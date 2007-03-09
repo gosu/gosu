@@ -1,0 +1,141 @@
+<html>
+<head>
+  <title>Gosu - Tutorial</title>
+  <link rel="stylesheet" type="text/css" href="gosu.css" />
+  <script type="text/javascript" language="Javascript" src="tutorial.js"></script>
+</head>
+
+<body class="rightSide" onLoad="showLang('cpp')">
+
+<h1>Input</h1>
+
+<a href="javaScript:showLang('cpp')">show C++ version</a> - <a href="javaScript:showLang('ruby')">show Ruby version</a>
+
+<h2>Needed Headers</h2>
+<div class="cpp"><p><pre>
+#include &lt;Gosu/AutoLink.hpp&gt;
+#include &lt;Gosu/AutoLinkMain.hpp&gt;
+#include &lt;Gosu/Bitmap.hpp&gt;
+#include &lt;Gosu/Color.hpp&gt;
+#include &lt;Gosu/Directories.hpp&gt;
+#include &lt;Gosu/Image.hpp&gt;
+#include &lt;Gosu/Input.hpp&gt;
+#include &lt;Gosu/IO.hpp&gt;
+#include &lt;Gosu/Math.hpp&gt;
+#include &lt;Gosu/Window.hpp&gt;
+#include &lt;boost/scoped_ptr.hpp&gt;
+</pre></p></div>
+
+<h2>Note</h2>
+<p>
+  Gamepad/joystick input is not supported under Mac OS and Linux yet.
+</p>
+
+<h2>Reacting to Button Presses</h2>
+<p>
+  There are two ways of handling input. Let's start with the first, and maybe more intuitive one: Reacting directly when the user presses (or releases) a button. What is a button? All the keyboard keys, all two or three mouse buttons, all the buttons and even the control pad on a gamepad are considered "buttons" in Gosu. Each of these buttons is represented by an unsigned integer; its "id".
+</p>
+
+<div class="cpp"><p>
+  There are predefined constants for lots of buttons in Gosu/Input.hpp. Keyboard key constants start with "kb", mouse button constants start with "ms" and gamepad button constants start with "gp". For example, "kbSpace" is the space bar, "msRight" is the right mouse button and "gpButton4" is the fifth button on the gamepad.
+</p>
+<p>
+  Similar to update() and draw(), Gosu::Window provides two virtual member functions buttonDown(unsigned id) and buttonUp(unsigned id) which can be overriden (and do nothing by default). The following piece of code implements a very important feature...being able to close the window by pressing ESC:
+</p>
+<p><pre>
+class GameWindow : public Gosu::Window
+{
+    ...
+public:
+    ...
+
+    void buttonDown(unsigned id)
+    {
+        if (id == Gosu::kbEscape)
+            close();
+    }
+
+    ...
+};
+</pre></p></div>
+
+<div class="ruby"><p>
+  There are predefined constants for lots of buttons in the Gosu::Button module. Keyboard key constants start with "Kb", mouse button constants start with "Ms" and gamepad button constants start with "Gp". For example, "KbSpace" is the space bar, "MsRight" is the right mouse button and "GpButton4" is the fifth button on the gamepad.
+</p>
+<p>
+  Similar to update() and draw(), Gosu::Window provides two member functions button_down(id) and button_up(id) which can be overriden (and do nothing by default). The following piece of code implements a very important feature...being able to close the window by pressing ESC:
+</p>
+<p><pre>
+class GameWindow &lt; Gosu::Window
+  ...
+  def button_down(id)
+    if id == Gosu::Button::KbEscape
+      close
+    end
+  end
+  ...
+end
+</pre></p></div>
+
+<p>
+  close() is provided by Gosu::Window. Of course, you could put any other reaction in here, including game logic. Releasing buttons works exactly the same way, so you should be able to figure it out by yourself if you need it.
+</p>
+
+<h2>Checking for Pressed Buttons</h2>
+<p>
+  While getting feedback on pushed buttons is suitable for one-time events such as UI interaction, jumping or typing, it is rather useless for actions that span several frames - for example, moving by holding buttons down. This is where the update() member function comes into play:
+</p>
+
+<div class="cpp"><p><pre>
+class GameWindow : public Gosu::Window
+{
+    ...
+public:
+    ...
+
+    void update()
+    {
+        if (input().down(Gosu::kbLeft) || input().down(Gosu::gpLeft))
+            player.turnLeft();
+        if (input().down(Gosu::kbRight) || input().down(Gosu::gpRight))
+            player.turnRight();
+        if (input().down(Gosu::kbUp) || input().down(Gosu::gpButton0))
+            player.accelerate();
+        player.move();
+    }
+
+    ...
+};
+</pre></p>
+<p>
+  Similar to Window::graphics(), Window::input() returns a reference to a window's Gosu::Input object, which in turn knows which buttons are currently pressed (down).
+</p></div>
+
+<div class="ruby"><p><pre>
+class GameWindow &lt; Gosu::Window
+  ...
+  def update
+    if button_down? Gosu::Button::KbLeft or button_down? Gosu::Button::GpLeft then
+      @player.turn_left
+    end
+    if button_down? Gosu::Button::KbRight or button_down? Gosu::Button::GpRight then
+      @player.turn_right
+    end
+    if button_down? Gosu::Button::KbUp or button_down? Gosu::Button::GpButton0 then
+      @player.accelerate
+    end
+    @player.move
+  end
+  ...
+end
+</pre></p></div>
+
+<p>
+ So these lines should once again be self-explanatory: The left, right and up arrow keys and their gamepad equivalents are checked, the player's appropriate member functions are called and finally the actual movement is done by calling move().
+</p>
+<p>
+  If you run this lesson's code, you should be able to fly around!
+</p>
+
+</body>
+</html> 

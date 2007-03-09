@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+<head>
+  <title>Gosu - Tutorial</title>
+  <link rel="stylesheet" type="text/css" href="gosu.css" />
+  <script type="text/javascript" language="Javascript" src="tutorial.js"></script>
+</head>
+
+<body class="rightSide" onLoad="showLang('cpp')">
+
+<h1>Basic Graphics</h1>
+
+<a href="javaScript:showLang('cpp')">show C++ version</a> - <a href="javaScript:showLang('ruby')">show Ruby version</a>
+
+<div class="cpp">
+  <h2>Needed Headers</h2>
+  <pre>
+    #include &lt;Gosu/AutoLink.hpp&gt;
+    #include &lt;Gosu/AutoLinkMain.hpp&gt;
+    #include &lt;Gosu/Bitmap.hpp&gt;
+    #include &lt;Gosu/Directories.hpp&gt;    
+    #include &lt;Gosu/Image.hpp&gt;
+    #include &lt;Gosu/IO.hpp&gt;
+    #include &lt;Gosu/Window.hpp&gt;
+    #include &lt;boost/scoped_ptr.hpp&gt;
+  </pre>
+</div>
+
+<div class="cpp">
+<h2>Declaring The New Image</h2>
+<p>
+  Let's start out with the most basic image a game could ever need: a static background. First, we declare a new member of GameWindow:
+</p>
+<p><pre>
+class GameWindow : public Gosu::Window
+{
+    boost::scoped_ptr&lt;Gosu::Image&gt; backgroundImage;
+
+public:
+    GameWindow() ...
+</pre></p>
+<p>
+  GameWindow's members are a good place to store resources, game state etc. A scoped_ptr is used here because it isn't convenient to construct the image in the constructor's initialization list (so we can't just use Gosu::Image directly). And to save us from writing a destructor, we use a scoped_ptr instead of a raw Gosu::Image*.
+</p>
+</div>
+
+<h2>Loading an Image From a File</h2>
+<div class="cpp">
+<p><pre>
+    GameWindow()
+    {
+        Gosu::Buffer backgroundFile;
+        Gosu::loadFile(Gosu::sharedResourcePrefix() + L"media/Space.png");
+        Gosu::Bitmap bitmap;
+        Gosu::loadFromPNG(bitmap, backgroundFile.frontReader());
+        backgroundImage.reset(new Gosu::Image(graphics(), bitmap));
+    }
+</pre></p>
+<p>
+  This piece of code shows how resources are usually loaded from files. First, the file is loaded into a Gosu::Buffer because this the fastest way to access most resources. After that, a new stream is constructed that starts reading at the start of the file.
+</p>
+<p>
+  Then the contents of this buffer are parsed (through the stream) as a PNG file and translated to a bitmap, which is just a generic container for rectangular areas of pixels (and does not have anything to do with BMP files).<br />
+</p>
+<p>
+  Eventually, a Gosu::Image is created from this bitmap and put in backgroundImage. The first argument given to the constructor is the Gosu::Graphics object onto which the image object can be drawn. graphics() is a member function inherited from Gosu::Window that returns a reference to the window's Graphics object.
+</p>
+</div>
+<div class="ruby">
+<p><pre>
+class GameWindow &lt; Gosu::Window
+  def initialize
+    super(640, 480, false, 20)
+    self.caption = "Gosu Tutorial Game"
+    
+    @background_image = Gosu::Image.new(self, "media/Space.png", true)
+  end
+
+  ...
+end
+</pre></p>
+<p>
+  Gosu::Image::new takes three arguments. First, like all media resources, it is tied to a window (self). All of Gosu's resources need a Window for initialization and will hold an internal reference to that window. Second, the file name of the image file is given. The third argument specifies whether the image is to be created with hard borders. See the <a href="concepts.html" target="_blank">concepts page</a> for an explanation.
+</p>
+</div>
+
+<h2>Drawing The Image</h2>
+<p>
+  As mentioned in the last lesson, the window's draw() member function is the place to draw everything. 
+</p>
+<div class="cpp"><p><pre>
+    void draw()
+    {
+        backgroundImage->draw(0, 0, 0);
+    }
+</pre></p></div>
+<div class="ruby"><p><pre>
+  def draw
+    @background_image.draw(0, 0, 0);
+  end
+</pre></p></div>
+<p>
+  The first two zeros are almost obvious: The image is drawn at (0; 0) so it covers the full screen. What about the third one? (Note: Even though Image's draw() function is the simplest way to draw an image, it can take many more than three arguments. See the reference for more information.)
+</p>
+
+<h2>Concept: Z-Ordering</h2>
+<p>
+  All drawing operations in Gosu accept an argument called "z", which is an integer value between 0 and 255 (even though it may be extended to the full 'double' range later). Things drawn with a higher z position will be drawn over those with a lower one. If two things have the same z position, they will be drawn in the order the drawing functions were called.
+</p>
+<p>
+  If you do not wish to use z ordering, just pass 0 all the time.
+</p>
+
+</body>
+</html> 

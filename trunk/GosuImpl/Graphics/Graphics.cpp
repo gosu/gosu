@@ -1,0 +1,81 @@
+#include <Gosu/Graphics.hpp>
+#include <GosuImpl/Graphics/Graphics.hpp>
+#include <Gosu/Bitmap.hpp>
+
+void Gosu::applyBorderFlags(Bitmap& dest, const Bitmap& source,
+    unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
+    unsigned borderFlags)
+{
+    dest.resize(srcWidth + (borderFlags & bfDoubleRight ? 3 : 2),
+        srcHeight + (borderFlags & bfDoubleBottom ? 3 : 2));
+    dest.fill(Colors::none);
+
+    // The borders are made "harder" by duplicating the original bitmap's
+    // borders.
+
+    // Top.
+    if (borderFlags & bfHardTop)
+        dest.insert(source, 1, 0, srcX, srcY, srcWidth, 1);
+    // Bottom.
+    if (borderFlags & bfHardBottom)
+    {
+        dest.insert(source, 1, dest.height() - 1,
+            srcX, srcY + srcHeight - 1, srcWidth, 1);
+        if (borderFlags & bfDoubleBottom)
+            dest.insert(source, 1, dest.height() - 2,
+                srcX, srcY + srcHeight - 1, srcWidth, 1);
+    }
+    // Left.
+    if (borderFlags & bfHardLeft)
+        dest.insert(source, 0, 1, srcX, srcY, 1, srcHeight);
+    // Right.
+    if (borderFlags & bfHardRight)
+    {
+        dest.insert(source, dest.width() - 1, 1, 
+            srcX + srcWidth - 1, srcY, 1, srcHeight);
+        if (borderFlags & bfDoubleRight)
+            dest.insert(source, dest.width() - 2, 1,
+                srcX + srcWidth - 1, srcY, 1, srcHeight);
+    }
+
+    // Top left.
+    if ((borderFlags & bfHardTop) && (borderFlags & bfHardLeft))
+        dest.setPixel(0, 0,
+            source.getPixel(srcX, srcY));
+    // Top right.
+    if ((borderFlags & bfHardTop) && (borderFlags & bfHardRight))
+    {
+        dest.setPixel(dest.width() - 1, 0,
+            source.getPixel(srcX + srcWidth - 1, srcY));
+        if (borderFlags & bfDoubleRight)
+            dest.setPixel(dest.width() - 2, 0,
+                source.getPixel(srcX + srcWidth - 1, srcY));
+    }
+    // Buttom left.
+    if ((borderFlags & bfHardBottom) && (borderFlags & bfHardLeft))
+    {
+        dest.setPixel(0, dest.height() - 1,
+            source.getPixel(srcX, srcY + srcHeight - 1));
+        if (borderFlags & bfDoubleBottom)
+            dest.setPixel(0, dest.height() - 2,
+                source.getPixel(srcX, srcY + srcHeight - 1));
+    }
+    // Bottom right.
+    if ((borderFlags & bfHardBottom) && (borderFlags & bfHardRight))
+    {
+        dest.setPixel(dest.width() - 1, dest.height() - 1,
+            source.getPixel(srcX + srcWidth - 1, srcY + srcHeight - 1));
+        if (borderFlags & bfDoubleBottom)
+            dest.setPixel(dest.width() - 1, dest.height() - 2,
+                source.getPixel(srcX + srcWidth - 1, srcY + srcHeight - 1));
+        if (borderFlags & bfDoubleRight)
+            dest.setPixel(dest.width() - 2, dest.height() - 1,
+                source.getPixel(srcX + srcWidth - 1, srcY + srcHeight - 1));
+        if ((borderFlags & bfDoubleBottom) && (borderFlags & bfDoubleRight))
+            dest.setPixel(dest.width() - 2, dest.height() - 2,
+                source.getPixel(srcX + srcWidth - 1, srcY + srcHeight - 1));
+    }
+
+    // Now put the final image into the prepared borders.
+    dest.insert(source, 1, 1, srcX, srcY, srcWidth, srcHeight);
+}

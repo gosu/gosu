@@ -1,0 +1,78 @@
+PKG_CONFIG = @PKG_CONFIG@
+
+BASE_OBJS = Math.o Utility.o IO.o FileUnix.o \
+    TimingUnix.o WindowX.o Graphics/Bitmap.o InputX.o Graphics/Graphics.o \
+    OpenGL/Graphics.o OpenGL/Blit.o OpenGL/TexChunk.o \
+    Graphics/Image.o Graphics/RotFlip.o Graphics/BlockAllocator.o OpenGL/Texture.o \
+    Graphics/LargeImageData.o Graphics/BitmapPNG.o Graphics/Font.o Graphics/BitmapBMP.o Graphics/TextPangoFT.o \
+    Graphics/Text.o Graphics/BitmapColorKey.o DirectoriesUnix.o
+NET_OBJS = Sockets/CommSocket.o Sockets/ListenerSocket.o Sockets/Socket.o Sockets/MessageSocket.o
+OPENAL_OBJ = AudioOpenAL.o
+FMOD_OBJ = AudioFmod.o
+
+OBJS = @GOSU_A_OBJS@
+# $(BASE_OBJS) $(NET_OBJS) $(GOSUMAIN_OBJ) $(FMOD_OBJ)
+# $(OPENAL_OBJ)
+
+RUBYOBJS = RubyGosu/Color.o RubyGosu/Font.o RubyGosu/Image.o \
+    RubyGosu/Sample.o RubyGosu/Window.o RubyGosu/Constants.o \
+    RubyGosu/Functions.o RubyGosu/RubyGosu.o RubyGosu/Song.o \
+    RubyGosu/Sockets.o
+
+XPLS = ../examples/Tutorial2 ../examples/Tutorial3 ../examples/Tutorial4 \
+       ../examples/Tutorial5 ../examples/Tutorial6 ../examples/Tutorial7
+
+CXXFLAGS += -I.. @FMOD_INC@ -Wall \
+    @PANGO_CXX_FLAGS@ @X_INCS@ \
+    -I@RUBY_INC_DIR@ -fPIC -DBOOST_DISABLE_THREADS
+
+LIBS = @AUDIO_LIBS@ -lrt -L@x_libraries@ -lX11 \
+    @PANGO_LIBS@ -lpng -lGL -lGLU -lglut -lXxf86vm
+
+RUBY_LIBS = $(LIBS) @RUBY_LIBS@ -ldl -lm -lc -lcrypt
+
+all: @TO_BE_MADE@
+
+directories:
+	if [ \! -d RubyGosu ]; then mkdir RubyGosu; fi
+	if [ \! -d OpenGL ]; then mkdir OpenGL; fi
+	if [ \! -d Graphics ]; then mkdir Graphics; fi
+	if [ \! -d Sockets ]; then mkdir Sockets; fi
+
+gosu.a: $(OBJS)
+	ar -r gosu.a @GOSU_A_OBJS@
+
+clean:
+	rm -f $(OBJS) gosu.a $(XPLS) $(RUBYOBJS) gosu.so gosu-config
+
+$(OBJS): %.o: ../GosuImpl/%.cpp
+	$(CXX) ../GosuImpl/$*.cpp -o $@ $(CXXFLAGS) -c
+
+
+examples: $(XPLS) gosu.a
+
+$(XPLS): %: %.cpp gosu.a
+	$(CXX) $@.cpp -o $@ $(CXXFLAGS) $(LIBS) gosu.a
+
+gosu-config:
+	echo "#!/bin/bash" > gosu-config
+	echo "while test \$$# -gt 0; do" >> gosu-config
+	echo "    case \$$1 in" >> gosu-config
+	echo "    --libs)" >> gosu-config
+	echo '    echo "$(LIBS)";;' >> gosu-config
+	echo "    --cxxflags)" >> gosu-config
+	echo '    echo "$(CXXFLAGS)";;' >> gosu-config
+	echo "    esac" >> gosu-config
+	echo "    shift" >> gosu-config
+	echo "done" >> gosu-config
+	chmod u+x gosu-config
+
+ruby: $(RUBYOBJS) gosu.a
+	g++ -shared -o gosu.so -Wall $(RUBYOBJS) $(RUBY_LIBS) @GOSU_A_OBJS@
+
+# $(BASE_OBJS) \
+        $(NET_OBJS) $(FMOD_OBJ) $(RUBY_LIBS)
+
+$(RUBYOBJS): %.o: ../%.cpp
+	$(CXX) ../$*.cpp -o $@ $(CXXFLAGS) -c -fPIC
+

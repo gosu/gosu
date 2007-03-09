@@ -1,0 +1,47 @@
+Really open ends:
+  23:31:12 Andares: You need to add -lXmu and -lXi to the makefile
+- document Gosu's Sockets
+- rethink and document Gosu's IO philosophy
+- convenience functions for loading images, samples and songs from files?
+
+Major design goals for 0.6x (timing):
+- redesign Gosu::Window to be more useful for framerate independent games?
+- anyway, get rid of WM_TIMER
+
+Major design goals for 0.7x (gfx):
+- find a way to factor RotFlips out of Gosu => Image redesign
+- implement clipping and a target() modifier for the new Image
+- actually, "Blit" is wrongly named in Gosu. Do we care?
+
+Major design goals for 0.8x (input):
+- implement gamepad/joystick input under Unix
+- input: using polled devices must suck when the update interval is higher than, say, 20 - fix/doc/whatever that
+- redesign Input's interface (multi-gamepad support, analog joystick support, POV support etc. etc.)
+- Windows: Input will regularly query not attached devices, thereby causing the game to halt every few seconds - think about this
+- automatically register KbA etc. constants under Ruby
+- decouple id<>char conversion from Gosu::Input/Gosu::Window
+
+Later:
+- Port Win::appFilename/appDirectory to Unix or get rid of filename related stuff altogether (actually boost::filesystem is nice, except it doesn't use wstrings)
+- Bitmap enlargement during hardBorders application process should use the same algorithm as setColorKey does to prevent minimal borders
+- D3D fullscreen window shouldn't popup on creation
+- Gosu/Gosu.hpp which includes everything?
+- implement PNG color keying
+- add examples for Gosu::Song, Gosu::Text, Gosu::Net?
+- more documentation for MS Unicows
+- RubyGosu: fix valueToColor(0xfffffffffffff)
+- clear Window with black on show
+- align text on pixel borders to improve readability
+- Windows: allow loading of local .ttf files.
+- Windows: font AA
+- song end callback
+- image using tiles to show the difference between hardborders true/false
+- test whether createText should return by value or if this is unoptimized
+- more UNICODE integration
+- implement Z=0 optimization on D3D
+- OpenGL integration under Windows
+- switch to OpenAL to get rid of FMOD's license
+- Auto-FSAA
+- all other TODO/FIXME/HACK/UPGR/PORT comments
+- all other IMPR comments
+

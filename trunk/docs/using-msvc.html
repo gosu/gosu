@@ -1,0 +1,74 @@
+<html>
+<head>
+  <title>Setting Up The Gosu Library With Microsoft Visual C++ 7.1</title>
+  <link rel="stylesheet" type="text/css" href="gosu.css" />
+</head>
+
+<body>
+
+<h1>Using Gosu with Microsoft Visual C++ 7.1</h1>
+
+<h2>Installing Other Libraries</h2>
+<p>
+  To use Gosu, you first have to install two libraries Gosu depends on. Don't worry, you don't have to fiddle around with makefiles or anything similarly evil, it's just a matter of downloading and extracting.
+</p>
+
+<h3><a href="http://www.boost.org/">Boost</a></h3>
+<p>
+  This is a collection of libraries that is used throughout Gosu. Many parts of Boost have been marked for inclusion in the next standard of C++, so you should take a look at it anyway!
+</p>
+<p>
+  All you have to do is to download and extract the latest Boost ZIP archive and add it to Visual C++'s include path (add Boost's root directory, not the "boost" subfolder).
+</p>
+
+<h3><a href="http://www.fmod.org/">FMOD</a></h3>
+<p>
+  This is the library used by Gosu for all sound output.
+</p>
+<p>
+  After downloading and extracting the ZIP archive, add the api\lib subdirectory to the library path. Note that you will have to distribute fmod.dll (included in FMOD's ZIP archive) along with your executable if you are using Gosu's audio system.
+</p>
+
+
+<h2>Setting Up Gosu</h2>
+<p>
+  Add Gosu's root directory (as with boost, not the 'Gosu' subdirectory) to Visual C++'s include path, and the 'msvc' directory to Visual C++'s library path.
+</p>
+
+<h2>Creating a New Gosu Project</h2>
+<p>
+  Click File/New/Project and select 'Win32 project', then 'Win32 application' and 'Empty project'. Add a new C++ source file to the project, for example via File->New. You need to do this first so the C++ language options will show up in the project options.
+</p>
+<p>
+  Then right-click your project, open the settings dialog and select "All Configurations". Go to the general options and select "Character set: Unicode".
+</p>
+<p>
+  Also go to "C/C++/Language" and enable run-time type information, correct for() scoping and the native wchar_t type. These steps aren't always necessary, but they will keep you out of trouble and closer to the language standard, anyway.
+</p>
+<p>
+  If you want your games to run on Windows 9x, you have to use the Microsoft Layer for Unicode. Look up "Microsoft Layer for Unicode" in the MSDN to find out how you have to set your linker options.
+</p>
+
+<h2>Distributing Gosu Games</h2>
+<p>
+  Gosu tries to reduce DLL dependencies. In the best case, your game only needs the Visual C++ runtimes (which should be installed everywhere?). If you use Gosu's audio system, you also need to supply fmod.dll. If you use the Microsoft Layer for Unicode, the executable will need unicows.dll to run on Windows 9x.
+</p>
+
+<h2>Minimal Gosu Application</h2>
+<p>
+  Open your C++ source file and enter:
+<pre>
+#include &lt;Gosu/AutoLink.hpp&gt;
+#include &lt;Gosu/AutoLinkMain.hpp&gt;
+
+int main(int argc, char* argv[])
+{
+    return 0;
+}
+</pre>
+
+  This application doesn't do anything - but if it compiles and runs, you know Gosu is working (so far).
+</p>
+
+</body>
+</html>
