@@ -197,7 +197,8 @@ namespace Gosu
         void processText(TextBlockBuilder& builder, const wstring& text)
         {
             vector<wstring> paragraphs;
-			boost::split(paragraphs, boost::replace_all_copy(text, L"\r\n", L"\n"),
+            wstring processedText = boost::replace_all_copy(text, L"\r\n", L"\n");
+			boost::split(paragraphs, processedText,
 				boost::is_any_of(L"\r\n"));
             for_each(paragraphs.begin(), paragraphs.end(),
                 boost::bind(processParagraph, boost::ref(builder), _1));
