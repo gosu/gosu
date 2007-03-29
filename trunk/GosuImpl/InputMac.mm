@@ -1,13 +1,13 @@
-#import <Gosu/Input.hpp>
 #import <AppKit/AppKit.h>
 #import <Carbon/Carbon.h>
+#include <Gosu/Input.hpp>
+#include <Gosu/Utility.hpp>
 #include <IOKit/hidsystem/IOLLEvent.h>
 #include <boost/array.hpp>
 #include <boost/cstdint.hpp>
 #include <map>
+#include <string>
 #include <vector>
-
-#include <iostream>
 
 namespace {
     // This is just a wild assumption. For Apple ADB keyboards, I read something
@@ -25,34 +25,32 @@ namespace {
         initializedCharData = true;
         
         idChars.assign(0);
-        
-        SInt16 keyScript = GetScriptManagerVariable(smKeyScript);
-        SInt16 keyLayoutID = GetScriptVariable(keyScript, smScriptKeys);
-        const UCKeyboardLayout* keyLayout =
-            reinterpret_cast<const UCKeyboardLayout*>(GetResource('uchr', keyLayoutID));
-        
-        std::wcout << L"Script: " << keyScript << std::endl;
-        std::wcout << L"LayoutID: " << keyLayoutID << std::endl;
-        std::wcout << L"Layout: " << keyLayout << std::endl;
+
+		const void* KCHR = reinterpret_cast<const void*>(GetScriptManagerVariable(smKCHRCache));
+		if (!KCHR)
+			return;
         
         for (unsigned code = 0; code < numScancodes; ++code)
         {
             UInt32 deadKeyState = 0;
-            UniChar buf[16] = { 0 };
-            UniCharCount length = 0;
-            OSStatus result =
-                UCKeyTranslate(keyLayout, code, kUCKeyActionDown, deadKeyState,
-                               LMGetKbdType(), kUCKeyTranslateNoDeadKeysMask,
-                               &deadKeyState, 16, &length, buf);
-            if (result == paramErr || result == kUCOutputBufferTooSmall || length != 1)
-                continue;
-            
-            // It'd be interesting to test this on really exotic keyboards.
-            
-            idChars[code] = buf[0];
-            charIds[buf[0]] = code;
-            
-            std::wcout << L"Connected " << buf[0] << L" to " << code << std::endl;
+			UInt32 value = KeyTranslate(KCHR, code, &deadKeyState);
+			// If this key triggered a dead key, hit it again to obtain the actual value.
+			if (deadKeyState != 0)
+				value = KeyTranslate(KCHR, code, &deadKeyState);
+			
+			// No character! Pity.
+			if (value == 0)
+				continue;
+			
+			// Now we have a character which is *not* limited to the ASCII range. To correctly
+			// translate this into a wchar_t, we need to convert it based on the current locale.
+			// TODO: That locale stuff should be explicit. Locales always cause trouble.
+			
+			std::string str(1, char(value));
+			wchar_t ch = Gosu::widen(str).at(0);
+			
+            idChars[code] = ch;
+            charIds[ch] = code;
         }
     }
 }

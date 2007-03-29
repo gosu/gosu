@@ -1,3 +1,7 @@
+0.7.0
+Mac: added idToChar/charToId
+Mac: added fullscreen
+
 0.6.5
 Linux, Mac: Fixed mmap()ing.
 
