@@ -1,0 +1,15 @@
+#summary Rationale behind Gosu's design
+#labels Phase-Design,Featured
+
+= Reality-driven =
+
+Everything in Gosu exists for the same single reason: It was necessary for an existing project. Nothing was, and will ever be, added out of boredom. Code that is added "just in case" will not be tested and likely just disappoint people.
+
+Seen the other way around, this ensures that Gosu includes everything that is necessary to get a working game out of 
+the door.
+
+= General =
+
+= Minimal =
+
+= Open-ness =
