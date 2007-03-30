@@ -3,7 +3,7 @@
 
 = TODO 0.7 (Google release) =
   * redesign input
-  * convenience functions for loading images, samples and songs from files?
+  * convenience functions for loading images, samples and songs from files? (Maybe C++ coders just need to have it easier to start using Gosu.)
   * move docs to Google
   * setup forwarding from raschke.de
   * explain in general why we won't do XYZ and why you have to use boost.
