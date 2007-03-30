@@ -14,7 +14,7 @@
 = Major design goals for 0.7x (immediately needed to complete playable games) =
   * USB input devices on Mac!
   * ...well yeah, USB input devices on Linux are cool too, but who's going to implement it?
-  * text input system (clean implementation on Mac, workaround on other platforms)
+  * text input system for chat boxes, high-score lists etc.
   * more sophisticated Audio interface for talking NPC's etc.
 
 = Major design goals for 0.8x (graphics) =
@@ -30,9 +30,6 @@
   * anyway, get rid of WM_TIMER
   * document or kill Gosu's Sockets
 
-= Major design goals for 1.0x (perfection) =
+= Major design goals for 1.x (perfection) =
   * Windows: Input will regularly query devices which are not currently attached, thereby causing the game to halt every few seconds - think about this
-  * automatically register KbA etc. constants under Ruby
-  * decouple id<>char conversion from Gosu::Input/Gosu::Window
-  * implement gamepad/joystick input under Unix
   * more UNICODE integration (switch to UTF8?)
