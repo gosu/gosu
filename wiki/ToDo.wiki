@@ -2,14 +2,14 @@
 #labels Featured
 
 = TODO 0.7 (Google release) =
-  * redesign input
-  * convenience functions for loading images, samples and songs from files? (Maybe C++ coders just need to have it easier to start using Gosu.)
   * move docs to Google
-  * setup forwarding from raschke.de
   * explain in general why we won't do XYZ and why you have to use boost.
+  * setup forwarding from raschke.de
+  * test and maybe use SWIG (imagine a reliable Ruby/Gosu and all the possibilities!)
+  * redesign input
   * switch to MSVC 05
-  * polish Ruby wrappers
   * delegate Linux support (help!)
+  * convenience functions for loading images, samples and songs from files? (Maybe C++ coders just need to have it easier to start using Gosu.)
 
 = Major design goals for 0.7x (immediately needed to complete playable games) =
   * USB input devices on Mac!
