@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		8D07F2C40486CC7A007CD1D0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB77AAFE841565C02AAC07 /* Carbon.framework */; };
-		D41001CA0BBBF7EA00AE183E /* TODO.txt in Resources */ = {isa = PBXBuildFile; fileRef = D41001C90BBBF7EA00AE183E /* TODO.txt */; };
 		D410E98D0A801948005C7067 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98A0A801948005C7067 /* AppKit.framework */; };
 		D410E98E0A801948005C7067 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98B0A801948005C7067 /* ApplicationServices.framework */; };
 		D410E98F0A801948005C7067 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98C0A801948005C7067 /* Foundation.framework */; };
@@ -86,7 +85,6 @@
 /* Begin PBXFileReference section */
 		08FB77AAFE841565C02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		8D07F2C80486CC7A007CD1D0 /* Gosu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Gosu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D41001C90BBBF7EA00AE183E /* TODO.txt */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = text; name = TODO.txt; path = ../TODO.txt; sourceTree = SOURCE_ROOT; };
 		D410E98A0A801948005C7067 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		D410E98B0A801948005C7067 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		D410E98C0A801948005C7067 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -189,7 +187,6 @@
 		0867D691FE84028FC02AAC07 /* Gosu */ = {
 			isa = PBXGroup;
 			children = (
-				D41001C90BBBF7EA00AE183E /* TODO.txt */,
 				08FB77ACFE841707C02AAC07 /* Interface */,
 				D410E8670A8018A8005C7067 /* Implementation */,
 				089C1665FE841158C02AAC07 /* Resources */,
@@ -419,7 +416,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D410EB6E0A801CDC005C7067 /* InfoPlist.strings in Resources */,
-				D41001CA0BBBF7EA00AE183E /* TODO.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
