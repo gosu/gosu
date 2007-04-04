@@ -415,6 +415,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D46F73970BC34651008003BA /* Build configuration list for PBXNativeTarget "RubyGosu" */;
 			buildPhases = (
+				D46F73C40BC347B1008003BA /* ShellScript */,
 				D46F73910BC34651008003BA /* Resources */,
 				D46F73920BC34651008003BA /* Sources */,
 				D46F73930BC34651008003BA /* Frameworks */,
@@ -472,6 +473,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXRezBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D46F73C40BC347B1008003BA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo $PATH\nswig -c++ -ruby -DSWIG_RUBY_AUTORENAME ../RubyGosu/gosu.swg";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8D07F2C10486CC7A007CD1D0 /* Sources */ = {
