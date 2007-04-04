@@ -156,8 +156,9 @@
 		D410EAF30A801B00005C7067 /* Socket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Socket.cpp; sourceTree = "<group>"; };
 		D410EAF40A801B00005C7067 /* Sockets.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = Sockets.hpp; sourceTree = "<group>"; };
 		D410EB290A801C28005C7067 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
-		D410EB6A0A801CD3005C7067 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; name = Info.plist; path = GosuRes/Info.plist; sourceTree = "<group>"; };
-		D410EB6D0A801CDC005C7067 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = English; path = GosuRes/English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D410EB6A0A801CD3005C7067 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
+		D410EB6D0A801CDC005C7067 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D46F73950BC34651008003BA /* gosu.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = gosu.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +174,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D46F73930BC34651008003BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -180,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				8D07F2C80486CC7A007CD1D0 /* Gosu.framework */,
+				D46F73950BC34651008003BA /* gosu.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -190,6 +199,7 @@
 				08FB77ACFE841707C02AAC07 /* Interface */,
 				D410E8670A8018A8005C7067 /* Implementation */,
 				089C1665FE841158C02AAC07 /* Resources */,
+				D46F737C0BC3458D008003BA /* RubyGosu */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
 				034768DDFF38A45A11DB9C8B /* Products */,
 			);
@@ -325,6 +335,13 @@
 			path = ../GosuImpl/Sockets;
 			sourceTree = SOURCE_ROOT;
 		};
+		D46F737C0BC3458D008003BA /* RubyGosu */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = RubyGosu;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -394,6 +411,23 @@
 			productReference = 8D07F2C80486CC7A007CD1D0 /* Gosu.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		D46F73940BC34651008003BA /* RubyGosu */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D46F73970BC34651008003BA /* Build configuration list for PBXNativeTarget "RubyGosu" */;
+			buildPhases = (
+				D46F73910BC34651008003BA /* Resources */,
+				D46F73920BC34651008003BA /* Sources */,
+				D46F73930BC34651008003BA /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RubyGosu;
+			productName = RubyGosu;
+			productReference = D46F73950BC34651008003BA /* gosu.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -406,6 +440,7 @@
 			projectDirPath = "";
 			targets = (
 				8D07F2BC0486CC7A007CD1D0 /* Gosu */,
+				D46F73940BC34651008003BA /* RubyGosu */,
 			);
 		};
 /* End PBXProject section */
@@ -416,6 +451,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D410EB6E0A801CDC005C7067 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D46F73910BC34651008003BA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,13 +512,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D46F73920BC34651008003BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
 		D410EB6C0A801CDC005C7067 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				D410EB6D0A801CDC005C7067 /* English */,
+				D410EB6D0A801CDC005C7067 /* InfoPlist.strings */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -571,6 +620,72 @@
 			};
 			name = Release;
 		};
+		D46F73980BC34651008003BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = (
+					..,
+					/usr/local/include,
+					"/usr/lib/ruby/1.8/universal-darwin8.0",
+				);
+				OTHER_LDFLAGS = (
+					"-lz_universal",
+					"-lfmod_universal",
+					"-lpng_universal",
+					"-ldl",
+					"-lruby",
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+					"-dynamic",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = gosu;
+				WRAPPER_EXTENSION = bundle;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		D46F73990BC34651008003BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					..,
+					/usr/local/include,
+					"/usr/lib/ruby/1.8/universal-darwin8.0",
+				);
+				OTHER_LDFLAGS = (
+					"-lz_universal",
+					"-lfmod_universal",
+					"-lpng_universal",
+					"-ldl",
+					"-lruby",
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+					"-dynamic",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = gosu;
+				WRAPPER_EXTENSION = bundle;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -588,6 +703,15 @@
 			buildConfigurations = (
 				4FADC24708B4156D00ABE55E /* Debug */,
 				4FADC24808B4156D00ABE55E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D46F73970BC34651008003BA /* Build configuration list for PBXNativeTarget "RubyGosu" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D46F73980BC34651008003BA /* Debug */,
+				D46F73990BC34651008003BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
