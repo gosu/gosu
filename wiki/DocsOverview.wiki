@@ -1,7 +1,18 @@
 #summary Entry point to all of Gosu's documentation.
 #labels Featured
 
-GettingStarted
-BasicConcepts
+= New to Gosu? =
+
+If you are curious about what Gosu is trying to achieve, read the Gosu's DesignRationale. If you want to take a look at random Gosu code, see the tutorials below.
+
+= Installation =
+
+For now, only GettingStartedOnOSX is available.
+
+= Tutorial =
+
+= Reference =
+
+First, if you want to follow along right from the beginning, find out about GettingStarted. Then, with an eye open on the BasicConcepts (and DesignRationale, if you are into deeper intentions of library design)
 CppTutorial CppReference
 RubyTutorial RubyReference
