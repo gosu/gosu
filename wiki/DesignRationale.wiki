@@ -26,7 +26,7 @@ However, we won't mind publishing your well-written and tested add-on library th
 
 = Reality-driven =
 
-Everything in Gosu exists for the same single reason: It was necessary for an existing project. Nothing was, and will ever be, added out of boredom. Experience with other libraries shows that code, that is added "just in case", will not be tested and likely just disappoint people.
+Everything in Gosu exists for the same single reason: It was necessary for an existing project. Nothing was, and will ever be, added out of boredom. Experience with other libraries shows that such "just in case" code will be tested poorly and likely just disappoint people.
 
 Seen the other way around, this ensures that Gosu includes (or will soonish include) everything that is necessary to get a very complete game out of the door.
 
