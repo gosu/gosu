@@ -1,0 +1,31 @@
+#summary How to set up Gosu on Mac OS X.
+
+= Gosu.framework =
+
+The supplied mac/Gosu.framework is the heart of Gosu, regardless of the language used. You can either install it into /Library/Frameworks, ~/Library/Frameworks or into the Frameworks directory of your application bundle's Contents folder.
+Just copying it into /Library/Frameworks is probably the most convenient option to start right away.
+
+= Installing Boost (C++ only) =
+
+[http://www.boost.org/ Boost] is a collection of libraries that is used throughout Gosu. Many parts of Boost have been marked for inclusion in the next standard of C++, so it's really worth a look!
+
+Download and extract the latest Boost release. Open a terminal, go to that directory and run:
+
+{{{
+    /.configure
+    make
+    sudo make install
+    sudo ln -s /usr/local/include/boost-1_33_1/boost /usr/include/boost
+}}}
+  
+(Replace "1_33_1" with boost's current version.)
+
+= Starting a new Gosu game (C++) =
+
+In Xcode, create a new Cocoa application project. Remove Resources/MainMenu.nib and main.m, then add a reference to the installed Gosu.framework.
+
+You can then add new code files, for example the ones from the tutorial. (But don't forget to copy the media folder as well!)
+
+= Starting a new Gosu game (Ruby) =
+
+...to be written...
