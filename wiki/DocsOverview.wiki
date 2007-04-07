@@ -11,8 +11,8 @@ For now, only GettingStartedOnOSX is available.
 
 = Tutorial =
 
+See either the RubyTutorial or the CppTutorial.
+
 = Reference =
 
-First, if you want to follow along right from the beginning, find out about GettingStarted. Then, with an eye open on the BasicConcepts (and DesignRationale, if you are into deeper intentions of library design)
-CppTutorial CppReference
-RubyTutorial RubyReference
+See either the RubyReference or the CppReference.
