@@ -37,7 +37,11 @@ namespace Gosu
         struct Impl;
         boost::scoped_ptr<Impl> pimpl;
 
-    public:
+#ifdef SWIG
+        Input();
+#endif
+
+public:
 #ifdef GOSU_IS_WIN
         Input(HWND window);
 #endif

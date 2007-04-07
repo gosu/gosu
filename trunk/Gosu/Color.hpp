@@ -24,6 +24,7 @@ namespace Gosu
         }
 
         //! Conversion constructor for literals of the form 0xaarrggbb.
+        //! (C++ only.)
         Color(boost::uint32_t argb)
         : rep(argb)
         {
@@ -102,6 +103,7 @@ namespace Gosu
         }
     };
 
+#ifndef SWIG
     inline bool operator==(Color a, Color b)
     {
         return a.argb() == b.argb();
@@ -124,6 +126,7 @@ namespace Gosu
     
     HSV colorToHSV(const Color& c);
     Color hsvToColor(const HSV& hsv);    
+#endif
 
     //! Namespace which contains some predefined colors.
     namespace Colors

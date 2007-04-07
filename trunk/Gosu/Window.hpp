@@ -23,13 +23,6 @@ namespace Gosu
         struct Impl;
         boost::scoped_ptr<Impl> pimpl;
 
-    protected:
-        //! Called before update when the user pressed a button while the
-        //! window had the focus.
-        virtual void buttonDown(unsigned id) {}
-        //! Same as buttonDown. Called then the user released a button.
-        virtual void buttonUp(unsigned id) {}
-
         // Called when the user tries to close the application with the
         // interface provided by the window manager (i.e. the [X] button).
         // Applications can override this member function to ask the user
@@ -38,7 +31,7 @@ namespace Gosu
         { 
             close(); 
         }*/
-
+        
     public:
         //! Constructs a Window.
         //! \param updateInterval Interval in milliseconds between two calls
@@ -62,6 +55,13 @@ namespace Gosu
         //! repaint itself. Your application's rendering code goes here.
         virtual void draw() {}
 
+        //! Called before update when the user pressed a button while the
+        //! window had the focus.
+        virtual void buttonDown(unsigned id) {}
+        //! Same as buttonDown. Called then the user released a button.
+        virtual void buttonUp(unsigned id) {}
+        
+#ifndef SWIG
         const Graphics& graphics() const;
         Graphics& graphics();
 
@@ -76,6 +76,7 @@ namespace Gosu
         virtual LRESULT handleMessage(UINT message, WPARAM wparam,
             LPARAM lparam);
         #endif
+#endif
     };
 }
 
