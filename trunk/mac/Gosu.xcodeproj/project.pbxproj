@@ -38,7 +38,6 @@
 		D410E9F30A8019CD005C7067 /* Timing.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D70A8019CD005C7067 /* Timing.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9F40A8019CD005C7067 /* Utility.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D80A8019CD005C7067 /* Utility.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9F50A8019CD005C7067 /* Window.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D90A8019CD005C7067 /* Window.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D410E9F60A8019CD005C7067 /* WinUtility.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9DA0A8019CD005C7067 /* WinUtility.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410EA360A8019FA005C7067 /* AudioFmod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410E9FE0A8019FA005C7067 /* AudioFmod.cpp */; };
 		D410EA370A8019FA005C7067 /* DirectoriesMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410E9FF0A8019FA005C7067 /* DirectoriesMac.mm */; };
 		D410EA380A8019FA005C7067 /* DirectoriesUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA000A8019FA005C7067 /* DirectoriesUnix.cpp */; };
@@ -116,7 +115,6 @@
 		D410E9D70A8019CD005C7067 /* Timing.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Timing.hpp; path = ../Gosu/Timing.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9D80A8019CD005C7067 /* Utility.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Utility.hpp; path = ../Gosu/Utility.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9D90A8019CD005C7067 /* Window.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Window.hpp; path = ../Gosu/Window.hpp; sourceTree = SOURCE_ROOT; };
-		D410E9DA0A8019CD005C7067 /* WinUtility.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = WinUtility.hpp; path = ../Gosu/WinUtility.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9FE0A8019FA005C7067 /* AudioFmod.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = AudioFmod.cpp; path = ../GosuImpl/AudioFmod.cpp; sourceTree = SOURCE_ROOT; };
 		D410E9FF0A8019FA005C7067 /* DirectoriesMac.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = DirectoriesMac.mm; path = ../GosuImpl/DirectoriesMac.mm; sourceTree = SOURCE_ROOT; };
 		D410EA000A8019FA005C7067 /* DirectoriesUnix.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = DirectoriesUnix.cpp; path = ../GosuImpl/DirectoriesUnix.cpp; sourceTree = SOURCE_ROOT; };
@@ -260,7 +258,6 @@
 				D410E9D70A8019CD005C7067 /* Timing.hpp */,
 				D410E9D80A8019CD005C7067 /* Utility.hpp */,
 				D410E9D90A8019CD005C7067 /* Window.hpp */,
-				D410E9DA0A8019CD005C7067 /* WinUtility.hpp */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -381,7 +378,6 @@
 				D410E9F30A8019CD005C7067 /* Timing.hpp in Headers */,
 				D410E9F40A8019CD005C7067 /* Utility.hpp in Headers */,
 				D410E9F50A8019CD005C7067 /* Window.hpp in Headers */,
-				D410E9F60A8019CD005C7067 /* WinUtility.hpp in Headers */,
 				D410EAFA0A801B00005C7067 /* BlockAllocator.hpp in Headers */,
 				D410EAFE0A801B00005C7067 /* Graphics.hpp in Headers */,
 				D410EB010A801B00005C7067 /* LargeImageData.hpp in Headers */,
@@ -493,7 +489,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ../RubyGosu\n/usr/local/bin/swig -c++ -ruby -DSWIG_RUBY_AUTORENAME gosu.swg";
+			shellScript = "cd ../RubyGosu\n/usr/local/bin/swig -c++ -ruby -autorename gosu.swg";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -658,7 +654,6 @@
 					/usr/local/include,
 					"/usr/lib/ruby/1.8/universal-darwin8.0",
 				);
-				INSTALL_PATH = ../RubyGosu;
 				MACH_O_TYPE = mh_bundle;
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -690,7 +685,6 @@
 					/usr/local/include,
 					"/usr/lib/ruby/1.8/universal-darwin8.0",
 				);
-				INSTALL_PATH = ../RubyGosu;
 				MACH_O_TYPE = mh_bundle;
 				OTHER_LDFLAGS = (
 					"-framework",

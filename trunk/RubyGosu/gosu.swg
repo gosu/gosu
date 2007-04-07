@@ -1,12 +1,21 @@
+// SWIG improvements related to Ruby:
+// - %predicate instead of %rename
+// - %exceptionclass stuff
+// - use Python names for op overloading
+// - %trackobjects
+
 // The docs make it seem like this is a generally good idea.
 %feature("compactdefaultargs");
+
+// Overriding virtuals is only necessary in Gosu::Window.
+%feature("director") Gosu::Window;
 
 // Resolve typedefs that SWIG doesn't recognize.
 %apply unsigned char { boost::uint8_t };
 %apply unsigned long { boost::uint32_t };
 
 // Custom typemaps for wchar/wstring.
-#pragma SWIG nowarn=-490
+#pragma SWIG nowarn=-490,-319
 %typemap(in) wchar_t {
     VALUE localTemporary = rb_obj_as_string($input);
     $1 = Gosu::widen(StringValueCStr(localTemporary)).at(0);
@@ -19,12 +28,59 @@
     temp = Gosu::widen(StringValueCStr(localTemporary));
     $1 = &temp;
 }
+%apply const std::wstring& { std::wstring, const std::string };
 %typemap(out) std::wstring {
     $result = rb_str_new2(Gosu::narrow($1).c_str());
 }
 
+// Typemaps for enums that should be given in as symbols.
+%typemap(in) Gosu::AlphaMode {
+    VALUE localTemporary = rb_obj_as_string($input);
+    if (!strcmp(StringValueCStr(localTemporary), "default"))
+        $1 = Gosu::amDefault;
+    else if (!strcmp(StringValueCStr(localTemporary), "additive"))
+        $1 = Gosu::amDefault;
+    else
+        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
+}
+%typemap(in) Gosu::TextAlign {
+    VALUE localTemporary = rb_obj_as_string($input);
+    if (!strcmp(StringValueCStr(localTemporary), "left"))
+        $1 = Gosu::taLeft;
+    else if (!strcmp(StringValueCStr(localTemporary), "center"))
+        $1 = Gosu::taCenter;
+    else if (!strcmp(StringValueCStr(localTemporary), "right"))
+        $1 = Gosu::taRight;
+    else if (!strcmp(StringValueCStr(localTemporary), "justify"))
+        $1 = Gosu::taJustify;
+    else
+        SWIG_exception_fail(SWIG_ValueError, "invalid text align");
+}
+%typemap(in) Gosu::Song::Type {
+    VALUE localTemporary = rb_obj_as_string($input);
+    if (!strcmp(StringValueCStr(localTemporary), "stream"))
+        $1 = Gosu::Song::stStream;
+    else if (!strcmp(StringValueCStr(localTemporary), "module"))
+        $1 = Gosu::Song::stModule;
+    else
+        SWIG_exception_fail(SWIG_ValueError, "invalid song type");
+}
+
+// Allow integral constants to be passed in place of Color values.
+%typemap(in) Gosu::Color {    
+    void* ptr;
+    int res = SWIG_ConvertPtr($input, &ptr, SWIGTYPE_p_Gosu__Color, 0);
+    if (!SWIG_IsOK(res))
+        // TODO: error checking
+        $1 = Gosu::Color(NUM2UINT($input));
+    else if (!ptr)
+        SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+    else
+        $1 = *reinterpret_cast<Gosu::Color*>(ptr);
+}
+
 // Header inclusion (order irrelevant)
-%module gosu
+%module(directors="1") gosu
 %{
 #include <Gosu/Audio.hpp>
 #include <Gosu/Color.hpp>
@@ -34,11 +90,14 @@
 #include <Gosu/Image.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/IO.hpp>
+#include <Gosu/Math.hpp>
 #include <Gosu/Text.hpp>
+#include <Gosu/Timing.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/Window.hpp>
     
 #include <sstream>
+    
     
 // Local helper function to load an image from a filename, regardless of format.
 Gosu::Bitmap loadImage(const std::wstring& filename) {
@@ -60,6 +119,17 @@ Gosu::Bitmap loadImage(const std::wstring& filename) {
     return result;
 }
 %}
+
+// Miscellaneous functions (timing, math)
+%ignore Gosu::Sleep;
+%include "../Gosu/Timing.hpp"
+%ignore Gosu::pi;
+%include "../Gosu/Math.hpp"
+%ignore Gosu::textWidth;
+%ignore Gosu::createText;
+%ignore Gosu::drawText;
+%include "../Gosu/Text.hpp"
+
 
 // Graphics:
 
@@ -101,16 +171,16 @@ Gosu::Bitmap loadImage(const std::wstring& filename) {
 %ignore Gosu::Image::Image(Graphics& graphics, const Bitmap& source, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, bool hardBorders = false);
 %include "../Gosu/Image.hpp"
 %extend Gosu::Image {
-    Image(Gosu::Window& window, const std::wstring& filename, bool hardBorders = false) {
-        return new Gosu::Image(window.graphics(), loadImage(filename), hardBorders);
+    Image(Gosu::Window& window, const std::string& filename, bool hardBorders = false) {
+        return new Gosu::Image(window.graphics(), loadImage(Gosu::widen(filename)), hardBorders);
     }
-    Image(Gosu::Window& window, const std::wstring& filename,
+    Image(Gosu::Window& window, const std::string& filename,
           unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
           bool hardBorders = false) {
-        return new Gosu::Image(window.graphics(), loadImage(filename),
+        return new Gosu::Image(window.graphics(), loadImage(Gosu::widen(filename)),
                                srcX, srcY, srcWidth, srcHeight, hardBorders);
     }
-    static Gosu::Image* createText(Gosu::Window& window, const std::wstring& text,
+    static Gosu::Image* fromText(Gosu::Window& window, const std::wstring& text,
                                    const std::wstring& fontName, unsigned fontHeight,
                                    unsigned lineSpacing, unsigned maxWidth, TextAlign align) {
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
@@ -132,6 +202,7 @@ Gosu::Bitmap loadImage(const std::wstring& filename) {
 %ignore Gosu::Audio;
 %ignore Gosu::Sample::Sample(Audio& audio, Reader reader);
 %ignore Gosu::Song::Song(Audio& audio, Type type, Reader reader);
+%rename("playing?") playing;
 %include "../Gosu/Audio.hpp"
 %extend Gosu::Sample {
     Sample(Gosu::Window& window, const std::wstring& filename) {
@@ -153,6 +224,10 @@ Gosu::Bitmap loadImage(const std::wstring& filename) {
 
 // Button ID constants
 %include "../Gosu/ButtonsMac.hpp"
+// Backwards compatibility: import the constants into Gosu::Button.
+%init %{
+    rb_eval_string("module Gosu::Button; Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }; end");
+%}
 
 // Window
 %rename("caption=") setCaption;
