@@ -1,4 +1,4 @@
-#summary Centralized description of some concepts that are used throughout the library.
+#summary Centralized description of some concepts used throughout the library.
 
 = Hard Borders =
 
