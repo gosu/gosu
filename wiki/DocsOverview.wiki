@@ -3,7 +3,7 @@
 
 = New to Gosu? =
 
-If you are curious about what Gosu is trying to achieve, read the Gosu's DesignRationale. If you want to take a look at random Gosu code, see the tutorials below.
+If you are curious about what Gosu is trying to achieve, read Gosu's DesignRationale. If you want to take a look at random Gosu code, see the tutorials below.
 
 = Installation =
 
