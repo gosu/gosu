@@ -1,17 +1,16 @@
 #summary Gosu's ToDo list.
 #labels Featured
 
-= TODO 0.7 (Google release) =
+= TODO 0.7 (initial Mac only, Google release) =
   * move docs to Google
   * explain in general why we won't do XYZ and why you have to use boost.
   * setup forwarding from raschke.de
-  * test and maybe use SWIG (imagine a reliable Ruby/Gosu and all the possibilities!)
   * redesign input
-  * switch to MSVC 05
   * delegate Linux support (help!)
   * convenience functions for loading images, samples and songs from files? (Maybe C++ coders just need to have it easier to start using Gosu.)
 
 = Major design goals for 0.7x (immediately needed to complete playable games) =
+  * switch to MSVC 05
   * USB input devices on Mac!
   * ...well yeah, USB input devices on Linux are cool too, but who's going to implement it?
   * text input system for chat boxes, high-score lists etc.
