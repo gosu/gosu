@@ -6,13 +6,12 @@
   * explain in general why we won't do XYZ and why you have to use boost.
   * setup forwarding from raschke.de
   * redesign input
-  * delegate Linux support (help!)
   * convenience functions for loading images, samples and songs from files? (Maybe C++ coders just need to have it easier to start using Gosu.)
 
 = Major design goals for 0.7x (immediately needed to complete playable games) =
-  * switch to MSVC 05
   * USB input devices on Mac!
-  * ...well yeah, USB input devices on Linux are cool too, but who's going to implement it?
+  * switch to MSVC 05
+  * delegate Linux support (help!)
   * text input system for chat boxes, high-score lists etc.
   * more sophisticated Audio interface for talking NPC's etc.
 
