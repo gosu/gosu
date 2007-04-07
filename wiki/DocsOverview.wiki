@@ -1,4 +1,4 @@
-#summary All relevant information in one place.
+#summary Entry point to all of Gosu's documentation.
 #labels Featured
 
 GettingStarted
