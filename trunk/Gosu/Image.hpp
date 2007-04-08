@@ -59,16 +59,12 @@ namespace Gosu
             AlphaMode mode = amDefault) const;
         // IMPR: drawRotMod should be available as well.
 
-#ifndef SWIG
-        //! Draws the image with the rotation and flip status represented by
-        //! the given RotFlip object.
+        #ifndef SWIG
         void drawRotFlip(double x, double y, ZPos z,
             RotFlip rf,
             double factorX = 1, double factorY = 1,
             Color c = Colors::white,
             AlphaMode mode = amDefault) const;
-        //! Like drawRotFlip(), but allows to give modulation colors for all
-        //! four corners.
         void drawRotFlipMod(double x, double y, ZPos z,
             RotFlip rf,
             double factorX, double factorY,
@@ -77,10 +73,9 @@ namespace Gosu
 
         //! Provides access to the underlying image data object.
         const ImageData& getData() const;
-#endif
+        #endif
     };
 
-#ifndef SWIG
     //! Convenience function that splits a bitmap into an area of small 
     //! rectangles and creates images from them.
     //! \param tileWidth If positive, specifies the width of one tile in
@@ -118,7 +113,6 @@ namespace Gosu
                     x * tileWidth, y * tileHeight, tileWidth, tileHeight,
                     hardBorders)));
     }
-#endif
 }
 
 #endif

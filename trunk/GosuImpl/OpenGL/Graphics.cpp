@@ -101,7 +101,7 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
                  clearWithColor.alpha()/255.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    return true; // FIXME!
+    return true;
 }
 
 void Gosu::Graphics::end()
@@ -110,7 +110,6 @@ void Gosu::Graphics::end()
         if (!pimpl->textures[i].expired())
             boost::shared_ptr<OpenGL::Texture>(pimpl->textures[i])->sync();
     pimpl->queue.performBlits();
-//    glXSwapBuffers(dpy, window);
     glFlush();
 }
 

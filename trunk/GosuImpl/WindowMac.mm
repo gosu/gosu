@@ -146,6 +146,7 @@ struct Gosu::Window::Impl
     
     static void doTick(Window& window)
     {
+        assert(&window);
         if (!window.graphics().fullscreen())
         {
             if (NSPointInRect([window.pimpl->window.obj() mouseLocationOutsideOfEventStream],
