@@ -174,9 +174,8 @@ Gosu::Bitmap loadImage(const std::wstring& filename) {
     Image(Gosu::Window& window, const std::string& filename, bool hardBorders = false) {
         return new Gosu::Image(window.graphics(), loadImage(Gosu::widen(filename)), hardBorders);
     }
-    Image(Gosu::Window& window, const std::string& filename,
-          unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-          bool hardBorders = false) {
+    Image(Gosu::Window& window, const std::string& filename, bool hardBorders,
+          unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight) {
         return new Gosu::Image(window.graphics(), loadImage(Gosu::widen(filename)),
                                srcX, srcY, srcWidth, srcHeight, hardBorders);
     }
