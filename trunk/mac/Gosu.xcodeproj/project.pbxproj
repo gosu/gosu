@@ -389,13 +389,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D4CA894C0BC68B5D00A431AC /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -424,7 +417,6 @@
 			buildConfigurationList = D4CA89510BC68B9E00A431AC /* Build configuration list for PBXNativeTarget "RubyGosu" */;
 			buildPhases = (
 				D4CA895C0BC68DF800A431AC /* ShellScript */,
-				D4CA894C0BC68B5D00A431AC /* Headers */,
 				D4CA894D0BC68B5D00A431AC /* Sources */,
 				D4CA894E0BC68B5D00A431AC /* Frameworks */,
 			);
@@ -557,6 +549,7 @@
 		4FADC24308B4156D00ABE55E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CONFIGURATION_BUILD_DIR = .;
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -565,9 +558,14 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = /Library/Frameworks;
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
+				OTHER_LDFLAGS = (
+					"-lz_universal",
+					"-lfmod_universal",
+					"-lpng_universal",
+				);
 				PRODUCT_NAME = Gosu;
 				WRAPPER_EXTENSION = framework;
 				ZERO_LINK = YES;
@@ -581,14 +579,20 @@
 					ppc,
 					i386,
 				);
+				CONFIGURATION_BUILD_DIR = .;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = /Library/Frameworks;
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
+				OTHER_LDFLAGS = (
+					"-lz_universal",
+					"-lfmod_universal",
+					"-lpng_universal",
+				);
 				PRODUCT_NAME = Gosu;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -597,53 +601,36 @@
 		4FADC24708B4156D00ABE55E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DEPLOYMENT_LOCATION = YES;
-				DSTROOT = /;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					..,
 					/usr/local/include,
 				);
-				INSTALL_PATH = /Library/Frameworks;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
-				OTHER_LDFLAGS = (
-					"-lz_universal",
-					"-lfmod_universal",
-					"-lpng_universal",
-				);
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Debug;
 		};
 		4FADC24808B4156D00ABE55E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DEPLOYMENT_LOCATION = YES;
-				DEPLOYMENT_POSTPROCESSING = NO;
-				DSTROOT = /;
+				DEPLOYMENT_POSTPROCESSING = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					..,
 					/usr/local/include,
 				);
-				INSTALL_PATH = /Library/Frameworks;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
-				OTHER_LDFLAGS = (
-					"-lz_universal",
-					"-lfmod_universal",
-					"-lpng_universal",
-				);
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Release;
 		};
 		D4CA89520BC68B9E00A431AC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CONFIGURATION_BUILD_DIR = .;
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";
@@ -656,6 +643,7 @@
 				);
 				MACH_O_TYPE = mh_bundle;
 				OTHER_LDFLAGS = (
+					"-F.",
 					"-framework",
 					Gosu,
 					"-lruby",
@@ -674,7 +662,7 @@
 					ppc,
 					i386,
 				);
-				CONFIGURATION_BUILD_DIR = ../RubyGosu;
+				CONFIGURATION_BUILD_DIR = .;
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";
@@ -687,6 +675,7 @@
 				);
 				MACH_O_TYPE = mh_bundle;
 				OTHER_LDFLAGS = (
+					"-F.",
 					"-framework",
 					Gosu,
 					"-lruby",
