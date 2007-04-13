@@ -5,7 +5,6 @@
   * move docs to Google
   * explain in general why we won't do XYZ and why you have to use boost.
   * setup forwarding from raschke.de
-  * redesign input
   * convenience functions for loading images, samples and songs from files? (Maybe C++ coders just need to have it easier to start using Gosu.)
 
 = Major design goals for 0.7x (immediately needed to complete playable games) =
