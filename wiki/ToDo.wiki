@@ -2,6 +2,7 @@
 #labels Featured
 
 = TODO 0.7 (initial Mac only, Google release) =
+  * link everything into gosu.bundle, or restore old RubyGosuStub. Decisions!!!!!!11
   * move docs to Google
   * explain in general why we won't do XYZ and why you have to use boost.
   * setup forwarding from raschke.de
