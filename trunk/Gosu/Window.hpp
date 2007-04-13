@@ -6,6 +6,7 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
+#include <Gosu/Input.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <string>
 
@@ -57,9 +58,9 @@ namespace Gosu
 
         //! Called before update when the user pressed a button while the
         //! window had the focus.
-        virtual void buttonDown(unsigned id) {}
+        virtual void buttonDown(Gosu::Button btn) {}
         //! Same as buttonDown. Called then the user released a button.
-        virtual void buttonUp(unsigned id) {}
+        virtual void buttonUp(Gosu::Button btn) {}
         
 #ifndef SWIG
         const Graphics& graphics() const;

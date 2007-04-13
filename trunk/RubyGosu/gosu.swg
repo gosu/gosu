@@ -243,12 +243,12 @@ Gosu::Bitmap loadImage(const std::wstring& filename) {
                                    z, mode);
     }
     bool isButtonDown(unsigned long btnId) const {
-        return $self->input().down(btnId);
+        return Gosu::Button(btnId).isDown();
     }
     unsigned long charToButtonId(wchar_t ch) {
-        return $self->input().charToId(ch);
+        return $self->input().charToId(ch).getId();
     }
     wchar_t buttonIdToChar(unsigned long btnId) {
-        return $self->input().idToChar(btnId);
+        return $self->input().idToChar(Gosu::Button(btnId));
     }
 };

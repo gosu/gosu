@@ -11,7 +11,7 @@
 
 namespace {
     // This is just a wild assumption. For Apple ADB keyboards, I read something
-    // about 127 being the max, but I do not know about other hardware.
+    // about 127 being the max, but checking more than that will not hurt, so...
     const unsigned numScancodes = 256;
     
     boost::array<wchar_t, numScancodes> idChars;
@@ -53,6 +53,13 @@ namespace {
             charIds[ch] = code;
         }
     }
+	 
+    boost::array<bool, Gosu::numButtons> buttonStates;
+}
+
+bool Gosu::Button::isDown() const
+{
+    return buttonStates.at(id);
 }
 
 struct Gosu::Input::Impl
@@ -64,26 +71,21 @@ struct Gosu::Input::Impl
     
     unsigned currentMods;
     
-    boost::array<bool, numButtons> buttonStates;
-    
     struct WaitingButton
     {
-        unsigned btnId;
+        Button btn;
         bool down;
-        WaitingButton(unsigned btnId, bool down) : btnId(btnId), down(down) {}
+        WaitingButton(unsigned btnId, bool down) : btn(btnId), down(down) {}
     };
     std::vector<WaitingButton> queue;
 
     Impl(Input& input)
     : input(input), mouseFactorX(1), mouseFactorY(1), currentMods(0)
     {
-        buttonStates.assign(false);
     }
     
     void enqueue(unsigned btnId, bool down)
     {
-        if (btnId == 0)
-            btnId = 0x1337; // hack to make 'A' key work, which is 0 otherwise.
         queue.push_back(WaitingButton(btnId, down));
     }
 
@@ -110,6 +112,7 @@ Gosu::Input::Input(void* window)
 : pimpl(new Impl(*this))
 {
     pimpl->window = static_cast<NSWindow*>(window);
+    buttonStates.assign(false);
     initCharTranslation();
 }
 
@@ -154,32 +157,20 @@ bool Gosu::Input::feedNSEvent(void* event)
     return false;
 }
 
-bool Gosu::Input::down(unsigned btnId) const
+wchar_t Gosu::Input::idToChar(Button btn) const
 {
-    return pimpl->buttonStates.at(btnId);
-}
-    
-wchar_t Gosu::Input::idToChar(unsigned btnId) const
-{
-    if (btnId == 0x1337)
-        btnId = 0;
-    
-    if (btnId < numScancodes)
-        return idChars[btnId];
+    if (btn.getId() < numScancodes)
+        return idChars[btn.getId()];
     else
         return 0;
 }
 
-unsigned Gosu::Input::charToId(wchar_t ch) const
+Gosu::Button Gosu::Input::charToId(wchar_t ch) const
 {
     std::map<wchar_t, unsigned>::const_iterator iter = charIds.find(ch);
     if (iter == charIds.end())
-        return 0;
-    unsigned result = iter->second;
-    if (result == 0)
-        return 0x1337;
-    else
-        return result;
+        return noButton;
+    return Gosu::Button(iter->second);
 }
 
 double Gosu::Input::mouseX() const
@@ -223,11 +214,11 @@ void Gosu::Input::update()
     for (unsigned i = 0; i < pimpl->queue.size(); ++i)
     {
         Impl::WaitingButton& wb = pimpl->queue[i];
-        pimpl->buttonStates.at(wb.btnId) = wb.down;
+        buttonStates.at(wb.btn.getId()) = wb.down;
         if (wb.down && onButtonDown)
-            onButtonDown(wb.btnId);
+            onButtonDown(wb.btn);
         else if (!wb.down && onButtonUp)
-            onButtonUp(wb.btnId);
+            onButtonUp(wb.btn);
     }
     pimpl->queue.clear();
 }

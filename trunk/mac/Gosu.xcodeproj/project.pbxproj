@@ -475,6 +475,7 @@
 			);
 			inputPaths = (
 				../RubyGosu/gosu.swg,
+				"../Gosu/*.hpp",
 			);
 			outputPaths = (
 				../RubyGosu/gosu_wrap.cxx,

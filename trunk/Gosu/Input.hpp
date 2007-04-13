@@ -29,19 +29,47 @@
 
 namespace Gosu
 {
-    //! Offers information about which buttons are currently pressed,
-    //! translates between button ids and characters and call events
-    //! when buttons are pushed or released.
+	//! Very lightweight class that identifies a button (keyboard, mouse or other device).
+	class Button
+	{
+		unsigned id;
+		
+	public:
+		//! For internal use.
+		explicit Button(unsigned id) : id(id) {}
+		//! For internal use.
+		unsigned getId() const { return id; }
+
+		//! Default constructor; == noButton.
+		Button() : id(noButton) {}
+
+		//! Conversion from ButtonName constants.
+		Button(ButtonName name) : id(name) {}
+		
+		//! Returns true if the button was pressed the last time
+		//! that the input system was updated.
+		bool isDown() const;
+	};
+	
+	//! Tests whether two Buttons identify the same physical button.
+	inline bool operator==(Button lhs, Button rhs)
+	{
+		return lhs.getId() == rhs.getId();
+	}
+	inline bool operator!=(Button lhs, Button rhs)
+	{
+		return !(lhs == rhs);
+	}
+	
+    //! Manages initialization and shutdown of the input system; only one Input
+	//! instance can live per application. (Should this limitation ever get into
+	//! anyone's way, I will happily remove it; until then, I practice KISS.)
     class Input
     {
         struct Impl;
         boost::scoped_ptr<Impl> pimpl;
 
-#ifdef SWIG
-        Input();
-#endif
-
-public:
+	public:
 #ifdef GOSU_IS_WIN
         Input(HWND window);
 #endif
@@ -55,15 +83,13 @@ public:
 #endif
         ~Input();
 
-        //! Returns whether a key was pressed when update() was called for the
-        //! last time.
-        bool down(unsigned id) const;
-
-        //! Returns the character a button id usually produces, or 0.
-        wchar_t idToChar(unsigned id) const;
-        //! Returns the id of the button that has to be pressed to produce the
-        //! given character, or 0.
-        unsigned charToId(wchar_t ch) const;
+        //! Returns the character a button usually produces, or 0.
+		//! Note: Will soon be renamed or even moved, decision pending.
+        wchar_t idToChar(Button btn) const;
+        //! Returns the button that has to be pressed to produce the
+        //! given character, or noButton.
+		//! Note: Will soon be renamed or even moved, decision pending.
+        Button charToId(wchar_t ch) const;
 
         //! Returns the horizontal position of the mouse relative to the top
         //! left corner of the window given to Input's constructor.
@@ -77,7 +103,9 @@ public:
         //! mouse is and calls onButtonUp/onButtonDown, if assigned.
         void update();
 
-        boost::function<void (unsigned)> onButtonDown, onButtonUp;
+		//! Assignable events that are called by update. You can bind these to your own functions.
+		//! If you use the Window class, it will assign forward these to its own methods.
+        boost::function<void (Button)> onButtonDown, onButtonUp;
     };
 }
 
