@@ -79,9 +79,21 @@
 		D410EB130A801B00005C7067 /* Sockets.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410EAF40A801B00005C7067 /* Sockets.hpp */; };
 		D410EB2A0A801C28005C7067 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410EB290A801C28005C7067 /* OpenGL.framework */; };
 		D410EB6E0A801CDC005C7067 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D410EB6C0A801CDC005C7067 /* InfoPlist.strings */; };
-		D4CA89580BC68D6100A431AC /* gosu_wrap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D4F0790E0BC3A37A00BC3F57 /* gosu_wrap.cxx */; };
+		D47BD32B0BD78F7200ACF014 /* RubyGosu_wrap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */; };
 		D4D8CB470BD398DE00CB51A9 /* RubyGosuStub.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D47BD33A0BD790B900ACF014 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		08FB77AAFE841565C02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
@@ -158,11 +170,13 @@
 		D410EB290A801C28005C7067 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		D410EB6A0A801CD3005C7067 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
 		D410EB6D0A801CDC005C7067 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RubyGosu_wrap.cxx; path = ../GosuImpl/RubyGosu_wrap.cxx; sourceTree = SOURCE_ROOT; };
+		D47BD3290BD78F7200ACF014 /* RubyGosu_wrap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RubyGosu_wrap.h; path = ../GosuImpl/RubyGosu_wrap.h; sourceTree = SOURCE_ROOT; };
+		D47BD32A0BD78F7200ACF014 /* RubyGosu.swg */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = RubyGosu.swg; path = ../GosuImpl/RubyGosu.swg; sourceTree = SOURCE_ROOT; };
+		D47BD33C0BD790DE00ACF014 /* RubyGosu Template.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; path = "RubyGosu Template.app"; sourceTree = "<group>"; };
 		D4CA89500BC68B5D00A431AC /* gosu.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = gosu.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = RubyGosuStub.mm; path = ../RubyGosu/RubyGosuStub.mm; sourceTree = SOURCE_ROOT; };
-		D4D8CB400BD3975700CB51A9 /* RubyGosuStub */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "compiled.mach-o.executable"; path = RubyGosuStub; sourceTree = BUILT_PRODUCTS_DIR; };
-		D4F0790E0BC3A37A00BC3F57 /* gosu_wrap.cxx */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = gosu_wrap.cxx; path = ../RubyGosu/gosu_wrap.cxx; sourceTree = SOURCE_ROOT; };
-		D4F079110BC3A4C400BC3F57 /* gosu.swg */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp; fileEncoding = 30; name = gosu.swg; path = ../RubyGosu/gosu.swg; sourceTree = SOURCE_ROOT; };
+		D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = RubyGosuStub.mm; path = ../GosuImpl/RubyGosuStub.mm; sourceTree = SOURCE_ROOT; };
+		D4D8CB400BD3975700CB51A9 /* RubyGosuStub */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RubyGosuStub; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,6 +222,7 @@
 		0867D691FE84028FC02AAC07 /* Gosu */ = {
 			isa = PBXGroup;
 			children = (
+				D47BD33C0BD790DE00ACF014 /* RubyGosu Template.app */,
 				08FB77ACFE841707C02AAC07 /* Interface */,
 				D410E8670A8018A8005C7067 /* Implementation */,
 				089C1665FE841158C02AAC07 /* Resources */,
@@ -349,8 +364,9 @@
 		D46F737C0BC3458D008003BA /* RubyGosu */ = {
 			isa = PBXGroup;
 			children = (
-				D4F079110BC3A4C400BC3F57 /* gosu.swg */,
-				D4F0790E0BC3A37A00BC3F57 /* gosu_wrap.cxx */,
+				D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */,
+				D47BD3290BD78F7200ACF014 /* RubyGosu_wrap.h */,
+				D47BD32A0BD78F7200ACF014 /* RubyGosu.swg */,
 				D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */,
 			);
 			name = RubyGosu;
@@ -424,9 +440,9 @@
 			productReference = 8D07F2C80486CC7A007CD1D0 /* Gosu.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		D4CA894F0BC68B5D00A431AC /* RubyGosu */ = {
+		D4CA894F0BC68B5D00A431AC /* RubyGosuCore */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D4CA89510BC68B9E00A431AC /* Build configuration list for PBXNativeTarget "RubyGosu" */;
+			buildConfigurationList = D4CA89510BC68B9E00A431AC /* Build configuration list for PBXNativeTarget "RubyGosuCore" */;
 			buildPhases = (
 				D4CA895C0BC68DF800A431AC /* ShellScript */,
 				D4CA894D0BC68B5D00A431AC /* Sources */,
@@ -436,7 +452,7 @@
 			);
 			dependencies = (
 			);
-			name = RubyGosu;
+			name = RubyGosuCore;
 			productName = RubyGosu;
 			productReference = D4CA89500BC68B5D00A431AC /* gosu.bundle */;
 			productType = "com.apple.product-type.library.dynamic";
@@ -445,6 +461,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D4D8CB420BD3977600CB51A9 /* Build configuration list for PBXNativeTarget "RubyGosuStub" */;
 			buildPhases = (
+				D47BD33A0BD790B900ACF014 /* CopyFiles */,
 				D4D8CB3D0BD3975700CB51A9 /* Sources */,
 				D4D8CB3E0BD3975700CB51A9 /* Frameworks */,
 			);
@@ -469,7 +486,7 @@
 			projectDirPath = "";
 			targets = (
 				8D07F2BC0486CC7A007CD1D0 /* Gosu */,
-				D4CA894F0BC68B5D00A431AC /* RubyGosu */,
+				D4CA894F0BC68B5D00A431AC /* RubyGosuCore */,
 				D4D8CB3F0BD3975700CB51A9 /* RubyGosuStub */,
 			);
 		};
@@ -511,7 +528,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ../RubyGosu\n/usr/local/bin/swig -c++ -ruby -autorename gosu.swg";
+			shellScript = "cd ..\n/usr/local/bin/swig -c++ -ruby -autorename GosuImpl/RubyGosu.swg";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -558,7 +575,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4CA89580BC68D6100A431AC /* gosu_wrap.cxx in Sources */,
+				D47BD32B0BD78F7200ACF014 /* RubyGosu_wrap.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -668,7 +685,7 @@
 		D4CA89520BC68B9E00A431AC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CONFIGURATION_BUILD_DIR = ../RubyGosu;
+				CONFIGURATION_BUILD_DIR = "../build/RubyGosu Template.app/Contents/Resources";
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";
@@ -681,7 +698,7 @@
 				);
 				MACH_O_TYPE = mh_bundle;
 				OTHER_LDFLAGS = (
-					"-F.",
+					"-F../build",
 					"-framework",
 					Gosu,
 					"-lruby",
@@ -700,7 +717,7 @@
 					ppc,
 					i386,
 				);
-				CONFIGURATION_BUILD_DIR = .;
+				CONFIGURATION_BUILD_DIR = "../build/RubyGosu Template.app/Contents/Resources";
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";
@@ -713,7 +730,7 @@
 				);
 				MACH_O_TYPE = mh_bundle;
 				OTHER_LDFLAGS = (
-					"-F.",
+					"-F../build",
 					"-framework",
 					Gosu,
 					"-lruby",
@@ -796,7 +813,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D4CA89510BC68B9E00A431AC /* Build configuration list for PBXNativeTarget "RubyGosu" */ = {
+		D4CA89510BC68B9E00A431AC /* Build configuration list for PBXNativeTarget "RubyGosuCore" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D4CA89520BC68B9E00A431AC /* Debug */,
