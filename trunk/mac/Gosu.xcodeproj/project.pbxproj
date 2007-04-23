@@ -83,6 +83,8 @@
 		D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */; };
 		D459FF840BDCD5D400E7F0D6 /* Gosu.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8D07F2C80486CC7A007CD1D0 /* Gosu.framework */; };
 		D459FF990BDCD9CF00E7F0D6 /* Gosu.icns in Resources */ = {isa = PBXBuildFile; fileRef = D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */; };
+		D459FFAE0BDCE41300E7F0D6 /* Gosu-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D459FFAD0BDCE41300E7F0D6 /* Gosu-Info.plist */; };
+		D459FFBD0BDD67E800E7F0D6 /* Main.rb in Resources */ = {isa = PBXBuildFile; fileRef = D459FFBC0BDD67E800E7F0D6 /* Main.rb */; };
 		D47BD32B0BD78F7200ACF014 /* RubyGosu_wrap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */; };
 /* End PBXBuildFile section */
 
@@ -196,15 +198,15 @@
 		D410EAF30A801B00005C7067 /* Socket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Socket.cpp; sourceTree = "<group>"; };
 		D410EAF40A801B00005C7067 /* Sockets.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = Sockets.hpp; sourceTree = "<group>"; };
 		D410EB290A801C28005C7067 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
-		D410EB6A0A801CD3005C7067 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
 		D410EB6D0A801CDC005C7067 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D459FF440BDCD23500E7F0D6 /* RubyGosu Template.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RubyGosu Template.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D459FF460BDCD23600E7F0D6 /* RubyGosu Template-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "RubyGosu Template-Info.plist"; sourceTree = "<group>"; };
 		D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Gosu.icns; sourceTree = "<group>"; };
+		D459FFAD0BDCE41300E7F0D6 /* Gosu-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Gosu-Info.plist"; sourceTree = "<group>"; };
+		D459FFBC0BDD67E800E7F0D6 /* Main.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = Main.rb; sourceTree = "<group>"; };
 		D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RubyGosu_wrap.cxx; path = ../GosuImpl/RubyGosu_wrap.cxx; sourceTree = SOURCE_ROOT; };
 		D47BD3290BD78F7200ACF014 /* RubyGosu_wrap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RubyGosu_wrap.h; path = ../GosuImpl/RubyGosu_wrap.h; sourceTree = SOURCE_ROOT; };
 		D47BD32A0BD78F7200ACF014 /* RubyGosu.swg */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = RubyGosu.swg; path = ../GosuImpl/RubyGosu.swg; sourceTree = SOURCE_ROOT; };
-		D47BD33C0BD790DE00ACF014 /* RubyGosu Template.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; path = "RubyGosu Template.app"; sourceTree = "<group>"; };
 		D4CA89500BC68B5D00A431AC /* gosu.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = gosu.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = RubyGosuStub.mm; path = ../GosuImpl/RubyGosuStub.mm; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -253,7 +255,7 @@
 		0867D691FE84028FC02AAC07 /* Gosu */ = {
 			isa = PBXGroup;
 			children = (
-				D47BD33C0BD790DE00ACF014 /* RubyGosu Template.app */,
+				D459FFBC0BDD67E800E7F0D6 /* Main.rb */,
 				08FB77ACFE841707C02AAC07 /* Interface */,
 				D410E8670A8018A8005C7067 /* Implementation */,
 				089C1665FE841158C02AAC07 /* Resources */,
@@ -280,8 +282,8 @@
 			isa = PBXGroup;
 			children = (
 				D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */,
-				D410EB6A0A801CD3005C7067 /* Info.plist */,
 				D410EB6C0A801CDC005C7067 /* InfoPlist.strings */,
+				D459FFAD0BDCE41300E7F0D6 /* Gosu-Info.plist */,
 				D459FF460BDCD23600E7F0D6 /* RubyGosu Template-Info.plist */,
 			);
 			name = Resources;
@@ -543,6 +545,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D459FF990BDCD9CF00E7F0D6 /* Gosu.icns in Resources */,
+				D459FFAE0BDCE41300E7F0D6 /* Gosu-Info.plist in Resources */,
+				D459FFBD0BDD67E800E7F0D6 /* Main.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
