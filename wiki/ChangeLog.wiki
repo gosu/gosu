@@ -1,11 +1,17 @@
 #summary Log of Gosu's development.
+#labels Featured
 
 =0.7.0=
-  * Mac: added idToChar/charToId
-  * Mac: added fullscreen
+  * Moved to Google Code!
+  * Mac: implemented idToChar/charToId
+  * Mac: implemented fullscreen
+  * C++: Input uses Gosu::Button instead of unsigned for identification
+  * Ruby: clearer Mac game distribution scheme
+  * Ruby: moved to SWIG
+  * Ruby: MUCH improved exception handling
 
 =0.6.5=
-  * Linux, Mac: Fixed mmap()ing.
+  * Linux, Mac: Fixed File.
 
 =0.6.4=
   * Linux: Made texture binding lazier; this seriously speeds up Gosu on some 3D drivers.
