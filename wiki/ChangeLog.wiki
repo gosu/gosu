@@ -1,0 +1,75 @@
+#summary Log of Gosu's development.
+
+=0.7.0=
+  * Mac: added idToChar/charToId
+  * Mac: added fullscreen
+
+=0.6.5=
+  * Linux, Mac: Fixed mmap()ing.
+
+=0.6.4=
+  * Linux: Made texture binding lazier; this seriously speeds up Gosu on some 3D drivers.
+  * Linux: Made checking for fmod more tolerant.
+  * Mac: simplified keyboard code; if this breaks something please inform us!
+  * Mac: Universal at last!
+  * Mac: updated to .xcodeproj files
+  * Win: Updated to more recent library versions.
+
+=0.6.3=
+  * Mac: added mouse clicking and hiding
+
+=0.6.2=
+  * Mac: Now even fixed Gosu/Input for C++!
+  * Win: Another Input bug fixed.
+
+=0.6.1=
+  * All: Fixed the stuff that the 0.6.0 update broke
+  * Linux, Mac: Improved installation routine
+
+=0.6.0=
+  * All: Added Mac support
+  * Ruby: Added draw_line and draw_triangle
+
+=0.5.1=
+  * All: Added Gosu::File and made it the prefererred option over loadFile/saveFile
+
+=0.5.0=
+  * All: Fixed Song::playing
+  * All: Replaced Gosu::Streams by new Gosu::IO system
+  * Win: Fixed Gosu::argument() splitting
+  * Win: Fixed Gosu::argument() range checking
+
+=0.4.3=
+  * All: globally replaced Bitmap::replace() by applyColorKey() for color keying
+  * All: added Win::appFilename and Win::appDirectory
+  * All: added Gosu/Compression.hpp
+
+=0.4.2=
+  * All: fixed some bugs in Song
+  * All: multiple instances of Audio prohibited
+  * All: added distance()
+  * All: added numpad keyboard IDs
+  * Unix: Compile OpenAL if fmod isn't found
+
+=0.4.1=
+  * Ruby: Some documentation improvements
+  * Ruby: Linux bug fixes
+  * Ruby: draw_quad fixed
+
+=0.4.0=
+  * All: merged documentation and website into one
+  * All: tutorial greatly improved
+  * Ruby: tutorial now supports Ruby
+  * Ruby: reference improved
+
+=0.3.2=
+  * MSVC: fixed linker errors (remains of MSVC6 compatibility)
+  * GCC: improved config script
+  * Ruby: added Linux support
+  * Ruby: improved exception stability
+
+=0.3.1=
+  * MSVC: removed non-working MSVC6 compatibility (hopeless)
+
+=0.3.0=
+(initial release)
