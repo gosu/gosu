@@ -64,7 +64,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = ../../Gosu/
+INPUT                  = ../Gosu/
 FILE_PATTERNS          = *.hpp
 RECURSIVE              = NO
 EXCLUDE                = 

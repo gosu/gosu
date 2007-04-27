@@ -33,6 +33,16 @@
     $result = rb_str_new2(Gosu::narrow($1).c_str());
 }
 
+%typemap(in) Gosu::Button {
+	$1 = Gosu::Button(NUM2LONG($input));
+}
+%typemap(out) Gosu::Button {
+	$result = LONG2NUM($1.getId());
+}
+%typemap(directorin) Gosu::Button {
+	$input = LONG2NUM($1.getId());
+}
+
 // Typemaps for enums that should be given in as symbols.
 %typemap(in) Gosu::AlphaMode {
     VALUE localTemporary = rb_obj_as_string($input);
@@ -242,13 +252,13 @@ Gosu::Bitmap loadImage(const std::wstring& filename) {
                                    x3, y3, c3, x4, y4, c4,
                                    z, mode);
     }
-    bool isButtonDown(unsigned long btnId) const {
-        return Gosu::Button(btnId).isDown();
+    bool isButtonDown(Gosu::Button btn) const {
+        return btn.isDown();
     }
-    unsigned long charToButtonId(wchar_t ch) {
-        return $self->input().charToId(ch).getId();
+    Gosu::Button charToButtonId(wchar_t ch) {
+        return $self->input().charToId(ch);
     }
-    wchar_t buttonIdToChar(unsigned long btnId) {
-        return $self->input().idToChar(Gosu::Button(btnId));
+    wchar_t buttonIdToChar(Gosu::Button btn) {
+        return $self->input().idToChar(btn);
     }
 };

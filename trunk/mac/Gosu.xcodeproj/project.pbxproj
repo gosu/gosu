@@ -83,7 +83,6 @@
 		D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */; };
 		D459FF840BDCD5D400E7F0D6 /* Gosu.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8D07F2C80486CC7A007CD1D0 /* Gosu.framework */; };
 		D459FF990BDCD9CF00E7F0D6 /* Gosu.icns in Resources */ = {isa = PBXBuildFile; fileRef = D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */; };
-		D459FFAE0BDCE41300E7F0D6 /* Gosu-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D459FFAD0BDCE41300E7F0D6 /* Gosu-Info.plist */; };
 		D459FFBD0BDD67E800E7F0D6 /* Main.rb in Resources */ = {isa = PBXBuildFile; fileRef = D459FFBC0BDD67E800E7F0D6 /* Main.rb */; };
 		D47BD32B0BD78F7200ACF014 /* RubyGosu_wrap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */; };
 /* End PBXBuildFile section */
@@ -93,21 +92,21 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D459FF430BDCD23500E7F0D6 /* RubyGosu Template */;
+			remoteGlobalIDString = D459FF430BDCD23500E7F0D6;
 			remoteInfo = "RubyGosu Template";
 		};
 		D459FF7B0BDCD51E00E7F0D6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8D07F2BC0486CC7A007CD1D0 /* Gosu */;
+			remoteGlobalIDString = 8D07F2BC0486CC7A007CD1D0;
 			remoteInfo = Gosu;
 		};
 		D459FF7F0BDCD52400E7F0D6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8D07F2BC0486CC7A007CD1D0 /* Gosu */;
+			remoteGlobalIDString = 8D07F2BC0486CC7A007CD1D0;
 			remoteInfo = Gosu;
 		};
 /* End PBXContainerItemProxy section */
@@ -255,7 +254,6 @@
 		0867D691FE84028FC02AAC07 /* Gosu */ = {
 			isa = PBXGroup;
 			children = (
-				D459FFBC0BDD67E800E7F0D6 /* Main.rb */,
 				08FB77ACFE841707C02AAC07 /* Interface */,
 				D410E8670A8018A8005C7067 /* Implementation */,
 				089C1665FE841158C02AAC07 /* Resources */,
@@ -285,6 +283,7 @@
 				D410EB6C0A801CDC005C7067 /* InfoPlist.strings */,
 				D459FFAD0BDCE41300E7F0D6 /* Gosu-Info.plist */,
 				D459FF460BDCD23600E7F0D6 /* RubyGosu Template-Info.plist */,
+				D459FFBC0BDD67E800E7F0D6 /* Main.rb */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -545,7 +544,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D459FF990BDCD9CF00E7F0D6 /* Gosu.icns in Resources */,
-				D459FFAE0BDCE41300E7F0D6 /* Gosu-Info.plist in Resources */,
 				D459FFBD0BDD67E800E7F0D6 /* Main.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -569,11 +567,11 @@
 			files = (
 			);
 			inputPaths = (
-				../RubyGosu/gosu.swg,
+				../GosuImpl/RubyGosu.swg,
 				"../Gosu/*.hpp",
 			);
 			outputPaths = (
-				../RubyGosu/gosu_wrap.cxx,
+				../GosuImpl/gosu_wrap.cxx,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -671,7 +669,7 @@
 		4FADC24308B4156D00ABE55E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CONFIGURATION_BUILD_DIR = ../build;
+				CONFIGURATION_BUILD_DIR = ..;
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -701,7 +699,7 @@
 					ppc,
 					i386,
 				);
-				CONFIGURATION_BUILD_DIR = ../build;
+				CONFIGURATION_BUILD_DIR = ..;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
@@ -777,7 +775,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "RubyGosu Template";
-				SYMROOT = ../build;
+				SYMROOT = ..;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -811,7 +809,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "RubyGosu Template";
-				SYMROOT = ../build;
+				SYMROOT = ..;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -820,7 +818,7 @@
 		D4CA89520BC68B9E00A431AC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "../build/RubyGosu Template.app/Contents/Resources";
+				CONFIGURATION_BUILD_DIR = "../RubyGosu Template.app/Contents/Resources";
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";
@@ -833,7 +831,7 @@
 				);
 				MACH_O_TYPE = mh_bundle;
 				OTHER_LDFLAGS = (
-					"-F../build",
+					"-F..",
 					"-framework",
 					Gosu,
 					"-lruby",
@@ -852,7 +850,7 @@
 					ppc,
 					i386,
 				);
-				CONFIGURATION_BUILD_DIR = "../build/RubyGosu Template.app/Contents/Resources";
+				CONFIGURATION_BUILD_DIR = "../RubyGosu Template.app/Contents/Resources";
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";
@@ -865,7 +863,7 @@
 				);
 				MACH_O_TYPE = mh_bundle;
 				OTHER_LDFLAGS = (
-					"-F../build",
+					"-F..",
 					"-framework",
 					Gosu,
 					"-lruby",
