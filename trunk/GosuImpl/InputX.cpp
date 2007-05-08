@@ -43,14 +43,14 @@ bool Gosu::Input::down(unsigned id) const
     return pimpl->keyMap[id];
 }
 
-unsigned Gosu::Input::charToId(wchar_t ch) const
+Gosu::Button Gosu::Input::charToId(wchar_t ch) const
 {
-    return ch;
+    return Gosu::Button(ch);
 }
 
-wchar_t Gosu::Input::idToChar(unsigned id) const
+wchar_t Gosu::Input::idToChar(Button btn) const
 {
-    return id;
+    return btn.getId();
 }
 
 double Gosu::Input::mouseX() const
@@ -74,7 +74,7 @@ void Gosu::Input::update()
                 event.xkey.keycode, 0);
             pimpl->keyMap[keysym] = true;
             if(onButtonDown)
-                onButtonDown(keysym);
+                onButtonDown(*reinterpret_cast<Button*>(&keysym));
         }
         else if(event.type == KeyRelease)
         {
@@ -82,7 +82,7 @@ void Gosu::Input::update()
                 event.xkey.keycode, 0);
             pimpl->keyMap[keysym] = false;
             if(onButtonUp)
-                onButtonUp(keysym);
+                onButtonUp(*reinterpret_cast<Button*>(&keysym));
         }
         else if(event.type == ButtonPress)
         {
@@ -96,7 +96,7 @@ void Gosu::Input::update()
             }
             pimpl->keyMap[id] = true;
             if(onButtonDown)
-                onButtonDown(id); // FIXME!
+                onButtonDown(*reinterpret_cast<Button*>(&id));
         }
         else if(event.type == ButtonRelease)
         {
@@ -110,7 +110,7 @@ void Gosu::Input::update()
             }
             pimpl->keyMap[id] = false;
             if(onButtonUp)
-                onButtonUp(id); // FIXME!
+                onButtonUp(*reinterpret_cast<Button*>(&id));
         }
         else if(event.type == MotionNotify)
         {

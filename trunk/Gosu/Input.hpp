@@ -91,6 +91,9 @@ namespace Gosu
 		//! Note: Will soon be renamed or even moved, decision pending.
         Button charToId(wchar_t ch) const;
 
+	//!! Added by Andares, it's missing for some reason.
+	bool down(unsigned id) const;
+
         //! Returns the horizontal position of the mouse relative to the top
         //! left corner of the window given to Input's constructor.
         double mouseX() const;

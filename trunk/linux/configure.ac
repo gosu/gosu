@@ -7,7 +7,7 @@ AC_INIT(Gosu, 0.6, jan.luecker@gmx.de)
 GOSU_A_OBJS=\$\(BASE_OBJS\)
 GOSU_A_OBJS=${GOSU_A_OBJS}" \$(NET_OBJS)"
 
-TO_BE_MADE="directories gosu.a examples gosu-config"
+TO_BE_MADE="directories gosu.a gosu.so examples gosu-config"
 
 # Checks for programs.
 AC_PROG_CXX

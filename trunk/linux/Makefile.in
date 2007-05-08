@@ -42,6 +42,15 @@ directories:
 gosu.a: $(OBJS)
 	ar -r gosu.a @GOSU_A_OBJS@
 
+gosu.so : $(OBJS)
+	g++ -shared -o gosu.so @GOSU_A_OBJS@
+
+# In progress!
+install:
+	cp -p gosu.so gosu.a /usr/lib
+	cp -pr ../Gosu /usr/include
+	ldconfig
+
 clean:
 	rm -f $(OBJS) gosu.a $(XPLS) $(RUBYOBJS) gosu.so gosu-config
 
