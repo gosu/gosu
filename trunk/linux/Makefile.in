@@ -45,10 +45,14 @@ gosu.a: $(OBJS)
 gosu.so : $(OBJS)
 	g++ -shared -o gosu.so @GOSU_A_OBJS@
 
-# In progress!
-install:
-	cp -p gosu.so gosu.a /usr/lib
+install: gosu.so
+	cp -p gosu.so /usr/lib/libgosu.so
 	cp -pr ../Gosu /usr/include
+	ldconfig
+
+uninstall:
+	rm /usr/lib/libgosu.so
+	rm -rf /usr/include/Gosu
 	ldconfig
 
 clean:
