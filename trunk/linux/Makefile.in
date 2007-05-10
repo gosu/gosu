@@ -8,6 +8,7 @@ BASE_OBJS = Math.o Utility.o IO.o FileUnix.o \
     Graphics/Text.o Graphics/BitmapColorKey.o DirectoriesUnix.o
 NET_OBJS = Sockets/CommSocket.o Sockets/ListenerSocket.o Sockets/Socket.o Sockets/MessageSocket.o
 OPENAL_OBJ = AudioOpenAL.o
+SDLMIXER_OBJ = AudioSDL.o
 FMOD_OBJ = AudioFmod.o
 
 OBJS = @GOSU_A_OBJS@
@@ -22,7 +23,7 @@ RUBYOBJS = RubyGosu/Color.o RubyGosu/Font.o RubyGosu/Image.o \
 XPLS = ../examples/Tutorial2 ../examples/Tutorial3 ../examples/Tutorial4 \
        ../examples/Tutorial5 ../examples/Tutorial6 ../examples/Tutorial7
 
-CXXFLAGS += -I.. @FMOD_INC@ -Wall \
+CXXFLAGS += -I.. @AUDIO_INC@ -Wall \
     @PANGO_CXX_FLAGS@ @X_INCS@ \
     -I@RUBY_INC_DIR@ -fPIC -DBOOST_DISABLE_THREADS
 
@@ -56,7 +57,8 @@ uninstall:
 	ldconfig
 
 clean:
-	rm -f $(OBJS) gosu.a $(XPLS) $(RUBYOBJS) gosu.so gosu-config
+	-rm -f $(OBJS) gosu.a $(XPLS) $(RUBYOBJS) gosu.so gosu-config
+	-rmdir RubyGosu OpenGL Graphics Sockets
 
 $(OBJS): %.o: ../GosuImpl/%.cpp
 	$(CXX) ../GosuImpl/$*.cpp -o $@ $(CXXFLAGS) -c

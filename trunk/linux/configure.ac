@@ -52,25 +52,35 @@ AC_SUBST(PANGO_CXX_FLAGS)
 PANGO_LIBS=`pkg-config pangoft2 --libs`
 AC_SUBST(PANGO_LIBS)
 
-# Try some fmod.so variants
+# Try to find a suitable audio library.
 AC_MSG_CHECKING(for fmod)
 AUDIO_LIBS="/usr/lib/libfmod.so"
-FMOD_INC=""
+AUDIO_INC=""
 if test ! -f $AUDIO_LIBS; then
   AUDIO_LIBS=`ls ../fmod*/api/libfmod*.so 2> /dev/null`
-  FMOD_INC=-I`ls -d ../fmod*/api/inc 2> /dev/null`
+  AUDIO_INC=-I`ls -d ../fmod*/api/inc 2> /dev/null`
 fi
 # If one is found, use AudioFmod
 if test $AUDIO_LIBS; then
-#  GOSU_AUDIO=AudioFmod.o
-GOSU_A_OBJS=${GOSU_A_OBJS}" \$(FMOD_OBJ)"
+  GOSU_A_OBJS=${GOSU_A_OBJS}" \$(FMOD_OBJ)"
+  AC_MSG_RESULT(yes)
+  AC_SUBST(AUDIO_LIBS)
+  AC_SUBST(AUDIO_INC)
 else
-  AC_MSG_ERROR(Missing fmod)
+  AC_MSG_RESULT(no)
+  AC_MSG_CHECKING(for SDL_mixer)
+  if test -f "/usr/lib/libSDL_mixer.so"; then
+    GOSU_A_OBJS=${GOSU_A_OBJS}" \$(SDLMIXER_OBJ)"
+    AUDIO_LIBS="`sdl-config --libs` -lSDL_mixer"
+    AUDIO_INC=`sdl-config --cflags`
+    AC_MSG_RESULT(yes)
+    AC_SUBST(AUDIO_LIBS)
+    AC_SUBST(AUDIO_INC)
+  else
+    AC_MSG_RESULT(no)
+    AC_MSG_ERROR(No suitable audio library found)
+  fi
 fi
-
-AC_MSG_RESULT(yes)
-AC_SUBST(AUDIO_LIBS)
-AC_SUBST(FMOD_INC)
 
 AC_CHECK_PROGS(ruby, ruby1.9 ruby1.8 ruby)
 RUBY_INC_DIR=`${ruby} -e 'require "rbconfig";print Config::CONFIG[["archdir"]]'`
