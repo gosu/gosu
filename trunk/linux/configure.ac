@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 #AC_PREREQ(2.59)
-AC_INIT(Gosu, 0.6, jan.luecker@gmx.de)
+AC_INIT(Gosu, 0.7, jan.luecker@gmx.de)
 
 GOSU_A_OBJS=\$\(BASE_OBJS\)
 GOSU_A_OBJS=${GOSU_A_OBJS}" \$(NET_OBJS)"

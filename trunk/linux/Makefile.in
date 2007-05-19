@@ -44,7 +44,7 @@ gosu.a: $(OBJS)
 	ar -r gosu.a @GOSU_A_OBJS@
 
 gosu.so : $(OBJS)
-	g++ -shared -o gosu.so @GOSU_A_OBJS@
+	g++ -shared -o gosu.so ${LIBS} @GOSU_A_OBJS@
 
 install: gosu.so
 	cp -p gosu.so /usr/lib/libgosu.so
