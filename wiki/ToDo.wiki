@@ -2,13 +2,13 @@
 #labels Featured
 
 = TODO 0.7 (initial Mac only, Google release) =
-  * link everything into gosu.bundle, or restore old RubyGosuStub. Decisions!!!!!!11
-  * move docs to Google
   * explain in general why we won't do XYZ and why you have to use boost.
   * setup forwarding from raschke.de
   * convenience functions for loading images, samples and songs from files? (Maybe C++ coders just need to have it easier to start using Gosu.)
 
 = Major design goals for 0.7x (immediately needed to complete playable games) =
+  * With UTF-8 support in C++ coming, get rid of all the wstring stuff. -> http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2209.html
+  * Also, maybe use tr1::shared_ptr instead of boost etc.? Don't think this helps anything.
   * USB input devices on Mac!
   * switch to MSVC 05
   * delegate Linux support (help!)
