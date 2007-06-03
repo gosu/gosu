@@ -243,6 +243,19 @@ Gosu::Bitmap loadImage(const std::wstring& filename) {
 %rename("button_down?") isButtonDown;
 %include "../Gosu/Window.hpp"
 %extend Gosu::Window {
+    void drawLine(double x1, double y1, Gosu::Color c1,
+                  double x2, double y2, Gosu::Color c2,
+                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault) {
+        $self->graphics().drawLine(x1, y1, c1, x2, y2, c2,
+                                   z, mode);
+    }
+    void drawTriangle(double x1, double y1, Gosu::Color c1,
+                      double x2, double y2, Gosu::Color c2,
+                      double x3, double y3, Gosu::Color c3,
+                      Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault) {
+        $self->graphics().drawTriangle(x1, y1, c1, x2, y2, c2, x3, y3, c3,
+                                       z, mode);
+    }
     void drawQuad(double x1, double y1, Gosu::Color c1,
                   double x2, double y2, Gosu::Color c2,
                   double x3, double y3, Gosu::Color c3,
