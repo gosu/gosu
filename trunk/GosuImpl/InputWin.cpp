@@ -9,6 +9,15 @@
 #include <stdexcept>
 #include <vector>
 
+namespace {
+	boost::array<bool, Gosu::numButtons> buttons;
+}
+
+bool Gosu::Button::isDown() const
+{
+    return buttons.at(id);
+}
+
 struct Gosu::Input::Impl
 {
     HWND window;
@@ -21,8 +30,6 @@ struct Gosu::Input::Impl
     double mouseX, mouseY;
 	double mouseFactorX, mouseFactorY;
     bool swapMouse;
-
-    boost::array<bool, numButtons> buttons;
 
     struct EventInfo
     {
@@ -336,19 +343,14 @@ Gosu::Input::Input(HWND window)
     // Get into a usable default state.
 
     pimpl->updateMousePos();
-    pimpl->buttons.assign(false);
+    buttons.assign(false);
 }
 
 Gosu::Input::~Input()
 {
 }
 
-bool Gosu::Input::down(unsigned id) const
-{
-    return pimpl->buttons.at(id);
-}
-
-unsigned Gosu::Input::charToId(wchar_t ch) const
+Gosu::Button Gosu::Input::charToId(wchar_t ch) const
 {
     SHORT vkey = ::VkKeyScan(/*std::*/towlower(ch));
 
@@ -356,32 +358,32 @@ unsigned Gosu::Input::charToId(wchar_t ch) const
     if (HIBYTE(vkey) == static_cast<unsigned char>(-1) &&
         LOBYTE(vkey) == static_cast<unsigned char>(-1))
     {
-        return false;
+		return noButton;
     }
 
     // Key needs special modifier keys?
     if (HIBYTE(vkey) != 0)
-        return false;
+        return noButton;
 
     // Now try to translate the virtual key code into a scan code.
-    return ::MapVirtualKey(vkey, 0);
+    return Button(::MapVirtualKey(vkey, 0));
 }
 
-wchar_t Gosu::Input::idToChar(unsigned id) const
+wchar_t Gosu::Input::idToChar(Gosu::Button btn) const
 {
     // Only translate keyboard ids.
-    if (id > 255)
+    if (btn.getId() > 255)
         return 0;
 
     // Special case...?
-    if (id == kbSpace)
+    if (btn.getId() == kbSpace)
         return L' ';
 
     // Try to get the key name.
     // (Three elements so too-long names will make GKNT return 3 and we'll know.)
     wchar_t buf[3];
-    if (::GetKeyNameText(id << 16, buf, 3) == 1)
-        return /*std::*/towlower(buf[0]);
+    if (::GetKeyNameText(btn.getId() << 16, buf, 3) == 1)
+		return /*std::*/towlower(buf[0]);
 
     return 0;
 }
@@ -415,12 +417,12 @@ void Gosu::Input::update()
         if (events[i].action == Impl::EventInfo::buttonDown)
         {
             if (onButtonDown)
-                onButtonDown(events[i].id);
+                onButtonDown(Button(events[i].id));
         }
         else
         {
             if (onButtonUp)
-                onButtonUp(events[i].id);
+                onButtonUp(Button(events[i].id));
         }
     }
 }

@@ -14,22 +14,11 @@
 #pragma comment(lib, "winmm.lib")
 #pragma comment(lib, "ws2_32.lib")
 
-#ifdef _MT
-    #ifdef NDEBUG
-    #pragma comment(lib, "GosuDyn.lib")
-    #pragma comment(lib, "GosuAux_zlibDyn.lib")
-    #else
-    #pragma comment(lib, "GosuDebugDyn.lib")
-    #pragma comment(lib, "GosuAux_zlibDebugDyn.lib")
-    #endif
+
+#ifdef NDEBUG
+#pragma comment(lib, "Gosu.lib")
 #else
-    #ifdef NDEBUG
-    #pragma comment(lib, "Gosu.lib")
-    #pragma comment(lib, "GosuAux_zlib.lib")
-    #else
-    #pragma comment(lib, "GosuDebug.lib")
-    #pragma comment(lib, "GosuAux_zlibDebug.lib")
-    #endif
+#pragma comment(lib, "GosuDebug.lib")
 #endif
 
 #endif
