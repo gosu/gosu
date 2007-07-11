@@ -10,10 +10,10 @@ Download and extract the latest Boost release. Open Terminal, 'cd' into to that 
     /.configure
     make
     sudo make install
-    sudo ln -s /usr/local/include/boost-1_33_1/boost /usr/include/boost
+    sudo ln -s /usr/local/include/boost-1_34/boost /usr/include/boost
 }}}
   
-(Replace "1_33_1" with boost's current version.)
+(Replace "1_34" with boost's current version.)
 
 = Starting a new Gosu game (C++) =
 
