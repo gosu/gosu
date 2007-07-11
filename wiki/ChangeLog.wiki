@@ -1,6 +1,11 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.1=
+  * Win: Moved to SWIG too
+  * Mac: Fixed build script
+  * Source: Incorporated above changes
+
 =0.7.0=
   * Moved to Google Code!
   * Mac: implemented idToChar/charToId
