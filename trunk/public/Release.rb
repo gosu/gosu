@@ -1,4 +1,4 @@
-require 'fileutils'
+require 'ftools'
 
 class Package
   def initialize(name)
@@ -6,15 +6,23 @@ class Package
   end
   def add_file(file)
     dest = "#{@name}/#{file}"
-    FileUtils.makedirs(File.dirname(dest))
-    FileUtils.copy("../#{file}", "#{@name}/#{file}")
+    File.makedirs(File.dirname(dest))
+    File.copy("../#{file}", dest)
+  end
+  def add_link(link)
+    dest = "#{@name}/#{link}"
+    File.makedirs(File.dirname(dest))
+    File.symlink(File.readlink("../#{link}"), dest)
   end
   def add_dir(dir)
     Dir.foreach("../#{dir}") do |item|
-      ftype = File.ftype("../#{dir}/#{item}")
-      if ftype == "file" then add_file("#{dir}/#{item}") end
-      if ftype == "directory" and not item[0, 1] == "." then
-        add_dir("#{dir}/#{item}")
+      case File.ftype("../#{dir}/#{item}")
+      when "file" then
+        add_file("#{dir}/#{item}")
+      when "link" then
+        add_link("#{dir}/#{item}")
+      when "directory" then
+        add_dir("#{dir}/#{item}") unless item[0, 1] == "."
       end
     end
   end
@@ -43,12 +51,9 @@ if ARGV[0] == 'source' then
   source.add_file("mac/Gosu-Info.plist")
   source.add_file("mac/RubyGosu Template-Info.plist")
   source.add_file("mac/Gosu.icns")
-  #source.add_file("msvc/Gosu.sln")
-  #source.add_file("msvc/Gosu.vcproj")
-  #source.add_file("msvc/WinMain.vcproj")
-  #source.add_file("msvc/RubyGosu.vcproj")
-  #source.add_file("msvc/libpng.vcproj")
-  #source.add_file("msvc/zlib.vcproj")
+  source.add_file("windows/Gosu.sln")
+  source.add_file("windows/Gosu.vcproj")
+  source.add_file("windows/RubyGosu.vcproj")
   source.targz_and_kill
 end
 
@@ -62,30 +67,22 @@ if ARGV[0] == 'mac' then
   mac.targz_and_kill
 end
 
-#msvc71 = Package.new("gosu-msvc71-#{ARGV[0]}")
-#msvc71.add_file("COPYING.txt")
-#msvc71.add_file("index.html")
-#msvc71.add_dir("Gosu")
-#msvc71.add_dir("docs")
-#msvc71.add_dir("examples")
-#msvc71.add_file("lib/Gosu.lib")
-#msvc71.add_file("lib/GosuDyn.lib")
-#msvc71.add_file("lib/GosuDebug.lib")
-#msvc71.add_file("lib/GosuDebugDyn.lib")
-#msvc71.add_file("lib/WinMain.lib")
-#msvc71.add_file("lib/WinMainDyn.lib")
-#msvc71.add_file("lib/WinMainDebug.lib")
-#msvc71.add_file("lib/WinMainDebugDyn.lib")
-#msvc71.del_file("examples/Tutorial.rb")
-#msvc71.zip_and_kill
+if ARGV[0] == 'windows-c++' then
+  windows_cpp = Package.new("gosu-windows-c++-#{ARGV[1]}")
+  windows_cpp.add_file("COPYING.txt")
+  windows_cpp.add_file("Gosu.lib")
+  windows_cpp.add_file("GosuDebug.lib")
+  windows_cpp.add_dir("Gosu")
+  windows_cpp.add_dir("reference")
+  windows_cpp.add_dir("examples")
+  windows_cpp.del_file("examples/Tutorial.rb")
+  windows_cpp.zip_and_kill
+end
 
-#if ARGV[0] == 'ruby-gosu' then
-#  ruby = Package.new("ruby-gosu-win32-#{ARGV[1]}")
-#  ruby.add_file("COPYING.txt")
-#  ruby.add_file("index.html")
-#  ruby.add_dir("docs")
-#  ruby.add_file("lib/gosu.so")
-#  ruby.add_file("examples/Tutorial.rb")
-#  ruby.add_dir("examples/media")
-#  ruby.zip_and_kill
-#end
+if ARGV[0] == 'windows-ruby' then
+  windows_ruby = Package.new("gosu-windows-ruby-#{ARGV[1]}")
+  windows_ruby.add_file("COPYING.txt")
+  windows_ruby.add_file("gosu.so")
+  windows_ruby.add_file("examples/Tutorial.rb")
+  windows_ruby.zip_and_kill
+end
