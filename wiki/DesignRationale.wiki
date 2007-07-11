@@ -38,5 +38,4 @@ Sometimes, you have to leave the world of portability for this to make sense - e
 
 = Radical =
 
-We will change the interface where it makes sense, and it will break code. This does not happen often, but who knows. Backward compatibility is the source of all evil, and we will not give in to it for a long time.
-(It will *loudly* break code, not make it silently fail, though.)
+We will change the interface where it makes sense, and it will break code. This does not happen often, but who knows. Backward compatibility is the root of all evil, and we will not give in to it until 1.0.
