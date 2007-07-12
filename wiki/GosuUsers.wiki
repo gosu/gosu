@@ -19,13 +19,11 @@ The Wiinstrument by Sebastian Burkhart and others uses Gosu, mostly for the styl
 
 === Ruby OMF 2097 (Ruby) ===
 
-http://rubyforge.org/projects/rubyomf2097
-
-Remake of the cool fighting game One Must Fall 2097 by Andrew Thompson, using Gosu. (Seemingly discontinued :( )
+Remake of the cool fighting game One Must Fall 2097 by Andrew Thompson, using Gosu. (Seemingly discontinued :( ) http://rubyforge.org/projects/rubyomf2097
 
 == Mini projects ==
 
-Gosu has also been used a lot for participating in small game development competitions – with varying code quality, as you may guess. These are posted here as source code. To run them on Windows or Linux, copy gosu.so into the same directory and run/double-click Main.rb. On OS X, duplicate `RubyGosu Template.app`, right-click it, open it's conents and put everything into the Resource folder. Then run your `Duplicate.app`.
+Gosu has also been used a lot for participating in small game development competitions – with varying code quality, as you may guess. These are posted here as source code. To run them on Windows or Linux, copy gosu.so into the same directory and run/double-click Main.rb. On OS X, duplicate `RubyGosu Template.app`, right-click it, open its contents and put everything into the `Resources` folder. Then run your `Duplicate.app`.
 
 === Encaved (Ruby) ===
 
