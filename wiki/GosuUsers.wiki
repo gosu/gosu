@@ -5,19 +5,19 @@
 
 == Major projects ==
 
-=== Terra Vera (working title) ===
+=== Terra Vera (working title) (C++) ===
 
 http://www.raschke.de/julian/terravera/game-5.png
 
 Terra Vera, a closed-source platformer by Julian Raschke with skeletal models and an intuitive level editor. Everything works, I just need to build all those levels! :)
 
-=== The Wiinstrument ===
+=== The Wiinstrument (C++) ===
 
 http://screenfashion.org/releases/wiinstrument_screenshot_small_1.jpg
 
 The Wiinstrument by Sebastian Burkhart and others uses Gosu, mostly for the stylish visuals. http://www.screenfashion.org/
 
-=== Ruby OMF 2097 ===
+=== Ruby OMF 2097 (Ruby) ===
 
 http://rubyforge.org/projects/rubyomf2097
 
@@ -25,4 +25,8 @@ Remake of the cool fighting game One Must Fall 2097 by Andrew Thompson, using Go
 
 == Mini projects ==
 
-Gosu has also been used a lot for participating in small game development competitions.
+Gosu has also been used a lot for participating in small game development competitions – with varying code quality, as you may guess. These are posted here as source code. To run them on Windows or Linux, copy gosu.so into the same directory and run/double-click Main.rb. On OS X, duplicate `RubyGosu Template.app`, right-click it, open it's conents and put everything into the Resource folder. Then run your `Duplicate.app`.
+
+=== Encaved (Ruby) ===
+
+Written by Florian Groß in 2004 as an entry to the Ludum Dare 48h competition. Compo theme was "Random", so it's about randomized dungeons in which you have to shoot guns and mines. http://www.raschke.de/julian/temp/Encaved.zip
