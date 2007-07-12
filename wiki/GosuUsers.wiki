@@ -21,7 +21,7 @@ The Wiinstrument by Sebastian Burkhart and others uses Gosu, mostly for the styl
 
 http://rubyforge.org/projects/rubyomf2097
 
-Remake of the cool fighting game One Must Fall 2097 using Gosu. (Seemingly discontinued :( )
+Remake of the cool fighting game One Must Fall 2097 by Andrew Thompson, using Gosu. (Seemingly discontinued :( )
 
 == Mini projects ==
 
