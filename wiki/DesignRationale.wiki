@@ -1,7 +1,7 @@
 #summary Rationale behind the core library's design
 #labels Phase-Design,Featured
 
-= Contents =
+= Slim =
 
 Gosu aims to contain everything that is necessary to write a game in clean C++ or Ruby code, yet not much more. Our aim is to get the annoying world of hardware and OS interaction out of your way. Think SDL with a very different, less C-ish style.
 
