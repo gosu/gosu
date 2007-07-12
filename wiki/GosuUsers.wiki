@@ -15,7 +15,7 @@ Terra Vera, a closed-source platformer by Julian Raschke with skeletal models an
 
 http://screenfashion.org/releases/wiinstrument_screenshot_small_1.jpg
 
-The Wiinstrument by Sebastian Burkhart and others of screenfashion.org uses Gosu, mostly for the stylish visuals.
+The Wiinstrument by Sebastian Burkhart and others of screenfashion.org uses Gosu, mostly for the stylish visuals. http://www.screenfashion.org/
 
 === Ruby OMF 2097 ===
 
@@ -24,3 +24,5 @@ http://rubyforge.org/projects/rubyomf2097
 Remake of the cool fighting game One Must Fall 2097 using Gosu. (Seemingly discontinued :( )
 
 == Mini projects ==
+
+Gosu has also been used a lot for participating in small game development competitions.
