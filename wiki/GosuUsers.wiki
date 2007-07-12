@@ -6,15 +6,12 @@
 == Major projects ==
 
 http://www.raschke.de/julian/terravera/game-5.png
-
 Terra Vera, a closed-source platformer by Julian Raschke with skeletal models and an intuitive level editor. Everything works, I just need to build all those levels! :)
 
 http://screenfashion.org/releases/wiinstrument_screenshot_small_1.jpg
-
 The Wiinstrument by Sebastian Burkhart and others of screenfashion.org uses Gosu, mostly for the stylish visuals.
 
 http://rubyforge.org/projects/rubyomf2097
-
 Remake of the cool fighting game One Must Fall 2097 using Gosu. (Seemingly discontinued :( )
 
 == Mini projects ==
