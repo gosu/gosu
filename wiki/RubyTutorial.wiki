@@ -49,6 +49,9 @@ class GameWindow < Gosu::Window
     @background_image = Gosu::Image.new(self, "media/Space.png", true)
   end
 
+  def update
+  end
+
   def draw
     @background_image.draw(0, 0, 0);
   end
