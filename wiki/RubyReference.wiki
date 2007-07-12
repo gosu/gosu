@@ -1,3 +1,6 @@
+#summary Complete listing of all official classes and methods in Gosu/Ruby.
+= Ruby API Reference =
+
 == General Notes ==
   * All functions and classes are contained in module Gosu.
   * Whenever a function expects a Gosu::Color value, a 0xAARRGGBB integer can be supplied instead.
