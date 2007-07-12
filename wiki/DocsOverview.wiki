@@ -7,7 +7,7 @@ If you are curious about what Gosu is trying to achieve, read Gosu's DesignRatio
 
 = Installation =
 
-For now, only GettingStartedOnOsx is available.
+Depending on your operating system, see GettingStartedOnOsx, GettingStartedOnWindows or GettingStartedOnLinux.
 
 = Tutorial =
 
