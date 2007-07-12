@@ -1,13 +1,13 @@
 #summary Complete listing of all official classes and methods in Gosu/Ruby.
 = Ruby API Reference =
 
-== General Notes ==
+== General notes ==
   * All functions and classes are contained in module Gosu.
   * Whenever a function expects a Gosu::Color value, a 0xAARRGGBB integer can be supplied instead.
   * Valid mode parameters for drawing functions are :default and :additive.
 
 
-== Color ==
+== class Gosu::Color ==
   * `initialize(argb)`: argb is a 0xAARRGGBB integer.
   * `initialize(a, r, g, b)`
   * `alpha`
@@ -19,14 +19,14 @@
   * `blue`
   * `blue=`
 
-== Font ==
+== class Gosu::Font ==
   * `initialize(window, font_name, height)`
   * `height`
   * `text_width(text, factor_x=1)`: Returns the width in pixels the given text would span.
   * `draw(text, x, y, z=0, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`
   * `draw_rel(text, x, y, z, rel_x, rel_y, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`: If relX is 0.0, the text will be to the right of x, if it is 1.0, the text will be to the left of x, if it is 0.5, it will be centered on x. Of course, all real numbers are possible values. The same applies to relY.
 
-== Image ==
+== class Gosu::Image ==
   * `initialize(window, filename, hard_borders, [srcX, srcY, srcWidth, srcHeight])`
   * `width`
   * `height`
@@ -35,18 +35,18 @@
   * `self.from_text(window, text, font_name, font_height, line_spacing, max_width, align)`: Creates a block of text of width max_width. Each line will take font_height + line_spacing pixels of vertical space.`: align must be one of :left, :right, :center oder :justify
   * `self.load_tiles(window, filename, tile_width, tile_height, hard_borders)`: tile_width is either the width of one tile in pixels or the number of columns, tile_height is its vertical equivalent
 
-== Sample ==
+== class Gosu::Sample ==
   * `initialize(window, filename)`
   * `play(vol=1, speed=1)`: See play_pan.
   * `play_pan(pan=0, vol=1, speed=1)`: pan can be anything from -1.0 (left) to 1.0 (right). vol can be anything from 0.0 (silence) to 1.0 (full volume). Playback speed is only limited by FMOD's capatibilities and can accept very high or low values. Use 1.0 for normal playback speed.
 
-== Song ==
+== class Gosu::Song ==
   * `initialize(window, filename, type)`: type must be either :stream (OGG...) or :module (MID, IT, MOD, X3M...)
   * `play`
   * `stop`
   * `playing?`
 
-== Window ==
+== class Gosu::Window ==
   * `initialize(width, height, fullscreen, update_interval)`: Note`: Having two or more windows and loading samples or songs on both of them will result in an exception. If you want to re-open your game window, make sure the old one is *really* dead.
   * `caption, caption=`
   * `show`
@@ -67,7 +67,7 @@
   * `width`
   * `height`
 
-== Free Functions ==
+== Free functions (in module Gosu) ==
 
   * `offset_x(angle, dist)`: Returns the horizontal distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
 
@@ -80,3 +80,92 @@
   * `milliseconds()`: Incrementing, possibly wrapping millisecond timer.
 
   * `default_font_name()`: Returns a font name that will work on any system.
+
+== Button IDs used by the input system (in module Gosu) ==
+
+_For clarity: Kb = Keyboard, Ms = Mouse, Gp = Gamepad._
+
+Kb0
+Kb1
+Kb2
+Kb3
+Kb4
+Kb5
+Kb6
+Kb7
+Kb8
+Kb9
+KbBackSpace
+KbDelete
+KbDown
+KbEnd
+KbEnter
+KbEscape
+KbF1
+KbF10
+KbF11
+KbF12
+KbF2
+KbF3
+KbF4
+KbF5
+KbF6
+KbF7
+KbF8
+KbF9
+KbHome
+KbInsert
+KbLeft
+KbLeftAlt
+KbLeftControl
+KbLeftShift
+KbNumpad0
+KbNumpad1
+KbNumpad2
+KbNumpad3
+KbNumpad4
+KbNumpad5
+KbNumpad6
+KbNumpad7
+KbNumpad8
+KbNumpad9
+KbNumpadAdd
+KbNumpadDivide
+KbNumpadMultiply
+KbNumpadSubtract
+KbPageDown
+KbPageUp
+KbPause
+KbReturn
+KbRight
+KbRightAlt
+KbRightControl
+KbRightShift
+KbSpace
+KbTab
+KbUp
+MsLeft
+MsMiddle
+MsRight
+MsWheelDown
+MsWheelUp
+GpButton0
+GpButton1
+GpButton10
+GpButton11
+GpButton12
+GpButton13
+GpButton14
+GpButton15
+GpButton2
+GpButton3
+GpButton4
+GpButton5
+GpButton6
+GpButton7
+GpButton8
+GpButton9
+GpDown
+GpLeft
+GpRight
+GpUp
