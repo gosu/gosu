@@ -4,7 +4,7 @@
 
 The code for the complete game, together with the required media files, can be found in the Gosu distribution of your choice ('examples' directory).
 On Windows/Linux: Copy gosu.so into the examples directory, run (or double-click) example.rb.
-On OS X: Make a duplicate of 'RubyGosu Template.app', right click it, open its contents  and copy the example.rb and the media folder into the 'Resources' directory. Then run 'YourDuplicate.app'!
+On OS X: Make a duplicate of `RubyGosu Template.app`, right click it, open its contents  and copy the example.rb and the media folder into the 'Resources' directory. Then run `YourDuplicate.app`!
 
 = 1. Overriding Window's Callbacks =
 
