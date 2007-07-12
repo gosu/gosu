@@ -4,7 +4,7 @@
 
 Functions related to image creation accept a boolean "hard borders" argument. This is a consequence of using 3D hardware acceleration. Try to notice the subtle difference between these two, overstretched images:
 
-http://www.raschke.de/julian/gosu/docs/img/hard_borders.png
+http://www.raschke.de/julian/temp/hard_borders.png
 
 When you draw an image with stretching factors other than 1.0 (10.0 in this case), it will become blurry - which, in general, is a good thing. However, take a look at the image's borders. The image of the left girl was created with hardBorders set to 'false' (the default) and the borders fade out. The image of the right girl, which was created with hard borders, does not fade out at all, but just ends on its borders.
 While most images should not have hard borders, they are essential for map tiles.
@@ -13,7 +13,7 @@ While most images should not have hard borders, they are essential for map tiles
 
 In all functions that expect arguments for all four corners of a rectangle or quadrilateral, the corners are numbered the way you are reading this text: left to right, then top to bottom.
 
-http://www.raschke.de/julian/gosu/docs/img/corner_indices.png
+http://www.raschke.de/julian/temp/corner_indices.png
 
 = Modulation Colours =
 
