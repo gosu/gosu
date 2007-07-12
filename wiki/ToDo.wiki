@@ -1,7 +1,8 @@
 #summary Gosu's ToDo list.
 #labels Featured
 
-= Getting things right wrt deployment =
+= Getting things right wrt deployment (0.7.3) =
+  * convenience functions for loading images, samples and songs from files (backport from Ruby/Gosu to C++/Gosu)
   * Put together the C++ tutorial again!
   * Mac Ruby extension should include the framework
   * RubyGosu Template.app should only be used as deployment sugar
@@ -13,7 +14,6 @@
   * delegate Linux support, esp. wrt. gamepads (*help!!*)
   * text input system for chat boxes, high-score lists etc.
   * more sophisticated Audio interface for talking NPC's etc.
-  * convenience functions for loading images, samples and songs from files? (Maybe C++ coders just need to have it easier to start using Gosu.)
 
 = Major design goals for 0.8x (graphics) =
   * use OpenGL on Windows
