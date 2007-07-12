@@ -1,0 +1,61 @@
+#summary How to set up Gosu on Windows.
+
+= Download FMOD (both languages) =
+
+[http://www.fmod.org/ FMOD] is the library we use for everything that involves sound output. As soon as you touch Gosu's sound system during runtime, your application will look for fmod.dll to be accessible in its path. This file is included in FMOD's development SDK: http://www.fmod.org/files/fmodapi375win.zip
+
+= Download Boost, change Visual C++ paths (C++ only) =
+
+[http://www.boost.org/ Boost] is a collection of libraries that is used throughout Gosu's interface. Many parts of Boost have been marked for inclusion in the next standard of C++, so you'd better look at it anyway! :) Download the latest release and extract it somewhere.
+
+In Visual C++, go to Tools/Options/Projects/VC++ paths. Select include file paths, add the directories you extracted boost and Gosu into - not the 'boost' or 'Gosu' subfolders themselves!
+
+Also, select library paths, and add the same directory for Gosu so MSVC can find Gosu.lib.
+
+= Creating a new Gosu game (C++) =
+
+Click File/New/Project and select 'Win32 project', then give it a name and in the application settings choose 'Empty project'. Click Finish.
+
+You can then add new code files, for example the ones from the tutorial. If you need a starting point or want to test if everything is correctly set up, select File/New, add a new C++ source file and use this code to compile and run:
+
+{{{
+#include <Gosu/AutoLink.hpp>
+#include <Gosu/Window.hpp>
+
+class MyWindow : public Gosu::Window
+{
+public:
+    MyWindow()
+    : Gosu::Window(640, 480, false, 20)
+    {
+        setCaption(L"Hello World!");
+    }
+};
+
+int main(int argc, char* argv[])
+{
+    MyWindow win;
+    win.show();
+    return 0;
+}
+}}}
+
+When loading resources, keep in mind that Gosu's resourcePrefix() will point to the directory your .EXE is located in. You may need to adjust your project settings to build into the directory where your resources reside.
+
+= Creating a new Gosu game (Ruby) =
+
+Getting started with Ruby is a lot easier: Create a new Ruby source file, copy gosu.so into the same directory and start away. Here is a minimal application to test if everything works:
+
+{{{
+require 'gosu'
+
+class MyWindow < Gosu::Window
+  def initialize
+    super(640, 480, false, 20)
+    self.caption = 'Hello World!'
+  end
+end
+
+w = MyWindow.new
+w.show
+}}}
