@@ -17,3 +17,7 @@ See either the RubyTutorial or the CppTutorial.
 
 C++: See the reference file that comes with all C++ archives.
 Ruby: See the RubyReference.
+
+= Further inspiration =
+
+There a lots of small, open source games you can take a look at on the GosuUsers page.
