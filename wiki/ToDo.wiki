@@ -2,9 +2,10 @@
 #labels Featured
 
 = Major design goals for 0.7x (immediately needed to complete playable games) =
+  * (Actually not needed, but:) Put together the C++ tutorial again!
   * With UTF-8 support in C++ coming, get rid of all the wstring stuff. -> http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2209.html
-  * USB input devices on Mac!
-  * delegate Linux support (help!)
+  * USB input devices on Mac! Scheduled for early August.
+  * delegate Linux support, esp. wrt. gamepads (*help!!*)
   * text input system for chat boxes, high-score lists etc.
   * more sophisticated Audio interface for talking NPC's etc.
   * convenience functions for loading images, samples and songs from files? (Maybe C++ coders just need to have it easier to start using Gosu.)
