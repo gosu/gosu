@@ -15,7 +15,7 @@ Terra Vera, a closed-source platformer by Julian Raschke with skeletal models an
 
 http://screenfashion.org/releases/wiinstrument_screenshot_small_1.jpg
 
-The Wiinstrument by Sebastian Burkhart and others of screenfashion.org uses Gosu, mostly for the stylish visuals. http://www.screenfashion.org/
+The Wiinstrument by Sebastian Burkhart and others uses Gosu, mostly for the stylish visuals. http://www.screenfashion.org/
 
 === Ruby OMF 2097 ===
 
