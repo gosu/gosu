@@ -1,0 +1,79 @@
+== General Notes ==
+  * All functions and classes are contained in module Gosu.
+  * Whenever a function expects a Gosu::Color value, a 0xAARRGGBB integer can be supplied instead.
+  * Valid mode parameters for drawing functions are :default and :additive.
+
+
+== Color ==
+  * initialize(argb): argb is a 0xAARRGGBB integer.
+  * initialize(a, r, g, b)
+  * alpha
+  * alpha=
+  * red
+  * red=
+  * green
+  * green=
+  * blue
+  * blue=
+
+== Font ==
+  * initialize(window, font_name, height)
+  * height
+  * text_width(text, factor_x=1): Returns the width in pixels the given text would span.
+  * draw(text, x, y, z=0, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)
+  * draw_rel(text, x, y, z, rel_x, rel_y, factor_x=1, factor_y=1, color=0xffffffff, mode=:default): If relX is 0.0, the text will be to the right of x, if it is 1.0, the text will be to the left of x, if it is 0.5, it will be centered on x. Of course, all real numbers are possible values. The same applies to relY.
+
+== Image ==
+  * initialize(window, filename, hard_borders, [srcX, srcY, srcWidth, srcHeight])
+  * width
+  * height
+  * draw(x, y, z=0, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)
+  * draw_rot(x, y, z=0, angle=0, center_x=0.5, center_y=0.5, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)
+  * self.from_text(window, text, font_name, font_height, line_spacing, max_width, align): Creates a block of text of width max_width. Each line will take font_height + line_spacing pixels of vertical space.: align must be one of :left, :right, :center oder :justify
+  * self.load_tiles(window, filename, tile_width, tile_height, hard_borders): tile_width is either the width of one tile in pixels or the number of columns, tile_height is its vertical equivalent
+
+== Sample ==
+  * initialize(window, filename)
+  * play(vol=1, speed=1): See play_pan.
+  * play_pan(pan=0, vol=1, speed=1): pan can be anything from -1.0 (left) to 1.0 (right). vol can be anything from 0.0 (silence) to 1.0 (full volume). Playback speed is only limited by FMOD's capatibilities and can accept very high or low values. Use 1.0 for normal playback speed.
+
+== Song ==
+  * initialize(window, filename, type): type must be either :stream (OGG...) or :module (MID, IT, MOD, X3M...)
+  * play
+  * stop
+  * playing?
+
+== Window ==
+  * initialize(width, height, fullscreen, update_interval): Note: Having two or more windows and loading samples or songs on both of them will result in an exception. If you want to re-open your game window, make sure the old one is *really* dead.
+  * caption, caption=
+  * show
+  * close
+  * visible?
+  * update
+  * draw
+  * button_down(id): Called when the user presses the button with the given id.
+  * button_up(id): Called when the user releases the button with the given id.
+  * draw_line(x1, y1, c1, x2, y2, c2, z=0, mode=:default)
+  * draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=:default)
+  * draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=:default)
+  * mouse_x
+  * mouse_y
+  * button_down?(id)
+  * button_id_to_char(id): Returns the character a given id stands for, or "".
+  * char_to_button_id(char): Returns the id usually used for a character, or 0.
+  * width
+  * height
+
+== Free Functions ==
+
+* offset_x(angle, dist): Returns the horizontal distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
+
+* offset_y(angle, dist): Returns the vertical distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
+
+* angle(x1, y1, x2, y2): Returns the angle between two points in degrees, where 0.0 means upwards. Returns 0 if both points are equal.
+
+* distance(x1, y1, x2, y2): Returns the distance between two points.
+
+* milliseconds(): Incrementing, possibly wrapping millisecond timer.
+
+* default_font_name(): Returns a font name that will work on any system.
