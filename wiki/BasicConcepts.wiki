@@ -1,6 +1,12 @@
 #summary Centralized description of some concepts used throughout the library.
 
-= Hard Borders =
+= Z-ordering =
+
+All drawing operations in Gosu accept an argument called "z", which is an integer value between 0 and 255 (even though it may be extended to the full 'double' range in later versions of Gosu). Things drawn with a higher z position will be drawn over those with a lower one. If two things have the same z position, they will be drawn in the order the drawing functions were called.
+
+If you do not wish to use z ordering, just pass 0 all the time.
+
+= Hard borders =
 
 Functions related to image creation accept a boolean "hard borders" argument. This is a consequence of using 3D hardware acceleration. Try to notice the subtle difference between these two, overstretched images:
 
@@ -9,13 +15,13 @@ http://www.raschke.de/julian/temp/hard_borders.png
 When you draw an image with stretching factors other than 1.0 (10.0 in this case), it will become blurry - which, in general, is a good thing. However, take a look at the image's borders. The image of the left girl was created with hardBorders set to 'false' (the default) and the borders fade out. The image of the right girl, which was created with hard borders, does not fade out at all, but just ends on its borders.
 While most images should not have hard borders, they are essential for map tiles.
 
-= Corner Indices =
+= Corner indices =
 
 In all functions that expect arguments for all four corners of a rectangle or quadrilateral, the corners are numbered the way you are reading this text: left to right, then top to bottom.
 
 http://www.raschke.de/julian/temp/corner_indices.png
 
-= Modulation Colours =
+= Modulation colours =
 
 Almost all image drawing functions accept modulation colours. The colours of all pixels on the source image will be multiplied with these colours, where a channel value of 255 means the maximum of 1.0. This means modulation colours can be used only to reduce particular channels of an image.
 The most obvious use of this is to supply a colour with an alpha value less than 255 so the image will drawn transparently, but you can also use this to darken images or to draw them in a different hue (which works best if the original image is mostly white).
