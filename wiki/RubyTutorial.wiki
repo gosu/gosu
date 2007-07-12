@@ -114,7 +114,7 @@ http://www.raschke.de/julian/temp/angles2.png
 
   * Player#accelerate makes use of the offset_x/offset_y functions. They are similar to what some people use sin/cos for: For example, if something moved 100 pixels at an angle of 30°, it would pass offset_x(30, 100) pixels horizontally and offset_y(30, 100) pixels vertically.
   * When loading BMP files, Gosu replaces 0xff00ff (fuchsia; that really ugly pink) with transparent pixels.
-  * Note that draw_rot puts the *center* of the image at (x; y) - *not* the upper left corner, as with draw. Also, the player is drawn at z=1, i.e. over the background (obviously). We'll replace these magic numbers with something better later.
+  * Note that draw_rot puts the *center* of the image at (x; y) - *not* the upper left corner, as with draw. Also, the player is drawn at z=1, i.e. over the background (obviously). We'll replace these magic numbers with something better later. Also, see the RubyReference for all drawing methods and arguments.
 
 === Integrating Player with the Window ===
 
@@ -144,7 +144,7 @@ class GameWindow < Gosu::Window
   end
 
   def draw
-    @player.draw
+    @player.draw # !
     @background_image.draw(0, 0, 0);
   end
 
@@ -196,7 +196,7 @@ class Star
 end
 }}}
 
-Since we don't want each and every star to load the animation again, we pass it into its constructor. (The Window will load the animation in about three paragraphs.)
+Since we don't want each and every star to load the animation again, we can't do that in its constructor, but rather pass it in from somewhere else. (The Window will load the animation in about three paragraphs.)
 
 To show a different frame of the stars' animation every 100 milliseconds, the time returned by Gosu::milliseconds is divided by 100 and then modulo-ed down to the number of frames. This very image is then additively drawn, centered at the star's position and modulated by a random colour we generated in the constructor.
 
@@ -226,7 +226,7 @@ class Window < Gosu::Window
     @player.warp(320, 240)
 
     @star_anim = Gosu::Image::load_tiles(self, "media/Star.png", 25, 25, false)
-    @stars = Array.new
+    @stars = Array.new # !
   end
 
   def update
@@ -246,3 +246,60 @@ class Window < Gosu::Window
   end
 …
 }}}
+
+Done! You can now collect stars.
+
+= 4. Text and sound =
+
+Finally, we want to draw the current score using a bitmap font and play a 'beep' sound every time the player collects a star. The Window will handle the text part, loading a font 20 pixels high:
+
+{{{
+class Window < Gosu::Window
+  def initialize
+    …
+    @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+  end
+
+  …
+
+  def draw
+    @background_image.draw(0, 0, ZOrder::Background)
+    @player.draw
+    @stars.each { |star| star.draw }
+    @font.draw("Score: #{@player.score}", 10, 10, ZOrder::UI, 1.0, 1.0, 0xffffff00)
+  end
+end
+}}}
+
+What's left for the player? Right: A counter for the score, loading the sound and playing it.
+
+{{{
+class Player
+  attr_reader :score
+
+  def initialize(window)
+    @image = Gosu::Image.new(window, "media/Starfighter.bmp", false)
+    @beep = Gosu::Sample.new(window, "media/Beep.wav")
+    @x = @y = @vel_x = @vel_y = @angle = 0.0
+    @score = 0
+  end
+
+  …
+
+  def collect_stars(stars)
+    stars.reject! do |star|
+      if Gosu::distance(@x, @y, star.x, star.y) < 35 then
+        @score += 10
+        @beep.play
+        true
+      else
+        false
+      end
+    end
+  end
+end
+}}}
+
+As you can see, loading and playing sound effects couldn't be easier! See the RubyReference for more powerful ways of playing back sounds - fiddle around with volume, position and pitch.
+
+That's it! Everything else is up to your imagination. If you can't imagine how this is enough to create games, see if you can find useful source code from the GosuUsers page.
