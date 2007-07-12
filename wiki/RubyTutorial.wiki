@@ -6,7 +6,7 @@ The code for the complete game, together with the required media files, can be f
 On Windows/Linux: Copy gosu.so into the examples directory, run (or double-click) example.rb.
 On OS X: Make a duplicate of `RubyGosu Template.app`, right click it, open its contents  and copy the example.rb and the media folder into the 'Resources' directory. Then run `YourDuplicate.app`.
 
-= 1. Overriding Window's Callbacks =
+= 1. Overriding Window's callbacks =
 
 The easiest way to create a complete Gosu application is to write a new class that derives from Gosu::Window (see the reference for a complete description of its interface). Here's how a minimal GameWindow class might look like:
 
@@ -63,3 +63,99 @@ Gosu::Image#initialize takes three arguments. First, like all media resources, i
 As mentioned in the last lesson, the window's draw() member function is the place to draw everything, so this is the place for us to draw our background image.
 
 The arguments are almost obvious. The image is drawn at (0;0) - the third image is the Z position; again, see BasicConcepts.
+
+=== Player & movement ===
+
+Here comes a simple player class:
+
+{{{
+class Player
+  def initialize(window)
+    @image = Gosu::Image.new(window, "media/Starfighter.bmp", false)
+    @x = @y = @vel_x = @vel_y = @angle = 0.0
+  end
+
+  def warp(x, y)
+    @x, @y = x, y
+  end
+  
+  def turn_left
+    @angle -= 4.5
+  end
+  
+  def turn_right
+    @angle += 4.5
+  end
+  
+  def accelerate
+    @vel_x += Gosu::offset_x(@angle, 0.5)
+    @vel_y += Gosu::offset_y(@angle, 0.5)
+  end
+  
+  def move
+    @x += @vel_x
+    @y += @vel_y
+    @x %= 640
+    @y %= 480
+    
+    @vel_x *= 0.95
+    @vel_y *= 0.95
+  end
+
+  def draw
+    @image.draw_rot(@x, @y, 1, @angle)
+  end
+end
+}}}
+
+There are a couple of things to say about this:
+
+http://www.raschke.de/julian/temp/angles2.png
+
+  * Player#accelerate makes use of the offset_x/offset_y functions. They are similar to what some people use sin/cos for: For example, if something moved 100 pixels at an angle of 30°, it would pass offset_x(30, 100) pixels horizontally and offset_y(30, 100) pixels vertically.
+  * When loading BMP files, Gosu replaces 0xff00ff (fuchsia; that really ugly pink) with transparent pixels.
+  * Note that draw_rot puts the *center* of the image at (x; y) - *not* the upper left corner, as with draw. Also, the player is drawn at z=1, i.e. over the background (obviously). We'll replace these magic numbers with something better later.
+
+=== Integrating Player with the Window ===
+
+{{{
+class GameWindow < Gosu::Window
+  def initialize
+    super(640, 480, false, 20)
+    self.caption = "Gosu Tutorial Game"
+    
+    @background_image = Gosu::Image.new(self, "media/Space.png", true)
+
+    @player = Player.new(self)
+    @player.warp(320, 240)
+  end
+
+  def update
+    if button_down? Gosu::Button::KbLeft or button_down? Gosu::Button::GpLeft then
+      @player.turn_left
+    end
+    if button_down? Gosu::Button::KbRight or button_down? Gosu::Button::GpRight then
+      @player.turn_right
+    end
+    if button_down? Gosu::Button::KbUp or button_down? Gosu::Button::GpButton0 then
+      @player.accelerate
+    end
+    @player.move
+  end
+
+  def draw
+    @player.draw
+    @background_image.draw(0, 0, 0);
+  end
+
+  def button_down(id)
+    if id == Gosu::Button::KbEscape
+      close
+    end
+  end
+end
+}}}
+
+As you can see, we have introduced keyboard and gamepad input!
+Similar to update() and draw(), Gosu::Window provides two member functions button_down(id) and button_up(id) which can be overriden, and do nothing by default. We do this here to close the window when the user presses ESC. (For a list of predefined button constants, see RubyReference).
+While getting feedback on pushed buttons is suitable for one-time events such as UI interaction, jumping or typing, it is rather useless for actions that span several frames - for example, moving by holding buttons down. This is where the update() member function comes into play, which only calls the player's movement methods. If you run this lesson's code, you should be able to fly around!
