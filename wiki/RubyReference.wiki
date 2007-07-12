@@ -66,14 +66,14 @@
 
 == Free Functions ==
 
-* `offset_x(angle, dist)`: Returns the horizontal distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
+  * `offset_x(angle, dist)`: Returns the horizontal distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
 
-* `offset_y(angle, dist)`: Returns the vertical distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
+  * `offset_y(angle, dist)`: Returns the vertical distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
 
-* `angle(x1, y1, x2, y2)`: Returns the angle between two points in degrees, where 0.0 means upwards. Returns 0 if both points are equal.
+  * `angle(x1, y1, x2, y2)`: Returns the angle between two points in degrees, where 0.0 means upwards. Returns 0 if both points are equal.
 
-* `distance(x1, y1, x2, y2)`: Returns the distance between two points.
+  * `distance(x1, y1, x2, y2)`: Returns the distance between two points.
 
-* `milliseconds()`: Incrementing, possibly wrapping millisecond timer.
+  * `milliseconds()`: Incrementing, possibly wrapping millisecond timer.
 
-* `default_font_name()`: Returns a font name that will work on any system.
+  * `default_font_name()`: Returns a font name that will work on any system.
