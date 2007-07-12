@@ -5,6 +5,7 @@
   * Win: Moved to SWIG too
   * Mac: Fixed build script
   * Source: Incorporated above changes
+  * Source: Added SDL_mixer fallback.
 
 =0.7.0=
   * Moved to Google Code!
