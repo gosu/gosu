@@ -85,6 +85,7 @@
 
 _For clarity: Kb = Keyboard, Ms = Mouse, Gp = Gamepad._
 
+{{{
 Kb0
 Kb1
 Kb2
@@ -169,3 +170,4 @@ GpDown
 GpLeft
 GpRight
 GpUp
+}}}
