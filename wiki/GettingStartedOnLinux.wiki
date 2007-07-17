@@ -1,0 +1,41 @@
+#summary How to set up Gosu on Linux.
+
+= Dependencies =
+
+In order to get audio support, fmod (>=3.72) must be unpacked into the folder "fmod" in the gosu directory, or installed system-wide.
+You can download the latest fmod 3.x at http://www.fmod.org
+In addition you will need the following Packages:
+  * xlibmesa-glu-dev
+  * libpango1.0-dev (Pango with freetype)
+  * X11, xf86 extensions (-lXxf86vm)
+  * libPNG3 (or higher)
+  * Boost (http://www.boost.org)
+  * OpenGL
+
+Most of these Packages can be found on your distributor's mirror-sites, the apt-tree or at the given position.
+
+If you want to use Ruby-gosu and create a gosu.so you will have to install at least one of the following packages:
+  * ruby (http://www.ruby-lang.org)
+  * ruby-dev
+
+= Compiling Gosu =
+
+To compile Gosu for Unix, go into the "gcc" directory, and execute:
+
+./configure
+make
+Execute "autoconf" if the configure-script doesn't work.
+Compiling Gosu applications
+
+Copy or link Gosu into your application's directory. You've got to compile with `gosu/gcc/gosu-config --libs`, and -Igosu `gosu/gcc/gosu-config --cxxflags`
+
+= Compiling your games =
+
+A simple Makefile could look like this:
+
+OBJS = main.o player.o
+CXXFLAGS += -Igosu/ `gosu/gcc/gosu-config --cxxflags`
+LIBS = `gosu/gcc/gosu-config --libs`
+
+myGame: $(OBJS) gosu/gcc/gosu.a
+        g++ -o myGame $(OBJS) gosu/gcc/gosu.a $(LIBS)
