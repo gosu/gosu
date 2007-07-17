@@ -79,6 +79,40 @@
 		D410EB130A801B00005C7067 /* Sockets.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410EAF40A801B00005C7067 /* Sockets.hpp */; };
 		D410EB2A0A801C28005C7067 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410EB290A801C28005C7067 /* OpenGL.framework */; };
 		D410EB6E0A801CDC005C7067 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D410EB6C0A801CDC005C7067 /* InfoPlist.strings */; };
+		D423821D0C4C3D08000DAA25 /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD40A801B00005C7067 /* Bitmap.cpp */; };
+		D42382240C4C3D68000DAA25 /* BitmapBMP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD50A801B00005C7067 /* BitmapBMP.cpp */; };
+		D42382250C4C3D68000DAA25 /* BitmapColorKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD60A801B00005C7067 /* BitmapColorKey.cpp */; };
+		D42382260C4C3D68000DAA25 /* BitmapPNG.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD70A801B00005C7067 /* BitmapPNG.cpp */; };
+		D42382270C4C3D68000DAA25 /* BlockAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD80A801B00005C7067 /* BlockAllocator.cpp */; };
+		D42382280C4C3D68000DAA25 /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADA0A801B00005C7067 /* Color.cpp */; };
+		D42382290C4C3D68000DAA25 /* Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADB0A801B00005C7067 /* Font.cpp */; };
+		D423822A0C4C3D68000DAA25 /* Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADC0A801B00005C7067 /* Graphics.cpp */; };
+		D423822B0C4C3D68000DAA25 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADE0A801B00005C7067 /* Image.cpp */; };
+		D423822C0C4C3D68000DAA25 /* LargeImageData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADF0A801B00005C7067 /* LargeImageData.cpp */; };
+		D423822D0C4C3D68000DAA25 /* RotFlip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE10A801B00005C7067 /* RotFlip.cpp */; };
+		D423822E0C4C3D68000DAA25 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE20A801B00005C7067 /* Text.cpp */; };
+		D423822F0C4C3D68000DAA25 /* TextMac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE30A801B00005C7067 /* TextMac.cpp */; };
+		D42382320C4C3D70000DAA25 /* Blit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE70A801B00005C7067 /* Blit.cpp */; };
+		D42382330C4C3D70000DAA25 /* Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE90A801B00005C7067 /* Graphics.cpp */; };
+		D42382340C4C3D70000DAA25 /* TexChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAEB0A801B00005C7067 /* TexChunk.cpp */; };
+		D42382350C4C3D70000DAA25 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAED0A801B00005C7067 /* Texture.cpp */; };
+		D42382380C4C3D79000DAA25 /* AudioFmod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410E9FE0A8019FA005C7067 /* AudioFmod.cpp */; };
+		D42382390C4C3D79000DAA25 /* DirectoriesMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410E9FF0A8019FA005C7067 /* DirectoriesMac.mm */; };
+		D423823A0C4C3D79000DAA25 /* DirectoriesUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA000A8019FA005C7067 /* DirectoriesUnix.cpp */; };
+		D423823B0C4C3D79000DAA25 /* FileUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA020A8019FA005C7067 /* FileUnix.cpp */; };
+		D423823C0C4C3D79000DAA25 /* InputMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410EA180A8019FA005C7067 /* InputMac.mm */; };
+		D423823D0C4C3D79000DAA25 /* IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA1B0A8019FA005C7067 /* IO.cpp */; };
+		D423823E0C4C3D79000DAA25 /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA1C0A8019FA005C7067 /* Math.cpp */; };
+		D423823F0C4C3D79000DAA25 /* TimingUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA2E0A8019FA005C7067 /* TimingUnix.cpp */; };
+		D42382400C4C3D79000DAA25 /* Utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA300A8019FA005C7067 /* Utility.cpp */; };
+		D42382410C4C3D79000DAA25 /* WindowMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410EA310A8019FA005C7067 /* WindowMac.mm */; };
+		D423825C0C4C3E3E000DAA25 /* DirectoriesMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410E9FF0A8019FA005C7067 /* DirectoriesMac.mm */; };
+		D423825F0C4C3E41000DAA25 /* Utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA300A8019FA005C7067 /* Utility.cpp */; };
+		D42382690C4C3E8A000DAA25 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410EB290A801C28005C7067 /* OpenGL.framework */; };
+		D423826A0C4C3E8A000DAA25 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98A0A801948005C7067 /* AppKit.framework */; };
+		D423826B0C4C3E8A000DAA25 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98B0A801948005C7067 /* ApplicationServices.framework */; };
+		D423826C0C4C3E8A000DAA25 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98C0A801948005C7067 /* Foundation.framework */; };
+		D423826D0C4C3E8A000DAA25 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB77AAFE841565C02AAC07 /* Carbon.framework */; };
 		D459FF4C0BDCD26D00E7F0D6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98A0A801948005C7067 /* AppKit.framework */; };
 		D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */; };
 		D459FF840BDCD5D400E7F0D6 /* Gosu.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8D07F2C80486CC7A007CD1D0 /* Gosu.framework */; };
@@ -86,30 +120,6 @@
 		D459FFBD0BDD67E800E7F0D6 /* Main.rb in Resources */ = {isa = PBXBuildFile; fileRef = D459FFBC0BDD67E800E7F0D6 /* Main.rb */; };
 		D47BD32B0BD78F7200ACF014 /* RubyGosu_wrap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		D459FF5B0BDCD36400E7F0D6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D459FF430BDCD23500E7F0D6;
-			remoteInfo = "RubyGosu Template";
-		};
-		D459FF7B0BDCD51E00E7F0D6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8D07F2BC0486CC7A007CD1D0;
-			remoteInfo = Gosu;
-		};
-		D459FF7F0BDCD52400E7F0D6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8D07F2BC0486CC7A007CD1D0;
-			remoteInfo = Gosu;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		D459FF820BDCD5B400E7F0D6 /* CopyFiles */ = {
@@ -235,6 +245,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D42382690C4C3E8A000DAA25 /* OpenGL.framework in Frameworks */,
+				D423826A0C4C3E8A000DAA25 /* AppKit.framework in Frameworks */,
+				D423826B0C4C3E8A000DAA25 /* ApplicationServices.framework in Frameworks */,
+				D423826C0C4C3E8A000DAA25 /* Foundation.framework in Frameworks */,
+				D423826D0C4C3E8A000DAA25 /* Carbon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -486,7 +501,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				D459FF7C0BDCD51E00E7F0D6 /* PBXTargetDependency */,
 			);
 			name = "RubyGosu Template";
 			productName = "RubyGosu Template";
@@ -504,8 +518,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				D459FF5C0BDCD36400E7F0D6 /* PBXTargetDependency */,
-				D459FF800BDCD52400E7F0D6 /* PBXTargetDependency */,
 			);
 			name = "RubyGosu Core";
 			productName = RubyGosu;
@@ -623,6 +635,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */,
+				D423825C0C4C3E3E000DAA25 /* DirectoriesMac.mm in Sources */,
+				D423825F0C4C3E41000DAA25 /* Utility.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -631,28 +645,37 @@
 			buildActionMask = 2147483647;
 			files = (
 				D47BD32B0BD78F7200ACF014 /* RubyGosu_wrap.cxx in Sources */,
+				D423821D0C4C3D08000DAA25 /* Bitmap.cpp in Sources */,
+				D42382240C4C3D68000DAA25 /* BitmapBMP.cpp in Sources */,
+				D42382250C4C3D68000DAA25 /* BitmapColorKey.cpp in Sources */,
+				D42382260C4C3D68000DAA25 /* BitmapPNG.cpp in Sources */,
+				D42382270C4C3D68000DAA25 /* BlockAllocator.cpp in Sources */,
+				D42382280C4C3D68000DAA25 /* Color.cpp in Sources */,
+				D42382290C4C3D68000DAA25 /* Font.cpp in Sources */,
+				D423822A0C4C3D68000DAA25 /* Graphics.cpp in Sources */,
+				D423822B0C4C3D68000DAA25 /* Image.cpp in Sources */,
+				D423822C0C4C3D68000DAA25 /* LargeImageData.cpp in Sources */,
+				D423822D0C4C3D68000DAA25 /* RotFlip.cpp in Sources */,
+				D423822E0C4C3D68000DAA25 /* Text.cpp in Sources */,
+				D423822F0C4C3D68000DAA25 /* TextMac.cpp in Sources */,
+				D42382320C4C3D70000DAA25 /* Blit.cpp in Sources */,
+				D42382330C4C3D70000DAA25 /* Graphics.cpp in Sources */,
+				D42382340C4C3D70000DAA25 /* TexChunk.cpp in Sources */,
+				D42382350C4C3D70000DAA25 /* Texture.cpp in Sources */,
+				D42382380C4C3D79000DAA25 /* AudioFmod.cpp in Sources */,
+				D42382390C4C3D79000DAA25 /* DirectoriesMac.mm in Sources */,
+				D423823A0C4C3D79000DAA25 /* DirectoriesUnix.cpp in Sources */,
+				D423823B0C4C3D79000DAA25 /* FileUnix.cpp in Sources */,
+				D423823C0C4C3D79000DAA25 /* InputMac.mm in Sources */,
+				D423823D0C4C3D79000DAA25 /* IO.cpp in Sources */,
+				D423823E0C4C3D79000DAA25 /* Math.cpp in Sources */,
+				D423823F0C4C3D79000DAA25 /* TimingUnix.cpp in Sources */,
+				D42382400C4C3D79000DAA25 /* Utility.cpp in Sources */,
+				D42382410C4C3D79000DAA25 /* WindowMac.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		D459FF5C0BDCD36400E7F0D6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D459FF430BDCD23500E7F0D6 /* RubyGosu Template */;
-			targetProxy = D459FF5B0BDCD36400E7F0D6 /* PBXContainerItemProxy */;
-		};
-		D459FF7C0BDCD51E00E7F0D6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8D07F2BC0486CC7A007CD1D0 /* Gosu */;
-			targetProxy = D459FF7B0BDCD51E00E7F0D6 /* PBXContainerItemProxy */;
-		};
-		D459FF800BDCD52400E7F0D6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8D07F2BC0486CC7A007CD1D0 /* Gosu */;
-			targetProxy = D459FF7F0BDCD52400E7F0D6 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D410EB6C0A801CDC005C7067 /* InfoPlist.strings */ = {
@@ -770,8 +793,6 @@
 					"-framework",
 					Foundation,
 					"-lruby",
-					"-framework",
-					Gosu,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "RubyGosu Template";
@@ -804,8 +825,6 @@
 					"-framework",
 					Foundation,
 					"-lruby",
-					"-framework",
-					Gosu,
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "RubyGosu Template";
@@ -818,7 +837,7 @@
 		D4CA89520BC68B9E00A431AC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "../RubyGosu Template.app/Contents/Resources";
+				CONFIGURATION_BUILD_DIR = ..;
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";
@@ -832,9 +851,10 @@
 				MACH_O_TYPE = mh_bundle;
 				OTHER_LDFLAGS = (
 					"-F..",
-					"-framework",
-					Gosu,
 					"-lruby",
+					"-lz_universal",
+					"-lpng_universal",
+					"-lfmod_universal",
 					"-flat_namespace",
 				);
 				PREBINDING = NO;
@@ -850,7 +870,7 @@
 					ppc,
 					i386,
 				);
-				CONFIGURATION_BUILD_DIR = "../RubyGosu Template.app/Contents/Resources";
+				CONFIGURATION_BUILD_DIR = ..;
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";
@@ -864,9 +884,10 @@
 				MACH_O_TYPE = mh_bundle;
 				OTHER_LDFLAGS = (
 					"-F..",
-					"-framework",
-					Gosu,
 					"-lruby",
+					"-lz_universal",
+					"-lpng_universal",
+					"-lfmod_universal",
 					"-flat_namespace",
 				);
 				PREBINDING = NO;

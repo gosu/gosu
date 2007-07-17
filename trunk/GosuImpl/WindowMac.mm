@@ -290,6 +290,13 @@ void Gosu::Window::setCaption(const std::wstring& caption)
 
 void Gosu::Window::show()
 {
+	// This is for Ruby/Gosu and misc. hackery:
+	// Usually, applications on the Mac only can get keyboard and mouse input if
+	// run by double-clicking an .app. So if this is run from the Terminal (i.e.
+	// during Ruby/Gosu game development), tell the OS we need input in any case.
+	ProcessSerialNumber psn = { 0, kCurrentProcess };
+	OSStatus res = TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+
     if (graphics().fullscreen())
         [NSCursor hide];
     NSTimer* timer = [NSTimer scheduledTimerWithTimeInterval: pimpl->interval / 1000.0

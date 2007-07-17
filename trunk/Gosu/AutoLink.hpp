@@ -6,6 +6,7 @@
 #ifndef GOSU_AUTOLINK_HPP
 #define GOSU_AUTOLINK_HPP
 
+/*
 #pragma comment(lib, "d3d8.lib")
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxerr8.lib")
@@ -13,7 +14,7 @@
 #pragma comment(lib, "fmodvc.lib")
 #pragma comment(lib, "winmm.lib")
 #pragma comment(lib, "ws2_32.lib")
-
+*/
 
 #ifdef NDEBUG
 #pragma comment(lib, "Gosu.lib")

@@ -60,10 +60,7 @@ class Player
   
   def collect_stars(stars)
     stars.reject! do |star|
-      dist_x = @x - star.x
-      dist_y = @y - star.y
-      dist = Math.sqrt(dist_x * dist_x + dist_y * dist_y)
-      if dist < 35 then
+      if Gosu::distance(@x, @y, star.x, star.y) < 35 then
         yield 10
         @beep.play
         true

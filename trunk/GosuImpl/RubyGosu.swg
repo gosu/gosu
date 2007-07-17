@@ -281,4 +281,10 @@ Gosu::Bitmap loadImage(const std::wstring& filename) {
     wchar_t buttonIdToChar(Gosu::Button btn) {
         return $self->input().idToChar(btn);
     }
+	double mouseX() {
+		return $self->input().mouseX();
+	}
+	double mouseY() {
+		return $self->input().mouseY();
+	}
 };
