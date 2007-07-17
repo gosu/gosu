@@ -1,11 +1,15 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.2= - still being polished
+  * Mac/Ruby: The cumbersome .app wrapper is now only used for deployment; for development, running Gosu applications from the Terminal is now possible.
+  * Ruby: Fixed missing mouse_x/mouse_y accessor functions. Thanks "mutwin.kraus"! ;)
+
 =0.7.1=
   * Win: Moved to SWIG too
   * Mac: Fixed build script
   * Source: Incorporated above changes
-  * Source: Added SDL_mixer fallback.
+  * Source: Added SDL_mixer fallback. Yay, thanks nornagon!
 
 =0.7.0=
   * Moved to Google Code!
