@@ -2,7 +2,7 @@
 
 = Dependencies =
 
-In order to get audio support, fmod (>=3.72) must be unpacked into the folder "fmod" in the gosu directory, or installed system-wide.
+If you want to use FMOD for audio, fmod (>=3.72) must be unpacked into the folder "fmod" in the Gosu directory, or installed system-wide. Otherwise, SDL_mixer needs to be present.
 You can download the latest fmod 3.x at http://www.fmod.org
 In addition you will need the following Packages:
   * xlibmesa-glu-dev
