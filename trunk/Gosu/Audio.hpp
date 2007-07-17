@@ -40,8 +40,13 @@ namespace Gosu
 
     public:
         //! Constructs a sample that can be played on the specified audio
+        //! system and loads the sample from a file.
+        Sample(Audio& audio, const std::wstring& filename);
+        
+        //! Constructs a sample that can be played on the specified audio
         //! system and loads the sample data from a stream.
         Sample(Audio& audio, Reader reader);
+        
         ~Sample();
 
         //! Plays the sample without panning.
@@ -82,9 +87,15 @@ namespace Gosu
             stModule
         };
 
+        //! Constructs a song that can be played on the provided audio system
+        //! and loads the song from a file. The type is determined from the
+        //! filename.
+        Song(Audio&, const std::wstring& filename);
+        
         //! Constructs a song of the specified type that can be played on the
         //! provided audio system and loads the song data from a stream.
         Song(Audio&, Type type, Reader reader);
+        
         ~Song();
 
         //! Starts playback of the song. This will stop all other songs and

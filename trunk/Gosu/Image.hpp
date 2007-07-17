@@ -17,6 +17,16 @@ namespace Gosu
         boost::scoped_ptr<ImageData> data;
 
     public:
+        //! Loads an image from a given filename that can be drawn onto
+        //! graphics.
+        Image(Graphics& graphics, const std::wstring& filename,
+              bool hardBorders = false);
+        //! Loads a portion of the the image at the given filename that can be
+        //! drawn onto graphics.
+        Image(Graphics& graphics, const std::wstring& filename, unsigned srcX,
+              unsigned srcY, unsigned srcWidth, unsigned srcHeight,
+              bool hardBorders = false);
+        
         //! Converts the given bitmap into an image that can be drawn onto
         //! graphics.
         Image(Graphics& graphics, const Bitmap& source,
@@ -26,6 +36,7 @@ namespace Gosu
         Image(Graphics& graphics, const Bitmap& source, unsigned srcX,
             unsigned srcY, unsigned srcWidth, unsigned srcHeight,
             bool hardBorders = false);
+
         ~Image();
 
         unsigned width() const;
