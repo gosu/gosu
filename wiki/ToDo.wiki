@@ -4,8 +4,6 @@
 = Getting things right wrt deployment (0.7.3) =
   * convenience functions for loading images, samples and songs from files (backport from Ruby/Gosu to C++/Gosu)
   * Put together the C++ tutorial again!
-  * Mac Ruby extension should include the framework
-  * RubyGosu Template.app should only be used as deployment sugar
   * => Ruby-gem and ruleness.
 
 = Major design goals for 0.7x (immediately needed to complete playable games) =
