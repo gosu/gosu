@@ -1,7 +1,7 @@
 #summary Log of Gosu's development.
 #labels Featured
 
-=0.7.2= - still being polished
+=0.7.2 (still being worked on)=
   * Mac/Ruby: The cumbersome .app wrapper is now only used for deployment; for development, running Gosu applications from the Terminal is now possible.
   * Ruby: Fixed missing mouse_x/mouse_y accessor functions. Thanks "mutwin.kraus"! ;)
 
