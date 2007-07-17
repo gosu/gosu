@@ -6,11 +6,11 @@
 
 = Download Boost, change Visual C++ paths (C++ only) =
 
-[http://www.boost.org/ Boost] is a collection of libraries that is used throughout Gosu's interface. Many parts of Boost have been marked for inclusion in the next standard of C++, so you'd better look at it anyway! :) Download the latest release and extract it somewhere.
+[http://www.boost.org/ Boost] is a collection of libraries that is used throughout Gosu's interface. Many parts of Boost have been marked for inclusion in the next standard of C++, so you'd better look at it anyway! :) Download the latest release and extract it into a separate directory.
 
-In Visual C++, go to Tools/Options/Projects/VC++ paths. Select include file paths, add the directories you extracted boost and Gosu into - not the 'boost' or 'Gosu' subfolders themselves!
+In Visual C++, go to Tools/Options/Projects/VC++ Directories. Show directories for include files and add the two directories you extracted boost and Gosu into - not the 'boost' or 'Gosu' subfolders themselves!
 
-Also, select library paths, and add the same directory for Gosu so MSVC can find Gosu.lib.
+Also, select library files, and add the same directory for Gosu so MSVC can find Gosu.lib.
 
 = Creating a new Gosu game (C++) =
 
