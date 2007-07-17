@@ -2,9 +2,9 @@
 
 = Source code =
 
-The code for the complete game, together with the required media files, can be found in the Gosu distribution of your choice ('examples' directory).
-On Windows/Linux: Copy gosu.so into the examples directory, run (or double-click) example.rb.
-On OS X: Make a duplicate of `RubyGosu Template.app`, right click it, open its contents  and copy the example.rb and the media folder into the 'Resources' directory. Then run `YourDuplicate.app`.
+The code for the complete game, together with the required media files, can be found in the Gosu distribution of your choice ('examples/Tutorial.rb').
+On Windows/Linux: Copy gosu.so into the examples directory, run (or double-click) Tutorial.rb.
+On OS X: Copy gosu.bundle into the examples directory. If you are using TextMate, just open Tutorial.rb and hit ⌘R. Otherwise, open a Terminal, 'cd' into the examples directory and run "ruby Main.rb".
 
 = 1. Overriding Window's callbacks =
 
@@ -144,7 +144,7 @@ class GameWindow < Gosu::Window
   end
 
   def draw
-    @player.draw # !
+    @player.draw
     @background_image.draw(0, 0, 0);
   end
 
@@ -226,7 +226,7 @@ class Window < Gosu::Window
     @player.warp(320, 240)
 
     @star_anim = Gosu::Image::load_tiles(self, "media/Star.png", 25, 25, false)
-    @stars = Array.new # !
+    @stars = Array.new
   end
 
   def update
