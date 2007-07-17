@@ -22,10 +22,14 @@ If you want to use Ruby-gosu and create a gosu.so you will have to install at le
 
 To compile Gosu for Unix, go into the "gcc" directory, and execute:
 
+{{{
 ./configure
 make
+}}}
+
 Execute "autoconf" if the configure-script doesn't work.
-Compiling Gosu applications
+
+= Compiling Gosu applications =
 
 Copy or link Gosu into your application's directory. You've got to compile with `gosu/gcc/gosu-config --libs`, and -Igosu `gosu/gcc/gosu-config --cxxflags`
 
@@ -33,9 +37,11 @@ Copy or link Gosu into your application's directory. You've got to compile with 
 
 A simple Makefile could look like this:
 
+{{{
 OBJS = main.o player.o
 CXXFLAGS += -Igosu/ `gosu/gcc/gosu-config --cxxflags`
 LIBS = `gosu/gcc/gosu-config --libs`
 
 myGame: $(OBJS) gosu/gcc/gosu.a
         g++ -o myGame $(OBJS) gosu/gcc/gosu.a $(LIBS)
+}}}
