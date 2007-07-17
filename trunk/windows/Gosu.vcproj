@@ -286,10 +286,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Gosu\AutoLinkMain.hpp"
-				>
-			</File>
-			<File
 				RelativePath="..\Gosu\Bitmap.hpp"
 				>
 			</File>
@@ -311,10 +307,6 @@
 			</File>
 			<File
 				RelativePath="..\Gosu\Fwd.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Gosu\GosuMain.hpp"
 				>
 			</File>
 			<File

@@ -17,7 +17,7 @@ namespace Gosu
 		kbF8 = 0x42,
 		kbF9 = 0x43,
 		kbF10 = 0x44,
-		kbF11 = 0x57
+		kbF11 = 0x57,
 		kbF12 = 0x58,
 		kb0 = 0x0b,
 		kb1 = 0x02,
