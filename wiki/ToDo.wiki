@@ -2,7 +2,6 @@
 #labels Featured
 
 = Getting things right wrt deployment (0.7.3) =
-  * convenience functions for loading images, samples and songs from files (backport from Ruby/Gosu to C++/Gosu)
   * Put together the C++ tutorial again!
   * => Ruby-gem and ruleness.
 
