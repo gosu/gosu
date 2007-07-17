@@ -9,6 +9,11 @@
 #include <stdexcept>
 #include <vector>
 
+#ifndef DIRECTINPUT_VERSION
+#define DIRECTINPUT_VERSION 0x0800
+#endif
+#include <dinput.h>
+
 namespace {
 	boost::array<bool, Gosu::numButtons> buttons;
 }
