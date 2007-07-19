@@ -238,13 +238,15 @@ Let's introduce the stars which are the central object of this lesson. Stars app
 {{{
 class Star
 {
-    Animation animation;
+    Animation* animation;
     Gosu::Color color;
     double posX, posY;
 
 public:
-    explicit Star(const Animation& anim)
+    explicit Star(Animation& anim)
     {
+        animation = &anim;
+	
         color.setAlpha(255);
         double red = Gosu::random(40, 255);
         color.setRed(static_cast<Gosu::Color::Channel>(red));
@@ -263,7 +265,7 @@ public:
     void draw() const
     {
         Gosu::Image& image = 
-            *animation[Gosu::milliseconds() / 100 % animation.size()];
+            *animation->at(Gosu::milliseconds() / 100 % animation->size());
 
         image.draw(posX - image.width() / 2.0, posY - image.height() / 2.0,
             zStars, 1, 1, color, Gosu::amAdditive);
@@ -299,36 +301,52 @@ class Player
 Now let's extend Window to load the animation, spawn new stars, have the player collect them and draw the remaining ones:
 
 {{{
-class Window < Gosu::Window
-  def initialize
-    super(640, 480, false, 20)
-    self.caption = "Gosu Tutorial Game"
-    
-    @background_image = Gosu::Image.new(self, "media/Space.png", true)
-    
-    @player = Player.new(self)
-    @player.warp(320, 240)
+class GameWindow : public Gosu::Window
+{
+    boost::scoped_ptr<Gosu::Image> backgroundImage;
+	Animation starAnim;
+	
+    Player player;
+    std::list<Star> stars;
 
-    @star_anim = Gosu::Image::load_tiles(self, "media/Star.png", 25, 25, false)
-    @stars = Array.new
-  end
+public:
+    GameWindow()
+    : Window(640, 480, false, 20), player(graphics())
+    {
+        setCaption(L"Gosu Tutorial Game");
 
-  def update
-    ...
-    @player.move
-    @player.collect_stars(@stars)
-    
-    if rand(100) < 4 and @stars.size < 25 then
-      @stars.push(Star.new(@star_anim))
-    end
-  end
+        std::wstring filename = Gosu::sharedResourcePrefix() + L"media/Space.png";
+        backgroundImage.reset(new Gosu::Image(graphics(), filename, false));
 
-  def draw
-    @background_image.draw(0, 0, ZOrder::Background)
-    @player.draw
-    @stars.each { |star| star.draw }
-  end
-…
+        filename = Gosu::sharedResourcePrefix() + L"media/Star.png";
+        Gosu::imagesFromTiledBitmap(graphics(), filename, 25, 25, false, starAnim);
+
+        player.warp(320, 240);
+    }
+
+    void update()
+    {
+        …
+        player.move();
+        player.collectStars(stars);
+
+        if (std::rand() % 25 == 0 && stars.size() < 25)
+            stars.push_back(Star(starAnim));
+    }
+
+    void draw()
+    {
+        player.draw();
+        backgroundImage->draw(0, 0, 0); 
+        for (std::list<Star>::const_iterator i = stars.begin(); i != stars.end(); ++i)
+        {
+            i->draw();
+        }
+
+    }
+
+    …
+};
 }}}
 
 Done! You can now collect stars.
@@ -338,52 +356,88 @@ Done! You can now collect stars.
 Finally, we want to draw the current score using a bitmap font and play a 'beep' sound every time the player collects a star. The Window will handle the text part, loading a font 20 pixels high:
 
 {{{
-class Window < Gosu::Window
-  def initialize
+class GameWindow : public Gosu::Window
+{
+    boost::scoped_ptr<Gosu::Image> backgroundImage;
+    Animation starAnim;
+    Gosu::Font font;
+
+    Player player;
+    std::list<Star> stars;
+
+public:
+    ...
+
+    GameWindow()
+    : Window(640, 480, false, 20),
+        font(graphics(), Gosu::defaultFontName(), 20),
+        player(graphics(), audio())
+    {
+        …
+    }
+
     …
-    @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
-  end
 
-  …
+    void draw()
+    {
+        player.draw();
+        backgroundImage->draw(0, 0, zBackground);
 
-  def draw
-    @background_image.draw(0, 0, ZOrder::Background)
-    @player.draw
-    @stars.each { |star| star.draw }
-    @font.draw("Score: #{@player.score}", 10, 10, ZOrder::UI, 1.0, 1.0, 0xffffff00)
-  end
-end
+        for (std::list<Star>::const_iterator i = stars.begin();
+            i != stars.end(); ++i)
+        {
+            i->draw();
+        }
+
+        font.draw(L"Score: " + boost::lexical_cast<std::wstring>(player.getScore()),
+            10, 10, zUI, 1, 1, Gosu::Colors::yellow);
+    }
+};
 }}}
 
 What's left for the player? Right: A counter for the score, loading the sound and playing it.
 
 {{{
 class Player
-  attr_reader :score
+{
+    boost::scoped_ptr<Gosu::Image> image;
+    boost::scoped_ptr<Gosu::Sample> beep;
+    double posX, posY, velX, velY, angle;
+    unsigned score;
 
-  def initialize(window)
-    @image = Gosu::Image.new(window, "media/Starfighter.bmp", false)
-    @beep = Gosu::Sample.new(window, "media/Beep.wav")
-    @x = @y = @vel_x = @vel_y = @angle = 0.0
-    @score = 0
-  end
+public:
+    Player(Gosu::Graphics& graphics, Gosu::Audio& audio)
+    {
+        std::wstring filename = Gosu::sharedResourcePrefix() + L"media/Starfighter.bmp";
+        image.reset(new Gosu::Image(graphics, filename));
 
-  …
+        filename = Gosu::sharedResourcePrefix() + L"media/Beep.wav";
+        beep.reset(new Gosu::Sample(audio, filename));
 
-  def collect_stars(stars)
-    stars.reject! do |star|
-      if Gosu::distance(@x, @y, star.x, star.y) < 35 then
-        @score += 10
-        @beep.play
-        true
-      else
-        false
-      end
-    end
-  end
-end
+        posX = posY = velX = velY = angle = 0;
+        score = 0;
+    }
+
+    unsigned getScore() const
+    {
+        return score;
+    }
+
+    …
+
+    void collectStars(std::list<Star>& stars, unsigned& score)
+    {
+        ...
+            if (…)
+            {
+                cur = stars.erase(cur);
+                score += 10;
+                beep->play();
+            }
+        ...
+    }
 }}}
 
-As you can see, loading and playing sound effects couldn't be easier! See the RubyReference for more powerful ways of playing back sounds - fiddle around with volume, position and pitch.
+As you can see, loading and playing sound effects couldn't be easier! See the reference for more powerful ways of playing back sounds - fiddle around with volume, position and pitch.
 
 That's it! Everything else is up to your imagination. If you can't imagine how this is enough to create games, see if you can find useful source code from the GosuUsers page.
