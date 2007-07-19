@@ -19,10 +19,10 @@ Download and extract the latest Boost release. Open Terminal, 'cd' into to that 
 
 In Xcode, create a new 'Application/Cocoa Application' project. Remove Resources/MainMenu.nib and main.m (files & references), right-click the project and add a reference to Gosu.framework (wherever you have unpacked it to).
 
-Your application also needs to include the Gosu.framework bundle. To instruct Xcode to automatically copy it into your application, choose Project->New Build Phase and select "Frameworks" as the Copy Files' target directory. Then locate this new build phase in the targets list and add Gosu.framework to it as well.
+Your application also needs to include the Gosu.framework bundle. To instruct Xcode to automatically copy it into your application, choose Project/New Build Phase and select "Frameworks" as the Copy Files' target directory. Then locate this new build phase in the targets list and add Gosu.framework to it as well. (Note: You may have to drag & drop the framework into the build phase from the finder, instead of adding it via a right-click.)
 
-You can then add new code files, for example the ones from the tutorial.
+You can then add new code files, for example the ones from the tutorial. Note: Usually, you want to right-click your target, Get Info, select Build/All Configurations/Build Locations and change the Build Products Path to '.' or something similar, so the application will have the correct position relative to your game's resources.
 
 = Starting a new Gosu game (Ruby) =
 
-Getting started with Ruby is a lot easier: All you need to do is to duplicate the supplied template application and change its source code. To do this, just right-click it, choose "Show package contents" and navigate into the Resources directory. This is where your source code and media files go, for example the ones from the tutorial.
+Getting started with Ruby is a lot easier (surprise): All you need to do is to duplicate the supplied template application and change its source code. To do this, just right-click it, choose "Show package contents" and navigate into the Resources directory. This is where your source code and media files go, for example the ones from the tutorial.
