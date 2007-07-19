@@ -33,7 +33,7 @@ window.show
 
 The constructor initializes the Gosu::Window base class. The parameters shown here create a 640x480 pixels large, non-fullscreen (that's what the "false" stands for) window that will be updated every 20 milliseconds. Then it changes the window's caption, which is empty until then.
 
-update() and draw() are overrides of Gosu::Window's member functions. update() is called every 20 milliseconds here and should contain the main game logic (move objects etc.). 20 is the recommended value.
+update() and draw() are overrides of Gosu::Window's member functions. update() is called every 20 milliseconds here and should contain the main game logic (move objects etc.).
 
 draw() is called afterwards and whenever the window needs redrawing for other reasons and should contain the rendering code.
 
