@@ -438,6 +438,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Gosu\Gosu.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\GosuImpl\Graphics\Graphics.cpp"
 				>
 			</File>

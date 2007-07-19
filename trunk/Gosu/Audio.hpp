@@ -11,6 +11,7 @@
 #include <Gosu/Platform.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/utility.hpp>
+#include <string>
 
 namespace Gosu
 {

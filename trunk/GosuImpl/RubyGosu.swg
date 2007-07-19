@@ -92,11 +92,12 @@
 // Header inclusion (order irrelevant)
 %module(directors="1") gosu
 %{
-// Avoid Ruby Macro Hell on Windows.
+// Avoid Ruby Macro Hell on Windows...
 #undef write
 #undef close
 #undef read
 #undef sleep
+
 #include <Gosu/Audio.hpp>
 #include <Gosu/Color.hpp>
 #include <Gosu/Font.hpp>
