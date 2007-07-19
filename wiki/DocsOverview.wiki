@@ -13,6 +13,8 @@ Depending on your operating system, see GettingStartedOnOsx, GettingStartedOnWin
 
 See either the RubyTutorial or the CppTutorial.
 
+There is also a french tutorial (possibly outdated?) for Ruby/Gosu on Linux at http://xitog.developpez.com/tutoriels/gosu/?page=Presentation
+
 = Reference =
 
 C++: See the reference file that comes with all C++ archives.
