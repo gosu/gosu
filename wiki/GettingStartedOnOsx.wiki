@@ -27,4 +27,4 @@ Note: Usually, you want to right-click your target, Get Info, select Build/All C
 
 = Starting a new Gosu game (Ruby) =
 
-Getting started with Ruby is a lot easier (surprise): All you need to do is to duplicate the supplied template application and change its source code. To do this, just right-click it, choose "Show package contents" and navigate into the Resources directory. This is where your source code and media files go, for example the ones from the tutorial.
+Getting started with Ruby is a lot easier (surprise): All you need to do is write down your code and run it in a way that `require 'gosu'` will work, i.e. by copying gosu.bundle into the same directory or installing it in one of Ruby's default library paths.
