@@ -4,24 +4,24 @@
 =0.7.2 (still being worked on)=
   * Mac/Ruby: The cumbersome .app wrapper is now only used for deployment; for development, running Gosu applications from the Terminal is now possible.
   * Ruby: Re-added missing mouse_x/mouse_y/width/height accessor functions in Window. Thanks mutwin.kraus! ;)
-  * Ruby: Removed the annoying "type" argument for Song#initialize. *Breaks code.*
-  * C++: Added (simplified!) constructors that take filenames to classes Image, Sample and Song; see reference.
+  * Ruby: Removed the annoying "type" argument for Song#initialize. *Breaks code*, even if this is not a milestone release ;(
+  * C++: Added (simplified!) constructors that take filenames to classes Image, Sample and Song; also loadImagesFromTiledBitmap accepts a filename. See reference.
+  * C++: Changed back Button:isDown to be Input::isDown(Button). There was kind of a mess going on, esp. because the tutorials were outdated.
 
 =0.7.1=
-  * Win: Moved to SWIG too
-  * Mac: Fixed build script
-  * Source: Incorporated above changes
-  * Source: Added SDL_mixer fallback. Yay, thanks nornagon!
+  * Win: Moved to SWIG too.
+  * Mac: Fixed build script.
+  * Linux: Added SDL_mixer fallback. Yay, thanks nornagon!
 
 =0.7.0=
   * Moved to Google Code!
   * Mac: implemented idToChar/charToId
   * Mac: implemented fullscreen
-  * C++: Input uses Gosu::Button instead of unsigned for identification
+  * C++: Input uses Gosu::Button instead of unsigned for identification. *Breaks code.*
   * Ruby: clearer Mac game distribution scheme
   * Ruby: moved to SWIG
   * Ruby: MUCH improved exception handling
-  * Ruby: *SOME ARGUMENTS SWAPPED FOR CONSISTENCY WITH C++ - SEE UPDATED REFERENCE IN CASE OF ERRORS!*
+  * Ruby: Some arguments swapped to become consistent with C++'s order. *Breaks code.*
 
 =0.6.5=
   * Linux, Mac: Fixed File.
