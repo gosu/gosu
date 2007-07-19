@@ -3,9 +3,8 @@
 = Source code =
 
 The code for the complete game, together with the required media files, can be found in the Gosu distribution of your choice ('examples/Tutorial.rb').
-On Windows/Linux: Copy gosu.so into the examples directory, run (or double-click) Tutorial.rb.
-On OS X: Gosu 0.7.1-: Duplicate "RubyGosu Template.app", rename Tutorial.rb to Main.rb and copy everything in 'examples' into the Resources subfolder of your duplicated app. Then run it.
-Gosu 0.7.2+: Copy gosu.bundle into the examples directory. If you are using TextMate, just open Tutorial.rb and hit ⌘R. Otherwise, open a Terminal, 'cd' into the examples directory and run "ruby Main.rb".
+
+To run it: Copy gosu.so (or gosu.bundle, respectively) into the examples directory, run Tutorial.rb; if you don't have an editor that supports direct execution (TextMate, SciTE…), `cd` into the directory and run it via `ruby Tutorial.rb`.
 
 = 1. Overriding Window's callbacks =
 
