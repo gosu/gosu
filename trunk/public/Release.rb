@@ -61,7 +61,8 @@ if ARGV[0] == 'mac' then
   mac = Package.new("gosu-mac-#{ARGV[1]}")
   mac.add_file("COPYING.txt")
   mac.add_dir("Gosu.framework")
-  mac.add_dir("RubyGosu Template.app")
+  mac.add_file("gosu.bundle")
+  mac.add_dir("RubyGosu Deployment Template.app")
   mac.add_dir("reference")
   mac.add_dir("examples")
   mac.targz_and_kill
