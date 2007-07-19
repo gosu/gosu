@@ -1,8 +1,9 @@
 #summary Gosu's ToDo list.
 #labels Featured
 
-= Getting things right wrt deployment (0.7.3) =
-  * Put together the C++ tutorial again!
+= Gosu 0.7.2... =
+  * Wait for Andares to supply new Linux build script.
+  * Fix Windows linker terror. :(
   * => Ruby-gem and ruleness.
 
 = Major design goals for 0.7x (immediately needed to complete playable games) =
