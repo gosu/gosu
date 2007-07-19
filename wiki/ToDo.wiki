@@ -4,6 +4,7 @@
 = Gosu 0.7.2... =
   * Wait for Andares to supply new Linux build script.
   * Fix Windows linker terror. :(
+  * Add sites for Ruby game deployment.
   * => Ruby-gem and ruleness.
 
 = Major design goals for 0.7x (immediately needed to complete playable games) =
