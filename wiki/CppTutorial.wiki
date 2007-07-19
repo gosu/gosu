@@ -9,7 +9,7 @@ The code for the complete game, together with the required media files, can be f
 The easiest way to create a complete Gosu application is to write a new class that derives from Gosu::Window (see the reference for a complete description of its interface). Here's how a minimal GameWindow class might look like:
 
 {{{
-#include <Gosu/Gosu.hpp> // Note: This is new in Gosu 0.7.2; for old-style includes, see Tutorial7.cpp.
+#include <Gosu/Gosu.hpp>
 
 #include <boost/scoped_ptr.hpp> // Used throughout Gosu and this tutorial.
 #include <boost/shared_ptr.hpp> // Learn them, they're moving into standard C++!
