@@ -17,7 +17,7 @@ There is also a French tutorial for Ruby/Gosu, which is slightly outdated on at 
 
 = Reference =
 
-C++: See the reference file that comes with all C++ archives.
+C++: See the `reference/index.html` file that comes with all C++ archives.
 Ruby: See the RubyReference.
 
 = Further inspiration =
