@@ -4,7 +4,7 @@
 =0.7.2 (still being worked on)=
   * Mac/Ruby: The cumbersome .app wrapper is now only used for deployment; for development, running Gosu applications from the Terminal is now possible.
   * Ruby: Re-added missing mouse_x/mouse_y/width/height accessor functions in Window. Thanks mutwin.kraus! ;)
-  * Ruby: Removed the annoying "type" argument for Song#initialize.
+  * Ruby: Removed the annoying "type" argument for Song#initialize. *Breaks code.*
   * C++: Added (simplified!) constructors that take filenames to classes Image, Sample and Song; see reference.
 
 =0.7.1=
