@@ -195,11 +195,11 @@ public:
         backgroundImage->draw(0, 0, 0);
     }
 	
-	void buttonDown(Gosu::Button btn)
-	{
-		if (btn == Gosu::kbEscape)
-			close();
-	}
+    void buttonDown(Gosu::Button btn)
+    {
+        if (btn == Gosu::kbEscape)
+           close();
+    }
 };
 }}}
 
@@ -434,6 +434,7 @@ public:
                 score += 10;
                 beep->play();
             }
+            else
         ...
     }
 }}}
