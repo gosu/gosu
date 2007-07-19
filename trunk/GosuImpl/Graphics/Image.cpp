@@ -3,11 +3,26 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/ImageData.hpp>
 #include <Gosu/Math.hpp>
+#include <Gosu/IO.hpp>
+
+Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, bool hardBorders)
+{
+	// Forward.
+	Image(graphics, quickLoadBitmap(filename), hardBorders).data.swap(data);
+}
+
+Gosu::Image::Image(Graphics& graphics, const std::wstring& filename,
+    unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
+    bool hardBorders)
+{
+	// Forward.
+	Image(graphics, quickLoadBitmap(filename), srcX, srcY, srcWidth, srcHeight, hardBorders).data.swap(data);
+}
 
 Gosu::Image::Image(Graphics& graphics, const Bitmap& source, bool hardBorders)
-: data(graphics.createImage(source, 0, 0, source.width(), source.height(),
-       hardBorders ? Gosu::bfHard : Gosu::bfSoft))
 {
+	// Forward.
+	Image(graphics, source, 0, 0, source.width(), source.height(), hardBorders).data.swap(data);
 }
 
 Gosu::Image::Image(Graphics& graphics, const Bitmap& source,

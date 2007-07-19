@@ -1,6 +1,25 @@
 #include <Gosu/Graphics.hpp>
 #include <GosuImpl/Graphics/Graphics.hpp>
 #include <Gosu/Bitmap.hpp>
+#include <Gosu/IO.hpp>
+
+Gosu::Bitmap Gosu::quickLoadBitmap(const std::wstring& filename)
+{
+	Buffer buf;
+	loadFile(buf, filename);
+	Bitmap bmp;
+
+    char formatTester[2];
+    buf.frontReader().read(formatTester, sizeof formatTester);
+    if (formatTester[0] == 'B' && formatTester[1] == 'M')
+    {
+        loadFromBMP(bmp, buf.frontReader());
+        applyColorKey(bmp, Colors::fuchsia);
+    }
+    else
+        loadFromPNG(bmp, buf.frontReader());
+	return bmp;
+}
 
 void Gosu::applyBorderFlags(Bitmap& dest, const Bitmap& source,
     unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,

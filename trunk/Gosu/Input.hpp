@@ -45,10 +45,6 @@ namespace Gosu
 
 		//! Conversion from ButtonName constants.
 		Button(ButtonName name) : id(name) {}
-		
-		//! Returns true if the button was pressed the last time
-		//! that the input system was updated.
-		bool isDown() const;
 	};
 	
 	//! Tests whether two Buttons identify the same physical button.
@@ -90,9 +86,9 @@ namespace Gosu
         //! given character, or noButton.
 		//! Note: Will soon be renamed or even moved, decision pending.
         Button charToId(wchar_t ch) const;
-
-	//!! Added by Andares, it's missing for some reason.
-	bool down(unsigned id) const;
+		
+		//! Returns true if a button is currently pressed.
+		bool down(Button btn) const;
 
         //! Returns the horizontal position of the mouse relative to the top
         //! left corner of the window given to Input's constructor.

@@ -112,27 +112,6 @@
 #include <Gosu/Window.hpp>
     
 #include <sstream>
-    
-    
-// Local helper function to load an image from a filename, regardless of format.
-Gosu::Bitmap loadImage(const std::wstring& filename) {
-    Gosu::Bitmap result;
-    
-    Gosu::Buffer buf;
-    Gosu::loadFile(buf, filename);
-    
-    char formatTester[2];
-    buf.frontReader().read(formatTester, sizeof formatTester);
-    if (formatTester[0] == 'B' && formatTester[1] == 'M')
-    {
-        Gosu::loadFromBMP(result, buf.frontReader());
-        applyColorKey(result, Gosu::Colors::fuchsia);
-    }
-    else
-        Gosu::loadFromPNG(result, buf.frontReader());
-    
-    return result;
-}
 %}
 
 // Miscellaneous functions (timing, math)
@@ -181,19 +160,21 @@ Gosu::Bitmap loadImage(const std::wstring& filename) {
 
 // Image
 // Hackishly allow the user to pass Window& instead of Graphics&.
-// Also, translate filenames into images and add convenience functions.
+// Also, provide convenience functions.
 %include "std_vector.i"
 %template(ImageVector) std::vector<Gosu::Image*>;
+%ignore Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, bool hardBorders = false);
+%ignore Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, bool hardBorders = false);
 %ignore Gosu::Image::Image(Graphics& graphics, const Bitmap& source, bool hardBorders = false);
 %ignore Gosu::Image::Image(Graphics& graphics, const Bitmap& source, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, bool hardBorders = false);
 %include "../Gosu/Image.hpp"
 %extend Gosu::Image {
     Image(Gosu::Window& window, const std::string& filename, bool hardBorders = false) {
-        return new Gosu::Image(window.graphics(), loadImage(Gosu::widen(filename)), hardBorders);
+        return new Gosu::Image(window.graphics(), Gosu::widen(filename), hardBorders);
     }
     Image(Gosu::Window& window, const std::string& filename, bool hardBorders,
           unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight) {
-        return new Gosu::Image(window.graphics(), loadImage(Gosu::widen(filename)),
+        return new Gosu::Image(window.graphics(), Gosu::widen(filename),
                                srcX, srcY, srcWidth, srcHeight, hardBorders);
     }
     static Gosu::Image* fromText(Gosu::Window& window, const std::wstring& text,
@@ -204,7 +185,7 @@ Gosu::Bitmap loadImage(const std::wstring& filename) {
     }
     static std::vector<Gosu::Image*> loadTiles(Gosu::Window& window, const std::wstring& filename,
                                                int tileWidth, int tileHeight, bool hardBorders) {
-        Gosu::Bitmap bmp = loadImage(filename);
+        Gosu::Bitmap bmp = Gosu::quickLoadBitmap(filename);
         std::vector<Gosu::Image*> vec;
         // TODO: const correctness
         Gosu::imagesFromTiledBitmap(window.graphics(), bmp,
@@ -216,22 +197,20 @@ Gosu::Bitmap loadImage(const std::wstring& filename) {
 // Audio:
 
 %ignore Gosu::Audio;
+%ignore Gosu::Sample::Sample(Audio& audio, const std::wstring& filename);
 %ignore Gosu::Sample::Sample(Audio& audio, Reader reader);
+%ignore Gosu::Song::Song(Audio& audio, const std::wstring& filename);
 %ignore Gosu::Song::Song(Audio& audio, Type type, Reader reader);
 %rename("playing?") playing;
 %include "../Gosu/Audio.hpp"
 %extend Gosu::Sample {
-    Sample(Gosu::Window& window, const std::wstring& filename) {
-        Gosu::Buffer buffer;
-        Gosu::loadFile(buffer, filename);
-        return new Gosu::Sample(window.audio(), buffer.frontReader());
+    Sample(Gosu::Window& window, const std::string& filename) {
+        return new Gosu::Sample(window.audio(), Gosu::widen(filename));
     }
 }
 %extend Gosu::Song {
-    Song(Gosu::Window& window, Type type, const std::wstring& filename) {
-        Gosu::Buffer buffer;
-        Gosu::loadFile(buffer, filename);
-        return new Gosu::Song(window.audio(), type, buffer.frontReader());
+    Song(Gosu::Window& window, const std::string& filename) {
+        return new Gosu::Song(window.audio(), Gosu::widen(filename));
     }
 }
 
@@ -273,7 +252,7 @@ Gosu::Bitmap loadImage(const std::wstring& filename) {
                                    z, mode);
     }
     bool isButtonDown(Gosu::Button btn) const {
-        return btn.isDown();
+        return $self->input().down(btn);
     }
     Gosu::Button charToButtonId(wchar_t ch) {
         return $self->input().charToId(ch);
@@ -281,10 +260,16 @@ Gosu::Bitmap loadImage(const std::wstring& filename) {
     wchar_t buttonIdToChar(Gosu::Button btn) {
         return $self->input().idToChar(btn);
     }
-	double mouseX() {
+	double mouseX() const {
 		return $self->input().mouseX();
 	}
-	double mouseY() {
+	double mouseY() const {
 		return $self->input().mouseY();
+	}
+	int width() const {
+		return $self->graphics().width();
+	}
+	int height() const {
+		return $self->graphics().height();
 	}
 };

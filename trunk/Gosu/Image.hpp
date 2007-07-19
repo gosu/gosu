@@ -19,10 +19,16 @@ namespace Gosu
     public:
         //! Loads an image from a given filename that can be drawn onto
         //! graphics.
+		//! This constructor can handle PNG and BMP images. A color key of #ff00ff is
+		//! automatically applied to BMP type images. For more flexibility, use the
+		//! corresponding constructor that uses a Bitmap object.
         Image(Graphics& graphics, const std::wstring& filename,
               bool hardBorders = false);
         //! Loads a portion of the the image at the given filename that can be
         //! drawn onto graphics.
+		//! This constructor can handle PNG and BMP images. A color key of #ff00ff is
+		//! automatically applied to BMP type images. For more flexibility, use the
+		//! corresponding constructor that uses a Bitmap object.
         Image(Graphics& graphics, const std::wstring& filename, unsigned srcX,
               unsigned srcY, unsigned srcWidth, unsigned srcHeight,
               bool hardBorders = false);
@@ -68,7 +74,7 @@ namespace Gosu
             double factorX = 1, double factorY = 1,
             Color c = Colors::white,
             AlphaMode mode = amDefault) const;
-        // IMPR: drawRotMod should be available as well.
+        // IMPR: drawRotMod should exist as well.
 
         #ifndef SWIG
         void drawRotFlip(double x, double y, ZPos z,
@@ -86,6 +92,20 @@ namespace Gosu
         const ImageData& getData() const;
         #endif
     };
+
+	//! Convenience function that splits a bitmap loaded from a file into an area
+	//! of small rectangles and creates images from them.
+    //! \param tileWidth If positive, specifies the width of one tile in
+    //! pixels. If negative, the bitmap is divided into -tileWidth rows.
+    //! \param tileHeight See tileWidth.
+    //! \param appendTo STL container to which the images will be appended.
+    //! Must provide a push_back member function.
+    template<typename Container>
+    void imagesFromTiledBitmap(Graphics& graphics, const std::wstring& filename,
+        int tileWidth, int tileHeight, bool hardBorders, Container& appendTo)
+    {
+		imagesFromTiledBitmap(graphics, quickLoadBitmap(filename), tileWidth, tileHeight, hardBorders, appendTo);
+    }
 
     //! Convenience function that splits a bitmap into an area of small 
     //! rectangles and creates images from them.

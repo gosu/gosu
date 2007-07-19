@@ -18,11 +18,6 @@ namespace {
 	boost::array<bool, Gosu::numButtons> buttons;
 }
 
-bool Gosu::Button::isDown() const
-{
-    return buttons.at(id);
-}
-
 struct Gosu::Input::Impl
 {
     HWND window;
@@ -391,6 +386,11 @@ wchar_t Gosu::Input::idToChar(Gosu::Button btn) const
 		return /*std::*/towlower(buf[0]);
 
     return 0;
+}
+
+bool Gosu::Input::down(Button btn) const
+{
+    return buttons.at(btn.getId());
 }
 
 double Gosu::Input::mouseX() const

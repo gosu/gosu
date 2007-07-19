@@ -37,10 +37,10 @@ bool Gosu::Input::feedXEvent(::XEvent& event, Gosu::Window* window)
     return true;
 }
 
-bool Gosu::Input::down(unsigned id) const
+bool Gosu::Input::down(Gosu::Button btn) const
 {
     // Will default to false for unknown indices (good).
-    return pimpl->keyMap[id];
+    return pimpl->keyMap[btn.getId()];
 }
 
 Gosu::Button Gosu::Input::charToId(wchar_t ch) const

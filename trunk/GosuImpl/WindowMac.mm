@@ -295,7 +295,7 @@ void Gosu::Window::show()
 	// run by double-clicking an .app. So if this is run from the Terminal (i.e.
 	// during Ruby/Gosu game development), tell the OS we need input in any case.
 	ProcessSerialNumber psn = { 0, kCurrentProcess };
-	OSStatus res = TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+	TransformProcessType(&psn, kProcessTransformToForegroundApplication);
 
     if (graphics().fullscreen())
         [NSCursor hide];

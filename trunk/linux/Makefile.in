@@ -15,11 +15,6 @@ OBJS = @GOSU_A_OBJS@
 # $(BASE_OBJS) $(NET_OBJS) $(GOSUMAIN_OBJ) $(FMOD_OBJ)
 # $(OPENAL_OBJ)
 
-RUBYOBJS = RubyGosu/Color.o RubyGosu/Font.o RubyGosu/Image.o \
-    RubyGosu/Sample.o RubyGosu/Window.o RubyGosu/Constants.o \
-    RubyGosu/Functions.o RubyGosu/RubyGosu.o RubyGosu/Song.o \
-    RubyGosu/Sockets.o
-
 XPLS = ../examples/Tutorial2 ../examples/Tutorial3 ../examples/Tutorial4 \
        ../examples/Tutorial5 ../examples/Tutorial6 ../examples/Tutorial7
 

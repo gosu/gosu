@@ -22,7 +22,6 @@
 		D410E9E30A8019CD005C7067 /* Directories.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9C70A8019CD005C7067 /* Directories.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9E40A8019CD005C7067 /* Font.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9C80A8019CD005C7067 /* Font.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9E50A8019CD005C7067 /* Fwd.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9C90A8019CD005C7067 /* Fwd.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D410E9E60A8019CD005C7067 /* GosuMain.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9CA0A8019CD005C7067 /* GosuMain.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9E70A8019CD005C7067 /* Graphics.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9CB0A8019CD005C7067 /* Graphics.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9E80A8019CD005C7067 /* GraphicsBase.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9CC0A8019CD005C7067 /* GraphicsBase.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9E90A8019CD005C7067 /* Image.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9CD0A8019CD005C7067 /* Image.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -113,6 +112,7 @@
 		D423826B0C4C3E8A000DAA25 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98B0A801948005C7067 /* ApplicationServices.framework */; };
 		D423826C0C4C3E8A000DAA25 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98C0A801948005C7067 /* Foundation.framework */; };
 		D423826D0C4C3E8A000DAA25 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB77AAFE841565C02AAC07 /* Carbon.framework */; };
+		D42BC0D10C4F840C00EBF79C /* Gosu.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D42BC0D00C4F840C00EBF79C /* Gosu.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D459FF4C0BDCD26D00E7F0D6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98A0A801948005C7067 /* AppKit.framework */; };
 		D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */; };
 		D459FF840BDCD5D400E7F0D6 /* Gosu.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8D07F2C80486CC7A007CD1D0 /* Gosu.framework */; };
@@ -151,7 +151,6 @@
 		D410E9C70A8019CD005C7067 /* Directories.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Directories.hpp; path = ../Gosu/Directories.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9C80A8019CD005C7067 /* Font.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Font.hpp; path = ../Gosu/Font.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9C90A8019CD005C7067 /* Fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Fwd.hpp; path = ../Gosu/Fwd.hpp; sourceTree = SOURCE_ROOT; };
-		D410E9CA0A8019CD005C7067 /* GosuMain.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = GosuMain.hpp; path = ../Gosu/GosuMain.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9CB0A8019CD005C7067 /* Graphics.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Graphics.hpp; path = ../Gosu/Graphics.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9CC0A8019CD005C7067 /* GraphicsBase.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = GraphicsBase.hpp; path = ../Gosu/GraphicsBase.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9CD0A8019CD005C7067 /* Image.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Image.hpp; path = ../Gosu/Image.hpp; sourceTree = SOURCE_ROOT; };
@@ -208,6 +207,7 @@
 		D410EAF40A801B00005C7067 /* Sockets.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = Sockets.hpp; sourceTree = "<group>"; };
 		D410EB290A801C28005C7067 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		D410EB6D0A801CDC005C7067 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D42BC0D00C4F840C00EBF79C /* Gosu.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Gosu.hpp; path = ../Gosu/Gosu.hpp; sourceTree = SOURCE_ROOT; };
 		D459FF440BDCD23500E7F0D6 /* RubyGosu Template.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RubyGosu Template.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D459FF460BDCD23600E7F0D6 /* RubyGosu Template-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "RubyGosu Template-Info.plist"; sourceTree = "<group>"; };
 		D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Gosu.icns; sourceTree = "<group>"; };
@@ -317,7 +317,6 @@
 				D410E9C70A8019CD005C7067 /* Directories.hpp */,
 				D410E9C80A8019CD005C7067 /* Font.hpp */,
 				D410E9C90A8019CD005C7067 /* Fwd.hpp */,
-				D410E9CA0A8019CD005C7067 /* GosuMain.hpp */,
 				D410E9CB0A8019CD005C7067 /* Graphics.hpp */,
 				D410E9CC0A8019CD005C7067 /* GraphicsBase.hpp */,
 				D410E9CD0A8019CD005C7067 /* Image.hpp */,
@@ -333,6 +332,7 @@
 				D410E9D70A8019CD005C7067 /* Timing.hpp */,
 				D410E9D80A8019CD005C7067 /* Utility.hpp */,
 				D410E9D90A8019CD005C7067 /* Window.hpp */,
+				D42BC0D00C4F840C00EBF79C /* Gosu.hpp */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -439,7 +439,6 @@
 				D410E9E30A8019CD005C7067 /* Directories.hpp in Headers */,
 				D410E9E40A8019CD005C7067 /* Font.hpp in Headers */,
 				D410E9E50A8019CD005C7067 /* Fwd.hpp in Headers */,
-				D410E9E60A8019CD005C7067 /* GosuMain.hpp in Headers */,
 				D410E9E70A8019CD005C7067 /* Graphics.hpp in Headers */,
 				D410E9E80A8019CD005C7067 /* GraphicsBase.hpp in Headers */,
 				D410E9E90A8019CD005C7067 /* Image.hpp in Headers */,
@@ -463,6 +462,7 @@
 				D410EB0C0A801B00005C7067 /* TexChunk.hpp in Headers */,
 				D410EB0E0A801B00005C7067 /* Texture.hpp in Headers */,
 				D410EB130A801B00005C7067 /* Sockets.hpp in Headers */,
+				D42BC0D10C4F840C00EBF79C /* Gosu.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

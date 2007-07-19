@@ -1,14 +1,16 @@
 #include <Gosu/Audio.hpp>
-#include <fmod.h>
-#include <fmod_errors.h>
 #include <Gosu/Math.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Utility.hpp>
+#include <boost/algorithm/string.hpp>
 #include <cassert>
 #include <cstdlib>
 #include <algorithm>
 #include <stdexcept>
 #include <vector>
+
+#include <fmod.h>
+#include <fmod_errors.h>
 
 namespace Gosu
 {
@@ -96,6 +98,15 @@ struct Gosu::Sample::SampleData : boost::noncopyable
             ::FSOUND_Sample_Free(rep);
     }
 };
+
+Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
+{
+	Buffer buf;
+	loadFile(buf, filename);
+
+	// Forward.
+	Sample(audio, buf.frontReader()).data.swap(data);
+}
 
 Gosu::Sample::Sample(Audio& audio, Reader reader)
 {
@@ -260,6 +271,24 @@ public:
         fmodCheck(::FMUSIC_StopSong(module_));
     }
 };
+
+Gosu::Song::Song(Audio& audio, const std::wstring& filename)
+{
+    Buffer buf;
+	  loadFile(buf, filename);
+	  Type type = stStream;
+
+	  using boost::iends_with;
+	  if (iends_with(filename, ".mod") || iends_with(filename, ".mid") ||
+		    iends_with(filename, ".s3m") || iends_with(filename, ".it") ||
+		    iends_with(filename, ".xm"))
+	  {
+	      type = stModule;
+	  }
+	
+    // Forward.
+	  Song(audio, type, buf.frontReader()).data.swap(data);
+}
 
 Gosu::Song::Song(Audio& audio, Type type, Reader reader)
 {

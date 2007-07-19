@@ -57,11 +57,6 @@ namespace {
     boost::array<bool, Gosu::numButtons> buttonStates;
 }
 
-bool Gosu::Button::isDown() const
-{
-    return buttonStates.at(id);
-}
-
 struct Gosu::Input::Impl
 {
     Input& input;
@@ -171,6 +166,11 @@ Gosu::Button Gosu::Input::charToId(wchar_t ch) const
     if (iter == charIds.end())
         return noButton;
     return Gosu::Button(iter->second);
+}
+
+bool Gosu::Input::down(Gosu::Button btn) const
+{
+    return buttonStates.at(btn.getId());
 }
 
 double Gosu::Input::mouseX() const

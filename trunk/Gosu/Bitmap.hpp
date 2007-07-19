@@ -60,7 +60,7 @@ namespace Gosu
     //! Saves the contents of the given bitmap into windows .bmp file data.
     Writer saveToBMP(const Bitmap& bmp, Writer writer);
     //! Loads a .png file into the given bitmap.
-    //! WARNING: loadFromPNG does not yet understand colour keys! The alpha
+    //! WARNING: loadFromPNG does not yet understand color keys (?)! The alpha
     //! channel is supported, though.
     Reader loadFromPNG(Bitmap& bmp, Reader reader);
     //! Saves the contents of the given bitmap into .png file data, 24 bits.
@@ -70,14 +70,9 @@ namespace Gosu
     //! to zero. Color values are adjusted so that no borders show up when
     //! the image is stretched or rotated.
     void applyColorKey(Bitmap& bitmap, Color key);
-}
-
-namespace std
-{
-    inline void swap(Gosu::Bitmap& a, Gosu::Bitmap& b)
-    {
-        a.swap(b);
-    }
+	
+	// Still to be moved around & undocumented, beware!
+	Bitmap quickLoadBitmap(const std::wstring& filename);
 }
 
 #endif

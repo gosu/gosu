@@ -2,6 +2,7 @@
 #include <Gosu/Math.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Utility.hpp>
+#include <boost/algorithm/string.hpp>
 #include <cassert>
 #include <cstdlib>
 #include <algorithm>
@@ -57,6 +58,15 @@ struct Gosu::Sample::SampleData : boost::noncopyable
   }
 };
 
+Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
+{
+    buffer buf;
+	  loadFile(buf, filename);
+
+	  // Forward.
+	  Sample(audio, buf.frontReader()).data.swap(data);
+}
+
 Gosu::Sample::Sample(Audio& audio, Reader reader) {
   std::size_t bufsize = reader.resource().size() - reader.position();
   Uint8* buffer = new Uint8[bufsize];
@@ -68,7 +78,7 @@ Gosu::Sample::Sample(Audio& audio, Reader reader) {
     throwLastSDLError();
 
   //if (buffer != 0)
-  //  delete[] buffer; // XXX: does SDL_mixer use this data?
+  //  delete[] buffer; // TODO: does SDL_mixer use this data?
 }
 
 Gosu::Sample::~Sample() {
@@ -126,7 +136,7 @@ class Gosu::Song::StreamData : public BaseData {
       std::size_t bufsize = reader.resource().size() - reader.position();
       buffer = new Uint8[bufsize];
       reader.read(buffer, bufsize);
-#ifdef GOSU_ALLOW_MP3
+#ifndef GOSU_ALLOW_MP3
       if (bufsize > 2 && 
           ((buffer[0] == '\xff' && (buffer[1] & 0xfe) == '\xfa') || 
            (buffer[0] == 'I' && buffer[1] == 'D' && buffer[2] == '3')))
@@ -161,6 +171,24 @@ class Gosu::Song::ModuleData : public Gosu::Song::StreamData {
   public:
     ModuleData(Gosu::Reader reader): StreamData(reader) {}
 };
+
+Gosu::Song::Song(Audio& audio, const std::wstring& filename)
+{
+    Buffer buf;
+	  loadFile(buf, filename);
+	  Type type = stStream;
+
+	  using boost::iends_with;
+	  if (iends_with(filename, ".mod") || iends_with(filename, ".mid") ||
+		    iends_with(filename, ".s3m") || iends_with(filename, ".it") ||
+		    iends_with(filename, ".xm"))
+	  {
+		    type = stModule;
+	  }
+	
+    // Forward.
+	  Song(audio, type, buf.frontReader()).data.swap(data);
+}
 
 Gosu::Song::Song(Audio &audio, Type type, Reader reader) {
   switch (type) {
