@@ -23,7 +23,7 @@ Your application also needs to include the Gosu.framework bundle. To instruct Xc
 
 You can then add new code files, for example the ones from the tutorial.
 
-Note: Usually, you want to right-click your target, Get Info, select Build/All Configurations/Build Locations and *change the Build Products Path to '.'* or something similar, so the application will have the correct position relative to your game's resources. Be aware that the Intermediate Build Files option will automatically change with the Build Products Path, and you have to manually revert it to 'build'.
+Note: Usually, you want to right-click your target, Get Info, select Build/All Configurations/Build Locations and *change the Per-configuration Build Products Path to '.'* or something similar, so the application will have the correct position relative to your game's resources.
 
 = Starting a new Gosu game (Ruby) =
 
