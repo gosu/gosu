@@ -17,7 +17,7 @@ Download and extract the latest Boost release. Open Terminal, 'cd' into to that 
 
 = Starting a new Gosu game (C++) =
 
-In Xcode, create a new Cocoa application project. Remove Resources/MainMenu.nib and main.m (files & references), right-click the project and add a reference to Gosu.framework (wherever you have unpacked it to).
+In Xcode, create a new 'Application/Cocoa Application' project. Remove Resources/MainMenu.nib and main.m (files & references), right-click the project and add a reference to Gosu.framework (wherever you have unpacked it to).
 
 Your application also needs to include the Gosu.framework bundle. To instruct Xcode to automatically copy it into your application, choose Project->New Build Phase and select "Frameworks" as the Copy Files' target directory. Then locate this new build phase in the targets list and add Gosu.framework to it as well.
 
