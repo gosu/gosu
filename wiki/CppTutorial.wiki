@@ -180,13 +180,13 @@ public:
 
     void update()
     {
-		if (input().down(Gosu::kbLeft) || input().down(Gosu::gpLeft))
-			player.turnLeft();
-		if (input().down(Gosu::kbRight) || input().down(Gosu::gpRight))
-			player.turnRight();
-		if (input().down(Gosu::kbUp) || input().down(Gosu::gpButton0))
-			player.accelerate();
-		player.move();
+        if (input().down(Gosu::kbLeft) || input().down(Gosu::gpLeft))
+            player.turnLeft();
+        if (input().down(Gosu::kbRight) || input().down(Gosu::gpRight))
+            player.turnRight();
+        if (input().down(Gosu::kbUp) || input().down(Gosu::gpButton0))
+              player.accelerate();
+        player.move();
     }
 
     void draw()
