@@ -21,7 +21,9 @@ In Xcode, create a new 'Application/Cocoa Application' project. Remove Resources
 
 Your application also needs to include the Gosu.framework bundle. To instruct Xcode to automatically copy it into your application, choose Project/New Build Phase and select "Frameworks" as the Copy Files' target directory. Then locate this new build phase in the targets list and add Gosu.framework to it as well. (Note: You may have to drag & drop the framework into the build phase from the finder, instead of adding it via a right-click.)
 
-You can then add new code files, for example the ones from the tutorial. Note: Usually, you want to right-click your target, Get Info, select Build/All Configurations/Build Locations and change the Build Products Path to '.' or something similar, so the application will have the correct position relative to your game's resources. Be aware that the Intermediate Build Files option will automatically adapt, and you have to manually revert it to 'build'.
+You can then add new code files, for example the ones from the tutorial.
+
+Note: Usually, you want to right-click your target, Get Info, select Build/All Configurations/Build Locations and *change the Build Products Path to '.'* or something similar, so the application will have the correct position relative to your game's resources. Be aware that the Intermediate Build Files option will automatically change with the Build Products Path, and you have to manually revert it to 'build'.
 
 = Starting a new Gosu game (Ruby) =
 
