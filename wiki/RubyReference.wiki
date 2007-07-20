@@ -40,7 +40,7 @@
   * `play_pan(pan=0, vol=1, speed=1)`: pan can be anything from -1.0 (left) to 1.0 (right). vol can be anything from 0.0 (silence) to 1.0 (full volume). Playback speed is only limited by FMOD's capatibilities and can accept very high or low values. Use 1.0 for normal playback speed.
 
 == class Gosu::Song ==
-  * `initialize(window, filename, type)`: type must be either :stream (OGG...) or :module (IT, MOD, X3M...)
+  * `initialize(window, filename)`
   * `play`
   * `stop`
   * `playing?`
