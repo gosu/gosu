@@ -21,10 +21,49 @@ In Xcode, create a new 'Application/Cocoa Application' project. Remove Resources
 
 Your application also needs to include the Gosu.framework bundle. To instruct Xcode to automatically copy it into your application, choose Project/New Build Phase and select "Frameworks" as the Copy Files' target directory. Then locate this new build phase in the targets list and add Gosu.framework to it as well. (Note: You may have to drag & drop the framework into the build phase from the finder, instead of adding it via a right-click.)
 
-You can then add new code files, for example the ones from the tutorial.
+You can then add new code files, for example the ones from the tutorial or this minimal application code:
+
+{{{
+#include <Gosu/Window.hpp>
+
+class MyWindow : public Gosu::Window
+{
+public:
+    MyWindow()
+    : Gosu::Window(640, 480, false, 20)
+    {
+        setCaption(L"Hello World!");
+    }
+};
+
+int main(int argc, char* argv[])
+{
+    MyWindow win;
+    win.show();
+    return 0;
+}
+}}}
 
 Note: Usually, you want to right-click your target, Get Info, select Build/All Configurations/Build Locations and *change the Per-configuration Build Products Path to '.'* or something similar, so the application will have the correct position relative to your game's resources.
 
 = Starting a new Gosu game (Ruby) =
 
 Getting started with Ruby is a lot easier (surprise): All you need to do is write down your code and run it in a way that `require 'gosu'` will work, i.e. by copying gosu.bundle into the same directory or installing it in one of Ruby's default library paths.
+
+To test if everything works, you can use this Hello World script:
+
+{{{
+require 'gosu'
+
+class MyWindow < Gosu::Window
+  def initialize
+    super(640, 480, false, 20)
+    self.caption = 'Hello World!'
+  end
+end
+
+w = MyWindow.new
+w.show
+}}}
+
+That's it — have fun!
