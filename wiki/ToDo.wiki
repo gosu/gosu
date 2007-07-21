@@ -13,18 +13,19 @@
   * text input system for chat boxes, high-score lists etc.
   * more sophisticated Audio interface for talking NPC's etc.
 
-= Major design goals for 0.8x (graphics) =
+= Major design goals for 0.8x (IO, timing) =
+  * the window argument in Ruby is annoying, because only one window can be used anyway. Maybe it should be Window.run, and all open Windows should work.
+  * simplify Gosu's IO philosophy (C++)
+  * redesign Gosu::Window to be more useful for framerate independent games?
+  * anyway, get rid of WM_TIMER
+  * document or kill Gosu's Sockets
+
+= Major design goals for 0.9x (graphics) =
   * use OpenGL on Windows
   * allow custom OpenGL integration
   * find a way to factor rot flips out of Gosu => Image redesign
   * implement clipping and a target() modifier for the new Image
   * multi-threaded blit queue and float-z-ordering?
-
-= Major design goals for 0.9x (IO, timing) =
-  * rework and document Gosu's IO philosophy
-  * redesign Gosu::Window to be more useful for framerate independent games?
-  * anyway, get rid of WM_TIMER
-  * document or kill Gosu's Sockets
 
 = Major design goals for 1.x (perfection) =
   * Windows: Input will regularly query devices which are not currently attached, thereby causing the game to halt every few seconds - think about this
