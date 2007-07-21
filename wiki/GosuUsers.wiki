@@ -29,6 +29,6 @@ Gosu has also been used a lot for participating in small game development compet
 
 Written by Florian Groß in 2004 as an entry to the Ludum Dare 48h competition. Compo theme was "Random", so it's about randomized dungeons in which you have to shoot guns and mines. http://www.raschke.de/julian/temp/Encaved.zip
 
-=== And... ===
+== And... ==
 
 …if you have anything in the works that uses Gosu, no matter how far it is, feel free to describe it in a comment! :)
