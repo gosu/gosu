@@ -5,7 +5,6 @@
   * Whenever a function expects a Gosu::Color value, a 0xAARRGGBB integer can be supplied instead.
   * Valid mode parameters for drawing functions are :default and :additive.
 
-
 == class Gosu::Color ==
   * `initialize(argb)`: argb is a 0xAARRGGBB integer.
   * `initialize(a, r, g, b)`
@@ -22,15 +21,15 @@
   * `initialize(window, font_name, height)`
   * `height`
   * `text_width(text, factor_x=1)`: Returns the width in pixels the given text would span.
-  * `draw(text, x, y, z=0, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`
+  * `draw(text, x, y, z, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`
   * `draw_rel(text, x, y, z, rel_x, rel_y, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`: If relX is 0.0, the text will be to the right of x, if it is 1.0, the text will be to the left of x, if it is 0.5, it will be centered on x. Of course, all real numbers are possible values. The same applies to relY.
 
 == class Gosu::Image ==
   * `initialize(window, filename, hard_borders, [srcX, srcY, srcWidth, srcHeight])`
   * `width`
   * `height`
-  * `draw(x, y, z=0, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`
-  * `draw_rot(x, y, z=0, angle=0, center_x=0.5, center_y=0.5, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`
+  * `draw(x, y, z, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`
+  * `draw_rot(x, y, z, angle, center_x=0.5, center_y=0.5, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`
   * `self.from_text(window, text, font_name, font_height, line_spacing, max_width, align)`: Creates a block of text of width max_width. Each line will take font_height + line_spacing pixels of vertical space.`: align must be one of :left, :right, :center oder :justify
   * `self.load_tiles(window, filename, tile_width, tile_height, hard_borders)`: tile_width is either the width of one tile in pixels or the number of columns, tile_height is its vertical equivalent
 
