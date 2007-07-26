@@ -27,7 +27,17 @@ Gosu has also been used a lot for participating in small game development compet
 
 === Encaved (Ruby) ===
 
-Written by Florian Groß in 2004 as an entry to the Ludum Dare 48h competition. Compo theme was "Random", so it's about randomized dungeons in which you have to shoot guns and mines. http://www.raschke.de/julian/temp/Encaved.zip
+Written by Florian Groß in 2004 as an entry to the Ludum Dare 48h competition. Compo theme was "Random", so it's about randomized dungeons in which you have to shoot guns and mines. 
+[http://www.raschke.de/julian/temp/Encaved.zip Download source package]
+
+=== Escave (Ruby) ===
+
+http://www.raschke.de/julian/temp/escave.jpg
+
+Janis Born's entry for the same compo. Features some cool graphics! ,,(Note: Done by someone who was new to Gosu, and even to Ruby! Still wow-ed.),,
+
+[http://www.raschke.de/julian/temp/escave-source.zip Download source package]
+[http://www.raschke.de/julian/temp/escave-windows.zip Download old Windows binary]
 
 == And... ==
 
