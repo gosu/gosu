@@ -42,6 +42,8 @@ if ARGV[0] == 'source' then
   source.add_file("COPYING.txt")
   source.add_dir("Gosu")
   source.add_dir("GosuImpl")
+  source.del_file("GosuImpl/RubyGosu_wrap.cxx")
+  source.del_file("GosuImpl/RubyGosu_wrap.h")
   source.add_dir("reference")
   source.add_dir("examples")
   source.add_dir("linux")
@@ -84,6 +86,7 @@ if ARGV[0] == 'windows-ruby' then
   windows_ruby = Package.new("gosu-windows-ruby-#{ARGV[1]}")
   windows_ruby.add_file("COPYING.txt")
   windows_ruby.add_file("gosu.so")
-  windows_ruby.add_file("examples/Tutorial.rb")
+  windows_ruby.add_dir("examples")
+  windows_ruby.del_file("examples/Tutorial.cpp")
   windows_ruby.zip_and_kill
 end

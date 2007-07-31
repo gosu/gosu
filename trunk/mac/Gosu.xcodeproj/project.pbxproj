@@ -13,7 +13,6 @@
 		D410E98F0A801948005C7067 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98C0A801948005C7067 /* Foundation.framework */; };
 		D410E9DB0A8019CD005C7067 /* Audio.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9BF0A8019CC005C7067 /* Audio.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9DC0A8019CD005C7067 /* AutoLink.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9C00A8019CC005C7067 /* AutoLink.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D410E9DD0A8019CD005C7067 /* AutoLinkMain.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9C10A8019CC005C7067 /* AutoLinkMain.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9DE0A8019CD005C7067 /* Bitmap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9C20A8019CC005C7067 /* Bitmap.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9DF0A8019CD005C7067 /* ButtonsMac.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9C30A8019CC005C7067 /* ButtonsMac.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9E00A8019CD005C7067 /* ButtonsWin.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9C40A8019CC005C7067 /* ButtonsWin.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -127,7 +126,6 @@
 		D410E98C0A801948005C7067 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		D410E9BF0A8019CC005C7067 /* Audio.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Audio.hpp; path = ../Gosu/Audio.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9C00A8019CC005C7067 /* AutoLink.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = AutoLink.hpp; path = ../Gosu/AutoLink.hpp; sourceTree = SOURCE_ROOT; };
-		D410E9C10A8019CC005C7067 /* AutoLinkMain.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = AutoLinkMain.hpp; path = ../Gosu/AutoLinkMain.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9C20A8019CC005C7067 /* Bitmap.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Bitmap.hpp; path = ../Gosu/Bitmap.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9C30A8019CC005C7067 /* ButtonsMac.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = ButtonsMac.hpp; path = ../Gosu/ButtonsMac.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9C40A8019CC005C7067 /* ButtonsWin.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = ButtonsWin.hpp; path = ../Gosu/ButtonsWin.hpp; sourceTree = SOURCE_ROOT; };
@@ -291,7 +289,6 @@
 			children = (
 				D410E9BF0A8019CC005C7067 /* Audio.hpp */,
 				D410E9C00A8019CC005C7067 /* AutoLink.hpp */,
-				D410E9C10A8019CC005C7067 /* AutoLinkMain.hpp */,
 				D410E9C20A8019CC005C7067 /* Bitmap.hpp */,
 				D410E9C30A8019CC005C7067 /* ButtonsMac.hpp */,
 				D410E9C40A8019CC005C7067 /* ButtonsWin.hpp */,
@@ -413,7 +410,6 @@
 			files = (
 				D410E9DB0A8019CD005C7067 /* Audio.hpp in Headers */,
 				D410E9DC0A8019CD005C7067 /* AutoLink.hpp in Headers */,
-				D410E9DD0A8019CD005C7067 /* AutoLinkMain.hpp in Headers */,
 				D410E9DE0A8019CD005C7067 /* Bitmap.hpp in Headers */,
 				D410E9DF0A8019CD005C7067 /* ButtonsMac.hpp in Headers */,
 				D410E9E00A8019CD005C7067 /* ButtonsWin.hpp in Headers */,

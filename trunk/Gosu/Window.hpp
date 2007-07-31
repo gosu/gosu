@@ -58,9 +58,9 @@ namespace Gosu
 
         //! Called before update when the user pressed a button while the
         //! window had the focus.
-        virtual void buttonDown(Gosu::Button btn) {}
+        virtual void buttonDown(Gosu::Button) {}
         //! Same as buttonDown. Called then the user released a button.
-        virtual void buttonUp(Gosu::Button btn) {}
+        virtual void buttonUp(Gosu::Button) {}
         
 #ifndef SWIG
         const Graphics& graphics() const;
