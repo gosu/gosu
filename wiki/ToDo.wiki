@@ -5,6 +5,10 @@
   * Wait for Andares to supply new Linux build script.
   * Ruby gem.
 
+= Done first because of real use case (Wiinstrument) and because it REDUCES Gosu's complexity =
+  * use OpenGL on Windows
+  * allow custom OpenGL integration
+
 = Major design goals for 0.7x (immediately needed to complete playable games) =
   * With UTF-8 support in C++ coming, get rid of all the wstring stuff. -> http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2209.html
   * delegate Linux support, esp. wrt. gamepads (*help!!*)
@@ -19,8 +23,6 @@
   * document or kill Gosu's Sockets
 
 = Major design goals for 0.9x (graphics) =
-  * use OpenGL on Windows
-  * allow custom OpenGL integration
   * find a way to factor rot flips out of Gosu => Image redesign
   * implement clipping and a target() modifier for the new Image
   * multi-threaded blit queue and float-z-ordering?
