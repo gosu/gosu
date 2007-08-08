@@ -1,7 +1,8 @@
 #summary Entry point to all of Gosu's documentation.
 #labels Featured
 
-= New to Gosu? = http://www.raschke.de/julian/temp/fatcat.jpg
+= New to Gosu? =
+http://www.raschke.de/julian/temp/fatcat.jpg
 
 If you are curious about what Gosu is trying to achieve, read Gosu's DesignRationale. If you want to take a look at random Gosu code, see the tutorials below.
 
