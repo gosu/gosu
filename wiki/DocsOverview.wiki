@@ -24,7 +24,7 @@ Ruby: See the RubyReference.
 
 = Ruby Game Packaging =
 
-How you can wrap up your Ruby/Gosu games for deployment. See either RubyPackagingOnOsx or RubyPackagingOnWindows.
+Since Ruby is not a compiled language, it is not obvious how to release games written in it to the public. For instructions see either RubyPackagingOnOsx or RubyPackagingOnWindows.
 
 = Further inspiration =
 
