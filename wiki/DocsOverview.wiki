@@ -2,7 +2,8 @@
 #labels Featured
 
 = New to Gosu? =
-http://www.raschke.de/julian/temp/fatcat.jpg
+
+http://www.raschke.de/julian/temp/fatcat.png
 
 If you are curious about what Gosu is trying to achieve, read Gosu's DesignRationale. If you want to take a look at random Gosu code, see the tutorials below.
 
@@ -23,4 +24,7 @@ Ruby: See the RubyReference.
 
 = Further inspiration =
 
-There a lots of small, open source games you can take a look at on the GosuUsers page.
+There a lots of small, open source games you can take a look at on the GosuUsers page. 
+
+
+
