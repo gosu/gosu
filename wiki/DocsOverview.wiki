@@ -22,9 +22,10 @@ There is also a French tutorial for Ruby/Gosu, which is slightly outdated on at 
 C++: See the `reference/index.html` file that comes with all C++ archives.
 Ruby: See the RubyReference.
 
+= Ruby Game Packaging =
+
+How you can wrap up your Ruby/Gosu games for deployment. See either RubyPackagingOnOsx or RubyPackagingOnWindows.
+
 = Further inspiration =
 
-There a lots of small, open source games you can take a look at on the GosuUsers page. 
-
-
-
+There are some small, open source games you can take a look at on the GosuUsers page. 
