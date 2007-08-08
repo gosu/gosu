@@ -5,25 +5,25 @@
   * Wait for Andares to supply new Linux build script.
   * Ruby gem.
 
-= Done first because of real use case (Wiinstrument) and because it REDUCES Gosu's complexity =
+= Scheduled for 0.7.4 or 0.7.5, respectively =
   * use OpenGL on Windows
-  * allow custom OpenGL integration
+  * allow/document custom OpenGL integration
 
 = Major design goals for 0.7x (immediately needed to complete playable games) =
-  * With UTF-8 support in C++ coming, get rid of all the wstring stuff. -> http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2209.html
-  * delegate Linux support, esp. wrt. gamepads (*help!!*)
   * text input system for chat boxes, high-score lists etc.
   * more sophisticated Audio interface for talking NPC's etc.
+  * With UTF-8 support in C++ coming, get rid of all the wstring stuff. -> http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2209.html
+  * delegate Linux support, esp. wrt. gamepads (*help!!*)
 
 = Major design goals for 0.8x (IO, timing) =
+  * document Gosu's Sockets
   * the window argument in Ruby is annoying, because only one window can be used anyway. Maybe it should be Window.run, and all open Windows should work.
   * simplify Gosu's IO philosophy (C++)
   * redesign Gosu::Window to be more useful for framerate independent games?
   * anyway, get rid of WM_TIMER
-  * document or kill Gosu's Sockets
 
 = Major design goals for 0.9x (graphics) =
-  * find a way to factor rot flips out of Gosu => Image redesign
+  * find a way to factor rot flips out of Gosu => Image/draw redesign
   * implement clipping and a target() modifier for the new Image
   * multi-threaded blit queue and float-z-ordering?
 
