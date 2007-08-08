@@ -106,7 +106,7 @@ namespace Gosu
         msNum = msRangeEnd - msRangeBegin + 1,
         gpNum = gpRangeEnd - gpRangeBegin + 1,
         
-        numButtons = gpRangeEnd,
+        numButtons = gpRangeEnd + 1,
 		noButton = 0xffffffff
     };
 }

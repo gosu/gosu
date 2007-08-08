@@ -9,6 +9,416 @@
 #include <string>
 #include <vector>
 
+#include <mach/mach.h>
+#include <mach/mach_error.h>
+#include <Kernel/IOKit/hidsystem/IOHIDUsageTables.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include <IOKit/hid/IOHIDLib.h>
+#include <IOKit/hid/IOHIDKeys.h>
+#include <IOKit/IOKitLib.h>
+#include <IOKit/IOCFPlugIn.h>
+#include <iostream>
+#include <stdexcept>
+#include <vector>
+#include <boost/utility.hpp>
+#include <boost/shared_ptr.hpp>
+
+// USB Gamepad code, likely to be moved somewhere else later.
+// This is Frankencode until the Input redesign happens.
+namespace {
+    using namespace std;
+    using namespace Gosu;
+    using boost::shared_ptr;
+
+    class CFScope : boost::noncopyable
+    {
+        CFTypeRef ref;
+    public:
+        CFScope(CFTypeRef ref) : ref(ref) {}
+        ~CFScope() { CFRelease(ref); }
+    };
+
+    class IOScope : boost::noncopyable
+    {
+        io_object_t ref;
+    public:
+        IOScope(io_object_t ref) : ref(ref) {}
+        ~IOScope() { IOObjectRelease(ref); }
+    };
+
+    template<typename Negatable>
+    void checkTrue(Negatable cond, const char* message = "work")
+    {
+        if (!cond)
+            throw runtime_error(string("HID system failed to ") + message);
+    }
+
+    void checkIO(IOReturn val, const char* message = "work")
+    {
+        checkTrue(val == kIOReturnSuccess, message);
+    }
+
+    string getDictString(CFMutableDictionaryRef dict, CFStringRef key, const char* what)
+    {
+        char buf[256];
+        CFStringRef str = 
+            (CFStringRef)CFDictionaryGetValue(dict, key);
+        checkTrue(str && CFStringGetCString(str, buf, sizeof buf, CFStringGetSystemEncoding()),
+            what);
+        return buf;
+    }
+
+    SInt32 getDictSInt32(CFMutableDictionaryRef dict, CFStringRef key, const char* what)
+    {
+        SInt32 value;
+        CFNumberRef number =
+            (CFNumberRef)CFDictionaryGetValue(dict, key);
+        checkTrue(number && CFNumberGetValue(number, kCFNumberSInt32Type, &value),
+            what);
+        return value;
+    }
+
+    struct Axis
+    {
+        IOHIDElementCookie cookie;
+        long min, max;
+        enum Role { mainX, mainY } role;
+
+        // Some devices report more axis than they have, with random constant values.
+        // An axis has to go into, and out of the neutral zone so it will be reported.
+        bool wasNeutralOnce;
+        
+        Axis(CFMutableDictionaryRef dict, Role role)
+        : role(role), wasNeutralOnce(false)
+        {
+            cookie = (IOHIDElementCookie)getDictSInt32(dict, CFSTR(kIOHIDElementCookieKey),
+                "get an element cookie");
+            min = getDictSInt32(dict, CFSTR(kIOHIDElementMinKey),
+                "get a min value");
+            max = getDictSInt32(dict, CFSTR(kIOHIDElementMaxKey),
+                "get a max value");
+        }
+    };
+
+    struct Hat
+    {
+        IOHIDElementCookie cookie;
+        enum { fourWay, eightWay, unknown } kind;
+
+        Hat(CFMutableDictionaryRef dict)
+        {
+            cookie = (IOHIDElementCookie)getDictSInt32(dict, CFSTR(kIOHIDElementCookieKey),
+                "an element cookie");
+            SInt32 max = getDictSInt32(dict, CFSTR(kIOHIDElementMaxKey),
+                "a max value");
+            if (max == 3)
+                kind = fourWay;
+            else if (max == 7)
+                kind = eightWay;
+            else
+                kind = unknown;
+        }
+    };
+
+    struct Button
+    {
+        IOHIDElementCookie cookie;
+
+        Button(CFMutableDictionaryRef dict)
+        {
+            cookie = (IOHIDElementCookie)getDictSInt32(dict, CFSTR(kIOHIDElementCookieKey),
+                "element cookie");
+        }
+    };
+
+    struct Device
+    {
+        shared_ptr<IOHIDDeviceInterface*> interface;
+
+        std::string name;
+        vector<Axis> axis;
+        vector<Hat> hats;
+        vector<Button> buttons;
+    };
+
+    class System
+    {
+        vector<Device> devices;
+        
+        static void closeAndReleaseInterface(IOHIDDeviceInterface** ptr)
+        {
+            (*ptr)->close(ptr); // Won't hurt if open() wasn't called
+            (*ptr)->Release(ptr);
+        }
+        
+        static void eraseDevice(void* target, IOReturn, void* refcon, void*)
+        {
+            System& self = *static_cast<System*>(target);  
+            for (unsigned i = 0; i < self.devices.size(); ++i)
+                if (self.devices[i].interface.get() == refcon)
+                {
+                    self.devices.erase(self.devices.begin() + i);
+                    return;
+                }
+            assert(false);
+        }
+        
+        bool isDeviceInteresting(CFMutableDictionaryRef properties)
+        {
+            // Get usage page/usage.
+            SInt32 page = getDictSInt32(properties, CFSTR(kIOHIDPrimaryUsagePageKey),
+                "a usage page");
+            SInt32 usage = getDictSInt32(properties, CFSTR(kIOHIDPrimaryUsageKey),
+                "a usage value");
+            // Device uninteresting?
+            return page == kHIDPage_GenericDesktop &&
+                (usage == kHIDUsage_GD_Joystick ||
+                 usage == kHIDUsage_GD_GamePad ||
+                 usage == kHIDUsage_GD_MultiAxisController);
+        }
+        
+        shared_ptr<IOHIDDeviceInterface*> getDeviceInterface(io_registry_entry_t object)
+        {
+            IOCFPlugInInterface** intermediate = 0;
+            SInt32 theScore;
+            checkIO(IOCreatePlugInInterfaceForService(object, kIOHIDDeviceUserClientTypeID,
+                        kIOCFPlugInInterfaceID, &intermediate, &theScore),
+                        "get intermediate device interface");
+
+            IOHIDDeviceInterface** rawResult = 0;
+            HRESULT ret = (*intermediate)->QueryInterface(intermediate,
+                                CFUUIDGetUUIDBytes(kIOHIDDeviceInterfaceID),
+                                reinterpret_cast<void**>(&rawResult));
+            (*intermediate)->Release(intermediate);
+            if (ret != S_OK)
+                checkTrue(false, "get real device interface through intermediate");
+            
+            // Yay - got it safe in here.
+            shared_ptr<IOHIDDeviceInterface*> result(rawResult, closeAndReleaseInterface);
+            
+            checkIO((*result)->open(result.get(), 0));
+            checkIO((*result)->setRemovalCallback(result.get(), eraseDevice, result.get(), this));
+            
+            return result;
+        }
+     
+        static void addElement(const void* value, void* parameter)
+        {
+            CFMutableDictionaryRef dict = (CFMutableDictionaryRef)value;
+            Device& target = *static_cast<Device*>(parameter);
+            
+            SInt32 elementType = getDictSInt32(dict, CFSTR(kIOHIDElementTypeKey),
+                                    ("an element type on " + target.name).c_str());
+            SInt32 usagePage = getDictSInt32(dict, CFSTR(kIOHIDElementUsagePageKey),
+                                    ("an element page on " + target.name).c_str());
+            SInt32 usage = getDictSInt32(dict, CFSTR(kIOHIDElementUsageKey),
+                                    ("an element usage on " + target.name).c_str());
+            
+            if ((elementType == kIOHIDElementTypeInput_Misc) ||
+                (elementType == kIOHIDElementTypeInput_Button) ||
+                (elementType == kIOHIDElementTypeInput_Axis))
+            {
+                switch (usagePage)
+                {
+                    case kHIDPage_GenericDesktop:
+                        switch (usage)
+                        {
+                            case kHIDUsage_GD_Y:
+                            case kHIDUsage_GD_Ry:
+                                target.axis.push_back(Axis(dict, Axis::mainY));
+                                break;
+                            case kHIDUsage_GD_X:
+                            case kHIDUsage_GD_Rx:
+                            case kHIDUsage_GD_Z:
+                            case kHIDUsage_GD_Rz:
+                            case kHIDUsage_GD_Slider:
+                            case kHIDUsage_GD_Dial:
+                            case kHIDUsage_GD_Wheel:
+                                target.axis.push_back(Axis(dict, Axis::mainX));
+                                break;
+                            case kHIDUsage_GD_Hatswitch:
+                                target.hats.push_back(Hat(dict));
+                                break;
+                        }
+                        break;
+                    case kHIDPage_Button:
+                        target.buttons.push_back(Button(dict));
+                        break;
+                }
+            }
+            else if (elementType == kIOHIDElementTypeCollection)
+                addElementCollection(target, dict);
+        }
+        
+        static void addElementCollection(Device& target, CFMutableDictionaryRef properties)
+        {
+            CFArrayRef array =
+                (CFArrayRef)CFDictionaryGetValue(properties, CFSTR(kIOHIDElementKey));
+            checkTrue(array,
+                ("get an element list for " + target.name).c_str());
+            
+            CFRange range = { 0, CFArrayGetCount(array) };
+            CFArrayApplyFunction(array, range, addElement, &target);
+        }
+     
+        void addDevice(io_object_t object)
+        {
+            // Get handle to device properties.
+            CFMutableDictionaryRef properties;
+            IORegistryEntryCreateCFProperties(object, &properties,
+                kCFAllocatorDefault, kNilOptions);
+            if (!properties)
+                return;
+            CFScope guard(properties);
+            
+            if (!isDeviceInteresting(properties))
+                return;
+            
+            Device newDevice;
+            newDevice.interface = getDeviceInterface(object);
+            newDevice.name = getDictString(properties, CFSTR(kIOHIDProductKey),
+                "a product name");
+            addElementCollection(newDevice, properties);
+            devices.push_back(newDevice);
+        }
+        
+    public:
+        System()
+        {
+            mach_port_t masterPort;
+            checkIO(IOMasterPort(bootstrap_port, &masterPort),
+                "get master port");
+            
+            CFMutableDictionaryRef hidDeviceKey =
+                IOServiceMatching(kIOHIDDeviceKey);
+            checkTrue(hidDeviceKey,
+                "build device list");
+
+            io_iterator_t iterator;
+            checkIO(IOServiceGetMatchingServices(masterPort, hidDeviceKey, &iterator),
+                "set up HID iterator");
+            IOScope guard(iterator);
+            
+            while (io_registry_entry_t deviceObject = IOIteratorNext(iterator))
+            {
+                IOScope guard(deviceObject);
+                addDevice(deviceObject);
+            }
+            
+            for (int dev = 0; dev < devices.size(); ++dev)
+            {
+                cout << getDevice(dev).name << endl;
+                for (unsigned j = 0; j < getDevice(dev).axis.size(); ++j)
+                    cout << " Axis from " << getDevice(dev).axis[j].min
+                         << " to " << getDevice(dev).axis[j].max << endl;
+                for (unsigned j = 0; j < getDevice(dev).hats.size(); ++j)
+                    cout << " Hat with kind = " << getDevice(dev).hats[j].kind << endl;
+                cout << " Found " << getDevice(dev).buttons.size() << " buttons" << endl;
+            }
+        }
+        
+        unsigned countDevices() const
+        {
+            return devices.size();
+        }
+        
+        const Device& getDevice(unsigned i) const
+        {
+            return devices.at(i);
+        }
+
+        boost::array<bool, gpNum> poll()
+        {
+            boost::array<bool, gpNum> result;
+            result.assign(false);
+        
+            IOHIDEventStruct event;
+            for (int dev = 0; dev < devices.size(); ++dev)
+            {
+                // Axis
+                for (int ax = 0; ax < devices[dev].axis.size(); ++ax)
+                {
+                    checkIO((*devices[dev].interface)->getElementValue(
+                        devices[dev].interface.get(),
+                        devices[dev].axis[ax].cookie, &event));
+                        
+                    Axis& a = devices[dev].axis[ax];
+                    if (event.value < (3 * a.min + 1 * a.max) / 4.0)
+                    {
+                        if (a.wasNeutralOnce)
+                            result[(a.role == Axis::mainX ? gpLeft : gpUp) - gpRangeBegin] = true;
+                    }
+                    else if (event.value > (1 * a.min + 3 * a.max) / 4.0)
+                    {
+                        if (a.wasNeutralOnce)
+                            result[(a.role == Axis::mainX ? gpRight : gpDown) - gpRangeBegin] = true;
+                    }
+                    else
+                        a.wasNeutralOnce = true;
+                }
+                
+                // Hats (merge into axis)
+                for (int hat = 0; hat < devices[dev].hats.size(); ++hat)
+                {
+                    checkIO((*devices[dev].interface)->getElementValue(
+                        devices[dev].interface.get(),
+                        devices[dev].hats[hat].cookie, &event));
+                     
+                    // Treat all hats as being 8-way.
+                    if (devices[dev].hats[hat].kind == Hat::fourWay)
+                        event.value *= 2;
+                        
+                    switch (event.value)
+                    {
+                        // Must...resist...doing...crappy...fallthrough...magic... 
+                        case 0:
+                            result[gpUp - gpRangeBegin] = true;
+                            break;
+                        case 1:
+                            result[gpUp - gpRangeBegin] = true;
+                            result[gpRight - gpRangeBegin] = true;
+                            break;
+                        case 2:
+                            result[gpRight - gpRangeBegin] = true;
+                            break;
+                        case 3:
+                            result[gpDown - gpRangeBegin] = true;
+                            result[gpRight - gpRangeBegin] = true;
+                            break;
+                        case 4:
+                            result[gpDown - gpRangeBegin] = true;
+                            break;
+                        case 5:
+                            result[gpDown - gpRangeBegin] = true;
+                            result[gpLeft - gpRangeBegin] = true;
+                            break;
+                        case 6:
+                            result[gpLeft - gpRangeBegin] = true;
+                            break;
+                        case 7:
+                            result[gpUp - gpRangeBegin] = true;
+                            result[gpLeft - gpRangeBegin] = true;
+                            break;
+                    }
+                }
+
+                // Buttons
+                for (int btn = 0; btn < devices[dev].buttons.size() && btn < 16; ++btn)
+                {
+                    checkIO((*devices[dev].interface)->getElementValue(
+                        devices[dev].interface.get(),
+                        devices[dev].buttons[btn].cookie, &event));
+                    
+                    if (event.value >= 1)
+                        result[gpButton0 + btn - gpRangeBegin] = true;
+                }
+            }
+            
+            return result;
+        }
+    };
+}
+
 namespace {
     // This is just a wild assumption. For Apple ADB keyboards, I read something
     // about 127 being the max, but checking more than that will not hurt, so...
@@ -221,4 +631,18 @@ void Gosu::Input::update()
             onButtonUp(wb.btn);
     }
     pimpl->queue.clear();
+    
+    static System sys;
+    boost::array<bool, gpNum> gpState = sys.poll();
+    for (unsigned i = 0; i < gpNum; ++i)
+    {
+        if (buttonStates[i + gpRangeBegin] != gpState[i])
+        {
+            buttonStates[i + gpRangeBegin] = gpState[i];
+            if (gpState[i] && onButtonDown)
+                onButtonDown(Button(gpRangeBegin + i));
+            else if (!gpState[i] && onButtonUp)
+                onButtonUp(Button(gpRangeBegin + i));
+        }
+    }
 }
