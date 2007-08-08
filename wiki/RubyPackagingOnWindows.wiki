@@ -1,0 +1,9 @@
+#summary How to wrap up Ruby/Gosu games for deployment on Microsoft Windows.
+
+= Ruby/Gosu Packaging on Microsoft Windows =
+
+To compile your Ruby game into an executable on Windows, you need to run it through the following program from the command line:
+
+[http://www.erikveen.dds.nl/rubyscript2exe/index.html RubyScript2Exe]
+
+You can then ship the resulting .exe file together with your game's resources and, if you use sound, fmod.dll.
