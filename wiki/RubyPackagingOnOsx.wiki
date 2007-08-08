@@ -1,6 +1,6 @@
 #summary How to wrap up Ruby/Gosu games for deployment on Mac OS X.
 
-= Ruby Packaging on Mac OS X =
+= Ruby/Gosu Packaging on Mac OS X =
 
 The Mac package of Gosu comes with a mysterious `RubyGosu Tempate.app` bundle. All you have to do to share your game with the public is following these easy steps:
   * Duplicate this bundle, open its contents via the right-click menu
