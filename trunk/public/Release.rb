@@ -42,8 +42,6 @@ if ARGV[0] == 'source' then
   source.add_file("COPYING.txt")
   source.add_dir("Gosu")
   source.add_dir("GosuImpl")
-  source.del_file("GosuImpl/RubyGosu_wrap.cxx")
-  source.del_file("GosuImpl/RubyGosu_wrap.h")
   source.add_dir("reference")
   source.add_dir("examples")
   source.add_dir("linux")
@@ -77,8 +75,11 @@ if ARGV[0] == 'windows-c++' then
   windows_cpp.add_file("GosuDebug.lib")
   windows_cpp.add_dir("Gosu")
   windows_cpp.add_dir("reference")
-  windows_cpp.add_dir("examples")
-  windows_cpp.del_file("examples/Tutorial.rb")
+  windows_cpp.add_file("examples/Tutorial.cpp")
+  windows_cpp.add_file("examples/media/Beep.wav")
+  windows_cpp.add_file("examples/media/Space.png")
+  windows_cpp.add_file("examples/media/Star.png")
+  windows_cpp.add_file("examples/media/Starfighter.bmp")
   windows_cpp.zip_and_kill
 end
 
