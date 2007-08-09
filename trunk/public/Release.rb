@@ -40,6 +40,7 @@ end
 if ARGV[0] == 'source' then
   source = Package.new("gosu-source-#{ARGV[1]}")
   source.add_file("COPYING.txt")
+  source.add_file("README.txt")
   source.add_dir("Gosu")
   source.add_dir("GosuImpl")
   source.add_dir("reference")
@@ -60,6 +61,7 @@ end
 if ARGV[0] == 'mac' then
   mac = Package.new("gosu-mac-#{ARGV[1]}")
   mac.add_file("COPYING.txt")
+  mac.add_file("README.txt")
   mac.add_dir("Gosu.framework")
   mac.add_file("gosu.bundle")
   mac.add_dir("RubyGosu Deployment Template.app")
@@ -71,6 +73,7 @@ end
 if ARGV[0] == 'windows-c++' then
   windows_cpp = Package.new("gosu-windows-c++-#{ARGV[1]}")
   windows_cpp.add_file("COPYING.txt")
+  windows_cpp.add_file("README.txt")
   windows_cpp.add_file("Gosu.lib")
   windows_cpp.add_file("GosuDebug.lib")
   windows_cpp.add_dir("Gosu")
@@ -86,6 +89,7 @@ end
 if ARGV[0] == 'windows-ruby' then
   windows_ruby = Package.new("gosu-windows-ruby-#{ARGV[1]}")
   windows_ruby.add_file("COPYING.txt")
+  windows_ruby.add_file("README.txt")
   windows_ruby.add_file("gosu.so")
   windows_ruby.add_dir("examples")
   windows_ruby.del_file("examples/Tutorial.cpp")
