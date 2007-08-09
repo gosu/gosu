@@ -14,6 +14,7 @@
   * more sophisticated Audio interface for talking NPC's etc.
   * With UTF-8 support in C++ coming, get rid of all the wstring stuff. -> http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2209.html
   * delegate Linux support, esp. wrt. gamepads (*help!!*)
+  * testing on Vista/OS X 10.3.9 would be cool.
 
 = Major design goals for 0.8x (IO, timing) =
   * document Gosu's Sockets
