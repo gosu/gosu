@@ -1,7 +1,12 @@
 #summary Log of Gosu's development.
 #labels Featured
 
-=0.7.2 (still to be released on Linux)=
+=0.7.3=
+  * Mac: Gamepad support at last!
+  * Ruby: New example game/exercise collection ‘Cptn. Ruby’
+  * All: Added README.txt file to tell people to read the wiki.
+
+=0.7.2=
   * Mac/Ruby: The cumbersome .app wrapper is now only used for deployment; for development, running Gosu applications from the Terminal is now possible.
   * Ruby: Re-added missing mouse_x/mouse_y/width/height accessor functions in Window. Thanks mutwin.kraus! ;)
   * Ruby: Removed the annoying "type" argument for Song#initialize. *Breaks code*, even if this is not a milestone release ;(
