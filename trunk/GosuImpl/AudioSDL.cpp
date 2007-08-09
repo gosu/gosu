@@ -60,7 +60,7 @@ struct Gosu::Sample::SampleData : boost::noncopyable
 
 Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
 {
-    buffer buf;
+    Buffer buf;
 	  loadFile(buf, filename);
 
 	  // Forward.

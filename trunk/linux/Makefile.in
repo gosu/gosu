@@ -10,13 +10,13 @@ NET_OBJS = Sockets/CommSocket.o Sockets/ListenerSocket.o Sockets/Socket.o Socket
 OPENAL_OBJ = AudioOpenAL.o
 SDLMIXER_OBJ = AudioSDL.o
 FMOD_OBJ = AudioFmod.o
+RUBYOBJS = RubyGosu_wrap.o
 
 OBJS = @GOSU_A_OBJS@
 # $(BASE_OBJS) $(NET_OBJS) $(GOSUMAIN_OBJ) $(FMOD_OBJ)
 # $(OPENAL_OBJ)
 
-XPLS = ../examples/Tutorial2 ../examples/Tutorial3 ../examples/Tutorial4 \
-       ../examples/Tutorial5 ../examples/Tutorial6 ../examples/Tutorial7
+XPLS = ../examples/Tutorial
 
 CXXFLAGS += -I.. @AUDIO_INC@ -Wall \
     @PANGO_CXX_FLAGS@ @X_INCS@ \
@@ -77,12 +77,21 @@ gosu-config:
 	echo "done" >> gosu-config
 	chmod u+x gosu-config
 
-ruby: $(RUBYOBJS) gosu.a
+ruby: RubyGosu_wrap.cpp $(RUBYOBJS) gosu.a
 	g++ -shared -o gosu.so -Wall $(RUBYOBJS) $(RUBY_LIBS) @GOSU_A_OBJS@
+
+#ruby: $(RUBYOBJS) gosu.a
+#	g++ -shared -o gosu.so -Wall $(RUBYOBJS) $(RUBY_LIBS) @GOSU_A_OBJS@
 
 # $(BASE_OBJS) \
         $(NET_OBJS) $(FMOD_OBJ) $(RUBY_LIBS)
 
-$(RUBYOBJS): %.o: ../%.cpp
-	$(CXX) ../$*.cpp -o $@ $(CXXFLAGS) -c -fPIC
+RubyGosu_wrap.cpp:
+	cd ../GosuImpl/ && swig -c++ -ruby -autorename RubyGosu.swg
+	cd ../linux/
+
+$(RUBYOBJS): %.o: ../GosuImpl/%.cxx
+	$(CXX) ../GosuImpl/$*.cxx -o $@ $(CXXFLAGS) -c -fPIC
+#$(RUBYOBJS): %.o: ../%.cpp
+#	$(CXX) ../$*.cpp -o $@ $(CXXFLAGS) -c -fPIC
 
