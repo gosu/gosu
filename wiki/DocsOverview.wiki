@@ -9,7 +9,7 @@ If you are curious about what Gosu is trying to achieve, read Gosu's DesignRatio
 
 = Installation =
 
-Depending on your operating system, see GettingStartedOnOsx, GettingStartedOnWindows or GettingStartedOnLinux.
+Depending on your operating system, see GettingStartedOnOsx, GettingStartedOnWindows or GettingStartedOnLinux. (Before downloading the prebuilt Ruby versions, please note that they are also available via `gem install gosu`!)
 
 = Tutorial =
 
