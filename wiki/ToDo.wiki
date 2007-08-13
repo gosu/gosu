@@ -11,7 +11,7 @@
 
 = Major design goals for 0.7.x (input redesign) =
   * text input system for chat boxes, high-score lists etc.
-  * rewrite Gosu::Input with support for multiple gamepads and analog joysticks
+  * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
   * delegate Linux support, esp. wrt. gamepads (*help!!*)
 
 = Major design goals for 0.8.x (IO, timing) =
