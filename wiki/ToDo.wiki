@@ -10,7 +10,7 @@
   * more sophisticated Audio interface for talking NPC's etc.
   * testing on Vista/OS X 10.3.9 would be cool.
 
-= Major design goals for 0.7.x Input redesign) =
+= Major design goals for 0.7.x (input redesign) =
   * rewrite Gosu::Input with support for multiple gamepads and analog joysticks
   * delegate Linux support, esp. wrt. gamepads (*help!!*)
 
