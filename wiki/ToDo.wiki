@@ -8,16 +8,15 @@
 = Major design goals for 0.7x (immediately needed to complete playable games) =
   * text input system for chat boxes, high-score lists etc.
   * more sophisticated Audio interface for talking NPC's etc.
-  * With UTF-8 support in C++ coming, get rid of all the wstring stuff. -> http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2209.html
-  * delegate Linux support, esp. wrt. gamepads (*help!!*)
   * testing on Vista/OS X 10.3.9 would be cool.
 
 = Major design goals for 0.8x (IO, timing) =
-  * document Gosu's Sockets
   * the window argument in Ruby is annoying, because only one window can be used anyway. Maybe it should be Window.run, and all open Windows should work.
   * simplify Gosu's IO philosophy (C++)
   * redesign Gosu::Window to be more useful for framerate independent games?
   * anyway, get rid of WM_TIMER
+  * With UTF-8 support in C++ coming, get rid of all the wstring stuff. -> http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2209.html
+  * document Gosu's Sockets
 
 = Major design goals for 0.9x (graphics) =
   * find a way to factor rot flips out of Gosu => Image/draw redesign
@@ -25,5 +24,6 @@
   * multi-threaded blit queue and float-z-ordering?
 
 = Major design goals for 1.x (perfection) =
+  * delegate Linux support, esp. wrt. gamepads (*help!!*)
   * Windows: Input will regularly query devices which are not currently attached, thereby causing the game to halt every few seconds - think about this
   * FSAA dammit!!
