@@ -5,12 +5,12 @@
   * use OpenGL on Windows
   * allow/document custom OpenGL integration
 
-= Also ASAP (immediately needed to complete playable games) =
-  * text input system for chat boxes, high-score lists etc.
+= Also ASAP =
   * more sophisticated Audio interface for talking NPC's etc.
-  * testing on Vista/OS X 10.3.9 would be cool.
+  * testing on Vista
 
 = Major design goals for 0.7.x (input redesign) =
+  * text input system for chat boxes, high-score lists etc.
   * rewrite Gosu::Input with support for multiple gamepads and analog joysticks
   * delegate Linux support, esp. wrt. gamepads (*help!!*)
 
