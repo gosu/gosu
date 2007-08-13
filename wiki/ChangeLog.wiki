@@ -3,6 +3,7 @@
 
 =0.7.4=
   * Mac: Hats work better than in 0.7.3 (and SDL :P)
+  * Ruby: Ooops - exceptions don't halt everything anymore.
 
 =0.7.3=
   * Mac: Gamepad support at last!
