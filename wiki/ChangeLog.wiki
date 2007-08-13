@@ -1,6 +1,9 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.4=
+  * Mac: Hats work better than in 0.7.3 (and SDL :P)
+
 =0.7.3=
   * Mac: Gamepad support at last!
   * Ruby: New example game/exercise collection ‘Cptn. Ruby’
