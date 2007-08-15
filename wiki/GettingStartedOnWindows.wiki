@@ -2,7 +2,7 @@
 
 = Download FMOD (both languages) =
 
-[http://www.fmod.org/ FMOD] is the library we use for everything that involves sound output. As soon as you touch Gosu's sound system during runtime, your application will look for fmod.dll to be accessible in its path. This file is included in FMOD's development SDK: http://www.fmod.org/files/fmodapi375win.zip
+[http://www.fmod.org/ FMOD] is the library we use for everything that involves sound output. As soon as you touch Gosu's sound system during runtime, your application will look for fmod.dll to be accessible in its path. This file is included in FMOD's development SDK (be sure to download version 3.75): http://www.fmod.org/
 
 = Download Boost, change Visual C++ Directories (C++ only) =
 
