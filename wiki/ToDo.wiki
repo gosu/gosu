@@ -12,9 +12,11 @@
 = Major design goals for 0.7.x (input redesign) =
   * text input system for chat boxes, high-score lists etc.
   * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
-  * delegate Linux support, esp. wrt. gamepads (*help!!*)
+  * make Command-Q work on OS X!
+  * generate Rdoc
 
 = Major design goals for 0.8.x (IO, timing) =
+  * delegate Linux support, esp. wrt. gamepads (*help!!*)
   * the window argument in Ruby is annoying, because only one window can be used anyway. Maybe it should be Window.run, and all open Windows should work.
   * simplify Gosu's IO philosophy (C++)
   * redesign Gosu::Window to be more useful for framerate independent games?
