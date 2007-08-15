@@ -6,13 +6,14 @@
   * allow/document custom OpenGL integration
 
 = Also ASAP =
+  * bundle fmod.dll
   * more sophisticated Audio interface for talking NPC's etc.
   * testing on Vista
 
 = Major design goals for 0.7.x (input redesign) =
   * text input system for chat boxes, high-score lists etc.
   * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
-  * make Command-Q work on OS X!
+  * make the Ruby wrapper's menu bar Command-Q work on OS X!
   * generate Rdoc
 
 = Major design goals for 0.8.x (IO, timing) =
