@@ -1,3 +1,10 @@
+begin
+  # In case you use Gosu via rubygems.
+  require 'rubygems'
+rescue LoadError
+  # In case you don't.
+end
+
 # Basically, the tutorial game taken to a jump'n'run perspective.
 
 # Shows how to
@@ -32,8 +39,7 @@ module Tiles
   Earth = 1
 end
 
-# Collectible item.
-class Gem
+class CollectibleGem
   attr_reader :x, :y
 
   def initialize(image, x, y)
@@ -140,7 +146,7 @@ class Map
     @tileset = Image.load_tiles(window, "media/CptnRuby Tileset.bmp", 50, 50, true)
     @sky = Image.new(window, "media/Space.png", true)
 
-    gem_img = Image.new(window, "media/CptnRuby Gem.png", false)
+    gem_img = Image.new(window, "media/CptnRuby CollectibleGem.png", false)
     @gems = []
 
     lines = File.readlines(filename).map { |line| line.chop }
@@ -154,7 +160,7 @@ class Map
         when '#'
           Tiles::Earth
         when 'x'
-          @gems.push(Gem.new(gem_img, x * 50 + 25, y * 50 + 25))
+          @gems.push(CollectibleGem.new(gem_img, x * 50 + 25, y * 50 + 25))
           nil
         else
           nil
