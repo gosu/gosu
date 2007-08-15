@@ -17,11 +17,14 @@
 #include <IOKit/hid/IOHIDKeys.h>
 #include <IOKit/IOKitLib.h>
 #include <IOKit/IOCFPlugIn.h>
-#include <iostream>
 #include <stdexcept>
 #include <vector>
 #include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>
+
+#ifdef DEBUGGING_GAMEPAD_OF_HORROR
+#include <iostream>
+#endif
 
 // USB Gamepad code, likely to be moved somewhere else later.
 // This is Frankencode until the Input redesign happens.
@@ -97,6 +100,9 @@ namespace {
                 "get a min value");
             max = getDictSInt32(dict, CFSTR(kIOHIDElementMaxKey),
                 "get a max value");
+            #ifdef DEBUGGING_GAMEPAD_OF_HORROR
+            std::cout << "Axis from " << min << " to " << max << std::endl;
+            #endif
         }
     };
 
@@ -104,19 +110,25 @@ namespace {
     {
         IOHIDElementCookie cookie;
         enum { fourWay, eightWay, unknown } kind;
+        long min;
 
         Hat(CFMutableDictionaryRef dict)
         {
             cookie = (IOHIDElementCookie)getDictSInt32(dict, CFSTR(kIOHIDElementCookieKey),
                 "an element cookie");
+            min = getDictSInt32(dict, CFSTR(kIOHIDElementMinKey),
+                "a min value");
             SInt32 max = getDictSInt32(dict, CFSTR(kIOHIDElementMaxKey),
                 "a max value");
-            if (max == 3)
+            if ((max - min) == 3)
                 kind = fourWay;
-            else if (max == 7)
+            else if ((max - min) == 7)
                 kind = eightWay;
             else
                 kind = unknown;
+            #ifdef DEBUGGING_GAMEPAD_OF_HORROR
+            std::cout << "Hat from " << min << " to " << max << std::endl;
+            #endif
         }
     };
 
@@ -304,17 +316,6 @@ namespace {
                 IOScope guard(deviceObject);
                 addDevice(deviceObject);
             }
-            
-            for (int dev = 0; dev < devices.size(); ++dev)
-            {
-                cout << getDevice(dev).name << endl;
-                for (unsigned j = 0; j < getDevice(dev).axis.size(); ++j)
-                    cout << " Axis from " << getDevice(dev).axis[j].min
-                         << " to " << getDevice(dev).axis[j].max << endl;
-                for (unsigned j = 0; j < getDevice(dev).hats.size(); ++j)
-                    cout << " Hat with kind = " << getDevice(dev).hats[j].kind << endl;
-                cout << " Found " << getDevice(dev).buttons.size() << " buttons" << endl;
-            }
         }
         
         unsigned countDevices() const
@@ -346,6 +347,9 @@ namespace {
                     if (event.value < (3 * a.min + 1 * a.max) / 4.0)
                     {
                         if (a.wasNeutralOnce)
+                        #ifdef DEBUGGING_GAMEPAD_OF_HORROR
+                            std::cout << "Axis " << ax << " reports " << event.value << std::endl,
+                        #endif
                             result[(a.role == Axis::mainX ? gpLeft : gpUp) - gpRangeBegin] = true;
                     }
                     else if (event.value > (1 * a.min + 3 * a.max) / 4.0)
@@ -364,10 +368,18 @@ namespace {
                         devices[dev].interface.get(),
                         devices[dev].hats[hat].cookie, &event));
                      
+                    // In case device does not start at 0 as expected.
+                    event.value -= devices[dev].hats[hat].min;
+                     
                     // Treat all hats as being 8-way.
                     if (devices[dev].hats[hat].kind == Hat::fourWay)
                         event.value *= 2;
-                        
+
+                    #ifdef DEBUGGING_GAMEPAD_OF_HORROR
+                    if (event.value >= 0 && event.value <= 7)
+                        std::cout << "Hat " << hat << " reports " << event.value << std::endl;
+                    #endif
+
                     switch (event.value)
                     {
                         // Must...resist...doing...crappy...fallthrough...magic... 

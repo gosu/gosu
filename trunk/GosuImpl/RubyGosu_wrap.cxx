@@ -1539,6 +1539,9 @@ SWIG_Ruby_SetModule(swig_module_info *pointer)
 #define SWIG_contract_assert(expr, msg) if (!(expr)) { SWIG_Error(SWIG_RuntimeError, msg); SWIG_fail; } else 
 
 
+
+  #define SWIG_exception(code, msg) do { SWIG_Error(code, msg);; } while(0) 
+
 /* -----------------------------------------------------------------------------
  * See the LICENSE file for information on copyright, usage and redistribution
  * of SWIG, and the README file for authors - http://www.swig.org/release.html.
@@ -1961,11 +1964,12 @@ static VALUE mGosu;
 #include <stdexcept>
 
 
-// Avoid Ruby Macro Hell on Windows.
+// Avoid Ruby Macro Hell on Windows...
 #undef write
 #undef close
 #undef read
 #undef sleep
+
 #include <Gosu/Audio.hpp>
 #include <Gosu/Color.hpp>
 #include <Gosu/Font.hpp>
@@ -2481,23 +2485,23 @@ void SwigDirector_Window::draw() {
 }
 
 
-void SwigDirector_Window::buttonDown(Gosu::Button btn) {
+void SwigDirector_Window::buttonDown(Gosu::Button arg0) {
   VALUE obj0 = Qnil ;
   VALUE result;
   
   {
-    obj0 = LONG2NUM((&btn)->getId());
+    obj0 = LONG2NUM((&arg0)->getId());
   }
   result = rb_funcall(swig_get_self(), rb_intern("button_down"), 1,obj0);
 }
 
 
-void SwigDirector_Window::buttonUp(Gosu::Button btn) {
+void SwigDirector_Window::buttonUp(Gosu::Button arg0) {
   VALUE obj0 = Qnil ;
   VALUE result;
   
   {
-    obj0 = LONG2NUM((&btn)->getId());
+    obj0 = LONG2NUM((&arg0)->getId());
   }
   result = rb_funcall(swig_get_self(), rb_intern("button_up"), 1,obj0);
 }
@@ -2517,7 +2521,13 @@ _wrap_sleep(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "Gosu::sleep" "', argument " "1"" of type '" "unsigned int""'");
   } 
   arg1 = static_cast< unsigned int >(val1);
-  Gosu::sleep(arg1);
+  {
+    try {
+      Gosu::sleep(arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -2532,7 +2542,13 @@ _wrap_milliseconds(int argc, VALUE *argv, VALUE self) {
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  result = (unsigned long)Gosu::milliseconds();
+  {
+    try {
+      result = (unsigned long)Gosu::milliseconds();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
   return vresult;
 fail:
@@ -2556,7 +2572,13 @@ _wrap_trunc(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "Gosu::trunc" "', argument " "1"" of type '" "double""'");
   } 
   arg1 = static_cast< double >(val1);
-  result = (long)Gosu::trunc(arg1);
+  {
+    try {
+      result = (long)Gosu::trunc(arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_long(static_cast< long >(result));
   return vresult;
 fail:
@@ -2580,7 +2602,13 @@ _wrap_round(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "Gosu::round" "', argument " "1"" of type '" "double""'");
   } 
   arg1 = static_cast< double >(val1);
-  result = (long)Gosu::round(arg1);
+  {
+    try {
+      result = (long)Gosu::round(arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_long(static_cast< long >(result));
   return vresult;
 fail:
@@ -2612,7 +2640,13 @@ _wrap_random(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Gosu::random" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = (double)Gosu::random(arg1,arg2);
+  {
+    try {
+      result = (double)Gosu::random(arg1,arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_double(static_cast< double >(result));
   return vresult;
 fail:
@@ -2644,7 +2678,13 @@ _wrap_offset_x(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Gosu::offsetX" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = (double)Gosu::offsetX(arg1,arg2);
+  {
+    try {
+      result = (double)Gosu::offsetX(arg1,arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_double(static_cast< double >(result));
   return vresult;
 fail:
@@ -2676,7 +2716,13 @@ _wrap_offset_y(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Gosu::offsetY" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = (double)Gosu::offsetY(arg1,arg2);
+  {
+    try {
+      result = (double)Gosu::offsetY(arg1,arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_double(static_cast< double >(result));
   return vresult;
 fail:
@@ -2734,7 +2780,13 @@ _wrap_angle(int argc, VALUE *argv, VALUE self) {
     } 
     arg5 = static_cast< double >(val5);
   }
-  result = (double)Gosu::angle(arg1,arg2,arg3,arg4,arg5);
+  {
+    try {
+      result = (double)Gosu::angle(arg1,arg2,arg3,arg4,arg5);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_double(static_cast< double >(result));
   return vresult;
 fail:
@@ -2766,7 +2818,13 @@ _wrap_angle_diff(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Gosu::angleDiff" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = (double)Gosu::angleDiff(arg1,arg2);
+  {
+    try {
+      result = (double)Gosu::angleDiff(arg1,arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_double(static_cast< double >(result));
   return vresult;
 fail:
@@ -2790,7 +2848,13 @@ _wrap_normalize_angle(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "Gosu::normalizeAngle" "', argument " "1"" of type '" "double""'");
   } 
   arg1 = static_cast< double >(val1);
-  result = (double)Gosu::normalizeAngle(arg1);
+  {
+    try {
+      result = (double)Gosu::normalizeAngle(arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_double(static_cast< double >(result));
   return vresult;
 fail:
@@ -2838,7 +2902,13 @@ _wrap_distance_sqr(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Gosu::distanceSqr" "', argument " "4"" of type '" "double""'");
   } 
   arg4 = static_cast< double >(val4);
-  result = (double)Gosu::distanceSqr(arg1,arg2,arg3,arg4);
+  {
+    try {
+      result = (double)Gosu::distanceSqr(arg1,arg2,arg3,arg4);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_double(static_cast< double >(result));
   return vresult;
 fail:
@@ -2886,7 +2956,13 @@ _wrap_distance(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Gosu::distance" "', argument " "4"" of type '" "double""'");
   } 
   arg4 = static_cast< double >(val4);
-  result = (double)Gosu::distance(arg1,arg2,arg3,arg4);
+  {
+    try {
+      result = (double)Gosu::distance(arg1,arg2,arg3,arg4);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_double(static_cast< double >(result));
   return vresult;
 fail:
@@ -2902,7 +2978,13 @@ _wrap_default_font_name(int argc, VALUE *argv, VALUE self) {
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  result = Gosu::defaultFontName();
+  {
+    try {
+      result = Gosu::defaultFontName();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   {
     vresult = rb_str_new2(Gosu::narrow(result).c_str());
   }
@@ -2922,8 +3004,14 @@ _wrap_new_Color__SWIG_0(int argc, VALUE *argv, VALUE self) {
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  result = (Gosu::Color *)new Gosu::Color();DATA_PTR(self) = result;
-  
+  {
+    try {
+      result = (Gosu::Color *)new Gosu::Color();DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return self;
 fail:
   return Qnil;
@@ -2946,8 +3034,14 @@ _wrap_new_Color__SWIG_1(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "Gosu::Color" "', argument " "1"" of type '" "boost::uint32_t""'");
   } 
   arg1 = static_cast< boost::uint32_t >(val1);
-  result = (Gosu::Color *)new Gosu::Color(arg1);DATA_PTR(self) = result;
-  
+  {
+    try {
+      result = (Gosu::Color *)new Gosu::Color(arg1);DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return self;
 fail:
   return Qnil;
@@ -2986,8 +3080,14 @@ _wrap_new_Color__SWIG_2(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Gosu::Color" "', argument " "3"" of type '" "Gosu::Color::Channel""'");
   } 
   arg3 = static_cast< Gosu::Color::Channel >(val3);
-  result = (Gosu::Color *)new Gosu::Color(arg1,arg2,arg3);DATA_PTR(self) = result;
-  
+  {
+    try {
+      result = (Gosu::Color *)new Gosu::Color(arg1,arg2,arg3);DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return self;
 fail:
   return Qnil;
@@ -3051,8 +3151,14 @@ _wrap_new_Color__SWIG_3(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Gosu::Color" "', argument " "4"" of type '" "Gosu::Color::Channel""'");
   } 
   arg4 = static_cast< Gosu::Color::Channel >(val4);
-  result = (Gosu::Color *)new Gosu::Color(arg1,arg2,arg3,arg4);DATA_PTR(self) = result;
-  
+  {
+    try {
+      result = (Gosu::Color *)new Gosu::Color(arg1,arg2,arg3,arg4);DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return self;
 fail:
   return Qnil;
@@ -3155,7 +3261,13 @@ _wrap_Color_alpha(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "alpha" "', argument " "1"" of type '" "Gosu::Color const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  result = ((Gosu::Color const *)arg1)->alpha();
+  {
+    try {
+      result = ((Gosu::Color const *)arg1)->alpha();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_unsigned_SS_char(static_cast< unsigned char >(result));
   return vresult;
 fail:
@@ -3179,7 +3291,13 @@ _wrap_Color_red(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "red" "', argument " "1"" of type '" "Gosu::Color const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  result = ((Gosu::Color const *)arg1)->red();
+  {
+    try {
+      result = ((Gosu::Color const *)arg1)->red();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_unsigned_SS_char(static_cast< unsigned char >(result));
   return vresult;
 fail:
@@ -3203,7 +3321,13 @@ _wrap_Color_green(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "green" "', argument " "1"" of type '" "Gosu::Color const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  result = ((Gosu::Color const *)arg1)->green();
+  {
+    try {
+      result = ((Gosu::Color const *)arg1)->green();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_unsigned_SS_char(static_cast< unsigned char >(result));
   return vresult;
 fail:
@@ -3227,7 +3351,13 @@ _wrap_Color_blue(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "blue" "', argument " "1"" of type '" "Gosu::Color const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  result = ((Gosu::Color const *)arg1)->blue();
+  {
+    try {
+      result = ((Gosu::Color const *)arg1)->blue();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_unsigned_SS_char(static_cast< unsigned char >(result));
   return vresult;
 fail:
@@ -3257,7 +3387,13 @@ _wrap_Color_alphae___(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "setAlpha" "', argument " "2"" of type '" "Gosu::Color::Channel""'");
   } 
   arg2 = static_cast< Gosu::Color::Channel >(val2);
-  (arg1)->setAlpha(arg2);
+  {
+    try {
+      (arg1)->setAlpha(arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -3286,7 +3422,13 @@ _wrap_Color_rede___(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "setRed" "', argument " "2"" of type '" "Gosu::Color::Channel""'");
   } 
   arg2 = static_cast< Gosu::Color::Channel >(val2);
-  (arg1)->setRed(arg2);
+  {
+    try {
+      (arg1)->setRed(arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -3315,7 +3457,13 @@ _wrap_Color_greene___(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "setGreen" "', argument " "2"" of type '" "Gosu::Color::Channel""'");
   } 
   arg2 = static_cast< Gosu::Color::Channel >(val2);
-  (arg1)->setGreen(arg2);
+  {
+    try {
+      (arg1)->setGreen(arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -3344,7 +3492,13 @@ _wrap_Color_bluee___(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "setBlue" "', argument " "2"" of type '" "Gosu::Color::Channel""'");
   } 
   arg2 = static_cast< Gosu::Color::Channel >(val2);
-  (arg1)->setBlue(arg2);
+  {
+    try {
+      (arg1)->setBlue(arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -3367,7 +3521,13 @@ _wrap_Color_argb(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "argb" "', argument " "1"" of type '" "Gosu::Color const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  result = ((Gosu::Color const *)arg1)->argb();
+  {
+    try {
+      result = ((Gosu::Color const *)arg1)->argb();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
   return vresult;
 fail:
@@ -3391,7 +3551,13 @@ _wrap_Color_bgr(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "bgr" "', argument " "1"" of type '" "Gosu::Color const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  result = ((Gosu::Color const *)arg1)->bgr();
+  {
+    try {
+      result = ((Gosu::Color const *)arg1)->bgr();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
   return vresult;
 fail:
@@ -3415,7 +3581,13 @@ _wrap_Color_abgr(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "abgr" "', argument " "1"" of type '" "Gosu::Color const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  result = ((Gosu::Color const *)arg1)->abgr();
+  {
+    try {
+      result = ((Gosu::Color const *)arg1)->abgr();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
   return vresult;
 fail:
@@ -3439,7 +3611,13 @@ _wrap_Color_to_s(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "toS" "', argument " "1"" of type '" "Gosu::Color const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  result = Gosu_Color_toS((Gosu::Color const *)arg1);
+  {
+    try {
+      result = Gosu_Color_toS((Gosu::Color const *)arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_std_string(static_cast< std::string >(result));
   return vresult;
 fail:
@@ -3556,7 +3734,13 @@ _wrap_Font_height(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "height" "', argument " "1"" of type '" "Gosu::Font const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Font * >(argp1);
-  result = (unsigned int)((Gosu::Font const *)arg1)->height();
+  {
+    try {
+      result = (unsigned int)((Gosu::Font const *)arg1)->height();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
   return vresult;
 fail:
@@ -3597,7 +3781,13 @@ _wrap_Font_text_width(int argc, VALUE *argv, VALUE self) {
     } 
     arg3 = static_cast< double >(val3);
   }
-  result = (double)((Gosu::Font const *)arg1)->textWidth((std::wstring const &)*arg2,arg3);
+  {
+    try {
+      result = (double)((Gosu::Font const *)arg1)->textWidth((std::wstring const &)*arg2,arg3);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_double(static_cast< double >(result));
   return vresult;
 fail:
@@ -3696,7 +3886,13 @@ _wrap_Font_draw(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
   }
-  ((Gosu::Font const *)arg1)->draw((std::wstring const &)*arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9);
+  {
+    try {
+      ((Gosu::Font const *)arg1)->draw((std::wstring const &)*arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -3810,7 +4006,13 @@ _wrap_Font_draw_rel(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
   }
-  ((Gosu::Font const *)arg1)->drawRel((std::wstring const &)*arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11);
+  {
+    try {
+      ((Gosu::Font const *)arg1)->drawRel((std::wstring const &)*arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -3868,8 +4070,14 @@ _wrap_new_Font(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Gosu::Font" "', argument " "3"" of type '" "unsigned int""'");
   } 
   arg3 = static_cast< unsigned int >(val3);
-  result = (Gosu::Font *)new_Gosu_Font(*arg1,(std::wstring const &)*arg2,arg3);DATA_PTR(self) = result;
-  
+  {
+    try {
+      result = (Gosu::Font *)new_Gosu_Font(*arg1,(std::wstring const &)*arg2,arg3);DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return self;
 fail:
   return Qnil;
@@ -3886,8 +4094,14 @@ _wrap_new_ImageVector__SWIG_0(int argc, VALUE *argv, VALUE self) {
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  result = (std::vector<Gosu::Image * > *)new std::vector<Gosu::Image * >();DATA_PTR(self) = result;
-  
+  {
+    try {
+      result = (std::vector<Gosu::Image * > *)new std::vector<Gosu::Image * >();DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return self;
 fail:
   return Qnil;
@@ -3910,8 +4124,14 @@ _wrap_new_ImageVector__SWIG_1(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "std::vector<(p.Gosu::Image)>" "', argument " "1"" of type '" "unsigned int""'");
   } 
   arg1 = static_cast< unsigned int >(val1);
-  result = (std::vector<Gosu::Image * > *)new std::vector<Gosu::Image * >(arg1);DATA_PTR(self) = result;
-  
+  {
+    try {
+      result = (std::vector<Gosu::Image * > *)new std::vector<Gosu::Image * >(arg1);DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return self;
 fail:
   return Qnil;
@@ -3945,8 +4165,14 @@ _wrap_new_ImageVector__SWIG_2(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "std::vector<(p.Gosu::Image)>" "', argument " "2"" of type '" "Gosu::Image *&""'"); 
   }
   arg2 = reinterpret_cast< Gosu::Image ** >(argp2);
-  result = (std::vector<Gosu::Image * > *)new std::vector<Gosu::Image * >(arg1,*arg2);DATA_PTR(self) = result;
-  
+  {
+    try {
+      result = (std::vector<Gosu::Image * > *)new std::vector<Gosu::Image * >(arg1,*arg2);DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return self;
 fail:
   return Qnil;
@@ -3995,8 +4221,14 @@ _wrap_new_ImageVector__SWIG_3(int argc, VALUE *argv, VALUE self) {
       SWIG_ConvertPtr(argv[0], (void **) &arg1, SWIGTYPE_p_std__vectorTGosu__Image_p_t, 1);
     }
   }
-  result = (std::vector<Gosu::Image * > *)new std::vector<Gosu::Image * >((std::vector<Gosu::Image * > const &)*arg1);DATA_PTR(self) = result;
-  
+  {
+    try {
+      result = (std::vector<Gosu::Image * > *)new std::vector<Gosu::Image * >((std::vector<Gosu::Image * > const &)*arg1);DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return self;
 fail:
   return Qnil;
@@ -4106,7 +4338,13 @@ _wrap_ImageVector_size(int argc, VALUE *argv, VALUE self) {
       SWIG_ConvertPtr(self, (void **) &arg1, SWIGTYPE_p_std__vectorTGosu__Image_p_t, 1);
     }
   }
-  result = (unsigned int)((std::vector<Gosu::Image * > const *)arg1)->size();
+  {
+    try {
+      result = (unsigned int)((std::vector<Gosu::Image * > const *)arg1)->size();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
   return vresult;
 fail:
@@ -4139,7 +4377,13 @@ _wrap_ImageVector_empty(int argc, VALUE *argv, VALUE self) {
       SWIG_ConvertPtr(self, (void **) &arg1, SWIGTYPE_p_std__vectorTGosu__Image_p_t, 1);
     }
   }
-  result = (bool)((std::vector<Gosu::Image * > const *)arg1)->empty();
+  {
+    try {
+      result = (bool)((std::vector<Gosu::Image * > const *)arg1)->empty();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_bool(static_cast< bool >(result));
   return vresult;
 fail:
@@ -4161,7 +4405,13 @@ _wrap_ImageVector_clear(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "clear" "', argument " "1"" of type '" "std::vector<Gosu::Image * > *""'"); 
   }
   arg1 = reinterpret_cast< std::vector<Gosu::Image * > * >(argp1);
-  (arg1)->clear();
+  {
+    try {
+      (arg1)->clear();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -4190,7 +4440,13 @@ _wrap_ImageVector_push_back(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "push_back" "', argument " "2"" of type '" "Gosu::Image *""'"); 
   }
   arg2 = reinterpret_cast< Gosu::Image * >(argp2);
-  (arg1)->push_back(arg2);
+  {
+    try {
+      (arg1)->push_back(arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -4213,13 +4469,19 @@ _wrap_ImageVector_pop(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "pop" "', argument " "1"" of type '" "std::vector<Gosu::Image * > *""'"); 
   }
   arg1 = reinterpret_cast< std::vector<Gosu::Image * > * >(argp1);
-  try {
-    result = (Gosu::Image *)std_vector_Sl_Gosu_Image_Sm__Sg__pop(arg1);
+  {
+    try {
+      try {
+        result = (Gosu::Image *)std_vector_Sl_Gosu_Image_Sm__Sg__pop(arg1);
+      }
+      catch(std::out_of_range &_e) {
+        rb_exc_raise(SWIG_Ruby_ExceptionType(SWIGTYPE_p_std__out_of_range, SWIG_NewPointerObj((new std::out_of_range(static_cast< const std::out_of_range& >(_e))),SWIGTYPE_p_std__out_of_range,SWIG_POINTER_OWN))); SWIG_fail;
+      }
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
   }
-  catch(std::out_of_range &_e) {
-    rb_exc_raise(SWIG_Ruby_ExceptionType(SWIGTYPE_p_std__out_of_range, SWIG_NewPointerObj((new std::out_of_range(static_cast< const std::out_of_range& >(_e))),SWIGTYPE_p_std__out_of_range,SWIG_POINTER_OWN))); SWIG_fail;
-  }
-  
   vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, 0 |  0 );
   return vresult;
 fail:
@@ -4251,13 +4513,19 @@ _wrap_ImageVector___getitem__(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "__getitem__" "', argument " "2"" of type '" "int""'");
   } 
   arg2 = static_cast< int >(val2);
-  try {
-    result = (Gosu::Image *)std_vector_Sl_Gosu_Image_Sm__Sg____getitem__(arg1,arg2);
+  {
+    try {
+      try {
+        result = (Gosu::Image *)std_vector_Sl_Gosu_Image_Sm__Sg____getitem__(arg1,arg2);
+      }
+      catch(std::out_of_range &_e) {
+        rb_exc_raise(SWIG_Ruby_ExceptionType(SWIGTYPE_p_std__out_of_range, SWIG_NewPointerObj((new std::out_of_range(static_cast< const std::out_of_range& >(_e))),SWIGTYPE_p_std__out_of_range,SWIG_POINTER_OWN))); SWIG_fail;
+      }
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
   }
-  catch(std::out_of_range &_e) {
-    rb_exc_raise(SWIG_Ruby_ExceptionType(SWIGTYPE_p_std__out_of_range, SWIG_NewPointerObj((new std::out_of_range(static_cast< const std::out_of_range& >(_e))),SWIGTYPE_p_std__out_of_range,SWIG_POINTER_OWN))); SWIG_fail;
-  }
-  
   vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, 0 |  0 );
   return vresult;
 fail:
@@ -4295,13 +4563,19 @@ _wrap_ImageVector___setitem__(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "__setitem__" "', argument " "3"" of type '" "Gosu::Image *""'"); 
   }
   arg3 = reinterpret_cast< Gosu::Image * >(argp3);
-  try {
-    std_vector_Sl_Gosu_Image_Sm__Sg____setitem__(arg1,arg2,arg3);
+  {
+    try {
+      try {
+        std_vector_Sl_Gosu_Image_Sm__Sg____setitem__(arg1,arg2,arg3);
+      }
+      catch(std::out_of_range &_e) {
+        rb_exc_raise(SWIG_Ruby_ExceptionType(SWIGTYPE_p_std__out_of_range, SWIG_NewPointerObj((new std::out_of_range(static_cast< const std::out_of_range& >(_e))),SWIGTYPE_p_std__out_of_range,SWIG_POINTER_OWN))); SWIG_fail;
+      }
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
   }
-  catch(std::out_of_range &_e) {
-    rb_exc_raise(SWIG_Ruby_ExceptionType(SWIGTYPE_p_std__out_of_range, SWIG_NewPointerObj((new std::out_of_range(static_cast< const std::out_of_range& >(_e))),SWIGTYPE_p_std__out_of_range,SWIG_POINTER_OWN))); SWIG_fail;
-  }
-  
   return Qnil;
 fail:
   return Qnil;
@@ -4322,7 +4596,13 @@ _wrap_ImageVector_each(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "each" "', argument " "1"" of type '" "std::vector<Gosu::Image * > *""'"); 
   }
   arg1 = reinterpret_cast< std::vector<Gosu::Image * > * >(argp1);
-  std_vector_Sl_Gosu_Image_Sm__Sg__each(arg1);
+  {
+    try {
+      std_vector_Sl_Gosu_Image_Sm__Sg__each(arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -4357,7 +4637,13 @@ _wrap_Image_width(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "width" "', argument " "1"" of type '" "Gosu::Image const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Image * >(argp1);
-  result = (unsigned int)((Gosu::Image const *)arg1)->width();
+  {
+    try {
+      result = (unsigned int)((Gosu::Image const *)arg1)->width();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
   return vresult;
 fail:
@@ -4381,7 +4667,13 @@ _wrap_Image_height(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "height" "', argument " "1"" of type '" "Gosu::Image const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Image * >(argp1);
-  result = (unsigned int)((Gosu::Image const *)arg1)->height();
+  {
+    try {
+      result = (unsigned int)((Gosu::Image const *)arg1)->height();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
   return vresult;
 fail:
@@ -4473,7 +4765,13 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
   }
-  ((Gosu::Image const *)arg1)->draw(arg2,arg3,arg4,arg5,arg6,arg7,arg8);
+  {
+    try {
+      ((Gosu::Image const *)arg1)->draw(arg2,arg3,arg4,arg5,arg6,arg7,arg8);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -4594,7 +4892,13 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
   }
-  ((Gosu::Image const *)arg1)->drawMod(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11);
+  {
+    try {
+      ((Gosu::Image const *)arg1)->drawMod(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -4713,7 +5017,13 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
   }
-  ((Gosu::Image const *)arg1)->drawRot(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11);
+  {
+    try {
+      ((Gosu::Image const *)arg1)->drawRot(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -4762,8 +5072,14 @@ _wrap_new_Image__SWIG_0(int argc, VALUE *argv, VALUE self) {
     } 
     arg3 = static_cast< bool >(val3);
   }
-  result = (Gosu::Image *)new_Gosu_Image__SWIG_0(*arg1,(std::string const &)*arg2,arg3);DATA_PTR(self) = result;
-  
+  {
+    try {
+      result = (Gosu::Image *)new_Gosu_Image__SWIG_0(*arg1,(std::string const &)*arg2,arg3);DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   if (SWIG_IsNewObj(res2)) delete arg2;
   return self;
 fail:
@@ -4861,8 +5177,14 @@ _wrap_new_Image__SWIG_1(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "Gosu::Image" "', argument " "7"" of type '" "unsigned int""'");
   } 
   arg7 = static_cast< unsigned int >(val7);
-  result = (Gosu::Image *)new_Gosu_Image__SWIG_1(*arg1,(std::string const &)*arg2,arg3,arg4,arg5,arg6,arg7);DATA_PTR(self) = result;
-  
+  {
+    try {
+      result = (Gosu::Image *)new_Gosu_Image__SWIG_1(*arg1,(std::string const &)*arg2,arg3,arg4,arg5,arg6,arg7);DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   if (SWIG_IsNewObj(res2)) delete arg2;
   return self;
 fail:
@@ -5024,7 +5346,13 @@ _wrap_Image_from_text(int argc, VALUE *argv, VALUE self) {
     else
     SWIG_exception_fail(SWIG_ValueError, "invalid text align");
   }
-  result = (Gosu::Image *)Gosu_Image_fromText(*arg1,(std::wstring const &)*arg2,(std::wstring const &)*arg3,arg4,arg5,arg6,arg7);
+  {
+    try {
+      result = (Gosu::Image *)Gosu_Image_fromText(*arg1,(std::wstring const &)*arg2,(std::wstring const &)*arg3,arg4,arg5,arg6,arg7);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, 0 |  0 );
   return vresult;
 fail:
@@ -5082,7 +5410,13 @@ _wrap_Image_load_tiles(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Gosu_Image_loadTiles" "', argument " "5"" of type '" "bool""'");
   } 
   arg5 = static_cast< bool >(val5);
-  result = Gosu_Image_loadTiles(*arg1,(std::wstring const &)*arg2,arg3,arg4,arg5);
+  {
+    try {
+      result = Gosu_Image_loadTiles(*arg1,(std::wstring const &)*arg2,arg3,arg4,arg5);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   {
     vresult = rb_ary_new2((&result)->size());
     for (unsigned int i=0; i<(&result)->size(); i++) {
@@ -5139,7 +5473,13 @@ _wrap_Sample_play(int argc, VALUE *argv, VALUE self) {
     } 
     arg3 = static_cast< double >(val3);
   }
-  ((Gosu::Sample const *)arg1)->play(arg2,arg3);
+  {
+    try {
+      ((Gosu::Sample const *)arg1)->play(arg2,arg3);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -5188,7 +5528,13 @@ _wrap_Sample_play_pan(int argc, VALUE *argv, VALUE self) {
     } 
     arg4 = static_cast< double >(val4);
   }
-  ((Gosu::Sample const *)arg1)->playPan(arg2,arg3,arg4);
+  {
+    try {
+      ((Gosu::Sample const *)arg1)->playPan(arg2,arg3,arg4);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -5244,8 +5590,14 @@ _wrap_new_Sample(int argc, VALUE *argv, VALUE self) {
     }
     arg2 = ptr;
   }
-  result = (Gosu::Sample *)new_Gosu_Sample(*arg1,(std::string const &)*arg2);DATA_PTR(self) = result;
-  
+  {
+    try {
+      result = (Gosu::Sample *)new_Gosu_Sample(*arg1,(std::string const &)*arg2);DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   if (SWIG_IsNewObj(res2)) delete arg2;
   return self;
 fail:
@@ -5275,7 +5627,13 @@ _wrap_Song_play(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "play" "', argument " "1"" of type '" "Gosu::Song *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Song * >(argp1);
-  (arg1)->play();
+  {
+    try {
+      (arg1)->play();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -5296,7 +5654,13 @@ _wrap_Song_stop(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "stop" "', argument " "1"" of type '" "Gosu::Song *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Song * >(argp1);
-  (arg1)->stop();
+  {
+    try {
+      (arg1)->stop();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -5319,7 +5683,13 @@ _wrap_Song_playingq___(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "playing" "', argument " "1"" of type '" "Gosu::Song const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Song * >(argp1);
-  result = (bool)((Gosu::Song const *)arg1)->playing();
+  {
+    try {
+      result = (bool)((Gosu::Song const *)arg1)->playing();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_bool(static_cast< bool >(result));
   return vresult;
 fail:
@@ -5376,8 +5746,14 @@ _wrap_new_Song(int argc, VALUE *argv, VALUE self) {
     }
     arg2 = ptr;
   }
-  result = (Gosu::Song *)new_Gosu_Song(*arg1,(std::string const &)*arg2);DATA_PTR(self) = result;
-  
+  {
+    try {
+      result = (Gosu::Song *)new_Gosu_Song(*arg1,(std::string const &)*arg2);DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   if (SWIG_IsNewObj(res2)) delete arg2;
   return self;
 fail:
@@ -5447,14 +5823,20 @@ _wrap_new_Window(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Gosu::Window" "', argument " "5"" of type '" "unsigned int""'");
   } 
   arg5 = static_cast< unsigned int >(val5);
-  if ( strcmp(rb_obj_classname(self), classname) != 0 ) {
-    /* subclassed */
-    result = (Gosu::Window *)new SwigDirector_Window(arg1,arg2,arg3,arg4,arg5); 
-  } else {
-    result = (Gosu::Window *)new Gosu::Window(arg2,arg3,arg4,arg5); 
+  {
+    try {
+      if ( strcmp(rb_obj_classname(self), classname) != 0 ) {
+        /* subclassed */
+        result = (Gosu::Window *)new SwigDirector_Window(arg1,arg2,arg3,arg4,arg5); 
+      } else {
+        result = (Gosu::Window *)new Gosu::Window(arg2,arg3,arg4,arg5); 
+      }
+      DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
   }
-  DATA_PTR(self) = result;
-  
   return self;
 fail:
   return Qnil;
@@ -5482,7 +5864,13 @@ _wrap_Window_caption(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "caption" "', argument " "1"" of type '" "Gosu::Window const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  result = ((Gosu::Window const *)arg1)->caption();
+  {
+    try {
+      result = ((Gosu::Window const *)arg1)->caption();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   {
     vresult = rb_str_new2(Gosu::narrow(result).c_str());
   }
@@ -5513,7 +5901,13 @@ _wrap_Window_captione___(int argc, VALUE *argv, VALUE self) {
     temp2 = Gosu::widen(StringValueCStr(localTemporary));
     arg2 = &temp2;
   }
-  (arg1)->setCaption((std::wstring const &)*arg2);
+  {
+    try {
+      (arg1)->setCaption((std::wstring const &)*arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -5534,7 +5928,13 @@ _wrap_Window_show(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "show" "', argument " "1"" of type '" "Gosu::Window *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  (arg1)->show();
+  {
+    try {
+      (arg1)->show();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -5555,7 +5955,13 @@ _wrap_Window_close(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "close" "', argument " "1"" of type '" "Gosu::Window *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  (arg1)->close();
+  {
+    try {
+      (arg1)->close();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -5581,10 +5987,16 @@ _wrap_Window_update(int argc, VALUE *argv, VALUE self) {
   director = dynamic_cast<Swig::Director *>(arg1);
   upcall = (director && (director->swig_get_self() == self));
   try {
-    if (upcall) {
-      (arg1)->Gosu::Window::update();
-    } else {
-      (arg1)->update();
+    {
+      try {
+        if (upcall) {
+          (arg1)->Gosu::Window::update();
+        } else {
+          (arg1)->update();
+        }
+      } catch(const std::runtime_error& e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
     }
   } catch (Swig::DirectorException& e) {
     rb_exc_raise(e.getError());
@@ -5615,10 +6027,16 @@ _wrap_Window_draw(int argc, VALUE *argv, VALUE self) {
   director = dynamic_cast<Swig::Director *>(arg1);
   upcall = (director && (director->swig_get_self() == self));
   try {
-    if (upcall) {
-      (arg1)->Gosu::Window::draw();
-    } else {
-      (arg1)->draw();
+    {
+      try {
+        if (upcall) {
+          (arg1)->Gosu::Window::draw();
+        } else {
+          (arg1)->draw();
+        }
+      } catch(const std::runtime_error& e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
     }
   } catch (Swig::DirectorException& e) {
     rb_exc_raise(e.getError());
@@ -5653,10 +6071,16 @@ _wrap_Window_button_down(int argc, VALUE *argv, VALUE self) {
   director = dynamic_cast<Swig::Director *>(arg1);
   upcall = (director && (director->swig_get_self() == self));
   try {
-    if (upcall) {
-      (arg1)->Gosu::Window::buttonDown(arg2);
-    } else {
-      (arg1)->buttonDown(arg2);
+    {
+      try {
+        if (upcall) {
+          (arg1)->Gosu::Window::buttonDown(arg2);
+        } else {
+          (arg1)->buttonDown(arg2);
+        }
+      } catch(const std::runtime_error& e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
     }
   } catch (Swig::DirectorException& e) {
     rb_exc_raise(e.getError());
@@ -5691,10 +6115,16 @@ _wrap_Window_button_up(int argc, VALUE *argv, VALUE self) {
   director = dynamic_cast<Swig::Director *>(arg1);
   upcall = (director && (director->swig_get_self() == self));
   try {
-    if (upcall) {
-      (arg1)->Gosu::Window::buttonUp(arg2);
-    } else {
-      (arg1)->buttonUp(arg2);
+    {
+      try {
+        if (upcall) {
+          (arg1)->Gosu::Window::buttonUp(arg2);
+        } else {
+          (arg1)->buttonUp(arg2);
+        }
+      } catch(const std::runtime_error& e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
     }
   } catch (Swig::DirectorException& e) {
     rb_exc_raise(e.getError());
@@ -5798,7 +6228,13 @@ _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
   }
-  Gosu_Window_drawLine(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9);
+  {
+    try {
+      Gosu_Window_drawLine(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -5925,7 +6361,13 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
   }
-  Gosu_Window_drawTriangle(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12);
+  {
+    try {
+      Gosu_Window_drawTriangle(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -6080,7 +6522,13 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
   }
-  Gosu_Window_drawQuad(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13,arg14,arg15);
+  {
+    try {
+      Gosu_Window_drawQuad(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13,arg14,arg15);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -6107,7 +6555,13 @@ _wrap_Window_button_downq___(int argc, VALUE *argv, VALUE self) {
   {
     arg2 = Gosu::Button(NUM2LONG(argv[0]));
   }
-  result = (bool)Gosu_Window_isButtonDown((Gosu::Window const *)arg1,arg2);
+  {
+    try {
+      result = (bool)Gosu_Window_isButtonDown((Gosu::Window const *)arg1,arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_bool(static_cast< bool >(result));
   return vresult;
 fail:
@@ -6136,7 +6590,13 @@ _wrap_Window_char_to_button_id(int argc, VALUE *argv, VALUE self) {
     VALUE localTemporary = rb_obj_as_string(argv[0]);
     arg2 = Gosu::widen(StringValueCStr(localTemporary)).at(0);
   }
-  result = Gosu_Window_charToButtonId(arg1,arg2);
+  {
+    try {
+      result = Gosu_Window_charToButtonId(arg1,arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   {
     vresult = LONG2NUM((&result)->getId());
   }
@@ -6166,7 +6626,13 @@ _wrap_Window_button_id_to_char(int argc, VALUE *argv, VALUE self) {
   {
     arg2 = Gosu::Button(NUM2LONG(argv[0]));
   }
-  result = Gosu_Window_buttonIdToChar(arg1,arg2);
+  {
+    try {
+      result = Gosu_Window_buttonIdToChar(arg1,arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   {
     vresult = rb_str_new2(Gosu::narrow(std::wstring(1, result)).c_str());
   }
@@ -6192,7 +6658,13 @@ _wrap_Window_mouse_x(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "mouseX" "', argument " "1"" of type '" "Gosu::Window const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  result = (double)Gosu_Window_mouseX((Gosu::Window const *)arg1);
+  {
+    try {
+      result = (double)Gosu_Window_mouseX((Gosu::Window const *)arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_double(static_cast< double >(result));
   return vresult;
 fail:
@@ -6216,7 +6688,13 @@ _wrap_Window_mouse_y(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "mouseY" "', argument " "1"" of type '" "Gosu::Window const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  result = (double)Gosu_Window_mouseY((Gosu::Window const *)arg1);
+  {
+    try {
+      result = (double)Gosu_Window_mouseY((Gosu::Window const *)arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_double(static_cast< double >(result));
   return vresult;
 fail:
@@ -6240,7 +6718,13 @@ _wrap_Window_width(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "width" "', argument " "1"" of type '" "Gosu::Window const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  result = (int)Gosu_Window_width((Gosu::Window const *)arg1);
+  {
+    try {
+      result = (int)Gosu_Window_width((Gosu::Window const *)arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_int(static_cast< int >(result));
   return vresult;
 fail:
@@ -6264,7 +6748,13 @@ _wrap_Window_height(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "height" "', argument " "1"" of type '" "Gosu::Window const *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  result = (int)Gosu_Window_height((Gosu::Window const *)arg1);
+  {
+    try {
+      result = (int)Gosu_Window_height((Gosu::Window const *)arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
   vresult = SWIG_From_int(static_cast< int >(result));
   return vresult;
 fail:

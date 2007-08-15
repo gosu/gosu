@@ -48,7 +48,6 @@ if ARGV[0] == 'source' then
   source.add_dir("linux")
   source.add_file("mac/Gosu.xcodeproj/project.pbxproj")
   source.add_file("mac/English.lproj/InfoPlist.strings")
-  source.add_file("mac/Main.rb")
   source.add_file("mac/Gosu-Info.plist")
   source.add_file("mac/RubyGosu Template-Info.plist")
   source.add_file("mac/Gosu.icns")
@@ -56,6 +55,7 @@ if ARGV[0] == 'source' then
   source.add_file("windows/Gosu.vcproj")
   source.add_file("windows/RubyGosu.vcproj")
   source.targz_and_kill
+  `./googlecode_upload.py --summary="Gosu #{ARGV[1]} source package (to compile on Linux)" --project=gosu --user=julianraschke --labels="Featured,Type-Source,OpSys-All" gosu-source-#{ARGV[1]}.tar.gz`
 end
 
 if ARGV[0] == 'mac' then
@@ -68,6 +68,7 @@ if ARGV[0] == 'mac' then
   mac.add_dir("reference")
   mac.add_dir("examples")
   mac.targz_and_kill
+  `./googlecode_upload.py --summary="Gosu #{ARGV[1]} precompiled for Mac OS X (C++ & Ruby)" --project=gosu --user=julianraschke --labels="Featured,Type-Archive,OpSys-OSX" gosu-mac-#{ARGV[1]}.tar.gz`
 end
 
 if ARGV[0] == 'windows-c++' then
@@ -84,6 +85,7 @@ if ARGV[0] == 'windows-c++' then
   windows_cpp.add_file("examples/media/Star.png")
   windows_cpp.add_file("examples/media/Starfighter.bmp")
   windows_cpp.zip_and_kill
+  `./googlecode_upload.py --summary="Gosu #{ARGV[1]} precompiled for 32-bit Windows (C++)" --project=gosu --user=julianraschke --labels="Featured,Type-Archive,OpSys-Windows" gosu-windows-c++-#{ARGV[1]}.zip`
 end
 
 if ARGV[0] == 'windows-ruby' then
@@ -94,4 +96,5 @@ if ARGV[0] == 'windows-ruby' then
   windows_ruby.add_dir("examples")
   windows_ruby.del_file("examples/Tutorial.cpp")
   windows_ruby.zip_and_kill
+  `./googlecode_upload.py --summary="Gosu #{ARGV[1]} precompiled for 32-bit Windows (Ruby)" --project=gosu --user=julianraschke --labels="Featured,Type-Archive,OpSys-Windows" gosu-windows-ruby-#{ARGV[1]}.zip`
 end

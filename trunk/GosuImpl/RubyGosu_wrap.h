@@ -23,8 +23,8 @@ public:
     virtual ~SwigDirector_Window();
     virtual void update();
     virtual void draw();
-    virtual void buttonDown(Gosu::Button btn);
-    virtual void buttonUp(Gosu::Button btn);
+    virtual void buttonDown(Gosu::Button arg0);
+    virtual void buttonUp(Gosu::Button arg0);
 };
 
 

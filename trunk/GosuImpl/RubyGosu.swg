@@ -1,8 +1,9 @@
 // SWIG improvements related to Ruby:
 // - %predicate instead of %rename
-// - %exceptionclass stuff
 // - use Python names for op overloading
 // - %trackobjects
+
+%include exception.i  
 
 // The docs make it seem like this is a generally good idea.
 %feature("compactdefaultargs");
@@ -114,6 +115,15 @@
     
 #include <sstream>
 %}
+
+// Exception wrapping
+%exception {
+    try {
+        $action
+    } catch(const std::runtime_error& e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+}
 
 // Miscellaneous functions (timing, math)
 %ignore Gosu::Sleep;
