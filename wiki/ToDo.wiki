@@ -10,7 +10,7 @@
   * bundle fmod.dll
   * more sophisticated Audio interface for talking NPC's etc.
   * testing on Vista
-  * special characters should work reliably on Ruby
+  * special characters should work reliably/in a documented way in Ruby
 
 = Major design goals for 0.7.x (input redesign) =
   * text input system for chat boxes, high-score lists etc.
