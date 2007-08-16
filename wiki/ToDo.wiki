@@ -6,6 +6,7 @@
   * allow/document custom OpenGL integration
 
 = Also ASAP =
+  * assure Gosu::File also creates directories as necessary
   * bundle fmod.dll
   * more sophisticated Audio interface for talking NPC's etc.
   * testing on Vista
