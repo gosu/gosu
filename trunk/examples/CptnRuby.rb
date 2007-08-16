@@ -146,7 +146,7 @@ class Map
     @tileset = Image.load_tiles(window, "media/CptnRuby Tileset.bmp", 50, 50, true)
     @sky = Image.new(window, "media/Space.png", true)
 
-    gem_img = Image.new(window, "media/CptnRuby CollectibleGem.png", false)
+    gem_img = Image.new(window, "media/CptnRuby Gem.png", false)
     @gems = []
 
     lines = File.readlines(filename).map { |line| line.chop }
