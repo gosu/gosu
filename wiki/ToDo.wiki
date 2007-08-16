@@ -6,6 +6,7 @@
   * allow/document custom OpenGL integration
 
 = Also ASAP =
+  * make sure createText does NOT chop off pixels on OS X!!
   * assure Gosu::File also creates directories as necessary
   * bundle fmod.dll
   * more sophisticated Audio interface for talking NPC's etc.
