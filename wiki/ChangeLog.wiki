@@ -1,6 +1,10 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.5=
+  * Ruby: Fixed name clash in CptnRuby.rb
+  * Mac: Changed userSettingsPrefix to be ~/Library/Preferences
+
 =0.7.4=
   * Mac: Hats work more reliably than in 0.7.3 (and SDL :P)
   * Ruby: Ooops - exceptions don't halt everything anymore.
