@@ -29,6 +29,7 @@
   * document Gosu's Sockets
 
 = Major design goals for 0.9.x (graphics) =
+  * load Image from string in Ruby (RMagick integration)
   * find a way to factor rot flips out of Gosu => Image/draw redesign
   * implement clipping and a target() modifier for the new Image
   * multi-threaded blit queue and float-z-ordering?
