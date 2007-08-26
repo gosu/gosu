@@ -216,6 +216,7 @@ void Gosu::CommSocket::update()
                 case GOSU_SOCK_ERR(ECONNABORTED):
                 case GOSU_SOCK_ERR(ETIMEDOUT):
                 case GOSU_SOCK_ERR(ECONNRESET):
+                case GOSU_SOCK_ERR(EPIPE):
                     disconnect();
                     return;
 
@@ -280,6 +281,7 @@ void Gosu::CommSocket::sendPendingData()
             case GOSU_SOCK_ERR(ECONNABORTED):
             case GOSU_SOCK_ERR(ECONNRESET):
             case GOSU_SOCK_ERR(ETIMEDOUT):
+            case GOSU_SOCK_ERR(EPIPE):
                 disconnect();
                 break;
 
