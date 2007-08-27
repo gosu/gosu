@@ -12,6 +12,7 @@
   * more sophisticated Audio interface for talking NPC's etc.
   * testing on Vista
   * special characters should work reliably/in a documented way in Ruby
+  * change Gosu to be suited to 60 Hz games by default! update_interval left for compatibility + special needs
 
 = Major design goals for 0.7.x (input redesign) =
   * text input system for chat boxes, high-score lists etc.
@@ -19,12 +20,10 @@
   * make the Ruby wrapper's menu bar Command-Q work on OS X!
   * generate Rdoc
 
-= Major design goals for 0.8.x (IO, timing) =
+= Major design goals for 0.8.x (IO, Strings) =
   * delegate Linux support, esp. wrt. gamepads (*help!!*)
   * the window argument in Ruby is annoying, because only one window can be used anyway. Maybe it should be Window.run, and all open Windows should work.
   * simplify Gosu's IO philosophy (C++)
-  * redesign Gosu::Window to be more useful for framerate independent games?
-  * anyway, get rid of WM_TIMER
   * With UTF-8 support in C++ coming, get rid of all the wstring stuff. -> http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2209.html
   * document Gosu's Sockets
 
@@ -36,4 +35,4 @@
 
 = Major design goals for 1.x (perfection) =
   * Windows: Input will regularly query devices which are not currently attached, thereby causing the game to halt every few seconds - think about this
-  * FSAA dammit!!
+  * FSAA/mipmap experiments
