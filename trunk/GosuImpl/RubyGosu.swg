@@ -172,8 +172,18 @@
 // Image
 // Hackishly allow the user to pass Window& instead of Graphics&.
 // Also, provide convenience functions.
-%include "std_vector.i"
-%template(ImageVector) std::vector<Gosu::Image*>;
+
+// Typemap to return an array of images (for loadTiles)
+%typemap(out) std::vector<Gosu::Image*> {
+    $result = rb_ary_new2($1.size());
+    for (unsigned i = 0; i < $1.size(); i++) {
+        //VALUE curImg = SWIG_Ruby_NewClassInstance(SWIGTYPE_p_Gosu__Image); // <- IMPR: How to avoid manual mangling?
+        //DATA_PTR(curImg) = (*&$1)[i];
+        VALUE curImg = SWIG_NewPointerObj(SWIG_as_voidptr((*&$1)[i]), SWIGTYPE_p_Gosu__Image, 0 |  0 );
+        rb_ary_store($result, i, curImg);
+    }
+}
+
 %ignore Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, bool hardBorders = false);
 %ignore Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, bool hardBorders = false);
 %ignore Gosu::Image::Image(Graphics& graphics, const Bitmap& source, bool hardBorders = false);
@@ -188,6 +198,7 @@
         return new Gosu::Image(window.graphics(), Gosu::widen(filename),
                                srcX, srcY, srcWidth, srcHeight, hardBorders);
     }
+    %newobject fromText;
     static Gosu::Image* fromText(Gosu::Window& window, const std::wstring& text,
                                    const std::wstring& fontName, unsigned fontHeight,
                                    unsigned lineSpacing, unsigned maxWidth, TextAlign align) {
@@ -198,7 +209,7 @@
                                                int tileWidth, int tileHeight, bool hardBorders) {
         Gosu::Bitmap bmp = Gosu::quickLoadBitmap(filename);
         std::vector<Gosu::Image*> vec;
-        // TODO: const correctness
+        // TODO: const correctness (<- did I mean exception safety?)
         Gosu::imagesFromTiledBitmap(window.graphics(), bmp,
                                     tileWidth, tileHeight, hardBorders, vec);
         return vec;        
