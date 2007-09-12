@@ -112,6 +112,17 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
 
     boost::optional<DisplayMode> mode = DisplayMode::find(pimpl->width, pimpl->height, false);
     pimpl->graphics.reset(new Gosu::Graphics(*mode));
+    
+    XColor black, dummy;
+    XAllocNamedColor(pimpl->dpy, pimpl->cmap, "black", &black, &dummy);
+    
+    char emptyData[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    Pixmap emptyBitmap =
+        XCreateBitmapFromData(pimpl->dpy, pimpl->window, emptyData, 8, 8);
+    Cursor emptyCursor = XCreatePixmapCursor(pimpl->dpy, emptyBitmap,
+        emptyBitmap, &black, &black, 0, 0);
+    XDefineCursor(pimpl->dpy, pimpl->window, emptyCursor);
+    XFreeCursor(pimpl->dpy, emptyCursor);
 }
 
 Gosu::Window::~Window()
