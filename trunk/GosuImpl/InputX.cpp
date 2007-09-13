@@ -43,12 +43,12 @@ bool Gosu::Input::down(Gosu::Button btn) const
     return pimpl->keyMap[btn.getId()];
 }
 
-Gosu::Button Gosu::Input::charToId(wchar_t ch) const
+Gosu::Button Gosu::Input::charToId(wchar_t ch)
 {
     return Gosu::Button(ch);
 }
 
-wchar_t Gosu::Input::idToChar(Button btn) const
+wchar_t Gosu::Input::idToChar(Button btn)
 {
     return btn.getId();
 }

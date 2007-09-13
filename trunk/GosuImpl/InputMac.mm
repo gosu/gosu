@@ -574,7 +574,7 @@ bool Gosu::Input::feedNSEvent(void* event)
     return false;
 }
 
-wchar_t Gosu::Input::idToChar(Button btn) const
+wchar_t Gosu::Input::idToChar(Button btn)
 {
     if (btn.getId() < numScancodes)
         return idChars[btn.getId()];
@@ -582,7 +582,7 @@ wchar_t Gosu::Input::idToChar(Button btn) const
         return 0;
 }
 
-Gosu::Button Gosu::Input::charToId(wchar_t ch) const
+Gosu::Button Gosu::Input::charToId(wchar_t ch)
 {
     std::map<wchar_t, unsigned>::const_iterator iter = charIds.find(ch);
     if (iter == charIds.end())

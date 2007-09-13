@@ -350,7 +350,7 @@ Gosu::Input::~Input()
 {
 }
 
-Gosu::Button Gosu::Input::charToId(wchar_t ch) const
+Gosu::Button Gosu::Input::charToId(wchar_t ch)
 {
     SHORT vkey = ::VkKeyScan(/*std::*/towlower(ch));
 
@@ -369,7 +369,7 @@ Gosu::Button Gosu::Input::charToId(wchar_t ch) const
     return Button(::MapVirtualKey(vkey, 0));
 }
 
-wchar_t Gosu::Input::idToChar(Gosu::Button btn) const
+wchar_t Gosu::Input::idToChar(Gosu::Button btn)
 {
     // Only translate keyboard ids.
     if (btn.getId() > 255)

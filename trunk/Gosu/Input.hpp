@@ -80,12 +80,10 @@ namespace Gosu
         ~Input();
 
         //! Returns the character a button usually produces, or 0.
-		//! Note: Will soon be renamed or even moved, decision pending.
-        wchar_t idToChar(Button btn) const;
+        static wchar_t idToChar(Button btn);
         //! Returns the button that has to be pressed to produce the
         //! given character, or noButton.
-		//! Note: Will soon be renamed or even moved, decision pending.
-        Button charToId(wchar_t ch) const;
+        static Button charToId(wchar_t ch);
 		
 		//! Returns true if a button is currently pressed.
 		bool down(Button btn) const;
