@@ -1937,12 +1937,9 @@ namespace Swig {
 #define SWIGTYPE_p_Gosu__Window swig_types[7]
 #define SWIGTYPE_p_boost__uint8_t swig_types[8]
 #define SWIGTYPE_p_char swig_types[9]
-#define SWIGTYPE_p_p_Gosu__Image swig_types[10]
-#define SWIGTYPE_p_std__out_of_range swig_types[11]
-#define SWIGTYPE_p_std__vectorTGosu__Image_p_t swig_types[12]
-#define SWIGTYPE_p_std__wstring swig_types[13]
-static swig_type_info *swig_types[15];
-static swig_module_info swig_module = {swig_types, 14, 0, 0, 0, 0};
+#define SWIGTYPE_p_std__wstring swig_types[10]
+static swig_type_info *swig_types[12];
+static swig_module_info swig_module = {swig_types, 11, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -1983,7 +1980,7 @@ static VALUE mGosu;
 #include <Gosu/Timing.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/Window.hpp>
-    
+
 #include <sstream>
 
 
@@ -2230,79 +2227,6 @@ SWIGINTERN Gosu::Font *new_Gosu_Font(Gosu::Window &window,std::wstring const &fo
         return new Gosu::Font(window.graphics(), fontName, height);
     }
 
-#include <stdexcept>
-
-
-#include <string>
-
-#define SWIG_FLOAT_P(x) ((TYPE(x) == T_FLOAT) || FIXNUM_P(x))
-
-bool SWIG_BOOL_P(VALUE) {
-    // dummy test, RTEST should take care of everything
-    return true;
-}
-bool SWIG_RB2BOOL(VALUE x) {
-    return RTEST(x);
-}
-VALUE SWIG_BOOL2RB(bool b) {
-    return b ? Qtrue : Qfalse;
-}
-double SWIG_NUM2DBL(VALUE x) {
-    return (FIXNUM_P(x) ? FIX2INT(x) : NUM2DBL(x));
-}
-bool SWIG_STRING_P(VALUE x) {
-    return TYPE(x) == T_STRING;
-}
-std::string SWIG_RB2STR(VALUE x) {
-    return std::string(RSTRING_PTR(x), RSTRING_LEN(x));
-}
-VALUE SWIG_STR2RB(const std::string& s) {
-    return rb_str_new(s.data(), s.size());
-}
-
-
-#include <vector>
-#include <algorithm>
-#include <stdexcept>
-
-
-SWIGINTERNINLINE VALUE
-SWIG_From_bool  (bool value)
-{
-  return value ? Qtrue : Qfalse;
-}
-
-SWIGINTERN Gosu::Image *std_vector_Sl_Gosu_Image_Sm__Sg__pop(std::vector<Gosu::Image * > *self){
-                if (self->size() == 0)
-                    throw std::out_of_range("pop from empty vector");
-                Gosu::Image* x = self->back();
-                self->pop_back();
-                return x;
-            }
-SWIGINTERN Gosu::Image *std_vector_Sl_Gosu_Image_Sm__Sg____getitem__(std::vector<Gosu::Image * > *self,int i){
-                int size = int(self->size());
-                if (i<0) i += size;
-                if (i>=0 && i<size)
-                    return (*self)[i];
-                else
-                    throw std::out_of_range("vector index out of range");
-            }
-SWIGINTERN void std_vector_Sl_Gosu_Image_Sm__Sg____setitem__(std::vector<Gosu::Image * > *self,int i,Gosu::Image *x){
-                int size = int(self->size());
-                if (i<0) i+= size;
-                if (i>=0 && i<size)
-                    (*self)[i] = x;
-                else
-                    throw std::out_of_range("vector index out of range");
-            }
-SWIGINTERN void std_vector_Sl_Gosu_Image_Sm__Sg__each(std::vector<Gosu::Image * > *self){
-                for (unsigned int i=0; i<self->size(); i++) {
-                    Gosu::Image* x = (*self)[i];
-                    rb_yield(SWIG_NewPointerObj((void *) x, 
-                                                SWIGTYPE_p_Gosu__Image, 0));
-                }
-            }
-
 SWIGINTERN int
 SWIG_AsCharPtrAndSize(VALUE obj, char** cptr, size_t* psize, int *alloc)
 {
@@ -2392,10 +2316,10 @@ SWIG_AsVal_bool (VALUE obj, bool *val)
 }
 
 SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_0(Gosu::Window &window,std::string const &filename,bool hardBorders=false){
-        return new Gosu::Image(window.graphics(), Gosu::widen(filename), hardBorders);
+        return new Gosu::Image(window.graphics(), Gosu::utf8ToWstring(filename), hardBorders);
     }
 SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_1(Gosu::Window &window,std::string const &filename,bool hardBorders,unsigned int srcX,unsigned int srcY,unsigned int srcWidth,unsigned int srcHeight){
-        return new Gosu::Image(window.graphics(), Gosu::widen(filename),
+        return new Gosu::Image(window.graphics(), Gosu::utf8ToWstring(filename),
                                srcX, srcY, srcWidth, srcHeight, hardBorders);
     }
 SWIGINTERN Gosu::Image *Gosu_Image_fromText(Gosu::Window &window,std::wstring const &text,std::wstring const &fontName,unsigned int fontHeight,unsigned int lineSpacing,unsigned int maxWidth,Gosu::TextAlign align){
@@ -2405,16 +2329,23 @@ SWIGINTERN Gosu::Image *Gosu_Image_fromText(Gosu::Window &window,std::wstring co
 SWIGINTERN std::vector<Gosu::Image * > Gosu_Image_loadTiles(Gosu::Window &window,std::wstring const &filename,int tileWidth,int tileHeight,bool hardBorders){
         Gosu::Bitmap bmp = Gosu::quickLoadBitmap(filename);
         std::vector<Gosu::Image*> vec;
-        // TODO: const correctness
+        // TODO: const correctness (<- did I mean exception safety?)
         Gosu::imagesFromTiledBitmap(window.graphics(), bmp,
                                     tileWidth, tileHeight, hardBorders, vec);
         return vec;        
     }
 SWIGINTERN Gosu::Sample *new_Gosu_Sample(Gosu::Window &window,std::string const &filename){
-        return new Gosu::Sample(window.audio(), Gosu::widen(filename));
+        return new Gosu::Sample(window.audio(), Gosu::utf8ToWstring(filename));
     }
+
+SWIGINTERNINLINE VALUE
+SWIG_From_bool  (bool value)
+{
+  return value ? Qtrue : Qfalse;
+}
+
 SWIGINTERN Gosu::Song *new_Gosu_Song(Gosu::Window &window,std::string const &filename){
-        return new Gosu::Song(window.audio(), Gosu::widen(filename));
+        return new Gosu::Song(window.audio(), Gosu::utf8ToWstring(filename));
     }
 SWIGINTERN void Gosu_Window_drawLine(Gosu::Window *self,double x1,double y1,Gosu::Color c1,double x2,double y2,Gosu::Color c2,Gosu::ZPos z=0,Gosu::AlphaMode mode=Gosu::amDefault){
         self->graphics().drawLine(x1, y1, c1, x2, y2, c2,
@@ -2986,7 +2917,7 @@ _wrap_default_font_name(int argc, VALUE *argv, VALUE self) {
     }
   }
   {
-    vresult = rb_str_new2(Gosu::narrow(result).c_str());
+    vresult = rb_str_new2(Gosu::wstringToUTF8(result).c_str());
   }
   return vresult;
 fail:
@@ -3771,7 +3702,7 @@ _wrap_Font_text_width(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Font * >(argp1);
   {
     VALUE localTemporary = rb_obj_as_string(argv[0]);
-    temp2 = Gosu::widen(StringValueCStr(localTemporary));
+    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
     arg2 = &temp2;
   }
   if (argc > 1) {
@@ -3830,7 +3761,7 @@ _wrap_Font_draw(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Font * >(argp1);
   {
     VALUE localTemporary = rb_obj_as_string(argv[0]);
-    temp2 = Gosu::widen(StringValueCStr(localTemporary));
+    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
     arg2 = &temp2;
   }
   ecode3 = SWIG_AsVal_double(argv[1], &val3);
@@ -3940,7 +3871,7 @@ _wrap_Font_draw_rel(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Font * >(argp1);
   {
     VALUE localTemporary = rb_obj_as_string(argv[0]);
-    temp2 = Gosu::widen(StringValueCStr(localTemporary));
+    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
     arg2 = &temp2;
   }
   ecode3 = SWIG_AsVal_double(argv[1], &val3);
@@ -4062,7 +3993,7 @@ _wrap_new_Font(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
     VALUE localTemporary = rb_obj_as_string(argv[1]);
-    temp2 = Gosu::widen(StringValueCStr(localTemporary));
+    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
     arg2 = &temp2;
   }
   ecode3 = SWIG_AsVal_unsigned_SS_int(argv[2], &val3);
@@ -4083,536 +4014,6 @@ fail:
   return Qnil;
 }
 
-
-swig_class cImageVector;
-
-SWIGINTERN VALUE
-_wrap_new_ImageVector__SWIG_0(int argc, VALUE *argv, VALUE self) {
-  std::vector<Gosu::Image * > *result = 0 ;
-  const char *classname SWIGUNUSED = "Gosu::ImageVector";
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  {
-    try {
-      result = (std::vector<Gosu::Image * > *)new std::vector<Gosu::Image * >();DATA_PTR(self) = result;
-      
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return self;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_new_ImageVector__SWIG_1(int argc, VALUE *argv, VALUE self) {
-  unsigned int arg1 ;
-  std::vector<Gosu::Image * > *result = 0 ;
-  unsigned int val1 ;
-  int ecode1 = 0 ;
-  const char *classname SWIGUNUSED = "Gosu::ImageVector";
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_unsigned_SS_int(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "std::vector<(p.Gosu::Image)>" "', argument " "1"" of type '" "unsigned int""'");
-  } 
-  arg1 = static_cast< unsigned int >(val1);
-  {
-    try {
-      result = (std::vector<Gosu::Image * > *)new std::vector<Gosu::Image * >(arg1);DATA_PTR(self) = result;
-      
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return self;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_new_ImageVector__SWIG_2(int argc, VALUE *argv, VALUE self) {
-  unsigned int arg1 ;
-  Gosu::Image **arg2 = 0 ;
-  std::vector<Gosu::Image * > *result = 0 ;
-  unsigned int val1 ;
-  int ecode1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  const char *classname SWIGUNUSED = "Gosu::ImageVector";
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_unsigned_SS_int(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "std::vector<(p.Gosu::Image)>" "', argument " "1"" of type '" "unsigned int""'");
-  } 
-  arg1 = static_cast< unsigned int >(val1);
-  res2 = SWIG_ConvertPtr(argv[1], &argp2, SWIGTYPE_p_p_Gosu__Image,  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "std::vector<(p.Gosu::Image)>" "', argument " "2"" of type '" "Gosu::Image *&""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "std::vector<(p.Gosu::Image)>" "', argument " "2"" of type '" "Gosu::Image *&""'"); 
-  }
-  arg2 = reinterpret_cast< Gosu::Image ** >(argp2);
-  {
-    try {
-      result = (std::vector<Gosu::Image * > *)new std::vector<Gosu::Image * >(arg1,*arg2);DATA_PTR(self) = result;
-      
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return self;
-fail:
-  return Qnil;
-}
-
-
-#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
-SWIGINTERN VALUE
-_wrap_ImageVector_allocate(VALUE self) {
-#else
-  SWIGINTERN VALUE
-  _wrap_ImageVector_allocate(int argc, VALUE *argv, VALUE self) {
-#endif
-    
-    
-    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_std__vectorTGosu__Image_p_t);
-#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
-    rb_obj_call_init(vresult, argc, argv);
-#endif
-    return vresult;
-  }
-  
-
-SWIGINTERN VALUE
-_wrap_new_ImageVector__SWIG_3(int argc, VALUE *argv, VALUE self) {
-  std::vector<Gosu::Image * > *arg1 = 0 ;
-  std::vector<Gosu::Image * > *result = 0 ;
-  std::vector<Gosu::Image * > temp1 ;
-  const char *classname SWIGUNUSED = "Gosu::ImageVector";
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  {
-    if (rb_obj_is_kind_of(argv[0],rb_cArray)) {
-      unsigned int size = RARRAY_LEN(argv[0]);
-      temp1 = std::vector<Gosu::Image* >(size);
-      arg1 = &temp1;
-      for (unsigned int i=0; i<size; i++) {
-        VALUE o = RARRAY_PTR(argv[0])[i];
-        Gosu::Image* x;
-        SWIG_ConvertPtr(o, (void **) &x, SWIGTYPE_p_Gosu__Image, 1);
-        temp1[i] = x;
-      }
-    } else {
-      SWIG_ConvertPtr(argv[0], (void **) &arg1, SWIGTYPE_p_std__vectorTGosu__Image_p_t, 1);
-    }
-  }
-  {
-    try {
-      result = (std::vector<Gosu::Image * > *)new std::vector<Gosu::Image * >((std::vector<Gosu::Image * > const &)*arg1);DATA_PTR(self) = result;
-      
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return self;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE _wrap_new_ImageVector(int nargs, VALUE *args, VALUE self) {
-  int argc;
-  VALUE argv[2];
-  int ii;
-  
-  argc = nargs;
-  if (argc > 2) SWIG_fail;
-  for (ii = 0; (ii < argc); ii++) {
-    argv[ii] = args[ii];
-  }
-  if (argc == 0) {
-    return _wrap_new_ImageVector__SWIG_0(nargs, args, self);
-  }
-  if (argc == 1) {
-    int _v;
-    {
-      int res = SWIG_AsVal_unsigned_SS_int(argv[0], NULL);
-      _v = SWIG_CheckState(res);
-    }
-    if (_v) {
-      return _wrap_new_ImageVector__SWIG_1(nargs, args, self);
-    }
-  }
-  if (argc == 1) {
-    int _v;
-    {
-      /* native sequence? */
-      if (rb_obj_is_kind_of(argv[0],rb_cArray)) {
-        unsigned int size = RARRAY_LEN(argv[0]);
-        if (size == 0) {
-          /* an empty sequence can be of any type */
-          _v = 1;
-        } else {
-          /* check the first element only */
-          Gosu::Image* x;
-          VALUE o = RARRAY_PTR(argv[0])[0];
-          if ((SWIG_ConvertPtr(o,(void **) &x, 
-                SWIGTYPE_p_Gosu__Image,0)) != -1)
-          _v = 1;
-          else
-          _v = 0;
-        }
-      } else {
-        /* wrapped vector? */
-        std::vector<Gosu::Image* >* v;
-        if (SWIG_ConvertPtr(argv[0],(void **) &v, 
-            SWIGTYPE_p_std__vectorTGosu__Image_p_t,0) != -1)
-        _v = 1;
-        else
-        _v = 0;
-      }
-    }
-    if (_v) {
-      return _wrap_new_ImageVector__SWIG_3(nargs, args, self);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    {
-      int res = SWIG_AsVal_unsigned_SS_int(argv[0], NULL);
-      _v = SWIG_CheckState(res);
-    }
-    if (_v) {
-      void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_p_Gosu__Image, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_new_ImageVector__SWIG_2(nargs, args, self);
-      }
-    }
-  }
-  
-fail:
-  rb_raise(rb_eArgError, "No matching function for overloaded 'new_ImageVector'");
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_ImageVector_size(int argc, VALUE *argv, VALUE self) {
-  std::vector<Gosu::Image * > *arg1 = (std::vector<Gosu::Image * > *) 0 ;
-  unsigned int result;
-  std::vector<Gosu::Image * > temp1 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  {
-    if (rb_obj_is_kind_of(self,rb_cArray)) {
-      unsigned int size = RARRAY_LEN(self);
-      temp1 = std::vector<Gosu::Image* >(size);
-      arg1 = &temp1;
-      for (unsigned int i=0; i<size; i++) {
-        VALUE o = RARRAY_PTR(self)[i];
-        Gosu::Image* x;
-        SWIG_ConvertPtr(o, (void **) &x, SWIGTYPE_p_Gosu__Image, 1);
-        temp1[i] = x;
-      }
-    } else {
-      SWIG_ConvertPtr(self, (void **) &arg1, SWIGTYPE_p_std__vectorTGosu__Image_p_t, 1);
-    }
-  }
-  {
-    try {
-      result = (unsigned int)((std::vector<Gosu::Image * > const *)arg1)->size();
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_ImageVector_empty(int argc, VALUE *argv, VALUE self) {
-  std::vector<Gosu::Image * > *arg1 = (std::vector<Gosu::Image * > *) 0 ;
-  bool result;
-  std::vector<Gosu::Image * > temp1 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  {
-    if (rb_obj_is_kind_of(self,rb_cArray)) {
-      unsigned int size = RARRAY_LEN(self);
-      temp1 = std::vector<Gosu::Image* >(size);
-      arg1 = &temp1;
-      for (unsigned int i=0; i<size; i++) {
-        VALUE o = RARRAY_PTR(self)[i];
-        Gosu::Image* x;
-        SWIG_ConvertPtr(o, (void **) &x, SWIGTYPE_p_Gosu__Image, 1);
-        temp1[i] = x;
-      }
-    } else {
-      SWIG_ConvertPtr(self, (void **) &arg1, SWIGTYPE_p_std__vectorTGosu__Image_p_t, 1);
-    }
-  }
-  {
-    try {
-      result = (bool)((std::vector<Gosu::Image * > const *)arg1)->empty();
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_bool(static_cast< bool >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_ImageVector_clear(int argc, VALUE *argv, VALUE self) {
-  std::vector<Gosu::Image * > *arg1 = (std::vector<Gosu::Image * > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_std__vectorTGosu__Image_p_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "clear" "', argument " "1"" of type '" "std::vector<Gosu::Image * > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::vector<Gosu::Image * > * >(argp1);
-  {
-    try {
-      (arg1)->clear();
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_ImageVector_push_back(int argc, VALUE *argv, VALUE self) {
-  std::vector<Gosu::Image * > *arg1 = (std::vector<Gosu::Image * > *) 0 ;
-  Gosu::Image *arg2 = (Gosu::Image *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_std__vectorTGosu__Image_p_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "push_back" "', argument " "1"" of type '" "std::vector<Gosu::Image * > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::vector<Gosu::Image * > * >(argp1);
-  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_Gosu__Image, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "push_back" "', argument " "2"" of type '" "Gosu::Image *""'"); 
-  }
-  arg2 = reinterpret_cast< Gosu::Image * >(argp2);
-  {
-    try {
-      (arg1)->push_back(arg2);
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_ImageVector_pop(int argc, VALUE *argv, VALUE self) {
-  std::vector<Gosu::Image * > *arg1 = (std::vector<Gosu::Image * > *) 0 ;
-  Gosu::Image *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_std__vectorTGosu__Image_p_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "pop" "', argument " "1"" of type '" "std::vector<Gosu::Image * > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::vector<Gosu::Image * > * >(argp1);
-  {
-    try {
-      try {
-        result = (Gosu::Image *)std_vector_Sl_Gosu_Image_Sm__Sg__pop(arg1);
-      }
-      catch(std::out_of_range &_e) {
-        rb_exc_raise(SWIG_Ruby_ExceptionType(SWIGTYPE_p_std__out_of_range, SWIG_NewPointerObj((new std::out_of_range(static_cast< const std::out_of_range& >(_e))),SWIGTYPE_p_std__out_of_range,SWIG_POINTER_OWN))); SWIG_fail;
-      }
-      
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, 0 |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_ImageVector___getitem__(int argc, VALUE *argv, VALUE self) {
-  std::vector<Gosu::Image * > *arg1 = (std::vector<Gosu::Image * > *) 0 ;
-  int arg2 ;
-  Gosu::Image *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_std__vectorTGosu__Image_p_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "__getitem__" "', argument " "1"" of type '" "std::vector<Gosu::Image * > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::vector<Gosu::Image * > * >(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "__getitem__" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  {
-    try {
-      try {
-        result = (Gosu::Image *)std_vector_Sl_Gosu_Image_Sm__Sg____getitem__(arg1,arg2);
-      }
-      catch(std::out_of_range &_e) {
-        rb_exc_raise(SWIG_Ruby_ExceptionType(SWIGTYPE_p_std__out_of_range, SWIG_NewPointerObj((new std::out_of_range(static_cast< const std::out_of_range& >(_e))),SWIGTYPE_p_std__out_of_range,SWIG_POINTER_OWN))); SWIG_fail;
-      }
-      
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, 0 |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_ImageVector___setitem__(int argc, VALUE *argv, VALUE self) {
-  std::vector<Gosu::Image * > *arg1 = (std::vector<Gosu::Image * > *) 0 ;
-  int arg2 ;
-  Gosu::Image *arg3 = (Gosu::Image *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_std__vectorTGosu__Image_p_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "__setitem__" "', argument " "1"" of type '" "std::vector<Gosu::Image * > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::vector<Gosu::Image * > * >(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "__setitem__" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(argv[1], &argp3,SWIGTYPE_p_Gosu__Image, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "__setitem__" "', argument " "3"" of type '" "Gosu::Image *""'"); 
-  }
-  arg3 = reinterpret_cast< Gosu::Image * >(argp3);
-  {
-    try {
-      try {
-        std_vector_Sl_Gosu_Image_Sm__Sg____setitem__(arg1,arg2,arg3);
-      }
-      catch(std::out_of_range &_e) {
-        rb_exc_raise(SWIG_Ruby_ExceptionType(SWIGTYPE_p_std__out_of_range, SWIG_NewPointerObj((new std::out_of_range(static_cast< const std::out_of_range& >(_e))),SWIGTYPE_p_std__out_of_range,SWIG_POINTER_OWN))); SWIG_fail;
-      }
-      
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_ImageVector_each(int argc, VALUE *argv, VALUE self) {
-  std::vector<Gosu::Image * > *arg1 = (std::vector<Gosu::Image * > *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_std__vectorTGosu__Image_p_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "each" "', argument " "1"" of type '" "std::vector<Gosu::Image * > *""'"); 
-  }
-  arg1 = reinterpret_cast< std::vector<Gosu::Image * > * >(argp1);
-  {
-    try {
-      std_vector_Sl_Gosu_Image_Sm__Sg__each(arg1);
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN void
-free_std_vector_Sl_Gosu_Image_Sm__Sg_(std::vector<Gosu::Image * > *arg1) {
-    delete arg1;
-}
 
 swig_class cImage;
 
@@ -5310,12 +4711,12 @@ _wrap_Image_from_text(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
     VALUE localTemporary = rb_obj_as_string(argv[1]);
-    temp2 = Gosu::widen(StringValueCStr(localTemporary));
+    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
     arg2 = &temp2;
   }
   {
     VALUE localTemporary = rb_obj_as_string(argv[2]);
-    temp3 = Gosu::widen(StringValueCStr(localTemporary));
+    temp3 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
     arg3 = &temp3;
   }
   ecode4 = SWIG_AsVal_unsigned_SS_int(argv[3], &val4);
@@ -5353,7 +4754,7 @@ _wrap_Image_from_text(int argc, VALUE *argv, VALUE self) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, 0 |  0 );
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN |  0 );
   return vresult;
 fail:
   return Qnil;
@@ -5367,7 +4768,7 @@ _wrap_Image_load_tiles(int argc, VALUE *argv, VALUE self) {
   int arg3 ;
   int arg4 ;
   bool arg5 ;
-  std::vector<Gosu::Image * > result;
+  SwigValueWrapper<std::vector<Gosu::Image * > > result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   std::wstring temp2 ;
@@ -5392,7 +4793,7 @@ _wrap_Image_load_tiles(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
     VALUE localTemporary = rb_obj_as_string(argv[1]);
-    temp2 = Gosu::widen(StringValueCStr(localTemporary));
+    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
     arg2 = &temp2;
   }
   ecode3 = SWIG_AsVal_int(argv[2], &val3);
@@ -5419,11 +4820,9 @@ _wrap_Image_load_tiles(int argc, VALUE *argv, VALUE self) {
   }
   {
     vresult = rb_ary_new2((&result)->size());
-    for (unsigned int i=0; i<(&result)->size(); i++) {
-      Gosu::Image* x = ((std::vector<Gosu::Image * > &)result)[i];
-      rb_ary_store(vresult,i,
-        SWIG_NewPointerObj((void *) x, 
-          SWIGTYPE_p_Gosu__Image, 0));
+    for (unsigned i = 0; i < (&result)->size(); i++) {
+      VALUE curImg = SWIG_NewPointerObj(SWIG_as_voidptr((*&result)[i]), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN);
+      rb_ary_store(vresult, i, curImg);
     }
   }
   return vresult;
@@ -5872,7 +5271,7 @@ _wrap_Window_caption(int argc, VALUE *argv, VALUE self) {
     }
   }
   {
-    vresult = rb_str_new2(Gosu::narrow(result).c_str());
+    vresult = rb_str_new2(Gosu::wstringToUTF8(result).c_str());
   }
   return vresult;
 fail:
@@ -5898,7 +5297,7 @@ _wrap_Window_captione___(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
     VALUE localTemporary = rb_obj_as_string(argv[0]);
-    temp2 = Gosu::widen(StringValueCStr(localTemporary));
+    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
     arg2 = &temp2;
   }
   {
@@ -6588,7 +5987,7 @@ _wrap_Window_char_to_button_id(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
     VALUE localTemporary = rb_obj_as_string(argv[0]);
-    arg2 = Gosu::widen(StringValueCStr(localTemporary)).at(0);
+    arg2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary)).at(0);
   }
   {
     try {
@@ -6634,7 +6033,7 @@ _wrap_Window_button_id_to_char(int argc, VALUE *argv, VALUE self) {
     }
   }
   {
-    vresult = rb_str_new2(Gosu::narrow(std::wstring(1, result)).c_str());
+    vresult = rb_str_new2(Gosu::wstringToUTF8(std::wstring(1, result)).c_str());
   }
   return vresult;
 fail:
@@ -6800,9 +6199,6 @@ static swig_type_info _swigt__p_Gosu__Song = {"_p_Gosu__Song", "Gosu::Song *", 0
 static swig_type_info _swigt__p_Gosu__Window = {"_p_Gosu__Window", "Gosu::Window *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_boost__uint8_t = {"_p_boost__uint8_t", "boost::uint8_t *|Gosu::ZPos *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_p_Gosu__Image = {"_p_p_Gosu__Image", "Gosu::Image **", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__out_of_range = {"_p_std__out_of_range", "std::out_of_range *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorTGosu__Image_p_t = {"_p_std__vectorTGosu__Image_p_t", "std::vector<Gosu::Image * > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__wstring = {"_p_std__wstring", "std::wstring *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
@@ -6816,9 +6212,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__Window,
   &_swigt__p_boost__uint8_t,
   &_swigt__p_char,
-  &_swigt__p_p_Gosu__Image,
-  &_swigt__p_std__out_of_range,
-  &_swigt__p_std__vectorTGosu__Image_p_t,
   &_swigt__p_std__wstring,
 };
 
@@ -6832,9 +6225,6 @@ static swig_cast_info _swigc__p_Gosu__Song[] = {  {&_swigt__p_Gosu__Song, 0, 0, 
 static swig_cast_info _swigc__p_Gosu__Window[] = {  {&_swigt__p_Gosu__Window, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_boost__uint8_t[] = {  {&_swigt__p_boost__uint8_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_p_Gosu__Image[] = {  {&_swigt__p_p_Gosu__Image, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__out_of_range[] = {  {&_swigt__p_std__out_of_range, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorTGosu__Image_p_t[] = {  {&_swigt__p_std__vectorTGosu__Image_p_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__wstring[] = {  {&_swigt__p_std__wstring, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
@@ -6848,9 +6238,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__Window,
   _swigc__p_boost__uint8_t,
   _swigc__p_char,
-  _swigc__p_p_Gosu__Image,
-  _swigc__p_std__out_of_range,
-  _swigc__p_std__vectorTGosu__Image_p_t,
   _swigc__p_std__wstring,
 };
 
@@ -7164,23 +6551,6 @@ SWIGEXPORT void Init_gosu(void) {
   cFont.mark = 0;
   cFont.destroy = (void (*)(void *)) free_Gosu_Font;
   cFont.trackObjects = 0;
-  
-  cImageVector.klass = rb_define_class_under(mGosu, "ImageVector", rb_cObject);
-  SWIG_TypeClientData(SWIGTYPE_p_std__vectorTGosu__Image_p_t, (void *) &cImageVector);
-  rb_include_module(cImageVector.klass, rb_eval_string("Enumerable"));
-  rb_define_alloc_func(cImageVector.klass, _wrap_ImageVector_allocate);
-  rb_define_method(cImageVector.klass, "initialize", VALUEFUNC(_wrap_new_ImageVector), -1);
-  rb_define_method(cImageVector.klass, "size", VALUEFUNC(_wrap_ImageVector_size), -1);
-  rb_define_method(cImageVector.klass, "empty", VALUEFUNC(_wrap_ImageVector_empty), -1);
-  rb_define_method(cImageVector.klass, "clear", VALUEFUNC(_wrap_ImageVector_clear), -1);
-  rb_define_method(cImageVector.klass, "push_back", VALUEFUNC(_wrap_ImageVector_push_back), -1);
-  rb_define_method(cImageVector.klass, "pop", VALUEFUNC(_wrap_ImageVector_pop), -1);
-  rb_define_method(cImageVector.klass, "[]", VALUEFUNC(_wrap_ImageVector___getitem__), -1);
-  rb_define_method(cImageVector.klass, "[]=", VALUEFUNC(_wrap_ImageVector___setitem__), -1);
-  rb_define_method(cImageVector.klass, "each", VALUEFUNC(_wrap_ImageVector_each), -1);
-  cImageVector.mark = 0;
-  cImageVector.destroy = (void (*)(void *)) free_std_vector_Sl_Gosu_Image_Sm__Sg_;
-  cImageVector.trackObjects = 0;
   
   cImage.klass = rb_define_class_under(mGosu, "Image", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Image, (void *) &cImage);

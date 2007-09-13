@@ -19,19 +19,19 @@
 #pragma SWIG nowarn=-490,-319
 %typemap(in) wchar_t {
     VALUE localTemporary = rb_obj_as_string($input);
-    $1 = Gosu::widen(StringValueCStr(localTemporary)).at(0);
+    $1 = Gosu::utf8ToWstring(StringValueCStr(localTemporary)).at(0);
 }
 %typemap(out) wchar_t {
-    $result = rb_str_new2(Gosu::narrow(std::wstring(1, $1)).c_str());
+    $result = rb_str_new2(Gosu::wstringToUTF8(std::wstring(1, $1)).c_str());
 }
 %typemap(in) const std::wstring& (std::wstring temp) {
     VALUE localTemporary = rb_obj_as_string($input);
-    temp = Gosu::widen(StringValueCStr(localTemporary));
+    temp = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
     $1 = &temp;
 }
 %apply const std::wstring& { std::wstring, const std::string };
 %typemap(out) std::wstring {
-    $result = rb_str_new2(Gosu::narrow($1).c_str());
+    $result = rb_str_new2(Gosu::wstringToUTF8($1).c_str());
 }
 
 %typemap(in) Gosu::Button {
@@ -112,7 +112,7 @@
 #include <Gosu/Timing.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/Window.hpp>
-    
+
 #include <sstream>
 %}
 
@@ -177,9 +177,7 @@
 %typemap(out) std::vector<Gosu::Image*> {
     $result = rb_ary_new2($1.size());
     for (unsigned i = 0; i < $1.size(); i++) {
-        //VALUE curImg = SWIG_Ruby_NewClassInstance(SWIGTYPE_p_Gosu__Image); // <- IMPR: How to avoid manual mangling?
-        //DATA_PTR(curImg) = (*&$1)[i];
-        VALUE curImg = SWIG_NewPointerObj(SWIG_as_voidptr((*&$1)[i]), SWIGTYPE_p_Gosu__Image, 0 |  0 );
+        VALUE curImg = SWIG_NewPointerObj(SWIG_as_voidptr((*&$1)[i]), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN);
         rb_ary_store($result, i, curImg);
     }
 }
@@ -191,11 +189,11 @@
 %include "../Gosu/Image.hpp"
 %extend Gosu::Image {
     Image(Gosu::Window& window, const std::string& filename, bool hardBorders = false) {
-        return new Gosu::Image(window.graphics(), Gosu::widen(filename), hardBorders);
+        return new Gosu::Image(window.graphics(), Gosu::utf8ToWstring(filename), hardBorders);
     }
     Image(Gosu::Window& window, const std::string& filename, bool hardBorders,
           unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight) {
-        return new Gosu::Image(window.graphics(), Gosu::widen(filename),
+        return new Gosu::Image(window.graphics(), Gosu::utf8ToWstring(filename),
                                srcX, srcY, srcWidth, srcHeight, hardBorders);
     }
     %newobject fromText;
@@ -227,12 +225,12 @@
 %include "../Gosu/Audio.hpp"
 %extend Gosu::Sample {
     Sample(Gosu::Window& window, const std::string& filename) {
-        return new Gosu::Sample(window.audio(), Gosu::widen(filename));
+        return new Gosu::Sample(window.audio(), Gosu::utf8ToWstring(filename));
     }
 }
 %extend Gosu::Song {
     Song(Gosu::Window& window, const std::string& filename) {
-        return new Gosu::Song(window.audio(), Gosu::widen(filename));
+        return new Gosu::Song(window.audio(), Gosu::utf8ToWstring(filename));
     }
 }
 

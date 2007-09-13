@@ -22,7 +22,7 @@ namespace Gosu
     
     //! Prefix for user settings.
     //! On Windows, the same as %APPDATA%.
-    //! On OS X, the user's Library folder.
+    //! On OS X, the user's Library/Preferences folder.
     //! On Linux, the home directory plus a trailing dot for hidden files.
     std::wstring userSettingsPrefix();
     

@@ -33,7 +33,7 @@ std::wstring Gosu::sharedResourcePrefix()
 std::wstring Gosu::userSettingsPrefix()
 {
 #ifdef GOSU_IS_MAC
-    return homeDir() + L"/Library/";
+    return homeDir() + L"/Library/Preferences/";
 #else
     return homeDir() + L"/.";
 #endif

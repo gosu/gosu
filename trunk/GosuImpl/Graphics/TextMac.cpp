@@ -13,16 +13,21 @@ std::wstring Gosu::defaultFontName()
     return L"Arial";
 }
 
+namespace Gosu
+{
+    std::vector<unsigned short> wstringToUniChars(const std::wstring& ws);
+}
+
 #include <iostream>
 #include <ostream>
 #include <sstream>
-void throwError(unsigned line)
+void throwError(OSStatus status, unsigned line)
 {
     std::ostringstream str;
-    str << "Error on line " << line;
+    str << "Error on line " << line << " (" << status << ")";
     throw std::runtime_error(str.str());
 }
-#define checkErr(status) if (!status) {} else throwError(__LINE__)
+#define checkErr(status) if (!(status)) {} else throwError(status, __LINE__)
 
 namespace
 {
@@ -58,7 +63,7 @@ namespace
     {
         ATSUStyle style;
         ATSUTextLayout layout;
-        std::vector<UniChar> utf16;
+        std::vector<UniChar> utf16; // More like UCS-2-INTERNAL.
 
         template<typename T>
         void setAttribute(ATSUAttributeTag tag, T value)
@@ -79,8 +84,9 @@ namespace
     public:
         ATSULayoutAndStyle(const std::wstring& text, const std::wstring& fontName,
                            double fontHeightPt, unsigned fontFlags)
-        : utf16(text.begin(), text.end())
         {
+            utf16 = Gosu::wstringToUniChars(text);
+        
             checkErr( ATSUCreateStyle(&style) );
             
             ATSUFontID font;
@@ -105,6 +111,8 @@ namespace
                                                  kATSUToTextEnd, utf16.size()) );
                                                             
             checkErr( ATSUSetRunStyle(layout, style, kATSUFromTextBeginning, kATSUToTextEnd) );
+
+            checkErr( ATSUSetTransientFontMatching(layout, true) );
         }
         
         ~ATSULayoutAndStyle()
@@ -135,8 +143,10 @@ namespace
         // IMPR: Caching
         
         CFStringRef cfName = CFStringCreateWithCString(NULL, Gosu::narrow(fontName).c_str(), kCFStringEncodingASCII);
-        ATSFontRef font = ATSFontFindFromName(cfName, kATSOptionFlagsDefault);
+        ATSFontRef font;
+        font = ATSFontFindFromName(cfName, kATSOptionFlagsDefault);
         CFRelease(cfName);
+        
         ATSFontMetrics metrics;
         checkErr(ATSFontGetHorizontalMetrics(font, kATSOptionFlagsDefault, &metrics));
         height = metrics.ascent - metrics.descent;
@@ -176,7 +186,6 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
                             helper.context());
     }
 
-    // IMPR: Performance optimization
     Bitmap wholeText;
     wholeText.resize(width, fontHeight);
     for (unsigned relY = 0; relY < fontHeight; ++relY)
