@@ -1,4 +1,4 @@
-#summary Complete listing of all official classes and methods in Gosu/Ruby.
+#summary Complete listing of all official classes and methods in Ruby/Gosu.
 = Ruby API Reference =
 
 == Common arguments ==
@@ -60,8 +60,8 @@
   * `mouse_x`
   * `mouse_y`
   * `button_down?(id)`
-  * `button_id_to_char(id)`: Returns the character a given id stands for, or "".
-  * `char_to_button_id(char)`: Returns the id usually used for a character, or 0.
+  * `self.button_id_to_char(id)`: Returns the character a given id stands for, or "".
+  * `self.char_to_button_id(char)`: Returns the id usually used for a character, or 0.
   * `width`
   * `height`
 
