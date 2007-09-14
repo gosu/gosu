@@ -47,6 +47,8 @@ Gosu::pango::pango()
 
 Gosu::pango::~pango()
 {
+    g_object_unref(context);
+    
     if(font_description)
         pango_font_description_free(font_description);
     if(attr)
@@ -97,7 +99,7 @@ unsigned Gosu::pango::textWidth(const std::wstring& text,
         attrList = pango_attr_list_new();
         pango_attr_list_insert(attrList, attr);
         pango_layout_set_attributes(layout, attrList);
-//        pango_attribute_destroy(attr);
+        pango_attr_list_unref(attrList);
     }
 
 

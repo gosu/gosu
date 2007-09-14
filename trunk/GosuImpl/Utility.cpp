@@ -1,4 +1,5 @@
 #include <Gosu/Utility.hpp>
+#include <Gosu/Platform.hpp>
 #include <cstddef>
 #include <cstdlib>
 #include <stdexcept>
@@ -95,7 +96,7 @@ vector<unsigned short> wstringToUniChars(const wstring& ws)
 }
 }
 #else
-std::wstring Gosu::utf8ToWString(const std::string& utf8)
+std::wstring Gosu::utf8ToWstring(const std::string& utf8)
 {
     return widen(utf8);
 }
@@ -108,7 +109,7 @@ std::string Gosu::wstringToUTF8(const std::wstring& ws)
 wstring Gosu::widen(const string& s)
 {
 #ifdef GOSU_IS_X
-    setlocale(LC_ALL, "utf8");
+    setlocale(LC_ALL, "");
 #endif
 
     size_t wideLen = std::mbstowcs(0, s.c_str(), 0);
