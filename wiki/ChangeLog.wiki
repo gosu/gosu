@@ -2,6 +2,7 @@
 #labels Featured
 
 =0.7.5=
+  * All: functions for button id<>character conversion are static now. Code shouldn't break.
   * Ruby: Fixed name clash in CptnRuby.rb
   * Ruby: Fixed memory leaks in load_tiles and from_text (thanks to Galin Yordanov!)
   * Linux: Some changes for UTF-8 support (thanks to Galin Yordanov again)
