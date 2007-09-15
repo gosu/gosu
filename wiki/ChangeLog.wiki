@@ -6,9 +6,11 @@
   * Ruby: Fixed name clash in CptnRuby.rb
   * Ruby: Fixed memory leaks in load_tiles and from_text (thanks to Galin Yordanov!)
   * Linux: Some changes for UTF-8 support (thanks to Galin Yordanov again)
-  * Linux: Hid mouse cursor over X11 window
+  * Linux: Hid mouse cursor over X11 window (thanks to acetoxy)
   * Mac: Changed userSettingsPrefix to be ~/Library/Preferences
-  * Mac: Some changes for UTF-8 support
+  * Mac: Some changes for Ruby UTF-8 support
+  * Windows: Strings in Ruby programs now must be UTF-8 encoded
+  * Windows: FMOD.dll shipped with Gosu (RubyGosu adjusted to find it)
 
 =0.7.4=
   * Mac: Hats work more reliably than in 0.7.3 (and SDL :P)
@@ -111,3 +113,4 @@
 
 =0.3.0=
 (initial release)
+ 
