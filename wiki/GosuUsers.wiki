@@ -27,7 +27,7 @@ Remake of the cool fighting game One Must Fall 2097 by Andrew Thompson, using Go
 
 Gosu has also been used a lot for participating in small game development competitions – with varying code quality, as you may guess. To run games from source code, make sure gosu.so/gosu.bundle is available, e.g. by copying it from your platform's Gosu release into the game's directory. Then run Main.rb from the command line via "ruby Main.rb", or from your favourite editor.
 
-=== Nightly Travels of a Witch ===
+=== Nightly Travels of a Witch (Ruby) ===
 
 http://www.raschke.de/julian/temp/NToaW.jpg
 
@@ -53,3 +53,4 @@ Janis Born's entry for the same compo. Features some cool graphics! ,,(Note: Don
 == And... ==
 
 …if you have anything in the works that uses Gosu, no matter in which development stage, feel free to describe it in a comment! :)
+ 
