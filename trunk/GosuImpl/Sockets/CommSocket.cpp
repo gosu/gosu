@@ -216,7 +216,10 @@ void Gosu::CommSocket::update()
                 case GOSU_SOCK_ERR(ECONNABORTED):
                 case GOSU_SOCK_ERR(ETIMEDOUT):
                 case GOSU_SOCK_ERR(ECONNRESET):
+				#ifndef GOSU_IS_WIN
+				// UNIX specific, rare error
                 case GOSU_SOCK_ERR(EPIPE):
+				#endif
                     disconnect();
                     return;
 
@@ -281,7 +284,10 @@ void Gosu::CommSocket::sendPendingData()
             case GOSU_SOCK_ERR(ECONNABORTED):
             case GOSU_SOCK_ERR(ECONNRESET):
             case GOSU_SOCK_ERR(ETIMEDOUT):
+			#ifndef GOSU_IS_WIN
+			// UNIX-specific, rare error
             case GOSU_SOCK_ERR(EPIPE):
+			#endif
                 disconnect();
                 break;
 
