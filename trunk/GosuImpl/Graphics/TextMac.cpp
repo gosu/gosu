@@ -104,15 +104,12 @@ namespace
                 setAttribute<Boolean>(kATSUQDItalicTag, TRUE);
             if (fontFlags & Gosu::ffUnderline)
                 setAttribute<Boolean>(kATSUQDUnderlineTag, TRUE);
-            
-            checkErr( ATSUCreateTextLayout(&layout) );
-            
-            checkErr( ATSUSetTextPointerLocation(layout, &utf16[0], kATSUFromTextBeginning,
-                                                 kATSUToTextEnd, utf16.size()) );
-                                                            
-            checkErr( ATSUSetRunStyle(layout, style, kATSUFromTextBeginning, kATSUToTextEnd) );
 
-            checkErr( ATSUSetTransientFontMatching(layout, true) );
+            UniCharCount runLength = utf16.size();
+            checkErr( ATSUCreateTextLayoutWithTextPtr(&utf16[0], kATSUFromTextBeginning,
+                            kATSUToTextEnd, utf16.size(), 1, &runLength, &style, &layout) );
+            
+            checkErr( ATSUSetTransientFontMatching(layout, TRUE) ); // TODO: WHY DOESN'T IT WORK!??
         }
         
         ~ATSULayoutAndStyle()

@@ -9,90 +9,72 @@ using namespace std;
 
 #ifdef __APPLE__
 #include <iconv.h>
+namespace
+{
+    extern const char UTF_8[] = "UTF-8";
+    extern const char UCS_2_INTERNAL[] = "UCS-2-INTERNAL";
+    extern const char UCS_4_INTERNAL[] = "UCS-4-INTERNAL";
+    extern const char CHAR[] = "char";
+
+    template<typename Out, const char* to, const char* from, typename In>
+    Out iconvert(const In& in)
+    {
+        if (in.empty())
+            return Out();
+    
+        const size_t bufferLen = 128;
+        typedef typename In::value_type InElem;
+        typedef typename Out::value_type OutElem;
+
+        static iconv_t cd = iconv_open(to, from);
+        
+        Out result;
+        OutElem buffer[bufferLen];
+        
+        const char* inbuf = reinterpret_cast<const char*>(&in[0]);
+        size_t inbytesleft = in.size() * sizeof(InElem);
+        char* outbuf = reinterpret_cast<char*>(buffer);
+        size_t outbytesleft = sizeof buffer;
+        
+        for (;;)
+        {
+            size_t ret = ::iconv(cd, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
+            if (ret == static_cast<size_t>(-1) && errno == EILSEQ)
+            {
+                // Skip illegal sequence part, repeat loop.
+                // TODO: Or retry w/ different encoding?
+                ++inbuf;
+                --inbytesleft;
+            }
+            else if (ret == static_cast<size_t>(-1) && errno == E2BIG)
+            {
+                // Append new characters, reset out buffer, then repeat loop.
+                result.insert(result.end(), buffer, buffer + bufferLen);
+                outbuf = reinterpret_cast<char*>(buffer);
+                outbytesleft = sizeof buffer;
+            }
+            else
+            {
+                // Append what's new in the buffer, then LEAVE loop.
+                result.insert(result.end(), buffer, buffer + bufferLen - outbytesleft / sizeof(OutElem));
+                return result;
+            }
+        }        
+    }
+}
 wstring Gosu::utf8ToWstring(const string& s)
 {
-    if (s.empty())
-        return L"";
-
-    static iconv_t cd = iconv_open("UCS-4-INTERNAL", "UTF-8");
-    
-    vector<wchar_t> result(s.length());
-    
-    const char* inbuf = reinterpret_cast<const char*>(s.data());
-    size_t inbytesleft = s.size() * sizeof s[0];
-    char* outbuf = reinterpret_cast<char*>(&result[0]);
-    size_t outbytesleft = result.size() * sizeof result[0];
-    size_t res = iconv(cd, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
-    
-    if (res == static_cast<size_t>(-1))
-    switch (errno) {
-        case EILSEQ: throw std::runtime_error("EILSEQ");
-        case EINVAL: throw std::runtime_error("EINVAL");
-        case E2BIG: throw std::runtime_error("E2BIG");
-        default: throw std::runtime_error(":(");
-    }
-    
-    result.resize(result.size() - outbytesleft / 4);
-        
-    return wstring(result.begin(), result.end());
+    return iconvert<wstring, UCS_4_INTERNAL, UTF_8>(s);
 }
-
 string Gosu::wstringToUTF8(const std::wstring& ws)
 {
-    if (ws.empty())
-        return string();
-
-    static iconv_t cd = iconv_open("UTF-8", "UCS-4-INTERNAL");
-    
-    vector<char> result(ws.length() * 10); // TODO: arbitrary, correct!
-    
-    const char* inbuf = reinterpret_cast<const char*>(ws.data());
-    size_t inbytesleft = ws.size() * sizeof ws[0];
-    char* outbuf = reinterpret_cast<char*>(&result[0]);
-    size_t outbytesleft = result.size() * sizeof result[0];
-    size_t res = iconv(cd, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
-    
-    if (res == static_cast<size_t>(-1))
-    switch (errno) {
-        case EILSEQ: throw std::runtime_error("EILSEQ");
-        case EINVAL: throw std::runtime_error("EINVAL");
-        case E2BIG: throw std::runtime_error("E2BIG");
-        default: throw std::runtime_error(":(");
-    }
-    
-    result.resize(result.size() - outbytesleft);
-    
-    return string(result.begin(), result.end());
+    return iconvert<string, UTF_8, UCS_4_INTERNAL>(ws);
 }
-
-// This is only necessary on OS X
+// This is only necessary on OS X (for text output)
 namespace Gosu {
 vector<unsigned short> wstringToUniChars(const wstring& ws)
 {
-    if (ws.empty())
-        return vector<unsigned short>();
-
-    static iconv_t cd = iconv_open("UCS-2-INTERNAL", "UCS-4-INTERNAL");
-    
-    vector<unsigned short> result(ws.length());
-    
-    const char* inbuf = reinterpret_cast<const char*>(ws.data());
-    size_t inbytesleft = ws.size() * sizeof ws[0];
-    char* outbuf = reinterpret_cast<char*>(&result[0]);
-    size_t outbytesleft = result.size() * sizeof result[0];
-    size_t res = iconv(cd, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
-    
-    if (res == static_cast<size_t>(-1))
-    switch (errno) {
-        case EILSEQ: throw std::runtime_error("EILSEQ");
-        case EINVAL: throw std::runtime_error("EINVAL");
-        case E2BIG: throw std::runtime_error("E2BIG");
-        default: throw std::runtime_error(":(");
-    }
-    
-    result.resize(result.size() - outbytesleft / 2);
-    
-    return result;
+    return iconvert<vector<unsigned short>, UCS_2_INTERNAL, UCS_4_INTERNAL>(ws);
 }
 }
 #elif defined(GOSU_IS_WIN)
@@ -103,14 +85,13 @@ wstring Gosu::utf8ToWstring(const string& utf8)
 	MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), utf8.size() + 1, &buffer[0], buffer.size());
 	return &buffer[0];
 }	
-
 string Gosu::wstringToUTF8(const wstring& ws)
 {
 	unsigned size = WideCharToMultiByte(CP_UTF8, 0, ws.c_str(), ws.size(), 0, 0, 0, 0);
 	vector<char> buffer(size + 1);
 	WideCharToMultiByte(CP_UTF8, 0, ws.c_str(), ws.size(), &buffer[0], buffer.size(), 0, 0);
 	return &buffer[0];
-}	
+}
 #else
 // On Linux, everything ought to be UTF8 anyway -- forward to locale widening/narrowing
 std::wstring Gosu::utf8ToWstring(const std::string& utf8)

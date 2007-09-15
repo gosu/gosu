@@ -691,6 +691,7 @@
 					"-lz_universal",
 					"-lpng_universal",
 					"-lfmod_universal",
+					"-liconv",
 				);
 				PRODUCT_NAME = Gosu;
 				WRAPPER_EXTENSION = framework;
@@ -718,6 +719,7 @@
 					"-lz_universal",
 					"-lpng_universal",
 					"-lfmod_universal",
+					"-liconv",
 				);
 				PRODUCT_NAME = Gosu;
 				WRAPPER_EXTENSION = framework;
@@ -777,6 +779,7 @@
 					"-framework",
 					Foundation,
 					"-lruby",
+					"-liconv",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "RubyGosu Deployment Template";
@@ -809,6 +812,7 @@
 					"-framework",
 					Foundation,
 					"-lruby",
+					"-liconv",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "RubyGosu Deployment Template";
