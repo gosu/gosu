@@ -1,30 +1,29 @@
 #summary Gosu's ToDo list.
 #labels Featured
 
-= Scheduled for 0.7.5 or something =
+= 0.7.6 (probably) =
+  * change Gosu to be suited to 60 Hz games by default! update_interval left for compatibility + special needs
   * use OpenGL on Windows
   * allow/document custom OpenGL integration
 
 = Also ASAP =
   * make sure createText does NOT chop off pixels on OS X!!
   * assure Gosu::File also creates directories as necessary
-  * bundle fmod.dll
   * more sophisticated Audio interface for talking NPC's etc.
   * testing on Vista
-  * special characters should work reliably/in a documented way in Ruby
-  * change Gosu to be suited to 60 Hz games by default! update_interval left for compatibility + special needs
 
-= Major design goals for 0.7.x (input redesign) =
+= Major design goals for 0.7.x (basics. input redesign) =
   * text input system for chat boxes, high-score lists etc.
   * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
   * make the Ruby wrapper's menu bar Command-Q work on OS X!
   * generate Rdoc
+  * change wstring to string? (for 0.8.0)
 
 = Major design goals for 0.8.x (IO, Strings) =
+  * make font substitution work on OS X, Windows
   * delegate Linux support, esp. wrt. gamepads (*help!!*)
   * the window argument in Ruby is annoying, because only one window can be used anyway. Maybe it should be Window.run, and all open Windows should work.
   * simplify Gosu's IO philosophy (C++)
-  * With UTF-8 support in C++ coming, get rid of all the wstring stuff. -> http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2209.html
   * document Gosu's Sockets
 
 = Major design goals for 0.9.x (graphics) =
@@ -36,3 +35,4 @@
 = Major design goals for 1.x (perfection) =
   * Windows: Input will regularly query devices which are not currently attached, thereby causing the game to halt every few seconds - think about this
   * FSAA/mipmap experiments
+ 
