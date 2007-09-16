@@ -20,21 +20,19 @@
   * generate Rdoc
   * change wstring to string? (for 0.8.0)
 
-= Major design goals for 0.8.x (IO, Strings) =
+= Major design goals for 0.8.x (graphics) =
+  * load Image from string in Ruby (RMagick integration)
+  * find a way to factor rot flips out of Gosu => Image/draw redesign
+  * implement clipping and a target() modifier for the new Image
+  * multi-threaded blit queue and float-z-ordering?
   * make font substitution work on OS X, Windows
+
+= Major design goals for 0.9.x (IO, Strings) =
   * delegate Linux support, esp. wrt. gamepads (*help!!*)
   * the window argument in Ruby is annoying, because only one window can be used anyway. Maybe it should be Window.run, and all open Windows should work.
   * simplify Gosu's IO philosophy (C++)
   * document Gosu's Sockets
 
-= Major design goals for 0.9.x (graphics) =
-  * load Image from string in Ruby (RMagick integration)
-  * find a way to factor rot flips out of Gosu => Image/draw redesign
-  * implement clipping and a target() modifier for the new Image
-  * multi-threaded blit queue and float-z-ordering?
-
 = Major design goals for 1.x (perfection) =
   * Windows: Input will regularly query devices which are not currently attached, thereby causing the game to halt every few seconds - think about this
   * FSAA/mipmap experiments
- 
- 
