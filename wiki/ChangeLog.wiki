@@ -10,7 +10,7 @@
   * Mac: Changed userSettingsPrefix to be ~/Library/Preferences
   * Mac: Some changes for Ruby UTF-8 support
   * Windows: Strings in Ruby programs now must be UTF-8 encoded
-  * Windows: FMOD.dll shipped with Gosu (RubyGosu adjusted to find it)
+  * Windows: FMOD.dll ships with Gosu now (RubyGosu adjusted to find it magically)
 
 =0.7.4=
   * Mac: Hats work more reliably than in 0.7.3 (and SDL :P)
@@ -113,4 +113,5 @@
 
 =0.3.0=
 (initial release)
+ 
  
