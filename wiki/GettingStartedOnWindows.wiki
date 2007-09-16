@@ -1,9 +1,5 @@
 #summary How to set up Gosu on Windows.
 
-= Download FMOD (both languages) =
-
-[http://www.fmod.org/ FMOD] is the library we use for everything that involves sound output. As soon as you touch Gosu's sound system during runtime, your application will look for fmod.dll to be accessible in its path. This file is included in FMOD's development SDK: http://www.fmod.org/index.php/release/version/fmodapi375win.zip
-
 = Download Boost, change Visual C++ Directories (C++ only) =
 
 [http://www.boost.org/ Boost] is a collection of libraries that is used throughout Gosu's interface. Many parts of Boost have been marked for inclusion in the next standard of C++, so you'd better look at it anyway! :) Download the latest release and extract it into a separate directory.
@@ -42,13 +38,21 @@ int main(int argc, char* argv[])
 }
 }}}
 
-When loading resources, keep in mind that Gosu's resourcePrefix() will point to the directory your .EXE is located in. You may need to adjust your project settings to build into the directory where your resources reside.
+When loading resources, keep in mind that Gosu's resourcePrefix() will point to the directory your .EXE is located in. You may need to adjust your project settings to build into the directory where your resources reside. Also, you need to copy fmod.dll into the same directory if you are using sound.
 
 = Creating a new Gosu game (Ruby) =
 
-Getting started with Ruby is a lot easier: Create a new Ruby source file, copy gosu.so (and if necessary, fmod.dll) into the same directory and start away. Here is a minimal application to test if everything works:
+Getting started with Ruby is a lot easier.
+If you are working with gems, simply require 'rubygems', then 'gosu'. If you are working with the ZIP archive, copy gosu.so (and if you are using sound, fmod.dll) into the directory where your Ruby code lives. Here is a minimal application to ensure that everything works:
 
 {{{
+begin
+  # In case you use Gosu via RubyGems.
+  require 'rubygems'
+rescue LoadError
+  # In case you don't.
+end
+
 require 'gosu'
 
 class MyWindow < Gosu::Window
@@ -63,3 +67,4 @@ w.show
 }}}
 
 That's it — have fun!
+ 
