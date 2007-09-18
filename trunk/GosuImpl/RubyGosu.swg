@@ -105,6 +105,7 @@
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
+#include <Gosu/ImageData.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Math.hpp>
@@ -195,6 +196,13 @@
           unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight) {
         return new Gosu::Image(window.graphics(), Gosu::utf8ToWstring(filename),
                                srcX, srcY, srcWidth, srcHeight, hardBorders);
+    }
+    void drawAsQuad(double x1, double y1, Color c1,
+            double x2, double y2, Color c2,
+            double x3, double y3, Color c3,
+            double x4, double y4, Color c4,
+            ZPos z, AlphaMode mode = Gosu::amDefault) {
+        $self->getData().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
     }
     %newobject fromText;
     static Gosu::Image* fromText(Gosu::Window& window, const std::wstring& text,

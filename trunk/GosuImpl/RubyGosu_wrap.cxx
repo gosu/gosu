@@ -1973,6 +1973,7 @@ static VALUE mGosu;
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
+#include <Gosu/ImageData.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Math.hpp>
@@ -2321,6 +2322,9 @@ SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_0(Gosu::Window &window,std::string 
 SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_1(Gosu::Window &window,std::string const &filename,bool hardBorders,unsigned int srcX,unsigned int srcY,unsigned int srcWidth,unsigned int srcHeight){
         return new Gosu::Image(window.graphics(), Gosu::utf8ToWstring(filename),
                                srcX, srcY, srcWidth, srcHeight, hardBorders);
+    }
+SWIGINTERN void Gosu_Image_drawAsQuad(Gosu::Image *self,double x1,double y1,Gosu::Color c1,double x2,double y2,Gosu::Color c2,double x3,double y3,Gosu::Color c3,double x4,double y4,Gosu::Color c4,Gosu::ZPos z,Gosu::AlphaMode mode=Gosu::amDefault){
+        self->getData().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
     }
 SWIGINTERN Gosu::Image *Gosu_Image_fromText(Gosu::Window &window,std::wstring const &text,std::wstring const &fontName,unsigned int fontHeight,unsigned int lineSpacing,unsigned int maxWidth,Gosu::TextAlign align){
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
@@ -4677,6 +4681,165 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
+  Gosu::Image *arg1 = (Gosu::Image *) 0 ;
+  double arg2 ;
+  double arg3 ;
+  Gosu::Color arg4 ;
+  double arg5 ;
+  double arg6 ;
+  Gosu::Color arg7 ;
+  double arg8 ;
+  double arg9 ;
+  Gosu::Color arg10 ;
+  double arg11 ;
+  double arg12 ;
+  Gosu::Color arg13 ;
+  Gosu::ZPos arg14 ;
+  Gosu::AlphaMode arg15 = (Gosu::AlphaMode) Gosu::amDefault ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  double val6 ;
+  int ecode6 = 0 ;
+  double val8 ;
+  int ecode8 = 0 ;
+  double val9 ;
+  int ecode9 = 0 ;
+  double val11 ;
+  int ecode11 = 0 ;
+  double val12 ;
+  int ecode12 = 0 ;
+  unsigned char val14 ;
+  int ecode14 = 0 ;
+  
+  if ((argc < 13) || (argc > 14)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 13)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Image, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "drawAsQuad" "', argument " "1"" of type '" "Gosu::Image *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::Image * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "drawAsQuad" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "drawAsQuad" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  {
+    void* ptr;
+    int res = SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+    if (!SWIG_IsOK(res))
+    // TODO: error checking
+    arg4 = Gosu::Color(NUM2UINT(argv[2]));
+    else if (!ptr)
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+    else
+    arg4 = *reinterpret_cast<Gosu::Color*>(ptr);
+  }
+  ecode5 = SWIG_AsVal_double(argv[3], &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "drawAsQuad" "', argument " "5"" of type '" "double""'");
+  } 
+  arg5 = static_cast< double >(val5);
+  ecode6 = SWIG_AsVal_double(argv[4], &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "drawAsQuad" "', argument " "6"" of type '" "double""'");
+  } 
+  arg6 = static_cast< double >(val6);
+  {
+    void* ptr;
+    int res = SWIG_ConvertPtr(argv[5], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+    if (!SWIG_IsOK(res))
+    // TODO: error checking
+    arg7 = Gosu::Color(NUM2UINT(argv[5]));
+    else if (!ptr)
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+    else
+    arg7 = *reinterpret_cast<Gosu::Color*>(ptr);
+  }
+  ecode8 = SWIG_AsVal_double(argv[6], &val8);
+  if (!SWIG_IsOK(ecode8)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "drawAsQuad" "', argument " "8"" of type '" "double""'");
+  } 
+  arg8 = static_cast< double >(val8);
+  ecode9 = SWIG_AsVal_double(argv[7], &val9);
+  if (!SWIG_IsOK(ecode9)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "drawAsQuad" "', argument " "9"" of type '" "double""'");
+  } 
+  arg9 = static_cast< double >(val9);
+  {
+    void* ptr;
+    int res = SWIG_ConvertPtr(argv[8], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+    if (!SWIG_IsOK(res))
+    // TODO: error checking
+    arg10 = Gosu::Color(NUM2UINT(argv[8]));
+    else if (!ptr)
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+    else
+    arg10 = *reinterpret_cast<Gosu::Color*>(ptr);
+  }
+  ecode11 = SWIG_AsVal_double(argv[9], &val11);
+  if (!SWIG_IsOK(ecode11)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode11), "in method '" "drawAsQuad" "', argument " "11"" of type '" "double""'");
+  } 
+  arg11 = static_cast< double >(val11);
+  ecode12 = SWIG_AsVal_double(argv[10], &val12);
+  if (!SWIG_IsOK(ecode12)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode12), "in method '" "drawAsQuad" "', argument " "12"" of type '" "double""'");
+  } 
+  arg12 = static_cast< double >(val12);
+  {
+    void* ptr;
+    int res = SWIG_ConvertPtr(argv[11], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+    if (!SWIG_IsOK(res))
+    // TODO: error checking
+    arg13 = Gosu::Color(NUM2UINT(argv[11]));
+    else if (!ptr)
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+    else
+    arg13 = *reinterpret_cast<Gosu::Color*>(ptr);
+  }
+  ecode14 = SWIG_AsVal_unsigned_SS_char(argv[12], &val14);
+  if (!SWIG_IsOK(ecode14)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode14), "in method '" "drawAsQuad" "', argument " "14"" of type '" "Gosu::ZPos""'");
+  } 
+  arg14 = static_cast< Gosu::ZPos >(val14);
+  if (argc > 13) {
+    {
+      VALUE localTemporary = rb_obj_as_string(argv[13]);
+      if (!strcmp(StringValueCStr(localTemporary), "default"))
+      arg15 = Gosu::amDefault;
+      else if (!strcmp(StringValueCStr(localTemporary), "additive"))
+      arg15 = Gosu::amDefault;
+      else
+      SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
+    }
+  }
+  {
+    try {
+      Gosu_Image_drawAsQuad(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13,arg14,arg15);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Image_from_text(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
   std::wstring *arg2 = 0 ;
@@ -6561,6 +6724,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cImage.klass, "draw", VALUEFUNC(_wrap_Image_draw), -1);
   rb_define_method(cImage.klass, "draw_mod", VALUEFUNC(_wrap_Image_draw_mod), -1);
   rb_define_method(cImage.klass, "draw_rot", VALUEFUNC(_wrap_Image_draw_rot), -1);
+  rb_define_method(cImage.klass, "draw_as_quad", VALUEFUNC(_wrap_Image_draw_as_quad), -1);
   rb_define_singleton_method(cImage.klass, "from_text", VALUEFUNC(_wrap_Image_from_text), -1);
   rb_define_singleton_method(cImage.klass, "load_tiles", VALUEFUNC(_wrap_Image_load_tiles), -1);
   cImage.mark = 0;
