@@ -77,6 +77,7 @@ if ARGV[0] == 'windows-c++' then
   windows_cpp.add_file("README.txt")
   windows_cpp.add_file("Gosu.lib")
   windows_cpp.add_file("GosuDebug.lib")
+  windows_cpp.add_file("fmod.dll")
   windows_cpp.add_dir("Gosu")
   windows_cpp.add_dir("reference")
   windows_cpp.add_file("examples/Tutorial.cpp")
@@ -93,6 +94,7 @@ if ARGV[0] == 'windows-ruby' then
   windows_ruby.add_file("COPYING.txt")
   windows_ruby.add_file("README.txt")
   windows_ruby.add_file("gosu.so")
+  windows_ruby.add_file("fmod.dll")
   windows_ruby.add_dir("examples")
   windows_ruby.del_file("examples/Tutorial.cpp")
   windows_ruby.zip_and_kill
