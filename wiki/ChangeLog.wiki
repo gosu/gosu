@@ -1,6 +1,9 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.6=
+  * Ruby: Image#draw_as_quad
+
 =0.7.5=
   * All: functions for button id<>character conversion are static now. Code shouldn't break.
   * Ruby: Fixed name clash in CptnRuby.rb
@@ -113,5 +116,6 @@
 
 =0.3.0=
 (initial release)
+ 
  
  
