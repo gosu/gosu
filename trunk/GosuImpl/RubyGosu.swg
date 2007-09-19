@@ -204,6 +204,23 @@
             ZPos z, AlphaMode mode = Gosu::amDefault) {
         $self->getData().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
     }
+    %newobject fromBlob;
+    static Gosu::Image* fromBlob(Gosu::Window& window, const std::string& blob, int width, int height,
+                                 bool hardBorders = false) {
+        if (width * height * 4 != blob.length())
+            throw std::logic_error("Blob length mismatch!");
+        Gosu::Bitmap bmp;
+        bmp.resize(width, height);
+        const unsigned* rgbaIter = reinterpret_cast<const unsigned*>(blob.data());
+        for (unsigned y = 0; y < height; ++y)
+            for (unsigned x = 0; x < width; ++x)
+            {
+                unsigned rgba = *rgbaIter;
+                bmp.setPixel(x, y, Gosu::Color(rgba).abgr()); //((rgba & 0xff000000) >> 8) | ((rgba & 0x00ffffff) << 8));
+                ++rgbaIter;
+            }
+        return new Gosu::Image(window.graphics(), bmp, hardBorders);
+    }
     %newobject fromText;
     static Gosu::Image* fromText(Gosu::Window& window, const std::wstring& text,
                                    const std::wstring& fontName, unsigned fontHeight,
