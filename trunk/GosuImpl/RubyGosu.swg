@@ -115,6 +115,42 @@
 #include <Gosu/Window.hpp>
 
 #include <sstream>
+
+// Allow filenames and RMagick Images to be passed where Bitmaps are needed.
+namespace Gosu
+{
+    Gosu::Bitmap loadBitmap(VALUE val)
+    {
+        // Try to treat as filename first.
+        if (rb_respond_to(val, rb_intern("to_str")))
+        {
+            const char* filename = STR2CSTR(rb_funcall(val, rb_intern("to_str"), 0));
+            return quickLoadBitmap(Gosu::utf8ToWstring(filename));
+        }
+
+        // Otherwise, try to call .to_blob on it.
+        // (Works with RMagick).
+        VALUE conversion = rb_str_new2("to_blob { self.format = 'RGBA'; self.depth = 8 }");
+        VALUE blob = rb_obj_instance_eval(1, &conversion, val);
+        Check_SafeStr(blob);
+        unsigned width = NUM2UINT(rb_funcall(val, rb_intern("columns"), 0));
+        unsigned height = NUM2UINT(rb_funcall(val, rb_intern("rows"), 0));
+                                 
+        if (width * height * 4 != RSTRING(blob)->len)
+            throw std::logic_error("Blob length mismatch!");
+        Bitmap result;
+        result.resize(width, height);
+        const unsigned* rgbaIter = reinterpret_cast<const unsigned*>(RSTRING(blob)->ptr);
+        for (unsigned y = 0; y < height; ++y)
+            for (unsigned x = 0; x < width; ++x)
+            {
+                unsigned rgba = *rgbaIter;
+                result.setPixel(x, y, Gosu::Color(rgba).abgr()); // swap R and B
+                ++rgbaIter;
+            }
+        return result;
+    }
+}
 %}
 
 // Exception wrapping
@@ -189,13 +225,13 @@
 %ignore Gosu::Image::Image(Graphics& graphics, const Bitmap& source, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, bool hardBorders = false);
 %include "../Gosu/Image.hpp"
 %extend Gosu::Image {
-    Image(Gosu::Window& window, const std::string& filename, bool hardBorders = false) {
-        return new Gosu::Image(window.graphics(), Gosu::utf8ToWstring(filename), hardBorders);
+    Image(Gosu::Window& window, VALUE source, bool hardBorders = false) {
+        return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source), hardBorders);
     }
-    Image(Gosu::Window& window, const std::string& filename, bool hardBorders,
+    Image(Gosu::Window& window, VALUE source, bool hardBorders,
           unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight) {
-        return new Gosu::Image(window.graphics(), Gosu::utf8ToWstring(filename),
-                               srcX, srcY, srcWidth, srcHeight, hardBorders);
+        return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source),
+            srcX, srcY, srcWidth, srcHeight, hardBorders);
     }
     void drawAsQuad(double x1, double y1, Color c1,
             double x2, double y2, Color c2,
@@ -204,23 +240,6 @@
             ZPos z, AlphaMode mode = Gosu::amDefault) {
         $self->getData().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
     }
-    %newobject fromBlob;
-    static Gosu::Image* fromBlob(Gosu::Window& window, const std::string& blob, int width, int height,
-                                 bool hardBorders = false) {
-        if (width * height * 4 != blob.length())
-            throw std::logic_error("Blob length mismatch!");
-        Gosu::Bitmap bmp;
-        bmp.resize(width, height);
-        const unsigned* rgbaIter = reinterpret_cast<const unsigned*>(blob.data());
-        for (unsigned y = 0; y < height; ++y)
-            for (unsigned x = 0; x < width; ++x)
-            {
-                unsigned rgba = *rgbaIter;
-                bmp.setPixel(x, y, Gosu::Color(rgba).abgr()); //((rgba & 0xff000000) >> 8) | ((rgba & 0x00ffffff) << 8));
-                ++rgbaIter;
-            }
-        return new Gosu::Image(window.graphics(), bmp, hardBorders);
-    }
     %newobject fromText;
     static Gosu::Image* fromText(Gosu::Window& window, const std::wstring& text,
                                    const std::wstring& fontName, unsigned fontHeight,
@@ -228,12 +247,11 @@
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
         return new Gosu::Image(window.graphics(), bmp);
     }
-    static std::vector<Gosu::Image*> loadTiles(Gosu::Window& window, const std::wstring& filename,
+    static std::vector<Gosu::Image*> loadTiles(Gosu::Window& window, VALUE source,
                                                int tileWidth, int tileHeight, bool hardBorders) {
-        Gosu::Bitmap bmp = Gosu::quickLoadBitmap(filename);
         std::vector<Gosu::Image*> vec;
         // TODO: const correctness (<- did I mean exception safety?)
-        Gosu::imagesFromTiledBitmap(window.graphics(), bmp,
+        Gosu::imagesFromTiledBitmap(window.graphics(), Gosu::loadBitmap(source),
                                     tileWidth, tileHeight, hardBorders, vec);
         return vec;        
     }

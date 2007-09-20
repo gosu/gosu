@@ -1984,6 +1984,42 @@ static VALUE mGosu;
 
 #include <sstream>
 
+// Allow filenames and RMagick Images to be passed where Bitmaps are needed.
+namespace Gosu
+{
+    Gosu::Bitmap loadBitmap(VALUE val)
+    {
+        // Try to treat as filename first.
+        if (rb_respond_to(val, rb_intern("to_str")))
+        {
+            const char* filename = STR2CSTR(rb_funcall(val, rb_intern("to_str"), 0));
+            return quickLoadBitmap(Gosu::utf8ToWstring(filename));
+        }
+
+        // Otherwise, try to call .to_blob on it.
+        // (Works with RMagick).
+        VALUE conversion = rb_str_new2("to_blob { self.format = 'RGBA'; self.depth = 8 }");
+        VALUE blob = rb_obj_instance_eval(1, &conversion, val);
+        Check_SafeStr(blob);
+        unsigned width = NUM2UINT(rb_funcall(val, rb_intern("columns"), 0));
+        unsigned height = NUM2UINT(rb_funcall(val, rb_intern("rows"), 0));
+                                 
+        if (width * height * 4 != RSTRING(blob)->len)
+            throw std::logic_error("Blob length mismatch!");
+        Bitmap result;
+        result.resize(width, height);
+        const unsigned* rgbaIter = reinterpret_cast<const unsigned*>(RSTRING(blob)->ptr);
+        for (unsigned y = 0; y < height; ++y)
+            for (unsigned x = 0; x < width; ++x)
+            {
+                unsigned rgba = *rgbaIter;
+                result.setPixel(x, y, Gosu::Color(rgba).abgr()); // swap R and B
+                ++rgbaIter;
+            }
+        return result;
+    }
+}
+
 
 #include <limits.h>
 #ifndef LLONG_MIN
@@ -2229,6 +2265,47 @@ SWIGINTERN Gosu::Font *new_Gosu_Font(Gosu::Window &window,std::wstring const &fo
     }
 
 SWIGINTERN int
+SWIG_AsVal_bool (VALUE obj, bool *val)
+{
+  if (obj == Qtrue) {
+    if (val) *val = true;
+    return SWIG_OK;
+  } else if (obj == Qfalse) {
+    if (val) *val = false;
+    return SWIG_OK;
+  } else {
+    int res = 0;
+    if (SWIG_AsVal_int (obj, &res) == SWIG_OK) {    
+      if (val) *val = res ? true : false;
+      return SWIG_OK;
+    }
+  }  
+  return SWIG_TypeError;
+}
+
+SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_0(Gosu::Window &window,VALUE source,bool hardBorders=false){
+        return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source), hardBorders);
+    }
+SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_1(Gosu::Window &window,VALUE source,bool hardBorders,unsigned int srcX,unsigned int srcY,unsigned int srcWidth,unsigned int srcHeight){
+        return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source),
+            srcX, srcY, srcWidth, srcHeight, hardBorders);
+    }
+SWIGINTERN void Gosu_Image_drawAsQuad(Gosu::Image *self,double x1,double y1,Gosu::Color c1,double x2,double y2,Gosu::Color c2,double x3,double y3,Gosu::Color c3,double x4,double y4,Gosu::Color c4,Gosu::ZPos z,Gosu::AlphaMode mode=Gosu::amDefault){
+        self->getData().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
+    }
+SWIGINTERN Gosu::Image *Gosu_Image_fromText(Gosu::Window &window,std::wstring const &text,std::wstring const &fontName,unsigned int fontHeight,unsigned int lineSpacing,unsigned int maxWidth,Gosu::TextAlign align){
+        Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
+        return new Gosu::Image(window.graphics(), bmp);
+    }
+SWIGINTERN std::vector<Gosu::Image * > Gosu_Image_loadTiles(Gosu::Window &window,VALUE source,int tileWidth,int tileHeight,bool hardBorders){
+        std::vector<Gosu::Image*> vec;
+        // TODO: const correctness (<- did I mean exception safety?)
+        Gosu::imagesFromTiledBitmap(window.graphics(), Gosu::loadBitmap(source),
+                                    tileWidth, tileHeight, hardBorders, vec);
+        return vec;        
+    }
+
+SWIGINTERN int
 SWIG_AsCharPtrAndSize(VALUE obj, char** cptr, size_t* psize, int *alloc)
 {
   if (TYPE(obj) == T_STRING) {
@@ -2296,63 +2373,6 @@ SWIG_AsPtr_std_string (VALUE obj, std::string **val)
   return SWIG_ERROR;
 }
 
-
-SWIGINTERN int
-SWIG_AsVal_bool (VALUE obj, bool *val)
-{
-  if (obj == Qtrue) {
-    if (val) *val = true;
-    return SWIG_OK;
-  } else if (obj == Qfalse) {
-    if (val) *val = false;
-    return SWIG_OK;
-  } else {
-    int res = 0;
-    if (SWIG_AsVal_int (obj, &res) == SWIG_OK) {    
-      if (val) *val = res ? true : false;
-      return SWIG_OK;
-    }
-  }  
-  return SWIG_TypeError;
-}
-
-SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_0(Gosu::Window &window,std::string const &filename,bool hardBorders=false){
-        return new Gosu::Image(window.graphics(), Gosu::utf8ToWstring(filename), hardBorders);
-    }
-SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_1(Gosu::Window &window,std::string const &filename,bool hardBorders,unsigned int srcX,unsigned int srcY,unsigned int srcWidth,unsigned int srcHeight){
-        return new Gosu::Image(window.graphics(), Gosu::utf8ToWstring(filename),
-                               srcX, srcY, srcWidth, srcHeight, hardBorders);
-    }
-SWIGINTERN void Gosu_Image_drawAsQuad(Gosu::Image *self,double x1,double y1,Gosu::Color c1,double x2,double y2,Gosu::Color c2,double x3,double y3,Gosu::Color c3,double x4,double y4,Gosu::Color c4,Gosu::ZPos z,Gosu::AlphaMode mode=Gosu::amDefault){
-        self->getData().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
-    }
-SWIGINTERN Gosu::Image *Gosu_Image_fromBlob(Gosu::Window &window,std::string const &blob,int width,int height,bool hardBorders=false){
-        if (width * height * 4 != blob.length())
-            throw std::logic_error("Blob length mismatch!");
-        Gosu::Bitmap bmp;
-        bmp.resize(width, height);
-        const unsigned* rgbaIter = reinterpret_cast<const unsigned*>(blob.data());
-        for (unsigned y = 0; y < height; ++y)
-            for (unsigned x = 0; x < width; ++x)
-            {
-                unsigned rgba = *rgbaIter;
-                bmp.setPixel(x, y, Gosu::Color(rgba).abgr()); //((rgba & 0xff000000) >> 8) | ((rgba & 0x00ffffff) << 8));
-                ++rgbaIter;
-            }
-        return new Gosu::Image(window.graphics(), bmp, hardBorders);
-    }
-SWIGINTERN Gosu::Image *Gosu_Image_fromText(Gosu::Window &window,std::wstring const &text,std::wstring const &fontName,unsigned int fontHeight,unsigned int lineSpacing,unsigned int maxWidth,Gosu::TextAlign align){
-        Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
-        return new Gosu::Image(window.graphics(), bmp);
-    }
-SWIGINTERN std::vector<Gosu::Image * > Gosu_Image_loadTiles(Gosu::Window &window,std::wstring const &filename,int tileWidth,int tileHeight,bool hardBorders){
-        Gosu::Bitmap bmp = Gosu::quickLoadBitmap(filename);
-        std::vector<Gosu::Image*> vec;
-        // TODO: const correctness (<- did I mean exception safety?)
-        Gosu::imagesFromTiledBitmap(window.graphics(), bmp,
-                                    tileWidth, tileHeight, hardBorders, vec);
-        return vec;        
-    }
 SWIGINTERN Gosu::Sample *new_Gosu_Sample(Gosu::Window &window,std::string const &filename){
         return new Gosu::Sample(window.audio(), Gosu::utf8ToWstring(filename));
     }
@@ -4453,12 +4473,11 @@ fail:
 SWIGINTERN VALUE
 _wrap_new_Image__SWIG_0(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
-  std::string *arg2 = 0 ;
+  VALUE arg2 = (VALUE) 0 ;
   bool arg3 = (bool) false ;
   Gosu::Image *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
   bool val3 ;
   int ecode3 = 0 ;
   const char *classname SWIGUNUSED = "Gosu::Image";
@@ -4474,17 +4493,7 @@ _wrap_new_Image__SWIG_0(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Gosu::Image" "', argument " "1"" of type '" "Gosu::Window &""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(argv[1], &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Gosu::Image" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Gosu::Image" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    arg2 = ptr;
-  }
+  arg2 = argv[1];
   if (argc > 2) {
     ecode3 = SWIG_AsVal_bool(argv[2], &val3);
     if (!SWIG_IsOK(ecode3)) {
@@ -4494,16 +4503,14 @@ _wrap_new_Image__SWIG_0(int argc, VALUE *argv, VALUE self) {
   }
   {
     try {
-      result = (Gosu::Image *)new_Gosu_Image__SWIG_0(*arg1,(std::string const &)*arg2,arg3);DATA_PTR(self) = result;
+      result = (Gosu::Image *)new_Gosu_Image__SWIG_0(*arg1,arg2,arg3);DATA_PTR(self) = result;
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return self;
 fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return Qnil;
 }
 
@@ -4528,7 +4535,7 @@ _wrap_Image_allocate(VALUE self) {
 SWIGINTERN VALUE
 _wrap_new_Image__SWIG_1(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
-  std::string *arg2 = 0 ;
+  VALUE arg2 = (VALUE) 0 ;
   bool arg3 ;
   unsigned int arg4 ;
   unsigned int arg5 ;
@@ -4537,7 +4544,6 @@ _wrap_new_Image__SWIG_1(int argc, VALUE *argv, VALUE self) {
   Gosu::Image *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
   bool val3 ;
   int ecode3 = 0 ;
   unsigned int val4 ;
@@ -4561,17 +4567,7 @@ _wrap_new_Image__SWIG_1(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Gosu::Image" "', argument " "1"" of type '" "Gosu::Window &""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(argv[1], &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Gosu::Image" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Gosu::Image" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    arg2 = ptr;
-  }
+  arg2 = argv[1];
   ecode3 = SWIG_AsVal_bool(argv[2], &val3);
   if (!SWIG_IsOK(ecode3)) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Gosu::Image" "', argument " "3"" of type '" "bool""'");
@@ -4599,16 +4595,14 @@ _wrap_new_Image__SWIG_1(int argc, VALUE *argv, VALUE self) {
   arg7 = static_cast< unsigned int >(val7);
   {
     try {
-      result = (Gosu::Image *)new_Gosu_Image__SWIG_1(*arg1,(std::string const &)*arg2,arg3,arg4,arg5,arg6,arg7);DATA_PTR(self) = result;
+      result = (Gosu::Image *)new_Gosu_Image__SWIG_1(*arg1,arg2,arg3,arg4,arg5,arg6,arg7);DATA_PTR(self) = result;
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return self;
 fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
   return Qnil;
 }
 
@@ -4629,8 +4623,7 @@ SWIGINTERN VALUE _wrap_new_Image(int nargs, VALUE *args, VALUE self) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
-      _v = SWIG_CheckState(res);
+      _v = (argv[1] != 0);
       if (_v) {
         if (argc <= 2) {
           return _wrap_new_Image__SWIG_0(nargs, args, self);
@@ -4651,8 +4644,7 @@ SWIGINTERN VALUE _wrap_new_Image(int nargs, VALUE *args, VALUE self) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
-      _v = SWIG_CheckState(res);
+      _v = (argv[1] != 0);
       if (_v) {
         {
           int res = SWIG_AsVal_bool(argv[2], NULL);
@@ -4855,80 +4847,6 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Image_from_blob(int argc, VALUE *argv, VALUE self) {
-  Gosu::Window *arg1 = 0 ;
-  std::string *arg2 = 0 ;
-  int arg3 ;
-  int arg4 ;
-  bool arg5 = (bool) false ;
-  Gosu::Image *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  int val3 ;
-  int ecode3 = 0 ;
-  int val4 ;
-  int ecode4 = 0 ;
-  bool val5 ;
-  int ecode5 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 4) || (argc > 5)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Gosu__Window,  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Gosu_Image_fromBlob" "', argument " "1"" of type '" "Gosu::Window &""'"); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Gosu_Image_fromBlob" "', argument " "1"" of type '" "Gosu::Window &""'"); 
-  }
-  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(argv[1], &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Gosu_Image_fromBlob" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Gosu_Image_fromBlob" "', argument " "2"" of type '" "std::string const &""'"); 
-    }
-    arg2 = ptr;
-  }
-  ecode3 = SWIG_AsVal_int(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Gosu_Image_fromBlob" "', argument " "3"" of type '" "int""'");
-  } 
-  arg3 = static_cast< int >(val3);
-  ecode4 = SWIG_AsVal_int(argv[3], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Gosu_Image_fromBlob" "', argument " "4"" of type '" "int""'");
-  } 
-  arg4 = static_cast< int >(val4);
-  if (argc > 4) {
-    ecode5 = SWIG_AsVal_bool(argv[4], &val5);
-    if (!SWIG_IsOK(ecode5)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Gosu_Image_fromBlob" "', argument " "5"" of type '" "bool""'");
-    } 
-    arg5 = static_cast< bool >(val5);
-  }
-  {
-    try {
-      result = (Gosu::Image *)Gosu_Image_fromBlob(*arg1,(std::string const &)*arg2,arg3,arg4,arg5);
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN |  0 );
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return vresult;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
 _wrap_Image_from_text(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
   std::wstring *arg2 = 0 ;
@@ -5016,14 +4934,13 @@ fail:
 SWIGINTERN VALUE
 _wrap_Image_load_tiles(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
-  std::wstring *arg2 = 0 ;
+  VALUE arg2 = (VALUE) 0 ;
   int arg3 ;
   int arg4 ;
   bool arg5 ;
   SwigValueWrapper<std::vector<Gosu::Image * > > result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  std::wstring temp2 ;
   int val3 ;
   int ecode3 = 0 ;
   int val4 ;
@@ -5043,11 +4960,7 @@ _wrap_Image_load_tiles(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Gosu_Image_loadTiles" "', argument " "1"" of type '" "Gosu::Window &""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  {
-    VALUE localTemporary = rb_obj_as_string(argv[1]);
-    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
-    arg2 = &temp2;
-  }
+  arg2 = argv[1];
   ecode3 = SWIG_AsVal_int(argv[2], &val3);
   if (!SWIG_IsOK(ecode3)) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Gosu_Image_loadTiles" "', argument " "3"" of type '" "int""'");
@@ -5065,7 +4978,7 @@ _wrap_Image_load_tiles(int argc, VALUE *argv, VALUE self) {
   arg5 = static_cast< bool >(val5);
   {
     try {
-      result = Gosu_Image_loadTiles(*arg1,(std::wstring const &)*arg2,arg3,arg4,arg5);
+      result = Gosu_Image_loadTiles(*arg1,arg2,arg3,arg4,arg5);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -6814,7 +6727,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cImage.klass, "draw_mod", VALUEFUNC(_wrap_Image_draw_mod), -1);
   rb_define_method(cImage.klass, "draw_rot", VALUEFUNC(_wrap_Image_draw_rot), -1);
   rb_define_method(cImage.klass, "draw_as_quad", VALUEFUNC(_wrap_Image_draw_as_quad), -1);
-  rb_define_singleton_method(cImage.klass, "from_blob", VALUEFUNC(_wrap_Image_from_blob), -1);
   rb_define_singleton_method(cImage.klass, "from_text", VALUEFUNC(_wrap_Image_from_text), -1);
   rb_define_singleton_method(cImage.klass, "load_tiles", VALUEFUNC(_wrap_Image_load_tiles), -1);
   cImage.mark = 0;
