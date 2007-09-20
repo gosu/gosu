@@ -143,7 +143,8 @@ class Map
   attr_reader :width, :height, :gems
   
   def initialize(window, filename)
-    @tileset = Image.load_tiles(window, "media/CptnRuby Tileset.bmp", 50, 50, true)
+    # Load 60x60 tiles, 5px overlap in all four directions.
+    @tileset = Image.load_tiles(window, "media/CptnRuby Tileset.png", 60, 60, true)
     @sky = Image.new(window, "media/Space.png", true)
 
     gem_img = Image.new(window, "media/CptnRuby Gem.png", false)
@@ -177,7 +178,9 @@ class Map
       @width.times do |x|
         tile = @tiles[x][y]
         if tile
-          @tileset[tile].draw(x * 50 - screen_x, y * 50 - screen_y, 0)
+          # Draw the tile with an offset (tile images have some overlap)
+          # Scrolling is implemented here just as in the game objects.
+          @tileset[tile].draw(x * 50 - screen_x - 5, y * 50 - screen_y - 5, 0)
         end
       end
     end
