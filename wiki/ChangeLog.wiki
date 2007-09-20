@@ -2,6 +2,7 @@
 #labels Featured
 
 =0.7.6=
+  * Ruby: RMagick Images can be passed instead of filenames
   * Ruby: Image#draw_as_quad
 
 =0.7.5=
@@ -116,6 +117,7 @@
 
 =0.3.0=
 (initial release)
+ 
  
  
  
