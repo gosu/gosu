@@ -2,8 +2,9 @@
 #labels Featured
 
 = 0.7.6 (probably) =
-  * changes to make Ruby/Gosu as flexible as C++ Gosu (draw_ex)
   * change Gosu to be suited to 60 Hz games by default! update_interval left for compatibility + special needs
+
+= 0.7.7=
   * use OpenGL on Windows
   * allow/document custom OpenGL integration
 
@@ -36,3 +37,4 @@
 = Major design goals for 1.x (perfection) =
   * Windows: Input will regularly query devices which are not currently attached, thereby causing the game to halt every few seconds - think about this
   * FSAA/mipmap experiments
+ 
