@@ -29,7 +29,7 @@
   * `width`
   * `height`
   * `draw(x, y, z, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`
-  * `draw_rot(x, y, z, angle, center_x=0.5, center_y=0.5, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`
+  * `draw_rot(x, y, z, angle, center_x=0.5, center_y=0.5, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`: center_x Relative horizontal position of the rotation center on the image. 0 is the left border, 1 is the right border, 0.5 is the center (and default)—the same applies to center_y, respectively.
   * `self.from_text(window, text, font_name, font_height, line_spacing, max_width, align)`: Creates a block of text of width max_width. Each line will take font_height + line_spacing pixels of vertical space.`: align must be one of :left, :right, :center oder :justify
   * `self.load_tiles(window, filename, tile_width, tile_height, hard_borders)`: tile_width is either the width of one tile in pixels or the number of columns, tile_height is its vertical equivalent
 
@@ -169,3 +169,4 @@ GpLeft
 GpRight
 GpUp
 }}}
+ 
