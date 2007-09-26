@@ -28,7 +28,7 @@ end
 #  7) optimize Map#draw so only tiles on screen are drawn (needs modulo, a pen
 #     and paper to figure out)
 #  8) add loading of next level when all gems are collected
-# Enemies, a more sophisticated object system, weapons, title and credits
+# ...Enemies, a more sophisticated object system, weapons, title and credits
 # screens...
 
 require 'gosu'
@@ -171,9 +171,18 @@ class Map
   end
   
   def draw(screen_x, screen_y)
+    # Very basic parallax-scrolling background.
+    2.times do |repeat_x|
+      2.times do |repeat_y|
+        x = -screen_x / 2 % 640
+        y = -screen_y / 2 % 480
+        @sky.draw(x - repeat_x * 640, y - repeat_y * 480, 0)
+      end
+    end
+    
+
     # Very primitive drawing function:
     # Draws all the tiles, some off-screen, some on-screen.
-    @sky.draw(0, 0, 0)
     @height.times do |y|
       @width.times do |x|
         tile = @tiles[x][y]
