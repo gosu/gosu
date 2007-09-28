@@ -103,6 +103,7 @@
 			>
 			<FileConfiguration
 				Name="Release|Win32"
+				ExcludedFromBuild="true"
 				>
 				<Tool
 					Name="VCCustomBuildTool"
@@ -110,6 +111,10 @@
 					Outputs="RubyGosu_wrap.cxx;RubyGosu_wrap.h"
 				/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\GosuImpl\RubyGosu_DllMain.cxx"
+			>
 		</File>
 		<File
 			RelativePath="..\GosuImpl\RubyGosu_wrap.cxx"

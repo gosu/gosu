@@ -1,5 +1,6 @@
 #include <Gosu/Window.hpp>
 #include <Gosu/WinUtility.hpp>
+#include <Gosu/Timing.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Audio.hpp>
 #include <Gosu/Input.hpp>
@@ -57,6 +58,7 @@ struct Gosu::Window::Impl
     boost::scoped_ptr<Graphics> graphics;
     boost::scoped_ptr<Audio> audio;
     boost::scoped_ptr<Input> input;
+	unsigned updateInterval;
 
     Impl()
     : handle(0)
@@ -127,7 +129,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     input().onButtonDown = boost::bind(&Window::buttonDown, this, _1);
     input().onButtonUp = boost::bind(&Window::buttonUp, this, _1);
 
-    ::SetTimer(handle(), 1337, updateInterval, 0);
+    pimpl->updateInterval = updateInterval;
 }
 
 Gosu::Window::~Window()
@@ -158,8 +160,27 @@ void Gosu::Window::show()
     try
     {
         Win::processMessages();
-        while (::IsWindowVisible(handle()) == TRUE)
-            Win::handleMessage();
+
+		unsigned lastTick = 0;
+		bool lastFrameSkipped = false;
+
+		for (;;) 
+	    {
+			Win::processMessages();
+
+			if (!::IsWindowVisible(handle()))
+				return;
+
+			unsigned ms = milliseconds();
+
+			if (ms >= lastTick + pimpl->updateInterval)
+			{
+				lastTick = ms;
+				input().update();
+			    update();
+				::InvalidateRect(handle(), 0, FALSE), lastFrameSkipped = false;
+			}
+		}
     }
     catch (...)
     {
@@ -217,17 +238,6 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
     if (message == WM_CLOSE)
     {
         close();
-        return 0;
-    }
-
-    if (message == WM_TIMER)
-    {
-        if (::IsWindowVisible(handle()) == TRUE)
-        {
-            input().update();
-            update();
-            ::InvalidateRect(handle(), 0, FALSE);
-        }
         return 0;
     }
 
