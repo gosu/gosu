@@ -58,7 +58,7 @@ struct Gosu::Window::Impl
     boost::scoped_ptr<Graphics> graphics;
     boost::scoped_ptr<Audio> audio;
     boost::scoped_ptr<Input> input;
-	unsigned updateInterval;
+	double updateInterval;
 
     Impl()
     : handle(0)
@@ -73,7 +73,7 @@ struct Gosu::Window::Impl
 };
 
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
-    unsigned updateInterval)
+    double updateInterval)
 : pimpl(new Impl)
 {
     // Don't even get started when there's no suitable display mode.
@@ -173,7 +173,7 @@ void Gosu::Window::show()
 
 			unsigned ms = milliseconds();
 
-			if (ms >= lastTick + pimpl->updateInterval)
+			if (ms - lastTick >= pimpl->updateInterval)
 			{
 				lastTick = ms;
 				input().update();
