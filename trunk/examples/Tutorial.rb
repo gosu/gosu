@@ -87,7 +87,7 @@ end
 
 class GameWindow < Gosu::Window
   def initialize
-    super(640, 480, false, 20)
+    super(640, 480, false)
     self.caption = "Gosu Tutorial Game"
     
     @background_image = Gosu::Image.new(self, "media/Space.png", true)

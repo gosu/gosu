@@ -2432,7 +2432,7 @@ SWIGINTERN int Gosu_Window_height(Gosu::Window const *self){
 
 #include "RubyGosu_wrap.h"
 
-SwigDirector_Window::SwigDirector_Window(VALUE self, unsigned int width, unsigned int height, bool fullscreen, unsigned int updateInterval): Gosu::Window(width, height, fullscreen, updateInterval), Swig::Director(self) {
+SwigDirector_Window::SwigDirector_Window(VALUE self, unsigned int width, unsigned int height, bool fullscreen, double updateInterval): Gosu::Window(width, height, fullscreen, updateInterval), Swig::Director(self) {
   
 }
 
@@ -5351,7 +5351,7 @@ _wrap_new_Window(int argc, VALUE *argv, VALUE self) {
   unsigned int arg2 ;
   unsigned int arg3 ;
   bool arg4 ;
-  unsigned int arg5 ;
+  double arg5 = (double) 16.666666 ;
   Gosu::Window *result = 0 ;
   unsigned int val2 ;
   int ecode2 = 0 ;
@@ -5359,12 +5359,12 @@ _wrap_new_Window(int argc, VALUE *argv, VALUE self) {
   int ecode3 = 0 ;
   bool val4 ;
   int ecode4 = 0 ;
-  unsigned int val5 ;
+  double val5 ;
   int ecode5 = 0 ;
   const char *classname SWIGUNUSED = "Gosu::Window";
   
-  if ((argc < 4) || (argc > 4)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
+  if ((argc < 3) || (argc > 4)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
   }
   arg1 = self;
   ecode2 = SWIG_AsVal_unsigned_SS_int(argv[0], &val2);
@@ -5382,11 +5382,13 @@ _wrap_new_Window(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Gosu::Window" "', argument " "4"" of type '" "bool""'");
   } 
   arg4 = static_cast< bool >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_int(argv[3], &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Gosu::Window" "', argument " "5"" of type '" "unsigned int""'");
-  } 
-  arg5 = static_cast< unsigned int >(val5);
+  if (argc > 3) {
+    ecode5 = SWIG_AsVal_double(argv[3], &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Gosu::Window" "', argument " "5"" of type '" "double""'");
+    } 
+    arg5 = static_cast< double >(val5);
+  }
   {
     try {
       if ( strcmp(rb_obj_classname(self), classname) != 0 ) {

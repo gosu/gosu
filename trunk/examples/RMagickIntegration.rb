@@ -1,25 +1,55 @@
-require '../gosu'
-require 'rubygems'
+begin
+  # In case you use Gosu via RubyGems.
+  require 'rubygems'
+rescue LoadError
+  # In case you don't.
+end
+
+# A (too) simple Gorilla-style shooter for two players.
+# Shows how Gosu and RMagick can be used together to generate a map, implement
+# a dynamic landscape and generally look great.
+
+require 'gosu'
 require 'rmagick'
 
 NULL_PIXEL = Magick::Pixel.from_color('none')
 
+# The class for this game's map.
+# Design:
+# * Dynamic map creation at startup, holding it as RMagick Image in @image
+# * Testing for solidity by testing @image's pixel values
+# * Drawing by (re)creating an array of Gosu::Image instances, each representing
+#   a part of the large @image
+# * Blasting holes into the map is implemented by drawing and erasing portions
+#   of @image, then setting the corresponding Gosu::Image instances to nil, so
+#   they will be recreated in Map#draw
+
 class Map
-  WIDTH = 800
-  HEIGHT = 600
+  WIDTH, HEIGHT = 800, 600
   TILE_SIZE = 100
   TILES_X = WIDTH / TILE_SIZE
   TILES_Y = HEIGHT / TILE_SIZE
   
-  def self.generate_map_image
-    map = Magick::Image.new(WIDTH, HEIGHT) { self.background_color = 'none' }
+  def initialize(window)
+    # We'll need the window later for re-creating Gosu images.
+    @window = window
+
+    # Let's start with something simple and load the sky via RMagick.
+    # Loading JPEG files isn't possible with Gosu, so say wow!
+    sky = Magick::Image.read("media/Sky.jpg").first
+    @sky = Gosu::Image.new(window, sky, true)
     
+    # This is the one large RMagick image that represents the map.
+    @map = Magick::Image.new(WIDTH, HEIGHT) { self.background_color = 'none' }
+    
+    # Set up a Draw object that fills with an earth texture.
     earth = Magick::Image.read('media/Earth.png').first.resize(1.5)
     gc = Magick::Draw.new
     gc.pattern('earth', 0, 0, earth.columns, earth.rows) { gc.composite(0, 0, 0, 0, earth) }    
     gc.fill('earth')
     gc.stroke('#603000').stroke_width(1.5)
-    
+    # Draw an island with ... TODO: continue here ;)
+    TODO!
     polypoints = [0, HEIGHT]
     0.upto(TILES_X) do |x|
       polypoints += [x * TILE_SIZE, HEIGHT * 0.2 + rand(HEIGHT * 0.8)]
@@ -27,7 +57,7 @@ class Map
     polypoints += [WIDTH, HEIGHT]
     gc.bezier(*polypoints)
     gc.draw(map)
-        
+    
     fill = Magick::GradientFill.new(0, HEIGHT * 0.4, WIDTH, HEIGHT * 0.4, '#fff', '#666')
     gradient = Magick::Image.new(WIDTH, HEIGHT, fill)
     gradient = map.composite(gradient, 0, 0, Magick::InCompositeOp)
@@ -39,79 +69,55 @@ class Map
     map.composite!(star, (WIDTH - star.columns) / 2,
       star_y - star.rows * 0.85, Magick::DstOverCompositeOp)
 
-    map
-  end
-  
-  def self.split(image)
-    result = []
-    (TILES_Y).times do |y|
-      (TILES_X).times do |x|
-        result << image.crop(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
-      end
-    end
-    result
-  end
-
-  def initialize(window)
-    @window = window
-    huge_map = Map.generate_map_image
-    @rmagick_images = Map.split(huge_map)
-    @gosu_images = @rmagick_images.map { |src| Gosu::Image.new(window, src, true) }
-
-    # Load a JPEG file via RMagick!
-    sky = Magick::Image.read("media/Sky.jpg").first
-    @sky = Gosu::Image.new(window, sky, true)
+    @gosu_images = [nil] * TILES_X * TILES_Y
   end
   
   def solid?(x, y)
     return false if y < 0
     return true if x < 0 or x >= 800 or y >= 600
-    img = @rmagick_images[y / TILE_SIZE * TILES_X + x / TILE_SIZE]
-    img.pixel_color(x % TILE_SIZE, y % TILE_SIZE) != NULL_PIXEL
+    @map.pixel_color(x, y) != NULL_PIXEL
   end
   
   def draw
     @sky.draw(0, 0, 0)
     TILES_Y.times do |y|
       TILES_X.times do |x|
-        @gosu_images[y * TILES_X + x].draw(x * TILE_SIZE, y * TILE_SIZE, 0)
+        index = y * TILES_X + x
+        if @gosu_images[index].nil? then
+          rmagick_image =
+            @map.crop(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+          @gosu_images[index] = Gosu::Image.new(@window, rmagick_image, true)
+        end
+        @gosu_images[index].draw(x * TILE_SIZE, y * TILE_SIZE, 0)
       end
     end
   end
+
+  RADIUS = 25
+  FULL_RADIUS = 30
   
   def blast(x, y)
-    left_index = x / TILE_SIZE
-    top_index = y / TILE_SIZE
+    left_index = (x - FULL_RADIUS) / TILE_SIZE
+    right_index = (x + FULL_RADIUS) / TILE_SIZE
+    top_index = (y - FULL_RADIUS) / TILE_SIZE
+    bottom_index = (y + FULL_RADIUS) / TILE_SIZE
     
-    if not @crater_image then
-      @crater_image = Magick::Image.new(50, 50) { self.background_color = 'none' }
+    @gosu_images[top_index * TILES_X + left_index] = nil
+    @gosu_images[top_index * TILES_X + right_index] = nil
+    @gosu_images[bottom_index * TILES_X + left_index] = nil
+    @gosu_images[bottom_index * TILES_X + right_index] = nil
+    
+    if @crater_image.nil? then
+      @crater_image = Magick::Image.new(2 * RADIUS, 2 * RADIUS) { self.background_color = 'none' }
       gc = Magick::Draw.new
-      gc.fill('black').circle(25, 25, 25, 0)
+      gc.fill('black').circle(RADIUS, RADIUS, RADIUS, 0)
       gc.draw(@crater_image)
-      @crater_shadow = @crater_image.shadow(0, 0, 5, 1)
+      @crater_shadow = @crater_image.shadow(0, 0, FULL_RADIUS - RADIUS, 1)
     end
     
-    -1.upto(1) do |rel_x|
-      -1.upto(1) do |rel_y|
-        # Don't change tiles outside of the map
-        next if left_index + rel_x < 0 or left_index + rel_x >= TILES_X or
-                top_index + rel_y < 0  or top_index + rel_y >= TILES_Y
-                
-        # Don't change tiles that are not affected
-        next if (x - 35) / TILE_SIZE > x / TILE_SIZE + rel_x or (x + 35) / TILE_SIZE < x / TILE_SIZE + rel_x
-        next if (y - 35) / TILE_SIZE > y / TILE_SIZE + rel_y or (y + 35) / TILE_SIZE < y / TILE_SIZE + rel_y
-          
-        index = (top_index + rel_y) * TILES_X + left_index + rel_x
-        center_x, center_y = x % TILE_SIZE, y % TILE_SIZE
-        center_x -= rel_x * TILE_SIZE
-        center_y -= rel_y * TILE_SIZE
-        
-        @rmagick_images[index].composite!(@crater_shadow, center_x - 35, center_y - 35, Magick::AtopCompositeOp)
-        @rmagick_images[index].composite!(@crater_shadow, center_x - 35, center_y - 35, Magick::AtopCompositeOp)
-        @rmagick_images[index].composite!(@crater_image, center_x - 25, center_y - 25, Magick::DstOutCompositeOp)
-        @gosu_images[index] = Gosu::Image.new(@window, @rmagick_images[index], true)
-      end
-    end
+    @map.composite!(@crater_shadow, x - FULL_RADIUS, y - FULL_RADIUS, Magick::AtopCompositeOp)
+    @map.composite!(@crater_shadow, x - FULL_RADIUS, y - FULL_RADIUS, Magick::AtopCompositeOp)
+    @map.composite!(@crater_image, x - RADIUS, y - RADIUS, Magick::DstOutCompositeOp)
   end
 end
 
@@ -263,7 +269,7 @@ class GameWindow < Gosu::Window
   attr_reader :map, :objects
   
   def initialize()
-    super(800, 600, false, 20)
+    super(800, 600, false)
     self.caption = "Medal of Anna - Gosu & RMagick integration demo"
 
     @player_instructions = []
@@ -324,6 +330,7 @@ class GameWindow < Gosu::Window
       @current_player = 1 - @current_player
       @waiting = true
     end
+    close if id == Gosu::KbEscape
   end
 end
 

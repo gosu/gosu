@@ -19,7 +19,7 @@ namespace Swig {
 class SwigDirector_Window : public Gosu::Window, public Swig::Director {
 
 public:
-    SwigDirector_Window(VALUE self, unsigned int width, unsigned int height, bool fullscreen, unsigned int updateInterval);
+    SwigDirector_Window(VALUE self, unsigned int width, unsigned int height, bool fullscreen, double updateInterval = 16.666666);
     virtual ~SwigDirector_Window();
     virtual void update();
     virtual void draw();

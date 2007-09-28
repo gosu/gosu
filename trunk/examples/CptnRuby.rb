@@ -206,7 +206,7 @@ class Game < Window
   attr_reader :map
 
   def initialize
-    super(640, 480, false, 20)
+    super(640, 480, false)
     self.caption = "Cptn. Ruby"
     @map = Map.new(self, "media/CptnRuby Map.txt")
     @cptn = CptnRuby.new(self, 400, 100)
