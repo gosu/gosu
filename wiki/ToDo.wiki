@@ -9,10 +9,9 @@
   * allow/document custom OpenGL integration
 
 = Also ASAP =
-  * make sure createText does NOT chop off pixels on OS X!!
   * assure Gosu::File also creates directories as necessary
   * more sophisticated Audio interface for talking NPC's etc.
-  * testing on Vista
+  * testing on Vista, Leopard, Panther
 
 = Major design goals for 0.7.x (basics. input redesign) =
   * text input system for chat boxes, high-score lists etc.
