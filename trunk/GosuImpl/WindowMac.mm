@@ -129,7 +129,7 @@ struct Gosu::Window::Impl
     boost::scoped_ptr<Graphics> graphics;
     boost::scoped_ptr<Audio> audio;
     boost::scoped_ptr<Input> input;
-    unsigned interval;
+    double interval;
     bool mouseViz;
     
     void createWindow(unsigned width, unsigned height)
@@ -176,7 +176,7 @@ struct Gosu::Window::Impl
 };
 
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
-                     unsigned updateInterval)
+                     double updateInterval)
 : pimpl(new Impl)
 {
     pimpl->pool.reset([[NSAutoreleasePool alloc] init]); // <- necessary...?
@@ -291,7 +291,7 @@ void Gosu::Window::setCaption(const std::wstring& caption)
 void Gosu::Window::show()
 {
 	// This is for Ruby/Gosu and misc. hackery:
-	// Usually, applications on the Mac only can get keyboard and mouse input if
+	// Usually, applications on the Mac can only get keyboard and mouse input if
 	// run by double-clicking an .app. So if this is run from the Terminal (i.e.
 	// during Ruby/Gosu game development), tell the OS we need input in any case.
 	ProcessSerialNumber psn = { 0, kCurrentProcess };

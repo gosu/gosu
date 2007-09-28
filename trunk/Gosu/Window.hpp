@@ -23,22 +23,13 @@ namespace Gosu
     {
         struct Impl;
         boost::scoped_ptr<Impl> pimpl;
-
-        // Called when the user tries to close the application with the
-        // interface provided by the window manager (i.e. the [X] button).
-        // Applications can override this member function to ask the user
-        // whether she is sure etc.
-        /*virtual void closeRequest()
-        { 
-            close(); 
-        }*/
         
     public:
         //! Constructs a Window.
         //! \param updateInterval Interval in milliseconds between two calls
         //! to the update member function.
         Window(unsigned width, unsigned height, bool fullscreen,
-            unsigned updateInterval);
+            double updateInterval = 16.666666);
         virtual ~Window();
 
         std::wstring caption() const;
@@ -62,6 +53,7 @@ namespace Gosu
         //! Same as buttonDown. Called then the user released a button.
         virtual void buttonUp(Gosu::Button) {}
         
+// Ignore when SWIG is wrapping this class for Ruby/Gosu.
 #ifndef SWIG
         const Graphics& graphics() const;
         Graphics& graphics();

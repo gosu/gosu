@@ -28,7 +28,8 @@ struct Gosu::Window::Impl
     ::Colormap cmap;
     ::Atom deleteAtom;
     std::wstring title;
-    unsigned int width, height, updateInterval;
+    unsigned int width, height;
+    double updateInterval;
     bool showing, visible;
 
     bool isFullscreen;
@@ -39,7 +40,7 @@ struct Gosu::Window::Impl
 };
 
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
-        unsigned updateInterval)
+        double updateInterval)
     : pimpl(new Impl)
 {
     pimpl->dpy = XOpenDisplay(NULL);
