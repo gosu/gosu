@@ -4,6 +4,7 @@
 =0.7.6=
   * All: Fixed a bug potentially cutting off text on all platforms
   * All: Fixed a bug which would exclude lines from very long text
+  * All: updateInterval is now a float, not an integer. On systems other than OS X, it is effectively rounded upwards, though. The new default value is 16.666666 (= 60 FPS).
   * Ruby: RMagick Images can be passed instead of filenames + example game
   * Ruby: Image#draw_as_quad
 
