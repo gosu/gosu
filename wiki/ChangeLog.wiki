@@ -2,6 +2,8 @@
 #labels Featured
 
 =0.7.6=
+  * All: Fixed a bug potentially cutting off text on all platforms
+  * All: Fixed a bug which would exclude lines from very long text
   * Ruby: RMagick Images can be passed instead of filenames + example game
   * Ruby: Image#draw_as_quad
 
