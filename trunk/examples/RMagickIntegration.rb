@@ -9,6 +9,9 @@ end
 # Shows how Gosu and RMagick can be used together to generate a map, implement
 # a dynamic landscape and generally look great.
 
+# Known issues:
+# * Collision detection of the missiles is lazy, allows shooting through thin walls.
+
 require 'gosu'
 require 'rmagick'
 
@@ -40,7 +43,7 @@ class Map
     @sky = Gosu::Image.new(window, sky, true)
     
     # This is the one large RMagick image that represents the map.
-    @map = Magick::Image.new(WIDTH, HEIGHT) { self.background_color = 'none' }
+    @image = Magick::Image.new(WIDTH, HEIGHT) { self.background_color = 'none' }
     
     # Set up a Draw object that fills with an earth texture.
     earth = Magick::Image.read('media/Earth.png').first.resize(1.5)
@@ -48,34 +51,39 @@ class Map
     gc.pattern('earth', 0, 0, earth.columns, earth.rows) { gc.composite(0, 0, 0, 0, earth) }    
     gc.fill('earth')
     gc.stroke('#603000').stroke_width(1.5)
-    # Draw an island with ... TODO: continue here ;)
-    TODO!
+    # Draw a smooth bezier island onto the map!
     polypoints = [0, HEIGHT]
     0.upto(TILES_X) do |x|
       polypoints += [x * TILE_SIZE, HEIGHT * 0.2 + rand(HEIGHT * 0.8)]
     end
     polypoints += [WIDTH, HEIGHT]
     gc.bezier(*polypoints)
-    gc.draw(map)
+    gc.draw(@image)
     
+    # Create a bright-dark gradient fill, an image from it and change the map's
+    # brightness with it.
     fill = Magick::GradientFill.new(0, HEIGHT * 0.4, WIDTH, HEIGHT * 0.4, '#fff', '#666')
     gradient = Magick::Image.new(WIDTH, HEIGHT, fill)
-    gradient = map.composite(gradient, 0, 0, Magick::InCompositeOp)
-    map.composite!(gradient, 0, 0, Magick::MultiplyCompositeOp)
-    
+    gradient = @image.composite(gradient, 0, 0, Magick::InCompositeOp)
+    @image.composite!(gradient, 0, 0, Magick::MultiplyCompositeOp)
+
+    # Finally, place the star in the middle of the map, just onto the ground.
     star = Magick::Image.read('media/LargeStar.png').first
     star_y = 0
-    star_y += 20 until map.pixel_color(WIDTH / 2, star_y) != NULL_PIXEL
-    map.composite!(star, (WIDTH - star.columns) / 2,
-      star_y - star.rows * 0.85, Magick::DstOverCompositeOp)
+    star_y += 20 until solid?(WIDTH / 2, star_y)
+    @image.composite!(star, (WIDTH - star.columns) / 2, star_y - star.rows * 0.85,
+      Magick::DstOverCompositeOp)
 
     @gosu_images = [nil] * TILES_X * TILES_Y
   end
   
   def solid?(x, y)
+    # Map is open at the top.
     return false if y < 0
+    # Map is closed on all other sides.
     return true if x < 0 or x >= 800 or y >= 600
-    @map.pixel_color(x, y) != NULL_PIXEL
+    # Inside of the map, determine solidity from the map image.
+    @image.pixel_color(x, y) != NULL_PIXEL
   end
   
   def draw
@@ -84,9 +92,8 @@ class Map
       TILES_X.times do |x|
         index = y * TILES_X + x
         if @gosu_images[index].nil? then
-          rmagick_image =
-            @map.crop(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
-          @gosu_images[index] = Gosu::Image.new(@window, rmagick_image, true)
+          part = @image.crop(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+          @gosu_images[index] = Gosu::Image.new(@window, part, true)
         end
         @gosu_images[index].draw(x * TILE_SIZE, y * TILE_SIZE, 0)
       end
@@ -94,53 +101,30 @@ class Map
   end
 
   RADIUS = 25
-  FULL_RADIUS = 30
+  SH_RADIUS = 45
   
   def blast(x, y)
-    left_index = (x - FULL_RADIUS) / TILE_SIZE
-    right_index = (x + FULL_RADIUS) / TILE_SIZE
-    top_index = (y - FULL_RADIUS) / TILE_SIZE
-    bottom_index = (y + FULL_RADIUS) / TILE_SIZE
+    left = (x - SH_RADIUS) / TILE_SIZE
+    right = (x + SH_RADIUS) / TILE_SIZE
+    top = (y - SH_RADIUS) / TILE_SIZE
+    bottom = (y + SH_RADIUS) / TILE_SIZE
     
-    @gosu_images[top_index * TILES_X + left_index] = nil
-    @gosu_images[top_index * TILES_X + right_index] = nil
-    @gosu_images[bottom_index * TILES_X + left_index] = nil
-    @gosu_images[bottom_index * TILES_X + right_index] = nil
+    @gosu_images[top * TILES_X + left] = nil
+    @gosu_images[top * TILES_X + right] = nil
+    @gosu_images[bottom * TILES_X + left] = nil
+    @gosu_images[bottom * TILES_X + right] = nil
     
     if @crater_image.nil? then
       @crater_image = Magick::Image.new(2 * RADIUS, 2 * RADIUS) { self.background_color = 'none' }
       gc = Magick::Draw.new
       gc.fill('black').circle(RADIUS, RADIUS, RADIUS, 0)
       gc.draw(@crater_image)
-      @crater_shadow = @crater_image.shadow(0, 0, FULL_RADIUS - RADIUS, 1)
+      @crater_shadow = @crater_image.shadow(0, 0, (SH_RADIUS - RADIUS) / 2, 1)
     end
     
-    @map.composite!(@crater_shadow, x - FULL_RADIUS, y - FULL_RADIUS, Magick::AtopCompositeOp)
-    @map.composite!(@crater_shadow, x - FULL_RADIUS, y - FULL_RADIUS, Magick::AtopCompositeOp)
-    @map.composite!(@crater_image, x - RADIUS, y - RADIUS, Magick::DstOutCompositeOp)
-  end
-end
-
-class Particle
-  def initialize(window, x, y)
-    @@image ||= Gosu::Image.new(window, 'media/Smoke.png', false)
-    @x, @y = x, y
-    @color = Gosu::Color.new(255, 255, 255, 255)
-  end
-  
-  def update
-    @y -= 5
-    @x = @x - 1 + rand(3)
-    @color.alpha -= 5
-    @color.alpha > 0
-  end
-  
-  def draw
-    @@image.draw(@x - 25, @y - 25, 0, 1, 1, @color)
-  end
-  
-  def hit_by?(missile)
-    false
+    @image.composite!(@crater_shadow, x - SH_RADIUS, y - SH_RADIUS, Magick::AtopCompositeOp)
+    @image.composite!(@crater_shadow, x - SH_RADIUS, y - SH_RADIUS, Magick::AtopCompositeOp)
+    @image.composite!(@crater_image, x - RADIUS, y - RADIUS, Magick::DstOutCompositeOp)
   end
 end
 
@@ -238,6 +222,7 @@ class Missile
   attr_reader :x, :y, :vx, :vy
   
   def initialize(window, x, y, angle)
+    @@explosion_sound ||= Gosu::Sample.new(window, "media/Explosion.wav")
     @vx, @vy = Gosu::offset_x(angle, 20).to_i, Gosu::offset_y(angle, 20).to_i
     @window, @x, @y = window, x + @vx, y + @vy
   end
@@ -249,6 +234,8 @@ class Missile
     if @window.map.solid?(x, y) or @window.objects.any? { |o| o.hit_by?(self) } then
       5.times { @window.objects << Particle.new(@window, x - 25 + rand(51), y - 25 + rand(51)) }
       @window.map.blast(x, y)
+      # Weeee, stereo sound!
+      @@explosion_sound.play_pan((2 * @x - Map::WIDTH) / Map::WIDTH)
       return false
     else
       return true
@@ -262,6 +249,29 @@ class Missile
   
   def hit_by?(missile)
     false # can't be hit
+  end
+end
+
+class Particle
+  def initialize(window, x, y)
+    @@image ||= Gosu::Image.new(window, 'media/Smoke.png', false)
+    @x, @y = x, y
+    @color = Gosu::Color.new(255, 255, 255, 255)
+  end
+  
+  def update
+    @y -= 5
+    @x = @x - 1 + rand(3)
+    @color.alpha -= 5
+    @color.alpha > 0
+  end
+  
+  def draw
+    @@image.draw(@x - 25, @y - 25, 0, 1, 1, @color)
+  end
+  
+  def hit_by?(missile)
+    false
   end
 end
 
@@ -300,7 +310,7 @@ class GameWindow < Gosu::Window
     cur_text = @player_won_messages[1 - @current_player] if @players[@current_player].dead
     
     if cur_text then
-      x, y = 0, height * 0.05
+      x, y = 0, 30
       cur_text.draw(x - 1, y, 0, 1, 1, 0xff000000)
       cur_text.draw(x + 1, y, 0, 1, 1, 0xff000000)
       cur_text.draw(x, y - 1, 0, 1, 1, 0xff000000)
