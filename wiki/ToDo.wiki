@@ -3,6 +3,7 @@
 
 = 0.7.7=
   * implement frameskip
+  * don't round updateInterval on Win/Linux
   * use OpenGL on Windows
   * allow/document custom OpenGL integration
 
