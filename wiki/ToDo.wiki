@@ -2,6 +2,7 @@
 #labels Featured
 
 = 0.7.7=
+  * implement frameskip
   * use OpenGL on Windows
   * allow/document custom OpenGL integration
 
