@@ -108,8 +108,6 @@ unsigned Gosu::pango::textWidth(const std::wstring& text,
     pango_layout_set_text(layout, utf8Str, -1);
     g_free(utf8Str);
 
-//    pango_layout_set_text(layout, narrow(text).c_str(), text.length());
-
     PangoDirection base_dir = pango_context_get_base_dir(context);
     pango_layout_set_alignment(layout,
         base_dir == PANGO_DIRECTION_LTR ? PANGO_ALIGN_LEFT : PANGO_ALIGN_RIGHT);
@@ -117,9 +115,10 @@ unsigned Gosu::pango::textWidth(const std::wstring& text,
     pango_layout_set_width(layout, -1);
 
     PangoRectangle logical_rect;
-    pango_layout_get_extents(layout, NULL, &logical_rect);
-    height = PANGO_PIXELS(logical_rect.height);
-    width = PANGO_PIXELS(logical_rect.width);
+
+    pango_layout_get_pixel_extents(layout, NULL, &logical_rect);
+    height = logical_rect.height;
+    width = logical_rect.width;
 
     return width;
 }
@@ -184,6 +183,3 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
     pango helper;
     helper.drawText(bitmap, text, x, y, c, fontFace, fontHeight, fontFlags);
 }
-
-
-

@@ -270,11 +270,11 @@ class GameWindow < Gosu::Window
     @player_won_messages = []
     2.times do |plr|
       @player_instructions << Gosu::Image.from_text(self,
-        "It is the #{ plr == 0 ? 'green' : 'red' } toy soldier's turn. \n" +
-        "(Arrow keys to walk and aim, Return to jump, Space to shoot) ",
-        Gosu::default_font_name, 25, 5, width, :center)
+        "It is the #{ plr == 0 ? 'green' : 'red' } toy soldier's turn.\n" +
+        "(Arrow keys to walk and aim, Return to jump, Space to shoot)",
+        Gosu::default_font_name, 25, 0, width, :center)
       @player_won_messages << Gosu::Image.from_text(self,
-        "The #{ plr == 0 ? 'green' : 'red' } toy soldier has won! ",
+        "The #{ plr == 0 ? 'green' : 'red' } toy soldier has won!",
         Gosu::default_font_name, 25, 5, width, :center)
     end
 
@@ -289,10 +289,17 @@ class GameWindow < Gosu::Window
   def draw
     @map.draw
     @objects.each { |o| o.draw }
-    if @players[@current_player].dead then
-      @player_won_messages[1 - @current_player].draw(0, height * 0.05, 0, 1, 1, 0xff000000)
-    elsif not @waiting then
-      @player_instructions[@current_player].draw(0, height * 0.05, 0, 1, 1, 0xff000000)
+    
+    cur_text = @player_instructions[@current_player] if not @waiting
+    cur_text = @player_won_messages[1 - @current_player] if @players[@current_player].dead
+    
+    if cur_text then
+      x, y = 0, height * 0.05
+      cur_text.draw(x - 1, y, 0, 1, 1, 0xff000000)
+      cur_text.draw(x + 1, y, 0, 1, 1, 0xff000000)
+      cur_text.draw(x, y - 1, 0, 1, 1, 0xff000000)
+      cur_text.draw(x, y + 1, 0, 1, 1, 0xff000000)
+      cur_text.draw(x, y, 0, 1, 1, 0xffffffff)
     end
   end
   

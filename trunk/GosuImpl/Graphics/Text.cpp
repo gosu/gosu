@@ -24,7 +24,7 @@ namespace Gosu
         typedef vector<WordInfo> Words;
 
         // Local helper class which manages building the bitmap from the
-        // collected words and the area of Images.
+        // collected words.
         class TextBlockBuilder
         {
             Bitmap bmp;
@@ -55,8 +55,7 @@ namespace Gosu
             {
                 usedLines = 0;
                 allocatedLines = 10;
-                bmp.resize(width, (lineSpacing + fontHeight) * allocatedLines,
-                    Colors::none);
+                bmp.resize(width, (lineSpacing + fontHeight) * allocatedLines, 0x00ffffff);
 
                 this->fontName = fontName;
                 this->fontHeight = fontHeight;
@@ -81,7 +80,7 @@ namespace Gosu
                 unsigned wordsWidth, bool overrideAlign)
             {
                 allocNextLine();
-
+                
                 unsigned words = end - begin;
 
                 // Where does the line start? (y)
@@ -116,7 +115,7 @@ namespace Gosu
 
                 for (Words::const_iterator cur = begin; cur != end; ++cur)
                 {
-                    drawText(bmp, cur->text, trunc(pos + 1), trunc(top + 1),
+                    drawText(bmp, cur->text, trunc(pos), trunc(top),
                         Colors::white, fontName, fontHeight, fontFlags);
                     pos += cur->width + spacing;
                 }
@@ -164,7 +163,7 @@ namespace Gosu
 
                     lineBegin = w;
                     wordsWidth = w->width;
-                    spacesWidth = 0;
+                    spacesWidth = spaceWidth;
                 }
             }
 

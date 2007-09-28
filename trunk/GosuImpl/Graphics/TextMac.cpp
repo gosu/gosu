@@ -163,7 +163,7 @@ unsigned Gosu::textWidth(const std::wstring& text,
     
     ATSULayoutAndStyle atlas(text, fontName, fontHeight / heightAt1Pt, fontFlags);
     Rect rect = atlas.textExtents();
-    return rect.right;// - rect.left;
+    return rect.right + 1 - rect.left;
 }
 
 void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
@@ -175,7 +175,7 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
     
     ATSULayoutAndStyle atlas(text, fontName, fontHeight / heightAt1Pt, fontFlags);
     Rect rect = atlas.textExtents();
-    unsigned width = rect.right;// - rect.left;
+    unsigned width = rect.right + 1 - rect.left;
     std::vector<boost::uint32_t> buf(width * fontHeight);
     {
         MacBitmap helper(&buf[0], width, fontHeight);
