@@ -1,9 +1,6 @@
 #summary Gosu's ToDo list.
 #labels Featured
 
-= 0.7.6 (probably) =
-  * change Gosu to be suited to 60 Hz games by default! update_interval left for compatibility + special needs
-
 = 0.7.7=
   * use OpenGL on Windows
   * allow/document custom OpenGL integration
