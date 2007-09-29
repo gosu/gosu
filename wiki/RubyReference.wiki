@@ -2,8 +2,8 @@
 = Ruby API Reference =
 
 == Common arguments ==
-  * Whenever a function expects a Gosu::Color value, a 0xAARRGGBB integer can be supplied instead.
-  * Valid mode parameters for drawing functions are :default and :additive.
+  * *Color shortcut:* Whenever a function expects a Gosu::Color value, a 0xAARRGGBB integer can be supplied instead.
+  * *Additive drawing:* Valid mode parameters for drawing functions are :default and :additive.
   * *RMagick users:* Magick::Image instances can be passed instead of filenames to Image.new and Image.load_tiles!
 
 == class Gosu::Color ==
