@@ -2,7 +2,7 @@
 
 = Source code =
 
-The code for the complete game, together with the required media files, can be found in the Gosu distribution of your choice ('examples/Tutorial7.cpp'). To run the game, setup a new project as seen in GettingStartedOnOsx, GettingStartedOnWindows or GettingStartedOnLinux, respectively, and use Tutorial.cpp as the only source file.
+The code for the complete game, together with the required media files, can be found in the Gosu distribution of your choice ('examples/Tutorial.cpp'). To run the game, setup a new project as seen in GettingStartedOnOsx, GettingStartedOnWindows or GettingStartedOnLinux, respectively, and use Tutorial.cpp as the only source file.
 
 = 1. Overriding Window's callbacks =
 
@@ -25,7 +25,7 @@ class GameWindow : public Gosu::Window
 {
 public:
     GameWindow()
-    : Window(640, 480, false, 20)
+    : Window(640, 480, false)
     {
         setCaption(L"Gosu Tutorial Game");
     }
@@ -46,11 +46,11 @@ int main(int argc, char* argv[])
 }
 }}}
 
-The constructor initializes the Gosu::Window base class. The parameters shown here create a 640x480 pixels large, non-fullscreen (that's what the "false" stands for) window that will be updated every 20 milliseconds. Then it changes the window's caption, which is empty until then. Note that Gosu uses std::wstring almost everywhere.
+The constructor initializes the Gosu::Window base class. The parameters shown here create a 640x480 pixels large, non-fullscreen (that's what the "false" stands for). Then it changes the window's caption, which is empty until then. Note that Gosu uses std::wstring almost everywhere.
 
-update() and draw() are overrides of Gosu::Window's member functions. update() is called every 20 milliseconds here and should contain the main game logic (move objects etc.).
+update() and draw() are overrides of Gosu::Window's member functions. update() is (by default) called 60 times per second and should contain the main game logic (move objects etc.).
 
-draw() is called afterwards and whenever the window needs redrawing for other reasons and should contain the rendering code.
+draw() is called afterwards, whenever the window needs redrawing for other reasons and can be skipped every other time if the FPS go too low. It should contain code to redraw the whole scene—no logic whatsoever!
 
 Then follows the main program. A window is created and its show() member function is called, which does not return until the window has been closed by the user or its own code. Tada - now you have a small black window with a title of your choice!
 
@@ -63,7 +63,7 @@ class GameWindow : public Gosu::Window
 
 public:
     GameWindow()
-    : Window(640, 480, false, 20)
+    : Window(640, 480, false)
     {
         setCaption(L"Gosu Tutorial Game");
         std::wstring filename = Gosu::sharedResourcePrefix() + L"media/Space.png";
@@ -170,7 +170,7 @@ class GameWindow : public Gosu::Window
 
 public:
     GameWindow()
-    : Window(640, 480, false, 20), player(graphics())
+    : Window(640, 480, false), player(graphics())
     {
         setCaption(L"Gosu Tutorial Game");
         std::wstring filename = Gosu::sharedResourcePrefix() + L"media/Space.png";
@@ -312,7 +312,7 @@ class GameWindow : public Gosu::Window
 
 public:
     GameWindow()
-    : Window(640, 480, false, 20), player(graphics())
+    : Window(640, 480, false), player(graphics())
     {
         setCaption(L"Gosu Tutorial Game");
 
@@ -370,7 +370,7 @@ public:
     ...
 
     GameWindow()
-    : Window(640, 480, false, 20),
+    : Window(640, 480, false),
         font(graphics(), Gosu::defaultFontName(), 20),
         player(graphics(), audio())
     {
