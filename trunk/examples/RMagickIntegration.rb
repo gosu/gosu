@@ -8,9 +8,15 @@ end
 # A (too) simple Gorilla-style shooter for two players.
 # Shows how Gosu and RMagick can be used together to generate a map, implement
 # a dynamic landscape and generally look great.
+# Also shows a very minimal, yet effective way of designing a game's object system.
+
+# Doesn't make use of Gosu's Z-ordering. Not many different things to draw, it's
+# easy to get the order right without it.
 
 # Known issues:
 # * Collision detection of the missiles is lazy, allows shooting through thin walls.
+# * The look of dead soldiers is, err, by accident. Soldier.png needs to be
+#   designed in a less obfuscated way :)
 
 require 'gosu'
 require 'rmagick'
@@ -26,6 +32,8 @@ NULL_PIXEL = Magick::Pixel.from_color('none')
 # * Blasting holes into the map is implemented by drawing and erasing portions
 #   of @image, then setting the corresponding Gosu::Image instances to nil, so
 #   they will be recreated in Map#draw
+# Note: The splitting is done because recreating such a large Gosu::Image for
+#       every map change would be a very noticeable delay!
 
 class Map
   WIDTH, HEIGHT = 800, 600
@@ -74,7 +82,9 @@ class Map
     @image.composite!(star, (WIDTH - star.columns) / 2, star_y - star.rows * 0.85,
       Magick::DstOverCompositeOp)
 
-    @gosu_images = [nil] * TILES_X * TILES_Y
+    # Creates an X*Y array for the Gosu images.
+    # (Initialized to nil automatically).
+    @gosu_images = Array.new(TILES_X) { Array.new(TILES_Y) }
   end
   
   def solid?(x, y)
@@ -87,32 +97,49 @@ class Map
   end
   
   def draw
+    # Sky background.
     @sky.draw(0, 0, 0)
+    # All the tiles.
     TILES_Y.times do |y|
       TILES_X.times do |x|
-        index = y * TILES_X + x
-        if @gosu_images[index].nil? then
+        # Recreate images that haven't been created yet, or need to be recreated
+        # due to map changes.
+        if @gosu_images[x][y].nil? then
           part = @image.crop(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
-          @gosu_images[index] = Gosu::Image.new(@window, part, true)
+          @gosu_images[x][y] = Gosu::Image.new(@window, part, true)
         end
-        @gosu_images[index].draw(x * TILE_SIZE, y * TILE_SIZE, 0)
+        # At last - draw it!
+        @gosu_images[x][y].draw(x * TILE_SIZE, y * TILE_SIZE, 0)
       end
     end
   end
 
+  # Radius of a crater.
   RADIUS = 25
+  # Radius of a crater, SHadow included.
   SH_RADIUS = 45
   
   def blast(x, y)
+    # This code assumes at most 2x2 tiles are affected by a blast, so
+    # don't change the RADIUS to 200 or something ;)
+    # Calculate the x/y indices of the two to four affected tiles.
+    # (left/right and top/bottom might be the same).
+    
     left = (x - SH_RADIUS) / TILE_SIZE
     right = (x + SH_RADIUS) / TILE_SIZE
     top = (y - SH_RADIUS) / TILE_SIZE
     bottom = (y + SH_RADIUS) / TILE_SIZE
+
+    # Set affected images to nil. (A 'double-free' doesn't hurt!)
     
-    @gosu_images[top * TILES_X + left] = nil
-    @gosu_images[top * TILES_X + right] = nil
-    @gosu_images[bottom * TILES_X + left] = nil
-    @gosu_images[bottom * TILES_X + right] = nil
+    @gosu_images[left][top] = nil
+    @gosu_images[right][top] = nil
+    @gosu_images[left][bottom] = nil
+    @gosu_images[right][bottom] = nil
+
+    # Create the crater image (basically a circle shape that is used to erase
+    # parts of the map) and the crater shadow image, if they don't exist
+    # already.
     
     if @crater_image.nil? then
       @crater_image = Magick::Image.new(2 * RADIUS, 2 * RADIUS) { self.background_color = 'none' }
@@ -122,34 +149,58 @@ class Map
       @crater_shadow = @crater_image.shadow(0, 0, (SH_RADIUS - RADIUS) / 2, 1)
     end
     
+    # Draw the shadow (twice for more intensity), then erase a circle from the map.
     @image.composite!(@crater_shadow, x - SH_RADIUS, y - SH_RADIUS, Magick::AtopCompositeOp)
     @image.composite!(@crater_shadow, x - SH_RADIUS, y - SH_RADIUS, Magick::AtopCompositeOp)
     @image.composite!(@crater_image, x - RADIUS, y - RADIUS, Magick::DstOutCompositeOp)
   end
 end
 
+# Player class.
+# Note that applies to the whole game:
+# All objects implement an informal interface.
+# draw: Draws the object (obviously)
+# update: Moves the object etc., returns false if the object is to be deleted
+# hit_by?(missile): Returns true if an object is hit by the missile, causing
+#                   it to explode on this object. 
+
 class Player
+  # Magic numbers considered harmful! This is the height of the
+  # player as used for collision detection.
+  HEIGHT = 14
+  
   attr_reader :x, :y, :dead
   
   def initialize(window, x, y, color)
+    # Only load the images once for all instances of this class.
     @@images ||= Gosu::Image.load_tiles(window, "media/Soldier.png", 40, 50, false)
+    
     @window, @x, @y, @color = window, x, y, color
     @vy = 0
+    
+    # -1: left, +1: right
     @dir = -1
+
+    # Aiming angle.
     @angle = 90
   end
   
   def draw
     if dead then
+      # Poor, broken soldier.
       @@images[0].draw_rot(x, y, 0, 290 * @dir, 0.5, 0.65, @dir * 0.5, 0.5, @color)
       @@images[2].draw_rot(x, y, 0, 160 * @dir, 0.95, 0.5, 0.5, @dir * 0.5, @color)
     else
+      # Was moved last frame?
       if @show_walk_anim
+        # Yes: Display walking animation.
         frame = Gosu::milliseconds / 200 % 2
       else
+        # No: Stand around (boring).
         frame = 0
       end
       
+      # Draw feet, then chest.
       @@images[frame].draw(x - 10 * @dir, y - 20, 0, @dir * 0.5, 0.5, @color)
       angle = @angle
       angle = 180 - angle if @dir == -1
@@ -158,10 +209,14 @@ class Player
   end
   
   def update
+    # First, assume that no walking happened this frame.
     @show_walk_anim = false
     
+    # Gravity.
     @vy += 1
+    
     if @vy > 1 then
+      # Move upwards until hitting something.
       @vy.times do
         if @window.map.solid?(x, y + 1)
           @vy = 0
@@ -171,8 +226,9 @@ class Player
         end
       end
     else
+      # Move downwards until hitting something.
       (-@vy).times do
-        if @window.map.solid?(x, y - 15)
+        if @window.map.solid?(x, y - HEIGHT - 1)
           @vy = 0
           break
         else
@@ -181,6 +237,8 @@ class Player
       end
     end
     
+    # Soldiers are never deleted (they may die, though, but that is a different
+    # concept).
     true
   end
   
@@ -195,8 +253,12 @@ class Player
   def try_walk(dir)
     @show_walk_anim = true
     @dir = dir
-    2.times { @y -= 1 unless @window.map.solid?(x, y - 15) }
-    @x += dir unless @window.map.solid?(x + dir, y) or @window.map.solid?(x + dir, y - 14) 
+    # First, magically move up (so soldiers can run up hills)
+    2.times { @y -= 1 unless @window.map.solid?(x, y - HEIGHT - 1) }
+    # Now move into the desired direction.
+    @x += dir unless @window.map.solid?(x + dir, y) or
+                     @window.map.solid?(x + dir, y - HEIGHT) 
+    # To make up for unnecessary movement upwards, sink downward again.
     2.times { @y += 1 unless @window.map.solid?(x, y + 1) }
   end
   
@@ -205,11 +267,12 @@ class Player
   end
   
   def shoot
-    @window.objects << Missile.new(@window, x, y - 15, @angle * @dir)
+    @window.objects << Missile.new(@window, x + 10 * @dir, y - 10, @angle * @dir)
   end
   
   def hit_by?(missile)
     if Gosu::distance(missile.x, missile.y, x, y) < 30 then
+      # Was hit :(
       @dead = true
       return true
     else
@@ -218,20 +281,29 @@ class Player
   end
 end
 
+# Implements the same interface as Player, except it'S a missile!
+
 class Missile
   attr_reader :x, :y, :vx, :vy
   
   def initialize(window, x, y, angle)
+    # All missile instances use the same sound.
     @@explosion_sound ||= Gosu::Sample.new(window, "media/Explosion.wav")
+    
+    # Horizontal/vertical velocity.
     @vx, @vy = Gosu::offset_x(angle, 20).to_i, Gosu::offset_y(angle, 20).to_i
+    
     @window, @x, @y = window, x + @vx, y + @vy
   end
   
   def update
+    # Movement, gravity
     @x += @vx
     @y += @vy
     @vy += 1
+    # Hit anything?
     if @window.map.solid?(x, y) or @window.objects.any? { |o| o.hit_by?(self) } then
+      # Create great particles.
       5.times { @window.objects << Particle.new(@window, x - 25 + rand(51), y - 25 + rand(51)) }
       @window.map.blast(x, y)
       # Weeee, stereo sound!
@@ -243,18 +315,24 @@ class Missile
   end
   
   def draw
+    # Just draw a small quad.
     @window.draw_quad(x-2, y-2, 0xff800000, x+2, y-2, 0xff800000, 
       x-2, y+2, 0xff800000, x+2, y+2, 0xff800000, 0)
   end
   
   def hit_by?(missile)
-    false # can't be hit
+    # Missiles can't be hit by other missiles!
+    false
   end
 end
 
+# Very minimal object that just draws a fading particle.
+
 class Particle
   def initialize(window, x, y)
+    # All Particle instances use the same image
     @@image ||= Gosu::Image.new(window, 'media/Smoke.png', false)
+    
     @x, @y = x, y
     @color = Gosu::Color.new(255, 255, 255, 255)
   end
@@ -263,6 +341,8 @@ class Particle
     @y -= 5
     @x = @x - 1 + rand(3)
     @color.alpha -= 5
+    
+    # Remove if faded completely.
     @color.alpha > 0
   end
   
@@ -271,9 +351,13 @@ class Particle
   end
   
   def hit_by?(missile)
+    # Smoke can't be hit!
     false
   end
 end
+
+# Finally, the class that ties it all together.
+# Very straightforward implementation.
 
 class GameWindow < Gosu::Window
   attr_reader :map, :objects
@@ -282,6 +366,7 @@ class GameWindow < Gosu::Window
     super(800, 600, false)
     self.caption = "Medal of Anna - Gosu & RMagick integration demo"
 
+    # Texts to display in the appropriate situations.
     @player_instructions = []
     @player_won_messages = []
     2.times do |plr|
@@ -294,17 +379,24 @@ class GameWindow < Gosu::Window
         Gosu::default_font_name, 25, 5, width, :center)
     end
 
+    # Create everything!
     @map = Map.new(self)
     @players = [Player.new(self, 200, 40, 0xff308000), Player.new(self, 600, 40, 0xff803000)]
     @objects = @players.dup
     
-    @current_player = 0
+    # Let any player start.
+    @current_player = rand(2)
+    # Currently not waiting for a missile to hit something.
     @waiting = false
   end
   
   def draw
+    # Draw the main game.
     @map.draw
     @objects.each { |o| o.draw }
+    
+    # If any text should be displayed, draw it - and add a nice black border around it
+    # by drawing it four times, with a little offset in each direction.
     
     cur_text = @player_instructions[@current_player] if not @waiting
     cur_text = @player_won_messages[1 - @current_player] if @players[@current_player].dead
@@ -320,10 +412,14 @@ class GameWindow < Gosu::Window
   end
   
   def update
+    # if waiting for the next player's turn, continue to do so until the missile has
+    # hit something.
     @waiting &&= !@objects.grep(Missile).empty?
-      
+     
+    # Remove all objects whose update method returns false. 
     @objects.reject! { |o| o.update == false }
 
+    # If it's a player's turn, forward controls.
     if not @waiting and not @players[@current_player].dead then
       player = @players[@current_player]
       player.aim_up if button_down? Gosu::KbUp
@@ -336,12 +432,16 @@ class GameWindow < Gosu::Window
   
   def button_down(id)
     if id == Gosu::KbSpace and not @waiting and not @players[@current_player].dead then
+      # Shoot! This is handled in button_down because holding space shouldn't
+      # auto-fire - the shots would come from different players.
       @players[@current_player].shoot
       @current_player = 1 - @current_player
       @waiting = true
     end
+    # Very important feature! ;)
     close if id == Gosu::KbEscape
   end
 end
 
+# So far we have only defined how everything *should* work - now set it up and run it!
 GameWindow.new.show

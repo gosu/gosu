@@ -27,6 +27,8 @@ namespace Gosu
         // collected words.
         class TextBlockBuilder
         {
+            bool doDrawText;
+            
             Bitmap bmp;
             unsigned usedLines, allocatedLines;
 
@@ -39,7 +41,7 @@ namespace Gosu
             void allocNextLine()
             {
                 ++usedLines;
-                if (usedLines == allocatedLines)
+                if (usedLines == allocatedLines && doDrawText)
                 {
                     allocatedLines += 10;
                     bmp.resize(bmp.width(),
@@ -51,12 +53,15 @@ namespace Gosu
         public:
             TextBlockBuilder(const wstring& fontName, unsigned fontHeight,
                 unsigned fontFlags, unsigned lineSpacing, unsigned width,
-                TextAlign align)
+                TextAlign align, bool doDrawText)
             {
                 usedLines = 0;
                 allocatedLines = 10;
-                bmp.resize(width, (lineSpacing + fontHeight) * allocatedLines, 0x00ffffff);
+                
+                if (doDrawText)
+                    bmp.resize(width, (lineSpacing + fontHeight) * allocatedLines, 0x00ffffff);
 
+                this->doDrawText = doDrawText;
                 this->fontName = fontName;
                 this->fontHeight = fontHeight;
                 this->fontFlags = fontFlags;
@@ -113,6 +118,9 @@ namespace Gosu
                 else
                     spacing = spaceWidth;
 
+                if (!doDrawText)
+                    return;
+
                 for (Words::const_iterator cur = begin; cur != end; ++cur)
                 {
                     drawText(bmp, cur->text, trunc(pos), trunc(top),
@@ -127,6 +135,11 @@ namespace Gosu
                 result.resize(result.width(),
                     usedLines * (lineSpacing + fontHeight));
                 return result;
+            }
+            
+            unsigned height() const
+            {
+                return usedLines * (lineSpacing + fontHeight);
             }
         };
 
@@ -197,8 +210,8 @@ namespace Gosu
         {
             vector<wstring> paragraphs;
             wstring processedText = boost::replace_all_copy(text, L"\r\n", L"\n");
-			boost::split(paragraphs, processedText,
-				boost::is_any_of(L"\r\n"));
+            boost::split(paragraphs, processedText,
+                boost::is_any_of(L"\r\n"));
             for_each(paragraphs.begin(), paragraphs.end(),
                 boost::bind(processParagraph, boost::ref(builder), _1));
         }
@@ -212,11 +225,27 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
     // Set up the builder object which will manage all the drawing and
     // conversions for us.
     TextBlockBuilder builder(fontName, fontHeight, fontFlags,
-        lineSpacing, maxWidth, align);
+        lineSpacing, maxWidth, align, true);
 
-    // Let the process* functions draw everything on builder.
+    // Let the process* functions draw everything.
     processText(builder, text);
 
     // Done!
     return builder.result();
+}
+
+unsigned Gosu::textHeight(const std::wstring& text,
+    const std::wstring& fontName, unsigned fontHeight, unsigned lineSpacing,
+    unsigned maxWidth, unsigned fontFlags)
+{
+    // Set up the builder object which will manage all the drawing and
+    // conversions for us.
+    TextBlockBuilder builder(fontName, fontHeight, fontFlags,
+        lineSpacing, maxWidth, taLeft, true);
+
+    // Let the process* functions simulate drawing everything everything.
+    processText(builder, text);
+
+    // Done!
+    return builder.height();
 }

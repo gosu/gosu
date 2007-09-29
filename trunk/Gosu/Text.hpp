@@ -39,6 +39,15 @@ namespace Gosu
         const std::wstring& fontName, unsigned fontHeight, 
         unsigned lineSpacing, unsigned maxWidth, TextAlign align,
         unsigned fontFlags = 0);
+    
+    //! Returns the height that a text block created by createText with the
+    //! same arguments would give.
+    //! Experimental for now, used for finding the right font size to fill
+    //! a given block of text. If a better method for this is included into
+    //! Gosu, this function will become deprecated and, later, removed.
+    unsigned textHeight(const std::wstring& text,
+          const std::wstring& fontName, unsigned fontHeight, 
+          unsigned lineSpacing, unsigned maxWidth, unsigned fontFlags = 0);
 }
 
 #endif
