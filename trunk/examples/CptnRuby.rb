@@ -24,10 +24,11 @@ end
 #  5) make the player wider, so he doesn't fall off edges as easily
 #  6) add background music (check if playing in Window#update to implement 
 #     looping)
+#  7) implement parallax scrolling for the star background!
 # Getting tricky:
-#  7) optimize Map#draw so only tiles on screen are drawn (needs modulo, a pen
+#  8) optimize Map#draw so only tiles on screen are drawn (needs modulo, a pen
 #     and paper to figure out)
-#  8) add loading of next level when all gems are collected
+#  9) add loading of next level when all gems are collected
 # ...Enemies, a more sophisticated object system, weapons, title and credits
 # screens...
 
@@ -171,14 +172,8 @@ class Map
   end
   
   def draw(screen_x, screen_y)
-    # Very basic parallax-scrolling background.
-    2.times do |repeat_x|
-      2.times do |repeat_y|
-        x = -screen_x / 2 % 640
-        y = -screen_y / 2 % 480
-        @sky.draw(x - repeat_x * 640, y - repeat_y * 480, 0)
-      end
-    end
+    # Sigh, stars!
+    @sky.draw(0, 0, 0)
     
 
     # Very primitive drawing function:
