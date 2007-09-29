@@ -47,7 +47,7 @@
   * `playing?`
 
 == class Gosu::Window ==
-  * `initialize(width, height, fullscreen, update_interval)`: Note`: Having two or more windows and loading samples or songs on both of them will result in an exception. If you want to re-open your game window, make sure the old one is *really* dead.
+  * `initialize(width, height, fullscreen, update_interval = 16.666666)`: Note`: Having two or more windows and loading samples or songs on both of them will result in an exception. If you want to re-open your game window, make sure the old one is *really* dead.
   * `caption, caption=`
   * `show`
   * `close`
