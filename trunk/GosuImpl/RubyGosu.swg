@@ -248,11 +248,6 @@ namespace Gosu
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
         return new Gosu::Image(window.graphics(), bmp);
     }
-    static unsigned textHeight(const std::wstring& text,
-                               const std::wstring& fontName, unsigned fontHeight,
-                               unsigned lineSpacing, unsigned maxWidth) {
-        return Gosu::textHeight(text, fontName, fontHeight, lineSpacing, maxWidth);
-    }
     static std::vector<Gosu::Image*> loadTiles(Gosu::Window& window, VALUE source,
                                                int tileWidth, int tileHeight, bool hardBorders) {
         std::vector<Gosu::Image*> vec;

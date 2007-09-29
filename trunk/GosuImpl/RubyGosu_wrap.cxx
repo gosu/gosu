@@ -2297,9 +2297,6 @@ SWIGINTERN Gosu::Image *Gosu_Image_fromText(Gosu::Window &window,std::wstring co
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
         return new Gosu::Image(window.graphics(), bmp);
     }
-SWIGINTERN unsigned int Gosu_Image_textHeight(std::wstring const &text,std::wstring const &fontName,unsigned int fontHeight,unsigned int lineSpacing,unsigned int maxWidth){
-        return Gosu::textHeight(text, fontName, fontHeight, lineSpacing, maxWidth);
-    }
 SWIGINTERN std::vector<Gosu::Image * > Gosu_Image_loadTiles(Gosu::Window &window,VALUE source,int tileWidth,int tileHeight,bool hardBorders){
         std::vector<Gosu::Image*> vec;
         // TODO: const correctness (<- did I mean exception safety?)
@@ -4935,66 +4932,6 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Image_text_height(int argc, VALUE *argv, VALUE self) {
-  std::wstring *arg1 = 0 ;
-  std::wstring *arg2 = 0 ;
-  unsigned int arg3 ;
-  unsigned int arg4 ;
-  unsigned int arg5 ;
-  unsigned int result;
-  std::wstring temp1 ;
-  std::wstring temp2 ;
-  unsigned int val3 ;
-  int ecode3 = 0 ;
-  unsigned int val4 ;
-  int ecode4 = 0 ;
-  unsigned int val5 ;
-  int ecode5 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 5) || (argc > 5)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 5)",argc); SWIG_fail;
-  }
-  {
-    VALUE localTemporary = rb_obj_as_string(argv[0]);
-    temp1 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
-    arg1 = &temp1;
-  }
-  {
-    VALUE localTemporary = rb_obj_as_string(argv[1]);
-    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
-    arg2 = &temp2;
-  }
-  ecode3 = SWIG_AsVal_unsigned_SS_int(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Gosu_Image_textHeight" "', argument " "3"" of type '" "unsigned int""'");
-  } 
-  arg3 = static_cast< unsigned int >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_int(argv[3], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Gosu_Image_textHeight" "', argument " "4"" of type '" "unsigned int""'");
-  } 
-  arg4 = static_cast< unsigned int >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_int(argv[4], &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Gosu_Image_textHeight" "', argument " "5"" of type '" "unsigned int""'");
-  } 
-  arg5 = static_cast< unsigned int >(val5);
-  {
-    try {
-      result = (unsigned int)Gosu_Image_textHeight((std::wstring const &)*arg1,(std::wstring const &)*arg2,arg3,arg4,arg5);
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
 _wrap_Image_load_tiles(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
   VALUE arg2 = (VALUE) 0 ;
@@ -6793,7 +6730,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cImage.klass, "draw_rot", VALUEFUNC(_wrap_Image_draw_rot), -1);
   rb_define_method(cImage.klass, "draw_as_quad", VALUEFUNC(_wrap_Image_draw_as_quad), -1);
   rb_define_singleton_method(cImage.klass, "from_text", VALUEFUNC(_wrap_Image_from_text), -1);
-  rb_define_singleton_method(cImage.klass, "text_height", VALUEFUNC(_wrap_Image_text_height), -1);
   rb_define_singleton_method(cImage.klass, "load_tiles", VALUEFUNC(_wrap_Image_load_tiles), -1);
   cImage.mark = 0;
   cImage.destroy = (void (*)(void *)) free_Gosu_Image;
