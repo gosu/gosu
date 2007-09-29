@@ -2,6 +2,7 @@
 #labels Featured
 
 = 0.7.7=
+  * find out about rb_schedule_threads() or what it's called.
   * implement frameskip
   * don't round updateInterval on Win/Linux
   * use OpenGL on Windows
