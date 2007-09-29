@@ -96,7 +96,7 @@ Kb6
 Kb7
 Kb8
 Kb9
-KbBackSpace
+KbBackspace
 KbDelete
 KbDown
 KbEnd
