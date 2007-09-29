@@ -4,6 +4,7 @@
 == Common arguments ==
   * Whenever a function expects a Gosu::Color value, a 0xAARRGGBB integer can be supplied instead.
   * Valid mode parameters for drawing functions are :default and :additive.
+  * *RMagick users:* Magick::Image instances can be passed instead of filenames to Image.new and Image.load_tiles!
 
 == class Gosu::Color ==
   * `initialize(argb)`: argb is a 0xAARRGGBB integer.
@@ -25,13 +26,14 @@
   * `draw_rel(text, x, y, z, rel_x, rel_y, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`: If relX is 0.0, the text will be to the right of x, if it is 1.0, the text will be to the left of x, if it is 0.5, it will be centered on x. Of course, all real numbers are possible values. The same applies to relY.
 
 == class Gosu::Image ==
-  * `initialize(window, filename, hard_borders, [srcX, srcY, srcWidth, srcHeight])`
+  * `initialize(window, filename_or_rmagick_image, hard_borders, [srcX, srcY, srcWidth, srcHeight])`
   * `width`
   * `height`
   * `draw(x, y, z, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`
   * `draw_rot(x, y, z, angle, center_x=0.5, center_y=0.5, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`: center_x Relative horizontal position of the rotation center on the image. 0 is the left border, 1 is the right border, 0.5 is the center (and default)—the same applies to center_y, respectively.
+  * `draw_as_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode=:default)`: Like Window#draw_quad, but with this texture instead of a solid color. Can be used to implement advanced, non-rectangular drawing techniques.
   * `self.from_text(window, text, font_name, font_height, line_spacing, max_width, align)`: Creates a block of text of width max_width. Each line will take font_height + line_spacing pixels of vertical space.`: align must be one of :left, :right, :center oder :justify
-  * `self.load_tiles(window, filename, tile_width, tile_height, hard_borders)`: tile_width is either the width of one tile in pixels or the number of columns, tile_height is its vertical equivalent
+  * `self.load_tiles(window, filename_or_rmagick_image, tile_width, tile_height, hard_borders)`: tile_width is either the width of one tile in pixels or the number of columns, tile_height is its vertical equivalent
 
 == class Gosu::Sample ==
   * `initialize(window, filename)`
