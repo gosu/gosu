@@ -3,6 +3,7 @@
 
 =0.7.7=
   * Ruby: Gosu::sleep was not supposed to exist, now killed (did overwrite Ruby's sleep when include'ing Gosu)
+  * Ruby: Gosu now cooperates with Ruby's multitasking
 
 =0.7.6=
   * All: Fixed a bug potentially cutting off text on all platforms
