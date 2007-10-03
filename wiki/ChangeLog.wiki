@@ -1,6 +1,9 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.7=
+  * Ruby: Gosu::sleep was not supposed to exist, now killed (did overwrite Ruby's sleep when include'ing Gosu)
+
 =0.7.6=
   * All: Fixed a bug potentially cutting off text on all platforms
   * All: Fixed a bug which would exclude lines from very long text
