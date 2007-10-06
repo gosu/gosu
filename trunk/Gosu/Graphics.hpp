@@ -66,11 +66,7 @@ namespace Gosu
         boost::scoped_ptr<Impl> pimpl;
 
     public:
-#ifdef GOSU_IS_WIN
-        Graphics(HWND handle, const RECT& outputRect, const DisplayMode& mode);
-#else
         Graphics(const DisplayMode& mode);
-#endif
         ~Graphics();
 
         // Undocumented until I have thought about this...

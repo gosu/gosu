@@ -13,7 +13,10 @@ namespace
 			throw std::runtime_error("Error getting special folder path");
 		std::size_t len = std::wcslen(buf);
 		if (buf[len - 1] != '\\')
-			buf[len] = '\\';
+		{
+			buf[len] = L'\\';
+			buf[len + 1] = L'\0';
+		}
 		return buf;
 	}
 }

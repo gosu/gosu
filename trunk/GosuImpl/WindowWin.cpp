@@ -4,6 +4,7 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Audio.hpp>
 #include <Gosu/Input.hpp>
+#include <GosuImpl/OpenGL/OpenGL.hpp>
 #include <boost/bind.hpp>
 #include <cassert>
 #include <stdexcept>
@@ -13,10 +14,23 @@ namespace Gosu
 {
     namespace
     {
+        void setupVSync()
+        {
+            char* extensions = (char*)glGetString(GL_EXTENSIONS);
+            if (!strstr(extensions, "WGL_EXT_swap_control"))
+                return;
+            typedef void (APIENTRY *PFNWGLEXTSWAPCONTROLPROC) (int);
+            PFNWGLEXTSWAPCONTROLPROC wglSwapIntervalEXT =
+                (PFNWGLEXTSWAPCONTROLPROC) wglGetProcAddress("wglSwapIntervalEXT");
+            if (!wglSwapIntervalEXT)
+                return;
+            wglSwapIntervalEXT(1);
+        }
+
         LRESULT CALLBACK windowProc(HWND wnd, UINT message, WPARAM wparam,
             LPARAM lparam)
         {
-            LONG_PTR lptr = ::GetWindowLongPtr(wnd, GWLP_USERDATA);
+            LONG_PTR lptr = GetWindowLongPtr(wnd, GWLP_USERDATA);
 
             if (lptr)
             {
@@ -24,7 +38,7 @@ namespace Gosu
                 return obj->handleMessage(message, wparam, lparam);
             }
             else
-                return ::DefWindowProc(wnd, message, wparam, lparam);
+                return DefWindowProc(wnd, message, wparam, lparam);
         }
 
         LPCTSTR windowClass()
@@ -32,10 +46,10 @@ namespace Gosu
             static LPCTSTR name = 0;
             if (name)
                 return name;
-
+            
             WNDCLASS wc;
             wc.lpszClassName = L"Gosu::Window";
-            wc.style = CS_CLASSDC;
+            wc.style = CS_OWNDC;
             wc.lpfnWndProc = windowProc;
             wc.cbClsExtra = 0;
             wc.cbWndExtra = 0;
@@ -55,20 +69,23 @@ namespace Gosu
 struct Gosu::Window::Impl
 {
     HWND handle;
+	HDC hdc;
     boost::scoped_ptr<Graphics> graphics;
     boost::scoped_ptr<Audio> audio;
     boost::scoped_ptr<Input> input;
 	double updateInterval;
 
     Impl()
-    : handle(0)
+    : handle(0), hdc(0)
     {
     }
 
     ~Impl()
     {
+        if (hdc)
+            ReleaseDC(handle, hdc);
         if (handle)
-            ::DestroyWindow(handle);
+            DestroyWindow(handle);
     }
 };
 
@@ -83,7 +100,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         throw std::runtime_error("No suitable display mode found");
 
     // Select window styles depending on mode.fullscreen.
-    DWORD style = 0;
+    DWORD style = WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
     DWORD styleEx = WS_EX_APPWINDOW;
     if (fullscreen)
     {
@@ -96,35 +113,55 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         styleEx |= WS_EX_WINDOWEDGE;
     }
 
-    pimpl->handle = ::CreateWindowEx(styleEx, windowClass(), 0, style,
+    pimpl->handle = CreateWindowEx(styleEx, windowClass(), 0, style,
         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, 0, 0,
         Win::instance(), 0);
+    Win::check(pimpl->handle);
 
-    ::SetLastError(0);
-    ::SetWindowLongPtr(handle(), GWLP_USERDATA,
+	pimpl->hdc = GetDC(handle());
+    Win::check(pimpl->handle);
+
+	PIXELFORMATDESCRIPTOR pfd;
+	ZeroMemory(&pfd, sizeof pfd);
+    pfd.nSize        = sizeof pfd;
+    pfd.nVersion     = 1;
+    pfd.dwFlags      = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+    pfd.iLayerType   = PFD_MAIN_PLANE;
+    pfd.iPixelType   = PFD_TYPE_RGBA;
+    pfd.cColorBits   = 32;
+	int pf = ChoosePixelFormat(pimpl->hdc, &pfd);
+    Win::check(pf);
+    Win::check(SetPixelFormat(pimpl->hdc, pf, &pfd));
+
+	HGLRC hrc = Win::check(wglCreateContext(pimpl->hdc), "creating rendering context");
+    Win::check(wglMakeCurrent(pimpl->hdc, hrc), "selecting the rendering context");
+
+    setupVSync();
+
+    SetLastError(0);
+    SetWindowLongPtr(handle(), GWLP_USERDATA,
         reinterpret_cast<LONG_PTR>(this));
-    if (::GetLastError() != 0)
+    if (GetLastError() != 0)
         Win::throwLastError("setting the window's GWLP_USERDATA pointer");
 
     // Determine the size the window needs to have.
     RECT rc = { 0, 0, width, height };
-    ::AdjustWindowRectEx(&rc, style, FALSE, styleEx);
+    AdjustWindowRectEx(&rc, style, FALSE, styleEx);
     unsigned windowW = rc.right - rc.left;
     unsigned windowH = rc.bottom - rc.top;
 
     // Center the window.
-    HWND desktopWindow = ::GetDesktopWindow();
+    HWND desktopWindow = GetDesktopWindow();
     RECT desktopRect;
-    ::GetClientRect(desktopWindow, &desktopRect);
+    GetClientRect(desktopWindow, &desktopRect);
     int desktopW = desktopRect.right - desktopRect.left;
     int desktopH = desktopRect.bottom - desktopRect.top;
     unsigned windowX = (desktopW - windowW) / 2;
     unsigned windowY = (desktopH - windowH) / 2;
 
-    ::MoveWindow(handle(), windowX, windowY, windowW, windowH, false);
+    MoveWindow(handle(), windowX, windowY, windowW, windowH, false);
 
-    RECT outputRect = { 0, 0, width, height };
-    pimpl->graphics.reset(new Gosu::Graphics(handle(), outputRect, *mode));
+    pimpl->graphics.reset(new Gosu::Graphics(*mode));
     pimpl->input.reset(new Gosu::Input(handle()));
     input().onButtonDown = boost::bind(&Window::buttonDown, this, _1);
     input().onButtonUp = boost::bind(&Window::buttonUp, this, _1);
@@ -134,29 +171,29 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
 
 Gosu::Window::~Window()
 {
-    ::KillTimer(handle(), 1337);
+    wglMakeCurrent(0, 0);
 }
 
 std::wstring Gosu::Window::caption() const
 {
-    int bufLen = ::GetWindowTextLength(handle()) + 1;
+    int bufLen = GetWindowTextLength(handle()) + 1;
 
     if (bufLen < 2)
         return L"";
 
     std::vector<TCHAR> buf(bufLen);
-    ::GetWindowText(handle(), &buf.front(), bufLen);
+    GetWindowText(handle(), &buf.front(), bufLen);
     return &buf.front();
 }
 
 void Gosu::Window::setCaption(const std::wstring& value)
 {
-    ::SetWindowText(handle(), value.c_str());
+    SetWindowText(handle(), value.c_str());
 }
 
 void Gosu::Window::show()
 {
-    ::ShowWindow(handle(), SW_SHOW);
+    ShowWindow(handle(), SW_SHOW);
     try
     {
         Win::processMessages();
@@ -191,7 +228,7 @@ void Gosu::Window::show()
 
 void Gosu::Window::close()
 {
-    ::ShowWindow(handle(), SW_HIDE);
+    ShowWindow(handle(), SW_HIDE);
 }
 
 const Gosu::Graphics& Gosu::Window::graphics() const
@@ -256,15 +293,16 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
             }
             graphics().end();
         }
-        ::ValidateRect(handle(), 0);
+        SwapBuffers(pimpl->hdc);
+        ValidateRect(handle(), 0);
         return 0;
     }
 
     if (message == WM_SETCURSOR && LOWORD(lparam) == HTCLIENT)
     {
-        ::SetCursor(0);
+        SetCursor(0);
         return TRUE;
     }
 
-    return ::DefWindowProc(handle(), message, wparam, lparam);
+    return DefWindowProc(handle(), message, wparam, lparam);
 }

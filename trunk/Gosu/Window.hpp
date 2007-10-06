@@ -16,9 +16,9 @@
 
 namespace Gosu
 {
-    //! Convenience class that serves as the foundation of a standard Gosu
-    //! application. Manages initialization of all of Gosu's core components
-    //! and provides basic timing functionality.
+    //! Convenient all-in-one class that serves as the foundation of a standard
+	//! Gosu application. Manages initialization of all of Gosu's core components
+    //! and provides timing functionality.
     class Window
     {
         struct Impl;

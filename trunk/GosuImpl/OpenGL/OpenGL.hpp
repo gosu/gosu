@@ -1,12 +1,13 @@
 #ifndef GOSUIMPL_OPENGL_OPENGL_HPP
 #define GOSUIMPL_OPENGL_OPENGL_HPP
 
-#ifndef WIN32
-#ifdef __linux__
-#include <GL/gl.h>
-#else
-#include <OpenGL/gl.h>
+#ifdef WIN32
+#include <windows.h>
 #endif
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
 #endif
 
 namespace Gosu
