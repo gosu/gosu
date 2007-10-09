@@ -100,7 +100,7 @@ Initializing the environment properly is key to the whole physics engine working
 
   * First of all, add the @beep and @score that was previously part of the Player to the Gosu::Window and initialize method.  
   * Create an instance variable called @dt and set it to 1.0/60.0.
-    This variable specifies how long a step represents in Space
+	  * This variable specifies how long a step represents in Space
   * Assign an instance variable called @space a new CP::Space
   * Initialize @space.damping to 0.8
 	  * 1.0 is no damping and 0.0 is full damping
