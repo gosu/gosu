@@ -69,16 +69,16 @@ Now that we have ripped out the undesirable characteristics of our Player, lets 
   * Add a @shape instance variable to track the Shape
   * Initialize the Shape's position, velocity, and angle
   * Update warp to set the position in the Body
-	(Note that position is a CP::Vec2 vector)
+	  * Note that position is a CP::Vec2 vector
   * Update turn_left to apply torque to the Body
-	(I will explain the SUBSTEPS constant when we cover stepping Space)
+	  * I will explain the SUBSTEPS constant when we cover stepping Space
   * Update turn_right to apply torque to the Body
   * Update accelerate to apply force to the Body
-        (Since force is a vector and we need to apply it in the direction of the angle I have added a method on the Numeric class to turn a radian scalar into a vector. See the code at the end of this document for more information)
+          * Since force is a vector and we need to apply it in the direction of the angle I have added a method on the Numeric class to turn a radian scalar into a vector. See the code at the end of this document for more information
   * Add the boost method and apply force to the Body
   * Add the reverse method and apply force to the Body
   * Update the draw method to use the Body angle, but be sure to convert from radians to degrees
-    (One thing to note is that Gosu has 0 degrees (0 radians) starting at the top of the screen and Chipmunk has 0 radians (0 degrees) pointing to the right. This is handled in our Numeric#radians_to_gosu method)
+	  * One thing to note is that Gosu has 0 degrees (0 radians) starting at the top of the screen and Chipmunk has 0 radians (0 degrees) pointing to the right. This is handled in our Numeric#radians_to_gosu method)
 
 == Stars In Your Eyes ==
 
@@ -103,11 +103,12 @@ Initializing the environment properly is key to the whole physics engine working
     This variable specifies how long a step represents in Space
   * Assign an instance variable called @space a new CP::Space
   * Initialize @space.damping to 0.8
-	(1.0 is no damping and 0.0 is full damping — I think of damping as being similar to an ambient friction in Space)
+	  * 1.0 is no damping and 0.0 is full damping
+	  * I think of damping as being similar to an ambient friction in Space
   * Create the Body for the player and assign it a mass of 10.0 and a moment of inertia of 150.0
-	(Think of the moment of inertia as an object's resistance to torque)
+	  * Think of the moment of inertia as an object's resistance to torque
   * Lets use a 4 vertex polygon to define the shape of the ship
-	(The "top" of the polygon should be oriented towards 0 radians (the right))
+	  * The "top" of the polygon should be oriented towards 0 radians (the right)
   * Create the poly Shape for the Body
   * Set the collision_type of the Shape to :ship
   * Add both the Body and the Shape to Space
@@ -155,9 +156,11 @@ As of this writing, Chipmunk's Ruby bindings documentation is out of date.  On t
 
 = ChipmunkIntegration.rb =
 
-{{{## File: ChipmunkIntegration.rb
+{{{
+## File: ChipmunkIntegration.rb
 ## Version: 1.0.0
 ## Date: 2007-10-05
+## Author: Dirk Johnson
 ## License: Same as for Gosu (MIT)
 ## Comments: Based on the Gosu Ruby Tutorial, but incorporating the Chipmunk Physics Engine
 
@@ -435,4 +438,5 @@ class GameWindow < Gosu::Window
 end
 
 window = GameWindow.new
-window.show}}}
+window.show
+}}}
