@@ -160,7 +160,6 @@ As of this writing, Chipmunk's Ruby bindings documentation is out of date.  On t
 ## File: ChipmunkIntegration.rb
 ## Version: 1.0.0
 ## Date: 2007-10-05
-## Author: Dirk Johnson
 ## License: Same as for Gosu (MIT)
 ## Comments: Based on the Gosu Ruby Tutorial, but incorporating the Chipmunk Physics Engine
 
@@ -184,11 +183,11 @@ class Numeric
   end
   
   def radians_to_gosu
-  	self * 180.0 / Math::PI + 90
+    self * 180.0 / Math::PI + 90
   end
   
   def radians_to_vec2
-  	CP::Vec2.new(Math::cos(self), Math::sin(self))
+    CP::Vec2.new(Math::cos(self), Math::sin(self))
   end
 end
 
@@ -239,25 +238,25 @@ class Player
   # forward momentum by creating a vector in the direction of the facing
   # and with a magnitude representing the force we want to apply
   def accelerate
-		@shape.body.apply_force((@shape.body.a.radians_to_vec2 * (3000.0/SUBSTEPS)), CP::Vec2.new(0.0, 0.0))
+    @shape.body.apply_force((@shape.body.a.radians_to_vec2 * (3000.0/SUBSTEPS)), CP::Vec2.new(0.0, 0.0))
   end
   
   # Apply even more forward force
   # See accelerate for more details
   def boost
-		@shape.body.apply_force((@shape.body.a.radians_to_vec2 * (3000.0)), CP::Vec2.new(0.0, 0.0))
+    @shape.body.apply_force((@shape.body.a.radians_to_vec2 * (3000.0)), CP::Vec2.new(0.0, 0.0))
   end
   
   # Apply reverse force
   # See accelerate for more details
   def reverse
-		@shape.body.apply_force(-(@shape.body.a.radians_to_vec2 * (1000.0/SUBSTEPS)), CP::Vec2.new(0.0, 0.0))
-	end
-	
-	# Wrap to the other side of the screen when we fly off the edge
+    @shape.body.apply_force(-(@shape.body.a.radians_to_vec2 * (1000.0/SUBSTEPS)), CP::Vec2.new(0.0, 0.0))
+  end
+  
+  # Wrap to the other side of the screen when we fly off the edge
   def validate_position
-  	l_position = CP::Vec2.new(@shape.body.p.x % SCREEN_WIDTH, @shape.body.p.y % SCREEN_HEIGHT)
-  	@shape.body.p = l_position
+    l_position = CP::Vec2.new(@shape.body.p.x % SCREEN_WIDTH, @shape.body.p.y % SCREEN_HEIGHT)
+    @shape.body.p = l_position
   end
   
   def draw
@@ -268,8 +267,8 @@ end
 # See how simple our Star is?
 # Of course... it just sits around and looks good...
 class Star
-	attr_reader :shape
-	
+  attr_reader :shape
+  
   def initialize(animation, shape)
     @animation = animation
     @color = Gosu::Color.new(0xff000000)
@@ -294,26 +293,26 @@ class GameWindow < Gosu::Window
   def initialize
     super(SCREEN_WIDTH, SCREEN_HEIGHT, false, 16)
     self.caption = "Gosu & Chipmunk Integration Demo"
-		@background_image = Gosu::Image.new(self, "media/Space.png", true)
+    @background_image = Gosu::Image.new(self, "media/Space.png", true)
 
     # Put the beep here, as it is the environment now that determines collision
-		@beep = Gosu::Sample.new(self, "media/Beep.wav")
-		
-		# Put the score here, as it is the environment that tracks this now
+    @beep = Gosu::Sample.new(self, "media/Beep.wav")
+    
+    # Put the score here, as it is the environment that tracks this now
     @score = 0
-		@font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+    @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
     
     # Time increment over which to apply a physics "step" ("delta t")
-  	@dt = (1.0/60.0)
-  	
-  	# Create our Space and set its damping
-  	# A damping of 0.8 causes the ship bleed off its force and torque over time
-  	# This is not realistic behavior in a vacuum of space, but it gives the game
-  	# the feel I'd like in this situation
+    @dt = (1.0/60.0)
+    
+    # Create our Space and set its damping
+    # A damping of 0.8 causes the ship bleed off its force and torque over time
+    # This is not realistic behavior in a vacuum of space, but it gives the game
+    # the feel I'd like in this situation
     @space = CP::Space.new
-		@space.damping = 0.8		
-		
-		# Create the Body for the Player
+    @space.damping = 0.8    
+    
+    # Create the Body for the Player
     body = CP::Body.new(10.0, 150.0)
     
     # In order to create a shape, we must first define it
@@ -347,9 +346,9 @@ class GameWindow < Gosu::Window
     # in the same order that their collision_types are defined in the add_collision_func call
     @remove_shapes = []
     @space.add_collision_func(:ship, :star) do |ship_shape, star_shape|
-			@score += 10
-			@beep.play
-			@remove_shapes << star_shape
+      @score += 10
+      @beep.play
+      @remove_shapes << star_shape
     end
     
     # Here we tell Space that we don't want one star bumping into another
@@ -362,63 +361,63 @@ class GameWindow < Gosu::Window
   end
 
   def update
-  	# Step the physics environment SUBSTEPS times each update
-  	SUBSTEPS.times do
-  		# This iterator makes an assumption of one Shape per Star making it safe to remove
-  		# each Shape's Body as it comes up
-  		# If our Stars had multiple Shapes, as would be required if we were to meticulously
-  		# define their true boundaries, we couldn't do this as we would remove the Body
-  		# multiple times
-  		# We would probably solve this by creating a separate @remove_bodies array to remove the Bodies
-  		# of the Stars that were gathered by the Player
- 			@remove_shapes.each do |shape|
-				@stars.delete_if { |star| star.shape == shape }
-				@space.remove_body(shape.body)
-				@space.remove_shape(shape)
-			end
-			@remove_shapes.clear # clear out the shapes for next pass
-			
-			# When a force or torque is set on a Body, it is cumulative
-			# This means that the force you applied last SUBSTEP will compound with the
-			# force applied this SUBSTEP; which is probably not the behavior you want
-			# We reset the forces on the Player each SUBSTEP for this reason
-			@player.shape.body.reset_forces
-			
-			# Wrap around the screen to the other side
-			@player.validate_position
-			
-			# Check keyboard
-			if button_down? Gosu::Button::KbLeft
-				@player.turn_left
-			end
-			if button_down? Gosu::Button::KbRight
-				@player.turn_right
-			end
-			
-			if button_down? Gosu::Button::KbUp
-				if ( (button_down? Gosu::Button::KbRightShift) || (button_down? Gosu::Button::KbLeftShift) )
-					@player.boost
-				else
-					@player.accelerate
-				end
-			elsif button_down? Gosu::Button::KbDown
-				@player.reverse
-			end
-			
-			# Perform the step over @dt period of time
-			# For best performance @dt should remain consistent for the game
-			@space.step(@dt)
-		end
-		
-		# Each update (not SUBSTEP) we see if we need to add more Stars
-		if rand(100) < 4 and @stars.size < 25 then
-    	body = CP::Body.new(0.0001, 0.0001)
-    	shape = CP::Shape::Circle.new(body, 25/2, CP::Vec2.new(0.0, 0.0))
-    	shape.collision_type = :star
-    	
-    	@space.add_body(body)
-    	@space.add_shape(shape)
-    	
+    # Step the physics environment SUBSTEPS times each update
+    SUBSTEPS.times do
+      # This iterator makes an assumption of one Shape per Star making it safe to remove
+      # each Shape's Body as it comes up
+      # If our Stars had multiple Shapes, as would be required if we were to meticulously
+      # define their true boundaries, we couldn't do this as we would remove the Body
+      # multiple times
+      # We would probably solve this by creating a separate @remove_bodies array to remove the Bodies
+      # of the Stars that were gathered by the Player
+      @remove_shapes.each do |shape|
+        @stars.delete_if { |star| star.shape == shape }
+        @space.remove_body(shape.body)
+        @space.remove_shape(shape)
+      end
+      @remove_shapes.clear # clear out the shapes for next pass
+      
+      # When a force or torque is set on a Body, it is cumulative
+      # This means that the force you applied last SUBSTEP will compound with the
+      # force applied this SUBSTEP; which is probably not the behavior you want
+      # We reset the forces on the Player each SUBSTEP for this reason
+      @player.shape.body.reset_forces
+      
+      # Wrap around the screen to the other side
+      @player.validate_position
+      
+      # Check keyboard
+      if button_down? Gosu::Button::KbLeft
+        @player.turn_left
+      end
+      if button_down? Gosu::Button::KbRight
+        @player.turn_right
+      end
+      
+      if button_down? Gosu::Button::KbUp
+        if ( (button_down? Gosu::Button::KbRightShift) || (button_down? Gosu::Button::KbLeftShift) )
+          @player.boost
+        else
+          @player.accelerate
+        end
+      elsif button_down? Gosu::Button::KbDown
+        @player.reverse
+      end
+      
+      # Perform the step over @dt period of time
+      # For best performance @dt should remain consistent for the game
+      @space.step(@dt)
+    end
+    
+    # Each update (not SUBSTEP) we see if we need to add more Stars
+    if rand(100) < 4 and @stars.size < 25 then
+      body = CP::Body.new(0.0001, 0.0001)
+      shape = CP::Shape::Circle.new(body, 25/2, CP::Vec2.new(0.0, 0.0))
+      shape.collision_type = :star
+      
+      @space.add_body(body)
+      @space.add_shape(shape)
+      
       @stars.push(Star.new(@star_anim, shape))
     end
   end
