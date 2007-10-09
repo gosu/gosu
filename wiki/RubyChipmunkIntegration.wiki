@@ -1,0 +1,438 @@
+#summary Ruby & Chipmunk Tutorial by Dirk Johnson
+
+= The Ruby & Chipmunk Tutorial =
+
+This tutorial covers integrating the Chipmunk Physics Engine's Ruby bindings with Gosu's Ruby bindings.  This tutorial assumes that both Gosu and Chipmunk have been properly installed.  See http://wiki.slembcke.net/main/published/Chipmunk. The source code for this tutorial can be found at the end of this page, and is supposed to be saved into Gosu's 'examples' folder, along with the chipmunk extension if you haven't installed it system-wide.
+
+= Prolog =
+
+Lately, I have been writing a game I have been threatening to write on-and-off for a long time.  I am, of course, using Ruby as the implementation language and Gosu as the animation layer.  One thing I faced early on was implementing the physics of the game; following one of my coding mantras, I took the approach of "get it to work first, worry about optimizing later". While the performance I saw was basically adequate for the scope of version 0.1, I could see it would start to bog down fairly quickly going forward.  As it happens, I showed Julian an early copy of my work and he pointed me to Chipmunk to handle the physics.
+
+Can I just say, Chipmunk is awesome: it is awesome because it is fast and it is simple to use.  And it is *really* awesome because, like Gosu, it supports both Mac OS X and Ruby!  Not to put too fine a point on it, in its current iteration (as of this writing, version 3), Chipmunk is a 2D, Euler space, rigid body, physics engine.  This is quite a mouthful, and, for the most part, all y'all need worry about is "2D" which means it will mesh quite well with Gosu.
+
+After looking at the Chipmunk framework, one thing I noticed was that it basically assumes that you are working with a profile oriented environment where down (the direction of gravity) is towards the bottom of the screen.  What this means is that you can exploit all Chipmunk offers (e.g., gravity, friction, collision detection, etc.) for your side-scrolling games, however, top-down games, where down is out the back of the display, might limit what Chipmunk can do for you, or, at least, render it more difficult to use.
+
+Of course, my game is top-down.
+
+So, that left me with discovering just what Chipmunk v3 could do for me.  I could have started the discovery process by ripping apart my code and attempting to integrate Chipmunk back in, but I decided to take a much simpler first step... take the top-down Tutorial for Gosu and integrate Chipmunk into that.  I even thought I would do it one better and document the conversion as a sort-of tutorial; thus what you are reading now.
+
+Let us begin...
+
+= Chipmunk 101 =
+
+== Universal Attributes ==
+
+Lets look at the Tutorial's Player class.  Notice it has instance variables for tracking what I call the universal attributes of a game object:
+
+  * @x - The horizontal position of the Player
+  * @y - The vertical position of the Player
+  * @vel_x - The velocity of the x attribute of the Player
+  * @vel_y - The velocity of the y attribute of the Player
+  * @angle - The angle or facing of the Player
+
+With Chipmunk, your game objects will no longer track your universal attributes, instead, your game objects will have a Chipmunk Body (sometimes called a rigid body) instance (CP::Body), which will track your universal attributes for you.  This is a good thing.  Now your game objects can focus on what makes them unique.
+
+== Space To Play ==
+
+In the Tutorial, collision analysis was done by the Player object, however, when you really think about it, determining whether one object collides with another object is really the purview of the universe in which your game objects live.  Luckily, Chipmunk provides us a "universe" object called Space (CP::Space).  Space is responsible for defining gravity and damping as well as keeping track of the Bodies and Shapes that exist within.  (Note: you can have none, one, or many Spaces in your game, easily allowing variable forces on your game objects, however, this tutorial assumes one Space.)
+
+== Shapely Objects ==
+
+The astute student will have noticed I snuck in a new term in the last paragraph: Shape.  While the Body is used to track universal attributes, the Shape (CP::Shape) is used to define the physical boundaries of those attributes.  Since a Shape is defined as being physical, it is primarily used for collision detection.  As one might guess, a Shape is pretty useless without a Body, therefore, each Shape has a Body.  This means that our game objects need only have a single reference to a Shape and they automatically get a Body, too!  It should be noted that your Shapes need to be convex shapes, which means all internal angles are less than or equal to 180 degrees.  Visually, this means no dimples in the shape.  If the game object being defined is more complex than a single convex shape can define, then a game object can have more than one Shape, that, when pieced together, form the overall shape of the object.  In this case, each Shape should point to the same Body.  (To me it is a bit awkward to have the Shape own the Body, considering that a game object could have more than one Shape but only need a single Body - rather, I would have the Body own the Shape(s).  This is, however, a minor detail and easily worked around.)
+
+== Oh! Did That Connect? ==
+
+In order to detect "collisions", the Tutorial cycled through every Star every update and judged the distance between the Player and the Stars; if the distance was less than a threshold (in this case, 35), then there was a collision and the Star was removed and the score increased by 10.  Now that game objects have Shapes, we can let Space do this work for us.  One might ask, "How do we tell Space to increment the score and remove the Star when there is a collision?"  I'm glad you asked, and the answer is "Ruby blocks!"  Space allows us to define blocks of code (sometimes called closures) that will be called when a Player collides with a Star (or, more generically, when one collision type collides with another collision type).  This allows us to increment the score and remove the Star from Space automagically!  Pretty cool.
+
+= Beginning With The End In Mind =
+
+Go ahead and run the ChipmunkIntegration.rb; it is located at the end of this tutorial.  The ship (Player) performs like I like the ship to perform.  You may prefer a different feel.  Notice I added a "reverse" (the down button).  When you are through getting a feel for where we are heading, lets get our hands dirty.
+
+(Note: The code at the end of this tutorial is commented and explains things this tutorial does not mention so be sure to read the comments in the code as well.)
+
+= Getting Our Hands Dirty =
+
+== Send In The Player ==
+
+Now that we understand the Chipmunk concepts that we need to apply to our game model, lets update the Player class by removing the following:
+
+  * Remove the score - it will be tracked by the game environment (Gosu::Window) so that Space has access to it
+  * Remove the beep - it will be sounded by the game environment (Gosu::Window) so that Space has access to it
+  * Remove the universal attributes - they belong to the Body
+  * Remove the move method - Chipmunk will do that for us
+  * Remove the collect_stars method - Space will handle this for us
+
+Now that we have ripped out the undesirable characteristics of our Player, lets rebuild it in our new, Chipmunkified image.  Following along in the code may help:
+
+  * Add an attr_reader for :shape
+  * Add a Shape parameter to your initialize method
+  * Add a @shape instance variable to track the Shape
+  * Initialize the Shape's position, velocity, and angle
+  * Update warp to set the position in the Body
+	(Note that position is a CP::Vec2 vector)
+  * Update turn_left to apply torque to the Body
+	(I will explain the SUBSTEPS constant when we cover stepping Space)
+  * Update turn_right to apply torque to the Body
+  * Update accelerate to apply force to the Body
+        (Since force is a vector and we need to apply it in the direction of the angle I have added a method on the Numeric class to turn a radian scalar into a vector. See the code at the end of this document for more information)
+  * Add the boost method and apply force to the Body
+  * Add the reverse method and apply force to the Body
+  * Update the draw method to use the Body angle, but be sure to convert from radians to degrees
+    (One thing to note is that Gosu has 0 degrees (0 radians) starting at the top of the screen and Chipmunk has 0 radians (0 degrees) pointing to the right. This is handled in our Numeric#radians_to_gosu method)
+
+== Stars In Your Eyes ==
+
+Lets next update the Star class.  This is actually quite trivial:
+
+  * Remove the attr_reader for :x and :y
+  * Remove the @x and @y instance variables; I bet by now, you can tell me why
+  * Add an attr_reader for :shape
+  * Add a Shape parameter to your initialize method
+  * Add a @shape instance variable to track the Shape
+  * Initialize the Shape's position, velocity, and angle
+  * Update the draw method to use the Body angle converted to degrees
+
+See, that wasn't so bad, was it?  And, we are half way there!
+
+== Setting Up The Environment ==
+
+Initializing the environment properly is key to the whole physics engine working well.  Lets take this one step at a time by starting from scratch.  Referring to the code at the end of this tutorial will make things a lot clearer as you read:
+
+  * First of all, add the @beep and @score that was previously part of the Player to the Gosu::Window and initialize method.  
+  * Create an instance variable called @dt and set it to 1.0/60.0.
+    This variable specifies how long a step represents in Space
+  * Assign an instance variable called @space a new CP::Space
+  * Initialize @space.damping to 0.8
+	(1.0 is no damping and 0.0 is full damping — I think of damping as being similar to an ambient friction in Space)
+  * Create the Body for the player and assign it a mass of 10.0 and a moment of inertia of 150.0
+	(Think of the moment of inertia as an object's resistance to torque)
+  * Lets use a 4 vertex polygon to define the shape of the ship
+	(The "top" of the polygon should be oriented towards 0 radians (the right))
+  * Create the poly Shape for the Body
+  * Set the collision_type of the Shape to :ship
+  * Add both the Body and the Shape to Space
+  * Create an @player instance variable and instantiate a Player instance using the new Shape
+  * Warp the player to the middle of the screen (320, 240)
+  * As in the previous Tutorial, continue to initialize the star animation and Stars arrays
+
+We are now ready to set up the rules for a collision between a :ship and a :star.  There is one critical thing to be aware of.  Within the block of code representing the rules for a collision, you are not allowed to modify the contents of Space.  This means you must keep track of what you want to modify and then modify away after the block of code has completed executing.  For this purpose, as we want to remove Stars from Space, we will create a @remove_shapes instance variable.
+
+  * Create @remove_shapes and initialize it to an empty array
+  * Add a collision function to Space for a collision between :ship and :star,
+	  * Increase the score by 10
+	  * Beep
+	  * Add the Star's Shape to the @remove_shapes array
+	  * Note that a collision closure receives references to both colliding shapes 
+
+What may not be obvious is that for things to work properly in our game, we need to define a second collision block in the case of one :star hitting :another.  You might ask how this could happen.  I'm glad you asked.  The way it could happen is that between the time that a :ship collides with a :star and the time the Star is removed from Space, the Star travels and may collide with another Star, thus moving that Star.  Since our Stars are intended to be stationary, we need to tell Space to ignore collisions between two :stars.  We do this by passing a nil block (&nil).
+
+  * Add a collision function to Space for a collision between :star and :star
+	  * Pass a nil block to instruct Space to ignore these collisions
+    
+Wow, we are done initializing our physics environment.  We are almost through with the conversion!  This is pretty fun, huh?  Onward.
+
+The next step is to integrate stepping Space with the Gosu::Window update.  One thing to note about the Chipmunk engine is you can lose collisions, meaning Shapes that should have been reported as a collide can go unreported when one or both of those Shapes have a large momentum.  The reason is that between steps the Shapes can travel so far as to pass each-other.  The trick, then, is to step Space with a small enough increment that you make such a miss highly unlikely.  In the Tutorial below, I have added a SUBSTEPS constant which lists how many times Space should be stepped per Gosu::Window update.  This may be adjusted as needed.  I personally like the feel of the game when SUBSTEPS is 6.  In the Gosu::Window update method, do the following:
+
+  * Create a loop using SUBSTEPS and do the following within this loop:
+	  * Cycle over the @remove_shapes array and
+		  * Delete the Star from the @stars array that corresponds to the current shape
+		  * Remove the Shape's Body from Space
+		  * Remove the Shape from Space
+	  * Clear the @remove_shapes array
+	  * Reset the forces on the Player's Body
+		  * As force and torque added to a body are cumulative, they should be reset every step
+	  * Tell the Player to validate its position on the screen
+	  * Check the keyboard for inputs
+		  * Don't forget to check for boost and reverse
+	  * Step Space using @dt as the time value
+  * Outside the loop, continue to add stars as in the old Tutorial		
+
+Congratulations!  You have converted the Gosu Tutorial to using Chipmunk!  And, along the way, you should have been armed with most of what you need to do the same to your games.  I hope you enjoyed this as much as I did, and I hope you make some awesome stuff with Gosu and Chipmunk (ChipSu?).
+
+= Epilog =
+
+As of this writing, Chipmunk's Ruby bindings documentation is out of date.  On the Chipmunk forums, the author, Scott Lembcke, has said he will be updating the docs and will "soon" release version 4.  In the meantime, scour the C documentation, the code, and the forums.  I will do my best to update this tutorial for version 4 when it is released.
+
+= ChipmunkIntegration.rb =
+
+`## File: ChipmunkIntegration.rb
+## Version: 1.0.0
+## Date: 2007-10-05
+## License: Same as for Gosu (MIT)
+## Comments: Based on the Gosu Ruby Tutorial, but incorporating the Chipmunk Physics Engine
+
+require 'rubygems'
+require 'gosu'
+require 'chipmunk'
+
+SCREEN_WIDTH = 640
+SCREEN_HEIGHT = 480
+
+# The number of steps to process every Gosu update
+# The Player ship can get going so fast as to "move through" a
+# star without triggering a collision; an increased number of
+# Chipmunk step calls per update will effectively avoid this issue
+SUBSTEPS = 6
+
+# Convenience methods for converting between Gosu degrees, radians, and Vec2 vectors
+class Numeric 
+  def gosu_to_radians
+    (self - 90) * Math::PI / 180.0
+  end
+  
+  def radians_to_gosu
+  	self * 180.0 / Math::PI + 90
+  end
+  
+  def radians_to_vec2
+  	CP::Vec2.new(Math::cos(self), Math::sin(self))
+  end
+end
+
+# Layering of sprites
+module ZOrder
+  Background, Stars, Player, UI = *0..3
+end
+
+# This game will have one Player in the form of a ship
+class Player
+  attr_reader :shape
+
+  def initialize(window, shape)
+    @image = Gosu::Image.new(window, "media/Starfighter.bmp", false)
+    @shape = shape
+    @shape.body.p = CP::Vec2.new(0.0, 0.0) # position
+    @shape.body.v = CP::Vec2.new(0.0, 0.0) # velocity
+    
+    # Keep in mind that down the screen is positive y, which means that PI/2 radians,
+    # which you might consider the top in the traditional Trig unit circle sense is actually
+    # the bottom; thus 3PI/2 is the top
+    @shape.body.a = (3*Math::PI/2.0) # angle in radians; faces towards top of screen
+  end
+  
+  # Directly set the position of our Player
+  def warp(vect)
+    @shape.body.p = vect
+  end
+  
+  # Apply negative Torque; Chipmunk will do the rest
+  # SUBSTEPS is used as a divisor to keep turning rate constant
+  # even if the number of steps per update are adjusted
+  def turn_left
+    @shape.body.t -= 400.0/SUBSTEPS
+  end
+  
+  # Apply positive Torque; Chipmunk will do the rest
+  # SUBSTEPS is used as a divisor to keep turning rate constant
+  # even if the number of steps per update are adjusted
+  def turn_right
+    @shape.body.t += 400.0/SUBSTEPS
+  end
+  
+  # Apply forward force; Chipmunk will do the rest
+  # SUBSTEPS is used as a divisor to keep acceleration rate constant
+  # even if the number of steps per update are adjusted
+  # Here we must convert the angle (facing) of the body into
+  # forward momentum by creating a vector in the direction of the facing
+  # and with a magnitude representing the force we want to apply
+  def accelerate
+		@shape.body.apply_force((@shape.body.a.radians_to_vec2 * (3000.0/SUBSTEPS)), CP::Vec2.new(0.0, 0.0))
+  end
+  
+  # Apply even more forward force
+  # See accelerate for more details
+  def boost
+		@shape.body.apply_force((@shape.body.a.radians_to_vec2 * (3000.0)), CP::Vec2.new(0.0, 0.0))
+  end
+  
+  # Apply reverse force
+  # See accelerate for more details
+  def reverse
+		@shape.body.apply_force(-(@shape.body.a.radians_to_vec2 * (1000.0/SUBSTEPS)), CP::Vec2.new(0.0, 0.0))
+	end
+	
+	# Wrap to the other side of the screen when we fly off the edge
+  def validate_position
+  	l_position = CP::Vec2.new(@shape.body.p.x % SCREEN_WIDTH, @shape.body.p.y % SCREEN_HEIGHT)
+  	@shape.body.p = l_position
+  end
+  
+  def draw
+    @image.draw_rot(@shape.body.p.x, @shape.body.p.y, ZOrder::Player, @shape.body.a.radians_to_gosu)
+  end
+end
+
+# See how simple our Star is?
+# Of course... it just sits around and looks good...
+class Star
+	attr_reader :shape
+	
+  def initialize(animation, shape)
+    @animation = animation
+    @color = Gosu::Color.new(0xff000000)
+    @color.red = rand(255 - 40) + 40
+    @color.green = rand(255 - 40) + 40
+    @color.blue = rand(255 - 40) + 40
+    @shape = shape
+    @shape.body.p = CP::Vec2.new(rand * SCREEN_WIDTH, rand * SCREEN_HEIGHT) # position
+    @shape.body.v = CP::Vec2.new(0.0, 0.0) # velocity
+    @shape.body.a = (3*Math::PI/2.0) # angle in radians; faces towards top of screen
+  end
+
+  def draw  
+    img = @animation[Gosu::milliseconds / 100 % @animation.size];
+    img.draw(@shape.body.p.x - img.width / 2.0, @shape.body.p.y - img.height / 2.0, ZOrder::Stars, 1, 1, @color, :additive)
+  end
+end
+
+# The Gosu::Window is always the "environment" of our game
+# It also provides the pulse of our game
+class GameWindow < Gosu::Window
+  def initialize
+    super(SCREEN_WIDTH, SCREEN_HEIGHT, false, 16)
+    self.caption = "Gosu & Chipmunk Integration Demo"
+		@background_image = Gosu::Image.new(self, "media/Space.png", true)
+
+    # Put the beep here, as it is the environment now that determines collision
+		@beep = Gosu::Sample.new(self, "media/Beep.wav")
+		
+		# Put the score here, as it is the environment that tracks this now
+    @score = 0
+		@font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+    
+    # Time increment over which to apply a physics "step" ("delta t")
+  	@dt = (1.0/60.0)
+  	
+  	# Create our Space and set its damping
+  	# A damping of 0.8 causes the ship bleed off its force and torque over time
+  	# This is not realistic behavior in a vacuum of space, but it gives the game
+  	# the feel I'd like in this situation
+    @space = CP::Space.new
+		@space.damping = 0.8		
+		
+		# Create the Body for the Player
+    body = CP::Body.new(10.0, 150.0)
+    
+    # In order to create a shape, we must first define it
+    # Chipmunk defines 3 types of Shapes: Segments, Circles and Polys
+    # We'll use s simple, 4 sided Poly for our Player (ship)
+    # You need to define the vectors so that the "top" of the Shape is towards 0 radians (the right)
+    shape_array = [CP::Vec2.new(-25.0, -25.0), CP::Vec2.new(-25.0, 25.0), CP::Vec2.new(25.0, 1.0), CP::Vec2.new(25.0, -1.0)]
+    shape = CP::Shape::Poly.new(body, shape_array, CP::Vec2.new(0,0))
+    
+    # The collision_type of a shape allows us to set up special collision behavior
+    # based on these types.  The actual value for the collision_type is arbitrary
+    # and, as long as it is consistent, will work for us; of course, it helps to have it make sense
+    shape.collision_type = :ship
+    
+    @space.add_body(body)
+    @space.add_shape(shape)
+
+    @player = Player.new(self, shape)
+    @player.warp(CP::Vec2.new(320, 240)) # move to the center of the window
+    
+    @star_anim = Gosu::Image::load_tiles(self, "media/Star.png", 25, 25, false)
+    @stars = Array.new
+        
+    # Here we define what is supposed to happen when a Player (ship) collides with a Star
+    # I create a @remove_shapes array because we cannot remove either Shapes or Bodies
+    # from Space within a collision closure, rather, we have to wait till the closure
+    # is through executing, then we can remove the Shapes and Bodies
+    # In this case, the Shapes and the Bodies they own are removed in the Gosu::Window.update phase
+    # by iterating over the @remove_shapes array
+    # Also note that both Shapes involved in the collision are passed into the closure
+    # in the same order that their collision_types are defined in the add_collision_func call
+    @remove_shapes = []
+    @space.add_collision_func(:ship, :star) do |ship_shape, star_shape|
+			@score += 10
+			@beep.play
+			@remove_shapes << star_shape
+    end
+    
+    # Here we tell Space that we don't want one star bumping into another
+    # The reason we need to do this is because when the Player hits a Star,
+    # the Star will travel until it is removed in the update cycle below
+    # which means it may collide and therefore push other Stars
+    # To see the effect, remove this line and play the game, every once in a while
+    # you'll see a Star moving
+    @space.add_collision_func(:star, :star, &nil)
+  end
+
+  def update
+  	# Step the physics environment SUBSTEPS times each update
+  	SUBSTEPS.times do
+  		# This iterator makes an assumption of one Shape per Star making it safe to remove
+  		# each Shape's Body as it comes up
+  		# If our Stars had multiple Shapes, as would be required if we were to meticulously
+  		# define their true boundaries, we couldn't do this as we would remove the Body
+  		# multiple times
+  		# We would probably solve this by creating a separate @remove_bodies array to remove the Bodies
+  		# of the Stars that were gathered by the Player
+ 			@remove_shapes.each do |shape|
+				@stars.delete_if { |star| star.shape == shape }
+				@space.remove_body(shape.body)
+				@space.remove_shape(shape)
+			end
+			@remove_shapes.clear # clear out the shapes for next pass
+			
+			# When a force or torque is set on a Body, it is cumulative
+			# This means that the force you applied last SUBSTEP will compound with the
+			# force applied this SUBSTEP; which is probably not the behavior you want
+			# We reset the forces on the Player each SUBSTEP for this reason
+			@player.shape.body.reset_forces
+			
+			# Wrap around the screen to the other side
+			@player.validate_position
+			
+			# Check keyboard
+			if button_down? Gosu::Button::KbLeft
+				@player.turn_left
+			end
+			if button_down? Gosu::Button::KbRight
+				@player.turn_right
+			end
+			
+			if button_down? Gosu::Button::KbUp
+				if ( (button_down? Gosu::Button::KbRightShift) || (button_down? Gosu::Button::KbLeftShift) )
+					@player.boost
+				else
+					@player.accelerate
+				end
+			elsif button_down? Gosu::Button::KbDown
+				@player.reverse
+			end
+			
+			# Perform the step over @dt period of time
+			# For best performance @dt should remain consistent for the game
+			@space.step(@dt)
+		end
+		
+		# Each update (not SUBSTEP) we see if we need to add more Stars
+		if rand(100) < 4 and @stars.size < 25 then
+    	body = CP::Body.new(0.0001, 0.0001)
+    	shape = CP::Shape::Circle.new(body, 25/2, CP::Vec2.new(0.0, 0.0))
+    	shape.collision_type = :star
+    	
+    	@space.add_body(body)
+    	@space.add_shape(shape)
+    	
+      @stars.push(Star.new(@star_anim, shape))
+    end
+  end
+
+  def draw
+    @background_image.draw(0, 0, ZOrder::Background)
+    @player.draw
+    @stars.each { |star| star.draw }
+    @font.draw("Score: #{@score}", 10, 10, ZOrder::UI, 1.0, 1.0, 0xffffff00)
+  end
+
+  def button_down(id)
+    if id == Gosu::Button::KbEscape
+      close
+    end
+  end
+end
+
+window = GameWindow.new
+window.show`
