@@ -25,6 +25,7 @@
   * implement clipping and a target() modifier for the new Image
   * multi-threaded blit queue and float-z-ordering?
   * make font substitution work on OS X, Windows
+  * speed up LargeImageData!
 
 = Major design goals for 0.9.x (IO, Strings) =
   * delegate Linux support, esp. wrt. gamepads (*help!!*)
