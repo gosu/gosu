@@ -2,7 +2,7 @@
 #include <GosuImpl/OpenGL/TexChunk.hpp>
 #include <GosuImpl/OpenGL/Texture.hpp>
 
-void Gosu::DrawOp::perform()
+void Gosu::DrawOp::perform() const
 {
     glEnable(GL_BLEND);
 

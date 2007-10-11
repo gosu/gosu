@@ -96,11 +96,16 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 
 void Gosu::Graphics::end()
 {
+    flush();
+    glFlush();
+}
+
+void Gosu::Graphics::flush()
+{
     for (unsigned i = 0; i < pimpl->textures.size(); ++i)
         if (!pimpl->textures[i].expired())
             boost::shared_ptr<Texture>(pimpl->textures[i])->sync();
     pimpl->queue.performDrawOps();
-    glFlush();
 }
 
 void Gosu::Graphics::drawLine(double x1, double y1, Color c1,

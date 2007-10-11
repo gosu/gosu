@@ -58,8 +58,6 @@ unsigned Gosu::LargeImageData::height() const
     return fullHeight;
 }
 
-// IMPR: Oh what beautiful code!
-
 namespace
 {
     // Local interpolation helper functions.

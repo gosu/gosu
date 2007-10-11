@@ -1935,8 +1935,8 @@ namespace Swig {
 #define SWIGTYPE_p_Gosu__Sample swig_types[5]
 #define SWIGTYPE_p_Gosu__Song swig_types[6]
 #define SWIGTYPE_p_Gosu__Window swig_types[7]
-#define SWIGTYPE_p_boost__uint8_t swig_types[8]
-#define SWIGTYPE_p_char swig_types[9]
+#define SWIGTYPE_p_char swig_types[8]
+#define SWIGTYPE_p_double swig_types[9]
 #define SWIGTYPE_p_std__wstring swig_types[10]
 static swig_type_info *swig_types[12];
 static swig_module_info swig_module = {swig_types, 11, 0, 0, 0, 0};
@@ -2420,6 +2420,9 @@ SWIGINTERN int Gosu_Window_width(Gosu::Window const *self){
 SWIGINTERN int Gosu_Window_height(Gosu::Window const *self){
 		return self->graphics().height();
 	}
+SWIGINTERN void Gosu_Window_flush(Gosu::Window *self){
+        self->graphics().flush();
+    }
 /* ---------------------------------------------------
  * C++ director class helpers
  * --------------------------------------------------- */
@@ -3756,7 +3759,7 @@ _wrap_Font_draw(int argc, VALUE *argv, VALUE self) {
   int ecode3 = 0 ;
   double val4 ;
   int ecode4 = 0 ;
-  unsigned char val5 ;
+  double val5 ;
   int ecode5 = 0 ;
   double val6 ;
   int ecode6 = 0 ;
@@ -3786,7 +3789,7 @@ _wrap_Font_draw(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "draw" "', argument " "4"" of type '" "double""'");
   } 
   arg4 = static_cast< double >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_char(argv[3], &val5);
+  ecode5 = SWIG_AsVal_double(argv[3], &val5);
   if (!SWIG_IsOK(ecode5)) {
     SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "draw" "', argument " "5"" of type '" "Gosu::ZPos""'");
   } 
@@ -3862,7 +3865,7 @@ _wrap_Font_draw_rel(int argc, VALUE *argv, VALUE self) {
   int ecode3 = 0 ;
   double val4 ;
   int ecode4 = 0 ;
-  unsigned char val5 ;
+  double val5 ;
   int ecode5 = 0 ;
   double val6 ;
   int ecode6 = 0 ;
@@ -3896,7 +3899,7 @@ _wrap_Font_draw_rel(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "drawRel" "', argument " "4"" of type '" "double""'");
   } 
   arg4 = static_cast< double >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_char(argv[3], &val5);
+  ecode5 = SWIG_AsVal_double(argv[3], &val5);
   if (!SWIG_IsOK(ecode5)) {
     SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "drawRel" "', argument " "5"" of type '" "Gosu::ZPos""'");
   } 
@@ -4110,7 +4113,7 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
   int ecode2 = 0 ;
   double val3 ;
   int ecode3 = 0 ;
-  unsigned char val4 ;
+  double val4 ;
   int ecode4 = 0 ;
   double val5 ;
   int ecode5 = 0 ;
@@ -4135,7 +4138,7 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "draw" "', argument " "3"" of type '" "double""'");
   } 
   arg3 = static_cast< double >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_char(argv[2], &val4);
+  ecode4 = SWIG_AsVal_double(argv[2], &val4);
   if (!SWIG_IsOK(ecode4)) {
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "draw" "', argument " "4"" of type '" "Gosu::ZPos""'");
   } 
@@ -4210,7 +4213,7 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
   int ecode2 = 0 ;
   double val3 ;
   int ecode3 = 0 ;
-  unsigned char val4 ;
+  double val4 ;
   int ecode4 = 0 ;
   double val5 ;
   int ecode5 = 0 ;
@@ -4235,7 +4238,7 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "drawMod" "', argument " "3"" of type '" "double""'");
   } 
   arg3 = static_cast< double >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_char(argv[2], &val4);
+  ecode4 = SWIG_AsVal_double(argv[2], &val4);
   if (!SWIG_IsOK(ecode4)) {
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "drawMod" "', argument " "4"" of type '" "Gosu::ZPos""'");
   } 
@@ -4337,7 +4340,7 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
   int ecode2 = 0 ;
   double val3 ;
   int ecode3 = 0 ;
-  unsigned char val4 ;
+  double val4 ;
   int ecode4 = 0 ;
   double val5 ;
   int ecode5 = 0 ;
@@ -4368,7 +4371,7 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "drawRot" "', argument " "3"" of type '" "double""'");
   } 
   arg3 = static_cast< double >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_char(argv[2], &val4);
+  ecode4 = SWIG_AsVal_double(argv[2], &val4);
   if (!SWIG_IsOK(ecode4)) {
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "drawRot" "', argument " "4"" of type '" "Gosu::ZPos""'");
   } 
@@ -4695,7 +4698,7 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   int ecode11 = 0 ;
   double val12 ;
   int ecode12 = 0 ;
-  unsigned char val14 ;
+  double val14 ;
   int ecode14 = 0 ;
   
   if ((argc < 13) || (argc > 14)) {
@@ -4790,7 +4793,7 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
     else
     arg13 = *reinterpret_cast<Gosu::Color*>(ptr);
   }
-  ecode14 = SWIG_AsVal_unsigned_SS_char(argv[12], &val14);
+  ecode14 = SWIG_AsVal_double(argv[12], &val14);
   if (!SWIG_IsOK(ecode14)) {
     SWIG_exception_fail(SWIG_ArgError(ecode14), "in method '" "drawAsQuad" "', argument " "14"" of type '" "Gosu::ZPos""'");
   } 
@@ -5696,7 +5699,7 @@ _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
   int ecode5 = 0 ;
   double val6 ;
   int ecode6 = 0 ;
-  unsigned char val8 ;
+  double val8 ;
   int ecode8 = 0 ;
   
   if ((argc < 6) || (argc > 8)) {
@@ -5750,7 +5753,7 @@ _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
     arg7 = *reinterpret_cast<Gosu::Color*>(ptr);
   }
   if (argc > 6) {
-    ecode8 = SWIG_AsVal_unsigned_SS_char(argv[6], &val8);
+    ecode8 = SWIG_AsVal_double(argv[6], &val8);
     if (!SWIG_IsOK(ecode8)) {
       SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "drawLine" "', argument " "8"" of type '" "Gosu::ZPos""'");
     } 
@@ -5808,7 +5811,7 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
   int ecode8 = 0 ;
   double val9 ;
   int ecode9 = 0 ;
-  unsigned char val11 ;
+  double val11 ;
   int ecode11 = 0 ;
   
   if ((argc < 9) || (argc > 11)) {
@@ -5883,7 +5886,7 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
     arg10 = *reinterpret_cast<Gosu::Color*>(ptr);
   }
   if (argc > 9) {
-    ecode11 = SWIG_AsVal_unsigned_SS_char(argv[9], &val11);
+    ecode11 = SWIG_AsVal_double(argv[9], &val11);
     if (!SWIG_IsOK(ecode11)) {
       SWIG_exception_fail(SWIG_ArgError(ecode11), "in method '" "drawTriangle" "', argument " "11"" of type '" "Gosu::ZPos""'");
     } 
@@ -5948,7 +5951,7 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
   int ecode11 = 0 ;
   double val12 ;
   int ecode12 = 0 ;
-  unsigned char val14 ;
+  double val14 ;
   int ecode14 = 0 ;
   
   if ((argc < 12) || (argc > 14)) {
@@ -6044,7 +6047,7 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
     arg13 = *reinterpret_cast<Gosu::Color*>(ptr);
   }
   if (argc > 12) {
-    ecode14 = SWIG_AsVal_unsigned_SS_char(argv[12], &val14);
+    ecode14 = SWIG_AsVal_double(argv[12], &val14);
     if (!SWIG_IsOK(ecode14)) {
       SWIG_exception_fail(SWIG_ArgError(ecode14), "in method '" "drawQuad" "', argument " "14"" of type '" "Gosu::ZPos""'");
     } 
@@ -6302,6 +6305,33 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Window_flush(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "flush" "', argument " "1"" of type '" "Gosu::Window *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  {
+    try {
+      Gosu_Window_flush(arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_disown_Window(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
@@ -6337,8 +6367,8 @@ static swig_type_info _swigt__p_Gosu__Image = {"_p_Gosu__Image", "Gosu::Image *"
 static swig_type_info _swigt__p_Gosu__Sample = {"_p_Gosu__Sample", "Gosu::Sample *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Song = {"_p_Gosu__Song", "Gosu::Song *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Window = {"_p_Gosu__Window", "Gosu::Window *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_boost__uint8_t = {"_p_boost__uint8_t", "boost::uint8_t *|Gosu::ZPos *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_double = {"_p_double", "double *|Gosu::ZPos *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__wstring = {"_p_std__wstring", "std::wstring *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
@@ -6350,8 +6380,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__Sample,
   &_swigt__p_Gosu__Song,
   &_swigt__p_Gosu__Window,
-  &_swigt__p_boost__uint8_t,
   &_swigt__p_char,
+  &_swigt__p_double,
   &_swigt__p_std__wstring,
 };
 
@@ -6363,8 +6393,8 @@ static swig_cast_info _swigc__p_Gosu__Image[] = {  {&_swigt__p_Gosu__Image, 0, 0
 static swig_cast_info _swigc__p_Gosu__Sample[] = {  {&_swigt__p_Gosu__Sample, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Song[] = {  {&_swigt__p_Gosu__Song, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Window[] = {  {&_swigt__p_Gosu__Window, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_boost__uint8_t[] = {  {&_swigt__p_boost__uint8_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__wstring[] = {  {&_swigt__p_std__wstring, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
@@ -6376,8 +6406,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__Sample,
   _swigc__p_Gosu__Song,
   _swigc__p_Gosu__Window,
-  _swigc__p_boost__uint8_t,
   _swigc__p_char,
+  _swigc__p_double,
   _swigc__p_std__wstring,
 };
 
@@ -6852,6 +6882,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cWindow.klass, "mouse_y", VALUEFUNC(_wrap_Window_mouse_y), -1);
   rb_define_method(cWindow.klass, "width", VALUEFUNC(_wrap_Window_width), -1);
   rb_define_method(cWindow.klass, "height", VALUEFUNC(_wrap_Window_height), -1);
+  rb_define_method(cWindow.klass, "flush", VALUEFUNC(_wrap_Window_flush), -1);
   cWindow.mark = 0;
   cWindow.destroy = (void (*)(void *)) free_Gosu_Window;
   cWindow.trackObjects = 0;

@@ -9,12 +9,11 @@
 namespace Gosu
 {
     //! Represents the Z position of something drawn with Gosu's graphics
-    //! system. Things with higher ZPos values will be drawn onto those with
-    //! lower ZPos values. Right now, ZPos is an integer in the range of 0 to
-    //! 255, but may later be extended to be an arbirary floating point value.
-    typedef boost::uint8_t ZPos;
+    //! system. Draw calls with higher ZPos values will cover those with a
+    //! lower ZPos value, that is, they are performed last.
+    typedef double ZPos;
 
-    //! Determines the way the colors are combined when one is drawn onto
+    //! Determines the way colors are combined when one is drawn onto
     //! another.
     enum AlphaMode
     {

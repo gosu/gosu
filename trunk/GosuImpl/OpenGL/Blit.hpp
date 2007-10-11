@@ -4,6 +4,7 @@
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Color.hpp>
 #include <GosuImpl/Graphics/Graphics.hpp>
+#include <set>
 
 struct Gosu::DrawOp
 {
@@ -15,33 +16,41 @@ struct Gosu::DrawOp
         Vertex(double x, double y, Color c) : x(x), y(y), c(c) {}
     };
 
+    ZPos z;
     Vertex vertices[4];
     unsigned usedVertices;
     const TexChunk* chunk;
     AlphaMode mode;
 
     DrawOp() { usedVertices = 0; chunk = 0; }
-    void perform();
+    void perform() const;
+    
+    bool operator<(const DrawOp& other) const
+    {
+        return z < other.z;
+    }
 };
 
 class Gosu::DrawOpQueue
 {
-    boost::array<std::vector<DrawOp>, 256> layers;
+    std::multiset<DrawOp> set;
 
 public:
-    void addDrawOp(const DrawOp& op, ZPos z)
+    void addDrawOp(DrawOp op, ZPos z)
     {
-        layers[z].push_back(op);
+        op.z = z;
+        set.insert(op);
     }
 
     void performDrawOps()
     {
-        for (unsigned z = 0; z < 256; ++z)
+        std::multiset<DrawOp>::iterator cur = set.begin(), end = set.end();
+        while (cur != end)
         {
-            for (unsigned i = 0; i < layers[z].size(); ++i)
-                layers[z][i].perform();
-            layers[z].clear();
+            cur->perform();
+            ++cur;
         }
+        set.clear();
     }
 };
 

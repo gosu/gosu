@@ -336,4 +336,7 @@ namespace Gosu
 	int height() const {
 		return $self->graphics().height();
 	}
+    void flush() {
+        $self->graphics().flush();
+    }
 };
