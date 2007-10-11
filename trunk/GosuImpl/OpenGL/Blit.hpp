@@ -1,26 +1,18 @@
-#ifndef GOSUIMPL_OPENGL_BLIT_HPP
-#define GOSUIMPL_OPENGL_BLIT_HPP
+#ifndef GOSUIMPL_DRAWOP_HPP
+#define GOSUIMPL_DRAWOP_HPP
 
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Color.hpp>
-#include <GosuImpl/OpenGL/OpenGL.hpp>
+#include <GosuImpl/Graphics/Graphics.hpp>
 
-struct Gosu::OpenGL::Blit
+struct Gosu::DrawOp
 {
     struct Vertex
     {
         double x, y;
-        double a, r, g, b;
-        
+        Color c;
         Vertex() {}
-        Vertex(double x, double y, const Color& color)
-        : x(x), y(y)
-        {
-            a = color.alpha() / 255.0;
-            r = color.red() / 255.0;
-            g = color.green() / 255.0;
-            b = color.blue() / 255.0;
-        }
+        Vertex(double x, double y, Color c) : x(x), y(y), c(c) {}
     };
 
     Vertex vertices[4];
@@ -28,8 +20,29 @@ struct Gosu::OpenGL::Blit
     const TexChunk* chunk;
     AlphaMode mode;
 
-    Blit() { chunk = 0; }
+    DrawOp() { usedVertices = 0; chunk = 0; }
     void perform();
+};
+
+class Gosu::DrawOpQueue
+{
+    boost::array<std::vector<DrawOp>, 256> layers;
+
+public:
+    void addDrawOp(const DrawOp& op, ZPos z)
+    {
+        layers[z].push_back(op);
+    }
+
+    void performDrawOps()
+    {
+        for (unsigned z = 0; z < 256; ++z)
+        {
+            for (unsigned i = 0; i < layers[z].size(); ++i)
+                layers[z][i].perform();
+            layers[z].clear();
+        }
+    }
 };
 
 #endif

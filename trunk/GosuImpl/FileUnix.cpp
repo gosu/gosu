@@ -9,7 +9,7 @@
 
 namespace
 {
-    // According to my man page, Unix folks just don't trust the 0 enough.
+    // According to my man page, Unix folks just don't trust the 0, it's got to be a crippled -1.
     void* const noMapping = reinterpret_cast<void*>(-1);
 }
 

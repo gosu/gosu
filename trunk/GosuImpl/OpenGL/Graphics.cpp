@@ -10,30 +10,20 @@
 struct Gosu::Graphics::Impl
 {
     unsigned width, height;
-    double factorX, factorY;
     bool fullscreen;
-    BlitQueue<OpenGL::Blit> queue;
-    typedef std::vector<boost::weak_ptr<OpenGL::Texture> > Textures;
+    double factorX, factorY;
+    DrawOpQueue queue;
+    typedef std::vector<boost::weak_ptr<Texture> > Textures;
     Textures textures;
 };
 
-boost::optional<Gosu::DisplayMode> Gosu::DisplayMode::find(unsigned width,
-    unsigned height, bool fullscreen)  // FIXME!
-{
-    DisplayMode mode;
-    mode.width = width;
-    mode.height = height;
-    mode.fullscreen = fullscreen;
-    return mode;
-}
-
-Gosu::Graphics::Graphics(const DisplayMode& mode)
+Gosu::Graphics::Graphics(unsigned width, unsigned height, bool fullscreen)
 : pimpl(new Impl)
 {
-    pimpl->width = mode.width;
-    pimpl->height = mode.height;
+    pimpl->width = width;
+    pimpl->height = height;
+    pimpl->fullscreen = fullscreen;
     pimpl->factorX = pimpl->factorY = 1.0;
-    pimpl->fullscreen = mode.fullscreen;
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -108,8 +98,8 @@ void Gosu::Graphics::end()
 {
     for (unsigned i = 0; i < pimpl->textures.size(); ++i)
         if (!pimpl->textures[i].expired())
-            boost::shared_ptr<OpenGL::Texture>(pimpl->textures[i])->sync();
-    pimpl->queue.performBlits();
+            boost::shared_ptr<Texture>(pimpl->textures[i])->sync();
+    pimpl->queue.performDrawOps();
     glFlush();
 }
 
@@ -117,19 +107,19 @@ void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
     double x2, double y2, Color c2,
     ZPos z, AlphaMode mode)
 {
-    OpenGL::Blit newBlit;
+    DrawOp op;
     
     x1 *= factorX();
     y1 *= factorY();
     x2 *= factorX();
     y2 *= factorY();
 
-    newBlit.mode = mode;
-    newBlit.usedVertices = 2;
-    newBlit.vertices[0] = OpenGL::Blit::Vertex(x1, y1, c1);
-    newBlit.vertices[1] = OpenGL::Blit::Vertex(x2, y2, c2);
+    op.mode = mode;
+    op.usedVertices = 2;
+    op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
+    op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
 
-    pimpl->queue.addBlit(newBlit, z);
+    pimpl->queue.addDrawOp(op, z);
 }
 
 void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
@@ -137,7 +127,7 @@ void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
     double x3, double y3, Color c3,
     ZPos z, AlphaMode mode)
 {
-    OpenGL::Blit newBlit;
+    DrawOp op;
 
     x1 *= factorX();
     y1 *= factorY();
@@ -146,13 +136,13 @@ void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
     x3 *= factorX();
     y3 *= factorY();
 
-    newBlit.mode = mode;
-    newBlit.usedVertices = 3;
-    newBlit.vertices[0] = OpenGL::Blit::Vertex(x1, y1, c1);
-    newBlit.vertices[1] = OpenGL::Blit::Vertex(x2, y2, c2);
-    newBlit.vertices[2] = OpenGL::Blit::Vertex(x3, y3, c3);
+    op.mode = mode;
+    op.usedVertices = 3;
+    op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
+    op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
+    op.vertices[2] = DrawOp::Vertex(x3, y3, c3);
 
-    pimpl->queue.addBlit(newBlit, z);
+    pimpl->queue.addDrawOp(op, z);
 }
 
 void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
@@ -161,7 +151,7 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
     double x4, double y4, Color c4,
     ZPos z, AlphaMode mode)
 {
-    OpenGL::Blit newBlit;
+    DrawOp op;
 
     x1 *= factorX();
     y1 *= factorY();
@@ -172,14 +162,14 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
     x4 *= factorX();
     y4 *= factorY();
 
-    newBlit.mode = mode;
-    newBlit.usedVertices = 4;
-    newBlit.vertices[0] = OpenGL::Blit::Vertex(x1, y1, c1);
-    newBlit.vertices[1] = OpenGL::Blit::Vertex(x2, y2, c2);
-    newBlit.vertices[3] = OpenGL::Blit::Vertex(x3, y3, c3);
-    newBlit.vertices[2] = OpenGL::Blit::Vertex(x4, y4, c4);
+    op.mode = mode;
+    op.usedVertices = 4;
+    op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
+    op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
+    op.vertices[3] = DrawOp::Vertex(x3, y3, c3);
+    op.vertices[2] = DrawOp::Vertex(x4, y4, c4);
 
-    pimpl->queue.addBlit(newBlit, z);
+    pimpl->queue.addDrawOp(op, z);
 }
 
 std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
@@ -202,15 +192,16 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
         if (srcX == 0 && srcWidth == src.width() &&
             srcY == 0 && srcHeight == src.height())
         {
-            data = ImageDataImpl::tryToCreate(*this, src, texture, 0, 0, 0, 0);
+            data = texture->tryAlloc(*this, pimpl->queue, texture,
+                    src, 0, 0, src.width(), src.height(), 0);
         }
         else
         {
             Bitmap trimmedSrc;
             trimmedSrc.resize(srcWidth, srcHeight);
             trimmedSrc.insert(src, 0, 0, srcX, srcY, srcWidth, srcHeight);
-            data = ImageDataImpl::tryToCreate(*this, trimmedSrc, texture, 0, 0,
-                                              0, 0);
+            data = texture->tryAlloc(*this, pimpl->queue, texture,
+                    trimmedSrc, 0, 0, trimmedSrc.width(), trimmedSrc.height(), 0);
         }
         
         if (!data.get())
@@ -243,7 +234,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
             continue;
         }
         
-        boost::shared_ptr<OpenGL::Texture> texture(*i);
+        boost::shared_ptr<Texture> texture(*i);
         
         std::auto_ptr<ImageData> data;
         data = texture->tryAlloc(*this, pimpl->queue, texture, bmp, 0, 0, bmp.width(), bmp.height(), 1);
@@ -253,8 +244,8 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     
     // All textures are full: Create a new one.
     
-    boost::shared_ptr<OpenGL::Texture> texture;
-    texture.reset(new OpenGL::Texture(256));
+    boost::shared_ptr<Texture> texture;
+    texture.reset(new Texture(256));
     pimpl->textures.push_back(texture);
     
     std::auto_ptr<ImageData> data;

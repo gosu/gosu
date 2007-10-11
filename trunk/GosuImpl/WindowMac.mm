@@ -144,35 +144,7 @@ struct Gosu::Window::Impl
         [window.obj() makeKeyAndOrderFront:nil];
     }
     
-    static void doTick(Window& window)
-    {
-        assert(&window);
-        if (!window.graphics().fullscreen())
-        {
-            if (NSPointInRect([window.pimpl->window.obj() mouseLocationOutsideOfEventStream],
-                              [[window.pimpl->window.obj() contentView] frame]))
-            {
-                if (window.pimpl->mouseViz)
-                    [NSCursor hide];
-                window.pimpl->mouseViz = false;
-            }
-            else
-            {
-                if (!window.pimpl->mouseViz)
-                    [NSCursor unhide];
-                window.pimpl->mouseViz = true;
-            }
-        }
-        
-        window.input().update();
-        window.update();
-        if (window.graphics().begin())
-        {
-            window.draw();
-            window.graphics().end();
-            [window.pimpl->context.obj() flushBuffer];
-        }
-    }
+    static void doTick(Window& window);
 };
 
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
@@ -236,7 +208,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     }
     [pimpl->context.obj() makeCurrentContext];
     
-    pimpl->graphics.reset(new Gosu::Graphics(*DisplayMode::find(width, height, fullscreen)));
+    pimpl->graphics.reset(new Gosu::Graphics(width, height, fullscreen));
     
     pimpl->input.reset(new Input(pimpl->window.get()));
     pimpl->input->onButtonDown = boost::bind(&Window::buttonDown, this, _1);
@@ -345,4 +317,44 @@ const Gosu::Input& Gosu::Window::input() const
 Gosu::Input& Gosu::Window::input()
 {
     return *pimpl->input;
+}
+
+// Moved here so including ruby.h will cause the minimal amount of macro damage.
+
+#ifdef GOSU_FOR_RUBY
+#include <ruby.h>
+#endif
+
+void Gosu::Window::Impl::doTick(Window& window)
+{
+    assert(&window);
+    if (!window.graphics().fullscreen())
+    {
+        if (NSPointInRect([window.pimpl->window.obj() mouseLocationOutsideOfEventStream],
+                          [[window.pimpl->window.obj() contentView] frame]))
+        {
+            if (window.pimpl->mouseViz)
+                [NSCursor hide];
+            window.pimpl->mouseViz = false;
+        }
+        else
+        {
+            if (!window.pimpl->mouseViz)
+                [NSCursor unhide];
+            window.pimpl->mouseViz = true;
+        }
+    }
+    
+    window.input().update();
+    window.update();
+    if (window.graphics().begin())
+    {
+        window.draw();
+        window.graphics().end();
+        [window.pimpl->context.obj() flushBuffer];
+    }
+    
+    #ifdef GOSU_FOR_RUBY
+    rb_thread_schedule();
+    #endif
 }

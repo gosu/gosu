@@ -11,15 +11,15 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
-class Gosu::OpenGL::TexChunk : public Gosu::ImageData
+class Gosu::TexChunk : public Gosu::ImageData
 {
     Graphics* graphics;
-    BlitQueue<Blit>* queue;
+    DrawOpQueue* queue;
     boost::shared_ptr<Texture> texture;
     int x, y, w, h, padding;
 
 public:
-    TexChunk(Graphics& graphics, BlitQueue<Blit>& queue, boost::shared_ptr<Texture> texture,
+    TexChunk(Graphics& graphics, DrawOpQueue& queue, boost::shared_ptr<Texture> texture,
              int x, int y, int w, int h, int padding);
     ~TexChunk();
 

@@ -155,7 +155,7 @@ class GameWindow : public Gosu::Window
 
 public:
     GameWindow()
-    : Window(640, 480, false, 20),
+    : Window(640, 480, false),
         font(graphics(), Gosu::defaultFontName(), 20),
         player(graphics(), audio())
     {

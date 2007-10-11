@@ -61,7 +61,7 @@ namespace Gosu
             AlphaMode mode = amDefault) const;
 
         //! Draws the image rotated by the given angle so that its rotation
-        //! center is at (x; y). Note that this is different to how all the
+        //! center is at (x; y). Note that this is different from how all the
         //! other drawing functions work!
         //! \param angle See Math.hpp for an explanation of how Gosu interprets
         //! angles.
@@ -74,7 +74,6 @@ namespace Gosu
             double factorX = 1, double factorY = 1,
             Color c = Colors::white,
             AlphaMode mode = amDefault) const;
-        // IMPR: drawRotMod should exist as well.
 
         #ifndef SWIG
         void drawRotFlip(double x, double y, ZPos z,
@@ -93,13 +92,14 @@ namespace Gosu
         #endif
     };
 
-	//! Convenience function that splits a bitmap loaded from a file into an area
+	//! Convenience function that splits a BMP or PNG file into an area
 	//! of small rectangles and creates images from them.
     //! \param tileWidth If positive, specifies the width of one tile in
     //! pixels. If negative, the bitmap is divided into -tileWidth rows.
     //! \param tileHeight See tileWidth.
     //! \param appendTo STL container to which the images will be appended.
-    //! Must provide a push_back member function.
+    //! Must provide a push_back member function; std::vector<boost::shared_ptr<Image>>
+    //! is usually the most reasonable container.
     template<typename Container>
     void imagesFromTiledBitmap(Graphics& graphics, const std::wstring& filename,
         int tileWidth, int tileHeight, bool hardBorders, Container& appendTo)
@@ -113,13 +113,12 @@ namespace Gosu
     //! pixels. If negative, the bitmap is divided into -tileWidth rows.
     //! \param tileHeight See tileWidth.
     //! \param appendTo STL container to which the images will be appended.
-    //! Must provide a push_back member function.
+    //! Must provide a push_back member function; std::vector<boost::shared_ptr<Image>>
+    //! is usually the most reasonable container.
     template<typename Container>
     void imagesFromTiledBitmap(Graphics& graphics, const Bitmap& bmp,
         int tileWidth, int tileHeight, bool hardBorders, Container& appendTo)
     {
-        // TODO: Check for tw*th==0
-
         int tilesX, tilesY;
 
         if (tileWidth > 0)

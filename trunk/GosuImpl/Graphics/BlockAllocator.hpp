@@ -15,16 +15,9 @@ namespace Gosu
         struct Block
         {
             unsigned left, top, width, height;
-
-            Block()
-            {
-            }
-
-            Block(unsigned aLeft, unsigned aTop, unsigned aWidth,
-                unsigned aHeight)
-            : left(aLeft), top(aTop), width(aWidth), height(aHeight)
-            {
-            }
+            Block() {}
+            Block(unsigned aLeft, unsigned aTop, unsigned aWidth, unsigned aHeight)
+            : left(aLeft), top(aTop), width(aWidth), height(aHeight) {}
         };
     
         BlockAllocator(unsigned width, unsigned height);

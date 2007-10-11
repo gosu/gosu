@@ -131,12 +131,14 @@ class Map
     top = (y - SH_RADIUS) / TILE_SIZE
     bottom = (y + SH_RADIUS) / TILE_SIZE
 
-    # Set affected images to nil. (A 'double-free' doesn't hurt!)
+    # Set affected images to nil.
+    # A 'double-free' doesn't hurt if e.g. left == right! However, we have to watch out
+    # for out-of-bounds errors.
     
-    @gosu_images[left][top] = nil
-    @gosu_images[right][top] = nil
-    @gosu_images[left][bottom] = nil
-    @gosu_images[right][bottom] = nil
+    @gosu_images[left][top] = nil unless left < 0 or top < 0
+    @gosu_images[right][top] = nil unless right >= TILES_X or top < 0
+    @gosu_images[left][bottom] = nil unless left < 0 or bottom >= TILES_Y
+    @gosu_images[right][bottom] = nil unless right >= TILES_X or bottom >= TILES_Y
 
     # Create the crater image (basically a circle shape that is used to erase
     # parts of the map) and the crater shadow image, if they don't exist

@@ -4,7 +4,7 @@
 #include <Gosu/Platform.hpp>
 #include <stdexcept>
 
-void Gosu::OpenGL::Texture::sync()
+void Gosu::Texture::sync()
 {
     if (!shouldSync)
         return;
@@ -14,7 +14,7 @@ void Gosu::OpenGL::Texture::sync()
     shouldSync = false;
 }
 
-Gosu::OpenGL::Texture::Texture(unsigned size)
+Gosu::Texture::Texture(unsigned size)
 : allocator(size, size), pixelData(size * size)
 {
     glGenTextures(1, &name);
@@ -25,27 +25,27 @@ Gosu::OpenGL::Texture::Texture(unsigned size)
     shouldSync = true;
 }
 
-Gosu::OpenGL::Texture::~Texture()
+Gosu::Texture::~Texture()
 {
     glDeleteTextures(1, &name);
 }
 
-unsigned Gosu::OpenGL::Texture::size() const
+unsigned Gosu::Texture::size() const
 {
     return allocator.width(); // == height
 }
 
-GLuint Gosu::OpenGL::Texture::texName() const
+GLuint Gosu::Texture::texName() const
 {
     return name;
 }
 
-std::auto_ptr<Gosu::OpenGL::TexChunk> Gosu::OpenGL::Texture::tryAlloc(Graphics& graphics, BlitQueue<Blit>& queue, boost::shared_ptr<Texture> ptr,
+std::auto_ptr<Gosu::TexChunk> Gosu::Texture::tryAlloc(Graphics& graphics, DrawOpQueue& queue, boost::shared_ptr<Texture> ptr,
                                                         const Bitmap& bmp, unsigned srcX,
                                                         unsigned srcY, unsigned srcWidth,
                                                         unsigned srcHeight, unsigned padding)
 {
-    std::auto_ptr<Gosu::OpenGL::TexChunk> result;
+    std::auto_ptr<Gosu::TexChunk> result;
     
     boost::optional<BlockAllocator::Block> block = allocator.alloc(srcWidth, srcHeight);
     if (!block)
@@ -66,7 +66,7 @@ std::auto_ptr<Gosu::OpenGL::TexChunk> Gosu::OpenGL::Texture::tryAlloc(Graphics& 
     return result;
 }
 
-void Gosu::OpenGL::Texture::free(unsigned x, unsigned y)
+void Gosu::Texture::free(unsigned x, unsigned y)
 {
     allocator.free(x, y);
 }

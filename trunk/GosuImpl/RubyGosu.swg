@@ -163,7 +163,7 @@ namespace Gosu
 }
 
 // Miscellaneous functions (timing, math)
-%ignore Gosu::Sleep;
+%ignore Gosu::sleep;
 %include "../Gosu/Timing.hpp"
 %ignore Gosu::pi;
 %include "../Gosu/Math.hpp"

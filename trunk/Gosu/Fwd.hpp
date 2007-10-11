@@ -11,7 +11,6 @@ namespace Gosu
     class Bitmap;
     class Buffer;
     class Color;
-    struct DisplayMode;
     class File;
     class Font;
     class Graphics;

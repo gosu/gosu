@@ -1,5 +1,5 @@
 //! \file Graphics.hpp
-//! Interface of the Graphics class and DisplayMode structure.
+//! Interface of the Graphics class.
 
 #ifndef GOSU_GRAPHICS_HPP
 #define GOSU_GRAPHICS_HPP
@@ -7,49 +7,14 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
-#include <Gosu/Platform.hpp>
-#include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <memory>
-
-#ifdef GOSU_IS_WIN
-#include <windows.h>
-#endif
-
-/*
-#ifdef unix
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <GL/glx.h>
-#include <GL/gl.h>
-#endif
-*/
 
 namespace Gosu
 {
-    //! Contains everything a Graphics object needs to be constructed.
-    struct DisplayMode
-    {
-        // TODO: Multi-adapter support is *very* weak at the moment...
-        // Improve or remove!
-
-        unsigned adapter;
-        unsigned width, height;
-        bool fullscreen;
-        unsigned bitDepth, refreshRate;
-
-        // IMPR: This is a little bit minimalistic.
-        //! Tries to find a display mode that matches the given parameters.
-        static boost::optional<DisplayMode> find(unsigned width,
-            unsigned height, bool fullscreen);
-    };
-
-    // TODO: RAII guard class for Graphics::begin/end.
-
+    //! Flags that affect the softness of a border.
     enum BorderFlags
     {
-        // Flags that affect the softness of a border.
         bfSoft = 0,
         bfHardLeft = 1,
         bfHardTop = 2,
@@ -66,7 +31,7 @@ namespace Gosu
         boost::scoped_ptr<Impl> pimpl;
 
     public:
-        Graphics(const DisplayMode& mode);
+        Graphics(unsigned width, unsigned height, bool fullscreen);
         ~Graphics();
 
         // Undocumented until I have thought about this...

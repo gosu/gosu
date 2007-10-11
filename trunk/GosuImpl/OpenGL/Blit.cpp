@@ -2,7 +2,7 @@
 #include <GosuImpl/OpenGL/TexChunk.hpp>
 #include <GosuImpl/OpenGL/Texture.hpp>
 
-void Gosu::OpenGL::Blit::perform()
+void Gosu::DrawOp::perform()
 {
     glEnable(GL_BLEND);
 
@@ -10,15 +10,6 @@ void Gosu::OpenGL::Blit::perform()
         glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     else
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-/*
-    if(mode == amAdditive)
-        glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_ONE);
-    else
-        glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_SRC_ALPHA);
-*/
-//    glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, (mode == amAdditive) ? GL_ONE : GL_SRC_ALPHA);
-//    glBlendFunc(GL_SRC_ALPHA, (mode == amAdditive) ? GL_ONE : GL_ONE_MINUS_SRC_ALPHA);
 
     if (chunk)
     {
@@ -39,7 +30,8 @@ void Gosu::OpenGL::Blit::perform()
 
     for (unsigned i = 0; i < usedVertices; i++)
     {
-        glColor4d(vertices[i].r, vertices[i].g, vertices[i].b, vertices[i].a);
+        glColor4f(vertices[i].c.red() / 255.0, vertices[i].c.green() / 255.0,
+                  vertices[i].c.blue() / 255.0, vertices[i].c.alpha() / 255.0);
         if (chunk)
             switch (i)
             {
