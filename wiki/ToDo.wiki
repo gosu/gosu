@@ -5,6 +5,8 @@
   * implement frameskip
   * don't round updateInterval on Win/Linux
   * allow/document custom OpenGL integration
+  * get rid of OpenGL tearing on OS X
+  * get rid of OpenGL tearing on Windows
 
 = Also ASAP =
   * assure Gosu::File also creates directories as necessary
