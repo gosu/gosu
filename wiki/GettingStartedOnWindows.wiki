@@ -43,7 +43,7 @@ When loading resources, keep in mind that Gosu's resourcePrefix() will point to 
 = Creating a new Gosu game (Ruby) =
 
 Getting started with Ruby is a lot easier.
-If you are working with gems, simply require 'rubygems', then 'gosu'. If you are working with the ZIP archive, copy gosu.so (and if you are using sound, fmod.dll) into the directory where your Ruby code lives. Here is a minimal application to ensure that everything works:
+If you are working with gems, simply require 'rubygems', then 'gosu'. If you are working with the ZIP archive, copy gosu.so (and if you are using sound, fmod.dll) into your project's directory. Here is a minimal application to ensure that everything works:
 
 {{{
 begin
