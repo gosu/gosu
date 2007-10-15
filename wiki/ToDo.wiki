@@ -8,6 +8,7 @@
   * get rid of OpenGL tearing on OS X
   * get rid of OpenGL tearing on Windows
   * FINALLY fix OpenGL additive drawing, if I get to it
+  * don't crash after exception (Ruby)
 
 = Also ASAP =
   * assure Gosu::File also creates directories as necessary
