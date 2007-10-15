@@ -207,6 +207,17 @@ namespace Gosu
     }
 }
 
+// AsyncResult
+
+%include "../Gosu/Async.hpp"
+%template(AsyncImageResult) Gosu::AsyncResult<Gosu::Image>;
+%extend AsyncImageResult {
+    %newobject value;
+    Gosu::Image* value() {
+        return takeValue().release();
+    }
+}
+
 // Image
 // Hackishly allow the user to pass Window& instead of Graphics&.
 // Also, provide convenience functions.
@@ -234,6 +245,10 @@ namespace Gosu
         return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source),
             srcX, srcY, srcWidth, srcHeight, hardBorders);
     }
+    %newobject asyncNew(Gosu::Window& window, const char* filename) {
+        return asyncNewImage();
+    }
+    static Gosu::Image*
     void drawAsQuad(double x1, double y1, Color c1,
             double x2, double y2, Color c2,
             double x3, double y3, Color c3,

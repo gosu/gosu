@@ -8,7 +8,7 @@ Gosu::Bitmap::Bitmap()
 {
 }
 
-unsigned Gosu::Bitmap::width() const
+/*unsigned Gosu::Bitmap::width() const
 {
     return w;
 }
@@ -16,7 +16,7 @@ unsigned Gosu::Bitmap::width() const
 unsigned Gosu::Bitmap::height() const
 {
     return h;
-}
+}*/
 
 void Gosu::Bitmap::swap(Bitmap& other)
 {
@@ -45,7 +45,7 @@ void Gosu::Bitmap::replace(Color what, Color with)
     std::replace(pixels.begin(), pixels.end(), what, with);
 }
 
-Gosu::Color Gosu::Bitmap::getPixel(unsigned x, unsigned y) const
+/*Gosu::Color Gosu::Bitmap::getPixel(unsigned x, unsigned y) const
 {
     assert(x <= w);
     assert(y <= h);
@@ -59,7 +59,7 @@ void Gosu::Bitmap::setPixel(unsigned x, unsigned y, Color c)
     assert(y <= h);
     assert(w*h > 0);
     pixels[y * w + x] = c;
-}
+}*/
 
 void Gosu::Bitmap::insert(const Bitmap& source, int x, int y)
 {

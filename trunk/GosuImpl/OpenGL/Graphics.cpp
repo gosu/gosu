@@ -15,6 +15,7 @@ struct Gosu::Graphics::Impl
     DrawOpQueue queue;
     typedef std::vector<boost::weak_ptr<Texture> > Textures;
     Textures textures;
+    boost::mutex mutex;
 };
 
 Gosu::Graphics::Graphics(unsigned width, unsigned height, bool fullscreen)
@@ -81,6 +82,11 @@ void Gosu::Graphics::setVirtualResolution(double virtualWidth,
     
     pimpl->factorX = width() / virtualWidth;
     pimpl->factorY = height() / virtualHeight;
+}
+
+boost::mutex& Gosu::Graphics::mutex()
+{
+    return pimpl->mutex;
 }
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)

@@ -327,6 +327,8 @@ Gosu::Input& Gosu::Window::input()
 
 void Gosu::Window::Impl::doTick(Window& window)
 {
+    boost::mutex::scoped_lock lock(window.graphics().mutex());
+    
     assert(&window);
     if (!window.graphics().fullscreen())
     {

@@ -25,8 +25,8 @@ namespace Gosu
     public:
         Bitmap();
 
-        unsigned width() const;
-        unsigned height() const;
+        unsigned width() const { return w; }
+        unsigned height() const { return h; }
 
         void swap(Bitmap& other);
 
@@ -37,11 +37,11 @@ namespace Gosu
 
         //! Returns the color at the specified position. x and y must be on the
         //! bitmap.
-        Color getPixel(unsigned x, unsigned y) const;
+        Color getPixel(unsigned x, unsigned y) const { return pixels[y * w + x]; }
 
         //! Sets the pixel at the specified position to a color. x and y must
         //! be on the bitmap.
-        void setPixel(unsigned x, unsigned y, Color c);
+        void setPixel(unsigned x, unsigned y, Color c) { pixels[y * w + x] = c; }
 
         //! Inserts a bitmap at the given position. Parts of the inserted
         //! bitmap that would be outside of the target bitmap will be
