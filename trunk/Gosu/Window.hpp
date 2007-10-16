@@ -53,6 +53,10 @@ namespace Gosu
         //! Same as buttonDown. Called then the user released a button.
         virtual void buttonUp(Gosu::Button) {}
         
+        #ifdef __APPLE__
+        void makeCurrent();
+        #endif
+        
 // Ignore when SWIG is wrapping this class for Ruby/Gosu.
 #ifndef SWIG
         const Graphics& graphics() const;

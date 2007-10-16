@@ -1967,6 +1967,7 @@ static VALUE mGosu;
 #undef read
 #undef sleep
 
+#include <Gosu/Async.hpp>
 #include <Gosu/Audio.hpp>
 #include <Gosu/Color.hpp>
 #include <Gosu/Font.hpp>

@@ -48,6 +48,7 @@ Gosu::pango::pango()
 Gosu::pango::~pango()
 {
     g_object_unref(context);
+    g_object_unref(layout);
     
     if(font_description)
         pango_font_description_free(font_description);

@@ -111,8 +111,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
 //    XMapWindow(pimpl->dpy, pimpl->window);
     glXMakeCurrent(pimpl->dpy, pimpl->window, pimpl->cx);
 
-    boost::optional<DisplayMode> mode = DisplayMode::find(pimpl->width, pimpl->height, false);
-    pimpl->graphics.reset(new Gosu::Graphics(*mode));
+    pimpl->graphics.reset(new Gosu::Graphics(pimpl->width, pimpl->height, false));
     
     XColor black, dummy;
     XAllocNamedColor(pimpl->dpy, pimpl->cmap, "black", &black, &dummy);

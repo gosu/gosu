@@ -285,6 +285,11 @@ void Gosu::Window::close()
     [NSApp terminate:nil];
 }
 
+void Gosu::Window::makeCurrent()
+{
+    [pimpl->context.obj() makeCurrentContext];
+}
+
 const Gosu::Graphics& Gosu::Window::graphics() const
 {
     return *pimpl->graphics;
@@ -327,9 +332,11 @@ Gosu::Input& Gosu::Window::input()
 
 void Gosu::Window::Impl::doTick(Window& window)
 {
+    window.makeCurrent();
+#ifdef GOSU_WITH_ASYNC
     boost::mutex::scoped_lock lock(window.graphics().mutex());
+#endif
     
-    assert(&window);
     if (!window.graphics().fullscreen())
     {
         if (NSPointInRect([window.pimpl->window.obj() mouseLocationOutsideOfEventStream],

@@ -8,8 +8,11 @@
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/thread.hpp>
 #include <memory>
+
+#ifdef GOSU_WITH_ASYNC
+#include <boost/thread.hpp>
+#endif
 
 namespace Gosu
 {
@@ -41,7 +44,9 @@ namespace Gosu
         double virtualWidth() const;
         double virtualHeight() const;
         void setVirtualResolution(double virtualWidth, double virtualHeight);
+        #ifdef GOSU_WITH_ASYNC
         boost::mutex& mutex();
+        #endif
         // End of Undocumented
 
         unsigned width() const;

@@ -15,7 +15,9 @@ struct Gosu::Graphics::Impl
     DrawOpQueue queue;
     typedef std::vector<boost::weak_ptr<Texture> > Textures;
     Textures textures;
+    #ifdef GOSU_WITH_ASYNC
     boost::mutex mutex;
+    #endif
 };
 
 Gosu::Graphics::Graphics(unsigned width, unsigned height, bool fullscreen)
@@ -84,10 +86,12 @@ void Gosu::Graphics::setVirtualResolution(double virtualWidth,
     pimpl->factorY = height() / virtualHeight;
 }
 
+#ifdef GOSU_WITH_ASYNC
 boost::mutex& Gosu::Graphics::mutex()
 {
     return pimpl->mutex;
 }
+#endif
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 {
@@ -263,5 +267,6 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     data = texture->tryAlloc(*this, pimpl->queue, texture, bmp, 0, 0, bmp.width(), bmp.height(), 1);
     if (!data.get())
         throw std::logic_error("Internal texture block allocation error");
+
     return data;
 }

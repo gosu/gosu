@@ -99,6 +99,7 @@
 #undef read
 #undef sleep
 
+#include <Gosu/Async.hpp>
 #include <Gosu/Audio.hpp>
 #include <Gosu/Color.hpp>
 #include <Gosu/Font.hpp>
@@ -209,14 +210,19 @@ namespace Gosu
 
 // AsyncResult
 
+#ifdef GOSU_WITH_ASYNC
+%ignore Gosu::asyncNewImage;
+%ignore Gosu::asyncNewImage_Impl;
+%ignore Gosu::AsyncResult::takeValue;
 %include "../Gosu/Async.hpp"
-%template(AsyncImageResult) Gosu::AsyncResult<Gosu::Image>;
-%extend AsyncImageResult {
+%extend Gosu::AsyncResult {
     %newobject value;
     Gosu::Image* value() {
-        return takeValue().release();
+        return $self->takeValue().release();
     }
 }
+%template(AsyncImageResult) Gosu::AsyncResult<Gosu::Image>;
+#endif
 
 // Image
 // Hackishly allow the user to pass Window& instead of Graphics&.
@@ -245,10 +251,12 @@ namespace Gosu
         return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source),
             srcX, srcY, srcWidth, srcHeight, hardBorders);
     }
-    %newobject asyncNew(Gosu::Window& window, const char* filename) {
-        return asyncNewImage();
+    #ifdef GOSU_WITH_ASYNC
+    %newobject asyncNew;
+    static Gosu::AsyncResult<Gosu::Image>* asyncNew(Gosu::Window& window, const std::wstring& filename) {
+        return new Gosu::AsyncResult<Gosu::Image>(Gosu::asyncNewImage(window, filename));
     }
-    static Gosu::Image*
+    #endif
     void drawAsQuad(double x1, double y1, Color c1,
             double x2, double y2, Color c2,
             double x3, double y3, Color c3,
