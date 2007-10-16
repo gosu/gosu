@@ -8,10 +8,10 @@
   * get rid of OpenGL tearing on OS X
   * get rid of OpenGL tearing on Windows
   * FINALLY fix OpenGL additive drawing, if I get to it
-  * don't crash after shutdown (Ruby; Audio destruction sequence)
   * experiment with GC performance
 
 = Also ASAP =
+  * don't crash after shutdown when storing resources in @@'s (Ruby; Audio destruction sequence)
   * assure Gosu::File also creates directories as necessary
   * more sophisticated Audio interface for talking NPC's etc.
   * testing on Vista, Leopard, Panther
