@@ -16,6 +16,8 @@ class Gosu::Texture
     bool shouldSync;
 
 public:
+    static unsigned maxTextureSize();
+
     Texture(unsigned size);
     ~Texture();
     unsigned size() const;

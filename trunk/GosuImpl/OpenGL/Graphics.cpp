@@ -191,6 +191,8 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     const Bitmap& src, unsigned srcX, unsigned srcY,
     unsigned srcWidth, unsigned srcHeight, unsigned borderFlags)
 {
+    static const unsigned maxSize = Texture::maxTextureSize();
+
     // Special case: If the texture is supposed to have hard borders,
     // is quadratic, has a size that is at least 64 pixels but less than 256
     // pixels and a power of two, create a single texture just for this image.
@@ -225,13 +227,13 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     }*/
     
     // Too large to fit on a single texture. 
-    if (srcWidth > 253 || srcHeight > 253)
+    if (srcWidth > maxSize - 2 || srcHeight > maxSize - 2)
     {
         Bitmap bmp;
         bmp.resize(srcWidth, srcHeight);
         bmp.insert(src, 0, 0, srcX, srcY, srcWidth, srcHeight);
         std::auto_ptr<ImageData> lidi;
-        lidi.reset(new LargeImageData(*this, bmp, 253, 253, borderFlags));
+        lidi.reset(new LargeImageData(*this, bmp, maxSize - 2, maxSize - 2, borderFlags));
         return lidi;
     }
     
@@ -260,7 +262,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     // All textures are full: Create a new one.
     
     boost::shared_ptr<Texture> texture;
-    texture.reset(new Texture(256));
+    texture.reset(new Texture(maxSize));
     pimpl->textures.push_back(texture);
     
     std::auto_ptr<ImageData> data;

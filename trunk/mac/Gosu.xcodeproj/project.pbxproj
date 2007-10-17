@@ -574,7 +574,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ..\n/usr/local/bin/swig -c++ -ruby -autorename GosuImpl/RubyGosu.swg";
+			shellScript = "cd ..\n/usr/local/bin/swig -c++ -ruby -autorename -DGOSU_WITH_ASYNC GosuImpl/RubyGosu.swg";
 		};
 /* End PBXShellScriptBuildPhase section */
 

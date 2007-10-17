@@ -4,6 +4,27 @@
 #include <Gosu/Platform.hpp>
 #include <stdexcept>
 
+// TODO: Not threadsafe.
+unsigned Gosu::Texture::maxTextureSize()
+{
+    const static unsigned MIN_SIZE = 256, MAX_SIZE = 512;
+
+    static unsigned size = 0;
+    if (size == 0)
+    {
+        size = MIN_SIZE / 2;
+        GLint width = 1;
+        do
+        {
+            size *= 2;
+            glTexImage2D(GL_PROXY_TEXTURE_2D, 0, 4, size * 2, size * 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+            glGetTexLevelParameteriv(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width); 
+        } while (width != 0 && size < MAX_SIZE);
+    }
+    
+    return size;
+}
+
 void Gosu::Texture::sync()
 {
     if (!shouldSync)
@@ -40,11 +61,14 @@ GLuint Gosu::Texture::texName() const
     return name;
 }
 
+#include <Gosu/Timing.hpp> // TODO
+
 std::auto_ptr<Gosu::TexChunk> Gosu::Texture::tryAlloc(Graphics& graphics, DrawOpQueue& queue, boost::shared_ptr<Texture> ptr,
                                                         const Bitmap& bmp, unsigned srcX,
                                                         unsigned srcY, unsigned srcWidth,
                                                         unsigned srcHeight, unsigned padding)
 {
+    printf("begin tryAlloc (%d x %d) @ %u\n", srcWidth, srcHeight, Gosu::milliseconds()); fflush(0);
     std::auto_ptr<Gosu::TexChunk> result;
     
     boost::optional<BlockAllocator::Block> block = allocator.alloc(srcWidth, srcHeight);
@@ -63,6 +87,7 @@ std::auto_ptr<Gosu::TexChunk> Gosu::Texture::tryAlloc(Graphics& graphics, DrawOp
     
     result.reset(new TexChunk(graphics, queue, ptr, block->left + padding, block->top + padding,
                               block->width - 2 * padding, block->height - 2 * padding, padding));
+    printf("end tryAlloc @ %u\n", Gosu::milliseconds()); fflush(0);
     return result;
 }
 
