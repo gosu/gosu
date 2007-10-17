@@ -118,7 +118,7 @@ class GameWindow < Gosu::Window
       self.caption = "Gosu Testing Zone @ #{@accum_fps} FPS"
       @accum_fps = 0
     end
-    
+
     if @bg_loading and @bg_loading.has_value then
       @bg = @bg_loading.value
       @bg_loading = nil
