@@ -4,7 +4,7 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Audio.hpp>
 #include <Gosu/Input.hpp>
-#include <GosuImpl/OpenGL/OpenGL.hpp>
+#include <GosuImpl/Graphics/Graphics.hpp>
 #include <boost/bind.hpp>
 #include <cassert>
 #include <stdexcept>
@@ -93,12 +93,6 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     double updateInterval)
 : pimpl(new Impl)
 {
-    // Don't even get started when there's no suitable display mode.
-    boost::optional<DisplayMode> mode =
-        DisplayMode::find(width, height, fullscreen);
-    if (!mode)
-        throw std::runtime_error("No suitable display mode found");
-
     // Select window styles depending on mode.fullscreen.
     DWORD style = WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
     DWORD styleEx = WS_EX_APPWINDOW;
@@ -161,7 +155,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
 
     MoveWindow(handle(), windowX, windowY, windowW, windowH, false);
 
-    pimpl->graphics.reset(new Gosu::Graphics(*mode));
+    pimpl->graphics.reset(new Gosu::Graphics(width, height, fullscreen));
     pimpl->input.reset(new Gosu::Input(handle()));
     input().onButtonDown = boost::bind(&Window::buttonDown, this, _1);
     input().onButtonUp = boost::bind(&Window::buttonUp, this, _1);

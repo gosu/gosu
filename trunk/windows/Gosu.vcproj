@@ -109,6 +109,7 @@
 				AdditionalOptions="/I&quot;zlib, libpng\zlib&quot; /I&quot;zlib, libpng\libpng&quot;"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				WholeProgramOptimization="false"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -298,10 +299,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Direct3D\Blit.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\GosuImpl\Graphics\BlockAllocator.cpp"
 				>
 			</File>
@@ -397,10 +394,6 @@
 			</File>
 			<File
 				RelativePath="..\Gosu\RotFlip.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GosuImpl\Direct3D\ScreenToBitmap.cpp"
 				>
 			</File>
 			<File
