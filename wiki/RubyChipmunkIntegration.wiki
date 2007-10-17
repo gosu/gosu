@@ -1,4 +1,4 @@
-#summary Ruby & Chipmunk Tutorial by Dirk Johnson
+#summary Ruby & Chipmunk Tutorial by Dirk Johnson.
 
 = The Ruby & Chipmunk Tutorial =
 
