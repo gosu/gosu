@@ -21,7 +21,7 @@
   * make the Ruby wrapper's menu bar Command-Q work on OS X!
   * generate Rdoc
   * change wstring to string? (for 0.8.0)
-  * force feedback would be a good fit for an input redesign. But is it really this important in 2007?
+  * force feedback would be a good fit for an input redesign. 2007 is packed even without this feature, though.
 
 = Major design goals for 0.8.x (graphics) =
   * more alpha modes, yay!
