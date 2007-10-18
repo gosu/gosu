@@ -696,6 +696,7 @@
 					"-lpng_universal",
 					"-lfmod_universal",
 					"-liconv",
+					"-lboost_thread_d_1_34_1_universal",
 				);
 				PRODUCT_NAME = Gosu;
 				WRAPPER_EXTENSION = framework;
@@ -724,6 +725,7 @@
 					"-lpng_universal",
 					"-lfmod_universal",
 					"-liconv",
+					"-lboost_thread_1_34_1_universal",
 				);
 				PRODUCT_NAME = Gosu;
 				WRAPPER_EXTENSION = framework;
@@ -739,7 +741,10 @@
 					..,
 					/usr/local/include,
 				);
-				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					.,
+					/usr/local/lib,
+				);
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
@@ -756,7 +761,10 @@
 					..,
 					/usr/local/include,
 				);
-				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					.,
+					/usr/local/lib,
+				);
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
@@ -852,7 +860,7 @@
 					"-lpng_universal",
 					"-lfmod_universal",
 					"-flat_namespace",
-					"-lboost_thread-mt-d",
+					"-lboost_thread_d_1_34_1_universal",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = gosu;
@@ -891,7 +899,7 @@
 					"-lpng_universal",
 					"-lfmod_universal",
 					"-flat_namespace",
-					"-lboost_thread-mt",
+					"-lboost_thread_1_34_1_universal",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = gosu;
