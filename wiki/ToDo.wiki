@@ -24,6 +24,7 @@
   * force feedback would be a good fit for an input redesign. But is it really this important in 2007?
 
 = Major design goals for 0.8.x (graphics) =
+  * more alpha modes, yay!
   * find a way to factor rot flips out of Gosu => Image/draw redesign
   * implement clipping and a target() modifier for the new Image
   * multi-threaded blit queue?
