@@ -4,8 +4,6 @@
 
 void Gosu::DrawOp::perform() const
 {
-    glEnable(GL_BLEND);
-
     if (mode == amAdditive)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     else
@@ -55,5 +53,4 @@ void Gosu::DrawOp::perform() const
 
     if (chunk)
         glDisable(GL_TEXTURE_2D);
-    glDisable(GL_BLEND);
 }

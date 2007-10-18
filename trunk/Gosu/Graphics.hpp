@@ -59,7 +59,9 @@ namespace Gosu
         //! Every call to begin must have a matching call to end.
         void end();
         // Processes all enqueued Gosu drawing operations, so custom OpenGL code can start.
-        void flush();
+        void beginGL();
+        // Resets Gosu into its default rendering state.
+        void endGL();
 
         void drawLine(double x1, double y1, Color c1,
             double x2, double y2, Color c2,

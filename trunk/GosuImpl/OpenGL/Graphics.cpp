@@ -35,6 +35,8 @@ Gosu::Graphics::Graphics(unsigned width, unsigned height, bool fullscreen)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+    glEnable(GL_BLEND);
 }
 
 Gosu::Graphics::~Graphics()
@@ -106,16 +108,38 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 
 void Gosu::Graphics::end()
 {
-    flush();
+    for (unsigned i = 0; i < pimpl->textures.size(); ++i)
+        if (!pimpl->textures[i].expired())
+            boost::shared_ptr<Texture>(pimpl->textures[i])->sync();
+    pimpl->queue.performDrawOps();
     glFlush();
 }
 
-void Gosu::Graphics::flush()
+void Gosu::Graphics::beginGL()
 {
     for (unsigned i = 0; i < pimpl->textures.size(); ++i)
         if (!pimpl->textures[i].expired())
             boost::shared_ptr<Texture>(pimpl->textures[i])->sync();
     pimpl->queue.performDrawOps();
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    glDisable(GL_BLEND);
+    // TODO: completely restore default state
+}
+
+void Gosu::Graphics::endGL()
+{
+    glPopAttrib();
+
+    // Restore matrices.
+    
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glViewport(0, 0, pimpl->width, pimpl->height);
+    glOrtho(0, pimpl->width, pimpl->height, 0, -1, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glEnable(GL_BLEND);
 }
 
 void Gosu::Graphics::drawLine(double x1, double y1, Color c1,

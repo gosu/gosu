@@ -2430,8 +2430,10 @@ SWIGINTERN int Gosu_Window_width(Gosu::Window const *self){
 SWIGINTERN int Gosu_Window_height(Gosu::Window const *self){
 		return self->graphics().height();
 	}
-SWIGINTERN void Gosu_Window_flush(Gosu::Window *self){
-        self->graphics().flush();
+SWIGINTERN void Gosu_Window_gl(Gosu::Window *self){
+        self->graphics().beginGL();
+        rb_yield(Qnil);
+        self->graphics().endGL();
     }
 /* ---------------------------------------------------
  * C++ director class helpers
@@ -6483,7 +6485,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Window_flush(int argc, VALUE *argv, VALUE self) {
+_wrap_Window_gl(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -6493,12 +6495,12 @@ _wrap_Window_flush(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "flush" "', argument " "1"" of type '" "Gosu::Window *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "gl" "', argument " "1"" of type '" "Gosu::Window *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
     try {
-      Gosu_Window_flush(arg1);
+      Gosu_Window_gl(arg1);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -7083,7 +7085,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cWindow.klass, "mouse_y", VALUEFUNC(_wrap_Window_mouse_y), -1);
   rb_define_method(cWindow.klass, "width", VALUEFUNC(_wrap_Window_width), -1);
   rb_define_method(cWindow.klass, "height", VALUEFUNC(_wrap_Window_height), -1);
-  rb_define_method(cWindow.klass, "flush", VALUEFUNC(_wrap_Window_flush), -1);
+  rb_define_method(cWindow.klass, "gl", VALUEFUNC(_wrap_Window_gl), -1);
   cWindow.mark = 0;
   cWindow.destroy = (void (*)(void *)) free_Gosu_Window;
   cWindow.trackObjects = 0;

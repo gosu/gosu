@@ -1,4 +1,4 @@
-# use freshly builded gosu
+# use freshly built gosu
 require '../gosu'
 require 'rubygems'
 require 'gl'
@@ -183,13 +183,6 @@ class GameWindow < Gosu::Window
         glColor4f(0.0, 1.0, 0.0, 0.5)
         glVertex3f(-1.0, -1.0, 1.0)
     glEnd
-    
-    glDisable(GL_CULL_FACE)
-    glMatrixMode(GL_MODELVIEW)
-    glLoadIdentity
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity
-    glOrtho(0, width, height, 0, -1, 1)
   end
 
   def draw
@@ -205,9 +198,9 @@ class GameWindow < Gosu::Window
     
     @background_image.draw(0, 0, ZOrder::Background)
     
-    flush
-
-    custom_draw
+    gl do
+      custom_draw
+    end
 
     @player.draw
     @stars.each { |star| star.draw }
