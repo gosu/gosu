@@ -50,7 +50,7 @@
     if (!strcmp(StringValueCStr(localTemporary), "default"))
         $1 = Gosu::amDefault;
     else if (!strcmp(StringValueCStr(localTemporary), "additive"))
-        $1 = Gosu::amDefault;
+        $1 = Gosu::amAdditive;
     else
         SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
 }

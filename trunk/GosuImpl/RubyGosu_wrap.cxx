@@ -3837,7 +3837,7 @@ _wrap_Font_draw(int argc, VALUE *argv, VALUE self) {
       if (!strcmp(StringValueCStr(localTemporary), "default"))
       arg9 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
-      arg9 = Gosu::amDefault;
+      arg9 = Gosu::amAdditive;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -3957,7 +3957,7 @@ _wrap_Font_draw_rel(int argc, VALUE *argv, VALUE self) {
       if (!strcmp(StringValueCStr(localTemporary), "default"))
       arg11 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
-      arg11 = Gosu::amDefault;
+      arg11 = Gosu::amAdditive;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -4314,7 +4314,7 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
       if (!strcmp(StringValueCStr(localTemporary), "default"))
       arg8 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
-      arg8 = Gosu::amDefault;
+      arg8 = Gosu::amAdditive;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -4441,7 +4441,7 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
       if (!strcmp(StringValueCStr(localTemporary), "default"))
       arg11 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
-      arg11 = Gosu::amDefault;
+      arg11 = Gosu::amAdditive;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -4566,7 +4566,7 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
       if (!strcmp(StringValueCStr(localTemporary), "default"))
       arg11 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
-      arg11 = Gosu::amDefault;
+      arg11 = Gosu::amAdditive;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -4982,7 +4982,7 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
       if (!strcmp(StringValueCStr(localTemporary), "default"))
       arg15 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
-      arg15 = Gosu::amDefault;
+      arg15 = Gosu::amAdditive;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -5943,7 +5943,7 @@ _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
       if (!strcmp(StringValueCStr(localTemporary), "default"))
       arg9 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
-      arg9 = Gosu::amDefault;
+      arg9 = Gosu::amAdditive;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -6076,7 +6076,7 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
       if (!strcmp(StringValueCStr(localTemporary), "default"))
       arg12 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
-      arg12 = Gosu::amDefault;
+      arg12 = Gosu::amAdditive;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -6237,7 +6237,7 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
       if (!strcmp(StringValueCStr(localTemporary), "default"))
       arg15 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
-      arg15 = Gosu::amDefault;
+      arg15 = Gosu::amAdditive;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }

@@ -1,7 +1,7 @@
 require 'gosu'
 
 module ZOrder
-  Background, Stars, Player, UI = *0..3
+  Background, Player, Stars, UI = *0..3
 end
 
 class Player
@@ -63,7 +63,7 @@ class Star
   
   def initialize(animation)
     @animation = animation
-    @color = Gosu::Color.new(0xff000000)
+    @color = Gosu::Color.new(0x80000000)
     @color.red = rand(255 - 40) + 40
     @color.green = rand(255 - 40) + 40
     @color.blue = rand(255 - 40) + 40

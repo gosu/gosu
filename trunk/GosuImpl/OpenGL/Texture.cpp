@@ -68,7 +68,6 @@ std::auto_ptr<Gosu::TexChunk> Gosu::Texture::tryAlloc(Graphics& graphics, DrawOp
                                                         unsigned srcY, unsigned srcWidth,
                                                         unsigned srcHeight, unsigned padding)
 {
-    printf("begin tryAlloc (%d x %d) @ %u\n", srcWidth, srcHeight, Gosu::milliseconds()); fflush(0);
     std::auto_ptr<Gosu::TexChunk> result;
     
     boost::optional<BlockAllocator::Block> block = allocator.alloc(srcWidth, srcHeight);
@@ -87,7 +86,6 @@ std::auto_ptr<Gosu::TexChunk> Gosu::Texture::tryAlloc(Graphics& graphics, DrawOp
     
     result.reset(new TexChunk(graphics, queue, ptr, block->left + padding, block->top + padding,
                               block->width - 2 * padding, block->height - 2 * padding, padding));
-    printf("end tryAlloc @ %u\n", Gosu::milliseconds()); fflush(0);
     return result;
 }
 
