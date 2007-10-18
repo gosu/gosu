@@ -3,6 +3,7 @@
 
 =0.7.7=
   * All: Gosu now uses doubles as Z positions
+  * Mac, Linux: Additive drawing fixed
   * Windows: Gosu now uses OpenGL instead of Direct3D (less code to maintain, portable OpenGL effects possible now)
   * Ruby: Gosu::sleep was not supposed to exist, now killed (did overwrite Ruby's sleep when include'ing Gosu)
   * Ruby: Gosu now cooperates with Ruby's multitasking
