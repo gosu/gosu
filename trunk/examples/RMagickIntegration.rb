@@ -55,7 +55,6 @@ class Map
     
     # Set up a Draw object that fills with an earth texture.
     earth = Magick::Image.read('media/Earth.png').first.resize(1.5)
-    earth.write('test.png')
     gc = Magick::Draw.new
     gc.pattern('earth', 0, 0, earth.columns, earth.rows) { gc.composite(0, 0, 0, 0, earth) }    
     gc.fill('earth')
