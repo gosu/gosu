@@ -1,8 +1,9 @@
 #include <Gosu/Gosu.hpp>
 #include <Gosu/AutoLink.hpp> // Makes life easier for Windows users compiling this.
 
-#include <boost/scoped_ptr.hpp> // Used throughout Gosu and this tutorial.
-#include <boost/shared_ptr.hpp> // Learn them, they're moving into standard C++!
+#include <boost/scoped_ptr.hpp> // Pointers used throughout Gosu and this tutorial.
+#include <boost/shared_ptr.hpp> // Read about them, they're moving into standard C++! :)
+
 #include <boost/lexical_cast.hpp> // Could also use <sstream>, just for int <-> string conversion
 
 #include <cmath>
