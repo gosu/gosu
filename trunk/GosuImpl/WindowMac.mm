@@ -262,6 +262,8 @@ void Gosu::Window::setCaption(const std::wstring& caption)
 
 void Gosu::Window::show()
 {
+    [NSThread setThreadPriority: 1.0];
+    
 	// This is for Ruby/Gosu and misc. hackery:
 	// Usually, applications on the Mac can only get keyboard and mouse input if
 	// run by double-clicking an .app. So if this is run from the Terminal (i.e.
@@ -364,6 +366,9 @@ void Gosu::Window::Impl::doTick(Window& window)
     }
     
     #ifdef GOSU_FOR_RUBY
+    static int counter = 0;
+    if (++counter % 60 == 0)
+        rb_gc_start();
     rb_thread_schedule();
     #endif
 }

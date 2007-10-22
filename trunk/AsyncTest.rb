@@ -104,7 +104,8 @@ class GameWindow < Gosu::Window
     @player.move
     @player.collect_stars(@stars)
     
-    if rand(100) < 4 and @stars.size < 25 then
+    #if rand(100) < 4 and @stars.size < 25 then
+    if @stars.size < 100 then
       @stars.push(Star.new(@star_anim))
     end
   end
@@ -113,11 +114,19 @@ class GameWindow < Gosu::Window
     @accum_fps ||= 0
     @cur_sec ||= 0
     @accum_fps += 1
-    if @cur_sec != Gosu::milliseconds / 1000 then
-      @cur_sec = Gosu::milliseconds / 1000
+    now = Gosu::milliseconds
+    if @cur_sec != now / 1000 then
+      @cur_sec = now / 1000
       self.caption = "Gosu Testing Zone @ #{@accum_fps} FPS"
       @accum_fps = 0
     end
+    
+    @last_tick ||= 0
+    if now - @last_tick > 50 then
+      tv = Time.now
+      puts "Jitter @ #{tv.hour}:#{tv.min}.#{tv.sec}"
+    end
+    @last_tick = now
 
     if @bg_loading and @bg_loading.has_value then
       @bg = @bg_loading.value
