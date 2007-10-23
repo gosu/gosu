@@ -10,45 +10,116 @@ module ZOrder
   Background, Stars, Player, UI = *0..3
 end
 
-class Player
-  attr_reader :score
+class GLBackground
+  MIN_X = -2
+  MAX_X = 2
+  VIS_STEPS_X = 3
+
+  MIN_Y = -3
+  MAX_Y = 3
+  VIS_STEPS_Y = 4
+
+  SCROLLS_PER_STEP = 50
 
   def initialize(window)
+    @image = Gosu::Image.new(window, "media/Earth.png", true)
+    @scrolls = 0
+    @height_map = Array.new(VIS_STEPS_Y + 2) { Array.new(VIS_STEPS_X + 1) { rand } }
+  end
+  
+  def scroll
+    @scrolls += 1
+    if @scrolls == SCROLLS_PER_STEP then
+      @scrolls = 0
+      @height_map.shift
+      @height_map.push Array.new(VIS_STEPS_X + 1) { rand }
+    end
+  end
+  
+  def exec_gl
+    info = @image.gl_tex_info
+    return unless info
+
+    glDepthFunc(GL_GEQUAL)
+    glEnable(GL_DEPTH_TEST)
+    glEnable(GL_BLEND)
+    glEnable(GL_CULL_FACE)
+
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity
+    gluPerspective(45.0, 1.0 * 800 / 600, 0.1, 5.0)
+
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity
+    glTranslate(0, 0, -3)
+    glScale(2, 2, 1)
+  
+    glEnable(GL_TEXTURE_2D)
+    glBindTexture(GL_TEXTURE_2D, info.tex_name)
+    
+    offs_y = 1.0 * @scrolls / SCROLLS_PER_STEP
+    
+    glBegin(GL_QUADS)
+    (MIN_Y..MAX_Y).each do |y|
+      (MIN_X..MAX_X).each do |x|
+        z = @height_map[STEPS_Y / 2 + y][x]
+        glColor4d(1, 1, 1, z)
+        glTexCoord2d(info.left, info.top)
+        glVertex3d((x - 0.5) / VIS_STEPS_X, (y - offs_y - 0.5) / VIS_STEPS_Y, z)
+
+        z = @height_map[STEPS_Y / 2 + y][x]
+        glColor4d(1, 1, 1, @height_map[STEPS_Y / 2 + y][x+1])
+        glTexCoord2d(info.right, info.top)
+        glVertex3d((x + 0.5) / VIS_STEPS_X, (y - offs_y - 0.5) / VIS_STEPS_Y,
+          @height_map[STEPS_Y / 2 + y][-STEPS_X / 2 + x + 1])
+
+        z = @height_map[STEPS_Y / 2 + y][x]
+        glColor4d(1, 1, 1, @height_map[STEPS_Y / 2 + y+1][x+1])
+        glTexCoord2d(info.right, info.bottom)
+        glVertex3d((x + 0.5) / VIS_STEPS_X, (y - offs_y + 0.5) / VIS_STEPS_Y,
+          @height_map[STEPS_Y / 2 + y + 1][-STEPS_X / 2 + x + 1])
+
+        z = @height_map[STEPS_Y / 2 + y][x]
+        glColor4d(1, 1, 1, @height_map[STEPS_Y / 2 + y+1][x])
+        glTexCoord2d(info.left, info.bottom)
+        glVertex3d((x - 0.5) / VIS_STEPS_X, (y - offs_y + 0.5) / VIS_STEPS_Y,
+          @height_map[STEPS_Y / 2 + y + 1][-STEPS_X / 2 + x])
+      end
+    end
+    glEnd
+  end
+end
+
+class Player
+  Speed = 7
+  
+  attr_reader :score
+
+  def initialize(window, x, y)
     @image = Gosu::Image.new(window, "media/Starfighter.bmp", false)
     @beep = Gosu::Sample.new(window, "media/Beep.wav")
-    @x = @y = @vel_x = @vel_y = @angle = 0.0
+    @x, @y = x, y
     @score = 0
   end
 
-  def warp(x, y)
-    @x, @y = x, y
+  def move_left
+    @x = [@x - Speed, 0].max
   end
   
-  def turn_left
-    @angle -= 4.5
-  end
-  
-  def turn_right
-    @angle += 4.5
+  def move_right
+    @x = [@x + Speed, 800].min
   end
   
   def accelerate
-    @vel_x += Gosu::offset_x(@angle, 0.5)
-    @vel_y += Gosu::offset_y(@angle, 0.5)
+    @y = [@y - Speed, 50].max
   end
   
-  def move
-    @x += @vel_x
-    @y += @vel_y
-    @x %= 640
-    @y %= 480
-    
-    @vel_x *= 0.95
-    @vel_y *= 0.95
+  def brake
+    @y = [@y + Speed, 600].min
   end
-
+  
   def draw
-    @image.draw_rot(@x, @y, ZOrder::Player, @angle)
+    @image.draw(@x - @image.width / 2, @y - @image.height / 2, ZOrder::Player)
   end
   
   def collect_stars(stars)
@@ -73,26 +144,31 @@ class Star
     @color.red = rand(255 - 40) + 40
     @color.green = rand(255 - 40) + 40
     @color.blue = rand(255 - 40) + 40
-    @x = rand * 640
-    @y = rand * 480
+    @x = rand * 800
+    @y = 0
   end
 
   def draw  
     img = @animation[Gosu::milliseconds / 100 % @animation.size];
-    img.draw(@x - img.width / 2.0, @y - img.height / 2.0,
-        ZOrder::Stars, 1, 1, @color, :additive)
+    img.draw_rot(@x, @y, ZOrder::Stars, @y, 0.5, 0.5, 1, 1, @color, :additive)
+  end
+  
+  def update
+    # Move towards bottom of screen
+    @y += 3
+    # Return false when out of screen (gets deleted then)
+    @y < 650
   end
 end
 
 class GameWindow < Gosu::Window
   def initialize
-    super(640, 480, false, 0)
-    self.caption = "Hackish OpenGL Integration"
+    super(800, 600, false)
+    self.caption = "Gosu & OpenGL Integration Demo"
     
-    @background_image = Gosu::Image.new(self, "media/Space.png", true)
+    @gl_background = GLBackground.new(self)
     
-    @player = Player.new(self)
-    @player.warp(320, 240)
+    @player = Player.new(self, 400, 500)
 
     @star_anim = Gosu::Image::load_tiles(self, "media/Star.png", 25, 25, false)
     @stars = Array.new
@@ -101,107 +177,29 @@ class GameWindow < Gosu::Window
   end
 
   def update
-    if button_down? Gosu::Button::KbLeft or button_down? Gosu::Button::GpLeft then
-      @player.turn_left
-    end
-    if button_down? Gosu::Button::KbRight or button_down? Gosu::Button::GpRight then
-      @player.turn_right
-    end
-    if button_down? Gosu::Button::KbUp or button_down? Gosu::Button::GpButton0 then
-      @player.accelerate
-    end
-    @player.move
+    @player.move_left if button_down? Gosu::Button::KbLeft or button_down? Gosu::Button::GpLeft
+    @player.move_right if button_down? Gosu::Button::KbRight or button_down? Gosu::Button::GpRight
+    @player.accelerate if button_down? Gosu::Button::KbUp or button_down? Gosu::Button::GpUp
+    @player.brake if button_down? Gosu::Button::KbDown or button_down? Gosu::Button::GpDown
+
     @player.collect_stars(@stars)
     
-    if @stars.size < 25 then
-      @stars.push(Star.new(@star_anim))
-    end
-  end
-
-  def custom_draw
-    $pyramid_angle ||= 0
-    $pyramid_angle += 0.2
-
-    glClearDepth(1.0)
-    glClear(GL_DEPTH_BUFFER_BIT)
-
-    glDepthFunc(GL_LEQUAL)
-    glEnable(GL_DEPTH_TEST)
-    glEnable(GL_CULL_FACE)
-    glEnable(GL_BLEND)
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity
-    # Calculate aspect ratio of the window
-    gluPerspective(45.0, 1.0 * width / height, 0.1, 100.0)
-    glMatrixMode(GL_MODELVIEW)
-    glLoadIdentity
-
-    # Move left 1.5 units and into the screen 6.0 units
-    glTranslatef(0, 0, -4.0)
-
-    # Rotate the pyramid on the Y-axis
-    glRotatef($pyramid_angle, 0.0, 1.0, 0.0)
-    # Draw a pyramid
-    glBegin(GL_POLYGON)
-        # Draw front side of pyramid
-        glColor4f(1.0, 0.0, 0.0, 1.0)
-        glVertex3f( 0.0,  1.0, 0.0)
-        
-        glColor4f(0.0, 1.0, 0.0, 0.5)
-        glVertex3f(-1.0, -1.0, 1.0)
-        
-        glColor4f(0.0, 0.0, 1.0, 0.5)
-        glVertex3f(1.0, -1.0, 1.0)
-
-        # Draw right side of pyramid
-        glColor4f(1.0, 0.0, 0.0, 1.0)
-        glVertex3f( 0.0,  1.0, 0.0)
-        
-        glColor4f(0.0, 0.0, 1.0, 0.5)
-        glVertex3f( 1.0, -1.0, 1.0)
-        
-        glColor4f(0.0, 1.0, 0.0, 0.5)
-        glVertex3f(1.0, -1.0, -1.0)
-
-        # Draw back side of pyramid
-        glColor4f(1.0, 0.0, 0.0, 1.0)
-        glVertex3f( 0.0,  1.0, 0.0)
-        
-        glColor4f(0.0, 1.0, 0.0, 0.5)
-        glVertex3f(1.0, -1.0, -1.0)
-        
-        glColor4f(0.0, 0.0, 1.0, 0.5)
-        glVertex3f(-1.0, -1.0, -1.0)
-
-        # Draw left side of pyramid
-        glColor4f(1.0, 0.0, 0.0, 1.0)
-        glVertex3f( 0.0,  1.0, 0.0)
-        
-        glColor4f(0.0, 0.0, 1.0, 0.5)
-        glVertex3f(-1.0, -1.0, -1.0)
-        
-        glColor4f(0.0, 1.0, 0.0, 0.5)
-        glVertex3f(-1.0, -1.0, 1.0)
-    glEnd
+    @stars.reject! { |star| !star.update }
+    
+    @gl_background.scroll
+    
+    @stars.push(Star.new(@star_anim)) if rand(20) == 0
   end
 
   def draw
-    @cur_second ||= Gosu::milliseconds / 1000
-    @accum_frames ||= 0
-    
-    @accum_frames += 1
-    if @cur_second != Gosu::milliseconds / 1000 then
-      @cur_second = Gosu::milliseconds / 1000
-      self.caption = "Hackish OpenGL Integration @ #{@accum_frames} FPS"
-      @accum_frames = 0
-    end
-    
-    @background_image.draw(0, 0, ZOrder::Background)
-    
     gl do
-      custom_draw
+      glClearColor(0.0, 0.2, 0.6, 1.0)
+      glClearDepth(0)
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+      
+      @gl_background.exec_gl
     end
-
+    
     @player.draw
     @stars.each { |star| star.draw }
     @font.draw("Score: #{@player.score}", 10, 10, ZOrder::UI, 1.0, 1.0, 0xffffff00)

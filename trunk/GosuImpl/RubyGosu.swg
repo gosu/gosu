@@ -224,6 +224,10 @@ namespace Gosu
 %template(AsyncImageResult) Gosu::AsyncResult<Gosu::Image>;
 #endif
 
+%ignore Gosu::ImageData;
+%rename("tex_name") texName;
+%include "../Gosu/ImageData.hpp"
+
 // Image
 // Hackishly allow the user to pass Window& instead of Graphics&.
 // Also, provide convenience functions.
@@ -263,6 +267,14 @@ namespace Gosu
             double x4, double y4, Color c4,
             ZPos z, AlphaMode mode = Gosu::amDefault) {
         $self->getData().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
+    }
+    %newobject glTexInfo;
+    Gosu::GLTexInfo* glTexInfo() const {
+        boost::optional<Gosu::GLTexInfo> info = $self->getData().glTexInfo();
+        if (info)
+            return new Gosu::GLTexInfo(*info);
+        else
+            return 0;
     }
     %newobject fromText;
     static Gosu::Image* fromText(Gosu::Window& window, const std::wstring& text,

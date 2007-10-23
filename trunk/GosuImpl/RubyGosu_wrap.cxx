@@ -1932,17 +1932,18 @@ namespace Swig {
 #define SWIGTYPE_p_Gosu__Button swig_types[2]
 #define SWIGTYPE_p_Gosu__Color swig_types[3]
 #define SWIGTYPE_p_Gosu__Font swig_types[4]
-#define SWIGTYPE_p_Gosu__Image swig_types[5]
-#define SWIGTYPE_p_Gosu__Sample swig_types[6]
-#define SWIGTYPE_p_Gosu__Song swig_types[7]
-#define SWIGTYPE_p_Gosu__Window swig_types[8]
-#define SWIGTYPE_p_boost__shared_ptrTboost__try_mutex_t swig_types[9]
-#define SWIGTYPE_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t swig_types[10]
-#define SWIGTYPE_p_char swig_types[11]
-#define SWIGTYPE_p_double swig_types[12]
-#define SWIGTYPE_p_std__wstring swig_types[13]
-static swig_type_info *swig_types[15];
-static swig_module_info swig_module = {swig_types, 14, 0, 0, 0, 0};
+#define SWIGTYPE_p_Gosu__GLTexInfo swig_types[5]
+#define SWIGTYPE_p_Gosu__Image swig_types[6]
+#define SWIGTYPE_p_Gosu__Sample swig_types[7]
+#define SWIGTYPE_p_Gosu__Song swig_types[8]
+#define SWIGTYPE_p_Gosu__Window swig_types[9]
+#define SWIGTYPE_p_boost__shared_ptrTboost__try_mutex_t swig_types[10]
+#define SWIGTYPE_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t swig_types[11]
+#define SWIGTYPE_p_char swig_types[12]
+#define SWIGTYPE_p_double swig_types[13]
+#define SWIGTYPE_p_std__wstring swig_types[14]
+static swig_type_info *swig_types[16];
+static swig_module_info swig_module = {swig_types, 15, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2309,6 +2310,13 @@ SWIGINTERN Gosu::AsyncResult<Gosu::Image > *Gosu_Image_asyncNew(Gosu::Window &wi
     }
 SWIGINTERN void Gosu_Image_drawAsQuad(Gosu::Image *self,double x1,double y1,Gosu::Color c1,double x2,double y2,Gosu::Color c2,double x3,double y3,Gosu::Color c3,double x4,double y4,Gosu::Color c4,Gosu::ZPos z,Gosu::AlphaMode mode=Gosu::amDefault){
         self->getData().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
+    }
+SWIGINTERN Gosu::GLTexInfo *Gosu_Image_glTexInfo(Gosu::Image const *self){
+        boost::optional<Gosu::GLTexInfo> info = self->getData().glTexInfo();
+        if (info)
+            return new Gosu::GLTexInfo(*info);
+        else
+            return 0;
     }
 SWIGINTERN Gosu::Image *Gosu_Image_fromText(Gosu::Window &window,std::wstring const &text,std::wstring const &fontName,unsigned int fontHeight,unsigned int lineSpacing,unsigned int maxWidth,Gosu::TextAlign align){
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
@@ -4170,6 +4178,322 @@ free_Gosu_AsyncResult_Sl_Gosu_Image_Sg_(Gosu::AsyncResult<Gosu::Image > *arg1) {
     delete arg1;
 }
 
+swig_class cGLTexInfo;
+
+SWIGINTERN VALUE
+_wrap_GLTexInfo_tex_name_set(int argc, VALUE *argv, VALUE self) {
+  Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__GLTexInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "texName" "', argument " "1"" of type '" "Gosu::GLTexInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "texName" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  if (arg1) (arg1)->texName = arg2;
+  
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_GLTexInfo_tex_name_get(int argc, VALUE *argv, VALUE self) {
+  Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__GLTexInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "texName" "', argument " "1"" of type '" "Gosu::GLTexInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
+  result = (int) ((arg1)->texName);
+  vresult = SWIG_From_int(static_cast< int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_GLTexInfo_left_set(int argc, VALUE *argv, VALUE self) {
+  Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__GLTexInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "left" "', argument " "1"" of type '" "Gosu::GLTexInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "left" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  if (arg1) (arg1)->left = arg2;
+  
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_GLTexInfo_left_get(int argc, VALUE *argv, VALUE self) {
+  Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
+  double result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__GLTexInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "left" "', argument " "1"" of type '" "Gosu::GLTexInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
+  result = (double) ((arg1)->left);
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_GLTexInfo_right_set(int argc, VALUE *argv, VALUE self) {
+  Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__GLTexInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "right" "', argument " "1"" of type '" "Gosu::GLTexInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "right" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  if (arg1) (arg1)->right = arg2;
+  
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_GLTexInfo_right_get(int argc, VALUE *argv, VALUE self) {
+  Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
+  double result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__GLTexInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "right" "', argument " "1"" of type '" "Gosu::GLTexInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
+  result = (double) ((arg1)->right);
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_GLTexInfo_top_set(int argc, VALUE *argv, VALUE self) {
+  Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__GLTexInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "top" "', argument " "1"" of type '" "Gosu::GLTexInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "top" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  if (arg1) (arg1)->top = arg2;
+  
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_GLTexInfo_top_get(int argc, VALUE *argv, VALUE self) {
+  Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
+  double result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__GLTexInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "top" "', argument " "1"" of type '" "Gosu::GLTexInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
+  result = (double) ((arg1)->top);
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_GLTexInfo_bottom_set(int argc, VALUE *argv, VALUE self) {
+  Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__GLTexInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "bottom" "', argument " "1"" of type '" "Gosu::GLTexInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "bottom" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  if (arg1) (arg1)->bottom = arg2;
+  
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_GLTexInfo_bottom_get(int argc, VALUE *argv, VALUE self) {
+  Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
+  double result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__GLTexInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "bottom" "', argument " "1"" of type '" "Gosu::GLTexInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
+  result = (double) ((arg1)->bottom);
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
+SWIGINTERN VALUE
+_wrap_GLTexInfo_allocate(VALUE self) {
+#else
+  SWIGINTERN VALUE
+  _wrap_GLTexInfo_allocate(int argc, VALUE *argv, VALUE self) {
+#endif
+    
+    
+    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_Gosu__GLTexInfo);
+#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
+    rb_obj_call_init(vresult, argc, argv);
+#endif
+    return vresult;
+  }
+  
+
+SWIGINTERN VALUE
+_wrap_new_GLTexInfo(int argc, VALUE *argv, VALUE self) {
+  Gosu::GLTexInfo *result = 0 ;
+  const char *classname SWIGUNUSED = "Gosu::GLTexInfo";
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  {
+    try {
+      result = (Gosu::GLTexInfo *)new Gosu::GLTexInfo();DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return self;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN void
+free_Gosu_GLTexInfo(Gosu::GLTexInfo *arg1) {
+    delete arg1;
+}
+
 swig_class cImage;
 
 SWIGINTERN void
@@ -4997,6 +5321,36 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
     }
   }
   return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Image_gl_tex_info(int argc, VALUE *argv, VALUE self) {
+  Gosu::Image *arg1 = (Gosu::Image *) 0 ;
+  Gosu::GLTexInfo *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Image, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "glTexInfo" "', argument " "1"" of type '" "Gosu::Image const *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::Image * >(argp1);
+  {
+    try {
+      result = (Gosu::GLTexInfo *)Gosu_Image_glTexInfo((Gosu::Image const *)arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__GLTexInfo, SWIG_POINTER_OWN |  0 );
+  return vresult;
 fail:
   return Qnil;
 }
@@ -6544,6 +6898,7 @@ static swig_type_info _swigt__p_Gosu__AsyncResultTGosu__Image_t = {"_p_Gosu__Asy
 static swig_type_info _swigt__p_Gosu__Button = {"_p_Gosu__Button", "Gosu::Button *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Color = {"_p_Gosu__Color", "Gosu::Color *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Font = {"_p_Gosu__Font", "Gosu::Font *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Gosu__GLTexInfo = {"_p_Gosu__GLTexInfo", "Gosu::GLTexInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Image = {"_p_Gosu__Image", "Gosu::Image *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Sample = {"_p_Gosu__Sample", "Gosu::Sample *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Song = {"_p_Gosu__Song", "Gosu::Song *", 0, 0, (void*)0, 0};
@@ -6560,6 +6915,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__Button,
   &_swigt__p_Gosu__Color,
   &_swigt__p_Gosu__Font,
+  &_swigt__p_Gosu__GLTexInfo,
   &_swigt__p_Gosu__Image,
   &_swigt__p_Gosu__Sample,
   &_swigt__p_Gosu__Song,
@@ -6576,6 +6932,7 @@ static swig_cast_info _swigc__p_Gosu__AsyncResultTGosu__Image_t[] = {  {&_swigt_
 static swig_cast_info _swigc__p_Gosu__Button[] = {  {&_swigt__p_Gosu__Button, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Color[] = {  {&_swigt__p_Gosu__Color, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Font[] = {  {&_swigt__p_Gosu__Font, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Gosu__GLTexInfo[] = {  {&_swigt__p_Gosu__GLTexInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Image[] = {  {&_swigt__p_Gosu__Image, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Sample[] = {  {&_swigt__p_Gosu__Sample, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Song[] = {  {&_swigt__p_Gosu__Song, 0, 0, 0},{0, 0, 0, 0}};
@@ -6592,6 +6949,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__Button,
   _swigc__p_Gosu__Color,
   _swigc__p_Gosu__Font,
+  _swigc__p_Gosu__GLTexInfo,
   _swigc__p_Gosu__Image,
   _swigc__p_Gosu__Sample,
   _swigc__p_Gosu__Song,
@@ -6923,6 +7281,24 @@ SWIGEXPORT void Init_gosu(void) {
   cAsyncImageResult.destroy = (void (*)(void *)) free_Gosu_AsyncResult_Sl_Gosu_Image_Sg_;
   cAsyncImageResult.trackObjects = 0;
   
+  cGLTexInfo.klass = rb_define_class_under(mGosu, "GLTexInfo", rb_cObject);
+  SWIG_TypeClientData(SWIGTYPE_p_Gosu__GLTexInfo, (void *) &cGLTexInfo);
+  rb_define_alloc_func(cGLTexInfo.klass, _wrap_GLTexInfo_allocate);
+  rb_define_method(cGLTexInfo.klass, "initialize", VALUEFUNC(_wrap_new_GLTexInfo), -1);
+  rb_define_method(cGLTexInfo.klass, "tex_name=", VALUEFUNC(_wrap_GLTexInfo_tex_name_set), -1);
+  rb_define_method(cGLTexInfo.klass, "tex_name", VALUEFUNC(_wrap_GLTexInfo_tex_name_get), -1);
+  rb_define_method(cGLTexInfo.klass, "left=", VALUEFUNC(_wrap_GLTexInfo_left_set), -1);
+  rb_define_method(cGLTexInfo.klass, "left", VALUEFUNC(_wrap_GLTexInfo_left_get), -1);
+  rb_define_method(cGLTexInfo.klass, "right=", VALUEFUNC(_wrap_GLTexInfo_right_set), -1);
+  rb_define_method(cGLTexInfo.klass, "right", VALUEFUNC(_wrap_GLTexInfo_right_get), -1);
+  rb_define_method(cGLTexInfo.klass, "top=", VALUEFUNC(_wrap_GLTexInfo_top_set), -1);
+  rb_define_method(cGLTexInfo.klass, "top", VALUEFUNC(_wrap_GLTexInfo_top_get), -1);
+  rb_define_method(cGLTexInfo.klass, "bottom=", VALUEFUNC(_wrap_GLTexInfo_bottom_set), -1);
+  rb_define_method(cGLTexInfo.klass, "bottom", VALUEFUNC(_wrap_GLTexInfo_bottom_get), -1);
+  cGLTexInfo.mark = 0;
+  cGLTexInfo.destroy = (void (*)(void *)) free_Gosu_GLTexInfo;
+  cGLTexInfo.trackObjects = 0;
+  
   cImage.klass = rb_define_class_under(mGosu, "Image", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Image, (void *) &cImage);
   rb_define_alloc_func(cImage.klass, _wrap_Image_allocate);
@@ -6934,6 +7310,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cImage.klass, "draw_rot", VALUEFUNC(_wrap_Image_draw_rot), -1);
   rb_define_singleton_method(cImage.klass, "async_new", VALUEFUNC(_wrap_Image_async_new), -1);
   rb_define_method(cImage.klass, "draw_as_quad", VALUEFUNC(_wrap_Image_draw_as_quad), -1);
+  rb_define_method(cImage.klass, "gl_tex_info", VALUEFUNC(_wrap_Image_gl_tex_info), -1);
   rb_define_singleton_method(cImage.klass, "from_text", VALUEFUNC(_wrap_Image_from_text), -1);
   rb_define_singleton_method(cImage.klass, "load_tiles", VALUEFUNC(_wrap_Image_load_tiles), -1);
   cImage.mark = 0;

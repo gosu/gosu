@@ -34,6 +34,8 @@ public:
         double x3, double y3, Color c3,
         double x4, double y4, Color c4,
         ZPos z, AlphaMode mode) const;
+        
+    boost::optional<GLTexInfo> glTexInfo() const;
 };
 
 #endif

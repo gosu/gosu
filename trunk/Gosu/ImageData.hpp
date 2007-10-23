@@ -6,10 +6,17 @@
 
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
+#include <boost/optional.hpp>
 #include <boost/utility.hpp>
 
 namespace Gosu
 {
+    struct GLTexInfo
+    {
+        int texName;
+        double left, right, top, bottom;
+    };
+
     //! The ImageData class is an abstract base class for drawable images.
     //! Instances of classes derived by ImageData are usually returned by
     //! Graphics::createImage and usually only used to implement drawing
@@ -30,6 +37,8 @@ namespace Gosu
             double x3, double y3, Color c3,
             double x4, double y4, Color c4,
             ZPos z, AlphaMode mode) const = 0;
+            
+        virtual boost::optional<GLTexInfo> glTexInfo() const = 0;
     };
 }
 
