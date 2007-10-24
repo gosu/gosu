@@ -1,12 +1,15 @@
 #summary Log of Gosu's development.
 #labels Featured
 
-=0.7.7=
+=0.7.7 (due late October)=
   * All: Gosu now uses doubles as Z positions
+  * All: Gosu allows for custom OpenGL integration, example game included
   * Mac, Linux: Additive drawing fixed
-  * Windows: Gosu now uses OpenGL instead of Direct3D (less code to maintain, portable OpenGL effects possible now)
+  * Mac: Vsync finally enabled—was even more necessary @ 60 Hz
+  * Windows: Gosu now uses OpenGL instead of Direct3D (less code to maintain, more game portability)
   * Ruby: Gosu::sleep was not supposed to exist, now killed (did overwrite Ruby's sleep when include'ing Gosu)
   * Ruby: Gosu now cooperates with Ruby's multitasking
+  * Ruby: Chipmunk integration example
 
 =0.7.6=
   * All: Fixed a bug potentially cutting off text on all platforms
