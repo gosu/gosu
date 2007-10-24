@@ -75,6 +75,8 @@ std::auto_ptr<Gosu::TexChunk>
     result.reset(new TexChunk(graphics, queue, ptr, block->left + padding, block->top + padding,
                               block->width - 2 * padding, block->height - 2 * padding, padding));
                               
+    printf("<SubImage %d> @ %u\n", num, Gosu::milliseconds());
+    #ifdef __BIG_ENDIAN__
     std::vector<unsigned> pixelData(srcWidth * srcHeight);
     for (unsigned y = 0; y < srcHeight; ++y)
         for (unsigned x = 0; x < srcWidth; ++x)
@@ -83,11 +85,16 @@ std::auto_ptr<Gosu::TexChunk>
             pixVal = bigToNative(pixVal);
             pixelData[y * srcWidth + x] = pixVal;
         }
+    const unsigned* texData = &pixelData[0];
+    unsigned format = GL_RGBA;
+    #else
+    const unsigned* texData = bmp.glCompatibleData();
+    unsigned format = GL_BGRA;
+    #endif
     
-    printf("<SubImage %d> @ %u\n", num, Gosu::milliseconds());
     glBindTexture(GL_TEXTURE_2D, name);
     glTexSubImage2D(GL_TEXTURE_2D, 0, block->left, block->top, block->width, block->height,
-                 GL_RGBA, GL_UNSIGNED_BYTE, &pixelData[0]);
+                 format, GL_UNSIGNED_BYTE, texData);
     num += 1;
     printf("</SubImage %d> @ %u\n", num, Gosu::milliseconds());
     return result;
