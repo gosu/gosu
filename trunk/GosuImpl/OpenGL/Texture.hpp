@@ -11,9 +11,8 @@
 class Gosu::Texture
 {
     BlockAllocator allocator;
-    std::vector<boost::uint32_t> pixelData;
     GLuint name;
-    bool shouldSync;
+    unsigned num;
 
 public:
     static unsigned maxTextureSize();
@@ -22,7 +21,6 @@ public:
     ~Texture();
     unsigned size() const;
     GLuint texName() const;
-    void sync();
     std::auto_ptr<TexChunk> 
         tryAlloc(Graphics& graphics, DrawOpQueue& queue, boost::shared_ptr<Texture> ptr, const Bitmap& bmp,
             unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, unsigned padding);

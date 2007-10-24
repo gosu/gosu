@@ -13,7 +13,7 @@ struct Gosu::Graphics::Impl
     bool fullscreen;
     double factorX, factorY;
     DrawOpQueue queue;
-    typedef std::vector<boost::weak_ptr<Texture> > Textures;
+    typedef std::vector<boost::shared_ptr<Texture> > Textures;
     Textures textures;
     #ifdef GOSU_WITH_ASYNC
     boost::mutex mutex;
@@ -108,18 +108,12 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 
 void Gosu::Graphics::end()
 {
-    for (unsigned i = 0; i < pimpl->textures.size(); ++i)
-        if (!pimpl->textures[i].expired())
-            boost::shared_ptr<Texture>(pimpl->textures[i])->sync();
     pimpl->queue.performDrawOps();
     glFlush();
 }
 
 void Gosu::Graphics::beginGL()
 {
-    for (unsigned i = 0; i < pimpl->textures.size(); ++i)
-        if (!pimpl->textures[i].expired())
-            boost::shared_ptr<Texture>(pimpl->textures[i])->sync();
     pimpl->queue.performDrawOps();
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glDisable(GL_BLEND);
@@ -267,14 +261,6 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     // Try to put the bitmap into one of the already allocated textures.
     for (Impl::Textures::iterator i = pimpl->textures.begin(); i != pimpl->textures.end(); ++i)
     {
-        // Clean up while we're at it.
-        if (i->expired())
-        {
-            --i;
-            pimpl->textures.erase(i + 1);
-            continue;
-        }
-        
         boost::shared_ptr<Texture> texture(*i);
         
         std::auto_ptr<ImageData> data;

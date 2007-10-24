@@ -25,25 +25,23 @@ unsigned Gosu::Texture::maxTextureSize()
     return size;
 }
 
-void Gosu::Texture::sync()
-{
-    if (!shouldSync)
-        return;
-    glBindTexture(GL_TEXTURE_2D, name);
-    glTexImage2D(GL_TEXTURE_2D, 0, 4, allocator.width(), allocator.height(), 0,
-                 GL_RGBA, GL_UNSIGNED_BYTE, &pixelData[0]);
-    shouldSync = false;
-}
+#include <Gosu/Timing.hpp>
 
 Gosu::Texture::Texture(unsigned size)
-: allocator(size, size), pixelData(size * size)
+: allocator(size, size), num(0)
 {
+    // Create texture name.
     glGenTextures(1, &name);
     if (name == static_cast<GLuint>(-1))
         throw std::runtime_error("Couldn't create OpenGL texture");
+   
+    // Create empty texture.
+    printf("<Create> @ %u\n", Gosu::milliseconds());
     glBindTexture(GL_TEXTURE_2D, name);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, allocator.width(), allocator.height(), 0,
+                 GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    shouldSync = true;
+    printf("</Create> @ %u\n", Gosu::milliseconds());
 }
 
 Gosu::Texture::~Texture()
@@ -61,12 +59,12 @@ GLuint Gosu::Texture::texName() const
     return name;
 }
 
-#include <Gosu/Timing.hpp> // TODO
-
-std::auto_ptr<Gosu::TexChunk> Gosu::Texture::tryAlloc(Graphics& graphics, DrawOpQueue& queue, boost::shared_ptr<Texture> ptr,
-                                                        const Bitmap& bmp, unsigned srcX,
-                                                        unsigned srcY, unsigned srcWidth,
-                                                        unsigned srcHeight, unsigned padding)
+std::auto_ptr<Gosu::TexChunk>
+    Gosu::Texture::tryAlloc(Graphics& graphics,
+        DrawOpQueue& queue, boost::shared_ptr<Texture> ptr,
+        const Bitmap& bmp, unsigned srcX,
+        unsigned srcY, unsigned srcWidth,
+        unsigned srcHeight, unsigned padding)
 {
     std::auto_ptr<Gosu::TexChunk> result;
     
@@ -74,22 +72,30 @@ std::auto_ptr<Gosu::TexChunk> Gosu::Texture::tryAlloc(Graphics& graphics, DrawOp
     if (!block)
         return result;
     
+    result.reset(new TexChunk(graphics, queue, ptr, block->left + padding, block->top + padding,
+                              block->width - 2 * padding, block->height - 2 * padding, padding));
+                              
+    std::vector<unsigned> pixelData(srcWidth * srcHeight);
     for (unsigned y = 0; y < srcHeight; ++y)
         for (unsigned x = 0; x < srcWidth; ++x)
         {
             boost::uint32_t pixVal = (bmp.getPixel(x, y).argb() & 0x00ffffff) << 8 | bmp.getPixel(x, y).alpha();
             pixVal = bigToNative(pixVal);
-            pixelData[(y + block->top) * allocator.width() + (x + block->left)] = pixVal;
+            pixelData[y * srcWidth + x] = pixVal;
         }
     
-    shouldSync = true;
-    
-    result.reset(new TexChunk(graphics, queue, ptr, block->left + padding, block->top + padding,
-                              block->width - 2 * padding, block->height - 2 * padding, padding));
+    printf("<SubImage %d> @ %u\n", num, Gosu::milliseconds());
+    glBindTexture(GL_TEXTURE_2D, name);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, block->left, block->top, block->width, block->height,
+                 GL_RGBA, GL_UNSIGNED_BYTE, &pixelData[0]);
+    num += 1;
+    printf("</SubImage %d> @ %u\n", num, Gosu::milliseconds());
     return result;
 }
 
 void Gosu::Texture::free(unsigned x, unsigned y)
 {
     allocator.free(x, y);
+    num -= 1;
+    printf("<Free = %d>\n", num);
 }

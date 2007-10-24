@@ -53,6 +53,8 @@ namespace Gosu
         //! clipped away.
         void insert(const Bitmap& source, int x, int y, unsigned srcX,
             unsigned srcY, unsigned srcWidth, unsigned srcHeight);
+            
+        const unsigned* glCompatibleData() const { return reinterpret_cast<const unsigned*>(&pixels[0]); }
     };
 
     //! Loads a Windows or OS/2 .bmp file into the given bitmap.
