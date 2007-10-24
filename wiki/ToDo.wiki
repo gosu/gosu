@@ -5,10 +5,7 @@
   * implement frameskip
   * don't round updateInterval on Windows
   * don't round updateInterval on Linux
-  * better interface for custom OpenGL, example game
-  * get rid of OpenGL tearing on OS X
   * get rid of OpenGL tearing on Windows
-  * experiment with Ruby GC performance
 
 = Also ASAP =
   * don't crash after shutdown when storing resources in @@'s (Ruby; Audio destruction sequence)
