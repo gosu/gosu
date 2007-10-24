@@ -3,11 +3,14 @@
 
 =0.7.7 (due late October)=
   * implement frameskip
-  * don't round updateInterval on Windows
-  * don't round updateInterval on Linux
   * get rid of OpenGL tearing on Windows
+  * fix weird crash when using the deployment template
+  * port at least one more example to C++
+  * documentation...
 
 = Also ASAP =
+  * don't round updateInterval on Windows
+  * don't round updateInterval on Linux
   * don't crash after shutdown when storing resources in @@'s (Ruby; Audio destruction sequence)
   * assure Gosu::File also creates directories as necessary
   * more sophisticated Audio interface for talking NPC's etc.
