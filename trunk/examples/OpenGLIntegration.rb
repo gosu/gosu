@@ -11,20 +11,15 @@ module ZOrder
 end
 
 class GLBackground
-  MIN_X = -2
-  MAX_X = 2
-  VIS_STEPS_X = 3
-
-  MIN_Y = -3
-  MAX_Y = 3
-  VIS_STEPS_Y = 4
-
+  POINTS_X = 5
+  POINTS_Y = 5
+  
   SCROLLS_PER_STEP = 50
 
   def initialize(window)
     @image = Gosu::Image.new(window, "media/Earth.png", true)
     @scrolls = 0
-    @height_map = Array.new(VIS_STEPS_Y + 2) { Array.new(VIS_STEPS_X + 1) { rand } }
+    @height_map = Array.new(POINTS_Y) { Array.new(POINTS_X) { rand } }
   end
   
   def scroll
@@ -32,7 +27,7 @@ class GLBackground
     if @scrolls == SCROLLS_PER_STEP then
       @scrolls = 0
       @height_map.shift
-      @height_map.push Array.new(VIS_STEPS_X + 1) { rand }
+      @height_map.push Array.new(POINTS_X) { rand }
     end
   end
   
@@ -60,30 +55,27 @@ class GLBackground
     offs_y = 1.0 * @scrolls / SCROLLS_PER_STEP
     
     glBegin(GL_QUADS)
-    (MIN_Y..MAX_Y).each do |y|
-      (MIN_X..MAX_X).each do |x|
-        z = @height_map[STEPS_Y / 2 + y][x]
+    0.upto(POINTS_X - 1) do |y|
+      0.upto(POINTS_Y - 1) do |x|
+        z = @height_map[y][x]
         glColor4d(1, 1, 1, z)
         glTexCoord2d(info.left, info.top)
-        glVertex3d((x - 0.5) / VIS_STEPS_X, (y - offs_y - 0.5) / VIS_STEPS_Y, z)
+        glVertex3d((x - 0.0) / POINTS_X, (y - offs_y - 0.0) / POINTS_Y, z)
 
-        z = @height_map[STEPS_Y / 2 + y][x]
-        glColor4d(1, 1, 1, @height_map[STEPS_Y / 2 + y][x+1])
+        z = @height_map[y][x+1]
+        glColor4d(1, 1, 1, z)
         glTexCoord2d(info.right, info.top)
-        glVertex3d((x + 0.5) / VIS_STEPS_X, (y - offs_y - 0.5) / VIS_STEPS_Y,
-          @height_map[STEPS_Y / 2 + y][-STEPS_X / 2 + x + 1])
+        glVertex3d((x + 1.0) / POINTS_X, (y - offs_y - 0.0) / POINTS_Y, z)
 
-        z = @height_map[STEPS_Y / 2 + y][x]
-        glColor4d(1, 1, 1, @height_map[STEPS_Y / 2 + y+1][x+1])
+        z = @height_map[y+1][x+1]
+        glColor4d(1, 1, 1, z)
         glTexCoord2d(info.right, info.bottom)
-        glVertex3d((x + 0.5) / VIS_STEPS_X, (y - offs_y + 0.5) / VIS_STEPS_Y,
-          @height_map[STEPS_Y / 2 + y + 1][-STEPS_X / 2 + x + 1])
+        glVertex3d((x + 1.0) / POINTS_X, (y - offs_y + 1.0) / POINTS_Y, z)
 
-        z = @height_map[STEPS_Y / 2 + y][x]
-        glColor4d(1, 1, 1, @height_map[STEPS_Y / 2 + y+1][x])
+        z = @height_map[y+1][x]
+        glColor4d(1, 1, 1, z)
         glTexCoord2d(info.left, info.bottom)
-        glVertex3d((x - 0.5) / VIS_STEPS_X, (y - offs_y + 0.5) / VIS_STEPS_Y,
-          @height_map[STEPS_Y / 2 + y + 1][-STEPS_X / 2 + x])
+        glVertex3d((x - 0.0) / POINTS_X, (y - offs_y + 1.0) / POINTS_Y, z)
       end
     end
     glEnd
