@@ -24,12 +24,13 @@
   * change wstring to string? (for 0.8.0)
   * force feedback would be a good fit for an input redesign. 2007 is packed even without this feature, though.
 
-= Major design goals for 0.8.x (graphics) =
+= Major design goals for 0.8.x (graphics - 2008) =
   * more alpha modes, yay!
   * find a way to factor rot flips out of Gosu => Image/draw redesign
   * implement clipping and a target() modifier for the new Image
   * multi-threaded blit queue?
   * make font substitution work on OS X, Windows
+  * more beautiful text! (kerning etc.?)
   * speed up LargeImageData!
 
 = Major design goals for 0.9.x (IO, Strings) =
