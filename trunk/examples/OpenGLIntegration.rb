@@ -11,10 +11,10 @@ module ZOrder
 end
 
 class GLBackground
-  POINTS_X = 5
-  POINTS_Y = 5
+  POINTS_X = 9
+  POINTS_Y = 9
   
-  SCROLLS_PER_STEP = 50
+  SCROLLS_PER_STEP = 30
 
   def initialize(window)
     @image = Gosu::Image.new(window, "media/Earth.png", true)
@@ -35,50 +35,48 @@ class GLBackground
     info = @image.gl_tex_info
     return unless info
 
-    glDepthFunc(GL_GEQUAL)
+    glDepthFunc(GL_LEQUAL)
     glEnable(GL_DEPTH_TEST)
     glEnable(GL_BLEND)
-    glEnable(GL_CULL_FACE)
 
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity
-    gluPerspective(45.0, 1.0 * 800 / 600, 0.1, 5.0)
+    glFrustum(-0.10, 0.10, -0.075, 0.075, 1, 100)
 
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity
-    glTranslate(0, 0, -3)
-    glScale(2, 2, 1)
+    glTranslate(0, 0, -4)
   
     glEnable(GL_TEXTURE_2D)
     glBindTexture(GL_TEXTURE_2D, info.tex_name)
     
     offs_y = 1.0 * @scrolls / SCROLLS_PER_STEP
     
-    glBegin(GL_QUADS)
-    0.upto(POINTS_X - 1) do |y|
-      0.upto(POINTS_Y - 1) do |x|
-        z = @height_map[y][x]
-        glColor4d(1, 1, 1, z)
-        glTexCoord2d(info.left, info.top)
-        glVertex3d((x - 0.0) / POINTS_X, (y - offs_y - 0.0) / POINTS_Y, z)
+    0.upto(POINTS_Y - 2) do |y|
+      0.upto(POINTS_X - 2) do |x|
+        glBegin(GL_TRIANGLE_STRIP)
+          z = @height_map[y][x]
+          glColor4d(1, 1, 1, z)
+          glTexCoord2d(info.left, info.top)
+          glVertex3d(-0.5 + (x - 0.0) / (POINTS_X-1), -0.5 + (y - offs_y - 0.0) / (POINTS_Y-2), z)
 
-        z = @height_map[y][x+1]
-        glColor4d(1, 1, 1, z)
-        glTexCoord2d(info.right, info.top)
-        glVertex3d((x + 1.0) / POINTS_X, (y - offs_y - 0.0) / POINTS_Y, z)
+          z = @height_map[y+1][x]
+          glColor4d(1, 1, 1, z)
+          glTexCoord2d(info.left, info.bottom)
+          glVertex3d(-0.5 + (x - 0.0) / (POINTS_X-1), -0.5 + (y - offs_y + 1.0) / (POINTS_Y-2), z)
+        
+          z = @height_map[y][x + 1]
+          glColor4d(1, 1, 1, z)
+          glTexCoord2d(info.right, info.top)
+          glVertex3d(-0.5 + (x + 1.0) / (POINTS_X-1), -0.5 + (y - offs_y - 0.0) / (POINTS_Y-2), z)
 
-        z = @height_map[y+1][x+1]
-        glColor4d(1, 1, 1, z)
-        glTexCoord2d(info.right, info.bottom)
-        glVertex3d((x + 1.0) / POINTS_X, (y - offs_y + 1.0) / POINTS_Y, z)
-
-        z = @height_map[y+1][x]
-        glColor4d(1, 1, 1, z)
-        glTexCoord2d(info.left, info.bottom)
-        glVertex3d((x - 0.0) / POINTS_X, (y - offs_y + 1.0) / POINTS_Y, z)
+          z = @height_map[y+1][x + 1]
+          glColor4d(1, 1, 1, z)
+          glTexCoord2d(info.right, info.bottom)
+          glVertex3d(-0.5 + (x + 1.0) / (POINTS_X-1), -0.5 + (y - offs_y + 1.0) / (POINTS_Y-2), z)
+        glEnd
       end
     end
-    glEnd
   end
 end
 
@@ -185,10 +183,10 @@ class GameWindow < Gosu::Window
 
   def draw
     gl do
-      glClearColor(0.0, 0.2, 0.6, 1.0)
+      glClearColor(0.0, 0.2, 0.5, 1.0)
       glClearDepth(0)
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-      
+     
       @gl_background.exec_gl
     end
     

@@ -335,6 +335,8 @@ Gosu::Input& Gosu::Window::input()
 void Gosu::Window::Impl::doTick(Window& window)
 {
     window.makeCurrent();
+    long value = 1;
+    [window.pimpl->context.obj() setValues: &value forParameter: NSOpenGLCPSwapInterval];
 #ifdef GOSU_WITH_ASYNC
     boost::mutex::scoped_lock lock(window.graphics().mutex());
 #endif
