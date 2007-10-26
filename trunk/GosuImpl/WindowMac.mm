@@ -163,8 +163,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     NSOpenGLPixelFormatAttribute attrs[] =
     {
         NSOpenGLPFADoubleBuffer,
-        // Stop here in windowed mode:
-        fullscreen ? NSOpenGLPFAScreenMask : (NSOpenGLPixelFormatAttribute)0,
+        NSOpenGLPFAScreenMask,
         (NSOpenGLPixelFormatAttribute)CGDisplayIDToOpenGLDisplayMask(CGMainDisplayID()),
         NSOpenGLPFAFullScreen,
         (NSOpenGLPixelFormatAttribute)0
@@ -287,9 +286,34 @@ void Gosu::Window::close()
     [NSApp terminate:nil];
 }
 
-void Gosu::Window::makeCurrent()
+void* Gosu::Window::createSharedContext()
 {
-    [pimpl->context.obj() makeCurrentContext];
+    NSOpenGLPixelFormatAttribute attributes[] = {
+        NSOpenGLPFADoubleBuffer,
+        NSOpenGLPFAScreenMask,
+        (NSOpenGLPixelFormatAttribute)CGDisplayIDToOpenGLDisplayMask(CGMainDisplayID()),
+        NSOpenGLPFAFullScreen,
+        NSOpenGLPFANoRecovery,
+        (NSOpenGLPixelFormatAttribute)0
+    };
+    
+    NSOpenGLPixelFormat* pf =
+        [[[NSOpenGLPixelFormat alloc]
+            initWithAttributes:attributes] autorelease];
+
+    return [[NSOpenGLContext alloc]
+            initWithFormat: pf
+            shareContext: pimpl->context.obj()];
+}
+
+void Gosu::Window::makeCurrentContext(void* context)
+{
+    [(NSOpenGLContext*)context makeCurrentContext];
+}
+
+void Gosu::Window::releaseContext(void* context)
+{
+    [(NSOpenGLContext*)context release];
 }
 
 const Gosu::Graphics& Gosu::Window::graphics() const
@@ -334,12 +358,8 @@ Gosu::Input& Gosu::Window::input()
 
 void Gosu::Window::Impl::doTick(Window& window)
 {
-    window.makeCurrent();
     long value = 1;
     [window.pimpl->context.obj() setValues: &value forParameter: NSOpenGLCPSwapInterval];
-#ifdef GOSU_WITH_ASYNC
-    boost::mutex::scoped_lock lock(window.graphics().mutex());
-#endif
     
     if (!window.graphics().fullscreen())
     {
@@ -368,9 +388,9 @@ void Gosu::Window::Impl::doTick(Window& window)
     }
     
     #ifdef GOSU_FOR_RUBY
-    static int counter = 0;
+    /*static int counter = 0;
     if (++counter % 60 == 0)
-        rb_gc_start();
+        rb_gc_start();*/
     rb_thread_schedule();
     #endif
 }

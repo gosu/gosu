@@ -54,7 +54,9 @@ namespace Gosu
         virtual void buttonUp(Gosu::Button) {}
         
         #ifdef __APPLE__
-        void makeCurrent();
+        void* createSharedContext();
+        void makeCurrentContext(void* context);
+        void releaseContext(void* context);
         #endif
         
 // Ignore when SWIG is wrapping this class for Ruby/Gosu.

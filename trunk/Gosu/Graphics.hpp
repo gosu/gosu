@@ -44,9 +44,6 @@ namespace Gosu
         double virtualWidth() const;
         double virtualHeight() const;
         void setVirtualResolution(double virtualWidth, double virtualHeight);
-        #ifdef GOSU_WITH_ASYNC
-        boost::mutex& mutex();
-        #endif
         // End of Undocumented
 
         unsigned width() const;

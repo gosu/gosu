@@ -42,15 +42,15 @@ namespace Gosu
         }
     };
     
-    void asyncNewImage_Impl(Window& window, std::wstring filename,
+    void asyncNewImage_Impl(Window& window, std::wstring filename, void* context,
                             boost::shared_ptr<boost::try_mutex> mutex,
                             boost::shared_ptr<std::auto_ptr<Image> > result)
     {
         boost::try_mutex::scoped_lock lock(*mutex);
-        Bitmap bmp = quickLoadBitmap(filename);
-        boost::mutex::scoped_lock lock2(window.graphics().mutex());
-        window.makeCurrent();
+        
+        window.makeCurrentContext(context);
         result->reset(new Image(window.graphics(), filename));
+        window.releaseContext(context);
 
         // TODO: Corner case: Will crash if graphics dies before operation finished.
     }
@@ -61,6 +61,7 @@ namespace Gosu
         boost::shared_ptr<std::auto_ptr<Image> > image(new std::auto_ptr<Image>);
         boost::thread thread(boost::bind(asyncNewImage_Impl,
                                          boost::ref(window), filename,
+                                         window.createSharedContext(),
                                          boost::ref(mutex), boost::ref(image)));
         return AsyncResult<Image>(mutex, image);
     }

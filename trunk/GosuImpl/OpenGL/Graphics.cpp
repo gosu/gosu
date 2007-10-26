@@ -88,13 +88,6 @@ void Gosu::Graphics::setVirtualResolution(double virtualWidth,
     pimpl->factorY = height() / virtualHeight;
 }
 
-#ifdef GOSU_WITH_ASYNC
-boost::mutex& Gosu::Graphics::mutex()
-{
-    return pimpl->mutex;
-}
-#endif
-
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 {
     glClearColor(clearWithColor.red()/255.0,
@@ -257,6 +250,8 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     
     Bitmap bmp;
     applyBorderFlags(bmp, src, srcX, srcY, srcWidth, srcHeight, borderFlags);
+    
+    boost::mutex::scoped_lock lock(pimpl->mutex);
     
     // Try to put the bitmap into one of the already allocated textures.
     for (Impl::Textures::iterator i = pimpl->textures.begin(); i != pimpl->textures.end(); ++i)
