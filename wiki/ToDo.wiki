@@ -5,6 +5,7 @@
   * implement frameskip
   * get rid of OpenGL tearing on Windows
   * port at least one more example to C++
+  * fix or kill Deployment Template on Leopard
   * documentation...
 
 = Also ASAP =
