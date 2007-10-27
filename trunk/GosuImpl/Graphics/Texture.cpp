@@ -36,12 +36,10 @@ Gosu::Texture::Texture(unsigned size)
         throw std::runtime_error("Couldn't create OpenGL texture");
    
     // Create empty texture.
-    printf("<Create> @ %u\n", Gosu::milliseconds());
     glBindTexture(GL_TEXTURE_2D, name);
     glTexImage2D(GL_TEXTURE_2D, 0, 4, allocator.width(), allocator.height(), 0,
                  GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    printf("</Create> @ %u\n", Gosu::milliseconds());
 }
 
 Gosu::Texture::~Texture()
@@ -75,7 +73,6 @@ std::auto_ptr<Gosu::TexChunk>
     result.reset(new TexChunk(graphics, queue, ptr, block->left + padding, block->top + padding,
                               block->width - 2 * padding, block->height - 2 * padding, padding));
                               
-    printf("<SubImage %d> @ %u\n", num, Gosu::milliseconds());
     #ifdef __BIG_ENDIAN__
     std::vector<unsigned> pixelData(srcWidth * srcHeight);
     for (unsigned y = 0; y < srcHeight; ++y)
@@ -96,7 +93,6 @@ std::auto_ptr<Gosu::TexChunk>
     glTexSubImage2D(GL_TEXTURE_2D, 0, block->left, block->top, block->width, block->height,
                  format, GL_UNSIGNED_BYTE, texData);
     num += 1;
-    printf("</SubImage %d> @ %u\n", num, Gosu::milliseconds());
     return result;
 }
 
@@ -104,5 +100,4 @@ void Gosu::Texture::free(unsigned x, unsigned y)
 {
     allocator.free(x, y);
     num -= 1;
-    printf("<Free = %d>\n", num);
 }

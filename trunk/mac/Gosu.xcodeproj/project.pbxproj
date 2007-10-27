@@ -845,6 +845,7 @@
 					"-lfmod_universal",
 					"-flat_namespace",
 					"-lboost_thread_d_1_34_1_universal",
+					"-liconv",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = gosu;
@@ -885,6 +886,7 @@
 					"-lfmod_universal",
 					"-flat_namespace",
 					"-lboost_thread_1_34_1_universal",
+					"-liconv",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = gosu;
