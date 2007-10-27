@@ -11,8 +11,8 @@ module ZOrder
 end
 
 class GLBackground
-  POINTS_X = 9
-  POINTS_Y = 9
+  POINTS_X = 5
+  POINTS_Y = 5
   
   SCROLLS_PER_STEP = 30
 

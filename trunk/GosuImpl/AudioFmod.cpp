@@ -94,6 +94,12 @@ struct Gosu::Sample::SampleData : boost::noncopyable
 
     ~SampleData()
     {
+        // TODO: Should be checked for earlier, as play would crash too.
+        // This is just because Ruby's GC will free objects in a weird
+        // order.
+        if (!fmodInitialized)
+            return;
+        
         if (rep != 0)
             ::FSOUND_Sample_Free(rep);
     }
@@ -222,6 +228,12 @@ public:
 
     ~StreamData()
     {
+        // TODO: Should be checked for earlier, as play would crash too.
+        // This is just because Ruby's GC will free objects in a weird
+        // order.
+        if (!fmodInitialized)
+            return;
+
         if (stream != 0)
             ::FSOUND_Stream_Close(stream);
     }
@@ -257,6 +269,12 @@ public:
 
     ~ModuleData()
     {
+        // TODO: Should be checked for earlier, as play would crash too.
+        // This is just because Ruby's GC will free objects in a weird
+        // order.
+        if (!fmodInitialized)
+            return;
+
         if (module_ != 0)
             ::FMUSIC_FreeSong(module_);
     }
