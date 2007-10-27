@@ -4,7 +4,6 @@
 =0.7.7 (due late October)=
   * implement frameskip
   * get rid of OpenGL tearing on Windows
-  * fix weird crash when using the deployment template
   * port at least one more example to C++
   * documentation...
 
