@@ -53,8 +53,11 @@ namespace Gosu
         //! clipped away.
         void insert(const Bitmap& source, int x, int y, unsigned srcX,
             unsigned srcY, unsigned srcWidth, unsigned srcHeight);
-            
+		
+		#ifndef __BIG_ENDIAN__
+		//! Undocumented optimization for Image creation; to be changed.
         const unsigned* glCompatibleData() const { return reinterpret_cast<const unsigned*>(&pixels[0]); }
+		#endif
     };
 
     //! Loads a Windows or OS/2 .bmp file into the given bitmap.
@@ -72,7 +75,11 @@ namespace Gosu
     //! to zero. Color values are adjusted so that no borders show up when
     //! the image is stretched or rotated.
     void applyColorKey(Bitmap& bitmap, Color key);
-	
+
+    void applyBorderFlags(Bitmap& dest, const Bitmap& source,
+        unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
+        unsigned borderFlags);	
+
 	// Still to be moved around & undocumented, beware! (TODO)
 	Bitmap quickLoadBitmap(const std::wstring& filename);
 }

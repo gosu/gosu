@@ -6,6 +6,7 @@
 #import <Gosu/Timing.hpp>
 #import <AppKit/AppKit.h>
 #import <ApplicationServices/ApplicationServices.h>
+#import <OpenGL/OpenGL.h>
 #import <boost/bind.hpp>
 #import <vector>
 
@@ -205,6 +206,9 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         // Tell context to draw on this window.
         [pimpl->context.obj() setView:[pimpl->window.obj() contentView]];
     }
+    
+    CGLEnable((CGLContextObj)[pimpl->context.obj() CGLContextObj], kCGLCEMPEngine);
+    
     [pimpl->context.obj() makeCurrentContext];
     
     pimpl->graphics.reset(new Gosu::Graphics(width, height, fullscreen));

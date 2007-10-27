@@ -115,22 +115,10 @@ void Gosu::BlockAllocator::free(unsigned left, unsigned top)
     {
         if (i->left == left && i->top == top)
         {
-            // Since we have freed up some space, it might make sense to look
-            // for textures up to our size again.
-            /*if (i->left >= pimpl->maxW && i->top >= pimpl->maxH)
-            {
-                // Be really optimistic about the new space.
-                pimpl->maxW += i->left;
-                if (pimpl->maxW > width())
-                    pimpl->maxW = width();
-                pimpl->maxH += i->top;
-                if (pimpl->maxH > height())
-                    pimpl->maxH = height();
-            }*/
+            pimpl->blocks.erase(i);
+			// Be optimistic again!
             pimpl->maxW = pimpl->width - 1;
             pimpl->maxH = pimpl->height - 1;
-
-            pimpl->blocks.erase(i);
             return;
         }
     }

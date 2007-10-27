@@ -1,14 +1,10 @@
 // Undocumented for the first few iterations. Interface may change rapidly.
-#ifdef GOSU_WITH_ASYNC
+// This is mainly a proof of concept. Stability will be the highest on OS X.
 
 #ifndef GOSU_ASYNC_HPP
 #define GOSU_ASYNC_HPP
 
 #include <Gosu/Fwd.hpp>
-#include <Gosu/Graphics.hpp>
-#include <Gosu/Image.hpp>
-#include <Gosu/Window.hpp>
-#include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/thread.hpp>
 #include <memory>
@@ -42,31 +38,11 @@ namespace Gosu
         }
     };
     
-    void asyncNewImage_Impl(Window& window, std::wstring filename, void* context,
-                            boost::shared_ptr<boost::try_mutex> mutex,
-                            boost::shared_ptr<std::auto_ptr<Image> > result)
-    {
-        boost::try_mutex::scoped_lock lock(*mutex);
-        
-        window.makeCurrentContext(context);
-        result->reset(new Image(window.graphics(), filename));
-        window.releaseContext(context);
+	// TODO: Will only work if the window doesn't die inbetween.
+	// TODO: More functions to come; or a general interface?
 
-        // TODO: Corner case: Will crash if graphics dies before operation finished.
-    }
-    
-    AsyncResult<Image> asyncNewImage(Window& window, const std::wstring& filename)
-    {
-        boost::shared_ptr<boost::try_mutex> mutex(new boost::try_mutex);
-        boost::shared_ptr<std::auto_ptr<Image> > image(new std::auto_ptr<Image>);
-        boost::thread thread(boost::bind(asyncNewImage_Impl,
-                                         boost::ref(window), filename,
-                                         window.createSharedContext(),
-                                         boost::ref(mutex), boost::ref(image)));
-        return AsyncResult<Image>(mutex, image);
-    }
+	AsyncResult<Image>
+		asyncNewImage(Window& window, const std::wstring& filename);
 }
-
-#endif
 
 #endif

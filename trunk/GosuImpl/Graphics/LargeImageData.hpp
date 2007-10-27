@@ -1,7 +1,7 @@
 #ifndef GOSUIMPL_LARGEIMAGEDATA_HPP
 #define GOSUIMPL_LARGEIMAGEDATA_HPP
 
-#include <GosuImpl/Graphics/Graphics.hpp>
+#include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
 #include <boost/shared_ptr.hpp>
 #include <vector>

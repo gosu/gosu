@@ -210,7 +210,6 @@ namespace Gosu
 
 // AsyncResult
 
-#ifdef GOSU_WITH_ASYNC
 %ignore Gosu::asyncNewImage;
 %ignore Gosu::asyncNewImage_Impl;
 %ignore Gosu::AsyncResult::takeValue;
@@ -222,7 +221,6 @@ namespace Gosu
     }
 }
 %template(AsyncImageResult) Gosu::AsyncResult<Gosu::Image>;
-#endif
 
 %ignore Gosu::ImageData;
 %rename("tex_name") texName;
@@ -255,12 +253,10 @@ namespace Gosu
         return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source),
             srcX, srcY, srcWidth, srcHeight, hardBorders);
     }
-    #ifdef GOSU_WITH_ASYNC
     %newobject asyncNew;
     static Gosu::AsyncResult<Gosu::Image>* asyncNew(Gosu::Window& window, const std::wstring& filename) {
         return new Gosu::AsyncResult<Gosu::Image>(Gosu::asyncNewImage(window, filename));
     }
-    #endif
     void drawAsQuad(double x1, double y1, Color c1,
             double x2, double y2, Color c2,
             double x3, double y3, Color c3,

@@ -10,10 +10,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <memory>
 
-#ifdef GOSU_WITH_ASYNC
-#include <boost/thread.hpp>
-#endif
-
 namespace Gosu
 {
     //! Flags that affect the softness of a border.

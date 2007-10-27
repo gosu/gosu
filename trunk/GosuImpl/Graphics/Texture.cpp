@@ -1,5 +1,5 @@
-#include <GosuImpl/OpenGL/Texture.hpp>
-#include <GosuImpl/OpenGL/TexChunk.hpp>
+#include <GosuImpl/Graphics/Texture.hpp>
+#include <GosuImpl/Graphics/TexChunk.hpp>
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Platform.hpp>
 #include <stdexcept>

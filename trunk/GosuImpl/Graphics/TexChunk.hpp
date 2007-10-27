@@ -1,15 +1,13 @@
-#ifndef GOSUIMPL_OPENGL_TEXCHUNK_HPP
-#define GOSUIMPL_OPENGL_TEXCHUNK_HPP
+#ifndef GOSUIMPL_GRAPHICS_TEXCHUNK_HPP
+#define GOSUIMPL_GRAPHICS_TEXCHUNK_HPP
 
+#include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
-#include <GosuImpl/Graphics/Graphics.hpp>
-#include <GosuImpl/OpenGL/Blit.hpp>
-#include <GosuImpl/OpenGL/Texture.hpp>
+#include <GosuImpl/Graphics/Common.hpp>
 #include <memory>
 #include <vector>
 #include <stdexcept>
 #include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 
 class Gosu::TexChunk : public Gosu::ImageData
 {

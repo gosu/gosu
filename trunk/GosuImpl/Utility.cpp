@@ -31,7 +31,7 @@ namespace
         Out result;
         OutElem buffer[bufferLen];
         
-        const char* inbuf = reinterpret_cast<const char*>(&in[0]);
+        char* inbuf = const_cast<char*>(reinterpret_cast<const char*>(&in[0]));
         size_t inbytesleft = in.size() * sizeof(InElem);
         char* outbuf = reinterpret_cast<char*>(buffer);
         size_t outbytesleft = sizeof buffer;
