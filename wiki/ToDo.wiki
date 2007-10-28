@@ -6,6 +6,8 @@
   * get rid of OpenGL tearing on Windows
   * port at least one more example to C++
   * fix or kill Deployment Template on Leopard
+  * rb_schedule_thread on Windows
+  * rb_schedule_thread on Linux
   * documentation...
 
 = Also ASAP =
