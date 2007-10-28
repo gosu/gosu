@@ -4,7 +4,7 @@
 
 The code for the complete game, together with the required media files, can be found in the Gosu distribution of your choice ('examples/Tutorial.rb').
 
-To run it: Copy gosu.so (or gosu.bundle, respectively) into the examples directory, run Tutorial.rb; if you don't have an editor that supports direct execution (TextMate, SciTE…), `cd` into the directory and run it via `ruby Tutorial.rb`.
+If you have not installed Gosu via RubyGems, you have to copy gosu.so (or gosu.bundle, respectively) into the examples directory, then run Tutorial.rb; if you don't have an editor that supports direct execution (TextMate, SciTE…), `cd` into the directory and run it via `ruby Tutorial.rb`.
 
 = 1. Overriding Window's callbacks =
 
@@ -30,11 +30,11 @@ window = GameWindow.new
 window.show
 }}}
 
-The constructor initializes the Gosu::Window base class. The parameters shown here create a 640x480 pixels large, non-fullscreen (that's what the "false" stands for) window. Then it changes the window's caption, which is empty until then.
+The constructor initializes the Gosu::Window base class. The parameters shown here create a 640x480 pixels large, non-fullscreen—that's what the "false" stands for—window. Then it changes the window's caption, which is empty until then.
 
-update() and draw() are overrides of Gosu::Window's member functions. update() is (by default) 60 times per second and should contain the main game logic (move objects etc.).
+update() and draw() are overrides of Gosu::Window's member functions. update() is called 60 times per second (by default) and should contain the main game logic: move objects, handle collisions, etc.
 
-draw() is called afterwards, whenever the window needs redrawing for other reasons and may also be skipped every other time if the FPS go too low. It should contain the code to redraw the whole screen, and no logic whatsoever.
+draw() is called afterwards and whenever the window needs redrawing for other reasons, and may also be skipped every other time if the FPS go too low. It should contain the code to redraw the whole screen, and no logic whatsoever.
 
 Then follows the main program. A window is created and its show() member function is called, which does not return until the window has been closed by the user or its own code. Tada - now you have a small black window with a title of your choice!
 
