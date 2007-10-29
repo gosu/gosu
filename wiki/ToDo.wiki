@@ -2,12 +2,11 @@
 #labels Featured
 
 =0.7.7 (due late October)=
-  * get rid of OpenGL tearing on Windows
-  * rb_schedule_thread on Windows
   * rb_schedule_thread on Linux
   * documentation...
 
 = Also ASAP =
+  * get rid of OpenGL tearing on Windows (Intel GMA 950)
   * don't round updateInterval on Windows
   * don't round updateInterval on Linux
   * implement frameskip
