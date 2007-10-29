@@ -3,7 +3,6 @@
 
 =0.7.7 (due late October)=
   * get rid of OpenGL tearing on Windows
-  * port at least one more example to C++
   * rb_schedule_thread on Windows
   * rb_schedule_thread on Linux
   * documentation...
@@ -12,6 +11,7 @@
   * don't round updateInterval on Windows
   * don't round updateInterval on Linux
   * implement frameskip
+  * more C++ examples
   * assure Gosu::File also creates directories as necessary
   * more sophisticated Audio interface for talking NPC's etc.
   * clean up Gosu's C++ interface
