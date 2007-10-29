@@ -99,7 +99,10 @@
 #undef read
 #undef sleep
 
+#ifndef WIN32
 #include <Gosu/Async.hpp>
+#endif
+
 #include <Gosu/Audio.hpp>
 #include <Gosu/Color.hpp>
 #include <Gosu/Font.hpp>
@@ -116,6 +119,20 @@
 #include <Gosu/Window.hpp>
 
 #include <sstream>
+
+namespace GosusDarkSide
+{
+    // TODO: Find a way for this to fit into Gosu's design.
+    // This can point to a function that wants to be called every
+    // frame, e.g. rb_thread_schedule.
+    typedef void (*HookOfHorror)();
+    extern HookOfHorror oncePerTick;
+    
+    void yieldToOtherRubyThreads()
+    {
+		rb_thread_schedule();
+    }
+}
 
 // Allow filenames and RMagick Images to be passed where Bitmaps are needed.
 namespace Gosu
@@ -210,6 +227,7 @@ namespace Gosu
 
 // AsyncResult
 
+#ifndef WIN32
 %ignore Gosu::asyncNewImage;
 %ignore Gosu::asyncNewImage_Impl;
 %ignore Gosu::AsyncResult::takeValue;
@@ -221,6 +239,7 @@ namespace Gosu
     }
 }
 %template(AsyncImageResult) Gosu::AsyncResult<Gosu::Image>;
+#endif
 
 %ignore Gosu::ImageData;
 %rename("tex_name") texName;
@@ -253,10 +272,12 @@ namespace Gosu
         return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source),
             srcX, srcY, srcWidth, srcHeight, hardBorders);
     }
+    #ifndef WIN32
     %newobject asyncNew;
     static Gosu::AsyncResult<Gosu::Image>* asyncNew(Gosu::Window& window, const std::wstring& filename) {
         return new Gosu::AsyncResult<Gosu::Image>(Gosu::asyncNewImage(window, filename));
     }
+    #endif
     void drawAsQuad(double x1, double y1, Color c1,
             double x2, double y2, Color c2,
             double x3, double y3, Color c3,
@@ -317,6 +338,7 @@ namespace Gosu
 // Backwards compatibility: import the constants into Gosu::Button.
 %init %{
     rb_eval_string("module Gosu::Button; Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }; end");
+    GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
 %}
 
 // Window

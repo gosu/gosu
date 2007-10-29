@@ -4,7 +4,7 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Audio.hpp>
 #include <Gosu/Input.hpp>
-#include <GosuImpl/Graphics/Graphics.hpp>
+#include <GosuImpl/Graphics/Common.hpp>
 #include <boost/bind.hpp>
 #include <cassert>
 #include <stdexcept>
@@ -185,6 +185,15 @@ void Gosu::Window::setCaption(const std::wstring& value)
     SetWindowText(handle(), value.c_str());
 }
 
+namespace GosusDarkSide
+{
+    // TODO: Find a way for this to fit into Gosu's design.
+    // This can point to a function that wants to be called every
+    // frame, e.g. rb_thread_schedule.
+    typedef void (*HookOfHorror)();
+    HookOfHorror oncePerTick = 0;
+}
+
 void Gosu::Window::show()
 {
     ShowWindow(handle(), SW_SHOW);
@@ -199,6 +208,8 @@ void Gosu::Window::show()
 	    {
 			Win::processMessages();
 
+            if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
+
 			if (!::IsWindowVisible(handle()))
 				return;
 
@@ -209,7 +220,8 @@ void Gosu::Window::show()
 				lastTick = ms;
 				input().update();
 			    update();
-				::InvalidateRect(handle(), 0, FALSE), lastFrameSkipped = false;
+				::InvalidateRect(handle(), 0, FALSE);
+                lastFrameSkipped = false;
 			}
 		}
     }

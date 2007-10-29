@@ -283,34 +283,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Graphics\Bitmap.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GosuImpl\Graphics\BitmapBMP.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GosuImpl\Graphics\BitmapColorKey.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GosuImpl\Graphics\BitmapPNG.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GosuImpl\Graphics\BlockAllocator.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GosuImpl\Graphics\BlockAllocator.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GosuImpl\Graphics\Color.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\GosuImpl\Sockets\CommSocket.cpp"
 				>
 			</File>
@@ -331,49 +303,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Graphics\Graphics.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\GosuImpl\Graphics\Graphics.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GosuImpl\Graphics\Image.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\GosuImpl\InputWin.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\GosuImpl\IO.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GosuImpl\Graphics\LargeImageData.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GosuImpl\Graphics\LargeImageData.hpp"
 				>
 			</File>
 			<File
@@ -389,23 +323,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Graphics\RotFlip.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Gosu\RotFlip.hpp"
-				>
-			</File>
-			<File
 				RelativePath="..\GosuImpl\Sockets\Socket.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GosuImpl\Graphics\Text.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GosuImpl\Graphics\TextWin.cpp"
 				>
 			</File>
 			<File
@@ -429,56 +347,90 @@
 				>
 			</File>
 			<Filter
-				Name="OpenGL"
+				Name="Graphics"
 				>
 				<File
-					RelativePath="..\GosuImpl\OpenGL\Blit.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\GosuImpl\OpenGL\Blit.hpp"
+					RelativePath="..\GosuImpl\Graphics\Bitmap.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\GosuImpl\OpenGL\Graphics.cpp"
+					RelativePath="..\GosuImpl\Graphics\BitmapBMP.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\GosuImpl\OpenGL\OpenGL.hpp"
+					RelativePath="..\GosuImpl\Graphics\BitmapColorKey.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\GosuImpl\OpenGL\TexChunk.cpp"
+					RelativePath="..\GosuImpl\Graphics\BitmapPNG.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\GosuImpl\OpenGL\TexChunk.hpp"
+					RelativePath="..\GosuImpl\Graphics\BitmapUtils.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\GosuImpl\OpenGL\Texture.cpp"
+					RelativePath="..\GosuImpl\Graphics\BlockAllocator.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\GosuImpl\OpenGL\Texture.hpp"
+					RelativePath="..\GosuImpl\Graphics\BlockAllocator.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\Color.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\Common.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\DrawOp.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\Graphics.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\Image.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\LargeImageData.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\LargeImageData.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\RotFlip.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\TexChunk.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\TexChunk.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\Text.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\Texture.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\Texture.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\TextWin.cpp"
 					>
 				</File>
 			</Filter>

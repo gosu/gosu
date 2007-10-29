@@ -35,7 +35,7 @@ class GLBackground
     info = @image.gl_tex_info
     return unless info
 
-    glDepthFunc(GL_LEQUAL)
+    glDepthFunc(GL_GEQUAL)
     glEnable(GL_DEPTH_TEST)
     glEnable(GL_BLEND)
 

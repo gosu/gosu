@@ -85,6 +85,9 @@ std::auto_ptr<Gosu::TexChunk>
     const unsigned* texData = &pixelData[0];
     unsigned format = GL_RGBA;
     #else
+    #ifndef GL_BGRA
+    #define GL_BGRA 0x80E1
+    #endif
     const unsigned* texData = bmp.glCompatibleData();
     unsigned format = GL_BGRA;
     #endif

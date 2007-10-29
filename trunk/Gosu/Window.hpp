@@ -25,7 +25,7 @@ namespace Gosu
     {
         struct Impl;
         boost::scoped_ptr<Impl> pimpl;
-        
+
     public:
         //! Constructs a Window.
         //! \param updateInterval Interval in milliseconds between two calls
@@ -67,14 +67,17 @@ namespace Gosu
         Input& input();
 
         #ifdef GOSU_IS_WIN
+        // Only on Windows.
         HWND handle() const;
         virtual LRESULT handleMessage(UINT message, WPARAM wparam,
             LPARAM lparam);
-        #endif
-        #endif
-        
+        #else
+        // Only on Unices (so far).
         typedef boost::shared_ptr<boost::function<void()> > SharedContext;
         SharedContext createSharedContext();
+        #endif
+
+        #endif
     };
 }
 

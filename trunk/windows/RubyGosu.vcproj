@@ -103,11 +103,10 @@
 			>
 			<FileConfiguration
 				Name="Release|Win32"
-				ExcludedFromBuild="true"
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="swig -c++ -ruby -autorename ../GosuImpl/RubyGosu.swg&#x0D;&#x0A;"
+					CommandLine="swig -c++ -ruby -autorename -DWIN32 ../GosuImpl/RubyGosu.swg&#x0D;&#x0A;"
 					Outputs="RubyGosu_wrap.cxx;RubyGosu_wrap.h"
 				/>
 			</FileConfiguration>
