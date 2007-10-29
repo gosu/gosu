@@ -147,6 +147,9 @@ class GameWindow < Gosu::Window
     if id == Gosu::Button::KbF2 then
       @bg = nil
       @bg_loading = Gosu::Image.async_new(self, "examples/media/Space.png")
+      @bg_loading = Gosu::Image.async_new(self, "examples/media/Space.png")
+      @bg_loading = Gosu::Image.async_new(self, "examples/media/Space.png")
+      @bg_loading = Gosu::Image.async_new(self, "examples/media/Space.png")
     end
     
     if id == Gosu::Button::KbEscape

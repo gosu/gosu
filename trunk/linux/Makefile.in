@@ -1,11 +1,11 @@
 PKG_CONFIG = @PKG_CONFIG@
 
 BASE_OBJS = Math.o Utility.o IO.o FileUnix.o \
-    TimingUnix.o WindowX.o Graphics/Bitmap.o InputX.o Graphics/Graphics.o \
-    OpenGL/Graphics.o OpenGL/Blit.o OpenGL/TexChunk.o \
-    Graphics/Image.o Graphics/RotFlip.o Graphics/BlockAllocator.o OpenGL/Texture.o \
+    TimingUnix.o WindowX.o Graphics/Bitmap.o InputX.o Graphics/BitmapUtils.o \
+    Graphics/TexChunk.o Graphics/Graphics.o \
+    Graphics/Image.o Graphics/RotFlip.o Graphics/BlockAllocator.o Graphics/Texture.o \
     Graphics/LargeImageData.o Graphics/BitmapPNG.o Graphics/Font.o Graphics/BitmapBMP.o Graphics/TextPangoFT.o \
-    Graphics/Text.o Graphics/BitmapColorKey.o DirectoriesUnix.o
+	Graphics/Text.o Graphics/BitmapColorKey.o DirectoriesUnix.o Async.o
 NET_OBJS = Sockets/CommSocket.o Sockets/ListenerSocket.o Sockets/Socket.o Sockets/MessageSocket.o
 OPENAL_OBJ = AudioOpenAL.o
 SDLMIXER_OBJ = AudioSDL.o
@@ -20,12 +20,12 @@ XPLS = ../examples/Tutorial
 
 CXXFLAGS += -I.. @AUDIO_INC@ -Wall \
     @PANGO_CXX_FLAGS@ @X_INCS@ \
-    -I@RUBY_INC_DIR@ -fPIC -DBOOST_DISABLE_THREADS
+	-I@RUBY_INC_DIR@ -fPIC -DNDEBUG -march=pentium-m -O3 -pipe -fomit-frame-pointer
 
 LIBS = @AUDIO_LIBS@ -lrt -L@x_libraries@ -lX11 \
-    @PANGO_LIBS@ -lpng -lGL -lGLU -lglut -lXxf86vm
+    @PANGO_LIBS@ -lpng -lGL -lGLU -lglut -lXxf86vm -lboost_thread
 
-RUBY_LIBS = $(LIBS) @RUBY_LIBS@ -ldl -lm -lc -lcrypt
+RUBY_LIBS = $(LIBS) @RUBY_LIBS@ -ldl -lm -lc -lcrypt -lboost_thread
 
 all: @TO_BE_MADE@
 

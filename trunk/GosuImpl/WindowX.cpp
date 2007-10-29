@@ -156,10 +156,9 @@ void Gosu::Window::setCaption(const std::wstring& caption)
     XSync(pimpl->dpy, false);
 }
 
-// this function is "inspired" by SDL
 void Gosu::Window::Impl::enterFullscreen()
 {
-    // save old mode. UGLY, but token from SDL.
+    // save old mode.
     XF86VidModeModeLine* l = (XF86VidModeModeLine*)((char*)&oldMode + sizeof oldMode.dotclock);
     XF86VidModeGetModeLine(dpy, XDefaultScreen(dpy), (int*)&oldMode.dotclock, l);
 
@@ -208,44 +207,6 @@ void Gosu::Window::Impl::enterFullscreen()
     isFullscreen = switched;
 
     XFree(modes);
-}
-
-void Gosu::Window::Impl::doTick(Window* window)
-{
-    while(::XPending(dpy))
-    {
-        ::XEvent event;
-        XNextEvent(dpy, &event);
-
-        if(!window->input().feedXEvent(event, window))
-        {
-            if(event.type == VisibilityNotify)
-            {
-                if(event.xvisibility.state == VisibilityFullyObscured)
-                    visible = false;
-                else
-                    visible = true;
-            }
-            else if(event.type == ConfigureNotify)
-            {
-            }
-            else if(event.type == ClientMessage)
-            {
-                if(static_cast<unsigned>(event.xclient.data.l[0]) == deleteAtom)
-                    window->close();
-            }
-        }
-    }
-
-    if(visible && window->graphics().begin(Colors::black))
-    {
-        window->draw();
-        window->graphics().end();
-	glXSwapBuffers(dpy, this->window);
-    }
-
-    window->input().update();
-    window->update();
 }
 
 void Gosu::Window::show()
@@ -327,4 +288,64 @@ const Gosu::Input& Gosu::Window::input() const
 Gosu::Input& Gosu::Window::input()
 {
     return *pimpl->input;
+}
+
+namespace
+{
+    void makeCurrentContext(Display* dpy, GLXDrawable drawable, GLXContext context) {
+        if (!glXMakeCurrent(dpy, drawable, context))
+            printf("glXMakeCurrent failed\n");
+    }
+
+    void releaseContext(Display* dpy, GLXContext context) {
+        glXDestroyContext(dpy, context);
+    }
+}
+
+void* Gosu::Window::createSharedContext() {
+	GLXContext ctx = glXCreateContext(pimpl->dpy, pimpl->vi, pimpl->cx, True);
+	if (!ctx)
+        throw std::runtime_error("Could not create shared GLX context");
+    
+    return SharedContext(
+        new boost::function<void()>(boost::bind(makeCurrentContext, pimpl->dpy, pimpl->window, ctx)),
+        boost::bind(releaseContext, pimpl->dpy, ctx));
+}
+
+void Gosu::Window::Impl::doTick(Window* window)
+{
+    while(::XPending(dpy))
+    {
+        ::XEvent event;
+        XNextEvent(dpy, &event);
+
+        if(!window->input().feedXEvent(event, window))
+        {
+            if(event.type == VisibilityNotify)
+            {
+                if(event.xvisibility.state == VisibilityFullyObscured)
+                    visible = false;
+                else
+                    visible = true;
+            }
+            else if(event.type == ConfigureNotify)
+            {
+            }
+            else if(event.type == ClientMessage)
+            {
+                if(static_cast<unsigned>(event.xclient.data.l[0]) == deleteAtom)
+                    window->close();
+            }
+        }
+    }
+
+    if(visible && window->graphics().begin(Colors::black))
+    {
+        window->draw();
+        window->graphics().end();
+	glXSwapBuffers(dpy, this->window);
+    }
+
+    window->input().update();
+    window->update();
 }

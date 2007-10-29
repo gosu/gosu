@@ -8,6 +8,8 @@
 #include <Gosu/Platform.hpp>
 #include <Gosu/Input.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/function.hpp>
 #include <string>
 
 #ifdef GOSU_IS_WIN
@@ -53,14 +55,8 @@ namespace Gosu
         //! Same as buttonDown. Called then the user released a button.
         virtual void buttonUp(Gosu::Button) {}
         
-        #ifdef __APPLE__
-        void* createSharedContext();
-        void makeCurrentContext(void* context);
-        void releaseContext(void* context);
-        #endif
-        
-// Ignore when SWIG is wrapping this class for Ruby/Gosu.
-#ifndef SWIG
+        // Ignore when SWIG is wrapping this class for Ruby/Gosu.
+        #ifndef SWIG
         const Graphics& graphics() const;
         Graphics& graphics();
 
@@ -75,7 +71,10 @@ namespace Gosu
         virtual LRESULT handleMessage(UINT message, WPARAM wparam,
             LPARAM lparam);
         #endif
-#endif
+        #endif
+        
+        typedef boost::shared_ptr<boost::function<void()> > SharedContext;
+        SharedContext createSharedContext();
     };
 }
 

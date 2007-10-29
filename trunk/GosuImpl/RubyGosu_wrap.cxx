@@ -1937,13 +1937,15 @@ namespace Swig {
 #define SWIGTYPE_p_Gosu__Sample swig_types[7]
 #define SWIGTYPE_p_Gosu__Song swig_types[8]
 #define SWIGTYPE_p_Gosu__Window swig_types[9]
-#define SWIGTYPE_p_boost__shared_ptrTboost__try_mutex_t swig_types[10]
-#define SWIGTYPE_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t swig_types[11]
-#define SWIGTYPE_p_char swig_types[12]
-#define SWIGTYPE_p_double swig_types[13]
-#define SWIGTYPE_p_std__wstring swig_types[14]
-static swig_type_info *swig_types[16];
-static swig_module_info swig_module = {swig_types, 15, 0, 0, 0, 0};
+#define SWIGTYPE_p_SharedContext swig_types[10]
+#define SWIGTYPE_p_boost__shared_ptrTboost__functionTvoid_fF_t_t swig_types[11]
+#define SWIGTYPE_p_boost__shared_ptrTboost__try_mutex_t swig_types[12]
+#define SWIGTYPE_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t swig_types[13]
+#define SWIGTYPE_p_char swig_types[14]
+#define SWIGTYPE_p_double swig_types[15]
+#define SWIGTYPE_p_std__wstring swig_types[16]
+static swig_type_info *swig_types[18];
+static swig_module_info swig_module = {swig_types, 17, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -6213,6 +6215,36 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Window_create_shared_context(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  Gosu::Window::SharedContext result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "createSharedContext" "', argument " "1"" of type '" "Gosu::Window *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  {
+    try {
+      result = (arg1)->createSharedContext();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_NewPointerObj((new Gosu::Window::SharedContext(static_cast< const Gosu::Window::SharedContext& >(result))), SWIGTYPE_p_boost__shared_ptrTboost__functionTvoid_fF_t_t, SWIG_POINTER_OWN |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   double arg2 ;
@@ -6903,6 +6935,8 @@ static swig_type_info _swigt__p_Gosu__Image = {"_p_Gosu__Image", "Gosu::Image *"
 static swig_type_info _swigt__p_Gosu__Sample = {"_p_Gosu__Sample", "Gosu::Sample *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Song = {"_p_Gosu__Song", "Gosu::Song *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Window = {"_p_Gosu__Window", "Gosu::Window *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_SharedContext = {"_p_SharedContext", "SharedContext *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_boost__shared_ptrTboost__functionTvoid_fF_t_t = {"_p_boost__shared_ptrTboost__functionTvoid_fF_t_t", "boost::shared_ptr<boost::function<void () > > *|Gosu::Window::SharedContext *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_boost__shared_ptrTboost__try_mutex_t = {"_p_boost__shared_ptrTboost__try_mutex_t", "boost::shared_ptr<boost::try_mutex > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t = {"_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t", "boost::shared_ptr<std::auto_ptr<Gosu::Image > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
@@ -6920,6 +6954,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__Sample,
   &_swigt__p_Gosu__Song,
   &_swigt__p_Gosu__Window,
+  &_swigt__p_SharedContext,
+  &_swigt__p_boost__shared_ptrTboost__functionTvoid_fF_t_t,
   &_swigt__p_boost__shared_ptrTboost__try_mutex_t,
   &_swigt__p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t,
   &_swigt__p_char,
@@ -6937,6 +6973,8 @@ static swig_cast_info _swigc__p_Gosu__Image[] = {  {&_swigt__p_Gosu__Image, 0, 0
 static swig_cast_info _swigc__p_Gosu__Sample[] = {  {&_swigt__p_Gosu__Sample, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Song[] = {  {&_swigt__p_Gosu__Song, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Window[] = {  {&_swigt__p_Gosu__Window, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_SharedContext[] = {  {&_swigt__p_SharedContext, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_boost__shared_ptrTboost__functionTvoid_fF_t_t[] = {  {&_swigt__p_boost__shared_ptrTboost__functionTvoid_fF_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_boost__shared_ptrTboost__try_mutex_t[] = {  {&_swigt__p_boost__shared_ptrTboost__try_mutex_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t[] = {  {&_swigt__p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
@@ -6954,6 +6992,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__Sample,
   _swigc__p_Gosu__Song,
   _swigc__p_Gosu__Window,
+  _swigc__p_SharedContext,
+  _swigc__p_boost__shared_ptrTboost__functionTvoid_fF_t_t,
   _swigc__p_boost__shared_ptrTboost__try_mutex_t,
   _swigc__p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t,
   _swigc__p_char,
@@ -7452,6 +7492,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cWindow.klass, "draw", VALUEFUNC(_wrap_Window_draw), -1);
   rb_define_method(cWindow.klass, "button_down", VALUEFUNC(_wrap_Window_button_down), -1);
   rb_define_method(cWindow.klass, "button_up", VALUEFUNC(_wrap_Window_button_up), -1);
+  rb_define_method(cWindow.klass, "create_shared_context", VALUEFUNC(_wrap_Window_create_shared_context), -1);
   rb_define_method(cWindow.klass, "draw_line", VALUEFUNC(_wrap_Window_draw_line), -1);
   rb_define_method(cWindow.klass, "draw_triangle", VALUEFUNC(_wrap_Window_draw_triangle), -1);
   rb_define_method(cWindow.klass, "draw_quad", VALUEFUNC(_wrap_Window_draw_quad), -1);

@@ -290,36 +290,6 @@ void Gosu::Window::close()
     [NSApp terminate:nil];
 }
 
-void* Gosu::Window::createSharedContext()
-{
-    NSOpenGLPixelFormatAttribute attributes[] = {
-        NSOpenGLPFADoubleBuffer,
-        NSOpenGLPFAScreenMask,
-        (NSOpenGLPixelFormatAttribute)CGDisplayIDToOpenGLDisplayMask(CGMainDisplayID()),
-        NSOpenGLPFAFullScreen,
-        NSOpenGLPFANoRecovery,
-        (NSOpenGLPixelFormatAttribute)0
-    };
-    
-    NSOpenGLPixelFormat* pf =
-        [[[NSOpenGLPixelFormat alloc]
-            initWithAttributes:attributes] autorelease];
-
-    return [[NSOpenGLContext alloc]
-            initWithFormat: pf
-            shareContext: pimpl->context.obj()];
-}
-
-void Gosu::Window::makeCurrentContext(void* context)
-{
-    [(NSOpenGLContext*)context makeCurrentContext];
-}
-
-void Gosu::Window::releaseContext(void* context)
-{
-    [(NSOpenGLContext*)context release];
-}
-
 const Gosu::Graphics& Gosu::Window::graphics() const
 {
     return *pimpl->graphics;
@@ -352,6 +322,42 @@ const Gosu::Input& Gosu::Window::input() const
 Gosu::Input& Gosu::Window::input()
 {
     return *pimpl->input;
+}
+
+namespace
+{
+    void makeCurrentContext(NSOpenGLContext* context)
+    {
+        [(NSOpenGLContext*)context makeCurrentContext];
+    }
+    
+    void releaseContext(NSOpenGLContext* context)
+    {
+        [(NSOpenGLContext*)context release];
+    }
+}
+
+Gosu::Window::SharedContext Gosu::Window::createSharedContext()
+{
+    NSOpenGLPixelFormatAttribute attributes[] = {
+        NSOpenGLPFADoubleBuffer,
+        NSOpenGLPFAScreenMask,
+        (NSOpenGLPixelFormatAttribute)CGDisplayIDToOpenGLDisplayMask(CGMainDisplayID()),
+        NSOpenGLPFAFullScreen,
+        NSOpenGLPFANoRecovery,
+        (NSOpenGLPixelFormatAttribute)0
+    };
+    
+    NSOpenGLPixelFormat* pf =
+        [[[NSOpenGLPixelFormat alloc]
+            initWithAttributes:attributes] autorelease];
+
+    NSOpenGLContext* ctx = [[NSOpenGLContext alloc]
+            initWithFormat: pf
+            shareContext: pimpl->context.obj()];
+    
+    return SharedContext(new boost::function<void()>(boost::bind(makeCurrentContext, ctx)),
+        boost::bind(releaseContext, ctx));
 }
 
 // Moved here so including ruby.h will cause the minimal amount of macro damage.
