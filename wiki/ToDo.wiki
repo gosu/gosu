@@ -2,10 +2,8 @@
 #labels Featured
 
 =0.7.7 (due late October)=
-  * implement frameskip
   * get rid of OpenGL tearing on Windows
   * port at least one more example to C++
-  * fix or kill Deployment Template on Leopard
   * rb_schedule_thread on Windows
   * rb_schedule_thread on Linux
   * documentation...
@@ -13,6 +11,7 @@
 = Also ASAP =
   * don't round updateInterval on Windows
   * don't round updateInterval on Linux
+  * implement frameskip
   * assure Gosu::File also creates directories as necessary
   * more sophisticated Audio interface for talking NPC's etc.
   * clean up Gosu's C++ interface
