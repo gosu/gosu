@@ -6,6 +6,7 @@
   * documentation...
 
 = Also ASAP =
+  * clean up after playing around with possible optimizations
   * get rid of OpenGL tearing on Windows (Intel GMA 950)
   * don't round updateInterval on Windows
   * don't round updateInterval on Linux
