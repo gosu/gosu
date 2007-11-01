@@ -2,7 +2,7 @@
 #labels Featured
 
 =0.7.7 (due late October)=
-  * documentation...
+  * Linux sanity testing before release
 
 = Also ASAP =
   * clean up after playing around with possible optimizations
