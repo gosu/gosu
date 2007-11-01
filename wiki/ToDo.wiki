@@ -2,7 +2,6 @@
 #labels Featured
 
 =0.7.7 (due late October)=
-  * rb_schedule_thread on Linux
   * documentation...
 
 = Also ASAP =
