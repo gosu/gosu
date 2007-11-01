@@ -31,7 +31,7 @@
   * implement clipping and a target() modifier for the new Image
   * multi-threaded blit queue?
   * make font substitution work on OS X, Windows
-  * allow loading of non-installed fonts (has been on internal ToDo way too long!)
+  * allow loading of non-system fonts (has been on internal ToDo way too long!)
   * more beautiful text! (kerning etc.?)
   * speed up LargeImageData!
 
