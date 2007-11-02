@@ -4,6 +4,11 @@
 =0.7.7 (due late October)=
   * Linux sanity testing before release
 
+=0.7.8 (due late November)=
+  * allow loading of non-system fonts (has been on internal ToDo way too long!)
+  * port one at least one Ruby example to C++ (OpenGL?)
+  * *FINALLY* get TextInput in!!
+
 = Also ASAP =
   * clean up after playing around with possible optimizations
   * get rid of OpenGL tearing on Windows (Intel GMA 950)
@@ -30,7 +35,6 @@
   * implement clipping and a target() modifier for the new Image
   * multi-threaded blit queue?
   * make font substitution work on OS X, Windows
-  * allow loading of non-system fonts (has been on internal ToDo way too long!)
   * more beautiful text! (kerning etc.?)
   * speed up LargeImageData!
 
