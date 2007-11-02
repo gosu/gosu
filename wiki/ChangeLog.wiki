@@ -1,7 +1,7 @@
 #summary Log of Gosu's development.
 #labels Featured
 
-=0.7.7
+=0.7.7=
   * All: Gosu now uses doubles as Z positions
   * All: Gosu allows for custom OpenGL integration, (Ruby) example game included
   * Mac, Linux: Additive drawing fixed
