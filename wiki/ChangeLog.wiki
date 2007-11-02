@@ -1,10 +1,11 @@
 #summary Log of Gosu's development.
 #labels Featured
 
-=0.7.7 (due late October)=
+=0.7.7
   * All: Gosu now uses doubles as Z positions
   * All: Gosu allows for custom OpenGL integration, (Ruby) example game included
   * Mac, Linux: Additive drawing fixed
+  * Mac: Leopard compatibility
   * Mac: Vsync finally enabled—was *so* more necessary @ 60 Hz
   * Windows: Gosu now uses OpenGL instead of Direct3D (less code to maintain, more game portability)
   * Windows: Vsync also enabled (didn't work on Intel chipset though...)
