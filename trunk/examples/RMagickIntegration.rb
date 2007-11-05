@@ -1,10 +1,3 @@
-begin
-  # In case you use Gosu via RubyGems.
-  require 'rubygems'
-rescue LoadError
-  # In case you don't.
-end
-
 # A (too) simple Gorilla-style shooter for two players.
 # Shows how Gosu and RMagick can be used together to generate a map, implement
 # a dynamic landscape and generally look great.
@@ -17,6 +10,13 @@ end
 # * Collision detection of the missiles is lazy, allows shooting through thin walls.
 # * The look of dead soldiers is, err, by accident. Soldier.png needs to be
 #   designed in a less obfuscated way :)
+
+begin
+  # In case you use Gosu via RubyGems.
+  require 'rubygems'
+rescue LoadError
+  # In case you don't.
+end
 
 require 'gosu'
 require 'rmagick'

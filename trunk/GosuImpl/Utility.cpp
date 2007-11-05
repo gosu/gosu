@@ -8,7 +8,9 @@
 using namespace std;
 
 #ifdef __APPLE__
-#include <iconv.h>
+// We want Apple's iconv
+#include </usr/include/iconv.h>
+#include <errno.h>
 namespace
 {
     extern const char UTF_8[] = "UTF-8";

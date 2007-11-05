@@ -209,6 +209,15 @@ void Gosu::Window::Impl::enterFullscreen()
     XFree(modes);
 }
 
+namespace GosusDarkSide
+{
+    // TODO: Find a way for this to fit into Gosu's design.
+    // This can point to a function that wants to be called every
+    // frame, e.g. rb_thread_schedule.
+    typedef void (*HookOfHorror)();
+    HookOfHorror oncePerTick = 0;
+}
+
 void Gosu::Window::show()
 {
     pimpl->showing = true;
@@ -218,7 +227,6 @@ void Gosu::Window::show()
 
     if(pimpl->isFullscreen) pimpl->enterFullscreen();
 
-
     setCaption(pimpl->title);
 
     unsigned long startTime, endTime;
@@ -226,6 +234,7 @@ void Gosu::Window::show()
     {
         startTime = milliseconds();
         pimpl->doTick(this);
+        if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
         endTime = milliseconds();
 
         if((endTime - startTime) < pimpl->updateInterval)
@@ -302,7 +311,9 @@ namespace
     }
 }
 
-void* Gosu::Window::createSharedContext() {
+Gosu::Window::SharedContext Gosu::Window::createSharedContext() {
+    throw std::runtime_error("Neither documented nor implemented");
+
 	GLXContext ctx = glXCreateContext(pimpl->dpy, pimpl->vi, pimpl->cx, True);
 	if (!ctx)
         throw std::runtime_error("Could not create shared GLX context");

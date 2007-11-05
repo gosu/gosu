@@ -360,11 +360,14 @@ Gosu::Window::SharedContext Gosu::Window::createSharedContext()
         boost::bind(releaseContext, ctx));
 }
 
-// Moved here so including ruby.h will cause the minimal amount of macro damage.
-
-#ifdef GOSU_FOR_RUBY
-#include <ruby.h>
-#endif
+namespace GosusDarkSide
+{
+    // TODO: Find a way for this to fit into Gosu's design.
+    // This can point to a function that wants to be called every
+    // frame, e.g. rb_thread_schedule.
+    typedef void (*HookOfHorror)();
+    HookOfHorror oncePerTick = 0;
+}
 
 void Gosu::Window::Impl::doTick(Window& window)
 {
@@ -397,10 +400,5 @@ void Gosu::Window::Impl::doTick(Window& window)
         [window.pimpl->context.obj() flushBuffer];
     }
     
-    #ifdef GOSU_FOR_RUBY
-    /*static int counter = 0;
-    if (++counter % 60 == 0)
-        rb_gc_start();*/
-    rb_thread_schedule();
-    #endif
+    if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
 }

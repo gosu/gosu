@@ -51,9 +51,10 @@ namespace Gosu
         bool begin(Color clearWithColor = Colors::black);
         //! Every call to begin must have a matching call to end.
         void end();
-        // Processes all enqueued Gosu drawing operations, so custom OpenGL code can start.
+        //! Finishes all pending Gosu drawing operations and executes
+        //! the following OpenGL code in a clean environment.
         void beginGL();
-        // Resets Gosu into its default rendering state.
+        //! Resets Gosu into its default rendering state.
         void endGL();
 
         void drawLine(double x1, double y1, Color c1,

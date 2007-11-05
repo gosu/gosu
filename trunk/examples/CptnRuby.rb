@@ -1,10 +1,3 @@
-begin
-  # In case you use Gosu via rubygems.
-  require 'rubygems'
-rescue LoadError
-  # In case you don't.
-end
-
 # Basically, the tutorial game taken to a jump'n'run perspective.
 
 # Shows how to
@@ -31,6 +24,13 @@ end
 #  9) add loading of next level when all gems are collected
 # ...Enemies, a more sophisticated object system, weapons, title and credits
 # screens...
+
+begin
+  # In case you use Gosu via rubygems.
+  require 'rubygems'
+rescue LoadError
+  # In case you don't.
+end
 
 require 'gosu'
 include Gosu

@@ -41,7 +41,7 @@ namespace
         MacBitmap(boost::uint32_t* buf, unsigned width, unsigned height)
         : buf(buf), width(width), height(height)
         {
-            CGColorSpaceRef colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB); 
+            CGColorSpaceRef colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceUserRGB); 
             ctx = CGBitmapContextCreate (buf, width, height, 8, width * 4, colorSpace,
                 kCGImageAlphaPremultipliedLast);
 

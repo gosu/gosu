@@ -1,20 +1,34 @@
-# use freshly built gosu
-require '../gosu'
-require 'rubygems'
+# The tutorial game over a landscape rendered with OpenGL.
+# Basically shows how arbitrary OpenGL calls can be put into
+# the block given to Window#gl, and that Gosu Images can be
+# used as textures using the gl_tex_info call.
+
+begin
+  # In case you use Gosu via RubyGems.
+  require 'rubygems'
+rescue LoadError
+  # In case you don't.
+end
+
+require 'gosu'
 require 'gl'
 require 'glu'
+
 include Gl
 include Glu
 
 module ZOrder
-  Background, Stars, Player, UI = *0..3
+  Stars, Player, UI = *0..3
 end
 
+# The only really new class here.
+# Draws a scrolling, repeating texture with a randomized height map.
 class GLBackground
-  POINTS_X = 5
-  POINTS_Y = 5
-  
-  SCROLLS_PER_STEP = 30
+  # Height map size
+  POINTS_X = 7
+  POINTS_Y = 7
+  # Scrolling speed
+  SCROLLS_PER_STEP = 50
 
   def initialize(window)
     @image = Gosu::Image.new(window, "media/Earth.png", true)
@@ -32,9 +46,15 @@ class GLBackground
   end
   
   def exec_gl
+    # Get the name of the OpenGL texture the Image resides on, and the
+    # u/v coordinates of the rect it occupies.
+    # gl_tex_info can return nil if the image was too large to fit onto
+    # a single OpenGL texture and was internally split up.
     info = @image.gl_tex_info
     return unless info
 
+    # Pretty straightforward OpenGL code.
+    
     glDepthFunc(GL_GEQUAL)
     glEnable(GL_DEPTH_TEST)
     glEnable(GL_BLEND)
@@ -80,6 +100,7 @@ class GLBackground
   end
 end
 
+# Roughly adapted from the tutorial game. Always faces north.
 class Player
   Speed = 7
   
@@ -125,6 +146,8 @@ class Player
   end
 end
 
+# Also taken from the tutorial, but drawn with draw_rot and an increasing angle
+# for extra rotation coolness!
 class Star
   attr_reader :x, :y
   
@@ -182,6 +205,9 @@ class GameWindow < Gosu::Window
   end
 
   def draw
+    # gl will execute the given block in a clean OpenGL environment, then reset
+    # everything so Gosu's rendering can take place again.
+    
     gl do
       glClearColor(0.0, 0.2, 0.5, 1.0)
       glClearDepth(0)

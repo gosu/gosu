@@ -1,4 +1,5 @@
 ## File: ChipmunkIntegration.rb
+## Author: Dirk Johnson
 ## Version: 1.0.0
 ## Date: 2007-10-05
 ## License: Same as for Gosu (MIT)

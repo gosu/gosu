@@ -764,6 +764,7 @@
 				HEADER_SEARCH_PATHS = (
 					..,
 					/usr/local/include,
+					/opt/local/include,
 					"/usr/lib/ruby/1.8/universal-darwin8.0",
 					"/usr/lib/ruby/1.8/universal-darwin9.0",
 				);
@@ -772,7 +773,6 @@
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
-					"-static",
 					"-lruby",
 					"-liconv",
 				);
@@ -799,6 +799,7 @@
 				HEADER_SEARCH_PATHS = (
 					..,
 					/usr/local/include,
+					/opt/local/include,
 					"/usr/lib/ruby/1.8/universal-darwin8.0",
 					"/usr/lib/ruby/1.8/universal-darwin9.0",
 				);
@@ -807,7 +808,6 @@
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
-					"-static",
 					"-lruby",
 					"-liconv",
 				);
