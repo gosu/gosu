@@ -1,10 +1,8 @@
 #summary Gosu's ToDo list.
 #labels Featured
 
-=0.7.7 (due late October)=
-  * Linux sanity testing before release
-
 =0.7.8 (due late November)=
+  * allow FPS > 60 even with vsync
   * allow loading of non-system fonts (has been on internal ToDo way too long!)
   * port one at least one Ruby example to C++ (OpenGL?)
   * *FINALLY* get TextInput in!!
