@@ -2,32 +2,33 @@
 
 = Dependencies =
 
-If you want to use FMOD for audio, fmod (>=3.72) must be unpacked into the folder "fmod" in the Gosu directory, or installed system-wide. Otherwise, SDL_mixer needs to be present.
-You can download the latest fmod 3.x at http://www.fmod.org
-In addition you will need the following Packages:
-  * xlibmesa-glu-dev
+To compile Gosu, you will need the following packages (install via sudo apt-get install <packagename>):
+  * g++
+  * autoconf
+  * libgl1-mesa-dev
+  * libglu1-mesa-dev
+  * libglut3-dev
   * libpango1.0-dev (Pango with freetype)
-  * X11, xf86 extensions (-lXxf86vm)
-  * libPNG3 (or higher)
-  * Boost (http://www.boost.org)
-  * OpenGL
+  * libboost-dev
+  * libxxf86vm-dev
 
-Most of these Packages can be found on your distributor's mirror-sites, the apt-tree or at the given position.
+If you want to use FMOD for audio, fmod 3.75 must be unpacked into the folder "fmod" in the Gosu directory, or installed system-wide. Otherwise, SDL_mixer needs to be present (package libsdl-mixer1.2-dev).
 
-If you want to use Ruby-gosu and create a gosu.so you will have to install at least one of the following packages:
-  * ruby (http://www.ruby-lang.org)
-  * ruby-dev
+Ruby/Gosu will be built if the following packages are installed as well:
+  * ruby
+  * ruby1.8 
+  * ruby1.8-dev
+  * swig1.3
 
 = Compiling Gosu =
 
 To compile Gosu for Unix, go into the "gcc" directory, and execute:
 
 {{{
+autoconf
 ./configure
 make
 }}}
-
-Execute "autoconf" if the configure-script doesn't work.
 
 = Compiling Gosu applications =
 
