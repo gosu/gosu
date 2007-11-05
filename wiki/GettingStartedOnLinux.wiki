@@ -30,19 +30,20 @@ autoconf
 make
 }}}
 
-= Compiling Gosu applications =
+= Using Ruby/Gosu =
+Just require gosu.so (require 'gosu') and everything should work fine. You can copy gosu.so into the examples folder and run Tutorial.rb to check everything's okay.
 
-Copy or link Gosu into your application's directory. You've got to compile with `gosu/gcc/gosu-config --libs`, and -Igosu `gosu/gcc/gosu-config --cxxflags`
+= Using C++ Gosu =
 
-= Compiling your games =
+Copy or link Gosu into your application's directory. You've got to compile with `gosu/linux/gosu-config --libs`, and -Igosu `gosu/linux/gosu-config --cxxflags`
 
 A simple Makefile could look like this:
 
 {{{
 OBJS = main.o player.o
-CXXFLAGS += -Igosu/ `gosu/gcc/gosu-config --cxxflags`
-LIBS = `gosu/gcc/gosu-config --libs`
+CXXFLAGS += -Igosu/ `gosu/linux/gosu-config --cxxflags`
+LIBS = `gosu/linux/gosu-config --libs`
 
-myGame: $(OBJS) gosu/gcc/gosu.a
-        g++ -o myGame $(OBJS) gosu/gcc/gosu.a $(LIBS)
+myGame: $(OBJS) gosu/linux/gosu.a
+        g++ -o myGame $(OBJS) gosu/linux/gosu.a $(LIBS)
 }}}
