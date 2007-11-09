@@ -10,7 +10,8 @@ To compile Gosu, you will need the following packages (install via sudo apt-get 
   * libglut3-dev
   * libpango1.0-dev (Pango with freetype)
   * libboost-dev
-  * libxxf86vm-dev
+  * libboost-thread-dev
+  * libxxf86vm-dev  
 
 If you want to use FMOD for audio, fmod 3.75 must be unpacked into the folder "fmod" in the Gosu directory, or installed system-wide. Otherwise, SDL_mixer needs to be present (package libsdl-mixer1.2-dev).
 
