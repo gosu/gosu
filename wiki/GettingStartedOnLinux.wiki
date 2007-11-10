@@ -8,7 +8,7 @@ To compile Gosu, you will need the following packages (install via sudo apt-get 
   * libgl1-mesa-dev
   * libglu1-mesa-dev
   * libglut3-dev
-  * libpango1.0-dev (Pango with freetype)
+  * libpango1.0-dev
   * libboost-dev
   * libboost-thread-dev
   * libxxf86vm-dev  
