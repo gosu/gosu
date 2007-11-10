@@ -80,7 +80,7 @@ end
 
 class GameWindow < Gosu::Window
   def initialize
-    super(640, 480, false)
+    super(640, 480, false, 1)
         
     @player = Player.new(self)
     @player.warp(320, 240)

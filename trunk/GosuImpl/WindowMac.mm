@@ -7,6 +7,7 @@
 #import <AppKit/AppKit.h>
 #import <ApplicationServices/ApplicationServices.h>
 #import <OpenGL/OpenGL.h>
+#import <OpenGL/gl.h>
 #import <boost/bind.hpp>
 #import <vector>
 
@@ -371,7 +372,7 @@ namespace GosusDarkSide
 
 void Gosu::Window::Impl::doTick(Window& window)
 {
-    long value = 1;
+    GLint value = 1;
     [window.pimpl->context.obj() setValues: &value forParameter: NSOpenGLCPSwapInterval];
     
     if (!window.graphics().fullscreen())

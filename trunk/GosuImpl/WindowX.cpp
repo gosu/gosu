@@ -4,16 +4,15 @@
 #include <Gosu/Input.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Audio.hpp>
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/extensions/xf86vmode.h>
 #include <boost/bind.hpp>
 #include <stdexcept>
 #include <algorithm>
 #include <vector>
 
 #include <GL/glx.h>
-
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/xf86vmode.h>
 
 struct Gosu::Window::Impl
 {
@@ -312,15 +311,18 @@ namespace
 }
 
 Gosu::Window::SharedContext Gosu::Window::createSharedContext() {
-    throw std::runtime_error("Neither documented nor implemented");
-
-	GLXContext ctx = glXCreateContext(pimpl->dpy, pimpl->vi, pimpl->cx, True);
+    const char* displayName = DisplayString( pimpl->dpy );
+    Display* dpy2 = XOpenDisplay( displayName );
+    if (!dpy2)
+        throw std::runtime_error("Could not duplicate X display");
+    
+	GLXContext ctx = glXCreateContext(dpy2, pimpl->vi, pimpl->cx, True);
 	if (!ctx)
         throw std::runtime_error("Could not create shared GLX context");
     
     return SharedContext(
-        new boost::function<void()>(boost::bind(makeCurrentContext, pimpl->dpy, pimpl->window, ctx)),
-        boost::bind(releaseContext, pimpl->dpy, ctx));
+        new boost::function<void()>(boost::bind(makeCurrentContext, dpy2, pimpl->window, ctx)),
+        boost::bind(releaseContext, dpy2, ctx));
 }
 
 void Gosu::Window::Impl::doTick(Window* window)
