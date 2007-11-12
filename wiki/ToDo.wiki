@@ -2,10 +2,13 @@
 #labels Featured
 
 =0.7.8 (due late November)=
+  * *FINALLY* get TextInput in!!
+  * Input redesign, Apple remote support would rule.
+  * more sophisticated Audio interface for talking NPC's etc.
   * allow FPS > 60 even with vsync
   * allow loading of non-system fonts (has been on internal ToDo way too long!)
-  * port one at least one Ruby example to C++ (OpenGL?)
-  * *FINALLY* get TextInput in!!
+  * bugfixes from issue tracker
+  * port at least one Ruby example to C++ (OpenGL?)
 
 = Also ASAP =
   * clean up after playing around with possible optimizations
@@ -15,7 +18,6 @@
   * implement frameskip
   * more C++ examples
   * assure Gosu::File also creates directories as necessary
-  * more sophisticated Audio interface for talking NPC's etc.
   * clean up Gosu's C++ interface
   * testing on Vista, Panther
 
