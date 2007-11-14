@@ -1,6 +1,10 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.8=
+  * Ruby: Another cool Chipmunk/RMagick demo by Robert Sheehan
+  * Ruby: HSV color support as in C++
+
 =0.7.7=
   * All: Gosu now uses doubles as Z positions
   * All: Gosu allows for custom OpenGL integration, (Ruby) example game included
