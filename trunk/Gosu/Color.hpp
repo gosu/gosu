@@ -116,14 +116,14 @@ namespace Gosu
 
     Color interpolate(Color a, Color b);
     Color multiply(Color a, Color b);
-    
+#endif    
     struct HSV
     {
         // h, s: range [0..1]
         // v: range [0..360)
         double h, s, v;
     };
-    
+#ifndef SWIG
     HSV colorToHSV(const Color& c);
     Color hsvToColor(const HSV& hsv);    
 #endif

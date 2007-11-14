@@ -213,6 +213,14 @@ namespace Gosu
                << "," << static_cast<int>($self->blue()) << ")";
         return stream.str();
     }
+    
+    Gosu::HSV toHSV() const {
+        return Gosu::colorToHSV(*$self);
+    }
+    
+    static Gosu::Color fromHSV(Gosu::HSV hsv) {
+        return Gosu::hsvToColor(hsv);
+    }
 }
 
 // Font

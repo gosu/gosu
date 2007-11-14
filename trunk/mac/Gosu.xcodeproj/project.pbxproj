@@ -501,7 +501,6 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4FADC24608B4156D00ABE55E /* Build configuration list for PBXProject "Gosu" */;
-			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 0867D691FE84028FC02AAC07 /* Gosu */;
 			productRefGroup = 034768DDFF38A45A11DB9C8B /* Products */;
@@ -559,7 +558,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ..\n/opt/local/bin/swig -c++ -ruby -autorename -DGOSU_WITH_ASYNC GosuImpl/RubyGosu.swg";
+			shellScript = "# Support for all sorts of SWIG installations\nPATH=/opt/local/bin:/usr/local/bin:/sw/bin:$PATH\ncd ..\nswig -c++ -ruby -autorename -DGOSU_WITH_ASYNC GosuImpl/RubyGosu.swg\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

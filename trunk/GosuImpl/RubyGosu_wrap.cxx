@@ -1933,17 +1933,18 @@ namespace Swig {
 #define SWIGTYPE_p_Gosu__Color swig_types[3]
 #define SWIGTYPE_p_Gosu__Font swig_types[4]
 #define SWIGTYPE_p_Gosu__GLTexInfo swig_types[5]
-#define SWIGTYPE_p_Gosu__Image swig_types[6]
-#define SWIGTYPE_p_Gosu__Sample swig_types[7]
-#define SWIGTYPE_p_Gosu__Song swig_types[8]
-#define SWIGTYPE_p_Gosu__Window swig_types[9]
-#define SWIGTYPE_p_boost__shared_ptrTboost__try_mutex_t swig_types[10]
-#define SWIGTYPE_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t swig_types[11]
-#define SWIGTYPE_p_char swig_types[12]
-#define SWIGTYPE_p_double swig_types[13]
-#define SWIGTYPE_p_std__wstring swig_types[14]
-static swig_type_info *swig_types[16];
-static swig_module_info swig_module = {swig_types, 15, 0, 0, 0, 0};
+#define SWIGTYPE_p_Gosu__HSV swig_types[6]
+#define SWIGTYPE_p_Gosu__Image swig_types[7]
+#define SWIGTYPE_p_Gosu__Sample swig_types[8]
+#define SWIGTYPE_p_Gosu__Song swig_types[9]
+#define SWIGTYPE_p_Gosu__Window swig_types[10]
+#define SWIGTYPE_p_boost__shared_ptrTboost__try_mutex_t swig_types[11]
+#define SWIGTYPE_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t swig_types[12]
+#define SWIGTYPE_p_char swig_types[13]
+#define SWIGTYPE_p_double swig_types[14]
+#define SWIGTYPE_p_std__wstring swig_types[15]
+static swig_type_info *swig_types[17];
+static swig_module_info swig_module = {swig_types, 16, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2214,6 +2215,12 @@ SWIG_From_std_string  (const std::string& s)
   }
 }
 
+SWIGINTERN Gosu::HSV Gosu_Color_toHSV(Gosu::Color const *self){
+        return Gosu::colorToHSV(*self);
+    }
+SWIGINTERN Gosu::Color Gosu_Color_fromHSV(Gosu::HSV hsv){
+        return Gosu::hsvToColor(hsv);
+    }
 
 SWIGINTERNINLINE VALUE
 SWIG_From_unsigned_SS_int  (unsigned int value)
@@ -3608,8 +3615,282 @@ fail:
 }
 
 
+SWIGINTERN VALUE
+_wrap_Color_to_hsv(int argc, VALUE *argv, VALUE self) {
+  Gosu::Color *arg1 = (Gosu::Color *) 0 ;
+  Gosu::HSV result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Color, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "toHSV" "', argument " "1"" of type '" "Gosu::Color const *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::Color * >(argp1);
+  {
+    try {
+      result = Gosu_Color_toHSV((Gosu::Color const *)arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_NewPointerObj((new Gosu::HSV(static_cast< const Gosu::HSV& >(result))), SWIGTYPE_p_Gosu__HSV, SWIG_POINTER_OWN |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Color_from_hsv(int argc, VALUE *argv, VALUE self) {
+  Gosu::HSV arg1 ;
+  Gosu::Color result;
+  void *argp1 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  {
+    res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Gosu__HSV,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Gosu_Color_fromHSV" "', argument " "1"" of type '" "Gosu::HSV""'"); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Gosu_Color_fromHSV" "', argument " "1"" of type '" "Gosu::HSV""'");
+    } else {
+      arg1 = *(reinterpret_cast< Gosu::HSV * >(argp1));
+    }
+  }
+  {
+    try {
+      result = Gosu_Color_fromHSV(arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_NewPointerObj((new Gosu::Color(static_cast< const Gosu::Color& >(result))), SWIGTYPE_p_Gosu__Color, SWIG_POINTER_OWN |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
 SWIGINTERN void
 free_Gosu_Color(Gosu::Color *arg1) {
+    delete arg1;
+}
+
+swig_class cHSV;
+
+SWIGINTERN VALUE
+_wrap_HSV_h_set(int argc, VALUE *argv, VALUE self) {
+  Gosu::HSV *arg1 = (Gosu::HSV *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__HSV, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "h" "', argument " "1"" of type '" "Gosu::HSV *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::HSV * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "h" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  if (arg1) (arg1)->h = arg2;
+  
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_HSV_h_get(int argc, VALUE *argv, VALUE self) {
+  Gosu::HSV *arg1 = (Gosu::HSV *) 0 ;
+  double result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__HSV, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "h" "', argument " "1"" of type '" "Gosu::HSV *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::HSV * >(argp1);
+  result = (double) ((arg1)->h);
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_HSV_s_set(int argc, VALUE *argv, VALUE self) {
+  Gosu::HSV *arg1 = (Gosu::HSV *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__HSV, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "s" "', argument " "1"" of type '" "Gosu::HSV *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::HSV * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "s" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  if (arg1) (arg1)->s = arg2;
+  
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_HSV_s_get(int argc, VALUE *argv, VALUE self) {
+  Gosu::HSV *arg1 = (Gosu::HSV *) 0 ;
+  double result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__HSV, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "s" "', argument " "1"" of type '" "Gosu::HSV *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::HSV * >(argp1);
+  result = (double) ((arg1)->s);
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_HSV_v_set(int argc, VALUE *argv, VALUE self) {
+  Gosu::HSV *arg1 = (Gosu::HSV *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__HSV, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "v" "', argument " "1"" of type '" "Gosu::HSV *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::HSV * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "v" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  if (arg1) (arg1)->v = arg2;
+  
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_HSV_v_get(int argc, VALUE *argv, VALUE self) {
+  Gosu::HSV *arg1 = (Gosu::HSV *) 0 ;
+  double result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__HSV, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "v" "', argument " "1"" of type '" "Gosu::HSV *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::HSV * >(argp1);
+  result = (double) ((arg1)->v);
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
+SWIGINTERN VALUE
+_wrap_HSV_allocate(VALUE self) {
+#else
+  SWIGINTERN VALUE
+  _wrap_HSV_allocate(int argc, VALUE *argv, VALUE self) {
+#endif
+    
+    
+    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_Gosu__HSV);
+#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
+    rb_obj_call_init(vresult, argc, argv);
+#endif
+    return vresult;
+  }
+  
+
+SWIGINTERN VALUE
+_wrap_new_HSV(int argc, VALUE *argv, VALUE self) {
+  Gosu::HSV *result = 0 ;
+  const char *classname SWIGUNUSED = "Gosu::HSV";
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  {
+    try {
+      result = (Gosu::HSV *)new Gosu::HSV();DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return self;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN void
+free_Gosu_HSV(Gosu::HSV *arg1) {
     delete arg1;
 }
 
@@ -6916,6 +7197,7 @@ static swig_type_info _swigt__p_Gosu__Button = {"_p_Gosu__Button", "Gosu::Button
 static swig_type_info _swigt__p_Gosu__Color = {"_p_Gosu__Color", "Gosu::Color *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Font = {"_p_Gosu__Font", "Gosu::Font *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__GLTexInfo = {"_p_Gosu__GLTexInfo", "Gosu::GLTexInfo *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Gosu__HSV = {"_p_Gosu__HSV", "Gosu::HSV *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Image = {"_p_Gosu__Image", "Gosu::Image *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Sample = {"_p_Gosu__Sample", "Gosu::Sample *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Song = {"_p_Gosu__Song", "Gosu::Song *", 0, 0, (void*)0, 0};
@@ -6933,6 +7215,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__Color,
   &_swigt__p_Gosu__Font,
   &_swigt__p_Gosu__GLTexInfo,
+  &_swigt__p_Gosu__HSV,
   &_swigt__p_Gosu__Image,
   &_swigt__p_Gosu__Sample,
   &_swigt__p_Gosu__Song,
@@ -6950,6 +7233,7 @@ static swig_cast_info _swigc__p_Gosu__Button[] = {  {&_swigt__p_Gosu__Button, 0,
 static swig_cast_info _swigc__p_Gosu__Color[] = {  {&_swigt__p_Gosu__Color, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Font[] = {  {&_swigt__p_Gosu__Font, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__GLTexInfo[] = {  {&_swigt__p_Gosu__GLTexInfo, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Gosu__HSV[] = {  {&_swigt__p_Gosu__HSV, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Image[] = {  {&_swigt__p_Gosu__Image, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Sample[] = {  {&_swigt__p_Gosu__Sample, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Song[] = {  {&_swigt__p_Gosu__Song, 0, 0, 0},{0, 0, 0, 0}};
@@ -6967,6 +7251,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__Color,
   _swigc__p_Gosu__Font,
   _swigc__p_Gosu__GLTexInfo,
+  _swigc__p_Gosu__HSV,
   _swigc__p_Gosu__Image,
   _swigc__p_Gosu__Sample,
   _swigc__p_Gosu__Song,
@@ -7263,9 +7548,25 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cColor.klass, "bgr", VALUEFUNC(_wrap_Color_bgr), -1);
   rb_define_method(cColor.klass, "abgr", VALUEFUNC(_wrap_Color_abgr), -1);
   rb_define_method(cColor.klass, "to_s", VALUEFUNC(_wrap_Color_to_s), -1);
+  rb_define_method(cColor.klass, "to_hsv", VALUEFUNC(_wrap_Color_to_hsv), -1);
+  rb_define_singleton_method(cColor.klass, "from_hsv", VALUEFUNC(_wrap_Color_from_hsv), -1);
   cColor.mark = 0;
   cColor.destroy = (void (*)(void *)) free_Gosu_Color;
   cColor.trackObjects = 0;
+  
+  cHSV.klass = rb_define_class_under(mGosu, "HSV", rb_cObject);
+  SWIG_TypeClientData(SWIGTYPE_p_Gosu__HSV, (void *) &cHSV);
+  rb_define_alloc_func(cHSV.klass, _wrap_HSV_allocate);
+  rb_define_method(cHSV.klass, "initialize", VALUEFUNC(_wrap_new_HSV), -1);
+  rb_define_method(cHSV.klass, "h=", VALUEFUNC(_wrap_HSV_h_set), -1);
+  rb_define_method(cHSV.klass, "h", VALUEFUNC(_wrap_HSV_h_get), -1);
+  rb_define_method(cHSV.klass, "s=", VALUEFUNC(_wrap_HSV_s_set), -1);
+  rb_define_method(cHSV.klass, "s", VALUEFUNC(_wrap_HSV_s_get), -1);
+  rb_define_method(cHSV.klass, "v=", VALUEFUNC(_wrap_HSV_v_set), -1);
+  rb_define_method(cHSV.klass, "v", VALUEFUNC(_wrap_HSV_v_get), -1);
+  cHSV.mark = 0;
+  cHSV.destroy = (void (*)(void *)) free_Gosu_HSV;
+  cHSV.trackObjects = 0;
   rb_define_singleton_method(mGosu, "none", VALUEFUNC(none_get), 0);
   rb_define_singleton_method(mGosu, "black", VALUEFUNC(black_get), 0);
   rb_define_singleton_method(mGosu, "gray", VALUEFUNC(gray_get), 0);
