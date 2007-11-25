@@ -3,6 +3,7 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
+#include <boost/none.hpp>
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
