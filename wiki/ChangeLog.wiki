@@ -2,6 +2,7 @@
 #labels Featured
 
 =0.7.8=
+  * Linux: Fixed compilation error (boost::none.hpp was missing, thanks to Ryan Baxter)
   * Ruby: Another cool Chipmunk/RMagick demo by Robert Sheehan
   * Ruby: HSV color support as in C++
 
