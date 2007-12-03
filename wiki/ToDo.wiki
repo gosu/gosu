@@ -1,14 +1,18 @@
 #summary Gosu's ToDo list.
 #labels Featured
 
-=0.7.8 (due late November)=
+= 0.7.8 (due early December) =
   * *FINALLY* get TextInput in!!
-  * Input redesign, Apple remote support would rule.
   * more sophisticated Audio interface for talking NPC's etc.
-  * allow FPS > 60 even with vsync
   * allow loading of non-system fonts (has been on internal ToDo way too long!)
   * bugfixes from issue tracker
   * port at least one Ruby example to C++ (OpenGL?)
+
+= 0.7.9 (release near theUltimateMeeting '07) =
+  * text input system for chat boxes, high-score lists etc.; rationale for NOT hacking one together as the other libraries do: http://blogs.msdn.com/oldnewthing/archive/2007/10/22/5586861.aspx
+  * allow FPS > 60 even with vsync
+  * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
+  * Apple remote support would rule.
 
 = Also ASAP =
   * clean up after playing around with possible optimizations
@@ -21,15 +25,11 @@
   * clean up Gosu's C++ interface
   * testing on Vista, Panther
 
-= Major design goals for 0.7.x (basics. input redesign - 2007) =
-  * text input system for chat boxes, high-score lists etc.; rationale for NOT hacking one together as the other libraries do: http://blogs.msdn.com/oldnewthing/archive/2007/10/22/5586861.aspx
-  * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
+= Major design goals for 0.8.x (graphics - 2008) =
   * make the Ruby wrapper's menu bar Command-Q work on OS X!
   * generate Rdoc
-  * change wstring to string? (for 0.8.0)
   * force feedback would be a good fit for an input redesign. 2007 is packed even without this feature, though.
-
-= Major design goals for 0.8.x (graphics - 2008) =
+  * change wstring to string (with 0.8.0)
   * more alpha modes, yay!
   * find a way to factor rot flips out of Gosu => Image/draw redesign
   * implement clipping and a target() modifier for the new Image
