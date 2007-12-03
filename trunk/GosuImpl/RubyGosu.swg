@@ -343,10 +343,16 @@ namespace Gosu
 
 // Button ID constants
 %include "../Gosu/ButtonsMac.hpp"
-// Backwards compatibility: import the constants into Gosu::Button.
 %init %{
+    // Backwards compatibility: import the constants into Gosu::Button.
     rb_eval_string("module Gosu::Button; Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }; end");
+
     GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
+    
+    #ifdef __APPLE__
+    void Gosu_MacStartup();
+    Gosu_MacStartup();
+    #endif
 %}
 
 // Window
