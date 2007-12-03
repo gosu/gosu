@@ -2,6 +2,8 @@
 #labels Featured
 
 =0.7.8=
+  * Mac: Window now pops up in the front when run from Ruby
+  * Linux: Removed optimization that prevented 64bit compilation
   * Linux: Fixed compilation error (boost::none.hpp was missing, thanks to Ryan Baxter)
   * Ruby: Another cool Chipmunk/RMagick demo by Robert Sheehan
   * Ruby: HSV color support as in C++
