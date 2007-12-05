@@ -82,7 +82,7 @@ namespace Gosu
         
         bool operator<(const DrawOp& other) const
         {
-            return z < other.z;
+            return z < other.z; // optimization starts TODAY
         }
     };
 
