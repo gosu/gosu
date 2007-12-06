@@ -3,9 +3,10 @@ require 'gosu'
 class GameWindow < Gosu::Window
   def initialize
     super(640, 480, false, 1)
-        
-    @sys_text = Gosu::Image.from_text(self, "Hallo Wält!", "Zapfino", 100, 0, 200, :left)
-    @loc_text = Gosu::Image.from_text(self, "Hallo Wält!", "./Vera.ttf", 100, 0, 200, :left)
+      
+    self.caption = "地下鉄で行きます"
+    @sys_text = Gosu::Image.from_text(self, "地下鉄で行きます", "Zapfino", 100, 0, 200, :left)
+    @loc_text = Gosu::Image.from_text(self, "地下鉄で行きます", "./Vera.ttf", 100, 0, 200, :left)
   end
 
   def draw

@@ -165,8 +165,6 @@ namespace
             UniCharCount runLength = utf16.size();
             checkErr( ATSUCreateTextLayoutWithTextPtr(&utf16[0], kATSUFromTextBeginning,
                             kATSUToTextEnd, utf16.size(), 1, &runLength, &style, &layout) );
-            
-            checkErr( ATSUSetTransientFontMatching(layout, TRUE) ); // TODO: WHY DOESN'T IT WORK!??
         }
         
         ~ATSULayoutAndStyle()
@@ -188,6 +186,7 @@ namespace
             RGBColor color = { 0xffff, 0xffff, 0xffff };
             setAttribute<RGBColor>(kATSUColorTag, color);
             setLayoutControl<CGContextRef>(kATSUCGContextTag, context);
+            checkErr( ATSUSetTransientFontMatching(layout, TRUE) ); // TODO: WHY DOESN'T IT WORK!??
             checkErr( ATSUDrawText(layout, kATSUFromTextBeginning, kATSUToTextEnd, x, y) );
         }
     };

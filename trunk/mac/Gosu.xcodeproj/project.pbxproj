@@ -27,7 +27,6 @@
 		D410E9EA0A8019CD005C7067 /* ImageData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9CE0A8019CD005C7067 /* ImageData.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9EB0A8019CD005C7067 /* Input.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9CF0A8019CD005C7067 /* Input.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9EC0A8019CD005C7067 /* IO.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D00A8019CD005C7067 /* IO.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D410E9ED0A8019CD005C7067 /* MacUtility.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D10A8019CD005C7067 /* MacUtility.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9EE0A8019CD005C7067 /* Math.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D20A8019CD005C7067 /* Math.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9EF0A8019CD005C7067 /* Platform.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D30A8019CD005C7067 /* Platform.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9F00A8019CD005C7067 /* RotFlip.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D40A8019CD005C7067 /* RotFlip.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -142,7 +141,6 @@
 		D410E9CE0A8019CD005C7067 /* ImageData.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = ImageData.hpp; path = ../Gosu/ImageData.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9CF0A8019CD005C7067 /* Input.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Input.hpp; path = ../Gosu/Input.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9D00A8019CD005C7067 /* IO.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = IO.hpp; path = ../Gosu/IO.hpp; sourceTree = SOURCE_ROOT; };
-		D410E9D10A8019CD005C7067 /* MacUtility.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = MacUtility.hpp; path = ../Gosu/MacUtility.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9D20A8019CD005C7067 /* Math.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Math.hpp; path = ../Gosu/Math.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9D30A8019CD005C7067 /* Platform.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Platform.hpp; path = ../Gosu/Platform.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9D40A8019CD005C7067 /* RotFlip.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = RotFlip.hpp; path = ../Gosu/RotFlip.hpp; sourceTree = SOURCE_ROOT; };
@@ -200,6 +198,7 @@
 		D4A7E97E0CD3907D00621B24 /* TexChunk.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TexChunk.hpp; sourceTree = "<group>"; };
 		D4A7E9A90CD3927D00621B24 /* Common.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Common.hpp; sourceTree = "<group>"; };
 		D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapUtils.cpp; sourceTree = "<group>"; };
+		D4AB62F50D08BA9900D71382 /* MacUtility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MacUtility.hpp; path = ../GosuImpl/MacUtility.hpp; sourceTree = SOURCE_ROOT; };
 		D4BC5D6A0CC29D0F002D4236 /* Async.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Async.hpp; path = ../Gosu/Async.hpp; sourceTree = SOURCE_ROOT; };
 		D4C09C830D04AD2800DA4D4F /* RubyGosu_MacStartup.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RubyGosu_MacStartup.cxx; path = ../GosuImpl/RubyGosu_MacStartup.cxx; sourceTree = SOURCE_ROOT; };
 		D4CA89500BC68B5D00A431AC /* gosu.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = gosu.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -312,7 +311,6 @@
 				D410E9CE0A8019CD005C7067 /* ImageData.hpp */,
 				D410E9CF0A8019CD005C7067 /* Input.hpp */,
 				D410E9D00A8019CD005C7067 /* IO.hpp */,
-				D410E9D10A8019CD005C7067 /* MacUtility.hpp */,
 				D410E9D20A8019CD005C7067 /* Math.hpp */,
 				D410E9D30A8019CD005C7067 /* Platform.hpp */,
 				D410E9D40A8019CD005C7067 /* RotFlip.hpp */,
@@ -337,6 +335,7 @@
 				D410EA020A8019FA005C7067 /* FileUnix.cpp */,
 				D410EA180A8019FA005C7067 /* InputMac.mm */,
 				D410EA1B0A8019FA005C7067 /* IO.cpp */,
+				D4AB62F50D08BA9900D71382 /* MacUtility.hpp */,
 				D410EA1C0A8019FA005C7067 /* Math.cpp */,
 				D410EA2E0A8019FA005C7067 /* TimingUnix.cpp */,
 				D410EA300A8019FA005C7067 /* Utility.cpp */,
@@ -423,7 +422,6 @@
 				D410E9EA0A8019CD005C7067 /* ImageData.hpp in Headers */,
 				D410E9EB0A8019CD005C7067 /* Input.hpp in Headers */,
 				D410E9EC0A8019CD005C7067 /* IO.hpp in Headers */,
-				D410E9ED0A8019CD005C7067 /* MacUtility.hpp in Headers */,
 				D410E9EE0A8019CD005C7067 /* Math.hpp in Headers */,
 				D410E9EF0A8019CD005C7067 /* Platform.hpp in Headers */,
 				D410E9F00A8019CD005C7067 /* RotFlip.hpp in Headers */,
