@@ -23,7 +23,7 @@
 #include <Gosu/Window.hpp>
 
 #ifdef GOSU_IS_MAC
-#include <Gosu/MacUtility.hpp>
+#include <GosuImpl/MacUtility.hpp>
 #endif
 #ifdef GOSU_IS_WIN
 #include <Gosu/WinUtility.hpp>

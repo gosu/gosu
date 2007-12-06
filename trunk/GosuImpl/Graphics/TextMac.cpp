@@ -1,10 +1,12 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
+#include <Gosu/IO.hpp>
 #include <boost/utility.hpp>
 #include <boost/cstdint.hpp>
 #include <cmath>
 #include <stdexcept>
+#include <map>
 #include <vector>
 #include <ApplicationServices/ApplicationServices.h>
 
@@ -24,9 +26,12 @@ namespace Gosu
 void throwError(OSStatus status, unsigned line)
 {
     std::ostringstream str;
-    str << "Error on line " << line << " (" << status << ")";
+    str << "Error on line " << line << " (Code " << status << "): "
+        << GetMacOSStatusErrorString(status)
+        << " (" << GetMacOSStatusCommentString(status) << ")";
     throw std::runtime_error(str.str());
 }
+
 #define checkErr(status) if (!(status)) {} else throwError(status, __LINE__)
 
 namespace
@@ -59,6 +64,63 @@ namespace
         }
     };
     
+    struct CachedFontInfo
+    {
+        ATSUFontID fontId;
+        double heightAt1Pt;
+        double descentAt1Pt;
+    };
+    CachedFontInfo& getFont(const std::wstring& fontName)
+    {
+        static std::map<std::wstring, CachedFontInfo> fonts;
+        
+        if (fonts.count(fontName))
+            return fonts[fontName];
+        
+        // Get reference to font, loaded from the system or a file.
+        ATSFontRef atsRef;
+        if (fontName.find(L"/") == std::wstring::npos)
+        {
+            // System font
+            CFStringRef cfName = CFStringCreateWithCString(NULL, Gosu::narrow(fontName).c_str(), kCFStringEncodingASCII);
+            atsRef = ATSFontFindFromName(cfName, kATSOptionFlagsDefault);
+            if (!atsRef)
+                throw std::runtime_error("Cannot find font " + Gosu::narrow(fontName));
+            CFRelease(cfName);
+        }
+        else
+        {
+            // Filename to font
+            Gosu::Buffer buf;
+            Gosu::loadFile(buf, fontName);
+            
+            ATSFontContainerRef container; 
+            checkErr( ATSFontActivateFromMemory(buf.data(), buf.size(),
+                          kATSFontContextLocal, kATSFontFormatUnspecified, 
+                          NULL, kATSOptionFlagsDefault, &container) );
+            
+            ATSFontRef fontRefs[1024]; 
+            ItemCount  fontCount; 
+            checkErr( ATSFontFindFromContainer(container, kATSOptionFlagsDefault, 
+                          1024, fontRefs, &fontCount) );
+            if (fontCount == 0)
+                throw std::runtime_error("No font found in " + Gosu::narrow(fontName));
+
+            atsRef = fontRefs[0];
+        }
+        
+        // Calculate metrics (for space allocations) and create CachedFontInfo entry.
+        CachedFontInfo newFont;
+        newFont.fontId = FMGetFontFromATSFontRef(atsRef);
+
+        ATSFontMetrics metrics;
+        checkErr(ATSFontGetHorizontalMetrics(newFont.fontId, kATSOptionFlagsDefault, &metrics));
+        newFont.heightAt1Pt = metrics.ascent - metrics.descent;
+        newFont.descentAt1Pt = -metrics.descent;
+        fonts[fontName] = newFont;
+        return fonts[fontName];
+    }
+    
     class ATSULayoutAndStyle
     {
         ATSUStyle style;
@@ -82,22 +144,17 @@ namespace
         }
         
     public:
-        ATSULayoutAndStyle(const std::wstring& text, const std::wstring& fontName,
-                           double fontHeightPt, unsigned fontFlags)
+        ATSULayoutAndStyle(const std::wstring& text, const std::wstring& fontName, unsigned fontHeightPx, unsigned fontFlags)
         {
             utf16 = Gosu::wstringToUniChars(text);
         
             checkErr( ATSUCreateStyle(&style) );
             
-            ATSUFontID font;
-            std::string narrowFontName = Gosu::narrow(fontName);
-            checkErr( ATSUFindFontFromName(narrowFontName.data(), narrowFontName.length(),
-                                               kFontFullName, kFontNoPlatformCode, kFontNoScriptCode,
-                                               kFontNoLanguageCode, &font) );
-
-            setAttribute<ATSUFontID>(kATSUFontTag, font);
+            CachedFontInfo& font = getFont(fontName);
             
-            setAttribute<Fixed>(kATSUSizeTag, X2Fix(fontHeightPt));
+            setAttribute<ATSUFontID>(kATSUFontTag, font.fontId);
+            
+            setAttribute<Fixed>(kATSUSizeTag, X2Fix(fontHeightPx / font.heightAt1Pt));
             if (fontFlags & Gosu::ffBold)
                 setAttribute<Boolean>(kATSUQDBoldfaceTag, TRUE);
             if (fontFlags & Gosu::ffItalic)
@@ -134,21 +191,6 @@ namespace
             checkErr( ATSUDrawText(layout, kATSUFromTextBeginning, kATSUToTextEnd, x, y) );
         }
     };
-    
-    void getMetricsAt1Pt(const std::wstring& fontName, double& height, double& descent)
-    {
-        // IMPR: Caching
-        
-        CFStringRef cfName = CFStringCreateWithCString(NULL, Gosu::narrow(fontName).c_str(), kCFStringEncodingASCII);
-        ATSFontRef font;
-        font = ATSFontFindFromName(cfName, kATSOptionFlagsDefault);
-        CFRelease(cfName);
-        
-        ATSFontMetrics metrics;
-        checkErr(ATSFontGetHorizontalMetrics(font, kATSOptionFlagsDefault, &metrics));
-        height = metrics.ascent - metrics.descent;
-        descent = -metrics.descent;
-    }
 }
 
 unsigned Gosu::textWidth(const std::wstring& text,
@@ -158,10 +200,7 @@ unsigned Gosu::textWidth(const std::wstring& text,
     if (text == L" ")
         return fontHeight / 3;
     
-    double heightAt1Pt, dummy;
-    getMetricsAt1Pt(fontName, heightAt1Pt, dummy);
-    
-    ATSULayoutAndStyle atlas(text, fontName, fontHeight / heightAt1Pt, fontFlags);
+    ATSULayoutAndStyle atlas(text, fontName, fontHeight, fontFlags);
     Rect rect = atlas.textExtents();
     return rect.right + 1 - rect.left;
 }
@@ -170,16 +209,15 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
     Color c, const std::wstring& fontName, unsigned fontHeight,
     unsigned fontFlags)
 {
-    double heightAt1Pt, descentAt1Pt;
-    getMetricsAt1Pt(fontName, heightAt1Pt, descentAt1Pt);
+    CachedFontInfo& font = getFont(fontName);
     
-    ATSULayoutAndStyle atlas(text, fontName, fontHeight / heightAt1Pt, fontFlags);
+    ATSULayoutAndStyle atlas(text, fontName, fontHeight, fontFlags);
     Rect rect = atlas.textExtents();
     unsigned width = rect.right + 1 - rect.left;
     std::vector<boost::uint32_t> buf(width * fontHeight);
     {
         MacBitmap helper(&buf[0], width, fontHeight);
-        atlas.drawToContext(X2Fix(-rect.left), X2Fix(fontHeight / heightAt1Pt * descentAt1Pt),
+        atlas.drawToContext(X2Fix(-rect.left), X2Fix(fontHeight / font.heightAt1Pt * font.descentAt1Pt),
                             helper.context());
     }
 

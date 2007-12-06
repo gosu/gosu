@@ -2,7 +2,7 @@
 #import <Gosu/Audio.hpp>
 #import <Gosu/Graphics.hpp>
 #import <Gosu/Input.hpp>
-#import <Gosu/MacUtility.hpp>
+#import <GosuImpl/MacUtility.hpp>
 #import <Gosu/Timing.hpp>
 #import <AppKit/AppKit.h>
 #import <ApplicationServices/ApplicationServices.h>
