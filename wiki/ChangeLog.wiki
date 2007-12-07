@@ -2,7 +2,7 @@
 #labels Featured
 
 =0.7.8=
-  * Mac: Window now pops up in the front when run from Ruby
+  * Mac: Window now pops up in the front when run from the Terminal
   * Mac: Font substitution works (こんにちは日本！)
   * Mac: Custom font loading—just use a filename as a font name (must contain '/')
   * Linux: Removed optimization that prevented 64bit compilation
