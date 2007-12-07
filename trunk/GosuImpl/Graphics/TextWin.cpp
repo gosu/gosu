@@ -1,3 +1,6 @@
+#define _WIN32_WINNT 0x0500 
+#include <windows.h>
+
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
@@ -7,6 +10,8 @@
 #include <cwchar>
 #include <algorithm>
 #include <stdexcept>
+#include <map>
+#include <set>
 
 std::wstring Gosu::defaultFontName()
 {
@@ -18,6 +23,8 @@ std::wstring Gosu::defaultFontName()
 
 namespace Gosu
 {
+    std::wstring getNameFromTTFFile(const std::wstring& filename);
+
     namespace
     {
         class WinBitmap : boost::noncopyable
@@ -78,9 +85,22 @@ namespace Gosu
                 return pixels;
             }*/
 
-            void selectFont(const std::wstring& fontName, unsigned fontHeight,
+            void selectFont(std::wstring fontName, unsigned fontHeight,
                 unsigned fontFlags) const
             {
+                static std::map<std::wstring, std::wstring> customFonts;
+
+                if (fontName.find(L"/") != std::wstring::npos)
+                {
+                    if (customFonts.count(fontName) == 0)
+                    {
+                        AddFontResourceEx(fontName.c_str(), FR_PRIVATE, 0);
+                        fontName = customFonts[fontName] = getNameFromTTFFile(fontName);
+                    }
+                    else
+                        fontName = customFonts[fontName];
+                }
+
                 // IMPR: Maybe remember the last font we had and don't
                 // recreate it every time?
 
@@ -136,7 +156,7 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
     Win::check(::SetBkMode(helper.context(), TRANSPARENT),
         "setting a bitmap's background mode to TRANSPARENT");
 
-    ::TextOut(helper.context(), 0, 0, text.c_str(), text.length());
+    ::ExtTextOut(helper.context(), 0, 0, 0, 0, text.c_str(), text.length(), 0);
 
     for (unsigned relY = 0; relY < fontHeight; ++relY)
         for (unsigned relX = 0; relX < width; ++relX)

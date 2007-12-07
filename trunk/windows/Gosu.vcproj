@@ -422,6 +422,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\GosuImpl\TextTTFWin.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\GosuImpl\Graphics\Texture.cpp"
 					>
 				</File>

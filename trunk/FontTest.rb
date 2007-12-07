@@ -4,9 +4,9 @@ class GameWindow < Gosu::Window
   def initialize
     super(640, 480, false, 1)
       
-    self.caption = "地下鉄で行きます"
-    @sys_text = Gosu::Image.from_text(self, "地下鉄で行きます", "Zapfino", 100, 0, 200, :left)
-    @loc_text = Gosu::Image.from_text(self, "地下鉄で行きます", "./Vera.ttf", 100, 0, 200, :left)
+    self.caption = "Huhu, 地下鉄で行きます"
+    @sys_text = Gosu::Image.from_text(self, "Huhu, 地下鉄で行きます", "Comic Sans MS", 100, 0, 200, :left)
+    @loc_text = Gosu::Image.from_text(self, "Huhu, 地下鉄で行きます", "./Vera.ttf", 100, 0, 200, :left)
   end
 
   def draw
