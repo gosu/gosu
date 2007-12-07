@@ -22,10 +22,6 @@
 #include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>
 
-#ifdef DEBUGGING_GAMEPAD_OF_HORROR
-#include <iostream>
-#endif
-
 // USB Gamepad code, likely to be moved somewhere else later.
 // This is Frankencode until the Input redesign happens.
 namespace {
@@ -100,9 +96,6 @@ namespace {
                 "get a min value");
             max = getDictSInt32(dict, CFSTR(kIOHIDElementMaxKey),
                 "get a max value");
-            #ifdef DEBUGGING_GAMEPAD_OF_HORROR
-            std::cout << "Axis from " << min << " to " << max << std::endl;
-            #endif
         }
     };
 
@@ -126,9 +119,6 @@ namespace {
                 kind = eightWay;
             else
                 kind = unknown;
-            #ifdef DEBUGGING_GAMEPAD_OF_HORROR
-            std::cout << "Hat from " << min << " to " << max << std::endl;
-            #endif
         }
     };
 
@@ -347,9 +337,6 @@ namespace {
                     if (event.value < (3 * a.min + 1 * a.max) / 4.0)
                     {
                         if (a.wasNeutralOnce)
-                        #ifdef DEBUGGING_GAMEPAD_OF_HORROR
-                            std::cout << "Axis " << ax << " reports " << event.value << std::endl,
-                        #endif
                             result[(a.role == Axis::mainX ? gpLeft : gpUp) - gpRangeBegin] = true;
                     }
                     else if (event.value > (1 * a.min + 3 * a.max) / 4.0)
@@ -374,11 +361,6 @@ namespace {
                     // Treat all hats as being 8-way.
                     if (devices[dev].hats[hat].kind == Hat::fourWay)
                         event.value *= 2;
-
-                    #ifdef DEBUGGING_GAMEPAD_OF_HORROR
-                    if (event.value >= 0 && event.value <= 7)
-                        std::cout << "Hat " << hat << " reports " << event.value << std::endl;
-                    #endif
 
                     switch (event.value)
                     {
@@ -431,6 +413,12 @@ namespace {
     };
 }
 
+// Needed for char translation.
+namespace Gosu
+{
+	std::wstring macRomanToWstring(const std::string& s);
+}
+
 namespace {
     // This is just a wild assumption. For Apple ADB keyboards, I read something
     // about 127 being the max, but checking more than that will not hurt, so...
@@ -469,7 +457,7 @@ namespace {
 			// TODO: That locale stuff should be explicit. Locales always cause trouble.
 			
 			std::string str(1, char(value));
-			wchar_t ch = Gosu::widen(str).at(0);
+			wchar_t ch = Gosu::macRomanToWstring(str).at(0);
 			
             idChars[code] = ch;
             charIds[ch] = code;

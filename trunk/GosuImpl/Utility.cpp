@@ -17,6 +17,7 @@ namespace
     extern const char UCS_2_INTERNAL[] = "UCS-2-INTERNAL";
     extern const char UCS_4_INTERNAL[] = "UCS-4-INTERNAL";
     extern const char CHAR[] = "char";
+    extern const char MACROMAN[] = "MacRoman";
 
     template<typename Out, const char* to, const char* from, typename In>
     Out iconvert(const In& in)
@@ -74,6 +75,10 @@ string Gosu::wstringToUTF8(const std::wstring& ws)
 }
 // This is only necessary on OS X (for text output)
 namespace Gosu {
+wstring macRomanToWstring(const string& s)
+{
+    return iconvert<wstring, UCS_4_INTERNAL, MACROMAN>(s);
+}
 vector<unsigned short> wstringToUniChars(const wstring& ws)
 {
     return iconvert<vector<unsigned short>, UCS_2_INTERNAL, UCS_4_INTERNAL>(ws);
