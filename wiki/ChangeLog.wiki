@@ -3,7 +3,7 @@
 
 =0.7.8=
   * Mac: Window now pops up in the front when run from the Terminal
-  * Mac: Font substitution works (こんにちは日本！)
+  * Mac: Font substitution works, i.e. chars outside of the selected font can be used (こんにちは日本！)
   * Mac: Custom font loading—just use a filename as a font name (must contain '/')
   * Linux: Removed optimization that prevented 64bit compilation
   * Linux: Fixed compilation error (boost::none.hpp was missing, thanks to Ryan Baxter)
