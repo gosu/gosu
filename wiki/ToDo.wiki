@@ -2,9 +2,10 @@
 #labels Featured
 
 = 0.7.8 (due early December) =
-  * *FINALLY* get TextInput in!!
+  * documentation…
+  * *FINALLY* get TextInput in!! Even if it's just a mockup.
   * more sophisticated Audio interface for talking NPC's etc.
-  * allow loading of non-system fonts (has been on internal ToDo way too long!)
+  * allow loading of non-system fonts on Windows, Linux
   * bugfixes from issue tracker
   * port at least one Ruby example to C++ (OpenGL?)
 
