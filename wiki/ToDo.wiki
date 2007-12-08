@@ -5,7 +5,7 @@
   * documentation…
   * *FINALLY* get TextInput in!! Even if it's just a mockup.
   * more sophisticated Audio interface for talking NPC's etc.
-  * allow loading of non-system fonts on Windows, Linux
+  * allow loading of non-system fonts on Linux
   * bugfixes from issue tracker
   * port at least one Ruby example to C++ (OpenGL?)
 
