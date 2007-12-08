@@ -176,6 +176,7 @@ namespace
         Rect textExtents() const
         {
             Rect rect;
+            checkErr( ATSUSetTransientFontMatching(layout, TRUE) );
             checkErr( ATSUMeasureTextImage(layout, kATSUFromTextBeginning,
                                            kATSUToTextEnd, X2Fix(0), X2Fix(0), &rect) );
             return rect;
@@ -183,10 +184,13 @@ namespace
         
         void drawToContext(Fixed x, Fixed y, CGContextRef context)
         {
-            RGBColor color = { 0xffff, 0xffff, 0xffff };
+            // Always draw in black - recoloring to white happens in drawText itself.
+            // Reason: Text drawn using fallback fonts seems to always be black anyway :(
+            
+            RGBColor color = { 0, 0, 0 };
             setAttribute<RGBColor>(kATSUColorTag, color);
             setLayoutControl<CGContextRef>(kATSUCGContextTag, context);
-            checkErr( ATSUSetTransientFontMatching(layout, TRUE) ); // TODO: WHY DOESN'T IT WORK!??
+            checkErr( ATSUSetTransientFontMatching(layout, TRUE) );
             checkErr( ATSUDrawText(layout, kATSUFromTextBeginning, kATSUToTextEnd, x, y) );
         }
     };
@@ -224,6 +228,9 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
     wholeText.resize(width, fontHeight);
     for (unsigned relY = 0; relY < fontHeight; ++relY)
         for (unsigned relX = 0; relX < width; ++relX)
-            wholeText.setPixel(relX, relY, buf[relY * width + relX]);
+        {
+            Color::Channel alpha = Color(buf[relY * width + relX]).alpha();
+            wholeText.setPixel(relX, relY, Color(alpha, 0xff, 0xff, 0xff));
+        }
     bitmap.insert(wholeText, x, y);
 }
