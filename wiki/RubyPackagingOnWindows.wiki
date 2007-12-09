@@ -7,3 +7,5 @@ To compile your Ruby game into an executable on Windows, you need to run it thro
 [http://www.erikveen.dds.nl/rubyscript2exe/index.html RubyScript2Exe]
 
 You can then ship the resulting .exe file together with your game's resources and, if you use sound, fmod.dll. (If you are using Gosu as a Ruby Gem, you can find fmod.dll in your gems directory, usually C:\ruby\lib\ruby\gems\1.8\gems\gosu-x.x.x\lib\fmod.dll).
+
+If you want to ship your game to be in a self-contained executable (similar to the .app bundle on Mac OS X), Erik Veenstra also has a guide to packaging a whole directory into a single .rb file. With a bit of experimentation, you can fit the whole game, including all resources, .dll's and even gosu.so into a single .exe file. Note that for licensing reasons, you should point out you are using FMOD then, as it cannot be seen from your game's files anymore.
