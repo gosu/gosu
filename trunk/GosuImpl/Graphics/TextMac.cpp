@@ -229,7 +229,11 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
     for (unsigned relY = 0; relY < fontHeight; ++relY)
         for (unsigned relX = 0; relX < width; ++relX)
         {
+#ifdef __BIG_ENDIAN__
+            Color::Channel alpha = buf[relY * width + relX];
+#else
             Color::Channel alpha = Color(buf[relY * width + relX]).alpha();
+#endif
             wholeText.setPixel(relX, relY, Color(alpha, 0xff, 0xff, 0xff));
         }
     bitmap.insert(wholeText, x, y);
