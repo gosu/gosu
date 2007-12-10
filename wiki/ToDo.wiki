@@ -5,11 +5,11 @@
   * woops. FULLSCREEN ON WINDOWS GODDAMMIT
   * documentation…
   * *FINALLY* get TextInput in!! Even if it's just a mockup.
-  * more sophisticated Audio interface for talking NPC's etc.
-  * bugfixes from issue tracker
-  * port at least one Ruby example to C++ (OpenGL?)
 
 = 0.7.9 (release near theUltimateMeeting '07) =
+  * port at least one Ruby example to C++ (OpenGL?)
+  * more sophisticated Audio interface for talking NPC's etc.
+  * bugfixes from issue tracker
   * text input system for chat boxes, high-score lists etc.; rationale for NOT hacking one together as the other libraries do: http://blogs.msdn.com/oldnewthing/archive/2007/10/22/5586861.aspx
   * allow FPS > 60 even with vsync
   * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
