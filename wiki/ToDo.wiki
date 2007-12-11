@@ -2,7 +2,6 @@
 #labels Featured
 
 = 0.7.8 (due early December) =
-  * woops. FULLSCREEN ON WINDOWS GODDAMMIT
   * documentation…
   * *FINALLY* get TextInput in!! Even if it's just a mockup.
 
