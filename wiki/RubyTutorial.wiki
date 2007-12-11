@@ -4,7 +4,11 @@
 
 The code for the complete game, together with the required media files, can be found in the Gosu distribution of your choice ('examples/Tutorial.rb').
 
-If you have not installed Gosu via RubyGems, you have to copy gosu.so (or gosu.bundle, respectively) into the examples directory, then run Tutorial.rb; if you don't have an editor that supports direct execution (TextMate, SciTE…), `cd` into the directory and run it via `ruby Tutorial.rb`.
+If you have installed Gosu via RubyGems, the examples are in your 'gems' folder together with the rest of the library. For example, on OS X 10.5, the examples can be found in `/Library/Ruby/Gems/1.8/gems/gosu-<version>/examples`.
+
+If you have not installed Gosu via RubyGems, you have to copy gosu.so (or gosu.bundle, respectively) into the examples directory, then run Tutorial.rb.
+
+If you don't have an editor that supports direct execution (TextMate, SciTE…), `cd` into the directory and run it via `ruby Tutorial.rb`.
 
 = 1. Overriding Window's callbacks =
 
