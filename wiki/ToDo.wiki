@@ -8,7 +8,7 @@
   * allow FPS > 60 even with vsync
   * Apple remote support would rule.
 
-= Also ASAP =
+= ASAP =
   * clean up after playing around with possible optimizations
   * get rid of OpenGL tearing on Windows (Intel GMA 950)
   * don't round updateInterval on Windows
@@ -22,20 +22,17 @@
   * clean up Gosu's C++ interface
   * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
 
-= Major design goals for 0.8.x (graphics - 2008) =
-  * make the Ruby wrapper's menu bar Command-Q work on OS X!
+= Major design goals for 0.8.x (graphics, polish) =
+  * make the Ruby wrapper's menu bar more complete on OS X
   * generate Rdoc
-  * force feedback would be a good fit for an input redesign. 2007 is packed even without this feature, though.
   * change wstring to string (with 0.8.0)
   * more alpha modes, yay!
   * find a way to factor rot flips out of Gosu => Image/draw redesign
   * implement clipping and a target() modifier for the new Image
-  * multi-threaded blit queue?
-  * make font substitution work on OS X, Windows
   * more beautiful text! (kerning etc.?)
   * speed up LargeImageData!
 
-= Major design goals for 0.9.x (IO, Strings) =
+= Major design goals for 0.9.x (IO) =
   * delegate Linux support, esp. wrt. gamepads (*help!!*)
   * the window argument in Ruby is annoying, because only one window can be used anyway. Maybe it should be Window.run, and all open Windows should work.
   * simplify Gosu's IO philosophy (C++)
@@ -44,4 +41,5 @@
 = Major design goals for 1.x (perfection) =
   * Windows: Input will regularly query devices which are not currently attached, thereby causing the game to halt every few seconds - think about this
   * FSAA/mipmap experiments
+  * force feedback would be cool
  
