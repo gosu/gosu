@@ -1,12 +1,11 @@
-#summary Gosu's ToDo list.
+#summary Gosu's mixup between a roadmap and a short-term to-do list.
 #labels Featured
 
 = 0.7.9 (release near theUltimateMeeting '07) =
   * port at least one Ruby example to C++ (OpenGL?)
-  * more sophisticated Audio interface for talking NPC's etc.
+  * more sophisticated Audio interface (for talking NPC's etc.)
   * bugfixes from issue tracker
   * allow FPS > 60 even with vsync
-  * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
   * Apple remote support would rule.
 
 = Also ASAP =
@@ -17,8 +16,11 @@
   * implement frameskip
   * more C++ examples
   * assure Gosu::File also creates directories as necessary
+  * testing on Vista
+
+= 0.8.0 (early 2008)=
   * clean up Gosu's C++ interface
-  * testing on Vista, Panther
+  * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
 
 = Major design goals for 0.8.x (graphics - 2008) =
   * make the Ruby wrapper's menu bar Command-Q work on OS X!
