@@ -14,6 +14,80 @@ namespace Gosu
 {
     namespace
     {
+        // Mode guessing experimentally adapted from GLFW library.
+        // http://glfw.sourceforge.net/
+
+        int findClosestVideoMode(int *w, int *h, int *bpp, int *refresh)
+        {
+            int     mode, bestmode, match, bestmatch, rr, bestrr, success;
+            DEVMODE dm;
+
+            // Find best match
+            bestmatch = 0x7fffffff;
+            bestrr    = 0x7fffffff;
+            mode = bestmode = 0;
+            do
+            {
+                dm.dmSize = sizeof(DEVMODE);
+                success = EnumDisplaySettings(NULL, mode, &dm);
+                if( success )
+                {
+                    match = dm.dmBitsPerPel - *bpp;
+                    if( match < 0 ) match = -match;
+                    match = (match << 25) |
+                            ((dm.dmPelsWidth - *w) * (dm.dmPelsWidth - *w) +
+                             (dm.dmPelsHeight - *h) * (dm.dmPelsHeight - *h));
+                    if( match < bestmatch )
+                    {
+                        bestmatch = match;
+                        bestmode  = mode;
+                        bestrr = (dm.dmDisplayFrequency - *refresh) *
+                                 (dm.dmDisplayFrequency - *refresh);
+                    }
+                    else if( match == bestmatch && *refresh > 0 )
+                    {
+                        rr = (dm.dmDisplayFrequency - *refresh) *
+                             (dm.dmDisplayFrequency - *refresh);
+                        if( rr < bestrr )
+                        {
+                            bestmatch = match;
+                            bestmode  = mode;
+                            bestrr    = rr;
+                        }
+                    }
+                }
+                ++mode;
+            }
+            while (success);
+
+            // Get the parameters for the best matching display mode
+            dm.dmSize = sizeof(DEVMODE);
+            EnumDisplaySettings( NULL, bestmode, &dm );
+
+            *w = dm.dmPelsWidth;
+            *h = dm.dmPelsHeight;
+            *bpp = dm.dmBitsPerPel;
+            *refresh = dm.dmDisplayFrequency;
+
+            return bestmode;
+        }
+
+        void setVideoMode(int mode)
+        {
+            // Get the parameters for the best matching display mode
+            DEVMODE dm;
+            dm.dmSize = sizeof(DEVMODE);
+            EnumDisplaySettings(NULL, mode, &dm);
+
+            // Set which fields we want to specify
+            dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT | DM_BITSPERPEL;
+
+            // Change display setting
+            dm.dmSize = sizeof(DEVMODE);
+            if (ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
+                throw std::runtime_error("Could not set fullscreen mode");
+        }
+
         void setupVSync()
         {
             char* extensions = (char*)glGetString(GL_EXTENSIONS);
@@ -144,14 +218,20 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     unsigned windowW = rc.right - rc.left;
     unsigned windowH = rc.bottom - rc.top;
 
-    // Center the window.
-    HWND desktopWindow = GetDesktopWindow();
-    RECT desktopRect;
-    GetClientRect(desktopWindow, &desktopRect);
-    int desktopW = desktopRect.right - desktopRect.left;
-    int desktopH = desktopRect.bottom - desktopRect.top;
-    unsigned windowX = (desktopW - windowW) / 2;
-    unsigned windowY = (desktopH - windowH) / 2;
+    int windowX = 0;
+    int windowY = 0;
+
+    if (!fullscreen)
+    {
+        // Center the window.
+        HWND desktopWindow = GetDesktopWindow();
+        RECT desktopRect;
+        GetClientRect(desktopWindow, &desktopRect);
+        int desktopW = desktopRect.right - desktopRect.left;
+        int desktopH = desktopRect.bottom - desktopRect.top;
+        windowX = (desktopW - windowW) / 2;
+        windowY = (desktopH - windowH) / 2;
+    }
 
     MoveWindow(handle(), windowX, windowY, windowW, windowH, false);
 
@@ -196,6 +276,9 @@ namespace GosusDarkSide
 
 void Gosu::Window::show()
 {
+    int w = graphics().width(), h = graphics().height(), bpp = 32, rr = 60;
+    if (pimpl->graphics->fullscreen())
+        setVideoMode(findClosestVideoMode(&w, &h, &bpp, &rr));
     ShowWindow(handle(), SW_SHOW);
     try
     {
@@ -235,6 +318,8 @@ void Gosu::Window::show()
 void Gosu::Window::close()
 {
     ShowWindow(handle(), SW_HIDE);
+    if (graphics().fullscreen())
+        ChangeDisplaySettings(NULL, CDS_FULLSCREEN);
 }
 
 const Gosu::Graphics& Gosu::Window::graphics() const
@@ -309,6 +394,22 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
         SetCursor(0);
         return TRUE;
     }
+
+    if (message == WM_SYSCOMMAND)
+    {
+        switch(wparam)
+        {
+            case SC_SCREENSAVE:
+            case SC_MONITORPOWER:
+                if (graphics().fullscreen())
+                    return 0;
+                else
+                    break;
+            case SC_KEYMENU:
+                return 0;
+        }
+    }
+
 
     return DefWindowProc(handle(), message, wparam, lparam);
 }
