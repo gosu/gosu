@@ -100,8 +100,6 @@
 		D425680A0C69CF6100E745AC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42568090C69CF6100E745AC /* IOKit.framework */; };
 		D425680B0C69CF6100E745AC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42568090C69CF6100E745AC /* IOKit.framework */; };
 		D42BC0D10C4F840C00EBF79C /* Gosu.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D42BC0D00C4F840C00EBF79C /* Gosu.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D432A1700D0EE449007F1A7C /* TextInputFallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D432A16F0D0EE449007F1A7C /* TextInputFallback.cpp */; };
-		D432A1710D0EE449007F1A7C /* TextInputFallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D432A16F0D0EE449007F1A7C /* TextInputFallback.cpp */; };
 		D459FF4C0BDCD26D00E7F0D6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98A0A801948005C7067 /* AppKit.framework */; };
 		D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */; };
 		D459FF990BDCD9CF00E7F0D6 /* Gosu.icns in Resources */ = {isa = PBXBuildFile; fileRef = D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */; };
@@ -185,7 +183,6 @@
 		D410EB6D0A801CDC005C7067 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D42568090C69CF6100E745AC /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		D42BC0D00C4F840C00EBF79C /* Gosu.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Gosu.hpp; path = ../Gosu/Gosu.hpp; sourceTree = SOURCE_ROOT; };
-		D432A16F0D0EE449007F1A7C /* TextInputFallback.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextInputFallback.cpp; path = ../GosuImpl/TextInputFallback.cpp; sourceTree = SOURCE_ROOT; };
 		D459FF440BDCD23500E7F0D6 /* RubyGosu Deployment Template.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RubyGosu Deployment Template.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D459FF460BDCD23600E7F0D6 /* RubyGosu Template-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "RubyGosu Template-Info.plist"; sourceTree = "<group>"; };
 		D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Gosu.icns; sourceTree = "<group>"; };
@@ -343,7 +340,6 @@
 				D410EA2E0A8019FA005C7067 /* TimingUnix.cpp */,
 				D410EA300A8019FA005C7067 /* Utility.cpp */,
 				D410EA310A8019FA005C7067 /* WindowMac.mm */,
-				D432A16F0D0EE449007F1A7C /* TextInputFallback.cpp */,
 			);
 			name = Implementation;
 			sourceTree = "<group>";
@@ -606,7 +602,6 @@
 				D4A7E97F0CD3907D00621B24 /* Texture.cpp in Sources */,
 				D4A7E9810CD3907D00621B24 /* TexChunk.cpp in Sources */,
 				D4A7E9E80CD39BA200621B24 /* BitmapUtils.cpp in Sources */,
-				D432A1710D0EE449007F1A7C /* TextInputFallback.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -653,7 +648,6 @@
 				D4A7E9840CD3907D00621B24 /* TexChunk.cpp in Sources */,
 				D4A7E9E90CD39BA200621B24 /* BitmapUtils.cpp in Sources */,
 				D4C09C840D04AD2800DA4D4F /* RubyGosu_MacStartup.cxx in Sources */,
-				D432A1700D0EE449007F1A7C /* TextInputFallback.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

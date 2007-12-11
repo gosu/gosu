@@ -476,8 +476,6 @@ struct Gosu::Input::Impl
     
     unsigned currentMods;
     
-    TextInput* textInput;
-    
     struct WaitingButton
     {
         Button btn;
@@ -487,7 +485,7 @@ struct Gosu::Input::Impl
     std::vector<WaitingButton> queue;
 
     Impl(Input& input)
-    : input(input), mouseFactorX(1), mouseFactorY(1), currentMods(0), textInput(0)
+    : input(input), mouseFactorX(1), mouseFactorY(1), currentMods(0)
     {
     }
     

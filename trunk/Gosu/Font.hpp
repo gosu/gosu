@@ -23,6 +23,7 @@ namespace Gosu
 
     public:
         //! Constructs a font that can be drawn onto the graphics object.
+        //! \param fontName Name of a system font, or a filename to a TTF file (must contain '/').
         //! \param height Height of the font, in pixels.
         Font(Graphics& graphics, const std::wstring& fontName,
             unsigned height);
