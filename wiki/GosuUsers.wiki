@@ -18,6 +18,12 @@ http://screenfashion.org/releases/wiinstrument_screenshot_small_1.jpg
 The Wiinstrument by Sebastian Burkhart and others uses Gosu, mostly for the stylish visuals.
 * http://www.screenfashion.org/
 
+=== Planets! ===
+
+http://www.raschke.de/julian/temp/planets.jpg
+
+This two-player shooter by Kurt Griffiths features very cool gravity and explosion effects, sound effects, support for optional music and sketch-themed graphics. Even though it has a [http://rubyforge.org/projects/planetsgame/ RubyForge project page], the available sources are outdated, so I updated them to the current Gosu API: [http://www.raschke.de/julian/temp/planets.zip Download source package].
+
 === Ruby OMF 2097 (Ruby) ===
 
 Remake of the cool fighting game One Must Fall 2097 by Andrew Thompson, using Gosu. (Seemingly discontinued :( )
