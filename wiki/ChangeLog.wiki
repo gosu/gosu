@@ -6,6 +6,7 @@
   * Mac, Windows: Custom font loading—just use a TTF filename as a font name (must contain '/')
   * Mac: Fixed Window#button_id_to_char
   * Mac: Window now pops up in the front when run from the Terminal
+  * Windows: Fixed fullscreen mode
   * Linux: Removed optimization that prevented 64bit compilation
   * Linux: Fixed compilation error (boost::none.hpp was missing, thanks to Ryan Baxter)
   * Ruby: Another cool Chipmunk/RMagick demo by Robert Sheehan
