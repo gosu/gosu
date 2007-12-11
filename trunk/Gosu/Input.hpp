@@ -59,7 +59,7 @@ namespace Gosu
 	
     //! Manages initialization and shutdown of the input system; only one Input
 	//! instance can live per application. (Should this limitation ever get into
-	//! anyone's way, I will happily remove it; until then, I practice KISS.)
+	//! anyone's way, I will happily remove it; until then, I practice YAGNI.)
     class Input
     {
         struct Impl;
@@ -84,7 +84,7 @@ namespace Gosu
         //! Returns the button that has to be pressed to produce the
         //! given character, or noButton.
         static Button charToId(wchar_t ch);
-		
+        
 		//! Returns true if a button is currently pressed.
 		bool down(Button btn) const;
 
