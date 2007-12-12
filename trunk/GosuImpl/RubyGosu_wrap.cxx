@@ -2129,15 +2129,16 @@ namespace Swig {
 #define SWIGTYPE_p_Gosu__HSV swig_types[6]
 #define SWIGTYPE_p_Gosu__Image swig_types[7]
 #define SWIGTYPE_p_Gosu__Sample swig_types[8]
-#define SWIGTYPE_p_Gosu__Song swig_types[9]
-#define SWIGTYPE_p_Gosu__Window swig_types[10]
-#define SWIGTYPE_p_boost__shared_ptrTboost__try_mutex_t swig_types[11]
-#define SWIGTYPE_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t swig_types[12]
-#define SWIGTYPE_p_char swig_types[13]
-#define SWIGTYPE_p_double swig_types[14]
-#define SWIGTYPE_p_std__wstring swig_types[15]
-static swig_type_info *swig_types[17];
-static swig_module_info swig_module = {swig_types, 16, 0, 0, 0, 0};
+#define SWIGTYPE_p_Gosu__SampleInstance swig_types[9]
+#define SWIGTYPE_p_Gosu__Song swig_types[10]
+#define SWIGTYPE_p_Gosu__Window swig_types[11]
+#define SWIGTYPE_p_boost__shared_ptrTboost__try_mutex_t swig_types[12]
+#define SWIGTYPE_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t swig_types[13]
+#define SWIGTYPE_p_char swig_types[14]
+#define SWIGTYPE_p_double swig_types[15]
+#define SWIGTYPE_p_std__wstring swig_types[16]
+static swig_type_info *swig_types[18];
+static swig_module_info swig_module = {swig_types, 17, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -6007,6 +6008,117 @@ fail:
 }
 
 
+swig_class cSampleInstance;
+
+#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
+SWIGINTERN VALUE
+_wrap_SampleInstance_allocate(VALUE self) {
+#else
+  SWIGINTERN VALUE
+  _wrap_SampleInstance_allocate(int argc, VALUE *argv, VALUE self) {
+#endif
+    
+    
+    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_Gosu__SampleInstance);
+#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
+    rb_obj_call_init(vresult, argc, argv);
+#endif
+    return vresult;
+  }
+  
+
+SWIGINTERN VALUE
+_wrap_new_SampleInstance(int argc, VALUE *argv, VALUE self) {
+  int arg1 ;
+  Gosu::SampleInstance *result = 0 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  const char *classname SWIGUNUSED = "Gosu::SampleInstance";
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  ecode1 = SWIG_AsVal_int(argv[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "int","Gosu::SampleInstance", 1, argv[0] ));
+  } 
+  arg1 = static_cast< int >(val1);
+  {
+    try {
+      result = (Gosu::SampleInstance *)new Gosu::SampleInstance(arg1);DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return self;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_SampleInstance_playingq___(int argc, VALUE *argv, VALUE self) {
+  Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__SampleInstance, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::SampleInstance const *","playing", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::SampleInstance * >(argp1);
+  {
+    try {
+      result = (bool)((Gosu::SampleInstance const *)arg1)->playing();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_bool(static_cast< bool >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_SampleInstance_stop(int argc, VALUE *argv, VALUE self) {
+  Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__SampleInstance, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::SampleInstance *","stop", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::SampleInstance * >(argp1);
+  {
+    try {
+      (arg1)->stop();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN void
+free_Gosu_SampleInstance(Gosu::SampleInstance *arg1) {
+    delete arg1;
+}
+
 swig_class cSample;
 
 SWIGINTERN void
@@ -6019,12 +6131,14 @@ _wrap_Sample_play(int argc, VALUE *argv, VALUE self) {
   Gosu::Sample *arg1 = (Gosu::Sample *) 0 ;
   double arg2 = (double) 1 ;
   double arg3 = (double) 1 ;
+  SwigValueWrapper< Gosu::SampleInstance > result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   double val2 ;
   int ecode2 = 0 ;
   double val3 ;
   int ecode3 = 0 ;
+  VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 2)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
@@ -6050,12 +6164,13 @@ _wrap_Sample_play(int argc, VALUE *argv, VALUE self) {
   }
   {
     try {
-      ((Gosu::Sample const *)arg1)->play(arg2,arg3);
+      result = ((Gosu::Sample const *)arg1)->play(arg2,arg3);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  return Qnil;
+  vresult = SWIG_NewPointerObj((new Gosu::SampleInstance(static_cast< const Gosu::SampleInstance& >(result))), SWIGTYPE_p_Gosu__SampleInstance, SWIG_POINTER_OWN |  0 );
+  return vresult;
 fail:
   return Qnil;
 }
@@ -6067,6 +6182,7 @@ _wrap_Sample_play_pan(int argc, VALUE *argv, VALUE self) {
   double arg2 ;
   double arg3 = (double) 1 ;
   double arg4 = (double) 1 ;
+  SwigValueWrapper< Gosu::SampleInstance > result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   double val2 ;
@@ -6075,6 +6191,7 @@ _wrap_Sample_play_pan(int argc, VALUE *argv, VALUE self) {
   int ecode3 = 0 ;
   double val4 ;
   int ecode4 = 0 ;
+  VALUE vresult = Qnil;
   
   if ((argc < 1) || (argc > 3)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
@@ -6105,12 +6222,13 @@ _wrap_Sample_play_pan(int argc, VALUE *argv, VALUE self) {
   }
   {
     try {
-      ((Gosu::Sample const *)arg1)->playPan(arg2,arg3,arg4);
+      result = ((Gosu::Sample const *)arg1)->playPan(arg2,arg3,arg4);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  return Qnil;
+  vresult = SWIG_NewPointerObj((new Gosu::SampleInstance(static_cast< const Gosu::SampleInstance& >(result))), SWIGTYPE_p_Gosu__SampleInstance, SWIG_POINTER_OWN |  0 );
+  return vresult;
 fail:
   return Qnil;
 }
@@ -7403,6 +7521,7 @@ static swig_type_info _swigt__p_Gosu__GLTexInfo = {"_p_Gosu__GLTexInfo", "Gosu::
 static swig_type_info _swigt__p_Gosu__HSV = {"_p_Gosu__HSV", "Gosu::HSV *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Image = {"_p_Gosu__Image", "Gosu::Image *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Sample = {"_p_Gosu__Sample", "Gosu::Sample *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Gosu__SampleInstance = {"_p_Gosu__SampleInstance", "Gosu::SampleInstance *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Song = {"_p_Gosu__Song", "Gosu::Song *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Window = {"_p_Gosu__Window", "Gosu::Window *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_boost__shared_ptrTboost__try_mutex_t = {"_p_boost__shared_ptrTboost__try_mutex_t", "boost::shared_ptr<boost::try_mutex > *", 0, 0, (void*)0, 0};
@@ -7421,6 +7540,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__HSV,
   &_swigt__p_Gosu__Image,
   &_swigt__p_Gosu__Sample,
+  &_swigt__p_Gosu__SampleInstance,
   &_swigt__p_Gosu__Song,
   &_swigt__p_Gosu__Window,
   &_swigt__p_boost__shared_ptrTboost__try_mutex_t,
@@ -7439,6 +7559,7 @@ static swig_cast_info _swigc__p_Gosu__GLTexInfo[] = {  {&_swigt__p_Gosu__GLTexIn
 static swig_cast_info _swigc__p_Gosu__HSV[] = {  {&_swigt__p_Gosu__HSV, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Image[] = {  {&_swigt__p_Gosu__Image, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Sample[] = {  {&_swigt__p_Gosu__Sample, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Gosu__SampleInstance[] = {  {&_swigt__p_Gosu__SampleInstance, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Song[] = {  {&_swigt__p_Gosu__Song, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Window[] = {  {&_swigt__p_Gosu__Window, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_boost__shared_ptrTboost__try_mutex_t[] = {  {&_swigt__p_boost__shared_ptrTboost__try_mutex_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -7457,6 +7578,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__HSV,
   _swigc__p_Gosu__Image,
   _swigc__p_Gosu__Sample,
+  _swigc__p_Gosu__SampleInstance,
   _swigc__p_Gosu__Song,
   _swigc__p_Gosu__Window,
   _swigc__p_boost__shared_ptrTboost__try_mutex_t,
@@ -7839,6 +7961,16 @@ SWIGEXPORT void Init_gosu(void) {
   cImage.mark = 0;
   cImage.destroy = (void (*)(void *)) free_Gosu_Image;
   cImage.trackObjects = 0;
+  
+  cSampleInstance.klass = rb_define_class_under(mGosu, "SampleInstance", rb_cObject);
+  SWIG_TypeClientData(SWIGTYPE_p_Gosu__SampleInstance, (void *) &cSampleInstance);
+  rb_define_alloc_func(cSampleInstance.klass, _wrap_SampleInstance_allocate);
+  rb_define_method(cSampleInstance.klass, "initialize", VALUEFUNC(_wrap_new_SampleInstance), -1);
+  rb_define_method(cSampleInstance.klass, "playing?", VALUEFUNC(_wrap_SampleInstance_playingq___), -1);
+  rb_define_method(cSampleInstance.klass, "stop", VALUEFUNC(_wrap_SampleInstance_stop), -1);
+  cSampleInstance.mark = 0;
+  cSampleInstance.destroy = (void (*)(void *)) free_Gosu_SampleInstance;
+  cSampleInstance.trackObjects = 0;
   
   cSample.klass = rb_define_class_under(mGosu, "Sample", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Sample, (void *) &cSample);

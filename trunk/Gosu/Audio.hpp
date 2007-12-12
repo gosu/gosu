@@ -31,6 +31,16 @@ namespace Gosu
         // IMPR: Should have a void update() function that calls FSOUND_Update()
     };
 
+	class SampleInstance
+	{
+		int handle;
+		
+	public:
+		explicit SampleInstance(int handle) : handle(handle) {}
+		bool playing() const;
+		void stop();
+	};
+
     //! A sample is a short sound that is completely loaded in memory, can be
     //! played multiple times at once and offers very flexible playback
     //! parameters. In short, use samples for everything that's not music.
@@ -56,7 +66,7 @@ namespace Gosu
         //! \param speed Playback speed is only limited by FMOD's
         //! capatibilities and can accept very high or low values. Use 1.0 for
         //! normal playback speed.
-        void play(double volume = 1, double speed = 1) const;
+        SampleInstance play(double volume = 1, double speed = 1) const;
 
         //! Plays the sample with panning. Even if pan is 0.0, the sample will
         //! not be as loud as if it were played by calling play() due to the
@@ -67,7 +77,7 @@ namespace Gosu
         //! \param speed Playback speed is only limited by FMOD's
         //! capatibilities and can accept very high or low values. Use 1.0 for
         //! normal playback speed.
-        void playPan(double pan, double volume = 1, double speed = 1) const;
+        SampleInstance playPan(double pan, double volume = 1, double speed = 1) const;
     };
 
     //! Songs are less flexible than samples in that they can only be played

@@ -10,6 +10,8 @@ class GameWindow < Gosu::Window
   end
 
   def draw
+    draw_line(100, 300, 0xffffffff, 300, 300, 0xffffffff, 255)
+    draw_line(300, 304, 0xffffffff, 100, 304, 0xffffffff, 255)
     @sys_text.draw(100, 100, 0)
     @loc_text.draw(400, 100, 0)
   end
