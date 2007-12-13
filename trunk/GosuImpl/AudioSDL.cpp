@@ -21,6 +21,8 @@ namespace Gosu {
     bool mixerInitialized = false;
     Song* curSong = NULL;
   }
+  
+  std::map<int, int> channelRegistry;
 }
 
 #ifdef GOSU_IS_WIN
@@ -55,21 +57,27 @@ Gosu::SampleInstance::SampleInstance(int handle, int extra)
 
 bool Gosu::SampleInstance::playing() const
 {
+    return channelRegistry[handle] == extra &&
+        Mix_Playing(handle) == 1;
 }
 
 void Gosu::SampleInstance::stop()
 {
+    if (playing())
+        Mix_HaltChannel(handle);
 }
 
 void Gosu::SampleInstance::changeVolume(double volume)
 {
-  Mix_Volume(channel, boundBy<int>(volume * 255, 0, 255));
+    if (playing())
+        Mix_Volume(channel, boundBy<int>(volume * 255, 0, 255));
 }
 
 void Gosu::SampleInstance::changePan(double pan)
 {
-  int leftPan = boundBy<int>(pan * 127, 0, 127);
-  Mix_SetPanning(channel, leftPan, 254 - leftPan);
+    int leftPan = boundBy<int>(pan * 127, 0, 127);
+    if (playing())
+        Mix_SetPanning(channel, leftPan, 254 - leftPan);
 }
 
 void Gosu::SampleInstance::changeSpeed(double speed)
@@ -117,6 +125,7 @@ Gosu::SampleInstance Gosu::Sample::play(double volume, double speed) const {
   SampleInstance result(channel, extra);
   
   if (channel > 0) {
+    extra = ++channelRegistry[channel];
     Mix_SetPanning(channel, 127, 127);
 
     if (volume != 1)
@@ -136,6 +145,7 @@ Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
   SampleInstance result(channel, extra);
 
   if (channel > 0) {
+    extra = ++channelRegistry[channel];
     result.changePan(pan);
 
     if (volume != 1)
