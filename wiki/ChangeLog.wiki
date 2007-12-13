@@ -1,6 +1,10 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.8.1=
+  * All: Audio interface extended! Yay.
+  * Mac: Fixed right-click detection
+
 =0.7.8=
   * Mac, Windows: Font substitution works, i.e. chars outside of the selected font can be used (こんにちは日本！)
   * Mac, Windows: Custom font loading—just use a TTF filename as a font name (must contain '/')
