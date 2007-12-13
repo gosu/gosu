@@ -15,7 +15,7 @@
 namespace Gosu {
   namespace {
     GOSU_NORETURN void throwLastSDLError() {
-      throw std::runtime_error(::Mix_GetError());
+      throw std::runtime_error(Mix_GetError());
     }
 
     bool mixerInitialized = false;
@@ -44,8 +44,38 @@ Gosu::Audio::Audio() {
 Gosu::Audio::~Audio() {
   assert(mixerInitialized);
 
-  ::Mix_CloseAudio();
+  Mix_CloseAudio();
   mixerInitialized = false;
+}
+
+Gosu::SampleInstance::SampleInstance(int handle, int extra)
+: handle(handle), extra(extra)
+{
+}
+
+bool Gosu::SampleInstance::playing() const
+{
+}
+
+void Gosu::SampleInstance::stop()
+{
+}
+
+void Gosu::SampleInstance::changeVolume(double volume)
+{
+  Mix_Volume(channel, boundBy<int>(volume * 255, 0, 255));
+}
+
+void Gosu::SampleInstance::changePan(double pan)
+{
+  int leftPan = boundBy<int>(pan * 127, 0, 127);
+  Mix_SetPanning(channel, leftPan, 254 - leftPan);
+}
+
+void Gosu::SampleInstance::changeSpeed(double speed)
+{
+  /* We ignore the speed for now as this seems to be non-trivial
+   * with SDL_mixer. */
 }
 
 struct Gosu::Sample::SampleData : boost::noncopyable
@@ -54,17 +84,17 @@ struct Gosu::Sample::SampleData : boost::noncopyable
   
   SampleData(): rep(0) {}
   ~SampleData() {
-    if (rep != 0) ::Mix_FreeChunk(rep);
+    if (rep != 0) Mix_FreeChunk(rep);
   }
 };
 
 Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
 {
-    Buffer buf;
-	  loadFile(buf, filename);
+  Buffer buf;
+  loadFile(buf, filename);
 
-	  // Forward.
-	  Sample(audio, buf.frontReader()).data.swap(data);
+  // Forward.
+  Sample(audio, buf.frontReader()).data.swap(data);
 }
 
 Gosu::Sample::Sample(Audio& audio, Reader reader) {
@@ -73,134 +103,102 @@ Gosu::Sample::Sample(Audio& audio, Reader reader) {
   reader.read(buffer, bufsize);
   
   data.reset(new SampleData);
-  data->rep = ::Mix_LoadWAV_RW(::SDL_RWFromMem(buffer, bufsize), 1);
+  data->rep = Mix_LoadWAV_RW(SDL_RWFromMem(buffer, bufsize), 1);
   if (data->rep == NULL)
     throwLastSDLError();
-
-  //if (buffer != 0)
-  //  delete[] buffer; // TODO: does SDL_mixer use this data?
 }
 
 Gosu::Sample::~Sample() {
 }
 
-void Gosu::Sample::play(double volume, double speed) const {
-  int channel = ::Mix_PlayChannel(-1, data->rep, 0);
+Gosu::SampleInstance Gosu::Sample::play(double volume, double speed) const {
+  int channel = Mix_PlayChannel(-1, data->rep, 0);
+  int extra;
+  SampleInstance result(channel, extra);
   
   if (channel > 0) {
-    ::Mix_SetPanning(channel, 127, 127);
+    Mix_SetPanning(channel, 127, 127);
 
     if (volume != 1)
-      ::Mix_Volume(channel, trunc(boundBy(volume * 255, 0.0, 255.0)));
+        result.changeVolume(volume);
 
     /* We ignore the speed for now as this seems to be non-trivial
      * with SDL_mixer. */
   }
+  
+  return result;
 }
 
-void Gosu::Sample::playPan(double pan, double volume, double speed) const {
-  int channel = ::Mix_PlayChannel(-1, data->rep, 0);
+Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
+    double speed) const {
+  int channel = Mix_PlayChannel(-1, data->rep, 0);
+  int extra;
+  SampleInstance result(channel, extra);
 
   if (channel > 0) {
-    Uint8 pan = trunc(boundBy(pan * 127, 0, 127));
-    ::Mix_SetPanning(channel, pan, 254-pan);
+    result.changePan(pan);
 
     if (volume != 1)
-      ::Mix_Volume(channel, trunc(boundBy(volume * 255, 0.0, 255.0)));
+      result.changeVolume(volume);
 
     /* Speed ignored for now, as above. */
   }
+  
+  return result;
 }
 
+// No class hierarchy here; SDL_mixer abstracts this away for us.
 class Gosu::Song::BaseData : boost::noncopyable {
-  public:
-    virtual ~BaseData() {}
+public:
+    Mix_Music* music;
+    std::vector<Uint8> buffer;
+    int volume;
+    
+    BaseData() : music(0), volume(0) {}
+    ~BaseData() {
+      if (music) Mix_FreeMusic(music);
+    }
 
-    virtual void play() = 0;
-    virtual void stop() = 0;
+    static void endSongCallback() {
+        curSong = 0;
+    }
 };
 
-class Gosu::Song::StreamData : public BaseData {
-  Mix_Music* music;
-  Uint8* buffer;
-
-  void endSongCallback() {
-    curSong = 0;
-  }
-
-  public:
-    StreamData(Gosu::Reader reader)
-      : music(0)
-    {
-#if 0 // no Mix_LoadMUS_RW :|
-      std::size_t bufsize = reader.resource().size() - reader.position();
-      buffer = new Uint8[bufsize];
-      reader.read(buffer, bufsize);
-#ifndef GOSU_ALLOW_MP3
-      if (bufsize > 2 && 
-          ((buffer[0] == '\xff' && (buffer[1] & 0xfe) == '\xfa') || 
-           (buffer[0] == 'I' && buffer[1] == 'D' && buffer[2] == '3')))
-        throw std::runtime_error("MP3 playback not allowed.");
-#endif
-      music = ::Mix_LoadMUS_RW(::SDL_RWFromMem(buffer, bufsize));
-      if (music == NULL)
-        throwLastSDLError();
-
-      ::Mix_HookMusicFinished(endSongCallback);
-#endif
-    }
-
-    ~StreamData() {
-      if (music != NULL)
-        Mix_FreeMusic(music);
-      if (buffer != NULL)
-        delete[] buffer;
-    }
-
     void play() {
-      if (::Mix_PlayMusic(music, 0) < 0)
+      if (Mix_PlayMusic(music, 0) < 0)
         throwLastSDLError();
     }
 
     void stop() {
-      ::Mix_HaltMusic();
-    }
-};
-
-class Gosu::Song::ModuleData : public Gosu::Song::StreamData {
-  public:
-    ModuleData(Gosu::Reader reader): StreamData(reader) {}
+          }
 };
 
 Gosu::Song::Song(Audio& audio, const std::wstring& filename)
 {
-    Buffer buf;
-	  loadFile(buf, filename);
-	  Type type = stStream;
-
-	  using boost::iends_with;
-	  if (iends_with(filename, ".mod") || iends_with(filename, ".mid") ||
-		    iends_with(filename, ".s3m") || iends_with(filename, ".it") ||
-		    iends_with(filename, ".xm"))
-	  {
-		    type = stModule;
-	  }
-	
-    // Forward.
-	  Song(audio, type, buf.frontReader()).data.swap(data);
+  Buffer buf;
+  loadFile(buf, filename);
+  Song(audio, type, buf.frontReader()).data.swap(data);
 }
 
-Gosu::Song::Song(Audio &audio, Type type, Reader reader) {
-  switch (type) {
-    case stStream:
-      data.reset(new StreamData(reader));
-      break;
-    case stModule:
-      data.reset(new ModuleData(reader));
-      break;
-    default:
-      throw std::logic_error("Invalid song type");
-  }
+Gosu::Song::Song(Audio &audio, Type type, Reader reader)
+: data(new BaseData)
+{
+    std::size_t bufsize = reader.resource().size() - reader.position();
+    pimpl->buffer.resize(bufsize);
+    reader.read(buffer.data(), bufsize);
+// Disabled for licensing reasons.
+// If you have a license to play MP3 files, compile with GOSU_ALLOW_MP3.
+#ifndef GOSU_ALLOW_MP3
+    if (bufsize > 2 && 
+      ((pimpl->buffer[0] == '\xff' && (pimpl->buffer[1] & 0xfe) == '\xfa') || 
+       (pimpl->buffer[0] == 'I' && pimpl->buffer[1] == 'D' && pimpl->buffer[2] == '3')))
+    throw std::runtime_error("MP3 playback not allowed.");
+#endif
+    data->music = Mix_LoadMUS_RW(SDL_RWFromMem(pimpl->buffer.data(), bufsize));
+    if (data->music == NULL)
+        throwLastSDLError();
+
+    Mix_HookMusicFinished(BaseData::endSongCallback);
 }
 
 Gosu::Song::~Song() {
@@ -213,17 +211,24 @@ void Gosu::Song::play() {
   
   assert(curSong == 0);
 
+  Mix_MusicVolume(data->volume);
   data->play();
   curSong = this;
 }
 
 void Gosu::Song::stop() {
   if (playing()) {
-    data->stop();
+    Mix_HaltMusic();
     curSong = 0;
   }
 }
 
 bool Gosu::Song::playing() const {
   return curSong == this;
+}
+
+void Gosu::Song::changeVolume(double volume) {
+  data->volume = boundBy<int>(volume * MIX_MAX_VOLUME, 0, MIX_MAX_VOLUME);
+  if (playing())
+    Mix_MusicVolume(data->volume);
 }

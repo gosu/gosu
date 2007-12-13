@@ -1,4 +1,4 @@
-require 'gosu'
+require '../gosu'
 
 module ZOrder
   Background, Player, Stars, UI = *0..3

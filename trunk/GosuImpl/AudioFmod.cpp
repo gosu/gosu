@@ -18,12 +18,12 @@ namespace Gosu
     {
         GOSU_NORETURN void throwLastFMODError()
         {
-            throw std::runtime_error(::FMOD_ErrorString(::FSOUND_GetError()));
+            throw std::runtime_error(FMOD_ErrorString(FSOUND_GetError()));
         }
 
         inline unsigned char fmodCheck(unsigned char retVal)
         {
-            if (retVal == 0 && ::FSOUND_GetError() != FMOD_ERR_NONE)
+            if (retVal == 0 && FSOUND_GetError() != FMOD_ERR_NONE)
                 throwLastFMODError();
 
             return retVal;
@@ -40,9 +40,12 @@ namespace Gosu
             #define VcppException(sev,err)  ((sev) | (FACILITY_VISUALCPP<<16) | err)
             #define BAD_MOD VcppException(ERROR_SEVERITY_ERROR, ERROR_MOD_NOT_FOUND)
 
+            // Try to call the first function from fmod.dll, which is lazily
+            // linked. With this guard, we can raise a catchable C++ exception
+            // if the library is not found, instead of crashing the game.
             __try
             {
-                ::FSOUND_SetHWND(reinterpret_cast<void*>(window));
+                FSOUND_SetHWND(reinterpret_cast<void*>(window));
             }
             __except ((GetExceptionCode() == BAD_MOD) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
             {
@@ -71,7 +74,7 @@ Gosu::Audio::Audio()
     if (fmodInitialized)
         throw std::logic_error("Multiple Gosu::Audio instances not supported");
 
-    fmodCheck(::FSOUND_Init(44100, 32, 0));
+    fmodCheck(FSOUND_Init(44100, 32, 0));
     fmodInitialized = true;
 }
 
@@ -79,8 +82,38 @@ Gosu::Audio::~Audio()
 {
     assert(fmodInitialized);
 
-    ::FSOUND_Close();
+    FSOUND_Close();
     fmodInitialized = false;
+}
+
+Gosu::SampleInstance::SampleInstance(int handle, int extra)
+: handle(handle), extra(extra)
+{
+}
+
+bool Gosu::SampleInstance::playing() const
+{
+    return FSOUND_IsPlaying(handle);
+}
+
+void Gosu::SampleInstance::stop()
+{
+    FSOUND_StopSound(handle);
+}
+
+void Gosu::SampleInstance::changeVolume(double volume)
+{
+    FSOUND_SetVolume(handle, boundBy<int>(volume * 255, 0, 255));
+}
+
+void Gosu::SampleInstance::changePan(double pan)
+{
+    FSOUND_SetPan(handle, boundBy<int>(pan * 127 + 127, 0, 255));
+}
+
+void Gosu::SampleInstance::changeSpeed(double speed)
+{
+    FSOUND_SetFrequency(handle, boundBy<int>(speed * extra, 100, 705600));
 }
 
 struct Gosu::Sample::SampleData : boost::noncopyable
@@ -94,14 +127,15 @@ struct Gosu::Sample::SampleData : boost::noncopyable
 
     ~SampleData()
     {
-        // TODO: Should be checked for earlier, as play would crash too.
-        // This is just because Ruby's GC will free objects in a weird
-        // order.
+        // Should be checked for earlier, as play would crash too.
+        // This is just because it's hard to free things in the right
+        // order in Ruby/Gosu.
+        
         if (!fmodInitialized)
             return;
         
         if (rep != 0)
-            ::FSOUND_Sample_Free(rep);
+            FSOUND_Sample_Free(rep);
     }
 };
 
@@ -120,7 +154,7 @@ Gosu::Sample::Sample(Audio& audio, Reader reader)
     reader.read(&buffer.front(), buffer.size());
 
     data.reset(new SampleData);
-    data->rep = ::FSOUND_Sample_Load(FSOUND_FREE | FSOUND_UNMANAGED,
+    data->rep = FSOUND_Sample_Load(FSOUND_FREE | FSOUND_UNMANAGED,
         &buffer.front(), FSOUND_NORMAL | FSOUND_LOADMEMORY, 0, buffer.size());
     if (data->rep == 0)
         throwLastFMODError();
@@ -131,54 +165,36 @@ Gosu::Sample::~Sample()
     assert(fmodInitialized);
 }
 
-void Gosu::Sample::play(double volume, double speed) const
+Gosu::SampleInstance Gosu::Sample::play(double volume, double speed) const
 {
-    int channel = ::FSOUND_PlaySound(FSOUND_FREE, data->rep);
-
-    if (channel > 0)
+    int handle = FSOUND_PlaySound(FSOUND_FREE, data->rep);
+    int freq;
+    if (handle > 0)
     {
-        ::FSOUND_SetPan(channel, FSOUND_STEREOPAN);
-
-        if (volume != 1)
-        {
-            double vol = boundBy(volume * 255, 0.0, 255.0);
-
-            ::FSOUND_SetVolume(channel, trunc(vol));
-        }
-
-        if (speed != 1)
-        {
-            double freq = boundBy(speed * ::FSOUND_GetFrequency(channel),
-                    100.0, 705600.0);
-
-            ::FSOUND_SetFrequency(channel, trunc(freq));
-        }
+        freq = FSOUND_GetFrequency(handle);
+        FSOUND_SetPan(handle, FSOUND_STEREOPAN);
     }
+    
+    SampleInstance result(handle, freq);
+    result.changeVolume(volume);
+    result.changeSpeed(speed);
+    return result;
 }
 
-void Gosu::Sample::playPan(double pan, double volume, double speed) const
+Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume, double speed) const
 {
-    int channel = ::FSOUND_PlaySound(FSOUND_FREE, data->rep);
-
-    if (channel > 0)
+    int handle = FSOUND_PlaySound(FSOUND_FREE, data->rep);
+    int freq;
+    if (handle > 0)
     {
-        ::FSOUND_SetPan(channel, trunc(boundBy(pan * 127 + 127, 0.0, 255.0)));
-
-        if (volume != 1)
-        {
-            double vol = boundBy(volume * 255, 0.0, 255.0);
-
-            ::FSOUND_SetVolume(channel, trunc(vol));
-        }
-
-        if (speed != 1)
-        {
-            double freq = boundBy(speed * ::FSOUND_GetFrequency(channel),
-                    100.0, 705600.0);
-
-            ::FSOUND_SetFrequency(channel, trunc(freq));
-        }
+        freq = FSOUND_GetFrequency(handle);
     }
+    
+    SampleInstance result(handle, freq);
+    result.changeVolume(volume);
+    result.changePan(pan);
+    result.changeSpeed(speed);
+    return result;
 }
 
 class Gosu::Song::BaseData : boost::noncopyable
@@ -188,27 +204,32 @@ public:
 
     virtual void play() = 0;
     virtual void stop() = 0;
+    virtual void changeVolume(double volume) = 0;
 };
 
 class Gosu::Song::StreamData : public BaseData
 {
     FSOUND_STREAM* stream;
+    int handle;
     std::vector<char> buffer;
 
     static signed char F_CALLBACKAPI endSongCallback(FSOUND_STREAM*, void*,
-        int, void*)
+        int, void* self)
     {
         curSong = 0;
+        static_cast<StreamData*>(self)->handle = -1;
         return 0;
     }
 
 public:
     StreamData(Gosu::Reader reader)
-    : stream(0)
+    : stream(0), handle(-1)
     {
         buffer.resize(reader.resource().size() - reader.position());
         reader.read(&buffer[0], buffer.size());
 
+// Disabled for licensing reasons.
+// If you have a license to play MP3 files, compile with GOSU_ALLOW_MP3.
 #ifndef GOSU_ALLOW_MP3
         if (buffer.size() > 2 &&
             ((buffer[0] == '\xff' && (buffer[1] & 0xfe) == '\xfa') ||
@@ -218,12 +239,12 @@ public:
         }
 #endif
 
-        stream = ::FSOUND_Stream_Open(&buffer[0], FSOUND_LOADMEMORY, 0,
+        stream = FSOUND_Stream_Open(&buffer[0], FSOUND_LOADMEMORY, 0,
             buffer.size());
         if (stream == 0)
             throwLastFMODError();
         
-        ::FSOUND_Stream_SetEndCallback(stream, endSongCallback, 0);
+        FSOUND_Stream_SetEndCallback(stream, endSongCallback, this);
     }
 
     ~StreamData()
@@ -235,18 +256,23 @@ public:
             return;
 
         if (stream != 0)
-            ::FSOUND_Stream_Close(stream);
+            FSOUND_Stream_Close(stream);
     }
 
     void play()
     {
-        if (::FSOUND_Stream_Play(FSOUND_FREE, stream) == -1)
-            throwLastFMODError();
+        handle = FSOUND_Stream_Play(FSOUND_FREE, stream);
     }
 
     void stop()
     {
-        fmodCheck(::FSOUND_Stream_Stop(stream));
+        fmodCheck(FSOUND_Stream_Stop(stream));
+    }
+
+    void changeVolume(double volume)
+    {
+        if (handle != -1)
+            FSOUND_SetVolume(handle, boundBy<int>(volume * 255, 0, 255));
     }
 };
 
@@ -261,7 +287,7 @@ public:
         std::vector<char> buffer(reader.resource().size() - reader.position());
         reader.read(&buffer[0], buffer.size());
 
-        module_ = ::FMUSIC_LoadSongEx(&buffer[0], 0, buffer.size(),
+        module_ = FMUSIC_LoadSongEx(&buffer[0], 0, buffer.size(),
             FSOUND_LOADMEMORY | FSOUND_LOOP_OFF, 0, 0);
         if (module_ == 0)
             throwLastFMODError();
@@ -276,36 +302,43 @@ public:
             return;
 
         if (module_ != 0)
-            ::FMUSIC_FreeSong(module_);
+            FMUSIC_FreeSong(module_);
     }
 
     void play()
     {
-        fmodCheck(::FMUSIC_PlaySong(module_));
+        FMUSIC_PlaySong(module_);
     }
 
     void stop()
     {
-        fmodCheck(::FMUSIC_StopSong(module_));
+        fmodCheck(FMUSIC_StopSong(module_));
+    }
+    
+    void changeVolume(double volume)
+    {
+        // Weird as it may seem, the FMOD doc really says volume can
+        // be 0 to 256, *inclusive*, for this function.
+        FMUSIC_SetMasterVolume(module_, boundBy<int>(volume * 256, 0, 256));
     }
 };
 
 Gosu::Song::Song(Audio& audio, const std::wstring& filename)
 {
     Buffer buf;
-	  loadFile(buf, filename);
-	  Type type = stStream;
-
-	  using boost::iends_with;
-	  if (iends_with(filename, ".mod") || iends_with(filename, ".mid") ||
-		    iends_with(filename, ".s3m") || iends_with(filename, ".it") ||
-		    iends_with(filename, ".xm"))
-	  {
+	loadFile(buf, filename);
+	Type type = stStream;
+    
+	using boost::iends_with;
+	if (iends_with(filename, ".mod") || iends_with(filename, ".mid") ||
+	    iends_with(filename, ".s3m") || iends_with(filename, ".it") ||
+	    iends_with(filename, ".xm"))
+	{
 	      type = stModule;
-	  }
+	}
 	
     // Forward.
-	  Song(audio, type, buf.frontReader()).data.swap(data);
+	Song(audio, type, buf.frontReader()).data.swap(data);
 }
 
 Gosu::Song::Song(Audio& audio, Type type, Reader reader)
@@ -354,4 +387,9 @@ void Gosu::Song::stop()
 bool Gosu::Song::playing() const
 {
     return curSong == this;
+}
+
+void Gosu::Song::changeVolume(double volume)
+{
+    data->changeVolume(volume);
 }

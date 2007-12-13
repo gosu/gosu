@@ -26,8 +26,8 @@
     {
         case NSLeftMouseDown:
         case NSLeftMouseUp:
-        case NSRightMouseUp:
         case NSRightMouseDown:
+        case NSRightMouseUp:
         case NSScrollWheel:
         case NSKeyUp:
         case NSKeyDown:
@@ -87,6 +87,12 @@ typedef void (*WindowProc)(Gosu::Window&);
 }
 @end
 
+#define OVERRIDE_METHOD(method)       \
+    - (void) method: (NSEvent*) event \
+    {                                 \
+        _input->feedNSEvent(event);   \
+    }
+
 @interface GosuWindow : NSWindow
 {
     Gosu::Input* _input;
@@ -98,13 +104,6 @@ typedef void (*WindowProc)(Gosu::Window&);
 {
     _input = input;
 }
-
-#define OVERRIDE_METHOD(method)       \
-    - (void) method: (NSEvent*) event \
-    {                                 \
-        _input->feedNSEvent(event);   \
-    }
-
 OVERRIDE_METHOD(keyDown);
 OVERRIDE_METHOD(keyUp);
 OVERRIDE_METHOD(flagsChanged);
@@ -112,9 +111,29 @@ OVERRIDE_METHOD(mouseDown);
 OVERRIDE_METHOD(mouseUp);
 OVERRIDE_METHOD(rightMouseDown);
 OVERRIDE_METHOD(rightMouseUp);
+@end
+
+@interface GosuView : NSView
+{
+    Gosu::Input* _input;
+}
+@end
+
+@implementation GosuView
+- (void) setInput: (Gosu::Input*)input
+{
+    _input = input;
+}
+OVERRIDE_METHOD(keyDown);
+OVERRIDE_METHOD(keyUp);
+OVERRIDE_METHOD(flagsChanged);
+OVERRIDE_METHOD(mouseDown);
+OVERRIDE_METHOD(mouseUp);
+OVERRIDE_METHOD(rightMouseDown);
+OVERRIDE_METHOD(rightMouseUp);
+@end
 
 #undef OVERRIDE_METHOD
-@end
 
 struct Gosu::Window::Impl
 {
@@ -142,6 +161,8 @@ struct Gosu::Window::Impl
                                                             backing:NSBackingStoreBuffered defer:NO]);
         [window.obj() retain]; // ...or is it autorelease?
         
+        [window.obj() setContentView: [[GosuView alloc] init]];
+
         [window.obj() center];
         [window.obj() makeKeyAndOrderFront:nil];
     }
@@ -226,6 +247,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     {
         [pimpl->window.obj() setDelegate: pimpl->forwarder.obj()];
         [pimpl->window.obj() setInput: pimpl->input.get()];
+        [(GosuView*)[pimpl->window.obj() contentView] setInput: pimpl->input.get()];
     }
     
     pimpl->interval = updateInterval;

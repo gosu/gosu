@@ -5,6 +5,9 @@
 
 %include exception.i  
 
+// Don't complain about ignored operators.
+#pragma SWIG nowarn=378
+
 // The docs make it seem like this is a generally good idea.
 %feature("compactdefaultargs");
 
@@ -202,6 +205,9 @@ namespace Gosu
 %rename("red=") setRed;
 %rename("green=") setGreen;
 %rename("blue=") setBlue;
+%rename("hue=") setHue;
+%rename("saturation=") setSaturation;
+%rename("value=") setValue;
 %include "std_string.i"
 %include "../Gosu/Color.hpp"
 %extend Gosu::Color {
@@ -212,14 +218,6 @@ namespace Gosu
                << "," << static_cast<int>($self->green())
                << "," << static_cast<int>($self->blue()) << ")";
         return stream.str();
-    }
-    
-    Gosu::HSV toHSV() const {
-        return Gosu::colorToHSV(*$self);
-    }
-    
-    static Gosu::Color fromHSV(Gosu::HSV hsv) {
-        return Gosu::hsvToColor(hsv);
     }
 }
 
@@ -326,6 +324,9 @@ namespace Gosu
 %ignore Gosu::Song::Song(Audio& audio, const std::wstring& filename);
 %ignore Gosu::Song::Song(Audio& audio, Type type, Reader reader);
 %rename("playing?") playing;
+%rename("volume=") changeVolume;
+%rename("pan=") changePan;
+%rename("speed=") changeSpeed;
 %include "../Gosu/Audio.hpp"
 %extend Gosu::Sample {
     Sample(Gosu::Window& window, const std::string& filename) {

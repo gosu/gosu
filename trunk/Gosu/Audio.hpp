@@ -15,8 +15,8 @@
 
 namespace Gosu
 {
-    //! Manages initialization and finalization of FMOD. Must be created before
-    //! and destroyed after all samples and songs.
+    //! Manages initialization and finalization of audio libraries. Must be
+    //! created before and destroyed after all samples and songs.
     //! There can only be one instance of Gosu::Audio.
     class Audio : boost::noncopyable
     {
@@ -27,18 +27,32 @@ namespace Gosu
         Audio();
 #endif
         ~Audio();
-
-        // IMPR: Should have a void update() function that calls FSOUND_Update()
     };
 
+    //! An instance of a Sample playing. Can be used to stop sounds dynamically,
+    //! or to check if they are finished.
+    //! It is recommended that you throw away sample instances if possible,
+    //! as they could accidentally refer to sounds played very long ago.
 	class SampleInstance
 	{
-		int handle;
+		int handle, extra;
 		
 	public:
-		explicit SampleInstance(int handle) : handle(handle) {}
+        //! Called by Sample, do not use.
+		SampleInstance(int handle, int extra);
+
 		bool playing() const;
 		void stop();
+
+        //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
+        //! volume).
+        void changeVolume(double volume);
+        //! \param pan Can be anything from -1.0 (left) to 1.0 (right).
+        void changePan(double pan);
+        //! \param speed Playback speed is only limited by FMOD's
+        //! capatibilities and can accept very high or low values. Use 1.0 for
+        //! normal playback speed.
+        void changeSpeed(double speed);
 	};
 
     //! A sample is a short sound that is completely loaded in memory, can be
@@ -90,7 +104,7 @@ namespace Gosu
         boost::scoped_ptr<BaseData> data;
 
     public:
-        //! There are two types of songs that can be managed by Song: Streamed
+        //! There are two types of songs that can be loaded as a Song: Streamed
         //! songs (like OGG) and modules (like MOD or XM).
         enum Type
         {
@@ -110,12 +124,15 @@ namespace Gosu
         ~Song();
 
         //! Starts playback of the song. This will stop all other songs and
-        //! cause the currently played song to restart if called twice.
+        //! cause the currently played song to restart if called on the
+        //! current song.
         void play();
         //! Stops playback of this song if it is currently played.
         void stop();
         //! Returns if the song is currently playing.
         bool playing() const;
+        //! Changes the volume of the song.
+        void changeVolume(double volume);
     };
 }
 

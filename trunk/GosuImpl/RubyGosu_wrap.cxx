@@ -2126,19 +2126,18 @@ namespace Swig {
 #define SWIGTYPE_p_Gosu__Color swig_types[3]
 #define SWIGTYPE_p_Gosu__Font swig_types[4]
 #define SWIGTYPE_p_Gosu__GLTexInfo swig_types[5]
-#define SWIGTYPE_p_Gosu__HSV swig_types[6]
-#define SWIGTYPE_p_Gosu__Image swig_types[7]
-#define SWIGTYPE_p_Gosu__Sample swig_types[8]
-#define SWIGTYPE_p_Gosu__SampleInstance swig_types[9]
-#define SWIGTYPE_p_Gosu__Song swig_types[10]
-#define SWIGTYPE_p_Gosu__Window swig_types[11]
-#define SWIGTYPE_p_boost__shared_ptrTboost__try_mutex_t swig_types[12]
-#define SWIGTYPE_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t swig_types[13]
-#define SWIGTYPE_p_char swig_types[14]
-#define SWIGTYPE_p_double swig_types[15]
-#define SWIGTYPE_p_std__wstring swig_types[16]
-static swig_type_info *swig_types[18];
-static swig_module_info swig_module = {swig_types, 17, 0, 0, 0, 0};
+#define SWIGTYPE_p_Gosu__Image swig_types[6]
+#define SWIGTYPE_p_Gosu__Sample swig_types[7]
+#define SWIGTYPE_p_Gosu__SampleInstance swig_types[8]
+#define SWIGTYPE_p_Gosu__Song swig_types[9]
+#define SWIGTYPE_p_Gosu__Window swig_types[10]
+#define SWIGTYPE_p_boost__shared_ptrTboost__try_mutex_t swig_types[11]
+#define SWIGTYPE_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t swig_types[12]
+#define SWIGTYPE_p_char swig_types[13]
+#define SWIGTYPE_p_double swig_types[14]
+#define SWIGTYPE_p_std__wstring swig_types[15]
+static swig_type_info *swig_types[17];
+static swig_module_info swig_module = {swig_types, 16, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2411,12 +2410,6 @@ SWIG_From_std_string  (const std::string& s)
   }
 }
 
-SWIGINTERN Gosu::HSV Gosu_Color_toHSV(Gosu::Color const *self){
-        return Gosu::colorToHSV(*self);
-    }
-SWIGINTERN Gosu::Color Gosu_Color_fromHSV(Gosu::HSV hsv){
-        return Gosu::hsvToColor(hsv);
-    }
 
 SWIGINTERNINLINE VALUE
 SWIG_From_unsigned_SS_int  (unsigned int value)
@@ -3437,6 +3430,106 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Color_from_hsv(int argc, VALUE *argv, VALUE self) {
+  double arg1 ;
+  double arg2 ;
+  double arg3 ;
+  Gosu::Color result;
+  double val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 3) || (argc > 3)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
+  }
+  ecode1 = SWIG_AsVal_double(argv[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "double","Gosu::Color::fromHSV", 1, argv[0] ));
+  } 
+  arg1 = static_cast< double >(val1);
+  ecode2 = SWIG_AsVal_double(argv[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","Gosu::Color::fromHSV", 2, argv[1] ));
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(argv[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "double","Gosu::Color::fromHSV", 3, argv[2] ));
+  } 
+  arg3 = static_cast< double >(val3);
+  {
+    try {
+      result = Gosu::Color::fromHSV(arg1,arg2,arg3);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_NewPointerObj((new Gosu::Color(static_cast< const Gosu::Color& >(result))), SWIGTYPE_p_Gosu__Color, SWIG_POINTER_OWN |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Color_from_ahsv(int argc, VALUE *argv, VALUE self) {
+  Gosu::Color::Channel arg1 ;
+  double arg2 ;
+  double arg3 ;
+  double arg4 ;
+  Gosu::Color result;
+  unsigned char val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 4) || (argc > 4)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
+  }
+  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color::fromAHSV", 1, argv[0] ));
+  } 
+  arg1 = static_cast< Gosu::Color::Channel >(val1);
+  ecode2 = SWIG_AsVal_double(argv[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","Gosu::Color::fromAHSV", 2, argv[1] ));
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(argv[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "double","Gosu::Color::fromAHSV", 3, argv[2] ));
+  } 
+  arg3 = static_cast< double >(val3);
+  ecode4 = SWIG_AsVal_double(argv[3], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "double","Gosu::Color::fromAHSV", 4, argv[3] ));
+  } 
+  arg4 = static_cast< double >(val4);
+  {
+    try {
+      result = Gosu::Color::fromAHSV(arg1,arg2,arg3,arg4);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_NewPointerObj((new Gosu::Color(static_cast< const Gosu::Color& >(result))), SWIGTYPE_p_Gosu__Color, SWIG_POINTER_OWN |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Color_alpha(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
   Gosu::Color::Channel result;
@@ -3697,6 +3790,201 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Color_hue(int argc, VALUE *argv, VALUE self) {
+  Gosu::Color *arg1 = (Gosu::Color *) 0 ;
+  double result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Color, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color const *","hue", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Color * >(argp1);
+  {
+    try {
+      result = (double)((Gosu::Color const *)arg1)->hue();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Color_huee___(int argc, VALUE *argv, VALUE self) {
+  Gosu::Color *arg1 = (Gosu::Color *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Color, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color *","setHue", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Color * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","setHue", 2, argv[0] ));
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      (arg1)->setHue(arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Color_saturation(int argc, VALUE *argv, VALUE self) {
+  Gosu::Color *arg1 = (Gosu::Color *) 0 ;
+  double result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Color, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color const *","saturation", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Color * >(argp1);
+  {
+    try {
+      result = (double)((Gosu::Color const *)arg1)->saturation();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Color_saturatione___(int argc, VALUE *argv, VALUE self) {
+  Gosu::Color *arg1 = (Gosu::Color *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Color, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color *","setSaturation", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Color * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","setSaturation", 2, argv[0] ));
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      (arg1)->setSaturation(arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Color_value(int argc, VALUE *argv, VALUE self) {
+  Gosu::Color *arg1 = (Gosu::Color *) 0 ;
+  double result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Color, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color const *","value", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Color * >(argp1);
+  {
+    try {
+      result = (double)((Gosu::Color const *)arg1)->value();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Color_valuee___(int argc, VALUE *argv, VALUE self) {
+  Gosu::Color *arg1 = (Gosu::Color *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Color, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color *","setValue", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Color * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","setValue", 2, argv[0] ));
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      (arg1)->setValue(arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Color_argb(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
   boost::uint32_t result;
@@ -3816,61 +4104,56 @@ fail:
 }
 
 
-SWIGINTERN VALUE
-_wrap_Color_to_hsv(int argc, VALUE *argv, VALUE self) {
-  Gosu::Color *arg1 = (Gosu::Color *) 0 ;
-  Gosu::HSV result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Color, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color const *","toHSV", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  {
-    try {
-      result = Gosu_Color_toHSV((Gosu::Color const *)arg1);
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_NewPointerObj((new Gosu::HSV(static_cast< const Gosu::HSV& >(result))), SWIGTYPE_p_Gosu__HSV, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
-  return Qnil;
+SWIGINTERN void
+free_Gosu_Color(Gosu::Color *arg1) {
+    delete arg1;
 }
 
-
 SWIGINTERN VALUE
-_wrap_Color_from_hsv(int argc, VALUE *argv, VALUE self) {
-  Gosu::HSV arg1 ;
+_wrap_interpolate(int argc, VALUE *argv, VALUE self) {
+  Gosu::Color arg1 ;
+  Gosu::Color arg2 ;
+  double arg3 = (double) 0.5 ;
   Gosu::Color result;
-  void *argp1 ;
-  int res1 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
   VALUE vresult = Qnil;
   
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  if ((argc < 2) || (argc > 3)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
   }
   {
-    res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Gosu__HSV,  0 );
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::HSV","Gosu_Color_fromHSV", 1, argv[0] )); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Gosu::HSV","Gosu_Color_fromHSV", 1, argv[0]));
-    } else {
-      arg1 = *(reinterpret_cast< Gosu::HSV * >(argp1));
-    }
+    void* ptr;
+    int res = SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+    if (!SWIG_IsOK(res))
+    // TODO: error checking
+    arg1 = Gosu::Color(NUM2UINT(argv[0]));
+    else if (!ptr)
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+    else
+    arg1 = *reinterpret_cast<Gosu::Color*>(ptr);
+  }
+  {
+    void* ptr;
+    int res = SWIG_ConvertPtr(argv[1], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+    if (!SWIG_IsOK(res))
+    // TODO: error checking
+    arg2 = Gosu::Color(NUM2UINT(argv[1]));
+    else if (!ptr)
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+    else
+    arg2 = *reinterpret_cast<Gosu::Color*>(ptr);
+  }
+  if (argc > 2) {
+    ecode3 = SWIG_AsVal_double(argv[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "double","Gosu::interpolate", 3, argv[2] ));
+    } 
+    arg3 = static_cast< double >(val3);
   }
   {
     try {
-      result = Gosu_Color_fromHSV(arg1);
+      result = Gosu::interpolate(arg1,arg2,arg3);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -3882,218 +4165,51 @@ fail:
 }
 
 
-SWIGINTERN void
-free_Gosu_Color(Gosu::Color *arg1) {
-    delete arg1;
-}
-
-swig_class cHSV;
-
 SWIGINTERN VALUE
-_wrap_HSV_h_set(int argc, VALUE *argv, VALUE self) {
-  Gosu::HSV *arg1 = (Gosu::HSV *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__HSV, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::HSV *","h", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::HSV * >(argp1);
-  ecode2 = SWIG_AsVal_double(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","h", 2, argv[0] ));
-  } 
-  arg2 = static_cast< double >(val2);
-  if (arg1) (arg1)->h = arg2;
-  
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_HSV_h_get(int argc, VALUE *argv, VALUE self) {
-  Gosu::HSV *arg1 = (Gosu::HSV *) 0 ;
-  double result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
+_wrap_multiply(int argc, VALUE *argv, VALUE self) {
+  Gosu::Color arg1 ;
+  Gosu::Color arg2 ;
+  Gosu::Color result;
   VALUE vresult = Qnil;
   
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__HSV, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::HSV *","h", 1, self )); 
+  {
+    void* ptr;
+    int res = SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+    if (!SWIG_IsOK(res))
+    // TODO: error checking
+    arg1 = Gosu::Color(NUM2UINT(argv[0]));
+    else if (!ptr)
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+    else
+    arg1 = *reinterpret_cast<Gosu::Color*>(ptr);
   }
-  arg1 = reinterpret_cast< Gosu::HSV * >(argp1);
-  result = (double) ((arg1)->h);
-  vresult = SWIG_From_double(static_cast< double >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_HSV_s_set(int argc, VALUE *argv, VALUE self) {
-  Gosu::HSV *arg1 = (Gosu::HSV *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__HSV, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::HSV *","s", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::HSV * >(argp1);
-  ecode2 = SWIG_AsVal_double(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","s", 2, argv[0] ));
-  } 
-  arg2 = static_cast< double >(val2);
-  if (arg1) (arg1)->s = arg2;
-  
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_HSV_s_get(int argc, VALUE *argv, VALUE self) {
-  Gosu::HSV *arg1 = (Gosu::HSV *) 0 ;
-  double result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__HSV, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::HSV *","s", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::HSV * >(argp1);
-  result = (double) ((arg1)->s);
-  vresult = SWIG_From_double(static_cast< double >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_HSV_v_set(int argc, VALUE *argv, VALUE self) {
-  Gosu::HSV *arg1 = (Gosu::HSV *) 0 ;
-  double arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__HSV, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::HSV *","v", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::HSV * >(argp1);
-  ecode2 = SWIG_AsVal_double(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","v", 2, argv[0] ));
-  } 
-  arg2 = static_cast< double >(val2);
-  if (arg1) (arg1)->v = arg2;
-  
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_HSV_v_get(int argc, VALUE *argv, VALUE self) {
-  Gosu::HSV *arg1 = (Gosu::HSV *) 0 ;
-  double result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__HSV, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::HSV *","v", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::HSV * >(argp1);
-  result = (double) ((arg1)->v);
-  vresult = SWIG_From_double(static_cast< double >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
-SWIGINTERN VALUE
-_wrap_HSV_allocate(VALUE self) {
-#else
-  SWIGINTERN VALUE
-  _wrap_HSV_allocate(int argc, VALUE *argv, VALUE self) {
-#endif
-    
-    
-    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_Gosu__HSV);
-#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
-    rb_obj_call_init(vresult, argc, argv);
-#endif
-    return vresult;
-  }
-  
-
-SWIGINTERN VALUE
-_wrap_new_HSV(int argc, VALUE *argv, VALUE self) {
-  Gosu::HSV *result = 0 ;
-  const char *classname SWIGUNUSED = "Gosu::HSV";
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  {
+    void* ptr;
+    int res = SWIG_ConvertPtr(argv[1], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+    if (!SWIG_IsOK(res))
+    // TODO: error checking
+    arg2 = Gosu::Color(NUM2UINT(argv[1]));
+    else if (!ptr)
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+    else
+    arg2 = *reinterpret_cast<Gosu::Color*>(ptr);
   }
   {
     try {
-      result = (Gosu::HSV *)new Gosu::HSV();DATA_PTR(self) = result;
-      
+      result = Gosu::multiply(arg1,arg2);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  return self;
+  vresult = SWIG_NewPointerObj((new Gosu::Color(static_cast< const Gosu::Color& >(result))), SWIGTYPE_p_Gosu__Color, SWIG_POINTER_OWN |  0 );
+  return vresult;
 fail:
   return Qnil;
 }
 
-
-SWIGINTERN void
-free_Gosu_HSV(Gosu::HSV *arg1) {
-    delete arg1;
-}
 
 SWIGINTERN VALUE
 _wrap_none_get(VALUE self) {
@@ -6030,22 +6146,30 @@ _wrap_SampleInstance_allocate(VALUE self) {
 SWIGINTERN VALUE
 _wrap_new_SampleInstance(int argc, VALUE *argv, VALUE self) {
   int arg1 ;
+  int arg2 ;
   Gosu::SampleInstance *result = 0 ;
   int val1 ;
   int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
   const char *classname SWIGUNUSED = "Gosu::SampleInstance";
   
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
   }
   ecode1 = SWIG_AsVal_int(argv[0], &val1);
   if (!SWIG_IsOK(ecode1)) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "int","Gosu::SampleInstance", 1, argv[0] ));
   } 
   arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_int(argv[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","Gosu::SampleInstance", 2, argv[1] ));
+  } 
+  arg2 = static_cast< int >(val2);
   {
     try {
-      result = (Gosu::SampleInstance *)new Gosu::SampleInstance(arg1);DATA_PTR(self) = result;
+      result = (Gosu::SampleInstance *)new Gosu::SampleInstance(arg1,arg2);DATA_PTR(self) = result;
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -6104,6 +6228,111 @@ _wrap_SampleInstance_stop(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->stop();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_SampleInstance_volumee___(int argc, VALUE *argv, VALUE self) {
+  Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__SampleInstance, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::SampleInstance *","changeVolume", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::SampleInstance * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","changeVolume", 2, argv[0] ));
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      (arg1)->changeVolume(arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_SampleInstance_pane___(int argc, VALUE *argv, VALUE self) {
+  Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__SampleInstance, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::SampleInstance *","changePan", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::SampleInstance * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","changePan", 2, argv[0] ));
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      (arg1)->changePan(arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_SampleInstance_speede___(int argc, VALUE *argv, VALUE self) {
+  Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__SampleInstance, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::SampleInstance *","changeSpeed", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::SampleInstance * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","changeSpeed", 2, argv[0] ));
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      (arg1)->changeSpeed(arg2);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -6385,6 +6614,41 @@ _wrap_Song_playingq___(int argc, VALUE *argv, VALUE self) {
   }
   vresult = SWIG_From_bool(static_cast< bool >(result));
   return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Song_volumee___(int argc, VALUE *argv, VALUE self) {
+  Gosu::Song *arg1 = (Gosu::Song *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Song, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Song *","changeVolume", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Song * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","changeVolume", 2, argv[0] ));
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      (arg1)->changeVolume(arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
 fail:
   return Qnil;
 }
@@ -7518,7 +7782,6 @@ static swig_type_info _swigt__p_Gosu__Button = {"_p_Gosu__Button", "Gosu::Button
 static swig_type_info _swigt__p_Gosu__Color = {"_p_Gosu__Color", "Gosu::Color *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Font = {"_p_Gosu__Font", "Gosu::Font *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__GLTexInfo = {"_p_Gosu__GLTexInfo", "Gosu::GLTexInfo *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_Gosu__HSV = {"_p_Gosu__HSV", "Gosu::HSV *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Image = {"_p_Gosu__Image", "Gosu::Image *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Sample = {"_p_Gosu__Sample", "Gosu::Sample *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__SampleInstance = {"_p_Gosu__SampleInstance", "Gosu::SampleInstance *", 0, 0, (void*)0, 0};
@@ -7537,7 +7800,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__Color,
   &_swigt__p_Gosu__Font,
   &_swigt__p_Gosu__GLTexInfo,
-  &_swigt__p_Gosu__HSV,
   &_swigt__p_Gosu__Image,
   &_swigt__p_Gosu__Sample,
   &_swigt__p_Gosu__SampleInstance,
@@ -7556,7 +7818,6 @@ static swig_cast_info _swigc__p_Gosu__Button[] = {  {&_swigt__p_Gosu__Button, 0,
 static swig_cast_info _swigc__p_Gosu__Color[] = {  {&_swigt__p_Gosu__Color, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Font[] = {  {&_swigt__p_Gosu__Font, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__GLTexInfo[] = {  {&_swigt__p_Gosu__GLTexInfo, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Gosu__HSV[] = {  {&_swigt__p_Gosu__HSV, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Image[] = {  {&_swigt__p_Gosu__Image, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Sample[] = {  {&_swigt__p_Gosu__Sample, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__SampleInstance[] = {  {&_swigt__p_Gosu__SampleInstance, 0, 0, 0},{0, 0, 0, 0}};
@@ -7575,7 +7836,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__Color,
   _swigc__p_Gosu__Font,
   _swigc__p_Gosu__GLTexInfo,
-  _swigc__p_Gosu__HSV,
   _swigc__p_Gosu__Image,
   _swigc__p_Gosu__Sample,
   _swigc__p_Gosu__SampleInstance,
@@ -7863,6 +8123,8 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Color, (void *) &cColor);
   rb_define_alloc_func(cColor.klass, _wrap_Color_allocate);
   rb_define_method(cColor.klass, "initialize", VALUEFUNC(_wrap_new_Color), -1);
+  rb_define_singleton_method(cColor.klass, "from_hsv", VALUEFUNC(_wrap_Color_from_hsv), -1);
+  rb_define_singleton_method(cColor.klass, "from_ahsv", VALUEFUNC(_wrap_Color_from_ahsv), -1);
   rb_define_method(cColor.klass, "alpha", VALUEFUNC(_wrap_Color_alpha), -1);
   rb_define_method(cColor.klass, "red", VALUEFUNC(_wrap_Color_red), -1);
   rb_define_method(cColor.klass, "green", VALUEFUNC(_wrap_Color_green), -1);
@@ -7871,29 +8133,21 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cColor.klass, "red=", VALUEFUNC(_wrap_Color_rede___), -1);
   rb_define_method(cColor.klass, "green=", VALUEFUNC(_wrap_Color_greene___), -1);
   rb_define_method(cColor.klass, "blue=", VALUEFUNC(_wrap_Color_bluee___), -1);
+  rb_define_method(cColor.klass, "hue", VALUEFUNC(_wrap_Color_hue), -1);
+  rb_define_method(cColor.klass, "hue=", VALUEFUNC(_wrap_Color_huee___), -1);
+  rb_define_method(cColor.klass, "saturation", VALUEFUNC(_wrap_Color_saturation), -1);
+  rb_define_method(cColor.klass, "saturation=", VALUEFUNC(_wrap_Color_saturatione___), -1);
+  rb_define_method(cColor.klass, "value", VALUEFUNC(_wrap_Color_value), -1);
+  rb_define_method(cColor.klass, "value=", VALUEFUNC(_wrap_Color_valuee___), -1);
   rb_define_method(cColor.klass, "argb", VALUEFUNC(_wrap_Color_argb), -1);
   rb_define_method(cColor.klass, "bgr", VALUEFUNC(_wrap_Color_bgr), -1);
   rb_define_method(cColor.klass, "abgr", VALUEFUNC(_wrap_Color_abgr), -1);
   rb_define_method(cColor.klass, "to_s", VALUEFUNC(_wrap_Color_to_s), -1);
-  rb_define_method(cColor.klass, "to_hsv", VALUEFUNC(_wrap_Color_to_hsv), -1);
-  rb_define_singleton_method(cColor.klass, "from_hsv", VALUEFUNC(_wrap_Color_from_hsv), -1);
   cColor.mark = 0;
   cColor.destroy = (void (*)(void *)) free_Gosu_Color;
   cColor.trackObjects = 0;
-  
-  cHSV.klass = rb_define_class_under(mGosu, "HSV", rb_cObject);
-  SWIG_TypeClientData(SWIGTYPE_p_Gosu__HSV, (void *) &cHSV);
-  rb_define_alloc_func(cHSV.klass, _wrap_HSV_allocate);
-  rb_define_method(cHSV.klass, "initialize", VALUEFUNC(_wrap_new_HSV), -1);
-  rb_define_method(cHSV.klass, "h=", VALUEFUNC(_wrap_HSV_h_set), -1);
-  rb_define_method(cHSV.klass, "h", VALUEFUNC(_wrap_HSV_h_get), -1);
-  rb_define_method(cHSV.klass, "s=", VALUEFUNC(_wrap_HSV_s_set), -1);
-  rb_define_method(cHSV.klass, "s", VALUEFUNC(_wrap_HSV_s_get), -1);
-  rb_define_method(cHSV.klass, "v=", VALUEFUNC(_wrap_HSV_v_set), -1);
-  rb_define_method(cHSV.klass, "v", VALUEFUNC(_wrap_HSV_v_get), -1);
-  cHSV.mark = 0;
-  cHSV.destroy = (void (*)(void *)) free_Gosu_HSV;
-  cHSV.trackObjects = 0;
+  rb_define_module_function(mGosu, "interpolate", VALUEFUNC(_wrap_interpolate), -1);
+  rb_define_module_function(mGosu, "multiply", VALUEFUNC(_wrap_multiply), -1);
   rb_define_singleton_method(mGosu, "none", VALUEFUNC(_wrap_none_get), 0);
   rb_define_singleton_method(mGosu, "black", VALUEFUNC(_wrap_black_get), 0);
   rb_define_singleton_method(mGosu, "gray", VALUEFUNC(_wrap_gray_get), 0);
@@ -7968,6 +8222,9 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cSampleInstance.klass, "initialize", VALUEFUNC(_wrap_new_SampleInstance), -1);
   rb_define_method(cSampleInstance.klass, "playing?", VALUEFUNC(_wrap_SampleInstance_playingq___), -1);
   rb_define_method(cSampleInstance.klass, "stop", VALUEFUNC(_wrap_SampleInstance_stop), -1);
+  rb_define_method(cSampleInstance.klass, "volume=", VALUEFUNC(_wrap_SampleInstance_volumee___), -1);
+  rb_define_method(cSampleInstance.klass, "pan=", VALUEFUNC(_wrap_SampleInstance_pane___), -1);
+  rb_define_method(cSampleInstance.klass, "speed=", VALUEFUNC(_wrap_SampleInstance_speede___), -1);
   cSampleInstance.mark = 0;
   cSampleInstance.destroy = (void (*)(void *)) free_Gosu_SampleInstance;
   cSampleInstance.trackObjects = 0;
@@ -7991,6 +8248,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cSong.klass, "play", VALUEFUNC(_wrap_Song_play), -1);
   rb_define_method(cSong.klass, "stop", VALUEFUNC(_wrap_Song_stop), -1);
   rb_define_method(cSong.klass, "playing?", VALUEFUNC(_wrap_Song_playingq___), -1);
+  rb_define_method(cSong.klass, "volume=", VALUEFUNC(_wrap_Song_volumee___), -1);
   cSong.mark = 0;
   cSong.destroy = (void (*)(void *)) free_Gosu_Song;
   cSong.trackObjects = 0;

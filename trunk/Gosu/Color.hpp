@@ -39,6 +39,13 @@ namespace Gosu
         {
             rep = (alpha << 24) | (red << 16) | (green << 8) | blue;
         }
+        
+        //! Constructs a color from the given hue/saturation/value triple.
+        //! Ranges of these values are given as 0..360, 0..1 and 0..1,
+        //! respectively.
+        //! The alpha value is set to 1 from this method.
+        static Color fromHSV(double h, double s, double v);
+        static Color fromAHSV(Channel alpha, double h, double s, double v);
 
         Channel alpha() const
         {
@@ -84,6 +91,24 @@ namespace Gosu
             rep |= value;
         }
 
+        //! Returns the hue of the color, in the usual range of 0..360.
+        double hue() const;
+        
+        //! Changes the current color so hue() will return h.
+        void setHue(double h);
+        
+        //! Returns the saturation of the color, in the range of 0..1.
+        double saturation() const;
+        
+        //! Changes the current color so saturation() will return s.
+        void setSaturation(double s);
+        
+        //! Returns the value (brightness) of the color, in the range of 0..1.
+        double value() const;
+        
+        //! Changes the current color so value() will return v.
+        void setValue(double v);
+
         //! Returns the color in 0xaarrggbb representation.
         boost::uint32_t argb() const
         {
@@ -102,8 +127,12 @@ namespace Gosu
             return alpha() << 24 | bgr();
         }
     };
-
-#ifndef SWIG
+    
+    // Causes weird errors when included in the SWIG wrapping process.
+    // If, with a future version of SWIG, this can be included and
+    // require 'gosu'; include Gosu
+    // works from within Ruby, the #ifndef guard can be removed.
+    #ifndef SWIG
     inline bool operator==(Color a, Color b)
     {
         return a.argb() == b.argb();
@@ -113,20 +142,15 @@ namespace Gosu
     {
         return a.argb() != b.argb();
     }
+    #endif
 
-    Color interpolate(Color a, Color b);
+    //! Interpolates linearly between two colors, with a given weight towards
+    //! the second color.
+    Color interpolate(Color a, Color b, double weight = 0.5);
+    
+    //! Combines two colors as if their channels were mapped to the 0..1 range
+    //! and then multiplied with each other.
     Color multiply(Color a, Color b);
-#endif    
-    struct HSV
-    {
-        // h, s: range [0..1]
-        // v: range [0..360)
-        double h, s, v;
-    };
-#ifndef SWIG
-    HSV colorToHSV(const Color& c);
-    Color hsvToColor(const HSV& hsv);    
-#endif
 
     //! Namespace which contains some predefined colors.
     namespace Colors
