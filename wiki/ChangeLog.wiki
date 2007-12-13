@@ -1,7 +1,7 @@
 #summary Log of Gosu's development.
 #labels Featured
 
-=0.7.8.1=
+=0.7.8.5=
   * All: Audio interface extended! Yay.
   * Mac: Fixed right-click detection
 
