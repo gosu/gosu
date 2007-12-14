@@ -46,15 +46,15 @@
 
 == class Gosu::Sample ==
   * `initialize(window, filename)`
-  * `play(vol=1, speed=1)`: See play_pan.
-  * `play_pan(pan=0, vol=1, speed=1)`: pan can be anything from -1.0 (left) to 1.0 (right). vol can be anything from 0.0 (silence) to 1.0 (full volume). Playback speed is only limited by FMOD's capatibilities and can accept very high or low values. Use 1.0 for normal playback speed. Returns a SampleInstance.
+  * `play(vol=1, speed=1)`: See play_pan. Returns a `SampleInstance`.
+  * `play_pan(pan=0, vol=1, speed=1)`: pan can be anything from -1.0 (left) to 1.0 (right). vol can be anything from 0.0 (silence) to 1.0 (full volume). Playback speed is only limited by FMOD's capatibilities and can accept very high or low values. Use 1.0 for normal playback speed. Returns a `SampleInstance`.
 
 == class Gosu::SampleInstance ==
   * `stop`: Stops this instance of a sound being played. Does not hurt to call twice, or too late.
   * `playing?`
-  * `volume=`: See Sample#initialize.
-  * `pan=`: See Sample#initialize.
-  * `speed=`: See Sample#initialize.
+  * `volume=(vol)`: See Sample#play_pan.
+  * `pan=(pan)`: See Sample#play_pan.
+  * `speed=(speed)`: See Sample#play_pan.
 
 == class Gosu::Song ==
   * `initialize(window, filename)`
