@@ -2,7 +2,9 @@
 #labels Featured
 
 =0.7.8.5=
-  * All: Audio interface extended! Yay.
+  * All: Much better HSV interface. Hope this didn't already break any code.
+  * All: Audio interface VASTLY extended! Yay.
+  * Linux: SDL_mixer port much closer to FMOD one.
   * Mac: Fixed right-click detection
 
 =0.7.8=
