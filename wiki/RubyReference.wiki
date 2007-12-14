@@ -17,8 +17,14 @@
   * `green=`
   * `blue`
   * `blue=`
-  * `to_hsv`: this color converted into an HSV struct
-  * `self.from_hsv(hsv)`: converts the given HSV struct back into a Color
+  * `hue`
+  * `hue=`
+  * `saturation`
+  * `saturation=`
+  * `value`
+  * `value=`
+  * `self.from_hsv(h, s, v)`: converts a HSV triple into a color. Same as from_ahsv with alpha set to 255.
+  * `self.from_ahsv(h, s, v)`: converts a HSV triple into a color, with a given alpha. Ranges: alpha from 0..255, h from 0..360, s from 0..1, v from 0..1.
 
 == class Gosu::Font ==
   * `initialize(window, font_name, height)`: font_name can either be the name of a system font, or a filename (must contain '/'). height is the height of the font, in pixels.
@@ -26,14 +32,6 @@
   * `text_width(text, factor_x=1)`: Returns the width in pixels the given text would span.
   * `draw(text, x, y, z, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`
   * `draw_rel(text, x, y, z, rel_x, rel_y, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`: If relX is 0.0, the text will be to the right of x, if it is 1.0, the text will be to the left of x, if it is 0.5, it will be centered on x. Of course, all real numbers are possible values. The same applies to relY.
-
-== class Gosu::HSV ==
-  * `h`: Hue, between 0.0 and 1.0
-  * `h=`
-  * `s`: Saturation, between 0.0 and 1.0
-  * `s=`
-  * `v`: Value, between 0.0 and 1.0
-  * `v=`
 
 == class Gosu::Image ==
   * `initialize(window, filename_or_rmagick_image, hard_borders, [srcX, srcY, srcWidth, srcHeight])`
@@ -49,13 +47,21 @@
 == class Gosu::Sample ==
   * `initialize(window, filename)`
   * `play(vol=1, speed=1)`: See play_pan.
-  * `play_pan(pan=0, vol=1, speed=1)`: pan can be anything from -1.0 (left) to 1.0 (right). vol can be anything from 0.0 (silence) to 1.0 (full volume). Playback speed is only limited by FMOD's capatibilities and can accept very high or low values. Use 1.0 for normal playback speed.
+  * `play_pan(pan=0, vol=1, speed=1)`: pan can be anything from -1.0 (left) to 1.0 (right). vol can be anything from 0.0 (silence) to 1.0 (full volume). Playback speed is only limited by FMOD's capatibilities and can accept very high or low values. Use 1.0 for normal playback speed. Returns a SampleInstance.
+
+== class Gosu::SampleInstance ==
+  * `stop`: Stops this instance of a sound being played. Does not hurt to call twice, or too late.
+  * `playing?`
+  * `volume=`: See Sample#initialize.
+  * `pan=`: See Sample#initialize.
+  * `speed=`: See Sample#initialize.
 
 == class Gosu::Song ==
   * `initialize(window, filename)`
   * `play`
   * `stop`
   * `playing?`
+  * `volume=(vol)`, with vol from 0..1.
 
 == class Gosu::Window ==
   * `initialize(width, height, fullscreen, update_interval = 16.666666)`: Note`: Having two or more windows and loading samples or songs on both of them will result in an exception. If you want to re-open your game window, make sure the old one is *really* dead.
