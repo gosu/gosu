@@ -6,6 +6,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <algorithm>
+#include <map>
 #include <stdexcept>
 #include <vector>
 
@@ -70,14 +71,14 @@ void Gosu::SampleInstance::stop()
 void Gosu::SampleInstance::changeVolume(double volume)
 {
     if (playing())
-        Mix_Volume(channel, boundBy<int>(volume * 255, 0, 255));
+        Mix_Volume(handle, boundBy<int>(volume * 255, 0, 255));
 }
 
 void Gosu::SampleInstance::changePan(double pan)
 {
     int leftPan = boundBy<int>(pan * 127, 0, 127);
     if (playing())
-        Mix_SetPanning(channel, leftPan, 254 - leftPan);
+        Mix_SetPanning(handle, leftPan, 254 - leftPan);
 }
 
 void Gosu::SampleInstance::changeSpeed(double speed)
@@ -174,41 +175,32 @@ public:
     }
 };
 
-    void play() {
-      if (Mix_PlayMusic(music, 0) < 0)
-        throwLastSDLError();
-    }
-
-    void stop() {
-          }
-};
-
 Gosu::Song::Song(Audio& audio, const std::wstring& filename)
+: data(new BaseData)
 {
-  Buffer buf;
-  loadFile(buf, filename);
-  Song(audio, type, buf.frontReader()).data.swap(data);
+    data->music = Mix_LoadMUS(Gosu::narrow(filename).c_str());
+    if (data->music == NULL)
+        throwLastSDLError();
+
+    Mix_HookMusicFinished(BaseData::endSongCallback);
 }
 
 Gosu::Song::Song(Audio &audio, Type type, Reader reader)
 : data(new BaseData)
 {
+#if 0
+    // TODO: Could fall back to using Sample API.
     std::size_t bufsize = reader.resource().size() - reader.position();
-    pimpl->buffer.resize(bufsize);
-    reader.read(buffer.data(), bufsize);
-// Disabled for licensing reasons.
-// If you have a license to play MP3 files, compile with GOSU_ALLOW_MP3.
-#ifndef GOSU_ALLOW_MP3
-    if (bufsize > 2 && 
-      ((pimpl->buffer[0] == '\xff' && (pimpl->buffer[1] & 0xfe) == '\xfa') || 
-       (pimpl->buffer[0] == 'I' && pimpl->buffer[1] == 'D' && pimpl->buffer[2] == '3')))
-    throw std::runtime_error("MP3 playback not allowed.");
-#endif
-    data->music = Mix_LoadMUS_RW(SDL_RWFromMem(pimpl->buffer.data(), bufsize));
+    data->buffer.resize(bufsize);
+    reader.read(data->buffer.data(), bufsize);
+    data->music = Mix_LoadMUS_RW(SDL_RWFromMem(data->buffer.data(), bufsize));
     if (data->music == NULL)
         throwLastSDLError();
 
     Mix_HookMusicFinished(BaseData::endSongCallback);
+#else
+    throw std::runtime_error("Loading files from memory not possible with libSDL_mixer");
+#endif
 }
 
 Gosu::Song::~Song() {
@@ -221,8 +213,9 @@ void Gosu::Song::play() {
   
   assert(curSong == 0);
 
-  Mix_MusicVolume(data->volume);
-  data->play();
+  Mix_VolumeMusic(data->volume);
+  if (Mix_PlayMusic(data->music, 0) < 0)
+    throwLastSDLError();
   curSong = this;
 }
 
@@ -240,5 +233,5 @@ bool Gosu::Song::playing() const {
 void Gosu::Song::changeVolume(double volume) {
   data->volume = boundBy<int>(volume * MIX_MAX_VOLUME, 0, MIX_MAX_VOLUME);
   if (playing())
-    Mix_MusicVolume(data->volume);
+    Mix_VolumeMusic(data->volume);
 }
