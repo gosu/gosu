@@ -3,7 +3,6 @@
 
 = 0.7.9 (release near theUltimateMeeting '07) =
   * port at least one Ruby example to C++ (OpenGL?)
-  * more sophisticated Audio interface (for talking NPC's etc.)
   * bugfixes from issue tracker
   * allow FPS > 60 even with vsync
   * Apple remote support would rule.
