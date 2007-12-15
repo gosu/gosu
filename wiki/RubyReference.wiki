@@ -118,7 +118,7 @@ KbBackspace
 KbDelete
 KbDown
 KbEnd
-KbEnter
+KbEnter (Numpad)
 KbEscape
 KbF1
 KbF10
@@ -155,7 +155,7 @@ KbNumpadSubtract
 KbPageDown
 KbPageUp
 KbPause
-KbReturn
+KbReturn (center of keyboard)
 KbRight
 KbRightAlt
 KbRightControl
