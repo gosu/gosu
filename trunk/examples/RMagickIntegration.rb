@@ -19,7 +19,7 @@ rescue LoadError
 end
 
 require 'gosu'
-require 'rmagick'
+require 'RMagick'
 
 NULL_PIXEL = Magick::Pixel.from_color('none')
 
