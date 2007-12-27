@@ -109,7 +109,7 @@ namespace Gosu
                     fontFlags & ffItalic ? TRUE : FALSE,
                     fontFlags & ffUnderline ? TRUE : FALSE,
                     FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
-                    CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY,
+                    CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
                     DEFAULT_PITCH | FF_DONTCARE };
 
                 // IMPR: This truncates. Is this reasonable? Should we rather
@@ -161,11 +161,12 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
     for (unsigned relY = 0; relY < fontHeight; ++relY)
         for (unsigned relX = 0; relX < width; ++relX)
         {
-            COLORREF winPixel = ::GetPixel(helper.context(), relX, relY);
+            Color pixel = c;
+            pixel.setAlpha(GetPixel(helper.context(), relX, relY) & 0xff);
             // IMPR: Make better use of c.alpha()?
             // Maybe even add an AlphaMode parameter?
-            if (winPixel != 0 && x + relX >= 0 && x + relX < bitmap.width() &&
+            if (pixel != 0 && x + relX >= 0 && x + relX < bitmap.width() &&
                 y + relY >= 0 && y + relY < bitmap.height())
-                bitmap.setPixel(x + relX, y + relY, c);
+                bitmap.setPixel(x + relX, y + relY, pixel);
         }
 }

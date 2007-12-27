@@ -162,7 +162,6 @@ Gosu::Sample::Sample(Audio& audio, Reader reader)
 
 Gosu::Sample::~Sample()
 {
-    assert(fmodInitialized);
 }
 
 Gosu::SampleInstance Gosu::Sample::play(double volume, double speed) const
@@ -360,8 +359,8 @@ Gosu::Song::Song(Audio& audio, Type type, Reader reader)
 
 Gosu::Song::~Song()
 {
-    assert(fmodInitialized);
-    stop();
+    if (fmodInitialized)
+        stop();
 }
 
 void Gosu::Song::play()
