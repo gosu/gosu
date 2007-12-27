@@ -1,13 +1,15 @@
 #summary Gosu's mixup between a roadmap and a short-term to-do list.
 #labels Featured
 
-= 0.7.9 (release near theUltimateMeeting '07) =
+= 0.7.9 (hopefully still '07) =
+  * don't hide cursor unnecessarily (OS X)
   * port at least one Ruby example to C++ (OpenGL?)
   * bugfixes from issue tracker
   * allow FPS > 60 even with vsync
-  * Apple remote support would rule.
+  * TextInput minimal impl
 
 = ASAP =
+  * Apple remote support would rule.
   * clean up after playing around with possible optimizations
   * get rid of OpenGL tearing on Windows (Intel GMA 950)
   * don't round updateInterval on Windows
