@@ -183,7 +183,7 @@ struct Gosu::Input::Impl
 
 							EventInfo event;
 							event.action = EventInfo::buttonDown;
-							if (data[i].dwData < 0)
+							if (int(data[i].dwData) < 0)
 								event.id = msWheelUp;
 							else
 								event.id = msWheelDown;
