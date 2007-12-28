@@ -18,7 +18,7 @@
   * implement frameskip
   * more C++ examples
   * assure Gosu::File also creates directories as necessary
-  * testing on Vista
+  * testing around with multiple monitors on Windows/OS X
 
 = 0.8.0 (early 2008)=
   * clean up Gosu's C++ interface
