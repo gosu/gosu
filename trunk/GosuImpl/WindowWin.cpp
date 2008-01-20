@@ -10,6 +10,9 @@
 #include <stdexcept>
 #include <vector>
 
+// TODO: Put fullscreen logic in different file, track fullscreen state and
+// enable dynamic toggling between fullscreen and window.
+
 namespace Gosu
 {
     namespace
@@ -148,9 +151,10 @@ struct Gosu::Window::Impl
     boost::scoped_ptr<Audio> audio;
     boost::scoped_ptr<Input> input;
 	double updateInterval;
+    bool iconified;
 
     Impl()
-    : handle(0), hdc(0)
+    : handle(0), hdc(0), iconified(false)
     {
     }
 
@@ -363,6 +367,29 @@ HWND Gosu::Window::handle() const
 
 LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
 {
+    if (message == WM_SETFOCUS && graphics().fullscreen() && IsWindowVisible(pimpl->handle))
+    {
+        if (pimpl->iconified)
+        {
+            OpenIcon(pimpl->handle);
+            int w = graphics().width(), h = graphics().height(), bpp = 32, rr = 60;
+            setVideoMode(findClosestVideoMode(&w, &h, &bpp, &rr));
+            pimpl->iconified = false;
+        }
+        return 0;
+    }
+
+    if (message == WM_KILLFOCUS && graphics().fullscreen() && IsWindowVisible(pimpl->handle))
+    {
+        if (!pimpl->iconified)
+        {
+            ChangeDisplaySettings(NULL, CDS_FULLSCREEN);
+            CloseWindow(pimpl->handle);
+            pimpl->iconified = true;
+        }
+        return 0;
+    }
+
     if (message == WM_CLOSE)
     {
         close();
@@ -409,7 +436,6 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
                 return 0;
         }
     }
-
 
     return DefWindowProc(handle(), message, wparam, lparam);
 }
