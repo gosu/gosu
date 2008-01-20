@@ -98,7 +98,6 @@ typedef void (*WindowProc)(Gosu::Window&);
     Gosu::Input* _input;
 }
 @end
-
 @implementation GosuWindow
 - (void) setInput: (Gosu::Input*)input
 {
@@ -118,7 +117,6 @@ OVERRIDE_METHOD(rightMouseUp);
     Gosu::Input* _input;
 }
 @end
-
 @implementation GosuView
 - (void) setInput: (Gosu::Input*)input
 {
@@ -143,8 +141,8 @@ struct Gosu::Window::Impl
     ObjRef<GosuWindow> window;
     ObjRef<GosuForwarder> forwarder;
     
-    // Fullscreen mode: Remember old display mode.
-    CFDictionaryRef savedMode;
+    // Fullscreen mode. Also remember old display mode.
+    CFDictionaryRef newMode, savedMode;
     
     ObjRef<NSOpenGLContext> context;
     boost::scoped_ptr<Graphics> graphics;
@@ -199,25 +197,20 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     
     if (fullscreen) {
         // Fullscreen: Create no window, instead change resolution.
-        
+
         // Save old mode and retrieve BPP
         pimpl->savedMode = CGDisplayCurrentMode(kCGDirectMainDisplay);
         int bpp;
         CFNumberGetValue((CFNumberRef)CFDictionaryGetValue(pimpl->savedMode, kCGDisplayBitsPerPixel),
                          kCFNumberIntType, &bpp);
-        
-        // Choose new mode
-        CFDictionaryRef newMode =
+        pimpl->newMode =
             CGDisplayBestModeForParameters(kCGDirectMainDisplay, bpp, width, height, 0);
-        CFNumberGetValue((CFNumberRef)CFDictionaryGetValue(newMode, kCGDisplayWidth),
+        CFNumberGetValue((CFNumberRef)CFDictionaryGetValue(pimpl->newMode, kCGDisplayWidth),
                          kCFNumberIntType, &width);
-        CFNumberGetValue((CFNumberRef)CFDictionaryGetValue(newMode, kCGDisplayHeight),
+        CFNumberGetValue((CFNumberRef)CFDictionaryGetValue(pimpl->newMode, kCGDisplayHeight),
                          kCFNumberIntType, &height);
-        cgCheck(CGDisplayCapture(kCGDirectMainDisplay), "capturing display");
-        cgCheck(CGDisplaySwitchToMode(kCGDirectMainDisplay, newMode), "switching mode");
-        
-        // Start drawing in fullscreen
-        [pimpl->context.obj() setFullScreen];
+
+        // Actual changing postponed until show().
     }
     else
     {
@@ -256,11 +249,6 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
 
 Gosu::Window::~Window()
 {
-    if (graphics().fullscreen())
-    {
-        CGDisplaySwitchToMode(kCGDirectMainDisplay, pimpl->savedMode);
-        CGReleaseAllDisplays();
-    }
 }
 
 std::wstring Gosu::Window::caption() const
@@ -289,9 +277,19 @@ void Gosu::Window::setCaption(const std::wstring& caption)
 void Gosu::Window::show()
 {
     [NSThread setThreadPriority: 1.0];
-    
+ 
     if (graphics().fullscreen())
+    {
         [NSCursor hide];
+
+        // Set new mode
+        cgCheck(CGDisplayCapture(kCGDirectMainDisplay), "capturing display");
+        cgCheck(CGDisplaySwitchToMode(kCGDirectMainDisplay, pimpl->newMode), "switching mode");
+        
+        // Start drawing in fullscreen
+        [pimpl->context.obj() setFullScreen];
+    }
+
     NSTimer* timer = [NSTimer scheduledTimerWithTimeInterval: pimpl->interval / 1000.0
                             target:pimpl->forwarder.obj() selector:@selector(doTick:)
                             userInfo:nil repeats:YES];
@@ -299,11 +297,19 @@ void Gosu::Window::show()
     [timer invalidate];
     if (graphics().fullscreen())
         [NSCursor unhide];
+
+    if (graphics().fullscreen())
+    {
+        // Resetting the mod shouldn't be all too important according to the docs.
+        // Let's leave it in until time for testing comes, though.
+        CGDisplaySwitchToMode(kCGDirectMainDisplay, pimpl->savedMode);
+        CGDisplayRelease(kCGDirectMainDisplay);
+    }
 }
 
 void Gosu::Window::close()
 {
-    [NSApp terminate:nil];
+    [NSApp stop:nil];
 }
 
 const Gosu::Graphics& Gosu::Window::graphics() const
