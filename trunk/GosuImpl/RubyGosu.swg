@@ -123,6 +123,20 @@
 
 #include <sstream>
 
+// New Ruby 1.9 syntax (for compilation with Ruby 1.8)
+#ifndef RSTRING_LEN
+# define RSTRING_LEN(x) RSTRING(x)->len
+#endif
+#ifndef RSTRING_PTR
+# define RSTRING_PTR(x) RSTRING(x)->ptr
+#endif
+#ifndef RARRAY_LEN
+# define RARRAY_LEN(x) RARRAY(x)->len
+#endif
+#ifndef RARRAY_PTR
+# define RARRAY_PTR(x) RARRAY(x)->ptr
+#endif
+
 namespace GosusDarkSide
 {
     // TODO: Find a way for this to fit into Gosu's design.
@@ -157,11 +171,11 @@ namespace Gosu
         unsigned width = NUM2UINT(rb_funcall(val, rb_intern("columns"), 0));
         unsigned height = NUM2UINT(rb_funcall(val, rb_intern("rows"), 0));
                                  
-        if (width * height * 4 != RSTRING(blob)->len)
+        if (width * height * 4 != RSTRING_LEN(blob))
             throw std::logic_error("Blob length mismatch!");
         Bitmap result;
         result.resize(width, height);
-        const unsigned* rgbaIter = reinterpret_cast<const unsigned*>(RSTRING(blob)->ptr);
+        const unsigned* rgbaIter = reinterpret_cast<const unsigned*>(RSTRING_PTR(blob));
         for (unsigned y = 0; y < height; ++y)
             for (unsigned x = 0; x < width; ++x)
             {
