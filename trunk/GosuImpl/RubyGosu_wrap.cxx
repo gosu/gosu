@@ -1928,23 +1928,20 @@ namespace Swig {
 /* -------- TYPES TABLE (BEGIN) -------- */
 
 #define SWIGTYPE_p_Channel swig_types[0]
-#define SWIGTYPE_p_Gosu__AsyncResultTGosu__Image_t swig_types[1]
-#define SWIGTYPE_p_Gosu__Button swig_types[2]
-#define SWIGTYPE_p_Gosu__Color swig_types[3]
-#define SWIGTYPE_p_Gosu__Font swig_types[4]
-#define SWIGTYPE_p_Gosu__GLTexInfo swig_types[5]
-#define SWIGTYPE_p_Gosu__Image swig_types[6]
-#define SWIGTYPE_p_Gosu__Sample swig_types[7]
-#define SWIGTYPE_p_Gosu__SampleInstance swig_types[8]
-#define SWIGTYPE_p_Gosu__Song swig_types[9]
-#define SWIGTYPE_p_Gosu__Window swig_types[10]
-#define SWIGTYPE_p_boost__shared_ptrTboost__try_mutex_t swig_types[11]
-#define SWIGTYPE_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t swig_types[12]
-#define SWIGTYPE_p_char swig_types[13]
-#define SWIGTYPE_p_double swig_types[14]
-#define SWIGTYPE_p_std__wstring swig_types[15]
-static swig_type_info *swig_types[17];
-static swig_module_info swig_module = {swig_types, 16, 0, 0, 0, 0};
+#define SWIGTYPE_p_Gosu__Button swig_types[1]
+#define SWIGTYPE_p_Gosu__Color swig_types[2]
+#define SWIGTYPE_p_Gosu__Font swig_types[3]
+#define SWIGTYPE_p_Gosu__GLTexInfo swig_types[4]
+#define SWIGTYPE_p_Gosu__Image swig_types[5]
+#define SWIGTYPE_p_Gosu__Sample swig_types[6]
+#define SWIGTYPE_p_Gosu__SampleInstance swig_types[7]
+#define SWIGTYPE_p_Gosu__Song swig_types[8]
+#define SWIGTYPE_p_Gosu__Window swig_types[9]
+#define SWIGTYPE_p_char swig_types[10]
+#define SWIGTYPE_p_double swig_types[11]
+#define SWIGTYPE_p_std__wstring swig_types[12]
+static swig_type_info *swig_types[14];
+static swig_module_info swig_module = {swig_types, 13, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2301,16 +2298,6 @@ SWIGINTERN Gosu::Font *new_Gosu_Font(Gosu::Window &window,std::wstring const &fo
         return new Gosu::Font(window.graphics(), fontName, height);
     }
 
-SWIGINTERNINLINE VALUE
-SWIG_From_bool  (bool value)
-{
-  return value ? Qtrue : Qfalse;
-}
-
-SWIGINTERN Gosu::Image *Gosu_AsyncResult_Sl_Gosu_Image_Sg__value(Gosu::AsyncResult<Gosu::Image > *self){
-        return self->takeValue().release();
-    }
-
 SWIGINTERN int
 SWIG_AsVal_bool (VALUE obj, bool *val)
 {
@@ -2337,9 +2324,6 @@ SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_1(Gosu::Window &window,VALUE source
         return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source),
             srcX, srcY, srcWidth, srcHeight, hardBorders);
     }
-SWIGINTERN Gosu::AsyncResult<Gosu::Image > *Gosu_Image_asyncNew(Gosu::Window &window,std::wstring const &filename){
-        return new Gosu::AsyncResult<Gosu::Image>(Gosu::asyncNewImage(window, filename));
-    }
 SWIGINTERN void Gosu_Image_drawAsQuad(Gosu::Image *self,double x1,double y1,Gosu::Color c1,double x2,double y2,Gosu::Color c2,double x3,double y3,Gosu::Color c3,double x4,double y4,Gosu::Color c4,Gosu::ZPos z,Gosu::AlphaMode mode=Gosu::amDefault){
         self->getData().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
     }
@@ -2361,6 +2345,13 @@ SWIGINTERN std::vector<Gosu::Image * > Gosu_Image_loadTiles(Gosu::Window &window
                                     tileWidth, tileHeight, hardBorders, vec);
         return vec;        
     }
+
+SWIGINTERNINLINE VALUE
+SWIG_From_bool  (bool value)
+{
+  return value ? Qtrue : Qfalse;
+}
+
 
 SWIGINTERN int
 SWIG_AsCharPtrAndSize(VALUE obj, char** cptr, size_t* psize, int *alloc)
@@ -2485,7 +2476,7 @@ SWIGINTERN void Gosu_Window_gl(Gosu::Window *self){
  * C++ director class methods
  * --------------------------------------------------- */
 
-#include "RubyGosu_wrap.h"
+#include "../GosuImpl/RubyGosu_wrap.h"
 
 SwigDirector_Window::SwigDirector_Window(VALUE self, unsigned int width, unsigned int height, bool fullscreen, double updateInterval): Gosu::Window(width, height, fullscreen, updateInterval), Swig::Director(self) {
   
@@ -4479,134 +4470,6 @@ fail:
 }
 
 
-swig_class cAsyncImageResult;
-
-#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
-SWIGINTERN VALUE
-_wrap_AsyncImageResult_allocate(VALUE self) {
-#else
-  SWIGINTERN VALUE
-  _wrap_AsyncImageResult_allocate(int argc, VALUE *argv, VALUE self) {
-#endif
-    
-    
-    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_Gosu__AsyncResultTGosu__Image_t);
-#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
-    rb_obj_call_init(vresult, argc, argv);
-#endif
-    return vresult;
-  }
-  
-
-SWIGINTERN VALUE
-_wrap_new_AsyncImageResult(int argc, VALUE *argv, VALUE self) {
-  boost::shared_ptr<boost::try_mutex > *arg1 = 0 ;
-  boost::shared_ptr<std::auto_ptr<Gosu::Image > > *arg2 = 0 ;
-  Gosu::AsyncResult<Gosu::Image > *result = 0 ;
-  void *argp1 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  const char *classname SWIGUNUSED = "Gosu::AsyncImageResult";
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_boost__shared_ptrTboost__try_mutex_t,  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Gosu::AsyncResult<(Gosu::Image)>" "', argument " "1"" of type '" "boost::shared_ptr<boost::try_mutex > const &""'"); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Gosu::AsyncResult<(Gosu::Image)>" "', argument " "1"" of type '" "boost::shared_ptr<boost::try_mutex > const &""'"); 
-  }
-  arg1 = reinterpret_cast< boost::shared_ptr<boost::try_mutex > * >(argp1);
-  res2 = SWIG_ConvertPtr(argv[1], &argp2, SWIGTYPE_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t,  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Gosu::AsyncResult<(Gosu::Image)>" "', argument " "2"" of type '" "boost::shared_ptr<std::auto_ptr<Gosu::Image > > const &""'"); 
-  }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Gosu::AsyncResult<(Gosu::Image)>" "', argument " "2"" of type '" "boost::shared_ptr<std::auto_ptr<Gosu::Image > > const &""'"); 
-  }
-  arg2 = reinterpret_cast< boost::shared_ptr<std::auto_ptr<Gosu::Image > > * >(argp2);
-  {
-    try {
-      result = (Gosu::AsyncResult<Gosu::Image > *)new Gosu::AsyncResult<Gosu::Image >((boost::shared_ptr<boost::try_mutex > const &)*arg1,(boost::shared_ptr<std::auto_ptr<Gosu::Image > > const &)*arg2);DATA_PTR(self) = result;
-      
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return self;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_AsyncImageResult_has_value(int argc, VALUE *argv, VALUE self) {
-  Gosu::AsyncResult<Gosu::Image > *arg1 = (Gosu::AsyncResult<Gosu::Image > *) 0 ;
-  bool result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__AsyncResultTGosu__Image_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "hasValue" "', argument " "1"" of type '" "Gosu::AsyncResult<Gosu::Image > const *""'"); 
-  }
-  arg1 = reinterpret_cast< Gosu::AsyncResult<Gosu::Image > * >(argp1);
-  {
-    try {
-      result = (bool)((Gosu::AsyncResult<Gosu::Image > const *)arg1)->hasValue();
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_bool(static_cast< bool >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_AsyncImageResult_value(int argc, VALUE *argv, VALUE self) {
-  Gosu::AsyncResult<Gosu::Image > *arg1 = (Gosu::AsyncResult<Gosu::Image > *) 0 ;
-  Gosu::Image *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__AsyncResultTGosu__Image_t, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "value" "', argument " "1"" of type '" "Gosu::AsyncResult<Gosu::Image > *""'"); 
-  }
-  arg1 = reinterpret_cast< Gosu::AsyncResult<Gosu::Image > * >(argp1);
-  {
-    try {
-      result = (Gosu::Image *)Gosu_AsyncResult_Sl_Gosu_Image_Sg__value(arg1);
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN void
-free_Gosu_AsyncResult_Sl_Gosu_Image_Sg_(Gosu::AsyncResult<Gosu::Image > *arg1) {
-    delete arg1;
-}
-
 swig_class cGLTexInfo;
 
 SWIGINTERN VALUE
@@ -5552,46 +5415,6 @@ SWIGINTERN VALUE _wrap_new_Image(int nargs, VALUE *args, VALUE self) {
   
 fail:
   rb_raise(rb_eArgError, "No matching function for overloaded 'new_Image'");
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Image_async_new(int argc, VALUE *argv, VALUE self) {
-  Gosu::Window *arg1 = 0 ;
-  std::wstring *arg2 = 0 ;
-  Gosu::AsyncResult<Gosu::Image > *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  std::wstring temp2 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Gosu__Window,  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Gosu_Image_asyncNew" "', argument " "1"" of type '" "Gosu::Window &""'"); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Gosu_Image_asyncNew" "', argument " "1"" of type '" "Gosu::Window &""'"); 
-  }
-  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  {
-    VALUE localTemporary = rb_obj_as_string(argv[1]);
-    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
-    arg2 = &temp2;
-  }
-  {
-    try {
-      result = (Gosu::AsyncResult<Gosu::Image > *)Gosu_Image_asyncNew(*arg1,(std::wstring const &)*arg2);
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__AsyncResultTGosu__Image_t, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
   return Qnil;
 }
 
@@ -7588,7 +7411,6 @@ fail:
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
 static swig_type_info _swigt__p_Channel = {"_p_Channel", "Channel *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_Gosu__AsyncResultTGosu__Image_t = {"_p_Gosu__AsyncResultTGosu__Image_t", "Gosu::AsyncResult<Gosu::Image > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Button = {"_p_Gosu__Button", "Gosu::Button *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Color = {"_p_Gosu__Color", "Gosu::Color *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Font = {"_p_Gosu__Font", "Gosu::Font *", 0, 0, (void*)0, 0};
@@ -7598,15 +7420,12 @@ static swig_type_info _swigt__p_Gosu__Sample = {"_p_Gosu__Sample", "Gosu::Sample
 static swig_type_info _swigt__p_Gosu__SampleInstance = {"_p_Gosu__SampleInstance", "Gosu::SampleInstance *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Song = {"_p_Gosu__Song", "Gosu::Song *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Window = {"_p_Gosu__Window", "Gosu::Window *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_boost__shared_ptrTboost__try_mutex_t = {"_p_boost__shared_ptrTboost__try_mutex_t", "boost::shared_ptr<boost::try_mutex > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t = {"_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t", "boost::shared_ptr<std::auto_ptr<Gosu::Image > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "double *|Gosu::ZPos *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__wstring = {"_p_std__wstring", "std::wstring *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Channel,
-  &_swigt__p_Gosu__AsyncResultTGosu__Image_t,
   &_swigt__p_Gosu__Button,
   &_swigt__p_Gosu__Color,
   &_swigt__p_Gosu__Font,
@@ -7616,15 +7435,12 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__SampleInstance,
   &_swigt__p_Gosu__Song,
   &_swigt__p_Gosu__Window,
-  &_swigt__p_boost__shared_ptrTboost__try_mutex_t,
-  &_swigt__p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t,
   &_swigt__p_char,
   &_swigt__p_double,
   &_swigt__p_std__wstring,
 };
 
 static swig_cast_info _swigc__p_Channel[] = {  {&_swigt__p_Channel, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Gosu__AsyncResultTGosu__Image_t[] = {  {&_swigt__p_Gosu__AsyncResultTGosu__Image_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Button[] = {  {&_swigt__p_Gosu__Button, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Color[] = {  {&_swigt__p_Gosu__Color, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Font[] = {  {&_swigt__p_Gosu__Font, 0, 0, 0},{0, 0, 0, 0}};
@@ -7634,15 +7450,12 @@ static swig_cast_info _swigc__p_Gosu__Sample[] = {  {&_swigt__p_Gosu__Sample, 0,
 static swig_cast_info _swigc__p_Gosu__SampleInstance[] = {  {&_swigt__p_Gosu__SampleInstance, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Song[] = {  {&_swigt__p_Gosu__Song, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Window[] = {  {&_swigt__p_Gosu__Window, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_boost__shared_ptrTboost__try_mutex_t[] = {  {&_swigt__p_boost__shared_ptrTboost__try_mutex_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t[] = {  {&_swigt__p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__wstring[] = {  {&_swigt__p_std__wstring, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Channel,
-  _swigc__p_Gosu__AsyncResultTGosu__Image_t,
   _swigc__p_Gosu__Button,
   _swigc__p_Gosu__Color,
   _swigc__p_Gosu__Font,
@@ -7652,8 +7465,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__SampleInstance,
   _swigc__p_Gosu__Song,
   _swigc__p_Gosu__Window,
-  _swigc__p_boost__shared_ptrTboost__try_mutex_t,
-  _swigc__p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t,
   _swigc__p_char,
   _swigc__p_double,
   _swigc__p_std__wstring,
@@ -7979,16 +7790,6 @@ SWIGEXPORT void Init_gosu(void) {
   cFont.destroy = (void (*)(void *)) free_Gosu_Font;
   cFont.trackObjects = 0;
   
-  cAsyncImageResult.klass = rb_define_class_under(mGosu, "AsyncImageResult", rb_cObject);
-  SWIG_TypeClientData(SWIGTYPE_p_Gosu__AsyncResultTGosu__Image_t, (void *) &cAsyncImageResult);
-  rb_define_alloc_func(cAsyncImageResult.klass, _wrap_AsyncImageResult_allocate);
-  rb_define_method(cAsyncImageResult.klass, "initialize", VALUEFUNC(_wrap_new_AsyncImageResult), -1);
-  rb_define_method(cAsyncImageResult.klass, "has_value", VALUEFUNC(_wrap_AsyncImageResult_has_value), -1);
-  rb_define_method(cAsyncImageResult.klass, "value", VALUEFUNC(_wrap_AsyncImageResult_value), -1);
-  cAsyncImageResult.mark = 0;
-  cAsyncImageResult.destroy = (void (*)(void *)) free_Gosu_AsyncResult_Sl_Gosu_Image_Sg_;
-  cAsyncImageResult.trackObjects = 0;
-  
   cGLTexInfo.klass = rb_define_class_under(mGosu, "GLTexInfo", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__GLTexInfo, (void *) &cGLTexInfo);
   rb_define_alloc_func(cGLTexInfo.klass, _wrap_GLTexInfo_allocate);
@@ -8016,7 +7817,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cImage.klass, "draw", VALUEFUNC(_wrap_Image_draw), -1);
   rb_define_method(cImage.klass, "draw_mod", VALUEFUNC(_wrap_Image_draw_mod), -1);
   rb_define_method(cImage.klass, "draw_rot", VALUEFUNC(_wrap_Image_draw_rot), -1);
-  rb_define_singleton_method(cImage.klass, "async_new", VALUEFUNC(_wrap_Image_async_new), -1);
   rb_define_method(cImage.klass, "draw_as_quad", VALUEFUNC(_wrap_Image_draw_as_quad), -1);
   rb_define_method(cImage.klass, "gl_tex_info", VALUEFUNC(_wrap_Image_gl_tex_info), -1);
   rb_define_singleton_method(cImage.klass, "from_text", VALUEFUNC(_wrap_Image_from_text), -1);
