@@ -2,8 +2,9 @@
 #labels Featured
 
 =0.7.9=
-  * Windows: Fullscreen mode allows alt+tab switching.
   * Mac: Fixed a bug where fullscreen mode could rearrange desktop icons (and otherwise confuse OS X).
+  * Windows: Fullscreen mode allows alt+tab switching.
+  * Windows: Fixed mouse wheel support.
 
 =0.7.8.5=
   * All: Much better HSV interface. Hope this doesn't already break any code.
