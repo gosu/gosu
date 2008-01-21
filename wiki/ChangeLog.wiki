@@ -1,8 +1,12 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.9=
+  * Windows: Fullscreen mode allows alt+tab switching.
+  * Mac: Fixed a bug where fullscreen mode could rearrange desktop icons (and otherwise confuse OS X).
+
 =0.7.8.5=
-  * All: Much better HSV interface. Hope this didn't already break any code.
+  * All: Much better HSV interface. Hope this doesn't already break any code.
   * All: Audio interface VASTLY extended! Yay.
   * Linux: SDL_mixer port much closer to FMOD one.
   * Mac: Fixed right-click detection
