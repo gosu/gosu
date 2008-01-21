@@ -19,3 +19,4 @@ end
 
 window = GameWindow.new
 window.show
+

@@ -97,15 +97,28 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
 
     // We don't want the window to be resized.
     XSizeHints* sizeHints = XAllocSizeHints();
-
     sizeHints->flags = PMinSize | PMaxSize;
     sizeHints->min_width = sizeHints->max_width = pimpl->width;
     sizeHints->min_height = sizeHints->max_height = pimpl->height;
-//    ::Atom sizeHintsAtom = XInternAtom(pimpl->dpy, "WM_SIZE_HINTS", true);
-    ::Atom sizeHintsAtom = XInternAtom(pimpl->dpy, "WM_NORMAL_HINTS", true);
-    XSetWMSizeHints(pimpl->dpy, pimpl->window, sizeHints, sizeHintsAtom);
+    XSetWMNormalHints(pimpl->dpy, pimpl->window, sizeHints);
     XFree(sizeHints);
 
+    Atom stateAtom = XInternAtom(pimpl->dpy, "_NET_WM_STATE", False);
+    Atom fullscreenAtom = XInternAtom(pimpl->dpy, "_NET_WM_STATE_FULLSCREEN", False);
+    if (fullscreen)// && stateAtom != None && fullscreenAtom != None)
+    {
+        XEvent xev;
+        memset(&xev, 0, sizeof(xev));
+        xev.type = ClientMessage;
+        xev.xclient.window = pimpl->window;
+        xev.xclient.message_type = stateAtom;
+        xev.xclient.format = 32;
+        xev.xclient.data.l[0] = 1;
+        xev.xclient.data.l[1] = fullscreenAtom;
+        xev.xclient.data.l[2] = 0;
+        XSendEvent(pimpl->dpy, DefaultRootWindow(pimpl->dpy), False,
+            SubstructureRedirectMask | SubstructureNotifyMask, &xev);
+    }
 
 //    XMapWindow(pimpl->dpy, pimpl->window);
     glXMakeCurrent(pimpl->dpy, pimpl->window, pimpl->cx);
@@ -132,11 +145,15 @@ Gosu::Window::~Window()
 
 std::wstring Gosu::Window::caption() const
 {
+    // TODO: Update to _NET_WM_NAME
+
     return pimpl->title;
 }
 
 void Gosu::Window::setCaption(const std::wstring& caption)
 {
+    // TODO: Update to _NET_WM_NAME
+
     pimpl->title = caption;
 
     if(!pimpl->showing) return;
@@ -168,17 +185,11 @@ void Gosu::Window::Impl::enterFullscreen()
 
     if(!ret) throw std::runtime_error("Can't retrieve XF86 modes, fullscreen impossible.");
 
-//    std::cout<<"Count: "<<modeCnt<<std::endl;
     bool switched = false;
     for(int i = 0; i < modeCnt; i++)
     {
-/*        std::cout<<modes[i]->hdisplay<<" x "<<modes[i]->vdisplay;
-        std::cout<<"  "<<modes[i]->flags;
-        std::cout<<std::endl;*/
-
         if(modes[i]->hdisplay == width && modes[i]->vdisplay == height)
         {
-//            std::cout<<i<<" matches! Switching."<<std::endl;
             XF86VidModeSwitchToMode(dpy, XDefaultScreen(dpy), modes[i]);
             switched = true;
             break;
@@ -187,6 +198,8 @@ void Gosu::Window::Impl::enterFullscreen()
 
     if(switched)
     {
+        //XFlush(pimpl->dpy);
+        //XSync(pimpl->dpy, 0);
         XMoveWindow(dpy, window, 0, 0);
         XRaiseWindow(dpy, window);
         XGrabPointer(dpy, window, true, 0, GrabModeAsync, GrabModeAsync, window,
@@ -200,7 +213,7 @@ void Gosu::Window::Impl::enterFullscreen()
     else
     {
         XFree(modes);
-        throw std::runtime_error("Can't find a fitting mode, fullscreen impossible.");
+        throw std::runtime_error("Can't find a fitting display mode, fullscreen not supported.");
     }
 
     isFullscreen = switched;
