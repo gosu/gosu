@@ -6,8 +6,8 @@
   * real mouse wheel support (OS X)
   * port at least one Ruby example to C++ (OpenGL?)
   * bugfixes from issue tracker
-  * allow FPS > 60 even with vsync
   * TextInput minimal impl
+  * milliseconds() very inexact on 10.5.2?
 
 = ASAP =
   * Apple remote support would rule.
@@ -23,6 +23,7 @@
 = 0.8.0 (early 2008)=
   * clean up Gosu's C++ interface
   * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
+  * allow FPS > 60 even with vsync
 
 = Major design goals for 0.8.x (graphics, polish) =
   * make the Ruby wrapper's menu bar more complete on OS X
