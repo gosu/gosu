@@ -3,7 +3,6 @@
 
 = 0.7.9 (hopefully still '07) =
   * don't hide cursor unnecessarily (OS X)
-  * real mouse wheel support (OS X)
   * port at least one Ruby example to C++ (OpenGL?) (test Xcode template with that)
   * bugfixes from issue tracker
   * TextInput minimal impl
