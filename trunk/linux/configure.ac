@@ -69,7 +69,7 @@ if test $AUDIO_LIBS; then
 else
   AC_MSG_RESULT(no)
   AC_MSG_CHECKING(for SDL_mixer)
-  if test -f "/usr/lib/libSDL_mixer.so"; then
+  if test -f "/usr/lib/libSDL_mixer.so" || test -f "/usr/local/lib/libSDL_mixer.so"; then
     GOSU_A_OBJS=${GOSU_A_OBJS}" \$(SDLMIXER_OBJ)"
     AUDIO_LIBS="`sdl-config --libs` -lSDL_mixer"
     AUDIO_INC=`sdl-config --cflags`
@@ -81,6 +81,9 @@ else
     AC_MSG_ERROR(No suitable audio library found)
   fi
 fi
+
+AC_CHECK_HEADER(sys/stat.h, HAVE_SYS_STAT_H=-DHAVE_SYS_STAT_H)
+AC_SUBST(HAVE_SYS_STAT_H)
 
 AC_CHECK_PROGS(ruby, ruby1.9 ruby1.8 ruby)
 RUBY_INC_DIR=`${ruby} -e 'require "rbconfig";print(Config::CONFIG[["rubyhdrdir"]] || Config::CONFIG[["archdir"]])'`
@@ -95,8 +98,16 @@ if test $RUBY_INC_DIR; then
   TO_BE_MADE=${TO_BE_MADE}" ruby"
 fi
 
+AC_CHECK_PROGS(swig, swig)
+
+AC_CHECK_LIB(dl, dlopen, LIBS+= -ldl, AC_CHECK_LIB(c, dlopen, ,AC_MSG_ERROR(Missing dlopen functionality), ), )
+
+AC_SUBST(DLOPEN_LIB)
 AC_SUBST(GOSU_A_OBJS)
 AC_SUBST(TO_BE_MADE)
+
+AC_CHECK_LIB(rt, sched_setscheduler, LIBS += -lrt , AC_CHECK_LIB(c, sched_setscheduler, , AC_MSG_ERROR(Missing librt functionality), ), )
+AC_SUBST(HAVE_LIBRT)
 
 # Checks for header files.
 

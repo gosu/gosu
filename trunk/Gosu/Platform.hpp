@@ -51,7 +51,7 @@ namespace Gosu
 # define GOSU_IS_WIN
 #else
 # define GOSU_IS_UNIX
-# ifdef __linux
+# # if defined(__linux) || defined(__FreeBSD__)
 #  define GOSU_IS_X
 # else
 #  define GOSU_IS_MAC

@@ -550,6 +550,20 @@ bool Gosu::Input::feedNSEvent(void* event)
         case NSRightMouseUp:
             pimpl->enqueue(msRight, false);
             return true;
+        case NSScrollWheel:
+            if ([ev deltaY] > 0)
+            {
+                pimpl->enqueue(msWheelUp, true);
+                pimpl->enqueue(msWheelUp, false);
+            }
+            else if ([ev deltaY] < 0)
+            {
+                pimpl->enqueue(msWheelDown, true);
+                pimpl->enqueue(msWheelDown, false);
+            }
+            else
+                return false;
+            return true;
     }
         
     // Handle other keys.

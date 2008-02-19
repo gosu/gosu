@@ -110,6 +110,7 @@ OVERRIDE_METHOD(mouseDown);
 OVERRIDE_METHOD(mouseUp);
 OVERRIDE_METHOD(rightMouseDown);
 OVERRIDE_METHOD(rightMouseUp);
+OVERRIDE_METHOD(scrollWheel);
 @end
 
 @interface GosuView : NSView
@@ -129,6 +130,7 @@ OVERRIDE_METHOD(mouseDown);
 OVERRIDE_METHOD(mouseUp);
 OVERRIDE_METHOD(rightMouseDown);
 OVERRIDE_METHOD(rightMouseUp);
+OVERRIDE_METHOD(scrollWheel);
 @end
 
 #undef OVERRIDE_METHOD
