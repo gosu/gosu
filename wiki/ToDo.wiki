@@ -7,7 +7,6 @@
   * port at least one Ruby example to C++ (OpenGL?)
   * bugfixes from issue tracker
   * TextInput minimal impl
-  * milliseconds() very inexact on 10.5.2?
 
 = ASAP =
   * Apple remote support would rule.
