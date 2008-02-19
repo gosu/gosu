@@ -187,6 +187,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         NSOpenGLPFAScreenMask,
         (NSOpenGLPixelFormatAttribute)CGDisplayIDToOpenGLDisplayMask(CGMainDisplayID()),
         NSOpenGLPFAFullScreen,
+        NSOpenGLPFADepthSize,
+        (NSOpenGLPixelFormatAttribute)16,
         (NSOpenGLPixelFormatAttribute)0
     };
     // Create pixel format and OpenGL context
