@@ -3,6 +3,7 @@
 
 =0.7.9=
   * All: OpenGL allocates depth buffer, allows for better custom OpenGL effects.
+  * FreeBSD: Linux port extended to cover FreeBSD as well
   * Mac: Fixed a bug where fullscreen mode could rearrange desktop icons (and otherwise confuse OS X).
   * Mac: Added mouse wheel support.
   * Windows: Fullscreen mode allows alt+tab switching.
