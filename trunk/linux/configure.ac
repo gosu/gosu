@@ -98,9 +98,9 @@ if test $RUBY_INC_DIR; then
   TO_BE_MADE=${TO_BE_MADE}" ruby"
 fi
 
-AC_CHECK_PROGS(swig, swig, ,NO_SWIG)
+AC_CHECK_PROG(HAVE_SWIG, swig, yes, no)
  
-if $NO_SWIG; then
+if test $HAVE_SWIG != "yes"; then
   AC_MSG_ERROR(Cannot find swig)
 fi
 
