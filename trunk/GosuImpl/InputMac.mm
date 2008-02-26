@@ -420,9 +420,7 @@ namespace Gosu
 }
 
 namespace {
-    // This is just a wild assumption. For Apple ADB keyboards, I read something
-    // about 127 being the max, but checking more than that will not hurt, so...
-    const unsigned numScancodes = 256;
+    const unsigned numScancodes = 128;
     
     boost::array<wchar_t, numScancodes> idChars;
     std::map<wchar_t, unsigned> charIds;
@@ -440,7 +438,7 @@ namespace {
 		if (!KCHR)
 			return;
         
-        for (unsigned code = 0; code < numScancodes; ++code)
+        for (int code = numScancodes - 1; code >= 0; --code)
         {
             UInt32 deadKeyState = 0;
 			UInt32 value = KeyTranslate(KCHR, code, &deadKeyState);
@@ -565,14 +563,14 @@ bool Gosu::Input::feedNSEvent(void* event)
                 return false;
             return true;
     }
-        
+	
     // Handle other keys.
     if (type == NSKeyDown || type == NSKeyUp)
     {
         pimpl->enqueue([ev keyCode], type == NSKeyDown);
         return true;
     }
-
+	
     return false;
 }
 

@@ -11,6 +11,18 @@
 #import <boost/bind.hpp>
 #import <vector>
 
+// Workaround for Apple NSScreen bug :(
+@interface NSScreen (NSScreenAccess)
+- (void) setFrame:(NSRect)frame;
+@end
+
+@implementation NSScreen (NSScreenAccess)
+- (void) setFrame:(NSRect)frame;
+{
+    _frame = frame;
+}
+@end
+
 // Necessary to catch input events in fullscreen mode
 @interface GosuApplication : NSApplication
 {
@@ -145,6 +157,7 @@ struct Gosu::Window::Impl
     
     // Fullscreen mode. Also remember old display mode.
     CFDictionaryRef newMode, savedMode;
+	NSRect savedFrame;
     
     ObjRef<NSOpenGLContext> context;
     boost::scoped_ptr<Graphics> graphics;
@@ -204,6 +217,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
 
         // Save old mode and retrieve BPP
         pimpl->savedMode = CGDisplayCurrentMode(kCGDirectMainDisplay);
+		pimpl->savedFrame = [[NSScreen mainScreen] frame];
         int bpp;
         CFNumberGetValue((CFNumberRef)CFDictionaryGetValue(pimpl->savedMode, kCGDisplayBitsPerPixel),
                          kCFNumberIntType, &bpp);
@@ -253,6 +267,12 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
 
 Gosu::Window::~Window()
 {
+    if (graphics().fullscreen())
+    {
+        CGDisplaySwitchToMode(kCGDirectMainDisplay, pimpl->savedMode);
+		[[NSScreen mainScreen] setFrame:pimpl->savedFrame]; 
+        CGReleaseAllDisplays();
+    }
 }
 
 std::wstring Gosu::Window::caption() const

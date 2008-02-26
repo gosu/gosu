@@ -22,7 +22,8 @@
 #pragma SWIG nowarn=-490,-319
 %typemap(in) wchar_t {
     VALUE localTemporary = rb_obj_as_string($input);
-    $1 = Gosu::utf8ToWstring(StringValueCStr(localTemporary)).at(0);
+    std::wstring localTemporary2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
+	$1 = localTemporary2.empty() ? 0 : localTemporary2.at(0);
 }
 %typemap(out) wchar_t {
     $result = rb_str_new2(Gosu::wstringToUTF8(std::wstring(1, $1)).c_str());
