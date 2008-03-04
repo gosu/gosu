@@ -3,9 +3,9 @@
 
 = 0.7.9 =
   * TextInput minimal impl
+  * testing around with multiple monitors on Windows/OS X
 
 = ASAP =
-  * Apple remote support would rule.
   * clean up after playing around with possible optimizations
   * get rid of OpenGL tearing on Windows (Intel GMA 950)
   * don't round updateInterval on Windows
@@ -13,9 +13,9 @@
   * implement frameskip
   * more C++ examples
   * assure Gosu::File also creates directories as necessary
-  * testing around with multiple monitors on Windows/OS X
 
 = 0.8.0 (early 2008)=
+  * Apple remote support would rule.
   * clean up Gosu's C++ interface
   * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
   * allow FPS > 60 even with vsync
@@ -28,7 +28,7 @@
   * more alpha modes, yay!
   * find a way to factor rot flips out of Gosu => Image/draw redesign
   * implement clipping and a target() modifier for the new Image
-  * more beautiful text! (kerning etc.?)
+  * much improved text output system, at the VERY least/as a first step, Font shouldn't be forced to be bold
   * speed up LargeImageData!
 
 = Major design goals for 0.9.x (IO) =
