@@ -29,6 +29,7 @@
   * find a way to factor rot flips out of Gosu => Image/draw redesign
   * implement clipping and a target() modifier for the new Image
   * much improved text output system, at the VERY least/as a first step, Font shouldn't be forced to be bold
+  * also, Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...)
   * speed up LargeImageData!
 
 = Major design goals for 0.9.x (IO) =
