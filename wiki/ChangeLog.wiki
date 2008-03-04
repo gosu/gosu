@@ -3,10 +3,13 @@
 
 =0.7.9=
   * All: OpenGL allocates depth buffer, allows for better custom OpenGL effects.
+  * All: Gosu::Font looks a lot smoother
   * FreeBSD: Linux port extended to cover FreeBSD as well (thanks Vagabond!)
   * Mac: Fixed a bug where fullscreen mode could rearrange desktop icons (and otherwise confuse OS X).
   * Mac: Added mouse wheel support.
   * Mac: char_to_id bugfix (thanks 0x17!)
+  * Mac: Mouse will not be hidden as aggressively
+  * Mac: Changed default font from Arial to Helvetica
   * Windows: Fullscreen mode allows alt+tab switching.
   * Windows: Fixed mouse wheel support.
 
