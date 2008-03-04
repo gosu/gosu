@@ -2,9 +2,6 @@
 #labels Featured
 
 = 0.7.9 =
-  * don't hide cursor unnecessarily (OS X)
-  * port at least one Ruby example to C++ (OpenGL?)
-  * bugfixes from issue tracker
   * TextInput minimal impl
 
 = ASAP =
