@@ -4,6 +4,7 @@
 = 0.7.9 =
   * TextInput minimal impl
   * testing around with multiple monitors on Windows/OS X
+  * deprecation message for Gosu::Button module
 
 = ASAP =
   * clean up after playing around with possible optimizations
