@@ -1,12 +1,11 @@
 #summary Gosu's mixup between a roadmap and a short-term to-do list.
 #labels Featured
 
-= 0.7.9 (hopefully still '07) =
+= 0.7.9 =
   * don't hide cursor unnecessarily (OS X)
-  * port at least one Ruby example to C++ (OpenGL?) (test Xcode template with that)
+  * port at least one Ruby example to C++ (OpenGL?)
   * bugfixes from issue tracker
   * TextInput minimal impl
-  * merge FreeBSD patch
 
 = ASAP =
   * Apple remote support would rule.
