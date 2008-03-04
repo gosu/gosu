@@ -50,13 +50,11 @@
 		D410EAF70A801B00005C7067 /* BitmapColorKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD60A801B00005C7067 /* BitmapColorKey.cpp */; };
 		D410EAF80A801B00005C7067 /* BitmapPNG.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD70A801B00005C7067 /* BitmapPNG.cpp */; };
 		D410EAF90A801B00005C7067 /* BlockAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD80A801B00005C7067 /* BlockAllocator.cpp */; };
-		D410EAFA0A801B00005C7067 /* BlockAllocator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410EAD90A801B00005C7067 /* BlockAllocator.hpp */; };
 		D410EAFB0A801B00005C7067 /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADA0A801B00005C7067 /* Color.cpp */; };
 		D410EAFC0A801B00005C7067 /* Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADB0A801B00005C7067 /* Font.cpp */; };
 		D410EAFD0A801B00005C7067 /* Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADC0A801B00005C7067 /* Graphics.cpp */; };
 		D410EAFF0A801B00005C7067 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADE0A801B00005C7067 /* Image.cpp */; };
 		D410EB000A801B00005C7067 /* LargeImageData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADF0A801B00005C7067 /* LargeImageData.cpp */; };
-		D410EB010A801B00005C7067 /* LargeImageData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410EAE00A801B00005C7067 /* LargeImageData.hpp */; };
 		D410EB020A801B00005C7067 /* RotFlip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE10A801B00005C7067 /* RotFlip.cpp */; };
 		D410EB030A801B00005C7067 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE20A801B00005C7067 /* Text.cpp */; };
 		D410EB040A801B00005C7067 /* TextMac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE30A801B00005C7067 /* TextMac.cpp */; };
@@ -107,12 +105,9 @@
 		D4A7E90A0CD377E000621B24 /* Async.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9080CD377E000621B24 /* Async.cpp */; };
 		D4A7E90B0CD377E000621B24 /* Async.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9080CD377E000621B24 /* Async.cpp */; };
 		D4A7E97F0CD3907D00621B24 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97B0CD3907D00621B24 /* Texture.cpp */; };
-		D4A7E9800CD3907D00621B24 /* Texture.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4A7E97C0CD3907D00621B24 /* Texture.hpp */; };
 		D4A7E9810CD3907D00621B24 /* TexChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97D0CD3907D00621B24 /* TexChunk.cpp */; };
-		D4A7E9820CD3907D00621B24 /* TexChunk.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4A7E97E0CD3907D00621B24 /* TexChunk.hpp */; };
 		D4A7E9830CD3907D00621B24 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97B0CD3907D00621B24 /* Texture.cpp */; };
 		D4A7E9840CD3907D00621B24 /* TexChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97D0CD3907D00621B24 /* TexChunk.cpp */; };
-		D4A7E9AA0CD3927D00621B24 /* Common.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4A7E9A90CD3927D00621B24 /* Common.hpp */; };
 		D4A7E9E80CD39BA200621B24 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
 		D4A7E9E90CD39BA200621B24 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
 		D4BC5D6B0CC29D0F002D4236 /* Async.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4BC5D6A0CC29D0F002D4236 /* Async.hpp */; };
@@ -430,14 +425,9 @@
 				D410E9F30A8019CD005C7067 /* Timing.hpp in Headers */,
 				D410E9F40A8019CD005C7067 /* Utility.hpp in Headers */,
 				D410E9F50A8019CD005C7067 /* Window.hpp in Headers */,
-				D410EAFA0A801B00005C7067 /* BlockAllocator.hpp in Headers */,
-				D410EB010A801B00005C7067 /* LargeImageData.hpp in Headers */,
 				D410EB130A801B00005C7067 /* Sockets.hpp in Headers */,
 				D42BC0D10C4F840C00EBF79C /* Gosu.hpp in Headers */,
 				D4BC5D6B0CC29D0F002D4236 /* Async.hpp in Headers */,
-				D4A7E9800CD3907D00621B24 /* Texture.hpp in Headers */,
-				D4A7E9820CD3907D00621B24 /* TexChunk.hpp in Headers */,
-				D4A7E9AA0CD3927D00621B24 /* Common.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -37,8 +37,7 @@ struct Gosu::Font::Impl
         Bitmap bmp;
         bmp.resize(charWidth, height);
         
-        drawText(bmp, charString, 0, 0, Colors::white, fontName, height,
-            ffBold);
+        drawText(bmp, charString, 0, 0, Colors::white, fontName, height, ffBold);
         imgPtr.reset(new Image(*graphics, bmp));
         return *imgPtr;
     }
@@ -49,7 +48,7 @@ Gosu::Font::Font(Graphics& graphics, const wstring& fontName, unsigned height)
 {
     pimpl->graphics = &graphics;
     pimpl->fontName = fontName;
-    pimpl->height = height;
+    pimpl->height = height * 2; // Auto-AA!
 }
 
 Gosu::Font::~Font()
@@ -58,20 +57,23 @@ Gosu::Font::~Font()
 
 unsigned Gosu::Font::height() const
 {
-    return pimpl->height;
+    return pimpl->height / 2;
 }
 
 double Gosu::Font::textWidth(const std::wstring& text, double factorX) const
 {
     double result = 0;
     for (unsigned i = 0; i < text.length(); ++i)
-        result += pimpl->getChar(text[i]).width() * factorX;
-    return result;
+        result += pimpl->getChar(text[i]).width();
+    return result * factorX / 2;
 }
 
 void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
     double factorX, double factorY, Color c, AlphaMode mode) const
 {
+    factorX /= 2;
+    factorY /= 2;
+
     for (unsigned i = 0; i < text.length(); ++i)
     {
         Image& curChar = pimpl->getChar(text[i]);

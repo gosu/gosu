@@ -12,7 +12,9 @@
 
 std::wstring Gosu::defaultFontName()
 {
-    return L"Arial";
+    // Could choose Arial to stay consistent with Windows, but since the font sizes will
+    // be messed up anyway...
+    return L"Helvetica";
 }
 
 namespace Gosu

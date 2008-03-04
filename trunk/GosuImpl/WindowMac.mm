@@ -423,7 +423,8 @@ void Gosu::Window::Impl::doTick(Window& window)
     if (!window.graphics().fullscreen())
     {
         if (NSPointInRect([window.pimpl->window.obj() mouseLocationOutsideOfEventStream],
-                          [[window.pimpl->window.obj() contentView] frame]))
+                          [[window.pimpl->window.obj() contentView] frame]) &&
+            [NSApp isActive])
         {
             if (window.pimpl->mouseViz)
                 [NSCursor hide];
