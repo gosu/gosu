@@ -15,7 +15,7 @@
   * more C++ examples
   * assure Gosu::File also creates directories as necessary
 
-= 0.8.0 (early 2008)=
+= 0.8.0 (after a cleanup/documentation delay)=
   * Apple remote support would rule.
   * clean up Gosu's C++ interface
   * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
