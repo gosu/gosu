@@ -6,7 +6,7 @@ class Test < Gosu::Window
   end
     
   def button_down(id)        
-    self.caption = "#{id} = #{button_id_to_char(id)} = #{char_to_button_id(button_id_to_char(id))}"
+    self.caption = "#{id} = #{button_id_to_char(id)} / #{button_id_to_char(id)[0]}  = #{char_to_button_id(button_id_to_char(id))}"
   end
 end
 

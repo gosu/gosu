@@ -449,11 +449,17 @@ namespace {
 			// No character! Pity.
 			if (value == 0)
 				continue;
+                
+            // Ignore special characters except newline.
+            if (value == 3)
+                value = 13; // convert Enter to Return
+            if (value < 32 && value != 13)
+                continue;
 			
 			// Now we have a character which is *not* limited to the ASCII range. To correctly
 			// translate this into a wchar_t, we need to convert it based on the current locale.
 			// TODO: That locale stuff should be explicit. Locales always cause trouble.
-			
+            
 			std::string str(1, char(value));
 			wchar_t ch = Gosu::macRomanToWstring(str).at(0);
 			
