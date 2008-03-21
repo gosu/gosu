@@ -1,6 +1,7 @@
 #import <AppKit/AppKit.h>
 #import <Carbon/Carbon.h>
 #include <Gosu/Input.hpp>
+#include <Gosu/TextInput.hpp>
 #include <Gosu/Utility.hpp>
 #include <IOKit/hidsystem/IOLLEvent.h>
 #include <boost/array.hpp>
@@ -475,6 +476,7 @@ struct Gosu::Input::Impl
 {
     Input& input;
     NSWindow* window;
+    TextInput* textInput;
     double mouseX, mouseY;
     double mouseFactorX, mouseFactorY;
     
@@ -489,7 +491,7 @@ struct Gosu::Input::Impl
     std::vector<WaitingButton> queue;
 
     Impl(Input& input)
-    : input(input), mouseFactorX(1), mouseFactorY(1), currentMods(0)
+    : input(input), textInput(0), mouseFactorX(1), mouseFactorY(1), currentMods(0)
     {
     }
     
@@ -532,14 +534,21 @@ Gosu::Input::~Input()
 bool Gosu::Input::feedNSEvent(void* event)
 {
     NSEvent* ev = (NSEvent*)event;
-    
+    unsigned type = [ev type];
+
+    if (type == NSKeyDown && textInput())
+    {
+        textInput()->feedNSEvent(event);
+        return true;
+    }
+            
     // Process modifier keys.
     unsigned mods = [ev modifierFlags];
     if (mods != pimpl->currentMods)
         pimpl->updateMods(mods);
     
+    
     // Handle mouse input.
-    unsigned type = [ev type];
     switch (type)
     {
         case NSLeftMouseDown:
@@ -663,4 +672,14 @@ void Gosu::Input::update()
                 onButtonUp(Button(gpRangeBegin + i));
         }
     }
+}
+
+Gosu::TextInput* Gosu::Input::textInput() const
+{
+    return pimpl->textInput;
+}
+
+void Gosu::Input::setTextInput(TextInput* textInput)
+{
+    pimpl->textInput = textInput;
 }

@@ -115,7 +115,14 @@ typedef void (*WindowProc)(Gosu::Window&);
 {
     _input = input;
 }
-OVERRIDE_METHOD(keyDown);
+
+- (void)keyDown: (NSEvent*) event
+{
+    puts("GosuWindow keyDown");
+    _input->feedNSEvent(event);
+}
+
+//OVERRIDE_METHOD(keyDown);
 OVERRIDE_METHOD(keyUp);
 OVERRIDE_METHOD(flagsChanged);
 OVERRIDE_METHOD(mouseDown);
@@ -134,6 +141,11 @@ OVERRIDE_METHOD(scrollWheel);
 - (void) setInput: (Gosu::Input*)input
 {
     _input = input;
+    
+}
+- (BOOL)acceptsFirstResponder
+{
+    return YES;
 }
 OVERRIDE_METHOD(keyDown);
 OVERRIDE_METHOD(keyUp);

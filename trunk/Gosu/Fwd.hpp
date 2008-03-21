@@ -22,6 +22,7 @@ namespace Gosu
     class RotFlip;
     class Sample;
     class Song;
+    class TextInput;
     class Timer;
     class Window;
     class Writer;

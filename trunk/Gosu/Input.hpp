@@ -24,6 +24,7 @@
 #endif
 
 #include <Gosu/Platform.hpp>
+#include <Gosu/Fwd.hpp>
 #include <boost/function.hpp>
 #include <boost/scoped_ptr.hpp>
 
@@ -66,17 +67,20 @@ namespace Gosu
         boost::scoped_ptr<Impl> pimpl;
 
 	public:
-#ifdef GOSU_IS_WIN
+        #ifdef GOSU_IS_WIN
         Input(HWND window);
-#endif
-#ifdef GOSU_IS_MAC
+        #endif
+        
+        #ifdef GOSU_IS_MAC
         Input(void* nswindow);
         bool feedNSEvent(void* event);
-#endif
-#ifdef GOSU_IS_X
+        #endif
+        
+        #ifdef GOSU_IS_X
         Input(::Display* dpy);
         bool feedXEvent(::XEvent& event, Window* window);
-#endif
+        #endif
+        
         ~Input();
 
         //! Returns the character a button usually produces, or 0.
@@ -95,14 +99,19 @@ namespace Gosu
         double mouseY() const;
         // See comments on virtual resolutions in Graphics.hpp.
         void setMouseResolution(double width, double height);
-
+        
         //! Collects new information about which buttons are pressed, where the
         //! mouse is and calls onButtonUp/onButtonDown, if assigned.
         void update();
-
+        
 		//! Assignable events that are called by update. You can bind these to your own functions.
 		//! If you use the Window class, it will assign forward these to its own methods.
         boost::function<void (Button)> onButtonDown, onButtonUp;
+        
+        #ifdef GOSU_IS_MAC
+        TextInput* textInput() const;
+        void setTextInput(TextInput* input);
+        #endif
     };
 }
 

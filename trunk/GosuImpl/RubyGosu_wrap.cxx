@@ -2130,14 +2130,15 @@ namespace Swig {
 #define SWIGTYPE_p_Gosu__Sample swig_types[7]
 #define SWIGTYPE_p_Gosu__SampleInstance swig_types[8]
 #define SWIGTYPE_p_Gosu__Song swig_types[9]
-#define SWIGTYPE_p_Gosu__Window swig_types[10]
-#define SWIGTYPE_p_boost__shared_ptrTboost__try_mutex_t swig_types[11]
-#define SWIGTYPE_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t swig_types[12]
-#define SWIGTYPE_p_char swig_types[13]
-#define SWIGTYPE_p_double swig_types[14]
-#define SWIGTYPE_p_std__wstring swig_types[15]
-static swig_type_info *swig_types[17];
-static swig_module_info swig_module = {swig_types, 16, 0, 0, 0, 0};
+#define SWIGTYPE_p_Gosu__TextInput swig_types[10]
+#define SWIGTYPE_p_Gosu__Window swig_types[11]
+#define SWIGTYPE_p_boost__shared_ptrTboost__try_mutex_t swig_types[12]
+#define SWIGTYPE_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t swig_types[13]
+#define SWIGTYPE_p_char swig_types[14]
+#define SWIGTYPE_p_double swig_types[15]
+#define SWIGTYPE_p_std__wstring swig_types[16]
+static swig_type_info *swig_types[18];
+static swig_module_info swig_module = {swig_types, 17, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2184,6 +2185,7 @@ static VALUE mGosu;
 #include <Gosu/IO.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/Text.hpp>
+#include <Gosu/TextInput.hpp>
 #include <Gosu/Timing.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/Window.hpp>
@@ -2652,6 +2654,12 @@ SWIGINTERN Gosu::Button Gosu_Window_charToButtonId(Gosu::Window *self,wchar_t ch
     }
 SWIGINTERN wchar_t Gosu_Window_buttonIdToChar(Gosu::Window *self,Gosu::Button btn){
         return self->input().idToChar(btn);
+    }
+SWIGINTERN Gosu::TextInput *Gosu_Window_textInput(Gosu::Window const *self){
+        return self->input().textInput();
+    }
+SWIGINTERN void Gosu_Window_setTextInput(Gosu::Window *self,Gosu::TextInput *ti){
+        self->input().setTextInput(ti);
     }
 SWIGINTERN double Gosu_Window_mouseX(Gosu::Window const *self){
 		return self->input().mouseX();
@@ -6733,6 +6741,84 @@ fail:
 }
 
 
+swig_class cTextInput;
+
+#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
+SWIGINTERN VALUE
+_wrap_TextInput_allocate(VALUE self) {
+#else
+  SWIGINTERN VALUE
+  _wrap_TextInput_allocate(int argc, VALUE *argv, VALUE self) {
+#endif
+    
+    
+    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_Gosu__TextInput);
+#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
+    rb_obj_call_init(vresult, argc, argv);
+#endif
+    return vresult;
+  }
+  
+
+SWIGINTERN VALUE
+_wrap_new_TextInput(int argc, VALUE *argv, VALUE self) {
+  Gosu::TextInput *result = 0 ;
+  const char *classname SWIGUNUSED = "Gosu::TextInput";
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  {
+    try {
+      result = (Gosu::TextInput *)new Gosu::TextInput();DATA_PTR(self) = result;
+      
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return self;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN void
+free_Gosu_TextInput(Gosu::TextInput *arg1) {
+    delete arg1;
+}
+
+SWIGINTERN VALUE
+_wrap_TextInput_text(int argc, VALUE *argv, VALUE self) {
+  Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
+  std::wstring result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::TextInput const *","text", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::TextInput * >(argp1);
+  {
+    try {
+      result = ((Gosu::TextInput const *)arg1)->text();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  {
+    vresult = rb_str_new2(Gosu::wstringToUTF8(result).c_str());
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
 swig_class cWindow;
 
 #ifdef HAVE_RB_DEFINE_ALLOC_FUNC
@@ -7617,6 +7703,71 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Window_text_input(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  Gosu::TextInput *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","textInput", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  {
+    try {
+      result = (Gosu::TextInput *)Gosu_Window_textInput((Gosu::Window const *)arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Window_text_inpute___(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  Gosu::TextInput *arg2 = (Gosu::TextInput *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","setTextInput", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "Gosu::TextInput *","setTextInput", 2, argv[0] )); 
+  }
+  arg2 = reinterpret_cast< Gosu::TextInput * >(argp2);
+  {
+    try {
+      Gosu_Window_setTextInput(arg1,arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Window_mouse_x(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   double result;
@@ -7801,6 +7952,7 @@ static swig_type_info _swigt__p_Gosu__Image = {"_p_Gosu__Image", "Gosu::Image *"
 static swig_type_info _swigt__p_Gosu__Sample = {"_p_Gosu__Sample", "Gosu::Sample *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__SampleInstance = {"_p_Gosu__SampleInstance", "Gosu::SampleInstance *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Song = {"_p_Gosu__Song", "Gosu::Song *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Gosu__TextInput = {"_p_Gosu__TextInput", "Gosu::TextInput *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Window = {"_p_Gosu__Window", "Gosu::Window *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_boost__shared_ptrTboost__try_mutex_t = {"_p_boost__shared_ptrTboost__try_mutex_t", "boost::shared_ptr<boost::try_mutex > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t = {"_p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t", "boost::shared_ptr<std::auto_ptr<Gosu::Image > > *", 0, 0, (void*)0, 0};
@@ -7819,6 +7971,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__Sample,
   &_swigt__p_Gosu__SampleInstance,
   &_swigt__p_Gosu__Song,
+  &_swigt__p_Gosu__TextInput,
   &_swigt__p_Gosu__Window,
   &_swigt__p_boost__shared_ptrTboost__try_mutex_t,
   &_swigt__p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t,
@@ -7837,6 +7990,7 @@ static swig_cast_info _swigc__p_Gosu__Image[] = {  {&_swigt__p_Gosu__Image, 0, 0
 static swig_cast_info _swigc__p_Gosu__Sample[] = {  {&_swigt__p_Gosu__Sample, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__SampleInstance[] = {  {&_swigt__p_Gosu__SampleInstance, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Song[] = {  {&_swigt__p_Gosu__Song, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Gosu__TextInput[] = {  {&_swigt__p_Gosu__TextInput, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Window[] = {  {&_swigt__p_Gosu__Window, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_boost__shared_ptrTboost__try_mutex_t[] = {  {&_swigt__p_boost__shared_ptrTboost__try_mutex_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t[] = {  {&_swigt__p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -7855,6 +8009,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__Sample,
   _swigc__p_Gosu__SampleInstance,
   _swigc__p_Gosu__Song,
+  _swigc__p_Gosu__TextInput,
   _swigc__p_Gosu__Window,
   _swigc__p_boost__shared_ptrTboost__try_mutex_t,
   _swigc__p_boost__shared_ptrTstd__auto_ptrTGosu__Image_t_t,
@@ -8374,6 +8529,15 @@ SWIGEXPORT void Init_gosu(void) {
   Gosu_MacStartup();
 #endif
   
+  
+  cTextInput.klass = rb_define_class_under(mGosu, "TextInput", rb_cObject);
+  SWIG_TypeClientData(SWIGTYPE_p_Gosu__TextInput, (void *) &cTextInput);
+  rb_define_alloc_func(cTextInput.klass, _wrap_TextInput_allocate);
+  rb_define_method(cTextInput.klass, "initialize", VALUEFUNC(_wrap_new_TextInput), -1);
+  rb_define_method(cTextInput.klass, "text", VALUEFUNC(_wrap_TextInput_text), -1);
+  cTextInput.mark = 0;
+  cTextInput.destroy = (void (*)(void *)) free_Gosu_TextInput;
+  cTextInput.trackObjects = 0;
   rb_define_module_function(mGosu, "disown_Window", VALUEFUNC(_wrap_disown_Window), -1);
   
   cWindow.klass = rb_define_class_under(mGosu, "Window", rb_cObject);
@@ -8394,6 +8558,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cWindow.klass, "button_down?", VALUEFUNC(_wrap_Window_button_downq___), -1);
   rb_define_method(cWindow.klass, "char_to_button_id", VALUEFUNC(_wrap_Window_char_to_button_id), -1);
   rb_define_method(cWindow.klass, "button_id_to_char", VALUEFUNC(_wrap_Window_button_id_to_char), -1);
+  rb_define_method(cWindow.klass, "text_input", VALUEFUNC(_wrap_Window_text_input), -1);
+  rb_define_method(cWindow.klass, "text_input=", VALUEFUNC(_wrap_Window_text_inpute___), -1);
   rb_define_method(cWindow.klass, "mouse_x", VALUEFUNC(_wrap_Window_mouse_x), -1);
   rb_define_method(cWindow.klass, "mouse_y", VALUEFUNC(_wrap_Window_mouse_y), -1);
   rb_define_method(cWindow.klass, "width", VALUEFUNC(_wrap_Window_width), -1);

@@ -118,6 +118,7 @@
 #include <Gosu/IO.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/Text.hpp>
+#include <Gosu/TextInput.hpp>
 #include <Gosu/Timing.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/Window.hpp>
@@ -371,9 +372,14 @@ namespace Gosu
     #endif
 %}
 
+// TextInput
+%ignore Gosu::TextInput::feedNSEvent(void* event);
+%include "../Gosu/TextInput.hpp"
+
 // Window
 %rename("caption=") setCaption;
 %rename("button_down?") isButtonDown;
+%rename("text_input=") setTextInput;
 %include "../Gosu/Window.hpp"
 %extend Gosu::Window {
     void drawLine(double x1, double y1, Gosu::Color c1,
@@ -406,6 +412,12 @@ namespace Gosu
     }
     wchar_t buttonIdToChar(Gosu::Button btn) {
         return $self->input().idToChar(btn);
+    }
+    TextInput* textInput() const {
+        return $self->input().textInput();
+    }
+    void setTextInput(TextInput* ti) {
+        $self->input().setTextInput(ti);
     }
 	double mouseX() const {
 		return $self->input().mouseX();
