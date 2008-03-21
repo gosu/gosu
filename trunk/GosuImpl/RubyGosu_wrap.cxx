@@ -6819,6 +6819,66 @@ fail:
 }
 
 
+SWIGINTERN VALUE
+_wrap_TextInput_caret_pos(int argc, VALUE *argv, VALUE self) {
+  Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
+  unsigned int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::TextInput const *","caretPos", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::TextInput * >(argp1);
+  {
+    try {
+      result = (unsigned int)((Gosu::TextInput const *)arg1)->caretPos();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_TextInput_selection_start(int argc, VALUE *argv, VALUE self) {
+  Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
+  unsigned int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::TextInput const *","selectionStart", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::TextInput * >(argp1);
+  {
+    try {
+      result = (unsigned int)((Gosu::TextInput const *)arg1)->selectionStart();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
 swig_class cWindow;
 
 #ifdef HAVE_RB_DEFINE_ALLOC_FUNC
@@ -8535,6 +8595,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_alloc_func(cTextInput.klass, _wrap_TextInput_allocate);
   rb_define_method(cTextInput.klass, "initialize", VALUEFUNC(_wrap_new_TextInput), -1);
   rb_define_method(cTextInput.klass, "text", VALUEFUNC(_wrap_TextInput_text), -1);
+  rb_define_method(cTextInput.klass, "caret_pos", VALUEFUNC(_wrap_TextInput_caret_pos), -1);
+  rb_define_method(cTextInput.klass, "selection_start", VALUEFUNC(_wrap_TextInput_selection_start), -1);
   cTextInput.mark = 0;
   cTextInput.destroy = (void (*)(void *)) free_Gosu_TextInput;
   cTextInput.trackObjects = 0;

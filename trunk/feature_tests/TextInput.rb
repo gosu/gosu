@@ -9,11 +9,11 @@ class Test < Gosu::Window
   
   def draw
     text = self.text_input.text
+    pos = self.text_input.caret_pos
+    sel = self.text_input.selection_start
     
-    @sel = @pos = 0
-    
-    sel_x = 10 + @font.text_width(text[0...@sel])
-    pos_x = 10 + @font.text_width(text[0...@pos])
+    sel_x = 10 + @font.text_width(text[0...sel])
+    pos_x = 10 + @font.text_width(text[0...pos])
     
     draw_quad(sel_x, 100, 0x990000ff, pos_x, 100, 0x990000ff,
               sel_x, 120, 0x990000ff, pos_x, 120, 0x990000ff)
