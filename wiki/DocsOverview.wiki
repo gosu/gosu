@@ -15,7 +15,9 @@ Depending on your operating system, see GettingStartedOnOsx, GettingStartedOnWin
 
 See either the RubyTutorial or the CppTutorial.
 
-There is also a French tutorial for Ruby/Gosu, which is slightly outdated on at least the Mac OS X part: http://xitog.developpez.com/tutoriels/gosu/?page=Presentation
+== Translations ==
+Spanish translation by ladybenko: http://cafeina.ladybenko.net/?p=485
+French tutorial for Ruby/Gosu (slightly outdated) by Damien Gouteux: http://xitog.developpez.com/tutoriels/gosu/?page=Presentation
 
 = Reference =
 
