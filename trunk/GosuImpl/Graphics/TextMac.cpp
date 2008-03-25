@@ -12,9 +12,9 @@
 
 std::wstring Gosu::defaultFontName()
 {
-    // Could choose Arial to stay consistent with Windows, but since the font sizes will
-    // be messed up anyway...
-    return L"Helvetica";
+    // OF COURSE Helvetica is better - but the dots above my capital umlauts get
+    // eaten when I use it with Gosu. Until this is fixed, keep Arial. (TODO)
+    return L"Arial";
 }
 
 namespace Gosu

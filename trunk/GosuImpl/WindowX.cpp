@@ -49,8 +49,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     static int attributeListSgl[] =
     {
         GLX_RGBA, GLX_DOUBLEBUFFER, // double buffering (?)
-        GLX_RED_SIZE, 1, // get the deepest buffer with 1 red bit
-        GLX_GREEN_SIZE, 1, GLX_BLUE_SIZE,  1, None
+        GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1, GLX_BLUE_SIZE, 1,
+        GLX_DEPTH_SIZE, 1, None
     };
 
     pimpl->vi = glXChooseVisual(pimpl->dpy, DefaultScreen(pimpl->dpy),

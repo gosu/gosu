@@ -2633,6 +2633,12 @@ SWIGINTERN Gosu::Sample *new_Gosu_Sample(Gosu::Window &window,std::string const 
 SWIGINTERN Gosu::Song *new_Gosu_Song(Gosu::Window &window,std::string const &filename){
         return new Gosu::Song(window.audio(), Gosu::utf8ToWstring(filename));
     }
+SWIGINTERN unsigned int Gosu_TextInput_caret_pos(Gosu::TextInput const *self){
+        return Gosu::wstringToUTF8(self->text().substr(0, self->caretPos())).size();
+    }
+SWIGINTERN unsigned int Gosu_TextInput_selection_start(Gosu::TextInput const *self){
+        return Gosu::wstringToUTF8(self->text().substr(0, self->selectionStart())).size();
+    }
 SWIGINTERN void Gosu_Window_drawLine(Gosu::Window *self,double x1,double y1,Gosu::Color c1,double x2,double y2,Gosu::Color c2,Gosu::ZPos z=0,Gosu::AlphaMode mode=Gosu::amDefault){
         self->graphics().drawLine(x1, y1, c1, x2, y2, c2,
                                    z, mode);
@@ -6832,12 +6838,12 @@ _wrap_TextInput_caret_pos(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::TextInput const *","caretPos", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::TextInput const *","caret_pos", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::TextInput * >(argp1);
   {
     try {
-      result = (unsigned int)((Gosu::TextInput const *)arg1)->caretPos();
+      result = (unsigned int)Gosu_TextInput_caret_pos((Gosu::TextInput const *)arg1);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -6862,12 +6868,12 @@ _wrap_TextInput_selection_start(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::TextInput const *","selectionStart", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::TextInput const *","selection_start", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::TextInput * >(argp1);
   {
     try {
-      result = (unsigned int)((Gosu::TextInput const *)arg1)->selectionStart();
+      result = (unsigned int)Gosu_TextInput_selection_start((Gosu::TextInput const *)arg1);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }

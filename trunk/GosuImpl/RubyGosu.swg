@@ -374,7 +374,18 @@ namespace Gosu
 
 // TextInput
 %ignore Gosu::TextInput::feedNSEvent(void* event);
+%ignore Gosu::TextInput::caretPos() const;
+%ignore Gosu::TextInput::selectionStart() const;
 %include "../Gosu/TextInput.hpp"
+%extend Gosu::TextInput {
+    // Fix indices into UTF-8 string
+    unsigned caret_pos() const {
+        return Gosu::wstringToUTF8($self->text().substr(0, $self->caretPos())).size();
+    }
+    unsigned selection_start() const {
+        return Gosu::wstringToUTF8($self->text().substr(0, $self->selectionStart())).size();
+    }
+};
 
 // Window
 %rename("caption=") setCaption;

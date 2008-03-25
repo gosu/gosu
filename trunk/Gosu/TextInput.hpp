@@ -18,10 +18,11 @@ namespace Gosu
     public:
         TextInput();
         ~TextInput();
+
         std::wstring text() const;
         unsigned caretPos() const;
         unsigned selectionStart() const;
-        
+
         #ifdef GOSU_IS_MAC
         void feedNSEvent(void* event);
         #endif
