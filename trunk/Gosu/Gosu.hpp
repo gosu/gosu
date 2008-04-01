@@ -19,14 +19,8 @@
 #include <Gosu/RotFlip.hpp>
 #include <Gosu/Sockets.hpp>
 #include <Gosu/Text.hpp>
+#include <Gosu/TextInput.hpp>
 #include <Gosu/Timing.hpp>
 #include <Gosu/Window.hpp>
-
-#ifdef GOSU_IS_MAC
-#include <GosuImpl/MacUtility.hpp>
-#endif
-#ifdef GOSU_IS_WIN
-#include <Gosu/WinUtility.hpp>
-#endif
 
 #endif

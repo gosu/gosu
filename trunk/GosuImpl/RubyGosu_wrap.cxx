@@ -2684,6 +2684,13 @@ SWIGINTERN void Gosu_Window_gl(Gosu::Window *self){
         rb_yield(Qnil);
         self->graphics().endGL();
     }
+
+    static void markWindow(void* window) {
+        Gosu::TextInput* ti = static_cast<Gosu::Window*>(window)->input().textInput();
+        if (VALUE ti_value = SWIG_RubyInstanceFor(ti))
+            rb_gc_mark(ti_value);
+    }
+
 /* ---------------------------------------------------
  * C++ director class helpers
  * --------------------------------------------------- */
@@ -3214,6 +3221,7 @@ _wrap_new_Color__SWIG_0(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::Color *)new Gosu::Color();DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -3244,6 +3252,7 @@ _wrap_new_Color__SWIG_1(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::Color *)new Gosu::Color(arg1);DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -3290,6 +3299,7 @@ _wrap_new_Color__SWIG_2(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::Color *)new Gosu::Color(arg1,arg2,arg3);DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -3361,6 +3371,7 @@ _wrap_new_Color__SWIG_3(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::Color *)new Gosu::Color(arg1,arg2,arg3,arg4);DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -4134,6 +4145,7 @@ fail:
 
 SWIGINTERN void
 free_Gosu_Color(Gosu::Color *arg1) {
+    SWIG_RubyRemoveTracking(arg1);
     delete arg1;
 }
 
@@ -4324,6 +4336,7 @@ swig_class cFont;
 
 SWIGINTERN void
 free_Gosu_Font(Gosu::Font *arg1) {
+    SWIG_RubyRemoveTracking(arg1);
     delete arg1;
 }
 
@@ -4682,6 +4695,7 @@ _wrap_new_Font(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::Font *)new_Gosu_Font(*arg1,(std::wstring const &)*arg2,arg3);DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -4745,6 +4759,7 @@ _wrap_new_AsyncImageResult(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::AsyncResult<Gosu::Image > *)new Gosu::AsyncResult<Gosu::Image >((boost::shared_ptr<boost::try_mutex > const &)*arg1,(boost::shared_ptr<std::auto_ptr<Gosu::Image > > const &)*arg2);DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -4818,6 +4833,7 @@ fail:
 
 SWIGINTERN void
 free_Gosu_AsyncResult_Sl_Gosu_Image_Sg_(Gosu::AsyncResult<Gosu::Image > *arg1) {
+    SWIG_RubyRemoveTracking(arg1);
     delete arg1;
 }
 
@@ -5121,6 +5137,7 @@ _wrap_new_GLTexInfo(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::GLTexInfo *)new Gosu::GLTexInfo();DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -5134,6 +5151,7 @@ fail:
 
 SWIGINTERN void
 free_Gosu_GLTexInfo(Gosu::GLTexInfo *arg1) {
+    SWIG_RubyRemoveTracking(arg1);
     delete arg1;
 }
 
@@ -5141,6 +5159,7 @@ swig_class cImage;
 
 SWIGINTERN void
 free_Gosu_Image(Gosu::Image *arg1) {
+    SWIG_RubyRemoveTracking(arg1);
     delete arg1;
 }
 
@@ -5587,6 +5606,7 @@ _wrap_new_Image__SWIG_0(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::Image *)new_Gosu_Image__SWIG_0(*arg1,arg2,arg3);DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -5679,6 +5699,7 @@ _wrap_new_Image__SWIG_1(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::Image *)new_Gosu_Image__SWIG_1(*arg1,arg2,arg3,arg4,arg5,arg6,arg7);DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -6198,6 +6219,7 @@ _wrap_new_SampleInstance(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::SampleInstance *)new Gosu::SampleInstance(arg1,arg2);DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -6373,6 +6395,7 @@ fail:
 
 SWIGINTERN void
 free_Gosu_SampleInstance(Gosu::SampleInstance *arg1) {
+    SWIG_RubyRemoveTracking(arg1);
     delete arg1;
 }
 
@@ -6380,6 +6403,7 @@ swig_class cSample;
 
 SWIGINTERN void
 free_Gosu_Sample(Gosu::Sample *arg1) {
+    SWIG_RubyRemoveTracking(arg1);
     delete arg1;
 }
 
@@ -6543,6 +6567,7 @@ _wrap_new_Sample(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::Sample *)new_Gosu_Sample(*arg1,(std::string const &)*arg2);DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -6560,6 +6585,7 @@ swig_class cSong;
 
 SWIGINTERN void
 free_Gosu_Song(Gosu::Song *arg1) {
+    SWIG_RubyRemoveTracking(arg1);
     delete arg1;
 }
 
@@ -6734,6 +6760,7 @@ _wrap_new_Song(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::Song *)new_Gosu_Song(*arg1,(std::string const &)*arg2);DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -6777,6 +6804,7 @@ _wrap_new_TextInput(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::TextInput *)new Gosu::TextInput();DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -6790,6 +6818,7 @@ fail:
 
 SWIGINTERN void
 free_Gosu_TextInput(Gosu::TextInput *arg1) {
+    SWIG_RubyRemoveTracking(arg1);
     delete arg1;
 }
 
@@ -6957,6 +6986,7 @@ _wrap_new_Window(int argc, VALUE *argv, VALUE self) {
         result = (Gosu::Window *)new Gosu::Window(arg2,arg3,arg4,arg5); 
       }
       DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
       
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -6970,6 +7000,7 @@ fail:
 
 SWIGINTERN void
 free_Gosu_Window(Gosu::Window *arg1) {
+    SWIG_RubyRemoveTracking(arg1);
     delete arg1;
 }
 
@@ -8381,7 +8412,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cColor.klass, "to_s", VALUEFUNC(_wrap_Color_to_s), -1);
   cColor.mark = 0;
   cColor.destroy = (void (*)(void *)) free_Gosu_Color;
-  cColor.trackObjects = 0;
+  cColor.trackObjects = 1;
   rb_define_module_function(mGosu, "interpolate", VALUEFUNC(_wrap_interpolate), -1);
   rb_define_module_function(mGosu, "multiply", VALUEFUNC(_wrap_multiply), -1);
   rb_define_singleton_method(mGosu, "none", VALUEFUNC(_wrap_none_get), 0);
@@ -8404,7 +8435,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cFont.klass, "draw_rel", VALUEFUNC(_wrap_Font_draw_rel), -1);
   cFont.mark = 0;
   cFont.destroy = (void (*)(void *)) free_Gosu_Font;
-  cFont.trackObjects = 0;
+  cFont.trackObjects = 1;
   
   cAsyncImageResult.klass = rb_define_class_under(mGosu, "AsyncImageResult", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__AsyncResultTGosu__Image_t, (void *) &cAsyncImageResult);
@@ -8414,7 +8445,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cAsyncImageResult.klass, "value", VALUEFUNC(_wrap_AsyncImageResult_value), -1);
   cAsyncImageResult.mark = 0;
   cAsyncImageResult.destroy = (void (*)(void *)) free_Gosu_AsyncResult_Sl_Gosu_Image_Sg_;
-  cAsyncImageResult.trackObjects = 0;
+  cAsyncImageResult.trackObjects = 1;
   
   cGLTexInfo.klass = rb_define_class_under(mGosu, "GLTexInfo", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__GLTexInfo, (void *) &cGLTexInfo);
@@ -8432,7 +8463,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cGLTexInfo.klass, "bottom", VALUEFUNC(_wrap_GLTexInfo_bottom_get), -1);
   cGLTexInfo.mark = 0;
   cGLTexInfo.destroy = (void (*)(void *)) free_Gosu_GLTexInfo;
-  cGLTexInfo.trackObjects = 0;
+  cGLTexInfo.trackObjects = 1;
   
   cImage.klass = rb_define_class_under(mGosu, "Image", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Image, (void *) &cImage);
@@ -8450,7 +8481,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_singleton_method(cImage.klass, "load_tiles", VALUEFUNC(_wrap_Image_load_tiles), -1);
   cImage.mark = 0;
   cImage.destroy = (void (*)(void *)) free_Gosu_Image;
-  cImage.trackObjects = 0;
+  cImage.trackObjects = 1;
   
   cSampleInstance.klass = rb_define_class_under(mGosu, "SampleInstance", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__SampleInstance, (void *) &cSampleInstance);
@@ -8463,7 +8494,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cSampleInstance.klass, "speed=", VALUEFUNC(_wrap_SampleInstance_speede___), -1);
   cSampleInstance.mark = 0;
   cSampleInstance.destroy = (void (*)(void *)) free_Gosu_SampleInstance;
-  cSampleInstance.trackObjects = 0;
+  cSampleInstance.trackObjects = 1;
   
   cSample.klass = rb_define_class_under(mGosu, "Sample", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Sample, (void *) &cSample);
@@ -8473,7 +8504,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cSample.klass, "play_pan", VALUEFUNC(_wrap_Sample_play_pan), -1);
   cSample.mark = 0;
   cSample.destroy = (void (*)(void *)) free_Gosu_Sample;
-  cSample.trackObjects = 0;
+  cSample.trackObjects = 1;
   
   cSong.klass = rb_define_class_under(mGosu, "Song", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Song, (void *) &cSong);
@@ -8487,7 +8518,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cSong.klass, "volume=", VALUEFUNC(_wrap_Song_volumee___), -1);
   cSong.mark = 0;
   cSong.destroy = (void (*)(void *)) free_Gosu_Song;
-  cSong.trackObjects = 0;
+  cSong.trackObjects = 1;
   rb_define_const(mGosu, "KbRangeBegin", SWIG_From_int(static_cast< int >(Gosu::kbRangeBegin)));
   rb_define_const(mGosu, "KbEscape", SWIG_From_int(static_cast< int >(Gosu::kbEscape)));
   rb_define_const(mGosu, "KbF1", SWIG_From_int(static_cast< int >(Gosu::kbF1)));
@@ -8605,7 +8636,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cTextInput.klass, "selection_start", VALUEFUNC(_wrap_TextInput_selection_start), -1);
   cTextInput.mark = 0;
   cTextInput.destroy = (void (*)(void *)) free_Gosu_TextInput;
-  cTextInput.trackObjects = 0;
+  cTextInput.trackObjects = 1;
   rb_define_module_function(mGosu, "disown_Window", VALUEFUNC(_wrap_disown_Window), -1);
   
   cWindow.klass = rb_define_class_under(mGosu, "Window", rb_cObject);
@@ -8633,8 +8664,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cWindow.klass, "width", VALUEFUNC(_wrap_Window_width), -1);
   rb_define_method(cWindow.klass, "height", VALUEFUNC(_wrap_Window_height), -1);
   rb_define_method(cWindow.klass, "gl", VALUEFUNC(_wrap_Window_gl), -1);
-  cWindow.mark = 0;
+  cWindow.mark = (void (*)(void *)) markWindow;
   cWindow.destroy = (void (*)(void *)) free_Gosu_Window;
-  cWindow.trackObjects = 0;
+  cWindow.trackObjects = 1;
 }
 

@@ -110,9 +110,9 @@
 		D4A7E9840CD3907D00621B24 /* TexChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97D0CD3907D00621B24 /* TexChunk.cpp */; };
 		D4A7E9E80CD39BA200621B24 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
 		D4A7E9E90CD39BA200621B24 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
-		D4BC5D6B0CC29D0F002D4236 /* Async.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4BC5D6A0CC29D0F002D4236 /* Async.hpp */; };
+		D4BC5D6B0CC29D0F002D4236 /* Async.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4BC5D6A0CC29D0F002D4236 /* Async.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4C09C840D04AD2800DA4D4F /* RubyGosu_MacStartup.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D4C09C830D04AD2800DA4D4F /* RubyGosu_MacStartup.cxx */; };
-		D4F07B230D934C8B00FB3D99 /* TextInput.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4F07B220D934C8B00FB3D99 /* TextInput.hpp */; };
+		D4F07B230D934C8B00FB3D99 /* TextInput.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4F07B220D934C8B00FB3D99 /* TextInput.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F07B270D93504700FB3D99 /* TextInputMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4F07B260D93504700FB3D99 /* TextInputMac.mm */; };
 		D4F07B280D93504700FB3D99 /* TextInputMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4F07B260D93504700FB3D99 /* TextInputMac.mm */; };
 /* End PBXBuildFile section */
@@ -408,6 +408,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4BC5D6B0CC29D0F002D4236 /* Async.hpp in Headers */,
 				D410E9DB0A8019CD005C7067 /* Audio.hpp in Headers */,
 				D410E9DC0A8019CD005C7067 /* AutoLink.hpp in Headers */,
 				D410E9DE0A8019CD005C7067 /* Bitmap.hpp in Headers */,
@@ -429,13 +430,12 @@
 				D410E9F00A8019CD005C7067 /* RotFlip.hpp in Headers */,
 				D410E9F10A8019CD005C7067 /* Sockets.hpp in Headers */,
 				D410E9F20A8019CD005C7067 /* Text.hpp in Headers */,
+				D4F07B230D934C8B00FB3D99 /* TextInput.hpp in Headers */,
 				D410E9F30A8019CD005C7067 /* Timing.hpp in Headers */,
 				D410E9F40A8019CD005C7067 /* Utility.hpp in Headers */,
 				D410E9F50A8019CD005C7067 /* Window.hpp in Headers */,
 				D410EB130A801B00005C7067 /* Sockets.hpp in Headers */,
 				D42BC0D10C4F840C00EBF79C /* Gosu.hpp in Headers */,
-				D4BC5D6B0CC29D0F002D4236 /* Async.hpp in Headers */,
-				D4F07B230D934C8B00FB3D99 /* TextInput.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

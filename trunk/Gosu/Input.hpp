@@ -4,6 +4,7 @@
 #ifndef GOSU_INPUT_HPP
 #define GOSU_INPUT_HPP
 
+#include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
 
 #ifdef GOSU_IS_WIN
@@ -16,7 +17,6 @@
 #endif
 
 #ifdef GOSU_IS_X
-#include <Gosu/Fwd.hpp>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/keysym.h>

@@ -1,8 +1,8 @@
-// SWIG improvements related to Ruby:
+// Mini Swig Style Improvement List:
 // - %predicate instead of %rename
 // - use Python names for op overloading
-// - %trackobjects
 
+%trackobjects;
 %include exception.i  
 
 // Don't complain about ignored operators.
@@ -391,7 +391,17 @@ namespace Gosu
 %rename("caption=") setCaption;
 %rename("button_down?") isButtonDown;
 %rename("text_input=") setTextInput;
+%markfunc Gosu::Window "markWindow";
 %include "../Gosu/Window.hpp"
+
+%header %{
+    static void markWindow(void* window) {
+        Gosu::TextInput* ti = static_cast<Gosu::Window*>(window)->input().textInput();
+        if (VALUE ti_value = SWIG_RubyInstanceFor(ti))
+            rb_gc_mark(ti_value);
+    }
+%}
+
 %extend Gosu::Window {
     void drawLine(double x1, double y1, Gosu::Color c1,
                   double x2, double y2, Gosu::Color c2,
@@ -424,12 +434,15 @@ namespace Gosu
     wchar_t buttonIdToChar(Gosu::Button btn) {
         return $self->input().idToChar(btn);
     }
+    
     TextInput* textInput() const {
         return $self->input().textInput();
     }
+    
     void setTextInput(TextInput* ti) {
         $self->input().setTextInput(ti);
     }
+    
 	double mouseX() const {
 		return $self->input().mouseX();
 	}
