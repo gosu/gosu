@@ -7,7 +7,7 @@
 Download and extract the latest Boost release. Open Terminal, 'cd' into to that directory and run:
 
 {{{
-    /.configure
+    ./configure
     make
     sudo make install
     sudo ln -s /usr/local/include/boost-1_34/boost /usr/include/boost
@@ -20,6 +20,8 @@ Download and extract the latest Boost release. Open Terminal, 'cd' into to that 
 = Starting a new Gosu game (C++) =
 
 In Xcode, create a new 'Application/Cocoa Application' project. Remove Resources/MainMenu.nib and main.m (files & references), right-click the project and add a reference to Gosu.framework (wherever you have unpacked it to).
+
+In order to make the Boost headers accessible, select 'Project/Edit Active Project', search for 'Header Search Paths' in 'Build' and set it to `/usr/local/include`, or `/opt/local/include` if you used MacPorts to install Boost.
 
 Your application also needs to include the Gosu.framework bundle. To instruct Xcode to automatically copy it into your application, choose Project/New Build Phase and select "Frameworks" as the Copy Files' target directory. Then locate this new build phase in the targets list and add Gosu.framework to it as well. (Note: You may have to drag & drop the framework into the build phase from the finder, instead of adding it via a right-click.)
 
