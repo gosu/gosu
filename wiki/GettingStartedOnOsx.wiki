@@ -15,6 +15,8 @@ Download and extract the latest Boost release. Open Terminal, 'cd' into to that 
   
 (Replace "1_34" with boost's current version.)
 
+*If you are using MacPorts*, you can also `sudo port install boost`.
+
 = Starting a new Gosu game (C++) =
 
 In Xcode, create a new 'Application/Cocoa Application' project. Remove Resources/MainMenu.nib and main.m (files & references), right-click the project and add a reference to Gosu.framework (wherever you have unpacked it to).
