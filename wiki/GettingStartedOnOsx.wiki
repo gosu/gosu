@@ -34,7 +34,7 @@ class MyWindow : public Gosu::Window
 {
 public:
     MyWindow()
-    : Gosu::Window(640, 480, false, 20)
+    : Gosu::Window(640, 480, false)
     {
         setCaption(L"Hello World!");
     }
@@ -44,7 +44,6 @@ int main(int argc, char* argv[])
 {
     MyWindow win;
     win.show();
-    return 0;
 }
 
 }}}
