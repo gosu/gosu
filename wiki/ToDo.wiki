@@ -2,7 +2,7 @@
 #labels Featured
 
 = 0.7.9 (WIP) =
-  * TextInput minimal impl
+  * TextInput impl on Windows, Linux
   * testing around with multiple monitors on Windows/OS X
   * deprecation message for Gosu::Button module
 
@@ -20,6 +20,7 @@
 
 = 0.8.0 (after a cleanup/documentation delay)=
   * Apple remote support would rule.
+  * clean up Ruby's interface; draw_quad and friends should require the Z parameter
   * clean up Gosu's C++ interface
   * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
   * allow FPS > 60 even with vsync
