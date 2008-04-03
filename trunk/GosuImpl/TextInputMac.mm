@@ -2,8 +2,19 @@
 #include <GosuImpl/MacUtility.hpp>
 #include <algorithm>
 #include <vector>
+#include <wctype.h>
 
 #import <Cocoa/Cocoa.h>
+
+// Sometimes macro DSLs aren't evil.
+#define CARET_POS (*_caretPos)
+#define SEL_START (*_selectionStart)
+#define IMPL_WITH_SEL_RESET(selector)           \
+- (void)selector:(id)sender                     \
+{                                               \
+    [self selector##AndModifySelection:sender]; \
+    SEL_START = CARET_POS;                      \
+}
 
 @interface GosuTextInput : NSResponder
 {
@@ -16,12 +27,12 @@
 - (void)insertText:(id)insertString
 {
     // Delete (overwrite) previous selection.
-    if (*_caretPos != *_selectionStart)
+    if (CARET_POS != SEL_START)
     {
-        unsigned min = std::min(*_caretPos, *_selectionStart);
-        unsigned max = std::max(*_caretPos, *_selectionStart);
+        unsigned min = std::min(CARET_POS, SEL_START);
+        unsigned max = std::max(CARET_POS, SEL_START);
         _text->erase(_text->begin() + min, _text->begin() + max);
-        *_caretPos = *_selectionStart = min;
+        CARET_POS = SEL_START = min;
     }
     
     NSString* str = (NSString*)insertString;
@@ -32,70 +43,106 @@
     std::vector<unichar> unibuf([str length]);
     [str getCharacters: &unibuf[0]];
     
-    _text->insert(_text->begin() + *_caretPos, unibuf.begin(), unibuf.end());
-    (*_caretPos) += unibuf.size();
-    (*_selectionStart) = *_caretPos;
-
-    std::wstring(*_text).length();
+    _text->insert(_text->begin() + CARET_POS, unibuf.begin(), unibuf.end());
+    (CARET_POS) += unibuf.size();
+    (SEL_START) = CARET_POS;
 }
-- (void)moveLeft:(id)sender
-{
-    if (*_caretPos > 0)
-        (*_caretPos) -= 1;
-    (*_selectionStart) = *_caretPos;
 
-    std::wstring(*_text).length();
-}
-- (void)moveRight:(id)sender
-{
-    if (*_caretPos < _text->length())
-        (*_caretPos) += 1;
-    (*_selectionStart) = *_caretPos;
+// Movement.
 
-    std::wstring(*_text).length();
-}
 - (void)moveLeftAndModifySelection:(id)sender
 {
-    if (*_caretPos > 0)
-        (*_caretPos) -= 1;
-
-    std::wstring(*_text).length();
+    if (CARET_POS > 0)
+        (CARET_POS) -= 1;
 }
 - (void)moveRightAndModifySelection:(id)sender
 {
-    if (*_caretPos < _text->length())
-        (*_caretPos) += 1;
-
-    std::wstring(*_text).length();
+    if (CARET_POS < _text->length())
+        (CARET_POS) += 1;
 }
-- (void)moveToBeginningOfLine:(id)sender
+- (void)moveUpAndModifySelection:(id)sender
 {
-    *_caretPos = *_selectionStart = 0;
-
-    std::wstring(*_text).length();
+    CARET_POS = 0;
 }
-- (void)moveToEndOfLine:(id)sender
+- (void)moveDownAndModifySelection:(id)sender
 {
-    *_caretPos = *_selectionStart = _text->length();
-
-    std::wstring(*_text).length();
+    CARET_POS = _text->length();
 }
+- (void)moveToBeginningOfLineAndModifySelection:(id)sender
+{
+    [self moveUpAndModifySelection: sender];
+}
+- (void)moveToEndOfLineAndModifySelection:(id)sender
+{
+    [self moveDownAndModifySelection: sender];
+}
+- (void)moveToBeginningOfDocumentAndModifySelection:(id)sender
+{
+    [self moveUpAndModifySelection: sender];
+}
+- (void)moveToEndOfDocumentAndModifySelection:(id)sender
+{
+    [self moveDownAndModifySelection: sender];
+}
+- (void)moveWordLeftAndModifySelection:(id)sender
+{
+    if (CARET_POS == _text->length())
+        --CARET_POS;
+    
+    while (CARET_POS > 0 && iswspace(_text->at(CARET_POS - 1)))
+        --CARET_POS;
+
+    while (CARET_POS > 0 && !iswspace(_text->at(CARET_POS - 1)))
+        --CARET_POS;
+}
+- (void)moveWordRightAndModifySelection:(id)sender
+{
+    while (CARET_POS < _text->length() && iswspace(_text->at(CARET_POS)))
+        ++CARET_POS;
+
+    while (CARET_POS < _text->length() && !iswspace(_text->at(CARET_POS)))
+        ++CARET_POS;
+}
+
+IMPL_WITH_SEL_RESET(moveLeft)
+IMPL_WITH_SEL_RESET(moveRight)
+IMPL_WITH_SEL_RESET(moveUp)
+IMPL_WITH_SEL_RESET(moveDown)
+IMPL_WITH_SEL_RESET(moveWordLeft)
+IMPL_WITH_SEL_RESET(moveWordRight)
+IMPL_WITH_SEL_RESET(moveToBeginningOfLine)
+IMPL_WITH_SEL_RESET(moveToEndOfLine)
+IMPL_WITH_SEL_RESET(moveToBeginningOfDocument)
+IMPL_WITH_SEL_RESET(moveToEndOfDocument)
+
+// Deletion.
+
 - (void)deleteBackward:(id)sender
 {
-    if (*_caretPos == *_selectionStart && *_caretPos > 0)
-        --*_caretPos;
+    if (CARET_POS == SEL_START && CARET_POS > 0)
+        --CARET_POS;
     [self insertText: @""];
-
-    std::wstring(*_text).length();
 }
 - (void)deleteForward:(id)sender
 {
-    if (*_caretPos == *_selectionStart && *_caretPos < _text->length())
-        ++*_caretPos;
+    if (CARET_POS == SEL_START && CARET_POS < _text->length())
+        ++CARET_POS;
     [self insertText: @""];
-
-    std::wstring(*_text).length();
 }
+
+// TODO: Advanced deletion (deleteWord...)
+
+// Selection.
+
+- (void)selectAll:(id)sender
+{
+    SEL_START = 0;
+    CARET_POS = _text->length();
+}
+
+// TODO: Cmd+A should really be hard-coded into selectAll.
+
+// Helper to set up this instance.
 
 - (void)setText:(std::wstring&)text andCaretPos:(unsigned&)caretPos andSelectionStart:(unsigned&)selectionStart
 {
