@@ -15,7 +15,7 @@ Download and extract the latest Boost release. Open Terminal, 'cd' into to that 
   
 (Replace "1_34" with boost's current version.)
 
-*If you are using MacPorts*, you can also `sudo port install boost`.
+*If you are using MacPorts*, you can, in theory, simply run `sudo port install boost`. In practice however, MacPorts' version of Boost is usually broken.
 
 = Starting a new Gosu game (C++) =
 
