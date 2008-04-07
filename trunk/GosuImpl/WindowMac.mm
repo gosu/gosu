@@ -276,7 +276,7 @@ Gosu::Window::~Window()
     if (graphics().fullscreen())
     {
         CGDisplaySwitchToMode(kCGDirectMainDisplay, pimpl->savedMode);
-		//[[NSScreen mainScreen] setFrame:pimpl->savedFrame]; 
+		[[NSScreen mainScreen] setFrame:pimpl->savedFrame]; 
         CGReleaseAllDisplays();
     }
 }
