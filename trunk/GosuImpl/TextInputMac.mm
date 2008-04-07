@@ -1,4 +1,5 @@
 #include <Gosu/TextInput.hpp>
+#include <Gosu/ButtonsMac.hpp>
 #include <GosuImpl/MacUtility.hpp>
 #include <algorithm>
 #include <vector>
@@ -176,6 +177,12 @@ std::wstring Gosu::TextInput::text() const
     return pimpl->text;
 }
 
+void Gosu::TextInput::setText(const std::wstring& text)
+{
+	pimpl->text = text;
+	pimpl->caretPos = pimpl->selectionStart = text.length();
+}
+
 unsigned Gosu::TextInput::caretPos() const
 {
     return pimpl->caretPos;
@@ -186,7 +193,15 @@ unsigned Gosu::TextInput::selectionStart() const
     return pimpl->selectionStart;
 }
 
-void Gosu::TextInput::feedNSEvent(void* event)
+bool Gosu::TextInput::feedNSEvent(void* event)
 {
-    [pimpl->responder.get() interpretKeyEvents: [NSArray arrayWithObject: (NSEvent*)event]];
+	NSEvent* nsEvent = (NSEvent*)event;
+	long keyCode = [nsEvent keyCode];
+	if (keyCode != kbEscape && keyCode != kbTab && keyCode != kbReturn && keyCode != kbEnter)
+	{
+		[pimpl->responder.get() interpretKeyEvents: [NSArray arrayWithObject: nsEvent]];
+		return true;
+	}
+	else
+		return false;
 }

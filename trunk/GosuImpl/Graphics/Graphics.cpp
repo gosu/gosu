@@ -112,7 +112,6 @@ void Gosu::Graphics::beginGL()
     pimpl->queue.performDrawOps();
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glDisable(GL_BLEND);
-    // TODO: completely restore default state
 }
 
 void Gosu::Graphics::endGL()

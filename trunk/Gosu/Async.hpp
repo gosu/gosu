@@ -28,7 +28,7 @@ namespace Gosu
         bool hasValue() const
         {
             boost::try_mutex::scoped_try_lock lock(*mutex);
-            return lock.locked() && result->get();
+            return lock && result->get();
         }
         
         std::auto_ptr<Result> takeValue()

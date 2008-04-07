@@ -102,8 +102,6 @@
 		D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */; };
 		D459FF990BDCD9CF00E7F0D6 /* Gosu.icns in Resources */ = {isa = PBXBuildFile; fileRef = D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */; };
 		D47BD32B0BD78F7200ACF014 /* RubyGosu_wrap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */; };
-		D4A7E90A0CD377E000621B24 /* Async.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9080CD377E000621B24 /* Async.cpp */; };
-		D4A7E90B0CD377E000621B24 /* Async.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9080CD377E000621B24 /* Async.cpp */; };
 		D4A7E97F0CD3907D00621B24 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97B0CD3907D00621B24 /* Texture.cpp */; };
 		D4A7E9810CD3907D00621B24 /* TexChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97D0CD3907D00621B24 /* TexChunk.cpp */; };
 		D4A7E9830CD3907D00621B24 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97B0CD3907D00621B24 /* Texture.cpp */; };
@@ -596,7 +594,6 @@
 				D410EB100A801B00005C7067 /* ListenerSocket.cpp in Sources */,
 				D410EB110A801B00005C7067 /* MessageSocket.cpp in Sources */,
 				D410EB120A801B00005C7067 /* Socket.cpp in Sources */,
-				D4A7E90A0CD377E000621B24 /* Async.cpp in Sources */,
 				D4A7E97F0CD3907D00621B24 /* Texture.cpp in Sources */,
 				D4A7E9810CD3907D00621B24 /* TexChunk.cpp in Sources */,
 				D4A7E9E80CD39BA200621B24 /* BitmapUtils.cpp in Sources */,
@@ -642,7 +639,6 @@
 				D423823F0C4C3D79000DAA25 /* TimingUnix.cpp in Sources */,
 				D42382400C4C3D79000DAA25 /* Utility.cpp in Sources */,
 				D42382410C4C3D79000DAA25 /* WindowMac.mm in Sources */,
-				D4A7E90B0CD377E000621B24 /* Async.cpp in Sources */,
 				D4A7E9830CD3907D00621B24 /* Texture.cpp in Sources */,
 				D4A7E9840CD3907D00621B24 /* TexChunk.cpp in Sources */,
 				D4A7E9E90CD39BA200621B24 /* BitmapUtils.cpp in Sources */,

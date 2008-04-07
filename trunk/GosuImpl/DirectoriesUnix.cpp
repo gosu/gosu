@@ -11,8 +11,7 @@ namespace
 {
     std::wstring homeDir()
     {   
-        // TODO: Would geteuid() be a better choice? I'm no UNIX guru.
-        passwd* pwd = getpwuid(getuid());
+        passwd* pwd = getpwuid(geteuid());
         assert(pwd);
         return Gosu::widen(pwd->pw_dir);
     }

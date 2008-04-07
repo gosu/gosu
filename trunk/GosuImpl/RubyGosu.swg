@@ -103,9 +103,9 @@
 #undef read
 #undef sleep
 
-#ifndef WIN32
-#include <Gosu/Async.hpp>
-#endif
+//#ifndef WIN32
+//#include <Gosu/Async.hpp>
+//#endif
 
 #include <Gosu/Audio.hpp>
 #include <Gosu/Color.hpp>
@@ -249,19 +249,19 @@ namespace Gosu
 
 // AsyncResult
 
-#ifndef WIN32
-%ignore Gosu::asyncNewImage;
-%ignore Gosu::asyncNewImage_Impl;
-%ignore Gosu::AsyncResult::takeValue;
-%include "../Gosu/Async.hpp"
-%extend Gosu::AsyncResult {
-    %newobject value;
-    Gosu::Image* value() {
-        return $self->takeValue().release();
-    }
-}
-%template(AsyncImageResult) Gosu::AsyncResult<Gosu::Image>;
-#endif
+//#ifndef WIN32
+//%ignore Gosu::asyncNewImage;
+//%ignore Gosu::asyncNewImage_Impl;
+//%ignore Gosu::AsyncResult::takeValue;
+//%include "../Gosu/Async.hpp"
+//%extend Gosu::AsyncResult {
+//    %newobject value;
+//    Gosu::Image* value() {
+//        return $self->takeValue().release();
+//    }
+//}
+//%template(AsyncImageResult) Gosu::AsyncResult<Gosu::Image>;
+//#endif
 
 %ignore Gosu::ImageData;
 %rename("tex_name") texName;
@@ -295,10 +295,10 @@ namespace Gosu
             srcX, srcY, srcWidth, srcHeight, hardBorders);
     }
     #ifndef WIN32
-    %newobject asyncNew;
-    static Gosu::AsyncResult<Gosu::Image>* asyncNew(Gosu::Window& window, const std::wstring& filename) {
-        return new Gosu::AsyncResult<Gosu::Image>(Gosu::asyncNewImage(window, filename));
-    }
+//    %newobject asyncNew;
+//    static Gosu::AsyncResult<Gosu::Image>* asyncNew(Gosu::Window& window, const std::wstring& filename) {
+//        return new Gosu::AsyncResult<Gosu::Image>(Gosu::asyncNewImage(window, filename));
+//    }
     #endif
     void drawAsQuad(double x1, double y1, Color c1,
             double x2, double y2, Color c2,
@@ -376,6 +376,7 @@ namespace Gosu
 %ignore Gosu::TextInput::feedNSEvent(void* event);
 %ignore Gosu::TextInput::caretPos() const;
 %ignore Gosu::TextInput::selectionStart() const;
+%rename("text=") setText;
 %include "../Gosu/TextInput.hpp"
 %extend Gosu::TextInput {
     // Fix indices into UTF-8 string
