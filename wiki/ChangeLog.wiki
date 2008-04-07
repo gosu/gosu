@@ -10,7 +10,6 @@
   * Mac: Added mouse wheel support.
   * Mac: char_to_id bugfix (thanks 0x17!)
   * Mac: Mouse will not be hidden as aggressively
-  * Mac: Changed default font from Arial to Helvetica
   * Mac: Don't keep firing buttonDown events when holding keys down
   * Windows: Fullscreen mode allows alt+tab switching.
   * Windows: Fixed mouse wheel support.
