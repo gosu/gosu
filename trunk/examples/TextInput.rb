@@ -63,7 +63,7 @@ class TextField < Gosu::TextInput
     # Calculate the position of the caret and the selection start.
     pos_x = x + @font.text_width(self.text[0...self.caret_pos])
     sel_x = x + @font.text_width(self.text[0...self.selection_start])
-
+    
     # Draw the selection background, if any; if not, sel_x and pos_x will be
     # the same value, making this quad empty.
     @window.draw_quad(sel_x, y,          SELECTION_COLOR,

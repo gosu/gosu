@@ -536,8 +536,11 @@ bool Gosu::Input::feedNSEvent(void* event)
     NSEvent* ev = (NSEvent*)event;
     unsigned type = [ev type];
 
-    if ((type == NSKeyDown) && textInput() && textInput()->feedNSEvent(event))
+    if (type == NSKeyDown && textInput() && textInput()->feedNSEvent(event))
         return true;
+        
+    if (type == NSKeyDown && [ev isARepeat])
+        return false;
             
     // Process modifier keys.
     unsigned mods = [ev modifierFlags];
