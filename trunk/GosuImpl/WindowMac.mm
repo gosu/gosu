@@ -116,13 +116,7 @@ typedef void (*WindowProc)(Gosu::Window&);
     _input = input;
 }
 
-- (void)keyDown: (NSEvent*) event
-{
-    puts("GosuWindow keyDown");
-    _input->feedNSEvent(event);
-}
-
-//OVERRIDE_METHOD(keyDown);
+OVERRIDE_METHOD(keyDown);
 OVERRIDE_METHOD(keyUp);
 OVERRIDE_METHOD(flagsChanged);
 OVERRIDE_METHOD(mouseDown);
@@ -282,7 +276,7 @@ Gosu::Window::~Window()
     if (graphics().fullscreen())
     {
         CGDisplaySwitchToMode(kCGDirectMainDisplay, pimpl->savedMode);
-		[[NSScreen mainScreen] setFrame:pimpl->savedFrame]; 
+		//[[NSScreen mainScreen] setFrame:pimpl->savedFrame]; 
         CGReleaseAllDisplays();
     }
 }
@@ -331,11 +325,11 @@ void Gosu::Window::show()
                             userInfo:nil repeats:YES];
     [NSApp run];
     [timer invalidate];
-    if (graphics().fullscreen())
-        [NSCursor unhide];
-
+    
     if (graphics().fullscreen())
     {
+        [NSCursor unhide];
+
         // Resetting the mod shouldn't be all too important according to the docs.
         // Let's leave it in until time for testing comes, though.
         CGDisplaySwitchToMode(kCGDirectMainDisplay, pimpl->savedMode);
