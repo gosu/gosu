@@ -108,13 +108,12 @@ class TextInputWindow < Gosu::Window
     # Set up an array of three text fields.
     @text_fields = Array.new(3) { |index| TextField.new(self, font, 50, 30 + index * 50) }
     
-    # TODO
-    @cursor = Gosu::Image.new(self, "media/Starfighter.bmp", false)
+    @cursor = Gosu::Image.new(self, "media/Cursor.png", false)
   end
   
   def draw
     @text_fields.each { |tf| tf.draw }
-    @cursor.draw_rot(mouse_x, mouse_y, 0, 315, 0.5, 0, 0.5, 0.5)
+    @cursor.draw(mouse_x, mouse_y, 0)
   end
   
   def button_down(id)

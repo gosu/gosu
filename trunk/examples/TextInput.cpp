@@ -120,7 +120,7 @@ public:
         for (int index = 0; index < lengthof(textFields); ++index)
             textFields[index].reset(new TextField(*this, *font, 50, 30 + index * 50));
         
-        cursor.reset(new Gosu::Image(graphics(), L"media/Starfighter.bmp", false));
+        cursor.reset(new Gosu::Image(graphics(), L"media/Cursor.png", false));
     }
 
     void draw()
@@ -128,7 +128,7 @@ public:
         for (int i = 0; i < lengthof(textFields); ++i)
             textFields[i]->draw();
             
-        cursor->drawRot(input().mouseX(), input().mouseY(), 0, 315, 0.5, 0, 0.5, 0.5);
+        cursor->draw(input().mouseX(), input().mouseY(), 0);
     }
   
     void buttonDown(Gosu::Button btn)
