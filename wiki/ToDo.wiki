@@ -1,43 +1,42 @@
 #summary Gosu's mixup between a roadmap and a short-term to-do list.
 #labels Featured
 
-= 0.7.9 (WIP) =
-  * TextInput impl on Windows, Linux
-  * testing around with multiple monitors on Windows/OS X
+= 0.7.9 (pending on Windows, Linux) =
+  * TextInput impl on Windows
+  * TextInput impl on Linux
+  * Testing around with multiple monitors on Windows
+  * Fix the whole X11 mess on Linux… I mean, the X11 port of Gosu, not the mess itself ;/
+  * Note: Linux workaround: metacity --replace seems to work wonders.
 
-= Linux 0.7.9 =
-  * if nothing else works, mention metacity --replace as a workaround. Sigh.
+= 0.8.0 (after a cleanup/documentation delay)=
+  * Experimentation: Don't switch resolution EVER but stretch in software? Would probably look better on TFT's and be less error prone.
+  * Experimentation: Should the C++ version keep using wstring, or switch to UTF-8 strings?
+  * Unify documentation!
+  * clean up Ruby's interface; draw_quad and friends should require the Z parameter (BREAKS CODE)
+  * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
+  * maybe rewrite Gosu::Image with support for clipping and other things
+  * provide C++ application templates where possible, maybe even installers for the templates
 
-= ASAP =
+= Major design goals for 0.8.x (graphics, polish) =
+  * make the Ruby wrapper's menu bar more complete on OS X
+  * much improved text output system, at the VERY least/as a first step, Font shouldn't be forced to be bold
+  * generate Rdoc
+  * more alpha modes, yay!
+  * find a way to factor rot flips out of Gosu => Image/draw redesign
+  * implement clipping and a target() modifier for the new Image
+  * also, Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...)
+  * speed up LargeImageData!
+  * Apple remote support would rule.
+  * allow FPS > 60 even with vsync
   * clean up after playing around with possible optimizations
   * get rid of OpenGL tearing on Windows (Intel GMA 950)
   * don't round updateInterval on Windows
   * don't round updateInterval on Linux
   * implement frameskip
-  * more C++ examples
   * assure Gosu::File also creates directories as necessary
-
-= 0.8.0 (after a cleanup/documentation delay)=
-  * Apple remote support would rule.
-  * clean up Ruby's interface; draw_quad and friends should require the Z parameter
-  * clean up Gosu's C++ interface
-  * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
-  * allow FPS > 60 even with vsync
-  * include Xcode template; specify default location for Gosu
-
-= Major design goals for 0.8.x (graphics, polish) =
-  * make the Ruby wrapper's menu bar more complete on OS X
-  * generate Rdoc
-  * change wstring to string (with 0.8.0)
-  * more alpha modes, yay!
-  * find a way to factor rot flips out of Gosu => Image/draw redesign
-  * implement clipping and a target() modifier for the new Image
-  * much improved text output system, at the VERY least/as a first step, Font shouldn't be forced to be bold
-  * also, Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...)
-  * speed up LargeImageData!
+  * more C++ examples
 
 = Major design goals for 0.9.x (IO) =
-  * delegate Linux support, esp. wrt. gamepads (*help!!*)
   * the window argument in Ruby is annoying, because only one window can be used anyway. Maybe it should be Window.run, and all open Windows should work.
   * simplify Gosu's IO philosophy (C++)
   * document Gosu's Sockets
