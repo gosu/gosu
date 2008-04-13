@@ -63,6 +63,12 @@
   * `playing?`
   * `volume=(vol)`, with vol from 0..1.
 
+== class Gosu::TextInput ==
+  * `text`: Current text
+  * `text=(str)`: Replaces the text and positions the cursor at the end of the line
+  * `caret_pos`: Position of the caret as the index of the character that it's left to.
+  * `selection_start`: If there is a selection, `selection_start` yields its beginning, using the same indexing scheme as `caret_pos`; otherwise, equal to `caret_pos`.
+
 == class Gosu::Window ==
   * `initialize(width, height, fullscreen, update_interval = 16.666666)`: Note`: Having two or more windows and loading samples or songs on both of them will result in an exception. If you want to re-open your game window, make sure the old one is *really* dead.
   * `caption, caption=`
