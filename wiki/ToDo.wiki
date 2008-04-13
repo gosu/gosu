@@ -1,14 +1,13 @@
 #summary Gosu's mixup between a roadmap and a short-term to-do list.
 #labels Featured
 
-= 0.7.9 (pending on Windows, Linux) =
-  * TextInput impl on Windows
+= 0.7.9 (pending on Linux) =
   * TextInput impl on Linux
-  * Testing around with multiple monitors on Windows
   * Fix the whole X11 mess on Linux… I mean, the X11 port of Gosu, not the mess itself ;/
   * Note: Linux workaround: metacity --replace seems to work wonders.
 
 = 0.8.0 (after a cleanup/documentation delay)=
+  * Testing around with multiple monitors on Windows
   * Experimentation: Don't switch resolution EVER but stretch in software? Would probably look better on TFT's and be less error prone.
   * Experimentation: Should the C++ version keep using wstring, or switch to UTF-8 strings?
   * Unify documentation!
