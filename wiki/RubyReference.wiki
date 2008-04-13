@@ -87,6 +87,8 @@
   * `button_down?(id)`
   * `self.button_id_to_char(id)`: Returns the character a given id stands for, or "".
   * `self.char_to_button_id(char)`: Returns the id usually used for a character, or 0.
+  * `text_input`
+  * `text_input=`: Sets current text input object that builds an input string
   * `width`
   * `height`
   * `gl <block>`: See examples/OpenGLIntegration.rb.
