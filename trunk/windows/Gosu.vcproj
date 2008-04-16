@@ -327,6 +327,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\GosuImpl\TextInputWin.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\GosuImpl\TimingWin.cpp"
 				>
 			</File>
@@ -511,15 +515,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Gosu\Sockets.hpp"
-				>
-			</File>
-			<File
 				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
 				>
 			</File>
 			<File
+				RelativePath="..\Gosu\Sockets.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\Gosu\Text.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Gosu\TextInput.hpp"
 				>
 			</File>
 			<File

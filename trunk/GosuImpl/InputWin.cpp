@@ -20,6 +20,9 @@ namespace {
 
 struct Gosu::Input::Impl
 {
+    TextInput* textInput;
+    Impl() : textInput(0) {}
+
     HWND window;
     boost::shared_ptr<IDirectInput8> input;
 
@@ -430,4 +433,14 @@ void Gosu::Input::update()
                 onButtonUp(Button(events[i].id));
         }
     }
+}
+
+Gosu::TextInput* Gosu::Input::textInput() const
+{
+    return pimpl->textInput;
+}
+
+void Gosu::Input::setTextInput(TextInput* textInput)
+{
+    pimpl->textInput = textInput;
 }

@@ -1,34 +1,5 @@
 #include <Gosu/Input.hpp>
 
-/*
-
-Not meant to be compiled, taken out until 0.7.9.
-
-Relies on addition to Gosu/Input.hpp:
-
-    // One TextInput instance can be selected per Input which will then translate
-    // events into a string.
-    class TextInput
-    {
-        struct Impl;
-        boost::scoped_ptr<Impl> pimpl;
-        
-    public:
-        TextInput(class Input& input);
-        virtual ~TextInput();
-        
-        // Called by Input. Type of events depends on platform.
-        bool feedEvent(void* event);
-        
-        std::wstring text() const;
-        unsigned caretPos() const;
-        unsigned selStartPos() const;
-    };
-
-Also on the fact that     
-
-*/
-
 // This is a very stupid dummy implementation that
 // will hopefully only be used for prototyping.
 
@@ -37,14 +8,12 @@ Also on the fact that
 
 struct Gosu::TextInput:Impl
 {
-    Input* input;
     std::wstring text;
 };
 
-Gosu::TextInput::TextInput(Input& input)
+Gosu::TextInput::TextInput()
 : pimpl(new Impl)
 {
-    pimpl->input = &input;
 }
 
 Gosu::TextInput::~TextInput()
@@ -61,7 +30,7 @@ bool feedEvent(void* event)
         return true;
     }
     
-    wchar_t chr = pimpl->input->idToChar(Button(buttonId));
+    wchar_t chr = Input::idToChar(Button(buttonId));
     if (chr != 0)
     {
         pimpl->text += chr;
@@ -76,12 +45,17 @@ std::wstring Gosu::TextInput::text() const
     return pimpl->text;
 }
 
+void Gosu::TextInput::setText(const std::wstring& text)
+{
+    pimpl->text = text;
+}
+
 std::wstring Gosu::TextInput::caretPos() const
 {
     return pimpl->text.length();
 }
 
-std::wstring Gosu::TextInput::selStartPos() const
+std::wstring Gosu::TextInput::selStart() const
 {
     return pimpl->text.length();
 }

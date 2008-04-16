@@ -4,6 +4,7 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Audio.hpp>
 #include <Gosu/Input.hpp>
+#include <Gosu/TextInput.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <boost/bind.hpp>
 #include <cassert>
@@ -435,6 +436,11 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
             case SC_KEYMENU:
                 return 0;
         }
+    }
+
+    if (pimpl->input && input().textInput() && input().textInput()->feedMessage(message, wparam, lparam))
+    {
+        return 0;
     }
 
     return DefWindowProc(handle(), message, wparam, lparam);

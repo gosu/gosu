@@ -7,6 +7,7 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <string>
 
 namespace Gosu
 {
@@ -42,8 +43,13 @@ namespace Gosu
         //! selectionStart() is equal to caretPos().
         unsigned selectionStart() const;
 
-        #ifdef GOSU_IS_MAC
+        // Platform-specific communication with Gosu::Input.
+        #if defined(GOSU_IS_MAC)
         bool feedNSEvent(void* event);
+        #elif defined(GOSU_IS_WIN)
+        bool feedMessage(unsigned long message, unsigned long wparam, unsigned long lparam);
+        #else
+        bool feedButtonId(unsigned id);
         #endif
     };
 }

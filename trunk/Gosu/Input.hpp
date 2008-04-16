@@ -108,10 +108,8 @@ namespace Gosu
 		//! If you use the Window class, it will assign forward these to its own methods.
         boost::function<void (Button)> onButtonDown, onButtonUp;
         
-        #ifdef GOSU_IS_MAC
         TextInput* textInput() const;
         void setTextInput(TextInput* input);
-        #endif
     };
 }
 

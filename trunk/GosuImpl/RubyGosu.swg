@@ -373,7 +373,9 @@ namespace Gosu
 %}
 
 // TextInput
-%ignore Gosu::TextInput::feedNSEvent(void* event);
+%ignore Gosu::TextInput::feedNSEvent(void*);
+%ignore Gosu::TextInput::feedMessage(unsigned long, unsigned long, unsigned long);
+%ignore Gosu::TextInput::feedButtonId(unsigned);
 %ignore Gosu::TextInput::caretPos() const;
 %ignore Gosu::TextInput::selectionStart() const;
 %rename("text=") setText;
