@@ -6,7 +6,7 @@
   * Fix the whole X11 mess on Linux… I mean, the X11 port of Gosu, not the mess itself ;/
   * Note: Linux workaround: metacity --replace seems to work wonders.
 
-= 0.7.9.5 (will MAYBE be pulled into the 0.7.0 series without breaking compatibility) =
+= 0.7.9.5 (features that COULD be pulled into the 0.7.0 series without breaking compatibility) =
   * Ruby 1.9.0 support
   * Testing around with multiple monitors on Windows
   * get rid of OpenGL tearing on Windows (Intel GMA 950)
