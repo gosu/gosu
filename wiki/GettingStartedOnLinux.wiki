@@ -14,13 +14,20 @@ To compile Gosu, you will need the following packages (install via sudo apt-get 
 
 If you want to use FMOD for audio, fmod 3.75 must be installed system-wide or manually unpacked so that the fmod… folder is in the same folder as the Gosu, GosuImpl and linux folders. Otherwise, SDL_mixer needs to be present (package libsdl-mixer1.2-dev).
 
+
+*Copy-and-pastable command line* for Ubuntu 7.10 (Gutsy Gibbon), with SDL-mixer as the audio library *and without* Ruby support:
+
+{{{
+sudo apt-get install g++ autoconf libgl1-mesa-dev libglu1-mesa-dev libglut3-dev libpango1.0-dev libboost-dev libxxf86vm-dev libsdl-mixer1.2-dev
+}}}
+
 Ruby/Gosu will be built if the following packages are installed as well:
   * ruby
   * ruby1.8 
   * ruby1.8-dev
   * swig (or swig1.3)
 
-*Copy-and-pastable command line* for Ubuntu 7.10 (Gutsy Gibbon), with SDL-mixer as audio library:
+*Copy-and-pastable command line* for Ubuntu 7.10 (Gutsy Gibbon), with SDL-mixer as the audio library *and* Ruby support:
 
 {{{
 sudo apt-get install g++ autoconf libgl1-mesa-dev libglu1-mesa-dev libglut3-dev libpango1.0-dev libboost-dev libxxf86vm-dev ruby ruby1.8 ruby1.8-dev swig libsdl-mixer1.2-dev
