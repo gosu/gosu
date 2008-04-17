@@ -30,7 +30,9 @@ fi
 AC_SUBST(X_INCS)
 AC_SUBST(x_libraries)
 
-LIBS="$LIBS -L$x_libraries"
+if test $x_libraries; then
+  LIBS="$LIBS -L$x_libraries"
+fi
 
 #AC_CHECK_LIB([Xxf86vm], [XF86VidModeGetModeLine], ,
 #  AC_MSG_ERROR(Missing Xxf86vm))
@@ -104,13 +106,13 @@ if test $HAVE_SWIG != "yes"; then
   AC_MSG_ERROR(Cannot find swig)
 fi
 
-AC_CHECK_LIB(dl, dlopen, LIBS+= -ldl, AC_CHECK_LIB(c, dlopen, ,AC_MSG_ERROR(Missing dlopen functionality), ), )
+AC_CHECK_LIB(dl, dlopen, LIBS="$LIBS -ldl", AC_CHECK_LIB(c, dlopen, ,AC_MSG_ERROR(Missing dlopen functionality), ), )
 
 AC_SUBST(DLOPEN_LIB)
 AC_SUBST(GOSU_A_OBJS)
 AC_SUBST(TO_BE_MADE)
 
-AC_CHECK_LIB(rt, sched_setscheduler, LIBS += -lrt , AC_CHECK_LIB(c, sched_setscheduler, , AC_MSG_ERROR(Missing librt functionality), ), )
+AC_CHECK_LIB(rt, sched_setscheduler, LIBS="$LIBS -lrt", AC_CHECK_LIB(c, sched_setscheduler, , AC_MSG_ERROR(Missing librt functionality), ), )
 AC_SUBST(HAVE_LIBRT)
 
 # Checks for header files.
