@@ -37,7 +37,7 @@ sudo apt-get install g++ autoconf libgl1-mesa-dev libglu1-mesa-dev libglut3-dev 
 
 = Compiling Gosu =
 
-To compile Gosu for Unix, go into the `Linux` directory, and execute:
+To compile Gosu for Unix, go into the `linux` directory and execute:
 
 {{{
 autoconf
@@ -46,7 +46,7 @@ make
 }}}
 
 = Using Ruby/Gosu =
-Just require gosu.so (require 'gosu') and everything should work fine. You can copy gosu.so into the examples folder and run Tutorial.rb to check everything's okay.
+Just require gosu.so (`require 'gosu'`) and everything should work fine. You can copy gosu.so into the examples folder and run Tutorial.rb to check everything's okay.
 
 = Using C++ Gosu =
 
