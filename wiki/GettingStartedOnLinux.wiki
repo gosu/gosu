@@ -33,8 +33,6 @@ Ruby/Gosu will be built if the following packages are installed as well:
 sudo apt-get install g++ autoconf libgl1-mesa-dev libglu1-mesa-dev libglut3-dev libpango1.0-dev libboost-dev libxxf86vm-dev ruby ruby1.8 ruby1.8-dev swig libsdl-mixer1.2-dev
 }}}
 
-(Note: You have to enable the `universe` source under System->Administration->Software Sources.)
-
 = Compiling Gosu =
 
 To compile Gosu for Unix, go into the `linux` directory and execute:
