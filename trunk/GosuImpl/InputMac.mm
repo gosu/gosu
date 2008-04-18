@@ -683,3 +683,4 @@ void Gosu::Input::setTextInput(TextInput* textInput)
 {
     pimpl->textInput = textInput;
 }
+

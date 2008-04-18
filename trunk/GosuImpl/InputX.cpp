@@ -1,13 +1,16 @@
 #include <Gosu/Input.hpp>
+#include <Gosu/TextInput.hpp>
 #include <vector>
 #include <map>
 
 struct Gosu::Input::Impl
 {
+    TextInput* textInput;
     std::vector< ::XEvent> eventList;
     std::map<unsigned int, bool> keyMap;
     double mouseX, mouseY;
     ::Display* display;
+    Impl() : textInput(0) {}
 };
 
 Gosu::Input::Input(::Display* dpy)
@@ -65,26 +68,30 @@ double Gosu::Input::mouseY() const
 
 void Gosu::Input::update()
 {
-    for(unsigned int i = 0; i < pimpl->eventList.size(); i++)
+    for (unsigned int i = 0; i < pimpl->eventList.size(); i++)
     {
         ::XEvent event = pimpl->eventList[i];
-        if(event.type == KeyPress)
+
+        if (textInput() && textInput()->feedXEvent(pimpl->display, &event))
+            return;
+
+        if (event.type == KeyPress)
         {
             unsigned keysym = XKeycodeToKeysym(pimpl->display,
                 event.xkey.keycode, 0);
             pimpl->keyMap[keysym] = true;
-            if(onButtonDown)
+            if (onButtonDown)
                 onButtonDown(*reinterpret_cast<Button*>(&keysym));
         }
-        else if(event.type == KeyRelease)
+        else if (event.type == KeyRelease)
         {
             unsigned keysym = XKeycodeToKeysym(pimpl->display,
                 event.xkey.keycode, 0);
             pimpl->keyMap[keysym] = false;
-            if(onButtonUp)
+            if (onButtonUp)
                 onButtonUp(*reinterpret_cast<Button*>(&keysym));
         }
-        else if(event.type == ButtonPress)
+        else if (event.type == ButtonPress)
         {
             unsigned id;
             switch (event.xbutton.button)
@@ -95,10 +102,10 @@ void Gosu::Input::update()
             default: continue;
             }
             pimpl->keyMap[id] = true;
-            if(onButtonDown)
+            if (onButtonDown)
                 onButtonDown(*reinterpret_cast<Button*>(&id));
         }
-        else if(event.type == ButtonRelease)
+        else if (event.type == ButtonRelease)
         {
             unsigned id;
             switch (event.xbutton.button)
@@ -109,15 +116,24 @@ void Gosu::Input::update()
             default: continue;
             }
             pimpl->keyMap[id] = false;
-            if(onButtonUp)
+            if (onButtonUp)
                 onButtonUp(*reinterpret_cast<Button*>(&id));
         }
-        else if(event.type == MotionNotify)
+        else if (event.type == MotionNotify)
         {
             pimpl->mouseX = event.xbutton.x;
             pimpl->mouseY = event.xbutton.y;
         }
     }
     pimpl->eventList.clear();
+}
+Gosu::TextInput* Gosu::Input::textInput() const
+{
+    return pimpl->textInput;
+}
+
+void Gosu::Input::setTextInput(TextInput* textInput)
+{
+    pimpl->textInput = textInput;
 }
 

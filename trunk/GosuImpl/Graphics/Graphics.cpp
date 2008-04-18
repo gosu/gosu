@@ -5,7 +5,7 @@
 #include <GosuImpl/Graphics/TexChunk.hpp>
 #include <GosuImpl/Graphics/LargeImageData.hpp>
 #include <Gosu/Bitmap.hpp>
-#ifndef WIN32
+#if 0
 #include <boost/thread.hpp>
 #endif
 
@@ -17,7 +17,7 @@ struct Gosu::Graphics::Impl
     DrawOpQueue queue;
     typedef std::vector<boost::shared_ptr<Texture> > Textures;
     Textures textures;
-#ifndef WIN32
+#if 0
     boost::mutex texMutex;
 #endif
 };
@@ -252,7 +252,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     Bitmap bmp;
     applyBorderFlags(bmp, src, srcX, srcY, srcWidth, srcHeight, borderFlags);
 
-#ifndef WIN32
+#if 0
     boost::mutex::scoped_lock lock(pimpl->texMutex);
 #endif
     

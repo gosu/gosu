@@ -369,7 +369,7 @@ void Gosu::Window::Impl::doTick(Window* window)
     {
         window->draw();
         window->graphics().end();
-	glXSwapBuffers(dpy, this->window);
+        glXSwapBuffers(dpy, this->window);
     }
 
     window->input().update();

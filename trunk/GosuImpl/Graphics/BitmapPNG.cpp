@@ -1,6 +1,6 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/IO.hpp>
-#ifndef WIN32
+#if 0
 #include <boost/thread.hpp>
 #endif
 #include <cassert>
@@ -11,7 +11,7 @@ namespace Gosu
 {
     namespace
     {
-#ifndef WIN32
+#if 0
         // Stupid, but everyone would expect loadFromPNG/saveToPNG to be thread-safe.
         boost::mutex pngMutex;
 #endif
@@ -35,7 +35,7 @@ namespace Gosu
 
 Gosu::Reader Gosu::loadFromPNG(Bitmap& out, Reader reader)
 {
-#ifndef WIN32
+#if 0
     boost::mutex::scoped_lock lock(pngMutex);
 #endif
 
@@ -209,7 +209,7 @@ Gosu::Reader Gosu::loadFromPNG(Bitmap& out, Reader reader)
 
 Gosu::Writer Gosu::saveToPNG(const Bitmap& bmp, Writer writer)
 {
-#ifndef WIN32
+#if 0
     boost::mutex::scoped_lock lock(pngMutex);
 #endif
 

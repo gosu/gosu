@@ -49,7 +49,7 @@ namespace Gosu
         #elif defined(GOSU_IS_WIN)
         bool feedMessage(unsigned long message, unsigned long wparam, unsigned long lparam);
         #else
-        bool feedButtonId(unsigned id);
+        bool feedXEvent(void* display, void* event);
         #endif
     };
 }

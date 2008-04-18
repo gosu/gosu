@@ -4,10 +4,6 @@
 #include <vector>
 #include <wctype.h>
 
-// OPT-IN, have you heard of it?!
-#define NOMINMAX
-#include <windows.h>
-
 struct Gosu::TextInput::Impl
 {
     std::wstring text;
@@ -48,9 +44,16 @@ unsigned Gosu::TextInput::selectionStart() const
 #define CARET_POS (pimpl->caretPos)
 #define SEL_START (pimpl->selectionStart)
 
-bool Gosu::TextInput::feedMessage(unsigned long message, unsigned long wparam, unsigned long lparam)
+bool Gosu::TextInput::feedXEvent(void* display, void* event)
 {
-    if (message == WM_CHAR && wparam >= 32 && wparam != 127)
+    XEvent* ev = static_cast<XEvent*>(event);
+
+    if (ev->type != KeyPressed)
+        return false;
+
+    wchar_t ch = (wchar_t)XKeycodeToKeysym((Display*)display, ev->xkey.keycode, 0);
+
+    if (ch >= 32 && ch != 127)
     {
         // Delete (overwrite) previous selection.
         if (CARET_POS != SEL_START)
@@ -61,17 +64,17 @@ bool Gosu::TextInput::feedMessage(unsigned long message, unsigned long wparam, u
             CARET_POS = SEL_START = min;
         }
         
-        pimpl->text.insert(pimpl->text.begin() + CARET_POS, static_cast<wchar_t>(wparam));
+        pimpl->text.insert(pimpl->text.begin() + CARET_POS, ch);
         CARET_POS += 1;
         SEL_START = CARET_POS;
         return true;
     }
 
-    bool ctrlDown	= (GetKeyState(VK_CONTROL) < 0);
-	bool shiftDown	= (GetKeyState(VK_SHIFT) < 0);
+    bool ctrlDown	= (ke->xkey.state & ControlMask);
+    bool shiftDown	= (ke->xkey.state & ShiftMask);
 
     // Char left
-    if (message == WM_KEYDOWN && wparam == VK_LEFT && !ctrlDown)
+    if (ch == kbLeft && !ctrlDown)
     {
         if (CARET_POS > 0)
             CARET_POS -= 1;
@@ -83,7 +86,7 @@ bool Gosu::TextInput::feedMessage(unsigned long message, unsigned long wparam, u
     }
 
     // Char right
-    if (message == WM_KEYDOWN && wparam == VK_RIGHT && !ctrlDown)
+    if (ch == kbRight && !ctrlDown)
     {
         if (CARET_POS < pimpl->text.length())
             CARET_POS += 1;
@@ -95,7 +98,7 @@ bool Gosu::TextInput::feedMessage(unsigned long message, unsigned long wparam, u
     }
     
     // Home
-    if (message == WM_KEYDOWN && wparam == VK_HOME)
+    if (ch == kbHome)
     {
         CARET_POS = 0;
 
@@ -106,7 +109,7 @@ bool Gosu::TextInput::feedMessage(unsigned long message, unsigned long wparam, u
     }
 
     // End
-    if (message == WM_KEYDOWN && wparam == VK_END)
+    if (ch == kbEnd)
     {
         CARET_POS = pimpl->text.length();
 
@@ -117,7 +120,7 @@ bool Gosu::TextInput::feedMessage(unsigned long message, unsigned long wparam, u
     }
 
     // Word left
-    if (message == WM_KEYDOWN && wparam == VK_LEFT && ctrlDown)
+    if (ch == kbLeft && ctrlDown)
     {
         if (CARET_POS == pimpl->text.length())
             --CARET_POS;
@@ -135,7 +138,7 @@ bool Gosu::TextInput::feedMessage(unsigned long message, unsigned long wparam, u
     }
 
     // Word right
-    if (message == WM_KEYDOWN && wparam == VK_RIGHT && ctrlDown)
+    if (ch == kbRight && ctrlDown)
     {
         while (CARET_POS < pimpl->text.length() && iswspace(pimpl->text.at(CARET_POS)))
             ++CARET_POS;
@@ -150,7 +153,7 @@ bool Gosu::TextInput::feedMessage(unsigned long message, unsigned long wparam, u
     }
 
     // Delete existant selection
-    if (message == WM_KEYDOWN && wparam == VK_BACK)
+    if (ch == kbBackspace)
     {
         if (SEL_START != CARET_POS)
         {
@@ -159,11 +162,10 @@ bool Gosu::TextInput::feedMessage(unsigned long message, unsigned long wparam, u
             pimpl->text.erase(pimpl->text.begin() + min, pimpl->text.begin() + max);
             SEL_START = CARET_POS = min;
         }
-        else
+        else if (CARET_POS > 0)
         {
             unsigned oldCaret = CARET_POS;
-            // Move left - either char or word
-            feedMessage(WM_KEYDOWN, VK_LEFT, lparam);
+            CARET_POS -= 1;
             pimpl->text.erase(pimpl->text.begin() + CARET_POS, pimpl->text.begin() + oldCaret);
             SEL_START = CARET_POS;
         }
@@ -172,7 +174,7 @@ bool Gosu::TextInput::feedMessage(unsigned long message, unsigned long wparam, u
     }
 
     // Delete existant selection
-    if (message == WM_KEYDOWN && wparam == VK_DELETE)
+    if (ch == kbDelete)
     {
         if (SEL_START != CARET_POS)
         {
@@ -181,11 +183,10 @@ bool Gosu::TextInput::feedMessage(unsigned long message, unsigned long wparam, u
             pimpl->text.erase(pimpl->text.begin() + min, pimpl->text.begin() + max);
             SEL_START = CARET_POS = min;
         }
-        else
+        else if (CARET_POS < pimpl->text.length())
         {
             unsigned oldCaret = CARET_POS;
-            // Move right - either char or word
-            feedMessage(WM_KEYDOWN, VK_RIGHT, lparam);
+            CARET_POS += 1;
             pimpl->text.erase(pimpl->text.begin() + oldCaret, pimpl->text.begin() + CARET_POS);
             SEL_START = CARET_POS = oldCaret;
         }

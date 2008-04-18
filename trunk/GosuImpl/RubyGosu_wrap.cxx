@@ -2497,7 +2497,7 @@ SWIGINTERN void Gosu_Window_gl(Gosu::Window *self){
  * C++ director class methods
  * --------------------------------------------------- */
 
-#include "../GosuImpl/RubyGosu_wrap.h"
+#include "RubyGosu_wrap.h"
 
 SwigDirector_Window::SwigDirector_Window(VALUE self, unsigned int width, unsigned int height, bool fullscreen, double updateInterval): Gosu::Window(width, height, fullscreen, updateInterval), Swig::Director(self) {
   
