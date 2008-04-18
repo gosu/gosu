@@ -1,10 +1,10 @@
 #summary Gosu's mixup between a roadmap and a short-term to-do list.
 #labels Featured
 
-= 0.7.9 (pending on Linux) =
-  * TextInput impl on Linux
-  * Fix the whole X11 mess on Linux… I mean, the X11 port of Gosu, not the mess itself ;/
-  * Note: Linux workaround: metacity --replace seems to work wonders.
+= 0.7.9.3 (Linux) =
+  * Better TextInput impl on Linux
+  * Fixes for at least one of the X11 issues
+  * (Note: Linux workaround: metacity --replace seems to work wonders.)
 
 = 0.7.9.x=
 Features that COULD be pulled into the 0.7.0 series without breaking compatibility to keep the step to 0.8.0 as small as possible; I'll try to implement those for which I see actual demand :)
