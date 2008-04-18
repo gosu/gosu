@@ -73,7 +73,7 @@ void Gosu::Input::update()
         ::XEvent event = pimpl->eventList[i];
 
         if (textInput() && textInput()->feedXEvent(pimpl->display, &event))
-            return;
+            continue;
 
         if (event.type == KeyPress)
         {

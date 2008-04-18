@@ -6507,6 +6507,48 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_TextInput_feed_xevent(int argc, VALUE *argv, VALUE self) {
+  Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
+  void *arg2 = (void *) 0 ;
+  void *arg3 = (void *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  int res3 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "feedXEvent" "', argument " "1"" of type '" "Gosu::TextInput *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::TextInput * >(argp1);
+  res2 = SWIG_ConvertPtr(argv[0],SWIG_as_voidptrptr(&arg2), 0, 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "feedXEvent" "', argument " "2"" of type '" "void *""'"); 
+  }
+  res3 = SWIG_ConvertPtr(argv[1],SWIG_as_voidptrptr(&arg3), 0, 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "feedXEvent" "', argument " "3"" of type '" "void *""'"); 
+  }
+  {
+    try {
+      result = (bool)(arg1)->feedXEvent(arg2,arg3);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_bool(static_cast< bool >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_TextInput_caret_pos(int argc, VALUE *argv, VALUE self) {
   Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
   unsigned int result;
@@ -8260,6 +8302,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cTextInput.klass, "initialize", VALUEFUNC(_wrap_new_TextInput), -1);
   rb_define_method(cTextInput.klass, "text", VALUEFUNC(_wrap_TextInput_text), -1);
   rb_define_method(cTextInput.klass, "text=", VALUEFUNC(_wrap_TextInput_texte___), -1);
+  rb_define_method(cTextInput.klass, "feed_xevent", VALUEFUNC(_wrap_TextInput_feed_xevent), -1);
   rb_define_method(cTextInput.klass, "caret_pos", VALUEFUNC(_wrap_TextInput_caret_pos), -1);
   rb_define_method(cTextInput.klass, "selection_start", VALUEFUNC(_wrap_TextInput_selection_start), -1);
   cTextInput.mark = 0;

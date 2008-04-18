@@ -1,5 +1,5 @@
 #include <Gosu/TextInput.hpp>
-#include <Gosu/ButtonsWin.hpp>
+#include <Gosu/Input.hpp>
 #include <algorithm>
 #include <vector>
 #include <wctype.h>
@@ -48,12 +48,18 @@ bool Gosu::TextInput::feedXEvent(void* display, void* event)
 {
     XEvent* ev = static_cast<XEvent*>(event);
 
-    if (ev->type != KeyPressed)
+    if (ev->type != KeyPress)
         return false;
 
-    wchar_t ch = (wchar_t)XKeycodeToKeysym((Display*)display, ev->xkey.keycode, 0);
+    bool ctrlDown	= (ev->xkey.state & ControlMask);
+    bool shiftDown	= (ev->xkey.state & ShiftMask);
 
-    if (ch >= 32 && ch != 127)
+    KeySym lower, upper;
+    XConvertCase(XKeycodeToKeysym((Display*)display, ev->xkey.keycode, 0), &lower, &upper);
+
+    wchar_t ch = static_cast<wchar_t>(shiftDown ? upper : lower);
+
+    if (ch >= 32 && ch != 127 && ch <= 255)
     {
         // Delete (overwrite) previous selection.
         if (CARET_POS != SEL_START)
@@ -69,9 +75,6 @@ bool Gosu::TextInput::feedXEvent(void* display, void* event)
         SEL_START = CARET_POS;
         return true;
     }
-
-    bool ctrlDown	= (ke->xkey.state & ControlMask);
-    bool shiftDown	= (ke->xkey.state & ShiftMask);
 
     // Char left
     if (ch == kbLeft && !ctrlDown)

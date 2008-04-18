@@ -1,5 +1,5 @@
-#ifndef GOSU_BUTTONSMAC_HPP
-#define GOSU_BUTTONSMAC_HPP
+#ifndef GOSU_BUTTONSX_HPP
+#define GOSU_BUTTONSX_HPP
 
 namespace Gosu
 {
@@ -112,3 +112,4 @@ namespace Gosu
 }
 
 #endif
+
