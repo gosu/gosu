@@ -4,3 +4,5 @@
 = Gosu Exchange =
 
 User jordan.applewhite suggested that there should be a place to exchange experiences that is not as real time as IRC. Also, I would like to collect some answers to emails here in the future. And maybe some users come up with their own best practices. So feel free to post anything that doesn't fit somewhere else as a comment to this page!
+
+*Note:* This is getting a bit messy here, but it was good to see what kind of things people are interested in. I will take that as a base to decide what to use for future Gosu discussion. -Julian
