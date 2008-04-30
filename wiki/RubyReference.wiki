@@ -70,11 +70,12 @@
   * `selection_start`: If there is a selection, `selection_start` yields its beginning, using the same indexing scheme as `caret_pos`; otherwise, equal to `caret_pos`.
 
 == class Gosu::Window ==
+_Note that you should really only use on instance of this class at the same time. This might change later._
   * `initialize(width, height, fullscreen, update_interval = 16.666666)`: Note`: Having two or more windows and loading samples or songs on both of them will result in an exception. If you want to re-open your game window, make sure the old one is *really* dead.
   * `caption, caption=`
-  * `show`
-  * `close`
-  * `visible?`
+  * `show`: Enters a modal loop where the Window is visible on screen and receives calls to `draw`, `update` etc.
+  * `close`: Tells the window to end the current `show` loop as soon as possible.
+  * `visible?`: Returns true if a call to show is currently in progress, false before and after that.
   * `update`
   * `draw`
   * `button_down(id)`: Called when the user presses the button with the given id.
