@@ -18,6 +18,7 @@ Features that COULD be pulled into the 0.7.x series without breaking compatibili
   * Unify documentation!
   * also, Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...)
   * make the Ruby wrapper's menu bar more complete on OS X
+  * Experimentation: Should support for multiple Window instances be kept? Should the window argument to most constructors leave? -> Only stronger error messages could be pulled into the 0.7.9.x series.
 
 = 0.8.0 (after a cleanup/documentation delay)=
   * Experimentation: Don't switch resolution EVER but stretch in software? Would probably look better on TFT's and be less error prone.
