@@ -24,7 +24,7 @@
   * `value`
   * `value=`
   * `self.from_hsv(h, s, v)`: converts a HSV triple into a color. Same as from_ahsv with alpha set to 255.
-  * `self.from_ahsv(h, s, v)`: converts a HSV triple into a color, with a given alpha. Ranges: alpha from 0..255, h from 0..360, s from 0..1, v from 0..1.
+  * `self.from_ahsv(a, h, s, v)`: converts a HSV triple into a color, with a given alpha. Ranges: alpha from 0..255, h from 0..360, s from 0..1, v from 0..1.
 
 == class Gosu::Font ==
   * `initialize(window, font_name, height)`: font_name can either be the name of a system font, or a filename (must contain '/'). height is the height of the font, in pixels.
