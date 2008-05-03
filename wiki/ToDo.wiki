@@ -1,6 +1,10 @@
 #summary Gosu's mixup between a roadmap and a short-term to-do list.
 #labels Featured
 
+= ASAP =
+  * Fix Color HSV support
+  * Fix and document Gosu::angle_diff
+
 = 0.7.9.3 (Linux) =
   * Better TextInput impl on Linux
   * Fixes for at least one of the X11 issues
