@@ -4432,6 +4432,118 @@ fail:
 }
 
 
+SWIGINTERN VALUE
+_wrap_Font_draw_rot(int argc, VALUE *argv, VALUE self) {
+  Gosu::Font *arg1 = (Gosu::Font *) 0 ;
+  std::wstring *arg2 = 0 ;
+  double arg3 ;
+  double arg4 ;
+  Gosu::ZPos arg5 ;
+  double arg6 ;
+  double arg7 = (double) 1 ;
+  double arg8 = (double) 1 ;
+  Gosu::Color arg9 = (Gosu::Color) Gosu::Colors::white ;
+  Gosu::AlphaMode arg10 = (Gosu::AlphaMode) Gosu::amDefault ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::wstring temp2 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  double val6 ;
+  int ecode6 = 0 ;
+  double val7 ;
+  int ecode7 = 0 ;
+  double val8 ;
+  int ecode8 = 0 ;
+  
+  if ((argc < 5) || (argc > 9)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 5)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Font, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "drawRot" "', argument " "1"" of type '" "Gosu::Font const *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::Font * >(argp1);
+  {
+    VALUE localTemporary = rb_obj_as_string(argv[0]);
+    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
+    arg2 = &temp2;
+  }
+  ecode3 = SWIG_AsVal_double(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "drawRot" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  ecode4 = SWIG_AsVal_double(argv[2], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "drawRot" "', argument " "4"" of type '" "double""'");
+  } 
+  arg4 = static_cast< double >(val4);
+  ecode5 = SWIG_AsVal_double(argv[3], &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "drawRot" "', argument " "5"" of type '" "Gosu::ZPos""'");
+  } 
+  arg5 = static_cast< Gosu::ZPos >(val5);
+  ecode6 = SWIG_AsVal_double(argv[4], &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "drawRot" "', argument " "6"" of type '" "double""'");
+  } 
+  arg6 = static_cast< double >(val6);
+  if (argc > 5) {
+    ecode7 = SWIG_AsVal_double(argv[5], &val7);
+    if (!SWIG_IsOK(ecode7)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "drawRot" "', argument " "7"" of type '" "double""'");
+    } 
+    arg7 = static_cast< double >(val7);
+  }
+  if (argc > 6) {
+    ecode8 = SWIG_AsVal_double(argv[6], &val8);
+    if (!SWIG_IsOK(ecode8)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "drawRot" "', argument " "8"" of type '" "double""'");
+    } 
+    arg8 = static_cast< double >(val8);
+  }
+  if (argc > 7) {
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[7], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      // TODO: error checking
+      arg9 = Gosu::Color(NUM2UINT(argv[7]));
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg9 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
+  }
+  if (argc > 8) {
+    {
+      VALUE localTemporary = rb_obj_as_string(argv[8]);
+      if (!strcmp(StringValueCStr(localTemporary), "default"))
+      arg10 = Gosu::amDefault;
+      else if (!strcmp(StringValueCStr(localTemporary), "additive"))
+      arg10 = Gosu::amAdditive;
+      else
+      SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
+    }
+  }
+  {
+    try {
+      ((Gosu::Font const *)arg1)->drawRot((std::wstring const &)*arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
 #ifdef HAVE_RB_DEFINE_ALLOC_FUNC
 SWIGINTERN VALUE
 _wrap_Font_allocate(VALUE self) {
@@ -6507,48 +6619,6 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_TextInput_feed_xevent(int argc, VALUE *argv, VALUE self) {
-  Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
-  void *arg2 = (void *) 0 ;
-  void *arg3 = (void *) 0 ;
-  bool result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 ;
-  int res3 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "feedXEvent" "', argument " "1"" of type '" "Gosu::TextInput *""'"); 
-  }
-  arg1 = reinterpret_cast< Gosu::TextInput * >(argp1);
-  res2 = SWIG_ConvertPtr(argv[0],SWIG_as_voidptrptr(&arg2), 0, 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "feedXEvent" "', argument " "2"" of type '" "void *""'"); 
-  }
-  res3 = SWIG_ConvertPtr(argv[1],SWIG_as_voidptrptr(&arg3), 0, 0);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "feedXEvent" "', argument " "3"" of type '" "void *""'"); 
-  }
-  {
-    try {
-      result = (bool)(arg1)->feedXEvent(arg2,arg3);
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_bool(static_cast< bool >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
 _wrap_TextInput_caret_pos(int argc, VALUE *argv, VALUE self) {
   Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
   unsigned int result;
@@ -8113,6 +8183,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cFont.klass, "text_width", VALUEFUNC(_wrap_Font_text_width), -1);
   rb_define_method(cFont.klass, "draw", VALUEFUNC(_wrap_Font_draw), -1);
   rb_define_method(cFont.klass, "draw_rel", VALUEFUNC(_wrap_Font_draw_rel), -1);
+  rb_define_method(cFont.klass, "draw_rot", VALUEFUNC(_wrap_Font_draw_rot), -1);
   cFont.mark = 0;
   cFont.destroy = (void (*)(void *)) free_Gosu_Font;
   cFont.trackObjects = 1;
@@ -8302,7 +8373,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cTextInput.klass, "initialize", VALUEFUNC(_wrap_new_TextInput), -1);
   rb_define_method(cTextInput.klass, "text", VALUEFUNC(_wrap_TextInput_text), -1);
   rb_define_method(cTextInput.klass, "text=", VALUEFUNC(_wrap_TextInput_texte___), -1);
-  rb_define_method(cTextInput.klass, "feed_xevent", VALUEFUNC(_wrap_TextInput_feed_xevent), -1);
   rb_define_method(cTextInput.klass, "caret_pos", VALUEFUNC(_wrap_TextInput_caret_pos), -1);
   rb_define_method(cTextInput.klass, "selection_start", VALUEFUNC(_wrap_TextInput_selection_start), -1);
   cTextInput.mark = 0;

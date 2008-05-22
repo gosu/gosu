@@ -49,6 +49,10 @@ namespace Gosu
         void drawRel(const std::wstring& text, double x, double y, ZPos z,
             double relX, double relY, double factorX = 1, double factorY = 1,
             Color c = Colors::white, AlphaMode mode = amDefault) const;
+            
+        void drawRot(const std::wstring& text, double x, double y, ZPos z, double angle,
+            double factorX = 1, double factorY = 1,
+            Color c = Colors::white, AlphaMode mode = amDefault) const;
     };
 }
 

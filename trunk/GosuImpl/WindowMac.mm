@@ -380,12 +380,12 @@ namespace
 {
     void makeCurrentContext(NSOpenGLContext* context)
     {
-        [(NSOpenGLContext*)context makeCurrentContext];
+        [context makeCurrentContext];
     }
     
     void releaseContext(NSOpenGLContext* context)
     {
-        [(NSOpenGLContext*)context release];
+        [context release];
     }
 }
 

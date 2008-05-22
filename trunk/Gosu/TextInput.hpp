@@ -48,7 +48,7 @@ namespace Gosu
         bool feedNSEvent(void* event);
         #elif defined(GOSU_IS_WIN)
         bool feedMessage(unsigned long message, unsigned long wparam, unsigned long lparam);
-        #else
+        #elif defined(GOSU_IS_X)
         bool feedXEvent(void* display, void* event);
         #endif
     };

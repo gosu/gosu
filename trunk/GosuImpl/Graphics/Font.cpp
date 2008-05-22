@@ -77,8 +77,7 @@ void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
     for (unsigned i = 0; i < text.length(); ++i)
     {
         Image& curChar = pimpl->getChar(text[i]);
-        curChar.draw(x, y, z,
-            factorX, factorY, c, mode);
+        curChar.draw(x, y, z, factorX, factorY, c, mode);
         x += curChar.width() * factorX;
     }
 }
@@ -91,4 +90,21 @@ void Gosu::Font::drawRel(const wstring& text, double x, double y, ZPos z,
     y -= height() * factorY * relY;
 
     draw(text, x, y, z, factorX, factorY, c, mode);
+}
+
+void Gosu::Font::drawRot(const wstring& text, double x, double y, ZPos z, double angle,
+    double factorX, double factorY, Color c, AlphaMode mode) const
+{
+    factorX /= 2;
+    factorY /= 2;
+    
+    double stepX = offsetX(angle + 90, 1.0), stepY = offsetY(angle + 90, 1.0);
+
+    for (unsigned i = 0; i < text.length(); ++i)
+    {
+        Image& curChar = pimpl->getChar(text[i]);
+        curChar.drawRot(x, y, z, angle, 0.0, 0.0, factorX, factorY, c, mode);
+        x += curChar.width() * factorX * stepX;
+        y += curChar.width() * factorX * stepY;
+    }
 }
