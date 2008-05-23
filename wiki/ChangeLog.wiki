@@ -2,6 +2,7 @@
 #labels Featured
 
 =0.7.9 (WIP)=
+  * All: Document Gosu::interpolate?
   * All: Added Gosu::TextInput functionality with example for Ruby and C++
   * All: OpenGL allocates depth buffer, allows for better custom OpenGL effects.
   * All: Gosu::Font looks a lot smoother
