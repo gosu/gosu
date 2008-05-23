@@ -21,11 +21,9 @@ unsigned Gosu::Texture::maxTextureSize()
             glGetTexLevelParameteriv(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width); 
         } while (width != 0 && size < MAX_SIZE);
     }
-    
+        
     return size;
 }
-
-#include <Gosu/Timing.hpp>
 
 Gosu::Texture::Texture(unsigned size)
 : allocator(size, size), num(0)

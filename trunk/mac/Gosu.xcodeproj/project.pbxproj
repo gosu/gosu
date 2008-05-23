@@ -753,6 +753,131 @@
 			};
 			name = Release;
 		};
+		D40DD7C80DE7666F00C78FB6 /* Profiling */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEPLOYMENT_POSTPROCESSING = YES;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					..,
+					/usr/local/include,
+					/opt/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = .;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Profiling;
+		};
+		D40DD7C90DE7666F00C78FB6 /* Profiling */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				CONFIGURATION_BUILD_DIR = ..;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GENERATE_PROFILING_CODE = YES;
+				INFOPLIST_FILE = "Gosu-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				LIBRARY_STYLE = DYNAMIC;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_LDFLAGS = (
+					"-lz_universal",
+					"-lpng_universal",
+					"-lfmod_universal",
+					"-liconv",
+					"-lboost_thread_1_34_1_universal",
+				);
+				PRODUCT_NAME = Gosu;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Profiling;
+		};
+		D40DD7CA0DE7666F00C78FB6 /* Profiling */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)";
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = (
+					..,
+					/usr/local/include,
+					/opt/local/include,
+					"/usr/lib/ruby/1.8/universal-darwin8.0",
+					"/usr/lib/ruby/1.8/universal-darwin9.0",
+				);
+				INFOPLIST_FILE = "RubyGosu Template-Info.plist";
+				OBJROOT = build;
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-lruby",
+					"-liconv",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "RubyGosu Deployment Template";
+				SYMROOT = ..;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Profiling;
+		};
+		D40DD7CB0DE7666F00C78FB6 /* Profiling */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				CONFIGURATION_BUILD_DIR = ..;
+				COPY_PHASE_STRIP = YES;
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_EXTENSION = bundle;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					NDEBUG,
+					GOSU_FOR_RUBY,
+				);
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					..,
+					/usr/local/include,
+					/opt/local/include,
+					"/usr/lib/ruby/1.8/universal-darwin8.0",
+					"/usr/lib/ruby/1.8/universal-darwin9.0",
+				);
+				MACH_O_TYPE = mh_bundle;
+				OTHER_LDFLAGS = (
+					"-F..",
+					"-lruby",
+					"-lz_universal",
+					"-lpng_universal",
+					"-lfmod_universal",
+					"-flat_namespace",
+					"-lboost_thread_1_34_1_universal",
+					"-liconv",
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = gosu;
+				ZERO_LINK = NO;
+			};
+			name = Profiling;
+		};
 		D43CBDAF0D077176007D13E7 /* BleedingEdge */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1028,6 +1153,7 @@
 			buildConfigurations = (
 				4FADC24308B4156D00ABE55E /* Debug */,
 				4FADC24408B4156D00ABE55E /* Release */,
+				D40DD7C90DE7666F00C78FB6 /* Profiling */,
 				D43CBDB00D077176007D13E7 /* BleedingEdge */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1038,6 +1164,7 @@
 			buildConfigurations = (
 				4FADC24708B4156D00ABE55E /* Debug */,
 				4FADC24808B4156D00ABE55E /* Release */,
+				D40DD7C80DE7666F00C78FB6 /* Profiling */,
 				D43CBDAF0D077176007D13E7 /* BleedingEdge */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1048,6 +1175,7 @@
 			buildConfigurations = (
 				D459FF480BDCD23600E7F0D6 /* Debug */,
 				D459FF490BDCD23600E7F0D6 /* Release */,
+				D40DD7CA0DE7666F00C78FB6 /* Profiling */,
 				D43CBDB10D077176007D13E7 /* BleedingEdge */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1058,6 +1186,7 @@
 			buildConfigurations = (
 				D4CA89520BC68B9E00A431AC /* Debug */,
 				D4CA89530BC68B9E00A431AC /* Release */,
+				D40DD7CB0DE7666F00C78FB6 /* Profiling */,
 				D43CBDB20D077176007D13E7 /* BleedingEdge */,
 			);
 			defaultConfigurationIsVisible = 0;

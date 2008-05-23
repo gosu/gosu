@@ -42,7 +42,6 @@ Gosu::LargeImageData::LargeImageData(Graphics& graphics,
                 localBorderFlags &= ~(borderFlags & bfHardBottom);
 
             parts[y * partsX + x].reset(graphics.createImage(source,
-                                                             
                 x * partWidth, y * partHeight, srcWidth, srcHeight,
                 localBorderFlags).release());
         }

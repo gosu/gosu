@@ -1,5 +1,5 @@
 // This should be a short #ifdef'ed section in RubyGosu.swg, but due to three
-// involved namespace hells (Ruby!!!, SWIG, Carbon), this is impossible.
+// involved namespace hells (ruby.h!!!, SWIG, Carbon), this is impossible.
 
 #include <Carbon/Carbon.h>
 

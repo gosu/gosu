@@ -114,10 +114,10 @@ void Gosu::Color::setValue(double v)
 Gosu::Color Gosu::interpolate(Color a, Color b, double weight)
 {
     Color result;
-    result.setAlpha(round((a.alpha() + b.alpha()) * weight));
-    result.setRed  (round((a.red()   + b.red())   * weight));
-    result.setGreen(round((a.green() + b.green()) * weight));
-    result.setBlue (round((a.blue()  + b.blue())  * weight));
+    result.setAlpha(round(a.alpha() * (1 - weight) + b.alpha() * weight));
+    result.setRed  (round(a.red()   * (1 - weight) + b.red()   * weight));
+    result.setGreen(round(a.green() * (1 - weight) + b.green() * weight));
+    result.setBlue (round(a.blue()  * (1 - weight) + b.blue()  * weight));
     return result;
 }
 
