@@ -4,6 +4,7 @@
 = ASAP =
   * Fix Color HSV support
   * Fix and document Gosu::angle_diff
+  * Document Gosu::interpolate, improve it too?
 
 = 0.7.9.3 (Linux) =
   * Better TextInput impl on Linux
@@ -26,6 +27,7 @@ Features that COULD be pulled into the 0.7.x series without breaking compatibili
   * Experimentation: Should support for multiple Window instances be kept? Should the window argument to most constructors leave? -> Only stronger error messages could be pulled into the 0.7.9.x series.
 
 = 0.8.0 (after a cleanup/documentation delay)=
+  * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
   * Experimentation: Don't switch resolution EVER but stretch in software? Would probably look better on TFT's and be less error prone.
   * Experimentation: Should the C++ version keep using wstring, or switch to UTF-8 strings?
   * clean up Ruby's interface; draw_quad and friends should require the Z parameter (BREAKS CODE)
