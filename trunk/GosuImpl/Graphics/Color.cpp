@@ -8,8 +8,6 @@ namespace
     
     HSV colorToHSV(const Gosu::Color& c)
     {
-        HSV hsv;
-        
         double r = c.red() / 255.0;
         double g = c.green() / 255.0;
         double b = c.blue() / 255.0;
@@ -19,28 +17,25 @@ namespace
 
         if (max == 0)
         {
-            hsv.h = hsv.s = hsv.v = 0;
+            HSV hsv = { 0, 0, 0 };
             return hsv;
         }
         
         // Value.
-        hsv.v = max;
-
-        double delta = max - min;
+        HSV hsv = { -1, -1, max };
         
         // Saturation.
+        double delta = max - min;
         hsv.s = delta / max;
         
         // Hue.
         if (r == max)
-            hsv.h = (g - b) / delta;
+            hsv.h = (g - b) / delta + (g < b ? 6 : 0);
         else if (g == max)
-            hsv.h = 2 + (b - r) / delta;
+            hsv.h = (b - r) / delta + 2;
         else
-            hsv.h = 4 + (r - g) / delta;
+            hsv.h = (r - g) / delta + 4;
         hsv.h *= 60;
-        if (hsv.h < 0)
-            hsv.h += 360;
         
         return hsv;
     }
@@ -57,7 +52,10 @@ Gosu::Color Gosu::Color::fromAHSV(Channel alpha, double h, double s, double v)
 		// Grey.
         return Color(alpha, v * 255, v * 255, v * 255);
     
-	int sector = static_cast<int>(h / 60);
+    // Normalize hue
+    h = ((static_cast<int>(h) % 360) + 360) % 360;
+    
+	int sector = h / 60;
     double factorial = h / 60 - sector;
     
 	double p = v * (1 - s);
