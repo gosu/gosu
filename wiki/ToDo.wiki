@@ -2,8 +2,6 @@
 #labels Featured
 
 = ASAP =
-  * Fix Color HSV support
-  * Fix and document Gosu::angle_diff
   * Document Gosu::interpolate, improve it too?
 
 = 0.7.9.3 (Linux) =
