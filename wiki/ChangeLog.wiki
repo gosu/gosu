@@ -1,8 +1,11 @@
 #summary Log of Gosu's development.
 #labels Featured
 
-=0.7.9 (WIP)=
-  * All: Document Gosu::interpolate?
+=0.7.9.4=
+  * All: Added Song::volume() (thanks rabbitblue!)
+  * All: Fixed Gosu::angleDiff
+
+=0.7.9=
   * All: Added Gosu::TextInput functionality with example for Ruby and C++
   * All: OpenGL allocates depth buffer, allows for better custom OpenGL effects.
   * All: Gosu::Font looks a lot smoother
