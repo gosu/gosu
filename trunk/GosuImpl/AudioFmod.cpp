@@ -198,12 +198,28 @@ Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume, double spe
 
 class Gosu::Song::BaseData : boost::noncopyable
 {
+    double volume_;
+
+protected:
+    BaseData() : volume_(1) {}
+    virtual void applyVolume() = 0;
+
 public:
     virtual ~BaseData() {}
 
     virtual void play() = 0;
     virtual void stop() = 0;
-    virtual void changeVolume(double volume) = 0;
+    
+    double volume() const
+    {
+        return volume_;
+    }
+    
+    void changeVolume(double volume)
+    {
+        volume_ = boundBy(volume, 0.0, 1.0);
+        applyVolume();
+    }
 };
 
 class Gosu::Song::StreamData : public BaseData
@@ -245,7 +261,7 @@ public:
         
         FSOUND_Stream_SetEndCallback(stream, endSongCallback, this);
     }
-
+    
     ~StreamData()
     {
         // TODO: Should be checked for earlier, as play would crash too.
@@ -257,21 +273,22 @@ public:
         if (stream != 0)
             FSOUND_Stream_Close(stream);
     }
-
+    
     void play()
     {
         handle = FSOUND_Stream_Play(FSOUND_FREE, stream);
+        applyVolume();
     }
-
+    
     void stop()
     {
         fmodCheck(FSOUND_Stream_Stop(stream));
     }
-
-    void changeVolume(double volume)
+    
+    void applyVolume()
     {
         if (handle != -1)
-            FSOUND_SetVolume(handle, boundBy<int>(volume * 255, 0, 255));
+            FSOUND_SetVolume(handle, static_cast<int>(volume() * 255));
     }
 };
 
@@ -307,6 +324,7 @@ public:
     void play()
     {
         FMUSIC_PlaySong(module_);
+        applyVolume();
     }
 
     void stop()
@@ -314,11 +332,11 @@ public:
         fmodCheck(FMUSIC_StopSong(module_));
     }
     
-    void changeVolume(double volume)
+    void applyVolume()
     {
         // Weird as it may seem, the FMOD doc really says volume can
         // be 0 to 256, *inclusive*, for this function.
-        FMUSIC_SetMasterVolume(module_, boundBy<int>(volume * 256, 0, 256));
+        FMUSIC_SetMasterVolume(module_, static_cast<int>(volume() * 256.0));
     }
 };
 
@@ -388,7 +406,12 @@ bool Gosu::Song::playing() const
     return curSong == this;
 }
 
+double Gosu::Song::volume() const
+{
+    return data->volume();
+}
+
 void Gosu::Song::changeVolume(double volume)
 {
-    data->changeVolume(volume);
+    data-> changeVolume(volume);
 }

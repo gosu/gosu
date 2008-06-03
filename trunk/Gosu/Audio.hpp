@@ -131,6 +131,8 @@ namespace Gosu
         void stop();
         //! Returns if the song is currently playing.
         bool playing() const;
+        //! Returns the current volume of the song.
+        double volume() const;
         //! Changes the volume of the song.
         void changeVolume(double volume);
     };

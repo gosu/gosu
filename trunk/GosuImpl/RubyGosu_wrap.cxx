@@ -6404,6 +6404,36 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Song_volume(int argc, VALUE *argv, VALUE self) {
+  Gosu::Song *arg1 = (Gosu::Song *) 0 ;
+  double result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Song, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "volume" "', argument " "1"" of type '" "Gosu::Song const *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::Song * >(argp1);
+  {
+    try {
+      result = (double)((Gosu::Song const *)arg1)->volume();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Song_volumee___(int argc, VALUE *argv, VALUE self) {
   Gosu::Song *arg1 = (Gosu::Song *) 0 ;
   double arg2 ;
@@ -8255,6 +8285,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cSong.klass, "play", VALUEFUNC(_wrap_Song_play), -1);
   rb_define_method(cSong.klass, "stop", VALUEFUNC(_wrap_Song_stop), -1);
   rb_define_method(cSong.klass, "playing?", VALUEFUNC(_wrap_Song_playingq___), -1);
+  rb_define_method(cSong.klass, "volume", VALUEFUNC(_wrap_Song_volume), -1);
   rb_define_method(cSong.klass, "volume=", VALUEFUNC(_wrap_Song_volumee___), -1);
   cSong.mark = 0;
   cSong.destroy = (void (*)(void *)) free_Gosu_Song;
