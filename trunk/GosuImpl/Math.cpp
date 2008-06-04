@@ -30,9 +30,9 @@ double Gosu::angle(double fromX, double fromY, double toX, double toY,
         return std::atan2(distY, distX) / pi * 180 + 90;
 }
 
-double Gosu::angleDiff(double angle1, double angle2)
+double Gosu::angleDiff(double from, double to)
 {
-    return std::fmod(std::fabs(angle1 - angle2), 360);
+    return normalizeAngle(std::fmod(to - from + 180, 360) - 180);
 }
 
 double Gosu::normalizeAngle(double angle)

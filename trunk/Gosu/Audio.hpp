@@ -1,6 +1,9 @@
 //! \file Audio.hpp
 //! Contains all the classes of Gosu's audio system.
 
+// REDESIGN: Rename all changeXXX() member functions to setXXX().
+// REDESIGN: Don't require window argument, is this possible?
+
 #ifndef GOSU_AUDIO_HPP
 #define GOSU_AUDIO_HPP
 
@@ -18,6 +21,7 @@ namespace Gosu
     //! Manages initialization and finalization of audio libraries. Must be
     //! created before and destroyed after all samples and songs.
     //! There can only be one instance of Gosu::Audio.
+    //! Usually created internally by Gosu::Window.
     class Audio : boost::noncopyable
     {
     public:

@@ -146,6 +146,7 @@ namespace Gosu
 
     //! Interpolates linearly between two colors, with a given weight towards
     //! the second color.
+    //! Specialization of the general function in Gosu/Math.hpp.
     Color interpolate(Color a, Color b, double weight = 0.5);
     
     //! Combines two colors as if their channels were mapped to the 0..1 range
@@ -164,6 +165,7 @@ namespace Gosu
         const Color blue    = 0xff0000ff;
         const Color yellow  = 0xffffff00;
         const Color fuchsia = 0xffff00ff;
+        const Color cyan    = 0xff00ffff;
     }
 }
 

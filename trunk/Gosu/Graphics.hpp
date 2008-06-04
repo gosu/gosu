@@ -25,6 +25,7 @@ namespace Gosu
     
     //! Serves as the target of all drawing and provides basic drawing
     //! functionality.
+    //! Usually created by Gosu::Window.
     class Graphics
     {
         struct Impl;

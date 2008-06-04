@@ -75,6 +75,14 @@ namespace Gosu
 
     //! Returns the distance between two points.
     double distance(double x1, double y1, double x2, double y2);
+    
+    //! Interpolates a value between a and b, weight being the bias towards the second value.
+    //! Examples: interpolate(0, 10, 0.5) == 5, interpolate(-10, 10, 0.25) == 5, interpolate(0, 10, -0.5) == -5.
+    template<typename T>
+    T interpolate(T a, T b, double weight = 0.5)
+    {
+        return a * (1.0 - weight) + b * weight;
+    }
 }
 
 #endif

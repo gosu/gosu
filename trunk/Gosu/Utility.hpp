@@ -1,6 +1,8 @@
 //! \file Utility.hpp
 //! General purpose utility functions.
 
+// REDESIGN: Rename to StringConversion.hpp?
+
 #ifndef GOSU_UTILITY_HPP
 #define GOSU_UTILITY_HPP
 

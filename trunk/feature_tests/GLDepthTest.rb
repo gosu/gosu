@@ -6,7 +6,7 @@ require 'glu'
 include Gl
 include Glu
 
-class GameWindow < Gosu::Window
+class Test < Gosu::Window
   def initialize
     super(800, 600, false)
     self.caption = "oglt3"
@@ -169,5 +169,4 @@ class GameWindow < Gosu::Window
   end
 end
 
-window = GameWindow.new
-window.show
+Test.new.show

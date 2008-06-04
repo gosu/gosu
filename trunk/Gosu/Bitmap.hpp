@@ -60,15 +60,15 @@ namespace Gosu
 		#endif
     };
 
-    //! Loads a Windows or OS/2 .bmp file into the given bitmap.
+    //! Loads a Windows or OS/2 BMP file into the given bitmap.
     Reader loadFromBMP(Bitmap& bmp, Reader reader);
-    //! Saves the contents of the given bitmap into windows .bmp file data.
+    //! Saves the contents of the given bitmap into windows BMP file data.
     Writer saveToBMP(const Bitmap& bmp, Writer writer);
-    //! Loads a .png file into the given bitmap.
+    //! Loads a PNG file into the given bitmap.
     //! WARNING: loadFromPNG does not understand PNG color keys! Please use
     //! the alpha channel instead.
     Reader loadFromPNG(Bitmap& bmp, Reader reader);
-    //! Saves the contents of the given bitmap into .png file data, 24 bits.
+    //! Saves the contents of the given bitmap into PNG file data, 24 bits.
     Writer saveToPNG(const Bitmap& bmp, Writer writer);
 
     //! Set the alpha value of all pixels which are equal to the color key
