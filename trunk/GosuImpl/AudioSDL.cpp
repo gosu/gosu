@@ -76,9 +76,9 @@ void Gosu::SampleInstance::changeVolume(double volume)
 
 void Gosu::SampleInstance::changePan(double pan)
 {
-    int leftPan = boundBy<int>(pan * 127, 0, 127);
+    int rightPan = boundBy<int>(pan * 127, 0, 127);
     if (playing())
-        Mix_SetPanning(handle, leftPan, 254 - leftPan);
+        Mix_SetPanning(handle, 254 - rightPan, rightPan);
 }
 
 void Gosu::SampleInstance::changeSpeed(double speed)
