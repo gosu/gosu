@@ -2,8 +2,9 @@
 #labels Featured
 
 =0.7.9.4=
-  * All: Added Song::volume() (thanks rabbitblue!)
+  * All: Added Song::volume()/Song#volume (thanks rabbitblue!)
   * All: Fixed Gosu::angleDiff
+  * Linux: Fixed panning of SDL-based sound system (thanks oli...! ;))
 
 =0.7.9=
   * All: Added Gosu::TextInput functionality with example for Ruby and C++
