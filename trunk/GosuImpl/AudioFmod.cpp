@@ -413,5 +413,5 @@ double Gosu::Song::volume() const
 
 void Gosu::Song::changeVolume(double volume)
 {
-    data-> changeVolume(volume);
+    data->changeVolume(volume);
 }

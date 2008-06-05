@@ -160,10 +160,10 @@ Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
 class Gosu::Song::BaseData : boost::noncopyable {
 public:
     Mix_Music* music;
-    std::vector<Uint8> buffer;
-    int volume;
+    //std::vector<Uint8> buffer; - used by constructor that has been commented out
+    double volume;
     
-    BaseData() : music(0), volume(0) {}
+    BaseData() : music(0), volume(1.0) {}
     ~BaseData() {
       if (music) Mix_FreeMusic(music);
     }
@@ -211,10 +211,10 @@ void Gosu::Song::play() {
   
   assert(curSong == 0);
 
-  Mix_VolumeMusic(data->volume);
   if (Mix_PlayMusic(data->music, 0) < 0)
     throwLastSDLError();
   curSong = this;
+  changeVolume(data->volume);
 }
 
 void Gosu::Song::stop() {
@@ -228,8 +228,15 @@ bool Gosu::Song::playing() const {
   return curSong == this;
 }
 
-void Gosu::Song::changeVolume(double volume) {
-  data->volume = boundBy<int>(volume * MIX_MAX_VOLUME, 0, MIX_MAX_VOLUME);
-  if (playing())
-    Mix_VolumeMusic(data->volume);
+double Gosu::Song::volume() const {
+  return data->volume;
 }
+
+void Gosu::Song::changeVolume(double volume) {
+  data->volume = boundBy(volume, 0.0, 1.0);
+
+  if (playing())
+    Mix_VolumeMusic(trunc(data->volume * MIX_MAX_VOLUME));
+}
+
+
