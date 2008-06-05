@@ -1,6 +1,6 @@
 #summary How to set up Gosu on Mac OS X.
 
-= Installing Boost (C++ only) =
+= Installing Boost (required for using Gosu with C++ only) =
 
 [http://www.boost.org/ Boost] is a collection of libraries that is used throughout Gosu. Many parts of Boost have been marked for inclusion in the next standard of C++, so it's really worth a look!
 
@@ -52,11 +52,14 @@ Note: Usually, you want to right-click your target, Get Info, select Build/All C
 
 = Starting a new Gosu game (Ruby) =
 
-Getting started with Ruby is a lot easier (surprise): All you need to do is write down your code and run it in a way that `require 'gosu'` will work, i.e. by copying gosu.bundle into the same directory or installing it in one of Ruby's default library paths.
+Getting started with Ruby is a lot easier (surprise):
+  * If you installed Gosu using RubyGems (`sudo gem install gosu`), you just need to `require 'rubygems'` before you `require 'gosu'`.
+  * Otherwise you need to run your code in a way that `require 'gosu'` will work, i.e. by either copying gosu.bundle into the same directory or installing it in one of Ruby's default library paths.
 
 To test if everything works, you can use this Hello World script:
 
 {{{
+require 'rubygems' # Remove if you aren't using RubyGems
 require 'gosu'
 
 class MyWindow < Gosu::Window
