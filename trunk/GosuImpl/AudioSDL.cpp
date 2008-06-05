@@ -122,40 +122,38 @@ Gosu::Sample::~Sample() {
 
 Gosu::SampleInstance Gosu::Sample::play(double volume, double speed) const {
   int channel = Mix_PlayChannel(-1, data->rep, 0);
-  int extra;
+  if (channel == -1)
+    return SampleInstance(-1, -1);
+
+  int extra = ++channelRegistry[channel];
   SampleInstance result(channel, extra);
-  
-  if (channel > 0) {
-    extra = ++channelRegistry[channel];
-    Mix_SetPanning(channel, 127, 127);
 
-    if (volume != 1)
-        result.changeVolume(volume);
+  if (volume != 1)
+      result.changeVolume(volume);
 
-    /* We ignore the speed for now as this seems to be non-trivial
-     * with SDL_mixer. */
-  }
-  
   return result;
+
+  /* We ignore the speed for now as this seems to be non-trivial
+   * with SDL_mixer. */
 }
 
 Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
     double speed) const {
   int channel = Mix_PlayChannel(-1, data->rep, 0);
-  int extra;
+  if (channel == -1)
+    return SampleInstance(-1, -1);
+
+  int extra = ++channelRegistry[channel];
   SampleInstance result(channel, extra);
 
-  if (channel > 0) {
-    extra = ++channelRegistry[channel];
-    result.changePan(pan);
+  result.changePan(pan);
 
-    if (volume != 1)
-      result.changeVolume(volume);
+  if (volume != 1)
+    result.changeVolume(volume);
 
-    /* Speed ignored for now, as above. */
-  }
-  
   return result;
+
+  /* Speed ignored for now, as above. */
 }
 
 // No class hierarchy here; SDL_mixer abstracts this away for us.
@@ -189,7 +187,7 @@ Gosu::Song::Song(Audio &audio, Type type, Reader reader)
 : data(new BaseData)
 {
 #if 0
-    // TODO: Could fall back to using Sample API.
+    // Why oh why is LoadMUS_RW traditionally broken.
     std::size_t bufsize = reader.resource().size() - reader.position();
     data->buffer.resize(bufsize);
     reader.read(data->buffer.data(), bufsize);
