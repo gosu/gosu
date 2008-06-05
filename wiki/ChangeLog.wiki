@@ -4,7 +4,7 @@
 =0.7.9.4=
   * All: Added Song::volume()/Song#volume (thanks rabbitblue!)
   * All: Fixed Gosu::angleDiff
-  * Linux: Fixed panning of SDL-based sound system (thanks oli...! ;))
+  * Linux: Fixed panning of SDL-based sound system, also added support for graceful degradation if no sound device available (thanks oli...! ;))
 
 =0.7.9=
   * All: Added Gosu::TextInput functionality with example for Ruby and C++
