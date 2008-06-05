@@ -20,6 +20,7 @@ namespace Gosu {
     }
 
     bool mixerInitialized = false;
+    bool noSound = false;
     Song* curSong = NULL;
   }
   
@@ -35,11 +36,8 @@ Gosu::Audio::Audio() {
   if (mixerInitialized)
     throw std::logic_error("Multiple Gosu::Audio instances not supported.");
 
-  if (SDL_Init(SDL_INIT_AUDIO) < 0)
-    throw std::runtime_error("Unable to initialize SDL audio.");
-
-  if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0)
-    throwLastSDLError();
+  if (SDL_Init(SDL_INIT_AUDIO) || Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0)
+    noSound = true;
 
   mixerInitialized = true;
 }
@@ -47,7 +45,8 @@ Gosu::Audio::Audio() {
 Gosu::Audio::~Audio() {
   assert(mixerInitialized);
 
-  Mix_CloseAudio();
+  if (!noSound)
+    Mix_CloseAudio();
   mixerInitialized = false;
 }
 
@@ -58,7 +57,7 @@ Gosu::SampleInstance::SampleInstance(int handle, int extra)
 
 bool Gosu::SampleInstance::playing() const
 {
-    return channelRegistry[handle] == extra &&
+    return !noSound && channelRegistry[handle] == extra &&
         Mix_Playing(handle) == 1;
 }
 
@@ -99,6 +98,9 @@ struct Gosu::Sample::SampleData : boost::noncopyable
 
 Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
 {
+  if (noSound)
+    return;
+
   Buffer buf;
   loadFile(buf, filename);
 
@@ -107,6 +109,9 @@ Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
 }
 
 Gosu::Sample::Sample(Audio& audio, Reader reader) {
+  if (noSound)
+    return;
+
   std::size_t bufsize = reader.resource().size() - reader.position();
   Uint8* buffer = new Uint8[bufsize];
   reader.read(buffer, bufsize);
@@ -121,8 +126,9 @@ Gosu::Sample::~Sample() {
 }
 
 Gosu::SampleInstance Gosu::Sample::play(double volume, double speed) const {
-  int channel = Mix_PlayChannel(-1, data->rep, 0);
-  if (channel == -1)
+  int channel;
+  
+  if (noSound || (channel = Mix_PlayChannel(-1, data->rep, 0)) == -1)
     return SampleInstance(-1, -1);
 
   int extra = ++channelRegistry[channel];
@@ -139,8 +145,9 @@ Gosu::SampleInstance Gosu::Sample::play(double volume, double speed) const {
 
 Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
     double speed) const {
-  int channel = Mix_PlayChannel(-1, data->rep, 0);
-  if (channel == -1)
+  int channel;
+  
+  if (noSound || (channel = Mix_PlayChannel(-1, data->rep, 0)) == -1)
     return SampleInstance(-1, -1);
 
   int extra = ++channelRegistry[channel];
@@ -176,6 +183,9 @@ public:
 Gosu::Song::Song(Audio& audio, const std::wstring& filename)
 : data(new BaseData)
 {
+    if (noSound)
+        return;
+
     data->music = Mix_LoadMUS(Gosu::narrow(filename).c_str());
     if (data->music == NULL)
         throwLastSDLError();
@@ -206,6 +216,9 @@ Gosu::Song::~Song() {
 }
 
 void Gosu::Song::play() {
+  if (noSound)
+    return;
+
   if (curSong)
     curSong->stop();
   
