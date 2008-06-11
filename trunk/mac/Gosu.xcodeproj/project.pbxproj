@@ -109,7 +109,6 @@
 		D4A7E9E80CD39BA200621B24 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
 		D4A7E9E90CD39BA200621B24 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
 		D4BC5D6B0CC29D0F002D4236 /* Async.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4BC5D6A0CC29D0F002D4236 /* Async.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4C09C840D04AD2800DA4D4F /* RubyGosu_MacStartup.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D4C09C830D04AD2800DA4D4F /* RubyGosu_MacStartup.cxx */; };
 		D4F07B230D934C8B00FB3D99 /* TextInput.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4F07B220D934C8B00FB3D99 /* TextInput.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F07B270D93504700FB3D99 /* TextInputMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4F07B260D93504700FB3D99 /* TextInputMac.mm */; };
 		D4F07B280D93504700FB3D99 /* TextInputMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4F07B260D93504700FB3D99 /* TextInputMac.mm */; };
@@ -196,7 +195,6 @@
 		D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapUtils.cpp; sourceTree = "<group>"; };
 		D4AB62F50D08BA9900D71382 /* MacUtility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MacUtility.hpp; path = ../GosuImpl/MacUtility.hpp; sourceTree = SOURCE_ROOT; };
 		D4BC5D6A0CC29D0F002D4236 /* Async.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Async.hpp; path = ../Gosu/Async.hpp; sourceTree = SOURCE_ROOT; };
-		D4C09C830D04AD2800DA4D4F /* RubyGosu_MacStartup.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RubyGosu_MacStartup.cxx; path = ../GosuImpl/RubyGosu_MacStartup.cxx; sourceTree = SOURCE_ROOT; };
 		D4CA89500BC68B5D00A431AC /* gosu.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = gosu.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = RubyGosuStub.mm; path = ../GosuImpl/RubyGosuStub.mm; sourceTree = SOURCE_ROOT; };
 		D4F07B220D934C8B00FB3D99 /* TextInput.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextInput.hpp; path = ../Gosu/TextInput.hpp; sourceTree = SOURCE_ROOT; };
@@ -394,7 +392,6 @@
 				D47BD3290BD78F7200ACF014 /* RubyGosu_wrap.h */,
 				D47BD32A0BD78F7200ACF014 /* RubyGosu.swg */,
 				D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */,
-				D4C09C830D04AD2800DA4D4F /* RubyGosu_MacStartup.cxx */,
 			);
 			name = RubyGosu;
 			sourceTree = "<group>";
@@ -642,7 +639,6 @@
 				D4A7E9830CD3907D00621B24 /* Texture.cpp in Sources */,
 				D4A7E9840CD3907D00621B24 /* TexChunk.cpp in Sources */,
 				D4A7E9E90CD39BA200621B24 /* BitmapUtils.cpp in Sources */,
-				D4C09C840D04AD2800DA4D4F /* RubyGosu_MacStartup.cxx in Sources */,
 				D4F07B280D93504700FB3D99 /* TextInputMac.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
