@@ -4,11 +4,6 @@
 = ASAP =
   * Document Gosu::interpolate, improve it too?
 
-= 0.7.9.3 (Linux) =
-  * Better TextInput impl on Linux
-  * Fixes for at least one of the X11 issues
-  * (Note: Linux workaround: metacity --replace seems to work wonders.)
-
 = 0.7.9.x=
 Features that COULD be pulled into the 0.7.x series without breaking compatibility to keep the step to 0.8.0 as small as possible; I'll try to implement those for which I see actual demand :)
   * Ruby 1.9.0 support
