@@ -42,6 +42,9 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         double updateInterval)
     : pimpl(new Impl)
 {
+    // Sorry folks - but I haven't heard of a system on which this works for a while.
+    fullscreen = false;
+
     pimpl->dpy = XOpenDisplay(NULL);
     if (!pimpl->dpy)
         throw std::runtime_error("Cannot find display");
