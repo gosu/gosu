@@ -100,12 +100,6 @@ if test $RUBY_INC_DIR; then
   TO_BE_MADE=${TO_BE_MADE}" ruby"
 fi
 
-AC_CHECK_PROG(HAVE_SWIG, swig, yes, no)
- 
-if test $HAVE_SWIG != "yes"; then
-  AC_MSG_ERROR(Cannot find swig)
-fi
-
 AC_CHECK_LIB(dl, dlopen, LIBS="$LIBS -ldl", AC_CHECK_LIB(c, dlopen, ,AC_MSG_ERROR(Missing dlopen functionality), ), )
 
 AC_SUBST(DLOPEN_LIB)

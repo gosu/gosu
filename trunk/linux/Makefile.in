@@ -58,7 +58,6 @@ clean:
 $(OBJS): %.o: ../GosuImpl/%.cpp
 	$(CXX) ../GosuImpl/$*.cpp -o $@ $(CXXFLAGS) -c
 
-
 examples: $(XPLS) gosu.a
 
 $(XPLS): %: %.cpp gosu.a
@@ -77,18 +76,11 @@ gosu-config:
 	echo "done" >> gosu-config
 	chmod u+x gosu-config
 
-ruby: RubyGosu_wrap.cpp $(RUBYOBJS) gosu.a
+ruby: $(RUBYOBJS) gosu.a
 	g++ -shared -o gosu.so -Wall $(RUBYOBJS) $(RUBY_LIBS) @GOSU_A_OBJS@
-
-#ruby: $(RUBYOBJS) gosu.a
-#	g++ -shared -o gosu.so -Wall $(RUBYOBJS) $(RUBY_LIBS) @GOSU_A_OBJS@
 
 # $(BASE_OBJS) \
         $(NET_OBJS) $(FMOD_OBJ) $(RUBY_LIBS)
-
-RubyGosu_wrap.cpp:
-	cd ../GosuImpl/ && swig -c++ -ruby -autorename RubyGosu.swg
-	cd ../linux/
 
 $(RUBYOBJS): %.o: ../GosuImpl/%.cxx
 	$(CXX) ../GosuImpl/$*.cxx -o $@ $(CXXFLAGS) -c -fPIC
