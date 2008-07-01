@@ -12,7 +12,46 @@
 #include <GL/glx.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <X11/extensions/xf86vmode.h>
+#include "X11vroot.h"
+
+namespace
+{
+    template<typename T>
+    class scoped_resource
+    {
+        T* pointer;
+        typedef boost::function<void(T*)> Deleter;
+        Deleter deleter;
+        
+    public:
+        scoped_resource(T* pointer, const Deleter& deleter)
+        : pointer(pointer), deleter(deleter)
+        {
+        }
+        
+        void reset(T* newPointer = 0)
+        {
+            if (pointer)
+                deleter(pointer);
+            pointer = newPointer;
+        }
+        
+        T* get() const
+        {
+            return pointer;
+        }
+        
+        T* operator->() const
+        {
+            return get();
+        }
+        
+        ~scoped_resource()
+        {
+            reset(0);
+        }
+    };
+}
 
 struct Gosu::Window::Impl
 {
@@ -20,136 +59,188 @@ struct Gosu::Window::Impl
     boost::scoped_ptr<Input> input;
     boost::scoped_ptr<Audio> audio;
 
+    ::Display* display;
+    
+    bool mapped, showing, active;
+    
+    ::GLXContext context;
     ::Window window;
-    ::Display* dpy;
-    ::XVisualInfo* vi;
-    ::GLXContext cx;
-    ::Colormap cmap;
-    ::Atom deleteAtom;
+    ::XVisualInfo* visual;
+    
+    // Last set title
     std::wstring title;
-    unsigned int width, height;
+    // Last known position
+    int x, y;
+    // Last known size
+    int width, height;
+
+
     double updateInterval;
-    bool showing, visible;
+    bool fullscreen;
 
-    bool isFullscreen;
-    XF86VidModeModeInfo oldMode;
+    Impl(unsigned width, unsigned height, unsigned fullscreen, double updateInterval)
+    :   mapped(false), showing(false), active(true),
+        x(0), y(0), width(width), height(height),
+        updateInterval(updateInterval), fullscreen(fullscreen)
+    {
+        
+    }
+    
+    void executeAndWait(boost::function<void(Display*, ::Window)> function, int forMessage)
+    {
+        XSelectInput(display, window, StructureNotifyMask);
+        function(display, window);
+        while (true)
+        {
+            ::XEvent event;
+            XNextEvent(display, &event);
+            if (event.type == forMessage)
+                break;
+        }
+        XSelectInput(display, window, 0x1ffffff & ~PointerMotionHintMask & ~ResizeRedirectMask);
+    }
 
-    void enterFullscreen();
-    void doTick(Window* window);
+    void doTick(Window* window)
+    {
+        while (::XPending(display))
+        {
+            ::XEvent event;
+            XNextEvent(display, &event);
+            
+            // Override redirect fix (thanks for Pyglet folks again):
+            if (event.type == ButtonPress && fullscreen && !active)
+                XSetInputFocus(display, this->window, RevertToParent, CurrentTime);
+            
+            if (!window->input().feedXEvent(event, window))
+            {
+                if (event.type == ConfigureNotify)
+                {
+                    // Only boring stuff to do? Let's do something random:
+                    glXMakeCurrent(display, this->window, context);
+                }
+                else if (event.type == ClientMessage)
+                {
+                    if (static_cast<unsigned>(event.xclient.data.l[0]) ==
+                            XInternAtom(display, "WM_DELETE_WINDOW", false))
+                        window->close();
+                }
+                else if (event.type == FocusIn)
+                    active = true;
+                else if (event.type == FocusOut)
+                    active = false;
+            }
+        }
+
+        if (window->graphics().begin(Colors::black))
+        {
+            window->draw();
+            window->graphics().end();
+            glXSwapBuffers(display, this->window);
+        }
+
+        window->input().update();
+        window->update();
+    }
 };
 
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         double updateInterval)
-    : pimpl(new Impl)
+:   pimpl(new Impl(width, height, fullscreen, updateInterval))
 {
-    // Sorry folks - but I haven't heard of a system on which this works for a while.
-    fullscreen = false;
-
-    pimpl->dpy = XOpenDisplay(NULL);
-    if (!pimpl->dpy)
+    pimpl->display = XOpenDisplay(NULL);
+    if (!pimpl->display)
         throw std::runtime_error("Cannot find display");
+    
+    ::Window root = DefaultRootWindow(pimpl->display);
 
-    static int attributeListSgl[] =
+    // Setup GLX visual
+    static int glxAttributes[] =
     {
-        GLX_RGBA, GLX_DOUBLEBUFFER, // double buffering (?)
-        GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1, GLX_BLUE_SIZE, 1,
-        GLX_DEPTH_SIZE, 1, None
+        GLX_RGBA,
+        GLX_DOUBLEBUFFER,
+        GLX_RED_SIZE, 1,
+        GLX_GREEN_SIZE, 1,
+        GLX_BLUE_SIZE, 1,
+        GLX_DEPTH_SIZE, 1,
+        None
     };
+    pimpl->visual = glXChooseVisual(pimpl->display, DefaultScreen(pimpl->display), glxAttributes);
 
-    pimpl->vi = glXChooseVisual(pimpl->dpy, DefaultScreen(pimpl->dpy),
-        attributeListSgl);
+    // Create GLX context    
+    pimpl->context = glXCreateContext(pimpl->display, pimpl->visual, 0, GL_TRUE);
 
-    pimpl->cx = glXCreateContext(pimpl->dpy, pimpl->vi, 0,   GL_TRUE);
+    // Set up window attributes (& mask)
+    XSetWindowAttributes windowAttributes;
+    windowAttributes.colormap = XCreateColormap(pimpl->display, root, pimpl->visual->visual, AllocNone);
+    windowAttributes.bit_gravity = NorthWestGravity;
+    windowAttributes.background_pixel = 0;
+    unsigned mask = CWColormap | CWBitGravity | CWBackPixel;
 
-    pimpl->cmap = XCreateColormap(pimpl->dpy, RootWindow(pimpl->dpy, pimpl->vi->screen),
-        pimpl->vi->visual, AllocNone);
+    // Create window
+    pimpl->window = XCreateWindow(pimpl->display, root, 0, 0, width, height, 0,
+        pimpl->visual->depth, InputOutput, pimpl->visual->visual,
+        mask, &windowAttributes);    
 
-    pimpl->deleteAtom = XInternAtom(pimpl->dpy, "WM_DELETE_WINDOW", true);
-//    pimpl->blackColor = BlackPixel(pimpl->dpy, DefaultScreen(pimpl->dpy));
-    pimpl->width = width;
-    pimpl->height = height;
-    pimpl->showing = false;
-    pimpl->title = L"Gosu Window";
-    pimpl->updateInterval = updateInterval;
-    pimpl->visible = true;
-    pimpl->isFullscreen = fullscreen;
+    // Request a close button for the window
+    Atom atoms[] = { XInternAtom(pimpl->display, "WM_DELETE_WINDOW", false) };
+    XSetWMProtocols(pimpl->display, pimpl->window, atoms, 1);
 
-    pimpl->input.reset(new Gosu::Input(pimpl->dpy));
-    input().onButtonDown = boost::bind(&Window::buttonDown, this, _1);
-    input().onButtonUp = boost::bind(&Window::buttonUp, this, _1);
+    Screen* screen = XScreenOfDisplay(pimpl->display,
+                        DefaultScreen(pimpl->display));
 
+    if (fullscreen)
+    {
+        pimpl->width = screen->width;
+        pimpl->height = screen->height;
+        XMoveResizeWindow(pimpl->display, pimpl->window, 0, 0,
+            screen->width, screen->height);
+            
+        XSetWindowAttributes windowAttributes;
+        windowAttributes.override_redirect = true;
+        unsigned mask = CWOverrideRedirect;
+        XChangeWindowAttributes(pimpl->display, pimpl->window, mask, &windowAttributes);
+    }
+    else
+        ; // Window already has requested size
 
-    // ******************** from show(): ********************
-
-    XSetWindowAttributes swa;
-
-    swa.colormap = pimpl->cmap;
-    swa.border_pixel = 0;
-
-    pimpl->window = XCreateWindow(pimpl->dpy, RootWindow(pimpl->dpy, pimpl->vi->screen), 0,
-        0, pimpl->width, pimpl->height, 0, pimpl->vi->depth, InputOutput, pimpl->vi->visual,
-        CWBorderPixel|CWColormap/*|CWEventMask*/, &swa);
-
-    XSelectInput(pimpl->dpy, pimpl->window,
-        StructureNotifyMask | KeyPressMask | KeyReleaseMask | VisibilityChangeMask |
-        ButtonPressMask | ButtonReleaseMask | PointerMotionMask /*| ClientMessageMask*/);
-
-    // We want a [X]-Button
-    if (pimpl->deleteAtom)
-        XSetWMProtocols(pimpl->dpy, pimpl->window, &(pimpl->deleteAtom), 1);
-
-    // We don't want the window to be resized.
-    XSizeHints* sizeHints = XAllocSizeHints();
+    // Set window to be non resizable
+    scoped_resource<XSizeHints> sizeHints(XAllocSizeHints(), XFree);
     sizeHints->flags = PMinSize | PMaxSize;
     sizeHints->min_width = sizeHints->max_width = pimpl->width;
     sizeHints->min_height = sizeHints->max_height = pimpl->height;
-    XSetWMNormalHints(pimpl->dpy, pimpl->window, sizeHints);
-    XFree(sizeHints);
+    XSetWMNormalHints(pimpl->display, pimpl->window, sizeHints.get());
+    sizeHints.reset();
 
-    Atom stateAtom = XInternAtom(pimpl->dpy, "_NET_WM_STATE", False);
-    Atom fullscreenAtom = XInternAtom(pimpl->dpy, "_NET_WM_STATE_FULLSCREEN", False);
-    if (fullscreen)// && stateAtom != None && fullscreenAtom != None)
-    {
-        XEvent xev;
-        memset(&xev, 0, sizeof(xev));
-        xev.type = ClientMessage;
-        xev.xclient.window = pimpl->window;
-        xev.xclient.message_type = stateAtom;
-        xev.xclient.format = 32;
-        xev.xclient.data.l[0] = 1;
-        xev.xclient.data.l[1] = fullscreenAtom;
-        xev.xclient.data.l[2] = 0;
-        XSendEvent(pimpl->dpy, DefaultRootWindow(pimpl->dpy), False,
-            SubstructureRedirectMask | SubstructureNotifyMask, &xev);
-    }
+    // TODO: Window style (_MOTIF_WM_HINTS)?        
 
-//    XMapWindow(pimpl->dpy, pimpl->window);
-    glXMakeCurrent(pimpl->dpy, pimpl->window, pimpl->cx);
-
-    pimpl->graphics.reset(new Gosu::Graphics(pimpl->width, pimpl->height, false));
-    
     XColor black, dummy;
-    XAllocNamedColor(pimpl->dpy, pimpl->cmap, "black", &black, &dummy);
-    
+    XAllocNamedColor(pimpl->display, screen->cmap, "black", &black, &dummy);    
     char emptyData[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     Pixmap emptyBitmap =
-        XCreateBitmapFromData(pimpl->dpy, pimpl->window, emptyData, 8, 8);
-    Cursor emptyCursor = XCreatePixmapCursor(pimpl->dpy, emptyBitmap,
+        XCreateBitmapFromData(pimpl->display, pimpl->window, emptyData, 8, 8);
+    Cursor emptyCursor = XCreatePixmapCursor(pimpl->display, emptyBitmap,
         emptyBitmap, &black, &black, 0, 0);
-    XDefineCursor(pimpl->dpy, pimpl->window, emptyCursor);
-    XFreeCursor(pimpl->dpy, emptyCursor);
+    XDefineCursor(pimpl->display, pimpl->window, emptyCursor);
+    XFreeCursor(pimpl->display, emptyCursor);
+
+    // Must be current already so that Graphics' constructor can set up things
+    glXMakeCurrent(pimpl->display, pimpl->window, pimpl->context);
+
+    // Now set up major Gosu components
+    pimpl->graphics.reset(new Gosu::Graphics(pimpl->width, pimpl->height, fullscreen));
+    pimpl->input.reset(new Gosu::Input(pimpl->display));
+    input().onButtonDown = boost::bind(&Window::buttonDown, this, _1);
+    input().onButtonUp = boost::bind(&Window::buttonUp, this, _1);
 }
 
 Gosu::Window::~Window()
-{
-    XDestroyWindow(pimpl->dpy, pimpl->window);
-    XSync(pimpl->dpy, false);
+{    
+    XDestroyWindow(pimpl->display, pimpl->window);
+    XSync(pimpl->display, false);
 }
 
 std::wstring Gosu::Window::caption() const
 {
-    // TODO: Update to _NET_WM_NAME
-
     return pimpl->title;
 }
 
@@ -159,7 +250,9 @@ void Gosu::Window::setCaption(const std::wstring& caption)
 
     pimpl->title = caption;
 
-    if(!pimpl->showing) return;
+    // TODO: Why?!
+    if (!pimpl->showing)
+        return;
 
     std::string tmpString = narrow(pimpl->title);
     std::vector<char> title(pimpl->title.size() + 1);
@@ -170,21 +263,21 @@ void Gosu::Window::setCaption(const std::wstring& caption)
     char* titlePtr = &title[0];
     XStringListToTextProperty(&titlePtr, 1, &titleprop);
 
-    XSetWMName(pimpl->dpy, pimpl->window, &titleprop);
+    XSetWMName(pimpl->display, pimpl->window, &titleprop);
     XFree(titleprop.value);
-    XSync(pimpl->dpy, false);
+    XSync(pimpl->display, false);
 }
 
-void Gosu::Window::Impl::enterFullscreen()
+/*void Gosu::Window::Impl::enterFullscreen()
 {
     // save old mode.
     XF86VidModeModeLine* l = (XF86VidModeModeLine*)((char*)&oldMode + sizeof oldMode.dotclock);
-    XF86VidModeGetModeLine(dpy, XDefaultScreen(dpy), (int*)&oldMode.dotclock, l);
+    XF86VidModeGetModeLine(display, XDefaultScreen(display), (int*)&oldMode.dotclock, l);
 
     // search fitting new mode
     int modeCnt;
     XF86VidModeModeInfo** modes;
-    bool ret = XF86VidModeGetAllModeLines(dpy, XDefaultScreen(dpy), &modeCnt, &modes);
+    bool ret = XF86VidModeGetAllModeLines(display, XDefaultScreen(disply), &modeCnt, &modes);
 
     if(!ret) throw std::runtime_error("Can't retrieve XF86 modes, fullscreen impossible.");
 
@@ -193,7 +286,7 @@ void Gosu::Window::Impl::enterFullscreen()
     {
         if(modes[i]->hdisplay == width && modes[i]->vdisplay == height)
         {
-            XF86VidModeSwitchToMode(dpy, XDefaultScreen(dpy), modes[i]);
+            XF86VidModeSwitchToMode(display, XDefaultScreen(display), modes[i]);
             switched = true;
             break;
         }
@@ -201,9 +294,9 @@ void Gosu::Window::Impl::enterFullscreen()
 
     if(switched)
     {
-        //XFlush(pimpl->dpy);
-        //XSync(pimpl->dpy, 0);
-        XMoveWindow(dpy, window, 0, 0);
+        //XFlush(pimpl->display);
+        //XSync(pimpl->display, 0);
+        XMoveWindow(display, window, 0, 0);
         XRaiseWindow(dpy, window);
         XGrabPointer(dpy, window, true, 0, GrabModeAsync, GrabModeAsync, window,
             None, CurrentTime);
@@ -222,7 +315,7 @@ void Gosu::Window::Impl::enterFullscreen()
     isFullscreen = switched;
 
     XFree(modes);
-}
+}*/
 
 namespace GosusDarkSide
 {
@@ -233,50 +326,55 @@ namespace GosusDarkSide
     HookOfHorror oncePerTick = 0;
 }
 
+// TODO: Some exception safety
+
 void Gosu::Window::show()
 {
-    pimpl->showing = true;
-
-    XMapWindow(pimpl->dpy, pimpl->window);
-    XFlush(pimpl->dpy);
-
-    if(pimpl->isFullscreen) pimpl->enterFullscreen();
+    // Map window
+    pimpl->executeAndWait(XMapRaised, MapNotify);
+    pimpl->mapped = true;
+    
+    // Make glx current
+    glXMakeCurrent(pimpl->display, pimpl->window, pimpl->context);
+    
+    if (pimpl->fullscreen)
+        XSetInputFocus(pimpl->display, pimpl->window, RevertToParent, CurrentTime);
 
     setCaption(pimpl->title);
 
     unsigned long startTime, endTime;
-    while(pimpl->showing)
+
+    pimpl->showing = true;
+    while (pimpl->showing)
     {
         startTime = milliseconds();
         pimpl->doTick(this);
         if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
         endTime = milliseconds();
 
-        if((endTime - startTime) < pimpl->updateInterval)
+        if ((endTime - startTime) < pimpl->updateInterval)
             sleep(pimpl->updateInterval - (endTime - startTime));
     }
 
-    // Close the X window
-    if(pimpl->isFullscreen)
-    {
-        XUngrabPointer(pimpl->dpy, CurrentTime);
-        XF86VidModeSwitchToMode(pimpl->dpy, XDefaultScreen(pimpl->dpy), &(pimpl->oldMode));
-    }
+    // // Close the X window
+    //     if(pimpl->isFullscreen)
+    //     {
+    //         XUngrabPointer(pimpl->dpy, CurrentTime);
+    //         XF86VidModeSwitchToMode(pimpl->dpy, XDefaultScreen(pimpl->dpy), &(pimpl->oldMode));
+    //     }
 
-    XUnmapWindow(pimpl->dpy, pimpl->window);
-    XSync(pimpl->dpy, false);
+    glXMakeCurrent(pimpl->display, 0, 0);
+    pimpl->executeAndWait(XUnmapWindow, UnmapNotify);
+    pimpl->mapped = false;
 }
 
 void Gosu::Window::close()
 {
-/*    if(pimpl->isFullscreen)
+    /*if(pimpl->isFullscreen)
     {
         XUngrabPointer(pimpl->dpy, CurrentTime);
         XF86VidModeSwitchToMode(pimpl->dpy, XDefaultScreen(pimpl->dpy), &(pimpl->oldMode));
-    }
-
-    XUnmapWindow(pimpl->dpy, pimpl->window);
-    XSync(pimpl->dpy, false);*/
+    }*/
     pimpl->showing = false;
 }
 
@@ -327,54 +425,16 @@ namespace
 }
 
 Gosu::Window::SharedContext Gosu::Window::createSharedContext() {
-    const char* displayName = DisplayString( pimpl->dpy );
+    const char* displayName = DisplayString( pimpl->display );
     Display* dpy2 = XOpenDisplay( displayName );
     if (!dpy2)
         throw std::runtime_error("Could not duplicate X display");
     
-	GLXContext ctx = glXCreateContext(dpy2, pimpl->vi, pimpl->cx, True);
+	GLXContext ctx = glXCreateContext(dpy2, pimpl->visual, pimpl->context, True);
 	if (!ctx)
         throw std::runtime_error("Could not create shared GLX context");
     
     return SharedContext(
         new boost::function<void()>(boost::bind(makeCurrentContext, dpy2, pimpl->window, ctx)),
         boost::bind(releaseContext, dpy2, ctx));
-}
-
-void Gosu::Window::Impl::doTick(Window* window)
-{
-    while(::XPending(dpy))
-    {
-        ::XEvent event;
-        XNextEvent(dpy, &event);
-
-        if(!window->input().feedXEvent(event, window))
-        {
-            if(event.type == VisibilityNotify)
-            {
-                if(event.xvisibility.state == VisibilityFullyObscured)
-                    visible = false;
-                else
-                    visible = true;
-            }
-            else if(event.type == ConfigureNotify)
-            {
-            }
-            else if(event.type == ClientMessage)
-            {
-                if(static_cast<unsigned>(event.xclient.data.l[0]) == deleteAtom)
-                    window->close();
-            }
-        }
-    }
-
-    if(visible && window->graphics().begin(Colors::black))
-    {
-        window->draw();
-        window->graphics().end();
-        glXSwapBuffers(dpy, this->window);
-    }
-
-    window->input().update();
-    window->update();
 }
