@@ -1,3 +1,8 @@
+// While (re)writing this file, I have been looking at many other libraries since all the
+// "official" documentation was horrible, at least those parts that I was able to find.
+// Kudos to the Pyglet folks (http://www.pyglet.org/) who wrote code that was much easier to
+// understand than that!
+
 #include <Gosu/Window.hpp>
 #include <Gosu/Timing.hpp>
 #include <Gosu/Utility.hpp>
