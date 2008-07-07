@@ -1,0 +1,20 @@
+desc "Build Gosu.framework"
+task :build_cpp_mac do
+  sh "cd mac && xcodebuild -project Gosu.xcodeproj -target Gosu -configuration Release"
+end
+
+desc "Build gosu.bundle and RubyGosu Deployment Template.app"
+task :build_ruby_mac do
+  sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Core' -configuration Release"
+  sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Deployment Template' -configuration Release"
+end
+
+# TODO: Packages from Release.rb (non-gems)
+
+# TODO: Gem task again! see below:
+
+# TODO: Upload to RubyForge: http://nubyonrails.com/articles/tutorial-publishing-rubygems-with-hoe
+
+# TODO: Windows tasks
+
+# TODO: Linux tasks (??!?!?)
