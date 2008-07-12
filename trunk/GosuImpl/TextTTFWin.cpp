@@ -70,7 +70,7 @@ std::wstring getNameFromTTFFile(const std::wstring& filename)
 	{
         TRACE(_T("ERROR:  failed to open '%s'\n"), Gosu::narrow(filename).c_str());
 		TRACE(_T("ERROR: %s failed\n"), _T("CreateFile"));
-		return FALSE;
+		return filename;
 	}
 
 	// get the file size
@@ -80,7 +80,7 @@ std::wstring getNameFromTTFFile(const std::wstring& filename)
 	{
 		TRACE(_T("ERROR: %s failed\n"), _T("GetFileSize"));
 		::CloseHandle(hFile);
-		return FALSE;
+		return filename;
 	}
 
 	//TRACE(_T("dwFileSize = %d\n"), dwFileSize);
@@ -98,7 +98,7 @@ std::wstring getNameFromTTFFile(const std::wstring& filename)
 	{
 		TRACE(_T("ERROR: %s failed\n"), _T("CreateFileMapping"));
 		::CloseHandle(hFile);
-		return FALSE;
+		return filename;
 	}
 
 	LPBYTE lpMapAddress = (LPBYTE) ::MapViewOfFile(hMappedFile,		// handle to file-mapping object
@@ -112,7 +112,7 @@ std::wstring getNameFromTTFFile(const std::wstring& filename)
 		TRACE(_T("ERROR: %s failed\n"), _T("MapViewOfFile"));
 		::CloseHandle(hMappedFile);
 		::CloseHandle(hFile);
-		return FALSE;
+		return filename;
 	}
 
 	BOOL bRetVal = FALSE;

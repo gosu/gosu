@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="fmodvc.lib opengl32.lib dinput8.lib dxerr8.lib winmm.lib dxguid.lib delayimp.lib"
+				AdditionalDependencies="fmodvc.lib opengl32.lib dinput8.lib winmm.lib dxguid.lib delayimp.lib"
 				OutputFile="$(OutDir)\$(ProjectName)Debug.lib"
 			/>
 			<Tool
@@ -129,7 +129,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="fmodvc.lib opengl32.lib dinput8.lib dxerr8.lib winmm.lib dxguid.lib delayimp.lib"
+				AdditionalDependencies="fmodvc.lib opengl32.lib dinput8.lib winmm.lib dxguid.lib delayimp.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
