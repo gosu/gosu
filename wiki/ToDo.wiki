@@ -3,6 +3,7 @@
 
 = ASAP =
   * Document Gosu::interpolate, improve it too?
+  * A bit more letterspacing
 
 = 0.7.9.x=
 Features that COULD be pulled into the 0.7.x series without breaking compatibility to keep the step to 0.8.0 as small as possible; I'll try to implement those for which I see actual demand :)
