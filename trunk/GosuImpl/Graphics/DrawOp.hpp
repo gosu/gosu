@@ -11,6 +11,8 @@ namespace Gosu
 {
     struct DrawOp
     {
+        enum { BEGIN_CLIPPING = 5, END_CLIPPING = 6 };
+    
         struct Vertex
         {
             double x, y;
@@ -29,6 +31,17 @@ namespace Gosu
         
         void perform() const
         {
+            if (usedVertices == BEGIN_CLIPPING)
+            {
+                glEnable(GL_SCISSOR_TEST);
+                glScissor(vertices[0].x, vertices[0].y, vertices[1].x, vertices[1].y);
+                return;
+            }
+            else if (usedVertices == END_CLIPPING)
+            {
+                glDisable(GL_SCISSOR_TEST);
+            }
+        
             if (mode == amAdditive)
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             else

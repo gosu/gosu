@@ -92,12 +92,15 @@ void Gosu::Graphics::setVirtualResolution(double virtualWidth,
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 {
+    // Flush leftover clippings
+    endClipping();
+
     glClearColor(clearWithColor.red()/255.0,
                  clearWithColor.green()/255.0,
                  clearWithColor.blue()/255.0,
                  clearWithColor.alpha()/255.0);
     glClear(GL_COLOR_BUFFER_BIT);
-
+    
     return true;
 }
 
@@ -128,6 +131,26 @@ void Gosu::Graphics::endGL()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glEnable(GL_BLEND);
+}
+
+void Gosu::Graphics::beginClipping(int x, int y, unsigned width, unsigned height)
+{
+    // Insert special draw op
+    DrawOp op;
+    op.usedVertices = DrawOp::BEGIN_CLIPPING;
+    op.vertices[0].x = x;
+    op.vertices[0].y = y;
+    op.vertices[1].x = width;
+    op.vertices[1].y = height;
+    pimpl->queue.addDrawOp(op, 0);
+}
+
+void Gosu::Graphics::endClipping()
+{
+    // Insert special draw op
+    DrawOp op;
+    op.usedVertices = DrawOp::END_CLIPPING;
+    pimpl->queue.addDrawOp(op, 0);
 }
 
 void Gosu::Graphics::drawLine(double x1, double y1, Color c1,

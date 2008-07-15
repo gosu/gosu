@@ -2480,6 +2480,11 @@ SWIGINTERN void Gosu_Window_gl(Gosu::Window *self){
         rb_yield(Qnil);
         self->graphics().endGL();
     }
+SWIGINTERN void Gosu_Window_clipTo(Gosu::Window *self,int x,int y,unsigned int width,unsigned int height){
+        self->graphics().beginClipping(x, y, width, height);
+        rb_yield(Qnil);
+        self->graphics().endClipping();
+    }
 
     static void markWindow(void* window) {
         Gosu::TextInput* ti = static_cast<Gosu::Window*>(window)->input().textInput();
@@ -7815,6 +7820,65 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Window_clip_to(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  unsigned int arg4 ;
+  unsigned int arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  unsigned int val4 ;
+  int ecode4 = 0 ;
+  unsigned int val5 ;
+  int ecode5 = 0 ;
+  
+  if ((argc < 4) || (argc > 4)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "clipTo" "', argument " "1"" of type '" "Gosu::Window *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "clipTo" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "clipTo" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_unsigned_SS_int(argv[2], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "clipTo" "', argument " "4"" of type '" "unsigned int""'");
+  } 
+  arg4 = static_cast< unsigned int >(val4);
+  ecode5 = SWIG_AsVal_unsigned_SS_int(argv[3], &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "clipTo" "', argument " "5"" of type '" "unsigned int""'");
+  } 
+  arg5 = static_cast< unsigned int >(val5);
+  {
+    try {
+      Gosu_Window_clipTo(arg1,arg2,arg3,arg4,arg5);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_disown_Window(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
@@ -8441,6 +8505,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cWindow.klass, "width", VALUEFUNC(_wrap_Window_width), -1);
   rb_define_method(cWindow.klass, "height", VALUEFUNC(_wrap_Window_height), -1);
   rb_define_method(cWindow.klass, "gl", VALUEFUNC(_wrap_Window_gl), -1);
+  rb_define_method(cWindow.klass, "clip_to", VALUEFUNC(_wrap_Window_clip_to), -1);
   cWindow.mark = (void (*)(void *)) markWindow;
   cWindow.destroy = (void (*)(void *)) free_Gosu_Window;
   cWindow.trackObjects = 1;
