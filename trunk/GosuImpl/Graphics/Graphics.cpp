@@ -135,22 +135,12 @@ void Gosu::Graphics::endGL()
 
 void Gosu::Graphics::beginClipping(int x, int y, unsigned width, unsigned height)
 {
-    // Insert special draw op
-    DrawOp op;
-    op.usedVertices = DrawOp::BEGIN_CLIPPING;
-    op.vertices[0].x = x;
-    op.vertices[0].y = y;
-    op.vertices[1].x = width;
-    op.vertices[1].y = height;
-    pimpl->queue.addDrawOp(op, 0);
+    pimpl->queue.beginClipping(x, this->height() - y - height, width, height);
 }
 
 void Gosu::Graphics::endClipping()
 {
-    // Insert special draw op
-    DrawOp op;
-    op.usedVertices = DrawOp::END_CLIPPING;
-    pimpl->queue.addDrawOp(op, 0);
+    pimpl->queue.endClipping();
 }
 
 void Gosu::Graphics::drawLine(double x1, double y1, Color c1,

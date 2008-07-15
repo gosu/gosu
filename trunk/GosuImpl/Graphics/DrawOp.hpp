@@ -11,8 +11,9 @@ namespace Gosu
 {
     struct DrawOp
     {
-        enum { BEGIN_CLIPPING = 5, END_CLIPPING = 6 };
-    
+        int clipX, clipY;
+        unsigned clipWidth, clipHeight;
+            
         struct Vertex
         {
             double x, y;
@@ -27,19 +28,14 @@ namespace Gosu
         const TexChunk* chunk;
         AlphaMode mode;
 
-        DrawOp() { usedVertices = 0; chunk = 0; }
+        DrawOp() { clipWidth = 0xffffffff; usedVertices = 0; chunk = 0; }
         
         void perform() const
         {
-            if (usedVertices == BEGIN_CLIPPING)
+            if (clipWidth != 0xffffffff)
             {
                 glEnable(GL_SCISSOR_TEST);
-                glScissor(vertices[0].x, vertices[0].y, vertices[1].x, vertices[1].y);
-                return;
-            }
-            else if (usedVertices == END_CLIPPING)
-            {
-                glDisable(GL_SCISSOR_TEST);
+                glScissor(clipX, clipY, clipWidth, clipHeight);
             }
         
             if (mode == amAdditive)
@@ -91,6 +87,9 @@ namespace Gosu
 
             if (chunk)
                 glDisable(GL_TEXTURE_2D);
+
+            if (clipWidth != 0xffffffff)
+                glDisable(GL_SCISSOR_TEST);
         }
         
         bool operator<(const DrawOp& other) const
@@ -101,13 +100,40 @@ namespace Gosu
 
     class DrawOpQueue
     {
+        int clipX, clipY;
+        unsigned clipWidth, clipHeight;
         std::multiset<DrawOp> set;
 
     public:
+        DrawOpQueue()
+        : clipWidth(0xffffffff)
+        {
+        }
+    
         void addDrawOp(DrawOp op, ZPos z)
         {
             op.z = z;
+            if (clipWidth != 0xffffffff)
+            {
+                op.clipX = clipX;
+                op.clipY = clipY;
+                op.clipWidth = clipWidth;
+                op.clipHeight = clipHeight;
+            }
             set.insert(op);
+        }
+        
+        void beginClipping(int x, int y, unsigned width, unsigned height)
+        {
+            clipX = x;
+            clipY = y;
+            clipWidth = width;
+            clipHeight = height;
+        }
+        
+        void endClipping()
+        {
+            clipWidth = 0xffffffff;
         }
 
         void performDrawOps()
