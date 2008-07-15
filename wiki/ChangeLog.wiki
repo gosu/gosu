@@ -4,8 +4,9 @@
 =0.7.9.4=
   * All: Added Song::volume()/Song#volume (thanks rabbitblue!)
   * All: Fixed Gosu::angleDiff
+  * All: Added clipping.
   * Linux: Fixed panning of SDL-based sound system, also added support for graceful degradation if no sound device available (thanks oli...! ;))
-  * Linux: Windowed mode is now enforced all the time until a fullscreen mode has been fixed. Sorry.
+  * Linux: Windowed mode fixed on Compiz, fullscreen mode fixed everywhere.
 
 =0.7.9=
   * All: Added Gosu::TextInput functionality with example for Ruby and C++
