@@ -20,7 +20,7 @@ namespace Gosu
         bfHardTop = 2,
         bfHardRight = 4,
         bfHardBottom = 8,
-        bfHard = bfHardLeft | bfHardTop | bfHardRight | bfHardBottom,
+        bfHard = bfHardLeft | bfHardTop | bfHardRight | bfHardBottom
     };        
     
     //! Serves as the target of all drawing and provides basic drawing
