@@ -18,9 +18,9 @@ OBJS = @GOSU_A_OBJS@
 
 XPLS = ../examples/Tutorial
 
-CXXFLAGS += -I.. @AUDIO_INC@ -Wall \
+CXXFLAGS += -fPIC -I.. @AUDIO_INC@ -Wall \
     @PANGO_CXX_FLAGS@ @X_INCS@ @HAVE_SYS_STAT_H@ \
-	-I@RUBY_INC_DIR@ -I@RUBY_ARCH_DIR@ -fPIC -DNDEBUG -O3 -pipe -fomit-frame-pointer
+	-I@RUBY_INC_DIR@ -I@RUBY_ARCH_DIR@ -DNDEBUG -O3 -pipe -fomit-frame-pointer
 
 LIBS = @AUDIO_LIBS@ -L@x_libraries@ -lX11 \
     @PANGO_LIBS@ -lpng -lGL -lGLU -lglut -lXxf86vm #-lboost_thread
