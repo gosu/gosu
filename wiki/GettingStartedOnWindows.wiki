@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 }
 }}}
 
-When loading resources, keep in mind that Gosu's resourcePrefix() will point to the directory your .EXE is located in. You may need to adjust your project settings to build into the directory where your resources reside. Also, you need to copy fmod.dll into the same directory if you are using sound.
+When loading resources, keep in mind that Gosu's resourcePrefix() will point to the directory your .EXE is located in. You may need to adjust your project settings to build into the directory where your resources reside. Also, you need to copy fmod.dll into the same directory unless you aren't using sound and set MSVC up to lazily link against fmod.dll (see the MSVC manual on how to do that).
 
 = Creating a new Gosu game (Ruby) =
 
