@@ -1,4 +1,5 @@
 require 'ftools'
+require 'rake/gempackagetask'
 
 GOSU_VERSION = ENV['GOSU_RELEASE_VERSION']
 throw "GOSU_RELEASE_VERSION must be set" if GOSU_VERSION.nil?
@@ -19,6 +20,31 @@ COMMON_RUBY_FILES = COMMON_FILES + FileList[
   'examples/media/*',
 ]
 
+SPEC = Gem::Specification.new do |s|
+  #### Basic information.
+  s.name = 'gosu'
+  s.version = GOSU_VERSION
+  s.platform = 'universal-darwin'
+  s.summary = '2D game development library.'
+  s.description = <<EOS
+  2D game development library.
+  
+  The library features easy to use and game-friendly interfaces to 2D graphics
+  and text (accelerated by 3D hardware), sound samples and music as well as
+  keyboard, mouse and gamepad/joystick input.
+  
+  Includes demos for integration with RMagick, Chipmunk and Ruby-OpenGL.
+EOS
+  s.authors = ['Julian Raschke', 'Jan Luecker']
+  s.date = Time.now.strftime "%Y-%m-%d"
+  s.email = 'julian@raschke.de'
+  s.files = COMMON_RUBY_FILES + ['lib/gosu.bundle']
+  s.homepage = 'http://code.google.com/p/gosu/'
+  s.require_paths = ["lib"]
+  s.required_ruby_version = Gem::Requirement.new(">= 1.8.2")
+  s.summary = '2D game development library.'
+end
+  
 desc "Build Gosu.framework"
 task :build_cpp_mac do
   sh "cd mac && xcodebuild -project Gosu.xcodeproj -target Gosu -configuration Release"
@@ -31,8 +57,14 @@ task :build_ruby_mac do
 end
 
 desc "Copies all files for the Ruby gem to packaged/gem..."
-task :prepare_gem_files => :build_ruby_mac do
-  throw "NYI"
+task :prepare_gem_mac => :build_ruby_mac do
+  sh "mkdir lib"
+  sh "cp gosu.bundle lib/gosu.bundle"
+end
+
+Rake::GemPackageTask.new(SPEC) do |t|
+  t.package_dir = 'public'
+  t.need_tar = true
 end
 
 ARCHIVE_FILENAME_MAC = "public/gosu-mac-#{GOSU_VERSION}.tar.gz"
@@ -44,7 +76,7 @@ task :build_archive_mac => [:build_cpp_mac, :build_ruby_mac] do
   sh "tar -czf #{ARCHIVE_FILENAME_MAC} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
 end
 
-desc "Releases the Mac ZIP archive on GoogleCode"
+desc "Releases the Mac archive on GoogleCode"
 task :release_archive_mac => :build_archive_mac do
   sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} precompiled for Mac OS X (C++ & Ruby)\"" +
      " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-OSX\" #{ARCHIVE_FILENAME_MAC}"
@@ -55,8 +87,6 @@ end
 
 # TODO: Upload to RubyForge: http://nubyonrails.com/articles/tutorial-publishing-rubygems-with-hoe
 
-
-# TODO: Packages from Release.rb (non-gems)
 
 # TODO: Windows tasks
 
