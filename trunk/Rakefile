@@ -1,3 +1,24 @@
+require 'ftools'
+
+GOSU_VERSION = ENV['GOSU_RELEASE_VERSION']
+throw "GOSU_RELEASE_VERSION must be set" if GOSU_VERSION.nil?
+
+COMMON_FILES = FileList[
+  'COPYING.txt',
+  'README.txt',
+]
+
+COMMON_CPP_FILES = COMMON_FILES + FileList[
+  'examples/*.cpp',
+  'examples/media/*',
+  'reference/**/*'
+]
+
+COMMON_RUBY_FILES = COMMON_FILES + FileList[
+  'examples/*.rb',
+  'examples/media/*',
+]
+
 desc "Build Gosu.framework"
 task :build_cpp_mac do
   sh "cd mac && xcodebuild -project Gosu.xcodeproj -target Gosu -configuration Release"
@@ -9,11 +30,33 @@ task :build_ruby_mac do
   sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Deployment Template' -configuration Release"
 end
 
-# TODO: Packages from Release.rb (non-gems)
+desc "Copies all files for the Ruby gem to packaged/gem..."
+task :prepare_gem_files => :build_ruby_mac do
+  throw "NYI"
+end
+
+ARCHIVE_FILENAME_MAC = "public/gosu-mac-#{GOSU_VERSION}.tar.gz"
+
+desc "Builds the Mac archive"
+task :build_archive_mac => [:build_cpp_mac, :build_ruby_mac] do
+  files = COMMON_CPP_FILES + COMMON_RUBY_FILES + ['gosu.bundle'] +
+          FileList['Gosu.framework/**/*', 'RubyGosu Deployment Template.app/**/*']
+  sh "tar -czf #{ARCHIVE_FILENAME_MAC} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
+end
+
+desc "Releases the Mac ZIP archive on GoogleCode"
+task :release_archive_mac => :build_archive_mac do
+  sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} precompiled for Mac OS X (C++ & Ruby)\"" +
+     " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-OSX\" #{ARCHIVE_FILENAME_MAC}"
+end
+
 
 # TODO: Gem task again! see below:
 
 # TODO: Upload to RubyForge: http://nubyonrails.com/articles/tutorial-publishing-rubygems-with-hoe
+
+
+# TODO: Packages from Release.rb (non-gems)
 
 # TODO: Windows tasks
 
