@@ -42,7 +42,8 @@ autoconf
 make
 }}}
 
-It is not recommended to do a 'make install' as you probably know better where to put the resulting files. (TODO?)
+There is a deprecated 'make install' command that will work for C++, but as most Linux distributions are using a package manager we recommend copying the resulting `linux/libgosu.a` file to your game's directory manually.
+For using Ruby/Gosu, you can install Gosu globally by copying the resulting `linux/gosu.so` file to `/usr/lib/ruby/1.8/${your-arch-here}-linux/`, or also copy it next to your Ruby source files where it will be found.
 
 = Using Ruby/Gosu =
 Just require gosu.so (`require 'gosu'`) and everything should work fine. You can copy gosu.so into the examples folder and run Tutorial.rb to check everything's okay.
