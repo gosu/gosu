@@ -303,7 +303,7 @@ void Gosu::Window::show()
 
 			unsigned ms = milliseconds();
 
-			if (ms - lastTick >= pimpl->updateInterval)
+			if (ms < lastTick || ms - lastTick >= pimpl->updateInterval)
 			{
 				lastTick = ms;
 				input().update();
