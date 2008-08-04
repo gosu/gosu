@@ -8,6 +8,7 @@
   * All: Added Font::drawRot()/Font#draw_rot
   * Linux: Fixed panning of SDL-based sound system, also added support for graceful degradation if no sound device available (thanks oli...! ;))
   * Linux: Windowed mode fixed on Compiz, fullscreen mode fixed everywhere.
+  * Linux: Fixed an unlikely lockup.
 
 =0.7.9=
   * All: Added Gosu::TextInput functionality with example for Ruby and C++
