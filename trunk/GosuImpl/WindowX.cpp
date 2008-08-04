@@ -347,7 +347,7 @@ void Gosu::Window::show()
 
     setCaption(pimpl->title);
 
-    unsigned long startTime, endTime;
+    unsigned startTime, endTime;
 
     pimpl->showing = true;
     while (pimpl->showing)
@@ -357,7 +357,7 @@ void Gosu::Window::show()
         if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
         endTime = milliseconds();
 
-        if ((endTime - startTime) < pimpl->updateInterval)
+        if (startTime < endTime && (endTime - startTime) < pimpl->updateInterval)
             sleep(pimpl->updateInterval - (endTime - startTime));
     }
 
