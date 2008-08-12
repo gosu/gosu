@@ -3,10 +3,12 @@ require '../gosu'
 class Test < Gosu::Window
   def initialize
     super(800, 600, false)
+
+    Gosu::Image.new(self, "Umläuts.png", false) rescue nil
       
-    self.caption = "Huhu, 地下鉄で行きます"
+    self.caption = "Huhu, Ümläuts!"
     @font = Gosu::Font.new(self, "Monaco", 15)
-    @sys_text = Gosu::Image.from_text(self, "Huhu, 地下 hihi 鉄で行 haha きます", "Helvetica", 15, 0, 200, :left)
+    @sys_text = Gosu::Image.from_text(self, "Huhu, 地下鉄chikatetsuでde行きますikimasu!", "Helvetica", 15, 0, 200, :left)
     @loc_text = Gosu::Image.from_text(self, "Huhu, 地下鉄で行きます", "./Vera.ttf", 30, 0, 200, :left)
   end
 

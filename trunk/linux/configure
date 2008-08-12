@@ -677,7 +677,6 @@ ruby
 RUBY_INC_DIR
 RUBY_ARCH_DIR
 RUBY_LIBS
-HAVE_SWIG
 DLOPEN_LIB
 GOSU_A_OBJS
 TO_BE_MADE
@@ -4310,51 +4309,6 @@ if test $RUBY_INC_DIR; then
   TO_BE_MADE=${TO_BE_MADE}" ruby"
 fi
 
-# Extract the first word of "swig", so it can be a program name with args.
-set dummy swig; ac_word=$2
-{ echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
-if test "${ac_cv_prog_HAVE_SWIG+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  if test -n "$HAVE_SWIG"; then
-  ac_cv_prog_HAVE_SWIG="$HAVE_SWIG" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-    ac_cv_prog_HAVE_SWIG="yes"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-IFS=$as_save_IFS
-
-  test -z "$ac_cv_prog_HAVE_SWIG" && ac_cv_prog_HAVE_SWIG="no"
-fi
-fi
-HAVE_SWIG=$ac_cv_prog_HAVE_SWIG
-if test -n "$HAVE_SWIG"; then
-  { echo "$as_me:$LINENO: result: $HAVE_SWIG" >&5
-echo "${ECHO_T}$HAVE_SWIG" >&6; }
-else
-  { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-fi
-
-
-
-if test $HAVE_SWIG != "yes"; then
-  { { echo "$as_me:$LINENO: error: Cannot find swig" >&5
-echo "$as_me: error: Cannot find swig" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
 { echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
 echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6; }
 if test "${ac_cv_lib_dl_dlopen+set}" = set; then
@@ -5344,7 +5298,6 @@ ruby!$ruby$ac_delim
 RUBY_INC_DIR!$RUBY_INC_DIR$ac_delim
 RUBY_ARCH_DIR!$RUBY_ARCH_DIR$ac_delim
 RUBY_LIBS!$RUBY_LIBS$ac_delim
-HAVE_SWIG!$HAVE_SWIG$ac_delim
 DLOPEN_LIB!$DLOPEN_LIB$ac_delim
 GOSU_A_OBJS!$GOSU_A_OBJS$ac_delim
 TO_BE_MADE!$TO_BE_MADE$ac_delim
@@ -5353,7 +5306,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 70; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 69; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
