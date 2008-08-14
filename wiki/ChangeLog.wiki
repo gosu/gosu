@@ -5,7 +5,7 @@
   * All: Added Song::volume()/Song#volume (thanks rabbitblue!)
   * All: Fixed Gosu::angleDiff
   * All: Fixed loading of PNG files with transparent palette entries.
-  * All: Added clipping.
+  * All: Added clipping via Window::beginClipping/endClipping or Window#clip_to, respectively
   * All: Added Font::drawRot()/Font#draw_rot
   * Linux: Fixed panning of SDL-based sound system, also added support for graceful degradation if no sound device available (thanks oli...! ;))
   * Linux: Windowed mode fixed on Compiz, fullscreen mode fixed everywhere.
