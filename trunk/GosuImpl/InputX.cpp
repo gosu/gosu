@@ -99,6 +99,8 @@ void Gosu::Input::update()
             case Button1: id = msLeft; break;
             case Button2: id = msMiddle; break;
             case Button3: id = msRight; break;
+            case Button4: id = msWheelUp; break;
+            case Button5: id = msWheelDown; break;
             default: continue;
             }
             pimpl->keyMap[id] = true;

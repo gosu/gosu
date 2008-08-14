@@ -22,7 +22,12 @@ class Test < Gosu::Window
   end
   
   def button_down(id)
-    close if id == Gosu::KbEscape
+    if id == Gosu::KbEscape or id == char_to_button_id("ä") then
+      close
+    else
+      @text ||= ""
+      @text += button_id_to_char(id)
+    end
   end
 end
 
