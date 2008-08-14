@@ -82,10 +82,10 @@ Gosu::Reader Gosu::loadFromPNG(Bitmap& out, Reader reader)
         colorType = png_get_color_type(pngPtr, infoPtr),
         bitDepth = png_get_bit_depth(pngPtr, infoPtr);
 
-    // TODO: Does not work?!
+    png_bytep trans;
+    int numTrans = 0;
     if (png_get_valid(pngPtr, infoPtr, PNG_INFO_tRNS))
-        png_set_tRNS_to_alpha(pngPtr);
-
+        png_get_tRNS(pngPtr, infoPtr, &trans, &numTrans, NULL);
     // This function only understands palette images with a bit depth <= 8 and
     // non-palette images with a bit depth of 8 (the latter is no problem
     // though, since the transformations given to png_read_png should change
@@ -181,7 +181,14 @@ Gosu::Reader Gosu::loadFromPNG(Bitmap& out, Reader reader)
                         png_destroy_read_struct(&pngPtr, &infoPtr, 0);
                         throw std::runtime_error("Palette index out of range");
                     }
-                    c.setAlpha(255);
+                    
+                    int alpha = 255;
+                    for (int i = 0; i < numTrans; ++i)
+                    {
+                        if (trans[i] == palIndex)
+                            alpha = 0;
+                    }
+                    c.setAlpha(alpha);
                     c.setRed  (palColors[palIndex].red);
                     c.setGreen(palColors[palIndex].green);
                     c.setBlue (palColors[palIndex].blue);
