@@ -8464,6 +8464,13 @@ SWIGEXPORT void Init_gosu(void) {
   // Backwards compatibility: import the constants into Gosu::Button.
   rb_eval_string("module Gosu::Button; Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }; end");
   
+  // Extend Numeric with simple angle conversion methods.
+  // IMPR: Maybe faster in C?
+  rb_eval_string("class Numeric;"
+    "  def gosu_to_radians; (self - 90) * Math::PI / 180.0; end;"
+    "  def radians_to_gosu; self * 180.0 / Math::PI + 90; end;"
+    "end");
+  
   GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
   
   

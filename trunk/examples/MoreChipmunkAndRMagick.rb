@@ -9,12 +9,8 @@ require 'gosu'
 require 'chipmunk'
 require 'RMagick'
 
-# Convenience method for converting between radians, Gosu degrees and Vec2 vectors.
+# Convenience method for converting from radians to a Vec2 vector.
 class Numeric 
-   def radians_to_gosu
-       self * 180.0 / Math::PI + 90
-   end
-
    def radians_to_vec2
        CP::Vec2.new(Math::cos(self), Math::sin(self))
    end
