@@ -7,7 +7,7 @@
 // TODO: Not threadsafe.
 unsigned Gosu::Texture::maxTextureSize()
 {
-    const static unsigned MIN_SIZE = 256, MAX_SIZE = 512;
+    const static unsigned MIN_SIZE = 256, MAX_SIZE = 1024;
 
     static unsigned size = 0;
     if (size == 0)
