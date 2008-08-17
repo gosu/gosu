@@ -192,7 +192,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     Win::check(pimpl->handle);
 
 	pimpl->hdc = GetDC(handle());
-    Win::check(pimpl->handle);
+    Win::check(pimpl->hdc);
 
 	PIXELFORMATDESCRIPTOR pfd;
 	ZeroMemory(&pfd, sizeof pfd);
