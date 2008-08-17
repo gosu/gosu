@@ -28,6 +28,7 @@ class Test < Gosu::Window
   def initialize
     super WIDTH, HEIGHT, true
     @wp = Gosu::Image.new self, "media/Wallpaper.png", true
+    @font = Gosu::Font.new self, Gosu::default_font_name, 20
   end
   
   def draw
@@ -40,6 +41,8 @@ class Test < Gosu::Window
       factor_x, factor_y = factor_y, factor_x
     end
     @wp.draw_rot WIDTH / 2, HEIGHT / 2, 0, angle, 0.5, 0.5, factor_x, factor_y, 0x80ffffff
+    
+    @font.draw "#{WIDTH} x #{HEIGHT} pixels in action!", 10, 10, 0
   end
 
   def button_down(id)
