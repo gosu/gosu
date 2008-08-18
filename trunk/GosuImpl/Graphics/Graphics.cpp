@@ -78,8 +78,8 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
 
     pimpl->virtWidth = virtualWidth;
     pimpl->virtHeight = virtualHeight;
-    pimpl->factorX = 1.0 * virtualWidth / pimpl->physWidth;
-    pimpl->factorY = 1.0 * virtualHeight / pimpl->physHeight;
+    pimpl->factorX = 1.0 / virtualWidth * pimpl->physWidth;
+    pimpl->factorY = 1.0 / virtualHeight * pimpl->physHeight;
 }
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)

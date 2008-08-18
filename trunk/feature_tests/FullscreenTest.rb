@@ -42,7 +42,11 @@ class Test < Gosu::Window
     end
     @wp.draw_rot WIDTH / 2, HEIGHT / 2, 0, angle, 0.5, 0.5, factor_x, factor_y, 0x80ffffff
     
-    @font.draw "#{WIDTH} x #{HEIGHT} pixels in action!", 10, 10, 0
+    @font.draw "Want #{WIDTH} x #{HEIGHT} pixels", 10, 10, 
+0
+    @font.draw "= get #{width} x #{height} pixels", 
+10, 
+60, 0
   end
 
   def button_down(id)
