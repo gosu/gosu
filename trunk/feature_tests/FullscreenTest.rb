@@ -8,7 +8,7 @@ WIDTH, HEIGHT = 640, 480
 
 # Undersized case (should NOT distort on 4:3 display)
 #WIDTH, HEIGHT = 640, 320
-# OS X, 4:3: Clipping missing
+# OS X, 4:3: Clipping missing, reported resolution wrong
 
 #### Cases that should work some day ####
 
@@ -28,6 +28,7 @@ class Test < Gosu::Window
   def initialize
     super WIDTH, HEIGHT, true
     @wp = Gosu::Image.new self, "media/Wallpaper.png", true
+    @cursor = Gosu::Image.new self, "media/Cursor.png", false
     @font = Gosu::Font.new self, Gosu::default_font_name, 20
   end
   
@@ -42,11 +43,10 @@ class Test < Gosu::Window
     end
     @wp.draw_rot WIDTH / 2, HEIGHT / 2, 0, angle, 0.5, 0.5, factor_x, factor_y, 0x80ffffff
     
-    @font.draw "Want #{WIDTH} x #{HEIGHT} pixels", 10, 10, 
-0
-    @font.draw "= get #{width} x #{height} pixels", 
-10, 
-60, 0
+    @font.draw "Want #{WIDTH} x #{HEIGHT} pixels", 10, 10, 0
+    @font.draw "= get #{width} x #{height} pixels", 10, 60, 0
+    
+    @cursor.draw mouse_x, mouse_y, 0
   end
 
   def button_down(id)
