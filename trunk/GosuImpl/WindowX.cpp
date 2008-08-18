@@ -241,7 +241,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     if (fullscreen)
     {
         graphics().setResolution(width, height);
-        input().setMouseResolution(width, height);
+        input().setMouseFactors(1.0 * width / pimpl->width,
+                  1.0 * height / pimpl->height);
     }
 }
 

@@ -66,6 +66,12 @@ double Gosu::Input::mouseY() const
     return pimpl->mouseY * pimpl->mouseFactorY;
 }
 
+void Gosu::Input::setMouseFactors(double factorX, double factorY)
+{
+    pimpl->mouseFactorX = factorX;
+    pimpl->mouseFactorY = factorY;
+}
+
 void Gosu::Input::update()
 {
     for (unsigned int i = 0; i < pimpl->eventList.size(); i++)
