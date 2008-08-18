@@ -620,19 +620,10 @@ double Gosu::Input::mouseY() const
     return pimpl->mouseY * pimpl->mouseFactorY;
 }
 
-void Gosu::Input::setMouseResolution(double width, double height)
+void Gosu::Input::setMouseFactors(double factorX, double factorY)
 {
-    NSSize size;
-    if (pimpl->window)
-        size = [[pimpl->window contentView] frame].size;
-    else
-    {
-        CGSize cgSize = CGDisplayBounds(CGMainDisplayID()).size;
-        size.width = cgSize.width, size.height = cgSize.height;
-    }
-
-    pimpl->mouseFactorX = width / size.width;
-    pimpl->mouseFactorY = height / size.height;
+    pimpl->mouseFactorX = factorX;
+    pimpl->mouseFactorY = factorY;
 }
 
 void Gosu::Input::update()

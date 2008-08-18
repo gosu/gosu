@@ -97,8 +97,8 @@ namespace Gosu
         double mouseX() const;
         //! See mouseX.
         double mouseY() const;
-        // See comments on virtual resolutions in Graphics.hpp.
-        void setMouseResolution(double width, double height);
+        // Undocumented for the moment.
+        void setMouseFactors(double factorX, double factorY);
         
         //! Collects new information about which buttons are pressed, where the
         //! mouse is and calls onButtonUp/onButtonDown, if assigned.

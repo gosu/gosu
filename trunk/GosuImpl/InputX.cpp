@@ -8,7 +8,7 @@ struct Gosu::Input::Impl
     TextInput* textInput;
     std::vector< ::XEvent> eventList;
     std::map<unsigned int, bool> keyMap;
-    double mouseX, mouseY;
+    double mouseX, mouseY, mouseFactorX, mouseFactorY;
     ::Display* display;
     Impl() : textInput(0) {}
 };
@@ -17,8 +17,8 @@ Gosu::Input::Input(::Display* dpy)
     : pimpl(new Impl)
 {
     // IMPR: Get current position?
-    pimpl->mouseX = 0;
-    pimpl->mouseY = 0;
+    pimpl->mouseX = pimpl->mouseY = 0;
+    pimpl->mouseFactorX = pimpl->mouseFactorY = 1.0;
     pimpl->display = dpy;
 }
 
@@ -58,12 +58,12 @@ wchar_t Gosu::Input::idToChar(Button btn)
 
 double Gosu::Input::mouseX() const
 {
-    return pimpl->mouseX;
+    return pimpl->mouseX * pimpl->mouseFactorX;
 }
 
 double Gosu::Input::mouseY() const
 {
-    return pimpl->mouseY;
+    return pimpl->mouseY * pimpl->mouseFactorY;
 }
 
 void Gosu::Input::update()
@@ -129,7 +129,8 @@ void Gosu::Input::update()
     }
     pimpl->eventList.clear();
 }
-Gosu::TextInput* Gosu::Input::textInput() const
+
+Gosu::TextInput* Gosu::Input::textInput() const
 {
     return pimpl->textInput;
 }

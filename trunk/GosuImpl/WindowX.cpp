@@ -233,12 +233,16 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
 
     // Now set up major Gosu components
     pimpl->graphics.reset(new Gosu::Graphics(pimpl->width, pimpl->height, fullscreen));
-    if (fullscreen)
-        graphics().setResolution(width, height);
-    
-    pimpl->input.reset(new Gosu::Input(pimpl->display));
+    pimpl->input.reset(new Gosu::Input(pimpl->display));    
     input().onButtonDown = boost::bind(&Window::buttonDown, this, _1);
     input().onButtonUp = boost::bind(&Window::buttonUp, this, _1);
+    
+    // Fix coordinates for fullscreen screen-scaling
+    if (fullscreen)
+    {
+        graphics().setResolution(width, height);
+        input().setMouseResolution(width, height);
+    }
 }
 
 Gosu::Window::~Window()
