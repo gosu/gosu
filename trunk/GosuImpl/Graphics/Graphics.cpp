@@ -11,9 +11,10 @@
 
 struct Gosu::Graphics::Impl
 {
-    unsigned width, height;
-    bool fullscreen;
+    unsigned physWidth, physHeight;
+    unsigned virtWidth, virtHeight;
     double factorX, factorY;
+    bool fullscreen;
     DrawOpQueue queue;
     typedef std::vector<boost::shared_ptr<Texture> > Textures;
     Textures textures;
@@ -22,18 +23,18 @@ struct Gosu::Graphics::Impl
 #endif
 };
 
-Gosu::Graphics::Graphics(unsigned width, unsigned height, bool fullscreen)
+Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscreen)
 : pimpl(new Impl)
 {
-    pimpl->width = width;
-    pimpl->height = height;
-    pimpl->fullscreen = fullscreen;
+    pimpl->physWidth  = pimpl->virtWidth  = physWidth;
+    pimpl->physHeight = pimpl->virtHeight = physHeight;
     pimpl->factorX = pimpl->factorY = 1.0;
+    pimpl->fullscreen = fullscreen;
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glViewport(0, 0, pimpl->width, pimpl->height);
-    glOrtho(0, pimpl->width, pimpl->height, 0, -1, 1);
+    glViewport(0, 0, pimpl->physWidth, pimpl->physHeight);
+    glOrtho(0, pimpl->virtWidth, pimpl->virtHeight, 0, -1, 1);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -47,12 +48,12 @@ Gosu::Graphics::~Graphics()
 
 unsigned Gosu::Graphics::width() const
 {
-    return pimpl->width;
+    return pimpl->virtWidth;
 }
 
 unsigned Gosu::Graphics::height() const
 {
-    return pimpl->height;
+    return pimpl->virtHeight;
 }
 
 bool Gosu::Graphics::fullscreen() const
@@ -70,24 +71,15 @@ double Gosu::Graphics::factorY() const
     return pimpl->factorY;
 }
 
-double Gosu::Graphics::virtualWidth() const
+void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight)
 {
-    return width() / factorX();
-}
-
-double Gosu::Graphics::virtualHeight() const
-{
-    return height() / factorY();
-}
-
-void Gosu::Graphics::setVirtualResolution(double virtualWidth,
-                                          double virtualHeight)
-{
-    if (virtualWidth == 0 || virtualHeight == 0)
+    if (virtualWidth * virtualHeight < 1)
         throw std::invalid_argument("Invalid virtual resolution.");
-    
-    pimpl->factorX = width() / virtualWidth;
-    pimpl->factorY = height() / virtualHeight;
+
+    pimpl->virtWidth = virtualWidth;
+    pimpl->virtHeight = virtualHeight;
+    pimpl->factorX = 1.0 * virtualWidth / pimpl->physWidth;
+    pimpl->factorY = 1.0 * virtualHeight / pimpl->physHeight;
 }
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
@@ -125,8 +117,8 @@ void Gosu::Graphics::endGL()
     
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glViewport(0, 0, pimpl->width, pimpl->height);
-    glOrtho(0, pimpl->width, pimpl->height, 0, -1, 1);
+    glViewport(0, 0, pimpl->physWidth, pimpl->physHeight);
+    glOrtho(0, pimpl->virtWidth, pimpl->virtHeight, 0, -1, 1);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();

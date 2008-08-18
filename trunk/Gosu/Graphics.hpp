@@ -32,15 +32,13 @@ namespace Gosu
         boost::scoped_ptr<Impl> pimpl;
 
     public:
-        Graphics(unsigned width, unsigned height, bool fullscreen);
+        Graphics(unsigned physicalWidth, unsigned physicalHeight, bool fullscreen);
         ~Graphics();
 
         // Undocumented until I have thought about this...
         double factorX() const;
         double factorY() const;
-        double virtualWidth() const;
-        double virtualHeight() const;
-        void setVirtualResolution(double virtualWidth, double virtualHeight);
+        void setResolution(unsigned virtualWidth, unsigned virtualHeight);
         // End of Undocumented
 
         unsigned width() const;
