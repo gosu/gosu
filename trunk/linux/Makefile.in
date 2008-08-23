@@ -85,7 +85,7 @@ gosu-config:
 	echo "done" >> gosu-config
 	chmod u+x gosu-config
 
-ruby: ruby: RubyGosu_wrap.cpp $(RUBYOBJS) gosu.a
+ruby: RubyGosu_wrap.cpp $(RUBYOBJS) gosu.a
 	g++ -shared -o gosu.so -Wall $(RUBYOBJS) $(RUBY_LIBS) @GOSU_A_OBJS@
 
 # $(BASE_OBJS) \
