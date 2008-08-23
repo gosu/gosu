@@ -1,12 +1,20 @@
 PKG_CONFIG = @PKG_CONFIG@
 
-BASE_OBJS = Math.o Utility.o IO.o FileUnix.o \
-    TimingUnix.o WindowX.o Graphics/Bitmap.o InputX.o TextInputX.o Graphics/BitmapUtils.o \
-    Graphics/Color.o Graphics/TexChunk.o Graphics/Graphics.o \
-    Graphics/Image.o Graphics/RotFlip.o Graphics/BlockAllocator.o Graphics/Texture.o \
-    Graphics/LargeImageData.o Graphics/BitmapPNG.o Graphics/Font.o Graphics/BitmapBMP.o Graphics/TextPangoFT.o \
-	Graphics/Text.o Graphics/BitmapColorKey.o DirectoriesUnix.o
-NET_OBJS = Sockets/CommSocket.o Sockets/ListenerSocket.o Sockets/Socket.o Sockets/MessageSocket.o
+GOSU_DIR = @abs_top_srcdir@/..
+
+BASE_OBJS = Math.o Utility.o IO.o FileUnix.o TimingUnix.o WindowX.o	\
+	    Graphics/Bitmap.o InputX.o TextInputX.o			\
+	    Graphics/BitmapUtils.o Graphics/Color.o			\
+	    Graphics/TexChunk.o Graphics/Graphics.o Graphics/Image.o	\
+	    Graphics/RotFlip.o Graphics/BlockAllocator.o		\
+	    Graphics/Texture.o Graphics/LargeImageData.o		\
+	    Graphics/BitmapPNG.o Graphics/Font.o Graphics/BitmapBMP.o	\
+	    Graphics/TextPangoFT.o Graphics/Text.o			\
+	    Graphics/BitmapColorKey.o DirectoriesUnix.o
+
+NET_OBJS = Sockets/CommSocket.o Sockets/ListenerSocket.o	\
+	   Sockets/Socket.o Sockets/MessageSocket.o
+
 OPENAL_OBJ = AudioOpenAL.o
 SDLMIXER_OBJ = AudioSDL.o
 FMOD_OBJ = AudioFmod.o
@@ -16,11 +24,12 @@ OBJS = @GOSU_A_OBJS@
 # $(BASE_OBJS) $(NET_OBJS) $(GOSUMAIN_OBJ) $(FMOD_OBJ)
 # $(OPENAL_OBJ)
 
-XPLS = ../examples/Tutorial
+XPLS = $(GOSU_DIR)/examples/Tutorial
 
-CXXFLAGS += -fPIC -I.. @AUDIO_INC@ -Wall \
-    @PANGO_CXX_FLAGS@ @X_INCS@ @HAVE_SYS_STAT_H@ \
-	-I@RUBY_INC_DIR@ -I@RUBY_ARCH_DIR@ -DNDEBUG -O3 -pipe -fomit-frame-pointer
+CXXFLAGS += -fPIC -I.. @AUDIO_INC@ -Wall @PANGO_CXX_FLAGS@ @X_INCS@	\
+	    @HAVE_SYS_STAT_H@ @HAVE_EACCESS@ -I@RUBY_INC_DIR@		\
+	    -I@RUBY_ARCH_DIR@ -fPIC -DNDEBUG -O3 -pipe			\
+	    -fomit-frame-pointer
 
 LIBS = @AUDIO_LIBS@ -L@x_libraries@ -lX11 \
     @PANGO_LIBS@ -lpng -lGL -lGLU -lglut -lXxf86vm #-lboost_thread
@@ -41,12 +50,12 @@ gosu.a: $(OBJS)
 gosu.so : $(OBJS)
 	g++ -shared -o gosu.so ${LIBS} @GOSU_A_OBJS@
 
-# install: gosu.so
+install: gosu.so
 #   cp -p gosu.so /usr/lib/libgosu.so
 #   cp -pr ../Gosu /usr/include
 #   ldconfig
 # 
-# uninstall:
+uninstall:
 #   rm /usr/lib/libgosu.so
 #   rm -rf /usr/include/Gosu
 #   ldconfig
@@ -55,8 +64,8 @@ clean:
 	-rm -f $(OBJS) gosu.a $(XPLS) $(RUBYOBJS) gosu.so gosu-config
 	-rmdir RubyGosu OpenGL Graphics Sockets
 
-$(OBJS): %.o: ../GosuImpl/%.cpp
-	$(CXX) ../GosuImpl/$*.cpp -o $@ $(CXXFLAGS) -c
+$(OBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cpp
+	$(CXX) $(GOSU_DIR)/GosuImpl/$*.cpp -o $@ $(CXXFLAGS) -c
 
 examples: $(XPLS) gosu.a
 
@@ -76,14 +85,17 @@ gosu-config:
 	echo "done" >> gosu-config
 	chmod u+x gosu-config
 
-ruby: $(RUBYOBJS) gosu.a
+ruby: ruby: RubyGosu_wrap.cpp $(RUBYOBJS) gosu.a
 	g++ -shared -o gosu.so -Wall $(RUBYOBJS) $(RUBY_LIBS) @GOSU_A_OBJS@
 
 # $(BASE_OBJS) \
         $(NET_OBJS) $(FMOD_OBJ) $(RUBY_LIBS)
 
-$(RUBYOBJS): %.o: ../GosuImpl/%.cxx
-	$(CXX) ../GosuImpl/$*.cxx -o $@ $(CXXFLAGS) -c -fPIC
-#$(RUBYOBJS): %.o: ../%.cpp
-#	$(CXX) ../$*.cpp -o $@ $(CXXFLAGS) -c -fPIC
+RubyGosu_wrap.cpp:
+	cd $(GOSU_DIR)/GosuImpl/ && swig -c++ -ruby -autorename RubyGosu.swg
+	cd $(GOSU_DIR)/linux/
 
+$(RUBYOBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cxx
+	$(CXX) -fPIC $(GOSU_DIR)/GosuImpl/$*.cxx -o $@ $(CXXFLAGS) -c
+#$(RUBYOBJS): %.o: $(GOSU_DIR)/%.cpp
+#	$(CXX) $(GOSU_DIR)/$*.cpp -o $@ $(CXXFLAGS) -c -fPIC

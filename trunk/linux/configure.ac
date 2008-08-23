@@ -87,7 +87,11 @@ fi
 AC_CHECK_HEADER(sys/stat.h, HAVE_SYS_STAT_H=-DHAVE_SYS_STAT_H)
 AC_SUBST(HAVE_SYS_STAT_H)
 
-AC_CHECK_PROGS(ruby, ruby1.9 ruby1.8 ruby)
+# workaround ruby 1.9 redefining standard c++ eaccess
+AC_CHECK_FUNC(eaccess, HAVE_EACCESS=-DHAVE_EACCESS)
+AC_SUBST(HAVE_EACCESS)
+
+AC_CHECK_PROGS(ruby, ruby1.8 ruby1.9 ruby)
 RUBY_INC_DIR=`${ruby} -e 'require "rbconfig";print(Config::CONFIG[["rubyhdrdir"]] || Config::CONFIG[["archdir"]])'`
 RUBY_ARCH_DIR=`${ruby} -e 'require "rbconfig";print File.join(Config::CONFIG[["rubyhdrdir"]], Config::CONFIG[["arch"]]) if Config::CONFIG[["rubyhdrdir"]]'`
 RUBY_LIBS=`${ruby} -e 'require "rbconfig";print(Config::CONFIG[["LIBRUBYARG"]] || "-l" + Config::CONFIG[["ruby_install_name"]])'`
@@ -98,6 +102,12 @@ if test $RUBY_INC_DIR; then
   AC_SUBST(RUBY_ARCH_DIR)
   AC_SUBST(RUBY_LIBS)
   TO_BE_MADE=${TO_BE_MADE}" ruby"
+fi
+
+AC_CHECK_PROG(HAVE_SWIG, swig, yes, no)
+ 
+if test $HAVE_SWIG != "yes"; then
+  AC_MSG_ERROR(Cannot find swig)
 fi
 
 AC_CHECK_LIB(dl, dlopen, LIBS="$LIBS -ldl", AC_CHECK_LIB(c, dlopen, ,AC_MSG_ERROR(Missing dlopen functionality), ), )
