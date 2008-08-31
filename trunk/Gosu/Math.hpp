@@ -58,13 +58,20 @@ namespace Gosu
     //! Returns min if value is smaller than min, max if value is larger than
     //! max and value otherwise.
     template<typename T>
-    T boundBy(T value, T min, T max)
+    T clamp(T value, T min, T max)
     {
         if (value < min)
             return min;
         if (value > max)
             return max;
         return value;
+    }
+    
+    // Backward compatibility with 0.7.x
+    template<typename T>
+    T boundBy(T value, T min, T max)
+    {
+        return clamp(value, min, max);
     }
 
     //! Returns the square of the distance between two points.

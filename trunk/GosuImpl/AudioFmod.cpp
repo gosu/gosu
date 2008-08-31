@@ -103,17 +103,17 @@ void Gosu::SampleInstance::stop()
 
 void Gosu::SampleInstance::changeVolume(double volume)
 {
-    FSOUND_SetVolume(handle, boundBy<int>(volume * 255, 0, 255));
+    FSOUND_SetVolume(handle, clamp<int>(volume * 255, 0, 255));
 }
 
 void Gosu::SampleInstance::changePan(double pan)
 {
-    FSOUND_SetPan(handle, boundBy<int>(pan * 127 + 127, 0, 255));
+    FSOUND_SetPan(handle, clamp<int>(pan * 127 + 127, 0, 255));
 }
 
 void Gosu::SampleInstance::changeSpeed(double speed)
 {
-    FSOUND_SetFrequency(handle, boundBy<int>(speed * extra, 100, 705600));
+    FSOUND_SetFrequency(handle, clamp<int>(speed * extra, 100, 705600));
 }
 
 struct Gosu::Sample::SampleData : boost::noncopyable
@@ -217,7 +217,7 @@ public:
     
     void changeVolume(double volume)
     {
-        volume_ = boundBy(volume, 0.0, 1.0);
+        volume_ = clamp(volume, 0.0, 1.0);
         applyVolume();
     }
 };

@@ -70,12 +70,12 @@ void Gosu::SampleInstance::stop()
 void Gosu::SampleInstance::changeVolume(double volume)
 {
     if (playing())
-        Mix_Volume(handle, boundBy<int>(volume * 255, 0, 255));
+        Mix_Volume(handle, clamp<int>(volume * 255, 0, 255));
 }
 
 void Gosu::SampleInstance::changePan(double pan)
 {
-    int rightPan = boundBy<int>(pan * 127, 0, 127);
+    int rightPan = clamp<int>(pan * 127, 0, 127);
     if (playing())
         Mix_SetPanning(handle, 254 - rightPan, rightPan);
 }
@@ -246,7 +246,7 @@ double Gosu::Song::volume() const {
 }
 
 void Gosu::Song::changeVolume(double volume) {
-  data->volume = boundBy(volume, 0.0, 1.0);
+  data->volume = clamp(volume, 0.0, 1.0);
 
   if (playing())
     Mix_VolumeMusic(trunc(data->volume * MIX_MAX_VOLUME));
