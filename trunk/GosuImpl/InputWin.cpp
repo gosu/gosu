@@ -406,12 +406,10 @@ double Gosu::Input::mouseY() const
     return pimpl->mouseY * pimpl->mouseFactorY;
 }
 
-void Gosu::Input::setMouseResolution(double width, double height)
+void Gosu::Input::setMouseFactors(double factorX, double factorY)
 {
-	RECT rc;
-	GetClientRect(pimpl->window, &rc);
-	pimpl->mouseFactorX = width / (rc.right - rc.left);
-	pimpl->mouseFactorY = height / (rc.bottom - rc.top);
+	pimpl->mouseFactorX = factorX;
+	pimpl->mouseFactorY = factorY;
 }
 
 void Gosu::Input::update()
