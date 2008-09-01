@@ -32,7 +32,7 @@ CXXFLAGS += -fPIC -I.. @AUDIO_INC@ -Wall @PANGO_CXX_FLAGS@ @X_INCS@	\
 	    -fomit-frame-pointer
 
 LIBS = @AUDIO_LIBS@ -L@x_libraries@ -lX11 \
-    @PANGO_LIBS@ -lpng -lGL -lGLU -lglut -lXxf86vm #-lboost_thread
+    @PANGO_LIBS@ -lpng -lGL #-lboost_thread
 
 RUBY_LIBS = $(LIBS) @RUBY_LIBS@ @DLOPEN_LIB@ -lm -lc -lcrypt #-lboost_thread
 

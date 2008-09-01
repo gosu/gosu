@@ -673,6 +673,7 @@ AUDIO_INC
 GREP
 EGREP
 HAVE_SYS_STAT_H
+HAVE_EACCESS
 ruby
 RUBY_INC_DIR
 RUBY_ARCH_DIR
@@ -3090,79 +3091,8 @@ echo "$as_me: error: Missing GL" >&2;}
 fi
 
 
-{ echo "$as_me:$LINENO: checking for gluNewQuadric in -lGLU" >&5
-echo $ECHO_N "checking for gluNewQuadric in -lGLU... $ECHO_C" >&6; }
-if test "${ac_cv_lib_GLU_gluNewQuadric+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGLU -lpthread $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char gluNewQuadric ();
-int
-main ()
-{
-return gluNewQuadric ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_GLU_gluNewQuadric=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_GLU_gluNewQuadric=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_GLU_gluNewQuadric" >&5
-echo "${ECHO_T}$ac_cv_lib_GLU_gluNewQuadric" >&6; }
-if test $ac_cv_lib_GLU_gluNewQuadric = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBGLU 1
-_ACEOF
-
-  LIBS="-lGLU $LIBS"
-
-else
-  { { echo "$as_me:$LINENO: error: Missing GLU" >&5
-echo "$as_me: error: Missing GLU" >&2;}
-   { (exit 1); exit 1; }; }
-fi
+# GLU doesn't seem to be used atm, but may come back later.
+# AC_CHECK_LIB([GLU], [gluNewQuadric], , AC_MSG_ERROR(Missing GLU), -lpthread)
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -4255,7 +4185,95 @@ fi
 
 
 
-for ac_prog in ruby1.9 ruby1.8 ruby
+# workaround ruby 1.9 redefining standard c++ eaccess
+{ echo "$as_me:$LINENO: checking for eaccess" >&5
+echo $ECHO_N "checking for eaccess... $ECHO_C" >&6; }
+if test "${ac_cv_func_eaccess+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+/* Define eaccess to an innocuous variant, in case <limits.h> declares eaccess.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define eaccess innocuous_eaccess
+
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char eaccess (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+
+#undef eaccess
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char eaccess ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined __stub_eaccess || defined __stub___eaccess
+choke me
+#endif
+
+int
+main ()
+{
+return eaccess ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_func_eaccess=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_func_eaccess=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_func_eaccess" >&5
+echo "${ECHO_T}$ac_cv_func_eaccess" >&6; }
+if test $ac_cv_func_eaccess = yes; then
+  HAVE_EACCESS=-DHAVE_EACCESS
+fi
+
+
+
+for ac_prog in ruby1.8 ruby1.9 ruby
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
@@ -4308,6 +4326,14 @@ if test $RUBY_INC_DIR; then
 
   TO_BE_MADE=${TO_BE_MADE}" ruby"
 fi
+
+# Don't use SWIG, it's always WAY outdated in Debian's default tree etc.
+#
+# AC_CHECK_PROG(HAVE_SWIG, swig, yes, no)
+#
+#if test $HAVE_SWIG != "yes"; then
+#  AC_MSG_ERROR(Cannot find swig)
+#fi
 
 { echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
 echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6; }
@@ -5294,6 +5320,7 @@ AUDIO_INC!$AUDIO_INC$ac_delim
 GREP!$GREP$ac_delim
 EGREP!$EGREP$ac_delim
 HAVE_SYS_STAT_H!$HAVE_SYS_STAT_H$ac_delim
+HAVE_EACCESS!$HAVE_EACCESS$ac_delim
 ruby!$ruby$ac_delim
 RUBY_INC_DIR!$RUBY_INC_DIR$ac_delim
 RUBY_ARCH_DIR!$RUBY_ARCH_DIR$ac_delim
@@ -5306,7 +5333,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 69; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 70; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
