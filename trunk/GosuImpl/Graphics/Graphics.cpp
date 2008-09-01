@@ -8,6 +8,7 @@
 #if 0
 #include <boost/thread.hpp>
 #endif
+#include <cmath>
 
 struct Gosu::Graphics::Impl
 {
@@ -127,7 +128,14 @@ void Gosu::Graphics::endGL()
 
 void Gosu::Graphics::beginClipping(int x, int y, unsigned width, unsigned height)
 {
-    pimpl->queue.beginClipping(x, this->height() - y - height, width, height);
+    // In doubt, make the clipping region smaller than requested.
+    
+    int physX = static_cast<int>(std::ceil(x * factorX()));
+    int physY = static_cast<int>(std::ceil((0.0 + this->height() - y - height) * factorY()));
+    unsigned physWidth  = static_cast<unsigned>(width  * factorX());
+    unsigned physHeight = static_cast<unsigned>(height * factorY());
+
+    pimpl->queue.beginClipping(physX, physY, physWidth, physHeight);
 }
 
 void Gosu::Graphics::endClipping()
