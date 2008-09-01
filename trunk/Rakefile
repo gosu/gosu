@@ -29,19 +29,19 @@ SPEC = Gem::Specification.new do |s|
   s.description = <<EOS
   2D game development library.
   
-  The library features easy to use and game-friendly interfaces to 2D graphics
+  Gosu features easy to use and game-friendly interfaces to 2D graphics
   and text (accelerated by 3D hardware), sound samples and music as well as
   keyboard, mouse and gamepad/joystick input.
   
-  Includes demos for integration with RMagick, Chipmunk and Ruby-OpenGL.
+  Also includes demos for integration with RMagick, Chipmunk and Ruby-OpenGL.
 EOS
   s.authors = ['Julian Raschke', 'Jan Luecker']
-  s.date = Time.now.strftime "%Y-%m-%d"
+  s.date = Time.now.strftime '%Y-%m-%d'
   s.email = 'julian@raschke.de'
   s.files = COMMON_RUBY_FILES + ['lib/gosu.bundle']
   s.homepage = 'http://code.google.com/p/gosu/'
-  s.require_paths = ["lib"]
-  s.required_ruby_version = Gem::Requirement.new(">= 1.8.2")
+  s.require_paths = ['lib']
+  s.required_ruby_version = Gem::Requirement.new('>= 1.8.2')
   s.summary = '2D game development library.'
 end
   
@@ -56,7 +56,7 @@ task :build_ruby_mac do
   sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Deployment Template' -configuration Release"
 end
 
-desc "Copies all files for the Ruby gem to packaged/gem..."
+desc "Copies all files for building the Mac RubyGem."
 task :prepare_gem_mac => :build_ruby_mac do
   sh "mkdir lib"
   sh "cp gosu.bundle lib/gosu.bundle"
@@ -83,11 +83,8 @@ task :release_archive_mac => :build_archive_mac do
 end
 
 
-# TODO: Gem task again! see below:
-
-# TODO: Upload to RubyForge: http://nubyonrails.com/articles/tutorial-publishing-rubygems-with-hoe
-
+# TODO? Upload to RubyForge: http://nubyonrails.com/articles/tutorial-publishing-rubygems-with-hoe
 
 # TODO: Windows tasks
 
-# TODO: Linux tasks (??!?!?)
+# TODO: Linux tasks, use contributed gemspec

@@ -18,7 +18,10 @@ AC_SUBST(PKG_CONFIG)
 
 # Checks for libraries.
 AC_CHECK_LIB([GL], [glMatrixMode], , AC_MSG_ERROR(Missing GL), -lpthread)
-AC_CHECK_LIB([GLU], [gluNewQuadric], , AC_MSG_ERROR(Missing GLU), -lpthread)
+
+# GLU doesn't seem to be used atm, but may come back later.
+# AC_CHECK_LIB([GLU], [gluNewQuadric], , AC_MSG_ERROR(Missing GLU), -lpthread)
+
 AC_PATH_X
 if test $no_x ; then
   AC_MSG_ERROR([Missing X])
@@ -104,11 +107,13 @@ if test $RUBY_INC_DIR; then
   TO_BE_MADE=${TO_BE_MADE}" ruby"
 fi
 
-AC_CHECK_PROG(HAVE_SWIG, swig, yes, no)
- 
-if test $HAVE_SWIG != "yes"; then
-  AC_MSG_ERROR(Cannot find swig)
-fi
+# Don't use SWIG, it's always WAY outdated in Debian's default tree etc.
+#
+# AC_CHECK_PROG(HAVE_SWIG, swig, yes, no)
+# 
+#if test $HAVE_SWIG != "yes"; then
+#  AC_MSG_ERROR(Cannot find swig)
+#fi
 
 AC_CHECK_LIB(dl, dlopen, LIBS="$LIBS -ldl", AC_CHECK_LIB(c, dlopen, ,AC_MSG_ERROR(Missing dlopen functionality), ), )
 

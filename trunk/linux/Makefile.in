@@ -85,15 +85,16 @@ gosu-config:
 	echo "done" >> gosu-config
 	chmod u+x gosu-config
 
-ruby: RubyGosu_wrap.cpp $(RUBYOBJS) gosu.a
+# RubyGosu_wrap.cpp taken out because we use the prebuilt version from SVN
+ruby: $(RUBYOBJS) gosu.a
 	g++ -shared -o gosu.so -Wall $(RUBYOBJS) $(RUBY_LIBS) @GOSU_A_OBJS@
 
 # $(BASE_OBJS) \
         $(NET_OBJS) $(FMOD_OBJ) $(RUBY_LIBS)
 
-RubyGosu_wrap.cpp:
-	cd $(GOSU_DIR)/GosuImpl/ && swig -c++ -ruby -autorename RubyGosu.swg
-	cd $(GOSU_DIR)/linux/
+# RubyGosu_wrap.cpp:
+#   cd $(GOSU_DIR)/GosuImpl/ && swig -c++ -ruby -autorename RubyGosu.swg
+#   cd $(GOSU_DIR)/linux/
 
 $(RUBYOBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cxx
 	$(CXX) -fPIC $(GOSU_DIR)/GosuImpl/$*.cxx -o $@ $(CXXFLAGS) -c
