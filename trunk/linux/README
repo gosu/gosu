@@ -1,4 +1,0 @@
-In order to compile Gosu for GNU/Linux, please type:
-$ autoconf
-$ ./configure
-$ make

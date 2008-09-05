@@ -1,4 +1,4 @@
-require '../gosu'
+require '../lib/gosu'
 
 class Test < Gosu::Window
   def initialize 

@@ -1,4 +1,4 @@
-require '../gosu'
+require '../lib/gosu'
 require 'rubygems'
 require 'gl'
 require 'glu'

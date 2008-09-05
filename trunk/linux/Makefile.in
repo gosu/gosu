@@ -47,10 +47,10 @@ directories:
 gosu.a: $(OBJS)
 	ar -r gosu.a @GOSU_A_OBJS@
 
-gosu.so : $(OBJS)
-	g++ -shared -o gosu.so ${LIBS} @GOSU_A_OBJS@
+../lib/gosu.so : $(OBJS)
+	g++ -shared -o ../lib/gosu.so ${LIBS} @GOSU_A_OBJS@
 
-install: gosu.so
+install: ../lib/gosu.so
 #   cp -p gosu.so /usr/lib/libgosu.so
 #   cp -pr ../Gosu /usr/include
 #   ldconfig
@@ -61,7 +61,7 @@ uninstall:
 #   ldconfig
 
 clean:
-	-rm -f $(OBJS) gosu.a $(XPLS) $(RUBYOBJS) gosu.so gosu-config
+	-rm -f $(OBJS) gosu.a $(XPLS) $(RUBYOBJS) ../lib/gosu.so gosu-config
 	-rmdir RubyGosu OpenGL Graphics Sockets
 
 $(OBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cpp

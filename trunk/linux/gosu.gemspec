@@ -56,19 +56,15 @@ EOF
   s.homepage = 'http://code.google.com/p/gosu'
   s.summary = '2D game development library.'
 
-  s.extensions = [ 'linux/extconf.rb' ]
-  s.require_path = 'linux'
-
   s.requirements = [ 'g++',
-                     'swig',
                      'pkg-config',
-                     'libgl and libglu',
+                     'libgl',
                      'X11 includes and libraries',
                      'pangoft2',
-                     'fmod or sdlmixer',
+                     'fmod or SDL_mixer',
 
-                     "(packages for debian/ubuntu:\n" +
-                     ' g++ swig pkg-config ruby-dev xorg-dev' +
+                     "(Packages for Debian/Ubuntu:\n" +
+                     ' g++ pkg-config ruby-dev xorg-dev' +
                      ' libsdl-mixer1.2-dev libgl1-mesa-dev libglu1-mesa-dev' +
                      ' libpango1.0-dev' +
                      "\n)"]

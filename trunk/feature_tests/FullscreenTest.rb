@@ -1,4 +1,4 @@
-require '../gosu'
+require '../lib/gosu'
 
 #### Cases that HAVE to work ####
 

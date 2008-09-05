@@ -840,7 +840,7 @@
 					ppc,
 					i386,
 				);
-				CONFIGURATION_BUILD_DIR = ..;
+				CONFIGURATION_BUILD_DIR = ../lib;
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";
@@ -964,7 +964,7 @@
 					ppc,
 					i386,
 				);
-				CONFIGURATION_BUILD_DIR = ..;
+				CONFIGURATION_BUILD_DIR = ../lib;
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";
@@ -1069,7 +1069,7 @@
 		D4CA89520BC68B9E00A431AC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CONFIGURATION_BUILD_DIR = ..;
+				CONFIGURATION_BUILD_DIR = ../lib;
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";
@@ -1107,7 +1107,7 @@
 					ppc,
 					i386,
 				);
-				CONFIGURATION_BUILD_DIR = ..;
+				CONFIGURATION_BUILD_DIR = ../lib;
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";

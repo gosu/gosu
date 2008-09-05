@@ -1,5 +1,5 @@
 # Require cutting-edge development Gosu for testing.
-require '../gosu'
+require '../lib/gosu'
 
 class Test < Gosu::Window
   def initialize 
