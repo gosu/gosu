@@ -66,7 +66,7 @@ Gosu::Image#initialize takes three arguments. First, like all media resources, i
 
 As mentioned in the last lesson, the window's draw() member function is the place to draw everything, so this is the place for us to draw our background image.
 
-The arguments are almost obvious. The image is drawn at (0;0) - the third image is the Z position; again, see BasicConcepts.
+The arguments are almost obvious. The image is drawn at (0;0) - the third argument is the Z position; again, see BasicConcepts.
 
 === Player & movement ===
 
