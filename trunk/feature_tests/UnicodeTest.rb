@@ -27,6 +27,7 @@ class Test < Gosu::Window
     else
       @text ||= ""
       @text += button_id_to_char(id)
+      self.caption = @text
     end
   end
 end

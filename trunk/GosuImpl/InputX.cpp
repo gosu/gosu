@@ -1,5 +1,6 @@
 #include <Gosu/Input.hpp>
 #include <Gosu/TextInput.hpp>
+#include <Gosu/Utility.hpp>
 #include <vector>
 #include <map>
 
@@ -83,11 +84,14 @@ void Gosu::Input::update()
 
         if (event.type == KeyPress)
         {
-            unsigned keysym = XKeycodeToKeysym(pimpl->display,
-                event.xkey.keycode, 0);
-            pimpl->keyMap[keysym] = true;
+            char buf[8];
+            unsigned chars = XLookupString(&event.xkey, buf, sizeof buf, 0, 0);
+            if (chars == 0)
+                continue;
+            wchar_t wc = widen(buf).at(0);
+            pimpl->keyMap[wc] = true;
             if (onButtonDown)
-                onButtonDown(*reinterpret_cast<Button*>(&keysym));
+                onButtonDown(Button(wc));
         }
         else if (event.type == KeyRelease)
         {
@@ -110,6 +114,7 @@ void Gosu::Input::update()
             default: continue;
             }
             pimpl->keyMap[id] = true;
+            // TODO: Here, above, below, who came up with that cast? Uh :)
             if (onButtonDown)
                 onButtonDown(*reinterpret_cast<Button*>(&id));
         }

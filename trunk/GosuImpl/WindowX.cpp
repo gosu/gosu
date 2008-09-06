@@ -264,10 +264,10 @@ void Gosu::Window::setCaption(const std::wstring& caption)
     pimpl->title = caption;
 
     // TODO: Why?!
-    if (!pimpl->showing)
-        return;
+    //if (!pimpl->showing)
+    //    return;
 
-    std::string tmpString = narrow(pimpl->title);
+    std::string tmpString(pimpl->title.begin(), pimpl->title.end());
     std::vector<char> title(pimpl->title.size() + 1);
     std::copy(tmpString.begin(), tmpString.end(), title.begin());
     title.back() = 0;
@@ -280,55 +280,6 @@ void Gosu::Window::setCaption(const std::wstring& caption)
     XFree(titleprop.value);
     XSync(pimpl->display, false);
 }
-
-/*void Gosu::Window::Impl::enterFullscreen()
-{
-    // save old mode.
-    XF86VidModeModeLine* l = (XF86VidModeModeLine*)((char*)&oldMode + sizeof oldMode.dotclock);
-    XF86VidModeGetModeLine(display, XDefaultScreen(display), (int*)&oldMode.dotclock, l);
-
-    // search fitting new mode
-    int modeCnt;
-    XF86VidModeModeInfo** modes;
-    bool ret = XF86VidModeGetAllModeLines(display, XDefaultScreen(disply), &modeCnt, &modes);
-
-    if(!ret) throw std::runtime_error("Can't retrieve XF86 modes, fullscreen impossible.");
-
-    bool switched = false;
-    for(int i = 0; i < modeCnt; i++)
-    {
-        if(modes[i]->hdisplay == width && modes[i]->vdisplay == height)
-        {
-            XF86VidModeSwitchToMode(display, XDefaultScreen(display), modes[i]);
-            switched = true;
-            break;
-        }
-    }
-
-    if(switched)
-    {
-        //XFlush(pimpl->display);
-        //XSync(pimpl->display, 0);
-        XMoveWindow(display, window, 0, 0);
-        XRaiseWindow(dpy, window);
-        XGrabPointer(dpy, window, true, 0, GrabModeAsync, GrabModeAsync, window,
-            None, CurrentTime);
-        XMapRaised(dpy, window);
-        XSync(dpy, window);
-        XWarpPointer(dpy, None, window, 0,0,0,0, 0, 0);
-        XSync(dpy, window);
-        XWarpPointer(dpy, None, window, 0,0,0,0, width/2, height/2);
-    }
-    else
-    {
-        XFree(modes);
-        throw std::runtime_error("Can't find a fitting display mode, fullscreen not supported.");
-    }
-
-    isFullscreen = switched;
-
-    XFree(modes);
-}*/
 
 namespace GosusDarkSide
 {
@@ -369,13 +320,6 @@ void Gosu::Window::show()
             sleep(pimpl->updateInterval - (endTime - startTime));
     }
 
-    // // Close the X window
-    //     if(pimpl->isFullscreen)
-    //     {
-    //         XUngrabPointer(pimpl->dpy, CurrentTime);
-    //         XF86VidModeSwitchToMode(pimpl->dpy, XDefaultScreen(pimpl->dpy), &(pimpl->oldMode));
-    //     }
-
     glXMakeCurrent(pimpl->display, 0, 0);
     pimpl->executeAndWait(XUnmapWindow, UnmapNotify);
     pimpl->mapped = false;
@@ -383,11 +327,6 @@ void Gosu::Window::show()
 
 void Gosu::Window::close()
 {
-    /*if(pimpl->isFullscreen)
-    {
-        XUngrabPointer(pimpl->dpy, CurrentTime);
-        XF86VidModeSwitchToMode(pimpl->dpy, XDefaultScreen(pimpl->dpy), &(pimpl->oldMode));
-    }*/
     pimpl->showing = false;
 }
 
