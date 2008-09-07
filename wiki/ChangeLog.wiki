@@ -10,6 +10,7 @@
   * All: Increased the max OpenGL texture size used for a single image to 1024x1024 (only important if you rely on Image#tex_info)
   * C++: Renamed boundBy() to clamp()
   * Linux: Fixed panning of SDL-based sound system, also added support for graceful degradation if no sound device available (thanks oli...! ;))
+  * Linux: Fixed bugs with Unicode input chars
   * Linux: Windowed mode fixed on Compiz, fullscreen mode fixed everywhere.
   * Linux: Mouse wheel should work now.
   * Windows, Linux: Fixed an unlikely lockup.
