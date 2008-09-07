@@ -1,7 +1,7 @@
 #summary Log of Gosu's development.
 #labels Featured
 
-=0.7.9.4 (WIP)=
+=0.7.10 (WIP)=
   * All: Added Song::volume()/Song#volume (thanks rabbitblue!)
   * All: Fixed Gosu::angleDiff
   * All: Fixed loading of PNG files with transparent palette entries.
