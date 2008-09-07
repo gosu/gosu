@@ -12,7 +12,7 @@ COMMON_FILES = FileList[
 COMMON_CPP_FILES = COMMON_FILES + FileList[
   'examples/*.cpp',
   'examples/media/*',
-  'reference/**/*'
+  'reference/**/*',
 ]
 
 COMMON_RUBY_FILES = COMMON_FILES + FileList[
@@ -20,12 +20,13 @@ COMMON_RUBY_FILES = COMMON_FILES + FileList[
   'examples/media/*',
 ]
 
-SOURCE_FILES = COMMON_CPP_FILES + COMMON_RUBY_FILES + FileList [
+SOURCE_FILES = COMMON_CPP_FILES + COMMON_RUBY_FILES + FileList[
+  'Rakefile',
   'Gosu/**/*', 'GosuImpl/**/*',
   'linux/configure', 'linux/configure.ac', 'linux/Makefile.in',
   'mac/Gosu.xcodeproj/**/*', 'mac/*.a', 'mac/English.lproj/**/*',
   'mac/Gosu-Info.plist', 'mac/RubyGosu Template-Info.plist',
-  'windows/**/*'
+  'windows/**/*',
 ]
 
 BASE_SPEC = Gem::Specification.new do |s|
@@ -53,9 +54,14 @@ EOS
   s.summary = '2D game development library.'
 end
 
+desc "Build C++ reference with doxygen"
+task :cpp_docs do
+  sh "cd reference && doxygen"
+end
+
 Rake.application.in_namespace :mac do
   desc "Build Gosu.framework"
-  task :cpp do
+  task :cpp => :cpp_docs do
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target Gosu -configuration Release"
   end
 
@@ -80,12 +86,12 @@ Rake.application.in_namespace :mac do
        " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-OSX\" #{MAC_ARCHIVE_FILENAME}"
   end
 
+  task :gem => :ruby
+
   MAC_SPEC = BASE_SPEC.dup
   MAC_SPEC.platform = 'universal-darwin'
   MAC_SPEC.files = COMMON_RUBY_FILES + ['lib/gosu.bundle']
   Rake::GemPackageTask.new(MAC_SPEC) { |t| t.package_dir = 'public/mac_gem' }
-  
-  task :package => :ruby
 end
 
 # TODO: Windows tasks
@@ -94,7 +100,7 @@ Rake.application.in_namespace :linux do
   LINUX_ARCHIVE_FILENAME = "public/gosu-source-#{GOSU_VERSION}.tar.gz"
 
   desc "Build the archive #{LINUX_ARCHIVE_FILENAME}"
-  task :archive => :build do
+  task :archive => [:build, :cpp_reference] do
     files = COMMON_CPP_FILES + COMMON_RUBY_FILES
     sh "tar -czf #{LINUX_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
   end
@@ -108,7 +114,7 @@ Rake.application.in_namespace :linux do
 
   LINUX_SPEC = BASE_SPEC.dup
   LINUX_SPEC.platform = 'ruby'
-  LINUX_SPEC.files = COMMON_RUBY_FILES + ['linux/configure.ac', 'linux/Makefile.in', 'linux/extconf.rb']
+  LINUX_SPEC.files = COMMON_RUBY_FILES + ['linux/configure.ac', 'linux/Makefile.in', 'linux/extconf.rb', "Ruby Source TODO"]
   LINUX_SPEC.extensions = [ 'linux/extconf.rb' ]
   LINUX_SPEC.require_path = 'lib'
   LINUX_SPEC.requirements = ['g++',
