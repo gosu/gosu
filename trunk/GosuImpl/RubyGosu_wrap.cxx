@@ -1969,6 +1969,7 @@ static VALUE mGosu;
 #undef close
 #undef read
 #undef sleep
+#undef Sleep
 
 //#ifndef WIN32
 //#include <Gosu/Async.hpp>

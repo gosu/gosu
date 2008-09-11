@@ -96,6 +96,19 @@ end
 
 # TODO: Windows tasks
 
+Rake.application.in_namespace :win do
+  WINDOWS_CPP_ARCHIVE_FILENAME = "public/gosu-windows-cpp-#{GOSU_VERSION}.zip"
+  
+  desc "Build the archive #{MAC_ARCHIVE_FILENAME}"
+  task :archive do #=> [:cpp, :ruby] do
+    files = COMMON_CPP_FILES + ['lib/Gosu.lib', 'lib/GosuDebug.lib']
+    sh "zip #{WINDOWS_CPP_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
+  end
+
+  WINDOWS_RUBY_ARCHIVE_FILENAME = "public/gosu-windows-ruby-#{GOSU_VERSION}.zip"
+
+end
+
 Rake.application.in_namespace :linux do
   LINUX_ARCHIVE_FILENAME = "public/gosu-source-#{GOSU_VERSION}.tar.gz"
 
