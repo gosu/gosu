@@ -110,4 +110,17 @@ AC_SUBST(TO_BE_MADE)
 AC_CHECK_LIB(rt, sched_setscheduler, LIBS="$LIBS -lrt", AC_CHECK_LIB(c, sched_setscheduler, , AC_MSG_ERROR(Missing librt functionality), ), )
 AC_SUBST(HAVE_LIBRT)
 
+if test $GOSU_MAKEFILE_FOR_GEM; then
+  # If called by extconf.rb, let "make install" only build gosu.so.
+  INSTALL_ACTION="../lib/gosu.so"
+  UNINSTALL_ACTION=""
+else
+  # Otherwise, install/uninstall the C++ version of Gosu.
+  INSTALL_ACTION="cpp_install"
+  UNINSTALL_ACTION="cpp_uninstall"
+fi
+  
+AC_SUBST(INSTALL_ACTION)
+AC_SUBST(UNINSTALL_ACTION)
+
 AC_OUTPUT(Makefile)

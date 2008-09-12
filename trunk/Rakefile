@@ -166,7 +166,7 @@ Rake.application.in_namespace :linux do
  
                       "(Packages for Debian/Ubuntu:\n" +
                       ' g++ pkg-config ruby-dev xorg-dev' +
-                      ' libsdl-mixer1.2-dev libgl1-mesa-dev libglu1-mesa-dev' +
+                      ' libsdl-mixer1.2-dev libgl1-mesa-dev' +
                       ' libpango1.0-dev' +
                       "\n)"]
   end

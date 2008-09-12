@@ -6,6 +6,6 @@ require 'mkmf'
 
 Dir.chdir File.dirname($0)
 
-exit 1 if not system('./configure')
+exit 1 if not system('env GOSU_MAKEFILE_FOR_GEM=1 ./configure')
 
 exit 0

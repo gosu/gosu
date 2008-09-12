@@ -47,15 +47,18 @@ directories:
 ../lib/libgosu.so: 
 	g++ -shared -o ../lib/libgosu.so ${LIBS} @GOSU_A_OBJS@
 
-#../lib/gosu.so
-install:
+install: @INSTALL_ACTION@
+
+uninstall: @UNINSTALL_ACTION@
+
+cpp_install:
 	cp -p ../lib/libgosu.a /usr/lib/
 	cp -p ../lib/libgosu.so /usr/lib/
 	cp -p ../bin/gosu-config /usr/bin/
 	cp -pr ../Gosu /usr/include
 	ldconfig
 
-uninstall:
+cpp_uninstall:
 	rm /usr/lib/libgosu.a
 	rm /usr/lib/libgosu.so
 	rm /usr/bin/gosu-config
@@ -63,7 +66,7 @@ uninstall:
 	ldconfig
 
 clean:
-	rm -f $(OBJS) $(XPLS) $(RUBYOBJS) ../lib/*
+	rm -f $(OBJS) $(XPLS) $(RUBYOBJS) ../lib/*gosu* ../bin/gosu-config
 	rmdir RubyGosu OpenGL Graphics Sockets
 
 $(OBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cpp
