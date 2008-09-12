@@ -70,35 +70,3 @@ if ARGV[0] == 'mac' then
   mac.targz_and_kill
   `./googlecode_upload.py --summary="Gosu #{ARGV[1]} precompiled for Mac OS X (C++ & Ruby)" --project=gosu --user=julianraschke --labels="Featured,Type-Archive,OpSys-OSX" gosu-mac-#{ARGV[1]}.tar.gz`
 end
-
-if ARGV[0] == 'windows-cpp' then
-  windows_cpp = Package.new("gosu-windows-cpp-#{ARGV[1]}")
-  windows_cpp.add_file("COPYING.txt")
-  windows_cpp.add_file("README.txt")
-  windows_cpp.add_file("Gosu.lib")
-  windows_cpp.add_file("GosuDebug.lib")
-  windows_cpp.add_file("fmod.dll")
-  windows_cpp.add_dir("Gosu")
-  windows_cpp.add_dir("reference")
-  windows_cpp.add_file("examples/Tutorial.cpp")
-  windows_cpp.add_file("examples/TextInput.cpp")
-  windows_cpp.add_file("examples/media/Beep.wav")
-  windows_cpp.add_file("examples/media/Space.png")
-  windows_cpp.add_file("examples/media/Star.png")
-  windows_cpp.add_file("examples/media/Starfighter.bmp")
-  windows_cpp.zip_and_kill
-  `./googlecode_upload.py --summary="Gosu #{ARGV[1]} precompiled for 32-bit Windows (C++)" --project=gosu --user=julianraschke --labels="Featured,Type-Archive,OpSys-Windows" gosu-windows-cpp-#{ARGV[1]}.zip`
-end
-
-if ARGV[0] == 'windows-ruby' then
-  windows_ruby = Package.new("gosu-windows-ruby-#{ARGV[1]}")
-  windows_ruby.add_file("COPYING.txt")
-  windows_ruby.add_file("README.txt")
-  windows_ruby.add_file("gosu.so")
-  windows_ruby.add_file("fmod.dll")
-  windows_ruby.add_dir("examples")
-  windows_ruby.del_file("examples/Tutorial.cpp")
-  windows_ruby.del_file("examples/TextInput.cpp")
-  windows_ruby.zip_and_kill
-  `./googlecode_upload.py --summary="Gosu #{ARGV[1]} precompiled for 32-bit Windows (Ruby)" --project=gosu --user=julianraschke --labels="Featured,Type-Archive,OpSys-Windows" gosu-windows-ruby-#{ARGV[1]}.zip`
-end

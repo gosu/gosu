@@ -29,25 +29,24 @@ SOURCE_FILES = COMMON_CPP_FILES + COMMON_RUBY_FILES + FileList[
   'windows/**/*',
 ]
 
-BASE_SPEC = Gem::Specification.new do |s|
+# Sets everything except 'platform' and 'files'.
+def apply_gemspec_defaults s
   #### Basic information.
   s.name = 'gosu'
   s.version = GOSU_VERSION
-  s.platform = 'placeholder'
   s.summary = '2D game development library.'
   s.description = <<EOS
   2D game development library.
-  
+
   Gosu features easy to use and game-friendly interfaces to 2D graphics
   and text (accelerated by 3D hardware), sound samples and music as well as
   keyboard, mouse and gamepad/joystick input.
-  
+
   Also includes demos for integration with RMagick, Chipmunk and Ruby-OpenGL.
 EOS
   s.authors = ['Julian Raschke', 'Jan Luecker']
   s.date = Time.now.strftime '%Y-%m-%d'
   s.email = 'julian@raschke.de'
-  s.files = ['placeholder']
   s.homepage = 'http://code.google.com/p/gosu/'
   s.require_paths = ['lib']
   s.required_ruby_version = Gem::Requirement.new('>= 1.8.2')
@@ -88,9 +87,11 @@ Rake.application.in_namespace :mac do
 
   task :gem => :ruby
 
-  MAC_SPEC = BASE_SPEC.dup
-  MAC_SPEC.platform = 'universal-darwin'
-  MAC_SPEC.files = COMMON_RUBY_FILES + ['lib/gosu.bundle']
+  MAC_SPEC = Gem::Specification.new do |s|
+    apply_gemspec_defaults s
+    s.platform = 'universal-darwin'
+    s.files = COMMON_RUBY_FILES + ['lib/gosu.bundle']
+  end
   Rake::GemPackageTask.new(MAC_SPEC) { |t| t.package_dir = 'public/mac_gem' }
 end
 
@@ -99,14 +100,41 @@ end
 Rake.application.in_namespace :win do
   WINDOWS_CPP_ARCHIVE_FILENAME = "public/gosu-windows-cpp-#{GOSU_VERSION}.zip"
   
-  desc "Build the archive #{MAC_ARCHIVE_FILENAME}"
-  task :archive do #=> [:cpp, :ruby] do
-    files = COMMON_CPP_FILES + ['lib/Gosu.lib', 'lib/GosuDebug.lib']
+  desc "Build the archive #{WINDOWS_CPP_ARCHIVE_FILENAME}"
+  task :cpp_archive do #=> [:cpp] do
+    files = COMMON_CPP_FILES + ['lib/Gosu.lib', 'lib/GosuDebug.lib', 'lib/fmod.dll']
     sh "zip #{WINDOWS_CPP_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
+  end
+
+  desc "Releases the archive #{WINDOWS_CPP_ARCHIVE_FILENAME} on GoogleCode"
+  task :cpp_release => :cpp_archive do
+    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} precompiled for 32-bit Windows (C++)\"" +
+       " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-Windows\" #{MAC_ARCHIVE_FILENAME}"
   end
 
   WINDOWS_RUBY_ARCHIVE_FILENAME = "public/gosu-windows-ruby-#{GOSU_VERSION}.zip"
 
+  desc "Build the archive #{WINDOWS_RUBY_ARCHIVE_FILENAME}"
+  task :ruby_archive do #=> [:ruby] do
+    files = COMMON_RUBY_FILES + ['lib/gosu.so', 'lib/fmod.dll']
+    sh "zip #{WINDOWS_RUBY_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
+  end
+
+  desc "Releases the archive #{WINDOWS_RUBY_ARCHIVE_FILENAME} on GoogleCode"
+  task :ruby_release => :ruby_archive do
+    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} precompiled for 32-bit Windows (Ruby)\"" +
+       " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-Windows\" #{MAC_ARCHIVE_FILENAME}"
+  end
+  
+  desc "Release both #{WINDOWS_CPP_ARCHIVE_FILENAME} and #{WINDOWS_RUBY_ARCHIVE_FILENAME}"
+  task :release => [:cpp_release, :ruby_release]
+
+  WINDOWS_SPEC = Gem::Specification.new do |s|
+    apply_gemspec_defaults s
+    s.platform = 'x86-mswin32-60'
+    s.files = COMMON_RUBY_FILES + ['lib/gosu.so', 'lib/fmod.dll']
+  end
+  Rake::GemPackageTask.new(WINDOWS_SPEC) { |t| t.package_dir = 'public/windows_gem' }
 end
 
 Rake.application.in_namespace :linux do
@@ -124,24 +152,26 @@ Rake.application.in_namespace :linux do
     #sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} precompiled for Mac OS X (C++ & Ruby)\"" +
     #   " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-OSX\" #{MAC_ARCHIVE_FILENAME}"
   end
-
-  LINUX_SPEC = BASE_SPEC.dup
-  LINUX_SPEC.platform = 'ruby'
-  LINUX_SPEC.files = COMMON_RUBY_FILES + ['linux/configure.ac', 'linux/Makefile.in', 'linux/extconf.rb', "Ruby Source TODO"]
-  LINUX_SPEC.extensions = [ 'linux/extconf.rb' ]
-  LINUX_SPEC.require_path = 'lib'
-  LINUX_SPEC.requirements = ['g++',
-                             'pkg-config',
-                             'libgl',
-                             'X11 includes and libraries',
-                             'pangoft2',
-                             'fmod or SDL_mixer',
-
-                             "(Packages for Debian/Ubuntu:\n" +
-                             ' g++ pkg-config ruby-dev xorg-dev' +
-                             ' libsdl-mixer1.2-dev libgl1-mesa-dev libglu1-mesa-dev' +
-                             ' libpango1.0-dev' +
-                             "\n)"]
+  
+  LINUX_SPEC = Gem::Specification.new do |s|
+    apply_gemspec_defaults s
+    s.platform = 'ruby'
+    s.files = COMMON_RUBY_FILES + ['linux/configure.ac', 'linux/Makefile.in', 'linux/extconf.rb', "Ruby Source TODO"]
+    s.extensions = [ 'linux/extconf.rb' ]
+    s.require_path = 'lib'
+    s.requirements = ['g++',
+                      'pkg-config',
+                      'libgl',
+                      'X11 includes and libraries',
+                      'pangoft2',
+                      'fmod or SDL_mixer',
+ 
+                      "(Packages for Debian/Ubuntu:\n" +
+                      ' g++ pkg-config ruby-dev xorg-dev' +
+                      ' libsdl-mixer1.2-dev libgl1-mesa-dev libglu1-mesa-dev' +
+                      ' libpango1.0-dev' +
+                      "\n)"]
+  end
   
   Rake::GemPackageTask.new(LINUX_SPEC) { |t| t.package_dir = 'public/linux_gem' }
 end
