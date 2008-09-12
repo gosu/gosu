@@ -12,6 +12,7 @@
   * Linux: Fixed panning of SDL-based sound system, also added support for graceful degradation if no sound device available (thanks oli...! ;))
   * Linux: Windowed mode fixed on Compiz, fullscreen mode fixed everywhere.
   * Linux: Mouse wheel should work now.
+  * Linux: Now available as a Ruby gem! (Thanks to Leonardo Boiko for the contribution)
   * Windows, Linux: Fixed an unlikely lockup.
 
 =0.7.9=
