@@ -84,20 +84,24 @@ void Gosu::Input::update()
 
         if (event.type == KeyPress)
         {
-            char buf[8];
-            unsigned chars = XLookupString(&event.xkey, buf, sizeof buf, 0, 0);
-            unsigned keysym = XKeycodeToKeysym(pimpl->display, event.xkey.keycode, 0);
-            unsigned id = (chars == 0) ? keysym : widen(buf).at(0);
+            // char buf[8];
+            // unsigned chars = XLookupString(&event.xkey, buf, sizeof buf, 0, 0);
+            // unsigned keysym = XKeycodeToKeysym(pimpl->display, event.xkey.keycode, 0);
+            // unsigned id = (chars == 0) ? keysym : widen(buf).at(0);
+
+            unsigned id = XKeycodeToKeysym(pimpl->display, event.xkey.keycode, 0);
             pimpl->keyMap[id] = true;
             if (onButtonDown)
                 onButtonDown(Button(id));
         }
         else if (event.type == KeyRelease)
         {
-            char buf[8];
-            unsigned chars = XLookupString(&event.xkey, buf, sizeof buf, 0, 0);
-            unsigned keysym = XKeycodeToKeysym(pimpl->display, event.xkey.keycode, 0);
-            unsigned id = (chars == 0) ? keysym : widen(buf).at(0);
+            // char buf[8];
+            // unsigned chars = XLookupString(&event.xkey, buf, sizeof buf, 0, 0);
+            // unsigned keysym = XKeycodeToKeysym(pimpl->display, event.xkey.keycode, 0);
+            // unsigned id = (chars == 0) ? keysym : widen(buf).at(0);
+
+            unsigned id = XKeycodeToKeysym(pimpl->display, event.xkey.keycode, 0);
             pimpl->keyMap[id] = false;
             if (onButtonUp) 
                 onButtonUp(Button(id));
