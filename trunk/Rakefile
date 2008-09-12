@@ -139,7 +139,7 @@ Rake.application.in_namespace :linux do
   LINUX_ARCHIVE_FILENAME = "public/gosu-source-#{GOSU_VERSION}.tar.gz"
 
   desc "Build the archive #{LINUX_ARCHIVE_FILENAME}"
-  task :archive => [:build, :cpp_reference] do
+  task :archive => [:cpp_docs] do
     files = SOURCE_FILES
     sh "tar -czf #{LINUX_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
   end
