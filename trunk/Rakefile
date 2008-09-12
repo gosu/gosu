@@ -154,7 +154,7 @@ Rake.application.in_namespace :linux do
   LINUX_SPEC = Gem::Specification.new do |s|
     apply_gemspec_defaults s
     s.platform = 'ruby'
-    s.files = COMMON_RUBY_FILES + ['linux/configure.ac', 'linux/Makefile.in', 'linux/extconf.rb', "Ruby Source TODO"]
+    s.files = SOURCE_FILES + [ 'linux/extconf.rb' ]
     s.extensions = [ 'linux/extconf.rb' ]
     s.require_path = 'lib'
     s.requirements = ['g++',

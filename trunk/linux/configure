@@ -682,6 +682,8 @@ DLOPEN_LIB
 GOSU_A_OBJS
 TO_BE_MADE
 HAVE_LIBRT
+INSTALL_ACTION
+UNINSTALL_ACTION
 LIBOBJS
 LTLIBOBJS'
 ac_subst_files=''
@@ -4610,6 +4612,19 @@ fi
 
 
 
+if test $GOSU_MAKEFILE_FOR_GEM; then
+  # If called by extconf.rb, let "make install" only build gosu.so.
+  INSTALL_ACTION="../lib/gosu.so"
+  UNINSTALL_ACTION=""
+else
+  # Otherwise, install/uninstall the C++ version of Gosu.
+  INSTALL_ACTION="cpp_install"
+  UNINSTALL_ACTION="cpp_uninstall"
+fi
+
+
+
+
 ac_config_files="$ac_config_files Makefile"
 
 cat >confcache <<\_ACEOF
@@ -5308,11 +5323,13 @@ DLOPEN_LIB!$DLOPEN_LIB$ac_delim
 GOSU_A_OBJS!$GOSU_A_OBJS$ac_delim
 TO_BE_MADE!$TO_BE_MADE$ac_delim
 HAVE_LIBRT!$HAVE_LIBRT$ac_delim
+INSTALL_ACTION!$INSTALL_ACTION$ac_delim
+UNINSTALL_ACTION!$UNINSTALL_ACTION$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 70; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 72; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
