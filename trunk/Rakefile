@@ -95,8 +95,6 @@ Rake.application.in_namespace :mac do
   Rake::GemPackageTask.new(MAC_SPEC) { |t| t.package_dir = 'public/mac_gem' }
 end
 
-# TODO: Windows tasks
-
 Rake.application.in_namespace :win do
   WINDOWS_CPP_ARCHIVE_FILENAME = "public/gosu-windows-cpp-#{GOSU_VERSION}.zip"
   
@@ -109,7 +107,7 @@ Rake.application.in_namespace :win do
   desc "Releases the archive #{WINDOWS_CPP_ARCHIVE_FILENAME} on GoogleCode"
   task :cpp_release => :cpp_archive do
     sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} precompiled for 32-bit Windows (C++)\"" +
-       " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-Windows\" #{MAC_ARCHIVE_FILENAME}"
+       " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-Windows\" #{WINDOWS_CPP_ARCHIVE_FILENAME}"
   end
 
   WINDOWS_RUBY_ARCHIVE_FILENAME = "public/gosu-windows-ruby-#{GOSU_VERSION}.zip"
@@ -123,7 +121,7 @@ Rake.application.in_namespace :win do
   desc "Releases the archive #{WINDOWS_RUBY_ARCHIVE_FILENAME} on GoogleCode"
   task :ruby_release => :ruby_archive do
     sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} precompiled for 32-bit Windows (Ruby)\"" +
-       " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-Windows\" #{MAC_ARCHIVE_FILENAME}"
+       " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-Windows\" #{WINDOWS_RUBY_ARCHIVE_FILENAME}"
   end
   
   desc "Release both #{WINDOWS_CPP_ARCHIVE_FILENAME} and #{WINDOWS_RUBY_ARCHIVE_FILENAME}"
@@ -142,15 +140,14 @@ Rake.application.in_namespace :linux do
 
   desc "Build the archive #{LINUX_ARCHIVE_FILENAME}"
   task :archive => [:build, :cpp_reference] do
-    files = COMMON_CPP_FILES + COMMON_RUBY_FILES
+    files = SOURCE_FILES
     sh "tar -czf #{LINUX_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
   end
 
   desc "Releases the archive #{LINUX_ARCHIVE_FILENAME} on GoogleCode"
   task :release => :archive do
-    #TODO
-    #sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} precompiled for Mac OS X (C++ & Ruby)\"" +
-    #   " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-OSX\" #{MAC_ARCHIVE_FILENAME}"
+    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} source package (to compile on Linux)\"" +
+       " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-All\" #{LINUX_ARCHIVE_FILENAME}"
   end
   
   LINUX_SPEC = Gem::Specification.new do |s|
