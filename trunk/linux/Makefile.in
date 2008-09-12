@@ -21,7 +21,7 @@ RUBYOBJS = RubyGosu_wrap.o
 
 OBJS = @GOSU_A_OBJS@
 
-XPLS = $(GOSU_DIR)/examples/Tutorial
+XPLS = $(GOSU_DIR)/examples/Tutorial $(GOSU_DIR)/examples/TextInput
 
 CXXFLAGS += -fPIC -I.. @AUDIO_INC@ -Wall @PANGO_CXX_FLAGS@ @X_INCS@ \
 	    @HAVE_SYS_STAT_H@ @HAVE_EACCESS@ -I@RUBY_INC_DIR@ \
@@ -35,6 +35,7 @@ all: @TO_BE_MADE@
 
 directories:
 	if [ \! -d ../bin ]; then mkdir ../bin; fi
+	if [ \! -d ../lib ]; then mkdir ../lib; fi
 	if [ \! -d RubyGosu ]; then mkdir RubyGosu; fi
 	if [ \! -d OpenGL ]; then mkdir OpenGL; fi
 	if [ \! -d Graphics ]; then mkdir Graphics; fi

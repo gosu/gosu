@@ -7,7 +7,7 @@ AC_INIT(Gosu, 0.7, julian@raschke.de)
 GOSU_A_OBJS=\$\(BASE_OBJS\)
 GOSU_A_OBJS=${GOSU_A_OBJS}" \$(NET_OBJS)"
 
-TO_BE_MADE="directories ../lib/libgosu.a ../lib/libgosu.so examples gosu-config"
+TO_BE_MADE="directories ../lib/libgosu.a ../lib/libgosu.so examples ../bin/gosu-config"
 
 # pkg-config...whatever that is.
 AC_PROG_CXX
@@ -92,7 +92,7 @@ RUBY_ARCH_DIR=`${ruby} -e 'require "rbconfig";print File.join(Config::CONFIG[["r
 RUBY_LIBS=`${ruby} -e 'require "rbconfig";print(Config::CONFIG[["LIBRUBYARG"]] || "-l" + Config::CONFIG[["ruby_install_name"]])'`
 # 2> /dev/null
 
-if test $RUBY_INC_DIR; then
+if test -e "$RUBY_INC_DIR/ruby.h"; then
   AC_SUBST(RUBY_INC_DIR)
   AC_SUBST(RUBY_ARCH_DIR)
   AC_SUBST(RUBY_LIBS)
@@ -106,7 +106,7 @@ AC_SUBST(DLOPEN_LIB)
 AC_SUBST(GOSU_A_OBJS)
 AC_SUBST(TO_BE_MADE)
 
-# librb
+# librt
 AC_CHECK_LIB(rt, sched_setscheduler, LIBS="$LIBS -lrt", AC_CHECK_LIB(c, sched_setscheduler, , AC_MSG_ERROR(Missing librt functionality), ), )
 AC_SUBST(HAVE_LIBRT)
 
