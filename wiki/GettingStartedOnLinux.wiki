@@ -29,7 +29,7 @@ sudo apt-get install g++ libgl1-mesa-dev libpango1.0-dev libboost-dev ruby ruby1
 
 = Compiling Gosu =
 
-To compile Gosu,`cd` into the `linux` subdirectory and run:
+To compile Gosu, `cd` into the `linux` subdirectory and run:
 
 {{{
 ./configure
