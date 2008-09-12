@@ -41,7 +41,7 @@ namespace Gosu
         kbRightControl = XK_Control_R,
         kbLeftAlt = XK_Alt_L,
         kbRightAlt = XK_Alt_R,
-        kbLeftMeta = 0,
+        kbLeftMeta = 0, // TODO?!
         kbRightMeta = 0,
         kbBackspace = XK_BackSpace,
         kbLeft = XK_Left,
@@ -69,7 +69,7 @@ namespace Gosu
         kbNumpadSubtract = XK_KP_Subtract,
         kbNumpadMultiply = XK_KP_Multiply,
         kbNumpadDivide = XK_KP_Divide,
-        kbRangeEnd = 0xff,
+        kbRangeEnd = 0xffff,
         
         msRangeBegin,
         msLeft = msRangeBegin,

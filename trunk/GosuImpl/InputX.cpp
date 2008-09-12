@@ -86,20 +86,21 @@ void Gosu::Input::update()
         {
             char buf[8];
             unsigned chars = XLookupString(&event.xkey, buf, sizeof buf, 0, 0);
-            if (chars == 0)
-                continue;
-            wchar_t wc = widen(buf).at(0);
-            pimpl->keyMap[wc] = true;
+            unsigned keysym = XKeycodeToKeysym(pimpl->display, event.xkey.keycode, 0);
+            unsigned id = (chars == 0) ? keysym : widen(buf).at(0);
+            pimpl->keyMap[id] = true;
             if (onButtonDown)
-                onButtonDown(Button(wc));
+                onButtonDown(Button(id));
         }
         else if (event.type == KeyRelease)
         {
-            unsigned keysym = XKeycodeToKeysym(pimpl->display,
-                event.xkey.keycode, 0);
-            pimpl->keyMap[keysym] = false;
-            if (onButtonUp)
-                onButtonUp(*reinterpret_cast<Button*>(&keysym));
+            char buf[8];
+            unsigned chars = XLookupString(&event.xkey, buf, sizeof buf, 0, 0);
+            unsigned keysym = XKeycodeToKeysym(pimpl->display, event.xkey.keycode, 0);
+            unsigned id = (chars == 0) ? keysym : widen(buf).at(0);
+            pimpl->keyMap[id] = false;
+            if (onButtonUp) 
+                onButtonUp(Button(id));
         }
         else if (event.type == ButtonPress)
         {
