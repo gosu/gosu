@@ -2,7 +2,7 @@
 
 = Dependencies =
 
-To compile Gosu, you will need the following packages (install via sudo apt-get install <packagename>):
+To compile Gosu, you will need the following packages (install via `sudo apt-get install <packagename>`):
   * g++
   * libgl1-mesa-dev
   * libpango1.0-dev
