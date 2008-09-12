@@ -81,7 +81,7 @@ Rake.application.in_namespace :mac do
 
   desc "Releases the archive #{MAC_ARCHIVE_FILENAME} on GoogleCode"
   task :release => :archive do
-    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} precompiled for Mac OS X (C++ & Ruby)\"" +
+    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION}, compiled for Mac OS X (C++ & Ruby)\"" +
        " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-OSX\" #{MAC_ARCHIVE_FILENAME}"
   end
 
@@ -106,7 +106,7 @@ Rake.application.in_namespace :win do
 
   desc "Releases the archive #{WINDOWS_CPP_ARCHIVE_FILENAME} on GoogleCode"
   task :cpp_release => :cpp_archive do
-    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} precompiled for 32-bit Windows (C++)\"" +
+    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION}, compiled for 32-bit Windows (C++)\"" +
        " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-Windows\" #{WINDOWS_CPP_ARCHIVE_FILENAME}"
   end
 
@@ -120,7 +120,7 @@ Rake.application.in_namespace :win do
 
   desc "Releases the archive #{WINDOWS_RUBY_ARCHIVE_FILENAME} on GoogleCode"
   task :ruby_release => :ruby_archive do
-    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} precompiled for 32-bit Windows (Ruby)\"" +
+    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION}, compiled for 32-bit Windows (Ruby)\"" +
        " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-Windows\" #{WINDOWS_RUBY_ARCHIVE_FILENAME}"
   end
   

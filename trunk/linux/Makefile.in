@@ -15,88 +15,80 @@ BASE_OBJS = Math.o Utility.o IO.o FileUnix.o TimingUnix.o WindowX.o	\
 NET_OBJS = Sockets/CommSocket.o Sockets/ListenerSocket.o	\
 	   Sockets/Socket.o Sockets/MessageSocket.o
 
-OPENAL_OBJ = AudioOpenAL.o
 SDLMIXER_OBJ = AudioSDL.o
 FMOD_OBJ = AudioFmod.o
 RUBYOBJS = RubyGosu_wrap.o
 
 OBJS = @GOSU_A_OBJS@
-# $(BASE_OBJS) $(NET_OBJS) $(GOSUMAIN_OBJ) $(FMOD_OBJ)
-# $(OPENAL_OBJ)
 
 XPLS = $(GOSU_DIR)/examples/Tutorial
 
-CXXFLAGS += -fPIC -I.. @AUDIO_INC@ -Wall @PANGO_CXX_FLAGS@ @X_INCS@	\
-	    @HAVE_SYS_STAT_H@ @HAVE_EACCESS@ -I@RUBY_INC_DIR@		\
-	    -I@RUBY_ARCH_DIR@ -fPIC -DNDEBUG -O3 -pipe			\
-	    -fomit-frame-pointer
+CXXFLAGS += -fPIC -I.. @AUDIO_INC@ -Wall @PANGO_CXX_FLAGS@ @X_INCS@ \
+	    @HAVE_SYS_STAT_H@ @HAVE_EACCESS@ -I@RUBY_INC_DIR@ \
+	    -I@RUBY_ARCH_DIR@ -fPIC -DNDEBUG -O3 -pipe -fomit-frame-pointer
 
-LIBS = @AUDIO_LIBS@ -L@x_libraries@ -lX11 \
-    @PANGO_LIBS@ -lpng -lGL #-lboost_thread
+LIBS = @AUDIO_LIBS@ -L@x_libraries@ -lX11 @PANGO_LIBS@ -lpng -lGL #-lboost_thread
 
 RUBY_LIBS = $(LIBS) @RUBY_LIBS@ @DLOPEN_LIB@ -lm -lc -lcrypt #-lboost_thread
 
 all: @TO_BE_MADE@
 
 directories:
+	if [ \! -d ../bin ]; then mkdir ../bin; fi
 	if [ \! -d RubyGosu ]; then mkdir RubyGosu; fi
 	if [ \! -d OpenGL ]; then mkdir OpenGL; fi
 	if [ \! -d Graphics ]; then mkdir Graphics; fi
 	if [ \! -d Sockets ]; then mkdir Sockets; fi
 
-gosu.a: $(OBJS)
-	ar -r gosu.a @GOSU_A_OBJS@
+../lib/libgosu.a: $(OBJS)
+	ar -r ../lib/libgosu.a @GOSU_A_OBJS@
 
-../lib/gosu.so : $(OBJS)
-	g++ -shared -o ../lib/gosu.so ${LIBS} @GOSU_A_OBJS@
+../lib/libgosu.so: 
+	g++ -shared -o ../lib/libgosu.so ${LIBS} @GOSU_A_OBJS@
 
-install: ../lib/gosu.so
-#   cp -p gosu.so /usr/lib/libgosu.so
-#   cp -pr ../Gosu /usr/include
-#   ldconfig
-# 
+#../lib/gosu.so
+install:
+	cp -p ../lib/libgosu.a /usr/lib/
+	cp -p ../lib/libgosu.so /usr/lib/
+	cp -p ../bin/gosu-config /usr/bin/
+	cp -pr ../Gosu /usr/include
+	ldconfig
+
 uninstall:
-#   rm /usr/lib/libgosu.so
-#   rm -rf /usr/include/Gosu
-#   ldconfig
+	rm /usr/lib/libgosu.a
+	rm /usr/lib/libgosu.so
+	rm /usr/bin/gosu-config
+	rm -rf /usr/include/Gosu
+	ldconfig
 
 clean:
-	-rm -f $(OBJS) gosu.a $(XPLS) $(RUBYOBJS) ../lib/gosu.so gosu-config
-	-rmdir RubyGosu OpenGL Graphics Sockets
+	rm -f $(OBJS) $(XPLS) $(RUBYOBJS) ../lib/*
+	rmdir RubyGosu OpenGL Graphics Sockets
 
 $(OBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cpp
 	$(CXX) $(GOSU_DIR)/GosuImpl/$*.cpp -o $@ $(CXXFLAGS) -c
 
-examples: $(XPLS) gosu.a
+examples: $(XPLS) ../lib/libgosu.a
 
-$(XPLS): %: %.cpp gosu.a
-	$(CXX) $@.cpp -o $@ $(CXXFLAGS) $(LIBS) gosu.a
+$(XPLS): %: %.cpp ../lib/libgosu.a
+	$(CXX) $@.cpp -o $@ $(CXXFLAGS) $(LIBS) ../lib/libgosu.a
 
-gosu-config:
-	echo "#!/bin/bash" > gosu-config
-	echo "while test \$$# -gt 0; do" >> gosu-config
-	echo "    case \$$1 in" >> gosu-config
-	echo "    --libs)" >> gosu-config
-	echo '    echo "$(LIBS)";;' >> gosu-config
-	echo "    --cxxflags)" >> gosu-config
-	echo '    echo "$(CXXFLAGS)";;' >> gosu-config
-	echo "    esac" >> gosu-config
-	echo "    shift" >> gosu-config
-	echo "done" >> gosu-config
-	chmod u+x gosu-config
+../bin/gosu-config:
+	echo "#!/bin/bash" > ../bin/gosu-config
+	echo "while test \$$# -gt 0; do" >> ../bin/gosu-config
+	echo "    case \$$1 in" >> ../bin/gosu-config
+	echo "    --libs)" >> ../bin/gosu-config
+	echo '    echo "$(LIBS)";;' >> ../bin/gosu-config
+	echo "    --cxxflags)" >> ../bin/gosu-config
+	echo '    echo "$(CXXFLAGS)";;' >> ../bin/gosu-config
+	echo "    esac" >> ../bin/gosu-config
+	echo "    shift" >> ../bin/gosu-config
+	echo "done" >> ../bin/gosu-config
+	chmod u+x ../bin/gosu-config
 
 # RubyGosu_wrap.cpp taken out because we use the prebuilt version from SVN
-ruby: $(RUBYOBJS) gosu.a
-	g++ -shared -o gosu.so -Wall $(RUBYOBJS) $(RUBY_LIBS) @GOSU_A_OBJS@
-
-# $(BASE_OBJS) \
-        $(NET_OBJS) $(FMOD_OBJ) $(RUBY_LIBS)
-
-# RubyGosu_wrap.cpp:
-#   cd $(GOSU_DIR)/GosuImpl/ && swig -c++ -ruby -autorename RubyGosu.swg
-#   cd $(GOSU_DIR)/linux/
+../lib/gosu.so: $(RUBYOBJS) ../lib/libgosu.a
+	g++ -shared -o ../lib/gosu.so -Wall $(RUBYOBJS) $(RUBY_LIBS) @GOSU_A_OBJS@
 
 $(RUBYOBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cxx
 	$(CXX) -fPIC $(GOSU_DIR)/GosuImpl/$*.cxx -o $@ $(CXXFLAGS) -c
-#$(RUBYOBJS): %.o: $(GOSU_DIR)/%.cpp
-#	$(CXX) $(GOSU_DIR)/$*.cpp -o $@ $(CXXFLAGS) -c -fPIC
