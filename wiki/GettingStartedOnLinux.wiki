@@ -2,7 +2,7 @@
 
 = Dependencies =
 
-To compile Gosu, you will need the following packages (install via `sudo apt-get install <packagename>`):
+To install Gosu in any form, you will need the following packages (install via `sudo apt-get install <packagename>`):
   * g++
   * libgl1-mesa-dev
   * libpango1.0-dev
@@ -27,6 +27,10 @@ Ruby/Gosu will be built if the following packages are installed as well:
 sudo apt-get install g++ libgl1-mesa-dev libpango1.0-dev libboost-dev ruby ruby1.8 ruby1.8-dev libsdl-mixer1.2-dev
 }}}
 
+= Ruby Gem =
+
+If you are only interested in using Gosu with the Ruby programming language, you can install it as a Ruby gem via `sudo gem install gosu`. You will still have to install the packages listed above, though.
+
 = Compiling Gosu =
 
 To compile Gosu, `cd` into the `linux` subdirectory and run:
@@ -40,7 +44,8 @@ There is a deprecated 'make install' command that will work for C++, but as most
 For using Ruby/Gosu, you can install Gosu globally by copying the resulting `linux/gosu.so` file to `/usr/lib/ruby/site_ruby/${your-ruby-version-here}/${your-arch-here}-linux/`, or also copy it next to your Ruby source files where it will be found.
 
 = Using Ruby/Gosu =
-Just require gosu.so (`require 'gosu'`) and everything should work fine. You can copy gosu.so into the examples folder and run Tutorial.rb to check everything's okay.
+
+Just require `gosu.so` (`require 'gosu'`) and everything should work fine. If you are using RubyGems, remember to `require 'rubygems'` first. If not, you can copy gosu.so around to accompany your Ruby source files.
 
 = Using C++ Gosu =
 
@@ -50,9 +55,9 @@ A simple Makefile could look like this:
 
 {{{
 OBJS = main.o player.o
-CXXFLAGS += -Igosu/ `gosu/linux/gosu-config --cxxflags`
-LIBS = `gosu/linux/gosu-config --libs`
+CXXFLAGS += -Igosu/ `gosu/bin/gosu-config --cxxflags`
+LIBS = `gosu/bin/gosu-config --libs`
 
-myGame: $(OBJS) gosu/linux/gosu.a
-        g++ -o myGame $(OBJS) gosu/linux/gosu.a $(LIBS)
+myGame: $(OBJS) gosu/lib/libgosu.a
+        g++ -o myGame $(OBJS) gosu/lib/libgosu.a $(LIBS)
 }}}
