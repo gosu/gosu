@@ -59,7 +59,7 @@ task :cpp_docs do
   sh "cd reference && doxygen"
 end
 
-Rake.application.in_namespace :mac do
+namespace :mac do
   desc "Build Gosu.framework"
   task :cpp => :cpp_docs do
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target Gosu -configuration Release"
@@ -96,7 +96,7 @@ Rake.application.in_namespace :mac do
   Rake::GemPackageTask.new(MAC_SPEC) { |t| t.package_dir = 'public/mac_gem' }
 end
 
-Rake.application.in_namespace :win do
+namespace :win do
   WINDOWS_CPP_ARCHIVE_FILENAME = "public/gosu-windows-cpp-#{GOSU_VERSION}.zip"
   
   desc "Build the archive #{WINDOWS_CPP_ARCHIVE_FILENAME}"
@@ -136,7 +136,7 @@ Rake.application.in_namespace :win do
   Rake::GemPackageTask.new(WINDOWS_SPEC) { |t| t.package_dir = 'public/windows_gem' }
 end
 
-Rake.application.in_namespace :linux do
+namespace :linux do
   LINUX_ARCHIVE_FILENAME = "public/gosu-source-#{GOSU_VERSION}.tar.gz"
 
   desc "Build the archive #{LINUX_ARCHIVE_FILENAME}"
