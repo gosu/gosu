@@ -49,15 +49,15 @@ Just require `gosu.so` (`require 'gosu'`) and everything should work fine. If yo
 
 = Using C++ Gosu =
 
-Copy or link Gosu into your application's directory. You've got to compile with ``gosu/linux/gosu-config --libs``` and -Igosu ```gosu/linux/gosu-config --cxxflags``
+(The following assumes that you have installed Gosu system-wide via `sudo make install`. If not, you will have to add paths as necessary.)
 
-A simple Makefile could look like this:
+You have to compile with ``gosu-config --libs``` and -Igosu ```gosu-config --cxxflags``, so a simple Makefile could look like this:
 
 {{{
 OBJS = main.o player.o
-CXXFLAGS += -Igosu/ `gosu/bin/gosu-config --cxxflags`
-LIBS = `gosu/bin/gosu-config --libs`
+CXXFLAGS += `gosu-config --cxxflags`
+LIBS = `gosu-config --libs`
 
-myGame: $(OBJS) gosu/lib/libgosu.a
-        g++ -o myGame $(OBJS) gosu/lib/libgosu.a $(LIBS)
+myGame: $(OBJS) libgosu.a
+        g++ -o myGame $(OBJS) libgosu.a $(LIBS)
 }}}
