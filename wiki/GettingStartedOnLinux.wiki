@@ -56,7 +56,7 @@ You have to compile with ``gosu-config --libs``` and -Igosu ```gosu-config --cxx
 {{{
 OBJS = main.o player.o
 CXXFLAGS += `gosu-config --cxxflags`
-LIBS = `gosu-config --libs`
+LIBS = -lgosu `gosu-config --libs`
 
 myGame: $(OBJS) libgosu.a
         g++ -o myGame $(OBJS) libgosu.a $(LIBS)
