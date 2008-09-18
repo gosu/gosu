@@ -4267,7 +4267,7 @@ fi
 
 
 
-for ac_prog in ruby1.8 ruby1.9 ruby
+for ac_prog in $GOSU_RUBY_COMMAND ruby ruby1.8 ruby1.9
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2

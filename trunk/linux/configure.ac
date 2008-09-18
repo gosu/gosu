@@ -86,7 +86,7 @@ AC_SUBST(HAVE_SYS_STAT_H)
 AC_CHECK_FUNC(eaccess, HAVE_EACCESS=-DHAVE_EACCESS)
 AC_SUBST(HAVE_EACCESS)
 
-AC_CHECK_PROGS(ruby, ruby1.8 ruby1.9 ruby)
+AC_CHECK_PROGS(ruby, $GOSU_RUBY_COMMAND ruby ruby1.8 ruby1.9)
 RUBY_INC_DIR=`${ruby} -e 'require "rbconfig";print(Config::CONFIG[["rubyhdrdir"]] || Config::CONFIG[["archdir"]])'`
 RUBY_ARCH_DIR=`${ruby} -e 'require "rbconfig";print File.join(Config::CONFIG[["rubyhdrdir"]], Config::CONFIG[["arch"]]) if Config::CONFIG[["rubyhdrdir"]]'`
 RUBY_LIBS=`${ruby} -e 'require "rbconfig";print(Config::CONFIG[["LIBRUBYARG"]] || "-l" + Config::CONFIG[["ruby_install_name"]])'`
