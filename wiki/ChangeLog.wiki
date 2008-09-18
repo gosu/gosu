@@ -1,8 +1,9 @@
 #summary Log of Gosu's development.
 #labels Featured
 
-=0.7.10.2=
+=0.7.10.2 (Linux only)=
   * Linux: Fixed bug with -fPIC causing compilation trouble AGAIN (thanks 0x17!)
+  * Linux: Fixed bug with installing Gosu for Ruby 1.9 when 1.8 is also present
 
 =0.7.10=
   * All: Added Song::volume()/Song#volume (thanks rabbitblue!)
