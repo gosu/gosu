@@ -1,5 +1,9 @@
 #summary Tutorial for a small game using Ruby/Gosu.
 
+= Translations =
+
+For links to translations of this tutorial (Traditional Chinese, Spanish, French) see the DocsOverview page.
+
 = Source code =
 
 The code for the complete game, together with the required media files, can be found in the Gosu distribution of your choice ('examples/Tutorial.rb').
