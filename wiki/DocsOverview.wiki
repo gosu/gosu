@@ -16,6 +16,8 @@ Depending on your operating system, see GettingStartedOnOsx, GettingStartedOnWin
 See either the RubyTutorial or the CppTutorial.
 
 == Translations ==
+*Traditional Chinese* translation by poga: http://devpoga.wordpress.com/2008/05/28/ruby_gosu_tutorial/
+
 *Spanish* translation by ladybenko: http://cafeina.ladybenko.net/?p=485
 
 *French* tutorial for Ruby/Gosu (slightly outdated) by Damien Gouteux: http://xitog.developpez.com/tutoriels/gosu/?page=Presentation
