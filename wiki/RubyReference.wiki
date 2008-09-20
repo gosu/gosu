@@ -93,7 +93,8 @@ _Note that you should really only use on instance of this class at the same time
   * `text_input=`: Sets current text input object that builds an input string
   * `width`
   * `height`
-  * `gl <block>`: See examples/OpenGLIntegration.rb.
+  * `gl do ... end`: See examples/OpenGLIntegration.rb.
+  * `clip_to(x, y, w, h) do ... end`: Limits the drawing area to a given rectangle while evaluating the code inside of the block.
 
 == Free functions (in module Gosu) ==
 
