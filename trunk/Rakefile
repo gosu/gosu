@@ -101,7 +101,7 @@ namespace :win do
   
   desc "Build the archive #{WINDOWS_CPP_ARCHIVE_FILENAME}"
   task :cpp_archive do #=> [:cpp] do
-    files = COMMON_CPP_FILES + ['lib/Gosu.lib', 'lib/GosuDebug.lib', 'lib/fmod.dll']
+    files = COMMON_CPP_FILES + FileList['Gosu/*.hpp', 'lib/Gosu.lib', 'lib/GosuDebug.lib', 'lib/fmod.dll']
     sh "zip #{WINDOWS_CPP_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
   end
 
