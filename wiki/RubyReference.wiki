@@ -62,6 +62,7 @@
   * `play`
   * `stop`
   * `playing?`
+  * `volume`, from 0..1.
   * `volume=(vol)`, with vol from 0..1.
 
 == class Gosu::TextInput ==
