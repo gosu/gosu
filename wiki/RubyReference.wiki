@@ -32,6 +32,7 @@
   * `text_width(text, factor_x=1)`: Returns the width in pixels the given text would span.
   * `draw(text, x, y, z, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`
   * `draw_rel(text, x, y, z, rel_x, rel_y, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`: If relX is 0.0, the text will be to the right of x, if it is 1.0, the text will be to the left of x, if it is 0.5, it will be centered on x. Of course, all real numbers are possible values. The same applies to relY.
+  * `draw_rot(text, x, y, z, angle, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`: Same as `draw` but rotated at the top left corner.
 
 == class Gosu::Image ==
   * `initialize(window, filename_or_rmagick_image, hard_borders, [srcX, srcY, srcWidth, srcHeight])`
