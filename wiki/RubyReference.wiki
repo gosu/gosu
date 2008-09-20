@@ -105,6 +105,8 @@ _Note that you should really only use on instance of this class at the same time
 
   * `angle(x1, y1, x2, y2)`: Returns the angle between two points in degrees, where 0.0 means upwards. Returns 0 if both points are equal.
 
+  * `angle_diff(angle1, angle2)`: Returns the smallest angle that can be added to `angle1` to get to `angle2` (can be negative if counter-clockwise movement is shorter).
+
   * `distance(x1, y1, x2, y2)`: Returns the distance between two points.
 
   * `milliseconds()`: Incrementing, possibly wrapping millisecond timer.
