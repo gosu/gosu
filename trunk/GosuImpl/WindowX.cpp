@@ -316,7 +316,7 @@ void Gosu::Window::show()
         if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
         endTime = milliseconds();
 
-        if (startTime < endTime && (endTime - startTime) < pimpl->updateInterval)
+        if (startTime <= endTime && (endTime - startTime) < pimpl->updateInterval)
             sleep(pimpl->updateInterval - (endTime - startTime));
     }
 
