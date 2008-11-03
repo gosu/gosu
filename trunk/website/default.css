@@ -1,5 +1,4 @@
-/* mwForum Default Style 2.13.2 */
-/* buttonIcons="0" */
+/* mwForum hacked to look like Google Code (for Gosu board) */
 
 /* Canvas */
 html {
@@ -106,9 +105,10 @@ span.pln a:hover {
 
 /* Table frame */
 table.tbl {
-	margin-top: 10px;
 	width: 100%;
-	border: 1px solid silver;
+	border-top: 10px solid #e5ecf9;
+	border-bottom: 10px solid #e5ecf9;
+	-webkit-border-radius: 5px;
 	border-collapse: collapse;
 	border-spacing: 0;
 	empty-cells: show;
@@ -116,15 +116,13 @@ table.tbl {
 
 /* Table header row */
 table.tbl tr.hrw {
-	background-color: #cbd3d9;
-	background-image: url(bg_hcl.png);
+	background-color: #c3d9ff;
 	font-weight: bold;
 }
 
 /* Table header cell */
 table.tbl th {
-	border: 1px solid silver;
-	padding: 2px 4px;
+	padding: 4px 6px;
 	text-align: left;
 	white-space: nowrap;
 }
@@ -142,8 +140,8 @@ table.tbl tr.crw {
 
 /* Table content cell */
 table.tbl td {
-	border: 1px solid silver;
-	padding: 2px 4px;
+	padding: 4px 6px;
+	border-top: 1px solid #666;
 }
 
 /* Table short cell */
