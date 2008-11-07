@@ -1,6 +1,10 @@
 #summary List of known projects to use Gosu!
 #labels Featured
 
+= Outdated Content =
+
+The contents of this page is slowly being moved to the "Gosu Showcase" board on the official libgosu.org forums.
+
 = Projects using Gosu =
 
 == Major projects ==
