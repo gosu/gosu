@@ -1,8 +1,6 @@
-#summary Post questions and other comments, see collected answers.
+#summary Outdated: Please use the forums on http://libgosu.org/!
 #labels Featured
 
 = Gosu Exchange =
 
-User jordan.applewhite suggested that there should be a place to exchange experiences that is not as real time as IRC. Also, I would like to collect some answers to emails here in the future. And maybe some users come up with their own best practices. So feel free to post anything that doesn't fit somewhere else as a comment to this page!
-
-*Note:* This is getting a bit messy here, but it was good to see what kind of things people are interested in. I will take that as a base to decide what to use for future Gosu discussion. -Julian
+The comments on this Wiki page were the predecessor to the Gosu forums on http://libgosu.org/. Threads of discussion are slowly being migrated. Please ask new questions in the forum! Thanks.
