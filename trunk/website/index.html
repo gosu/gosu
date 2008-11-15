@@ -4,6 +4,8 @@
 <html>
 <head>
   <title>Gosu</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
   <style type="text/css">
     body {
       font-family: "Lucida Grande", sans-serif;
@@ -11,21 +13,53 @@
     }
     
     #main {
-      border: 3px solid black;
-      padding: 2em;
-      background-color: #c3d9ff;
-      -webkit-border-radius: 2em;
-      -moz-border-radius: 2em;
+      padding: 1.5em;
+      -webkit-border-radius: 1em;
+      -moz-border-radius: 1em;
+    }
+    
+    p.copyright {
+      clear: both;
+      text-align: center;
+      color: #89a;
+      font-size: 70%;
     }
     
     #logo_container {
-      text-align: center;
-      border-bottom: 3px solid black;
-      margin: 0em -2em 0em -2em;
+      float: right;
+    }
+    
+    .quick_link {
+      float: right;
+      clear: right;
+      padding: 1em;
+      -webkit-border-radius: 0.5em;
+      -moz-border-radius: 0.5em;
+      background: #c3d9ff;
+      width: 15em;
+      margin: 1em 0em 0em 1em;
+    }
+    
+    .quick_link ul {
+      margin: 0.5em;
+      padding-left: 1em;
+    }
+    
+    .quick_link li {
+      margin: 0em;
+    }
+    
+    a {
+      color: red;
     }
     
     h1 {
-      font-size: 150%;
+      font-size: 130%;
+      margin-top: 0em;
+    }
+    
+    h2 {
+      font-size: 115%;
     }
     
     li {
@@ -36,23 +70,79 @@
 <body>
   <div id="main">
     <div id="logo_container">
-      <img src="gosu.png" alt="Gosu logo" style="margin: 0em; vertical-align: bottom">
+      <img src="website_header.png" alt="Gosu logo" style="margin: 0em; vertical-align: bottom">
+    </div>
+
+    <div class="quick_link">
+      <a href="http://code.google.com/p/gosu/">Gosu's GoogleCode homepage</a> is the place for:
+      <ul>
+        <li><a href="http://code.google.com/p/gosu/wiki/DocsOverview">official documentation in the Wiki</a></li>
+        <li><a href="http://code.google.com/p/gosu/downloads/list">packaged downloads,</li>
+        <li><a href="http://code.google.com/p/gosu/source/checkout">the Subversion repository and</a></li>
+        <li>the official list of <a href="http://code.google.com/p/gosu/issues/list">issues</a></li>
+      </ul>
+      There's also a lot of discussion in the Wiki comments that is slowly being moved to the forums:
+    </div>
+    <div class="quick_link">
+      <a href="http://vu2040.eta.railshoster.de/cgi-bin/mwf/forum.pl">The official forum system</a> has just opened as a proper place to discuss questions. Please register and join the discussion!<br><br>The forums will soon be available under <tt>forum.libgosu.org</tt>, but if you want to bookmark it already, please use <tt>forum.pl</tt> instead of <tt>forum_show.pl</tt> so posts will be properly marked as new. Thanks!
+    </div>
+    <div class="quick_link">
+      There is also a low traffic <a href="irc://irc.freenode.org/gosu">IRC channel on freenode</a> for friendly chat.
+    </div>
+    <div class="quick_link">
+      Stay up to date easily with <a href="http://code.google.com/p/gosu/feeds">RSS feeds of downloads and more</a> from the GoogleCode page, or subscribe even to Gosu news and discussion easily via the <a href="http://vu2040.eta.railshoster.de/cgi-bin/mwf/forum_feeds.pl">feeds from the forum</a>.
     </div>
     <h1>
-      Welcome to the new, work-in-progress homepage of the Gosu library!
+      Welcome to the new Gosu homepage!
     </h1>
+    <h2>
+      Gosu, what is that?
+    </h2>
     <p>
+      Gosu is a 2D game development library for the Ruby and C++ programming languages, available for Mac OS X, Windows and Linux. (MSVC++ 2005 or 2008 needed for the Windows C++ version).
+    </p>
+    <p>
+      Both the C++ and Ruby version provide:
       <ul>
-        <li>
-          You can find downloads, source code and documentation on the <a href="http://code.google.com/p/gosu/">Google Code homepage</a>. It also contains a lot of discussion on the Wiki pages that will slowly be moved to the new board.
-        </li>
-        <li>
-          Gosu also has a <a href="http://vu2040.eta.railshoster.de/cgi-bin/mwf/forum.pl">proper forum system</a> now! Please register and join the discussion. The forums will soon be available under <tt>forum.libgosu.org</tt>, but if you want to bookmark it already, please use <tt>forum.pl</tt> instead of <tt>forum_show.pl</tt> so posts will be properly marked as new. Thanks!
-        </li>
-        <li>
-          RSS feeds to keep you informed about both Gosu and new board postings are coming soon.
-        </li>
+        <li> 2D graphics and text, accelerated by 3D hardware—i.e. blazingly fast rotations, scaling and color modulation</li>
+        <li> Sound samples and music in various formats, based on the tested &amp; optimized FMOD3 library</li>
+        <li> Keyboard, mouse and gamepad/joystick input</li>
       </ul>
+    
+      Ruby/Gosu also features:
+
+      <ul>
+        <li> Translations of the Ruby tutorial into Traditional Chinese, Spanish and French (see <a href="http://code.google.com/p/gosu/wiki/DocsOverview">DocsOverview</a>)</li>
+        <li> Installation via <tt>gem install gosu</tt>, complete with examples</li>
+        <li> RMagick integration, shown in an example game</li>
+        <li> A tutorial on how to use the <a href="http://wiki.slembcke.net/main/published/Chipmunk">Chipmunk</a> physics library with Gosu: <a href="http://code.google.com/p/gosu/wiki/RubyChipmunkIntegration">RubyChipmunkIntegration</a>, written by Dirk Johnson</li>
+        <li> An example of how to use <tt>ruby-opengl</tt> to add rich 3D effects to 2D Gosu games</li>
+      </ul>
+    </p>
+    
+    <h2>Progress info</h2>
+    <p>
+      Before giving the interface an overhaul with version 0.8.0, I am trying to build a proper website to make Gosu more accessible and easier to discuss. Of course, I also fix bugs and glitches as they appear, so expect a few more versions in the 0.7.x series. Contributions are always welcome, of course!
+    </p>
+
+    <h2>Ruby Game Development Overview</h2>
+    <p>If you are coming from a Ruby background and haven't yet decided on a library or want to know about alternatives to Gosu, or if you haven't yet decided to even use Ruby, check out Andrea O. K. Wrights articles and her talk, which give a fair overview:
+      <ul>
+        <li><a href="http://www.oreillynet.com/pub/a/ruby/2007/12/04/creating-games-in-ruby.html">Article (part 1)</a></li>
+        <li><a href="http://www.oreillynet.com/pub/a/ruby/2007/12/18/creating-games-in-ruby-part-2.html">Article (part 2)</a></li>
+        <li><a href="http://rubyconf2007.confreaks.com/d1t2p2_building_games_with_ruby.html">Video of the talk (RubyConf '07)</a></li>
+      </ul>
+    </p>
+    
+    <h2>Licensing</h2>
+    <p>
+      Gosu is released under the MIT license.
+    </p>
+    <p>
+      Note: Even though Gosu's own source code and documentation are released under the MIT license, it uses the closed source FMOD library for sound output. FMOD is free of charge for freeware games though, and has very fair conditions otherwise. On Linux, if FMOD is not present, SDL_mixer will be used as the default. You use 100% Free code in this case!
+    </p>
+    <p class="copyright">
+      Gosu and all documentation © 2001-2008 <a href="mailto:julian@raschke.de">Julian Raschke</a>, Jan Lücker and contributors.
     </p>
   </div>
 </body>

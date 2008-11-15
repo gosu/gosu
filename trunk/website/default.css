@@ -46,6 +46,10 @@ div.frm {
 	background-color: #c3d9ff;
 }
 
+div.dsc {
+  margin-top: 0px;
+}
+
 /* Generic header cell */
 div.hcl {
 	height: 1.337em;
