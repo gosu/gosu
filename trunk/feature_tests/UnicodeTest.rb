@@ -9,7 +9,7 @@ class Test < Gosu::Window
     self.caption = "Huhu, Ümläuts!"
     @font = Gosu::Font.new(self, "Monaco", 15)
     @sys_text = Gosu::Image.from_text(self, "Huhu, 地下鉄chikatetsuでde行きますikimasu!", "Helvetica", 15, 0, 200, :left)
-    @loc_text = Gosu::Image.from_text(self, "Huhu, 地下鉄で行きます", "./Vera.ttf", 30, 0, 200, :left)
+    @loc_text = Gosu::Image.from_text(self, "Huhu, 地下鉄で行きます", "media/Vera.ttf", 30, 0, 200, :left)
   end
 
   def draw
