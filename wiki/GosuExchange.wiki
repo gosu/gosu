@@ -1,5 +1,4 @@
 #summary Outdated: Please use the forums on http://libgosu.org/!
-#labels Featured
 
 = Gosu Exchange =
 
