@@ -21,6 +21,8 @@ Gosu::Input::Input(::Display* dpy)
     pimpl->mouseX = pimpl->mouseY = 0;
     pimpl->mouseFactorX = pimpl->mouseFactorY = 1.0;
     pimpl->display = dpy;
+
+    XAutoRepeatOff(dpy);
 }
 
 Gosu::Input::~Input()
