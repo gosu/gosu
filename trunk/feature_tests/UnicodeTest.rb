@@ -10,6 +10,11 @@ class Test < Gosu::Window
     @font = Gosu::Font.new(self, "Monaco", 15)
     @sys_text = Gosu::Image.from_text(self, "Huhu, 地下鉄chikatetsuでde行きますikimasu!", "Helvetica", 15, 0, 200, :left)
     @loc_text = Gosu::Image.from_text(self, "Huhu, 地下鉄で行きます", "media/Vera.ttf", 30, 0, 200, :left)
+    @japanese_text = Gosu::Image.from_text(self, "Achtung, hier kommts: " +
+                                                 "このテクストはスペエクがありません。このテクストはスペエクがありません。このテクストはスペエクがありません。" +
+                                                 "このテクストはスペエクがありません。このテクストはスペエクがありません。このテクストはスペエクがありません。" +
+                                                 "このテクストはスペエクがありません。このテクストはスペエクがありません。このテクストはスペエクがありません。",
+                                                 Gosu::default_font_name, 30, 0, 200, :center)
   end
 
   def draw
@@ -17,6 +22,7 @@ class Test < Gosu::Window
     draw_line(300, 304, 0xffffffff, 100, 304, 0xffffffff, 255)
     @sys_text.draw(100, 100, 0)
     @loc_text.draw(400, 100, 0)
+    @japanese_text.draw(100, 400, 0)
     @font.draw(('A'..'Z').to_a.join + ('a'..'z').to_a.join, 10, 10, 0)
     @font.draw_rel("Alfons läuft durch Bayern und fühlt sich pudelwohl dabei! Na sowas.", 800, 600, 0, 0.5, 0.5)
   end
