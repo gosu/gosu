@@ -1,66 +1,6 @@
-#summary List of known projects to use Gosu!
-#labels Featured
+#summary Outdated: Please use the forums on http://libgosu.org/!
+#labels Deprecated
 
 = Outdated Content =
 
-The contents of this page is slowly being moved to the "Gosu Showcase" board on the official libgosu.org forums.
-
-= Projects using Gosu =
-
-== Major projects ==
-
-=== Terra Vera (working title) (C++) ===
-
-http://www.raschke.de/julian/temp/terravera.jpg
-
-Terra Vera, a closed-source platformer by Julian Raschke with skeletal models and an intuitive level editor. Everything works, I just need to build all those levels! :)
-
-=== The Wiinstrument (C++) ===
-
-http://screenfashion.org/releases/wiinstrument_screenshot_small_1.jpg
-
-The Wiinstrument by Sebastian Burkhart and others uses Gosu, mostly for the stylish visuals.
-* http://www.screenfashion.org/
-
-=== Planets! ===
-
-http://www.raschke.de/julian/temp/planets.jpg
-
-This two-player shooter by Kurt Griffiths features very cool gravity and explosion effects, sound effects, support for optional music and sketch-themed graphics. Even though it has a [http://rubyforge.org/projects/planetsgame/ RubyForge project page], the available sources are outdated, so I updated them to the current Gosu API: [http://www.raschke.de/julian/temp/planets.zip Download source package].
-
-=== Ruby OMF 2097 (Ruby) ===
-
-Remake of the cool fighting game One Must Fall 2097 by Andrew Thompson, using Gosu. (Seemingly discontinued :( )
-  * http://rubyforge.org/projects/rubyomf2097
-
-== Mini projects ==
-
-Gosu has also been used a lot for participating in small game development competitions – with varying code quality, as you may have guessed. To run games from source code, make sure gosu.so/gosu.bundle is available, e.g. by copying it from your platform's Gosu release into the game's directory. Then run Main.rb from the command line via "ruby Main.rb", or from your favourite editor.
-
-=== Nightly Travels of a Witch (Ruby) ===
-
-http://www.raschke.de/julian/temp/NToaW.jpg
-
-Written by Team Tortilla (Florian Groß, Alexander Post, Julian Raschke) for the 72h competition in the summer of 2006, this is a puzzle game with unusual controls, some nice touches like parallax scrolling and a particle engine. Of course, that time was saved by writing less code comments and levels. ;)
-  * [http://www.raschke.de/julian/temp/NToaW-mac.zip Download Mac version]
-  * [http://flgr.0x42.net/gdc72h-05/postfinal.win.zip Download Windows version]
-  * [http://www.raschke.de/julian/temp/NToaW-source.zip Download source package]
-
-=== Encaved (Ruby) ===
-
-Written by Florian Groß in 2004 as an entry to the Ludum Dare 48h competition. Compo theme was "Random", so it's about randomized dungeons in which you have to shoot guns and mines. 
-  * [http://www.raschke.de/julian/temp/Encaved.zip Download source package]
-
-=== Escave (Ruby) ===
-
-http://www.raschke.de/julian/temp/escave.jpg
-
-Janis Born's entry for the same compo. Features some cool graphics! ,,(Note: Done by someone who was new to Gosu, and even to Ruby! Yay.),,
-
-  * [http://www.raschke.de/julian/temp/escave-source.zip Download source package]
-  * [http://www.raschke.de/julian/temp/escave-windows.zip Download old Windows binary]
-
-== And... ==
-
-…if you have anything in the works that uses Gosu, no matter in which development stage, feel free to describe it in a comment! :)
- 
+The comments on this page is slowly being moved to the "Gosu Showcase" board on the official http://libgosu.org/ forums.
