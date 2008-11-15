@@ -2,6 +2,7 @@
 #labels Featured
 
 =0.7.11=
+  * Linux: Disabled key repeat.
   * Linux: Fixed timing bug on very fast machines.
 
 =0.7.10.1 / 0.7.10.2 / 0.7.10.3=
