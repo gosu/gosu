@@ -1,33 +1,116 @@
-#summary Gosu's roadmap.
+#summary List of upcoming To Do items, refreshed daily.
 #labels Featured
 
-These are the remnants of my ToDo list. All the stuff that could be done in 0.7.x has been turned into OmniFocus tasks. Maybe I will write an AppleScript to sync them to this list some day.
+====== To Do list ======
 
-= 0.8.0 (after a cleanup/documentation delay)=
+This list of tasks is exported automatically from my OmniFocus projects each day.
+
+===== Gosu 0.7.x =====
+  * 0.7.11, i18n/Text release
+    * Windows: Fix issue with btn_id_to_char on Russian Windows
+    * Linux: Fix problem with Unicode chars (redesign button id system)
+    * Check out freshly on Linux
+    * Experiment with RTL support in Font
+    * Add a bit more letterspacing to Font (Mac)
+    * Implement :one_line pseudo alignment value
+    * Verify that radians_to_gosu & vice versa work
+    * Iterate on currently reported issues
+    * Mac: Make createText use ATSUI
+    * Windows: Make createText use Uniscribe
+    * Linux: Make createText use Pango/Freetype2
+    * gosuToRadians/radiansToGosu in Math.hpp
+    * Design a new logo for Gosu
+    * Add KbZ as the physical Z key, etc. (Mac)
+    * Add KbZ as the physical Z key, etc. (Windows)
+    * Add KbZ as the physical Z key, etc. (Linux)
+    * Change Gosu domain
+      * Antwort bzgl. DNS-Server, RailsHoster
+      * Redirect libgosu.org to RailsHoster
+      * Change all references to vu2040 to libgosu.org in the forum (and everywhere else)
+      * Request Image::Info and DB::SQLite3
+    * Release Gosu 0.7.11
+    * Make it easy to create backups of the board
+    * Announce Gosu 0.7.11 + [forums.]libgosu.org + LD13
+    * (Order a T-shirt from wishlist after all this hard work!)
+  * 0.7.12, performance/graphics release
+    * Mehr Modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
+    * TextField mit clip_to
+    * Iterate on first category of fullscreen tests
+    * Add Proof of Concept for Macro Patches
+    * Fix Linux fullscreen/beginGL/endGL bug
+    * Clipping benchmarken
+    * Test multiple screen on Windows
+    * Get rid of OpenGL tearing with GMA950 on Windows
+    * Get rid of context selection error with driver set to always do FSAA
+    * Don't round updateInterval on Windows
+    * Don't round updateInterval on Linux
+    * Implement frameskip
+    * Be able to have more logical FPS than Hz despite working vsync
+    * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
+    * Ruby 1.9-Support
+      * Compile Ruby 1.9 on Intel (Mac)
+      * Compile Ruby 1.9 on PPC (Mac)
+      * RG Deployment Template auf 1.9 umstellen
+      * Look into Ruby 1.9 on Windows
+      * Document support for Ruby 1.9
+      * Package OR&G with optimized Gosu
+  * 0.7.13, polish/deployment release
+    * RMagick auf Windows statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
+    * Reviewen: http://rubyforge.org/tracker/index.php?func=detail&aid=21405&group_id=375&atid=1504
+    * RMagick auf OS X statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
+    * Make sure README and LICENSE are appropriately named in the Gem?
+    * Fragen: Monet zu Gosu Showcase hinzufügen
+    * Collect Gosu YouTube videos and link them prominently
+    * Gosu.gstencil?
+    * Make Ruby reference available online, automatically
+    * Mac OS: Mauszeiger wird im FS sichtbar bei Klick in obere linke Ecke: Warum?
+    * Examples leichter findbar machen
+    * Bessere Ruby-Deployment-Hilfen
+    * Make C++ reference available online, automatically
+    * Assure that files from doxygen task are considered for packaging
+    * FMOD3: Sound auf Vista blockiert bei mehreren Benutzern?
+    * Windows Vista + RubyScript2exe: Bug reposten
+    * Windows build task possible? Clarify
+    * Look how http://github.com/singpolyma/rubygame/tree/master gets the Debian packaging done
+    * Rakefile sollte autoconf ausführen
+    * Linux: Either install gosu.so to Ruby libdir, or don't build it at all
+    * Deployment-Hilfe, Rakefile, Mac
+    * Add Wiki tutorial on how to lazily link FMOD
+    * Deployment-Hilfe, Rakefile, Win
+    * Retry properly showing/hiding the mouse on OS X (immune to blocking main thread)
+    * Make the wrapper's menu bar on OS X more complete
+  * Now that the Rakefile works, stop doing every task every time (use file dependencies)
+  * survivor->jlnr nickchange
+  * FMOD Ex evaluieren
+  * Document Gosu::interpolate, improve it too?
+  * SubApp-System: Plan ausdenken
+  * Implement mouse_x=/mouse_y= on each platform
+  * Compile Terra Vera with both 0.7.10 packages
+  * Song/Sound Looping
+  * http://rubyforge.org/projects/rbplusplus anschauen
+  * Überlegen, wie man http://freeimage.sourceforge.net/requirements.html am einfachsten wrappen könnte
+  * Gucken, ob http://slick.cokeandcode.com/index.php?entry=entry080426-213044 Wert für Gosu hat
+  * OmniFocus -> WIki Rake Task
+  * Experimentation with new drawing syntax; maybe first prototype as the last version of the 0.7.x series?
+===== Gosu 0.8.x (preliminary) =====
+  * Flesh out tasks below …
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
   * Experimentation: Should the C++ version keep using wstring, or switch to UTF-8 strings?
-  * clean up Ruby's interface; draw_quad and friends should require the Z parameter (BREAKS CODE)
-  * rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
-  * provide C++ application templates where possible, maybe even installers for the templates
-
-= Major design goals for 0.8.x (graphics, polish) =
+  * Redesign (see forum) drawing interface
+  * Rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
+  * Windows: Input will regularly query devices which are not currently attached, thereby causing the game to halt every few seconds - think about this
+  * FSAA/mipmap experiments
+  * force feedback would be cool
+  * Provide C++ application templates where possible, maybe even installers for the templates
   * much improved text output system, at the VERY least/as a first step, Font shouldn't be forced to be bold
   * more alpha modes, yay!
   * find a way to factor rot flips out of Gosu => Image/draw redesign
   * implement clipping and a target() modifier for the new Image
-  * speed up LargeImageData!
+  * speed up LargeImageData?!
   * Apple remote support would rule.
   * clean up after playing around with possible optimizations
   * assure Gosu::File also creates directories as necessary
   * more C++ examples
-
-= Major design goals for 0.9.x (IO) =
   * the window argument in Ruby is annoying, because only one window can be used anyway. Maybe it should be Window.run, and all open Windows should work.
   * simplify Gosu's IO philosophy (C++)
   * document Gosu's Sockets
-
-= Major design goals for 1.x (perfection) =
-  * Windows: Input will regularly query devices which are not currently attached, thereby causing the game to halt every few seconds - think about this
-  * FSAA/mipmap experiments
-  * force feedback would be cool
- 
