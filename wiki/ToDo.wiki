@@ -1,11 +1,11 @@
 #summary List of upcoming To Do items, refreshed daily.
 #labels Featured
 
-====== To Do list ======
+= To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects each day.
 
-===== Gosu 0.7.x =====
+== Gosu 0.7.x ==
   * 0.7.11, i18n/Text release
     * Windows: Fix issue with btn_id_to_char on Russian Windows
     * Linux: Fix problem with Unicode chars (redesign button id system)
@@ -92,7 +92,7 @@ This list of tasks is exported automatically from my OmniFocus projects each day
   * Gucken, ob http://slick.cokeandcode.com/index.php?entry=entry080426-213044 Wert für Gosu hat
   * OmniFocus -> WIki Rake Task
   * Experimentation with new drawing syntax; maybe first prototype as the last version of the 0.7.x series?
-===== Gosu 0.8.x (preliminary) =====
+== Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
   * Experimentation: Should the C++ version keep using wstring, or switch to UTF-8 strings?
