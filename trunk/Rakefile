@@ -1,8 +1,7 @@
+require 'rubygems'
+require 'appscript'
 require 'ftools'
 require 'rake/gempackagetask'
-
-GOSU_VERSION = ENV['GOSU_RELEASE_VERSION']
-throw "GOSU_RELEASE_VERSION must be set" if GOSU_VERSION.nil?
 
 COMMON_FILES = FileList[
   'COPYING.txt',
@@ -30,6 +29,12 @@ SOURCE_FILES = COMMON_CPP_FILES + COMMON_RUBY_FILES + FileList[
 ]
 SOURCE_FILES.uniq!
 
+GOSU_VERSION = ENV['GOSU_RELEASE_VERSION'] || '0.0.0'
+
+task :version do
+  throw "GOSU_RELEASE_VERSION must be set" if GOSU_VERSION == '0.0.0'
+end
+
 # Sets everything except 'platform' and 'files'.
 def apply_gemspec_defaults s
   #### Basic information.
@@ -54,6 +59,42 @@ EOS
   s.summary = '2D game development library.'
 end
 
+
+desc "Publish OmniFocus tasks in ToDo Wiki page"
+task :todo do
+  File.open "wiki/ToDo.wiki", "w" do |wiki_page|
+    doc = Appscript.app("OmniFocus").default_document
+    my_projects = doc.folders["Eigene Projekte"].projects.get
+    gosu_projects = my_projects.select { |p| p.name.get =~ /^Gosu/ }
+
+    wiki_page.puts "#summary List of upcoming To Do items, refreshed daily."
+    wiki_page.puts "#labels Featured"
+    wiki_page.puts
+    wiki_page.puts "= To Do list ="
+    wiki_page.puts
+    wiki_page.puts "This list of tasks is exported automatically from my OmniFocus projects."
+    wiki_page.puts
+
+    $shown_tasks = []
+
+    def wiki_page.list_tasks_in root, indent = 2
+      root.tasks.get.each do |task|
+        next if $shown_tasks.include? task or task.completed.get
+        $shown_tasks << task
+        puts "#{' ' * indent}* #{task.name.get}"
+        list_tasks_in task, indent + 2 unless task.tasks.get.empty?
+      end
+    end  
+
+    gosu_projects.each do |project|
+      wiki_page.puts "== #{project.name.get} =="
+      wiki_page.list_tasks_in project
+    end
+  end
+  
+  sh "svn ci wiki -m 'To Do list refresh'"
+end
+
 desc "Build C++ reference with doxygen"
 task :cpp_docs do
   sh "cd reference && doxygen"
@@ -74,7 +115,7 @@ namespace :mac do
   MAC_ARCHIVE_FILENAME = "public/gosu-mac-#{GOSU_VERSION}.tar.gz"
 
   desc "Build the archive #{MAC_ARCHIVE_FILENAME}"
-  task :archive => [:cpp, :ruby] do
+  task :archive => [:cpp, :ruby, :version] do
     files = COMMON_CPP_FILES + COMMON_RUBY_FILES + ['lib/gosu.bundle'] +
             FileList['Gosu.framework/**/*', 'RubyGosu Deployment Template.app/**/*']
     sh "tar -czf #{MAC_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
@@ -86,7 +127,7 @@ namespace :mac do
        " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-OSX\" #{MAC_ARCHIVE_FILENAME}"
   end
 
-  task :gem => :ruby
+  task :gem => [:ruby, :version]
 
   MAC_SPEC = Gem::Specification.new do |s|
     apply_gemspec_defaults s
@@ -100,7 +141,7 @@ namespace :win do
   WINDOWS_CPP_ARCHIVE_FILENAME = "public/gosu-windows-cpp-#{GOSU_VERSION}.zip"
   
   desc "Build the archive #{WINDOWS_CPP_ARCHIVE_FILENAME}"
-  task :cpp_archive do #=> [:cpp] do
+  task :cpp_archive => [:version] do
     files = COMMON_CPP_FILES + FileList['Gosu/*.hpp', 'lib/Gosu.lib', 'lib/GosuDebug.lib', 'lib/fmod.dll']
     sh "zip #{WINDOWS_CPP_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
   end
@@ -114,7 +155,7 @@ namespace :win do
   WINDOWS_RUBY_ARCHIVE_FILENAME = "public/gosu-windows-ruby-#{GOSU_VERSION}.zip"
 
   desc "Build the archive #{WINDOWS_RUBY_ARCHIVE_FILENAME}"
-  task :ruby_archive do #=> [:ruby] do
+  task :ruby_archive => [:version] do
     files = COMMON_RUBY_FILES + ['lib/gosu.so', 'lib/fmod.dll']
     sh "zip #{WINDOWS_RUBY_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
   end
@@ -128,6 +169,8 @@ namespace :win do
   desc "Release both #{WINDOWS_CPP_ARCHIVE_FILENAME} and #{WINDOWS_RUBY_ARCHIVE_FILENAME}"
   task :release => [:cpp_release, :ruby_release]
 
+  task :gem => [:version]
+
   WINDOWS_SPEC = Gem::Specification.new do |s|
     apply_gemspec_defaults s
     s.platform = 'x86-mswin32-60'
@@ -140,7 +183,7 @@ namespace :linux do
   LINUX_ARCHIVE_FILENAME = "public/gosu-source-#{GOSU_VERSION}.tar.gz"
 
   desc "Build the archive #{LINUX_ARCHIVE_FILENAME}"
-  task :archive => [:cpp_docs] do
+  task :archive => [:cpp_docs, :version] do
     files = SOURCE_FILES
     sh "cd .. && tar -czf gosu/#{LINUX_ARCHIVE_FILENAME} #{files.map { |filename| "'gosu/#{filename}'" }.join(' ')}"
   end
@@ -150,6 +193,8 @@ namespace :linux do
     sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} source package (to compile on Linux)\"" +
        " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-All\" #{LINUX_ARCHIVE_FILENAME}"
   end
+  
+  task :gem => [:version]
   
   LINUX_SPEC = Gem::Specification.new do |s|
     apply_gemspec_defaults s
@@ -175,4 +220,3 @@ namespace :linux do
 end
 
 # TODO? Gem upload to RubyForge: http://nubyonrails.com/articles/tutorial-publishing-rubygems-with-hoe
-
