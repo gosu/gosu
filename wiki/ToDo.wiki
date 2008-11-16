@@ -3,7 +3,7 @@
 
 = To Do list =
 
-This list of tasks is exported automatically from my OmniFocus projects each day.
+This list of tasks is exported automatically from my OmniFocus projects.
 
 == Gosu 0.7.x ==
   * 0.7.11, i18n/Text release
