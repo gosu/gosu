@@ -4,6 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
+(Last update: 2008-11-16)
 
 == Gosu 0.7.x ==
   * 0.7.11, i18n/Text release
@@ -90,7 +91,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * http://rubyforge.org/projects/rbplusplus anschauen
   * Überlegen, wie man http://freeimage.sourceforge.net/requirements.html am einfachsten wrappen könnte
   * Gucken, ob http://slick.cokeandcode.com/index.php?entry=entry080426-213044 Wert für Gosu hat
-  * OmniFocus -> WIki Rake Task
   * Experimentation with new drawing syntax; maybe first prototype as the last version of the 0.7.x series?
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
