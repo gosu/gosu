@@ -6,6 +6,24 @@
 #include <boost/array.hpp>
 using namespace std;
 
+namespace
+{
+    bool isRtlChar(wchar_t wc)
+    {
+        return wc == 0x202e;
+    }
+    
+    bool isLtrChar(wchar_t wc)
+    {
+        return wc == 0x202d;
+    }
+    
+    bool isFormattingChar(wchar_t wc)
+    {
+        return isLtrChar(wc) || isRtlChar(wc);
+    }
+}
+
 struct Gosu::Font::Impl
 {
     Graphics* graphics;
@@ -33,6 +51,8 @@ struct Gosu::Font::Impl
             return *imgPtr;
 
         wstring charString(1, wc);
+        if (isFormattingChar(wc))
+            charString.clear(); // Don't draw formatting characters
         unsigned charWidth = Gosu::textWidth(charString, fontName, height, ffBold);
         Bitmap bmp;
         bmp.resize(charWidth, height);
@@ -73,12 +93,33 @@ void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
 {
     factorX /= 2;
     factorY /= 2;
+    enum {
+        LTR = 1,
+        RTL = -1
+    } dir = LTR;
 
     for (unsigned i = 0; i < text.length(); ++i)
     {
+        if (isLtrChar(text[i]))
+        {
+            if (dir == RTL)
+                x -= 2 * textWidth(text.substr(i + 1, wstring::npos)) * factorX, dir = LTR;
+            continue;
+        }
+        if (isRtlChar(text[i]))
+        {
+            if (dir == LTR)
+                x += 2 * textWidth(text.substr(i + 1, wstring::npos)) * factorX, dir = RTL;
+            continue;
+        }
+    
         Image& curChar = pimpl->getChar(text[i]);
-        curChar.draw(x, y, z, factorX, factorY, c, mode);
-        x += curChar.width() * factorX;
+        if (dir == LTR)
+            curChar.draw(x, y, z, factorX, factorY, c, mode);
+        else
+            curChar.draw(x - curChar.width() * factorX, y, z, factorX, factorY, c, mode);
+        
+        x += curChar.width() * factorX * dir;
     }
 }
                      
@@ -88,7 +129,7 @@ void Gosu::Font::drawRel(const wstring& text, double x, double y, ZPos z,
 {
     x -= textWidth(text) * factorX * relX;
     y -= height() * factorY * relY;
-
+    
     draw(text, x, y, z, factorX, factorY, c, mode);
 }
 
@@ -99,7 +140,7 @@ void Gosu::Font::drawRot(const wstring& text, double x, double y, ZPos z, double
     factorY /= 2;
     
     double stepX = offsetX(angle + 90, 1.0), stepY = offsetY(angle + 90, 1.0);
-
+    
     for (unsigned i = 0; i < text.length(); ++i)
     {
         Image& curChar = pimpl->getChar(text[i]);

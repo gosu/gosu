@@ -210,14 +210,38 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
     const std::wstring& fontName, unsigned fontHeight, unsigned lineSpacing,
     unsigned maxWidth, TextAlign align, unsigned fontFlags)
 {
+    if (text.empty())
+    {
+        Bitmap emptyBitmap;
+        emptyBitmap.resize(1, fontHeight);
+        return emptyBitmap;
+    }
+    
     // Set up the builder object which will manage all the drawing and
     // conversions for us.
     TextBlockBuilder builder(fontName, fontHeight, fontFlags,
         lineSpacing, maxWidth, align);
-
+    
     // Let the process* functions draw everything.
     processText(builder, text);
-
+    
     // Done!
     return builder.result();
+}
+
+// Very easy special case.
+Gosu::Bitmap Gosu::createText(const std::wstring& text,
+    const std::wstring& fontName, unsigned fontHeight, unsigned fontFlags)
+{
+    if (text.empty())
+    {
+        Bitmap emptyBitmap;
+        emptyBitmap.resize(1, fontHeight);
+        return emptyBitmap;
+    }
+    
+    Gosu::Bitmap bmp;
+    bmp.resize(Gosu::textWidth(text, fontName, fontHeight, fontFlags), fontHeight);
+    drawText(bmp, text, 0, 0, 0xffffffff, fontName, fontHeight, fontFlags);
+    return bmp;
 }

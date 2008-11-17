@@ -7,16 +7,16 @@ class Test < Gosu::Window
     Gosu::Image.new(self, "Umläuts.png", false) rescue nil
       
     self.caption = "Huhu, Ümläuts!"
-    @font = Gosu::Font.new(self, "Monaco", 15)
-    @sys_text = Gosu::Image.from_text(self, "Huhu, 地下鉄chikatetsuでde行きますikimasu!", "Helvetica", 15, 0, 200, :left)
-    @loc_text = Gosu::Image.from_text(self, "Huhu, 地下鉄で行きます", "media/Vera.ttf", 30, 0, 200, :left)
+    @font = Gosu::Font.new(self, "Monaco", 50)
+    @sys_text = Gosu::Image.from_text(self, "Huhu, 地下鉄chikatetsuでde行きますikimasu!", "Helvetica", 15)
+    @loc_text = Gosu::Image.from_text(self, "Huhu, 地下鉄で行きます", "media/Vera.ttf", 30)
     @japanese_text = Gosu::Image.from_text(self, "Achtung, hier kommts: " +
                                                  "このテクストはスペエクがありません。このテクストはスペエクがありません。このテクストはスペエクがありません。" +
                                                  "このテクストはスペエクがありません。このテクストはスペエクがありません。このテクストはスペエクがありません。" +
                                                  "このテクストはスペエクがありません。このテクストはスペエクがありません。このテクストはスペエクがありません。",
                                                  Gosu::default_font_name, 30, 0, 200, :center)
   end
-
+  
   def draw
     draw_line(100, 300, 0xffffffff, 300, 300, 0xffffffff, 255)
     draw_line(300, 304, 0xffffffff, 100, 304, 0xffffffff, 255)

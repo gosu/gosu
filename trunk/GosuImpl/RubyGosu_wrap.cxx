@@ -2337,7 +2337,11 @@ SWIGINTERN Gosu::GLTexInfo *Gosu_Image_glTexInfo(Gosu::Image const *self){
         else
             return 0;
     }
-SWIGINTERN Gosu::Image *Gosu_Image_fromText(Gosu::Window &window,std::wstring const &text,std::wstring const &fontName,unsigned int fontHeight,unsigned int lineSpacing,unsigned int maxWidth,Gosu::TextAlign align){
+SWIGINTERN Gosu::Image *Gosu_Image_fromText__SWIG_0(Gosu::Window &window,std::wstring const &text,std::wstring const &fontName,unsigned int fontHeight){
+        Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight);
+        return new Gosu::Image(window.graphics(), bmp);
+    }
+SWIGINTERN Gosu::Image *Gosu_Image_fromText__SWIG_1(Gosu::Window &window,std::wstring const &text,std::wstring const &fontName,unsigned int fontHeight,unsigned int lineSpacing,unsigned int maxWidth,Gosu::TextAlign align){
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
         return new Gosu::Image(window.graphics(), bmp);
     }
@@ -5773,7 +5777,62 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Image_from_text(int argc, VALUE *argv, VALUE self) {
+_wrap_Image_from_text__SWIG_0(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = 0 ;
+  std::wstring *arg2 = 0 ;
+  std::wstring *arg3 = 0 ;
+  unsigned int arg4 ;
+  Gosu::Image *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::wstring temp2 ;
+  std::wstring temp3 ;
+  unsigned int val4 ;
+  int ecode4 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 4) || (argc > 4)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Gosu__Window,  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Gosu_Image_fromText__SWIG_0" "', argument " "1"" of type '" "Gosu::Window &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Gosu_Image_fromText__SWIG_0" "', argument " "1"" of type '" "Gosu::Window &""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  {
+    VALUE localTemporary = rb_obj_as_string(argv[1]);
+    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
+    arg2 = &temp2;
+  }
+  {
+    VALUE localTemporary = rb_obj_as_string(argv[2]);
+    temp3 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
+    arg3 = &temp3;
+  }
+  ecode4 = SWIG_AsVal_unsigned_SS_int(argv[3], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Gosu_Image_fromText__SWIG_0" "', argument " "4"" of type '" "unsigned int""'");
+  } 
+  arg4 = static_cast< unsigned int >(val4);
+  {
+    try {
+      result = (Gosu::Image *)Gosu_Image_fromText__SWIG_0(*arg1,(std::wstring const &)*arg2,(std::wstring const &)*arg3,arg4);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Image_from_text__SWIG_1(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
   std::wstring *arg2 = 0 ;
   std::wstring *arg3 = 0 ;
@@ -5799,10 +5858,10 @@ _wrap_Image_from_text(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Gosu__Window,  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Gosu_Image_fromText" "', argument " "1"" of type '" "Gosu::Window &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Gosu_Image_fromText__SWIG_1" "', argument " "1"" of type '" "Gosu::Window &""'"); 
   }
   if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Gosu_Image_fromText" "', argument " "1"" of type '" "Gosu::Window &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Gosu_Image_fromText__SWIG_1" "', argument " "1"" of type '" "Gosu::Window &""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
@@ -5817,17 +5876,17 @@ _wrap_Image_from_text(int argc, VALUE *argv, VALUE self) {
   }
   ecode4 = SWIG_AsVal_unsigned_SS_int(argv[3], &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Gosu_Image_fromText" "', argument " "4"" of type '" "unsigned int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Gosu_Image_fromText__SWIG_1" "', argument " "4"" of type '" "unsigned int""'");
   } 
   arg4 = static_cast< unsigned int >(val4);
   ecode5 = SWIG_AsVal_unsigned_SS_int(argv[4], &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Gosu_Image_fromText" "', argument " "5"" of type '" "unsigned int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Gosu_Image_fromText__SWIG_1" "', argument " "5"" of type '" "unsigned int""'");
   } 
   arg5 = static_cast< unsigned int >(val5);
   ecode6 = SWIG_AsVal_unsigned_SS_int(argv[5], &val6);
   if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "Gosu_Image_fromText" "', argument " "6"" of type '" "unsigned int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "Gosu_Image_fromText__SWIG_1" "', argument " "6"" of type '" "unsigned int""'");
   } 
   arg6 = static_cast< unsigned int >(val6);
   {
@@ -5845,7 +5904,7 @@ _wrap_Image_from_text(int argc, VALUE *argv, VALUE self) {
   }
   {
     try {
-      result = (Gosu::Image *)Gosu_Image_fromText(*arg1,(std::wstring const &)*arg2,(std::wstring const &)*arg3,arg4,arg5,arg6,arg7);
+      result = (Gosu::Image *)Gosu_Image_fromText__SWIG_1(*arg1,(std::wstring const &)*arg2,(std::wstring const &)*arg3,arg4,arg5,arg6,arg7);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -5853,6 +5912,91 @@ _wrap_Image_from_text(int argc, VALUE *argv, VALUE self) {
   vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN |  0 );
   return vresult;
 fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE _wrap_Image_from_text(int nargs, VALUE *args, VALUE self) {
+  int argc;
+  VALUE argv[7];
+  int ii;
+  
+  argc = nargs;
+  if (argc > 7) SWIG_fail;
+  for (ii = 0; (ii < argc); ii++) {
+    argv[ii] = args[ii];
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__wstring, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_std__wstring, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_unsigned_SS_int(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_Image_from_text__SWIG_0(nargs, args, self);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 7) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__wstring, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_std__wstring, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_unsigned_SS_int(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            {
+              int res = SWIG_AsVal_unsigned_SS_int(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              {
+                int res = SWIG_AsVal_unsigned_SS_int(argv[5], NULL);
+                _v = SWIG_CheckState(res);
+              }
+              if (_v) {
+                {
+                  int res = SWIG_AsVal_int(argv[6], NULL);
+                  _v = SWIG_CheckState(res);
+                }
+                if (_v) {
+                  return _wrap_Image_from_text__SWIG_1(nargs, args, self);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  rb_raise(rb_eArgError, "No matching function for overloaded 'Image_from_text'");
   return Qnil;
 }
 
@@ -8383,6 +8527,102 @@ SWIGEXPORT void Init_gosu(void) {
   cSong.mark = 0;
   cSong.destroy = (void (*)(void *)) free_Gosu_Song;
   cSong.trackObjects = 1;
+  rb_define_const(mGosu, "KbRangeBegin", SWIG_From_int(static_cast< int >(Gosu::kbRangeBegin)));
+  rb_define_const(mGosu, "KbEscape", SWIG_From_int(static_cast< int >(Gosu::kbEscape)));
+  rb_define_const(mGosu, "KbF1", SWIG_From_int(static_cast< int >(Gosu::kbF1)));
+  rb_define_const(mGosu, "KbF2", SWIG_From_int(static_cast< int >(Gosu::kbF2)));
+  rb_define_const(mGosu, "KbF3", SWIG_From_int(static_cast< int >(Gosu::kbF3)));
+  rb_define_const(mGosu, "KbF4", SWIG_From_int(static_cast< int >(Gosu::kbF4)));
+  rb_define_const(mGosu, "KbF5", SWIG_From_int(static_cast< int >(Gosu::kbF5)));
+  rb_define_const(mGosu, "KbF6", SWIG_From_int(static_cast< int >(Gosu::kbF6)));
+  rb_define_const(mGosu, "KbF7", SWIG_From_int(static_cast< int >(Gosu::kbF7)));
+  rb_define_const(mGosu, "KbF8", SWIG_From_int(static_cast< int >(Gosu::kbF8)));
+  rb_define_const(mGosu, "KbF9", SWIG_From_int(static_cast< int >(Gosu::kbF9)));
+  rb_define_const(mGosu, "KbF10", SWIG_From_int(static_cast< int >(Gosu::kbF10)));
+  rb_define_const(mGosu, "KbF11", SWIG_From_int(static_cast< int >(Gosu::kbF11)));
+  rb_define_const(mGosu, "KbF12", SWIG_From_int(static_cast< int >(Gosu::kbF12)));
+  rb_define_const(mGosu, "Kb1", SWIG_From_int(static_cast< int >(Gosu::kb1)));
+  rb_define_const(mGosu, "Kb2", SWIG_From_int(static_cast< int >(Gosu::kb2)));
+  rb_define_const(mGosu, "Kb3", SWIG_From_int(static_cast< int >(Gosu::kb3)));
+  rb_define_const(mGosu, "Kb4", SWIG_From_int(static_cast< int >(Gosu::kb4)));
+  rb_define_const(mGosu, "Kb5", SWIG_From_int(static_cast< int >(Gosu::kb5)));
+  rb_define_const(mGosu, "Kb6", SWIG_From_int(static_cast< int >(Gosu::kb6)));
+  rb_define_const(mGosu, "Kb7", SWIG_From_int(static_cast< int >(Gosu::kb7)));
+  rb_define_const(mGosu, "Kb8", SWIG_From_int(static_cast< int >(Gosu::kb8)));
+  rb_define_const(mGosu, "Kb9", SWIG_From_int(static_cast< int >(Gosu::kb9)));
+  rb_define_const(mGosu, "Kb0", SWIG_From_int(static_cast< int >(Gosu::kb0)));
+  rb_define_const(mGosu, "KbTab", SWIG_From_int(static_cast< int >(Gosu::kbTab)));
+  rb_define_const(mGosu, "KbReturn", SWIG_From_int(static_cast< int >(Gosu::kbReturn)));
+  rb_define_const(mGosu, "KbSpace", SWIG_From_int(static_cast< int >(Gosu::kbSpace)));
+  rb_define_const(mGosu, "KbLeftShift", SWIG_From_int(static_cast< int >(Gosu::kbLeftShift)));
+  rb_define_const(mGosu, "KbRightShift", SWIG_From_int(static_cast< int >(Gosu::kbRightShift)));
+  rb_define_const(mGosu, "KbLeftControl", SWIG_From_int(static_cast< int >(Gosu::kbLeftControl)));
+  rb_define_const(mGosu, "KbRightControl", SWIG_From_int(static_cast< int >(Gosu::kbRightControl)));
+  rb_define_const(mGosu, "KbLeftAlt", SWIG_From_int(static_cast< int >(Gosu::kbLeftAlt)));
+  rb_define_const(mGosu, "KbRightAlt", SWIG_From_int(static_cast< int >(Gosu::kbRightAlt)));
+  rb_define_const(mGosu, "KbLeftMeta", SWIG_From_int(static_cast< int >(Gosu::kbLeftMeta)));
+  rb_define_const(mGosu, "KbRightMeta", SWIG_From_int(static_cast< int >(Gosu::kbRightMeta)));
+  rb_define_const(mGosu, "KbBackspace", SWIG_From_int(static_cast< int >(Gosu::kbBackspace)));
+  rb_define_const(mGosu, "KbLeft", SWIG_From_int(static_cast< int >(Gosu::kbLeft)));
+  rb_define_const(mGosu, "KbRight", SWIG_From_int(static_cast< int >(Gosu::kbRight)));
+  rb_define_const(mGosu, "KbUp", SWIG_From_int(static_cast< int >(Gosu::kbUp)));
+  rb_define_const(mGosu, "KbDown", SWIG_From_int(static_cast< int >(Gosu::kbDown)));
+  rb_define_const(mGosu, "KbHome", SWIG_From_int(static_cast< int >(Gosu::kbHome)));
+  rb_define_const(mGosu, "KbEnd", SWIG_From_int(static_cast< int >(Gosu::kbEnd)));
+  rb_define_const(mGosu, "KbInsert", SWIG_From_int(static_cast< int >(Gosu::kbInsert)));
+  rb_define_const(mGosu, "KbDelete", SWIG_From_int(static_cast< int >(Gosu::kbDelete)));
+  rb_define_const(mGosu, "KbPageUp", SWIG_From_int(static_cast< int >(Gosu::kbPageUp)));
+  rb_define_const(mGosu, "KbPageDown", SWIG_From_int(static_cast< int >(Gosu::kbPageDown)));
+  rb_define_const(mGosu, "KbEnter", SWIG_From_int(static_cast< int >(Gosu::kbEnter)));
+  rb_define_const(mGosu, "KbNumpad1", SWIG_From_int(static_cast< int >(Gosu::kbNumpad1)));
+  rb_define_const(mGosu, "KbNumpad2", SWIG_From_int(static_cast< int >(Gosu::kbNumpad2)));
+  rb_define_const(mGosu, "KbNumpad3", SWIG_From_int(static_cast< int >(Gosu::kbNumpad3)));
+  rb_define_const(mGosu, "KbNumpad4", SWIG_From_int(static_cast< int >(Gosu::kbNumpad4)));
+  rb_define_const(mGosu, "KbNumpad5", SWIG_From_int(static_cast< int >(Gosu::kbNumpad5)));
+  rb_define_const(mGosu, "KbNumpad6", SWIG_From_int(static_cast< int >(Gosu::kbNumpad6)));
+  rb_define_const(mGosu, "KbNumpad7", SWIG_From_int(static_cast< int >(Gosu::kbNumpad7)));
+  rb_define_const(mGosu, "KbNumpad8", SWIG_From_int(static_cast< int >(Gosu::kbNumpad8)));
+  rb_define_const(mGosu, "KbNumpad9", SWIG_From_int(static_cast< int >(Gosu::kbNumpad9)));
+  rb_define_const(mGosu, "KbNumpad0", SWIG_From_int(static_cast< int >(Gosu::kbNumpad0)));
+  rb_define_const(mGosu, "KbNumpadAdd", SWIG_From_int(static_cast< int >(Gosu::kbNumpadAdd)));
+  rb_define_const(mGosu, "KbNumpadSubtract", SWIG_From_int(static_cast< int >(Gosu::kbNumpadSubtract)));
+  rb_define_const(mGosu, "KbNumpadMultiply", SWIG_From_int(static_cast< int >(Gosu::kbNumpadMultiply)));
+  rb_define_const(mGosu, "KbNumpadDivide", SWIG_From_int(static_cast< int >(Gosu::kbNumpadDivide)));
+  rb_define_const(mGosu, "KbRangeEnd", SWIG_From_int(static_cast< int >(Gosu::kbRangeEnd)));
+  rb_define_const(mGosu, "MsRangeBegin", SWIG_From_int(static_cast< int >(Gosu::msRangeBegin)));
+  rb_define_const(mGosu, "MsLeft", SWIG_From_int(static_cast< int >(Gosu::msLeft)));
+  rb_define_const(mGosu, "MsRight", SWIG_From_int(static_cast< int >(Gosu::msRight)));
+  rb_define_const(mGosu, "MsMiddle", SWIG_From_int(static_cast< int >(Gosu::msMiddle)));
+  rb_define_const(mGosu, "MsWheelUp", SWIG_From_int(static_cast< int >(Gosu::msWheelUp)));
+  rb_define_const(mGosu, "MsWheelDown", SWIG_From_int(static_cast< int >(Gosu::msWheelDown)));
+  rb_define_const(mGosu, "MsRangeEnd", SWIG_From_int(static_cast< int >(Gosu::msRangeEnd)));
+  rb_define_const(mGosu, "GpRangeBegin", SWIG_From_int(static_cast< int >(Gosu::gpRangeBegin)));
+  rb_define_const(mGosu, "GpLeft", SWIG_From_int(static_cast< int >(Gosu::gpLeft)));
+  rb_define_const(mGosu, "GpRight", SWIG_From_int(static_cast< int >(Gosu::gpRight)));
+  rb_define_const(mGosu, "GpUp", SWIG_From_int(static_cast< int >(Gosu::gpUp)));
+  rb_define_const(mGosu, "GpDown", SWIG_From_int(static_cast< int >(Gosu::gpDown)));
+  rb_define_const(mGosu, "GpButton0", SWIG_From_int(static_cast< int >(Gosu::gpButton0)));
+  rb_define_const(mGosu, "GpButton1", SWIG_From_int(static_cast< int >(Gosu::gpButton1)));
+  rb_define_const(mGosu, "GpButton2", SWIG_From_int(static_cast< int >(Gosu::gpButton2)));
+  rb_define_const(mGosu, "GpButton3", SWIG_From_int(static_cast< int >(Gosu::gpButton3)));
+  rb_define_const(mGosu, "GpButton4", SWIG_From_int(static_cast< int >(Gosu::gpButton4)));
+  rb_define_const(mGosu, "GpButton5", SWIG_From_int(static_cast< int >(Gosu::gpButton5)));
+  rb_define_const(mGosu, "GpButton6", SWIG_From_int(static_cast< int >(Gosu::gpButton6)));
+  rb_define_const(mGosu, "GpButton7", SWIG_From_int(static_cast< int >(Gosu::gpButton7)));
+  rb_define_const(mGosu, "GpButton8", SWIG_From_int(static_cast< int >(Gosu::gpButton8)));
+  rb_define_const(mGosu, "GpButton9", SWIG_From_int(static_cast< int >(Gosu::gpButton9)));
+  rb_define_const(mGosu, "GpButton10", SWIG_From_int(static_cast< int >(Gosu::gpButton10)));
+  rb_define_const(mGosu, "GpButton11", SWIG_From_int(static_cast< int >(Gosu::gpButton11)));
+  rb_define_const(mGosu, "GpButton12", SWIG_From_int(static_cast< int >(Gosu::gpButton12)));
+  rb_define_const(mGosu, "GpButton13", SWIG_From_int(static_cast< int >(Gosu::gpButton13)));
+  rb_define_const(mGosu, "GpButton14", SWIG_From_int(static_cast< int >(Gosu::gpButton14)));
+  rb_define_const(mGosu, "GpButton15", SWIG_From_int(static_cast< int >(Gosu::gpButton15)));
+  rb_define_const(mGosu, "GpRangeEnd", SWIG_From_int(static_cast< int >(Gosu::gpRangeEnd)));
+  rb_define_const(mGosu, "KbNum", SWIG_From_int(static_cast< int >(Gosu::kbNum)));
+  rb_define_const(mGosu, "MsNum", SWIG_From_int(static_cast< int >(Gosu::msNum)));
+  rb_define_const(mGosu, "GpNum", SWIG_From_int(static_cast< int >(Gosu::gpNum)));
+  rb_define_const(mGosu, "NumButtons", SWIG_From_int(static_cast< int >(Gosu::numButtons)));
+  rb_define_const(mGosu, "NoButton", SWIG_From_int(static_cast< int >(Gosu::noButton)));
   
   // Backwards compatibility: import the constants into Gosu::Button.
   rb_eval_string("module Gosu::Button; Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }; end");

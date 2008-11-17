@@ -58,9 +58,8 @@ namespace Gosu
 		return !(lhs == rhs);
 	}
 	
-    //! Manages initialization and shutdown of the input system; only one Input
-	//! instance can live per application. (Should this limitation ever get into
-	//! anyone's way, I will happily remove it; until then, I practice YAGNI.)
+    //! Manages initialization and shutdown of the input system. Only one Input
+	//! instance can exist per application.
     class Input
     {
         struct Impl;
@@ -82,7 +81,7 @@ namespace Gosu
         #endif
         
         ~Input();
-
+        
         //! Returns the character a button usually produces, or 0.
         static wchar_t idToChar(Button btn);
         //! Returns the button that has to be pressed to produce the
@@ -91,7 +90,7 @@ namespace Gosu
         
 		//! Returns true if a button is currently pressed.
 		bool down(Button btn) const;
-
+        
         //! Returns the horizontal position of the mouse relative to the top
         //! left corner of the window given to Input's constructor.
         double mouseX() const;

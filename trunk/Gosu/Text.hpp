@@ -30,14 +30,26 @@ namespace Gosu
         Color c, const std::wstring& fontName, unsigned fontHeight,
         unsigned fontFlags = 0);
 
+    //! Creates a bitmap that is filled with a line of text given to the function.
+    //! The line cannot contain line breaks.
+    //! \param fontName Name of a system font, or a filename to a TTF file (must contain '/').
+    //! \param fontHeight Height of the font in pixels.
+    //! \param fontFlags Binary combination of members of the FontFlags
+    //! enum.
+    Bitmap createText(const std::wstring& text,
+        const std::wstring& fontName, unsigned fontHeight,
+        unsigned fontFlags = 0);
+
     //! Creates a bitmap that is filled with the text given to the function.
     //! The text may contain line breaks.
     //! \param fontName Name of a system font, or a filename to a TTF file (must contain '/').
     //! \param fontHeight Height of the font in pixels.
     //! \param lineSpacing Spacing between two lines of text in pixels.
-    //! \param maxWidth Maximal width of the bitmap that will be returned. Text
+    //! \param maxWidth Width of the bitmap that will be returned. Text
     //! will be split into multiple lines to avoid drawing over the right
     //! border. When a single word is too long, it will be truncated.
+    //! \param fontFlags Binary combination of members of the FontFlags
+    //! enum.
     Bitmap createText(const std::wstring& text,
         const std::wstring& fontName, unsigned fontHeight, 
         unsigned lineSpacing, unsigned maxWidth, TextAlign align,

@@ -325,6 +325,12 @@ namespace Gosu
     }
     %newobject fromText;
     static Gosu::Image* fromText(Gosu::Window& window, const std::wstring& text,
+                                 const std::wstring& fontName, unsigned fontHeight) {
+        Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight);
+        return new Gosu::Image(window.graphics(), bmp);
+    }
+    %newobject fromText;
+    static Gosu::Image* fromText(Gosu::Window& window, const std::wstring& text,
                                  const std::wstring& fontName, unsigned fontHeight,
                                  unsigned lineSpacing, unsigned maxWidth, TextAlign align) {
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
@@ -367,6 +373,8 @@ namespace Gosu
 // Input and Window:
 
 // Button ID constants
+// Does not matter that it's the Mac file, %include only analyses symbols to export, not their values.
+%include "../Gosu/ButtonsMac.hpp"
 %init %{
     // Backwards compatibility: import the constants into Gosu::Button.
     rb_eval_string("module Gosu::Button; Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }; end");

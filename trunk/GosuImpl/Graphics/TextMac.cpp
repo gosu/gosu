@@ -201,24 +201,30 @@ namespace
 unsigned Gosu::textWidth(const std::wstring& text,
     const std::wstring& fontName, unsigned fontHeight, unsigned fontFlags)
 {
+    if (text.empty())
+        return 1;
+
     // TODO: special case :///7
     if (text == L" ")
         return fontHeight / 3;
     
     ATSULayoutAndStyle atlas(text, fontName, fontHeight, fontFlags);
     Rect rect = atlas.textExtents();
-    return rect.right + 1 - rect.left;
+    return rect.right + 1 - rect.left + 1; // add one pixel on OS X
 }
 
 void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
     Color c, const std::wstring& fontName, unsigned fontHeight,
     unsigned fontFlags)
 {
+    if (text.empty())
+        return;
+
     CachedFontInfo& font = getFont(fontName);
     
     ATSULayoutAndStyle atlas(text, fontName, fontHeight, fontFlags);
     Rect rect = atlas.textExtents();
-    unsigned width = rect.right + 1 - rect.left;
+    unsigned width = rect.right + 1 - rect.left + 1; // add one pixel on OS X
     std::vector<boost::uint32_t> buf(width * fontHeight);
     {
         MacBitmap helper(&buf[0], width, fontHeight);
