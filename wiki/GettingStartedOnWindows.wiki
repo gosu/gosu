@@ -12,7 +12,7 @@ Also, select library files, and add the same directory for Gosu so MSVC can find
 
 Click File/New/Project and select 'Win32 project', then give it a name and in the application settings choose 'Empty project'. Click Finish.
 
-You can then add new code files, for example the ones from the tutorial. *Important: You need to go into the project options, select C/C++ options, then Language and change the used library from "Multithreaded DLL" to "Multithreaded", and "Multithreaded Debug DLL" to "Multithreaded Debug", respectively - or you will get linker errors!* These options are usually only available after adding the first C++ source file.
+You can then add new code files, for example the ones from the tutorial. *Important: You need to go into the project options, select C/C++ options, then Code Generation and change the used library from "Multithreaded DLL" to "Multithreaded", and "Multithreaded Debug DLL" to "Multithreaded Debug", respectively - or you will get linker errors!* These options are usually only available after adding the first C++ source file.
 
 If you need a starting point or want to test if everything is correctly set up, select File/New, add a new C++ source file and use this code to compile and run:
 
