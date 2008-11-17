@@ -39,13 +39,20 @@
 }
 
 %typemap(in) Gosu::Button {
-	$1 = Gosu::Button(NUM2LONG($input));
+    if (NIL_P($input))
+        $1 = Gosu::noButton;
+    else
+        $1 = Gosu::Button(NUM2LONG($input));
 }
 %typemap(out) Gosu::Button {
 	$result = LONG2NUM($1.getId());
+    if ($result == -1)
+        $result = Qnil;
 }
 %typemap(directorin) Gosu::Button {
 	$input = LONG2NUM($1.getId());
+    if ($input == -1)
+        $input = Qnil;
 }
 
 // Typemaps for enums that should be given in as symbols.
@@ -360,13 +367,11 @@ namespace Gosu
 // Input and Window:
 
 // Button ID constants
-%include "../Gosu/ButtonsMac.hpp"
 %init %{
     // Backwards compatibility: import the constants into Gosu::Button.
     rb_eval_string("module Gosu::Button; Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }; end");
     
     // Extend Numeric with simple angle conversion methods.
-    // IMPR: Maybe faster in C?
     rb_eval_string("class Numeric;"
                    "  def gosu_to_radians; (self - 90) * Math::PI / 180.0; end;"
                    "  def radians_to_gosu; self * 180.0 / Math::PI + 90; end;"

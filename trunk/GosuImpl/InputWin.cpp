@@ -374,7 +374,7 @@ Gosu::Button Gosu::Input::charToId(wchar_t ch)
 
 wchar_t Gosu::Input::idToChar(Gosu::Button btn)
 {
-    // Only translate keyboard ids.
+	// Only translate keyboard ids.
     if (btn.getId() > 255)
         return 0;
 
@@ -393,6 +393,10 @@ wchar_t Gosu::Input::idToChar(Gosu::Button btn)
 
 bool Gosu::Input::down(Button btn) const
 {
+	// The invalid button is never pressed (but can be passed to this function).
+	if (btn == noButton)
+		return false;
+
     return buttons.at(btn.getId());
 }
 

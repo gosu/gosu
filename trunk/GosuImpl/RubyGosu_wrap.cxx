@@ -2534,6 +2534,8 @@ void SwigDirector_Window::buttonDown(Gosu::Button arg0) {
   
   {
     obj0 = LONG2NUM((&arg0)->getId());
+    if (obj0 == -1)
+    obj0 = Qnil;
   }
   result = rb_funcall(swig_get_self(), rb_intern("button_down"), 1,obj0);
 }
@@ -2545,6 +2547,8 @@ void SwigDirector_Window::buttonUp(Gosu::Button arg0) {
   
   {
     obj0 = LONG2NUM((&arg0)->getId());
+    if (obj0 == -1)
+    obj0 = Qnil;
   }
   result = rb_funcall(swig_get_self(), rb_intern("button_up"), 1,obj0);
 }
@@ -7031,6 +7035,9 @@ _wrap_Window_button_down(int argc, VALUE *argv, VALUE self) {
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
+    if (NIL_P(argv[0]))
+    arg2 = Gosu::noButton;
+    else
     arg2 = Gosu::Button(NUM2LONG(argv[0]));
   }
   director = dynamic_cast<Swig::Director *>(arg1);
@@ -7075,6 +7082,9 @@ _wrap_Window_button_up(int argc, VALUE *argv, VALUE self) {
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
+    if (NIL_P(argv[0]))
+    arg2 = Gosu::noButton;
+    else
     arg2 = Gosu::Button(NUM2LONG(argv[0]));
   }
   director = dynamic_cast<Swig::Director *>(arg1);
@@ -7518,6 +7528,9 @@ _wrap_Window_button_downq___(int argc, VALUE *argv, VALUE self) {
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
+    if (NIL_P(argv[0]))
+    arg2 = Gosu::noButton;
+    else
     arg2 = Gosu::Button(NUM2LONG(argv[0]));
   }
   {
@@ -7565,6 +7578,8 @@ _wrap_Window_char_to_button_id(int argc, VALUE *argv, VALUE self) {
   }
   {
     vresult = LONG2NUM((&result)->getId());
+    if (vresult == -1)
+    vresult = Qnil;
   }
   return vresult;
 fail:
@@ -7590,6 +7605,9 @@ _wrap_Window_button_id_to_char(int argc, VALUE *argv, VALUE self) {
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
+    if (NIL_P(argv[0]))
+    arg2 = Gosu::noButton;
+    else
     arg2 = Gosu::Button(NUM2LONG(argv[0]));
   }
   {
@@ -8365,108 +8383,11 @@ SWIGEXPORT void Init_gosu(void) {
   cSong.mark = 0;
   cSong.destroy = (void (*)(void *)) free_Gosu_Song;
   cSong.trackObjects = 1;
-  rb_define_const(mGosu, "KbRangeBegin", SWIG_From_int(static_cast< int >(Gosu::kbRangeBegin)));
-  rb_define_const(mGosu, "KbEscape", SWIG_From_int(static_cast< int >(Gosu::kbEscape)));
-  rb_define_const(mGosu, "KbF1", SWIG_From_int(static_cast< int >(Gosu::kbF1)));
-  rb_define_const(mGosu, "KbF2", SWIG_From_int(static_cast< int >(Gosu::kbF2)));
-  rb_define_const(mGosu, "KbF3", SWIG_From_int(static_cast< int >(Gosu::kbF3)));
-  rb_define_const(mGosu, "KbF4", SWIG_From_int(static_cast< int >(Gosu::kbF4)));
-  rb_define_const(mGosu, "KbF5", SWIG_From_int(static_cast< int >(Gosu::kbF5)));
-  rb_define_const(mGosu, "KbF6", SWIG_From_int(static_cast< int >(Gosu::kbF6)));
-  rb_define_const(mGosu, "KbF7", SWIG_From_int(static_cast< int >(Gosu::kbF7)));
-  rb_define_const(mGosu, "KbF8", SWIG_From_int(static_cast< int >(Gosu::kbF8)));
-  rb_define_const(mGosu, "KbF9", SWIG_From_int(static_cast< int >(Gosu::kbF9)));
-  rb_define_const(mGosu, "KbF10", SWIG_From_int(static_cast< int >(Gosu::kbF10)));
-  rb_define_const(mGosu, "KbF11", SWIG_From_int(static_cast< int >(Gosu::kbF11)));
-  rb_define_const(mGosu, "KbF12", SWIG_From_int(static_cast< int >(Gosu::kbF12)));
-  rb_define_const(mGosu, "Kb1", SWIG_From_int(static_cast< int >(Gosu::kb1)));
-  rb_define_const(mGosu, "Kb2", SWIG_From_int(static_cast< int >(Gosu::kb2)));
-  rb_define_const(mGosu, "Kb3", SWIG_From_int(static_cast< int >(Gosu::kb3)));
-  rb_define_const(mGosu, "Kb4", SWIG_From_int(static_cast< int >(Gosu::kb4)));
-  rb_define_const(mGosu, "Kb5", SWIG_From_int(static_cast< int >(Gosu::kb5)));
-  rb_define_const(mGosu, "Kb6", SWIG_From_int(static_cast< int >(Gosu::kb6)));
-  rb_define_const(mGosu, "Kb7", SWIG_From_int(static_cast< int >(Gosu::kb7)));
-  rb_define_const(mGosu, "Kb8", SWIG_From_int(static_cast< int >(Gosu::kb8)));
-  rb_define_const(mGosu, "Kb9", SWIG_From_int(static_cast< int >(Gosu::kb9)));
-  rb_define_const(mGosu, "Kb0", SWIG_From_int(static_cast< int >(Gosu::kb0)));
-  rb_define_const(mGosu, "KbTab", SWIG_From_int(static_cast< int >(Gosu::kbTab)));
-  rb_define_const(mGosu, "KbReturn", SWIG_From_int(static_cast< int >(Gosu::kbReturn)));
-  rb_define_const(mGosu, "KbSpace", SWIG_From_int(static_cast< int >(Gosu::kbSpace)));
-  rb_define_const(mGosu, "KbLeftShift", SWIG_From_int(static_cast< int >(Gosu::kbLeftShift)));
-  rb_define_const(mGosu, "KbRightShift", SWIG_From_int(static_cast< int >(Gosu::kbRightShift)));
-  rb_define_const(mGosu, "KbLeftControl", SWIG_From_int(static_cast< int >(Gosu::kbLeftControl)));
-  rb_define_const(mGosu, "KbRightControl", SWIG_From_int(static_cast< int >(Gosu::kbRightControl)));
-  rb_define_const(mGosu, "KbLeftAlt", SWIG_From_int(static_cast< int >(Gosu::kbLeftAlt)));
-  rb_define_const(mGosu, "KbRightAlt", SWIG_From_int(static_cast< int >(Gosu::kbRightAlt)));
-  rb_define_const(mGosu, "KbLeftMeta", SWIG_From_int(static_cast< int >(Gosu::kbLeftMeta)));
-  rb_define_const(mGosu, "KbRightMeta", SWIG_From_int(static_cast< int >(Gosu::kbRightMeta)));
-  rb_define_const(mGosu, "KbBackspace", SWIG_From_int(static_cast< int >(Gosu::kbBackspace)));
-  rb_define_const(mGosu, "KbLeft", SWIG_From_int(static_cast< int >(Gosu::kbLeft)));
-  rb_define_const(mGosu, "KbRight", SWIG_From_int(static_cast< int >(Gosu::kbRight)));
-  rb_define_const(mGosu, "KbUp", SWIG_From_int(static_cast< int >(Gosu::kbUp)));
-  rb_define_const(mGosu, "KbDown", SWIG_From_int(static_cast< int >(Gosu::kbDown)));
-  rb_define_const(mGosu, "KbHome", SWIG_From_int(static_cast< int >(Gosu::kbHome)));
-  rb_define_const(mGosu, "KbEnd", SWIG_From_int(static_cast< int >(Gosu::kbEnd)));
-  rb_define_const(mGosu, "KbInsert", SWIG_From_int(static_cast< int >(Gosu::kbInsert)));
-  rb_define_const(mGosu, "KbDelete", SWIG_From_int(static_cast< int >(Gosu::kbDelete)));
-  rb_define_const(mGosu, "KbPageUp", SWIG_From_int(static_cast< int >(Gosu::kbPageUp)));
-  rb_define_const(mGosu, "KbPageDown", SWIG_From_int(static_cast< int >(Gosu::kbPageDown)));
-  rb_define_const(mGosu, "KbEnter", SWIG_From_int(static_cast< int >(Gosu::kbEnter)));
-  rb_define_const(mGosu, "KbNumpad1", SWIG_From_int(static_cast< int >(Gosu::kbNumpad1)));
-  rb_define_const(mGosu, "KbNumpad2", SWIG_From_int(static_cast< int >(Gosu::kbNumpad2)));
-  rb_define_const(mGosu, "KbNumpad3", SWIG_From_int(static_cast< int >(Gosu::kbNumpad3)));
-  rb_define_const(mGosu, "KbNumpad4", SWIG_From_int(static_cast< int >(Gosu::kbNumpad4)));
-  rb_define_const(mGosu, "KbNumpad5", SWIG_From_int(static_cast< int >(Gosu::kbNumpad5)));
-  rb_define_const(mGosu, "KbNumpad6", SWIG_From_int(static_cast< int >(Gosu::kbNumpad6)));
-  rb_define_const(mGosu, "KbNumpad7", SWIG_From_int(static_cast< int >(Gosu::kbNumpad7)));
-  rb_define_const(mGosu, "KbNumpad8", SWIG_From_int(static_cast< int >(Gosu::kbNumpad8)));
-  rb_define_const(mGosu, "KbNumpad9", SWIG_From_int(static_cast< int >(Gosu::kbNumpad9)));
-  rb_define_const(mGosu, "KbNumpad0", SWIG_From_int(static_cast< int >(Gosu::kbNumpad0)));
-  rb_define_const(mGosu, "KbNumpadAdd", SWIG_From_int(static_cast< int >(Gosu::kbNumpadAdd)));
-  rb_define_const(mGosu, "KbNumpadSubtract", SWIG_From_int(static_cast< int >(Gosu::kbNumpadSubtract)));
-  rb_define_const(mGosu, "KbNumpadMultiply", SWIG_From_int(static_cast< int >(Gosu::kbNumpadMultiply)));
-  rb_define_const(mGosu, "KbNumpadDivide", SWIG_From_int(static_cast< int >(Gosu::kbNumpadDivide)));
-  rb_define_const(mGosu, "KbRangeEnd", SWIG_From_int(static_cast< int >(Gosu::kbRangeEnd)));
-  rb_define_const(mGosu, "MsRangeBegin", SWIG_From_int(static_cast< int >(Gosu::msRangeBegin)));
-  rb_define_const(mGosu, "MsLeft", SWIG_From_int(static_cast< int >(Gosu::msLeft)));
-  rb_define_const(mGosu, "MsRight", SWIG_From_int(static_cast< int >(Gosu::msRight)));
-  rb_define_const(mGosu, "MsMiddle", SWIG_From_int(static_cast< int >(Gosu::msMiddle)));
-  rb_define_const(mGosu, "MsWheelUp", SWIG_From_int(static_cast< int >(Gosu::msWheelUp)));
-  rb_define_const(mGosu, "MsWheelDown", SWIG_From_int(static_cast< int >(Gosu::msWheelDown)));
-  rb_define_const(mGosu, "MsRangeEnd", SWIG_From_int(static_cast< int >(Gosu::msRangeEnd)));
-  rb_define_const(mGosu, "GpRangeBegin", SWIG_From_int(static_cast< int >(Gosu::gpRangeBegin)));
-  rb_define_const(mGosu, "GpLeft", SWIG_From_int(static_cast< int >(Gosu::gpLeft)));
-  rb_define_const(mGosu, "GpRight", SWIG_From_int(static_cast< int >(Gosu::gpRight)));
-  rb_define_const(mGosu, "GpUp", SWIG_From_int(static_cast< int >(Gosu::gpUp)));
-  rb_define_const(mGosu, "GpDown", SWIG_From_int(static_cast< int >(Gosu::gpDown)));
-  rb_define_const(mGosu, "GpButton0", SWIG_From_int(static_cast< int >(Gosu::gpButton0)));
-  rb_define_const(mGosu, "GpButton1", SWIG_From_int(static_cast< int >(Gosu::gpButton1)));
-  rb_define_const(mGosu, "GpButton2", SWIG_From_int(static_cast< int >(Gosu::gpButton2)));
-  rb_define_const(mGosu, "GpButton3", SWIG_From_int(static_cast< int >(Gosu::gpButton3)));
-  rb_define_const(mGosu, "GpButton4", SWIG_From_int(static_cast< int >(Gosu::gpButton4)));
-  rb_define_const(mGosu, "GpButton5", SWIG_From_int(static_cast< int >(Gosu::gpButton5)));
-  rb_define_const(mGosu, "GpButton6", SWIG_From_int(static_cast< int >(Gosu::gpButton6)));
-  rb_define_const(mGosu, "GpButton7", SWIG_From_int(static_cast< int >(Gosu::gpButton7)));
-  rb_define_const(mGosu, "GpButton8", SWIG_From_int(static_cast< int >(Gosu::gpButton8)));
-  rb_define_const(mGosu, "GpButton9", SWIG_From_int(static_cast< int >(Gosu::gpButton9)));
-  rb_define_const(mGosu, "GpButton10", SWIG_From_int(static_cast< int >(Gosu::gpButton10)));
-  rb_define_const(mGosu, "GpButton11", SWIG_From_int(static_cast< int >(Gosu::gpButton11)));
-  rb_define_const(mGosu, "GpButton12", SWIG_From_int(static_cast< int >(Gosu::gpButton12)));
-  rb_define_const(mGosu, "GpButton13", SWIG_From_int(static_cast< int >(Gosu::gpButton13)));
-  rb_define_const(mGosu, "GpButton14", SWIG_From_int(static_cast< int >(Gosu::gpButton14)));
-  rb_define_const(mGosu, "GpButton15", SWIG_From_int(static_cast< int >(Gosu::gpButton15)));
-  rb_define_const(mGosu, "GpRangeEnd", SWIG_From_int(static_cast< int >(Gosu::gpRangeEnd)));
-  rb_define_const(mGosu, "KbNum", SWIG_From_int(static_cast< int >(Gosu::kbNum)));
-  rb_define_const(mGosu, "MsNum", SWIG_From_int(static_cast< int >(Gosu::msNum)));
-  rb_define_const(mGosu, "GpNum", SWIG_From_int(static_cast< int >(Gosu::gpNum)));
-  rb_define_const(mGosu, "NumButtons", SWIG_From_int(static_cast< int >(Gosu::numButtons)));
-  rb_define_const(mGosu, "NoButton", SWIG_From_int(static_cast< int >(Gosu::noButton)));
   
   // Backwards compatibility: import the constants into Gosu::Button.
   rb_eval_string("module Gosu::Button; Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }; end");
   
   // Extend Numeric with simple angle conversion methods.
-  // IMPR: Maybe faster in C?
   rb_eval_string("class Numeric;"
     "  def gosu_to_radians; (self - 90) * Math::PI / 180.0; end;"
     "  def radians_to_gosu; self * 180.0 / Math::PI + 90; end;"

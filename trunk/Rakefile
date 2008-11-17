@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'appscript'
 require 'ftools'
+require 'date'
 require 'rake/gempackagetask'
 
 COMMON_FILES = FileList[
@@ -73,6 +74,7 @@ task :todo do
     wiki_page.puts "= To Do list ="
     wiki_page.puts
     wiki_page.puts "This list of tasks is exported automatically from my OmniFocus projects."
+    wiki_page.puts "(Last update: #{Date.today})"
     wiki_page.puts
 
     $shown_tasks = []

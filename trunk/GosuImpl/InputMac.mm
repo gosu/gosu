@@ -607,6 +607,9 @@ Gosu::Button Gosu::Input::charToId(wchar_t ch)
 
 bool Gosu::Input::down(Gosu::Button btn) const
 {
+    if (btn == noButton)
+        return false;
+
     return buttonStates.at(btn.getId());
 }
 

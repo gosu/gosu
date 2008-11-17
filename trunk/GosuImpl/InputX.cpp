@@ -45,6 +45,9 @@ bool Gosu::Input::feedXEvent(::XEvent& event, Gosu::Window* window)
 
 bool Gosu::Input::down(Gosu::Button btn) const
 {
+    if (btn == noButton)
+        return false;
+
     // Will default to false for unknown indices (good).
     return pimpl->keyMap[btn.getId()];
 }
