@@ -4,6 +4,8 @@
 =0.7.11=
   * Ruby: `char_to_button_id` returns nil for untypable characters instead of -1.
   * All: `Input::down(button)` silently returns false for a "no button" id, `Window#button_down?` silently returns false for `nil` values.
+  * All: Added simpler createText()/Image#from_text with support for just one line.
+  * All: Added bi-directional support in Gosu::Font, based on the LTR Override and RTL Override code points.
   * Linux: Disabled key repeat.
   * Linux: Fixed timing bug on very fast machines.
 
