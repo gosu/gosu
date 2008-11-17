@@ -2,6 +2,8 @@
 #labels Featured
 
 =0.7.11=
+  * Ruby: `char_to_button_id` returns nil for untypable characters instead of -1.
+  * All: `Input::down(button)` silently returns false for a "no button" id, `Window#button_down?` silently returns false for `nil` values.
   * Linux: Disabled key repeat.
   * Linux: Fixed timing bug on very fast machines.
 
