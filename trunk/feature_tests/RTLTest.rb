@@ -10,7 +10,7 @@ class Test < Gosu::Window
   def draw
     @font.draw("Erstens‮Zweitens‭Drittens", 10, 10, 0)
     @font.draw("‮Alleinstehend :(", 10, 50, 0)
-    @font.draw("Erstens Zweitens Drittens", 10, 90, 0)
+    @font.draw("שלום העולם!", 10, 90, 0)
   end
   
   def button_down(id)
