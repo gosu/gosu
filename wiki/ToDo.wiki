@@ -4,16 +4,13 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2008-11-16)
+(Last update: 2008-11-17)
 
 == Gosu 0.7.x ==
   * 0.7.11, i18n/Text release
-    * Windows: Fix issue with btn_id_to_char on Russian Windows
     * Linux: Fix problem with Unicode chars (redesign button id system)
     * Check out freshly on Linux
-    * Experiment with RTL support in Font
-    * Add a bit more letterspacing to Font (Mac)
-    * Implement :one_line pseudo alignment value
+    * Add RTL support to Font::drawRot too
     * Verify that radians_to_gosu & vice versa work
     * Iterate on currently reported issues
     * Mac: Make createText use ATSUI
@@ -29,7 +26,9 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Redirect libgosu.org to RailsHoster
       * Change all references to vu2040 to libgosu.org in the forum (and everywhere else)
       * Request Image::Info and DB::SQLite3
+    * Re-run doxygen
     * Release Gosu 0.7.11
+    * Update RubyReference: char_to_button_id returns nil now, easier from_text method
     * Make it easy to create backups of the board
     * Announce Gosu 0.7.11 + [forums.]libgosu.org + LD13
     * (Order a T-shirt from wishlist after all this hard work!)
