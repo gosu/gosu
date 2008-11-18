@@ -4,20 +4,18 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2008-11-17)
+(Last update: 2008-11-18)
 
 == Gosu 0.7.x ==
-  * 0.7.11, i18n/Text release
+  * 0.7.11, i18n/text release
     * Linux: Fix problem with Unicode chars (redesign button id system)
     * Check out freshly on Linux
+    * Update "Progress Info" on website
     * Add RTL support to Font::drawRot too
-    * Verify that radians_to_gosu & vice versa work
+    * Make RTL work without RTL/LTR markers?!
     * Iterate on currently reported issues
-    * Mac: Make createText use ATSUI
-    * Windows: Make createText use Uniscribe
-    * Linux: Make createText use Pango/Freetype2
+    * Verify that radians_to_gosu & vice versa work
     * gosuToRadians/radiansToGosu in Math.hpp
-    * Design a new logo for Gosu
     * Add KbZ as the physical Z key, etc. (Mac)
     * Add KbZ as the physical Z key, etc. (Windows)
     * Add KbZ as the physical Z key, etc. (Linux)
@@ -27,8 +25,9 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Change all references to vu2040 to libgosu.org in the forum (and everywhere else)
       * Request Image::Info and DB::SQLite3
     * Re-run doxygen
+    * Design a new logo for Gosu
     * Release Gosu 0.7.11
-    * Update RubyReference: char_to_button_id returns nil now, easier from_text method
+    * Update RubyReference: char_to_button_id returns nil now, easier from_text method, KbZ buttons
     * Make it easy to create backups of the board
     * Announce Gosu 0.7.11 + [forums.]libgosu.org + LD13
     * (Order a T-shirt from wishlist after all this hard work!)
@@ -54,7 +53,11 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Look into Ruby 1.9 on Windows
       * Document support for Ruby 1.9
       * Package OR&G with optimized Gosu
-  * 0.7.13, polish/deployment release
+  * 0.7.13, text quality release
+    * Mac: Make createText use ATSUI
+    * Windows: Make createText use Uniscribe
+    * Linux: Make createText use Pango/Freetype2
+  * 0.7.14, polish/deployment release
     * RMagick auf Windows statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * Reviewen: http://rubyforge.org/tracker/index.php?func=detail&aid=21405&group_id=375&atid=1504
     * RMagick auf OS X statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
