@@ -4,15 +4,15 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2008-11-18)
+(Last update: 2008-11-20)
 
 == Gosu 0.7.x ==
   * 0.7.11, i18n/text release
     * Linux: Fix problem with Unicode chars (redesign button id system)
     * Check out freshly on Linux
     * Update "Progress Info" on website
-    * Add RTL support to Font::drawRot too
     * Make RTL work without RTL/LTR markers?!
+    * Add RTL support to Font::drawRot too
     * Iterate on currently reported issues
     * Verify that radians_to_gosu & vice versa work
     * gosuToRadians/radiansToGosu in Math.hpp
