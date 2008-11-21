@@ -6,7 +6,9 @@ class Test < Gosu::Window
   end
     
   def button_down(id)        
-    self.caption = "#{id} = #{button_id_to_char(id)} / #{button_id_to_char(id)[0]}  = #{char_to_button_id(button_id_to_char(id))}"
+    self.caption = "#{id} = #{button_id_to_char(id)} / #{button_id_to_char(id)[0]} = #{char_to_button_id(button_id_to_char(id))}"
+    name = Gosu.constants.grep(/^Kb/).find { |name| Gosu.const_get(name) == id }
+    self.caption += " called: #{name}" unless name.nil?
   end
 end
 
