@@ -17,7 +17,7 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".."
+			OutputDirectory="../lib"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -62,6 +62,7 @@
 				AdditionalDependencies="msvcrt-ruby18.lib"
 				OutputFile="$(OutDir)\gosu.so"
 				LinkIncremental="1"
+				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="false"
 				SubSystem="2"
 				OptimizeReferences="2"

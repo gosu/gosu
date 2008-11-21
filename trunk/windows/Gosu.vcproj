@@ -17,7 +17,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".."
+			OutputDirectory="../lib"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
@@ -83,7 +83,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".."
+			OutputDirectory="../lib"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
@@ -515,11 +515,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Gosu\Sockets.hpp"
+				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
+				RelativePath="..\Gosu\Sockets.hpp"
 				>
 			</File>
 			<File
