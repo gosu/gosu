@@ -29,6 +29,17 @@ namespace Gosu
     //! to call std::srand before using it).
     double random(double min, double max);
 
+    //! Translates between Gosu's angle system and radians.
+    inline double gosuToRadians(double angle)
+    {
+        return (angle - 90) * pi / 180;
+    }
+    //! Translates between Gosu's angle system and radians.
+    inline double radiansToGosu(double angle)
+    {
+        return angle * 180 / pi + 90;
+    }
+
     //! Returns the horizontal distance between the origin and the point to
     //! which you would get if you moved radius pixels in the direction
     //! specified by angle.

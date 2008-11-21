@@ -27,7 +27,7 @@ double Gosu::angle(double fromX, double fromY, double toX, double toY,
     if (distX == 0 && distY == 0)
         return def;
     else
-        return std::atan2(distY, distX) / pi * 180 + 90;
+        return radiansToGosu(std::atan2(distY, distX));
 }
 
 double Gosu::angleDiff(double from, double to)

@@ -2679,6 +2679,66 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_gosu_to_radians(int argc, VALUE *argv, VALUE self) {
+  double arg1 ;
+  double result;
+  double val1 ;
+  int ecode1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  ecode1 = SWIG_AsVal_double(argv[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "Gosu::gosuToRadians" "', argument " "1"" of type '" "double""'");
+  } 
+  arg1 = static_cast< double >(val1);
+  {
+    try {
+      result = (double)Gosu::gosuToRadians(arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_radians_to_gosu(int argc, VALUE *argv, VALUE self) {
+  double arg1 ;
+  double result;
+  double val1 ;
+  int ecode1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  ecode1 = SWIG_AsVal_double(argv[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "Gosu::radiansToGosu" "', argument " "1"" of type '" "double""'");
+  } 
+  arg1 = static_cast< double >(val1);
+  {
+    try {
+      result = (double)Gosu::radiansToGosu(arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_offset_x(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
   double arg2 ;
@@ -8384,6 +8444,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "trunc", VALUEFUNC(_wrap_trunc), -1);
   rb_define_module_function(mGosu, "round", VALUEFUNC(_wrap_round), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
+  rb_define_module_function(mGosu, "gosu_to_radians", VALUEFUNC(_wrap_gosu_to_radians), -1);
+  rb_define_module_function(mGosu, "radians_to_gosu", VALUEFUNC(_wrap_radians_to_gosu), -1);
   rb_define_module_function(mGosu, "offset_x", VALUEFUNC(_wrap_offset_x), -1);
   rb_define_module_function(mGosu, "offset_y", VALUEFUNC(_wrap_offset_y), -1);
   rb_define_module_function(mGosu, "angle", VALUEFUNC(_wrap_angle), -1);
