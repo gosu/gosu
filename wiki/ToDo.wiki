@@ -4,9 +4,10 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2008-11-30)
+(Last update: 2008-12-01)
 
 == Gosu 0.7.x ==
+  * Mails und Forenbeiträge beantworten
   * 0.7.11, i18n/text release
     * Check out freshly on Linux
     * Linux: Fix problem with Unicode chars (redesign button id system)
