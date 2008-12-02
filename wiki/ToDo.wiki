@@ -4,19 +4,19 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2008-12-01)
+(Last update: 2008-12-02)
 
 == Gosu 0.7.x ==
-  * Mails und Forenbeiträge beantworten
   * 0.7.11, i18n/text release
     * Check out freshly on Linux
     * Linux: Fix problem with Unicode chars (redesign button id system)
     * Add KbZ as the physical Z key, etc. (Linux)
     * Update "Progress Info" on website
-    * Make RTL work without RTL/LTR markers?!
-    * Add RTL support to Font::drawRot too
     * Iterate on currently reported issues
     * Verify that radians_to_gosu & vice versa work
+    * Fix Linux fullscreen/beginGL/endGL bug
+    * Add fullscreen stretching prevention
+    * Add fullscreen accessors to make proper FS OpenGL possible
     * Change Gosu domain
       * Antwort bzgl. DNS-Server, RailsHoster
       * Redirect libgosu.org to RailsHoster
@@ -30,11 +30,11 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Announce Gosu 0.7.11 + [forums.]libgosu.org + LD13
     * (Order a T-shirt from wishlist after all this hard work!)
   * 0.7.12, performance/graphics release
+    * Experiment: resizing the window possible?
     * Mehr Modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
     * TextField mit clip_to
     * Iterate on first category of fullscreen tests
     * Add Proof of Concept for Macro Patches
-    * Fix Linux fullscreen/beginGL/endGL bug
     * Clipping benchmarken
     * Test multiple screen on Windows
     * Get rid of OpenGL tearing with GMA950 on Windows
@@ -55,6 +55,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Mac: Make createText use ATSUI
     * Windows: Make createText use Uniscribe
     * Linux: Make createText use Pango/Freetype2
+    * Make RTL work without RTL/LTR markers?!
+    * Add RTL support to Font::drawRot too
   * 0.7.14, polish/deployment release
     * RMagick auf Windows statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * Reviewen: http://rubyforge.org/tracker/index.php?func=detail&aid=21405&group_id=375&atid=1504
