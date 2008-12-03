@@ -4,14 +4,12 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2008-12-02)
+(Last update: 2008-12-03)
 
 == Gosu 0.7.x ==
   * 0.7.11, i18n/text release
-    * Check out freshly on Linux
     * Linux: Fix problem with Unicode chars (redesign button id system)
     * Add KbZ as the physical Z key, etc. (Linux)
-    * Update "Progress Info" on website
     * Iterate on currently reported issues
     * Verify that radians_to_gosu & vice versa work
     * Fix Linux fullscreen/beginGL/endGL bug
