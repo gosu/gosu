@@ -179,9 +179,9 @@
 		D42568090C69CF6100E745AC /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		D42BC0D00C4F840C00EBF79C /* Gosu.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Gosu.hpp; path = ../Gosu/Gosu.hpp; sourceTree = SOURCE_ROOT; };
 		D459FF440BDCD23500E7F0D6 /* RubyGosu Deployment Template.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RubyGosu Deployment Template.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D459FF460BDCD23600E7F0D6 /* RubyGosu Template-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "RubyGosu Template-Info.plist"; sourceTree = "<group>"; };
+		D459FF460BDCD23600E7F0D6 /* RubyGosu Template-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RubyGosu Template-Info.plist"; sourceTree = "<group>"; };
 		D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Gosu.icns; sourceTree = "<group>"; };
-		D459FFAD0BDCE41300E7F0D6 /* Gosu-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Gosu-Info.plist"; sourceTree = "<group>"; };
+		D459FFAD0BDCE41300E7F0D6 /* Gosu-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "Gosu-Info.plist"; sourceTree = "<group>"; };
 		D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RubyGosu_wrap.cxx; path = ../GosuImpl/RubyGosu_wrap.cxx; sourceTree = SOURCE_ROOT; };
 		D47BD3290BD78F7200ACF014 /* RubyGosu_wrap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RubyGosu_wrap.h; path = ../GosuImpl/RubyGosu_wrap.h; sourceTree = SOURCE_ROOT; };
 		D47BD32A0BD78F7200ACF014 /* RubyGosu.swg */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = RubyGosu.swg; path = ../GosuImpl/RubyGosu.swg; sourceTree = SOURCE_ROOT; };
