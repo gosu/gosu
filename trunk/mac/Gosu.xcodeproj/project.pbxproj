@@ -117,6 +117,7 @@
 /* Begin PBXFileReference section */
 		08FB77AAFE841565C02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		8D07F2C80486CC7A007CD1D0 /* Gosu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Gosu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D410D6220EE9D379007740AE /* Iconv.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Iconv.hpp; path = ../GosuImpl/Iconv.hpp; sourceTree = SOURCE_ROOT; };
 		D410E98A0A801948005C7067 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		D410E98B0A801948005C7067 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		D410E98C0A801948005C7067 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -330,6 +331,7 @@
 				D410E9FF0A8019FA005C7067 /* DirectoriesMac.mm */,
 				D410EA000A8019FA005C7067 /* DirectoriesUnix.cpp */,
 				D410EA020A8019FA005C7067 /* FileUnix.cpp */,
+				D410D6220EE9D379007740AE /* Iconv.hpp */,
 				D410EA180A8019FA005C7067 /* InputMac.mm */,
 				D410EA1B0A8019FA005C7067 /* IO.cpp */,
 				D4AB62F50D08BA9900D71382 /* MacUtility.hpp */,

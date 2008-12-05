@@ -9,6 +9,15 @@
 using namespace std;
 
 #ifdef __APPLE__
+
+namespace {
+    extern const char UTF_8[] = "UTF-8";
+    extern const char UCS_2_INTERNAL[] = "UCS-2-INTERNAL";
+    extern const char UCS_4_INTERNAL[] = "UCS-4-INTERNAL";
+    extern const char CHAR[] = "char";
+    extern const char MACROMAN[] = "MacRoman";
+}
+
 wstring Gosu::utf8ToWstring(const string& s)
 {
     return iconvert<wstring, UCS_4_INTERNAL, UTF_8>(s);

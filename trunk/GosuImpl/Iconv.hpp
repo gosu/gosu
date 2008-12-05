@@ -7,16 +7,10 @@
 #else
 #include <iconv.h>
 #endif
-
 #include <errno.h>
-namespace
-{
-    extern const char UTF_8[] = "UTF-8";
-    extern const char UCS_2_INTERNAL[] = "UCS-2-INTERNAL";
-    extern const char UCS_4_INTERNAL[] = "UCS-4-INTERNAL";
-    extern const char CHAR[] = "char";
-    extern const char MACROMAN[] = "MacRoman";
 
+namespace Gosu
+{
     template<typename Out, const char* to, const char* from, typename In>
     Out iconvert(const In& in)
     {
