@@ -326,14 +326,14 @@ namespace Gosu
         else
             return 0;
     }
-    %newobject fromText;
-    static Gosu::Image* fromText(Gosu::Window& window, const std::wstring& text,
+    %newobject fromText4;
+    static Gosu::Image* fromText4(Gosu::Window& window, const std::wstring& text,
                                  const std::wstring& fontName, unsigned fontHeight) {
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight);
         return new Gosu::Image(window.graphics(), bmp);
     }
-    %newobject fromText;
-    static Gosu::Image* fromText(Gosu::Window& window, const std::wstring& text,
+    %newobject fromText7;
+    static Gosu::Image* fromText7(Gosu::Window& window, const std::wstring& text,
                                  const std::wstring& fontName, unsigned fontHeight,
                                  unsigned lineSpacing, unsigned maxWidth, TextAlign align) {
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
@@ -381,6 +381,9 @@ namespace Gosu
 %init %{
     // Backwards compatibility: import the constants into Gosu::Button.
     rb_eval_string("module Gosu::Button; Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }; end");
+
+    // ARGH, SWIG workaround...
+    rb_eval_string("class Gosu::Image; def self.from_text(*args); args.size == 4 ? from_text_4(*args) : from_text_7(*args); end; end");
     
     // Extend Numeric with simple angle conversion methods.
     rb_eval_string("class Numeric;"

@@ -3,9 +3,9 @@ require '../lib/gosu'
 class Test < Gosu::Window
   def initialize
     super(800, 600, false)
-
+    
     Gosu::Image.new(self, "Umläuts.png", false) rescue nil
-      
+    
     self.caption = "Huhu, Ümläuts!"
     @font = Gosu::Font.new(self, "Monaco", 50)
     @sys_text = Gosu::Image.from_text(self, "Huhu, 地下鉄chikatetsuでde行きますikimasu!", "Helvetica", 15)
