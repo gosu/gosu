@@ -41,6 +41,7 @@
   * `draw(x, y, z, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`
   * `draw_rot(x, y, z, angle, center_x=0.5, center_y=0.5, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)`: center_x Relative horizontal position of the rotation center on the image. 0 is the left border, 1 is the right border, 0.5 is the center (and default)—the same applies to center_y, respectively.
   * `draw_as_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode=:default)`: Like Window#draw_quad, but with this texture instead of a solid color. Can be used to implement advanced, non-rectangular drawing techniques.
+  * `self.from_text(window, text, font_name, font_height)`: Creates a line of text. font_name can either be the name of a system font, or a filename (must contain '/').
   * `self.from_text(window, text, font_name, font_height, line_spacing, max_width, align)`: Creates a block of text of width max_width. Each line will take font_height + line_spacing pixels of vertical space.`: align must be one of :left, :right, :center oder :justify. : font_name can either be the name of a system font, or a filename (must contain '/').
   * `self.load_tiles(window, filename_or_rmagick_image, tile_width, tile_height, hard_borders)`: tile_width is either the width of one tile in pixels or the number of columns, tile_height is its vertical equivalent
   * `gl_tex_info`: See examples/OpenGLIntegration.rb.
@@ -128,6 +129,32 @@ Kb6
 Kb7
 Kb8
 Kb9
+KbA
+KbB
+KbC
+KbD
+KbE
+KbF
+KbG
+KbH
+KbI
+KbJ
+KbK
+KbL
+KbM
+KbN
+KbO
+KbP
+KbQ
+KbR
+KbS
+KbT
+KbU
+KbV
+KbW
+KbX
+KbY
+KbZ
 KbBackspace
 KbDelete
 KbDown
