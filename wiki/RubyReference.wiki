@@ -89,8 +89,8 @@ _Note that you should really only use on instance of this class at the same time
   * `mouse_x`
   * `mouse_y`
   * `button_down?(id)`
-  * `self.button_id_to_char(id)`: Returns the character a given id stands for, or "".
-  * `self.char_to_button_id(char)`: Returns the id usually used for a character, or 0.
+  * `self.button_id_to_char(id)`: Returns the character a given id stands for, or nil.
+  * `self.char_to_button_id(char)`: Returns the id usually used for a character, or nil.
   * `text_input`
   * `text_input=`: Sets current text input object that builds an input string
   * `width`
