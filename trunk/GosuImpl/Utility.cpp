@@ -8,14 +8,10 @@
 #include <GosuImpl/Iconv.hpp>
 using namespace std;
 
-#ifdef __APPLE__
-
+#ifndef GOSU_IS_WIN
 namespace {
     extern const char UTF_8[] = "UTF-8";
-    extern const char UCS_2_INTERNAL[] = "UCS-2-INTERNAL";
     extern const char UCS_4_INTERNAL[] = "UCS-4-INTERNAL";
-    extern const char CHAR[] = "char";
-    extern const char MACROMAN[] = "MacRoman";
 }
 
 wstring Gosu::utf8ToWstring(const string& s)
@@ -26,18 +22,30 @@ string Gosu::wstringToUTF8(const std::wstring& ws)
 {
     return iconvert<string, UTF_8, UCS_4_INTERNAL>(ws);
 }
+
+#ifdef GOSU_IS_MAC
 // This is only necessary on OS X (for text output)
+// TODO: Move to respective files now that iconvert<> has been extracted
+// from this file.
+
+namespace {
+    extern const char MACROMAN[] = "MacRoman";
+    extern const char UCS_2_INTERNAL[] = "UCS-2-INTERNAL";
+}
+
 namespace Gosu {
-wstring macRomanToWstring(const string& s)
-{
-    return iconvert<wstring, UCS_4_INTERNAL, MACROMAN>(s);
+    wstring macRomanToWstring(const string& s)
+    {
+        return iconvert<wstring, UCS_4_INTERNAL, MACROMAN>(s);
+    }
+    vector<unsigned short> wstringToUniChars(const wstring& ws)
+    {
+        return iconvert<vector<unsigned short>, UCS_2_INTERNAL, UCS_4_INTERNAL>(ws);
+    }
 }
-vector<unsigned short> wstringToUniChars(const wstring& ws)
-{
-    return iconvert<vector<unsigned short>, UCS_2_INTERNAL, UCS_4_INTERNAL>(ws);
-}
-}
-#elif defined(GOSU_IS_WIN)
+
+#endif
+#else
 #include <windows.h>
 wstring Gosu::utf8ToWstring(const string& utf8)
 {
@@ -51,16 +59,6 @@ string Gosu::wstringToUTF8(const wstring& ws)
 	vector<char> buffer(size + 1);
 	WideCharToMultiByte(CP_UTF8, 0, ws.c_str(), ws.size(), &buffer[0], buffer.size(), 0, 0);
 	return &buffer[0];
-}
-#else
-// On Linux, everything ought to be UTF8 anyway -- forward to locale widening/narrowing
-std::wstring Gosu::utf8ToWstring(const std::string& utf8)
-{
-    return widen(utf8);
-}
-std::string Gosu::wstringToUTF8(const std::wstring& ws)
-{
-    return narrow(ws);
 }
 #endif
 

@@ -26,7 +26,10 @@
 	$1 = localTemporary2.empty() ? 0 : localTemporary2.at(0);
 }
 %typemap(out) wchar_t {
-    $result = rb_str_new2(Gosu::wstringToUTF8(std::wstring(1, $1)).c_str());
+    if ($1 == 0)
+        $result = Qnil;
+    else
+        $result = rb_str_new2(Gosu::wstringToUTF8(std::wstring(1, $1)).c_str());
 }
 %typemap(in) const std::wstring& (std::wstring temp) {
     VALUE localTemporary = rb_obj_as_string($input);
