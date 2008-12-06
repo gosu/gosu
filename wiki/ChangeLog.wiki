@@ -5,6 +5,7 @@
   * Ruby: `char_to_button_id` and `button_id_to_char` return nil for value that couldn't be converted (instead of 0).
   * All: `Input::down(button)` silently returns false for a "no button" id, `Window#button_down?` silently returns false for `nil` values.
   * All: Added simpler createText()/Image#from_text with support for just one line.
+  * All: Added kbA - kbZ constants that map to the physical A-Z keys (i.e. should not be affected by localized keyboards).
   * Mac: Added some more spacing between Font characters.
   * Linux: Disabled key repeat. (Really!)
   * Linux: Fixed timing bug on very fast machines.
