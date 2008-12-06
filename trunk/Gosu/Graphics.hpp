@@ -40,7 +40,7 @@ namespace Gosu
         double factorY() const;
         void setResolution(unsigned virtualWidth, unsigned virtualHeight);
         // End of Undocumented
-
+        
         unsigned width() const;
         unsigned height() const;
         bool fullscreen() const;

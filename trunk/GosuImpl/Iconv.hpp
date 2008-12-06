@@ -59,3 +59,4 @@ namespace Gosu
 }
 
 #endif
+

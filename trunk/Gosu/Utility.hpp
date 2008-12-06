@@ -12,13 +12,14 @@
 namespace Gosu
 {
     //! Converts an std::string into an std::wstring.
-    std::wstring widen(const std::string& s);
-    //! Converts an std::wstring into an std::string.
-    std::string narrow(const std::wstring& ws);
-    
-    // Undocumented, temporary: Please ignore. ;)
     std::wstring utf8ToWstring(const std::string& utf8);
+    //! Converts an std::wstring into an std::string.
     std::string wstringToUTF8(const std::wstring& ws);
+
+    //! Converts an std::string into an std::wstring using local encoding.
+    std::wstring widen(const std::string& s);
+    //! Converts an std::wstring into an std::string using local encoding.
+    std::string narrow(const std::wstring& ws);
 }
 
 #endif

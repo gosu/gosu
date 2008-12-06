@@ -21,6 +21,7 @@
 #include <Gosu/Text.hpp>
 #include <Gosu/TextInput.hpp>
 #include <Gosu/Timing.hpp>
+#include <Gosu/Utility.hpp>
 #include <Gosu/Window.hpp>
 
 #endif

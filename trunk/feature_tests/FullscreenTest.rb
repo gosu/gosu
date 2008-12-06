@@ -3,11 +3,11 @@ require '../lib/gosu'
 #### Cases that HAVE to work ####
 
 # Undersized case (should NOT distort on a widescreen display)
-WIDTH, HEIGHT = 640, 480
+#WIDTH, HEIGHT = 640, 480
 # OS X, 4:3: Works
 
 # Undersized case (should NOT distort on 4:3 display)
-#WIDTH, HEIGHT = 640, 320
+WIDTH, HEIGHT = 640, 320
 # OS X, 4:3: Clipping missing, reported resolution wrong
 
 #### Cases that should work some day ####

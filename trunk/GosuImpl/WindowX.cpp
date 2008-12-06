@@ -259,7 +259,7 @@ std::wstring Gosu::Window::caption() const
 
 void Gosu::Window::setCaption(const std::wstring& caption)
 {
-    // TODO: Update to _NET_WM_NAME
+    // TODO: Update to _NET_WM_NAME to support Unicode
 
     pimpl->title = caption;
 

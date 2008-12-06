@@ -9,6 +9,8 @@
 #include <boost/thread.hpp>
 #endif
 #include <cmath>
+#include <algorithm>
+#include <limits>
 
 struct Gosu::Graphics::Impl
 {
@@ -19,6 +21,7 @@ struct Gosu::Graphics::Impl
     DrawOpQueue queue;
     typedef std::vector<boost::shared_ptr<Texture> > Textures;
     Textures textures;
+
 #if 0
     boost::mutex texMutex;
 #endif
@@ -79,6 +82,11 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
 
     pimpl->virtWidth = virtualWidth;
     pimpl->virtHeight = virtualHeight;
+    /*    
+    pimpl->factorX = pimpl->factorY =
+        std::min(1.0 / virtualWidth * pimpl->physWidth,
+                 1.0 / virtualHeight * pimpl->physHeight);
+    */
     pimpl->factorX = 1.0 / virtualWidth * pimpl->physWidth;
     pimpl->factorY = 1.0 / virtualHeight * pimpl->physHeight;
 }
@@ -99,7 +107,24 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 
 void Gosu::Graphics::end()
 {
+    /*double vBarWidth = pimpl->physWidth / factorX() - width();
+    if (vBarWidth > 0)
+    {
+        drawQuad(0, 0, 0x00000000, vBarWidth, 0, 0x00000000,
+                 0, height(), 0x00000000, vBarWidth, height(), 0x00000000,
+                 std::numeric_limits<double>::max());
+    }
+    
+    double hBarHeight = pimpl->physHeight / factorY() - height();
+    if (hBarHeight > 0)
+    {
+        drawQuad(0, 0, 0x00000000, width(), 0, 0x00000000,
+                 0, hBarHeight, 0x00000000, width(), hBarHeight, 0x00000000,
+                 std::numeric_limits<double>::max());
+    }*/
+
     pimpl->queue.performDrawOps();
+
     glFlush();
 }
 

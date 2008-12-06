@@ -4,6 +4,8 @@
 #include <vector>
 #include <map>
 
+#include <GosuImpl/Iconv.hpp>
+
 struct Gosu::Input::Impl
 {
     TextInput* textInput;
@@ -21,8 +23,6 @@ Gosu::Input::Input(::Display* dpy)
     pimpl->mouseX = pimpl->mouseY = 0;
     pimpl->mouseFactorX = pimpl->mouseFactorY = 1.0;
     pimpl->display = dpy;
-
-    XAutoRepeatOff(dpy);
 }
 
 Gosu::Input::~Input()
@@ -54,12 +54,37 @@ bool Gosu::Input::down(Gosu::Button btn) const
 
 Gosu::Button Gosu::Input::charToId(wchar_t ch)
 {
-    return Gosu::Button(ch);
+    // ASCII chars
+    if (ch >= 32 && ch <= 255)
+        return Button(ch);
+    // Other chars are conceptually not findable :(
+    return noButton;
+}
+
+namespace
+{
+    extern const char LATIN[] = "ISO8859-1";
+    extern const char UCS_4_INTERNAL[] = "UCS-4LE";
 }
 
 wchar_t Gosu::Input::idToChar(Button btn)
 {
-    return btn.getId();
+    // ASCII chars
+    if (btn.getId() >= 32 && btn.getId() <= 255)
+        return btn.getId();
+    
+    // Looking at SDL source suggests that this is to be interpreted depending on the third byte.
+    // Should find solid literature on that if it exists.
+    // Commented out: This is pretty pointless since LATIN-1 maps to Unicode directly...
+    // BUT could serve as a basis for more?!
+    //if ((btn.getId() >> 8) == 0)
+    //{
+    //    unsigned char in[] = { btn.getId() & 0xff, 0 };
+    //    std::wstring converted = iconvert<std::wstring, UCS_4_INTERNAL, LATIN>(std::string(reinterpret_cast<char*>(in)));
+    //    return converted.at(0);
+    //}
+
+    return 0;
 }
 
 double Gosu::Input::mouseX() const
@@ -95,6 +120,7 @@ void Gosu::Input::update()
             // unsigned id = (chars == 0) ? keysym : widen(buf).at(0);
 
             unsigned id = XKeycodeToKeysym(pimpl->display, event.xkey.keycode, 0);
+
             pimpl->keyMap[id] = true;
             if (onButtonDown)
                 onButtonDown(Button(id));
@@ -106,9 +132,20 @@ void Gosu::Input::update()
             // unsigned keysym = XKeycodeToKeysym(pimpl->display, event.xkey.keycode, 0);
             // unsigned id = (chars == 0) ? keysym : widen(buf).at(0);
 
+            if (i < pimpl->eventList.size() - 1)
+            {
+                ::XEvent nextEvent = pimpl->eventList[i + 1];
+                if (nextEvent.type == KeyPress && nextEvent.xkey.keycode == event.xkey.keycode)
+                {
+                    i += 1;
+                    continue;
+                }
+            }
+
             unsigned id = XKeycodeToKeysym(pimpl->display, event.xkey.keycode, 0);
+
             pimpl->keyMap[id] = false;
-            if (onButtonUp) 
+            if (onButtonUp)
                 onButtonUp(Button(id));
         }
         else if (event.type == ButtonPress)
