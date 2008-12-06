@@ -11,7 +11,11 @@ using namespace std;
 #ifndef GOSU_IS_WIN
 namespace {
     extern const char UTF_8[] = "UTF-8";
-    extern const char UCS_4_INTERNAL[] = "UCS-4-INTERNAL";
+#ifdef __BIG_ENDIAN__
+    extern const char UCS_4_INTERNAL[] = "UCS-4BE";
+#else
+    extern const char UCS_4_INTERNAL[] = "UCS-4LE";
+#endif
 }
 
 wstring Gosu::utf8ToWstring(const string& s)
