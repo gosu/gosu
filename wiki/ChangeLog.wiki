@@ -2,12 +2,13 @@
 #labels Featured
 
 =0.7.11=
-  * Ruby: `char_to_button_id` returns nil for untypable characters instead of -1.
+  * Ruby: `char_to_button_id` and `button_id_to_char` return nil for value that couldn't be converted (instead of 0).
   * All: `Input::down(button)` silently returns false for a "no button" id, `Window#button_down?` silently returns false for `nil` values.
   * All: Added simpler createText()/Image#from_text with support for just one line.
   * Mac: Added some more spacing between Font characters.
-  * Linux: Disabled key repeat.
+  * Linux: Disabled key repeat. (Really!)
   * Linux: Fixed timing bug on very fast machines.
+  * Linux: Fixed crashes with regards to non-ASCII keys and Button<>char conversion.
   * (All: Added experimental bi-directional text support in Gosu::Font, based on the LTR Override and RTL Override code points. You will need to manually insert them for now, implicit LTR/RTL text will not be recognized.)
 
 =0.7.10.1 / 0.7.10.2 / 0.7.10.3=
