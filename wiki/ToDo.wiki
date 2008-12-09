@@ -4,33 +4,26 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2008-12-04)
+(Last update: 2008-12-09)
 
 == Gosu 0.7.x ==
   * 0.7.11, i18n/text release
-    * Linux: Fix problem with Unicode chars (redesign button id system)
-    * Add KbZ as the physical Z key, etc. (Linux)
-    * Iterate on currently reported issues
-    * Verify that radians_to_gosu & vice versa work
-    * Fix Linux fullscreen/beginGL/endGL bug
-    * Add fullscreen stretching prevention
-    * Add fullscreen accessors to make proper FS OpenGL possible
-    * Change Gosu domain
-      * Antwort bzgl. DNS-Server, RailsHoster
-      * Redirect libgosu.org to RailsHoster
-      * Change all references to vu2040 to libgosu.org in the forum (and everywhere else)
-      * Request Image::Info and DB::SQLite3
-    * Design a new logo for Gosu
-    * Re-run doxygen
-    * Release Gosu 0.7.11
-    * Update RubyReference: char_to_button_id returns nil now, easier from_text method, KbZ buttons
-    * Make it easy to create backups of the board
     * Announce Gosu 0.7.11 + [forums.]libgosu.org + LD13
     * (Order a T-shirt from wishlist after all this hard work!)
+  * angle_diff fixen und Task entfernen
+  * Change Gosu domain
+    * Antwort bzgl. DNS-Server, RailsHoster
+    * Redirect libgosu.org to RailsHoster
+    * Change all references to vu2040 to libgosu.org in the forum (and everywhere else)
+    * Request Image::Info and DB::SQLite3
+  * Make it easy to create backups of the board
+  * Design a new logo for Gosu
   * 0.7.12, performance/graphics release
     * Experiment: resizing the window possible?
+    * Add fullscreen accessors to make proper FS OpenGL possible
     * Mehr Modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
     * TextField mit clip_to
+    * Add fullscreen stretching prevention
     * Iterate on first category of fullscreen tests
     * Add Proof of Concept for Macro Patches
     * Clipping benchmarken
@@ -50,6 +43,9 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Document support for Ruby 1.9
       * Package OR&G with optimized Gosu
   * 0.7.13, text quality release
+    * Linux: Support Unicode in title bar
+    * Linux: Support other XKeySyms than Latin 1
+    * Mac: Add dead keys to TextInput
     * Mac: Make createText use ATSUI
     * Windows: Make createText use Uniscribe
     * Linux: Make createText use Pango/Freetype2
