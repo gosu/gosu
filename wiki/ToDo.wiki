@@ -4,13 +4,13 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2008-12-10)
+(Last update: 2008-12-11)
 
 == Gosu 0.7.x ==
   * 0.7.11, i18n/text release
     * Announce Gosu 0.7.11 + [forums.]libgosu.org + LD13
     * (Order a T-shirt from wishlist after all this hard work!)
-  * angle_diff fixen und Task entfernen
+  * angle_diff fixen :/
   * Change Gosu domain
     * Antwort bzgl. DNS-Server, RailsHoster
     * Redirect libgosu.org to RailsHoster
@@ -19,6 +19,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make it easy to create backups of the board
   * Design a new logo for Gosu
   * 0.7.12, performance/graphics release
+    * RMagick auf Windows statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
+    * RMagick auf OS X statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * Experiment: resizing the window possible?
     * Add fullscreen accessors to make proper FS OpenGL possible
     * Mehr Modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
@@ -52,9 +54,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Make RTL work without RTL/LTR markers?!
     * Add RTL support to Font::drawRot too
   * 0.7.14, polish/deployment release
-    * RMagick auf Windows statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * Reviewen: http://rubyforge.org/tracker/index.php?func=detail&aid=21405&group_id=375&atid=1504
-    * RMagick auf OS X statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * Make sure README and LICENSE are appropriately named in the Gem?
     * Fragen: Monet zu Gosu Showcase hinzufügen
     * Collect Gosu YouTube videos and link them prominently
