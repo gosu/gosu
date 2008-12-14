@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2008-12-11)
+(Last update: 2008-12-14)
 
 == Gosu 0.7.x ==
   * 0.7.11, i18n/text release
