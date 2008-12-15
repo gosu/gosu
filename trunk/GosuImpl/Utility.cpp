@@ -5,7 +5,9 @@
 #include <stdexcept>
 #include <algorithm>
 #include <vector>
+#ifndef GOSU_IS_WIN
 #include <GosuImpl/Iconv.hpp>
+#endif
 using namespace std;
 
 #ifndef GOSU_IS_WIN
