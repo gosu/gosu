@@ -4,14 +4,15 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2008-12-15)
+(Last update: 2008-12-16)
 
 == Gosu 0.7.x ==
+  * Reply to gamepad mail
   * Find out why Gosu apps won't run in cutting-edge TextMate o___O
   * 0.7.11, i18n/text release
     * Announce Gosu 0.7.11 + [forums.]libgosu.org + LD13
     * (Order a T-shirt from wishlist after all this hard work!)
-  * angle_diff fixen :/
+  * Fix angle_diff :/
   * Change Gosu domain
     * Antwort bzgl. DNS-Server, RailsHoster
     * Redirect libgosu.org to RailsHoster
