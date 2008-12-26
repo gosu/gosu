@@ -4,11 +4,12 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2008-12-25)
+(Last update: 2008-12-26)
 
 == Gosu 0.7.x ==
   * 0.7.11, i18n/text release
     * Move three topics of content over to the forum
+    * Post LD results
     * Announce Gosu 0.7.11 + [forums.]libgosu.org + LD13
     * (Order a T-shirt from wishlist after all this hard work!)
   * Fix angle_diff :/
