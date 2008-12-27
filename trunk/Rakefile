@@ -26,6 +26,7 @@ SOURCE_FILES = COMMON_CPP_FILES + COMMON_RUBY_FILES + FileList[
   'linux/configure', 'linux/configure.ac', 'linux/Makefile.in',
   'mac/Gosu.xcodeproj/**/*', 'mac/*.a', 'mac/English.lproj/**/*',
   'mac/Gosu-Info.plist', 'mac/RubyGosu Template-Info.plist',
+  'mac/Gosu.icns',
   'windows/Gosu.sln', 'windows/Gosu.vcproj', 'windows/RubyGosu.vcproj',
   'windows/zlib, libpng/**/*'
 ]
