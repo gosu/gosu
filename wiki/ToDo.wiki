@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2008-12-26)
+(Last update: 2008-12-27)
 
 == Gosu 0.7.x ==
   * 0.7.11, i18n/text release
@@ -20,6 +20,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Request Image::Info and DB::SQLite3
   * Make it easy to create backups of the board
   * Design a new logo for Gosu
+  * Link YouTube videos, and maybe blog tags like http://www.cuberick.com/search/label/gosu?
   * 0.7.12, performance/graphics release
     * RMagick auf Windows statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * RMagick auf OS X statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
