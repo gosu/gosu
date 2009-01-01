@@ -203,7 +203,17 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         [NSApplication sharedApplication];
     
     // Settings, depending on fullscreen or not
-    NSOpenGLPixelFormatAttribute attrs[] =
+    NSOpenGLPixelFormatAttribute windowedAttrs[] =
+    {
+        NSOpenGLPFADoubleBuffer,
+        NSOpenGLPFAScreenMask,
+        (NSOpenGLPixelFormatAttribute)CGDisplayIDToOpenGLDisplayMask(CGMainDisplayID()),
+        //NSOpenGLPFAFullScreen,
+        NSOpenGLPFADepthSize,
+        (NSOpenGLPixelFormatAttribute)16,
+        (NSOpenGLPixelFormatAttribute)0
+    };
+    NSOpenGLPixelFormatAttribute fullscreenAttrs[] =
     {
         NSOpenGLPFADoubleBuffer,
         NSOpenGLPFAScreenMask,
@@ -213,6 +223,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         (NSOpenGLPixelFormatAttribute)16,
         (NSOpenGLPixelFormatAttribute)0
     };
+    NSOpenGLPixelFormatAttribute* attrs = fullscreen ? fullscreenAttrs : windowedAttrs;
+    
     // Create pixel format and OpenGL context
     ObjRef<NSOpenGLPixelFormat> fmt([[NSOpenGLPixelFormat alloc] initWithAttributes:attrs]);
     assert(fmt.get() != nil);
