@@ -2,6 +2,7 @@
 #labels Featured
 
 =0.7.12 (Work in Progress)=
+  * 2009-01-01, All: Gosu::angle_diff() fixed
   * 2009-01-01, Mac: Window::close/Window#close now closes the Window immediately, not after the next event happens (thanks BackupBrian!)
 
 =0.7.11=
