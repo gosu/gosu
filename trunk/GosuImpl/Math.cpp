@@ -32,7 +32,7 @@ double Gosu::angle(double fromX, double fromY, double toX, double toY,
 
 double Gosu::angleDiff(double from, double to)
 {
-    return normalizeAngle(std::fmod(to - from + 180, 360) - 180);
+    return std::fmod(to - from + 180, 360) - 180;
 }
 
 double Gosu::normalizeAngle(double angle)
