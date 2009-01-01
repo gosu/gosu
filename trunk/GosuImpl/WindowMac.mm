@@ -349,6 +349,19 @@ void Gosu::Window::show()
 void Gosu::Window::close()
 {
     [NSApp stop:nil];
+    
+    // NSApp doesn't check its 'stopped' flag until it finishes processing
+    // the next event (timers are not events), so here's a rather hacky way
+    // to make sure it has one in its queue
+    [NSApp postEvent: [NSEvent otherEventWithType:NSApplicationDefined
+                               location:NSZeroPoint
+                               modifierFlags:0
+                               timestamp:0.0
+                               windowNumber:0
+                               context:NULL
+                               subtype:0
+                               data1:0
+                               data2:0] atStart:NO];
 }
 
 const Gosu::Graphics& Gosu::Window::graphics() const
