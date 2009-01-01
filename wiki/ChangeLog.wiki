@@ -2,7 +2,7 @@
 #labels Featured
 
 =0.7.12 (Work in Progress)=
-  * Mac: Window::close/Window#close now closes the Window immediately, not after the next event happens (thanks BackupBrian!)
+  * 2009-01-01, Mac: Window::close/Window#close now closes the Window immediately, not after the next event happens (thanks BackupBrian!)
 
 =0.7.11=
   * Ruby: `char_to_button_id` and `button_id_to_char` return nil for value that couldn't be converted (instead of 0).
