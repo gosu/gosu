@@ -60,16 +60,9 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Look into Ruby 1.9 on Windows
       * Document support for Ruby 1.9
       * Package OR&G with optimized Gosu
-  * 0.7.14, text quality release
-    * Linux: Support Unicode in title bar
-    * Linux: Support other XKeySyms than Latin 1
-    * Mac: Add dead keys to TextInput
-    * Mac: Make createText use ATSUI
-    * Windows: Make createText use Uniscribe
-    * Linux: Make createText use Pango/Freetype2
-    * Make RTL work without RTL/LTR markers?!
-    * Add RTL support to Font::drawRot too
-  * 0.7.15, polish/deployment release
+  * 0.7.14, polish/deployment release
+    * Assure that files from doxygen task are considered for packaging
+    * Find out why Cmd+char triggers two button_downs, but only one button_up!
     * Reviewen: http://rubyforge.org/tracker/index.php?func=detail&aid=21405&group_id=375&atid=1504
     * Make sure README and LICENSE are appropriately named in the Gem?
     * Fragen: Monet zu Gosu Showcase hinzufügen
@@ -77,6 +70,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Gosu.gstencil?
     * Make Ruby reference available online, automatically
     * Mac OS: Mauszeiger wird im FS sichtbar bei Klick in obere linke Ecke: Warum?
+    * Gosu.gstencil?
     * Examples leichter findbar machen
     * Bessere Ruby-Deployment-Hilfen
     * Make C++ reference available online, automatically
@@ -92,83 +86,29 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Deployment-Hilfe, Rakefile, Win
     * Retry properly showing/hiding the mouse on OS X (immune to blocking main thread)
     * Make the wrapper's menu bar on OS X more complete
+    * Now that the Rakefile works, stop doing every task every time (use file dependencies)
+    * Make it easier to find the examples from the Gem
+  * 0.7.15, text quality release
+    * Linux: Support Unicode in title bar
+    * Linux: Support other XKeySyms than Latin 1
+    * Mac: Add dead keys to TextInput
+    * Mac: Make createText use ATSUI
+    * Windows: Make createText use Uniscribe
+    * Linux: Make createText use Pango/Freetype2
+    * Make RTL work without RTL/LTR markers?!
+    * Add RTL support to Font::drawRot too
   * Implement mouse_x=/mouse_y= on each platform
-  * Find out why Cmd+char triggers two button_downs, but only one button_up!
-  * Now that the Rakefile works, stop doing every task every time (use file dependencies)
   * Evaluate FMOD Ex
-  * Document Gosu::interpolate, improve it too?
   * Make plans for an official Scene system
-  * Compile Terra Vera with both 0.7.10 packages
   * Look at http://rubyforge.org/projects/rbplusplus
-  * Überlegen, wie man http://freeimage.sourceforge.net/requirements.html am einfachsten wrappen könnte
-  * Gucken, ob http://slick.cokeandcode.com/index.php?entry=entry080426-213044 Wert für Gosu hat
+  * Look at http://freeimage.sourceforge.net/requirements.html
+  * Look at http://slick.cokeandcode.com/index.php?entry=entry080426-213044
   * Experimentation with new drawing syntax; maybe first prototype as the last version of the 0.7.x series?
   * RMagick auf Windows statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
-  * Überlegen, wie man http://freeimage.sourceforge.net/requirements.html am einfachsten wrappen könnte
-  * Implement mouse_x=/mouse_y= on each platform
-  * (Order a T-shirt from wishlist after all this hard work!)
-  * Linux: Support other XKeySyms than Latin 1
   * Document Gosu::interpolate, improve it too?
-  * Add fullscreen accessors to make proper FS OpenGL possible
-  * Announce Gosu 0.7.11 + [forums.]libgosu.org + LD13
-  * FMOD3: Sound auf Vista blockiert bei mehreren Benutzern?
-  * Get rid of OpenGL tearing with GMA950 on Windows
-  * Retry properly showing/hiding the mouse on OS X (immune to blocking main thread)
-  * Make C++ reference available online, automatically
-  * Linux: Support Unicode in title bar
-  * Compile Ruby 1.9 on Intel (Mac)
-  * Linux: Make createText use Pango/Freetype2
-  * Mac: Add dead keys to TextInput
-  * Add RTL support to Font::drawRot too
   * TextField mit clip_to
-  * Experimentation with new drawing syntax; maybe first prototype as the last version of the 0.7.x series?
   * Experiment: resizing the window possible?
-  * Get rid of context selection error with driver set to always do FSAA
-  * Deployment-Hilfe, Rakefile, Win
-  * Fragen: Monet zu Gosu Showcase hinzufügen
-  * Compile Terra Vera with both 0.7.10 packages
-  * FMOD Ex evaluieren
-  * Fix angle_diff :/
-  * Windows: Make createText use Uniscribe
-  * Make Ruby reference available online, automatically
-  * Assure that files from doxygen task are considered for packaging
-  * RMagick auf OS X statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
-  * Reply to gamepad mail
-  * Don't round updateInterval on Linux
-  * Be able to have more logical FPS than Hz despite working vsync
-  * Examples leichter findbar machen
-  * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
-  * Collect Gosu YouTube videos and link them prominently
-  * Make sure README and LICENSE are appropriately named in the Gem?
   * SubApp-System: Plan ausdenken
-  * Test multiple screen on Windows
-  * Look how http://github.com/singpolyma/rubygame/tree/master gets the Debian packaging done
-  * Clipping benchmarken
-  * Make the wrapper's menu bar on OS X more complete
-  * Don't round updateInterval on Windows
-  * Gosu.gstencil?
-  * http://rubyforge.org/projects/rbplusplus anschauen
-  * Make RTL work without RTL/LTR markers?!
-  * survivor->jlnr nickchange
-  * Mac OS: Mauszeiger wird im FS sichtbar bei Klick in obere linke Ecke: Warum?
-  * Add Proof of Concept for Macro Patches
-  * Bessere Ruby-Deployment-Hilfen
-  * Reviewen: http://rubyforge.org/tracker/index.php?func=detail&aid=21405&group_id=375&atid=1504
-  * Gucken, ob http://slick.cokeandcode.com/index.php?entry=entry080426-213044 Wert für Gosu hat
-  * Add Wiki tutorial on how to lazily link FMOD
-  * Mehr Modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
-  * Rakefile sollte autoconf ausführen
-  * Make it easy to create backups of the board
-  * Implement frameskip
-  * Design a new logo for Gosu
-  * Linux: Either install gosu.so to Ruby libdir, or don't build it at all
-  * Add fullscreen stretching prevention
-  * Mac: Make createText use ATSUI
-  * Iterate on first category of fullscreen tests
-  * Now that the Rakefile works, stop doing every task every time (use file dependencies)
-  * Windows build task possible? Clarify
-  * Windows Vista + RubyScript2exe: Bug reposten
-  * Deployment-Hilfe, Rakefile, Mac
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
