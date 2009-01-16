@@ -4,24 +4,37 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2008-12-27)
+(Last update: 2009-01-16)
 
 == Gosu 0.7.x ==
-  * 0.7.11, i18n/text release
-    * Move three topics of content over to the forum
-    * Post LD results
-    * Announce Gosu 0.7.11 + [forums.]libgosu.org + LD13
-    * (Order a T-shirt from wishlist after all this hard work!)
-  * Fix angle_diff :/
-  * Change Gosu domain
-    * Antwort bzgl. DNS-Server, RailsHoster
-    * Redirect libgosu.org to RailsHoster
-    * Change all references to vu2040 to libgosu.org in the forum (and everywhere else)
-    * Request Image::Info and DB::SQLite3
-  * Make it easy to create backups of the board
-  * Design a new logo for Gosu
+  * Change Gosu hosting
+    * Migrate to own acct
+    * Kill RailsHoster acct
+    * Tell everyone that RailsHoster sucks, a lot
+    * Change all references to vu2040 to libgosu.org in the forum (->search) and everywhere else, e.g. GetStOnWi
+    * Make it easy to create backups of the board
+    * Automate backing up the board
+    * Google/ask for timeout-based "new" system in mwForum
+  * Build new CI
+    * Design a new logo for Gosu
+    * Adjust main page design
+    * Adjust forum design
+    * Adjust GoogleCode design
   * Link YouTube videos, and maybe blog tags like http://www.cuberick.com/search/label/gosu?
-  * 0.7.12, performance/graphics release
+  * 0.7.12, after-LD / publicity release
+    * Song/Sound looping with FMOD
+    * Song/Sound looping with SDL_mixer :(
+    * Rethink item: Replace ifndef GOSU_IS_X by ifdef GOSU_NOT_X
+    * Check if Linux can load web safe fonts
+    * Windows: Don't fail if the requested windowed resolution is too large
+    * Don't round updateInterval on Windows
+    * Test if a default value of 16.0000 for updateInterval makes more sense
+    * Implement Z_IMMEDIATE
+    * Consider using float internally
+    * Release 0.7.12
+    * Announce Gosu 0.7.12 + [forums.]libgosu.org + LD13
+  * 0.7.13, performance/graphics release
+    * Take a look at Crate: http://copiousfreetime.rubyforge.org/crate/
     * RMagick auf Windows statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * RMagick auf OS X statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * Experiment: resizing the window possible?
@@ -29,13 +42,13 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Mehr Modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
     * TextField mit clip_to
     * Add fullscreen stretching prevention
+    * Try not hiding the mouse cursor outside of the main window on OS X
     * Iterate on first category of fullscreen tests
     * Add Proof of Concept for Macro Patches
-    * Clipping benchmarken
+    * Clipping benchmark
     * Test multiple screen on Windows
     * Get rid of OpenGL tearing with GMA950 on Windows
     * Get rid of context selection error with driver set to always do FSAA
-    * Don't round updateInterval on Windows
     * Don't round updateInterval on Linux
     * Implement frameskip
     * Be able to have more logical FPS than Hz despite working vsync
@@ -47,7 +60,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Look into Ruby 1.9 on Windows
       * Document support for Ruby 1.9
       * Package OR&G with optimized Gosu
-  * 0.7.13, text quality release
+  * 0.7.14, text quality release
     * Linux: Support Unicode in title bar
     * Linux: Support other XKeySyms than Latin 1
     * Mac: Add dead keys to TextInput
@@ -56,7 +69,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Linux: Make createText use Pango/Freetype2
     * Make RTL work without RTL/LTR markers?!
     * Add RTL support to Font::drawRot too
-  * 0.7.14, polish/deployment release
+  * 0.7.15, polish/deployment release
     * Reviewen: http://rubyforge.org/tracker/index.php?func=detail&aid=21405&group_id=375&atid=1504
     * Make sure README and LICENSE are appropriately named in the Gem?
     * Fragen: Monet zu Gosu Showcase hinzufügen
@@ -79,19 +92,17 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Deployment-Hilfe, Rakefile, Win
     * Retry properly showing/hiding the mouse on OS X (immune to blocking main thread)
     * Make the wrapper's menu bar on OS X more complete
-  * Now that the Rakefile works, stop doing every task every time (use file dependencies)
-  * survivor->jlnr nickchange
-  * FMOD Ex evaluieren
-  * Document Gosu::interpolate, improve it too?
-  * SubApp-System: Plan ausdenken
   * Implement mouse_x=/mouse_y= on each platform
+  * Find out why Cmd+char triggers two button_downs, but only one button_up!
+  * Now that the Rakefile works, stop doing every task every time (use file dependencies)
+  * Evaluate FMOD Ex
+  * Document Gosu::interpolate, improve it too?
+  * Make plans for an official Scene system
   * Compile Terra Vera with both 0.7.10 packages
-  * Song/Sound Looping
-  * http://rubyforge.org/projects/rbplusplus anschauen
+  * Look at http://rubyforge.org/projects/rbplusplus
   * Überlegen, wie man http://freeimage.sourceforge.net/requirements.html am einfachsten wrappen könnte
   * Gucken, ob http://slick.cokeandcode.com/index.php?entry=entry080426-213044 Wert für Gosu hat
   * Experimentation with new drawing syntax; maybe first prototype as the last version of the 0.7.x series?
-  * Find out why Gosu apps won't run in cutting-edge TextMate o___O
   * RMagick auf Windows statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
   * Überlegen, wie man http://freeimage.sourceforge.net/requirements.html am einfachsten wrappen könnte
   * Implement mouse_x=/mouse_y= on each platform
@@ -115,7 +126,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Get rid of context selection error with driver set to always do FSAA
   * Deployment-Hilfe, Rakefile, Win
   * Fragen: Monet zu Gosu Showcase hinzufügen
-  * Song/Sound Looping
   * Compile Terra Vera with both 0.7.10 packages
   * FMOD Ex evaluieren
   * Fix angle_diff :/
@@ -138,7 +148,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Don't round updateInterval on Windows
   * Gosu.gstencil?
   * http://rubyforge.org/projects/rbplusplus anschauen
-  * Find out why Gosu apps won't run in cutting-edge TextMate o___O
   * Make RTL work without RTL/LTR markers?!
   * survivor->jlnr nickchange
   * Mac OS: Mauszeiger wird im FS sichtbar bei Klick in obere linke Ecke: Warum?
@@ -162,8 +171,9 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Deployment-Hilfe, Rakefile, Mac
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
+  * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
-  * Experimentation: Should the C++ version keep using wstring, or switch to UTF-8 strings?
+  * Use float instead of double everywhere
   * Redesign (see forum) drawing interface
   * Rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
   * Windows: Input will regularly query devices which are not currently attached, thereby causing the game to halt every few seconds - think about this
