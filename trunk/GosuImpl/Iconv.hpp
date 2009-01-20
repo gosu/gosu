@@ -1,6 +1,8 @@
 #ifndef GOSIMPL_ICONV_HPP
 #define GOSIMPL_ICONV_HPP
 
+#include <Gosu/Platform.hpp>
+
 #ifdef __APPLE__
 // We want Apple's iconv
 #include </usr/include/iconv.h>
@@ -57,6 +59,7 @@ namespace Gosu
         }        
     }
 }
+
 
 #endif
 

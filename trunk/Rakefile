@@ -67,7 +67,7 @@ desc "Publish OmniFocus tasks in ToDo Wiki page"
 task :todo do
   File.open "wiki/ToDo.wiki", "w" do |wiki_page|
     doc = Appscript.app("OmniFocus").default_document
-    my_projects = doc.folders["Eigene Projekte"].projects.get
+    my_projects = doc.folders["Einzelprojekte"].projects.get
     gosu_projects = my_projects.select { |p| p.name.get =~ /^Gosu/ }
 
     wiki_page.puts "#summary List of upcoming To Do items, refreshed daily."

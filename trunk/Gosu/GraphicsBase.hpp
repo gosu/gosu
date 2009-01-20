@@ -4,8 +4,6 @@
 #ifndef GOSU_GRAPHICSBASE_HPP
 #define GOSU_GRAPHICSBASE_HPP
 
-#include <boost/cstdint.hpp>
-
 namespace Gosu
 {
     //! Represents the Z position of something drawn with Gosu's graphics

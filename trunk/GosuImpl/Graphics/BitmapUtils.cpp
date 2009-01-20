@@ -1,7 +1,9 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/IO.hpp>
+#include <Gosu/Platform.hpp>
 
+#ifndef GOSU_IS_IPHONE
 Gosu::Bitmap Gosu::quickLoadBitmap(const std::wstring& filename)
 {
 	Buffer buf;
@@ -19,6 +21,7 @@ Gosu::Bitmap Gosu::quickLoadBitmap(const std::wstring& filename)
         loadFromPNG(bmp, buf.frontReader());
 	return bmp;
 }
+#endif
 
 void Gosu::applyBorderFlags(Bitmap& dest, const Bitmap& source,
     unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,

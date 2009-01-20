@@ -5,6 +5,7 @@
 #include <Gosu/Color.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/TexChunk.hpp>
+#include <boost/cstdint.hpp>
 #include <set>
 
 namespace Gosu
@@ -30,6 +31,7 @@ namespace Gosu
 
         DrawOp() { clipWidth = 0xffffffff; usedVertices = 0; chunk = 0; }
         
+#ifndef GOSU_IS_IPHONE
         void perform() const
         {
             if (clipWidth != 0xffffffff)
@@ -59,7 +61,7 @@ namespace Gosu
             double left, top, right, bottom;
             if (chunk)
                 chunk->getCoords(left, top, right, bottom);
-
+            
             for (unsigned i = 0; i < usedVertices; i++)
             {
                 glColor4f(vertices[i].c.red() / 255.0, vertices[i].c.green() / 255.0,
@@ -82,19 +84,78 @@ namespace Gosu
                     }
                 glVertex2d(vertices[i].x, vertices[i].y);
             }
-
+            
             glEnd();
-
+            
             if (chunk)
                 glDisable(GL_TEXTURE_2D);
-
+            
             if (clipWidth != 0xffffffff)
                 glDisable(GL_SCISSOR_TEST);
         }
+#else
+        void perform() const
+        {
+            static GLfloat spriteVertices[8];
+            static GLfloat spriteTexcoords[8];
+            static boost::uint32_t spriteColors[40];
+            
+            // iPhone specific setup
+            static bool isSetup = false;
+            if (!isSetup)
+            {
+                // Sets up pointers and enables states needed for using vertex arrays and textures
+                glVertexPointer(2, GL_FLOAT, 0, spriteVertices);
+                glEnableClientState(GL_VERTEX_ARRAY);
+                glTexCoordPointer(2, GL_FLOAT, 0, spriteTexcoords);
+                glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+                glColorPointer(4, GL_UNSIGNED_BYTE, 0, spriteColors);
+                glEnableClientState(GL_COLOR_ARRAY);
+                
+                isSetup = true;
+            }
+            
+            if (mode == amAdditive)
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+            else
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            
+            if (chunk)
+            {
+                glEnable(GL_TEXTURE_2D);
+                glBindTexture(GL_TEXTURE_2D, chunk->texName());
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                
+                double left, top, right, bottom;
+                chunk->getCoords(left, top, right, bottom);
+                spriteTexcoords[0] = left, spriteTexcoords[1] = top;
+                spriteTexcoords[2] = right, spriteTexcoords[3] = top;
+                spriteTexcoords[4] = left, spriteTexcoords[5] = bottom;
+                spriteTexcoords[6] = right, spriteTexcoords[7] = bottom;
+            }
+            
+            for (int i = 0; i < usedVertices; ++i)
+            {
+                spriteVertices[i*2] = vertices[i].x;
+                spriteVertices[i*2+1] = vertices[i].y;
+                spriteColors[i] = vertices[i].c.abgr();
+            }
+                
+            if (usedVertices == 2)
+                glDrawArrays(GL_LINES, 0, 2);
+            else if (usedVertices == 3)
+                glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
+            else if (usedVertices == 4)
+                glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+                        
+            if (chunk)
+                glDisable(GL_TEXTURE_2D);
+        }
+#endif
         
         bool operator<(const DrawOp& other) const
         {
-            return z < other.z; // optimization starts TODAY
+            return z < other.z;
         }
     };
 

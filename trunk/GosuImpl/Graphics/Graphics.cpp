@@ -34,12 +34,16 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     pimpl->physHeight = pimpl->virtHeight = physHeight;
     pimpl->factorX = pimpl->factorY = 1.0;
     pimpl->fullscreen = fullscreen;
-
+    
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, pimpl->physWidth, pimpl->physHeight);
+    #ifdef GOSU_IS_IPHONE
+    glOrthof(0, pimpl->virtWidth, pimpl->virtHeight, 0, -1, 1);
+    #else
     glOrtho(0, pimpl->virtWidth, pimpl->virtHeight, 0, -1, 1);
-
+    #endif
+    
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -93,8 +97,10 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 {
+#ifndef GOSU_IS_IPHONE
     // Flush leftover clippings
     endClipping();
+#endif
 
     glClearColor(clearWithColor.red()/255.0,
                  clearWithColor.green()/255.0,
@@ -130,13 +136,20 @@ void Gosu::Graphics::end()
 
 void Gosu::Graphics::beginGL()
 {
+#ifdef GOSU_IS_IPHONE
+    throw std::logic_error("Custom OpenGL is unsupported on the iPhone");
+#else
     pimpl->queue.performDrawOps();
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glDisable(GL_BLEND);
+#endif
 }
 
 void Gosu::Graphics::endGL()
 {
+#ifdef GOSU_IS_IPHONE
+    throw std::logic_error("Custom OpenGL is unsupported on the iPhone");
+#else
     glPopAttrib();
 
     // Restore matrices.
@@ -149,10 +162,14 @@ void Gosu::Graphics::endGL()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glEnable(GL_BLEND);
+#endif
 }
 
 void Gosu::Graphics::beginClipping(int x, int y, unsigned width, unsigned height)
 {
+#ifdef GOSU_IS_IPHONE
+    throw std::logic_error("Clipping is unsupported on the iPhone");
+#else
     // In doubt, make the clipping region smaller than requested.
     
     int physX = static_cast<int>(std::ceil(x * factorX()));
@@ -161,11 +178,16 @@ void Gosu::Graphics::beginClipping(int x, int y, unsigned width, unsigned height
     unsigned physHeight = static_cast<unsigned>(height * factorY());
 
     pimpl->queue.beginClipping(physX, physY, physWidth, physHeight);
+#endif
 }
 
 void Gosu::Graphics::endClipping()
 {
+#ifdef GOSU_IS_IPHONE
+    throw std::logic_error("Clipping is unsupported on the iPhone");
+#else
     pimpl->queue.endClipping();
+#endif
 }
 
 void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
@@ -231,8 +253,14 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
     op.usedVertices = 4;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
+// TODO: Should be harmonized
+#ifdef GOSU_IS_IPHONE
+    op.vertices[2] = DrawOp::Vertex(x3, y3, c3);
+    op.vertices[3] = DrawOp::Vertex(x4, y4, c4);
+#else
     op.vertices[3] = DrawOp::Vertex(x3, y3, c3);
     op.vertices[2] = DrawOp::Vertex(x4, y4, c4);
+#endif
 
     pimpl->queue.addDrawOp(op, z);
 }

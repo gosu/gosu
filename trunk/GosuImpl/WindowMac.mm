@@ -208,7 +208,6 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         NSOpenGLPFADoubleBuffer,
         NSOpenGLPFAScreenMask,
         (NSOpenGLPixelFormatAttribute)CGDisplayIDToOpenGLDisplayMask(CGMainDisplayID()),
-        //NSOpenGLPFAFullScreen,
         NSOpenGLPFADepthSize,
         (NSOpenGLPixelFormatAttribute)16,
         (NSOpenGLPixelFormatAttribute)0
@@ -227,9 +226,11 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     
     // Create pixel format and OpenGL context
     ObjRef<NSOpenGLPixelFormat> fmt([[NSOpenGLPixelFormat alloc] initWithAttributes:attrs]);
-    assert(fmt.get() != nil);
+    if (!fmt.get())
+        throw std::runtime_error("Could not find a suitable OpenGL pixel format");
     pimpl->context.reset([[NSOpenGLContext alloc] initWithFormat: fmt.obj() shareContext:nil]);
-    assert(pimpl->context.get() != nil);
+    if (!pimpl->context.get())
+        throw std::runtime_error("Unable to create an OpenGL context with the supplied pixel format");
     
     if (fullscreen) {
         // Fullscreen: Create no window, instead change resolution.

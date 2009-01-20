@@ -8,8 +8,8 @@ class Player
   attr_reader :score
 
   def initialize(window)
-    @image = Gosu::Image.new(window, "examples/media/Starfighter.bmp", false)
-    @beep = Gosu::Sample.new(window, "examples/media/Beep.wav")
+    @image = Gosu::Image.new(window, "../examples/media/Starfighter.bmp", false)
+    @beep = Gosu::Sample.new(window, "../examples/media/Beep.wav")
     @x = @y = @vel_x = @vel_y = @angle = 0.0
     @score = 0
   end
@@ -85,7 +85,7 @@ class GameWindow < Gosu::Window
     @player = Player.new(self)
     @player.warp(320, 240)
 
-    @star_anim = Gosu::Image::load_tiles(self, "examples/media/Star.png", 25, 25, false)
+    @star_anim = Gosu::Image::load_tiles(self, "../examples/media/Star.png", 25, 25, false)
     @stars = Array.new
     
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
@@ -141,15 +141,15 @@ class GameWindow < Gosu::Window
 
   def button_down(id)
     if id == Gosu::Button::KbF1 then
-      @bg = Gosu::Image.new(self, "examples/media/Space.png", true)
+      @bg = Gosu::Image.new(self, "../examples/media/Space.png", true)
     end
     
     if id == Gosu::Button::KbF2 then
       @bg = nil
-      @bg_loading = Gosu::Image.async_new(self, "examples/media/Space.png")
-      @bg_loading = Gosu::Image.async_new(self, "examples/media/Space.png")
-      @bg_loading = Gosu::Image.async_new(self, "examples/media/Space.png")
-      @bg_loading = Gosu::Image.async_new(self, "examples/media/Space.png")
+      @bg_loading = Gosu::Image.async_new(self, "../examples/media/Space.png")
+      @bg_loading = Gosu::Image.async_new(self, "../examples/media/Space.png")
+      @bg_loading = Gosu::Image.async_new(self, "../examples/media/Space.png")
+      @bg_loading = Gosu::Image.async_new(self, "../examples/media/Space.png")
     end
     
     if id == Gosu::Button::KbEscape

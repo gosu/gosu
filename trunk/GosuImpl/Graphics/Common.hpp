@@ -1,10 +1,14 @@
 #ifndef GOSUIMPL_GRAPHICS_COMMON_HPP
 #define GOSUIMPL_GRAPHICS_COMMON_HPP
 
-#ifdef WIN32
+#include <Gosu/Platform.hpp>
+
+#if defined(GOSU_IS_WIN)
 #include <windows.h>
-#endif
-#ifdef __APPLE__
+#elif defined(GOSU_IS_IPHONE)
+#include <OpenGLES/ES1/gl.h>
+#include <OpenGLES/ES1/glext.h>
+#elif defined(GOSU_IS_MAC)
 #include <OpenGL/gl.h>
 #else
 #include <GL/gl.h>

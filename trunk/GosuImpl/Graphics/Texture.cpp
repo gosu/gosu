@@ -4,9 +4,17 @@
 #include <Gosu/Platform.hpp>
 #include <stdexcept>
 
+#ifndef GL_BGRA
+#define GL_BGRA 0x80E1
+#endif
+
 // TODO: Not threadsafe.
 unsigned Gosu::Texture::maxTextureSize()
 {
+#if defined(GOSU_IS_MAC)
+    // Includes the iPhone
+    return 1024;
+#else
     const static unsigned MIN_SIZE = 256, MAX_SIZE = 1024;
 
     static unsigned size = 0;
@@ -17,12 +25,17 @@ unsigned Gosu::Texture::maxTextureSize()
         do
         {
             size *= 2;
-            glTexImage2D(GL_PROXY_TEXTURE_2D, 0, 4, size * 2, size * 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+            #ifdef GOSU_IS_IPHONE
+            glTexImage2D(GL_PROXY_TEXTURE_2D, 0, GL_RGBA, size * 2, size * 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+            #else
+            glTexImage2D(GL_PROXY_TEXTURE_2D, 0, GL_BGRA, size * 2, size * 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+            #endif
             glGetTexLevelParameteriv(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width); 
         } while (width != 0 && size < MAX_SIZE);
     }
-        
+    
     return size;
+#endif
 }
 
 Gosu::Texture::Texture(unsigned size)
@@ -35,8 +48,13 @@ Gosu::Texture::Texture(unsigned size)
    
     // Create empty texture.
     glBindTexture(GL_TEXTURE_2D, name);
+#ifndef GOSU_IS_IPHONE
     glTexImage2D(GL_TEXTURE_2D, 0, 4, allocator.width(), allocator.height(), 0,
                  GL_RGBA, GL_UNSIGNED_BYTE, 0);
+#else
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, allocator.width(), allocator.height(), 0,
+                 GL_RGBA, GL_UNSIGNED_BYTE, 0);
+#endif
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 }
 
@@ -70,8 +88,8 @@ std::auto_ptr<Gosu::TexChunk>
     
     result.reset(new TexChunk(graphics, queue, ptr, block->left + padding, block->top + padding,
                               block->width - 2 * padding, block->height - 2 * padding, padding));
-                              
-    #ifdef __BIG_ENDIAN__
+    
+#if defined(__BIG_ENDIAN__)
     std::vector<unsigned> pixelData(srcWidth * srcHeight);
     for (unsigned y = 0; y < srcHeight; ++y)
         for (unsigned x = 0; x < srcWidth; ++x)
@@ -82,13 +100,17 @@ std::auto_ptr<Gosu::TexChunk>
         }
     const unsigned* texData = &pixelData[0];
     unsigned format = GL_RGBA;
-    #else
-    #ifndef GL_BGRA
-    #define GL_BGRA 0x80E1
-    #endif
+#elif defined(GOSU_IS_IPHONE)
+    std::vector<unsigned> pixelData(srcWidth * srcHeight);
+    for (unsigned y = 0; y < srcHeight; ++y)
+        for (unsigned x = 0; x < srcWidth; ++x)
+            pixelData[y * srcWidth + x] = bmp.getPixel(x, y).abgr();
+    const unsigned* texData = &pixelData[0];
+    unsigned format = GL_RGBA;
+#else
     const unsigned* texData = bmp.glCompatibleData();
     unsigned format = GL_BGRA;
-    #endif
+#endif
     
     glBindTexture(GL_TEXTURE_2D, name);
     glTexSubImage2D(GL_TEXTURE_2D, 0, block->left, block->top, block->width, block->height,

@@ -59,11 +59,17 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1,
     newDrawOp.usedVertices = 4;
     newDrawOp.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     newDrawOp.vertices[1] = DrawOp::Vertex(x2, y2, c2);
+// TODO: Should be harmonized
+#ifdef GOSU_IS_IPHONE
+    newDrawOp.vertices[2] = DrawOp::Vertex(x3, y3, c3);
+    newDrawOp.vertices[3] = DrawOp::Vertex(x4, y4, c4);
+#else
     newDrawOp.vertices[3] = DrawOp::Vertex(x3, y3, c3);
     newDrawOp.vertices[2] = DrawOp::Vertex(x4, y4, c4);
+#endif
     newDrawOp.chunk = this;
     newDrawOp.mode = mode;
-
+    
     queue->addDrawOp(newDrawOp, z);
 }
 

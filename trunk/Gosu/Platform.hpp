@@ -39,15 +39,13 @@ namespace Gosu
 #undef CONV_FUN
 #undef CONV_FUN2
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER)
 #define GOSU_NORETURN __declspec(noreturn)
-#endif
-
-#ifdef __GNUC__
+#elif defined(__GNUC__)
 #define GOSU_NORETURN __attribute__ ((noreturn))
 #endif
 
-#ifdef WIN32
+#if defined(WIN32)
 # define GOSU_IS_WIN
 #else
 # define GOSU_IS_UNIX
@@ -55,6 +53,10 @@ namespace Gosu
 #  define GOSU_IS_X
 # else
 #  define GOSU_IS_MAC
+#  include <TargetConditionals.h>
+#  if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#   define GOSU_IS_IPHONE
+#  endif
 # endif
 #endif
 
