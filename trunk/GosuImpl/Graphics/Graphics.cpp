@@ -46,6 +46,10 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    #ifdef GOSU_IS_IPHONE
+    glTranslatef(physWidth, 0, 0);
+    glRotatef(90, 0, 0, 1);
+    #endif
 
     glEnable(GL_BLEND);
 }

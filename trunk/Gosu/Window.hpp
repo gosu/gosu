@@ -16,6 +16,11 @@
 #include <windows.h>
 #endif
 
+#ifdef GOSU_IS_IPHONE
+struct NSSet;
+struct UIEvent;
+#endif
+
 namespace Gosu
 {
     //! Convenient all-in-one class that serves as the foundation of a standard
@@ -54,6 +59,14 @@ namespace Gosu
         virtual void buttonDown(Gosu::Button) {}
         //! Same as buttonDown. Called then the user released a button.
         virtual void buttonUp(Gosu::Button) {}
+        
+        #ifdef GOSU_IS_IPHONE
+        virtual void touchesBegan(NSSet* touches, UIEvent* withEvent) {}
+        virtual void touchesMoved(NSSet* touches, UIEvent* withEvent) {}
+        virtual void touchesEnded(NSSet* touches, UIEvent* withEvent) {}
+        virtual void touchesChanged(UIEvent* withEvent) {}
+        virtual void touchesCancelled() {}
+        #endif
         
         // Ignore when SWIG is wrapping this class for Ruby/Gosu.
         #ifndef SWIG
