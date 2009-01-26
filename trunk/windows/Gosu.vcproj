@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="fmodvc.lib opengl32.lib dinput8.lib winmm.lib dxguid.lib delayimp.lib"
+				AdditionalDependencies="fmodvc.lib opengl32.lib dinput8.lib winmm.lib dxguid.lib ws2_32.lib delayimp.lib"
 				OutputFile="$(OutDir)\$(ProjectName)Debug.lib"
 			/>
 			<Tool
@@ -129,7 +129,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="fmodvc.lib opengl32.lib dinput8.lib winmm.lib dxguid.lib delayimp.lib"
+				AdditionalDependencies="fmodvc.lib opengl32.lib dinput8.lib winmm.lib dxguid.lib ws2_32.lib delayimp.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -515,11 +515,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
+				RelativePath="..\Gosu\Sockets.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Gosu\Sockets.hpp"
+				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
 				>
 			</File>
 			<File

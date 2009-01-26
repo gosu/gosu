@@ -5,6 +5,7 @@
 
 #if defined(GOSU_IS_WIN)
 #include <windows.h>
+#include <GL/gl.h>
 #elif defined(GOSU_IS_IPHONE)
 #include <OpenGLES/ES1/gl.h>
 #include <OpenGLES/ES1/glext.h>

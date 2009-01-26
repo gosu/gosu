@@ -11,18 +11,19 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
 #include <string>
+#include <vector>
 
 #ifdef GOSU_IS_WIN
 #include <windows.h>
 #endif
 
-#ifdef GOSU_IS_IPHONE
-struct NSSet;
-struct UIEvent;
-#endif
-
 namespace Gosu
 {
+    #ifdef GOSU_IS_IPHONE
+    struct Touch { double x, y; };
+    typedef std::vector<Touch> Touches;
+    #endif
+
     //! Convenient all-in-one class that serves as the foundation of a standard
 	//! Gosu application. Manages initialization of all of Gosu's core components
     //! and provides timing functionality.
@@ -60,14 +61,6 @@ namespace Gosu
         //! Same as buttonDown. Called then the user released a button.
         virtual void buttonUp(Gosu::Button) {}
         
-        #ifdef GOSU_IS_IPHONE
-        virtual void touchesBegan(NSSet* touches, UIEvent* withEvent) {}
-        virtual void touchesMoved(NSSet* touches, UIEvent* withEvent) {}
-        virtual void touchesEnded(NSSet* touches, UIEvent* withEvent) {}
-        virtual void touchesChanged(UIEvent* withEvent) {}
-        virtual void touchesCancelled() {}
-        #endif
-        
         // Ignore when SWIG is wrapping this class for Ruby/Gosu.
         #ifndef SWIG
         const Graphics& graphics() const;
@@ -89,6 +82,11 @@ namespace Gosu
         typedef boost::shared_ptr<boost::function<void()> > SharedContext;
         SharedContext createSharedContext();
         #endif
+        #ifdef GOSU_IS_IPHONE
+        virtual void touchesBegan(const Touches& touches) {}
+        virtual void touchesMoved(const Touches& touches) {}
+        virtual void touchesEnded(const Touches& touches) {}
+        #endif        
 
         #endif
     };
