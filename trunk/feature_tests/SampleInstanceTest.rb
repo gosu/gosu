@@ -8,7 +8,8 @@ class Test < Gosu::Window
   end
 
   def update
-    @instance = @sample.play if not @instance.playing?
+    self.caption = "Playing: #{@instance.playing?}, paused: #{@instance.paused?}"
+    @instance = @sample.play if not @instance.playing? and not @instance.paused?
     @instance.pan = Gosu::random(-1, 1) if button_down?(Gosu::KbTab)
   end
   
@@ -17,7 +18,7 @@ class Test < Gosu::Window
     @instance.stop if id == Gosu::KbSpace
     @instance.speed = 0.5 if id == Gosu::KbLeft
     @instance.pause if id == Gosu::KbDown
-    @instance.resume = 0.5 if id == Gosu::KbUp
+    @instance.resume if id == Gosu::KbUp
   end
 end
 
