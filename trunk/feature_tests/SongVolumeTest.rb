@@ -13,9 +13,11 @@ class Test < Gosu::Window
     # MIDI not yet supported everywhere :( Should be implemented
     # using OS APIs where missing.
     mid = it #Gosu::Song.new(self, "media/Inferno.mid")
-    @songs = [ogg, it, mid]
+    # Looping WAV
+    wav = Gosu::Song.new(self, "media/Loop.wav")
+    @songs = [ogg, it, mid, wav]
     @song = @songs[0]
-    @song.play
+    @song.play(true)
   end
 
   def update
@@ -27,12 +29,13 @@ class Test < Gosu::Window
   end
   
   def button_down(id)
-    @song.play if id == Gosu::KbSpace
+    @song.play(true) if id == Gosu::KbSpace
     @song.pause if button_id_to_char(id) == 'p'
     @song.stop if id == Gosu::KbBackspace
     @song = @songs[0] if button_id_to_char(id) == '1'
     @song = @songs[1] if button_id_to_char(id) == '2'
     @song = @songs[2] if button_id_to_char(id) == '3'
+    @song = @songs[3] if button_id_to_char(id) == '4'
   end
 end
 

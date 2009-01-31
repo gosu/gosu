@@ -242,7 +242,7 @@ Gosu::Song* Gosu::Song::currentSong() {
   return curSong;
 }
 
-void Gosu::Song::play() {
+void Gosu::Song::play(bool looping) {
   if (noSound)
     return;
 
@@ -254,7 +254,7 @@ void Gosu::Song::play() {
 
   if (Mix_PausedMusic())
     Mix_ResumeMusic();
-  if (!playing() && Mix_PlayMusic(data->music, 0) < 0)
+  if (!playing() && Mix_PlayMusic(data->music, looping ? -1 : 0) < 0)
     throwLastSDLError();
   changeVolume(data->volume);
   curSong = this;
@@ -292,5 +292,4 @@ void Gosu::Song::changeVolume(double volume) {
   if (playing())
     Mix_VolumeMusic(trunc(data->volume * MIX_MAX_VOLUME));
 }
-
 
