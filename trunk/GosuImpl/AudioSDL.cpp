@@ -215,30 +215,48 @@ Gosu::Song::~Song() {
   stop();
 }
 
+Gosu::Song* Gosu::Song::currentSong() {
+  return curSong;
+}
+
 void Gosu::Song::play() {
   if (noSound)
     return;
 
-  if (curSong)
-    curSong->stop();
-  
-  assert(curSong == 0);
+  if (curSong && curSong != this)
+  {
+      curSong->stop();
+      assert(curSong == 0);
+  }
 
-  if (Mix_PlayMusic(data->music, 0) < 0)
+  if (Mix_PausedMusic())
+    Mix_ResumeMusic();
+  if (!playing() && Mix_PlayMusic(data->music, 0) < 0)
     throwLastSDLError();
-  curSong = this;
   changeVolume(data->volume);
+  curSong = this;
+}
+
+void Gosu::Song::pause()
+{
+    if (curSong == this)
+        Mix_PauseMusic();
+}
+
+bool Gosu::Song::paused() const
+{
+    return curSong == this && Mix_PausedMusic();
 }
 
 void Gosu::Song::stop() {
-  if (playing()) {
+  if (curSong == this) {
     Mix_HaltMusic();
     curSong = 0;
   }
 }
 
 bool Gosu::Song::playing() const {
-  return curSong == this;
+  return curSong == this && !paused();
 }
 
 double Gosu::Song::volume() const {
