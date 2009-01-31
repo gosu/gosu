@@ -6130,6 +6130,90 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_SampleInstance_pausedq___(int argc, VALUE *argv, VALUE self) {
+  Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__SampleInstance, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "paused" "', argument " "1"" of type '" "Gosu::SampleInstance const *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::SampleInstance * >(argp1);
+  {
+    try {
+      result = (bool)((Gosu::SampleInstance const *)arg1)->paused();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_bool(static_cast< bool >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_SampleInstance_pause(int argc, VALUE *argv, VALUE self) {
+  Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__SampleInstance, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "pause" "', argument " "1"" of type '" "Gosu::SampleInstance *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::SampleInstance * >(argp1);
+  {
+    try {
+      (arg1)->pause();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_SampleInstance_resume(int argc, VALUE *argv, VALUE self) {
+  Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__SampleInstance, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "resume" "', argument " "1"" of type '" "Gosu::SampleInstance *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::SampleInstance * >(argp1);
+  {
+    try {
+      (arg1)->resume();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_SampleInstance_stop(int argc, VALUE *argv, VALUE self) {
   Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
   void *argp1 = 0 ;
@@ -8555,6 +8639,9 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_alloc_func(cSampleInstance.klass, _wrap_SampleInstance_allocate);
   rb_define_method(cSampleInstance.klass, "initialize", VALUEFUNC(_wrap_new_SampleInstance), -1);
   rb_define_method(cSampleInstance.klass, "playing?", VALUEFUNC(_wrap_SampleInstance_playingq___), -1);
+  rb_define_method(cSampleInstance.klass, "paused?", VALUEFUNC(_wrap_SampleInstance_pausedq___), -1);
+  rb_define_method(cSampleInstance.klass, "pause", VALUEFUNC(_wrap_SampleInstance_pause), -1);
+  rb_define_method(cSampleInstance.klass, "resume", VALUEFUNC(_wrap_SampleInstance_resume), -1);
   rb_define_method(cSampleInstance.klass, "stop", VALUEFUNC(_wrap_SampleInstance_stop), -1);
   rb_define_method(cSampleInstance.klass, "volume=", VALUEFUNC(_wrap_SampleInstance_volumee___), -1);
   rb_define_method(cSampleInstance.klass, "pan=", VALUEFUNC(_wrap_SampleInstance_pane___), -1);
