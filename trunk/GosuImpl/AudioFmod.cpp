@@ -208,6 +208,8 @@ public:
     virtual ~BaseData() {}
 
     virtual void play() = 0;
+    virtual void pause() = 0;
+    virtual bool paused() const = 0;
     virtual void stop() = 0;
     
     double volume() const
@@ -276,13 +278,28 @@ public:
     
     void play()
     {
-        handle = FSOUND_Stream_Play(FSOUND_FREE, stream);
+        if (handle == -1)
+            handle = FSOUND_Stream_Play(FSOUND_FREE, stream);
+        else if (paused())
+            FSOUND_SetPaused(handle, 0);
         applyVolume();
+    }
+    
+    void pause()
+    {
+        if (handle != -1)
+            FSOUND_SetPaused(handle, 1);
+    }
+    
+    bool paused() const
+    {
+        return handle != -1 && FSOUND_GetPaused(handle);
     }
     
     void stop()
     {
         fmodCheck(FSOUND_Stream_Stop(stream));
+        handle = -1; // The end callback is NOT being called!
     }
     
     void applyVolume()
@@ -323,13 +340,27 @@ public:
 
     void play()
     {
-        FMUSIC_PlaySong(module_);
+        if (paused())
+            FMUSIC_SetPaused(module_, 0);
+        else
+            FMUSIC_PlaySong(module_);
         applyVolume();
+    }
+    
+    void pause()
+    {
+        FMUSIC_SetPaused(module_, 1);
+    }
+    
+    bool paused() const
+    {
+        return FMUSIC_GetPaused(module_);
     }
 
     void stop()
     {
         fmodCheck(FMUSIC_StopSong(module_));
+        FMUSIC_SetPaused(module_, false);
     }
     
     void applyVolume()
@@ -381,20 +412,37 @@ Gosu::Song::~Song()
         stop();
 }
 
+Gosu::Song* Gosu::Song::currentSong()
+{
+    return curSong;
+}
+
 void Gosu::Song::play()
 {
-    if (curSong)
+    if (curSong && curSong != this)
+    {
         curSong->stop();
-
-    assert(curSong == 0);
+        assert(curSong == 0);
+    }
 
     data->play();
-    curSong = this;
+    curSong = this; // may be redundant
+}
+
+void Gosu::Song::pause()
+{
+    if (curSong == this)
+        data->pause(); // may be redundant
+}
+
+bool Gosu::Song::paused() const
+{
+    return curSong == this && data->paused();
 }
 
 void Gosu::Song::stop()
 {
-    if (playing())
+    if (curSong == this)
     {
         data->stop();
         curSong = 0;
@@ -403,7 +451,7 @@ void Gosu::Song::stop()
 
 bool Gosu::Song::playing() const
 {
-    return curSong == this;
+    return curSong == this && !data->paused();
 }
 
 double Gosu::Song::volume() const

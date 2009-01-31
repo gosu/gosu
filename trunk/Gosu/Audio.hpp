@@ -54,14 +54,14 @@ namespace Gosu
         //! \param pan Can be anything from -1.0 (left) to 1.0 (right).
         void changePan(double pan);
         //! \param speed Playback speed is only limited by FMOD's
-        //! capatibilities and can accept very high or low values. Use 1.0 for
+        //! capabilities and can accept very high or low values. Use 1.0 for
         //! normal playback speed.
         void changeSpeed(double speed);
 	};
 
     //! A sample is a short sound that is completely loaded in memory, can be
     //! played multiple times at once and offers very flexible playback
-    //! parameters. In short, use samples for everything that's not music.
+    //! parameters. Use samples for everything that's not music.
     class Sample
     {
         struct SampleData;
@@ -82,19 +82,19 @@ namespace Gosu
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
         //! volume).
         //! \param speed Playback speed is only limited by FMOD's
-        //! capatibilities and can accept very high or low values. Use 1.0 for
+        //! capabilities and can accept very high or low values. Use 1.0 for
         //! normal playback speed.
         SampleInstance play(double volume = 1, double speed = 1) const;
 
         //! Plays the sample with panning. Even if pan is 0.0, the sample will
         //! not be as loud as if it were played by calling play() due to the
-        //! way FMOD's panning works.
+        //! way the panning works.
         //! \param pan Can be anything from -1.0 (left) to 1.0 (right).
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
         //! volume).
-        //! \param speed Playback speed is only limited by FMOD's
-        //! capatibilities and can accept very high or low values. Use 1.0 for
-        //! normal playback speed.
+        //! \param speed Playback speed is only limited by FMOD's (or
+        //! SDL_mixer's, respectively) capabilities and can accept very high
+        //! or low values. Use 1.0 for normal playback speed.
         SampleInstance playPan(double pan, double volume = 1, double speed = 1) const;
     };
 
@@ -126,12 +126,23 @@ namespace Gosu
         Song(Audio&, Type type, Reader reader);
         
         ~Song();
-
-        //! Starts playback of the song. This will stop all other songs and
-        //! cause the currently played song to restart if called on the
-        //! current song.
+        
+        //! Returns the song currently being played or paused, or 0 if
+        //! no song has been played yet or the last song has finished
+        //! playing.
+        static Song* currentSong();
+        
+        //! Starts or resumes playback of the song. This will stop all other
+        //! songs and set the current song to this object.
         void play();
-        //! Stops playback of this song if it is currently played.
+        //! Pauses playback of the song. It is not considered being played.
+        //! currentSong will stay the same.
+        void pause();
+        //! Returns true if the song is the current song, but in paused
+        //! mode.
+        bool paused() const;
+        //! Stops playback of this song if it is currently played or paused.
+        //! Afterwards, currentSong will return 0.
         void stop();
         //! Returns if the song is currently playing.
         bool playing() const;

@@ -6458,6 +6458,28 @@ free_Gosu_Song(Gosu::Song *arg1) {
 }
 
 SWIGINTERN VALUE
+_wrap_Song_current_song(int argc, VALUE *argv, VALUE self) {
+  Gosu::Song *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  {
+    try {
+      result = (Gosu::Song *)Gosu::Song::currentSong();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Song, 0 |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Song_play(int argc, VALUE *argv, VALUE self) {
   Gosu::Song *arg1 = (Gosu::Song *) 0 ;
   void *argp1 = 0 ;
@@ -6479,6 +6501,63 @@ _wrap_Song_play(int argc, VALUE *argv, VALUE self) {
     }
   }
   return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Song_pause(int argc, VALUE *argv, VALUE self) {
+  Gosu::Song *arg1 = (Gosu::Song *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Song, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "pause" "', argument " "1"" of type '" "Gosu::Song *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::Song * >(argp1);
+  {
+    try {
+      (arg1)->pause();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Song_pausedq___(int argc, VALUE *argv, VALUE self) {
+  Gosu::Song *arg1 = (Gosu::Song *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Song, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "paused" "', argument " "1"" of type '" "Gosu::Song const *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::Song * >(argp1);
+  {
+    try {
+      result = (bool)((Gosu::Song const *)arg1)->paused();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_bool(static_cast< bool >(result));
+  return vresult;
 fail:
   return Qnil;
 }
@@ -8500,7 +8579,10 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cSong.klass, "initialize", VALUEFUNC(_wrap_new_Song), -1);
   rb_define_const(cSong.klass, "StStream", SWIG_From_int(static_cast< int >(Gosu::Song::stStream)));
   rb_define_const(cSong.klass, "StModule", SWIG_From_int(static_cast< int >(Gosu::Song::stModule)));
+  rb_define_singleton_method(cSong.klass, "current_song", VALUEFUNC(_wrap_Song_current_song), -1);
   rb_define_method(cSong.klass, "play", VALUEFUNC(_wrap_Song_play), -1);
+  rb_define_method(cSong.klass, "pause", VALUEFUNC(_wrap_Song_pause), -1);
+  rb_define_method(cSong.klass, "paused?", VALUEFUNC(_wrap_Song_pausedq___), -1);
   rb_define_method(cSong.klass, "stop", VALUEFUNC(_wrap_Song_stop), -1);
   rb_define_method(cSong.klass, "playing?", VALUEFUNC(_wrap_Song_playingq___), -1);
   rb_define_method(cSong.klass, "volume", VALUEFUNC(_wrap_Song_volume), -1);
