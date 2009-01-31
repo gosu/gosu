@@ -170,10 +170,9 @@ namespace Gosu
         : clipWidth(0xffffffff)
         {
         }
-    
+        
         void addDrawOp(DrawOp op, ZPos z)
         {
-            op.z = z;
             if (clipWidth != 0xffffffff)
             {
                 op.clipX = clipX;
@@ -181,6 +180,9 @@ namespace Gosu
                 op.clipWidth = clipWidth;
                 op.clipHeight = clipHeight;
             }
+            if (z == zImmediate)
+                return op.perform();
+            op.z = z;
             set.insert(op);
         }
         

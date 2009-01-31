@@ -4,12 +4,19 @@
 #ifndef GOSU_GRAPHICSBASE_HPP
 #define GOSU_GRAPHICSBASE_HPP
 
+#include <limits>
+
 namespace Gosu
 {
     //! Represents the Z position of something drawn with Gosu's graphics
     //! system. Draw calls with higher ZPos values will cover those with a
     //! lower ZPos value, that is, they are performed last.
     typedef double ZPos;
+    
+    //! The lowest possible Z position. By using this, you tell Gosu that
+    //! your drawing operation does not need Z ordering and can be performed
+    //! immediately.
+    const double zImmediate = -std::numeric_limits<double>::infinity();
 
     //! Determines the way colors are combined when one is drawn onto
     //! another.

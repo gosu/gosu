@@ -225,6 +225,7 @@ namespace Gosu
 // Graphics:
 
 // ZPos, AlphaMode, FontFlags, TextAlign
+%ignore Gosu::zImmediate;
 %include "../Gosu/GraphicsBase.hpp"
 
 // Color
