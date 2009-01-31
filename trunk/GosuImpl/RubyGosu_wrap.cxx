@@ -6364,6 +6364,7 @@ _wrap_Sample_play(int argc, VALUE *argv, VALUE self) {
   Gosu::Sample *arg1 = (Gosu::Sample *) 0 ;
   double arg2 = (double) 1 ;
   double arg3 = (double) 1 ;
+  bool arg4 = (bool) false ;
   SwigValueWrapper<Gosu::SampleInstance > result;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -6371,9 +6372,11 @@ _wrap_Sample_play(int argc, VALUE *argv, VALUE self) {
   int ecode2 = 0 ;
   double val3 ;
   int ecode3 = 0 ;
+  bool val4 ;
+  int ecode4 = 0 ;
   VALUE vresult = Qnil;
   
-  if ((argc < 0) || (argc > 2)) {
+  if ((argc < 0) || (argc > 3)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Sample, 0 |  0 );
@@ -6395,9 +6398,16 @@ _wrap_Sample_play(int argc, VALUE *argv, VALUE self) {
     } 
     arg3 = static_cast< double >(val3);
   }
+  if (argc > 2) {
+    ecode4 = SWIG_AsVal_bool(argv[2], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "play" "', argument " "4"" of type '" "bool""'");
+    } 
+    arg4 = static_cast< bool >(val4);
+  }
   {
     try {
-      result = ((Gosu::Sample const *)arg1)->play(arg2,arg3);
+      result = ((Gosu::Sample const *)arg1)->play(arg2,arg3,arg4);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -6415,6 +6425,7 @@ _wrap_Sample_play_pan(int argc, VALUE *argv, VALUE self) {
   double arg2 ;
   double arg3 = (double) 1 ;
   double arg4 = (double) 1 ;
+  bool arg5 = (bool) false ;
   SwigValueWrapper<Gosu::SampleInstance > result;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -6424,9 +6435,11 @@ _wrap_Sample_play_pan(int argc, VALUE *argv, VALUE self) {
   int ecode3 = 0 ;
   double val4 ;
   int ecode4 = 0 ;
+  bool val5 ;
+  int ecode5 = 0 ;
   VALUE vresult = Qnil;
   
-  if ((argc < 1) || (argc > 3)) {
+  if ((argc < 1) || (argc > 4)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Sample, 0 |  0 );
@@ -6453,9 +6466,16 @@ _wrap_Sample_play_pan(int argc, VALUE *argv, VALUE self) {
     } 
     arg4 = static_cast< double >(val4);
   }
+  if (argc > 3) {
+    ecode5 = SWIG_AsVal_bool(argv[3], &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "playPan" "', argument " "5"" of type '" "bool""'");
+    } 
+    arg5 = static_cast< bool >(val5);
+  }
   {
     try {
-      result = ((Gosu::Sample const *)arg1)->playPan(arg2,arg3,arg4);
+      result = ((Gosu::Sample const *)arg1)->playPan(arg2,arg3,arg4,arg5);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -6566,10 +6586,13 @@ fail:
 SWIGINTERN VALUE
 _wrap_Song_play(int argc, VALUE *argv, VALUE self) {
   Gosu::Song *arg1 = (Gosu::Song *) 0 ;
+  bool arg2 = (bool) false ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
   
-  if ((argc < 0) || (argc > 0)) {
+  if ((argc < 0) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Song, 0 |  0 );
@@ -6577,9 +6600,16 @@ _wrap_Song_play(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "play" "', argument " "1"" of type '" "Gosu::Song *""'"); 
   }
   arg1 = reinterpret_cast< Gosu::Song * >(argp1);
+  if (argc > 0) {
+    ecode2 = SWIG_AsVal_bool(argv[0], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "play" "', argument " "2"" of type '" "bool""'");
+    } 
+    arg2 = static_cast< bool >(val2);
+  }
   {
     try {
-      (arg1)->play();
+      (arg1)->play(arg2);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
