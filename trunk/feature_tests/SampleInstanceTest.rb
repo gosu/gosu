@@ -16,6 +16,8 @@ class Test < Gosu::Window
     close if id == Gosu::KbEscape
     @instance.stop if id == Gosu::KbSpace
     @instance.speed = 0.5 if id == Gosu::KbLeft
+    @instance.pause if id == Gosu::KbDown
+    @instance.resume = 0.5 if id == Gosu::KbUp
   end
 end
 

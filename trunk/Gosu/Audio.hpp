@@ -40,12 +40,16 @@ namespace Gosu
 	class SampleInstance
 	{
 		int handle, extra;
-		
+        bool alive() const;		
+
 	public:
         //! Called by Sample, do not use.
 		SampleInstance(int handle, int extra);
 
 		bool playing() const;
+		bool paused() const;
+        void pause();
+        void resume();
 		void stop();
 
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full

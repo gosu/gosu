@@ -50,6 +50,12 @@ Gosu::Audio::~Audio() {
   mixerInitialized = false;
 }
 
+bool Gosu::SampleInstance::alive() const
+{
+    return !noSound && channelRegistry[handle] == extra &&
+        Mix_Playing(handle) == 1;
+}
+
 Gosu::SampleInstance::SampleInstance(int handle, int extra)
 : handle(handle), extra(extra)
 {
@@ -57,26 +63,42 @@ Gosu::SampleInstance::SampleInstance(int handle, int extra)
 
 bool Gosu::SampleInstance::playing() const
 {
-    return !noSound && channelRegistry[handle] == extra &&
-        Mix_Playing(handle) == 1;
+    return alive() && !Mix_Paused(handle);
+}
+
+void Gosu::SampleInstance::resume()
+{
+    if (alive())
+        Mix_Resume(handle);
+}
+
+void Gosu::SampleInstance::pause()
+{
+    if (alive())
+        Mix_Pause(handle);
+}
+
+bool Gosu::SampleInstance::paused() const
+{
+    return alive() && Mix_Paused(handle);
 }
 
 void Gosu::SampleInstance::stop()
 {
-    if (playing())
+    if (alive())
         Mix_HaltChannel(handle);
 }
 
 void Gosu::SampleInstance::changeVolume(double volume)
 {
-    if (playing())
+    if (alive())
         Mix_Volume(handle, clamp<int>(volume * 255, 0, 255));
 }
 
 void Gosu::SampleInstance::changePan(double pan)
 {
     int rightPan = clamp<int>(pan * 127, 0, 127);
-    if (playing())
+    if (alive())
         Mix_SetPanning(handle, 254 - rightPan, rightPan);
 }
 
