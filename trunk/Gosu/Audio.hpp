@@ -88,7 +88,8 @@ namespace Gosu
         //! \param speed Playback speed is only limited by FMOD's
         //! capabilities and can accept very high or low values. Use 1.0 for
         //! normal playback speed.
-        SampleInstance play(double volume = 1, double speed = 1) const;
+        SampleInstance play(double volume = 1, double speed = 1,
+            bool looping = false) const;
 
         //! Plays the sample with panning. Even if pan is 0.0, the sample will
         //! not be as loud as if it were played by calling play() due to the
@@ -99,7 +100,8 @@ namespace Gosu
         //! \param speed Playback speed is only limited by FMOD's (or
         //! SDL_mixer's, respectively) capabilities and can accept very high
         //! or low values. Use 1.0 for normal playback speed.
-        SampleInstance playPan(double pan, double volume = 1, double speed = 1) const;
+        SampleInstance playPan(double pan, double volume = 1, double speed = 1,
+            bool looping = false) const;
     };
 
     //! Songs are less flexible than samples in that they can only be played
@@ -138,7 +140,7 @@ namespace Gosu
         
         //! Starts or resumes playback of the song. This will stop all other
         //! songs and set the current song to this object.
-        void play();
+        void play(bool looping = false);
         //! Pauses playback of the song. It is not considered being played.
         //! currentSong will stay the same.
         void pause();

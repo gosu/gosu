@@ -147,7 +147,8 @@ Gosu::Sample::Sample(Audio& audio, Reader reader) {
 Gosu::Sample::~Sample() {
 }
 
-Gosu::SampleInstance Gosu::Sample::play(double volume, double speed) const {
+Gosu::SampleInstance Gosu::Sample::play(double volume, double speed,
+    bool looping) const {
   int channel;
   
   if (noSound || (channel = Mix_PlayChannel(-1, data->rep, 0)) == -1)
@@ -166,7 +167,7 @@ Gosu::SampleInstance Gosu::Sample::play(double volume, double speed) const {
 }
 
 Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
-    double speed) const {
+    double speed, bool looping) const {
   int channel;
   
   if (noSound || (channel = Mix_PlayChannel(-1, data->rep, 0)) == -1)
