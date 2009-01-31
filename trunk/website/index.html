@@ -7,13 +7,21 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   <style type="text/css">
+    html {
+      background: url("footer.png") bottom repeat-x;
+      margin: 0px;
+      padding: 0px 0px 20px 0px;
+    }
+    
     body {
       font-family: "Lucida Grande", sans-serif;
-      padding: 1em 3em;
+      background: url("background.png") top repeat-x;
+      margin: 0px;
+      padding: 9px;
     }
     
     #main {
-      padding: 1.5em;
+      padding: 15px;
       -webkit-border-radius: 1em;
       -moz-border-radius: 1em;
     }
@@ -29,15 +37,20 @@
       float: right;
     }
     
+    #logo_container img {
+      margin: 0em 0em 0em 1.5em;
+      vertical-align: bottom;
+    }
+    
     .quick_link {
       float: right;
       clear: right;
-      padding: 1em;
-      -webkit-border-radius: 0.5em;
+      padding: 20px;
+      border: 5px solid black;
+      -webkit-border-radius: 1em 0.5em;
       -moz-border-radius: 0.5em;
-      background: #c3d9ff;
-      width: 15em;
-      margin: 1em 0em 0em 1em;
+      width: 250px;
+      margin: -15px 0em 25px 1.5em;
     }
     
     .quick_link ul {
@@ -55,7 +68,7 @@
     
     h1 {
       font-size: 130%;
-      margin-top: 0em;
+      margin-top: 55px;
     }
     
     h2 {
@@ -70,7 +83,7 @@
 <body>
   <div id="main">
     <div id="logo_container">
-      <img src="website_header.png" alt="Gosu logo" style="margin: 0em; vertical-align: bottom">
+      <img src="website_header.png" alt="Gosu logo">
     </div>
 
     <div class="quick_link">
@@ -89,17 +102,14 @@
     <div class="quick_link">
       There is also a low traffic <a href="irc://irc.freenode.org/gosu">IRC channel on freenode</a> for friendly chat.
     </div>
-    <div class="quick_link">
+    <div class="quick_link" style="background: url('rss-background.png') center bottom repeat-x; padding-bottom: 100px">
       Stay up to date easily with <a href="http://code.google.com/p/gosu/feeds">RSS feeds of downloads and more</a> from the GoogleCode page, or subscribe even to Gosu news and discussion easily via the <a href="http://vu2040.eta.railshoster.de/cgi-bin/mwf/forum_feeds.pl">feeds from the forum</a>.
     </div>
     <h1>
       Welcome to the new Gosu homepage!
     </h1>
-    <h2>
-      Gosu, what is that?
-    </h2>
     <p>
-      Gosu is a 2D game development library for the Ruby and C++ programming languages, available for Mac OS X, Windows and Linux. (MSVC++ 2005 or 2008 needed for the Windows C++ version).
+      Gosu is a 2D game development library for the Ruby and C++ programming languages, available for Mac OS X, Windows and Linux. <small>(MSVC++ 2005 or 2008 needed for the Windows C++ version).</small>
     </p>
     <p>
       Both the C++ and Ruby version provide:
