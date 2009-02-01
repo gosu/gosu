@@ -3,7 +3,7 @@
 
 =0.7.12 (Work in Progress)=
   * 2009-01-31: Added Song and Sample looping
-  * 2009-01-31: Added Song#pause, #paused? and SampleInstance#pause, paused?
+  * 2009-01-31: Added Song#pause, #paused? and SampleInstance#pause, paused?, resume
   * 2009-01-31: C++: Added Gosu::zImmediate (bypasses Z ordering)
   * 2009-01-27: Win: Automatically link against Windows' socket libraries
   * 2009-01-01, All: Gosu::angle_diff() fixed
