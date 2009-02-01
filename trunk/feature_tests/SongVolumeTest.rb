@@ -29,7 +29,8 @@ class Test < Gosu::Window
   end
   
   def button_down(id)
-    @song.play(true) if id == Gosu::KbSpace
+    @song.play(true) if button_id_to_char(id) == 'l'
+    @song.play(false) if id == Gosu::KbSpace
     @song.pause if button_id_to_char(id) == 'p'
     @song.stop if id == Gosu::KbBackspace
     @song = @songs[0] if button_id_to_char(id) == '1'

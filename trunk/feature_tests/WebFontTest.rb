@@ -10,7 +10,7 @@ class Test < Gosu::Window
                      Verdana
                      Trebuchet\ MS
                      Lucida\ Sans).map do |name|
-      Gosu::Image.from_text(self, name, name, 20)
+      Gosu::Image.from_text(self, name, name, 20) rescue Gosu::Image.from_text(self, "Missing: #{name}", Gosu::default_font_name, 20)
     end
   end
 

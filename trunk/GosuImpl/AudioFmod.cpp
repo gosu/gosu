@@ -96,6 +96,21 @@ bool Gosu::SampleInstance::playing() const
     return FSOUND_IsPlaying(handle);
 }
 
+bool Gosu::SampleInstance::paused() const
+{
+    return FSOUND_GetPaused(handle);
+}
+
+void Gosu::SampleInstance::pause()
+{
+    FSOUND_SetPaused(handle, 1);
+}
+
+void Gosu::SampleInstance::resume()
+{
+    FSOUND_SetPaused(handle, 0);
+}
+
 void Gosu::SampleInstance::stop()
 {
     FSOUND_StopSound(handle);
@@ -164,12 +179,15 @@ Gosu::Sample::~Sample()
 {
 }
 
-Gosu::SampleInstance Gosu::Sample::play(double volume, double speed) const
+Gosu::SampleInstance Gosu::Sample::play(double volume, double speed,
+    bool looping) const
 {
     int handle = FSOUND_PlaySound(FSOUND_FREE, data->rep);
     int freq;
     if (handle > 0)
     {
+        if (looping)
+            FSOUND_SetLoopMode(handle, FSOUND_LOOP_NORMAL);
         freq = FSOUND_GetFrequency(handle);
         FSOUND_SetPan(handle, FSOUND_STEREOPAN);
     }
@@ -180,12 +198,15 @@ Gosu::SampleInstance Gosu::Sample::play(double volume, double speed) const
     return result;
 }
 
-Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume, double speed) const
+Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
+    double speed, bool looping) const
 {
     int handle = FSOUND_PlaySound(FSOUND_FREE, data->rep);
     int freq;
     if (handle > 0)
     {
+        if (looping)
+            FSOUND_SetLoopMode(handle, FSOUND_LOOP_NORMAL);
         freq = FSOUND_GetFrequency(handle);
     }
     
@@ -207,7 +228,7 @@ protected:
 public:
     virtual ~BaseData() {}
 
-    virtual void play() = 0;
+    virtual void play(bool looping) = 0;
     virtual void pause() = 0;
     virtual bool paused() const = 0;
     virtual void stop() = 0;
@@ -256,8 +277,8 @@ public:
         }
 #endif
 
-        stream = FSOUND_Stream_Open(&buffer[0], FSOUND_LOADMEMORY, 0,
-            buffer.size());
+        stream = FSOUND_Stream_Open(&buffer[0], FSOUND_LOADMEMORY | FSOUND_LOOP_NORMAL,
+            0, buffer.size());
         if (stream == 0)
             throwLastFMODError();
         
@@ -276,10 +297,13 @@ public:
             FSOUND_Stream_Close(stream);
     }
     
-    void play()
+    void play(bool looping)
     {
         if (handle == -1)
+        {
             handle = FSOUND_Stream_Play(FSOUND_FREE, stream);
+                FSOUND_Stream_SetLoopCount(stream, looping ? -1 : 0);
+        }
         else if (paused())
             FSOUND_SetPaused(handle, 0);
         applyVolume();
@@ -338,12 +362,13 @@ public:
             FMUSIC_FreeSong(module_);
     }
 
-    void play()
+    void play(bool looping)
     {
         if (paused())
             FMUSIC_SetPaused(module_, 0);
         else
             FMUSIC_PlaySong(module_);
+        FMUSIC_SetLooping(module_, looping);
         applyVolume();
     }
     
@@ -417,7 +442,7 @@ Gosu::Song* Gosu::Song::currentSong()
     return curSong;
 }
 
-void Gosu::Song::play()
+void Gosu::Song::play(bool looping)
 {
     if (curSong && curSong != this)
     {
@@ -425,7 +450,7 @@ void Gosu::Song::play()
         assert(curSong == 0);
     }
 
-    data->play();
+    data->play(looping);
     curSong = this; // may be redundant
 }
 
