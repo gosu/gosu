@@ -151,7 +151,7 @@ Gosu::SampleInstance Gosu::Sample::play(double volume, double speed,
     bool looping) const {
   int channel;
   
-  if (noSound || (channel = Mix_PlayChannel(-1, data->rep, 0)) == -1)
+  if (noSound || (channel = Mix_PlayChannel(-1, data->rep, looping ? -1 : 0)) == -1)
     return SampleInstance(-1, -1);
 
   int extra = ++channelRegistry[channel];
@@ -170,7 +170,7 @@ Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
     double speed, bool looping) const {
   int channel;
   
-  if (noSound || (channel = Mix_PlayChannel(-1, data->rep, 0)) == -1)
+  if (noSound || (channel = Mix_PlayChannel(-1, data->rep, looping ? -1 : 0)) == -1)
     return SampleInstance(-1, -1);
 
   int extra = ++channelRegistry[channel];
