@@ -4,47 +4,36 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-01-30)
+(Last update: 2009-02-01)
 
 == Gosu 0.7.x ==
-  * Change Gosu hosting
-    * Migrate to own acct
-    * Tell everyone that RailsHoster sucks, a lot :(
-    * Change all references to vu2040 to libgosu.org in the forum (->search) and everywhere else, e.g. GetStOnWi
-    * Make it easy to create backups of the board
-    * Automate backing up the board
-    * Google/ask for timeout-based "new" system in mwForum
-  * Build new CI
-    * Design a new logo for Gosu
-    * Adjust main page design
-    * Adjust forum design
-    * Adjust GoogleCode design
-  * Link YouTube videos, and maybe blog tags like http://www.cuberick.com/search/label/gosu?
   * 0.7.12, after-LD / publicity release
-    * Song/Sound looping with FMOD
-    * Song/Sound looping with SDL_mixer :(
-    * Rethink item: Replace ifndef GOSU_IS_X by ifdef GOSU_NOT_X
-    * Check if Linux can load web safe fonts
-    * Windows: Don't fail if the requested windowed resolution is too large
     * Don't round updateInterval on Windows
     * Test if a default value of 16.0000 for updateInterval makes more sense
-    * Implement Z_IMMEDIATE
-    * Consider using float internally
     * Release 0.7.12
-    * Announce Gosu 0.7.12 + [forums.]libgosu.org + LD13
+    * Document Song::..., SampleInstance::..., zImmediate
+    * Change Gosu hosting
+      * Adding cgi-bin support to libgosu.org (RailsHoster)
+      * Change all references to vu2040 to libgosu.org in the forum (->search) and everywhere else, e.g. GetStOnWi
+      * Make it easy to create backups of the board
+      * Automate backing up the board
+      * Google/ask for timeout-based "new" system in mwForum
+    * Announce Gosu 0.7.12 + [forums.]libgosu.org + LD results
   * 0.7.13, performance/graphics release
+    * Clipping benchmark
+    * Windows: Don't fail if the requested windowed resolution is too large
     * Take a look at Crate: http://copiousfreetime.rubyforge.org/crate/
     * RMagick auf Windows statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * RMagick auf OS X statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * Experiment: resizing the window possible?
+    * Benchmark Z_IMMEDIATE
     * Add fullscreen accessors to make proper FS OpenGL possible
-    * Mehr Modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
-    * TextField mit clip_to
+    * More alpha modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
+    * TextField with clip_to (update example)
     * Add fullscreen stretching prevention
     * Try not hiding the mouse cursor outside of the main window on OS X
     * Iterate on first category of fullscreen tests
     * Add Proof of Concept for Macro Patches
-    * Clipping benchmark
     * Test multiple screen on Windows
     * Get rid of OpenGL tearing with GMA950 on Windows
     * Get rid of context selection error with driver set to always do FSAA
@@ -66,13 +55,9 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Make sure README and LICENSE are appropriately named in the Gem?
     * Fragen: Monet zu Gosu Showcase hinzufügen
     * Collect Gosu YouTube videos and link them prominently
-    * Gosu.gstencil?
-    * Make Ruby reference available online, automatically
     * Mac OS: Mauszeiger wird im FS sichtbar bei Klick in obere linke Ecke: Warum?
-    * Gosu.gstencil?
     * Examples leichter findbar machen
     * Bessere Ruby-Deployment-Hilfen
-    * Make C++ reference available online, automatically
     * Assure that files from doxygen task are considered for packaging
     * FMOD3: Sound auf Vista blockiert bei mehreren Benutzern?
     * Windows Vista + RubyScript2exe: Bug reposten
@@ -97,7 +82,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Make RTL work without RTL/LTR markers?!
     * Add RTL support to Font::drawRot too
   * Implement mouse_x=/mouse_y= on each platform
-  * Evaluate FMOD Ex
   * Make plans for an official Scene system
   * Look at http://rubyforge.org/projects/rbplusplus
   * Look at http://freeimage.sourceforge.net/requirements.html
@@ -105,9 +89,19 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Experimentation with new drawing syntax; maybe first prototype as the last version of the 0.7.x series?
   * RMagick auf Windows statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
   * Document Gosu::interpolate, improve it too?
-  * TextField mit clip_to
   * Experiment: resizing the window possible?
-  * SubApp-System: Plan ausdenken
+== Gosu CI/Usability ==
+  * Iterate on Gosu logo
+  * Iterate on main page design
+  * Adjust forum design
+  * Adjust GoogleCode design
+  * Adjust sample games
+  * See if doxygen can also use Ruby input
+  * Adjust doxygen output
+  * Automatically upload doxygen output
+  * Make Ruby reference available online, automatically
+  * Link YouTube videos, and maybe blog tags like http://www.cuberick.com/search/label/gosu?
+  * Gosu.gstencil?
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
