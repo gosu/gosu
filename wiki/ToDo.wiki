@@ -89,7 +89,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Document Gosu::interpolate, improve it too?
   * Experiment: resizing the window possible?
 == Gosu CI/Usability ==
-  * Iterate on Gosu logo
   * Iterate on main page design
   * Adjust forum design
   * Adjust GoogleCode design
