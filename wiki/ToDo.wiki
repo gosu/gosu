@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-02-03)
+(Last update: 2009-02-04)
 
 == Gosu 0.7.x ==
   * 0.7.12, after-LD / publicity release
@@ -13,7 +13,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Release 0.7.12
     * Document Song::..., SampleInstance::..., zImmediate
     * Change Gosu hosting
-      * Make it easy to create backups of the board
+      * SSH auth via key has to work (RailsHoster)
       * Automate backing up the board
       * Google/ask for timeout-based "new" system in mwForum
     * Announce Gosu 0.7.12 + [forums.]libgosu.org + LD results
@@ -92,6 +92,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Iterate on main page design
   * Adjust forum design
   * Adjust GoogleCode design
+  * Adjust RubyGosu Deployment icon
   * Adjust sample games
   * See if doxygen can also use Ruby input
   * Adjust doxygen output
@@ -99,6 +100,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make Ruby reference available online, automatically
   * Link YouTube videos, and maybe blog tags like http://www.cuberick.com/search/label/gosu?
   * Gosu.gstencil?
+  * Change sender address of forum mailer
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
