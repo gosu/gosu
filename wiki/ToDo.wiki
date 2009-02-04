@@ -13,8 +13,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Release 0.7.12
     * Document Song::..., SampleInstance::..., zImmediate
     * Change Gosu hosting
-      * SSH auth via key has to work (RailsHoster)
-      * Automate backing up the board
       * Google/ask for timeout-based "new" system in mwForum
     * Announce Gosu 0.7.12 + [forums.]libgosu.org + LD results
   * 0.7.13, performance/graphics release
