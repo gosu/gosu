@@ -4,17 +4,15 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-02-05)
+(Last update: 2009-02-06)
 
 == Gosu 0.7.x ==
   * 0.7.12, after-LD / publicity release
-    * Don't round updateInterval on Windows
-    * Test if a default value of 16.0000 for updateInterval makes more sense
     * Release 0.7.12
     * Document Song::..., SampleInstance::..., zImmediate
     * Change Gosu hosting
-      * Google/ask for timeout-based "new" system in mwForum
     * Announce Gosu 0.7.12 + [forums.]libgosu.org + LD results
+  * Consider adding boost to gosu via svn:externals
   * 0.7.13, performance/graphics release
     * Clipping benchmark
     * Windows: Don't fail if the requested windowed resolution is too large
