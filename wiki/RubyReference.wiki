@@ -48,11 +48,14 @@
 
 == class Gosu::Sample ==
   * `initialize(window, filename)`
-  * `play(vol=1, speed=1)`: See play_pan. Returns a `SampleInstance`.
-  * `play_pan(pan=0, vol=1, speed=1)`: pan can be anything from -1.0 (left) to 1.0 (right). vol can be anything from 0.0 (silence) to 1.0 (full volume). Playback speed is only limited by FMOD's capatibilities and can accept very high or low values. Use 1.0 for normal playback speed. Returns a `SampleInstance`.
+  * `play(vol=1, speed=1, looping=false)`: See play_pan. Returns a `SampleInstance`.
+  * `play_pan(pan=0, vol=1, speed=1, looping=false)`: pan can be anything from -1.0 (left) to 1.0 (right). vol can be anything from 0.0 (silence) to 1.0 (full volume). Playback speed is only limited by FMOD's capatibilities and can accept very high or low values. Use 1.0 for normal playback speed. Returns a `SampleInstance`.
 
 == class Gosu::SampleInstance ==
-  * `stop`: Stops this instance of a sound being played. Does not hurt to call twice, or too late.
+  * `stop`: Stops this instance of a sound being played. Calling this twice, or too late, does not do any harm. You can nil out the reference to the instance afterwards as it will be useless.
+  * `pause`: Pauses this instance to be resumed afterwards. It will still keep a channel filled while paused.
+  * `paused?`
+  * `resume`
   * `playing?`
   * `volume=(vol)`: See Sample#play_pan.
   * `pan=(pan)`: See Sample#play_pan.
@@ -60,7 +63,9 @@
 
 == class Gosu::Song ==
   * `initialize(window, filename)`
-  * `play`
+  * `play(looping = false)`: Also used to resume paused songs.
+  * `pause`
+  * `paused?`
   * `stop`
   * `playing?`
   * `volume`, from 0..1.
@@ -88,6 +93,9 @@ _Note that you should really only use on instance of this class at the same time
   * `draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=:default)`
   * `mouse_x`
   * `mouse_y`
+  * `mouse_x=`
+  * `mouse_y=`
+  * `set_mouse_position(x, y)`: To avoid the intermediate position of calling `mouse_x=` followed by `mouse_y=`.
   * `button_down?(id)`
   * `self.button_id_to_char(id)`: Returns the character a given id stands for, or nil.
   * `self.char_to_button_id(char)`: Returns the id usually used for a character, or nil.
