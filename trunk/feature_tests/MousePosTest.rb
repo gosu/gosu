@@ -1,0 +1,22 @@
+require '../lib/gosu'
+
+class Test < Gosu::Window
+  def initialize
+    super(480, 320, true)
+    @cursor = Gosu::Image.new(self, "media/Cursor.png", false)
+  end
+  
+  def button_down id
+    if id == Gosu::KbEscape then
+      close
+    else
+      set_mouse_position mouse_x / 2, mouse_y
+    end
+  end
+  
+  def draw
+    @cursor.draw mouse_x, mouse_y, 0
+  end
+end
+
+Test.new.show

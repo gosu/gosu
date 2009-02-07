@@ -2474,6 +2474,15 @@ SWIGINTERN double Gosu_Window_mouseX(Gosu::Window const *self){
 SWIGINTERN double Gosu_Window_mouseY(Gosu::Window const *self){
 		return self->input().mouseY();
 	}
+SWIGINTERN void Gosu_Window_setMousePosition(Gosu::Window *self,double x,double y){
+        self->input().setMousePosition(x, y);
+    }
+SWIGINTERN void Gosu_Window_setMouseX(Gosu::Window *self,double x){
+        self->input().setMousePosition(x, self->input().mouseY());
+    }
+SWIGINTERN void Gosu_Window_setMouseY(Gosu::Window *self,double y){
+        self->input().setMousePosition(self->input().mouseX(), y);
+    }
 SWIGINTERN int Gosu_Window_width(Gosu::Window const *self){
 		return self->graphics().width();
 	}
@@ -8067,6 +8076,119 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Window_set_mouse_position(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  double arg2 ;
+  double arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "setMousePosition" "', argument " "1"" of type '" "Gosu::Window *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "setMousePosition" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "setMousePosition" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  {
+    try {
+      Gosu_Window_setMousePosition(arg1,arg2,arg3);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Window_mouse_xe___(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "setMouseX" "', argument " "1"" of type '" "Gosu::Window *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "setMouseX" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      Gosu_Window_setMouseX(arg1,arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Window_mouse_ye___(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "setMouseY" "', argument " "1"" of type '" "Gosu::Window *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "setMouseY" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      Gosu_Window_setMouseY(arg1,arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Window_width(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   int result;
@@ -8880,6 +9002,9 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cWindow.klass, "text_input=", VALUEFUNC(_wrap_Window_text_inpute___), -1);
   rb_define_method(cWindow.klass, "mouse_x", VALUEFUNC(_wrap_Window_mouse_x), -1);
   rb_define_method(cWindow.klass, "mouse_y", VALUEFUNC(_wrap_Window_mouse_y), -1);
+  rb_define_method(cWindow.klass, "set_mouse_position", VALUEFUNC(_wrap_Window_set_mouse_position), -1);
+  rb_define_method(cWindow.klass, "mouse_x=", VALUEFUNC(_wrap_Window_mouse_xe___), -1);
+  rb_define_method(cWindow.klass, "mouse_y=", VALUEFUNC(_wrap_Window_mouse_ye___), -1);
   rb_define_method(cWindow.klass, "width", VALUEFUNC(_wrap_Window_width), -1);
   rb_define_method(cWindow.klass, "height", VALUEFUNC(_wrap_Window_height), -1);
   rb_define_method(cWindow.klass, "gl", VALUEFUNC(_wrap_Window_gl), -1);

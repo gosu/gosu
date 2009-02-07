@@ -76,8 +76,8 @@ namespace Gosu
         #endif
         
         #ifdef GOSU_IS_X
-        Input(::Display* dpy);
-        bool feedXEvent(::XEvent& event, Window* window);
+        Input(::Display* display, ::Window window);
+        bool feedXEvent(::XEvent& event);
         #endif
         
         ~Input();
@@ -96,6 +96,12 @@ namespace Gosu
         double mouseX() const;
         //! See mouseX.
         double mouseY() const;
+
+        //! Immediately moves the mouse as far towards the desired position
+        //! as possible. x and y are relativ to the window just as in the mouse
+        //! position accessors.
+        void setMousePosition(double x, double y);
+
         // Undocumented for the moment.
         void setMouseFactors(double factorX, double factorY);
         

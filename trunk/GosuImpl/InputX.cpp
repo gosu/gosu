@@ -9,28 +9,32 @@
 struct Gosu::Input::Impl
 {
     TextInput* textInput;
-    std::vector< ::XEvent> eventList;
+    std::vector<::XEvent> eventList;
     std::map<unsigned int, bool> keyMap;
     double mouseX, mouseY, mouseFactorX, mouseFactorY;
     ::Display* display;
+	::Window wnd;
     Impl() : textInput(0) {}
 };
 
-Gosu::Input::Input(::Display* dpy)
+Gosu::Input::Input(::Display* dpy, Window wnd)
     : pimpl(new Impl)
 {
     // IMPR: Get current position?
     pimpl->mouseX = pimpl->mouseY = 0;
     pimpl->mouseFactorX = pimpl->mouseFactorY = 1.0;
     pimpl->display = dpy;
+	pimpl->window = wnd;
 }
 
 Gosu::Input::~Input()
 {
 }
 
-bool Gosu::Input::feedXEvent(::XEvent& event, Gosu::Window* window)
+bool Gosu::Input::feedXEvent(::XEvent& event)
 {
+	// IMPR: Wouldn't it make more sense to filter the other way around?
+	
     if(event.type == VisibilityNotify ||
        event.type == CirculateRequest ||
        event.type == ConfigureRequest ||
@@ -38,7 +42,7 @@ bool Gosu::Input::feedXEvent(::XEvent& event, Gosu::Window* window)
        event.type == ResizeRequest ||
        event.type == ClientMessage)
         return false;
-
+	
     pimpl->eventList.push_back(event);
     return true;
 }
@@ -186,6 +190,12 @@ void Gosu::Input::update()
         }
     }
     pimpl->eventList.clear();
+}
+
+Gosu::Input::setMousePosition(double x, double y)
+{
+    ::XWarpPointer(pimp->display, pimpl->window, None, 0, 0, 0, 0,
+				   x / pimpl->mouseFactorX, y / pimpl->mouseFactorY);
 }
 
 Gosu::TextInput* Gosu::Input::textInput() const

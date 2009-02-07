@@ -517,6 +517,20 @@ struct Gosu::Input::Impl
         
         currentMods = newMods;
     }
+
+    void refreshMousePosition()
+    {
+        NSPoint mousePos = [NSEvent mouseLocation];
+        if (window)
+        {
+            mousePos = [window convertScreenToBase: mousePos];
+            mousePos.y = [[window contentView] frame].size.height - mousePos.y;
+        }
+        else
+            mousePos.y = CGDisplayBounds(CGMainDisplayID()).size.height - mousePos.y;
+        mouseX = mousePos.x;
+        mouseY = mousePos.y;
+    }
 };
 
 Gosu::Input::Input(void* window)
@@ -623,6 +637,22 @@ double Gosu::Input::mouseY() const
     return pimpl->mouseY * pimpl->mouseFactorY;
 }
 
+void Gosu::Input::setMousePosition(double x, double y)
+{
+    NSPoint mousePos = NSMakePoint(x, y);
+    if (pimpl->window)
+    {
+        mousePos.y = [[pimpl->window contentView] frame].size.height - mousePos.y;
+        mousePos = [pimpl->window convertBaseToScreen: mousePos];
+        mousePos.y = CGDisplayBounds(CGMainDisplayID()).size.height - mousePos.y;
+    }
+
+    CGSetLocalEventsSuppressionInterval(0.0);
+    CGWarpMouseCursorPosition(CGPointMake(mousePos.x, mousePos.y));
+    
+    pimpl->refreshMousePosition();
+}
+
 void Gosu::Input::setMouseFactors(double factorX, double factorY)
 {
     pimpl->mouseFactorX = factorX;
@@ -631,16 +661,7 @@ void Gosu::Input::setMouseFactors(double factorX, double factorY)
 
 void Gosu::Input::update()
 {
-    NSPoint mousePos = [NSEvent mouseLocation];
-    if (pimpl->window)
-    {
-        mousePos = [pimpl->window convertScreenToBase: mousePos];
-        mousePos.y = [[pimpl->window contentView] frame].size.height - mousePos.y;
-    }
-    else
-        mousePos.y = CGDisplayBounds(CGMainDisplayID()).size.height - mousePos.y;
-    pimpl->mouseX = mousePos.x;
-    pimpl->mouseY = mousePos.y;
+    pimpl->refreshMousePosition();
     
     for (unsigned i = 0; i < pimpl->queue.size(); ++i)
     {

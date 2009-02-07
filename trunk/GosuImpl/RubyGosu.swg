@@ -418,6 +418,8 @@ namespace Gosu
 %rename("caption=") setCaption;
 %rename("button_down?") isButtonDown;
 %rename("text_input=") setTextInput;
+%rename("mouse_x=") setMouseX;
+%rename("mouse_y=") setMouseY;
 %markfunc Gosu::Window "markWindow";
 %include "../Gosu/Window.hpp"
 
@@ -476,6 +478,16 @@ namespace Gosu
 	double mouseY() const {
 		return $self->input().mouseY();
 	}
+    void setMousePosition(double x, double y) {
+        $self->input().setMousePosition(x, y);
+    }
+    void setMouseX(double x) {
+        $self->input().setMousePosition(x, $self->input().mouseY());
+    }
+    void setMouseY(double y) {
+        $self->input().setMousePosition($self->input().mouseX(), y);
+    }
+    
 	int width() const {
 		return $self->graphics().width();
 	}
