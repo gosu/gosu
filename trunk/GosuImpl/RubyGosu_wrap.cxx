@@ -2119,13 +2119,6 @@ SWIG_AsVal_double (VALUE obj, double *val)
   #define SWIG_From_double   rb_float_new 
 
 
-SWIGINTERNINLINE VALUE
-SWIG_From_int  (int value)
-{    
-  return SWIG_From_long  (value);
-}
-
-
 #include <string>
 
 
@@ -2300,6 +2293,13 @@ SWIG_AsVal_unsigned_SS_int (VALUE obj, unsigned int *val)
 SWIGINTERN Gosu::Font *new_Gosu_Font(Gosu::Window &window,std::wstring const &fontName,unsigned int height){
         return new Gosu::Font(window.graphics(), fontName, height);
     }
+
+SWIGINTERNINLINE VALUE
+SWIG_From_int  (int value)
+{    
+  return SWIG_From_long  (value);
+}
+
 
 SWIGINTERN int
 SWIG_AsVal_bool (VALUE obj, bool *val)
@@ -2590,66 +2590,6 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_trunc(int argc, VALUE *argv, VALUE self) {
-  double arg1 ;
-  long result;
-  double val1 ;
-  int ecode1 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_double(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "Gosu::trunc" "', argument " "1"" of type '" "double""'");
-  } 
-  arg1 = static_cast< double >(val1);
-  {
-    try {
-      result = (long)Gosu::trunc(arg1);
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_long(static_cast< long >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_round(int argc, VALUE *argv, VALUE self) {
-  double arg1 ;
-  long result;
-  double val1 ;
-  int ecode1 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_double(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "Gosu::round" "', argument " "1"" of type '" "double""'");
-  } 
-  arg1 = static_cast< double >(val1);
-  {
-    try {
-      result = (long)Gosu::round(arg1);
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_long(static_cast< long >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
 _wrap_random(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
   double arg2 ;
@@ -2676,66 +2616,6 @@ _wrap_random(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)Gosu::random(arg1,arg2);
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_double(static_cast< double >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_gosu_to_radians(int argc, VALUE *argv, VALUE self) {
-  double arg1 ;
-  double result;
-  double val1 ;
-  int ecode1 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_double(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "Gosu::gosuToRadians" "', argument " "1"" of type '" "double""'");
-  } 
-  arg1 = static_cast< double >(val1);
-  {
-    try {
-      result = (double)Gosu::gosuToRadians(arg1);
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_double(static_cast< double >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_radians_to_gosu(int argc, VALUE *argv, VALUE self) {
-  double arg1 ;
-  double result;
-  double val1 ;
-  int ecode1 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_double(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "Gosu::radiansToGosu" "', argument " "1"" of type '" "double""'");
-  } 
-  arg1 = static_cast< double >(val1);
-  {
-    try {
-      result = (double)Gosu::radiansToGosu(arg1);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -2944,60 +2824,6 @@ _wrap_normalize_angle(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)Gosu::normalizeAngle(arg1);
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_double(static_cast< double >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_distance_sqr(int argc, VALUE *argv, VALUE self) {
-  double arg1 ;
-  double arg2 ;
-  double arg3 ;
-  double arg4 ;
-  double result;
-  double val1 ;
-  int ecode1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  double val3 ;
-  int ecode3 = 0 ;
-  double val4 ;
-  int ecode4 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 4) || (argc > 4)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_double(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "Gosu::distanceSqr" "', argument " "1"" of type '" "double""'");
-  } 
-  arg1 = static_cast< double >(val1);
-  ecode2 = SWIG_AsVal_double(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Gosu::distanceSqr" "', argument " "2"" of type '" "double""'");
-  } 
-  arg2 = static_cast< double >(val2);
-  ecode3 = SWIG_AsVal_double(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Gosu::distanceSqr" "', argument " "3"" of type '" "double""'");
-  } 
-  arg3 = static_cast< double >(val3);
-  ecode4 = SWIG_AsVal_double(argv[3], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Gosu::distanceSqr" "', argument " "4"" of type '" "double""'");
-  } 
-  arg4 = static_cast< double >(val4);
-  {
-    try {
-      result = (double)Gosu::distanceSqr(arg1,arg2,arg3,arg4);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -8674,28 +8500,14 @@ SWIGEXPORT void Init_gosu(void) {
   
   SWIG_RubyInitializeTrackings();
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
-  rb_define_module_function(mGosu, "trunc", VALUEFUNC(_wrap_trunc), -1);
-  rb_define_module_function(mGosu, "round", VALUEFUNC(_wrap_round), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
-  rb_define_module_function(mGosu, "gosu_to_radians", VALUEFUNC(_wrap_gosu_to_radians), -1);
-  rb_define_module_function(mGosu, "radians_to_gosu", VALUEFUNC(_wrap_radians_to_gosu), -1);
   rb_define_module_function(mGosu, "offset_x", VALUEFUNC(_wrap_offset_x), -1);
   rb_define_module_function(mGosu, "offset_y", VALUEFUNC(_wrap_offset_y), -1);
   rb_define_module_function(mGosu, "angle", VALUEFUNC(_wrap_angle), -1);
   rb_define_module_function(mGosu, "angle_diff", VALUEFUNC(_wrap_angle_diff), -1);
   rb_define_module_function(mGosu, "normalize_angle", VALUEFUNC(_wrap_normalize_angle), -1);
-  rb_define_module_function(mGosu, "distance_sqr", VALUEFUNC(_wrap_distance_sqr), -1);
   rb_define_module_function(mGosu, "distance", VALUEFUNC(_wrap_distance), -1);
   rb_define_module_function(mGosu, "default_font_name", VALUEFUNC(_wrap_default_font_name), -1);
-  rb_define_const(mGosu, "AmDefault", SWIG_From_int(static_cast< int >(Gosu::amDefault)));
-  rb_define_const(mGosu, "AmAdditive", SWIG_From_int(static_cast< int >(Gosu::amAdditive)));
-  rb_define_const(mGosu, "FfBold", SWIG_From_int(static_cast< int >(Gosu::ffBold)));
-  rb_define_const(mGosu, "FfItalic", SWIG_From_int(static_cast< int >(Gosu::ffItalic)));
-  rb_define_const(mGosu, "FfUnderline", SWIG_From_int(static_cast< int >(Gosu::ffUnderline)));
-  rb_define_const(mGosu, "TaLeft", SWIG_From_int(static_cast< int >(Gosu::taLeft)));
-  rb_define_const(mGosu, "TaRight", SWIG_From_int(static_cast< int >(Gosu::taRight)));
-  rb_define_const(mGosu, "TaCenter", SWIG_From_int(static_cast< int >(Gosu::taCenter)));
-  rb_define_const(mGosu, "TaJustify", SWIG_From_int(static_cast< int >(Gosu::taJustify)));
   
   cColor.klass = rb_define_class_under(mGosu, "Color", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Color, (void *) &cColor);
@@ -8959,10 +8771,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_eval_string("class Gosu::Image; def self.from_text(*args); args.size == 4 ? from_text_4(*args) : from_text_7(*args); end; end");
   
   // Extend Numeric with simple angle conversion methods.
-  rb_eval_string("class Numeric;"
-    "  def gosu_to_radians; (self - 90) * Math::PI / 180.0; end;"
-    "  def radians_to_gosu; self * 180.0 / Math::PI + 90; end;"
-    "end");
+  rb_eval_string("class ::Numeric;def gosu_to_radians;(self-90)*Math::PI/180.0;end;def radians_to_gosu;self*180.0/Math::PI+90;end;end");
   
   GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
   

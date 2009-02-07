@@ -214,6 +214,11 @@ namespace Gosu
 %ignore Gosu::sleep;
 %include "../Gosu/Timing.hpp"
 %ignore Gosu::pi;
+%ignore Gosu::distanceSqr;
+%ignore Gosu::round;
+%ignore Gosu::trunc;
+%ignore Gosu::radiansToGosu;
+%ignore Gosu::gosuToRadians;
 %include "../Gosu/Math.hpp"
 %ignore Gosu::textWidth;
 %ignore Gosu::createText;
@@ -226,6 +231,9 @@ namespace Gosu
 
 // ZPos, AlphaMode, FontFlags, TextAlign
 %ignore Gosu::zImmediate;
+%ignore Gosu::AlphaMode;
+%ignore Gosu::FontFlags;
+%ignore Gosu::TextAlign;
 %include "../Gosu/GraphicsBase.hpp"
 
 // Color
@@ -353,6 +361,7 @@ namespace Gosu
 // Audio:
 
 %ignore Gosu::Audio;
+%Ignore Gosu::SongType;
 %ignore Gosu::Sample::Sample(Audio& audio, const std::wstring& filename);
 %ignore Gosu::Sample::Sample(Audio& audio, Reader reader);
 %ignore Gosu::Song::Song(Audio& audio, const std::wstring& filename);
@@ -381,18 +390,15 @@ namespace Gosu
 // Does not matter that it's the Mac file, %include only analyses symbols to export, not their values.
 %include "../Gosu/ButtonsMac.hpp"
 %init %{
-    // Backwards compatibility: import the constants into Gosu::Button.
+        // Backwards compatibility: import the constants into Gosu::Button.
     rb_eval_string("module Gosu::Button; Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }; end");
 
     // ARGH, SWIG workaround...
     rb_eval_string("class Gosu::Image; def self.from_text(*args); args.size == 4 ? from_text_4(*args) : from_text_7(*args); end; end");
-    
-    // Extend Numeric with simple angle conversion methods.
-    rb_eval_string("class Numeric;"
-                   "  def gosu_to_radians; (self - 90) * Math::PI / 180.0; end;"
-                   "  def radians_to_gosu; self * 180.0 / Math::PI + 90; end;"
-                   "end");
 
+    // Extend Numeric with simple angle conversion methods.
+    rb_eval_string("class ::Numeric;def gosu_to_radians;(self-90)*Math::PI/180.0;end;def radians_to_gosu;self*180.0/Math::PI+90;end;end");
+    
     GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
 %}
 
