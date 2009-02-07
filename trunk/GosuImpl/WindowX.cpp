@@ -116,7 +116,7 @@ struct Gosu::Window::Impl
             if (event.type == ButtonPress && fullscreen && !active)
                 XSetInputFocus(display, this->window, RevertToParent, CurrentTime);
             
-            if (!window->input().feedXEvent(event, window))
+            if (!window->input().feedXEvent(event))
             {
                 if (event.type == ConfigureNotify)
                 {
@@ -232,8 +232,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     glXMakeCurrent(pimpl->display, pimpl->window, pimpl->context);
 
     // Now set up major Gosu components
-    pimpl->graphics.reset(new Gosu::Graphics(pimpl->width, pimpl->height, fullscreen));
-    pimpl->input.reset(new Gosu::Input(pimpl->display));    
+    pimpl->graphics.reset(new Graphics(pimpl->width, pimpl->height, fullscreen));
+    pimpl->input.reset(new Input(pimpl->display, pimpl->window));    
     input().onButtonDown = boost::bind(&Window::buttonDown, this, _1);
     input().onButtonUp = boost::bind(&Window::buttonUp, this, _1);
     

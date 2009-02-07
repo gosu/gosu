@@ -9,15 +9,15 @@
 struct Gosu::Input::Impl
 {
     TextInput* textInput;
-    std::vector<::XEvent> eventList;
+    std::vector< ::XEvent> eventList;
     std::map<unsigned int, bool> keyMap;
     double mouseX, mouseY, mouseFactorX, mouseFactorY;
     ::Display* display;
-	::Window wnd;
+	::Window window;
     Impl() : textInput(0) {}
 };
 
-Gosu::Input::Input(::Display* dpy, Window wnd)
+Gosu::Input::Input(::Display* dpy, ::Window wnd)
     : pimpl(new Impl)
 {
     // IMPR: Get current position?
@@ -188,14 +188,21 @@ void Gosu::Input::update()
             pimpl->mouseX = event.xbutton.x;
             pimpl->mouseY = event.xbutton.y;
         }
+        else if (event.type == EnterNotify || event.type == LeaveNotify)
+        {
+            pimpl->mouseX = event.xcrossing.x;
+            pimpl->mouseY = event.xcrossing.y;
+        }
     }
     pimpl->eventList.clear();
 }
 
-Gosu::Input::setMousePosition(double x, double y)
+void Gosu::Input::setMousePosition(double x, double y)
 {
-    ::XWarpPointer(pimp->display, pimpl->window, None, 0, 0, 0, 0,
+    ::XWarpPointer(pimpl->display, None, pimpl->window, 0, 0, 0, 0,
 				   x / pimpl->mouseFactorX, y / pimpl->mouseFactorY);
+    ::XSync(pimpl->display, False);
+    pimpl->mouseX = x, pimpl->mouseY = y;
 }
 
 Gosu::TextInput* Gosu::Input::textInput() const

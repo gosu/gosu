@@ -10,7 +10,11 @@ class Test < Gosu::Window
     if id == Gosu::KbEscape then
       close
     else
-      set_mouse_position mouse_x / 2, mouse_y
+      if rand < 0.5 then
+       set_mouse_position mouse_x / 2, mouse_y
+      else
+       self.mouse_x /= 2
+      end
     end
   end
   
