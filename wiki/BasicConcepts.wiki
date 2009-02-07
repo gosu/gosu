@@ -4,7 +4,9 @@
 
 All drawing operations in Gosu accept a floating-point value called "z" (technically, a `double`). Things drawn with a higher z position will be drawn over those with a lower one. If two things have the same z position, they will be drawn in the order the drawing functions were called.
 
-If you do not wish to use z ordering, just pass 0 all the time.
+If you do not wish to use z ordering, just pass the same constant all the time.
+
+In C++, there is the constant Gosu::zImmediate to specify that no Z-ordering should happen at all, and that the underlying OpenGL commands can be executed synchronously. Whether this increases performance remains to be tested.
 
 = Hard borders =
 
