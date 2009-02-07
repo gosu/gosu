@@ -2,7 +2,7 @@ require '../lib/gosu'
 
 class Test < Gosu::Window
   def initialize
-    super(480, 320, true)
+    super(480, 320, false)
     @cursor = Gosu::Image.new(self, "media/Cursor.png", false)
   end
   

@@ -410,6 +410,14 @@ double Gosu::Input::mouseY() const
     return pimpl->mouseY * pimpl->mouseFactorY;
 }
 
+void Gosu::Input::setMousePosition(double x, double y)
+{
+	POINT pos = { x / pimpl->mouseFactorX, y / pimpl->mouseFactorY };
+	::ClientToScreen(pimpl->window, &pos);
+	::SetCursorPos(pos.x, pos.y);
+	pimpl->updateMousePos();
+}
+
 void Gosu::Input::setMouseFactors(double factorX, double factorY)
 {
 	pimpl->mouseFactorX = factorX;

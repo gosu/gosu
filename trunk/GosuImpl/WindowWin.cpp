@@ -95,6 +95,8 @@ namespace Gosu
         void setupVSync()
         {
             char* extensions = (char*)glGetString(GL_EXTENSIONS);
+			// The Intel drivers will actually have a proc address for wglSwapInterval that
+			// doesn't do much, so the string instead of just getting the address.
             if (!strstr(extensions, "WGL_EXT_swap_control"))
                 return;
             typedef void (APIENTRY *PFNWGLEXTSWAPCONTROLPROC) (int);
@@ -296,21 +298,30 @@ void Gosu::Window::show()
 	    {
 			Win::processMessages();
 
-            if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
-
+			// Whyever this would happen...!
 			if (!::IsWindowVisible(handle()))
+			{
+				Sleep(50);
 				return;
+			}
 
 			unsigned ms = milliseconds();
 
-			if (ms < lastTick || ms - lastTick >= pimpl->updateInterval)
+			if (ms < lastTick || ms - lastTick >= static_cast<unsigned>(pimpl->updateInterval))
 			{
 				lastTick = ms;
 				input().update();
 			    update();
 				::InvalidateRect(handle(), 0, FALSE);
-                lastFrameSkipped = false;
-			}
+				// There probably should be a proper "oncePerTick" handler
+				// system in the future. Right now, this is necessary to give
+				// timeslices to Ruby's green threads in Ruby/Gosu.
+		        if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
+				lastFrameSkipped = false;
+			} else if (pimpl->updateInterval - (ms - lastTick) > 5)
+				// More than 5 ms left until next update: Sleep to reduce
+				// processur usage, Sleep() is accurate enough for that.
+				Sleep(5);
 		}
     }
     catch (...)

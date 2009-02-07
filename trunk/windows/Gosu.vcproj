@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="9,00"
 	Name="Gosu"
 	ProjectGUID="{4989339B-019C-4399-86F5-1D9245C420C6}"
 	RootNamespace="Gosu"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -47,9 +48,8 @@
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="1"
-				DisableSpecificWarnings="4996"
+				DisableSpecificWarnings="4996;4244"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -107,16 +107,17 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/I&quot;zlib, libpng\zlib&quot; /I&quot;zlib, libpng\libpng&quot;"
+				Optimization="3"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				WholeProgramOptimization="false"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
+				FloatingPointModel="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="1"
-				DisableSpecificWarnings="4996"
+				DisableSpecificWarnings="4996;4244"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -515,11 +516,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Gosu\Sockets.hpp"
+				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
+				RelativePath="..\Gosu\Sockets.hpp"
 				>
 			</File>
 			<File
