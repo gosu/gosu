@@ -4,12 +4,12 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-02-06)
+(Last update: 2009-02-07)
 
 == Gosu 0.7.x ==
   * 0.7.12, after-LD / publicity release
     * Release 0.7.12
-    * Document Song::..., SampleInstance::..., zImmediate
+    * Document Song::..., SampleInstance::..., zImmediate, SMP
     * Change Gosu hosting
     * Announce Gosu 0.7.12 + [forums.]libgosu.org + LD results
   * Consider adding boost to gosu via svn:externals
