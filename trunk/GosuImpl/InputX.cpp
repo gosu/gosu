@@ -202,6 +202,8 @@ void Gosu::Input::setMousePosition(double x, double y)
     ::XWarpPointer(pimpl->display, None, pimpl->window, 0, 0, 0, 0,
 				   x / pimpl->mouseFactorX, y / pimpl->mouseFactorY);
     ::XSync(pimpl->display, False);
+    // Couldn't find a way to fetch the current mouse position. These
+    // values may not be correct if the cursor was grabbed, for example.
     pimpl->mouseX = x, pimpl->mouseY = y;
 }
 
