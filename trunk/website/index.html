@@ -8,44 +8,51 @@
   
   <style type="text/css">
     html {
-      background: url("footer.png") bottom repeat-x;
       margin: 0px;
       padding: 0px;
     }
     
     body {
-      font-family: "Lucida Grande", sans-serif;
-      background: url("background.png") top repeat-x;
       margin: 0px;
       padding: 9px;
+      font-family: "Lucida Grande", sans-serif;
+      background: url("background.jpg") top center repeat-x;
     }
     
     #main {
-      padding: 15px;
-      -webkit-border-radius: 1em;
-      -moz-border-radius: 1em;
+      padding: 25px;
+      -webkit-border-radius: 1em 0.5em;
+      -moz-border-radius: 0.5em;
+      background: white;
+      width: 90%;
+      margin: 106px auto 0px auto;
     }
     
-    p.copyright {
-      clear: both;
-      text-align: center;
-      color: #fff;
-      margin-top: 5em;
-      margin-bottom: -8px;
-      font-size: 70%;
-    }
+    /*div.tab {
+          padding: 10px;
+          margin-top: -64px;
+          margin-left: -25px;
+          margin-bottom: 30px;
+          -webkit-border-top-left-radius: 1em 0.5em;
+          -webkit-border-top-right-radius: 1em 0.5em;
+          -moz-border-topleft-radius: 0.5em;
+          -moz-border-topright-radius: 0.5em;
+          background: white;
+          text-align: center;
+          font-weight: bold;
+          border-bottom: 1px solid #ccc;
+          width: 200px;
+        }*/
     
-    p.copyright a {
-      color: #fff;
-      font-weight: bold;
-    }
     
     #logo_container {
       float: right;
+      margin-top: -106px;
+      margin-bottom: 10px;
     }
     
     #logo_container img {
-      margin: 0em 0em 0em 1.5em;
+      margin: -10px -10px -10px 0px;
       vertical-align: bottom;
     }
     
@@ -69,16 +76,17 @@
       margin: 0em;
     }
     
+    .quick_link#feed_link {
+      background: url('feed-icon.png') 10px 20px no-repeat;
+      padding-left: 100px;
+      width: 176px;
+    }
+    
     a {
       color: red;
     }
     
     h1 {
-      font-size: 130%;
-      margin-top: 55px;
-    }
-    
-    h2 {
       font-size: 115%;
     }
     
@@ -94,7 +102,7 @@
     </div>
 
     <div class="quick_link">
-      <a href="http://code.google.com/p/gosu/">Gosu's GoogleCode homepage</a> is the place for:
+      <a href="http://code.google.com/p/gosu/">Gosu's GoogleCode project</a> is the place for:
       <ul>
         <li><a href="http://code.google.com/p/gosu/wiki/DocsOverview">official documentation in the Wiki</a></li>
         <li><a href="http://code.google.com/p/gosu/downloads/list">packaged downloads,</li>
@@ -106,15 +114,15 @@
     <div class="quick_link">
       <a href="http://www.libgosu.org/cgi-bin/mwf/forum.pl">The official forum system</a> has just opened as a proper place to discuss questions. Please register and join the discussion!<br><small>If you want to bookmark it, please use <tt>forum.pl</tt> instead of <tt>forum_show.pl</tt> so posts will be properly marked as new.</small>
     </div>
+    <div class="quick_link" id="feed_link">
+      Stay up to date easily with <a href="http://code.google.com/p/gosu/feeds">RSS feeds of downloads and more</a> from the GoogleCode page, or subscribe even to Gosu news and discussion easily via the <a href="http://vu2040.eta.railshoster.de/cgi-bin/mwf/forum_feeds.pl">feeds from the forum</a>.
+    </div>
     <div class="quick_link">
       There is also a low traffic <a href="irc://irc.freenode.org/gosu">IRC channel on freenode</a> for friendly chat.
     </div>
-    <div class="quick_link" style="background: url('feed-icon.png') top left no-repeat; padding-left: 112px; width: 162px">
-      Stay up to date easily with <a href="http://code.google.com/p/gosu/feeds">RSS feeds of downloads and more</a> from the GoogleCode page, or subscribe even to Gosu news and discussion easily via the <a href="http://vu2040.eta.railshoster.de/cgi-bin/mwf/forum_feeds.pl">feeds from the forum</a>.
-    </div>
-    <h1>
-      Welcome to the new Gosu homepage!
-    </h1>
+    <!-- <div class="tab">
+          Main Page
+        </div> -->
     <p>
       Gosu is a 2D game development library for the Ruby and C++ programming languages, available for Mac OS X, Windows and Linux. <small>(MSVC++ 2005 or 2008 needed for the Windows C++ version).</small>
     </p>
@@ -137,12 +145,12 @@
       </ul>
     </p>
     
-    <h2>Progress info</h2>
-    <p>
-      The interface could be cleaned up a bit, but right now, the focus is on fixing bugs and glitches that can be changed while keeping the current interface. Once I run out of things to fix, version 0.8 will bring joy and new features to play with (at least I hope so). <strong>Contributions are welcome!</strong>
-    </p>
+    <!-- <h1>Progress info</h1>
+        <p>
+          The interface could be cleaned up a bit, but right now, the focus is on fixing bugs and glitches that can be changed while keeping the current interface. Once I run out of things to fix, version 0.8 will bring joy and new features to play with (at least I hope so). <strong>Contributions are welcome!</strong>
+        </p> -->
 
-    <h2>Ruby Game Development Overview</h2>
+    <h1>Ruby Game Development Overview</h1>
     <p>If you are coming from a Ruby background and haven't yet decided on a library or want to know about alternatives to Gosu, or if you haven't yet decided to even use Ruby, check out Andrea O. K. Wrights articles and her talk, which give a fair overview:
       <ul>
         <li><a href="http://www.oreillynet.com/pub/a/ruby/2007/12/04/creating-games-in-ruby.html">Article (part 1)</a></li>
@@ -151,15 +159,15 @@
       </ul>
     </p>
     
-    <h2>Licensing</h2>
+    <h1>Licensing</h1>
+    <p>
+      Gosu and all documentation © 2001-2009 <a href="mailto:julian@raschke.de">Julian Raschke</a>, Jan Lücker and contributors.
+    </p>
     <p>
       Gosu is released under the MIT license.
     </p>
     <p>
       Note: Even though Gosu's own source code and documentation are released under the MIT license, it uses the closed source FMOD library for sound output. FMOD is free of charge for freeware games though, and has very fair conditions otherwise. On Linux, if FMOD is not present, SDL_mixer will be used as the default. You use 100% Free code in this case!
-    </p>
-    <p class="copyright">
-      Gosu and all documentation © 2001-2009 <a href="mailto:julian@raschke.de">Julian Raschke</a>, Jan Lücker and contributors.
     </p>
   </div>
 </body>

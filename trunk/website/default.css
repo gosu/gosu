@@ -6,29 +6,24 @@ html {
 	height: 100%;
 	background-color: white;
 	padding: 0;
+  	background: url("background.jpg") top center repeat-x;
 }
 body {
 	margin: 0;
-	background-color: white;
-	padding: 10px;
+  	font-family: "Lucida Grande", Verdana, sans-serif;
+	background: url("forum_header.png") 25px 25px no-repeat;
+	padding: 25px;
 }
 
 /* Base font */
 body, table {
-	font-size: 13px;
-	font-family: verdana, sans-serif;
+	font-size: 14px;
 }
 
 /* Link */
 a {
-	color: blue;
+	color: #c00;
 	text-decoration: none;
-}
-a:visited {
-	color: blue;
-}
-a:hover {
-	color: red;
 }
 a img {
 	border: none;
@@ -36,14 +31,12 @@ a img {
 
 /* Generic frame */
 div.frm {
-  clear: both;
+    clear: both;
 	margin-top: 10px;
-/*  border: 1px solid black;*/
-	-webkit-border-top-left-radius: 5px 7px;
-	-webkit-border-top-right-radius: 5px 7px;
-  -moz-border-radius-topright: 7px;
-  -moz-border-radius-topleft: 7px;
-	background-color: #c3d9ff;
+	-webkit-border-radius: 1em 0.5em;
+  	-moz-border-radius: 0.5em;
+	background-color: #fff;
+	padding: 5px;
 }
 
 div.dsc {
@@ -52,6 +45,7 @@ div.dsc {
 
 /* Generic header cell */
 div.hcl {
+	font-size: 115%;
 	height: 1.337em;
 	padding: 5px 6px;
 	overflow: hidden;
@@ -60,7 +54,7 @@ div.hcl {
 /* Generic content cell */
 div.ccl {
 	border-top: 1px solid #666;
-	background-color: #efefef;
+	background-color: #fff;
 	padding: 6px;
 }
 div.ccl:first-child {
@@ -73,7 +67,7 @@ div.ccl p:first-child {
 /* Generic button cell */
 div.bcl {
 	border-top: 1px solid silver;
-	background-color: #e5ecf9;
+	background-color: #fff;
 	padding: 2px 4px 2px 1px;
 }
 
@@ -110,22 +104,22 @@ span.pln a:hover {
 /* Table frame */
 table.tbl {
 	width: 100%;
-	border-top: 10px solid #e5ecf9;
-	border-bottom: 10px solid #e5ecf9;
-	-webkit-border-radius: 5px;
+	margin-top: 10px;
 	border-collapse: collapse;
 	border-spacing: 0;
 	empty-cells: show;
+	border: 2px solid white;
 }
 
 /* Table header row */
 table.tbl tr.hrw {
-	background-color: #c3d9ff;
+	background-color: #fff;
 	font-weight: bold;
 }
 
 /* Table header cell */
 table.tbl th {
+	font-size: 115%;
 	padding: 4px 6px;
 	text-align: left;
 	white-space: nowrap;
@@ -162,14 +156,16 @@ table.tbl .icl {
 
 /* Top bar frame */
 div.tpb {
-	margin: 0em 0em 2em 1em;
+	margin: 0px 0 30px 10px;
+	padding: 0.5em 0.7em 0.7em 0.7em;
 	float: right;
-	-webkit-border-radius: 5px;
-	background-color: #ddf8cc;
+	background-color: #fff;
+	-webkit-border-radius: 1em 0.5em;
+  	-moz-border-radius: 0.5em;
 }
 
 div.tpb div.bcl {
-  background-color: #ddf8cc;
+  background-color: #fff;
   border: none;
 }
 
