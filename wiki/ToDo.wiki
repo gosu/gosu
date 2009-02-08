@@ -7,9 +7,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
 (Last update: 2009-02-08)
 
 == Gosu 0.7.x ==
-  * 0.7.12, after-LD / publicity release
-    * Change Gosu hosting
-    * Announce Gosu 0.7.12 + [forums.]libgosu.org + LD results
   * 0.7.13, performance/graphics release
     * Consider adding boost to gosu via svn:externals
     * Clipping benchmark
