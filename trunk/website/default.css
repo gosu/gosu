@@ -122,7 +122,8 @@ table.tbl tr.hrw {
 /* Table header cell */
 table.tbl th {
 	font-size: 115%;
-	padding: 5px;
+	padding: 5px 9px;
+	text-transform: lowercase;
 	text-align: left;
 	white-space: nowrap;
 }
@@ -215,19 +216,25 @@ img.plb {
 /* Post header of unread posts */
 div.pst.unr div.hcl {
 	background-color: #c0ffc0;
-	background-image: url(bg_pstunr.png);
+	margin-bottom: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
 }
 
 /* Post header of new posts */
 div.pst.new div.hcl {
-	background-color: #e8e8a0;
-	background-image: url(bg_pstnew.png);
+	background-color: #e8c838;
+	margin-bottom: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
 }
 
 /* Post header of target posts */
 div.pst.tgt div.hcl {
 	background-color: #cdcbe0;
-	background-image: url(bg_psttgt.png);
+	margin-bottom: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
 }
 
 /* Quote */
