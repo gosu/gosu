@@ -6,12 +6,12 @@ html {
 	height: 100%;
 	background-color: white;
 	padding: 0;
-  	background: url("background.jpg") top center repeat-x;
+  	background: url("/background.jpg") top center repeat-x;
 }
 body {
 	margin: 0;
   	font-family: "Lucida Grande", Verdana, sans-serif;
-	background: url("forum_header.png") 25px 25px no-repeat;
+	background: url("/forum_header.png") 25px 25px no-repeat;
 	padding: 25px;
 }
 
