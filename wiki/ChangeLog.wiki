@@ -1,7 +1,8 @@
 #summary Log of Gosu's development.
 #labels Featured
 
-=0.7.12 (Work in Progress)=
+=0.7.12=
+  * 2009-02-08: Added Window::setMousePosition/set_mouse_position/mouse_x=/mouse_y=
   * 2009-01-31: Added Song and Sample looping
   * 2009-01-31: Added Song#pause, #paused? and SampleInstance#pause, paused?, resume
   * 2009-01-31: C++: Added Gosu::zImmediate (bypasses Z ordering)
