@@ -26,10 +26,11 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Test multiple screen on Windows
     * Get rid of OpenGL tearing with GMA950 on Windows
     * Get rid of context selection error with driver set to always do FSAA
-    * Don't round updateInterval on Linux
-    * Implement frameskip
-    * Be able to have more logical FPS than Hz despite working vsync
-    * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
+    * Look for update_interval rounding errors on Linux
+    * Implement/verify frameskip on Windows
+    * Implement/verify frameskip on OS X
+    * Mac
+    * Implement/verify frameskip on Linux
     * Ruby 1.9-Support
       * Compile Ruby 1.9 on Intel (Mac)
       * Compile Ruby 1.9 on PPC (Mac)
@@ -62,6 +63,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Now that the Rakefile works, stop doing every task every time (use file dependencies)
     * Make it easier to find the examples from the Gem
   * 0.7.15, text quality release
+    * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
     * Linux: Support Unicode in title bar
     * Linux: Support other XKeySyms than Latin 1
     * Mac: Add dead keys to TextInput
