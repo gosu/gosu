@@ -40,7 +40,7 @@ div.frm {
 }
 
 div.dsc {
-  margin-top: -8px;
+  margin-top: -10px;
 }
 
 /* Generic header cell */
@@ -114,6 +114,7 @@ table.tbl {
 
 /* Table header row */
 table.tbl tr.hrw {
+	color: white;
 	background-color: #333;
 	font-weight: bold;
 }
@@ -121,7 +122,7 @@ table.tbl tr.hrw {
 /* Table header cell */
 table.tbl th {
 	font-size: 115%;
-	padding: 4px 6px;
+	padding: 5px;
 	text-align: left;
 	white-space: nowrap;
 }
@@ -139,7 +140,7 @@ table.tbl tr.crw {
 
 /* Table content cell */
 table.tbl td {
-	padding: 4px 6px;
+	padding: 9px;
 	border-top: 1px solid #666;
 }
 
