@@ -40,7 +40,7 @@ div.frm {
 }
 
 div.dsc {
-  margin-top: 0px;
+  margin-top: -8px;
 }
 
 /* Generic header cell */
@@ -75,6 +75,7 @@ div.bcl {
 div.bcl a, a.btl {
 	margin: 1px;
 	padding: 0 4px;
+	text-transform: lowercase;
 }
 div.bcl a:hover, a.btl:hover {
 	margin: 0;
@@ -108,12 +109,12 @@ table.tbl {
 	border-collapse: collapse;
 	border-spacing: 0;
 	empty-cells: show;
-	border: 2px solid white;
+	border: 2px solid #333;
 }
 
 /* Table header row */
 table.tbl tr.hrw {
-	background-color: #fff;
+	background-color: #333;
 	font-weight: bold;
 }
 
@@ -477,6 +478,6 @@ div.bds {
 	font-size: 85%;
 }
 
-div.pst {
+div.pst, div.msg {
 	border: 2px solid #666;
 }
