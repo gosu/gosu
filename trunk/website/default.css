@@ -313,6 +313,7 @@ img.flg {
 
 /* Header title */
 span.htt {
+	text-transform: lowercase;
 	font-weight: bold;
 }
 
@@ -474,4 +475,8 @@ img.emi {
 /* Board description */
 div.bds {
 	font-size: 85%;
+}
+
+div.pst {
+	border: 2px solid #666;
 }
