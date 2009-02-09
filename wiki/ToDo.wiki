@@ -8,6 +8,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
 
 == Gosu 0.7.x ==
   * Fix broken recaptcha key
+  * Write the last ANN to ruby-lang for 0.7.x
   * 0.7.13, performance/graphics/iPhone release
     * Consider adding boost to gosu via svn:externals
     * Think: What would be the costs of being able to delete images while they are still referenced? Mergable with macros?
