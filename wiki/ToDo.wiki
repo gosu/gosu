@@ -4,17 +4,18 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-02-09)
+(Last update: 2009-02-10)
 
 == Gosu 0.7.x ==
-  * Fix broken recaptcha key
-  * Write the last ANN to ruby-lang for 0.7.x
   * 0.7.13, performance/graphics/iPhone release
-    * Consider adding boost to gosu via svn:externals
+    * Test RMagick.bundle on PPC
+    * Test RMagick.bundle on Tiger
+    * Do research about color depth on the iPhone (affects GosuView and all of Graphics...!)
     * Think: What would be the costs of being able to delete images while they are still referenced? Mergable with macros?
+    * Think: Should the initial order of draw() and update() be the same on all platforms? If so, which order would be correct?
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
-    * Clipping benchmark
-    * OS X: Bei Fokusverlust alle Keys releasen
+    * Benchmark clip_to
+    * OS X: Release all keys on focus loss
     * Make even the mouse wheel consistently send buttonUp events on all platforms
     * Windows: Don't fail if the requested windowed resolution is too large
     * Take a look at Crate: http://copiousfreetime.rubyforge.org/crate/
@@ -36,7 +37,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Implement/verify frameskip on OS X
     * Mac
     * Implement/verify frameskip on Linux
-    * Ruby 1.9-Support
+    * Ruby 1.9 Support
       * Compile Ruby 1.9 on Intel (Mac)
       * Compile Ruby 1.9 on PPC (Mac)
       * RG Deployment Template auf 1.9 umstellen
@@ -46,15 +47,15 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Try to add SDL_mixer packages for Windows
     * Try to add SDL_mixer packages for OS X
     * Move three threads from GosuExchange to the forums
-    * Move three games from GosuUsers to the forums
     * Release 0.7.13
+    * Document Window#update_interval
   * 0.7.14, polish/deployment release
     * Assure that files from doxygen task are considered for packaging
     * Find out why Cmd+char triggers two button_downs, but only one button_up!
-    * Reviewen: http://rubyforge.org/tracker/index.php?func=detail&aid=21405&group_id=375&atid=1504
+    * Review: http://rubyforge.org/tracker/index.php?func=detail&aid=21405&group_id=375&atid=1504
     * Make sure README and LICENSE are appropriately named in the Gem?
-    * Fragen: Monet zu Gosu Showcase hinzufügen
     * Collect Gosu YouTube videos and link them prominently
+    * Create a dynamic screenshot page for all the topics in the Showcase
     * Mac OS: Mauszeiger wird im FS sichtbar bei Klick in obere linke Ecke: Warum?
     * Examples leichter findbar machen
     * Bessere Ruby-Deployment-Hilfen
