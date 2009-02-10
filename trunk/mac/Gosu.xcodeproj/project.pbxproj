@@ -62,7 +62,7 @@
 		D410EB100A801B00005C7067 /* ListenerSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAF10A801B00005C7067 /* ListenerSocket.cpp */; };
 		D410EB110A801B00005C7067 /* MessageSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAF20A801B00005C7067 /* MessageSocket.cpp */; };
 		D410EB120A801B00005C7067 /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAF30A801B00005C7067 /* Socket.cpp */; };
-		D410EB130A801B00005C7067 /* Sockets.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410EAF40A801B00005C7067 /* Sockets.hpp */; };
+		D410EB130A801B00005C7067 /* Sockets.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410EAF40A801B00005C7067 /* Sockets.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410EB2A0A801C28005C7067 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410EB290A801C28005C7067 /* OpenGL.framework */; };
 		D410EB6E0A801CDC005C7067 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D410EB6C0A801CDC005C7067 /* InfoPlist.strings */; };
 		D423821D0C4C3D08000DAA25 /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD40A801B00005C7067 /* Bitmap.cpp */; };
@@ -102,6 +102,33 @@
 		D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */; };
 		D459FF990BDCD9CF00E7F0D6 /* Gosu.icns in Resources */ = {isa = PBXBuildFile; fileRef = D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */; };
 		D47BD32B0BD78F7200ACF014 /* RubyGosu_wrap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */; };
+		D4A5A1FF0F40D2EA00FFF378 /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD40A801B00005C7067 /* Bitmap.cpp */; };
+		D4A5A2000F40D2EC00FFF378 /* BitmapBMP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD50A801B00005C7067 /* BitmapBMP.cpp */; };
+		D4A5A2010F40D2EC00FFF378 /* BitmapColorKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD60A801B00005C7067 /* BitmapColorKey.cpp */; };
+		D4A5A2030F40D2F500FFF378 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
+		D4A5A2040F40D2F700FFF378 /* BlockAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD80A801B00005C7067 /* BlockAllocator.cpp */; };
+		D4A5A2050F40D2FB00FFF378 /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADA0A801B00005C7067 /* Color.cpp */; };
+		D4A5A2090F40D30700FFF378 /* FileUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA020A8019FA005C7067 /* FileUnix.cpp */; };
+		D4A5A20B0F40D30900FFF378 /* Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADC0A801B00005C7067 /* Graphics.cpp */; };
+		D4A5A20C0F40D30A00FFF378 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADE0A801B00005C7067 /* Image.cpp */; };
+		D4A5A20D0F40D30E00FFF378 /* IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA1B0A8019FA005C7067 /* IO.cpp */; };
+		D4A5A20E0F40D30F00FFF378 /* LargeImageData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADF0A801B00005C7067 /* LargeImageData.cpp */; };
+		D4A5A2130F40D33300FFF378 /* TimingUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA2E0A8019FA005C7067 /* TimingUnix.cpp */; };
+		D4A5A2140F40D33400FFF378 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97B0CD3907D00621B24 /* Texture.cpp */; };
+		D4A5A2150F40D33800FFF378 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE20A801B00005C7067 /* Text.cpp */; };
+		D4A5A2160F40D33B00FFF378 /* TexChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97D0CD3907D00621B24 /* TexChunk.cpp */; };
+		D4A5A2180F40D33D00FFF378 /* RotFlip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE10A801B00005C7067 /* RotFlip.cpp */; };
+		D4A5A21A0F40D34600FFF378 /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA1C0A8019FA005C7067 /* Math.cpp */; };
+		D4A5A2230F40D45200FFF378 /* InputTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A2200F40D45200FFF378 /* InputTouch.mm */; };
+		D4A5A2240F40D45200FFF378 /* WindowTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A2210F40D45200FFF378 /* WindowTouch.mm */; };
+		D4A5A2250F40D45200FFF378 /* UtilityTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A2220F40D45200FFF378 /* UtilityTouch.mm */; };
+		D4A5A2300F40D48300FFF378 /* GosuView.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A22D0F40D48300FFF378 /* GosuView.mm */; };
+		D4A5A2310F40D48300FFF378 /* BitmapUtilsTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A22E0F40D48300FFF378 /* BitmapUtilsTouch.mm */; };
+		D4A5A3000F40D51B00FFF378 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A5A2FB0F40D51B00FFF378 /* CoreGraphics.framework */; };
+		D4A5A3010F40D51B00FFF378 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A5A2FC0F40D51B00FFF378 /* QuartzCore.framework */; };
+		D4A5A3020F40D51B00FFF378 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A5A2FD0F40D51B00FFF378 /* OpenGLES.framework */; };
+		D4A5A3030F40D51B00FFF378 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A5A2FE0F40D51B00FFF378 /* UIKit.framework */; };
+		D4A5A3040F40D51B00FFF378 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A5A2FF0F40D51B00FFF378 /* Foundation.framework */; };
 		D4A7E97F0CD3907D00621B24 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97B0CD3907D00621B24 /* Texture.cpp */; };
 		D4A7E9810CD3907D00621B24 /* TexChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97D0CD3907D00621B24 /* TexChunk.cpp */; };
 		D4A7E9830CD3907D00621B24 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97B0CD3907D00621B24 /* Texture.cpp */; };
@@ -187,6 +214,18 @@
 		D47BD3290BD78F7200ACF014 /* RubyGosu_wrap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RubyGosu_wrap.h; path = ../GosuImpl/RubyGosu_wrap.h; sourceTree = SOURCE_ROOT; };
 		D47BD32A0BD78F7200ACF014 /* RubyGosu.swg */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = RubyGosu.swg; path = ../GosuImpl/RubyGosu.swg; sourceTree = SOURCE_ROOT; };
 		D499E6380D06B51300BA6DEC /* DrawOp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DrawOp.hpp; sourceTree = "<group>"; };
+		D4A5A1F40F40D28600FFF378 /* libgosutouch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgosutouch.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4A5A2200F40D45200FFF378 /* InputTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = InputTouch.mm; path = ../GosuImpl/InputTouch.mm; sourceTree = SOURCE_ROOT; };
+		D4A5A2210F40D45200FFF378 /* WindowTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = WindowTouch.mm; path = ../GosuImpl/WindowTouch.mm; sourceTree = SOURCE_ROOT; };
+		D4A5A2220F40D45200FFF378 /* UtilityTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = UtilityTouch.mm; path = ../GosuImpl/UtilityTouch.mm; sourceTree = SOURCE_ROOT; };
+		D4A5A22C0F40D48300FFF378 /* GosuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GosuView.h; sourceTree = "<group>"; };
+		D4A5A22D0F40D48300FFF378 /* GosuView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GosuView.mm; sourceTree = "<group>"; };
+		D4A5A22E0F40D48300FFF378 /* BitmapUtilsTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BitmapUtilsTouch.mm; sourceTree = "<group>"; };
+		D4A5A2FB0F40D51B00FFF378 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		D4A5A2FC0F40D51B00FFF378 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		D4A5A2FD0F40D51B00FFF378 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		D4A5A2FE0F40D51B00FFF378 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		D4A5A2FF0F40D51B00FFF378 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D4A7E9080CD377E000621B24 /* Async.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Async.cpp; path = ../GosuImpl/Async.cpp; sourceTree = SOURCE_ROOT; };
 		D4A7E97B0CD3907D00621B24 /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
 		D4A7E97C0CD3907D00621B24 /* Texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Texture.hpp; sourceTree = "<group>"; };
@@ -224,6 +263,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D4A5A1F20F40D28600FFF378 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4A5A3000F40D51B00FFF378 /* CoreGraphics.framework in Frameworks */,
+				D4A5A3010F40D51B00FFF378 /* QuartzCore.framework in Frameworks */,
+				D4A5A3020F40D51B00FFF378 /* OpenGLES.framework in Frameworks */,
+				D4A5A3030F40D51B00FFF378 /* UIKit.framework in Frameworks */,
+				D4A5A3040F40D51B00FFF378 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D4CA894E0BC68B5D00A431AC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -246,6 +297,7 @@
 				8D07F2C80486CC7A007CD1D0 /* Gosu.framework */,
 				D4CA89500BC68B5D00A431AC /* gosu.bundle */,
 				D459FF440BDCD23500E7F0D6 /* RubyGosu Deployment Template.app */,
+				D4A5A1F40F40D28600FFF378 /* libgosutouch.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -257,13 +309,14 @@
 				D410E8670A8018A8005C7067 /* Implementation */,
 				089C1665FE841158C02AAC07 /* Resources */,
 				D46F737C0BC3458D008003BA /* RubyGosu */,
-				0867D69AFE84028FC02AAC07 /* Frameworks */,
+				0867D69AFE84028FC02AAC07 /* Frameworks Mac */,
+				D4A5A2F00F40D4EE00FFF378 /* Frameworks Touch */,
 				034768DDFF38A45A11DB9C8B /* Products */,
 			);
 			name = Gosu;
 			sourceTree = "<group>";
 		};
-		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
+		0867D69AFE84028FC02AAC07 /* Frameworks Mac */ = {
 			isa = PBXGroup;
 			children = (
 				D42568090C69CF6100E745AC /* IOKit.framework */,
@@ -273,7 +326,7 @@
 				D410E98C0A801948005C7067 /* Foundation.framework */,
 				08FB77AAFE841565C02AAC07 /* Carbon.framework */,
 			);
-			name = Frameworks;
+			name = "Frameworks Mac";
 			sourceTree = "<group>";
 		};
 		089C1665FE841158C02AAC07 /* Resources */ = {
@@ -333,13 +386,16 @@
 				D410EA020A8019FA005C7067 /* FileUnix.cpp */,
 				D410D6220EE9D379007740AE /* Iconv.hpp */,
 				D410EA180A8019FA005C7067 /* InputMac.mm */,
+				D4A5A2200F40D45200FFF378 /* InputTouch.mm */,
 				D410EA1B0A8019FA005C7067 /* IO.cpp */,
 				D4AB62F50D08BA9900D71382 /* MacUtility.hpp */,
 				D410EA1C0A8019FA005C7067 /* Math.cpp */,
 				D4F07B260D93504700FB3D99 /* TextInputMac.mm */,
 				D410EA2E0A8019FA005C7067 /* TimingUnix.cpp */,
 				D410EA300A8019FA005C7067 /* Utility.cpp */,
+				D4A5A2220F40D45200FFF378 /* UtilityTouch.mm */,
 				D410EA310A8019FA005C7067 /* WindowMac.mm */,
+				D4A5A2210F40D45200FFF378 /* WindowTouch.mm */,
 			);
 			name = Implementation;
 			sourceTree = "<group>";
@@ -347,6 +403,9 @@
 		D410EAD30A801B00005C7067 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				D4A5A22C0F40D48300FFF378 /* GosuView.h */,
+				D4A5A22D0F40D48300FFF378 /* GosuView.mm */,
+				D4A5A22E0F40D48300FFF378 /* BitmapUtilsTouch.mm */,
 				D410EAD40A801B00005C7067 /* Bitmap.cpp */,
 				D410EAD50A801B00005C7067 /* BitmapBMP.cpp */,
 				D410EAD60A801B00005C7067 /* BitmapColorKey.cpp */,
@@ -396,6 +455,18 @@
 				D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */,
 			);
 			name = RubyGosu;
+			sourceTree = "<group>";
+		};
+		D4A5A2F00F40D4EE00FFF378 /* Frameworks Touch */ = {
+			isa = PBXGroup;
+			children = (
+				D4A5A2FB0F40D51B00FFF378 /* CoreGraphics.framework */,
+				D4A5A2FC0F40D51B00FFF378 /* QuartzCore.framework */,
+				D4A5A2FD0F40D51B00FFF378 /* OpenGLES.framework */,
+				D4A5A2FE0F40D51B00FFF378 /* UIKit.framework */,
+				D4A5A2FF0F40D51B00FFF378 /* Foundation.framework */,
+			);
+			name = "Frameworks Touch";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -476,6 +547,22 @@
 			productReference = D459FF440BDCD23500E7F0D6 /* RubyGosu Deployment Template.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D4A5A1F30F40D28600FFF378 /* Gosu Touch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D4A5A1F90F40D2A500FFF378 /* Build configuration list for PBXNativeTarget "Gosu Touch" */;
+			buildPhases = (
+				D4A5A1F10F40D28600FFF378 /* Sources */,
+				D4A5A1F20F40D28600FFF378 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Gosu Touch";
+			productName = "Gosu Touch";
+			productReference = D4A5A1F40F40D28600FFF378 /* libgosutouch.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		D4CA894F0BC68B5D00A431AC /* RubyGosu Core */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D4CA89510BC68B9E00A431AC /* Build configuration list for PBXNativeTarget "RubyGosu Core" */;
@@ -509,6 +596,7 @@
 				8D07F2BC0486CC7A007CD1D0 /* Gosu */,
 				D459FF430BDCD23500E7F0D6 /* RubyGosu Deployment Template */,
 				D4CA894F0BC68B5D00A431AC /* RubyGosu Core */,
+				D4A5A1F30F40D28600FFF378 /* Gosu Touch */,
 			);
 		};
 /* End PBXProject section */
@@ -607,6 +695,35 @@
 				D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */,
 				D423825C0C4C3E3E000DAA25 /* DirectoriesMac.mm in Sources */,
 				D423825F0C4C3E41000DAA25 /* Utility.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D4A5A1F10F40D28600FFF378 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4A5A1FF0F40D2EA00FFF378 /* Bitmap.cpp in Sources */,
+				D4A5A2000F40D2EC00FFF378 /* BitmapBMP.cpp in Sources */,
+				D4A5A2010F40D2EC00FFF378 /* BitmapColorKey.cpp in Sources */,
+				D4A5A2030F40D2F500FFF378 /* BitmapUtils.cpp in Sources */,
+				D4A5A2040F40D2F700FFF378 /* BlockAllocator.cpp in Sources */,
+				D4A5A2050F40D2FB00FFF378 /* Color.cpp in Sources */,
+				D4A5A2090F40D30700FFF378 /* FileUnix.cpp in Sources */,
+				D4A5A20B0F40D30900FFF378 /* Graphics.cpp in Sources */,
+				D4A5A20C0F40D30A00FFF378 /* Image.cpp in Sources */,
+				D4A5A20D0F40D30E00FFF378 /* IO.cpp in Sources */,
+				D4A5A20E0F40D30F00FFF378 /* LargeImageData.cpp in Sources */,
+				D4A5A2130F40D33300FFF378 /* TimingUnix.cpp in Sources */,
+				D4A5A2140F40D33400FFF378 /* Texture.cpp in Sources */,
+				D4A5A2150F40D33800FFF378 /* Text.cpp in Sources */,
+				D4A5A2160F40D33B00FFF378 /* TexChunk.cpp in Sources */,
+				D4A5A2180F40D33D00FFF378 /* RotFlip.cpp in Sources */,
+				D4A5A21A0F40D34600FFF378 /* Math.cpp in Sources */,
+				D4A5A2230F40D45200FFF378 /* InputTouch.mm in Sources */,
+				D4A5A2240F40D45200FFF378 /* WindowTouch.mm in Sources */,
+				D4A5A2250F40D45200FFF378 /* UtilityTouch.mm in Sources */,
+				D4A5A2300F40D48300FFF378 /* GosuView.mm in Sources */,
+				D4A5A2310F40D48300FFF378 /* BitmapUtilsTouch.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -751,255 +868,6 @@
 			};
 			name = Release;
 		};
-		D40DD7C80DE7666F00C78FB6 /* Profiling */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEPLOYMENT_POSTPROCESSING = YES;
-				GCC_AUTO_VECTORIZATION = YES;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					..,
-					/usr/local/include,
-					/opt/local/include,
-				);
-				LIBRARY_SEARCH_PATHS = .;
-				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-			};
-			name = Profiling;
-		};
-		D40DD7C90DE7666F00C78FB6 /* Profiling */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				CONFIGURATION_BUILD_DIR = ..;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GENERATE_PROFILING_CODE = YES;
-				INFOPLIST_FILE = "Gosu-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				LIBRARY_STYLE = DYNAMIC;
-				MACH_O_TYPE = mh_dylib;
-				OTHER_LDFLAGS = (
-					"-lz_universal",
-					"-lpng_universal",
-					"-lfmod_universal",
-					"-liconv",
-					"-lboost_thread_1_34_1_universal",
-				);
-				PRODUCT_NAME = Gosu;
-				WRAPPER_EXTENSION = framework;
-			};
-			name = Profiling;
-		};
-		D40DD7CA0DE7666F00C78FB6 /* Profiling */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)";
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					..,
-					/usr/local/include,
-					/opt/local/include,
-					"/usr/lib/ruby/1.8/universal-darwin8.0",
-					"/usr/lib/ruby/1.8/universal-darwin9.0",
-				);
-				INFOPLIST_FILE = "RubyGosu Template-Info.plist";
-				OBJROOT = build;
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-lruby",
-					"-liconv",
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = "RubyGosu Deployment Template";
-				SYMROOT = ..;
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = Profiling;
-		};
-		D40DD7CB0DE7666F00C78FB6 /* Profiling */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				CONFIGURATION_BUILD_DIR = ../lib;
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = "";
-				DYLIB_CURRENT_VERSION = "";
-				EXECUTABLE_EXTENSION = bundle;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					NDEBUG,
-					GOSU_FOR_RUBY,
-				);
-				GENERATE_MASTER_OBJECT_FILE = YES;
-				HEADER_SEARCH_PATHS = (
-					..,
-					/usr/local/include,
-					/opt/local/include,
-					"/usr/lib/ruby/1.8/universal-darwin8.0",
-					"/usr/lib/ruby/1.8/universal-darwin9.0",
-				);
-				MACH_O_TYPE = mh_bundle;
-				OTHER_LDFLAGS = (
-					"-F..",
-					"-lruby",
-					"-lz_universal",
-					"-lpng_universal",
-					"-lfmod_universal",
-					"-flat_namespace",
-					"-lboost_thread_1_34_1_universal",
-					"-liconv",
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = gosu;
-				ZERO_LINK = NO;
-			};
-			name = Profiling;
-		};
-		D43CBDAF0D077176007D13E7 /* BleedingEdge */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEPLOYMENT_POSTPROCESSING = YES;
-				GCC_AUTO_VECTORIZATION = YES;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					..,
-					/usr/local/include,
-					/opt/local/include,
-				);
-				LIBRARY_SEARCH_PATHS = .;
-				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-			};
-			name = BleedingEdge;
-		};
-		D43CBDB00D077176007D13E7 /* BleedingEdge */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				CONFIGURATION_BUILD_DIR = ..;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				INFOPLIST_FILE = "Gosu-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				LIBRARY_STYLE = DYNAMIC;
-				MACH_O_TYPE = mh_dylib;
-				OTHER_LDFLAGS = (
-					"-lz_universal",
-					"-lpng_universal",
-					"-lfmod_universal",
-					"-liconv",
-					"-lboost_thread_1_34_1_universal",
-				);
-				PRODUCT_NAME = Gosu;
-				WRAPPER_EXTENSION = framework;
-			};
-			name = BleedingEdge;
-		};
-		D43CBDB10D077176007D13E7 /* BleedingEdge */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)";
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					..,
-					/usr/local/include,
-					/opt/local/include,
-					"/usr/lib/ruby/1.8/universal-darwin8.0",
-					"/usr/lib/ruby/1.8/universal-darwin9.0",
-				);
-				INFOPLIST_FILE = "RubyGosu Template-Info.plist";
-				OBJROOT = build;
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-lruby19_universal",
-					"-liconv",
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = "RubyGosu Deployment Template";
-				SYMROOT = ..;
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = BleedingEdge;
-		};
-		D43CBDB20D077176007D13E7 /* BleedingEdge */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				CONFIGURATION_BUILD_DIR = ../lib;
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = "";
-				DYLIB_CURRENT_VERSION = "";
-				EXECUTABLE_EXTENSION = bundle;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					NDEBUG,
-					GOSU_FOR_RUBY,
-				);
-				GENERATE_MASTER_OBJECT_FILE = YES;
-				HEADER_SEARCH_PATHS = (
-					..,
-					/usr/local/include,
-					/opt/local/include,
-					"/usr/lib/ruby/1.8/universal-darwin8.0",
-					"/usr/lib/ruby/1.8/universal-darwin9.0",
-				);
-				MACH_O_TYPE = mh_bundle;
-				OTHER_LDFLAGS = (
-					"-F..",
-					"-lruby",
-					"-lz_universal",
-					"-lpng_universal",
-					"-lfmod_universal",
-					"-flat_namespace",
-					"-lboost_thread_1_34_1_universal",
-					"-liconv",
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = gosu;
-				ZERO_LINK = NO;
-			};
-			name = BleedingEdge;
-		};
 		D459FF480BDCD23600E7F0D6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1064,6 +932,35 @@
 				PRODUCT_NAME = "RubyGosu Deployment Template";
 				SYMROOT = ..;
 				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		D4A5A1F50F40D28700FFF378 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = ../lib;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PREBINDING = NO;
+				PRODUCT_NAME = "gosutouch-sim";
+				SDKROOT = iphonesimulator2.2.1;
+			};
+			name = Debug;
+		};
+		D4A5A1F60F40D28700FFF378 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = ../lib;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = gosutouch;
+				SDKROOT = iphoneos2.2.1;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -1151,8 +1048,6 @@
 			buildConfigurations = (
 				4FADC24308B4156D00ABE55E /* Debug */,
 				4FADC24408B4156D00ABE55E /* Release */,
-				D40DD7C90DE7666F00C78FB6 /* Profiling */,
-				D43CBDB00D077176007D13E7 /* BleedingEdge */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1162,8 +1057,6 @@
 			buildConfigurations = (
 				4FADC24708B4156D00ABE55E /* Debug */,
 				4FADC24808B4156D00ABE55E /* Release */,
-				D40DD7C80DE7666F00C78FB6 /* Profiling */,
-				D43CBDAF0D077176007D13E7 /* BleedingEdge */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1173,8 +1066,15 @@
 			buildConfigurations = (
 				D459FF480BDCD23600E7F0D6 /* Debug */,
 				D459FF490BDCD23600E7F0D6 /* Release */,
-				D40DD7CA0DE7666F00C78FB6 /* Profiling */,
-				D43CBDB10D077176007D13E7 /* BleedingEdge */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D4A5A1F90F40D2A500FFF378 /* Build configuration list for PBXNativeTarget "Gosu Touch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4A5A1F50F40D28700FFF378 /* Debug */,
+				D4A5A1F60F40D28700FFF378 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1184,8 +1084,6 @@
 			buildConfigurations = (
 				D4CA89520BC68B9E00A431AC /* Debug */,
 				D4CA89530BC68B9E00A431AC /* Release */,
-				D40DD7CB0DE7666F00C78FB6 /* Profiling */,
-				D43CBDB20D077176007D13E7 /* BleedingEdge */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

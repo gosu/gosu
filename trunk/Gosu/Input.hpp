@@ -71,8 +71,12 @@ namespace Gosu
         #endif
         
         #ifdef GOSU_IS_MAC
+        #ifdef GOSU_IS_IPHONE
+        Input();
+        #else
         Input(void* nswindow);
         bool feedNSEvent(void* event);
+        #endif
         #endif
         
         #ifdef GOSU_IS_X

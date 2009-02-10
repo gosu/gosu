@@ -178,7 +178,7 @@ struct Gosu::Window::Impl
         NSRect rect = NSMakeRect(0, 0, width, height);
         unsigned style = NSTitledWindowMask | NSMiniaturizableWindowMask | NSClosableWindowMask;
         window.reset([[GosuWindow alloc] initWithContentRect: rect styleMask:style 
-                                                            backing:NSBackingStoreBuffered defer:NO]);
+                                         backing:NSBackingStoreBuffered defer:NO]);
         [window.obj() retain]; // ...or is it autorelease?
         
         [window.obj() setContentView: [[GosuView alloc] init]];
@@ -316,6 +316,11 @@ void Gosu::Window::setCaption(const std::wstring& caption)
     std::vector<unichar> unibuf(caption.begin(), caption.end());
     [pimpl->window.obj() setTitle:
         [NSString stringWithCharacters: &unibuf[0] length: unibuf.size()]];
+}
+
+double Gosu::Window::updateInterval() const
+{
+    return pimpl->interval;
 }
 
 void Gosu::Window::show()
@@ -458,6 +463,7 @@ namespace GosusDarkSide
 
 void Gosu::Window::Impl::doTick(Window& window)
 {
+    // Enable vsync.
     GLint value = 1;
     [window.pimpl->context.obj() setValues: &value forParameter: NSOpenGLCPSwapInterval];
     

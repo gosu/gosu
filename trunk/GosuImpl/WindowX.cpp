@@ -257,6 +257,11 @@ std::wstring Gosu::Window::caption() const
     return pimpl->title;
 }
 
+double Gosu::Window::updateInterval() const
+{
+    return pimpl->updateInterval;
+}
+
 void Gosu::Window::setCaption(const std::wstring& caption)
 {
     // TODO: Update to _NET_WM_NAME to support Unicode

@@ -42,6 +42,8 @@ namespace Gosu
 
         std::wstring caption() const;
         void setCaption(const std::wstring& caption);
+        
+        double updateInterval() const;
 
         //! Starts the main event loop.
         void show();
@@ -73,16 +75,24 @@ namespace Gosu
         Input& input();
 
         #ifdef GOSU_IS_WIN
-        // Only on Windows.
+        // Only on Windows, used for integrating with GUI toolkits.
         HWND handle() const;
         virtual LRESULT handleMessage(UINT message, WPARAM wparam,
             LPARAM lparam);
-        #else
+        #endif
+        
+        #ifdef GOSU_IS_UNIX
+        // Context for creating shared contexts.
         // Only on Unices (so far).
         typedef boost::shared_ptr<boost::function<void()> > SharedContext;
         SharedContext createSharedContext();
         #endif
+        
         #ifdef GOSU_IS_IPHONE
+        // iPhone-only callbacks for touch events.
+        // Note that it does not hurt to override them even if you compile
+        // for another platform; if you don't specify "virtual" the code
+        // should even be stripped away cleanly.
         virtual void touchesBegan(const Touches& touches) {}
         virtual void touchesMoved(const Touches& touches) {}
         virtual void touchesEnded(const Touches& touches) {}

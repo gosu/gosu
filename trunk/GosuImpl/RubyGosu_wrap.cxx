@@ -7031,6 +7031,36 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Window_update_interval(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  double result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "updateInterval" "', argument " "1"" of type '" "Gosu::Window const *""'"); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  {
+    try {
+      result = (double)((Gosu::Window const *)arg1)->updateInterval();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Window_show(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
@@ -8795,6 +8825,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cWindow.klass, "initialize", VALUEFUNC(_wrap_new_Window), -1);
   rb_define_method(cWindow.klass, "caption", VALUEFUNC(_wrap_Window_caption), -1);
   rb_define_method(cWindow.klass, "caption=", VALUEFUNC(_wrap_Window_captione___), -1);
+  rb_define_method(cWindow.klass, "update_interval", VALUEFUNC(_wrap_Window_update_interval), -1);
   rb_define_method(cWindow.klass, "show", VALUEFUNC(_wrap_Window_show), -1);
   rb_define_method(cWindow.klass, "close", VALUEFUNC(_wrap_Window_close), -1);
   rb_define_method(cWindow.klass, "update", VALUEFUNC(_wrap_Window_update), -1);

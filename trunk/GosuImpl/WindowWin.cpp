@@ -272,6 +272,11 @@ void Gosu::Window::setCaption(const std::wstring& value)
     SetWindowText(handle(), value.c_str());
 }
 
+double Gosu::Window::updateInterval() const
+{
+    return pimpl->updateInterval;
+}
+
 namespace GosusDarkSide
 {
     // TODO: Find a way for this to fit into Gosu's design.
