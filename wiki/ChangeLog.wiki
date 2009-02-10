@@ -1,6 +1,10 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.13 (WIP)=
+  * 2009-02-10: Ruby: Upgraded to SWIG 1.3.37 (better error messages, probably some fixes in corner cases)
+  * 2009-02-10: All: Added Window::updateInterval() / Window#updateInterval
+
 =0.7.12=
   * 2009-02-07: All: Added Window::setMousePosition/set_mouse_position/mouse_x=/mouse_y=
   * 2009-02-07: Win: Improved timing code
