@@ -2,6 +2,7 @@
 #import <OpenGLES/EAGL.h>
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
+#import <Gosu/Window.hpp>
 
 // UIView subclass that contains a CAEAGLLayer.
 
@@ -16,8 +17,12 @@
     
     /* OpenGL names for the renderbuffer and framebuffers used to render to this view */
     GLuint viewRenderbuffer, viewFramebuffer;
+    
+    NSMutableSet* currentTouches;
+    Gosu::Touches* currentTouchesVector;
 }
 
+- (const Gosu::Touches&)currentTouches;
 - (void)drawView;
 
 @end

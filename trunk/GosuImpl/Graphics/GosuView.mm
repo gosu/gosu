@@ -1,10 +1,9 @@
 #import <QuartzCore/QuartzCore.h>
 #import <OpenGLES/EAGLDrawable.h>
 #import <UIKit/UIKit.h>
-#import "GosuView.h"
 
-#include <Gosu/Graphics.hpp>
-#include <Gosu/Window.hpp>
+#import <Gosu/Graphics.hpp>
+#import <GosuImpl/Graphics/GosuView.hpp>
 
 Gosu::Window& windowInstance();
 
@@ -115,17 +114,33 @@ namespace {
     [super dealloc];
 }
 
-// Direct forwarding of all touches to avoid more indirections.
+- (const Gosu::Touches&)currentTouches {
+    if (!currentTouchesVector)
+        currentTouchesVector = new Gosu::Touches(translateTouches(currentTouches, self));
+    return *currentTouchesVector;
+}
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    delete currentTouchesVector; currentTouchesVector = 0;
+    if (!currentTouches) currentTouches = [[NSMutableSet alloc] init];
+
+    [currentTouches unionSet: touches];
+
     windowInstance().touchesBegan(translateTouches(touches, self));
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    delete currentTouchesVector; currentTouchesVector = 0;
+
     windowInstance().touchesMoved(translateTouches(touches, self));
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    delete currentTouchesVector; currentTouchesVector = 0;
+    if (!currentTouches) currentTouches = [[NSMutableSet alloc] init];
+
+    [currentTouches minusSet: touches];
+
     windowInstance().touchesEnded(translateTouches(touches, self));
 }
 

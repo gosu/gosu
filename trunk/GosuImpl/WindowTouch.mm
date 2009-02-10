@@ -2,7 +2,7 @@
 #import <Gosu/Graphics.hpp>
 #import <Gosu/Input.hpp>
 #import <GosuImpl/MacUtility.hpp>   
-#import <GosuImpl/Graphics/GosuView.h>
+#import <GosuImpl/Graphics/GosuView.hpp>
 #import <CoreGraphics/CoreGraphics.h>
 #import <UIKit/UIKit.h>
 #import <OpenGLES/EAGL.h>
@@ -120,4 +120,9 @@ void Gosu::Window::show()
 void Gosu::Window::close()
 {
     throw "NYI";
+}
+
+const Gosu::Touches& Gosu::Window::currentTouches() const
+{
+    return [pimpl->view.obj() currentTouches];
 }

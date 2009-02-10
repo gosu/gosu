@@ -96,6 +96,8 @@ namespace Gosu
         virtual void touchesBegan(const Touches& touches) {}
         virtual void touchesMoved(const Touches& touches) {}
         virtual void touchesEnded(const Touches& touches) {}
+        // Currently known touches.
+        const Touches& currentTouches() const;
         #endif        
 
         #endif
