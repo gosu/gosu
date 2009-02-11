@@ -4,7 +4,7 @@
 
 This tutorial covers integrating the Chipmunk Physics Engine's Ruby bindings with Gosu's Ruby bindings.  This tutorial assumes that both Gosu and Chipmunk have been properly installed.  See http://wiki.slembcke.net/main/published/Chipmunk. The source code for this tutorial can be found in Gosu's 'examples' folder, but to run it, you'll need to copy the chipmunk extension there too if you haven't installed it system-wide.
 
-*Pre-compiled Chipmunk libraries* are available in this forum thread: http://www.libgosu.org/cgi-bin/mwf/topic_show.pl?tid=82.
+*Pre-compiled Chipmunk libraries* are available in [http://www.libgosu.org/cgi-bin/mwf/topic_show.pl?tid=82 this forum thread]. Thanks, bentglasstube!
 
 = Prolog =
 
