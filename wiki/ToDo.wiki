@@ -4,10 +4,11 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-02-10)
+(Last update: 2009-02-11)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics/iPhone release
+    * Fix "too many fingers" bug on iPhone
     * Test RMagick.bundle on PPC
     * Test RMagick.bundle on Tiger
     * Do research about color depth on the iPhone (affects GosuView and all of Graphics...!)
