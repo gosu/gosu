@@ -7,3 +7,5 @@ The Mac package of Gosu comes with a mysterious `RubyGosu Tempate.app` bundle. A
   * Copy your game files and gosu.bundle into the `Contents/Resources` subfolder
   * Rename your game's main source file to `Main.rb`
 And you're done! You now have a fully functional .app bundle.
+
+If you want to ship RMagick with your game, see [http://www.libgosu.org/cgi-bin/mwf/topic_show.pl?tid=42 this useful forum thread by codekitchen].
