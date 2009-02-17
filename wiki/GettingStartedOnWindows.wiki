@@ -22,9 +22,9 @@ http://www.libgosu.org/wiki_images/msvc_4_proj2.png
 
 *Note:* In the Express edition of MSVC, only "Win32 console application" is available. In this case, just add the following line somewhere in your source code. It should not affect building on other platforms. (Thanks for the tip, anza!)
 
-`
+{{{
 #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
-`
+}}}
 
 You can then add new code files, for example the one from the tutorial.
 
