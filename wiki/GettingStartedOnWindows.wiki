@@ -4,15 +4,37 @@
 
 [http://www.boost.org/ Boost] is a collection of libraries that is used throughout Gosu's interface. Many parts of Boost have been marked for inclusion in the next standard of C++, so you'd better look at it anyway! :) Download the latest release and extract it into a separate directory.
 
-In Visual C++, go to Tools/Options/Projects/VC++ Directories. Show directories for include files and add the two directories you extracted boost and Gosu into - not the 'boost' or 'Gosu' subfolders themselves!
+In Visual C++, go to Tools/Options/Projects and Solutions/VC++ Directories. Select the list of directories for include files and add the two directories you extracted boost and Gosu into—not the contained 'boost' or 'Gosu' subfolders.
 
-Also, select library files, and add the same directory for Gosu so MSVC can find Gosu.lib.
+http://www.libgosu.org/wiki_images/msvc_1_include.png
+
+Also, select library files, and add the 'lib' subfolder from Gosu so MSVC can find Gosu.lib.
+
+http://www.libgosu.org/wiki_images/msvc_2_lib.png
 
 = Creating a new Gosu game (C++) =
 
-Click File/New/Project and select 'Win32 project', then give it a name and in the application settings choose 'Empty project'. (This is not available in the Express version, see this forum thread for a workaround: http://www.libgosu.org/cgi-bin/mwf/topic_show.pl?pid=178) Click Finish.
+Click File/New/Project and select 'Win32 project', then give it a name and in the application settings choose 'Empty project'.
 
-You can then add new code files, for example the ones from the tutorial. *Important: You need to go into the project options, select C/C++ options, then Code Generation and change the used library from "Multithreaded DLL" to "Multithreaded", and "Multithreaded Debug DLL" to "Multithreaded Debug", respectively - or you will get linker errors!* These options are usually only available after adding the first C++ source file.
+http://www.libgosu.org/wiki_images/msvc_3_proj.png
+
+http://www.libgosu.org/wiki_images/msvc_4_proj2.png
+
+*Note:* In the Express edition of MSVC, only "Win32 console application" is available. In this case, just add the following line somewhere in your source code. It should not affect building on other platforms. (Thanks for the tip, anza!)
+
+`
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+`
+
+You can then add new code files, for example the one from the tutorial.
+
+Next, you need to go into the project options, select C/C++ options, then Code Generation and change the used library from "Multithreaded DLL" to "Multithreaded", and "Multithreaded Debug DLL" to "Multithreaded Debug", respectively—or you will get linker errors. These options are usually only available after adding the first C++ source file.
+
+http://www.libgosu.org/wiki_images/msvc_5_rt.png
+
+To ensure that your EXE file can find fmod.dll and your project's resources, you should also change its output directory for both configurations. (In this case I have put fmod.dll into the examples folder and built straight to that as I was testing the Tutorial game.)
+
+http://www.libgosu.org/wiki_images/msvc_6_outputdir.png
 
 If you need a starting point or want to test if everything is correctly set up, select File/New, add a new C++ source file and use this code to compile and run:
 
@@ -37,8 +59,6 @@ int main(int argc, char* argv[])
     return 0;
 }
 }}}
-
-When loading resources, keep in mind that Gosu's resourcePrefix() will point to the directory your .EXE is located in. You may need to adjust your project settings to build into the directory where your resources reside. Also, you need to copy fmod.dll into the same directory unless you aren't using sound and set MSVC up to lazily link against fmod.dll (see the MSVC manual on how to do that).
 
 = Creating a new Gosu game (Ruby) =
 
