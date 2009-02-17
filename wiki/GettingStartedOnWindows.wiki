@@ -1,8 +1,8 @@
 #summary How to set up Gosu on Windows.
 
-= Download Boost, change Visual C++ Directories (C++ only) =
+= Installing Gosu (C++ only) =
 
-[http://www.boost.org/ Boost] is a collection of libraries that is used throughout Gosu's interface. Many parts of Boost have been marked for inclusion in the next standard of C++, so you'd better look at it anyway! :) Download the latest release and extract it into a separate directory.
+The only dependency for using Gosu is [http://www.boost.org/ Boost] is a collection of libraries that is used throughout Gosu's interface. Many parts of Boost have been marked for inclusion in the next standard of C++, so you'd better look at it anyway! :) Download the latest release and extract it into a separate directory.
 
 In Visual C++, go to Tools/Options/Projects and Solutions/VC++ Directories. Select the list of directories for include files and add the two directories you extracted boost and Gosu into—not the contained 'boost' or 'Gosu' subfolders.
 
