@@ -38,7 +38,7 @@ Gosu::Bitmap Gosu::quickLoadBitmap(const std::wstring& filename)
     CGContextRelease(context);
     
     for (unsigned y = 0; y < bmp.height(); ++y)
-        for (unsigned x = 0; x < bmp.height(); ++x)
+        for (unsigned x = 0; x < bmp.width(); ++x)
             bmp.setPixel(x, y, bmp.getPixel(x, y).abgr());
     
     // Done!
