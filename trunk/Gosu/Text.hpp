@@ -5,6 +5,7 @@
 #define GOSU_TEXT_HPP
 
 #include <Gosu/Fwd.hpp>
+#include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
 #include <string>
 

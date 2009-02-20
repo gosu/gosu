@@ -11,6 +11,7 @@
 #include <windows.h>
 #endif
 #include <Gosu/Fwd.hpp>
+#include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/utility.hpp>

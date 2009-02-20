@@ -49,6 +49,10 @@ void Gosu::SampleInstance::changeSpeed(double speed)
 {
 }
 
+struct Gosu::Sample::SampleData
+{
+};
+
 Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
 {
 }
@@ -72,6 +76,10 @@ Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
 {
     return SampleInstance(0, 0);
 }
+
+struct Gosu::Song::BaseData
+{
+};
 
 Gosu::Song::Song(Audio& audio, const std::wstring& filename)
 {

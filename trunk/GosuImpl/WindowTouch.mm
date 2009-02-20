@@ -1,5 +1,6 @@
 #import <Gosu/Window.hpp>
 #import <Gosu/Graphics.hpp>
+#import <Gosu/Audio.hpp>
 #import <Gosu/Input.hpp>
 #import <GosuImpl/MacUtility.hpp>   
 #import <GosuImpl/Graphics/GosuView.hpp>
@@ -17,6 +18,7 @@ struct Gosu::Window::Impl {
     ObjRef<UIWindow> window;
     ObjRef<GosuView> view;
     boost::scoped_ptr<Graphics> graphics;
+    boost::scoped_ptr<Audio> audio;
     boost::scoped_ptr<Input> input;
     double interval;
 };
@@ -74,6 +76,7 @@ Gosu::Window::Window(unsigned width, unsigned height,
 	[pimpl->window.obj() addSubview: pimpl->view.obj()];
     
     pimpl->graphics.reset(new Graphics(320, 480, false));
+    pimpl->audio.reset(new Audio());
     pimpl->input.reset(new Input());
     pimpl->interval = updateInterval;
 
@@ -102,6 +105,14 @@ const Gosu::Graphics& Gosu::Window::graphics() const {
 
 Gosu::Graphics& Gosu::Window::graphics() {
     return *pimpl->graphics;
+}
+
+const Gosu::Audio& Gosu::Window::audio() const {
+    return *pimpl->audio;
+}
+
+Gosu::Audio& Gosu::Window::audio() {
+    return *pimpl->audio;
 }
 
 const Gosu::Input& Gosu::Window::input() const {
