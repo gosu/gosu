@@ -22,11 +22,11 @@ bool Gosu::Input::down(Button btn) const {
 }
 
 double Gosu::Input::mouseX() const {
-    return 0.0/0.0;
+    return -1000;
 }
 
 double Gosu::Input::mouseY() const {
-    return 0.0/0.0;
+    return -1000;
 }
 
 void Gosu::Input::setMousePosition(double x, double y) {
