@@ -4,9 +4,10 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-02-21)
+(Last update: 2009-02-22)
 
 == Gosu 0.7.x ==
+  * Investigate into 0.7.12 slowness issue
   * 0.7.13, performance/graphics/iPhone release
     * Fix "too many fingers" bug on iPhone
     * Get rid of autoreleasing on the iPhone, releasing is easy and fast
