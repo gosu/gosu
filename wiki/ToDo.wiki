@@ -4,14 +4,15 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-02-22)
+(Last update: 2009-02-24)
 
 == Gosu 0.7.x ==
-  * Investigate into 0.7.12 slowness issue
+  * Comment on 0.7.12 slowness issue
   * 0.7.13, performance/graphics/iPhone release
     * Fix "too many fingers" bug on iPhone
     * Get rid of autoreleasing on the iPhone, releasing is easy and fast
     * Move the touch stuff to Gosu::Input
+    * screen_resolution() function *at last*!!
     * Check whether the gosutouch lib can be built "Universally"
     * Rename glCompatibleData() to data() and document it
     * Allow adjustment of the virtual touchscreen resolution
