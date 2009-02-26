@@ -83,7 +83,6 @@ _Note that you should really only use on instance of this class at the same time
   * `caption, caption=`
   * `show`: Enters a modal loop where the Window is visible on screen and receives calls to `draw`, `update` etc.
   * `close`: Tells the window to end the current `show` loop as soon as possible.
-  * `visible?`: Returns true if a call to show is currently in progress, false before and after that.
   * `update`
   * `draw`
   * `button_down(id)`: Called when the user presses the button with the given id.
