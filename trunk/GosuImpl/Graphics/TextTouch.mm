@@ -7,19 +7,35 @@
 #import <cmath>
 using namespace std;
 
-std::wstring Gosu::defaultFontName()
+namespace
+{
+    map<pair<wstring, double>, UIFont*> usedFonts;
+
+    UIFont* getFont(const wstring& name, double height)
+    {
+        UIFont* result = usedFonts[make_pair(name, height)];
+        if (!result)
+        {
+            result = [UIFont fontWithName: [NSString stringWithUTF8String: Gosu::wstringToUTF8(name).c_str()]
+                                     size: height];
+        }
+        return result;
+    }
+}
+
+wstring Gosu::defaultFontName()
 {
     // OF COURSE Helvetica is better - but the dots above my capital umlauts get
     // eaten when I use it with Gosu. Until this is fixed, keep Arial. (TODO)
     return L"Arial";
 }
 
-unsigned Gosu::textWidth(const std::wstring& text,
-    const std::wstring& fontName, unsigned fontHeight, unsigned fontFlags)
+unsigned Gosu::textWidth(const wstring& text,
+    const wstring& fontName, unsigned fontHeight, unsigned fontFlags)
 {
+    UIFont* font = getFont(fontName, fontHeight);
+
     // This will, of course, compute a too large size; fontHeight is in pixels, the method expects point.
-    UIFont* font = [UIFont fontWithName: [NSString stringWithUTF8String: wstringToUTF8(fontName).c_str()]
-                           size: fontHeight];
     CGSize size = [[NSString stringWithUTF8String: wstringToUTF8(text).c_str()]
                              sizeWithFont: font];
                            
@@ -27,13 +43,11 @@ unsigned Gosu::textWidth(const std::wstring& text,
     return ceil(size.width / size.height * fontHeight);
 }
 
-void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
-    Color c, const std::wstring& fontName, unsigned fontHeight,
+void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
+    Color c, const wstring& fontName, unsigned fontHeight,
     unsigned fontFlags)
 {
-    const char* utf8FontName = wstringToUTF8(fontName).c_str();
-    UIFont* font = [UIFont fontWithName: [NSString stringWithUTF8String: utf8FontName]
-                           size: fontHeight];
+    UIFont* font = getFont(fontName, fontHeight);
     NSString* string = [NSString stringWithUTF8String: wstringToUTF8(text).c_str()];
 
     // This will, of course, compute a too large size; fontHeight is in pixels, the method expects point.
@@ -60,7 +74,7 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
     // TODO: Should probably use CGShowText instead of all the ObjC bloat.
     
     // Use new font with proper size this time.
-    font = [UIFont fontWithName: [NSString stringWithUTF8String: utf8FontName] size: fontHeight * fontHeight / size.height];
+    font = getFont(fontName, fontHeight * fontHeight / size.height);
     
     CGContextTranslateCTM(context, 0, fontHeight);
     CGContextScaleCTM(context, 1, -1);
