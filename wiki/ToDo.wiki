@@ -4,12 +4,14 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-02-27)
+(Last update: 2009-03-01)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics/iPhone release
+    * Go through SVN diff for 42sec halting bug o_O
     * Fix "too many fingers" bug on iPhone
     * Get rid of autoreleasing on the iPhone, releasing is easy and fast
+    * Rethink Window#visible?
     * Move the touch stuff to Gosu::Input
     * screen_resolution() function *at last*!!
     * Check whether the gosutouch lib can be built "Universally"
@@ -28,10 +30,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * OS X: Release all keys on focus loss
     * Make even the mouse wheel consistently send buttonUp events on all platforms
     * Windows: Don't fail if the requested windowed resolution is too large
-    * Take a look at Crate: http://copiousfreetime.rubyforge.org/crate/
     * Link the all-in-one-bundle from the boards: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * Experiment: resizing the window possible?
-    * Benchmark Z_IMMEDIATE
     * Add fullscreen accessors to make proper FS OpenGL possible
     * More alpha modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
     * TextField with clip_to (update example)
@@ -54,8 +54,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Look into Ruby 1.9 on Windows
       * Document support for Ruby 1.9
       * Package OR&G with optimized Gosu
-    * Try to add SDL_mixer packages for Windows
-    * Try to add SDL_mixer packages for OS X
+    * Add SDL_mixer packages for Windows (or make them the default)
+    * Add SDL_mixer packages for OS X (or make them the default)
     * Move three threads from GosuExchange to the forums
     * Release 0.7.13
     * Document Window#update_interval
@@ -111,6 +111,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Link YouTube videos, and maybe blog tags like http://www.cuberick.com/search/label/gosu?
   * Gosu.gstencil?
   * Change sender address of forum mailer
+  * Make logo in forum clickable
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
