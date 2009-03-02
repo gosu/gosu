@@ -27,6 +27,7 @@
 #include <Gosu/Fwd.hpp>
 #include <boost/function.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <vector>
 
 namespace Gosu
 {
@@ -48,6 +49,11 @@ namespace Gosu
 		Button(ButtonName name) : id(name) {}
 	};
 	
+	// Available even on non-iPhone platforms to make it easier to compile the
+	// same source for multiple platforms. To be moved to Input.hpp, though.
+    struct Touch { double x, y; };
+    typedef std::vector<Touch> Touches;
+
 	//! Tests whether two Buttons identify the same physical button.
 	inline bool operator==(Button lhs, Button rhs)
 	{

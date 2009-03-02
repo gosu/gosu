@@ -11,7 +11,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
 #include <string>
-#include <vector>
 
 #ifdef GOSU_IS_WIN
 #include <windows.h>
@@ -19,11 +18,6 @@
 
 namespace Gosu
 {
-	// Available even on non-iPhone platforms to make it easier to compile the
-	// same source for multiple platforms. To be moved to Input.hpp, though.
-    struct Touch { double x, y; };
-    typedef std::vector<Touch> Touches;
-
     //! Convenient all-in-one class that serves as the foundation of a standard
 	//! Gosu application. Manages initialization of all of Gosu's core components
     //! and provides timing functionality.
