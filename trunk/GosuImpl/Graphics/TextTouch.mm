@@ -62,7 +62,7 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     // Use a temporary context to draw the CGImage to the buffer.
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context =
-        CGBitmapContextCreate(const_cast<unsigned*>(bmp.glCompatibleData()),
+        CGBitmapContextCreate(bmp.data(),
                               bmp.width(), bmp.height(), 8, bmp.width() * 4,
                               colorSpace,
                               kCGImageAlphaPremultipliedLast);

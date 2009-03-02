@@ -30,7 +30,7 @@ Gosu::Bitmap Gosu::quickLoadBitmap(const std::wstring& filename)
     
     // Use a temporary context to draw the CGImage to the buffer.
     CGContextRef context =
-        CGBitmapContextCreate(const_cast<unsigned*>(bmp.glCompatibleData()),
+        CGBitmapContextCreate(bmp.data(),
                               bmp.width(), bmp.height(), 8, bmp.width() * 4,
                               CGImageGetColorSpace(image),
                               kCGImageAlphaPremultipliedLast);

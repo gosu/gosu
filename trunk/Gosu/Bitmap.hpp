@@ -54,10 +54,10 @@ namespace Gosu
         void insert(const Bitmap& source, int x, int y, unsigned srcX,
             unsigned srcY, unsigned srcWidth, unsigned srcHeight);
 		
-		#ifndef __BIG_ENDIAN__
-		//! Undocumented optimization for Image creation; to be changed.
-        const unsigned* glCompatibleData() const { return reinterpret_cast<const unsigned*>(&pixels[0]); }
-		#endif
+		//! Direct access to the array of color values. May be useful for optimized
+        //! OpenGL operations.
+        const unsigned* data() const { return reinterpret_cast<const unsigned*>(&pixels[0]); }
+        unsigned* data() { return reinterpret_cast<unsigned*>(&pixels[0]); }
     };
 
     //! Loads a Windows or OS/2 BMP file into the given bitmap.
