@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-03-01)
+(Last update: 2009-03-03)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics/iPhone release
@@ -12,10 +12,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Fix "too many fingers" bug on iPhone
     * Get rid of autoreleasing on the iPhone, releasing is easy and fast
     * Rethink Window#visible?
-    * Move the touch stuff to Gosu::Input
     * screen_resolution() function *at last*!!
     * Check whether the gosutouch lib can be built "Universally"
-    * Rename glCompatibleData() to data() and document it
     * Allow adjustment of the virtual touchscreen resolution
     * Test RMagick.bundle on PPC
     * Test RMagick.bundle on Tiger
@@ -27,11 +25,10 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Consider if I can allow both vertex orders (OGL/D3D) in draw_quad
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
     * Benchmark clip_to
-    * OS X: Release all keys on focus loss
+    * OS X: Release all keys on battery notification dialog (?)
     * Make even the mouse wheel consistently send buttonUp events on all platforms
     * Windows: Don't fail if the requested windowed resolution is too large
     * Link the all-in-one-bundle from the boards: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
-    * Experiment: resizing the window possible?
     * Add fullscreen accessors to make proper FS OpenGL possible
     * More alpha modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
     * TextField with clip_to (update example)
@@ -62,6 +59,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * (1x mymüsli for all the hard work!</selfmotivation>)
   * 0.7.14, polish/deployment release
     * Assure that files from doxygen task are considered for packaging
+    * RMagick auf Windows statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * Find out why Cmd+char triggers two button_downs, but only one button_up!
     * Review: http://rubyforge.org/tracker/index.php?func=detail&aid=21405&group_id=375&atid=1504
     * Make sure README and LICENSE are appropriately named in the Gem?
@@ -98,11 +96,14 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Look at http://rubyforge.org/projects/rbplusplus
   * Look at http://freeimage.sourceforge.net/requirements.html
   * Look at http://slick.cokeandcode.com/index.php?entry=entry080426-213044
+  * Experiment: resizing the window possible?
   * Experimentation with new drawing syntax; maybe first prototype as the last version of the 0.7.x series?
-  * RMagick auf Windows statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
   * Document Gosu::interpolate, improve it too?
   * Experiment: resizing the window possible?
 == Gosu CI/Usability ==
+  * Add some first eye catchers to front page
+  * Waiting for SDL_mixer as std library …
+  * Add "What now?" link list to front page
   * Adjust sample games
   * See if doxygen can also use Ruby input
   * Adjust doxygen output
