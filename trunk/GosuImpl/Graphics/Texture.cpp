@@ -25,11 +25,7 @@ unsigned Gosu::Texture::maxTextureSize()
         do
         {
             size *= 2;
-            #ifdef GOSU_IS_IPHONE
-            glTexImage2D(GL_PROXY_TEXTURE_2D, 0, GL_RGBA, size * 2, size * 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-            #else
             glTexImage2D(GL_PROXY_TEXTURE_2D, 0, GL_BGRA, size * 2, size * 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-            #endif
             glGetTexLevelParameteriv(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width); 
         } while (width != 0 && size < MAX_SIZE);
     }

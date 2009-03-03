@@ -10,6 +10,8 @@
 
 namespace Gosu
 {
+    const GLuint NO_TEXTURE = static_cast<GLuint>(-1);
+
     struct DrawOp
     {
         int clipX, clipY;
@@ -32,7 +34,7 @@ namespace Gosu
         DrawOp() { clipWidth = 0xffffffff; usedVertices = 0; chunk = 0; }
         
 #ifndef GOSU_IS_IPHONE
-        void perform() const
+        void perform(unsigned& unusedForNow) const
         {
             if (clipWidth != 0xffffffff)
             {
@@ -94,7 +96,7 @@ namespace Gosu
                 glDisable(GL_SCISSOR_TEST);
         }
 #else
-        void perform() const
+        void perform(unsigned& currentTexName) const
         {
             static GLfloat spriteVertices[8];
             static GLfloat spriteTexcoords[8];
@@ -122,9 +124,13 @@ namespace Gosu
             
             if (chunk)
             {
-                glEnable(GL_TEXTURE_2D);
-                glBindTexture(GL_TEXTURE_2D, chunk->texName());
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                if (currentTexName == NO_TEXTURE)
+                    glEnable(GL_TEXTURE_2D);
+                if (chunk->texName() != currentTexName)
+                {
+                    glBindTexture(GL_TEXTURE_2D, chunk->texName());
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                }
                 
                 double left, top, right, bottom;
                 chunk->getCoords(left, top, right, bottom);
@@ -132,6 +138,13 @@ namespace Gosu
                 spriteTexcoords[2] = right, spriteTexcoords[3] = top;
                 spriteTexcoords[4] = left, spriteTexcoords[5] = bottom;
                 spriteTexcoords[6] = right, spriteTexcoords[7] = bottom;
+                
+                currentTexName = chunk->texName();
+            }
+            else if (currentTexName != NO_TEXTURE)
+            {
+                glDisable(GL_TEXTURE_2D);
+                currentTexName = -1;
             }
             
             for (int i = 0; i < usedVertices; ++i)
@@ -147,9 +160,6 @@ namespace Gosu
                 glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
             else if (usedVertices == 4)
                 glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-                        
-            if (chunk)
-                glDisable(GL_TEXTURE_2D);
         }
 #endif
         
@@ -180,8 +190,17 @@ namespace Gosu
                 op.clipWidth = clipWidth;
                 op.clipHeight = clipHeight;
             }
+
             if (z == zImmediate)
-                return op.perform();
+            {
+            #ifdef GOSU_IS_IPHONE
+                GLuint currentTexName = NO_TEXTURE;
+                op.perform(currentTexName);
+                if (currentTexName != NO_TEXTURE)
+                    glDisable(GL_TEXTURE_2D);
+            #endif
+            }
+            
             op.z = z;
             set.insert(op);
         }
@@ -201,13 +220,19 @@ namespace Gosu
 
         void performDrawOps()
         {
+            GLuint currentTexName = NO_TEXTURE;
+            
             std::multiset<DrawOp>::iterator cur = set.begin(), end = set.end();
             while (cur != end)
             {
-                cur->perform();
+                cur->perform(currentTexName);
                 ++cur;
             }
             set.clear();
+            #ifdef GOSU_IS_IPHONE
+            if (currentTexName != NO_TEXTURE)
+                glDisable(GL_TEXTURE_2D);
+            #endif
         }
     };
 }
