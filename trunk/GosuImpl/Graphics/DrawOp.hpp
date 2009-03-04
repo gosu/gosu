@@ -34,7 +34,7 @@ namespace Gosu
         DrawOp() { clipWidth = 0xffffffff; usedVertices = 0; chunk = 0; }
         
 #ifndef GOSU_IS_IPHONE
-        void perform(unsigned& unusedForNow) const
+        void perform(GLuint& unusedForNow) const
         {
             if (clipWidth != 0xffffffff)
             {
@@ -160,6 +160,11 @@ namespace Gosu
                 glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
             else if (usedVertices == 4)
                 glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        }
+        
+        unsigned texName() const
+        {
+            return chunk ? chunk->texName() : NO_TEXTURE;
         }
 #endif
         
