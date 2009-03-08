@@ -1,6 +1,8 @@
 #summary Complete listing of all official classes and methods in Ruby/Gosu.
 = Ruby API Reference =
 
+[http://www.libgosu.org/ http://www.libgosu.org/website_header.png]
+
 == Common arguments ==
   * *Color shortcut:* Whenever a function expects a Gosu::Color value, a 0xAARRGGBB integer can be supplied instead.
   * *Additive drawing:* Valid mode parameters for drawing functions are :default and :additive.
