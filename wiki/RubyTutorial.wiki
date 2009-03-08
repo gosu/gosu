@@ -314,4 +314,4 @@ end
 
 As you can see, loading and playing sound effects couldn't be easier! See the RubyReference for more powerful ways of playing back sounds - fiddle around with volume, position and pitch.
 
-That's it! Everything else is up to your imagination. If you can't imagine how this is enough to create games, see if you can find useful source code from the GosuUsers page.
+That's it! Everything else is up to your imagination. If you can't imagine how this is enough to create games, take a look at the examples on the [http://www.libgosu.org/cgi-bin/mwf/board_show.pl?bid=2 Gosu Showcase board].
