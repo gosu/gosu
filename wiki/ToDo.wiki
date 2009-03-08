@@ -1,6 +1,8 @@
 #summary List of upcoming To Do items, refreshed daily.
 #labels Featured
 
+[http://www.libgosu.org/cgi-bin/mwf/forum.pl http://www.libgosu.org/wiki_images/board_link.png]
+
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
