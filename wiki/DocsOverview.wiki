@@ -33,4 +33,4 @@ Since Ruby is not a compiled language, it is not obvious how to release games wr
 
 = Further inspiration =
 
-There are some small, open source games you can take a look at on the GosuUsers page. 
+There are many games you can take a look at in the [http://www.libgosu.org/cgi-bin/mwf/board_show.pl?bid=2 Gosu Showcase board], and even more useful libraries to use with Gosu in the [http://www.libgosu.org/cgi-bin/mwf/board_show.pl?bid=4 Extending Gosu board]!
