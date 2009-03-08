@@ -279,9 +279,8 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     // Special case: If the texture is supposed to have hard borders,
     // is quadratic, has a size that is at least 64 pixels but less than 256
     // pixels and a power of two, create a single texture just for this image.
-    /*if ((borderFlags & bfHard) == bfHard &&
+    if ((borderFlags & bfHard) == bfHard &&
         srcWidth == srcHeight &&
-        srcWidth >= 64 && srcWidth <= 256 &&
         (srcWidth & (srcWidth - 1)) == 0)
     {
         boost::shared_ptr<Texture> texture(new Texture(srcWidth));
@@ -307,7 +306,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
         if (!data.get())
             throw std::logic_error("Internal texture block allocation error");
         return data;
-    }*/
+    }
     
     // Too large to fit on a single texture. 
     if (srcWidth > maxSize - 2 || srcHeight > maxSize - 2)
