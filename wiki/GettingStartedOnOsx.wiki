@@ -1,5 +1,7 @@
 #summary How to set up Gosu on Mac OS X.
 
+[http://www.libgosu.org/cgi-bin/mwf/forum.pl http://www.libgosu.org/wiki_images/board_link.png]
+
 = Installing Boost (required for using Gosu with C++ only) =
 
 [http://www.boost.org/ Boost] is a collection of libraries that is used throughout Gosu. Many parts of Boost have been marked for inclusion in the next standard of C++, so it's really worth a look!
