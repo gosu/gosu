@@ -1,5 +1,7 @@
 #summary Tutorial for a small game using Ruby/Gosu.
 
+[http://www.libgosu.org/cgi-bin/mwf/forum.pl http://www.libgosu.org/wiki_images/board_link.png]
+
 = Translations =
 
 For links to translations of this tutorial (Traditional Chinese, Spanish, French) see the DocsOverview page.
