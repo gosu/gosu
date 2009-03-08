@@ -1,5 +1,7 @@
 #summary Tutorial for a small game using Gosu and C++.
 
+[http://www.libgosu.org/cgi-bin/mwf/forum.pl http://www.libgosu.org/wiki_images/board_link.png]
+
 = Source code =
 
 The code for the complete game, together with the required media files, can be found in the Gosu distribution of your choice ('examples/Tutorial.cpp'). To run the game, setup a new project as seen in GettingStartedOnOsx, GettingStartedOnWindows or GettingStartedOnLinux, respectively, and use Tutorial.cpp as the only source file.
