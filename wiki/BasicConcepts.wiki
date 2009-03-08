@@ -1,5 +1,7 @@
 #summary Centralized description of some concepts used throughout the library.
 
+[http://www.libgosu.org/cgi-bin/mwf/forum.pl http://www.libgosu.org/wiki_images/board_link.png]
+
 = Z-ordering =
 
 All drawing operations in Gosu accept a floating-point value called "z" (technically, a `double`). Things drawn with a higher z position will be drawn over those with a lower one. If two things have the same z position, they will be drawn in the order the drawing functions were called.
