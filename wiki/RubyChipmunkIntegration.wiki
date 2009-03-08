@@ -1,5 +1,7 @@
 #summary Ruby & Chipmunk Tutorial by Dirk Johnson.
 
+[http://www.libgosu.org/cgi-bin/mwf/forum.pl http://www.libgosu.org/wiki_images/board_link.png]
+
 = The Ruby & Chipmunk Tutorial =
 
 This tutorial covers integrating the Chipmunk Physics Engine's Ruby bindings with Gosu's Ruby bindings.  This tutorial assumes that both Gosu and Chipmunk have been properly installed.  See http://wiki.slembcke.net/main/published/Chipmunk. The source code for this tutorial can be found in Gosu's 'examples' folder, but to run it, you'll need to copy the chipmunk extension there too if you haven't installed it system-wide.
