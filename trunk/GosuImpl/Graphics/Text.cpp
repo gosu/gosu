@@ -3,6 +3,7 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/Math.hpp>
+#include <Gosu/Utility.hpp>
 #include <boost/bind.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/tokenizer.hpp>
@@ -16,10 +17,30 @@ namespace Gosu
 {
     namespace
     {
+        // Just a very simple heuristic that should make Chinese and Japanese text working in most
+        // of the cases.
+        bool isBreakingAsianGlyph(wchar_t ch)
+        {
+            if (ch >= 0x3040 && ch <= 0x3096)
+                return true; // Hiragana
+            
+            if (ch >= 0x30a0 && ch <= 0x30fa)
+                return true; // Katakana
+            
+            if (ch >= 0x4e00 && ch <= 0x9fff)
+                return true; // CJK Unified Ideographs
+                
+            if (ch >= 0x3400 && ch <= 0x4db5)
+                return true; // CJK Unified Ideographs Extension A
+            
+            return false;
+        }
+    
         struct WordInfo
         {
             wstring text;
             unsigned width;
+            unsigned spaceWidth;
         };
         typedef vector<WordInfo> Words;
 
@@ -83,6 +104,10 @@ namespace Gosu
                 allocNextLine();
                 
                 unsigned words = end - begin;
+                
+                unsigned totalSpacing = 0;
+                for (Words::const_iterator i = begin; i != end - 1; ++i)
+                    totalSpacing += i->spaceWidth;
 
                 // Where does the line start? (y)
                 unsigned top = (usedLines - 1) * (fontHeight + lineSpacing);
@@ -93,12 +118,12 @@ namespace Gosu
                 {
                 // Start so that the text touches the right border.
                 case taRight:
-                    pos = bmp.width() - wordsWidth - (words - 1) * spaceWidth;
+                    pos = bmp.width() - wordsWidth - totalSpacing;
                     break;
 
                 // Start so that the text is centered.
                 case taCenter:
-                    pos = bmp.width() - wordsWidth - (words - 1) * spaceWidth;
+                    pos = bmp.width() - wordsWidth - totalSpacing;
                     pos /= 2;
                     break;
 
@@ -107,18 +132,15 @@ namespace Gosu
                     pos = 0;
                 }
 
-                // How much space is between each word?
-                double spacing;
-                if (align == taJustify && !overrideAlign)
-                    spacing = (bmp.width() - wordsWidth) / (words - 1.0);
-                else
-                    spacing = spaceWidth;
-
                 for (Words::const_iterator cur = begin; cur != end; ++cur)
                 {
                     drawText(bmp, cur->text, trunc(pos), trunc(top),
                         Colors::white, fontName, fontHeight, fontFlags);
-                    pos += cur->width + spacing;
+
+                    if (align == taJustify && !overrideAlign)
+                        pos += cur->width + 1.0 * (width() - wordsWidth) / (words - 1);
+                    else
+                        pos += cur->width + cur->spaceWidth;
                 }
             }
 
@@ -133,10 +155,10 @@ namespace Gosu
 
         void processWords(TextBlockBuilder& builder, const Words& words)
         {
+            printf("Drawing %d words in line starting with %s\n\n", words.size(), wstringToUTF8(words.front().text).c_str());
+
             // Index into words to the first word in the current line.
             Words::const_iterator lineBegin = words.begin();
-
-            const unsigned spaceWidth = builder.textWidth(L" "); // IMPR.
 
             // Used width, in pixels, of the words [lineBegin..w[.
             unsigned wordsWidth = 0;
@@ -153,7 +175,7 @@ namespace Gosu
                     // There's enough space for the words [lineBegin..w] plus
                     // the spaces between them: Proceed with the next word.
                     wordsWidth = newWordsWidth;
-                    spacesWidth += spaceWidth;
+                    spacesWidth += w->spaceWidth;
                 }
                 else
                 {
@@ -164,7 +186,7 @@ namespace Gosu
 
                     lineBegin = w;
                     wordsWidth = w->width;
-                    spacesWidth = spaceWidth;
+                    spacesWidth = w->spaceWidth;
                 }
             }
 
@@ -181,14 +203,51 @@ namespace Gosu
         {
             Words collectedWords;
 
-            boost::char_separator<wchar_t> sep(L" ");
-            Tokenizer words(paragraph, sep);
-            for (Tokenizer::iterator i = words.begin(); i != words.end(); ++i)
+            const unsigned spaceWidth = builder.textWidth(L" ");
+
+            unsigned beginOfWord = 0;
+            
+            for (unsigned cur = 0; cur < paragraph.length(); ++cur)
             {
                 WordInfo newWord;
-                newWord.text = *i;
-                newWord.width = builder.textWidth(newWord.text);
-                collectedWords.push_back(newWord);
+
+                if (paragraph[cur] == L' ')
+                {
+                    // Whitespace: Add last word to list if existent
+                    if (beginOfWord != cur)
+                    {
+                        newWord.text.assign(paragraph.begin() + beginOfWord, paragraph.begin() + cur);
+                        newWord.width = builder.textWidth(newWord.text);
+                        newWord.spaceWidth = spaceWidth;
+                        collectedWords.push_back(newWord);
+                    }
+                    beginOfWord = cur + 1;
+                }
+                else if (isBreakingAsianGlyph(paragraph[cur]))
+                {
+                    // Whitespace: Add last word to list if existent
+                    if (beginOfWord != cur)
+                    {
+                        newWord.text.assign(paragraph.begin() + beginOfWord, paragraph.begin() + cur);
+                        newWord.width = builder.textWidth(newWord.text);
+                        newWord.spaceWidth = 0;
+                        collectedWords.push_back(newWord);
+                    }
+                    // Add glyph as a single "word"
+                    newWord.text = wstring(1, paragraph[cur]);
+                    newWord.width = builder.textWidth(newWord.text);
+                    newWord.spaceWidth = 0;
+                    collectedWords.push_back(newWord);
+                    beginOfWord = cur + 1;
+                }
+            }
+            if (beginOfWord < paragraph.length())
+            {
+                WordInfo lastWord;
+                lastWord.text.assign(paragraph.begin() + beginOfWord, paragraph.end());
+                lastWord.width = builder.textWidth(lastWord.text);
+                lastWord.spaceWidth = 0;
+                collectedWords.push_back(lastWord);
             }
 
             processWords(builder, collectedWords);

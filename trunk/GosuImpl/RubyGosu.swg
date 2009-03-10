@@ -394,7 +394,7 @@ namespace Gosu
     rb_eval_string("module Gosu::Button; Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }; end");
 
     // ARGH, SWIG workaround...
-    rb_eval_string("class Gosu::Image; def self.from_text(*args); args.size == 4 ? from_text_4(*args) : from_text_7(*args); end; end");
+    rb_eval_string("class Gosu::Image; def self.from_text(*args); args.size == 4 ? from_text4(*args) : from_text7(*args); end; end");
 
     // Extend Numeric with simple angle conversion methods.
     rb_eval_string("class ::Numeric;def gosu_to_radians;(self-90)*Math::PI/180.0;end;def radians_to_gosu;self*180.0/Math::PI+90;end;end");

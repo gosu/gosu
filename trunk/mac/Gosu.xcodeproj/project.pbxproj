@@ -199,7 +199,7 @@
 		D410EADF0A801B00005C7067 /* LargeImageData.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = LargeImageData.cpp; sourceTree = "<group>"; };
 		D410EAE00A801B00005C7067 /* LargeImageData.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = LargeImageData.hpp; sourceTree = "<group>"; };
 		D410EAE10A801B00005C7067 /* RotFlip.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = RotFlip.cpp; sourceTree = "<group>"; };
-		D410EAE20A801B00005C7067 /* Text.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Text.cpp; sourceTree = "<group>"; };
+		D410EAE20A801B00005C7067 /* Text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Text.cpp; sourceTree = "<group>"; };
 		D410EAE30A801B00005C7067 /* TextMac.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TextMac.cpp; sourceTree = "<group>"; };
 		D410EAF00A801B00005C7067 /* CommSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CommSocket.cpp; sourceTree = "<group>"; };
 		D410EAF10A801B00005C7067 /* ListenerSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ListenerSocket.cpp; sourceTree = "<group>"; };
