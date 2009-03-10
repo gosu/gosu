@@ -11,10 +11,10 @@ namespace {
     Gosu::Touches translateTouches(NSSet* touches, UIView* view)
     {
         Gosu::Touches result;
-        for (UITouch* touch in touches)
+        for (UITouch* uiTouch in touches)
         {
-            CGPoint point = [touch locationInView: view];
-            Gosu::Touch touch = { point.y, [view bounds].size.width - point.x };
+            CGPoint point = [uiTouch locationInView: view];
+            Gosu::Touch touch = { uiTouch, point.y, [view bounds].size.width - point.x };
             result.push_back(touch);
         }
         return result;
