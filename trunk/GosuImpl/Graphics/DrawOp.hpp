@@ -116,6 +116,12 @@ namespace Gosu
                 
                 isSetup = true;
             }
+
+            if (clipWidth != 0xffffffff)
+            {
+                glEnable(GL_SCISSOR_TEST);
+                glScissor(clipX, clipY, clipWidth, clipHeight);
+            }
             
             if (mode == amAdditive)
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -160,6 +166,10 @@ namespace Gosu
                 glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
             else if (usedVertices == 4)
                 glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+                
+            
+            if (clipWidth != 0xffffffff)
+                glDisable(GL_SCISSOR_TEST);
         }
         
         unsigned texName() const
@@ -203,6 +213,9 @@ namespace Gosu
                 op.perform(currentTexName);
                 if (currentTexName != NO_TEXTURE)
                     glDisable(GL_TEXTURE_2D);
+            #else
+                GLuint dummy;
+                op.perform(dummy);
             #endif
             }
             

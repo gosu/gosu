@@ -155,8 +155,6 @@ namespace Gosu
 
         void processWords(TextBlockBuilder& builder, const Words& words)
         {
-            printf("Drawing %d words in line starting with %s\n\n", words.size(), wstringToUTF8(words.front().text).c_str());
-
             // Index into words to the first word in the current line.
             Words::const_iterator lineBegin = words.begin();
 

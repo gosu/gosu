@@ -102,10 +102,8 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 {
-#ifndef GOSU_IS_IPHONE
     // Flush leftover clippings
     endClipping();
-#endif
 
     glClearColor(clearWithColor.red()/255.0,
                  clearWithColor.green()/255.0,
@@ -172,27 +170,27 @@ void Gosu::Graphics::endGL()
 
 void Gosu::Graphics::beginClipping(int x, int y, unsigned width, unsigned height)
 {
-#ifdef GOSU_IS_IPHONE
-    throw std::logic_error("Clipping is unsupported on the iPhone");
-#else
     // In doubt, make the clipping region smaller than requested.
     
+#ifndef GOSU_IS_IPHONE
     int physX = static_cast<int>(std::ceil(x * factorX()));
     int physY = static_cast<int>(std::ceil((0.0 + this->height() - y - height) * factorY()));
     unsigned physWidth  = static_cast<unsigned>(width  * factorX());
     unsigned physHeight = static_cast<unsigned>(height * factorY());
+#else
+    // Make up for rotation
+    int physX = 320 - static_cast<int>(std::ceil((0.0 + y + height) * factorX()));
+    int physY = 480 - static_cast<int>(std::ceil((0.0 + x + width) * factorY()));
+    unsigned physWidth  = static_cast<unsigned>(height * factorX());
+    unsigned physHeight = static_cast<unsigned>(width  * factorY());
+#endif
 
     pimpl->queue.beginClipping(physX, physY, physWidth, physHeight);
-#endif
 }
 
 void Gosu::Graphics::endClipping()
 {
-#ifdef GOSU_IS_IPHONE
-    throw std::logic_error("Clipping is unsupported on the iPhone");
-#else
     pimpl->queue.endClipping();
-#endif
 }
 
 void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
