@@ -179,10 +179,10 @@ void Gosu::Graphics::beginClipping(int x, int y, unsigned width, unsigned height
     unsigned physHeight = static_cast<unsigned>(height * factorY());
 #else
     // Make up for rotation
-    int physX = 320 - static_cast<int>(std::ceil((0.0 + y + height) * factorX()));
-    int physY = 480 - static_cast<int>(std::ceil((0.0 + x + width) * factorY()));
-    unsigned physWidth  = static_cast<unsigned>(height * factorX());
-    unsigned physHeight = static_cast<unsigned>(width  * factorY());
+    int physX = 320 - static_cast<int>(std::ceil(320.0 * (0.0 + y + height) / this->height()));
+    int physY = 480 - static_cast<int>(std::ceil(480.0 * (0.0 + x + width) / this->width()));
+    unsigned physWidth  = static_cast<unsigned>(320.0 * height / this->height());
+    unsigned physHeight = static_cast<unsigned>(480.0 * width / this->width());
 #endif
 
     pimpl->queue.beginClipping(physX, physY, physWidth, physHeight);
