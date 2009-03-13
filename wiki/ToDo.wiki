@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-03-12)
+(Last update: 2009-03-13)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics/iPhone and OpenAL release
@@ -27,6 +27,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Make even the mouse wheel consistently send buttonUp events on all platforms
     * Windows: Don't fail if the requested windowed resolution is too large
     * Link the all-in-one-bundle from the boards: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
+    * Take a look at AmIMeYet's bug in the forum PM's
     * Add fullscreen accessors to make proper FS OpenGL possible
     * More alpha modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
     * TextField with clip_to (update example)
@@ -54,7 +55,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Release 0.7.13
     * Document Window#update_interval
   * (1x mymüsli for all the hard work!</selfmotivation>)
-  * 0.7.14, text quality release
+  * 0.7.14, text quality release (+Linux gamepad!)
     * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
     * Linux: Support Unicode in title bar
     * Linux: Support other XKeySyms than Latin 1
@@ -64,6 +65,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Linux: Make createText use Pango/Freetype2
     * Make RTL work without RTL/LTR markers?!
     * Add RTL support to Font::drawRot too
+    * Add Linux gamepad support
   * 0.7.15, polish/deployment release
     * Assure that files from doxygen task are considered for packaging
     * RMagick auf Windows statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
