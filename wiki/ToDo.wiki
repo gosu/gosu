@@ -4,10 +4,11 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-03-15)
+(Last update: 2009-03-16)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics/iPhone and OpenAL release
+    * Test block allocator for 3 tilesets of 512 8x8px tiles
     * Fix "too many fingers" bug on iPhone
     * Get rid of autoreleasing on the iPhone, releasing is easy and fast
     * screen_resolution() function *at last*!!
@@ -16,6 +17,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Test RMagick.bundle on PPC
     * Test RMagick.bundle on Tiger
     * Fix PNG loading on iPhone
+    * Rausfinden woher die komischen Ränder bei Env/Grounds/Grass.bmp kamen
     * Think: What would be the costs of being able to delete images while they are still referenced? Mergable with macros?
     * Think: Should the initial order of draw() and update() be the same on all platforms? If so, which order would be correct?
     * Post http://github.com/joakimk/caribbean-onslaught/tree/master before it gets lost?
