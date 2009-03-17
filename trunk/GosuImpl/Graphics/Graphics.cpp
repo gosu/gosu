@@ -30,8 +30,8 @@ struct Gosu::Graphics::Impl
 Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscreen)
 : pimpl(new Impl)
 {
-    pimpl->physWidth  = physWidth;
-    pimpl->physHeight = physHeight;
+    pimpl->virtWidth  = pimpl->physWidth  = physWidth;
+    pimpl->virtHeight = pimpl->physHeight = physHeight;
     pimpl->factorX = pimpl->factorY = 1.0;
     pimpl->fullscreen = fullscreen;
 
