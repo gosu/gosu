@@ -36,7 +36,6 @@
 		D410E9F30A8019CD005C7067 /* Timing.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D70A8019CD005C7067 /* Timing.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9F40A8019CD005C7067 /* Utility.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D80A8019CD005C7067 /* Utility.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9F50A8019CD005C7067 /* Window.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D90A8019CD005C7067 /* Window.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D410EA360A8019FA005C7067 /* AudioFmod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410E9FE0A8019FA005C7067 /* AudioFmod.cpp */; };
 		D410EA370A8019FA005C7067 /* DirectoriesMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410E9FF0A8019FA005C7067 /* DirectoriesMac.mm */; };
 		D410EA380A8019FA005C7067 /* DirectoriesUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA000A8019FA005C7067 /* DirectoriesUnix.cpp */; };
 		D410EA3A0A8019FA005C7067 /* FileUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA020A8019FA005C7067 /* FileUnix.cpp */; };
@@ -78,7 +77,6 @@
 		D423822D0C4C3D68000DAA25 /* RotFlip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE10A801B00005C7067 /* RotFlip.cpp */; };
 		D423822E0C4C3D68000DAA25 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE20A801B00005C7067 /* Text.cpp */; };
 		D423822F0C4C3D68000DAA25 /* TextMac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE30A801B00005C7067 /* TextMac.cpp */; };
-		D42382380C4C3D79000DAA25 /* AudioFmod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410E9FE0A8019FA005C7067 /* AudioFmod.cpp */; };
 		D42382390C4C3D79000DAA25 /* DirectoriesMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410E9FF0A8019FA005C7067 /* DirectoriesMac.mm */; };
 		D423823A0C4C3D79000DAA25 /* DirectoriesUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA000A8019FA005C7067 /* DirectoriesUnix.cpp */; };
 		D423823B0C4C3D79000DAA25 /* FileUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA020A8019FA005C7067 /* FileUnix.cpp */; };
@@ -97,10 +95,14 @@
 		D423826D0C4C3E8A000DAA25 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB77AAFE841565C02AAC07 /* Carbon.framework */; };
 		D425680A0C69CF6100E745AC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42568090C69CF6100E745AC /* IOKit.framework */; };
 		D425680B0C69CF6100E745AC /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42568090C69CF6100E745AC /* IOKit.framework */; };
-		D42762500F4E1EAA00C9B0A5 /* AudioTouch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D427624F0F4E1EAA00C9B0A5 /* AudioTouch.cpp */; };
 		D42762510F4E216500C9B0A5 /* Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADB0A801B00005C7067 /* Font.cpp */; };
 		D42762AB0F4E267500C9B0A5 /* DirectoriesTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42762AA0F4E267500C9B0A5 /* DirectoriesTouch.mm */; };
 		D42BC0D10C4F840C00EBF79C /* Gosu.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D42BC0D00C4F840C00EBF79C /* Gosu.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		D42D02400F7068C500407E60 /* AudioOpenAL.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42DFE380F6F84DA00407E60 /* AudioOpenAL.mm */; };
+		D42D02410F7068CB00407E60 /* AudioFmod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D42D023E0F7068BC00407E60 /* AudioFmod.cpp */; };
+		D42D02420F7068CB00407E60 /* AudioFmod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D42D023E0F7068BC00407E60 /* AudioFmod.cpp */; };
+		D42D025E0F706A0100407E60 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025C0F706A0100407E60 /* AudioToolbox.framework */; };
+		D42D025F0F706A0100407E60 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025D0F706A0100407E60 /* OpenAL.framework */; };
 		D459FF4C0BDCD26D00E7F0D6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98A0A801948005C7067 /* AppKit.framework */; };
 		D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */; };
 		D459FF990BDCD9CF00E7F0D6 /* Gosu.icns in Resources */ = {isa = PBXBuildFile; fileRef = D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */; };
@@ -176,7 +178,6 @@
 		D410E9D70A8019CD005C7067 /* Timing.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Timing.hpp; path = ../Gosu/Timing.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9D80A8019CD005C7067 /* Utility.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Utility.hpp; path = ../Gosu/Utility.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9D90A8019CD005C7067 /* Window.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Window.hpp; path = ../Gosu/Window.hpp; sourceTree = SOURCE_ROOT; };
-		D410E9FE0A8019FA005C7067 /* AudioFmod.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = AudioFmod.cpp; path = ../GosuImpl/AudioFmod.cpp; sourceTree = SOURCE_ROOT; };
 		D410E9FF0A8019FA005C7067 /* DirectoriesMac.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = DirectoriesMac.mm; path = ../GosuImpl/DirectoriesMac.mm; sourceTree = SOURCE_ROOT; };
 		D410EA000A8019FA005C7067 /* DirectoriesUnix.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = DirectoriesUnix.cpp; path = ../GosuImpl/DirectoriesUnix.cpp; sourceTree = SOURCE_ROOT; };
 		D410EA020A8019FA005C7067 /* FileUnix.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = FileUnix.cpp; path = ../GosuImpl/FileUnix.cpp; sourceTree = SOURCE_ROOT; };
@@ -209,9 +210,12 @@
 		D410EB290A801C28005C7067 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		D410EB6D0A801CDC005C7067 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D42568090C69CF6100E745AC /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
-		D427624F0F4E1EAA00C9B0A5 /* AudioTouch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioTouch.cpp; path = ../GosuImpl/AudioTouch.cpp; sourceTree = SOURCE_ROOT; };
 		D42762AA0F4E267500C9B0A5 /* DirectoriesTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DirectoriesTouch.mm; path = ../GosuImpl/DirectoriesTouch.mm; sourceTree = SOURCE_ROOT; };
 		D42BC0D00C4F840C00EBF79C /* Gosu.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Gosu.hpp; path = ../Gosu/Gosu.hpp; sourceTree = SOURCE_ROOT; };
+		D42D023E0F7068BC00407E60 /* AudioFmod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioFmod.cpp; path = ../GosuImpl/AudioFmod.cpp; sourceTree = SOURCE_ROOT; };
+		D42D025C0F706A0100407E60 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		D42D025D0F706A0100407E60 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		D42DFE380F6F84DA00407E60 /* AudioOpenAL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AudioOpenAL.mm; path = ../GosuImpl/AudioOpenAL.mm; sourceTree = SOURCE_ROOT; };
 		D459FF440BDCD23500E7F0D6 /* RubyGosu Deployment Template.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RubyGosu Deployment Template.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D459FF460BDCD23600E7F0D6 /* RubyGosu Template-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RubyGosu Template-Info.plist"; sourceTree = "<group>"; };
 		D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Gosu.icns; sourceTree = "<group>"; };
@@ -278,6 +282,8 @@
 				D4A5A3020F40D51B00FFF378 /* OpenGLES.framework in Frameworks */,
 				D4A5A3030F40D51B00FFF378 /* UIKit.framework in Frameworks */,
 				D4A5A3040F40D51B00FFF378 /* Foundation.framework in Frameworks */,
+				D42D025E0F706A0100407E60 /* AudioToolbox.framework in Frameworks */,
+				D42D025F0F706A0100407E60 /* OpenAL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,8 +391,8 @@
 			children = (
 				D410EAD30A801B00005C7067 /* Graphics */,
 				D410EAEF0A801B00005C7067 /* Sockets */,
-				D410E9FE0A8019FA005C7067 /* AudioFmod.cpp */,
-				D427624F0F4E1EAA00C9B0A5 /* AudioTouch.cpp */,
+				D42D023E0F7068BC00407E60 /* AudioFmod.cpp */,
+				D42DFE380F6F84DA00407E60 /* AudioOpenAL.mm */,
 				D4A7E9080CD377E000621B24 /* Async.cpp */,
 				D410E9FF0A8019FA005C7067 /* DirectoriesMac.mm */,
 				D42762AA0F4E267500C9B0A5 /* DirectoriesTouch.mm */,
@@ -469,6 +475,8 @@
 		D4A5A2F00F40D4EE00FFF378 /* Frameworks Touch */ = {
 			isa = PBXGroup;
 			children = (
+				D42D025C0F706A0100407E60 /* AudioToolbox.framework */,
+				D42D025D0F706A0100407E60 /* OpenAL.framework */,
 				D4A5A2FB0F40D51B00FFF378 /* CoreGraphics.framework */,
 				D4A5A2FC0F40D51B00FFF378 /* QuartzCore.framework */,
 				D4A5A2FD0F40D51B00FFF378 /* OpenGLES.framework */,
@@ -662,7 +670,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D410EA360A8019FA005C7067 /* AudioFmod.cpp in Sources */,
 				D410EA370A8019FA005C7067 /* DirectoriesMac.mm in Sources */,
 				D410EA380A8019FA005C7067 /* DirectoriesUnix.cpp in Sources */,
 				D410EA3A0A8019FA005C7067 /* FileUnix.cpp in Sources */,
@@ -693,6 +700,7 @@
 				D4A7E9810CD3907D00621B24 /* TexChunk.cpp in Sources */,
 				D4A7E9E80CD39BA200621B24 /* BitmapUtils.cpp in Sources */,
 				D4F07B270D93504700FB3D99 /* TextInputMac.mm in Sources */,
+				D42D02420F7068CB00407E60 /* AudioFmod.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -732,10 +740,10 @@
 				D4A5A2250F40D45200FFF378 /* UtilityTouch.mm in Sources */,
 				D4A5A2300F40D48300FFF378 /* GosuView.mm in Sources */,
 				D4A5A2310F40D48300FFF378 /* BitmapUtilsTouch.mm in Sources */,
-				D42762500F4E1EAA00C9B0A5 /* AudioTouch.cpp in Sources */,
 				D42762510F4E216500C9B0A5 /* Font.cpp in Sources */,
 				D42762AB0F4E267500C9B0A5 /* DirectoriesTouch.mm in Sources */,
 				D4032B7D0F5035A900A20790 /* TextTouch.mm in Sources */,
+				D42D02400F7068C500407E60 /* AudioOpenAL.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -757,7 +765,6 @@
 				D423822D0C4C3D68000DAA25 /* RotFlip.cpp in Sources */,
 				D423822E0C4C3D68000DAA25 /* Text.cpp in Sources */,
 				D423822F0C4C3D68000DAA25 /* TextMac.cpp in Sources */,
-				D42382380C4C3D79000DAA25 /* AudioFmod.cpp in Sources */,
 				D42382390C4C3D79000DAA25 /* DirectoriesMac.mm in Sources */,
 				D423823A0C4C3D79000DAA25 /* DirectoriesUnix.cpp in Sources */,
 				D423823B0C4C3D79000DAA25 /* FileUnix.cpp in Sources */,
@@ -771,6 +778,7 @@
 				D4A7E9840CD3907D00621B24 /* TexChunk.cpp in Sources */,
 				D4A7E9E90CD39BA200621B24 /* BitmapUtils.cpp in Sources */,
 				D4F07B280D93504700FB3D99 /* TextInputMac.mm in Sources */,
+				D42D02410F7068CB00407E60 /* AudioFmod.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
