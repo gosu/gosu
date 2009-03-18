@@ -2,6 +2,9 @@
 #define GOSU_MACUTILITY_HPP
 
 #include <Gosu/Platform.hpp>
+
+#import <CoreFoundation/CoreFoundation.h>
+
 #ifndef GOSU_IS_IPHONE
 #import <ApplicationServices/ApplicationServices.h>
 

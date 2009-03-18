@@ -73,7 +73,7 @@ bool Gosu::SampleInstance::playing() const
 {
     NSUInteger source = alChannelManagement->sourceIfStillPlaying(handle, extra);
     if (source == ALChannelManagement::NO_SOURCE)
-        return;
+        return false;
     ALint state;
     alGetSourcei(source, AL_SOURCE_STATE, &state);
     return state == AL_PLAYING;
@@ -83,7 +83,7 @@ bool Gosu::SampleInstance::paused() const
 {
     NSUInteger source = alChannelManagement->sourceIfStillPlaying(handle, extra);
     if (source == ALChannelManagement::NO_SOURCE)
-        return;
+        return false;
     ALint state;
     alGetSourcei(source, AL_SOURCE_STATE, &state);
     return state == AL_PAUSED;
@@ -175,7 +175,8 @@ Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
 
 Gosu::Sample::Sample(Audio& audio, Reader reader)
 {
-    throw logic_error("NYI");
+    AudioFile audioFile(reader.resource());
+    data.reset(new SampleData(audioFile));
 }
 
 Gosu::Sample::~Sample()

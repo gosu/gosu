@@ -3,9 +3,11 @@
 
 #include <AudioToolbox/AudioToolbox.h>
 #include <OpenAL/al.h>
+#include <Gosu/IO.hpp>
 #include <GosuImpl/MacUtility.hpp>
 #include <Gosu/Utility.hpp>
 #include <boost/utility.hpp>
+#include <algorithm>
 #include <vector>
 #import <Foundation/Foundation.h>
 
@@ -15,6 +17,21 @@ namespace Gosu
     {
         AudioFileID fileID;
         mutable std::vector<char> decodedData;
+        
+        static OSStatus AudioFile_ReadProc(void* inClientData, SInt64 inPosition, UInt32 requestCount,
+                                           void* buffer, UInt32* actualCount)
+        {
+            const Resource& res = *static_cast<Resource*>(inClientData);
+            *actualCount = std::min<UInt32>(requestCount, res.size() - inPosition);
+            res.read(inPosition, *actualCount, buffer);
+            return noErr;
+        }
+        
+        static SInt64 AudioFile_GetSizeProc(void* inClientData)
+        {
+            const Resource& res = *static_cast<Resource*>(inClientData);
+            return res.size();
+        }
         
     public:
         AudioFile(const std::wstring& filename)
@@ -29,6 +46,13 @@ namespace Gosu
             CFURLGetFSRef(reinterpret_cast<CFURLRef>(url.get()), &fsRef);
             CHECK_OS(AudioFileOpen(&fsRef, fsRdPerm, 0, &fileID));
             #endif
+        }
+        
+        AudioFile(const Gosu::Resource& resource)
+        {
+            void* clientData = const_cast<Resource*>(&resource);
+            CHECK_OS(AudioFileOpenWithCallbacks(clientData, AudioFile_ReadProc, 0,
+                                                AudioFile_GetSizeProc, 0, 0, &fileID));
         }
         
         ~AudioFile()
