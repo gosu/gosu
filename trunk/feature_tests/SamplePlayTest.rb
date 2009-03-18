@@ -14,7 +14,8 @@ class Test < Gosu::Window
   def button_down(id)
     case id
     when Gosu::KbEscape then close
-    when Gosu::KbSpace then @instance = @sample.play
+    when Gosu::MsLeft then
+      @instance = @sample.play_pan mouse_x/320 - 1, 1, mouse_y/480 + 0.5
     end
   end
 end

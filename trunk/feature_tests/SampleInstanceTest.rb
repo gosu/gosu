@@ -3,7 +3,7 @@ require '../lib/gosu'
 class Test < Gosu::Window
   def initialize 
     super(640, 480, false)
-    @sample = Gosu::Sample.new(self, "media/Jingle_Bells.ogg")
+    @sample = Gosu::Sample.new(self, "media/Sample.wav")
     @instance = @sample.play(1, 1, true)
   end
 

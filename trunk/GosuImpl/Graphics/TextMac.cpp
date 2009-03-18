@@ -2,6 +2,7 @@
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/IO.hpp>
+#include <GosuImpl/MacUtility.hpp>
 #include <boost/utility.hpp>
 #include <boost/cstdint.hpp>
 #include <cmath>
@@ -21,20 +22,6 @@ namespace Gosu
 {
     std::vector<unsigned short> wstringToUniChars(const std::wstring& ws);
 }
-
-#include <iostream>
-#include <ostream>
-#include <sstream>
-void throwError(OSStatus status, unsigned line)
-{
-    std::ostringstream str;
-    str << "Error on line " << line << " (Code " << status << "): "
-        << GetMacOSStatusErrorString(status)
-        << " (" << GetMacOSStatusCommentString(status) << ")";
-    throw std::runtime_error(str.str());
-}
-
-#define checkErr(status) if (!(status)) {} else throwError(status, __LINE__)
 
 namespace
 {
@@ -97,13 +84,13 @@ namespace
             Gosu::loadFile(buf, fontName);
             
             ATSFontContainerRef container; 
-            checkErr( ATSFontActivateFromMemory(buf.data(), buf.size(),
+            CHECK_OS( ATSFontActivateFromMemory(buf.data(), buf.size(),
                           kATSFontContextLocal, kATSFontFormatUnspecified, 
                           NULL, kATSOptionFlagsDefault, &container) );
             
             ATSFontRef fontRefs[1024]; 
             ItemCount  fontCount; 
-            checkErr( ATSFontFindFromContainer(container, kATSOptionFlagsDefault, 
+            CHECK_OS( ATSFontFindFromContainer(container, kATSOptionFlagsDefault, 
                           1024, fontRefs, &fontCount) );
             if (fontCount == 0)
                 throw std::runtime_error("No font found in " + Gosu::narrow(fontName));
@@ -116,7 +103,7 @@ namespace
         newFont.fontId = FMGetFontFromATSFontRef(atsRef);
 
         ATSFontMetrics metrics;
-        checkErr(ATSFontGetHorizontalMetrics(newFont.fontId, kATSOptionFlagsDefault, &metrics));
+        CHECK_OS(ATSFontGetHorizontalMetrics(newFont.fontId, kATSOptionFlagsDefault, &metrics));
         newFont.heightAt1Pt = metrics.ascent - metrics.descent;
         newFont.descentAt1Pt = -metrics.descent;
         fonts[fontName] = newFont;
@@ -134,7 +121,7 @@ namespace
         {
             ByteCount size = sizeof value;
             ATSUAttributeValuePtr ptr = &value;
-            checkErr( ATSUSetAttributes(style, 1, &tag, &size, &ptr) );
+            CHECK_OS( ATSUSetAttributes(style, 1, &tag, &size, &ptr) );
         }
         
         template<typename T>
@@ -142,7 +129,7 @@ namespace
         {
             ByteCount size = sizeof value;
             ATSUAttributeValuePtr ptr = &value;
-            checkErr( ATSUSetLayoutControls(layout, 1, &tag, &size, &ptr) );
+            CHECK_OS( ATSUSetLayoutControls(layout, 1, &tag, &size, &ptr) );
         }
         
     public:
@@ -150,7 +137,7 @@ namespace
         {
             utf16 = Gosu::wstringToUniChars(text);
         
-            checkErr( ATSUCreateStyle(&style) );
+            CHECK_OS( ATSUCreateStyle(&style) );
             
             CachedFontInfo& font = getFont(fontName);
             
@@ -165,21 +152,21 @@ namespace
                 setAttribute<Boolean>(kATSUQDUnderlineTag, TRUE);
 
             UniCharCount runLength = utf16.size();
-            checkErr( ATSUCreateTextLayoutWithTextPtr(&utf16[0], kATSUFromTextBeginning,
+            CHECK_OS( ATSUCreateTextLayoutWithTextPtr(&utf16[0], kATSUFromTextBeginning,
                             kATSUToTextEnd, utf16.size(), 1, &runLength, &style, &layout) );
         }
         
         ~ATSULayoutAndStyle()
         {
-            checkErr( ATSUDisposeStyle(style) );
-            checkErr( ATSUDisposeTextLayout(layout) );
+            CHECK_OS( ATSUDisposeStyle(style) );
+            CHECK_OS( ATSUDisposeTextLayout(layout) );
         }
 
         Rect textExtents() const
         {
             Rect rect;
-            checkErr( ATSUSetTransientFontMatching(layout, TRUE) );
-            checkErr( ATSUMeasureTextImage(layout, kATSUFromTextBeginning,
+            CHECK_OS( ATSUSetTransientFontMatching(layout, TRUE) );
+            CHECK_OS( ATSUMeasureTextImage(layout, kATSUFromTextBeginning,
                                            kATSUToTextEnd, X2Fix(0), X2Fix(0), &rect) );
             return rect;
         }
@@ -192,8 +179,8 @@ namespace
             RGBColor color = { 0, 0, 0 };
             setAttribute<RGBColor>(kATSUColorTag, color);
             setLayoutControl<CGContextRef>(kATSUCGContextTag, context);
-            checkErr( ATSUSetTransientFontMatching(layout, TRUE) );
-            checkErr( ATSUDrawText(layout, kATSUFromTextBeginning, kATSUToTextEnd, x, y) );
+            CHECK_OS( ATSUSetTransientFontMatching(layout, TRUE) );
+            CHECK_OS( ATSUDrawText(layout, kATSUFromTextBeginning, kATSUToTextEnd, x, y) );
         }
     };
 }

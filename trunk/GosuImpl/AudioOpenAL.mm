@@ -1,11 +1,16 @@
+#include <GosuImpl/MacUtility.hpp>
+#include <GosuImpl/Audio/AudioFileMac.hpp>
+#include <GosuImpl/Audio/ALChannelManagement.hpp>
+
 #include <Gosu/Audio.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/Platform.hpp>
-#include <GosuImpl/MacUtility.hpp>
+
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
+
 #include <cassert>
 #include <cstdlib>
 #include <algorithm>
@@ -14,17 +19,6 @@
 
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
-
-#import <CoreFoundation/CoreFoundation.h>
-#import <Foundation/Foundation.h>
-#ifndef GOSU_IS_IPHONE
-#import <ApplicationServices/ApplicationServices.h>
-#endif
-#import <AudioToolbox/AudioToolbox.h>
-
-#include <iostream>
-#include <ostream>
-#include <sstream>
 
 #if __LP64__ || NS_BUILD_32_LIKE_64
 typedef long NSInteger;
@@ -39,28 +33,8 @@ using namespace std;
 namespace
 {
     using namespace Gosu;
-
-    // TODO: Move to MacUtility.hpp, this is C&P from TextMac.cpp
-    void throwError(OSStatus status, unsigned line)
-    {
-        ostringstream str;
-        #ifdef GOSU_IS_IPHONE
-        str << "Error on line " << line << " (Code " << status << ")";
-        #else
-        str << "Error on line " << line << " (Code " << status << "): "
-            << GetMacOSStatusErrorString(status)
-            << " (" << GetMacOSStatusCommentString(status) << ")";
-        #endif
-        throw runtime_error(str.str());
-    }
     
-    #define checkErr(status) if (!(status)) {} else throwError(status, __LINE__)
-    
-    bool alInitialized = false;
-    ALCdevice* alDevice = 0;
-    ALCcontext* alContext = 0;
-    
-    GOSU_NORETURN void throwLastALError(const char* action)
+    /*GOSU_NORETURN void throwLastALError(const char* action)
     {
         string message = "OpenAL error " +
                          boost::lexical_cast<string>(alcGetError(alDevice));
@@ -73,103 +47,21 @@ namespace
     {
         if (alcGetError(alDevice) != ALC_NO_ERROR)
             throwLastALError(action);
-    }
+    }*/
 
     Song* curSong = 0;
-    
-    class AudioFile : boost::noncopyable
-    {
-        AudioFileID fileID;
-        mutable vector<char> decodedData;
-        
-    public:
-        AudioFile(const std::wstring& filename)
-        {
-            // TODO: use CFURLGetFSRef(infileurl, &outInputFSRef); for 10.4 compatibility
-        
-            ObjRef<NSURL> url([NSURL fileURLWithPath: [NSString stringWithUTF8String: wstringToUTF8(filename).c_str()]]);
-            #ifdef GOSU_IS_IPHONE
-            checkErr(AudioFileOpenURL((CFURLRef)url.get(), kAudioFileReadPermission, 0, &fileID));
-            #else
-            checkErr(AudioFileOpenURL((CFURLRef)url.get(), fsRdPerm, 0, &fileID));
-            #endif
-        }
-        
-        ~AudioFile()
-        {
-            AudioFileClose(fileID);
-        }
-        
-        UInt32 getSizeOfData() const
-        {
-            UInt64 sizeOfData = 0;
-            UInt32 sizeOfProperty = sizeof sizeOfData;
-            checkErr(AudioFileGetProperty(fileID, kAudioFilePropertyAudioDataByteCount, &sizeOfProperty, &sizeOfData));
-            return sizeOfData;
-        }
-        
-        ALuint getBitRate() const
-        {
-            UInt32 bitRate = 0;
-            UInt32 sizeOfProperty = sizeof bitRate;
-            checkErr(AudioFileGetProperty(fileID, kAudioFilePropertyBitRate, &sizeOfProperty, &bitRate));
-            return bitRate / 8;
-        }
-        
-        pair<ALuint, ALuint> getFormatAndSampleRate() const
-        {
-            AudioStreamBasicDescription desc;
-            UInt32 sizeOfProperty = sizeof desc;
-            checkErr(AudioFileGetProperty(fileID, kAudioFilePropertyDataFormat, &sizeOfProperty, &desc));
-            pair<ALuint, ALuint> formatAndSampleRate = make_pair(0, desc.mSampleRate);
-            if (desc.mChannelsPerFrame == 1)
-                if (desc.mBitsPerChannel == 8)
-                    formatAndSampleRate.first = AL_FORMAT_MONO8;
-                else if (desc.mBitsPerChannel == 16)
-                    formatAndSampleRate.first = AL_FORMAT_MONO16;
-            else if (desc.mChannelsPerFrame == 2)
-                if (desc.mBitsPerChannel == 8)
-                    formatAndSampleRate.first = AL_FORMAT_STEREO8;
-                else if (desc.mBitsPerChannel == 16)
-                    formatAndSampleRate.first = AL_FORMAT_STEREO16;
-            if (formatAndSampleRate.first == 0)
-                throw runtime_error("Invalid sample format");
-            return formatAndSampleRate;
-        }
-        
-        const vector<char>& getDecodedData() const
-        {
-            if (decodedData.empty())
-            {
-                UInt32 sizeOfData = getSizeOfData();
-                decodedData.resize(sizeOfData);
-                checkErr(AudioFileReadBytes(fileID, false, 0, &sizeOfData, &decodedData[0]));
-            }
-            return decodedData;
-        }
-    };
 }
 
 Gosu::Audio::Audio()
 {
-    if (alInitialized)
+    if (alChannelManagement)
         throw std::logic_error("Multiple Gosu::Audio instances not supported");
-    
-    // Open preferred device
-    alDevice = alcOpenDevice(0);
-    alContext = alcCreateContext(alDevice, 0);
-    alcMakeContextCurrent(alContext);
-    
-    alInitialized = true;
+    alChannelManagement.reset(new ALChannelManagement);
 }
 
 Gosu::Audio::~Audio()
 {
-    assert(alInitialized);
-
-    // Anything to do here?
-    
-    alInitialized = false;
+    alChannelManagement.reset();
 }
 
 Gosu::SampleInstance::SampleInstance(int handle, int extra)
@@ -201,14 +93,27 @@ void Gosu::SampleInstance::stop()
 
 void Gosu::SampleInstance::changeVolume(double volume)
 {
+    NSUInteger source = alChannelManagement->sourceIfStillPlaying(handle, extra);
+    if (source == ALChannelManagement::NO_SOURCE)
+        return;
+    alSourcef(source, AL_GAIN, volume);
 }
 
 void Gosu::SampleInstance::changePan(double pan)
 {
+    NSUInteger source = alChannelManagement->sourceIfStillPlaying(handle, extra);
+    if (source == ALChannelManagement::NO_SOURCE)
+        return;
+    // TODO: This is not the old panning behavior!
+    alSource3f(source, AL_POSITION, pan * 10, 0, 0);
 }
 
 void Gosu::SampleInstance::changeSpeed(double speed)
 {
+    NSUInteger source = alChannelManagement->sourceIfStillPlaying(handle, extra);
+    if (source == ALChannelManagement::NO_SOURCE)
+        return;
+    alSourcef(source, AL_PITCH, speed);
 }
 
 struct Gosu::Sample::SampleData : boost::noncopyable
@@ -223,24 +128,17 @@ struct Gosu::Sample::SampleData : boost::noncopyable
                      &audioFile.getDecodedData().front(),
                      audioFile.getDecodedData().size(),
                      audioFile.getFormatAndSampleRate().second);
-        alGenSources(1, &source);
-        alSourcei(source, AL_BUFFER, buffer);
-        alSourcef(source, AL_PITCH, 1.0f);
-        alSourcef(source, AL_GAIN, 1.0f);
-        printf("Reported sample rate: %d, format: %d\n",
-                audioFile.getFormatAndSampleRate().first,
-                audioFile.getFormatAndSampleRate().second);
-        //alSourcei(sourceID, AL_LOOPING, AL_TRUE);
     }
 
     ~SampleData()
     {
-        // Should be checked for earlier, as play would crash too.
-        // This is just because it's hard to free things in the right
-        // order in Ruby/Gosu.
+        // It's hard to free things in the right order in Ruby/Gosu.
+        // Make sure buffer isn't deleted after the context/device are shut down.
         
-        if (!alInitialized)
+        if (!alChannelManagement)
             return;
+            
+        alDeleteBuffers(1, &buffer);
     }
 };
 
@@ -252,6 +150,7 @@ Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
 
 Gosu::Sample::Sample(Audio& audio, Reader reader)
 {
+    throw logic_error("NYI");
 }
 
 Gosu::Sample::~Sample()
@@ -261,15 +160,28 @@ Gosu::Sample::~Sample()
 Gosu::SampleInstance Gosu::Sample::play(double volume, double speed,
     bool looping) const
 {
-    alSourcePlay(data->source);
-
-    return SampleInstance(0, 0);
+    return playPan(0, volume, speed, looping);
 }
 
 Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
     double speed, bool looping) const
 {
-    return SampleInstance(0, 0);
+    std::pair<int, int> channelAndToken = alChannelManagement->reserveChannel();
+    if (channelAndToken.first == ALChannelManagement::NO_FREE_CHANNEL)
+        return Gosu::SampleInstance(channelAndToken.first, channelAndToken.second);
+        
+    NSUInteger source = alChannelManagement->sourceIfStillPlaying(channelAndToken.first,
+                                                                  channelAndToken.second);
+    assert(source != ALChannelManagement::NO_SOURCE);
+    alSourcei(source, AL_BUFFER, data->buffer);
+    // TODO: This is not the old panning behavior!
+    alSource3f(source, AL_POSITION, pan * 10, 0, 0);
+    alSourcef(source, AL_GAIN, volume);
+    alSourcef(source, AL_PITCH, speed);
+    alSourcei(source, AL_LOOPING, looping ? AL_TRUE : AL_FALSE);
+    alSourcePlay(source);
+
+    return Gosu::SampleInstance(channelAndToken.first, channelAndToken.second);
 }
 
 class Gosu::Song::BaseData : boost::noncopyable
@@ -488,7 +400,7 @@ Gosu::Song::Song(Audio& audio, Type type, Reader reader)
 
 Gosu::Song::~Song()
 {
-    if (alInitialized)
+    if (alChannelManagement)
         stop();
 }
 

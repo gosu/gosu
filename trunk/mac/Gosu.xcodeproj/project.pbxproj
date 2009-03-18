@@ -99,10 +99,11 @@
 		D42762AB0F4E267500C9B0A5 /* DirectoriesTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42762AA0F4E267500C9B0A5 /* DirectoriesTouch.mm */; };
 		D42BC0D10C4F840C00EBF79C /* Gosu.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D42BC0D00C4F840C00EBF79C /* Gosu.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D42D02400F7068C500407E60 /* AudioOpenAL.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42DFE380F6F84DA00407E60 /* AudioOpenAL.mm */; };
-		D42D02410F7068CB00407E60 /* AudioFmod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D42D023E0F7068BC00407E60 /* AudioFmod.cpp */; };
 		D42D02420F7068CB00407E60 /* AudioFmod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D42D023E0F7068BC00407E60 /* AudioFmod.cpp */; };
 		D42D025E0F706A0100407E60 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025C0F706A0100407E60 /* AudioToolbox.framework */; };
 		D42D025F0F706A0100407E60 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025D0F706A0100407E60 /* OpenAL.framework */; };
+		D42D03760F70A26800407E60 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D03750F70A26800407E60 /* OpenAL.framework */; };
+		D42D03BF0F70A8B700407E60 /* AudioFmod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D42D023E0F7068BC00407E60 /* AudioFmod.cpp */; };
 		D459FF4C0BDCD26D00E7F0D6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98A0A801948005C7067 /* AppKit.framework */; };
 		D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */; };
 		D459FF990BDCD9CF00E7F0D6 /* Gosu.icns in Resources */ = {isa = PBXBuildFile; fileRef = D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */; };
@@ -215,6 +216,9 @@
 		D42D023E0F7068BC00407E60 /* AudioFmod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioFmod.cpp; path = ../GosuImpl/AudioFmod.cpp; sourceTree = SOURCE_ROOT; };
 		D42D025C0F706A0100407E60 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		D42D025D0F706A0100407E60 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		D42D02DC0F7092DF00407E60 /* AudioFileMac.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AudioFileMac.hpp; path = ../GosuImpl/Audio/AudioFileMac.hpp; sourceTree = "<group>"; };
+		D42D03430F70989100407E60 /* ALChannelManagement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ALChannelManagement.hpp; path = ../GosuImpl/Audio/ALChannelManagement.hpp; sourceTree = SOURCE_ROOT; };
+		D42D03750F70A26800407E60 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = /System/Library/Frameworks/OpenAL.framework; sourceTree = "<absolute>"; };
 		D42DFE380F6F84DA00407E60 /* AudioOpenAL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AudioOpenAL.mm; path = ../GosuImpl/AudioOpenAL.mm; sourceTree = SOURCE_ROOT; };
 		D459FF440BDCD23500E7F0D6 /* RubyGosu Deployment Template.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RubyGosu Deployment Template.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D459FF460BDCD23600E7F0D6 /* RubyGosu Template-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RubyGosu Template-Info.plist"; sourceTree = "<group>"; };
@@ -297,6 +301,7 @@
 				D423826C0C4C3E8A000DAA25 /* Foundation.framework in Frameworks */,
 				D423826D0C4C3E8A000DAA25 /* Carbon.framework in Frameworks */,
 				D425680B0C69CF6100E745AC /* IOKit.framework in Frameworks */,
+				D42D03760F70A26800407E60 /* OpenAL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,6 +336,7 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks Mac */ = {
 			isa = PBXGroup;
 			children = (
+				D42D03750F70A26800407E60 /* OpenAL.framework */,
 				D42568090C69CF6100E745AC /* IOKit.framework */,
 				D410EB290A801C28005C7067 /* OpenGL.framework */,
 				D410E98A0A801948005C7067 /* AppKit.framework */,
@@ -389,6 +395,7 @@
 		D410E8670A8018A8005C7067 /* Implementation */ = {
 			isa = PBXGroup;
 			children = (
+				D42D02DA0F70929E00407E60 /* Audio */,
 				D410EAD30A801B00005C7067 /* Graphics */,
 				D410EAEF0A801B00005C7067 /* Sockets */,
 				D42D023E0F7068BC00407E60 /* AudioFmod.cpp */,
@@ -460,6 +467,15 @@
 			name = Sockets;
 			path = ../GosuImpl/Sockets;
 			sourceTree = SOURCE_ROOT;
+		};
+		D42D02DA0F70929E00407E60 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				D42D02DC0F7092DF00407E60 /* AudioFileMac.hpp */,
+				D42D03430F70989100407E60 /* ALChannelManagement.hpp */,
+			);
+			name = Audio;
+			sourceTree = "<group>";
 		};
 		D46F737C0BC3458D008003BA /* RubyGosu */ = {
 			isa = PBXGroup;
@@ -778,7 +794,7 @@
 				D4A7E9840CD3907D00621B24 /* TexChunk.cpp in Sources */,
 				D4A7E9E90CD39BA200621B24 /* BitmapUtils.cpp in Sources */,
 				D4F07B280D93504700FB3D99 /* TextInputMac.mm in Sources */,
-				D42D02410F7068CB00407E60 /* AudioFmod.cpp in Sources */,
+				D42D03BF0F70A8B700407E60 /* AudioFmod.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
