@@ -71,24 +71,49 @@ Gosu::SampleInstance::SampleInstance(int handle, int extra)
 
 bool Gosu::SampleInstance::playing() const
 {
-    return false;
+    NSUInteger source = alChannelManagement->sourceIfStillPlaying(handle, extra);
+    if (source == ALChannelManagement::NO_SOURCE)
+        return;
+    ALint state;
+    alGetSourcei(source, AL_SOURCE_STATE, &state);
+    return state == AL_PLAYING;
 }
 
 bool Gosu::SampleInstance::paused() const
 {
-    return false;
+    NSUInteger source = alChannelManagement->sourceIfStillPlaying(handle, extra);
+    if (source == ALChannelManagement::NO_SOURCE)
+        return;
+    ALint state;
+    alGetSourcei(source, AL_SOURCE_STATE, &state);
+    return state == AL_PAUSED;
 }
 
 void Gosu::SampleInstance::pause()
 {
+    NSUInteger source = alChannelManagement->sourceIfStillPlaying(handle, extra);
+    if (source == ALChannelManagement::NO_SOURCE)
+        return;
+    alSourcePause(source);
 }
 
 void Gosu::SampleInstance::resume()
 {
+    NSUInteger source = alChannelManagement->sourceIfStillPlaying(handle, extra);
+    if (source == ALChannelManagement::NO_SOURCE)
+        return;
+    ALint state;
+    alGetSourcei(source, AL_SOURCE_STATE, &state);
+    if (state == AL_PAUSED)
+        alSourcePlay(source);
 }
 
 void Gosu::SampleInstance::stop()
 {
+    NSUInteger source = alChannelManagement->sourceIfStillPlaying(handle, extra);
+    if (source == ALChannelManagement::NO_SOURCE)
+        return;
+    alSourceStop(source);
 }
 
 void Gosu::SampleInstance::changeVolume(double volume)
