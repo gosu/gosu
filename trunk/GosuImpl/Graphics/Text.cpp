@@ -143,6 +143,11 @@ namespace Gosu
                         pos += cur->width + cur->spaceWidth;
                 }
             }
+            
+            void addEmptyLine()
+            {
+                allocNextLine();
+            }
 
             Bitmap result() const
             {
@@ -155,6 +160,9 @@ namespace Gosu
 
         void processWords(TextBlockBuilder& builder, const Words& words)
         {
+            if (words.empty())
+                return builder.addEmptyLine();
+
             // Index into words to the first word in the current line.
             Words::const_iterator lineBegin = words.begin();
 
