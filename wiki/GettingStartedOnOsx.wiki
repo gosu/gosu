@@ -12,20 +12,33 @@ Download and extract the latest Boost release. Open Terminal, 'cd' into to that 
     ./configure
     make
     sudo make install
-    sudo ln -s /usr/local/include/boost-1_34/boost /usr/include/boost
+    sudo ln -s /usr/local/include/boost-1_38/boost /usr/include/boost
 }}}
   
-(Replace "1_34" with boost's current version.)
+(Replace "1_38" with boost's current version.)
 
-*If you are using MacPorts*, you can, in theory, simply run `sudo port install boost`. In practice however, MacPorts' version of Boost is usually broken.
+*If you are using MacPorts*, you can, in theory, simply run `sudo port install boost`. In practice however, MacPorts' version of Boost is usually broken and/or outdated.
 
 = Starting a new Gosu game (C++) =
 
-In Xcode, create a new 'Application/Cocoa Application' project. Remove Resources/MainMenu.nib and main.m (files & references), right-click the project and add a reference to Gosu.framework (wherever you have unpacked it to).
+In Xcode, create a new 'Application/Cocoa Application' project.
 
-In order to make the Boost headers accessible, select 'Project/Edit Active Project', search for 'Header Search Paths' in 'Build' and set it to `/usr/local/include`, or `/opt/local/include` if you used MacPorts to install Boost.
+Remove & trash the following files:
 
-Your application also needs to include the Gosu.framework bundle. To instruct Xcode to automatically copy it into your application, choose Project/New Build Phase and select "Frameworks" as the Copy Files' target directory. Then locate this new build phase in the targets list and add Gosu.framework to it as well. (Note: You may have to drag & drop the framework into the build phase from the finder, instead of adding it via a right-click.)
+  * Resources/MainMenu.nib (or .xib, depending on the version of Xcode)
+  * Other Sources/main.m
+
+Then right-click "Other Frameworks" and add a reference to an existing framework, namely Gosu.framework. Make sure you didn't put Gosu.framework into a system directory like /System/Library/Frameworks because Xcode treats these directories with some magic.
+
+http://www.libgosu.org/wiki_images/xcode_files.png
+
+In order to make the Boost headers accessible, select 'Project/Edit Active Project' from the top menu, search for 'Header Search Paths' in 'Build' and set it to `/usr/local/include`, or `/opt/local/include` if you used MacPorts to install Boost.
+
+http://www.libgosu.org/wiki_images/xcode_header_paths.png
+
+Your application bundle also needs to contain the Gosu.framework bundle. To instruct Xcode to automatically copy it into your application, choose Project/New Build Phase and select "Frameworks" as the Copy Files' target directory. Then locate this new build phase in the targets list and add Gosu.framework to it as well. (Note: You may have to drag & drop the framework into the build phase from the finder, instead of adding it via a right-click.)
+
+*Note:* My version of Xcode defaults to using the 10.5 SDK. Gosu also works with 10.4 if you just select 10.4 everywhere, but you can do that once you've verified everything works.
 
 You can then add new code files, for example the ones from the tutorial or this minimal application code:
 
