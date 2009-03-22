@@ -4,19 +4,32 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-03-16)
+(Last update: 2009-03-22)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics/iPhone and OpenAL release
+    * iPhone-related stuff that would be nice to finish during this release
+      * Finish OpenAL port of Gosu::Audio (Ogg Songs)
+      * Try to add dynamic MikMod loading code
+      * Add OpenAL packages for Windows (and make them the default)
+      * Add OpenAL packages for OS X (and make them the default)
+      * Fix "too many fingers" bug on iPhone
+      * Get rid of autoreleasing on the iPhone, releasing is easy and fast with ObjRef
+      * Implement Proof of Concept for Macro Patches
+      * Fix PNG loading on iPhone
+      * Check whether the gosutouch lib can be built "Universally"
+    * Screen size / fullscreen stuff
+      * Iterate on first category of fullscreen tests
+      * screen_resolution() function *at last*!!
+      * Allow adjustment of the virtual touchscreen resolution
+      * Make initial window black instead of garbled on OS X
+      * Make initial window black instead of garbled on Windows
+      * Windows: Don't fail if the requested windowed resolution is too large
+      * Add fullscreen accessors to make proper FS OpenGL possible
+      * Add fullscreen stretching prevention
+      * Try not hiding the mouse cursor outside of the main window on OS X
+      * Test multiple screens on Windows
     * Test block allocator for 3 tilesets of 512 8x8px tiles
-    * Fix "too many fingers" bug on iPhone
-    * Get rid of autoreleasing on the iPhone, releasing is easy and fast
-    * screen_resolution() function *at last*!!
-    * Check whether the gosutouch lib can be built "Universally"
-    * Allow adjustment of the virtual touchscreen resolution
-    * Test RMagick.bundle on PPC
-    * Test RMagick.bundle on Tiger
-    * Fix PNG loading on iPhone
     * Rausfinden woher die komischen Ränder bei Env/Grounds/Grass.bmp kamen
     * Think: What would be the costs of being able to delete images while they are still referenced? Mergable with macros?
     * Think: Should the initial order of draw() and update() be the same on all platforms? If so, which order would be correct?
@@ -27,36 +40,31 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Benchmark clip_to
     * OS X: Release all keys on battery notification dialog (?)
     * Make even the mouse wheel consistently send buttonUp events on all platforms
-    * Windows: Don't fail if the requested windowed resolution is too large
-    * Link the all-in-one-bundle from the boards: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
+    * Finish the RMagick bundling thing
+      * Link the all-in-one-bundle from the boards: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
+      * Test RMagick.bundle on Tiger
+      * Test RMagick.bundle on PPC
     * Take a look at AmIMeYet's bug in the forum PM's
-    * Add fullscreen accessors to make proper FS OpenGL possible
     * More alpha modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
     * TextField with clip_to (update example)
-    * Add fullscreen stretching prevention
-    * Try not hiding the mouse cursor outside of the main window on OS X
-    * Iterate on first category of fullscreen tests
-    * Implement Proof of Concept for Macro Patches
-    * Test multiple screens on Windows
     * Get rid of context selection error with driver set to always do FSAA
-    * Look for update_interval rounding errors on Linux
-    * Implement/verify frameskip on Windows
-    * Implement/verify frameskip on OS X
-    * Mac
-    * Implement/verify frameskip on Linux
-    * Ruby 1.9 Support
-      * Compile Ruby 1.9 on Intel (Mac)
-      * Compile Ruby 1.9 on PPC (Mac)
-      * RG Deployment Template auf 1.9 umstellen
-      * Look into Ruby 1.9 on Windows
-      * Document support for Ruby 1.9
-      * Package OR&G with optimized Gosu
-    * Add OpenAL packages for Windows (and make them the default)
-    * Add OpenAL packages for OS X (and make them the default)
+    * Timing Tuning
+      * Look for update_interval rounding errors on Linux
+      * Implement/verify frameskip on Windows
+      * Implement/verify frameskip on OS X
+      * Implement/verify frameskip on Linux
     * Move three threads from GosuExchange to the forums
+    * See what can be done to fix the window icon on Windows
     * Release 0.7.13
     * Document Window#update_interval
-  * (1x mymüsli for all the hard work!</selfmotivation>)
+  * (1x mymüsli for all the hard work! (motivation!)
+  * 0.7.13.37, Mac/Windows gem-rerelease with support for 1.9
+    * Compile Ruby 1.9 on Intel (Mac)
+    * Compile Ruby 1.9 on PPC (Mac)
+    * Set RG Deployment Template to use 1.9
+    * Look into Ruby 1.9 on Windows
+    * Document support for Ruby 1.9
+    * Package OR&G with optimized Gosu
   * 0.7.14, text quality release (+Linux gamepad!)
     * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
     * Linux: Support Unicode in title bar
