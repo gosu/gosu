@@ -19,6 +19,19 @@
 #include <X11/Xutil.h>
 #include "X11vroot.h"
 
+namespace Gosu
+{
+    unsigned screenWidth()
+    {
+        return 0; // TODO
+    }
+    
+    unsigned screenHeight()
+    {
+        return 0; // TODO
+    }
+}
+
 namespace
 {
     template<typename T>

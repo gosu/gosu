@@ -2381,6 +2381,13 @@ SWIG_AsVal_double (VALUE obj, double *val)
   #define SWIG_From_double   rb_float_new 
 
 
+SWIGINTERNINLINE VALUE
+SWIG_From_unsigned_SS_int  (unsigned int value)
+{    
+  return SWIG_From_unsigned_SS_long  (value);
+}
+
+
 #include <string>
 
 
@@ -2482,13 +2489,6 @@ SWIG_From_std_string  (const std::string& s)
   } else {
     return SWIG_FromCharPtrAndSize(s.c_str(), 0);
   }
-}
-
-
-SWIGINTERNINLINE VALUE
-SWIG_From_unsigned_SS_int  (unsigned int value)
-{    
-  return SWIG_From_unsigned_SS_long  (value);
 }
 
 
@@ -3169,6 +3169,50 @@ _wrap_default_font_name(int argc, VALUE *argv, VALUE self) {
   {
     vresult = rb_str_new2(Gosu::wstringToUTF8(result).c_str());
   }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_screen_width(int argc, VALUE *argv, VALUE self) {
+  unsigned int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  {
+    try {
+      result = (unsigned int)Gosu::screenWidth();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_screen_height(int argc, VALUE *argv, VALUE self) {
+  unsigned int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  {
+    try {
+      result = (unsigned int)Gosu::screenHeight();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
   return vresult;
 fail:
   return Qnil;
@@ -8814,6 +8858,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "normalize_angle", VALUEFUNC(_wrap_normalize_angle), -1);
   rb_define_module_function(mGosu, "distance", VALUEFUNC(_wrap_distance), -1);
   rb_define_module_function(mGosu, "default_font_name", VALUEFUNC(_wrap_default_font_name), -1);
+  rb_define_module_function(mGosu, "screen_width", VALUEFUNC(_wrap_screen_width), -1);
+  rb_define_module_function(mGosu, "screen_height", VALUEFUNC(_wrap_screen_height), -1);
   
   cColor.klass = rb_define_class_under(mGosu, "Color", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Color, (void *) &cColor);

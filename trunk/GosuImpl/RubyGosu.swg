@@ -236,6 +236,11 @@ namespace Gosu
 %ignore Gosu::TextAlign;
 %include "../Gosu/GraphicsBase.hpp"
 
+// For screenWidth/screenHeight
+%ignore Gosu::Graphics;
+%ignore Gosu::BorderFlags;
+%include "../Gosu/Graphics.hpp"
+
 // Color
 %rename("alpha=") setAlpha;
 %rename("red=") setRed;

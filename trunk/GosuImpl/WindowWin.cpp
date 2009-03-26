@@ -16,6 +16,16 @@
 
 namespace Gosu
 {
+    unsigned screenWidth()
+    {
+        return 0; // TODO
+    }
+    
+    unsigned screenHeight()
+    {
+        return 0; // TODO
+    }
+
     namespace
     {
         // Mode guessing experimentally adapted from GLFW library.
