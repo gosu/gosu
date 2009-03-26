@@ -1,8 +1,11 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/IO.hpp>
+#include <Gosu/Platform.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/integer.hpp>
 #include <stdexcept>
+
+#ifndef GOSU_IS_IPHONE
 
 namespace 
 {
@@ -174,6 +177,8 @@ Gosu::Reader Gosu::loadFromBMP(Bitmap& bmp, Reader reader)
     
     return reader;
 }
+
+#endif
 
 namespace
 {

@@ -108,8 +108,8 @@
 		D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */; };
 		D459FF990BDCD9CF00E7F0D6 /* Gosu.icns in Resources */ = {isa = PBXBuildFile; fileRef = D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */; };
 		D47BD32B0BD78F7200ACF014 /* RubyGosu_wrap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */; };
+		D48810BD0F7C0E3000602C04 /* BitmapBMP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD50A801B00005C7067 /* BitmapBMP.cpp */; };
 		D4A5A1FF0F40D2EA00FFF378 /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD40A801B00005C7067 /* Bitmap.cpp */; };
-		D4A5A2000F40D2EC00FFF378 /* BitmapBMP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD50A801B00005C7067 /* BitmapBMP.cpp */; };
 		D4A5A2010F40D2EC00FFF378 /* BitmapColorKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD60A801B00005C7067 /* BitmapColorKey.cpp */; };
 		D4A5A2030F40D2F500FFF378 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
 		D4A5A2040F40D2F700FFF378 /* BlockAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD80A801B00005C7067 /* BlockAllocator.cpp */; };
@@ -129,7 +129,7 @@
 		D4A5A2240F40D45200FFF378 /* WindowTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A2210F40D45200FFF378 /* WindowTouch.mm */; };
 		D4A5A2250F40D45200FFF378 /* UtilityTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A2220F40D45200FFF378 /* UtilityTouch.mm */; };
 		D4A5A2300F40D48300FFF378 /* GosuView.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A22D0F40D48300FFF378 /* GosuView.mm */; };
-		D4A5A2310F40D48300FFF378 /* BitmapUtilsTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A22E0F40D48300FFF378 /* BitmapUtilsTouch.mm */; };
+		D4A5A2310F40D48300FFF378 /* BitmapTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A22E0F40D48300FFF378 /* BitmapTouch.mm */; };
 		D4A5A3000F40D51B00FFF378 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A5A2FB0F40D51B00FFF378 /* CoreGraphics.framework */; };
 		D4A5A3010F40D51B00FFF378 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A5A2FC0F40D51B00FFF378 /* QuartzCore.framework */; };
 		D4A5A3020F40D51B00FFF378 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A5A2FD0F40D51B00FFF378 /* OpenGLES.framework */; };
@@ -228,13 +228,13 @@
 		D47BD3290BD78F7200ACF014 /* RubyGosu_wrap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RubyGosu_wrap.h; path = ../GosuImpl/RubyGosu_wrap.h; sourceTree = SOURCE_ROOT; };
 		D47BD32A0BD78F7200ACF014 /* RubyGosu.swg */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = RubyGosu.swg; path = ../GosuImpl/RubyGosu.swg; sourceTree = SOURCE_ROOT; };
 		D499E6380D06B51300BA6DEC /* DrawOp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DrawOp.hpp; sourceTree = "<group>"; };
-		D4A5A1F40F40D28600FFF378 /* libgosutouch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgosutouch.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4A5A1F40F40D28600FFF378 /* libgosutouch-sim.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libgosutouch-sim.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4A5A2200F40D45200FFF378 /* InputTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = InputTouch.mm; path = ../GosuImpl/InputTouch.mm; sourceTree = SOURCE_ROOT; };
 		D4A5A2210F40D45200FFF378 /* WindowTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = WindowTouch.mm; path = ../GosuImpl/WindowTouch.mm; sourceTree = SOURCE_ROOT; };
 		D4A5A2220F40D45200FFF378 /* UtilityTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = UtilityTouch.mm; path = ../GosuImpl/UtilityTouch.mm; sourceTree = SOURCE_ROOT; };
 		D4A5A22C0F40D48300FFF378 /* GosuView.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GosuView.hpp; sourceTree = "<group>"; };
 		D4A5A22D0F40D48300FFF378 /* GosuView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GosuView.mm; sourceTree = "<group>"; };
-		D4A5A22E0F40D48300FFF378 /* BitmapUtilsTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BitmapUtilsTouch.mm; sourceTree = "<group>"; };
+		D4A5A22E0F40D48300FFF378 /* BitmapTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BitmapTouch.mm; sourceTree = "<group>"; };
 		D4A5A2FB0F40D51B00FFF378 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		D4A5A2FC0F40D51B00FFF378 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		D4A5A2FD0F40D51B00FFF378 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -314,7 +314,7 @@
 				8D07F2C80486CC7A007CD1D0 /* Gosu.framework */,
 				D4CA89500BC68B5D00A431AC /* gosu.bundle */,
 				D459FF440BDCD23500E7F0D6 /* RubyGosu Deployment Template.app */,
-				D4A5A1F40F40D28600FFF378 /* libgosutouch.a */,
+				D4A5A1F40F40D28600FFF378 /* libgosutouch-sim.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -426,12 +426,12 @@
 			children = (
 				D4A5A22C0F40D48300FFF378 /* GosuView.hpp */,
 				D4A5A22D0F40D48300FFF378 /* GosuView.mm */,
-				D4A5A22E0F40D48300FFF378 /* BitmapUtilsTouch.mm */,
 				D410EAD40A801B00005C7067 /* Bitmap.cpp */,
 				D410EAD50A801B00005C7067 /* BitmapBMP.cpp */,
 				D410EAD60A801B00005C7067 /* BitmapColorKey.cpp */,
 				D410EAD70A801B00005C7067 /* BitmapPNG.cpp */,
 				D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */,
+				D4A5A22E0F40D48300FFF378 /* BitmapTouch.mm */,
 				D410EAD80A801B00005C7067 /* BlockAllocator.cpp */,
 				D410EAD90A801B00005C7067 /* BlockAllocator.hpp */,
 				D410EADA0A801B00005C7067 /* Color.cpp */,
@@ -592,7 +592,7 @@
 			);
 			name = "Gosu Touch";
 			productName = "Gosu Touch";
-			productReference = D4A5A1F40F40D28600FFF378 /* libgosutouch.a */;
+			productReference = D4A5A1F40F40D28600FFF378 /* libgosutouch-sim.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		D4CA894F0BC68B5D00A431AC /* RubyGosu Core */ = {
@@ -735,7 +735,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4A5A1FF0F40D2EA00FFF378 /* Bitmap.cpp in Sources */,
-				D4A5A2000F40D2EC00FFF378 /* BitmapBMP.cpp in Sources */,
 				D4A5A2010F40D2EC00FFF378 /* BitmapColorKey.cpp in Sources */,
 				D4A5A2030F40D2F500FFF378 /* BitmapUtils.cpp in Sources */,
 				D4A5A2040F40D2F700FFF378 /* BlockAllocator.cpp in Sources */,
@@ -755,11 +754,12 @@
 				D4A5A2240F40D45200FFF378 /* WindowTouch.mm in Sources */,
 				D4A5A2250F40D45200FFF378 /* UtilityTouch.mm in Sources */,
 				D4A5A2300F40D48300FFF378 /* GosuView.mm in Sources */,
-				D4A5A2310F40D48300FFF378 /* BitmapUtilsTouch.mm in Sources */,
+				D4A5A2310F40D48300FFF378 /* BitmapTouch.mm in Sources */,
 				D42762510F4E216500C9B0A5 /* Font.cpp in Sources */,
 				D42762AB0F4E267500C9B0A5 /* DirectoriesTouch.mm in Sources */,
 				D4032B7D0F5035A900A20790 /* TextTouch.mm in Sources */,
 				D42D02400F7068C500407E60 /* AudioOpenAL.mm in Sources */,
+				D48810BD0F7C0E3000602C04 /* BitmapBMP.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
