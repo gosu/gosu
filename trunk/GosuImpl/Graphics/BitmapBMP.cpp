@@ -72,6 +72,7 @@ Gosu::Reader Gosu::loadFromBMP(Bitmap& bmp, Reader reader)
     if (infoHeaderSize != 12 && infoHeaderSize != 40)
         throw std::runtime_error("Unsupported BMP header");
     bool isOs2Bitmap = infoHeaderSize == 12;
+    bool isTopDown = false;
     
     unsigned width, height, bitCount, clrUsed;
     if (isOs2Bitmap)
@@ -86,6 +87,11 @@ Gosu::Reader Gosu::loadFromBMP(Bitmap& bmp, Reader reader)
     {
         width = readVal<32>(reader);
         height = readVal<32>(reader);
+        if (static_cast<int>(height) < 0)
+        {
+            isTopDown = true;
+            height = -static_cast<int>(height);
+        }
         readVal<16>(reader); // planes
         bitCount = readVal<16>(reader);
         readVal<32>(reader); // compression
@@ -131,6 +137,10 @@ Gosu::Reader Gosu::loadFromBMP(Bitmap& bmp, Reader reader)
         case 24: pixelBytesPerRow = width * 3;
     }
     unsigned fillBytes = (4 - (pixelBytesPerRow % 4)) % 4;
+
+    int begin = isTopDown ?      0 : height - 1;
+    int end = isTopDown   ? height : -1;
+    int step = isTopDown  ?     +1 : -1;
     
     if (bitCount == 24)
     {
@@ -139,7 +149,7 @@ Gosu::Reader Gosu::loadFromBMP(Bitmap& bmp, Reader reader)
         std::vector<boost::uint8_t> buf(height * (pixelBytesPerRow + fillBytes));
         boost::uint8_t* ptr = &buf[0];
         reader.read(ptr, buf.size());
-        for (int y = height - 1; y >= 0; --y)
+        for (int y = begin; y != end; y += step)
         {
             for (unsigned x = 0; x < width; ++x)
             {
@@ -154,13 +164,13 @@ Gosu::Reader Gosu::loadFromBMP(Bitmap& bmp, Reader reader)
         }
     }
     else
-    for (int y = height - 1; y >= 0; --y)
-    {
-        for (unsigned x = 0; x < width; x += xOffset)
-            decodePart(bitCount, bmp, reader, x, y, colors);
-        
-        reader.seek(fillBytes);
-    }
+        for (int y = begin; y != end; y += step)
+        {
+            for (unsigned x = 0; x < width; x += xOffset)
+                decodePart(bitCount, bmp, reader, x, y, colors);
+            
+            reader.seek(fillBytes);
+        }
     
     return reader;
 }

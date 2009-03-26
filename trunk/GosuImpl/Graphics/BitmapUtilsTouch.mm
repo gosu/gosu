@@ -17,7 +17,7 @@ Gosu::Bitmap Gosu::quickLoadBitmap(const std::wstring& filename)
         applyColorKey(result, 0xffff00ff);
         return result;
     }
-
+    
     // First create a UIImage object from the data in a image file, and then extract the Core Graphics image
     std::string utf8Filename = wstringToUTF8(filename);
     CGImageRef image = [UIImage imageWithContentsOfFile: [NSString stringWithUTF8String:utf8Filename.c_str()]].CGImage;
