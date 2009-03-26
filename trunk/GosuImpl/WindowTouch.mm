@@ -9,7 +9,7 @@
 #import <OpenGLES/EAGL.h>
 
 namespace Gosu {
-    CGRect screenRect = [[UIScreen mainScreen] bounds]];
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
     
     unsigned screenWidth()
     {
@@ -90,7 +90,7 @@ Gosu::Window::Window(unsigned width, unsigned height,
 	[pimpl->window.obj() addSubview: pimpl->view.obj()];
     
     pimpl->graphics.reset(new Graphics(320, 480, false));
-    pimpl->graphics.setResolution(480, 320);
+    pimpl->graphics->setResolution(480, 320);
     pimpl->audio.reset(new Audio());
     pimpl->input.reset(new Input());
     pimpl->interval = updateInterval;
