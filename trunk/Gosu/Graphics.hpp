@@ -12,6 +12,9 @@
 
 namespace Gosu
 {
+    unsigned screenWidth();
+    unsigned screenHeight();
+
     //! Flags that affect the softness of a border.
     enum BorderFlags
     {
