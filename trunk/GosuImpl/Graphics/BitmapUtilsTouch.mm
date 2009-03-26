@@ -20,7 +20,7 @@ Gosu::Bitmap Gosu::quickLoadBitmap(const std::wstring& filename)
 
     // First create a UIImage object from the data in a image file, and then extract the Core Graphics image
     std::string utf8Filename = wstringToUTF8(filename);
-    CGImageRef image = [UIImage imageNamed: [NSString stringWithUTF8String:utf8Filename.c_str()]].CGImage;
+    CGImageRef image = [UIImage imageWithContentsOfFile: [NSString stringWithUTF8String:utf8Filename.c_str()]].CGImage;
     if (!image)
         throw std::runtime_error("Could not load image " + utf8Filename);
     
