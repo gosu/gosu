@@ -2,6 +2,7 @@
 #labels Featured
 
 =0.7.13 (WIP)=
+  * 2009-03-26: All: Fixed loading top-down BMP files (seem to be rare? :) )
   * 2009-03-09: All: Made Gosu::createText/Image.from_text more compatible with Chinese and Japanese scripts (wrt line breaks)
   * 2009-03-08: All: Reintroduced optimization that square, power-of-two, hard-bordered images are always allocated on a texture of their own
   * 2009-02-10: Ruby: Upgraded to SWIG 1.3.37 (better error messages, probably some fixes in corner cases)
