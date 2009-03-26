@@ -8,6 +8,20 @@
 #import <UIKit/UIKit.h>
 #import <OpenGLES/EAGL.h>
 
+namespace Gosu {
+    CGRect screenRect = [[UIScreen mainScreen] bounds]];
+    
+    unsigned screenWidth()
+    {
+        return screenRect.size.width;
+    }
+    
+    unsigned screenHeight()
+    {
+        return screenRect.size.height;
+    }
+}
+
 int main(int argc, char *argv[]) {
     Gosu::ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]);
 	return UIApplicationMain(argc, argv, nil, @"GosuAppDelegate");

@@ -12,6 +12,20 @@
 #import <boost/bind.hpp>
 #import <vector>
 
+namespace Gosu {
+    NSRect screenRect = [[[NSScreen screens] objectAtIndex: 0] frame];
+    
+    unsigned screenWidth()
+    {
+        return screenRect.size.width;
+    }
+    
+    unsigned screenHeight()
+    {
+        return screenRect.size.height;
+    }
+}
+
 // Workaround for Apple NSScreen bug :(
 @interface NSScreen (NSScreenAccess)
 - (void) setFrame:(NSRect)frame;

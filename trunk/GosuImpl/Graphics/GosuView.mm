@@ -7,20 +7,6 @@
 
 Gosu::Window& windowInstance();
 
-namespace Gosu {
-    CGRect screenRect = [[UIScreen mainScreen] bounds]];
-    
-    unsigned screenWidth()
-    {
-        return screenRect.size.width;
-    }
-    
-    unsigned screenHeight()
-    {
-        return screenRect.size.height;
-    }
-}
-
 namespace {
     Gosu::Touches translateTouches(NSSet* touches, UIView* view)
     {

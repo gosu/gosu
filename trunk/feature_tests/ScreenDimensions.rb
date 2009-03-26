@@ -1,0 +1,13 @@
+require '../lib/gosu'
+
+class Test < Gosu::Window
+  def initialize 
+    super(Gosu::screen_width * 9 / 10, Gosu::screen_height * 9 / 10, false)
+  end
+
+  def button_down(id)
+    close if id == Gosu::KbEscape
+  end
+end
+
+Test.new.show
