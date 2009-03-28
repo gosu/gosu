@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-03-27)
+(Last update: 2009-03-29)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics/iPhone and OpenAL release
@@ -34,6 +34,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Think: Should the initial order of draw() and update() be the same on all platforms? If so, which order would be correct?
     * Display the prerequisites at the start of extconf.rb on Linux
     * Post http://github.com/joakimk/caribbean-onslaught/tree/master before it gets lost?
+    * Update wiki page on how to best install boost on OS X
     * Consider if I can allow both vertex orders (OGL/D3D) in draw_quad
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
     * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
