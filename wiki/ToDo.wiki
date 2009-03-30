@@ -4,10 +4,11 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-03-29)
+(Last update: 2009-03-30)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics/iPhone and OpenAL release
+    * Look into RubyReference OpenGL bug?!
     * iPhone-related stuff that would be nice to finish during this release
       * Finish OpenAL port of Gosu::Audio (Ogg Songs)
       * Fix "too many fingers" bug on iPhone
