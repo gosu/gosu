@@ -18,12 +18,12 @@ namespace Gosu
 {
     unsigned screenWidth()
     {
-        return 0; // TODO
+        return GetSystemMetrics(SM_CXSCREEN);
     }
     
     unsigned screenHeight()
     {
-        return 0; // TODO
+        return GetSystemMetrics(SM_CYSCREEN);
     }
 
     namespace
