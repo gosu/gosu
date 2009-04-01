@@ -68,7 +68,7 @@ boost::optional<Gosu::BlockAllocator::Block>
     if (aWidth > width() || aHeight > height())
         return boost::optional<Block>();
 
-    // It could theoretically fit, but there's no space left.
+    // We know there's no space left.
     if (aWidth > pimpl->maxW && aHeight > pimpl->maxH)
         return boost::optional<Block>();
     
@@ -78,6 +78,12 @@ boost::optional<Gosu::BlockAllocator::Block>
     if (pimpl->isBlockFree(b))
     {
         pimpl->blocks.push_back(b);
+        pimpl->firstX += aWidth;
+        if (pimpl->firstX + aWidth >= width())
+        {
+            pimpl->firstX = 0;
+            pimpl->firstY += aHeight;
+        }
         return b;
     }
 
@@ -97,6 +103,14 @@ boost::optional<Gosu::BlockAllocator::Block>
                 --y;
             while (x > 0 && pimpl->isBlockFree(Block(x - 1, y, aWidth, aHeight)))
                 --x;
+            
+            pimpl->firstX = x + aWidth;
+            pimpl->firstY = y;
+            if (pimpl->firstX + aWidth >= width())
+            {
+                pimpl->firstX = 0;
+                pimpl->firstY += aHeight;
+            }
 
             pimpl->blocks.push_back(b);
             return b;

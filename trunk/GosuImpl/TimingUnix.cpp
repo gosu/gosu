@@ -13,5 +13,5 @@ unsigned long Gosu::milliseconds()
 {
 	timeval tp;
 	gettimeofday(&tp, NULL);
-	return Gosu::trunc(tp.tv_usec / 1000 + tp.tv_sec * 1000);
+	return tp.tv_usec / 1000 + tp.tv_sec * 1000;
 }
