@@ -4,20 +4,18 @@
 
 = Installing Boost (required for using Gosu with C++ only) =
 
-[http://www.boost.org/ Boost] is a collection of libraries that is used throughout Gosu. Many parts of Boost have been marked for inclusion in the next standard of C++, so it's really worth a look!
+[http://www.boost.org/ Boost] is a collection of libraries that is used throughout Gosu. Many parts of Boost have been marked for inclusion in the next standard of C++, so it's definitely worth a look a its docs.
 
-Download and extract the latest Boost release. Open Terminal, 'cd' into to that directory and run:
+*If you are using MacPorts*, you can, in theory, simply run `sudo port install boost`. In practice however, MacPorts' version of Boost is usually broken and/or outdated.
 
+For most tasks, the headers of the boost library will be enough, so the easiest way to install them would be:
 {{{
-    ./configure
-    make
-    sudo make install
-    sudo ln -s /usr/local/include/boost-1_38/boost /usr/include/boost
+svn co http://svn.boost.org/svn/boost/trunk/boost boost
+sudo mv boost /usr/local/include
 }}}
   
 (Replace "1_38" with boost's current version.)
 
-*If you are using MacPorts*, you can, in theory, simply run `sudo port install boost`. In practice however, MacPorts' version of Boost is usually broken and/or outdated.
 
 = Starting a new Gosu game (C++) =
 
