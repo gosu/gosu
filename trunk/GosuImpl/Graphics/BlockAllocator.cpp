@@ -10,6 +10,17 @@ struct Gosu::BlockAllocator::Impl
     Blocks blocks;
     unsigned firstX, firstY;
     unsigned maxW, maxH;
+    
+    void markBlockUsed(const Block& block, unsigned aWidth, unsigned aHeight)
+    {
+        firstX += aWidth;
+        if (firstX + aWidth >= width)
+        {
+            firstX = 0;
+            firstY += aHeight;
+        }
+        blocks.push_back(block);
+    }
 
     bool isBlockFree(const Block& block) const
     {
@@ -77,13 +88,7 @@ boost::optional<Gosu::BlockAllocator::Block>
     Block b = Block(pimpl->firstX, pimpl->firstY, aWidth, aHeight);
     if (pimpl->isBlockFree(b))
     {
-        pimpl->blocks.push_back(b);
-        pimpl->firstX += aWidth;
-        if (pimpl->firstX + aWidth >= width())
-        {
-            pimpl->firstX = 0;
-            pimpl->firstY += aHeight;
-        }
+        pimpl->markBlockUsed(b, aWidth, aHeight);
         return b;
     }
 
@@ -104,15 +109,7 @@ boost::optional<Gosu::BlockAllocator::Block>
             while (x > 0 && pimpl->isBlockFree(Block(x - 1, y, aWidth, aHeight)))
                 --x;
             
-            pimpl->firstX = x + aWidth;
-            pimpl->firstY = y;
-            if (pimpl->firstX + aWidth >= width())
-            {
-                pimpl->firstX = 0;
-                pimpl->firstY += aHeight;
-            }
-
-            pimpl->blocks.push_back(b);
+            pimpl->markBlockUsed(b, aWidth, aHeight);
             return b;
         }
 

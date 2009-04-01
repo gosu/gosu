@@ -1,7 +1,5 @@
 #include <Gosu/Timing.hpp>
-#include <Gosu/Math.hpp>
 #include <unistd.h>
-#include <time.h>
 #include <sys/time.h>
 
 void Gosu::sleep(unsigned milliseconds)
