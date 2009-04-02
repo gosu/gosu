@@ -2,6 +2,8 @@
 #labels Featured
 
 =0.7.13 (WIP)=
+  * 2009-04-01: All: Reinstalled Image allocation optimization
+  * 2009-04-01: All: Fixed PNG writing (alpha channel)
   * 2009-03-26: All: Fixed loading top-down BMP files (seem to be rare? :) )
   * 2009-03-09: All: Made Gosu::createText/Image.from_text more compatible with Chinese and Japanese scripts (wrt line breaks)
   * 2009-03-08: All: Reintroduced optimization that square, power-of-two, hard-bordered images are always allocated on a texture of their own
