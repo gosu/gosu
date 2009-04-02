@@ -328,8 +328,8 @@ void Gosu::Window::setCaption(const std::wstring& caption)
     // This truncates the values... why on earth does a compiler use 32bit wchar_ts
     // on an UTF16 based system?
     std::vector<unichar> unibuf(caption.begin(), caption.end());
-    [pimpl->window.obj() setTitle:
-        [NSString stringWithCharacters: &unibuf[0] length: unibuf.size()]];
+    ObjRef<NSString> title([[NSString alloc] initWithCharacters: &unibuf[0] length: unibuf.size()]);
+    [pimpl->window.obj() setTitle: title.obj()];
 }
 
 double Gosu::Window::updateInterval() const

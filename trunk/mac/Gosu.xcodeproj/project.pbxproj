@@ -187,7 +187,7 @@
 		D410EA1C0A8019FA005C7067 /* Math.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = Math.cpp; path = ../GosuImpl/Math.cpp; sourceTree = SOURCE_ROOT; };
 		D410EA2E0A8019FA005C7067 /* TimingUnix.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = TimingUnix.cpp; path = ../GosuImpl/TimingUnix.cpp; sourceTree = SOURCE_ROOT; };
 		D410EA300A8019FA005C7067 /* Utility.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = Utility.cpp; path = ../GosuImpl/Utility.cpp; sourceTree = SOURCE_ROOT; };
-		D410EA310A8019FA005C7067 /* WindowMac.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = WindowMac.mm; path = ../GosuImpl/WindowMac.mm; sourceTree = SOURCE_ROOT; };
+		D410EA310A8019FA005C7067 /* WindowMac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = WindowMac.mm; path = ../GosuImpl/WindowMac.mm; sourceTree = SOURCE_ROOT; };
 		D410EAD40A801B00005C7067 /* Bitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Bitmap.cpp; sourceTree = "<group>"; };
 		D410EAD50A801B00005C7067 /* BitmapBMP.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapBMP.cpp; sourceTree = "<group>"; };
 		D410EAD60A801B00005C7067 /* BitmapColorKey.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapColorKey.cpp; sourceTree = "<group>"; };
