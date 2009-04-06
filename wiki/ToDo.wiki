@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-04-04)
+(Last update: 2009-04-06)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics/iPhone and OpenAL release
@@ -57,17 +57,17 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * (1x mymüsli for all the hard work! (motivation!)
   * 0.7.13.37, Mac/Windows gem-rerelease with support for 1.9
     * Compile Ruby 1.9 on Intel (Mac)
-    * Compile Ruby 1.9 on PPC (Mac)
-    * Set RG Deployment Template to use 1.9
-    * Look into Ruby 1.9 on Windows
+    * Set RG Deployment Template to use 1.9 and full gosu
+    * Compile Ruby 1.9 on PPC (Mac) and lipo'fy ruby1.9-static.a
     * Document support for Ruby 1.9
-    * Package OR&G with optimized Gosu
+    * Package OR&G with optimized Gosu (weee)
+    * Look into Ruby 1.9 on Windows
   * 0.7.14, text quality release (+Linux gamepad!)
     * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
     * Linux: Support Unicode in title bar
     * Linux: Support other XKeySyms than Latin 1
     * Mac: Add dead keys to TextInput
-    * Mac: Make createText use ATSUI/Core Text
+    * Mac: Make createText use Core Text
     * Windows: Make createText use Uniscribe
     * Linux: Make createText use Pango/Freetype2
     * Make RTL work without RTL/LTR markers?!
@@ -109,6 +109,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Introduce 0.8 syntax
     * Make sure Images can live without a Window (context!)
     * Add Image::Image *and set hardBorders to true on default*
+  * Think: Possible to have beautiful quotation mark indenting?@Gosu Text
 == Gosu CI/Usability ==
   * Add some first eye catchers to front page
   * See if I can bundle the most important feeds together with FeedBurner or so
