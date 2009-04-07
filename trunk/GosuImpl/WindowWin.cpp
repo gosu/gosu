@@ -105,8 +105,8 @@ namespace Gosu
         void setupVSync()
         {
             char* extensions = (char*)glGetString(GL_EXTENSIONS);
-			// The Intel drivers will actually have a proc address for wglSwapInterval that
-			// doesn't do much, so the string instead of just getting the address.
+			// The Intel BootCamp drivers will actually have a proc address for wglSwapInterval
+            // that doesn't do much, so check the string instead of just getting the address.
             if (!strstr(extensions, "WGL_EXT_swap_control"))
                 return;
             typedef void (APIENTRY *PFNWGLEXTSWAPCONTROLPROC) (int);
@@ -146,7 +146,7 @@ namespace Gosu
             wc.hInstance = Win::instance();
             wc.hIcon = 0;
             wc.hCursor = 0;
-            wc.hbrBackground = 0;
+            wc.hbrBackground = ::CreateSolidBrush(0);//0;
             wc.lpszMenuName = 0;
             
             name = reinterpret_cast<LPCTSTR>(::RegisterClass(&wc));
@@ -302,6 +302,7 @@ void Gosu::Window::show()
     if (pimpl->graphics->fullscreen())
         setVideoMode(findClosestVideoMode(&w, &h, &bpp, &rr));
     ShowWindow(handle(), SW_SHOW);
+    UpdateWindow(handle());
     try
     {
         Win::processMessages();
@@ -327,12 +328,17 @@ void Gosu::Window::show()
 				lastTick = ms;
 				input().update();
 			    update();
-				::InvalidateRect(handle(), 0, FALSE);
+                if (!lastFrameSkipped && ms - lastTick >= static_cast<unsigned>(pimpl->updateInterval * 2))
+                    lastFrameSkipped = true;
+                else
+                {
+    				::InvalidateRect(handle(), 0, FALSE);
+    				lastFrameSkipped = false;
+                }
 				// There probably should be a proper "oncePerTick" handler
 				// system in the future. Right now, this is necessary to give
 				// timeslices to Ruby's green threads in Ruby/Gosu.
 		        if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
-				lastFrameSkipped = false;
 			} else if (pimpl->updateInterval - (ms - lastTick) > 5)
 				// More than 5 ms left until next update: Sleep to reduce
 				// processur usage, Sleep() is accurate enough for that.
