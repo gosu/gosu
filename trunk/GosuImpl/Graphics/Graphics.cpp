@@ -241,6 +241,8 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
     double x4, double y4, Color c4,
     ZPos z, AlphaMode mode)
 {
+    reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, x4, y4);
+
     DrawOp op;
 
     x1 *= factorX();

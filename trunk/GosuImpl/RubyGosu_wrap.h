@@ -23,6 +23,7 @@ public:
     virtual ~SwigDirector_Window();
     virtual void update();
     virtual void draw();
+    virtual bool needsRedraw() const;
     virtual void buttonDown(Gosu::Button arg0);
     virtual void buttonUp(Gosu::Button arg0);
 };

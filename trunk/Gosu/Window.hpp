@@ -50,7 +50,12 @@ namespace Gosu
         //! Called after every update and when the OS wants the window to
         //! repaint itself. Your application's rendering code goes here.
         virtual void draw() {}
-
+        
+        //! Gives the game a chance to say no to being redrawn.
+        //! This is not a definitive answer. The operating system can still cause
+        //! redraws for one reason or another.
+        virtual bool needsRedraw() const { return true; }
+        
         //! Called before update when the user pressed a button while the
         //! window had the focus.
         virtual void buttonDown(Gosu::Button) {}

@@ -1,4 +1,5 @@
 #include <GosuImpl/Graphics/LargeImageData.hpp>
+#include <GosuImpl/Graphics/Common.hpp>
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Math.hpp>
@@ -84,6 +85,8 @@ void Gosu::LargeImageData::draw(double x1, double y1, Color c1,
     if (parts.empty())
         return;
 
+    reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, x4, y4);
+    
     for (unsigned py = 0; py < partsY; ++py)
         for (unsigned px = 0; px < partsX; ++px)
         {

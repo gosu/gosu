@@ -205,7 +205,7 @@ namespace Gosu
                 op.clipWidth = clipWidth;
                 op.clipHeight = clipHeight;
             }
-
+            
             if (z == zImmediate)
             {
             #ifdef GOSU_IS_IPHONE

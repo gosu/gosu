@@ -3,7 +3,6 @@
 #import <Gosu/Graphics.hpp>
 #import <Gosu/Input.hpp>
 #import <GosuImpl/MacUtility.hpp>
-#import <GosuImpl/WindowFrameManager.hpp>
 #import <Gosu/Timing.hpp>
 #import <Gosu/Utility.hpp>
 #import <AppKit/AppKit.h>
@@ -187,7 +186,6 @@ struct Gosu::Window::Impl
     boost::scoped_ptr<Audio> audio;
     boost::scoped_ptr<Input> input;
     double interval;
-    FrameManager frameManager;
     bool mouseViz;
     
     void createWindow(unsigned width, unsigned height)
@@ -362,7 +360,6 @@ void Gosu::Window::show()
     NSTimer* timer = [NSTimer scheduledTimerWithTimeInterval: pimpl->interval / 1000.0
                             target:pimpl->forwarder.obj() selector:@selector(doTick:)
                             userInfo:nil repeats:YES];
-    pimpl->frameManager.start(updateInterval());
     update();
     [NSApp run];
     [timer invalidate];
@@ -499,7 +496,7 @@ void Gosu::Window::Impl::doTick(Window& window)
         }
     }
     
-    if (window.pimpl->frameManager.shouldDrawFrameStartingNow() and
+    if (window.needsRedraw() and
         window.graphics().begin())
     {
         window.draw();
@@ -511,6 +508,4 @@ void Gosu::Window::Impl::doTick(Window& window)
     window.update();
     
     if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
-    
-    window.pimpl->frameManager.frameEnded();
 }

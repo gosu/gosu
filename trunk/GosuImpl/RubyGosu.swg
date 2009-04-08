@@ -431,6 +431,7 @@ namespace Gosu
 %rename("text_input=") setTextInput;
 %rename("mouse_x=") setMouseX;
 %rename("mouse_y=") setMouseY;
+%rename("needs_redraw?") needsRedraw;
 %markfunc Gosu::Window "markWindow";
 %include "../Gosu/Window.hpp"
 
