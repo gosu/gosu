@@ -3,7 +3,9 @@
 #import <Gosu/Graphics.hpp>
 #import <Gosu/Input.hpp>
 #import <GosuImpl/MacUtility.hpp>
+#import <GosuImpl/WindowFrameManager.hpp>
 #import <Gosu/Timing.hpp>
+#import <Gosu/Utility.hpp>
 #import <AppKit/AppKit.h>
 #import <ApplicationServices/ApplicationServices.h>
 #import <Carbon/Carbon.h>
@@ -185,6 +187,7 @@ struct Gosu::Window::Impl
     boost::scoped_ptr<Audio> audio;
     boost::scoped_ptr<Input> input;
     double interval;
+    FrameManager frameManager;
     bool mouseViz;
     
     void createWindow(unsigned width, unsigned height)
@@ -196,7 +199,7 @@ struct Gosu::Window::Impl
         [window.obj() retain]; // ...or is it autorelease?
         
         [window.obj() setContentView: [[GosuView alloc] init]];
-
+        
         [window.obj() center];
         [window.obj() makeKeyAndOrderFront:nil];
     }
@@ -240,10 +243,10 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     
     // Create pixel format and OpenGL context
     ObjRef<NSOpenGLPixelFormat> fmt([[NSOpenGLPixelFormat alloc] initWithAttributes:attrs]);
-    if (!fmt.get())
+    if (not fmt.get())
         throw std::runtime_error("Could not find a suitable OpenGL pixel format");
     pimpl->context.reset([[NSOpenGLContext alloc] initWithFormat: fmt.obj() shareContext:nil]);
-    if (!pimpl->context.get())
+    if (not pimpl->context.get())
         throw std::runtime_error("Unable to create an OpenGL context with the supplied pixel format");
     
     if (fullscreen) {
@@ -288,7 +291,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     
     pimpl->forwarder.reset([[GosuForwarder alloc] initWithWindow: this withProc: &Impl::doTick]);
     
-    if (!fullscreen)
+    if (not fullscreen)
     {
         [pimpl->window.obj() setDelegate: pimpl->forwarder.obj()];
         [pimpl->window.obj() setInput: pimpl->input.get()];
@@ -311,24 +314,19 @@ Gosu::Window::~Window()
 
 std::wstring Gosu::Window::caption() const
 {
-    if (!pimpl->window.get())
+    if (not pimpl->window.get())
         return L"";
     
-    NSString* str = [pimpl->window.obj() title];
-    std::vector<unichar> unibuf([str length]);
-    [str getCharacters: &unibuf[0]];
-    return std::wstring(unibuf.begin(), unibuf.end());
+    return Gosu::utf8ToWstring([[pimpl->window.obj() title] UTF8String]);
 }
 
 void Gosu::Window::setCaption(const std::wstring& caption)
 {
-    if (!pimpl->window.get())
+    if (not pimpl->window.get())
         return;
     
-    // This truncates the values... why on earth does a compiler use 32bit wchar_ts
-    // on an UTF16 based system?
-    std::vector<unichar> unibuf(caption.begin(), caption.end());
-    ObjRef<NSString> title([[NSString alloc] initWithCharacters: &unibuf[0] length: unibuf.size()]);
+    std::string utf8 = wstringToUTF8(caption);
+    ObjRef<NSString> title([[NSString alloc] initWithUTF8String: utf8.c_str()]);
     [pimpl->window.obj() setTitle: title.obj()];
 }
 
@@ -364,6 +362,8 @@ void Gosu::Window::show()
     NSTimer* timer = [NSTimer scheduledTimerWithTimeInterval: pimpl->interval / 1000.0
                             target:pimpl->forwarder.obj() selector:@selector(doTick:)
                             userInfo:nil repeats:YES];
+    pimpl->frameManager.start(updateInterval());
+    update();
     [NSApp run];
     [timer invalidate];
     
@@ -493,20 +493,24 @@ void Gosu::Window::Impl::doTick(Window& window)
         }
         else
         {
-            if (!window.pimpl->mouseViz)
+            if (not window.pimpl->mouseViz)
                 [NSCursor unhide];
             window.pimpl->mouseViz = true;
         }
     }
     
-    window.input().update();
-    window.update();
-    if (window.graphics().begin())
+    if (window.pimpl->frameManager.shouldDrawFrameStartingNow() and
+        window.graphics().begin())
     {
         window.draw();
         window.graphics().end();
         [window.pimpl->context.obj() flushBuffer];
     }
     
+    window.input().update();
+    window.update();
+    
     if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
+    
+    window.pimpl->frameManager.frameEnded();
 }
