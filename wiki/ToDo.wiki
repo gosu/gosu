@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-04-08)
+(Last update: 2009-04-09)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics/iPhone and OpenAL release
@@ -28,11 +28,11 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Think: What would be the costs of being able to delete images while they are still referenced? Mergable with macros?
     * Display the prerequisites at the start of extconf.rb on Linux
     * Post http://github.com/joakimk/caribbean-onslaught/tree/master before it gets lost?
-    * Consider if I can allow both vertex orders (OGL/D3D) in draw_quad
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
     * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
     * OS X: Release all keys on battery notification dialog (?)
-    * Make even the mouse wheel consistently send buttonUp events on all platforms
+    * Make even the mouse wheel consistently send buttonUp events on Linux
+    * Make even the mouse wheel consistently send buttonUp events on Windows
     * Finish the RMagick bundling thing
       * Try to build RMagick.bundle against the 10.4 SDK
       * Link the all-in-one-bundle from the boards: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
@@ -43,14 +43,17 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Get rid of context selection error with driver set to always do FSAA (Windows)
     * Timing Tuning
       * Look for update_interval rounding errors on Linux
-      * Fix frameskip on OS X
-      * Fix frameskip on Windows
-      * Implement/verify frameskip on Linux
+      * Undo frameskip on Windows
     * Move three threads from GosuExchange to the forums
     * See what can be done to fix the window icon on Windows
+    * Respect Window#needs_redraw? on iPhone
+    * Respect Window#needs_redraw? on Windows
+    * Respect Window#needs_redraw? on Linux
+    * Build diagram explaining the Window's loop
     * Release 0.7.13
     * Document Window#update_interval
-    * Document frameskipping and update/draw logic
+    * Document main loop and Window#needsRedraw
+    * Document corner order tolerance
   * More alpha modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
   * Benchmark clip_to
   * (1x mymüsli for all the hard work! (motivation!)
@@ -109,10 +112,11 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Make sure Images can live without a Window (context!)
     * Add Image::Image *and set hardBorders to true on default*
   * Think: Possible to have beautiful quotation mark indenting?@Gosu Text
+  * See if other libraries catch the release of the 'A' key in cmd+a
 == Gosu CI/Usability ==
   * Add some first eye catchers to front page
   * See if I can bundle the most important feeds together with FeedBurner or so
-  * Waiting for SDL_mixer as std library …
+  * Wait for Version 0.7.13
   * Add "What now?" link list to front page
   * Adjust sample games
   * See if doxygen can also use Ruby input
@@ -120,7 +124,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Automatically upload doxygen output
   * Make Ruby reference available online, automatically
   * Link YouTube videos, and maybe blog tags like http://www.cuberick.com/search/label/gosu?
-  * Gosu.gstencil?
   * Change sender address of forum mailer
   * Make logo in forum clickable
 == Gosu 0.8.x (preliminary) ==
