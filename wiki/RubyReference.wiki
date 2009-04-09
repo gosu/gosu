@@ -45,7 +45,7 @@
   * `draw_as_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode=:default)`: Like Window#draw_quad, but with this texture instead of a solid color. Can be used to implement advanced, non-rectangular drawing techniques.
   * `self.from_text(window, text, font_name, font_height)`: Creates a line of text. font_name can either be the name of a system font, or a filename (must contain '/').
   * `self.from_text(window, text, font_name, font_height, line_spacing, max_width, align)`: Creates a block of text of width max_width. Each line will take font_height + line_spacing pixels of vertical space.`: align must be one of :left, :right, :center oder :justify. : font_name can either be the name of a system font, or a filename (must contain '/', does not work on Linux yet).
-  * `self.load_tiles(window, filename_or_rmagick_image, tile_width, tile_height, hard_borders)`: tile_width is either the width of one tile in pixels or the number of columns, tile_height is its vertical equivalent
+  * `self.load_tiles(window, filename_or_rmagick_image, tile_width, tile_height, hard_borders)`: tile_width can either be the width of one tile in pixels or the number of columns multiplied by -1. tile_height is its vertical equivalent
   * `gl_tex_info`: See examples/OpenGLIntegration.rb.
 
 == class Gosu::Sample ==
