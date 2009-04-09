@@ -502,14 +502,14 @@ struct Gosu::Input::Impl
 
     void updateMods(unsigned newMods)
     {
-        const unsigned ids[8] = { kbLeftShift, kbLeftControl,
-                                  kbLeftAlt, kbLeftMeta,
-                                  kbRightShift, kbRightControl,
-                                  kbRightAlt, kbRightMeta };
-        const unsigned bits[8] = { NX_DEVICELSHIFTKEYMASK, NX_DEVICELCTLKEYMASK,
-                                   NX_DEVICELALTKEYMASK, NX_DEVICELCMDKEYMASK,
-                                   NX_DEVICERSHIFTKEYMASK, NX_DEVICERCTLKEYMASK,
-                                   NX_DEVICERALTKEYMASK, NX_DEVICERCMDKEYMASK };
+        static const unsigned ids[8] = { kbLeftShift, kbLeftControl,
+                                         kbLeftAlt, kbLeftMeta,
+                                         kbRightShift, kbRightControl,
+                                         kbRightAlt, kbRightMeta };
+        static const unsigned bits[8] = { NX_DEVICELSHIFTKEYMASK, NX_DEVICELCTLKEYMASK,
+                                          NX_DEVICELALTKEYMASK, NX_DEVICELCMDKEYMASK,
+                                          NX_DEVICERSHIFTKEYMASK, NX_DEVICERCTLKEYMASK,
+                                          NX_DEVICERALTKEYMASK, NX_DEVICERCMDKEYMASK };
     
         for (unsigned i = 0; i < 8; ++i)
             if ((currentMods & bits[i]) != (newMods & bits[i]))
@@ -547,6 +547,8 @@ Gosu::Input::~Input()
 
 bool Gosu::Input::feedNSEvent(void* event)
 {
+    puts("Event!");
+
     NSEvent* ev = (NSEvent*)event;
     unsigned type = [ev type];
 
@@ -560,7 +562,6 @@ bool Gosu::Input::feedNSEvent(void* event)
     unsigned mods = [ev modifierFlags];
     if (mods != pimpl->currentMods)
         pimpl->updateMods(mods);
-    
     
     // Handle mouse input.
     switch (type)

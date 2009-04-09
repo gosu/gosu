@@ -8,10 +8,12 @@ class Test < Gosu::Window
   
   def button_down id
     @downs += 1
+    puts "Button down: #{id}"
   end
   
   def button_up id
     @ups += 1
+    puts "Button up: #{id}"
   end
   
   def update
