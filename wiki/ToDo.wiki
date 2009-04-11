@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-04-09)
+(Last update: 2009-04-11)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics/iPhone and OpenAL release
@@ -13,6 +13,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Fix "too many fingers" bug on iPhone
       * Implement Proof of Concept for Macro Patches
       * Integrate "fat" iPhone building from forum
+      * Clear GOSU_IS_MAC vs. GOSU_IS_OSX
     * Screen size / fullscreen stuff
       * Iterate on first category of fullscreen tests
       * screen_resolution() function on Linux/X11
@@ -46,7 +47,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Undo frameskip on Windows
     * Move three threads from GosuExchange to the forums
     * See what can be done to fix the window icon on Windows
-    * Respect Window#needs_redraw? on iPhone
     * Respect Window#needs_redraw? on Windows
     * Respect Window#needs_redraw? on Linux
     * Build diagram explaining the Window's loop
