@@ -10,6 +10,8 @@
 
 Gosu::Reader Gosu::loadFromBMP(Bitmap& bmp, Reader reader)
 {
+    ObjRef<NSAutoreleasePool> pool([NSAutoreleasePool new]);
+
     std::size_t length = reader.resource().size() - reader.position();
     ObjRef<NSMutableData> buffer([[NSMutableData alloc] initWithLength: length]);
     reader.read([buffer.get() mutableBytes], length);
@@ -46,6 +48,8 @@ Gosu::Reader Gosu::loadFromPNG(Bitmap& bmp, Reader reader)
 
 Gosu::Writer Gosu::saveToPNG(const Bitmap& bmp, Writer writer)
 {
+    ObjRef<NSAutoreleasePool> pool([NSAutoreleasePool new]);
+
     CGDataProviderRef dataProvider =
         CGDataProviderCreateWithData(0, bmp.data(), bmp.width() * bmp.height() * 4, 0);
 
@@ -56,7 +60,7 @@ Gosu::Writer Gosu::saveToPNG(const Bitmap& bmp, Writer writer)
                       kCGImageAlphaFirst, dataProvider, 0, false, kCGRenderingIntentDefault);
 
     ObjRef<UIImage> image([[UIImage alloc] initWithCGImage: imageRef]);
-
+    
     NSData* pngRef = UIImagePNGRepresentation(image.get());
     writer.write([pngRef bytes], [pngRef length]);
     image.reset();

@@ -60,6 +60,9 @@ namespace {
 }
 
 - (void)drawView {
+    if (not windowInstance().needsRedraw())
+        return;
+    
     [EAGLContext setCurrentContext:context];
     glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
     glViewport(0, 0, backingWidth, backingHeight);

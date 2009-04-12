@@ -315,6 +315,7 @@ std::wstring Gosu::Window::caption() const
     if (not pimpl->window.get())
         return L"";
     
+    ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]);
     return Gosu::utf8ToWstring([[pimpl->window.obj() title] UTF8String]);
 }
 

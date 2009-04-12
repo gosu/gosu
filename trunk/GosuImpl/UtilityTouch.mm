@@ -31,6 +31,7 @@ string Gosu::wstringToUTF8(const std::wstring& ws)
     ObjRef<NSString> str([[NSString alloc] initWithBytes: ws.data()
                                            length: ws.size() * sizeof(wchar_t)
                                            encoding:NSUTF32LittleEndianStringEncoding]);
+    ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]);
     return [str.obj() UTF8String];
 }
 wstring Gosu::widen(const string& s)

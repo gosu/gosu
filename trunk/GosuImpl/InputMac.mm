@@ -547,8 +547,6 @@ Gosu::Input::~Input()
 
 bool Gosu::Input::feedNSEvent(void* event)
 {
-    puts("Event!");
-
     NSEvent* ev = (NSEvent*)event;
     unsigned type = [ev type];
 
