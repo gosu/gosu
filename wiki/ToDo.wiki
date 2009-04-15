@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-04-14)
+(Last update: 2009-04-16)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics/iPhone and OpenAL release
@@ -15,6 +15,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Integrate "fat" iPhone building from forum
       * Clear up GOSU_IS_MAC vs. GOSU_IS_OSX
       * Use getBytes instead of UTF8String
+    * Make button_id_to_char and vice versa class methods
     * Screen size / fullscreen stuff
       * Iterate on first category of fullscreen tests
       * screen_resolution() function on Linux/X11
@@ -55,6 +56,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Document Window#update_interval
     * Document main loop and Window#needsRedraw
     * Document corner order tolerance
+    * Document button_id_to_char now being a class method
   * More alpha modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
   * Benchmark clip_to
   * (1x mymüsli for all the hard work! (motivation!)
