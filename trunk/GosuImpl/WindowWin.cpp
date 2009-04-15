@@ -144,7 +144,8 @@ namespace Gosu
             wc.cbClsExtra = 0;
             wc.cbWndExtra = 0;
             wc.hInstance = Win::instance();
-            wc.hIcon = 0;
+            wc.hIcon = ::ExtractIcon(wc.hInstance, Win::appFilename().c_str(), 0);
+            printf("Icon loaded: %d\n", wc.hIcon);
             wc.hCursor = 0;
             wc.hbrBackground = ::CreateSolidBrush(0);//0;
             wc.lpszMenuName = 0;
