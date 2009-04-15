@@ -309,7 +309,7 @@ void Gosu::Window::show()
 
 		unsigned lastTick = 0;
 
-		for (;;) 
+		for (;;)
 	    {
 			Win::processMessages();
 

@@ -147,6 +147,10 @@ struct Gosu::Input::Impl
 		DIDEVICEOBJECTDATA data[inputBufferSize];
 		DWORD inOut;
 		HRESULT hr;
+        
+        RECT rect;
+        ::GetClientRect(window, &rect);
+        bool ignoreClicks = mouseX < 0 || mouseX > rect.right || mouseY < 0 || mouseY > rect.bottom;
 
 		inOut = inputBufferSize;
 		hr = mouse->GetDeviceData(sizeof data[0], data, &inOut, 0);
@@ -158,25 +162,25 @@ struct Gosu::Input::Impl
 				// Everything's ok: Update buttons and fire events.
 				for (unsigned i = 0; i < inOut; ++i)
 				{
-					bool down = (data[i].dwData & 0x80) != 0;
+					bool down = (data[i].dwData & 0x80) != 0 && !ignoreClicks;
 	                    
 					switch (data[i].dwOfs)
 					{
 						case DIMOFS_BUTTON0:
 						{
 							unsigned id = swapMouse ? msRight : msLeft;
-							forceButton(id, down, collectEvents);
+							setButton(id, down, collectEvents);
 							break;
 						}
 						case DIMOFS_BUTTON1:
 						{
 							unsigned id = swapMouse ? msLeft : msRight;
-							forceButton(id, down, collectEvents);
+							setButton(id, down, collectEvents);
 							break;
 						}
 						case DIMOFS_BUTTON2:
 						{
-							forceButton(msMiddle, down, collectEvents);
+							setButton(msMiddle, down, collectEvents);
 							break;
 						}
 						case DIMOFS_Z:
@@ -210,6 +214,8 @@ struct Gosu::Input::Impl
 				break;
 			}
 		}
+        
+        keyboard:
 
 		inOut = inputBufferSize;
 		hr = keyboard->GetDeviceData(sizeof data[0], data, &inOut, 0);
