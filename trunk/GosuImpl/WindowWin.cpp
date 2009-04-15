@@ -308,7 +308,6 @@ void Gosu::Window::show()
         Win::processMessages();
 
 		unsigned lastTick = 0;
-		bool lastFrameSkipped = false;
 
 		for (;;) 
 	    {
@@ -328,18 +327,14 @@ void Gosu::Window::show()
 				lastTick = ms;
 				input().update();
 			    update();
-                if (!lastFrameSkipped && ms - lastTick >= static_cast<unsigned>(pimpl->updateInterval * 2))
-                    lastFrameSkipped = true;
-                else
-                {
-    				::InvalidateRect(handle(), 0, FALSE);
-    				lastFrameSkipped = false;
-                }
+                if (needsRedraw())
+      				::InvalidateRect(handle(), 0, FALSE);
 				// There probably should be a proper "oncePerTick" handler
 				// system in the future. Right now, this is necessary to give
 				// timeslices to Ruby's green threads in Ruby/Gosu.
 		        if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
-			} else if (pimpl->updateInterval - (ms - lastTick) > 5)
+			}
+            else if (pimpl->updateInterval - (ms - lastTick) > 5)
 				// More than 5 ms left until next update: Sleep to reduce
 				// processur usage, Sleep() is accurate enough for that.
 				Sleep(5);

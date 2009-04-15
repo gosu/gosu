@@ -191,6 +191,8 @@ struct Gosu::Input::Impl
 							else
 								event.id = msWheelUp;
 							events.push_back(event);
+                            event.action = EventInfo::buttonUp;
+                            events.push_back(event);
 							break;
 						}
 					}
