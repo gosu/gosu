@@ -2,8 +2,9 @@
 #labels Featured
 
 =0.7.13 (WIP)=
-  * 2009-04-16: Win: Spinning the mouse wheel generates buttonUp events right after the buttonDown events for symmetry (fix)
-  * 2009-04-16: Win: Gosu automatically uses the first icon in the game's executable (if present) as the window icon, thanks for the suggestion Tuiq!
+  * 2009-04-16: Ruby: button_id_to_char and char_to_button_id are also available as class methods of Window now (old version is inofficially deprecated now).
+  * 2009-04-15: Win: Spinning the mouse wheel generates buttonUp events right after the buttonDown events for symmetry (fix)
+  * 2009-04-15: Win: Gosu automatically uses the first icon in the game's executable (if present) as the window icon, thanks for the suggestion Tuiq!
   * 2009-04-16: Win: No button_down events for clicking on the task bar button anymore, thanks AmIMeYet!
   * 2009-04-08: All: Introduced Window#needs_redraw? for game-specific optimizations
   * 2009-04-08: All: Accept both OpenGL and previous vertex order for draw_quad/Image#draw_as_quad
