@@ -75,7 +75,6 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1,
     queue->addDrawOp(newDrawOp, z);
 }
 
-
 boost::optional<Gosu::GLTexInfo> Gosu::TexChunk::glTexInfo() const
 {
     Gosu::GLTexInfo info;

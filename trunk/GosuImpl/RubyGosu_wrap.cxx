@@ -2718,11 +2718,11 @@ SWIGINTERN void Gosu_Window_drawQuad(Gosu::Window *self,double x1,double y1,Gosu
 SWIGINTERN bool Gosu_Window_isButtonDown(Gosu::Window const *self,Gosu::Button btn){
         return self->input().down(btn);
     }
-SWIGINTERN Gosu::Button Gosu_Window_charToButtonId(Gosu::Window *self,wchar_t ch){
-        return self->input().charToId(ch);
+SWIGINTERN Gosu::Button Gosu_Window_charToButtonId(wchar_t ch){
+        return Gosu::Input::charToId(ch);
     }
-SWIGINTERN wchar_t Gosu_Window_buttonIdToChar(Gosu::Window *self,Gosu::Button btn){
-        return self->input().idToChar(btn);
+SWIGINTERN wchar_t Gosu_Window_buttonIdToChar(Gosu::Button btn){
+        return Gosu::Input::idToChar(btn);
     }
 SWIGINTERN Gosu::TextInput *Gosu_Window_textInput(Gosu::Window const *self){
         return self->input().textInput();
@@ -8093,29 +8093,21 @@ fail:
 
 SWIGINTERN VALUE
 _wrap_Window_char_to_button_id(int argc, VALUE *argv, VALUE self) {
-  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
-  wchar_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
+  wchar_t arg1 ;
   Gosu::Button result;
   VALUE vresult = Qnil;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","charToButtonId", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
     VALUE localTemporary = rb_obj_as_string(argv[0]);
     std::wstring localTemporary2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
-    arg2 = localTemporary2.empty() ? 0 : localTemporary2.at(0);
+    arg1 = localTemporary2.empty() ? 0 : localTemporary2.at(0);
   }
   {
     try {
-      result = Gosu_Window_charToButtonId(arg1,arg2);
+      result = Gosu_Window_charToButtonId(arg1);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -8133,30 +8125,22 @@ fail:
 
 SWIGINTERN VALUE
 _wrap_Window_button_id_to_char(int argc, VALUE *argv, VALUE self) {
-  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
-  Gosu::Button arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
+  Gosu::Button arg1 ;
   wchar_t result;
   VALUE vresult = Qnil;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","buttonIdToChar", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
     if (NIL_P(argv[0]))
-    arg2 = Gosu::noButton;
+    arg1 = Gosu::noButton;
     else
-    arg2 = Gosu::Button(NUM2LONG(argv[0]));
+    arg1 = Gosu::Button(NUM2LONG(argv[0]));
   }
   {
     try {
-      result = Gosu_Window_buttonIdToChar(arg1,arg2);
+      result = Gosu_Window_buttonIdToChar(arg1);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -9178,7 +9162,12 @@ SWIGEXPORT void Init_gosu(void) {
   rb_eval_string("module Gosu::Button; Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }; end");
   
   // ARGH, SWIG workaround...
+  // It doesn't understand the C++ overloading otherwise.
   rb_eval_string("class Gosu::Image; def self.from_text(*args); args.size == 4 ? from_text4(*args) : from_text7(*args); end; end");
+  
+  // ARGH, SWIG workaround 2..
+  // It won't let me have a class method and method with the same name.
+  rb_eval_string("class Gosu::Window; def button_id_to_char(id); self.class.button_id_to_char(id); end; def char_to_button_id(ch); self.class.char_to_button_id(ch); end; end");
   
   // Extend Numeric with simple angle conversion methods.
   rb_eval_string("class ::Numeric;def gosu_to_radians;(self-90)*Math::PI/180.0;end;def radians_to_gosu;self*180.0/Math::PI+90;end;end");
@@ -9217,8 +9206,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(cWindow.klass, "draw_triangle", VALUEFUNC(_wrap_Window_draw_triangle), -1);
   rb_define_method(cWindow.klass, "draw_quad", VALUEFUNC(_wrap_Window_draw_quad), -1);
   rb_define_method(cWindow.klass, "button_down?", VALUEFUNC(_wrap_Window_button_downq___), -1);
-  rb_define_method(cWindow.klass, "char_to_button_id", VALUEFUNC(_wrap_Window_char_to_button_id), -1);
-  rb_define_method(cWindow.klass, "button_id_to_char", VALUEFUNC(_wrap_Window_button_id_to_char), -1);
+  rb_define_singleton_method(cWindow.klass, "char_to_button_id", VALUEFUNC(_wrap_Window_char_to_button_id), -1);
+  rb_define_singleton_method(cWindow.klass, "button_id_to_char", VALUEFUNC(_wrap_Window_button_id_to_char), -1);
   rb_define_method(cWindow.klass, "text_input", VALUEFUNC(_wrap_Window_text_input), -1);
   rb_define_method(cWindow.klass, "text_input=", VALUEFUNC(_wrap_Window_text_inpute___), -1);
   rb_define_method(cWindow.klass, "mouse_x", VALUEFUNC(_wrap_Window_mouse_x), -1);
