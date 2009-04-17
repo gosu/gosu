@@ -122,12 +122,12 @@ struct Gosu::Window::Impl
 
     void doTick(Window* window)
     {
-        while (::XPending(display))
+        while (XPending(display))
         {
-            ::XEvent event;
+            XEvent event;
             XNextEvent(display, &event);
             
-            // Override redirect fix (thanks for Pyglet folks again):
+            // Override redirect fix (thanks go to the Pyglet folks again):
             if (event.type == ButtonPress && fullscreen && !active)
                 XSetInputFocus(display, this->window, RevertToParent, CurrentTime);
             
@@ -150,14 +150,14 @@ struct Gosu::Window::Impl
                     active = false;
             }
         }
-
-        if (window->graphics().begin(Colors::black))
+        
+        if (window->needsRedraw() && window->graphics().begin(Colors::black))
         {
             window->draw();
             window->graphics().end();
             glXSwapBuffers(display, this->window);
         }
-
+        
         window->input().update();
         window->update();
     }
