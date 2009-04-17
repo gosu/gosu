@@ -2,7 +2,7 @@ require '../lib/gosu'
 
 class Test < Gosu::Window
   def initialize 
-    super(Gosu::screen_width * 9 / 10, Gosu::screen_height * 9 / 10, false)
+    super(Gosu::screen_width * 5 / 10, Gosu::screen_height * 5 / 10, false)
   end
 
   def button_down(id)

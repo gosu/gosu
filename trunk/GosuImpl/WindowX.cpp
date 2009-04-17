@@ -19,19 +19,6 @@
 #include <X11/Xutil.h>
 #include "X11vroot.h"
 
-namespace Gosu
-{
-    unsigned screenWidth()
-    {
-        return 0; // TODO
-    }
-    
-    unsigned screenHeight()
-    {
-        return 0; // TODO
-    }
-}
-
 namespace
 {
     template<typename T>
@@ -69,6 +56,21 @@ namespace
             reset(0);
         }
     };
+}
+
+namespace Gosu
+{
+    unsigned screenWidth()
+    {
+        scoped_resource<Display> display(XOpenDisplay(NULL), XCloseDisplay);
+        return DisplayWidth(display.get(), DefaultScreen(display.get()));
+    }
+    
+    unsigned screenHeight()
+    {
+        scoped_resource<Display> display(XOpenDisplay(NULL), XCloseDisplay);
+        return DisplayHeight(display.get(), DefaultScreen(display.get()));
+    }
 }
 
 struct Gosu::Window::Impl

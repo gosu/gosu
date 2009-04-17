@@ -167,7 +167,9 @@ void Gosu::Input::update()
             pimpl->keyMap[id] = true;
             // TODO: Here, above, below, who came up with that cast? Uh :)
             if (onButtonDown)
-                onButtonDown(*reinterpret_cast<Button*>(&id));
+                onButtonDown(Button(id));
+            if (onButtonUp and id == msWheelUp or id == msWheelDown)
+                onButtonUp(Button(id));
         }
         else if (event.type == ButtonRelease)
         {
