@@ -300,7 +300,7 @@ namespace GosusDarkSide
 void Gosu::Window::show()
 {
     int w = graphics().width(), h = graphics().height(), bpp = 32, rr = 60;
-    if (pimpl->graphics->fullscreen())
+    if (graphics().fullscreen())
         setVideoMode(findClosestVideoMode(&w, &h, &bpp, &rr));
     ShowWindow(handle(), SW_SHOW);
     UpdateWindow(handle());
