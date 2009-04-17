@@ -1,8 +1,6 @@
 #summary Entry point to all of Gosu's documentation.
 #labels Featured
 
-http://www.raschke.de/julian/temp/fatcat.png
-
 = New to Gosu? =
 
 If you are curious about what Gosu is trying to achieve, read Gosu's DesignRationale. If you want to take a look at random Gosu code, see the tutorials below.
