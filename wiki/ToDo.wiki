@@ -4,21 +4,12 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-04-16)
+(Last update: 2009-04-17)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics/iPhone and OpenAL release
-    * iPhone-related stuff that would be nice to finish during this release
-      * Finish OpenAL port of Gosu::Audio (Ogg Songs)
-      * Fix "too many fingers" bug on iPhone
-      * Implement Proof of Concept for Macro Patches
-      * Integrate "fat" iPhone building from forum
-      * Clear up GOSU_IS_MAC vs. GOSU_IS_OSX
-      * Use getBytes instead of UTF8String
-    * Make button_id_to_char and vice versa class methods
     * Screen size / fullscreen stuff
       * Iterate on first category of fullscreen tests
-      * screen_resolution() function on Linux/X11
       * Allow adjustment of the virtual touchscreen resolution
       * Make initial window black instead of garbled on OS X
       * Windows: Don't fail if the requested windowed resolution is too large
@@ -26,37 +17,38 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Add fullscreen stretching prevention
       * Try not to hide the mouse cursor outside of the main window on OS X
       * Test multiple screens on Windows
-    * Use OpenAL for OS X too
-    * Try to add dynamic MikMod loading code
-    * Think: What would be the costs of being able to delete images while they are still referenced? Mergable with macros?
-    * Display the prerequisites at the start of extconf.rb on Linux
+    * If OpenAL streaming works soon enough...
+      * Use OpenAL for OS X too
+      * Try to add dynamic MikMod loading code
     * Post http://github.com/joakimk/caribbean-onslaught/tree/master before it gets lost?
-    * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
-    * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
     * OS X: Release all keys on battery notification dialog (?)
-    * Make even the mouse wheel consistently send buttonUp events on Linux
-    * Make even the mouse wheel consistently send buttonUp events on Windows
-    * Finish the RMagick bundling thing
-      * Try to build RMagick.bundle against the 10.4 SDK
-      * Link the all-in-one-bundle from the boards: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
-      * Test RMagick.bundle on Tiger
-      * Test RMagick.bundle on PPC
-    * Take a look at AmIMeYet's bug in the forum PM's
     * TextField with clip_to (update example)
     * Get rid of context selection error with driver set to always do FSAA (Windows)
     * Timing Tuning
-      * Look for update_interval rounding errors on Linux
-      * Undo frameskip on Windows
-    * Move three threads from GosuExchange to the forums
     * See what can be done to fix the window icon on Windows
-    * Respect Window#needs_redraw? on Windows
-    * Respect Window#needs_redraw? on Linux
-    * Finish diagram explaining the Window's loop
     * Release 0.7.13
     * Document Window#update_interval
+    * Move three threads from GosuExchange to the forums
+    * Finish diagram explaining the Window's loop
     * Document main loop and Window#needsRedraw
     * Document corner order tolerance
     * Document button_id_to_char now being a class method
+    * Test if the extconf.rb help lines are really being shown
+  * Web research work
+    * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
+    * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
+  * iPhone-related stuff that should be finished soonish
+    * Finish OpenAL port of Gosu::Audio (Ogg Songs)
+    * Fix "too many fingers" bug on iPhone
+    * Implement Proof of Concept for Macro Patches
+    * Integrate "fat" iPhone building from forum
+    * Clear up GOSU_IS_MAC vs. GOSU_IS_OSX
+    * Use getBytes instead of UTF8String
+  * Finish the RMagick bundling thing
+    * Try to build RMagick.bundle against the 10.4 SDK
+    * Link the all-in-one-bundle from the boards: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
+    * Test RMagick.bundle on Tiger
+    * Test RMagick.bundle on PPC
   * More alpha modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
   * Benchmark clip_to
   * (1x mymüsli for all the hard work! (motivation!)
@@ -79,6 +71,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Add RTL support to Font::drawRot too
     * Add Linux gamepad support
   * 0.7.15, polish/deployment release
+    * Make it possible to delete images while they are still referenced in the queue.
     * Assure that files from doxygen task are considered for packaging
     * RMagick auf Windows statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * Find out why Cmd+char triggers two button_downs, but only one button_up!
