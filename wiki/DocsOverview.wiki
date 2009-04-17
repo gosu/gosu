@@ -14,6 +14,9 @@ Depending on your operating system, see GettingStartedOnOsx, GettingStartedOnWin
 See either the RubyTutorial or the CppTutorial.
 
 == Translations of the Ruby version ==
+
+*Polish* translation by S. Wojnowski: http://rubyhelp.org/articles/gosu
+
 *Traditional Chinese* translation by poga: http://devpoga.wordpress.com/2008/05/28/ruby_gosu_tutorial/
 
 *Spanish* translation by ladybenko: http://cafeina.ladybenko.net/?p=485
