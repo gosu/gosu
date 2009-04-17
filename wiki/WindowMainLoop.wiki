@@ -12,4 +12,4 @@ Examples of what you can do in these events are shown in the RubyTutorial and Cp
 
 There are some variations to this loop: of course, you can allocate Images and other resources whenever you want. It might also be useful to call `show` twice. And the `close` function may not be called, technically, if the user closes the window using the standard methods on his operating system.
 
-One recent bit of magic is the `bool needsRedraw()`/`needs_redraw?` method that you can override on Gosu::Window. It allows advanced games to implement frame skipping when the computer cannot catch up, or may save resources on puzzle games that only need to be redrawn when something has happened. Most games should be fine without overriding this method, though.
+One recent bit of magic is the method `bool needsRedraw() const`/`needs_redraw?` that you can override on Gosu::Window. It allows advanced games to implement frame skipping when the computer cannot catch up, or may save resources on puzzle games that only need to be redrawn when something has happened. Most games should be fine without overriding this method, though.
