@@ -151,15 +151,15 @@ struct Gosu::Window::Impl
             }
         }
         
+        window->input().update();
+        window->update();
+
         if (window->needsRedraw() && window->graphics().begin(Colors::black))
         {
             window->draw();
             window->graphics().end();
             glXSwapBuffers(display, this->window);
         }
-        
-        window->input().update();
-        window->update();
     }
 };
 

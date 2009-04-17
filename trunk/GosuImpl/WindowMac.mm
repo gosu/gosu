@@ -497,16 +497,16 @@ void Gosu::Window::Impl::doTick(Window& window)
         }
     }
     
+    window.input().update();
+    window.update();
+
     if (window.needsRedraw() and
         window.graphics().begin())
     {
         window.draw();
         window.graphics().end();
         [window.pimpl->context.obj() flushBuffer];
-    }
-    
-    window.input().update();
-    window.update();
+    }    
     
     if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
 }
