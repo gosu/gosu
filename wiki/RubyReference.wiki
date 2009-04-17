@@ -87,6 +87,7 @@ _Note that you should really only use on instance of this class at the same time
   * `close`: Tells the window to end the current `show` loop as soon as possible.
   * `update`
   * `draw`
+  * `needs_redraw?`: By default, always returns true. Override this to keep the window from redrawing itself at certain times, e.g. to implement frameskip.
   * `button_down(id)`: Called when the user presses the button with the given id.
   * `button_up(id)`: Called when the user releases the button with the given id.
   * `draw_line(x1, y1, c1, x2, y2, c2, z=0, mode=:default)`
@@ -122,6 +123,8 @@ _Note that you should really only use on instance of this class at the same time
   * `milliseconds()`: Incrementing, possibly wrapping millisecond timer.
 
   * `default_font_name()`: Returns a font name that will work on any system.
+
+  * `screen_width()`, `screen_height()`: Return the dimensions of the system's primary screen. Can be used to choose the size of your windowed resolution.
 
 == Button IDs used by the input system (in module Gosu) ==
 
