@@ -2,6 +2,7 @@
 #labels Featured
 
 =0.7.13 (WIP)=
+  * 2009-04-17: All: Implemented global screen width/screen height getter functions
   * 2009-04-16: Ruby: button_id_to_char and char_to_button_id are also available as class methods of Window now (old version is inofficially deprecated now).
   * 2009-04-15: Win: Spinning the mouse wheel generates buttonUp events right after the buttonDown events for symmetry (fix)
   * 2009-04-15: Win: Gosu automatically uses the first icon in the game's executable (if present) as the window icon, thanks for the suggestion Tuiq!
