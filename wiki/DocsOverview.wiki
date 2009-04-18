@@ -27,7 +27,7 @@ The original tutorial in *French* (slightly outdated) by Damien Gouteux: http://
 
 = Reference =
 
-C++: See the `reference/index.html` file that comes with all C++ archives.
+C++: Available on http://www.libgosu.org/cpp/
 Ruby: See the RubyReference.
 
 = Ruby Game Packaging =
