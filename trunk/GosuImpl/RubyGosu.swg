@@ -11,6 +11,8 @@
 // The docs make it seem like this is a generally good idea.
 %feature("compactdefaultargs");
 
+%feature("autodoc", "3");
+
 // Overriding virtuals is only necessary in Gosu::Window.
 %feature("director") Gosu::Window;
 

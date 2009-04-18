@@ -2844,6 +2844,16 @@ void SwigDirector_Window::buttonUp(Gosu::Button arg0) {
 }
 
 
+
+/*
+  Document-method: Gosu::Gosu.milliseconds
+
+  call-seq:
+    milliseconds -> unsigned long
+
+A module function.
+
+*/
 SWIGINTERN VALUE
 _wrap_milliseconds(int argc, VALUE *argv, VALUE self) {
   unsigned long result;
@@ -2866,6 +2876,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Gosu.random
+
+  call-seq:
+    random(double min, double max) -> double
+
+A module function.
+
+*/
 SWIGINTERN VALUE
 _wrap_random(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
@@ -2904,6 +2924,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Gosu.offset_x
+
+  call-seq:
+    offset_x(double angle, double radius) -> double
+
+A module function.
+
+*/
 SWIGINTERN VALUE
 _wrap_offset_x(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
@@ -2942,6 +2972,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Gosu.offset_y
+
+  call-seq:
+    offset_y(double angle, double radius) -> double
+
+A module function.
+
+*/
 SWIGINTERN VALUE
 _wrap_offset_y(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
@@ -2980,6 +3020,17 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Gosu.angle
+
+  call-seq:
+    angle(double fromX, double fromY, double toX, double toY, 
+    double def=0) -> double
+
+A module function.
+
+*/
 SWIGINTERN VALUE
 _wrap_angle(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
@@ -3044,6 +3095,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Gosu.angle_diff
+
+  call-seq:
+    angle_diff(double angle1, double angle2) -> double
+
+A module function.
+
+*/
 SWIGINTERN VALUE
 _wrap_angle_diff(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
@@ -3082,6 +3143,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Gosu.normalize_angle
+
+  call-seq:
+    normalize_angle(double angle) -> double
+
+A module function.
+
+*/
 SWIGINTERN VALUE
 _wrap_normalize_angle(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
@@ -3112,6 +3183,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Gosu.distance
+
+  call-seq:
+    distance(double x1, double y1, double x2, double y2) -> double
+
+A module function.
+
+*/
 SWIGINTERN VALUE
 _wrap_distance(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
@@ -3166,6 +3247,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Gosu.default_font_name
+
+  call-seq:
+    default_font_name -> std::wstring
+
+A module function.
+
+*/
 SWIGINTERN VALUE
 _wrap_default_font_name(int argc, VALUE *argv, VALUE self) {
   std::wstring result;
@@ -3190,6 +3281,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Gosu.screen_width
+
+  call-seq:
+    screen_width -> unsigned int
+
+A module function.
+
+*/
 SWIGINTERN VALUE
 _wrap_screen_width(int argc, VALUE *argv, VALUE self) {
   unsigned int result;
@@ -3212,6 +3313,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Gosu.screen_height
+
+  call-seq:
+    screen_height -> unsigned int
+
+A module function.
+
+*/
 SWIGINTERN VALUE
 _wrap_screen_height(int argc, VALUE *argv, VALUE self) {
   unsigned int result;
@@ -3234,8 +3345,29 @@ fail:
 }
 
 
+
+/*
+  Document-class: Gosu::Color
+
+  Proxy of C++ Gosu::Color class
+
+
+*/
 swig_class cColor;
 
+
+/*
+  Document-method: Gosu::Color.new
+
+  call-seq:
+    Color.new
+    Color.new(boost::uint32_t argb)
+    Color.new(Channel red, Channel green, Channel blue)
+    Color.new(Channel alpha, Channel red, Channel green, Channel blue)
+
+Class constructor.
+
+*/
 SWIGINTERN VALUE
 _wrap_new_Color__SWIG_0(int argc, VALUE *argv, VALUE self) {
   const char *classname SWIGUNUSED = "Gosu::Color";
@@ -3494,6 +3626,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.from_hsv
+
+  call-seq:
+    from_hsv(double h, double s, double v) -> Color
+
+A class method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_from_hsv(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
@@ -3540,6 +3682,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.from_ahsv
+
+  call-seq:
+    from_ahsv(Channel alpha, double h, double s, double v) -> Color
+
+A class method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_from_ahsv(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg1 ;
@@ -3594,6 +3746,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.alpha
+
+  call-seq:
+    alpha -> Channel
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_alpha(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -3624,6 +3786,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.red
+
+  call-seq:
+    red -> Channel
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_red(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -3654,6 +3826,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.green
+
+  call-seq:
+    green -> Channel
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_green(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -3684,6 +3866,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.blue
+
+  call-seq:
+    blue -> Channel
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_blue(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -3714,6 +3906,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.alpha=
+
+  call-seq:
+    alpha=(Channel value)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_alphae___(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -3749,6 +3951,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.red=
+
+  call-seq:
+    red=(Channel value)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_rede___(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -3784,6 +3996,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.green=
+
+  call-seq:
+    green=(Channel value)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_greene___(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -3819,6 +4041,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.blue=
+
+  call-seq:
+    blue=(Channel value)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_bluee___(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -3854,6 +4086,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.hue
+
+  call-seq:
+    hue -> double
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_hue(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -3884,6 +4126,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.hue=
+
+  call-seq:
+    hue=(double h)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_huee___(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -3919,6 +4171,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.saturation
+
+  call-seq:
+    saturation -> double
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_saturation(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -3949,6 +4211,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.saturation=
+
+  call-seq:
+    saturation=(double s)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_saturatione___(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -3984,6 +4256,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.value
+
+  call-seq:
+    value -> double
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_value(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -4014,6 +4296,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.value=
+
+  call-seq:
+    value=(double v)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_valuee___(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -4049,6 +4341,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.argb
+
+  call-seq:
+    argb -> boost::uint32_t
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_argb(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -4079,6 +4381,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.bgr
+
+  call-seq:
+    bgr -> boost::uint32_t
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_bgr(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -4109,6 +4421,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.abgr
+
+  call-seq:
+    abgr -> boost::uint32_t
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_abgr(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -4139,6 +4461,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.to_s
+
+  call-seq:
+    to_s -> string
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Color_to_s(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
@@ -4175,6 +4507,16 @@ free_Gosu_Color(Gosu::Color *arg1) {
     delete arg1;
 }
 
+
+/*
+  Document-method: Gosu::Gosu.interpolate
+
+  call-seq:
+    interpolate(Color a, Color b, double weight=0.5) -> Color
+
+A module function.
+
+*/
 SWIGINTERN VALUE
 _wrap_interpolate(int argc, VALUE *argv, VALUE self) {
   Gosu::Color arg1 ;
@@ -4231,6 +4573,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Gosu.multiply
+
+  call-seq:
+    multiply(Color a, Color b) -> Color
+
+A module function.
+
+*/
 SWIGINTERN VALUE
 _wrap_multiply(int argc, VALUE *argv, VALUE self) {
   Gosu::Color arg1 ;
@@ -4277,6 +4629,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Colors.none
+
+  call-seq:
+    none -> Color
+
+Get value of attribute.
+
+*/
 SWIGINTERN VALUE
 _wrap_none_get(VALUE self) {
   VALUE _val;
@@ -4286,6 +4648,16 @@ _wrap_none_get(VALUE self) {
 }
 
 
+
+/*
+  Document-method: Gosu::Colors.black
+
+  call-seq:
+    black -> Color
+
+Get value of attribute.
+
+*/
 SWIGINTERN VALUE
 _wrap_black_get(VALUE self) {
   VALUE _val;
@@ -4295,6 +4667,16 @@ _wrap_black_get(VALUE self) {
 }
 
 
+
+/*
+  Document-method: Gosu::Colors.gray
+
+  call-seq:
+    gray -> Color
+
+Get value of attribute.
+
+*/
 SWIGINTERN VALUE
 _wrap_gray_get(VALUE self) {
   VALUE _val;
@@ -4304,6 +4686,16 @@ _wrap_gray_get(VALUE self) {
 }
 
 
+
+/*
+  Document-method: Gosu::Colors.white
+
+  call-seq:
+    white -> Color
+
+Get value of attribute.
+
+*/
 SWIGINTERN VALUE
 _wrap_white_get(VALUE self) {
   VALUE _val;
@@ -4313,6 +4705,16 @@ _wrap_white_get(VALUE self) {
 }
 
 
+
+/*
+  Document-method: Gosu::Colors.red
+
+  call-seq:
+    red -> Color
+
+Get value of attribute.
+
+*/
 SWIGINTERN VALUE
 _wrap_red_get(VALUE self) {
   VALUE _val;
@@ -4322,6 +4724,16 @@ _wrap_red_get(VALUE self) {
 }
 
 
+
+/*
+  Document-method: Gosu::Colors.green
+
+  call-seq:
+    green -> Color
+
+Get value of attribute.
+
+*/
 SWIGINTERN VALUE
 _wrap_green_get(VALUE self) {
   VALUE _val;
@@ -4331,6 +4743,16 @@ _wrap_green_get(VALUE self) {
 }
 
 
+
+/*
+  Document-method: Gosu::Colors.blue
+
+  call-seq:
+    blue -> Color
+
+Get value of attribute.
+
+*/
 SWIGINTERN VALUE
 _wrap_blue_get(VALUE self) {
   VALUE _val;
@@ -4340,6 +4762,16 @@ _wrap_blue_get(VALUE self) {
 }
 
 
+
+/*
+  Document-method: Gosu::Colors.yellow
+
+  call-seq:
+    yellow -> Color
+
+Get value of attribute.
+
+*/
 SWIGINTERN VALUE
 _wrap_yellow_get(VALUE self) {
   VALUE _val;
@@ -4349,6 +4781,16 @@ _wrap_yellow_get(VALUE self) {
 }
 
 
+
+/*
+  Document-method: Gosu::Colors.fuchsia
+
+  call-seq:
+    fuchsia -> Color
+
+Get value of attribute.
+
+*/
 SWIGINTERN VALUE
 _wrap_fuchsia_get(VALUE self) {
   VALUE _val;
@@ -4358,6 +4800,16 @@ _wrap_fuchsia_get(VALUE self) {
 }
 
 
+
+/*
+  Document-method: Gosu::Colors.cyan
+
+  call-seq:
+    cyan -> Color
+
+Get value of attribute.
+
+*/
 SWIGINTERN VALUE
 _wrap_cyan_get(VALUE self) {
   VALUE _val;
@@ -4367,6 +4819,14 @@ _wrap_cyan_get(VALUE self) {
 }
 
 
+
+/*
+  Document-class: Gosu::Font
+
+  Proxy of C++ Gosu::Font class
+
+
+*/
 swig_class cFont;
 
 SWIGINTERN void
@@ -4375,6 +4835,16 @@ free_Gosu_Font(Gosu::Font *arg1) {
     delete arg1;
 }
 
+
+/*
+  Document-method: Gosu::Font.height
+
+  call-seq:
+    height -> unsigned int
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Font_height(int argc, VALUE *argv, VALUE self) {
   Gosu::Font *arg1 = (Gosu::Font *) 0 ;
@@ -4405,6 +4875,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Font.text_width
+
+  call-seq:
+    text_width(std::wstring text, double factorX=1) -> double
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Font_text_width(int argc, VALUE *argv, VALUE self) {
   Gosu::Font *arg1 = (Gosu::Font *) 0 ;
@@ -4452,6 +4932,18 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Font.draw
+
+  call-seq:
+    draw(std::wstring text, double x, double y, ZPos z, double factorX=1, 
+    double factorY=1, Color c=white, 
+     mode=AmDefault)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Font_draw(int argc, VALUE *argv, VALUE self) {
   Gosu::Font *arg1 = (Gosu::Font *) 0 ;
@@ -4556,6 +5048,18 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Font.draw_rel
+
+  call-seq:
+    draw_rel(std::wstring text, double x, double y, ZPos z, double relX, 
+    double relY, double factorX=1, double factorY=1, 
+    Color c=white,  mode=AmDefault)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Font_draw_rel(int argc, VALUE *argv, VALUE self) {
   Gosu::Font *arg1 = (Gosu::Font *) 0 ;
@@ -4676,6 +5180,18 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Font.draw_rot
+
+  call-seq:
+    draw_rot(std::wstring text, double x, double y, ZPos z, double angle, 
+    double factorX=1, double factorY=1, 
+    Color c=white,  mode=AmDefault)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Font_draw_rot(int argc, VALUE *argv, VALUE self) {
   Gosu::Font *arg1 = (Gosu::Font *) 0 ;
@@ -4805,6 +5321,16 @@ _wrap_Font_allocate(VALUE self) {
   }
   
 
+
+/*
+  Document-method: Gosu::Font.new
+
+  call-seq:
+    Font.new(Window window, std::wstring fontName, unsigned int height)
+
+Class constructor.
+
+*/
 SWIGINTERN VALUE
 _wrap_new_Font(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
@@ -4854,8 +5380,36 @@ fail:
 }
 
 
+
+/*
+  Document-class: Gosu::GLTexInfo
+
+  Proxy of C++ Gosu::GLTexInfo class
+
+
+*/
 swig_class cGLTexInfo;
 
+
+/*
+  Document-method: Gosu::GLTexInfo.tex_name
+
+  call-seq:
+    tex_name -> int
+
+Get value of attribute.
+
+*/
+
+/*
+  Document-method: Gosu::GLTexInfo.tex_name=
+
+  call-seq:
+    tex_name=(x) -> int
+
+Set new value for attribute.
+
+*/
 SWIGINTERN VALUE
 _wrap_GLTexInfo_tex_name_set(int argc, VALUE *argv, VALUE self) {
   Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
@@ -4909,6 +5463,26 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::GLTexInfo.left
+
+  call-seq:
+    left -> double
+
+Get value of attribute.
+
+*/
+
+/*
+  Document-method: Gosu::GLTexInfo.left=
+
+  call-seq:
+    left=(x) -> double
+
+Set new value for attribute.
+
+*/
 SWIGINTERN VALUE
 _wrap_GLTexInfo_left_set(int argc, VALUE *argv, VALUE self) {
   Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
@@ -4962,6 +5536,26 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::GLTexInfo.right
+
+  call-seq:
+    right -> double
+
+Get value of attribute.
+
+*/
+
+/*
+  Document-method: Gosu::GLTexInfo.right=
+
+  call-seq:
+    right=(x) -> double
+
+Set new value for attribute.
+
+*/
 SWIGINTERN VALUE
 _wrap_GLTexInfo_right_set(int argc, VALUE *argv, VALUE self) {
   Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
@@ -5015,6 +5609,26 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::GLTexInfo.top
+
+  call-seq:
+    top -> double
+
+Get value of attribute.
+
+*/
+
+/*
+  Document-method: Gosu::GLTexInfo.top=
+
+  call-seq:
+    top=(x) -> double
+
+Set new value for attribute.
+
+*/
 SWIGINTERN VALUE
 _wrap_GLTexInfo_top_set(int argc, VALUE *argv, VALUE self) {
   Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
@@ -5068,6 +5682,26 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::GLTexInfo.bottom
+
+  call-seq:
+    bottom -> double
+
+Get value of attribute.
+
+*/
+
+/*
+  Document-method: Gosu::GLTexInfo.bottom=
+
+  call-seq:
+    bottom=(x) -> double
+
+Set new value for attribute.
+
+*/
 SWIGINTERN VALUE
 _wrap_GLTexInfo_bottom_set(int argc, VALUE *argv, VALUE self) {
   Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
@@ -5138,6 +5772,16 @@ _wrap_GLTexInfo_allocate(VALUE self) {
   }
   
 
+
+/*
+  Document-method: Gosu::GLTexInfo.new
+
+  call-seq:
+    GLTexInfo.new
+
+Class constructor.
+
+*/
 SWIGINTERN VALUE
 _wrap_new_GLTexInfo(int argc, VALUE *argv, VALUE self) {
   const char *classname SWIGUNUSED = "Gosu::GLTexInfo";
@@ -5167,6 +5811,14 @@ free_Gosu_GLTexInfo(Gosu::GLTexInfo *arg1) {
     delete arg1;
 }
 
+
+/*
+  Document-class: Gosu::Image
+
+  Proxy of C++ Gosu::Image class
+
+
+*/
 swig_class cImage;
 
 SWIGINTERN void
@@ -5175,6 +5827,16 @@ free_Gosu_Image(Gosu::Image *arg1) {
     delete arg1;
 }
 
+
+/*
+  Document-method: Gosu::Image.width
+
+  call-seq:
+    width -> unsigned int
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Image_width(int argc, VALUE *argv, VALUE self) {
   Gosu::Image *arg1 = (Gosu::Image *) 0 ;
@@ -5205,6 +5867,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Image.height
+
+  call-seq:
+    height -> unsigned int
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Image_height(int argc, VALUE *argv, VALUE self) {
   Gosu::Image *arg1 = (Gosu::Image *) 0 ;
@@ -5235,6 +5907,17 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Image.draw
+
+  call-seq:
+    draw(double x, double y, ZPos z, double factorX=1, double factorY=1, 
+    Color c=white,  mode=AmDefault)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
   Gosu::Image *arg1 = (Gosu::Image *) 0 ;
@@ -5332,6 +6015,18 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Image.draw_mod
+
+  call-seq:
+    draw_mod(double x, double y, ZPos z, double factorX, double factorY, 
+    Color c1, Color c2, Color c3, Color c4, 
+     mode=AmDefault)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
   Gosu::Image *arg1 = (Gosu::Image *) 0 ;
@@ -5459,6 +6154,18 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Image.draw_rot
+
+  call-seq:
+    draw_rot(double x, double y, ZPos z, double angle, double centerX=0.5, 
+    double centerY=0.5, double factorX=1, 
+    double factorY=1, Color c=white,  mode=AmDefault)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
   Gosu::Image *arg1 = (Gosu::Image *) 0 ;
@@ -5584,6 +6291,19 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Image.new
+
+  call-seq:
+    Image.new(Window window, VALUE source, bool hardBorders=false)
+    Image.new(Window window, VALUE source, bool hardBorders, unsigned int srcX, 
+    unsigned int srcY, unsigned int srcWidth, 
+    unsigned int srcHeight)
+
+Class constructor.
+
+*/
 SWIGINTERN VALUE
 _wrap_new_Image__SWIG_0(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
@@ -5806,6 +6526,18 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Image.draw_as_quad
+
+  call-seq:
+    draw_as_quad(double x1, double y1, Color c1, double x2, double y2, 
+    Color c2, double x3, double y3, Color c3, 
+    double x4, double y4, Color c4, ZPos z,  mode=AmDefault)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   Gosu::Image *arg1 = (Gosu::Image *) 0 ;
@@ -5965,6 +6697,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Image.gl_tex_info
+
+  call-seq:
+    gl_tex_info -> GLTexInfo
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Image_gl_tex_info(int argc, VALUE *argv, VALUE self) {
   Gosu::Image *arg1 = (Gosu::Image *) 0 ;
@@ -5995,6 +6737,17 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Image.from_text4
+
+  call-seq:
+    from_text4(Window window, std::wstring text, std::wstring fontName, 
+    unsigned int fontHeight) -> Image
+
+A class method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Image_from_text4(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
@@ -6050,6 +6803,18 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Image.from_text7
+
+  call-seq:
+    from_text7(Window window, std::wstring text, std::wstring fontName, 
+    unsigned int fontHeight, unsigned int lineSpacing, 
+    unsigned int maxWidth,  align) -> Image
+
+A class method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Image_from_text7(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
@@ -6135,6 +6900,17 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Image.load_tiles
+
+  call-seq:
+    load_tiles(Window window, VALUE source, int tileWidth, int tileHeight, 
+    bool hardBorders) -> std::vector<(p.Gosu::Image)>
+
+A class method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Image_load_tiles(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
@@ -6200,6 +6976,14 @@ fail:
 }
 
 
+
+/*
+  Document-class: Gosu::SampleInstance
+
+  Proxy of C++ Gosu::SampleInstance class
+
+
+*/
 swig_class cSampleInstance;
 
 #ifdef HAVE_RB_DEFINE_ALLOC_FUNC
@@ -6219,6 +7003,16 @@ _wrap_SampleInstance_allocate(VALUE self) {
   }
   
 
+
+/*
+  Document-method: Gosu::SampleInstance.new
+
+  call-seq:
+    SampleInstance.new(int handle, int extra)
+
+Class constructor.
+
+*/
 SWIGINTERN VALUE
 _wrap_new_SampleInstance(int argc, VALUE *argv, VALUE self) {
   int arg1 ;
@@ -6258,6 +7052,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::SampleInstance.playing?
+
+  call-seq:
+    playing? -> bool
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_SampleInstance_playingq___(int argc, VALUE *argv, VALUE self) {
   Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
@@ -6288,6 +7092,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::SampleInstance.paused?
+
+  call-seq:
+    paused? -> bool
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_SampleInstance_pausedq___(int argc, VALUE *argv, VALUE self) {
   Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
@@ -6318,6 +7132,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::SampleInstance.pause
+
+  call-seq:
+    pause
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_SampleInstance_pause(int argc, VALUE *argv, VALUE self) {
   Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
@@ -6345,6 +7169,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::SampleInstance.resume
+
+  call-seq:
+    resume
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_SampleInstance_resume(int argc, VALUE *argv, VALUE self) {
   Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
@@ -6372,6 +7206,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::SampleInstance.stop
+
+  call-seq:
+    stop
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_SampleInstance_stop(int argc, VALUE *argv, VALUE self) {
   Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
@@ -6399,6 +7243,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::SampleInstance.volume=
+
+  call-seq:
+    volume=(double volume)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_SampleInstance_volumee___(int argc, VALUE *argv, VALUE self) {
   Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
@@ -6434,6 +7288,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::SampleInstance.pan=
+
+  call-seq:
+    pan=(double pan)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_SampleInstance_pane___(int argc, VALUE *argv, VALUE self) {
   Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
@@ -6469,6 +7333,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::SampleInstance.speed=
+
+  call-seq:
+    speed=(double speed)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_SampleInstance_speede___(int argc, VALUE *argv, VALUE self) {
   Gosu::SampleInstance *arg1 = (Gosu::SampleInstance *) 0 ;
@@ -6510,6 +7384,14 @@ free_Gosu_SampleInstance(Gosu::SampleInstance *arg1) {
     delete arg1;
 }
 
+
+/*
+  Document-class: Gosu::Sample
+
+  Proxy of C++ Gosu::Sample class
+
+
+*/
 swig_class cSample;
 
 SWIGINTERN void
@@ -6518,6 +7400,16 @@ free_Gosu_Sample(Gosu::Sample *arg1) {
     delete arg1;
 }
 
+
+/*
+  Document-method: Gosu::Sample.play
+
+  call-seq:
+    play(double volume=1, double speed=1, bool looping=false) -> SampleInstance
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Sample_play(int argc, VALUE *argv, VALUE self) {
   Gosu::Sample *arg1 = (Gosu::Sample *) 0 ;
@@ -6578,6 +7470,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Sample.play_pan
+
+  call-seq:
+    play_pan(double pan, double volume=1, double speed=1, bool looping=false) -> SampleInstance
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Sample_play_pan(int argc, VALUE *argv, VALUE self) {
   Gosu::Sample *arg1 = (Gosu::Sample *) 0 ;
@@ -6663,6 +7565,16 @@ _wrap_Sample_allocate(VALUE self) {
   }
   
 
+
+/*
+  Document-method: Gosu::Sample.new
+
+  call-seq:
+    Sample.new(Window window, string filename)
+
+Class constructor.
+
+*/
 SWIGINTERN VALUE
 _wrap_new_Sample(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
@@ -6712,14 +7624,52 @@ fail:
 }
 
 
+
+/*
+  Document-class: Gosu::Song
+
+  Proxy of C++ Gosu::Song class
+
+
+*/
 swig_class cSong;
 
+
+/*
+  Document-method: Gosu::Type.StStream
+
+  call-seq:
+    StStream -> int
+
+A class method.
+
+*/
+
+/*
+  Document-method: Gosu::Type.StModule
+
+  call-seq:
+    StModule -> int
+
+A class method.
+
+*/
 SWIGINTERN void
 free_Gosu_Song(Gosu::Song *arg1) {
     SWIG_RubyRemoveTracking(arg1);
     delete arg1;
 }
 
+
+/*
+  Document-method: Gosu::Song.current_song
+
+  call-seq:
+    current_song -> Song
+
+A class method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Song_current_song(int argc, VALUE *argv, VALUE self) {
   Gosu::Song *result = 0 ;
@@ -6742,6 +7692,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Song.play
+
+  call-seq:
+    play(bool looping=false)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Song_play(int argc, VALUE *argv, VALUE self) {
   Gosu::Song *arg1 = (Gosu::Song *) 0 ;
@@ -6779,6 +7739,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Song.pause
+
+  call-seq:
+    pause
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Song_pause(int argc, VALUE *argv, VALUE self) {
   Gosu::Song *arg1 = (Gosu::Song *) 0 ;
@@ -6806,6 +7776,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Song.paused?
+
+  call-seq:
+    paused? -> bool
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Song_pausedq___(int argc, VALUE *argv, VALUE self) {
   Gosu::Song *arg1 = (Gosu::Song *) 0 ;
@@ -6836,6 +7816,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Song.stop
+
+  call-seq:
+    stop
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Song_stop(int argc, VALUE *argv, VALUE self) {
   Gosu::Song *arg1 = (Gosu::Song *) 0 ;
@@ -6863,6 +7853,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Song.playing?
+
+  call-seq:
+    playing? -> bool
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Song_playingq___(int argc, VALUE *argv, VALUE self) {
   Gosu::Song *arg1 = (Gosu::Song *) 0 ;
@@ -6893,6 +7893,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Song.volume
+
+  call-seq:
+    volume -> double
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Song_volume(int argc, VALUE *argv, VALUE self) {
   Gosu::Song *arg1 = (Gosu::Song *) 0 ;
@@ -6923,6 +7933,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Song.volume=
+
+  call-seq:
+    volume=(double volume)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Song_volumee___(int argc, VALUE *argv, VALUE self) {
   Gosu::Song *arg1 = (Gosu::Song *) 0 ;
@@ -6975,6 +7995,16 @@ _wrap_Song_allocate(VALUE self) {
   }
   
 
+
+/*
+  Document-method: Gosu::Song.new
+
+  call-seq:
+    Song.new(Window window, string filename)
+
+Class constructor.
+
+*/
 SWIGINTERN VALUE
 _wrap_new_Song(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
@@ -7024,6 +8054,14 @@ fail:
 }
 
 
+
+/*
+  Document-class: Gosu::TextInput
+
+  Proxy of C++ Gosu::TextInput class
+
+
+*/
 swig_class cTextInput;
 
 #ifdef HAVE_RB_DEFINE_ALLOC_FUNC
@@ -7043,6 +8081,16 @@ _wrap_TextInput_allocate(VALUE self) {
   }
   
 
+
+/*
+  Document-method: Gosu::TextInput.new
+
+  call-seq:
+    TextInput.new
+
+Class constructor.
+
+*/
 SWIGINTERN VALUE
 _wrap_new_TextInput(int argc, VALUE *argv, VALUE self) {
   const char *classname SWIGUNUSED = "Gosu::TextInput";
@@ -7072,6 +8120,16 @@ free_Gosu_TextInput(Gosu::TextInput *arg1) {
     delete arg1;
 }
 
+
+/*
+  Document-method: Gosu::TextInput.text
+
+  call-seq:
+    text -> std::wstring
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_TextInput_text(int argc, VALUE *argv, VALUE self) {
   Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
@@ -7104,6 +8162,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::TextInput.text=
+
+  call-seq:
+    text=(std::wstring text)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_TextInput_texte___(int argc, VALUE *argv, VALUE self) {
   Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
@@ -7138,6 +8206,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::TextInput.caret_pos
+
+  call-seq:
+    caret_pos -> unsigned int
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_TextInput_caret_pos(int argc, VALUE *argv, VALUE self) {
   Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
@@ -7168,6 +8246,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::TextInput.selection_start
+
+  call-seq:
+    selection_start -> unsigned int
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_TextInput_selection_start(int argc, VALUE *argv, VALUE self) {
   Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
@@ -7198,6 +8286,14 @@ fail:
 }
 
 
+
+/*
+  Document-class: Gosu::Window
+
+  Proxy of C++ Gosu::Window class
+
+
+*/
 swig_class cWindow;
 
 #ifdef HAVE_RB_DEFINE_ALLOC_FUNC
@@ -7217,6 +8313,17 @@ _wrap_Window_allocate(VALUE self) {
   }
   
 
+
+/*
+  Document-method: Gosu::Window.new
+
+  call-seq:
+    Window.new(unsigned int width, unsigned int height, bool fullscreen, 
+    double updateInterval=16.666666)
+
+Class constructor.
+
+*/
 SWIGINTERN VALUE
 _wrap_new_Window(int argc, VALUE *argv, VALUE self) {
   VALUE arg1 = (VALUE) 0 ;
@@ -7288,6 +8395,16 @@ free_Gosu_Window(Gosu::Window *arg1) {
     delete arg1;
 }
 
+
+/*
+  Document-method: Gosu::Window.caption
+
+  call-seq:
+    caption -> std::wstring
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_caption(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -7320,6 +8437,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.caption=
+
+  call-seq:
+    caption=(std::wstring caption)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_captione___(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -7354,6 +8481,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.update_interval
+
+  call-seq:
+    update_interval -> double
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_update_interval(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -7384,6 +8521,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.show
+
+  call-seq:
+    show
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_show(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -7411,6 +8558,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.close
+
+  call-seq:
+    close
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_close(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -7438,6 +8595,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.update
+
+  call-seq:
+    update
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_update(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -7478,6 +8645,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.draw
+
+  call-seq:
+    draw
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_draw(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -7518,6 +8695,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.needs_redraw?
+
+  call-seq:
+    needs_redraw? -> bool
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_needs_redrawq___(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -7561,6 +8748,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.button_down
+
+  call-seq:
+    button_down(Gosu::Button arg0)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_button_down(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -7608,6 +8805,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.button_up
+
+  call-seq:
+    button_up(Gosu::Button arg0)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_button_up(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -7655,6 +8862,17 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.draw_line
+
+  call-seq:
+    draw_line(double x1, double y1, Color c1, double x2, double y2, 
+    Color c2, ZPos z=0,  mode=AmDefault)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -7760,6 +8978,18 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.draw_triangle
+
+  call-seq:
+    draw_triangle(double x1, double y1, Color c1, double x2, double y2, 
+    Color c2, double x3, double y3, Color c3, 
+    ZPos z=0,  mode=AmDefault)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -7893,6 +9123,18 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.draw_quad
+
+  call-seq:
+    draw_quad(double x1, double y1, Color c1, double x2, double y2, 
+    Color c2, double x3, double y3, Color c3, 
+    double x4, double y4, Color c4, ZPos z=0,  mode=AmDefault)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -8054,6 +9296,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.button_down?
+
+  call-seq:
+    button_down?(Gosu::Button btn) -> bool
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_button_downq___(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -8091,6 +9343,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.char_to_button_id
+
+  call-seq:
+    char_to_button_id(wchar_t ch) -> Gosu::Button
+
+A class method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_char_to_button_id(int argc, VALUE *argv, VALUE self) {
   wchar_t arg1 ;
@@ -8123,6 +9385,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.button_id_to_char
+
+  call-seq:
+    button_id_to_char(Gosu::Button btn) -> wchar_t
+
+A class method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_button_id_to_char(int argc, VALUE *argv, VALUE self) {
   Gosu::Button arg1 ;
@@ -8157,6 +9429,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.text_input
+
+  call-seq:
+    text_input -> TextInput
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_text_input(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -8187,6 +9469,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.text_input=
+
+  call-seq:
+    text_input=(TextInput ti)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_text_inpute___(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -8222,6 +9514,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.mouse_x
+
+  call-seq:
+    mouse_x -> double
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_mouse_x(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -8252,6 +9554,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.mouse_y
+
+  call-seq:
+    mouse_y -> double
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_mouse_y(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -8282,6 +9594,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.set_mouse_position
+
+  call-seq:
+    set_mouse_position(double x, double y)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_set_mouse_position(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -8325,6 +9647,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.mouse_x=
+
+  call-seq:
+    mouse_x=(double x)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_mouse_xe___(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -8360,6 +9692,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.mouse_y=
+
+  call-seq:
+    mouse_y=(double y)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_mouse_ye___(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -8395,6 +9737,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.width
+
+  call-seq:
+    width -> int
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_width(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -8425,6 +9777,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.height
+
+  call-seq:
+    height -> int
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_height(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -8455,6 +9817,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.gl
+
+  call-seq:
+    gl
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_gl(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
@@ -8482,6 +9854,16 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Window.clip_to
+
+  call-seq:
+    clip_to(int x, int y, unsigned int width, unsigned int height)
+
+An instance method.
+
+*/
 SWIGINTERN VALUE
 _wrap_Window_clip_to(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
