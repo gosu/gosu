@@ -28,6 +28,7 @@ The original tutorial in *French* (slightly outdated) by Damien Gouteux: http://
 = Reference =
 
 C++: Available on http://www.libgosu.org/cpp/
+
 Ruby: See the RubyReference.
 
 = Ruby Game Packaging =
