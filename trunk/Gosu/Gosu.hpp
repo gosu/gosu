@@ -1,6 +1,12 @@
 //! \file Gosu.hpp
 //! Umbrella header for lazy people with fast compilers, or pre-compiled headers.
 
+//! \mainpage Gosu C++ Documentation
+//!
+//! These pages serve as a reference on the C++ interface of Gosu. For a higher-level
+//! discussion of concepts and ideas behind the library, see the Wiki entries linked
+//! from the official website, http://www.libgosu.org/.
+
 #ifndef GOSU_GOSU_HPP
 #define GOSU_GOSU_HPP
 

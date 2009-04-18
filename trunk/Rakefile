@@ -12,7 +12,7 @@ COMMON_FILES = FileList[
 COMMON_CPP_FILES = COMMON_FILES + FileList[
   'examples/*.cpp',
   'examples/media/*',
-  'reference/**/*',
+  'reference/cpp/**/*',
 ]
 
 COMMON_RUBY_FILES = COMMON_FILES + FileList[
@@ -102,6 +102,11 @@ end
 desc "Build C++ reference with doxygen"
 task :cpp_docs do
   sh "cd reference && doxygen"
+end
+
+desc "Upload documentation to www.libgosu.org"
+task :upload_docs => :cpp_docs do
+    sh "scp -r reference/cpp vu2040@eta.railshoster.de:~/htdocs/"
 end
 
 namespace :mac do
