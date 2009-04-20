@@ -167,6 +167,8 @@ struct Gosu::Window::Impl
 	double updateInterval;
     bool iconified;
 
+    unsigned originalWidth, originalHeight;
+
     Impl()
     : handle(0), hdc(0), iconified(false)
     {
@@ -185,6 +187,9 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     double updateInterval)
 : pimpl(new Impl)
 {
+    pimpl->originalWidth = width;
+    pimpl->originalHeight = height;
+    
     // Select window styles depending on mode.fullscreen.
     DWORD style = WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
     DWORD styleEx = WS_EX_APPWINDOW;
@@ -299,7 +304,7 @@ namespace GosusDarkSide
 
 void Gosu::Window::show()
 {
-    int w = graphics().width(), h = graphics().height(), bpp = 32, rr = 60;
+    int w = pimpl->originalWidth, h = pimpl->originalHeight, bpp = 32, rr = 60;
     if (graphics().fullscreen())
         setVideoMode(findClosestVideoMode(&w, &h, &bpp, &rr));
     ShowWindow(handle(), SW_SHOW);
