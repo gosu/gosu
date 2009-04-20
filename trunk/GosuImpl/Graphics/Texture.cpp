@@ -52,6 +52,8 @@ Gosu::Texture::Texture(unsigned size)
                  GL_RGBA, GL_UNSIGNED_BYTE, 0);
 #endif
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 }
 
 Gosu::Texture::~Texture()
