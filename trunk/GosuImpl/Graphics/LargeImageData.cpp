@@ -34,14 +34,14 @@ Gosu::LargeImageData::LargeImageData(Graphics& graphics,
 
             unsigned localBorderFlags = bfHard;
             if (x == 0)
-                localBorderFlags &= ~(borderFlags & bfHardLeft);
-            else if (x == partsX - 1)
-                localBorderFlags &= ~(borderFlags & bfHardRight);
+                localBorderFlags = (localBorderFlags & ~bfHardLeft) | (borderFlags & bfHardLeft);
+            if (x == partsX - 1)
+                localBorderFlags = (localBorderFlags & ~bfHardRight) | (borderFlags & bfHardRight);
             if (y == 0)
-                localBorderFlags &= ~(borderFlags & bfHardTop);
-            else if (y == partsY - 1)
-                localBorderFlags &= ~(borderFlags & bfHardBottom);
-
+                localBorderFlags = (localBorderFlags & ~bfHardTop) | (borderFlags & bfHardTop);
+            if (y == partsY - 1)
+                localBorderFlags = (localBorderFlags & ~bfHardBottom) | (borderFlags & bfHardBottom);
+            
             parts[y * partsX + x].reset(graphics.createImage(source,
                 x * partWidth, y * partHeight, srcWidth, srcHeight,
                 localBorderFlags).release());
