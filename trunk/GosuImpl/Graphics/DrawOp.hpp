@@ -34,7 +34,7 @@ namespace Gosu
         DrawOp() { clipWidth = 0xffffffff; usedVertices = 0; chunk = 0; }
         
 #ifndef GOSU_IS_IPHONE
-        void perform(GLuint& unusedForNow) const
+        void perform(GLuint& currentTexName) const
         {
             if (clipWidth != 0xffffffff)
             {
@@ -49,8 +49,16 @@ namespace Gosu
 
             if (chunk)
             {
-                glEnable(GL_TEXTURE_2D);
-                glBindTexture(GL_TEXTURE_2D, chunk->texName());
+                if (currentTexName == NO_TEXTURE)
+                    glEnable(GL_TEXTURE_2D);
+                if (chunk->texName() != currentTexName)
+                    glBindTexture(GL_TEXTURE_2D, chunk->texName());
+                currentTexName = chunk->texName();
+            }
+            else if (currentTexName != NO_TEXTURE)
+            {
+                glDisable(GL_TEXTURE_2D);
+                currentTexName = NO_TEXTURE;
             }
 
             if (usedVertices == 2)
@@ -88,9 +96,6 @@ namespace Gosu
             }
             
             glEnd();
-            
-            if (chunk)
-                glDisable(GL_TEXTURE_2D);
             
             if (clipWidth != 0xffffffff)
                 glDisable(GL_SCISSOR_TEST);
@@ -150,7 +155,7 @@ namespace Gosu
             else if (currentTexName != NO_TEXTURE)
             {
                 glDisable(GL_TEXTURE_2D);
-                currentTexName = -1;
+                currentTexName = NO_TEXTURE;
             }
             
             for (int i = 0; i < usedVertices; ++i)
@@ -208,15 +213,10 @@ namespace Gosu
             
             if (z == zImmediate)
             {
-            #ifdef GOSU_IS_IPHONE
                 GLuint currentTexName = NO_TEXTURE;
                 op.perform(currentTexName);
                 if (currentTexName != NO_TEXTURE)
                     glDisable(GL_TEXTURE_2D);
-            #else
-                GLuint dummy;
-                op.perform(dummy);
-            #endif
             }
             
             op.z = z;
@@ -247,10 +247,9 @@ namespace Gosu
                 ++cur;
             }
             set.clear();
-            #ifdef GOSU_IS_IPHONE
+            
             if (currentTexName != NO_TEXTURE)
                 glDisable(GL_TEXTURE_2D);
-            #endif
         }
     };
 }
