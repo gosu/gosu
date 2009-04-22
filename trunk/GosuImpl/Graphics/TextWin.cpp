@@ -66,7 +66,7 @@ namespace Gosu
             ~WinBitmap()
             {
                 ::DeleteObject(bitmap);
-                ::DeleteObject(::SelectObject(dc, ::GetStockObject(SYSTEM_FONT)));
+                ::SelectObject(dc, ::GetStockObject(SYSTEM_FONT));
                 ::DeleteDC(dc);
             }
 
@@ -88,8 +88,16 @@ namespace Gosu
             void selectFont(std::wstring fontName, unsigned fontHeight,
                 unsigned fontFlags) const
             {
-                static std::map<std::wstring, std::wstring> customFonts;
+                // TODO for ASYNC support:
+                // Use a lock on both maps.
 
+                // Note:
+                // The caching of opened fonts didn't really show improved text rendering
+                // performance on my test system.
+                // In case of trouble, it can be taken out without worrying too much.
+
+                static std::map<std::wstring, std::wstring> customFonts;
+                
                 if (fontName.find(L"/") != std::wstring::npos)
                 {
                     if (customFonts.count(fontName) == 0)
@@ -100,28 +108,32 @@ namespace Gosu
                     else
                         fontName = customFonts[fontName];
                 }
+                
+                static std::map<std::pair<std::wstring, unsigned>, HFONT> loadedFonts;
+                
+                HFONT font;
+                std::pair<std::wstring, unsigned> key = std::make_pair(fontName, fontHeight);
+                if (loadedFonts.count(key) == 0)
+                {
+                    LOGFONT logfont = { fontHeight, 0, 0, 0,
+                        fontFlags & ffBold ? FW_BOLD : FW_NORMAL,
+                        fontFlags & ffItalic ? TRUE : FALSE,
+                        fontFlags & ffUnderline ? TRUE : FALSE,
+                        FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+                        CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
+                        DEFAULT_PITCH | FF_DONTCARE };
+                    
+                    // Note: This will truncate the font value, but that's the way stuff works.
+                    /*std::*/wcsncpy(logfont.lfFaceName, fontName.c_str(), LF_FACESIZE);
+                    logfont.lfFaceName[LF_FACESIZE - 1] = 0;
+                    
+                    font = loadedFonts[key] = Win::check(::CreateFontIndirect(&logfont),
+                        "creating font object for " + narrow(fontName));
+                }
+                else
+                    font = loadedFonts[key];
 
-                // IMPR: Maybe remember the last font we had and don't
-                // recreate it every time?
-
-                LOGFONT logfont = { fontHeight, 0, 0, 0,
-                    fontFlags & ffBold ? FW_BOLD : FW_NORMAL,
-                    fontFlags & ffItalic ? TRUE : FALSE,
-                    fontFlags & ffUnderline ? TRUE : FALSE,
-                    FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
-                    CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
-                    DEFAULT_PITCH | FF_DONTCARE };
-
-                // Note: This will truncate the font value, but that's the way stuff works.
-                /*std::*/wcsncpy(logfont.lfFaceName, fontName.c_str(), LF_FACESIZE);
-                logfont.lfFaceName[LF_FACESIZE - 1] = 0;
-
-                HFONT newFont = Win::check(::CreateFontIndirect(&logfont),
-                    "creating font object for " + narrow(fontName));
-
-                HFONT oldFont = reinterpret_cast<HFONT>(::SelectObject(dc, newFont));
-                Win::check(oldFont, "selecting the font object for " + narrow(fontName));
-                ::DeleteObject(oldFont);
+                ::SelectObject(dc, font);
             }
         };
     }
@@ -156,7 +168,7 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
         "setting a bitmap's background mode to TRANSPARENT");
 
     ::ExtTextOut(helper.context(), 0, 0, 0, 0, text.c_str(), text.length(), 0);
-
+    
     for (unsigned relY = 0; relY < fontHeight; ++relY)
         for (unsigned relX = 0; relX < width; ++relX)
         {

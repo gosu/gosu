@@ -426,7 +426,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\GosuImpl\TextTTFWin.cpp"
+					RelativePath="..\GosuImpl\Graphics\TextTTFWin.cpp"
 					>
 				</File>
 				<File
@@ -515,11 +515,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Gosu\Sockets.hpp"
+				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
+				RelativePath="..\Gosu\Sockets.hpp"
 				>
 			</File>
 			<File
