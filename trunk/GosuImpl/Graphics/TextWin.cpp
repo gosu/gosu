@@ -112,8 +112,7 @@ namespace Gosu
                     CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
                     DEFAULT_PITCH | FF_DONTCARE };
 
-                // IMPR: This truncates. Is this reasonable? Should we rather
-                // throw something?
+                // Note: This will truncate the font value, but that's the way stuff works.
                 /*std::*/wcsncpy(logfont.lfFaceName, fontName.c_str(), LF_FACESIZE);
                 logfont.lfFaceName[LF_FACESIZE - 1] = 0;
 
