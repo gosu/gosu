@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-04-22)
+(Last update: 2009-04-23)
 
 == Gosu 0.7.x ==
   * Rethink if Image#from_text with \n's is really what I want
@@ -125,6 +125,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Link YouTube videos, and maybe blog tags like http://www.cuberick.com/search/label/gosu?
   * Change sender address of forum mailer
   * Make logo in forum clickable
+  * Add gallery of images from Gosu Showcase board
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
