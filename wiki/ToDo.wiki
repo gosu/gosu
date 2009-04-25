@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-04-23)
+(Last update: 2009-04-25)
 
 == Gosu 0.7.x ==
   * Rethink if Image#from_text with \n's is really what I want
@@ -58,6 +58,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * TextField with clip_to (update example)
     * Compile Ruby 1.9 on Intel (Mac)
     * Set RG Deployment Template to use 1.9 and full gosu
+    * See if I can fit custom alpha modes in
     * Update to SWIG 1.3.38!
     * Compile Ruby 1.9 on PPC (Mac) and lipo'fy ruby1.9-static.a
     * Document support for Ruby 1.9
