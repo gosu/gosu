@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-04-25)
+(Last update: 2009-04-26)
 
 == Gosu 0.7.x ==
   * Rethink if Image#from_text with \n's is really what I want
