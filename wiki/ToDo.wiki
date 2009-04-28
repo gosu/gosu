@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-04-26)
+(Last update: 2009-04-28)
 
 == Gosu 0.7.x ==
   * Rethink if Image#from_text with \n's is really what I want
@@ -17,7 +17,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Rename "hard_borders" into "tileable"
   * Rethink single-texture policy for images <64x64
   * Release Gosu 0.7.13.1
-  * Shrink diagram and make sure it's spelt "needs_redraw?"
+  * Shrink diagram and make sure it's spelt "needs_redraw?", and *your* needs_redraw?
   * Split up BasicConcepts into single pages with prettier diagrams (also mention corner order tolerance)
   * Web research work
     * Post http://github.com/joakimk/caribbean-onslaught/tree/master before it gets lost?
@@ -64,6 +64,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Document support for Ruby 1.9
     * Package OR&G with optimized Gosu (weee)
     * Look into Ruby 1.9 on Windows
+    * Release 0.7.13.37
   * 0.7.14, text quality release (+Linux gamepad!)
     * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
     * Linux: Support Unicode in title bar
