@@ -8,7 +8,7 @@ class Test < Gosu::Window
     
     self.caption = "Huhu, Ümläuts!"
     @font = Gosu::Font.new(self, "Monaco", 50)
-    @sys_text = Gosu::Image.from_text(self, "Huhu, 地下鉄chikatetsuでde行きますikimasu!", "Helvetica", 15)
+    @sys_text = Gosu::Image.from_text(self, "Huhu, 地下鉄chika\ntetsuでde行きますikimasu!", "Helvetica", 15)
     @loc_text = Gosu::Image.from_text(self, "Huhu, 地下鉄で行きます", "media/Vera.ttf", 30)
     @german_text = Gosu::Image.from_text(self, "Unicode [ˈjuːnɪkoʊd] ist ein internationaler Standard, in dem langfristig für jedes sinntragende Schriftzeichen oder Textelement aller bekannten Schriftkulturen und Zeichensysteme ein digitaler Code festgelegt wird. Ziel ist es, die Verwendung unterschiedlicher und inkompatibler Kodierungen in verschiedenen Ländern oder Kulturkreisen zu beseitigen. Unicode wird laufend um Zeichen weiterer Schriftsysteme ergänzt. ISO 10646 ist die von ISO verwendete praktisch bedeutungsgleiche Bezeichnung des Unicode-Zeichensatzes; er wird dort als Universal Character Set (UCS) bezeichnet.",
                                                Gosu::default_font_name, 20, 0, 300, :center)

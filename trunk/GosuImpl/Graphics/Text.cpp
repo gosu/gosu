@@ -304,9 +304,21 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
         emptyBitmap.resize(1, fontHeight);
         return emptyBitmap;
     }
-    
-    Gosu::Bitmap bmp;
-    bmp.resize(Gosu::textWidth(text, fontName, fontHeight, fontFlags), fontHeight);
+
+    vector<wstring> lines;
+    wstring processedText = boost::replace_all_copy(text, L"\r\n", L"\n");
+    boost::split(lines, processedText, boost::is_any_of(L"\r\n"));
+
+    Bitmap bmp;
+    bmp.resize(textWidth(lines.front(), fontName, fontHeight, fontFlags), fontHeight);
     drawText(bmp, text, 0, 0, 0xffffffff, fontName, fontHeight, fontFlags);
+    
+    for (int i = 1; i < lines.size(); ++i)
+    {
+        bmp.resize(max(bmp.width(), textWidth(lines[i], fontName, fontHeight, fontFlags)),
+                   bmp.height() + fontHeight);
+        drawText(bmp, lines[i], 0, fontHeight * i, 0xffffffff, fontName, fontHeight, fontFlags);
+    }
+    
     return bmp;
 }
