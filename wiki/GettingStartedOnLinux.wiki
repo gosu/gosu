@@ -32,6 +32,14 @@ sudo apt-get install g++ libgl1-mesa-dev libpango1.0-dev libboost-dev ruby ruby1
 
 If you are only interested in using Gosu with the Ruby programming language, you can install it as a Ruby gem via `sudo gem install gosu`. You will still have to install the packages listed above, though.
 
+= Ruby 1.9 Support =
+
+To use Gosu with Ruby 1.9, just replace all occurences of 1.8 with 1.9. The copy-and-pastable command line is thus:
+
+{{{
+sudo apt-get install g++ libgl1-mesa-dev libpango1.0-dev libboost-dev ruby ruby1.8 ruby1.8-dev libsdl-mixer1.2-dev
+}}}
+
 = Compiling Gosu =
 
 To compile Gosu, `cd` into the `linux` subdirectory and run:
