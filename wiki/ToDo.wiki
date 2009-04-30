@@ -4,46 +4,21 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-04-29)
+(Last update: 2009-04-30)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics release
     * Timing Tuning
-  * Test if the extconf.rb help lines are really being shown
-  * Test LD14 entry on Linux
-  * Port the iPhone texture optimization to other platforms
-  * Rename "hard_borders" into "tileable"
-  * Rethink single-texture policy for images <64x64
-  * Release Gosu 0.7.13.1
-  * Shrink diagram and make sure it's spelt "needs_redraw?", and *your* needs_redraw?
-  * Split up BasicConcepts into single pages with prettier diagrams (also mention corner order tolerance)
-  * Web research work
+  * Web work
     * Post http://github.com/joakimk/caribbean-onslaught/tree/master before it gets lost?
     * Move three threads from GosuExchange to the forums
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
     * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
-  * iPhone-related stuff that should be finished soonish
-    * Finish OpenAL port of Gosu::Audio (Ogg Songs)
-    * Fix "too many fingers" bug on iPhone
-    * Implement Proof of Concept for Macro Patches
-    * Integrate "fat" iPhone building from forum
-    * Clear up GOSU_IS_MAC vs. GOSU_IS_OSX
-    * Use getBytes instead of UTF8String
   * Finish OpenAL on OS X!
     * Use OpenAL for OS X too
     * Try to add dynamic MikMod loading code
-  * Try harder to reproduce these bugs
-    * Get rid of context selection error with driver set to always do FSAA (Windows)
-    * OS X: Release all keys on battery notification dialog (?)
-  * Finish the RMagick bundling thing
-    * Try to build RMagick.bundle against the 10.4 SDK
-    * Link the all-in-one-bundle from the boards: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
-    * Test RMagick.bundle on Tiger
-    * Test RMagick.bundle on PPC
-  * More alpha modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
-  * Benchmark clip_to
-  * (1x mymüsli for all the hard work! (motivation!)
   * 0.7.13.37, The Popular Release
+    * More alpha modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
     * Screen size / fullscreen stuff
       * Iterate on first category of fullscreen tests
       * Allow adjustment of the virtual touchscreen resolution
@@ -62,7 +37,27 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Document support for Ruby 1.9
     * Package OR&G with optimized Gosu (weee)
     * Look into Ruby 1.9 on Windows
+    * Test if the extconf.rb help lines are really being shown
+    * Test LD14 entry on Linux
     * Release 0.7.13.37
+    * Rename hard_borders to tileable in the wiki
+    * Document 64px minimum for single-texture opt.
+    * (1x mymüsli for all the hard work! (motivation!)
+  * Try harder to reproduce these bugs
+    * Get rid of context selection error with driver set to always do FSAA (Windows)
+    * OS X: Release all keys on battery notification dialog (?)
+  * Finish the RMagick bundling thing
+    * Try to build RMagick.bundle against the 10.4 SDK
+    * Link the all-in-one-bundle from the boards: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
+    * Test RMagick.bundle on Tiger
+    * Test RMagick.bundle on PPC
+  * iPhone-related stuff that should be finished soonish
+    * Finish OpenAL port of Gosu::Audio (Ogg Songs)
+    * Fix "too many fingers" bug on iPhone
+    * Implement Proof of Concept for Macro Patches
+    * Integrate "fat" iPhone building from forum
+    * Clear up GOSU_IS_MAC vs. GOSU_IS_OSX
+    * Use getBytes instead of UTF8String
   * 0.7.14, text quality release (+Linux gamepad!)
     * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
     * Image#from_text should support maxWidth=0 => no limits on size
@@ -113,6 +108,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Make sure Images can live without a Window (context!)
     * Add Image::Image *and set hardBorders to true on default*
   * Think: Possible to have beautiful quotation mark indenting?@Gosu Text
+  * Benchmark clip_to; worth replacing with stencils?
   * See if other libraries catch the release of the 'A' key in cmd+a
 == Gosu CI/Usability ==
   * Make things a bit more comic-y
@@ -127,6 +123,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Change sender address of forum mailer
   * Make logo in forum clickable
   * Add gallery of images from Gosu Showcase board
+  * Add Unicode Support wiki page
+  * Split up BasicConcepts into single pages with prettier diagrams (also mention corner order tolerance)
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
