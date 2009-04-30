@@ -281,7 +281,8 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     // pixels and a power of two, create a single texture just for this image.
     if ((borderFlags & bfTileable) == bfTileable &&
         srcWidth == srcHeight &&
-        (srcWidth & (srcWidth - 1)) == 0)
+        (srcWidth & (srcWidth - 1)) == 0 &&
+        srcWidth >= 64)
     {
         boost::shared_ptr<Texture> texture(new Texture(srcWidth));
         std::auto_ptr<ImageData> data;
