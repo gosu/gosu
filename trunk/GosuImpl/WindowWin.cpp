@@ -201,7 +201,9 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     if (fullscreen)
     {
         style |= WS_POPUP;
+#ifdef NDEBUG
         styleEx |= WS_EX_TOPMOST;
+#endif
     }
     else
     {
