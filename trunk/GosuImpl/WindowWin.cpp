@@ -137,19 +137,25 @@ namespace Gosu
             if (name)
                 return name;
             
-            WNDCLASS wc;
+            WNDCLASSEX wc;
+            ZeroMemory(&wc, sizeof wc);
+            wc.cbSize = sizeof wc;
             wc.lpszClassName = L"Gosu::Window";
             wc.style = CS_OWNDC;
             wc.lpfnWndProc = windowProc;
             wc.cbClsExtra = 0;
             wc.cbWndExtra = 0;
             wc.hInstance = Win::instance();
-            wc.hIcon = ::ExtractIcon(wc.hInstance, Win::appFilename().c_str(), 0);
+            wc.hIcon = ExtractIcon(wc.hInstance, Win::appFilename().c_str(), 0);
             wc.hCursor = 0;
-            wc.hbrBackground = ::CreateSolidBrush(0);//0;
+            wc.hbrBackground = CreateSolidBrush(0);
             wc.lpszMenuName = 0;
+            wc.hIconSm = (HICON)CopyImage(wc.hIcon, IMAGE_ICON,
+                GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON),
+                LR_COPYFROMRESOURCE | LR_COPYRETURNORG);
+
             
-            name = reinterpret_cast<LPCTSTR>(::RegisterClass(&wc));
+            name = reinterpret_cast<LPCTSTR>(RegisterClassEx(&wc));
             Win::check(name, "registering a window class");
             return name;
         }
