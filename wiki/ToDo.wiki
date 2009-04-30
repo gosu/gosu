@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-04-30)
+(Last update: 2009-05-01)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics release
@@ -37,7 +37,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Document support for Ruby 1.9
     * Package OR&G with optimized Gosu (weee)
     * Look into Ruby 1.9 on Windows
-    * Test if the extconf.rb help lines are really being shown
     * Test LD14 entry on Linux
     * Release 0.7.13.37
     * Rename hard_borders to tileable in the wiki
