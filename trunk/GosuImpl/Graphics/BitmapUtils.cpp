@@ -32,34 +32,34 @@ void Gosu::applyBorderFlags(Bitmap& dest, const Bitmap& source,
     // borders.
 
     // Top.
-    if (borderFlags & bfHardTop)
+    if (borderFlags & bfTileableTop)
         dest.insert(source, 1, 0, srcX, srcY, srcWidth, 1);
     // Bottom.
-    if (borderFlags & bfHardBottom)
+    if (borderFlags & bfTileableBottom)
         dest.insert(source, 1, dest.height() - 1,
             srcX, srcY + srcHeight - 1, srcWidth, 1);
     // Left.
-    if (borderFlags & bfHardLeft)
+    if (borderFlags & bfTileableLeft)
         dest.insert(source, 0, 1, srcX, srcY, 1, srcHeight);
     // Right.
-    if (borderFlags & bfHardRight)
+    if (borderFlags & bfTileableRight)
         dest.insert(source, dest.width() - 1, 1, 
             srcX + srcWidth - 1, srcY, 1, srcHeight);
 
     // Top left.
-    if ((borderFlags & bfHardTop) && (borderFlags & bfHardLeft))
+    if ((borderFlags & bfTileableTop) && (borderFlags & bfTileableLeft))
         dest.setPixel(0, 0,
             source.getPixel(srcX, srcY));
     // Top right.
-    if ((borderFlags & bfHardTop) && (borderFlags & bfHardRight))
+    if ((borderFlags & bfTileableTop) && (borderFlags & bfTileableRight))
         dest.setPixel(dest.width() - 1, 0,
             source.getPixel(srcX + srcWidth - 1, srcY));
     // Bottom left.
-    if ((borderFlags & bfHardBottom) && (borderFlags & bfHardLeft))
+    if ((borderFlags & bfTileableBottom) && (borderFlags & bfTileableLeft))
         dest.setPixel(0, dest.height() - 1,
             source.getPixel(srcX, srcY + srcHeight - 1));
     // Bottom right.
-    if ((borderFlags & bfHardBottom) && (borderFlags & bfHardRight))
+    if ((borderFlags & bfTileableBottom) && (borderFlags & bfTileableRight))
         dest.setPixel(dest.width() - 1, dest.height() - 1,
             source.getPixel(srcX + srcWidth - 1, srcY + srcHeight - 1));
 

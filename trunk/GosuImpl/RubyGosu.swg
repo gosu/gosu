@@ -307,19 +307,19 @@ namespace Gosu
     }
 }
 
-%ignore Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, bool hardBorders = false);
-%ignore Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, bool hardBorders = false);
-%ignore Gosu::Image::Image(Graphics& graphics, const Bitmap& source, bool hardBorders = false);
-%ignore Gosu::Image::Image(Graphics& graphics, const Bitmap& source, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, bool hardBorders = false);
+%ignore Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, bool tileable = false);
+%ignore Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, bool tileable = false);
+%ignore Gosu::Image::Image(Graphics& graphics, const Bitmap& source, bool tileable = false);
+%ignore Gosu::Image::Image(Graphics& graphics, const Bitmap& source, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, bool tileable = false);
 %include "../Gosu/Image.hpp"
 %extend Gosu::Image {
-    Image(Gosu::Window& window, VALUE source, bool hardBorders = false) {
-        return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source), hardBorders);
+    Image(Gosu::Window& window, VALUE source, bool tileable = false) {
+        return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source), tileable);
     }
-    Image(Gosu::Window& window, VALUE source, bool hardBorders,
+    Image(Gosu::Window& window, VALUE source, bool tileable,
           unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight) {
         return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source),
-            srcX, srcY, srcWidth, srcHeight, hardBorders);
+            srcX, srcY, srcWidth, srcHeight, tileable);
     }
     #ifndef WIN32
 //    %newobject asyncNew;
@@ -356,11 +356,11 @@ namespace Gosu
         return new Gosu::Image(window.graphics(), bmp);
     }
     static std::vector<Gosu::Image*> loadTiles(Gosu::Window& window, VALUE source,
-                                               int tileWidth, int tileHeight, bool hardBorders) {
+                                               int tileWidth, int tileHeight, bool tileable) {
         std::vector<Gosu::Image*> vec;
         // TODO: const correctness (<- did I mean exception safety?)
         Gosu::imagesFromTiledBitmap(window.graphics(), Gosu::loadBitmap(source),
-                                    tileWidth, tileHeight, hardBorders, vec);
+                                    tileWidth, tileHeight, tileable, vec);
         return vec;        
     }
 }

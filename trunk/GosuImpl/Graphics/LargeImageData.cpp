@@ -32,15 +32,15 @@ Gosu::LargeImageData::LargeImageData(Graphics& graphics,
             if (y == partsY - 1 && source.height() % partHeight != 0)
                 srcHeight = source.height() % partHeight;
 
-            unsigned localBorderFlags = bfHard;
+            unsigned localBorderFlags = bfTileable;
             if (x == 0)
-                localBorderFlags = (localBorderFlags & ~bfHardLeft) | (borderFlags & bfHardLeft);
+                localBorderFlags = (localBorderFlags & ~bfTileableLeft) | (borderFlags & bfTileableLeft);
             if (x == partsX - 1)
-                localBorderFlags = (localBorderFlags & ~bfHardRight) | (borderFlags & bfHardRight);
+                localBorderFlags = (localBorderFlags & ~bfTileableRight) | (borderFlags & bfTileableRight);
             if (y == 0)
-                localBorderFlags = (localBorderFlags & ~bfHardTop) | (borderFlags & bfHardTop);
+                localBorderFlags = (localBorderFlags & ~bfTileableTop) | (borderFlags & bfTileableTop);
             if (y == partsY - 1)
-                localBorderFlags = (localBorderFlags & ~bfHardBottom) | (borderFlags & bfHardBottom);
+                localBorderFlags = (localBorderFlags & ~bfTileableBottom) | (borderFlags & bfTileableBottom);
             
             parts[y * partsX + x].reset(graphics.createImage(source,
                 x * partWidth, y * partHeight, srcWidth, srcHeight,

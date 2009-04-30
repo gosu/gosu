@@ -2382,6 +2382,13 @@ SWIG_AsVal_double (VALUE obj, double *val)
 
 
 SWIGINTERNINLINE VALUE
+SWIG_From_int  (int value)
+{    
+  return SWIG_From_long  (value);
+}
+
+
+SWIGINTERNINLINE VALUE
 SWIG_From_unsigned_SS_int  (unsigned int value)
 {    
   return SWIG_From_unsigned_SS_long  (value);
@@ -2556,13 +2563,6 @@ SWIGINTERN Gosu::Font *new_Gosu_Font(Gosu::Window &window,std::wstring const &fo
         return new Gosu::Font(window.graphics(), fontName, height);
     }
 
-SWIGINTERNINLINE VALUE
-SWIG_From_int  (int value)
-{    
-  return SWIG_From_long  (value);
-}
-
-
 SWIGINTERN int
 SWIG_AsVal_bool (VALUE obj, bool *val)
 {
@@ -2582,12 +2582,12 @@ SWIG_AsVal_bool (VALUE obj, bool *val)
   return SWIG_TypeError;
 }
 
-SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_0(Gosu::Window &window,VALUE source,bool hardBorders=false){
-        return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source), hardBorders);
+SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_0(Gosu::Window &window,VALUE source,bool tileable=false){
+        return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source), tileable);
     }
-SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_1(Gosu::Window &window,VALUE source,bool hardBorders,unsigned int srcX,unsigned int srcY,unsigned int srcWidth,unsigned int srcHeight){
+SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_1(Gosu::Window &window,VALUE source,bool tileable,unsigned int srcX,unsigned int srcY,unsigned int srcWidth,unsigned int srcHeight){
         return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source),
-            srcX, srcY, srcWidth, srcHeight, hardBorders);
+            srcX, srcY, srcWidth, srcHeight, tileable);
     }
 SWIGINTERN void Gosu_Image_drawAsQuad(Gosu::Image *self,double x1,double y1,Gosu::Color c1,double x2,double y2,Gosu::Color c2,double x3,double y3,Gosu::Color c3,double x4,double y4,Gosu::Color c4,Gosu::ZPos z,Gosu::AlphaMode mode=Gosu::amDefault){
         self->getData().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
@@ -2607,11 +2607,11 @@ SWIGINTERN Gosu::Image *Gosu_Image_fromText7(Gosu::Window &window,std::wstring c
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
         return new Gosu::Image(window.graphics(), bmp);
     }
-SWIGINTERN std::vector< Gosu::Image * > Gosu_Image_loadTiles(Gosu::Window &window,VALUE source,int tileWidth,int tileHeight,bool hardBorders){
+SWIGINTERN std::vector< Gosu::Image * > Gosu_Image_loadTiles(Gosu::Window &window,VALUE source,int tileWidth,int tileHeight,bool tileable){
         std::vector<Gosu::Image*> vec;
         // TODO: const correctness (<- did I mean exception safety?)
         Gosu::imagesFromTiledBitmap(window.graphics(), Gosu::loadBitmap(source),
-                                    tileWidth, tileHeight, hardBorders, vec);
+                                    tileWidth, tileHeight, tileable, vec);
         return vec;        
     }
 
@@ -6296,8 +6296,8 @@ fail:
   Document-method: Gosu::Image.new
 
   call-seq:
-    Image.new(Window window, VALUE source, bool hardBorders=false)
-    Image.new(Window window, VALUE source, bool hardBorders, unsigned int srcX, 
+    Image.new(Window window, VALUE source, bool tileable=false)
+    Image.new(Window window, VALUE source, bool tileable, unsigned int srcX, 
     unsigned int srcY, unsigned int srcWidth, 
     unsigned int srcHeight)
 
@@ -6519,8 +6519,8 @@ SWIGINTERN VALUE _wrap_new_Image(int nargs, VALUE *args, VALUE self) {
   
 fail:
   Ruby_Format_OverloadedError( argc, 7, "Image.new", 
-    "    Image.new(Gosu::Window &window, VALUE source, bool hardBorders)\n"
-    "    Image.new(Gosu::Window &window, VALUE source, bool hardBorders, unsigned int srcX, unsigned int srcY, unsigned int srcWidth, unsigned int srcHeight)\n");
+    "    Image.new(Gosu::Window &window, VALUE source, bool tileable)\n"
+    "    Image.new(Gosu::Window &window, VALUE source, bool tileable, unsigned int srcX, unsigned int srcY, unsigned int srcWidth, unsigned int srcHeight)\n");
   
   return Qnil;
 }
@@ -6906,7 +6906,7 @@ fail:
 
   call-seq:
     load_tiles(Window window, VALUE source, int tileWidth, int tileHeight, 
-    bool hardBorders) -> std::vector<(p.Gosu::Image)>
+    bool tileable) -> std::vector<(p.Gosu::Image)>
 
 A class method.
 
@@ -10282,6 +10282,12 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "normalize_angle", VALUEFUNC(_wrap_normalize_angle), -1);
   rb_define_module_function(mGosu, "distance", VALUEFUNC(_wrap_distance), -1);
   rb_define_module_function(mGosu, "default_font_name", VALUEFUNC(_wrap_default_font_name), -1);
+  rb_define_const(mGosu, "BfSoft", SWIG_From_int(static_cast< int >(Gosu::bfSoft)));
+  rb_define_const(mGosu, "BfTileableLeft", SWIG_From_int(static_cast< int >(Gosu::bfTileableLeft)));
+  rb_define_const(mGosu, "BfTileableTop", SWIG_From_int(static_cast< int >(Gosu::bfTileableTop)));
+  rb_define_const(mGosu, "BfTileableRight", SWIG_From_int(static_cast< int >(Gosu::bfTileableRight)));
+  rb_define_const(mGosu, "BfTileableBottom", SWIG_From_int(static_cast< int >(Gosu::bfTileableBottom)));
+  rb_define_const(mGosu, "BfTileable", SWIG_From_int(static_cast< int >(Gosu::bfTileable)));
   rb_define_module_function(mGosu, "screen_width", VALUEFUNC(_wrap_screen_width), -1);
   rb_define_module_function(mGosu, "screen_height", VALUEFUNC(_wrap_screen_height), -1);
   

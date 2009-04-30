@@ -5,31 +5,31 @@
 #include <Gosu/Math.hpp>
 #include <Gosu/IO.hpp>
 
-Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, bool hardBorders)
+Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, bool tileable)
 {
 	// Forward.
-	Image(graphics, quickLoadBitmap(filename), hardBorders).data.swap(data);
+	Image(graphics, quickLoadBitmap(filename), tileable).data.swap(data);
 }
 
 Gosu::Image::Image(Graphics& graphics, const std::wstring& filename,
     unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-    bool hardBorders)
+    bool tileable)
 {
 	// Forward.
-	Image(graphics, quickLoadBitmap(filename), srcX, srcY, srcWidth, srcHeight, hardBorders).data.swap(data);
+	Image(graphics, quickLoadBitmap(filename), srcX, srcY, srcWidth, srcHeight, tileable).data.swap(data);
 }
 
-Gosu::Image::Image(Graphics& graphics, const Bitmap& source, bool hardBorders)
+Gosu::Image::Image(Graphics& graphics, const Bitmap& source, bool tileable)
 {
 	// Forward.
-	Image(graphics, source, 0, 0, source.width(), source.height(), hardBorders).data.swap(data);
+	Image(graphics, source, 0, 0, source.width(), source.height(), tileable).data.swap(data);
 }
 
 Gosu::Image::Image(Graphics& graphics, const Bitmap& source,
     unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-    bool hardBorders)
+    bool tileable)
 : data(graphics.createImage(source, srcX, srcY, srcWidth, srcHeight,
-    hardBorders ? Gosu::bfHard : Gosu::bfSoft))
+    tileable ? Gosu::bfTileable : Gosu::bfSoft))
 {
 }
 

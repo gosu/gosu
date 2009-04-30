@@ -279,7 +279,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     // Special case: If the texture is supposed to have hard borders,
     // is quadratic, has a size that is at least 64 pixels but less than 256
     // pixels and a power of two, create a single texture just for this image.
-    if ((borderFlags & bfHard) == bfHard &&
+    if ((borderFlags & bfTileable) == bfTileable &&
         srcWidth == srcHeight &&
         (srcWidth & (srcWidth - 1)) == 0)
     {

@@ -17,7 +17,7 @@ namespace Gosu
     //! your drawing operation does not need Z ordering and can be performed
     //! immediately.
     const double zImmediate = -std::numeric_limits<double>::infinity();
-
+    
     //! Determines the way colors are combined when one is drawn onto
     //! another.
     enum AlphaMode
@@ -30,14 +30,14 @@ namespace Gosu
         //! to the old color's channels.
         amAdditive
     };
-
+    
     enum FontFlags
     {
         ffBold      = 1,
         ffItalic    = 2,
         ffUnderline = 4
     };
-
+    
     enum TextAlign
     {
         taLeft,
@@ -45,6 +45,17 @@ namespace Gosu
         taCenter,
         taJustify
     };
+    
+    //! Flags that affect the tileability of an image.
+    enum BorderFlags
+    {
+        bfSoft = 0,
+        bfTileableLeft = 1,
+        bfTileableTop = 2,
+        bfTileableRight = 4,
+        bfTileableBottom = 8,
+        bfTileable = bfTileableLeft | bfTileableTop | bfTileableRight | bfTileableBottom
+    };        
 }
 
 #endif

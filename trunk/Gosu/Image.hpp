@@ -23,7 +23,7 @@ namespace Gosu
 		//! automatically applied to BMP type images. For more flexibility, use the
 		//! corresponding constructor that uses a Bitmap object.
         Image(Graphics& graphics, const std::wstring& filename,
-              bool hardBorders = false);
+              bool tileable = false);
         //! Loads a portion of the the image at the given filename that can be
         //! drawn onto graphics.
 		//! This constructor can handle PNG and BMP images. A color key of #ff00ff is
@@ -31,17 +31,17 @@ namespace Gosu
 		//! corresponding constructor that uses a Bitmap object.
         Image(Graphics& graphics, const std::wstring& filename, unsigned srcX,
               unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-              bool hardBorders = false);
+              bool tileable = false);
         
         //! Converts the given bitmap into an image that can be drawn onto
         //! graphics.
         Image(Graphics& graphics, const Bitmap& source,
-            bool hardBorders = false);
+            bool tileable = false);
         //! Converts a portion of the given bitmap into an image that can be
         //! drawn onto graphics.
         Image(Graphics& graphics, const Bitmap& source, unsigned srcX,
             unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-            bool hardBorders = false);
+            bool tileable = false);
 
         ~Image();
 
@@ -102,9 +102,9 @@ namespace Gosu
     //! is usually the most reasonable container.
     template<typename Container>
     void imagesFromTiledBitmap(Graphics& graphics, const std::wstring& filename,
-        int tileWidth, int tileHeight, bool hardBorders, Container& appendTo)
+        int tileWidth, int tileHeight, bool tileable, Container& appendTo)
     {
-		imagesFromTiledBitmap(graphics, quickLoadBitmap(filename), tileWidth, tileHeight, hardBorders, appendTo);
+		imagesFromTiledBitmap(graphics, quickLoadBitmap(filename), tileWidth, tileHeight, tileable, appendTo);
     }
 
     //! Convenience function that splits a bitmap into an area of small 
@@ -117,7 +117,7 @@ namespace Gosu
     //! is usually the most reasonable container.
     template<typename Container>
     void imagesFromTiledBitmap(Graphics& graphics, const Bitmap& bmp,
-        int tileWidth, int tileHeight, bool hardBorders, Container& appendTo)
+        int tileWidth, int tileHeight, bool tileable, Container& appendTo)
     {
         int tilesX, tilesY;
 
@@ -141,7 +141,7 @@ namespace Gosu
             for (int x = 0; x < tilesX; ++x)
                 appendTo.push_back(typename Container::value_type(new Image(graphics, bmp,
                     x * tileWidth, y * tileHeight, tileWidth, tileHeight,
-                    hardBorders)));
+                    tileable)));
     }
 }
 

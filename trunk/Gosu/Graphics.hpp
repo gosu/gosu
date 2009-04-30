@@ -12,19 +12,11 @@
 
 namespace Gosu
 {
+    //! Returns the width, in pixels, of the user's primary screen.
     unsigned screenWidth();
+    
+    //! Returns the height, in pixels, of the user's primary screen.
     unsigned screenHeight();
-
-    //! Flags that affect the softness of a border.
-    enum BorderFlags
-    {
-        bfSoft = 0,
-        bfHardLeft = 1,
-        bfHardTop = 2,
-        bfHardRight = 4,
-        bfHardBottom = 8,
-        bfHard = bfHardLeft | bfHardTop | bfHardRight | bfHardBottom
-    };        
     
     //! Serves as the target of all drawing and provides basic drawing
     //! functionality.
