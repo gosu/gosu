@@ -4,13 +4,12 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-05-01)
+(Last update: 2009-05-03)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics release
     * Timing Tuning
   * Web work
-    * Post http://github.com/joakimk/caribbean-onslaught/tree/master before it gets lost?
     * Move three threads from GosuExchange to the forums
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
     * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
@@ -18,7 +17,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Use OpenAL for OS X too
     * Try to add dynamic MikMod loading code
   * 0.7.13.37, The Popular Release
-    * More alpha modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
     * Screen size / fullscreen stuff
       * Iterate on first category of fullscreen tests
       * Allow adjustment of the virtual touchscreen resolution
@@ -31,8 +29,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * TextField with clip_to (update example)
     * Compile Ruby 1.9 on Intel (Mac)
     * Set RG Deployment Template to use 1.9 and full gosu
-    * See if I can fit custom alpha modes in
-    * Update to SWIG 1.3.38!
+    * Update to SWIG 1.3.39!
     * Compile Ruby 1.9 on PPC (Mac) and lipo'fy ruby1.9-static.a
     * Document support for Ruby 1.9
     * Package OR&G with optimized Gosu (weee)
@@ -101,6 +98,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Look at http://slick.cokeandcode.com/index.php?entry=entry080426-213044
   * Experiment: resizing the window possible?
   * Experimentation with new drawing syntax; maybe first prototype as the last version of the 0.7.x series?
+  * Create concept: Allow custom OpenGL actions to be put into the Z ordering queue
+  * More alpha modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
   * Document Gosu::interpolate, improve it too?
   * Experiment: resizing the window possible?
   * Introduce 0.8 syntax
