@@ -64,15 +64,16 @@ namespace Gosu
         
         // Ignore when SWIG is wrapping this class for Ruby/Gosu.
         #ifndef SWIG
+        
         const Graphics& graphics() const;
         Graphics& graphics();
-
+        
         const Audio& audio() const;
         Audio& audio();
-
+        
         const Input& input() const;
         Input& input();
-
+        
         #ifdef GOSU_IS_WIN
         // Only on Windows, used for integrating with GUI toolkits.
         HWND handle() const;
@@ -98,7 +99,7 @@ namespace Gosu
         // Currently known touches.
         const Touches& currentTouches() const;
         #endif        
-
+        
         #endif
     };
 }

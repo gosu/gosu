@@ -107,6 +107,104 @@
 		D459FF4C0BDCD26D00E7F0D6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98A0A801948005C7067 /* AppKit.framework */; };
 		D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */; };
 		D459FF990BDCD9CF00E7F0D6 /* Gosu.icns in Resources */ = {isa = PBXBuildFile; fileRef = D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */; };
+		D46C2A3B0FAE037800A33476 /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD40A801B00005C7067 /* Bitmap.cpp */; };
+		D46C2A3C0FAE037800A33476 /* BitmapBMP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD50A801B00005C7067 /* BitmapBMP.cpp */; };
+		D46C2A3D0FAE037800A33476 /* BitmapColorKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD60A801B00005C7067 /* BitmapColorKey.cpp */; };
+		D46C2A3E0FAE037800A33476 /* BitmapPNG.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD70A801B00005C7067 /* BitmapPNG.cpp */; };
+		D46C2A3F0FAE037800A33476 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
+		D46C2A400FAE037800A33476 /* BlockAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD80A801B00005C7067 /* BlockAllocator.cpp */; };
+		D46C2A410FAE037800A33476 /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADA0A801B00005C7067 /* Color.cpp */; };
+		D46C2A420FAE037800A33476 /* Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADB0A801B00005C7067 /* Font.cpp */; };
+		D46C2A430FAE037800A33476 /* Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADC0A801B00005C7067 /* Graphics.cpp */; };
+		D46C2A440FAE037800A33476 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADE0A801B00005C7067 /* Image.cpp */; };
+		D46C2A450FAE037800A33476 /* LargeImageData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADF0A801B00005C7067 /* LargeImageData.cpp */; };
+		D46C2A460FAE037800A33476 /* RotFlip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE10A801B00005C7067 /* RotFlip.cpp */; };
+		D46C2A470FAE037800A33476 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97B0CD3907D00621B24 /* Texture.cpp */; };
+		D46C2A480FAE037800A33476 /* TexChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97D0CD3907D00621B24 /* TexChunk.cpp */; };
+		D46C2A490FAE037800A33476 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE20A801B00005C7067 /* Text.cpp */; };
+		D46C2A4A0FAE037800A33476 /* TextMac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE30A801B00005C7067 /* TextMac.cpp */; };
+		D46C2A4B0FAE039E00A33476 /* AudioFmod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D42D023E0F7068BC00407E60 /* AudioFmod.cpp */; };
+		D46C2A4C0FAE039E00A33476 /* DirectoriesUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA000A8019FA005C7067 /* DirectoriesUnix.cpp */; };
+		D46C2A4D0FAE039E00A33476 /* FileUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA020A8019FA005C7067 /* FileUnix.cpp */; };
+		D46C2A4E0FAE039E00A33476 /* InputMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410EA180A8019FA005C7067 /* InputMac.mm */; };
+		D46C2A4F0FAE039E00A33476 /* IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA1B0A8019FA005C7067 /* IO.cpp */; };
+		D46C2A500FAE039E00A33476 /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA1C0A8019FA005C7067 /* Math.cpp */; };
+		D46C2A510FAE039E00A33476 /* TextInputMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4F07B260D93504700FB3D99 /* TextInputMac.mm */; };
+		D46C2A520FAE039E00A33476 /* TimingUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA2E0A8019FA005C7067 /* TimingUnix.cpp */; };
+		D46C2A530FAE039E00A33476 /* WindowMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410EA310A8019FA005C7067 /* WindowMac.mm */; };
+		D46C2A540FAE03B100A33476 /* RubyGosu_wrap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */; };
+		D46C2DDF0FAE03F900A33476 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D03750F70A26800407E60 /* OpenAL.framework */; };
+		D46C2DE00FAE03F900A33476 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42568090C69CF6100E745AC /* IOKit.framework */; };
+		D46C2DE10FAE03F900A33476 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410EB290A801C28005C7067 /* OpenGL.framework */; };
+		D46C2DE20FAE03F900A33476 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98B0A801948005C7067 /* ApplicationServices.framework */; };
+		D46C2DE30FAE03F900A33476 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98C0A801948005C7067 /* Foundation.framework */; };
+		D46C2DE40FAE03F900A33476 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB77AAFE841565C02AAC07 /* Carbon.framework */; };
+		D46C2E2B0FAE090200A33476 /* array.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E070FAE090200A33476 /* array.c */; };
+		D46C2E2C0FAE090200A33476 /* bignum.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E080FAE090200A33476 /* bignum.c */; };
+		D46C2E2D0FAE090200A33476 /* class.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E090FAE090200A33476 /* class.c */; };
+		D46C2E2E0FAE090200A33476 /* compar.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E0A0FAE090200A33476 /* compar.c */; };
+		D46C2E2F0FAE090200A33476 /* dir.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E0B0FAE090200A33476 /* dir.c */; };
+		D46C2E320FAE090200A33476 /* enum.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E0E0FAE090200A33476 /* enum.c */; };
+		D46C2E330FAE090200A33476 /* enumerator.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E0F0FAE090200A33476 /* enumerator.c */; };
+		D46C2E350FAE090200A33476 /* eval.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E110FAE090200A33476 /* eval.c */; };
+		D46C2E360FAE090200A33476 /* file.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E120FAE090200A33476 /* file.c */; };
+		D46C2E370FAE090200A33476 /* gc.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E130FAE090200A33476 /* gc.c */; };
+		D46C2E380FAE090200A33476 /* hash.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E140FAE090200A33476 /* hash.c */; };
+		D46C2E390FAE090200A33476 /* inits.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E150FAE090200A33476 /* inits.c */; };
+		D46C2E3A0FAE090200A33476 /* io.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E160FAE090200A33476 /* io.c */; };
+		D46C2E3B0FAE090200A33476 /* marshal.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E170FAE090200A33476 /* marshal.c */; };
+		D46C2E3C0FAE090200A33476 /* math.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E180FAE090200A33476 /* math.c */; };
+		D46C2E3D0FAE090200A33476 /* numeric.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E190FAE090200A33476 /* numeric.c */; };
+		D46C2E3E0FAE090200A33476 /* object.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E1A0FAE090200A33476 /* object.c */; };
+		D46C2E3F0FAE090200A33476 /* pack.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E1B0FAE090200A33476 /* pack.c */; };
+		D46C2E400FAE090200A33476 /* parse.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E1C0FAE090200A33476 /* parse.c */; };
+		D46C2E410FAE090200A33476 /* process.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E1D0FAE090200A33476 /* process.c */; };
+		D46C2E420FAE090200A33476 /* random.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E1E0FAE090200A33476 /* random.c */; };
+		D46C2E430FAE090200A33476 /* range.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E1F0FAE090200A33476 /* range.c */; };
+		D46C2E440FAE090200A33476 /* re.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E200FAE090200A33476 /* re.c */; };
+		D46C2E450FAE090200A33476 /* ruby.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E210FAE090200A33476 /* ruby.c */; };
+		D46C2E460FAE090200A33476 /* signal.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E220FAE090200A33476 /* signal.c */; };
+		D46C2E470FAE090200A33476 /* sprintf.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E230FAE090200A33476 /* sprintf.c */; };
+		D46C2E480FAE090200A33476 /* st.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E240FAE090200A33476 /* st.c */; };
+		D46C2E490FAE090200A33476 /* string.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E250FAE090200A33476 /* string.c */; };
+		D46C2E4A0FAE090200A33476 /* struct.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E260FAE090200A33476 /* struct.c */; };
+		D46C2E4B0FAE090200A33476 /* time.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E270FAE090200A33476 /* time.c */; };
+		D46C2E4C0FAE090200A33476 /* util.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E280FAE090200A33476 /* util.c */; };
+		D46C2E4D0FAE090200A33476 /* variable.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E290FAE090200A33476 /* variable.c */; };
+		D46C2E4E0FAE090200A33476 /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E2A0FAE090200A33476 /* version.c */; };
+		D46C2E6F0FAE0C6F00A33476 /* finite.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2E6E0FAE0C6F00A33476 /* finite.c */; };
+		D46C2EB70FAE0F0500A33476 /* dmyext.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2EB60FAE0F0500A33476 /* dmyext.c */; };
+		D46C2EDB0FAE10B000A33476 /* dmydln.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2EDA0FAE10B000A33476 /* dmydln.c */; };
+		D46C2F1E0FAE2FA400A33476 /* complex.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F0F0FAE2FA400A33476 /* complex.c */; };
+		D46C2F1F0FAE2FA400A33476 /* cont.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F100FAE2FA400A33476 /* cont.c */; };
+		D46C2F200FAE2FA400A33476 /* debug.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F110FAE2FA400A33476 /* debug.c */; };
+		D46C2F210FAE2FA400A33476 /* encoding.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F120FAE2FA400A33476 /* encoding.c */; };
+		D46C2F220FAE2FA400A33476 /* prelude.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F130FAE2FA400A33476 /* prelude.c */; };
+		D46C2F230FAE2FA400A33476 /* regcomp.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F140FAE2FA400A33476 /* regcomp.c */; };
+		D46C2F240FAE2FA400A33476 /* regenc.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F150FAE2FA400A33476 /* regenc.c */; };
+		D46C2F250FAE2FA400A33476 /* regerror.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F160FAE2FA400A33476 /* regerror.c */; };
+		D46C2F260FAE2FA400A33476 /* regexec.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F170FAE2FA400A33476 /* regexec.c */; };
+		D46C2F270FAE2FA400A33476 /* regparse.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F180FAE2FA400A33476 /* regparse.c */; };
+		D46C2F280FAE2FA400A33476 /* regsyntax.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F190FAE2FA400A33476 /* regsyntax.c */; };
+		D46C2F290FAE2FA400A33476 /* thread.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F1A0FAE2FA400A33476 /* thread.c */; };
+		D46C2F2A0FAE2FA400A33476 /* vm.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F1B0FAE2FA400A33476 /* vm.c */; };
+		D46C2F2B0FAE2FA400A33476 /* vm_dump.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F1C0FAE2FA400A33476 /* vm_dump.c */; };
+		D46C2F480FAE319800A33476 /* error.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F470FAE319800A33476 /* error.c */; };
+		D46C2F520FAE321300A33476 /* utf_8.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F4F0FAE321300A33476 /* utf_8.c */; };
+		D46C2F530FAE321300A33476 /* us_ascii.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F500FAE321300A33476 /* us_ascii.c */; };
+		D46C2F5D0FAE370500A33476 /* transcode.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F5C0FAE370500A33476 /* transcode.c */; };
+		D46C2F600FAE371E00A33476 /* proc.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F5F0FAE371E00A33476 /* proc.c */; };
+		D46C2F640FAE376C00A33476 /* newline.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F630FAE376C00A33476 /* newline.c */; };
+		D46C2F660FAE377300A33476 /* rational.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F650FAE377300A33476 /* rational.c */; };
+		D46C2F690FAE379000A33476 /* safe.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F680FAE379000A33476 /* safe.c */; };
+		D46C2F6C0FAE37A900A33476 /* iseq.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F6B0FAE37A900A33476 /* iseq.c */; };
+		D46C2F6E0FAE37C400A33476 /* unicode.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F6D0FAE37C400A33476 /* unicode.c */; };
+		D46C2F710FAE37FB00A33476 /* load.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F700FAE37FB00A33476 /* load.c */; };
+		D46C2F730FAE380500A33476 /* ascii.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F720FAE380500A33476 /* ascii.c */; };
+		D46C2F760FAE383B00A33476 /* strftime.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F750FAE383B00A33476 /* strftime.c */; };
+		D46C2F790FAE38F300A33476 /* compile.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F780FAE38F300A33476 /* compile.c */; };
+		D46C2F870FAE393800A33476 /* lgamma_r.c in Sources */ = {isa = PBXBuildFile; fileRef = D46C2F860FAE393800A33476 /* lgamma_r.c */; };
+		D46C2F8E0FAE39FD00A33476 /* Main.rb in Resources */ = {isa = PBXBuildFile; fileRef = D46C2F8D0FAE39FD00A33476 /* Main.rb */; };
 		D47BD32B0BD78F7200ACF014 /* RubyGosu_wrap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */; };
 		D48810BD0F7C0E3000602C04 /* BitmapBMP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD50A801B00005C7067 /* BitmapBMP.cpp */; };
 		D4A5A1FF0F40D2EA00FFF378 /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD40A801B00005C7067 /* Bitmap.cpp */; };
@@ -220,10 +318,76 @@
 		D42D03430F70989100407E60 /* ALChannelManagement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ALChannelManagement.hpp; path = ../GosuImpl/Audio/ALChannelManagement.hpp; sourceTree = SOURCE_ROOT; };
 		D42D03750F70A26800407E60 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = /System/Library/Frameworks/OpenAL.framework; sourceTree = "<absolute>"; };
 		D42DFE380F6F84DA00407E60 /* AudioOpenAL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AudioOpenAL.mm; path = ../GosuImpl/AudioOpenAL.mm; sourceTree = SOURCE_ROOT; };
-		D459FF440BDCD23500E7F0D6 /* RubyGosu Deployment Template.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RubyGosu Deployment Template.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D459FF460BDCD23600E7F0D6 /* RubyGosu Template-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RubyGosu Template-Info.plist"; sourceTree = "<group>"; };
+		D459FF440BDCD23500E7F0D6 /* RubyGosu App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RubyGosu App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D459FF460BDCD23600E7F0D6 /* RubyGosu App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RubyGosu App-Info.plist"; sourceTree = "<group>"; };
 		D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Gosu.icns; sourceTree = "<group>"; };
 		D459FFAD0BDCE41300E7F0D6 /* Gosu-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "Gosu-Info.plist"; sourceTree = "<group>"; };
+		D46C2E070FAE090200A33476 /* array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = array.c; path = "Ruby 1.9 Source/array.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E080FAE090200A33476 /* bignum.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bignum.c; path = "Ruby 1.9 Source/bignum.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E090FAE090200A33476 /* class.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = class.c; path = "Ruby 1.9 Source/class.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E0A0FAE090200A33476 /* compar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = compar.c; path = "Ruby 1.9 Source/compar.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E0B0FAE090200A33476 /* dir.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dir.c; path = "Ruby 1.9 Source/dir.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E0E0FAE090200A33476 /* enum.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = enum.c; path = "Ruby 1.9 Source/enum.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E0F0FAE090200A33476 /* enumerator.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = enumerator.c; path = "Ruby 1.9 Source/enumerator.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E110FAE090200A33476 /* eval.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = eval.c; path = "Ruby 1.9 Source/eval.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E120FAE090200A33476 /* file.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = file.c; path = "Ruby 1.9 Source/file.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E130FAE090200A33476 /* gc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gc.c; path = "Ruby 1.9 Source/gc.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E140FAE090200A33476 /* hash.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = hash.c; path = "Ruby 1.9 Source/hash.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E150FAE090200A33476 /* inits.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = inits.c; path = "Ruby 1.9 Source/inits.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E160FAE090200A33476 /* io.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = io.c; path = "Ruby 1.9 Source/io.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E170FAE090200A33476 /* marshal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = marshal.c; path = "Ruby 1.9 Source/marshal.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E180FAE090200A33476 /* math.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = math.c; path = "Ruby 1.9 Source/math.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E190FAE090200A33476 /* numeric.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = numeric.c; path = "Ruby 1.9 Source/numeric.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E1A0FAE090200A33476 /* object.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = object.c; path = "Ruby 1.9 Source/object.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E1B0FAE090200A33476 /* pack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pack.c; path = "Ruby 1.9 Source/pack.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E1C0FAE090200A33476 /* parse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parse.c; path = "Ruby 1.9 Source/parse.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E1D0FAE090200A33476 /* process.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = process.c; path = "Ruby 1.9 Source/process.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E1E0FAE090200A33476 /* random.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = random.c; path = "Ruby 1.9 Source/random.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E1F0FAE090200A33476 /* range.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = range.c; path = "Ruby 1.9 Source/range.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E200FAE090200A33476 /* re.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = re.c; path = "Ruby 1.9 Source/re.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E210FAE090200A33476 /* ruby.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ruby.c; path = "Ruby 1.9 Source/ruby.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E220FAE090200A33476 /* signal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = signal.c; path = "Ruby 1.9 Source/signal.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E230FAE090200A33476 /* sprintf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sprintf.c; path = "Ruby 1.9 Source/sprintf.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E240FAE090200A33476 /* st.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = st.c; path = "Ruby 1.9 Source/st.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E250FAE090200A33476 /* string.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = string.c; path = "Ruby 1.9 Source/string.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E260FAE090200A33476 /* struct.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = struct.c; path = "Ruby 1.9 Source/struct.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E270FAE090200A33476 /* time.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = time.c; path = "Ruby 1.9 Source/time.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E280FAE090200A33476 /* util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = util.c; path = "Ruby 1.9 Source/util.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E290FAE090200A33476 /* variable.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = variable.c; path = "Ruby 1.9 Source/variable.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E2A0FAE090200A33476 /* version.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = version.c; path = "Ruby 1.9 Source/version.c"; sourceTree = SOURCE_ROOT; };
+		D46C2E6E0FAE0C6F00A33476 /* finite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = finite.c; path = "Ruby 1.9 Source/missing/finite.c"; sourceTree = "<group>"; };
+		D46C2EB60FAE0F0500A33476 /* dmyext.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dmyext.c; path = "Ruby 1.9 Source/dmyext.c"; sourceTree = SOURCE_ROOT; };
+		D46C2EDA0FAE10B000A33476 /* dmydln.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dmydln.c; path = "Ruby 1.9 Source/dmydln.c"; sourceTree = SOURCE_ROOT; };
+		D46C2F0F0FAE2FA400A33476 /* complex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = complex.c; path = "Ruby 1.9 Source/complex.c"; sourceTree = "<group>"; };
+		D46C2F100FAE2FA400A33476 /* cont.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cont.c; path = "Ruby 1.9 Source/cont.c"; sourceTree = "<group>"; };
+		D46C2F110FAE2FA400A33476 /* debug.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = debug.c; path = "Ruby 1.9 Source/debug.c"; sourceTree = "<group>"; };
+		D46C2F120FAE2FA400A33476 /* encoding.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = encoding.c; path = "Ruby 1.9 Source/encoding.c"; sourceTree = "<group>"; };
+		D46C2F130FAE2FA400A33476 /* prelude.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = prelude.c; path = "Ruby 1.9 Source/prelude.c"; sourceTree = "<group>"; };
+		D46C2F140FAE2FA400A33476 /* regcomp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = regcomp.c; path = "Ruby 1.9 Source/regcomp.c"; sourceTree = "<group>"; };
+		D46C2F150FAE2FA400A33476 /* regenc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = regenc.c; path = "Ruby 1.9 Source/regenc.c"; sourceTree = "<group>"; };
+		D46C2F160FAE2FA400A33476 /* regerror.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = regerror.c; path = "Ruby 1.9 Source/regerror.c"; sourceTree = "<group>"; };
+		D46C2F170FAE2FA400A33476 /* regexec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = regexec.c; path = "Ruby 1.9 Source/regexec.c"; sourceTree = "<group>"; };
+		D46C2F180FAE2FA400A33476 /* regparse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = regparse.c; path = "Ruby 1.9 Source/regparse.c"; sourceTree = "<group>"; };
+		D46C2F190FAE2FA400A33476 /* regsyntax.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = regsyntax.c; path = "Ruby 1.9 Source/regsyntax.c"; sourceTree = "<group>"; };
+		D46C2F1A0FAE2FA400A33476 /* thread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = thread.c; path = "Ruby 1.9 Source/thread.c"; sourceTree = "<group>"; };
+		D46C2F1B0FAE2FA400A33476 /* vm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = vm.c; path = "Ruby 1.9 Source/vm.c"; sourceTree = "<group>"; };
+		D46C2F1C0FAE2FA400A33476 /* vm_dump.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = vm_dump.c; path = "Ruby 1.9 Source/vm_dump.c"; sourceTree = "<group>"; };
+		D46C2F470FAE319800A33476 /* error.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = error.c; path = "Ruby 1.9 Source/error.c"; sourceTree = "<group>"; };
+		D46C2F4F0FAE321300A33476 /* utf_8.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = utf_8.c; path = "Ruby 1.9 Source/enc/utf_8.c"; sourceTree = "<group>"; };
+		D46C2F500FAE321300A33476 /* us_ascii.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = us_ascii.c; path = "Ruby 1.9 Source/enc/us_ascii.c"; sourceTree = "<group>"; };
+		D46C2F5C0FAE370500A33476 /* transcode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = transcode.c; path = "Ruby 1.9 Source/transcode.c"; sourceTree = "<group>"; };
+		D46C2F5F0FAE371E00A33476 /* proc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = proc.c; path = "Ruby 1.9 Source/proc.c"; sourceTree = "<group>"; };
+		D46C2F630FAE376C00A33476 /* newline.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = newline.c; path = "Ruby 1.9 Source/newline.c"; sourceTree = "<group>"; };
+		D46C2F650FAE377300A33476 /* rational.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rational.c; path = "Ruby 1.9 Source/rational.c"; sourceTree = "<group>"; };
+		D46C2F680FAE379000A33476 /* safe.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = safe.c; path = "Ruby 1.9 Source/safe.c"; sourceTree = "<group>"; };
+		D46C2F6B0FAE37A900A33476 /* iseq.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = iseq.c; path = "Ruby 1.9 Source/iseq.c"; sourceTree = "<group>"; };
+		D46C2F6D0FAE37C400A33476 /* unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = unicode.c; path = "Ruby 1.9 Source/enc/unicode.c"; sourceTree = "<group>"; };
+		D46C2F700FAE37FB00A33476 /* load.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = load.c; path = "Ruby 1.9 Source/load.c"; sourceTree = "<group>"; };
+		D46C2F720FAE380500A33476 /* ascii.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ascii.c; path = "Ruby 1.9 Source/enc/ascii.c"; sourceTree = "<group>"; };
+		D46C2F750FAE383B00A33476 /* strftime.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = strftime.c; path = "Ruby 1.9 Source/strftime.c"; sourceTree = "<group>"; };
+		D46C2F780FAE38F300A33476 /* compile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = compile.c; path = "Ruby 1.9 Source/compile.c"; sourceTree = "<group>"; };
+		D46C2F860FAE393800A33476 /* lgamma_r.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lgamma_r.c; path = "Ruby 1.9 Source/missing/lgamma_r.c"; sourceTree = "<group>"; };
+		D46C2F8D0FAE39FD00A33476 /* Main.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = Main.rb; sourceTree = "<group>"; };
 		D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RubyGosu_wrap.cxx; path = ../GosuImpl/RubyGosu_wrap.cxx; sourceTree = SOURCE_ROOT; };
 		D47BD3290BD78F7200ACF014 /* RubyGosu_wrap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RubyGosu_wrap.h; path = ../GosuImpl/RubyGosu_wrap.h; sourceTree = SOURCE_ROOT; };
 		D47BD32A0BD78F7200ACF014 /* RubyGosu.swg */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = RubyGosu.swg; path = ../GosuImpl/RubyGosu.swg; sourceTree = SOURCE_ROOT; };
@@ -274,6 +438,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				D459FF4C0BDCD26D00E7F0D6 /* AppKit.framework in Frameworks */,
+				D46C2DDF0FAE03F900A33476 /* OpenAL.framework in Frameworks */,
+				D46C2DE00FAE03F900A33476 /* IOKit.framework in Frameworks */,
+				D46C2DE10FAE03F900A33476 /* OpenGL.framework in Frameworks */,
+				D46C2DE20FAE03F900A33476 /* ApplicationServices.framework in Frameworks */,
+				D46C2DE30FAE03F900A33476 /* Foundation.framework in Frameworks */,
+				D46C2DE40FAE03F900A33476 /* Carbon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,7 +483,7 @@
 			children = (
 				8D07F2C80486CC7A007CD1D0 /* Gosu.framework */,
 				D4CA89500BC68B5D00A431AC /* gosu.bundle */,
-				D459FF440BDCD23500E7F0D6 /* RubyGosu Deployment Template.app */,
+				D459FF440BDCD23500E7F0D6 /* RubyGosu App.app */,
 				D4A5A1F40F40D28600FFF378 /* libgosutouch.a */,
 			);
 			name = Products;
@@ -353,7 +523,8 @@
 				D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */,
 				D410EB6C0A801CDC005C7067 /* InfoPlist.strings */,
 				D459FFAD0BDCE41300E7F0D6 /* Gosu-Info.plist */,
-				D459FF460BDCD23600E7F0D6 /* RubyGosu Template-Info.plist */,
+				D459FF460BDCD23600E7F0D6 /* RubyGosu App-Info.plist */,
+				D46C2F8D0FAE39FD00A33476 /* Main.rb */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -477,9 +648,98 @@
 			name = Audio;
 			sourceTree = "<group>";
 		};
+		D46C2E010FAE087000A33476 /* Ruby 1.9 */ = {
+			isa = PBXGroup;
+			children = (
+				D46C2F0C0FAE2F5900A33476 /* enc */,
+				D46C2F7B0FAE390500A33476 /* missing */,
+				D46C2E070FAE090200A33476 /* array.c */,
+				D46C2E080FAE090200A33476 /* bignum.c */,
+				D46C2E090FAE090200A33476 /* class.c */,
+				D46C2E0A0FAE090200A33476 /* compar.c */,
+				D46C2F780FAE38F300A33476 /* compile.c */,
+				D46C2F0F0FAE2FA400A33476 /* complex.c */,
+				D46C2F100FAE2FA400A33476 /* cont.c */,
+				D46C2F110FAE2FA400A33476 /* debug.c */,
+				D46C2E0B0FAE090200A33476 /* dir.c */,
+				D46C2EDA0FAE10B000A33476 /* dmydln.c */,
+				D46C2EB60FAE0F0500A33476 /* dmyext.c */,
+				D46C2F120FAE2FA400A33476 /* encoding.c */,
+				D46C2E0E0FAE090200A33476 /* enum.c */,
+				D46C2E0F0FAE090200A33476 /* enumerator.c */,
+				D46C2F470FAE319800A33476 /* error.c */,
+				D46C2E110FAE090200A33476 /* eval.c */,
+				D46C2E120FAE090200A33476 /* file.c */,
+				D46C2E130FAE090200A33476 /* gc.c */,
+				D46C2E140FAE090200A33476 /* hash.c */,
+				D46C2E150FAE090200A33476 /* inits.c */,
+				D46C2E160FAE090200A33476 /* io.c */,
+				D46C2F6B0FAE37A900A33476 /* iseq.c */,
+				D46C2F700FAE37FB00A33476 /* load.c */,
+				D46C2E170FAE090200A33476 /* marshal.c */,
+				D46C2E180FAE090200A33476 /* math.c */,
+				D46C2F630FAE376C00A33476 /* newline.c */,
+				D46C2E190FAE090200A33476 /* numeric.c */,
+				D46C2E1A0FAE090200A33476 /* object.c */,
+				D46C2E1B0FAE090200A33476 /* pack.c */,
+				D46C2E1C0FAE090200A33476 /* parse.c */,
+				D46C2F130FAE2FA400A33476 /* prelude.c */,
+				D46C2F5F0FAE371E00A33476 /* proc.c */,
+				D46C2E1D0FAE090200A33476 /* process.c */,
+				D46C2E1E0FAE090200A33476 /* random.c */,
+				D46C2E1F0FAE090200A33476 /* range.c */,
+				D46C2F650FAE377300A33476 /* rational.c */,
+				D46C2E200FAE090200A33476 /* re.c */,
+				D46C2F140FAE2FA400A33476 /* regcomp.c */,
+				D46C2F150FAE2FA400A33476 /* regenc.c */,
+				D46C2F160FAE2FA400A33476 /* regerror.c */,
+				D46C2F170FAE2FA400A33476 /* regexec.c */,
+				D46C2F180FAE2FA400A33476 /* regparse.c */,
+				D46C2F190FAE2FA400A33476 /* regsyntax.c */,
+				D46C2E210FAE090200A33476 /* ruby.c */,
+				D46C2F680FAE379000A33476 /* safe.c */,
+				D46C2E220FAE090200A33476 /* signal.c */,
+				D46C2E230FAE090200A33476 /* sprintf.c */,
+				D46C2E240FAE090200A33476 /* st.c */,
+				D46C2E250FAE090200A33476 /* string.c */,
+				D46C2F750FAE383B00A33476 /* strftime.c */,
+				D46C2E260FAE090200A33476 /* struct.c */,
+				D46C2F1A0FAE2FA400A33476 /* thread.c */,
+				D46C2E270FAE090200A33476 /* time.c */,
+				D46C2F5C0FAE370500A33476 /* transcode.c */,
+				D46C2F6D0FAE37C400A33476 /* unicode.c */,
+				D46C2E280FAE090200A33476 /* util.c */,
+				D46C2E290FAE090200A33476 /* variable.c */,
+				D46C2E2A0FAE090200A33476 /* version.c */,
+				D46C2F1B0FAE2FA400A33476 /* vm.c */,
+				D46C2F1C0FAE2FA400A33476 /* vm_dump.c */,
+			);
+			name = "Ruby 1.9";
+			sourceTree = "<group>";
+		};
+		D46C2F0C0FAE2F5900A33476 /* enc */ = {
+			isa = PBXGroup;
+			children = (
+				D46C2F720FAE380500A33476 /* ascii.c */,
+				D46C2F4F0FAE321300A33476 /* utf_8.c */,
+				D46C2F500FAE321300A33476 /* us_ascii.c */,
+			);
+			name = enc;
+			sourceTree = "<group>";
+		};
+		D46C2F7B0FAE390500A33476 /* missing */ = {
+			isa = PBXGroup;
+			children = (
+				D46C2E6E0FAE0C6F00A33476 /* finite.c */,
+				D46C2F860FAE393800A33476 /* lgamma_r.c */,
+			);
+			name = missing;
+			sourceTree = "<group>";
+		};
 		D46F737C0BC3458D008003BA /* RubyGosu */ = {
 			isa = PBXGroup;
 			children = (
+				D46C2E010FAE087000A33476 /* Ruby 1.9 */,
 				D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */,
 				D47BD3290BD78F7200ACF014 /* RubyGosu_wrap.h */,
 				D47BD32A0BD78F7200ACF014 /* RubyGosu.swg */,
@@ -562,9 +822,9 @@
 			productReference = 8D07F2C80486CC7A007CD1D0 /* Gosu.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		D459FF430BDCD23500E7F0D6 /* RubyGosu Deployment Template */ = {
+		D459FF430BDCD23500E7F0D6 /* RubyGosu App */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D459FF470BDCD23600E7F0D6 /* Build configuration list for PBXNativeTarget "RubyGosu Deployment Template" */;
+			buildConfigurationList = D459FF470BDCD23600E7F0D6 /* Build configuration list for PBXNativeTarget "RubyGosu App" */;
 			buildPhases = (
 				D459FF400BDCD23500E7F0D6 /* Resources */,
 				D459FF410BDCD23500E7F0D6 /* Sources */,
@@ -574,9 +834,9 @@
 			);
 			dependencies = (
 			);
-			name = "RubyGosu Deployment Template";
+			name = "RubyGosu App";
 			productName = "RubyGosu Template";
-			productReference = D459FF440BDCD23500E7F0D6 /* RubyGosu Deployment Template.app */;
+			productReference = D459FF440BDCD23500E7F0D6 /* RubyGosu App.app */;
 			productType = "com.apple.product-type.application";
 		};
 		D4A5A1F30F40D28600FFF378 /* Gosu Touch */ = {
@@ -626,7 +886,7 @@
 			projectRoot = ..;
 			targets = (
 				8D07F2BC0486CC7A007CD1D0 /* Gosu */,
-				D459FF430BDCD23500E7F0D6 /* RubyGosu Deployment Template */,
+				D459FF430BDCD23500E7F0D6 /* RubyGosu App */,
 				D4CA894F0BC68B5D00A431AC /* RubyGosu Core */,
 				D4A5A1F30F40D28600FFF378 /* Gosu Touch */,
 			);
@@ -647,6 +907,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D459FF990BDCD9CF00E7F0D6 /* Gosu.icns in Resources */,
+				D46C2F8E0FAE39FD00A33476 /* Main.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -727,6 +988,97 @@
 				D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */,
 				D423825C0C4C3E3E000DAA25 /* DirectoriesMac.mm in Sources */,
 				D423825F0C4C3E41000DAA25 /* Utility.cpp in Sources */,
+				D46C2A3B0FAE037800A33476 /* Bitmap.cpp in Sources */,
+				D46C2A3C0FAE037800A33476 /* BitmapBMP.cpp in Sources */,
+				D46C2A3D0FAE037800A33476 /* BitmapColorKey.cpp in Sources */,
+				D46C2A3E0FAE037800A33476 /* BitmapPNG.cpp in Sources */,
+				D46C2A3F0FAE037800A33476 /* BitmapUtils.cpp in Sources */,
+				D46C2A400FAE037800A33476 /* BlockAllocator.cpp in Sources */,
+				D46C2A410FAE037800A33476 /* Color.cpp in Sources */,
+				D46C2A420FAE037800A33476 /* Font.cpp in Sources */,
+				D46C2A430FAE037800A33476 /* Graphics.cpp in Sources */,
+				D46C2A440FAE037800A33476 /* Image.cpp in Sources */,
+				D46C2A450FAE037800A33476 /* LargeImageData.cpp in Sources */,
+				D46C2A460FAE037800A33476 /* RotFlip.cpp in Sources */,
+				D46C2A470FAE037800A33476 /* Texture.cpp in Sources */,
+				D46C2A480FAE037800A33476 /* TexChunk.cpp in Sources */,
+				D46C2A490FAE037800A33476 /* Text.cpp in Sources */,
+				D46C2A4A0FAE037800A33476 /* TextMac.cpp in Sources */,
+				D46C2A4B0FAE039E00A33476 /* AudioFmod.cpp in Sources */,
+				D46C2A4C0FAE039E00A33476 /* DirectoriesUnix.cpp in Sources */,
+				D46C2A4D0FAE039E00A33476 /* FileUnix.cpp in Sources */,
+				D46C2A4E0FAE039E00A33476 /* InputMac.mm in Sources */,
+				D46C2A4F0FAE039E00A33476 /* IO.cpp in Sources */,
+				D46C2A500FAE039E00A33476 /* Math.cpp in Sources */,
+				D46C2A510FAE039E00A33476 /* TextInputMac.mm in Sources */,
+				D46C2A520FAE039E00A33476 /* TimingUnix.cpp in Sources */,
+				D46C2A530FAE039E00A33476 /* WindowMac.mm in Sources */,
+				D46C2A540FAE03B100A33476 /* RubyGosu_wrap.cxx in Sources */,
+				D46C2E2B0FAE090200A33476 /* array.c in Sources */,
+				D46C2E2C0FAE090200A33476 /* bignum.c in Sources */,
+				D46C2E2D0FAE090200A33476 /* class.c in Sources */,
+				D46C2E2E0FAE090200A33476 /* compar.c in Sources */,
+				D46C2E2F0FAE090200A33476 /* dir.c in Sources */,
+				D46C2E320FAE090200A33476 /* enum.c in Sources */,
+				D46C2E330FAE090200A33476 /* enumerator.c in Sources */,
+				D46C2E350FAE090200A33476 /* eval.c in Sources */,
+				D46C2E360FAE090200A33476 /* file.c in Sources */,
+				D46C2E370FAE090200A33476 /* gc.c in Sources */,
+				D46C2E380FAE090200A33476 /* hash.c in Sources */,
+				D46C2E390FAE090200A33476 /* inits.c in Sources */,
+				D46C2E3A0FAE090200A33476 /* io.c in Sources */,
+				D46C2E3B0FAE090200A33476 /* marshal.c in Sources */,
+				D46C2E3C0FAE090200A33476 /* math.c in Sources */,
+				D46C2E3D0FAE090200A33476 /* numeric.c in Sources */,
+				D46C2E3E0FAE090200A33476 /* object.c in Sources */,
+				D46C2E3F0FAE090200A33476 /* pack.c in Sources */,
+				D46C2E400FAE090200A33476 /* parse.c in Sources */,
+				D46C2E410FAE090200A33476 /* process.c in Sources */,
+				D46C2E420FAE090200A33476 /* random.c in Sources */,
+				D46C2E430FAE090200A33476 /* range.c in Sources */,
+				D46C2E440FAE090200A33476 /* re.c in Sources */,
+				D46C2E450FAE090200A33476 /* ruby.c in Sources */,
+				D46C2E460FAE090200A33476 /* signal.c in Sources */,
+				D46C2E470FAE090200A33476 /* sprintf.c in Sources */,
+				D46C2E480FAE090200A33476 /* st.c in Sources */,
+				D46C2E490FAE090200A33476 /* string.c in Sources */,
+				D46C2E4A0FAE090200A33476 /* struct.c in Sources */,
+				D46C2E4B0FAE090200A33476 /* time.c in Sources */,
+				D46C2E4C0FAE090200A33476 /* util.c in Sources */,
+				D46C2E4D0FAE090200A33476 /* variable.c in Sources */,
+				D46C2E4E0FAE090200A33476 /* version.c in Sources */,
+				D46C2E6F0FAE0C6F00A33476 /* finite.c in Sources */,
+				D46C2EB70FAE0F0500A33476 /* dmyext.c in Sources */,
+				D46C2EDB0FAE10B000A33476 /* dmydln.c in Sources */,
+				D46C2F1E0FAE2FA400A33476 /* complex.c in Sources */,
+				D46C2F1F0FAE2FA400A33476 /* cont.c in Sources */,
+				D46C2F200FAE2FA400A33476 /* debug.c in Sources */,
+				D46C2F210FAE2FA400A33476 /* encoding.c in Sources */,
+				D46C2F220FAE2FA400A33476 /* prelude.c in Sources */,
+				D46C2F230FAE2FA400A33476 /* regcomp.c in Sources */,
+				D46C2F240FAE2FA400A33476 /* regenc.c in Sources */,
+				D46C2F250FAE2FA400A33476 /* regerror.c in Sources */,
+				D46C2F260FAE2FA400A33476 /* regexec.c in Sources */,
+				D46C2F270FAE2FA400A33476 /* regparse.c in Sources */,
+				D46C2F280FAE2FA400A33476 /* regsyntax.c in Sources */,
+				D46C2F290FAE2FA400A33476 /* thread.c in Sources */,
+				D46C2F2A0FAE2FA400A33476 /* vm.c in Sources */,
+				D46C2F2B0FAE2FA400A33476 /* vm_dump.c in Sources */,
+				D46C2F480FAE319800A33476 /* error.c in Sources */,
+				D46C2F520FAE321300A33476 /* utf_8.c in Sources */,
+				D46C2F530FAE321300A33476 /* us_ascii.c in Sources */,
+				D46C2F5D0FAE370500A33476 /* transcode.c in Sources */,
+				D46C2F600FAE371E00A33476 /* proc.c in Sources */,
+				D46C2F640FAE376C00A33476 /* newline.c in Sources */,
+				D46C2F660FAE377300A33476 /* rational.c in Sources */,
+				D46C2F690FAE379000A33476 /* safe.c in Sources */,
+				D46C2F6C0FAE37A900A33476 /* iseq.c in Sources */,
+				D46C2F6E0FAE37C400A33476 /* unicode.c in Sources */,
+				D46C2F710FAE37FB00A33476 /* load.c in Sources */,
+				D46C2F730FAE380500A33476 /* ascii.c in Sources */,
+				D46C2F760FAE383B00A33476 /* strftime.c in Sources */,
+				D46C2F790FAE38F300A33476 /* compile.c in Sources */,
+				D46C2F870FAE393800A33476 /* lgamma_r.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -915,22 +1267,25 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				HEADER_SEARCH_PATHS = (
-					..,
-					/usr/local/include,
-					/opt/local/include,
-					"/usr/lib/ruby/1.8/universal-darwin8.0",
-					"/usr/lib/ruby/1.8/universal-darwin9.0",
+					"$(HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(inherited)",
 				);
-				INFOPLIST_FILE = "RubyGosu Template-Info.plist";
+				HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"Ruby 1.9 Source/include\"";
+				HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"Ruby 1.9 Source/include/ruby\"";
+				INFOPLIST_FILE = "RubyGosu App-Info.plist";
 				OBJROOT = build;
 				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-lruby",
+					"-F..",
+					"-lz_universal",
+					"-lpng_universal",
+					"-lfmod_universal",
+					"-flat_namespace",
+					"-lboost_thread_1_34_1_universal",
 					"-liconv",
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "RubyGosu Deployment Template";
+				PRODUCT_NAME = "RubyGosu App";
 				SYMROOT = ..;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
@@ -940,48 +1295,46 @@
 		D459FF490BDCD23600E7F0D6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)";
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				HEADER_SEARCH_PATHS = (
-					..,
-					/usr/local/include,
-					/opt/local/include,
-					"/usr/lib/ruby/1.8/universal-darwin8.0",
-					"/usr/lib/ruby/1.8/universal-darwin9.0",
+					"$(HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(inherited)",
 				);
-				INFOPLIST_FILE = "RubyGosu Template-Info.plist";
+				HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"Ruby 1.9 Source/include\"";
+				HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"Ruby 1.9 Source/include/ruby\"";
+				INFOPLIST_FILE = "RubyGosu App-Info.plist";
 				OBJROOT = build;
 				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-lruby",
+					"-F..",
+					"-lz_universal",
+					"-lpng_universal",
+					"-lfmod_universal",
+					"-flat_namespace",
+					"-lboost_thread_1_34_1_universal",
 					"-liconv",
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "RubyGosu Deployment Template";
+				PRODUCT_NAME = "RubyGosu App";
 				SYMROOT = ..;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
-		D46C13CF0F8589F8004C3FCB /* Release (MacPorts 1.9) */ = {
+		D46C29700FADB59600A33476 /* Release with 1.9 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEPLOYMENT_POSTPROCESSING = YES;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					GOSU_RUBY_19_MACPORTS,
-					NDEBUG,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -993,9 +1346,9 @@
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
-			name = "Release (MacPorts 1.9)";
+			name = "Release with 1.9";
 		};
-		D46C13D00F8589F8004C3FCB /* Release (MacPorts 1.9) */ = {
+		D46C29710FADB59600A33476 /* Release with 1.9 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
@@ -1021,44 +1374,45 @@
 				PRODUCT_NAME = Gosu;
 				WRAPPER_EXTENSION = framework;
 			};
-			name = "Release (MacPorts 1.9)";
+			name = "Release with 1.9";
 		};
-		D46C13D10F8589F8004C3FCB /* Release (MacPorts 1.9) */ = {
+		D46C29720FADB59600A33476 /* Release with 1.9 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)";
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				HEADER_SEARCH_PATHS = (
-					..,
-					/usr/local/include,
-					/opt/local/include,
-					"/usr/lib/ruby/1.8/universal-darwin8.0",
-					"/usr/lib/ruby/1.8/universal-darwin9.0",
+					"$(HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(inherited)",
 				);
-				INFOPLIST_FILE = "RubyGosu Template-Info.plist";
+				HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"Ruby 1.9 Source/include\"";
+				HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"Ruby 1.9 Source/include/ruby\"";
+				INFOPLIST_FILE = "RubyGosu App-Info.plist";
 				OBJROOT = build;
 				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-lruby",
+					"-F..",
+					"-lz_universal",
+					"-lpng_universal",
+					"-lfmod_universal",
+					"-flat_namespace",
+					"-lboost_thread_1_34_1_universal",
 					"-liconv",
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "RubyGosu Deployment Template";
+				PRODUCT_NAME = "RubyGosu App";
 				SYMROOT = ..;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
-			name = "Release (MacPorts 1.9)";
+			name = "Release with 1.9";
 		};
-		D46C13D20F8589F8004C3FCB /* Release (MacPorts 1.9) */ = {
+		D46C29730FADB59600A33476 /* Release with 1.9 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(NATIVE_ARCH)";
@@ -1073,35 +1427,29 @@
 				);
 				GENERATE_MASTER_OBJECT_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					..,
 					"$(inherited)",
-					"/opt/local/include/ruby1.9-1.9.1",
-					"/opt/local/include/ruby1.9-1.9.1/i386-darwin9",
-				);
-				HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"/opt/local/include/ruby1.9-1.9.1\"";
-				LIBRARY_SEARCH_PATHS = (
-					/opt/local/lib,
-					.,
+					"/usr/local/include/ruby1.9-1.9.1",
+					"/usr/local/include/ruby1.9-1.9.1/i386-darwin9.6.0",
 				);
 				MACH_O_TYPE = mh_bundle;
 				OTHER_LDFLAGS = (
 					"-F..",
-					"-lruby1.9",
+					"-lruby1.9-static",
 					"-lz_universal",
 					"-lpng_universal",
 					"-lfmod_universal",
 					"-flat_namespace",
-					"-liconv",
 					"-lboost_thread_1_34_1_universal",
+					"-liconv",
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = gosu1.9;
+				PRODUCT_NAME = gosu;
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				ZERO_LINK = NO;
 			};
-			name = "Release (MacPorts 1.9)";
+			name = "Release with 1.9";
 		};
-		D46C13D30F8589F8004C3FCB /* Release (MacPorts 1.9) */ = {
+		D46C29740FADB59600A33476 /* Release with 1.9 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1116,7 +1464,7 @@
 				SDKROOT = iphoneos2.2.1;
 				ZERO_LINK = NO;
 			};
-			name = "Release (MacPorts 1.9)";
+			name = "Release with 1.9";
 		};
 		D4A5A1F50F40D28700FFF378 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1200,7 +1548,6 @@
 				);
 				GENERATE_MASTER_OBJECT_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					..,
 					"$(inherited)",
 					"/usr/lib/ruby/1.8/universal-darwin8.0",
 					"/usr/lib/ruby/1.8/universal-darwin9.0",
@@ -1230,7 +1577,7 @@
 			buildConfigurations = (
 				4FADC24308B4156D00ABE55E /* Debug */,
 				4FADC24408B4156D00ABE55E /* Release */,
-				D46C13D00F8589F8004C3FCB /* Release (MacPorts 1.9) */,
+				D46C29710FADB59600A33476 /* Release with 1.9 */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1240,17 +1587,17 @@
 			buildConfigurations = (
 				4FADC24708B4156D00ABE55E /* Debug */,
 				4FADC24808B4156D00ABE55E /* Release */,
-				D46C13CF0F8589F8004C3FCB /* Release (MacPorts 1.9) */,
+				D46C29700FADB59600A33476 /* Release with 1.9 */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D459FF470BDCD23600E7F0D6 /* Build configuration list for PBXNativeTarget "RubyGosu Deployment Template" */ = {
+		D459FF470BDCD23600E7F0D6 /* Build configuration list for PBXNativeTarget "RubyGosu App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D459FF480BDCD23600E7F0D6 /* Debug */,
 				D459FF490BDCD23600E7F0D6 /* Release */,
-				D46C13D10F8589F8004C3FCB /* Release (MacPorts 1.9) */,
+				D46C29720FADB59600A33476 /* Release with 1.9 */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1260,7 +1607,7 @@
 			buildConfigurations = (
 				D4A5A1F50F40D28700FFF378 /* Debug */,
 				D4A5A1F60F40D28700FFF378 /* Release */,
-				D46C13D30F8589F8004C3FCB /* Release (MacPorts 1.9) */,
+				D46C29740FADB59600A33476 /* Release with 1.9 */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1270,7 +1617,7 @@
 			buildConfigurations = (
 				D4CA89520BC68B9E00A431AC /* Debug */,
 				D4CA89530BC68B9E00A431AC /* Release */,
-				D46C13D20F8589F8004C3FCB /* Release (MacPorts 1.9) */,
+				D46C29730FADB59600A33476 /* Release with 1.9 */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

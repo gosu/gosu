@@ -3,9 +3,7 @@
 
 #include <Gosu/Platform.hpp>
 
-#ifdef GOSU_RUBY_19_MACPORTS
-#include <iconv.h> // from MacPorts
-#elsif defined(__APPLE__)
+#ifdef __APPLE__
 #include </usr/include/iconv.h> // We want Apple's iconv
 #else
 #include <iconv.h>
