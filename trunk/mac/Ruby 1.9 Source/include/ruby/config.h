@@ -1,3 +1,5 @@
+#define DLN_DEFAULT_LIB_PATH "."
+
 #define PACKAGE_NAME ""
 #define PACKAGE_TARNAME ""
 #define PACKAGE_VERSION ""
@@ -223,12 +225,12 @@
 #define HAVE_PTHREAD_ATTR_SETINHERITSCHED 1
 #define DLEXT_MAXLEN 7
 #define DLEXT ".bundle"
-#define RUBY_LIB "/usr/local/lib/ruby1.9/1.9.1"
-#define RUBY_SITE_LIB "/usr/local/lib/ruby1.9/site_ruby"
-#define RUBY_SITE_LIB2 "/usr/local/lib/ruby1.9/site_ruby/1.9.1"
-#define RUBY_VENDOR_LIB "/usr/local/lib/ruby1.9/vendor_ruby"
-#define RUBY_VENDOR_LIB2 "/usr/local/lib/ruby1.9/vendor_ruby/1.9.1"
+#define RUBY_LIB "."
+#define RUBY_SITE_LIB "."
+#define RUBY_SITE_LIB2 "."
+#define RUBY_VENDOR_LIB "."
+#define RUBY_VENDOR_LIB2 "."
 #define RUBY_PLATFORM "i386-darwin9.6.0"
-#define RUBY_ARCHLIB "/usr/local/lib/ruby1.9/1.9.1/i386-darwin9.6.0"
-#define RUBY_SITE_ARCHLIB "/usr/local/lib/ruby1.9/site_ruby/1.9.1/i386-darwin9.6.0"
-#define RUBY_VENDOR_ARCHLIB "/usr/local/lib/ruby1.9/vendor_ruby/1.9.1/i386-darwin9.6.0"
+#define RUBY_ARCHLIB "."
+#define RUBY_SITE_ARCHLIB "."
+#define RUBY_VENDOR_ARCHLIB "."
