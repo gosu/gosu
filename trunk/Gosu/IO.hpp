@@ -22,6 +22,8 @@ namespace Gosu
     const ByteOrder nativeByteOrder = boLittle, otherByteOrder = boBig;
 #endif
 
+    //! Utility class that points to a specific position in a resource
+    //! and offers an interface for sequential reading.
     class Reader
     {
         const Resource* res;
@@ -78,7 +80,9 @@ namespace Gosu
             return t;
         }
     };
-
+    
+    //! Utility class that points to a specific position in a resource
+    //! and offers an interface for sequential writing.
     class Writer
     {
         Resource* res;

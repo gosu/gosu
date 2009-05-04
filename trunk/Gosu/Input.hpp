@@ -50,8 +50,17 @@ namespace Gosu
 	};
 	
 	// Available even on non-iPhone platforms to make it easier to compile the
-	// same source for multiple platforms. To be moved to Input.hpp, though.
-    struct Touch { void* id; double x, y; };
+	// same source for multiple platforms.
+    
+    //! Struct that saves information about a touch on the surface of a multi-
+    //! touch device.
+    struct Touch
+    {
+        //! Allows for identification of a touch across calls.
+        void* id;
+        //! Position of a touch on the touch screen.
+        double x, y;
+    };
     typedef std::vector<Touch> Touches;
 
 	//! Tests whether two Buttons identify the same physical button.
@@ -123,7 +132,9 @@ namespace Gosu
 		//! If you use the Window class, it will assign forward these to its own methods.
         boost::function<void (Button)> onButtonDown, onButtonUp;
         
+        //! Returns the currently active TextInput instance, or 0.
         TextInput* textInput() const;
+        //! Sets the currently active TextInput, or clears it (input = 0).
         void setTextInput(TextInput* input);
     };
 }

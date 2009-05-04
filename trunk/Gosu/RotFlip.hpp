@@ -1,11 +1,13 @@
 //! \file RotFlip.hpp
-//! Interface of the undocumented RotFlip class.
+//! Interface of the RotFlip class.
 
 #ifndef GOSU_ROTFLIP_HPP
 #define GOSU_ROTFLIP_HPP
 
 namespace Gosu
 {
+    //! Human-understandable descriptions of the variants of rotations and flips
+    //! that can be constructed.
     enum RotFlipName
     {
         rfDefault,
@@ -31,7 +33,13 @@ namespace Gosu
         rfFlipYRotate180 = rfFlipX,
         rfFlipYRotate270 = rfRotate270FlipX
     };
-
+    
+    //! Light-weight class that encodes a rotation by 0, 90, 180, or 270
+    //! degrees as well as optional horizontal and/or vertical flips.
+    //! In short, this convieniently encodes the eight ways in which a
+    //! aligned rectangle can be linearly transformed to result in an aligned
+    //! rectangle again.
+    //! Especially useful for games with tile-based maps.
     class RotFlip
     {
         RotFlipName name_;
@@ -109,7 +117,8 @@ namespace Gosu
     {
         return a.name() != b.name();
     }
-
+    
+    //! Applies a RotFlip to a point x/y in a square of side length max.
     void applyToPoint(RotFlip rotFlip, int& x, int& y, int max);
 }
 

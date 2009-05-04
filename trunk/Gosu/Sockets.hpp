@@ -12,12 +12,16 @@
 
 namespace Gosu
 {
-    // Both addresses and ports are returned from and given to Gosu
-    // functions in host byte order.
+    //! Addresses are returned from and given to Gosu functions in host byte order.
     typedef boost::uint32_t SocketAddress;
-    typedef boost::uint16_t SocketPort;
-    const SocketPort anyPort = 0;
 
+    //! Ports are returned from and given to Gosu functions in host byte order.
+    typedef boost::uint16_t SocketPort;
+    
+    //! Constant that can be used as a placeholder for an arbitrary port, e.g. when
+    //! starting to listen.
+    const SocketPort anyPort = 0;
+    
     //! Tries to convert a dotted IP4 string into an address suitable for
     //! socket functions. If the string supplied is not such a string, it
     //! tries to look up the host via DNS. If both methods fail, zero is
@@ -65,16 +69,20 @@ namespace Gosu
         boost::function<void (SocketAddress, SocketPort, const void*,
             std::size_t)> onReceive;
     };
-
+    
+    //! Defines the way in which data is collected until the onReceive event
+    //! is called for CommSockets.
     enum CommMode
     {
         cmRaw,
         //cmLines,
         cmManaged
     };
-
+    
     class Socket;
-
+    
+    //! Wraps a TCP socket that is used for one part of bi-directional
+    //! communication.
     class CommSocket
     {
         struct Impl;
@@ -105,7 +113,9 @@ namespace Gosu
         boost::function<void (const void*, std::size_t)> onReceive;
         boost::function<void ()> onDisconnection;
     };
-
+    
+    //! Wraps a TCP socket that waits on a specific port and can create
+    //! CommSocket instances via its onConnection event.
     class ListenerSocket
     {
         struct Impl;
@@ -120,8 +130,8 @@ namespace Gosu
 
         void update();
 
-        // This signal is fired by update() whenever someone connects
-        // to the port which is currently listened on.
+        //! This signal is fired by update() whenever someone connects
+        //! to the port which is currently listened on.
         boost::function<void (Socket&)> onConnection;
     };
 }
