@@ -11,7 +11,7 @@ Moin moin, dear Gosu user!
 * If you have any questions or feedback,
   -  visit the boards at http://libgosu.org/,
   -  leave a comment on one of Gosu's wiki page,
-  -  try your luck in #gosu on irc.freenode.org,
+  -  try your luck in irc://irc.freenode.org/gosu,
   -  or mail me at julian@raschke.de!
 
 We hope you'll enjoy using Gosu!

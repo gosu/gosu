@@ -25,17 +25,17 @@ a:hover {
 text-decoration: underline;
 }
 
-html, body {
-color: #000;
-font-size: 12px;
-font-family: "Lucida Grande", Tahoma, sans;
-text-align: center;
-margin: 0;
-padding: 0;
-}
-
 html {
-  background: url('http://www.libgosu.org/background.jpg') top center no-repeat white;
+	margin: 0px;
+	height: 100%;
+	background-color: white;
+	padding: 0;
+  background: url("http://www.libgosu.org/background.jpg") top center repeat-x;
+}
+body {
+	margin: 0;
+  font-family: "Lucida Grande", Verdana, sans-serif;
+  text-align: center;
 }
 
 #child_of, #defined_in, #file_wrapper {
@@ -63,16 +63,22 @@ margin-right: 0;
 padding-top: 12px;
 }
 
+#title {
+  text-align: left;
+  padding-left: 245px;
+}
+
 /* center everything */
 
 #container {
+  background: url('http://www.libgosu.org/forum_header.png') 29px 20px no-repeat white;
+
 margin: 25px auto 0 auto;
 padding: 15px 15px 0 15px;
 -webkit-border-radius: 1em 0.5em;
 -moz-border-radius: 0.5em;
 width: 900px;
-text-align: left;
-background: white;
+text-align: center;
 }
 
 /* header stuff */
@@ -93,6 +99,7 @@ color: #000;
 font-size: 30px;
 margin: 4px 0 0 0;
 } #header p {
+  display: none;
 margin: 0;
 padding: 0;
 padding-left: 3px;
@@ -107,13 +114,16 @@ font-weight: bold;
 /* basic layout and navigation bars */
 
 #left {
-background-color: #181848;
+  margin-top: 10px;
+  border: 2px solid black;
+  -webkit-border-radius: 1em 0.5em;
+  -moz-border-radius: 0.5em;
 width: 220px;
+margin-left: 10px;
 float: left;
-_width: 208px;
 margin-bottom: 24px;
 } #left a {
-line-height: 14px;
+line-height: 18px;
 }
 
 /* navigation bar colors and text styles */
@@ -123,7 +133,6 @@ width: 196px;
 margin: 6px;
 padding: 6px;
 text-align: left;
-background-color: #fff;
 overflow: hidden;
 } .navigation h3 {
 font-weight: bold;
@@ -133,9 +142,11 @@ margin-left: 6px;
 } #includes .navigation span, #includes .navigation a {
 margin-left: 0;
 } .darker {
-background-color: #e4ebed;
+  width: 194px;
+  -webkit-border-radius: 1em 0.5em;
+  -moz-border-radius: 0.5em;
+  border: 2px solid #ccc;
 } #spacer {
-background-color: #fff;
 height: 18px;
 display: none;
 }
@@ -143,13 +154,16 @@ display: none;
 /* content area */
 
 #content {
-padding: 20px;
-width: 640px;
-float: left;
-min-height: 450px;
-margin: 0;
-margin-bottom: -4px;
-} #content img {
+  text-align: left;
+  padding: 20px;
+  width: 625px;
+  float: left;
+  min-height: 450px;
+  margin: 0;
+  margin-bottom: -4px;
+}
+
+#content img {
 padding-top: 6px;
 padding-bottom: 12px;
 }
@@ -187,7 +201,7 @@ color: #181848;
 /* tables */
 
 table {
-width: 585px;
+width: 560px;
 margin-right: 0;
 border-collapse: collapse;
 border: 1px solid #e4ebed;
@@ -211,11 +225,15 @@ border-bottom: 1px solid #e4ebed;
 margin-left: 20px;
 margin-bottom: -17px;
 margin-top: 17px;
-} div.method_block h3 {
-color: #181848;
-margin-left: 0;
-padding: 0;
-} #content div.method_block h1, #content #description h1 {
+}
+
+div.method_block h3 {
+  margin-left: 2.5em;
+  padding: 0;
+  text-indent: -2.5em;
+}
+
+#content div.method_block h1, #content #description h1 {
 margin-left: 6px;
 color: #ccd5dc;
 } div.method_block a.small { /* where is this used? */
@@ -257,31 +275,31 @@ ol, ul {
 margin-left: 6px;
 }
 
-p.source_link a {
-text-align: right;
-font-weight: normal;
-} div.source {
+div.source {
 display: none;
-} pre, tt {
+}
+pre, tt {
 color: #181848;
 font-weight: normal;
 font-family: Courier, Courier New, monospace;
 font-size: 12px;
-} pre {
+}
+pre {
 line-height: 14px;
 margin-left: 12px;
 overflow: auto;
 /* next 4 lines because IE sucks */
 _position: relative;
-_width: 587px;
+_width: 487px;
 _overflow-x:scroll;
 _overflow-y:visible;
 } b tt, tt b {
 font-weight: bold;
 } div.source g {
 margin-left: 0;
-} p.source_link {
-text-align: center;
+} 
+p.source_link {
+display: none;
 }
 
 /* source code highlighting */

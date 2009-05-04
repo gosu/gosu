@@ -97,7 +97,7 @@ module Gosu
     # font_height:: Height of the font in pixels.
     # line_spacing:: Spacing between two lines of text in pixels.
     # max_width:: Width of the bitmap that will be returned. Text will be split into multiple lines to avoid drawing over the right border. When a single word is too long, it will be truncated.
-    # align: One of :left, :right, :center or :justify.
+    # align:: One of :left, :right, :center or :justify.
     # enum.
     def self.from_text(window, text, font_name, font_height, line_spacing, max_width, align); end
     
@@ -121,9 +121,7 @@ module Gosu
     #
     # Returns a SampleInstance.
     # volume:: Can be anything from 0.0 (silence) to 1.0 (full volume).
-    # speed:: Playback speed is only limited by the underlying audio library,
-    # and can accept very high or low values. Use 1.0 for
-    # normal playback speed.
+    # speed:: Playback speed is only limited by the underlying audio library, and can accept very high or low values. Use 1.0 for normal playback speed.
     def play(vol=1, speed=1, looping=false); end
     
     # Plays the sample with panning. Even if pan is 0.0, the sample will
@@ -132,9 +130,7 @@ module Gosu
     #
     # Returns a SampleInstance.
     # volume:: Can be anything from 0.0 (silence) to 1.0 (full volume).
-    # speed:: Playback speed is only limited by the underlying audio library,
-    # and can accept very high or low values. Use 1.0 for
-    # normal playback speed.
+    # speed:: Playback speed is only limited by the underlying audio library, and can accept very high or low values. Use 1.0 for normal playback speed.
     def play_pan(pan=0, vol=1, speed=1, looping=false); end
   end
     
@@ -287,41 +283,42 @@ module Gosu
     def clip_to(x, y, w, h, &drawing_code); end
   end
   
-  # Returns the horizontal distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
-  def offset_x(angle, dist); end 
+    # Returns the horizontal distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
+    def offset_x(angle, dist); end 
   
-  # Returns the vertical distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
-  def offset_y(angle, dist); end
+    # Returns the vertical distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
+    def offset_y(angle, dist); end
 
-  # Returns the angle from point 1 to point 2 in degrees, where 0.0 means upwards. Returns 0 if both points are equal.
-  def angle(x1, y1, x2, y2); end
+    # Returns the angle from point 1 to point 2 in degrees, where 0.0 means upwards. Returns 0 if both points are equal.
+    def angle(x1, y1, x2, y2); end
 
-  # Returns the smallest angle that can be added to angle1 to get to angle2 (can be negative if counter-clockwise movement is shorter).
-  def angle_diff(angle1, angle2); end
+    # Returns the smallest angle that can be added to angle1 to get to angle2 (can be negative if counter-clockwise movement is shorter).
+    def angle_diff(angle1, angle2); end
 
-  # Returns the distance between two points.
-  def distance(x1, y1, x2, y2); end
+    # Returns the distance between two points.
+    def distance(x1, y1, x2, y2); end
 
-  # Incrementing, possibly wrapping millisecond timer.
-  def milliseconds(); end
+    # Incrementing, possibly wrapping millisecond timer.
+    def milliseconds(); end
 
-  # Returns the name of a neutral font that is available on the current
-  # platform.
-  def default_font_name(); end
+    # Returns the name of a neutral font that is available on the current
+    # platform.
+    def default_font_name(); end
 
-  # Returns the width, in pixels, of the user's primary screen.
-  def screen_width(); end
+    # Returns the width, in pixels, of the user's primary screen.
+    def screen_width(); end
 
-  # Returns the height, in pixels, of the user's primary screen.
-  def screen_height(); end
+    # Returns the height, in pixels, of the user's primary screen.
+    def screen_height(); end
+end
 end
 
 # Small additions to Numeric to make it easier to integrate Gosu with
 # libraries that use radians, like Chipmunk.
-class Numeric
-  # = self * 180.0 / Math::PI + 90
+class ::Numeric
+  # Returns <tt>self * 180.0 / Math::PI + 90</tt>
   def radians_to_gosu(); end
 
-  # = (self - 90) * Math::PI / 180.0
+  # Returns <tt>(self - 90) * Math::PI / 180.0</tt>
   def gosu_to_radians(); end
 end

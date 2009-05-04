@@ -103,14 +103,8 @@ end
 Rake::RDocTask.new do |rd|  
   rd.main = "README.txt"
   rd.rdoc_dir = "reference/rdoc"
-  
-  rd.rdoc_files.include(
-      "reference/RubyGosu.rb",
-      "README.txt",  
-      "COPYING.txt")
-  
+  rd.rdoc_files.include("reference/gosu.rb", "README.txt")
   rd.title = "RubyGosu rdoc Reference"
-  
   rd.template = `allison --path`.chomp
 end
 
@@ -126,7 +120,8 @@ end
 
 desc "Upload documentation to www.libgosu.org"
 task :upload_docs => [:cpp_docs, :ruby_docs] do
-    sh "scp -C -r reference/cpp vu2040@eta.railshoster.de:~/htdocs/"
+  sh "scp -C -r reference/cpp vu2040@eta.railshoster.de:~/htdocs/ || true"
+  sh "scp -C -r reference/rdoc vu2040@eta.railshoster.de:~/htdocs/ || true"
 end
 
 namespace :mac do
