@@ -25,6 +25,22 @@ div.contents {
   padding: 2em;
 }
 
+div.memitem {
+  padding: 0.5em;
+  -webkit-border-radius: 1em 0.5em;
+  -moz-border-radius: 0.5em;
+  border: 1px solid #333;
+}
+
+div.memproto, td.memitemright {
+  font-family: "Monaco", monospace;
+  font-weight: bold;
+}
+
+td.indexkey {
+  padding: 0.5em;
+}
+
 p.footer {
   color: #aaa;
   padding: 2em;
@@ -39,7 +55,7 @@ DIV.tabs
    float            : left;
    width            : 100%;
    background       : url("tab_b.gif") repeat-x bottom;
-   margin-bottom    : 4px;
+   margin-bottom    : 16px;
 }
 
 DIV.tabs UL

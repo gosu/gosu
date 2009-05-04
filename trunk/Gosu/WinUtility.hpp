@@ -34,7 +34,7 @@ namespace Gosu
         void registerMessageHook(const boost::function<bool (MSG&)>& hook);
         
         //! Throws an exception according to the error which GetLastError()
-        //! returns, optionally prefixed with "While <action>, the following
+        //! returns, optionally prefixed with "While (action), the following
         //! error occured: ".
         GOSU_NORETURN void throwLastError(const std::string& action = "");
 

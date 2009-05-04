@@ -12,7 +12,7 @@
 namespace Gosu
 {
     //! Contains information about the underlying OpenGL texture and the
-    //! u/v space used or image data. Can be retrieved from some images
+    //! u/v space used for image data. Can be retrieved from some images
     //! to use them in OpenGL operations.
     struct GLTexInfo
     {
