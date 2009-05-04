@@ -207,6 +207,11 @@
 		D47BD32B0BD78F7200ACF014 /* RubyGosu_wrap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */; };
 		D48810BD0F7C0E3000602C04 /* BitmapBMP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD50A801B00005C7067 /* BitmapBMP.cpp */; };
 		D49163370FAE55C4001692E0 /* dln.c in Sources */ = {isa = PBXBuildFile; fileRef = D49163360FAE55C4001692E0 /* dln.c */; };
+		D49164AC0FAF25E3001692E0 /* encdb.c in Sources */ = {isa = PBXBuildFile; fileRef = D491648A0FAF25E3001692E0 /* encdb.c */; };
+		D49164C70FAF25E3001692E0 /* utf_16be.c in Sources */ = {isa = PBXBuildFile; fileRef = D49164A50FAF25E3001692E0 /* utf_16be.c */; };
+		D49164C80FAF25E3001692E0 /* utf_16le.c in Sources */ = {isa = PBXBuildFile; fileRef = D49164A60FAF25E3001692E0 /* utf_16le.c */; };
+		D49164C90FAF25E3001692E0 /* utf_32be.c in Sources */ = {isa = PBXBuildFile; fileRef = D49164A70FAF25E3001692E0 /* utf_32be.c */; };
+		D49164CA0FAF25E3001692E0 /* utf_32le.c in Sources */ = {isa = PBXBuildFile; fileRef = D49164A80FAF25E3001692E0 /* utf_32le.c */; };
 		D4A5A1FF0F40D2EA00FFF378 /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD40A801B00005C7067 /* Bitmap.cpp */; };
 		D4A5A2010F40D2EC00FFF378 /* BitmapColorKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD60A801B00005C7067 /* BitmapColorKey.cpp */; };
 		D4A5A2030F40D2F500FFF378 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
@@ -410,6 +415,11 @@
 		D49163580FAE58D0001692E0 /* vm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm.h; sourceTree = "<group>"; };
 		D49163590FAE58D0001692E0 /* win32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = win32.h; sourceTree = "<group>"; };
 		D491635A0FAE58D0001692E0 /* ruby.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ruby.h; sourceTree = "<group>"; };
+		D491648A0FAF25E3001692E0 /* encdb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = encdb.c; path = "Ruby 1.9 Source/enc/encdb.c"; sourceTree = "<group>"; };
+		D49164A50FAF25E3001692E0 /* utf_16be.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = utf_16be.c; path = "Ruby 1.9 Source/enc/utf_16be.c"; sourceTree = "<group>"; };
+		D49164A60FAF25E3001692E0 /* utf_16le.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = utf_16le.c; path = "Ruby 1.9 Source/enc/utf_16le.c"; sourceTree = "<group>"; };
+		D49164A70FAF25E3001692E0 /* utf_32be.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = utf_32be.c; path = "Ruby 1.9 Source/enc/utf_32be.c"; sourceTree = "<group>"; };
+		D49164A80FAF25E3001692E0 /* utf_32le.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = utf_32le.c; path = "Ruby 1.9 Source/enc/utf_32le.c"; sourceTree = "<group>"; };
 		D499E6380D06B51300BA6DEC /* DrawOp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DrawOp.hpp; sourceTree = "<group>"; };
 		D4A5A1F40F40D28600FFF378 /* libgosutouch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgosutouch.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4A5A2200F40D45200FFF378 /* InputTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = InputTouch.mm; path = ../GosuImpl/InputTouch.mm; sourceTree = SOURCE_ROOT; };
@@ -743,6 +753,11 @@
 				D46C2F720FAE380500A33476 /* ascii.c */,
 				D46C2F4F0FAE321300A33476 /* utf_8.c */,
 				D46C2F500FAE321300A33476 /* us_ascii.c */,
+				D491648A0FAF25E3001692E0 /* encdb.c */,
+				D49164A50FAF25E3001692E0 /* utf_16be.c */,
+				D49164A60FAF25E3001692E0 /* utf_16le.c */,
+				D49164A70FAF25E3001692E0 /* utf_32be.c */,
+				D49164A80FAF25E3001692E0 /* utf_32le.c */,
 			);
 			name = enc;
 			sourceTree = "<group>";
@@ -1142,6 +1157,11 @@
 				D46C2F790FAE38F300A33476 /* compile.c in Sources */,
 				D46C2F870FAE393800A33476 /* lgamma_r.c in Sources */,
 				D49163370FAE55C4001692E0 /* dln.c in Sources */,
+				D49164AC0FAF25E3001692E0 /* encdb.c in Sources */,
+				D49164C70FAF25E3001692E0 /* utf_16be.c in Sources */,
+				D49164C80FAF25E3001692E0 /* utf_16le.c in Sources */,
+				D49164C90FAF25E3001692E0 /* utf_32be.c in Sources */,
+				D49164CA0FAF25E3001692E0 /* utf_32le.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
