@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-05-03)
+(Last update: 2009-05-04)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics release
@@ -27,21 +27,18 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Try not to hide the mouse cursor outside of the main window on OS X
       * Test multiple screens on Windows
     * TextField with clip_to (update example)
-    * Compile Ruby 1.9 on Intel (Mac)
-    * Set RG Deployment Template to use 1.9 and full gosu
-    * Update to SWIG 1.3.39!
-    * Compile Ruby 1.9 on PPC (Mac) and lipo'fy ruby1.9-static.a
-    * Document support for Ruby 1.9
     * Package OR&G with optimized Gosu (weee)
     * Look into Ruby 1.9 on Windows
     * Test LD14 entry on Linux
     * Release 0.7.13.37
     * Rename hard_borders to tileable in the wiki
     * Document 64px minimum for single-texture opt.
+    * Document support for Ruby 1.9
     * (1x mymüsli for all the hard work! (motivation!)
   * Try harder to reproduce these bugs
     * Get rid of context selection error with driver set to always do FSAA (Windows)
     * OS X: Release all keys on battery notification dialog (?)
+  * Try a quick prototype of Gosu working with Shoes (if that doesn't work, wxRuby)
   * Finish the RMagick bundling thing
     * Try to build RMagick.bundle against the 10.4 SDK
     * Link the all-in-one-bundle from the boards: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
