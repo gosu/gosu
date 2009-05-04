@@ -108,6 +108,7 @@ namespace Gosu
         static Button charToId(wchar_t ch);
         
 		//! Returns true if a button is currently pressed.
+        //! Updated every tick.
 		bool down(Button btn) const;
         
         //! Returns the horizontal position of the mouse relative to the top

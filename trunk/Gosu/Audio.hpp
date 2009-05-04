@@ -49,8 +49,11 @@ namespace Gosu
 
 		bool playing() const;
 		bool paused() const;
+        //! Pauses this instance to be resumed afterwards. It will still keep a channel filled while paused.
         void pause();
         void resume();
+        //! Stops this instance of a sound being played.
+        //! Calling this twice, or too late, does not do any harm.
 		void stop();
 
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
@@ -86,8 +89,8 @@ namespace Gosu
         //! Plays the sample without panning.
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
         //! volume).
-        //! \param speed Playback speed is only limited by FMOD's
-        //! capabilities and can accept very high or low values. Use 1.0 for
+        //! \param speed Playback speed is only limited by the underlying audio library,
+        //! and can accept very high or low values. Use 1.0 for
         //! normal playback speed.
         SampleInstance play(double volume = 1, double speed = 1,
             bool looping = false) const;
@@ -98,8 +101,8 @@ namespace Gosu
         //! \param pan Can be anything from -1.0 (left) to 1.0 (right).
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
         //! volume).
-        //! \param speed Playback speed is only limited by FMOD's (or
-        //! SDL_mixer's, respectively) capabilities and can accept very high
+        //! \param speed Playback speed is only limited by by the underlying audio library,
+        //! and can accept very high
         //! or low values. Use 1.0 for normal playback speed.
         SampleInstance playPan(double pan, double volume = 1, double speed = 1,
             bool looping = false) const;
@@ -151,7 +154,7 @@ namespace Gosu
         //! Stops playback of this song if it is currently played or paused.
         //! Afterwards, currentSong will return 0.
         void stop();
-        //! Returns if the song is currently playing.
+        //! Returns true if the song is currently playing.
         bool playing() const;
         //! Returns the current volume of the song.
         double volume() const;

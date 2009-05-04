@@ -21,6 +21,8 @@ namespace Gosu
     //! Convenient all-in-one class that serves as the foundation of a standard
 	//! Gosu application. Manages initialization of all of Gosu's core components
     //! and provides timing functionality.
+    //! Note that you should really only use on instance of this class at the same time.
+    //! This may or may not change later.
     class Window
     {
         struct Impl;
@@ -39,7 +41,7 @@ namespace Gosu
         
         double updateInterval() const;
 
-        //! Starts the main event loop.
+        //! Enters a modal loop where the Window is visible on screen and receives calls to draw, update etc.
         void show();
         //! Closes the window if it is currently shown.
         void close();
@@ -54,6 +56,7 @@ namespace Gosu
         //! Gives the game a chance to say no to being redrawn.
         //! This is not a definitive answer. The operating system can still cause
         //! redraws for one reason or another.
+        //! By default, the window is redrawn all the time.
         virtual bool needsRedraw() const { return true; }
         
         //! Called before update when the user pressed a button while the

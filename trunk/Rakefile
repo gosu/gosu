@@ -3,6 +3,7 @@ require 'appscript'
 require 'ftools'
 require 'date'
 require 'rake/gempackagetask'
+require 'rake/rdoctask'
 
 COMMON_FILES = FileList[
   'COPYING.txt',
@@ -99,13 +100,32 @@ task :todo do
   sh "svn ci wiki -m 'To Do list refresh'"
 end
 
+Rake::RDocTask.new do |rd|  
+  rd.main = "README.txt"
+  rd.rdoc_dir = "reference/rdoc"
+  
+  rd.rdoc_files.include(
+      "reference/RubyGosu.rb",
+      "README.txt",  
+      "COPYING.txt")
+  
+  rd.title = "RubyGosu rdoc Reference"
+  
+  rd.template = `allison --path`.chomp
+end
+
+desc "Build Ruby reference with rdoc"
+task :ruby_docs => :rdoc do
+  sh "cp reference/rdoc-style.css reference/rdoc/rdoc-style.css"
+end
+
 desc "Build C++ reference with doxygen"
 task :cpp_docs do
   sh "cd reference && doxygen"
 end
 
 desc "Upload documentation to www.libgosu.org"
-task :upload_docs => :cpp_docs do
+task :upload_docs => [:cpp_docs, :ruby_docs] do
     sh "scp -C -r reference/cpp vu2040@eta.railshoster.de:~/htdocs/"
 end
 

@@ -50,11 +50,12 @@ namespace Gosu
     //! specified by angle.
     //! \param angle Angle in degrees where 0.0 means upwards.
     double offsetY(double angle, double radius);
-    //! Returns the angle between two points in degrees, where 0.0 means
+    //! Returns the angle from point 1 to point 2 in degrees, where 0.0 means
     //! upwards. Returns def if both points are equal.
     double angle(double fromX, double fromY, double toX, double toY,
         double def = 0);
-    //! Returns the smallest positive angle between two angles.
+    //! Returns the smallest angle that can be added to angle1 to get to
+    //! angle2 (can be negative if counter-clockwise movement is shorter).
     double angleDiff(double angle1, double angle2);
     //! Normalizes an angle to fit into the range [0; 360[.
     double normalizeAngle(double angle);

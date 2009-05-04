@@ -92,14 +92,14 @@ namespace Gosu
         #endif
     };
 
-	//! Convenience function that splits a BMP or PNG file into an area
+	//! Convenience function that splits a BMP or PNG file into an array
 	//! of small rectangles and creates images from them.
     //! \param tileWidth If positive, specifies the width of one tile in
     //! pixels. If negative, the bitmap is divided into -tileWidth rows.
     //! \param tileHeight See tileWidth.
     //! \param appendTo STL container to which the images will be appended.
     //! Must provide a push_back member function; std::vector<boost::shared_ptr<Image>>
-    //! is usually the most reasonable container.
+    //! or boost::ptr_vector<Image> are good choices.
     template<typename Container>
     void imagesFromTiledBitmap(Graphics& graphics, const std::wstring& filename,
         int tileWidth, int tileHeight, bool tileable, Container& appendTo)
@@ -107,14 +107,14 @@ namespace Gosu
 		imagesFromTiledBitmap(graphics, quickLoadBitmap(filename), tileWidth, tileHeight, tileable, appendTo);
     }
 
-    //! Convenience function that splits a bitmap into an area of small 
+    //! Convenience function that splits a bitmap into an area of array 
     //! rectangles and creates images from them.
     //! \param tileWidth If positive, specifies the width of one tile in
     //! pixels. If negative, the bitmap is divided into -tileWidth rows.
     //! \param tileHeight See tileWidth.
     //! \param appendTo STL container to which the images will be appended.
     //! Must provide a push_back member function; std::vector<boost::shared_ptr<Image>>
-    //! is usually the most reasonable container.
+    //! or boost::ptr_vector<Image> are good choices.
     template<typename Container>
     void imagesFromTiledBitmap(Graphics& graphics, const Bitmap& bmp,
         int tileWidth, int tileHeight, bool tileable, Container& appendTo)

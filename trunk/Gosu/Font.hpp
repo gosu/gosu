@@ -23,7 +23,8 @@ namespace Gosu
 
     public:
         //! Constructs a font that can be drawn onto the graphics object.
-        //! \param fontName Name of a system font, or a filename to a TTF file (must contain '/').
+        //! \param fontName Name of a system font, or a filename to a TTF
+        //!        file (must contain '/', does not work on Linux).
         //! \param height Height of the font, in pixels.
         Font(Graphics& graphics, const std::wstring& fontName,
             unsigned height);
@@ -32,7 +33,7 @@ namespace Gosu
         //! Returns the height of the font, in pixels.
         unsigned height() const;
 
-        //! Returns the width the given text would occupy if drawn.
+        //! Returns the width, in pixels, the given text would occupy if drawn.
         double textWidth(const std::wstring& text, double factorX = 1) const;
 
         //! Draws text so the top left corner of the text is at (x; y).
@@ -49,7 +50,8 @@ namespace Gosu
         void drawRel(const std::wstring& text, double x, double y, ZPos z,
             double relX, double relY, double factorX = 1, double factorY = 1,
             Color c = Colors::white, AlphaMode mode = amDefault) const;
-            
+        
+        //! Analogous to draw, but rotates the text by a given angle.
         void drawRot(const std::wstring& text, double x, double y, ZPos z, double angle,
             double factorX = 1, double factorY = 1,
             Color c = Colors::white, AlphaMode mode = amDefault) const;

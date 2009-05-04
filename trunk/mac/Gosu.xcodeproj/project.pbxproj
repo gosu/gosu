@@ -396,25 +396,6 @@
 		D47BD3290BD78F7200ACF014 /* RubyGosu_wrap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RubyGosu_wrap.h; path = ../GosuImpl/RubyGosu_wrap.h; sourceTree = SOURCE_ROOT; };
 		D47BD32A0BD78F7200ACF014 /* RubyGosu.swg */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = RubyGosu.swg; path = ../GosuImpl/RubyGosu.swg; sourceTree = SOURCE_ROOT; };
 		D49163360FAE55C4001692E0 /* dln.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dln.c; path = "Ruby 1.9 Source/dln.c"; sourceTree = "<group>"; };
-		D49163480FAE58D0001692E0 /* rubyio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rubyio.h; sourceTree = "<group>"; };
-		D49163490FAE58D0001692E0 /* rubysig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rubysig.h; sourceTree = "<group>"; };
-		D491634A0FAE58D0001692E0 /* st.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = st.h; sourceTree = "<group>"; };
-		D491634B0FAE58D0001692E0 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
-		D491634C0FAE58D0001692E0 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
-		D491634D0FAE58D0001692E0 /* defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = defines.h; sourceTree = "<group>"; };
-		D491634E0FAE58D0001692E0 /* encoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = encoding.h; sourceTree = "<group>"; };
-		D491634F0FAE58D0001692E0 /* intern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = intern.h; sourceTree = "<group>"; };
-		D49163500FAE58D0001692E0 /* io.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = io.h; sourceTree = "<group>"; };
-		D49163510FAE58D0001692E0 /* missing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = missing.h; sourceTree = "<group>"; };
-		D49163520FAE58D0001692E0 /* oniguruma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oniguruma.h; sourceTree = "<group>"; };
-		D49163530FAE58D0001692E0 /* re.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = re.h; sourceTree = "<group>"; };
-		D49163540FAE58D0001692E0 /* regex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = regex.h; sourceTree = "<group>"; };
-		D49163550FAE58D0001692E0 /* ruby.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ruby.h; sourceTree = "<group>"; };
-		D49163560FAE58D0001692E0 /* st.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = st.h; sourceTree = "<group>"; };
-		D49163570FAE58D0001692E0 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
-		D49163580FAE58D0001692E0 /* vm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm.h; sourceTree = "<group>"; };
-		D49163590FAE58D0001692E0 /* win32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = win32.h; sourceTree = "<group>"; };
-		D491635A0FAE58D0001692E0 /* ruby.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ruby.h; sourceTree = "<group>"; };
 		D491648A0FAF25E3001692E0 /* encdb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = encdb.c; path = "Ruby 1.9 Source/enc/encdb.c"; sourceTree = "<group>"; };
 		D49164A50FAF25E3001692E0 /* utf_16be.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = utf_16be.c; path = "Ruby 1.9 Source/enc/utf_16be.c"; sourceTree = "<group>"; };
 		D49164A60FAF25E3001692E0 /* utf_16le.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = utf_16le.c; path = "Ruby 1.9 Source/enc/utf_16le.c"; sourceTree = "<group>"; };
@@ -681,7 +662,6 @@
 			isa = PBXGroup;
 			children = (
 				D46C2F0C0FAE2F5900A33476 /* enc */,
-				D49163450FAE58D0001692E0 /* include */,
 				D46C2F7B0FAE390500A33476 /* missing */,
 				D46C2E070FAE090200A33476 /* array.c */,
 				D46C2E080FAE090200A33476 /* bignum.c */,
@@ -781,49 +761,6 @@
 				D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */,
 			);
 			name = RubyGosu;
-			sourceTree = "<group>";
-		};
-		D49163450FAE58D0001692E0 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				D49163460FAE58D0001692E0 /* ruby */,
-				D491635A0FAE58D0001692E0 /* ruby.h */,
-			);
-			name = include;
-			path = "Ruby 1.9 Source/include";
-			sourceTree = "<group>";
-		};
-		D49163460FAE58D0001692E0 /* ruby */ = {
-			isa = PBXGroup;
-			children = (
-				D49163470FAE58D0001692E0 /* backward */,
-				D491634C0FAE58D0001692E0 /* config.h */,
-				D491634D0FAE58D0001692E0 /* defines.h */,
-				D491634E0FAE58D0001692E0 /* encoding.h */,
-				D491634F0FAE58D0001692E0 /* intern.h */,
-				D49163500FAE58D0001692E0 /* io.h */,
-				D49163510FAE58D0001692E0 /* missing.h */,
-				D49163520FAE58D0001692E0 /* oniguruma.h */,
-				D49163530FAE58D0001692E0 /* re.h */,
-				D49163540FAE58D0001692E0 /* regex.h */,
-				D49163550FAE58D0001692E0 /* ruby.h */,
-				D49163560FAE58D0001692E0 /* st.h */,
-				D49163570FAE58D0001692E0 /* util.h */,
-				D49163580FAE58D0001692E0 /* vm.h */,
-				D49163590FAE58D0001692E0 /* win32.h */,
-			);
-			path = ruby;
-			sourceTree = "<group>";
-		};
-		D49163470FAE58D0001692E0 /* backward */ = {
-			isa = PBXGroup;
-			children = (
-				D49163480FAE58D0001692E0 /* rubyio.h */,
-				D49163490FAE58D0001692E0 /* rubysig.h */,
-				D491634A0FAE58D0001692E0 /* st.h */,
-				D491634B0FAE58D0001692E0 /* util.h */,
-			);
-			path = backward;
 			sourceTree = "<group>";
 		};
 		D4A5A2F00F40D4EE00FFF378 /* Frameworks Touch */ = {

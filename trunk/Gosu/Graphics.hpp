@@ -50,11 +50,12 @@ namespace Gosu
         void beginGL();
         //! Resets Gosu into its default rendering state.
         void endGL();
-        // Enables clipping to a specified rectangle.
+        //! Enables clipping to a specified rectangle.
         void beginClipping(int x, int y, unsigned width, unsigned height);
-        // Disables clipping.
+        //! Disables clipping.
         void endClipping();
 
+        //! Draws a line from one point to another (last pixel exclusive).
         void drawLine(double x1, double y1, Color c1,
             double x2, double y2, Color c2,
             ZPos z, AlphaMode mode = amDefault);

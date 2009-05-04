@@ -236,6 +236,7 @@ namespace Gosu
 %ignore Gosu::AlphaMode;
 %ignore Gosu::FontFlags;
 %ignore Gosu::TextAlign;
+%ignore Gosu::BorderFlags;
 %include "../Gosu/GraphicsBase.hpp"
 
 // For screenWidth/screenHeight
