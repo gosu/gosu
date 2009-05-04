@@ -106,7 +106,7 @@ end
 
 desc "Upload documentation to www.libgosu.org"
 task :upload_docs => :cpp_docs do
-    sh "scp -r reference/cpp vu2040@eta.railshoster.de:~/htdocs/"
+    sh "scp -C -r reference/cpp vu2040@eta.railshoster.de:~/htdocs/"
 end
 
 namespace :mac do
