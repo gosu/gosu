@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-05-04)
+(Last update: 2009-05-05)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics release
@@ -13,6 +13,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Move three threads from GosuExchange to the forums
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
     * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
+    * Report Ocra bugs: spaces in exe name = crash, requires .rb and .so files?!
   * Finish OpenAL on OS X!
     * Use OpenAL for OS X too
     * Try to add dynamic MikMod loading code
@@ -27,8 +28,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Try not to hide the mouse cursor outside of the main window on OS X
       * Test multiple screens on Windows
     * TextField with clip_to (update example)
-    * Package OR&G with optimized Gosu (weee)
-    * Look into Ruby 1.9 on Windows
     * Test LD14 entry on Linux
     * Release 0.7.13.37
     * Rename hard_borders to tileable in the wiki
@@ -106,7 +105,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Benchmark clip_to; worth replacing with stencils?
   * See if other libraries catch the release of the 'A' key in cmd+a
 == Gosu CI/Usability ==
-  * Make things a bit more comic-y
   * Add some first eye catchers to front page
   * Wait for Version 0.7.1337
   * Move to GitHub
@@ -117,6 +115,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Link YouTube videos, and maybe blog tags like http://www.cuberick.com/search/label/gosu?
   * Change sender address of forum mailer
   * Make logo in forum clickable
+  * Make logo in Rdoc clickable
   * Add gallery of images from Gosu Showcase board
   * Add Unicode Support wiki page
   * Split up BasicConcepts into single pages with prettier diagrams (also mention corner order tolerance)
