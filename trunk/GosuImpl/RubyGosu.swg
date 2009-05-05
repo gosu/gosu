@@ -115,6 +115,14 @@
 #undef read
 #undef sleep
 #undef Sleep
+#undef int8_t
+#undef uint8_t
+#undef int16_t
+#undef uint16_t
+#undef int32_t
+#undef uint32_t
+#undef int64_t
+#undef uint64_t
 
 //#ifndef WIN32
 //#include <Gosu/Async.hpp>

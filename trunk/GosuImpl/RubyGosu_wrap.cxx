@@ -2237,6 +2237,14 @@ static VALUE mGosu;
 #undef read
 #undef sleep
 #undef Sleep
+#undef int8_t
+#undef uint8_t
+#undef int16_t
+#undef uint16_t
+#undef int32_t
+#undef uint32_t
+#undef int64_t
+#undef uint64_t
 
 //#ifndef WIN32
 //#include <Gosu/Async.hpp>
@@ -2382,13 +2390,6 @@ SWIG_AsVal_double (VALUE obj, double *val)
 
 
   #define SWIG_From_double   rb_float_new 
-
-
-SWIGINTERNINLINE VALUE
-SWIG_From_int  (int value)
-{    
-  return SWIG_From_long  (value);
-}
 
 
 SWIGINTERNINLINE VALUE
@@ -2565,6 +2566,13 @@ SWIG_AsVal_unsigned_SS_int (VALUE obj, unsigned int *val)
 SWIGINTERN Gosu::Font *new_Gosu_Font(Gosu::Window &window,std::wstring const &fontName,unsigned int height){
         return new Gosu::Font(window.graphics(), fontName, height);
     }
+
+SWIGINTERNINLINE VALUE
+SWIG_From_int  (int value)
+{    
+  return SWIG_From_long  (value);
+}
+
 
 SWIGINTERN int
 SWIG_AsVal_bool (VALUE obj, bool *val)
@@ -10285,12 +10293,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "normalize_angle", VALUEFUNC(_wrap_normalize_angle), -1);
   rb_define_module_function(mGosu, "distance", VALUEFUNC(_wrap_distance), -1);
   rb_define_module_function(mGosu, "default_font_name", VALUEFUNC(_wrap_default_font_name), -1);
-  rb_define_const(mGosu, "BfSoft", SWIG_From_int(static_cast< int >(Gosu::bfSoft)));
-  rb_define_const(mGosu, "BfTileableLeft", SWIG_From_int(static_cast< int >(Gosu::bfTileableLeft)));
-  rb_define_const(mGosu, "BfTileableTop", SWIG_From_int(static_cast< int >(Gosu::bfTileableTop)));
-  rb_define_const(mGosu, "BfTileableRight", SWIG_From_int(static_cast< int >(Gosu::bfTileableRight)));
-  rb_define_const(mGosu, "BfTileableBottom", SWIG_From_int(static_cast< int >(Gosu::bfTileableBottom)));
-  rb_define_const(mGosu, "BfTileable", SWIG_From_int(static_cast< int >(Gosu::bfTileable)));
   rb_define_module_function(mGosu, "screen_width", VALUEFUNC(_wrap_screen_width), -1);
   rb_define_module_function(mGosu, "screen_height", VALUEFUNC(_wrap_screen_height), -1);
   
