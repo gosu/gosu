@@ -123,7 +123,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;C:\Ruby1.9\include\ruby-1.9.1&quot;;&quot;C:\Ruby1.9\include\ruby-1.9.1\i386-mswin32&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;RUBYGOSU_EXPORTS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;RUBYGOSU_EXPORTS;_WSPIAPI_H_;HAVE_VSNPRINTF"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
