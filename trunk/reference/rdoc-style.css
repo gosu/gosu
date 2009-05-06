@@ -1,8 +1,10 @@
 
-/*;
-Allison 2 template;
-Copyright 2007, 2008 Cloudburst, LLC. Licensed under the AFL 3. See the included LICENSE file.;
-*/;
+/*
+Allison 2 template
+Copyright 2007, 2008 Cloudburst, LLC. Licensed under the AFL 3. See the included LICENSE file.
+
+Modified for use on libgosu.org by Julian Raschke <julian@raschke.de>
+*/
 
 /* default styles */
 
@@ -38,7 +40,7 @@ body {
   text-align: center;
 }
 
-#child_of, #defined_in, #file_wrapper {
+#child_of, #defined_in {
   display: none;
 }
 
@@ -74,7 +76,7 @@ padding-top: 12px;
   background: url('http://www.libgosu.org/forum_header.png') 29px 20px no-repeat white;
 
 margin: 25px auto 0 auto;
-padding: 15px 15px 0 15px;
+padding: 25px 15px 0 15px;
 -webkit-border-radius: 1em 0.5em;
 -moz-border-radius: 0.5em;
 width: 900px;
@@ -90,31 +92,27 @@ width: 888px;
 height: 52px;
 _height: 58px;
 margin-bottom: 12px;
-vertical-align: baseline;
+vertical-align: bottom;
 overflow: hidden;
 }
 
 #header h1 {
-color: #000;
-font-size: 30px;
-margin: 4px 0 0 0;
-} #header p {
+  color: #000;
+  font-size: 30px;
+  margin: 4px 0 0 0;
+}
+#header p {
   display: none;
-margin: 0;
-padding: 0;
-padding-left: 3px;
-font-size: 16px;
-color: #000;
-} #header a {
-color: #000;
-text-decoration: none;
-font-weight: bold;
+}
+#header a {
+  color: #000;
+  text-decoration: none;
+  font-weight: bold;
 }
 
 /* basic layout and navigation bars */
 
 #left {
-  margin-top: 10px;
   border: 2px solid black;
   -webkit-border-radius: 1em 0.5em;
   -moz-border-radius: 0.5em;

@@ -40,7 +40,7 @@
     }
 		
 		div#tabs {
-      margin-top: -53px;
+      margin-top: -54px;
       margin-left: -10px;
 			margin-bottom: 45px;
 		}
@@ -52,7 +52,8 @@
       -webkit-border-top-right-radius: 1em 0.5em;
       -moz-border-radius-topleft: 0.5em;
       -moz-border-radius-topright: 0.5em;
-      background: #e8e8e8;
+      background: #eee;
+			border-bottom: 1px solid #bbb;
       text-align: center;
       font-weight: bold;
       width: 150px;
@@ -61,6 +62,7 @@
 
 		span.active {
 			background: white;
+			border-bottom: 1px solid white;
 		}
     
     .quick_link {
@@ -88,6 +90,12 @@
       padding-left: 100px;
       width: 176px;
     }
+
+		.quick_link .yo_dawg_i_herd_u_like_divs {
+			margin-top: 1em;
+			border-top: 1px solid black;
+			padding-top: 1em;
+		}
     
     a {
       color: red;
@@ -95,6 +103,7 @@
     
     h1 {
       font-size: 115%;
+			margin-top: 1.5em;
     }
     
     li {
@@ -131,10 +140,11 @@ pageTracker._trackPageview();
         <li><a href="http://code.google.com/p/gosu/source/checkout">the Subversion repository</a> and</li>
         <li>the <a href="http://code.google.com/p/gosu/issues/list">issue tracker</a></li>
       </ul>
+
+			<div class="yo_dawg_i_herd_u_like_divs">
+				But <a href="http://github.com/jlnr/gosu/">Gosu is also on GitHub</a> for easy forking!
+			</div>
     </div>
-		<div class="quick_link">
-			But <a href="http://github.com/jlnr/gosu/">Gosu is also on GitHub</a> for easy forking!
-		</div>
     <div class="quick_link" id="feed_link">
       Stay up to date easily with <a href="http://code.google.com/p/gosu/feeds">RSS feeds of downloads and more</a> from the GoogleCode page, or subscribe even to Gosu news and discussion easily via the <a href="http://www.libgosu.org/cgi-bin/mwf/forum_feeds.pl">feeds from the forum</a>.
     </div>
@@ -165,7 +175,7 @@ pageTracker._trackPageview();
       Ruby/Gosu also features:
 
       <ul>
-        <li> Translations of the Ruby tutorial into Traditional Chinese, Spanish and French (see <a href="http://code.google.com/p/gosu/wiki/DocsOverview">DocsOverview</a>)</li>
+        <li> Translations of the Ruby tutorial into Traditional Chinese, Spanish and French, as well as Polish material—see <a href="http://code.google.com/p/gosu/wiki/DocsOverview">DocsOverview</a> in the Wiki</li>
         <li> Installation via <tt>gem install gosu</tt>, complete with examples</li>
         <li> RMagick integration, shown in an example game</li>
         <li> A tutorial on how to use the <a href="http://wiki.slembcke.net/main/published/Chipmunk">Chipmunk</a> physics library with Gosu: <a href="http://code.google.com/p/gosu/wiki/RubyChipmunkIntegration">RubyChipmunkIntegration</a>, written by Dirk Johnson</li>
@@ -173,17 +183,17 @@ pageTracker._trackPageview();
       </ul>
     </p>
     
+		<h1>What's next?</h1>
 		<p>
 			Current work focuses on <a href="http://www.libgosu.org/cgi-bin/mwf/topic_show.pl?pid=336">bringing Gosu to the iPhone</a>, making it easy to use it with <a href="http://www.libgosu.org/cgi-bin/mwf/topic_show.pl?pid=111">Ruby 1.9 on all platforms</a>, and making it easier to integrate robust custom OpenGL.
 		</p>
 
-    <h1>Ruby Game Development Overview</h1>
-    <p>If you are coming from a Ruby background and haven't yet decided on a library or want to know about alternatives to Gosu, or if you haven't yet decided to even use Ruby, check out Andrea O. K. Wrights articles and her talk, which give a fair overview:
-      <ul>
-        <li><a href="http://www.oreillynet.com/pub/a/ruby/2007/12/04/creating-games-in-ruby.html">Article (part 1)</a></li>
-        <li><a href="http://www.oreillynet.com/pub/a/ruby/2007/12/18/creating-games-in-ruby-part-2.html">Article (part 2)</a></li>
-        <li><a href="http://rubyconf2007.confreaks.com/d1t2p2_building_games_with_ruby.html">Video of the talk (RubyConf '07)</a></li>
-      </ul>
+    <h1>Ruby Game Development: Overview</h1>
+    <p>If you are coming from a Ruby background and haven't yet decided on a library or want to know about alternatives to Gosu, or if you haven't yet decided to even use Ruby, check out Andrea O. K. Wrights articles and her talk, which give a fair overview.</p>
+    <p>
+		  <a href="http://www.oreillynet.com/pub/a/ruby/2007/12/04/creating-games-in-ruby.html">Article (part 1)</a> /
+      <a href="http://www.oreillynet.com/pub/a/ruby/2007/12/18/creating-games-in-ruby-part-2.html">Article (part 2)</a> /
+      <a href="http://rubyconf2007.confreaks.com/d1t2p2_building_games_with_ruby.html">Video of the talk (RubyConf '07)</a>
     </p>
     
     <h1>Licensing</h1>

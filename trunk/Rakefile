@@ -103,7 +103,7 @@ end
 Rake::RDocTask.new do |rd|  
   rd.main = "README.txt"
   rd.rdoc_dir = "reference/rdoc"
-  rd.rdoc_files.include("reference/gosu.rb", "README.txt")
+  rd.rdoc_files.include("reference/gosu.rb", "README.txt", "COPYING.txt")
   rd.title = "RubyGosu rdoc Reference"
   rd.template = `allison --path`.chomp
 end
