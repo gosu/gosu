@@ -180,7 +180,7 @@ namespace :win do
 
   desc "Build the archive #{WINDOWS_RUBY_ARCHIVE_FILENAME}"
   task :ruby_archive => [:version] do
-    files = COMMON_RUBY_FILES + ['lib/gosu.so', 'lib/fmod.dll']
+    files = COMMON_RUBY_FILES + ['lib/gosu.rb', 'lib/gosu.for_1_8.so', 'lib/gosu.for_1_9.so', 'lib/fmod.dll']
     sh "zip #{WINDOWS_RUBY_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
   end
 
@@ -198,7 +198,7 @@ namespace :win do
   WINDOWS_SPEC = Gem::Specification.new do |s|
     apply_gemspec_defaults s
     s.platform = 'x86-mswin32-60'
-    s.files = COMMON_RUBY_FILES + ['lib/gosu.so', 'lib/fmod.dll']
+    s.files = COMMON_RUBY_FILES + ['lib/gosu.rb', 'lib/gosu.for_1_8.so', 'lib/gosu.for_1_9.so', 'lib/fmod.dll']
   end
   Rake::GemPackageTask.new(WINDOWS_SPEC) { |t| t.package_dir = 'public/windows_gem' }
 end
