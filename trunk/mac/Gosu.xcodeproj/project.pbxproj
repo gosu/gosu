@@ -423,7 +423,7 @@
 		D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapUtils.cpp; sourceTree = "<group>"; };
 		D4AB62F50D08BA9900D71382 /* MacUtility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MacUtility.hpp; path = ../GosuImpl/MacUtility.hpp; sourceTree = SOURCE_ROOT; };
 		D4BC5D6A0CC29D0F002D4236 /* Async.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Async.hpp; path = ../Gosu/Async.hpp; sourceTree = SOURCE_ROOT; };
-		D4CA89500BC68B5D00A431AC /* gosu.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = gosu.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4CA89500BC68B5D00A431AC /* gosu.for_1_9.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = gosu.for_1_9.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = RubyGosuStub.mm; path = ../GosuImpl/RubyGosuStub.mm; sourceTree = SOURCE_ROOT; };
 		D4F07B220D934C8B00FB3D99 /* TextInput.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextInput.hpp; path = ../Gosu/TextInput.hpp; sourceTree = SOURCE_ROOT; };
 		D4F07B260D93504700FB3D99 /* TextInputMac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextInputMac.mm; path = ../GosuImpl/TextInputMac.mm; sourceTree = SOURCE_ROOT; };
@@ -492,7 +492,7 @@
 			isa = PBXGroup;
 			children = (
 				8D07F2C80486CC7A007CD1D0 /* Gosu.framework */,
-				D4CA89500BC68B5D00A431AC /* gosu.bundle */,
+				D4CA89500BC68B5D00A431AC /* gosu.for_1_9.bundle */,
 				D459FF440BDCD23500E7F0D6 /* RubyGosu App.app */,
 				D4A5A1F40F40D28600FFF378 /* libgosutouch.a */,
 			);
@@ -884,7 +884,7 @@
 			);
 			name = "RubyGosu Core";
 			productName = RubyGosu;
-			productReference = D4CA89500BC68B5D00A431AC /* gosu.bundle */;
+			productReference = D4CA89500BC68B5D00A431AC /* gosu.for_1_9.bundle */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 /* End PBXNativeTarget section */
@@ -1322,6 +1322,10 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					NDEBUG,
+					RUBY_EMBEDDED,
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					"$(HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
@@ -1409,10 +1413,13 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
 				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)";
-				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					NDEBUG,
+					RUBY_EMBEDDED,
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					"$(HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
@@ -1433,6 +1440,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = "RubyGosu App";
+				STRIP_STYLE = debugging;
 				SYMROOT = ..;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
@@ -1442,12 +1450,13 @@
 		D46C29730FADB59600A33476 /* Release with 1.9 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				CONFIGURATION_BUILD_DIR = ../lib;
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";
-				EXECUTABLE_EXTENSION = bundle;
+				EXECUTABLE_EXTENSION = for_1_9.bundle;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					NDEBUG,
 					GOSU_FOR_RUBY,
@@ -1461,7 +1470,7 @@
 				MACH_O_TYPE = mh_bundle;
 				OTHER_LDFLAGS = (
 					"-F..",
-					"-lruby1.9-static",
+					"-lruby_1_9_1_universal",
 					"-lz_universal",
 					"-lpng_universal",
 					"-lfmod_universal",
@@ -1471,7 +1480,6 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = gosu;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				ZERO_LINK = NO;
 			};
 			name = "Release with 1.9";
@@ -1568,7 +1576,7 @@
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";
-				EXECUTABLE_EXTENSION = bundle;
+				EXECUTABLE_EXTENSION = for_1_8.bundle;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					NDEBUG,
 					GOSU_FOR_RUBY,

@@ -56,16 +56,5 @@ EOF
   s.homepage = 'http://code.google.com/p/gosu'
   s.summary = '2D game development library.'
 
-  s.requirements = [ 'g++',
-                     'pkg-config',
-                     'libgl',
-                     'X11 includes and libraries',
-                     'pangoft2',
-                     'fmod or SDL_mixer',
-
-                     "(Packages for Debian/Ubuntu:\n" +
-                     ' g++ pkg-config ruby-dev xorg-dev' +
-                     ' libsdl-mixer1.2-dev libgl1-mesa-dev libglu1-mesa-dev' +
-                     ' libpango1.0-dev' +
-                     "\n)"]
+  s.requirements = [ 'See http://code.google.com/p/gosu/wiki/GettingStartedOnLinux\n)"]
 end
