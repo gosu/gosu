@@ -31,7 +31,7 @@ Ruby: Available at http://www.libgosu.org/rdoc/
 
 = Ruby Game Packaging =
 
-Since Ruby is not a compiled language, it is not obvious how to release games written in it to the public. For instructions see either RubyPackagingOnOsx or RubyPackagingOnWindows.
+Since Ruby is not a compiled language, it may not be obvious how to release games written in it to the public. For instructions see either RubyPackagingOnOsx or RubyPackagingOnWindows.
 
 = Further inspiration =
 
