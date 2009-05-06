@@ -1,0 +1,126 @@
+Index: GosuImpl/RubyGosu_wrap.cxx
+===================================================================
+--- GosuImpl/RubyGosu_wrap.cxx	(Revision 993)
++++ GosuImpl/RubyGosu_wrap.cxx	(Arbeitskopie)
+@@ -8,6 +8,10 @@
+  * interface file instead. 
+  * ----------------------------------------------------------------------------- */
+ 
++// This file was afterwards patched using the following instructions:
++// http://sourceforge.net/tracker/index.php?func=detail&aid=2034216&group_id=1645&atid=101645
++// (Many thanks to Kevin Burge for that.)
++
+ #define SWIGRUBY
+ #define SWIG_DIRECTORS
+ 
+@@ -855,6 +859,7 @@
+ 
+ 
+ #include <ruby.h>
++#include <map>
+ 
+ /* Remove global macros defined in Ruby's win32.h */
+ #ifdef write
+@@ -1183,7 +1188,7 @@
+ /* Global Ruby hash table to store Trackings from C/C++
+    structs to Ruby Objects. 
+ */
+-static VALUE swig_ruby_trackings = Qnil;
++static std::map<void*, VALUE> swig_ruby_trackings;
+ 
+ /* Global variable that stores a reference to the ruby
+    hash table delete function. */
+@@ -1200,34 +1205,18 @@
+      This is done to allow multiple DSOs to share the same
+      tracking table.
+   */
+-  ID trackings_id = rb_intern( "@__trackings__" );
+   VALUE verbose = rb_gv_get("VERBOSE");
+   rb_gv_set("VERBOSE", Qfalse);
+-  swig_ruby_trackings = rb_ivar_get( _mSWIG, trackings_id );
+   rb_gv_set("VERBOSE", verbose);
+ 
+   /* No, it hasn't.  Create one ourselves */ 
+-  if ( swig_ruby_trackings == Qnil )
+-    {
+-      swig_ruby_trackings = rb_hash_new();
+-      rb_ivar_set( _mSWIG, trackings_id, swig_ruby_trackings );
+-    }
++  swig_ruby_trackings.clear();
+ 
+   /* Now store a reference to the hash table delete function
+      so that we only have to look it up once.*/
+   swig_ruby_hash_delete = rb_intern("delete");
+ }
+ 
+-/* Get a Ruby number to reference a pointer */
+-SWIGRUNTIME VALUE SWIG_RubyPtrToReference(void* ptr) {
+-  /* We cast the pointer to an unsigned long
+-     and then store a reference to it using
+-     a Ruby number object. */
+-
+-  /* Convert the pointer to a Ruby number */
+-  return SWIG2NUM(ptr);
+-}
+-
+ /* Get a Ruby number to reference an object */
+ SWIGRUNTIME VALUE SWIG_RubyObjectToReference(VALUE object) {
+   /* We cast the object to an unsigned long
+@@ -1249,39 +1238,16 @@
+ 
+ /* Add a Tracking from a C/C++ struct to a Ruby object */
+ SWIGRUNTIME void SWIG_RubyAddTracking(void* ptr, VALUE object) {
+-  /* In a Ruby hash table we store the pointer and
+-     the associated Ruby object.  The trick here is
+-     that we cannot store the Ruby object directly - if
+-     we do then it cannot be garbage collected.  So
+-     instead we typecast it as a unsigned long and
+-     convert it to a Ruby number object.*/
+-
+-  /* Get a reference to the pointer as a Ruby number */
+-  VALUE key = SWIG_RubyPtrToReference(ptr);
+-
+-  /* Get a reference to the Ruby object as a Ruby number */
+-  VALUE value = SWIG_RubyObjectToReference(object);
+-
+   /* Store the mapping to the global hash table. */
+-  rb_hash_aset(swig_ruby_trackings, key, value);
++  swig_ruby_trackings[ptr] = object;
+ }
+ 
+ /* Get the Ruby object that owns the specified C/C++ struct */
+ SWIGRUNTIME VALUE SWIG_RubyInstanceFor(void* ptr) {
+-  /* Get a reference to the pointer as a Ruby number */
+-  VALUE key = SWIG_RubyPtrToReference(ptr);
+-
+-  /* Now lookup the value stored in the global hash table */
+-  VALUE value = rb_hash_aref(swig_ruby_trackings, key);
+-	
+-  if (value == Qnil) {
+-    /* No object exists - return nil. */
++  if (swig_ruby_trackings.count(ptr) == 0)
+     return Qnil;
+-  }
+-  else {
+-    /* Convert this value to Ruby object */
+-    return SWIG_RubyReferenceToObject(value);
+-  }
++  else
++    return swig_ruby_trackings[ptr];
+ }
+ 
+ /* Remove a Tracking from a C/C++ struct to a Ruby object.  It
+@@ -1289,12 +1255,7 @@
+    since the same memory address may be reused later to create
+    a new object. */
+ SWIGRUNTIME void SWIG_RubyRemoveTracking(void* ptr) {
+-  /* Get a reference to the pointer as a Ruby number */
+-  VALUE key = SWIG_RubyPtrToReference(ptr);
+-
+-  /* Delete the object from the hash table by calling Ruby's
+-     do this we need to call the Hash.delete method.*/
+-  rb_funcall(swig_ruby_trackings, swig_ruby_hash_delete, 1, key);
++  swig_ruby_trackings.erase(ptr);
+ }
+ 
+ /* This is a helper method that unlinks a Ruby object from its
