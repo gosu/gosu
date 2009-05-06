@@ -1,10 +1,6 @@
 #summary Entry point to all of Gosu's documentation.
 #labels Featured
 
-= New to Gosu? =
-
-If you are curious about what Gosu is trying to achieve, read Gosu's DesignRationale. If you want to take a look at random Gosu code, see the tutorials below.
-
 = Installation =
 
 Depending on your operating system, see GettingStartedOnOsx, GettingStartedOnWindows or GettingStartedOnLinux. (Before downloading the prebuilt Ruby versions, please note that they are also available via `gem install gosu`!)
@@ -27,9 +23,11 @@ The original tutorial in *French* (slightly outdated) by Damien Gouteux: http://
 
 = Reference =
 
-C++: Available on http://www.libgosu.org/cpp/
+C++: Available at http://www.libgosu.org/cpp/
 
-Ruby: See the RubyReference.
+Ruby: Available at http://www.libgosu.org/rdoc/
+
+...but there is also the classic, at-a-glance overview over the Ruby interface: RubyReference.
 
 = Ruby Game Packaging =
 
