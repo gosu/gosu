@@ -140,7 +140,6 @@ namespace Gosu
                 if (chunk->texName() != currentTexName)
                 {
                     glBindTexture(GL_TEXTURE_2D, chunk->texName());
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                 }
                 
                 double left, top, right, bottom;

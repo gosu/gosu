@@ -137,7 +137,8 @@ module Gosu
   # An instance of a Sample playing. Can be used to stop sounds dynamically,
   # or to check if they are finished.
   # It is recommended that you throw away sample instances if possible,
-  # as they could accidentally refer to sounds played very long ago.
+  # as they could accidentally refer to other sounds being played after
+  # a very long time has passed.
   class SampleInstance
     attr_accessor :volume
     attr_accessor :speed
