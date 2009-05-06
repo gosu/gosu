@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-05-05)
+(Last update: 2009-05-06)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics release
@@ -104,14 +104,12 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Think: Possible to have beautiful quotation mark indenting?@Gosu Text
   * Benchmark clip_to; worth replacing with stencils?
   * See if other libraries catch the release of the 'A' key in cmd+a
+  * Add rdoc to Gosu gem
 == Gosu CI/Usability ==
   * Add some first eye catchers to front page
-  * Wait for Version 0.7.1337
-  * Move to GitHub
   * Add OpenGL Wiki page
   * Add "What now?" link list to front page
   * Adjust sample games
-  * Make Ruby reference available online, automatically
   * Link YouTube videos, and maybe blog tags like http://www.cuberick.com/search/label/gosu?
   * Change sender address of forum mailer
   * Make logo in forum clickable
@@ -119,6 +117,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Add gallery of images from Gosu Showcase board
   * Add Unicode Support wiki page
   * Split up BasicConcepts into single pages with prettier diagrams (also mention corner order tolerance)
+  * Setup github homepage
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
