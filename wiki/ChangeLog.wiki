@@ -1,6 +1,14 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.13.5=
+  * 2009-05-06: Linux: Fixed issue where thrown exceptions could result in a SIGSEGV on Linux
+  * 2009-05-06: Ruby: Worked around incompatibility between Ruby's GC and SWIG's object tracking
+  * 2009-05-04: Ruby: Added support for Ruby 1.9 for Windows and Linux
+  * 2009-05-04: Ruby: Rebuilt RubyGosu wrapper with SWIG 1.3.3.9
+  * 2009-04-29: Added support for newlines to simple version of createText/Image#from_text
+  * 2009-04-20: Fixed two bugs with texture borders
+
 =0.7.13=
   * 2009-04-17: All: Implemented global screen width/screen height getter functions
   * 2009-04-16: Ruby: button_id_to_char and char_to_button_id are also available as class methods of Window now (old version is inofficially deprecated now).
