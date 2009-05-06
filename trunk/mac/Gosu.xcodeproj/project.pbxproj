@@ -1470,12 +1470,12 @@
 				MACH_O_TYPE = mh_bundle;
 				OTHER_LDFLAGS = (
 					"-F..",
-					"-lruby_1_9_1_universal",
 					"-lz_universal",
 					"-lpng_universal",
 					"-lfmod_universal",
-					"-flat_namespace",
 					"-lboost_thread_1_34_1_universal",
+					"-flat_namespace",
+					"-weak-lruby_1_9_1_universal",
 					"-liconv",
 				);
 				PREBINDING = NO;

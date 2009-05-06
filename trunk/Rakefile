@@ -140,7 +140,7 @@ namespace :mac do
 
   desc "Build the archive #{MAC_ARCHIVE_FILENAME}"
   task :archive => [:cpp, :ruby, :version] do
-    files = COMMON_CPP_FILES + COMMON_RUBY_FILES + ['lib/gosu.bundle'] +
+    files = COMMON_CPP_FILES + COMMON_RUBY_FILES + ['lib/gosu.rb', 'lib/gosu.for_1_8.bundle', 'lib/gosu.for_1_9.bundle'] +
             FileList['Gosu.framework/**/*', 'RubyGosu App.app/**/*']
     sh "tar -czf #{MAC_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
   end
