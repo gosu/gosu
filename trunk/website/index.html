@@ -163,6 +163,12 @@ pageTracker._trackPageview();
       Gosu is a 2D game development library for the Ruby and C++ programming languages, available for Mac OS X, Windows and Linux.<br>
 			<small>MSVC++ 2005 or 2008 needed for the Windows C++ version, but the free Express versions are fine.</small>
     </p>
+
+		<p style="border: 1px solid red; margin-right: 350px; padding: 1em">
+			Ruby warning:<br>There is an incompatibility between SWIG (used for wrapping Gosu), and Ruby 1.8.6 from a certain patchlevel onwards (1.8.7 and 1.9 included). If your game dies with the error "object allocation during
+			garbage collection phase", all you can do for now is to revert to an earlier revision of Ruby 1.8.6 (p114 is known to work).<br>
+			A new gem is on its way!
+		</p>
 		
     <p>
       All languages have access to:
