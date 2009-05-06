@@ -953,7 +953,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Support for all sorts of SWIG installations\nPATH=/opt/local/bin:/usr/local/bin:/sw/bin:$PATH\ncd ..\nswig -c++ -ruby -autorename GosuImpl/RubyGosu.swg\n";
+			shellScript = "# Support for all sorts of SWIG installations\n# Commented out for the moment.\n# If commented in again, either SWIG should be fixed, regarding the 1.8.6+/1.9+ GC bug, or the patch should be applied.\n#PATH=/opt/local/bin:/usr/local/bin:/sw/bin:$PATH\n#cd ..\n#swig -c++ -ruby -autorename GosuImpl/RubyGosu.swg\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
