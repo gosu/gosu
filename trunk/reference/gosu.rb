@@ -103,6 +103,7 @@ module Gosu
     
     # Convenience function that splits a BMP or PNG file into an array
     # of small rectangles and creates images from them.
+    # Returns the Array containing Image instances.
     # tile_width:: If positive, specifies the width of one tile in pixels. If negative, the bitmap is divided into -tile_width rows.
     # tile_height:: See tile_width.
     def self.load_tiles(window, filename_or_rmagick_image, tile_width, tile_height, tileable); end
