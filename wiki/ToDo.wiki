@@ -4,11 +4,12 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-05-06)
+(Last update: 2009-05-07)
 
 == Gosu 0.7.x ==
   * 0.7.13, performance/graphics release
     * Timing Tuning
+  * rake-Task push_to_github
   * Web work
     * Move three threads from GosuExchange to the forums
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
@@ -18,6 +19,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Use OpenAL for OS X too
     * Try to add dynamic MikMod loading code
   * 0.7.13.37, The Popular Release
+    * Verify that TextInput works cleanly on Ruby 1.9 with Unicode
     * Screen size / fullscreen stuff
       * Iterate on first category of fullscreen tests
       * Allow adjustment of the virtual touchscreen resolution
@@ -32,7 +34,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Release 0.7.13.37
     * Rename hard_borders to tileable in the wiki
     * Document 64px minimum for single-texture opt.
-    * Document support for Ruby 1.9
     * (1x mymüsli for all the hard work! (motivation!)
   * Try harder to reproduce these bugs
     * Get rid of context selection error with driver set to always do FSAA (Windows)
@@ -105,6 +106,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Benchmark clip_to; worth replacing with stencils?
   * See if other libraries catch the release of the 'A' key in cmd+a
   * Add rdoc to Gosu gem
+  * Make Linux gemspec more robust wrt examples/
 == Gosu CI/Usability ==
   * Add some first eye catchers to front page
   * Add OpenGL Wiki page
@@ -118,6 +120,10 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Add Unicode Support wiki page
   * Split up BasicConcepts into single pages with prettier diagrams (also mention corner order tolerance)
   * Setup github homepage
+  * Link ChangeLog and ToDo on front page
+  * Button ids -> Rdoc!
+  * Mention Gosu's respectable age somewhere :)
+  * Link to benkos example
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
