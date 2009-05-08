@@ -120,28 +120,29 @@ struct Gosu::Sample::SampleData : boost::noncopyable
 
 Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
 {
-  if (noSound)
-    return;
+    if (noSound)
+        return;
 
-  Buffer buf;
-  loadFile(buf, filename);
-
-  // Forward.
-  Sample(audio, buf.frontReader()).data.swap(data);
+    data.reset(new SampleData);
+    // Saved locally because Mix_LoadWAV is a macro, wouldn't trust it...
+    std::string filenameUTF8 = wstringToUTF(filename);
+    data->rep = Mix_LoadWAV(filenameUTF8.c_str());
+    if (data->rep == NULL)
+        throwLastSDLError();
 }
 
 Gosu::Sample::Sample(Audio& audio, Reader reader) {
-  if (noSound)
-    return;
+    if (noSound)
+        return;
 
-  std::size_t bufsize = reader.resource().size() - reader.position();
-  Uint8* buffer = new Uint8[bufsize];
-  reader.read(buffer, bufsize);
-  
-  data.reset(new SampleData);
-  data->rep = Mix_LoadWAV_RW(SDL_RWFromMem(buffer, bufsize), 1);
-  if (data->rep == NULL)
-    throwLastSDLError();
+    std::size_t bufsize = reader.resource().size() - reader.position();
+    Uint8* buffer = static_cast<Uint8*>(malloc(bufsize));
+    reader.read(buffer, bufsize);
+
+    data.reset(new SampleData);
+    data->rep = Mix_LoadWAV_RW(SDL_RWFromMem(buffer, bufsize), 1);
+    if (data->rep == NULL)
+        throwLastSDLError();
 }
 
 Gosu::Sample::~Sample() {

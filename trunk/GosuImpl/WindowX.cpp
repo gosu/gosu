@@ -1,7 +1,7 @@
 // While (re)writing this file, I have been looking at many other libraries since all the
 // "official" documentation was horrible, at least those parts that I was able to find.
 // Kudos to the Pyglet folks (http://www.pyglet.org/) who wrote code that was much easier to
-// understand than that!
+// understand than that! --jlnr
 
 #include <Gosu/Window.hpp>
 #include <Gosu/Timing.hpp>
@@ -12,6 +12,7 @@
 #include <boost/bind.hpp>
 #include <stdexcept>
 #include <algorithm>
+#include <cstdlib>
 #include <vector>
 
 #include <GL/glx.h>
@@ -93,7 +94,6 @@ struct Gosu::Window::Impl
     int x, y;
     // Last known size
     int width, height;
-
 
     double updateInterval;
     bool fullscreen;
