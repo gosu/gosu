@@ -43,6 +43,7 @@ int main()
 
         Init_gosu();
         rb_eval_string("$LOADED_FEATURES << 'gosu.bundle'");
+        rb_eval_string("$LOADED_FEATURES << 'rubygems.rb'");
 
         return ruby_run_node(ruby_options(argc, argv)); 
     }
