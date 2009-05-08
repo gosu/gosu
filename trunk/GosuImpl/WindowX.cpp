@@ -12,7 +12,7 @@
 #include <boost/bind.hpp>
 #include <stdexcept>
 #include <algorithm>
-#include <cstdlib>
+#include <cstdio>
 #include <vector>
 
 #include <GL/glx.h>
