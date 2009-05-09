@@ -4,11 +4,9 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-05-08)
+(Last update: 2009-05-09)
 
 == Gosu 0.7.x ==
-  * 0.7.13, performance/graphics release
-    * Timing Tuning
   * rake-Task push_to_github
   * Web work
     * Move three threads from GosuExchange to the forums
@@ -18,7 +16,9 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Finish OpenAL on OS X!
     * Use OpenAL for OS X too
     * Try to add dynamic MikMod loading code
-  * 0.7.13.37, The Popular Release
+  * 0.7.13.5 (bugfixes bugfixes bugfixes)
+    * Build dylib dependency eraser script
+    * Complete the list of Gosu::Colors, inspired by the CSS colors, and move them to Color
     * Verify that TextInput works cleanly on Ruby 1.9 with Unicode
     * Screen size / fullscreen stuff
       * Iterate on first category of fullscreen tests
@@ -31,19 +31,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Test multiple screens on Windows
     * TextField with clip_to (update example)
     * Test LD14 entry on Linux
-    * Release 0.7.13.37
-    * Rename hard_borders to tileable in the wiki
-    * Document 64px minimum for single-texture opt.
+    * Release 0.7.13.5
     * (1x mymüsli for all the hard work! (motivation!)
-  * Try harder to reproduce these bugs
-    * Get rid of context selection error with driver set to always do FSAA (Windows)
-    * OS X: Release all keys on battery notification dialog (?)
-  * Try a quick prototype of Gosu working with Shoes (if that doesn't work, wxRuby)
-  * Finish the RMagick bundling thing
-    * Try to build RMagick.bundle against the 10.4 SDK
-    * Link the all-in-one-bundle from the boards: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
-    * Test RMagick.bundle on Tiger
-    * Test RMagick.bundle on PPC
   * iPhone-related stuff that should be finished soonish
     * Finish OpenAL port of Gosu::Audio (Ogg Songs)
     * Fix "too many fingers" bug on iPhone
@@ -51,6 +40,15 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Integrate "fat" iPhone building from forum
     * Clear up GOSU_IS_MAC vs. GOSU_IS_OSX
     * Use getBytes instead of UTF8String
+  * Try a quick prototype of Gosu working with Shoes (if that doesn't work, wxRuby)
+  * Try harder to reproduce these bugs
+    * Get rid of context selection error with driver set to always do FSAA (Windows)
+    * OS X: Release all keys on battery notification dialog (?)
+  * Finish the RMagick bundling thing
+    * Try to build RMagick.bundle against the 10.4 SDK
+    * Link the all-in-one-bundle from the boards: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
+    * Test RMagick.bundle on Tiger
+    * Test RMagick.bundle on PPC
   * 0.7.14, text quality release (+Linux gamepad!)
     * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
     * Image#from_text should support maxWidth=0 => no limits on size
@@ -77,7 +75,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Bessere Ruby-Deployment-Hilfen
     * Assure that files from doxygen task are considered for packaging
     * FMOD3: Sound auf Vista blockiert bei mehreren Benutzern?
-    * Windows Vista + RubyScript2exe: Bug reposten
     * Windows build task possible? Clarify
     * Look how http://github.com/singpolyma/rubygame/tree/master gets the Debian packaging done
     * Rakefile sollte autoconf ausführen
@@ -108,6 +105,15 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Add rdoc to Gosu gem
   * Make Linux gemspec more robust wrt examples/
 == Gosu CI/Usability ==
+  * Button ids & colors -> Rdoc!
+  * Rename hard_borders to tileable in the wiki
+  * Document 64px minimum for single-texture opt.
+  * Mention Gosu's respectable age somewhere :)
+  * Link to benkos example
+  * Post LD14 games to board
+  * Split up BasicConcepts into single pages with prettier diagrams
+  * Paste split up BasicConcepts into rRdoc sources
+  * Paste spiit up BasicConcepts into doxygen sources
   * Add some first eye catchers to front page
   * Add OpenGL Wiki page
   * Add "What now?" link list to front page
@@ -118,12 +124,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make logo in Rdoc clickable
   * Add gallery of images from Gosu Showcase board
   * Add Unicode Support wiki page
-  * Split up BasicConcepts into single pages with prettier diagrams (also mention corner order tolerance)
   * Setup github homepage
   * Link ChangeLog and ToDo on front page
-  * Button ids -> Rdoc!
-  * Mention Gosu's respectable age somewhere :)
-  * Link to benkos example
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
