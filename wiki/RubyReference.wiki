@@ -249,7 +249,7 @@ GpRight
 GpUp
 }}}
  
-== Extensions to module Numeric ==
+== Extensions to class Numeric ==
 
   * `Numeric#gosu_to_radians`: Converts from an Gosu angle as shown in BasicConcepts to an angle in radians.
   * `Numeric#radians_to_gosu`: Converts from an angle given in radians to a Gosu angle as shown in BasicConcepts.
