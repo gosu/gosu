@@ -125,7 +125,7 @@ Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
 
     data.reset(new SampleData);
     // Saved locally because Mix_LoadWAV is a macro, wouldn't trust it...
-    std::string filenameUTF8 = wstringToUTF(filename);
+    std::string filenameUTF8 = wstringToUTF8(filename);
     data->rep = Mix_LoadWAV(filenameUTF8.c_str());
     if (data->rep == NULL)
         throwLastSDLError();
@@ -210,7 +210,7 @@ Gosu::Song::Song(Audio& audio, const std::wstring& filename)
     if (noSound)
         return;
 
-    data->music = Mix_LoadMUS(Gosu::narrow(filename).c_str());
+    data->music = Mix_LoadMUS(Gosu::wstringToUTF8(filename).c_str());
     if (data->music == NULL)
         throwLastSDLError();
 
@@ -221,7 +221,8 @@ Gosu::Song::Song(Audio &audio, Type type, Reader reader)
 : data(new BaseData)
 {
 #if 0
-    // Why oh why is LoadMUS_RW traditionally broken.
+    // This is traditionally broken in SDL_mixer. File bugs :)
+    
     std::size_t bufsize = reader.resource().size() - reader.position();
     data->buffer.resize(bufsize);
     reader.read(data->buffer.data(), bufsize);

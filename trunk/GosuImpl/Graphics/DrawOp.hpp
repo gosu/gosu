@@ -105,7 +105,7 @@ namespace Gosu
         {
             static GLfloat spriteVertices[8];
             static GLfloat spriteTexcoords[8];
-            static boost::uint32_t spriteColors[40];
+            static boost::uint32_t spriteColors[4];
             
             // iPhone specific setup
             static bool isSetup = false;
