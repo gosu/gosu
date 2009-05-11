@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-05-10)
+(Last update: 2009-05-12)
 
 == Gosu 0.7.x ==
   * rake-Task push_to_github
@@ -17,9 +17,12 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Use OpenAL for OS X too
     * Try to add dynamic MikMod loading code
   * 0.7.13.5 (bugfixes bugfixes bugfixes)
-    * Build dylib dependency eraser script
-    * Complete the list of Gosu::Colors, inspired by the CSS colors, and move them to Color
     * Verify that TextInput works cleanly on Ruby 1.9 with Unicode
+    * Build dylib dependency eraser script
+    * Add the Gosu<->Radian scaling to C++ too (Math.hpp)
+    * Add support for giving font flags from Ruby
+    * Reply to Gosu::random mail
+    * Complete the list of Gosu::Colors, inspired by the CSS colors, and move them to Color
     * Screen size / fullscreen stuff
       * Iterate on first category of fullscreen tests
       * Allow adjustment of the virtual touchscreen resolution
@@ -32,6 +35,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * TextField with clip_to (update example)
     * Test LD14 entry on Linux
     * Release 0.7.13.5
+    * Document Font#name, Font#height, Font#flags
     * (1x mymüsli for all the hard work! (motivation!)
   * iPhone-related stuff that should be finished soonish
     * Finish OpenAL port of Gosu::Audio (Ogg Songs)
@@ -105,8 +109,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Add rdoc to Gosu gem
   * Make Linux gemspec more robust wrt examples/
 == Gosu CI/Usability ==
-  * Button ids & colors -> Rdoc!
-  * Rename hard_borders to tileable in the wiki
   * Document 64px minimum for single-texture opt.
   * Mention Gosu's respectable age somewhere :)
   * Link to benkos example
@@ -126,6 +128,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Add Unicode Support wiki page
   * Setup github homepage
   * Link ChangeLog and ToDo on front page
+  * Make sure createText is visible in Doxygen
+  * Ask forum what overload for draw_quad would make sense
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
