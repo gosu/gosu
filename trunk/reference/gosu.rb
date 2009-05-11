@@ -1,4 +1,117 @@
 module Gosu
+  Kb0 = :implementation_defined
+  Kb1 = :implementation_defined
+  Kb2 = :implementation_defined
+  Kb3 = :implementation_defined
+  Kb4 = :implementation_defined
+  Kb5 = :implementation_defined
+  Kb6 = :implementation_defined
+  Kb7 = :implementation_defined
+  Kb8 = :implementation_defined
+  Kb9 = :implementation_defined
+  KbA = :implementation_defined
+  KbB = :implementation_defined
+  KbC = :implementation_defined
+  KbD = :implementation_defined
+  KbE = :implementation_defined
+  KbF = :implementation_defined
+  KbG = :implementation_defined
+  KbH = :implementation_defined
+  KbI = :implementation_defined
+  KbJ = :implementation_defined
+  KbK = :implementation_defined
+  KbL = :implementation_defined
+  KbM = :implementation_defined
+  KbN = :implementation_defined
+  KbO = :implementation_defined
+  KbP = :implementation_defined
+  KbQ = :implementation_defined
+  KbR = :implementation_defined
+  KbS = :implementation_defined
+  KbT = :implementation_defined
+  KbU = :implementation_defined
+  KbV = :implementation_defined
+  KbW = :implementation_defined
+  KbX = :implementation_defined
+  KbY = :implementation_defined
+  KbZ = :implementation_defined
+  KbBackspace = :implementation_defined
+  KbDelete = :implementation_defined
+  KbDown = :implementation_defined
+  KbEnd = :implementation_defined
+  # On Numpad
+  KbEnter = :implementation_defined
+  KbEscape = :implementation_defined
+  KbF1 = :implementation_defined
+  KbF10 = :implementation_defined
+  KbF11 = :implementation_defined
+  KbF12 = :implementation_defined
+  KbF2 = :implementation_defined
+  KbF3 = :implementation_defined
+  KbF4 = :implementation_defined
+  KbF5 = :implementation_defined
+  KbF6 = :implementation_defined
+  KbF7 = :implementation_defined
+  KbF8 = :implementation_defined
+  KbF9 = :implementation_defined
+  KbHome = :implementation_defined
+  KbInsert = :implementation_defined
+  KbLeft = :implementation_defined
+  KbLeftAlt = :implementation_defined
+  KbLeftControl = :implementation_defined
+  KbLeftShift = :implementation_defined
+  KbNumpad0 = :implementation_defined
+  KbNumpad1 = :implementation_defined
+  KbNumpad2 = :implementation_defined
+  KbNumpad3 = :implementation_defined
+  KbNumpad4 = :implementation_defined
+  KbNumpad5 = :implementation_defined
+  KbNumpad6 = :implementation_defined
+  KbNumpad7 = :implementation_defined
+  KbNumpad8 = :implementation_defined
+  KbNumpad9 = :implementation_defined
+  KbNumpadAdd = :implementation_defined
+  KbNumpadDivide = :implementation_defined
+  KbNumpadMultiply = :implementation_defined
+  KbNumpadSubtract = :implementation_defined
+  KbPageDown = :implementation_defined
+  KbPageUp = :implementation_defined
+  KbPause = :implementation_defined
+  # Above the right shift key
+  KbReturn = :implementation_defined
+  KbRight = :implementation_defined
+  KbRightAlt = :implementation_defined
+  KbRightControl = :implementation_defined
+  KbRightShift = :implementation_defined
+  KbSpace = :implementation_defined
+  KbTab = :implementation_defined
+  KbUp = :implementation_defined
+  MsLeft = :implementation_defined
+  MsMiddle = :implementation_defined
+  MsRight = :implementation_defined
+  MsWheelDown = :implementation_defined
+  MsWheelUp = :implementation_defined
+  GpButton0 = :implementation_defined
+  GpButton1 = :implementation_defined
+  GpButton10 = :implementation_defined
+  GpButton11 = :implementation_defined
+  GpButton12 = :implementation_defined
+  GpButton13 = :implementation_defined
+  GpButton14 = :implementation_defined
+  GpButton15 = :implementation_defined
+  GpButton2 = :implementation_defined
+  GpButton3 = :implementation_defined
+  GpButton4 = :implementation_defined
+  GpButton5 = :implementation_defined
+  GpButton6 = :implementation_defined
+  GpButton7 = :implementation_defined
+  GpButton8 = :implementation_defined
+  GpButton9 = :implementation_defined
+  GpDown = :implementation_defined
+  GpLeft = :implementation_defined
+  GpRight = :implementation_defined
+  GpUp = :implementation_defined
+
   # Represents an ARGB color value with 8 bits for each channel. Can be
   # replaced by literals of the form 0xaarrggbb in all of Gosu.
   class Color
@@ -54,7 +167,7 @@ module Gosu
   end
   
   # Provides functionality for drawing rectangular images.
-  class Gosu::Image
+  class Image
     attr_reader :width, :height
     
     # Loads an image from a given filename that can be drawn onto
@@ -312,7 +425,7 @@ module Gosu
 
     # Returns the height, in pixels, of the user's primary screen.
     def screen_height(); end
-end
+  end
 end
 
 # Small additions to Numeric to make it easier to integrate Gosu with
