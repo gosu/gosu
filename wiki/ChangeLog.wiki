@@ -2,6 +2,7 @@
 #labels Featured
 
 =0.7.13.2 (experimental minor release; Ruby gems only)=
+  * 2009-05-11: All: Added flags, height, name accessors to Font
   * 2009-05-06: Linux: Fixed issue where thrown exceptions could result in a SIGSEGV on Linux
   * 2009-05-06: Ruby: Worked around incompatibility between Ruby's GC and SWIG's object tracking
   * 2009-05-04: Ruby: Added support for Ruby 1.9 for Windows and Linux
