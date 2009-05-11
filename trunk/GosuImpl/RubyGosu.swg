@@ -416,7 +416,10 @@ namespace Gosu
     rb_eval_string("class Gosu::Window; def button_id_to_char(id); self.class.button_id_to_char(id); end; def char_to_button_id(ch); self.class.char_to_button_id(ch); end; end");
 
     // Extend Numeric with simple angle conversion methods.
-    rb_eval_string("class ::Numeric;def gosu_to_radians;(self-90)*Math::PI/180.0;end;def radians_to_gosu;self*180.0/Math::PI+90;end;end");
+    rb_eval_string("class ::Numeric; def gosu_to_radian_scale; self*Math::PI/180.0; end; end");
+    rb_eval_string("class ::Numeric; def radian_scale_to_gosu; self*180.0/Math::PI; end; end");
+    rb_eval_string("class ::Numeric; def gosu_to_radians; (self-90)*Math::PI/180.0; end; end");
+    rb_eval_string("class ::Numeric; def radians_to_gosu; self*180.0/Math::PI+90;   end; end");
     
     GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
 %}
@@ -471,6 +474,10 @@ namespace Gosu
         $self->graphics().drawTriangle(x1, y1, c1, x2, y2, c2, x3, y3, c3,
                                        z, mode);
     }
+    /*void drawRect(double x, double y, double w, double h, Gosu::Color c,
+                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault) {
+        $self->graphics().drawRect(x, y, w, h, c, z, mode);
+    }*/
     void drawQuad(double x1, double y1, Gosu::Color c1,
                   double x2, double y2, Gosu::Color c2,
                   double x3, double y3, Gosu::Color c3,

@@ -27,8 +27,9 @@ namespace
 struct Gosu::Font::Impl
 {
     Graphics* graphics;
-    wstring fontName;
+    wstring name;
     unsigned height;
+    unsigned flags;
 
     // Chunk of 2^16 characters (on Windows, there'll only be one of them).
     // IMPR: I couldn't find a way to determine the size of wchar_t at compile
@@ -53,31 +54,43 @@ struct Gosu::Font::Impl
         wstring charString(1, wc);
         if (isFormattingChar(wc))
             charString.clear(); // Don't draw formatting characters
-        unsigned charWidth = Gosu::textWidth(charString, fontName, height, ffBold);
+        unsigned charWidth = Gosu::textWidth(charString, name, height, flags);
         Bitmap bmp;
         bmp.resize(charWidth, height);
         
-        drawText(bmp, charString, 0, 0, Colors::white, fontName, height, ffBold);
+        drawText(bmp, charString, 0, 0, Colors::white, name, height, flags);
         imgPtr.reset(new Image(*graphics, bmp));
         return *imgPtr;
     }
 };
 
-Gosu::Font::Font(Graphics& graphics, const wstring& fontName, unsigned height)
+Gosu::Font::Font(Graphics& graphics, const wstring& fontName, unsigned fontHeight,
+    unsigned fontFlags)
 : pimpl(new Impl)
 {
     pimpl->graphics = &graphics;
-    pimpl->fontName = fontName;
-    pimpl->height = height * 2; // Auto-AA!
+    pimpl->name = fontName;
+    pimpl->height = fontHeight * 2; // Auto-AA!
+    pimpl->flags = fontFlags;
 }
 
 Gosu::Font::~Font()
 {
 }
 
+std::wstring Gosu::Font::name() const
+{
+    return pimpl->name;
+}
+
 unsigned Gosu::Font::height() const
 {
     return pimpl->height / 2;
+}
+
+unsigned Gosu::Font::flags() const
+{
+    return pimpl->flags;
 }
 
 double Gosu::Font::textWidth(const std::wstring& text, double factorX) const

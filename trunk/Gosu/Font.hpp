@@ -25,22 +25,30 @@ namespace Gosu
         //! Constructs a font that can be drawn onto the graphics object.
         //! \param fontName Name of a system font, or a filename to a TTF
         //!        file (must contain '/', does not work on Linux).
-        //! \param height Height of the font, in pixels.
+        //! \param fontHeight Height of the font, in pixels.
+        //! \param fontFlags Flags used to render individual characters of
+        //!        the font.
         Font(Graphics& graphics, const std::wstring& fontName,
-            unsigned height);
+            unsigned fontHeight, unsigned fontFlags = ffBold);
         ~Font();
-
+        
+        //! Returns the name of the font that was used to create it.
+        std::wstring name() const;
+        
         //! Returns the height of the font, in pixels.
         unsigned height() const;
-
+        
+        //! Returns the flags used to create the font characters.
+        unsigned flags() const;
+        
         //! Returns the width, in pixels, the given text would occupy if drawn.
         double textWidth(const std::wstring& text, double factorX = 1) const;
-
+        
         //! Draws text so the top left corner of the text is at (x; y).
         void draw(const std::wstring& text, double x, double y, ZPos z,
             double factorX = 1, double factorY = 1,
             Color c = Colors::white, AlphaMode mode = amDefault) const;
-
+        
         //! Draws text at a position relative to (x; y).
         //! \param relX Determines where the text is drawn horizontally. If
         //! relX is 0.0, the text will be to the right of x, if it is 1.0,
