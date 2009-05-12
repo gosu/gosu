@@ -388,7 +388,7 @@ namespace
 {
     void makeCurrentContext(Display* dpy, GLXDrawable drawable, GLXContext context) {
         if (!glXMakeCurrent(dpy, drawable, context))
-            printf("glXMakeCurrent failed\n");
+            std::printf("glXMakeCurrent failed\n");
     }
 
     void releaseContext(Display* dpy, GLXContext context) {
