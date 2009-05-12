@@ -243,4 +243,14 @@ namespace :linux do
   Rake::GemPackageTask.new(LINUX_SPEC) { |t| t.package_dir = 'public/linux_gem' }
 end
 
+desc "Uses a parallel gosu.git repository and git-svn to push changes to github"
+task push_to_github
+  Dir.chdir '../gosu.git'
+  fetch_output = `git svn fetch`
+  puts fetch_output
+  last_commit_id = fetch_output.reverse[/ [a-f0-9]{40} /].reverse
+  sh "git rebase #{last_commit_id}"
+  sh "git push origin master"
+end
+
 # TODO? Gem upload to RubyForge: http://nubyonrails.com/articles/tutorial-publishing-rubygems-with-hoe
