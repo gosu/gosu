@@ -7,13 +7,10 @@ puts 'See the following site for a list:'
 puts 'http://code.google.com/p/gosu/wiki/GettingStartedOnLinux'
 puts
 
-require 'mkmf'
+require 'rbconfig'
 
 Dir.chdir File.dirname($0)
 
-ruby_command = "ruby#{RUBY_VERSION[0..2]}"
+ruby_command = File.join(Config::CONFIG["bindir"], Config::CONFIG["RUBY_INSTALL_NAME"])
 
 exit 1 if not system("env GOSU_MAKEFILE_FOR_GEM=1 GOSU_RUBY_COMMAND=#{ruby_command} sh configure")
-
-exit 0
-
