@@ -244,7 +244,7 @@ namespace :linux do
 end
 
 desc "Uses a parallel gosu.git repository and git-svn to push changes to github"
-task push_to_github do
+task :push_to_github do
   Dir.chdir '../gosu.git'
   fetch_output = `git svn fetch`
   puts fetch_output
