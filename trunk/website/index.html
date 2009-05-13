@@ -96,6 +96,13 @@
 			border-top: 1px solid black;
 			padding-top: 1em;
 		}
+		
+		.quick_link #project_of_the_day {
+			text-align: center;
+			margin: -20px;
+			padding: 10px 0px;
+			line-height: 150%;
+		}
     
     a {
       color: red;
@@ -145,9 +152,23 @@ pageTracker._trackPageview();
 				But <a href="http://github.com/jlnr/gosu/">Gosu is also on GitHub</a> for easy forking!
 			</div>
     </div>
+
+		<div class="quick_link">
+			<div id="project_of_the_day">
+				Project of the Day: <a href="http://www.libgosu.org/cgi-bin/mwf/topic_show.pl?tid=119">Rubystein&nbsp;3D</a>
+				<br>
+				<a href="http://www.libgosu.org/cgi-bin/mwf/topic_show.pl?tid=119">
+					<img src="project_of_the_day.jpg" alt="Screenshot of the project of the day">
+				</a>
+				<br>
+				This and more awesome projects in the <a href="http://www.libgosu.org/cgi-bin/mwf/board_show.pl?bid=2">Gosu Showcase</a> forum!
+			</div>
+		</div>
+
     <div class="quick_link" id="feed_link">
       Stay up to date easily with <a href="http://code.google.com/p/gosu/feeds">RSS feeds of downloads and more</a> from the GoogleCode page, or subscribe even to Gosu news and discussion easily via the <a href="http://www.libgosu.org/cgi-bin/mwf/forum_feeds.pl">feeds from the forum</a>.
     </div>
+
     <div class="quick_link">
       There is also a low traffic <a href="irc://irc.freenode.org/gosu">IRC channel on freenode</a> for friendly chat.
     </div>
@@ -163,29 +184,28 @@ pageTracker._trackPageview();
       Gosu is a 2D game development library for the Ruby and C++ programming languages, available for Mac OS X, Windows and Linux.<br>
 			<small>MSVC++ 2005 or 2008 needed for the Windows C++ version, but the free Express versions are fine.</small>
     </p>
-
+		
     <p>
-      All languages have access to:
+      Both languages have access to:
       <ul>
         <li> 2D graphics and text, accelerated by 3D hardware</li>
         <li> Sound samples and music in various formats</li>
-        <li> Keyboard, mouse and gamepad/joystick input</li>
+        <li> Keyboard, mouse and gamepad input</li>
       </ul>
     
       Ruby/Gosu also features:
-
       <ul>
         <li> Translations of the Ruby tutorial into Traditional Chinese, Spanish and French, as well as Polish material—see <a href="http://code.google.com/p/gosu/wiki/DocsOverview">DocsOverview</a> in the Wiki</li>
         <li> Installation via <tt>gem install gosu</tt>, complete with examples</li>
-        <li> RMagick integration, shown in an example game</li>
-        <li> A tutorial on how to use the <a href="http://wiki.slembcke.net/main/published/Chipmunk">Chipmunk</a> physics library with Gosu: <a href="http://code.google.com/p/gosu/wiki/RubyChipmunkIntegration">RubyChipmunkIntegration</a>, written by Dirk Johnson</li>
         <li> An example for using <tt>ruby-opengl</tt> to add rich 3D effects to 2D Gosu games</li>
+        <li> A tutorial on how to use the <a href="http://wiki.slembcke.net/main/published/Chipmunk">Chipmunk</a> physics library with Gosu: <a href="http://code.google.com/p/gosu/wiki/RubyChipmunkIntegration">RubyChipmunkIntegration</a>, written by Dirk Johnson</li>
+        <li> RMagick integration, shown in an example game—a lighter-weight replacement is available on the forum</li>
       </ul>
     </p>
     
 		<h1>What's next?</h1>
 		<p>
-			Current work focuses on <a href="http://www.libgosu.org/cgi-bin/mwf/topic_show.pl?pid=336">bringing Gosu to the iPhone</a>, making it easy to use it with <a href="http://www.libgosu.org/cgi-bin/mwf/topic_show.pl?pid=111">Ruby 1.9 on all platforms</a>, and making it easier to integrate robust custom OpenGL.
+			Current work focuses on <a href="http://www.libgosu.org/cgi-bin/mwf/topic_show.pl?pid=336">bringing Gosu to the iPhone</a>, making it easy to deploy Gosu games with <a href="http://www.libgosu.org/cgi-bin/mwf/topic_show.pl?pid=111">Ruby 1.9 on Windows and OS X</a>, and making it easier to integrate robust custom OpenGL.
 		</p>
 
     <h1>Ruby Game Development: Overview</h1>
@@ -207,5 +227,7 @@ pageTracker._trackPageview();
       Note: Even though Gosu's own source code and documentation are released under the MIT license, it still uses the closed source FMOD library for sound output, which is free of charge only for use in freeware.<br>On Linux, SDL_mixer will be used as the default. You use 100% Free code in this case!
     </p>
   </div>
+
+	<div style="clear: both"></div>
 </body>
 </html>
