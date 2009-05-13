@@ -176,10 +176,19 @@ module Gosu
 		# This constructor can handle PNG and BMP images. A color key of #ff00ff is
 		# automatically applied to BMP type images. For more flexibility, use PNG
 		# files.
+    def initialize(window, filename_or_rmagick_image, tileable); end
+
+    # Loads an image from a given filename that can be drawn onto
+    # the given window.
+    #
+		# This constructor can handle PNG and BMP images. A color key of #ff00ff is
+		# automatically applied to BMP type images. For more flexibility, use PNG
+		# files.
 		#
-		# The last four parameters are optional, so you have to supply either
-		# 3 or 7 arguments.
-    def initialize(window, filename_or_rmagick_image, tileable, [src_x, src_y, src_width, src_height]); end
+		# This constructor only loads a sub-rectangle of the given file. Because
+		# every call of this constructor will open the image again, it is preferable
+		# to use Image#load_tiles.
+    def initialize(window, filename_or_rmagick_image, tileable, src_x, src_y, src_width, src_height); end
     
     # Draws the image so its upper left corner is at (x; y).
     def draw(x, y, z, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
@@ -372,14 +381,14 @@ module Gosu
     def button_up(id); end
     
     # Draws a line from one point to another (last pixel exclusive).
-    def draw_line(x1, y1, c1, x2, y2, c2, z=0, mode=:default)
+    def draw_line(x1, y1, c1, x2, y2, c2, z=0, mode=:default); end
       
-    def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=:default)
+    def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=:default); end
     
     # Draws a rectangle (two triangles) with given corners and corresponding
     # colors.
     # The points can be in clockwise order, or in a Z shape.
-    def draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=:default)
+    def draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=:default); end
     
   	# Returns true if a button is currently pressed. Updated every tick.
     def button_down?(id); end
@@ -398,34 +407,33 @@ module Gosu
     def clip_to(x, y, w, h, &drawing_code); end
   end
   
-    # Returns the horizontal distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
-    def offset_x(angle, dist); end 
-  
-    # Returns the vertical distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
-    def offset_y(angle, dist); end
+  # Returns the horizontal distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
+  def offset_x(angle, dist); end 
 
-    # Returns the angle from point 1 to point 2 in degrees, where 0.0 means upwards. Returns 0 if both points are equal.
-    def angle(x1, y1, x2, y2); end
+  # Returns the vertical distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
+  def offset_y(angle, dist); end
 
-    # Returns the smallest angle that can be added to angle1 to get to angle2 (can be negative if counter-clockwise movement is shorter).
-    def angle_diff(angle1, angle2); end
+  # Returns the angle from point 1 to point 2 in degrees, where 0.0 means upwards. Returns 0 if both points are equal.
+  def angle(x1, y1, x2, y2); end
 
-    # Returns the distance between two points.
-    def distance(x1, y1, x2, y2); end
+  # Returns the smallest angle that can be added to angle1 to get to angle2 (can be negative if counter-clockwise movement is shorter).
+  def angle_diff(angle1, angle2); end
 
-    # Incrementing, possibly wrapping millisecond timer.
-    def milliseconds(); end
+  # Returns the distance between two points.
+  def distance(x1, y1, x2, y2); end
 
-    # Returns the name of a neutral font that is available on the current
-    # platform.
-    def default_font_name(); end
+  # Incrementing, possibly wrapping millisecond timer.
+  def milliseconds(); end
 
-    # Returns the width, in pixels, of the user's primary screen.
-    def screen_width(); end
+  # Returns the name of a neutral font that is available on the current
+  # platform.
+  def default_font_name(); end
 
-    # Returns the height, in pixels, of the user's primary screen.
-    def screen_height(); end
-  end
+  # Returns the width, in pixels, of the user's primary screen.
+  def screen_width(); end
+
+  # Returns the height, in pixels, of the user's primary screen.
+  def screen_height(); end
 end
 
 # Small additions to Numeric to make it easier to integrate Gosu with
