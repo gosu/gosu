@@ -4,10 +4,9 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-05-12)
+(Last update: 2009-05-13)
 
 == Gosu 0.7.x ==
-  * rake-Task push_to_github
   * Web work
     * Move three threads from GosuExchange to the forums
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
@@ -41,6 +40,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Finish OpenAL port of Gosu::Audio (Ogg Songs)
     * Fix "too many fingers" bug on iPhone
     * Implement Proof of Concept for Macro Patches
+    * socket.bundle und syck.bundle in den Wrapper reinschweißen
     * Integrate "fat" iPhone building from forum
     * Clear up GOSU_IS_MAC vs. GOSU_IS_OSX
     * Use getBytes instead of UTF8String
@@ -108,16 +108,15 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * See if other libraries catch the release of the 'A' key in cmd+a
   * Add rdoc to Gosu gem
   * Make Linux gemspec more robust wrt examples/
+  * Make more stuff configurable like http://github.com/cout/rice/blob/98ba7098e2de5849f2e7272021340976a768456f/ruby.ac#L7-20
 == Gosu CI/Usability ==
   * Document 64px minimum for single-texture opt.
   * Mention Gosu's respectable age somewhere :)
   * Link to benkos example
-  * Post LD14 games to board
   * Split up BasicConcepts into single pages with prettier diagrams
-  * Paste split up BasicConcepts into rRdoc sources
+  * Paste split up BasicConcepts into rdoc sources
   * Paste spiit up BasicConcepts into doxygen sources
   * Add some first eye catchers to front page
-  * Add OpenGL Wiki page
   * Add "What now?" link list to front page
   * Adjust sample games
   * Link YouTube videos, and maybe blog tags like http://www.cuberick.com/search/label/gosu?
@@ -125,11 +124,16 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make logo in forum clickable
   * Make logo in Rdoc clickable
   * Add gallery of images from Gosu Showcase board
-  * Add Unicode Support wiki page
   * Setup github homepage
   * Link ChangeLog and ToDo on front page
   * Make sure createText is visible in Doxygen
   * Ask forum what overload for draw_quad would make sense
+  * Img ctor @ rdoc: [], display as overload
+  * Link LD games in forum
+  * Add OpenGL Wiki page
+  * Add Unicode Support wiki page
+  * Ruby/Gosu Icon: Fix ugly shadow
+  * Add some RSS feed to main index.html page
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
