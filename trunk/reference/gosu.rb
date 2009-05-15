@@ -407,6 +407,15 @@ module Gosu
     def clip_to(x, y, w, h, &drawing_code); end
   end
   
+  # Contains information about the underlying OpenGL texture and the u/v space used for image data.
+  #
+  # Can be retrieved from some images to use them in OpenGL operations. (Will not work with images that are too large for a single texture.)
+  #
+  # See examples/OpenGLIntegration.rb.
+  class GLTexInfo
+    attr_accessor :tex_name, :left, :right, :top, :bottom
+  end
+  
   # Returns the horizontal distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
   def offset_x(angle, dist); end 
 
