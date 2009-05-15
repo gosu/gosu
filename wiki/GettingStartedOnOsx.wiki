@@ -67,17 +67,17 @@ Note: Usually, you want to right-click your target, Get Info, select Build/All C
 
 Getting started with Ruby is a lot easier (surprise):
   * If you installed Gosu using RubyGems (`sudo gem install gosu`), you just need to `require 'rubygems'` before you `require 'gosu'`.
-  * Otherwise you need to run your code in a way that `require 'gosu'` will work, i.e. by either copying gosu.bundle into the same directory or installing it in one of Ruby's default library paths.
+  * Otherwise you need to run your code in a way that `require 'gosu'` will work, i.e. by either copying the contents of the `lib` folder into the same directory or installing it in one of Ruby's default library paths.
 
 To test if everything works, you can use this Hello World script:
 
 {{{
-require 'rubygems' # Remove if you aren't using RubyGems
+require 'rubygems' # Remove this line if you aren't using RubyGems
 require 'gosu'
 
 class MyWindow < Gosu::Window
   def initialize
-    super(640, 480, false, 20)
+    super(640, 480, false)
     self.caption = 'Hello World!'
   end
 end
