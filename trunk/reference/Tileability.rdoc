@@ -1,0 +1,11 @@
+= Tileability
+
+Functions related to image creation accept a boolean "tileable" argument. This is a consequence of using 3D hardware acceleration. Try to notice the subtle difference between these two, overstretched images:
+
+http://www.raschke.de/julian/temp/hard_borders.png
+
+When you draw an image with stretching factors other than 1.0 (10.0 in this case) or at odd coordinates, it will become interpolated—which, in general, is much better than getting all pixel-y.
+
+But take a look at the image's borders. The image of the left girl was created with tileable set to 'false' (the default) and the borders fade out. The image of the right girl, which was created with tileable set to 'true, does not fade out at all, but just ends on its borders.
+
+While most images should not be tileable, you should always pass true for map tiles.

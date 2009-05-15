@@ -233,7 +233,6 @@ div.method_block h3 {
 
 #content div.method_block h1, #content #description h1 {
 margin-left: 6px;
-color: #ccd5dc;
 } div.method_block a.small { /* where is this used? */
 font-size: 3px;
 line-height: 3px;
@@ -270,7 +269,7 @@ margin-bottom: 6px;
 }
 
 ol, ul {
-margin-left: 6px;
+margin-left: 50px;
 }
 
 div.source {

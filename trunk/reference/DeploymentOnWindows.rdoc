@@ -1,0 +1,23 @@
+= Ruby/Gosu Packaging on Microsoft Windows (for Ruby 1.8)
+
+To compile your Ruby game into an executable on Windows, you need to run it through the following program from the command line:
+
+http://www.erikveen.dds.nl/rubyscript2exe/index.html
+
+The 'rubyscript2exe' gem worked better for me than the standalone script file.
+
+You can then ship the resulting .exe file together with your game's resources and, if you use sound, fmod.dll. (If you are using Gosu as a Ruby Gem, you can find fmod.dll in your gems directory, usually C:\ruby\lib\ruby\gems\1.8\gems\gosu-x.x.x\lib\fmod.dll).
+
+If you want to ship your game to be in a self-contained executable (similar to the .app bundle on Mac OS X), Erik Veenstra also has a guide to packaging a whole directory into a single .rb file.
+
+http://www.erikveen.dds.nl/distributingrubyapplications/index.html
+
+With a bit of experimentation, you can fit the whole game, including all resources, .dll's and even gosu.so into a single .exe file. Note that for licensing reasons, you should point out you are using FMOD then, as it cannot be seen from your game's files anymore.
+
+= Ruby/Gosu Packaging on Microsoft Windows (for Ruby 1.9)
+
+The steps for packaging a Ruby 1.9 should be the same when using the Ocra tool:
+
+http://github.com/larsch/ocra/tree/master
+
+But in practice, I have found that I need to ship the .rb and .so files with my .exe file, so it seems there is still work going on in that project.
