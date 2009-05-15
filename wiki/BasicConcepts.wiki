@@ -22,13 +22,14 @@ But take a look at the image's borders. The image of the left girl was created w
 
 While most images should not be tileable, you should always pass true for map tiles.
 
-= Corner indices =
+= Order of Corners =
 
 In all functions that expect arguments for all four corners of a rectangle or quadrilateral, except `ImageData::draw` (in C++), you can either pass clockwise coordinates, or coordinates in the following order (a Z shape):
 
 http://www.raschke.de/julian/temp/corner_indices.png
 
-= Modulation colours =
+= Drawing with Colors =
 
-Almost all image drawing functions accept modulation colours. The colours of all pixels on the source image will be multiplied with these colours, where a channel value of 255 means the maximum of 1.0. This means modulation colours can be used only to reduce particular channels of an image.
-The most obvious use of this is to supply a colour with an alpha value less than 255 so the image will drawn transparently, but you can also use this to darken images or to draw them in a different hue (which works best if the original image is mostly white).
+Almost all image drawing functions accept modulation colours. The colours of all pixels on the source image will be multiplied with these colours, where a channel value of 255 corresponds to the maximum value of 1.0. This means modulation colours can be used only to reduce particular channels of an image.
+
+The most obvious use of this is to supply a colour with an alpha value less than 255 so the image will drawn transparently, but you can also use this to darken images or to draw them in a different hue (which works best if the original image is mostly grayscale).
