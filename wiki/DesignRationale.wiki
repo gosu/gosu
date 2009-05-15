@@ -1,5 +1,4 @@
 #summary Rationale behind the core library's design
-#labels Phase-Design,Featured
 
 = Bloatfree =
 
