@@ -1,8 +1,9 @@
 #summary Log of Gosu's development.
 #labels Featured
 
-=0.7.13.3 (Ruby only)=
-  * 2009-05-15: Published the experimental Ruby 1.9 .app wrapper, feedback very welcome!
+=0.7.13.3=
+  * 2009-05-15: Ruby: Published the experimental Ruby 1.9 .app wrapper, feedback very welcome!
+  * 2009-05-14: C++: Added name() and flags() getters to Gosu::Font, and a flags argument to its constructor.
 
 =0.7.13.2 (experimental minor release; Ruby gems only)=
   * 2009-05-11: All: Added flags, height, name accessors to Font
