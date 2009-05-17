@@ -86,7 +86,7 @@ AC_SUBST(HAVE_SYS_STAT_H)
 AC_CHECK_FUNC(eaccess, HAVE_EACCESS=-DHAVE_EACCESS)
 AC_SUBST(HAVE_EACCESS)
 
-if [ -z $ruby ]; then
+if [ -z $GOSU_RUBY_COMMAND ]; then
 	AC_CHECK_PROGS(ruby, ruby ruby1.8 ruby1.9)
 else
 	ruby=$GOSU_RUBY_COMMAND
