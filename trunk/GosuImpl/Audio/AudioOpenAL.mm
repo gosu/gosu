@@ -212,30 +212,31 @@ Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
 
 class Gosu::Song::BaseData : boost::noncopyable
 {
-//    double volume_;
-//
-//protected:
-//    BaseData() : volume_(1) {}
-//    virtual void applyVolume() = 0;
-//
-//public:
-//    virtual ~BaseData() {}
-//
-//    virtual void play(bool looping) = 0;
-//    virtual void pause() = 0;
-//    virtual bool paused() const = 0;
-//    virtual void stop() = 0;
-//    
-//    double volume() const
-//    {
-//        return volume_;
-//    }
-//    
-//    void changeVolume(double volume)
-//    {
-//        volume_ = clamp(volume, 0.0, 1.0);
-//        applyVolume();
-//    }
+    double volume_;
+
+protected:
+    BaseData() : volume_(1) {}
+    virtual void applyVolume() = 0;
+
+public:
+    virtual ~BaseData() {}
+    
+    virtual void play() = 0;
+    virtual void playing() const = 0;
+    virtual void pause() = 0;
+    virtual bool paused() const = 0;
+    virtual void stop() = 0;
+    
+    double volume() const
+    {
+        return volume_;
+    }
+    
+    void changeVolume(double volume)
+    {
+        volume_ = clamp(volume, 0.0, 1.0);
+        applyVolume();
+    }
 };
 
 //class Gosu::Song::StreamData : public BaseData

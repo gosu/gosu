@@ -8,14 +8,14 @@ namespace Gosu
 {
     //! Pi.
     const double pi = 3.1415926536;
-
+    
     //! Truncates the fractional part of a real value. Equivalent to
     //! static_cast<long>.
     inline long trunc(double value)
     {
         return static_cast<long>(value);
     }
-
+    
     //! Rounds a real value towards the next integer.
     inline long round(double value)
     {
@@ -24,11 +24,11 @@ namespace Gosu
         else
             return static_cast<long>(value - 0.5);
     }
-
+    
     //! Returns a real value between min and max. Uses std::rand (so you have
     //! to call std::srand before using it).
     double random(double min, double max);
-
+    
     //! Translates between Gosu's angle system and radians.
     inline double gosuToRadians(double angle)
     {
@@ -40,6 +40,19 @@ namespace Gosu
         return angle * 180 / pi + 90;
     }
 
+    //! Translates between Gosu's angle scaling and radians, i.e. it
+    //! does not change the 'origin' of the angle system.
+    inline double gosuToRadianScale(double angle)
+    {
+        return angle * pi / 180;
+    }
+    //! Translates between Gosu's angle scaling and radians, i.e. it
+    //! does not change the 'origin' of the angle system.
+    inline double radiansScaleToGosu(double angle)
+    {
+        return angle * 180 / pi;
+    }
+    
     //! Returns the horizontal distance between the origin and the point to
     //! which you would get if you moved radius pixels in the direction
     //! specified by angle.
@@ -59,14 +72,14 @@ namespace Gosu
     double angleDiff(double angle1, double angle2);
     //! Normalizes an angle to fit into the range [0; 360[.
     double normalizeAngle(double angle);
-
+    
     //! Returns value * value.
     template<typename T>
     T square(T value)
     {
         return value * value;
     }
-
+    
     //! Returns min if value is smaller than min, max if value is larger than
     //! max and value otherwise.
     template<typename T>
@@ -85,13 +98,13 @@ namespace Gosu
     {
         return clamp(value, min, max);
     }
-
+    
     //! Returns the square of the distance between two points.
     inline double distanceSqr(double x1, double y1, double x2, double y2)
     {
         return square(x1 - x2) + square(y1 - y2);
     }
-
+    
     //! Returns the distance between two points.
     double distance(double x1, double y1, double x2, double y2);
     
