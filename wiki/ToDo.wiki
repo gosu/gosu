@@ -4,9 +4,12 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-05-13)
+(Last update: 2009-05-17)
 
 == Gosu 0.7.x ==
+  * Publish Gosu 0.7.13.4 for Linux 1.9/multiruby compat.
+  * Reply to Gosu::random mail
+  * Look into Windows linking trouble :(
   * Web work
     * Move three threads from GosuExchange to the forums
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
@@ -14,13 +17,14 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Report Ocra bugs: spaces in exe name = crash, requires .rb and .so files?!
   * Finish OpenAL on OS X!
     * Use OpenAL for OS X too
+    * Start list of supported sound/song formats
     * Try to add dynamic MikMod loading code
   * 0.7.13.5 (bugfixes bugfixes bugfixes)
+    * See if really old games have problems running in current Gosu
+    * Give multitruby support a second try (fix the problem with AC_PROGRAM_WHATEVER)
     * Verify that TextInput works cleanly on Ruby 1.9 with Unicode
-    * Build dylib dependency eraser script
     * Add the Gosu<->Radian scaling to C++ too (Math.hpp)
     * Add support for giving font flags from Ruby
-    * Reply to Gosu::random mail
     * Complete the list of Gosu::Colors, inspired by the CSS colors, and move them to Color
     * Screen size / fullscreen stuff
       * Iterate on first category of fullscreen tests
@@ -33,6 +37,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Test multiple screens on Windows
     * TextField with clip_to (update example)
     * Test LD14 entry on Linux
+    * Rebuild the .so files on Windows
     * Release 0.7.13.5
     * Document Font#name, Font#height, Font#flags
     * (1x mymüsli for all the hard work! (motivation!)
@@ -110,12 +115,14 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make Linux gemspec more robust wrt examples/
   * Make more stuff configurable like http://github.com/cout/rice/blob/98ba7098e2de5849f2e7272021340976a768456f/ruby.ac#L7-20
 == Gosu CI/Usability ==
+  * Automate selection of the "Project of the Day" + screenshot (Rake task & cronjob)
+  * Add gallery of images from Gosu Showcase board
+  * Somehow strip the directory from the rdoc filenames
   * Document 64px minimum for single-texture opt.
   * Mention Gosu's respectable age somewhere :)
   * Link to benkos example
-  * Split up BasicConcepts into single pages with prettier diagrams
-  * Paste split up BasicConcepts into rdoc sources
   * Paste spiit up BasicConcepts into doxygen sources
+  * Put RubyTutorial into rdoc
   * Add some first eye catchers to front page
   * Add "What now?" link list to front page
   * Adjust sample games
@@ -123,17 +130,20 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Change sender address of forum mailer
   * Make logo in forum clickable
   * Make logo in Rdoc clickable
-  * Add gallery of images from Gosu Showcase board
   * Setup github homepage
   * Link ChangeLog and ToDo on front page
   * Make sure createText is visible in Doxygen
   * Ask forum what overload for draw_quad would make sense
-  * Img ctor @ rdoc: [], display as overload
-  * Link LD games in forum
   * Add OpenGL Wiki page
   * Add Unicode Support wiki page
   * Ruby/Gosu Icon: Fix ugly shadow
   * Add some RSS feed to main index.html page
+  * Make tt blocks prettier on front page
+  * Make Ruby 1.9.1 wrapper a separate download
+  * Turn changelog and todo into links on frontpage
+  * Change bundle identifier to org.libgosu.UntitledGame
+  * Automatically run push_to_github task
+  * Try to translate the RubyTutorial to Japanese :)
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
