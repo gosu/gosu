@@ -4,9 +4,10 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-05-17)
+(Last update: 2009-05-18)
 
 == Gosu 0.7.x ==
+  * configure: Gucken ob libruby auch per config gesucht wird
   * Publish Gosu 0.7.13.4 for Linux 1.9/multiruby compat.
   * Reply to Gosu::random mail
   * Look into Windows linking trouble :(
@@ -20,6 +21,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Start list of supported sound/song formats
     * Try to add dynamic MikMod loading code
   * 0.7.13.5 (bugfixes bugfixes bugfixes)
+    * Quick look: How hard is MacRuby support?
+    * See if John Shea's talk had something about not being locked to pixel positions
     * See if really old games have problems running in current Gosu
     * Give multitruby support a second try (fix the problem with AC_PROGRAM_WHATEVER)
     * Verify that TextInput works cleanly on Ruby 1.9 with Unicode
