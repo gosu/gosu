@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-05-18)
+(Last update: 2009-05-20)
 
 == Gosu 0.7.x ==
   * configure: Gucken ob libruby auch per config gesucht wird
@@ -147,6 +147,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Change bundle identifier to org.libgosu.UntitledGame
   * Automatically run push_to_github task
   * Try to translate the RubyTutorial to Japanese :)
+  * Deployment wiki page/rdoc: Mention Icon resource support!
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
