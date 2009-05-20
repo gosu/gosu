@@ -25,8 +25,8 @@ namespace Gosu
             return static_cast<long>(value - 0.5);
     }
     
-    //! Returns a real value between min and max. Uses std::rand (so you have
-    //! to call std::srand before using it).
+    //! Returns a real value between min (inclusive) and max (exclusive).
+    //! Uses std::rand, so you should call std::srand before using it.
     double random(double min, double max);
     
     //! Translates between Gosu's angle system and radians.

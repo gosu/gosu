@@ -416,6 +416,9 @@ module Gosu
     attr_accessor :tex_name, :left, :right, :top, :bottom
   end
   
+  # Returns a random double between min (inclusive) and max (exclusive).
+  def random(min, max); end
+  
   # Returns the horizontal distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
   def offset_x(angle, dist); end 
 
