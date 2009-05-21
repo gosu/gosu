@@ -4,29 +4,34 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-05-20)
+(Last update: 2009-05-21)
 
 == Gosu 0.7.x ==
-  * configure: Gucken ob libruby auch per config gesucht wird
-  * Publish Gosu 0.7.13.4 for Linux 1.9/multiruby compat.
-  * Reply to Gosu::random mail
   * Look into Windows linking trouble :(
+  * Look at janmejay's bakery
+  * Separate 1.9 .app wrapper from rest of Mac package
+  * Finish OpenAL on OS X!
+    * Add AudioToolbox(?) support for streaming songs
+    * Check Song::play() behavior on new OGG stream vs. other libs
+    * Test/fix Song/Sample looping
+    * Start list of supported sound/song formats
+    * Try to add dynamic MikMod loading code
+    * Check Song::play() behavior on new MikMod song vs. other libs
+    * Get Anna to test the new OpenAL code on Intel/Tiger...
+    * Get philomory to test the new OpenAL code on PPC/Tiger? :)
+  * Remove FMOD support altogether from Linux
+  * Publish Gosu 0.7.14 for Linux 1.9/multiruby compat. and no more FMOD
   * Web work
     * Move three threads from GosuExchange to the forums
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
     * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
     * Report Ocra bugs: spaces in exe name = crash, requires .rb and .so files?!
-  * Finish OpenAL on OS X!
-    * Use OpenAL for OS X too
-    * Start list of supported sound/song formats
-    * Try to add dynamic MikMod loading code
-  * 0.7.13.5 (bugfixes bugfixes bugfixes)
+  * 0.7.15 (bugfixes bugfixes bugfixes)
     * Quick look: How hard is MacRuby support?
     * See if John Shea's talk had something about not being locked to pixel positions
     * See if really old games have problems running in current Gosu
     * Give multitruby support a second try (fix the problem with AC_PROGRAM_WHATEVER)
     * Verify that TextInput works cleanly on Ruby 1.9 with Unicode
-    * Add the Gosu<->Radian scaling to C++ too (Math.hpp)
     * Add support for giving font flags from Ruby
     * Complete the list of Gosu::Colors, inspired by the CSS colors, and move them to Color
     * Screen size / fullscreen stuff
@@ -45,7 +50,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Document Font#name, Font#height, Font#flags
     * (1x mymüsli for all the hard work! (motivation!)
   * iPhone-related stuff that should be finished soonish
-    * Finish OpenAL port of Gosu::Audio (Ogg Songs)
     * Fix "too many fingers" bug on iPhone
     * Implement Proof of Concept for Macro Patches
     * socket.bundle und syck.bundle in den Wrapper reinschweißen
@@ -61,15 +65,15 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Link the all-in-one-bundle from the boards: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * Test RMagick.bundle on Tiger
     * Test RMagick.bundle on PPC
-  * 0.7.14, text quality release (+Linux gamepad!)
+  * 0.7.16, text quality release (+Linux gamepad!)
+    * Look for non-deprecated replacement for KeyTranslate and UCKeyTranslate
     * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
     * Image#from_text should support maxWidth=0 => no limits on size
     * Linux: Support Unicode in title bar
     * Linux: Support other XKeySyms than Latin 1
     * Mac: Add dead keys to TextInput
-    * Mac: Make createText use Core Text
+    * Mac: Use Core Text instead of ATSUI
     * Windows: Make createText use Uniscribe
-    * Linux: Make createText use Pango/Freetype2
     * Make RTL work without RTL/LTR markers?!
     * Add RTL support to Font::drawRot too
     * Add Linux gamepad support
@@ -119,7 +123,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make more stuff configurable like http://github.com/cout/rice/blob/98ba7098e2de5849f2e7272021340976a768456f/ruby.ac#L7-20
 == Gosu CI/Usability ==
   * Automate selection of the "Project of the Day" + screenshot (Rake task & cronjob)
-  * Add gallery of images from Gosu Showcase board
   * Somehow strip the directory from the rdoc filenames
   * Document 64px minimum for single-texture opt.
   * Mention Gosu's respectable age somewhere :)
