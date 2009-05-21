@@ -408,13 +408,16 @@ public:
         
         alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
         
-        while (processed-- && active)
+        for (int i = 0; i < processed && active; ++i)
         {
             NSUInteger buffer;
             alSourceUnqueueBuffers(source, 1, &buffer);
             active = streamTo(source, buffer);
             alSourceQueueBuffers(source, 1, &buffer);
         }
+
+        if (processed == 2 && active)
+            alSourcePlay(source);
         
         if (!active)
         {
