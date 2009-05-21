@@ -497,6 +497,7 @@ void Gosu::Window::Impl::doTick(Window& window)
         }
     }
     
+    window.audio().update();
     window.input().update();
     window.update();
 

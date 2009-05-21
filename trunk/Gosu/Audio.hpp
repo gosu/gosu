@@ -26,12 +26,16 @@ namespace Gosu
     class Audio : boost::noncopyable
     {
     public:
-#ifdef GOSU_IS_WIN
+        #ifdef GOSU_IS_WIN
         explicit Audio(HWND window);
-#else
+        #else
         Audio();
-#endif
+        #endif
         ~Audio();
+        
+        #ifdef GOSU_IS_MAC
+        void update();
+        #endif
     };
 
     //! An instance of a Sample playing. Can be used to stop sounds dynamically,
@@ -117,7 +121,11 @@ namespace Gosu
         class ModuleData;
         class StreamData;
         boost::scoped_ptr<BaseData> data;
-
+        
+        #ifdef GOSU_IS_MAC
+        void update();
+        friend class Audio;
+        #endif
     public:
         //! There are two types of songs that can be loaded as a Song: Streamed
         //! songs (like OGG) and modules (like MOD or XM).

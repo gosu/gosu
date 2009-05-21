@@ -9,13 +9,13 @@ class Test < Gosu::Window
     ogg = Gosu::Song.new(self, "media/Jingle_Bells.ogg")
     # Taken from http://www.arachnosoft.com/main/
     # Copyright Maxime Abbey
-    it = Gosu::Song.new(self, "media/Green.it")
+    #it = Gosu::Song.new(self, "media/Green.it")
     # MIDI not yet supported everywhere :( Should be implemented
     # using OS APIs where missing.
-    mid = it #Gosu::Song.new(self, "media/Inferno.mid")
+    #mid = it #Gosu::Song.new(self, "media/Inferno.mid")
     # Looping WAV
-    wav = Gosu::Song.new(self, "media/Loop.wav")
-    @songs = [ogg, it, mid, wav]
+    #wav = Gosu::Song.new(self, "media/Loop.wav")
+    @songs = [ogg]#, it, mid, wav]
     @song = @songs[0]
     @song.play(true)
   end
@@ -24,8 +24,8 @@ class Test < Gosu::Window
     @song.volume -= 0.05 if button_down? Gosu::KbDown
     @song.volume += 0.05 if button_down? Gosu::KbUp
     song_index = @songs.index(Gosu::Song.current_song) || "none"
-    songs_paused = @songs.map { |s| s.paused? }
-    self.caption = "Volume: #{(@song.volume * 100).to_i}, Song: #{song_index}, Paused: #{songs_paused.inspect}"
+    #songs_paused = @songs.map { |s| s.paused? }
+    #self.caption = "Volume: #{(@song.volume * 100).to_i}, Song: #{song_index}, Paused: #{songs_paused.inspect}"
   end
   
   def button_down(id)

@@ -5,11 +5,13 @@
 #define GOSU_PLATFORM_HPP
 
 #ifdef __BIG_ENDIAN__
+#define GOSU_IS_BIG_ENDIAN
 #define IDENTITY_FUN bigToNative
 #define IDENTITY_FUN2 nativeToBig
 #define CONV_FUN littleToNative
 #define CONV_FUN2 nativeToLittle
 #else
+#define GOSU_IS_LITTLE_ENDIAN
 #define IDENTITY_FUN littleToNative
 #define IDENTITY_FUN2 nativeToLittle
 #define CONV_FUN bigToNative

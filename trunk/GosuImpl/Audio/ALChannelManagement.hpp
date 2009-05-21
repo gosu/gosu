@@ -60,7 +60,7 @@ namespace Gosu
         
         int sourceIfStillPlaying(int channel, int token) const
         {
-            if (currentTokens[channel] == token)
+            if (channel != NO_FREE_CHANNEL && currentTokens[channel] == token)
                 return alSources[channel];
             return NO_SOURCE;
         }

@@ -99,11 +99,8 @@
 		D42762AB0F4E267500C9B0A5 /* DirectoriesTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42762AA0F4E267500C9B0A5 /* DirectoriesTouch.mm */; };
 		D42BC0D10C4F840C00EBF79C /* Gosu.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D42BC0D00C4F840C00EBF79C /* Gosu.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D42D02400F7068C500407E60 /* AudioOpenAL.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42DFE380F6F84DA00407E60 /* AudioOpenAL.mm */; };
-		D42D02420F7068CB00407E60 /* AudioFmod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D42D023E0F7068BC00407E60 /* AudioFmod.cpp */; };
 		D42D025E0F706A0100407E60 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025C0F706A0100407E60 /* AudioToolbox.framework */; };
 		D42D025F0F706A0100407E60 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025D0F706A0100407E60 /* OpenAL.framework */; };
-		D42D03760F70A26800407E60 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D03750F70A26800407E60 /* OpenAL.framework */; };
-		D42D03BF0F70A8B700407E60 /* AudioFmod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D42D023E0F7068BC00407E60 /* AudioFmod.cpp */; };
 		D459FF4C0BDCD26D00E7F0D6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98A0A801948005C7067 /* AppKit.framework */; };
 		D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */; };
 		D459FF990BDCD9CF00E7F0D6 /* Gosu.icns in Resources */ = {isa = PBXBuildFile; fileRef = D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */; };
@@ -123,7 +120,6 @@
 		D46C2A480FAE037800A33476 /* TexChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97D0CD3907D00621B24 /* TexChunk.cpp */; };
 		D46C2A490FAE037800A33476 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE20A801B00005C7067 /* Text.cpp */; };
 		D46C2A4A0FAE037800A33476 /* TextMac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE30A801B00005C7067 /* TextMac.cpp */; };
-		D46C2A4B0FAE039E00A33476 /* AudioFmod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D42D023E0F7068BC00407E60 /* AudioFmod.cpp */; };
 		D46C2A4C0FAE039E00A33476 /* DirectoriesUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA000A8019FA005C7067 /* DirectoriesUnix.cpp */; };
 		D46C2A4D0FAE039E00A33476 /* FileUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA020A8019FA005C7067 /* FileUnix.cpp */; };
 		D46C2A4E0FAE039E00A33476 /* InputMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410EA180A8019FA005C7067 /* InputMac.mm */; };
@@ -133,7 +129,6 @@
 		D46C2A520FAE039E00A33476 /* TimingUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA2E0A8019FA005C7067 /* TimingUnix.cpp */; };
 		D46C2A530FAE039E00A33476 /* WindowMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410EA310A8019FA005C7067 /* WindowMac.mm */; };
 		D46C2A540FAE03B100A33476 /* RubyGosu_wrap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */; };
-		D46C2DDF0FAE03F900A33476 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D03750F70A26800407E60 /* OpenAL.framework */; };
 		D46C2DE00FAE03F900A33476 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42568090C69CF6100E745AC /* IOKit.framework */; };
 		D46C2DE10FAE03F900A33476 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410EB290A801C28005C7067 /* OpenGL.framework */; };
 		D46C2DE20FAE03F900A33476 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98B0A801948005C7067 /* ApplicationServices.framework */; };
@@ -237,7 +232,6 @@
 		D4A5A3010F40D51B00FFF378 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A5A2FC0F40D51B00FFF378 /* QuartzCore.framework */; };
 		D4A5A3020F40D51B00FFF378 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A5A2FD0F40D51B00FFF378 /* OpenGLES.framework */; };
 		D4A5A3030F40D51B00FFF378 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A5A2FE0F40D51B00FFF378 /* UIKit.framework */; };
-		D4A5A3040F40D51B00FFF378 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A5A2FF0F40D51B00FFF378 /* Foundation.framework */; };
 		D4A7E97F0CD3907D00621B24 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97B0CD3907D00621B24 /* Texture.cpp */; };
 		D4A7E9810CD3907D00621B24 /* TexChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97D0CD3907D00621B24 /* TexChunk.cpp */; };
 		D4A7E9830CD3907D00621B24 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97B0CD3907D00621B24 /* Texture.cpp */; };
@@ -313,7 +307,6 @@
 		D4F4BAD40FC370770013CE21 /* inflate.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BABF0FC370760013CE21 /* inflate.c */; };
 		D4F4BAD50FC370770013CE21 /* inffixed.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F4BAC00FC370760013CE21 /* inffixed.h */; };
 		D4F4BAD60FC370770013CE21 /* inftrees.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F4BAC10FC370760013CE21 /* inftrees.h */; };
-		D4F4BAD70FC370770013CE21 /* minigzip.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BAC20FC370760013CE21 /* minigzip.c */; };
 		D4F4BAD80FC370770013CE21 /* trees.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BAC30FC370760013CE21 /* trees.c */; };
 		D4F4BAD90FC370770013CE21 /* trees.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F4BAC40FC370760013CE21 /* trees.h */; };
 		D4F4BADA0FC370770013CE21 /* uncompr.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BAC50FC370760013CE21 /* uncompr.c */; };
@@ -328,7 +321,6 @@
 		D4F4BAE30FC370770013CE21 /* infback.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BABB0FC370760013CE21 /* infback.c */; };
 		D4F4BAE40FC370770013CE21 /* inffast.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BABC0FC370760013CE21 /* inffast.c */; };
 		D4F4BAE50FC370770013CE21 /* inflate.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BABF0FC370760013CE21 /* inflate.c */; };
-		D4F4BAE60FC370770013CE21 /* minigzip.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BAC20FC370760013CE21 /* minigzip.c */; };
 		D4F4BAE70FC370770013CE21 /* trees.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BAC30FC370760013CE21 /* trees.c */; };
 		D4F4BAE80FC370770013CE21 /* uncompr.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BAC50FC370760013CE21 /* uncompr.c */; };
 		D4F4BAE90FC370770013CE21 /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BAC90FC370760013CE21 /* zutil.c */; };
@@ -339,7 +331,6 @@
 		D4F4BAEE0FC370770013CE21 /* infback.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BABB0FC370760013CE21 /* infback.c */; };
 		D4F4BAEF0FC370770013CE21 /* inffast.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BABC0FC370760013CE21 /* inffast.c */; };
 		D4F4BAF00FC370770013CE21 /* inflate.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BABF0FC370760013CE21 /* inflate.c */; };
-		D4F4BAF10FC370770013CE21 /* minigzip.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BAC20FC370760013CE21 /* minigzip.c */; };
 		D4F4BAF20FC370770013CE21 /* trees.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BAC30FC370760013CE21 /* trees.c */; };
 		D4F4BAF30FC370770013CE21 /* uncompr.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BAC50FC370760013CE21 /* uncompr.c */; };
 		D4F4BAF40FC370770013CE21 /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BAC90FC370760013CE21 /* zutil.c */; };
@@ -350,6 +341,108 @@
 		D4F4BAFE0FC3709C0013CE21 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BAFA0FC3709C0013CE21 /* compress.c */; };
 		D4F4BAFF0FC3709C0013CE21 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BAF90FC3709C0013CE21 /* adler32.c */; };
 		D4F4BB000FC3709C0013CE21 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BAFA0FC3709C0013CE21 /* compress.c */; };
+		D4F4BE800FC486150013CE21 /* AudioOpenAL.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42DFE380F6F84DA00407E60 /* AudioOpenAL.mm */; };
+		D4F4BE810FC486160013CE21 /* AudioOpenAL.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42DFE380F6F84DA00407E60 /* AudioOpenAL.mm */; };
+		D4F4BE820FC486160013CE21 /* AudioOpenAL.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42DFE380F6F84DA00407E60 /* AudioOpenAL.mm */; };
+		D4F4BF420FC4C9E00013CE21 /* framing.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF400FC4C9E00013CE21 /* framing.c */; };
+		D4F4BF430FC4C9E00013CE21 /* bitwise.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF410FC4C9E00013CE21 /* bitwise.c */; };
+		D4F4BF440FC4C9E00013CE21 /* framing.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF400FC4C9E00013CE21 /* framing.c */; };
+		D4F4BF450FC4C9E00013CE21 /* bitwise.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF410FC4C9E00013CE21 /* bitwise.c */; };
+		D4F4BF460FC4C9E00013CE21 /* framing.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF400FC4C9E00013CE21 /* framing.c */; };
+		D4F4BF470FC4C9E00013CE21 /* bitwise.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF410FC4C9E00013CE21 /* bitwise.c */; };
+		D4F4BF480FC4C9E00013CE21 /* framing.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF400FC4C9E00013CE21 /* framing.c */; };
+		D4F4BF490FC4C9E00013CE21 /* bitwise.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF410FC4C9E00013CE21 /* bitwise.c */; };
+		D4F4BF6A0FC4CA720013CE21 /* vorbisfile.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF690FC4CA720013CE21 /* vorbisfile.c */; };
+		D4F4BF6B0FC4CA720013CE21 /* vorbisfile.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF690FC4CA720013CE21 /* vorbisfile.c */; };
+		D4F4BF6C0FC4CA720013CE21 /* vorbisfile.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF690FC4CA720013CE21 /* vorbisfile.c */; };
+		D4F4BF6D0FC4CA720013CE21 /* vorbisfile.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF690FC4CA720013CE21 /* vorbisfile.c */; };
+		D4F4BF880FC4CB1A0013CE21 /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF740FC4CB1A0013CE21 /* window.c */; };
+		D4F4BF890FC4CB1A0013CE21 /* synthesis.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF750FC4CB1A0013CE21 /* synthesis.c */; };
+		D4F4BF8A0FC4CB1A0013CE21 /* smallft.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF760FC4CB1A0013CE21 /* smallft.c */; };
+		D4F4BF8B0FC4CB1A0013CE21 /* sharedbook.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF770FC4CB1A0013CE21 /* sharedbook.c */; };
+		D4F4BF8C0FC4CB1A0013CE21 /* res0.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF780FC4CB1A0013CE21 /* res0.c */; };
+		D4F4BF8D0FC4CB1A0013CE21 /* registry.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF790FC4CB1A0013CE21 /* registry.c */; };
+		D4F4BF8E0FC4CB1A0013CE21 /* psy.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7A0FC4CB1A0013CE21 /* psy.c */; };
+		D4F4BF8F0FC4CB1A0013CE21 /* mdct.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7B0FC4CB1A0013CE21 /* mdct.c */; };
+		D4F4BF900FC4CB1A0013CE21 /* mapping0.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7C0FC4CB1A0013CE21 /* mapping0.c */; };
+		D4F4BF910FC4CB1A0013CE21 /* lsp.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7D0FC4CB1A0013CE21 /* lsp.c */; };
+		D4F4BF920FC4CB1A0013CE21 /* lpc.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7E0FC4CB1A0013CE21 /* lpc.c */; };
+		D4F4BF930FC4CB1A0013CE21 /* lookup.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7F0FC4CB1A0013CE21 /* lookup.c */; };
+		D4F4BF940FC4CB1A0013CE21 /* floor1.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF800FC4CB1A0013CE21 /* floor1.c */; };
+		D4F4BF950FC4CB1A0013CE21 /* info.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF810FC4CB1A0013CE21 /* info.c */; };
+		D4F4BF960FC4CB1A0013CE21 /* floor0.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF820FC4CB1A0013CE21 /* floor0.c */; };
+		D4F4BF970FC4CB1A0013CE21 /* envelope.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF830FC4CB1A0013CE21 /* envelope.c */; };
+		D4F4BF980FC4CB1A0013CE21 /* codebook.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF840FC4CB1A0013CE21 /* codebook.c */; };
+		D4F4BF990FC4CB1A0013CE21 /* block.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF850FC4CB1A0013CE21 /* block.c */; };
+		D4F4BF9A0FC4CB1A0013CE21 /* bitrate.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF860FC4CB1A0013CE21 /* bitrate.c */; };
+		D4F4BF9B0FC4CB1A0013CE21 /* analysis.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF870FC4CB1A0013CE21 /* analysis.c */; };
+		D4F4BF9C0FC4CB1A0013CE21 /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF740FC4CB1A0013CE21 /* window.c */; };
+		D4F4BF9D0FC4CB1A0013CE21 /* synthesis.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF750FC4CB1A0013CE21 /* synthesis.c */; };
+		D4F4BF9E0FC4CB1A0013CE21 /* smallft.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF760FC4CB1A0013CE21 /* smallft.c */; };
+		D4F4BF9F0FC4CB1A0013CE21 /* sharedbook.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF770FC4CB1A0013CE21 /* sharedbook.c */; };
+		D4F4BFA00FC4CB1A0013CE21 /* res0.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF780FC4CB1A0013CE21 /* res0.c */; };
+		D4F4BFA10FC4CB1A0013CE21 /* registry.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF790FC4CB1A0013CE21 /* registry.c */; };
+		D4F4BFA20FC4CB1A0013CE21 /* psy.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7A0FC4CB1A0013CE21 /* psy.c */; };
+		D4F4BFA30FC4CB1A0013CE21 /* mdct.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7B0FC4CB1A0013CE21 /* mdct.c */; };
+		D4F4BFA40FC4CB1A0013CE21 /* mapping0.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7C0FC4CB1A0013CE21 /* mapping0.c */; };
+		D4F4BFA50FC4CB1A0013CE21 /* lsp.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7D0FC4CB1A0013CE21 /* lsp.c */; };
+		D4F4BFA60FC4CB1A0013CE21 /* lpc.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7E0FC4CB1A0013CE21 /* lpc.c */; };
+		D4F4BFA70FC4CB1A0013CE21 /* lookup.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7F0FC4CB1A0013CE21 /* lookup.c */; };
+		D4F4BFA80FC4CB1A0013CE21 /* floor1.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF800FC4CB1A0013CE21 /* floor1.c */; };
+		D4F4BFA90FC4CB1A0013CE21 /* info.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF810FC4CB1A0013CE21 /* info.c */; };
+		D4F4BFAA0FC4CB1A0013CE21 /* floor0.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF820FC4CB1A0013CE21 /* floor0.c */; };
+		D4F4BFAB0FC4CB1A0013CE21 /* envelope.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF830FC4CB1A0013CE21 /* envelope.c */; };
+		D4F4BFAC0FC4CB1A0013CE21 /* codebook.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF840FC4CB1A0013CE21 /* codebook.c */; };
+		D4F4BFAD0FC4CB1A0013CE21 /* block.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF850FC4CB1A0013CE21 /* block.c */; };
+		D4F4BFAE0FC4CB1A0013CE21 /* bitrate.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF860FC4CB1A0013CE21 /* bitrate.c */; };
+		D4F4BFAF0FC4CB1A0013CE21 /* analysis.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF870FC4CB1A0013CE21 /* analysis.c */; };
+		D4F4BFB00FC4CB1A0013CE21 /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF740FC4CB1A0013CE21 /* window.c */; };
+		D4F4BFB10FC4CB1A0013CE21 /* synthesis.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF750FC4CB1A0013CE21 /* synthesis.c */; };
+		D4F4BFB20FC4CB1A0013CE21 /* smallft.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF760FC4CB1A0013CE21 /* smallft.c */; };
+		D4F4BFB30FC4CB1A0013CE21 /* sharedbook.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF770FC4CB1A0013CE21 /* sharedbook.c */; };
+		D4F4BFB40FC4CB1A0013CE21 /* res0.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF780FC4CB1A0013CE21 /* res0.c */; };
+		D4F4BFB50FC4CB1A0013CE21 /* registry.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF790FC4CB1A0013CE21 /* registry.c */; };
+		D4F4BFB60FC4CB1A0013CE21 /* psy.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7A0FC4CB1A0013CE21 /* psy.c */; };
+		D4F4BFB70FC4CB1A0013CE21 /* mdct.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7B0FC4CB1A0013CE21 /* mdct.c */; };
+		D4F4BFB80FC4CB1A0013CE21 /* mapping0.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7C0FC4CB1A0013CE21 /* mapping0.c */; };
+		D4F4BFB90FC4CB1A0013CE21 /* lsp.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7D0FC4CB1A0013CE21 /* lsp.c */; };
+		D4F4BFBA0FC4CB1A0013CE21 /* lpc.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7E0FC4CB1A0013CE21 /* lpc.c */; };
+		D4F4BFBB0FC4CB1A0013CE21 /* lookup.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7F0FC4CB1A0013CE21 /* lookup.c */; };
+		D4F4BFBC0FC4CB1A0013CE21 /* floor1.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF800FC4CB1A0013CE21 /* floor1.c */; };
+		D4F4BFBD0FC4CB1A0013CE21 /* info.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF810FC4CB1A0013CE21 /* info.c */; };
+		D4F4BFBE0FC4CB1A0013CE21 /* floor0.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF820FC4CB1A0013CE21 /* floor0.c */; };
+		D4F4BFBF0FC4CB1A0013CE21 /* envelope.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF830FC4CB1A0013CE21 /* envelope.c */; };
+		D4F4BFC00FC4CB1A0013CE21 /* codebook.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF840FC4CB1A0013CE21 /* codebook.c */; };
+		D4F4BFC10FC4CB1A0013CE21 /* block.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF850FC4CB1A0013CE21 /* block.c */; };
+		D4F4BFC20FC4CB1A0013CE21 /* bitrate.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF860FC4CB1A0013CE21 /* bitrate.c */; };
+		D4F4BFC30FC4CB1A0013CE21 /* analysis.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF870FC4CB1A0013CE21 /* analysis.c */; };
+		D4F4BFC40FC4CB1A0013CE21 /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF740FC4CB1A0013CE21 /* window.c */; };
+		D4F4BFC50FC4CB1A0013CE21 /* synthesis.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF750FC4CB1A0013CE21 /* synthesis.c */; };
+		D4F4BFC60FC4CB1A0013CE21 /* smallft.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF760FC4CB1A0013CE21 /* smallft.c */; };
+		D4F4BFC70FC4CB1A0013CE21 /* sharedbook.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF770FC4CB1A0013CE21 /* sharedbook.c */; };
+		D4F4BFC80FC4CB1A0013CE21 /* res0.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF780FC4CB1A0013CE21 /* res0.c */; };
+		D4F4BFC90FC4CB1A0013CE21 /* registry.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF790FC4CB1A0013CE21 /* registry.c */; };
+		D4F4BFCA0FC4CB1A0013CE21 /* psy.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7A0FC4CB1A0013CE21 /* psy.c */; };
+		D4F4BFCB0FC4CB1A0013CE21 /* mdct.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7B0FC4CB1A0013CE21 /* mdct.c */; };
+		D4F4BFCC0FC4CB1A0013CE21 /* mapping0.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7C0FC4CB1A0013CE21 /* mapping0.c */; };
+		D4F4BFCD0FC4CB1A0013CE21 /* lsp.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7D0FC4CB1A0013CE21 /* lsp.c */; };
+		D4F4BFCE0FC4CB1A0013CE21 /* lpc.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7E0FC4CB1A0013CE21 /* lpc.c */; };
+		D4F4BFCF0FC4CB1A0013CE21 /* lookup.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF7F0FC4CB1A0013CE21 /* lookup.c */; };
+		D4F4BFD00FC4CB1A0013CE21 /* floor1.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF800FC4CB1A0013CE21 /* floor1.c */; };
+		D4F4BFD10FC4CB1A0013CE21 /* info.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF810FC4CB1A0013CE21 /* info.c */; };
+		D4F4BFD20FC4CB1A0013CE21 /* floor0.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF820FC4CB1A0013CE21 /* floor0.c */; };
+		D4F4BFD30FC4CB1A0013CE21 /* envelope.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF830FC4CB1A0013CE21 /* envelope.c */; };
+		D4F4BFD40FC4CB1A0013CE21 /* codebook.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF840FC4CB1A0013CE21 /* codebook.c */; };
+		D4F4BFD50FC4CB1A0013CE21 /* block.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF850FC4CB1A0013CE21 /* block.c */; };
+		D4F4BFD60FC4CB1A0013CE21 /* bitrate.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF860FC4CB1A0013CE21 /* bitrate.c */; };
+		D4F4BFD70FC4CB1A0013CE21 /* analysis.c in Sources */ = {isa = PBXBuildFile; fileRef = D4F4BF870FC4CB1A0013CE21 /* analysis.c */; };
+		D4F4C1750FC5A14A0013CE21 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025C0F706A0100407E60 /* AudioToolbox.framework */; };
+		D4F4C1760FC5A14B0013CE21 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025C0F706A0100407E60 /* AudioToolbox.framework */; };
+		D4F4C1770FC5A14B0013CE21 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025C0F706A0100407E60 /* AudioToolbox.framework */; };
+		D4F4C2920FC5A1650013CE21 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98C0A801948005C7067 /* Foundation.framework */; };
+		D4F4C2930FC5A1790013CE21 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025D0F706A0100407E60 /* OpenAL.framework */; };
+		D4F4C2940FC5A1790013CE21 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025D0F706A0100407E60 /* OpenAL.framework */; };
+		D4F4C2950FC5A17A0013CE21 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025D0F706A0100407E60 /* OpenAL.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -419,12 +512,10 @@
 		D4257ADE0FBF48CC00AD955A /* OggFile.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = OggFile.hpp; path = ../GosuImpl/Audio/OggFile.hpp; sourceTree = SOURCE_ROOT; };
 		D42762AA0F4E267500C9B0A5 /* DirectoriesTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DirectoriesTouch.mm; path = ../GosuImpl/DirectoriesTouch.mm; sourceTree = SOURCE_ROOT; };
 		D42BC0D00C4F840C00EBF79C /* Gosu.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Gosu.hpp; path = ../Gosu/Gosu.hpp; sourceTree = SOURCE_ROOT; };
-		D42D023E0F7068BC00407E60 /* AudioFmod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioFmod.cpp; path = ../GosuImpl/AudioFmod.cpp; sourceTree = SOURCE_ROOT; };
 		D42D025C0F706A0100407E60 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		D42D025D0F706A0100407E60 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		D42D02DC0F7092DF00407E60 /* AudioFileMac.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AudioFileMac.hpp; path = ../GosuImpl/Audio/AudioFileMac.hpp; sourceTree = "<group>"; };
 		D42D03430F70989100407E60 /* ALChannelManagement.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ALChannelManagement.hpp; path = ../GosuImpl/Audio/ALChannelManagement.hpp; sourceTree = SOURCE_ROOT; };
-		D42D03750F70A26800407E60 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = /System/Library/Frameworks/OpenAL.framework; sourceTree = "<absolute>"; };
 		D42DFE380F6F84DA00407E60 /* AudioOpenAL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AudioOpenAL.mm; path = ../GosuImpl/Audio/AudioOpenAL.mm; sourceTree = SOURCE_ROOT; };
 		D459FF440BDCD23500E7F0D6 /* RubyGosu App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RubyGosu App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D459FF460BDCD23600E7F0D6 /* RubyGosu App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RubyGosu App-Info.plist"; sourceTree = "<group>"; };
@@ -516,7 +607,6 @@
 		D4A5A2FC0F40D51B00FFF378 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		D4A5A2FD0F40D51B00FFF378 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		D4A5A2FE0F40D51B00FFF378 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		D4A5A2FF0F40D51B00FFF378 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D4A7E9080CD377E000621B24 /* Async.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Async.cpp; path = ../GosuImpl/Async.cpp; sourceTree = SOURCE_ROOT; };
 		D4A7E97B0CD3907D00621B24 /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
 		D4A7E97C0CD3907D00621B24 /* Texture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Texture.hpp; sourceTree = "<group>"; };
@@ -561,7 +651,6 @@
 		D4F4BABF0FC370760013CE21 /* inflate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = inflate.c; path = ../dependencies/zlib/inflate.c; sourceTree = SOURCE_ROOT; };
 		D4F4BAC00FC370760013CE21 /* inffixed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = inffixed.h; path = ../dependencies/zlib/inffixed.h; sourceTree = SOURCE_ROOT; };
 		D4F4BAC10FC370760013CE21 /* inftrees.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = inftrees.h; path = ../dependencies/zlib/inftrees.h; sourceTree = SOURCE_ROOT; };
-		D4F4BAC20FC370760013CE21 /* minigzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = minigzip.c; path = ../dependencies/zlib/minigzip.c; sourceTree = SOURCE_ROOT; };
 		D4F4BAC30FC370760013CE21 /* trees.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = trees.c; path = ../dependencies/zlib/trees.c; sourceTree = SOURCE_ROOT; };
 		D4F4BAC40FC370760013CE21 /* trees.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trees.h; path = ../dependencies/zlib/trees.h; sourceTree = SOURCE_ROOT; };
 		D4F4BAC50FC370760013CE21 /* uncompr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = uncompr.c; path = ../dependencies/zlib/uncompr.c; sourceTree = SOURCE_ROOT; };
@@ -572,6 +661,29 @@
 		D4F4BACA0FC370760013CE21 /* inftrees.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = inftrees.c; path = ../dependencies/zlib/inftrees.c; sourceTree = SOURCE_ROOT; };
 		D4F4BAF90FC3709C0013CE21 /* adler32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = adler32.c; path = ../dependencies/zlib/adler32.c; sourceTree = SOURCE_ROOT; };
 		D4F4BAFA0FC3709C0013CE21 /* compress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = compress.c; path = ../dependencies/zlib/compress.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF400FC4C9E00013CE21 /* framing.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = framing.c; path = ../dependencies/libogg/src/framing.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF410FC4C9E00013CE21 /* bitwise.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bitwise.c; path = ../dependencies/libogg/src/bitwise.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF690FC4CA720013CE21 /* vorbisfile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = vorbisfile.c; path = ../dependencies/libvorbis/lib/vorbisfile.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF740FC4CB1A0013CE21 /* window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = window.c; path = ../dependencies/libvorbis/lib/window.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF750FC4CB1A0013CE21 /* synthesis.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = synthesis.c; path = ../dependencies/libvorbis/lib/synthesis.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF760FC4CB1A0013CE21 /* smallft.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = smallft.c; path = ../dependencies/libvorbis/lib/smallft.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF770FC4CB1A0013CE21 /* sharedbook.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sharedbook.c; path = ../dependencies/libvorbis/lib/sharedbook.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF780FC4CB1A0013CE21 /* res0.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = res0.c; path = ../dependencies/libvorbis/lib/res0.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF790FC4CB1A0013CE21 /* registry.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = registry.c; path = ../dependencies/libvorbis/lib/registry.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF7A0FC4CB1A0013CE21 /* psy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = psy.c; path = ../dependencies/libvorbis/lib/psy.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF7B0FC4CB1A0013CE21 /* mdct.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mdct.c; path = ../dependencies/libvorbis/lib/mdct.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF7C0FC4CB1A0013CE21 /* mapping0.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mapping0.c; path = ../dependencies/libvorbis/lib/mapping0.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF7D0FC4CB1A0013CE21 /* lsp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lsp.c; path = ../dependencies/libvorbis/lib/lsp.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF7E0FC4CB1A0013CE21 /* lpc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lpc.c; path = ../dependencies/libvorbis/lib/lpc.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF7F0FC4CB1A0013CE21 /* lookup.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lookup.c; path = ../dependencies/libvorbis/lib/lookup.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF800FC4CB1A0013CE21 /* floor1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = floor1.c; path = ../dependencies/libvorbis/lib/floor1.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF810FC4CB1A0013CE21 /* info.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = info.c; path = ../dependencies/libvorbis/lib/info.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF820FC4CB1A0013CE21 /* floor0.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = floor0.c; path = ../dependencies/libvorbis/lib/floor0.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF830FC4CB1A0013CE21 /* envelope.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = envelope.c; path = ../dependencies/libvorbis/lib/envelope.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF840FC4CB1A0013CE21 /* codebook.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = codebook.c; path = ../dependencies/libvorbis/lib/codebook.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF850FC4CB1A0013CE21 /* block.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = block.c; path = ../dependencies/libvorbis/lib/block.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF860FC4CB1A0013CE21 /* bitrate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bitrate.c; path = ../dependencies/libvorbis/lib/bitrate.c; sourceTree = SOURCE_ROOT; };
+		D4F4BF870FC4CB1A0013CE21 /* analysis.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = analysis.c; path = ../dependencies/libvorbis/lib/analysis.c; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -585,6 +697,8 @@
 				D410E98F0A801948005C7067 /* Foundation.framework in Frameworks */,
 				D410EB2A0A801C28005C7067 /* OpenGL.framework in Frameworks */,
 				D425680A0C69CF6100E745AC /* IOKit.framework in Frameworks */,
+				D4F4C1750FC5A14A0013CE21 /* AudioToolbox.framework in Frameworks */,
+				D4F4C2950FC5A17A0013CE21 /* OpenAL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,12 +707,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D459FF4C0BDCD26D00E7F0D6 /* AppKit.framework in Frameworks */,
-				D46C2DDF0FAE03F900A33476 /* OpenAL.framework in Frameworks */,
 				D46C2DE00FAE03F900A33476 /* IOKit.framework in Frameworks */,
 				D46C2DE10FAE03F900A33476 /* OpenGL.framework in Frameworks */,
 				D46C2DE20FAE03F900A33476 /* ApplicationServices.framework in Frameworks */,
 				D46C2DE30FAE03F900A33476 /* Foundation.framework in Frameworks */,
 				D46C2DE40FAE03F900A33476 /* Carbon.framework in Frameworks */,
+				D4F4C1760FC5A14B0013CE21 /* AudioToolbox.framework in Frameworks */,
+				D4F4C2940FC5A1790013CE21 /* OpenAL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -610,9 +725,9 @@
 				D4A5A3010F40D51B00FFF378 /* QuartzCore.framework in Frameworks */,
 				D4A5A3020F40D51B00FFF378 /* OpenGLES.framework in Frameworks */,
 				D4A5A3030F40D51B00FFF378 /* UIKit.framework in Frameworks */,
-				D4A5A3040F40D51B00FFF378 /* Foundation.framework in Frameworks */,
 				D42D025E0F706A0100407E60 /* AudioToolbox.framework in Frameworks */,
 				D42D025F0F706A0100407E60 /* OpenAL.framework in Frameworks */,
+				D4F4C2920FC5A1650013CE21 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,7 +741,8 @@
 				D423826C0C4C3E8A000DAA25 /* Foundation.framework in Frameworks */,
 				D423826D0C4C3E8A000DAA25 /* Carbon.framework in Frameworks */,
 				D425680B0C69CF6100E745AC /* IOKit.framework in Frameworks */,
-				D42D03760F70A26800407E60 /* OpenAL.framework in Frameworks */,
+				D4F4C1770FC5A14B0013CE21 /* AudioToolbox.framework in Frameworks */,
+				D4F4C2930FC5A1790013CE21 /* OpenAL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -652,25 +768,26 @@
 				D4F4BA690FC36E930013CE21 /* Dependencies */,
 				089C1665FE841158C02AAC07 /* Resources */,
 				D46F737C0BC3458D008003BA /* RubyGosu */,
-				0867D69AFE84028FC02AAC07 /* Frameworks Mac */,
+				0867D69AFE84028FC02AAC07 /* Frameworks */,
 				D4A5A2F00F40D4EE00FFF378 /* Frameworks Touch */,
 				034768DDFF38A45A11DB9C8B /* Products */,
 			);
 			name = Gosu;
 			sourceTree = "<group>";
 		};
-		0867D69AFE84028FC02AAC07 /* Frameworks Mac */ = {
+		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D42D03750F70A26800407E60 /* OpenAL.framework */,
+				D42D025C0F706A0100407E60 /* AudioToolbox.framework */,
 				D42568090C69CF6100E745AC /* IOKit.framework */,
+				D42D025D0F706A0100407E60 /* OpenAL.framework */,
 				D410EB290A801C28005C7067 /* OpenGL.framework */,
 				D410E98A0A801948005C7067 /* AppKit.framework */,
 				D410E98B0A801948005C7067 /* ApplicationServices.framework */,
 				D410E98C0A801948005C7067 /* Foundation.framework */,
 				08FB77AAFE841565C02AAC07 /* Carbon.framework */,
 			);
-			name = "Frameworks Mac";
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		089C1665FE841158C02AAC07 /* Resources */ = {
@@ -725,7 +842,6 @@
 				D42D02DA0F70929E00407E60 /* Audio */,
 				D410EAD30A801B00005C7067 /* Graphics */,
 				D410EAEF0A801B00005C7067 /* Sockets */,
-				D42D023E0F7068BC00407E60 /* AudioFmod.cpp */,
 				D4A7E9080CD377E000621B24 /* Async.cpp */,
 				D410E9FF0A8019FA005C7067 /* DirectoriesMac.mm */,
 				D42762AA0F4E267500C9B0A5 /* DirectoriesTouch.mm */,
@@ -913,13 +1029,10 @@
 		D4A5A2F00F40D4EE00FFF378 /* Frameworks Touch */ = {
 			isa = PBXGroup;
 			children = (
-				D42D025C0F706A0100407E60 /* AudioToolbox.framework */,
-				D42D025D0F706A0100407E60 /* OpenAL.framework */,
 				D4A5A2FB0F40D51B00FFF378 /* CoreGraphics.framework */,
 				D4A5A2FC0F40D51B00FFF378 /* QuartzCore.framework */,
 				D4A5A2FD0F40D51B00FFF378 /* OpenGLES.framework */,
 				D4A5A2FE0F40D51B00FFF378 /* UIKit.framework */,
-				D4A5A2FF0F40D51B00FFF378 /* Foundation.framework */,
 			);
 			name = "Frameworks Touch";
 			sourceTree = "<group>";
@@ -927,6 +1040,9 @@
 		D4F4BA690FC36E930013CE21 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				D4F4BF6F0FC4CAEA0013CE21 /* libvorbis */,
+				D4F4BF620FC4CA650013CE21 /* libvorbisfile */,
+				D4F4BF4A0FC4C9E30013CE21 /* libogg */,
 				D4F4BAB40FC3705B0013CE21 /* libz */,
 				D4F4BA6A0FC36EA30013CE21 /* libpng */,
 			);
@@ -976,7 +1092,6 @@
 				D4F4BABF0FC370760013CE21 /* inflate.c */,
 				D4F4BAC00FC370760013CE21 /* inffixed.h */,
 				D4F4BAC10FC370760013CE21 /* inftrees.h */,
-				D4F4BAC20FC370760013CE21 /* minigzip.c */,
 				D4F4BAC30FC370760013CE21 /* trees.c */,
 				D4F4BAC40FC370760013CE21 /* trees.h */,
 				D4F4BAC50FC370760013CE21 /* uncompr.c */,
@@ -987,6 +1102,50 @@
 				D4F4BACA0FC370760013CE21 /* inftrees.c */,
 			);
 			name = libz;
+			sourceTree = "<group>";
+		};
+		D4F4BF4A0FC4C9E30013CE21 /* libogg */ = {
+			isa = PBXGroup;
+			children = (
+				D4F4BF400FC4C9E00013CE21 /* framing.c */,
+				D4F4BF410FC4C9E00013CE21 /* bitwise.c */,
+			);
+			name = libogg;
+			sourceTree = "<group>";
+		};
+		D4F4BF620FC4CA650013CE21 /* libvorbisfile */ = {
+			isa = PBXGroup;
+			children = (
+				D4F4BF690FC4CA720013CE21 /* vorbisfile.c */,
+			);
+			name = libvorbisfile;
+			sourceTree = "<group>";
+		};
+		D4F4BF6F0FC4CAEA0013CE21 /* libvorbis */ = {
+			isa = PBXGroup;
+			children = (
+				D4F4BF740FC4CB1A0013CE21 /* window.c */,
+				D4F4BF750FC4CB1A0013CE21 /* synthesis.c */,
+				D4F4BF760FC4CB1A0013CE21 /* smallft.c */,
+				D4F4BF770FC4CB1A0013CE21 /* sharedbook.c */,
+				D4F4BF780FC4CB1A0013CE21 /* res0.c */,
+				D4F4BF790FC4CB1A0013CE21 /* registry.c */,
+				D4F4BF7A0FC4CB1A0013CE21 /* psy.c */,
+				D4F4BF7B0FC4CB1A0013CE21 /* mdct.c */,
+				D4F4BF7C0FC4CB1A0013CE21 /* mapping0.c */,
+				D4F4BF7D0FC4CB1A0013CE21 /* lsp.c */,
+				D4F4BF7E0FC4CB1A0013CE21 /* lpc.c */,
+				D4F4BF7F0FC4CB1A0013CE21 /* lookup.c */,
+				D4F4BF800FC4CB1A0013CE21 /* floor1.c */,
+				D4F4BF810FC4CB1A0013CE21 /* info.c */,
+				D4F4BF820FC4CB1A0013CE21 /* floor0.c */,
+				D4F4BF830FC4CB1A0013CE21 /* envelope.c */,
+				D4F4BF840FC4CB1A0013CE21 /* codebook.c */,
+				D4F4BF850FC4CB1A0013CE21 /* block.c */,
+				D4F4BF860FC4CB1A0013CE21 /* bitrate.c */,
+				D4F4BF870FC4CB1A0013CE21 /* analysis.c */,
+			);
+			name = libvorbis;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1216,7 +1375,6 @@
 				D4A7E9810CD3907D00621B24 /* TexChunk.cpp in Sources */,
 				D4A7E9E80CD39BA200621B24 /* BitmapUtils.cpp in Sources */,
 				D4F07B270D93504700FB3D99 /* TextInputMac.mm in Sources */,
-				D42D02420F7068CB00407E60 /* AudioFmod.cpp in Sources */,
 				D4F4BA7F0FC36FB60013CE21 /* png.c in Sources */,
 				D4F4BA820FC36FB60013CE21 /* pngerror.c in Sources */,
 				D4F4BA830FC36FB60013CE21 /* pnggccrd.c in Sources */,
@@ -1240,13 +1398,36 @@
 				D4F4BAD00FC370770013CE21 /* infback.c in Sources */,
 				D4F4BAD10FC370770013CE21 /* inffast.c in Sources */,
 				D4F4BAD40FC370770013CE21 /* inflate.c in Sources */,
-				D4F4BAD70FC370770013CE21 /* minigzip.c in Sources */,
 				D4F4BAD80FC370770013CE21 /* trees.c in Sources */,
 				D4F4BADA0FC370770013CE21 /* uncompr.c in Sources */,
 				D4F4BADE0FC370770013CE21 /* zutil.c in Sources */,
 				D4F4BADF0FC370770013CE21 /* inftrees.c in Sources */,
 				D4F4BAFB0FC3709C0013CE21 /* adler32.c in Sources */,
 				D4F4BAFC0FC3709C0013CE21 /* compress.c in Sources */,
+				D4F4BE820FC486160013CE21 /* AudioOpenAL.mm in Sources */,
+				D4F4BF420FC4C9E00013CE21 /* framing.c in Sources */,
+				D4F4BF430FC4C9E00013CE21 /* bitwise.c in Sources */,
+				D4F4BF6A0FC4CA720013CE21 /* vorbisfile.c in Sources */,
+				D4F4BF880FC4CB1A0013CE21 /* window.c in Sources */,
+				D4F4BF890FC4CB1A0013CE21 /* synthesis.c in Sources */,
+				D4F4BF8A0FC4CB1A0013CE21 /* smallft.c in Sources */,
+				D4F4BF8B0FC4CB1A0013CE21 /* sharedbook.c in Sources */,
+				D4F4BF8C0FC4CB1A0013CE21 /* res0.c in Sources */,
+				D4F4BF8D0FC4CB1A0013CE21 /* registry.c in Sources */,
+				D4F4BF8E0FC4CB1A0013CE21 /* psy.c in Sources */,
+				D4F4BF8F0FC4CB1A0013CE21 /* mdct.c in Sources */,
+				D4F4BF900FC4CB1A0013CE21 /* mapping0.c in Sources */,
+				D4F4BF910FC4CB1A0013CE21 /* lsp.c in Sources */,
+				D4F4BF920FC4CB1A0013CE21 /* lpc.c in Sources */,
+				D4F4BF930FC4CB1A0013CE21 /* lookup.c in Sources */,
+				D4F4BF940FC4CB1A0013CE21 /* floor1.c in Sources */,
+				D4F4BF950FC4CB1A0013CE21 /* info.c in Sources */,
+				D4F4BF960FC4CB1A0013CE21 /* floor0.c in Sources */,
+				D4F4BF970FC4CB1A0013CE21 /* envelope.c in Sources */,
+				D4F4BF980FC4CB1A0013CE21 /* codebook.c in Sources */,
+				D4F4BF990FC4CB1A0013CE21 /* block.c in Sources */,
+				D4F4BF9A0FC4CB1A0013CE21 /* bitrate.c in Sources */,
+				D4F4BF9B0FC4CB1A0013CE21 /* analysis.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1273,7 +1454,6 @@
 				D46C2A480FAE037800A33476 /* TexChunk.cpp in Sources */,
 				D46C2A490FAE037800A33476 /* Text.cpp in Sources */,
 				D46C2A4A0FAE037800A33476 /* TextMac.cpp in Sources */,
-				D46C2A4B0FAE039E00A33476 /* AudioFmod.cpp in Sources */,
 				D46C2A4C0FAE039E00A33476 /* DirectoriesUnix.cpp in Sources */,
 				D46C2A4D0FAE039E00A33476 /* FileUnix.cpp in Sources */,
 				D46C2A4E0FAE039E00A33476 /* InputMac.mm in Sources */,
@@ -1376,13 +1556,36 @@
 				D4F4BAE30FC370770013CE21 /* infback.c in Sources */,
 				D4F4BAE40FC370770013CE21 /* inffast.c in Sources */,
 				D4F4BAE50FC370770013CE21 /* inflate.c in Sources */,
-				D4F4BAE60FC370770013CE21 /* minigzip.c in Sources */,
 				D4F4BAE70FC370770013CE21 /* trees.c in Sources */,
 				D4F4BAE80FC370770013CE21 /* uncompr.c in Sources */,
 				D4F4BAE90FC370770013CE21 /* zutil.c in Sources */,
 				D4F4BAEA0FC370770013CE21 /* inftrees.c in Sources */,
 				D4F4BAFD0FC3709C0013CE21 /* adler32.c in Sources */,
 				D4F4BAFE0FC3709C0013CE21 /* compress.c in Sources */,
+				D4F4BE810FC486160013CE21 /* AudioOpenAL.mm in Sources */,
+				D4F4BF440FC4C9E00013CE21 /* framing.c in Sources */,
+				D4F4BF450FC4C9E00013CE21 /* bitwise.c in Sources */,
+				D4F4BF6B0FC4CA720013CE21 /* vorbisfile.c in Sources */,
+				D4F4BF9C0FC4CB1A0013CE21 /* window.c in Sources */,
+				D4F4BF9D0FC4CB1A0013CE21 /* synthesis.c in Sources */,
+				D4F4BF9E0FC4CB1A0013CE21 /* smallft.c in Sources */,
+				D4F4BF9F0FC4CB1A0013CE21 /* sharedbook.c in Sources */,
+				D4F4BFA00FC4CB1A0013CE21 /* res0.c in Sources */,
+				D4F4BFA10FC4CB1A0013CE21 /* registry.c in Sources */,
+				D4F4BFA20FC4CB1A0013CE21 /* psy.c in Sources */,
+				D4F4BFA30FC4CB1A0013CE21 /* mdct.c in Sources */,
+				D4F4BFA40FC4CB1A0013CE21 /* mapping0.c in Sources */,
+				D4F4BFA50FC4CB1A0013CE21 /* lsp.c in Sources */,
+				D4F4BFA60FC4CB1A0013CE21 /* lpc.c in Sources */,
+				D4F4BFA70FC4CB1A0013CE21 /* lookup.c in Sources */,
+				D4F4BFA80FC4CB1A0013CE21 /* floor1.c in Sources */,
+				D4F4BFA90FC4CB1A0013CE21 /* info.c in Sources */,
+				D4F4BFAA0FC4CB1A0013CE21 /* floor0.c in Sources */,
+				D4F4BFAB0FC4CB1A0013CE21 /* envelope.c in Sources */,
+				D4F4BFAC0FC4CB1A0013CE21 /* codebook.c in Sources */,
+				D4F4BFAD0FC4CB1A0013CE21 /* block.c in Sources */,
+				D4F4BFAE0FC4CB1A0013CE21 /* bitrate.c in Sources */,
+				D4F4BFAF0FC4CB1A0013CE21 /* analysis.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1416,6 +1619,29 @@
 				D4032B7D0F5035A900A20790 /* TextTouch.mm in Sources */,
 				D42D02400F7068C500407E60 /* AudioOpenAL.mm in Sources */,
 				D48810BD0F7C0E3000602C04 /* BitmapBMP.cpp in Sources */,
+				D4F4BF480FC4C9E00013CE21 /* framing.c in Sources */,
+				D4F4BF490FC4C9E00013CE21 /* bitwise.c in Sources */,
+				D4F4BF6D0FC4CA720013CE21 /* vorbisfile.c in Sources */,
+				D4F4BFC40FC4CB1A0013CE21 /* window.c in Sources */,
+				D4F4BFC50FC4CB1A0013CE21 /* synthesis.c in Sources */,
+				D4F4BFC60FC4CB1A0013CE21 /* smallft.c in Sources */,
+				D4F4BFC70FC4CB1A0013CE21 /* sharedbook.c in Sources */,
+				D4F4BFC80FC4CB1A0013CE21 /* res0.c in Sources */,
+				D4F4BFC90FC4CB1A0013CE21 /* registry.c in Sources */,
+				D4F4BFCA0FC4CB1A0013CE21 /* psy.c in Sources */,
+				D4F4BFCB0FC4CB1A0013CE21 /* mdct.c in Sources */,
+				D4F4BFCC0FC4CB1A0013CE21 /* mapping0.c in Sources */,
+				D4F4BFCD0FC4CB1A0013CE21 /* lsp.c in Sources */,
+				D4F4BFCE0FC4CB1A0013CE21 /* lpc.c in Sources */,
+				D4F4BFCF0FC4CB1A0013CE21 /* lookup.c in Sources */,
+				D4F4BFD00FC4CB1A0013CE21 /* floor1.c in Sources */,
+				D4F4BFD10FC4CB1A0013CE21 /* info.c in Sources */,
+				D4F4BFD20FC4CB1A0013CE21 /* floor0.c in Sources */,
+				D4F4BFD30FC4CB1A0013CE21 /* envelope.c in Sources */,
+				D4F4BFD40FC4CB1A0013CE21 /* codebook.c in Sources */,
+				D4F4BFD50FC4CB1A0013CE21 /* block.c in Sources */,
+				D4F4BFD60FC4CB1A0013CE21 /* bitrate.c in Sources */,
+				D4F4BFD70FC4CB1A0013CE21 /* analysis.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1450,7 +1676,6 @@
 				D4A7E9840CD3907D00621B24 /* TexChunk.cpp in Sources */,
 				D4A7E9E90CD39BA200621B24 /* BitmapUtils.cpp in Sources */,
 				D4F07B280D93504700FB3D99 /* TextInputMac.mm in Sources */,
-				D42D03BF0F70A8B700407E60 /* AudioFmod.cpp in Sources */,
 				D4F4BAA30FC36FB60013CE21 /* png.c in Sources */,
 				D4F4BAA40FC36FB60013CE21 /* pngerror.c in Sources */,
 				D4F4BAA50FC36FB60013CE21 /* pnggccrd.c in Sources */,
@@ -1474,13 +1699,36 @@
 				D4F4BAEE0FC370770013CE21 /* infback.c in Sources */,
 				D4F4BAEF0FC370770013CE21 /* inffast.c in Sources */,
 				D4F4BAF00FC370770013CE21 /* inflate.c in Sources */,
-				D4F4BAF10FC370770013CE21 /* minigzip.c in Sources */,
 				D4F4BAF20FC370770013CE21 /* trees.c in Sources */,
 				D4F4BAF30FC370770013CE21 /* uncompr.c in Sources */,
 				D4F4BAF40FC370770013CE21 /* zutil.c in Sources */,
 				D4F4BAF50FC370770013CE21 /* inftrees.c in Sources */,
 				D4F4BAFF0FC3709C0013CE21 /* adler32.c in Sources */,
 				D4F4BB000FC3709C0013CE21 /* compress.c in Sources */,
+				D4F4BE800FC486150013CE21 /* AudioOpenAL.mm in Sources */,
+				D4F4BF460FC4C9E00013CE21 /* framing.c in Sources */,
+				D4F4BF470FC4C9E00013CE21 /* bitwise.c in Sources */,
+				D4F4BF6C0FC4CA720013CE21 /* vorbisfile.c in Sources */,
+				D4F4BFB00FC4CB1A0013CE21 /* window.c in Sources */,
+				D4F4BFB10FC4CB1A0013CE21 /* synthesis.c in Sources */,
+				D4F4BFB20FC4CB1A0013CE21 /* smallft.c in Sources */,
+				D4F4BFB30FC4CB1A0013CE21 /* sharedbook.c in Sources */,
+				D4F4BFB40FC4CB1A0013CE21 /* res0.c in Sources */,
+				D4F4BFB50FC4CB1A0013CE21 /* registry.c in Sources */,
+				D4F4BFB60FC4CB1A0013CE21 /* psy.c in Sources */,
+				D4F4BFB70FC4CB1A0013CE21 /* mdct.c in Sources */,
+				D4F4BFB80FC4CB1A0013CE21 /* mapping0.c in Sources */,
+				D4F4BFB90FC4CB1A0013CE21 /* lsp.c in Sources */,
+				D4F4BFBA0FC4CB1A0013CE21 /* lpc.c in Sources */,
+				D4F4BFBB0FC4CB1A0013CE21 /* lookup.c in Sources */,
+				D4F4BFBC0FC4CB1A0013CE21 /* floor1.c in Sources */,
+				D4F4BFBD0FC4CB1A0013CE21 /* info.c in Sources */,
+				D4F4BFBE0FC4CB1A0013CE21 /* floor0.c in Sources */,
+				D4F4BFBF0FC4CB1A0013CE21 /* envelope.c in Sources */,
+				D4F4BFC00FC4CB1A0013CE21 /* codebook.c in Sources */,
+				D4F4BFC10FC4CB1A0013CE21 /* block.c in Sources */,
+				D4F4BFC20FC4CB1A0013CE21 /* bitrate.c in Sources */,
+				D4F4BFC30FC4CB1A0013CE21 /* analysis.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1513,11 +1761,7 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
-				OTHER_LDFLAGS = (
-					"-lfmod_universal",
-					"-liconv",
-					"-lboost_thread_d_1_34_1_universal",
-				);
+				OTHER_LDFLAGS = "-liconv";
 				PRODUCT_NAME = Gosu;
 				WRAPPER_EXTENSION = framework;
 				ZERO_LINK = NO;
@@ -1540,11 +1784,7 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
-				OTHER_LDFLAGS = (
-					"-lfmod_universal",
-					"-liconv",
-					"-lboost_thread_1_34_1_universal",
-				);
+				OTHER_LDFLAGS = "-liconv";
 				PRODUCT_NAME = Gosu;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1608,9 +1848,7 @@
 				OBJROOT = build;
 				OTHER_LDFLAGS = (
 					"-F..",
-					"-lfmod_universal",
 					"-flat_namespace",
-					"-lboost_thread_1_34_1_universal",
 					"-liconv",
 				);
 				PREBINDING = NO;
@@ -1650,11 +1888,9 @@
 				);
 				OTHER_LDFLAGS = (
 					"-F..",
-					"-lfmod_universal",
 					"-flat_namespace",
 					"-undefined",
 					dynamic_lookup,
-					"-lboost_thread_1_34_1_universal",
 					"-liconv",
 				);
 				PREBINDING = NO;
@@ -1702,11 +1938,7 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
-				OTHER_LDFLAGS = (
-					"-lfmod_universal",
-					"-liconv",
-					"-lboost_thread_1_34_1_universal",
-				);
+				OTHER_LDFLAGS = "-liconv";
 				PRODUCT_NAME = Gosu;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1736,9 +1968,7 @@
 				OBJROOT = build;
 				OTHER_LDFLAGS = (
 					"-F..",
-					"-lfmod_universal",
 					"-flat_namespace",
-					"-lboost_thread_1_34_1_universal",
 					"-liconv",
 				);
 				PREBINDING = NO;
@@ -1773,8 +2003,6 @@
 				MACH_O_TYPE = mh_bundle;
 				OTHER_LDFLAGS = (
 					"-F..",
-					"-lfmod_universal",
-					"-lboost_thread_1_34_1_universal",
 					"-flat_namespace",
 					"-weak-lruby_1_9_1_universal",
 					"-liconv",
@@ -1853,9 +2081,7 @@
 				OTHER_LDFLAGS = (
 					"-F..",
 					"-lruby",
-					"-lfmod_universal",
 					"-flat_namespace",
-					"-lboost_thread_d_1_34_1_universal",
 					"-liconv",
 				);
 				PREBINDING = NO;
@@ -1890,9 +2116,7 @@
 				OTHER_LDFLAGS = (
 					"-F..",
 					"-lruby",
-					"-lfmod_universal",
 					"-flat_namespace",
-					"-lboost_thread_1_34_1_universal",
 					"-liconv",
 				);
 				PREBINDING = NO;

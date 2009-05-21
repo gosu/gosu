@@ -73,6 +73,7 @@ namespace
 }
 
 - (void)doTick:(NSTimer*)timer {
+    windowInstance().audio().update();
     windowInstance().update();
     [gosuView drawView];
 }
