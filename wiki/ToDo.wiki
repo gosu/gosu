@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-05-21)
+(Last update: 2009-05-22)
 
 == Gosu 0.7.x ==
   * Look into Windows linking trouble :(
@@ -122,8 +122,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make Linux gemspec more robust wrt examples/
   * Make more stuff configurable like http://github.com/cout/rice/blob/98ba7098e2de5849f2e7272021340976a768456f/ruby.ac#L7-20
 == Gosu CI/Usability ==
-  * Automate selection of the "Project of the Day" + screenshot (Rake task & cronjob)
-  * Somehow strip the directory from the rdoc filenames
   * Document 64px minimum for single-texture opt.
   * Mention Gosu's respectable age somewhere :)
   * Link to benkos example
