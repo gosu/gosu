@@ -39,7 +39,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/I&quot;zlib, libpng\zlib&quot; /I&quot;zlib, libpng\libpng&quot;"
+				AdditionalOptions="/I&quot;..\dependencies\zlib&quot; /I&quot;..\dependencies\libpng&quot;"
 				Optimization="0"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="false"
@@ -106,7 +106,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/I&quot;zlib, libpng\zlib&quot; /I&quot;zlib, libpng\libpng&quot;"
+				AdditionalOptions="/I&quot;..\dependencies\zlib&quot; /I&quot;..\dependencies\libpng&quot;"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				WholeProgramOptimization="false"
@@ -152,126 +152,126 @@
 	</References>
 	<Files>
 		<Filter
-			Name="zlib, libpng"
+			Name="zlib and libpng"
 			>
 			<File
-				RelativePath=".\zlib, libpng\zlib\adler32.c"
+				RelativePath=".\..\dependencies\zlib\adler32.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\zlib\compress.c"
+				RelativePath=".\..\dependencies\zlib\compress.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\zlib\crc32.c"
+				RelativePath=".\..\dependencies\zlib\crc32.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\zlib\deflate.c"
+				RelativePath=".\..\dependencies\zlib\deflate.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\zlib\gzio.c"
+				RelativePath=".\..\dependencies\zlib\gzio.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\zlib\infback.c"
+				RelativePath=".\..\dependencies\zlib\infback.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\zlib\inffast.c"
+				RelativePath=".\..\dependencies\zlib\inffast.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\zlib\inflate.c"
+				RelativePath=".\..\dependencies\zlib\inflate.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\zlib\inftrees.c"
+				RelativePath=".\..\dependencies\zlib\inftrees.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\zlib\minigzip.c"
+				RelativePath=".\..\dependencies\zlib\minigzip.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\png.c"
+				RelativePath=".\..\dependencies\libpng\png.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\pngerror.c"
+				RelativePath=".\..\dependencies\libpng\pngerror.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\pnggccrd.c"
+				RelativePath=".\..\dependencies\libpng\pnggccrd.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\pngget.c"
+				RelativePath=".\..\dependencies\libpng\pngget.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\pngmem.c"
+				RelativePath=".\..\dependencies\libpng\pngmem.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\pngpread.c"
+				RelativePath=".\..\dependencies\libpng\pngpread.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\pngread.c"
+				RelativePath=".\..\dependencies\libpng\pngread.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\pngrio.c"
+				RelativePath=".\..\dependencies\libpng\pngrio.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\pngrtran.c"
+				RelativePath=".\..\dependencies\libpng\pngrtran.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\pngrutil.c"
+				RelativePath=".\..\dependencies\libpng\pngrutil.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\pngset.c"
+				RelativePath=".\..\dependencies\libpng\pngset.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\pngtrans.c"
+				RelativePath=".\..\dependencies\libpng\pngtrans.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\pngvcrd.c"
+				RelativePath=".\..\dependencies\libpng\pngvcrd.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\pngwio.c"
+				RelativePath=".\..\dependencies\libpng\pngwio.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\pngwrite.c"
+				RelativePath=".\..\dependencies\libpng\pngwrite.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\pngwtran.c"
+				RelativePath=".\..\dependencies\libpng\pngwtran.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\libpng\pngwutil.c"
+				RelativePath=".\..\dependencies\libpng\pngwutil.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\zlib\trees.c"
+				RelativePath=".\..\dependencies\zlib\trees.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\zlib\uncompr.c"
+				RelativePath=".\..\dependencies\zlib\uncompr.c"
 				>
 			</File>
 			<File
-				RelativePath=".\zlib, libpng\zlib\zutil.c"
+				RelativePath=".\..\dependencies\zlib\zutil.c"
 				>
 			</File>
 		</Filter>
