@@ -5,7 +5,7 @@
 double Gosu::random(double min, double max)
 {
     double rnd = std::rand();
-    return rnd / (RAND_MAX + 1) * (max - min) + min;
+    return rnd / (static_cast<double>(RAND_MAX) + 1) * (max - min) + min;
 }
 
 double Gosu::offsetX(double angle, double radius)

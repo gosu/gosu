@@ -314,7 +314,11 @@ class Gosu::Song::StreamData : public BaseData
     
     bool streamTo(NSUInteger source, NSUInteger buffer)
     {
+        #ifdef GOSU_IS_IPHONE
+        static const unsigned BUFFER_SIZE = 4096 * 4;
+        #else
         static const unsigned BUFFER_SIZE = 4096 * 8;
+        #endif
         char audioData[BUFFER_SIZE];
         std::size_t readBytes = oggFile.readData(audioData, BUFFER_SIZE);
         if (readBytes > 0)
