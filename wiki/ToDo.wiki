@@ -4,14 +4,14 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-05-23)
+(Last update: 2009-05-24)
 
 == Gosu 0.7.x ==
-  * Look into Windows linking trouble :(
   * Look at janmejay's bakery
   * Look into Windows standby woes
   * Separate 1.9 .app wrapper from rest of Mac package
   * Finish OpenAL on OS X!
+    * Fix starvation bug (happens on iPhone)
     * Add AudioToolbox(?) support for streaming songs
     * Check Song::play() behavior on new OGG stream vs. other libs
     * Test/fix Song/Sample looping
@@ -34,7 +34,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Give multitruby support a second try (fix the problem with AC_PROGRAM_WHATEVER)
     * Verify that TextInput works cleanly on Ruby 1.9 with Unicode
     * Add support for giving font flags from Ruby
-    * Complete the list of Gosu::Colors, inspired by the CSS colors, and move them to Color
+    * Complete the list of Gosu::Colors, inspired by the CSS colors, and move them to Color in Ruby
     * Screen size / fullscreen stuff
       * Iterate on first category of fullscreen tests
       * Allow adjustment of the virtual touchscreen resolution
@@ -150,6 +150,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Automatically run push_to_github task
   * Try to translate the RubyTutorial to Japanese :)
   * Deployment wiki page/rdoc: Mention Icon resource support!
+  * Document draw_line's weirdness
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
