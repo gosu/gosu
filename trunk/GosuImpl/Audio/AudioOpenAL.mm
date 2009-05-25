@@ -420,6 +420,7 @@ public:
             alSourceQueueBuffers(source, 1, &buffer);
         }
 
+        // We got starved, need to call play again
         if (processed == 2 && active)
             alSourcePlay(source);
         

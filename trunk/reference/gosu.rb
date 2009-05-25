@@ -365,10 +365,12 @@ module Gosu
     # repaint itself. Your application's rendering code goes here.
     def draw; end
     
-    # Gives the game a chance to say no to being redrawn.
+    # Can be overriden to give the game a chance to say no to being redrawn.
     # This is not a definitive answer. The operating system can still cause
     # redraws for one reason or another.
-    # By default, the window is redrawn all the time.
+    #
+    # By default, the window is redrawn all the time (i.e. Window#needs_draw?
+    # always returns true.)
     def needs_redraw?; end
     
     # To avoid the intermediate position of calling mouse_x= followed by mouse_y=.
@@ -393,10 +395,10 @@ module Gosu
   	# Returns true if a button is currently pressed. Updated every tick.
     def button_down?(id); end
     
-    # Returns the character a button usually produces, or ni.
+    # DEPRECATED: Returns the character a button usually produces, or nil.
     def self.button_id_to_char(id); end
     
-    # Returns the button that has to be pressed to produce the
+    # DEPRECATED: Returns the button that has to be pressed to produce the
     # given character, or nil.
     def self.char_to_button_id(char); end
     
