@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-05-24)
+(Last update: 2009-05-25)
 
 == Gosu 0.7.x ==
   * Look at janmejay's bakery
@@ -52,6 +52,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * (1x mymüsli for all the hard work! (motivation!)
   * iPhone-related stuff that should be finished soonish
     * Fix "too many fingers" bug on iPhone
+    * Let resolution decide orientation
     * Implement Proof of Concept for Macro Patches
     * socket.bundle und syck.bundle in den Wrapper reinschweißen
     * Integrate "fat" iPhone building from forum
