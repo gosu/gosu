@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-05-26)
+(Last update: 2009-05-27)
 
 == Gosu 0.7.x ==
   * Look at janmejay's bakery
@@ -154,6 +154,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Try to translate the RubyTutorial to Japanese :)
   * Deployment wiki page/rdoc: Mention Icon resource support!
   * Document draw_line's weirdness
+  * Fix: "PotD"-Link is too close to screenshot
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
