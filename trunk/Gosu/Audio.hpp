@@ -33,9 +33,7 @@ namespace Gosu
         #endif
         ~Audio();
         
-        #ifdef GOSU_IS_MAC
         void update();
-        #endif
     };
 
     //! An instance of a Sample playing. Can be used to stop sounds dynamically,

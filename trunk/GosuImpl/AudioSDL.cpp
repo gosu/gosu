@@ -50,6 +50,10 @@ Gosu::Audio::~Audio() {
   mixerInitialized = false;
 }
 
+void Gosu::Audio::update()
+{
+}
+
 bool Gosu::SampleInstance::alive() const
 {
     return !noSound && channelRegistry[handle] == extra &&

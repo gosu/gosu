@@ -86,6 +86,10 @@ Gosu::Audio::~Audio()
     fmodInitialized = false;
 }
 
+void Gosu::Audio::update()
+{
+}
+
 Gosu::SampleInstance::SampleInstance(int handle, int extra)
 : handle(handle), extra(extra)
 {
