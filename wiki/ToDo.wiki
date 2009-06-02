@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-06-01)
+(Last update: 2009-06-02)
 
 == Gosu 0.7.x ==
   * Look at janmejay's bakery
@@ -30,6 +30,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
     * Report Ocra bugs: spaces in exe name = crash, requires .rb and .so files?!
   * 0.7.15 (bugfixes bugfixes bugfixes)
+    * Add GOSU_VERSION constant
     * Quick look: How hard is MacRuby support?
     * See if John Shea's talk had something about not being locked to pixel positions
     * See if really old games have problems running in current Gosu
