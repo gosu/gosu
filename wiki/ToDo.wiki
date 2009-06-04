@@ -4,12 +4,13 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-06-03)
+(Last update: 2009-06-04)
 
 == Gosu 0.7.x ==
   * Look at janmejay's bakery
   * Look into Windows standby woes
   * Look for ScancodeToKeyname fn on Mac, if unsuccessful reply to mail
+  * Look into ruby-opengl problem on GettingStartedOnLinux
   * Separate 1.9 .app wrapper from rest of Mac package
   * Finish OpenAL on OS X!
     * Single reserveChannel for Gosu::Song
