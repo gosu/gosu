@@ -4,13 +4,13 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-06-06)
+(Last update: 2009-06-07)
 
 == Gosu 0.7.x ==
-  * Look into Gosu gl_tex_info trouble
+  * Look for ScancodeToKeyname fn on Mac, if unsuccessful reply to mail
   * Look at janmejay's bakery
   * Look into Windows standby woes
-  * Look for ScancodeToKeyname fn on Mac, if unsuccessful reply to mail
+  * Change bundle identifier to org.libgosu.UntitledGame
   * Look into ruby-opengl problem on GettingStartedOnLinux
   * Separate 1.9 .app wrapper from rest of Mac package
   * Finish OpenAL on OS X!
@@ -150,9 +150,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Ruby/Gosu Icon: Fix ugly shadow
   * Add some RSS feed to main index.html page
   * Make tt blocks prettier on front page
-  * Make Ruby 1.9.1 wrapper a separate download
   * Turn changelog and todo into links on frontpage
-  * Change bundle identifier to org.libgosu.UntitledGame
   * Automatically run push_to_github task
   * Try to translate the RubyTutorial to Japanese :)
   * Deployment wiki page/rdoc: Mention Icon resource support!
