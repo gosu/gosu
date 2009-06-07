@@ -1,5 +1,4 @@
 require 'mysql'
-require 'cgi'
 require 'RMagick'
 
 begin
@@ -16,7 +15,7 @@ begin
   
   File.open('potd_values.rb', 'w') do |file|
     file.puts "$POTD_ID = #{winner[0]}"
-    file.puts "$POTD_TITLE = %(#{CGI.escapeHTML(winner[1])})"
+    file.puts "$POTD_TITLE = %(#{winner[1]})"
   end
   
   image = Magick::Image.read("http://www.libgosu.org/mwf/attachments/#{winner[2].to_i % 100}/#{winner[2]}/#{winner[3]}")[0]
