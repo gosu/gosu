@@ -25,7 +25,7 @@ unsigned Gosu::Texture::maxTextureSize()
         do
         {
             size *= 2;
-            glTexImage2D(GL_PROXY_TEXTURE_2D, 0, GL_BGRA, size * 2, size * 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+            glTexImage2D(GL_PROXY_TEXTURE_2D, 0, 4, size * 2, size * 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
             glGetTexLevelParameteriv(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width); 
         } while (width != 0 && size < MAX_SIZE);
     }
@@ -44,11 +44,11 @@ Gosu::Texture::Texture(unsigned size)
    
     // Create empty texture.
     glBindTexture(GL_TEXTURE_2D, name);
-#ifndef GOSU_IS_IPHONE
-    glTexImage2D(GL_TEXTURE_2D, 0, 4, allocator.width(), allocator.height(), 0,
+#ifdef GOSU_IS_IPHONE
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, allocator.width(), allocator.height(), 0,
                  GL_RGBA, GL_UNSIGNED_BYTE, 0);
 #else
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, allocator.width(), allocator.height(), 0,
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, allocator.width(), allocator.height(), 0,
                  GL_RGBA, GL_UNSIGNED_BYTE, 0);
 #endif
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
