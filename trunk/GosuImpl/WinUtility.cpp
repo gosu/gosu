@@ -80,7 +80,7 @@ void Gosu::Win::throwLastError(const std::string& action)
     if (!::FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, 0,
         ::GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-        reinterpret_cast<LPSTR>(&buffer), 0, 0))
+        reinterpret_cast<LPSTR>(&buffer), 0, 0) || buffer == 0)
     {
         // IMPR: Can we do better than this?
         throw std::runtime_error("Unknown error");
