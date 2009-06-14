@@ -42,7 +42,7 @@ namespace Gosu
         std::pair<int, int> reserveChannel()
         {
             int i;
-            for (i = 0; i <= NUM_SOURCES; ++i)
+            for (i = 1; i <= NUM_SOURCES; ++i)
             {
                 if (i == NUM_SOURCES)
                     return std::make_pair<int, int>(NO_FREE_CHANNEL, NO_TOKEN);
@@ -63,6 +63,11 @@ namespace Gosu
             if (channel != NO_FREE_CHANNEL && currentTokens[channel] == token)
                 return alSources[channel];
             return NO_SOURCE;
+        }
+        
+        int sourceForSongs() const
+        {
+            return alSources[0];
         }
     };
     ALCdevice* ALChannelManagement::alDevice = 0;

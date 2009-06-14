@@ -112,7 +112,7 @@ namespace Gosu
         
         const std::vector<char>& decodedData()
         {
-            static const unsigned INCREMENT = 1024*1024;
+            static const unsigned INCREMENT = 512*1024;
             
             if (!decodedData_.empty())
                 return decodedData_;

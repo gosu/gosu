@@ -16,6 +16,7 @@ namespace Gosu
     class AudioFile : boost::noncopyable
     {
         AudioFileID fileID;
+        SInt64 position;
         mutable std::vector<char> decodedData;
         
         static OSStatus AudioFile_ReadProc(void* inClientData, SInt64 inPosition, UInt32 requestCount,
@@ -46,6 +47,7 @@ namespace Gosu
             CFURLGetFSRef(reinterpret_cast<CFURLRef>(url.get()), &fsRef);
             CHECK_OS(AudioFileOpen(&fsRef, fsRdPerm, 0, &fileID));
             #endif
+            position = 0;
         }
         
         AudioFile(const Gosu::Resource& resource)
@@ -53,6 +55,7 @@ namespace Gosu
             void* clientData = const_cast<Resource*>(&resource);
             CHECK_OS(AudioFileOpenWithCallbacks(clientData, AudioFile_ReadProc, 0,
                                                 AudioFile_GetSizeProc, 0, 0, &fileID));
+            position = 0;
         }
         
         ~AudioFile()
@@ -91,6 +94,9 @@ namespace Gosu
         
         const std::vector<char>& getDecodedData() const
         {
+            // Class has not been built for both streaming and reading at once :)
+            assert(position == 0);
+
             if (decodedData.empty())
             {
                 UInt32 sizeOfData = getSizeOfData();
@@ -98,6 +104,16 @@ namespace Gosu
                 CHECK_OS(AudioFileReadBytes(fileID, false, 0, &sizeOfData, &decodedData[0]));
             }
             return decodedData;
+        }
+        
+        std::size_t readData(void* dest, UInt32 length)
+        {
+            // Class has not been built for both streaming and reading at once :)
+            assert(decodedData.empty());
+
+            CHECK_OS(AudioFileReadBytes(fileID, false, position, &length, dest));
+            position += length;
+            return length;
         }
     };
 }

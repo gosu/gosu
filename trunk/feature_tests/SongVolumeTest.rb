@@ -1,9 +1,12 @@
 # Require cutting-edge development Gosu for testing.
 require '../lib/gosu'
 
+# This kind of turned into a stress-test for song too.
+
 class Test < Gosu::Window
   def initialize 
-    super(640, 480, false)
+    # increase update_interval to simulate very low framerate (Song will skip)
+    super(640, 480, false, 30)
     # Taken from Wikipedia, public domain
     # (Also, best song in the world)
     ogg = Gosu::Song.new(self, "media/Jingle_Bells.ogg")
@@ -18,6 +21,8 @@ class Test < Gosu::Window
     @songs = [ogg]#, it, mid, wav]
     @song = @songs[0]
     @song.play(true)
+    
+    @another_sample = Gosu::Sample.new(self, "media/Sample.wav")
   end
 
   def update
@@ -29,6 +34,10 @@ class Test < Gosu::Window
   end
   
   def button_down(id)
+    sleep 3 if button_id_to_char(id) == 's'
+    
+    @another_sample.play if button_id_to_char(id) == 'a'
+    
     @song.play(true) if button_id_to_char(id) == 'l'
     @song.play(false) if id == Gosu::KbSpace
     @song.pause if button_id_to_char(id) == 'p'

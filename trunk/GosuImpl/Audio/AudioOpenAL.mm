@@ -296,7 +296,6 @@ class Gosu::Song::StreamData : public BaseData
 {
     OggFile oggFile;
     NSUInteger buffers[2];
-    boost::optional<std::pair<int, int> > channel;
     
     void applyVolume()
     {
@@ -307,9 +306,7 @@ class Gosu::Song::StreamData : public BaseData
     
     int lookupSource() const
     {
-        if (!channel)
-            return ALChannelManagement::NO_SOURCE;
-        return alChannelManagement->sourceIfStillPlaying(channel->first, channel->second);
+        return alChannelManagement->sourceForSongs();
     }
     
     bool streamTo(NSUInteger source, NSUInteger buffer)
@@ -344,7 +341,6 @@ public:
         stop();
         oggFile.rewind();
         
-        channel = alChannelManagement->reserveChannel();
         int source = lookupSource();
         if (source != ALChannelManagement::NO_SOURCE)
         {
@@ -378,7 +374,6 @@ public:
             while (processed--)
                 alSourceUnqueueBuffers(source, 1, &buffer);
         }
-        channel.reset();
     }
     
     void pause()
@@ -401,11 +396,6 @@ public:
     void update()
     {
         int source = lookupSource();
-        if (source == ALChannelManagement::NO_SOURCE)
-        {
-            stop();
-            return;
-        }
         
         int processed;
         bool active = true;
@@ -425,10 +415,7 @@ public:
             alSourcePlay(source);
         
         if (!active)
-        {
-            channel.reset();
             curSong = 0;
-        }
     }
 };
 
