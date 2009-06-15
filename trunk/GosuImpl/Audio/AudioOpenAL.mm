@@ -344,13 +344,13 @@ public:
         int source = lookupSource();
         if (source != ALChannelManagement::NO_SOURCE)
         {
-            streamTo(source, buffers[0]);
-            streamTo(source, buffers[1]);
-
             alSource3f(source, AL_POSITION, 0, 0, 0);
             alSourcef(source, AL_GAIN, volume());
             alSourcef(source, AL_PITCH, 1);
             alSourcei(source, AL_LOOPING, AL_FALSE); // need to implement this manually...
+
+            streamTo(source, buffers[0]);
+            streamTo(source, buffers[1]);
 
             alSourceQueueBuffers(source, 2, buffers);
             alSourcePlay(source);
@@ -407,15 +407,23 @@ public:
             NSUInteger buffer;
             alSourceUnqueueBuffers(source, 1, &buffer);
             active = streamTo(source, buffer);
-            alSourceQueueBuffers(source, 1, &buffer);
+            if (active)
+                alSourceQueueBuffers(source, 1, &buffer);
         }
-
-        // We got starved, need to call play again
-        if (processed == 2 && active)
-            alSourcePlay(source);
         
-        if (!active)
+        ALint state;
+        alGetSourcei(source, AL_SOURCE_STATE, &state);
+        if (active && state != AL_PLAYING && state != AL_PAUSED)
+        {
+            // We seemingly got starved.
+            alSourcePlay(source);
+        }
+        else if (!active)
+        {
+            // We got starved but there is nothing to play left, stop this
+            stop();
             curSong = 0;
+        }
     }
 };
 
