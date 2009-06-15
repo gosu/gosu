@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-06-13)
+(Last update: 2009-06-15)
 
 == Gosu 0.7.x ==
   * Look at janmejay's bakery
@@ -13,14 +13,11 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Look into ruby-opengl problem on GettingStartedOnLinux
   * Separate 1.9 .app wrapper from rest of Mac package
   * Finish OpenAL on OS X!
-    * Single reserveChannel for Gosu::Song
-    * Fix starvation bug (happens on iPhone)
     * Add AudioToolbox(?) support for streaming songs
-    * Check Song::play() behavior on new OGG stream vs. other libs
-    * Test/fix Song/Sample looping
+    * Implement looping in OpenAL port
+    * Check Song::play() behavior with OpenAL vs. other libs
     * Start list of supported sound/song formats
-    * Try to add dynamic MikMod loading code
-    * Check Song::play() behavior on new MikMod song vs. other libs
+    * Make buffers in Mac port larger and make sure that update_interval<100 always works
     * Get Anna to test the new OpenAL code on Intel/Tiger...
     * Get philomory to test the new OpenAL code on PPC/Tiger? :)
   * Remove FMOD support altogether from Linux
@@ -38,7 +35,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Give multitruby support a second try (fix the problem with AC_PROGRAM_WHATEVER)
     * Verify that TextInput works cleanly on Ruby 1.9 with Unicode
     * Add support for giving font flags from Ruby
-    * Complete the list of Gosu::Colors, inspired by the CSS colors, and move them to Color in Ruby
+    * Complete the list of Gosu::Colors, inspired by the CSS colors, and move them to Color in Ruby / support :red/:green/etc…
     * Screen size / fullscreen stuff
       * Iterate on first category of fullscreen tests
       * Allow adjustment of the virtual touchscreen resolution
@@ -62,6 +59,10 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Integrate "fat" iPhone building from forum
     * Clear up GOSU_IS_MAC vs. GOSU_IS_OSX
     * Use getBytes instead of UTF8String
+  * OpenAL improvements
+    * Try to add dynamic MikMod loading code
+    * Check Song::play() behavior on new MikMod song vs. other libs
+    * Move decoding/updating into another thread (yuck)
   * Try a quick prototype of Gosu working with Shoes (if that doesn't work, wxRuby)
   * Try harder to reproduce these bugs
     * Get rid of context selection error with driver set to always do FSAA (Windows)
@@ -128,6 +129,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make Linux gemspec more robust wrt examples/
   * Make more stuff configurable like http://github.com/cout/rice/blob/98ba7098e2de5849f2e7272021340976a768456f/ruby.ac#L7-20
 == Gosu CI/Usability ==
+  * See what's going on with forum subscriptions
   * Document 64px minimum for single-texture opt.
   * Mention Gosu's respectable age somewhere :)
   * Link to benkos example
