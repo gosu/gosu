@@ -1,8 +1,8 @@
 #ifndef GOSUIMPL_AUDIO_OGGFILE_HPP
 #define GOSUIMPL_AUDIO_OGGFILE_HPP
 
+#include <GosuImpl/Audio/AudioFile.hpp>
 #include <vorbis/vorbisfile.h>
-#include <boost/noncopyable.hpp>
 #include <algorithm>
 #include <stdexcept>
 
@@ -10,7 +10,7 @@
 
 namespace Gosu
 {
-    class OggFile : boost::noncopyable
+    class OggFile : AudioFile
     {
         Gosu::Buffer buffer_;
         Gosu::Reader reader_;

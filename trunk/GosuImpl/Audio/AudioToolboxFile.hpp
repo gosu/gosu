@@ -1,5 +1,5 @@
-#ifndef GOSU_AUDIO_AUDIOFILE_MAC_HPP
-#define GOSU_AUDIO_AUDIOFILE_MAC_HPP
+#ifndef GOSU_AUDIO_AudioToolboxFile_MAC_HPP
+#define GOSU_AUDIO_AudioToolboxFile_MAC_HPP
 
 #include <AudioToolbox/AudioToolbox.h>
 #include <OpenAL/al.h>
@@ -13,7 +13,7 @@
 
 namespace Gosu
 {
-    class AudioFile : boost::noncopyable
+    class AudioToolboxFile : boost::noncopyable
     {
         AudioFileID fileID;
         SInt64 position;
@@ -35,7 +35,7 @@ namespace Gosu
         }
         
     public:
-        AudioFile(const std::wstring& filename)
+        AudioToolboxFile(const std::wstring& filename)
         {
             ObjRef<NSString> utf8Filename([[NSString alloc] initWithUTF8String: wstringToUTF8(filename).c_str()]);
             ObjRef<NSURL> url([[NSURL alloc] initFileURLWithPath: utf8Filename.get()]);
@@ -50,7 +50,7 @@ namespace Gosu
             position = 0;
         }
         
-        AudioFile(const Gosu::Resource& resource)
+        AudioToolboxFile(const Gosu::Resource& resource)
         {
             void* clientData = const_cast<Resource*>(&resource);
             CHECK_OS(AudioFileOpenWithCallbacks(clientData, AudioFile_ReadProc, 0,
@@ -58,7 +58,7 @@ namespace Gosu
             position = 0;
         }
         
-        ~AudioFile()
+        ~AudioToolboxFile()
         {
             AudioFileClose(fileID);
         }

@@ -1,5 +1,5 @@
 #include <GosuImpl/MacUtility.hpp>
-#include <GosuImpl/Audio/AudioFileMac.hpp>
+#include <GosuImpl/Audio/AudioToolboxFile.hpp>
 #include <GosuImpl/Audio/ALChannelManagement.hpp>
 #include <GosuImpl/Audio/OggFile.hpp>
 
@@ -153,7 +153,7 @@ struct Gosu::Sample::SampleData : boost::noncopyable
 {
     NSUInteger buffer, source;
 
-    SampleData(const AudioFile& audioFile)
+    SampleData(const AudioToolboxFile& audioFile)
     {
         alGenBuffers(1, &buffer);
         alBufferData(buffer,
@@ -204,7 +204,7 @@ Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
     }
     else
     {
-        AudioFile audioFile(filename);
+        AudioToolboxFile audioFile(filename);
         data.reset(new SampleData(audioFile));
     }
 }
@@ -226,7 +226,7 @@ Gosu::Sample::Sample(Audio& audio, Reader reader)
     }
     else
     {
-        AudioFile audioFile(reader.resource());
+        AudioToolboxFile audioFile(reader.resource());
         data.reset(new SampleData(audioFile));
     }
 }
