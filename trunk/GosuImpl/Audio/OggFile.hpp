@@ -17,7 +17,6 @@ namespace Gosu
         ALenum format_;
         ALenum sampleRate_;
         OggVorbis_File file_;
-        std::vector<char> decodedData_;
 
         // extern "C"
         static std::size_t readCallback(void* ptr, std::size_t size, std::size_t nmemb, void* datasource)
@@ -108,28 +107,6 @@ namespace Gosu
             teardown();
             reader_ = buffer_.frontReader();
             setup();
-        }
-        
-        const std::vector<char>& decodedData()
-        {
-            static const unsigned INCREMENT = 512*1024;
-            
-            if (!decodedData_.empty())
-                return decodedData_;
-            
-            for (;;)
-            {
-                decodedData_.resize(decodedData_.size() + INCREMENT);
-                int readBytes = readData(&decodedData_[decodedData_.size() - INCREMENT],
-                                    INCREMENT);
-                if (readBytes < INCREMENT)
-                {
-                    decodedData_.resize(decodedData_.size() - INCREMENT + readBytes);
-                    break;
-                }
-            }
-            
-            return decodedData_;
         }
     };
 }

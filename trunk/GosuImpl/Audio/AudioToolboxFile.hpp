@@ -7,9 +7,11 @@
 #include <Gosu/IO.hpp>
 #include <GosuImpl/MacUtility.hpp>
 #include <Gosu/Utility.hpp>
+#include <Gosu/Platform.hpp>
 #include <algorithm>
 #include <vector>
 #include <boost/lexical_cast.hpp>
+#include <arpa/inet.h>
 #import <Foundation/Foundation.h>
 
 namespace Gosu
@@ -19,8 +21,12 @@ namespace Gosu
         Gosu::Buffer buffer_;
         AudioFileID fileID_;
         SInt64 position_;
-        mutable std::vector<char> decodedData_;
         
+        ALenum format_;
+        ALuint sampleRate_;
+        UInt32 maxPacketSize_;
+        bool bigEndian_;
+                
         static OSStatus AudioFile_ReadProc(void* inClientData, SInt64 inPosition, UInt32 requestCount,
                                            void* buffer, UInt32* actualCount)
         {
@@ -34,6 +40,45 @@ namespace Gosu
         {
             const Resource& res = *static_cast<Resource*>(inClientData);
             return res.size();
+        }
+                
+        void init()
+        {
+            // Streaming starts at beginning
+            position_ = 0;
+            
+            // Max packet size for streaming
+            UInt32 sizeOfProperty = sizeof maxPacketSize_;
+            CHECK_OS(AudioFileGetProperty(fileID_, kAudioFilePropertyMaximumPacketSize,
+                &sizeOfProperty, &maxPacketSize_));
+            
+            AudioStreamBasicDescription desc;
+            sizeOfProperty = sizeof desc;
+            CHECK_OS(AudioFileGetProperty(fileID_, kAudioFilePropertyDataFormat, &sizeOfProperty, &desc));
+            
+            // Audio format for OpenAL
+            
+            format_ = 0;
+            if (desc.mChannelsPerFrame == 1)
+                if (desc.mBitsPerChannel == 8)
+                    format_ = AL_FORMAT_MONO8;
+                else if (desc.mBitsPerChannel == 16)
+                    format_ = AL_FORMAT_MONO16;
+            else if (desc.mChannelsPerFrame == 2)
+                if (desc.mBitsPerChannel == 8)
+                    format_ = AL_FORMAT_STEREO8;
+                else if (desc.mBitsPerChannel == 16)
+                    format_ = AL_FORMAT_STEREO16;
+            if (format_ == 0)
+                throw std::runtime_error("Invalid sample format: " +
+                    boost::lexical_cast<std::string>(desc.mChannelsPerFrame) + " channels, " +
+                    boost::lexical_cast<std::string>(desc.mBitsPerChannel) + " bits per channel");   
+                
+            // Sample rate for OpenAL
+            sampleRate_ = desc.mSampleRate;
+            
+            // Do we have to swap the endianness for use in OpenAL?
+            bigEndian_ = desc.mFormatFlags & kAudioFormatFlagIsBigEndian;
         }
         
     public:
@@ -49,7 +94,8 @@ namespace Gosu
             CFURLGetFSRef(reinterpret_cast<CFURLRef>(url.get()), &fsRef);
             CHECK_OS(AudioFileOpen(&fsRef, fsRdPerm, 0, &fileID_));
             #endif
-            position_ = 0;
+            
+            init();
         }
         
         AudioToolboxFile(Gosu::Reader reader)
@@ -60,7 +106,8 @@ namespace Gosu
             void* clientData = &buffer_;
             CHECK_OS(AudioFileOpenWithCallbacks(clientData, AudioFile_ReadProc, 0,
                                                 AudioFile_GetSizeProc, 0, 0, &fileID_));
-            position_ = 0;
+            
+            init();
         }
         
         ~AudioToolboxFile()
@@ -68,45 +115,15 @@ namespace Gosu
             AudioFileClose(fileID_);
         }
         
-        UInt32 sizeOfData() const
-        {
-            UInt64 size = 0;
-            UInt32 sizeOfProperty = sizeof size;
-            CHECK_OS(AudioFileGetProperty(fileID_, kAudioFilePropertyAudioDataByteCount, &sizeOfProperty, &size));
-            return size;
-        }
-        
         ALenum format() const
         {
-            AudioStreamBasicDescription desc;
-            UInt32 sizeOfProperty = sizeof desc;
-            CHECK_OS(AudioFileGetProperty(fileID_, kAudioFilePropertyDataFormat, &sizeOfProperty, &desc));
-
-            if (desc.mChannelsPerFrame == 1)
-                if (desc.mBitsPerChannel == 8)
-                    return AL_FORMAT_MONO8;
-                else if (desc.mBitsPerChannel == 16)
-                    return AL_FORMAT_MONO16;
-            else if (desc.mChannelsPerFrame == 2)
-                if (desc.mBitsPerChannel == 8)
-                    return AL_FORMAT_STEREO8;
-                else if (desc.mBitsPerChannel == 16)
-                    return AL_FORMAT_STEREO16;
-            
-            if (desc.mBitsPerChannel == 0)
-                return AL_FORMAT_STEREO16; // Let's just guess for streaming files!
-            
-            throw std::runtime_error("Invalid sample format: " +
-                boost::lexical_cast<std::string>(desc.mChannelsPerFrame) + " channels, " +
-                boost::lexical_cast<std::string>(desc.mBitsPerChannel) + " bits per channel");
+            return format_;
         }
         
         ALuint sampleRate() const
         {
-            AudioStreamBasicDescription desc;
-            UInt32 sizeOfProperty = sizeof desc;
-            CHECK_OS(AudioFileGetProperty(fileID_, kAudioFilePropertyDataFormat, &sizeOfProperty, &desc));
-            return desc.mSampleRate;
+            return sampleRate_;
+
         }
         
         void rewind()
@@ -114,40 +131,22 @@ namespace Gosu
             position_ = 0;
         }
         
-        const std::vector<char>& decodedData()
-        {
-            // Class has not been built for both streaming and reading at once :)
-            assert(position_ == 0);
-
-            if (decodedData_.empty())
-            {
-                UInt32 size = sizeOfData();
-                decodedData_.resize(size);
-                CHECK_OS(AudioFileReadBytes(fileID_, false, 0, &size, &decodedData_[0]));
-            }
-            return decodedData_;
-        }
-        
         std::size_t readData(void* dest, UInt32 length)
         {
             // Class has not been built for both streaming and reading at once :)
             assert(decodedData_.empty());
             
-            /*UInt32 possiblePackets = 1;
-            
+            UInt32 numPackets = length / maxPacketSize_;
             UInt32 numBytes;
-            AudioStreamPacketDescription packetDescriptions[possiblePackets];
-            CHECK_OS(AudioFileReadPackets(fileID_, false,
-                &numBytes, &packedDescriptions[0], position_, 
-   UInt32                       *outNumBytes,
-   AudioStreamPacketDescription *outPacketDescriptions,
-   SInt64                       inStartingPacket,
-   UInt32                       *ioNumPackets,
-   void                         *outBuffer)*/
-            
-            CHECK_OS(AudioFileReadBytes(fileID_, false, position_, &length, dest));
-            position_ += length;
-            return length;
+            CHECK_OS(AudioFileReadPackets(fileID_, false, &numBytes,
+                0, position_, &numPackets, dest));
+            position_ += numPackets;
+            if (bigEndian_)
+                std::transform(static_cast<UInt16*>(dest),
+                               static_cast<UInt16*>(dest) + length / 2,
+                               static_cast<UInt16*>(dest),
+                               htons);
+            return numBytes;
         }
     };
 }
