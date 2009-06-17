@@ -3,7 +3,7 @@ require '../lib/gosu'
 
 w = Gosu::Window.new(100, 100, false)
 Dir.chdir 'audio_formats'
-Dir['*'].each do |format|
+Dir['*mp3*'].each do |format|
   puts "Testing #{format}:"
   begin
     si = Gosu::Sample.new(w, format).play
