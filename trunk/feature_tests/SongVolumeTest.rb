@@ -18,6 +18,7 @@ class Test < Gosu::Window
     #mid = it #Gosu::Song.new(self, "media/Inferno.mid")
     # Looping WAV
     #wav = Gosu::Song.new(self, "media/Loop.wav")
+    # 
     @songs = [ogg]#, it, mid, wav]
     @song = @songs[0]
     @song.play(true)

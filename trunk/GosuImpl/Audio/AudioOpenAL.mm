@@ -50,7 +50,21 @@ namespace
         if (alcGetError(alDevice) != ALC_NO_ERROR)
             throwLastALError(action);
     }*/
+    
+    bool isOggFile(Gosu::Reader reader)
+    {
+        char magicBytes[4];
+        reader.read(magicBytes, 4);
+        return magicBytes[0] == 'O' && magicBytes[1] == 'g' &&
+               magicBytes[2] == 'g' && magicBytes[3] == 'S';
+    }
 
+    bool isOggFile(const std::wstring& filename)
+    {
+        Gosu::File file(filename);
+        return isOggFile(file.frontReader());
+    }
+    
     Song* curSong = 0;
 }
 
@@ -153,26 +167,16 @@ struct Gosu::Sample::SampleData : boost::noncopyable
 {
     NSUInteger buffer, source;
 
-    SampleData(const AudioToolboxFile& audioFile)
+    SampleData(AudioFile& audioFile)
     {
         alGenBuffers(1, &buffer);
         alBufferData(buffer,
-                     audioFile.getFormatAndSampleRate().first,
-                     &audioFile.getDecodedData().front(),
-                     audioFile.getDecodedData().size(),
-                     audioFile.getFormatAndSampleRate().second);
+                     audioFile.format(),
+                     &audioFile.decodedData().front(),
+                     audioFile.decodedData().size(),
+                     audioFile.sampleRate());
     }
     
-    SampleData(OggFile& oggFile)
-    {
-        alGenBuffers(1, &buffer);
-        alBufferData(buffer,
-                     oggFile.format(),
-                     &oggFile.decodedData().front(),
-                     oggFile.decodedData().size(),
-                     oggFile.sampleRate());
-    }
-
     ~SampleData()
     {
         // It's hard to free things in the right order in Ruby/Gosu.
@@ -187,15 +191,7 @@ struct Gosu::Sample::SampleData : boost::noncopyable
 
 Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
 {
-    bool isOgg;
-    {
-        char magicBytes[4];
-        Gosu::File file(filename);
-        file.read(0, 4, magicBytes);
-        isOgg = magicBytes[0] == 'O' && magicBytes[1] == 'g' &&
-                magicBytes[2] == 'g' && magicBytes[3] == 'S';
-    }
-    if (isOgg)
+    if (isOggFile(filename))
     {
         Gosu::Buffer buffer;
         Gosu::loadFile(buffer, filename);
@@ -211,22 +207,14 @@ Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
 
 Gosu::Sample::Sample(Audio& audio, Reader reader)
 {
-    bool isOgg;
-    {
-        char magicBytes[4];
-        Reader anotherReader = reader;
-        anotherReader.read(magicBytes, 4);
-        isOgg = magicBytes[0] == 'O' && magicBytes[1] == 'g' &&
-                magicBytes[2] == 'g' && magicBytes[3] == 'S';
-    }
-    if (isOgg)
+    if (isOggFile(reader))
     {
         OggFile oggFile(reader);
         data.reset(new SampleData(oggFile));
     }
     else
     {
-        AudioToolboxFile audioFile(reader.resource());
+        AudioToolboxFile audioFile(reader);
         data.reset(new SampleData(audioFile));
     }
 }
@@ -294,7 +282,7 @@ public:
 
 class Gosu::Song::StreamData : public BaseData
 {
-    OggFile oggFile;
+    boost::scoped_ptr<AudioFile> file;
     NSUInteger buffers[2];
     
     void applyVolume()
@@ -309,7 +297,7 @@ class Gosu::Song::StreamData : public BaseData
         return alChannelManagement->sourceForSongs();
     }
     
-    bool streamTo(NSUInteger source, NSUInteger buffer)
+    bool streamToBuffer(NSUInteger buffer)
     {
         #ifdef GOSU_IS_IPHONE
         static const unsigned BUFFER_SIZE = 4096 * 4;
@@ -317,16 +305,19 @@ class Gosu::Song::StreamData : public BaseData
         static const unsigned BUFFER_SIZE = 4096 * 8;
         #endif
         char audioData[BUFFER_SIZE];
-        std::size_t readBytes = oggFile.readData(audioData, BUFFER_SIZE);
+        std::size_t readBytes = file->readData(audioData, BUFFER_SIZE);
         if (readBytes > 0)
-            alBufferData(buffer, oggFile.format(), audioData, readBytes, oggFile.sampleRate());
+            alBufferData(buffer, file->format(), audioData, readBytes, file->sampleRate());
         return readBytes > 0;
     }
     
 public:
     StreamData(Reader reader)
-    : oggFile(reader)
     {
+        if (isOggFile(reader))
+            file.reset(new OggFile(reader));
+        else
+            file.reset(new AudioToolboxFile(reader));
         alGenBuffers(2, buffers);
     }
     
@@ -339,7 +330,7 @@ public:
     void play(bool looping)
     {
         stop();
-        oggFile.rewind();
+        file->rewind();
         
         int source = lookupSource();
         if (source != ALChannelManagement::NO_SOURCE)
@@ -349,8 +340,8 @@ public:
             alSourcef(source, AL_PITCH, 1);
             alSourcei(source, AL_LOOPING, AL_FALSE); // need to implement this manually...
 
-            streamTo(source, buffers[0]);
-            streamTo(source, buffers[1]);
+            streamToBuffer(buffers[0]);
+            streamToBuffer(buffers[1]);
 
             alSourceQueueBuffers(source, 2, buffers);
             alSourcePlay(source);
@@ -406,7 +397,7 @@ public:
         {
             NSUInteger buffer;
             alSourceUnqueueBuffers(source, 1, &buffer);
-            active = streamTo(source, buffer);
+            active = streamToBuffer(buffer);
             if (active)
                 alSourceQueueBuffers(source, 1, &buffer);
         }

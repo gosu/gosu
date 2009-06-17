@@ -10,7 +10,7 @@
 
 namespace Gosu
 {
-    class OggFile : AudioFile
+    class OggFile : public AudioFile
     {
         Gosu::Buffer buffer_;
         Gosu::Reader reader_;
