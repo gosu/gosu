@@ -20,11 +20,12 @@ namespace Gosu
     {
         Gosu::Buffer buffer_;
         AudioFileID fileID_;
+        ExtAudioFileRef file_;
         SInt64 position_;
         
         ALenum format_;
         ALuint sampleRate_;
-        UInt32 maxPacketSize_;
+        UInt32 bytesPerFrame_;
         bool bigEndian_;
                 
         static OSStatus AudioFile_ReadProc(void* inClientData, SInt64 inPosition, UInt32 requestCount,
@@ -47,14 +48,10 @@ namespace Gosu
             // Streaming starts at beginning
             position_ = 0;
             
-            // Max packet size for streaming
-            UInt32 sizeOfProperty = sizeof maxPacketSize_;
-            CHECK_OS(AudioFileGetProperty(fileID_, kAudioFilePropertyMaximumPacketSize,
-                &sizeOfProperty, &maxPacketSize_));
-            
             AudioStreamBasicDescription desc;
-            sizeOfProperty = sizeof desc;
-            CHECK_OS(AudioFileGetProperty(fileID_, kAudioFilePropertyDataFormat, &sizeOfProperty, &desc));
+            UInt32 sizeOfProperty = sizeof desc;
+            CHECK_OS(ExtAudioFileGetProperty(file_, kExtAudioFileProperty_FileDataFormat,
+                &sizeOfProperty, &desc));
             
             // Audio format for OpenAL
             
@@ -88,8 +85,24 @@ namespace Gosu
             // Sample rate for OpenAL
             sampleRate_ = desc.mSampleRate;
             
-            // Do we have to swap the endianness for use in OpenAL?
-            bigEndian_ = desc.mFormatFlags & kAudioFormatFlagIsBigEndian;
+
+            // Client (target) data format
+
+            if (desc.mBytesPerFrame == 0)
+            {
+                AudioStreamBasicDescription clientData = { 0 };
+                clientData.mSampleRate = sampleRate_;
+                clientData.mFormatID = kAudioFormatLinearPCM;
+                clientData.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
+                clientData.mBitsPerChannel = 8 * sizeof(signed int);
+                clientData.mChannelsPerFrame = desc.mChannelsPerFrame;
+                clientData.mFramesPerPacket = 1;
+                clientData.mBytesPerPacket =
+                    clientData.mBytesPerFrame = desc.mChannelsPerFrame * sizeof(signed int);
+                CHECK_OS(ExtAudioFileSetProperty(file_,
+                    kExtAudioFileProperty_ClientDataFormat,
+                    sizeof clientData, &clientData));
+            }
         }
         
     public:
@@ -98,13 +111,15 @@ namespace Gosu
             ObjRef<NSString> utf8Filename([[NSString alloc] initWithUTF8String: wstringToUTF8(filename).c_str()]);
             ObjRef<NSURL> url([[NSURL alloc] initFileURLWithPath: utf8Filename.get()]);
             #ifdef GOSU_IS_IPHONE
-            CHECK_OS(AudioFileOpenURL((CFURLRef)url.get(), kAudioFileReadPermission, 0, &fileID_));
+            CHECK_OS(ExtAudioFileOpenURL((CFURLRef)url.get(), &file_));
             #else
             // Use FSRef for compatibility with 10.4 Tiger.
             FSRef fsRef;
             CFURLGetFSRef(reinterpret_cast<CFURLRef>(url.get()), &fsRef);
-            CHECK_OS(AudioFileOpen(&fsRef, fsRdPerm, 0, &fileID_));
+            CHECK_OS(ExtAudioFileOpen(&fsRef, &file_));
             #endif
+            
+            fileID_ = 0;
             
             init();
         }
@@ -117,13 +132,17 @@ namespace Gosu
             void* clientData = &buffer_;
             CHECK_OS(AudioFileOpenWithCallbacks(clientData, AudioFile_ReadProc, 0,
                                                 AudioFile_GetSizeProc, 0, 0, &fileID_));
-            
+            CHECK_OS(ExtAudioFileWrapAudioFileID(fileID_, false, &file_));
+
             init();
         }
         
         ~AudioToolboxFile()
         {
-            AudioFileClose(fileID_);
+            ExtAudioFileDispose(file_);
+        
+            if (fileID_)
+                AudioFileClose(fileID_);
         }
         
         ALenum format() const
@@ -134,30 +153,23 @@ namespace Gosu
         ALuint sampleRate() const
         {
             return sampleRate_;
-
         }
         
         void rewind()
         {
-            position_ = 0;
+            CHECK_OS(ExtAudioFileSeek(file_, 0));
         }
         
         std::size_t readData(void* dest, UInt32 length)
         {
-            // Class has not been built for both streaming and reading at once :)
-            assert(decodedData_.empty());
-            
-            UInt32 numPackets = length / maxPacketSize_;
-            UInt32 numBytes;
-            CHECK_OS(AudioFileReadPackets(fileID_, false, &numBytes,
-                0, position_, &numPackets, dest));
-            position_ += numPackets;
-            if (bigEndian_)
-                std::transform(static_cast<UInt16*>(dest),
-                               static_cast<UInt16*>(dest) + length / 2,
-                               static_cast<UInt16*>(dest),
-                               htons);
-            return numBytes;
+            AudioBufferList abl;
+            abl.mNumberBuffers = 1;
+            abl.mBuffers[0].mNumberChannels = 1;
+            abl.mBuffers[0].mDataByteSize = length;
+            abl.mBuffers[0].mData = dest;
+            UInt32 numFrames = 0xffffffff;
+            CHECK_OS(ExtAudioFileRead(file_, &numFrames, &abl));
+            return abl.mBuffers[0].mDataByteSize;
         }
     };
 }
