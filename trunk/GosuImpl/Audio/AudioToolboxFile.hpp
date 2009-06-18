@@ -52,56 +52,47 @@ namespace Gosu
             UInt32 sizeOfProperty = sizeof desc;
             CHECK_OS(ExtAudioFileGetProperty(file_, kExtAudioFileProperty_FileDataFormat,
                 &sizeOfProperty, &desc));
-            
-            // Audio format for OpenAL
-            
-            if (desc.mFormatFlags & kAudioFormatFlagIsFloat)
-                throw std::runtime_error("Float-based formats are unsupported");
-            if (desc.mFormatFlags & kAudioFormatFlagIsSignedInteger == 0)
-                throw std::runtime_error("Unsigned integer based formats are unsupported");
-            if (desc.mFormatFlags & kAudioFormatFlagIsNonInterleaved)
-                throw std::runtime_error("Non-interleaved formats are unsupported");
-            
-            format_ = 0;
-            if (desc.mChannelsPerFrame == 1)
-                if (desc.mBitsPerChannel == 8)
-                    format_ = AL_FORMAT_MONO8;
-                else if (desc.mBitsPerChannel == 16)
-                    format_ = AL_FORMAT_MONO16;
-            else if (desc.mChannelsPerFrame == 2)
-                if (desc.mBitsPerChannel == 8)
-                    format_ = AL_FORMAT_STEREO8;
-                else if (desc.mBitsPerChannel == 16)
-                    format_ = AL_FORMAT_STEREO16;
-            
-            if (desc.mBitsPerChannel == 0)
-                format_ = AL_FORMAT_MONO16;
-            
-            if (format_ == 0)
-                throw std::runtime_error("Invalid sample format: " +
-                    boost::lexical_cast<std::string>(desc.mChannelsPerFrame) + " channels, " +
-                    boost::lexical_cast<std::string>(desc.mBitsPerChannel) + " bits per channel");   
-                
+
             // Sample rate for OpenAL
             sampleRate_ = desc.mSampleRate;
             
-
-            // Client (target) data format
-
-            if (desc.mBytesPerFrame == 0)
+            // Sanity checks
+            if (desc.mFormatFlags & kAudioFormatFlagIsNonInterleaved)
+                throw std::runtime_error("Non-interleaved formats are unsupported");
+            
+            // Easy formats
+            format_ = 0;
+            if (desc.mChannelsPerFrame == 1)
+                /*if (desc.mBitsPerChannel == 8)
+                    format_ = AL_FORMAT_MONO8;
+                else*/ if (desc.mBitsPerChannel == 16)
+                    format_ = AL_FORMAT_MONO16;
+            else if (desc.mChannelsPerFrame == 2)
+                /*if (desc.mBitsPerChannel == 8)
+                    format_ = AL_FORMAT_STEREO8;
+                else */if (desc.mBitsPerChannel == 16)
+                    format_ = AL_FORMAT_STEREO16;
+            
+            // If format not native for OpenAL, set client data format
+            // to enable conversion
+            if (format_ == 0 ||
+                desc.mFormatFlags & kAudioFormatFlagIsBigEndian ||
+                desc.mFormatFlags & kAudioFormatFlagIsFloat ||
+                !(desc.mFormatFlags & kAudioFormatFlagIsSignedInteger))
             {
                 AudioStreamBasicDescription clientData = { 0 };
-                clientData.mSampleRate = sampleRate_;
+                sampleRate_ = clientData.mSampleRate = 44100;
                 clientData.mFormatID = kAudioFormatLinearPCM;
                 clientData.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                clientData.mBitsPerChannel = 8 * sizeof(signed int);
-                clientData.mChannelsPerFrame = desc.mChannelsPerFrame;
+                clientData.mBitsPerChannel = 16;
+                clientData.mChannelsPerFrame = 2;
                 clientData.mFramesPerPacket = 1;
                 clientData.mBytesPerPacket =
-                    clientData.mBytesPerFrame = desc.mChannelsPerFrame * sizeof(signed int);
+                    clientData.mBytesPerFrame = 4;
                 CHECK_OS(ExtAudioFileSetProperty(file_,
                     kExtAudioFileProperty_ClientDataFormat,
                     sizeof clientData, &clientData));
+                format_ = AL_FORMAT_STEREO16;
             }
         }
         

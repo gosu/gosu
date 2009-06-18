@@ -9,7 +9,7 @@
 	<key>CFBundleIconFile</key>
 	<string>Gosu</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.yourcompany.yourgame</string>
+	<string>org.libgosu.UntitledGame</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
