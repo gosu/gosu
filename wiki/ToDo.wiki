@@ -4,13 +4,11 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-06-17)
+(Last update: 2009-06-20)
 
 == Gosu 0.7.x ==
   * Look at janmejay's bakery
-  * Look into Windows standby woes
-  * Change bundle identifier to org.libgosu.UntitledGame
-  * Separate 1.9 .app wrapper from rest of Mac package
+  * Test StandBy with Windows and a running Gosu app
   * Finish OpenAL on OS X!
     * Implement looping in OpenAL port
     * Check Song::play() behavior with OpenAL vs. other libs
@@ -19,6 +17,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Get Anna to test the new OpenAL code on Intel/Tiger...
     * Get philomory to test the new OpenAL code on PPC/Tiger? :)
   * Remove FMOD support altogether from Linux
+  * Separate 1.9 .app wrapper from rest of Mac package
   * Publish Gosu 0.7.14 for Linux 1.9/multiruby compat. and no more FMOD
   * Web work
     * Move three threads from GosuExchange to the forums
@@ -29,6 +28,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Add GOSU_VERSION constant
     * Quick look: How hard is MacRuby support?
     * See if John Shea's talk had something about not being locked to pixel positions
+    * Look into "garbage while loading" bug on OS X
     * See if really old games have problems running in current Gosu
     * Give multitruby support a second try (fix the problem with AC_PROGRAM_WHATEVER)
     * Verify that TextInput works cleanly on Ruby 1.9 with Unicode
