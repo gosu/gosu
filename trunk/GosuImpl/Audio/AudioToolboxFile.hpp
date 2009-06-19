@@ -3,6 +3,7 @@
 
 #include <GosuImpl/Audio/AudioFile.hpp>
 #include <AudioToolbox/AudioToolbox.h>
+#include <AudioToolbox/ExtendedAudioFile.h>
 #include <OpenAL/al.h>
 #include <Gosu/IO.hpp>
 #include <GosuImpl/MacUtility.hpp>

@@ -312,6 +312,18 @@ class Gosu::Song::StreamData : public BaseData
     }
     
 public:
+    StreamData(const std::wstring& filename)
+    {
+        if (isOggFile(filename))
+        {
+            Gosu::File sourceFile(filename);
+            file.reset(new OggFile(sourceFile.frontReader()));
+        }
+        else
+            file.reset(new AudioToolboxFile(filename));
+        alGenBuffers(2, buffers);
+    }
+
     StreamData(Reader reader)
     {
         if (isOggFile(reader))
@@ -424,12 +436,8 @@ void Gosu::Song::update()
 }
 
 Gosu::Song::Song(Audio& audio, const std::wstring& filename)
+: data(new StreamData(filename))
 {
-    Buffer buf;
-	loadFile(buf, filename);
-	
-    // Forward.
-	Song(audio, stStream, buf.frontReader()).data.swap(data);
 }
 
 Gosu::Song::Song(Audio& audio, Type type, Reader reader)
