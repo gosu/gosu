@@ -13,7 +13,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Implement looping in OpenAL port
     * Check Song::play() behavior with OpenAL vs. other libs
     * Start list of supported sound/song formats
-    * Make buffers in Mac port larger and make sure that update_interval<100 always works
+    * Make buffers in Mac port larger and make sure that update_interval<66 always plays running Songs without jitter
     * Get Anna to test the new OpenAL code on Intel/Tiger...
     * Get philomory to test the new OpenAL code on PPC/Tiger? :)
   * Remove FMOD support altogether from Linux
@@ -156,6 +156,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Fix: "PotD"-Link is too close to screenshot
   * Note that draw can be called more often than update in the main loop
   * Setup board so it yields 301 redirects for vu2040
+  * UTF8 Support for PotD texts(?)
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
