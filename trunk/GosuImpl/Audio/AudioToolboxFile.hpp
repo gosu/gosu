@@ -29,8 +29,8 @@ namespace Gosu
         UInt32 bytesPerFrame_;
         bool bigEndian_;
                 
-        static OSStatus AudioFile_ReadProc(void* inClientData, SInt64 inPosition, UInt32 requestCount,
-                                           void* buffer, UInt32* actualCount)
+        static OSStatus AudioFile_ReadProc(void* inClientData, SInt64 inPosition,
+            UInt32 requestCount, void* buffer, UInt32* actualCount)
         {
             const Resource& res = *static_cast<Resource*>(inClientData);
             *actualCount = std::min<UInt32>(requestCount, res.size() - inPosition);
@@ -82,18 +82,21 @@ namespace Gosu
                 !(desc.mFormatFlags & kAudioFormatFlagIsSignedInteger))
             {
                 AudioStreamBasicDescription clientData = { 0 };
-                sampleRate_ = clientData.mSampleRate = 44100;
+                sampleRate_ = clientData.mSampleRate = 22050;
                 clientData.mFormatID = kAudioFormatLinearPCM;
                 clientData.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
                 clientData.mBitsPerChannel = 16;
-                clientData.mChannelsPerFrame = 2;
+                clientData.mChannelsPerFrame = desc.mChannelsPerFrame;
                 clientData.mFramesPerPacket = 1;
                 clientData.mBytesPerPacket =
-                    clientData.mBytesPerFrame = 4;
+                    clientData.mBytesPerFrame =
+                        clientData.mChannelsPerFrame * clientData.mBitsPerChannel / 8;
                 CHECK_OS(ExtAudioFileSetProperty(file_,
                     kExtAudioFileProperty_ClientDataFormat,
                     sizeof clientData, &clientData));
-                format_ = AL_FORMAT_STEREO16;
+                format_ = clientData.mChannelsPerFrame == 1 ?
+                          AL_FORMAT_MONO16 :
+                          AL_FORMAT_STEREO16;
             }
         }
         
@@ -108,7 +111,15 @@ namespace Gosu
             // Use FSRef for compatibility with 10.4 Tiger.
             FSRef fsRef;
             CFURLGetFSRef(reinterpret_cast<CFURLRef>(url.get()), &fsRef);
-            CHECK_OS(ExtAudioFileOpen(&fsRef, &file_));
+            try
+            {
+                CHECK_OS(ExtAudioFileOpen(&fsRef, &file_));
+            }
+            catch (const std::runtime_error&)
+            {
+                throw std::runtime_error("Unsupported audio file type (" +
+                    Gosu::wstringToUTF8(filename) + ")");
+            }
             #endif
             
             fileID_ = 0;
@@ -121,11 +132,14 @@ namespace Gosu
             buffer_.resize(reader.resource().size() - reader.position());
             reader.read(buffer_.data(), buffer_.size());
             
+            // TODO: For some reason, this fails on the iPhone with at least MP3 files.
+            // If this turns into a serious problem, the plain AudioFile API could be
+            // used which works for non-compressed formats at least.
+            
             void* clientData = &buffer_;
             CHECK_OS(AudioFileOpenWithCallbacks(clientData, AudioFile_ReadProc, 0,
                                                 AudioFile_GetSizeProc, 0, 0, &fileID_));
             CHECK_OS(ExtAudioFileWrapAudioFileID(fileID_, false, &file_));
-
             init();
         }
         
@@ -159,7 +173,7 @@ namespace Gosu
             abl.mBuffers[0].mNumberChannels = 1;
             abl.mBuffers[0].mDataByteSize = length;
             abl.mBuffers[0].mData = dest;
-            UInt32 numFrames = 0xffffffff;
+            UInt32 numFrames = 0xffffffff; // give us as many frames as possible given our buffer
             CHECK_OS(ExtAudioFileRead(file_, &numFrames, &abl));
             return abl.mBuffers[0].mDataByteSize;
         }

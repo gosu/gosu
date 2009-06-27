@@ -66,6 +66,7 @@ namespace
     }
     
     Song* curSong = 0;
+    bool curSongLooping;
 }
 
 Gosu::Audio::Audio()
@@ -261,8 +262,9 @@ protected:
 public:
     virtual ~BaseData() {}
     
-    virtual void play(bool looping) = 0;
+    virtual void play() = 0;
     virtual void pause() = 0;
+    virtual void resume() = 0;
     virtual bool paused() const = 0;
     virtual void stop() = 0;
     
@@ -335,15 +337,15 @@ public:
     
     ~StreamData()
     {
-        stop();
-        alDeleteBuffers(2, buffers);
+        if (alChannelManagement)
+        {
+            stop();
+            alDeleteBuffers(2, buffers);
+        }
     }
     
-    void play(bool looping)
+    void play()
     {
-        stop();
-        file->rewind();
-        
         int source = lookupSource();
         if (source != ALChannelManagement::NO_SOURCE)
         {
@@ -377,6 +379,7 @@ public:
             while (processed--)
                 alSourceUnqueueBuffers(source, 1, &buffer);
         }
+        file->rewind();
     }
     
     void pause()
@@ -384,6 +387,13 @@ public:
         int source = lookupSource();
         if (source != ALChannelManagement::NO_SOURCE)
             alSourcePause(source);
+    }
+    
+    void resume()
+    {
+        int source = lookupSource();
+        if (source != ALChannelManagement::NO_SOURCE)
+            alSourcePlay(source);
     }
     
     bool paused() const
@@ -423,9 +433,22 @@ public:
         }
         else if (!active)
         {
-            // We got starved but there is nothing to play left, stop this
-            stop();
-            curSong = 0;
+            // We got starved but there is nothing to play left.
+
+            if (curSongLooping)
+            {
+                // Start anew.
+                
+                stop();
+                play();
+            }
+            else
+            {
+                // Stop this song.
+                
+                stop();
+                curSong = 0;
+            }
         }
     }
 };
@@ -458,14 +481,22 @@ Gosu::Song* Gosu::Song::currentSong()
 
 void Gosu::Song::play(bool looping)
 {
+    if (paused())
+        data->resume();
+    
     if (curSong && curSong != this)
     {
         curSong->stop();
         assert(curSong == 0);
     }
-
-    data->play(looping);
-    curSong = this; // may be redundant
+    
+    if (curSong == 0)
+    {
+        data->play();
+        curSong = this; // may be redundant
+    }
+    
+    curSongLooping = looping;
 }
 
 void Gosu::Song::pause()
