@@ -1,4 +1,13 @@
 module Gosu
+  # Version string of the form "0.1.2" or "0.1.2.3".
+  VERSION = :a_string
+  # First component of the version.
+  MAJOR_VERSION = :a_fixnum
+  # Second component of the version.
+  MINOR_VERSION = :a_fixnum
+  # Third component of the version.
+  POINT_VERSION = :a_fixnum
+  
   Kb0 = :implementation_defined
   Kb1 = :implementation_defined
   Kb2 = :implementation_defined

@@ -140,6 +140,7 @@
 #include <Gosu/TextInput.hpp>
 #include <Gosu/Timing.hpp>
 #include <Gosu/Utility.hpp>
+#include <Gosu/Version.hpp>
 #include <Gosu/Window.hpp>
 
 #include <sstream>
@@ -217,6 +218,13 @@ namespace Gosu
         SWIG_exception(SWIG_RuntimeError, e.what());
     }
 }
+
+// Version constant
+%rename("MAJOR_VERSION") GOSU_MAJOR_VERSION;
+%rename("MINOR_VERSION") GOSU_MINOR_VERSION;
+%rename("POINT_VERSION") GOSU_POINT_VERSION;
+%rename("VERSION") GOSU_VERSION;
+%include "../Gosu/Version.hpp"
 
 // Miscellaneous functions (timing, math)
 %ignore Gosu::sleep;

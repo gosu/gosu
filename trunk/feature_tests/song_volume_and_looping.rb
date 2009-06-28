@@ -26,7 +26,7 @@ class Test < Gosu::Window
     @songs << Gosu::Song.new(self, "media/JingleBells.ogg")
     
     @songs << Gosu::Song.new(self, "media/JingleBells.ogg")
-
+    
     @songs << Gosu::Song.new(self, "audio_formats/wav_16bit_pcm.wav")
     
     # Jingle Bells converted to MP3
@@ -38,13 +38,13 @@ class Test < Gosu::Window
     
     # inferno.mid
     @songs << Gosu::Song.new(self, "audio_formats/general_midi.mid") rescue nil
-
+    
     @song = @songs.first
     @song.play(true)
     
     @another_sample = Gosu::Sample.new(self, "audio_formats/wav_16bit_pcm.wav")
   end
-
+  
   def update
     @song.volume -= 0.05 if button_down? Gosu::KbDown
     @song.volume += 0.05 if button_down? Gosu::KbUp

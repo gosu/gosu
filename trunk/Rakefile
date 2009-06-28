@@ -38,6 +38,20 @@ GOSU_VERSION = ENV['GOSU_RELEASE_VERSION'] || '0.0.0'
 
 task :version do
   throw "GOSU_RELEASE_VERSION must be set" if GOSU_VERSION == '0.0.0'
+
+  components = GOSU_VERSION.split('.')
+  
+  File.open('Gosu/Version.hpp', 'w') do |file|
+    file.puts '#ifndef GOSU_VERSION_HPP'
+    file.puts '#define GOSU_VERSION_HPP'
+    file.puts
+    file.puts "#define GOSU_MAJOR_VERSION #{components[0]}"
+    file.puts "#define GOSU_MINOR_VERSION #{components[1]}"
+    file.puts "#define GOSU_POINT_VERSION #{components[2]}"
+    file.puts "#define GOSU_VERSION \"#{GOSU_VERSION}\""
+    file.puts
+    file.puts '#endif'
+  end
 end
 
 # Sets everything except 'platform' and 'files'.
@@ -135,9 +149,10 @@ namespace :mac do
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target Gosu -configuration Release"
   end
 
-  desc "Build lib/gosu.bundle and RubyGosu App.app"
+  desc "Build lib/gosu.for_1_8.bundle, lib/gosu.for_1_9.bundle and RubyGosu App.app"
   task :ruby do
-    sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Core' -configuration Release"
+    sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Core' -configuration 'Release'"
+    sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Core' -configuration 'Release with 1.9'"
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu App' -configuration 'Release with 1.9'"
   end
 
@@ -145,15 +160,25 @@ namespace :mac do
 
   desc "Build the archive #{MAC_ARCHIVE_FILENAME}"
   task :archive => [:cpp, :ruby, :version] do
-    files = COMMON_CPP_FILES + COMMON_RUBY_FILES + ['lib/gosu.rb', 'lib/gosu.for_1_8.bundle', 'lib/gosu.for_1_9.bundle'] +
-            FileList['Gosu.framework/**/*', 'RubyGosu App.app/**/*']
+    files = COMMON_CPP_FILES + COMMON_RUBY_FILES + ['lib/gosu.rb', 'lib/gosu.*.bundle'] +
+            FileList['Gosu.framework/**/*']
     sh "tar -czf #{MAC_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
   end
+  
+  MAC_WRAPPER_FILENAME = "public/gosu-mac-wrapper-#{GOSU_VERSION}.tar.gz"
+  
+  desc "Publish RubyGosu App.app"
+  task :app_wrapper => [:cpp, :ruby, :version] do
+    files = FileList['RubyGosu App.app/**/*']
+    sh "tar -czf #{MAC_WRAPPER_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
+  end
 
-  desc "Releases the archive #{MAC_ARCHIVE_FILENAME} on GoogleCode"
-  task :release => :archive do
+  desc "Releases the archive #{MAC_ARCHIVE_FILENAME} and #{MAC_WRAPPER_FILENAME} on GoogleCode"
+  task :release => [:archive, :app_wrapper] do
     sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION}, compiled for Mac OS X (C++ & Ruby)\"" +
        " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-OSX\" #{MAC_ARCHIVE_FILENAME}"
+    sh "./googlecode_upload.py --summary=\"Self-contained template app, containing Gosu #{GOSU_VERSION} and Ruby 1.9\"" +
+       " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-OSX\" #{MAC_WRAPPER_FILENAME}"
   end
 
   task :gem => [:ruby, :version]
