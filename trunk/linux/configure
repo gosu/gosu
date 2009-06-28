@@ -3727,43 +3727,16 @@ PANGO_CXX_FLAGS=`pkg-config pangoft2 --cflags`
 PANGO_LIBS=`pkg-config pangoft2 --libs`
 
 
-# Try to find FMOD.
-{ $as_echo "$as_me:$LINENO: checking for fmod" >&5
-$as_echo_n "checking for fmod... " >&6; }
-AUDIO_LIBS="/usr/lib/libfmod.so"
-AUDIO_INC=""
-if test ! -f $AUDIO_LIBS; then
-  AUDIO_LIBS=`ls ../fmod*/api/libfmod*.so 2> /dev/null`
-  AUDIO_INC=-I`ls -d ../fmod*/api/inc 2> /dev/null`
-fi
-if test $AUDIO_LIBS; then
-  # If it has been found, use AudioFmod
-  GOSU_A_OBJS=${GOSU_A_OBJS}" \$(FMOD_OBJ)"
+{ $as_echo "$as_me:$LINENO: checking for SDL_mixer" >&5
+$as_echo_n "checking for SDL_mixer... " >&6; }
+if test -f "/usr/lib/libSDL_mixer.so" || test -f "/usr/local/lib/libSDL_mixer.so"; then
+  GOSU_A_OBJS=${GOSU_A_OBJS}" \$(SDLMIXER_OBJ)"
+  AUDIO_LIBS="`sdl-config --libs` -lSDL_mixer"
+  AUDIO_INC=`sdl-config --cflags`
   { $as_echo "$as_me:$LINENO: result: yes" >&5
 $as_echo "yes" >&6; }
 
 
-else
-  # OK, try SDL_mixer...
-  { $as_echo "$as_me:$LINENO: result: no" >&5
-$as_echo "no" >&6; }
-  { $as_echo "$as_me:$LINENO: checking for SDL_mixer" >&5
-$as_echo_n "checking for SDL_mixer... " >&6; }
-  if test -f "/usr/lib/libSDL_mixer.so" || test -f "/usr/local/lib/libSDL_mixer.so"; then
-    GOSU_A_OBJS=${GOSU_A_OBJS}" \$(SDLMIXER_OBJ)"
-    AUDIO_LIBS="`sdl-config --libs` -lSDL_mixer"
-    AUDIO_INC=`sdl-config --cflags`
-    { $as_echo "$as_me:$LINENO: result: yes" >&5
-$as_echo "yes" >&6; }
-
-
-  else
-    { $as_echo "$as_me:$LINENO: result: no" >&5
-$as_echo "no" >&6; }
-    { { $as_echo "$as_me:$LINENO: error: No suitable audio library found" >&5
-$as_echo "$as_me: error: No suitable audio library found" >&2;}
-   { (exit 1); exit 1; }; }
-  fi
 fi
 
 # stat.h
@@ -4383,7 +4356,7 @@ fi
 
 
 
-if  -z $GOSU_RUBY_COMMAND ; then
+if test -z $GOSU_RUBY_COMMAND; then
 	for ac_prog in ruby ruby1.8 ruby1.9
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
