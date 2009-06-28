@@ -36,10 +36,10 @@ namespace
 {
     using namespace Gosu;
     
-    /*GOSU_NORETURN void throwLastALError(const char* action)
+    GOSU_NORETURN void throwLastALError(const char* action)
     {
         string message = "OpenAL error " +
-                         boost::lexical_cast<string>(alcGetError(alDevice));
+                         boost::lexical_cast<string>(alcGetError(ALChannelManagement::device()));
         if (action)
             message += " while ", message += action;
         throw runtime_error(message);
@@ -47,9 +47,9 @@ namespace
 
     inline void alCheck(const char* action = 0)
     {
-        if (alcGetError(alDevice) != ALC_NO_ERROR)
+        if (alcGetError(ALChannelManagement::device()) != ALC_NO_ERROR)
             throwLastALError(action);
-    }*/
+    }
     
     bool isOggFile(Gosu::Reader reader)
     {
@@ -67,13 +67,6 @@ namespace
     
     Song* curSong = 0;
     bool curSongLooping;
-
-    // HACK
-    // The whole framesTillPlayback variable just exists to introduce tiny, artificial
-    // gaps between stopping one song and playing another.
-    // I am not even sure it covers all cases where this can happen.
-    
-    unsigned framesTillPlayback = 0;
 }
 
 Gosu::Audio::Audio()
@@ -361,11 +354,13 @@ public:
             alSourcef(source, AL_PITCH, 1);
             alSourcei(source, AL_LOOPING, AL_FALSE); // need to implement this manually...
 
-            //streamToBuffer(buffers[0]);
-            //streamToBuffer(buffers[1]);
-
-            //alSourceQueueBuffers(source, 2, buffers);
-            //alSourcePlay(source);
+            streamToBuffer(buffers[0]);
+            streamToBuffer(buffers[1]);
+            
+            // TODO: Not good for songs with less than two buffers full of data.
+            
+            alSourceQueueBuffers(source, 2, buffers);
+            alSourcePlay(source);
         }
     }
 
@@ -375,16 +370,21 @@ public:
         if (source != ALChannelManagement::NO_SOURCE)
         {
             alSourceStop(source);
+
+            NSUInteger buffer;
+            
+            // The number of QUEUED buffers apparently includes the number of
+            // PROCESSED ones, so getting rid of the QUEUED ones is enough.
+            
             int queued;
             alGetSourcei(source, AL_BUFFERS_QUEUED, &queued);
-            NSUInteger buffer;
             while (queued--)
                 alSourceUnqueueBuffers(source, 1, &buffer);
-            
-            int processed;
-            alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
-            while (processed--)
-                alSourceUnqueueBuffers(source, 1, &buffer);
+
+            //int processed;
+            //alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
+            //while (processed--)
+            //    alSourceUnqueueBuffers(source, 1, &buffer);
         }
         file->rewind();
     }
@@ -415,30 +415,15 @@ public:
     
     void update()
     {
-        if (framesTillPlayback > 0)
-        {
-            --framesTillPlayback;
-            if (framesTillPlayback == 0)
-            {
-                streamToBuffer(buffers[0]);
-                streamToBuffer(buffers[1]);
-
-                alSourceQueueBuffers(lookupSource(), 2, buffers);
-                alSourcePlay(lookupSource());
-            }
-            return;
-        }
-    
         int source = lookupSource();
-        
-        int processed;
+
+        NSUInteger buffer;
+        int queued, processed;
         bool active = true;
         
         alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
-        
-        for (int i = 0; i < processed && active; ++i)
+        for (int i = 0; i < processed; ++i)
         {
-            NSUInteger buffer;
             alSourceUnqueueBuffers(source, 1, &buffer);
             active = streamToBuffer(buffer);
             if (active)
@@ -447,31 +432,23 @@ public:
         
         ALint state;
         alGetSourcei(source, AL_SOURCE_STATE, &state);
-        //printf("active = %i, state = %u\n", active, state);
         if (active && state != AL_PLAYING && state != AL_PAUSED)
         {
-            // We seemingly got starved, or not started yet.
+            // We seemingly got starved.
             alSourcePlay(source);
         }
         else if (!active)
         {
-            // We got starved but there is nothing to play left.
+            // We got starved and there is nothing to play left.
+            // In any case, shut down the playback logic for a moment.
+            stop();
 
             if (curSongLooping)
-            {
                 // Start anew.
-                
-                stop();
                 play();
-                framesTillPlayback = 1;
-            }
             else
-            {
-                // Stop this song.
-                
-                stop();
+                // Let the world know we're finished.
                 curSong = 0;
-            }
         }
     }
 };
@@ -502,8 +479,6 @@ Gosu::Song* Gosu::Song::currentSong()
     return curSong;
 }
 
-#include <Gosu/Timing.hpp>
-
 void Gosu::Song::play(bool looping)
 {
     if (paused())
@@ -516,11 +491,7 @@ void Gosu::Song::play(bool looping)
     }
     
     if (curSong == 0)
-    {
-        framesTillPlayback = 2;
-        
         data->play();
-    }
     
     curSong = this;
     curSongLooping = looping;

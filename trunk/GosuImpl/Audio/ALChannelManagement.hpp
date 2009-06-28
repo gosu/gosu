@@ -18,7 +18,12 @@ namespace Gosu
         
     public:
         enum { NO_TOKEN = -1, NO_SOURCE = -1, NO_FREE_CHANNEL = -1 };
-    
+        
+        static ALCdevice* device()
+        {
+            return alDevice;
+        }
+        
         ALChannelManagement()
         {
             // Open preferred device
