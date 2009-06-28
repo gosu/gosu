@@ -23,6 +23,7 @@ namespace Gosu
         AudioFileID fileID_;
         ExtAudioFileRef file_;
         SInt64 position_;
+        SInt64 seekOffset_;
         
         ALenum format_;
         ALuint sampleRate_;
@@ -43,11 +44,55 @@ namespace Gosu
             const Resource& res = *static_cast<Resource*>(inClientData);
             return res.size();
         }
+        
+        void initSeekOffset()
+        {
+            AudioConverterRef acRef;
+            UInt32 acrSize = sizeof acRef;
+            CHECK_OS(ExtAudioFileGetProperty(file_, kExtAudioFileProperty_AudioConverter,
+                &acrSize, &acRef));
+            
+            AudioConverterPrimeInfo primeInfo;
+            UInt32 piSize = sizeof primeInfo;
+            OSStatus result = AudioConverterGetProperty(acRef, kAudioConverterPrimeInfo,
+                &piSize, &primeInfo);
+            if (result != kAudioConverterErr_PropertyNotSupported)
+            {
+                CHECK_OS(result);
+                seekOffset_ = primeInfo.leadingFrames;
+            }
+        }
+        
+        void initClientFormatBasedOn(const AudioStreamBasicDescription& base)
+        {
+            AudioStreamBasicDescription clientData = { 0 };
+            sampleRate_ = clientData.mSampleRate = 22050;
+            clientData.mFormatID = kAudioFormatLinearPCM;
+            clientData.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
+            clientData.mBitsPerChannel = 16;
+            clientData.mChannelsPerFrame = base.mChannelsPerFrame;
+            clientData.mFramesPerPacket = 1;
+            clientData.mBytesPerPacket =
+                clientData.mBytesPerFrame =
+                    clientData.mChannelsPerFrame * clientData.mBitsPerChannel / 8;
+            CHECK_OS(ExtAudioFileSetProperty(file_,
+                kExtAudioFileProperty_ClientDataFormat,
+                sizeof clientData, &clientData));
+            
+            initSeekOffset();
                 
+            format_ = clientData.mChannelsPerFrame == 1 ?
+                      AL_FORMAT_MONO16 :
+                      AL_FORMAT_STEREO16;
+        }
+        
         void init()
         {
             // Streaming starts at beginning
             position_ = 0;
+            
+            // Unless overridden later, assume that the index into seek() is 0-based
+            seekOffset_ = 0;
             
             AudioStreamBasicDescription desc;
             UInt32 sizeOfProperty = sizeof desc;
@@ -74,30 +119,19 @@ namespace Gosu
                 else */if (desc.mBitsPerChannel == 16)
                     format_ = AL_FORMAT_STEREO16;
             
-            // If format not native for OpenAL, set client data format
-            // to enable conversion
             if (format_ == 0 ||
+                // If format not native for OpenAL, set client data format
+                // to enable conversion
                 desc.mFormatFlags & kAudioFormatFlagIsBigEndian ||
                 desc.mFormatFlags & kAudioFormatFlagIsFloat ||
                 !(desc.mFormatFlags & kAudioFormatFlagIsSignedInteger))
-            {
-                AudioStreamBasicDescription clientData = { 0 };
-                sampleRate_ = clientData.mSampleRate = 22050;
-                clientData.mFormatID = kAudioFormatLinearPCM;
-                clientData.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-                clientData.mBitsPerChannel = 16;
-                clientData.mChannelsPerFrame = desc.mChannelsPerFrame;
-                clientData.mFramesPerPacket = 1;
-                clientData.mBytesPerPacket =
-                    clientData.mBytesPerFrame =
-                        clientData.mChannelsPerFrame * clientData.mBitsPerChannel / 8;
+                    initClientFormatBasedOn(desc);
+            else
+                // Just set the old format as the client format so
+                // ExtAudioFileSeek will work for us.
                 CHECK_OS(ExtAudioFileSetProperty(file_,
                     kExtAudioFileProperty_ClientDataFormat,
-                    sizeof clientData, &clientData));
-                format_ = clientData.mChannelsPerFrame == 1 ?
-                          AL_FORMAT_MONO16 :
-                          AL_FORMAT_STEREO16;
-            }
+                    sizeof desc, &desc));
         }
         
     public:
@@ -163,7 +197,7 @@ namespace Gosu
         
         void rewind()
         {
-            CHECK_OS(ExtAudioFileSeek(file_, 0));
+            CHECK_OS(ExtAudioFileSeek(file_, 0 + seekOffset_));
         }
         
         std::size_t readData(void* dest, UInt32 length)

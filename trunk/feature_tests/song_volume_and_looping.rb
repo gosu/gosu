@@ -23,9 +23,11 @@ class Test < Gosu::Window
     
     # Taken from Wikipedia, public domain
     # (Also, best song in the world)
-    #@songs << Gosu::Song.new(self, "media/JingleBells.ogg")
+    @songs << Gosu::Song.new(self, "media/JingleBells.ogg")
     
-    #@songs << Gosu::Song.new(self, "audio_formats/wav_16bit_pcm.wav")
+    @songs << Gosu::Song.new(self, "media/JingleBells.ogg")
+
+    @songs << Gosu::Song.new(self, "audio_formats/wav_16bit_pcm.wav")
     
     # Jingle Bells converted to MP3
     @songs << Gosu::Song.new(self, "media/JingleBells.mp3") rescue nil
@@ -46,9 +48,9 @@ class Test < Gosu::Window
   def update
     @song.volume -= 0.05 if button_down? Gosu::KbDown
     @song.volume += 0.05 if button_down? Gosu::KbUp
-    songs_paused = @songs.map { |s| s.paused? }
+    song_states = @songs.map { |s| s.paused? ? 'paused' : (s.playing? ? 'playing' : 'idle') }
     self.caption = "Volume: #{(@song.volume * 100).to_i}, " +
-                   "Song: #{@song.format}, Paused: #{songs_paused.inspect}"
+                   "Song: #{@song.format}, paused/playing: #{song_states.inspect}"
   end
   
   def button_down(id)
@@ -62,7 +64,7 @@ class Test < Gosu::Window
     @song.stop if id == Gosu::KbBackspace
     ch = button_id_to_char(id)
     if ('1'..'9').include? ch then
-      @song = @songs[ch.to_i - 1] unless ch.to_i >= @songs.size
+      @song = @songs[ch.to_i - 1] unless ch.to_i > @songs.size
     end
   end
 end

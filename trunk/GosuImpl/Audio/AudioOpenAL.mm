@@ -67,6 +67,13 @@ namespace
     
     Song* curSong = 0;
     bool curSongLooping;
+
+    // HACK
+    // The whole framesTillPlayback variable just exists to introduce tiny, artificial
+    // gaps between stopping one song and playing another.
+    // I am not even sure it covers all cases where this can happen.
+    
+    unsigned framesTillPlayback = 0;
 }
 
 Gosu::Audio::Audio()
@@ -354,11 +361,11 @@ public:
             alSourcef(source, AL_PITCH, 1);
             alSourcei(source, AL_LOOPING, AL_FALSE); // need to implement this manually...
 
-            streamToBuffer(buffers[0]);
-            streamToBuffer(buffers[1]);
+            //streamToBuffer(buffers[0]);
+            //streamToBuffer(buffers[1]);
 
-            alSourceQueueBuffers(source, 2, buffers);
-            alSourcePlay(source);
+            //alSourceQueueBuffers(source, 2, buffers);
+            //alSourcePlay(source);
         }
     }
 
@@ -408,6 +415,20 @@ public:
     
     void update()
     {
+        if (framesTillPlayback > 0)
+        {
+            --framesTillPlayback;
+            if (framesTillPlayback == 0)
+            {
+                streamToBuffer(buffers[0]);
+                streamToBuffer(buffers[1]);
+
+                alSourceQueueBuffers(lookupSource(), 2, buffers);
+                alSourcePlay(lookupSource());
+            }
+            return;
+        }
+    
         int source = lookupSource();
         
         int processed;
@@ -426,9 +447,10 @@ public:
         
         ALint state;
         alGetSourcei(source, AL_SOURCE_STATE, &state);
+        //printf("active = %i, state = %u\n", active, state);
         if (active && state != AL_PLAYING && state != AL_PAUSED)
         {
-            // We seemingly got starved.
+            // We seemingly got starved, or not started yet.
             alSourcePlay(source);
         }
         else if (!active)
@@ -441,6 +463,7 @@ public:
                 
                 stop();
                 play();
+                framesTillPlayback = 1;
             }
             else
             {
@@ -479,6 +502,8 @@ Gosu::Song* Gosu::Song::currentSong()
     return curSong;
 }
 
+#include <Gosu/Timing.hpp>
+
 void Gosu::Song::play(bool looping)
 {
     if (paused())
@@ -492,10 +517,12 @@ void Gosu::Song::play(bool looping)
     
     if (curSong == 0)
     {
+        framesTillPlayback = 2;
+        
         data->play();
-        curSong = this; // may be redundant
     }
     
+    curSong = this;
     curSongLooping = looping;
 }
 
