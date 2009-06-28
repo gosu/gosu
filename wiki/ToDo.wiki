@@ -4,28 +4,25 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-06-26)
+(Last update: 2009-06-28)
 
 == Gosu 0.7.x ==
   * Look at janmejay's bakery
   * Test StandBy with Windows and a running Gosu app
   * Finish OpenAL on OS X!
-    * Implement looping in OpenAL port
-    * Check Song::play() behavior with OpenAL vs. other libs
-    * Start list of supported sound/song formats
-    * Make buffers in Mac port larger and make sure that update_interval<66 always plays running Songs without jitter
+    * Fix issue where switching to a different Song may not cause it to be played
     * Get Anna to test the new OpenAL code on Intel/Tiger...
-    * Get philomory to test the new OpenAL code on PPC/Tiger? :)
   * Remove FMOD support altogether from Linux
   * Separate 1.9 .app wrapper from rest of Mac package
+  * Add Gosu::VERSION constant
   * Publish Gosu 0.7.14 for Linux 1.9/multiruby compat. and no more FMOD
+  * Publish list of supported sound/song formats
   * Web work
     * Move three threads from GosuExchange to the forums
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
     * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
     * Report Ocra bugs: spaces in exe name = crash, requires .rb and .so files?!
   * 0.7.15 (bugfixes bugfixes bugfixes)
-    * Add GOSU_VERSION constant
     * Quick look: How hard is MacRuby support?
     * See if John Shea's talk had something about not being locked to pixel positions
     * Look into "garbage while loading" bug on OS X
@@ -57,8 +54,10 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Integrate "fat" iPhone building from forum
     * Clear up GOSU_IS_MAC vs. GOSU_IS_OSX
     * Use getBytes instead of UTF8String
-  * OpenAL improvements
+  * More OpenAL niceties
     * Try to add dynamic MikMod loading code
+    * See if there is a native/fastest mixing rate on Mac/iPhone
+    * Make buffers in Mac port larger and make sure that update_interval<66 always plays running Songs without jitter
     * Check Song::play() behavior on new MikMod song vs. other libs
     * Move decoding/updating into another thread (yuck)
   * Try a quick prototype of Gosu working with Shoes (if that doesn't work, wxRuby)
