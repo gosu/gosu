@@ -1,6 +1,14 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.14=
+  * 2009-06-28: Mac: OpenAL officially replaces FMOD in Gosu's OS X port.
+  * 2009-06-28: Ruby: Added Gosu::VERSION constants
+  * 2009-06-28: Linux: Removed FMOD support altogether
+  * 2009-06-28: C++: Added GOSU_VERSION macros in Gosu/Version.hpp
+  * 2009-06-07: All: Fixed max texture size calculation
+  * 2009-05-17: Linux: Improved compatibility with Ruby 1.9
+
 =0.7.13.3=
   * 2009-05-15: Ruby: Published the experimental Ruby 1.9 .app wrapper, feedback very welcome!
   * 2009-05-14: C++: Added name() and flags() getters to Gosu::Font, and a flags argument to its constructor.
