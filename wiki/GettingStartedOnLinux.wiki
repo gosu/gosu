@@ -1,4 +1,4 @@
-#summary How to set up Gosu on Linux (or FreeBSD).
+#summary How to set up Gosu on Linux or FreeBSD.
 
 [http://www.libgosu.org/cgi-bin/mwf/forum.pl http://www.libgosu.org/wiki_images/board_link.png]
 
