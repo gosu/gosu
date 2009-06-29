@@ -4,18 +4,13 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-06-28)
+(Last update: 2009-06-29)
 
 == Gosu 0.7.x ==
   * Look at janmejay's bakery
   * Test StandBy with Windows and a running Gosu app
-  * Finish OpenAL on OS X!
-    * Fix issue where switching to a different Song may not cause it to be played
-    * Get Anna to test the new OpenAL code on Intel/Tiger...
-  * Remove FMOD support altogether from Linux
-  * Separate 1.9 .app wrapper from rest of Mac package
-  * Add Gosu::VERSION constant
-  * Publish Gosu 0.7.14 for Linux 1.9/multiruby compat. and no more FMOD
+  * Get Anna to test the new OpenAL code on Intel/Tiger...
+  * Change audio_formats.rb so it builds the list of supported formats
   * Publish list of supported sound/song formats
   * Web work
     * Move three threads from GosuExchange to the forums
@@ -23,11 +18,11 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
     * Report Ocra bugs: spaces in exe name = crash, requires .rb and .so files?!
   * 0.7.15 (bugfixes bugfixes bugfixes)
+    * Make sure custom TTF files don't throw an exception on Linux
     * Quick look: How hard is MacRuby support?
     * See if John Shea's talk had something about not being locked to pixel positions
     * Look into "garbage while loading" bug on OS X
     * See if really old games have problems running in current Gosu
-    * Give multitruby support a second try (fix the problem with AC_PROGRAM_WHATEVER)
     * Verify that TextInput works cleanly on Ruby 1.9 with Unicode
     * Add support for giving font flags from Ruby
     * Complete the list of Gosu::Colors, inspired by the CSS colors, and move them to Color in Ruby / support :red/:green/etc…
@@ -42,9 +37,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Test multiple screens on Windows
     * TextField with clip_to (update example)
     * Test LD14 entry on Linux
-    * Rebuild the .so files on Windows
     * Release 0.7.13.5
-    * Document Font#name, Font#height, Font#flags
     * (1x mymüsli for all the hard work! (motivation!)
   * iPhone-related stuff that should be finished soonish
     * Fix "too many fingers" bug on iPhone
@@ -126,6 +119,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make Linux gemspec more robust wrt examples/
   * Make more stuff configurable like http://github.com/cout/rice/blob/98ba7098e2de5849f2e7272021340976a768456f/ruby.ac#L7-20
 == Gosu CI/Usability ==
+  * Refresh ToDo list only when necessary
   * Document 64px minimum for single-texture opt.
   * Mention Gosu's respectable age somewhere :)
   * Link to benkos example
@@ -156,6 +150,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Note that draw can be called more often than update in the main loop
   * Setup board so it yields 301 redirects for vu2040
   * UTF8 Support for PotD texts(?)
+  * Link gosu-fr project :)
+  * Fix div.frm.err in board styles
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
