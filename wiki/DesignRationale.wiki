@@ -34,7 +34,3 @@ Seen the other way around, this ensures that Gosu includes (or will soonish incl
 While there is a convenient, completely portable Window class which bundles all of Gosu's components for you, nothing prevents you from using the Graphics class alone. Or the Audio class. You could use Gosu just for timing or PNG loading/saving in a command-line tool, and still get away without paying for all the unused functionality.
 
 Sometimes, you have to leave the world of portability for this to make sense - eg., when you don't use the Gosu::Window class, but a custom Win32 HWND instead, you need to call a Windows-only constructor. This makes it possible to use Gosu in conjunction with the Win32 API, Windows Forms, or your own X11 window (e.g. for complex level editors). Gosu does NOT dogmatically stand in your way when you do unportable things like that.
-
-= Radical =
-
-We will change the interface where it makes sense, and it will break code. This does not happen often, but who knows. Backward compatibility is the root of all evil, and we will not give in to it until 1.0.
