@@ -281,7 +281,8 @@ namespace Gosu
 
 // Font
 // Hackishly allow the user to pass Window& instead of Graphics&.
-%ignore Gosu::Font::Font(Graphics& graphics, const std::wstring& fontName, unsigned height);
+%ignore Gosu::Font::Font(Graphics& graphics, const std::wstring& fontName,
+    unsigned height, unsigned flags);
 %include "../Gosu/Font.hpp"
 %extend Gosu::Font {
     Font(Gosu::Window& window, const std::wstring& fontName, unsigned height) {

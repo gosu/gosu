@@ -152,7 +152,7 @@ module Gosu
   # Fonts are ideal for small texts that change regularly. For large,
   # static texts you should use Image#from_text.
   class Font
-    attr_reader :height
+    attr_reader :name, :height
     
     # font_name:: Name of a system font, or a filename to a TTF file (must contain '/', does not work on Linux).
     # height:: Height of the font, in pixels.

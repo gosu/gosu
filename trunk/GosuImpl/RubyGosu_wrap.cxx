@@ -2156,18 +2156,17 @@ namespace Swig {
 #define SWIGTYPE_p_Gosu__Color swig_types[2]
 #define SWIGTYPE_p_Gosu__Font swig_types[3]
 #define SWIGTYPE_p_Gosu__GLTexInfo swig_types[4]
-#define SWIGTYPE_p_Gosu__Graphics swig_types[5]
-#define SWIGTYPE_p_Gosu__Image swig_types[6]
-#define SWIGTYPE_p_Gosu__Sample swig_types[7]
-#define SWIGTYPE_p_Gosu__SampleInstance swig_types[8]
-#define SWIGTYPE_p_Gosu__Song swig_types[9]
-#define SWIGTYPE_p_Gosu__TextInput swig_types[10]
-#define SWIGTYPE_p_Gosu__Window swig_types[11]
-#define SWIGTYPE_p_char swig_types[12]
-#define SWIGTYPE_p_double swig_types[13]
-#define SWIGTYPE_p_std__wstring swig_types[14]
-static swig_type_info *swig_types[16];
-static swig_module_info swig_module = {swig_types, 15, 0, 0, 0, 0};
+#define SWIGTYPE_p_Gosu__Image swig_types[5]
+#define SWIGTYPE_p_Gosu__Sample swig_types[6]
+#define SWIGTYPE_p_Gosu__SampleInstance swig_types[7]
+#define SWIGTYPE_p_Gosu__Song swig_types[8]
+#define SWIGTYPE_p_Gosu__TextInput swig_types[9]
+#define SWIGTYPE_p_Gosu__Window swig_types[10]
+#define SWIGTYPE_p_char swig_types[11]
+#define SWIGTYPE_p_double swig_types[12]
+#define SWIGTYPE_p_std__wstring swig_types[13]
+static swig_type_info *swig_types[15];
+static swig_module_info swig_module = {swig_types, 14, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2480,22 +2479,6 @@ SWIG_From_std_string  (const std::string& s)
 }
 
 
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_int (VALUE obj, unsigned int *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
-  if (SWIG_IsOK(res)) {
-    if ((v > UINT_MAX)) {
-      return SWIG_OverflowError;
-    } else {
-      if (val) *val = static_cast< unsigned int >(v);
-    }
-  }  
-  return res;
-}
-
-
 /*@SWIG:/usr/local/share/swig/1.3.39/ruby/rubyprimtypes.swg,23,%ruby_aux_method@*/
 SWIGINTERN VALUE SWIG_AUX_NUM2LONG(VALUE *args)
 {
@@ -2540,7 +2523,23 @@ SWIG_AsVal_int (VALUE obj, int *val)
   return res;
 }
 
-SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_1(Gosu::Window &window,std::wstring const &fontName,unsigned int height){
+
+SWIGINTERN int
+SWIG_AsVal_unsigned_SS_int (VALUE obj, unsigned int *val)
+{
+  unsigned long v;
+  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
+  if (SWIG_IsOK(res)) {
+    if ((v > UINT_MAX)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = static_cast< unsigned int >(v);
+    }
+  }  
+  return res;
+}
+
+SWIGINTERN Gosu::Font *new_Gosu_Font(Gosu::Window &window,std::wstring const &fontName,unsigned int height){
         return new Gosu::Font(window.graphics(), fontName, height);
     }
 
@@ -4410,65 +4409,6 @@ _wrap_cyan_get(VALUE self) {
 
 swig_class SwigClassFont;
 
-SWIGINTERN VALUE
-_wrap_new_Font__SWIG_0(int argc, VALUE *argv, VALUE self) {
-  Gosu::Graphics *arg1 = 0 ;
-  std::wstring *arg2 = 0 ;
-  unsigned int arg3 ;
-  unsigned int arg4 = (unsigned int) Gosu::ffBold ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  std::wstring temp2 ;
-  unsigned int val3 ;
-  int ecode3 = 0 ;
-  unsigned int val4 ;
-  int ecode4 = 0 ;
-  const char *classname SWIGUNUSED = "Gosu::Font";
-  Gosu::Font *result = 0 ;
-  
-  if ((argc < 3) || (argc > 4)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Gosu__Graphics,  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Graphics &","Gosu::Font", 1, argv[0] )); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Gosu::Graphics &","Gosu::Font", 1, argv[0])); 
-  }
-  arg1 = reinterpret_cast< Gosu::Graphics * >(argp1);
-  {
-    VALUE localTemporary = rb_obj_as_string(argv[1]);
-    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
-    arg2 = &temp2;
-  }
-  ecode3 = SWIG_AsVal_unsigned_SS_int(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "unsigned int","Gosu::Font", 3, argv[2] ));
-  } 
-  arg3 = static_cast< unsigned int >(val3);
-  if (argc > 3) {
-    ecode4 = SWIG_AsVal_unsigned_SS_int(argv[3], &val4);
-    if (!SWIG_IsOK(ecode4)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "unsigned int","Gosu::Font", 4, argv[3] ));
-    } 
-    arg4 = static_cast< unsigned int >(val4);
-  }
-  {
-    try {
-      result = (Gosu::Font *)new Gosu::Font(*arg1,(std::wstring const &)*arg2,arg3,arg4);
-      DATA_PTR(self) = result;
-      SWIG_RubyAddTracking(result, self);
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return self;
-fail:
-  return Qnil;
-}
-
-
 SWIGINTERN void
 free_Gosu_Font(Gosu::Font *arg1) {
     SWIG_RubyRemoveTracking(arg1);
@@ -4968,7 +4908,7 @@ _wrap_Font_allocate(VALUE self) {
   
 
 SWIGINTERN VALUE
-_wrap_new_Font__SWIG_1(int argc, VALUE *argv, VALUE self) {
+_wrap_new_Font(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
   std::wstring *arg2 = 0 ;
   unsigned int arg3 ;
@@ -5003,7 +4943,7 @@ _wrap_new_Font__SWIG_1(int argc, VALUE *argv, VALUE self) {
   arg3 = static_cast< unsigned int >(val3);
   {
     try {
-      result = (Gosu::Font *)new_Gosu_Font__SWIG_1(*arg1,(std::wstring const &)*arg2,arg3);
+      result = (Gosu::Font *)new_Gosu_Font(*arg1,(std::wstring const &)*arg2,arg3);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
     } catch(const std::runtime_error& e) {
@@ -5012,75 +4952,6 @@ _wrap_new_Font__SWIG_1(int argc, VALUE *argv, VALUE self) {
   }
   return self;
 fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE _wrap_new_Font(int nargs, VALUE *args, VALUE self) {
-  int argc;
-  VALUE argv[4];
-  int ii;
-  
-  argc = nargs;
-  if (argc > 4) SWIG_fail;
-  for (ii = 0; (ii < argc); ++ii) {
-    argv[ii] = args[ii];
-  }
-  if ((argc >= 3) && (argc <= 4)) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Graphics, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__wstring, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        {
-          int res = SWIG_AsVal_unsigned_SS_int(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          if (argc <= 3) {
-            return _wrap_new_Font__SWIG_0(nargs, args, self);
-          }
-          {
-            int res = SWIG_AsVal_unsigned_SS_int(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            return _wrap_new_Font__SWIG_0(nargs, args, self);
-          }
-        }
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__wstring, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        {
-          int res = SWIG_AsVal_unsigned_SS_int(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          return _wrap_new_Font__SWIG_1(nargs, args, self);
-        }
-      }
-    }
-  }
-  
-fail:
-  Ruby_Format_OverloadedError( argc, 4, "Font.new", 
-    "    Font.new(Gosu::Graphics &graphics, std::wstring const &fontName, unsigned int fontHeight, unsigned int fontFlags)\n"
-    "    Font.new(Gosu::Window &window, std::wstring const &fontName, unsigned int height)\n");
-  
   return Qnil;
 }
 
@@ -8805,7 +8676,6 @@ static swig_type_info _swigt__p_Gosu__Button = {"_p_Gosu__Button", "Gosu::Button
 static swig_type_info _swigt__p_Gosu__Color = {"_p_Gosu__Color", "Gosu::Color *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Font = {"_p_Gosu__Font", "Gosu::Font *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__GLTexInfo = {"_p_Gosu__GLTexInfo", "Gosu::GLTexInfo *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_Gosu__Graphics = {"_p_Gosu__Graphics", "Gosu::Graphics *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Image = {"_p_Gosu__Image", "Gosu::Image *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Sample = {"_p_Gosu__Sample", "Gosu::Sample *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__SampleInstance = {"_p_Gosu__SampleInstance", "Gosu::SampleInstance *", 0, 0, (void*)0, 0};
@@ -8822,7 +8692,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__Color,
   &_swigt__p_Gosu__Font,
   &_swigt__p_Gosu__GLTexInfo,
-  &_swigt__p_Gosu__Graphics,
   &_swigt__p_Gosu__Image,
   &_swigt__p_Gosu__Sample,
   &_swigt__p_Gosu__SampleInstance,
@@ -8839,7 +8708,6 @@ static swig_cast_info _swigc__p_Gosu__Button[] = {  {&_swigt__p_Gosu__Button, 0,
 static swig_cast_info _swigc__p_Gosu__Color[] = {  {&_swigt__p_Gosu__Color, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Font[] = {  {&_swigt__p_Gosu__Font, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__GLTexInfo[] = {  {&_swigt__p_Gosu__GLTexInfo, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Gosu__Graphics[] = {  {&_swigt__p_Gosu__Graphics, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Image[] = {  {&_swigt__p_Gosu__Image, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Sample[] = {  {&_swigt__p_Gosu__Sample, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__SampleInstance[] = {  {&_swigt__p_Gosu__SampleInstance, 0, 0, 0},{0, 0, 0, 0}};
@@ -8856,7 +8724,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__Color,
   _swigc__p_Gosu__Font,
   _swigc__p_Gosu__GLTexInfo,
-  _swigc__p_Gosu__Graphics,
   _swigc__p_Gosu__Image,
   _swigc__p_Gosu__Sample,
   _swigc__p_Gosu__SampleInstance,
