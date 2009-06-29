@@ -145,12 +145,12 @@ end
 
 namespace :mac do
   desc "Build Gosu.framework"
-  task :cpp => :cpp_docs do
+  task :cpp => [:version, :cpp_docs] do
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target Gosu -configuration Release"
   end
 
   desc "Build lib/gosu.for_1_8.bundle, lib/gosu.for_1_9.bundle and RubyGosu App.app"
-  task :ruby do
+  task :ruby => [:version, :ruby_docs] do
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Core' -configuration 'Release'"
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Core' -configuration 'Release with 1.9'"
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu App' -configuration 'Release with 1.9'"
@@ -160,8 +160,7 @@ namespace :mac do
 
   desc "Build the archive #{MAC_ARCHIVE_FILENAME}"
   task :archive => [:cpp, :ruby, :version] do
-    files = COMMON_CPP_FILES + COMMON_RUBY_FILES + ['lib/gosu.rb', 'lib/gosu.*.bundle'] +
-            FileList['Gosu.framework/**/*']
+    files = COMMON_CPP_FILES + COMMON_RUBY_FILES + FileList['lib/gosu.rb', 'lib/gosu.*.bundle', 'Gosu.framework/**/*']
     sh "tar -czf #{MAC_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
   end
   
