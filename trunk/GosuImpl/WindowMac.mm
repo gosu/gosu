@@ -200,6 +200,7 @@ struct Gosu::Window::Impl
         
         [window.obj() center];
         [window.obj() makeKeyAndOrderFront:nil];
+        [[window.obj() contentView] display];
     }
     
     static void doTick(Window& window);
