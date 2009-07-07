@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8D07F2C40486CC7A007CD1D0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB77AAFE841565C02AAC07 /* Carbon.framework */; };
+		B9CA23C1100396920073D01B /* Macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B9CA23C0100396920073D01B /* Macro.hpp */; };
 		D4032B7D0F5035A900A20790 /* TextTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4032B7C0F5035A900A20790 /* TextTouch.mm */; };
 		D410E98D0A801948005C7067 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98A0A801948005C7067 /* AppKit.framework */; };
 		D410E98E0A801948005C7067 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98B0A801948005C7067 /* ApplicationServices.framework */; };
@@ -461,6 +462,7 @@
 /* Begin PBXFileReference section */
 		08FB77AAFE841565C02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		8D07F2C80486CC7A007CD1D0 /* Gosu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Gosu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9CA23C0100396920073D01B /* Macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Macro.hpp; sourceTree = "<group>"; };
 		D4032B7C0F5035A900A20790 /* TextTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TextTouch.mm; sourceTree = "<group>"; };
 		D410D6220EE9D379007740AE /* Iconv.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Iconv.hpp; path = ../GosuImpl/Iconv.hpp; sourceTree = SOURCE_ROOT; };
 		D410E98A0A801948005C7067 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
@@ -882,8 +884,6 @@
 		D410EAD30A801B00005C7067 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
-				D4A5A22C0F40D48300FFF378 /* GosuView.hpp */,
-				D4A5A22D0F40D48300FFF378 /* GosuView.mm */,
 				D410EAD40A801B00005C7067 /* Bitmap.cpp */,
 				D410EAD50A801B00005C7067 /* BitmapBMP.cpp */,
 				D410EAD60A801B00005C7067 /* BitmapColorKey.cpp */,
@@ -896,10 +896,13 @@
 				D4A7E9A90CD3927D00621B24 /* Common.hpp */,
 				D499E6380D06B51300BA6DEC /* DrawOp.hpp */,
 				D410EADB0A801B00005C7067 /* Font.cpp */,
+				D4A5A22C0F40D48300FFF378 /* GosuView.hpp */,
+				D4A5A22D0F40D48300FFF378 /* GosuView.mm */,
 				D410EADC0A801B00005C7067 /* Graphics.cpp */,
 				D410EADE0A801B00005C7067 /* Image.cpp */,
 				D410EADF0A801B00005C7067 /* LargeImageData.cpp */,
 				D410EAE00A801B00005C7067 /* LargeImageData.hpp */,
+				B9CA23C0100396920073D01B /* Macro.hpp */,
 				D410EAE10A801B00005C7067 /* RotFlip.cpp */,
 				D4A7E97B0CD3907D00621B24 /* Texture.cpp */,
 				D4A7E97C0CD3907D00621B24 /* Texture.hpp */,
@@ -1214,6 +1217,7 @@
 				D443F6BD0FE9330700BC0D66 /* AudioFile.hpp in Headers */,
 				D443F6D40FE9346800BC0D66 /* AudioToolboxFile.hpp in Headers */,
 				D448D8980FF81E1E002FA7EE /* Version.hpp in Headers */,
+				B9CA23C1100396920073D01B /* Macro.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1908,7 +1912,7 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					NDEBUG,
+					"$(inherited)",
 					RUBY_EMBEDDED,
 				);
 				HEADER_SEARCH_PATHS = (
@@ -1998,7 +2002,7 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					NDEBUG,
+					"$(inherited)",
 					RUBY_EMBEDDED,
 				);
 				HEADER_SEARCH_PATHS = (
@@ -2035,7 +2039,7 @@
 				DYLIB_CURRENT_VERSION = "";
 				EXECUTABLE_EXTENSION = for_1_9.bundle;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					NDEBUG,
+					"$(inherited)",
 					GOSU_FOR_RUBY,
 				);
 				GENERATE_MASTER_OBJECT_FILE = YES;
@@ -2113,7 +2117,10 @@
 				DYLIB_COMPATIBILITY_VERSION = "";
 				DYLIB_CURRENT_VERSION = "";
 				EXECUTABLE_EXTENSION = bundle;
-				GCC_PREPROCESSOR_DEFINITIONS = GOSU_FOR_RUBY;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					GOSU_FOR_RUBY,
+				);
 				GENERATE_MASTER_OBJECT_FILE = YES;
 				HEADER_SEARCH_PATHS = (
 					..,
@@ -2147,7 +2154,7 @@
 				DYLIB_CURRENT_VERSION = "";
 				EXECUTABLE_EXTENSION = for_1_8.bundle;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					NDEBUG,
+					"$(inherited)",
 					GOSU_FOR_RUBY,
 				);
 				GENERATE_MASTER_OBJECT_FILE = YES;

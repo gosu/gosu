@@ -4,6 +4,7 @@
 #include <GosuImpl/Graphics/Texture.hpp>
 #include <GosuImpl/Graphics/TexChunk.hpp>
 #include <GosuImpl/Graphics/LargeImageData.hpp>
+#include <GosuImpl/Graphics/Macro.hpp>
 #include <Gosu/Bitmap.hpp>
 #if 0
 #include <boost/thread.hpp>
@@ -18,10 +19,10 @@ struct Gosu::Graphics::Impl
     unsigned virtWidth, virtHeight;
     double factorX, factorY;
     bool fullscreen;
-    DrawOpQueue queue;
+    DrawOpQueueStack queues;
     typedef std::vector<boost::shared_ptr<Texture> > Textures;
     Textures textures;
-
+    
 #if 0
     boost::mutex texMutex;
 #endif
@@ -53,6 +54,9 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     #endif
 
     glEnable(GL_BLEND);
+    
+    // Create default draw-op queue.
+    pimpl->queues.resize(1);
 }
 
 Gosu::Graphics::~Graphics()
@@ -102,6 +106,9 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 {
+    // If there is a recording in process, stop it.
+    pimpl->queues.resize(1);
+
     // Flush leftover clippings
     endClipping();
 
@@ -131,18 +138,26 @@ void Gosu::Graphics::end()
                  0, hBarHeight, 0x00000000, width(), hBarHeight, 0x00000000,
                  std::numeric_limits<double>::max());
     }*/
-
-    pimpl->queue.performDrawOps();
+    
+    // If there is a recording in process, stop it.
+    pimpl->queues.resize(1);
+    
+    pimpl->queues.at(0).performDrawOps();
+    pimpl->queues.at(0).clear();
 
     glFlush();
 }
 
 void Gosu::Graphics::beginGL()
 {
+    if (pimpl->queues.size() > 1)
+        throw std::logic_error("Custom OpenGL is not allowed while creating a macro");
+    
 #ifdef GOSU_IS_IPHONE
     throw std::logic_error("Custom OpenGL is unsupported on the iPhone");
 #else
-    pimpl->queue.performDrawOps();
+    pimpl->queues.at(0).performDrawOps();
+    pimpl->queues.at(0).clear();
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glDisable(GL_BLEND);
 #endif
@@ -170,6 +185,9 @@ void Gosu::Graphics::endGL()
 
 void Gosu::Graphics::beginClipping(int x, int y, unsigned width, unsigned height)
 {
+    if (pimpl->queues.size() > 1)
+        throw std::logic_error("Clipping not allowed while creating a macro");
+    
     // In doubt, make the clipping region smaller than requested.
     
 #ifndef GOSU_IS_IPHONE
@@ -185,12 +203,30 @@ void Gosu::Graphics::beginClipping(int x, int y, unsigned width, unsigned height
     unsigned physHeight = static_cast<unsigned>(480.0 * width / this->width());
 #endif
 
-    pimpl->queue.beginClipping(physX, physY, physWidth, physHeight);
+    pimpl->queues.back().beginClipping(physX, physY, physWidth, physHeight);
 }
 
 void Gosu::Graphics::endClipping()
 {
-    pimpl->queue.endClipping();
+    if (pimpl->queues.size() > 1)
+        throw std::logic_error("Clipping is not allowed while creating a macro");
+    
+    pimpl->queues.back().endClipping();
+}
+
+void Gosu::Graphics::beginRecording()
+{
+    pimpl->queues.resize(pimpl->queues.size() + 1);
+}
+
+std::auto_ptr<Gosu::ImageData> Gosu::Graphics::endRecording()
+{
+    if (pimpl->queues.size() == 1)
+        throw std::logic_error("No macro recording in progress that can be captured");
+    
+    std::auto_ptr<ImageData> result(new Macro(pimpl->queues.back()));
+    pimpl->queues.pop_back();
+    return result;
 }
 
 void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
@@ -209,7 +245,7 @@ void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
 
-    pimpl->queue.addDrawOp(op, z);
+    pimpl->queues.back().addDrawOp(op, z);
 }
 
 void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
@@ -232,7 +268,7 @@ void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
     op.vertices[2] = DrawOp::Vertex(x3, y3, c3);
 
-    pimpl->queue.addDrawOp(op, z);
+    pimpl->queues.back().addDrawOp(op, z);
 }
 
 void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
@@ -267,7 +303,7 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
     op.vertices[2] = DrawOp::Vertex(x4, y4, c4);
 #endif
 
-    pimpl->queue.addDrawOp(op, z);
+    pimpl->queues.back().addDrawOp(op, z);
 }
 
 std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
@@ -292,7 +328,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
         if (srcX == 0 && srcWidth == src.width() &&
             srcY == 0 && srcHeight == src.height())
         {
-            data = texture->tryAlloc(*this, pimpl->queue, texture,
+            data = texture->tryAlloc(*this, pimpl->queues, texture,
                     src, 0, 0, src.width(), src.height(), 0);
         }
         else
@@ -300,7 +336,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
             Bitmap trimmedSrc;
             trimmedSrc.resize(srcWidth, srcHeight);
             trimmedSrc.insert(src, 0, 0, srcX, srcY, srcWidth, srcHeight);
-            data = texture->tryAlloc(*this, pimpl->queue, texture,
+            data = texture->tryAlloc(*this, pimpl->queues, texture,
                     trimmedSrc, 0, 0, trimmedSrc.width(), trimmedSrc.height(), 0);
         }
         
@@ -333,7 +369,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
         boost::shared_ptr<Texture> texture(*i);
         
         std::auto_ptr<ImageData> data;
-        data = texture->tryAlloc(*this, pimpl->queue, texture, bmp, 0, 0, bmp.width(), bmp.height(), 1);
+        data = texture->tryAlloc(*this, pimpl->queues, texture, bmp, 0, 0, bmp.width(), bmp.height(), 1);
         if (data.get())
             return data;
     }
@@ -345,7 +381,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     pimpl->textures.push_back(texture);
     
     std::auto_ptr<ImageData> data;
-    data = texture->tryAlloc(*this, pimpl->queue, texture, bmp, 0, 0, bmp.width(), bmp.height(), 1);
+    data = texture->tryAlloc(*this, pimpl->queues, texture, bmp, 0, 0, bmp.width(), bmp.height(), 1);
     if (!data.get())
         throw std::logic_error("Internal texture block allocation error");
 

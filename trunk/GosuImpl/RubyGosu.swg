@@ -327,6 +327,7 @@ namespace Gosu
 %ignore Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, bool tileable = false);
 %ignore Gosu::Image::Image(Graphics& graphics, const Bitmap& source, bool tileable = false);
 %ignore Gosu::Image::Image(Graphics& graphics, const Bitmap& source, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, bool tileable = false);
+%ignore Gosu::Image::Image(std::auto_ptr<ImageData> data);
 %include "../Gosu/Image.hpp"
 %extend Gosu::Image {
     Image(Gosu::Window& window, VALUE source, bool tileable = false) {
@@ -545,5 +546,11 @@ namespace Gosu
         $self->graphics().beginClipping(x, y, width, height);
         rb_yield(Qnil);
         $self->graphics().endClipping();
+    }
+    %newobject record;
+    Gosu::Image* record() {
+        $self->graphics().beginRecording();
+        rb_yield(Qnil);
+        return new Gosu::Image($self->graphics().endRecording());
     }
 };

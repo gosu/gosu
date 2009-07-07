@@ -54,6 +54,12 @@ namespace Gosu
         void beginClipping(int x, int y, unsigned width, unsigned height);
         //! Disables clipping.
         void endClipping();
+        
+        //! Starts recording a macro. Cannot be nested.
+        void beginRecording();
+        //! Finishes building the macro and returns it as a drawable object.
+        //! Most usually, the return value is passed to Image::Image().
+        std::auto_ptr<Gosu::ImageData> endRecording();
 
         //! Draws a line from one point to another (last pixel exclusive).
         void drawLine(double x1, double y1, Color c1,

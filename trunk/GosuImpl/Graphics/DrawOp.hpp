@@ -6,6 +6,7 @@
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/TexChunk.hpp>
 #include <boost/cstdint.hpp>
+#include <algorithm>
 #include <set>
 
 namespace Gosu
@@ -200,6 +201,15 @@ namespace Gosu
         {
         }
         
+        void swap(DrawOpQueue& other)
+        {
+            std::swap(clipX, other.clipX);
+            std::swap(clipY, other.clipY);
+            std::swap(clipWidth, other.clipWidth);
+            std::swap(clipHeight, other.clipHeight);
+            set.swap(other.set);
+        }
+        
         void addDrawOp(DrawOp op, ZPos z)
         {
             if (clipWidth != 0xffffffff)
@@ -235,20 +245,24 @@ namespace Gosu
             clipWidth = 0xffffffff;
         }
 
-        void performDrawOps()
+        void performDrawOps() const
         {
             GLuint currentTexName = NO_TEXTURE;
             
-            std::multiset<DrawOp>::iterator cur = set.begin(), end = set.end();
+            std::multiset<DrawOp>::const_iterator cur = set.begin(), end = set.end();
             while (cur != end)
             {
                 cur->perform(currentTexName);
                 ++cur;
             }
-            set.clear();
             
             if (currentTexName != NO_TEXTURE)
                 glDisable(GL_TEXTURE_2D);
+        }
+        
+        void clear()
+        {
+            set.clear();
         }
     };
 }

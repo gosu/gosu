@@ -90,7 +90,7 @@ void Gosu::LargeImageData::draw(double x1, double y1, Color c1,
     for (unsigned py = 0; py < partsY; ++py)
         for (unsigned px = 0; px < partsX; ++px)
         {
-            const ImageData& part = *parts[py * partsX + px];
+            ImageData& part = *parts[py * partsX + px];
 
             double relXL = static_cast<double>(px * partWidth) / width();
             double relXR = static_cast<double>(px * partWidth + part.width()) / width();

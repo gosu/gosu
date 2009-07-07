@@ -16,6 +16,7 @@
 #endif
 
 #include <algorithm>
+#include <vector>
 
 namespace Gosu
 {
@@ -23,6 +24,8 @@ namespace Gosu
     class TexChunk;
     struct DrawOp;
     class DrawOpQueue;
+    typedef std::vector<DrawOpQueue> DrawOpQueueStack;
+    class Macro;
     
     template<typename T>
     bool isPToTheLeftOfAB(T xa, T ya,

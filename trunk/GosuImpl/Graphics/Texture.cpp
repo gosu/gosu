@@ -78,7 +78,7 @@ GLuint Gosu::Texture::texName() const
 
 std::auto_ptr<Gosu::TexChunk>
     Gosu::Texture::tryAlloc(Graphics& graphics,
-        DrawOpQueue& queue, boost::shared_ptr<Texture> ptr,
+        DrawOpQueueStack& queues, boost::shared_ptr<Texture> ptr,
         const Bitmap& bmp, unsigned srcX,
         unsigned srcY, unsigned srcWidth,
         unsigned srcHeight, unsigned padding)
@@ -89,7 +89,7 @@ std::auto_ptr<Gosu::TexChunk>
     if (!block)
         return result;
     
-    result.reset(new TexChunk(graphics, queue, ptr, block->left + padding, block->top + padding,
+    result.reset(new TexChunk(graphics, queues, ptr, block->left + padding, block->top + padding,
                               block->width - 2 * padding, block->height - 2 * padding, padding));
     
 #if defined(__BIG_ENDIAN__)

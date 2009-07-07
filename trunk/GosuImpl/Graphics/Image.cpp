@@ -33,6 +33,11 @@ Gosu::Image::Image(Graphics& graphics, const Bitmap& source,
 {
 }
 
+Gosu::Image::Image(std::auto_ptr<ImageData> data)
+: data(data.release())
+{
+}
+
 Gosu::Image::~Image()
 {
 }

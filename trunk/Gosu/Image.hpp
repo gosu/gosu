@@ -8,6 +8,7 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/RotFlip.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace Gosu
 {
@@ -42,6 +43,9 @@ namespace Gosu
         Image(Graphics& graphics, const Bitmap& source, unsigned srcX,
             unsigned srcY, unsigned srcWidth, unsigned srcHeight,
             bool tileable = false);
+        
+        //! Creates an Image from a user-supplied instance of the ImageData interface.
+        explicit Image(std::auto_ptr<ImageData> data);
 
         ~Image();
 

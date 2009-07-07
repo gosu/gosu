@@ -2741,6 +2741,11 @@ SWIGINTERN void Gosu_Window_clipTo(Gosu::Window *self,int x,int y,unsigned int w
         rb_yield(Qnil);
         self->graphics().endClipping();
     }
+SWIGINTERN Gosu::Image *Gosu_Window_record(Gosu::Window *self){
+        self->graphics().beginRecording();
+        rb_yield(Qnil);
+        return new Gosu::Image(self->graphics().endRecording());
+    }
 
     static void markWindow(void* window) {
         Gosu::TextInput* ti = static_cast<Gosu::Window*>(window)->input().textInput();
@@ -8644,6 +8649,36 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Window_record(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  Gosu::Image *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","record", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  {
+    try {
+      result = (Gosu::Image *)Gosu_Window_record(arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_disown_Window(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
@@ -9332,6 +9367,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "height", VALUEFUNC(_wrap_Window_height), -1);
   rb_define_method(SwigClassWindow.klass, "gl", VALUEFUNC(_wrap_Window_gl), -1);
   rb_define_method(SwigClassWindow.klass, "clip_to", VALUEFUNC(_wrap_Window_clip_to), -1);
+  rb_define_method(SwigClassWindow.klass, "record", VALUEFUNC(_wrap_Window_record), -1);
   SwigClassWindow.mark = (void (*)(void *)) markWindow;
   SwigClassWindow.destroy = (void (*)(void *)) free_Gosu_Window;
   SwigClassWindow.trackObjects = 1;
