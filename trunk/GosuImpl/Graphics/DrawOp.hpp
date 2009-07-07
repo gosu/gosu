@@ -5,6 +5,7 @@
 #include <Gosu/Color.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/TexChunk.hpp>
+#include <boost/bind.hpp>
 #include <boost/cstdint.hpp>
 #include <algorithm>
 #include <set>
@@ -13,6 +14,14 @@ namespace Gosu
 {
     const GLuint NO_TEXTURE = static_cast<GLuint>(-1);
 
+    struct ArrayVertex
+    {
+        GLfloat texCoords[2];
+        boost::uint32_t color;
+        GLfloat vertices[3];
+    };
+    typedef std::vector<ArrayVertex> VertexArray;
+    
     struct DrawOp
     {
         int clipX, clipY;
@@ -183,6 +192,28 @@ namespace Gosu
         }
 #endif
         
+        void compileTo(VertexArray& va) const
+        {
+            ArrayVertex result[4];
+            
+            for (int i = 0; i < 4; ++i)
+            {
+                result[i].vertices[0] = vertices[i].x;
+                result[i].vertices[1] = vertices[i].y;
+                result[i].vertices[2] = 0;
+                result[i].color = vertices[i].c.abgr();
+            }
+
+            double left, top, right, bottom;
+            chunk->getCoords(left, top, right, bottom);
+            result[0].texCoords[0] = left,  result[0].texCoords[1] = top;
+            result[1].texCoords[0] = right, result[1].texCoords[1] = top;
+            result[2].texCoords[0] = left,  result[2].texCoords[1] = bottom;
+            result[3].texCoords[0] = right, result[3].texCoords[1] = bottom;
+
+            va.insert(va.end(), result, result + 4);
+        }
+        
         bool operator<(const DrawOp& other) const
         {
             return z < other.z;
@@ -263,6 +294,13 @@ namespace Gosu
         void clear()
         {
             set.clear();
+        }
+        
+        void compileTo(VertexArray& va) const
+        {
+            va.resize(set.size());
+            std::for_each(set.begin(), set.end(),
+                          boost::bind(&DrawOp::compileTo, _1, boost::ref(va)));
         }
     };
 }

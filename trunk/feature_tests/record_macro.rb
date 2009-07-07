@@ -3,19 +3,28 @@ require '../lib/gosu'
 require 'fps_counter'
 
 class Test < Gosu::Window
-  def draw_grid
-    160.times do |x|
-      120.times do |y|
-        @image.draw x * 3, y * 3, 0, 0.01, 0.01
+  def grid_x
+    20 + Math.sin(Gosu::milliseconds / 200.0) * 10
+  end
+  
+  def grid_y
+    20 + Math.cos(Gosu::milliseconds / 200.0) * 10
+  end
+  
+  def draw_grid base_x, base_y
+    400.times do |x|
+      300.times do |y|
+        @image.draw base_x + x * 2, base_y + y * 2, 0, 0.01, 0.01, 0x80ffffff
       end
     end
   end
   
-  def initialize 
+  def initialize
     super(640, 480, false)
     
     @image = Gosu::Image.new(self, "media/SquareTexture.png", true)
-    @macro = record { draw_grid }
+    @macro = record { draw_grid 0, 0 }
+    puts "Macro size: #{@macro.width}x#{@macro.height}"
   end
   
   def button_down(id)
@@ -30,9 +39,9 @@ class Test < Gosu::Window
     
     self.caption = "#{@fps_counter.fps} FPS, Macro: #{use_macro}"
     if use_macro then
-      @macro.draw 10, 10, 0
+      @macro.draw grid_x, grid_y, 0
     else
-      draw_grid
+      draw_grid grid_x, grid_y
     end
   end
 end

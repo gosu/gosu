@@ -8,12 +8,12 @@
 
 class Gosu::Macro : public Gosu::ImageData
 {
-    DrawOpQueue queue;
+    VertexArray vertexArray;
     
 public:
-    Macro(DrawOpQueue& swapMe)
+    Macro(const DrawOpQueue& queue)
     {
-        queue.swap(swapMe);
+        queue.compileTo(vertexArray);
     }
     
     unsigned int width() const
@@ -32,7 +32,21 @@ public:
               double x4, double y4, Color c4,
               ZPos z, AlphaMode mode) const
     {
-        queue.performDrawOps();
+        glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();
+        glTranslated(x1, y1, 0);
+        
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, 1);
+        
+        glInterleavedArrays(GL_T2F_C4UB_V3F, 0, &vertexArray[0]);
+
+        glDrawArrays(GL_QUADS, 0, vertexArray.size());
+        glFlush();
+
+        glDisable(GL_TEXTURE_2D);
+        
+        glPopMatrix();
     }
     
     boost::optional<Gosu::GLTexInfo> glTexInfo() const
