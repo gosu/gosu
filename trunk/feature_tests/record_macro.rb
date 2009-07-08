@@ -20,7 +20,7 @@ class Test < Gosu::Window
   end
   
   def initialize
-    super(640, 480, false)
+    super(900, 700, false)
     
     @image = Gosu::Image.new(self, "media/SquareTexture.png", true)
     @macro = record { draw_grid 0, 0 }
