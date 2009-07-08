@@ -32,6 +32,11 @@ public:
               double x4, double y4, Color c4,
               ZPos z, AlphaMode mode) const
     {
+#ifndef GOSU_IS_IPHONE
+        
+        // Commented out for now on the iPhone.
+        // To work, it would need to reset the VertexPointer etc. after doing its work.
+        
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
         glTranslated(x1, y1, 0);
@@ -47,6 +52,7 @@ public:
         glDisable(GL_TEXTURE_2D);
         
         glPopMatrix();
+#endif
     }
     
     boost::optional<Gosu::GLTexInfo> glTexInfo() const
