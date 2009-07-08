@@ -22,7 +22,7 @@ class Test < Gosu::Window
   def initialize
     super(900, 700, false)
     
-    @image = Gosu::Image.new(self, "media/SquareTexture.png", true)
+    @image = Gosu::Image.new(self, "media/Wallpaper.png", true)
     @macro = record { draw_grid 0, 0 }
     puts "Macro size: #{@macro.width}x#{@macro.height}"
   end
@@ -39,7 +39,8 @@ class Test < Gosu::Window
     
     self.caption = "#{@fps_counter.fps} FPS, Macro: #{use_macro}"
     if use_macro then
-      @macro.draw grid_x, grid_y, 0
+      zoom = button_down?(char_to_button_id('+')) ? 100.0 : 1.0
+      @macro.draw grid_x, grid_y, 0, zoom, zoom
     else
       draw_grid grid_x, grid_y
     end

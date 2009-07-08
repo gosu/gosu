@@ -208,8 +208,8 @@ namespace Gosu
             chunk->getCoords(left, top, right, bottom);
             result[0].texCoords[0] = left,  result[0].texCoords[1] = top;
             result[1].texCoords[0] = right, result[1].texCoords[1] = top;
-            result[2].texCoords[0] = left,  result[2].texCoords[1] = bottom;
-            result[3].texCoords[0] = right, result[3].texCoords[1] = bottom;
+            result[2].texCoords[0] = right, result[2].texCoords[1] = bottom;
+            result[3].texCoords[0] = left,  result[3].texCoords[1] = bottom;
 
             va.insert(va.end(), result, result + 4);
         }
