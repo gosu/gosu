@@ -44,7 +44,7 @@ namespace Gosu
         DrawOp() { clipWidth = 0xffffffff; usedVertices = 0; chunk = 0; }
         
 #ifndef GOSU_IS_IPHONE
-        void perform(GLuint& currentTexName, void*) const
+        void perform(GLuint& currentTexName, const void*) const
         {
             if (clipWidth != 0xffffffff)
             {
