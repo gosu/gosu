@@ -44,7 +44,7 @@ namespace Gosu
         DrawOp() { clipWidth = 0xffffffff; usedVertices = 0; chunk = 0; }
         
 #ifndef GOSU_IS_IPHONE
-        void perform(GLuint& currentTexName) const
+        void perform(GLuint& currentTexName, void*) const
         {
             if (clipWidth != 0xffffffff)
             {
@@ -111,11 +111,17 @@ namespace Gosu
                 glDisable(GL_SCISSOR_TEST);
         }
 #else
-        void perform(unsigned& currentTexName) const
+        void perform(unsigned& currentTexName, const DrawOp* next) const
         {
-            static GLfloat spriteVertices[8];
-            static GLfloat spriteTexcoords[8];
-            static boost::uint32_t spriteColors[4];
+            if (usedVertices != 4)
+                return; // No triangles, no lines on iPhone
+            
+            static const unsigned MAX_AUTOGROUP = 24;
+            
+            static int spriteCounter = 0;
+            static GLfloat spriteVertices[12 * MAX_AUTOGROUP];
+            static GLfloat spriteTexcoords[12 * MAX_AUTOGROUP];
+            static boost::uint32_t spriteColors[6 * MAX_AUTOGROUP];
             
             // iPhone specific setup
             static bool isSetup = false;
@@ -131,7 +137,7 @@ namespace Gosu
                 
                 isSetup = true;
             }
-
+            
             if (clipWidth != 0xffffffff)
             {
                 glEnable(GL_SCISSOR_TEST);
@@ -154,10 +160,19 @@ namespace Gosu
                 
                 double left, top, right, bottom;
                 chunk->getCoords(left, top, right, bottom);
-                spriteTexcoords[0] = left, spriteTexcoords[1] = top;
-                spriteTexcoords[2] = right, spriteTexcoords[3] = top;
-                spriteTexcoords[4] = left, spriteTexcoords[5] = bottom;
-                spriteTexcoords[6] = right, spriteTexcoords[7] = bottom;
+                spriteTexcoords[spriteCounter*12 + 0] = left;
+                spriteTexcoords[spriteCounter*12 + 1] = top;
+                spriteTexcoords[spriteCounter*12 + 2] = right;
+                spriteTexcoords[spriteCounter*12 + 3] = top;
+                spriteTexcoords[spriteCounter*12 + 4] = left;
+                spriteTexcoords[spriteCounter*12 + 5] = bottom;
+                
+                spriteTexcoords[spriteCounter*12 + 6] = right;
+                spriteTexcoords[spriteCounter*12 + 7] = top;
+                spriteTexcoords[spriteCounter*12 + 8] = left;
+                spriteTexcoords[spriteCounter*12 + 9] = bottom;
+                spriteTexcoords[spriteCounter*12 + 10] = right;
+                spriteTexcoords[spriteCounter*12 + 11] = bottom;
                 
                 currentTexName = chunk->texName();
             }
@@ -167,20 +182,29 @@ namespace Gosu
                 currentTexName = NO_TEXTURE;
             }
             
-            for (int i = 0; i < usedVertices; ++i)
+            for (int i = 0; i < 3; ++i)
             {
-                spriteVertices[i*2] = vertices[i].x;
-                spriteVertices[i*2+1] = vertices[i].y;
-                spriteColors[i] = vertices[i].c.abgr();
+                spriteVertices[spriteCounter*12 + i*2] = vertices[i].x;
+                spriteVertices[spriteCounter*12 + i*2+1] = vertices[i].y;
+                spriteColors[spriteCounter*6 + i] = vertices[i].c.abgr();
             }
-                
-            if (usedVertices == 2)
-                glDrawArrays(GL_LINES, 0, 2);
-            else if (usedVertices == 3)
-                glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
-            else if (usedVertices == 4)
-                glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-                
+            for (int i = 0; i < 3; ++i)
+            {
+                spriteVertices[spriteCounter*12 + 6 + i*2] = vertices[i + 1].x;
+                spriteVertices[spriteCounter*12 + 6 + i*2+1] = vertices[i + 1].y;
+                spriteColors[spriteCounter*6 + 3 + i] = vertices[i + 1].c.abgr();
+            }
+            
+            ++spriteCounter;
+            if (spriteCounter == MAX_AUTOGROUP or next == 0 or
+                next->chunk != chunk or next->mode != mode or
+                clipWidth != 0xffffffff or next->clipWidth != 0xffffffff)
+            {
+                glDrawArrays(GL_TRIANGLES, 0, 6 * spriteCounter);
+                //if (spriteCounter > 1)
+                //    printf("grouped %d quads\n", spriteCounter);
+                spriteCounter = 0;
+            }
             
             if (clipWidth != 0xffffffff)
                 glDisable(GL_SCISSOR_TEST);
@@ -254,7 +278,7 @@ namespace Gosu
             if (z == zImmediate)
             {
                 GLuint currentTexName = NO_TEXTURE;
-                op.perform(currentTexName);
+                op.perform(currentTexName, 0);
                 if (currentTexName != NO_TEXTURE)
                     glDisable(GL_TEXTURE_2D);
             }
@@ -280,11 +304,12 @@ namespace Gosu
         {
             GLuint currentTexName = NO_TEXTURE;
             
-            std::multiset<DrawOp>::const_iterator cur = set.begin(), end = set.end();
+            std::multiset<DrawOp>::const_iterator last, cur = set.begin(), end = set.end();
             while (cur != end)
             {
-                cur->perform(currentTexName);
+                last = cur;
                 ++cur;
+                last->perform(currentTexName, cur == end ? 0 : &*cur);
             }
             
             if (currentTexName != NO_TEXTURE)
