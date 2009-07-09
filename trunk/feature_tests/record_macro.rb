@@ -14,7 +14,7 @@ class Test < Gosu::Window
   def draw_grid base_x, base_y
     400.times do |x|
       300.times do |y|
-        @image.draw base_x + x * 2, base_y + y * 2, 0, 0.01, 0.01, 0x80ffffff
+        @images[x % 2].draw base_x + x * 2, base_y + y * 2, 0, 0.01, 0.01, 0x80ffffff
       end
     end
   end
@@ -22,7 +22,9 @@ class Test < Gosu::Window
   def initialize
     super(900, 700, false)
     
-    @image = Gosu::Image.new(self, "media/Wallpaper.png", true)
+    @images = %w(Wallpaper.png SquareTexture.png).map do |filename|
+      Gosu::Image.new(self, "media/#{filename}", true)
+    end
     @macro = record { draw_grid 0, 0 }
     puts "Macro size: #{@macro.width}x#{@macro.height}"
   end
