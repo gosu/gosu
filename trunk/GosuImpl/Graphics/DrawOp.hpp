@@ -197,7 +197,8 @@ namespace Gosu
             
             ++spriteCounter;
             if (spriteCounter == MAX_AUTOGROUP or next == 0 or
-                next->chunk != chunk or next->mode != mode or
+                chunk == 0 or next->chunk == 0 or 
+                next->chunk->texName() != chunk->texName() or next->mode != mode or
                 clipWidth != 0xffffffff or next->clipWidth != 0xffffffff)
             {
                 glDrawArrays(GL_TRIANGLES, 0, 6 * spriteCounter);
