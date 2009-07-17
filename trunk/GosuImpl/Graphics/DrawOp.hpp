@@ -332,5 +332,3 @@ namespace Gosu
 }
 
 #endif
-
-
