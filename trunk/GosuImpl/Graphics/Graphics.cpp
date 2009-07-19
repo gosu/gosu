@@ -253,26 +253,26 @@ void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
     double x3, double y3, Color c3,
     ZPos z, AlphaMode mode)
 {
-#ifdef GOSU_IS_IPHONE
-    drawQuad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x3, y3, c3, z, mode);
-#else
     DrawOp op;
-
+    
     x1 *= factorX();
     y1 *= factorY();
     x2 *= factorX();
     y2 *= factorY();
     x3 *= factorX();
     y3 *= factorY();
-
+    
     op.mode = mode;
     op.usedVertices = 3;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
     op.vertices[2] = DrawOp::Vertex(x3, y3, c3);
-
-    pimpl->queues.back().addDrawOp(op, z);
+#ifdef GOSU_IS_IPHONE
+    op.usedVertices = 4;
+    op.vertices[3] = op.vertices[2];
 #endif
+    
+    pimpl->queues.back().addDrawOp(op, z);
 }
 
 void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
