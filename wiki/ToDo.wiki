@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-07-15)
+(Last update: 2009-07-20)
 
 == Gosu 0.7.x ==
   * Look at janmejay's bakery
@@ -18,10 +18,9 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
     * Report Ocra bugs: spaces in exe name = crash, requires .rb and .so files?!
   * 0.7.15 (bugfixes bugfixes bugfixes)
-    * Make sure custom TTF files don't throw an exception on Linux
-    * Quick look: How hard is MacRuby support?
+    * Add -I/usr/include/SDL to the makefile
+    * Fix Color#dup
     * See if John Shea's talk had something about not being locked to pixel positions
-    * Look into "garbage while loading" bug on OS X
     * See if really old games have problems running in current Gosu
     * Verify that TextInput works cleanly on Ruby 1.9 with Unicode
     * Add support for giving font flags from Ruby
@@ -37,10 +36,9 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Test multiple screens on Windows
     * TextField with clip_to (update example)
     * Test LD14 entry on Linux
-    * Release 0.7.13.5
+    * Release 0.7.15
     * (1x mymüsli for all the hard work! (motivation!)
   * iPhone-related stuff that should be finished soonish
-    * Fix "too many fingers" bug on iPhone
     * Let resolution decide orientation
     * Implement Proof of Concept for Macro Patches
     * socket.bundle und syck.bundle in den Wrapper reinschweißen
@@ -65,6 +63,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * 0.7.16, text quality release (+Linux gamepad!)
     * Look for non-deprecated replacement for KeyTranslate and UCKeyTranslate
     * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
+    * Verify that Daniel font works properly in Font and Text
     * Image#from_text should support maxWidth=0 => no limits on size
     * Linux: Support Unicode in title bar
     * Linux: Support other XKeySyms than Latin 1
@@ -73,12 +72,13 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Windows: Make createText use Uniscribe
     * Make RTL work without RTL/LTR markers?!
     * Add RTL support to Font::drawRot too
-    * Add Linux gamepad support
+    * Add Linux gamepad support, try wgois for that
   * 0.7.15, polish/deployment release
     * Make it possible to delete images while they are still referenced in the queue.
     * Assure that files from doxygen task are considered for packaging
-    * RMagick auf Windows statisch kompilieren: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
+    * Compile all-in-one RMagick for Windows: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * Find out why Cmd+char triggers two button_downs, but only one button_up!
+    * Get rid of quad/tri/line drawing
     * Review: http://rubyforge.org/tracker/index.php?func=detail&aid=21405&group_id=375&atid=1504
     * Make sure README and LICENSE are appropriately named in the Gem?
     * Collect Gosu YouTube videos and link them prominently
@@ -115,6 +115,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Think: Possible to have beautiful quotation mark indenting?@Gosu Text
   * Benchmark clip_to; worth replacing with stencils?
   * See if other libraries catch the release of the 'A' key in cmd+a
+  * Find out why applyColorKey smears solid image data to the lower right
   * Add rdoc to Gosu gem
   * Make Linux gemspec more robust wrt examples/
   * Make more stuff configurable like http://github.com/cout/rice/blob/98ba7098e2de5849f2e7272021340976a768456f/ruby.ac#L7-20
@@ -135,10 +136,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Setup github homepage
   * Link ChangeLog and ToDo on front page
   * Make sure createText is visible in Doxygen
-  * Ask forum what overload for draw_quad would make sense
   * Add OpenGL Wiki page
   * Add Unicode Support wiki page
-  * Ruby/Gosu Icon: Fix ugly shadow
   * Add some RSS feed to main index.html page
   * Make tt blocks prettier on front page
   * Turn changelog and todo into links on frontpage
@@ -146,17 +145,16 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Try to translate the RubyTutorial to Japanese :)
   * Deployment wiki page/rdoc: Mention Icon resource support!
   * Document draw_line's weirdness
-  * Fix: "PotD"-Link is too close to screenshot
   * Note that draw can be called more often than update in the main loop
   * Setup board so it yields 301 redirects for vu2040
   * UTF8 Support for PotD texts(?)
-  * Link gosu-fr project :)
   * Fix div.frm.err in board styles
-  * rebuild doxygen with SHOW_NAMESPACES=true
+  * Move from doxygen to NaturalDocs experimentally
   * Make 'filter' text field stand out more in rdoc
+  * Use rubyforge gem in Gosu rakefile to upload releases
+  * Change weirdo homepage text about RMagick
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
-  * Think about using pre-multiplied alpha internally: http://home.comcast.net/~tom_forsyth/blog.wiki.html
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
   * Use float instead of double everywhere
   * Redesign (see forum) drawing interface
