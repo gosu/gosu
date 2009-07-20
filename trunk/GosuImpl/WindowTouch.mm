@@ -76,6 +76,7 @@ namespace
     windowInstance().audio().update();
     windowInstance().update();
     [gosuView drawView];
+    [gosuView removeDeadTouches];
 }
 @end
 

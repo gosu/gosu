@@ -23,6 +23,12 @@
 }
 
 - (const Gosu::Touches&)currentTouches;
+
 - (void)drawView;
+
+// This method is necessary because if pressing a LOT of touches, some
+// of them may end up not being sent to touchesEnded(), which is confusing
+// to application programmers.
+- (void)removeDeadTouches;
 
 @end
