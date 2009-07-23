@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-07-21)
+(Last update: 2009-07-23)
 
 == Gosu 0.7.x ==
   * Look at janmejay's bakery
@@ -12,6 +12,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Get Anna to test the new OpenAL code on Intel/Tiger...
   * Change audio_formats.rb so it builds the list of supported formats
   * Publish list of supported sound/song formats
+  * Either document gosu_to_radian_scale or rename it before anyone relies on it
   * Web work
     * Move three threads from GosuExchange to the forums
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
@@ -115,6 +116,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Think: Possible to have beautiful quotation mark indenting?@Gosu Text
   * Benchmark clip_to; worth replacing with stencils?
   * See if other libraries catch the release of the 'A' key in cmd+a
+  * If there every is functionality to 'and' and 'or' Gosu::Button, how would one check in buttonDown?
   * Find out why applyColorKey smears solid image data to the lower right
   * Add rdoc to Gosu gem
   * Make Linux gemspec more robust wrt examples/
