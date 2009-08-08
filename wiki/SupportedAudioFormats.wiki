@@ -11,4 +11,4 @@ This list is populated using the semi-automated script from `trunk/feature_tests
 || Windows (Gosu::Song)  ||  ||  ||  ||  ||  || Yes || Yes || Yes || Yes || Yes || Yes || Yes ||
 
 
-OS X refers to both Macs and iPhones/iPods.
+OS X refers to both Macs and iPhones/iPods. I only tested the CAF formats because they are popular on the iPhone.
