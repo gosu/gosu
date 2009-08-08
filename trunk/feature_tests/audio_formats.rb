@@ -3,22 +3,44 @@ require '../lib/gosu'
 
 w = Gosu::Window.new(100, 100, false)
 Dir.chdir 'audio_formats'
-Dir['*'].each do |format|
-  puts "Testing #{format}:"
+FORMATS_TO_TRY = Dir['*']
+
+puts "|| Platform || #{FORMATS_TO_TRY.map { |fn| fn[/[^\.]*/].gsub('_', ' ') }.join(' || ')} ||"
+
+my_platform = case RUBY_PLATFORM
+  when /darwin/ then 'OS X'
+  when /win/ then 'Windows'
+  else 'Linux'
+end
+
+# Sample
+
+print "|| #{my_platform} (Gosu::Sample)"
+FORMATS_TO_TRY.each do |format|
+  print " || "
   begin
     si = Gosu::Sample.new(w, format).play
     sleep 1
     si.stop
-    puts " X Sample"
+    print "Yes"
   rescue
-    puts "   Sample (#$!)"
+    # Do nothing
   end
+end
+puts " ||"
+
+# Song
+
+print "|| #{my_platform} (Gosu::Song) "
+FORMATS_TO_TRY.each do |format|
+  print " || "
   begin
     Gosu::Song.new(w, format).play
     sleep 1
     Gosu::Song::current_song.stop if Gosu::Song::current_song
-    puts " X Song"
+    print "Yes"
   rescue
-    puts "   Song (#$!)"
+    # Do nothing
   end
 end
+puts " ||"
