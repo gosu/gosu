@@ -3,7 +3,7 @@ require '../lib/gosu'
 
 w = Gosu::Window.new(100, 100, false)
 Dir.chdir 'audio_formats'
-FORMATS_TO_TRY = Dir['*']
+FORMATS_TO_TRY = Dir['*'].sort
 
 puts "|| Platform || #{FORMATS_TO_TRY.map { |fn| fn[/[^\.]*/].gsub('_', ' ') }.join(' || ')} ||"
 
