@@ -5,6 +5,6 @@
 This list is populated using the semi-automated script from `trunk/feature_tests/audio_formats.rb`. It is important to note that many container formats, such as WAV or OGG, can contain several types of audio data. Recommended formats are Ogg Vorbis and PCM WAV, which are the most usual combinations.
 
 || Platform || aiff 32bit float || au 16bit pcm || caf be 16bit 44khz || caf le 16bit 44khz || caf le 8bit 44khz || general midi || impulse tracker || mp3 128k stereo || mp3 avg 96kbit jointstereo || ogg vorbis || wav 16bit pcm || wav 4bit ms adpcm ||
-|| OS X (Sample) || No || No || No || No || No || No || No || No || No || No || No || No ||
+|| OS X (Gosu::Sample) || Yes || Yes || Yes || Yes || Yes || No || No || Yes || Yes || Yes || Yes || Yes ||
 
 OS X refers to both Macs and iPhones/iPods.
