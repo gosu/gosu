@@ -4,15 +4,18 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-08-01)
+(Last update: 2009-08-12)
 
 == Gosu 0.7.x ==
+  * Install git and git-svn
+  * Start pushing again, verify that it still works
   * Look at janmejay's bakery
   * Test StandBy with Windows and a running Gosu app
   * Get Anna to test the new OpenAL code on Intel/Tiger...
   * Change audio_formats.rb so it builds the list of supported formats
   * Publish list of supported sound/song formats
   * Either document gosu_to_radian_scale or rename it before anyone relies on it
+  * "Garbled Screen"-Bug erneut angucken
   * Web work
     * Move three threads from GosuExchange to the forums
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
