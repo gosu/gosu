@@ -1,0 +1,314 @@
+
+/* 
+ Allison 2 template
+ Copyright 2007, 2008 Cloudburst, LLC. Licensed under the AFL 3. See the included LICENSE file.
+*/
+
+/* default styles */
+
+* {
+  margin: 0
+  padding: 0
+  border: none
+}
+
+@default = "#000"
+@background = "#fff"
+@very_light = "#e4ebed"
+@light = "#ccd5dc"
+@medium = "#304878"
+@dark = "#181848"
+
+@buffer = 6
+
+.clear {
+  clear: both
+}
+
+a {
+  color: @medium
+  font-weight: bold
+  text-decoration: none
+}
+
+a:hover {
+  text-decoration: underline
+}
+
+html, body {
+	color: @default
+	font-size: @font_size = 13
+	font-family: helvetica, verdana, sans
+	background-color: @background
+	text-align: center
+	margin: 0
+	padding: 0
+}
+
+p, ul, ol {
+  line-height: @lineheight = 16
+} li {
+  margin: @buffer / 2
+  _margin-left: 40px
+} p, pre, table, ol, ul {
+  margin: @lineheight
+} #item_name {
+  margin-top: -8px
+}
+
+h1 {
+  font-size: 22px
+  margin-top: @lineheight
+} h2, h3 {
+  font-size: @medium_header_size = 18
+  margin: @buffer
+  margin-right: 0
+  padding-top: @buffer * 2
+} 
+
+/* center everything */
+
+#container {
+  margin: 20px auto 0 auto
+  width: @width = 900
+  text-align: left
+}
+
+/* header stuff */
+
+#header {
+   padding: @buffer
+   padding-top: @buffer / 2
+   width: @width - @buffer * 2
+   height: @header_height = 64 - @buffer * 2
+   _height: @header_height + @buffer
+   margin-bottom: @buffer * 2
+   vertical-align: baseline
+   background-color: @dark
+   overflow: hidden
+} .curve {
+  background-color: @dark
+  margin: 0
+  padding: 0
+  height: 1px
+  overflow: hidden /* again, ie problem */
+} 
+
+def curve(div_id, curve_array, width); s = ""; curve_array.length.times {|n| s += "\n##{div_id}#{curve_array.length - 1 - n}{border-left: #{curve_array[n]}px solid #{@background}; border-right: #{curve_array[n]}px solid #{@background}; width: #{width - curve_array[n]*2}px; _width: #{width - 12}px; }"}; s; end
+@curves = [1, 1, 2, 3, 4, 6]
+
+curve("preheader_curve_", @curves, @width)
+
+#header h1 {
+  color: @background
+  font-size: 30px
+  margin: 4px 0 0 0 
+ } #header p {
+  margin: 0
+  padding: 0
+  padding-left: 3px
+  font-size: 16px
+  color: @background
+} #header a {
+  color: @background
+  text-decoration: none
+  font-weight: bold
+}
+
+/* basic layout and navigation bars */
+  
+#left {
+  background-color: @dark
+  width: @left_width = 220
+  float: left
+  _width: @left_width - @buffer * 2
+  margin-bottom: @buffer * 4
+} #left a {
+  line-height: 14px
+} 
+
+/* navigation bar colors and text styles */
+
+.navigation {
+  width: @left_width - @buffer * 4
+  margin: @buffer
+  padding: @buffer
+  text-align: left
+  background-color: @background
+  overflow: hidden
+} .navigation h3 {
+  font-weight: bold
+  margin-bottom: 5px  
+} .navigation span, .navigation a {
+  margin-left: @buffer
+} #includes .navigation span, #includes .navigation a {
+  margin-left: 0
+} .darker {
+  background-color: @very_light 
+} #spacer {
+  background-color: @background
+  height: @buffer * 3
+  display: none
+}
+
+/* content area */
+
+#content {
+  padding: @content_padding = 20
+  width: @width - @left_width - @content_padding * 2
+  float: left
+  min-height: 450px
+  margin: 0
+  margin-bottom: -4px
+} #content img {
+  padding-top: @buffer
+  padding-bottom: @buffer * 2
+}
+
+#content h1, h2 {
+  border-top: 1px solid @very_light
+} #content h1 {
+  padding-top: @buffer * 3
+} #content #item_name { /* why does this need to be fully qualified? */
+  padding-top: 0
+  border: none
+}
+
+/* footer */
+
+#footer {
+  text-align: center
+  background-color: @background
+  padding: @buffer * 3
+  border-top: 1px solid @very_light
+  color: @light
+} #footer a {
+  font-weight: normal
+  color: @light
+}
+
+/* for that dumb redirect index page I can't avoid */
+
+#redirect {
+  text-align: center  
+} #redirect a {
+  color: @dark
+}
+
+/* tables */
+
+table {
+  width: @width - @left_width - 95
+  margin-right: 0
+  border-collapse: collapse
+  border: 1px solid @very_light
+} td, th {
+  background-color: @background
+  text-align: left
+  padding: @buffer
+  line-height: 14px
+  font-size: @font_size
+} td.normal {
+  font-family: @monospace = "Courier, Courier New, monospace"
+  font-size: @monospace_size = 12
+} td.highlight {
+  color: @medium
+}  
+
+/* method_block details */
+  
+div.method_block {
+  border-bottom: 1px solid @very_light
+  margin-left: 20px
+  margin-bottom: -17px
+  margin-top: 17px
+} div.method_block h3 {
+  color: @dark
+  margin-left: 0
+  padding: 0
+} #content div.method_block h1, #content #description h1 { 
+  margin-left: @buffer
+  color: @light
+} div.method_block a.small { /* where is this used? */
+  font-size: 3px
+  line-height: 3px
+} 
+
+/* index includes on the navigation bar */
+
+div.index a {
+  font-size: @font_size
+} #method {
+  display: none 
+} #file, #class {
+  display: block
+} div.list_header {
+  float: left
+} div.list_header_link {
+  float: right
+  padding-top: 3px
+} div.list_header_link a {
+  font-weight: normal
+} div.navigation h3, .list_header_link {
+  margin: 0
+  margin-top: @buffer
+  margin-bottom: @buffer
+  padding: 0
+}
+
+.index label {
+  font-size: @font_size
+} .index form input {
+  width: @left_width - @buffer * 14
+} .index form {
+   margin-bottom: @buffer
+}
+
+ol, ul {
+  margin-left: @buffer
+} 
+
+p.source_link a {
+  text-align: right
+  font-weight: normal
+} div.source {
+  display: none
+} pre, tt {
+  color: @dark
+  font-weight: normal
+  font-family: @monospace
+  font-size: @monospace_size
+} pre {
+  line-height: 14px
+  margin-left: @buffer * 2
+  overflow: auto
+  /* next 4 lines because IE sucks */
+  _position: relative
+  _width: @width - @left_width - (@buffer * 15 + 3)
+  _overflow-x:scroll
+  _overflow-y:visible
+} b tt, tt b {
+  font-weight: bold
+} div.source g {
+  margin-left: 0
+} p.source_link {
+  text-align: center
+} 
+
+/* source code highlighting */
+
+.source pre {
+  color: black
+}
+pre .ruby-value, pre .ruby-symbol {
+  color: @blue = "#1104bb"
+} pre .ruby-value.str, pre .ruby-node {
+  color: @dark
+} pre .ruby-ivar, pre .ruby-cvar {
+} pre .ruby-comment {
+  color: @green = "#009500"
+} pre .ruby-constant {
+  color: @orange = "#cd8802"
+} pre .ruby-keyword {
+  color: @purple = "#8d04aa"
+} 
