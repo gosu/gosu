@@ -4,24 +4,19 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-08-15)
+(Last update: 2009-08-16)
 
 == Gosu 0.7.x ==
-  * Install git and git-svn
-  * Start pushing again, verify that it still works
-  * Look at janmejay's bakery
   * Test StandBy with Windows and a running Gosu app
-  * Get Anna to test the new OpenAL code on Intel/Tiger...
-  * Change audio_formats.rb so it builds the list of supported formats
-  * Publish list of supported sound/song formats
+  * Get Anna or someone else to test the new OpenAL code on Intel/Tiger...
   * Either document gosu_to_radian_scale or rename it before anyone relies on it
-  * "Garbled Screen"-Bug erneut angucken
   * Web work
     * Move three threads from GosuExchange to the forums
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
     * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
     * Report Ocra bugs: spaces in exe name = crash, requires .rb and .so files?!
   * 0.7.15 (bugfixes bugfixes bugfixes)
+    * Revisit "garbled screen" bug on Mac
     * Add -I/usr/include/SDL to the makefile
     * Fix Color#dup
     * See if John Shea's talk had something about not being locked to pixel positions
@@ -158,6 +153,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Change weirdo homepage text about RMagick
   * Donate to allison's author when I'm home
   * Explain SampleInstance vs. Sample somewhere
+  * Correct wikipedia article: http://en.wikipedia.org/wiki/Chipmunk_physics_engine
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
