@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-08-23)
+(Last update: 2009-08-25)
 
 == Gosu 0.7.x ==
   * Test StandBy with Windows and a running Gosu app
@@ -119,6 +119,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Add rdoc to Gosu gem
   * Make Linux gemspec more robust wrt examples/
   * Make more stuff configurable like http://github.com/cout/rice/blob/98ba7098e2de5849f2e7272021340976a768456f/ruby.ac#L7-20
+  * Auf VM probieren: http://jolierouge.net/downloads/Chipmunk-4.1.0.gem
 == Gosu CI/Usability ==
   * Refresh ToDo list only when necessary
   * Document 64px minimum for single-texture opt.
