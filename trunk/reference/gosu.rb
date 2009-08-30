@@ -351,7 +351,6 @@ module Gosu
     attr_accessor :mouse_x
     attr_accessor :mouse_y
     attr_accessor :text_input
-    attr_reader :update_interval
     attr_reader :width, :height
     attr_reader :update_interval
     
@@ -420,11 +419,11 @@ module Gosu
   
   # Contains information about the underlying OpenGL texture and the u/v space used for image data.
   #
-  # Can be retrieved from some images to use them in OpenGL operations. (Will not work with images that are too large for a single texture.)
+  # Can be retrieved from some images to use them in OpenGL operations. nil will be returned instead by images that are too large for a single texture.)
   #
   # See examples/OpenGLIntegration.rb.
   class GLTexInfo
-    attr_accessor :tex_name, :left, :right, :top, :bottom
+    attr_reader :tex_name, :left, :right, :top, :bottom
   end
   
   # Returns a random double between min (inclusive) and max (exclusive).

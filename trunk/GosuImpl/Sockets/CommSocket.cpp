@@ -34,7 +34,7 @@ struct Gosu::CommSocket::Impl
 
                 for (;;) // IMPR.
                 {
-                    const size_t sizeSize = sizeof(u_long);
+                    const size_t sizeSize = sizeof(unsigned long);
 
                     // Not even enough bytes there to determine the size of the
                     // incoming message.
@@ -42,7 +42,7 @@ struct Gosu::CommSocket::Impl
                         break;
 
                     // Message size is already here, convert it.
-                    u_long msgSize = *reinterpret_cast<u_long*>(&inbox[0]);
+                    unsigned long msgSize = *reinterpret_cast<unsigned long*>(&inbox[0]);
                     msgSize = ntohl(msgSize);
 
                     // Can't really handle zero-size messages. IMPR?!
@@ -240,7 +240,7 @@ void Gosu::CommSocket::send(const void* buffer, std::size_t size)
     // In managed mode, also send the length of the buffer.
     if (mode() == cmManaged)
     {
-        u_long netSize = htonl(size);
+        unsigned long netSize = htonl(size);
         const char* charBuf = reinterpret_cast<const char*>(&netSize);
         pimpl->outbox.insert(pimpl->outbox.end(), charBuf,
             charBuf + sizeof netSize);

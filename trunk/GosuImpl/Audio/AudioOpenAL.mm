@@ -22,14 +22,6 @@
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
 
-#if __LP64__ || NS_BUILD_32_LIKE_64
-typedef long NSInteger;
-typedef unsigned long NSUInteger;
-#else
-typedef int NSInteger;
-typedef unsigned int NSUInteger;
-#endif
-
 using namespace std;
 
 namespace
@@ -94,7 +86,7 @@ Gosu::SampleInstance::SampleInstance(int handle, int extra)
 
 bool Gosu::SampleInstance::playing() const
 {
-    NSUInteger source = alChannelManagement->sourceIfStillPlaying(handle, extra);
+    ALuint source = alChannelManagement->sourceIfStillPlaying(handle, extra);
     if (source == ALChannelManagement::NO_SOURCE)
         return false;
     ALint state;
@@ -104,7 +96,7 @@ bool Gosu::SampleInstance::playing() const
 
 bool Gosu::SampleInstance::paused() const
 {
-    NSUInteger source = alChannelManagement->sourceIfStillPlaying(handle, extra);
+    ALuint source = alChannelManagement->sourceIfStillPlaying(handle, extra);
     if (source == ALChannelManagement::NO_SOURCE)
         return false;
     ALint state;
@@ -114,7 +106,7 @@ bool Gosu::SampleInstance::paused() const
 
 void Gosu::SampleInstance::pause()
 {
-    NSUInteger source = alChannelManagement->sourceIfStillPlaying(handle, extra);
+    ALuint source = alChannelManagement->sourceIfStillPlaying(handle, extra);
     if (source == ALChannelManagement::NO_SOURCE)
         return;
     alSourcePause(source);
@@ -122,7 +114,7 @@ void Gosu::SampleInstance::pause()
 
 void Gosu::SampleInstance::resume()
 {
-    NSUInteger source = alChannelManagement->sourceIfStillPlaying(handle, extra);
+    ALuint source = alChannelManagement->sourceIfStillPlaying(handle, extra);
     if (source == ALChannelManagement::NO_SOURCE)
         return;
     ALint state;
@@ -133,7 +125,7 @@ void Gosu::SampleInstance::resume()
 
 void Gosu::SampleInstance::stop()
 {
-    NSUInteger source = alChannelManagement->sourceIfStillPlaying(handle, extra);
+    ALuint source = alChannelManagement->sourceIfStillPlaying(handle, extra);
     if (source == ALChannelManagement::NO_SOURCE)
         return;
     alSourceStop(source);
@@ -141,7 +133,7 @@ void Gosu::SampleInstance::stop()
 
 void Gosu::SampleInstance::changeVolume(double volume)
 {
-    NSUInteger source = alChannelManagement->sourceIfStillPlaying(handle, extra);
+    ALuint source = alChannelManagement->sourceIfStillPlaying(handle, extra);
     if (source == ALChannelManagement::NO_SOURCE)
         return;
     alSourcef(source, AL_GAIN, volume);
@@ -166,7 +158,7 @@ void Gosu::SampleInstance::changeSpeed(double speed)
 
 struct Gosu::Sample::SampleData : boost::noncopyable
 {
-    NSUInteger buffer, source;
+    ALuint buffer, source;
 
     SampleData(AudioFile& audioFile)
     {
@@ -285,7 +277,7 @@ public:
 class Gosu::Song::StreamData : public BaseData
 {
     boost::scoped_ptr<AudioFile> file;
-    NSUInteger buffers[2];
+    ALuint buffers[2];
     
     void applyVolume()
     {
@@ -299,7 +291,7 @@ class Gosu::Song::StreamData : public BaseData
         return alChannelManagement->sourceForSongs();
     }
     
-    bool streamToBuffer(NSUInteger buffer)
+    bool streamToBuffer(ALuint buffer)
     {
         #ifdef GOSU_IS_IPHONE
         static const unsigned BUFFER_SIZE = 4096 * 4;
@@ -371,7 +363,7 @@ public:
         {
             alSourceStop(source);
 
-            NSUInteger buffer;
+            ALuint buffer;
             
             // The number of QUEUED buffers apparently includes the number of
             // PROCESSED ones, so getting rid of the QUEUED ones is enough.
@@ -417,7 +409,7 @@ public:
     {
         int source = lookupSource();
 
-        NSUInteger buffer;
+        ALuint buffer;
         int queued, processed;
         bool active = true;
         

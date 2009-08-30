@@ -435,6 +435,7 @@ namespace {
         
         idChars.assign(0);
 
+#ifndef __LP64__
 		const void* KCHR = reinterpret_cast<const void*>(GetScriptManagerVariable(smKCHRCache));
 		if (!KCHR)
 			return;
@@ -467,6 +468,7 @@ namespace {
             idChars[code] = ch;
             charIds[ch] = code;
         }
+#endif
     }
 	 
     boost::array<bool, Gosu::numButtons> buttonStates;

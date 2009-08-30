@@ -113,7 +113,7 @@ void Gosu::Socket::setHandle(SocketHandle value)
 
 void Gosu::Socket::setBlocking(bool value)
 {
-    u_long enable = !value;
+    unsigned long enable = !value;
     socketCheck(::ioctlsocket(handle(), FIONBIO, &enable));
 }
 

@@ -201,7 +201,7 @@ namespace Gosu
             CHECK_OS(ExtAudioFileSeek(file_, 0 + seekOffset_));
         }
         
-        std::size_t readData(void* dest, UInt32 length)
+        std::size_t readData(void* dest, size_t length)
         {
             AudioBufferList abl;
             abl.mNumberBuffers = 1;

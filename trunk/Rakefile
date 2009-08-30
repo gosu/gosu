@@ -280,7 +280,7 @@ end
 desc "Uses a parallel gosu.git repository and git-svn to push changes to github"
 task :push_to_github do
   Dir.chdir '../gosu.git'
-  fetch_output = `git svn fetch`
+  fetch_output = `PATH=/usr/local/git/bin:$PATH git svn fetch`
   puts fetch_output
   last_commit_id = fetch_output.reverse[/ [a-f0-9]{40} /].reverse
   sh "git rebase #{last_commit_id}"

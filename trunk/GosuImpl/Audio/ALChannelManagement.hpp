@@ -12,9 +12,9 @@ namespace Gosu
         static ALCcontext* alContext;
 
         enum { NUM_SOURCES = 32 }; // This is what the iPhone supports, I hear.
-        NSUInteger alSources[NUM_SOURCES];
-        NSUInteger currentToken;
-        NSUInteger currentTokens[NUM_SOURCES];
+        ALuint alSources[NUM_SOURCES];
+        ALuint currentToken;
+        ALuint currentTokens[NUM_SOURCES];
         
     public:
         enum { NO_TOKEN = -1, NO_SOURCE = -1, NO_FREE_CHANNEL = -1 };
