@@ -4,9 +4,11 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-08-30)
+(Last update: 2009-09-01)
 
 == Gosu 0.7.x ==
+  * Issue hotfix for Gosu on Snow Leopard
+  * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Test StandBy with Windows and a running Gosu app
   * Get Anna or someone else to test the new OpenAL code on Intel/Tiger...
   * Either document gosu_to_radian_scale or rename it before anyone relies on it
