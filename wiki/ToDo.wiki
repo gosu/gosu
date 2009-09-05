@@ -4,9 +4,12 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-09-04)
+(Last update: 2009-09-06)
 
 == Gosu 0.7.x ==
+  * Install Ruby 1.9.1
+  * Build experimental three-way universal Gosu gem
+  * Let Marco/Alex test experimental 64-bit gem
   * Issue hotfix for Gosu on Snow Leopard
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Test StandBy with Windows and a running Gosu app
@@ -20,7 +23,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * 0.7.15 (bugfixes bugfixes bugfixes)
     * Revisit "garbled screen" bug on Mac
     * Add -I/usr/include/SDL to the makefile
-    * Fix Color#dup
     * See if John Shea's talk had something about not being locked to pixel positions
     * See if really old games have problems running in current Gosu
     * Verify that TextInput works cleanly on Ruby 1.9 with Unicode
@@ -47,6 +49,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Clear up GOSU_IS_MAC vs. GOSU_IS_OSX
     * Use getBytes instead of UTF8String
   * More OpenAL niceties
+    * Look at protea as an FMOD replacement http://www.viremo.de/proteaAudio/
     * Try to add dynamic MikMod loading code
     * See if there is a native/fastest mixing rate on Mac/iPhone
     * Make buffers in Mac port larger and make sure that update_interval<66 always plays running Songs without jitter
