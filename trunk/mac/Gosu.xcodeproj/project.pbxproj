@@ -102,6 +102,9 @@
 		D42D02400F7068C500407E60 /* AudioOpenAL.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42DFE380F6F84DA00407E60 /* AudioOpenAL.mm */; };
 		D42D025E0F706A0100407E60 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025C0F706A0100407E60 /* AudioToolbox.framework */; };
 		D42D025F0F706A0100407E60 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025D0F706A0100407E60 /* OpenAL.framework */; };
+		D42E1A15104AEF1D0019345C /* TextTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4032B7C0F5035A900A20790 /* TextTouch.mm */; };
+		D42E1A16104AEF1F0019345C /* TextTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4032B7C0F5035A900A20790 /* TextTouch.mm */; };
+		D42E1A17104AEF210019345C /* TextTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4032B7C0F5035A900A20790 /* TextTouch.mm */; };
 		D443F6BD0FE9330700BC0D66 /* AudioFile.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D443F6BC0FE9330700BC0D66 /* AudioFile.hpp */; };
 		D443F6D40FE9346800BC0D66 /* AudioToolboxFile.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D443F6D30FE9346800BC0D66 /* AudioToolboxFile.hpp */; };
 		D448D8980FF81E1E002FA7EE /* Version.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D448D8970FF81E1E002FA7EE /* Version.hpp */; };
@@ -1453,6 +1456,7 @@
 				D4F4BF990FC4CB1A0013CE21 /* block.c in Sources */,
 				D4F4BF9A0FC4CB1A0013CE21 /* bitrate.c in Sources */,
 				D4F4BF9B0FC4CB1A0013CE21 /* analysis.c in Sources */,
+				D42E1A15104AEF1D0019345C /* TextTouch.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1611,6 +1615,7 @@
 				D4F4BFAD0FC4CB1A0013CE21 /* block.c in Sources */,
 				D4F4BFAE0FC4CB1A0013CE21 /* bitrate.c in Sources */,
 				D4F4BFAF0FC4CB1A0013CE21 /* analysis.c in Sources */,
+				D42E1A17104AEF210019345C /* TextTouch.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1754,6 +1759,7 @@
 				D4F4BFC10FC4CB1A0013CE21 /* block.c in Sources */,
 				D4F4BFC20FC4CB1A0013CE21 /* bitrate.c in Sources */,
 				D4F4BFC30FC4CB1A0013CE21 /* analysis.c in Sources */,
+				D42E1A16104AEF1F0019345C /* TextTouch.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

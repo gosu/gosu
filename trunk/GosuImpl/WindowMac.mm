@@ -27,6 +27,7 @@ namespace Gosu {
     }
 }
 
+#ifndef __LP64__
 // Workaround for Apple NSScreen bug :(
 @interface NSScreen (NSScreenAccess)
 - (void) setFrame:(NSRect)frame;
@@ -38,6 +39,7 @@ namespace Gosu {
     _frame = frame;
 }
 @end
+#endif
 
 // Necessary to catch input events in fullscreen mode
 @interface GosuApplication : NSApplication

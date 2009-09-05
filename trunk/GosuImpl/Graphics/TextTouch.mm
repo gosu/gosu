@@ -1,24 +1,34 @@
+#import <Gosu/Platform.hpp>
+
+#if defined(__LP64__) || defined(GOSU_IS_IPHONE)
+
 #import <Gosu/Text.hpp>
 #import <Gosu/Bitmap.hpp>
 #import <Gosu/Utility.hpp>
 #import <GosuImpl/MacUtility.hpp>
-#import <UIKit/UIKit.h>
-#import <CoreGraphics/CoreGraphics.h>
 #import <map>
 #import <cmath>
 using namespace std;
 
+#if defined(GOSU_IS_IPHONE)
+#import <UIKit/UIKit.h>
+#import <CoreGraphics/CoreGraphics.h>
+typedef UIFont OSXFont;
+#else
+#import <AppKit/AppKit.h>
+typedef NSFont OSXFont;
+#endif
+
 namespace
 {
-    map<pair<wstring, double>, UIFont*> usedFonts;
-
-    UIFont* getFont(const wstring& name, double height)
+    map<pair<wstring, double>, OSXFont*> usedFonts;
+    OSXFont* getFont(const wstring& name, double height)
     {
-        UIFont* result = usedFonts[make_pair(name, height)];
+        OSXFont* result = usedFonts[make_pair(name, height)];
         if (!result)
         {
             Gosu::ObjRef<NSString> fontName([[NSString alloc] initWithUTF8String: Gosu::wstringToUTF8(name).c_str()]);
-            result = [UIFont fontWithName: fontName.obj() size: height];
+            result = [OSXFont fontWithName: fontName.obj() size: height];
         }
         return result;
     }
@@ -34,11 +44,17 @@ wstring Gosu::defaultFontName()
 unsigned Gosu::textWidth(const wstring& text,
     const wstring& fontName, unsigned fontHeight, unsigned fontFlags)
 {
-    UIFont* font = getFont(fontName, fontHeight);
-
+    OSXFont* font = getFont(fontName, fontHeight);
+    
     // This will, of course, compute a too large size; fontHeight is in pixels, the method expects point.
     ObjRef<NSString> string([[NSString alloc] initWithUTF8String: wstringToUTF8(text).c_str()]);
+    #ifndef GOSU_IS_IPHONE
+    ObjRef<NSDictionary> attributes([[NSDictionary alloc] initWithObjectsAndKeys:
+        NSFontAttributeName, font, nil]);
+    CGSize size = [string.obj() sizeWithAttributes: attributes.get()];
+    #else
     CGSize size = [string.obj() sizeWithFont: font];
+    #endif
                            
     // Now adjust the scaling...
     return ceil(size.width / size.height * fontHeight);
@@ -48,11 +64,17 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     Color c, const wstring& fontName, unsigned fontHeight,
     unsigned fontFlags)
 {
-    UIFont* font = getFont(fontName, fontHeight);
+    OSXFont* font = getFont(fontName, fontHeight);
     ObjRef<NSString> string([[NSString alloc] initWithUTF8String: wstringToUTF8(text).c_str()]);
 
     // This will, of course, compute a too large size; fontHeight is in pixels, the method expects point.
+    #ifndef GOSU_IS_IPHONE
+    ObjRef<NSDictionary> attributes([[NSDictionary alloc] initWithObjectsAndKeys:
+        NSFontAttributeName, font, nil]);
+    CGSize size = [string.obj() sizeWithAttributes: attributes.get()];
+    #else
     CGSize size = [string.obj() sizeWithFont: font];
+    #endif
     
     unsigned width = ceil(size.width / size.height * fontHeight);
 
@@ -79,11 +101,17 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     
     CGContextTranslateCTM(context, 0, fontHeight);
     CGContextScaleCTM(context, 1, -1);
+    #ifdef GOSU_IS_IPHONE
     UIGraphicsPushContext(context);
     [string.obj() drawAtPoint: CGPointZero withFont: font];
     UIGraphicsPopContext();
+    #else
+    [string.obj() drawAtPoint: CGPointZero withAttributes: attributes.get()];
+    #endif
     CGContextRelease(context);
 
     // Done!
     bitmap.insert(bmp, x, y);
 }
+
+#endif

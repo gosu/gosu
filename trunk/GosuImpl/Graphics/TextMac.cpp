@@ -1,3 +1,5 @@
+#ifndef __LP64__
+
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
@@ -233,3 +235,5 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
         }
     bitmap.insert(wholeText, x, y);
 }
+
+#endif
