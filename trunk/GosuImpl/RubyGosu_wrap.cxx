@@ -2459,12 +2459,15 @@ SWIG_From_unsigned_SS_char  (unsigned char value)
   return SWIG_From_unsigned_SS_long  (value);
 }
 
+SWIGINTERN Gosu::Color Gosu_Color_dup(Gosu::Color const *self){
+        return *self;
+    }
 SWIGINTERN std::string Gosu_Color_toS(Gosu::Color const *self){
         std::ostringstream stream;
-        stream << "(" << static_cast<int>(self->alpha())
-               << "," << static_cast<int>(self->red()) 
-               << "," << static_cast<int>(self->green())
-               << "," << static_cast<int>(self->blue()) << ")";
+        stream << "(ARGB: " << static_cast<int>(self->alpha())
+               << ", " << static_cast<int>(self->red()) 
+               << ", " << static_cast<int>(self->green())
+               << ", " << static_cast<int>(self->blue()) << ")";
         return stream.str();
     }
 
@@ -4178,6 +4181,45 @@ _wrap_Color_abgr(int argc, VALUE *argv, VALUE self) {
     }
   }
   vresult = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+
+/*
+  Document-method: Gosu::Color.dup
+
+  call-seq:
+    dup -> Color
+
+Create a duplicate of the class and unfreeze it if needed.
+*/
+SWIGINTERN VALUE
+_wrap_Color_dup(int argc, VALUE *argv, VALUE self) {
+  Gosu::Color *arg1 = (Gosu::Color *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  Gosu::Color result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Color, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color const *","dup", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Color * >(argp1);
+  {
+    try {
+      result = Gosu_Color_dup((Gosu::Color const *)arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_NewPointerObj((new Gosu::Color(static_cast< const Gosu::Color& >(result))), SWIGTYPE_p_Gosu__Color, SWIG_POINTER_OWN |  0 );
   return vresult;
 fail:
   return Qnil;
@@ -9069,6 +9111,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassColor.klass, "argb", VALUEFUNC(_wrap_Color_argb), -1);
   rb_define_method(SwigClassColor.klass, "bgr", VALUEFUNC(_wrap_Color_bgr), -1);
   rb_define_method(SwigClassColor.klass, "abgr", VALUEFUNC(_wrap_Color_abgr), -1);
+  rb_define_method(SwigClassColor.klass, "dup", VALUEFUNC(_wrap_Color_dup), -1);
   rb_define_method(SwigClassColor.klass, "to_s", VALUEFUNC(_wrap_Color_to_s), -1);
   SwigClassColor.mark = 0;
   SwigClassColor.destroy = (void (*)(void *)) free_Gosu_Color;

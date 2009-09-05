@@ -269,12 +269,16 @@ namespace Gosu
 %include "std_string.i"
 %include "../Gosu/Color.hpp"
 %extend Gosu::Color {
+    Gosu::Color dup() const {
+        return *$self;
+    }
+
     std::string toS() const {
         std::ostringstream stream;
-        stream << "(" << static_cast<int>($self->alpha())
-               << "," << static_cast<int>($self->red()) 
-               << "," << static_cast<int>($self->green())
-               << "," << static_cast<int>($self->blue()) << ")";
+        stream << "(ARGB: " << static_cast<int>($self->alpha())
+               << "/" << static_cast<int>($self->red()) 
+               << "/" << static_cast<int>($self->green())
+               << "/" << static_cast<int>($self->blue()) << ")";
         return stream.str();
     }
 }
