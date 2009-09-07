@@ -4,10 +4,10 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-09-07)
+(Last update: 2009-09-08)
 
 == Gosu 0.7.x ==
-  * Install Ruby 1.9.1 universally (???)
+  * Install Ruby 1.9.1 in 64-bit and lipo against old ruby-1.9.1 lib
   * re'mv boost
   * Build experimental three-way universal Gosu gem
   * Let Marco/Alex test experimental 64-bit gem
