@@ -284,6 +284,7 @@ task :push_to_github do
   Dir.chdir '../gosu.git'
   fetch_output = `#{GIT_PREFIX} git svn fetch`
   puts fetch_output
+  return if fetch_output.empty?
   last_commit_id = fetch_output.reverse[/ [a-f0-9]{40} /].reverse
   sh "#{GIT_PREFIX} git rebase #{last_commit_id}"
   sh "#{GIT_PREFIX} git push origin master"
