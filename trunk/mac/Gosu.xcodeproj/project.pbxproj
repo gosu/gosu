@@ -636,7 +636,7 @@
 		D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapUtils.cpp; sourceTree = "<group>"; };
 		D4AB62F50D08BA9900D71382 /* MacUtility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MacUtility.hpp; path = ../GosuImpl/MacUtility.hpp; sourceTree = SOURCE_ROOT; };
 		D4BC5D6A0CC29D0F002D4236 /* Async.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Async.hpp; path = ../Gosu/Async.hpp; sourceTree = SOURCE_ROOT; };
-		D4CA89500BC68B5D00A431AC /* gosu.for_1_8.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = gosu.for_1_8.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4CA89500BC68B5D00A431AC /* gosu.for_1_9.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = gosu.for_1_9.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = RubyGosuStub.mm; path = ../GosuImpl/RubyGosuStub.mm; sourceTree = SOURCE_ROOT; };
 		D4F07B220D934C8B00FB3D99 /* TextInput.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextInput.hpp; path = ../Gosu/TextInput.hpp; sourceTree = SOURCE_ROOT; };
 		D4F07B260D93504700FB3D99 /* TextInputMac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextInputMac.mm; path = ../GosuImpl/TextInputMac.mm; sourceTree = SOURCE_ROOT; };
@@ -773,7 +773,7 @@
 			isa = PBXGroup;
 			children = (
 				8D07F2C80486CC7A007CD1D0 /* Gosu.framework */,
-				D4CA89500BC68B5D00A431AC /* gosu.for_1_8.bundle */,
+				D4CA89500BC68B5D00A431AC /* gosu.for_1_9.bundle */,
 				D459FF440BDCD23500E7F0D6 /* RubyGosu App.app */,
 				D4A5A1F40F40D28600FFF378 /* libgosutouch.a */,
 			);
@@ -1295,7 +1295,7 @@
 			);
 			name = "RubyGosu Core";
 			productName = RubyGosu;
-			productReference = D4CA89500BC68B5D00A431AC /* gosu.for_1_8.bundle */;
+			productReference = D4CA89500BC68B5D00A431AC /* gosu.for_1_9.bundle */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 /* End PBXNativeTarget section */
@@ -1846,6 +1846,7 @@
 				LIBRARY_SEARCH_PATHS = .;
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT_x86_64 = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};
@@ -1911,8 +1912,11 @@
 		D459FF490BDCD23600E7F0D6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = (
+					ppc,
+					x86_64,
+					i386,
+				);
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)";
 				EXPORTED_SYMBOLS_FILE = "Ruby 1.9.exports";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -1974,6 +1978,7 @@
 				LIBRARY_SEARCH_PATHS = .;
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT_x86_64 = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = "Release with 1.9";
 		};
@@ -1982,6 +1987,7 @@
 			buildSettings = {
 				ARCHS = (
 					ppc,
+					x86_64,
 					i386,
 				);
 				CONFIGURATION_BUILD_DIR = ..;
@@ -2002,8 +2008,11 @@
 		D46C29720FADB59600A33476 /* Release with 1.9 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = (
+					ppc,
+					x86_64,
+					i386,
+				);
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -2038,8 +2047,11 @@
 		D46C29730FADB59600A33476 /* Release with 1.9 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = (
+					ppc,
+					x86_64,
+					i386,
+				);
 				CONFIGURATION_BUILD_DIR = ../lib;
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = "";
@@ -2052,8 +2064,8 @@
 				GENERATE_MASTER_OBJECT_FILE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"/usr/local/include/ruby1.9-1.9.1",
-					"/usr/local/include/ruby1.9-1.9.1/i386-darwin9.6.0",
+					"/usr/local/include/ruby-1.9-1.9.1",
+					"/usr/local/include/ruby-1.9-1.9.1/i386-darwin9.8.0",
 				);
 				MACH_O_TYPE = mh_bundle;
 				OTHER_LDFLAGS = (
@@ -2152,8 +2164,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
-					i386,
 					ppc,
+					x86_64,
+					i386,
 				);
 				CONFIGURATION_BUILD_DIR = ../lib;
 				COPY_PHASE_STRIP = YES;

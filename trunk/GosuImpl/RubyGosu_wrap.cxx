@@ -2465,9 +2465,9 @@ SWIGINTERN Gosu::Color Gosu_Color_dup(Gosu::Color const *self){
 SWIGINTERN std::string Gosu_Color_toS(Gosu::Color const *self){
         std::ostringstream stream;
         stream << "(ARGB: " << static_cast<int>(self->alpha())
-               << ", " << static_cast<int>(self->red()) 
-               << ", " << static_cast<int>(self->green())
-               << ", " << static_cast<int>(self->blue()) << ")";
+               << "/" << static_cast<int>(self->red()) 
+               << "/" << static_cast<int>(self->green())
+               << "/" << static_cast<int>(self->blue()) << ")";
         return stream.str();
     }
 
@@ -9072,8 +9072,8 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_RubyInitializeTrackings();
   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(7)));
-  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(14)));
-  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.14"));
+  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(15)));
+  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.15"));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
   rb_define_module_function(mGosu, "gosu_to_radian_scale", VALUEFUNC(_wrap_gosu_to_radian_scale), -1);
