@@ -2,7 +2,7 @@
 #labels Featured
 
 =0.7.15=
-  * 2009-09-08: Added compatibility with 64-bit x86 Ruby on OS X (= Snow Leopard)
+  * 2009-09-13: Added compatibility with 64-bit x86 Ruby on OS X (= Snow Leopard)
   * 2009-09-08: Fixed Gosu::Color#dup for Ruby
   * 2009-07-10: Some experimental iPhone optimizations
 
