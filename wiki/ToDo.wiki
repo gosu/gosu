@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-09-12)
+(Last update: 2009-09-13)
 
 == Gosu 0.7.x ==
   * Let someone test experimental 64-bit gem
@@ -161,6 +161,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Donate to allison's author when I'm home
   * Explain SampleInstance vs. Sample somewhere
   * Correct wikipedia article: http://en.wikipedia.org/wiki/Chipmunk_physics_engine
+  * OR&G: Build simpler version
+  * Remove macros from docs
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
