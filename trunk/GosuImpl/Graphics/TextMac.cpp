@@ -1,4 +1,6 @@
-#ifndef __LP64__
+#include <Gosu/Platform.hpp>
+
+#if !defined(GOSU_IS_IPHONE) && !defined(__LP64__)
 
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Text.hpp>

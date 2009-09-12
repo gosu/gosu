@@ -1,6 +1,6 @@
 #import <Gosu/Platform.hpp>
 
-#if defined(__LP64__) || defined(GOSU_IS_IPHONE)
+#if defined(GOSU_IS_IPHONE) || defined(__LP64__)
 
 #import <Gosu/Text.hpp>
 #import <Gosu/Bitmap.hpp>
@@ -28,7 +28,7 @@ namespace
         if (!result)
         {
             Gosu::ObjRef<NSString> fontName([[NSString alloc] initWithUTF8String: Gosu::wstringToUTF8(name).c_str()]);
-            result = [OSXFont fontWithName: fontName.obj() size: height];
+            result = [[OSXFont fontWithName: fontName.obj() size: height] retain];
         }
         return result;
     }
@@ -50,8 +50,8 @@ unsigned Gosu::textWidth(const wstring& text,
     ObjRef<NSString> string([[NSString alloc] initWithUTF8String: wstringToUTF8(text).c_str()]);
     #ifndef GOSU_IS_IPHONE
     ObjRef<NSDictionary> attributes([[NSDictionary alloc] initWithObjectsAndKeys:
-        NSFontAttributeName, font, nil]);
-    CGSize size = [string.obj() sizeWithAttributes: attributes.get()];
+        font, NSFontAttributeName, nil]);
+    NSSize size = [string.obj() sizeWithAttributes: attributes.get()];
     #else
     CGSize size = [string.obj() sizeWithFont: font];
     #endif
@@ -70,8 +70,8 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     // This will, of course, compute a too large size; fontHeight is in pixels, the method expects point.
     #ifndef GOSU_IS_IPHONE
     ObjRef<NSDictionary> attributes([[NSDictionary alloc] initWithObjectsAndKeys:
-        NSFontAttributeName, font, nil]);
-    CGSize size = [string.obj() sizeWithAttributes: attributes.get()];
+        font, NSFontAttributeName, nil]);
+    NSSize size = [string.obj() sizeWithAttributes: attributes.get()];
     #else
     CGSize size = [string.obj() sizeWithFont: font];
     #endif
@@ -90,23 +90,30 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
                               colorSpace,
                               kCGImageAlphaPremultipliedLast);
     CGColorSpaceRelease(colorSpace);
+    #if defined(GOSU_IS_IPHONE)
     CGFloat color[] = { c.green() / 255.0, c.blue() / 255.0, c.red() / 255.0, 0 };
     CGContextSetStrokeColor(context, color);
     CGContextSetFillColor(context, color);
-    
-    // TODO: Should probably use CGShowText instead of all the ObjC bloat.
+    #endif
     
     // Use new font with proper size this time.
     font = getFont(fontName, fontHeight * fontHeight / size.height);
-    
+
+    #ifdef GOSU_IS_IPHONE
     CGContextTranslateCTM(context, 0, fontHeight);
     CGContextScaleCTM(context, 1, -1);
-    #ifdef GOSU_IS_IPHONE
     UIGraphicsPushContext(context);
-    [string.obj() drawAtPoint: CGPointZero withFont: font];
+        [string.obj() drawAtPoint: CGPointZero withFont: font];
     UIGraphicsPopContext();
     #else
-    [string.obj() drawAtPoint: CGPointZero withAttributes: attributes.get()];
+    NSPoint NSPointZero = { 0, 0 };
+    attributes.reset([[NSDictionary alloc] initWithObjectsAndKeys:
+        font, NSFontAttributeName, [NSColor whiteColor], NSForegroundColorAttributeName, nil]);
+    
+    [NSGraphicsContext saveGraphicsState];
+    [NSGraphicsContext setCurrentContext: [NSGraphicsContext graphicsContextWithGraphicsPort:(void *)context flipped:false]];
+        [string.obj() drawAtPoint: NSPointZero withAttributes: attributes.get()];
+    [NSGraphicsContext restoreGraphicsState];
     #endif
     CGContextRelease(context);
 

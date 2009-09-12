@@ -8,6 +8,7 @@ class Test < Gosu::Window
   end
   
   def draw
+    draw_quad 0,0,0xffff0000,800,0,0xffff0000,0,600,0xffff0000,800,600,0xffff0000,0
     @font.draw("Erstens‮Zweitens‭Drittens", 10, 10, 0)
     @font.draw("‮Alleinstehend :(", 10, 50, 0)
     @font.draw("שלום העולם!", 10, 90, 0)
