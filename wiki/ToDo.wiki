@@ -4,22 +4,22 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-09-14)
+(Last update: 2009-09-15)
 
 == Gosu 0.7.x ==
-  * Release 0.7.15
+  * Rausfinden, was "BODY" im Gosu-SVN verändert
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Look at TextInput bug on 1.9
   * Look at TextInput contrib
   * Test StandBy with Windows and a running Gosu app
-  * Get Anna or someone else to test the new OpenAL code on Intel/Tiger...
+  * Get someone to test the new OpenAL code on Intel/Tiger...
   * Either document gosu_to_radian_scale or rename it before anyone relies on it
   * Web work
     * Move three threads from GosuExchange to the forums
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
     * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
     * Report Ocra bugs: spaces in exe name = crash, requires .rb and .so files?!
-  * 0.7.15 (bugfixes bugfixes bugfixes)
+  * 0.7.16 (bugfixes bugfixes bugfixes)
     * Revisit "garbled screen" bug on Mac
     * Add -I/usr/include/SDL to the makefile
     * See if John Shea's talk had something about not being locked to pixel positions
@@ -38,7 +38,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Test multiple screens on Windows
     * TextField with clip_to (update example)
     * Test LD14 entry on Linux
-    * Release 0.7.15
+    * Release 0.7.16
     * (1x mymüsli for all the hard work! (motivation!)
   * iPhone-related stuff that should be finished soonish
     * Let resolution decide orientation
@@ -63,7 +63,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Link the all-in-one-bundle from the boards: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * Test RMagick.bundle on Tiger
     * Test RMagick.bundle on PPC
-  * 0.7.16, text quality release (+Linux gamepad!)
+  * 0.7.17, text quality release (+Linux gamepad!)
     * See if the differences between from_text and Font#draw are a bug
     * Look for non-deprecated replacement for KeyTranslate and UCKeyTranslate
     * Creating a non-existent font should throw an exception on *all* platforms, test on which it does
@@ -78,7 +78,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Make RTL work without RTL/LTR markers?!
     * Add RTL support to Font::drawRot too
     * Add Linux gamepad support, try wgois for that
-  * 0.7.15, polish/deployment release
+  * 0.7.18, polish/deployment release
     * Make it possible to delete images while they are still referenced in the queue.
     * Assure that files from doxygen task are considered for packaging
     * Compile all-in-one RMagick for Windows: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
@@ -161,7 +161,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Explain SampleInstance vs. Sample somewhere
   * Correct wikipedia article: http://en.wikipedia.org/wiki/Chipmunk_physics_engine
   * OR&G: Build simpler version
-  * Remove macros from docs
   * Check if DelphiGL wiki accepts donations
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
