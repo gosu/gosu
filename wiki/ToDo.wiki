@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-09-15)
+(Last update: 2009-09-16)
 
 == Gosu 0.7.x ==
   * Rausfinden, was "BODY" im Gosu-SVN verändert
@@ -80,6 +80,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Add Linux gamepad support, try wgois for that
   * 0.7.18, polish/deployment release
     * Make it possible to delete images while they are still referenced in the queue.
+    * Make Gosu::Color more fault-tolerant regarding its component values
     * Assure that files from doxygen task are considered for packaging
     * Compile all-in-one RMagick for Windows: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * Find out why Cmd+char triggers two button_downs, but only one button_up!
