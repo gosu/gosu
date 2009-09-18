@@ -6,7 +6,8 @@ begin
   dbh = Mysql.real_connect("localhost", ARGV[0], ARGV[1], "mwf")
   res = dbh.query %( select t.id, t.subject, a.postId, a.fileName
                      from topics t join attachments a on (t.basePostId = a.postId)
-                     where boardId = (select id from boards where title = 'Gosu Showcase') )
+                     where boardId = (select id from boards where title = 'Gosu Showcase' and
+                                       (a.filename like '%.png' or a.filename like '%.jpg')) )
   ary = []
   res.each { |row| ary << row }
   res.free
