@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-09-19)
+(Last update: 2009-09-20)
 
 == Gosu 0.7.x ==
   * Rausfinden, was "BODY" im Gosu-SVN verändert
