@@ -4,10 +4,11 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-09-22)
+(Last update: 2009-09-23)
 
 == Gosu 0.7.x ==
   * Rausfinden, was "BODY" im Gosu-SVN verändert
+  * Look into a way to wrap Gosu for MacRuby
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Look at TextInput bug on 1.9
   * Look at TextInput contrib
@@ -54,6 +55,9 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Make buffers in Mac port larger and make sure that update_interval<66 always plays running Songs without jitter
     * Check Song::play() behavior on new MikMod song vs. other libs
     * Move decoding/updating into another thread (yuck)
+    * Re-Evaluate glfw for fixing the fullscreen mess
+    * Think about adding cmd+F support for toggling fullscreen: Possible?
+    * Think about adding alt+enter support for toggling fullscreen: Possible?
   * Try a quick prototype of Gosu working with Shoes (if that doesn't work, wxRuby)
   * Try harder to reproduce these bugs
     * Get rid of context selection error with driver set to always do FSAA (Windows)
