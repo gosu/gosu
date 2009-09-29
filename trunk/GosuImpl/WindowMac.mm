@@ -195,8 +195,8 @@ struct Gosu::Window::Impl
         NSRect rect = NSMakeRect(0, 0, width, height);
         unsigned style = NSTitledWindowMask | NSMiniaturizableWindowMask | NSClosableWindowMask;
         window.reset([[GosuWindow alloc] initWithContentRect: rect styleMask:style 
-                                         backing:NSBackingStoreBuffered defer:NO]);
-        [window.obj() retain]; // ...or is it autorelease?
+                                         backing:NSBackingStoreBuffered defer:YES]);
+        [window.obj() retain]; // TODO: Why?
         
         [window.obj() setContentView: [[GosuView alloc] init]];
         
@@ -207,6 +207,11 @@ struct Gosu::Window::Impl
     
     static void doTick(Window& window);
 };
+
+// Without this variable, the context seems to get eaten by the GC. Oh
+// wow, this sounds hacky and fragile. I am scared :(
+
+static NSOpenGLContext* context;
 
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
                      double updateInterval)
@@ -246,13 +251,14 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     ObjRef<NSOpenGLPixelFormat> fmt([[NSOpenGLPixelFormat alloc] initWithAttributes:attrs]);
     if (not fmt.get())
         throw std::runtime_error("Could not find a suitable OpenGL pixel format");
-    pimpl->context.reset([[NSOpenGLContext alloc] initWithFormat: fmt.obj() shareContext:nil]);
+    ::context = [[NSOpenGLContext alloc] initWithFormat: fmt.obj() shareContext:nil];
+    pimpl->context.reset(context);
     if (not pimpl->context.get())
         throw std::runtime_error("Unable to create an OpenGL context with the supplied pixel format");
     
     if (fullscreen) {
         // Fullscreen: Create no window, instead change resolution.
-
+        
         // Save old mode and retrieve BPP
         pimpl->savedMode = CGDisplayCurrentMode(kCGDirectMainDisplay);
 		pimpl->savedFrame = [[NSScreen mainScreen] frame];
@@ -265,7 +271,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
                          kCFNumberIntType, &width);
         CFNumberGetValue((CFNumberRef)CFDictionaryGetValue(pimpl->newMode, kCGDisplayHeight),
                          kCFNumberIntType, &height);
-
+        
         // Actual changing postponed until show().
     }
     else
@@ -275,6 +281,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         pimpl->createWindow(width, height);
         
         // Tell context to draw on this window.
+        
         [pimpl->context.obj() setView:[pimpl->window.obj() contentView]];
     }
     
@@ -308,7 +315,9 @@ Gosu::Window::~Window()
     if (graphics().fullscreen())
     {
         CGDisplaySwitchToMode(kCGDirectMainDisplay, pimpl->savedMode);
+        #ifndef __LP64__
 		[[NSScreen mainScreen] setFrame:pimpl->savedFrame]; 
+        #endif
         CGReleaseAllDisplays();
     }
 }
@@ -372,7 +381,7 @@ void Gosu::Window::show()
     {
         [NSCursor unhide];
 
-        // Resetting the mod shouldn't be all too important according to the docs.
+        // Resetting the mode shouldn't be all too important according to the docs.
         // Let's leave it in until time for testing comes, though.
         CGDisplaySwitchToMode(kCGDirectMainDisplay, pimpl->savedMode);
         CGDisplayRelease(kCGDirectMainDisplay);
@@ -510,7 +519,7 @@ void Gosu::Window::Impl::doTick(Window& window)
         window.draw();
         window.graphics().end();
         [window.pimpl->context.obj() flushBuffer];
-    }    
+    }
     
     if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
 }
