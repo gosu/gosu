@@ -229,7 +229,6 @@ module Gosu
     # line_spacing:: Spacing between two lines of text in pixels.
     # max_width:: Width of the bitmap that will be returned. Text will be split into multiple lines to avoid drawing over the right border. When a single word is too long, it will be truncated.
     # align:: One of :left, :right, :center or :justify.
-    # enum.
     def self.from_text(window, text, font_name, font_height, line_spacing, max_width, align); end
     
     # Convenience function that splits a BMP or PNG file into an array
@@ -343,9 +342,9 @@ module Gosu
   # coordinates relative to the window. This means that the mouse position
   # can be negative or larger than the window size.
   #
-  # Note that you should really only use on instance of this class at the same time. This may or may not change later.
+  # Note that you should really only use one instance of this class at the same time. This may or may not change later.
   #
-  # Right now, having two or more windows and loading samples or songs on both of them will result in an exception. If you want to re-open your game window, make sure the old one is really dead, e.g. by poking the garbage collector.
+  # Right now, having two or more windows and loading samples or songs on both of them will result in an exception.
   class Window
     attr_accessor :caption
     attr_accessor :mouse_x
@@ -377,11 +376,11 @@ module Gosu
     # This is not a definitive answer. The operating system can still cause
     # redraws for one reason or another.
     #
-    # By default, the window is redrawn all the time (i.e. Window#needs_draw?
+    # By default, the window is redrawn all the time (i.e. Window#needs_redraw?
     # always returns true.)
     def needs_redraw?; end
     
-    # To avoid the intermediate position of calling mouse_x= followed by mouse_y=.
+    # DEPRECATED.
     def set_mouse_position(x, y); end
     
     # Called before update when the user pressed a button while the
@@ -403,11 +402,11 @@ module Gosu
   	# Returns true if a button is currently pressed. Updated every tick.
     def button_down?(id); end
     
-    # DEPRECATED: Returns the character a button usually produces, or nil.
+    # DEPRECATED: Returns the character a button usually produces, or nil. Please use TextInput instead.
     def self.button_id_to_char(id); end
     
     # DEPRECATED: Returns the button that has to be pressed to produce the
-    # given character, or nil.
+    # given character, or nil. Please use TextInput instead.
     def self.char_to_button_id(char); end
     
     # See examples/OpenGLIntegration.rb.
