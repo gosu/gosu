@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-09-26)
+(Last update: 2009-10-07)
 
 == Gosu 0.7.x ==
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
@@ -41,7 +41,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * (1x mymüsli for all the hard work! (motivation!)
   * iPhone-related stuff that should be finished soonish
     * Let resolution decide orientation
-    * Implement Proof of Concept for Macro Patches
     * socket.bundle und syck.bundle in den Wrapper reinschweißen
     * Integrate "fat" iPhone building from forum
     * Clear up GOSU_IS_MAC vs. GOSU_IS_OSX
@@ -129,7 +128,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make Linux gemspec more robust wrt examples/
   * Make more stuff configurable like http://github.com/cout/rice/blob/98ba7098e2de5849f2e7272021340976a768456f/ruby.ac#L7-20
 == Gosu CI/Usability ==
-  * Refresh ToDo list only when necessary
   * Document 64px minimum for single-texture opt.
   * Mention Gosu's respectable age somewhere :)
   * Link to benkos example
@@ -165,6 +163,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Correct wikipedia article: http://en.wikipedia.org/wiki/Chipmunk_physics_engine
   * OR&G: Build simpler version
   * Check if DelphiGL wiki accepts donations
+  * Remove from Tutorial.rb that Gosu::Button:: stuff ASAP
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
