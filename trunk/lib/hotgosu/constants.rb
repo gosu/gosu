@@ -133,3 +133,11 @@ module Gosu
   POINT_VERSION = 15
   VERSION = "0.7.15"
 end
+
+module Gosu
+  module Button
+    Gosu.constants.grep(/^(Gp|Ms|Kb)/).each do |constant|
+      self.const_set constant, Gosu.const_get(constant)
+    end
+  end
+end

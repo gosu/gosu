@@ -10,9 +10,7 @@ class Window
   
   def caption; @ref.caption; end
   def caption=(s); @ref.setCaption s; end
-  
-  def update; end
-  
+    
   def show; @ref.show; end
   def close; @ref.close; end
   
@@ -29,6 +27,13 @@ class Window
   
   def button_up id; end
   def button_down id; end
+  def draw; end
+  def update; end
+  def needs_redraw?; false; end
+  
+  def button_down? id
+    @ref.isButtonDown id
+  end
   
 #     attr_accessor :caption
 #     attr_accessor :mouse_x

@@ -1,19 +1,33 @@
 module Gosu
-  class Image < ::ObjGosuImage
-    def self.new(window, filename, tileable = false)
-      alloc.initWithWindow window, filename: filename, tileable: tileable
+  Image = ::ObjGosuImage
+  
+  class Image
+    def self.new(*args)
+      case args.length
+      when 2..3 then
+        alloc.initWithWindow args[0], filename: args[1], tileable: (args[2] || false)
+      when 7 then
+        alloc.initWithWindow args[0], filename: args[1], tileable: args[2],
+          sourceX: src_x, sourceY: src_y, sourceWidth: src_width, sourceHeight: src_height
+      else
+        raise ArgumentError.new("wrong number of arguments (#{args.length} for 2, 3 or 7)")
+      end
     end
 
-    def self.new(window, filename_or_rmagick_image, tileable, src_x, src_y, src_width, src_height)
-      raise :TODO
+    def self.load_tiles(window, filename, tile_width, tile_height, tileable)
+      loadTilesWithWindow window, filename: filename,
+        tileWidth: tile_width, tileHeight: tile_height, tileable: tileable
     end
-    
+
     def draw(x, y, z, factor_x = 1, factor_y = 1, color = 0xffffffff, mode = :default)
       drawWithX x, y: y, z: z, factorX: factor_x, factorY: factor_y, color: color
       # TODO mode
     end
 
-    def draw_rot(x, y, z, angle, center_x=0.5, center_y=0.5, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)
+    def draw_rot(x, y, z, angle, center_x = 0.5, center_y = 0.5, factor_x = 1, factor_y = 1,
+      color = 0xffffffff, mode = :default)
+      drawRotWithX x, y: y, z: z, angle: angle, centerX: center_x, centerY: center_y,
+        factorX: factor_x, factorY: factor_y, color: color
     end
   end
 
@@ -42,12 +56,6 @@ module Gosu
 #     # align:: One of :left, :right, :center or :justify.
 #     def self.from_text(window, text, font_name, font_height, line_spacing, max_width, align); end
 #     
-#     # Convenience function that splits a BMP or PNG file into an array
-#     # of small rectangles and creates images from them.
-#     # Returns the Array containing Image instances.
-#     # tile_width:: If positive, specifies the width of one tile in pixels. If negative, the bitmap is divided into -tile_width rows.
-#     # tile_height:: See tile_width.
-#     def self.load_tiles(window, filename_or_rmagick_image, tile_width, tile_height, tileable); end
 #     
 #     # See examples/OpenGLIntegration.rb.
 #     def gl_tex_info; end

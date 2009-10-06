@@ -1,11 +1,3 @@
-//
-//  Gosu_Window.m
-//  Gosu
-//
-//  Created by Julian Raschke on 25.09.09.
-//  Copyright 2009 Raschke & Ludwig GbR. All rights reserved.
-//
-
 #import "ObjGosuWindow.h"
 #import <Gosu/Graphics.hpp>
 #import <Gosu/Input.hpp>
@@ -56,63 +48,63 @@ public:
     return _window;
 }
 
-- (NSString*) caption
+- (NSString*)caption
 {
     return nil; // TODO_window->caption();
 }
 
-- (void) setCaption: (NSString*) caption
+- (void)setCaption: (NSString*) caption
 {
     _window->setCaption(Gosu::utf8ToWstring([caption UTF8String]));
 }
 
-- (unsigned) height
+- (unsigned)height
 {
     return _window->graphics().height();
 }
 
-- (float) mouseX
+- (float)mouseX
 {
     return _window->input().mouseX();
 }
 
-- (void) setMouseX: (float)mouseX
+- (void)setMouseX: (float)mouseX
 {
     _window->input().setMousePosition(mouseX, _window->input().mouseY());
 }
 
-- (float) mouseY
+- (float)mouseY
 {
     return _window->input().mouseY();
 }
 
-- (void) setMouseY: (float)mouseY
+- (void)setMouseY: (float)mouseY
 {
     _window->input().setMousePosition(_window->input().mouseX(), mouseY);
 }
 
-- (id) textInput
+- (id)textInput
 {
     // TODO
     return nil;
 }
 
-- (void) setTextInput: (id)textInput
+- (void)setTextInput: (id)textInput
 {
     // TODO
 }
 
-- (float) updateInterval
+- (float)updateInterval
 {
     return _window->updateInterval();
 }
 
-- (unsigned) width
+- (unsigned)width
 {
     return _window->graphics().width();
 }
 
-- (id) initWithDelegate: (id)delegate width:(int)width height:(int)height inFullscreen:(BOOL)fullscreen updateInterval:(float)updateInterval
+- (id)initWithDelegate: (id)delegate width:(int)width height:(int)height inFullscreen:(BOOL)fullscreen updateInterval:(float)updateInterval
 {
     if (not (self = [super init]))
         return NULL;
@@ -120,24 +112,28 @@ public:
     return self;
 }
 
-- (void) show
+- (void)show
 {
     _window->show();
 }
 
-- (void) close
+- (void)close
 {
     _window->close();
 }
 
-- (void) update
+- (void)update
 {
 }
 
-- (void) draw
+- (void)draw
 {
 }
 
+- (NSNumber*)isButtonDown: (unsigned)button
+{
+    return [NSNumber numberWithBool: _window->input().down(Gosu::Button(button))];
+}
 @end
 
 extern "C" void Init_gosu()
