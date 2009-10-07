@@ -151,7 +151,7 @@ class Map
     gem_img = Image.new(window, "media/CptnRuby Gem.png", false)
     @gems = []
 
-    lines = File.readlines(filename).map { |line| line.chop }
+    lines = File.readlines(filename).map { |line| line.chomp }
     @height = lines.size
     @width = lines[0].size
     @tiles = Array.new(@width) do |x|
