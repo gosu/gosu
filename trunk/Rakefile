@@ -171,7 +171,8 @@ namespace :mac do
 
   desc "Build the archive #{MAC_ARCHIVE_FILENAME}"
   task :archive => [:cpp, :ruby, :version] do
-    files = COMMON_CPP_FILES + COMMON_RUBY_FILES + FileList['lib/gosu.rb', 'lib/gosu.*.bundle', 'Gosu.framework/**/*']
+    files = COMMON_CPP_FILES + COMMON_RUBY_FILES +
+      FileList['lib/gosu.rb', 'lib/gosu.*.bundle', 'lib/hotgosu.rb', 'lib/hotgosu/**/*', 'Gosu.framework/**/*']
     sh "tar -czf #{MAC_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
   end
   
@@ -196,7 +197,8 @@ namespace :mac do
   MAC_SPEC = Gem::Specification.new do |s|
     apply_gemspec_defaults s
     s.platform = 'universal-darwin'
-    s.files = COMMON_RUBY_FILES + ['lib/gosu.rb', 'lib/gosu.for_1_8.bundle', 'lib/gosu.for_1_9.bundle']
+    s.files = COMMON_RUBY_FILES +
+      FileList['lib/gosu.rb', 'lib/gosu.*.bundle', 'lib/hotgosu.rb', 'lib/hotgosu/**/*']
   end
   Rake::GemPackageTask.new(MAC_SPEC) { |t| t.package_dir = 'public/mac_gem' }
 end
@@ -271,7 +273,7 @@ namespace :linux do
                       'libgl',
                       'X11 includes and libraries',
                       'pangoft2',
-                      'fmod or SDL_mixer',
+                      'SDL_mixer',
  
                       "(Packages for Debian/Ubuntu:\n" +
                       ' g++ pkg-config ruby-dev xorg-dev' +
@@ -290,10 +292,11 @@ task :push_to_github do
   Dir.chdir '../gosu.git'
   fetch_output = `#{GIT_PREFIX} git svn fetch`
   puts fetch_output
-  return if fetch_output.empty?
-  last_commit_id = fetch_output.reverse[/ [a-f0-9]{40} /].reverse
-  sh "#{GIT_PREFIX} git rebase #{last_commit_id}"
-  sh "#{GIT_PREFIX} git push origin master"
+  if not fetch_output.empty? then
+    last_commit_id = fetch_output.reverse[/ [a-f0-9]{40} /].reverse
+    sh "#{GIT_PREFIX} git rebase #{last_commit_id}"
+    sh "#{GIT_PREFIX} git push origin master"
+  end
 end
 
 # TODO? Gem upload to RubyForge: http://nubyonrails.com/articles/tutorial-publishing-rubygems-with-hoe
