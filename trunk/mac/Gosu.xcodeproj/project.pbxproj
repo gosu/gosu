@@ -254,6 +254,17 @@
 		D4A7E9E80CD39BA200621B24 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
 		D4A7E9E90CD39BA200621B24 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
 		D4BC5D6B0CC29D0F002D4236 /* Async.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4BC5D6A0CC29D0F002D4236 /* Async.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		D4C8713210825E3200E1FF5A /* socket.c in Sources */ = {isa = PBXBuildFile; fileRef = D4C8712E10825E3100E1FF5A /* socket.c */; };
+		D4C8714210825E7500E1FF5A /* bytecode.c in Sources */ = {isa = PBXBuildFile; fileRef = D4C8713410825E7500E1FF5A /* bytecode.c */; };
+		D4C8714310825E7500E1FF5A /* emitter.c in Sources */ = {isa = PBXBuildFile; fileRef = D4C8713510825E7500E1FF5A /* emitter.c */; };
+		D4C8714410825E7500E1FF5A /* gram.c in Sources */ = {isa = PBXBuildFile; fileRef = D4C8713710825E7500E1FF5A /* gram.c */; };
+		D4C8714510825E7500E1FF5A /* handler.c in Sources */ = {isa = PBXBuildFile; fileRef = D4C8713910825E7500E1FF5A /* handler.c */; };
+		D4C8714610825E7500E1FF5A /* implicit.c in Sources */ = {isa = PBXBuildFile; fileRef = D4C8713A10825E7500E1FF5A /* implicit.c */; };
+		D4C8714710825E7500E1FF5A /* node.c in Sources */ = {isa = PBXBuildFile; fileRef = D4C8713B10825E7500E1FF5A /* node.c */; };
+		D4C8714810825E7500E1FF5A /* rubyext.c in Sources */ = {isa = PBXBuildFile; fileRef = D4C8713C10825E7500E1FF5A /* rubyext.c */; };
+		D4C8714910825E7500E1FF5A /* syck.c in Sources */ = {isa = PBXBuildFile; fileRef = D4C8713D10825E7500E1FF5A /* syck.c */; };
+		D4C8714A10825E7500E1FF5A /* token.c in Sources */ = {isa = PBXBuildFile; fileRef = D4C8713F10825E7500E1FF5A /* token.c */; };
+		D4C8714B10825E7500E1FF5A /* yaml2byte.c in Sources */ = {isa = PBXBuildFile; fileRef = D4C8714010825E7500E1FF5A /* yaml2byte.c */; };
 		D4D3E455106D26AA006DCD24 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025C0F706A0100407E60 /* AudioToolbox.framework */; };
 		D4D3E456106D26AA006DCD24 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42568090C69CF6100E745AC /* IOKit.framework */; };
 		D4D3E457106D26AA006DCD24 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025D0F706A0100407E60 /* OpenAL.framework */; };
@@ -770,6 +781,25 @@
 		D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapUtils.cpp; sourceTree = "<group>"; };
 		D4AB62F50D08BA9900D71382 /* MacUtility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MacUtility.hpp; path = ../GosuImpl/MacUtility.hpp; sourceTree = SOURCE_ROOT; };
 		D4BC5D6A0CC29D0F002D4236 /* Async.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Async.hpp; path = ../Gosu/Async.hpp; sourceTree = SOURCE_ROOT; };
+		D4C8712910825E3100E1FF5A /* addrinfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = addrinfo.h; path = "Ruby 1.9 Source/ext/socket/addrinfo.h"; sourceTree = "<group>"; };
+		D4C8712A10825E3100E1FF5A /* constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = constants.h; path = "Ruby 1.9 Source/ext/socket/constants.h"; sourceTree = "<group>"; };
+		D4C8712B10825E3100E1FF5A /* extconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = extconf.h; path = "Ruby 1.9 Source/ext/socket/extconf.h"; sourceTree = "<group>"; };
+		D4C8712E10825E3100E1FF5A /* socket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = socket.c; path = "Ruby 1.9 Source/ext/socket/socket.c"; sourceTree = "<group>"; };
+		D4C8712F10825E3100E1FF5A /* sockport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sockport.h; path = "Ruby 1.9 Source/ext/socket/sockport.h"; sourceTree = "<group>"; };
+		D4C8713410825E7500E1FF5A /* bytecode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bytecode.c; path = "Ruby 1.9 Source/ext/syck/bytecode.c"; sourceTree = "<group>"; };
+		D4C8713510825E7500E1FF5A /* emitter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = emitter.c; path = "Ruby 1.9 Source/ext/syck/emitter.c"; sourceTree = "<group>"; };
+		D4C8713610825E7500E1FF5A /* extconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = extconf.h; path = "Ruby 1.9 Source/ext/syck/extconf.h"; sourceTree = "<group>"; };
+		D4C8713710825E7500E1FF5A /* gram.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gram.c; path = "Ruby 1.9 Source/ext/syck/gram.c"; sourceTree = "<group>"; };
+		D4C8713810825E7500E1FF5A /* gram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gram.h; path = "Ruby 1.9 Source/ext/syck/gram.h"; sourceTree = "<group>"; };
+		D4C8713910825E7500E1FF5A /* handler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = handler.c; path = "Ruby 1.9 Source/ext/syck/handler.c"; sourceTree = "<group>"; };
+		D4C8713A10825E7500E1FF5A /* implicit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = implicit.c; path = "Ruby 1.9 Source/ext/syck/implicit.c"; sourceTree = "<group>"; };
+		D4C8713B10825E7500E1FF5A /* node.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = node.c; path = "Ruby 1.9 Source/ext/syck/node.c"; sourceTree = "<group>"; };
+		D4C8713C10825E7500E1FF5A /* rubyext.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rubyext.c; path = "Ruby 1.9 Source/ext/syck/rubyext.c"; sourceTree = "<group>"; };
+		D4C8713D10825E7500E1FF5A /* syck.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = syck.c; path = "Ruby 1.9 Source/ext/syck/syck.c"; sourceTree = "<group>"; };
+		D4C8713E10825E7500E1FF5A /* syck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = syck.h; path = "Ruby 1.9 Source/ext/syck/syck.h"; sourceTree = "<group>"; };
+		D4C8713F10825E7500E1FF5A /* token.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = token.c; path = "Ruby 1.9 Source/ext/syck/token.c"; sourceTree = "<group>"; };
+		D4C8714010825E7500E1FF5A /* yaml2byte.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = yaml2byte.c; path = "Ruby 1.9 Source/ext/syck/yaml2byte.c"; sourceTree = "<group>"; };
+		D4C8714110825E7500E1FF5A /* yamlbyte.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = yamlbyte.h; path = "Ruby 1.9 Source/ext/syck/yamlbyte.h"; sourceTree = "<group>"; };
 		D4CA89500BC68B5D00A431AC /* gosu.for_1_8.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = gosu.for_1_8.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4D3E71A10722AAA006DCD24 /* MacRuby.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MacRuby.framework; path = /Library/Frameworks/MacRuby.framework; sourceTree = "<absolute>"; };
 		D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = RubyGosuStub.mm; path = ../GosuImpl/RubyGosuStub.mm; sourceTree = SOURCE_ROOT; };
@@ -1118,6 +1148,8 @@
 		D46C2E010FAE087000A33476 /* Ruby 1.9 */ = {
 			isa = PBXGroup;
 			children = (
+				D4C8713310825E4D00E1FF5A /* syck */,
+				D4C8712710825DED00E1FF5A /* socket */,
 				D46C2F0C0FAE2F5900A33476 /* enc */,
 				D46C2F7B0FAE390500A33476 /* missing */,
 				D46C2E070FAE090200A33476 /* array.c */,
@@ -1229,6 +1261,39 @@
 				D4A5A2FE0F40D51B00FFF378 /* UIKit.framework */,
 			);
 			name = "Frameworks Touch";
+			sourceTree = "<group>";
+		};
+		D4C8712710825DED00E1FF5A /* socket */ = {
+			isa = PBXGroup;
+			children = (
+				D4C8712910825E3100E1FF5A /* addrinfo.h */,
+				D4C8712A10825E3100E1FF5A /* constants.h */,
+				D4C8712B10825E3100E1FF5A /* extconf.h */,
+				D4C8712E10825E3100E1FF5A /* socket.c */,
+				D4C8712F10825E3100E1FF5A /* sockport.h */,
+			);
+			name = socket;
+			sourceTree = "<group>";
+		};
+		D4C8713310825E4D00E1FF5A /* syck */ = {
+			isa = PBXGroup;
+			children = (
+				D4C8713410825E7500E1FF5A /* bytecode.c */,
+				D4C8713510825E7500E1FF5A /* emitter.c */,
+				D4C8713610825E7500E1FF5A /* extconf.h */,
+				D4C8713710825E7500E1FF5A /* gram.c */,
+				D4C8713810825E7500E1FF5A /* gram.h */,
+				D4C8713910825E7500E1FF5A /* handler.c */,
+				D4C8713A10825E7500E1FF5A /* implicit.c */,
+				D4C8713B10825E7500E1FF5A /* node.c */,
+				D4C8713C10825E7500E1FF5A /* rubyext.c */,
+				D4C8713D10825E7500E1FF5A /* syck.c */,
+				D4C8713E10825E7500E1FF5A /* syck.h */,
+				D4C8713F10825E7500E1FF5A /* token.c */,
+				D4C8714010825E7500E1FF5A /* yaml2byte.c */,
+				D4C8714110825E7500E1FF5A /* yamlbyte.h */,
+			);
+			name = syck;
 			sourceTree = "<group>";
 		};
 		D4F4BA690FC36E930013CE21 /* Dependencies */ = {
@@ -1933,6 +1998,17 @@
 				D4F4BFAE0FC4CB1A0013CE21 /* bitrate.c in Sources */,
 				D4F4BFAF0FC4CB1A0013CE21 /* analysis.c in Sources */,
 				D42E1A17104AEF210019345C /* TextTouch.mm in Sources */,
+				D4C8713210825E3200E1FF5A /* socket.c in Sources */,
+				D4C8714210825E7500E1FF5A /* bytecode.c in Sources */,
+				D4C8714310825E7500E1FF5A /* emitter.c in Sources */,
+				D4C8714410825E7500E1FF5A /* gram.c in Sources */,
+				D4C8714510825E7500E1FF5A /* handler.c in Sources */,
+				D4C8714610825E7500E1FF5A /* implicit.c in Sources */,
+				D4C8714710825E7500E1FF5A /* node.c in Sources */,
+				D4C8714810825E7500E1FF5A /* rubyext.c in Sources */,
+				D4C8714910825E7500E1FF5A /* syck.c in Sources */,
+				D4C8714A10825E7500E1FF5A /* token.c in Sources */,
+				D4C8714B10825E7500E1FF5A /* yaml2byte.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2335,6 +2411,8 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
+					HAVE_GETADDRINFO,
+					HAVE_SOCKADDR_STORAGE,
 					RUBY_EMBEDDED,
 				);
 				HEADER_SEARCH_PATHS = (
@@ -2430,6 +2508,8 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
+					HAVE_GETADDRINFO,
+					HAVE_SOCKADDR_STORAGE,
 					RUBY_EMBEDDED,
 				);
 				HEADER_SEARCH_PATHS = (
