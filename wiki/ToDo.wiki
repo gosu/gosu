@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-10-08)
+(Last update: 2009-10-25)
 
 == Gosu 0.7.x ==
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
@@ -44,6 +44,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * socket.bundle und syck.bundle in den Wrapper reinschweißen
     * Integrate "fat" iPhone building from forum
     * Clear up GOSU_IS_MAC vs. GOSU_IS_OSX
+    * Migrate WindowTouch.mm to CADisplayLink (3.1 SDK)
+    * Make sure that iPhone VA vertices are small and well-aligned
     * Use getBytes instead of UTF8String
   * More OpenAL niceties
     * Look at protea as an FMOD replacement http://www.viremo.de/proteaAudio/
