@@ -9,6 +9,9 @@ This list is populated using the semi-automated script from `trunk/feature_tests
 || OS X (Gosu::Song)  || Yes || Yes || Yes || Yes || Yes ||  ||  || Yes || Yes || Yes || Yes || Yes ||
 || Windows (Gosu::Sample) ||  ||  ||  ||  ||  ||  ||  || Yes || Yes || Yes || Yes || Yes ||
 || Windows (Gosu::Song)  ||  ||  ||  ||  ||  || Yes || Yes || Yes || Yes || Yes || Yes || Yes ||
-
+|| Linux (Gosu::Sample) ||  ||  ||  ||  ||  ||  ||  ||  ||  || Yes || Yes || Yes ||
+|| Linux (Gosu::Song)  ||  ||  ||  ||  ||  || Yes || Yes || Yes || Yes || Yes || Yes ||  ||
 
 OS X refers to both Macs and iPhones/iPods. I only tested the CAF formats because they are popular on the iPhone.
+
+*Note:* Sound in my Ubuntu VM (VMware Fusion) is currently broken, so I don't know if all formats actually sound right. At least those are the ones that didn't throw an exception upon loading on Ubuntu 9.10 with a basic Gosu install.
