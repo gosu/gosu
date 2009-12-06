@@ -9072,8 +9072,8 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_RubyInitializeTrackings();
   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(7)));
-  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(15)));
-  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.15"));
+  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(16)));
+  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.16"));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
   rb_define_module_function(mGosu, "gosu_to_radian_scale", VALUEFUNC(_wrap_gosu_to_radian_scale), -1);
@@ -9087,6 +9087,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "default_font_name", VALUEFUNC(_wrap_default_font_name), -1);
   rb_define_module_function(mGosu, "screen_width", VALUEFUNC(_wrap_screen_width), -1);
   rb_define_module_function(mGosu, "screen_height", VALUEFUNC(_wrap_screen_height), -1);
+  rb_define_const(mGosu, "MAX_TEXTURE_SIZE", SWIG_From_unsigned_SS_int(static_cast< unsigned int >(Gosu::MAX_TEXTURE_SIZE)));
   
   SwigClassColor.klass = rb_define_class_under(mGosu, "Color", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Color, (void *) &SwigClassColor);

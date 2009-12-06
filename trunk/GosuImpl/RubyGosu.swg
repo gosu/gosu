@@ -256,7 +256,9 @@ namespace Gosu
 // For screenWidth/screenHeight
 %ignore Gosu::Graphics;
 %ignore Gosu::BorderFlags;
+%ignore Gosu::MAX_TEXTURE_SIZE;
 %include "../Gosu/Graphics.hpp"
+%constant unsigned MAX_TEXTURE_SIZE = Gosu::MAX_TEXTURE_SIZE;
 
 // Color
 %rename("alpha=") setAlpha;
