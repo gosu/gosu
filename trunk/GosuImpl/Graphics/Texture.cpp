@@ -1,3 +1,4 @@
+#include <Gosu/Graphics.hpp>
 #include <GosuImpl/Graphics/Texture.hpp>
 #include <GosuImpl/Graphics/TexChunk.hpp>
 #include <Gosu/Bitmap.hpp>
@@ -33,6 +34,8 @@ unsigned Gosu::Texture::maxTextureSize()
     return size;
 #endif
 }
+
+const unsigned Gosu::MAX_TEXTURE_SIZE = Gosu::Texture::maxTextureSize();
 
 Gosu::Texture::Texture(unsigned size)
 : allocator(size, size), num(0)
