@@ -1,6 +1,10 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.16=
+  * 2009-12-07: Added Gosu::MAX_TEXTURE_SIZE for banisterfiend ;)
+  * 2009-12-07: Added support for socket and yaml (=syck.bundle) in RubyGosu App.app
+
 =0.7.15=
   * 2009-09-13: Added compatibility with 64-bit x86 Ruby on OS X (= Snow Leopard)
   * 2009-09-08: Fixed Gosu::Color#dup for Ruby
