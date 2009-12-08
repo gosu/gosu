@@ -4,10 +4,9 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-11-28)
+(Last update: 2009-12-09)
 
 == Gosu 0.7.x ==
-  * Add Gosu::MAX_QUAD_SIZE
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Look at TextInput bug on 1.9
   * Look at TextInput contrib
@@ -167,6 +166,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Check if DelphiGL wiki accepts donations
   * Remove from Tutorial.rb that Gosu::Button:: stuff ASAP
   * Tutorials: Mention where to find the final source code
+  * Thai-Translation hinzufügen
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
