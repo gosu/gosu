@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-12-12)
+(Last update: 2009-12-13)
 
 == Gosu 0.7.x ==
   * Window Dimensions on Windows: Error messages instead of silent failure
@@ -169,7 +169,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Tutorials: Mention where to find the final source code
   * Thai-Translation hinzufügen
   * Document MAX_TEXTURE_SIZE
-  * all-inkl anrufen wg. Cronjob, Einrichtung Domain
+  * RSS fixen
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
