@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-12-13)
+(Last update: 2009-12-16)
 
 == Gosu 0.7.x ==
   * Window Dimensions on Windows: Error messages instead of silent failure
@@ -67,6 +67,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Link the all-in-one-bundle from the boards: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * Test RMagick.bundle on Tiger
     * Test RMagick.bundle on PPC
+  * Replace draw_line by something that makes sense
   * 0.7.17, text quality release (+Linux gamepad!)
     * See if the differences between from_text and Font#draw are a bug
     * Look for non-deprecated replacement for KeyTranslate and UCKeyTranslate
@@ -170,6 +171,10 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Thai-Translation hinzufügen
   * Document MAX_TEXTURE_SIZE
   * RSS fixen
+  * .app'ify ippa's game after :retrofy is in
+  * Wipe Deployment Template off the face of the earth, 10.6 incompatible!!
+  * Strongly promote Ocra over rs2e
+  * Consider libgosu.spreadshirt.com
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
