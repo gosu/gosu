@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-12-17)
+(Last update: 2009-12-18)
 
 == Gosu 0.7.x ==
   * Window Dimensions on Windows: Error messages instead of silent failure
@@ -170,7 +170,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Tutorials: Mention where to find the final source code
   * Thai-Translation hinzufügen
   * Document MAX_TEXTURE_SIZE
-  * Fix Gosu-RSS
   * .app'ify ippa's game after :retrofy is in
   * Wipe Deployment Template off the face of the earth, 10.6 incompatible!!
   * Strongly promote Ocra over rs2e
