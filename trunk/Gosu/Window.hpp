@@ -71,9 +71,6 @@ namespace Gosu
         const Graphics& graphics() const;
         Graphics& graphics();
         
-        const Audio& audio() const;
-        Audio& audio();
-        
         const Input& input() const;
         Input& input();
         
@@ -104,6 +101,10 @@ namespace Gosu
         #endif        
         
         #endif
+        
+        // Deprecated.
+        const Audio& audio() const;
+        Audio& audio();
     };
 }
 

@@ -408,25 +408,16 @@ namespace Gosu
 %Ignore Gosu::SongType;
 %ignore Gosu::Sample::Sample(Audio& audio, const std::wstring& filename);
 %ignore Gosu::Sample::Sample(Audio& audio, Reader reader);
+%ignore Gosu::Sample::Sample(Reader reader);
 %ignore Gosu::Song::Song(Audio& audio, const std::wstring& filename);
 %ignore Gosu::Song::Song(Audio& audio, Type type, Reader reader);
+%ignore Gosu::Song::Song(Type type, Reader reader);
 %rename("playing?") playing;
 %rename("paused?") paused;
 %rename("volume=") changeVolume;
 %rename("pan=") changePan;
 %rename("speed=") changeSpeed;
 %include "../Gosu/Audio.hpp"
-%extend Gosu::Sample {
-    Sample(Gosu::Window& window, const std::string& filename) {
-        return new Gosu::Sample(window.audio(), Gosu::utf8ToWstring(filename));
-    }
-}
-%extend Gosu::Song {
-    Song(Gosu::Window& window, const std::string& filename) {
-        return new Gosu::Song(window.audio(), Gosu::utf8ToWstring(filename));
-    }
-}
-
 
 // Input and Window:
 

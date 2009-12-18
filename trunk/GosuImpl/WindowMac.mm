@@ -416,20 +416,6 @@ Gosu::Graphics& Gosu::Window::graphics()
     return *pimpl->graphics;
 }
 
-const Gosu::Audio& Gosu::Window::audio() const
-{
-    if (!pimpl->audio)
-        pimpl->audio.reset(new Gosu::Audio);
-    return *pimpl->audio;
-}
- 
-Gosu::Audio& Gosu::Window::audio()
-{
-    if (!pimpl->audio)
-        pimpl->audio.reset(new Gosu::Audio);
-    return *pimpl->audio;
-}
- 
 const Gosu::Input& Gosu::Window::input() const
 {
     return *pimpl->input;
@@ -509,7 +495,7 @@ void Gosu::Window::Impl::doTick(Window& window)
         }
     }
     
-    window.audio().update();
+    Gosu::Song::update();
     window.input().update();
     window.update();
 
@@ -523,3 +509,19 @@ void Gosu::Window::Impl::doTick(Window& window)
     
     if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
 }
+
+// Deprecated.
+
+class Gosu::Audio {};
+namespace { Gosu::Audio dummyAudio; }
+
+const Gosu::Audio& Gosu::Window::audio() const
+{
+    return dummyAudio;
+}
+ 
+Gosu::Audio& Gosu::Window::audio()
+{
+    return dummyAudio;
+}
+ 

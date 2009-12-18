@@ -19,6 +19,24 @@ module Gosu::Button
   Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }
 end
 
+# Backwards compatibility: Window arguments to Sample and Song
+class Gosu::Sample
+  alias new_initialize initialize
+  
+  def initialize(*args)
+    args.shift if args.first.is_a? Gosu::Window
+    new_initialize args
+  end
+end
+class Gosu::Song
+  alias new_initialize initialize
+  
+  def initialize(*args)
+    args.shift if args.first.is_a? Gosu::Window
+    new_initialize args
+  end
+end
+
 # Color constants (SWIG messes up constants somehow)
 class Gosu::Color
   NONE    = Gosu::Color.new(0x00000000)

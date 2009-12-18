@@ -61,24 +61,6 @@ namespace
     bool curSongLooping;
 }
 
-Gosu::Audio::Audio()
-{
-    if (alChannelManagement)
-        throw std::logic_error("Multiple Gosu::Audio instances not supported");
-    alChannelManagement.reset(new ALChannelManagement);
-}
-
-Gosu::Audio::~Audio()
-{
-    alChannelManagement.reset();
-}
-
-void Gosu::Audio::update()
-{
-    if (Song::currentSong())
-        Song::currentSong()->update();
-}
-
 Gosu::SampleInstance::SampleInstance(int handle, int extra)
 : handle(handle), extra(extra)
 {
@@ -182,8 +164,11 @@ struct Gosu::Sample::SampleData : boost::noncopyable
     }
 };
 
-Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
+Gosu::Sample::Sample(const std::wstring& filename)
 {
+    if (!alChannelManagement)
+        alChannelManagement.reset(new ALChannelManagement);
+
     if (isOggFile(filename))
     {
         Gosu::Buffer buffer;
@@ -198,8 +183,16 @@ Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
     }
 }
 
-Gosu::Sample::Sample(Audio& audio, Reader reader)
+Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
 {
+    Sample(filename).data.swap(data);
+}
+
+Gosu::Sample::Sample(Reader reader)
+{
+    if (!alChannelManagement)
+        alChannelManagement.reset(new ALChannelManagement);
+
     if (isOggFile(reader))
     {
         OggFile oggFile(reader);
@@ -210,6 +203,11 @@ Gosu::Sample::Sample(Audio& audio, Reader reader)
         AudioToolboxFile audioFile(reader);
         data.reset(new SampleData(audioFile));
     }
+}
+
+Gosu::Sample::Sample(Audio& audio, Reader reader)
+{
+    Sample(reader).data.swap(data);
 }
 
 Gosu::Sample::~Sample()
@@ -445,25 +443,33 @@ public:
     }
 };
 
-void Gosu::Song::update()
+Gosu::Song::Song(const std::wstring& filename)
 {
-    data->update();
+    if (!alChannelManagement)
+        alChannelManagement.reset(new ALChannelManagement);
+    data.reset(new StreamData(filename));
 }
 
 Gosu::Song::Song(Audio& audio, const std::wstring& filename)
-: data(new StreamData(filename))
 {
+    Song(filename).data.swap(data);
+}
+
+Gosu::Song::Song(Type type, Reader reader)
+{
+    if (!alChannelManagement)
+        alChannelManagement.reset(new ALChannelManagement);
+    data.reset(new StreamData(reader));
 }
 
 Gosu::Song::Song(Audio& audio, Type type, Reader reader)
-: data(new StreamData(reader))
 {
+    Song(type, reader).data.swap(data);
 }
 
 Gosu::Song::~Song()
 {
-    if (alChannelManagement)
-        stop();
+    stop();
 }
 
 Gosu::Song* Gosu::Song::currentSong()
@@ -522,4 +528,10 @@ double Gosu::Song::volume() const
 void Gosu::Song::changeVolume(double volume)
 {
     data->changeVolume(volume);
+}
+
+void Gosu::Song::update()
+{
+    if (currentSong())
+        currentSong()->data->update();
 }
