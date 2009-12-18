@@ -33,7 +33,7 @@ namespace Gosu
         Song* curSong = 0;
 
         #ifdef GOSU_IS_WIN
-        bool setWindow(HWND window)
+        bool setWindow()
         {
             // Copied and pasted from MSDN.
             #define FACILITY_VISUALCPP  ((LONG)0x6d)
@@ -45,7 +45,7 @@ namespace Gosu
             // if the library is not found, instead of crashing the game.
             __try
             {
-                FSOUND_SetHWND(reinterpret_cast<void*>(window));
+                FSOUND_SetHWND(GetDesktopWindow());
             }
             __except ((GetExceptionCode() == BAD_MOD) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
             {
@@ -61,14 +61,11 @@ namespace Gosu
     }
 }
 
-#ifdef GOSU_IS_WIN
-Gosu::Audio::Audio(HWND window)
-{
-    if (!setWindow(window))
-        throw std::runtime_error("Could not load fmod.dll");
-#else
 Gosu::Audio::Audio()
 {
+#ifdef GOSU_IS_WIN
+    if (!setWindow())
+        throw std::runtime_error("Could not load fmod.dll");
 #endif
 
     if (fmodInitialized)

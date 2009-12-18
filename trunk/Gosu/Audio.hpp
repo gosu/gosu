@@ -26,11 +26,7 @@ namespace Gosu
     class Audio : boost::noncopyable
     {
     public:
-        #ifdef GOSU_IS_WIN
-        explicit Audio(HWND window);
-        #else
         Audio();
-        #endif
         ~Audio();
         
         void update();

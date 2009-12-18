@@ -380,14 +380,14 @@ Gosu::Graphics& Gosu::Window::graphics()
 const Gosu::Audio& Gosu::Window::audio() const
 {
     if (!pimpl->audio)
-        pimpl->audio.reset(new Gosu::Audio(handle()));
+        pimpl->audio.reset(new Gosu::Audio());
     return *pimpl->audio;
 }
 
 Gosu::Audio& Gosu::Window::audio()
 {
     if (!pimpl->audio)
-        pimpl->audio.reset(new Gosu::Audio(handle()));
+        pimpl->audio.reset(new Gosu::Audio());
     return *pimpl->audio;
 }
 
