@@ -2,14 +2,13 @@
 #labels Featured
 
 =0.7.16=
-  * 2009-12-19: Added Gosu::Color::RED etc., for C++ and Ruby, deprecated Colors::red in C++
-  * 2009-12-07: Added Gosu::MAX_TEXTURE_SIZE for banisterfiend ;)
-  * 2009-12-07: Added support for socket and yaml (=syck.bundle) in RubyGosu App.app
+  * 2009-12-19: All: Added Gosu::Color::RED etc., for C++ and Ruby, deprecated Colors::red in C++
+  * 2009-12-07: Ruby: Added Gosu::MAX_TEXTURE_SIZE for banisterfiend ;)
+  * 2009-12-07: Ruby: Added support for socket and yaml (=syck.bundle) in RubyGosu App.app
 
 =0.7.15=
-  * 2009-09-13: Added compatibility with 64-bit x86 Ruby on OS X (= Snow Leopard)
-  * 2009-09-08: Fixed Gosu::Color#dup for Ruby
-  * 2009-07-10: Some experimental iPhone optimizations
+  * 2009-09-13: Ruby: Added compatibility with 64-bit x86 Ruby on OS X (= Snow Leopard)
+  * 2009-09-08: Ruby: Fixed Gosu::Color#dup
 
 =0.7.14=
   * 2009-06-28: Mac: OpenAL officially replaces FMOD in Gosu's OS X port.
