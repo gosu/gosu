@@ -12,3 +12,5 @@ begin
 rescue LoadError => e
   require "#{File.dirname(__FILE__)}/gosu.#{Config::CONFIG['DLEXT']}"
 end
+
+require "#{File.dirname(__FILE__)}/gosu/patches.rb"

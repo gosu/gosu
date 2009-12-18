@@ -58,7 +58,7 @@ struct Gosu::Font::Impl
         Bitmap bmp;
         bmp.resize(charWidth, height);
         
-        drawText(bmp, charString, 0, 0, Colors::white, name, height, flags);
+        drawText(bmp, charString, 0, 0, Color::WHITE, name, height, flags);
         imgPtr.reset(new Image(*graphics, bmp));
         return *imgPtr;
     }

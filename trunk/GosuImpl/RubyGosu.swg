@@ -269,7 +269,21 @@ namespace Gosu
 %rename("saturation=") setSaturation;
 %rename("value=") setValue;
 %include "std_string.i"
+
+%ignore Gosu::Color::NONE;
+%ignore Gosu::Color::BLACK;
+%ignore Gosu::Color::GRAY;
+%ignore Gosu::Color::WHITE;
+%ignore Gosu::Color::AQUA;
+%ignore Gosu::Color::RED;
+%ignore Gosu::Color::GREEN;
+%ignore Gosu::Color::BLUE;
+%ignore Gosu::Color::YELLOW;
+%ignore Gosu::Color::FUCHSIA;
+%ignore Gosu::Color::CYAN;
+
 %include "../Gosu/Color.hpp"
+
 %extend Gosu::Color {
     Gosu::Color dup() const {
         return *$self;
@@ -420,9 +434,6 @@ namespace Gosu
 // Does not matter that it's the Mac file, %include only analyses symbols to export, not their values.
 %include "../Gosu/ButtonsMac.hpp"
 %init %{
-    // Backwards compatibility: import the constants into Gosu::Button.
-    rb_eval_string("module Gosu::Button; Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }; end");
-
     // ARGH, SWIG workaround...
     // It doesn't understand the C++ overloading otherwise.
     rb_eval_string("class Gosu::Image; def self.from_text(*args); args.size == 4 ? from_text4(*args) : from_text7(*args); end; end");
@@ -430,12 +441,6 @@ namespace Gosu
     // ARGH, SWIG workaround 2..
     // It won't let me have a class method and method with the same name.
     rb_eval_string("class Gosu::Window; def button_id_to_char(id); self.class.button_id_to_char(id); end; def char_to_button_id(ch); self.class.char_to_button_id(ch); end; end");
-
-    // Extend Numeric with simple angle conversion methods.
-    rb_eval_string("class ::Numeric; def gosu_to_radian_scale; self*Math::PI/180.0; end; end");
-    rb_eval_string("class ::Numeric; def radian_scale_to_gosu; self*180.0/Math::PI; end; end");
-    rb_eval_string("class ::Numeric; def gosu_to_radians; (self-90)*Math::PI/180.0; end; end");
-    rb_eval_string("class ::Numeric; def radians_to_gosu; self*180.0/Math::PI+90;   end; end");
     
     GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
 %}

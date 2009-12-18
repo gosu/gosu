@@ -47,7 +47,7 @@ namespace Gosu
         //! Draws text so the top left corner of the text is at (x; y).
         void draw(const std::wstring& text, double x, double y, ZPos z,
             double factorX = 1, double factorY = 1,
-            Color c = Colors::white, AlphaMode mode = amDefault) const;
+            Color c = Color::WHITE, AlphaMode mode = amDefault) const;
         
         //! Draws text at a position relative to (x; y).
         //! \param relX Determines where the text is drawn horizontally. If
@@ -57,12 +57,12 @@ namespace Gosu
         //! \param relY See relX.
         void drawRel(const std::wstring& text, double x, double y, ZPos z,
             double relX, double relY, double factorX = 1, double factorY = 1,
-            Color c = Colors::white, AlphaMode mode = amDefault) const;
+            Color c = Color::WHITE, AlphaMode mode = amDefault) const;
         
         //! Analogous to draw, but rotates the text by a given angle.
         void drawRot(const std::wstring& text, double x, double y, ZPos z, double angle,
             double factorX = 1, double factorY = 1,
-            Color c = Colors::white, AlphaMode mode = amDefault) const;
+            Color c = Color::WHITE, AlphaMode mode = amDefault) const;
     };
 }
 

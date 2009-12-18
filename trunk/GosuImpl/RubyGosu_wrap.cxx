@@ -4401,6 +4401,15 @@ _wrap_white_get(VALUE self) {
 
 
 SWIGINTERN VALUE
+_wrap_aqua_get(VALUE self) {
+  VALUE _val;
+  
+  _val = SWIG_NewPointerObj(SWIG_as_voidptr(&Gosu::Colors::aqua), SWIGTYPE_p_Gosu__Color,  0 );
+  return _val;
+}
+
+
+SWIGINTERN VALUE
 _wrap_red_get(VALUE self) {
   VALUE _val;
   
@@ -4610,7 +4619,7 @@ _wrap_Font_draw(int argc, VALUE *argv, VALUE self) {
   Gosu::ZPos arg5 ;
   double arg6 = (double) 1 ;
   double arg7 = (double) 1 ;
-  Gosu::Color arg8 = (Gosu::Color) Gosu::Colors::white ;
+  Gosu::Color arg8 = (Gosu::Color) Gosu::Color::WHITE ;
   Gosu::AlphaMode arg9 = (Gosu::AlphaMode) Gosu::amDefault ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -4716,7 +4725,7 @@ _wrap_Font_draw_rel(int argc, VALUE *argv, VALUE self) {
   double arg7 ;
   double arg8 = (double) 1 ;
   double arg9 = (double) 1 ;
-  Gosu::Color arg10 = (Gosu::Color) Gosu::Colors::white ;
+  Gosu::Color arg10 = (Gosu::Color) Gosu::Color::WHITE ;
   Gosu::AlphaMode arg11 = (Gosu::AlphaMode) Gosu::amDefault ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -4835,7 +4844,7 @@ _wrap_Font_draw_rot(int argc, VALUE *argv, VALUE self) {
   double arg6 ;
   double arg7 = (double) 1 ;
   double arg8 = (double) 1 ;
-  Gosu::Color arg9 = (Gosu::Color) Gosu::Colors::white ;
+  Gosu::Color arg9 = (Gosu::Color) Gosu::Color::WHITE ;
   Gosu::AlphaMode arg10 = (Gosu::AlphaMode) Gosu::amDefault ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -5392,7 +5401,7 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
   Gosu::ZPos arg4 ;
   double arg5 = (double) 1 ;
   double arg6 = (double) 1 ;
-  Gosu::Color arg7 = (Gosu::Color) Gosu::Colors::white ;
+  Gosu::Color arg7 = (Gosu::Color) Gosu::Color::WHITE ;
   Gosu::AlphaMode arg8 = (Gosu::AlphaMode) Gosu::amDefault ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -5619,7 +5628,7 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
   double arg7 = (double) 0.5 ;
   double arg8 = (double) 1 ;
   double arg9 = (double) 1 ;
-  Gosu::Color arg10 = (Gosu::Color) Gosu::Colors::white ;
+  Gosu::Color arg10 = (Gosu::Color) Gosu::Color::WHITE ;
   Gosu::AlphaMode arg11 = (Gosu::AlphaMode) Gosu::amDefault ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -9123,6 +9132,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_singleton_method(mGosu, "black", VALUEFUNC(_wrap_black_get), 0);
   rb_define_singleton_method(mGosu, "gray", VALUEFUNC(_wrap_gray_get), 0);
   rb_define_singleton_method(mGosu, "white", VALUEFUNC(_wrap_white_get), 0);
+  rb_define_singleton_method(mGosu, "aqua", VALUEFUNC(_wrap_aqua_get), 0);
   rb_define_singleton_method(mGosu, "red", VALUEFUNC(_wrap_red_get), 0);
   rb_define_singleton_method(mGosu, "green", VALUEFUNC(_wrap_green_get), 0);
   rb_define_singleton_method(mGosu, "blue", VALUEFUNC(_wrap_blue_get), 0);
@@ -9347,9 +9357,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "NumButtons", SWIG_From_int(static_cast< int >(Gosu::numButtons)));
   rb_define_const(mGosu, "NoButton", SWIG_From_int(static_cast< int >(Gosu::noButton)));
   
-  // Backwards compatibility: import the constants into Gosu::Button.
-  rb_eval_string("module Gosu::Button; Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }; end");
-  
   // ARGH, SWIG workaround...
   // It doesn't understand the C++ overloading otherwise.
   rb_eval_string("class Gosu::Image; def self.from_text(*args); args.size == 4 ? from_text4(*args) : from_text7(*args); end; end");
@@ -9357,12 +9364,6 @@ SWIGEXPORT void Init_gosu(void) {
   // ARGH, SWIG workaround 2..
   // It won't let me have a class method and method with the same name.
   rb_eval_string("class Gosu::Window; def button_id_to_char(id); self.class.button_id_to_char(id); end; def char_to_button_id(ch); self.class.char_to_button_id(ch); end; end");
-  
-  // Extend Numeric with simple angle conversion methods.
-  rb_eval_string("class ::Numeric; def gosu_to_radian_scale; self*Math::PI/180.0; end; end");
-  rb_eval_string("class ::Numeric; def radian_scale_to_gosu; self*180.0/Math::PI; end; end");
-  rb_eval_string("class ::Numeric; def gosu_to_radians; (self-90)*Math::PI/180.0; end; end");
-  rb_eval_string("class ::Numeric; def radians_to_gosu; self*180.0/Math::PI+90;   end; end");
   
   GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
   

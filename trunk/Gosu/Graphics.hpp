@@ -47,7 +47,7 @@ namespace Gosu
 
         //! Prepares the graphics object for drawing. Nothing must be drawn
         //! without calling begin.
-        bool begin(Color clearWithColor = Colors::black);
+        bool begin(Color clearWithColor = Color::BLACK);
         //! Every call to begin must have a matching call to end.
         void end();
         //! Finishes all pending Gosu drawing operations and executes

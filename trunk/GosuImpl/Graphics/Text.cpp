@@ -65,7 +65,7 @@ namespace Gosu
                     allocatedLines += 10;
                     bmp.resize(bmp.width(),
                         (lineSpacing + fontHeight) * allocatedLines,
-                        Colors::none);
+                        Color::NONE);
                 }
             }
 
@@ -135,7 +135,7 @@ namespace Gosu
                 for (Words::const_iterator cur = begin; cur != end; ++cur)
                 {
                     drawText(bmp, cur->text, trunc(pos), trunc(top),
-                        Colors::white, fontName, fontHeight, fontFlags);
+                        Color::WHITE, fontName, fontHeight, fontFlags);
 
                     if (align == taJustify && !overrideAlign)
                         pos += cur->width + 1.0 * (width() - wordsWidth) / (words - 1);

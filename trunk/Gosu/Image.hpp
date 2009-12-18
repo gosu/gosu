@@ -48,14 +48,14 @@ namespace Gosu
         explicit Image(std::auto_ptr<ImageData> data);
 
         ~Image();
-
+        
         unsigned width() const;
         unsigned height() const;
 
         //! Draws the image so its upper left corner is at (x; y).
         void draw(double x, double y, ZPos z,
             double factorX = 1, double factorY = 1,
-            Color c = Colors::white,
+            Color c = Color::WHITE,
             AlphaMode mode = amDefault) const;
         //! Like draw(), but allows to give modulation colors for all four
         //! corners.
@@ -76,14 +76,14 @@ namespace Gosu
         void drawRot(double x, double y, ZPos z,
             double angle, double centerX = 0.5, double centerY = 0.5,
             double factorX = 1, double factorY = 1,
-            Color c = Colors::white,
+            Color c = Color::WHITE,
             AlphaMode mode = amDefault) const;
 
         #ifndef SWIG
         void drawRotFlip(double x, double y, ZPos z,
             RotFlip rf,
             double factorX = 1, double factorY = 1,
-            Color c = Colors::white,
+            Color c = Color::WHITE,
             AlphaMode mode = amDefault) const;
         void drawRotFlipMod(double x, double y, ZPos z,
             RotFlip rf,

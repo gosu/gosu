@@ -14,7 +14,7 @@ Gosu::Bitmap Gosu::quickLoadBitmap(const std::wstring& filename)
     if (formatTester[0] == 'B' && formatTester[1] == 'M')
     {
         loadFromBMP(bmp, buf.frontReader());
-        applyColorKey(bmp, Colors::fuchsia);
+        applyColorKey(bmp, Color::FUCHSIA);
     }
     else
         loadFromPNG(bmp, buf.frontReader());
@@ -26,7 +26,7 @@ void Gosu::applyBorderFlags(Bitmap& dest, const Bitmap& source,
     unsigned borderFlags)
 {
     dest.resize(srcWidth + 2, srcHeight + 2);
-    dest.fill(Colors::none);
+    dest.fill(Color::NONE);
 
     // The borders are made "harder" by duplicating the original bitmap's
     // borders.

@@ -30,7 +30,7 @@ namespace Gosu
 
         void swap(Bitmap& other);
 
-        void resize(unsigned width, unsigned height, Color c = Colors::none);
+        void resize(unsigned width, unsigned height, Color c = Color::NONE);
 
         void fill(Color c);
         void replace(Color oldColor, Color newColor);

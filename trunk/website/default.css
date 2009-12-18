@@ -489,3 +489,50 @@ div.bds {
 div.pst, div.msg {
 	border: 2px solid #666;
 }
+
+/* Image page */
+p.ims, p.imc {
+	text-align: center;
+}
+
+/* Icon sprites */
+.sic {
+	vertical-align: text-top;
+	margin-top: 1px;
+	width: 14px;
+	height: 14px;
+	background-image: url(icons.png) 
+}
+.sic_board_nr { background-position: 0 -1px; } 
+.sic_board_nu { background-position: 0 -16px; } 
+.sic_board_or { background-position: 0 -31px; } 
+.sic_board_ou { background-position: 0 -46px; } 
+.sic_nav_minus { background-position: 0 -61px; } 
+.sic_nav_next { background-position: 0 -76px; } 
+.sic_nav_next_d { background-position: 0 -91px; } 
+.sic_nav_plus { background-position: 0 -106px; } 
+.sic_nav_prev { background-position: 0 -121px; } 
+.sic_nav_prev_d { background-position: 0 -136px; } 
+.sic_nav_up { background-position: 0 -151px; } 
+.sic_post_a { background-position: 0 -166px; } 
+.sic_post_i { background-position: 0 -181px; } 
+.sic_post_nn { background-position: 0 -196px; } 
+.sic_post_nr { background-position: 0 -211px; } 
+.sic_post_nu { background-position: 0 -226px; } 
+.sic_post_or { background-position: 0 -241px; } 
+.sic_post_ou { background-position: 0 -256px; } 
+.sic_sml_lol { background-position: 0 -271px; } 
+.sic_sml_neg { background-position: 0 -286px; } 
+.sic_sml_ooh { background-position: 0 -301px; } 
+.sic_sml_pos { background-position: 0 -316px; } 
+.sic_sml_tng { background-position: 0 -331px; } 
+.sic_sml_wnk { background-position: 0 -346px; } 
+.sic_topic_l { background-position: 0 -361px; } 
+.sic_topic_nr { background-position: 0 -376px; } 
+.sic_topic_nu { background-position: 0 -391px; } 
+.sic_topic_or { background-position: 0 -406px; } 
+.sic_topic_ou { background-position: 0 -421px; } 
+.sic_topic_poll { background-position: 0 -436px; } 
+.sic_hint_info { background-position: 0 -451px; } 
+.sic_hint_exec { background-position: 0 -466px; }
+.sic_hint_error { background-position: 0 -481px; }

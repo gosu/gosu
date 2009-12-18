@@ -126,6 +126,19 @@ namespace Gosu
         {
             return alpha() << 24 | bgr();
         }
+        
+        static const Color NONE;
+        static const Color BLACK;
+        static const Color GRAY;
+        static const Color WHITE;
+        
+        static const Color AQUA;
+        static const Color RED;
+        static const Color GREEN;
+        static const Color BLUE;
+        static const Color YELLOW;
+        static const Color FUCHSIA;
+        static const Color CYAN;
     };
     
     // Causes weird errors when included in the SWIG wrapping process.
@@ -153,13 +166,15 @@ namespace Gosu
     //! and then multiplied with each other.
     Color multiply(Color a, Color b);
 
-    //! Namespace which contains some predefined colors.
+    // Deprecated
     namespace Colors
     {
         const Color none    = 0x00000000;
         const Color black   = 0xff000000;
         const Color gray    = 0xff808080;
         const Color white   = 0xffffffff;
+        
+        const Color aqua    = 0xff00ffff;
         const Color red     = 0xffff0000;
         const Color green   = 0xff00ff00;
         const Color blue    = 0xff0000ff;

@@ -124,3 +124,15 @@ Gosu::Color Gosu::multiply(Color a, Color b)
                  round(a.green() * b.green() / 255.0),
                  round(a.blue()  * b.blue()  / 255.0));
 }
+
+const Gosu::Color Gosu::Color::NONE    = 0x00000000;
+const Gosu::Color Gosu::Color::BLACK   = 0xff000000;
+const Gosu::Color Gosu::Color::GRAY    = 0xff808080;
+const Gosu::Color Gosu::Color::WHITE   = 0xffffffff;            
+const Gosu::Color Gosu::Color::AQUA    = 0xff00ffff;
+const Gosu::Color Gosu::Color::RED     = 0xffff0000;
+const Gosu::Color Gosu::Color::GREEN   = 0xff00ff00;
+const Gosu::Color Gosu::Color::BLUE    = 0xff0000ff;
+const Gosu::Color Gosu::Color::YELLOW  = 0xffffff00;
+const Gosu::Color Gosu::Color::FUCHSIA = 0xffff00ff;
+const Gosu::Color Gosu::Color::CYAN    = 0xff00ffff;

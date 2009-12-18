@@ -22,7 +22,7 @@ void Gosu::applyColorKey(Bitmap& bitmap, Color key)
 
                 if (surroundingColors.empty())
                 {
-                    bitmap.setPixel(x, y, Colors::none);
+                    bitmap.setPixel(x, y, Color::NONE);
                     continue;
                 }
 

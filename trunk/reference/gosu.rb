@@ -146,6 +146,18 @@ module Gosu
     # s:: Float from 0..1
     # v:: Float from 0..1.
     def self.from_ahsv(a, h, s, v); end
+
+    NONE    = Gosu::Color.new(0x00000000)
+    BLACK   = Gosu::Color.new(0xff000000)
+    GRAY    = Gosu::Color.new(0xff808080)
+    WHITE   = Gosu::Color.new(0xffffffff)            
+    AQUA    = Gosu::Color.new(0xff00ffff)
+    RED     = Gosu::Color.new(0xffff0000)
+    GREEN   = Gosu::Color.new(0xff00ff00)
+    BLUE    = Gosu::Color.new(0xff0000ff)
+    YELLOW  = Gosu::Color.new(0xffffff00)
+    FUCHSIA = Gosu::Color.new(0xffff00ff)
+    CYAN    = Gosu::Color.new(0xff00ffff)
   end
   
   # A font can be used to draw text on a Window object very flexibly.
