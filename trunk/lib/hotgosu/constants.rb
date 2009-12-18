@@ -130,8 +130,8 @@ module Gosu
   MsWheelUp = 65539
   NoButton = -1
   NumButtons = 65562
-  POINT_VERSION = 15
-  VERSION = "0.7.15"
+  POINT_VERSION = 16
+  VERSION = "0.7.16"
 end
 
 module Gosu
