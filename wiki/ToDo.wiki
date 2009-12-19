@@ -4,29 +4,28 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-12-18)
+(Last update: 2009-12-20)
 
 == Gosu 0.7.x ==
-  * Window Dimensions on Windows: Error messages instead of silent failure
-  * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
-  * Look at TextInput bug on 1.9
-  * Look at TextInput contrib
+  * 0.7.16, the Christmas version
+    * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
+    * Look at TextInput bug on 1.9
+    * Look at TextInput contrib
+    * Either document gosu_to_radian_scale or rename it before anyone relies on it
+    * Window Dimensions on Windows: Error messages instead of silent failure
+    * Add -I/usr/include/SDL to the makefile
+    * Document new color constants
   * Test StandBy with Windows and a running Gosu app
   * Get someone to test the new OpenAL code on Intel/Tiger...
-  * Either document gosu_to_radian_scale or rename it before anyone relies on it
   * Web work
     * Move three threads from GosuExchange to the forums
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
     * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
-    * Report Ocra bugs: spaces in exe name = crash, requires .rb and .so files?!
-  * 0.7.16 (bugfixes bugfixes bugfixes)
+  * 0.7.17 The screen size stuff …
     * Revisit "garbled screen" bug on Mac
-    * Add -I/usr/include/SDL to the makefile
     * See if John Shea's talk had something about not being locked to pixel positions
     * See if really old games have problems running in current Gosu
-    * Verify that TextInput works cleanly on Ruby 1.9 with Unicode
     * Add support for giving font flags from Ruby
-    * Complete the list of Gosu::Colors, inspired by the CSS colors, and move them to Color in Ruby / support :red/:green/etc…
     * Screen size / fullscreen stuff
       * Iterate on first category of fullscreen tests
       * Allow adjustment of the virtual touchscreen resolution
@@ -38,7 +37,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Test multiple screens on Windows
     * TextField with clip_to (update example)
     * Test LD14 entry on Linux
-    * Release 0.7.16
+    * Release!
     * (1x mymüsli for all the hard work! (motivation!)
   * iPhone-related stuff that should be finished soonish
     * Let resolution decide orientation
@@ -68,7 +67,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Test RMagick.bundle on Tiger
     * Test RMagick.bundle on PPC
   * Replace draw_line by something that makes sense
-  * 0.7.17, text quality release (+Linux gamepad!)
+  * 0.7.18, text quality release (+Linux gamepad!)
     * See if the differences between from_text and Font#draw are a bug
     * Look for non-deprecated replacement for KeyTranslate and UCKeyTranslate
     * Creating a non-existent font should throw an exception on *all* platforms, test on which it does
@@ -83,7 +82,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Make RTL work without RTL/LTR markers?!
     * Add RTL support to Font::drawRot too
     * Add Linux gamepad support, try wgois for that
-  * 0.7.18, polish/deployment release
+  * 0.7.19, polish/deployment release
     * Make it possible to delete images while they are still referenced in the queue.
     * Make Gosu::Color more fault-tolerant regarding its component values
     * Assure that files from doxygen task are considered for packaging
