@@ -61,6 +61,11 @@ namespace
     bool curSongLooping;
 }
 
+#define CONSTRUCTOR_COMMON \
+    ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]); \
+    if (!alChannelManagement) \
+        alChannelManagement.reset(new ALChannelManagement)
+
 Gosu::SampleInstance::SampleInstance(int handle, int extra)
 : handle(handle), extra(extra)
 {
@@ -166,8 +171,7 @@ struct Gosu::Sample::SampleData : boost::noncopyable
 
 Gosu::Sample::Sample(const std::wstring& filename)
 {
-    if (!alChannelManagement)
-        alChannelManagement.reset(new ALChannelManagement);
+    CONSTRUCTOR_COMMON;
 
     if (isOggFile(filename))
     {
@@ -190,8 +194,7 @@ Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
 
 Gosu::Sample::Sample(Reader reader)
 {
-    if (!alChannelManagement)
-        alChannelManagement.reset(new ALChannelManagement);
+    CONSTRUCTOR_COMMON;
 
     if (isOggFile(reader))
     {
@@ -445,8 +448,8 @@ public:
 
 Gosu::Song::Song(const std::wstring& filename)
 {
-    if (!alChannelManagement)
-        alChannelManagement.reset(new ALChannelManagement);
+    CONSTRUCTOR_COMMON;
+
     data.reset(new StreamData(filename));
 }
 
@@ -457,8 +460,8 @@ Gosu::Song::Song(Audio& audio, const std::wstring& filename)
 
 Gosu::Song::Song(Type type, Reader reader)
 {
-    if (!alChannelManagement)
-        alChannelManagement.reset(new ALChannelManagement);
+    CONSTRUCTOR_COMMON;
+
     data.reset(new StreamData(reader));
 }
 
