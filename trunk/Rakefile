@@ -112,6 +112,8 @@ task :todo do
     end
   end
   
+  `svn update wiki` # Just for cleanliness' sake.
+  
   diff = `svn diff wiki`
   if diff.count("\n") == 13 and diff =~ /Last update/ then
     # We have only changed the date, just revert.
