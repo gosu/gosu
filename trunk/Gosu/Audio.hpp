@@ -1,9 +1,6 @@
 //! \file Audio.hpp
 //! Contains all the classes of Gosu's audio system.
 
-// REDESIGN: Rename all changeXXX() member functions to setXXX().
-// REDESIGN: Don't require window argument, is this possible?
-
 #ifndef GOSU_AUDIO_HPP
 #define GOSU_AUDIO_HPP
 

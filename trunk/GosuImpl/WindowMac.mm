@@ -185,7 +185,6 @@ struct Gosu::Window::Impl
     
     ObjRef<NSOpenGLContext> context;
     boost::scoped_ptr<Graphics> graphics;
-    boost::scoped_ptr<Audio> audio;
     boost::scoped_ptr<Input> input;
     double interval;
     bool mouseViz;

@@ -19,39 +19,22 @@ namespace Gosu {
       throw std::runtime_error(Mix_GetError());
     }
 
-    bool mixerInitialized = false;
     bool noSound = false;
     Song* curSong = NULL;
+
+    void requireSDLMixer()
+    {
+      static bool mixerInitialized = false;
+      if (mixerInitialized)
+          return;
+      if (SDL_Init(SDL_INIT_AUDIO) || Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0)
+          noSound = true;
+      std::atexit(Mix_CloseAudio);
+      mixerInitialized = true;
+    }
   }
   
   std::map<int, int> channelRegistry;
-}
-
-#ifdef GOSU_IS_WIN
-Gosu::Audio::Audio(HWND window) {
-  // Nothing to do; SDL_mixer does not require the window handle.
-#else
-Gosu::Audio::Audio() {
-#endif
-  if (mixerInitialized)
-    throw std::logic_error("Multiple Gosu::Audio instances not supported.");
-
-  if (SDL_Init(SDL_INIT_AUDIO) || Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0)
-    noSound = true;
-
-  mixerInitialized = true;
-}
-
-Gosu::Audio::~Audio() {
-  assert(mixerInitialized);
-
-  if (!noSound)
-    Mix_CloseAudio();
-  mixerInitialized = false;
-}
-
-void Gosu::Audio::update()
-{
 }
 
 bool Gosu::SampleInstance::alive() const
@@ -124,6 +107,8 @@ struct Gosu::Sample::SampleData : boost::noncopyable
 
 Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
 {
+    requireSDLMixer();
+
     if (noSound)
         return;
 
@@ -135,7 +120,10 @@ Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
         throwLastSDLError();
 }
 
-Gosu::Sample::Sample(Audio& audio, Reader reader) {
+Gosu::Sample::Sample(Audio& audio, Reader reader)
+{
+    requireSDLMixer();
+
     if (noSound)
         return;
 
@@ -211,6 +199,8 @@ public:
 Gosu::Song::Song(Audio& audio, const std::wstring& filename)
 : data(new BaseData)
 {
+    requireSDLMixer();
+
     if (noSound)
         return;
 
@@ -224,6 +214,10 @@ Gosu::Song::Song(Audio& audio, const std::wstring& filename)
 Gosu::Song::Song(Audio &audio, Type type, Reader reader)
 : data(new BaseData)
 {
+    requireSDLMixer();
+
+    if (noSound)
+        return;
 #if 0
     // This is traditionally broken in SDL_mixer. File bugs :)
     

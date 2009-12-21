@@ -2,7 +2,6 @@
 #include <Gosu/WinUtility.hpp>
 #include <Gosu/Timing.hpp>
 #include <Gosu/Graphics.hpp>
-#include <Gosu/Audio.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/TextInput.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
@@ -167,7 +166,6 @@ struct Gosu::Window::Impl
     HWND handle;
 	HDC hdc;
     boost::scoped_ptr<Graphics> graphics;
-    boost::scoped_ptr<Audio> audio;
     boost::scoped_ptr<Input> input;
 	double updateInterval;
     bool iconified;
@@ -377,20 +375,6 @@ Gosu::Graphics& Gosu::Window::graphics()
     return *pimpl->graphics;
 }
 
-const Gosu::Audio& Gosu::Window::audio() const
-{
-    if (!pimpl->audio)
-        pimpl->audio.reset(new Gosu::Audio());
-    return *pimpl->audio;
-}
-
-Gosu::Audio& Gosu::Window::audio()
-{
-    if (!pimpl->audio)
-        pimpl->audio.reset(new Gosu::Audio());
-    return *pimpl->audio;
-}
-
 const Gosu::Input& Gosu::Window::input() const
 {
     return *pimpl->input;
@@ -485,3 +469,18 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
 
     return DefWindowProc(handle(), message, wparam, lparam);
 }
+// Deprecated.
+
+class Gosu::Audio {};
+namespace { Gosu::Audio dummyAudio; }
+
+const Gosu::Audio& Gosu::Window::audio() const
+{
+    return dummyAudio;
+}
+ 
+Gosu::Audio& Gosu::Window::audio()
+{
+    return dummyAudio;
+}
+

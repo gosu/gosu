@@ -78,7 +78,6 @@ struct Gosu::Window::Impl
 {
     boost::scoped_ptr<Graphics> graphics;
     boost::scoped_ptr<Input> input;
-    boost::scoped_ptr<Audio> audio;
 
     ::Display* display;
     
@@ -360,20 +359,6 @@ Gosu::Graphics& Gosu::Window::graphics()
     return *pimpl->graphics;
 }
 
-const Gosu::Audio& Gosu::Window::audio() const
-{
-    if (!pimpl->audio)
-        pimpl->audio.reset(new Gosu::Audio());
-    return *pimpl->audio;
-}
-
-Gosu::Audio& Gosu::Window::audio()
-{
-    if (!pimpl->audio)
-        pimpl->audio.reset(new Gosu::Audio());
-    return *pimpl->audio;
-}
-
 const Gosu::Input& Gosu::Window::input() const
 {
     return *pimpl->input;
@@ -410,3 +395,19 @@ Gosu::Window::SharedContext Gosu::Window::createSharedContext() {
         new boost::function<void()>(boost::bind(makeCurrentContext, dpy2, pimpl->window, ctx)),
         boost::bind(releaseContext, dpy2, ctx));
 }
+
+// Deprecated.
+
+class Gosu::Audio {};
+namespace { Gosu::Audio dummyAudio; }
+
+const Gosu::Audio& Gosu::Window::audio() const
+{
+    return dummyAudio;
+}
+ 
+Gosu::Audio& Gosu::Window::audio()
+{
+    return dummyAudio;
+}
+
