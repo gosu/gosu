@@ -2231,6 +2231,9 @@ static VALUE mGosu;
 
 // For Ruby-only MAX_TEXTURE_SIZE
 #include <Gosu/../GosuImpl/Graphics/Texture.hpp>
+namespace Gosu {
+    unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
+}
 
 #include <sstream>
 
@@ -3200,6 +3203,28 @@ _wrap_screen_height(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (unsigned int)Gosu::screenHeight();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap___max_texture_size(int argc, VALUE *argv, VALUE self) {
+  unsigned int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  {
+    try {
+      result = (unsigned int)Gosu::__maxTextureSize();
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -9108,7 +9133,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "default_font_name", VALUEFUNC(_wrap_default_font_name), -1);
   rb_define_module_function(mGosu, "screen_width", VALUEFUNC(_wrap_screen_width), -1);
   rb_define_module_function(mGosu, "screen_height", VALUEFUNC(_wrap_screen_height), -1);
-  rb_define_const(mGosu, "MAX_TEXTURE_SIZE", SWIG_From_unsigned_SS_int(static_cast< unsigned int >(Gosu::Texture::maxTextureSize())));
+  rb_define_module_function(mGosu, "__max_texture_size", VALUEFUNC(_wrap___max_texture_size), -1);
   
   SwigClassColor.klass = rb_define_class_under(mGosu, "Color", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Color, (void *) &SwigClassColor);
@@ -9377,6 +9402,9 @@ SWIGEXPORT void Init_gosu(void) {
   // ARGH, SWIG workaround 2..
   // It won't let me have a class method and method with the same name.
   rb_eval_string("class Gosu::Window; def button_id_to_char(id); self.class.button_id_to_char(id); end; def char_to_button_id(ch); self.class.char_to_button_id(ch); end; end");
+  
+  // ARGH, Linux workaround: instead of declaring a constant, we declare a hidden function and call it when we need to define the constant.
+  rb_eval_string("module Gosu;def self.const_missing sym;if sym == :MAX_TEXTURE_SIZE then;const_set sym, __max_texture_size;else;super;end;end;end");
   
   GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
   

@@ -145,6 +145,9 @@
 
 // For Ruby-only MAX_TEXTURE_SIZE
 #include <Gosu/../GosuImpl/Graphics/Texture.hpp>
+namespace Gosu {
+    unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
+}
 
 #include <sstream>
 
@@ -259,9 +262,16 @@ namespace Gosu
 // For screenWidth/screenHeight
 %ignore Gosu::Graphics;
 %ignore Gosu::BorderFlags;
-%ignore Gosu::MAX_TEXTURE_SIZE;
+//%ignore Gosu::MAX_TEXTURE_SIZE;
 %include "../Gosu/Graphics.hpp"
-%constant unsigned MAX_TEXTURE_SIZE = Gosu::Texture::maxTextureSize();
+
+// More Ubuntu libgl initialization fail workarounds
+
+//%constant unsigned MAX_TEXTURE_SIZE = Gosu::Texture::maxTextureSize();
+
+namespace Gosu {
+    unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
+}
 
 // Color
 %rename("alpha=") setAlpha;
@@ -435,6 +445,9 @@ namespace Gosu
     // ARGH, SWIG workaround 2..
     // It won't let me have a class method and method with the same name.
     rb_eval_string("class Gosu::Window; def button_id_to_char(id); self.class.button_id_to_char(id); end; def char_to_button_id(ch); self.class.char_to_button_id(ch); end; end");
+    
+    // ARGH, Linux workaround: instead of declaring a constant, we declare a hidden function and call it when we need to define the constant.
+    rb_eval_string("module Gosu;def self.const_missing sym;if sym == :MAX_TEXTURE_SIZE then;const_set sym, __max_texture_size;else;super;end;end;end");
     
     GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
 %}
