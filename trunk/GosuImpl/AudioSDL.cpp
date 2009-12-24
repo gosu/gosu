@@ -105,7 +105,7 @@ struct Gosu::Sample::SampleData : boost::noncopyable
   }
 };
 
-Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
+Gosu::Sample::Sample(const std::wstring& filename)
 {
     requireSDLMixer();
 
@@ -120,7 +120,7 @@ Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
         throwLastSDLError();
 }
 
-Gosu::Sample::Sample(Audio& audio, Reader reader)
+Gosu::Sample::Sample(Reader reader)
 {
     requireSDLMixer();
 
@@ -196,7 +196,7 @@ public:
     }
 };
 
-Gosu::Song::Song(Audio& audio, const std::wstring& filename)
+Gosu::Song::Song(const std::wstring& filename)
 : data(new BaseData)
 {
     requireSDLMixer();
@@ -211,7 +211,7 @@ Gosu::Song::Song(Audio& audio, const std::wstring& filename)
     Mix_HookMusicFinished(BaseData::endSongCallback);
 }
 
-Gosu::Song::Song(Audio &audio, Type type, Reader reader)
+Gosu::Song::Song(Type type, Reader reader)
 : data(new BaseData)
 {
     requireSDLMixer();
