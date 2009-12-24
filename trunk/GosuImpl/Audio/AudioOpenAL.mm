@@ -187,11 +187,6 @@ Gosu::Sample::Sample(const std::wstring& filename)
     }
 }
 
-Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
-{
-    Sample(filename).data.swap(data);
-}
-
 Gosu::Sample::Sample(Reader reader)
 {
     CONSTRUCTOR_COMMON;
@@ -206,11 +201,6 @@ Gosu::Sample::Sample(Reader reader)
         AudioToolboxFile audioFile(reader);
         data.reset(new SampleData(audioFile));
     }
-}
-
-Gosu::Sample::Sample(Audio& audio, Reader reader)
-{
-    Sample(reader).data.swap(data);
 }
 
 Gosu::Sample::~Sample()
@@ -453,21 +443,11 @@ Gosu::Song::Song(const std::wstring& filename)
     data.reset(new StreamData(filename));
 }
 
-Gosu::Song::Song(Audio& audio, const std::wstring& filename)
-{
-    Song(filename).data.swap(data);
-}
-
 Gosu::Song::Song(Type type, Reader reader)
 {
     CONSTRUCTOR_COMMON;
 
     data.reset(new StreamData(reader));
-}
-
-Gosu::Song::Song(Audio& audio, Type type, Reader reader)
-{
-    Song(type, reader).data.swap(data);
 }
 
 Gosu::Song::~Song()
@@ -537,4 +517,26 @@ void Gosu::Song::update()
 {
     if (currentSong())
         currentSong()->data->update();
+}
+
+// Deprecated constructors.
+
+Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
+{
+    Sample(filename).data.swap(data);
+}
+
+Gosu::Sample::Sample(Audio& audio, Reader reader)
+{
+    Sample(reader).data.swap(data);
+}
+
+Gosu::Song::Song(Audio& audio, const std::wstring& filename)
+{
+    Song(filename).data.swap(data);
+}
+
+Gosu::Song::Song(Audio& audio, Type type, Reader reader)
+{
+    Song(type, reader).data.swap(data);
 }
