@@ -143,6 +143,9 @@
 #include <Gosu/Version.hpp>
 #include <Gosu/Window.hpp>
 
+// For Ruby-only MAX_TEXTURE_SIZE
+#include <Gosu/../GosuImpl/Graphics/Texture.hpp>
+
 #include <sstream>
 
 // New Ruby 1.9 syntax (for compilation with Ruby 1.8)
@@ -258,7 +261,7 @@ namespace Gosu
 %ignore Gosu::BorderFlags;
 %ignore Gosu::MAX_TEXTURE_SIZE;
 %include "../Gosu/Graphics.hpp"
-%constant unsigned MAX_TEXTURE_SIZE = Gosu::MAX_TEXTURE_SIZE;
+%constant unsigned MAX_TEXTURE_SIZE = Gosu::Texture::maxTextureSize();
 
 // Color
 %rename("alpha=") setAlpha;

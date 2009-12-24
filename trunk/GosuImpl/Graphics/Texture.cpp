@@ -35,7 +35,7 @@ unsigned Gosu::Texture::maxTextureSize()
 #endif
 }
 
-const unsigned Gosu::MAX_TEXTURE_SIZE = Gosu::Texture::maxTextureSize();
+//const unsigned Gosu::MAX_TEXTURE_SIZE = Gosu::Texture::maxTextureSize();
 
 Gosu::Texture::Texture(unsigned size)
 : allocator(size, size), num(0)

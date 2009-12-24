@@ -2229,6 +2229,9 @@ static VALUE mGosu;
 #include <Gosu/Version.hpp>
 #include <Gosu/Window.hpp>
 
+// For Ruby-only MAX_TEXTURE_SIZE
+#include <Gosu/../GosuImpl/Graphics/Texture.hpp>
+
 #include <sstream>
 
 // New Ruby 1.9 syntax (for compilation with Ruby 1.8)
@@ -9105,7 +9108,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "default_font_name", VALUEFUNC(_wrap_default_font_name), -1);
   rb_define_module_function(mGosu, "screen_width", VALUEFUNC(_wrap_screen_width), -1);
   rb_define_module_function(mGosu, "screen_height", VALUEFUNC(_wrap_screen_height), -1);
-  rb_define_const(mGosu, "MAX_TEXTURE_SIZE", SWIG_From_unsigned_SS_int(static_cast< unsigned int >(Gosu::MAX_TEXTURE_SIZE)));
+  rb_define_const(mGosu, "MAX_TEXTURE_SIZE", SWIG_From_unsigned_SS_int(static_cast< unsigned int >(Gosu::Texture::maxTextureSize())));
   
   SwigClassColor.klass = rb_define_class_under(mGosu, "Color", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Color, (void *) &SwigClassColor);
