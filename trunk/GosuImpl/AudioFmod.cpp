@@ -29,9 +29,6 @@ namespace Gosu
             return retVal;
         }
 
-        bool fmodInitialized = false;
-        Song* curSong = 0;
-
         #ifdef GOSU_IS_WIN
         bool setWindow()
         {
@@ -58,33 +55,23 @@ namespace Gosu
             #undef FACILITY_VISUALCPP
         }
         #endif
+
+        void requireFMOD()
+        {
+            static bool initialized = false;
+            if (initialized)
+                return;
+                
+            #ifdef GOSU_IS_WIN
+            if (!setWindow())
+                throw std::runtime_error("Could not load fmod.dll");
+            #endif
+            fmodCheck(FSOUND_Init(44100, 32, 0));
+            
+            initialized = true;
+        }
+        Song* curSong = 0;
     }
-}
-
-Gosu::Audio::Audio()
-{
-#ifdef GOSU_IS_WIN
-    if (!setWindow())
-        throw std::runtime_error("Could not load fmod.dll");
-#endif
-
-    if (fmodInitialized)
-        throw std::logic_error("Multiple Gosu::Audio instances not supported");
-
-    fmodCheck(FSOUND_Init(44100, 32, 0));
-    fmodInitialized = true;
-}
-
-Gosu::Audio::~Audio()
-{
-    assert(fmodInitialized);
-
-    FSOUND_Close();
-    fmodInitialized = false;
-}
-
-void Gosu::Audio::update()
-{
 }
 
 Gosu::SampleInstance::SampleInstance(int handle, int extra)
@@ -155,8 +142,10 @@ struct Gosu::Sample::SampleData : boost::noncopyable
     }
 };
 
-Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
+Gosu::Sample::Sample(const std::wstring& filename)
 {
+    requireFMOD();
+    
 	Buffer buf;
 	loadFile(buf, filename);
 
@@ -164,8 +153,10 @@ Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
 	Sample(audio, buf.frontReader()).data.swap(data);
 }
 
-Gosu::Sample::Sample(Audio& audio, Reader reader)
+Gosu::Sample::Sample(Reader reader)
 {
+    requireFMOD();
+    
     std::vector<char> buffer(reader.resource().size() - reader.position());
     reader.read(&buffer.front(), buffer.size());
 
@@ -397,8 +388,10 @@ public:
     }
 };
 
-Gosu::Song::Song(Audio& audio, const std::wstring& filename)
+Gosu::Song::Song(const std::wstring& filename)
 {
+    requireFMOD();
+    
     Buffer buf;
 	loadFile(buf, filename);
 	Type type = stStream;
@@ -415,8 +408,10 @@ Gosu::Song::Song(Audio& audio, const std::wstring& filename)
 	Song(audio, type, buf.frontReader()).data.swap(data);
 }
 
-Gosu::Song::Song(Audio& audio, Type type, Reader reader)
+Gosu::Song::Song(Type type, Reader reader)
 {
+    requireFMOD();
+    
     switch (type)
     {
     case stStream:
@@ -488,4 +483,26 @@ double Gosu::Song::volume() const
 void Gosu::Song::changeVolume(double volume)
 {
     data->changeVolume(volume);
+}
+
+// Deprecated constructors.
+
+Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
+{
+    Sample(filename).data.swap(data);
+}
+
+Gosu::Sample::Sample(Audio& audio, Reader reader)
+{
+    Sample(reader).data.swap(data);
+}
+
+Gosu::Song::Song(Audio& audio, const std::wstring& filename)
+{
+    Song(filename).data.swap(data);
+}
+
+Gosu::Song::Song(Audio& audio, Type type, Reader reader)
+{
+    Song(type, reader).data.swap(data);
 }

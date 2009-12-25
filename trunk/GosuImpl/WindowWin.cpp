@@ -469,6 +469,7 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
 
     return DefWindowProc(handle(), message, wparam, lparam);
 }
+
 // Deprecated.
 
 class Gosu::Audio {};
@@ -483,4 +484,3 @@ Gosu::Audio& Gosu::Window::audio()
 {
     return dummyAudio;
 }
-
