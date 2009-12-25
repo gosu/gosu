@@ -55,7 +55,7 @@ namespace Gosu
             #undef FACILITY_VISUALCPP
         }
         #endif
-
+        
         void requireFMOD()
         {
             static bool initialized = false;
@@ -130,13 +130,6 @@ struct Gosu::Sample::SampleData : boost::noncopyable
 
     ~SampleData()
     {
-        // Should be checked for earlier, as play would crash too.
-        // This is just because it's hard to free things in the right
-        // order in Ruby/Gosu.
-        
-        if (!fmodInitialized)
-            return;
-        
         if (rep != 0)
             FSOUND_Sample_Free(rep);
     }
@@ -150,7 +143,7 @@ Gosu::Sample::Sample(const std::wstring& filename)
 	loadFile(buf, filename);
 
 	// Forward.
-	Sample(audio, buf.frontReader()).data.swap(data);
+	Sample(buf.frontReader()).data.swap(data);
 }
 
 Gosu::Sample::Sample(Reader reader)
@@ -279,12 +272,6 @@ public:
     
     ~StreamData()
     {
-        // TODO: Should be checked for earlier, as play would crash too.
-        // This is just because Ruby's GC will free objects in a weird
-        // order.
-        if (!fmodInitialized)
-            return;
-
         if (stream != 0)
             FSOUND_Stream_Close(stream);
     }
@@ -344,12 +331,6 @@ public:
 
     ~ModuleData()
     {
-        // TODO: Should be checked for earlier, as play would crash too.
-        // This is just because Ruby's GC will free objects in a weird
-        // order.
-        if (!fmodInitialized)
-            return;
-
         if (module_ != 0)
             FMUSIC_FreeSong(module_);
     }
@@ -405,7 +386,7 @@ Gosu::Song::Song(const std::wstring& filename)
 	}
 	
     // Forward.
-	Song(audio, type, buf.frontReader()).data.swap(data);
+	Song(type, buf.frontReader()).data.swap(data);
 }
 
 Gosu::Song::Song(Type type, Reader reader)
@@ -429,8 +410,6 @@ Gosu::Song::Song(Type type, Reader reader)
 
 Gosu::Song::~Song()
 {
-    if (fmodInitialized)
-        stop();
 }
 
 Gosu::Song* Gosu::Song::currentSong()
@@ -483,6 +462,10 @@ double Gosu::Song::volume() const
 void Gosu::Song::changeVolume(double volume)
 {
     data->changeVolume(volume);
+}
+
+void Gosu::Song::update()
+{
 }
 
 // Deprecated constructors.
