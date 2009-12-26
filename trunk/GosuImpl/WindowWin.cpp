@@ -190,6 +190,13 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     double updateInterval)
 : pimpl(new Impl)
 {
+    if (!fullscreen && (width >= screenWidth() | height >= screenHeight()))
+    {
+        MessageBox(0, L"Your desktop resolution is too small to open the requested window.",
+            L"Cannot open window", MB_OK | MB_ICONERROR);
+        throw std::invalid_argument("Desktop resolution is too small to open a window of this size");
+    }
+
     pimpl->originalWidth = width;
     pimpl->originalHeight = height;
     
