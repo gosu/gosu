@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-12-25)
+(Last update: 2009-12-27)
 
 == Gosu 0.7.x ==
   * 0.7.16, the Christmas version
@@ -14,7 +14,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Look at TextInput bug on 1.9
     * Look at TextInput contrib
     * Either document gosu_to_radian_scale or rename it before anyone relies on it
-    * Window Dimensions on Windows: Error messages instead of silent failure
     * Add -I/usr/include/SDL to the makefile
     * Document new color constants, MAX_TEXTURE_SIZE
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
