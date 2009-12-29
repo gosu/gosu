@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-12-29)
+(Last update: 2009-12-30)
 
 == Gosu 0.7.x ==
   * 0.7.16, the Christmas version
@@ -31,6 +31,9 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Windows: Don't fail if the requested windowed resolution is too large
       * Add fullscreen accessors to make proper FS OpenGL possible
       * Add fullscreen stretching prevention
+      * Re-Evaluate glfw for fixing the fullscreen mess
+      * Think about adding cmd+F support for toggling fullscreen: Possible?
+      * Think about adding alt+enter support for toggling fullscreen: Possible?
       * Try not to hide the mouse cursor outside of the main window on OS X
       * Test multiple screens on Windows
     * TextField with clip_to (update example)
@@ -50,11 +53,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * See if there is a native/fastest mixing rate on Mac/iPhone
     * Make buffers in Mac port larger and make sure that update_interval<66 always plays running Songs without jitter
     * Check Song::play() behavior on new MikMod song vs. other libs
-    * Move decoding/updating into another thread (yuck)
-    * Re-Evaluate glfw for fixing the fullscreen mess
-    * Think about adding cmd+F support for toggling fullscreen: Possible?
-    * Think about adding alt+enter support for toggling fullscreen: Possible?
-  * Try a quick prototype of Gosu working with Shoes (if that doesn't work, wxRuby)
+  * See if Shoes is still alive and try a quick prototype of Gosu working with Shoes (if that doesn't work, wxRuby)
   * Try harder to reproduce these bugs
     * Get rid of context selection error with driver set to always do FSAA (Windows)
     * OS X: Release all keys on battery notification dialog (?)
