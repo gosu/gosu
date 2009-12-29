@@ -20,12 +20,12 @@
 
 begin
   # In case you use Gosu via RubyGems.
-#  require 'rubygems'
+  require 'rubygems'
 rescue LoadError
   # In case you don't.
 end
 
-require '../lib/gosu'
+require 'gosu'
 
 class TextField < Gosu::TextInput
   # Some constants that define our appearance.
