@@ -210,8 +210,8 @@ class Game < Window
   end
   def update
     move_x = 0
-    move_x -= 5 if button_down? Button::KbLeft
-    move_x += 5 if button_down? Button::KbRight
+    move_x -= 5 if button_down? KbLeft
+    move_x += 5 if button_down? KbRight
     @cptn.update(move_x)
     @cptn.collect_gems(@map.gems)
     # Scrolling follows player
@@ -223,8 +223,8 @@ class Game < Window
     @cptn.draw @screen_x, @screen_y
   end
   def button_down(id)
-    if id == Button::KbUp then @cptn.try_to_jump end
-    if id == Button::KbEscape then close end
+    if id == KbUp then @cptn.try_to_jump end
+    if id == KbEscape then close end
   end
 end
 

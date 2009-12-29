@@ -222,20 +222,20 @@ class GameWindow < Gosu::Window
       @player.validate_position
       
       # Check keyboard
-      if button_down? Gosu::Button::KbLeft
+      if button_down? Gosu::KbLeft
         @player.turn_left
       end
-      if button_down? Gosu::Button::KbRight
+      if button_down? Gosu::KbRight
         @player.turn_right
       end
       
-      if button_down? Gosu::Button::KbUp
-        if ( (button_down? Gosu::Button::KbRightShift) || (button_down? Gosu::Button::KbLeftShift) )
+      if button_down? Gosu::KbUp
+        if ( (button_down? Gosu::KbRightShift) || (button_down? Gosu::KbLeftShift) )
           @player.boost
         else
           @player.accelerate
         end
-      elsif button_down? Gosu::Button::KbDown
+      elsif button_down? Gosu::KbDown
         @player.reverse
       end
       
@@ -265,7 +265,7 @@ class GameWindow < Gosu::Window
   end
 
   def button_down(id)
-    if id == Gosu::Button::KbEscape
+    if id == Gosu::KbEscape
       close
     end
   end

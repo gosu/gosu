@@ -190,10 +190,10 @@ class GameWindow < Gosu::Window
   end
 
   def update
-    @player.move_left if button_down? Gosu::Button::KbLeft or button_down? Gosu::Button::GpLeft
-    @player.move_right if button_down? Gosu::Button::KbRight or button_down? Gosu::Button::GpRight
-    @player.accelerate if button_down? Gosu::Button::KbUp or button_down? Gosu::Button::GpUp
-    @player.brake if button_down? Gosu::Button::KbDown or button_down? Gosu::Button::GpDown
+    @player.move_left if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft
+    @player.move_right if button_down? Gosu::KbRight or button_down? Gosu::GpRight
+    @player.accelerate if button_down? Gosu::KbUp or button_down? Gosu::GpUp
+    @player.brake if button_down? Gosu::KbDown or button_down? Gosu::GpDown
 
     @player.collect_stars(@stars)
     
@@ -222,7 +222,7 @@ class GameWindow < Gosu::Window
   end
 
   def button_down(id)
-    if id == Gosu::Button::KbEscape
+    if id == Gosu::KbEscape
       close
     end
   end
