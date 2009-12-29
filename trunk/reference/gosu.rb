@@ -344,6 +344,13 @@ module Gosu
     attr_accessor :text
     attr_reader :caret_pos
     attr_reader :selection_start
+
+    # Overridable filter that is applied to all new text that is entered.
+    # Allows for context-sensitive filtering/extending/... of the text.
+    # The text will be inserted at caretPos afterwards.
+    def filter text_in
+      text_in
+    end
   end
   
   # Main class that serves as the foundation of a standard
