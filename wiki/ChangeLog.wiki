@@ -2,6 +2,7 @@
 #labels Featured
 
 =0.7.16=
+  * 2009-12-29: All: Added Gosu::TextInput#filter for customizing what can/will be entered
   * 2009-12-19: All: Added Gosu::Color::RED etc., for C++ and Ruby, deprecated Colors::red in C++
   * 2009-12-07: Ruby: Added Gosu::MAX_TEXTURE_SIZE for banisterfiend ;)
   * 2009-12-07: Ruby: Added support for socket and yaml (=syck.bundle) in RubyGosu App.app
