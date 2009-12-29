@@ -67,7 +67,7 @@ cpp_uninstall:
 	ldconfig
 
 clean:
-	rm -f $(OBJS) $(XPLS) $(RUBYOBJS) ../lib/*gosu* ../bin/gosu-config
+	rm -f $(OBJS) $(XPLS) $(RUBYOBJS) ../lib/libgosu* ../lib/gosu?* ../bin/gosu-config
 	rmdir RubyGosu OpenGL Graphics Sockets
 
 $(OBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cpp

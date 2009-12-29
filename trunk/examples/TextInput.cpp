@@ -45,16 +45,24 @@ public:
         setText(L"Click to change text");
     
     }
+
+    // Local helper.
+    static wchar_t toUpper(wchar_t in)
+    {
+        // In case towupper is not in std::, we use a 'using' here.
+        // (It's actually a C99 function.)
+        using namespace std;
+        return towupper((wint_t)in);
+    }
     
     // Example filter member function. You can truncate the text to employ a length limit,
     // limit the text to certain characters etc.
     std::wstring filter(const std::wstring& string) const
     {
-        std::wstring result(string.length());
-        // In case towupper is not in std::, we use a 'using' here.
-        // (It's actually a C99 function.)
-        using namespace std;
-        std::transform(string.begin(), string.end(), towupper);
+        std::wstring result;
+        result.resize(string.length());
+        std::transform(string.begin(), string.end(), result.begin(), toUpper);
+        return result;
     }
     
     void draw() const
