@@ -16,7 +16,7 @@ class Player
 
   def initialize(window)
     @image = Gosu::Image.new(window, "media/Starfighter.bmp", false)
-    @beep = Gosu::Sample.new(window, "media/Beep.wav")
+    @beep = Gosu::Sample.new("media/Beep.wav")
     @x = @y = @vel_x = @vel_y = @angle = 0.0
     @score = 0
   end

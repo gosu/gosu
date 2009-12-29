@@ -131,7 +131,7 @@ class GameWindow < Gosu::Window
     @background_image = Gosu::Image.new(self, "media/Space.png", true)
 
     # Put the beep here, as it is the environment now that determines collision
-    @beep = Gosu::Sample.new(self, "media/Beep.wav")
+    @beep = Gosu::Sample.new("media/Beep.wav")
     
     # Put the score here, as it is the environment that tracks this now
     @score = 0

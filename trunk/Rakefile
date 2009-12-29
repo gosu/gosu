@@ -167,6 +167,7 @@ namespace :mac do
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Core' -configuration 'Release'"
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Core' -configuration 'Release with 1.9'"
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu App' -configuration 'Release with 1.9'"
+    # TODO: MacRuby
   end
 
   MAC_ARCHIVE_FILENAME = "public/gosu-mac-#{GOSU_VERSION}.tar.gz"
@@ -174,7 +175,8 @@ namespace :mac do
   desc "Build the archive #{MAC_ARCHIVE_FILENAME}"
   task :archive => [:cpp, :ruby, :version] do
     files = COMMON_CPP_FILES + COMMON_RUBY_FILES +
-      FileList['lib/gosu.rb', 'lib/gosu.*.bundle', 'lib/hotgosu.rb', 'lib/hotgosu/**/*', 'Gosu.framework/**/*']
+      FileList['lib/gosu.rb', 'lib/gosu.*.bundle', 'Gosu.framework/**/*']
+      # TODO: 'lib/hotgosu.rb', 'lib/hotgosu/**/*', 
     sh "tar -czf #{MAC_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
   end
   

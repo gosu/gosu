@@ -66,13 +66,13 @@ class Player
 
 
 public:
-    Player(Gosu::Graphics& graphics, Gosu::Audio& audio)
+    Player(Gosu::Graphics& graphics)
     {
         std::wstring filename = Gosu::sharedResourcePrefix() + L"media/Starfighter.bmp";
         image.reset(new Gosu::Image(graphics, filename));
 
         filename = Gosu::sharedResourcePrefix() + L"media/Beep.wav";
-        beep.reset(new Gosu::Sample(audio, filename));
+        beep.reset(new Gosu::Sample(filename));
 
         posX = posY = velX = velY = angle = 0;
         score = 0;
