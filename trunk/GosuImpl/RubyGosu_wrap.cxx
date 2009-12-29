@@ -2700,6 +2700,32 @@ SWIGINTERN Gosu::Image *Gosu_Window_record(Gosu::Window *self){
 
 #include "RubyGosu_wrap.h"
 
+SwigDirector_TextInput::SwigDirector_TextInput(VALUE self): Gosu::TextInput(), Swig::Director(self) {
+  
+}
+
+
+
+SwigDirector_TextInput::~SwigDirector_TextInput() {
+}
+
+std::wstring SwigDirector_TextInput::filter(std::wstring const &textIn) const {
+  std::wstring c_result ;
+  VALUE obj0 = Qnil ;
+  VALUE result;
+  
+  {
+    obj0 = rb_str_new2(Gosu::wstringToUTF8(textIn).c_str());
+  }
+  result = rb_funcall(swig_get_self(), rb_intern("filter"), 1,obj0);
+  {
+    VALUE localTemporary = rb_obj_as_string(result);
+    c_result = Gosu::utf8ToWstring(StringValueCStr(localTemporary));;
+  }
+  return (std::wstring) c_result;
+}
+
+
 SwigDirector_Window::SwigDirector_Window(VALUE self, unsigned int width, unsigned int height, bool fullscreen, double updateInterval): Gosu::Window(width, height, fullscreen, updateInterval), Swig::Director(self) {
   
 }
@@ -7137,15 +7163,23 @@ _wrap_TextInput_allocate(VALUE self) {
 
 SWIGINTERN VALUE
 _wrap_new_TextInput(int argc, VALUE *argv, VALUE self) {
+  VALUE arg1 = (VALUE) 0 ;
   const char *classname SWIGUNUSED = "Gosu::TextInput";
   Gosu::TextInput *result = 0 ;
   
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
+  arg1 = self;
   {
     try {
-      result = (Gosu::TextInput *)new Gosu::TextInput();
+      if ( strcmp(rb_obj_classname(self), classname) != 0 ) {
+        /* subclassed */
+        result = (Gosu::TextInput *)new SwigDirector_TextInput(arg1); 
+      } else {
+        result = (Gosu::TextInput *)new Gosu::TextInput(); 
+      }
+      
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
     } catch(const std::runtime_error& e) {
@@ -7231,6 +7265,58 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_TextInput_filter(int argc, VALUE *argv, VALUE self) {
+  Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
+  std::wstring *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::wstring temp2 ;
+  Swig::Director *director = 0;
+  bool upcall = false;
+  std::wstring result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::TextInput const *","filter", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::TextInput * >(argp1);
+  {
+    VALUE localTemporary = rb_obj_as_string(argv[0]);
+    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
+    arg2 = &temp2;
+  }
+  director = dynamic_cast<Swig::Director *>(arg1);
+  upcall = (director && (director->swig_get_self() == self));
+  try {
+    {
+      try {
+        if (upcall) {
+          result = ((Gosu::TextInput const *)arg1)->Gosu::TextInput::filter((std::wstring const &)*arg2);
+        } else {
+          result = ((Gosu::TextInput const *)arg1)->filter((std::wstring const &)*arg2);
+        }
+      } catch(const std::runtime_error& e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
+    }
+  } catch (Swig::DirectorException& e) {
+    rb_exc_raise(e.getError());
+    SWIG_fail;
+  }
+  {
+    vresult = rb_str_new2(Gosu::wstringToUTF8(result).c_str());
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_TextInput_caret_pos(int argc, VALUE *argv, VALUE self) {
   Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
   void *argp1 = 0 ;
@@ -7285,6 +7371,31 @@ _wrap_TextInput_selection_start(int argc, VALUE *argv, VALUE self) {
   }
   vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
   return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_disown_TextInput(int argc, VALUE *argv, VALUE self) {
+  Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::TextInput *","disown_TextInput", 1, argv[0] )); 
+  }
+  arg1 = reinterpret_cast< Gosu::TextInput * >(argp1);
+  {
+    Swig::Director *director = dynamic_cast<Swig::Director *>(arg1);
+    if (director) director->swig_disown();
+  }
+  
+  return Qnil;
 fail:
   return Qnil;
 }
@@ -8353,6 +8464,7 @@ _wrap_Window_text_input(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  Swig::Director *director = 0;
   Gosu::TextInput *result = 0 ;
   VALUE vresult = Qnil;
   
@@ -8371,7 +8483,12 @@ _wrap_Window_text_input(int argc, VALUE *argv, VALUE self) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
+  director = dynamic_cast<Swig::Director *>(result);
+  if (director) {
+    vresult = director->swig_get_self();
+  } else {
+    vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
+  }
   return vresult;
 fail:
   return Qnil;
@@ -9408,6 +9525,7 @@ SWIGEXPORT void Init_gosu(void) {
   
   GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
   
+  rb_define_module_function(mGosu, "disown_TextInput", VALUEFUNC(_wrap_disown_TextInput), -1);
   
   SwigClassTextInput.klass = rb_define_class_under(mGosu, "TextInput", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__TextInput, (void *) &SwigClassTextInput);
@@ -9415,6 +9533,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassTextInput.klass, "initialize", VALUEFUNC(_wrap_new_TextInput), -1);
   rb_define_method(SwigClassTextInput.klass, "text", VALUEFUNC(_wrap_TextInput_text), -1);
   rb_define_method(SwigClassTextInput.klass, "text=", VALUEFUNC(_wrap_TextInput_texte___), -1);
+  rb_define_method(SwigClassTextInput.klass, "filter", VALUEFUNC(_wrap_TextInput_filter), -1);
   rb_define_method(SwigClassTextInput.klass, "caret_pos", VALUEFUNC(_wrap_TextInput_caret_pos), -1);
   rb_define_method(SwigClassTextInput.klass, "selection_start", VALUEFUNC(_wrap_TextInput_selection_start), -1);
   SwigClassTextInput.mark = 0;

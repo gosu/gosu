@@ -11,8 +11,11 @@
 // The docs make it seem like this is a generally good idea.
 %feature("compactdefaultargs");
 
-// Overriding virtuals is only necessary in Gosu::Window.
+// Overriding virtuals is necessary in Gosu::Window.
 %feature("director") Gosu::Window;
+
+// Overriding virtuals is necessary in Gosu::TextInput.
+%feature("director") Gosu::TextInput;
 
 // Resolve typedefs that SWIG doesn't recognize.
 %apply unsigned char { boost::uint8_t };
@@ -39,6 +42,16 @@
 %apply const std::wstring& { std::wstring, const std::string };
 %typemap(out) std::wstring {
     $result = rb_str_new2(Gosu::wstringToUTF8($1).c_str());
+}
+%typemap(out) const std::wstring& {
+    $result = rb_str_new2(Gosu::wstringToUTF8($1).c_str());
+}
+%typemap(directorin) const std::wstring& {
+    $input = rb_str_new2(Gosu::wstringToUTF8($1).c_str());
+}
+%typemap(directorout) std::wstring {
+    VALUE localTemporary = rb_obj_as_string($1);
+    $result = Gosu::utf8ToWstring(StringValueCStr(localTemporary));;
 }
 
 %typemap(in) Gosu::Button {

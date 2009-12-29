@@ -27,7 +27,7 @@ namespace Gosu
         
     public:
         TextInput();
-        ~TextInput();
+        virtual ~TextInput();
 
         std::wstring text() const;
 
@@ -42,7 +42,7 @@ namespace Gosu
         //! using the same indexing scheme as caretPos. If there is no selection,
         //! selectionStart() is equal to caretPos().
         unsigned selectionStart() const;
-
+        
         // Platform-specific communication with Gosu::Input.
         #if defined(GOSU_IS_MAC)
         bool feedNSEvent(void* event);
@@ -51,6 +51,14 @@ namespace Gosu
         #elif defined(GOSU_IS_X)
         bool feedXEvent(void* display, void* event);
         #endif
+
+        //! Overridable filter that is applied to all new text that is entered.
+        //! Allows for context-sensitive filtering/extending/... of the text.
+        //! The text will be inserted at caretPos afterwards.
+        virtual std::wstring filter(const std::wstring& textIn) const
+        {
+            return textIn;
+        }
     };
 }
 

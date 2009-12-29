@@ -19,6 +19,7 @@
 
 @interface GosuTextInput : NSResponder
 {
+    Gosu::TextInput* _filter;
     std::wstring* _text;
     unsigned* _caretPos;
     unsigned* _selectionStart;
@@ -44,8 +45,10 @@
     std::vector<unichar> unibuf([str length]);
     [str getCharacters: &unibuf[0]];
     
-    _text->insert(_text->begin() + CARET_POS, unibuf.begin(), unibuf.end());
-    (CARET_POS) += unibuf.size();
+    std::wstring text = _filter->filter(std::wstring(unibuf.begin(), unibuf.end()));
+    
+    _text->insert(_text->begin() + CARET_POS, text.begin(), text.end());
+    (CARET_POS) += text.size();
     (SEL_START) = CARET_POS;
 }
 
@@ -145,8 +148,10 @@ IMPL_WITH_SEL_RESET(moveToEndOfDocument)
 
 // Helper to set up this instance.
 
-- (void)setText:(std::wstring&)text andCaretPos:(unsigned&)caretPos andSelectionStart:(unsigned&)selectionStart
+- (void)setFilter:(Gosu::TextInput&)filter andText:(std::wstring&)text
+    andCaretPos:(unsigned&)caretPos andSelectionStart:(unsigned&)selectionStart
 {
+    _filter = &filter;
     _text = &text;
     _caretPos = &caretPos;
     _selectionStart = &selectionStart;
@@ -165,7 +170,8 @@ Gosu::TextInput::TextInput()
 : pimpl(new Impl)
 {
     pimpl->responder.reset([[GosuTextInput alloc] init]);
-    [pimpl->responder.get() setText: pimpl->text andCaretPos: pimpl->caretPos andSelectionStart: pimpl->selectionStart];
+    [pimpl->responder.get() setFilter: *this andText: pimpl->text
+        andCaretPos: pimpl->caretPos andSelectionStart: pimpl->selectionStart];
 }
 
 Gosu::TextInput::~TextInput()

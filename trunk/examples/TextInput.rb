@@ -20,12 +20,12 @@
 
 begin
   # In case you use Gosu via RubyGems.
-  require 'rubygems'
+#  require 'rubygems'
 rescue LoadError
   # In case you don't.
 end
 
-require 'gosu'
+require '../lib/gosu'
 
 class TextField < Gosu::TextInput
   # Some constants that define our appearance.
@@ -45,6 +45,12 @@ class TextField < Gosu::TextInput
     
     # Start with a self-explanatory text in each field.
     self.text = "Click to change text"
+  end
+  
+  # Example filter method. You can truncate the text to employ a length limit (watch out
+  # with Ruby 1.8 and UTF-8!), limit the text to certain characters etc.
+  def filter text
+    text.upcase
   end
   
   def draw
@@ -82,7 +88,7 @@ class TextField < Gosu::TextInput
   end
 
   # This text field grows with the text that's being entered.
-  # (Without clipping, one has to be a bit creative about this ;) )
+  # (Usually one would use clip_to and scroll around on the text field.)
   def width
     @font.text_width(self.text)
   end

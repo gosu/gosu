@@ -20,6 +20,8 @@
 
 #include <Gosu/Gosu.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <cwctype>
+#include <algorithm>
 
 class TextField : public Gosu::TextInput
 {
@@ -41,6 +43,18 @@ public:
     {
         // Start with a self-explanatory text in each field.
         setText(L"Click to change text");
+    
+    }
+    
+    // Example filter member function. You can truncate the text to employ a length limit,
+    // limit the text to certain characters etc.
+    std::wstring filter(const std::wstring& string) const
+    {
+        std::wstring result(string.length());
+        // In case towupper is not in std::, we use a 'using' here.
+        // (It's actually a C99 function.)
+        using namespace std;
+        std::transform(string.begin(), string.end(), towupper);
     }
     
     void draw() const
@@ -78,7 +92,7 @@ public:
     }
     
     // This text field grows with the text that's being entered.
-    // (Without clipping, one has to be a bit creative about this ;) )
+    // (Usually one would use beginClipping/endClipping and scroll around on the text field.)
     double width() const
     {
         return font.textWidth(text());

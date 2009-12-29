@@ -16,6 +16,15 @@ namespace Swig {
 }
 
 
+class SwigDirector_TextInput : public Gosu::TextInput, public Swig::Director {
+
+public:
+    SwigDirector_TextInput(VALUE self);
+    virtual ~SwigDirector_TextInput();
+    virtual std::wstring filter(std::wstring const &textIn) const;
+};
+
+
 class SwigDirector_Window : public Gosu::Window, public Swig::Director {
 
 public:

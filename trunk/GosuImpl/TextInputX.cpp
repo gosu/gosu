@@ -70,8 +70,10 @@ bool Gosu::TextInput::feedXEvent(void* display, void* event)
             CARET_POS = SEL_START = min;
         }
         
-        pimpl->text.insert(pimpl->text.begin() + CARET_POS, ch);
-        CARET_POS += 1;
+        wchar_t text[] = { ch, 0 };
+        std::wstring filteredText = filter(text);
+        pimpl->text.insert(pimpl->text.begin() + CARET_POS, filteredText.begin(), filteredText.end());
+        CARET_POS += filteredText.length();
         SEL_START = CARET_POS;
         return true;
     }

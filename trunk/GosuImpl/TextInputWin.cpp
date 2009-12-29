@@ -61,8 +61,10 @@ bool Gosu::TextInput::feedMessage(unsigned long message, unsigned long wparam, u
             CARET_POS = SEL_START = min;
         }
         
-        pimpl->text.insert(pimpl->text.begin() + CARET_POS, static_cast<wchar_t>(wparam));
-        CARET_POS += 1;
+        wchar_t text[] = { static_cast<wchar_t>(wparam), 0 };
+        std::wstring filteredText = filter(text);
+        pimpl->text.insert(pimpl->text.begin() + CARET_POS, filteredText.begin(), filteredText.end());
+        CARET_POS += filteredText.length();
         SEL_START = CARET_POS;
         return true;
     }
