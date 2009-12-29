@@ -4,18 +4,15 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-12-28)
+(Last update: 2009-12-29)
 
 == Gosu 0.7.x ==
   * 0.7.16, the Christmas version
-    * Remove Window in MacRuby/reference/docs
-    * Remove Window arguments on Windows
-    * Adjust Tutorial, examples, documentation
-    * Look at TextInput bug on 1.9
-    * Look at TextInput contrib
-    * Either document gosu_to_radian_scale or rename it before anyone relies on it
-    * Add -I/usr/include/SDL to the makefile
+    * Change RubyGosu.app to include patches.rb and reupload
+    * Turn the source tar.gz into a Linux-only archive and reupload
+    * Adjust documentation (Tutorial...) to Sample/Song changes
     * Document new color constants, MAX_TEXTURE_SIZE
+  * Either document gosu_to_radian_scale or rename it before anyone relies on it
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Test StandBy with Windows and a running Gosu app
   * Get someone to test the new OpenAL code on Intel/Tiger...
@@ -24,14 +21,13 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
     * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
   * 0.7.17 The screen size stuff …
-    * Revisit "garbled screen" bug on Mac
     * See if John Shea's talk had something about not being locked to pixel positions
     * See if really old games have problems running in current Gosu
+    * Make initial window black instead of garbled on OS X
     * Add support for giving font flags from Ruby
     * Screen size / fullscreen stuff
       * Iterate on first category of fullscreen tests
       * Allow adjustment of the virtual touchscreen resolution
-      * Make initial window black instead of garbled on OS X
       * Windows: Don't fail if the requested windowed resolution is too large
       * Add fullscreen accessors to make proper FS OpenGL possible
       * Add fullscreen stretching prevention
@@ -40,7 +36,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * TextField with clip_to (update example)
     * Test LD14 entry on Linux
     * Release!
-    * (1x mymüsli for all the hard work! (motivation!)
   * iPhone-related stuff that should be finished soonish
     * Let resolution decide orientation
     * socket.bundle und syck.bundle in den Wrapper reinschweißen
@@ -138,7 +133,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Document 64px minimum for single-texture opt.
   * Mention Gosu's respectable age somewhere :)
   * Link to benkos example
-  * Paste spiit up BasicConcepts into doxygen sources
   * Put RubyTutorial into rdoc
   * Add some first eye catchers to front page
   * Add "What now?" link list to front page
@@ -155,7 +149,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Add some RSS feed to main index.html page
   * Make tt blocks prettier on front page
   * Turn changelog and todo into links on frontpage
-  * Automatically run push_to_github task
   * Try to translate the RubyTutorial to Japanese :)
   * Deployment wiki page/rdoc: Mention Icon resource support!
   * Document draw_line's weirdness
@@ -169,12 +162,12 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Explain SampleInstance vs. Sample somewhere
   * OR&G: Build simpler version
   * Check if DelphiGL wiki accepts donations
-  * Remove from Tutorial.rb that Gosu::Button:: stuff ASAP
   * Tutorials: Mention where to find the final source code
   * Thai-Translation hinzufügen
   * Document MAX_TEXTURE_SIZE
   * .app'ify ippa's game after :retrofy is in
   * Consider libgosu.spreadshirt.com
+  * Make sure that it is documented what happens to different drawing ops with same z-order
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
