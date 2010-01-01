@@ -1,3 +1,5 @@
+# Encoding: UTF-8
+
 # Require cutting-edge development Gosu for testing.
 require '../lib/gosu'
 

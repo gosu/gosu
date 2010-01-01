@@ -25,7 +25,7 @@ class Gosu::Sample
   
   def initialize(*args)
     args.shift if args.first.is_a? Gosu::Window
-    new_initialize args
+    new_initialize *args
   end
 end
 class Gosu::Song
@@ -33,7 +33,7 @@ class Gosu::Song
   
   def initialize(*args)
     args.shift if args.first.is_a? Gosu::Window
-    new_initialize args
+    new_initialize *args
   end
 end
 
