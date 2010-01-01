@@ -50,6 +50,7 @@ int main()
         rb_eval_string("$LOADED_FEATURES << 'rubygems.rb'");
         rb_eval_string("$LOADED_FEATURES << 'syck.bundle'");
         rb_eval_string("$LOADED_FEATURES << 'socket.bundle'");
+        rb_eval_string("require 'gosu/patches'");
 
         return ruby_run_node(ruby_options(argc, argv)); 
     }
