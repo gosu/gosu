@@ -4,12 +4,12 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2009-12-30)
+(Last update: 2010-01-03)
 
 == Gosu 0.7.x ==
-  * 0.7.16, the Christmas version
-    * Change RubyGosu.app to include patches.rb and reupload
-    * Turn the source tar.gz into a Linux-only archive and reupload
+  * 0.7.16/0.7.17, the Christmas version
+    * Find out why no sound on Windows
+    * Turn the source tar.gz into a Linux-only archive
     * Adjust documentation (Tutorial...) to Sample/Song changes
     * Document new color constants, MAX_TEXTURE_SIZE
   * Either document gosu_to_radian_scale or rename it before anyone relies on it
@@ -20,7 +20,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Move three threads from GosuExchange to the forums
     * Ask some forum whether the Intel GMA950 and X3100 chips really don't support OGL vsync on Windows
     * Ask some forum why the IntelCPUPowerManagement could hang for 42sec
-  * 0.7.17 The screen size stuff …
+  * The screen size/OpenGL stuff …
     * See if John Shea's talk had something about not being locked to pixel positions
     * See if really old games have problems running in current Gosu
     * Make initial window black instead of garbled on OS X
@@ -63,7 +63,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Test RMagick.bundle on Tiger
     * Test RMagick.bundle on PPC
   * Replace draw_line by something that makes sense
-  * 0.7.18, text quality release (+Linux gamepad!)
+  * Text quality release (+Linux gamepad!)
     * See if the differences between from_text and Font#draw are a bug
     * Look for non-deprecated replacement for KeyTranslate and UCKeyTranslate
     * Creating a non-existent font should throw an exception on *all* platforms, test on which it does
@@ -78,7 +78,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Make RTL work without RTL/LTR markers?!
     * Add RTL support to Font::drawRot too
     * Add Linux gamepad support, try wgois for that
-  * 0.7.19, polish/deployment release
+  * Polish/deployment release
     * Make it possible to delete images while they are still referenced in the queue.
     * Make Gosu::Color more fault-tolerant regarding its component values
     * Assure that files from doxygen task are considered for packaging
@@ -167,6 +167,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * .app'ify ippa's game after :retrofy is in
   * Consider libgosu.spreadshirt.com
   * Make sure that it is documented what happens to different drawing ops with same z-order
+  * Cancel RailsHoster acct
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
@@ -186,6 +187,5 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * clean up after playing around with possible optimizations
   * assure Gosu::File also creates directories as necessary
   * more C++ examples
-  * the window argument in Ruby is annoying, because only one window can be used anyway. Maybe it should be Window.run, and all open Windows should work.
   * simplify Gosu's IO philosophy (C++)
   * document Gosu's Sockets
