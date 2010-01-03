@@ -4,14 +4,14 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-01-03)
+(Last update: 2010-01-04)
 
 == Gosu 0.7.x ==
   * 0.7.16/0.7.17, the Christmas version
-    * Find out why no sound on Windows
-    * Turn the source tar.gz into a Linux-only archive
-    * Adjust documentation (Tutorial...) to Sample/Song changes
+    * Test sound on Windows
+    * Test Linux archive
     * Document new color constants, MAX_TEXTURE_SIZE
+  * Update to newer Ruby 1.9 version in RubyGosu App.app
   * Either document gosu_to_radian_scale or rename it before anyone relies on it
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Test StandBy with Windows and a running Gosu app
