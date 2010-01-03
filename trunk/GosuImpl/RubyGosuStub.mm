@@ -23,7 +23,7 @@ int main()
     std::string resourcePath = Gosu::wstringToUTF8(Gosu::resourcePrefix());
     chdir(resourcePath.c_str());
 
-    std::string mainPath = resourcePath + "Main.rb";
+    std::string mainPath = resourcePath + "gosu/run.rb";
 
     char* argv[] = { "ruby", const_cast<char*>(mainPath.c_str()), 0 };
     int argc = 2;
@@ -50,7 +50,6 @@ int main()
         rb_eval_string("$LOADED_FEATURES << 'rubygems.rb'");
         rb_eval_string("$LOADED_FEATURES << 'syck.bundle'");
         rb_eval_string("$LOADED_FEATURES << 'socket.bundle'");
-        rb_eval_string("require 'gosu/patches'");
 
         return ruby_run_node(ruby_options(argc, argv)); 
     }
