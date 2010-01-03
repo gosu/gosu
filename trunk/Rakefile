@@ -17,6 +17,7 @@ COMMON_CPP_FILES = COMMON_FILES + FileList[
 ]
 
 COMMON_RUBY_FILES = COMMON_FILES + FileList[
+  'lib/gosu/patches.rb',
   'examples/*.rb',
   'examples/media/*',
   'reference/rdoc/**/*'
@@ -173,10 +174,8 @@ namespace :mac do
   MAC_ARCHIVE_FILENAME = "public/gosu-mac-#{GOSU_VERSION}.tar.gz"
 
   desc "Build the archive #{MAC_ARCHIVE_FILENAME}"
-  task :archive => [:cpp, :ruby, :version] do
-    files = COMMON_CPP_FILES + COMMON_RUBY_FILES +
-      FileList['lib/gosu.rb', 'lib/gosu.*.bundle', 'Gosu.framework/**/*']
-      # TODO: 'lib/hotgosu.rb', 'lib/hotgosu/**/*', 
+  task :archive => [:cpp, :version] do
+    files = COMMON_CPP_FILES + FileList['Gosu.framework/**/*']
     sh "tar -czf #{MAC_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
   end
   
@@ -190,7 +189,7 @@ namespace :mac do
 
   desc "Releases the archive #{MAC_ARCHIVE_FILENAME} and #{MAC_WRAPPER_FILENAME} on GoogleCode"
   task :release => [:archive, :app_wrapper] do
-    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION}, compiled for Mac OS X (C++ & Ruby)\"" +
+    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION}, compiled for Mac OS X (C++)\"" +
        " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-OSX\" #{MAC_ARCHIVE_FILENAME}"
     sh "./googlecode_upload.py --summary=\"Self-contained template app, containing Gosu #{GOSU_VERSION} and Ruby 1.9\"" +
        " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-OSX\" #{MAC_WRAPPER_FILENAME}"
@@ -202,9 +201,14 @@ namespace :mac do
     apply_gemspec_defaults s
     s.platform = 'universal-darwin'
     s.files = COMMON_RUBY_FILES +
-      FileList['lib/gosu.rb', 'lib/gosu.*.bundle', 'lib/hotgosu.rb', 'lib/hotgosu/**/*']
+      FileList['lib/gosu.rb', 'lib/gosu.*.bundle']
+      # TODO: 'lib/hotgosu.rb', 'lib/hotgosu/**/*', 
   end
   Rake::GemPackageTask.new(MAC_SPEC) { |t| t.package_dir = 'public/mac_gem' }
+  
+  task :release_gem => :gem do
+    sh "gem push public/mac_gem/gosu-#{GOSU_VERSION}-universal-darwin.gem"
+  end
 end
 
 namespace :win do
@@ -247,6 +251,10 @@ namespace :win do
     s.files = COMMON_RUBY_FILES + ['lib/gosu.rb', 'lib/gosu.for_1_8.so', 'lib/gosu.for_1_9.so', 'lib/fmod.dll']
   end
   Rake::GemPackageTask.new(WINDOWS_SPEC) { |t| t.package_dir = 'public/windows_gem' }
+  
+  task :release_gem => :gem do
+    sh "gem push public/windows_gem/gosu-#{GOSU_VERSION}-x86-mswin32-60.gem"
+  end
 end
 
 namespace :linux do
@@ -287,6 +295,10 @@ namespace :linux do
   end
   
   Rake::GemPackageTask.new(LINUX_SPEC) { |t| t.package_dir = 'public/linux_gem' }
+
+  task :release_gem => :gem do
+    sh "gem push public/linux_gem/gosu-#{GOSU_VERSION}.gem"
+  end
 end
 
 GIT_PREFIX="PATH=/usr/local/git/bin:$PATH"
