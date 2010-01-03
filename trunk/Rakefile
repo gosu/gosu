@@ -23,17 +23,12 @@ COMMON_RUBY_FILES = COMMON_FILES + FileList[
   'reference/rdoc/**/*'
 ]
 
-SOURCE_FILES = COMMON_CPP_FILES + COMMON_RUBY_FILES + FileList[
+LINUX_FILES = COMMON_CPP_FILES + COMMON_RUBY_FILES + FileList[
   'Rakefile',
   'Gosu/**/*', 'GosuImpl/**/*',
-  'linux/configure', 'linux/configure.ac', 'linux/Makefile.in',
-  'mac/Gosu.xcodeproj/**/*', 'mac/*.a', 'mac/English.lproj/**/*',
-  'mac/Gosu-Info.plist', 'mac/RubyGosu App-Info.plist',
-  'mac/Gosu.icns',
-  'windows/Gosu.sln', 'windows/Gosu.vcproj', 'windows/RubyGosu.vcproj',
-  'dependencies/**/*'
+  'linux/configure', 'linux/configure.ac', 'linux/Makefile.in'
 ]
-SOURCE_FILES.uniq!
+LINUX_FILES.uniq!
 
 GOSU_VERSION = ENV['GOSU_RELEASE_VERSION'] || '0.0.0'
 
@@ -258,17 +253,17 @@ namespace :win do
 end
 
 namespace :linux do
-  LINUX_ARCHIVE_FILENAME = "public/gosu-source-#{GOSU_VERSION}.tar.gz"
+  LINUX_ARCHIVE_FILENAME = "public/gosu-linux-#{GOSU_VERSION}.tar.gz"
 
   desc "Build the archive #{LINUX_ARCHIVE_FILENAME}"
   task :archive => [:cpp_docs, :version] do
-    files = SOURCE_FILES
+    files = LINUX_FILES
     sh "cd .. && tar -czf gosu/#{LINUX_ARCHIVE_FILENAME} #{files.map { |filename| "'gosu/#{filename}'" }.join(' ')}"
   end
 
   desc "Releases the archive #{LINUX_ARCHIVE_FILENAME} on GoogleCode"
   task :release => :archive do
-    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} source package (to compile on Linux)\"" +
+    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} source package for Linux (primarily for C++)\"" +
        " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-All\" #{LINUX_ARCHIVE_FILENAME}"
   end
   
@@ -277,7 +272,7 @@ namespace :linux do
   LINUX_SPEC = Gem::Specification.new do |s|
     apply_gemspec_defaults s
     s.platform = 'ruby'
-    s.files = SOURCE_FILES + [ 'linux/extconf.rb' ]
+    s.files = LINUX_FILES + [ 'linux/extconf.rb' ]
     s.extensions = [ 'linux/extconf.rb' ]
     s.require_path = 'lib'
     s.requirements = ['g++',
