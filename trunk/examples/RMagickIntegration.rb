@@ -290,7 +290,7 @@ class Missile
   
   def initialize(window, x, y, angle)
     # All missile instances use the same sound.
-    @@explosion_sound ||= Gosu::Sample.new("media/Explosion.wav")
+    @@explosion_sound ||= Gosu::Sample.new(window, "media/Explosion.wav")
     
     # Horizontal/vertical velocity.
     @vx, @vy = Gosu::offset_x(angle, 20).to_i, Gosu::offset_y(angle, 20).to_i
