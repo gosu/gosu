@@ -2,7 +2,7 @@ require '../lib/gosu'
 
 class Test < Gosu::Window
   def initialize
-    super(800, 800, false)
+    super(800, 700, false)
     
     Gosu::Image.new(self, "Umläuts.png", false) rescue nil
     

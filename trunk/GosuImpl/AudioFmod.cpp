@@ -40,7 +40,7 @@ namespace Gosu
             #define BAD_MOD VcppException(ERROR_SEVERITY_ERROR, ERROR_MOD_NOT_FOUND)
 
             HWND fmodWindow = __Gosu_HWND_for_FMOD;
-            if (fmodWindow == HWND_NULL)
+            if (fmodWindow == 0)
                 fmodWindow = GetDesktopWindow();
 
             // Try to call the first function from fmod.dll, which is lazily

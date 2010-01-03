@@ -15,7 +15,7 @@
 
 namespace Gosu
 {
-    HWND __Gosu_HWND_for_FMOD = HWND_NULL;
+    HWND __Gosu_HWND_for_FMOD = 0;
 
     unsigned screenWidth()
     {
@@ -284,7 +284,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
 Gosu::Window::~Window()
 {
     wglMakeCurrent(0, 0);
-    __Gosu_HWND_for_FMOD = HWND_NULL;
+    __Gosu_HWND_for_FMOD = 0;
 }
 
 std::wstring Gosu::Window::caption() const
