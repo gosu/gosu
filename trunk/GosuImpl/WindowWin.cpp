@@ -15,6 +15,8 @@
 
 namespace Gosu
 {
+    HWND __Gosu_HWND_for_FMOD = HWND_NULL;
+
     unsigned screenWidth()
     {
         return GetSystemMetrics(SM_CXSCREEN);
@@ -220,6 +222,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, 0, 0,
         Win::instance(), 0);
     Win::check(pimpl->handle);
+    __Gosu_HWND_for_FMOD = pimpl->handle;
 
 	pimpl->hdc = GetDC(handle());
     Win::check(pimpl->hdc);
@@ -281,6 +284,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
 Gosu::Window::~Window()
 {
     wglMakeCurrent(0, 0);
+    __Gosu_HWND_for_FMOD = HWND_NULL;
 }
 
 std::wstring Gosu::Window::caption() const

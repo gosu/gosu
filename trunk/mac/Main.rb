@@ -1,7 +1,6 @@
-# Do not include gosu.bundle into this template.
-# This is just here so you can run your game from the terminal, or
-# your favorite text editor, using `ruby Main.rb`.
-
+# Do not copy gosu.bundle into this template.
+# This 'require' is only here so you can run your game from the
+# terminal using `ruby Main.rb`, or your favorite text editor.
 require 'gosu'
 
 class MyWindow < Gosu::Window
