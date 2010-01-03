@@ -216,6 +216,7 @@
 		D46C2F8E0FAE39FD00A33476 /* Main.rb in Resources */ = {isa = PBXBuildFile; fileRef = D46C2F8D0FAE39FD00A33476 /* Main.rb */; };
 		D47BD32B0BD78F7200ACF014 /* RubyGosu_wrap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */; };
 		D48532D310EE05D400E10154 /* gosu in Resources */ = {isa = PBXBuildFile; fileRef = D48532D110EE05D400E10154 /* gosu */; };
+		D485338210F0CDB400E10154 /* stringio.c in Sources */ = {isa = PBXBuildFile; fileRef = D485337B10F0CDB400E10154 /* stringio.c */; };
 		D48810BD0F7C0E3000602C04 /* BitmapBMP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD50A801B00005C7067 /* BitmapBMP.cpp */; };
 		D49163370FAE55C4001692E0 /* dln.c in Sources */ = {isa = PBXBuildFile; fileRef = D49163360FAE55C4001692E0 /* dln.c */; };
 		D49164AC0FAF25E3001692E0 /* encdb.c in Sources */ = {isa = PBXBuildFile; fileRef = D491648A0FAF25E3001692E0 /* encdb.c */; };
@@ -756,6 +757,7 @@
 		D47BD3290BD78F7200ACF014 /* RubyGosu_wrap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RubyGosu_wrap.h; path = ../GosuImpl/RubyGosu_wrap.h; sourceTree = SOURCE_ROOT; };
 		D47BD32A0BD78F7200ACF014 /* RubyGosu.swg */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = RubyGosu.swg; path = ../GosuImpl/RubyGosu.swg; sourceTree = SOURCE_ROOT; };
 		D48532D110EE05D400E10154 /* gosu */ = {isa = PBXFileReference; lastKnownFileType = folder; name = gosu; path = ../lib/gosu; sourceTree = SOURCE_ROOT; };
+		D485337B10F0CDB400E10154 /* stringio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stringio.c; sourceTree = "<group>"; };
 		D49163360FAE55C4001692E0 /* dln.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dln.c; path = "Ruby 1.9 Source/dln.c"; sourceTree = "<group>"; };
 		D491648A0FAF25E3001692E0 /* encdb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = encdb.c; path = "Ruby 1.9 Source/enc/encdb.c"; sourceTree = "<group>"; };
 		D49164A50FAF25E3001692E0 /* utf_16be.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = utf_16be.c; path = "Ruby 1.9 Source/enc/utf_16be.c"; sourceTree = "<group>"; };
@@ -1151,6 +1153,7 @@
 		D46C2E010FAE087000A33476 /* Ruby 1.9 */ = {
 			isa = PBXGroup;
 			children = (
+				D485337410F0CDB400E10154 /* stringio */,
 				D4C8713310825E4D00E1FF5A /* syck */,
 				D4C8712710825DED00E1FF5A /* socket */,
 				D46C2F0C0FAE2F5900A33476 /* enc */,
@@ -1253,6 +1256,15 @@
 				D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */,
 			);
 			name = RubyGosu;
+			sourceTree = "<group>";
+		};
+		D485337410F0CDB400E10154 /* stringio */ = {
+			isa = PBXGroup;
+			children = (
+				D485337B10F0CDB400E10154 /* stringio.c */,
+			);
+			name = stringio;
+			path = "Ruby 1.9 Source/ext/stringio";
 			sourceTree = "<group>";
 		};
 		D4A5A2F00F40D4EE00FFF378 /* Frameworks Touch */ = {
@@ -2013,6 +2025,7 @@
 				D4C8714910825E7500E1FF5A /* syck.c in Sources */,
 				D4C8714A10825E7500E1FF5A /* token.c in Sources */,
 				D4C8714B10825E7500E1FF5A /* yaml2byte.c in Sources */,
+				D485338210F0CDB400E10154 /* stringio.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

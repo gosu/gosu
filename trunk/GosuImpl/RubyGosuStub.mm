@@ -7,6 +7,7 @@
 extern "C" void Init_gosu();
 extern "C" void Init_syck();
 extern "C" void Init_socket();
+extern "C" void Init_stringio();
 
 extern "C" int rb_enc_register(const char *, OnigEncodingType*);
 extern "C" void rb_encdb_declare(const char *name);
@@ -46,10 +47,12 @@ int main()
         Init_gosu();
         Init_syck();
         Init_socket();
+        Init_stringio();
         rb_eval_string("$LOADED_FEATURES << 'gosu.bundle'");
         rb_eval_string("$LOADED_FEATURES << 'rubygems.rb'");
         rb_eval_string("$LOADED_FEATURES << 'syck.bundle'");
         rb_eval_string("$LOADED_FEATURES << 'socket.bundle'");
+        rb_eval_string("$LOADED_FEATURES << 'stringio.bundle'");
 
         return ruby_run_node(ruby_options(argc, argv)); 
     }
