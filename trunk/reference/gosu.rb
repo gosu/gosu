@@ -126,13 +126,13 @@ module Gosu
   class Color
     attr_accessor :alpha, :red, :green, :blue, :hue, :saturation, :value
 
-    # argb: 0xAARRGGBB integer.
-  	def initialize(argb); end
   	# a:: Integer from 0..255
   	# r:: Integer from 0..255
   	# g:: Integer from 0..255
   	# b:: Integer from 0..255
     def initialize(a, r, g, b); end
+    # argb: 0xAARRGGBB integer.
+  	def initialize(argb); end
     
     # Converts a HSV triple into a color. Same as from_ahsv with alpha set to 255.
     # h:: Integer from 0..360
