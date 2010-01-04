@@ -1,6 +1,12 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.17=
+  * 2010-01-03: Mac/Ruby: Added stringio.bundle to the list of built-in extensions in RubyGosu App.app
+  * 2010-01-01: All: Reverted Gosu::Sample and Gosu::Song to retain their first argument for now
+  * 2010-01-01: Ruby: Fixed support for Ruby 1.9
+  * 2010-01-01: Ruby: Gosu::milliseconds always returns a Fixnum now
+
 =0.7.16=
   * 2009-12-29: All: Added Gosu::TextInput#filter for customizing what can/will be entered
   * 2009-12-27: Windows: Added an error message when running a windowed game on a too small desktop
