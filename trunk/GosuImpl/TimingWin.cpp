@@ -27,5 +27,5 @@ unsigned long Gosu::milliseconds()
     // Truncate to 2^30, C++ users shouldn't mind and Ruby users will
     // have a happy GC on 32-bit systems.
     // No, don't ask why this is an unsigned long then :)
-    return ::timeGetTime() & 0x20000000;
+    return ::timeGetTime() & 0x1fffffff;
 }
