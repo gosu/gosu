@@ -14,7 +14,7 @@
   * 2009-12-19: All: Added Gosu::Color::RED etc., for C++ and Ruby, deprecated Colors::red in C++
   * 2009-12-07: Ruby: Added Gosu::MAX_TEXTURE_SIZE for banisterfiend ;)
   * 2009-12-07: Ruby: Added support for socket and yaml (=syck.bundle) in RubyGosu App.app
-  * 2009-10-09: Ruby: Added enough experimental MacRuby support to run Tutorial.rb
+  * 2009-10-09: Ruby: Added enough experimental MacRuby support to run Tutorial.rb (you will need to build Gosu from source)
 
 =0.7.15=
   * 2009-09-13: Ruby: Added compatibility with 64-bit x86 Ruby on OS X (= Snow Leopard)
