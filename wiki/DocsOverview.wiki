@@ -11,6 +11,8 @@ See either the RubyTutorial or the CppTutorial.
 
 == Translations of the Ruby version ==
 
+*Thai* translation of the Tutorial: http://thaigamasutra.com/2009/11/30/gosu-tutorial-thai-tranlation/
+
 *French* mirror/translation of this GoogleCode page: http://code.google.com/p/gosu-fr/, provided by Damien Gouteux.
 
 *Polish* translation by S. Wojnowski: http://rubyhelp.org/articles/gosu
