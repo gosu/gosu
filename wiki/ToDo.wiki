@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-01-09)
+(Last update: 2010-01-10)
 
 == Gosu 0.7.x ==
   * Linux rerelease with patches.rb working!
@@ -162,13 +162,11 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * OR&G: Build simpler version
   * Check if DelphiGL wiki accepts donations
   * Tutorials: Mention where to find the final source code
-  * Thai-Translation hinzufügen
   * Document MAX_TEXTURE_SIZE
   * .app'ify ippa's game after :retrofy is in
   * Consider libgosu.spreadshirt.com
   * Make sure that it is documented what happens to different drawing ops with same z-order
-  * Cancel RailsHoster acct
-  * Add a note why some attachments are missing
+  * Print & send RailsHoster cancellation out
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
