@@ -10,7 +10,7 @@ begin
     require "#{File.dirname(__FILE__)}/gosu.for_1_8.#{Config::CONFIG['DLEXT']}"
   end
 rescue LoadError => e
-  require "#{File.dirname(__FILE__)}/gosu.#{Config::CONFIG['DLEXT']}"
+  require "#{File.dirname(__FILE__)}/gosu.custom.#{Config::CONFIG['DLEXT']}"
 end
 
 require "#{File.dirname(__FILE__)}/gosu/patches.rb"

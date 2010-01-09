@@ -2,6 +2,13 @@
 # Bogus extconf.rb to bridge rubygems to autoconf.
 # rubygems will call "make install" on the resulting makefile.
 
+if defined? RUBY_PLATFORM and RUBY_PLATFORM[0..4] 'win32' then
+  puts 'This gem is not meant to be installed on Windows.'
+  puts 'On Windows, please use:'
+  puts 'gem install gosu --platform=mswin32'
+  exit 1
+end
+
 puts 'The Gosu gem requires some libraries to be installed system-wide.'
 puts 'See the following site for a list:'
 puts 'http://code.google.com/p/gosu/wiki/GettingStartedOnLinux'

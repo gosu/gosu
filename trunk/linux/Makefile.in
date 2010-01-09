@@ -15,8 +15,7 @@ BASE_OBJS = Math.o Utility.o IO.o FileUnix.o TimingUnix.o WindowX.o	\
 NET_OBJS = Sockets/CommSocket.o Sockets/ListenerSocket.o	\
 	   Sockets/Socket.o Sockets/MessageSocket.o
 
-SDLMIXER_OBJ = AudioSDL.o
-FMOD_OBJ = AudioFmod.o
+SDLMIXER_OBJ = Audio/AudioSDL.o
 RUBYOBJS = RubyGosu_wrap.o
 
 OBJS = @GOSU_A_OBJS@
@@ -68,7 +67,7 @@ cpp_uninstall:
 
 clean:
 	rm -f $(OBJS) $(XPLS) $(RUBYOBJS) ../lib/libgosu* ../lib/gosu?* ../bin/gosu-config
-	rmdir RubyGosu OpenGL Graphics Sockets
+	rmdir RubyGosu Audio OpenGL Graphics Sockets
 
 $(OBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cpp
 	$(CXX) $(GOSU_DIR)/GosuImpl/$*.cpp -o $@ $(CXXFLAGS) -c
@@ -92,7 +91,7 @@ $(XPLS): %: %.cpp ../lib/libgosu.a
 	chmod u+x ../bin/gosu-config
 
 # RubyGosu_wrap.cpp taken out because we use the prebuilt version from SVN
-../lib/gosu.so: $(RUBYOBJS) ../lib/libgosu.a
+../lib/gosu.custom.so: $(RUBYOBJS) ../lib/libgosu.a
 	g++ -shared -o ../lib/gosu.so -Wall $(RUBYOBJS) $(RUBY_LIBS) @GOSU_A_OBJS@
 
 $(RUBYOBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cxx

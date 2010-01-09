@@ -80,7 +80,7 @@ if test -e "$RUBY_INC_DIR/ruby.h"; then
   AC_SUBST(RUBY_INC_DIR)
   AC_SUBST(RUBY_ARCH_DIR)
   AC_SUBST(RUBY_LIBS)
-  TO_BE_MADE=${TO_BE_MADE}" ../lib/gosu.so"
+  TO_BE_MADE=${TO_BE_MADE}" ../lib/gosu.custom.so"
 fi
 
 # libdl
@@ -95,8 +95,8 @@ AC_CHECK_LIB(rt, sched_setscheduler, LIBS="$LIBS -lrt", AC_CHECK_LIB(c, sched_se
 AC_SUBST(HAVE_LIBRT)
 
 if test $GOSU_MAKEFILE_FOR_GEM; then
-  # If called by extconf.rb, let "make install" only build gosu.so.
-  INSTALL_ACTION="../lib/gosu.so"
+  # If called by extconf.rb, let "make install" only build gosu.custom.so.
+  INSTALL_ACTION="../lib/gosu.custom.so"
   UNINSTALL_ACTION=""
 else
   # Otherwise, install/uninstall the C++ version of Gosu.

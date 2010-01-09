@@ -4412,7 +4412,7 @@ if test -e "$RUBY_INC_DIR/ruby.h"; then
 
 
 
-  TO_BE_MADE=${TO_BE_MADE}" ../lib/gosu.so"
+  TO_BE_MADE=${TO_BE_MADE}" ../lib/gosu.custom.so"
 fi
 
 # libdl
@@ -4723,8 +4723,8 @@ fi
 
 
 if test $GOSU_MAKEFILE_FOR_GEM; then
-  # If called by extconf.rb, let "make install" only build gosu.so.
-  INSTALL_ACTION="../lib/gosu.so"
+  # If called by extconf.rb, let "make install" only build gosu.custom.so.
+  INSTALL_ACTION="../lib/gosu.custom.so"
   UNINSTALL_ACTION=""
 else
   # Otherwise, install/uninstall the C++ version of Gosu.
@@ -5397,7 +5397,8 @@ $debug ||
 if test -n "$CONFIG_FILES"; then
 
 
-ac_cr=''
+ac_cr='
+'
 ac_cs_awk_cr=`$AWK 'BEGIN { print "a\rb" }' </dev/null 2>/dev/null`
 if test "$ac_cs_awk_cr" = "a${ac_cr}b"; then
   ac_cs_awk_cr='\\r'
