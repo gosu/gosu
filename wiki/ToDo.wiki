@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-01-10)
+(Last update: 2010-01-11)
 
 == Gosu 0.7.x ==
   * Linux rerelease with patches.rb working!
@@ -131,7 +131,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
 == Gosu CI/Usability ==
   * Document 64px minimum for single-texture opt.
   * Mention Gosu's respectable age somewhere :)
-  * Link to benkos example
+  * Link to benkos example & Chingu regarding states
   * Put RubyTutorial into rdoc
   * Add some first eye catchers to front page
   * Add "What now?" link list to front page
