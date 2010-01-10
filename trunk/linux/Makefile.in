@@ -40,6 +40,7 @@ directories:
 	if [ \! -d OpenGL ]; then mkdir OpenGL; fi
 	if [ \! -d Graphics ]; then mkdir Graphics; fi
 	if [ \! -d Sockets ]; then mkdir Sockets; fi
+	if [ \! -d Audio ]; then mkdir Audio; fi
 
 ../lib/libgosu.a: $(OBJS)
 	ar -r ../lib/libgosu.a @GOSU_A_OBJS@
