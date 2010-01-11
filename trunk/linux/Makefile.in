@@ -93,7 +93,7 @@ $(XPLS): %: %.cpp ../lib/libgosu.a
 
 # RubyGosu_wrap.cpp taken out because we use the prebuilt version from SVN
 ../lib/gosu.custom.so: $(RUBYOBJS) ../lib/libgosu.a
-	g++ -shared -o ../lib/gosu.so -Wall $(RUBYOBJS) $(RUBY_LIBS) @GOSU_A_OBJS@
+	g++ -shared -o ../lib/gosu.custom.so -Wall $(RUBYOBJS) $(RUBY_LIBS) @GOSU_A_OBJS@
 
 $(RUBYOBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cxx
 	$(CXX) -fPIC $(GOSU_DIR)/GosuImpl/$*.cxx -o $@ $(CXXFLAGS) -c
