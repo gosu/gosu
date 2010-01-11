@@ -17,6 +17,7 @@ COMMON_CPP_FILES = COMMON_FILES + FileList[
 ]
 
 COMMON_RUBY_FILES = COMMON_FILES + FileList[
+  'lib/gosu.rb',
   'lib/gosu/patches.rb',
   'examples/*.rb',
   'examples/media/*',
