@@ -4,10 +4,9 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-01-12)
+(Last update: 2010-01-13)
 
 == Gosu 0.7.x ==
-  * Release 0.7.18 if no complaints
   * Test/verify Linux archive works
   * Test/verify Linux gem works
   * Test/verify Windows gem works
@@ -166,7 +165,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * .app'ify ippa's game after :retrofy is in
   * Consider libgosu.spreadshirt.com
   * Make sure that it is documented what happens to different drawing ops with same z-order
-  * Print & send RailsHoster cancellation out
+  * Send RailsHoster cancellation out
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
