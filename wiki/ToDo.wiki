@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-01-23)
+(Last update: 2010-01-24)
 
 == Gosu 0.7.x ==
   * Fix Gosu::drawQuad color order bug
@@ -148,12 +148,10 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Turn changelog and todo into links on frontpage
   * Try to translate the RubyTutorial to Japanese :)
   * Deployment wiki page/rdoc: Mention Icon resource support!
-  * Document draw_line's weirdness
   * Note that draw can be called more often than update in the main loop
   * Setup board so it yields 301 redirects for vu2040
   * UTF8 Support for PotD texts(?)
   * Move from doxygen to NaturalDocs experimentally
-  * Use rubyforge gem in Gosu rakefile to upload releases
   * Change weirdo homepage text about RMagick
   * Donate to allison's author when I'm home
   * Explain SampleInstance vs. Sample somewhere
