@@ -4,10 +4,11 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-01-24)
+(Last update: 2010-01-28)
 
 == Gosu 0.7.x ==
-  * Fix Gosu::drawQuad color order bug
+  * Check out exception propagation bug in Window#draw/#update
+  * Fix drawQuad/Gosu::Color order bug
   * Test SampleInstance#volume
   * Update to newer Ruby 1.9 version in RubyGosu App.app
   * Either document gosu_to_radian_scale or rename it before anyone relies on it
