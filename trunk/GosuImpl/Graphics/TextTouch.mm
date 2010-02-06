@@ -21,14 +21,68 @@ typedef NSFont OSXFont;
 
 namespace
 {
-    map<pair<wstring, double>, OSXFont*> usedFonts;
-    OSXFont* getFont(const wstring& name, double height)
+    // TODO: Merge with InputMac.mm
+    template<typename CFTypeRef>
+    class CFScope : boost::noncopyable
     {
-        OSXFont* result = usedFonts[make_pair(name, height)];
+        CFTypeRef ref;
+    public:
+        explicit CFScope(CFTypeRef ref) : ref(ref) {}
+        ~CFScope() { CFRelease(ref); }
+        CFTypeRef get() { return ref; }
+    };
+
+    map<pair<wstring, double>, OSXFont*> usedFonts;
+    OSXFont* getFont(const wstring& fontName, double height)
+    {
+        OSXFont* result = usedFonts[make_pair(fontName, height)];
         if (!result)
         {
-            Gosu::ObjRef<NSString> fontName([[NSString alloc] initWithUTF8String: Gosu::wstringToUTF8(name).c_str()]);
-            result = [[OSXFont fontWithName: fontName.obj() size: height] retain];
+            if (fontName.find(L"/") == std::wstring::npos)
+            {
+                // System font
+                Gosu::ObjRef<NSString> name([[NSString alloc] initWithUTF8String: Gosu::wstringToUTF8(fontName).c_str()]);
+                result = [[OSXFont fontWithName: name.obj() size: height] retain];
+            }
+            else
+            {
+            #if 0
+                // Filename to font
+                CFScope<CFStringRef> urlString(
+                    CFStringCreateWithBytes(NULL,
+                        reinterpret_cast<const UInt8*>(fontName.c_str()),
+                        fontName.length() * sizeof(wchar_t),
+                        kCFStringEncodingUTF32LE, NO));
+
+                CFScope<CFURLRef> url(
+                    CFURLCreateWithFileSystemPath(NULL, urlString.get(),
+                        kCFURLPOSIXPathStyle, YES));
+                
+                CFScope<CFArrayRef> array(
+                    CTFontManagerCreateFontDescriptorsFromURL(url.get()));
+                
+                if (array.get() == NULL || CFArrayGetCount(array.get()) < 1)
+            #endif
+                    result = getFont(Gosu::defaultFontName(), height);
+            #if 0
+                else
+                {
+                    CTFontDescriptorRef ref =
+                        CFArrayGetValueAtIndex(array.get(), 0);
+                    CFScope<CTStringRef> fontName(
+                        (CTStringRef)CTFontDescriptorCopyAttribute(ref.get(), kCTFontNameAttribute));
+                    if (CTFontManagerRegisterFontsForURL(url.get(),
+                        kCTFontManagerScopeProcess, NULL))
+                    {
+                        const char* utf8FontName =
+                            CFStringGetCStringPtr(fontName.get(), kCFStringEncodingUTF8);
+                        result = getFont(Gosu::utf8ToWstring(utf8FontName), height);
+                    }
+                    else
+                        result = getFont(Gosu::defaultFontName(), height);
+                }
+            #endif
+            }
         }
         return result;
     }
