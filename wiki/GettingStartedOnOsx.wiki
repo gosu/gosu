@@ -13,9 +13,6 @@ For most tasks, the headers of the boost library will be enough, so the easiest 
 svn co http://svn.boost.org/svn/boost/trunk/boost boost
 sudo mv boost /usr/local/include
 }}}
-  
-(Replace "1_38" with boost's current version.)
-
 
 = Starting a new Gosu game (C++) =
 
