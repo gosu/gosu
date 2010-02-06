@@ -283,9 +283,9 @@ module Gosu
   # as they could accidentally refer to other sounds being played after
   # a very long time has passed.
   class SampleInstance
-    attr_accessor :volume
-    attr_accessor :speed
-    attr_accessor :pan
+    attr_writer :volume
+    attr_writer :speed
+    attr_writer :pan
     
     # Stops this instance of a sound being played. Calling this twice, or too late, does not do any harm. You can nil out the reference to the instance afterwards as it will be useless.
     def stop; end
