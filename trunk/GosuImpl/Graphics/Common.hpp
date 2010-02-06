@@ -33,16 +33,17 @@ namespace Gosu
     {
         return (xb - xa) * (yp - ya) - (xp - xa) * (yb - ya) > 0;
     }
-    
-    template<typename T>
+        
+    template<typename T, typename C>
     void reorderCoordinatesIfNecessary(T& x1, T& y1,
-        T& x2, T& y2, T& x3, T& y3, T& x4, T& y4)
+        T& x2, T& y2, T& x3, T& y3, C& c3, T& x4, T& y4, C& c4)
     {
         if (isPToTheLeftOfAB(x1, y1, x2, y2, x3, y3) ==
             isPToTheLeftOfAB(x2, y2, x3, y3, x4, y4))
         {
             std::swap(x3, x4);
             std::swap(y3, y4);
+            std::swap(c3, c4);
         }
     }
 }

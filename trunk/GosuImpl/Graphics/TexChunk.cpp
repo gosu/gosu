@@ -47,7 +47,7 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1,
 {
     DrawOp newDrawOp;
     
-    reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, x4, y4);
+    reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
     
     x1 *= graphics->factorX();
     y1 *= graphics->factorY();
