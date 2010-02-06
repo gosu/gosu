@@ -11,6 +11,7 @@
 For most tasks, the headers of the boost library will be enough, so the easiest way to install them would be:
 {{{
 svn co http://svn.boost.org/svn/boost/trunk/boost boost
+sudo mkdir -p /usr/local/include
 sudo mv boost /usr/local/include
 }}}
 
