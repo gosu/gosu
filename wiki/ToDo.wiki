@@ -4,9 +4,10 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-02-07)
+(Last update: 2010-02-09)
 
 == Gosu 0.7.x ==
+  * Test RNADALE.rb with newest Ruby 1.9
   * Update to newer Ruby 1.9 version in RubyGosu App.app
   * Either document gosu_to_radian_scale or rename it before anyone relies on it
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
@@ -154,6 +155,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Update README.txt year
   * Include CptnCpp as sample game
   * Slap Tuiq until he posts Chuadrat again :P
+  * Rethink Google Analytics (bah German laws…)
 == Gosu 0.8.x (preliminary) ==
   * Flesh out tasks below …
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
