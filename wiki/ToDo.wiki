@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-02-09)
+(Last update: 2010-02-13)
 
 == Gosu 0.7.x ==
   * Test RNADALE.rb with newest Ruby 1.9
@@ -157,7 +157,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Slap Tuiq until he posts Chuadrat again :P
   * Rethink Google Analytics (bah German laws…)
 == Gosu 0.8.x (preliminary) ==
-  * Flesh out tasks below …
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
   * Use float instead of double everywhere
   * Redesign (see forum) drawing interface
@@ -166,10 +165,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * FSAA/mipmap experiments
   * force feedback would be cool
   * Provide C++ application templates where possible, maybe even installers for the templates
-  * much improved text output system, at the VERY least/as a first step, Font shouldn't be forced to be bold
   * more alpha modes, yay!
   * find a way to factor rot flips out of Gosu => Image/draw redesign
-  * implement clipping and a target() modifier for the new Image
   * speed up LargeImageData?!
   * Apple remote support would rule.
   * clean up after playing around with possible optimizations
