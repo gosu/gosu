@@ -27,6 +27,8 @@ int main(int argc, char *argv[]) {
 	return UIApplicationMain(argc, argv, nil, @"GosuAppDelegate");
 }
 
+class Gosu::Audio {};
+
 struct Gosu::Window::Impl {
     ObjRef<NSAutoreleasePool> pool;
     ObjRef<UIWindow> window;
@@ -73,7 +75,6 @@ namespace
 }
 
 - (void)doTick:(NSTimer*)timer {
-    windowInstance().audio().update();
     windowInstance().update();
     [gosuView drawView];
     [gosuView removeDeadTouches];
@@ -93,7 +94,6 @@ Gosu::Window::Window(unsigned width, unsigned height,
     
     pimpl->graphics.reset(new Graphics(320, 480, false));
     pimpl->graphics->setResolution(480, 320);
-    pimpl->audio.reset(new Audio());
     pimpl->input.reset(new Input());
     pimpl->interval = updateInterval;
 
