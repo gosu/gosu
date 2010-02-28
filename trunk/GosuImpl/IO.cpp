@@ -18,6 +18,16 @@ void Gosu::Writer::write(const void* source, std::size_t length)
     seek(length);
 }
 
+std::size_t Gosu::Buffer::size() const
+{
+    return buf.size();
+}
+
+void Gosu::Buffer::resize(std::size_t newSize)
+{
+    buf.resize(newSize);
+}
+
 void Gosu::Buffer::read(std::size_t offset, std::size_t length,
     void* destBuffer) const
 {

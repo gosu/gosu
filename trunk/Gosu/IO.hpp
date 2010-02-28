@@ -192,15 +192,8 @@ namespace Gosu
             return *this;
         }
 
-        std::size_t size() const
-        {
-            return buf.size();
-        }
-
-        void resize(std::size_t newSize)
-        {
-            buf.resize(newSize);
-        }
+        std::size_t size() const;
+        void resize(std::size_t newSize);
 
         void read(std::size_t offset, std::size_t length,
             void* destBuffer) const;
