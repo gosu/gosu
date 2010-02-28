@@ -23,7 +23,14 @@ namespace Gosu {
 }
 
 int main(int argc, char *argv[]) {
+    puts("Startup");
+    fflush(0);
+
     Gosu::ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]);
+
+    puts("Kram");
+    fflush(0);
+
 	return UIApplicationMain(argc, argv, nil, @"GosuAppDelegate");
 }
 
@@ -85,6 +92,9 @@ Gosu::Window::Window(unsigned width, unsigned height,
     bool fullscreen, double updateInterval)
 : pimpl(new Impl)
 {
+    puts("Window constructor starts");
+    fflush(0);
+
     pimpl->pool.reset([[NSAutoreleasePool alloc] init]);
 	pimpl->window.reset([[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]]);
     pimpl->view.reset([[GosuView alloc] initWithFrame:[pimpl->window.obj() bounds]]);
@@ -94,6 +104,7 @@ Gosu::Window::Window(unsigned width, unsigned height,
     
     pimpl->graphics.reset(new Graphics(320, 480, false));
     pimpl->graphics->setResolution(480, 320);
+    pimpl->audio.reset(new Audio());
     pimpl->input.reset(new Input());
     pimpl->interval = updateInterval;
 
