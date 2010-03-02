@@ -4,9 +4,10 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-03-01)
+(Last update: 2010-03-02)
 
 == Gosu 0.7.x ==
+  * Gosu HAS to work with TextMate again somehow
   * Gosu: compile x86_64 with gcc 4.2 on OS X
   * Test RNADALE.rb with newest Ruby 1.9
   * Update to newer Ruby 1.9 version in RubyGosu App.app
