@@ -4,17 +4,18 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-03-05)
+(Last update: 2010-03-07)
 
 == Gosu 0.7.x ==
-  * Find out how to: git patches back to svn
+  * Find out how to: merge mathias' git patches back to svn
   * Gosu HAS to work with TextMate again somehow
-  * Gosu: compile x86_64 with gcc 4.2 on OS X
   * Test RNADALE.rb with newest Ruby 1.9
+  * Sneak ippa's OpenGL retrofication in (don't document, psst, still secret!)
   * Fix custom font loading on 10.6 (after installing 10.6, using LSMinimumSystemVersionByArchitecture—works for Frameworks?)
-  * Update to newer Ruby 1.9 version in RubyGosu App.app
   * Quickly fix Sockets for 64-bit compatibility (long -> int32_t)
   * Rename Gosu ToScale functions and publish new gem
+  * Gosu: compile x86_64 with gcc 4.2 on OS X
+  * Update to newer Ruby 1.9 version in RubyGosu App.app
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Test StandBy with Windows and a running Gosu app
   * The screen size/OpenGL stuff …
