@@ -51,3 +51,14 @@ class Gosu::Color
   FUCHSIA = Gosu::Color.new(0xffff00ff)
   CYAN    = Gosu::Color.new(0xff00ffff)
 end
+
+# Instance methods for button_id_to_char and char_to_button_id
+class Gosu::Window
+  def button_id_to_char(id)
+    self.class.button_id_to_char(id)
+  end
+  
+  def char_to_button_id(ch)
+    self.class.char_to_button_id(ch)
+  end
+end
