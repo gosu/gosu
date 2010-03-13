@@ -159,6 +159,7 @@
 // For Ruby-only MAX_TEXTURE_SIZE
 #include <Gosu/../GosuImpl/Graphics/Texture.hpp>
 namespace Gosu {
+    unsigned enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
     unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
 }
 
@@ -283,6 +284,7 @@ namespace Gosu
 //%constant unsigned MAX_TEXTURE_SIZE = Gosu::Texture::maxTextureSize();
 
 namespace Gosu {
+    unsigned enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
     unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
 }
 
@@ -357,7 +359,7 @@ namespace Gosu {
 %include "../Gosu/ImageData.hpp"
 
 // Image
-// Hackishly allow the user to pass Window& instead of Graphics&.
+// Allow the user to pass Window& instead of Graphics&.
 // Also, provide convenience functions.
 
 // Typemap to return an array of images (for loadTiles)
@@ -377,7 +379,8 @@ namespace Gosu {
 %include "../Gosu/Image.hpp"
 %extend Gosu::Image {
     Image(Gosu::Window& window, VALUE source, bool tileable = false) {
-        return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source), tileable);
+        return new Gosu::Image(window.graphics(),
+            Gosu::loadBitmap(source), tileable);
     }
     Image(Gosu::Window& window, VALUE source, bool tileable,
           unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight) {

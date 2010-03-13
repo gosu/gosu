@@ -37,6 +37,11 @@ unsigned Gosu::Texture::maxTextureSize()
 
 //const unsigned Gosu::MAX_TEXTURE_SIZE = Gosu::Texture::maxTextureSize();
 
+namespace Gosu
+{
+    bool undocumentedRetrofication = false;
+}
+
 Gosu::Texture::Texture(unsigned size)
 : allocator(size, size), num(0)
 {
@@ -54,7 +59,15 @@ Gosu::Texture::Texture(unsigned size)
     glTexImage2D(GL_TEXTURE_2D, 0, 4, allocator.width(), allocator.height(), 0,
                  GL_RGBA, GL_UNSIGNED_BYTE, 0);
 #endif
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    
+    if (undocumentedRetrofication)
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    }
+    else
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    
 #ifdef GOSU_IS_WIN
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -121,6 +134,7 @@ std::auto_ptr<Gosu::TexChunk>
     glBindTexture(GL_TEXTURE_2D, name);
     glTexSubImage2D(GL_TEXTURE_2D, 0, block->left, block->top, block->width, block->height,
                  format, GL_UNSIGNED_BYTE, texData);
+
     num += 1;
     return result;
 }

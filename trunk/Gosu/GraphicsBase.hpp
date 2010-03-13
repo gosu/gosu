@@ -49,7 +49,7 @@ namespace Gosu
     //! Flags that affect the tileability of an image.
     enum BorderFlags
     {
-        bfSoft = 0,
+        bfSmooth = 0,
         bfTileableLeft = 1,
         bfTileableTop = 2,
         bfTileableRight = 4,

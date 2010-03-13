@@ -2232,6 +2232,7 @@ static VALUE mGosu;
 // For Ruby-only MAX_TEXTURE_SIZE
 #include <Gosu/../GosuImpl/Graphics/Texture.hpp>
 namespace Gosu {
+    unsigned enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
     unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
 }
 
@@ -2573,7 +2574,8 @@ SWIG_AsVal_bool (VALUE obj, bool *val)
 }
 
 SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_0(Gosu::Window &window,VALUE source,bool tileable=false){
-        return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source), tileable);
+        return new Gosu::Image(window.graphics(),
+            Gosu::loadBitmap(source), tileable);
     }
 SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_1(Gosu::Window &window,VALUE source,bool tileable,unsigned int srcX,unsigned int srcY,unsigned int srcWidth,unsigned int srcHeight){
         return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source),
@@ -3229,6 +3231,28 @@ _wrap_screen_height(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (unsigned int)Gosu::screenHeight();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_enable_undocumented_retrofication(int argc, VALUE *argv, VALUE self) {
+  unsigned int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  {
+    try {
+      result = (unsigned int)Gosu::enableUndocumentedRetrofication();
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -9250,6 +9274,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "default_font_name", VALUEFUNC(_wrap_default_font_name), -1);
   rb_define_module_function(mGosu, "screen_width", VALUEFUNC(_wrap_screen_width), -1);
   rb_define_module_function(mGosu, "screen_height", VALUEFUNC(_wrap_screen_height), -1);
+  rb_define_module_function(mGosu, "enable_undocumented_retrofication", VALUEFUNC(_wrap_enable_undocumented_retrofication), -1);
   rb_define_module_function(mGosu, "__max_texture_size", VALUEFUNC(_wrap___max_texture_size), -1);
   
   SwigClassColor.klass = rb_define_class_under(mGosu, "Color", rb_cObject);

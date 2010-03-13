@@ -29,7 +29,7 @@ Gosu::Image::Image(Graphics& graphics, const Bitmap& source,
     unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
     bool tileable)
 : data(graphics.createImage(source, srcX, srcY, srcWidth, srcHeight,
-    tileable ? Gosu::bfTileable : Gosu::bfSoft))
+    tileable ? Gosu::bfTileable : Gosu::bfSmooth))
 {
 }
 
