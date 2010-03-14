@@ -4,9 +4,10 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-03-12)
+(Last update: 2010-03-15)
 
 == Gosu 0.7.x ==
+  * Install Windows to be able to compile Gosu at all
   * Find out how to: merge mathias' git patches back to svn
   * Get Gosu working with TextMate again
     * Test in new/clean install of TextMate
@@ -17,6 +18,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Sneak ippa's OpenGL retrofication in (don't document, psst, still secret!)
   * Fix custom font loading on 10.6 (after installing 10.6, using LSMinimumSystemVersionByArchitecture—works for Frameworks?)
   * Quickly fix Sockets for 64-bit compatibility (long -> int32_t)
+  * Why does this crash: Image.from_text 64-bit with attached args
   * Rename Gosu ToScale functions and publish new version
   * Check out SDL_ttf as custom TTF alternative
   * Gosu: compile x86_64 with gcc 4.2 on OS X
