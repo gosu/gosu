@@ -4,10 +4,9 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-03-17)
+(Last update: 2010-03-21)
 
 == Gosu 0.7.x ==
-  * Install MSVC to be able to compile Gosu at all
   * Remove KbPause from rdoc (doxygen?)
   * Find out how to: merge mathias' git patches back to svn
   * Get Gosu working with TextMate again
