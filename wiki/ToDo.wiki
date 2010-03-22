@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-03-22)
+(Last update: 2010-03-23)
 
 == Gosu 0.7.x ==
   * Remove KbPause from rdoc (doxygen?)
@@ -21,6 +21,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Why does this crash: Image.from_text 64-bit with attached args
   * Rename Gosu ToScale functions
   * Publish new version
+  * Add Numeric#clamp to Ruby
   * Make Window arguments optional for Audio, but throw exceptions when in wrong order
   * Make Window arguments optional for Graphics, but throw exceptions when in wrong order
   * Throw an exception when using multiple Windows
