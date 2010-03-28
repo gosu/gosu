@@ -4,10 +4,9 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-03-23)
+(Last update: 2010-03-28)
 
 == Gosu 0.7.x ==
-  * Remove KbPause from rdoc (doxygen?)
   * Find out how to: merge mathias' git patches back to svn
   * Get Gosu working with TextMate again
     * Test in new/clean install of TextMate
@@ -15,11 +14,10 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Simulate running, see what is causing the problem
     * Either fix Gosu or report bug
   * Test RNADALE.rb with newest Ruby 1.9
-  * Sneak ippa's OpenGL retrofication in (don't document, psst, still secret!)
   * Fix custom font loading on 10.6 (after installing 10.6, using LSMinimumSystemVersionByArchitecture—works for Frameworks?)
-  * Quickly fix Sockets for 64-bit compatibility (long -> int32_t)
   * Why does this crash: Image.from_text 64-bit with attached args
   * Rename Gosu ToScale functions
+  * Test compiling on Linux
   * Publish new version
   * Add Numeric#clamp to Ruby
   * Make Window arguments optional for Audio, but throw exceptions when in wrong order
