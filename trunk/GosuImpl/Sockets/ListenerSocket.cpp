@@ -21,7 +21,6 @@ Gosu::ListenerSocket::ListenerSocket(SocketPort port)
     sockaddr_in addr;
     std::memset(&addr, 0, sizeof addr);
     addr.sin_family = AF_INET;
-//    addr.sin_addr.S_un.S_addr = ::htonl(INADDR_ANY);
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
     addr.sin_port = htons(port);
     socketCheck(::bind(pimpl->socket.handle(),

@@ -17,7 +17,6 @@
     #include <netdb.h>
     #include <sys/ioctl.h> 
     #define GOSU_SOCK_ERR(code) code
-    // IMPR: Macros ok?
     #define INVALID_SOCKET -1
     #define SOCKET_ERROR -1
     #define closesocket close

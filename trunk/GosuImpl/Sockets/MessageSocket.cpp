@@ -18,20 +18,21 @@ Gosu::MessageSocket::MessageSocket(SocketPort port)
     sockaddr_in addr;
     std::memset(&addr, 0, sizeof addr);
     addr.sin_family = AF_INET;
-//    addr.sin_addr.S_un.S_addr = ::htonl(INADDR_ANY);
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
     addr.sin_port = htons(port);
     socketCheck(::bind(pimpl->socket.handle(),
         reinterpret_cast<sockaddr*>(&addr), sizeof addr));
 
-//FIXME: Unix: implement this. SO_MAX_MSG_SIZE not defined.
-#ifdef WIN32
     unsigned maxMessageSize;
     int size = sizeof maxMessageSize;
+    #ifdef GOSU_IS_WIN
     socketCheck(::getsockopt(pimpl->socket.handle(), SOL_SOCKET, SO_MAX_MSG_SIZE,
         reinterpret_cast<char*>(&maxMessageSize), &size));
+    #else
+    socketCheck(::getsockopt(pimpl->socket.handle(), SOL_SOCKET, SO_SNDBUF,
+        reinterpret_cast<char*>(&maxMessageSize), &size));
+    #endif
     pimpl->maxMessageSize = maxMessageSize;
-#endif
 }
 
 Gosu::MessageSocket::~MessageSocket()
@@ -58,17 +59,16 @@ void Gosu::MessageSocket::update()
     std::vector<char> buffer(maxMessageSize());
 
     sockaddr_in addr;
-    int size = sizeof addr;
+    socklen_t size = sizeof addr;
 
     for (;;)
     {
         int received = ::recvfrom(pimpl->socket.handle(), &buffer.front(),
             buffer.size(), 0, reinterpret_cast<sockaddr*>(&addr),
-            reinterpret_cast<socklen_t*>(&size));
+            &size);
 
         if (received != SOCKET_ERROR && onReceive)
         {
-//            onReceive(::ntohl(addr.sin_addr.S_un.S_addr),
             onReceive(ntohl(addr.sin_addr.s_addr),
                 ntohs(addr.sin_port), &buffer.front(), received);
         }
@@ -79,7 +79,6 @@ void Gosu::MessageSocket::update()
             case GOSU_SOCK_ERR(ENETDOWN):
             case GOSU_SOCK_ERR(ENETRESET):
             case GOSU_SOCK_ERR(ETIMEDOUT):
-            // IMPR: "The application should close the socket..."??
             case GOSU_SOCK_ERR(ECONNRESET):
                 return;
 
@@ -96,7 +95,6 @@ void Gosu::MessageSocket::send(SocketAddress address, SocketPort port,
     sockaddr_in addr;
     std::memset(&addr, 0, sizeof addr);
     addr.sin_family = AF_INET;
-//    addr.sin_addr.S_un.S_addr = ::htonl(address);
     addr.sin_addr.s_addr = htonl(address);
     addr.sin_port = htons(port);
 
@@ -128,9 +126,3 @@ void Gosu::MessageSocket::send(SocketAddress address, SocketPort port,
             throwLastSocketError();
     }
 }
-
-/*void Gosu::MessageSocket::broadcast(SocketPort port,
-    const void* buffer, std::size_t size)
-{
-    assert(false);
-}*/

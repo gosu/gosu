@@ -1,5 +1,6 @@
 #include <Gosu/Sockets.hpp>
 #include <GosuImpl/Sockets/Sockets.hpp>
+#include <boost/cstdint.hpp>
 #include <cassert>
 #include <cstring>
 #include <stdexcept>
@@ -34,7 +35,7 @@ struct Gosu::CommSocket::Impl
 
                 for (;;) // IMPR.
                 {
-                    const size_t sizeSize = sizeof(unsigned long);
+                    const size_t sizeSize = sizeof(boost::uint32_t);
 
                     // Not even enough bytes there to determine the size of the
                     // incoming message.
@@ -42,7 +43,7 @@ struct Gosu::CommSocket::Impl
                         break;
 
                     // Message size is already here, convert it.
-                    unsigned long msgSize = *reinterpret_cast<unsigned long*>(&inbox[0]);
+                    boost::uint32_t msgSize = *reinterpret_cast<boost::uint32_t*>(&inbox[0]);
                     msgSize = ntohl(msgSize);
 
                     // Can't really handle zero-size messages. IMPR?!
@@ -240,7 +241,7 @@ void Gosu::CommSocket::send(const void* buffer, std::size_t size)
     // In managed mode, also send the length of the buffer.
     if (mode() == cmManaged)
     {
-        unsigned long netSize = htonl(size);
+        boost::uint32_t netSize = htonl(size);
         const char* charBuf = reinterpret_cast<const char*>(&netSize);
         pimpl->outbox.insert(pimpl->outbox.end(), charBuf,
             charBuf + sizeof netSize);
