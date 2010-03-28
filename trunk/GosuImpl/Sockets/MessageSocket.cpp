@@ -24,7 +24,7 @@ Gosu::MessageSocket::MessageSocket(SocketPort port)
         reinterpret_cast<sockaddr*>(&addr), sizeof addr));
 
     unsigned maxMessageSize;
-    int size = sizeof maxMessageSize;
+    socklen_t size = sizeof maxMessageSize;
     #ifdef GOSU_IS_WIN
     socketCheck(::getsockopt(pimpl->socket.handle(), SOL_SOCKET, SO_MAX_MSG_SIZE,
         reinterpret_cast<char*>(&maxMessageSize), &size));
