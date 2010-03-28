@@ -85,7 +85,6 @@ module Gosu
   KbNumpadSubtract = :implementation_defined
   KbPageDown = :implementation_defined
   KbPageUp = :implementation_defined
-  KbPause = :implementation_defined
   # Above the right shift key
   KbReturn = :implementation_defined
   KbRight = :implementation_defined
