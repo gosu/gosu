@@ -46,7 +46,6 @@ namespace
             }
             else
             {
-            #if 0
                 // Filename to font
                 CFScope<CFStringRef> urlString(
                     CFStringCreateWithBytes(NULL,
@@ -62,15 +61,13 @@ namespace
                     CTFontManagerCreateFontDescriptorsFromURL(url.get()));
                 
                 if (array.get() == NULL || CFArrayGetCount(array.get()) < 1)
-            #endif
                     result = getFont(Gosu::defaultFontName(), height);
-            #if 0
                 else
                 {
                     CTFontDescriptorRef ref =
-                        CFArrayGetValueAtIndex(array.get(), 0);
-                    CFScope<CTStringRef> fontName(
-                        (CTStringRef)CTFontDescriptorCopyAttribute(ref.get(), kCTFontNameAttribute));
+                        (CTFontDescriptorRef)CFArrayGetValueAtIndex(array.get(), 0);
+                    CFScope<CFStringRef> fontName(
+                        (CFStringRef)CTFontDescriptorCopyAttribute(ref, kCTFontNameAttribute));
                     if (CTFontManagerRegisterFontsForURL(url.get(),
                         kCTFontManagerScopeProcess, NULL))
                     {
@@ -81,7 +78,6 @@ namespace
                     else
                         result = getFont(Gosu::defaultFontName(), height);
                 }
-            #endif
             }
         }
         return result;
@@ -100,7 +96,8 @@ unsigned Gosu::textWidth(const wstring& text,
 {
     OSXFont* font = getFont(fontName, fontHeight);
     
-    // This will, of course, compute a too large size; fontHeight is in pixels, the method expects point.
+    // This will, of course, compute a too large size; fontHeight is in pixels,
+    // the method expects point.
     ObjRef<NSString> string([[NSString alloc] initWithUTF8String: wstringToUTF8(text).c_str()]);
     #ifndef GOSU_IS_IPHONE
     ObjRef<NSDictionary> attributes([[NSDictionary alloc] initWithObjectsAndKeys:
@@ -165,8 +162,9 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
         font, NSFontAttributeName, [NSColor whiteColor], NSForegroundColorAttributeName, nil]);
     
     [NSGraphicsContext saveGraphicsState];
-    [NSGraphicsContext setCurrentContext: [NSGraphicsContext graphicsContextWithGraphicsPort:(void *)context flipped:false]];
-        [string.obj() drawAtPoint: NSPointZero withAttributes: attributes.get()];
+    [NSGraphicsContext setCurrentContext:
+        [NSGraphicsContext graphicsContextWithGraphicsPort:(void *)context flipped:false]];
+    [string.obj() drawAtPoint: NSPointZero withAttributes: attributes.get()];
     [NSGraphicsContext restoreGraphicsState];
     #endif
     CGContextRelease(context);
