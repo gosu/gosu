@@ -78,6 +78,8 @@
         $1 = Gosu::amDefault;
     else if (!strcmp(StringValueCStr(localTemporary), "additive"))
         $1 = Gosu::amAdditive;
+    else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+        $1 = Gosu::amMultiply;
     else
         SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
 }

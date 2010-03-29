@@ -4701,6 +4701,8 @@ _wrap_Font_draw(int argc, VALUE *argv, VALUE self) {
       arg9 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
       arg9 = Gosu::amAdditive;
+      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      arg9 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -4821,6 +4823,8 @@ _wrap_Font_draw_rel(int argc, VALUE *argv, VALUE self) {
       arg11 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
       arg11 = Gosu::amAdditive;
+      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      arg11 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -4933,6 +4937,8 @@ _wrap_Font_draw_rot(int argc, VALUE *argv, VALUE self) {
       arg10 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
       arg10 = Gosu::amAdditive;
+      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      arg10 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -5477,6 +5483,8 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
       arg8 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
       arg8 = Gosu::amAdditive;
+      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      arg8 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -5604,6 +5612,8 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
       arg11 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
       arg11 = Gosu::amAdditive;
+      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      arg11 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -5729,6 +5739,8 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
       arg11 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
       arg11 = Gosu::amAdditive;
+      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      arg11 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -6110,6 +6122,8 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
       arg15 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
       arg15 = Gosu::amAdditive;
+      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      arg15 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -8069,6 +8083,8 @@ _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
       arg9 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
       arg9 = Gosu::amAdditive;
+      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      arg9 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -8202,6 +8218,8 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
       arg12 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
       arg12 = Gosu::amAdditive;
+      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      arg12 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -8363,6 +8381,8 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
       arg15 = Gosu::amDefault;
       else if (!strcmp(StringValueCStr(localTemporary), "additive"))
       arg15 = Gosu::amAdditive;
+      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      arg15 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
     }
@@ -9536,17 +9556,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "GpNum", SWIG_From_int(static_cast< int >(Gosu::gpNum)));
   rb_define_const(mGosu, "NumButtons", SWIG_From_int(static_cast< int >(Gosu::numButtons)));
   rb_define_const(mGosu, "NoButton", SWIG_From_int(static_cast< int >(Gosu::noButton)));
-  
-  // ARGH, SWIG workaround...
-  // It doesn't understand the C++ overloading otherwise.
-  rb_eval_string("class Gosu::Image; def self.from_text(*args); args.size == 4 ? from_text4(*args) : from_text7(*args); end; end");
-  
-  // ARGH, SWIG workaround 2..
-  // It won't let me have a class method and method with the same name.
-  rb_eval_string("class Gosu::Window; def button_id_to_char(id); self.class.button_id_to_char(id); end; def char_to_button_id(ch); self.class.char_to_button_id(ch); end; end");
-  
-  // ARGH, Linux workaround: instead of declaring a constant, we declare a hidden function and call it when we need to define the constant.
-  rb_eval_string("module Gosu;def self.const_missing sym;if sym == :MAX_TEXTURE_SIZE then;const_set sym, __max_texture_size;else;super;end;end;end");
   
   GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
   

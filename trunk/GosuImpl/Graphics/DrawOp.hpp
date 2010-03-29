@@ -54,6 +54,8 @@ namespace Gosu
         
             if (mode == amAdditive)
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+            else if (mode == amMultiply)
+                glBlendFunc(GL_DST_COLOR, GL_ZERO);
             else
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -146,6 +148,8 @@ namespace Gosu
             
             if (mode == amAdditive)
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+            else if (mode == amMultiply)
+                glBlendFunc(GL_DST_COLOR, GL_ZERO);
             else
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             
