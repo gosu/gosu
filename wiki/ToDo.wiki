@@ -4,21 +4,21 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-03-28)
+(Last update: 2010-03-29)
 
 == Gosu 0.7.x ==
-  * Find out how to: merge mathias' git patches back to svn
-  * Get Gosu working with TextMate again
-    * Test in new/clean install of TextMate
-    * Update TextMate to latest
-    * Simulate running, see what is causing the problem
-    * Either fix Gosu or report bug
-  * Test RNADALE.rb with newest Ruby 1.9
   * Fix custom font loading on 10.6 (after installing 10.6, using LSMinimumSystemVersionByArchitecture—works for Frameworks?)
+    * Add LSMini... to RubyGosu.app and test locally
+    * Add LSMini... to RubyGosu.app and test on Mina
+    * Add LSMini… to GettingStartedOnOSX (yuck)
+    * Add LSMini… to Terra Vera and test locally
+    * Add LSMini… to Terra Vera and test on Mina
   * Why does this crash: Image.from_text 64-bit with attached args
   * Rename Gosu ToScale functions
   * Test compiling on Linux
+  * Test RNADALE.rb with newest Ruby 1.9
   * Publish new version
+  * Regenerate docs (for multiply)
   * Add Numeric#clamp to Ruby
   * Make Window arguments optional for Audio, but throw exceptions when in wrong order
   * Make Window arguments optional for Graphics, but throw exceptions when in wrong order
@@ -171,6 +171,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Include CptnCpp as sample game
   * Slap Tuiq until he posts Chuadrat again :P
   * Ask: Why not clWhite?
+  * Document alpha modes for Ruby
 == Gosu 0.8.x (preliminary) ==
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
   * Use float instead of double everywhere
