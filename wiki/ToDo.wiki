@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-03-29)
+(Last update: 2010-04-03)
 
 == Gosu 0.7.x ==
   * Fix custom font loading on 10.6 (after installing 10.6, using LSMinimumSystemVersionByArchitecture—works for Frameworks?)
@@ -15,9 +15,12 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Add LSMini… to Terra Vera and test on Mina
   * Why does this crash: Image.from_text 64-bit with attached args
   * Rename Gosu ToScale functions
+  * Look into Windows Gosu::Color linker trouble
+  * Look into rvm linker problems
   * Test compiling on Linux
   * Test RNADALE.rb with newest Ruby 1.9
   * Publish new version
+  * Integrate customFont (SDL_ttf fallback)
   * Regenerate docs (for multiply)
   * Add Numeric#clamp to Ruby
   * Make Window arguments optional for Audio, but throw exceptions when in wrong order
