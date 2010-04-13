@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-04-03)
+(Last update: 2010-04-14)
 
 == Gosu 0.7.x ==
   * Fix custom font loading on 10.6 (after installing 10.6, using LSMinimumSystemVersionByArchitecture—works for Frameworks?)
@@ -48,6 +48,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Try not to hide the mouse cursor outside of the main window on OS X
       * Test multiple screens on Windows
     * TextField with clip_to (update example)
+  * Look for non-deprecated replacement for KeyTranslate and UCKeyTranslate
   * iPhone-related stuff that should be finished soonish
     * Let resolution decide orientation
     * socket.bundle und syck.bundle in den Wrapper reinschweißen
@@ -74,7 +75,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Replace draw_line by something that makes sense
   * Text quality release (+Linux gamepad!)
     * See if the differences between from_text and Font#draw are a bug
-    * Look for non-deprecated replacement for KeyTranslate and UCKeyTranslate
     * Creating a non-existent font should throw an exception on all platforms, test on which it does
     * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
     * Verify that Daniel font works properly in Font and Text
