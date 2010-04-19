@@ -38,11 +38,14 @@ namespace
         OSXFont* result = usedFonts[make_pair(fontName, height)];
         if (!result)
         {
+        #ifndef GOSU_IS_IPHONE
             if (fontName.find(L"/") == std::wstring::npos)
             {
+        #endif
                 // System font
                 Gosu::ObjRef<NSString> name([[NSString alloc] initWithUTF8String: Gosu::wstringToUTF8(fontName).c_str()]);
                 result = [[OSXFont fontWithName: name.obj() size: height] retain];
+        #ifndef GOSU_IS_IPHONE
             }
             else
             {
@@ -79,6 +82,7 @@ namespace
                         result = getFont(Gosu::defaultFontName(), height);
                 }
             }
+        #endif
         }
         return result;
     }
