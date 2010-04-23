@@ -589,18 +589,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		D448D8DA0FF82204002FA7EE /* PBXContainerItemProxy */ = {
+		D4B7A8321182240D006767FF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D4CA894F0BC68B5D00A431AC;
+			remoteGlobalIDString = D4CA894F0BC68B5D00A431AC /* RubyGosu Core */;
 			remoteInfo = "RubyGosu Core";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		08FB77AAFE841565C02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
-		8D07F2C80486CC7A007CD1D0 /* Gosu */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = folder; path = Gosu; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D07F2C80486CC7A007CD1D0 /* Gosu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Gosu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9CA23C0100396920073D01B /* Macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Macro.hpp; sourceTree = "<group>"; };
 		D4032B7C0F5035A900A20790 /* TextTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TextTouch.mm; sourceTree = "<group>"; };
 		D410D6220EE9D379007740AE /* Iconv.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Iconv.hpp; path = ../GosuImpl/Iconv.hpp; sourceTree = SOURCE_ROOT; };
@@ -663,7 +663,7 @@
 		D410EB290A801C28005C7067 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		D410EB6D0A801CDC005C7067 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D4177736106CFB0B005DC1C4 /* MacRubyGosu-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MacRubyGosu-Info.plist"; sourceTree = "<group>"; };
-		D4177742106CFC22005DC1C4 /* gosu */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = folder; path = gosu; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4177742106CFC22005DC1C4 /* gosu.for_macruby.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = gosu.for_macruby.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4177750106CFD8A005DC1C4 /* ObjGosuWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjGosuWindow.h; path = ../GosuImpl/ObjGosu/ObjGosuWindow.h; sourceTree = SOURCE_ROOT; };
 		D4177751106CFD8A005DC1C4 /* ObjGosuWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjGosuWindow.mm; path = ../GosuImpl/ObjGosu/ObjGosuWindow.mm; sourceTree = SOURCE_ROOT; };
 		D42568090C69CF6100E745AC /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
@@ -804,7 +804,7 @@
 		D4C8713F10825E7500E1FF5A /* token.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = token.c; path = "Ruby 1.9 Source/ext/syck/token.c"; sourceTree = "<group>"; };
 		D4C8714010825E7500E1FF5A /* yaml2byte.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = yaml2byte.c; path = "Ruby 1.9 Source/ext/syck/yaml2byte.c"; sourceTree = "<group>"; };
 		D4C8714110825E7500E1FF5A /* yamlbyte.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = yamlbyte.h; path = "Ruby 1.9 Source/ext/syck/yamlbyte.h"; sourceTree = "<group>"; };
-		D4CA89500BC68B5D00A431AC /* gosu */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = folder; path = gosu; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4CA89500BC68B5D00A431AC /* gosu.for_1_8.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = gosu.for_1_8.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4D3E71A10722AAA006DCD24 /* MacRuby.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MacRuby.framework; path = /Library/Frameworks/MacRuby.framework; sourceTree = "<absolute>"; };
 		D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = RubyGosuStub.mm; path = ../GosuImpl/RubyGosuStub.mm; sourceTree = SOURCE_ROOT; };
 		D4F07B220D934C8B00FB3D99 /* TextInput.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextInput.hpp; path = ../Gosu/TextInput.hpp; sourceTree = SOURCE_ROOT; };
@@ -957,11 +957,11 @@
 		034768DDFF38A45A11DB9C8B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D07F2C80486CC7A007CD1D0 /* Gosu */,
-				D4CA89500BC68B5D00A431AC /* gosu */,
+				8D07F2C80486CC7A007CD1D0 /* Gosu.framework */,
+				D4CA89500BC68B5D00A431AC /* gosu.for_1_8.bundle */,
 				D459FF440BDCD23500E7F0D6 /* RubyGosu App.app */,
 				D4A5A1F40F40D28600FFF378 /* libgosutouch.a */,
-				D4177742106CFC22005DC1C4 /* gosu */,
+				D4177742106CFC22005DC1C4 /* gosu.for_macruby.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1529,7 +1529,7 @@
 			name = Gosu;
 			productInstallPath = "$(HOME)/Library/Frameworks";
 			productName = Gosu;
-			productReference = 8D07F2C80486CC7A007CD1D0 /* Gosu */;
+			productReference = 8D07F2C80486CC7A007CD1D0 /* Gosu.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		D4177741106CFC22005DC1C4 /* MacRuby Bundle */ = {
@@ -1546,7 +1546,7 @@
 			);
 			name = "MacRuby Bundle";
 			productName = "MacRuby Bundle";
-			productReference = D4177742106CFC22005DC1C4 /* gosu */;
+			productReference = D4177742106CFC22005DC1C4 /* gosu.for_macruby.bundle */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 		D459FF430BDCD23500E7F0D6 /* RubyGosu App */ = {
@@ -1560,7 +1560,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				D448D8DB0FF82204002FA7EE /* PBXTargetDependency */,
+				D4B7A8331182240D006767FF /* PBXTargetDependency */,
 			);
 			name = "RubyGosu App";
 			productName = "RubyGosu Template";
@@ -1597,7 +1597,7 @@
 			);
 			name = "RubyGosu Core";
 			productName = RubyGosu;
-			productReference = D4CA89500BC68B5D00A431AC /* gosu */;
+			productReference = D4CA89500BC68B5D00A431AC /* gosu.for_1_8.bundle */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 /* End PBXNativeTarget section */
@@ -2176,10 +2176,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		D448D8DB0FF82204002FA7EE /* PBXTargetDependency */ = {
+		D4B7A8331182240D006767FF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D4CA894F0BC68B5D00A431AC /* RubyGosu Core */;
-			targetProxy = D448D8DA0FF82204002FA7EE /* PBXContainerItemProxy */;
+			targetProxy = D4B7A8321182240D006767FF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

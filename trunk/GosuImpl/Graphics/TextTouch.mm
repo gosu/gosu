@@ -32,19 +32,25 @@ namespace
         CFTypeRef get() { return ref; }
     };
 
-    map<pair<wstring, double>, OSXFont*> usedFonts;
     OSXFont* getFont(const wstring& fontName, double height)
     {
+        static map<pair<wstring, double>, OSXFont*> usedFonts;
+
         OSXFont* result = usedFonts[make_pair(fontName, height)];
         if (!result)
         {
         #ifndef GOSU_IS_IPHONE
             if (fontName.find(L"/") == std::wstring::npos)
             {
-        #endif
+        #endif                
                 // System font
                 Gosu::ObjRef<NSString> name([[NSString alloc] initWithUTF8String: Gosu::wstringToUTF8(fontName).c_str()]);
-                result = [[OSXFont fontWithName: name.obj() size: height] retain];
+                //result = [[OSXFont fontWithName: name.obj() size: height] retain];
+                NSFontDescriptor* desc = [[[NSFontDescriptor alloc] initWithFontAttributes:nil] fontDescriptorWithFamily:name.obj()];
+                result = [[NSFont fontWithDescriptor:desc size:height] retain];
+                if (!result && fontName != Gosu::defaultFontName())
+                    result = getFont(Gosu::defaultFontName(), height);
+                usedFonts[make_pair(fontName, height)] = result;
         #ifndef GOSU_IS_IPHONE
             }
             else
@@ -55,31 +61,36 @@ namespace
                         reinterpret_cast<const UInt8*>(fontName.c_str()),
                         fontName.length() * sizeof(wchar_t),
                         kCFStringEncodingUTF32LE, NO));
-
                 CFScope<CFURLRef> url(
                     CFURLCreateWithFileSystemPath(NULL, urlString.get(),
                         kCFURLPOSIXPathStyle, YES));
+                if (!url.get())
+                {
+                    result = getFont(Gosu::defaultFontName(), height);
+                    usedFonts[make_pair(fontName, height)] = result;
+                }
                 
                 CFScope<CFArrayRef> array(
                     CTFontManagerCreateFontDescriptorsFromURL(url.get()));
-                
-                if (array.get() == NULL || CFArrayGetCount(array.get()) < 1)
+
+                if (array.get() == NULL || CFArrayGetCount(array.get()) < 1 ||
+                    !CTFontManagerRegisterFontsForURL(url.get(),
+                            kCTFontManagerScopeProcess, NULL))
+                {
                     result = getFont(Gosu::defaultFontName(), height);
+                    usedFonts[make_pair(fontName, height)] = result;
+                }
                 else
                 {
                     CTFontDescriptorRef ref =
                         (CTFontDescriptorRef)CFArrayGetValueAtIndex(array.get(), 0);
-                    CFScope<CFStringRef> fontName(
-                        (CFStringRef)CTFontDescriptorCopyAttribute(ref, kCTFontNameAttribute));
-                    if (CTFontManagerRegisterFontsForURL(url.get(),
-                        kCTFontManagerScopeProcess, NULL))
-                    {
-                        const char* utf8FontName =
-                            CFStringGetCStringPtr(fontName.get(), kCFStringEncodingUTF8);
-                        result = getFont(Gosu::utf8ToWstring(utf8FontName), height);
-                    }
-                    else
-                        result = getFont(Gosu::defaultFontName(), height);
+                    CFScope<CFStringRef> fontNameStr(
+                        (CFStringRef)CTFontDescriptorCopyAttribute(ref, kCTFontFamilyNameAttribute));
+                    
+                    const char* utf8FontName =
+                        [(NSString*)fontNameStr.get() cStringUsingEncoding: NSUTF8StringEncoding];
+                    result = getFont(Gosu::utf8ToWstring(utf8FontName), height);
+                    usedFonts[make_pair(fontName, height)] = result;
                 }
             }
         #endif
