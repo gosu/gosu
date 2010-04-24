@@ -2853,7 +2853,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_gosu_to_radian_scale(int argc, VALUE *argv, VALUE self) {
+_wrap_degrees_to_radians(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
   double val1 ;
   int ecode1 = 0 ;
@@ -2865,12 +2865,12 @@ _wrap_gosu_to_radian_scale(int argc, VALUE *argv, VALUE self) {
   }
   ecode1 = SWIG_AsVal_double(argv[0], &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "double","Gosu::gosuToRadianScale", 1, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "double","Gosu::degreesToRadians", 1, argv[0] ));
   } 
   arg1 = static_cast< double >(val1);
   {
     try {
-      result = (double)Gosu::gosuToRadianScale(arg1);
+      result = (double)Gosu::degreesToRadians(arg1);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -2883,7 +2883,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_radians_scale_to_gosu(int argc, VALUE *argv, VALUE self) {
+_wrap_radians_to_degrees(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
   double val1 ;
   int ecode1 = 0 ;
@@ -2895,12 +2895,12 @@ _wrap_radians_scale_to_gosu(int argc, VALUE *argv, VALUE self) {
   }
   ecode1 = SWIG_AsVal_double(argv[0], &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "double","Gosu::radiansScaleToGosu", 1, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "double","Gosu::radiansToDegrees", 1, argv[0] ));
   } 
   arg1 = static_cast< double >(val1);
   {
     try {
-      result = (double)Gosu::radiansScaleToGosu(arg1);
+      result = (double)Gosu::radiansToDegrees(arg1);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -9283,8 +9283,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.18"));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
-  rb_define_module_function(mGosu, "gosu_to_radian_scale", VALUEFUNC(_wrap_gosu_to_radian_scale), -1);
-  rb_define_module_function(mGosu, "radians_scale_to_gosu", VALUEFUNC(_wrap_radians_scale_to_gosu), -1);
+  rb_define_module_function(mGosu, "degrees_to_radians", VALUEFUNC(_wrap_degrees_to_radians), -1);
+  rb_define_module_function(mGosu, "radians_to_degrees", VALUEFUNC(_wrap_radians_to_degrees), -1);
   rb_define_module_function(mGosu, "offset_x", VALUEFUNC(_wrap_offset_x), -1);
   rb_define_module_function(mGosu, "offset_y", VALUEFUNC(_wrap_offset_y), -1);
   rb_define_module_function(mGosu, "angle", VALUEFUNC(_wrap_angle), -1);
