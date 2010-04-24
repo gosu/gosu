@@ -1,9 +1,9 @@
 # Extend Numeric with simple angle conversion methods.
 class ::Numeric
-  def gosu_to_radian_scale
+  def degrees_to_radians
     self * Math::PI / 180.0
   end
-  def radian_scale_to_gosu
+  def radians_to_degrees
     self * 180.0 / Math::PI
   end
   def gosu_to_radians

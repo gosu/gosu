@@ -29,26 +29,28 @@ namespace Gosu
     //! Uses std::rand, so you should call std::srand before using it.
     double random(double min, double max);
     
-    //! Translates between Gosu's angle system and radians.
+    //! Translates between Gosu's angle system (where 0¡ is at the top)
+    //! and radians (where 0 is at the right).
     inline double gosuToRadians(double angle)
     {
         return (angle - 90) * pi / 180;
     }
-    //! Translates between Gosu's angle system and radians.
+    //! Translates between Gosu's angle system (where 0¡ is at the top)
+    //! and radians (where 0 is at the right).
     inline double radiansToGosu(double angle)
     {
         return angle * 180 / pi + 90;
     }
 
-    //! Translates between Gosu's angle scaling and radians, i.e. it
+    //! Translates between degrees (used by Gosu) and radians, i.e. it
     //! does not change the 'origin' of the angle system.
-    inline double gosuToRadianScale(double angle)
+    inline double degreesToRadians(double angle)
     {
         return angle * pi / 180;
     }
-    //! Translates between Gosu's angle scaling and radians, i.e. it
+    //! Translates between degrees (used by Gosu) and radians, i.e. it
     //! does not change the 'origin' of the angle system.
-    inline double radiansScaleToGosu(double angle)
+    inline double radiansToDegrees(double angle)
     {
         return angle * 180 / pi;
     }

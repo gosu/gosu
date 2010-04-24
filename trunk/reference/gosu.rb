@@ -478,9 +478,19 @@ end
 # Small additions to Numeric to make it easier to integrate Gosu with
 # libraries that use radians, like Chipmunk.
 class ::Numeric
-  # Returns <tt>self * 180.0 / Math::PI + 90</tt>
+  # Returns <tt>self * 180.0 / Math::PI + 90</tt>.
+  # Translates between Gosu's angle system (where 0° is at the top) and
+  # radians (where 0 is at the right).
   def radians_to_gosu(); end
 
   # Returns <tt>(self - 90) * Math::PI / 180.0</tt>
+  # Translates between Gosu's angle system (where 0° is at the top) and
+  # radians (where 0 is at the right).
   def gosu_to_radians(); end
+  
+  # Scales a degree value to radians.
+  def degrees_to_radians(); end
+  
+  # Scales a radian value to degrees.
+  def radians_to_degrees(); end
 end

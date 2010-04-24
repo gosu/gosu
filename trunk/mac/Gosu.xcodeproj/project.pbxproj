@@ -593,7 +593,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D4CA894F0BC68B5D00A431AC /* RubyGosu Core */;
+			remoteGlobalIDString = D4CA894F0BC68B5D00A431AC;
 			remoteInfo = "RubyGosu Core";
 		};
 /* End PBXContainerItemProxy section */
