@@ -161,7 +161,7 @@
 // For Ruby-only MAX_TEXTURE_SIZE
 #include <Gosu/../GosuImpl/Graphics/Texture.hpp>
 namespace Gosu {
-    unsigned enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
+    void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
     unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
 }
 
@@ -286,7 +286,7 @@ namespace Gosu
 //%constant unsigned MAX_TEXTURE_SIZE = Gosu::Texture::maxTextureSize();
 
 namespace Gosu {
-    unsigned enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
+    void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
     unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
 }
 

@@ -2232,7 +2232,7 @@ static VALUE mGosu;
 // For Ruby-only MAX_TEXTURE_SIZE
 #include <Gosu/../GosuImpl/Graphics/Texture.hpp>
 namespace Gosu {
-    unsigned enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
+    void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
     unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
 }
 
@@ -3244,21 +3244,17 @@ fail:
 
 SWIGINTERN VALUE
 _wrap_enable_undocumented_retrofication(int argc, VALUE *argv, VALUE self) {
-  unsigned int result;
-  VALUE vresult = Qnil;
-  
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
   {
     try {
-      result = (unsigned int)Gosu::enableUndocumentedRetrofication();
+      Gosu::enableUndocumentedRetrofication();
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
-  return vresult;
+  return Qnil;
 fail:
   return Qnil;
 }
