@@ -4,11 +4,9 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-04-24)
+(Last update: 2010-04-25)
 
 == Gosu 0.7.x ==
-  * Test compiling on Linux
-  * Publish new version
   * Regenerate docs (for multiply and the degrees/radians stuff)
   * Test RNADALE.rb with newest Ruby 1.9
   * Look into rvm linker problems
