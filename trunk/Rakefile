@@ -29,7 +29,6 @@ GOSU_VERSION = ENV['GOSU_RELEASE_VERSION'] || '0.0.0'
 
 # Sets everything except 'platform' and 'files'.
 def apply_gemspec_defaults s
-  #### Basic information.
   s.name = 'gosu'
   s.version = GOSU_VERSION
   s.summary = '2D game development library.'

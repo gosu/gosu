@@ -9,7 +9,6 @@ namespace :mac do
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Core' -configuration 'Release'"
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Core' -configuration 'Release with 1.9'"
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu App' -configuration 'Release with 1.9'"
-    # TODO: MacRuby
   end
 
   MAC_ARCHIVE_FILENAME = "public/gosu-mac-#{GOSU_VERSION}.tar.gz"
@@ -42,7 +41,6 @@ namespace :mac do
     apply_gemspec_defaults s
     s.platform = 'universal-darwin'
     s.files = COMMON_RUBY_FILES + FileList['lib/gosu.*.bundle']
-      # TODO: 'lib/hotgosu.rb', 'lib/hotgosu/**/*', 
   end
   Rake::GemPackageTask.new(MAC_SPEC) { |t| t.package_dir = 'public/mac_gem' }
   
