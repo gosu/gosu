@@ -4,9 +4,11 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-04-26)
+(Last update: 2010-04-28)
 
 == Gosu 0.7.x ==
+  * Find out how to change Ruby's lib-dir when installing (for RubyGosu App)
+  * Change RubyGosu App to use script-built libraries/headers
   * Fix: angle_diff(463, 103)
   * Put ruby-opengl in 1.9 bundle if possible
   * Add Window#width, #height, #fullscreen?
