@@ -2274,7 +2274,8 @@ namespace Gosu
         // Try to treat as filename first.
         if (rb_respond_to(val, rb_intern("to_str")))
         {
-            const char* filename = STR2CSTR(rb_funcall(val, rb_intern("to_str"), 0));
+            VALUE to_str = rb_funcall(val, rb_intern("to_str"), 0);
+            const char* filename = StringValuePtr(to_str);
             return quickLoadBitmap(Gosu::utf8ToWstring(filename));
         }
 
