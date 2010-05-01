@@ -1,9 +1,7 @@
 require 'rubygems'
-require 'appscript'
 require 'ftools'
 require 'date'
 require 'rake/gempackagetask'
-require 'rake/rdoctask'
 
 COMMON_FILES = FileList[
   'COPYING.txt',

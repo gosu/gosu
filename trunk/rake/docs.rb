@@ -1,3 +1,5 @@
+require 'rake/rdoctask'
+
 desc "Clean rdoc directory so all HTML will definitely be refreshed"
 task :clean_rdoc do
   sh "rm -rf reference/rdoc/*"

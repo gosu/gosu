@@ -1,3 +1,5 @@
+require 'appscript'
+
 if ENV['USER'] == 'jlnr' then
   desc "Publish OmniFocus tasks in ToDo Wiki page"
   task :todo do
