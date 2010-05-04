@@ -4,12 +4,13 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-05-02)
+(Last update: 2010-05-04)
 
 == Gosu 0.7.x ==
   * Add include paths to 1.9 gosu.bundle
   * Add RubyGosu Core dependency to RubyGosu App (for SWIG rebuild)
   * Try RubyGosu App with some smallish game
+  * Let @jeedee know about progress
   * Release new RubyGosu App.app
   * Fix: angle_diff(463, 103)
   * Put ruby-opengl in 1.9 bundle if possible
