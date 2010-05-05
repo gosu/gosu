@@ -1,8 +1,22 @@
-RUBY_DYLIB      = "libruby.1.9.1.dylib"
-TARGET_ROOT     = "mac/Ruby"
-SOURCE_ROOT     = "#{TARGET_ROOT}/source"
-ALL_PLATFORMS   = [:ppc, :i386, :x86_64]
-STDLIB_KILLLIST = %w(README irb rake* racc rdoc* *ubygems* cgi* readline* tkutil* tcltklib* rss*)
+RVM_RUBY         = "ruby-1.9.2-preview1"
+INTERNAL_VERSION = "1.9.1"
+RUBY_DYLIB       = "libruby.#{INTERNAL_VERSION}.dylib"
+TARGET_ROOT      = "mac/Ruby"
+SOURCE_ROOT      = "#{ENV['USER']}/.rvm/rubies/#{RVM_RUBY}"
+GEM_ROOT         = "#{ENV['USER']}/.rvm/gems/#{RVM_RUBY}/gems"
+ALL_PLATFORMS    = [:ppc, :i386, :x86_64]
+STDLIB_KILLLIST  = %w(README irb rake* racc rdoc* *ubygems* cgi* readline* tkutil* tcltklib* rss*)
+GEMS             = %w(chipmunk ruby-opengl eventmachine iobuffer rev)
+CFLAGS           = {
+  :ppc    => %('-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4 -I/Developer/SDKs/MacOSX10.4u.sdk/usr/lib/gcc/powerpc-apple-darwin10/4.0.1/include'),
+  :i386   => %('-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4 -I/Developer/SDKs/MacOSX10.4u.sdk/usr/lib/gcc/i686-apple-darwin10/4.0.1/include'),
+  :x86_64 => %('-isysroot /Developer/SDKs/MacOSX10.6.sdk  -mmacosx-version-min=10.6'),
+}
+BUILD            = {
+  :ppc    => %(powerpc-apple-darwin8.0),
+  :i386   => %(i686-apple-darwin8.0),
+  :x86_64 => %(x86_64-apple-darwin10.0),
+}
 
 def merge_lib source_file, target_file
   if File.exist? target_file then
@@ -15,47 +29,61 @@ end
 namespace :ruby19 do
   ALL_PLATFORMS.each do |platform|
     task platform.to_sym do
-      # Compile Ruby and libruby
-      sh "bash #{TARGET_ROOT}/#{platform}.sh"
+      # Let RVM install the correct Ruby
+      sh "env RVM_RUBY=#{RVM_RUBY} RVM_ARCH=#{platform} " +
+         "    RVM_BUILD=#{BUILD[platform]} RVM_CFLAGS=#{CFLAGS[platform]} " +
+         "    bash #{TARGET_ROOT}/install_rvm_ruby.sh"
       
-      # Copy platform specific config.h
-      sh "mkdir -p #{TARGET_ROOT}/include/#{platform}/ruby"
-      sh "cp #{TARGET_ROOT}/#{platform}/.ext/include/*/ruby/*.h #{TARGET_ROOT}/include/#{platform}/ruby/"
+      # Copy headers
+      sh "cp #{SOURCE_ROOT}/include/ruby*/* #{TARGET_ROOT}/include/"
+      # Rename platform-specific folder so Xcode will find it
+      sh "mv #{TARGET_ROOT}/include/*darwin* #{TARGET_ROOT}/include/#{platform}"
+      
+      # Copy Ruby libraries
+      sh "cp #{SOURCE_ROOT}/lib/ruby/#{INTERNAL_VERSION}/* #{TARGET_ROOT}/lib"
+      STDLIB_KILLLIST.each do |item|
+        sh "rm -rf #{TARGET_ROOT}/lib/#{item}"
+      end
       
       # Merge libruby with existing platforms
-      source_file = "#{TARGET_ROOT}/#{platform}/#{RUBY_DYLIB}"
+      # (Yes, this will bork the installation in rvm)
+      source_file = "#{SOURCE_ROOT}/lib/#{RUBY_DYLIB}"
       target_file = "#{TARGET_ROOT}/#{RUBY_DYLIB}"
+      sh "install_name_tool -id @executable_path/../Frameworks/#{RUBY_DYLIB} #{source_file}"
       merge_lib source_file, target_file
       
-      # Copy binary libraries
-      Dir["#{TARGET_ROOT}/#{platform}/.ext/*darwin*/*.bundle"].each do |source_file|
+      # Merge binary libraries
+      Dir["#{SOURCE_ROOT}/lib/ruby/*darwin*/*.bundle"].each do |source_file|
         target_file = "#{TARGET_ROOT}/lib/#{File.basename(source_file)}"
         merge_lib source_file, target_file
+      end
+      
+      # Merge gems
+      GEMS.each do |gem_name|
+        gem_lib = Dir["#{GEM_ROOT}/#{gem_name}-*/lib"].first
+        Dir["#{gem_lib}/**/*.rb"].each do |ruby_file|
+          target_file = ruby_file.dup
+          target_file[gem_lib] = "#{TARGET_ROOT}/lib"
+          sh "mkdir -p #{File.dirname(target_filename)}"
+          sh "cp #{ruby_file} #{target_file}"
+        end
+
+        Dir["#{gem_lib}/**/*.bundle"].each do |ext_file|
+          target_file = ext_file.dup
+          target_file[gem_lib] = "#{TARGET_ROOT}/lib"
+          sh "mkdir -p #{File.dirname(target_filename)}"
+          merge_lib ruby_file, target_file
+        end
       end
     end
   end
   
-  task :copy_headers do
-    sh "cp -R #{SOURCE_ROOT}/include #{TARGET_ROOT}"
-  end
-  
-  task :copy_stdlib do
-    sh "mkdir -p #{TARGET_ROOT}/lib"
-    sh "cp -R #{SOURCE_ROOT}/lib/* #{TARGET_ROOT}/lib/"
-    STDLIB_KILLLIST.each do |item|
-      sh "rm -rf #{TARGET_ROOT}/lib/#{item}"
-    end
-  end
-  
-  task :build => [:cleanup, :copy_headers] + ALL_PLATFORMS do
+  task :build => [:clean] + ALL_PLATFORMS do
     # yessir
   end
   
-  task :cleanup do
+  task :clean do
     sh "rm -rf #{TARGET_ROOT}/lib/*"
     sh "rm -rf #{TARGET_ROOT}/include/*"
-    ALL_PLATFORMS.each do |platform|
-      sh "rm -rf #{TARGET_ROOT}/#{platform}"
-    end
   end
 end
