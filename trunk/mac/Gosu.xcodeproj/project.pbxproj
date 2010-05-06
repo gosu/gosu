@@ -479,7 +479,7 @@
 		D459FF460BDCD23600E7F0D6 /* RubyGosu App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RubyGosu App-Info.plist"; sourceTree = "<group>"; };
 		D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Gosu.icns; sourceTree = "<group>"; };
 		D459FFAD0BDCE41300E7F0D6 /* Gosu-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "Gosu-Info.plist"; sourceTree = "<group>"; };
-		D4698E6D118C709D00FF24EF /* libruby.1.9.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libruby.1.9.1.dylib; path = Ruby/lib/libruby.1.9.1.dylib; sourceTree = "<group>"; };
+		D4698E6D118C709D00FF24EF /* libruby.1.9.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libruby.1.9.1.dylib; path = Ruby/libruby.1.9.1.dylib; sourceTree = "<group>"; };
 		D4698ED8118D5B1C00FF24EF /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lib; path = Ruby/lib; sourceTree = "<group>"; };
 		D46C2F8D0FAE39FD00A33476 /* Main.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = Main.rb; sourceTree = "<group>"; };
 		D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RubyGosu_wrap.cxx; path = ../GosuImpl/RubyGosu_wrap.cxx; sourceTree = SOURCE_ROOT; };

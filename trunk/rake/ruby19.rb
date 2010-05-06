@@ -1,6 +1,7 @@
 RVM_RUBY         = "ruby-1.9.2-preview1"
 INTERNAL_VERSION = "1.9.1"
 RUBY_DYLIB       = "libruby.#{INTERNAL_VERSION}.dylib"
+RUBY_DYLIB_ID    = "@executable_path/../Frameworks/#{RUBY_DYLIB}"
 TARGET_ROOT      = "mac/Ruby"
 SOURCE_ROOT      = "#{ENV['HOME']}/.rvm/rubies/#{RVM_RUBY}"
 GEM_ROOT         = "#{ENV['HOME']}/.rvm/gems/#{RVM_RUBY}/gems"
@@ -19,6 +20,7 @@ BUILD            = {
 }
 
 def merge_lib source_file, target_file
+  sh "install_name_tool -change #{SOURCE_ROOT}/lib/#{RUBY_DYLIB} #{RUBY_DYLIB_ID} #{source_file}"
   if File.exist? target_file then
     sh "lipo #{source_file} #{target_file} -create -output #{target_file}"
   else
@@ -45,7 +47,7 @@ namespace :ruby19 do
       # (Yes, this will bork the installation in rvm)
       source_file = "#{SOURCE_ROOT}/lib/#{RUBY_DYLIB}"
       target_file = "#{TARGET_ROOT}/#{RUBY_DYLIB}"
-      sh "install_name_tool -id @executable_path/../Frameworks/#{RUBY_DYLIB} #{source_file}"
+      sh "install_name_tool -id RUBY_DYLIB_ID #{source_file}"
       merge_lib source_file, target_file
       
       # Merge binary libraries
