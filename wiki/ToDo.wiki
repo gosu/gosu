@@ -4,13 +4,11 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-05-04)
+(Last update: 2010-05-06)
 
 == Gosu 0.7.x ==
-  * Add include paths to 1.9 gosu.bundle
   * Add RubyGosu Core dependency to RubyGosu App (for SWIG rebuild)
   * Try RubyGosu App with some smallish game
-  * Let @jeedee know about progress
   * Release new RubyGosu App.app
   * Fix: angle_diff(463, 103)
   * Put ruby-opengl in 1.9 bundle if possible
@@ -31,6 +29,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Update to newer Ruby 1.9 version in RubyGosu App.app
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Test StandBy with Windows and a running Gosu app
+  * Check for 1.9.2 final and let @jeedee know about progress if existing
   * The screen size/OpenGL stuff …
     * See if John Shea's talk had something about not being locked to pixel positions
     * See if really old games have problems running in current Gosu
