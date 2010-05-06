@@ -2,11 +2,11 @@ RVM_RUBY         = "ruby-1.9.2-preview1"
 INTERNAL_VERSION = "1.9.1"
 RUBY_DYLIB       = "libruby.#{INTERNAL_VERSION}.dylib"
 TARGET_ROOT      = "mac/Ruby"
-SOURCE_ROOT      = "#{ENV['USER']}/.rvm/rubies/#{RVM_RUBY}"
-GEM_ROOT         = "#{ENV['USER']}/.rvm/gems/#{RVM_RUBY}/gems"
+SOURCE_ROOT      = "#{ENV['HOME']}/.rvm/rubies/#{RVM_RUBY}"
+GEM_ROOT         = "#{ENV['HOME']}/.rvm/gems/#{RVM_RUBY}/gems"
 ALL_PLATFORMS    = [:ppc, :i386, :x86_64]
-STDLIB_KILLLIST  = %w(README irb rake* racc rdoc* *ubygems* cgi* readline* tkutil* tcltklib* rss*)
-GEMS             = %w(chipmunk ruby-opengl eventmachine iobuffer rev)
+LIB_KILLLIST     = %w(README irb rake* racc rdoc* *ubygems* cgi* readline* tcltk* tk* tcltklib* rss* *-darwin*)
+GEMS             = []#%w(chipmunk ruby-opengl eventmachine iobuffer rev)
 CFLAGS           = {
   :ppc    => %('-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4 -I/Developer/SDKs/MacOSX10.4u.sdk/usr/lib/gcc/powerpc-apple-darwin10/4.0.1/include'),
   :i386   => %('-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4 -I/Developer/SDKs/MacOSX10.4u.sdk/usr/lib/gcc/i686-apple-darwin10/4.0.1/include'),
@@ -35,16 +35,12 @@ namespace :ruby19 do
          "    bash #{TARGET_ROOT}/install_rvm_ruby.sh"
       
       # Copy headers
-      sh "cp #{SOURCE_ROOT}/include/ruby*/* #{TARGET_ROOT}/include/"
+      sh "cp -r #{SOURCE_ROOT}/include/ruby*/* #{TARGET_ROOT}/include/"
       # Rename platform-specific folder so Xcode will find it
-      sh "mv #{TARGET_ROOT}/include/*darwin* #{TARGET_ROOT}/include/#{platform}"
+      sh "mv #{TARGET_ROOT}/include/*-darwin* #{TARGET_ROOT}/include/#{platform}"
       
       # Copy Ruby libraries
-      sh "cp #{SOURCE_ROOT}/lib/ruby/#{INTERNAL_VERSION}/* #{TARGET_ROOT}/lib"
-      STDLIB_KILLLIST.each do |item|
-        sh "rm -rf #{TARGET_ROOT}/lib/#{item}"
-      end
-      
+      sh "cp -r #{SOURCE_ROOT}/lib/ruby/#{INTERNAL_VERSION}/* #{TARGET_ROOT}/lib"
       # Merge libruby with existing platforms
       # (Yes, this will bork the installation in rvm)
       source_file = "#{SOURCE_ROOT}/lib/#{RUBY_DYLIB}"
@@ -53,7 +49,7 @@ namespace :ruby19 do
       merge_lib source_file, target_file
       
       # Merge binary libraries
-      Dir["#{SOURCE_ROOT}/lib/ruby/*darwin*/*.bundle"].each do |source_file|
+      Dir["#{SOURCE_ROOT}/lib/ruby/#{INTERNAL_VERSION}/*-darwin*/*.bundle"].each do |source_file|
         target_file = "#{TARGET_ROOT}/lib/#{File.basename(source_file)}"
         merge_lib source_file, target_file
       end
@@ -62,6 +58,7 @@ namespace :ruby19 do
       GEMS.each do |gem_name|
         gem_lib = Dir["#{GEM_ROOT}/#{gem_name}-*/lib"].first
         Dir["#{gem_lib}/**/*.rb"].each do |ruby_file|
+          puts ruby_file
           target_file = ruby_file.dup
           target_file[gem_lib] = "#{TARGET_ROOT}/lib"
           sh "mkdir -p #{File.dirname(target_filename)}"
@@ -69,11 +66,16 @@ namespace :ruby19 do
         end
 
         Dir["#{gem_lib}/**/*.bundle"].each do |ext_file|
+          puts ruby_file
           target_file = ext_file.dup
           target_file[gem_lib] = "#{TARGET_ROOT}/lib"
           sh "mkdir -p #{File.dirname(target_filename)}"
           merge_lib ruby_file, target_file
         end
+      end
+
+      LIB_KILLLIST.each do |item|
+        sh "rm -rf #{TARGET_ROOT}/lib/#{item}"
       end
     end
   end
@@ -83,6 +85,7 @@ namespace :ruby19 do
   end
   
   task :clean do
+    sh "rm -rf #{TARGET_ROOT}/#{RUBY_DYLIB}"
     sh "rm -rf #{TARGET_ROOT}/lib/*"
     sh "rm -rf #{TARGET_ROOT}/include/*"
   end
