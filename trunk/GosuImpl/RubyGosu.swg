@@ -485,6 +485,7 @@ namespace Gosu {
 %rename("mouse_x=") setMouseX;
 %rename("mouse_y=") setMouseY;
 %rename("needs_redraw?") needsRedraw;
+%rename("fullscreen?") fullscreen;
 %markfunc Gosu::Window "markWindow";
 %include "../Gosu/Window.hpp"
 
@@ -563,6 +564,10 @@ namespace Gosu {
 	int height() const {
 		return $self->graphics().height();
 	}
+    bool fullscreen() const {
+        return $self->graphics().fullscreen();
+    }
+    
     void gl() {
         $self->graphics().beginGL();
         rb_yield(Qnil);
