@@ -10,7 +10,7 @@ Rake::RDocTask.new do |rd|
   rd.rdoc_dir = "reference/rdoc"
   rd.rdoc_files.include("reference/gosu.rb", "README.txt", "COPYING.txt", *Dir["reference/*.rdoc"])
   rd.title = "RubyGosu rdoc Reference"
-  rd.template = "#{File.dirname(__FILE__)}/reference/rdoc-template/lib/allison"
+  rd.template = "reference/rdoc-template/lib/allison"
 end
 
 desc "Build Ruby reference with rdoc"

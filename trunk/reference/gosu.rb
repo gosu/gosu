@@ -369,6 +369,7 @@ module Gosu
     attr_accessor :mouse_y
     attr_accessor :text_input
     attr_reader :width, :height
+    attr_reader :fullscreen?
     attr_reader :update_interval
     
     # update_interval:: Interval in milliseconds between two calls
