@@ -1807,7 +1807,8 @@
 				MACH_O_TYPE = mh_bundle;
 				OTHER_LDFLAGS = (
 					"-F..",
-					"-lruby.1.9.1",
+					"-flat_namespace",
+					"-weak-lruby.1.9.1",
 					"-liconv",
 				);
 				PREBINDING = NO;
