@@ -4,15 +4,9 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-05-06)
+(Last update: 2010-05-07)
 
 == Gosu 0.7.x ==
-  * Add RubyGosu Core dependency to RubyGosu App (for SWIG rebuild)
-  * Try RubyGosu App with some smallish game
-  * Release new RubyGosu App.app
-  * Fix: angle_diff(463, 103)
-  * Put ruby-opengl in 1.9 bundle if possible
-  * Add Window#width, #height, #fullscreen?
   * Put multiply in changes
   * Regenerate docs (for multiply and the degrees/radians stuff)
   * Test RNADALE.rb with newest Ruby 1.9
@@ -25,8 +19,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make Window arguments optional for Graphics, but throw exceptions when in wrong order
   * Throw an exception when using multiple Windows
   * Check out SDL_ttf as custom TTF alternative
-  * Gosu: compile x86_64 with gcc 4.2 on OS X
-  * Update to newer Ruby 1.9 version in RubyGosu App.app
+  * Verify vality of this task: "Gosu: compile x86_64 with gcc 4.2 on OS X"
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Test StandBy with Windows and a running Gosu app
   * Check for 1.9.2 final and let @jeedee know about progress if existing
@@ -122,9 +115,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * More alpha modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
   * Document Gosu::interpolate, improve it too?
   * Experiment: resizing the window possible?
-  * Introduce 0.8 syntax
-    * Make sure Images can live without a Window (context!)
-    * Add Image::Image *and set hardBorders to true on default*
   * Think: Possible to have beautiful quotation mark indenting?@Gosu Text
   * See if other libraries catch the release of the 'A' key in cmd+a
   * If there ever is functionality to 'and' and 'or' Gosu::Button, how would one check in buttonDown?
