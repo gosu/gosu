@@ -47,7 +47,7 @@ namespace :ruby19 do
       # (Yes, this will bork the installation in rvm)
       source_file = "#{SOURCE_ROOT}/lib/#{RUBY_DYLIB}"
       target_file = "#{TARGET_ROOT}/#{RUBY_DYLIB}"
-      sh "install_name_tool -id RUBY_DYLIB_ID #{source_file}"
+      sh "install_name_tool -id #{RUBY_DYLIB_ID} #{source_file}"
       merge_lib source_file, target_file
       
       # Merge binary libraries

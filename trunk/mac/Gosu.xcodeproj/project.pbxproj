@@ -386,6 +386,16 @@
 		D4F4C2950FC5A17A0013CE21 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025D0F706A0100407E60 /* OpenAL.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		D4F0C5771193EB9C0032C0D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D4CA894F0BC68B5D00A431AC /* RubyGosu Core */;
+			remoteInfo = "RubyGosu Core";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		D4698E6C118C709400FF24EF /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -1043,6 +1053,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				D4F0C5781193EB9C0032C0D5 /* PBXTargetDependency */,
 			);
 			name = "RubyGosu App";
 			productName = "RubyGosu Template";
@@ -1480,6 +1491,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D4F0C5781193EB9C0032C0D5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D4CA894F0BC68B5D00A431AC /* RubyGosu Core */;
+			targetProxy = D4F0C5771193EB9C0032C0D5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D410EB6C0A801CDC005C7067 /* InfoPlist.strings */ = {
