@@ -12,9 +12,22 @@ puts 'See the following site for a list:'
 puts 'http://code.google.com/p/gosu/wiki/GettingStartedOnLinux'
 puts
 
+SOURCE_FILES =
+    %w(Math.cpp Utility.cpp IO.cpp FileUnix.cpp InputX.cpp TextInputX.cpp TimingUnix.cpp WindowX.cpp
+	     Graphics/Bitmap.cpp Graphics/BitmapUtils.cpp Graphics/Color.cpp
+	     Graphics/TexChunk.cpp Graphics/Graphics.cpp Graphics/Image.cpp
+	     Graphics/RotFlip.cpp Graphics/BlockAllocator.cpp
+	     Graphics/Texture.cpp Graphics/LargeImageData.cpp
+	     Graphics/BitmapPNG.cpp Graphics/Font.cpp Graphics/BitmapBMP.cpp
+	     Graphics/TextPangoFT.cpp Graphics/Text.cpp
+	     Graphics/BitmapColorKey.cpp DirectoriesUnix.cpp
+	     Audio/AudioSDL.cpp RubyGosu_wrap.cxx)
+
 require 'mkmf'
 
-dir_config("gosu")
+# Copy all relevant C++ files into the current directory (rofl)
+
+SOURCE_FILES.each { |file| `cp ../GosuImpl/#{file} #{File.basename(file)}` }
 
 create_makefile("gosu")
 
