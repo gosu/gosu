@@ -1,6 +1,5 @@
 namespace :linux do
   LINUX_FILES = COMMON_CPP_FILES + COMMON_RUBY_FILES + FileList[
-    'Rakefile',
     'Gosu/**/*', 'GosuImpl/**/*',
     'linux/configure', 'linux/configure.ac', 'linux/Makefile.in'
   ]
@@ -16,7 +15,7 @@ namespace :linux do
 
   desc "Releases the archive #{LINUX_ARCHIVE_FILENAME} on GoogleCode"
   task :release => :archive do
-    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} source package for Linux (primarily for C++)\"" +
+    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} source package for Linux (C++)\"" +
        " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-All\" #{LINUX_ARCHIVE_FILENAME}"
   end
   
@@ -25,7 +24,7 @@ namespace :linux do
   LINUX_SPEC = Gem::Specification.new do |s|
     apply_gemspec_defaults s
     s.platform = 'ruby'
-    s.files = LINUX_FILES + [ 'linux/extconf.rb' ]
+    s.files = COMMON_RUBY_FILES + FileList[ 'Gosu/**/*', 'GosuImpl/**/*', 'linux/extconf.rb' ]
     s.extensions = [ 'linux/extconf.rb' ]
     s.require_path = 'lib'
     s.requirements = ['g++',
@@ -42,9 +41,9 @@ namespace :linux do
                       "\n)"]
   end
   
-  Rake::GemPackageTask.new(LINUX_SPEC) { |t| t.package_dir = 'public/linux_gem' }
+  Rake::GemPackageTask.new(LINUX_SPEC) { |t| t.package_dir = 'public' }
 
   task :release_gem => :gem do
-    sh "gem push public/linux_gem/gosu-#{GOSU_VERSION}.gem"
+    sh "gem push public/gosu-#{GOSU_VERSION}.gem"
   end
 end
