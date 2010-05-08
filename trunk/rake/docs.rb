@@ -15,8 +15,6 @@ end
 
 desc "Build Ruby reference with rdoc"
 task :ruby_docs => [:clean_rdoc, :rdoc] do
-  # Make sure that there are no blatant syntax errors in gosu.rb
-  sh "ruby reference/gosu.rb"
   # Copy the stylesheet over, wee!
   sh "cp reference/rdoc-style.css reference/rdoc/rdoc-style.css"
 end
