@@ -12,6 +12,7 @@ puts 'See the following site for a list:'
 puts 'http://code.google.com/p/gosu/wiki/GettingStartedOnLinux'
 puts
 
+# FIXME should reversely filter out files ending in Win, Mac, Touch, AL etc.
 SOURCE_FILES =
     %w(Math.cpp Utility.cpp IO.cpp FileUnix.cpp InputX.cpp TextInputX.cpp TimingUnix.cpp WindowX.cpp
 	     Graphics/Bitmap.cpp Graphics/BitmapUtils.cpp Graphics/Color.cpp
@@ -25,15 +26,22 @@ SOURCE_FILES =
 
 require 'mkmf'
 
-# Copy all relevant C++ files into the current directory # FIXME & LULZ
+# Copy all relevant C++ files into the current directory
+# FIXME could be done by gem packager
 SOURCE_FILES.each { |file| `cp ../GosuImpl/#{file} #{File.basename(file)}` }
+
+# Symlink our pretty gosu.so into ../lib
+# FIXME gosu.so should just look in the right place
+`ln -s ../linux/gosu.so ../lib/gosu.custom.so`
 
 sdl_config = with_config("sdl-config", "sdl-config")
 pango_config = "pkg-config pangoft2" # FIXME should probably use with_config
 
 $INCFLAGS << " -I../ -I../GosuImpl `#{sdl_config} --cflags` `#{pango_config} --cflags`"
-$LDFLAGS << " `#{pango_config} --libs`"
-have_header('SDL_mixer.h') if have_library('SDL_mixer','Mix_OpenAudio')
+$LDFLAGS << " `#{pango_config} --libs` -lX11"
+have_header('SDL_mixer.h') if have_library('SDL_mixer', 'Mix_OpenAudio')
+have_header('gl.h') if have_library('GL', 'glMatrixMode')
+have_header('png.h') if have_library('png', 'png_sig_cmp')
 
 create_makefile("gosu")
 
