@@ -25,10 +25,15 @@ SOURCE_FILES =
 
 require 'mkmf'
 
-# Copy all relevant C++ files into the current directory (rofl)
-
+# Copy all relevant C++ files into the current directory # FIXME & LULZ
 SOURCE_FILES.each { |file| `cp ../GosuImpl/#{file} #{File.basename(file)}` }
-$INCFLAGS << ' -I../ -I../GosuImpl'
+
+sdl_config = with_config("sdl-config", "sdl-config")
+pango_config = "pkg-config pangoft2" # FIXME should probably use with_config
+
+$INCFLAGS << " -I../ -I../GosuImpl `#{sdl_config} --cflags` `#{pango_config} --cflags`"
+$LDFLAGS << " `#{pango_config} --libs`"
+have_header('SDL_mixer.h') if have_library('SDL_mixer','Mix_OpenAudio')
 
 create_makefile("gosu")
 
