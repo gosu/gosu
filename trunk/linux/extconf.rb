@@ -28,7 +28,7 @@ require 'mkmf'
 # Copy all relevant C++ files into the current directory (rofl)
 
 SOURCE_FILES.each { |file| `cp ../GosuImpl/#{file} #{File.basename(file)}` }
-$INCFLAGS << ' -I../Gosu/'
+$INCFLAGS << ' -I../'
 
 create_makefile("gosu")
 
