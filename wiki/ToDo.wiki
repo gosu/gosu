@@ -4,28 +4,25 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-05-08)
+(Last update: 2010-05-09)
 
 == Gosu 0.7.x ==
-  * Put multiply in changes
-  * Regenerate docs (for multiply and the degrees/radians stuff)
   * Test RNADALE.rb with newest Ruby 1.9
-  * Look into rvm linker problems
   * Why does this crash: Image.from_text 64-bit with attached args
   * Integrate customFont (SDL_ttf fallback)
+  * Integrate customFont into Linux make system, get rid of Ruby bloat
   * Add/finish iPad support
   * Add Numeric#clamp to Ruby
   * Make Window arguments optional for Audio, but throw exceptions when in wrong order
   * Make Window arguments optional for Graphics, but throw exceptions when in wrong order
   * Throw an exception when using multiple Windows
-  * Check out SDL_ttf as custom TTF alternative
   * Verify vality of this task: "Gosu: compile x86_64 with gcc 4.2 on OS X"
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Test StandBy with Windows and a running Gosu app
   * Check for 1.9.2 final and let @jeedee know about progress if existing
+  * See if really old games have problems running in current Gosu
   * The screen size/OpenGL stuff …
     * See if John Shea's talk had something about not being locked to pixel positions
-    * See if really old games have problems running in current Gosu
     * Make initial window black instead of garbled on OS X
     * Add support for giving font flags from Ruby
     * Screen size / fullscreen stuff
@@ -41,6 +38,11 @@ This list of tasks is exported automatically from my OmniFocus projects.
       * Test multiple screens on Windows
     * TextField with clip_to (update example)
   * Look for non-deprecated replacement for KeyTranslate and UCKeyTranslate
+  * Make Gosu fun to use on OS X
+    * Create C++ app template for Xcode
+    * Create iPhone app template for Xcode
+    * Create .pkg wrapper to install Gosu into /Developer/Gosu
+    * Massively cleanup Gosu SVN directory
   * iPhone-related stuff that should be finished soonish
     * Let resolution decide orientation
     * Integrate "fat" iPhone building from forum
@@ -54,7 +56,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * See if there is a native/fastest mixing rate on Mac/iPhone
     * Make buffers in Mac port larger and make sure that update_interval<66 always plays running Songs without jitter
     * Check Song::play() behavior on new MikMod song vs. other libs
-  * See if Shoes is still alive and try a quick prototype of Gosu working with Shoes (if that doesn't work, wxRuby)
   * Try harder to reproduce these bugs
     * Get rid of context selection error with driver set to always do FSAA (Windows)
     * OS X: Release all keys on battery notification dialog (?)
@@ -69,7 +70,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Creating a non-existent font should throw an exception on all platforms, test on which it does
     * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
     * Verify that Daniel font works properly in Font and Text
-    * Image#from_text should support maxWidth=0 => no limits on size
     * Linux: Support Unicode in title bar
     * Linux: Support other XKeySyms than Latin 1
     * Mac: Add dead keys to TextInput
@@ -83,7 +83,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Make Gosu::Color more fault-tolerant regarding its component values
     * Assure that files from doxygen task are considered for packaging
     * Compile all-in-one RMagick for Windows: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
-    * Find out why Cmd+char triggers two button_downs, but only one button_up!
     * Get rid of quad/tri/line drawing
     * Review: http://rubyforge.org/tracker/index.php?func=detail&aid=21405&group_id=375&atid=1504
     * Make sure README and LICENSE are appropriately named in the Gem
@@ -96,9 +95,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Windows build task possible? Clarify
     * Look how http://github.com/singpolyma/rubygame/tree/master gets the Debian packaging done
     * Rakefile sollte autoconf ausführen
-    * Linux: Either install gosu.so to Ruby libdir, or don't build it at all
     * Deployment-Hilfe, Rakefile, Mac
-    * Add Wiki tutorial on how to lazily link FMOD
     * Deployment-Hilfe, Rakefile, Win
     * Retry properly showing/hiding the mouse on OS X (immune to blocking main thread)
     * Make the wrapper's menu bar on OS X more complete
@@ -106,11 +103,9 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Make it easier to find the examples from the Gem
   * Re-introduce Async support
   * Make plans for an official Scene system
-  * Look at http://rubyforge.org/projects/rbplusplus
   * Look at http://freeimage.sourceforge.net/requirements.html
   * Look at http://slick.cokeandcode.com/index.php?entry=entry080426-213044
   * Experiment: resizing the window possible?
-  * Experimentation with new drawing syntax; maybe first prototype as the last version of the 0.7.x series?
   * Create concept: Allow custom OpenGL actions to be put into the Z ordering queue
   * More alpha modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
   * Document Gosu::interpolate, improve it too?
@@ -119,11 +114,10 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * See if other libraries catch the release of the 'A' key in cmd+a
   * If there ever is functionality to 'and' and 'or' Gosu::Button, how would one check in buttonDown?
   * Find out why applyColorKey smears solid image data to the lower right
-  * Add rdoc to Gosu gem
-  * Make Linux gemspec more robust wrt examples/
   * Add check for Caps Lock/Num Lock
   * KbBracketLeft and KbBracketRight for ÖÄ?
   * Make more stuff configurable like http://github.com/cout/rice/blob/98ba7098e2de5849f2e7272021340976a768456f/ruby.ac#L7-20
+  * Experimentation with new drawing syntax; maybe first prototype as the last version of the 0.7.x series?
 == Gosu CI/Usability ==
   * Document 64px minimum for reliable single-texture optimization
   * Mention Gosu's respectable age somewhere :)
@@ -133,7 +127,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Add "What now?" link list to front page
   * Emphasize difference between button_down and button_down? somewhere
   * Link YouTube videos, and maybe blog tags like http://www.cuberick.com/search/label/gosu?
-  * Change sender address of forum mailer
   * Make logo in forum clickable
   * Make logo in Rdoc clickable
   * Link ChangeLog and ToDo on front page
@@ -146,7 +139,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Deployment wiki page/rdoc: Mention Icon resource support!
   * Note that draw can be called more often than update in the main loop
   * UTF8 Support for PotD texts(?)
-  * Move from doxygen to NaturalDocs experimentally
   * Change weirdo homepage text about RMagick
   * Donate to allison's author when I'm home
   * Explain SampleInstance vs. Sample somewhere
@@ -154,7 +146,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Check if DelphiGL wiki accepts donations
   * Tutorials: Mention where to find the final source code
   * Document MAX_TEXTURE_SIZE
-  * .app'ify ippa's game after :retrofy is in
+  * .app'ify ippa's game after :retrofy is in and the wrapper can handle texplay
   * Consider libgosu.spreadshirt.com
   * Make sure that it is documented what happens to different drawing ops with same z-order
   * Update README.txt year
@@ -163,6 +155,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Ask: Why not clWhite?
   * Document alpha modes for Ruby
   * Add LD17 games to Gosu Showcase
+  * Add rdoc to Gosu gem
 == Gosu 0.8.x (preliminary) ==
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
   * Use float instead of double everywhere
