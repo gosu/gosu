@@ -3,7 +3,7 @@
 if defined? RUBY_PLATFORM and (RUBY_PLATFORM['-win32'] or RUBY_PLATFORM['win32-'] or RUBY_PLATFORM['-mingw32']) then
   puts 'This gem is not meant to be installed on Windows. If you see this message, gem made a mistake.'
   puts 'On Windows, please use:'
-  puts 'gem install gosu --platform=mswin32'
+  puts 'gem install gosu --platform=i386-mingw32'
   exit 1
 end
 
