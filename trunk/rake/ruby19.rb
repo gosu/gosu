@@ -6,7 +6,7 @@ TARGET_ROOT      = "mac/Ruby"
 SOURCE_ROOT      = "#{ENV['HOME']}/.rvm/rubies/#{RVM_RUBY}"
 GEM_ROOT         = "#{ENV['HOME']}/.rvm/gems/#{RVM_RUBY}/gems"
 ALL_PLATFORMS    = [:ppc, :i386, :x86_64]
-LIB_KILLLIST     = %w(README irb rake* racc rdoc* *ubygems* cgi* readline* tcltk* tk* tcltklib* rss* *-darwin*)
+LIB_KILLLIST     = %w(README irb rake* racc rdoc* *ubygems* readline* tcltk* tk* tcltklib* rss* *-darwin*)
 GEMS             = []#%w(chipmunk ruby-opengl eventmachine iobuffer rev)
 CFLAGS           = {
   :ppc    => %('-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4 -I/Developer/SDKs/MacOSX10.4u.sdk/usr/lib/gcc/powerpc-apple-darwin10/4.0.1/include'),
@@ -51,8 +51,12 @@ namespace :ruby19 do
       merge_lib source_file, target_file
       
       # Merge binary libraries
-      Dir["#{SOURCE_ROOT}/lib/ruby/#{INTERNAL_VERSION}/*-darwin*/*.bundle"].each do |source_file|
-        target_file = "#{TARGET_ROOT}/lib/#{File.basename(source_file)}"
+      Dir["#{SOURCE_ROOT}/lib/ruby/#{INTERNAL_VERSION}/*-darwin*/**/*.bundle"].each do |source_file|
+        target_file = source_file.dup
+        target_file["#{SOURCE_ROOT}/lib/ruby/#{INTERNAL_VERSION}/"] = ""
+        target_file[/^[^\/]*\//] = ""
+        target_file = "#{TARGET_ROOT}/lib/#{target_file}"
+        sh "mkdir -p #{File.dirname(target_file)}"
         merge_lib source_file, target_file
       end
       
@@ -63,7 +67,7 @@ namespace :ruby19 do
           puts ruby_file
           target_file = ruby_file.dup
           target_file[gem_lib] = "#{TARGET_ROOT}/lib"
-          sh "mkdir -p #{File.dirname(target_filename)}"
+          sh "mkdir -p #{File.dirname(target_file)}"
           sh "cp #{ruby_file} #{target_file}"
         end
 
@@ -71,7 +75,7 @@ namespace :ruby19 do
           puts ruby_file
           target_file = ext_file.dup
           target_file[gem_lib] = "#{TARGET_ROOT}/lib"
-          sh "mkdir -p #{File.dirname(target_filename)}"
+          sh "mkdir -p #{File.dirname(target_file)}"
           merge_lib ruby_file, target_file
         end
       end
