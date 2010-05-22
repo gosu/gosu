@@ -37,10 +37,34 @@ double Gosu::angleDiff(double from, double to)
 
 double Gosu::normalizeAngle(double angle)
 {
-    double result = std::fmod(angle, 360);
+    return wrap(angle, 0.0, 360.0);
+}
+
+int Gosu::wrap(int value, int min, int max)
+{
+    int result = (value - min) % (max - min);
     if (result < 0)
-        result += 360;
-    return result;
+        return result + max;
+    else
+        return result + min;
+}
+
+float Gosu::wrap(float value, float min, float max)
+{
+    double result = std::fmod(value - min, max - min);
+    if (result < 0)
+        return result + max;
+    else
+        return result + min;
+}
+
+double Gosu::wrap(double value, double min, double max)
+{
+    double result = std::fmod(value - min, max - min);
+    if (result < 0)
+        return result + max;
+    else
+        return result + min;
 }
 
 double Gosu::distance(double x1, double y1, double x2, double y2)

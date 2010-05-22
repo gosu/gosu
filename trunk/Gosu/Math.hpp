@@ -101,6 +101,19 @@ namespace Gosu
         return clamp(value, min, max);
     }
     
+    //! Returns (value-min) % (max-min) + min, where % always has a positive
+    //! result for max > min. The results are undefined for max <= min.
+    //! Note: This means that max is exclusive.
+    int wrap(int value, int min, int max);
+    //! Returns (value-min) % (max-min) + min, where % always has a positive
+    //! result for max > min. The results are undefined for max <= min.
+    //! Note: This means that max is exclusive.
+    float wrap(float value, float min, float max);
+    //! Returns (value-min) % (max-min) + min, where % always has a positive
+    //! result for max > min. The results are undefined for max <= min.
+    //! Note: This means that max is exclusive.
+    double wrap(double value, double min, double max);
+    
     //! Returns the square of the distance between two points.
     inline double distanceSqr(double x1, double y1, double x2, double y2)
     {

@@ -256,6 +256,9 @@ namespace Gosu
 %ignore Gosu::distanceSqr;
 %ignore Gosu::round;
 %ignore Gosu::trunc;
+%ignore Gosu::boundBy;
+%ignore Gosu::clamp;
+%ignore Gosu::wrap;
 %ignore Gosu::radiansToGosu;
 %ignore Gosu::gosuToRadians;
 %include "../Gosu/Math.hpp"
