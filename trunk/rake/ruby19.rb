@@ -56,7 +56,7 @@ namespace :ruby19 do
         target_file["#{SOURCE_ROOT}/lib/ruby/#{INTERNAL_VERSION}/"] = ""
         target_file[/^[^\/]*\//] = ""
         target_file = "#{TARGET_ROOT}/lib/#{target_file}"
-        sh "mkdir -p #{File.dirname(target_file)}"
+        mkdir_p File.dirname(target_file)
         merge_lib source_file, target_file
       end
       
@@ -67,7 +67,7 @@ namespace :ruby19 do
           puts ruby_file
           target_file = ruby_file.dup
           target_file[gem_lib] = "#{TARGET_ROOT}/lib"
-          sh "mkdir -p #{File.dirname(target_file)}"
+          mkdir_p File.dirname(target_file)
           sh "cp #{ruby_file} #{target_file}"
         end
 
@@ -75,7 +75,7 @@ namespace :ruby19 do
           puts ruby_file
           target_file = ext_file.dup
           target_file[gem_lib] = "#{TARGET_ROOT}/lib"
-          sh "mkdir -p #{File.dirname(target_file)}"
+          mkdir_p File.dirname(target_file)
           merge_lib ruby_file, target_file
         end
       end
