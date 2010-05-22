@@ -4,15 +4,14 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-05-20)
+(Last update: 2010-05-22)
 
 == Gosu 0.7.x ==
-  * Gosu::wrap(min, max, value)
   * Why does this crash: Image.from_text 64-bit with attached args
   * Integrate customFont (SDL_ttf fallback)
   * Integrate customFont into Linux make system, get rid of Ruby bloat
   * Add/finish iPad support
-  * Add Numeric#clamp to Ruby
+  * Add Numeric#clamp, Numeric#wrap to Ruby
   * See why Gosu does not work with Rubinius
   * Make Window arguments optional for Audio, but throw exceptions when in wrong order
   * Make Window arguments optional for Graphics, but throw exceptions when in wrong order
