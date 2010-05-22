@@ -34,20 +34,25 @@ namespace Gosu
 	//! Very lightweight class that identifies a button (keyboard, mouse or other device).
 	class Button
 	{
-		unsigned id;
+		unsigned id_;
 		
 	public:
 		//! For internal use.
-		explicit Button(unsigned id) : id(id) {}
+		explicit Button(unsigned id) : id_(id) {}
 		//! For internal use.
-		unsigned getId() const { return id; }
+		unsigned id() const { return id_; }
 
 		//! Default constructor; == noButton.
-		Button() : id(noButton) {}
+		Button() : id_(noButton) {}
 
 		//! Conversion from ButtonName constants.
-		Button(ButtonName name) : id(name) {}
+		Button(ButtonName name) : id_(name) {}
 	};
+    
+    bool operator<(Button lhs, Button rhs)
+    {
+        return lhs.getId() < rhs.getId();
+    }
 	
 	// Available even on non-iPhone platforms to make it easier to compile the
 	// same source for multiple platforms.
