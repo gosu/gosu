@@ -49,11 +49,6 @@ namespace Gosu
 		Button(ButtonName name) : id_(name) {}
 	};
     
-    bool operator<(Button lhs, Button rhs)
-    {
-        return lhs.getId() < rhs.getId();
-    }
-	
 	// Available even on non-iPhone platforms to make it easier to compile the
 	// same source for multiple platforms.
     
@@ -67,16 +62,20 @@ namespace Gosu
         double x, y;
     };
     typedef std::vector<Touch> Touches;
-
+    
 	//! Tests whether two Buttons identify the same physical button.
 	inline bool operator==(Button lhs, Button rhs)
 	{
-		return lhs.getId() == rhs.getId();
+		return lhs.id() == rhs.id();
 	}
 	inline bool operator!=(Button lhs, Button rhs)
 	{
 		return !(lhs == rhs);
 	}
+    inline bool operator<(Button lhs, Button rhs)
+    {
+        return lhs.id() < rhs.id();
+    }
 	
     //! Manages initialization and shutdown of the input system. Only one Input
 	//! instance can exist per application.

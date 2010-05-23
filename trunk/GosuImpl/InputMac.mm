@@ -606,8 +606,8 @@ bool Gosu::Input::feedNSEvent(void* event)
 
 wchar_t Gosu::Input::idToChar(Button btn)
 {
-    if (btn.getId() < numScancodes)
-        return idChars[btn.getId()];
+    if (btn.id() < numScancodes)
+        return idChars[btn.id()];
     else
         return 0;
 }
@@ -625,7 +625,7 @@ bool Gosu::Input::down(Gosu::Button btn) const
     if (btn == noButton)
         return false;
 
-    return buttonStates.at(btn.getId());
+    return buttonStates.at(btn.id());
 }
 
 double Gosu::Input::mouseX() const
@@ -667,7 +667,7 @@ void Gosu::Input::update()
     for (unsigned i = 0; i < pimpl->queue.size(); ++i)
     {
         Impl::WaitingButton& wb = pimpl->queue[i];
-        buttonStates.at(wb.btn.getId()) = wb.down;
+        buttonStates.at(wb.btn.id()) = wb.down;
         if (wb.down && onButtonDown)
             onButtonDown(wb.btn);
         else if (!wb.down && onButtonUp)

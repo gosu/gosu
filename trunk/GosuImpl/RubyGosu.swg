@@ -61,12 +61,12 @@
         $1 = Gosu::Button(NUM2LONG($input));
 }
 %typemap(out) Gosu::Button {
-	$result = LONG2NUM($1.getId());
+	$result = LONG2NUM($1.id());
     if ($result == -1)
         $result = Qnil;
 }
 %typemap(directorin) Gosu::Button {
-	$input = LONG2NUM($1.getId());
+	$input = LONG2NUM($1.id());
     if ($input == -1)
         $input = Qnil;
 }

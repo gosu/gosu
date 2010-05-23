@@ -255,6 +255,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     if (not pimpl->context.get())
         throw std::runtime_error("Unable to create an OpenGL context with the supplied pixel format");
     
+    unsigned realWidth = width, realHeight = height;
+    
     if (fullscreen) {
         // Fullscreen: Create no window, instead change resolution.
         
@@ -276,23 +278,32 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     else
     {
         // Windowed: Create window large enough to display stuff
-        // TODO: Shrink resolution when screen too small
-        pimpl->createWindow(width, height);
+        // This is a pretty brutal heuristic I guess.
+        
+        double factor = std::min(0.9 * screenWidth() / width,
+                                 0.8 * screenHeight() / height);
+        
+        if (factor < 1)
+            realWidth *= factor, realHeight *= factor;
+        
+        pimpl->createWindow(realWidth, realHeight);
         
         // Tell context to draw on this window.
         
         [pimpl->context.obj() setView:[pimpl->window.obj() contentView]];
     }
-    
+        
     CGLEnable((CGLContextObj)[pimpl->context.obj() CGLContextObj], kCGLCEMPEngine);
     
     [pimpl->context.obj() makeCurrentContext];
     
-    pimpl->graphics.reset(new Gosu::Graphics(width, height, fullscreen));
+    pimpl->graphics.reset(new Gosu::Graphics(realWidth, realHeight, fullscreen));
+    pimpl->graphics->setResolution(width, height);
     
     pimpl->input.reset(new Input(pimpl->window.get()));
     pimpl->input->onButtonDown = boost::bind(&Window::buttonDown, this, _1);
     pimpl->input->onButtonUp = boost::bind(&Window::buttonUp, this, _1);
+    pimpl->input->setMouseFactors(1.0 * width / realWidth, 1.0 * height / realHeight);
     if (fullscreen)
         [NSApp setInput: input()];
     
