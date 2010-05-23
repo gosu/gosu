@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-05-22)
+(Last update: 2010-05-23)
 
 == Gosu 0.7.x ==
   * Why does this crash: Image.from_text 64-bit with attached args
@@ -28,7 +28,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Screen size / fullscreen stuff
       * Iterate on first category of fullscreen tests
       * Allow adjustment of the virtual touchscreen resolution
-      * Windows: Don't fail if the requested windowed resolution is too large
       * Add fullscreen accessors to make proper FS OpenGL possible
       * Add fullscreen stretching prevention
       * Re-Evaluate glfw for fixing the fullscreen mess
