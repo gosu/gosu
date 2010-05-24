@@ -53,7 +53,7 @@ bool Gosu::Input::down(Gosu::Button btn) const
         return false;
 
     // Will default to false for unknown indices (good).
-    return pimpl->keyMap[btn.getId()];
+    return pimpl->keyMap[btn.id()];
 }
 
 Gosu::Button Gosu::Input::charToId(wchar_t ch)
@@ -74,16 +74,16 @@ namespace
 wchar_t Gosu::Input::idToChar(Button btn)
 {
     // ASCII chars
-    if (btn.getId() >= 32 && btn.getId() <= 255)
-        return btn.getId();
+    if (btn.id() >= 32 && btn.id() <= 255)
+        return btn.id();
     
     // Looking at SDL source suggests that this is to be interpreted depending on the third byte.
     // Should find solid literature on that if it exists.
     // Commented out: This is pretty pointless since LATIN-1 maps to Unicode directly...
     // BUT could serve as a basis for more?!
-    //if ((btn.getId() >> 8) == 0)
+    //if ((btn.id() >> 8) == 0)
     //{
-    //    unsigned char in[] = { btn.getId() & 0xff, 0 };
+    //    unsigned char in[] = { btn.id() & 0xff, 0 };
     //    std::wstring converted = iconvert<std::wstring, UCS_4_INTERNAL, LATIN>(std::string(reinterpret_cast<char*>(in)));
     //    return converted.at(0);
     //}

@@ -383,17 +383,17 @@ Gosu::Button Gosu::Input::charToId(wchar_t ch)
 wchar_t Gosu::Input::idToChar(Gosu::Button btn)
 {
 	// Only translate keyboard ids.
-    if (btn.getId() > 255)
+    if (btn.id() > 255)
         return 0;
 
     // Special case...?
-    if (btn.getId() == kbSpace)
+    if (btn.id() == kbSpace)
         return L' ';
 
     // Try to get the key name.
     // (Three elements so too-long names will make GKNT return 3 and we'll know.)
     wchar_t buf[3];
-    if (::GetKeyNameText(btn.getId() << 16, buf, 3) == 1)
+    if (::GetKeyNameText(btn.id() << 16, buf, 3) == 1)
 		return /*std::*/towlower(buf[0]);
 
     return 0;
@@ -405,7 +405,7 @@ bool Gosu::Input::down(Button btn) const
 	if (btn == noButton)
 		return false;
 
-    return buttons.at(btn.getId());
+    return buttons.at(btn.id());
 }
 
 double Gosu::Input::mouseX() const
