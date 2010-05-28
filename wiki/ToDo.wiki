@@ -4,9 +4,10 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-05-23)
+(Last update: 2010-05-28)
 
 == Gosu 0.7.x ==
+  * Also transparently reduce resolution on Windows
   * Why does this crash: Image.from_text 64-bit with attached args
   * Integrate customFont (SDL_ttf fallback)
   * Integrate customFont into Linux make system, get rid of Ruby bloat
