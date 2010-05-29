@@ -1,3 +1,5 @@
+#define NOMINMAX // RAGE >_<
+
 #include <Gosu/Window.hpp>
 #include <Gosu/WinUtility.hpp>
 #include <Gosu/Timing.hpp>
@@ -192,13 +194,6 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     double updateInterval)
 : pimpl(new Impl)
 {
-    if (!fullscreen && (width >= screenWidth() || height >= screenHeight()))
-    {
-        MessageBox(0, L"Your desktop resolution is too small to open the requested window.",
-            L"Cannot open window", MB_OK | MB_ICONERROR);
-        throw std::invalid_argument("Desktop resolution is too small to open a window of this size");
-    }
-
     pimpl->originalWidth = width;
     pimpl->originalHeight = height;
     
@@ -250,6 +245,18 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     if (GetLastError() != 0)
         Win::throwLastError("setting the window's GWLP_USERDATA pointer");
 
+    // Windowed: Create window large enough to display stuff
+    // This is a pretty brutal heuristic I guess.
+    
+    if (!fullscreen)
+    {
+		double factor = std::min(0.9 * screenWidth() / width,
+								 0.8 * screenHeight() / height);
+	    
+		if (factor < 1)
+			width *= factor, height *= factor;
+	}
+
     // Determine the size the window needs to have.
     RECT rc = { 0, 0, width, height };
     AdjustWindowRectEx(&rc, style, FALSE, styleEx);
@@ -274,7 +281,9 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     MoveWindow(handle(), windowX, windowY, windowW, windowH, false);
 
     pimpl->graphics.reset(new Gosu::Graphics(width, height, fullscreen));
+	graphics().setResolution(pimpl->originalWidth, pimpl->originalHeight);
     pimpl->input.reset(new Gosu::Input(handle()));
+	input().setMouseFactors(1.0 * pimpl->originalWidth / width, 1.0 * pimpl->originalHeight / height);
     input().onButtonDown = boost::bind(&Window::buttonDown, this, _1);
     input().onButtonUp = boost::bind(&Window::buttonUp, this, _1);
 
