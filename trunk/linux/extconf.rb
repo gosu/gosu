@@ -20,10 +20,10 @@ SOURCE_FILES =
 	     Graphics/RotFlip.cpp Graphics/BlockAllocator.cpp
 	     Graphics/Texture.cpp Graphics/LargeImageData.cpp
 	     Graphics/BitmapPNG.cpp Graphics/Font.cpp Graphics/BitmapBMP.cpp
-	     Graphics/TextPangoFT.cpp Graphics/Text.cpp
+	     Graphics/TextUnix.cpp Graphics/Text.cpp
 	     Graphics/BitmapColorKey.cpp DirectoriesUnix.cpp
 	     Audio/AudioSDL.cpp RubyGosu_wrap.cxx)
-
+Mix_OpenAudio
 require 'mkmf'
 
 # Copy all relevant C++ files into the current directory
@@ -31,7 +31,7 @@ require 'mkmf'
 SOURCE_FILES.each { |file| `cp ../GosuImpl/#{file} #{File.basename(file)}` }
 
 # Symlink our pretty gosu.so into ../lib
-# FIXME gosu.so should just look in the right place
+# FIXME gosu.rb should just look in the right place
 `ln -s ../linux/gosu.so ../lib/gosu.custom.so`
 
 sdl_config = with_config("sdl-config", "sdl-config")
@@ -40,6 +40,7 @@ pango_config = "pkg-config pangoft2" # FIXME should probably use with_config
 $INCFLAGS << " -I../ -I../GosuImpl `#{sdl_config} --cflags` `#{pango_config} --cflags`"
 $LDFLAGS << " `#{pango_config} --libs` -lX11"
 have_header('SDL_mixer.h') if have_library('SDL_mixer', 'Mix_OpenAudio')
+have_header('SDL_ttf.h') if have_library('SDL_ttf', 'TTF_RenderUTF8_Blended')
 have_header('gl.h') if have_library('GL', 'glMatrixMode')
 have_header('png.h') if have_library('png', 'png_sig_cmp')
 
