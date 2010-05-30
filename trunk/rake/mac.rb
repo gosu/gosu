@@ -42,9 +42,9 @@ namespace :mac do
     s.platform = 'universal-darwin'
     s.files = COMMON_RUBY_FILES + FileList['lib/gosu.*.bundle']
   end
-  Rake::GemPackageTask.new(MAC_SPEC) { |t| t.package_dir = 'public/mac_gem' }
+  Rake::GemPackageTask.new(MAC_SPEC) { |t| t.package_dir = 'public' }
   
   task :release_gem => :gem do
-    sh "gem push public/mac_gem/gosu-#{GOSU_VERSION}-universal-darwin.gem"
+    sh "gem push public/gosu-#{GOSU_VERSION}-universal-darwin.gem"
   end
 end

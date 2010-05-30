@@ -341,8 +341,8 @@ module Gosu
   # TextInput only aims to provide enough code for your own GUIs to build upon.
   class TextInput
     attr_accessor :text
-    attr_reader :caret_pos
-    attr_reader :selection_start
+    attr_accessor :caret_pos
+    attr_accessor :selection_start
 
     # Overridable filter that is applied to all new text that is entered.
     # Allows for context-sensitive filtering/extending/... of the text.
