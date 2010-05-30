@@ -3,7 +3,7 @@
 
 =0.7.20=
   * 2010-05-30: Windows: Removed Ruby package (use the rubygem)
-  * 2010-05-30: Linux: Removed Ruby support from autotools (use the rubygem)
+  * 2010-05-30: Linux: Removed Ruby support from autotools/source package (use the rubygem)
   * 2010-05-30: All: Added setCaretPos/setSelectionStart (C++) and caret_pos=/selection_start= (Ruby) to TextInput
   * 2010-05-30: Linux: Added fallback to SDL_TFF when loading local .ttf files, please install libSDL-ttf2.0-dev to continue using Gosu, thanks to the_om3ga
   * 2010-05-29: Windows: When requesting a windowed resolution larger than the desktop, Gosu will transparently scale the window down
