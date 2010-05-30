@@ -10,11 +10,13 @@ To install Gosu in any form, you will need the following packages (install via `
   * libpango1.0-dev
   * libboost-dev
   * libsdl-mixer1.2-dev
+  * libsdl-ttf2.0-dev
+
 
 *Copy-and-pastable command line* for Ubuntu 8.04 (Hardy Heron) *without* Ruby support:
 
 {{{
-sudo apt-get install g++ libgl1-mesa-dev libpango1.0-dev libboost-dev libsdl-mixer1.2-dev
+sudo apt-get install g++ libgl1-mesa-dev libpango1.0-dev libboost-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
 }}}
 
 Ruby/Gosu will be built if the following packages are installed as well:
@@ -25,7 +27,7 @@ Ruby/Gosu will be built if the following packages are installed as well:
 *Copy-and-pastable command line* for Ubuntu 8.04 (Hardy Heron) *with* Ruby support:
 
 {{{
-sudo apt-get install g++ libgl1-mesa-dev libpango1.0-dev libboost-dev ruby ruby1.8 ruby1.8-dev libsdl-mixer1.2-dev
+sudo apt-get install g++ libgl1-mesa-dev libpango1.0-dev libboost-dev ruby ruby1.8 ruby1.8-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
 }}}
 
 = Ruby Gem =
