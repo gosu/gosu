@@ -13,34 +13,15 @@ To install Gosu in any form, you will need the following packages (install via `
   * libsdl-ttf2.0-dev
 
 
-*Copy-and-pastable command line* for Ubuntu 8.04 (Hardy Heron) *without* Ruby support:
+*Copy-and-pastable command line* for Ubuntu 8.04 (Hardy Heron):
 
 {{{
 sudo apt-get install g++ libgl1-mesa-dev libpango1.0-dev libboost-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
 }}}
 
-Ruby/Gosu will be built if the following packages are installed as well:
-  * ruby
-  * ruby1.8 
-  * ruby1.8-dev
-
-*Copy-and-pastable command line* for Ubuntu 8.04 (Hardy Heron) *with* Ruby support:
-
-{{{
-sudo apt-get install g++ libgl1-mesa-dev libpango1.0-dev libboost-dev ruby ruby1.8 ruby1.8-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
-}}}
-
 = Ruby Gem =
 
-If you are only interested in using Gosu with the Ruby programming language, you can install it as a Ruby gem via `sudo gem install gosu`. You will still have to install the packages listed above, though.
-
-= Ruby 1.9 Support =
-
-To use Gosu with Ruby 1.9, just replace all occurences of 1.8 with 1.9. The copy-and-pastable command line is thus:
-
-{{{
-sudo apt-get install g++ libgl1-mesa-dev libpango1.0-dev libboost-dev ruby1.9 ruby1.9-dev libsdl-mixer1.2-dev
-}}}
+If you are only interested in using Gosu with the Ruby programming language, you can install it as a Ruby gem via `sudo gem install gosu`. You will still have to install the packages listed above, though. Also, you might need a `ruby-dev` package.
 
 Afterwards, `gem install gosu` should work.
 
