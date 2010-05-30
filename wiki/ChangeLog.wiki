@@ -9,7 +9,7 @@
   * 2010-05-29: Windows: When requesting a windowed resolution larger than the desktop, Gosu will transparently scale the window down
   * 2010-05-23: C++: Added operator< for Gosu::Button so they can be put into a std::map
   * 2010-05-21: Mac: Gosu wrapper .app now contains full, three-way universal Ruby 1.9 (only tcltk etc. missing)
-  * 2010-05-09: Linux: Converted Ruby gem to use mkmf instead of autotools
+  * 2010-05-09: Linux: Converted Ruby gem to use mkmf instead of autotools (fixes rvm problems)
   * 2010-05-07: Ruby: Added Window#fullscreen?
 
 =0.7.19=
