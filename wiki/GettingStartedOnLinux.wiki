@@ -21,7 +21,7 @@ sudo apt-get install g++ libgl1-mesa-dev libpango1.0-dev libboost-dev libsdl-mix
 
 = Ruby Gem =
 
-If you are only interested in using Gosu with the Ruby programming language, you can install it as a Ruby gem via `sudo gem install gosu`. You will still have to install the packages listed above, though. Also, you might need a `ruby-dev` package.
+If you are only interested in using Gosu with the Ruby programming language, you can install it as a Ruby gem via `sudo gem install gosu`. You will still have to install the packages listed above, though. Also, you might need a `ruby18-dev` or `ruby19-dev` package, respectively.
 
 Afterwards, `gem install gosu` should work.
 
