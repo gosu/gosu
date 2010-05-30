@@ -102,6 +102,19 @@ class TextField < Gosu::TextInput
     mouse_x > x - PADDING and mouse_x < x + width + PADDING and
       mouse_y > y - PADDING and mouse_y < y + height + PADDING
   end
+  
+  # Tries to move the caret to the position specifies by mouse_x
+  def move_caret(mouse_x)
+    # Test character by character
+    1.upto(self.text.length) do |i|
+      if mouse_x < x + @font.text_width(text[0...i]) then
+        self.caret_pos = self.selection_start = i - 1;
+        return
+      end
+    end
+    # Default case: user must have clicked the right edge
+    self.caret_pos = self.selection_start = self.text.length
+  end
 end
 
 class TextInputWindow < Gosu::Window
@@ -138,6 +151,8 @@ class TextInputWindow < Gosu::Window
     elsif id == Gosu::MsLeft then
       # Mouse click: Select text field based on mouse position.
       self.text_input = @text_fields.find { |tf| tf.under_point?(mouse_x, mouse_y) }
+      # Advanced: Move caret to clicked position
+      self.text_input.move_caret(mouse_x) unless self.text_input.nil?
     end
   end
 end

@@ -7,7 +7,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-// Sometimes macro DSLs aren't evil.
 #define CARET_POS (*_caretPos)
 #define SEL_START (*_selectionStart)
 #define IMPL_WITH_SEL_RESET(selector)           \
@@ -194,9 +193,19 @@ unsigned Gosu::TextInput::caretPos() const
     return pimpl->caretPos;
 }
 
+void Gosu::TextInput::setCaretPos(unsigned pos)
+{
+    pimpl->caretPos = pos;
+}
+
 unsigned Gosu::TextInput::selectionStart() const
 {
     return pimpl->selectionStart;
+}
+
+void Gosu::TextInput::setSelectionStart(unsigned pos)
+{
+    pimpl->selectionStart = pos;
 }
 
 bool Gosu::TextInput::feedNSEvent(void* event)

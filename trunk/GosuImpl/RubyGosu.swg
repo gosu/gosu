@@ -470,6 +470,8 @@ namespace Gosu {
 %ignore Gosu::TextInput::caretPos() const;
 %ignore Gosu::TextInput::selectionStart() const;
 %rename("text=") setText;
+%rename("caret_pos=") setCaretPos;
+%rename("selection_start=") setSelectionStart;
 %include "../Gosu/TextInput.hpp"
 %extend Gosu::TextInput {
     // Fix indices into UTF-8 string

@@ -37,11 +37,16 @@ namespace Gosu
 
         //! Position of the caret as the index of the character that it's left to.
         unsigned caretPos() const;
+        //! Sets the caret position as returned by caretPos.
+        //! You usually also want to use setSelectionStart.
+        void setCaretPos(unsigned pos);
 
         //! If there is a selection, the selectionStart() member yields its beginning,
         //! using the same indexing scheme as caretPos. If there is no selection,
         //! selectionStart() is equal to caretPos().
         unsigned selectionStart() const;
+        //! Sets the start of the selection as returned by selectionStart.
+        void setSelectionStart(unsigned pos);
         
         // Platform-specific communication with Gosu::Input.
         #if defined(GOSU_IS_MAC)

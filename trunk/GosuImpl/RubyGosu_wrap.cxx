@@ -7303,6 +7303,76 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_TextInput_caret_pose___(int argc, VALUE *argv, VALUE self) {
+  Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
+  unsigned int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned int val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::TextInput *","setCaretPos", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::TextInput * >(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned int","setCaretPos", 2, argv[0] ));
+  } 
+  arg2 = static_cast< unsigned int >(val2);
+  {
+    try {
+      (arg1)->setCaretPos(arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_TextInput_selection_starte___(int argc, VALUE *argv, VALUE self) {
+  Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
+  unsigned int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned int val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::TextInput *","setSelectionStart", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::TextInput * >(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned int","setSelectionStart", 2, argv[0] ));
+  } 
+  arg2 = static_cast< unsigned int >(val2);
+  {
+    try {
+      (arg1)->setSelectionStart(arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_TextInput_filter(int argc, VALUE *argv, VALUE self) {
   Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
   std::wstring *arg2 = 0 ;
@@ -9597,6 +9667,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassTextInput.klass, "initialize", VALUEFUNC(_wrap_new_TextInput), -1);
   rb_define_method(SwigClassTextInput.klass, "text", VALUEFUNC(_wrap_TextInput_text), -1);
   rb_define_method(SwigClassTextInput.klass, "text=", VALUEFUNC(_wrap_TextInput_texte___), -1);
+  rb_define_method(SwigClassTextInput.klass, "caret_pos=", VALUEFUNC(_wrap_TextInput_caret_pose___), -1);
+  rb_define_method(SwigClassTextInput.klass, "selection_start=", VALUEFUNC(_wrap_TextInput_selection_starte___), -1);
   rb_define_method(SwigClassTextInput.klass, "filter", VALUEFUNC(_wrap_TextInput_filter), -1);
   rb_define_method(SwigClassTextInput.klass, "caret_pos", VALUEFUNC(_wrap_TextInput_caret_pos), -1);
   rb_define_method(SwigClassTextInput.klass, "selection_start", VALUEFUNC(_wrap_TextInput_selection_start), -1);
