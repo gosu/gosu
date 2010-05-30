@@ -1,6 +1,17 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.20=
+  * 2010-05-30: Windows: Removed Ruby package (use the rubygem)
+  * 2010-05-30: Linux: Removed Ruby support from autotools (use the rubygem)
+  * 2010-05-30: All: Added setCaretPos/setSelectionStart (C++) and caret_pos=/selection_start= (Ruby) to TextInput
+  * 2010-05-30: Linux: Added fallback to SDL_TFF when loading local .ttf files, please install libSDL-ttf2.0-dev to continue using Gosu, thanks to the_om3ga
+  * 2010-05-29: Windows: When requesting a windowed resolution larger than the desktop, Gosu will transparently scale the window down
+  * 2010-05-23: C++: Added operator< for Gosu::Button so they can be put into a std::map
+  * 2010-05-21: Mac: Gosu wrapper .app now contains full, three-way universal Ruby 1.9 (only tcltk etc. missing)
+  * 2010-05-09: Linux: Converted Ruby gem to use mkmf instead of autotools
+  * 2010-05-07: Ruby: Added Window#fullscreen?
+
 =0.7.19=
   * 2010-04-24: Mac: Fixed custom TTF loading on 64-bit OS X 10.6 (thanks Tri&Alex for trying it out); see GettingStartedOnOsx for necessary Xcode project setup instructions
   * 2010-04-23: All: Renamed the semi-documented gosuToRadianScale to degreesToRadian and vice versa (in Ruby, instance methods of Numeric). gosuToRadians and radiansToGosu remain unchanged.
