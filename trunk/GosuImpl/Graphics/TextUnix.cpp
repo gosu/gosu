@@ -9,6 +9,8 @@
 
 #include <boost/utility.hpp>
 #include <string>
+#include <cstring>
+#include <stdexcept>
 
 std::wstring Gosu::defaultFontName()
 {
@@ -179,7 +181,7 @@ namespace Gosu
             
             ~SDLSurface()
             {
-                SDL_FreeSurface(surface)
+                SDL_FreeSurface(surface);
             }
             
             unsigned height() const
@@ -190,6 +192,11 @@ namespace Gosu
             unsigned width() const
             {
                 return surface->w;
+            }
+            
+            const void* data() const
+            {
+                return surface->pixels;
             }
         };
         
@@ -211,11 +218,11 @@ namespace Gosu
             TTF_CloseFont(font);
         }
 
-        unsigned textWidth(const std::string& text){
+        unsigned textWidth(const std::wstring& text){
             return SDLSurface(font, text, 0xffffff).width();
         }
 
-        void draw(Bitmap& bmp, std::string& text, int x, int y, Gosu::Color c) {
+        void drawText(Bitmap& bmp, const std::wstring& text, int x, int y, Gosu::Color c) {
             SDLSurface surf(font, text, c);
             Gosu::Bitmap temp;
             temp.resize(surf.width(), surf.height());

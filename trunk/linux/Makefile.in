@@ -9,35 +9,30 @@ BASE_OBJS = Math.o Utility.o IO.o FileUnix.o TimingUnix.o WindowX.o	\
 	    Graphics/RotFlip.o Graphics/BlockAllocator.o		\
 	    Graphics/Texture.o Graphics/LargeImageData.o		\
 	    Graphics/BitmapPNG.o Graphics/Font.o Graphics/BitmapBMP.o	\
-	    Graphics/TextPangoFT.o Graphics/Text.o			\
+	    Graphics/TextUnix.o Graphics/Text.o			\
 	    Graphics/BitmapColorKey.o DirectoriesUnix.o
 
 NET_OBJS = Sockets/CommSocket.o Sockets/ListenerSocket.o	\
 	   Sockets/Socket.o Sockets/MessageSocket.o
 
 SDLMIXER_OBJ = Audio/AudioSDL.o
-RUBYOBJS = RubyGosu_wrap.o
 
 OBJS = @GOSU_A_OBJS@
 
 XPLS = $(GOSU_DIR)/examples/Tutorial $(GOSU_DIR)/examples/TextInput
 
 CXXFLAGS = -fPIC -I.. @AUDIO_INC@ -Wall @PANGO_CXX_FLAGS@ @X_INCS@ \
-	   @HAVE_SYS_STAT_H@ @HAVE_EACCESS@ -I@RUBY_INC_DIR@ \
-	   -I@RUBY_ARCH_DIR@ -DNDEBUG -O3 -pipe -fomit-frame-pointer \
+	   @HAVE_SYS_STAT_H@ \
+	   -DNDEBUG -O3 -pipe -fomit-frame-pointer \
 	   -I/usr/include/SDL
 
-LIBS = @AUDIO_LIBS@ -L@x_libraries@ -lX11 @PANGO_LIBS@ -lpng -lstdc++ -lGL #-lboost_thread
-
-RUBY_LIBS = $(LIBS) @RUBY_LIBS@ @DLOPEN_LIB@ -lm -lc -lcrypt #-lboost_thread
+LIBS = @AUDIO_LIBS@ -L@x_libraries@ -lX11 @PANGO_LIBS@ -lpng -lstdc++ -lGL -lSDL_ttf #-lboost_thread
 
 all: @TO_BE_MADE@
 
 directories:
 	if [ \! -d ../bin ]; then mkdir ../bin; fi
 	if [ \! -d ../lib ]; then mkdir ../lib; fi
-	if [ \! -d RubyGosu ]; then mkdir RubyGosu; fi
-	if [ \! -d OpenGL ]; then mkdir OpenGL; fi
 	if [ \! -d Graphics ]; then mkdir Graphics; fi
 	if [ \! -d Sockets ]; then mkdir Sockets; fi
 	if [ \! -d Audio ]; then mkdir Audio; fi
@@ -67,8 +62,8 @@ cpp_uninstall:
 	ldconfig
 
 clean:
-	rm -f $(OBJS) $(XPLS) $(RUBYOBJS) ../lib/libgosu* ../lib/gosu?* ../bin/gosu-config
-	rmdir RubyGosu Audio OpenGL Graphics Sockets
+	rm -f $(OBJS) $(XPLS) ../lib/libgosu* ../lib/gosu?* ../bin/gosu-config
+	rmdir Audio Graphics Sockets
 
 $(OBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cpp
 	$(CXX) $(GOSU_DIR)/GosuImpl/$*.cpp -o $@ $(CXXFLAGS) -c
@@ -91,9 +86,3 @@ $(XPLS): %: %.cpp ../lib/libgosu.a
 	echo "done" >> ../bin/gosu-config
 	chmod u+x ../bin/gosu-config
 
-# RubyGosu_wrap.cpp taken out because we use the prebuilt version from SVN
-../lib/gosu.custom.so: $(RUBYOBJS) ../lib/libgosu.a
-	g++ -shared -o ../lib/gosu.custom.so -Wall $(RUBYOBJS) $(RUBY_LIBS) @GOSU_A_OBJS@
-
-$(RUBYOBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cxx
-	$(CXX) -fPIC $(GOSU_DIR)/GosuImpl/$*.cxx -o $@ $(CXXFLAGS) -c

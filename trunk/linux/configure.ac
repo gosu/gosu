@@ -61,28 +61,6 @@ fi
 AC_CHECK_HEADER(sys/stat.h, HAVE_SYS_STAT_H=-DHAVE_SYS_STAT_H)
 AC_SUBST(HAVE_SYS_STAT_H)
 
-# workaround ruby 1.9 redefining standard c++ eaccess
-AC_CHECK_FUNC(eaccess, HAVE_EACCESS=-DHAVE_EACCESS)
-AC_SUBST(HAVE_EACCESS)
-
-if test -z $GOSU_RUBY_COMMAND; then
-	AC_CHECK_PROGS(ruby, ruby ruby1.8 ruby1.9)
-else
-	ruby=$GOSU_RUBY_COMMAND
-	AC_SUBST(ruby)
-fi
-RUBY_INC_DIR=`${ruby} -rrbconfig -e 'print(Config::CONFIG[["rubyhdrdir"]] || Config::CONFIG[["archdir"]])'`
-RUBY_ARCH_DIR=`${ruby} -rrbconfig -e 'print File.join(Config::CONFIG[["rubyhdrdir"]], Config::CONFIG[["arch"]]) if Config::CONFIG[["rubyhdrdir"]]'`
-RUBY_LIBS=`${ruby} -rrbconfig -e 'print(Config::CONFIG[["LIBRUBYARG"]] || "-l" + Config::CONFIG[["ruby_install_name"]])'`
-# 2> /dev/null
-
-if test -e "$RUBY_INC_DIR/ruby.h"; then
-  AC_SUBST(RUBY_INC_DIR)
-  AC_SUBST(RUBY_ARCH_DIR)
-  AC_SUBST(RUBY_LIBS)
-  TO_BE_MADE=${TO_BE_MADE}" ../lib/gosu.custom.so"
-fi
-
 # libdl
 AC_CHECK_LIB(dl, dlopen, LIBS="$LIBS -ldl", AC_CHECK_LIB(c, dlopen, ,AC_MSG_ERROR(Missing dlopen functionality), ), )
 AC_SUBST(DLOPEN_LIB)
@@ -94,16 +72,8 @@ AC_SUBST(TO_BE_MADE)
 AC_CHECK_LIB(rt, sched_setscheduler, LIBS="$LIBS -lrt", AC_CHECK_LIB(c, sched_setscheduler, , AC_MSG_ERROR(Missing librt functionality), ), )
 AC_SUBST(HAVE_LIBRT)
 
-if test $GOSU_MAKEFILE_FOR_GEM; then
-  # If called by extconf.rb, let "make install" only build gosu.custom.so.
-  INSTALL_ACTION="../lib/gosu.custom.so"
-  UNINSTALL_ACTION=""
-else
-  # Otherwise, install/uninstall the C++ version of Gosu.
-  INSTALL_ACTION="cpp_install"
-  UNINSTALL_ACTION="cpp_uninstall"
-fi
-  
+INSTALL_ACTION="cpp_install"
+UNINSTALL_ACTION="cpp_uninstall"
 AC_SUBST(INSTALL_ACTION)
 AC_SUBST(UNINSTALL_ACTION)
 
