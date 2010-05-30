@@ -36,9 +36,19 @@ unsigned Gosu::TextInput::caretPos() const
     return pimpl->caretPos;
 }
 
+void Gosu::TextInput::setCaretPos(unsigned pos)
+{
+    pimpl->caretPos = pos;
+}
+
 unsigned Gosu::TextInput::selectionStart() const
 {
     return pimpl->selectionStart;
+}
+
+void Gosu::TextInput::setSelectionStart(unsigned pos)
+{
+    pimpl->selectionStart = pos;
 }
 
 #define CARET_POS (pimpl->caretPos)
