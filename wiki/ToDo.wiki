@@ -4,21 +4,17 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-05-29)
+(Last update: 2010-05-30)
 
 == Gosu 0.7.x ==
-  * Also transparently reduce resolution on Windows
-  * Add setCaretPos and setSelectionStart on OS X; if works, port to Win/Linux
   * Why does this crash: Image.from_text 64-bit with attached args
-  * Integrate customFont (SDL_ttf fallback)
-  * Integrate customFont into Linux make system, get rid of Ruby bloat
   * Add/finish iPad support
   * Add Numeric#clamp, Numeric#wrap to Ruby
   * See why Gosu does not work with Rubinius
   * Make Window arguments optional for Audio, but throw exceptions when in wrong order
   * Make Window arguments optional for Graphics, but throw exceptions when in wrong order
   * Throw an exception when using multiple Windows
-  * Verify vality of this task: "Gosu: compile x86_64 with gcc 4.2 on OS X"
+  * Verify usefulness of this task: "Gosu: compile x86_64 with gcc 4.2 on OS X"
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Test StandBy with Windows and a running Gosu app
   * Check for 1.9.2 final and let @jeedee know about progress if existing
@@ -157,6 +153,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Document alpha modes for Ruby
   * Add LD17 games to Gosu Showcase; SautEUR, pythong, mathias, jsb, philomory
   * Add rdoc to Gosu gem
+  * Update TextInput.cpp to include setCaretPos
 == Gosu 0.8.x (preliminary) ==
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
   * Use float instead of double everywhere
