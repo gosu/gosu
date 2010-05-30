@@ -23,7 +23,7 @@ SOURCE_FILES =
 	     Graphics/TextUnix.cpp Graphics/Text.cpp
 	     Graphics/BitmapColorKey.cpp DirectoriesUnix.cpp
 	     Audio/AudioSDL.cpp RubyGosu_wrap.cxx)
-Mix_OpenAudio
+
 require 'mkmf'
 
 # Copy all relevant C++ files into the current directory
