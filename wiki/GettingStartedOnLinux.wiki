@@ -13,7 +13,7 @@ To install Gosu in any form, you will need the following packages (install via `
   * libsdl-ttf2.0-dev
 
 
-*Copy-and-pastable command line* for Ubuntu 8.04 (Hardy Heron):
+*Copy-and-pastable command line* for Ubuntu, last tested 2010 (how do I even find out the name of the Ubuntu version I have installed?)
 
 {{{
 sudo apt-get install g++ libgl1-mesa-dev libpango1.0-dev libboost-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
