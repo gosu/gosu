@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-05-30)
+(Last update: 2010-05-31)
 
 == Gosu 0.7.x ==
   * Why does this crash: Image.from_text 64-bit with attached args
@@ -18,6 +18,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Test StandBy with Windows and a running Gosu app
   * Check for 1.9.2 final and let @jeedee know about progress if existing
+  * Find out why UnicodeTest fails horribly on Ubuntu :(
   * See if really old games have problems running in current Gosu
   * The screen size/OpenGL stuff …
     * See if John Shea's talk had something about not being locked to pixel positions
@@ -151,7 +152,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Slap Tuiq until he posts Chuadrat again :P
   * Ask: Why not clWhite?
   * Document alpha modes for Ruby
-  * Add LD17 games to Gosu Showcase; SautEUR, pythong, mathias, jsb, philomory
   * Add rdoc to Gosu gem
   * Update TextInput.cpp to include setCaretPos
 == Gosu 0.8.x (preliminary) ==
