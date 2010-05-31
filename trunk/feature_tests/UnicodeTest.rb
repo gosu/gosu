@@ -1,3 +1,5 @@
+# Encoding: UTF-8
+
 require '../lib/gosu'
 
 class Test < Gosu::Window

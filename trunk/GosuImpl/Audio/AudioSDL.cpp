@@ -293,6 +293,10 @@ void Gosu::Song::changeVolume(double volume) {
     Mix_VolumeMusic(trunc(data->volume * MIX_MAX_VOLUME));
 }
 
+void Gosu::Song::update()
+{
+}
+
 // Deprecated constructors.
 
 Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
