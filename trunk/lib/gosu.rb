@@ -9,7 +9,7 @@ begin
   require "#{File.dirname(__FILE__)}/gosu.for_#{version}.#{Config::CONFIG['DLEXT']}"
   require "#{File.dirname(__FILE__)}/gosu/swig_patches.rb"
 rescue LoadError => e
-  require "#{File.dirname(__FILE__)}/gosu.custom.#{Config::CONFIG['DLEXT']}"
+  require "#{File.dirname(__FILE__)}/gosu.#{Config::CONFIG['DLEXT']}"
   require "#{File.dirname(__FILE__)}/gosu/swig_patches.rb"
 end
 

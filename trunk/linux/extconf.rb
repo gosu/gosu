@@ -32,7 +32,7 @@ SOURCE_FILES.each { |file| `cp ../GosuImpl/#{file} #{File.basename(file)}` }
 
 # Symlink our pretty gosu.so into ../lib
 # FIXME gosu.rb should just look in the right place
-`ln -s ../linux/gosu.so ../lib/gosu.custom.so`
+`ln -s ../linux/gosu.so ../lib/gosu.so`
 
 sdl_config = with_config("sdl-config", "sdl-config")
 pango_config = "pkg-config pangoft2" # FIXME should probably use with_config

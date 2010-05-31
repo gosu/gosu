@@ -1,6 +1,6 @@
-require 'appscript'
-
 if ENV['USER'] == 'jlnr' then
+  require 'appscript'
+
   desc "Publish OmniFocus tasks in ToDo Wiki page"
   task :todo do
     File.open "wiki/ToDo.wiki", "w" do |wiki_page|

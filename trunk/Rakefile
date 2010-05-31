@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'ftools'
+require 'fileutils'
 require 'date'
 require 'rake/gempackagetask'
 
