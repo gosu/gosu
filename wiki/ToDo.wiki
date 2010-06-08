@@ -4,9 +4,10 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-06-07)
+(Last update: 2010-06-08)
 
 == Gosu 0.7.x ==
+  * Matrix-Support (with_transformation do … end)
   * Why does this crash: Image.from_text 64-bit with attached args
   * Add/finish iPad support
   * Add Numeric#clamp, Numeric#wrap to Ruby
@@ -63,7 +64,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Test RMagick.bundle on Tiger
     * Test RMagick.bundle on PPC
   * Replace draw_line by something that makes sense
-  * Text quality release (+Linux gamepad!)
+  * Text quality release
     * See if the differences between from_text and Font#draw are a bug
     * Creating a non-existent font should throw an exception on all platforms, test on which it does
     * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
@@ -75,7 +76,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Windows: Make createText use Uniscribe
     * Make RTL work without RTL/LTR markers?!
     * Add RTL support to Font::drawRot too
-    * Add Linux gamepad support, try wgois for that
+  * Try wgois for Linux gamepad support
   * Polish/deployment release
     * Make it possible to delete images while they are still referenced in the queue.
     * Make Gosu::Color more fault-tolerant regarding its component values
