@@ -20,7 +20,7 @@ SOURCE_FILES =
 	     Graphics/RotFlip.cpp Graphics/BlockAllocator.cpp
 	     Graphics/Texture.cpp Graphics/LargeImageData.cpp
 	     Graphics/BitmapPNG.cpp Graphics/Font.cpp Graphics/BitmapBMP.cpp
-	     Graphics/TextUnix.cpp Graphics/Text.cpp
+	     Graphics/TextUnix.cpp Graphics/Text.cpp Graphics/Transform.cpp
 	     Graphics/BitmapColorKey.cpp DirectoriesUnix.cpp
 	     Audio/AudioSDL.cpp RubyGosu_wrap.cxx)
 

@@ -589,6 +589,15 @@ namespace Gosu {
         rb_yield(Qnil);
         return new Gosu::Image($self->graphics().endRecording());
     }
+    void transform(double m0, double m1, double m2, double m3, double m4, double m5, double m6, double m7,
+        double m8, double m9, double m10, double m11, double m12, double m13, double m14, double m15) {
+        Gosu::Transform transform = {
+            m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15
+        };
+        $self->graphics().pushTransform(transform);
+        rb_yield(Qnil);
+        $self->graphics().popTransform();
+    }
     void rotate(double angle) {
         $self->graphics().pushTransform(Gosu::rotate(angle));
         rb_yield(Qnil);

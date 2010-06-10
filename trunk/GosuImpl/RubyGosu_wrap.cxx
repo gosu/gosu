@@ -2688,6 +2688,14 @@ SWIGINTERN Gosu::Image *Gosu_Window_record(Gosu::Window *self){
         rb_yield(Qnil);
         return new Gosu::Image(self->graphics().endRecording());
     }
+SWIGINTERN void Gosu_Window_transform(Gosu::Window *self,double m0,double m1,double m2,double m3,double m4,double m5,double m6,double m7,double m8,double m9,double m10,double m11,double m12,double m13,double m14,double m15){
+        Gosu::Transform transform = {
+            m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15
+        };
+        self->graphics().pushTransform(transform);
+        rb_yield(Qnil);
+        self->graphics().popTransform();
+    }
 SWIGINTERN void Gosu_Window_rotate(Gosu::Window *self,double angle){
         self->graphics().pushTransform(Gosu::rotate(angle));
         rb_yield(Qnil);
@@ -9227,6 +9235,161 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Window_transform(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  double arg2 ;
+  double arg3 ;
+  double arg4 ;
+  double arg5 ;
+  double arg6 ;
+  double arg7 ;
+  double arg8 ;
+  double arg9 ;
+  double arg10 ;
+  double arg11 ;
+  double arg12 ;
+  double arg13 ;
+  double arg14 ;
+  double arg15 ;
+  double arg16 ;
+  double arg17 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  double val6 ;
+  int ecode6 = 0 ;
+  double val7 ;
+  int ecode7 = 0 ;
+  double val8 ;
+  int ecode8 = 0 ;
+  double val9 ;
+  int ecode9 = 0 ;
+  double val10 ;
+  int ecode10 = 0 ;
+  double val11 ;
+  int ecode11 = 0 ;
+  double val12 ;
+  int ecode12 = 0 ;
+  double val13 ;
+  int ecode13 = 0 ;
+  double val14 ;
+  int ecode14 = 0 ;
+  double val15 ;
+  int ecode15 = 0 ;
+  double val16 ;
+  int ecode16 = 0 ;
+  double val17 ;
+  int ecode17 = 0 ;
+  
+  if ((argc < 16) || (argc > 16)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 16)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","transform", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","transform", 2, argv[0] ));
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "double","transform", 3, argv[1] ));
+  } 
+  arg3 = static_cast< double >(val3);
+  ecode4 = SWIG_AsVal_double(argv[2], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "double","transform", 4, argv[2] ));
+  } 
+  arg4 = static_cast< double >(val4);
+  ecode5 = SWIG_AsVal_double(argv[3], &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), Ruby_Format_TypeError( "", "double","transform", 5, argv[3] ));
+  } 
+  arg5 = static_cast< double >(val5);
+  ecode6 = SWIG_AsVal_double(argv[4], &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), Ruby_Format_TypeError( "", "double","transform", 6, argv[4] ));
+  } 
+  arg6 = static_cast< double >(val6);
+  ecode7 = SWIG_AsVal_double(argv[5], &val7);
+  if (!SWIG_IsOK(ecode7)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode7), Ruby_Format_TypeError( "", "double","transform", 7, argv[5] ));
+  } 
+  arg7 = static_cast< double >(val7);
+  ecode8 = SWIG_AsVal_double(argv[6], &val8);
+  if (!SWIG_IsOK(ecode8)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode8), Ruby_Format_TypeError( "", "double","transform", 8, argv[6] ));
+  } 
+  arg8 = static_cast< double >(val8);
+  ecode9 = SWIG_AsVal_double(argv[7], &val9);
+  if (!SWIG_IsOK(ecode9)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode9), Ruby_Format_TypeError( "", "double","transform", 9, argv[7] ));
+  } 
+  arg9 = static_cast< double >(val9);
+  ecode10 = SWIG_AsVal_double(argv[8], &val10);
+  if (!SWIG_IsOK(ecode10)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode10), Ruby_Format_TypeError( "", "double","transform", 10, argv[8] ));
+  } 
+  arg10 = static_cast< double >(val10);
+  ecode11 = SWIG_AsVal_double(argv[9], &val11);
+  if (!SWIG_IsOK(ecode11)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode11), Ruby_Format_TypeError( "", "double","transform", 11, argv[9] ));
+  } 
+  arg11 = static_cast< double >(val11);
+  ecode12 = SWIG_AsVal_double(argv[10], &val12);
+  if (!SWIG_IsOK(ecode12)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode12), Ruby_Format_TypeError( "", "double","transform", 12, argv[10] ));
+  } 
+  arg12 = static_cast< double >(val12);
+  ecode13 = SWIG_AsVal_double(argv[11], &val13);
+  if (!SWIG_IsOK(ecode13)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode13), Ruby_Format_TypeError( "", "double","transform", 13, argv[11] ));
+  } 
+  arg13 = static_cast< double >(val13);
+  ecode14 = SWIG_AsVal_double(argv[12], &val14);
+  if (!SWIG_IsOK(ecode14)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode14), Ruby_Format_TypeError( "", "double","transform", 14, argv[12] ));
+  } 
+  arg14 = static_cast< double >(val14);
+  ecode15 = SWIG_AsVal_double(argv[13], &val15);
+  if (!SWIG_IsOK(ecode15)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode15), Ruby_Format_TypeError( "", "double","transform", 15, argv[13] ));
+  } 
+  arg15 = static_cast< double >(val15);
+  ecode16 = SWIG_AsVal_double(argv[14], &val16);
+  if (!SWIG_IsOK(ecode16)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode16), Ruby_Format_TypeError( "", "double","transform", 16, argv[14] ));
+  } 
+  arg16 = static_cast< double >(val16);
+  ecode17 = SWIG_AsVal_double(argv[15], &val17);
+  if (!SWIG_IsOK(ecode17)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode17), Ruby_Format_TypeError( "", "double","transform", 17, argv[15] ));
+  } 
+  arg17 = static_cast< double >(val17);
+  {
+    try {
+      Gosu_Window_transform(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13,arg14,arg15,arg16,arg17);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Window_rotate(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   double arg2 ;
@@ -10134,6 +10297,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "gl", VALUEFUNC(_wrap_Window_gl), -1);
   rb_define_method(SwigClassWindow.klass, "clip_to", VALUEFUNC(_wrap_Window_clip_to), -1);
   rb_define_method(SwigClassWindow.klass, "record", VALUEFUNC(_wrap_Window_record), -1);
+  rb_define_method(SwigClassWindow.klass, "transform", VALUEFUNC(_wrap_Window_transform), -1);
   rb_define_method(SwigClassWindow.klass, "rotate", VALUEFUNC(_wrap_Window_rotate), -1);
   rb_define_method(SwigClassWindow.klass, "scale", VALUEFUNC(_wrap_Window_scale), -1);
   rb_define_method(SwigClassWindow.klass, "translate", VALUEFUNC(_wrap_Window_translate), -1);

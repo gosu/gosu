@@ -1,3 +1,6 @@
+// Default matrices, adapted from original Transform support
+// contribution by erisdiscord. Thank you!
+
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Math.hpp>
 #include <cmath>
