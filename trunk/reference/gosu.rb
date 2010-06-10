@@ -433,6 +433,21 @@ module Gosu
     
     # Limits the drawing area to a given rectangle while evaluating the code inside of the block.
     def clip_to(x, y, w, h, &drawing_code); end
+    
+    # Rotates everything drawn in the block around (0, 0).
+    def rotate(angle, &drawing_code); end
+    
+    # Scales everything drawn in the block by a factor.
+    def scale(factor, &drawing_code); end
+    
+    # Scales everything drawn in the block by a factor for each dimension.
+    def scale(factor_x, factor_y, &drawing_code); end
+    
+    # Moves everything drawn in the block by an offset in each dimension.
+    def translate(x, y, &drawing_code); end
+    
+    # Applies a free-form matrix rotation to everything drawn in the block.
+    def transform(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, &drawing_code); end
   end
   
   # Contains information about the underlying OpenGL texture and the u/v space used for image data.
