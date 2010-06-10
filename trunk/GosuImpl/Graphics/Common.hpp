@@ -17,6 +17,7 @@
 #endif
 
 #include <algorithm>
+#include <list>
 #include <vector>
 
 namespace Gosu
@@ -25,7 +26,7 @@ namespace Gosu
     class TexChunk;
     struct DrawOp;
     class DrawOpQueue;
-    typedef std::vector<Transform> Transforms;
+    typedef std::list<Transform> Transforms;
     typedef std::vector<DrawOpQueue> DrawOpQueueStack;
     class Macro;
     

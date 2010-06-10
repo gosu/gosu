@@ -36,15 +36,14 @@ struct Gosu::Graphics::Impl
         result.assign(0);
         for (int i = 0; i < 16; ++i)
             for (int j = 0; j < 4; ++j)
-                result[i] += left[i / 4 + j] * right[i % 4 + j * 4];
+                result[i] += left[i / 4 * 4 + j] * right[i % 4 + j * 4];
         return result;
     }
     
     void calculateAbsoluteTransform()
     {
         absoluteTransforms.push_back(
-            std::accumulate(currentTransforms.begin() + 1, currentTransforms.end(),
-                            currentTransforms.front(), multiply));
+            std::accumulate(currentTransforms.begin(), currentTransforms.end(), Gosu::scale(1), multiply));
     }
 };
 
@@ -78,12 +77,8 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     // Create default draw-op queue.
     pimpl->queues.resize(1);
     
-    // Create default matrix.
-    pimpl->currentTransforms.resize(1);
-    pimpl->currentTransforms[0].assign(0);
-    for (int i = 0; i < 16; i += 5)
-        pimpl->currentTransforms[0][i] = 1;
-    pimpl->absoluteTransforms = pimpl->currentTransforms;
+    // Push one identity matrix as the default transform.
+    pimpl->absoluteTransforms.push_back(scale(1));
 }
 
 Gosu::Graphics::~Graphics()
@@ -138,7 +133,7 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
     pimpl->queues.resize(1);
     
     // If there are transformations in progress, clear them.
-    pimpl->currentTransforms.resize(1);
+    pimpl->currentTransforms.resize(0);
     pimpl->absoluteTransforms.resize(1);
 
     // Flush leftover clippings

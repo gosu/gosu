@@ -45,14 +45,21 @@ namespace Gosu
         DrawOp(Gosu::Transform& transform) : transform(&transform) { clipWidth = 0xffffffff; usedVertices = 0; chunk = 0; }
         
 #ifndef GOSU_IS_IPHONE
-        void perform(GLuint& currentTexName, const void*) const
+        void perform(GLuint& currentTexName, Transform*& currentTransform, const void*) const
         {
             if (clipWidth != 0xffffffff)
             {
                 glEnable(GL_SCISSOR_TEST);
                 glScissor(clipX, clipY, clipWidth, clipHeight);
             }
-        
+            
+            if (transform != currentTransform) {
+                glPopMatrix();
+                glPushMatrix();
+                glMultMatrixd(transform->data());
+                currentTransform = transform;
+            }
+            
             if (mode == amAdditive)
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             else if (mode == amMultiply)
@@ -114,7 +121,7 @@ namespace Gosu
                 glDisable(GL_SCISSOR_TEST);
         }
 #else
-        void perform(unsigned& currentTexName, const DrawOp* next) const
+        void perform(unsigned& currentTexName, Transform*& currentTransform, const DrawOp* next) const
         {
             if (usedVertices != 4)
                 return; // No triangles, no lines on iPhone
@@ -139,6 +146,13 @@ namespace Gosu
                 glEnableClientState(GL_COLOR_ARRAY);
                 
                 isSetup = true;
+            }
+            
+            if (transform != currentTransform) {
+                glPopMatrix();
+                glPushMatrix();
+                glMultMatrixd(transform->data());
+                currentTransform = transform;
             }
             
             if (clipWidth != 0xffffffff)
@@ -284,7 +298,11 @@ namespace Gosu
             if (z == zImmediate)
             {
                 GLuint currentTexName = NO_TEXTURE;
-                op.perform(currentTexName, 0);
+                Transform* currentTransform = 0;
+                glMatrixMode(GL_MODELVIEW);
+                glPushMatrix();
+                op.perform(currentTexName, currentTransform, 0);
+                glPopMatrix();
                 if (currentTexName != NO_TEXTURE)
                     glDisable(GL_TEXTURE_2D);
             }
@@ -309,14 +327,20 @@ namespace Gosu
         void performDrawOps() const
         {
             GLuint currentTexName = NO_TEXTURE;
+            Transform* currentTransform = 0;
+            
+            glMatrixMode(GL_MODELVIEW);
+            glPushMatrix();
             
             std::multiset<DrawOp>::const_iterator last, cur = set.begin(), end = set.end();
             while (cur != end)
             {
                 last = cur;
                 ++cur;
-                last->perform(currentTexName, cur == end ? 0 : &*cur);
+                last->perform(currentTexName, currentTransform, cur == end ? 0 : &*cur);
             }
+            
+            glPopMatrix();
             
             if (currentTexName != NO_TEXTURE)
                 glDisable(GL_TEXTURE_2D);
