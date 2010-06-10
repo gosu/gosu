@@ -384,6 +384,10 @@
 		D4F4C2930FC5A1790013CE21 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025D0F706A0100407E60 /* OpenAL.framework */; };
 		D4F4C2940FC5A1790013CE21 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025D0F706A0100407E60 /* OpenAL.framework */; };
 		D4F4C2950FC5A17A0013CE21 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42D025D0F706A0100407E60 /* OpenAL.framework */; };
+		D4FA74BD11C0064100E719EA /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4FA74BC11C0064100E719EA /* Transform.cpp */; };
+		D4FA74D211C0071100E719EA /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4FA74BC11C0064100E719EA /* Transform.cpp */; };
+		D4FA74D311C0071300E719EA /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4FA74BC11C0064100E719EA /* Transform.cpp */; };
+		D4FA74D411C0071300E719EA /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4FA74BC11C0064100E719EA /* Transform.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -586,6 +590,7 @@
 		D4F4BF850FC4CB1A0013CE21 /* block.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = block.c; path = ../dependencies/libvorbis/lib/block.c; sourceTree = SOURCE_ROOT; };
 		D4F4BF860FC4CB1A0013CE21 /* bitrate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bitrate.c; path = ../dependencies/libvorbis/lib/bitrate.c; sourceTree = SOURCE_ROOT; };
 		D4F4BF870FC4CB1A0013CE21 /* analysis.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = analysis.c; path = ../dependencies/libvorbis/lib/analysis.c; sourceTree = SOURCE_ROOT; };
+		D4FA74BC11C0064100E719EA /* Transform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Transform.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -800,6 +805,7 @@
 				D410EAE20A801B00005C7067 /* Text.cpp */,
 				D410EAE30A801B00005C7067 /* TextMac.cpp */,
 				D4032B7C0F5035A900A20790 /* TextTouch.mm */,
+				D4FA74BC11C0064100E719EA /* Transform.cpp */,
 			);
 			name = Graphics;
 			path = ../GosuImpl/Graphics;
@@ -1254,6 +1260,7 @@
 				D4F4BF9A0FC4CB1A0013CE21 /* bitrate.c in Sources */,
 				D4F4BF9B0FC4CB1A0013CE21 /* analysis.c in Sources */,
 				D42E1A15104AEF1D0019345C /* TextTouch.mm in Sources */,
+				D4FA74BD11C0064100E719EA /* Transform.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1343,6 +1350,7 @@
 				D4F4BFAE0FC4CB1A0013CE21 /* bitrate.c in Sources */,
 				D4F4BFAF0FC4CB1A0013CE21 /* analysis.c in Sources */,
 				D42E1A17104AEF210019345C /* TextTouch.mm in Sources */,
+				D4FA74D211C0071100E719EA /* Transform.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1399,6 +1407,7 @@
 				D4F4BFD50FC4CB1A0013CE21 /* block.c in Sources */,
 				D4F4BFD60FC4CB1A0013CE21 /* bitrate.c in Sources */,
 				D4F4BFD70FC4CB1A0013CE21 /* analysis.c in Sources */,
+				D4FA74D411C0071300E719EA /* Transform.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1487,6 +1496,7 @@
 				D4F4BFC20FC4CB1A0013CE21 /* bitrate.c in Sources */,
 				D4F4BFC30FC4CB1A0013CE21 /* analysis.c in Sources */,
 				D42E1A16104AEF1F0019345C /* TextTouch.mm in Sources */,
+				D4FA74D311C0071300E719EA /* Transform.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

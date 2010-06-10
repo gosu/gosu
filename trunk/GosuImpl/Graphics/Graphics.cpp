@@ -11,6 +11,7 @@
 #endif
 #include <cmath>
 #include <algorithm>
+#include <numeric>
 #include <limits>
 
 struct Gosu::Graphics::Impl
@@ -22,10 +23,29 @@ struct Gosu::Graphics::Impl
     DrawOpQueueStack queues;
     typedef std::vector<boost::shared_ptr<Texture> > Textures;
     Textures textures;
-    
+    Transforms currentTransforms;
+    Transforms absoluteTransforms;
 #if 0
     boost::mutex texMutex;
 #endif
+    
+    static Gosu::Transform
+    multiply(const Gosu::Transform left, const Gosu::Transform right)
+    {
+        Gosu::Transform result;
+        result.assign(0);
+        for (int i = 0; i < 16; ++i)
+            for (int j = 0; j < 4; ++j)
+                result[i] += left[i / 4 + j] * right[i % 4 + j * 4];
+        return result;
+    }
+    
+    void calculateAbsoluteTransform()
+    {
+        absoluteTransforms.push_back(
+            std::accumulate(currentTransforms.begin() + 1, currentTransforms.end(),
+                            currentTransforms.front(), multiply));
+    }
 };
 
 Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscreen)
@@ -57,6 +77,13 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     
     // Create default draw-op queue.
     pimpl->queues.resize(1);
+    
+    // Create default matrix.
+    pimpl->currentTransforms.resize(1);
+    pimpl->currentTransforms[0].assign(0);
+    for (int i = 0; i < 16; i += 5)
+        pimpl->currentTransforms[0][i] = 1;
+    pimpl->absoluteTransforms = pimpl->currentTransforms;
 }
 
 Gosu::Graphics::~Graphics()
@@ -107,7 +134,12 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 {
     // If there is a recording in process, stop it.
+    // TODO: Raise exception?
     pimpl->queues.resize(1);
+    
+    // If there are transformations in progress, clear them.
+    pimpl->currentTransforms.resize(1);
+    pimpl->absoluteTransforms.resize(1);
 
     // Flush leftover clippings
     endClipping();
@@ -229,11 +261,23 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::endRecording()
     return result;
 }
 
+void Gosu::Graphics::pushTransform(const Gosu::Transform& transform)
+{
+    pimpl->currentTransforms.push_back(transform);
+    pimpl->calculateAbsoluteTransform();
+}
+
+void Gosu::Graphics::popTransform()
+{
+    pimpl->currentTransforms.pop_back();
+    pimpl->calculateAbsoluteTransform();
+}
+
 void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
     double x2, double y2, Color c2,
     ZPos z, AlphaMode mode)
 {
-    DrawOp op;
+    DrawOp op(pimpl->absoluteTransforms.back());
     
     x1 *= factorX();
     y1 *= factorY();
@@ -253,7 +297,7 @@ void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
     double x3, double y3, Color c3,
     ZPos z, AlphaMode mode)
 {
-    DrawOp op;
+    DrawOp op(pimpl->absoluteTransforms.back());
     
     x1 *= factorX();
     y1 *= factorY();
@@ -283,7 +327,7 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
 {
     reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
-    DrawOp op;
+    DrawOp op(pimpl->absoluteTransforms.back());
 
     x1 *= factorX();
     y1 *= factorY();
@@ -332,7 +376,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
         if (srcX == 0 && srcWidth == src.width() &&
             srcY == 0 && srcHeight == src.height())
         {
-            data = texture->tryAlloc(*this, pimpl->queues, texture,
+            data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture,
                     src, 0, 0, src.width(), src.height(), 0);
         }
         else
@@ -340,7 +384,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
             Bitmap trimmedSrc;
             trimmedSrc.resize(srcWidth, srcHeight);
             trimmedSrc.insert(src, 0, 0, srcX, srcY, srcWidth, srcHeight);
-            data = texture->tryAlloc(*this, pimpl->queues, texture,
+            data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture,
                     trimmedSrc, 0, 0, trimmedSrc.width(), trimmedSrc.height(), 0);
         }
         
@@ -373,7 +417,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
         boost::shared_ptr<Texture> texture(*i);
         
         std::auto_ptr<ImageData> data;
-        data = texture->tryAlloc(*this, pimpl->queues, texture, bmp, 0, 0, bmp.width(), bmp.height(), 1);
+        data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture, bmp, 0, 0, bmp.width(), bmp.height(), 1);
         if (data.get())
             return data;
     }
@@ -385,7 +429,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     pimpl->textures.push_back(texture);
     
     std::auto_ptr<ImageData> data;
-    data = texture->tryAlloc(*this, pimpl->queues, texture, bmp, 0, 0, bmp.width(), bmp.height(), 1);
+    data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture, bmp, 0, 0, bmp.width(), bmp.height(), 1);
     if (!data.get())
         throw std::logic_error("Internal texture block allocation error");
 

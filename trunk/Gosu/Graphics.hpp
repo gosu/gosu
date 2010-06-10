@@ -7,6 +7,7 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
+#include <boost/array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <memory>
 
@@ -23,6 +24,12 @@ namespace Gosu
     // Only useful when extending Gosu using OpenGL.
     // (Held back until it will not cause a stock Ubuntu to crash. Don't ask me!)
     //extern unsigned const MAX_TEXTURE_SIZE;
+    
+    typedef boost::array<double, 16> Transform;
+    Transform rotate(double angle);
+    Transform translate(double x, double y);
+    Transform scale(double factor);
+    Transform scale(double factorX, double factorY);
     
     //! Serves as the target of all drawing and provides basic drawing
     //! functionality.
@@ -66,6 +73,11 @@ namespace Gosu
         //! Finishes building the macro and returns it as a drawable object.
         //! Most usually, the return value is passed to Image::Image().
         std::auto_ptr<Gosu::ImageData> endRecording();
+        
+        //! Pushes one transformation onto the transformation stack.
+        void pushTransform(const Transform& transform);
+        //! Pops one transformation from the transformation stack.
+        void popTransform();
 
         //! Draws a line from one point to another (last pixel exclusive).
         void drawLine(double x1, double y1, Color c1,

@@ -4,10 +4,10 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 
-Gosu::TexChunk::TexChunk(Graphics& graphics, DrawOpQueueStack& queues,
-                                 boost::shared_ptr<Texture> texture,
-                                 int x, int y, int w, int h, int padding)
-: graphics(&graphics), queues(&queues), texture(texture), x(x), y(y), w(w), h(h), padding(padding)
+Gosu::TexChunk::TexChunk(Graphics& graphics, Transforms& transforms, DrawOpQueueStack& queues,
+    boost::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding)
+:   graphics(&graphics), transforms(&transforms), queues(&queues),
+    texture(texture), x(x), y(y), w(w), h(h), padding(padding)
 {
 }
 
@@ -45,7 +45,7 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1,
     double x4, double y4, Color c4,
     ZPos z, AlphaMode mode) const
 {
-    DrawOp newDrawOp;
+    DrawOp newDrawOp(transforms->back());
     
     reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
     

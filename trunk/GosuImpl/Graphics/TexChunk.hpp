@@ -12,13 +12,14 @@
 class Gosu::TexChunk : public Gosu::ImageData
 {
     Graphics* graphics;
+    Transforms* transforms;
     DrawOpQueueStack* queues;
     boost::shared_ptr<Texture> texture;
     int x, y, w, h, padding;
 
 public:
-    TexChunk(Graphics& graphics, DrawOpQueueStack& queues, boost::shared_ptr<Texture> texture,
-             int x, int y, int w, int h, int padding);
+    TexChunk(Graphics& graphics, Transforms& transforms, DrawOpQueueStack& queues,
+             boost::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding);
     ~TexChunk();
 
     unsigned int width() const;

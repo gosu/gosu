@@ -1,6 +1,7 @@
 #ifndef GOSUIMPL_GRAPHICS_COMMON_HPP
 #define GOSUIMPL_GRAPHICS_COMMON_HPP
 
+#include <Gosu/Graphics.hpp>
 #include <Gosu/Platform.hpp>
 
 #if defined(GOSU_IS_WIN)
@@ -24,6 +25,7 @@ namespace Gosu
     class TexChunk;
     struct DrawOp;
     class DrawOpQueue;
+    typedef std::vector<Transform> Transforms;
     typedef std::vector<DrawOpQueue> DrawOpQueueStack;
     class Macro;
     

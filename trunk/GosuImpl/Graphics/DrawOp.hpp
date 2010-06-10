@@ -24,6 +24,7 @@ namespace Gosu
     
     struct DrawOp
     {
+        Gosu::Transform* transform;
         int clipX, clipY;
         unsigned clipWidth, clipHeight;
             
@@ -41,7 +42,7 @@ namespace Gosu
         const TexChunk* chunk;
         AlphaMode mode;
 
-        DrawOp() { clipWidth = 0xffffffff; usedVertices = 0; chunk = 0; }
+        DrawOp(Gosu::Transform& transform) : transform(&transform) { clipWidth = 0xffffffff; usedVertices = 0; chunk = 0; }
         
 #ifndef GOSU_IS_IPHONE
         void perform(GLuint& currentTexName, const void*) const
