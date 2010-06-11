@@ -4,11 +4,14 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-06-08)
+(Last update: 2010-06-11)
 
 == Gosu 0.7.x ==
-  * Matrix-Support (with_transformation do … end)
+  * Add Transform.cpp to Windows project files
+  * Add scaling to SDL text so descenders don't overflow
+  * Find out why UnicodeTest fails horribly on Ubuntu :(
   * Why does this crash: Image.from_text 64-bit with attached args
+  * Release 0.7.21
   * Add/finish iPad support
   * Add Numeric#clamp, Numeric#wrap to Ruby
   * See why Gosu does not work with Rubinius
@@ -19,7 +22,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Test StandBy with Windows and a running Gosu app
   * Check for 1.9.2 final and let @jeedee know about progress if existing
-  * Find out why UnicodeTest fails horribly on Ubuntu :(
   * See if really old games have problems running in current Gosu
   * The screen size/OpenGL stuff …
     * See if John Shea's talk had something about not being locked to pixel positions
