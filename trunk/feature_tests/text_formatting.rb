@@ -8,7 +8,7 @@ class Test < Gosu::Window
   end
   
   def draw
-    @font.draw("Hal<b>lo We<i>lt<c=ffff00>yell</i>ow</c>white", 10, 10, 0)
+    @font.draw("</u>H<u>al<b>lo We<i>lt<c=ffff00>y<u>ell</i>ow</c>w</u>hite", 10, 10, 0)
   end
   
   def button_down(id)

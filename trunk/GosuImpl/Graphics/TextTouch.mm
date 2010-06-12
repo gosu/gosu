@@ -79,13 +79,13 @@ namespace
         #endif
     }
 
-    OSXFont* getFont(wstring fontName, double height)
+    OSXFont* getFont(wstring fontName, unsigned fontFlags, double height)
     {
         fontName = normalizeFont(fontName);
     
-        static map<pair<wstring, double>, OSXFont*> usedFonts;
+        static map<pair<wstring, pair<unsigned, double> >, OSXFont*> usedFonts;
         
-        OSXFont* result = usedFonts[make_pair(fontName, height)];
+        OSXFont* result = usedFonts[make_pair(fontName, make_pair(fontFlags, height))];
         if (!result)
         {
             Gosu::ObjRef<NSString> name([[NSString alloc] initWithUTF8String: Gosu::wstringToUTF8(fontName).c_str()]);
@@ -94,10 +94,14 @@ namespace
             #else
             NSFontDescriptor* desc = [[[NSFontDescriptor alloc] initWithFontAttributes:nil] fontDescriptorWithFamily:name.obj()];
             result = [[NSFont fontWithDescriptor:desc size:height] retain];
+            if (result && (fontFlags & Gosu::ffBold))
+                result = [[NSFontManager sharedFontManager] convertFont:result toHaveTrait:NSFontBoldTrait];
+            if (result && (fontFlags & Gosu::ffItalic))
+                result = [[NSFontManager sharedFontManager] convertFont:result toHaveTrait:NSFontItalicTrait];
             #endif
             if (!result && fontName != Gosu::defaultFontName())
-                result = getFont(Gosu::defaultFontName(), height);
-            usedFonts[make_pair(fontName, height)] = result;
+                result = getFont(Gosu::defaultFontName(), 0, height);
+            usedFonts[make_pair(fontName, make_pair(fontFlags, height))] = result;
         }
         return result;
     }
@@ -110,17 +114,36 @@ wstring Gosu::defaultFontName()
     return L"Arial";
 }
 
+#ifndef GOSU_IS_IPHONE
+namespace
+{
+    NSDictionary* attributeDictionary(NSFont* font, unsigned fontFlags)
+    {
+        NSMutableDictionary* dict =
+            [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                font, NSFontAttributeName,
+                [NSColor whiteColor], NSForegroundColorAttributeName,
+                nil];
+        if (fontFlags & Gosu::ffUnderline)
+        {
+            Gosu::ObjRef<NSNumber> underline([[NSNumber alloc] initWithInt:NSUnderlineStyleSingle]);
+            [dict setValue: underline.obj() forKey:NSUnderlineStyleAttributeName];
+        }
+        return dict;
+    }
+}
+#endif
+
 unsigned Gosu::textWidth(const wstring& text,
     const wstring& fontName, unsigned fontHeight, unsigned fontFlags)
 {
-    OSXFont* font = getFont(fontName, fontHeight);
+    OSXFont* font = getFont(fontName, fontFlags, fontHeight);
     
     // This will, of course, compute a too large size; fontHeight is in pixels,
     // the method expects point.
     ObjRef<NSString> string([[NSString alloc] initWithUTF8String: wstringToUTF8(text).c_str()]);
     #ifndef GOSU_IS_IPHONE
-    ObjRef<NSDictionary> attributes([[NSDictionary alloc] initWithObjectsAndKeys:
-        font, NSFontAttributeName, nil]);
+    ObjRef<NSDictionary> attributes(attributeDictionary(font, fontFlags));
     NSSize size = [string.obj() sizeWithAttributes: attributes.get()];
     #else
     CGSize size = [string.obj() sizeWithFont: font];
@@ -134,13 +157,12 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     Color c, const wstring& fontName, unsigned fontHeight,
     unsigned fontFlags)
 {
-    OSXFont* font = getFont(fontName, fontHeight);
+    OSXFont* font = getFont(fontName, fontFlags, fontHeight);
     ObjRef<NSString> string([[NSString alloc] initWithUTF8String: wstringToUTF8(text).c_str()]);
 
     // This will, of course, compute a too large size; fontHeight is in pixels, the method expects point.
     #ifndef GOSU_IS_IPHONE
-    ObjRef<NSDictionary> attributes([[NSDictionary alloc] initWithObjectsAndKeys:
-        font, NSFontAttributeName, nil]);
+    ObjRef<NSDictionary> attributes(attributeDictionary(font, fontFlags));
     NSSize size = [string.obj() sizeWithAttributes: attributes.get()];
     #else
     CGSize size = [string.obj() sizeWithFont: font];
@@ -167,7 +189,7 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     #endif
     
     // Use new font with proper size this time.
-    font = getFont(fontName, fontHeight * fontHeight / size.height);
+    font = getFont(fontName, fontFlags, fontHeight * fontHeight / size.height);
 
     #ifdef GOSU_IS_IPHONE
     CGContextTranslateCTM(context, 0, fontHeight);
@@ -177,8 +199,7 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     UIGraphicsPopContext();
     #else
     NSPoint NSPointZero = { 0, 0 };
-    attributes.reset([[NSDictionary alloc] initWithObjectsAndKeys:
-        font, NSFontAttributeName, [NSColor whiteColor], NSForegroundColorAttributeName, nil]);
+    attributes.reset(attributeDictionary(font, fontFlags));
     
     [NSGraphicsContext saveGraphicsState];
     [NSGraphicsContext setCurrentContext:
