@@ -3,6 +3,7 @@
 #include <Gosu/Image.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/Text.hpp>
+#include <GosuImpl/Graphics/FormattedString.hpp>
 #include <boost/array.hpp>
 using namespace std;
 
@@ -29,24 +30,25 @@ struct Gosu::Font::Impl
     Graphics* graphics;
     wstring name;
     unsigned height;
-    unsigned flags;
 
     // Chunk of 2^16 characters (on Windows, there'll only be one of them).
     // IMPR: I couldn't find a way to determine the size of wchar_t at compile
     // time, so I can't get rid of the magic numbers or even do some #ifdef
     // magic.
     typedef boost::array<boost::scoped_ptr<Image>, 65536> CharChunk;
-    boost::scoped_ptr<CharChunk> chunks[65536];
+    boost::scoped_ptr<CharChunk> chunks[65536][ffCombinations];
 
-    Image& getChar(wchar_t wc)
+    Image& getChar(wchar_t wc, unsigned flags)
     {
+        assert(flags < ffCombinations);
+    
         size_t chunkIndex = wc / 65536;
         size_t charIndex = wc % 65536;
 
-        if (!chunks[chunkIndex])
-            chunks[chunkIndex].reset(new CharChunk);
+        if (!chunks[chunkIndex][flags])
+            chunks[chunkIndex][flags].reset(new CharChunk);
 
-        boost::scoped_ptr<Image>& imgPtr = (*chunks[chunkIndex])[charIndex];
+        boost::scoped_ptr<Image>& imgPtr = (*chunks[chunkIndex][flags])[charIndex];
 
         if (imgPtr)
             return *imgPtr;
@@ -70,8 +72,8 @@ Gosu::Font::Font(Graphics& graphics, const wstring& fontName, unsigned fontHeigh
 {
     pimpl->graphics = &graphics;
     pimpl->name = fontName;
-    pimpl->height = fontHeight * 2; // Auto-AA!
-    pimpl->flags = fontFlags;
+    pimpl->height = fontHeight * 2;
+    //pimpl->flags = fontFlags; TODO
 }
 
 Gosu::Font::~Font()
@@ -90,20 +92,23 @@ unsigned Gosu::Font::height() const
 
 unsigned Gosu::Font::flags() const
 {
-    return pimpl->flags;
+    return 0;//pimpl->flags;
 }
 
 double Gosu::Font::textWidth(const std::wstring& text, double factorX) const
 {
+    FormattedString fs(text);
     double result = 0;
-    for (unsigned i = 0; i < text.length(); ++i)
-        result += pimpl->getChar(text[i]).width();
+    for (unsigned i = 0; i < fs.length(); ++i)
+        result += pimpl->getChar(fs.charAt(i), fs.flagsAt(i)).width();
     return result * factorX / 2;
 }
 
 void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
     double factorX, double factorY, Color c, AlphaMode mode) const
 {
+    FormattedString fs(text);
+
     factorX /= 2;
     factorY /= 2;
     enum {
@@ -111,8 +116,12 @@ void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
         RTL = -1
     } dir = LTR;
 
-    for (unsigned i = 0; i < text.length(); ++i)
+    for (unsigned i = 0; i < fs.length(); ++i)
     {
+        /*
+        
+        Sorry, LTR/RTL support taken out until somebody uses it
+        
         if (isLtrChar(text[i]))
         {
             if (dir == RTL)
@@ -124,18 +133,18 @@ void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
             if (dir == LTR)
                 x += 2 * textWidth(text.substr(i + 1, wstring::npos)) * factorX, dir = RTL;
             continue;
-        }
+        }*/
     
-        Image& curChar = pimpl->getChar(text[i]);
-        if (dir == LTR)
-            curChar.draw(x, y, z, factorX, factorY, c, mode);
-        else
-            curChar.draw(x - curChar.width() * factorX, y, z, factorX, factorY, c, mode);
+        Image& curChar = pimpl->getChar(fs.charAt(i), fs.flagsAt(i));
+        //if (dir == LTR)
+            curChar.draw(x, y, z, factorX, factorY, Gosu::multiply(fs.colorAt(i), c), mode);
+        //else
+        //    curChar.draw(x - curChar.width() * factorX, y, z, factorX, factorY, c, mode);
         
         x += curChar.width() * factorX * dir;
     }
 }
-                     
+
 void Gosu::Font::drawRel(const wstring& text, double x, double y, ZPos z,
     double relX, double relY, double factorX, double factorY, Color c,
     AlphaMode mode) const
@@ -149,6 +158,8 @@ void Gosu::Font::drawRel(const wstring& text, double x, double y, ZPos z,
 void Gosu::Font::drawRot(const wstring& text, double x, double y, ZPos z, double angle,
     double factorX, double factorY, Color c, AlphaMode mode) const
 {
+    // TODO: Remove, replace by draw and pushTransform
+    
     factorX /= 2;
     factorY /= 2;
     
@@ -156,7 +167,7 @@ void Gosu::Font::drawRot(const wstring& text, double x, double y, ZPos z, double
     
     for (unsigned i = 0; i < text.length(); ++i)
     {
-        Image& curChar = pimpl->getChar(text[i]);
+        Image& curChar = pimpl->getChar(text[i], 0);
         curChar.drawRot(x, y, z, angle, 0.0, 0.0, factorX, factorY, c, mode);
         x += curChar.width() * factorX * stepX;
         y += curChar.width() * factorX * stepY;

@@ -35,9 +35,10 @@ namespace Gosu
     
     enum FontFlags
     {
-        ffBold      = 1,
-        ffItalic    = 2,
-        ffUnderline = 4
+        ffBold         = 1,
+        ffItalic       = 2,
+        ffUnderline    = 4,
+        ffCombinations = 8
     };
     
     enum TextAlign
