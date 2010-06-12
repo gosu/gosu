@@ -1,6 +1,6 @@
 require '../lib/gosu'
 
-TEST_STRING = "</u>H<u>al<b>lo We<i>lt<c=ffff00>y<u>ell</i>ow</c>w</u>hite"
+TEST_STRING = "</u>H<u>al<b>lo We<i>lt<c=ffff00>y<u>e<c=80ffff00>ll</i>ow</c></c>w</u>hite"
 
 class Test < Gosu::Window
   def initialize

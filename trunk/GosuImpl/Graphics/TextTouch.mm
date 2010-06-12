@@ -117,12 +117,22 @@ wstring Gosu::defaultFontName()
 #ifndef GOSU_IS_IPHONE
 namespace
 {
-    NSDictionary* attributeDictionary(NSFont* font, unsigned fontFlags)
+    NSDictionary* attributeDictionary(NSFont* font, Gosu::Color color, unsigned fontFlags)
     {
+        static std::map<Gosu::Color, NSColor*> colorCache;
+        
+        // Because of the way we later copy the buffer directly to a Gosu::Bitmap, we
+        // need to swap the color components already.
+        color = color.abgr();
+        
+        if (!colorCache[color])
+            colorCache[color] = [[NSColor colorWithDeviceRed:color.red()/255.0
+                green:color.green()/255.0 blue:color.blue()/255.0 alpha:color.alpha()/255.0] retain];
+        
         NSMutableDictionary* dict =
             [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                 font, NSFontAttributeName,
-                [NSColor whiteColor], NSForegroundColorAttributeName,
+                colorCache[color], NSForegroundColorAttributeName,
                 nil];
         if (fontFlags & Gosu::ffUnderline)
         {
@@ -143,7 +153,7 @@ unsigned Gosu::textWidth(const wstring& text,
     // the method expects point.
     ObjRef<NSString> string([[NSString alloc] initWithUTF8String: wstringToUTF8(text).c_str()]);
     #ifndef GOSU_IS_IPHONE
-    ObjRef<NSDictionary> attributes(attributeDictionary(font, fontFlags));
+    ObjRef<NSDictionary> attributes(attributeDictionary(font, 0xffffffff, fontFlags));
     NSSize size = [string.obj() sizeWithAttributes: attributes.get()];
     #else
     CGSize size = [string.obj() sizeWithFont: font];
@@ -162,7 +172,7 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
 
     // This will, of course, compute a too large size; fontHeight is in pixels, the method expects point.
     #ifndef GOSU_IS_IPHONE
-    ObjRef<NSDictionary> attributes(attributeDictionary(font, fontFlags));
+    ObjRef<NSDictionary> attributes(attributeDictionary(font, c, fontFlags));
     NSSize size = [string.obj() sizeWithAttributes: attributes.get()];
     #else
     CGSize size = [string.obj() sizeWithFont: font];
@@ -182,7 +192,7 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
                               colorSpace,
                               kCGImageAlphaPremultipliedLast);
     CGColorSpaceRelease(colorSpace);
-    #if defined(GOSU_IS_IPHONE)
+    #ifdef GOSU_IS_IPHONE
     CGFloat color[] = { c.green() / 255.0, c.blue() / 255.0, c.red() / 255.0, 0 };
     CGContextSetStrokeColor(context, color);
     CGContextSetFillColor(context, color);
@@ -199,7 +209,7 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     UIGraphicsPopContext();
     #else
     NSPoint NSPointZero = { 0, 0 };
-    attributes.reset(attributeDictionary(font, fontFlags));
+    attributes.reset(attributeDictionary(font, c, fontFlags));
     
     [NSGraphicsContext saveGraphicsState];
     [NSGraphicsContext setCurrentContext:

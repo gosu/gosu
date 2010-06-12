@@ -78,6 +78,7 @@ namespace Gosu
                         std::wcstol(html.c_str() + pos + 3, 0, 16);
                     c.push_back(0xff000000 | rgb);
                     pos += 10;
+                    continue;
                 }
                 if (html.substr(pos, 3) == L"<c=" &&
                     html.at(pos + 11) == L'>')
@@ -87,11 +88,13 @@ namespace Gosu
                         std::wcstoll(html.c_str() + pos + 3, 0, 16);
                     c.push_back(argb);
                     pos += 12;
+                    continue;
                 }
                 if (html.substr(pos, 4) == L"</c>")
                 {
                     c.pop_back();
                     pos += 4;
+                    continue;
                 }
                 
                 unsigned flags = 0;

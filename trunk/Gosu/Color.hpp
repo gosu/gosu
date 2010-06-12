@@ -146,6 +146,11 @@ namespace Gosu
     // require 'gosu'; include Gosu
     // works from within Ruby, the #ifndef guard can be removed.
     #ifndef SWIG
+    inline bool operator<(Color a, Color b)
+    {
+        return a.argb() < b.argb();
+    }
+    
     inline bool operator==(Color a, Color b)
     {
         return a.argb() == b.argb();
