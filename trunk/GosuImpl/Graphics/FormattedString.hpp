@@ -24,6 +24,10 @@ namespace Gosu
         std::vector<FormattedChar> chars;
         
     public:
+        FormattedString()
+        {
+        }
+        
         explicit FormattedString(const std::wstring& html)
         {
             unsigned pos = 0;
@@ -135,6 +139,13 @@ namespace Gosu
             return chars.size();
         }
         
+        FormattedString range(unsigned begin, unsigned end) const
+        {
+            FormattedString result;
+            result.chars.assign(chars.begin() + begin, chars.begin() + end);
+            return result;
+        }
+        
         std::vector<FormattedString> splitLines() const
         {
             std::vector<FormattedString> result;
@@ -143,13 +154,13 @@ namespace Gosu
             {
                 if (charAt(cur) == L'\n')
                 {
-                    FormattedString line(L"");
+                    FormattedString line;
                     line.chars.assign(chars.begin() + begin, chars.begin() + cur);
                     result.push_back(line);
                     begin = cur + 1;
                 }
             }
-            FormattedString line(L"");
+            FormattedString line;
             line.chars.assign(chars.begin() + begin, chars.end());
             result.push_back(line);
             return result;
@@ -163,13 +174,13 @@ namespace Gosu
             {
                 if (!chars[begin].sameStyleAs(chars[cur]))
                 {
-                    FormattedString line(L"");
+                    FormattedString line;
                     line.chars.assign(chars.begin() + begin, chars.begin() + cur);
                     result.push_back(line);
                     begin = cur;
                 }
             }
-            FormattedString line(L"");
+            FormattedString line;
             line.chars.assign(chars.begin() + begin, chars.end());
             result.push_back(line);
             return result;

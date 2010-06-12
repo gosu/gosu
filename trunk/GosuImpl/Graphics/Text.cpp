@@ -8,7 +8,6 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
-#include <boost/tokenizer.hpp>
 #include <cassert>
 #include <cmath>
 #include <algorithm>
@@ -40,7 +39,7 @@ namespace Gosu
     
         struct WordInfo
         {
-            wstring text;
+            FormattedString text;
             unsigned width;
             unsigned spaceWidth;
         };
@@ -54,10 +53,10 @@ namespace Gosu
             unsigned usedLines, allocatedLines;
 
             wstring fontName;
-            unsigned fontHeight, fontFlags, lineSpacing;
+            unsigned fontHeight, lineSpacing;
             TextAlign align;
 
-            unsigned spaceWidth;
+            unsigned spaceWidth_;
 
             void allocNextLine()
             {
@@ -73,8 +72,7 @@ namespace Gosu
 
         public:
             TextBlockBuilder(const wstring& fontName, unsigned fontHeight,
-                unsigned fontFlags, unsigned lineSpacing, unsigned width,
-                TextAlign align)
+                unsigned lineSpacing, unsigned width, TextAlign align)
             {
                 usedLines = 0;
                 allocatedLines = 10;
@@ -83,11 +81,10 @@ namespace Gosu
 
                 this->fontName = fontName;
                 this->fontHeight = fontHeight;
-                this->fontFlags = fontFlags;
                 this->lineSpacing = lineSpacing;
                 this->align = align;
 
-                spaceWidth = textWidth(L" ");
+                spaceWidth_ = textWidth(FormattedString(L" "));
             }
 
             unsigned width() const
@@ -95,9 +92,16 @@ namespace Gosu
                 return bmp.width();
             }
 
-            unsigned textWidth(const std::wstring& text) const
+            unsigned textWidth(const FormattedString& text) const
             {
-                return Gosu::textWidth(text, fontName, fontHeight, fontFlags);
+                if (text.length() == 0)
+                    return 0;
+                
+                std::vector<FormattedString> parts = text.splitParts();
+                unsigned result = 0;
+                BOOST_FOREACH (const FormattedString& part, parts)
+                    result += Gosu::textWidth(part.unformat(), fontName, fontHeight, part.flagsAt(0));
+                return result;
             }
 
             void addLine(Words::const_iterator begin, Words::const_iterator end,
@@ -136,9 +140,17 @@ namespace Gosu
 
                 for (Words::const_iterator cur = begin; cur != end; ++cur)
                 {
-                    drawText(bmp, cur->text, trunc(pos), trunc(top),
-                        Color::WHITE, fontName, fontHeight, fontFlags);
-
+                    std::vector<FormattedString> parts = cur->text.splitParts();
+                    int x = 0;
+                    BOOST_FOREACH (const FormattedString& part, parts)
+                    {
+                        std::wstring unformattedPart = part.unformat();
+                        drawText(bmp, unformattedPart, trunc(pos) + x, trunc(top),
+                            part.colorAt(0), fontName, fontHeight, part.flagsAt(0));
+                        x += Gosu::textWidth(unformattedPart, fontName, fontHeight,
+                            part.flagsAt(0));
+                    }
+                    
                     if (align == taJustify && !overrideAlign)
                         pos += cur->width + 1.0 * (width() - wordsWidth) / (words - 1);
                     else
@@ -157,6 +169,11 @@ namespace Gosu
                 result.resize(result.width(),
                     usedLines * (lineSpacing + fontHeight));
                 return result;
+            }
+            
+            unsigned spaceWidth() const
+            {
+                return spaceWidth_;
             }
         };
 
@@ -202,16 +219,11 @@ namespace Gosu
             if (words.empty() || lineBegin != words.end())
                 builder.addLine(lineBegin, words.end(), wordsWidth, true);
         }
-
-        typedef boost::tokenizer<boost::char_separator<wchar_t>,
-            wstring::const_iterator, wstring> Tokenizer;
-
-        void processParagraph(TextBlockBuilder& builder,
-            const wstring& paragraph)
+        
+        void processParagraph(TextBlockBuilder& builder, const FormattedString& paragraph)
         {
             Words collectedWords;
 
-            const unsigned spaceWidth = builder.textWidth(L" ");
 
             unsigned beginOfWord = 0;
             
@@ -219,30 +231,30 @@ namespace Gosu
             {
                 WordInfo newWord;
 
-                if (paragraph[cur] == L' ')
+                if (paragraph.charAt(cur) == L' ')
                 {
                     // Whitespace: Add last word to list if existent
                     if (beginOfWord != cur)
                     {
-                        newWord.text.assign(paragraph.begin() + beginOfWord, paragraph.begin() + cur);
+                        newWord.text = paragraph.range(beginOfWord, cur);
                         newWord.width = builder.textWidth(newWord.text);
-                        newWord.spaceWidth = spaceWidth;
+                        newWord.spaceWidth = builder.spaceWidth();
                         collectedWords.push_back(newWord);
                     }
                     beginOfWord = cur + 1;
                 }
-                else if (isBreakingAsianGlyph(paragraph[cur]))
+                else if (isBreakingAsianGlyph(paragraph.charAt(cur)))
                 {
                     // Whitespace: Add last word to list if existent
                     if (beginOfWord != cur)
                     {
-                        newWord.text.assign(paragraph.begin() + beginOfWord, paragraph.begin() + cur);
+                        newWord.text = paragraph.range(beginOfWord, cur);
                         newWord.width = builder.textWidth(newWord.text);
                         newWord.spaceWidth = 0;
                         collectedWords.push_back(newWord);
                     }
                     // Add glyph as a single "word"
-                    newWord.text = wstring(1, paragraph[cur]);
+                    newWord.text = paragraph.range(cur, cur + 2);
                     newWord.width = builder.textWidth(newWord.text);
                     newWord.spaceWidth = 0;
                     collectedWords.push_back(newWord);
@@ -252,7 +264,7 @@ namespace Gosu
             if (beginOfWord < paragraph.length())
             {
                 WordInfo lastWord;
-                lastWord.text.assign(paragraph.begin() + beginOfWord, paragraph.end());
+                lastWord.text = paragraph.range(beginOfWord, paragraph.length());
                 lastWord.width = builder.textWidth(lastWord.text);
                 lastWord.spaceWidth = 0;
                 collectedWords.push_back(lastWord);
@@ -261,14 +273,11 @@ namespace Gosu
             processWords(builder, collectedWords);
         }
 
-        void processText(TextBlockBuilder& builder, const wstring& text)
+        void processText(TextBlockBuilder& builder, const FormattedString& text)
         {
-            vector<wstring> paragraphs;
-            wstring processedText = boost::replace_all_copy(text, L"\r\n", L"\n");
-            boost::split(paragraphs, processedText,
-                boost::is_any_of(L"\r\n"));
-            for_each(paragraphs.begin(), paragraphs.end(),
-                boost::bind(processParagraph, boost::ref(builder), _1));
+            vector<FormattedString> paragraphs = text.splitLines();
+            BOOST_FOREACH (FormattedString& fs, paragraphs)
+                processParagraph(builder, fs);
         }
     }
 }
@@ -277,7 +286,8 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
     const std::wstring& fontName, unsigned fontHeight, unsigned lineSpacing,
     unsigned maxWidth, TextAlign align, unsigned fontFlags)
 {
-    if (text.empty())
+    FormattedString fs(boost::replace_all_copy(text, L"\r\n", L"\n"));
+    if (fs.length() == 0)
     {
         Bitmap emptyBitmap;
         emptyBitmap.resize(1, fontHeight);
@@ -286,11 +296,11 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
     
     // Set up the builder object which will manage all the drawing and
     // conversions for us.
-    TextBlockBuilder builder(fontName, fontHeight, fontFlags,
+    TextBlockBuilder builder(fontName, fontHeight,
         lineSpacing, maxWidth, align);
     
     // Let the process* functions draw everything.
-    processText(builder, text);
+    processText(builder, fs);
     
     // Done!
     return builder.result();
