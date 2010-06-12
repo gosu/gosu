@@ -4,8 +4,10 @@
 #include <Gosu/Image.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/Utility.hpp>
-#include <boost/bind.hpp>
+#include <GosuImpl/Graphics/FormattedString.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/bind.hpp>
+#include <boost/foreach.hpp>
 #include <boost/tokenizer.hpp>
 #include <cassert>
 #include <cmath>
@@ -298,26 +300,36 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
 Gosu::Bitmap Gosu::createText(const std::wstring& text,
     const std::wstring& fontName, unsigned fontHeight, unsigned fontFlags)
 {
-    if (text.empty())
-    {
-        Bitmap emptyBitmap;
-        emptyBitmap.resize(1, fontHeight);
-        return emptyBitmap;
-    }
-
-    vector<wstring> lines;
-    wstring processedText = boost::replace_all_copy(text, L"\r\n", L"\n");
-    boost::split(lines, processedText, boost::is_any_of(L"\r\n"));
-
     Bitmap bmp;
-    bmp.resize(textWidth(lines.front(), fontName, fontHeight, fontFlags), fontHeight);
-    drawText(bmp, text, 0, 0, 0xffffffff, fontName, fontHeight, fontFlags);
+    bmp.resize(1, fontHeight);
     
-    for (int i = 1; i < lines.size(); ++i)
+    FormattedString fs(boost::replace_all_copy(text, L"\r\n", L"\n"));
+    if (fs.length() == 0)
+        return bmp;
+    
+    vector<FormattedString> lines = fs.splitLines();
+
+    for (int i = 0; i < lines.size(); ++i)
     {
-        bmp.resize(max(bmp.width(), textWidth(lines[i], fontName, fontHeight, fontFlags)),
-                   bmp.height() + fontHeight);
-        drawText(bmp, lines[i], 0, fontHeight * i, 0xffffffff, fontName, fontHeight, fontFlags);
+        bmp.resize(bmp.width(), (i + 1) * fontHeight);
+
+        if (lines[i].length() == 0)
+            continue;
+        
+        unsigned x = 0;
+        std::vector<FormattedString> parts = lines[i].splitParts();
+        for (int p = 0; p < parts.size(); ++p)
+        {
+            const FormattedString& part = parts[p];
+            assert(part.length() > 0);
+            std::wstring unformattedText = part.unformat();
+            unsigned partWidth =
+                textWidth(unformattedText, fontName, fontHeight, part.flagsAt(0));
+            bmp.resize(std::max(bmp.width(), x + partWidth), bmp.height());
+            drawText(bmp, unformattedText, x, i * fontHeight, part.colorAt(0),
+                fontName, fontHeight, part.flagsAt(0));
+            x += partWidth;
+        }
     }
     
     return bmp;

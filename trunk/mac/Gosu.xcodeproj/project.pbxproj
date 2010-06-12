@@ -792,6 +792,7 @@
 				D4A7E9A90CD3927D00621B24 /* Common.hpp */,
 				D499E6380D06B51300BA6DEC /* DrawOp.hpp */,
 				D410EADB0A801B00005C7067 /* Font.cpp */,
+				D414FFAF11C3E68C0008B352 /* FormattedString.hpp */,
 				D4A5A22C0F40D48300FFF378 /* GosuView.hpp */,
 				D4A5A22D0F40D48300FFF378 /* GosuView.mm */,
 				D410EADC0A801B00005C7067 /* Graphics.cpp */,
@@ -808,7 +809,6 @@
 				D410EAE30A801B00005C7067 /* TextMac.cpp */,
 				D4032B7C0F5035A900A20790 /* TextTouch.mm */,
 				D4FA74BC11C0064100E719EA /* Transform.cpp */,
-				D414FFAF11C3E68C0008B352 /* FormattedString.hpp */,
 			);
 			name = Graphics;
 			path = ../GosuImpl/Graphics;

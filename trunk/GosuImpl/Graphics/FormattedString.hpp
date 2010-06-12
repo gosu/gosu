@@ -15,6 +15,11 @@ namespace Gosu
             wchar_t wc;
             Gosu::Color color;
             unsigned flags;
+            
+            bool sameStyleAs(const FormattedChar& other) const
+            {
+                return color == other.color && flags == other.flags;
+            }
         };
         std::vector<FormattedChar> chars;
         
@@ -27,7 +32,7 @@ namespace Gosu
             c.push_back(0xffffffff);
             while (pos < html.length())
             {
-                // TODO: Range checking
+                // TODO: Range checking for the color ops
             
                 if (html.substr(pos, 3) == L"<b>")
                 {
@@ -99,6 +104,14 @@ namespace Gosu
             }
         }
         
+        std::wstring unformat() const
+        {
+            std::wstring result(length(), L' ');
+            for (int i = 0; i < chars.size(); ++i)
+                result[i] = chars[i].wc;
+            return result;
+        }
+        
         wchar_t charAt(unsigned index) const
         {
             return chars[index].wc;
@@ -117,6 +130,46 @@ namespace Gosu
         unsigned length() const
         {
             return chars.size();
+        }
+        
+        std::vector<FormattedString> splitLines() const
+        {
+            std::vector<FormattedString> result;
+            unsigned begin = 0;
+            for (unsigned cur = 0; cur < length(); ++cur)
+            {
+                if (charAt(cur) == L'\n')
+                {
+                    FormattedString line(L"");
+                    line.chars.assign(chars.begin() + begin, chars.begin() + cur);
+                    result.push_back(line);
+                    begin = cur + 1;
+                }
+            }
+            FormattedString line(L"");
+            line.chars.assign(chars.begin() + begin, chars.end());
+            result.push_back(line);
+            return result;
+        }
+        
+        std::vector<FormattedString> splitParts() const
+        {
+            std::vector<FormattedString> result;
+            unsigned begin = 0;
+            for (unsigned cur = 1; cur < length(); ++cur)
+            {
+                if (!chars[begin].sameStyleAs(chars[cur]))
+                {
+                    FormattedString line(L"");
+                    line.chars.assign(chars.begin() + begin, chars.begin() + cur);
+                    result.push_back(line);
+                    begin = cur;
+                }
+            }
+            FormattedString line(L"");
+            line.chars.assign(chars.begin() + begin, chars.end());
+            result.push_back(line);
+            return result;
         }
     };
 }
