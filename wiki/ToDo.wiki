@@ -4,10 +4,11 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-06-11)
+(Last update: 2010-06-12)
 
 == Gosu 0.7.x ==
   * Add Transform.cpp to Windows project files
+  * beginGL: Throw exception if transformations still in progress
   * Add scaling to SDL text so descenders don't overflow
   * Find out why UnicodeTest fails horribly on Ubuntu :(
   * Why does this crash: Image.from_text 64-bit with attached args
