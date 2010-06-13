@@ -5,6 +5,7 @@
 #define GOSU_AUDIO_HPP
 
 #ifdef WIN32
+#define NOMINMAX
 #include <windows.h>
 #endif
 #include <Gosu/Fwd.hpp>

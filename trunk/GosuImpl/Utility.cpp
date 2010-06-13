@@ -53,6 +53,7 @@ namespace Gosu {
 
 #endif
 #else
+#define NOMINMAX
 #include <windows.h>
 wstring Gosu::utf8ToWstring(const string& utf8)
 {

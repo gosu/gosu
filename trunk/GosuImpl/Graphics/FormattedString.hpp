@@ -141,7 +141,8 @@ namespace Gosu
                     int endOfEntity = pos + 1;
                     while (html[endOfEntity] != L';')
                     {
-                        if (!std::iswalnum(static_cast<std::wint_t>(html[endOfEntity])))
+                        using namespace std; // never know where the wchar_t stuff is ...
+                        if (!iswalnum(static_cast<wint_t>(html[endOfEntity])))
                             goto normalCharacter;
                         endOfEntity += 1;
                         if (endOfEntity >= html.size())
@@ -170,7 +171,7 @@ namespace Gosu
         
         const wchar_t* entityAt(unsigned index) const
         {
-            if (chars[index].wc != 0 or chars[index].entity.empty())
+            if (chars[index].wc != 0 || chars[index].entity.empty())
                 return 0;
             return chars[index].entity.c_str();
         }
