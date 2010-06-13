@@ -1,6 +1,16 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.21=
+  * 2010-05-13: Ruby: Updated CptnRuby to use translate() for scrolling
+  * 2010-05-13: All: In light of transformations, Font#drawRot is deprecated now
+  * 2010-05-13: C++: Fixed alpha support in Gosu::saveToPNG
+  * 2010-05-13: All: Added Image.getData().toBitmap() (C++)/Image#to_blob (Ruby)
+  * 2010-05-13: All: Added support for custom entities as registerEntity(name, bitmap) (C++)/register_entity(name, image) (Ruby) that can be placed in text as &name;
+  * 2010-05-13: All: Added HTML-like text markup for Font and Image#from_text (and C++ equivalents): <b>, <u>, <i> and <c=aarrggbb>/<c=rrggbb>
+  * 2010-05-10: All: Added four matrix transformations that affect all contained drawing: scale(), translate(), rotate() and a free-form transform()
+  * 2010-05-31: Linux: made gem Rubinius-compatible
+
 =0.7.20=
   * 2010-05-30: Windows: Removed Ruby package (use the rubygem)
   * 2010-05-30: Linux: Removed Ruby support from autotools/source package (use the rubygem)
