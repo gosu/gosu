@@ -435,6 +435,20 @@ namespace Gosu {
                                     tileWidth, tileHeight, tileable, vec);
         return vec;        
     }
+    std::string toBlob() const
+    {
+        Gosu::Bitmap bmp = $self->getData().toBitmap();
+        return std::string(reinterpret_cast<const char*>(bmp.data()),
+                           reinterpret_cast<const char*>(bmp.data()) + bmp.width() * bmp.height() * 4);
+    }
+    unsigned columns() const
+    {
+        return $self->width();
+    }
+    unsigned rows() const
+    {
+        return $self->height();
+    }
 }
 
 // Audio:
@@ -516,10 +530,6 @@ namespace Gosu {
         $self->graphics().drawTriangle(x1, y1, c1, x2, y2, c2, x3, y3, c3,
                                        z, mode);
     }
-    /*void drawRect(double x, double y, double w, double h, Gosu::Color c,
-                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault) {
-        $self->graphics().drawRect(x, y, w, h, c, z, mode);
-    }*/
     void drawQuad(double x1, double y1, Gosu::Color c1,
                   double x2, double y2, Gosu::Color c2,
                   double x3, double y3, Gosu::Color c3,

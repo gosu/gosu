@@ -85,12 +85,16 @@ class GameWindow < Gosu::Window
     super(640, 480, false)
     self.caption = "Gosu Tutorial Game"
     
+    # Also test Image#to_blob while we're at it
     @background_image = Gosu::Image.new(self, "media/Space.png", true)
+    @background_image = Gosu::Image.new(self, @background_image, true)
     
     @player = Player.new(self)
     @player.warp(320, 240)
-
-    @star_anim = Gosu::Image::load_tiles(self, "media/Star.png", 25, 25, false)
+    
+    # Also test Image#to_blob while we're at it
+    @star_anim = Gosu::Image::new(self, "media/Star.png", true)
+    @star_anim = Gosu::Image::load_tiles(self, @star_anim, 25, 25, false)
     @stars = Array.new
     
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
