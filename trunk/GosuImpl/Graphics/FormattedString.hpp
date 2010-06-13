@@ -7,6 +7,7 @@
 #include <boost/foreach.hpp>
 #include <stdexcept>
 #include <vector>
+#include <cwchar>
 
 namespace Gosu
 {
@@ -140,9 +141,11 @@ namespace Gosu
                     int endOfEntity = pos;
                     while (html[endOfEntity] != L';')
                     {
+                        if (!std::iswalnum(static_cast<std::wint_t>(html[endOfEntity])))
+                            goto normalCharacter;
                         endOfEntity += 1;
                         if (endOfEntity >= html.size())
-                            throw std::runtime_error("Unterminated entity in input string " + wstringToUTF8(html));
+                            goto normalCharacter;
                     }
                     FormattedChar fc = { 0, c.back(), 0, std::wstring(html.begin() + pos + 1, html.begin() + endOfEntity) };
                     chars.push_back(fc);
@@ -150,6 +153,7 @@ namespace Gosu
                     continue;
                 }
                 
+            normalCharacter:                
                 FormattedChar fc = { html[pos], c.back(), flags(b,u,i) };
                 chars.push_back(fc);
                 pos += 1;

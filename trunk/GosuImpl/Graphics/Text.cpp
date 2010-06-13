@@ -100,6 +100,9 @@ namespace Gosu
                 if (text.length() == 0)
                     return 0;
                 
+                if (text.entityAt(0))
+                    return entityBitmap(text.entityAt(0)).width();
+                
                 std::vector<FormattedString> parts = text.splitParts();
                 unsigned result = 0;
                 BOOST_FOREACH (const FormattedString& part, parts)
@@ -147,6 +150,14 @@ namespace Gosu
                     int x = 0;
                     BOOST_FOREACH (const FormattedString& part, parts)
                     {
+                        if (part.entityAt(0))
+                        {
+                            const Gosu::Bitmap& entity = entityBitmap(part.entityAt(0));
+                            bmp.insert(entity, trunc(pos) + x, trunc(top));
+                            x += entity.width();
+                            continue;
+                        }
+                        
                         std::wstring unformattedPart = part.unformat();
                         drawText(bmp, unformattedPart, trunc(pos) + x, trunc(top),
                             part.colorAt(0), fontName, fontHeight, part.flagsAt(0));
@@ -226,8 +237,7 @@ namespace Gosu
         void processParagraph(TextBlockBuilder& builder, const FormattedString& paragraph)
         {
             Words collectedWords;
-
-
+            
             unsigned beginOfWord = 0;
             
             for (unsigned cur = 0; cur < paragraph.length(); ++cur)
