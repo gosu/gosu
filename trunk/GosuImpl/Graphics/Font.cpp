@@ -29,7 +29,7 @@ struct Gosu::Font::Impl
 {
     Graphics* graphics;
     wstring name;
-    unsigned height;
+    unsigned height, flags;
 
     // Chunk of 2^16 characters (on Windows, there'll only be one of them).
     // IMPR: I couldn't find a way to determine the size of wchar_t at compile
@@ -73,7 +73,7 @@ Gosu::Font::Font(Graphics& graphics, const wstring& fontName, unsigned fontHeigh
     pimpl->graphics = &graphics;
     pimpl->name = fontName;
     pimpl->height = fontHeight * 2;
-    //pimpl->flags = fontFlags; TODO
+    pimpl->flags = fontFlags;
 }
 
 Gosu::Font::~Font()
@@ -92,12 +92,12 @@ unsigned Gosu::Font::height() const
 
 unsigned Gosu::Font::flags() const
 {
-    return 0;//pimpl->flags;
+    return pimpl->flags;
 }
 
 double Gosu::Font::textWidth(const std::wstring& text, double factorX) const
 {
-    FormattedString fs(text);
+    FormattedString fs(text, flags());
     double result = 0;
     for (unsigned i = 0; i < fs.length(); ++i)
         result += pimpl->getChar(fs.charAt(i), fs.flagsAt(i)).width();
@@ -107,7 +107,7 @@ double Gosu::Font::textWidth(const std::wstring& text, double factorX) const
 void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
     double factorX, double factorY, Color c, AlphaMode mode) const
 {
-    FormattedString fs(text);
+    FormattedString fs(text, flags());
 
     factorX /= 2;
     factorY /= 2;

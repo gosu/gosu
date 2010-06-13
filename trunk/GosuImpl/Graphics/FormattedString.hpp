@@ -28,10 +28,12 @@ namespace Gosu
         {
         }
         
-        explicit FormattedString(const std::wstring& html)
+        explicit FormattedString(const std::wstring& html, unsigned baseFlags)
         {
             unsigned pos = 0;
-            int b = 0, u = 0, i = 0;
+            int b = (baseFlags & ffBold) ? 1 : 0,
+                u = (baseFlags & ffUnderline) ? 1 : 0,
+                i = (baseFlags & ffItalic) ? 1 : 0;
             std::vector<Gosu::Color> c;
             c.push_back(0xffffffff);
             while (pos < html.length())

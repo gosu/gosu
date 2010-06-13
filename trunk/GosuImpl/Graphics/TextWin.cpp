@@ -173,9 +173,8 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
         for (unsigned relX = 0; relX < width; ++relX)
         {
             Color pixel = c;
-            pixel.setAlpha(GetPixel(helper.context(), relX, relY) & 0xff);
-            // IMPR: Make better use of c.alpha()?
-            // Maybe even add an AlphaMode parameter?
+            Color::Channel srcAlpha = GetPixel(helper.context(), relX, relY) & 0xff;
+            pixel = multiply(c, Color(alpha, 255, 255, 255));
             if (pixel != 0 && x + relX >= 0 && x + relX < bitmap.width() &&
                 y + relY >= 0 && y + relY < bitmap.height())
                 bitmap.setPixel(x + relX, y + relY, pixel);

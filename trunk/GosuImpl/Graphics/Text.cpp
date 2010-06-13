@@ -84,7 +84,7 @@ namespace Gosu
                 this->lineSpacing = lineSpacing;
                 this->align = align;
 
-                spaceWidth_ = textWidth(FormattedString(L" "));
+                spaceWidth_ = textWidth(FormattedString(L" ", 0));
             }
 
             unsigned width() const
@@ -286,7 +286,7 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
     const std::wstring& fontName, unsigned fontHeight, unsigned lineSpacing,
     unsigned maxWidth, TextAlign align, unsigned fontFlags)
 {
-    FormattedString fs(boost::replace_all_copy(text, L"\r\n", L"\n"));
+    FormattedString fs(boost::replace_all_copy(text, L"\r\n", L"\n"), fontFlags);
     if (fs.length() == 0)
     {
         Bitmap emptyBitmap;
@@ -313,7 +313,7 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
     Bitmap bmp;
     bmp.resize(1, fontHeight);
     
-    FormattedString fs(boost::replace_all_copy(text, L"\r\n", L"\n"));
+    FormattedString fs(boost::replace_all_copy(text, L"\r\n", L"\n"), fontFlags);
     if (fs.length() == 0)
         return bmp;
     

@@ -149,8 +149,7 @@ namespace Gosu
                     if (x + x2 < 0 || x + x2 >= bitmap.width())
                         break;
                     unsigned val = ft_bitmap.buffer[y2*width+x2];
-                    Color color = c;
-                    color.setAlpha(val);
+                    Color color = multiply(c, Gosu::Color(val, 255, 255, 255));
                     bitmap.setPixel(x2 + x, y2 + y, color);
                 }
             }
