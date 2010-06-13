@@ -90,9 +90,9 @@ namespace
         {
             Gosu::ObjRef<NSString> name([[NSString alloc] initWithUTF8String: Gosu::wstringToUTF8(fontName).c_str()]);
             #ifdef GOSU_IS_IPHONE
-            result = [[OSXFont fontWithName: name.obj() size: height] retain];
+            result = [OSXFont fontWithName: name.obj() size: height];
             #else
-            NSFontDescriptor* desc = [[[NSFontDescriptor alloc] initWithFontAttributes:nil] fontDescriptorWithFamily:name.obj()];
+            NSFontDescriptor* desc = [[NSFontDescriptor fontDescriptorWithFontAttributes:nil] fontDescriptorWithFamily:name.obj()];
             result = [[NSFont fontWithDescriptor:desc size:height] retain];
             if (result && (fontFlags & Gosu::ffBold))
                 result = [[NSFontManager sharedFontManager] convertFont:result toHaveTrait:NSFontBoldTrait];
@@ -101,7 +101,8 @@ namespace
             #endif
             if (!result && fontName != Gosu::defaultFontName())
                 result = getFont(Gosu::defaultFontName(), 0, height);
-            usedFonts[make_pair(fontName, make_pair(fontFlags, height))] = result;
+            assert(result);
+            usedFonts[make_pair(fontName, make_pair(fontFlags, height))] = [result retain];
         }
         return result;
     }
