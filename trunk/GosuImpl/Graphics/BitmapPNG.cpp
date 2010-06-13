@@ -241,7 +241,7 @@ Gosu::Writer Gosu::saveToPNG(const Bitmap& bmp, Writer writer)
     tmpWriteStream = &writer;  // No more experimental.
     png_set_write_fn(pngPtr, png_get_io_ptr(pngPtr), writePNGdata, flushPNGdata);
 
-    png_set_IHDR(pngPtr, infoPtr, bmp.width(), bmp.height(), 8, PNG_COLOR_TYPE_RGB,
+    png_set_IHDR(pngPtr, infoPtr, bmp.width(), bmp.height(), 8, PNG_COLOR_TYPE_RGBA,
         PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
     png_write_info(pngPtr, infoPtr);
@@ -250,12 +250,13 @@ Gosu::Writer Gosu::saveToPNG(const Bitmap& bmp, Writer writer)
     rows = new png_bytep[bmp.height()];
     for(unsigned int y = 0; y < bmp.height(); y++)
     {
-        rows[y] = new png_byte[bmp.width() * 3];
-        for(unsigned int x = 0; x < bmp.width()*3; x += 3)
+        rows[y] = new png_byte[bmp.width() * 4];
+        for(unsigned int x = 0; x < bmp.width()*4; x += 4)
         {
-            rows[y][x] = bmp.getPixel(x/3, y).red();
-            rows[y][x+1] = bmp.getPixel(x/3, y).green();
-            rows[y][x+2] = bmp.getPixel(x/3, y).blue();
+            rows[y][x] = bmp.getPixel(x/4, y).red();
+            rows[y][x+1] = bmp.getPixel(x/4, y).green();
+            rows[y][x+2] = bmp.getPixel(x/4, y).blue();
+            rows[y][x+3] = bmp.getPixel(x/4, y).alpha();
         }
     }
 
