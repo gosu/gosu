@@ -73,6 +73,11 @@ public:
     {
         return boost::none;
     }
+    
+    Gosu::Bitmap toBitmap() const
+    {
+        throw std::logic_error("Gosu::Macro cannot be rendered to Gosu::Bitmap");
+    }
 };
 
 #endif

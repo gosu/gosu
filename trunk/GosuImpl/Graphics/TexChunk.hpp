@@ -35,6 +35,7 @@ public:
         ZPos z, AlphaMode mode) const;
         
     boost::optional<GLTexInfo> glTexInfo() const;
+    Gosu::Bitmap toBitmap() const;
 };
 
 #endif

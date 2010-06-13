@@ -42,6 +42,7 @@ namespace Gosu
             ZPos z, AlphaMode mode) const = 0;
             
         virtual boost::optional<GLTexInfo> glTexInfo() const = 0;
+        virtual Bitmap toBitmap() const = 0;
     };
 }
 

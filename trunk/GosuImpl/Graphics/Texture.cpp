@@ -144,3 +144,34 @@ void Gosu::Texture::free(unsigned x, unsigned y)
     allocator.free(x, y);
     num -= 1;
 }
+
+Gosu::Bitmap Gosu::Texture::toBitmap(unsigned x, unsigned y, unsigned width, unsigned height) const
+{
+#if defined(__BIG_ENDIAN__)
+    unsigned format = GL_RGBA;
+#elif defined(GOSU_IS_IPHONE)
+    unsigned format = GL_RGBA;
+#else
+    unsigned format = GL_BGRA;
+#endif
+    
+    Gosu::Bitmap fullTexture;
+    fullTexture.resize(size(), size());
+    glBindTexture(GL_TEXTURE_2D, name);
+    glGetTexImage(GL_TEXTURE_2D, 0, format, GL_UNSIGNED_BYTE, fullTexture.data());
+    Gosu::Bitmap bitmap;
+    bitmap.resize(width, height);
+    bitmap.insert(fullTexture, -int(x), -int(y));
+    
+#if defined(__BIG_ENDIAN__)
+    for (unsigned y = 0; y < height; ++y)
+        for (unsigned x = 0; x < width; ++x)
+            bmp.setPixel(x, y, bigToNative(bmp.getPixel(x, y).argb() & 0xffffff00) >> 8 | bmp.getPixel(x, y).alpha() << 24));
+#elif defined(GOSU_IS_IPHONE)
+    for (unsigned y = 0; y < height; ++y)
+        for (unsigned x = 0; x < width; ++x)
+            bmp.setPixel(x, y, bmp.getPixel(x, y).abgr());
+#endif
+    
+    return bitmap;
+}

@@ -31,6 +31,8 @@ namespace Gosu
         {
             return boost::none;
         }
+        
+        Bitmap toBitmap() const;
     };
 }
 

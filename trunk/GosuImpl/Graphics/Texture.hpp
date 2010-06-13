@@ -2,6 +2,7 @@
 #define GOSUIMPL_GRAPHICS_TEXTURE_HPP
 
 #include <Gosu/Fwd.hpp>
+#include <Gosu/Bitmap.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/TexChunk.hpp>
 #include <GosuImpl/Graphics/BlockAllocator.hpp>
@@ -29,6 +30,7 @@ namespace Gosu
                 const Bitmap& bmp, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
                 unsigned padding);
         void free(unsigned x, unsigned y);
+        Gosu::Bitmap toBitmap(unsigned x, unsigned y, unsigned width, unsigned height) const;
     };
 }
 

@@ -82,3 +82,8 @@ boost::optional<Gosu::GLTexInfo> Gosu::TexChunk::glTexInfo() const
     getCoords(info.left, info.top, info.right, info.bottom);
     return info;
 }
+
+Gosu::Bitmap Gosu::TexChunk::toBitmap() const
+{
+    return texture->toBitmap(x, y, w, h);
+}
