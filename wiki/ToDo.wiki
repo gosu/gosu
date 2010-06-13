@@ -4,18 +4,24 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-06-12)
+(Last update: 2010-06-13)
 
 == Gosu 0.7.x ==
-  * Add Transform.cpp to Windows project files
-  * beginGL: Throw exception if transformations still in progress
-  * Add scaling to SDL text so descenders don't overflow
-  * Find out why UnicodeTest fails horribly on Ubuntu :(
-  * Why does this crash: Image.from_text 64-bit with attached args
-  * Release 0.7.21
+  * Fix Gosu::Song on iOS
   * Add/finish iPad support
+  * Fix CJK support
+  * Gosu::RotFlip aus Gosu entfernen
+  * Use pushTransform for setResolution()
+  * Adjust WindowMac
+  * Adjust WindowWin
+  * Adjust WindowX and add shrinking for oversized resolutions
+  * Optimize popTransform, avoid duplicate matrices
+  * Add scaling to SDL text so descenders don't overflow
+  * Add FontFlags support for SDL_TTF Gosu/Text
+  * Fix Unicode support for SDL_TTF port (UnicodeTest.rb, @loc_test)
+  * Make C++'s Gosu::multiply available in Ruby as Gosu::Color::*
   * Add Numeric#clamp, Numeric#wrap to Ruby
-  * See why Gosu does not work with Rubinius
+  * Make Mac/Gosu work with Rubinius
   * Make Window arguments optional for Audio, but throw exceptions when in wrong order
   * Make Window arguments optional for Graphics, but throw exceptions when in wrong order
   * Throw an exception when using multiple Windows
@@ -67,7 +73,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Test RMagick.bundle on Tiger
     * Test RMagick.bundle on PPC
   * Replace draw_line by something that makes sense
-  * Text quality release
+  * Text quality
+    * Realize ffUnderline by hand in createText/Font
     * See if the differences between from_text and Font#draw are a bug
     * Creating a non-existent font should throw an exception on all platforms, test on which it does
     * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
@@ -76,9 +83,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Linux: Support other XKeySyms than Latin 1
     * Mac: Add dead keys to TextInput
     * Mac: Use Core Text instead of ATSUI
-    * Windows: Make createText use Uniscribe
-    * Make RTL work without RTL/LTR markers?!
-    * Add RTL support to Font::drawRot too
   * Try wgois for Linux gamepad support
   * Polish/deployment release
     * Make it possible to delete images while they are still referenced in the queue.
@@ -120,6 +124,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * KbBracketLeft and KbBracketRight for ÖÄ?
   * Make more stuff configurable like http://github.com/cout/rice/blob/98ba7098e2de5849f2e7272021340976a768456f/ruby.ac#L7-20
   * Experimentation with new drawing syntax; maybe first prototype as the last version of the 0.7.x series?
+  * Deprecate Image::getData, introduce Image::data
 == Gosu CI/Usability ==
   * Document 64px minimum for reliable single-texture optimization
   * Mention Gosu's respectable age somewhere :)
