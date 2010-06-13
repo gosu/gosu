@@ -2,7 +2,7 @@
 
 # Shows how to
 #  * implement jumping/gravity
-#  * implement scrolling
+#  * implement scrolling using Window#translate
 #  * implement a simple tile-based map
 #  * load levels from primitive text files
 
@@ -25,14 +25,15 @@
 # ...Enemies, a more sophisticated object system, weapons, title and credits
 # screens...
 
-begin
-  # In case you use Gosu via rubygems.
-  require 'rubygems'
-rescue LoadError
-  # In case you don't.
-end
-
-require 'gosu'
+require '../lib/gosu'
+# begin
+#   # In case you use Gosu via rubygems.
+#   require 'rubygems'
+# rescue LoadError
+#   # In case you don't.
+# end
+# 
+# require 'gosu'
 include Gosu
 
 module Tiles
@@ -48,10 +49,9 @@ class CollectibleGem
     @x, @y = x, y
   end
   
-  def draw(screen_x, screen_y)
+  def draw
     # Draw, slowly rotating
-    @image.draw_rot(@x - screen_x, @y - screen_y, 0,
-      25 * Math.sin(milliseconds / 133.7))
+    @image.draw_rot(@x, @y, 0, 25 * Math.sin(milliseconds / 133.7))
   end
 end
 
@@ -72,7 +72,7 @@ class CptnRuby
     @cur_image = @standing    
   end
   
-  def draw(screen_x, screen_y)
+  def draw
     # Flip vertically when facing to the left.
     if @dir == :left then
       offs_x = -25
@@ -81,7 +81,7 @@ class CptnRuby
       offs_x = 25
       factor = -1.0
     end
-    @cur_image.draw(@x - screen_x + offs_x, @y - screen_y - 49, 0, factor, 1.0)
+    @cur_image.draw(@x + offs_x, @y - 49, 0, factor, 1.0)
   end
   
   # Could the object be placed at x + offs_x/y + offs_y without being stuck?
@@ -146,7 +146,6 @@ class Map
   def initialize(window, filename)
     # Load 60x60 tiles, 5px overlap in all four directions.
     @tileset = Image.load_tiles(window, "media/CptnRuby Tileset.png", 60, 60, true)
-    @sky = Image.new(window, "media/Space.png", true)
 
     gem_img = Image.new(window, "media/CptnRuby Gem.png", false)
     @gems = []
@@ -171,11 +170,7 @@ class Map
     end
   end
   
-  def draw(screen_x, screen_y)
-    # Sigh, stars!
-    @sky.draw(0, 0, 0)
-    
-
+  def draw
     # Very primitive drawing function:
     # Draws all the tiles, some off-screen, some on-screen.
     @height.times do |y|
@@ -184,11 +179,11 @@ class Map
         if tile
           # Draw the tile with an offset (tile images have some overlap)
           # Scrolling is implemented here just as in the game objects.
-          @tileset[tile].draw(x * 50 - screen_x - 5, y * 50 - screen_y - 5, 0)
+          @tileset[tile].draw(x * 50 - 5, y * 50 - 5, 0)
         end
       end
     end
-    @gems.each { |c| c.draw(screen_x, screen_y) }
+    @gems.each { |c| c.draw }
   end
   
   # Solid at a given pixel position?
@@ -203,10 +198,11 @@ class Game < Window
   def initialize
     super(640, 480, false)
     self.caption = "Cptn. Ruby"
+    @sky = Image.new(self, "media/Space.png", true)
     @map = Map.new(self, "media/CptnRuby Map.txt")
     @cptn = CptnRuby.new(self, 400, 100)
-    # Scrolling is stored as the position of the top left corner of the screen.
-    @screen_x = @screen_y = 0
+    # The scrolling position is stored as top left corner of the screen.
+    @camera_x = @camera_y = 0
   end
   def update
     move_x = 0
@@ -215,12 +211,15 @@ class Game < Window
     @cptn.update(move_x)
     @cptn.collect_gems(@map.gems)
     # Scrolling follows player
-    @screen_x = [[@cptn.x - 320, 0].max, @map.width * 50 - 640].min
-    @screen_y = [[@cptn.y - 240, 0].max, @map.height * 50 - 480].min
+    @camera_x = [[@cptn.x - 320, 0].max, @map.width * 50 - 640].min
+    @camera_y = [[@cptn.y - 240, 0].max, @map.height * 50 - 480].min
   end
   def draw
-    @map.draw @screen_x, @screen_y
-    @cptn.draw @screen_x, @screen_y
+    @sky.draw 0, 0, 0
+    translate(-@camera_x, -@camera_y) do
+      @map.draw
+      @cptn.draw
+    end
   end
   def button_down(id)
     if id == KbUp then @cptn.try_to_jump end

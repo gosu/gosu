@@ -1,6 +1,7 @@
 #ifndef GOSUIMPL_GRAPHICS_COMMON_HPP
 #define GOSUIMPL_GRAPHICS_COMMON_HPP
 
+#include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Platform.hpp>
 
@@ -58,6 +59,17 @@ namespace Gosu
             for (int j = 0; j < 4; ++j)
                 result[i] += left[i / 4 * 4 + j] * right[i % 4 + j * 4];
         return result;
+    }
+    
+    inline void multiplyBitmapAlpha(Bitmap& bmp, Color::Channel alpha)
+    {
+        for (int y = 0; y < bmp.height(); ++y)
+            for (int x = 0; x < bmp.width(); ++x)
+            {
+                Color c = bmp.getPixel(x, y);
+                c.setAlpha(c.alpha() * alpha / 255);
+                bmp.setPixel(x, y, c);
+            }
     }
     
     const Bitmap& entityBitmap(const std::wstring& name);

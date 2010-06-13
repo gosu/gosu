@@ -46,6 +46,7 @@ namespace Gosu
         double textWidth(const std::wstring& text, double factorX = 1) const;
         
         //! Draws text so the top left corner of the text is at (x; y).
+        //! \param text Formatted text without line-breaks.
         void draw(const std::wstring& text, double x, double y, ZPos z,
             double factorX = 1, double factorY = 1,
             Color c = Color::WHITE, AlphaMode mode = amDefault) const;

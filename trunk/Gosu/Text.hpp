@@ -15,14 +15,18 @@ namespace Gosu
     //! platform.
     std::wstring defaultFontName();
 
-    //! Returns the width a text would span on a bitmap if it were drawn
-    //! using drawText with the same arguments.
+    //! Returns the width an unformatted line of text would span on a bitmap if it were drawn using
+    //! drawText with the same arguments. This is a very low-level function that does not understand
+    //! any of Gosu's HTML-like markup.
+    //! \param text Unformatted text.
     //! \param fontName Name of a system font, or a filename to a TTF file (must contain '/', does not work on Linux).
     unsigned textWidth(const std::wstring& text,
         const std::wstring& fontName, unsigned fontHeight,
         unsigned fontFlags = 0);
 
-    //! Draws a line of text on a bitmap.
+    //! Draws a line of unformatted text on a bitmap. This is a very low-level function that does not understand
+    //! any of Gosu's HTML-like markup.
+    //! \param text Unformatted text.
     //! \param fontName Name of a system font, or a filename to a TTF file (must contain '/', does not work on Linux).
     //! \param fontHeight Height, in pixels, of the text.
     //! \param fontFlags Binary combination of members of the FontFlags
@@ -31,8 +35,9 @@ namespace Gosu
         Color c, const std::wstring& fontName, unsigned fontHeight,
         unsigned fontFlags = 0);
 
-    //! Creates a bitmap that is filled with a line of text given to the function.
-    //! The line cannot contain line breaks.
+    //! Creates a bitmap that is filled with a line of formatted text given to the function.
+    //! The line can contain line breaks and HTML-like markup.
+    //! \param text Formatted text.
     //! \param fontName Name of a system font, or a filename to a TTF file (must contain '/', does not work on Linux).
     //! \param fontHeight Height of the font in pixels.
     //! \param fontFlags Binary combination of members of the FontFlags
@@ -41,8 +46,9 @@ namespace Gosu
         const std::wstring& fontName, unsigned fontHeight,
         unsigned fontFlags = 0);
 
-    //! Creates a bitmap that is filled with the text given to the function.
-    //! The text may contain line breaks.
+    //! Creates a bitmap that is filled with the formatted text given to the function.
+    //! The line can contain line breaks and HTML-like markup.
+    //! \param text Formatted text.
     //! \param fontName Name of a system font, or a filename to a TTF file (must contain '/', does not work on Linux).
     //! \param fontHeight Height of the font in pixels.
     //! \param lineSpacing Spacing between two lines of text in pixels.

@@ -152,7 +152,8 @@ namespace Gosu
                     {
                         if (part.entityAt(0))
                         {
-                            const Gosu::Bitmap& entity = entityBitmap(part.entityAt(0));
+                            Gosu::Bitmap entity = entityBitmap(part.entityAt(0));
+                            multiplyBitmapAlpha(entity, part.colorAt(0).alpha());
                             bmp.insert(entity, trunc(pos) + x, trunc(top));
                             x += entity.width();
                             continue;
@@ -346,7 +347,8 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
             const FormattedString& part = parts[p];
             if (part.length() == 1 && part.entityAt(0))
             {
-                const Bitmap& entity = entityBitmap(part.entityAt(0));
+                Gosu::Bitmap entity = entityBitmap(part.entityAt(0));
+                multiplyBitmapAlpha(entity, part.colorAt(0).alpha());
                 bmp.resize(std::max(bmp.width(), x + entity.width()), bmp.height());
                 bmp.insert(entity, x, i * fontHeight);
                 x += entity.width();
