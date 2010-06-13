@@ -7,7 +7,7 @@
   * 2010-05-13: C++: Fixed alpha support in Gosu::saveToPNG
   * 2010-05-13: All: Added Image.getData().toBitmap() (C++)/Image#to_blob (Ruby)
   * 2010-05-13: All: Added support for custom entities as registerEntity(name, bitmap) (C++)/register_entity(name, image) (Ruby) that can be placed in text as &name;
-  * 2010-05-13: All: Added HTML-like text markup for Font and Image#from_text (and C++ equivalents): <b>, <u>, <i> and <c=aarrggbb>/<c=rrggbb>
+  * 2010-05-13: All: Added HTML-like text markup for Font and Image#from_text (and C++ equivalents): `<b>`, `<u>`, `<i>` and `<c=aarrggbb>/<c=rrggbb>`
   * 2010-05-10: All: Added four matrix transformations that affect all contained drawing: scale(), translate(), rotate() and a free-form transform()
   * 2010-05-31: Linux: made gem Rubinius-compatible
 
