@@ -158,9 +158,15 @@ void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
         }*/
         
         const Image& curChar = pimpl->imageAt(fs, i);
-        double curFactor = pimpl->factorAt(fs, i);
+        double curFactor;
+        Gosu::Color color;
+        if (fs.entityAt(i))
+            curFactor = 1.0, color = Gosu::Color(fs.colorAt(i).alpha() * c.alpha() / 255, 255, 255, 255);
+        else
+            curFactor = 0.5, color = Gosu::multiply(fs.colorAt(i), c);
+
         //if (dir == LTR)
-            curChar.draw(x, y, z, factorX * curFactor, factorY * curFactor, Gosu::multiply(fs.colorAt(i), c), mode);
+            curChar.draw(x, y, z, factorX * curFactor, factorY * curFactor, color, mode);
         //else
         //    curChar.draw(x - curChar.width() * factorX, y, z, factorX, factorY, c, mode);
         

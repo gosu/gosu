@@ -136,9 +136,9 @@ namespace Gosu
                     pos += 5;
                     continue;
                 }
-                if (html[pos] == L'&')
+                if (html[pos] == L'&' && pos < html.length() - 1)
                 {
-                    int endOfEntity = pos;
+                    int endOfEntity = pos + 1;
                     while (html[endOfEntity] != L';')
                     {
                         if (!std::iswalnum(static_cast<std::wint_t>(html[endOfEntity])))
