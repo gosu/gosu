@@ -26,7 +26,7 @@ namespace Gosu
     //extern unsigned const MAX_TEXTURE_SIZE;
     
     typedef boost::array<double, 16> Transform;
-    Transform rotate(double angle);
+    Transform rotate(double angle, double aroundX = 0, double aroundY = 0);
     Transform translate(double x, double y);
     Transform scale(double factor);
     Transform scale(double factorX, double factorY);

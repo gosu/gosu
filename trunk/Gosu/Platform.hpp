@@ -62,4 +62,12 @@ namespace Gosu
 # endif
 #endif
 
+#if (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
+# define GOSU_DEPRECATED  __attribute__((__deprecated__))
+#elif defined(GOSU_IS_WIN)
+# define GOSU_DEPRECATED __declspec(deprecated)
+#else
+# define GOSU_DEPRECATED 
+#endif
+
 #endif

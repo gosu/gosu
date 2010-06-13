@@ -100,11 +100,10 @@ namespace Gosu
         const Touches& currentTouches() const;
         #endif        
         
+        GOSU_DEPRECATED const Audio& audio() const;
+        GOSU_DEPRECATED Audio& audio();
+
         #endif
-        
-        // Deprecated.
-        const Audio& audio() const;
-        Audio& audio();
     };
 }
 

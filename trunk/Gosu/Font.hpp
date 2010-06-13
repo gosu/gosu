@@ -7,6 +7,7 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
+#include <Gosu/Platform.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <string>
 
@@ -59,6 +60,9 @@ namespace Gosu
             double relX, double relY, double factorX = 1, double factorY = 1,
             Color c = Color::WHITE, AlphaMode mode = amDefault) const;
         
+        #ifndef SWIG
+        GOSU_DEPRECATED
+        #endif
         //! Analogous to draw, but rotates the text by a given angle.
         void drawRot(const std::wstring& text, double x, double y, ZPos z, double angle,
             double factorX = 1, double factorY = 1,

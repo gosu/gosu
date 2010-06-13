@@ -434,8 +434,8 @@ module Gosu
     # Limits the drawing area to a given rectangle while evaluating the code inside of the block.
     def clip_to(x, y, w, h, &drawing_code); end
     
-    # Rotates everything drawn in the block around (0, 0).
-    def rotate(angle, &drawing_code); end
+    # Rotates everything drawn in the block around (around_x, around_y).
+    def rotate(angle, around_x = 0, around_y = 0 &drawing_code); end
     
     # Scales everything drawn in the block by a factor.
     def scale(factor, &drawing_code); end

@@ -6,12 +6,12 @@
 #include <GosuImpl/Graphics/LargeImageData.hpp>
 #include <GosuImpl/Graphics/Macro.hpp>
 #include <Gosu/Bitmap.hpp>
+#include <boost/foreach.hpp>
 #if 0
 #include <boost/thread.hpp>
 #endif
 #include <cmath>
 #include <algorithm>
-#include <numeric>
 #include <limits>
 
 struct Gosu::Graphics::Impl
@@ -29,21 +29,12 @@ struct Gosu::Graphics::Impl
     boost::mutex texMutex;
 #endif
     
-    static Gosu::Transform
-    multiply(const Gosu::Transform left, const Gosu::Transform right)
-    {
-        Gosu::Transform result;
-        result.assign(0);
-        for (int i = 0; i < 16; ++i)
-            for (int j = 0; j < 4; ++j)
-                result[i] += left[i / 4 * 4 + j] * right[i % 4 + j * 4];
-        return result;
-    }
-    
     void calculateAbsoluteTransform()
     {
-        absoluteTransforms.push_back(
-            std::accumulate(currentTransforms.begin(), currentTransforms.end(), Gosu::scale(1), multiply));
+        Transform result = scale(1);
+        BOOST_FOREACH (const Transform& tf, currentTransforms)
+            result = multiply(result, tf);
+        absoluteTransforms.push_back(result);
     }
 };
 

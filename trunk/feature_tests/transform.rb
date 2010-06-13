@@ -119,22 +119,11 @@ class GameWindow < Gosu::Window
   end
 
   def draw
-    translate(-320, -240) do
-      transform(0.5, 0, 0, 0,
-                0,   1, 0, 0,
-                0,   0, 1, 0,
-                0,   0, 0, 1) do
-        rotate(@angle) do
-          scale(0.5) do
-            translate(320, 240) do
-              @background_image.draw(0, 0, ZOrder::Background)
-              @player.draw
-              @stars.each { |star| star.draw }
-              @font.draw("Score: #{@player.score}", 10, 10, ZOrder::UI, 1.0, 1.0, 0xffffff00)
-            end
-          end
-        end
-      end
+    rotate(@angle, 320, 240) do
+      @background_image.draw(0, 0, ZOrder::Background)
+      @player.draw
+      @stars.each { |star| star.draw }
+      @font.draw("Score: #{@player.score}", 10, 10, ZOrder::UI, 1.0, 1.0, 0xffffff00)
     end
   end
 

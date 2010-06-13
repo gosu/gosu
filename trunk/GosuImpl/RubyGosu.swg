@@ -598,8 +598,8 @@ namespace Gosu {
         rb_yield(Qnil);
         $self->graphics().popTransform();
     }
-    void rotate(double angle) {
-        $self->graphics().pushTransform(Gosu::rotate(angle));
+    void rotate(double angle, double aroundX = 0, double aroundY = 0) {
+        $self->graphics().pushTransform(Gosu::rotate(angle, aroundX, aroundY));
         rb_yield(Qnil);
         $self->graphics().popTransform();
     }

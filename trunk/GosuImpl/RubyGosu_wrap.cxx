@@ -2152,23 +2152,22 @@ namespace Swig {
 /* -------- TYPES TABLE (BEGIN) -------- */
 
 #define SWIGTYPE_p_Channel swig_types[0]
-#define SWIGTYPE_p_Gosu__Audio swig_types[1]
-#define SWIGTYPE_p_Gosu__Button swig_types[2]
-#define SWIGTYPE_p_Gosu__Color swig_types[3]
-#define SWIGTYPE_p_Gosu__Font swig_types[4]
-#define SWIGTYPE_p_Gosu__GLTexInfo swig_types[5]
-#define SWIGTYPE_p_Gosu__Image swig_types[6]
-#define SWIGTYPE_p_Gosu__Sample swig_types[7]
-#define SWIGTYPE_p_Gosu__SampleInstance swig_types[8]
-#define SWIGTYPE_p_Gosu__Song swig_types[9]
-#define SWIGTYPE_p_Gosu__TextInput swig_types[10]
-#define SWIGTYPE_p_Gosu__Window swig_types[11]
-#define SWIGTYPE_p_boost__arrayT_double_16_t swig_types[12]
-#define SWIGTYPE_p_char swig_types[13]
-#define SWIGTYPE_p_double swig_types[14]
-#define SWIGTYPE_p_std__wstring swig_types[15]
-static swig_type_info *swig_types[17];
-static swig_module_info swig_module = {swig_types, 16, 0, 0, 0, 0};
+#define SWIGTYPE_p_Gosu__Button swig_types[1]
+#define SWIGTYPE_p_Gosu__Color swig_types[2]
+#define SWIGTYPE_p_Gosu__Font swig_types[3]
+#define SWIGTYPE_p_Gosu__GLTexInfo swig_types[4]
+#define SWIGTYPE_p_Gosu__Image swig_types[5]
+#define SWIGTYPE_p_Gosu__Sample swig_types[6]
+#define SWIGTYPE_p_Gosu__SampleInstance swig_types[7]
+#define SWIGTYPE_p_Gosu__Song swig_types[8]
+#define SWIGTYPE_p_Gosu__TextInput swig_types[9]
+#define SWIGTYPE_p_Gosu__Window swig_types[10]
+#define SWIGTYPE_p_boost__arrayT_double_16_t swig_types[11]
+#define SWIGTYPE_p_char swig_types[12]
+#define SWIGTYPE_p_double swig_types[13]
+#define SWIGTYPE_p_std__wstring swig_types[14]
+static swig_type_info *swig_types[16];
+static swig_module_info swig_module = {swig_types, 15, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2696,8 +2695,8 @@ SWIGINTERN void Gosu_Window_transform(Gosu::Window *self,double m0,double m1,dou
         rb_yield(Qnil);
         self->graphics().popTransform();
     }
-SWIGINTERN void Gosu_Window_rotate(Gosu::Window *self,double angle){
-        self->graphics().pushTransform(Gosu::rotate(angle));
+SWIGINTERN void Gosu_Window_rotate(Gosu::Window *self,double angle,double aroundX=0,double aroundY=0){
+        self->graphics().pushTransform(Gosu::rotate(angle, aroundX, aroundY));
         rb_yield(Qnil);
         self->graphics().popTransform();
     }
@@ -3278,12 +3277,18 @@ fail:
 SWIGINTERN VALUE
 _wrap_rotate(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
+  double arg2 = (double) 0 ;
+  double arg3 = (double) 0 ;
   double val1 ;
   int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
   Gosu::Transform result;
   VALUE vresult = Qnil;
   
-  if ((argc < 1) || (argc > 1)) {
+  if ((argc < 1) || (argc > 3)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
   ecode1 = SWIG_AsVal_double(argv[0], &val1);
@@ -3291,9 +3296,23 @@ _wrap_rotate(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "double","Gosu::rotate", 1, argv[0] ));
   } 
   arg1 = static_cast< double >(val1);
+  if (argc > 1) {
+    ecode2 = SWIG_AsVal_double(argv[1], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","Gosu::rotate", 2, argv[1] ));
+    } 
+    arg2 = static_cast< double >(val2);
+  }
+  if (argc > 2) {
+    ecode3 = SWIG_AsVal_double(argv[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "double","Gosu::rotate", 3, argv[2] ));
+    } 
+    arg3 = static_cast< double >(val3);
+  }
   {
     try {
-      result = Gosu::rotate(arg1);
+      result = Gosu::rotate(arg1,arg2,arg3);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -8178,105 +8197,6 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Window_audio__SWIG_0(int argc, VALUE *argv, VALUE self) {
-  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  Gosu::Audio *result = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","audio", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  {
-    try {
-      result = (Gosu::Audio *) &((Gosu::Window const *)arg1)->audio();
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Audio, 0 |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Window_audio__SWIG_1(int argc, VALUE *argv, VALUE self) {
-  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  Gosu::Audio *result = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","audio", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  {
-    try {
-      result = (Gosu::Audio *) &(arg1)->audio();
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Audio, 0 |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE _wrap_Window_audio(int nargs, VALUE *args, VALUE self) {
-  int argc;
-  VALUE argv[2];
-  int ii;
-  
-  argc = nargs + 1;
-  argv[0] = self;
-  if (argc > 2) SWIG_fail;
-  for (ii = 1; (ii < argc); ++ii) {
-    argv[ii] = args[ii-1];
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_Window_audio__SWIG_1(nargs, args, self);
-    }
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_Window_audio__SWIG_0(nargs, args, self);
-    }
-  }
-  
-fail:
-  Ruby_Format_OverloadedError( argc, 2, "Window.audio", 
-    "    Gosu::Audio & Window.audio()\n"
-    "    Gosu::Audio & Window.audio()\n");
-  
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
 _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   double arg2 ;
@@ -9393,12 +9313,18 @@ SWIGINTERN VALUE
 _wrap_Window_rotate(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   double arg2 ;
+  double arg3 = (double) 0 ;
+  double arg4 = (double) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   double val2 ;
   int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
   
-  if ((argc < 1) || (argc > 1)) {
+  if ((argc < 1) || (argc > 3)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
@@ -9411,9 +9337,23 @@ _wrap_Window_rotate(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","rotate", 2, argv[0] ));
   } 
   arg2 = static_cast< double >(val2);
+  if (argc > 1) {
+    ecode3 = SWIG_AsVal_double(argv[1], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "double","rotate", 3, argv[1] ));
+    } 
+    arg3 = static_cast< double >(val3);
+  }
+  if (argc > 2) {
+    ecode4 = SWIG_AsVal_double(argv[2], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "double","rotate", 4, argv[2] ));
+    } 
+    arg4 = static_cast< double >(val4);
+  }
   {
     try {
-      Gosu_Window_rotate(arg1,arg2);
+      Gosu_Window_rotate(arg1,arg2,arg3,arg4);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -9631,7 +9571,6 @@ fail:
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
 static swig_type_info _swigt__p_Channel = {"_p_Channel", "Channel *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_Gosu__Audio = {"_p_Gosu__Audio", "Gosu::Audio *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Button = {"_p_Gosu__Button", "Gosu::Button *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Color = {"_p_Gosu__Color", "Gosu::Color *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Font = {"_p_Gosu__Font", "Gosu::Font *", 0, 0, (void*)0, 0};
@@ -9649,7 +9588,6 @@ static swig_type_info _swigt__p_std__wstring = {"_p_std__wstring", "std::wstring
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Channel,
-  &_swigt__p_Gosu__Audio,
   &_swigt__p_Gosu__Button,
   &_swigt__p_Gosu__Color,
   &_swigt__p_Gosu__Font,
@@ -9667,7 +9605,6 @@ static swig_type_info *swig_type_initial[] = {
 };
 
 static swig_cast_info _swigc__p_Channel[] = {  {&_swigt__p_Channel, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Gosu__Audio[] = {  {&_swigt__p_Gosu__Audio, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Button[] = {  {&_swigt__p_Gosu__Button, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Color[] = {  {&_swigt__p_Gosu__Color, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Font[] = {  {&_swigt__p_Gosu__Font, 0, 0, 0},{0, 0, 0, 0}};
@@ -9685,7 +9622,6 @@ static swig_cast_info _swigc__p_std__wstring[] = {  {&_swigt__p_std__wstring, 0,
 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Channel,
-  _swigc__p_Gosu__Audio,
   _swigc__p_Gosu__Button,
   _swigc__p_Gosu__Color,
   _swigc__p_Gosu__Font,
@@ -10277,7 +10213,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "needs_redraw?", VALUEFUNC(_wrap_Window_needs_redrawq___), -1);
   rb_define_method(SwigClassWindow.klass, "button_down", VALUEFUNC(_wrap_Window_button_down), -1);
   rb_define_method(SwigClassWindow.klass, "button_up", VALUEFUNC(_wrap_Window_button_up), -1);
-  rb_define_method(SwigClassWindow.klass, "audio", VALUEFUNC(_wrap_Window_audio), -1);
   rb_define_method(SwigClassWindow.klass, "draw_line", VALUEFUNC(_wrap_Window_draw_line), -1);
   rb_define_method(SwigClassWindow.klass, "draw_triangle", VALUEFUNC(_wrap_Window_draw_triangle), -1);
   rb_define_method(SwigClassWindow.klass, "draw_quad", VALUEFUNC(_wrap_Window_draw_quad), -1);

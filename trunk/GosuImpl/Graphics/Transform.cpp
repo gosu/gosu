@@ -3,10 +3,11 @@
 
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Math.hpp>
+#include <GosuImpl/Graphics/Common.hpp>
 #include <cmath>
 
 Gosu::Transform
-Gosu::rotate(double angle)
+Gosu::rotate(double angle, double aroundX, double aroundY)
 {
     double c = std::cos(degreesToRadians(angle));
     double s = std::sin(degreesToRadians(angle));
@@ -16,6 +17,8 @@ Gosu::rotate(double angle)
         0,  0,  1, 0,
         0,  0,  0, 1
     };
+    if (aroundX != 0 || aroundY != 0)
+        result = multiply(multiply(translate(-aroundX, -aroundY), result), translate(aroundX, aroundY));
     return result;
 }
 
