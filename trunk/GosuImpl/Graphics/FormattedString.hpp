@@ -23,6 +23,15 @@ namespace Gosu
         };
         std::vector<FormattedChar> chars;
         
+        unsigned flags(int b, int u, int i)
+        {
+            unsigned flags = 0;
+            if (b > 0) flags |= ffBold;
+            if (u > 0) flags |= ffUnderline;
+            if (i > 0) flags |= ffItalic;
+            return flags;
+        }
+        
     public:
         FormattedString()
         {
@@ -102,12 +111,29 @@ namespace Gosu
                     pos += 4;
                     continue;
                 }
+                if (html.substr(pos, 4) == L"&lt;")
+                {
+                    FormattedChar fc = { L'<', c.back(), flags(b,u,i) };
+                    chars.push_back(fc);
+                    pos += 4;
+                    continue;
+                }
+                if (html.substr(pos, 4) == L"&gt;")
+                {
+                    FormattedChar fc = { L'>', c.back(), flags(b,u,i) };
+                    chars.push_back(fc);
+                    pos += 4;
+                    continue;
+                }
+                if (html.substr(pos, 5) == L"&amp;")
+                {
+                    FormattedChar fc = { L'&', c.back(), flags(b,u,i) };
+                    chars.push_back(fc);
+                    pos += 5;
+                    continue;
+                }
                 
-                unsigned flags = 0;
-                if (b > 0) flags |= ffBold;
-                if (u > 0) flags |= ffUnderline;
-                if (i > 0) flags |= ffItalic;
-                FormattedChar fc = { html[pos], c.back(), flags };
+                FormattedChar fc = { html[pos], c.back(), flags(b,u,i) };
                 chars.push_back(fc);
                 pos += 1;
             }
