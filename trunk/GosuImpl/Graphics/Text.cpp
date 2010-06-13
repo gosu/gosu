@@ -4,13 +4,16 @@
 #include <Gosu/Image.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/Utility.hpp>
+#include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/FormattedString.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
+#include <boost/shared_ptr.hpp>
 #include <cassert>
 #include <cmath>
 #include <algorithm>
+#include <map>
 #include <vector>
 using namespace std;
 
@@ -331,6 +334,15 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
         for (int p = 0; p < parts.size(); ++p)
         {
             const FormattedString& part = parts[p];
+            if (part.length() == 1 && part.entityAt(0))
+            {
+                const Bitmap& entity = entityBitmap(part.entityAt(0));
+                bmp.resize(std::max(bmp.width(), x + entity.width()), bmp.height());
+                bmp.insert(entity, x, i * fontHeight);
+                x += entity.width();
+                continue;
+            }
+                
             assert(part.length() > 0);
             std::wstring unformattedText = part.unformat();
             unsigned partWidth =
@@ -343,4 +355,19 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
     }
     
     return bmp;
+}
+
+namespace
+{
+    std::map<std::wstring, boost::shared_ptr<Gosu::Bitmap> > entities;
+}
+
+void Gosu::registerEntity(const std::wstring& name, const Gosu::Bitmap& replacement)
+{
+    entities[name].reset(new Bitmap(replacement));
+}
+
+const Gosu::Bitmap& Gosu::entityBitmap(const std::wstring& name)
+{
+    return *entities[name];
 }

@@ -59,6 +59,8 @@ namespace Gosu
                 result[i] += left[i / 4 * 4 + j] * right[i % 4 + j * 4];
         return result;
     }
+    
+    const Bitmap& entityBitmap(const std::wstring& name);
 }
 
 #endif

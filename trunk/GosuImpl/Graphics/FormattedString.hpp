@@ -2,8 +2,10 @@
 #define GOSUIMPL_GRAPHICS_TEXTFORMATTING
 
 #include <Gosu/Color.hpp>
+#include <Gosu/Utility.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/foreach.hpp>
+#include <stdexcept>
 #include <vector>
 
 namespace Gosu
@@ -15,15 +17,16 @@ namespace Gosu
             wchar_t wc;
             Gosu::Color color;
             unsigned flags;
+            std::wstring entity;
             
             bool sameStyleAs(const FormattedChar& other) const
             {
-                return color == other.color && flags == other.flags;
+                return wc && other.wc && color == other.color && flags == other.flags;
             }
         };
         std::vector<FormattedChar> chars;
         
-        unsigned flags(int b, int u, int i)
+        static unsigned flags(int b, int u, int i)
         {
             unsigned flags = 0;
             if (b > 0) flags |= ffBold;
@@ -47,7 +50,7 @@ namespace Gosu
             c.push_back(0xffffffff);
             while (pos < html.length())
             {
-                // TODO: Range checking for the color ops
+                // TODO: range checking for the color ops so .at() doesn't crash valid strings
             
                 if (html.substr(pos, 3) == L"<b>")
                 {
@@ -90,7 +93,7 @@ namespace Gosu
                 {
                     using namespace std;
                     boost::uint32_t rgb =
-                        std::wcstol(html.c_str() + pos + 3, 0, 16);
+                        std::wcstoul(html.c_str() + pos + 3, 0, 16);
                     c.push_back(0xff000000 | rgb);
                     pos += 10;
                     continue;
@@ -100,7 +103,7 @@ namespace Gosu
                 {
                     using namespace std;
                     boost::uint32_t argb =
-                        std::wcstoll(html.c_str() + pos + 3, 0, 16);
+                        std::wcstoul(html.c_str() + pos + 3, 0, 16);
                     c.push_back(argb);
                     pos += 12;
                     continue;
@@ -132,6 +135,20 @@ namespace Gosu
                     pos += 5;
                     continue;
                 }
+                if (html[pos] == L'&')
+                {
+                    int endOfEntity = pos;
+                    while (html[endOfEntity] != L';')
+                    {
+                        endOfEntity += 1;
+                        if (endOfEntity >= html.size())
+                            throw std::runtime_error("Unterminated entity in input string " + wstringToUTF8(html));
+                    }
+                    FormattedChar fc = { 0, c.back(), 0, std::wstring(html.begin() + pos + 1, html.begin() + endOfEntity) };
+                    chars.push_back(fc);
+                    pos = endOfEntity + 1;
+                    continue;
+                }
                 
                 FormattedChar fc = { html[pos], c.back(), flags(b,u,i) };
                 chars.push_back(fc);
@@ -145,6 +162,13 @@ namespace Gosu
             for (int i = 0; i < chars.size(); ++i)
                 result[i] = chars[i].wc;
             return result;
+        }
+        
+        const wchar_t* entityAt(unsigned index) const
+        {
+            if (chars[index].wc != 0 or chars[index].entity.empty())
+                return 0;
+            return chars[index].entity.c_str();
         }
         
         wchar_t charAt(unsigned index) const

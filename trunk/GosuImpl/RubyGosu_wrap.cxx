@@ -2234,6 +2234,7 @@ static VALUE mGosu;
 namespace Gosu {
     void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
     unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
+    void register_entity(const std::wstring& name, Gosu::Image* image) { registerEntity(name, image->getData().toBitmap()); }
 }
 
 #include <sstream>
@@ -3522,6 +3523,40 @@ _wrap___max_texture_size(int argc, VALUE *argv, VALUE self) {
   }
   vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
   return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_register_entity(int argc, VALUE *argv, VALUE self) {
+  std::wstring *arg1 = 0 ;
+  Gosu::Image *arg2 = (Gosu::Image *) 0 ;
+  std::wstring temp1 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  {
+    VALUE localTemporary = rb_obj_as_string(argv[0]);
+    temp1 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
+    arg1 = &temp1;
+  }
+  res2 = SWIG_ConvertPtr(argv[1], &argp2,SWIGTYPE_p_Gosu__Image, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "Gosu::Image *","Gosu::register_entity", 2, argv[1] )); 
+  }
+  arg2 = reinterpret_cast< Gosu::Image * >(argp2);
+  {
+    try {
+      Gosu::register_entity((std::wstring const &)*arg1,arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
 fail:
   return Qnil;
 }
@@ -10019,6 +10054,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "scale", VALUEFUNC(_wrap_scale), -1);
   rb_define_module_function(mGosu, "enable_undocumented_retrofication", VALUEFUNC(_wrap_enable_undocumented_retrofication), -1);
   rb_define_module_function(mGosu, "__max_texture_size", VALUEFUNC(_wrap___max_texture_size), -1);
+  rb_define_module_function(mGosu, "register_entity", VALUEFUNC(_wrap_register_entity), -1);
   
   SwigClassColor.klass = rb_define_class_under(mGosu, "Color", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Color, (void *) &SwigClassColor);

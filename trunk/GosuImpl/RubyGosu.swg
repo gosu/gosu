@@ -163,6 +163,7 @@
 namespace Gosu {
     void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
     unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
+    void register_entity(const std::wstring& name, Gosu::Image* image) { registerEntity(name, image->getData().toBitmap()); }
 }
 
 #include <sstream>
@@ -266,6 +267,7 @@ namespace Gosu
 %ignore Gosu::createText;
 %ignore Gosu::textHeight;
 %ignore Gosu::drawText;
+%ignore Gosu::registerEntity;
 %include "../Gosu/Text.hpp"
 
 
@@ -292,6 +294,7 @@ namespace Gosu
 namespace Gosu {
     void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
     unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
+    void register_entity(const std::wstring& name, Gosu::Image* image) { registerEntity(name, image->getData().toBitmap()); }
 }
 
 // Color

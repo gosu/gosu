@@ -3,8 +3,11 @@
 #include <Gosu/Image.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/Text.hpp>
+#include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/FormattedString.hpp>
 #include <boost/array.hpp>
+#include <boost/shared_ptr.hpp>
+#include <map>
 using namespace std;
 
 namespace
@@ -37,9 +40,22 @@ struct Gosu::Font::Impl
     // magic.
     typedef boost::array<boost::scoped_ptr<Image>, 65536> CharChunk;
     boost::scoped_ptr<CharChunk> chunks[65536][ffCombinations];
+    
+    std::map<std::wstring, boost::shared_ptr<Image> > entityCache;
 
-    Image& getChar(wchar_t wc, unsigned flags)
+    const Image& imageAt(const FormattedString& fs, unsigned i)
     {
+        if (fs.entityAt(i))
+        {
+            boost::shared_ptr<Image>& ptr = entityCache[fs.entityAt(i)];
+            if (!ptr)
+                ptr.reset(new Image(*graphics, entityBitmap(fs.entityAt(i)), false));
+            return *ptr;
+        }
+        
+        wchar_t wc = fs.charAt(i);
+        unsigned flags = fs.flagsAt(i);
+        
         assert(flags < ffCombinations);
     
         size_t chunkIndex = wc / 65536;
@@ -63,6 +79,14 @@ struct Gosu::Font::Impl
         drawText(bmp, charString, 0, 0, Color::WHITE, name, height, flags);
         imgPtr.reset(new Image(*graphics, bmp));
         return *imgPtr;
+    }
+    
+    double factorAt(const FormattedString& fs, unsigned index) const
+    {
+        if (fs.entityAt(index))
+            return 1;
+        else
+            return 0.5;
     }
 };
 
@@ -100,8 +124,8 @@ double Gosu::Font::textWidth(const std::wstring& text, double factorX) const
     FormattedString fs(text, flags());
     double result = 0;
     for (unsigned i = 0; i < fs.length(); ++i)
-        result += pimpl->getChar(fs.charAt(i), fs.flagsAt(i)).width();
-    return result * factorX / 2;
+        result += pimpl->imageAt(fs, i).width() * pimpl->factorAt(fs, i);
+    return result * factorX;
 }
 
 void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
@@ -109,8 +133,6 @@ void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
 {
     FormattedString fs(text, flags());
 
-    factorX /= 2;
-    factorY /= 2;
     enum {
         LTR = 1,
         RTL = -1
@@ -134,14 +156,15 @@ void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
                 x += 2 * textWidth(text.substr(i + 1, wstring::npos)) * factorX, dir = RTL;
             continue;
         }*/
-    
-        Image& curChar = pimpl->getChar(fs.charAt(i), fs.flagsAt(i));
+        
+        const Image& curChar = pimpl->imageAt(fs, i);
+        double curFactor = pimpl->factorAt(fs, i);
         //if (dir == LTR)
-            curChar.draw(x, y, z, factorX, factorY, Gosu::multiply(fs.colorAt(i), c), mode);
+            curChar.draw(x, y, z, factorX * curFactor, factorY * curFactor, Gosu::multiply(fs.colorAt(i), c), mode);
         //else
         //    curChar.draw(x - curChar.width() * factorX, y, z, factorX, factorY, c, mode);
         
-        x += curChar.width() * factorX * dir;
+        x += curChar.width() * factorX * curFactor * dir;
     }
 }
 
@@ -158,18 +181,7 @@ void Gosu::Font::drawRel(const wstring& text, double x, double y, ZPos z,
 void Gosu::Font::drawRot(const wstring& text, double x, double y, ZPos z, double angle,
     double factorX, double factorY, Color c, AlphaMode mode) const
 {
-    // TODO: Remove, replace by draw and pushTransform
-    
-    factorX /= 2;
-    factorY /= 2;
-    
-    double stepX = offsetX(angle + 90, 1.0), stepY = offsetY(angle + 90, 1.0);
-    
-    for (unsigned i = 0; i < text.length(); ++i)
-    {
-        Image& curChar = pimpl->getChar(text[i], 0);
-        curChar.drawRot(x, y, z, angle, 0.0, 0.0, factorX, factorY, c, mode);
-        x += curChar.width() * factorX * stepX;
-        y += curChar.width() * factorX * stepY;
-    }
+    pimpl->graphics->pushTransform(rotate(angle, x, y));
+    draw(text, x, y, z, factorX, factorY, c, mode);
+    pimpl->graphics->popTransform();
 }

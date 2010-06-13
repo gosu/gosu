@@ -6,6 +6,7 @@
 #include <GosuImpl/Graphics/LargeImageData.hpp>
 #include <GosuImpl/Graphics/Macro.hpp>
 #include <Gosu/Bitmap.hpp>
+#include <Gosu/Image.hpp>
 #include <boost/foreach.hpp>
 #if 0
 #include <boost/thread.hpp>
@@ -25,6 +26,7 @@ struct Gosu::Graphics::Impl
     Textures textures;
     Transforms currentTransforms;
     Transforms absoluteTransforms;
+    
 #if 0
     boost::mutex texMutex;
 #endif

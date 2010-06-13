@@ -55,6 +55,10 @@ namespace Gosu
         const std::wstring& fontName, unsigned fontHeight, 
         unsigned lineSpacing, unsigned maxWidth, TextAlign align,
         unsigned fontFlags = 0);
+    
+    //! Registers a new HTML-style entity that can subsequently be used
+    //! with Gosu::Font and Gosu::createText. The name is given without & and ;.
+    void registerEntity(const std::wstring& name, const Bitmap& replacement);
 }
 
 #endif
