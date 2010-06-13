@@ -166,11 +166,11 @@ Gosu::Bitmap Gosu::Texture::toBitmap(unsigned x, unsigned y, unsigned width, uns
 #if defined(__BIG_ENDIAN__)
     for (unsigned y = 0; y < height; ++y)
         for (unsigned x = 0; x < width; ++x)
-            bmp.setPixel(x, y, bigToNative(bmp.getPixel(x, y).argb() & 0xffffff00) >> 8 | bmp.getPixel(x, y).alpha() << 24));
+            bitmap.setPixel(x, y, bigToNative(bitmap.getPixel(x, y).argb() & 0xffffff00 >> 8 | bitmap.getPixel(x, y).alpha() << 24));
 #elif defined(GOSU_IS_IPHONE)
     for (unsigned y = 0; y < height; ++y)
         for (unsigned x = 0; x < width; ++x)
-            bmp.setPixel(x, y, bmp.getPixel(x, y).abgr());
+            bitmap.setPixel(x, y, bitmap.getPixel(x, y).abgr());
 #endif
     
     return bitmap;
