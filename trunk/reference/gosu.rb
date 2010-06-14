@@ -182,7 +182,7 @@ module Gosu
     # rel_y:: See rel_x.
     def draw_rel(text, x, y, z, rel_x, rel_y, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
       
-    # Analogous to draw, but rotates the text by a given angle.
+    # DEPRECATED: Analogous to draw, but rotates the text by a given angle.
     def draw_rot(text, x, y, z, angle, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
   end
   

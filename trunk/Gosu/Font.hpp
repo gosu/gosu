@@ -64,7 +64,8 @@ namespace Gosu
         #ifndef SWIG
         GOSU_DEPRECATED
         #endif
-        //! Analogous to draw, but rotates the text by a given angle.
+        //! DEPRECATED: Analogous to draw, but rotates the text by a given angle. Use 
+        //! a simple pushTransform to achieve the same effect.
         void drawRot(const std::wstring& text, double x, double y, ZPos z, double angle,
             double factorX = 1, double factorY = 1,
             Color c = Color::WHITE, AlphaMode mode = amDefault) const;
