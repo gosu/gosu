@@ -4,27 +4,35 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-06-13)
+(Last update: 2010-06-14)
 
 == Gosu 0.7.x ==
-  * Fix Gosu::Song on iOS
-  * Add/finish iPad support
-  * Fix CJK support
+  * Move currentTouches() into Input
+  * Treat Touch coordinates the same as other coordinates (apply zooming)
+  * Pass on touches to Window individually
+  * Add showCursor(true) / showCursor(false) on OS X
+  * Add showCursor(true) / showCursor(false) on Windows
+  * Add showCursor(true) / showCursor(false) on Mac
+  * Document showCursor
   * Gosu::RotFlip aus Gosu entfernen
+  * Optimize popTransform, avoid duplicate matrices
   * Use pushTransform for setResolution()
   * Adjust WindowMac
   * Adjust WindowWin
   * Adjust WindowX and add shrinking for oversized resolutions
-  * Optimize popTransform, avoid duplicate matrices
+  * Fix CJK support
+  * Use Gosu text formatting in Tutorial.rb
+  * Throw an exception when using multiple Windows
+  * Release 0.7.22
+  * Fix Gosu::Song on iOS
+  * Add/finish iPad support
   * Add scaling to SDL text so descenders don't overflow
   * Add FontFlags support for SDL_TTF Gosu/Text
   * Fix Unicode support for SDL_TTF port (UnicodeTest.rb, @loc_test)
   * Make C++'s Gosu::multiply available in Ruby as Gosu::Color::*
   * Add Numeric#clamp, Numeric#wrap to Ruby
-  * Make Mac/Gosu work with Rubinius
   * Make Window arguments optional for Audio, but throw exceptions when in wrong order
   * Make Window arguments optional for Graphics, but throw exceptions when in wrong order
-  * Throw an exception when using multiple Windows
   * Verify usefulness of this task: "Gosu: compile x86_64 with gcc 4.2 on OS X"
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Test StandBy with Windows and a running Gosu app
@@ -50,7 +58,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Create C++ app template for Xcode
     * Create iPhone app template for Xcode
     * Create .pkg wrapper to install Gosu into /Developer/Gosu
-    * Massively cleanup Gosu SVN directory
   * iPhone-related stuff that should be finished soonish
     * Let resolution decide orientation
     * Integrate "fat" iPhone building from forum
@@ -84,7 +91,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Mac: Add dead keys to TextInput
     * Mac: Use Core Text instead of ATSUI
   * Try wgois for Linux gamepad support
-  * Polish/deployment release
+  * Polish/deployment
     * Make it possible to delete images while they are still referenced in the queue.
     * Make Gosu::Color more fault-tolerant regarding its component values
     * Assure that files from doxygen task are considered for packaging
@@ -96,10 +103,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Create a dynamic screenshot page for all the topics in the Showcase
     * Mac OS: Mauszeiger wird im FS sichtbar bei Klick in obere linke Ecke: Warum?
     * Examples leichter findbar machen
-    * Bessere Ruby-Deployment-Hilfen
-    * Assure that files from doxygen task are considered for packaging
-    * Windows build task possible? Clarify
-    * Look how http://github.com/singpolyma/rubygame/tree/master gets the Debian packaging done
     * Rakefile sollte autoconf ausführen
     * Deployment-Hilfe, Rakefile, Mac
     * Deployment-Hilfe, Rakefile, Win
@@ -107,8 +110,9 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Make the wrapper's menu bar on OS X more complete
     * Now that the Rakefile works, stop doing every task every time (use file dependencies)
     * Make it easier to find the examples from the Gem
+  * Make Mac/Gosu work with Rubinius
   * Re-introduce Async support
-  * Make plans for an official Scene system
+  * Make plans for an official Scene/State system
   * Look at http://freeimage.sourceforge.net/requirements.html
   * Look at http://slick.cokeandcode.com/index.php?entry=entry080426-213044
   * Experiment: resizing the window possible?
@@ -119,7 +123,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Think: Possible to have beautiful quotation mark indenting?@Gosu Text
   * See if other libraries catch the release of the 'A' key in cmd+a
   * If there ever is functionality to 'and' and 'or' Gosu::Button, how would one check in buttonDown?
-  * Find out why applyColorKey smears solid image data to the lower right
   * Add check for Caps Lock/Num Lock
   * KbBracketLeft and KbBracketRight for ÖÄ?
   * Make more stuff configurable like http://github.com/cout/rice/blob/98ba7098e2de5849f2e7272021340976a768456f/ruby.ac#L7-20
@@ -164,6 +167,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Add rdoc to Gosu gem
   * Update TextInput.cpp to include setCaretPos
   * Make sure that WindowMainLoop states that the whole order is just about perceived performance
+  * Document how Font roughly works (allow devs to cache chars by text_width'ing the alphabet)
 == Gosu 0.8.x (preliminary) ==
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
   * Use float instead of double everywhere
