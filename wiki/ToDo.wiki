@@ -4,9 +4,13 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-06-14)
+(Last update: 2010-06-15)
 
 == Gosu 0.7.x ==
+  * See if support for ffBold etc. is really broken on 32-bit OS X
+  * Reverse Transform order
+  * Fix CJK support
+  * Release 0.7.22
   * Move currentTouches() into Input
   * Treat Touch coordinates the same as other coordinates (apply zooming)
   * Pass on touches to Window individually
@@ -20,10 +24,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Adjust WindowMac
   * Adjust WindowWin
   * Adjust WindowX and add shrinking for oversized resolutions
-  * Fix CJK support
   * Use Gosu text formatting in Tutorial.rb
   * Throw an exception when using multiple Windows
-  * Release 0.7.22
   * Fix Gosu::Song on iOS
   * Add/finish iPad support
   * Add scaling to SDL text so descenders don't overflow
