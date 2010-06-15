@@ -34,7 +34,7 @@ struct Gosu::Graphics::Impl
     void calculateAbsoluteTransform()
     {
         Transform result = scale(1);
-        BOOST_FOREACH (const Transform& tf, currentTransforms)
+        BOOST_REVERSE_FOREACH (const Transform& tf, currentTransforms)
             result = multiply(result, tf);
         absoluteTransforms.push_back(result);
     }
