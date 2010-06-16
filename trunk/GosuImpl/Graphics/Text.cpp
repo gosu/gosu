@@ -247,7 +247,8 @@ namespace Gosu
 
                 if (paragraph.charAt(cur) == L' ')
                 {
-                    // Whitespace: Add last word to list if existent
+                    // Whitespace:
+                    // Add last word to list if existent
                     if (beginOfWord != cur)
                     {
                         newWord.text = paragraph.range(beginOfWord, cur);
@@ -259,7 +260,8 @@ namespace Gosu
                 }
                 else if (isBreakingAsianGlyph(paragraph.charAt(cur)))
                 {
-                    // Whitespace: Add last word to list if existent
+                    // Asian glyph (treat as single word):
+                    // Add last word to list if existent
                     if (beginOfWord != cur)
                     {
                         newWord.text = paragraph.range(beginOfWord, cur);
@@ -268,7 +270,7 @@ namespace Gosu
                         collectedWords.push_back(newWord);
                     }
                     // Add glyph as a single "word"
-                    newWord.text = paragraph.range(cur, cur + 2);
+                    newWord.text = paragraph.range(cur, cur + 1);
                     newWord.width = builder.textWidth(newWord.text);
                     newWord.spaceWidth = 0;
                     collectedWords.push_back(newWord);
@@ -283,7 +285,7 @@ namespace Gosu
                 lastWord.spaceWidth = 0;
                 collectedWords.push_back(lastWord);
             }
-
+            
             processWords(builder, collectedWords);
         }
 
