@@ -1,6 +1,10 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.22=
+  * 2010-05-17: All: Fixed CJK support throughout Gosu
+  * 2010-05-17: All: Transforms are now applied in reverse order (the one that makes sense)
+
 =0.7.21=
   * 2010-05-13: Ruby: Updated CptnRuby to use translate() for scrolling
   * 2010-05-13: All: In light of transformations, Font#drawRot is deprecated now
