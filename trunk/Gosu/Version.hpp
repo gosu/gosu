@@ -3,7 +3,7 @@
 
 #define GOSU_MAJOR_VERSION 0
 #define GOSU_MINOR_VERSION 7
-#define GOSU_POINT_VERSION 21
-#define GOSU_VERSION "0.7.21"
+#define GOSU_POINT_VERSION 22
+#define GOSU_VERSION "0.7.22"
 
 #endif
