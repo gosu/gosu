@@ -4,13 +4,12 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-06-15)
+(Last update: 2010-06-16)
 
 == Gosu 0.7.x ==
   * See if support for ffBold etc. is really broken on 32-bit OS X
-  * Reverse Transform order
-  * Fix CJK support
   * Release 0.7.22
+  * Gosu: try integer truncing of drawing positions
   * Move currentTouches() into Input
   * Treat Touch coordinates the same as other coordinates (apply zooming)
   * Pass on touches to Window individually
