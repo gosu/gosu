@@ -151,7 +151,13 @@ namespace Gosu
             if (transform != currentTransform) {
                 glPopMatrix();
                 glPushMatrix();
+                #ifndef GOSU_IS_IPHONE
                 glMultMatrixd(transform->data());
+                #else
+                boost::array<float, 16> matrix;
+                matrix = *transform;
+                glMultMatrixf(matrix.data());
+                #endif
                 currentTransform = transform;
             }
             

@@ -147,6 +147,9 @@ void Gosu::Texture::free(unsigned x, unsigned y)
 
 Gosu::Bitmap Gosu::Texture::toBitmap(unsigned x, unsigned y, unsigned width, unsigned height) const
 {
+#ifdef GOSU_IS_IPHONE
+    throw std::logic_error("Texture::toBitmap not supported on iOS");
+#else
 #if defined(__BIG_ENDIAN__)
     unsigned format = GL_RGBA;
 #elif defined(GOSU_IS_IPHONE)
@@ -174,4 +177,5 @@ Gosu::Bitmap Gosu::Texture::toBitmap(unsigned x, unsigned y, unsigned width, uns
 #endif
     
     return bitmap;
+#endif
 }
