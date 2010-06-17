@@ -4,20 +4,22 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-06-16)
+(Last update: 2010-06-17)
 
 == Gosu 0.7.x ==
-  * See if support for ffBold etc. is really broken on 32-bit OS X
-  * Release 0.7.22
-  * Gosu: try integer truncing of drawing positions
+  * Fix Transforms for iPhone (auto-grouping should be the problem)
+  * Make clipping use current transformation
   * Move currentTouches() into Input
   * Treat Touch coordinates the same as other coordinates (apply zooming)
   * Pass on touches to Window individually
+  * Gosu: try integer truncing of drawing positions
   * Add showCursor(true) / showCursor(false) on OS X
   * Add showCursor(true) / showCursor(false) on Windows
   * Add showCursor(true) / showCursor(false) on Mac
   * Document showCursor
-  * Gosu::RotFlip aus Gosu entfernen
+  * Remove Gosu::RotFlip from Gosu
+  * Post alternative RotFlip files to board
+  * Let enableUndocumentedRetrofication always throw an exception so people use rescue blocks :)
   * Optimize popTransform, avoid duplicate matrices
   * Use pushTransform for setResolution()
   * Adjust WindowMac
@@ -91,7 +93,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Linux: Support other XKeySyms than Latin 1
     * Mac: Add dead keys to TextInput
     * Mac: Use Core Text instead of ATSUI
-  * Try wgois for Linux gamepad support
+  * Try wgois or http://appliedstochastics.com/articles/ruby_jsw.html for Linux gamepad support
   * Polish/deployment
     * Make it possible to delete images while they are still referenced in the queue.
     * Make Gosu::Color more fault-tolerant regarding its component values
@@ -162,14 +164,15 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make sure that it is documented what happens to different drawing ops with same z-order
   * Update README.txt year
   * Include CptnCpp as sample game
-  * Slap Tuiq until he posts Chuadrat again :P
-  * Ask: Why not clWhite?
   * Document alpha modes for Ruby
   * Add rdoc to Gosu gem
   * Update TextInput.cpp to include setCaretPos
   * Make sure that WindowMainLoop states that the whole order is just about perceived performance
   * Document how Font roughly works (allow devs to cache chars by text_width'ing the alphabet)
 == Gosu 0.8.x (preliminary) ==
+  * Ask: Why not clWhite?
+  * Ask board: 0x00 alpha == opaque? Switch worth it?
+  * Let Image() lazy-load it's file using Gosu::File (which keeps the file alive until it is really needed), add Gosu::loading_progress and Gosu::load_more for easy loading bars
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
   * Use float instead of double everywhere
   * Redesign (see forum) drawing interface
@@ -179,7 +182,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * force feedback would be cool
   * Provide C++ application templates where possible, maybe even installers for the templates
   * more alpha modes, yay!
-  * find a way to factor rot flips out of Gosu => Image/draw redesign
   * speed up LargeImageData?!
   * Apple remote support would rule.
   * clean up after playing around with possible optimizations
