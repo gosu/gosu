@@ -95,11 +95,17 @@ bool Gosu::Graphics::fullscreen() const
 
 double Gosu::Graphics::factorX() const
 {
+#ifdef GOSU_IS_IPHONE
+    throw "NYI";
+#endif
     return pimpl->factorX;
 }
 
 double Gosu::Graphics::factorY() const
 {
+#ifdef GOSU_IS_IPHONE
+    throw "NYI";
+#endif
     return pimpl->factorY;
 }
 
