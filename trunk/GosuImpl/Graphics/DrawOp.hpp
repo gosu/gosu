@@ -5,9 +5,8 @@
 #include <Gosu/Color.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/TexChunk.hpp>
-#include <boost/bind.hpp>
 #include <boost/cstdint.hpp>
-#include <algorithm>
+#include <boost/foreach.hpp>
 #include <set>
 
 namespace Gosu
@@ -123,9 +122,6 @@ namespace Gosu
 #else
         void perform(unsigned& currentTexName, Transform*& currentTransform, const DrawOp* next) const
         {
-            if (usedVertices != 4)
-                return; // No triangles, no lines on iPhone
-            
             static const unsigned MAX_AUTOGROUP = 24;
             
             static int spriteCounter = 0;
@@ -151,13 +147,9 @@ namespace Gosu
             if (transform != currentTransform) {
                 glPopMatrix();
                 glPushMatrix();
-                #ifndef GOSU_IS_IPHONE
-                glMultMatrixd(transform->data());
-                #else
                 boost::array<float, 16> matrix;
                 matrix = *transform;
                 glMultMatrixf(matrix.data());
-                #endif
                 currentTransform = transform;
             }
             
@@ -293,6 +285,11 @@ namespace Gosu
         
         void addDrawOp(DrawOp op, ZPos z)
         {
+            #ifdef GOSU_IS_IPHONE
+            // No triangles, no lines supported
+            assert(op.usedVertices == 4);
+            #endif
+
             if (clipWidth != 0xffffffff)
             {
                 op.clipX = clipX;
@@ -359,9 +356,9 @@ namespace Gosu
         
         void compileTo(VertexArray& va) const
         {
-            va.resize(set.size());
-            std::for_each(set.begin(), set.end(),
-                          boost::bind(&DrawOp::compileTo, _1, boost::ref(va)));
+            va.reserve(set.size());
+            BOOST_FOREACH (const DrawOp& op, set)
+                op.compileTo(va);
         }
     };
 }

@@ -5,7 +5,9 @@
 #include <Gosu/Utility.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/foreach.hpp>
+#include <boost/variant.hpp>
 #include <stdexcept>
+#include <utility>
 #include <vector>
 #include <cwchar>
 
@@ -25,7 +27,11 @@ namespace Gosu
                 return wc && other.wc && color == other.color && flags == other.flags;
             }
         };
-        std::vector<FormattedChar> chars;
+        
+        typedef std::pair<std::wstring, unsigned> SimpleImpl;
+        typedef std::vector<FormattedChar> FancyImpl;
+        
+        boost::variant<SimpleImpl, FancyImpl> impl;
         
         static unsigned flags(int b, int u, int i)
         {
@@ -43,6 +49,14 @@ namespace Gosu
         
         explicit FormattedString(const std::wstring& html, unsigned baseFlags)
         {
+            if (html.find_first_of(L"<&") == std::wstring::npos)
+            {
+                impl = SimpleImpl(html, baseFlags);
+                return;
+            }
+            
+            FancyImpl chars;
+        
             unsigned pos = 0;
             int b = (baseFlags & ffBold) ? 1 : 0,
                 u = (baseFlags & ffUnderline) ? 1 : 0,
@@ -161,10 +175,16 @@ namespace Gosu
                 chars.push_back(fc);
                 pos += 1;
             }
+            
+            impl = chars;
         }
         
         std::wstring unformat() const
         {
+            if (const SimpleImpl* simpl = boost::get<SimpleImpl>(&impl))
+                return simpl->first;
+            
+            const FancyImpl& chars = boost::get<FancyImpl>(impl);
             std::wstring result(length(), L' ');
             for (int i = 0; i < chars.size(); ++i)
                 result[i] = chars[i].wc;
@@ -173,6 +193,10 @@ namespace Gosu
         
         const wchar_t* entityAt(unsigned index) const
         {
+            if (impl.which() == 0)
+                return 0;
+            
+            const FancyImpl& chars = boost::get<FancyImpl>(impl);
             if (chars[index].wc != 0 || chars[index].entity.empty())
                 return 0;
             return chars[index].entity.c_str();
@@ -180,28 +204,51 @@ namespace Gosu
         
         wchar_t charAt(unsigned index) const
         {
+            if (const SimpleImpl* simpl = boost::get<SimpleImpl>(&impl))
+                return simpl->first[index];
+            
+            const FancyImpl& chars = boost::get<FancyImpl>(impl);
             return chars[index].wc;
         }
         
         unsigned flagsAt(unsigned index) const
         {
+            if (const SimpleImpl* simpl = boost::get<SimpleImpl>(&impl))
+                return simpl->second;
+            
+            const FancyImpl& chars = boost::get<FancyImpl>(impl);
             return chars[index].flags;
         }
         
         Gosu::Color colorAt(unsigned index) const
         {
+            if (impl.which() == 0)
+                return Color::WHITE;
+            
+            const FancyImpl& chars = boost::get<FancyImpl>(impl);
             return chars[index].color;
         }
         
         unsigned length() const
         {
+            if (const SimpleImpl* simpl = boost::get<SimpleImpl>(&impl))
+                return simpl->first.size();
+            
+            const FancyImpl& chars = boost::get<FancyImpl>(impl);
             return chars.size();
         }
         
         FormattedString range(unsigned begin, unsigned end) const
         {
             FormattedString result;
-            result.chars.assign(chars.begin() + begin, chars.begin() + end);
+
+            if (const SimpleImpl* simpl = boost::get<SimpleImpl>(&impl))
+                result.impl = SimpleImpl(std::wstring(simpl->first.begin() + begin, simpl->first.begin() + end), simpl->second);
+            else
+            {
+                const FancyImpl& chars = boost::get<FancyImpl>(impl);
+                result.impl = FancyImpl(chars.begin() + begin, chars.begin() + end);
+            }
             return result;
         }
         
@@ -210,38 +257,30 @@ namespace Gosu
             std::vector<FormattedString> result;
             unsigned begin = 0;
             for (unsigned cur = 0; cur < length(); ++cur)
-            {
                 if (charAt(cur) == L'\n')
                 {
-                    FormattedString line;
-                    line.chars.assign(chars.begin() + begin, chars.begin() + cur);
-                    result.push_back(line);
+                    result.push_back(range(begin, cur));
                     begin = cur + 1;
                 }
-            }
-            FormattedString line;
-            line.chars.assign(chars.begin() + begin, chars.end());
-            result.push_back(line);
+            result.push_back(range(begin, length()));
             return result;
         }
         
         std::vector<FormattedString> splitParts() const
         {
+            if (impl.which() == 0)
+                return std::vector<FormattedString>(1, *this);
+            
+            const FancyImpl& chars = boost::get<FancyImpl>(impl);
             std::vector<FormattedString> result;
             unsigned begin = 0;
             for (unsigned cur = 1; cur < length(); ++cur)
-            {
                 if (!chars[begin].sameStyleAs(chars[cur]))
                 {
-                    FormattedString line;
-                    line.chars.assign(chars.begin() + begin, chars.begin() + cur);
-                    result.push_back(line);
+                    result.push_back(range(begin, cur));
                     begin = cur;
                 }
-            }
-            FormattedString line;
-            line.chars.assign(chars.begin() + begin, chars.end());
-            result.push_back(line);
+            result.push_back(range(begin, length()));
             return result;
         }
     };
