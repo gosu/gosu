@@ -4,15 +4,17 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-06-17)
+(Last update: 2010-06-18)
 
 == Gosu 0.7.x ==
-  * Fix Transforms for iPhone (auto-grouping should be the problem)
+  * Fix Transforms for iPhone
   * Make clipping use current transformation
-  * Move currentTouches() into Input
-  * Treat Touch coordinates the same as other coordinates (apply zooming)
-  * Pass on touches to Window individually
   * Gosu: try integer truncing of drawing positions
+  * Optimize popTransform, avoid duplicate matrices
+  * Use pushTransform for setResolution()
+  * Adjust WindowMac
+  * Adjust WindowWin
+  * Adjust WindowX and add shrinking for oversized resolutions
   * Add showCursor(true) / showCursor(false) on OS X
   * Add showCursor(true) / showCursor(false) on Windows
   * Add showCursor(true) / showCursor(false) on Mac
@@ -20,11 +22,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Remove Gosu::RotFlip from Gosu
   * Post alternative RotFlip files to board
   * Let enableUndocumentedRetrofication always throw an exception so people use rescue blocks :)
-  * Optimize popTransform, avoid duplicate matrices
-  * Use pushTransform for setResolution()
-  * Adjust WindowMac
-  * Adjust WindowWin
-  * Adjust WindowX and add shrinking for oversized resolutions
+  * Add Gosu::escape()
   * Use Gosu text formatting in Tutorial.rb
   * Throw an exception when using multiple Windows
   * Fix Gosu::Song on iOS
@@ -34,6 +32,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Fix Unicode support for SDL_TTF port (UnicodeTest.rb, @loc_test)
   * Make C++'s Gosu::multiply available in Ruby as Gosu::Color::*
   * Add Numeric#clamp, Numeric#wrap to Ruby
+  * Look at http://audiere.sourceforge.net/ for Windows
   * Make Window arguments optional for Audio, but throw exceptions when in wrong order
   * Make Window arguments optional for Graphics, but throw exceptions when in wrong order
   * Verify usefulness of this task: "Gosu: compile x86_64 with gcc 4.2 on OS X"
@@ -171,21 +170,19 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Document how Font roughly works (allow devs to cache chars by text_width'ing the alphabet)
 == Gosu 0.8.x (preliminary) ==
   * Ask: Why not clWhite?
-  * Ask board: 0x00 alpha == opaque? Switch worth it?
+  * Ask board: 0x00 alpha == opaque? Switch worth it? Esp. what to do with Color::WHITE
   * Let Image() lazy-load it's file using Gosu::File (which keeps the file alive until it is really needed), add Gosu::loading_progress and Gosu::load_more for easy loading bars
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
   * Use float instead of double everywhere
+  * Rename pimpl/Impl to p/Private
   * Redesign (see forum) drawing interface
   * Rewrite Gosu::Input with support for multiple gamepads and analog joysticks, serializable button IDs, …
   * Windows: Input will regularly query devices which are not currently attached, thereby causing the game to halt every few seconds - think about this
   * FSAA/mipmap experiments
-  * force feedback would be cool
   * Provide C++ application templates where possible, maybe even installers for the templates
-  * more alpha modes, yay!
   * speed up LargeImageData?!
   * Apple remote support would rule.
-  * clean up after playing around with possible optimizations
-  * assure Gosu::File also creates directories as necessary
+  * Assure Gosu::File also creates directories as necessary
   * more C++ examples
   * simplify Gosu's IO philosophy (C++)
   * document Gosu's Sockets
