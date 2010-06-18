@@ -94,9 +94,9 @@ namespace Gosu
         // Note that it does not hurt to override them even if you compile
         // for another platform; if you don't specify "virtual" the code
         // should even be stripped away cleanly.
-        virtual void touchBegan(Touch& touch) {}
-        virtual void touchMoved(Touch& touch) {}
-        virtual void touchEnded(Touch& touch) {}
+        virtual void touchBegan(Touch touch) {}
+        virtual void touchMoved(Touch touch) {}
+        virtual void touchEnded(Touch touch) {}
         #endif        
         
         const Audio& audio() const;
