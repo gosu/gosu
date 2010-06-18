@@ -50,20 +50,6 @@ namespace Gosu
 		Button(ButtonName name) : id_(name) {}
 	};
     
-	// Available even on non-iPhone platforms to make it easier to compile the
-	// same source for multiple platforms.
-    
-    //! Struct that saves information about a touch on the surface of a multi-
-    //! touch device.
-    struct Touch
-    {
-        //! Allows for identification of a touch across calls.
-        void* id;
-        //! Position of a touch on the touch screen.
-        double x, y;
-    };
-    typedef std::vector<Touch> Touches;
-    
 	//! Tests whether two Buttons identify the same physical button.
 	inline bool operator==(Button lhs, Button rhs)
 	{
@@ -78,6 +64,19 @@ namespace Gosu
         return lhs.id() < rhs.id();
     }
 	
+    //! Struct that saves information about a touch on the surface of a multi-
+    //! touch device.
+	//! Available even on non-iPhone platforms to make it easier to compile the
+	//! same source for multiple platforms.
+    struct Touch
+    {
+        //! Allows for identification of a touch across calls.
+        void* id;
+        //! Position of a touch on the touch screen.
+        float x, y;
+    };
+    typedef std::vector<Touch> Touches;
+    
     //! Manages initialization and shutdown of the input system. Only one Input
 	//! instance can exist per application.
     class Input
@@ -92,9 +91,10 @@ namespace Gosu
         
         #ifdef GOSU_IS_MAC
         #ifdef GOSU_IS_IPHONE
-        Input();
+        Input(void* view);
+        void feedTouchEvent(int type, void* touches);
         #else
-        Input(void* nswindow);
+        Input(void* window);
         bool feedNSEvent(void* event);
         #endif
         #endif
@@ -121,14 +121,17 @@ namespace Gosu
         double mouseX() const;
         //! See mouseX.
         double mouseY() const;
-
+        
         //! Immediately moves the mouse as far towards the desired position
         //! as possible. x and y are relativ to the window just as in the mouse
         //! position accessors.
         void setMousePosition(double x, double y);
 
-        // Undocumented for the moment.
+        // Undocumented for the moment. Also applies to currentTouches().
         void setMouseFactors(double factorX, double factorY);
+        
+        //! Currently known touches.
+        const Touches& currentTouches() const;
         
         //! Collects new information about which buttons are pressed, where the
         //! mouse is and calls onButtonUp/onButtonDown, if assigned.
@@ -137,6 +140,10 @@ namespace Gosu
 		//! Assignable events that are called by update. You can bind these to your own functions.
 		//! If you use the Window class, it will assign forward these to its own methods.
         boost::function<void (Button)> onButtonDown, onButtonUp;
+        
+		//! Assignable events that are called by update. You can bind these to your own functions.
+		//! If you use the Window class, it will assign forward these to its own methods.
+        boost::function<void (Touch)> onTouchBegan, onTouchMoved, onTouchEnded;
         
         //! Returns the currently active TextInput instance, or 0.
         TextInput* textInput() const;

@@ -7,20 +7,6 @@
 
 Gosu::Window& windowInstance();
 
-namespace {
-    Gosu::Touches translateTouches(NSSet* touches, UIView* view)
-    {
-        Gosu::Touches result;
-        for (UITouch* uiTouch in touches)
-        {                
-            CGPoint point = [uiTouch locationInView: view];
-            Gosu::Touch touch = { uiTouch, point.y, [view bounds].size.width - point.x };
-            result.push_back(touch);
-        }
-        return result;
-    }
-}
-
 // A class extension to declare private methods
 @interface GosuView ()
 
@@ -120,65 +106,21 @@ namespace {
     [super dealloc];
 }
 
-- (const Gosu::Touches&)currentTouches {
-    if (!currentTouchesVector)
-        currentTouchesVector = new Gosu::Touches(translateTouches(currentTouches, self));
-    return *currentTouchesVector;
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    delete currentTouchesVector; currentTouchesVector = 0;
-    if (!currentTouches) currentTouches = [[NSMutableSet alloc] init];
-
-    [currentTouches unionSet: touches];
-
-    windowInstance().touchesBegan(translateTouches(touches, self));
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {    
+    windowInstance().input().feedTouchEvent(0, touches);
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    delete currentTouchesVector; currentTouchesVector = 0;
-
-    windowInstance().touchesMoved(translateTouches(touches, self));
+    windowInstance().input().feedTouchEvent(1, touches);
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    delete currentTouchesVector; currentTouchesVector = 0;
-    if (!currentTouches) currentTouches = [[NSMutableSet alloc] init];
-
-    [currentTouches minusSet: touches];
-
-    windowInstance().touchesEnded(translateTouches(touches, self));
+    windowInstance().input().feedTouchEvent(2, touches);
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     // TODO: Should be differentiated on the Gosu side.
     [self touchesEnded: touches withEvent: event];
-}
-
-- (void)removeDeadTouches {
-    NSMutableSet* deadTouches = 0;
-
-    for (UITouch* touch in currentTouches)
-    {
-        UITouchPhase phase = [touch phase];
-        if (phase == UITouchPhaseBegan ||
-            phase == UITouchPhaseMoved ||
-            phase == UITouchPhaseStationary)
-            continue;
-            
-        // Something was deleted, we will need the set.
-        if (deadTouches == 0)
-            deadTouches = [[NSMutableSet alloc] init];
-        [deadTouches addObject:touch];
-    }
-    
-    // Has something been deleted?
-    if (deadTouches)
-    {
-        delete currentTouchesVector;
-        [currentTouches minusSet: deadTouches];
-        windowInstance().touchesEnded(translateTouches(deadTouches, self));
-    }
 }
 
 - (bool)isMultipleTouchEnabled {

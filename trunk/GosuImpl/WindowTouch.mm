@@ -1,9 +1,11 @@
-#import <Gosu/Window.hpp>
-#import <Gosu/Graphics.hpp>
-#import <Gosu/Audio.hpp>
-#import <Gosu/Input.hpp>
-#import <GosuImpl/MacUtility.hpp>   
-#import <GosuImpl/Graphics/GosuView.hpp>
+#include <Gosu/Window.hpp>
+#include <Gosu/Graphics.hpp>
+#include <Gosu/Audio.hpp>
+#include <Gosu/Input.hpp>
+#include <GosuImpl/MacUtility.hpp>   
+#include <GosuImpl/Graphics/GosuView.hpp>
+#include <boost/bind.hpp>
+
 #import <CoreGraphics/CoreGraphics.h>
 #import <UIKit/UIKit.h>
 #import <OpenGLES/EAGL.h>
@@ -45,7 +47,7 @@ Gosu::Window& windowInstance();
 }
 @end
 
-// Ugly monkey patching to bridge the C++ and ObjC sides.
+// Ugly patching to bridge the C++ and ObjC sides.
 namespace
 {
     GosuView* gosuView = nil;
@@ -77,7 +79,8 @@ namespace
 - (void)doTick:(NSTimer*)timer {
     windowInstance().update();
     [gosuView drawView];
-    [gosuView removeDeadTouches];
+    Gosu::Song::update();
+    windowInstance().input().update();
 }
 @end
 
@@ -95,7 +98,10 @@ Gosu::Window::Window(unsigned width, unsigned height,
     pimpl->graphics.reset(new Graphics(320, 480, false));
     pimpl->graphics->setResolution(480, 320);
     pimpl->audio.reset(new Audio());
-    pimpl->input.reset(new Input());
+    pimpl->input.reset(new Input(gosuView));
+    pimpl->input->onTouchBegan = boost::bind(&Window::touchBegan, this, _1);
+    pimpl->input->onTouchMoved = boost::bind(&Window::touchMoved, this, _1);
+    pimpl->input->onTouchEnded = boost::bind(&Window::touchEnded, this, _1);
     pimpl->interval = updateInterval;
 
     [pimpl->window.obj() makeKeyAndVisible];
@@ -149,9 +155,4 @@ void Gosu::Window::show()
 void Gosu::Window::close()
 {
     throw "NYI";
-}
-
-const Gosu::Touches& Gosu::Window::currentTouches() const
-{
-    return [pimpl->view.obj() currentTouches];
 }

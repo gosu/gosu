@@ -107,6 +107,12 @@ void Gosu::Input::setMouseFactors(double factorX, double factorY)
     pimpl->mouseFactorY = factorY;
 }
 
+const Gosu::Touches& Gosu::Input::currentTouches() const
+{
+    static Gosu::Touches none;
+    return none;
+}
+
 void Gosu::Input::update()
 {
     for (unsigned int i = 0; i < pimpl->eventList.size(); i++)
