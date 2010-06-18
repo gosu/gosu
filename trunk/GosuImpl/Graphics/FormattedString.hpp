@@ -149,6 +149,8 @@ namespace Gosu
                             goto normalCharacter;
                     }
                     FormattedChar fc = { 0, c.back(), 0, std::wstring(html.begin() + pos + 1, html.begin() + endOfEntity) };
+                    if (!isEntity(fc.entity))
+                        goto normalCharacter;
                     chars.push_back(fc);
                     pos = endOfEntity + 1;
                     continue;

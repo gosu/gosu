@@ -73,6 +73,7 @@ namespace Gosu
             }
     }
     
+    bool isEntity(const std::wstring& name);
     const Bitmap& entityBitmap(const std::wstring& name);
 }
 

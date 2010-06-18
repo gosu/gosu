@@ -381,7 +381,15 @@ void Gosu::registerEntity(const std::wstring& name, const Gosu::Bitmap& replacem
     entities[name].reset(new Bitmap(replacement));
 }
 
+bool Gosu::isEntity(const std::wstring& name)
+{
+    return entities[name];
+}
+
 const Gosu::Bitmap& Gosu::entityBitmap(const std::wstring& name)
 {
-    return *entities[name];
+    boost::shared_ptr<Gosu::Bitmap>& ptr = entities[name];
+    if (!ptr)
+        throw std::runtime_error("Unknown entity: " + Gosu::wstringToUTF8(name));
+    return *ptr;
 }
