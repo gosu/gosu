@@ -59,7 +59,7 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     #ifdef GOSU_IS_IPHONE
     glTranslatef(physWidth, 0, 0);
     glRotatef(90, 0, 0, 1);
-    glScalef(3.0/2, 2.0/3, 0);
+    glScalef(1.0 * physHeight / physWidth, 1.0 * physWidth / physHeight, 0);
     #endif
 
     glEnable(GL_BLEND);
