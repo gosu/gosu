@@ -4,28 +4,25 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-06-18)
+(Last update: 2010-06-19)
 
 == Gosu 0.7.x ==
+  * Test text formatting on Windows
+  * Optimize popTransform, avoid duplicate matrices
   * Fix Transforms for iPhone
   * Make clipping use current transformation
-  * Gosu: try integer truncing of drawing positions
-  * Optimize popTransform, avoid duplicate matrices
-  * Use pushTransform for setResolution()
+  * Remove setResolution and use transforms instead
   * Adjust WindowMac
   * Adjust WindowWin
   * Adjust WindowX and add shrinking for oversized resolutions
+  * Gosu: try integer truncing of drawing positions
   * Add showCursor(true) / showCursor(false) on OS X
   * Add showCursor(true) / showCursor(false) on Windows
   * Add showCursor(true) / showCursor(false) on Mac
   * Document showCursor
-  * Remove Gosu::RotFlip from Gosu
-  * Post alternative RotFlip files to board
   * Let enableUndocumentedRetrofication always throw an exception so people use rescue blocks :)
-  * Add Gosu::escape()
   * Use Gosu text formatting in Tutorial.rb
   * Throw an exception when using multiple Windows
-  * Fix Gosu::Song on iOS
   * Add/finish iPad support
   * Add scaling to SDL text so descenders don't overflow
   * Add FontFlags support for SDL_TTF Gosu/Text
@@ -168,6 +165,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Update TextInput.cpp to include setCaretPos
   * Make sure that WindowMainLoop states that the whole order is just about perceived performance
   * Document how Font roughly works (allow devs to cache chars by text_width'ing the alphabet)
+  * Make Gosu available on Facebook
 == Gosu 0.8.x (preliminary) ==
   * Ask: Why not clWhite?
   * Ask board: 0x00 alpha == opaque? Switch worth it? Esp. what to do with Color::WHITE
