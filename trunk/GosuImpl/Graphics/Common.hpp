@@ -62,6 +62,16 @@ namespace Gosu
         return result;
     }
     
+    inline void applyTransform(const Transform& transform, double& x, double& y)
+    {
+        double result[4] = { x, y, 0, 1 };
+        for (int i = 0; i < 4; ++i)
+            for (int j = 0; j < 4; ++j)
+                result[i] += transform[i * 4 + j];
+        x = result[0] / result[3];
+        y = result[1] / result[3];
+    }
+    
     inline void multiplyBitmapAlpha(Bitmap& bmp, Color::Channel alpha)
     {
         for (int y = 0; y < bmp.height(); ++y)

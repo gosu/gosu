@@ -18,8 +18,6 @@
 struct Gosu::Graphics::Impl
 {
     unsigned physWidth, physHeight;
-    unsigned virtWidth, virtHeight;
-    double factorX, factorY;
     bool fullscreen;
     DrawOpQueueStack queues;
     typedef std::vector<boost::shared_ptr<Texture> > Textures;
@@ -43,9 +41,8 @@ struct Gosu::Graphics::Impl
 Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscreen)
 : pimpl(new Impl)
 {
-    pimpl->virtWidth  = pimpl->physWidth  = physWidth;
-    pimpl->virtHeight = pimpl->physHeight = physHeight;
-    pimpl->factorX = pimpl->factorY = 1.0;
+    pimpl->physWidth  = physWidth;
+    pimpl->physHeight = physHeight;
     pimpl->fullscreen = fullscreen;
 
     glMatrixMode(GL_PROJECTION);
@@ -71,6 +68,7 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     pimpl->queues.resize(1);
     
     // Push one identity matrix as the default transform.
+    pimpl->currentTransforms.push_back(scale(1));
     pimpl->absoluteTransforms.push_back(scale(1));
 }
 
@@ -80,12 +78,16 @@ Gosu::Graphics::~Graphics()
 
 unsigned Gosu::Graphics::width() const
 {
-    return pimpl->virtWidth;
+    double size[2] = { pimpl->physWidth, pimpl->physHeight };
+    applyTransform(pimpl->absoluteTransforms.front(), size[0], size[1]);
+    return size[0];
 }
 
 unsigned Gosu::Graphics::height() const
 {
-    return pimpl->virtHeight;
+    double size[2] = { pimpl->physWidth, pimpl->physHeight };
+    applyTransform(pimpl->absoluteTransforms.front(), size[0], size[1]);
+    return size[1];
 }
 
 bool Gosu::Graphics::fullscreen() const
@@ -93,30 +95,14 @@ bool Gosu::Graphics::fullscreen() const
     return pimpl->fullscreen;
 }
 
-double Gosu::Graphics::factorX() const
-{
-    return pimpl->factorX;
-}
-
-double Gosu::Graphics::factorY() const
-{
-    return pimpl->factorY;
-}
-
 void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight)
 {
-    if (virtualWidth * virtualHeight < 1)
+    if (virtualWidth == 0 || virtualHeight == 0)
         throw std::invalid_argument("Invalid virtual resolution.");
-
-    pimpl->virtWidth = virtualWidth;
-    pimpl->virtHeight = virtualHeight;
-    /*    
-    pimpl->factorX = pimpl->factorY =
-        std::min(1.0 / virtualWidth * pimpl->physWidth,
-                 1.0 / virtualHeight * pimpl->physHeight);
-    */
-    pimpl->factorX = 1.0 / virtualWidth * pimpl->physWidth;
-    pimpl->factorY = 1.0 / virtualHeight * pimpl->physHeight;
+    
+    pimpl->currentTransforms.front() =
+    pimpl->absoluteTransforms.front() = scale(1.0 / virtualWidth  * pimpl->physWidth,
+                                              1.0 / virtualHeight * pimpl->physHeight);
 }
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
@@ -125,10 +111,9 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
     // TODO: Raise exception?
     pimpl->queues.resize(1);
     
-    // If there are transformations in progress, clear them.
-    pimpl->currentTransforms.resize(0);
+    pimpl->currentTransforms.resize(1);
     pimpl->absoluteTransforms.resize(1);
-
+    
     // Flush leftover clippings
     endClipping();
 
@@ -143,22 +128,6 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 
 void Gosu::Graphics::end()
 {
-    /*double vBarWidth = pimpl->physWidth / factorX() - width();
-    if (vBarWidth > 0)
-    {
-        drawQuad(0, 0, 0x00000000, vBarWidth, 0, 0x00000000,
-                 0, height(), 0x00000000, vBarWidth, height(), 0x00000000,
-                 std::numeric_limits<double>::max());
-    }
-    
-    double hBarHeight = pimpl->physHeight / factorY() - height();
-    if (hBarHeight > 0)
-    {
-        drawQuad(0, 0, 0x00000000, width(), 0, 0x00000000,
-                 0, hBarHeight, 0x00000000, width(), hBarHeight, 0x00000000,
-                 std::numeric_limits<double>::max());
-    }*/
-    
     // If there is a recording in process, stop it.
     pimpl->queues.resize(1);
     
@@ -195,7 +164,7 @@ void Gosu::Graphics::endGL()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, pimpl->physWidth, pimpl->physHeight);
-    glOrtho(0, pimpl->virtWidth, pimpl->virtHeight, 0, -1, 1);
+    glOrtho(0, pimpl->physWidth, pimpl->physHeight, 0, -1, 1);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -211,10 +180,12 @@ void Gosu::Graphics::beginClipping(int x, int y, unsigned width, unsigned height
     // In doubt, make the clipping region smaller than requested.
     
 #ifndef GOSU_IS_IPHONE
-    int physX = static_cast<int>(std::ceil(x * factorX()));
-    int physY = static_cast<int>(std::ceil((0.0 + this->height() - y - height) * factorY()));
-    unsigned physWidth  = static_cast<unsigned>(width  * factorX());
-    unsigned physHeight = static_cast<unsigned>(height * factorY());
+    double factorX = pimpl->absoluteTransforms.front()[0];
+    double factorY = pimpl->absoluteTransforms.front()[4];
+    int physX = static_cast<int>(std::ceil(x * factorX));
+    int physY = static_cast<int>(std::ceil((0.0 + this->height() - y - height) * factorY));
+    unsigned physWidth  = static_cast<unsigned>(width  * factorX);
+    unsigned physHeight = static_cast<unsigned>(height * factorY);
 #else
     // Make up for rotation
     int physX = 320 - static_cast<int>(std::ceil(320.0 * (0.0 + y + height) / this->height()));
@@ -267,11 +238,6 @@ void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
 {
     DrawOp op(pimpl->absoluteTransforms.back());
     
-    x1 *= factorX();
-    y1 *= factorY();
-    x2 *= factorX();
-    y2 *= factorY();
-
     op.mode = mode;
     op.usedVertices = 2;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
@@ -286,14 +252,7 @@ void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
     ZPos z, AlphaMode mode)
 {
     DrawOp op(pimpl->absoluteTransforms.back());
-    
-    x1 *= factorX();
-    y1 *= factorY();
-    x2 *= factorX();
-    y2 *= factorY();
-    x3 *= factorX();
-    y3 *= factorY();
-    
+        
     op.mode = mode;
     op.usedVertices = 3;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
@@ -316,16 +275,7 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
     reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
     DrawOp op(pimpl->absoluteTransforms.back());
-
-    x1 *= factorX();
-    y1 *= factorY();
-    x2 *= factorX();
-    y2 *= factorY();
-    x3 *= factorX();
-    y3 *= factorY();
-    x4 *= factorX();
-    y4 *= factorY();
-
+    
     op.mode = mode;
     op.usedVertices = 4;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);

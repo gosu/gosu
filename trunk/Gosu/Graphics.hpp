@@ -44,8 +44,6 @@ namespace Gosu
         ~Graphics();
 
         // Undocumented until I have thought about this...
-        double factorX() const;
-        double factorY() const;
         void setResolution(unsigned virtualWidth, unsigned virtualHeight);
         // End of Undocumented
         
