@@ -107,57 +107,6 @@ void Gosu::Image::drawRot(double x, double y, ZPos z,
                c, z, mode);
 }
 
-void Gosu::Image::drawRotFlip(double x, double y, ZPos z,
-    RotFlip rf,
-    double factorX, double factorY,
-    Color c,
-    AlphaMode mode) const
-{
-    drawRotFlipMod(x, y, z, rf, factorX, factorY, c, c, c, c, mode);
-}
-
-void Gosu::Image::drawRotFlipMod(double x, double y, ZPos z,
-    RotFlip rf,
-    double factorX, double factorY,
-    Color c1, Color c2, Color c3, Color c4,
-    AlphaMode mode) const
-{
-    double offsetX;
-    double offsetY;
-
-    if (rf.rotated())
-    {
-        offsetX = height() * factorY / 2;
-        offsetY = width() * factorX / 2;
-    }
-    else
-    {
-        offsetX = width() * factorX / 2;
-        offsetY = height() * factorY / 2;
-    }
-
-    struct Point
-    {
-        double x, y;
-    };
-
-    Point corners[4] = { { x - offsetX, y - offsetY },
-                         { x + offsetX, y - offsetY },
-                         { x - offsetX, y + offsetY },
-                         { x + offsetX, y + offsetY } };
-
-    Point* vertices[4] =
-        { &corners[rf.mapCorner(0)], &corners[rf.mapCorner(1)],
-          &corners[rf.mapCorner(2)], &corners[rf.mapCorner(3)] };
-
-    data->draw(
-        vertices[0]->x, vertices[0]->y, c1,
-        vertices[1]->x, vertices[1]->y, c2,
-        vertices[2]->x, vertices[2]->y, c3,
-        vertices[3]->x, vertices[3]->y, c4,
-        z, mode);
-}
-
 const Gosu::ImageData& Gosu::Image::getData() const
 {
     return *data;

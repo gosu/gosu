@@ -19,7 +19,6 @@ namespace Gosu
     class Input;
     class Reader;
     class Resource;
-    class RotFlip;
     class Sample;
     class Song;
     class TextInput;

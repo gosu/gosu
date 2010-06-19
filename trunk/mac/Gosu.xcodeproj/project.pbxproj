@@ -31,7 +31,6 @@
 		D410E9EC0A8019CD005C7067 /* IO.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D00A8019CD005C7067 /* IO.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9EE0A8019CD005C7067 /* Math.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D20A8019CD005C7067 /* Math.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9EF0A8019CD005C7067 /* Platform.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D30A8019CD005C7067 /* Platform.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D410E9F00A8019CD005C7067 /* RotFlip.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D40A8019CD005C7067 /* RotFlip.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9F10A8019CD005C7067 /* Sockets.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D50A8019CD005C7067 /* Sockets.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9F20A8019CD005C7067 /* Text.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D60A8019CD005C7067 /* Text.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D410E9F30A8019CD005C7067 /* Timing.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D410E9D70A8019CD005C7067 /* Timing.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -56,7 +55,6 @@
 		D410EAFD0A801B00005C7067 /* Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADC0A801B00005C7067 /* Graphics.cpp */; };
 		D410EAFF0A801B00005C7067 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADE0A801B00005C7067 /* Image.cpp */; };
 		D410EB000A801B00005C7067 /* LargeImageData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADF0A801B00005C7067 /* LargeImageData.cpp */; };
-		D410EB020A801B00005C7067 /* RotFlip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE10A801B00005C7067 /* RotFlip.cpp */; };
 		D410EB030A801B00005C7067 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE20A801B00005C7067 /* Text.cpp */; };
 		D410EB040A801B00005C7067 /* TextMac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE30A801B00005C7067 /* TextMac.cpp */; };
 		D410EB0F0A801B00005C7067 /* CommSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAF00A801B00005C7067 /* CommSocket.cpp */; };
@@ -76,7 +74,6 @@
 		D423822A0C4C3D68000DAA25 /* Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADC0A801B00005C7067 /* Graphics.cpp */; };
 		D423822B0C4C3D68000DAA25 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADE0A801B00005C7067 /* Image.cpp */; };
 		D423822C0C4C3D68000DAA25 /* LargeImageData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADF0A801B00005C7067 /* LargeImageData.cpp */; };
-		D423822D0C4C3D68000DAA25 /* RotFlip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE10A801B00005C7067 /* RotFlip.cpp */; };
 		D423822E0C4C3D68000DAA25 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE20A801B00005C7067 /* Text.cpp */; };
 		D423822F0C4C3D68000DAA25 /* TextMac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE30A801B00005C7067 /* TextMac.cpp */; };
 		D42382390C4C3D79000DAA25 /* DirectoriesMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410E9FF0A8019FA005C7067 /* DirectoriesMac.mm */; };
@@ -126,7 +123,6 @@
 		D46C2A430FAE037800A33476 /* Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADC0A801B00005C7067 /* Graphics.cpp */; };
 		D46C2A440FAE037800A33476 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADE0A801B00005C7067 /* Image.cpp */; };
 		D46C2A450FAE037800A33476 /* LargeImageData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADF0A801B00005C7067 /* LargeImageData.cpp */; };
-		D46C2A460FAE037800A33476 /* RotFlip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE10A801B00005C7067 /* RotFlip.cpp */; };
 		D46C2A470FAE037800A33476 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97B0CD3907D00621B24 /* Texture.cpp */; };
 		D46C2A480FAE037800A33476 /* TexChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97D0CD3907D00621B24 /* TexChunk.cpp */; };
 		D46C2A490FAE037800A33476 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE20A801B00005C7067 /* Text.cpp */; };
@@ -163,7 +159,6 @@
 		D4A5A2140F40D33400FFF378 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97B0CD3907D00621B24 /* Texture.cpp */; };
 		D4A5A2150F40D33800FFF378 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE20A801B00005C7067 /* Text.cpp */; };
 		D4A5A2160F40D33B00FFF378 /* TexChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97D0CD3907D00621B24 /* TexChunk.cpp */; };
-		D4A5A2180F40D33D00FFF378 /* RotFlip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE10A801B00005C7067 /* RotFlip.cpp */; };
 		D4A5A21A0F40D34600FFF378 /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA1C0A8019FA005C7067 /* Math.cpp */; };
 		D4A5A2230F40D45200FFF378 /* InputTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A2200F40D45200FFF378 /* InputTouch.mm */; };
 		D4A5A2240F40D45200FFF378 /* WindowTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A2210F40D45200FFF378 /* WindowTouch.mm */; };
@@ -441,7 +436,6 @@
 		D410E9D00A8019CD005C7067 /* IO.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = IO.hpp; path = ../Gosu/IO.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9D20A8019CD005C7067 /* Math.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Math.hpp; path = ../Gosu/Math.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9D30A8019CD005C7067 /* Platform.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Platform.hpp; path = ../Gosu/Platform.hpp; sourceTree = SOURCE_ROOT; };
-		D410E9D40A8019CD005C7067 /* RotFlip.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = RotFlip.hpp; path = ../Gosu/RotFlip.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9D50A8019CD005C7067 /* Sockets.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Sockets.hpp; path = ../Gosu/Sockets.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9D60A8019CD005C7067 /* Text.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Text.hpp; path = ../Gosu/Text.hpp; sourceTree = SOURCE_ROOT; };
 		D410E9D70A8019CD005C7067 /* Timing.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = Timing.hpp; path = ../Gosu/Timing.hpp; sourceTree = SOURCE_ROOT; };
@@ -468,7 +462,6 @@
 		D410EADE0A801B00005C7067 /* Image.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Image.cpp; sourceTree = "<group>"; };
 		D410EADF0A801B00005C7067 /* LargeImageData.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = LargeImageData.cpp; sourceTree = "<group>"; };
 		D410EAE00A801B00005C7067 /* LargeImageData.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = LargeImageData.hpp; sourceTree = "<group>"; };
-		D410EAE10A801B00005C7067 /* RotFlip.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = RotFlip.cpp; sourceTree = "<group>"; };
 		D410EAE20A801B00005C7067 /* Text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Text.cpp; sourceTree = "<group>"; };
 		D410EAE30A801B00005C7067 /* TextMac.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = TextMac.cpp; sourceTree = "<group>"; };
 		D410EAF00A801B00005C7067 /* CommSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CommSocket.cpp; sourceTree = "<group>"; };
@@ -738,7 +731,6 @@
 				D410E9D00A8019CD005C7067 /* IO.hpp */,
 				D410E9D20A8019CD005C7067 /* Math.hpp */,
 				D410E9D30A8019CD005C7067 /* Platform.hpp */,
-				D410E9D40A8019CD005C7067 /* RotFlip.hpp */,
 				D410E9D50A8019CD005C7067 /* Sockets.hpp */,
 				D410E9D60A8019CD005C7067 /* Text.hpp */,
 				D4F07B220D934C8B00FB3D99 /* TextInput.hpp */,
@@ -800,7 +792,6 @@
 				D410EADF0A801B00005C7067 /* LargeImageData.cpp */,
 				D410EAE00A801B00005C7067 /* LargeImageData.hpp */,
 				B9CA23C0100396920073D01B /* Macro.hpp */,
-				D410EAE10A801B00005C7067 /* RotFlip.cpp */,
 				D4A7E97B0CD3907D00621B24 /* Texture.cpp */,
 				D4A7E97C0CD3907D00621B24 /* Texture.hpp */,
 				D4A7E97D0CD3907D00621B24 /* TexChunk.cpp */,
@@ -1000,7 +991,6 @@
 				D410E9EC0A8019CD005C7067 /* IO.hpp in Headers */,
 				D410E9EE0A8019CD005C7067 /* Math.hpp in Headers */,
 				D410E9EF0A8019CD005C7067 /* Platform.hpp in Headers */,
-				D410E9F00A8019CD005C7067 /* RotFlip.hpp in Headers */,
 				D410E9F10A8019CD005C7067 /* Sockets.hpp in Headers */,
 				D410E9F20A8019CD005C7067 /* Text.hpp in Headers */,
 				D4F07B230D934C8B00FB3D99 /* TextInput.hpp in Headers */,
@@ -1199,7 +1189,6 @@
 				D410EAFD0A801B00005C7067 /* Graphics.cpp in Sources */,
 				D410EAFF0A801B00005C7067 /* Image.cpp in Sources */,
 				D410EB000A801B00005C7067 /* LargeImageData.cpp in Sources */,
-				D410EB020A801B00005C7067 /* RotFlip.cpp in Sources */,
 				D410EB030A801B00005C7067 /* Text.cpp in Sources */,
 				D410EB040A801B00005C7067 /* TextMac.cpp in Sources */,
 				D410EB0F0A801B00005C7067 /* CommSocket.cpp in Sources */,
@@ -1286,7 +1275,6 @@
 				D46C2A430FAE037800A33476 /* Graphics.cpp in Sources */,
 				D46C2A440FAE037800A33476 /* Image.cpp in Sources */,
 				D46C2A450FAE037800A33476 /* LargeImageData.cpp in Sources */,
-				D46C2A460FAE037800A33476 /* RotFlip.cpp in Sources */,
 				D46C2A470FAE037800A33476 /* Texture.cpp in Sources */,
 				D46C2A480FAE037800A33476 /* TexChunk.cpp in Sources */,
 				D46C2A490FAE037800A33476 /* Text.cpp in Sources */,
@@ -1376,7 +1364,6 @@
 				D4A5A2140F40D33400FFF378 /* Texture.cpp in Sources */,
 				D4A5A2150F40D33800FFF378 /* Text.cpp in Sources */,
 				D4A5A2160F40D33B00FFF378 /* TexChunk.cpp in Sources */,
-				D4A5A2180F40D33D00FFF378 /* RotFlip.cpp in Sources */,
 				D4A5A21A0F40D34600FFF378 /* Math.cpp in Sources */,
 				D4A5A2230F40D45200FFF378 /* InputTouch.mm in Sources */,
 				D4A5A2240F40D45200FFF378 /* WindowTouch.mm in Sources */,
@@ -1430,7 +1417,6 @@
 				D423822A0C4C3D68000DAA25 /* Graphics.cpp in Sources */,
 				D423822B0C4C3D68000DAA25 /* Image.cpp in Sources */,
 				D423822C0C4C3D68000DAA25 /* LargeImageData.cpp in Sources */,
-				D423822D0C4C3D68000DAA25 /* RotFlip.cpp in Sources */,
 				D423822E0C4C3D68000DAA25 /* Text.cpp in Sources */,
 				D423822F0C4C3D68000DAA25 /* TextMac.cpp in Sources */,
 				D42382390C4C3D79000DAA25 /* DirectoriesMac.mm in Sources */,

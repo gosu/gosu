@@ -6,7 +6,6 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Bitmap.hpp>
-#include <Gosu/RotFlip.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <memory>
 
@@ -79,21 +78,8 @@ namespace Gosu
             Color c = Color::WHITE,
             AlphaMode mode = amDefault) const;
 
-        #ifndef SWIG
-        void drawRotFlip(double x, double y, ZPos z,
-            RotFlip rf,
-            double factorX = 1, double factorY = 1,
-            Color c = Color::WHITE,
-            AlphaMode mode = amDefault) const;
-        void drawRotFlipMod(double x, double y, ZPos z,
-            RotFlip rf,
-            double factorX, double factorY,
-            Color c1, Color c2, Color c3, Color c4,
-            AlphaMode mode = amDefault) const;
-
         //! Provides access to the underlying image data object.
         const ImageData& getData() const;
-        #endif
     };
 
 	//! Convenience function that splits a BMP or PNG file into an array
