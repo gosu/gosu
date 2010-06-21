@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-06-19)
+(Last update: 2010-06-22)
 
 == Gosu 0.7.x ==
   * Test text formatting on Windows
@@ -165,7 +165,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Update TextInput.cpp to include setCaretPos
   * Make sure that WindowMainLoop states that the whole order is just about perceived performance
   * Document how Font roughly works (allow devs to cache chars by text_width'ing the alphabet)
-  * Make Gosu available on Facebook
 == Gosu 0.8.x (preliminary) ==
   * Ask: Why not clWhite?
   * Ask board: 0x00 alpha == opaque? Switch worth it? Esp. what to do with Color::WHITE
