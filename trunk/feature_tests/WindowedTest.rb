@@ -1,14 +1,17 @@
 require '../lib/gosu'
 
+W, H = 4000, 2000
+
 class Test < Gosu::Window
   def initialize
-    super 4000, 2000, false
+    super W, H, false
     @wp = Gosu::Image.new self, "media/Wallpaper.png", true
     @cursor = Gosu::Image.new self, "media/Cursor.png", false
+    self.caption = "I am #{width} x #{height}"
   end
   
   def draw
-    @wp.draw 4000 - @wp.width, 2000 - @wp.height, 0
+    @wp.draw W - @wp.width, H - @wp.height, 0
     @cursor.draw mouse_x, mouse_y, 0
   end
 

@@ -2,6 +2,7 @@
 #import <Carbon/Carbon.h>
 #include <Gosu/Input.hpp>
 #include <Gosu/TextInput.hpp>
+#include <GosuImpl/MacUtility.hpp>
 #include <Gosu/Utility.hpp>
 #include <IOKit/hidsystem/IOLLEvent.h>
 #include <boost/array.hpp>
@@ -20,7 +21,6 @@
 #include <IOKit/IOCFPlugIn.h>
 #include <stdexcept>
 #include <vector>
-#include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>
 
 // USB Gamepad code, likely to be moved somewhere else later.
@@ -29,23 +29,7 @@ namespace {
     using namespace std;
     using namespace Gosu;
     using boost::shared_ptr;
-
-    class CFScope : boost::noncopyable
-    {
-        CFTypeRef ref;
-    public:
-        CFScope(CFTypeRef ref) : ref(ref) {}
-        ~CFScope() { CFRelease(ref); }
-    };
-
-    class IOScope : boost::noncopyable
-    {
-        io_object_t ref;
-    public:
-        IOScope(io_object_t ref) : ref(ref) {}
-        ~IOScope() { IOObjectRelease(ref); }
-    };
-
+    
     template<typename Negatable>
     void checkTrue(Negatable cond, const char* message = "work")
     {
@@ -272,7 +256,7 @@ namespace {
                 kCFAllocatorDefault, kNilOptions);
             if (!properties)
                 return;
-            CFScope guard(properties);
+            CFRef<> guard(properties);
             
             if (!isDeviceInteresting(properties))
                 return;

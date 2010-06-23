@@ -86,4 +86,52 @@ namespace Gosu
 }
 #endif
 
+namespace Gosu
+{
+    template<typename CFRefType = CFTypeRef>
+    class CFRef : boost::noncopyable
+    {
+        CFRefType ref;
+
+    public:
+        explicit CFRef(CFRefType ref)
+        :   ref(ref)
+        {
+        }
+        
+        CFRef()
+        {
+            if (ref)
+                CFRelease(ref);
+        }
+        
+        CFRefType get()
+        {
+            return ref;
+        }
+        
+        CFRefType obj()
+        {
+            if (!ref)
+                throw std::logic_error("CF reference invalid (null)");
+            return ref;
+        }
+    };
+    
+    class IOScope : boost::noncopyable
+    {
+        io_object_t ref;
+    public:
+        IOScope(io_object_t ref)
+        :   ref(ref)
+        {
+        }
+        
+        ~IOScope()
+        {
+            IOObjectRelease(ref);
+        }
+    };
+}
+
 #endif

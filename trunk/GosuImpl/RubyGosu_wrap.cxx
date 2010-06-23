@@ -2157,17 +2157,18 @@ namespace Swig {
 #define SWIGTYPE_p_Gosu__Font swig_types[3]
 #define SWIGTYPE_p_Gosu__GLTexInfo swig_types[4]
 #define SWIGTYPE_p_Gosu__Image swig_types[5]
-#define SWIGTYPE_p_Gosu__Sample swig_types[6]
-#define SWIGTYPE_p_Gosu__SampleInstance swig_types[7]
-#define SWIGTYPE_p_Gosu__Song swig_types[8]
-#define SWIGTYPE_p_Gosu__TextInput swig_types[9]
-#define SWIGTYPE_p_Gosu__Window swig_types[10]
-#define SWIGTYPE_p_boost__arrayT_double_16_t swig_types[11]
-#define SWIGTYPE_p_char swig_types[12]
-#define SWIGTYPE_p_double swig_types[13]
-#define SWIGTYPE_p_std__wstring swig_types[14]
-static swig_type_info *swig_types[16];
-static swig_module_info swig_module = {swig_types, 15, 0, 0, 0, 0};
+#define SWIGTYPE_p_Gosu__ImageData swig_types[6]
+#define SWIGTYPE_p_Gosu__Sample swig_types[7]
+#define SWIGTYPE_p_Gosu__SampleInstance swig_types[8]
+#define SWIGTYPE_p_Gosu__Song swig_types[9]
+#define SWIGTYPE_p_Gosu__TextInput swig_types[10]
+#define SWIGTYPE_p_Gosu__Window swig_types[11]
+#define SWIGTYPE_p_boost__arrayT_double_16_t swig_types[12]
+#define SWIGTYPE_p_char swig_types[13]
+#define SWIGTYPE_p_double swig_types[14]
+#define SWIGTYPE_p_std__wstring swig_types[15]
+static swig_type_info *swig_types[17];
+static swig_module_info swig_module = {swig_types, 16, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -6035,6 +6036,36 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Image_get_data(int argc, VALUE *argv, VALUE self) {
+  Gosu::Image *arg1 = (Gosu::Image *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  Gosu::ImageData *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Image, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Image const *","getData", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Image * >(argp1);
+  {
+    try {
+      result = (Gosu::ImageData *) &((Gosu::Image const *)arg1)->getData();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__ImageData, 0 |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_new_Image__SWIG_0(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
   VALUE arg2 = (VALUE) 0 ;
@@ -9712,6 +9743,7 @@ static swig_type_info _swigt__p_Gosu__Color = {"_p_Gosu__Color", "Gosu::Color *"
 static swig_type_info _swigt__p_Gosu__Font = {"_p_Gosu__Font", "Gosu::Font *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__GLTexInfo = {"_p_Gosu__GLTexInfo", "Gosu::GLTexInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Image = {"_p_Gosu__Image", "Gosu::Image *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Gosu__ImageData = {"_p_Gosu__ImageData", "Gosu::ImageData *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Sample = {"_p_Gosu__Sample", "Gosu::Sample *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__SampleInstance = {"_p_Gosu__SampleInstance", "Gosu::SampleInstance *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Song = {"_p_Gosu__Song", "Gosu::Song *", 0, 0, (void*)0, 0};
@@ -9729,6 +9761,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__Font,
   &_swigt__p_Gosu__GLTexInfo,
   &_swigt__p_Gosu__Image,
+  &_swigt__p_Gosu__ImageData,
   &_swigt__p_Gosu__Sample,
   &_swigt__p_Gosu__SampleInstance,
   &_swigt__p_Gosu__Song,
@@ -9746,6 +9779,7 @@ static swig_cast_info _swigc__p_Gosu__Color[] = {  {&_swigt__p_Gosu__Color, 0, 0
 static swig_cast_info _swigc__p_Gosu__Font[] = {  {&_swigt__p_Gosu__Font, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__GLTexInfo[] = {  {&_swigt__p_Gosu__GLTexInfo, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Image[] = {  {&_swigt__p_Gosu__Image, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Gosu__ImageData[] = {  {&_swigt__p_Gosu__ImageData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Sample[] = {  {&_swigt__p_Gosu__Sample, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__SampleInstance[] = {  {&_swigt__p_Gosu__SampleInstance, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Song[] = {  {&_swigt__p_Gosu__Song, 0, 0, 0},{0, 0, 0, 0}};
@@ -9763,6 +9797,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__Font,
   _swigc__p_Gosu__GLTexInfo,
   _swigc__p_Gosu__Image,
+  _swigc__p_Gosu__ImageData,
   _swigc__p_Gosu__Sample,
   _swigc__p_Gosu__SampleInstance,
   _swigc__p_Gosu__Song,
@@ -10140,6 +10175,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassImage.klass, "draw", VALUEFUNC(_wrap_Image_draw), -1);
   rb_define_method(SwigClassImage.klass, "draw_mod", VALUEFUNC(_wrap_Image_draw_mod), -1);
   rb_define_method(SwigClassImage.klass, "draw_rot", VALUEFUNC(_wrap_Image_draw_rot), -1);
+  rb_define_method(SwigClassImage.klass, "get_data", VALUEFUNC(_wrap_Image_get_data), -1);
   rb_define_method(SwigClassImage.klass, "draw_as_quad", VALUEFUNC(_wrap_Image_draw_as_quad), -1);
   rb_define_method(SwigClassImage.klass, "gl_tex_info", VALUEFUNC(_wrap_Image_gl_tex_info), -1);
   rb_define_singleton_method(SwigClassImage.klass, "from_text4", VALUEFUNC(_wrap_Image_from_text4), -1);

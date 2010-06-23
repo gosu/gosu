@@ -21,17 +21,9 @@ typedef NSFont OSXFont;
 
 namespace
 {
-    // TODO: Merge with InputMac.mm
-    template<typename CFTypeRef>
-    class CFScope : boost::noncopyable
-    {
-        CFTypeRef ref;
-    public:
-        explicit CFScope(CFTypeRef ref) : ref(ref) {}
-        ~CFScope() { CFRelease(ref); }
-        CFTypeRef get() { return ref; }
-    };
-    
+    using Gosu::ObjRef;
+    using Gosu::CFRef;
+
     // If a font is a filename, loads the font and returns its family name that can be used
     // like any system font. Otherwise, just returns the family name.
     std::wstring normalizeFont(const std::wstring& fontName)
@@ -49,32 +41,32 @@ namespace
         if (familyOfFiles.count(fontName) > 0)
             return familyOfFiles[fontName];
         
-        CFScope<CFStringRef> urlString(
+        CFRef<CFStringRef> urlString(
             CFStringCreateWithBytes(NULL,
                 reinterpret_cast<const UInt8*>(fontName.c_str()),
                 fontName.length() * sizeof(wchar_t),
                 kCFStringEncodingUTF32LE, NO));
-        CFScope<CFURLRef> url(
-            CFURLCreateWithFileSystemPath(NULL, urlString.get(),
+        CFRef<CFURLRef> url(
+            CFURLCreateWithFileSystemPath(NULL, urlString.obj(),
                 kCFURLPOSIXPathStyle, YES));
         if (!url.get())
             return familyOfFiles[fontName] = Gosu::defaultFontName();
             
-        CFScope<CFArrayRef> array(
-            CTFontManagerCreateFontDescriptorsFromURL(url.get()));
+        CFRef<CFArrayRef> array(
+            CTFontManagerCreateFontDescriptorsFromURL(url.obj()));
 
-        if (array.get() == NULL || CFArrayGetCount(array.get()) < 1 ||
-            !CTFontManagerRegisterFontsForURL(url.get(),
+        if (array.get() == NULL || CFArrayGetCount(array.obj()) < 1 ||
+            !CTFontManagerRegisterFontsForURL(url.obj(),
                     kCTFontManagerScopeProcess, NULL))
             return familyOfFiles[fontName] = Gosu::defaultFontName();
 
         CTFontDescriptorRef ref =
             (CTFontDescriptorRef)CFArrayGetValueAtIndex(array.get(), 0);
-        CFScope<CFStringRef> fontNameStr(
+        CFRef<CFStringRef> fontNameStr(
             (CFStringRef)CTFontDescriptorCopyAttribute(ref, kCTFontFamilyNameAttribute));
                 
         const char* utf8FontName =
-            [(NSString*)fontNameStr.get() cStringUsingEncoding: NSUTF8StringEncoding];
+            [(NSString*)fontNameStr.obj() cStringUsingEncoding: NSUTF8StringEncoding];
         return familyOfFiles[fontName] = Gosu::utf8ToWstring(utf8FontName);
         #endif
     }
@@ -88,7 +80,7 @@ namespace
         OSXFont* result = usedFonts[make_pair(fontName, make_pair(fontFlags, height))];
         if (!result)
         {
-            Gosu::ObjRef<NSString> name([[NSString alloc] initWithUTF8String: Gosu::wstringToUTF8(fontName).c_str()]);
+            ObjRef<NSString> name([[NSString alloc] initWithUTF8String: Gosu::wstringToUTF8(fontName).c_str()]);
             #ifdef GOSU_IS_IPHONE
             result = [OSXFont fontWithName: name.obj() size: height];
             #else
