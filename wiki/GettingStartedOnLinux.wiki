@@ -8,7 +8,7 @@ To install Gosu in any form, you will need the following packages (install via `
   * g++
   * libgl1-mesa-dev
   * libpango1.0-dev
-  * libboost-dev
+  * libboost-dev (>= 1.35.0—please check the version you have!)
   * libsdl-mixer1.2-dev
   * libsdl-ttf2.0-dev
 
