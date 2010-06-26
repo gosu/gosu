@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="9,00"
 	Name="Gosu"
 	ProjectGUID="{4989339B-019C-4399-86F5-1D9245C420C6}"
 	RootNamespace="Gosu"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -519,11 +520,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Gosu\Sockets.hpp"
+				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
+				RelativePath="..\Gosu\Sockets.hpp"
 				>
 			</File>
 			<File
