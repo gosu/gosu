@@ -2779,6 +2779,21 @@ SwigDirector_Window::SwigDirector_Window(VALUE self, unsigned int width, unsigne
 
 
 
+bool SwigDirector_Window::needsCursor() const {
+  bool c_result ;
+  VALUE result;
+  
+  result = rb_funcall(swig_get_self(), rb_intern("needs_cursor?"), 0, NULL);
+  bool swig_val;
+  int swig_res = SWIG_AsVal_bool(result, &swig_val);
+  if (!SWIG_IsOK(swig_res)) {
+    Swig::DirectorTypeMismatchException::raise(SWIG_ErrorType(SWIG_ArgError(swig_res)), "in output value of type '""bool""'");
+  }
+  c_result = static_cast< bool >(swig_val);
+  return (bool) c_result;
+}
+
+
 SwigDirector_Window::~SwigDirector_Window() {
 }
 
@@ -7908,6 +7923,51 @@ fail:
 
 swig_class SwigClassWindow;
 
+SWIGINTERN VALUE
+_wrap_Window_needs_cursorq___(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  Swig::Director *director = 0;
+  bool upcall = false;
+  SwigDirector_Window *darg = 0;
+  bool result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","needsCursor", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  director = dynamic_cast<Swig::Director *>(arg1);
+  upcall = (director && (director->swig_get_self() == self));
+  try {
+    darg = dynamic_cast<SwigDirector_Window *>(arg1);
+    {
+      try {
+        if (upcall) {
+          result = (bool)((SwigDirector_Window const *)darg)->needsCursorSwigPublic();
+        } else {
+          result = (bool)((SwigDirector_Window const *)darg)->needsCursor();
+        }
+      } catch(const std::runtime_error& e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
+    }
+  } catch (Swig::DirectorException& e) {
+    rb_exc_raise(e.getError());
+    SWIG_fail;
+  }
+  vresult = SWIG_From_bool(static_cast< bool >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
 #ifdef HAVE_RB_DEFINE_ALLOC_FUNC
 SWIGINTERN VALUE
 _wrap_Window_allocate(VALUE self) {
@@ -10069,8 +10129,8 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_RubyInitializeTrackings();
   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(7)));
-  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(22)));
-  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.22"));
+  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(23)));
+  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.23"));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
   rb_define_module_function(mGosu, "degrees_to_radians", VALUEFUNC(_wrap_degrees_to_radians), -1);
@@ -10379,6 +10439,7 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Window, (void *) &SwigClassWindow);
   rb_define_alloc_func(SwigClassWindow.klass, _wrap_Window_allocate);
   rb_define_method(SwigClassWindow.klass, "initialize", VALUEFUNC(_wrap_new_Window), -1);
+  rb_define_protected_method(SwigClassWindow.klass, "needs_cursor?", VALUEFUNC(_wrap_Window_needs_cursorq___), -1);
   rb_define_method(SwigClassWindow.klass, "caption", VALUEFUNC(_wrap_Window_caption), -1);
   rb_define_method(SwigClassWindow.klass, "caption=", VALUEFUNC(_wrap_Window_captione___), -1);
   rb_define_method(SwigClassWindow.klass, "update_interval", VALUEFUNC(_wrap_Window_update_interval), -1);

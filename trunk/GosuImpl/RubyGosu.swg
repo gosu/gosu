@@ -506,6 +506,7 @@ namespace Gosu {
 %rename("text_input=") setTextInput;
 %rename("mouse_x=") setMouseX;
 %rename("mouse_y=") setMouseY;
+%rename("needs_cursor?") needsCursor;
 %rename("needs_redraw?") needsRedraw;
 %rename("fullscreen?") fullscreen;
 %markfunc Gosu::Window "markWindow";
