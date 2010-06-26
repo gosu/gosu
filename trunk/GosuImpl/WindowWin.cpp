@@ -158,7 +158,6 @@ namespace Gosu
             wc.hIconSm = (HICON)CopyImage(wc.hIcon, IMAGE_ICON,
                 GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON),
                 LR_COPYFROMRESOURCE | LR_COPYRETURNORG);
-
             
             name = reinterpret_cast<LPCTSTR>(RegisterClassEx(&wc));
             Win::check(name, "registering a window class");
@@ -199,7 +198,6 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     pimpl->originalWidth = width;
     pimpl->originalHeight = height;
     
-    // Select window styles depending on mode.fullscreen.
     DWORD style = WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
     DWORD styleEx = WS_EX_APPWINDOW;
     if (fullscreen)
@@ -259,7 +257,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
 			width *= factor, height *= factor;
 	}
 
-    // Determine the size the window needs to have.
+    // Determine the size the window needs to have including UI chrome.
     RECT rc = { 0, 0, width, height };
     AdjustWindowRectEx(&rc, style, FALSE, styleEx);
     unsigned windowW = rc.right - rc.left;
@@ -359,6 +357,10 @@ void Gosu::Window::show()
 			{
 				lastTick = ms;
 				input().update();
+				// TODO: Bad heuristic -- this causes flickering cursor on right and bottom border of the
+				// window.
+				if (input().mouseX() >= 0 && input().mouseY() >= 0)
+					SendMessage(handle(), WM_SETCURSOR, reinterpret_cast<WPARAM>(handle()), HTCLIENT);
 			    update();
                 if (needsRedraw())
       				::InvalidateRect(handle(), 0, FALSE);
@@ -417,7 +419,12 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
 	if (message == WM_SETCURSOR)
     {
 		if (LOWORD(lparam) != HTCLIENT || needsCursor())
-			SetCursor(LoadCursor(Win::instance(), IDC_ARROW));
+		{
+			static const HCURSOR arrowCursor = LoadCursor(0, IDC_ARROW);
+			SetCursor(arrowCursor);
+	    }
+		else
+			SetCursor(NULL);
         return TRUE;
     }
 
@@ -470,12 +477,6 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
         return 0;
     }
 
-    if (message == WM_SETCURSOR && LOWORD(lparam) == HTCLIENT)
-    {
-        SetCursor(0);
-        return TRUE;
-    }
-
     if (message == WM_SYSCOMMAND)
     {
         switch(wparam)
@@ -492,9 +493,7 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
     }
 
     if (pimpl->input && input().textInput() && input().textInput()->feedMessage(message, wparam, lparam))
-    {
         return 0;
-    }
 
     return DefWindowProc(handle(), message, wparam, lparam);
 }
