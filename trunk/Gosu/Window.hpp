@@ -13,7 +13,9 @@
 #include <string>
 
 #ifdef GOSU_IS_WIN
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
 #include <windows.h>
 #endif
 

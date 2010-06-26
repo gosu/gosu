@@ -1,4 +1,6 @@
-#define NOMINMAX // RAGE >_<
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif // RAGE >_<
 
 #include <Gosu/Window.hpp>
 #include <Gosu/WinUtility.hpp>

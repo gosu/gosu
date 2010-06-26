@@ -5,7 +5,9 @@
 #include <wctype.h>
 
 // OPT-IN, have you heard of it?!
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
 #include <windows.h>
 
 struct Gosu::TextInput::Impl

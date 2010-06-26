@@ -9,7 +9,9 @@
 
 #ifdef GOSU_IS_WIN
 #include <Gosu/ButtonsWin.hpp>
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
 #include <windows.h>
 #endif
 

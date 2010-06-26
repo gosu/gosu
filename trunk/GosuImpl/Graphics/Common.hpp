@@ -6,7 +6,9 @@
 #include <Gosu/Platform.hpp>
 
 #if defined(GOSU_IS_WIN)
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
 #include <windows.h>
 #include <GL/gl.h>
 #elif defined(GOSU_IS_IPHONE)
