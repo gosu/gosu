@@ -28,6 +28,11 @@ namespace Gosu
     {
         struct Impl;
         boost::scoped_ptr<Impl> pimpl;
+	
+	protected:
+		//! If this function returns true, the system arrow cursor is drawn while
+		//! over the window.
+		virtual bool needsCursor() const { return true; }
 
     public:
         //! Constructs a Window.

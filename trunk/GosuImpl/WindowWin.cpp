@@ -412,6 +412,13 @@ HWND Gosu::Window::handle() const
 
 LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
 {
+	if (message == WM_SETCURSOR)
+    {
+		if (LOWORD(lparam) != HTCLIENT || needsCursor())
+			SetCursor(LoadCursor(Win::instance(), IDC_ARROW));
+        return TRUE;
+    }
+
     if (message == WM_SETFOCUS && graphics().fullscreen() && IsWindowVisible(pimpl->handle))
     {
         if (pimpl->iconified)
