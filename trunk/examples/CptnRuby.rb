@@ -25,15 +25,14 @@
 # ...Enemies, a more sophisticated object system, weapons, title and credits
 # screens...
 
-require '../lib/gosu'
-# begin
-#   # In case you use Gosu via rubygems.
-#   require 'rubygems'
-# rescue LoadError
-#   # In case you don't.
-# end
-# 
-# require 'gosu'
+begin
+  # In case you use Gosu via rubygems.
+  require 'rubygems'
+rescue LoadError
+  # In case you don't.
+end
+
+require 'gosu'
 include Gosu
 
 module Tiles

@@ -34,7 +34,7 @@ namespace Gosu
 	protected:
 		//! If this function returns true, the system arrow cursor is drawn while
 		//! over the window.
-		virtual bool needsCursor() const { return true; }
+		virtual bool needsCursor() const { return false; }
 
     public:
         //! Constructs a Window.
