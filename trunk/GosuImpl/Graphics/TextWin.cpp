@@ -109,10 +109,11 @@ namespace Gosu
                         fontName = customFonts[fontName];
                 }
                 
-                static std::map<std::pair<std::wstring, unsigned>, HFONT> loadedFonts;
+				static std::map<std::pair<std::wstring, unsigned>, HFONT> loadedFonts;
                 
                 HFONT font;
-                std::pair<std::wstring, unsigned> key = std::make_pair(fontName, fontHeight);
+				std::pair<std::wstring, unsigned> key =
+					std::make_pair(fontName, fontHeight | fontFlags << 16);
                 if (loadedFonts.count(key) == 0)
                 {
                     LOGFONT logfont = { fontHeight, 0, 0, 0,
