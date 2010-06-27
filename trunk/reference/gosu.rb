@@ -399,6 +399,11 @@ module Gosu
     # always returns true.)
     def needs_redraw?; end
     
+    # Can be overriden to show the system cursor when necessary, e.g. in level
+    # editors or other situations where introducing a custom cursor is not
+    # desired.
+    def needs_cursor?; end
+    
     # DEPRECATED.
     def set_mouse_position(x, y); end
     

@@ -56,7 +56,8 @@ namespace Gosu
             unsigned usedLines, allocatedLines;
 
             wstring fontName;
-            unsigned fontHeight, lineSpacing;
+            unsigned fontHeight;
+            int lineSpacing;
             TextAlign align;
 
             unsigned spaceWidth_;
@@ -68,14 +69,14 @@ namespace Gosu
                 {
                     allocatedLines += 10;
                     bmp.resize(bmp.width(),
-                        (lineSpacing + fontHeight) * allocatedLines,
+                        fontHeight * allocatedLines + lineSpacing * (allocatedLines - 1),
                         Color::NONE);
                 }
             }
 
         public:
             TextBlockBuilder(const wstring& fontName, unsigned fontHeight,
-                unsigned lineSpacing, unsigned width, TextAlign align)
+                int lineSpacing, unsigned width, TextAlign align)
             {
                 usedLines = 0;
                 allocatedLines = 10;
@@ -182,7 +183,7 @@ namespace Gosu
             {
                 Bitmap result = bmp;
                 result.resize(result.width(),
-                    usedLines * (lineSpacing + fontHeight));
+                    fontHeight * usedLines + lineSpacing * (usedLines - 1));
                 return result;
             }
             
@@ -299,9 +300,12 @@ namespace Gosu
 }
 
 Gosu::Bitmap Gosu::createText(const std::wstring& text,
-    const std::wstring& fontName, unsigned fontHeight, unsigned lineSpacing,
+    const std::wstring& fontName, unsigned fontHeight, int lineSpacing,
     unsigned maxWidth, TextAlign align, unsigned fontFlags)
 {
+    if (lineSpacing <= -static_cast<int>(fontHeight))
+        throw std::logic_error("negative line spacing of more than line height impossible");
+
     FormattedString fs(boost::replace_all_copy(text, L"\r\n", L"\n"), fontFlags);
     if (fs.length() == 0)
     {
@@ -312,8 +316,7 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
     
     // Set up the builder object which will manage all the drawing and
     // conversions for us.
-    TextBlockBuilder builder(fontName, fontHeight,
-        lineSpacing, maxWidth, align);
+    TextBlockBuilder builder(fontName, fontHeight, lineSpacing, maxWidth, align);
     
     // Let the process* functions draw everything.
     processText(builder, fs);

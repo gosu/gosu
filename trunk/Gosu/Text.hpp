@@ -51,7 +51,8 @@ namespace Gosu
     //! \param text Formatted text.
     //! \param fontName Name of a system font, or a filename to a TTF file (must contain '/', does not work on Linux).
     //! \param fontHeight Height of the font in pixels.
-    //! \param lineSpacing Spacing between two lines of text in pixels.
+    //! \param lineSpacing Spacing between two lines of text in pixels. Can be negative to make
+    //! text stick together more closely.
     //! \param maxWidth Width of the bitmap that will be returned. Text
     //! will be split into multiple lines to avoid drawing over the right
     //! border. When a single word is too long, it will be truncated.
@@ -59,7 +60,7 @@ namespace Gosu
     //! enum.
     Bitmap createText(const std::wstring& text,
         const std::wstring& fontName, unsigned fontHeight, 
-        unsigned lineSpacing, unsigned maxWidth, TextAlign align,
+        int lineSpacing, unsigned maxWidth, TextAlign align,
         unsigned fontFlags = 0);
     
     //! Registers a new HTML-style entity that can subsequently be used
