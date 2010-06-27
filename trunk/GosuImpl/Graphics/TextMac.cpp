@@ -233,7 +233,8 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
 #else
             Color::Channel alpha = Color(buf[relY * width + relX]).alpha();
 #endif
-            wholeText.setPixel(relX, relY, Color(alpha, 0xff, 0xff, 0xff));
+            if (alpha != 0)
+                wholeText.setPixel(relX, relY, multiply(c, Color(alpha, 0xff, 0xff, 0xff)));
         }
     bitmap.insert(wholeText, x, y);
 }

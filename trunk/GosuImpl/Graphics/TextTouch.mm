@@ -176,6 +176,7 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     // Get the width and height of the image
     Bitmap bmp;
     bmp.resize(width, fontHeight);
+    bmp.insert(bitmap, -x, -y);
     
     // Use a temporary context to draw the CGImage to the buffer.
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
