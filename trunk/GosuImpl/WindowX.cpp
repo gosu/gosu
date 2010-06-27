@@ -83,6 +83,9 @@ struct Gosu::Window::Impl
     
     bool mapped, showing, active;
     
+    Cursor emptyCursor;
+    bool showingCursor;
+    
     ::GLXContext context;
     ::Window window;
     ::XVisualInfo* visual;
@@ -148,6 +151,17 @@ struct Gosu::Window::Impl
                 else if (event.type == FocusOut)
                     active = false;
             }
+        }
+        
+        if (showingCursor && !window->needsCursor())
+        {
+            XUndefineCursor(display, this->window);
+            showingCursor = false;
+        }
+        else if (!showingCursor && window->needsCursor())
+        {
+            XDefineCursor(display, this->window, emptyCursor);
+            showingCursor = true;
         }
         
         window->input().update();
@@ -237,10 +251,9 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     char emptyData[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     Pixmap emptyBitmap =
         XCreateBitmapFromData(pimpl->display, pimpl->window, emptyData, 8, 8);
-    Cursor emptyCursor = XCreatePixmapCursor(pimpl->display, emptyBitmap,
+    pimpl->emptyCursor = XCreatePixmapCursor(pimpl->display, emptyBitmap,
         emptyBitmap, &black, &black, 0, 0);
-    XDefineCursor(pimpl->display, pimpl->window, emptyCursor);
-    XFreeCursor(pimpl->display, emptyCursor);
+    pimpl->showingCursor = true; // Empty cursor not yet installed
 
     // Must be current already so that Graphics' constructor can set up things
     glXMakeCurrent(pimpl->display, pimpl->window, pimpl->context);
@@ -262,6 +275,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
 
 Gosu::Window::~Window()
 {    
+    XFreeCursor(pimpl->display, pimpl->emptyCursor);
     XDestroyWindow(pimpl->display, pimpl->window);
     XSync(pimpl->display, false);
 }
@@ -281,10 +295,6 @@ void Gosu::Window::setCaption(const std::wstring& caption)
     // TODO: Update to _NET_WM_NAME to support Unicode
 
     pimpl->title = caption;
-
-    // TODO: Why?!
-    //if (!pimpl->showing)
-    //    return;
 
     std::string tmpString(pimpl->title.begin(), pimpl->title.end());
     std::vector<char> title(pimpl->title.size() + 1);
