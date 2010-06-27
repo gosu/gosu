@@ -14,7 +14,7 @@ In C++, there is the constant Gosu::zImmediate to specify that no Z-ordering sho
 
 Functions related to image creation accept a boolean "tileable" argument. This is a consequence of using 3D hardware acceleration. Try to notice the subtle difference between these two, overstretched images:
 
-http://www.raschke.de/julian/temp/hard_borders.png
+http://libgosu.org/wiki_images/hard_borders.png
 
 When you draw an image with stretching factors other than 1.0 (10.0 in this case) or at odd coordinates, it will become interpolated—which, in general, is much better than getting all pixel-y.
 
@@ -26,7 +26,7 @@ While most images should not be tileable, you should always pass true for map ti
 
 In all functions that expect arguments for all four corners of a rectangle or quadrilateral, except `ImageData::draw` (in C++), you can either pass clockwise coordinates, or coordinates in the following order (a Z shape):
 
-http://www.raschke.de/julian/temp/corner_indices.png
+http://libgosu.org/wiki_images/corner_indices.png
 
 = Drawing with Colors =
 
