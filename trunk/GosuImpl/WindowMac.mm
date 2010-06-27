@@ -370,8 +370,6 @@ void Gosu::Window::show()
  
     if (graphics().fullscreen())
     {
-        [NSCursor hide];
-
         // Set new mode
         cgCheck(CGDisplayCapture(kCGDirectMainDisplay), "capturing display");
         cgCheck(CGDisplaySwitchToMode(kCGDirectMainDisplay, pimpl->newMode), "switching mode");
@@ -389,8 +387,6 @@ void Gosu::Window::show()
     
     if (graphics().fullscreen())
     {
-        [NSCursor unhide];
-
         // Resetting the mode shouldn't be all too important according to the docs.
         // Let's leave it in until time for testing comes, though.
         CGDisplaySwitchToMode(kCGDirectMainDisplay, pimpl->savedMode);
@@ -487,22 +483,20 @@ void Gosu::Window::Impl::doTick(Window& window)
     GLint value = 1;
     [window.pimpl->context.obj() setValues: &value forParameter: NSOpenGLCPSwapInterval];
     
-    if (!window.graphics().fullscreen())
+    if ((window.graphics().fullscreen() ||
+        NSPointInRect([window.pimpl->window.obj() mouseLocationOutsideOfEventStream],
+                      [[window.pimpl->window.obj() contentView] frame])) &&
+        [NSApp isActive] && !window.needsCursor())
     {
-        if (NSPointInRect([window.pimpl->window.obj() mouseLocationOutsideOfEventStream],
-                          [[window.pimpl->window.obj() contentView] frame]) &&
-            [NSApp isActive])
-        {
-            if (window.pimpl->mouseViz)
-                [NSCursor hide];
-            window.pimpl->mouseViz = false;
-        }
-        else
-        {
-            if (not window.pimpl->mouseViz)
-                [NSCursor unhide];
-            window.pimpl->mouseViz = true;
-        }
+        if (window.pimpl->mouseViz)
+            [NSCursor hide];
+        window.pimpl->mouseViz = false;
+    }
+    else
+    {
+        if (not window.pimpl->mouseViz)
+            [NSCursor unhide];
+        window.pimpl->mouseViz = true;
     }
     
     Gosu::Song::update();

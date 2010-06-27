@@ -6,7 +6,7 @@ class NeedsCursorTest < Gosu::Window
   end
   
   def needs_cursor?
-	puts button_down?(Gosu::KbSpace)
+    puts button_down?(Gosu::KbSpace)
     button_down? Gosu::KbSpace
   end
 end
