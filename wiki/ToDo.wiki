@@ -4,24 +4,20 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-06-27)
+(Last update: 2010-06-28)
 
 == Gosu 0.7.x ==
-  * Convert lineSpacing to an integer (add support for negative lineSpacing)
-  * Make clipping use current transformation
+  * Fix that needsCursor on Windows does stuff when inactive
   * Gosu: try integer truncing of drawing positions
-  * Add showCursor(true) / showCursor(false) on OS X
-  * Add showCursor(true) / showCursor(false) on Mac
-  * Document showCursor
+  * Make clipping use current transformation
   * Remove setResolution and use transforms instead
-  * Adjust WindowMac
-  * Adjust WindowWin
-  * Adjust WindowX and add shrinking for oversized resolutions
-  * Announce MSVS08 Switch
+  * WindowX: add shrinking for oversized resolutions
   * Optimize popTransform, avoid duplicate matrices
   * Let enableUndocumentedRetrofication always throw an exception so people use rescue blocks :)
   * Use Gosu text formatting in Tutorial.rb
   * Fix 8bitAlpha.png supplied by shawn42
+  * Announce MSVS08 Switch
+  * Update documentation via FTP
   * Throw an exception when using multiple Windows
   * Add scaling to SDL text so descenders don't overflow
   * Add FontFlags support for SDL_TTF Gosu/Text
