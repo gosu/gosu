@@ -9,12 +9,17 @@
 #define GL_BGRA 0x80E1
 #endif
 
-// TODO: Not threadsafe.
+// TODO: Move from Texture:: to local namespace and use MAX_TEXTURE_SIZE instead.
 unsigned Gosu::Texture::maxTextureSize()
 {
 #if defined(GOSU_IS_MAC)
     // Includes the iPhone
     return 1024;
+#elif defined(GOSU_IS_UNIX)
+    // Since we cannot get the max. texture size until after context creation, we have to
+    // just be pessimistic about it until Gosu is restructured to create the context
+    // earlier. Otherwise, libGL will segfault left and right.
+    return 512;
 #else
     const static unsigned MIN_SIZE = 256, MAX_SIZE = 1024;
 
@@ -35,7 +40,7 @@ unsigned Gosu::Texture::maxTextureSize()
 #endif
 }
 
-//const unsigned Gosu::MAX_TEXTURE_SIZE = Gosu::Texture::maxTextureSize();
+const unsigned Gosu::MAX_TEXTURE_SIZE = Gosu::Texture::maxTextureSize();
 
 namespace Gosu
 {

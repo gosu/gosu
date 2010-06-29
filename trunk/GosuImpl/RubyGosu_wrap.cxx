@@ -2230,11 +2230,8 @@ static VALUE mGosu;
 #include <Gosu/Version.hpp>
 #include <Gosu/Window.hpp>
 
-// For Ruby-only MAX_TEXTURE_SIZE
-#include <Gosu/../GosuImpl/Graphics/Texture.hpp>
 namespace Gosu {
     void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
-    unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
     void register_entity(const std::wstring& name, Gosu::Image* image) { registerEntity(name, image->getData().toBitmap()); }
 }
 
@@ -3517,28 +3514,6 @@ _wrap_enable_undocumented_retrofication(int argc, VALUE *argv, VALUE self) {
     }
   }
   return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap___max_texture_size(int argc, VALUE *argv, VALUE self) {
-  unsigned int result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  {
-    try {
-      result = (unsigned int)Gosu::__maxTextureSize();
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
-  return vresult;
 fail:
   return Qnil;
 }
@@ -10147,8 +10122,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "rotate", VALUEFUNC(_wrap_rotate), -1);
   rb_define_module_function(mGosu, "translate", VALUEFUNC(_wrap_translate), -1);
   rb_define_module_function(mGosu, "scale", VALUEFUNC(_wrap_scale), -1);
+  rb_define_const(mGosu, "MAX_TEXTURE_SIZE", SWIG_From_unsigned_SS_int(static_cast< unsigned int >(Gosu::MAX_TEXTURE_SIZE)));
   rb_define_module_function(mGosu, "enable_undocumented_retrofication", VALUEFUNC(_wrap_enable_undocumented_retrofication), -1);
-  rb_define_module_function(mGosu, "__max_texture_size", VALUEFUNC(_wrap___max_texture_size), -1);
   rb_define_module_function(mGosu, "register_entity", VALUEFUNC(_wrap_register_entity), -1);
   
   SwigClassColor.klass = rb_define_class_under(mGosu, "Color", rb_cObject);

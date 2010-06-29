@@ -158,11 +158,8 @@
 #include <Gosu/Version.hpp>
 #include <Gosu/Window.hpp>
 
-// For Ruby-only MAX_TEXTURE_SIZE
-#include <Gosu/../GosuImpl/Graphics/Texture.hpp>
 namespace Gosu {
     void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
-    unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
     void register_entity(const std::wstring& name, Gosu::Image* image) { registerEntity(name, image->getData().toBitmap()); }
 }
 
@@ -284,16 +281,13 @@ namespace Gosu
 // For screenWidth/screenHeight
 %ignore Gosu::Graphics;
 %ignore Gosu::BorderFlags;
-//%ignore Gosu::MAX_TEXTURE_SIZE;
+%ignore Gosu::MAX_TEXTURE_SIZE;
 %include "../Gosu/Graphics.hpp"
 
-// More Ubuntu libgl initialization fail workarounds
-
-//%constant unsigned MAX_TEXTURE_SIZE = Gosu::Texture::maxTextureSize();
+%constant unsigned MAX_TEXTURE_SIZE = Gosu::MAX_TEXTURE_SIZE;
 
 namespace Gosu {
     void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
-    unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
     void register_entity(const std::wstring& name, Gosu::Image* image) { registerEntity(name, image->getData().toBitmap()); }
 }
 

@@ -19,11 +19,10 @@ namespace Gosu
     //! Returns the height, in pixels, of the user's primary screen.
     unsigned screenHeight();
     
-    // Returns the maximum size of an image that can fit on a single
-    // texture.
-    // Only useful when extending Gosu using OpenGL.
-    // (Held back until it will not cause a stock Ubuntu to crash. Don't ask me!)
-    //extern unsigned const MAX_TEXTURE_SIZE;
+    //! Returns the maximum size of an texture that will be allocated
+    //! internally by Gosu.
+    //! Useful when extending Gosu using OpenGL.
+    extern unsigned const MAX_TEXTURE_SIZE;
     
     typedef boost::array<double, 16> Transform;
     Transform rotate(double angle, double aroundX = 0, double aroundY = 0);
