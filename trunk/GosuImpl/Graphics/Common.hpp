@@ -70,7 +70,7 @@ namespace Gosu
         double out[4] = { 0, 0, 0, 0 };
         for (int i = 0; i < 4; ++i)
             for (int j = 0; j < 4; ++j)
-                out[i] += in[j] * transform[i * 4 + j];
+                out[i] += in[j] * transform[j * 4 + i];
         x = out[0] / out[3];
         y = out[1] / out[3];
     }

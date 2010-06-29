@@ -7,6 +7,7 @@
 #include <GosuImpl/Graphics/Macro.hpp>
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Image.hpp>
+#include <Gosu/Platform.hpp>
 #include <boost/foreach.hpp>
 #if 0
 #include <boost/thread.hpp>
@@ -47,29 +48,31 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glViewport(0, 0, pimpl->physWidth, pimpl->physHeight);
+    glViewport(0, 0, physWidth, physHeight);
     #ifdef GOSU_IS_IPHONE
-    glOrthof(0, pimpl->physWidth, pimpl->physHeight, 0, -1, 1);
+    glOrthof(0, physWidth, physHeight, 0, -1, 1);
     #else
-    glOrtho(0, pimpl->physWidth, pimpl->physHeight, 0, -1, 1);
+    glOrtho(0, physWidth, physHeight, 0, -1, 1);
     #endif
     
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    #ifdef GOSU_IS_IPHONE
-    glTranslatef(physWidth, 0, 0);
-    glRotatef(90, 0, 0, 1);
-    glScalef(1.0 * physHeight / physWidth, 1.0 * physWidth / physHeight, 0);
-    #endif
-
+    
     glEnable(GL_BLEND);
     
     // Create default draw-op queue.
     pimpl->queues.resize(1);
     
+    Transform baseTransform = scale(1);
+    #ifdef GOSU_IS_IPHONE
+    baseTransform = translate(physWidth, 0);
+    baseTransform = multiply(rotate(90), baseTransform);
+    baseTransform = multiply(scale(1.0 * physHeight / physWidth, 1.0 * physWidth / physHeight), baseTransform);
+    #endif
+    
     // Push one identity matrix as the default transform.
-    pimpl->currentTransforms.push_back(scale(1));
-    pimpl->absoluteTransforms.push_back(scale(1));
+    pimpl->currentTransforms.push_back(baseTransform);
+    pimpl->absoluteTransforms.push_back(baseTransform);
 }
 
 Gosu::Graphics::~Graphics()
@@ -78,16 +81,20 @@ Gosu::Graphics::~Graphics()
 
 unsigned Gosu::Graphics::width() const
 {
-    double size[2] = { pimpl->physWidth, pimpl->physHeight };
-    applyTransform(pimpl->absoluteTransforms.front(), size[0], size[1]);
-    return size[0];
+    // TODO: should be the other way around. Matrix inversion omfg!
+    return pimpl->physWidth;
+    //double size[2] = { pimpl->physWidth, pimpl->physHeight };
+    //applyTransform(pimpl->absoluteTransforms.front(), size[0], size[1]);
+    //return size[0];
 }
 
 unsigned Gosu::Graphics::height() const
 {
-    double size[2] = { pimpl->physWidth, pimpl->physHeight };
-    applyTransform(pimpl->absoluteTransforms.front(), size[0], size[1]);
-    return size[1];
+    // TODO: should be the other way around. Matrix inversion omfg!
+    return pimpl->physHeight;
+    //double size[2] = { pimpl->physWidth, pimpl->physHeight };
+    //applyTransform(pimpl->absoluteTransforms.front(), size[0], size[1]);
+    //return size[1];
 }
 
 bool Gosu::Graphics::fullscreen() const
@@ -99,10 +106,18 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
 {
     if (virtualWidth == 0 || virtualHeight == 0)
         throw std::invalid_argument("Invalid virtual resolution.");
-    
-    pimpl->currentTransforms.front() =
-    pimpl->absoluteTransforms.front() = scale(1.0 / virtualWidth  * pimpl->physWidth,
-                                              1.0 / virtualHeight * pimpl->physHeight);
+
+    Transform baseTransform;
+    #ifdef GOSU_IS_IPHONE
+    baseTransform = translate(pimpl->physWidth, 0);
+    baseTransform = multiply(rotate(90), baseTransform);
+    baseTransform = multiply(scale(1.0 * pimpl->physHeight / virtualWidth, 1.0 * pimpl->physWidth / virtualHeight), baseTransform);
+    #else
+    baseTransform = scale(1.0 / virtualWidth  * pimpl->physWidth,
+                          1.0 / virtualHeight * pimpl->physHeight);
+    #endif
+
+    pimpl->currentTransforms.front() = pimpl->absoluteTransforms.front() = baseTransform;
 }
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
@@ -177,23 +192,22 @@ void Gosu::Graphics::beginClipping(int x, int y, unsigned width, unsigned height
     if (pimpl->queues.size() > 1)
         throw std::logic_error("Clipping not allowed while creating a macro");
     
-    // In doubt, make the clipping region smaller than requested.
+    // Apply current transformation.
     
-#ifndef GOSU_IS_IPHONE
-    double factorX = pimpl->absoluteTransforms.front()[0];
-    double factorY = pimpl->absoluteTransforms.front()[4];
-    int physX = static_cast<int>(std::ceil(x * factorX));
-    int physY = static_cast<int>(std::ceil((0.0 + this->height() - y - height) * factorY));
-    unsigned physWidth  = static_cast<unsigned>(width  * factorX);
-    unsigned physHeight = static_cast<unsigned>(height * factorY);
-#else
-    // Make up for rotation
-    int physX = 320 - static_cast<int>(std::ceil(320.0 * (0.0 + y + height) / this->height()));
-    int physY = 480 - static_cast<int>(std::ceil(480.0 * (0.0 + x + width) / this->width()));
-    unsigned physWidth  = static_cast<unsigned>(320.0 * height / this->height());
-    unsigned physHeight = static_cast<unsigned>(480.0 * width / this->width());
-#endif
+    double left = x, right = x + width;
+    double top = y, bottom = y + height;
 
+    applyTransform(pimpl->absoluteTransforms.back(), left, top);
+    applyTransform(pimpl->absoluteTransforms.back(), right, bottom);
+
+    int physX = std::min(left, right);
+    int physY = std::min(top, bottom);
+    int physWidth = std::abs(left - right);
+    int physHeight = std::abs(top - bottom);
+
+    // Apply OpenGL's counting from the wrong side ;)
+    physY = pimpl->physHeight - physY - physHeight;
+    
     pimpl->queues.back().beginClipping(physX, physY, physWidth, physHeight);
 }
 
