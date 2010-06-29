@@ -81,20 +81,18 @@ Gosu::Graphics::~Graphics()
 
 unsigned Gosu::Graphics::width() const
 {
-    // TODO: should be the other way around. Matrix inversion omfg!
-    return pimpl->physWidth;
-    //double size[2] = { pimpl->physWidth, pimpl->physHeight };
+    double size[2] = { pimpl->physWidth, pimpl->physHeight };
+    // TODO: should be the other way around? Matrix inversion?
     //applyTransform(pimpl->absoluteTransforms.front(), size[0], size[1]);
-    //return size[0];
+    return size[0];
 }
 
 unsigned Gosu::Graphics::height() const
 {
-    // TODO: should be the other way around. Matrix inversion omfg!
-    return pimpl->physHeight;
-    //double size[2] = { pimpl->physWidth, pimpl->physHeight };
+    double size[2] = { pimpl->physWidth, pimpl->physHeight };
+    // TODO: should be the other way around? Matrix inversion?
     //applyTransform(pimpl->absoluteTransforms.front(), size[0], size[1]);
-    //return size[1];
+    return size[1];
 }
 
 bool Gosu::Graphics::fullscreen() const
