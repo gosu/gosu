@@ -41,6 +41,21 @@ namespace {
     {
         checkTrue(val == kIOReturnSuccess, message);
     }
+    
+    class IOScope : boost::noncopyable
+    {
+        io_object_t ref;
+    public:
+        IOScope(io_object_t ref)
+        :   ref(ref)
+        {
+        }
+        
+        ~IOScope()
+        {
+            IOObjectRelease(ref);
+        }
+    };
 
     string getDictString(CFMutableDictionaryRef dict, CFStringRef key, const char* what)
     {

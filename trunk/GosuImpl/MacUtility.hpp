@@ -117,21 +117,6 @@ namespace Gosu
             return ref;
         }
     };
-    
-    class IOScope : boost::noncopyable
-    {
-        io_object_t ref;
-    public:
-        IOScope(io_object_t ref)
-        :   ref(ref)
-        {
-        }
-        
-        ~IOScope()
-        {
-            IOObjectRelease(ref);
-        }
-    };
 }
 
 #endif
