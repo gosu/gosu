@@ -41,7 +41,7 @@ EOS
   s.authors = ['Julian Raschke', 'Jan Luecker']
   s.date = Time.now.strftime '%Y-%m-%d'
   s.email = 'julian@raschke.de'
-  s.homepage = 'http://code.google.com/p/gosu/'
+  s.homepage = 'http://libgosu.org/'
   s.require_paths = ['lib']
   s.required_ruby_version = Gem::Requirement.new('>= 1.8.2')
   s.summary = '2D game development library.'
