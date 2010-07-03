@@ -43,9 +43,27 @@ namespace Gosu
 
         DrawOp(Gosu::Transform& transform) : transform(&transform) { clipWidth = 0xffffffff; usedVertices = 0; chunk = 0; }
         
-        void perform(GLuint& currentTexName,
-                     Transform*& currentTransform,
-                     const DrawOp* next) const
+        struct RenderState
+        {
+            GLuint texName;
+            Transform* transform;
+            
+            RenderState()
+            :   texName(NO_TEXTURE), transform(0)
+            {
+                glMatrixMode(GL_MODELVIEW);
+                glPushMatrix();
+            }
+            
+            ~RenderState()
+            {
+                if (texName != NO_TEXTURE)
+                    glDisable(GL_TEXTURE_2D);
+                glPopMatrix();
+            }
+        };
+        
+        void perform(RenderState& current, const DrawOp* next) const
         {
             #ifdef GOSU_IS_IPHONE
             static const unsigned MAX_AUTOGROUP = 24;
@@ -77,7 +95,7 @@ namespace Gosu
                 glScissor(clipX, clipY, clipWidth, clipHeight);
             }
             
-            if (transform != currentTransform) {
+            if (transform != current.transform) {
                 glPopMatrix();
                 glPushMatrix();
                 #ifndef GOSU_IS_IPHONE
@@ -87,7 +105,7 @@ namespace Gosu
                 matrix = *transform;
                 glMultMatrixf(matrix.data());
                 #endif
-                currentTransform = transform;
+                current.transform = transform;
             }
             
             if (mode == amAdditive)
@@ -99,9 +117,9 @@ namespace Gosu
 
             if (chunk)
             {
-                if (currentTexName == NO_TEXTURE)
+                if (current.texName == NO_TEXTURE)
                     glEnable(GL_TEXTURE_2D);
-                if (chunk->texName() != currentTexName)
+                if (chunk->texName() != current.texName)
                     glBindTexture(GL_TEXTURE_2D, chunk->texName());
 
                 #ifdef GOSU_IS_IPHONE
@@ -122,12 +140,12 @@ namespace Gosu
                 spriteTexcoords[spriteCounter*12 + 11] = bottom;
                 #endif
                 
-                currentTexName = chunk->texName();
+                current.texName = chunk->texName();
             }
-            else if (currentTexName != NO_TEXTURE)
+            else if (current.texName != NO_TEXTURE)
             {
                 glDisable(GL_TEXTURE_2D);
-                currentTexName = NO_TEXTURE;
+                current.texName = NO_TEXTURE;
             }
             
             #ifndef GOSU_IS_IPHONE
@@ -263,14 +281,8 @@ namespace Gosu
             
             if (z == zImmediate)
             {
-                GLuint currentTexName = NO_TEXTURE;
-                Transform* currentTransform = 0;
-                glMatrixMode(GL_MODELVIEW);
-                glPushMatrix();
-                op.perform(currentTexName, currentTransform, 0);
-                glPopMatrix();
-                if (currentTexName != NO_TEXTURE)
-                    glDisable(GL_TEXTURE_2D);
+                DrawOp::RenderState current;
+                op.perform(current, 0);
             }
             
             op.z = z;
@@ -292,24 +304,15 @@ namespace Gosu
 
         void performDrawOps() const
         {
-            GLuint currentTexName = NO_TEXTURE;
-            Transform* currentTransform = 0;
-            
-            glMatrixMode(GL_MODELVIEW);
-            glPushMatrix();
+            DrawOp::RenderState current;
             
             std::multiset<DrawOp>::const_iterator last, cur = set.begin(), end = set.end();
             while (cur != end)
             {
                 last = cur;
                 ++cur;
-                last->perform(currentTexName, currentTransform, cur == end ? 0 : &*cur);
+                last->perform(current, cur == end ? 0 : &*cur);
             }
-            
-            glPopMatrix();
-            
-            if (currentTexName != NO_TEXTURE)
-                glDisable(GL_TEXTURE_2D);
         }
         
         void clear()
