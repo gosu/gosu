@@ -55,6 +55,10 @@ namespace Gosu
         bool begin(Color clearWithColor = Color::BLACK);
         //! Every call to begin must have a matching call to end.
         void end();
+        //! Flushes the Z queue to the screen and starts a new one.
+        //! Useful for games that are *very* composite in nature (splitscreen).
+        void flush();
+        
         //! Finishes all pending Gosu drawing operations and executes
         //! the following OpenGL code in a clean environment.
         void beginGL();

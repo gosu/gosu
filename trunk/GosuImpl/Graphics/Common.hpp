@@ -28,12 +28,16 @@ namespace Gosu
 {
     class Texture;
     class TexChunk;
+    class RenderState;
     struct DrawOp;
     class DrawOpQueue;
     typedef std::list<Transform> Transforms;
     typedef std::vector<DrawOpQueue> DrawOpQueueStack;
     class Macro;
     
+    const GLuint NO_TEXTURE = static_cast<GLuint>(-1);
+    const unsigned NO_CLIPPING = 0xffffffff;
+
     template<typename T>
     bool isPToTheLeftOfAB(T xa, T ya,
         T xb, T yb, T xp, T yp)

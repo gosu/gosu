@@ -5,14 +5,13 @@
 #include <Gosu/Color.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/TexChunk.hpp>
+#include <GosuImpl/Graphics/RenderState.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/foreach.hpp>
 #include <set>
 
 namespace Gosu
 {
-    const GLuint NO_TEXTURE = static_cast<GLuint>(-1);
-
     struct ArrayVertex
     {
         GLfloat texCoords[2];
@@ -41,27 +40,11 @@ namespace Gosu
         const TexChunk* chunk;
         AlphaMode mode;
 
-        DrawOp(Gosu::Transform& transform) : transform(&transform) { clipWidth = 0xffffffff; usedVertices = 0; chunk = 0; }
-        
-        struct RenderState
+        DrawOp(Gosu::Transform& transform)
+        :   transform(&transform), clipWidth(NO_CLIPPING),
+            usedVertices(0), chunk(0)
         {
-            GLuint texName;
-            Transform* transform;
-            
-            RenderState()
-            :   texName(NO_TEXTURE), transform(0)
-            {
-                glMatrixMode(GL_MODELVIEW);
-                glPushMatrix();
-            }
-            
-            ~RenderState()
-            {
-                if (texName != NO_TEXTURE)
-                    glDisable(GL_TEXTURE_2D);
-                glPopMatrix();
-            }
-        };
+        }
         
         void perform(RenderState& current, const DrawOp* next) const
         {
@@ -88,40 +71,15 @@ namespace Gosu
                 isSetup = true;
             }
             #endif
-
-            if (clipWidth != 0xffffffff)
-            {
-                glEnable(GL_SCISSOR_TEST);
-                glScissor(clipX, clipY, clipWidth, clipHeight);
-            }
             
-            if (transform != current.transform) {
-                glPopMatrix();
-                glPushMatrix();
-                #ifndef GOSU_IS_IPHONE
-                glMultMatrixd(transform->data());
-                #else
-                boost::array<float, 16> matrix;
-                matrix = *transform;
-                glMultMatrixf(matrix.data());
-                #endif
-                current.transform = transform;
-            }
+            current.setClipRect(clipX, clipY, clipWidth, clipHeight);
+            current.setTransform(transform);
+            current.setAlphaMode(mode);
             
-            if (mode == amAdditive)
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-            else if (mode == amMultiply)
-                glBlendFunc(GL_DST_COLOR, GL_ZERO);
-            else
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
             if (chunk)
             {
-                if (current.texName == NO_TEXTURE)
-                    glEnable(GL_TEXTURE_2D);
-                if (chunk->texName() != current.texName)
-                    glBindTexture(GL_TEXTURE_2D, chunk->texName());
-
+                current.setTexName(chunk->texName());
+                
                 #ifdef GOSU_IS_IPHONE
                 double left, top, right, bottom;
                 chunk->getCoords(left, top, right, bottom);
@@ -139,15 +97,10 @@ namespace Gosu
                 spriteTexcoords[spriteCounter*12 + 10] = right;
                 spriteTexcoords[spriteCounter*12 + 11] = bottom;
                 #endif
-                
-                current.texName = chunk->texName();
             }
-            else if (current.texName != NO_TEXTURE)
-            {
-                glDisable(GL_TEXTURE_2D);
-                current.texName = NO_TEXTURE;
-            }
-            
+            else
+                current.setTexName(NO_TEXTURE);
+
             #ifndef GOSU_IS_IPHONE
             if (usedVertices == 2)
                 glBegin(GL_LINES);
@@ -202,7 +155,7 @@ namespace Gosu
             if (spriteCounter == MAX_AUTOGROUP or next == 0 or
                 chunk == 0 or next->chunk == 0 or next->transform != transform or
                 next->chunk->texName() != chunk->texName() or next->mode != mode or
-                clipWidth != 0xffffffff or next->clipWidth != 0xffffffff)
+                clipWidth != NO_CLIPPING or next->clipWidth != NO_CLIPPING)
             {
                 glDrawArrays(GL_TRIANGLES, 0, 6 * spriteCounter);
                 //if (spriteCounter > 1)
@@ -210,9 +163,6 @@ namespace Gosu
                 spriteCounter = 0;
             }
             #endif
-            
-            if (clipWidth != 0xffffffff)
-                glDisable(GL_SCISSOR_TEST);
         }
         
         void compileTo(VertexArray& va) const
@@ -251,7 +201,7 @@ namespace Gosu
 
     public:
         DrawOpQueue()
-        : clipWidth(0xffffffff)
+        : clipWidth(NO_CLIPPING)
         {
         }
         
@@ -271,7 +221,7 @@ namespace Gosu
             assert(op.usedVertices == 4);
             #endif
 
-            if (clipWidth != 0xffffffff)
+            if (clipWidth != NO_CLIPPING)
             {
                 op.clipX = clipX;
                 op.clipY = clipY;
@@ -281,7 +231,7 @@ namespace Gosu
             
             if (z == zImmediate)
             {
-                DrawOp::RenderState current;
+                RenderState current;
                 op.perform(current, 0);
             }
             
@@ -299,12 +249,12 @@ namespace Gosu
         
         void endClipping()
         {
-            clipWidth = 0xffffffff;
+            clipWidth = NO_CLIPPING;
         }
 
         void performDrawOps() const
         {
-            DrawOp::RenderState current;
+            RenderState current;
             
             std::multiset<DrawOp>::const_iterator last, cur = set.begin(), end = set.end();
             while (cur != end)

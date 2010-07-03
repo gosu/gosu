@@ -133,13 +133,18 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 
 void Gosu::Graphics::end()
 {
-    // If there is a recording in process, stop it.
+    flush();
+
+    glFlush();
+}
+
+void Gosu::Graphics::flush()
+{
+    // If there is a recording in process, cancel it.
     pimpl->queues.resize(1);
     
     pimpl->queues.at(0).performDrawOps();
     pimpl->queues.at(0).clear();
-
-    glFlush();
 }
 
 void Gosu::Graphics::beginGL()
