@@ -1,4 +1,4 @@
-RVM_RUBY         = "ruby-1.9.2-preview1"
+RVM_RUBY         = "ruby-1.9.2-rc1"
 INTERNAL_VERSION = "1.9.1"
 RUBY_DYLIB       = "libruby.#{INTERNAL_VERSION}.dylib"
 RUBY_DYLIB_ID    = "@executable_path/../Frameworks/#{RUBY_DYLIB}"
@@ -7,10 +7,10 @@ SOURCE_ROOT      = "#{ENV['HOME']}/.rvm/rubies/#{RVM_RUBY}"
 GEM_ROOT         = "#{ENV['HOME']}/.rvm/gems/#{RVM_RUBY}/gems"
 ALL_PLATFORMS    = [:ppc, :i386, :x86_64]
 LIB_KILLLIST     = %w(README irb rake* racc rdoc* *ubygems* readline* tcltk* tk* tcltklib* rss* *-darwin*)
-GEMS             = []#%w(chipmunk ruby-opengl eventmachine iobuffer rev)
+GEMS             = %w(texplay iobuffer rev eventmachine) # chipmunk, ruby-opengl broken atm
 CFLAGS           = {
-  :ppc    => %('-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4 -I/Developer/SDKs/MacOSX10.4u.sdk/usr/lib/gcc/powerpc-apple-darwin10/4.0.1/include'),
-  :i386   => %('-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4 -I/Developer/SDKs/MacOSX10.4u.sdk/usr/lib/gcc/i686-apple-darwin10/4.0.1/include'),
+  :ppc    => %('-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4 -I/Developer/SDKs/MacOSX10.4u.sdk/usr/lib/gcc/powerpc-apple-darwin10/4.0.1/include -I/Developer/SDKs/MacOSX10.4u.sdk/usr/include/c++/4.0.0'),
+  :i386   => %('-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4 -I/Developer/SDKs/MacOSX10.4u.sdk/usr/lib/gcc/i686-apple-darwin10/4.0.1/include -I/Developer/SDKs/MacOSX10.4u.sdk/usr/include/c++/4.0.0'),
   :x86_64 => %('-isysroot /Developer/SDKs/MacOSX10.6.sdk  -mmacosx-version-min=10.6'),
 }
 BUILD            = {
@@ -34,6 +34,7 @@ namespace :ruby19 do
       # Let RVM install the correct Ruby
       sh "env RVM_RUBY=#{RVM_RUBY} RVM_ARCH=#{platform} " +
          "    RVM_BUILD=#{BUILD[platform]} RVM_CFLAGS=#{CFLAGS[platform]} " +
+         "    RVM_GEMS='#{GEMS.join(' ')}' " +
          "    bash #{TARGET_ROOT}/install_rvm_ruby.sh"
       
       # Copy headers
