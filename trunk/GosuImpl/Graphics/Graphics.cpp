@@ -117,7 +117,7 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
     pimpl->queues.resize(1);
     
     pimpl->currentTransforms.resize(1);
-    pimpl->absoluteTransforms.resize(1);
+    pimpl->absoluteTransforms = pimpl->currentTransforms;
     
     // Flush leftover clippings
     endClipping();
@@ -224,11 +224,24 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::endRecording()
     return result;
 }
 
+namespace
+{
+    void ensureBackOfList(Gosu::Transforms& list, const Gosu::Transform& transform)
+    {
+        Gosu::Transforms::iterator oldPosition =
+            std::find(list.begin(), list.end(), transform);
+        if (oldPosition == list.end())
+            list.push_back(transform);
+        else
+            list.splice(list.end(), list, oldPosition);
+    }
+}
+
 void Gosu::Graphics::pushTransform(const Gosu::Transform& transform)
 {
     pimpl->currentTransforms.push_back(transform);
     Transform result = multiply(transform, pimpl->absoluteTransforms.back());
-    pimpl->absoluteTransforms.push_back(result);
+    ensureBackOfList(pimpl->absoluteTransforms, result);
 }
 
 void Gosu::Graphics::popTransform()
@@ -237,7 +250,7 @@ void Gosu::Graphics::popTransform()
     Transform result = scale(1);
     BOOST_REVERSE_FOREACH (const Transform& tf, pimpl->currentTransforms)
         result = multiply(result, tf);
-    pimpl->absoluteTransforms.push_back(result);
+    ensureBackOfList(pimpl->absoluteTransforms, result);
 }
 
 void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
