@@ -29,14 +29,6 @@ struct Gosu::Graphics::Impl
 #if 0
     boost::mutex texMutex;
 #endif
-    
-    void calculateAbsoluteTransform()
-    {
-        Transform result = scale(1);
-        BOOST_REVERSE_FOREACH (const Transform& tf, currentTransforms)
-            result = multiply(result, tf);
-        absoluteTransforms.push_back(result);
-    }
 };
 
 Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscreen)
@@ -104,7 +96,7 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
 {
     if (virtualWidth == 0 || virtualHeight == 0)
         throw std::invalid_argument("Invalid virtual resolution.");
-
+    
     Transform baseTransform;
     #ifdef GOSU_IS_IPHONE
     baseTransform = translate(pimpl->physWidth, 0);
@@ -194,15 +186,15 @@ void Gosu::Graphics::beginClipping(int x, int y, unsigned width, unsigned height
     
     double left = x, right = x + width;
     double top = y, bottom = y + height;
-
+    
     applyTransform(pimpl->absoluteTransforms.back(), left, top);
     applyTransform(pimpl->absoluteTransforms.back(), right, bottom);
-
+    
     int physX = std::min(left, right);
     int physY = std::min(top, bottom);
     int physWidth = std::abs(left - right);
     int physHeight = std::abs(top - bottom);
-
+    
     // Apply OpenGL's counting from the wrong side ;)
     physY = pimpl->physHeight - physY - physHeight;
     
@@ -235,13 +227,17 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::endRecording()
 void Gosu::Graphics::pushTransform(const Gosu::Transform& transform)
 {
     pimpl->currentTransforms.push_back(transform);
-    pimpl->calculateAbsoluteTransform();
+    Transform result = multiply(transform, pimpl->absoluteTransforms.back());
+    pimpl->absoluteTransforms.push_back(result);
 }
 
 void Gosu::Graphics::popTransform()
 {
     pimpl->currentTransforms.pop_back();
-    pimpl->calculateAbsoluteTransform();
+    Transform result = scale(1);
+    BOOST_REVERSE_FOREACH (const Transform& tf, pimpl->currentTransforms)
+        result = multiply(result, tf);
+    pimpl->absoluteTransforms.push_back(result);
 }
 
 void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
