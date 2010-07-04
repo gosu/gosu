@@ -25,7 +25,7 @@ class Gosu::DrawOpQueue
         if (clipRectStack.empty())
             return effectiveRect.reset();
 
-        ClipRect result = { 0, 0, NO_CLIPPING, NO_CLIPPING };
+        ClipRect result = { 0, 0, 0x7fffffff, 0x7fffffff };
         BOOST_FOREACH (const ClipRect& rect, clipRectStack)
         {
             int right = std::min<int>(result.x + result.width, rect.x + rect.width);
