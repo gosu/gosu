@@ -271,7 +271,6 @@ namespace Gosu
 // Graphics:
 
 // ZPos, AlphaMode, FontFlags, TextAlign
-%ignore Gosu::zImmediate;
 %ignore Gosu::AlphaMode;
 %ignore Gosu::FontFlags;
 %ignore Gosu::TextAlign;

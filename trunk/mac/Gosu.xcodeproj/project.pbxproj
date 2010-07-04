@@ -105,6 +105,7 @@
 		D459FF4C0BDCD26D00E7F0D6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98A0A801948005C7067 /* AppKit.framework */; };
 		D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */; };
 		D459FF990BDCD9CF00E7F0D6 /* Gosu.icns in Resources */ = {isa = PBXBuildFile; fileRef = D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */; };
+		D4683F6E11E086F000FD7FBE /* DrawOpQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4683F6D11E086F000FD7FBE /* DrawOpQueue.hpp */; };
 		D4698E6E118C709D00FF24EF /* libruby.1.9.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D4698E6D118C709D00FF24EF /* libruby.1.9.1.dylib */; };
 		D4698E70118C70A000FF24EF /* libruby.1.9.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = D4698E6D118C709D00FF24EF /* libruby.1.9.1.dylib */; };
 		D4698EF4118D5B1D00FF24EF /* lib in Resources */ = {isa = PBXBuildFile; fileRef = D4698ED8118D5B1C00FF24EF /* lib */; };
@@ -473,6 +474,7 @@
 		D459FF460BDCD23600E7F0D6 /* RubyGosu App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RubyGosu App-Info.plist"; sourceTree = "<group>"; };
 		D459FF980BDCD9CF00E7F0D6 /* Gosu.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Gosu.icns; sourceTree = "<group>"; };
 		D459FFAD0BDCE41300E7F0D6 /* Gosu-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "Gosu-Info.plist"; sourceTree = "<group>"; };
+		D4683F6D11E086F000FD7FBE /* DrawOpQueue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DrawOpQueue.hpp; sourceTree = "<group>"; };
 		D4698E6D118C709D00FF24EF /* libruby.1.9.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libruby.1.9.1.dylib; path = Ruby/libruby.1.9.1.dylib; sourceTree = "<group>"; };
 		D4698ED8118D5B1C00FF24EF /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lib; path = Ruby/lib; sourceTree = "<group>"; };
 		D46C2F8D0FAE39FD00A33476 /* Main.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = Main.rb; sourceTree = "<group>"; };
@@ -769,6 +771,7 @@
 				D410EADA0A801B00005C7067 /* Color.cpp */,
 				D4A7E9A90CD3927D00621B24 /* Common.hpp */,
 				D499E6380D06B51300BA6DEC /* DrawOp.hpp */,
+				D4683F6D11E086F000FD7FBE /* DrawOpQueue.hpp */,
 				D410EADB0A801B00005C7067 /* Font.cpp */,
 				D414FFAF11C3E68C0008B352 /* FormattedString.hpp */,
 				D4A5A22C0F40D48300FFF378 /* GosuView.hpp */,
@@ -778,6 +781,7 @@
 				D410EADF0A801B00005C7067 /* LargeImageData.cpp */,
 				D410EAE00A801B00005C7067 /* LargeImageData.hpp */,
 				B9CA23C0100396920073D01B /* Macro.hpp */,
+				D482B1CF11DFC764004C8497 /* RenderState.hpp */,
 				D4A7E97B0CD3907D00621B24 /* Texture.cpp */,
 				D4A7E97C0CD3907D00621B24 /* Texture.hpp */,
 				D4A7E97D0CD3907D00621B24 /* TexChunk.cpp */,
@@ -786,7 +790,6 @@
 				D410EAE30A801B00005C7067 /* TextMac.cpp */,
 				D4032B7C0F5035A900A20790 /* TextTouch.mm */,
 				D4FA74BC11C0064100E719EA /* Transform.cpp */,
-				D482B1CF11DFC764004C8497 /* RenderState.hpp */,
 			);
 			name = Graphics;
 			path = ../GosuImpl/Graphics;
@@ -987,6 +990,7 @@
 				D448D8980FF81E1E002FA7EE /* Version.hpp in Headers */,
 				D410E9F50A8019CD005C7067 /* Window.hpp in Headers */,
 				D482B1D011DFC764004C8497 /* RenderState.hpp in Headers */,
+				D4683F6E11E086F000FD7FBE /* DrawOpQueue.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

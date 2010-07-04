@@ -37,14 +37,14 @@ namespace Gosu
     
     const GLuint NO_TEXTURE = static_cast<GLuint>(-1);
     const unsigned NO_CLIPPING = 0xffffffff;
-
+    
     template<typename T>
     bool isPToTheLeftOfAB(T xa, T ya,
         T xb, T yb, T xp, T yp)
     {
         return (xb - xa) * (yp - ya) - (xp - xa) * (yb - ya) > 0;
     }
-        
+    
     template<typename T, typename C>
     void reorderCoordinatesIfNecessary(T& x1, T& y1,
         T& x2, T& y2, T& x3, T& y3, C& c3, T& x4, T& y4, C& c4)
