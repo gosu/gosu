@@ -115,13 +115,12 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
     // If there is a recording in process, stop it.
     // TODO: Raise exception?
     pimpl->queues.resize(1);
+    // Clear leftover clippings.
+    pimpl->queues.front().clear();
     
     pimpl->currentTransforms.resize(1);
     pimpl->absoluteTransforms = pimpl->currentTransforms;
     
-    // Flush leftover clippings
-    endClipping();
-
     glClearColor(clearWithColor.red()/255.0,
                  clearWithColor.green()/255.0,
                  clearWithColor.blue()/255.0,

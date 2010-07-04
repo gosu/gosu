@@ -3,28 +3,47 @@
 
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/DrawOp.hpp>
+#include <boost/foreach.hpp>
+#include <boost/optional.hpp>
 #include <algorithm>
 #include <set>
-#include <boost/foreach.hpp>
+#include <vector>
 
 class Gosu::DrawOpQueue
 {
-    int clipX, clipY;
-    unsigned clipWidth, clipHeight;
     std::multiset<DrawOp> set;
 
-public:
-    DrawOpQueue()
-    : clipWidth(NO_CLIPPING)
+    struct ClipRect
     {
+        int x, y;
+        unsigned width, height;
+    };
+    std::vector<ClipRect> clipRectStack;
+    boost::optional<ClipRect> effectiveRect;
+    void updateEffectiveRect()
+    {
+        if (clipRectStack.empty())
+            return effectiveRect.reset();
+
+        ClipRect result = { 0, 0, NO_CLIPPING, NO_CLIPPING };
+        BOOST_FOREACH (const ClipRect& rect, clipRectStack)
+        {
+            int right = std::min<int>(result.x + result.width, rect.x + rect.width);
+            int bottom = std::min<int>(result.y + result.height, rect.y + rect.height);
+            result.x = std::max<int>(result.x, rect.x);
+            result.y = std::max<int>(result.y, rect.y);
+            result.width = right - result.x;
+            result.height = bottom - result.y;
+        }
+        effectiveRect = result;
     }
-    
+
+public:
+    // I really wish I would trust ADL. :|
     void swap(DrawOpQueue& other)
     {
-        std::swap(clipX, other.clipX);
-        std::swap(clipY, other.clipY);
-        std::swap(clipWidth, other.clipWidth);
-        std::swap(clipHeight, other.clipHeight);
+        clipRectStack.swap(other.clipRectStack);
+        std::swap(effectiveRect, other.effectiveRect);
         set.swap(other.set);
     }
     
@@ -34,13 +53,14 @@ public:
         // No triangles, no lines supported
         assert(op.usedVertices == 4);
         #endif
-
-        if (clipWidth != NO_CLIPPING)
+        
+        if (effectiveRect)
         {
-            op.clipX = clipX;
-            op.clipY = clipY;
-            op.clipWidth = clipWidth;
-            op.clipHeight = clipHeight;
+            const ClipRect& rect = *effectiveRect;
+            op.clipX = rect.x;
+            op.clipY = rect.y;
+            op.clipWidth = rect.width;
+            op.clipHeight = rect.height;
         }
         
         op.z = z;
@@ -49,15 +69,15 @@ public:
     
     void beginClipping(int x, int y, unsigned width, unsigned height)
     {
-        clipX = x;
-        clipY = y;
-        clipWidth = width;
-        clipHeight = height;
+        ClipRect rect = { x, y, width, height };
+        clipRectStack.push_back(rect);
+        updateEffectiveRect();
     }
     
     void endClipping()
     {
-        clipWidth = NO_CLIPPING;
+        clipRectStack.pop_back();
+        updateEffectiveRect();
     }
 
     void performDrawOps() const
@@ -75,6 +95,8 @@ public:
     
     void clear()
     {
+        clipRectStack.clear();
+        effectiveRect.reset();
         set.clear();
     }
     
