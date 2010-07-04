@@ -2,6 +2,7 @@
 #define GOSUIMPL_GRAPHICS_DRAWOPQUEUE_HPP
 
 #include <GosuImpl/Graphics/Common.hpp>
+#include <GosuImpl/Graphics/DrawOp.hpp>
 #include <algorithm>
 #include <set>
 #include <boost/foreach.hpp>

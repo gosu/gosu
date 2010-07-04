@@ -3256,6 +3256,15 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_zImmediate_get(VALUE self) {
+  VALUE _val;
+  
+  _val = SWIG_From_double(static_cast< double >(Gosu::zImmediate));
+  return _val;
+}
+
+
+SWIGINTERN VALUE
 _wrap_screen_width(int argc, VALUE *argv, VALUE self) {
   unsigned int result;
   VALUE vresult = Qnil;
@@ -10117,6 +10126,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "normalize_angle", VALUEFUNC(_wrap_normalize_angle), -1);
   rb_define_module_function(mGosu, "distance", VALUEFUNC(_wrap_distance), -1);
   rb_define_module_function(mGosu, "default_font_name", VALUEFUNC(_wrap_default_font_name), -1);
+  rb_define_singleton_method(mGosu, "zImmediate", VALUEFUNC(_wrap_zImmediate_get), 0);
   rb_define_module_function(mGosu, "screen_width", VALUEFUNC(_wrap_screen_width), -1);
   rb_define_module_function(mGosu, "screen_height", VALUEFUNC(_wrap_screen_height), -1);
   rb_define_module_function(mGosu, "rotate", VALUEFUNC(_wrap_rotate), -1);

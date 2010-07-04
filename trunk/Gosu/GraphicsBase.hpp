@@ -4,6 +4,7 @@
 #ifndef GOSU_GRAPHICSBASE_HPP
 #define GOSU_GRAPHICSBASE_HPP
 
+#include <Gosu/Platform.hpp>
 #include <limits>
 
 namespace Gosu
@@ -17,7 +18,9 @@ namespace Gosu
     //! your drawing operation does not need Z ordering and can be performed
     //! immediately.
     //! Deprecated because this turned out not be very useful in optimizing.
+    #ifndef SWIG
     GOSU_DEPRECATED
+    #endif
     const double zImmediate = -std::numeric_limits<double>::infinity();
     
     //! Determines the way colors are combined when one is drawn onto

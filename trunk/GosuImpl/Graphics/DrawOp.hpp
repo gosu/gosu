@@ -6,7 +6,6 @@
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/TexChunk.hpp>
 #include <GosuImpl/Graphics/RenderState.hpp>
-#include <GosuImpl/Graphics/DrawOpQueue.hpp>
 #include <boost/cstdint.hpp>
 
 namespace Gosu
