@@ -101,6 +101,7 @@
 		D42E1A15104AEF1D0019345C /* TextTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4032B7C0F5035A900A20790 /* TextTouch.mm */; };
 		D42E1A16104AEF1F0019345C /* TextTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4032B7C0F5035A900A20790 /* TextTouch.mm */; };
 		D42E1A17104AEF210019345C /* TextTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4032B7C0F5035A900A20790 /* TextTouch.mm */; };
+		D444352311E45A8B00188921 /* AccelerometerReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = D444352211E45A8B00188921 /* AccelerometerReader.mm */; };
 		D448D8980FF81E1E002FA7EE /* Version.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D448D8970FF81E1E002FA7EE /* Version.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D459FF4C0BDCD26D00E7F0D6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98A0A801948005C7067 /* AppKit.framework */; };
 		D459FF610BDCD38700E7F0D6 /* RubyGosuStub.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */; };
@@ -469,6 +470,8 @@
 		D42DFE380F6F84DA00407E60 /* AudioOpenAL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AudioOpenAL.mm; path = ../GosuImpl/Audio/AudioOpenAL.mm; sourceTree = SOURCE_ROOT; };
 		D443F6BC0FE9330700BC0D66 /* AudioFile.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AudioFile.hpp; path = ../GosuImpl/Audio/AudioFile.hpp; sourceTree = SOURCE_ROOT; };
 		D443F6D30FE9346800BC0D66 /* AudioToolboxFile.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AudioToolboxFile.hpp; path = ../GosuImpl/Audio/AudioToolboxFile.hpp; sourceTree = SOURCE_ROOT; };
+		D444352111E45A8B00188921 /* AccelerometerReader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AccelerometerReader.hpp; path = ../GosuImpl/Input/AccelerometerReader.hpp; sourceTree = SOURCE_ROOT; };
+		D444352211E45A8B00188921 /* AccelerometerReader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AccelerometerReader.mm; path = ../GosuImpl/Input/AccelerometerReader.mm; sourceTree = SOURCE_ROOT; };
 		D448D8970FF81E1E002FA7EE /* Version.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Version.hpp; path = ../Gosu/Version.hpp; sourceTree = SOURCE_ROOT; };
 		D459FF440BDCD23500E7F0D6 /* RubyGosu App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RubyGosu App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D459FF460BDCD23600E7F0D6 /* RubyGosu App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RubyGosu App-Info.plist"; sourceTree = "<group>"; };
@@ -735,6 +738,7 @@
 			children = (
 				D42D02DA0F70929E00407E60 /* Audio */,
 				D410EAD30A801B00005C7067 /* Graphics */,
+				D444350111E453C900188921 /* Input */,
 				D410EAEF0A801B00005C7067 /* Sockets */,
 				D4A7E9080CD377E000621B24 /* Async.cpp */,
 				D410E9FF0A8019FA005C7067 /* DirectoriesMac.mm */,
@@ -818,6 +822,15 @@
 				D4257ADE0FBF48CC00AD955A /* OggFile.hpp */,
 			);
 			name = Audio;
+			sourceTree = "<group>";
+		};
+		D444350111E453C900188921 /* Input */ = {
+			isa = PBXGroup;
+			children = (
+				D444352111E45A8B00188921 /* AccelerometerReader.hpp */,
+				D444352211E45A8B00188921 /* AccelerometerReader.mm */,
+			);
+			name = Input;
 			sourceTree = "<group>";
 		};
 		D46F737C0BC3458D008003BA /* RubyGosu */ = {
@@ -1375,6 +1388,7 @@
 				D4F4BFD60FC4CB1A0013CE21 /* bitrate.c in Sources */,
 				D4F4BFD70FC4CB1A0013CE21 /* analysis.c in Sources */,
 				D4FA74D411C0071300E719EA /* Transform.cpp in Sources */,
+				D444352311E45A8B00188921 /* AccelerometerReader.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

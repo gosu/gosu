@@ -3,6 +3,7 @@
 
 #import <GosuImpl/MacUtility.hpp>
 #import <GosuImpl/Graphics/GosuView.hpp>
+#import <GosuImpl/Input/AccelerometerReader.hpp>
 
 struct Gosu::TextInput::Impl {};
 Gosu::TextInput::TextInput() {}
@@ -15,6 +16,7 @@ unsigned Gosu::TextInput::selectionStart() const { return 0; }
 struct Gosu::Input::Impl {
     GosuView* view;
     float factorX, factorY;
+    float updateInterval;
     
     ObjRef<NSMutableSet> currentTouchesSet;
     boost::scoped_ptr<Gosu::Touches> currentTouchesVector;
@@ -26,12 +28,22 @@ struct Gosu::Input::Impl {
         touch.x *= factorX, touch.y *= factorY;
         return touch;
     }
+    
+    ObjRef<AccelerometerReader> accelerometerReader;
+    
+    float acceleration(int index)
+    {
+        if (accelerometerReader.get() == 0)
+            accelerometerReader.reset([[AccelerometerReader alloc] initWithUpdateInterval: updateInterval]);
+        return [accelerometerReader.obj() acceleration][index];
+    }
 };
 
-Gosu::Input::Input(void* view)
+Gosu::Input::Input(void* view, float updateInterval)
 : pimpl(new Impl)
 {
     pimpl->view = (GosuView*)view;
+    pimpl->updateInterval = updateInterval;
     pimpl->currentTouchesSet.reset([[NSMutableSet alloc] init]);
     setMouseFactors(1, 1);
 }
@@ -91,6 +103,18 @@ const Gosu::Touches& Gosu::Input::currentTouches() const
             pimpl->currentTouchesVector->push_back(pimpl->translateTouch(uiTouch));
     }
     return *pimpl->currentTouchesVector;
+}
+
+double Gosu::Input::accelerometerX() const {
+    return pimpl->acceleration(0);
+}
+
+double Gosu::Input::accelerometerY() const {
+    return pimpl->acceleration(1);
+}
+
+double Gosu::Input::accelerometerZ() const {
+    return pimpl->acceleration(2);
 }
 
 void Gosu::Input::update() {

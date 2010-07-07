@@ -93,7 +93,7 @@ namespace Gosu
         
         #ifdef GOSU_IS_MAC
         #ifdef GOSU_IS_IPHONE
-        Input(void* view);
+        Input(void* view, float updateInterval);
         void feedTouchEvent(int type, void* touches);
         #else
         Input(void* window);
@@ -134,6 +134,11 @@ namespace Gosu
         
         //! Currently known touches.
         const Touches& currentTouches() const;
+        
+        //! Accelerometer positions in all three dimensions (smoothened).
+        double accelerometerX() const;
+        double accelerometerY() const;
+        double accelerometerZ() const;
         
         //! Collects new information about which buttons are pressed, where the
         //! mouse is and calls onButtonUp/onButtonDown, if assigned.

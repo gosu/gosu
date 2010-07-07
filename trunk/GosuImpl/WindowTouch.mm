@@ -98,7 +98,7 @@ Gosu::Window::Window(unsigned width, unsigned height,
     pimpl->graphics.reset(new Graphics(screenWidth(), screenHeight(), false));
     pimpl->graphics->setResolution(screenHeight(), screenWidth());
     pimpl->audio.reset(new Audio());
-    pimpl->input.reset(new Input(gosuView));
+    pimpl->input.reset(new Input(gosuView, updateInterval));
     pimpl->input->onTouchBegan = boost::bind(&Window::touchBegan, this, _1);
     pimpl->input->onTouchMoved = boost::bind(&Window::touchMoved, this, _1);
     pimpl->input->onTouchEnded = boost::bind(&Window::touchEnded, this, _1);
