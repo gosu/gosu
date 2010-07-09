@@ -7,7 +7,7 @@ SOURCE_ROOT      = "#{ENV['HOME']}/.rvm/rubies/#{RVM_RUBY}"
 GEM_ROOT         = "#{ENV['HOME']}/.rvm/gems/#{RVM_RUBY}/gems"
 ALL_PLATFORMS    = [:ppc, :i386, :x86_64]
 LIB_KILLLIST     = %w(README irb rake* racc rdoc* *ubygems* readline* tcltk* tk* tcltklib* rss* *-darwin*)
-GEMS             = %w(texplay iobuffer rev eventmachine) # chipmunk, ruby-opengl broken atm
+GEMS             = %w(chipmunk texplay iobuffer rev eventmachine) # TODO: ruby-opengl needs some rake stuff?
 CFLAGS           = {
   :ppc    => %('-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4 -I/Developer/SDKs/MacOSX10.4u.sdk/usr/lib/gcc/powerpc-apple-darwin10/4.0.1/include -I/Developer/SDKs/MacOSX10.4u.sdk/usr/include/c++/4.0.0'),
   :i386   => %('-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4 -I/Developer/SDKs/MacOSX10.4u.sdk/usr/lib/gcc/i686-apple-darwin10/4.0.1/include -I/Developer/SDKs/MacOSX10.4u.sdk/usr/include/c++/4.0.0'),
