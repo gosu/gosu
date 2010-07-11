@@ -8,10 +8,15 @@ GEM_ROOT         = "#{ENV['HOME']}/.rvm/gems/#{RVM_RUBY}/gems"
 ALL_PLATFORMS    = [:ppc, :i386, :x86_64]
 LIB_KILLLIST     = %w(README irb rake* racc rdoc* *ubygems* readline* tcltk* tk* tcltklib* rss* *-darwin*)
 GEMS             = %w(chipmunk texplay iobuffer rev eventmachine) # TODO: ruby-opengl needs some rake stuff?
+
+# Just to abbreviate the CFLAGS
+SDK_10_4 = '/Developer/SDKs/MacOSX10.4u.sdk'
+SDK_10_6 = '/Developer/SDKs/MacOSX10.6.sdk'
+
 CFLAGS           = {
-  :ppc    => %('-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4 -I/Developer/SDKs/MacOSX10.4u.sdk/usr/lib/gcc/powerpc-apple-darwin10/4.0.1/include -I/Developer/SDKs/MacOSX10.4u.sdk/usr/include/c++/4.0.0'),
-  :i386   => %('-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4 -I/Developer/SDKs/MacOSX10.4u.sdk/usr/lib/gcc/i686-apple-darwin10/4.0.1/include -I/Developer/SDKs/MacOSX10.4u.sdk/usr/include/c++/4.0.0'),
-  :x86_64 => %('-isysroot /Developer/SDKs/MacOSX10.6.sdk  -mmacosx-version-min=10.6'),
+  :ppc    => "'-isysroot #{SDK_10_4} -mmacosx-version-min=10.4 -I#{SDK_10_4}/usr/lib/gcc/powerpc-apple-darwin10/4.0.1/include -I#{SDK_10_4}/usr/include/c++/4.0.0 -I#{SDK_10_4}/usr/include/c++/4.0.0/powerpc-apple-darwin8'",
+  :i386   => "'-isysroot #{SDK_10_4} -mmacosx-version-min=10.4 -I#{SDK_10_4}/usr/lib/gcc/i686-apple-darwin10/4.0.1/include -I#{SDK_10_4}/usr/include/c++/4.0.0 -I#{SDK_10_4}/usr/include/c++/4.0.0/i686-apple-darwin8'",
+  :x86_64 => "'-isysroot #{SDK_10_6} -mmacosx-version-min=10.6'",
 }
 BUILD            = {
   :ppc    => %(powerpc-apple-darwin8.0),
