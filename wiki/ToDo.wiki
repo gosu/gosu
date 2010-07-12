@@ -4,10 +4,11 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-07-11)
+(Last update: 2010-07-12)
 
 == Gosu 0.7.x ==
   * Use AVAudioplayer for Gosu::Song on iPhone (MP3 HW accel)
+  * Download Visual Studio 2008 again
   * Gosu: try integer truncing of drawing positions
   * Remove setResolution and use transforms instead
   * WindowX: add shrinking for oversized resolutions
