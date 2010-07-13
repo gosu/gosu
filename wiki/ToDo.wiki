@@ -4,11 +4,13 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-07-12)
+(Last update: 2010-07-13)
 
 == Gosu 0.7.x ==
   * Use AVAudioplayer for Gosu::Song on iPhone (MP3 HW accel)
+  * Make <c=> more somehow efficient in Font::drawRel
   * Download Visual Studio 2008 again
+  * See if I should fork out RubyGosu.app into Ruby App project
   * Gosu: try integer truncing of drawing positions
   * Remove setResolution and use transforms instead
   * WindowX: add shrinking for oversized resolutions
