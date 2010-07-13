@@ -67,10 +67,9 @@ namespace :ruby19 do
       end
       
       # Merge gems
-      GEMS.each do |gem_name|
+      GEMS.split.each do |gem_name|
         gem_lib = Dir["#{GEM_ROOT}/#{gem_name}-*/lib"].first
         Dir["#{gem_lib}/**/*.rb"].each do |ruby_file|
-          puts ruby_file
           target_file = ruby_file.dup
           target_file[gem_lib] = "#{TARGET_ROOT}/lib"
           mkdir_p File.dirname(target_file)
@@ -78,7 +77,6 @@ namespace :ruby19 do
         end
 
         Dir["#{gem_lib}/**/*.bundle"].each do |ext_file|
-          puts ruby_file
           target_file = ext_file.dup
           target_file[gem_lib] = "#{TARGET_ROOT}/lib"
           mkdir_p File.dirname(target_file)
