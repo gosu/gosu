@@ -4,11 +4,14 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-07-13)
+(Last update: 2010-07-14)
 
 == Gosu 0.7.x ==
   * Use AVAudioplayer for Gosu::Song on iPhone (MP3 HW accel)
   * Make <c=> more somehow efficient in Font::drawRel
+  * Make fuchsia work in BMPs in GosuTouch
+  * Fix PNG alpha in Inv.png
+  * Fix 8bitAlpha.png supplied by shawn42
   * Download Visual Studio 2008 again
   * See if I should fork out RubyGosu.app into Ruby App project
   * Gosu: try integer truncing of drawing positions
@@ -16,7 +19,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * WindowX: add shrinking for oversized resolutions
   * Let enableUndocumentedRetrofication always throw an exception so people use rescue blocks :)
   * Use Gosu text formatting in Tutorial.rb
-  * Fix 8bitAlpha.png supplied by shawn42
   * Switch to SWIG 2.0 and see which bugs remain
   * Announce MSVS08 Switch & update docs
   * Add and document Window#flush
@@ -162,12 +164,15 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Update TextInput.cpp to include setCaretPos
   * Make sure that WindowMainLoop states that the whole order is just about perceived performance
   * Document how Font roughly works (allow devs to cache chars by text_width'ing the alphabet)
+  * Fix rdoc images
 == Gosu 0.8.x (preliminary) ==
   * Ask: Why not clWhite?
   * Ask board: 0x00 alpha == opaque? Switch worth it? Esp. what to do with Color::WHITE
-  * Let Image() lazy-load it's file using Gosu::File (which keeps the file alive until it is really needed), add Gosu::loading_progress and Gosu::load_more for easy loading bars
+  * Let Image() lazy-load its file using Gosu::File (which keeps the file alive until it is really needed), add Gosu::loading_progress and Gosu::load_more for easy loading bars
   * Make Window::needsRedraw protected like needsCursor
   * Make Window::needsCursor return true by default for Windowed games
+  * Make Image, Sample, Song, Font use an intrusive_ptr internally
+  * Make things tileable by default but add :smooth and :pure or something like that
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
   * Use float instead of double everywhere
   * Rename pimpl/Impl to p/Private
