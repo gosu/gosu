@@ -1,4 +1,4 @@
-RVM_RUBY         = "ruby-1.9.2-rc1"
+RVM_RUBY         = "ruby-1.9.2-rc2"
 INTERNAL_VERSION = "1.9.1"
 RUBY_DYLIB       = "libruby.#{INTERNAL_VERSION}.dylib"
 RUBY_DYLIB_ID    = "@executable_path/../Frameworks/#{RUBY_DYLIB}"
@@ -67,7 +67,7 @@ namespace :ruby19 do
       end
       
       # Merge gems
-      GEMS.split.each do |gem_name|
+      GEMS.each do |gem_name|
         gem_lib = Dir["#{GEM_ROOT}/#{gem_name}-*/lib"].first
         Dir["#{gem_lib}/**/*.rb"].each do |ruby_file|
           target_file = ruby_file.dup
@@ -80,7 +80,7 @@ namespace :ruby19 do
           target_file = ext_file.dup
           target_file[gem_lib] = "#{TARGET_ROOT}/lib"
           mkdir_p File.dirname(target_file)
-          merge_lib ruby_file, target_file
+          merge_lib ext_file, target_file
         end
       end
 
