@@ -51,16 +51,16 @@ Gosu::Input::Input(void* view, float updateInterval)
 Gosu::Input::~Input() {
 }
 
-void Gosu::Input::feedTouchEvent(int type, void* touches)
+void Gosu::Input::feedTouchEvent(bool down, void* touches)
 {
     NSSet* uiTouches = (NSSet*)touches;
     
     pimpl->currentTouchesVector.reset();
-    boost::function<void (Touch)>* f = &onTouchMoved;
-    if (type == 0)
-        [pimpl->currentTouchesSet.get() unionSet: uiTouches], f = &onTouchBegan;
-    else if (type == 2)
-        [pimpl->currentTouchesSet.get() minusSet: uiTouches], f = &onTouchEnded;
+    if (down)
+        [pimpl->currentTouchesSet.get() unionSet: uiTouches];
+    else
+        [pimpl->currentTouchesSet.get() minusSet: uiTouches];
+    boost::function<void (Touch)>& f = down ? onTouchBegan : onTouchEnded;
     for (UITouch* uiTouch in uiTouches)
         if (*f)
             (*f)(pimpl->translateTouch(uiTouch));        

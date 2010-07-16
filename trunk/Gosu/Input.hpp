@@ -94,7 +94,7 @@ namespace Gosu
         #ifdef GOSU_IS_MAC
         #ifdef GOSU_IS_IPHONE
         Input(void* view, float updateInterval);
-        void feedTouchEvent(int type, void* touches);
+        void feedTouchEvent(bool down, void* touches);
         #else
         Input(void* window);
         bool feedNSEvent(void* event);
@@ -150,7 +150,7 @@ namespace Gosu
         
 		//! Assignable events that are called by update. You can bind these to your own functions.
 		//! If you use the Window class, it will assign forward these to its own methods.
-        boost::function<void (Touch)> onTouchBegan, onTouchMoved, onTouchEnded;
+        boost::function<void (Touch)> onTouchBegan, onTouchEnded;
         
         //! Returns the currently active TextInput instance, or 0.
         TextInput* textInput() const;

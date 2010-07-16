@@ -107,15 +107,11 @@ Gosu::Window& windowInstance();
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {    
-    windowInstance().input().feedTouchEvent(0, touches);
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    windowInstance().input().feedTouchEvent(1, touches);
+    windowInstance().input().feedTouchEvent(false, touches);
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    windowInstance().input().feedTouchEvent(2, touches);
+    windowInstance().input().feedTouchEvent(true, touches);
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
