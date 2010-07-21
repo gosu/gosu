@@ -4,11 +4,12 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-07-17)
+(Last update: 2010-07-22)
 
 == Gosu 0.7.x ==
   * Use AVAudioplayer for Gosu::Song on iPhone (MP3 HW accel)
   * Make <c=> more somehow efficient in Font::drawRel
+  * Add <s=> to text formatting
   * Make fuchsia work in BMPs in GosuTouch
   * Fix PNG alpha in Inv.png
   * Fix 8bitAlpha.png supplied by shawn42
@@ -18,6 +19,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Remove setResolution and use transforms instead
   * Windows: Improve shrinking heuristics (get task bar size)
   * WindowX: add shrinking for oversized resolutions
+  * Re-compile configure.ac
   * Let enableUndocumentedRetrofication always throw an exception so people use rescue blocks :)
   * Use Gosu text formatting in Tutorial.rb
   * Switch to SWIG 2.0 and see which bugs remain
