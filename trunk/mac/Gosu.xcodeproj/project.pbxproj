@@ -174,6 +174,7 @@
 		D4A7E9840CD3907D00621B24 /* TexChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97D0CD3907D00621B24 /* TexChunk.cpp */; };
 		D4A7E9E80CD39BA200621B24 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
 		D4A7E9E90CD39BA200621B24 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
+		D4B0132C11F823C600A804F7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4B0132B11F823C600A804F7 /* AVFoundation.framework */; };
 		D4BC5D6B0CC29D0F002D4236 /* Async.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4BC5D6A0CC29D0F002D4236 /* Async.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F07B230D934C8B00FB3D99 /* TextInput.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4F07B220D934C8B00FB3D99 /* TextInput.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F07B270D93504700FB3D99 /* TextInputMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4F07B260D93504700FB3D99 /* TextInputMac.mm */; };
@@ -506,6 +507,7 @@
 		D4A7E9A90CD3927D00621B24 /* Common.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Common.hpp; sourceTree = "<group>"; };
 		D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapUtils.cpp; sourceTree = "<group>"; };
 		D4AB62F50D08BA9900D71382 /* MacUtility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MacUtility.hpp; path = ../GosuImpl/MacUtility.hpp; sourceTree = SOURCE_ROOT; };
+		D4B0132B11F823C600A804F7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D4BC5D6A0CC29D0F002D4236 /* Async.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Async.hpp; path = ../Gosu/Async.hpp; sourceTree = SOURCE_ROOT; };
 		D4CA89500BC68B5D00A431AC /* gosu.for_1_8.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = gosu.for_1_8.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4D3E71A10722AAA006DCD24 /* MacRuby.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MacRuby.framework; path = /Library/Frameworks/MacRuby.framework; sourceTree = "<absolute>"; };
@@ -622,6 +624,7 @@
 				D42D025E0F706A0100407E60 /* AudioToolbox.framework in Frameworks */,
 				D42D025F0F706A0100407E60 /* OpenAL.framework in Frameworks */,
 				D4F4C2920FC5A1650013CE21 /* Foundation.framework in Frameworks */,
+				D4B0132C11F823C600A804F7 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -853,6 +856,7 @@
 				D4A5A2FC0F40D51B00FFF378 /* QuartzCore.framework */,
 				D4A5A2FD0F40D51B00FFF378 /* OpenGLES.framework */,
 				D4A5A2FE0F40D51B00FFF378 /* UIKit.framework */,
+				D4B0132B11F823C600A804F7 /* AVFoundation.framework */,
 			);
 			name = "Frameworks Touch";
 			sourceTree = "<group>";
