@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-07-22)
+(Last update: 2010-07-23)
 
 == Gosu 0.7.x ==
   * Make <c=> more somehow efficient in Font::drawRel
@@ -184,7 +184,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Windows: Input will regularly query devices which are not currently attached, thereby causing the game to halt every few seconds - think about this
   * FSAA/mipmap experiments
   * Provide C++ application templates where possible, maybe even installers for the templates
-  * speed up LargeImageData?!
   * Apple remote support would rule.
   * Assure Gosu::File also creates directories as necessary
   * more C++ examples
