@@ -315,6 +315,7 @@ public:
     void stop()
     {
         [player.obj() stop];
+        player.obj().currentTime = 0;
     }
     
     void update()

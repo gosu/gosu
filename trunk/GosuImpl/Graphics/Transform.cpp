@@ -47,7 +47,7 @@ Gosu::scale(double factor)
 }
 
 Gosu::Transform
-Gosu::scale(double factorX, double factorY)
+Gosu::scale(double factorX, double factorY, double aroundX, double aroundY)
 {
     Gosu::Transform result = {
         factorX, 0,       0, 0,
@@ -55,5 +55,7 @@ Gosu::scale(double factorX, double factorY)
         0,       0,       1, 0,
         0,       0,       0, 1
     };
+    if (aroundX != 0 || aroundY != 0)
+        result = multiply(multiply(translate(-aroundX, -aroundY), result), translate(aroundX, aroundY));
     return result;
 }

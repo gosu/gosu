@@ -76,7 +76,11 @@ unsigned Gosu::Graphics::width() const
     double size[2] = { pimpl->physWidth, pimpl->physHeight };
     // TODO: should be the other way around? Matrix inversion?
     //applyTransform(pimpl->absoluteTransforms.front(), size[0], size[1]);
-    return size[0];
+    #ifdef GOSU_IS_IPHONE
+    return size[1];
+    #else
+    return size[2];
+    #endif
 }
 
 unsigned Gosu::Graphics::height() const
@@ -84,7 +88,11 @@ unsigned Gosu::Graphics::height() const
     double size[2] = { pimpl->physWidth, pimpl->physHeight };
     // TODO: should be the other way around? Matrix inversion?
     //applyTransform(pimpl->absoluteTransforms.front(), size[0], size[1]);
+    #ifdef GOSU_IS_IPHONE
+    return size[0];
+    #else
     return size[1];
+    #endif
 }
 
 bool Gosu::Graphics::fullscreen() const

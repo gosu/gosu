@@ -25,14 +25,14 @@ namespace Gosu
     extern unsigned const MAX_TEXTURE_SIZE;
     
     typedef boost::array<double, 16> Transform;
-    Transform rotate(double angle, double aroundX = 0, double aroundY = 0);
     Transform translate(double x, double y);
+    Transform rotate(double angle, double aroundX = 0, double aroundY = 0);
     Transform scale(double factor);
-    Transform scale(double factorX, double factorY);
+    Transform scale(double factorX, double factorY, double fromX = 0, double fromY = 0);
     
-    //! Serves as the target of all drawing and provides basic drawing
+    //! Serves as the target of all drawing and provides primitive drawing
     //! functionality.
-    //! Usually created by Gosu::Window.
+    //! Usually created internally by Gosu::Window.
     class Graphics
     {
         struct Impl;
