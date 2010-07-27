@@ -4,9 +4,10 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-07-23)
+(Last update: 2010-07-27)
 
 == Gosu 0.7.x ==
+  * See what OolongEngine does better than GosuTouch (I guess: timing, audio?)
   * Make <c=> more somehow efficient in Font::drawRel
   * Add <s=> to text formatting
   * Make fuchsia work in BMPs in GosuTouch
