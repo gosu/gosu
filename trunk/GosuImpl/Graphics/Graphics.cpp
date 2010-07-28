@@ -79,7 +79,7 @@ unsigned Gosu::Graphics::width() const
     #ifdef GOSU_IS_IPHONE
     return size[1];
     #else
-    return size[2];
+    return size[0];
     #endif
 }
 

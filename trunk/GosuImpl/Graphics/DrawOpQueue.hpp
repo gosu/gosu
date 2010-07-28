@@ -95,8 +95,9 @@ public:
     
     void clear()
     {
-        clipRectStack.clear();
-        effectiveRect.reset();
+        // Not sure if Graphics::begin() should implicitly do that.
+        //clipRectStack.clear();
+        //effectiveRect.reset();
         set.clear();
     }
     
