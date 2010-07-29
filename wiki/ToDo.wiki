@@ -4,10 +4,12 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-07-27)
+(Last update: 2010-07-30)
 
 == Gosu 0.7.x ==
+  * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously
   * See what OolongEngine does better than GosuTouch (I guess: timing, audio?)
+  * Add m4a to audio_formats.rb
   * Make <c=> more somehow efficient in Font::drawRel
   * Add <s=> to text formatting
   * Make fuchsia work in BMPs in GosuTouch
