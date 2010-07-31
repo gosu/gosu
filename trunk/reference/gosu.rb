@@ -423,6 +423,11 @@ module Gosu
     # The points can be in clockwise order, or in a Z shape.
     def draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=:default); end
     
+    # Flushes all drawing operations to OpenGL so that Z-ordering can start anew. This
+    # is useful when drawing several parts of code on top of each other that use conflicting
+    # z positions.
+    def flush; end
+    
   	# Returns true if a button is currently pressed. Updated every tick.
     def button_down?(id); end
     

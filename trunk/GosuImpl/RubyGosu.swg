@@ -536,6 +536,9 @@ namespace Gosu {
                                    x3, y3, c3, x4, y4, c4,
                                    z, mode);
     }
+    void flush() {
+        return $self->graphics().flush();
+    }
     bool isButtonDown(Gosu::Button btn) const {
         return $self->input().down(btn);
     }

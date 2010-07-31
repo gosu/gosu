@@ -2643,6 +2643,9 @@ SWIGINTERN void Gosu_Window_drawQuad(Gosu::Window *self,double x1,double y1,Gosu
                                    x3, y3, c3, x4, y4, c4,
                                    z, mode);
     }
+SWIGINTERN void Gosu_Window_flush(Gosu::Window *self){
+        return self->graphics().flush();
+    }
 SWIGINTERN bool Gosu_Window_isButtonDown(Gosu::Window const *self,Gosu::Button btn){
         return self->input().down(btn);
     }
@@ -3309,6 +3312,44 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_translate(int argc, VALUE *argv, VALUE self) {
+  double arg1 ;
+  double arg2 ;
+  double val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  Gosu::Transform result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  ecode1 = SWIG_AsVal_double(argv[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "double","Gosu::translate", 1, argv[0] ));
+  } 
+  arg1 = static_cast< double >(val1);
+  ecode2 = SWIG_AsVal_double(argv[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","Gosu::translate", 2, argv[1] ));
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try {
+      result = Gosu::translate(arg1,arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_NewPointerObj((new Gosu::Transform(static_cast< const Gosu::Transform& >(result))), SWIGTYPE_p_boost__arrayT_double_16_t, SWIG_POINTER_OWN |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_rotate(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
   double arg2 = (double) 0 ;
@@ -3359,44 +3400,6 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_translate(int argc, VALUE *argv, VALUE self) {
-  double arg1 ;
-  double arg2 ;
-  double val1 ;
-  int ecode1 = 0 ;
-  double val2 ;
-  int ecode2 = 0 ;
-  Gosu::Transform result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_double(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "double","Gosu::translate", 1, argv[0] ));
-  } 
-  arg1 = static_cast< double >(val1);
-  ecode2 = SWIG_AsVal_double(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","Gosu::translate", 2, argv[1] ));
-  } 
-  arg2 = static_cast< double >(val2);
-  {
-    try {
-      result = Gosu::translate(arg1,arg2);
-    } catch(const std::runtime_error& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_NewPointerObj((new Gosu::Transform(static_cast< const Gosu::Transform& >(result))), SWIGTYPE_p_boost__arrayT_double_16_t, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
 _wrap_scale__SWIG_0(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
   double val1 ;
@@ -3430,14 +3433,20 @@ SWIGINTERN VALUE
 _wrap_scale__SWIG_1(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
   double arg2 ;
+  double arg3 = (double) 0 ;
+  double arg4 = (double) 0 ;
   double val1 ;
   int ecode1 = 0 ;
   double val2 ;
   int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
   Gosu::Transform result;
   VALUE vresult = Qnil;
   
-  if ((argc < 2) || (argc > 2)) {
+  if ((argc < 2) || (argc > 4)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
   }
   ecode1 = SWIG_AsVal_double(argv[0], &val1);
@@ -3450,9 +3459,23 @@ _wrap_scale__SWIG_1(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","Gosu::scale", 2, argv[1] ));
   } 
   arg2 = static_cast< double >(val2);
+  if (argc > 2) {
+    ecode3 = SWIG_AsVal_double(argv[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "double","Gosu::scale", 3, argv[2] ));
+    } 
+    arg3 = static_cast< double >(val3);
+  }
+  if (argc > 3) {
+    ecode4 = SWIG_AsVal_double(argv[3], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "double","Gosu::scale", 4, argv[3] ));
+    } 
+    arg4 = static_cast< double >(val4);
+  }
   {
     try {
-      result = Gosu::scale(arg1,arg2);
+      result = Gosu::scale(arg1,arg2,arg3,arg4);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -3466,11 +3489,11 @@ fail:
 
 SWIGINTERN VALUE _wrap_scale(int nargs, VALUE *args, VALUE self) {
   int argc;
-  VALUE argv[2];
+  VALUE argv[4];
   int ii;
   
   argc = nargs;
-  if (argc > 2) SWIG_fail;
+  if (argc > 4) SWIG_fail;
   for (ii = 0; (ii < argc); ++ii) {
     argv[ii] = args[ii];
   }
@@ -3484,7 +3507,7 @@ SWIGINTERN VALUE _wrap_scale(int nargs, VALUE *args, VALUE self) {
       return _wrap_scale__SWIG_0(nargs, args, self);
     }
   }
-  if (argc == 2) {
+  if ((argc >= 2) && (argc <= 4)) {
     int _v;
     {
       int res = SWIG_AsVal_double(argv[0], NULL);
@@ -3496,15 +3519,33 @@ SWIGINTERN VALUE _wrap_scale(int nargs, VALUE *args, VALUE self) {
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        return _wrap_scale__SWIG_1(nargs, args, self);
+        if (argc <= 2) {
+          return _wrap_scale__SWIG_1(nargs, args, self);
+        }
+        {
+          int res = SWIG_AsVal_double(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          if (argc <= 3) {
+            return _wrap_scale__SWIG_1(nargs, args, self);
+          }
+          {
+            int res = SWIG_AsVal_double(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_scale__SWIG_1(nargs, args, self);
+          }
+        }
       }
     }
   }
   
 fail:
-  Ruby_Format_OverloadedError( argc, 2, "scale", 
+  Ruby_Format_OverloadedError( argc, 4, "scale", 
     "    Gosu::Transform scale(double factor)\n"
-    "    Gosu::Transform scale(double factorX, double factorY)\n");
+    "    Gosu::Transform scale(double factorX, double factorY, double fromX, double fromY)\n");
   
   return Qnil;
 }
@@ -8813,6 +8854,33 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Window_flush(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","flush", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  {
+    try {
+      Gosu_Window_flush(arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Window_button_downq___(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   Gosu::Button arg2 ;
@@ -10129,8 +10197,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_singleton_method(mGosu, "zImmediate", VALUEFUNC(_wrap_zImmediate_get), 0);
   rb_define_module_function(mGosu, "screen_width", VALUEFUNC(_wrap_screen_width), -1);
   rb_define_module_function(mGosu, "screen_height", VALUEFUNC(_wrap_screen_height), -1);
-  rb_define_module_function(mGosu, "rotate", VALUEFUNC(_wrap_rotate), -1);
   rb_define_module_function(mGosu, "translate", VALUEFUNC(_wrap_translate), -1);
+  rb_define_module_function(mGosu, "rotate", VALUEFUNC(_wrap_rotate), -1);
   rb_define_module_function(mGosu, "scale", VALUEFUNC(_wrap_scale), -1);
   rb_define_const(mGosu, "MAX_TEXTURE_SIZE", SWIG_From_unsigned_SS_int(static_cast< unsigned int >(Gosu::MAX_TEXTURE_SIZE)));
   rb_define_module_function(mGosu, "enable_undocumented_retrofication", VALUEFUNC(_wrap_enable_undocumented_retrofication), -1);
@@ -10438,6 +10506,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "draw_line", VALUEFUNC(_wrap_Window_draw_line), -1);
   rb_define_method(SwigClassWindow.klass, "draw_triangle", VALUEFUNC(_wrap_Window_draw_triangle), -1);
   rb_define_method(SwigClassWindow.klass, "draw_quad", VALUEFUNC(_wrap_Window_draw_quad), -1);
+  rb_define_method(SwigClassWindow.klass, "flush", VALUEFUNC(_wrap_Window_flush), -1);
   rb_define_method(SwigClassWindow.klass, "button_down?", VALUEFUNC(_wrap_Window_button_downq___), -1);
   rb_define_singleton_method(SwigClassWindow.klass, "char_to_button_id", VALUEFUNC(_wrap_Window_char_to_button_id), -1);
   rb_define_singleton_method(SwigClassWindow.klass, "button_id_to_char", VALUEFUNC(_wrap_Window_button_id_to_char), -1);
