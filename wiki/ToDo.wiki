@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-07-30)
+(Last update: 2010-07-31)
 
 == Gosu 0.7.x ==
   * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously
@@ -32,7 +32,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Add scaling to SDL text so descenders don't overflow
   * Add FontFlags support for SDL_TTF Gosu/Text
   * Fix Unicode support for SDL_TTF port (UnicodeTest.rb, @loc_test)
-  * Make C++'s Gosu::multiply available in Ruby as Gosu::Color::*
+  * Make C++'s Gosu::multiply available in Ruby
   * Add Numeric#clamp, Numeric#wrap to Ruby
   * Look at http://audiere.sourceforge.net/ for Windows
   * Make Window arguments optional for Audio, but throw exceptions when in wrong order
@@ -169,7 +169,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Update TextInput.cpp to include setCaretPos
   * Make sure that WindowMainLoop states that the whole order is just about perceived performance
   * Document how Font roughly works (allow devs to cache chars by text_width'ing the alphabet)
-  * Fix rdoc images
+  * Fix rdoc image links
 == Gosu 0.8.x (preliminary) ==
   * Ask: Why not clWhite?
   * Ask board: 0x00 alpha == opaque? Switch worth it? Esp. what to do with Color::WHITE
