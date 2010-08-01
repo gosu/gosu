@@ -24,3 +24,7 @@ To let your game find the DLLs you have to change the PATH environment like this
 `ENV['PATH'] = File.join(GAMEROOT,"lib") + ";" + ENV['PATH']`
 
 If you have any trouble, feel free to ask on the Gosu boards. Ocra is still a project in development and everybody can benefit from sharing your experience.
+
+--
+
+If you run into problems with bundling fmod.dll, please see this thread: http://www.libgosu.org/cgi-bin/mwf/topic_show.pl?tid=426
