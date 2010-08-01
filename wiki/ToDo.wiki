@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-07-31)
+(Last update: 2010-08-01)
 
 == Gosu 0.7.x ==
   * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously
@@ -26,7 +26,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Use Gosu text formatting in Tutorial.rb
   * Switch to SWIG 2.0 and see which bugs remain
   * Announce MSVS08 Switch & update docs
-  * Add and document Window#flush
   * Update documentation via FTP
   * Throw an exception when using multiple Windows
   * Add scaling to SDL text so descenders don't overflow
