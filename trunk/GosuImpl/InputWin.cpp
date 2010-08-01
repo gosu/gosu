@@ -402,9 +402,9 @@ wchar_t Gosu::Input::idToChar(Gosu::Button btn)
 bool Gosu::Input::down(Button btn) const
 {
 	// The invalid button is never pressed (but can be passed to this function).
-	if (btn == noButton)
+	if (btn == noButton || btn.id() >= numButtons)
 		return false;
-
+    
     return buttons.at(btn.id());
 }
 
