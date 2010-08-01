@@ -129,7 +129,7 @@ namespace {
         Button(CFMutableDictionaryRef dict)
         {
             cookie = (IOHIDElementCookie)getDictSInt32(dict, CFSTR(kIOHIDElementCookieKey),
-                "element cookie");
+                "get an element cookie");
         }
     };
 
@@ -278,8 +278,15 @@ namespace {
             
             Device newDevice;
             newDevice.interface = getDeviceInterface(object);
-            newDevice.name = getDictString(properties, CFSTR(kIOHIDProductKey),
-                "a product name");
+            try
+            {
+                newDevice.name = getDictString(properties, CFSTR(kIOHIDProductKey),
+                    "get a product name");
+            }
+            catch (const runtime_error&)
+            {
+                newDevice.name = "unnamed device";
+            }
             addElementCollection(newDevice, properties);
             devices.push_back(newDevice);
         }
