@@ -1,4 +1,5 @@
 #include <Gosu/Graphics.hpp>
+#include <GosuImpl/Orientation.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/DrawOp.hpp>
 #include <GosuImpl/Graphics/Texture.hpp>
@@ -16,8 +17,13 @@
 #include <algorithm>
 #include <limits>
 
+#ifdef GOSU_IS_IPHONE
+#import <UIKit/UIKit.h>
+#endif
+
 struct Gosu::Graphics::Impl
 {
+    unsigned virtWidth, virtHeight;
     unsigned physWidth, physHeight;
     bool fullscreen;
     DrawOpQueueStack queues;
@@ -29,6 +35,42 @@ struct Gosu::Graphics::Impl
 #if 0
     boost::mutex texMutex;
 #endif
+
+#ifdef GOSU_IS_IPHONE
+    Transform transformForOrientation(Orientation orientation)
+    {
+        Transform result;
+        switch (orientation)
+        {
+        case orLandscapeLeft:
+            result = translate(physWidth, 0);
+            result = multiply(rotate(90), result);
+            result = multiply(scale(1.0 * physHeight / virtWidth, 1.0 * physWidth / virtHeight), result);
+            return result;
+        default:
+            result = translate(0, physHeight);
+            result = multiply(rotate(-90), result);
+            result = multiply(scale(1.0 * physHeight / virtWidth, 1.0 * physWidth / virtHeight), result);
+            return result;
+        }
+    } 
+    
+    Orientation orientation;
+    
+    Impl()
+    : orientation(currentOrientation())
+    {
+    }
+    
+    void updateBaseTransform()
+    {
+        if (orientation != currentOrientation())
+        {
+            orientation = currentOrientation();
+            currentTransforms.front() = transformForOrientation(orientation);
+        }
+    }
+#endif
 };
 
 Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscreen)
@@ -36,6 +78,11 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
 {
     pimpl->physWidth  = physWidth;
     pimpl->physHeight = physHeight;
+    pimpl->virtWidth  = physWidth;
+    pimpl->virtHeight = physHeight;
+    #ifdef GOSU_IS_IPHONE
+    std::swap(pimpl->virtWidth, pimpl->virtHeight);
+    #endif
     pimpl->fullscreen = fullscreen;
 
     glMatrixMode(GL_PROJECTION);
@@ -55,16 +102,9 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     // Create default draw-op queue.
     pimpl->queues.resize(1);
     
-    Transform baseTransform = scale(1);
-    #ifdef GOSU_IS_IPHONE
-    baseTransform = translate(physWidth, 0);
-    baseTransform = multiply(rotate(90), baseTransform);
-    baseTransform = multiply(scale(1.0 * physHeight / physWidth, 1.0 * physWidth / physHeight), baseTransform);
-    #endif
-    
     // Push one identity matrix as the default transform.
-    pimpl->currentTransforms.push_back(baseTransform);
-    pimpl->absoluteTransforms.push_back(baseTransform);
+    pimpl->currentTransforms.push_back(scale(1));
+    pimpl->absoluteTransforms.push_back(scale(1));
 }
 
 Gosu::Graphics::~Graphics()
@@ -73,26 +113,14 @@ Gosu::Graphics::~Graphics()
 
 unsigned Gosu::Graphics::width() const
 {
-    double size[2] = { pimpl->physWidth, pimpl->physHeight };
-    // TODO: should be the other way around? Matrix inversion?
-    //applyTransform(pimpl->absoluteTransforms.front(), size[0], size[1]);
-    #ifdef GOSU_IS_IPHONE
-    return size[1];
-    #else
+    double size[2] = { pimpl->virtWidth, pimpl->virtHeight };
     return size[0];
-    #endif
 }
 
 unsigned Gosu::Graphics::height() const
 {
-    double size[2] = { pimpl->physWidth, pimpl->physHeight };
-    // TODO: should be the other way around? Matrix inversion?
-    //applyTransform(pimpl->absoluteTransforms.front(), size[0], size[1]);
-    #ifdef GOSU_IS_IPHONE
-    return size[0];
-    #else
+    double size[2] = { pimpl->virtWidth, pimpl->virtHeight };
     return size[1];
-    #endif
 }
 
 bool Gosu::Graphics::fullscreen() const
@@ -105,17 +133,15 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
     if (virtualWidth == 0 || virtualHeight == 0)
         throw std::invalid_argument("Invalid virtual resolution.");
     
-    Transform baseTransform;
+    pimpl->virtWidth = virtualWidth, pimpl->virtHeight = virtualHeight;
     #ifdef GOSU_IS_IPHONE
-    baseTransform = translate(pimpl->physWidth, 0);
-    baseTransform = multiply(rotate(90), baseTransform);
-    baseTransform = multiply(scale(1.0 * pimpl->physHeight / virtualWidth, 1.0 * pimpl->physWidth / virtualHeight), baseTransform);
+    pimpl->orientation = static_cast<Gosu::Orientation>(-1);
     #else
+    Transform baseTransform;
     baseTransform = scale(1.0 / virtualWidth  * pimpl->physWidth,
                           1.0 / virtualHeight * pimpl->physHeight);
-    #endif
-
     pimpl->currentTransforms.front() = pimpl->absoluteTransforms.front() = baseTransform;
+    #endif
 }
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
@@ -127,6 +153,9 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
     pimpl->queues.front().clear();
     
     pimpl->currentTransforms.resize(1);
+    #ifdef GOSU_IS_IPHONE
+    pimpl->updateBaseTransform();
+    #endif
     pimpl->absoluteTransforms = pimpl->currentTransforms;
     
     glClearColor(clearWithColor.red()/255.0,
@@ -162,8 +191,7 @@ void Gosu::Graphics::beginGL()
 #ifdef GOSU_IS_IPHONE
     throw std::logic_error("Custom OpenGL is unsupported on the iPhone");
 #else
-    pimpl->queues.at(0).performDrawOps();
-    pimpl->queues.at(0).clear();
+    flush();
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glDisable(GL_BLEND);
 #endif

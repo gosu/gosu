@@ -34,7 +34,7 @@ class Gosu::Audio {};
 struct Gosu::Window::Impl {
     ObjRef<NSAutoreleasePool> pool;
     ObjRef<UIWindow> window;
-    ObjRef<GosuView> view;
+    ObjRef<GosuViewController> controller;
     boost::scoped_ptr<Graphics> graphics;
     boost::scoped_ptr<Audio> audio;
     boost::scoped_ptr<Input> input;
@@ -55,7 +55,6 @@ namespace
 
 @implementation GosuAppDelegate
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
-    [[UIApplication sharedApplication] setStatusBarHidden:YES animated:NO];
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     [UIApplication sharedApplication].statusBarOrientation = UIInterfaceOrientationLandscapeRight;
     
@@ -90,10 +89,9 @@ Gosu::Window::Window(unsigned width, unsigned height,
 {
     pimpl->pool.reset([[NSAutoreleasePool alloc] init]);
 	pimpl->window.reset([[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]]);
-    pimpl->view.reset([[GosuView alloc] initWithFrame:[pimpl->window.obj() bounds]]);
-    gosuView = pimpl->view.obj();
-
-	[pimpl->window.obj() addSubview: pimpl->view.obj()];
+    pimpl->controller.reset([[GosuViewController alloc] init]);
+    gosuView = (GosuView*)pimpl->controller.obj().view;
+	[pimpl->window.obj() addSubview: gosuView];
     
     pimpl->graphics.reset(new Graphics(screenWidth(), screenHeight(), false));
     pimpl->graphics->setResolution(screenHeight(), screenWidth());
@@ -149,10 +147,9 @@ Gosu::Input& Gosu::Window::input() {
 
 void Gosu::Window::show()
 {
-    throw std::logic_error("Gosu::Window::show not available on iPhone");
 }
 
 void Gosu::Window::close()
 {
-    throw "NYI";
+    throw std::logic_error("Cannot close windows manually on iOS");
 }

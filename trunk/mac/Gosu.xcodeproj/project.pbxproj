@@ -144,6 +144,8 @@
 		D482B1D011DFC764004C8497 /* RenderState.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D482B1CF11DFC764004C8497 /* RenderState.hpp */; };
 		D48532D310EE05D400E10154 /* gosu in Resources */ = {isa = PBXBuildFile; fileRef = D48532D110EE05D400E10154 /* gosu */; };
 		D48810BD0F7C0E3000602C04 /* BitmapBMP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD50A801B00005C7067 /* BitmapBMP.cpp */; };
+		D4897E621207FC7000DCAFD8 /* Orientation.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4897E5F1207FC6F00DCAFD8 /* Orientation.hpp */; };
+		D4897E811208039800DCAFD8 /* Orientation.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4897E601207FC7000DCAFD8 /* Orientation.mm */; };
 		D4A5A1FF0F40D2EA00FFF378 /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD40A801B00005C7067 /* Bitmap.cpp */; };
 		D4A5A2010F40D2EC00FFF378 /* BitmapColorKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD60A801B00005C7067 /* BitmapColorKey.cpp */; };
 		D4A5A2030F40D2F500FFF378 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
@@ -446,7 +448,7 @@
 		D410EAD90A801B00005C7067 /* BlockAllocator.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = BlockAllocator.hpp; sourceTree = "<group>"; };
 		D410EADA0A801B00005C7067 /* Color.cpp */ = {isa = PBXFileReference; fileEncoding = 30; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Color.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		D410EADB0A801B00005C7067 /* Font.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Font.cpp; sourceTree = "<group>"; };
-		D410EADC0A801B00005C7067 /* Graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Graphics.cpp; sourceTree = "<group>"; };
+		D410EADC0A801B00005C7067 /* Graphics.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 30; path = Graphics.cpp; sourceTree = "<group>"; };
 		D410EADE0A801B00005C7067 /* Image.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Image.cpp; sourceTree = "<group>"; };
 		D410EADF0A801B00005C7067 /* LargeImageData.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = LargeImageData.cpp; sourceTree = "<group>"; };
 		D410EAE00A801B00005C7067 /* LargeImageData.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = LargeImageData.hpp; sourceTree = "<group>"; };
@@ -487,6 +489,8 @@
 		D47BD32A0BD78F7200ACF014 /* RubyGosu.swg */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = RubyGosu.swg; path = ../GosuImpl/RubyGosu.swg; sourceTree = SOURCE_ROOT; };
 		D482B1CF11DFC764004C8497 /* RenderState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RenderState.hpp; sourceTree = "<group>"; };
 		D48532D110EE05D400E10154 /* gosu */ = {isa = PBXFileReference; lastKnownFileType = folder; name = gosu; path = ../lib/gosu; sourceTree = SOURCE_ROOT; };
+		D4897E5F1207FC6F00DCAFD8 /* Orientation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Orientation.hpp; path = ../GosuImpl/Orientation.hpp; sourceTree = SOURCE_ROOT; };
+		D4897E601207FC7000DCAFD8 /* Orientation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Orientation.mm; path = ../GosuImpl/Orientation.mm; sourceTree = SOURCE_ROOT; };
 		D499E6380D06B51300BA6DEC /* DrawOp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DrawOp.hpp; sourceTree = "<group>"; };
 		D4A5A1F40F40D28600FFF378 /* libgosutouch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgosutouch.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4A5A2200F40D45200FFF378 /* InputTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = InputTouch.mm; path = ../GosuImpl/InputTouch.mm; sourceTree = SOURCE_ROOT; };
@@ -760,6 +764,8 @@
 				D4A5A2220F40D45200FFF378 /* UtilityTouch.mm */,
 				D410EA310A8019FA005C7067 /* WindowMac.mm */,
 				D4A5A2210F40D45200FFF378 /* WindowTouch.mm */,
+				D4897E5F1207FC6F00DCAFD8 /* Orientation.hpp */,
+				D4897E601207FC7000DCAFD8 /* Orientation.mm */,
 			);
 			name = Implementation;
 			sourceTree = "<group>";
@@ -1008,6 +1014,7 @@
 				D410E9F50A8019CD005C7067 /* Window.hpp in Headers */,
 				D482B1D011DFC764004C8497 /* RenderState.hpp in Headers */,
 				D4683F6E11E086F000FD7FBE /* DrawOpQueue.hpp in Headers */,
+				D4897E621207FC7000DCAFD8 /* Orientation.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1393,6 +1400,7 @@
 				D4F4BFD70FC4CB1A0013CE21 /* analysis.c in Sources */,
 				D4FA74D411C0071300E719EA /* Transform.cpp in Sources */,
 				D444352311E45A8B00188921 /* AccelerometerReader.mm in Sources */,
+				D4897E811208039800DCAFD8 /* Orientation.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

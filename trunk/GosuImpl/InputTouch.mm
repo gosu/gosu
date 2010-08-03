@@ -2,6 +2,7 @@
 #include <Gosu/TextInput.hpp>
 
 #import <GosuImpl/MacUtility.hpp>
+#import <GosuImpl/Orientation.hpp>
 #import <GosuImpl/Graphics/GosuView.hpp>
 #import <GosuImpl/Input/AccelerometerReader.hpp>
 
@@ -21,10 +22,19 @@ struct Gosu::Input::Impl {
     ObjRef<NSMutableSet> currentTouchesSet;
     boost::scoped_ptr<Gosu::Touches> currentTouchesVector;
     
-    Gosu::Touch translateTouch(UITouch* uiTouch)
+    Touch translateTouch(UITouch* uiTouch)
     {
         CGPoint point = [uiTouch locationInView: view];
-        Gosu::Touch touch = { uiTouch, point.y, [view bounds].size.width - point.x };
+        Touch touch = { uiTouch, point.y, point.x };
+        switch (currentOrientation())
+        {
+        case orLandscapeLeft:
+            touch.y = [view bounds].size.width - touch.y;
+            break;
+        default:
+            touch.x = [view bounds].size.height - touch.x;
+            break;
+        }
         touch.x *= factorX, touch.y *= factorY;
         return touch;
     }

@@ -7,6 +7,17 @@
 
 Gosu::Window& windowInstance();
 
+// A controller to allow for autorotation.
+@implementation GosuViewController
+- (void)loadView {
+    self.view = [[GosuView alloc] init];
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return NO;//UIInterfaceOrientationIsLandscape(interfaceOrientation);
+}
+@end
+
 // A class extension to declare private methods
 @interface GosuView ()
 
@@ -26,8 +37,8 @@ Gosu::Window& windowInstance();
     return [CAEAGLLayer class];
 }
 
-- (id)initWithFrame:(CGRect)frame {
-    if ((self = [super initWithFrame:frame])) {
+- (id)init {
+    if ((self = [super initWithFrame: [[UIScreen mainScreen] bounds]])) {
         CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
         
         eaglLayer.opaque = YES;
@@ -62,14 +73,12 @@ Gosu::Window& windowInstance();
     [context presentRenderbuffer:GL_RENDERBUFFER_OES];
 }
 
-
 - (void)layoutSubviews {
     [EAGLContext setCurrentContext:context];
     [self destroyFramebuffer];
     [self createFramebuffer];
     [self drawView];
 }
-
 
 - (BOOL)createFramebuffer {
     glGenFramebuffersOES(1, &viewFramebuffer);
@@ -123,11 +132,11 @@ Gosu::Window& windowInstance();
     [self touchesEnded: touches withEvent: event];
 }
 
-- (bool)isMultipleTouchEnabled {
+- (BOOL)isMultipleTouchEnabled {
     return YES;
 }
 
-- (bool)isExclusiveTouch {
+- (BOOL)isExclusiveTouch {
     return YES;
 }
 

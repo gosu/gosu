@@ -4,6 +4,11 @@
 #import <OpenGLES/ES1/glext.h>
 #import <Gosu/Window.hpp>
 
+// UIViewController subclass that creates a GosuView and helps it manage rotation.
+
+@interface GosuViewController : UIViewController
+@end
+
 // UIView subclass that contains a CAEAGLLayer.
 
 @interface GosuView : UIView {
@@ -22,13 +27,5 @@
     Gosu::Touches* currentTouchesVector;
 }
 
-- (const Gosu::Touches&)currentTouches;
-
 - (void)drawView;
-
-// This method is necessary because if pressing a LOT of touches, some
-// of them may end up not being sent to touchesEnded(), which is confusing
-// to application programmers.
-- (void)removeDeadTouches;
-
 @end

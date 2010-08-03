@@ -16,7 +16,7 @@ SDK_10_6 = '/Developer/SDKs/MacOSX10.6.sdk'
 CFLAGS           = {
   :ppc    => "'-isysroot #{SDK_10_4} -mmacosx-version-min=10.4 -I#{SDK_10_4}/usr/lib/gcc/powerpc-apple-darwin10/4.0.1/include -I#{SDK_10_4}/usr/include/c++/4.0.0 -I#{SDK_10_4}/usr/include/c++/4.0.0/powerpc-apple-darwin8'",
   :i386   => "'-isysroot #{SDK_10_4} -mmacosx-version-min=10.4 -I#{SDK_10_4}/usr/lib/gcc/i686-apple-darwin10/4.0.1/include -I#{SDK_10_4}/usr/include/c++/4.0.0 -I#{SDK_10_4}/usr/include/c++/4.0.0/i686-apple-darwin8'",
-  :x86_64 => "'-isysroot #{SDK_10_6} -mmacosx-version-min=10.6'",
+  :x86_64 => "'-isysroot #{SDK_10_6} -mmacosx-version-min=10.6 -Denviron=\\(\\*_NSGetEnviron\\(\\)\\)'",
 }
 BUILD            = {
   :ppc    => %(powerpc-apple-darwin8.0),

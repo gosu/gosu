@@ -32,7 +32,7 @@ namespace :mac do
     sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION}, compiled for Mac OS X (C++)\"" +
        " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-OSX\" #{MAC_ARCHIVE_FILENAME}"
     sh "./googlecode_upload.py --summary=\"Self-contained template app, containing Gosu #{GOSU_VERSION} and Ruby 1.9\"" +
-       " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-OSX\" #{MAC_WRAPPER_FILENAME}"
+       " --project=gosu --user=julianraschke --labels=\"Type-Archive,OpSys-OSX\" #{MAC_WRAPPER_FILENAME}"
   end
 
   task :gem => [:ruby, :version]
