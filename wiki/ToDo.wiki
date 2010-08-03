@@ -7,10 +7,12 @@ This list of tasks is exported automatically from my OmniFocus projects.
 (Last update: 2010-08-03)
 
 == Gosu 0.7.x ==
-  * Fix RubyGosu Wrapper.app and re-upload for gamepad bug
+  * Fix music stopping/playing with AVAudioToolkit
   * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously
+  * Fix RubyGosu Wrapper.app and re-upload for gamepad bug
   * See what OolongEngine does better than GosuTouch (I guess: timing, audio?)
   * Add m4a to audio_formats.rb
+  * See if xiph Tremor makes sense for Gosu Touch
   * Make <c=> more somehow efficient in Font::drawRel
   * Add <s=> to text formatting
   * Make fuchsia work in BMPs in GosuTouch
