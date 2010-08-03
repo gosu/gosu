@@ -498,14 +498,15 @@ public:
 
 Gosu::Song::Song(const std::wstring& filename)
 {
-    CONSTRUCTOR_COMMON;
-    
 #ifdef GOSU_IS_IPHONE
     if (boost::iends_with(filename, L".mp3") || boost::iends_with(filename, L".aac") || boost::iends_with(filename, L".m4a"))
         data.reset(new ModuleData(filename));
     else
 #endif
+    {
+        CONSTRUCTOR_COMMON;
         data.reset(new StreamData(filename));
+    }
 }
 
 Gosu::Song::Song(Type type, Reader reader)

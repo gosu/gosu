@@ -47,10 +47,12 @@ Gosu::Window& windowInstance();
 }
 @end
 
-// Ugly patching to bridge the C++ and ObjC sides.
 namespace
 {
+    // Ugly patching to bridge the C++ and ObjC sides.
     GosuView* gosuView = nil;
+    bool pausedSong = false;
+    bool paused = false;
 }
 
 @implementation GosuAppDelegate
@@ -68,15 +70,27 @@ namespace
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-	// TODO: stop updating; periodically draw
+	if (Gosu::Song::currentSong())
+    {
+        Gosu::Song::currentSong()->pause();
+        pausedSong = true;
+    }
+    paused = true;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-	// TODO: start updating again
+	if (pausedSong)
+    {
+        if (Gosu::Song::currentSong())
+            Gosu::Song::currentSong()->play();
+        pausedSong = false;
+    }
+    paused = false;
 }
 
 - (void)doTick:(NSTimer*)timer {
-    windowInstance().update();
+    if (!paused)
+        windowInstance().update();
     [gosuView drawView];
     Gosu::Song::update();
     windowInstance().input().update();

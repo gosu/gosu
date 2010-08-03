@@ -1,5 +1,4 @@
 #include <Gosu/Graphics.hpp>
-#include <GosuImpl/Orientation.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/DrawOp.hpp>
 #include <GosuImpl/Graphics/Texture.hpp>
@@ -19,6 +18,7 @@
 
 #ifdef GOSU_IS_IPHONE
 #import <UIKit/UIKit.h>
+#include <GosuImpl/Orientation.hpp>
 #endif
 
 struct Gosu::Graphics::Impl
