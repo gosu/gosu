@@ -4,14 +4,14 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-08-03)
+(Last update: 2010-08-05)
 
 == Gosu 0.7.x ==
-  * Fix music stopping/playing with AVAudioToolkit
   * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously
   * Fix RubyGosu Wrapper.app and re-upload for gamepad bug
   * See what OolongEngine does better than GosuTouch (I guess: timing, audio?)
   * Add m4a to audio_formats.rb
+  * Fix updateMousePos when hitting ctrl+alt+del in Vista/Win7
   * See if xiph Tremor makes sense for Gosu Touch
   * Make <c=> more somehow efficient in Font::drawRel
   * Add <s=> to text formatting
@@ -19,6 +19,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Fix PNG alpha in Inv.png
   * Fix 8bitAlpha.png supplied by shawn42
   * Download Visual Studio 2008 again
+  * Test Gosu&ocra with FMOD.dll/audiere.dll/whatever.dll
   * See if I should fork out RubyGosu.app into Ruby App project
   * Gosu: try integer truncing of drawing positions
   * Remove setResolution and use transforms instead
