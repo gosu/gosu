@@ -76,6 +76,7 @@ namespace
         pausedSong = true;
     }
     paused = true;
+    windowInstance().loseFocus();
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {

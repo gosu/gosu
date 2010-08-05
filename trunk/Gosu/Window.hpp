@@ -31,11 +31,6 @@ namespace Gosu
         struct Impl;
         boost::scoped_ptr<Impl> pimpl;
 	
-	protected:
-		//! If this function returns true, the system arrow cursor is drawn while
-		//! over the window.
-		virtual bool needsCursor() const { return false; }
-
     public:
         //! Constructs a Window.
         //! \param updateInterval Interval in milliseconds between two calls
@@ -66,6 +61,15 @@ namespace Gosu
         //! redraws for one reason or another.
         //! By default, the window is redrawn all the time.
         virtual bool needsRedraw() const { return true; }
+
+		//! If this function returns true, the system arrow cursor is drawn while
+		//! over the window.
+		virtual bool needsCursor() const { return false; }
+        
+        //! This function is called when the window loses focus on some platforms.
+        //! Most importantly, it is called on the iPhone or iPad when the user
+        //! locks the screen.
+        virtual void loseFocus() {}
         
         //! Called before update when the user pressed a button while the
         //! window had the focus.
