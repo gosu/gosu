@@ -119,8 +119,9 @@ namespace Gosu
                 unsigned words = end - begin;
                 
                 unsigned totalSpacing = 0;
-                for (Words::const_iterator i = begin; i != end - 1; ++i)
-                    totalSpacing += i->spaceWidth;
+                if (begin > end)
+                    for (Words::const_iterator i = begin; i != end - 1; ++i)
+                        totalSpacing += i->spaceWidth;
 
                 // Where does the line start? (y)
                 unsigned top = (usedLines - 1) * (fontHeight + lineSpacing);

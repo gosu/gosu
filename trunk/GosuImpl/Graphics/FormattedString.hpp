@@ -103,7 +103,8 @@ namespace Gosu
                     pos += 4;
                     continue;
                 }
-                if (html.substr(pos, 3) == L"<c=" &&
+                if (html.length() >= pos + 10 &&
+                    html.substr(pos, 3) == L"<c=" &&
                     html.at(pos + 9) == L'>')
                 {
                     using namespace std;
@@ -113,7 +114,8 @@ namespace Gosu
                     pos += 10;
                     continue;
                 }
-                if (html.substr(pos, 3) == L"<c=" &&
+                if (html.length() >= pos + 12 &&
+                    html.substr(pos, 3) == L"<c=" &&
                     html.at(pos + 11) == L'>')
                 {
                     using namespace std;
