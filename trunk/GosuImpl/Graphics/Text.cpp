@@ -119,7 +119,7 @@ namespace Gosu
                 unsigned words = end - begin;
                 
                 unsigned totalSpacing = 0;
-                if (begin > end)
+                if (begin < end)
                     for (Words::const_iterator i = begin; i != end - 1; ++i)
                         totalSpacing += i->spaceWidth;
 
