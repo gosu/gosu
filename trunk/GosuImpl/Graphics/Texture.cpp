@@ -155,18 +155,10 @@ Gosu::Bitmap Gosu::Texture::toBitmap(unsigned x, unsigned y, unsigned width, uns
 #ifdef GOSU_IS_IPHONE
     throw std::logic_error("Texture::toBitmap not supported on iOS");
 #else
-#if defined(__BIG_ENDIAN__)
-    unsigned format = GL_RGBA;
-#elif defined(GOSU_IS_IPHONE)
-    unsigned format = GL_RGBA;
-#else
-    unsigned format = GL_BGRA;
-#endif
-    
     Gosu::Bitmap fullTexture;
     fullTexture.resize(size(), size());
     glBindTexture(GL_TEXTURE_2D, name);
-    glGetTexImage(GL_TEXTURE_2D, 0, format, GL_UNSIGNED_BYTE, fullTexture.data());
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_BYTE, fullTexture.data());
     Gosu::Bitmap bitmap;
     bitmap.resize(width, height);
     bitmap.insert(fullTexture, -int(x), -int(y));

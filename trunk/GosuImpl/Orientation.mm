@@ -22,6 +22,7 @@ Gosu::Orientation Gosu::currentOrientation()
     if (now - changedAtTime >= CHANGE_AFTER_MS)
     {
         orientation = orientationToGosu(newOrientation);
+        [UIApplication sharedApplication].statusBarOrientation = (UIInterfaceOrientation)newOrientation;
         changedAtTime = now;
     }
     if (!UIDeviceOrientationIsLandscape(newOrientation) || orientationToGosu(newOrientation) == orientation)
