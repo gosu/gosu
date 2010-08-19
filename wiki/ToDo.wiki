@@ -4,10 +4,11 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-08-11)
+(Last update: 2010-08-19)
 
 == Gosu 0.7.x ==
   * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously
+  * Ensure that Gosu::createText always widthx1 pixels for empty strings
   * Fix RubyGosu Wrapper.app and re-upload for gamepad bug
   * See what OolongEngine does better than GosuTouch (I guess: timing, audio?)
   * Add m4a to audio_formats.rb
