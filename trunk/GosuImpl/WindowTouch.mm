@@ -25,7 +25,7 @@ namespace Gosu {
 }
 
 int main(int argc, char *argv[]) {
-    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    [[NSAutoreleasePool alloc] init];
 	return UIApplicationMain(argc, argv, nil, @"GosuAppDelegate");
 }
 
@@ -90,8 +90,6 @@ namespace
 }
 
 - (void)doTick:(NSTimer*)timer {
-    Gosu::ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]);
-    
     if (!paused)
         windowInstance().update();
     [gosuView drawView];
