@@ -32,6 +32,13 @@ class Gosu::DrawOpQueue
             int bottom = std::min<int>(result.y + result.height, rect.y + rect.height);
             result.x = std::max<int>(result.x, rect.x);
             result.y = std::max<int>(result.y, rect.y);
+            
+            if (result.x >= right or result.y >= bottom)
+            {
+                effectiveRect.reset();
+                return;
+            }
+            
             result.width = right - result.x;
             result.height = bottom - result.y;
         }
@@ -66,6 +73,10 @@ public:
             op.clipWidth = rect.width;
             op.clipHeight = rect.height;
         }
+        else if (!clipRectStack.empty())
+            // When we have no effect rect but the stack is not empty, we have clipped
+            // the whole world away and don't need to render things.
+            return;
         
         op.z = z;
         set.insert(op);
