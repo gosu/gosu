@@ -35,6 +35,10 @@ class Gosu::DrawOpQueue
             result.width = right - result.x;
             result.height = bottom - result.y;
         }
+        
+        int fac = clipRectBaseFactor();
+        result.x *= fac, result.y *= fac, result.width *= fac, result.height *= fac;
+        
         effectiveRect = result;
     }
 

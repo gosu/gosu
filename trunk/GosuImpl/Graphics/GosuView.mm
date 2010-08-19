@@ -3,9 +3,23 @@
 #import <UIKit/UIKit.h>
 
 #import <Gosu/Graphics.hpp>
+#import <GosuImpl/Graphics/Common.hpp>
 #import <GosuImpl/Graphics/GosuView.hpp>
 
 Gosu::Window& windowInstance();
+
+int Gosu::clipRectBaseFactor()
+{
+    static int result = 0;
+    if (result == 0)
+    {
+        if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
+            result = [UIScreen mainScreen].scale;
+        else
+            result = 1;
+    }
+    return result;
+}
 
 // A controller to allow for autorotation.
 @implementation GosuViewController
@@ -80,6 +94,8 @@ Gosu::Window& windowInstance();
 - (void)layoutSubviews {
     [EAGLContext setCurrentContext:context];
     [self destroyFramebuffer];
+    if ([self respondsToSelector:@selector(contentScaleFactor)])
+        self.contentScaleFactor = Gosu::clipRectBaseFactor();
     [self createFramebuffer];
     [self drawView];
 }

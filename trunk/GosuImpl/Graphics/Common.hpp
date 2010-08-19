@@ -90,6 +90,12 @@ namespace Gosu
             }
     }
     
+    #ifdef GOSU_IS_IPHONE
+    int clipRectBaseFactor();
+    #else
+    inline int clipRectBaseFactor() { return 1; }
+    #endif
+    
     bool isEntity(const std::wstring& name);
     const Bitmap& entityBitmap(const std::wstring& name);
 }
