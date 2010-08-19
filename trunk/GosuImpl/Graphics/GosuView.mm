@@ -16,6 +16,10 @@ Gosu::Window& windowInstance();
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return NO;//UIInterfaceOrientationIsLandscape(interfaceOrientation);
 }
+
+- (void)didReceiveMemoryWarning {
+    windowInstance().releaseMemory();
+}
 @end
 
 // A class extension to declare private methods
@@ -111,7 +115,7 @@ Gosu::Window& windowInstance();
     delete currentTouchesVector;
     [currentTouches release];
     [EAGLContext setCurrentContext:nil];
-    [context release];  
+    [context release];
     [super dealloc];
 }
 

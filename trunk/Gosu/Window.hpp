@@ -71,6 +71,10 @@ namespace Gosu
         //! locks the screen.
         virtual void loseFocus() {}
         
+        //! This function is called when the operating system's memory is low.
+        //! So far, it is only called in iOS applications.
+        virtual void releaseMemory() {}
+        
         //! Called before update when the user pressed a button while the
         //! window had the focus.
         virtual void buttonDown(Gosu::Button) {}
