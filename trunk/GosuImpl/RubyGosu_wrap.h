@@ -29,14 +29,12 @@ class SwigDirector_Window : public Gosu::Window, public Swig::Director {
 
 public:
     SwigDirector_Window(VALUE self, unsigned int width, unsigned int height, bool fullscreen, double updateInterval = 16.666666);
-    virtual bool needsCursor() const;
-    virtual bool needsCursorSwigPublic() const {
-      return Gosu::Window::needsCursor();
-    }
     virtual ~SwigDirector_Window();
     virtual void update();
     virtual void draw();
     virtual bool needsRedraw() const;
+    virtual bool needsCursor() const;
+    virtual void loseFocus();
     virtual void buttonDown(Gosu::Button arg0);
     virtual void buttonUp(Gosu::Button arg0);
 };
