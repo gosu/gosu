@@ -25,14 +25,13 @@ namespace Gosu {
 }
 
 int main(int argc, char *argv[]) {
-    Gosu::ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]);
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 	return UIApplicationMain(argc, argv, nil, @"GosuAppDelegate");
 }
 
 class Gosu::Audio {};
 
 struct Gosu::Window::Impl {
-    ObjRef<NSAutoreleasePool> pool;
     ObjRef<UIWindow> window;
     ObjRef<GosuViewController> controller;
     boost::scoped_ptr<Graphics> graphics;
@@ -57,8 +56,9 @@ namespace
 
 @implementation GosuAppDelegate
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
-    [UIApplication sharedApplication].statusBarOrientation = UIInterfaceOrientationLandscapeRight;
+    [UIDevice.currentDevice beginGeneratingDeviceOrientationNotifications];
+    UIApplication.sharedApplication.idleTimerDisabled = YES;
+    UIApplication.sharedApplication.statusBarOrientation = UIInterfaceOrientationLandscapeRight;
     
     windowInstance();
     
@@ -90,6 +90,8 @@ namespace
 }
 
 - (void)doTick:(NSTimer*)timer {
+    Gosu::ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]);
+    
     if (!paused)
         windowInstance().update();
     [gosuView drawView];
@@ -102,7 +104,6 @@ Gosu::Window::Window(unsigned width, unsigned height,
     bool fullscreen, double updateInterval)
 : pimpl(new Impl)
 {
-    pimpl->pool.reset([[NSAutoreleasePool alloc] init]);
 	pimpl->window.reset([[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]]);
     pimpl->controller.reset([[GosuViewController alloc] init]);
     gosuView = (GosuView*)pimpl->controller.obj().view;
