@@ -33,7 +33,7 @@ class Gosu::DrawOpQueue
             result.x = std::max<int>(result.x, rect.x);
             result.y = std::max<int>(result.y, rect.y);
             
-            if (result.x >= right or result.y >= bottom)
+            if (result.x >= right || result.y >= bottom)
             {
                 effectiveRect.reset();
                 return;
