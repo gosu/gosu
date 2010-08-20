@@ -27,7 +27,7 @@ Gosu::Orientation Gosu::currentOrientation()
     {
         orientation = orientationToGosu(newOrientation);
         [UIApplication sharedApplication].statusBarOrientation =
-            (newOrientation == UIDeviceOrientationLandscapeLeft ? UIInterfaceOrientationLandscapeLeft : UIInterfaceOrientationLandscapeRight);
+            (newOrientation == UIDeviceOrientationLandscapeLeft ? UIInterfaceOrientationLandscapeRight : UIInterfaceOrientationLandscapeLeft);
     }
     
     return orientation;
