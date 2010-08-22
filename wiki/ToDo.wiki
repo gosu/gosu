@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-08-21)
+(Last update: 2010-08-22)
 
 == Gosu 0.7.x ==
   * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously
@@ -19,7 +19,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make fuchsia work in BMPs in GosuTouch
   * Fix PNG alpha in Inv.png
   * Fix 8bitAlpha.png supplied by shawn42
-  * Download Visual Studio 2008 again
   * Test Gosu&ocra with FMOD.dll/audiere.dll/whatever.dll
   * See if I should fork out RubyGosu.app into Ruby App project
   * Gosu: try integer truncing of drawing positions
@@ -174,7 +173,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Update TextInput.cpp to include setCaretPos
   * Make sure that WindowMainLoop states that the whole order is just about perceived performance
   * Document how Font roughly works (allow devs to cache chars by text_width'ing the alphabet)
-  * Fix rdoc image links
 == Gosu 0.8.x (preliminary) ==
   * Ask board: 0x00 alpha == opaque? Switch worth it? Esp. what to do with Color::WHITE
   * Let Image() lazy-load its file using Gosu::File (which keeps the file alive until it is really needed), add Gosu::loading_progress and Gosu::load_more for easy loading bars
