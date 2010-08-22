@@ -646,7 +646,7 @@ double Gosu::Input::mouseY() const
 
 void Gosu::Input::setMousePosition(double x, double y)
 {
-    NSPoint mousePos = NSMakePoint(x, y);
+    NSPoint mousePos = NSMakePoint(x / pimpl->mouseFactorX, y / pimpl->mouseFactorY);
     if (pimpl->window)
     {
         mousePos.y = [[pimpl->window contentView] frame].size.height - mousePos.y;
