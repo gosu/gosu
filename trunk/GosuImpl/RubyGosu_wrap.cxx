@@ -2833,6 +2833,13 @@ void SwigDirector_Window::loseFocus() {
 }
 
 
+void SwigDirector_Window::releaseMemory() {
+  VALUE result;
+  
+  result = rb_funcall(swig_get_self(), rb_intern("release_memory"), 0, NULL);
+}
+
+
 void SwigDirector_Window::buttonDown(Gosu::Button arg0) {
   VALUE obj0 = Qnil ;
   VALUE result;
@@ -8400,6 +8407,46 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Window_release_memory(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  Swig::Director *director = 0;
+  bool upcall = false;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","releaseMemory", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  director = dynamic_cast<Swig::Director *>(arg1);
+  upcall = (director && (director->swig_get_self() == self));
+  try {
+    {
+      try {
+        if (upcall) {
+          (arg1)->Gosu::Window::releaseMemory();
+        } else {
+          (arg1)->releaseMemory();
+        }
+      } catch(const std::runtime_error& e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
+    }
+  } catch (Swig::DirectorException& e) {
+    rb_exc_raise(e.getError());
+    SWIG_fail;
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Window_button_down(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   Gosu::Button arg2 ;
@@ -10547,6 +10594,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "needs_redraw?", VALUEFUNC(_wrap_Window_needs_redrawq___), -1);
   rb_define_method(SwigClassWindow.klass, "needs_cursor?", VALUEFUNC(_wrap_Window_needs_cursorq___), -1);
   rb_define_method(SwigClassWindow.klass, "lose_focus", VALUEFUNC(_wrap_Window_lose_focus), -1);
+  rb_define_method(SwigClassWindow.klass, "release_memory", VALUEFUNC(_wrap_Window_release_memory), -1);
   rb_define_method(SwigClassWindow.klass, "button_down", VALUEFUNC(_wrap_Window_button_down), -1);
   rb_define_method(SwigClassWindow.klass, "button_up", VALUEFUNC(_wrap_Window_button_up), -1);
   rb_define_method(SwigClassWindow.klass, "draw_line", VALUEFUNC(_wrap_Window_draw_line), -1);

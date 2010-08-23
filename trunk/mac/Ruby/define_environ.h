@@ -1,0 +1,1 @@
+#define environ (*_NSGetEnviron())
