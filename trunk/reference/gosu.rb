@@ -165,7 +165,7 @@ module Gosu
   class Font
     attr_reader :name, :height
     
-    # font_name:: Name of a system font, or a filename to a TTF file (must contain '/', does not work on Linux).
+    # font_name:: Name of a system font, or a filename to a TTF file (must contain '/').
     # height:: Height of the font, in pixels.
     def initialize(window, font_name, height); end
     
@@ -225,7 +225,7 @@ module Gosu
     #
     # The text is always rendered in white. If you want to draw it in a
     # different color, just modulate it by the target color.
-    # font_name:: Name of a system font, or a filename to a TTF file (must contain '/', does not work on Linux).
+    # font_name:: Name of a system font, or a filename to a TTF file (must contain '/').
     # font_height:: Height of the font in pixels.
     def self.from_text(window, text, font_name, font_height); end
 
@@ -235,7 +235,7 @@ module Gosu
     #
     # The text is always rendered in white. If you want to draw it in a
     # different color, just modulate it by the target color.
-    # font_name:: Name of a system font, or a filename to a TTF file (must contain '/', does not work on Linux).
+    # font_name:: Name of a system font, or a filename to a TTF file (must contain '/').
     # font_height:: Height of the font in pixels.
     # line_spacing:: Spacing between two lines of text in pixels.
     # max_width:: Width of the bitmap that will be returned. Text will be split into multiple lines to avoid drawing over the right border. When a single word is too long, it will be truncated.
@@ -397,11 +397,17 @@ module Gosu
     #
     # By default, the window is redrawn all the time (i.e. Window#needs_redraw?
     # always returns true.)
+    #
+    # NOTE: Because of the way SWIG translates this between C++ and Ruby, you
+    # must return either true or false, not e.g. nil.
     def needs_redraw?; end
     
     # Can be overriden to show the system cursor when necessary, e.g. in level
     # editors or other situations where introducing a custom cursor is not
     # desired.
+    #
+    # NOTE: Because of the way SWIG translates this between C++ and Ruby, you
+    # must return either true or false, not e.g. nil.
     def needs_cursor?; end
     
     # DEPRECATED.
