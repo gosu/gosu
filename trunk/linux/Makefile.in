@@ -6,7 +6,7 @@ BASE_OBJS = Math.o Utility.o IO.o FileUnix.o TimingUnix.o WindowX.o	\
 	    Graphics/Bitmap.o InputX.o TextInputX.o			\
 	    Graphics/BitmapUtils.o Graphics/Color.o			\
 	    Graphics/TexChunk.o Graphics/Graphics.o Graphics/Image.o	\
-	    Graphics/RotFlip.o Graphics/BlockAllocator.o		\
+	    Graphics/BlockAllocator.o		\
 	    Graphics/Texture.o Graphics/LargeImageData.o		\
 	    Graphics/BitmapPNG.o Graphics/Font.o Graphics/BitmapBMP.o	\
 	    Graphics/TextUnix.o Graphics/Text.o	Graphics/Transform.o		\
