@@ -21,8 +21,8 @@
   * 2010-06-26: All: Added Window#needs_cursor?/Window::needsCursor() to be able to show the cursor when in editor situations
 
 =0.7.22=
-  * 2010-05-17: All: Fixed CJK support throughout Gosu
-  * 2010-05-17: All: Transforms are now applied in reverse order (the one that makes sense)
+  * 2010-06-17: All: Fixed CJK support throughout Gosu
+  * 2010-06-17: All: Transforms are now applied in reverse order (the one that makes sense)
 
 =0.7.21=
   * 2010-05-13: Ruby: Updated CptnRuby to use translate() for scrolling
