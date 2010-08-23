@@ -7,17 +7,13 @@ This list of tasks is exported automatically from my OmniFocus projects.
 (Last update: 2010-08-23)
 
 == Gosu 0.7.x ==
-  * Fix updateMousePos when hitting ctrl+alt+del in Vista/Win7
   * Announce MSVS08 Switch & update docs
   * Re-compile configure.ac
-  * Update documentation via FTP
   * Let @jeedee know about progress if existing
   * See why Gosu::~Song with Ogg files sometimes causes other songs to stop
   * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously
   * Ensure that Gosu::createText always widthx1 pixels for empty strings
-  * See what OolongEngine does better than GosuTouch (I guess: timing, audio?)
   * Add m4a to audio_formats.rb
-  * See if xiph Tremor makes sense for Gosu Touch
   * Make <c=> more somehow efficient in Font::drawRel
   * Add <s=> to text formatting
   * Make fuchsia work in BMPs in GosuTouch
@@ -64,13 +60,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Create C++ app template for Xcode
     * Create iPhone app template for Xcode
     * Create .pkg wrapper to install Gosu into /Developer/Gosu
-  * iPhone-related stuff that should be finished soonish
-    * Let resolution decide orientation
-    * Integrate "fat" iPhone building from forum
-    * Clear up GOSU_IS_MAC vs. GOSU_IS_OSX
-    * Migrate WindowTouch.mm to CADisplayLink (3.1 SDK)
-    * Make sure that iPhone VA vertices are small and well-aligned
-    * Use getBytes instead of UTF8String
   * More OpenAL niceties
     * Look at protea as an FMOD replacement http://www.viremo.de/proteaAudio/
     * Try to add dynamic MikMod loading code
@@ -135,6 +124,15 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Experimentation with new drawing syntax; maybe first prototype as the last version of the 0.7.x series?
   * Deprecate Image::getData, introduce Image::data
   * Try and see if Gosu can be made to correctly release pushed buttons when the keyboard is overloaded
+== Gosu Touch ==
+  * See what OolongEngine does better than GosuTouch (I guess: timing, audio?)
+  * See if xiph Tremor makes sense for Gosu Touch
+  * Let resolution decide orientation
+  * Integrate "fat" iPhone building from forum
+  * Clear up GOSU_IS_MAC vs. GOSU_IS_OSX
+  * Migrate WindowTouch.mm to CADisplayLink (3.1 SDK)
+  * Make sure that iPhone VA vertices are small and well-aligned
+  * Use getBytes instead of UTF8String
 == Gosu CI/Usability ==
   * Document 64px minimum for reliable single-texture optimization
   * Mention Gosu's respectable age somewhere :)
@@ -174,6 +172,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make sure that WindowMainLoop states that the whole order is just about perceived performance
   * Document how Font roughly works (allow devs to cache chars by text_width'ing the alphabet)
   * Delete anything saying that TTF does not work on Linux
+  * Document that needs_* need to return boolean values
 == Gosu 0.8.x (preliminary) ==
   * Ask board: 0x00 alpha == opaque? Switch worth it? Esp. what to do with Color::WHITE
   * Let Image() lazy-load its file using Gosu::File (which keeps the file alive until it is really needed), add Gosu::loading_progress and Gosu::load_more for easy loading bars
