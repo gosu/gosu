@@ -135,7 +135,9 @@ struct Gosu::Input::Impl
 	void updateMousePos()
 	{
 		POINT pos;
-		Win::check(::GetCursorPos(&pos));
+		if (!::GetCursorPos(&pos))
+			return;
+
 		Win::check(::ScreenToClient(window, &pos));
 
 		mouseX = pos.x;
@@ -353,6 +355,7 @@ Gosu::Input::Input(HWND window)
 
     // Get into a usable default state.
 
+	pimpl->mouseX = pimpl->mouseY = 0;
     pimpl->updateMousePos();
     buttons.assign(false);
 }

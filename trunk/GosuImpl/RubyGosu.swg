@@ -126,6 +126,7 @@
 #undef write
 #undef close
 #undef read
+#undef bind
 #undef sleep
 #undef Sleep
 #undef int8_t
