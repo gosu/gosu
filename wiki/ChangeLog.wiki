@@ -1,6 +1,25 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.23=
+  * 2010-08-23: Windows: Removed inappropriate exception when mouseX/Y cannot be refreshed due to locked screen
+  * 2010-08-23: C++: Finally removed RotFlip completely. If you actually happened to use it: a replacement is available on the forum.
+  * 2010-08-22: Mac: Fixed setMousePos/mouse_x=/mouse_y= on OS X when the window has been shrunk down.
+  * 2010-08-19: C++: Added releaseMemory() callback to Gosu::Window that is mainly called on iOS when the OS is low on memory. Proposals for creative uses on other operating systems welcome.
+  * 2010-08-16: All: Fixed a channel swapping bug in Image::toBitmap/to_blob.
+  * 2010-08-13: All: Fixed a crash when formatting a paragraph of text with a word that is wider than the max paragraph width.
+  * 2010-08-12: All: Fixed an exception when partial formatting strings were rendered.
+  * 2010-08-05: C++: Added Window::loseFocus callback that is mainly called on iOS when the screen is locked.
+  * 2010-08-01: Mac: Fixed a crash where a USB device would not have a device name (product name)
+  * 2010-08-01: All: Added Window#flush/Graphics::flush() to flush the current Z queue to OpenGL and start a fresh one. All drawing operations afterwards will inevitably be *over* the previous ones.
+  * 2010-07-27: Added aroundX, aroundY parameters to Gosu::scale(sx, sy)
+  * 2010-07-07: Added accelerometerX/Y/Z() methods to Input (returning 0 on non-iPhone platforms), with thanks to PhilCK
+  * 2010-07-04: All: Made clipping operations nestable (also: faster, respects transforms etc.)
+  * 2010-07-04: C++: Deprecated zImmediate
+  * 2010-06-29: Fixed MAX_TEXTURE_SIZE, now always 512 (pessimistic value) on Linux
+  * 2010-06-28: All: Added support for negative line spacing, improved some text rendering corners
+  * 2010-06-26: All: Added Window#needs_cursor?/Window::needsCursor() to be able to show the cursor when in editor situations
+
 =0.7.22=
   * 2010-05-17: All: Fixed CJK support throughout Gosu
   * 2010-05-17: All: Transforms are now applied in reverse order (the one that makes sense)
