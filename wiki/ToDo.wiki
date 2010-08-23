@@ -4,15 +4,19 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-08-22)
+(Last update: 2010-08-23)
 
 == Gosu 0.7.x ==
+  * Fix updateMousePos when hitting ctrl+alt+del in Vista/Win7
+  * Announce MSVS08 Switch & update docs
+  * Re-compile configure.ac
+  * Update documentation via FTP
+  * Let @jeedee know about progress if existing
+  * See why Gosu::~Song with Ogg files sometimes causes other songs to stop
   * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously
   * Ensure that Gosu::createText always widthx1 pixels for empty strings
-  * Fix RubyGosu Wrapper.app and re-upload for gamepad bug
   * See what OolongEngine does better than GosuTouch (I guess: timing, audio?)
   * Add m4a to audio_formats.rb
-  * Fix updateMousePos when hitting ctrl+alt+del in Vista/Win7
   * See if xiph Tremor makes sense for Gosu Touch
   * Make <c=> more somehow efficient in Font::drawRel
   * Add <s=> to text formatting
@@ -25,12 +29,9 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Remove setResolution and use transforms instead
   * Windows: Improve shrinking heuristics (get task bar size)
   * WindowX: add shrinking for oversized resolutions
-  * Re-compile configure.ac
   * Let enableUndocumentedRetrofication always throw an exception so people use rescue blocks :)
   * Use Gosu text formatting in Tutorial.rb
   * Switch to SWIG 2.0 and see which bugs remain
-  * Announce MSVS08 Switch & update docs
-  * Update documentation via FTP
   * Throw an exception when using multiple Windows
   * Add scaling to SDL text so descenders don't overflow
   * Add FontFlags support for SDL_TTF Gosu/Text
@@ -43,7 +44,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Verify usefulness of this task: "Gosu: compile x86_64 with gcc 4.2 on OS X"
   * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Test StandBy with Windows and a running Gosu app
-  * Check for 1.9.2 final and let @jeedee know about progress if existing
   * See if really old games have problems running in current Gosu
   * The screen size/OpenGL stuff …
     * See if John Shea's talk had something about not being locked to pixel positions
@@ -173,6 +173,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Update TextInput.cpp to include setCaretPos
   * Make sure that WindowMainLoop states that the whole order is just about perceived performance
   * Document how Font roughly works (allow devs to cache chars by text_width'ing the alphabet)
+  * Delete anything saying that TTF does not work on Linux
 == Gosu 0.8.x (preliminary) ==
   * Ask board: 0x00 alpha == opaque? Switch worth it? Esp. what to do with Color::WHITE
   * Let Image() lazy-load its file using Gosu::File (which keeps the file alive until it is really needed), add Gosu::loading_progress and Gosu::load_more for easy loading bars
