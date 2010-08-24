@@ -4,11 +4,12 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-08-23)
+(Last update: 2010-08-24)
 
 == Gosu 0.7.x ==
   * Announce MSVS08 Switch & update docs
   * Re-compile configure.ac
+  * Fix Segfault when Image.new doesn't find its file on Linux
   * Let @jeedee know about progress if existing
   * See why Gosu::~Song with Ogg files sometimes causes other songs to stop
   * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously
@@ -172,8 +173,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make sure that WindowMainLoop states that the whole order is just about perceived performance
   * Document how Font roughly works (allow devs to cache chars by text_width'ing the alphabet)
   * Delete anything saying that TTF does not work on Linux
-  * Document that needs_* need to return boolean values
 == Gosu 0.8.x (preliminary) ==
+  * Rename needs_* to need_* in Ruby
   * Ask board: 0x00 alpha == opaque? Switch worth it? Esp. what to do with Color::WHITE
   * Let Image() lazy-load its file using Gosu::File (which keeps the file alive until it is really needed), add Gosu::loading_progress and Gosu::load_more for easy loading bars
   * Make Window::needsCursor return true by default for Windowed games
