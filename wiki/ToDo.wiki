@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-08-28)
+(Last update: 2010-08-29)
 
 == Gosu 0.7.x ==
   * Check if MSVC08 really optimizes Gosu
@@ -176,9 +176,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Update TextInput.cpp to include setCaretPos
   * Make sure that WindowMainLoop states that the whole order is just about perceived performance
   * Document how Font roughly works (allow devs to cache chars by text_width'ing the alphabet)
-  * Delete anything saying that TTF does not work on Linux
 == Gosu 0.8.x (preliminary) ==
-  * Rename needs_* to need_* in Ruby
+  * Rename needs_x? to need_x? in Ruby
   * Ask board: 0x00 alpha == opaque? Switch worth it? Esp. what to do with Color::WHITE
   * Let Image() lazy-load its file using Gosu::File (which keeps the file alive until it is really needed), add Gosu::loading_progress and Gosu::load_more for easy loading bars
   * Make Window::needsCursor return true by default for Windowed games
