@@ -42,8 +42,7 @@ struct Gosu::Window::Impl {
 
 Gosu::Window& windowInstance();
 
-@interface GosuAppDelegate : NSObject <UIApplicationDelegate> {
-}
+@interface GosuAppDelegate : NSObject <UIApplicationDelegate>
 @end
 
 namespace
@@ -55,6 +54,21 @@ namespace
 }
 
 @implementation GosuAppDelegate
+// Required according to docs...
+- (void)applicationProtectedDataWillBecomeUnavailable:(UIApplication *)application
+{
+}
+
+// Required according to docs...
+- (void)applicationProtectedDataDidBecomeAvailable:(UIApplication *)application
+{
+}
+
+// Required according to docs...
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+}
+
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
     [UIDevice.currentDevice beginGeneratingDeviceOrientationNotifications];
     UIApplication.sharedApplication.idleTimerDisabled = YES;
