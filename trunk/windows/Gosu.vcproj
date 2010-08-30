@@ -293,10 +293,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Graphics\Font.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\Gosu\Gosu.hpp"
 				>
 			</File>
@@ -392,6 +388,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\GosuImpl\Graphics\DrawOpQueue.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\Font.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\GosuImpl\Graphics\Graphics.cpp"
 					>
 				</File>
@@ -405,6 +409,14 @@
 				</File>
 				<File
 					RelativePath="..\GosuImpl\Graphics\LargeImageData.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\Macro.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Graphics\RenderState.hpp"
 					>
 				</File>
 				<File
@@ -513,11 +525,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Gosu\Sockets.hpp"
+				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
+				RelativePath="..\Gosu\Sockets.hpp"
 				>
 			</File>
 			<File
