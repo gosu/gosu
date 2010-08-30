@@ -4,10 +4,11 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-08-29)
+(Last update: 2010-08-30)
 
 == Gosu 0.7.x ==
   * Check if MSVC08 really optimizes Gosu
+  * Give record{} a quick test run
   * Add missing files to MSVC Project
   * Announce MSVS08 Switch & update docs
   * Re-compile configure.ac
@@ -138,6 +139,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Migrate WindowTouch.mm to CADisplayLink (3.1 SDK)
   * Make sure that iPhone VA vertices are small and well-aligned
   * Use getBytes instead of UTF8String
+  * Testen, ob nicht alles besser ist, wenn ich graphics width/height die echten Daten des iPhone4 liefern lasse
 == Gosu CI/Usability ==
   * Document 64px minimum for reliable single-texture optimization
   * Mention Gosu's respectable age somewhere :)
