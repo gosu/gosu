@@ -859,7 +859,6 @@ SWIG_UnpackDataName(const char *c, void *ptr, size_t sz, const char *name) {
 
 
 #include <ruby.h>
-#include <map>
 
 /* Remove global macros defined in Ruby's win32.h */
 #ifdef write
@@ -872,6 +871,7 @@ SWIG_UnpackDataName(const char *c, void *ptr, size_t sz, const char *name) {
 # undef bind
 #endif
 
+#include <map>
 
 /* Ruby 1.7 defines NUM2LL(), LL2NUM() and ULL2NUM() macros */
 #ifndef NUM2LL

@@ -41,6 +41,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="3"
 				AdditionalIncludeDirectories="&quot;C:\Ruby18-mswin32\lib\ruby\1.8\i386-mswin32&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;_WSPIAPI_H_;RUBYGOSU_EXPORTS;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
@@ -122,6 +123,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="3"
 				AdditionalIncludeDirectories="&quot;C:\Ruby19-mswin32\include\ruby-1.9.1&quot;;&quot;C:\Ruby19-mswin32\include\ruby-1.9.1\i386-mswin32&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;RUBYGOSU_EXPORTS;_WSPIAPI_H_;HAVE_VSNPRINTF;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
