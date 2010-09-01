@@ -4,12 +4,10 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-08-30)
+(Last update: 2010-09-01)
 
 == Gosu 0.7.x ==
-  * Check if MSVC08 really optimizes Gosu
-  * Give record{} a quick test run
-  * Add missing files to MSVC Project
+  * Test tuiq's EXE thingie
   * Announce MSVS08 Switch & update docs
   * Re-compile configure.ac
   * Fix Segfault when Image.new doesn't find its file on Linux
