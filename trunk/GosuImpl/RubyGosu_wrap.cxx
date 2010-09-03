@@ -859,6 +859,7 @@ SWIG_UnpackDataName(const char *c, void *ptr, size_t sz, const char *name) {
 
 
 #include <ruby.h>
+#include <map>
 
 /* Remove global macros defined in Ruby's win32.h */
 #ifdef write
@@ -871,7 +872,6 @@ SWIG_UnpackDataName(const char *c, void *ptr, size_t sz, const char *name) {
 # undef bind
 #endif
 
-#include <map>
 
 /* Ruby 1.7 defines NUM2LL(), LL2NUM() and ULL2NUM() macros */
 #ifndef NUM2LL
@@ -2596,7 +2596,7 @@ SWIGINTERN Gosu::Image *Gosu_Image_fromText4(Gosu::Window &window,std::wstring c
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight);
         return new Gosu::Image(window.graphics(), bmp);
     }
-SWIGINTERN Gosu::Image *Gosu_Image_fromText7(Gosu::Window &window,std::wstring const &text,std::wstring const &fontName,unsigned int fontHeight,unsigned int lineSpacing,unsigned int maxWidth,Gosu::TextAlign align){
+SWIGINTERN Gosu::Image *Gosu_Image_fromText7(Gosu::Window &window,std::wstring const &text,std::wstring const &fontName,unsigned int fontHeight,int lineSpacing,unsigned int maxWidth,Gosu::TextAlign align){
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
         return new Gosu::Image(window.graphics(), bmp);
     }
@@ -6594,7 +6594,7 @@ _wrap_Image_from_text7(int argc, VALUE *argv, VALUE self) {
   std::wstring *arg2 = 0 ;
   std::wstring *arg3 = 0 ;
   unsigned int arg4 ;
-  unsigned int arg5 ;
+  int arg5 ;
   unsigned int arg6 ;
   Gosu::TextAlign arg7 ;
   void *argp1 = 0 ;
@@ -6603,7 +6603,7 @@ _wrap_Image_from_text7(int argc, VALUE *argv, VALUE self) {
   std::wstring temp3 ;
   unsigned int val4 ;
   int ecode4 = 0 ;
-  unsigned int val5 ;
+  int val5 ;
   int ecode5 = 0 ;
   unsigned int val6 ;
   int ecode6 = 0 ;
@@ -6636,11 +6636,11 @@ _wrap_Image_from_text7(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "unsigned int","Gosu_Image_fromText7", 4, argv[3] ));
   } 
   arg4 = static_cast< unsigned int >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_int(argv[4], &val5);
+  ecode5 = SWIG_AsVal_int(argv[4], &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), Ruby_Format_TypeError( "", "unsigned int","Gosu_Image_fromText7", 5, argv[4] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode5), Ruby_Format_TypeError( "", "int","Gosu_Image_fromText7", 5, argv[4] ));
   } 
-  arg5 = static_cast< unsigned int >(val5);
+  arg5 = static_cast< int >(val5);
   ecode6 = SWIG_AsVal_unsigned_SS_int(argv[5], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), Ruby_Format_TypeError( "", "unsigned int","Gosu_Image_fromText7", 6, argv[5] ));

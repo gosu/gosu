@@ -420,7 +420,7 @@ namespace Gosu {
     %newobject fromText7;
     static Gosu::Image* fromText7(Gosu::Window& window, const std::wstring& text,
                                  const std::wstring& fontName, unsigned fontHeight,
-                                 unsigned lineSpacing, unsigned maxWidth, TextAlign align) {
+                                 int lineSpacing, unsigned maxWidth, TextAlign align) {
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
         return new Gosu::Image(window.graphics(), bmp);
     }

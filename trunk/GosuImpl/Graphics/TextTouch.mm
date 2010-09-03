@@ -207,7 +207,8 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
         for (unsigned srcX = 0; srcX < width; ++srcX)
         {
             c.setAlpha(bmp.getPixel(srcX, srcY).alpha());
-            bitmap.setPixel(x + srcX, y + srcY, c);
+            if (c.alpha())
+                bitmap.setPixel(x + srcX, y + srcY, c);
         }
 }
 
