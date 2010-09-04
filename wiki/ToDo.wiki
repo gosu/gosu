@@ -4,10 +4,9 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-09-01)
+(Last update: 2010-09-04)
 
 == Gosu 0.7.x ==
-  * Test tuiq's EXE thingie
   * Announce MSVS08 Switch & update docs
   * Re-compile configure.ac
   * Fix Segfault when Image.new doesn't find its file on Linux
