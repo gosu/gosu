@@ -4,13 +4,15 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-09-04)
+(Last update: 2010-09-05)
 
 == Gosu 0.7.x ==
-  * Announce MSVS08 Switch & update docs
   * Re-compile configure.ac
+  * Add scaling to SDL text so descenders don't overflow
+  * Add FontFlags support for SDL_TTF Gosu/Text
+  * Fix Unicode support for SDL_TTF port (UnicodeTest.rb, @loc_test)
+  * Announce MSVS08 Switch & update docs
   * Fix Segfault when Image.new doesn't find its file on Linux
-  * Let @jeedee know about progress if existing
   * See why Gosu::~Song with Ogg files sometimes causes other songs to stop
   * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously
   * Ensure that Gosu::createText always widthx1 pixels for empty strings
@@ -28,11 +30,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * WindowX: add shrinking for oversized resolutions
   * Let enableUndocumentedRetrofication always throw an exception so people use rescue blocks :)
   * Use Gosu text formatting in Tutorial.rb
-  * Switch to SWIG 2.0 and see which bugs remain
+  * Switch to SWIG 2.0 and see which SWIG bugs remain
   * Throw an exception when using multiple Windows
-  * Add scaling to SDL text so descenders don't overflow
-  * Add FontFlags support for SDL_TTF Gosu/Text
-  * Fix Unicode support for SDL_TTF port (UnicodeTest.rb, @loc_test)
   * Make C++'s Gosu::multiply available in Ruby
   * Add Numeric#clamp, Numeric#wrap to Ruby
   * Look at http://audiere.sourceforge.net/ for Windows
