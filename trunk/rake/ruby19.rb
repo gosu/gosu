@@ -13,15 +13,10 @@ GEMS             = %w(chipmunk texplay iobuffer rev eventmachine) # TODO: ruby-o
 SDK_10_4 = '/Developer/SDKs/MacOSX10.4u.sdk'
 SDK_10_6 = '/Developer/SDKs/MacOSX10.6.sdk'
 
-LDFLAGS           = {
-  :ppc    => "-isysroot #{SDK_10_4} -mmacosx-version-min=10.4",
-  :i386   => "-isysroot #{SDK_10_4} -mmacosx-version-min=10.4",
-  :x86_64 => "-isysroot #{SDK_10_6} -mmacosx-version-min=10.6"
-}
 CFLAGS           = {
-  :ppc    => "#{LDFLAGS[:ppc]}    -include #{File.expand_path(TARGET_ROOT)}/define_environ.h -I#{SDK_10_4}/usr/lib/gcc/powerpc-apple-darwin10/4.0.1/include -I#{SDK_10_4}/usr/include/c++/4.0.0 -I#{SDK_10_4}/usr/include/c++/4.0.0/powerpc-apple-darwin8",
-  :i386   => "#{LDFLAGS[:i386]}   -include #{File.expand_path(TARGET_ROOT)}/define_environ.h -I#{SDK_10_4}/usr/lib/gcc/i686-apple-darwin10/4.0.1/include -I#{SDK_10_4}/usr/include/c++/4.0.0 -I#{SDK_10_4}/usr/include/c++/4.0.0/i686-apple-darwin8",
-  :x86_64 => "#{LDFLAGS[:x86_64]} -include #{File.expand_path(TARGET_ROOT)}/define_environ.h"
+  :ppc    => "'-isysroot #{SDK_10_4} -mmacosx-version-min=10.4 -I#{SDK_10_4}/usr/lib/gcc/powerpc-apple-darwin10/4.0.1/include -I#{SDK_10_4}/usr/include/c++/4.0.0 -I#{SDK_10_4}/usr/include/c++/4.0.0/powerpc-apple-darwin8'",
+  :i386   => "'-isysroot #{SDK_10_4} -mmacosx-version-min=10.4 -I#{SDK_10_4}/usr/lib/gcc/i686-apple-darwin10/4.0.1/include -I#{SDK_10_4}/usr/include/c++/4.0.0 -I#{SDK_10_4}/usr/include/c++/4.0.0/i686-apple-darwin8'",
+  :x86_64 => "'-isysroot #{SDK_10_6} -mmacosx-version-min=10.6 -include #{File.expand_path(TARGET_ROOT)}/define_environ.h'"
 }
 BUILD            = {
   :ppc    => %(powerpc-apple-darwin8.0),
@@ -43,7 +38,7 @@ namespace :ruby19 do
     task platform.to_sym do
       # Let RVM install the correct Ruby
       sh "env RVM_RUBY=#{RVM_RUBY} RVM_ARCH=#{platform} " +
-         "    RVM_BUILD=#{BUILD[platform]} RVM_CFLAGS='#{CFLAGS[platform]}' RVM_LDFLAGS='#{LDFLAGS[platform]}' " +
+         "    RVM_BUILD=#{BUILD[platform]} RVM_CFLAGS=#{CFLAGS[platform]} " +
          "    RVM_GEMS='#{GEMS.join(' ')}' " +
          "    bash #{TARGET_ROOT}/install_rvm_ruby.sh"
       
