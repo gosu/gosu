@@ -1,6 +1,13 @@
 #summary Log of Gosu's development.
 #labels Featured
 
+=0.7.24=
+  * 2010-09-08: All: Made all beginClipping/clip_to arguments doubles instead of ints
+  * 2010-09-08: C++: Made Image, Sample, Font copy-constructable because they are immutable - should greatly reduce the need of shared_ptrs.
+  * 2010-09-03: OS X: Improved text rendering
+  * 2010-09-03: Ruby: line_height (argument to Image#from_text) is now a signed int, not unsigned int
+  * 2010-08-30: Windows: Fixed speed issues (re-introduced optimization switch)
+
 =0.7.23=
   * 2010-08-23: Windows: Removed inappropriate exception when mouseX/Y cannot be refreshed due to locked screen
   * 2010-08-23: C++: Finally removed RotFlip completely. If you actually happened to use it: a replacement is available on the forum.
