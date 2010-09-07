@@ -137,9 +137,6 @@ Gosu::Sample::Sample(Reader reader)
         throwLastSDLError();
 }
 
-Gosu::Sample::~Sample() {
-}
-
 Gosu::SampleInstance Gosu::Sample::play(double volume, double speed,
     bool looping) const {
   int channel;

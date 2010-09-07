@@ -100,10 +100,6 @@ Gosu::Font::Font(Graphics& graphics, const wstring& fontName, unsigned fontHeigh
     pimpl->flags = fontFlags;
 }
 
-Gosu::Font::~Font()
-{
-}
-
 std::wstring Gosu::Font::name() const
 {
     return pimpl->name;

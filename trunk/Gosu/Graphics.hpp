@@ -65,7 +65,7 @@ namespace Gosu
         //! Resets Gosu into its default rendering state.
         void endGL();
         //! Enables clipping to a specified rectangle.
-        void beginClipping(int x, int y, unsigned width, unsigned height);
+        void beginClipping(double x, double y, double width, double height);
         //! Disables clipping.
         void endClipping();
         

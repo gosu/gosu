@@ -38,10 +38,6 @@ Gosu::Image::Image(std::auto_ptr<ImageData> data)
 {
 }
 
-Gosu::Image::~Image()
-{
-}
-
 unsigned Gosu::Image::width() const
 {
     return data->width();

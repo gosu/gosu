@@ -166,10 +166,6 @@ Gosu::Sample::Sample(Reader reader)
         throwLastFMODError();
 }
 
-Gosu::Sample::~Sample()
-{
-}
-
 Gosu::SampleInstance Gosu::Sample::play(double volume, double speed,
     bool looping) const
 {

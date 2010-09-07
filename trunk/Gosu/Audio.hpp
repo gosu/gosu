@@ -14,6 +14,7 @@
 #include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <string>
 
 namespace Gosu
@@ -61,8 +62,8 @@ namespace Gosu
     class Sample
     {
         struct SampleData;
-        boost::scoped_ptr<SampleData> data;
-
+        boost::shared_ptr<SampleData> data;
+    
     public:
         //! Constructs a sample that can be played on the specified audio
         //! system and loads the sample from a file.
@@ -72,8 +73,6 @@ namespace Gosu
         //! system and loads the sample data from a stream.
         explicit Sample(Reader reader);
         
-        ~Sample();
-
         //! Plays the sample without panning.
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
         //! volume).
@@ -109,6 +108,7 @@ namespace Gosu
         class ModuleData;
         class StreamData;
         boost::scoped_ptr<BaseData> data;
+    
     public:
         //! There are two types of songs that can be loaded as a Song: Streamed
         //! songs (like OGG) and modules (like MOD or XM).

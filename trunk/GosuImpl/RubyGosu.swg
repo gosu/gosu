@@ -589,7 +589,7 @@ namespace Gosu {
         rb_yield(Qnil);
         $self->graphics().endGL();
     }
-    void clipTo(int x, int y, unsigned width, unsigned height) {
+    void clipTo(double x, double y, double width, double height) {
         $self->graphics().beginClipping(x, y, width, height);
         rb_yield(Qnil);
         $self->graphics().endClipping();

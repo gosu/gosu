@@ -12,6 +12,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/optional.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <cassert>
 #include <cstdlib>
@@ -205,10 +206,6 @@ Gosu::Sample::Sample(Reader reader)
         AudioToolboxFile audioFile(reader);
         data.reset(new SampleData(audioFile));
     }
-}
-
-Gosu::Sample::~Sample()
-{
 }
 
 Gosu::SampleInstance Gosu::Sample::play(double volume, double speed,

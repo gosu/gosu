@@ -217,7 +217,7 @@ void Gosu::Graphics::endGL()
 #endif
 }
 
-void Gosu::Graphics::beginClipping(int x, int y, unsigned width, unsigned height)
+void Gosu::Graphics::beginClipping(double x, double y, double width, double height)
 {
     if (pimpl->queues.size() > 1)
         throw std::logic_error("Clipping not allowed while creating a macro");

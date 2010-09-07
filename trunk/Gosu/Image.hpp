@@ -6,7 +6,7 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Bitmap.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <memory>
 
 namespace Gosu
@@ -14,7 +14,7 @@ namespace Gosu
     //! Provides functionality for drawing rectangular images.
     class Image
     {
-        boost::scoped_ptr<ImageData> data;
+        boost::shared_ptr<ImageData> data;
 
     public:
         //! Loads an image from a given filename that can be drawn onto
@@ -46,8 +46,6 @@ namespace Gosu
         //! Creates an Image from a user-supplied instance of the ImageData interface.
         explicit Image(std::auto_ptr<ImageData> data);
 
-        ~Image();
-        
         unsigned width() const;
         unsigned height() const;
 

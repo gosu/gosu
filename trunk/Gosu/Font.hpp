@@ -8,7 +8,7 @@
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Platform.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <string>
 
 namespace Gosu
@@ -20,7 +20,7 @@ namespace Gosu
     class Font
     {
         struct Impl;
-        boost::scoped_ptr<Impl> pimpl;
+        boost::shared_ptr<Impl> pimpl;
 
     public:
         //! Constructs a font that can be drawn onto the graphics object.
@@ -31,7 +31,6 @@ namespace Gosu
         //!        the font.
         Font(Graphics& graphics, const std::wstring& fontName,
             unsigned fontHeight, unsigned fontFlags = ffBold);
-        ~Font();
         
         //! Returns the name of the font that was used to create it.
         std::wstring name() const;
