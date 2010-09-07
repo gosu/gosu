@@ -2691,7 +2691,7 @@ SWIGINTERN void Gosu_Window_gl(Gosu::Window *self){
         rb_yield(Qnil);
         self->graphics().endGL();
     }
-SWIGINTERN void Gosu_Window_clipTo(Gosu::Window *self,int x,int y,unsigned int width,unsigned int height){
+SWIGINTERN void Gosu_Window_clipTo(Gosu::Window *self,double x,double y,double width,double height){
         self->graphics().beginClipping(x, y, width, height);
         rb_yield(Qnil);
         self->graphics().endClipping();
@@ -4801,12 +4801,6 @@ _wrap_cyan_get(VALUE self) {
 
 swig_class SwigClassFont;
 
-SWIGINTERN void
-free_Gosu_Font(Gosu::Font *arg1) {
-    SWIG_RubyRemoveTracking(arg1);
-    delete arg1;
-}
-
 SWIGINTERN VALUE
 _wrap_Font_name(int argc, VALUE *argv, VALUE self) {
   Gosu::Font *arg1 = (Gosu::Font *) 0 ;
@@ -5354,6 +5348,12 @@ fail:
 }
 
 
+SWIGINTERN void
+free_Gosu_Font(Gosu::Font *arg1) {
+    SWIG_RubyRemoveTracking(arg1);
+    delete arg1;
+}
+
 swig_class SwigClassGLTexInfo;
 
 SWIGINTERN VALUE
@@ -5668,12 +5668,6 @@ free_Gosu_GLTexInfo(Gosu::GLTexInfo *arg1) {
 }
 
 swig_class SwigClassImage;
-
-SWIGINTERN void
-free_Gosu_Image(Gosu::Image *arg1) {
-    SWIG_RubyRemoveTracking(arg1);
-    delete arg1;
-}
 
 SWIGINTERN VALUE
 _wrap_Image_width(int argc, VALUE *argv, VALUE self) {
@@ -6828,6 +6822,12 @@ fail:
 }
 
 
+SWIGINTERN void
+free_Gosu_Image(Gosu::Image *arg1) {
+    SWIG_RubyRemoveTracking(arg1);
+    delete arg1;
+}
+
 swig_class SwigClassSampleInstance;
 
 #ifdef HAVE_RB_DEFINE_ALLOC_FUNC
@@ -7187,12 +7187,6 @@ fail:
 }
 
 
-SWIGINTERN void
-free_Gosu_Sample(Gosu::Sample *arg1) {
-    SWIG_RubyRemoveTracking(arg1);
-    delete arg1;
-}
-
 SWIGINTERN VALUE
 _wrap_Sample_play(int argc, VALUE *argv, VALUE self) {
   Gosu::Sample *arg1 = (Gosu::Sample *) 0 ;
@@ -7320,6 +7314,12 @@ fail:
   return Qnil;
 }
 
+
+SWIGINTERN void
+free_Gosu_Sample(Gosu::Sample *arg1) {
+    SWIG_RubyRemoveTracking(arg1);
+    delete arg1;
+}
 
 swig_class SwigClassSong;
 
@@ -9440,19 +9440,19 @@ fail:
 SWIGINTERN VALUE
 _wrap_Window_clip_to(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
-  int arg2 ;
-  int arg3 ;
-  unsigned int arg4 ;
-  unsigned int arg5 ;
+  double arg2 ;
+  double arg3 ;
+  double arg4 ;
+  double arg5 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int val2 ;
+  double val2 ;
   int ecode2 = 0 ;
-  int val3 ;
+  double val3 ;
   int ecode3 = 0 ;
-  unsigned int val4 ;
+  double val4 ;
   int ecode4 = 0 ;
-  unsigned int val5 ;
+  double val5 ;
   int ecode5 = 0 ;
   
   if ((argc < 4) || (argc > 4)) {
@@ -9463,26 +9463,26 @@ _wrap_Window_clip_to(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","clipTo", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","clipTo", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","clipTo", 2, argv[0] ));
   } 
-  arg2 = static_cast< int >(val2);
-  ecode3 = SWIG_AsVal_int(argv[1], &val3);
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(argv[1], &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "int","clipTo", 3, argv[1] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "double","clipTo", 3, argv[1] ));
   } 
-  arg3 = static_cast< int >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_int(argv[2], &val4);
+  arg3 = static_cast< double >(val3);
+  ecode4 = SWIG_AsVal_double(argv[2], &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "unsigned int","clipTo", 4, argv[2] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "double","clipTo", 4, argv[2] ));
   } 
-  arg4 = static_cast< unsigned int >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_int(argv[3], &val5);
+  arg4 = static_cast< double >(val4);
+  ecode5 = SWIG_AsVal_double(argv[3], &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), Ruby_Format_TypeError( "", "unsigned int","clipTo", 5, argv[3] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode5), Ruby_Format_TypeError( "", "double","clipTo", 5, argv[3] ));
   } 
-  arg5 = static_cast< unsigned int >(val5);
+  arg5 = static_cast< double >(val5);
   {
     try {
       Gosu_Window_clipTo(arg1,arg2,arg3,arg4,arg5);
