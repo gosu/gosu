@@ -4,9 +4,11 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-09-09)
+(Last update: 2010-09-15)
 
 == Gosu 0.7.x ==
+  * Make RED etc a ColorConstant < Color that throws an error on using red=
+  * Deprecate Color::new, make it Color::rgb/argb/rgba etc
   * Re-compile configure.ac
   * Add scaling to SDL text so descenders don't overflow
   * Add FontFlags support for SDL_TTF Gosu/Text
