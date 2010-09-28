@@ -4,10 +4,9 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-09-15)
+(Last update: 2010-09-28)
 
 == Gosu 0.7.x ==
-  * Make RED etc a ColorConstant < Color that throws an error on using red=
   * Deprecate Color::new, make it Color::rgb/argb/rgba etc
   * Re-compile configure.ac
   * Add scaling to SDL text so descenders don't overflow
@@ -40,7 +39,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make Window arguments optional for Audio, but throw exceptions when in wrong order
   * Make Window arguments optional for Graphics, but throw exceptions when in wrong order
   * Verify usefulness of this task: "Gosu: compile x86_64 with gcc 4.2 on OS X"
-  * Think about button_id_to_char and vice versa on 64-bit (new Tasks)
   * Test StandBy with Windows and a running Gosu app
   * See if really old games have problems running in current Gosu
   * The screen size/OpenGL stuff …
