@@ -167,6 +167,7 @@ namespace Gosu {
 }
 
 #include <sstream>
+#include <boost/algorithm/string.hpp>
 
 // New Ruby 1.9 syntax (for compilation with Ruby 1.8)
 #ifndef RSTRING_LEN
@@ -447,6 +448,16 @@ namespace Gosu {
     unsigned rows() const
     {
         return $self->height();
+    }
+    void save(const std::wstring& filename) const
+    {
+        Gosu::Bitmap bmp = $self->getData().toBitmap();
+        Gosu::Buffer buf;
+        if (boost::iends_with(filename, L".bmp"))
+            Gosu::saveToBMP(bmp, buf.backWriter());
+        else
+            Gosu::saveToPNG(bmp, buf.backWriter());
+        Gosu::saveFile(buf, filename);
     }
 }
 

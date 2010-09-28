@@ -125,13 +125,13 @@ module Gosu
   class Color
     attr_accessor :alpha, :red, :green, :blue, :hue, :saturation, :value
 
-  	# a:: Integer from 0..255
-  	# r:: Integer from 0..255
-  	# g:: Integer from 0..255
-  	# b:: Integer from 0..255
+    # a:: Integer from 0..255
+    # r:: Integer from 0..255
+    # g:: Integer from 0..255
+    # b:: Integer from 0..255
     def initialize(a, r, g, b); end
     # argb: 0xAARRGGBB integer.
-  	def initialize(argb); end
+    def initialize(argb); end
     
     # Converts a HSV triple into a color. Same as from_ahsv with alpha set to 255.
     # h:: Integer from 0..360
@@ -204,21 +204,21 @@ module Gosu
     # Loads an image from a given filename that can be drawn onto
     # the given window.
     #
-		# This constructor can handle PNG and BMP images. A color key of #ff00ff is
-		# automatically applied to BMP type images. For more flexibility, use PNG
-		# files.
+    # This constructor can handle PNG and BMP images. A color key of #ff00ff is
+    # automatically applied to BMP type images. For more flexibility, use PNG
+    # files.
     def initialize(window, filename_or_rmagick_image, tileable); end
 
     # Loads an image from a given filename that can be drawn onto
     # the given window.
     #
-		# This constructor can handle PNG and BMP images. A color key of #ff00ff is
-		# automatically applied to BMP type images. For more flexibility, use PNG
-		# files.
-		#
-		# This constructor only loads a sub-rectangle of the given file. Because
-		# every call of this constructor will open the image again, it is preferable
-		# to use Image#load_tiles.
+    # This constructor can handle PNG and BMP images. A color key of #ff00ff is
+    # automatically applied to BMP type images. For more flexibility, use PNG
+    # files.
+    #
+    # This constructor only loads a sub-rectangle of the given file. Because
+    # every call of this constructor will open the image again, it is preferable
+    # to use Image#load_tiles.
     def initialize(window, filename_or_rmagick_image, tileable, src_x, src_y, src_width, src_height); end
     
     # Draws the image so its upper left corner is at (x; y).
@@ -262,6 +262,11 @@ module Gosu
     
     # See examples/OpenGLIntegration.rb.
     def gl_tex_info; end
+    
+    # Saves the texture contents as an image file. Useful, for example, to
+    # pre-render text on a development machine with proper fonts installed.
+    # Saves in Windows BMP format if filename ends in ".bmp", as PNG otherwise.
+    def save(filename); end
   end
 
   # A sample is a short sound that is completely loaded in memory, can be
@@ -364,7 +369,7 @@ module Gosu
   end
   
   # Main class that serves as the foundation of a standard
-	# Gosu application. Manages initialization of all of Gosu's core components
+  # Gosu application. Manages initialization of all of Gosu's core components
   # and provides timing functionality.
   #
   # Note that all coordinates, even the mouse position, are in client
@@ -445,7 +450,7 @@ module Gosu
     # z positions.
     def flush; end
     
-  	# Returns true if a button is currently pressed. Updated every tick.
+    # Returns true if a button is currently pressed. Updated every tick.
     def button_down?(id); end
     
     # Returns the character a button usually produces, or nil. To implement real text-input

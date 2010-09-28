@@ -2237,6 +2237,7 @@ namespace Gosu {
 }
 
 #include <sstream>
+#include <boost/algorithm/string.hpp>
 
 // New Ruby 1.9 syntax (for compilation with Ruby 1.8)
 #ifndef RSTRING_LEN
@@ -2617,6 +2618,15 @@ SWIGINTERN unsigned int Gosu_Image_columns(Gosu::Image const *self){
     }
 SWIGINTERN unsigned int Gosu_Image_rows(Gosu::Image const *self){
         return self->height();
+    }
+SWIGINTERN void Gosu_Image_save(Gosu::Image const *self,std::wstring const &filename){
+        Gosu::Bitmap bmp = self->getData().toBitmap();
+        Gosu::Buffer buf;
+        if (boost::iends_with(filename, L".bmp"))
+            Gosu::saveToBMP(bmp, buf.backWriter());
+        else
+            Gosu::saveToPNG(bmp, buf.backWriter());
+        Gosu::saveFile(buf, filename);
     }
 
 SWIGINTERNINLINE VALUE
@@ -6824,6 +6834,40 @@ fail:
 }
 
 
+SWIGINTERN VALUE
+_wrap_Image_save(int argc, VALUE *argv, VALUE self) {
+  Gosu::Image *arg1 = (Gosu::Image *) 0 ;
+  std::wstring *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::wstring temp2 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Image, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Image const *","save", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Image * >(argp1);
+  {
+    VALUE localTemporary = rb_obj_as_string(argv[0]);
+    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
+    arg2 = &temp2;
+  }
+  {
+    try {
+      Gosu_Image_save((Gosu::Image const *)arg1,(std::wstring const &)*arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
 SWIGINTERN void
 free_Gosu_Image(Gosu::Image *arg1) {
     SWIG_RubyRemoveTracking(arg1);
@@ -10393,6 +10437,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassImage.klass, "to_blob", VALUEFUNC(_wrap_Image_to_blob), -1);
   rb_define_method(SwigClassImage.klass, "columns", VALUEFUNC(_wrap_Image_columns), -1);
   rb_define_method(SwigClassImage.klass, "rows", VALUEFUNC(_wrap_Image_rows), -1);
+  rb_define_method(SwigClassImage.klass, "save", VALUEFUNC(_wrap_Image_save), -1);
   SwigClassImage.mark = 0;
   SwigClassImage.destroy = (void (*)(void *)) free_Gosu_Image;
   SwigClassImage.trackObjects = 1;
