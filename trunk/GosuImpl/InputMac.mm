@@ -441,11 +441,49 @@ namespace {
         
         idChars.assign(0);
 
-#ifndef __LP64__
+#ifdef __LP64__
+        CFRef<TISInputSourceRef> is(TISCopyCurrentKeyboardLayoutInputSource());
+        CFRef<CFDataRef> UCHR(
+            static_cast<CFDataRef>(TISGetInputSourceProperty(is.obj(), kTISPropertyUnicodeKeyLayoutData)));
+        if (!UCHR.get())
+            return;
+        
+        // Reverse for() to prefer lower IDs in charToId
+        for (int code = numScancodes - 1; code >= 0; --code)
+        {
+            UInt32 deadKeyState = 0;
+            UniChar value[8];
+            UniCharCount valueLength = 8;
+            
+            if (code == kbLeftShift || code == kbRightShift ||
+                    code == kbLeftAlt || code == kbRightAlt ||
+                    code == kbLeftControl || code == kbRightControl ||
+                    code == kbLeftMeta || code == kbRightMeta)
+                continue;
+            
+            if (noErr != UCKeyTranslate(
+                    reinterpret_cast<const UCKeyboardLayout*>(CFDataGetBytePtr(UCHR.obj())),
+                    code, kUCKeyActionDown, 0, LMGetKbdType(),
+                    kUCKeyTranslateNoDeadKeysMask, &deadKeyState,
+                    valueLength, &valueLength, value))
+                continue;
+            
+            // Ignore special characters except newline.
+            if (value[0] == 3)
+                value[0] = 13; // convert Enter to Return
+            if (value[0] < 32 && value[0] != 13)
+                continue;
+            
+            idChars[code] = value[0];
+            charIds[value[0]] = code;
+        }
+#else
+        // The very old-school way.
 		const void* KCHR = reinterpret_cast<const void*>(GetScriptManagerVariable(smKCHRCache));
 		if (!KCHR)
 			return;
         
+        // Reverse for() to prefer lower IDs in charToId
         for (int code = numScancodes - 1; code >= 0; --code)
         {
             UInt32 deadKeyState = 0;
@@ -454,20 +492,12 @@ namespace {
 			if (deadKeyState != 0)
 				value = KeyTranslate(KCHR, code, &deadKeyState);
 			
-			// No character! Pity.
-			if (value == 0)
-				continue;
-                
             // Ignore special characters except newline.
             if (value == 3)
                 value = 13; // convert Enter to Return
             if (value < 32 && value != 13)
                 continue;
 			
-			// Now we have a character which is *not* limited to the ASCII range. To correctly
-			// translate this into a wchar_t, we need to convert it based on the current locale.
-			// TODO: That locale stuff should be explicit. Locales always cause trouble.
-            
 			std::string str(1, char(value));
 			wchar_t ch = Gosu::macRomanToWstring(str).at(0);
 			

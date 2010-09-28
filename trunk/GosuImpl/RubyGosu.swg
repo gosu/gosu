@@ -61,14 +61,16 @@
         $1 = Gosu::Button(NUM2LONG($input));
 }
 %typemap(out) Gosu::Button {
-	$result = LONG2NUM($1.id());
-    if ($result == -1)
+    if ($1 == Gosu::noButton)
         $result = Qnil;
+    else
+        $result = LONG2NUM($1.id());
 }
 %typemap(directorin) Gosu::Button {
-	$input = LONG2NUM($1.id());
-    if ($input == -1)
+    if ($1 == Gosu::noButton)
         $input = Qnil;
+    else
+        $input = LONG2NUM($1.id());
 }
 
 // Typemaps for enums that should be given in as symbols.

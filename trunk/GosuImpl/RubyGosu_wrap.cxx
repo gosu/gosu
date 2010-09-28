@@ -2846,9 +2846,10 @@ void SwigDirector_Window::buttonDown(Gosu::Button arg0) {
   VALUE result;
   
   {
-    obj0 = LONG2NUM((&arg0)->id());
-    if (obj0 == -1)
+    if (arg0 == Gosu::noButton)
     obj0 = Qnil;
+    else
+    obj0 = LONG2NUM((&arg0)->id());
   }
   result = rb_funcall(swig_get_self(), rb_intern("button_down"), 1,obj0);
 }
@@ -2859,9 +2860,10 @@ void SwigDirector_Window::buttonUp(Gosu::Button arg0) {
   VALUE result;
   
   {
-    obj0 = LONG2NUM((&arg0)->id());
-    if (obj0 == -1)
+    if (arg0 == Gosu::noButton)
     obj0 = Qnil;
+    else
+    obj0 = LONG2NUM((&arg0)->id());
   }
   result = rb_funcall(swig_get_self(), rb_intern("button_up"), 1,obj0);
 }
@@ -9032,9 +9034,10 @@ _wrap_Window_char_to_button_id(int argc, VALUE *argv, VALUE self) {
     }
   }
   {
-    vresult = LONG2NUM((&result)->id());
-    if (vresult == -1)
+    if (result == Gosu::noButton)
     vresult = Qnil;
+    else
+    vresult = LONG2NUM((&result)->id());
   }
   return vresult;
 fail:
