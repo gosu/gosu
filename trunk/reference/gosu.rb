@@ -437,11 +437,11 @@ module Gosu
   	# Returns true if a button is currently pressed. Updated every tick.
     def button_down?(id); end
     
-    # DEPRECATED: Returns the character a button usually produces, or nil. Please use TextInput instead.
+    # Returns the character a button usually produces, or nil. To implement real text-input
+    # facilities, look at the TextInput class instead.
     def self.button_id_to_char(id); end
     
-    # DEPRECATED: Returns the button that has to be pressed to produce the
-    # given character, or nil. Please use TextInput instead.
+    # Returns the button that has to be pressed to produce the given character, or nil.
     def self.char_to_button_id(char); end
     
     # See examples/OpenGLIntegration.rb.
