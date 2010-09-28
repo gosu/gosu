@@ -145,17 +145,28 @@ module Gosu
     # s:: Float from 0..1
     # v:: Float from 0..1.
     def self.from_ahsv(a, h, s, v); end
-
+    
+    # constant
     NONE    = Gosu::Color.new(0x00000000)
+    # constant
     BLACK   = Gosu::Color.new(0xff000000)
+    # constant
     GRAY    = Gosu::Color.new(0xff808080)
+    # constant
     WHITE   = Gosu::Color.new(0xffffffff)            
+    # constant
     AQUA    = Gosu::Color.new(0xff00ffff)
+    # constant
     RED     = Gosu::Color.new(0xffff0000)
+    # constant
     GREEN   = Gosu::Color.new(0xff00ff00)
+    # constant
     BLUE    = Gosu::Color.new(0xff0000ff)
+    # constant
     YELLOW  = Gosu::Color.new(0xffffff00)
+    # constant
     FUCHSIA = Gosu::Color.new(0xffff00ff)
+    # constant
     CYAN    = Gosu::Color.new(0xff00ffff)
   end
   

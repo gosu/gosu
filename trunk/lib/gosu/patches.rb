@@ -39,17 +39,28 @@ end
 
 # Color constants (SWIG messes up constants somehow)
 class Gosu::Color
-  NONE    = Gosu::Color.new(0x00000000)
-  BLACK   = Gosu::Color.new(0xff000000)
-  GRAY    = Gosu::Color.new(0xff808080)
-  WHITE   = Gosu::Color.new(0xffffffff)            
-  AQUA    = Gosu::Color.new(0xff00ffff)
-  RED     = Gosu::Color.new(0xffff0000)
-  GREEN   = Gosu::Color.new(0xff00ff00)
-  BLUE    = Gosu::Color.new(0xff0000ff)
-  YELLOW  = Gosu::Color.new(0xffffff00)
-  FUCHSIA = Gosu::Color.new(0xffff00ff)
-  CYAN    = Gosu::Color.new(0xff00ffff)
+  class Constant < Gosu::Color
+  private
+    def alpha=; end
+    def red=; end
+    def green=; end
+    def blue=; end
+    def hue=; end
+    def saturation=; end
+    def value=; end
+  end
+  
+  NONE    = Gosu::Color::Constant.new(0x00000000)
+  BLACK   = Gosu::Color::Constant.new(0xff000000)
+  GRAY    = Gosu::Color::Constant.new(0xff808080)
+  WHITE   = Gosu::Color::Constant.new(0xffffffff)            
+  AQUA    = Gosu::Color::Constant.new(0xff00ffff)
+  RED     = Gosu::Color::Constant.new(0xffff0000)
+  GREEN   = Gosu::Color::Constant.new(0xff00ff00)
+  BLUE    = Gosu::Color::Constant.new(0xff0000ff)
+  YELLOW  = Gosu::Color::Constant.new(0xffffff00)
+  FUCHSIA = Gosu::Color::Constant.new(0xffff00ff)
+  CYAN    = Gosu::Color::Constant.new(0xff00ffff)
 end
 
 # Instance methods for button_id_to_char and char_to_button_id
