@@ -3,8 +3,8 @@
 
 namespace Gosu
 {
-    //! Enumerates all the named button ids that can be used with Gosu::Input.
-    //! This enumeration contains ids for non-character keyboard keys (kb*),
+    //! List of button ids that can be used with Gosu::Input.
+    //! This enumeration contains ids for keyboard keys (kb*),
     //! mouse buttons and mouse wheel (ms*) and gamepad buttons (gp*).
     enum ButtonName
     {
