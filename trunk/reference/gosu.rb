@@ -467,13 +467,13 @@ module Gosu
     def clip_to(x, y, w, h, &drawing_code); end
     
     # Rotates everything drawn in the block around (around_x, around_y).
-    def rotate(angle, around_x = 0, around_y = 0 &drawing_code); end
+    def rotate(angle, around_x = 0, around_y = 0, &drawing_code); end
     
     # Scales everything drawn in the block by a factor.
-    def scale(factor, &drawing_code); end
+    def scale(factor_x, factor_y = factor_x, &drawing_code); end
     
     # Scales everything drawn in the block by a factor for each dimension.
-    def scale(factor_x, factor_y, &drawing_code); end
+    def scale(factor_x, factor_y, around_x, around_y, &drawing_code); end
     
     # Moves everything drawn in the block by an offset in each dimension.
     def translate(x, y, &drawing_code); end

@@ -637,6 +637,11 @@ namespace Gosu {
         rb_yield(Qnil);
         $self->graphics().popTransform();
     }
+    void scale(double factorX, double factorY, double aroundX, double aroundY) {
+        $self->graphics().pushTransform(Gosu::scale(factorX, factorY, aroundX, aroundY));
+        rb_yield(Qnil);
+        $self->graphics().popTransform();
+    }
     void translate(double x, double y) {
         $self->graphics().pushTransform(Gosu::translate(x, y));
         rb_yield(Qnil);

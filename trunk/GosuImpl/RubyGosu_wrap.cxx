@@ -2734,6 +2734,11 @@ SWIGINTERN void Gosu_Window_scale__SWIG_1(Gosu::Window *self,double factorX,doub
         rb_yield(Qnil);
         self->graphics().popTransform();
     }
+SWIGINTERN void Gosu_Window_scale__SWIG_2(Gosu::Window *self,double factorX,double factorY,double aroundX,double aroundY){
+        self->graphics().pushTransform(Gosu::scale(factorX, factorY, aroundX, aroundY));
+        rb_yield(Qnil);
+        self->graphics().popTransform();
+    }
 SWIGINTERN void Gosu_Window_translate(Gosu::Window *self,double x,double y){
         self->graphics().pushTransform(Gosu::translate(x, y));
         rb_yield(Qnil);
@@ -9861,14 +9866,73 @@ fail:
 }
 
 
+SWIGINTERN VALUE
+_wrap_Window_scale__SWIG_2(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  double arg2 ;
+  double arg3 ;
+  double arg4 ;
+  double arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  
+  if ((argc < 4) || (argc > 4)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","scale", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","scale", 2, argv[0] ));
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "double","scale", 3, argv[1] ));
+  } 
+  arg3 = static_cast< double >(val3);
+  ecode4 = SWIG_AsVal_double(argv[2], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "double","scale", 4, argv[2] ));
+  } 
+  arg4 = static_cast< double >(val4);
+  ecode5 = SWIG_AsVal_double(argv[3], &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), Ruby_Format_TypeError( "", "double","scale", 5, argv[3] ));
+  } 
+  arg5 = static_cast< double >(val5);
+  {
+    try {
+      Gosu_Window_scale__SWIG_2(arg1,arg2,arg3,arg4,arg5);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
 SWIGINTERN VALUE _wrap_Window_scale(int nargs, VALUE *args, VALUE self) {
   int argc;
-  VALUE argv[4];
+  VALUE argv[6];
   int ii;
   
   argc = nargs + 1;
   argv[0] = self;
-  if (argc > 4) SWIG_fail;
+  if (argc > 6) SWIG_fail;
   for (ii = 1; (ii < argc); ++ii) {
     argv[ii] = args[ii-1];
   }
@@ -9908,11 +9972,45 @@ SWIGINTERN VALUE _wrap_Window_scale(int nargs, VALUE *args, VALUE self) {
       }
     }
   }
+  if (argc == 5) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_double(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          {
+            int res = SWIG_AsVal_double(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            {
+              int res = SWIG_AsVal_double(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              return _wrap_Window_scale__SWIG_2(nargs, args, self);
+            }
+          }
+        }
+      }
+    }
+  }
   
 fail:
-  Ruby_Format_OverloadedError( argc, 4, "scale", 
+  Ruby_Format_OverloadedError( argc, 6, "scale", 
     "    void scale(double factor)\n"
-    "    void scale(double factorX, double factorY)\n");
+    "    void scale(double factorX, double factorY)\n"
+    "    void scale(double factorX, double factorY, double aroundX, double aroundY)\n");
   
   return Qnil;
 }
