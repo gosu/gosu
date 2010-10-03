@@ -4,10 +4,11 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-09-30)
+(Last update: 2010-10-03)
 
 == Gosu 0.7.x ==
-  * Fix Image#to_blob
+  * Only show Gosu::Window after show() has been called (OS X)
+  * Switch Gosu::Color to RGBA, fix Gosu::to_blob
   * Deprecate Color::new, make it Color::rgb/argb/rgba etc
   * Re-compile configure.ac
   * Add scaling to SDL text so descenders don't overflow
@@ -15,6 +16,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Fix Unicode support for SDL_TTF port (UnicodeTest.rb, @loc_test)
   * Fix Segfault when Image.new doesn't find its file on Linux
   * Announce MSVS08 Switch & update docs
+  * See if clipping coordinate calculation is correct with all transformations considered
+  * Switch to SWIG 2.0 and see which SWIG bugs remain
   * See why Gosu::~Song with Ogg files sometimes causes other songs to stop
   * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously
   * Ensure that Gosu::createText always widthx1 pixels for empty strings
@@ -32,7 +35,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * WindowX: add shrinking for oversized resolutions
   * Let enableUndocumentedRetrofication always throw an exception so people use rescue blocks :)
   * Use Gosu text formatting in Tutorial.rb
-  * Switch to SWIG 2.0 and see which SWIG bugs remain
   * Throw an exception when using multiple Windows
   * Make C++'s Gosu::multiply available in Ruby
   * Add Numeric#clamp, Numeric#wrap to Ruby
