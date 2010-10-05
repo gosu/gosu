@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-10-03)
+(Last update: 2010-10-05)
 
 == Gosu 0.7.x ==
   * Only show Gosu::Window after show() has been called (OS X)
@@ -177,6 +177,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Update TextInput.cpp to include setCaretPos
   * Make sure that WindowMainLoop states that the whole order is just about perceived performance
   * Document how Font roughly works (allow devs to cache chars by text_width'ing the alphabet)
+  * Say "you can attach files after posting" below input box in board
 == Gosu 0.8.x (preliminary) ==
   * Rename needs_x? to need_x? in Ruby
   * Ask board: 0x00 alpha == opaque? Switch worth it? Esp. what to do with Color::WHITE
