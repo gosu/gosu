@@ -4,13 +4,14 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-10-16)
+(Last update: 2010-10-23)
 
 == Gosu 0.7.x ==
-  * test needs_cursor again on linux (permatrue)
   * Only show Gosu::Window after show() has been called (OS X)
   * Switch Gosu::Color to RGBA, fix Gosu::to_blob
   * Deprecate Color::new, make it Color::rgb/argb/rgba etc
+  * Fix Gosu::random being dependent on timeGetTime on Win
+  * test needs_cursor again on linux (permatrue)
   * Re-compile configure.ac
   * Add scaling to SDL text so descenders don't overflow
   * Add FontFlags support for SDL_TTF Gosu/Text
