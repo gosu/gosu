@@ -8,8 +8,28 @@ Usually, you create a subclass of Gosu::Window and override the parts that you n
 
 http://www.libgosu.org/wiki_images/main_loop.png
 
-Examples of what you can do in these events are shown in the RubyTutorial and CppTutorial pages.
+Examples of what you can do in these events are shown on the RubyTutorial and CppTutorial pages.
 
-There are some variations to this loop: of course, you can allocate Images and other resources whenever you want. It might also be useful to call `show` twice. And the `close` function may not be called, technically, if the user closes the window using the standard methods on his operating system.
+There are details that you may be interested in:
+  * `draw` is _very_ flexible. The usual flow is shown above, but `draw` is generally called whenever the OS wants to redraw the window. This may be upon calling `show`, or twice between `update` calls, or not at all during a frame if the window is obscured.
+  * It follows that _you cannot know_ at all which callback will be called first. `initialize` (or the constructor in C++) _must_ set up a valid state. If update contains `respawn() if player == nil`, then `initialize` should also contain `respawn()`. You can just call `update()` as the last call in `initialize`/the constructor if it helps.
+  * Because `draw` is so flexible, it should really only render the current state of things and not change anything, not even advance animations. If you write `draw` in a functional, read-only style then you are safe.
+  * In `update`, you may want to check `button_down?` (or `input().down()` in C++) to poll the most recent state of a button. Because the input events should logically be fired _before_ `button_down?` is updated, it follows that they all have to happen before `update`. This sadly means that you cannot directly react to the very latest button events in `draw`; an `update` call will always happen inbetween.
 
-One recent bit of magic is the method `bool needsRedraw() const` or `needs_redraw?`, respectively, that you can override on Gosu::Window. It allows advanced games to implement frame skipping when the computer cannot catch up, or may save resources on puzzle games that only need to be redrawn when something has happened. Most games should be fine without overriding this method, though.
+= Performance Degradation =
+
+What if the system is too slow to run the game at its intended framerate? There are two major solutions.
+
+== Discrete Games ==
+
+First, you can write your game logic in the style of the example games. In every logical frame (`update`), the player moves by a fixed amount of pixels forward. Animations also advance with every logical frame etc. This will result in rather integer-based, discrete game code. The CPU may like it too.
+
+However, if the system is too slow for your game, you are very limited in your options:
+  * You can spawn less particles or reduce eye candy in other ways. This only works if there is much eye candy to begin with.
+  * You can drop frames by returning false in the `needs_redraw? `/`needsRedraw()` callback. You have to be careful not too skip too many frames in a row though.
+
+== Delta-Time Physics ==
+
+You can also write your games by checking `Gosu::milliseconds()` between one `update` call and another, then update your game state based on the time different (delta time, dt). This allows physics to be written in a style that matches school physics (position += speed*dt) and is very common when working with physics engines. This style naturally works better with a low framerate, but may need more up-front thinking, and the calculations may be slower in general because floating-point values are a more natural fit here.
+
+This is definitely a by-case choice and Gosu tries to support both styles of programming.
