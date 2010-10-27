@@ -122,7 +122,7 @@ end
 
 There are a couple of things to say about this:
 
-http://www.raschke.de/julian/temp/angles2.png
+http://www.libgosu.org/wiki_images/angles2.png
 
   * Player#accelerate makes use of the offset_x/offset_y functions. They are similar to what some people use sin/cos for: For example, if something moved 100 pixels at an angle of 30°, it would pass offset_x(30, 100) pixels horizontally and offset_y(30, 100) pixels vertically.
   * When loading BMP files, Gosu replaces 0xff00ff (fuchsia; that really ugly pink) with transparent pixels.
