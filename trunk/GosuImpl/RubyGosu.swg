@@ -1,6 +1,6 @@
-// Mini Swig Style Improvement List:
-// - %predicate instead of %rename
-// - use Python names for op overloading
+// Mini SWIG file TODO List:
+// - %predicate instead of %rename where applicable
+// - use Python names for op overloading for easier porting to other languages
 
 %trackobjects;
 %include exception.i  
