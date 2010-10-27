@@ -45,11 +45,13 @@ In Visual C++ 2010, the process of adding libraries is way more complicated. F
 
 http://www.libgosu.org/wiki_images/msvc10-expert.jpg
 
-The "Property Manager" pane will appear behind the file list. Unfold one of your projects (i.e. follow the steps below first):
+The "Property Manager" pane will appear behind the file list.
+
+Then create a project as shown in the section below before continuing here. Unfold your project in the Property Manager:
 
 http://www.libgosu.org/wiki_images/msvc10-propsheet.png
 
-Then click the Microsoft.Cpp.Win32.User entry, which are your user settings and contain the VC directories.
+Then click the Microsoft.Cpp.Win32.User entry, which contain, among others, the VC directories.
 
 http://www.libgosu.org/wiki_images/msvc10-directories.png
 
