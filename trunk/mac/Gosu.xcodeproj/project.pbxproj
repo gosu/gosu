@@ -1168,7 +1168,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Support for all sorts of SWIG installations\nPATH=/opt/local/bin:/usr/local/bin:/sw/bin:$PATH\ncd ..\nswig -c++ -ruby -autorename GosuImpl/RubyGosu.swg\npatch -p0 <GosuImpl/RubyGosu_SWIG_GC_PATCH.patch\n";
+			shellScript = "# Support for all sorts of SWIG installations\nPATH=/opt/local/bin:/usr/local/bin:/sw/bin:$PATH\ncd ..\nswig -c++ -ruby -autorename GosuImpl/RubyGosu.swg\npatch --no-backup-if-mismatch -p0 <GosuImpl/RubyGosu_SWIG_GC_PATCH.patch\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
