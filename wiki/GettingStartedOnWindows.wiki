@@ -2,9 +2,34 @@
 
 [http://www.libgosu.org/cgi-bin/mwf/forum.pl http://www.libgosu.org/wiki_images/board_link.png]
 
-= Installing Gosu (C++ only) =
+= Creating a new Gosu game (Ruby) =
 
-The only dependency for using Gosu is [http://www.boost.org/ Boost] is a collection of libraries that is used throughout Gosu's interface. Many parts of Boost have been marked for inclusion in the next standard of C++, so you'd better look at it anyway! :) Download the latest release and extract it into a separate directory.
+Getting started with Ruby is a lot easier. Any Ruby version will work, either the Ruby Installer ones or the minimal builds from ruby-lang.org. In any case you will need Rubygems which comes with either version. Install Gosu:
+
+`gem install gosu`
+
+Then create a new file and try to run it:
+
+{{{
+require 'rubygems'
+require 'gosu'
+
+class MyWindow < Gosu::Window
+  def initialize
+    super(640, 480, false, 20)
+    self.caption = 'Hello World!'
+  end
+end
+
+w = MyWindow.new
+w.show
+}}}
+
+You can work your way from here using the RubyTutorial if you want.
+
+= Adding Header/Library Paths (for C++ with Visual C++ 2008) =
+
+The only dependency for using Gosu is [http://www.boost.org/ boost]. Many parts of boost have been marked for inclusion in the next standard of C++, so you'd better look at it anyway! :) Download the latest release and extract it into a separate directory. *You do not have to compile anything* for Gosu, the boost headers are enough and cover most of its libraries.
 
 In Visual C++, go to Tools/Options/Projects and Solutions/VC++ Directories. Select the list of directories for include files and add the two directories you extracted boost and Gosu into—not the contained 'boost' or 'Gosu' subfolders.
 
@@ -14,7 +39,29 @@ Also, select library files, and add the 'lib' subfolder from Gosu so MSVC can fi
 
 http://www.libgosu.org/wiki_images/msvc_2_lib.png
 
-= Creating a new Gosu game (C++) =
+= Adding Header/Library Paths (for C++ with Visual C++ 2010 / Upgrading to Visual C++ 2010 =
+
+In Visual C++ 2010, the process of adding libraries is way more complicated. First, change into "Expert Mode":
+
+http://www.libgosu.org/wiki_images/msvc_10-expert.jpg
+
+The "Property Manager" pane will appear behind the file list. Unfold one of your projects (i.e. follow the steps below first):
+
+http://www.libgosu.org/wiki_images/msvc_10-propsheet.png
+
+Then click the Microsoft.Cpp.Win32.User entry, which are your user settings and contain the VC directories.
+
+http://www.libgosu.org/wiki_images/msvc_10-directories.png
+
+Here you can add the header and library directories as shown for Visual C++ 2008:
+
+http://www.libgosu.org/wiki_images/msvc_10-include.png
+
+*Don't forget to save* the property sheet changes by clicking the floppy disk icon.
+
+If these steps are unclear, refer to http://blogs.msdn.com/b/vcblog/archive/2010/03/02/visual-studio-2010-c-project-upgrade-guide.aspx
+
+= Creating a new C++ Gosu game (with Visual C++ 2008 or 2010) =
 
 Click File/New/Project and select 'Win32 project', then give it a name and in the application settings choose 'Empty project'.
 
@@ -33,6 +80,8 @@ You can then add new code files, for example the one from the tutorial.
 Next, you need to go into the project options, select C/C++ options, then Code Generation and change the used library from "Multithreaded DLL" to "Multithreaded", and "Multithreaded Debug DLL" to "Multithreaded Debug", respectively—or you will get linker errors. These options are usually only available after adding the first C++ source file.
 
 http://www.libgosu.org/wiki_images/msvc_5_rt.png
+
+*In Visual C++ 2010*, you will also need to change the compiler toolset to vc90 on the project's first property page. Gosu is not built for the vc100 toolset.
 
 To ensure that your EXE file can find fmod.dll and your project's resources, you should also change its output directory for both configurations. (In this case I have put fmod.dll into the examples folder and built straight to that as I was testing the Tutorial game.)
 
@@ -62,31 +111,4 @@ int main(int argc, char* argv[])
 }
 }}}
 
-= Creating a new Gosu game (Ruby) =
-
-Getting started with Ruby is a lot easier.
-If you are working with gems, simply require 'rubygems', then 'gosu'. If you are working with the ZIP archive, copy gosu.so (and if you are using sound, fmod.dll) into your project's directory. Here is a minimal application to ensure that everything works:
-
-{{{
-begin
-  # In case you use Gosu via RubyGems.
-  require 'rubygems'
-rescue LoadError
-  # In case you don't.
-end
-
-require 'gosu'
-
-class MyWindow < Gosu::Window
-  def initialize
-    super(640, 480, false, 20)
-    self.caption = 'Hello World!'
-  end
-end
-
-w = MyWindow.new
-w.show
-}}}
-
-That's it — have fun!
- 
+You can work your way from here using the CppTutorial if you want.
