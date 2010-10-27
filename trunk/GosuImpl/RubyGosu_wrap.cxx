@@ -2236,6 +2236,7 @@ namespace Gosu {
     void register_entity(const std::wstring& name, Gosu::Image* image) { registerEntity(name, image->getData().toBitmap()); }
 }
 
+#include <ctime>
 #include <sstream>
 #include <boost/algorithm/string.hpp>
 
@@ -10708,6 +10709,9 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "NoButton", SWIG_From_int(static_cast< int >(Gosu::noButton)));
   
   GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
+  // While we are at it, to some healthy srand() - otherwise unavailable to Ruby people
+  std::srand(static_cast<unsigned int>(std::time(0)));
+  std::rand(); // and flush the first value
   
   rb_define_module_function(mGosu, "disown_TextInput", VALUEFUNC(_wrap_disown_TextInput), -1);
   

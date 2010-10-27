@@ -166,6 +166,7 @@ namespace Gosu {
     void register_entity(const std::wstring& name, Gosu::Image* image) { registerEntity(name, image->getData().toBitmap()); }
 }
 
+#include <ctime>
 #include <sstream>
 #include <boost/algorithm/string.hpp>
 
@@ -486,7 +487,8 @@ namespace Gosu {
 %init %{
     GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
 	// While we are at it, to some healthy srand() - otherwise unavailable to Ruby people
-	std::srand(Gosu::milliseconds());
+	std::srand(static_cast<unsigned int>(std::time(0)));
+    std::rand(); // and flush the first value
 %}
 
 // TextInput
