@@ -485,6 +485,8 @@ namespace Gosu {
 %include "../Gosu/ButtonsMac.hpp"
 %init %{
     GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
+	// While we are at it, to some healthy srand() - otherwise unavailable to Ruby people
+	std::srand(Gosu::milliseconds());
 %}
 
 // TextInput
