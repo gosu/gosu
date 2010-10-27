@@ -11,7 +11,7 @@ http://www.libgosu.org/wiki_images/main_loop.png
 Examples of what you can do in these events are shown on the RubyTutorial and CppTutorial pages.
 
 There are details that you may be interested in:
-  * `draw` is _very_ flexible. The usual flow is shown above, but `draw` is generally called whenever the OS wants to redraw the window. This may be upon calling `show`, or twice between `update` calls, or not at all during a frame if the window is obscured.
+  * `draw` is _very_ flexible. The usual flow is shown above, but `draw` is generally called whenever the OS wants to redraw the window. This may be directly upon calling `show`, or even twice between `update` calls, or not at all during a frame if the window is obscured.
   * It follows that _you cannot know_ at all which callback will be called first. `initialize` (or the constructor in C++) _must_ set up a valid state. If update contains `respawn() if player == nil`, then `initialize` should also contain `respawn()`. You can just call `update()` as the last call in `initialize`/the constructor if it helps.
   * Because `draw` is so flexible, it should really only render the current state of things and not change anything, not even advance animations. If you write `draw` in a functional, read-only style then you are safe.
   * In `update`, you may want to check `button_down?` (or `input().down()` in C++) to poll the most recent state of a button. Because the input events should logically be fired _before_ `button_down?` is updated, it follows that they all have to happen before `update`. This sadly means that you cannot directly react to the very latest button events in `draw`; an `update` call will always happen inbetween.
