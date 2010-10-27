@@ -43,19 +43,19 @@ http://www.libgosu.org/wiki_images/msvc_2_lib.png
 
 In Visual C++ 2010, the process of adding libraries is way more complicated. First, change into "Expert Mode":
 
-http://www.libgosu.org/wiki_images/msvc_10-expert.jpg
+http://www.libgosu.org/wiki_images/msvc10-expert.jpg
 
 The "Property Manager" pane will appear behind the file list. Unfold one of your projects (i.e. follow the steps below first):
 
-http://www.libgosu.org/wiki_images/msvc_10-propsheet.png
+http://www.libgosu.org/wiki_images/msvc10-propsheet.png
 
 Then click the Microsoft.Cpp.Win32.User entry, which are your user settings and contain the VC directories.
 
-http://www.libgosu.org/wiki_images/msvc_10-directories.png
+http://www.libgosu.org/wiki_images/msvc10-directories.png
 
 Here you can add the header and library directories as shown for Visual C++ 2008:
 
-http://www.libgosu.org/wiki_images/msvc_10-include.png
+http://www.libgosu.org/wiki_images/msvc10-include.png
 
 *Don't forget to save* the property sheet changes by clicking the floppy disk icon.
 
