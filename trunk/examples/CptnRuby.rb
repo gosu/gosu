@@ -25,13 +25,7 @@
 # ...Enemies, a more sophisticated object system, weapons, title and credits
 # screens...
 
-begin
-  # In case you use Gosu via rubygems.
-  require 'rubygems'
-rescue LoadError
-  # In case you don't.
-end
-
+require 'rubygems'
 require 'gosu'
 include Gosu
 

@@ -1,10 +1,4 @@
-begin
-  # In case you use Gosu via RubyGems.
-  require 'rubygems'
-rescue LoadError
-  # In case you don't.
-end
-
+require 'rubygems'
 require 'gosu'
 
 module ZOrder

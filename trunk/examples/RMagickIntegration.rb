@@ -11,13 +11,7 @@
 # * The look of dead soldiers is, err, by accident. Soldier.png needs to be
 #   designed in a less obfuscated way :)
 
-begin
-  # In case you use Gosu via RubyGems.
-  require 'rubygems'
-rescue LoadError
-  # In case you don't.
-end
-
+require 'rubygems'
 require 'gosu'
 require 'RMagick'
 

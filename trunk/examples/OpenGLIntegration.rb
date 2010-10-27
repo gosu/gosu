@@ -3,13 +3,7 @@
 # the block given to Window#gl, and that Gosu Images can be
 # used as textures using the gl_tex_info call.
 
-begin
-  # In case you use Gosu via RubyGems.
-  require 'rubygems'
-rescue LoadError
-  # In case you don't.
-end
-
+require 'rubygems'
 require 'gosu'
 require 'gl'
 require 'glu'
