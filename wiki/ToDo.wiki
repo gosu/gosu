@@ -4,23 +4,20 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-10-24)
+(Last update: 2010-10-28)
 
 == Gosu 0.7.x ==
   * Look into Unicode trouble from boards/Spooner
-  * Fix Gosu::random being dependent on timeGetTime on Win
+  * Only show Gosu::Window after show() has been called (OS X)
+  * Switch Gosu::Color to RGBA, fix Gosu::to_blob
+  * Deprecate Color::new, make it Color::rgb/argb/rgba etc
   * test needs_cursor again on linux (permatrue)
   * Re-compile configure.ac
   * Add scaling to SDL text so descenders don't overflow
   * Add FontFlags support for SDL_TTF Gosu/Text
   * Fix Unicode support for SDL_TTF port (UnicodeTest.rb, @loc_test)
   * Fix Segfault when Image.new doesn't find its file on Linux
-  * Only show Gosu::Window after show() has been called (OS X)
-  * Switch Gosu::Color to RGBA, fix Gosu::to_blob
-  * Deprecate Color::new, make it Color::rgb/argb/rgba etc
-  * Announce MSVS08 Switch & update docs
   * See if clipping coordinate calculation is correct with all transformations considered
-  * Switch to SWIG 2.0 and see which SWIG bugs remain
   * See why Gosu::~Song with Ogg files sometimes causes other songs to stop
   * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously
   * Ensure that Gosu::createText us always width*1 pixels for empty strings
@@ -153,18 +150,16 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Link YouTube videos, and maybe blog tags like http://www.cuberick.com/search/label/gosu?
   * Make logo in forum clickable
   * Make logo in Rdoc clickable
-  * Link ChangeLog and ToDo on front page
   * Make sure createText is visible in Doxygen
   * Add OpenGL Wiki page
   * Add Unicode Support wiki page
   * Add some RSS feed to main index.html page
   * Make tt blocks prettier on front page
-  * Try to translate the RubyTutorial to Japanese :)
   * Deployment wiki page/rdoc: Mention Icon resource support!
   * Note that draw can be called more often than update in the main loop
   * UTF8 Support for PotD texts(?)
   * Change weirdo homepage text about RMagick
-  * Donate to allison's author when I'm home
+  * Donate to allison's author
   * Explain SampleInstance vs. Sample somewhere
   * OR&G: Build simpler version
   * Check if DelphiGL wiki accepts donations
@@ -173,7 +168,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * .app'ify ippa's game after :retrofy is in and the wrapper can handle texplay
   * Consider libgosu.spreadshirt.com
   * Make sure that it is documented what happens to different drawing ops with same z-order
-  * Update README.txt year
+  * Update README.txt and website year
   * Include CptnCpp as sample game
   * Document alpha modes for Ruby
   * Add rdoc to Gosu gem
