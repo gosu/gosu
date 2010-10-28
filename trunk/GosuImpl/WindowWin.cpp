@@ -344,9 +344,9 @@ void Gosu::Window::show()
 	    {
 			Win::processMessages();
 
-			// Whyever this would happen...!
 			if (!::IsWindowVisible(handle()))
 			{
+                // TODO: Find out what the Sleep here is doing...
 				Sleep(50);
 				return;
 			}

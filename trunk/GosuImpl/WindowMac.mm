@@ -193,15 +193,12 @@ struct Gosu::Window::Impl
     {
         NSRect rect = NSMakeRect(0, 0, width, height);
         unsigned style = NSTitledWindowMask | NSMiniaturizableWindowMask | NSClosableWindowMask;
-        window.reset([[GosuWindow alloc] initWithContentRect: rect styleMask:style 
-                                         backing:NSBackingStoreBuffered defer:YES]);
+        window.reset([[GosuWindow alloc] initWithContentRect:rect styleMask:style 
+                                         backing:NSBackingStoreBuffered defer:NO]);
         [window.obj() retain]; // TODO: Why?
         
         [window.obj() setContentView: [[GosuView alloc] init]];
-        
         [window.obj() center];
-        [window.obj() makeKeyAndOrderFront:nil];
-        [[window.obj() contentView] display];
     }
     
     static void doTick(Window& window);
@@ -287,9 +284,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
             realWidth *= factor, realHeight *= factor;
         
         pimpl->createWindow(realWidth, realHeight);
-        
         // Tell context to draw on this window.
-        
         [pimpl->context.obj() setView:[pimpl->window.obj() contentView]];
     }
         
@@ -314,6 +309,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         [pimpl->window.obj() setDelegate: pimpl->forwarder.obj()];
         [pimpl->window.obj() setInput: pimpl->input.get()];
         [(GosuView*)[pimpl->window.obj() contentView] setInput: pimpl->input.get()];
+        // Finally, safely hide the window.
+        [pimpl->window.obj() orderOut:nil];
     }
     
     pimpl->interval = updateInterval;
@@ -377,11 +374,12 @@ void Gosu::Window::show()
         // Start drawing in fullscreen
         [pimpl->context.obj() setFullScreen];
     }
+    else
+        [pimpl->window.obj() makeKeyAndOrderFront:nil];
 
     NSTimer* timer = [NSTimer scheduledTimerWithTimeInterval: pimpl->interval / 1000.0
                             target:pimpl->forwarder.obj() selector:@selector(doTick:)
                             userInfo:nil repeats:YES];
-    update();
     [NSApp run];
     [timer invalidate];
     
@@ -391,6 +389,10 @@ void Gosu::Window::show()
         // Let's leave it in until time for testing comes, though.
         CGDisplaySwitchToMode(kCGDirectMainDisplay, pimpl->savedMode);
         CGDisplayRelease(kCGDirectMainDisplay);
+    }
+    else
+    {
+        [pimpl->window.obj() orderOut:nil];
     }
 }
 
