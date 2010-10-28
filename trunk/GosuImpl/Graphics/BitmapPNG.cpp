@@ -34,7 +34,7 @@ namespace Gosu
 }
 
 Gosu::Reader Gosu::loadFromPNG(Bitmap& out, Reader reader)
-{
+{    
 #if 0
     boost::mutex::scoped_lock lock(pngMutex);
 #endif

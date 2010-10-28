@@ -5,39 +5,53 @@
 #define GOSU_COLOR_HPP
 
 #include <boost/cstdint.hpp>
+#include <Gosu/Platform.hpp>
 
 namespace Gosu
 {
     //! Represents an ARGB color value with 8 bits for each channel. Can be
     //! implicitly constructed from literals of the form 0xaarrggbb. Has fast
     //! value semantics.
+    //! The four-byte layout in memory is RGBA. On Big-Endian machines the
+    //! unsigned int interpretation is 0xrrggbbaa, on Little-Endian machines
+    //! it is 0xaabbggrr.
     class Color
     {
         boost::uint32_t rep;
-
+        enum
+        {
+            RED_OFFSET   =  0,
+            GREEN_OFFSET =  8,
+            BLUE_OFFSET  = 16,
+            ALPHA_OFFSET = 24
+        };
+        
     public:
         typedef boost::uint8_t Channel;
-
+        static const unsigned GL_FORMAT = 0x1908; // GL_RGBA
+        
         //! The default constructor does not initialize the color to any value.
         Color()
         {
         }
-
+        
         //! Conversion constructor for literals of the form 0xaarrggbb.
         //! (C++ only.)
         Color(boost::uint32_t argb)
-        : rep(argb)
         {
+            *this = Color((argb >> 24) & 0xff, (argb >> 16) & 0xff,
+                          (argb >>  8) & 0xff, (argb >>  0) & 0xff);
         }
-
+        
         Color(Channel red, Channel green, Channel blue)
         {
-            rep = (0xff << 24) | (red << 16) | (green << 8) | blue;
+            *this = Color(0xff, red, green, blue);
         }
-
+        
         Color(Channel alpha, Channel red, Channel green, Channel blue)
         {
-            rep = (alpha << 24) | (red << 16) | (green << 8) | blue;
+            rep = (alpha << ALPHA_OFFSET) | (red << RED_OFFSET) |
+                  (green << GREEN_OFFSET) | (blue << BLUE_OFFSET);
         }
         
         //! Constructs a color from the given hue/saturation/value triple.
@@ -47,48 +61,48 @@ namespace Gosu
         static Color fromHSV(double h, double s, double v);
         static Color fromAHSV(Channel alpha, double h, double s, double v);
 
-        Channel alpha() const
-        {
-            return static_cast<Channel>((rep >> 24) & 0xff);
-        }
-
         Channel red() const
         {
-            return static_cast<Channel>((rep >> 16) & 0xff);
+            return static_cast<Channel>(rep >> RED_OFFSET);
         }
 
         Channel green() const
         {
-            return static_cast<Channel>((rep >> 8) & 0xff);
+            return static_cast<Channel>(rep >> GREEN_OFFSET);
         }
 
         Channel blue() const
         {
-            return static_cast<Channel>(rep & 0xff);
+            return static_cast<Channel>(rep >> BLUE_OFFSET);
         }
 
-        void setAlpha(Channel value)
+        Channel alpha() const
         {
-            rep &= 0x00ffffff;
-            rep |= value << 24;
+            return static_cast<Channel>(rep >> ALPHA_OFFSET);
         }
 
         void setRed(Channel value)
         {
-            rep &= 0xff00ffff;
-            rep |= value << 16;
+            rep &= ~(0xff << RED_OFFSET);
+            rep |= value << RED_OFFSET;
         }
 
         void setGreen(Channel value)
         {
-            rep &= 0xffff00ff;
-            rep |= value << 8;
+            rep &= ~(0xff << GREEN_OFFSET);
+            rep |= value << GREEN_OFFSET;
         }
 
         void setBlue(Channel value)
         {
-            rep &= 0xffffff00;
-            rep |= value;
+            rep &= ~(0xff << BLUE_OFFSET);
+            rep |= value << BLUE_OFFSET;
+        }
+
+        void setAlpha(Channel value)
+        {
+            rep &= ~(0xff << ALPHA_OFFSET);
+            rep |= value << ALPHA_OFFSET;
         }
 
         //! Returns the hue of the color, in the usual range of 0..360.
@@ -112,19 +126,19 @@ namespace Gosu
         //! Returns the color in 0xaarrggbb representation.
         boost::uint32_t argb() const
         {
-            return rep;
+            return alpha() << 24 | red() << 16 | green() << 8 | blue();
         }
 
         //! Returns the color in 0x00bbggrr representation.
         boost::uint32_t bgr() const
         {
-            return red() | (rep & 0x0000ff00) | blue() << 16;
+            return blue() << 16 | green() << 8 | red();
         }
 
         //! Returns the color in 0xaabbggrr representation.
         boost::uint32_t abgr() const
         {
-            return alpha() << 24 | bgr();
+            return alpha() << 24 | blue() << 16 | green() << 8 | red();
         }
         
         static const Color NONE;
@@ -171,7 +185,6 @@ namespace Gosu
     //! and then multiplied with each other.
     Color multiply(Color a, Color b);
 
-    // Deprecated
     namespace Colors
     {
         const Color none    = 0x00000000;

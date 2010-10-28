@@ -113,32 +113,9 @@ std::auto_ptr<Gosu::TexChunk>
     result.reset(new TexChunk(graphics, transforms, queues, ptr, block->left + padding, block->top + padding,
                               block->width - 2 * padding, block->height - 2 * padding, padding));
     
-#if defined(__BIG_ENDIAN__)
-    std::vector<unsigned> pixelData(srcWidth * srcHeight);
-    for (unsigned y = 0; y < srcHeight; ++y)
-        for (unsigned x = 0; x < srcWidth; ++x)
-        {
-            boost::uint32_t pixVal = (bmp.getPixel(x, y).argb() & 0x00ffffff) << 8 | bmp.getPixel(x, y).alpha();
-            pixVal = bigToNative(pixVal);
-            pixelData[y * srcWidth + x] = pixVal;
-        }
-    const unsigned* texData = &pixelData[0];
-    unsigned format = GL_RGBA;
-#elif defined(GOSU_IS_IPHONE)
-    std::vector<unsigned> pixelData(srcWidth * srcHeight);
-    for (unsigned y = 0; y < srcHeight; ++y)
-        for (unsigned x = 0; x < srcWidth; ++x)
-            pixelData[y * srcWidth + x] = bmp.getPixel(x, y).abgr();
-    const unsigned* texData = &pixelData[0];
-    unsigned format = GL_RGBA;
-#else
-    const unsigned* texData = bmp.data();
-    unsigned format = GL_BGRA;
-#endif
-    
     glBindTexture(GL_TEXTURE_2D, name);
     glTexSubImage2D(GL_TEXTURE_2D, 0, block->left, block->top, block->width, block->height,
-                 format, GL_UNSIGNED_BYTE, texData);
+                 Color::GL_FORMAT, GL_UNSIGNED_BYTE, bmp.data());
 
     num += 1;
     return result;
