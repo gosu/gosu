@@ -19,8 +19,6 @@ namespace Gosu
         unsigned num;
 
     public:
-        static unsigned maxTextureSize();
-
         Texture(unsigned size);
         ~Texture();
         unsigned size() const;

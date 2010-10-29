@@ -2301,14 +2301,8 @@ namespace Gosu
             throw std::logic_error("Blob length mismatch!");
         Bitmap result;
         result.resize(width, height);
-        const unsigned* rgbaIter = reinterpret_cast<const unsigned*>(RSTRING_PTR(blob));
-        for (unsigned y = 0; y < height; ++y)
-            for (unsigned x = 0; x < width; ++x)
-            {
-                unsigned rgba = *rgbaIter;
-                result.setPixel(x, y, Gosu::Color(rgba).abgr()); // swap R and B
-                ++rgbaIter;
-            }
+        std::memcpy(result.data(),
+            reinterpret_cast<const boost::uint32_t*>(RSTRING_PTR(blob)), width * height * 4);
         return result;
     }
 }
@@ -2618,6 +2612,7 @@ SWIGINTERN std::vector< Gosu::Image * > Gosu_Image_loadTiles(Gosu::Window &windo
         return vec;        
     }
 SWIGINTERN std::string Gosu_Image_toBlob(Gosu::Image const *self){
+        // TODO: Optimize with direct copy into a Ruby string
         Gosu::Bitmap bmp = self->getData().toBitmap();
         return std::string(reinterpret_cast<const char*>(bmp.data()),
                            reinterpret_cast<const char*>(bmp.data()) + bmp.width() * bmp.height() * 4);
@@ -3900,6 +3895,36 @@ fail:
     "    Color.new(Gosu::Color::Channel red, Gosu::Color::Channel green, Gosu::Color::Channel blue)\n"
     "    Color.new(Gosu::Color::Channel alpha, Gosu::Color::Channel red, Gosu::Color::Channel green, Gosu::Color::Channel blue)\n");
   
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Color_from_rgba(int argc, VALUE *argv, VALUE self) {
+  boost::uint32_t arg1 ;
+  unsigned long val1 ;
+  int ecode1 = 0 ;
+  Gosu::Color result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  ecode1 = SWIG_AsVal_unsigned_SS_long(argv[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "boost::uint32_t","Gosu::Color::fromRGBA", 1, argv[0] ));
+  } 
+  arg1 = static_cast< boost::uint32_t >(val1);
+  {
+    try {
+      result = Gosu::Color::fromRGBA(arg1);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_NewPointerObj((new Gosu::Color(static_cast< const Gosu::Color& >(result))), SWIGTYPE_p_Gosu__Color, SWIG_POINTER_OWN |  0 );
+  return vresult;
+fail:
   return Qnil;
 }
 
@@ -10456,6 +10481,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_alloc_func(SwigClassColor.klass, _wrap_Color_allocate);
   rb_define_method(SwigClassColor.klass, "initialize", VALUEFUNC(_wrap_new_Color), -1);
   rb_define_const(SwigClassColor.klass, "GL_FORMAT", SWIG_From_unsigned_SS_int(static_cast< unsigned int >(Gosu::Color::GL_FORMAT)));
+  rb_define_singleton_method(SwigClassColor.klass, "from_rgba", VALUEFUNC(_wrap_Color_from_rgba), -1);
   rb_define_singleton_method(SwigClassColor.klass, "from_hsv", VALUEFUNC(_wrap_Color_from_hsv), -1);
   rb_define_singleton_method(SwigClassColor.klass, "from_ahsv", VALUEFUNC(_wrap_Color_from_ahsv), -1);
   rb_define_method(SwigClassColor.klass, "red", VALUEFUNC(_wrap_Color_red), -1);

@@ -22,7 +22,7 @@ namespace Gosu
     //! Returns the maximum size of an texture that will be allocated
     //! internally by Gosu.
     //! Useful when extending Gosu using OpenGL.
-    extern unsigned const MAX_TEXTURE_SIZE;
+    unsigned const MAX_TEXTURE_SIZE = 1024;
     
     typedef boost::array<double, 16> Transform;
     Transform translate(double x, double y);

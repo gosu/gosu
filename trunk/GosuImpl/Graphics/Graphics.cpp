@@ -357,7 +357,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     const Bitmap& src, unsigned srcX, unsigned srcY,
     unsigned srcWidth, unsigned srcHeight, unsigned borderFlags)
 {
-    static const unsigned maxSize = Texture::maxTextureSize();
+    static const unsigned maxSize = MAX_TEXTURE_SIZE;
 
     // Special case: If the texture is supposed to have hard borders,
     // is quadratic, has a size that is at least 64 pixels but less than 256

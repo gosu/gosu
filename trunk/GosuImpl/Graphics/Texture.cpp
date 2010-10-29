@@ -5,43 +5,6 @@
 #include <Gosu/Platform.hpp>
 #include <stdexcept>
 
-#ifndef GL_BGRA
-#define GL_BGRA 0x80E1
-#endif
-
-// TODO: Move from Texture:: to local namespace and use MAX_TEXTURE_SIZE instead.
-unsigned Gosu::Texture::maxTextureSize()
-{
-#if defined(GOSU_IS_MAC)
-    // Includes the iPhone
-    return 1024;
-#elif defined(GOSU_IS_UNIX)
-    // Since we cannot get the max. texture size until after context creation, we have to
-    // just be pessimistic about it until Gosu is restructured to create the context
-    // earlier. Otherwise, libGL will segfault left and right.
-    return 512;
-#else
-    const static unsigned MIN_SIZE = 256, MAX_SIZE = 1024;
-
-    static unsigned size = 0;
-    if (size == 0)
-    {
-        size = MIN_SIZE / 2;
-        GLint width = 1;
-        do
-        {
-            size *= 2;
-            glTexImage2D(GL_PROXY_TEXTURE_2D, 0, 4, size * 2, size * 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-            glGetTexLevelParameteriv(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width); 
-        } while (width != 0 && size < MAX_SIZE);
-    }
-    
-    return size;
-#endif
-}
-
-const unsigned Gosu::MAX_TEXTURE_SIZE = Gosu::Texture::maxTextureSize();
-
 namespace Gosu
 {
     bool undocumentedRetrofication = false;

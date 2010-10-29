@@ -223,14 +223,8 @@ namespace Gosu
             throw std::logic_error("Blob length mismatch!");
         Bitmap result;
         result.resize(width, height);
-        const unsigned* rgbaIter = reinterpret_cast<const unsigned*>(RSTRING_PTR(blob));
-        for (unsigned y = 0; y < height; ++y)
-            for (unsigned x = 0; x < width; ++x)
-            {
-                unsigned rgba = *rgbaIter;
-                result.setPixel(x, y, Gosu::Color(rgba).abgr()); // swap R and B
-                ++rgbaIter;
-            }
+        std::memcpy(result.data(),
+            reinterpret_cast<const boost::uint32_t*>(RSTRING_PTR(blob)), width * height * 4);
         return result;
     }
 }
@@ -438,6 +432,7 @@ namespace Gosu {
     }
     std::string toBlob() const
     {
+        // TODO: Optimize with direct copy into a Ruby string
         Gosu::Bitmap bmp = $self->getData().toBitmap();
         return std::string(reinterpret_cast<const char*>(bmp.data()),
                            reinterpret_cast<const char*>(bmp.data()) + bmp.width() * bmp.height() * 4);

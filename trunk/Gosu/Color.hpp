@@ -18,13 +18,11 @@ namespace Gosu
     class Color
     {
         boost::uint32_t rep;
-        enum
-        {
-            RED_OFFSET   =  0,
-            GREEN_OFFSET =  8,
-            BLUE_OFFSET  = 16,
-            ALPHA_OFFSET = 24
-        };
+        #ifdef GOSU_IS_LITTLE_ENDIAN
+        enum { RED_OFFSET = 0, GREEN_OFFSET = 8, BLUE_OFFSET = 16, ALPHA_OFFSET = 24 };
+        #else
+        enum { RED_OFFSET = 24, GREEN_OFFSET = 16, BLUE_OFFSET = 8, ALPHA_OFFSET = 0 };
+        #endif
         
     public:
         typedef boost::uint8_t Channel;
@@ -52,6 +50,13 @@ namespace Gosu
         {
             rep = (alpha << ALPHA_OFFSET) | (red << RED_OFFSET) |
                   (green << GREEN_OFFSET) | (blue << BLUE_OFFSET);
+        }
+        
+        static Color fromRGBA(boost::uint32_t rgba)
+        {
+            Color result;
+            result.rep = rgba;
+            return result;
         }
         
         //! Constructs a color from the given hue/saturation/value triple.
