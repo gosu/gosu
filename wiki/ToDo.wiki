@@ -4,11 +4,10 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-10-28)
+(Last update: 2010-10-29)
 
 == Gosu 0.7.x ==
   * Look into Unicode trouble from boards/Spooner
-  * Only show Gosu::Window after show() has been called (OS X)
   * Switch Gosu::Color to RGBA, fix Gosu::to_blob
   * Deprecate Color::new, make it Color::rgb/argb/rgba etc
   * test needs_cursor again on linux (permatrue)
@@ -199,3 +198,5 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * simplify Gosu's IO philosophy (C++)
   * document Gosu's Sockets
   * Gosu::Scope instead of beginGL/endGL etc.
+  * Change ImageData::toBitmap to toBlob(byte*, size_t) and copy directly in RSTRING; add Image::toBitmap() instead
+  * Rename Color::fromXYZ -> Color::xyz()
