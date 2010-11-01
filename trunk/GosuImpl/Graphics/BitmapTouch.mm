@@ -34,10 +34,6 @@ Gosu::Reader Gosu::loadFromBMP(Bitmap& bmp, Reader reader)
     CGContextDrawImage(context, CGRectMake(0.0, 0.0, bmp.width(), bmp.height()), imageRef);
     CGContextRelease(context);
     
-    for (unsigned y = 0; y < bmp.height(); ++y)
-        for (unsigned x = 0; x < bmp.width(); ++x)
-            bmp.setPixel(x, y, bmp.getPixel(x, y).abgr());
-    
     return reader;
 }
 
