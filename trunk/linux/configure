@@ -3533,17 +3533,13 @@ PANGO_CXX_FLAGS=`pkg-config pangoft2 --cflags`
 PANGO_LIBS=`pkg-config pangoft2 --libs`
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for SDL_mixer" >&5
-$as_echo_n "checking for SDL_mixer... " >&6; }
-if test -f "/usr/lib/libSDL_mixer.so" || test -f "/usr/local/lib/libSDL_mixer.so"; then
-  GOSU_A_OBJS=${GOSU_A_OBJS}" \$(SDLMIXER_OBJ)"
-  AUDIO_LIBS="`sdl-config --libs` -lSDL_mixer"
-  AUDIO_INC=`sdl-config --cflags`
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
+#AC_MSG_CHECKING(for SDL_mixer)
+GOSU_A_OBJS=${GOSU_A_OBJS}" \$(SDLMIXER_OBJ)"
+AUDIO_LIBS="`sdl-config --libs` -lSDL_mixer"
+AUDIO_INC=`sdl-config --cflags`
+#AC_MSG_RESULT(yes)
 
 
-fi
 
 # stat.h
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for grep that handles long lines and -e" >&5
