@@ -98,7 +98,7 @@ Gosu::Bitmap Gosu::Texture::toBitmap(unsigned x, unsigned y, unsigned width, uns
     Gosu::Bitmap fullTexture;
     fullTexture.resize(size(), size());
     glBindTexture(GL_TEXTURE_2D, name);
-    glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_BYTE, fullTexture.data());
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, fullTexture.data());
     Gosu::Bitmap bitmap;
     bitmap.resize(width, height);
     bitmap.insert(fullTexture, -int(x), -int(y));
