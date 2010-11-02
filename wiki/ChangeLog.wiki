@@ -1,5 +1,12 @@
 #summary Log of Gosu's development.
-#labels Featured
+
+=0.7.25=
+  * 2010-11-01: All: Fixed Gosu::Image#to_blob/ImageData::toBitmap
+  * 2010-10-27: Ruby: Now seeding Gosu::random with the system time on startup
+  * 2010-09-29: Ruby: Added missing scale(x, y, around_x, around_y) (thanks to Spooner)
+  * 2010-09-29: Ruby: Added Image#save(fn)
+  * 2010-09-08: All: Un-deprecated button_id_to_char/char_to_button_id
+  * 2010-09-08: Mac: Fixed button_id_to_char/char_to_button_id
 
 =0.7.24=
   * 2010-09-08: All: Made all beginClipping/clip_to arguments doubles instead of ints
