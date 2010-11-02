@@ -130,8 +130,11 @@ module Gosu
     # g:: Integer from 0..255
     # b:: Integer from 0..255
     def initialize(a, r, g, b); end
-    # argb: 0xAARRGGBB integer.
+    # argb: 0xaarrggbb integer.
     def initialize(argb); end
+
+    # Initializes a color from an 0xrrggbbaa integer.
+    def self.from_rgba(rgba); end    
     
     # Converts a HSV triple into a color. Same as from_ahsv with alpha set to 255.
     # h:: Integer from 0..360
@@ -262,6 +265,10 @@ module Gosu
     
     # See examples/OpenGLIntegration.rb.
     def gl_tex_info; end
+    
+    # Returns the associated texture contents as binary string of RGBA values.
+    # Useful for use with RMagick (Magick::Image.from_blob).
+    def to_blob; end
     
     # Saves the texture contents as an image file. Useful, for example, to
     # pre-render text on a development machine with proper fonts installed.
