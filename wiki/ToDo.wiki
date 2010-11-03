@@ -4,19 +4,19 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-10-29)
+(Last update: 2010-11-03)
 
 == Gosu 0.7.x ==
-  * Look into Unicode trouble from boards/Spooner
-  * Switch Gosu::Color to RGBA, fix Gosu::to_blob
+  * Write feature_test script for the Unicode composition trouble
+  * Fix the Unicode composition trouble
   * Deprecate Color::new, make it Color::rgb/argb/rgba etc
-  * test needs_cursor again on linux (permatrue)
-  * Re-compile configure.ac
   * Add scaling to SDL text so descenders don't overflow
   * Add FontFlags support for SDL_TTF Gosu/Text
   * Fix Unicode support for SDL_TTF port (UnicodeTest.rb, @loc_test)
   * Fix Segfault when Image.new doesn't find its file on Linux
   * See if clipping coordinate calculation is correct with all transformations considered
+  * Look at http://audiere.sourceforge.net/ for Windows
+  * Test Gosu&ocra with FMOD.dll/audiere.dll/whatever.dll
   * See why Gosu::~Song with Ogg files sometimes causes other songs to stop
   * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously
   * Ensure that Gosu::createText us always width*1 pixels for empty strings
@@ -26,7 +26,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make fuchsia work in BMPs in GosuTouch
   * Fix PNG alpha in Inv.png
   * Fix 8bitAlpha.png supplied by shawn42
-  * Test Gosu&ocra with FMOD.dll/audiere.dll/whatever.dll
   * See if I should fork out RubyGosu.app into Ruby App project
   * Gosu: try integer truncing of drawing positions
   * Remove setResolution and use transforms instead
@@ -37,7 +36,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Throw an exception when using multiple Windows
   * Make C++'s Gosu::multiply available in Ruby
   * Add Numeric#clamp, Numeric#wrap to Ruby
-  * Look at http://audiere.sourceforge.net/ for Windows
   * Make Window arguments optional for Audio, but throw exceptions when in wrong order
   * Make Window arguments optional for Graphics, but throw exceptions when in wrong order
   * Verify usefulness of this task: "Gosu: compile x86_64 with gcc 4.2 on OS X"
@@ -175,14 +173,16 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make sure that WindowMainLoop states that the whole order is just about perceived performance
   * Document how Font roughly works (allow devs to cache chars by text_width'ing the alphabet)
   * Say "you can attach files after posting" below input box in board
+  * See if there is a way to auto-push_to_github on committing SVN
 == Gosu 0.8.x (preliminary) ==
+  * Rename gl_tex_info to gl_info and make it an array for Image
   * Rename needs_x? to need_x? in Ruby
   * Change color constant format
   * Let Image() lazy-load its file using Gosu::File (which keeps the file alive until it is really needed), add Gosu::loading_progress and Gosu::load_more for easy loading bars
   * Make Window::needsCursor return true by default for Windowed games
   * Make Image, Sample, Song, Font use an intrusive_ptr internally
   * Make things tileable by default but add :smooth and :pure or something like that
-  * Add :padding=>N argument to constructor for mega zooming
+  * Add :padding=>N argument to constructor for mega zooming without problems
   * Experimentation: In Ruby, can the window be a singleton and still provide the ability to inherit from it? (Singleton standard class)
   * Use float instead of double everywhere
   * Rename pimpl/Impl to p/Private
