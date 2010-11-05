@@ -25,7 +25,7 @@ If you are only interested in using Gosu with the Ruby programming language, you
 
 Afterwards, `gem install gosu` should work.
 
-= Compiling Gosu =
+= Compiling Gosu for C++ =
 
 To compile Gosu, `cd` into the `linux` subdirectory and run:
 
@@ -36,10 +36,6 @@ make
 
 There is a deprecated 'make install' command that will work for C++, but as most Linux distributions are using a package manager we recommend copying the resulting `linux/libgosu.a` file to your game's directory manually.
 For using Ruby/Gosu, you can install Gosu globally by copying the resulting `linux/gosu.so` file to `/usr/lib/ruby/site_ruby/${your-ruby-version-here}/${your-arch-here}-linux/`, or also copy it next to your Ruby source files where it will be found.
-
-= Using Ruby/Gosu =
-
-Just require `gosu.so` (`require 'gosu'`) and everything should work fine. If you are using RubyGems, remember to `require 'rubygems'` first. If not, you can copy gosu.so around to accompany your Ruby source files.
 
 = Using C++ Gosu =
 
