@@ -37,7 +37,7 @@ make
 There is a deprecated 'make install' command that will work for C++, but as most Linux distributions are using a package manager we recommend copying the resulting `linux/libgosu.a` file to your game's directory manually.
 For using Ruby/Gosu, you can install Gosu globally by copying the resulting `linux/gosu.so` file to `/usr/lib/ruby/site_ruby/${your-ruby-version-here}/${your-arch-here}-linux/`, or also copy it next to your Ruby source files where it will be found.
 
-= Using C++ Gosu =
+= Using Gosu in C++ =
 
 (The following assumes that you have installed Gosu system-wide via `sudo make install`. If not, you will have to add paths as necessary.)
 
