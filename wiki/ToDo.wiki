@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-11-06)
+(Last update: 2010-11-10)
 
 == Gosu 0.7.x ==
   * Write feature_test script for the Unicode composition trouble
@@ -124,6 +124,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Deprecate Image::getData, introduce Image::data
   * Try and see if Gosu can be made to correctly release pushed buttons when the keyboard is overloaded
   * Add Gosu::tempDir
+  * Remove OS X file artefacts (._README.txt) from Linux tarball
+  * Fix error when creating an Image from "\n" on OS X
 == Gosu Touch ==
   * See if [UIScreen scale] really gives us a hint about zooming on the iPad - and if so, tell the user to STOP IT man!
   * See what OolongEngine does better than GosuTouch (I guess: timing, audio?)
