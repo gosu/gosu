@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'mysql'
 require 'RMagick'
 
