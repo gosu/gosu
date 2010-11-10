@@ -1,3 +1,5 @@
+# Encoding: UTF-8
+
 require '../lib/gosu'
 
 class Test < Gosu::Window
@@ -5,6 +7,7 @@ class Test < Gosu::Window
     super(800, 600, false)
 	@font = Gosu::Font.new(self, "Arial", 20)
 	self.text_input = Gosu::TextInput.new
+	#self.caption = "Ü=#{@font.text_width 'Ü'}"
   end
   
   def update
