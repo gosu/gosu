@@ -16,7 +16,7 @@ require 'gosu'
 
 class MyWindow < Gosu::Window
   def initialize
-    super(640, 480, false, 20)
+    super 640, 480, false
     self.caption = 'Hello World!'
   end
 end
