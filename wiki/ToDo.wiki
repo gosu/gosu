@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-11-12)
+(Last update: 2010-11-13)
 
 == Gosu 0.7.x ==
   * Make sure returned strings are marked as UTF8-encoded
@@ -127,6 +127,10 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Add Gosu::tempDir
   * Remove OS X file artefacts (._README.txt) from Linux tarball
   * Fix error when creating an Image from "\n" on OS X
+  * Add callback for the OS-supplied "close" button
+  * Use a vector for the DrawOpQueue as suggested by Antikythera
+  * render-to-texture korrekt implementieren
+  * If GLFW doesn't help us: implement fullscreen as in the Old New Thing
 == Gosu Touch ==
   * See if [UIScreen scale] really gives us a hint about zooming on the iPad - and if so, tell the user to STOP IT man!
   * See what OolongEngine does better than GosuTouch (I guess: timing, audio?)
@@ -176,6 +180,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Document how Font roughly works (allow devs to cache chars by text_width'ing the alphabet)
   * Say "you can attach files after posting" below input box in board
   * See if there is a way to auto-push_to_github on committing SVN
+  * Peter Rexer antworten
 == Gosu 0.8.x (preliminary) ==
   * Rename gl_tex_info to gl_info and make it an array for Image
   * Rename needs_x? to need_x? in Ruby
