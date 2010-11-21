@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-11-19)
+(Last update: 2010-11-22)
 
 == Gosu 0.7.x ==
   * Install Ruby 1.9 via RVM
@@ -12,7 +12,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make sure TextInput#length counts characters, not bytes, in Ruby 1.9
   * Verify that the script posted by Spooner works as expected now
   * Deprecate Color::new, make it Color::rgb/argb/rgba etc
-  * Add scaling to SDL text so descenders don't overflow
   * Add FontFlags support for SDL_TTF Gosu/Text
   * Fix Unicode support for SDL_TTF port (UnicodeTest.rb, @loc_test)
   * Fix Segfault when Image.new doesn't find its file on Linux
@@ -179,7 +178,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Document how Font roughly works (allow devs to cache chars by text_width'ing the alphabet)
   * Say "you can attach files after posting" below input box in board
   * See if there is a way to auto-push_to_github on committing SVN
-  * Peter Rexer antworten
 == Gosu 0.8.x (preliminary) ==
   * Rename gl_tex_info to gl_info and make it an array for Image
   * Rename needs_x? to need_x? in Ruby
