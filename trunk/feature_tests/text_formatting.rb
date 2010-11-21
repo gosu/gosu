@@ -4,7 +4,7 @@ TEST_STRING = "</u>H<u>al<b>lo &amp;&lt;b&gt; We<i>lt H&M Entity: &cursor; <c=ff
 
 class Test < Gosu::Window
   def initialize
-    super(800, 600, false)
+    super 800, 600, false
     
     Gosu::register_entity "cursor", Gosu::Image.new(self, "media/Cursor.png", false)
     
@@ -16,10 +16,6 @@ class Test < Gosu::Window
   end
   
   def draw
-    # TODO: get rid of ugly aliasing on 64-bit OS X and possibly others
-    #draw_quad 0, 0, Gosu::Color::WHITE, 800, 0, Gosu::Color::WHITE,
-    #  800, 600, Gosu::Color::WHITE, 0, 600, Gosu::Color::WHITE, 0
-    
     @font.draw TEST_STRING, 10, 10, 0
     
     @simple_text.draw 10, 60, 0

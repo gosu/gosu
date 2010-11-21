@@ -1,4 +1,4 @@
-if ENV['USER'] == 'jlnr' then
+if ENV['USER'] == 'jlnr' and `uname` == 'Darwin' then
   require 'appscript'
 
   desc "Publish OmniFocus tasks in ToDo Wiki page"
