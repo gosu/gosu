@@ -24,7 +24,7 @@ namespace :linux do
   LINUX_SPEC = Gem::Specification.new do |s|
     apply_gemspec_defaults s
     s.platform = 'ruby'
-    s.files = COMMON_RUBY_FILES + FileList[ 'Gosu/**/*', 'GosuImpl/**/*', 'linux/extconf.rb' ]
+    s.files = COMMON_RUBY_FILES + FileList[ 'GosuImpl/**/*', 'linux/extconf.rb' ]
     s.extensions = [ 'linux/extconf.rb' ]
     s.require_path = 'lib'
     s.requirements = ['See http://code.google.com/p/gosu/wiki/GettingStartedOnLinux']
