@@ -206,9 +206,17 @@ namespace Gosu
             if (initResult < 0)
                 throw std::runtime_error("Could not initialize SDL_TTF");
 
-	        // Try to open the font at the given path
-	        font = TTF_OpenFont(Gosu::wstringToUTF8(fontName).c_str(), fontHeight);
-	        if (!font)
+	          // Try to open the font at the given path
+	          font = TTF_OpenFont(Gosu::wstringToUTF8(fontName).c_str(), fontHeight);
+	          if (!font)
+                throw std::runtime_error("Could not open TTF file " + Gosu::wstringToUTF8(fontName));
+            
+            // Re-open with scaled height so that ascenders/descenders fit
+            int tooLargeHeight = TTF_FontHeight(font);
+            int realHeight = fontHeight * fontHeight / tooLargeHeight;
+            TTF_CloseFont(font);
+	          font = TTF_OpenFont(Gosu::wstringToUTF8(fontName).c_str(), realHeight);
+	          if (!font)
                 throw std::runtime_error("Could not open TTF file " + Gosu::wstringToUTF8(fontName));
         }
         

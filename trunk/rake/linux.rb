@@ -27,18 +27,7 @@ namespace :linux do
     s.files = COMMON_RUBY_FILES + FileList[ 'Gosu/**/*', 'GosuImpl/**/*', 'linux/extconf.rb' ]
     s.extensions = [ 'linux/extconf.rb' ]
     s.require_path = 'lib'
-    s.requirements = ['g++',
-                      'pkg-config',
-                      'libgl',
-                      'X11 includes and libraries',
-                      'pangoft2',
-                      'SDL_mixer',
- 
-                      "(Packages for Debian/Ubuntu:\n" +
-                      ' g++ pkg-config ruby-dev xorg-dev' +
-                      ' libsdl-mixer1.2-dev libgl1-mesa-dev' +
-                      ' libpango1.0-dev' +
-                      "\n)"]
+    s.requirements = ['See http://code.google.com/p/gosu/wiki/GettingStartedOnLinux']
   end
   
   Rake::GemPackageTask.new(LINUX_SPEC) { |t| t.package_dir = 'public' }
@@ -46,4 +35,9 @@ namespace :linux do
   task :release_gem => :gem do
     sh "gem push public/gosu-#{GOSU_VERSION}.gem"
   end
+  
+  task :ruby do
+    sh "cd linux && rm -f Makefile && ruby extconf.rb && make"
+  end
 end
+
