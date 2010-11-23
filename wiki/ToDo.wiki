@@ -4,10 +4,9 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-11-22)
+(Last update: 2010-11-23)
 
 == Gosu 0.7.x ==
-  * Install Ruby 1.9 via RVM
   * Make sure returned strings are marked as UTF8-encoded
   * Make sure TextInput#length counts characters, not bytes, in Ruby 1.9
   * Verify that the script posted by Spooner works as expected now
