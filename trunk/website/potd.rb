@@ -15,12 +15,15 @@ begin
   
   winner = ary[rand(ary.size)]
   
+  filename = "http://www.libgosu.org/mwf/attachments/#{winner[2].to_i % 100}/#{winner[2]}/#{winner[3]}"
+  retry if not File.exist? filename
+  
   File.open('potd_values.rb', 'w') do |file|
     file.puts "$POTD_ID = #{winner[0]}"
     file.puts "$POTD_TITLE = %(#{winner[1]})"
   end
   
-  image = Magick::Image.read("http://www.libgosu.org/mwf/attachments/#{winner[2].to_i % 100}/#{winner[2]}/#{winner[3]}")[0]
+  image = Magick::Image.read(filename)[0]
   image.change_geometry! '276x350>' do |cols, rows, img|
     img.resize! cols, rows
   end
