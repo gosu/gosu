@@ -3,6 +3,8 @@ require 'mysql'
 require 'RMagick'
 
 begin
+  raise :only_for_retry_lol
+rescue
   begin
     # connect to the MySQL server
     dbh = Mysql.real_connect("localhost", ARGV[0], ARGV[1], "mwf")
@@ -29,10 +31,8 @@ begin
       img.resize! cols, rows
     end
     image.write 'potd.png'
-  rescue
-    # only for retry :P
+  ensure
+    # disconnect from server
+    dbh.close if dbh
   end
-ensure
-  # disconnect from server
-  dbh.close if dbh
 end
