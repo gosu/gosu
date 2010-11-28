@@ -14,7 +14,7 @@ begin
   res.free
 
   # Some files may not exist thanks to earlier libgosu server failage.
-  filename = :man_this_script_sucks
+  filename = "man_this_script_sucks"
   while not File.exist? filename do
     winner = ary[rand(ary.size)]
     filename = "http://www.libgosu.org/mwf/attachments/#{winner[2].to_i % 100}/#{winner[2]}/#{winner[3]}"
