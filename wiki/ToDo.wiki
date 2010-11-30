@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-11-23)
+(Last update: 2010-11-30)
 
 == Gosu 0.7.x ==
   * Make sure returned strings are marked as UTF8-encoded
@@ -142,6 +142,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Use getBytes instead of UTF8String
   * Testen, ob nicht alles besser ist, wenn ich graphics width/height die echten Daten des iPhone4 liefern lasse
   * Fix music stopping after locking the screen for a long time
+  * Fix too-many-Fingers-bug
 == Gosu CI/Usability ==
   * Document 64px minimum for reliable single-texture optimization
   * Mention Gosu's respectable age somewhere :)
