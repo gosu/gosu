@@ -48,4 +48,4 @@ EOS
   s.summary = '2D game development library.'
 end
 
-Dir['rake/*.rb'].each { |task| require task }
+Dir['rake/*.rb'].each { |task| require File.expand_path(task) }
