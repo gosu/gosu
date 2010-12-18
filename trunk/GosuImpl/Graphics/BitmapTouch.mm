@@ -50,10 +50,10 @@ Gosu::Writer Gosu::saveToPNG(const Bitmap& bmp, Writer writer)
         CGDataProviderCreateWithData(0, bmp.data(), bmp.width() * bmp.height() * 4, 0);
 
     static CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
-
+    
     CGImageRef imageRef =
         CGImageCreate(bmp.width(), bmp.height(), 8, 32, bmp.width() * 4, colorspace,
-                      kCGImageAlphaFirst, dataProvider, 0, false, kCGRenderingIntentDefault);
+                      kCGImageAlphaLast, dataProvider, 0, false, kCGRenderingIntentDefault);
 
     ObjRef<UIImage> image([[UIImage alloc] initWithCGImage: imageRef]);
     
