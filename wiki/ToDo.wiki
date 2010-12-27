@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2010-12-23)
+(Last update: 2010-12-27)
 
 == Gosu 0.7.x ==
   * Make sure returned strings are marked as UTF8-encoded
@@ -130,6 +130,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Use a vector for the DrawOpQueue as suggested by Antikythera
   * render-to-texture korrekt implementieren
   * If GLFW doesn't help us: implement fullscreen as in the Old New Thing
+  * Try to understand the benchmark on stackoverflow
 == Gosu Touch ==
   * See if [UIScreen scale] really gives us a hint about zooming on the iPad - and if so, tell the user to STOP IT man!
   * See what OolongEngine does better than GosuTouch (I guess: timing, audio?)
