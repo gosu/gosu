@@ -32,7 +32,10 @@
     if ($1 == 0)
         $result = Qnil;
     else
+    {
         $result = rb_str_new2(Gosu::wstringToUTF8(std::wstring(1, $1)).c_str());
+        FIX_ENCODING($result);
+    }
 }
 %typemap(in) const std::wstring& (std::wstring temp) {
     VALUE localTemporary = rb_obj_as_string($input);
@@ -42,12 +45,15 @@
 %apply const std::wstring& { std::wstring, const std::string };
 %typemap(out) std::wstring {
     $result = rb_str_new2(Gosu::wstringToUTF8($1).c_str());
+    FIX_ENCODING($result);
 }
 %typemap(out) const std::wstring& {
     $result = rb_str_new2(Gosu::wstringToUTF8($1).c_str());
+    FIX_ENCODING($result);
 }
 %typemap(directorin) const std::wstring& {
     $input = rb_str_new2(Gosu::wstringToUTF8($1).c_str());
+    FIX_ENCODING($input);
 }
 %typemap(directorout) std::wstring {
     VALUE localTemporary = rb_obj_as_string($1);
@@ -170,18 +176,12 @@ namespace Gosu {
 #include <sstream>
 #include <boost/algorithm/string.hpp>
 
-// New Ruby 1.9 syntax (for compilation with Ruby 1.8)
-#ifndef RSTRING_LEN
-# define RSTRING_LEN(x) RSTRING(x)->len
-#endif
-#ifndef RSTRING_PTR
-# define RSTRING_PTR(x) RSTRING(x)->ptr
-#endif
-#ifndef RARRAY_LEN
-# define RARRAY_LEN(x) RARRAY(x)->len
-#endif
-#ifndef RARRAY_PTR
-# define RARRAY_PTR(x) RARRAY(x)->ptr
+// Preprocessor check for 1.9 (thanks banister)
+#if defined(ROBJECT_EMBED_LEN_MAX)
+#define FIX_ENCODING(var) \
+    rb_funcall(var, rb_intern("force_encoding"), 1, rb_str_new2("UTF-8"));
+#else
+#define FIX_ENCODING(var)
 #endif
 
 namespace GosusDarkSide
@@ -215,7 +215,7 @@ namespace Gosu
         // (Works with RMagick).
         VALUE conversion = rb_str_new2("to_blob { self.format = 'RGBA'; self.depth = 8 }");
         VALUE blob = rb_obj_instance_eval(1, &conversion, val);
-        Check_SafeStr(blob);
+        rb_check_safe_obj(blob);
         unsigned width = NUM2UINT(rb_funcall(val, rb_intern("columns"), 0));
         unsigned height = NUM2UINT(rb_funcall(val, rb_intern("rows"), 0));
                                  

@@ -335,7 +335,8 @@ std::wstring Gosu::Window::caption() const
         return L"";
     
     ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]);
-    return Gosu::utf8ToWstring([[pimpl->window.obj() title] UTF8String]);
+    const char* utf8 = [[pimpl->window.obj() title] UTF8String];
+    return utf8 ? Gosu::utf8ToWstring(utf8) : std::wstring();
 }
 
 void Gosu::Window::setCaption(const std::wstring& caption)
