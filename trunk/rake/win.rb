@@ -10,7 +10,7 @@ namespace :win do
   desc "Releases the archive #{WINDOWS_ARCHIVE_FILENAME} on GoogleCode"
   task :release => :archive do
     sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION}, compiled for 32-bit Windows (C++)\"" +
-       " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-Windows\" #{WINDOWS_ARCHIVE_FILENAME}"
+       " --project=gosu --user=julianraschke --password=#{GOSU_PASSWORD.call} --labels=\"Featured,Type-Archive,OpSys-Windows\" #{WINDOWS_ARCHIVE_FILENAME}"
   end
 
   task :gem => [:version]

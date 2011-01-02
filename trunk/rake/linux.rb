@@ -16,7 +16,7 @@ namespace :linux do
   desc "Releases the archive #{LINUX_ARCHIVE_FILENAME} on GoogleCode"
   task :release => :archive do
     sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} source package for Linux (C++)\"" +
-       " --project=gosu --user=julianraschke --labels=\"Featured,Type-Archive,OpSys-All\" #{LINUX_ARCHIVE_FILENAME}"
+       " --project=gosu --user=julianraschke --password=#{GOSU_PASSWORD.call} --labels=\"Featured,Type-Archive,OpSys-All\" #{LINUX_ARCHIVE_FILENAME}"
   end
   
   task :gem => [:version]
