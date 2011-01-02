@@ -2252,8 +2252,10 @@ namespace Gosu {
 #if defined(ROBJECT_EMBED_LEN_MAX)
 #define FIX_ENCODING(var) \
     rb_funcall(var, rb_intern("force_encoding"), 1, rb_str_new2("UTF-8"));
+#define RUBY_18_19(r18, r19) r19
 #else
 #define FIX_ENCODING(var)
+#define RUBY_18_19(r18, r19) r18
 #endif
 
 namespace GosusDarkSide
@@ -2634,10 +2636,12 @@ SWIG_From_bool  (bool value)
 }
 
 SWIGINTERN unsigned int Gosu_TextInput_caret_pos(Gosu::TextInput const *self){
-        return Gosu::wstringToUTF8(self->text().substr(0, self->caretPos())).size();
+        return RUBY_18_19(Gosu::wstringToUTF8(self->text().substr(0, self->caretPos())).size(),
+            self->caretPos());
     }
 SWIGINTERN unsigned int Gosu_TextInput_selection_start(Gosu::TextInput const *self){
-        return Gosu::wstringToUTF8(self->text().substr(0, self->selectionStart())).size();
+        return RUBY_18_19(Gosu::wstringToUTF8(self->text().substr(0, self->selectionStart())).size(),
+            self->selectionStart());
     }
 SWIGINTERN void Gosu_Window_drawLine(Gosu::Window *self,double x1,double y1,Gosu::Color c1,double x2,double y2,Gosu::Color c2,Gosu::ZPos z=0,Gosu::AlphaMode mode=Gosu::amDefault){
         self->graphics().drawLine(x1, y1, c1, x2, y2, c2,

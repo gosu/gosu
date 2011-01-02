@@ -180,8 +180,10 @@ namespace Gosu {
 #if defined(ROBJECT_EMBED_LEN_MAX)
 #define FIX_ENCODING(var) \
     rb_funcall(var, rb_intern("force_encoding"), 1, rb_str_new2("UTF-8"));
+#define RUBY_18_19(r18, r19) r19
 #else
 #define FIX_ENCODING(var)
+#define RUBY_18_19(r18, r19) r18
 #endif
 
 namespace GosusDarkSide
@@ -499,10 +501,12 @@ namespace Gosu {
 %extend Gosu::TextInput {
     // Fix indices into UTF-8 string
     unsigned caret_pos() const {
-        return Gosu::wstringToUTF8($self->text().substr(0, $self->caretPos())).size();
+        return RUBY_18_19(Gosu::wstringToUTF8($self->text().substr(0, $self->caretPos())).size(),
+            $self->caretPos());
     }
     unsigned selection_start() const {
-        return Gosu::wstringToUTF8($self->text().substr(0, $self->selectionStart())).size();
+        return RUBY_18_19(Gosu::wstringToUTF8($self->text().substr(0, $self->selectionStart())).size(),
+            $self->selectionStart());
     }
 };
 
