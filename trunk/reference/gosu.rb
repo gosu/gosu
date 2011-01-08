@@ -467,8 +467,17 @@ module Gosu
     # Returns the button that has to be pressed to produce the given character, or nil.
     def self.char_to_button_id(char); end
     
-    # See examples/OpenGLIntegration.rb.
-    def gl(&custom_gl_code); end
+    # For custom OpenGL calls. Executes the given block in a clean OpenGL environment.
+    # Use the ruby-opengl gem to access OpenGL function (if you manage to get it to work).
+    # IF no z position is given, it will execute the given block immediately, otherwise,
+    # the code will be scheduled to be called between Gosu drawing operations.
+    # Note: You cannot call Gosu rendering functions within this block, and you can only
+    # call the gl function in the call tree of Window#draw.
+    # Note: Against Gosu's usual convention, the order of execution among GL blocks with
+    # an equal z position is undefined, and so is the precedence between GL blocks and images
+    # with the same z position.
+    # See examples/OpenGLIntegration.rb for an example.
+    def gl(z = nil, &custom_gl_code); end
     
     # Limits the drawing area to a given rectangle while evaluating the code inside of the block.
     def clip_to(x, y, w, h, &drawing_code); end
