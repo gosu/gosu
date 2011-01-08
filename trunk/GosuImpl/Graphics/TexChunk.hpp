@@ -16,17 +16,37 @@ class Gosu::TexChunk : public Gosu::ImageData
     DrawOpQueueStack* queues;
     boost::shared_ptr<Texture> texture;
     int x, y, w, h, padding;
+    
+    // Cached for faster access.
+    GLTexInfo info;
 
 public:
     TexChunk(Graphics& graphics, Transforms& transforms, DrawOpQueueStack& queues,
              boost::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding);
     ~TexChunk();
 
-    unsigned int width() const;
-    unsigned int height() const;
+    unsigned int width() const
+    {
+        return w;
+    }
     
-    GLuint texName() const;
-    void getCoords(float& left, float& top, float& right, float& bottom) const;
+    unsigned int height() const
+    {
+        return h;
+    }
+    
+    GLuint texName() const
+    {
+        return info.texName;
+    }
+    
+    void getCoords(float& left, float& top, float& right, float& bottom) const
+    {
+        left = info.left;
+        top = info.top;
+        right = info.right;
+        bottom = info.bottom;
+    }
 
     void draw(double x1, double y1, Color c1,
         double x2, double y2, Color c2,

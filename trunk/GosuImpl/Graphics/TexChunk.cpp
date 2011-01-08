@@ -9,34 +9,16 @@ Gosu::TexChunk::TexChunk(Graphics& graphics, Transforms& transforms, DrawOpQueue
 :   graphics(&graphics), transforms(&transforms), queues(&queues),
     texture(texture), x(x), y(y), w(w), h(h), padding(padding)
 {
+    info.texName = texture->texName();
+    info.left    = float(x) / texture->size();
+    info.top     = float(y) / texture->size();
+    info.right   = float(x + w) / texture->size();
+    info.bottom  = float(y + h) / texture->size();
 }
 
 Gosu::TexChunk::~TexChunk()
 {
     texture->free(x - padding, y - padding);
-}
-
-unsigned int Gosu::TexChunk::width() const
-{
-    return w;
-}
-
-unsigned int Gosu::TexChunk::height() const
-{
-    return h;
-}
-
-GLuint Gosu::TexChunk::texName() const
-{
-    return texture->texName();
-}
-
-void Gosu::TexChunk::getCoords(float& left, float& top, float& right, float& bottom) const
-{
-    left = float(x) / texture->size();
-    top = float(y) / texture->size();
-    right = float(x + w) / texture->size();
-    bottom = float(y + h) / texture->size();
 }
 
 void Gosu::TexChunk::draw(double x1, double y1, Color c1,
@@ -68,9 +50,6 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1,
 
 boost::optional<Gosu::GLTexInfo> Gosu::TexChunk::glTexInfo() const
 {
-    Gosu::GLTexInfo info;
-    info.texName = texName();
-    getCoords(info.left, info.top, info.right, info.bottom);
     return info;
 }
 
