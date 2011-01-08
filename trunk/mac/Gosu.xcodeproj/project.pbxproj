@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		8D07F2C40486CC7A007CD1D0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB77AAFE841565C02AAC07 /* Carbon.framework */; };
 		D4032B7D0F5035A900A20790 /* TextTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4032B7C0F5035A900A20790 /* TextTouch.mm */; };
+		D40C66A312D9282C00712276 /* TimingApple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D40C66A212D9282C00712276 /* TimingApple.cpp */; };
+		D40C66A412D9282C00712276 /* TimingApple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D40C66A212D9282C00712276 /* TimingApple.cpp */; };
+		D40C66A512D9282C00712276 /* TimingApple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D40C66A212D9282C00712276 /* TimingApple.cpp */; };
+		D40C66A612D9282C00712276 /* TimingApple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D40C66A212D9282C00712276 /* TimingApple.cpp */; };
 		D410E98D0A801948005C7067 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98A0A801948005C7067 /* AppKit.framework */; };
 		D410E98E0A801948005C7067 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98B0A801948005C7067 /* ApplicationServices.framework */; };
 		D410E98F0A801948005C7067 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D410E98C0A801948005C7067 /* Foundation.framework */; };
@@ -41,7 +45,6 @@
 		D410EA3D0A8019FA005C7067 /* InputMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410EA180A8019FA005C7067 /* InputMac.mm */; };
 		D410EA400A8019FA005C7067 /* IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA1B0A8019FA005C7067 /* IO.cpp */; };
 		D410EA410A8019FA005C7067 /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA1C0A8019FA005C7067 /* Math.cpp */; };
-		D410EA440A8019FA005C7067 /* TimingUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA2E0A8019FA005C7067 /* TimingUnix.cpp */; };
 		D410EA460A8019FA005C7067 /* Utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA300A8019FA005C7067 /* Utility.cpp */; };
 		D410EA470A8019FA005C7067 /* WindowMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410EA310A8019FA005C7067 /* WindowMac.mm */; };
 		D410EAF50A801B00005C7067 /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD40A801B00005C7067 /* Bitmap.cpp */; };
@@ -80,7 +83,6 @@
 		D423823C0C4C3D79000DAA25 /* InputMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410EA180A8019FA005C7067 /* InputMac.mm */; };
 		D423823D0C4C3D79000DAA25 /* IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA1B0A8019FA005C7067 /* IO.cpp */; };
 		D423823E0C4C3D79000DAA25 /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA1C0A8019FA005C7067 /* Math.cpp */; };
-		D423823F0C4C3D79000DAA25 /* TimingUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA2E0A8019FA005C7067 /* TimingUnix.cpp */; };
 		D42382400C4C3D79000DAA25 /* Utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA300A8019FA005C7067 /* Utility.cpp */; };
 		D42382410C4C3D79000DAA25 /* WindowMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410EA310A8019FA005C7067 /* WindowMac.mm */; };
 		D423825C0C4C3E3E000DAA25 /* DirectoriesMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410E9FF0A8019FA005C7067 /* DirectoriesMac.mm */; };
@@ -131,7 +133,6 @@
 		D46C2A4F0FAE039E00A33476 /* IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA1B0A8019FA005C7067 /* IO.cpp */; };
 		D46C2A500FAE039E00A33476 /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA1C0A8019FA005C7067 /* Math.cpp */; };
 		D46C2A510FAE039E00A33476 /* TextInputMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4F07B260D93504700FB3D99 /* TextInputMac.mm */; };
-		D46C2A520FAE039E00A33476 /* TimingUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA2E0A8019FA005C7067 /* TimingUnix.cpp */; };
 		D46C2A530FAE039E00A33476 /* WindowMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D410EA310A8019FA005C7067 /* WindowMac.mm */; };
 		D46C2A540FAE03B100A33476 /* RubyGosu_wrap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = D47BD3280BD78F7200ACF014 /* RubyGosu_wrap.cxx */; };
 		D46C2DE00FAE03F900A33476 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42568090C69CF6100E745AC /* IOKit.framework */; };
@@ -156,7 +157,6 @@
 		D4A5A20C0F40D30A00FFF378 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADE0A801B00005C7067 /* Image.cpp */; };
 		D4A5A20D0F40D30E00FFF378 /* IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA1B0A8019FA005C7067 /* IO.cpp */; };
 		D4A5A20E0F40D30F00FFF378 /* LargeImageData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EADF0A801B00005C7067 /* LargeImageData.cpp */; };
-		D4A5A2130F40D33300FFF378 /* TimingUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA2E0A8019FA005C7067 /* TimingUnix.cpp */; };
 		D4A5A2140F40D33400FFF378 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97B0CD3907D00621B24 /* Texture.cpp */; };
 		D4A5A2150F40D33800FFF378 /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAE20A801B00005C7067 /* Text.cpp */; };
 		D4A5A2160F40D33B00FFF378 /* TexChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E97D0CD3907D00621B24 /* TexChunk.cpp */; };
@@ -401,9 +401,10 @@
 
 /* Begin PBXFileReference section */
 		08FB77AAFE841565C02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
-		8D07F2C80486CC7A007CD1D0 /* Gosu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Gosu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D07F2C80486CC7A007CD1D0 /* Gosu */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = folder; path = Gosu; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9CA23C0100396920073D01B /* Macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Macro.hpp; sourceTree = "<group>"; };
 		D4032B7C0F5035A900A20790 /* TextTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TextTouch.mm; sourceTree = "<group>"; };
+		D40C66A212D9282C00712276 /* TimingApple.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TimingApple.cpp; path = ../GosuImpl/TimingApple.cpp; sourceTree = SOURCE_ROOT; };
 		D410D6220EE9D379007740AE /* Iconv.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Iconv.hpp; path = ../GosuImpl/Iconv.hpp; sourceTree = SOURCE_ROOT; };
 		D410E98A0A801948005C7067 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		D410E98B0A801948005C7067 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -437,7 +438,6 @@
 		D410EA180A8019FA005C7067 /* InputMac.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = InputMac.mm; path = ../GosuImpl/InputMac.mm; sourceTree = SOURCE_ROOT; };
 		D410EA1B0A8019FA005C7067 /* IO.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = IO.cpp; path = ../GosuImpl/IO.cpp; sourceTree = SOURCE_ROOT; };
 		D410EA1C0A8019FA005C7067 /* Math.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = Math.cpp; path = ../GosuImpl/Math.cpp; sourceTree = SOURCE_ROOT; };
-		D410EA2E0A8019FA005C7067 /* TimingUnix.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = TimingUnix.cpp; path = ../GosuImpl/TimingUnix.cpp; sourceTree = SOURCE_ROOT; };
 		D410EA300A8019FA005C7067 /* Utility.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = Utility.cpp; path = ../GosuImpl/Utility.cpp; sourceTree = SOURCE_ROOT; };
 		D410EA310A8019FA005C7067 /* WindowMac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = WindowMac.mm; path = ../GosuImpl/WindowMac.mm; sourceTree = SOURCE_ROOT; };
 		D410EAD40A801B00005C7067 /* Bitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = Bitmap.cpp; sourceTree = "<group>"; };
@@ -513,7 +513,7 @@
 		D4AB62F50D08BA9900D71382 /* MacUtility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MacUtility.hpp; path = ../GosuImpl/MacUtility.hpp; sourceTree = SOURCE_ROOT; };
 		D4B0132B11F823C600A804F7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D4BC5D6A0CC29D0F002D4236 /* Async.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Async.hpp; path = ../Gosu/Async.hpp; sourceTree = SOURCE_ROOT; };
-		D4CA89500BC68B5D00A431AC /* gosu.for_1_8.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = gosu.for_1_8.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4CA89500BC68B5D00A431AC /* gosu */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = folder; path = gosu; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4D3E71A10722AAA006DCD24 /* MacRuby.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MacRuby.framework; path = /Library/Frameworks/MacRuby.framework; sourceTree = "<absolute>"; };
 		D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = RubyGosuStub.mm; path = ../GosuImpl/RubyGosuStub.mm; sourceTree = SOURCE_ROOT; };
 		D4F07B220D934C8B00FB3D99 /* TextInput.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextInput.hpp; path = ../Gosu/TextInput.hpp; sourceTree = SOURCE_ROOT; };
@@ -653,8 +653,8 @@
 		034768DDFF38A45A11DB9C8B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D07F2C80486CC7A007CD1D0 /* Gosu.framework */,
-				D4CA89500BC68B5D00A431AC /* gosu.for_1_8.bundle */,
+				8D07F2C80486CC7A007CD1D0 /* Gosu */,
+				D4CA89500BC68B5D00A431AC /* gosu */,
 				D459FF440BDCD23500E7F0D6 /* RubyGosu App.app */,
 				D4A5A1F40F40D28600FFF378 /* libgosutouch.a */,
 			);
@@ -759,13 +759,13 @@
 				D4AB62F50D08BA9900D71382 /* MacUtility.hpp */,
 				D410EA1C0A8019FA005C7067 /* Math.cpp */,
 				D4F07B260D93504700FB3D99 /* TextInputMac.mm */,
-				D410EA2E0A8019FA005C7067 /* TimingUnix.cpp */,
 				D410EA300A8019FA005C7067 /* Utility.cpp */,
 				D4A5A2220F40D45200FFF378 /* UtilityTouch.mm */,
 				D410EA310A8019FA005C7067 /* WindowMac.mm */,
 				D4A5A2210F40D45200FFF378 /* WindowTouch.mm */,
 				D4897E5F1207FC6F00DCAFD8 /* Orientation.hpp */,
 				D4897E601207FC7000DCAFD8 /* Orientation.mm */,
+				D40C66A212D9282C00712276 /* TimingApple.cpp */,
 			);
 			name = Implementation;
 			sourceTree = "<group>";
@@ -1038,7 +1038,7 @@
 			name = Gosu;
 			productInstallPath = "$(HOME)/Library/Frameworks";
 			productName = Gosu;
-			productReference = 8D07F2C80486CC7A007CD1D0 /* Gosu.framework */;
+			productReference = 8D07F2C80486CC7A007CD1D0 /* Gosu */;
 			productType = "com.apple.product-type.framework";
 		};
 		D459FF430BDCD23500E7F0D6 /* RubyGosu App */ = {
@@ -1090,7 +1090,7 @@
 			);
 			name = "RubyGosu Core";
 			productName = RubyGosu;
-			productReference = D4CA89500BC68B5D00A431AC /* gosu.for_1_8.bundle */;
+			productReference = D4CA89500BC68B5D00A431AC /* gosu */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 /* End PBXNativeTarget section */
@@ -1183,7 +1183,6 @@
 				D410EA3D0A8019FA005C7067 /* InputMac.mm in Sources */,
 				D410EA400A8019FA005C7067 /* IO.cpp in Sources */,
 				D410EA410A8019FA005C7067 /* Math.cpp in Sources */,
-				D410EA440A8019FA005C7067 /* TimingUnix.cpp in Sources */,
 				D410EA460A8019FA005C7067 /* Utility.cpp in Sources */,
 				D410EA470A8019FA005C7067 /* WindowMac.mm in Sources */,
 				D410EAF50A801B00005C7067 /* Bitmap.cpp in Sources */,
@@ -1261,6 +1260,7 @@
 				D4F4BF9B0FC4CB1A0013CE21 /* analysis.c in Sources */,
 				D42E1A15104AEF1D0019345C /* TextTouch.mm in Sources */,
 				D4FA74BD11C0064100E719EA /* Transform.cpp in Sources */,
+				D40C66A412D9282C00712276 /* TimingApple.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1292,7 +1292,6 @@
 				D46C2A4F0FAE039E00A33476 /* IO.cpp in Sources */,
 				D46C2A500FAE039E00A33476 /* Math.cpp in Sources */,
 				D46C2A510FAE039E00A33476 /* TextInputMac.mm in Sources */,
-				D46C2A520FAE039E00A33476 /* TimingUnix.cpp in Sources */,
 				D46C2A530FAE039E00A33476 /* WindowMac.mm in Sources */,
 				D46C2A540FAE03B100A33476 /* RubyGosu_wrap.cxx in Sources */,
 				D4F4BA920FC36FB60013CE21 /* png.c in Sources */,
@@ -1350,6 +1349,7 @@
 				D4F4BFAF0FC4CB1A0013CE21 /* analysis.c in Sources */,
 				D42E1A17104AEF210019345C /* TextTouch.mm in Sources */,
 				D4FA74D211C0071100E719EA /* Transform.cpp in Sources */,
+				D40C66A512D9282C00712276 /* TimingApple.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1367,7 +1367,6 @@
 				D4A5A20C0F40D30A00FFF378 /* Image.cpp in Sources */,
 				D4A5A20D0F40D30E00FFF378 /* IO.cpp in Sources */,
 				D4A5A20E0F40D30F00FFF378 /* LargeImageData.cpp in Sources */,
-				D4A5A2130F40D33300FFF378 /* TimingUnix.cpp in Sources */,
 				D4A5A2140F40D33400FFF378 /* Texture.cpp in Sources */,
 				D4A5A2150F40D33800FFF378 /* Text.cpp in Sources */,
 				D4A5A2160F40D33B00FFF378 /* TexChunk.cpp in Sources */,
@@ -1408,6 +1407,7 @@
 				D4FA74D411C0071300E719EA /* Transform.cpp in Sources */,
 				D444352311E45A8B00188921 /* AccelerometerReader.mm in Sources */,
 				D4897E811208039800DCAFD8 /* Orientation.mm in Sources */,
+				D40C66A612D9282C00712276 /* TimingApple.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1434,7 +1434,6 @@
 				D423823C0C4C3D79000DAA25 /* InputMac.mm in Sources */,
 				D423823D0C4C3D79000DAA25 /* IO.cpp in Sources */,
 				D423823E0C4C3D79000DAA25 /* Math.cpp in Sources */,
-				D423823F0C4C3D79000DAA25 /* TimingUnix.cpp in Sources */,
 				D42382400C4C3D79000DAA25 /* Utility.cpp in Sources */,
 				D42382410C4C3D79000DAA25 /* WindowMac.mm in Sources */,
 				D4A7E9830CD3907D00621B24 /* Texture.cpp in Sources */,
@@ -1496,6 +1495,7 @@
 				D4F4BFC30FC4CB1A0013CE21 /* analysis.c in Sources */,
 				D42E1A16104AEF1F0019345C /* TextTouch.mm in Sources */,
 				D4FA74D311C0071300E719EA /* Transform.cpp in Sources */,
+				D40C66A312D9282C00712276 /* TimingApple.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -217,6 +217,12 @@ void Gosu::Graphics::endGL()
 #endif
 }
 
+#ifdef GOSU_IS_IPHONE
+void Gosu::Graphics::scheduleGL(const boost::function<void()>& functor, Gosu::ZPos z)
+{
+    throw std::logic_error("Custom OpenGL is unsupported on the iPhone");
+}
+#else
 namespace
 {
     struct RunGLFunctor
@@ -247,6 +253,7 @@ void Gosu::Graphics::scheduleGL(const boost::function<void()>& functor, Gosu::ZP
 {
     pimpl->queues.back().scheduleGL(RunGLFunctor(*this, functor), z);
 }
+#endif
 
 void Gosu::Graphics::beginClipping(double x, double y, double width, double height)
 {

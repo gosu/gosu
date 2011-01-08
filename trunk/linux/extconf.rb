@@ -14,7 +14,7 @@ puts
 
 # FIXME should reversely filter out files ending in Win, Mac, Touch, AL etc.
 SOURCE_FILES =
-    %w(Math.cpp Utility.cpp IO.cpp FileUnix.cpp InputX.cpp TextInputX.cpp TimingUnix.cpp WindowX.cpp
+    %w(Math.cpp Utility.cpp IO.cpp FileUnix.cpp InputX.cpp TextInputX.cpp TimingApple.cpp WindowX.cpp
 	     Graphics/Bitmap.cpp Graphics/BitmapUtils.cpp Graphics/Color.cpp
 	     Graphics/TexChunk.cpp Graphics/Graphics.cpp Graphics/Image.cpp
 	     Graphics/BlockAllocator.cpp
