@@ -72,7 +72,7 @@ namespace Gosu
         //! Note: Unlike normal drawing operations on the same Z level, the order
         //! of custom GL functors is NOT DEFINED.
         //! Note: You may not call any Gosu rendering functions from within the
-        //! functor.
+        //! functor, and you must schedule it from within Window::draw's call tree.
         void scheduleGL(const boost::function<void()>& functor, ZPos z);
         
         //! Enables clipping to a specified rectangle.

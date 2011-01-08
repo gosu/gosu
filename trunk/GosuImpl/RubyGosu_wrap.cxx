@@ -2247,6 +2247,7 @@ namespace Gosu {
 #include <ctime>
 #include <sstream>
 #include <boost/algorithm/string.hpp>
+#include <boost/bind.hpp>
 
 // Preprocessor check for 1.9 (thanks banister)
 #if defined(ROBJECT_EMBED_LEN_MAX)
@@ -2269,6 +2270,13 @@ namespace GosusDarkSide
     void yieldToOtherRubyThreads()
     {
 		rb_thread_schedule();
+    }
+}
+
+namespace
+{
+    void callRubyBlock(VALUE block) {
+        rb_funcall(block, rb_intern("call"), 0);
     }
 }
 
@@ -2555,6 +2563,32 @@ SWIGINTERN Gosu::Font *new_Gosu_Font(Gosu::Window &window,std::wstring const &fo
         return new Gosu::Font(window.graphics(), fontName, height);
     }
 
+#include <float.h>
+
+
+SWIGINTERN int
+SWIG_AsVal_float (VALUE obj, float *val)
+{
+  double v;
+  int res = SWIG_AsVal_double (obj, &v);
+  if (SWIG_IsOK(res)) {
+    if ((v < -FLT_MAX || v > FLT_MAX)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = static_cast< float >(v);
+    }
+  }  
+  return res;
+}
+
+
+SWIGINTERNINLINE VALUE
+SWIG_From_float  (float value)
+{    
+  return SWIG_From_double  (value);
+}
+
+
 SWIGINTERN int
 SWIG_AsVal_bool (VALUE obj, bool *val)
 {
@@ -2698,10 +2732,13 @@ SWIGINTERN int Gosu_Window_height(Gosu::Window const *self){
 SWIGINTERN bool Gosu_Window_fullscreen(Gosu::Window const *self){
         return self->graphics().fullscreen();
     }
-SWIGINTERN void Gosu_Window_gl(Gosu::Window *self){
+SWIGINTERN void Gosu_Window_gl__SWIG_0(Gosu::Window *self){
         self->graphics().beginGL();
         rb_yield(Qnil);
         self->graphics().endGL();
+    }
+SWIGINTERN void Gosu_Window_gl__SWIG_1(Gosu::Window *self,Gosu::ZPos z){
+        self->graphics().scheduleGL(boost::bind(callRubyBlock, rb_block_proc()), z);
     }
 SWIGINTERN void Gosu_Window_clipTo(Gosu::Window *self,double x,double y,double width,double height){
         self->graphics().beginClipping(x, y, width, height);
@@ -5464,10 +5501,10 @@ fail:
 SWIGINTERN VALUE
 _wrap_GLTexInfo_left_set(int argc, VALUE *argv, VALUE self) {
   Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
-  double arg2 ;
+  float arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  double val2 ;
+  float val2 ;
   int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
@@ -5478,11 +5515,11 @@ _wrap_GLTexInfo_left_set(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::GLTexInfo *","left", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
-  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  ecode2 = SWIG_AsVal_float(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","left", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "float","left", 2, argv[0] ));
   } 
-  arg2 = static_cast< double >(val2);
+  arg2 = static_cast< float >(val2);
   if (arg1) (arg1)->left = arg2;
   return Qnil;
 fail:
@@ -5495,7 +5532,7 @@ _wrap_GLTexInfo_left_get(int argc, VALUE *argv, VALUE self) {
   Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  double result;
+  float result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -5506,8 +5543,8 @@ _wrap_GLTexInfo_left_get(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::GLTexInfo *","left", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
-  result = (double) ((arg1)->left);
-  vresult = SWIG_From_double(static_cast< double >(result));
+  result = (float) ((arg1)->left);
+  vresult = SWIG_From_float(static_cast< float >(result));
   return vresult;
 fail:
   return Qnil;
@@ -5517,10 +5554,10 @@ fail:
 SWIGINTERN VALUE
 _wrap_GLTexInfo_right_set(int argc, VALUE *argv, VALUE self) {
   Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
-  double arg2 ;
+  float arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  double val2 ;
+  float val2 ;
   int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
@@ -5531,11 +5568,11 @@ _wrap_GLTexInfo_right_set(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::GLTexInfo *","right", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
-  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  ecode2 = SWIG_AsVal_float(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","right", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "float","right", 2, argv[0] ));
   } 
-  arg2 = static_cast< double >(val2);
+  arg2 = static_cast< float >(val2);
   if (arg1) (arg1)->right = arg2;
   return Qnil;
 fail:
@@ -5548,7 +5585,7 @@ _wrap_GLTexInfo_right_get(int argc, VALUE *argv, VALUE self) {
   Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  double result;
+  float result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -5559,8 +5596,8 @@ _wrap_GLTexInfo_right_get(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::GLTexInfo *","right", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
-  result = (double) ((arg1)->right);
-  vresult = SWIG_From_double(static_cast< double >(result));
+  result = (float) ((arg1)->right);
+  vresult = SWIG_From_float(static_cast< float >(result));
   return vresult;
 fail:
   return Qnil;
@@ -5570,10 +5607,10 @@ fail:
 SWIGINTERN VALUE
 _wrap_GLTexInfo_top_set(int argc, VALUE *argv, VALUE self) {
   Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
-  double arg2 ;
+  float arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  double val2 ;
+  float val2 ;
   int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
@@ -5584,11 +5621,11 @@ _wrap_GLTexInfo_top_set(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::GLTexInfo *","top", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
-  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  ecode2 = SWIG_AsVal_float(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","top", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "float","top", 2, argv[0] ));
   } 
-  arg2 = static_cast< double >(val2);
+  arg2 = static_cast< float >(val2);
   if (arg1) (arg1)->top = arg2;
   return Qnil;
 fail:
@@ -5601,7 +5638,7 @@ _wrap_GLTexInfo_top_get(int argc, VALUE *argv, VALUE self) {
   Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  double result;
+  float result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -5612,8 +5649,8 @@ _wrap_GLTexInfo_top_get(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::GLTexInfo *","top", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
-  result = (double) ((arg1)->top);
-  vresult = SWIG_From_double(static_cast< double >(result));
+  result = (float) ((arg1)->top);
+  vresult = SWIG_From_float(static_cast< float >(result));
   return vresult;
 fail:
   return Qnil;
@@ -5623,10 +5660,10 @@ fail:
 SWIGINTERN VALUE
 _wrap_GLTexInfo_bottom_set(int argc, VALUE *argv, VALUE self) {
   Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
-  double arg2 ;
+  float arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  double val2 ;
+  float val2 ;
   int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
@@ -5637,11 +5674,11 @@ _wrap_GLTexInfo_bottom_set(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::GLTexInfo *","bottom", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
-  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  ecode2 = SWIG_AsVal_float(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","bottom", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "float","bottom", 2, argv[0] ));
   } 
-  arg2 = static_cast< double >(val2);
+  arg2 = static_cast< float >(val2);
   if (arg1) (arg1)->bottom = arg2;
   return Qnil;
 fail:
@@ -5654,7 +5691,7 @@ _wrap_GLTexInfo_bottom_get(int argc, VALUE *argv, VALUE self) {
   Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  double result;
+  float result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -5665,8 +5702,8 @@ _wrap_GLTexInfo_bottom_get(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::GLTexInfo *","bottom", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
-  result = (double) ((arg1)->bottom);
-  vresult = SWIG_From_double(static_cast< double >(result));
+  result = (float) ((arg1)->bottom);
+  vresult = SWIG_From_float(static_cast< float >(result));
   return vresult;
 fail:
   return Qnil;
@@ -9504,7 +9541,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Window_gl(int argc, VALUE *argv, VALUE self) {
+_wrap_Window_gl__SWIG_0(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -9519,13 +9556,93 @@ _wrap_Window_gl(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
     try {
-      Gosu_Window_gl(arg1);
+      Gosu_Window_gl__SWIG_0(arg1);
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
   return Qnil;
 fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Window_gl__SWIG_1(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  Gosu::ZPos arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","gl", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  ecode2 = SWIG_AsVal_double(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::ZPos","gl", 2, argv[0] ));
+  } 
+  arg2 = static_cast< Gosu::ZPos >(val2);
+  {
+    try {
+      Gosu_Window_gl__SWIG_1(arg1,arg2);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE _wrap_Window_gl(int nargs, VALUE *args, VALUE self) {
+  int argc;
+  VALUE argv[3];
+  int ii;
+  
+  argc = nargs + 1;
+  argv[0] = self;
+  if (argc > 3) SWIG_fail;
+  for (ii = 1; (ii < argc); ++ii) {
+    argv[ii] = args[ii-1];
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_Window_gl__SWIG_0(nargs, args, self);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_Window_gl__SWIG_1(nargs, args, self);
+      }
+    }
+  }
+  
+fail:
+  Ruby_Format_OverloadedError( argc, 3, "gl", 
+    "    void gl()\n"
+    "    void gl(Gosu::ZPos z)\n");
+  
   return Qnil;
 }
 

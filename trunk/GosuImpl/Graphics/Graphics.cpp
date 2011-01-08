@@ -231,9 +231,14 @@ namespace
         
         void operator()() const
         {
-            graphics.beginGL();
+            // Inlined beginGL() to avoid flushing.
+            glPushAttrib(GL_ALL_ATTRIB_BITS);
+            glDisable(GL_BLEND);
+
             functor();
-            graphics.endGL();
+            
+            // Does not have to be inlined.
+            graphics.endGL();            
         }
     };
 }

@@ -175,6 +175,7 @@ namespace Gosu {
 #include <ctime>
 #include <sstream>
 #include <boost/algorithm/string.hpp>
+#include <boost/bind.hpp>
 
 // Preprocessor check for 1.9 (thanks banister)
 #if defined(ROBJECT_EMBED_LEN_MAX)
@@ -197,6 +198,13 @@ namespace GosusDarkSide
     void yieldToOtherRubyThreads()
     {
 		rb_thread_schedule();
+    }
+}
+
+namespace
+{
+    void callRubyBlock(VALUE block) {
+        rb_funcall(block, rb_intern("call"), 0);
     }
 }
 
@@ -604,6 +612,9 @@ namespace Gosu {
         $self->graphics().beginGL();
         rb_yield(Qnil);
         $self->graphics().endGL();
+    }
+    void gl(Gosu::ZPos z) {
+        $self->graphics().scheduleGL(boost::bind(callRubyBlock, rb_block_proc()), z);
     }
     void clipTo(double x, double y, double width, double height) {
         $self->graphics().beginClipping(x, y, width, height);

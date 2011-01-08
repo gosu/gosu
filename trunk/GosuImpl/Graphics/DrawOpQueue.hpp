@@ -145,13 +145,17 @@ public:
                     current = next;
                 }
                 last->perform(renderState, 0);
+                ++current;
             }
             
             // Draw next code, or break if there is none
             if (it == code.end())
-                return;
+                break;
             else
-                (it++)->second();
+            {
+                it->second();
+                ++it;
+            }
         }
     }
     
