@@ -50,17 +50,17 @@ class Gosu::Color
     def value=; end
   end
   
-  NONE    = Gosu::Color::Constant.new(0x00000000)
-  BLACK   = Gosu::Color::Constant.new(0xff000000)
-  GRAY    = Gosu::Color::Constant.new(0xff808080)
-  WHITE   = Gosu::Color::Constant.new(0xffffffff)            
-  AQUA    = Gosu::Color::Constant.new(0xff00ffff)
-  RED     = Gosu::Color::Constant.new(0xffff0000)
-  GREEN   = Gosu::Color::Constant.new(0xff00ff00)
-  BLUE    = Gosu::Color::Constant.new(0xff0000ff)
-  YELLOW  = Gosu::Color::Constant.new(0xffffff00)
-  FUCHSIA = Gosu::Color::Constant.new(0xffff00ff)
-  CYAN    = Gosu::Color::Constant.new(0xff00ffff)
+  NONE    = Gosu::Color::Constant.argb(0x00000000)
+  BLACK   = Gosu::Color::Constant.argb(0xff000000)
+  GRAY    = Gosu::Color::Constant.argb(0xff808080)
+  WHITE   = Gosu::Color::Constant.argb(0xffffffff)            
+  AQUA    = Gosu::Color::Constant.argb(0xff00ffff)
+  RED     = Gosu::Color::Constant.argb(0xffff0000)
+  GREEN   = Gosu::Color::Constant.argb(0xff00ff00)
+  BLUE    = Gosu::Color::Constant.argb(0xff0000ff)
+  YELLOW  = Gosu::Color::Constant.argb(0xffffff00)
+  FUCHSIA = Gosu::Color::Constant.argb(0xffff00ff)
+  CYAN    = Gosu::Color::Constant.argb(0xff00ffff)
 end
 
 # Instance methods for button_id_to_char and char_to_button_id

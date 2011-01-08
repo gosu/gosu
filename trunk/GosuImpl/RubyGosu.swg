@@ -324,6 +324,35 @@ namespace Gosu {
 %include "../Gosu/Color.hpp"
 
 %extend Gosu::Color {
+    static Gosu::Color rgb(Gosu::Color::Channel r, Gosu::Color::Channel g,
+        Gosu::Color::Channel b)
+    {
+        return Gosu::Color(r, g, b);
+    }
+    
+    static Gosu::Color rgba(Gosu::Color::Channel r, Gosu::Color::Channel g,
+        Gosu::Color::Channel b, Gosu::Color::Channel a)
+    {
+        return Gosu::Color(a, r, g, b);
+    }
+    
+    static Gosu::Color rgba(boost::uint32_t rgba)
+    {
+        return Gosu::Color(rgba & 0xff, (rgba >> 24) & 0xff,
+            (rgba >> 16) & 0xff, (rgba >> 8) & 0xff);
+    }
+    
+    static Gosu::Color argb(Gosu::Color::Channel a, Gosu::Color::Channel r,
+        Gosu::Color::Channel g, Gosu::Color::Channel b)
+    {
+        return Gosu::Color(a, r, g, b);
+    }
+    
+    static Gosu::Color argb(boost::uint32_t argb)
+    {
+        return argb;
+    }
+    
     Gosu::Color dup() const {
         return *$self;
     }
@@ -335,6 +364,10 @@ namespace Gosu {
                << "/" << static_cast<int>($self->green())
                << "/" << static_cast<int>($self->blue()) << ")";
         return stream.str();
+    }
+    
+    bool operator==(Gosu::Color other) {
+        return *$self == other;
     }
 }
 

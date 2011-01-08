@@ -34,7 +34,6 @@ namespace Gosu
         }
         
         //! Conversion constructor for literals of the form 0xaarrggbb.
-        //! (C++ only.)
         Color(boost::uint32_t argb)
         {
             *this = Color((argb >> 24) & 0xff, (argb >> 16) & 0xff,
@@ -50,13 +49,6 @@ namespace Gosu
         {
             rep = (alpha << ALPHA_OFFSET) | (red << RED_OFFSET) |
                   (green << GREEN_OFFSET) | (blue << BLUE_OFFSET);
-        }
-        
-        static Color fromRGBA(boost::uint32_t rgba)
-        {
-            Color result;
-            result.rep = rgba;
-            return result;
         }
         
         //! Constructs a color from the given hue/saturation/value triple.

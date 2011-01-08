@@ -130,11 +130,20 @@ module Gosu
     # g:: Integer from 0..255
     # b:: Integer from 0..255
     def initialize(a, r, g, b); end
-    # argb: 0xaarrggbb integer.
+    # Initializes a color from an 0xrrggbbaa integer.
     def initialize(argb); end
 
+    # Same as the constructor, but with an explicit order.
+    def self.rgba(r, g, b, a); end    
+    
     # Initializes a color from an 0xrrggbbaa integer.
-    def self.from_rgba(rgba); end    
+    def self.rgba(rgba); end    
+    
+    # Same as the constructor, but with an explicit order.
+    def self.argb(a, r, g, b); end    
+    
+    # Initializes a color from an 0xrrggbbaa integer.
+    def self.argb(argb); end    
     
     # Converts a HSV triple into a color. Same as from_ahsv with alpha set to 255.
     # h:: Integer from 0..360
@@ -150,27 +159,27 @@ module Gosu
     def self.from_ahsv(a, h, s, v); end
     
     # constant
-    NONE    = Gosu::Color.new(0x00000000)
+    NONE    = Gosu::Color.argb(0x00000000)
     # constant
-    BLACK   = Gosu::Color.new(0xff000000)
+    BLACK   = Gosu::Color.argb(0xff000000)
     # constant
-    GRAY    = Gosu::Color.new(0xff808080)
+    GRAY    = Gosu::Color.argb(0xff808080)
     # constant
-    WHITE   = Gosu::Color.new(0xffffffff)            
+    WHITE   = Gosu::Color.argb(0xffffffff)            
     # constant
-    AQUA    = Gosu::Color.new(0xff00ffff)
+    AQUA    = Gosu::Color.argb(0xff00ffff)
     # constant
-    RED     = Gosu::Color.new(0xffff0000)
+    RED     = Gosu::Color.argb(0xffff0000)
     # constant
-    GREEN   = Gosu::Color.new(0xff00ff00)
+    GREEN   = Gosu::Color.argb(0xff00ff00)
     # constant
-    BLUE    = Gosu::Color.new(0xff0000ff)
+    BLUE    = Gosu::Color.argb(0xff0000ff)
     # constant
-    YELLOW  = Gosu::Color.new(0xffffff00)
+    YELLOW  = Gosu::Color.argb(0xffffff00)
     # constant
-    FUCHSIA = Gosu::Color.new(0xffff00ff)
+    FUCHSIA = Gosu::Color.argb(0xffff00ff)
     # constant
-    CYAN    = Gosu::Color.new(0xff00ffff)
+    CYAN    = Gosu::Color.argb(0xff00ffff)
   end
   
   # A font can be used to draw text on a Window object very flexibly.
