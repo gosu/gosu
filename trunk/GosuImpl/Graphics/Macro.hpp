@@ -16,7 +16,7 @@ class Gosu::Macro : public Gosu::ImageData
     unsigned w, h;
     
 public:
-    Macro(const DrawOpQueue& queue)
+    Macro(DrawOpQueue& queue)
     {
         queue.compileTo(vertexArray);
         double left = 0, right = 0, top = 0, bottom = 0;

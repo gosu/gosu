@@ -31,12 +31,12 @@ GLuint Gosu::TexChunk::texName() const
     return texture->texName();
 }
 
-void Gosu::TexChunk::getCoords(double& left, double& top, double& right, double& bottom) const
+void Gosu::TexChunk::getCoords(float& left, float& top, float& right, float& bottom) const
 {
-    left = double(x) / texture->size();
-    top = double(y) / texture->size();
-    right = double(x + w) / texture->size();
-    bottom = double(y + h) / texture->size();
+    left = float(x) / texture->size();
+    top = float(y) / texture->size();
+    right = float(x + w) / texture->size();
+    bottom = float(y + h) / texture->size();
 }
 
 void Gosu::TexChunk::draw(double x1, double y1, Color c1,

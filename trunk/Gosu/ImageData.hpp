@@ -17,7 +17,7 @@ namespace Gosu
     struct GLTexInfo
     {
         int texName;
-        double left, right, top, bottom;
+        float left, right, top, bottom;
     };
 
     //! The ImageData class is an abstract base class for drawable images.

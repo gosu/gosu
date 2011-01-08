@@ -6,12 +6,11 @@
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
 #include <algorithm>
-#include <set>
 #include <vector>
 
 class Gosu::DrawOpQueue
 {
-    std::multiset<DrawOp> set;
+    std::vector<DrawOp> ops;
 
     struct ClipRect
     {
@@ -55,7 +54,7 @@ public:
     {
         clipRectStack.swap(other.clipRectStack);
         std::swap(effectiveRect, other.effectiveRect);
-        set.swap(other.set);
+        ops.swap(other.ops);
     }
     
     void addDrawOp(DrawOp op, ZPos z)
@@ -79,7 +78,7 @@ public:
             return;
         
         op.z = z;
-        set.insert(op);
+        ops.push_back(op);
     }
     
     void beginClipping(int x, int y, unsigned width, unsigned height)
@@ -95,17 +94,24 @@ public:
         updateEffectiveRect();
     }
 
-    void performDrawOps() const
+    void performDrawOps()
     {
+        // So we can make some assumptions.
+        if (ops.empty())
+            return;
+        
         RenderState current;
         
-        std::multiset<DrawOp>::const_iterator last, cur = set.begin(), end = set.end();
-        while (cur != end)
+        std::stable_sort(ops.begin(), ops.end());
+        const DrawOp* front = &ops.front();
+        const DrawOp* last = &ops.back();
+        while (front < last)
         {
-            last = cur;
-            ++cur;
-            last->perform(current, cur == end ? 0 : &*cur);
+            const DrawOp* next = front + 1;
+            front->perform(current, next);
+            front = next;
         }
+        last->perform(current, 0);
     }
     
     void clear()
@@ -113,13 +119,14 @@ public:
         // Not sure if Graphics::begin() should implicitly do that.
         //clipRectStack.clear();
         //effectiveRect.reset();
-        set.clear();
+        ops.clear();
     }
     
-    void compileTo(VertexArray& va) const
+    void compileTo(VertexArray& va)
     {
-        va.reserve(set.size());
-        BOOST_FOREACH (const DrawOp& op, set)
+        va.reserve(ops.size());
+        std::stable_sort(ops.begin(), ops.end());
+        BOOST_FOREACH (const DrawOp& op, ops)
             op.compileTo(va);
     }
 };

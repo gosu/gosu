@@ -12,9 +12,9 @@ namespace Gosu
 {
     struct ArrayVertex
     {
-        GLfloat texCoords[2];
+        float texCoords[2];
         boost::uint32_t color;
-        GLfloat vertices[3];
+        float vertices[3];
     };
     typedef std::vector<ArrayVertex> VertexArray;
     
@@ -26,10 +26,10 @@ namespace Gosu
             
         struct Vertex
         {
-            double x, y;
+            float x, y;
             Color c;
             Vertex() {}
-            Vertex(double x, double y, Color c) : x(x), y(y), c(c) {}
+            Vertex(float x, float y, Color c) : x(x), y(y), c(c) {}
         };
 
         ZPos z;
@@ -50,8 +50,8 @@ namespace Gosu
             static const unsigned MAX_AUTOGROUP = 24;
             
             static int spriteCounter = 0;
-            static GLfloat spriteVertices[12 * MAX_AUTOGROUP];
-            static GLfloat spriteTexcoords[12 * MAX_AUTOGROUP];
+            static float spriteVertices[12 * MAX_AUTOGROUP];
+            static float spriteTexcoords[12 * MAX_AUTOGROUP];
             static boost::uint32_t spriteColors[6 * MAX_AUTOGROUP];
             
             // iPhone specific setup
@@ -79,7 +79,7 @@ namespace Gosu
                 current.setTexName(chunk->texName());
                 
                 #ifdef GOSU_IS_IPHONE
-                double left, top, right, bottom;
+                float left, top, right, bottom;
                 chunk->getCoords(left, top, right, bottom);
                 spriteTexcoords[spriteCounter*12 + 0] = left;
                 spriteTexcoords[spriteCounter*12 + 1] = top;
@@ -107,31 +107,30 @@ namespace Gosu
             else if (usedVertices == 4)
                 glBegin(GL_QUADS);
 
-            double left, top, right, bottom;
+            float left, top, right, bottom;
             if (chunk)
                 chunk->getCoords(left, top, right, bottom);
             
             for (unsigned i = 0; i < usedVertices; i++)
             {
-                glColor4f(vertices[i].c.red() / 255.0, vertices[i].c.green() / 255.0,
-                          vertices[i].c.blue() / 255.0, vertices[i].c.alpha() / 255.0);
+                glColor4ubv(reinterpret_cast<const GLubyte*>(&vertices[i].c));
                 if (chunk)
                     switch (i)
                     {
                     case 0:
-                        glTexCoord2d(left, top);
+                        glTexCoord2f(left, top);
                         break;
                     case 1:
-                        glTexCoord2d(right, top);
+                        glTexCoord2f(right, top);
                         break;
                     case 2:
-                        glTexCoord2d(right, bottom);
+                        glTexCoord2f(right, bottom);
                         break;
                     case 3:
-                        glTexCoord2d(left, bottom);
+                        glTexCoord2f(left, bottom);
                         break;
                     }
-                glVertex2d(vertices[i].x, vertices[i].y);
+                glVertex2f(vertices[i].x, vertices[i].y);
             }
             
             glEnd();
@@ -175,7 +174,7 @@ namespace Gosu
                 result[i].color = vertices[i].c.abgr();
             }
 
-            double left, top, right, bottom;
+            float left, top, right, bottom;
             chunk->getCoords(left, top, right, bottom);
             result[0].texCoords[0] = left,  result[0].texCoords[1] = top;
             result[1].texCoords[0] = right, result[1].texCoords[1] = top;

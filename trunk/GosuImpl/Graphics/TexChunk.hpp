@@ -26,7 +26,7 @@ public:
     unsigned int height() const;
     
     GLuint texName() const;
-    void getCoords(double& left, double& top, double& right, double& bottom) const;
+    void getCoords(float& left, float& top, float& right, float& bottom) const;
 
     void draw(double x1, double y1, Color c1,
         double x2, double y2, Color c2,
