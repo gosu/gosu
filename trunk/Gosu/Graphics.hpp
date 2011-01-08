@@ -8,6 +8,7 @@
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
 #include <boost/array.hpp>
+#include <boost/function.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <memory>
 
@@ -64,6 +65,16 @@ namespace Gosu
         void beginGL();
         //! Resets Gosu into its default rendering state.
         void endGL();
+        //! (Experimental)
+        //! Schedules a custom GL functor to be executed at a certain Z level.
+        //! The functor is called in a clean GL context (as given by beginGL/endGL).
+        //! Gosu's rendering up to the Z level may not yet have been glFlush()ed.
+        //! Note: Unlike normal drawing operations on the same Z level, the order
+        //! of custom GL functors is NOT DEFINED.
+        //! Note: You may not call any Gosu rendering functions from within the
+        //! functor.
+        void scheduleGL(const boost::function<void()>& functor, ZPos z);
+        
         //! Enables clipping to a specified rectangle.
         void beginClipping(double x, double y, double width, double height);
         //! Disables clipping.

@@ -4,13 +4,18 @@
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/DrawOp.hpp>
 #include <boost/foreach.hpp>
+#include <boost/function.hpp>
 #include <boost/optional.hpp>
 #include <algorithm>
+#include <map>
 #include <vector>
 
 class Gosu::DrawOpQueue
 {
-    std::vector<DrawOp> ops;
+    typedef std::vector<DrawOp> DrawOps;
+    DrawOps ops;
+    typedef std::multimap<ZPos, boost::function<void()> > CodeMap;
+    CodeMap code;
 
     struct ClipRect
     {
@@ -55,13 +60,14 @@ public:
         clipRectStack.swap(other.clipRectStack);
         std::swap(effectiveRect, other.effectiveRect);
         ops.swap(other.ops);
+        code.swap(other.code);
     }
     
-    void addDrawOp(DrawOp op, ZPos z)
+    void scheduleDrawOp(DrawOp op, ZPos z)
     {
         #ifdef GOSU_IS_IPHONE
         // No triangles, no lines supported
-        assert(op.usedVertices == 4);
+        assert (op.usedVertices == 4);
         #endif
         
         if (effectiveRect)
@@ -81,6 +87,11 @@ public:
         ops.push_back(op);
     }
     
+    void scheduleGL(boost::function<void()> customCode, ZPos z)
+    {
+        code.insert(std::make_pair(z, customCode));
+    }
+    
     void beginClipping(int x, int y, unsigned width, unsigned height)
     {
         ClipRect rect = { x, y, width, height };
@@ -94,24 +105,54 @@ public:
         updateEffectiveRect();
     }
 
-    void performDrawOps()
+    void performDrawOpsAndCode()
     {
-        // So we can make some assumptions.
+        // Allows us to make some assumptions.
         if (ops.empty())
             return;
         
-        RenderState current;
-        
+        // Apply Z-Ordering.
         std::stable_sort(ops.begin(), ops.end());
-        const DrawOp* front = &ops.front();
-        const DrawOp* last = &ops.back();
-        while (front < last)
+        
+        // We will loop: Drawing DrawOps, execute custom code.
+        // This means if there is no code, we just draw one batch
+        // of DrawOps, so no performance is sacrified.
+        DrawOps::const_iterator current = ops.begin(), last = ops.begin();
+        CodeMap::const_iterator it = code.begin();
+        
+        while (true)
         {
-            const DrawOp* next = front + 1;
-            front->perform(current, next);
-            front = next;
+            if (it == code.end())
+                // Last or only batch of DrawOps:
+                // Just draw everything.
+                last = ops.end() - 1;
+            else
+            {
+                // There is code waiting:
+                // Only draw up to this Z level.
+                while (last != ops.end() - 1 && (last + 1)->z < it->first)
+                    ++last;
+            }
+            
+            if (current <= last)
+            {
+                // Draw DrawOps until next code is due
+                RenderState renderState;
+                while (current < last)
+                {
+                    DrawOps::const_iterator next = current + 1;
+                    current->perform(renderState, &*next);
+                    current = next;
+                }
+                last->perform(renderState, 0);
+            }
+            
+            // Draw next code, or break if there is none
+            if (it == code.end())
+                return;
+            else
+                (it++)->second();
         }
-        last->perform(current, 0);
     }
     
     void clear()
@@ -119,11 +160,15 @@ public:
         // Not sure if Graphics::begin() should implicitly do that.
         //clipRectStack.clear();
         //effectiveRect.reset();
+        code.clear();
         ops.clear();
     }
     
     void compileTo(VertexArray& va)
     {
+        if (!code.empty())
+            throw std::logic_error("Custom code cannot be recorded into a macro");
+        
         va.reserve(ops.size());
         std::stable_sort(ops.begin(), ops.end());
         BOOST_FOREACH (const DrawOp& op, ops)

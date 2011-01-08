@@ -179,7 +179,7 @@ void Gosu::Graphics::flush()
     // If there is a recording in process, cancel it.
     pimpl->queues.resize(1);
     
-    pimpl->queues.at(0).performDrawOps();
+    pimpl->queues.at(0).performDrawOpsAndCode();
     pimpl->queues.at(0).clear();
 }
 
@@ -215,6 +215,32 @@ void Gosu::Graphics::endGL()
     glLoadIdentity();
     glEnable(GL_BLEND);
 #endif
+}
+
+namespace
+{
+    struct RunGLFunctor
+    {
+        Gosu::Graphics& graphics;
+        boost::function<void()> functor;
+        
+        RunGLFunctor(Gosu::Graphics& graphics, const boost::function<void()>& functor)
+        : graphics(graphics), functor(functor)
+        {
+        }
+        
+        void operator()() const
+        {
+            graphics.beginGL();
+            functor();
+            graphics.endGL();
+        }
+    };
+}
+
+void Gosu::Graphics::scheduleGL(const boost::function<void()>& functor, Gosu::ZPos z)
+{
+    pimpl->queues.back().scheduleGL(RunGLFunctor(*this, functor), z);
 }
 
 void Gosu::Graphics::beginClipping(double x, double y, double width, double height)
@@ -304,7 +330,7 @@ void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
 
-    pimpl->queues.back().addDrawOp(op, z);
+    pimpl->queues.back().scheduleDrawOp(op, z);
 }
 
 void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
@@ -324,7 +350,7 @@ void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
     op.vertices[3] = op.vertices[2];
 #endif
     
-    pimpl->queues.back().addDrawOp(op, z);
+    pimpl->queues.back().scheduleDrawOp(op, z);
 }
 
 void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
@@ -350,7 +376,7 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
     op.vertices[2] = DrawOp::Vertex(x4, y4, c4);
 #endif
 
-    pimpl->queues.back().addDrawOp(op, z);
+    pimpl->queues.back().scheduleDrawOp(op, z);
 }
 
 std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(

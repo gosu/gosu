@@ -20,10 +20,12 @@ namespace Gosu
     
     struct DrawOp
     {
+        ZPos z;
+                
         Gosu::Transform* transform;
         int clipX, clipY;
         unsigned clipWidth, clipHeight;
-            
+        
         struct Vertex
         {
             float x, y;
@@ -31,16 +33,14 @@ namespace Gosu
             Vertex() {}
             Vertex(float x, float y, Color c) : x(x), y(y), c(c) {}
         };
-
-        ZPos z;
+        
         Vertex vertices[4];
         unsigned usedVertices;
         const TexChunk* chunk;
         AlphaMode mode;
-
+        
         DrawOp(Gosu::Transform& transform)
-        :   transform(&transform), clipWidth(NO_CLIPPING),
-            usedVertices(0), chunk(0)
+        :   transform(&transform), clipWidth(NO_CLIPPING), chunk(0)
         {
         }
         
