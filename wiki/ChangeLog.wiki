@@ -1,5 +1,12 @@
 #summary Log of Gosu's development.
 
+=0.7.26=
+  * 2011-01-08: Ruby: Added Color#== and Color::argb/Color::rgba constructors
+  * 2011-01-08: All: Added Window#gl(z, &block) (Ruby) / Graphics::scheduleGL(functor, z) (C++)
+  * 2011-01-08: All. Optimized Gosu's rendering backend a bit
+  * 2011-01-02: Ruby: All Strings coming from Gosu are now correctly tagged as UTF-8 in Ruby 1.9
+  * 2010-11-20: Fied SDL_TTF font height on Linux
+
 =0.7.25=
   * 2010-11-01: All: Fixed Gosu::Image#to_blob/ImageData::toBitmap
   * 2010-10-27: Ruby: Now seeding Gosu::random with the system time on startup
