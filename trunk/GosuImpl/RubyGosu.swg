@@ -131,6 +131,7 @@
 %module(directors="1") gosu
 %{
 // Avoid Ruby Macro Hell on Windows...
+#undef accept
 #undef write
 #undef close
 #undef read

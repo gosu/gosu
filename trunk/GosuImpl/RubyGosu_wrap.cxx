@@ -2203,6 +2203,7 @@ static VALUE mGosu;
 
 
 // Avoid Ruby Macro Hell on Windows...
+#undef accept
 #undef write
 #undef close
 #undef read
@@ -10957,8 +10958,8 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_RubyInitializeTrackings();
   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(7)));
-  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(25)));
-  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.25"));
+  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(26)));
+  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.26"));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
   rb_define_module_function(mGosu, "degrees_to_radians", VALUEFUNC(_wrap_degrees_to_radians), -1);
