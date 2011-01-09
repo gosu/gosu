@@ -4,21 +4,20 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2011-01-02)
+(Last update: 2011-01-09)
 
 == Gosu 0.7.x ==
-  * Add Z ordering for custom GL
-  * Add Color#==
-  * Deprecate Color::new, make it Color::rgb/argb/rgba etc
+  * Add Window::fps
   * Add FontFlags support for SDL_TTF Gosu/Text
   * Fix Unicode support for SDL_TTF port (UnicodeTest.rb, @loc_test)
   * Fix Segfault when Image.new doesn't find its file on Linux
-  * See if clipping coordinate calculation is correct with all transformations considered
+  * See if clipping coordinate calculation is correct with all transformations considered (why is Terava off by one pixel?)
   * Look at http://audiere.sourceforge.net/ for Windows
   * Test Gosu&ocra with FMOD.dll/audiere.dll/whatever.dll
   * See why Gosu::~Song with Ogg files sometimes causes other songs to stop
-  * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously
+  * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously (who is setting that variable anyway? Me right?)
   * Ensure that Gosu::createText us always width*1 pixels for empty strings
+  * Remove the "from_" from "from_hsv" and "from_ashv", and deprecate Color#initialize
   * Add m4a to audio_formats.rb
   * Make <c=> more efficient in Font::drawRel
   * Add <s=> to text formatting
@@ -30,7 +29,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Remove setResolution and use transforms instead
   * Windows: Improve shrinking heuristics (get task bar size)
   * WindowX: add shrinking for oversized resolutions
-  * Let enableUndocumentedRetrofication always throw an exception so people use rescue blocks :)
   * Use Gosu text formatting in Tutorial.rb
   * Throw an exception when using multiple Windows
   * Make C++'s Gosu::multiply available to Ruby
@@ -40,6 +38,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Verify usefulness of this task: "Gosu: compile x86_64 with gcc 4.2 on OS X"
   * Test StandBy with Windows and a running Gosu app
   * See if really old games have problems running in current Gosu
+  * Deprecate beginGL/endGL
   * The screen size/OpenGL stuff …
     * See if John Shea's talk had something about not being locked to pixel positions
     * Make initial window black instead of garbled on OS X
@@ -132,7 +131,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Try to understand the benchmark on stackoverflow
 == Gosu Touch ==
   * See if [UIScreen scale] really gives us a hint about zooming on the iPad - and if so, tell the user to STOP IT man!
-  * See what OolongEngine does better than GosuTouch (I guess: timing, audio?)
+  * Compare with OolongEngine for audio issues
   * See if xiph Tremor makes sense for Gosu Touch
   * Let resolution decide orientation
   * Integrate "fat" iPhone building from forum
