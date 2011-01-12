@@ -53,7 +53,7 @@ Gosu::Color Gosu::Color::fromAHSV(Channel alpha, double h, double s, double v)
         return Color(alpha, v * 255, v * 255, v * 255);
     
     // Normalize hue
-    h = ((static_cast<int>(h) % 360) + 360) % 360;
+    h = normalizeAngle(h);
     
 	int sector = h / 60;
     double factorial = h / 60 - sector;
