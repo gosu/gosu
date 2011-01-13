@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2011-01-12)
+(Last update: 2011-01-13)
 
 == Gosu 0.7.x ==
   * Add Window::fps
@@ -180,6 +180,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Say "you can attach files after posting" below input box in board
   * See if there is a way to auto-push_to_github on committing SVN
   * Fix download for all my LD games as soon as Mac wrapper is nicer :(
+  * Point out that Font#text_width is only relevant to Font#draw etc
 == Gosu 0.8.x (preliminary) ==
   * Rename gl_tex_info to gl_info and make it an array for Image
   * Rename needs_x? to need_x? in Ruby
