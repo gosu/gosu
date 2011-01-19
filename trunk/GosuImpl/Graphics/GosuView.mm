@@ -85,7 +85,7 @@ int Gosu::clipRectBaseFactor()
     if (not windowInstance().needsRedraw())
         return;
     
-    FPS::registerFrame();
+    Gosu::FPS::registerFrame();
     
     [EAGLContext setCurrentContext:context];
     glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
