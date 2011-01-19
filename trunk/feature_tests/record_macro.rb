@@ -1,6 +1,5 @@
 # Require cutting-edge development Gosu for testing.
 require '../lib/gosu'
-require 'fps_counter'
 
 class Test < Gosu::Window
   def grid_x
@@ -34,12 +33,9 @@ class Test < Gosu::Window
   end
   
   def draw
-    @fps_counter ||= FPSCounter.new
-    @fps_counter.register_tick
-    
     use_macro = !button_down?(Gosu::KbTab)
     
-    self.caption = "#{@fps_counter.fps} FPS, Macro: #{use_macro}"
+    self.caption = "#{Gosu::fps} FPS, Macro: #{use_macro}"
     if use_macro then
       zoom = button_down?(char_to_button_id('+')) ? 100.0 : 1.0
       @macro.draw grid_x, grid_y, 0, zoom, zoom

@@ -2230,6 +2230,7 @@ static VALUE mGosu;
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/ImageData.hpp>
+#include <Gosu/Inspection.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Math.hpp>
@@ -7332,6 +7333,28 @@ free_Gosu_Image(Gosu::Image *arg1) {
     delete arg1;
 }
 
+SWIGINTERN VALUE
+_wrap_fps(int argc, VALUE *argv, VALUE self) {
+  int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  {
+    try {
+      result = (int)Gosu::fps();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_int(static_cast< int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
 swig_class SwigClassSampleInstance;
 
 #ifdef HAVE_RB_DEFINE_ALLOC_FUNC
@@ -11082,6 +11105,7 @@ SWIGEXPORT void Init_gosu(void) {
   SwigClassImage.mark = 0;
   SwigClassImage.destroy = (void (*)(void *)) free_Gosu_Image;
   SwigClassImage.trackObjects = 1;
+  rb_define_module_function(mGosu, "fps", VALUEFUNC(_wrap_fps), -1);
   
   SwigClassSampleInstance.klass = rb_define_class_under(mGosu, "SampleInstance", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__SampleInstance, (void *) &SwigClassSampleInstance);

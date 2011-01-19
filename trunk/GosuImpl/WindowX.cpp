@@ -61,6 +61,11 @@ namespace
 
 namespace Gosu
 {
+    namespace FPS
+    {
+        int registerFrame();
+    }
+
     unsigned screenWidth()
     {
         scoped_resource<Display> display(XOpenDisplay(NULL), XCloseDisplay);
@@ -169,6 +174,7 @@ struct Gosu::Window::Impl
 
         if (window->needsRedraw() && window->graphics().begin(Colors::black))
         {
+            FPS::registerFrame();
             window->draw();
             window->graphics().end();
             glXSwapBuffers(display, this->window);

@@ -13,7 +13,13 @@
 #import <boost/bind.hpp>
 #import <vector>
 
-namespace Gosu {
+namespace Gosu
+{
+    namespace FPS
+    {
+        void registerFrame();
+    }
+    
     NSRect screenRect = [[[NSScreen screens] objectAtIndex: 0] frame];
     
     unsigned screenWidth()
@@ -506,9 +512,9 @@ void Gosu::Window::Impl::doTick(Window& window)
     window.input().update();
     window.update();
 
-    if (window.needsRedraw() and
-        window.graphics().begin())
+    if (window.needsRedraw() and window.graphics().begin())
     {
+        FPS::registerFrame();
         window.draw();
         window.graphics().end();
         [window.pimpl->context.obj() flushBuffer];

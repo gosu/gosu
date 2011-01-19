@@ -10,7 +10,8 @@
 #import <UIKit/UIKit.h>
 #import <OpenGLES/EAGL.h>
 
-namespace Gosu {
+namespace Gosu
+{
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     
     unsigned screenWidth()

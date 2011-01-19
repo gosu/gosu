@@ -8,6 +8,14 @@
 
 Gosu::Window& windowInstance();
 
+namespace Gosu
+{
+    namespace FPS
+    {
+        int registerFrame();
+    }
+}
+
 int Gosu::clipRectBaseFactor()
 {
     static int result = 0;
@@ -46,7 +54,6 @@ int Gosu::clipRectBaseFactor()
 
 @end
 
-
 @implementation GosuView
 
 @synthesize context;
@@ -77,6 +84,8 @@ int Gosu::clipRectBaseFactor()
 - (void)drawView {
     if (not windowInstance().needsRedraw())
         return;
+    
+    FPS::registerFrame();
     
     [EAGLContext setCurrentContext:context];
     glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);

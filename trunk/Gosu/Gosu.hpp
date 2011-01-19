@@ -19,6 +19,7 @@
 #include <Gosu/Image.hpp>
 #include <Gosu/ImageData.hpp>
 #include <Gosu/Input.hpp>
+#include <Gosu/Inspection.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/Platform.hpp>

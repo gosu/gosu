@@ -19,6 +19,11 @@
 
 namespace Gosu
 {
+    namespace FPS
+    {
+        int registerFrame();
+    }
+
     HWND __Gosu_HWND_for_FMOD = 0;
 
     unsigned screenWidth()
@@ -363,7 +368,10 @@ void Gosu::Window::show()
 					SendMessage(handle(), WM_SETCURSOR, reinterpret_cast<WPARAM>(handle()), HTCLIENT);
 			    update();
                 if (needsRedraw())
+                {
       				::InvalidateRect(handle(), 0, FALSE);
+                    FPS::registerFrame();
+                }
 				// There probably should be a proper "oncePerTick" handler
 				// system in the future. Right now, this is necessary to give
 				// timeslices to Ruby's green threads in Ruby/Gosu.

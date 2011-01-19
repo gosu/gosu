@@ -158,6 +158,7 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/ImageData.hpp>
+#include <Gosu/Inspection.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Math.hpp>
@@ -500,6 +501,11 @@ namespace Gosu {
         Gosu::saveFile(buf, filename);
     }
 }
+
+// Inspection:
+
+%include "../Gosu/Inspection.hpp"
+
 
 // Audio:
 

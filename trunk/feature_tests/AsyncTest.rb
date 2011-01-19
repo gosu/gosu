@@ -111,15 +111,7 @@ class GameWindow < Gosu::Window
   end
 
   def draw
-    @accum_fps ||= 0
-    @cur_sec ||= 0
-    @accum_fps += 1
-    now = Gosu::milliseconds
-    if @cur_sec != now / 1000 then
-      @cur_sec = now / 1000
-      self.caption = "Gosu Testing Zone @ #{@accum_fps} FPS"
-      @accum_fps = 0
-    end
+    self.caption = "Gosu Testing Zone @ #{Gosu::fps} FPS"
     
     @last_tick ||= 0
     if now - @last_tick > 50 then
