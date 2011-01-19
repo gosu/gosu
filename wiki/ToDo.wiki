@@ -4,10 +4,9 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2011-01-13)
+(Last update: 2011-01-19)
 
 == Gosu 0.7.x ==
-  * Add Window::fps
   * Find out what Gosu::Song::play does when it's already playing on all three platforms, then clarify docs
   * Add FontFlags support for SDL_TTF Gosu/Text
   * Fix Unicode support for SDL_TTF port (UnicodeTest.rb, @loc_test)
@@ -18,7 +17,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * See why Gosu::~Song with Ogg files sometimes causes other songs to stop
   * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously (who is setting that variable anyway? Me right?)
   * Ensure that Gosu::createText us always width*1 pixels for empty strings
-  * Remove the "from_" from "from_hsv" and "from_ashv", and deprecate Color#initialize
   * Add m4a to audio_formats.rb
   * Make <c=> more efficient in Font::drawRel
   * Add <s=> to text formatting
@@ -34,12 +32,9 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Throw an exception when using multiple Windows
   * Make C++'s Gosu::multiply available to Ruby
   * Add Numeric#clamp, Numeric#wrap to Ruby
-  * Make Window arguments optional for Audio, but throw exceptions when in wrong order
-  * Make Window arguments optional for Graphics, but throw exceptions when in wrong order
   * Verify usefulness of this task: "Gosu: compile x86_64 with gcc 4.2 on OS X"
   * Test StandBy with Windows and a running Gosu app
   * See if really old games have problems running in current Gosu
-  * Deprecate beginGL/endGL
   * The screen size/OpenGL stuff …
     * See if John Shea's talk had something about not being locked to pixel positions
     * Make initial window black instead of garbled on OS X
@@ -75,7 +70,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Replace draw_line by something that makes sense
   * Text quality
     * Implement ffUnderline by hand in createText/Font
-    * See if the differences between from_text and Font#draw are a bug
     * Creating a non-existent font should throw an exception on all platforms, test on which it does
     * Font should respect monospaced fonts and fonts with very weird kerning (Zapfino...): do research
     * Verify that Daniel font works properly in Font and Text
@@ -86,7 +80,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Try wgois or http://appliedstochastics.com/articles/ruby_jsw.html for Linux gamepad support
   * Polish/deployment
     * Make it possible to delete images while they are still referenced in the queue.
-    * Make Gosu::Color more fault-tolerant regarding its component values
+    * Make Gosu::Color more tolerant regarding its component values
     * Assure that files from doxygen task are considered for packaging
     * Compile all-in-one RMagick for Windows: http://rubyforge.org/forum/forum.php?thread_id=26872&forum_id=32
     * Get rid of quad/tri/line drawing
@@ -95,8 +89,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Collect Gosu YouTube videos and link them prominently
     * Create a dynamic screenshot page for all the topics in the Showcase
     * Mac OS: Mauszeiger wird im FS sichtbar bei Klick in obere linke Ecke: Warum?
-    * Examples leichter findbar machen
-    * Rakefile sollte autoconf ausführen
+    * Make examples discoverable
     * Deployment-Hilfe, Rakefile, Mac
     * Deployment-Hilfe, Rakefile, Win
     * Retry properly showing/hiding the mouse on OS X (immune to blocking main thread)
@@ -105,31 +98,25 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Make it easier to find the examples from the Gem
   * Make Mac/Gosu work with Rubinius
   * Re-introduce Async support
-  * Make plans for an official Scene/State system
   * Look at http://freeimage.sourceforge.net/requirements.html
   * Look at http://slick.cokeandcode.com/index.php?entry=entry080426-213044
   * Experiment: resizing the window possible?
-  * Create concept: Allow custom OpenGL actions to be put into the Z ordering queue
   * More alpha modes! http://www.adobe.com/devnet/pdf/pdfs/blend_modes.pdf
   * Document Gosu::interpolate, improve it too?
-  * Experiment: resizing the window possible?
   * Think: Possible to have beautiful quotation mark indenting?@Gosu Text
   * See if other libraries catch the release of the 'A' key in cmd+a
-  * If there ever is functionality to 'and' and 'or' Gosu::Button, how would one check in buttonDown?
   * Add check for Caps Lock/Num Lock
   * KbBracketLeft and KbBracketRight for ÖÄ?
   * Make more stuff configurable like http://github.com/cout/rice/blob/98ba7098e2de5849f2e7272021340976a768456f/ruby.ac#L7-20
-  * Experimentation with new drawing syntax; maybe first prototype as the last version of the 0.7.x series?
-  * Deprecate Image::getData, introduce Image::data
   * Try and see if Gosu can be made to correctly release pushed buttons when the keyboard is overloaded
   * Add Gosu::tempDir
   * Remove OS X file artefacts (._README.txt) from Linux tarball
   * Fix error when creating an Image from "\n" on OS X
   * Add callback for the OS-supplied "close" button
-  * Use a vector for the DrawOpQueue as suggested by Antikythera
   * render-to-texture korrekt implementieren
   * If GLFW doesn't help us: implement fullscreen as in the Old New Thing
   * Try to understand the benchmark on stackoverflow
+  * Make MacUtility.hpp public
 == Gosu Touch ==
   * See if [UIScreen scale] really gives us a hint about zooming on the iPad - and if so, tell the user to STOP IT man!
   * Compare with OolongEngine for audio issues
@@ -206,3 +193,9 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * document Gosu's Sockets
   * Gosu::Scope instead of beginGL/endGL etc.
   * Change ImageData::toBitmap to toBlob(byte*, size_t) and copy directly in RSTRING; add Image::toBitmap() instead
+  * Remove the "from_" from "from_hsv" and "from_ashv", and deprecate Color#initialize
+  * Deprecate Image::getData, introduce Image::data
+  * Experimentation with new drawing syntax
+  * Make plans for an official Scene/State system
+  * If there ever is functionality to 'and' and 'or' Gosu::Button, how would one check in buttonDown?
+  * Deprecate beginGL/endGL in favor of scheduleGL
