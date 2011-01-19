@@ -2,4 +2,4 @@
 
 In all functions that expect arguments for all four corners of a rectangle or quadrilateral, you can either pass clockwise coordinates, or coordinates in the following order (a Z shape):
 
-http://www.raschke.de/julian/temp/corner_indices.png
+http://www.libgosu.org/wiki_images/corner_indices.png

@@ -2,7 +2,7 @@
 
 Functions related to image creation accept a boolean "tileable" argument. This is a consequence of using 3D hardware acceleration. Try to notice the subtle difference between these two, overstretched images:
 
-http://www.raschke.de/julian/temp/hard_borders.png
+http://www.libgosu.org/wiki_images/hard_borders.png
 
 When you draw an image with stretching factors other than 1.0 (10.0 in this case) or at odd coordinates, it will become interpolated—which, in general, is much better than getting all pixel-y.
 
