@@ -18,18 +18,43 @@ namespace Gosu
     {
         Song* curSong = 0;
         
+        // Since audiere::OpenDevice is (contains) the first call to audiere.dll, we wrap
+        // the call in error handling code to see if the lazily linked DLL is there.
+        bool getDevice(AudioDevice*& device)
+        {
+            // Copied and pasted from MSDN.
+            #define FACILITY_VISUALCPP  ((LONG)0x6d)
+            #define VcppException(sev,err)  ((sev) | (FACILITY_VISUALCPP<<16) | err)
+            #define BAD_MOD VcppException(ERROR_SEVERITY_ERROR, ERROR_MOD_NOT_FOUND)
+
+            __try
+            {
+                device = OpenDevice();
+            }
+            __except ((GetExceptionCode() == BAD_MOD) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
+            {
+                return false;
+            }
+            return true;
+
+            #undef BAD_MOD
+            #undef VcppException
+            #undef FACILITY_VISUALCPP
+        }
+
         AudioDevice* device()
         {
             static AudioDevice* device = 0;
             if (device == 0)
             {
-                device = OpenDevice();
+                if (!getDevice(device))
+                    throw std::runtime_error("Could not find audiere.dll");
                 device->ref(); // Never free. Especially important in Ruby version, where GC order is undefined
             }
             return device;
         }
         
-        // Gosu:Buffer-based implementation of Audiere's File interface.
+        // Gosu::Buffer-based implementation of Audiere's File interface.
         // Provided since Audiere uses stdio to open files, which may not support Unicode
         // outside of the current codepage on Windows(?).
         class MemoryBuffer : boost::noncopyable
