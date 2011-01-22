@@ -148,44 +148,37 @@ bool Gosu::SampleInstance::paused() const
 
 void Gosu::SampleInstance::pause()
 {
-    OutputStreamPtr stream = streams.get(handle, extra);
-    if (stream)
+    if (OutputStreamPtr stream = streams.get(handle, extra))
         stream->stop();
 }
 
 void Gosu::SampleInstance::resume()
 {
-    OutputStreamPtr stream = streams.get(handle, extra);
-    if (stream)
+    if (OutputStreamPtr stream = streams.get(handle, extra))
         stream->play();
 }
 
 void Gosu::SampleInstance::stop()
 {
-    OutputStreamPtr stream = streams.get(handle, extra);
-    if (stream)
+    if (OutputStreamPtr stream = streams.get(handle, extra))
         stream->stop(), streams.clear(handle);
 }
 
 void Gosu::SampleInstance::changeVolume(double volume)
 {
-    OutputStreamPtr stream = streams.get(handle, extra);
-    if (stream)
+    if (OutputStreamPtr stream = streams.get(handle, extra))
         stream->setVolume(volume);
 }
 
 void Gosu::SampleInstance::changePan(double pan)
 {
-    OutputStreamPtr stream = streams.get(handle, extra);
-    if (stream)
+    if (OutputStreamPtr stream = streams.get(handle, extra))
         stream->setPan(clamp<float>(pan, -1.f, +1.f));
 }
 
 void Gosu::SampleInstance::changeSpeed(double speed)
 {
-    OutputStreamPtr stream = streams.get(handle, extra);
-    printf("getting instance %d, %d, %d\n", handle, extra, &*stream); fflush(0);
-    if (stream)
+    if (OutputStreamPtr stream = streams.get(handle, extra))
         stream->setPitchShift(clamp<float>(speed, 0.5f, 2.0f));
 }
 
@@ -217,10 +210,6 @@ Gosu::SampleInstance Gosu::Sample::play(double volume, double speed,
     OutputStreamPtr stream = device()->openStream(data->buffer->openStream());
     int handle, extra;
     streams.put(stream, handle, extra);
-    printf("creating instance %d, %d, %d\n", handle, extra, &*stream); fflush(0);
-
-    stream = streams.get(handle, extra);
-    printf("doublechecking instance %d, %d, %d\n", handle, extra, &*stream); fflush(0);
 
     SampleInstance instance(handle, extra);
     instance.changeVolume(volume);
