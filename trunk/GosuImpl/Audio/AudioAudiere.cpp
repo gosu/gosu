@@ -18,9 +18,14 @@ namespace Gosu
     {
         Song* curSong = 0;
         
-        const AudioDevicePtr& device()
+        AudioDevice* device()
         {
-            static AudioDevicePtr device(OpenDevice());
+            static AudioDevice* device = 0;
+            if (device == 0)
+            {
+                device = OpenDevice();
+                device->ref(); // Never free. Especially important in Ruby version, where GC order is undefined
+            }
             return device;
         }
         
@@ -414,6 +419,7 @@ void Gosu::Song::changeVolume(double volume)
 
 void Gosu::Song::update()
 {
+    device()->update();
 }
 
 // Deprecated constructors.
