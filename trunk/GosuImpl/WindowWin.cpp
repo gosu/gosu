@@ -21,7 +21,7 @@ namespace Gosu
 {
     namespace FPS
     {
-        int registerFrame();
+        void registerFrame();
     }
 
     HWND __Gosu_HWND_for_FMOD = 0;

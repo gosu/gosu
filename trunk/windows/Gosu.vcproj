@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="Gosu"
 	ProjectGUID="{4989339B-019C-4399-86F5-1D9245C420C6}"
 	RootNamespace="Gosu"
@@ -301,6 +301,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\GosuImpl\Inspection.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\GosuImpl\IO.cpp"
 				>
 			</File>
@@ -509,6 +513,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Gosu\Inspection.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\Gosu\IO.hpp"
 				>
 			</File>
@@ -525,11 +533,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
+				RelativePath="..\Gosu\Sockets.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Gosu\Sockets.hpp"
+				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
 				>
 			</File>
 			<File

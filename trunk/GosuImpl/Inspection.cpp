@@ -7,7 +7,7 @@ namespace Gosu
     {
         int fps, accum, sec;
 
-        int registerFrame()
+        void registerFrame()
         {
             ++accum;
             int newSec = Gosu::milliseconds() / 1000;

@@ -63,7 +63,7 @@ namespace Gosu
 {
     namespace FPS
     {
-        int registerFrame();
+        void registerFrame();
     }
 
     unsigned screenWidth()
