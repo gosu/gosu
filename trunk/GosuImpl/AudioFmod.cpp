@@ -14,8 +14,6 @@
 
 namespace Gosu
 {
-    extern HWND __Gosu_HWND_for_FMOD;
-
     namespace
     {
         GOSU_NORETURN void throwLastFMODError()
@@ -38,17 +36,13 @@ namespace Gosu
             #define FACILITY_VISUALCPP  ((LONG)0x6d)
             #define VcppException(sev,err)  ((sev) | (FACILITY_VISUALCPP<<16) | err)
             #define BAD_MOD VcppException(ERROR_SEVERITY_ERROR, ERROR_MOD_NOT_FOUND)
-
-            HWND fmodWindow = __Gosu_HWND_for_FMOD;
-            if (fmodWindow == 0)
-                fmodWindow = GetDesktopWindow();
-
+            
             // Try to call the first function from fmod.dll, which is lazily
             // linked. With this guard, we can raise a catchable C++ exception
             // if the library is not found, instead of crashing the game.
             __try
             {
-                FSOUND_SetHWND(fmodWindow);
+                FSOUND_SetHWND(GetDesktopWindow());
             }
             __except ((GetExceptionCode() == BAD_MOD) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
             {

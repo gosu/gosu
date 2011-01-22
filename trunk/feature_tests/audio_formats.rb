@@ -10,7 +10,7 @@ puts "|| Platform || #{FORMATS_TO_TRY.map { |fn| fn[/[^\.]*/].gsub('_', ' ') }.j
 
 my_platform = case RUBY_PLATFORM
   when /darwin/ then 'OS X'
-  when /win/ then 'Windows'
+  when /win/, /mingw/ then 'Windows'
   else 'Linux'
 end
 

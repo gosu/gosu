@@ -96,8 +96,10 @@ namespace Gosu
 
 
         // Deprecated.
-        Sample(Audio& audio, const std::wstring& filename);
-        Sample(Audio& audio, Reader reader);
+        #ifndef SWIG
+        GOSU_DEPRECATED Sample(Audio& audio, const std::wstring& filename);
+        GOSU_DEPRECATED Sample(Audio& audio, Reader reader);
+        #endif
     };
 
     //! Songs are less flexible than samples in that they can only be played
@@ -157,8 +159,10 @@ namespace Gosu
         static void update();
 
         // Deprecated.
-        Song(Audio&, const std::wstring& filename);
-        Song(Audio&, Type type, Reader reader);
+        #ifndef SWIG
+        GOSU_DEPRECATED Song(Audio&, const std::wstring& filename);
+        GOSU_DEPRECATED Song(Audio&, Type type, Reader reader);
+        #endif
     };
 }
 

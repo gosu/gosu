@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="RubyGosu"
 	ProjectGUID="{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}"
 	RootNamespace="RubyGosu"
@@ -61,11 +61,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/DELAYLOAD:fmod.dll"
+				AdditionalOptions="/DELAYLOAD:audiere.dll"
 				AdditionalDependencies="C:\Ruby18-mswin32\lib\msvcrt-ruby18.lib"
 				OutputFile="$(OutDir)\gosu.for_1_8.so"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="C:\Ruby\Lib"
+				AdditionalLibraryDirectories=""
 				GenerateManifest="false"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="false"
@@ -144,11 +144,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/DELAYLOAD:fmod.dll"
+				AdditionalOptions="/DELAYLOAD:audiere.dll"
 				AdditionalDependencies="C:\Ruby19-mswin32\lib\msvcrt-ruby191.lib"
 				OutputFile="$(OutDir)\gosu.for_1_9.so"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="C:\Ruby1.9\Lib"
+				AdditionalLibraryDirectories=""
 				GenerateManifest="false"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="false"
