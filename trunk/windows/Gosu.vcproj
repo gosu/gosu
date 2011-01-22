@@ -277,6 +277,10 @@
 			Name="Implementation"
 			>
 			<File
+				RelativePath="..\GosuImpl\Audio\AudioAudiere.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\GosuImpl\Sockets\CommSocket.cpp"
 				>
 			</File>
@@ -449,14 +453,6 @@
 				</File>
 				<File
 					RelativePath="..\GosuImpl\Graphics\Transform.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Audio"
-				>
-				<File
-					RelativePath="..\..\GosuImpl\Audio\AudioAudiere.cpp"
 					>
 				</File>
 			</Filter>
