@@ -81,6 +81,51 @@ namespace Gosu
                 return file;
             }
         };
+
+        class StreamRegistry
+        {
+            struct NumberedStream
+            {
+                int extra;
+                OutputStreamPtr stream;
+            };
+            mutable std::vector<NumberedStream> streams;
+
+        public:
+            StreamRegistry()
+            {
+                streams.reserve(100);
+            }
+            
+            OutputStreamPtr get(int handle, int extra) const
+            {
+                if (handle < streams.size() && streams[handle].extra == extra)
+                    return streams[handle].stream;
+                return OutputStreamPtr();
+            }
+            
+            void put(OutputStreamPtr stream, int& handle, int& extra)
+            {
+                handle = 0;
+                for (handle; handle < streams.size(); ++handle)
+                    if (!streams[handle].stream)
+                    {
+                        streams[handle].stream = stream;
+                        extra = ++streams[handle].extra;
+                        return;
+                    }
+                // handle == streams.size() <3  
+                NumberedStream newStream = { extra = 0, stream };
+                streams.push_back(newStream);
+            }
+            
+            void clear(int handle)
+            {
+                streams.at(handle).stream = 0;
+            }
+        };
+        
+        StreamRegistry streams;
     }
 }
 
@@ -91,42 +136,57 @@ Gosu::SampleInstance::SampleInstance(int handle, int extra)
 
 bool Gosu::SampleInstance::playing() const
 {
-    return false;//FSOUND_IsPlaying(handle);
+    OutputStreamPtr stream = streams.get(handle, extra);
+    return stream && stream->isPlaying();
 }
 
 bool Gosu::SampleInstance::paused() const
 {
-    return false;//FSOUND_GetPaused(handle);
+    OutputStreamPtr stream = streams.get(handle, extra);
+    return stream && !stream->isPlaying();
 }
 
 void Gosu::SampleInstance::pause()
 {
-    //FSOUND_SetPaused(handle, 1);
+    OutputStreamPtr stream = streams.get(handle, extra);
+    if (stream)
+        stream->stop();
 }
 
 void Gosu::SampleInstance::resume()
 {
-    //FSOUND_SetPaused(handle, 0);
+    OutputStreamPtr stream = streams.get(handle, extra);
+    if (stream)
+        stream->play();
 }
 
 void Gosu::SampleInstance::stop()
 {
-    //FSOUND_StopSound(handle);
+    OutputStreamPtr stream = streams.get(handle, extra);
+    if (stream)
+        stream->stop(), streams.clear(handle);
 }
 
 void Gosu::SampleInstance::changeVolume(double volume)
 {
-    //FSOUND_SetVolume(handle, clamp<int>(volume * 255, 0, 255));
+    OutputStreamPtr stream = streams.get(handle, extra);
+    if (stream)
+        stream->setVolume(volume);
 }
 
 void Gosu::SampleInstance::changePan(double pan)
 {
-    //FSOUND_SetPan(handle, clamp<int>(pan * 127 + 127, 0, 255));
+    OutputStreamPtr stream = streams.get(handle, extra);
+    if (stream)
+        stream->setPan(clamp<float>(pan, -1.f, +1.f));
 }
 
 void Gosu::SampleInstance::changeSpeed(double speed)
 {
-    //FSOUND_SetFrequency(handle, clamp<int>(speed * extra, 100, 705600));
+    OutputStreamPtr stream = streams.get(handle, extra);
+    printf("getting instance %d, %d, %d\n", handle, extra, &*stream); fflush(0);
+    if (stream)
+        stream->setPitchShift(clamp<float>(speed, 0.5f, 2.0f));
 }
 
 struct Gosu::Sample::SampleData : boost::noncopyable
@@ -154,28 +214,36 @@ Gosu::Sample::Sample(Reader reader)
 Gosu::SampleInstance Gosu::Sample::play(double volume, double speed,
     bool looping) const
 {
-    // Leaks memory, we should keep track of the stream with a RefPtr
-    OutputStream* stream = device()->openStream(data->buffer->openStream());
-    stream->setVolume(volume);
-    stream->setPitchShift(Gosu::clamp<float>(speed, 0.5f, 2.0f));
+    OutputStreamPtr stream = device()->openStream(data->buffer->openStream());
+    int handle, extra;
+    streams.put(stream, handle, extra);
+    printf("creating instance %d, %d, %d\n", handle, extra, &*stream); fflush(0);
+
+    stream = streams.get(handle, extra);
+    printf("doublechecking instance %d, %d, %d\n", handle, extra, &*stream); fflush(0);
+
+    SampleInstance instance(handle, extra);
+    instance.changeVolume(volume);
+    instance.changeSpeed(speed);
     stream->setRepeat(looping);
     stream->play();
-
-    return SampleInstance(0, 0);
+    return instance;
 }
 
 Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
     double speed, bool looping) const
 {
-    // Leaks memory, we should keep track of the stream with a RefPtr
-    OutputStream* stream = device()->openStream(data->buffer->openStream());
-    stream->setPan(pan);
-    stream->setVolume(volume);
-    stream->setPitchShift(Gosu::clamp<float>(speed, 0.5f, 2.0f));
+    OutputStreamPtr stream = device()->openStream(data->buffer->openStream());
+    int handle, extra;
+    streams.put(stream, handle, extra);
+
+    SampleInstance instance(handle, extra);
+    instance.changePan(pan);
+    instance.changeVolume(volume);
+    instance.changeSpeed(speed);
     stream->setRepeat(looping);
     stream->play();
-
-    return SampleInstance(0, 0);
+    return instance;
 }
 
 class Gosu::Song::BaseData : boost::noncopyable
@@ -348,8 +416,8 @@ public:
 
 Gosu::Song::Song(const std::wstring& filename)
 {
- //   requireFMOD();
- //   
+    device(); // Implicitly open audio device
+  
  //   Buffer buf;
 	//loadFile(buf, filename);
 	//Type type = stStream;
@@ -366,9 +434,9 @@ Gosu::Song::Song(const std::wstring& filename)
 	//Song(type, buf.frontReader()).data.swap(data);
 }
 
-Gosu::Song::Song(Type type, Reader reader)
+Gosu::Song::Song(Type, Reader reader)
 {
-    //requireFMOD();
+    device(); // Implicitly open audio device
     //
     //switch (type)
     //{

@@ -5,7 +5,8 @@ using namespace std;
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
 	// Append .so parent folder to PATH to make extensions (e.g. audiere.dll) loadable.
-	
+	// TODO: This sounds like a risky thing wrt security, but does this matter?
+
 	if (fdwReason == DLL_PROCESS_ATTACH)
 	{
 		TCHAR buffer[MAX_PATH+1];
