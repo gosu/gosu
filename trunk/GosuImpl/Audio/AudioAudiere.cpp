@@ -1,13 +1,9 @@
 #include <Gosu/Audio.hpp>
 #include <Gosu/Math.hpp>
-//#include <Gosu/IO.hpp>
-//#include <Gosu/Utility.hpp>
-//#include <boost/algorithm/string.hpp>
-//#include <cassert>
-//#include <cstdlib>
+#include <Gosu/IO.hpp>
+#include <boost/foreach.hpp>
 #include <algorithm>
-//#include <stdexcept>
-//#include <vector>
+#include <vector>
 
 #include <audiere.h>
 using namespace audiere;
@@ -17,42 +13,6 @@ namespace Gosu
     namespace
     {
         Song* curSong = 0;
-        
-        // Since audiere::OpenDevice is (contains) the first call to audiere.dll, we wrap
-        // the call in error handling code to see if the lazily linked DLL is there.
-        bool getDevice(AudioDevice*& device)
-        {
-            // Copied and pasted from MSDN.
-            #define FACILITY_VISUALCPP  ((LONG)0x6d)
-            #define VcppException(sev,err)  ((sev) | (FACILITY_VISUALCPP<<16) | err)
-            #define BAD_MOD VcppException(ERROR_SEVERITY_ERROR, ERROR_MOD_NOT_FOUND)
-
-            __try
-            {
-                device = OpenDevice();
-            }
-            __except ((GetExceptionCode() == BAD_MOD) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
-            {
-                return false;
-            }
-            return true;
-
-            #undef BAD_MOD
-            #undef VcppException
-            #undef FACILITY_VISUALCPP
-        }
-
-        AudioDevice* device()
-        {
-            static AudioDevice* device = 0;
-            if (device == 0)
-            {
-                if (!getDevice(device))
-                    throw std::runtime_error("Could not find audiere.dll");
-                device->ref(); // Never free. Especially important in Ruby version, where GC order is undefined
-            }
-            return device;
-        }
         
         // Gosu::Buffer-based implementation of Audiere's File interface.
         // Provided since Audiere uses stdio to open files, which may not support Unicode
@@ -82,14 +42,21 @@ namespace Gosu
             }
         };
 
-        class StreamRegistry
+        class StreamRegistry : public RefImplementation<StopCallback>, boost::noncopyable
         {
             struct NumberedStream
             {
                 int extra;
                 OutputStreamPtr stream;
             };
-            mutable std::vector<NumberedStream> streams;
+            std::vector<NumberedStream> streams;
+            
+            ADR_METHOD(void) streamStopped(StopEvent* event)
+            {
+                if (event->getReason() == StopEvent::STREAM_ENDED)
+                    if (!clear(event->getOutputStream()) && curSong)
+                        curSong = 0;
+            }
 
         public:
             StreamRegistry()
@@ -123,9 +90,62 @@ namespace Gosu
             {
                 streams.at(handle).stream = 0;
             }
+
+            bool clear(OutputStreamPtr stream)
+            {
+                BOOST_FOREACH (NumberedStream& numberedStream, streams)
+                    if (numberedStream.stream == stream)
+                    {
+                        numberedStream.stream = 0;
+                        return true;
+                    }
+                return false;
+            }
         };
         
-        StreamRegistry streams;
+        // Intentionally leak. Let Windows clean up on program exit.
+        StreamRegistry& streams = *(new StreamRegistry);
+
+        // Since audiere::OpenDevice is (contains) the first call to audiere.dll, we wrap
+        // the call in error handling code to see if the lazily linked DLL is there.
+        bool getDevice(AudioDevice*& device)
+        {
+            // Copied and pasted from MSDN.
+            #define FACILITY_VISUALCPP  ((LONG)0x6d)
+            #define VcppException(sev,err)  ((sev) | (FACILITY_VISUALCPP<<16) | err)
+            #define BAD_MOD VcppException(ERROR_SEVERITY_ERROR, ERROR_MOD_NOT_FOUND)
+
+            __try
+            {
+                device = OpenDevice();
+            }
+            __except ((GetExceptionCode() == BAD_MOD) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
+            {
+                return false;
+            }
+            return true;
+
+            #undef BAD_MOD
+            #undef VcppException
+            #undef FACILITY_VISUALCPP
+        }
+
+        AudioDevice* device()
+        {
+            static AudioDevice* device = 0;
+            if (device == 0)
+            {
+                if (!getDevice(device))
+                    throw std::runtime_error("Could not find audiere.dll");
+
+                device->registerCallback(&streams);
+
+                // Never free. Especially important in Ruby version, where GC order is undefined
+                device->ref();
+            }
+            return device;
+        }
+        
     }
 }
 
