@@ -4,9 +4,13 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2011-01-19)
+(Last update: 2011-01-22)
 
 == Gosu 0.7.x ==
+  * See if GetDesktopWindow works for FSOUND_SetHWND & get rid of old-style Sample/Song constructors
+  * Probably merge mathias' GLFW backend for Windows
+  * Get GLFW working on OS X
+  * Get GLFW working on Linux
   * Find out what Gosu::Song::play does when it's already playing on all three platforms, then clarify docs
   * Add FontFlags support for SDL_TTF Gosu/Text
   * Fix Unicode support for SDL_TTF port (UnicodeTest.rb, @loc_test)
