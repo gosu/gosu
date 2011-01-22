@@ -7,8 +7,15 @@ This list of tasks is exported automatically from my OmniFocus projects.
 (Last update: 2011-01-22)
 
 == Gosu 0.7.x ==
-  * See if GetDesktopWindow works for FSOUND_SetHWND & get rid of old-style Sample/Song constructors
-  * Probably merge mathias' GLFW backend for Windows
+  * Finish Gosu::Song implementation based on Audiere
+  * Check two bookmarked Audiere bug tracker entries: Do they bother me?
+  * Try audio formats with Audiere
+  * Upload preview build for Windows
+  * Release 0.7.27
+  * Update docs & examples
+  * Release a roadmap for 0.7, 0.8 & 0.9
+  * Port Gosu::Audio to Audiere on Linux too
+  * Merge mathias' GLFW backend for Windows
   * Get GLFW working on OS X
   * Get GLFW working on Linux
   * Find out what Gosu::Song::play does when it's already playing on all three platforms, then clarify docs
@@ -16,8 +23,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Fix Unicode support for SDL_TTF port (UnicodeTest.rb, @loc_test)
   * Fix Segfault when Image.new doesn't find its file on Linux
   * See if clipping coordinate calculation is correct with all transformations considered (why is Terava off by one pixel?)
-  * Look at http://audiere.sourceforge.net/ for Windows
-  * Test Gosu&ocra with FMOD.dll/audiere.dll/whatever.dll
+  * Test Gosu&ocra with audiere.dll
   * See why Gosu::~Song with Ogg files sometimes causes other songs to stop
   * Ensure that Gosu::Song: currentSong is never 0'ed asynchronously (who is setting that variable anyway? Me right?)
   * Ensure that Gosu::createText us always width*1 pixels for empty strings
@@ -58,11 +64,8 @@ This list of tasks is exported automatically from my OmniFocus projects.
     * Create iPhone app template for Xcode
     * Create .pkg wrapper to install Gosu into /Developer/Gosu
   * More OpenAL niceties
-    * Look at protea as an FMOD replacement http://www.viremo.de/proteaAudio/
-    * Try to add dynamic MikMod loading code
     * See if there is a native/fastest mixing rate on Mac/iPhone
     * Make buffers in Mac port larger and make sure that update_interval<66 always plays running Songs without jitter
-    * Check Song::play() behavior on new MikMod song vs. other libs
   * Try harder to reproduce these bugs
     * Get rid of context selection error with driver set to always do FSAA (Windows)
     * OS X: Release all keys on battery notification dialog (?)
@@ -117,8 +120,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Remove OS X file artefacts (._README.txt) from Linux tarball
   * Fix error when creating an Image from "\n" on OS X
   * Add callback for the OS-supplied "close" button
-  * render-to-texture korrekt implementieren
-  * If GLFW doesn't help us: implement fullscreen as in the Old New Thing
+  * Correctly implement render-to-texture (render{})
   * Try to understand the benchmark on stackoverflow
   * Make MacUtility.hpp public
 == Gosu Touch ==
