@@ -1,5 +1,10 @@
 #summary Log of Gosu's development.
 
+=0.7.27=
+  * 2011-01-29: Linux: Switched from SDL_mixer to Audiere (supports 'speed' arguments now)
+  * 2011-01-22: Windows: Switched from FMOD3 to Audiere
+  * 2011-01-19: All: Added Gosu::fps() that returns the approximate current framerate
+
 =0.7.26=
   * 2011-01-08: Ruby: Added Color#== and Color::argb/Color::rgba constructors
   * 2011-01-08: All: Added Window#gl(z, &block) (Ruby) / Graphics::scheduleGL(functor, z) (C++)
