@@ -17,7 +17,7 @@ SOURCE_FILES =
     %w(Math.cpp Utility.cpp IO.cpp FileUnix.cpp InputX.cpp TextInputX.cpp TimingUnix.cpp WindowX.cpp
 	     Graphics/Bitmap.cpp Graphics/BitmapUtils.cpp Graphics/Color.cpp
 	     Graphics/TexChunk.cpp Graphics/Graphics.cpp Graphics/Image.cpp
-	     Graphics/BlockAllocator.cpp
+	     Graphics/BlockAllocator.cpp Inspection.cpp
 	     Graphics/Texture.cpp Graphics/LargeImageData.cpp
 	     Graphics/BitmapPNG.cpp Graphics/Font.cpp Graphics/BitmapBMP.cpp
 	     Graphics/TextUnix.cpp Graphics/Text.cpp Graphics/Transform.cpp
