@@ -8,9 +8,9 @@ To install Gosu in any form, you will need the following packages (install via `
   * g++
   * libgl1-mesa-dev
   * libpango1.0-dev
-  * libboost-dev (>= 1.36.0—please check the version you have!)
-  * libsdl-ttf2.0-dev
+  * libboost-dev
   * libaudiere-dev
+  * libsdl-ttf2.0-dev
 
 
 *Copy-and-pastable command line* for Ubuntu, last tested on 10.10, should work across all versions:
