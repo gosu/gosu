@@ -22,7 +22,7 @@ SOURCE_FILES =
 	     Graphics/BitmapPNG.cpp Graphics/Font.cpp Graphics/BitmapBMP.cpp
 	     Graphics/TextUnix.cpp Graphics/Text.cpp Graphics/Transform.cpp
 	     Graphics/BitmapColorKey.cpp DirectoriesUnix.cpp
-	     Audio/AudioSDL.cpp RubyGosu_wrap.cxx)
+	     Audio/AudioAudiere.cpp RubyGosu_wrap.cxx)
 
 require 'mkmf'
 
@@ -35,11 +35,11 @@ SOURCE_FILES.each { |file| `cp ../GosuImpl/#{file} #{File.basename(file)}` }
 `ln -s ../linux/gosu.so ../lib/gosu.so`
 
 sdl_config = with_config("sdl-config", "sdl-config")
+audiere_config = with_config("audiere-config", "audiere-config")
 pango_config = "pkg-config pangoft2" # FIXME should probably use with_config
 
-$INCFLAGS << " -I../ -I../GosuImpl `#{sdl_config} --cflags` `#{pango_config} --cflags`"
-$LDFLAGS << " `#{sdl_config} --libs` `#{pango_config} --libs` -lX11"
-have_header('SDL_mixer.h') if have_library('SDL_mixer', 'Mix_OpenAudio')
+$INCFLAGS << " -I../ -I../GosuImpl `#{sdl_config} --cflags` `#{audiere_config} --cxxflags` `#{pango_config} --cflags`"
+$LDFLAGS << " `#{sdl_config} --libs` `#{audiere_config} --libs` `#{pango_config} --libs` -lX11"
 have_header('SDL_ttf.h') if have_library('SDL_ttf', 'TTF_RenderUTF8_Blended')
 have_header('gl.h') if have_library('GL', 'glMatrixMode')
 have_header('png.h') if have_library('png', 'png_sig_cmp')

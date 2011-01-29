@@ -10,12 +10,10 @@ BASE_OBJS = Math.o Utility.o IO.o FileUnix.o TimingUnix.o WindowX.o	\
 	    Graphics/Texture.o Graphics/LargeImageData.o		\
 	    Graphics/BitmapPNG.o Graphics/Font.o Graphics/BitmapBMP.o	\
 	    Graphics/TextUnix.o Graphics/Text.o	Graphics/Transform.o		\
-	    Graphics/BitmapColorKey.o DirectoriesUnix.o
+	    Graphics/BitmapColorKey.o DirectoriesUnix.o Audio/AudioAudiere.cpp
 
 NET_OBJS = Sockets/CommSocket.o Sockets/ListenerSocket.o	\
 	   Sockets/Socket.o Sockets/MessageSocket.o
-
-SDLMIXER_OBJ = Audio/AudioSDL.o
 
 OBJS = @GOSU_A_OBJS@
 
@@ -26,7 +24,7 @@ CXXFLAGS = -fPIC -I.. @AUDIO_INC@ -Wall @PANGO_CXX_FLAGS@ @X_INCS@ \
 	   -DNDEBUG -O3 -pipe -fomit-frame-pointer \
 	   -I/usr/include/SDL
 
-LIBS = @AUDIO_LIBS@ -L@x_libraries@ -lX11 @PANGO_LIBS@ -lpng -lstdc++ -lGL -lSDL_ttf #-lboost_thread
+LIBS = -L@x_libraries@ -lX11 @PANGO_LIBS@ @AUDIO_LIBS@ -lpng -lstdc++ -lGL -lSDL_ttf #-lboost_thread
 
 all: @TO_BE_MADE@
 

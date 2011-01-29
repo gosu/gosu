@@ -47,11 +47,8 @@ AC_SUBST(PANGO_CXX_FLAGS)
 PANGO_LIBS=`pkg-config pangoft2 --libs`
 AC_SUBST(PANGO_LIBS)
 
-#AC_MSG_CHECKING(for SDL_mixer)
-GOSU_A_OBJS=${GOSU_A_OBJS}" \$(SDLMIXER_OBJ)"
-AUDIO_LIBS="`sdl-config --libs` -lSDL_mixer"
-AUDIO_INC=`sdl-config --cflags`
-#AC_MSG_RESULT(yes)
+AUDIO_LIBS=`audiere-config --libs`
+AUDIO_INC=`audiere-config --cxxflags`
 AC_SUBST(AUDIO_LIBS)
 AC_SUBST(AUDIO_INC)
 
