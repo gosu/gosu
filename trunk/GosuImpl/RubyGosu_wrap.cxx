@@ -2171,12 +2171,13 @@ namespace Swig {
 #define SWIGTYPE_p_Gosu__Song swig_types[9]
 #define SWIGTYPE_p_Gosu__TextInput swig_types[10]
 #define SWIGTYPE_p_Gosu__Window swig_types[11]
-#define SWIGTYPE_p_boost__arrayT_double_16_t swig_types[12]
-#define SWIGTYPE_p_char swig_types[13]
-#define SWIGTYPE_p_double swig_types[14]
-#define SWIGTYPE_p_std__wstring swig_types[15]
-static swig_type_info *swig_types[17];
-static swig_module_info swig_module = {swig_types, 16, 0, 0, 0, 0};
+#define SWIGTYPE_p_Reader swig_types[12]
+#define SWIGTYPE_p_boost__arrayT_double_16_t swig_types[13]
+#define SWIGTYPE_p_char swig_types[14]
+#define SWIGTYPE_p_double swig_types[15]
+#define SWIGTYPE_p_std__wstring swig_types[16]
+static swig_type_info *swig_types[18];
+static swig_module_info swig_module = {swig_types, 17, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -7850,25 +7851,8 @@ free_Gosu_Sample(Gosu::Sample *arg1) {
 
 swig_class SwigClassSong;
 
-#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
 SWIGINTERN VALUE
-_wrap_Song_allocate(VALUE self) {
-#else
-  SWIGINTERN VALUE
-  _wrap_Song_allocate(int argc, VALUE *argv, VALUE self) {
-#endif
-    
-    
-    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_Gosu__Song);
-#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
-    rb_obj_call_init(vresult, argc, argv);
-#endif
-    return vresult;
-  }
-  
-
-SWIGINTERN VALUE
-_wrap_new_Song(int argc, VALUE *argv, VALUE self) {
+_wrap_new_Song__SWIG_0(int argc, VALUE *argv, VALUE self) {
   std::wstring *arg1 = 0 ;
   std::wstring temp1 ;
   const char *classname SWIGUNUSED = "Gosu::Song";
@@ -7893,6 +7877,98 @@ _wrap_new_Song(int argc, VALUE *argv, VALUE self) {
   }
   return self;
 fail:
+  return Qnil;
+}
+
+
+#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
+SWIGINTERN VALUE
+_wrap_Song_allocate(VALUE self) {
+#else
+  SWIGINTERN VALUE
+  _wrap_Song_allocate(int argc, VALUE *argv, VALUE self) {
+#endif
+    
+    
+    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_Gosu__Song);
+#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
+    rb_obj_call_init(vresult, argc, argv);
+#endif
+    return vresult;
+  }
+  
+
+SWIGINTERN VALUE
+_wrap_new_Song__SWIG_1(int argc, VALUE *argv, VALUE self) {
+  Reader arg1 ;
+  void *argp1 ;
+  int res1 = 0 ;
+  const char *classname SWIGUNUSED = "Gosu::Song";
+  Gosu::Song *result = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  {
+    res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Reader,  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Reader","Gosu::Song", 1, argv[0] )); 
+    }  
+    if (!argp1) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Reader","Gosu::Song", 1, argv[0]));
+    } else {
+      arg1 = *(reinterpret_cast< Reader * >(argp1));
+    }
+  }
+  {
+    try {
+      result = (Gosu::Song *)new Gosu::Song(arg1);
+      DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return self;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE _wrap_new_Song(int nargs, VALUE *args, VALUE self) {
+  int argc;
+  VALUE argv[1];
+  int ii;
+  
+  argc = nargs;
+  if (argc > 1) SWIG_fail;
+  for (ii = 0; (ii < argc); ++ii) {
+    argv[ii] = args[ii];
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_std__wstring, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_Song__SWIG_0(nargs, args, self);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Reader, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_Song__SWIG_1(nargs, args, self);
+    }
+  }
+  
+fail:
+  Ruby_Format_OverloadedError( argc, 1, "Song.new", 
+    "    Song.new(std::wstring const &filename)\n"
+    "    Song.new(Reader reader)\n");
+  
   return Qnil;
 }
 
@@ -10661,6 +10737,7 @@ static swig_type_info _swigt__p_Gosu__SampleInstance = {"_p_Gosu__SampleInstance
 static swig_type_info _swigt__p_Gosu__Song = {"_p_Gosu__Song", "Gosu::Song *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__TextInput = {"_p_Gosu__TextInput", "Gosu::TextInput *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Window = {"_p_Gosu__Window", "Gosu::Window *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Reader = {"_p_Reader", "Reader *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_boost__arrayT_double_16_t = {"_p_boost__arrayT_double_16_t", "boost::array< double,16 > *|Gosu::Transform *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "Gosu::ZPos *|double *", 0, 0, (void*)0, 0};
@@ -10679,6 +10756,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__Song,
   &_swigt__p_Gosu__TextInput,
   &_swigt__p_Gosu__Window,
+  &_swigt__p_Reader,
   &_swigt__p_boost__arrayT_double_16_t,
   &_swigt__p_char,
   &_swigt__p_double,
@@ -10697,6 +10775,7 @@ static swig_cast_info _swigc__p_Gosu__SampleInstance[] = {  {&_swigt__p_Gosu__Sa
 static swig_cast_info _swigc__p_Gosu__Song[] = {  {&_swigt__p_Gosu__Song, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__TextInput[] = {  {&_swigt__p_Gosu__TextInput, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Window[] = {  {&_swigt__p_Gosu__Window, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Reader[] = {  {&_swigt__p_Reader, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_boost__arrayT_double_16_t[] = {  {&_swigt__p_boost__arrayT_double_16_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
@@ -10715,6 +10794,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__Song,
   _swigc__p_Gosu__TextInput,
   _swigc__p_Gosu__Window,
+  _swigc__p_Reader,
   _swigc__p_boost__arrayT_double_16_t,
   _swigc__p_char,
   _swigc__p_double,
@@ -10981,8 +11061,8 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_RubyInitializeTrackings();
   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(7)));
-  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(26)));
-  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.26.1"));
+  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(27)));
+  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.27"));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
   rb_define_module_function(mGosu, "degrees_to_radians", VALUEFUNC(_wrap_degrees_to_radians), -1);
@@ -11137,8 +11217,6 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Song, (void *) &SwigClassSong);
   rb_define_alloc_func(SwigClassSong.klass, _wrap_Song_allocate);
   rb_define_method(SwigClassSong.klass, "initialize", VALUEFUNC(_wrap_new_Song), -1);
-  rb_define_const(SwigClassSong.klass, "StStream", SWIG_From_int(static_cast< int >(Gosu::Song::stStream)));
-  rb_define_const(SwigClassSong.klass, "StModule", SWIG_From_int(static_cast< int >(Gosu::Song::stModule)));
   rb_define_singleton_method(SwigClassSong.klass, "current_song", VALUEFUNC(_wrap_Song_current_song), -1);
   rb_define_method(SwigClassSong.klass, "play", VALUEFUNC(_wrap_Song_play), -1);
   rb_define_method(SwigClassSong.klass, "pause", VALUEFUNC(_wrap_Song_pause), -1);
