@@ -112,14 +112,6 @@ namespace Gosu
         boost::scoped_ptr<BaseData> data;
     
     public:
-        //! There are two types of songs that can be loaded as a Song: Streamed
-        //! songs (like OGG) and modules (like MOD or XM).
-        enum Type
-        {
-            stStream,
-            stModule
-        };
-
         //! Constructs a song that can be played on the provided audio system
         //! and loads the song from a file. The type is determined from the
         //! filename.
@@ -127,7 +119,7 @@ namespace Gosu
         
         //! Constructs a song of the specified type that can be played on the
         //! provided audio system and loads the song data from a stream.
-        Song(Type type, Reader reader);
+        explicit Song(Reader reader);
         
         ~Song();
         
@@ -160,6 +152,14 @@ namespace Gosu
 
         // Deprecated.
         #ifndef SWIG
+        //! There are two types of songs that can be loaded as a Song: Streamed
+        //! songs (like OGG) and modules (like MOD or XM).
+        enum Type
+        {
+            stStream,
+            stModule
+        };
+
         GOSU_DEPRECATED Song(Audio&, const std::wstring& filename);
         GOSU_DEPRECATED Song(Audio&, Type type, Reader reader);
         #endif

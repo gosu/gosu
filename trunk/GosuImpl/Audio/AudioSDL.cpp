@@ -208,7 +208,7 @@ Gosu::Song::Song(const std::wstring& filename)
     Mix_HookMusicFinished(BaseData::endSongCallback);
 }
 
-Gosu::Song::Song(Type type, Reader reader)
+Gosu::Song::Song(Reader reader)
 : data(new BaseData)
 {
     requireSDLMixer();

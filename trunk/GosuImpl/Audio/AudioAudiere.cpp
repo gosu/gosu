@@ -16,7 +16,7 @@ namespace Gosu
         
         // Gosu::Buffer-based implementation of Audiere's File interface.
         // Provided since Audiere uses stdio to open files, which may not support Unicode
-        // outside of the current codepage on Windows(?).
+        // filenames outside of the current codepage on Windows(?).
         class MemoryBuffer : boost::noncopyable
         {
             Gosu::Buffer buffer;
@@ -110,14 +110,17 @@ namespace Gosu
         // the call in error handling code to see if the lazily linked DLL is there.
         bool getDevice(AudioDevice*& device)
         {
+            #ifdef GOSU_IS_WIN
             // Copied and pasted from MSDN.
             #define FACILITY_VISUALCPP  ((LONG)0x6d)
             #define VcppException(sev,err)  ((sev) | (FACILITY_VISUALCPP<<16) | err)
             #define BAD_MOD VcppException(ERROR_SEVERITY_ERROR, ERROR_MOD_NOT_FOUND)
-
+            
             __try
             {
+            #endif
                 device = OpenDevice();
+            #ifdef GOSU_IS_WIN
             }
             __except ((GetExceptionCode() == BAD_MOD) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
             {
@@ -128,6 +131,7 @@ namespace Gosu
             #undef BAD_MOD
             #undef VcppException
             #undef FACILITY_VISUALCPP
+            #endif
         }
 
         AudioDevice* device()
@@ -267,8 +271,8 @@ public:
     virtual ~BaseData() {}
 
     virtual void play(bool looping) = 0;
+    virtual bool playing() const = 0;
     virtual void pause() = 0;
-    virtual bool paused() const = 0;
     virtual void stop() = 0;
     
     double volume() const
@@ -285,181 +289,71 @@ public:
 
 class Gosu::Song::StreamData : public BaseData
 {
-    //FSOUND_STREAM* stream;
-    //int handle;
-    //std::vector<char> buffer;
+    MemoryBuffer buffer;
+    OutputStreamPtr stream;
+    SampleInstance instance;
+    bool loop;
 
-    //static signed char F_CALLBACKAPI endSongCallback(FSOUND_STREAM*, void*,
-    //    int, void* self)
-    //{
-    //    curSong = 0;
-    //    static_cast<StreamData*>(self)->handle = -1;
-    //    return 0;
-    //}
+    void init()
+    {
+        int handle, extra;
+        stream = OpenSound(device(), buffer, true);
+        streams.put(stream, handle, extra);
+        instance = SampleInstance(handle, extra);
+        loop = false;
+    }
 
 public:
     StreamData(Gosu::Reader reader)
-    //: stream(0), handle(-1)
+    :   buffer(reader), instance(-1, -1)
     {
-//        buffer.resize(reader.resource().size() - reader.position());
-//        reader.read(&buffer[0], buffer.size());
-//
-//// Disabled for licensing reasons.
-//// If you have a license to play MP3 files, compile with GOSU_ALLOW_MP3.
-//#ifndef GOSU_ALLOW_MP3
-//        if (buffer.size() > 2 &&
-//            ((buffer[0] == '\xff' && (buffer[1] & 0xfe) == '\xfa') ||
-//            (buffer[0] == 'I' && buffer[1] == 'D' && buffer[2] == '3')))
-//        {
-//            throw std::runtime_error("MP3 file playback not allowed");
-//        }
-//#endif
-//
-//        stream = FSOUND_Stream_Open(&buffer[0], FSOUND_LOADMEMORY | FSOUND_LOOP_NORMAL,
-//            0, buffer.size());
-//        if (stream == 0)
-//            throwLastFMODError();
-//        
-//        FSOUND_Stream_SetEndCallback(stream, endSongCallback, this);
+        init();
     }
-    
-    ~StreamData()
+
+    StreamData(const std::wstring& filename)
+    :   buffer(filename), instance(-1, -1)
     {
-        //if (stream != 0)
-        //    FSOUND_Stream_Close(stream);
+        init();
     }
     
     void play(bool looping)
     {
-        //if (handle == -1)
-        //{
-        //    handle = FSOUND_Stream_Play(FSOUND_FREE, stream);
-        //        FSOUND_Stream_SetLoopCount(stream, looping ? -1 : 0);
-        //}
-        //else if (paused())
-        //    FSOUND_SetPaused(handle, 0);
-        //applyVolume();
+        applyVolume();
+        if (looping != loop)
+            stream->setRepeat(loop = looping);
+        stream->play();
+    }
+
+    bool playing() const
+    {
+        return instance.playing();
     }
     
     void pause()
     {
-        //if (handle != -1)
-        //    FSOUND_SetPaused(handle, 1);
-    }
-    
-    bool paused() const
-    {
-        return false;
-        //return handle != -1 && FSOUND_GetPaused(handle);
+        instance.pause();
     }
     
     void stop()
     {
-        //fmodCheck(FSOUND_Stream_Stop(stream));
-        //handle = -1; // The end callback is NOT being called!
+        instance.pause();
+        stream->reset();
     }
     
     void applyVolume()
     {
-        //if (handle != -1)
-            //FSOUND_SetVolume(handle, static_cast<int>(volume() * 255));
+        instance.changeVolume(volume());
     }
 };
 
-/*class Gosu::Song::ModuleData : public Gosu::Song::BaseData
-{
-    FMUSIC_MODULE* module_;
-
-public:
-    ModuleData(Reader reader)
-    : module_(0)
-    {
-        std::vector<char> buffer(reader.resource().size() - reader.position());
-        reader.read(&buffer[0], buffer.size());
-
-        module_ = FMUSIC_LoadSongEx(&buffer[0], 0, buffer.size(),
-            FSOUND_LOADMEMORY | FSOUND_LOOP_OFF, 0, 0);
-        if (module_ == 0)
-            throwLastFMODError();
-    }
-
-    ~ModuleData()
-    {
-        if (module_ != 0)
-            FMUSIC_FreeSong(module_);
-    }
-
-    void play(bool looping)
-    {
-        if (paused())
-            FMUSIC_SetPaused(module_, 0);
-        else
-            FMUSIC_PlaySong(module_);
-        FMUSIC_SetLooping(module_, looping);
-        applyVolume();
-    }
-    
-    void pause()
-    {
-        FMUSIC_SetPaused(module_, 1);
-    }
-    
-    bool paused() const
-    {
-        return FMUSIC_GetPaused(module_);
-    }
-
-    void stop()
-    {
-        fmodCheck(FMUSIC_StopSong(module_));
-        FMUSIC_SetPaused(module_, false);
-    }
-    
-    void applyVolume()
-    {
-        // Weird as it may seem, the FMOD doc really says volume can
-        // be 0 to 256, *inclusive*, for this function.
-        FMUSIC_SetMasterVolume(module_, static_cast<int>(volume() * 256.0));
-    }
-};*/
-
 Gosu::Song::Song(const std::wstring& filename)
+: data(new StreamData(filename))
 {
-    device(); // Implicitly open audio device
-  
- //   Buffer buf;
-	//loadFile(buf, filename);
-	//Type type = stStream;
- //   
-	//using boost::iends_with;
-	//if (iends_with(filename, ".mod") || iends_with(filename, ".mid") ||
-	//    iends_with(filename, ".s3m") || iends_with(filename, ".it") ||
-	//    iends_with(filename, ".xm"))
-	//{
-	//      type = stModule;
-	//}
-	//
- //   // Forward.
-	//Song(type, buf.frontReader()).data.swap(data);
 }
 
-Gosu::Song::Song(Type, Reader reader)
+Gosu::Song::Song(Reader reader)
+: data(new StreamData(reader))
 {
-    device(); // Implicitly open audio device
-    //
-    //switch (type)
-    //{
-    //case stStream:
-    //    data.reset(new StreamData(reader));
-    //    break;
-
-    //case stModule:
-    //    data.reset(new ModuleData(reader));
-    //    break;
-
-    //default:
-    //    throw std::logic_error("Invalid song type");
-    //}
 }
 
 Gosu::Song::~Song()
@@ -468,45 +362,48 @@ Gosu::Song::~Song()
 
 Gosu::Song* Gosu::Song::currentSong()
 {
-    return curSong;
+    if (curSong)
+        return curSong;
+    return 0;
 }
 
 void Gosu::Song::play(bool looping)
 {
-    //if (curSong && curSong != this)
-    //{
-    //    curSong->stop();
-    //    assert(curSong == 0);
-    //}
+    if (Gosu::Song* cur = currentSong())
+        if (cur != this)
+        {
+            cur->stop();
+            assert (currentSong() == 0);
+        }
 
-    //data->play(looping);
-    //curSong = this; // may be redundant
+    data->play(looping); // May be redundant
+    curSong = this;      // May be redundant
 }
 
 void Gosu::Song::pause()
 {
-    //if (curSong == this)
-    //    data->pause(); // may be redundant
+    if (curSong == this && data->playing())
+        data->pause();
 }
 
 bool Gosu::Song::paused() const
 {
-    return false;//return curSong == this && data->paused();
+    return curSong == this && !data->playing();
 }
 
 void Gosu::Song::stop()
 {
-    //if (curSong == this)
-    //{
-    //    data->stop();
-    //    curSong = 0;
-    //}
+    if (curSong == this)
+    {
+        data->stop();
+        curSong = 0;
+    }
 }
 
 bool Gosu::Song::playing() const
 {
-    return curSong == this;
-    //return curSong == this && !data->paused();
+    assert (!(curSong != this && data->playing()));
+    return data->playing();
 }
 
 double Gosu::Song::volume() const
@@ -543,5 +440,5 @@ Gosu::Song::Song(Audio& audio, const std::wstring& filename)
 
 Gosu::Song::Song(Audio& audio, Type type, Reader reader)
 {
-    Song(type, reader).data.swap(data);
+    Song(reader).data.swap(data);
 }

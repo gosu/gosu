@@ -17,7 +17,7 @@ end
 class Test < Gosu::Window
   def initialize 
     # increase update_interval to simulate very low framerate (Song will skip)
-    super(640, 480, false, 30)
+    super(900, 200, false, 30)
     
     @songs = []
     
@@ -49,8 +49,9 @@ class Test < Gosu::Window
     @song.volume -= 0.05 if button_down? Gosu::KbDown
     @song.volume += 0.05 if button_down? Gosu::KbUp
     song_states = @songs.map { |s| s.paused? ? 'paused' : (s.playing? ? 'playing' : 'idle') }
-    self.caption = "Volume: #{(@song.volume * 100).to_i}, " +
-                   "Song: #{@song.format}, paused/playing: #{song_states.inspect}"
+    self.caption = "Vol: #{(@song.volume * 100).to_i}, " +
+                   "Idx: #{@songs.index Gosu::Song.current_song}, " +
+				   "Song: #{@song.format}, paused/playing: #{song_states.inspect}"
   end
   
   def button_down(id)

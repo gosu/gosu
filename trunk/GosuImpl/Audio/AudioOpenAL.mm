@@ -506,7 +506,7 @@ Gosu::Song::Song(const std::wstring& filename)
     }
 }
 
-Gosu::Song::Song(Type type, Reader reader)
+Gosu::Song::Song(Reader reader)
 {
     CONSTRUCTOR_COMMON;
 
