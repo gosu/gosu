@@ -26,5 +26,6 @@ http://www.libgosu.org/
 
 ***
 
-This does NOT apply to fmod.dll shipped with the Windows version of Gosu.
-FMOD is a property of Firelight Technologies Pty, Ltd., see www.fmod.org.
+This does NOT apply to audiere.dll shipped with the Windows versions of
+Gosu. Audiere is a separate library licensed under the Lesser General
+Public License. Please consult audiere.sf.net for more details.
