@@ -3,6 +3,7 @@
 #include <Gosu/IO.hpp>
 #include <boost/foreach.hpp>
 #include <algorithm>
+#include <stdexcept>
 #include <vector>
 
 #include <audiere.h>
@@ -119,15 +120,13 @@ namespace Gosu
             __try
             {
             #endif
-                device = OpenDevice();
+                return (device = OpenDevice());
             #ifdef GOSU_IS_WIN
             }
             __except ((GetExceptionCode() == BAD_MOD) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
             {
                 return false;
             }
-            return true;
-
             #undef BAD_MOD
             #undef VcppException
             #undef FACILITY_VISUALCPP
@@ -140,7 +139,7 @@ namespace Gosu
             if (device == 0)
             {
                 if (!getDevice(device))
-                    throw std::runtime_error("Could not find audiere.dll");
+                    throw std::runtime_error("Could not initialize audiere or library not found");
 
                 device->registerCallback(&streams);
 
