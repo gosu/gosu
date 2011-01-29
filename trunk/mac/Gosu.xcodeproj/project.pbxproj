@@ -760,6 +760,7 @@
 				D410D6220EE9D379007740AE /* Iconv.hpp */,
 				D410EA180A8019FA005C7067 /* InputMac.mm */,
 				D4A5A2200F40D45200FFF378 /* InputTouch.mm */,
+				D49B612B12E6BE6C00C3DB80 /* Inspection.cpp */,
 				D410EA1B0A8019FA005C7067 /* IO.cpp */,
 				D4AB62F50D08BA9900D71382 /* MacUtility.hpp */,
 				D410EA1C0A8019FA005C7067 /* Math.cpp */,
@@ -771,7 +772,6 @@
 				D4A5A2220F40D45200FFF378 /* UtilityTouch.mm */,
 				D410EA310A8019FA005C7067 /* WindowMac.mm */,
 				D4A5A2210F40D45200FFF378 /* WindowTouch.mm */,
-				D49B612B12E6BE6C00C3DB80 /* Inspection.cpp */,
 			);
 			name = Implementation;
 			sourceTree = "<group>";

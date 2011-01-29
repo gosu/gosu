@@ -601,5 +601,5 @@ Gosu::Song::Song(Audio& audio, const std::wstring& filename)
 
 Gosu::Song::Song(Audio& audio, Type type, Reader reader)
 {
-    Song(type, reader).data.swap(data);
+    Song(reader).data.swap(data);
 }
