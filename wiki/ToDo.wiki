@@ -4,11 +4,9 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2011-01-29)
+(Last update: 2011-01-30)
 
 == Gosu 0.7.x ==
-  * Build HEAD audiere & Gosu on Windows
-  * Release 0.7.27
   * Release a roadmap for 0.7, 0.8 & 0.9
   * Try audio formats with Audiere
   * Merge mathias' GLFW backend for Windows
