@@ -4,9 +4,10 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2011-01-31)
+(Last update: 2011-02-04)
 
 == Gosu 0.7.x ==
+  * See if any audiere backend works on Ubuntu
   * Release a roadmap for 0.7, 0.8 & 0.9
   * Try audio formats with Audiere
   * Merge mathias' GLFW backend for Windows
