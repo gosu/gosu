@@ -8,7 +8,7 @@ namespace Gosu
     //! mouse buttons and mouse wheel (ms*) and gamepad buttons (gp*).
     enum ButtonName
     {
-        kbRangeBegin = 0x01,
+        kbRangeBegin = 0x00,
         kbA = 'a',
         kbB = 'b',
         kbC = 'c',
