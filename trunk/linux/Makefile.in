@@ -10,7 +10,7 @@ BASE_OBJS = Math.o Utility.o IO.o FileUnix.o TimingUnix.o WindowX.o	\
 	    Graphics/Texture.o Graphics/LargeImageData.o		\
 	    Graphics/BitmapPNG.o Graphics/Font.o Graphics/BitmapBMP.o	\
 	    Graphics/TextUnix.o Graphics/Text.o	Graphics/Transform.o		\
-	    Graphics/BitmapColorKey.o DirectoriesUnix.o Audio/AudioAudiere.o Inspection.o
+	    Graphics/BitmapColorKey.o DirectoriesUnix.o Audio/AudioSDL.o Inspection.o
 
 NET_OBJS = Sockets/CommSocket.o Sockets/ListenerSocket.o	\
 	   Sockets/Socket.o Sockets/MessageSocket.o
