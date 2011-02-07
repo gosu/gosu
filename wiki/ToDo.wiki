@@ -4,18 +4,17 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2011-02-06)
+(Last update: 2011-02-07)
 
 == Gosu 0.7.x ==
-  * Apply TheOm3ga's patch
-  * Revert Linux port to SDL_mixer
-  * Release a roadmap for 0.7, 0.8 & 0.9
-  * Try audio formats with Audiere
   * Merge mathias' GLFW backend for Windows
   * Get GLFW working on OS X
   * Get GLFW working on Linux
+  * Try to get gl_info for large images working
   * Release 0.7.28
   * Update docs
+  * Release a roadmap for 0.7, 0.8 & 0.9
+  * Try audio formats with Audiere
   * Perform 0.8 hyperjump (reordering all To Do tasks below)
   * Use 10.4 SSH to compile truly universal RubyGosu App \o/
   * Find out what Gosu::Song::play does when it's already playing on all three platforms, then clarify docs
