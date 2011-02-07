@@ -2,7 +2,7 @@
 
 WINDOWS_HINTS = %w(-win32 win32- mswin mingw32)
 
-if defined? RUBY_PLATFORM and WINDOWS_HINTS.any? { |hint| RUBY_PLATFORM.contain? hint } then
+if defined? RUBY_PLATFORM and WINDOWS_HINTS.any? { |hint| RUBY_PLATFORM.include? hint } then
   puts 'This gem is not meant to be installed on Windows. Instead, please use:'
   puts 'gem install gosu --platform=i386-mingw32'
   exit 1
