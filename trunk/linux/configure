@@ -3532,8 +3532,11 @@ PANGO_CXX_FLAGS=`pkg-config pangoft2 --cflags`
 PANGO_LIBS=`pkg-config pangoft2 --libs`
 
 
-AUDIO_LIBS=`audiere-config --libs`
-AUDIO_INC=`audiere-config --cxxflags`
+#AC_MSG_CHECKING(for SDL_mixer)
+GOSU_A_OBJS=${GOSU_A_OBJS}" \$(SDLMIXER_OBJ)"
+AUDIO_LIBS="`sdl-config --libs` -lSDL_mixer"
+AUDIO_INC=`sdl-config --cflags`
+#AC_MSG_RESULT(yes)
 
 
 

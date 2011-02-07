@@ -160,12 +160,12 @@ struct Gosu::Window::Impl
         
         if (showingCursor && !window->needsCursor())
         {
-            XUndefineCursor(display, this->window);
+            XDefineCursor(display, this->window, emptyCursor);
             showingCursor = false;
         }
         else if (!showingCursor && window->needsCursor())
         {
-            XDefineCursor(display, this->window, emptyCursor);
+            XUndefineCursor(display, this->window);
             showingCursor = true;
         }
         
