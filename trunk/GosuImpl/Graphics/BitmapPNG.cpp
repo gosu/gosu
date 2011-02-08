@@ -183,11 +183,9 @@ Gosu::Reader Gosu::loadFromPNG(Bitmap& out, Reader reader)
                     }
                     
                     int alpha = 255;
-                    for (int i = 0; i < numTrans; ++i)
-                    {
-                        if (trans[i] == palIndex)
-                            alpha = 0;
-                    }
+                    if (palIndex <= numTrans)
+                        alpha = trans[palIndex];
+                    
                     c.setAlpha(alpha);
                     c.setRed  (palColors[palIndex].red);
                     c.setGreen(palColors[palIndex].green);
