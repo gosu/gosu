@@ -83,7 +83,7 @@ Gosu::Reader Gosu::loadFromPNG(Bitmap& out, Reader reader)
         bitDepth = png_get_bit_depth(pngPtr, infoPtr);
 
     png_bytep trans;
-    int numTrans = 0;
+    int numTrans = -1;
     if (png_get_valid(pngPtr, infoPtr, PNG_INFO_tRNS))
         png_get_tRNS(pngPtr, infoPtr, &trans, &numTrans, NULL);
     // This function only understands palette images with a bit depth <= 8 and
