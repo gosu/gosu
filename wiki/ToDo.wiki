@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2011-02-09)
+(Last update: 2011-02-13)
 
 == Gosu 0.7.x ==
   * Replace Bitmap* by BitmapTouch on OS X
@@ -33,8 +33,6 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make <c=> more efficient in Font::drawRel
   * Add <s=> to text formatting
   * Make fuchsia work in BMPs in GosuTouch
-  * Fix PNG alpha in Inv.png
-  * Fix 8bitAlpha.png supplied by shawn42
   * See if I should fork out RubyGosu.app into Ruby App project
   * Gosu: try integer truncing of drawing positions
   * Remove setResolution and use transforms instead
