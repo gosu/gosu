@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2011-02-13)
+(Last update: 2011-02-18)
 
 == Gosu 0.7.x ==
   * Replace Bitmap* by BitmapTouch on OS X
@@ -175,6 +175,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Point out that Font#text_width is only relevant to Font#draw etc
   * Link to the FMOD MP3 licensing info page (or the page it refers to) publicly for clarification
   * Note: changing looping may restart song (audiere)
+  * Insert http://www.libgosu.org/cgi-bin/mwf/default/nav_up.png
 == Gosu 0.8.x (preliminary) ==
   * Rename gl_tex_info to gl_info and make it an array for Image
   * Rename needs_x? to need_x? in Ruby
