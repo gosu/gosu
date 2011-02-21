@@ -4,10 +4,11 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2011-02-18)
+(Last update: 2011-02-21)
 
 == Gosu 0.7.x ==
   * Replace Bitmap* by BitmapTouch on OS X
+  * Fix Color#== with types other than Color
   * Replace Bitmap* by OS functions
   * Replace Bitmap* by SDL_image or something
   * Merge mathias' GLFW backend for Windows
