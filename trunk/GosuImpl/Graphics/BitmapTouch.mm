@@ -8,7 +8,33 @@
 #include <stdexcept>
 #import <UIKit/UIKit.h>
 
-Gosu::Reader Gosu::loadFromBMP(Bitmap& bmp, Reader reader)
+namespace Gosu
+{
+    void uiImageToBitmap(UIImage* image, Bitmap& bitmap)
+    {
+        CGImageRef imageRef = [image CGImage];
+        
+        bitmap.resize(CGImageGetWidth(imageRef), CGImageGetHeight(imageRef));
+        
+        // Use a temporary context to draw the CGImage to the buffer.
+        CGContextRef context =
+            CGBitmapContextCreate(bitmap.data(),
+                                  bitmap.width(), bitmap.height(), 8, bitmap.width() * 4,
+                                  CGImageGetColorSpace(imageRef),
+                                  kCGImageAlphaPremultipliedLast);
+        CGContextDrawImage(context, CGRectMake(0.0, 0.0, bitmap.width(), bitmap.height()), imageRef);
+        CGContextRelease(context);
+    }
+}
+
+Gosu::Reader Gosu::loadFromBMP(Bitmap& bitmap, Reader reader)
+{
+    reader = loadFromPNG(bitmap, reader);
+    applyColorKey(bitmap, Color::FUCHSIA);
+    return reader;
+}
+
+Gosu::Reader Gosu::loadFromPNG(Bitmap& bitmap, Reader reader)
 {
     ObjRef<NSAutoreleasePool> pool([NSAutoreleasePool new]);
 
@@ -17,29 +43,8 @@ Gosu::Reader Gosu::loadFromBMP(Bitmap& bmp, Reader reader)
     reader.read([buffer.get() mutableBytes], length);
     
     ObjRef<UIImage> image([[UIImage alloc] initWithData: buffer.get()]);
-    if (!image.get())
-        throw std::runtime_error("Could not load image from resource of length " +
-                                 boost::lexical_cast<std::string>(length));
-    
-    CGImageRef imageRef = [image.obj() CGImage];
-    
-    bmp.resize(CGImageGetWidth(imageRef), CGImageGetHeight(imageRef));
-    
-    // Use a temporary context to draw the CGImage to the buffer.
-    CGContextRef context =
-        CGBitmapContextCreate(bmp.data(),
-                              bmp.width(), bmp.height(), 8, bmp.width() * 4,
-                              CGImageGetColorSpace(imageRef),
-                              kCGImageAlphaPremultipliedLast);
-    CGContextDrawImage(context, CGRectMake(0.0, 0.0, bmp.width(), bmp.height()), imageRef);
-    CGContextRelease(context);
-    
+    uiImageToBitmap(image.obj(), bitmap);    
     return reader;
-}
-
-Gosu::Reader Gosu::loadFromPNG(Bitmap& bmp, Reader reader)
-{
-    return loadFromBMP(bmp, reader);
 }
 
 Gosu::Writer Gosu::saveToPNG(const Bitmap& bmp, Writer writer)
@@ -66,4 +71,22 @@ Gosu::Writer Gosu::saveToPNG(const Bitmap& bmp, Writer writer)
     CGDataProviderRelease(dataProvider);
     
     return writer;
+}
+
+Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
+{
+    Bitmap bitmap;
+    loadFromBMP(bitmap, reader);
+    return bitmap;
+}
+
+Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
+{
+    ObjRef<NSString> filenameRef([[NSString alloc] initWithUTF8String: wstringToUTF8(filename).c_str()]);
+    ObjRef<UIImage> image([[UIImage alloc] initWithContentsOfFile: filenameRef.obj()]);
+    Bitmap bitmap;
+    uiImageToBitmap(image.obj(), bitmap);
+    if (boost::iends_with(filename, L".bmp"))
+        applyColorKey(bitmap, Color::FUCHSIA);
+    return bitmap;
 }
