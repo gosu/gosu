@@ -3,21 +3,27 @@
 #include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
 
-Gosu::Bitmap Gosu::quickLoadBitmap(const std::wstring& filename)
+Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
 {
-	Buffer buf;
-	loadFile(buf, filename);
+	Buffer buffer;
+	loadFile(buffer, filename);
+    return loadImageFile(buffer.frontReader());
+}
+
+Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
+{
 	Bitmap bmp;
 
     char formatTester[2];
-    buf.frontReader().read(formatTester, sizeof formatTester);
+    reader.read(formatTester, sizeof formatTester);
+    reader.setPosition(0);
     if (formatTester[0] == 'B' && formatTester[1] == 'M')
     {
-        loadFromBMP(bmp, buf.frontReader());
+        loadFromBMP(bmp, reader);
         applyColorKey(bmp, Color::FUCHSIA);
     }
     else
-        loadFromPNG(bmp, buf.frontReader());
+        loadFromPNG(bmp, reader);
 	return bmp;
 }
 

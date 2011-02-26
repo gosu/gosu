@@ -68,18 +68,20 @@ namespace Gosu
     Reader loadFromPNG(Bitmap& bmp, Reader reader);
     //! Saves the contents of the given bitmap into PNG file data, 24 bits.
     Writer saveToPNG(const Bitmap& bmp, Writer writer);
-
+    
     //! Set the alpha value of all pixels which are equal to the color key
     //! to zero. Color values are adjusted so that no borders show up when
     //! the image is stretched or rotated.
     void applyColorKey(Bitmap& bitmap, Color key);
-
+    
     void applyBorderFlags(Bitmap& dest, const Bitmap& source,
         unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
         unsigned borderFlags);	
-
-	// Still to be moved around & undocumented, beware! (TODO)
-	Bitmap quickLoadBitmap(const std::wstring& filename);
+    
+	//! Loads any supported image into a Bitmap object.
+	Bitmap loadImageFile(const std::wstring& filename);
+	//! Loads any supported image into a Bitmap object.
+	Bitmap loadImageFile(Gosu::Reader input);
 }
 
 #endif

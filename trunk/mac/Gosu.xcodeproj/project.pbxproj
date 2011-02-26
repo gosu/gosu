@@ -148,7 +148,7 @@
 		D49B612D12E6BE6C00C3DB80 /* Inspection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D49B612B12E6BE6C00C3DB80 /* Inspection.cpp */; };
 		D49B612E12E6BE6C00C3DB80 /* Inspection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D49B612B12E6BE6C00C3DB80 /* Inspection.cpp */; };
 		D49B612F12E6BE6C00C3DB80 /* Inspection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D49B612B12E6BE6C00C3DB80 /* Inspection.cpp */; };
-		D49B613D12E6C09900C3DB80 /* Inspection.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D49B613C12E6C09900C3DB80 /* Inspection.hpp */; };
+		D49B613D12E6C09900C3DB80 /* Inspection.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D49B613C12E6C09900C3DB80 /* Inspection.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4A5A1FF0F40D2EA00FFF378 /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD40A801B00005C7067 /* Bitmap.cpp */; };
 		D4A5A2010F40D2EC00FFF378 /* BitmapColorKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EAD60A801B00005C7067 /* BitmapColorKey.cpp */; };
 		D4A5A2030F40D2F500FFF378 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };

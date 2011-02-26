@@ -220,7 +220,7 @@ namespace Gosu
         {
             VALUE to_str = rb_funcall(val, rb_intern("to_str"), 0);
             const char* filename = StringValuePtr(to_str);
-            return quickLoadBitmap(Gosu::utf8ToWstring(filename));
+            return loadImageFile(Gosu::utf8ToWstring(filename));
         }
 
         // Otherwise, try to call .to_blob on it.
