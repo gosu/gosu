@@ -43,8 +43,13 @@ namespace Gosu
         //#ifdef __LP64__
         CGImageToBitmap([image CGImageForProposedRect:NULL context:nil hints:nil], bitmap);
         //#else
-        // I wish the code below worked on 10.5 and 10.4. But for some reasons, color values are always slightly
-        // off, regardless of the color space I use.
+        
+        // The code below causes colors to be slightly off on my machine (64-bit, 10.6), but should
+        // do the same thing and work on 10.4 & 10.5.
+        // This may be due to http://stackoverflow.com/questions/2239785/nsimage-color-shift-on-snow-leopard
+        // TODO: As soon as I have a 10.4/10.5 machine to verify, use above code on 10.6 and the code
+        // below otherwise. If it works, BitmapBMP and BitmapPNG can be kicked out on OS X.
+        
         // id anyRep = [image bestRepresentationForDevice:nil];
         // if (![anyRep isKindOfClass:[NSBitmapImageRep class]])
         //     throw std::logic_error("Cannot read vector graphics files");
