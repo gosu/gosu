@@ -94,7 +94,7 @@ namespace Gosu
         CFRefType ref;
 
     public:
-        explicit CFRef(CFRefType ref)
+        CFRef(CFRefType ref)
         :   ref(ref)
         {
         }

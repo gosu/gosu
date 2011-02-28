@@ -5,7 +5,8 @@
 #include <boost/integer.hpp>
 #include <stdexcept>
 
-#ifndef GOSU_IS_IPHONE
+// iOS does not include this file, OS X 64-bit uses NSImage/ImageIO instead.
+#if !defined(GOSU_IS_IPHONE) && !defined(__LP64__)
 
 namespace 
 {

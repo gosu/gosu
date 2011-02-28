@@ -3,14 +3,15 @@
 #include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
 
-// iOS uses UIImage directly.
-#ifndef GOSU_IS_IPHONE
+// OS X 64-bit and iOS use Apple APIs.
+#if !defined(GOSU_IS_IPHONE) && !defined(__LP64__)
 Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
 {
 	Buffer buffer;
 	loadFile(buffer, filename);
     return loadImageFile(buffer.frontReader());
 }
+#endif
 
 Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
 {
@@ -28,7 +29,6 @@ Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
         loadFromPNG(bmp, reader);
 	return bmp;
 }
-#endif
 
 void Gosu::applyBorderFlags(Bitmap& dest, const Bitmap& source,
     unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
