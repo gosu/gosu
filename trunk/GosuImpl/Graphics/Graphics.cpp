@@ -297,7 +297,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::endRecording()
     if (pimpl->queues.size() == 1)
         throw std::logic_error("No macro recording in progress that can be captured");
     
-    std::auto_ptr<ImageData> result(new Macro(pimpl->queues.back()));
+    std::auto_ptr<ImageData> result(new Macro(*this, pimpl->queues.back()));
     pimpl->queues.pop_back();
     return result;
 }

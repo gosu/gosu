@@ -5,6 +5,7 @@
 #include <Gosu/ImageData.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/DrawOpQueue.hpp>
+#include <boost/bind.hpp>
 #include <boost/foreach.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <cmath>
