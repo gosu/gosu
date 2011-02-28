@@ -35,7 +35,7 @@ namespace Gosu
 
 // iOS does not include this file, OS X 64-bit uses NSImage/ImageIO instead.
 // OS X does still use saveToPNG though.
-#if !defined(GOSU_IS_IPHONE) && !defined(__LP64__)
+#if !defined(GOSU_IS_MAC) || (!defined(GOSU_IS_IPHONE) && !defined(__LP64__))
 Gosu::Reader Gosu::loadFromPNG(Bitmap& out, Reader reader)
 {    
 #if 0

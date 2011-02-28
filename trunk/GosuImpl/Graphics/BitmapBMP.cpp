@@ -6,7 +6,7 @@
 #include <stdexcept>
 
 // iOS does not include this file, OS X 64-bit uses NSImage/ImageIO instead.
-#if !defined(GOSU_IS_IPHONE) && !defined(__LP64__)
+#if !defined(GOSU_IS_MAC) || (!defined(GOSU_IS_IPHONE) && !defined(__LP64__))
 
 namespace 
 {

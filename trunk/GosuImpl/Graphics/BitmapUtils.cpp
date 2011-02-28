@@ -4,7 +4,7 @@
 #include <Gosu/Platform.hpp>
 
 // OS X 64-bit and iOS use Apple APIs.
-#if !defined(GOSU_IS_IPHONE) && !defined(__LP64__)
+#if !defined(GOSU_IS_MAC) || (!defined(GOSU_IS_IPHONE) && !defined(__LP64__))
 Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
 {
 	Buffer buffer;
