@@ -15,8 +15,13 @@ class Gosu::Macro : public Gosu::ImageData
     VertexArray vertexArray;
     unsigned w, h;
     
+    // hack hack
+    // no sense in doing it right, jlnr will do it himself someday. hopefully. :S
+    
+    Graphics& graphics;
 public:
-    Macro(DrawOpQueue& queue)
+    Macro(Graphics& graphics, DrawOpQueue& queue)
+    : graphics(graphics)
     {
         queue.compileTo(vertexArray);
         double left = 0, right = 0, top = 0, bottom = 0;
@@ -50,25 +55,33 @@ public:
 #ifndef GOSU_IS_IPHONE
         // Commented out for now on the iPhone.
         // To work, it would need to reset the VertexPointer etc. after doing its work.
-        
+        boost::function<void()> f = boost::bind(&Macro::realDraw, this, x1, y1, x2, y2, x3, y3);
+        graphics.scheduleGL(f, z);
+#endif
+    }
+    
+    void realDraw(double x1, double y1,
+              double x2, double y2,
+              double x3, double y3) const
+    {
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
         glTranslated(x1, y1, 0);
         glScaled((x2 - x1) / width(), (y3 - y1) / height(), 1);
-        
+
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, 1);
-        
+
         glInterleavedArrays(GL_T2F_C4UB_V3F, 0, &vertexArray[0]);
 
         glDrawArrays(GL_QUADS, 0, vertexArray.size());
         glFlush();
 
         glDisable(GL_TEXTURE_2D);
-        
+
         glPopMatrix();
-#endif
     }
+    
     
     boost::optional<Gosu::GLTexInfo> glTexInfo() const
     {
