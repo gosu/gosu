@@ -4,7 +4,7 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2011-02-21)
+(Last update: 2011-02-28)
 
 == Gosu 0.7.x ==
   * Replace Bitmap* by BitmapTouch on OS X
@@ -208,3 +208,4 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Make plans for an official Scene/State system
   * If there ever is functionality to 'and' and 'or' Gosu::Button, how would one check in buttonDown?
   * Deprecate beginGL/endGL in favor of scheduleGL
+  * Add QuickLook support to image loading on 10.5+ via QLThumbnailImageCreate :D
