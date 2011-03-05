@@ -127,6 +127,18 @@
         $1 = *reinterpret_cast<Gosu::Color*>(ptr);
 }
 
+// Allow integral constants to be passed in place of Color values.
+%typemap(in) boost::optional<Gosu::Color> {    
+    if (TYPE($input) == T_FIXNUM || TYPE($input) == T_BIGNUM)
+        $1 = Gosu::Color(NUM2UINT($input));
+    else {
+        void* ptr;
+        int res = SWIG_ConvertPtr($input, &ptr, SWIGTYPE_p_Gosu__Color, 0);
+        if (SWIG_IsOK(res) && ptr)
+            $1 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
+}
+
 // Header inclusion (order irrelevant)
 %module(directors="1") gosu
 %{
@@ -368,8 +380,8 @@ namespace Gosu {
         return stream.str();
     }
     
-    bool operator==(Gosu::Color other) {
-        return *$self == other;
+    bool operator==(boost::optional<Gosu::Color> other) {
+        return other && *$self == *other;
     }
 }
 

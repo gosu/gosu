@@ -6,6 +6,13 @@ class Test < Gosu::Window
     @c1 = Gosu::Color.new(0xffff0000)
     @c2 = Gosu::Color.new(0xff00ff00)
     @c3 = Gosu::Color.new(0xff0000ff)
+    
+    # should work
+    @c1 == @c1 or raise "false negative"
+    # crashes when doing it naively with SWIG, but should work now
+    @c1 == 'not a color' and raise "false positive"
+    # should also work, MAGIC
+    @c1 == 0xffff0000 or raise "false indirect negative"
   end
 
   def update

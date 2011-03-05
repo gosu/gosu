@@ -2172,11 +2172,12 @@ namespace Swig {
 #define SWIGTYPE_p_Gosu__TextInput swig_types[10]
 #define SWIGTYPE_p_Gosu__Window swig_types[11]
 #define SWIGTYPE_p_boost__arrayT_double_16_t swig_types[12]
-#define SWIGTYPE_p_char swig_types[13]
-#define SWIGTYPE_p_double swig_types[14]
-#define SWIGTYPE_p_std__wstring swig_types[15]
-static swig_type_info *swig_types[17];
-static swig_module_info swig_module = {swig_types, 16, 0, 0, 0, 0};
+#define SWIGTYPE_p_boost__optionalT_Gosu__Color_t swig_types[13]
+#define SWIGTYPE_p_char swig_types[14]
+#define SWIGTYPE_p_double swig_types[15]
+#define SWIGTYPE_p_std__wstring swig_types[16]
+static swig_type_info *swig_types[18];
+static swig_module_info swig_module = {swig_types, 17, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2516,8 +2517,8 @@ SWIG_From_std_string  (const std::string& s)
   }
 }
 
-SWIGINTERN bool Gosu_Color_operator_Se__Se_(Gosu::Color *self,Gosu::Color other){
-        return *self == other;
+SWIGINTERN bool Gosu_Color_operator_Se__Se_(Gosu::Color *self,boost::optional< Gosu::Color > other){
+        return other && *self == *other;
     }
 
 SWIGINTERNINLINE VALUE
@@ -5023,7 +5024,7 @@ Equality comparison operator.
 SWIGINTERN VALUE
 _wrap_Color___eq__(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
-  Gosu::Color arg2 ;
+  boost::optional< Gosu::Color > arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   bool result;
@@ -5038,15 +5039,14 @@ _wrap_Color___eq__(int argc, VALUE *argv, VALUE self) {
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[0]) == T_FIXNUM || TYPE(argv[0]) == T_BIGNUM)
     arg2 = Gosu::Color(NUM2UINT(argv[0]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
-    else
-    arg2 = *reinterpret_cast<Gosu::Color*>(ptr);
+    else {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (SWIG_IsOK(res) && ptr)
+      arg2 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   {
     try {
@@ -10662,6 +10662,7 @@ static swig_type_info _swigt__p_Gosu__Song = {"_p_Gosu__Song", "Gosu::Song *", 0
 static swig_type_info _swigt__p_Gosu__TextInput = {"_p_Gosu__TextInput", "Gosu::TextInput *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Window = {"_p_Gosu__Window", "Gosu::Window *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_boost__arrayT_double_16_t = {"_p_boost__arrayT_double_16_t", "boost::array< double,16 > *|Gosu::Transform *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_boost__optionalT_Gosu__Color_t = {"_p_boost__optionalT_Gosu__Color_t", "boost::optional< Gosu::Color > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "Gosu::ZPos *|double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__wstring = {"_p_std__wstring", "std::wstring *", 0, 0, (void*)0, 0};
@@ -10680,6 +10681,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__TextInput,
   &_swigt__p_Gosu__Window,
   &_swigt__p_boost__arrayT_double_16_t,
+  &_swigt__p_boost__optionalT_Gosu__Color_t,
   &_swigt__p_char,
   &_swigt__p_double,
   &_swigt__p_std__wstring,
@@ -10698,6 +10700,7 @@ static swig_cast_info _swigc__p_Gosu__Song[] = {  {&_swigt__p_Gosu__Song, 0, 0, 
 static swig_cast_info _swigc__p_Gosu__TextInput[] = {  {&_swigt__p_Gosu__TextInput, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Window[] = {  {&_swigt__p_Gosu__Window, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_boost__arrayT_double_16_t[] = {  {&_swigt__p_boost__arrayT_double_16_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_boost__optionalT_Gosu__Color_t[] = {  {&_swigt__p_boost__optionalT_Gosu__Color_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__wstring[] = {  {&_swigt__p_std__wstring, 0, 0, 0},{0, 0, 0, 0}};
@@ -10716,6 +10719,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__TextInput,
   _swigc__p_Gosu__Window,
   _swigc__p_boost__arrayT_double_16_t,
+  _swigc__p_boost__optionalT_Gosu__Color_t,
   _swigc__p_char,
   _swigc__p_double,
   _swigc__p_std__wstring,
