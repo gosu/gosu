@@ -109,7 +109,11 @@ public:
     {
         // Allows us to make some assumptions.
         if (ops.empty())
+        {
+            BOOST_FOREACH (const CodeMap::value_type& fn, code)
+                fn.second();
             return;
+        }
         
         // Apply Z-Ordering.
         std::stable_sort(ops.begin(), ops.end());

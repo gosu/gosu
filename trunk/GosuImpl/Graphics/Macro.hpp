@@ -16,9 +16,6 @@ class Gosu::Macro : public Gosu::ImageData
     VertexArray vertexArray;
     unsigned w, h;
     
-    // hack hack
-    // no sense in doing it right, jlnr will do it himself someday. hopefully. :S
-    
     Graphics& graphics;
 public:
     Macro(Graphics& graphics, DrawOpQueue& queue)
@@ -26,7 +23,7 @@ public:
     {
         queue.compileTo(vertexArray);
         double left = 0, right = 0, top = 0, bottom = 0;
-        BOOST_FOREACH(const ArrayVertex& av, vertexArray)
+        BOOST_FOREACH (const ArrayVertex& av, vertexArray)
         {
             left = std::min<double>(left, av.vertices[0]);
             right = std::max<double>(right, av.vertices[0]);
@@ -53,36 +50,38 @@ public:
               double x4, double y4, Color c4,
               ZPos z, AlphaMode mode) const
     {
-#ifndef GOSU_IS_IPHONE
-        // Commented out for now on the iPhone.
-        // To work, it would need to reset the VertexPointer etc. after doing its work.
         boost::function<void()> f = boost::bind(&Macro::realDraw, this, x1, y1, x2, y2, x3, y3);
         graphics.scheduleGL(f, z);
-#endif
     }
     
     void realDraw(double x1, double y1,
               double x2, double y2,
               double x3, double y3) const
     {
+        // TODO: Commented out for now on the iPhone.
+        // To work, it would need to reset the VertexPointer etc. after doing its work.
+    #ifndef GOSU_IS_IPHONE
+        glEnable(GL_BLEND);
+        RenderState rs;
+        rs.setTexName(1);
+        rs.setAlphaMode(amDefault);
+        
+        // TODO: We should apply current transformations either here or in draw(), or both.
+        // TODO: Also, calculate the transform as a matrix and use RenderState::setTransform.
+        
         glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
+        //glPushMatrix();
         glTranslated(x1, y1, 0);
         glScaled((x2 - x1) / width(), (y3 - y1) / height(), 1);
-
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, 1);
-
+        
         glInterleavedArrays(GL_T2F_C4UB_V3F, 0, &vertexArray[0]);
 
         glDrawArrays(GL_QUADS, 0, vertexArray.size());
         glFlush();
 
-        glDisable(GL_TEXTURE_2D);
-
-        glPopMatrix();
+        //glPopMatrix();
+    #endif
     }
-    
     
     boost::optional<Gosu::GLTexInfo> glTexInfo() const
     {
@@ -91,7 +90,7 @@ public:
     
     Gosu::Bitmap toBitmap() const
     {
-        throw std::logic_error("Gosu::Macro cannot be rendered to Gosu::Bitmap");
+        throw std::logic_error("Gosu::Macro cannot be rendered as Gosu::Bitmap");
     }
 };
 
