@@ -4,13 +4,12 @@
 = To Do list =
 
 This list of tasks is exported automatically from my OmniFocus projects.
-(Last update: 2011-03-02)
+(Last update: 2011-03-07)
 
 == Gosu 0.7.x ==
   * Play Selene on Windows (take a look at jet3.ogg)
-  * Fix Color#== with types other than Color
-  * Replace Bitmap* by OS functions
-  * Replace Bitmap* by SDL_image or something
+  * Replace Bitmap* by OS functions on Windows
+  * Replace Bitmap* by SDL_image or DevIL
   * Merge mathias' GLFW backend for Windows
   * Get GLFW working on OS X
   * Get GLFW working on Linux
@@ -177,6 +176,7 @@ This list of tasks is exported automatically from my OmniFocus projects.
   * Link to the FMOD MP3 licensing info page (or the page it refers to) publicly for clarification
   * Note: changing looping may restart song (audiere)
   * Insert http://www.libgosu.org/cgi-bin/mwf/default/nav_up.png
+  * After GitHub switch, use this to upload files
 == Gosu 0.8.x (preliminary) ==
   * Rename gl_tex_info to gl_info and make it an array for Image
   * Rename needs_x? to need_x? in Ruby
