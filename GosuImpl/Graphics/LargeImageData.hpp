@@ -33,6 +33,7 @@ namespace Gosu
         }
         
         Bitmap toBitmap() const;
+        void insert(const Bitmap& bitmap, int x, int y);
     };
 }
 

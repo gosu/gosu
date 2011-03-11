@@ -56,6 +56,7 @@ public:
         
     boost::optional<GLTexInfo> glTexInfo() const;
     Gosu::Bitmap toBitmap() const;
+    void insert(const Bitmap& bitmap, int x, int y);
 };
 
 #endif

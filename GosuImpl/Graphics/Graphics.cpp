@@ -413,16 +413,14 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
         if (srcX == 0 && srcWidth == src.width() &&
             srcY == 0 && srcHeight == src.height())
         {
-            data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture,
-                    src, 0, 0, src.width(), src.height(), 0);
+            data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture, src, 0);
         }
         else
         {
             Bitmap trimmedSrc;
             trimmedSrc.resize(srcWidth, srcHeight);
             trimmedSrc.insert(src, 0, 0, srcX, srcY, srcWidth, srcHeight);
-            data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture,
-                    trimmedSrc, 0, 0, trimmedSrc.width(), trimmedSrc.height(), 0);
+            data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture, trimmedSrc, 0);
         }
         
         if (!data.get())
@@ -454,7 +452,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
         boost::shared_ptr<Texture> texture(*i);
         
         std::auto_ptr<ImageData> data;
-        data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture, bmp, 0, 0, bmp.width(), bmp.height(), 1);
+        data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture, bmp, 1);
         if (data.get())
             return data;
     }
@@ -466,7 +464,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     pimpl->textures.push_back(texture);
     
     std::auto_ptr<ImageData> data;
-    data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture, bmp, 0, 0, bmp.width(), bmp.height(), 1);
+    data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture, bmp, 1);
     if (!data.get())
         throw std::logic_error("Internal texture block allocation error");
 

@@ -92,6 +92,11 @@ public:
     {
         throw std::logic_error("Gosu::Macro cannot be rendered as Gosu::Bitmap");
     }
+    
+    void insert(const Bitmap& bitmap, int x, int y)
+    {
+        throw std::logic_error("Gosu::Macro cannot be updated with a Gosu::Bitmap");
+    }
 };
 
 #endif

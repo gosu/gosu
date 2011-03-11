@@ -43,6 +43,9 @@ namespace Gosu
             
         virtual boost::optional<GLTexInfo> glTexInfo() const = 0;
         virtual Bitmap toBitmap() const = 0;
+        
+        //! Experimental and undocumented for now.
+        virtual void insert(const Bitmap& bitmap, int x, int y) = 0;
     };
 }
 

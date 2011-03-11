@@ -126,3 +126,10 @@ Gosu::Bitmap Gosu::LargeImageData::toBitmap() const
             bitmap.insert(parts[y * partsX + x]->toBitmap(), x * partWidth, y * partHeight);
     return bitmap;
 }
+
+void Gosu::LargeImageData::insert(const Bitmap& bitmap, int atX, int atY)
+{
+    for (int x = 0; x < partsX; ++x)
+        for (int y = 0; y < partsY; ++y)
+            parts[y * partsX + x]->insert(bitmap, atX - x * partWidth, atY - y * partHeight);
+}

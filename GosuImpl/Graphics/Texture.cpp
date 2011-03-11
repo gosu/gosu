@@ -62,14 +62,11 @@ GLuint Gosu::Texture::texName() const
 
 std::auto_ptr<Gosu::TexChunk>
     Gosu::Texture::tryAlloc(Graphics& graphics, Transforms& transforms,
-        DrawOpQueueStack& queues, boost::shared_ptr<Texture> ptr,
-        const Bitmap& bmp, unsigned srcX,
-        unsigned srcY, unsigned srcWidth,
-        unsigned srcHeight, unsigned padding)
+        DrawOpQueueStack& queues, boost::shared_ptr<Texture> ptr, const Bitmap& bmp, unsigned padding)
 {
     std::auto_ptr<Gosu::TexChunk> result;
     
-    boost::optional<BlockAllocator::Block> block = allocator.alloc(srcWidth, srcHeight);
+    boost::optional<BlockAllocator::Block> block = allocator.alloc(bmp.width(), bmp.height());
     if (!block)
         return result;
     
