@@ -85,6 +85,6 @@ void Gosu::TexChunk::insert(const Bitmap& original, int x, int y)
     }
     
     glBindTexture(GL_TEXTURE_2D, texture->texName());
-    glTexSubImage2D(GL_TEXTURE_2D, 0, this->x + padding + x, this->y + padding + y, bitmap->width(), bitmap->height(),
+    glTexSubImage2D(GL_TEXTURE_2D, 0, this->x + x, this->y + y, bitmap->width(), bitmap->height(),
         Color::GL_FORMAT, GL_UNSIGNED_BYTE, bitmap->data());
 }

@@ -437,8 +437,7 @@ namespace Gosu {
 %include "../Gosu/Image.hpp"
 %extend Gosu::Image {
     Image(Gosu::Window& window, VALUE source, bool tileable = false) {
-        return new Gosu::Image(window.graphics(),
-            Gosu::loadBitmap(source), tileable);
+        return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source), tileable);
     }
     Image(Gosu::Window& window, VALUE source, bool tileable,
           unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight) {
@@ -468,23 +467,26 @@ namespace Gosu {
     }
     %newobject fromText4;
     static Gosu::Image* fromText4(Gosu::Window& window, const std::wstring& text,
-                                 const std::wstring& fontName, unsigned fontHeight) {
+                                 const std::wstring& fontName, unsigned fontHeight)
+    {
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight);
         return new Gosu::Image(window.graphics(), bmp);
     }
     %newobject fromText7;
     static Gosu::Image* fromText7(Gosu::Window& window, const std::wstring& text,
-                                 const std::wstring& fontName, unsigned fontHeight,
-                                 int lineSpacing, unsigned maxWidth, TextAlign align) {
+            const std::wstring& fontName, unsigned fontHeight,
+            int lineSpacing, unsigned maxWidth, TextAlign align)
+    {
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
         return new Gosu::Image(window.graphics(), bmp);
     }
-    static std::vector<Gosu::Image*> loadTiles(Gosu::Window& window, VALUE source,
-                                               int tileWidth, int tileHeight, bool tileable) {
+    static std::vector<Gosu::Image*> loadTiles(Gosu::Window& window,
+            VALUE source, int tileWidth, int tileHeight, bool tileable)
+    {
         std::vector<Gosu::Image*> vec;
         // TODO: const correctness (<- did I mean exception safety?)
         Gosu::imagesFromTiledBitmap(window.graphics(), Gosu::loadBitmap(source),
-                                    tileWidth, tileHeight, tileable, vec);
+            tileWidth, tileHeight, tileable, vec);
         return vec;        
     }
     std::string toBlob() const
@@ -511,6 +513,10 @@ namespace Gosu {
         else
             Gosu::saveToPNG(bmp, buf.backWriter());
         Gosu::saveFile(buf, filename);
+    }
+    void insert(VALUE source, int x, int y)
+    {
+        $self->getData().insert(Gosu::loadBitmap(source), x, y);
     }
 }
 

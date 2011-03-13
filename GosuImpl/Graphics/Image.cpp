@@ -26,15 +26,15 @@ Gosu::Image::Image(Graphics& graphics, const Bitmap& source, bool tileable)
 }
 
 Gosu::Image::Image(Graphics& graphics, const Bitmap& source,
-    unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-    bool tileable)
-: data(graphics.createImage(source, srcX, srcY, srcWidth, srcHeight,
+        unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
+        bool tileable)
+:   data(graphics.createImage(source, srcX, srcY, srcWidth, srcHeight,
     tileable ? Gosu::bfTileable : Gosu::bfSmooth))
 {
 }
 
 Gosu::Image::Image(std::auto_ptr<ImageData> data)
-: data(data.release())
+:   data(data.release())
 {
 }
 
@@ -103,7 +103,7 @@ void Gosu::Image::drawRot(double x, double y, ZPos z,
                c, z, mode);
 }
 
-const Gosu::ImageData& Gosu::Image::getData() const
+Gosu::ImageData& Gosu::Image::getData() const
 {
     return *data;
 }

@@ -2638,8 +2638,7 @@ SWIG_AsVal_bool (VALUE obj, bool *val)
 }
 
 SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_0(Gosu::Window &window,VALUE source,bool tileable=false){
-        return new Gosu::Image(window.graphics(),
-            Gosu::loadBitmap(source), tileable);
+        return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source), tileable);
     }
 SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_1(Gosu::Window &window,VALUE source,bool tileable,unsigned int srcX,unsigned int srcY,unsigned int srcWidth,unsigned int srcHeight){
         return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source),
@@ -2667,7 +2666,7 @@ SWIGINTERN std::vector< Gosu::Image * > Gosu_Image_loadTiles(Gosu::Window &windo
         std::vector<Gosu::Image*> vec;
         // TODO: const correctness (<- did I mean exception safety?)
         Gosu::imagesFromTiledBitmap(window.graphics(), Gosu::loadBitmap(source),
-                                    tileWidth, tileHeight, tileable, vec);
+            tileWidth, tileHeight, tileable, vec);
         return vec;        
     }
 SWIGINTERN std::string Gosu_Image_toBlob(Gosu::Image const *self){
@@ -2690,6 +2689,9 @@ SWIGINTERN void Gosu_Image_save(Gosu::Image const *self,std::wstring const &file
         else
             Gosu::saveToPNG(bmp, buf.backWriter());
         Gosu::saveFile(buf, filename);
+    }
+SWIGINTERN void Gosu_Image_insert(Gosu::Image *self,VALUE source,int x,int y){
+        self->getData().insert(Gosu::loadBitmap(source), x, y);
     }
 SWIGINTERN unsigned int Gosu_TextInput_caret_pos(Gosu::TextInput const *self){
         return RUBY_18_19(Gosu::wstringToUTF8(self->text().substr(0, self->caretPos())).size(),
@@ -7327,6 +7329,60 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Image.insert
+
+  call-seq:
+    insert(source, x, y)
+
+Insert one or more new elements in the Image.
+*/
+SWIGINTERN VALUE
+_wrap_Image_insert(int argc, VALUE *argv, VALUE self) {
+  Gosu::Image *arg1 = (Gosu::Image *) 0 ;
+  VALUE arg2 = (VALUE) 0 ;
+  int arg3 ;
+  int arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  
+  if ((argc < 3) || (argc > 3)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Image, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Image *","insert", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Image * >(argp1);
+  arg2 = argv[0];
+  ecode3 = SWIG_AsVal_int(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "int","insert", 3, argv[1] ));
+  } 
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(argv[2], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "int","insert", 4, argv[2] ));
+  } 
+  arg4 = static_cast< int >(val4);
+  {
+    try {
+      Gosu_Image_insert(arg1,arg2,arg3,arg4);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
 SWIGINTERN void
 free_Gosu_Image(Gosu::Image *arg1) {
     SWIG_RubyRemoveTracking(arg1);
@@ -11106,6 +11162,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassImage.klass, "columns", VALUEFUNC(_wrap_Image_columns), -1);
   rb_define_method(SwigClassImage.klass, "rows", VALUEFUNC(_wrap_Image_rows), -1);
   rb_define_method(SwigClassImage.klass, "save", VALUEFUNC(_wrap_Image_save), -1);
+  rb_define_method(SwigClassImage.klass, "insert", VALUEFUNC(_wrap_Image_insert), -1);
   SwigClassImage.mark = 0;
   SwigClassImage.destroy = (void (*)(void *)) free_Gosu_Image;
   SwigClassImage.trackObjects = 1;

@@ -77,7 +77,7 @@ namespace Gosu
             AlphaMode mode = amDefault) const;
 
         //! Provides access to the underlying image data object.
-        const ImageData& getData() const;
+        ImageData& getData() const;
     };
 
 	//! Convenience function that splits a BMP or PNG file into an array
