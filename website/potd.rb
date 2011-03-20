@@ -4,7 +4,7 @@ require 'RMagick'
 
 begin
   # connect to the MySQL server
-  dbh = Mysql.real_connect("localhost", ARGV[0], ARGV[1], "mwf")
+  dbh = Mysql.real_connect("localhost", "root", "", "mwf")
   res = dbh.query %( select t.id, t.subject, a.postId, a.fileName
                      from topics t join attachments a on (t.basePostId = a.postId)
                      where boardId = (select id from boards where title = 'Gosu Showcase' and

@@ -23,10 +23,3 @@ desc "Build C++ reference with doxygen"
 task :cpp_docs do
   sh "cd reference && doxygen"
 end
-
-desc "Upload documentation to www.libgosu.org"
-task :upload_docs => [:cpp_docs, :ruby_docs] do
-  # Expect some errors here, for example copying the .svn subdirectories might break.
-  sh "scp -C -r reference/cpp vu2040@eta.railshoster.de:~/htdocs/ || true"
-  sh "scp -C -r reference/rdoc vu2040@eta.railshoster.de:~/htdocs/ || true"
-end

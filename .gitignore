@@ -3,3 +3,7 @@
 /mac/build/
 /Gosu.framework/
 /lib/gosu.*.bundle
+/reference/cpp/
+/reference/rdoc/
+/website/cpp/
+/website/rdoc/
