@@ -18,14 +18,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 
-Julian Raschke julian@raschke.de
+                  Julian Raschke  julian@raschke.de
+                  Jan Lücker     jan.luecker@gmx.de
+                        http://www.libgosu.org/
 
-Jan Lücker jan.luecker@gmx.de
-
-http://www.libgosu.org/
-
-***
+                                  ***
 
 This does NOT apply to audiere.dll shipped with the Windows versions of
 Gosu. Audiere is a separate library licensed under the Lesser General
-Public License. Please consult audiere.sf.net for more details.
+Public License. Please consult http://audiere.sf.net/ for more details.
+
+This does also NOT apply to libogg and libvorbis, which are included in
+all source and binary distributions of Gosu, sometimes via audiere. These
+projects are licensed under a BSD-like license, and their copyright terms
+need to be supplied even with binary redistributions (e.g. Gosu games).
