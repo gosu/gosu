@@ -4,7 +4,7 @@ require 'date'
 require 'rake/gempackagetask'
 
 COMMON_FILES = FileList[
-  'COPYING.txt',
+  'COPYING',
   'README.txt',
 ]
 
