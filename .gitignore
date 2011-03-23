@@ -8,3 +8,10 @@
 /website/cpp/
 /website/rdoc/
 (*)
+/windows/*.ncb
+/windows/*.suo
+/windows/*.user
+/windows/Release
+/windows/Debug
+/lib/Gosu*.lib
+/lib/gosu.*.so
