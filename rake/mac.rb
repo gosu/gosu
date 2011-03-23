@@ -27,12 +27,9 @@ namespace :mac do
     sh "tar -czf #{MAC_WRAPPER_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
   end
 
-  desc "Releases the archive #{MAC_ARCHIVE_FILENAME} and #{MAC_WRAPPER_FILENAME} on GoogleCode"
+  desc "Releases the archive #{MAC_ARCHIVE_FILENAME} and #{MAC_WRAPPER_FILENAME} on GitHub"
   task :release => [:archive, :app_wrapper] do
-    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION}, compiled for Mac OS X (C++)\"" +
-       " --project=gosu --user=julianraschke --password=#{GOSU_PASSWORD.call} --labels=\"Featured,Type-Archive,OpSys-OSX\" #{MAC_ARCHIVE_FILENAME}"
-    sh "./googlecode_upload.py --summary=\"Self-contained template app, containing Gosu #{GOSU_VERSION} and Ruby 1.9\"" +
-       " --project=gosu --user=julianraschke --password=#{GOSU_PASSWORD.call} --labels=\"Type-Archive,OpSys-OSX\" #{MAC_WRAPPER_FILENAME}"
+    # broken, see linux.rb
   end
 
   task :gem => [:ruby, :version]

@@ -23,7 +23,6 @@ COMMON_RUBY_FILES = COMMON_FILES + FileList[
   'examples/media/*',
 ]
 
-GOSU_PASSWORD = lambda { ENV['GOSU_RELEASE_PASSWORD'] || raise("Please set GOSU_RELEASE_PASSWORD") }
 GOSU_VERSION = ENV['GOSU_RELEASE_VERSION'] || '0.0.0'
 
 # Sets everything except 'platform' and 'files'.

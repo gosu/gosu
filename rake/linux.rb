@@ -13,10 +13,10 @@ namespace :linux do
     sh "cd .. && tar -czf gosu/#{LINUX_ARCHIVE_FILENAME} #{files.map { |filename| "'gosu/#{filename}'" }.join(' ')}"
   end
 
-  desc "Releases the archive #{LINUX_ARCHIVE_FILENAME} on GoogleCode"
+  desc "Releases the archive #{LINUX_ARCHIVE_FILENAME} on GitHub"
   task :release => :archive do
-    sh "./googlecode_upload.py --summary=\"Gosu #{GOSU_VERSION} source package for Linux (C++)\"" +
-       " --project=gosu --user=julianraschke --password=#{GOSU_PASSWORD.call} --labels=\"Featured,Type-Archive,OpSys-All\" #{LINUX_ARCHIVE_FILENAME}"
+    # ...gets a broken pipe error...
+    #sh "rake/upload #{LINUX_ARCHIVE_FILENAME} 'Gosu #{GOSU_VERSION} source package for Linux (C++)'"
   end
   
   task :gem => [:version]

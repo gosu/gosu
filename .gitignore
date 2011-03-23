@@ -15,3 +15,5 @@
 /windows/Debug
 /lib/Gosu*.lib
 /lib/gosu.*.so
+
+/public/

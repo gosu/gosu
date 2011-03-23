@@ -36,6 +36,9 @@ end
 namespace :ruby19 do
   ALL_PLATFORMS.each do |platform|
     task platform.to_sym do
+      mkdir_p "#{TARGET_ROOT}/include"
+      mkdir_p "#{TARGET_ROOT}/lib"
+      
       # Let RVM install the correct Ruby
       sh "env RVM_RUBY=#{RVM_RUBY} RVM_ARCH=#{platform} " +
          "    RVM_BUILD=#{BUILD[platform]} RVM_CFLAGS=#{CFLAGS[platform]} " +
@@ -43,12 +46,12 @@ namespace :ruby19 do
          "    bash #{TARGET_ROOT}/install_rvm_ruby.sh"
       
       # Copy headers
-      sh "cp -r #{SOURCE_ROOT}/include/ruby*/* #{TARGET_ROOT}/include/"
+      sh "cp -R #{SOURCE_ROOT}/include/ruby*/* #{TARGET_ROOT}/include/"
       # Rename platform-specific folder so Xcode will find it
       sh "mv #{TARGET_ROOT}/include/*-darwin* #{TARGET_ROOT}/include/#{platform}"
       
       # Copy Ruby libraries
-      sh "cp -r #{SOURCE_ROOT}/lib/ruby/#{INTERNAL_VERSION}/* #{TARGET_ROOT}/lib"
+      sh "cp -R #{SOURCE_ROOT}/lib/ruby/#{INTERNAL_VERSION}/* #{TARGET_ROOT}/lib"
       # Merge libruby with existing platforms
       # (Yes, this will bork the installation in rvm)
       source_file = "#{SOURCE_ROOT}/lib/#{RUBY_DYLIB}"
