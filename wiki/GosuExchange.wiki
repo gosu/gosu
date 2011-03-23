@@ -1,5 +1,0 @@
-#summary Outdated: Please use the forums on http://libgosu.org/!
-
-= Gosu Exchange =
-
-The comments on this Wiki page were the predecessor to the Gosu forums on http://libgosu.org/. Threads of discussion are slowly being migrated. Please ask new questions in the forum! Thanks.

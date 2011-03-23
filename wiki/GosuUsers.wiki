@@ -1,5 +1,0 @@
-#summary Outdated: Please use the forums on http://libgosu.org/!
-
-= Outdated Content =
-
-The comments on this page is slowly being moved to the "Gosu Showcase" board on the official http://libgosu.org/ forums.
