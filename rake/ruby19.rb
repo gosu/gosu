@@ -7,7 +7,8 @@ SOURCE_ROOT      = "#{ENV['HOME']}/.rvm/rubies/#{RVM_RUBY}"
 GEM_ROOT         = "#{ENV['HOME']}/.rvm/gems/#{RVM_RUBY}/gems"
 ALL_PLATFORMS    = [:ppc, :i386, :x86_64]
 LIB_KILLLIST     = %w(README irb rake* racc rdoc* *ubygems* readline* tcltk* tk* tcltklib* rss* *-darwin*)
-GEMS             = %w(chipmunk texplay iobuffer rev eventmachine) # TODO: ruby-opengl needs some rake stuff?
+# TODO: texplay builds for wrong arch; ruby-opengl needs some rake stuff?
+GEMS             = %w(chipmunk iobuffer rev eventmachine)
 
 # Just to abbreviate the CFLAGS
 SDK_10_4 = '/Developer/SDKs/MacOSX10.4u.sdk'
