@@ -9,7 +9,6 @@ if ENV['USER'] == 'jlnr' and `uname`.chomp == 'Darwin' then
     end
     
     task :rebuild_index do
-      sh "git pull"
       sh "cd website && ruby potd.rb && erb -r potd_values.rb index.html.erb > index.html"
     end
     
