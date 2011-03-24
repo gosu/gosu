@@ -55,5 +55,8 @@ end
 
 Dir['rake/*.rb'].each { |task| require File.expand_path(task) }
 
-task :release => [:'mac:release', :'win:release', :'linux:release',
-                  :'mac:release_gem', :'win:release_gem', :'linux:release_gem']
+task :release => [:'mac:archive', :'win:archive', :'linux:archive',
+                  :'mac:release_gem', :'win:release_gem', :'linux:release_gem'] do
+  # TODO; Fix github upload, uncomment above requirements, use this instead
+  sh "scp -P 22000 #{MAC_ARCHIVE_FILENAME} #{WINDOWS_ARCHIVE_FILENAME} #{LINUX_ARCHIVE_FILENAME} libgosu.org:/Library/WebServer/Documents/libgosu.org/downloads/"
+end
