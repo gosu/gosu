@@ -1,6 +1,6 @@
 namespace :mac do
-  desc "Build Gosu.framework"
-  task :cpp => [:version, :cpp_docs] do
+  FRAMEWORK_FILENAME = "Gosu.framework"
+  file FRAMEWORK_FILENAME => [:version, :cpp_docs] do
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target Gosu -configuration Release"
   end
 
@@ -10,11 +10,10 @@ namespace :mac do
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Core' -configuration 'Release with 1.9'"
     sh "cd mac && xcodebuild -project Gosu.xcodeproj -target 'RubyGosu App' -configuration 'Release with 1.9'"
   end
-
+  
   MAC_ARCHIVE_FILENAME = "public/gosu-mac-#{GOSU_VERSION}.tar.gz"
-
-  desc "Build the archive #{MAC_ARCHIVE_FILENAME}"
-  task :archive => [:cpp, :version] do
+  
+  file MAC_ARCHIVE_FILENAME => [FRAMEWORK_FILENAME, :version] do
     files = COMMON_CPP_FILES + FileList['Gosu.framework/**/*']
     sh "tar -czf #{MAC_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
   end
@@ -22,14 +21,14 @@ namespace :mac do
   MAC_WRAPPER_FILENAME = "public/gosu-mac-wrapper-#{GOSU_VERSION}.tar.gz"
   
   desc "Publish RubyGosu App.app"
-  task :app_wrapper => [:cpp, :ruby, :version] do
+  task :app_wrapper => [FRAMEWORK_FILENAME, :ruby, :version] do
     files = FileList['RubyGosu App.app/**/*']
     sh "tar -czf #{MAC_WRAPPER_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
   end
 
-  desc "Releases the archive #{MAC_ARCHIVE_FILENAME} and #{MAC_WRAPPER_FILENAME} on GitHub"
-  task :release => [:archive, :app_wrapper] do
-    # broken, see linux.rb
+  desc "Releases the archive #{MAC_ARCHIVE_FILENAME} on GitHub"
+  task :release => [MAC_ARCHIVE_FILENAME, 'rake/upload'] do
+    sh "rake/upload #{MAC_ARCHIVE_FILENAME} '' 'Mac C++ package'"
   end
 
   task :gem => [:ruby, :version]

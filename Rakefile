@@ -48,6 +48,11 @@ EOS
   s.summary = '2D game development library.'
 end
 
+file 'rake/upload' do
+  sh 'curl https://github.com/jlnr/github-upload/raw/master/upload.rb > rake/upload'
+  sh 'chmod +x rake/upload'
+end
+
 Dir['rake/*.rb'].each { |task| require File.expand_path(task) }
 
 task :release => [:'mac:release', :'win:release', :'linux:release',
