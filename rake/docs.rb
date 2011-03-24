@@ -21,5 +21,5 @@ end
 
 desc "Build C++ reference with doxygen"
 task :cpp_docs do
-  sh "cd reference && doxygen"
+  sh "cd reference && doxygen > /dev/null"
 end
