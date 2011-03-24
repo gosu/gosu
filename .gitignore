@@ -23,3 +23,5 @@
 /windows/*.user
 /windows/Debug
 /windows/Release
+
+/RubyGosu App.app/
