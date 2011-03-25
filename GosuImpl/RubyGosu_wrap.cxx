@@ -2296,20 +2296,31 @@ namespace Gosu
             return loadImageFile(Gosu::utf8ToWstring(filename));
         }
 
-        // Otherwise, try to call .to_blob on it.
-        // (Works with RMagick).
+        // Otherwise, try to call .to_blob on it (works with RMagick, TexPlay etc).
         VALUE conversion = rb_str_new2("to_blob { self.format = 'RGBA'; self.depth = 8 }");
         VALUE blob = rb_obj_instance_eval(1, &conversion, val);
         rb_check_safe_obj(blob);
         unsigned width = NUM2UINT(rb_funcall(val, rb_intern("columns"), 0));
         unsigned height = NUM2UINT(rb_funcall(val, rb_intern("rows"), 0));
-                                 
-        if (width * height * 4 != RSTRING_LEN(blob))
-            throw std::logic_error("Blob length mismatch!");
+        
         Bitmap result;
         result.resize(width, height);
-        std::memcpy(result.data(),
-            reinterpret_cast<const boost::uint32_t*>(RSTRING_PTR(blob)), width * height * 4);
+        if (width * height * 4 == RSTRING_LEN(blob))
+        {
+            // 32 bit per pixel, assume R8G8B8A8
+            std::memcpy(result.data(),
+                reinterpret_cast<const boost::uint32_t*>(RSTRING_PTR(blob)), width * height * 4);
+        }
+        else if (width * height * 4 * sizeof(float) == RSTRING_LEN(blob))
+        {
+            // 32 bit per channel, assume float/float/float/float
+            const float* in = reinterpret_cast<const float*>(RSTRING_PTR(blob));
+            Gosu::Color::Channel* out = reinterpret_cast<Gosu::Color::Channel*>(result.data());
+            for (int i = width * height * 4; i > 0; --i)
+                *(out++) = *(in++) * 255;
+        }
+        else
+            throw std::logic_error("Blob length mismatch!");
         return result;
     }
 }
