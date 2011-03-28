@@ -3,14 +3,73 @@
 #include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
 
+#ifdef GOSU_IS_WIN
+#include <objidl.h>
+#include <gdiplus.h>
+#endif
+
 // OS X 64-bit and iOS use Apple APIs.
 #if !defined(GOSU_IS_MAC) || (!defined(GOSU_IS_IPHONE) && !defined(__LP64__))
+
+#ifdef GOSU_IS_WIN
+
+static ULONG_PTR gdiplusToken;
+
+void gdiShutdown(void)
+{
+    Gdiplus::GdiplusShutdown(gdiplusToken);
+}
+
 Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
 {
-	Buffer buffer;
-	loadFile(buffer, filename);
+    // Initialize GDI+
+    static boolean gdiInitialized = false;
+    if(!gdiInitialized)
+    {
+        gdiInitialized = true;
+        static Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+        Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+        atexit(gdiShutdown);
+    }
+
+    Bitmap bmp;
+
+    Gdiplus::Bitmap img(filename.c_str(), false);
+
+    GUID guid;
+    img.GetRawFormat(&guid);
+
+    if (guid == Gdiplus::ImageFormatJPEG || guid == Gdiplus::ImageFormatPNG ||
+        guid == Gdiplus::ImageFormatGIF || guid == Gdiplus::ImageFormatBMP ||
+        guid == Gdiplus::ImageFormatTIFF || guid == Gdiplus::ImageFormatIcon)
+    {
+        bmp.resize(img.GetWidth(), img.GetHeight());
+
+        Gdiplus::Color pixelColor;
+        for (int y = 0; y != img.GetHeight(); y++)
+        {
+            for (int x = 0; x < img.GetWidth(); x++)
+            {
+                img.GetPixel(x, y, &pixelColor);
+                bmp.setPixel(x, y, Color(pixelColor.GetValue()));
+            }
+        }
+    }
+    else
+    {
+        // TODO: Try to load devil, otherwise throw exception
+    }
+
+    return bmp;
+}
+#else
+Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
+{
+    Buffer buffer;
+    loadFile(buffer, filename);
     return loadImageFile(buffer.frontReader());
 }
+#endif
 #endif
 
 Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
