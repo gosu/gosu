@@ -15,7 +15,7 @@ public:
     GameWindow() : Gosu::Window(1024, 768, false)
     {
         //this->font.reset(new Gosu::Font(graphics(), L"examples/media/RAVIE.TTF", 40));
-        this->img = new Gosu::Image(graphics(), L"examples/media/Earth.png");
+        this->img = new Gosu::Image(graphics(), L"examples/media/trans.png");
         this->sky = new Gosu::Image(graphics(), L"examples/media/Sky.jpg");
 
         //this->p1 = new Gosu::Image(graphics(), L"examples/media/broken_NO_CHECKIN/001-Fighter01.png");
@@ -33,9 +33,8 @@ public:
         //this->font->draw(L"Yay", 10, 10, 120);
 
         //graphics().drawQuad(0, 0, Gosu::Color::RED, 500, 0, Gosu::Color::AQUA, 0, 500, Gosu::Color::WHITE, 500, 500, Gosu::Color::YELLOW, 5);
-        img->draw(0, 0, 15);
-        sky->draw(30, 30, 15);
-
+        img->draw(0, 0, 1);
+        sky->draw(0, 0, 0);
 
         //vertex->draw(300, 400, 200);
 
