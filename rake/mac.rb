@@ -36,7 +36,7 @@ namespace :mac do
   MAC_SPEC = Gem::Specification.new do |s|
     apply_gemspec_defaults s
     s.platform = 'universal-darwin'
-    s.files = COMMON_RUBY_FILES + FileList['lib/gosu.*.bundle']
+    s.files = COMMON_RUBY_FILES + %w(lib/gosu.for_1_8.bundle lib/gosu.for_1_9.bundle)
   end
   Rake::GemPackageTask.new(MAC_SPEC) { |t| t.package_dir = 'public' }
   
