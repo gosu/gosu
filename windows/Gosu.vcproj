@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="Gosu"
 	ProjectGUID="{4989339B-019C-4399-86F5-1D9245C420C6}"
 	RootNamespace="Gosu"
@@ -42,6 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/I&quot;..\dependencies\zlib&quot; /I&quot;..\dependencies\libpng&quot;"
 				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../&quot;;$(NOINHERIT)"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="3"
@@ -61,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="audiere.lib opengl32.lib dinput8.lib winmm.lib dxguid.lib ws2_32.lib delayimp.lib"
+				AdditionalDependencies="Gdiplus.lib audiere.lib opengl32.lib dinput8.lib winmm.lib dxguid.lib ws2_32.lib delayimp.lib"
 				OutputFile="$(OutDir)\$(ProjectName)Debug.lib"
 			/>
 			<Tool
@@ -110,6 +111,7 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				WholeProgramOptimization="false"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../&quot;;$(NOINHERIT)"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -127,7 +129,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="audiere.lib opengl32.lib dinput8.lib winmm.lib dxguid.lib ws2_32.lib delayimp.lib"
+				AdditionalDependencies="Gdiplus.lib audiere.lib opengl32.lib dinput8.lib winmm.lib dxguid.lib ws2_32.lib delayimp.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -360,6 +362,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\GosuImpl\Graphics\BitmapGDIplus.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\GosuImpl\Graphics\BitmapPNG.cpp"
 					>
 				</File>
@@ -537,11 +543,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Gosu\Sockets.hpp"
+				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
+				RelativePath="..\Gosu\Sockets.hpp"
 				>
 			</File>
 			<File

@@ -8,6 +8,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RubyGosu", "RubyGosu.vcproj
 		{4989339B-019C-4399-86F5-1D9245C420C6} = {4989339B-019C-4399-86F5-1D9245C420C6}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcproj", "{A2B6D6CE-783B-47AC-A3BB-A3E8E2519390}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4989339B-019C-4399-86F5-1D9245C420C6} = {4989339B-019C-4399-86F5-1D9245C420C6}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -27,6 +32,12 @@ Global
 		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release with 1.9|Win32.Build.0 = Release with Ruby 1.9|Win32
 		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release|Win32.ActiveCfg = Release|Win32
 		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release|Win32.Build.0 = Release|Win32
+		{A2B6D6CE-783B-47AC-A3BB-A3E8E2519390}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A2B6D6CE-783B-47AC-A3BB-A3E8E2519390}.Debug|Win32.Build.0 = Debug|Win32
+		{A2B6D6CE-783B-47AC-A3BB-A3E8E2519390}.Release with 1.9|Win32.ActiveCfg = Release|Win32
+		{A2B6D6CE-783B-47AC-A3BB-A3E8E2519390}.Release with 1.9|Win32.Build.0 = Release|Win32
+		{A2B6D6CE-783B-47AC-A3BB-A3E8E2519390}.Release|Win32.ActiveCfg = Release|Win32
+		{A2B6D6CE-783B-47AC-A3BB-A3E8E2519390}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
