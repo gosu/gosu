@@ -5,7 +5,6 @@
 
 #include <objidl.h>
 #include <gdiplus.h>
-#include <gdiplusbitmap.h>
 #include <windows.h>
 
 namespace 
@@ -18,7 +17,7 @@ namespace
     }
 }
 
-Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
+Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
 {
     // Initialize GDI+
     static boolean gdiInitialized = false;
@@ -31,8 +30,29 @@ Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
     }
 
     Bitmap bmp;
+    
+    HGLOBAL buffer = ::GlobalAlloc(GMEM_MOVEABLE, reader.resource().size());
+    if(!buffer)
+    {
+        //Error handling?
+    }
 
-    Gdiplus::Bitmap img(filename.c_str(), false);
+    void* bufferPtr = ::GlobalLock(buffer);
+    if(!bufferPtr)
+    {
+        //Error handling?
+    }
+
+    //CopyMemory(pBuffer, buffer.data(), reader.size());
+    reader.read(bufferPtr, reader.resource().size());
+
+    IStream* stream = NULL;
+    if (::CreateStreamOnHGlobal(buffer, FALSE, &stream) != S_OK)
+    {
+        //Error handling?
+    }
+    
+    Gdiplus::Bitmap img(stream, false);
 
     GUID guid;
     img.GetRawFormat(&guid);
@@ -43,26 +63,29 @@ Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
     {
         bmp.resize(img.GetWidth(), img.GetHeight());
 
-        Gdiplus::BitmapData* raw = new Gdiplus::BitmapData;
+        Gdiplus::BitmapData raw;
         Gdiplus::Rect rect(0, 0, img.GetWidth(), img.GetHeight());
 
-        // I am still not sure if this is a good idea, benchmarking say 3 times faster
         // TODO: Try with different images and formats.
-        img.LockBits(&rect, Gdiplus::ImageLockModeRead, PixelFormat32bppARGB, raw); //img.GetPixelFormat()
-        unsigned int* pixels = (unsigned int*)raw->Scan0;
+        img.LockBits(&rect, Gdiplus::ImageLockModeRead, PixelFormat32bppARGB, &raw); //img.GetPixelFormat()
+        unsigned int* pixels = (unsigned int*)raw.Scan0;
 
-        // TODO: This did work for my test jpg, but didnt for my test png - investigate.
-        //memcpy(bmp.data(), pixels, (img.GetHeight() * raw->Stride + img.GetWidth()));
+        // TODO: Gosu uses RGBA, this is ARGB. But this is a really fast..
+        //memcpy(bmp.data(), pixels, (img.GetHeight() * raw.Stride));
+
         for(int y=0; y<img.GetHeight(); y++)
         {
             for(int x=0; x<img.GetWidth(); x++)
             {
-                bmp.setPixel(x, y, pixels[y * raw->Stride / 4 + x]);
+                bmp.setPixel(x, y, pixels[y * raw.Stride / 4 + x]);
             }
         }
+        img.UnlockBits(&raw);
 
-        img.UnlockBits(raw);
+        if(guid == Gdiplus::ImageFormatBMP)
+            applyColorKey(bmp, Color::FUCHSIA);
 
+        // Old, using this for benchmarking.
         /*Gdiplus::Color pixelColor;
         for (int y = 0; y != img.GetHeight(); y++)
         {
@@ -77,6 +100,8 @@ Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
     {
         // TODO: Try to load devil, otherwise throw exception
     }
+
+
 
     return bmp;
 }
