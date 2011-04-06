@@ -4,8 +4,7 @@
 #include <Gosu/Platform.hpp>
 
 // OS X 64-bit and iOS use Apple APIs, Windows uses GDI+
-
-#if !defined(GOSU_IS_WIN) && !defined(GOSU_IS_IPHONE) && !(defined(GOSU_IS_MAC) && defined(__LP64__))
+#if !defined(GOSU_IS_MAC) && (!defined(GOSU_IS_IPHONE) && !defined(__LP64__)) 
 Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
 {
     Buffer buffer;
@@ -14,6 +13,7 @@ Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
 }
 #endif
 
+#if !defined(GOSU_IS_WIN)
 Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
 {
 	Bitmap bmp;
@@ -30,6 +30,7 @@ Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
         loadFromPNG(bmp, reader);
 	return bmp;
 }
+#endif
 
 void Gosu::applyBorderFlags(Bitmap& dest, const Bitmap& source,
     unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,

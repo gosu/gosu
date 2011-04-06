@@ -81,37 +81,30 @@
 
 // Typemaps for enums that should be given in as symbols.
 %typemap(in) Gosu::AlphaMode {
-    VALUE localTemporary = rb_obj_as_string($input);
-    if (!strcmp(StringValueCStr(localTemporary), "default"))
+    const char* cstr = Gosu::cstrFromSymbol($input);
+    
+    if (!strcmp(cstr, "default"))
         $1 = Gosu::amDefault;
-    else if (!strcmp(StringValueCStr(localTemporary), "additive"))
+    else if (!strcmp(cstr, "additive"))
         $1 = Gosu::amAdditive;
-    else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+    else if (!strcmp(cstr, "multiply"))
         $1 = Gosu::amMultiply;
     else
         SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
 }
 %typemap(in) Gosu::TextAlign {
-    VALUE localTemporary = rb_obj_as_string($input);
-    if (!strcmp(StringValueCStr(localTemporary), "left"))
+    const char* cstr = Gosu::cstrFromSymbol($input);
+
+    if (!strcmp(cstr, "left"))
         $1 = Gosu::taLeft;
-    else if (!strcmp(StringValueCStr(localTemporary), "center"))
+    else if (!strcmp(cstr, "center"))
         $1 = Gosu::taCenter;
-    else if (!strcmp(StringValueCStr(localTemporary), "right"))
+    else if (!strcmp(cstr, "right"))
         $1 = Gosu::taRight;
-    else if (!strcmp(StringValueCStr(localTemporary), "justify"))
+    else if (!strcmp(cstr, "justify"))
         $1 = Gosu::taJustify;
     else
         SWIG_exception_fail(SWIG_ValueError, "invalid text align");
-}
-%typemap(in) Gosu::Song::Type {
-    VALUE localTemporary = rb_obj_as_string($input);
-    if (!strcmp(StringValueCStr(localTemporary), "stream"))
-        $1 = Gosu::Song::stStream;
-    else if (!strcmp(StringValueCStr(localTemporary), "module"))
-        $1 = Gosu::Song::stModule;
-    else
-        SWIG_exception_fail(SWIG_ValueError, "invalid song type");
 }
 
 // Allow integral constants to be passed in place of Color values.
@@ -261,6 +254,10 @@ namespace Gosu
         else
             throw std::logic_error("Blob length mismatch!");
         return result;
+    }
+    
+    const char* cstrFromSymbol(VALUE symbol) {
+      return rb_id2name(SYM2ID(symbol));
     }
 }
 %}
@@ -599,11 +596,15 @@ namespace Gosu {
 %markfunc Gosu::Window "markWindow";
 %include "../Gosu/Window.hpp"
 
+// TODO: Why is this even necessary, does the GC not trace into my Window privates?
+// If necessary, can I fake this using an @ivar?
 %header %{
     static void markWindow(void* window) {
+        #ifndef __MACRUBY__
         Gosu::TextInput* ti = static_cast<Gosu::Window*>(window)->input().textInput();
         if (VALUE ti_value = SWIG_RubyInstanceFor(ti))
             rb_gc_mark(ti_value);
+        #endif
     }
 %}
 
