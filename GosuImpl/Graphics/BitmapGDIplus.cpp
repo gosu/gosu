@@ -43,7 +43,6 @@ Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
         //Error handling?
     }
 
-    //CopyMemory(pBuffer, buffer.data(), reader.size());
     reader.read(bufferPtr, reader.resource().size());
 
     IStream* stream = NULL;
