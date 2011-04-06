@@ -2,6 +2,7 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
+#include <Gosu/WinUtility.hpp>
 
 #include <objidl.h>
 #include <gdiplus.h>
@@ -20,8 +21,8 @@ namespace
 Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
 {
     // Initialize GDI+
-    static boolean gdiInitialized = false;
-    if(!gdiInitialized)
+    static bool gdiInitialized = false;
+    if (!gdiInitialized)
     {
         gdiInitialized = true;
         static Gdiplus::GdiplusStartupInput gdiplusStartupInput;
@@ -32,32 +33,29 @@ Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
     Bitmap bmp;
     
     HGLOBAL buffer = ::GlobalAlloc(GMEM_MOVEABLE, reader.resource().size());
-    if(!buffer)
-    {
-        //Error handling?
-    }
-
+    Win::check(buffer);
     void* bufferPtr = ::GlobalLock(buffer);
-    if(!bufferPtr)
+    if (!bufferPtr)
     {
-        //Error handling?
+        ::GlobalFree(buffer);
+        check(bufferPtr);
     }
-
     reader.read(bufferPtr, reader.resource().size());
-
+    
     IStream* stream = NULL;
-    if (::CreateStreamOnHGlobal(buffer, FALSE, &stream) != S_OK)
+    if (::CreateStreamOnHGlobal(buffer, TRUE, &stream) != S_OK)
     {
-        //Error handling?
+        ::GlobalFree(buffer);
+        throw std::runtime_error("Could not create IStream");
     }
     
     Gdiplus::Bitmap img(stream, false);
-
+    
     GUID guid;
     img.GetRawFormat(&guid);
-
+    
     if (guid == Gdiplus::ImageFormatJPEG || guid == Gdiplus::ImageFormatPNG ||
-        guid == Gdiplus::ImageFormatGIF || guid == Gdiplus::ImageFormatBMP ||
+        guid == Gdiplus::ImageFormatGIF  || guid == Gdiplus::ImageFormatBMP ||
         guid == Gdiplus::ImageFormatTIFF || guid == Gdiplus::ImageFormatIcon)
     {
         bmp.resize(img.GetWidth(), img.GetHeight());
@@ -71,7 +69,7 @@ Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
 
         // TODO: Gosu uses RGBA, this is ARGB. But this is a really fast..
         //memcpy(bmp.data(), pixels, (img.GetHeight() * raw.Stride));
-
+        
         for(int y=0; y<img.GetHeight(); y++)
         {
             for(int x=0; x<img.GetWidth(); x++)
@@ -99,8 +97,6 @@ Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
     {
         // TODO: Try to load devil, otherwise throw exception
     }
-
-
-
+    
     return bmp;
 }
