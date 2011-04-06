@@ -521,7 +521,6 @@
 		D4B0132B11F823C600A804F7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D4BC5D6A0CC29D0F002D4236 /* Async.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Async.hpp; path = ../Gosu/Async.hpp; sourceTree = SOURCE_ROOT; };
 		D4CA89500BC68B5D00A431AC /* gosu.for_1_9.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = gosu.for_1_9.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		D4D3E71A10722AAA006DCD24 /* MacRuby.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MacRuby.framework; path = /Library/Frameworks/MacRuby.framework; sourceTree = "<absolute>"; };
 		D4D8CB380BD3973400CB51A9 /* RubyGosuStub.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = RubyGosuStub.mm; path = ../GosuImpl/RubyGosuStub.mm; sourceTree = SOURCE_ROOT; };
 		D4F07B220D934C8B00FB3D99 /* TextInput.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextInput.hpp; path = ../Gosu/TextInput.hpp; sourceTree = SOURCE_ROOT; };
 		D4F07B260D93504700FB3D99 /* TextInputMac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextInputMac.mm; path = ../GosuImpl/TextInputMac.mm; sourceTree = SOURCE_ROOT; };
@@ -687,7 +686,6 @@
 			isa = PBXGroup;
 			children = (
 				D4698E6D118C709D00FF24EF /* libruby.1.9.1.dylib */,
-				D4D3E71A10722AAA006DCD24 /* MacRuby.framework */,
 				D42D025C0F706A0100407E60 /* AudioToolbox.framework */,
 				D42568090C69CF6100E745AC /* IOKit.framework */,
 				D42D025D0F706A0100407E60 /* OpenAL.framework */,
