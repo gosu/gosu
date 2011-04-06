@@ -3,6 +3,7 @@
 /lib/Gosu*.lib
 /lib/gosu.*.bundle
 /lib/gosu.*.so
+/lib/libgosutouch*.a
 /mac/build/
 /mac/Gosu.xcodeproj/*.pbxuser
 /mac/Gosu.xcodeproj/*.perspectivev3
@@ -10,8 +11,10 @@
 /mac/Ruby/lib/
 /mac/Ruby/libruby.1.9.1.dylib
 /public/
+/rake/upload
 /reference/cpp/
 /reference/rdoc/
+/RubyGosu App.app/
 /website/cpp/
 /website/index.html
 /website/mwf
@@ -23,6 +26,3 @@
 /windows/*.user
 /windows/Debug
 /windows/Release
-
-/RubyGosu App.app/
-/rake/upload

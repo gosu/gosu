@@ -194,6 +194,7 @@ void Gosu::Graphics::beginGL()
     flush();
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glDisable(GL_BLEND);
+    while (glGetError() != GL_NO_ERROR);
 #endif
 }
 
@@ -240,6 +241,7 @@ namespace
             // Inlined beginGL() to avoid flushing.
             glPushAttrib(GL_ALL_ATTRIB_BITS);
             glDisable(GL_BLEND);
+            while (glGetError() != GL_NO_ERROR);
 
             functor();
             

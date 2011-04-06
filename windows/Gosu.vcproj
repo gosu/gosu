@@ -362,10 +362,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\GosuImpl\Graphics\BitmapDevil.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\GosuImpl\Graphics\BitmapGDIplus.cpp"
 					>
 				</File>
@@ -547,11 +543,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Gosu\Sockets.hpp"
+				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
+				RelativePath="..\Gosu\Sockets.hpp"
 				>
 			</File>
 			<File

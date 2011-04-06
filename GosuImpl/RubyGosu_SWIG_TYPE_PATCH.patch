@@ -1,0 +1,11 @@
+--- GosuImpl/RubyGosu_wrap.cxx	2011-04-06 14:42:00.000000000 +0800
++++ GosuImpl/RubyGosu_wrap_.cxx	2011-04-06 14:49:55.000000000 +0800
+@@ -1514,7 +1514,7 @@
+         downcast methods. */
+       if (obj != Qnil) {
+         VALUE value = rb_iv_get(obj, "@__swigtype__");
+-        char* type_name = RSTRING_PTR(value);
++        const char* type_name = RSTRING_PTR(value);
+ 				
+         if (strcmp(type->name, type_name) == 0) {
+           return obj;
