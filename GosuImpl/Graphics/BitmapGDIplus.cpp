@@ -42,14 +42,15 @@ Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
     }
     reader.read(bufferPtr, reader.resource().size());
     
-    IStream* stream = NULL;
-    if (::CreateStreamOnHGlobal(buffer, TRUE, &stream) != S_OK)
+    IStream* rawStream = NULL;
+    if (::CreateStreamOnHGlobal(buffer, TRUE, &rawStream) != S_OK)
     {
         ::GlobalFree(buffer);
         throw std::runtime_error("Could not create IStream");
     }
+    boost::shared_ptr<IStream> stream = shareComPtr(rawStream);
     
-    Gdiplus::Bitmap img(stream, false);
+    Gdiplus::Bitmap img(stream.get(), false);
     
     GUID guid;
     img.GetRawFormat(&guid);
