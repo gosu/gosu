@@ -38,7 +38,7 @@ Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
     if (!bufferPtr)
     {
         ::GlobalFree(buffer);
-        check(bufferPtr);
+        Win::throwLastError();
     }
     reader.read(bufferPtr, reader.resource().size());
     
@@ -48,7 +48,7 @@ Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
         ::GlobalFree(buffer);
         throw std::runtime_error("Could not create IStream");
     }
-    boost::shared_ptr<IStream> stream = shareComPtr(rawStream);
+    boost::shared_ptr<IStream> stream = Win::shareComPtr(rawStream);
     
     Gdiplus::Bitmap img(stream.get(), false);
     
