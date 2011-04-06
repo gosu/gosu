@@ -1514,7 +1514,7 @@ SWIG_Ruby_NewPointerObj(void *ptr, swig_type_info *type, int flags)
         downcast methods. */
       if (obj != Qnil) {
         VALUE value = rb_iv_get(obj, "@__swigtype__");
-        char* type_name = RSTRING_PTR(value);
+        const char* type_name = RSTRING_PTR(value);
 				
         if (strcmp(type->name, type_name) == 0) {
           return obj;
@@ -2323,6 +2323,10 @@ namespace Gosu
             throw std::logic_error("Blob length mismatch!");
         return result;
     }
+    
+    const char* cstrFromSymbol(VALUE symbol) {
+      return rb_id2name(SYM2ID(symbol));
+    }
 }
 
 
@@ -2816,9 +2820,11 @@ SWIGINTERN void Gosu_Window_translate(Gosu::Window *self,double x,double y){
     }
 
     static void markWindow(void* window) {
+        #ifndef __MACRUBY__
         Gosu::TextInput* ti = static_cast<Gosu::Window*>(window)->input().textInput();
         if (VALUE ti_value = SWIG_RubyInstanceFor(ti))
             rb_gc_mark(ti_value);
+        #endif
     }
 
 /* ---------------------------------------------------
@@ -5502,12 +5508,13 @@ _wrap_Font_draw(int argc, VALUE *argv, VALUE self) {
   }
   if (argc > 7) {
     {
-      VALUE localTemporary = rb_obj_as_string(argv[7]);
-      if (!strcmp(StringValueCStr(localTemporary), "default"))
+      const char* cstr = Gosu::cstrFromSymbol(argv[7]);
+      
+      if (!strcmp(cstr, "default"))
       arg9 = Gosu::amDefault;
-      else if (!strcmp(StringValueCStr(localTemporary), "additive"))
+      else if (!strcmp(cstr, "additive"))
       arg9 = Gosu::amAdditive;
-      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      else if (!strcmp(cstr, "multiply"))
       arg9 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
@@ -5624,12 +5631,13 @@ _wrap_Font_draw_rel(int argc, VALUE *argv, VALUE self) {
   }
   if (argc > 9) {
     {
-      VALUE localTemporary = rb_obj_as_string(argv[9]);
-      if (!strcmp(StringValueCStr(localTemporary), "default"))
+      const char* cstr = Gosu::cstrFromSymbol(argv[9]);
+      
+      if (!strcmp(cstr, "default"))
       arg11 = Gosu::amDefault;
-      else if (!strcmp(StringValueCStr(localTemporary), "additive"))
+      else if (!strcmp(cstr, "additive"))
       arg11 = Gosu::amAdditive;
-      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      else if (!strcmp(cstr, "multiply"))
       arg11 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
@@ -5738,12 +5746,13 @@ _wrap_Font_draw_rot(int argc, VALUE *argv, VALUE self) {
   }
   if (argc > 8) {
     {
-      VALUE localTemporary = rb_obj_as_string(argv[8]);
-      if (!strcmp(StringValueCStr(localTemporary), "default"))
+      const char* cstr = Gosu::cstrFromSymbol(argv[8]);
+      
+      if (!strcmp(cstr, "default"))
       arg10 = Gosu::amDefault;
-      else if (!strcmp(StringValueCStr(localTemporary), "additive"))
+      else if (!strcmp(cstr, "additive"))
       arg10 = Gosu::amAdditive;
-      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      else if (!strcmp(cstr, "multiply"))
       arg10 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
@@ -6284,12 +6293,13 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
   }
   if (argc > 6) {
     {
-      VALUE localTemporary = rb_obj_as_string(argv[6]);
-      if (!strcmp(StringValueCStr(localTemporary), "default"))
+      const char* cstr = Gosu::cstrFromSymbol(argv[6]);
+      
+      if (!strcmp(cstr, "default"))
       arg8 = Gosu::amDefault;
-      else if (!strcmp(StringValueCStr(localTemporary), "additive"))
+      else if (!strcmp(cstr, "additive"))
       arg8 = Gosu::amAdditive;
-      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      else if (!strcmp(cstr, "multiply"))
       arg8 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
@@ -6413,12 +6423,13 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
   }
   if (argc > 9) {
     {
-      VALUE localTemporary = rb_obj_as_string(argv[9]);
-      if (!strcmp(StringValueCStr(localTemporary), "default"))
+      const char* cstr = Gosu::cstrFromSymbol(argv[9]);
+      
+      if (!strcmp(cstr, "default"))
       arg11 = Gosu::amDefault;
-      else if (!strcmp(StringValueCStr(localTemporary), "additive"))
+      else if (!strcmp(cstr, "additive"))
       arg11 = Gosu::amAdditive;
-      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      else if (!strcmp(cstr, "multiply"))
       arg11 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
@@ -6540,12 +6551,13 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
   }
   if (argc > 9) {
     {
-      VALUE localTemporary = rb_obj_as_string(argv[9]);
-      if (!strcmp(StringValueCStr(localTemporary), "default"))
+      const char* cstr = Gosu::cstrFromSymbol(argv[9]);
+      
+      if (!strcmp(cstr, "default"))
       arg11 = Gosu::amDefault;
-      else if (!strcmp(StringValueCStr(localTemporary), "additive"))
+      else if (!strcmp(cstr, "additive"))
       arg11 = Gosu::amAdditive;
-      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      else if (!strcmp(cstr, "multiply"))
       arg11 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
@@ -6953,12 +6965,13 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   arg14 = static_cast< Gosu::ZPos >(val14);
   if (argc > 13) {
     {
-      VALUE localTemporary = rb_obj_as_string(argv[13]);
-      if (!strcmp(StringValueCStr(localTemporary), "default"))
+      const char* cstr = Gosu::cstrFromSymbol(argv[13]);
+      
+      if (!strcmp(cstr, "default"))
       arg15 = Gosu::amDefault;
-      else if (!strcmp(StringValueCStr(localTemporary), "additive"))
+      else if (!strcmp(cstr, "additive"))
       arg15 = Gosu::amAdditive;
-      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      else if (!strcmp(cstr, "multiply"))
       arg15 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
@@ -7121,14 +7134,15 @@ _wrap_Image_from_text7(int argc, VALUE *argv, VALUE self) {
   } 
   arg6 = static_cast< unsigned int >(val6);
   {
-    VALUE localTemporary = rb_obj_as_string(argv[6]);
-    if (!strcmp(StringValueCStr(localTemporary), "left"))
+    const char* cstr = Gosu::cstrFromSymbol(argv[6]);
+    
+    if (!strcmp(cstr, "left"))
     arg7 = Gosu::taLeft;
-    else if (!strcmp(StringValueCStr(localTemporary), "center"))
+    else if (!strcmp(cstr, "center"))
     arg7 = Gosu::taCenter;
-    else if (!strcmp(StringValueCStr(localTemporary), "right"))
+    else if (!strcmp(cstr, "right"))
     arg7 = Gosu::taRight;
-    else if (!strcmp(StringValueCStr(localTemporary), "justify"))
+    else if (!strcmp(cstr, "justify"))
     arg7 = Gosu::taJustify;
     else
     SWIG_exception_fail(SWIG_ValueError, "invalid text align");
@@ -9217,12 +9231,13 @@ _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
   }
   if (argc > 7) {
     {
-      VALUE localTemporary = rb_obj_as_string(argv[7]);
-      if (!strcmp(StringValueCStr(localTemporary), "default"))
+      const char* cstr = Gosu::cstrFromSymbol(argv[7]);
+      
+      if (!strcmp(cstr, "default"))
       arg9 = Gosu::amDefault;
-      else if (!strcmp(StringValueCStr(localTemporary), "additive"))
+      else if (!strcmp(cstr, "additive"))
       arg9 = Gosu::amAdditive;
-      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      else if (!strcmp(cstr, "multiply"))
       arg9 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
@@ -9352,12 +9367,13 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
   }
   if (argc > 10) {
     {
-      VALUE localTemporary = rb_obj_as_string(argv[10]);
-      if (!strcmp(StringValueCStr(localTemporary), "default"))
+      const char* cstr = Gosu::cstrFromSymbol(argv[10]);
+      
+      if (!strcmp(cstr, "default"))
       arg12 = Gosu::amDefault;
-      else if (!strcmp(StringValueCStr(localTemporary), "additive"))
+      else if (!strcmp(cstr, "additive"))
       arg12 = Gosu::amAdditive;
-      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      else if (!strcmp(cstr, "multiply"))
       arg12 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
@@ -9515,12 +9531,13 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
   }
   if (argc > 13) {
     {
-      VALUE localTemporary = rb_obj_as_string(argv[13]);
-      if (!strcmp(StringValueCStr(localTemporary), "default"))
+      const char* cstr = Gosu::cstrFromSymbol(argv[13]);
+      
+      if (!strcmp(cstr, "default"))
       arg15 = Gosu::amDefault;
-      else if (!strcmp(StringValueCStr(localTemporary), "additive"))
+      else if (!strcmp(cstr, "additive"))
       arg15 = Gosu::amAdditive;
-      else if (!strcmp(StringValueCStr(localTemporary), "multiply"))
+      else if (!strcmp(cstr, "multiply"))
       arg15 = Gosu::amMultiply;
       else
       SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
