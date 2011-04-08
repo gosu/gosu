@@ -36,10 +36,10 @@ if ENV['USER'] == 'jlnr' and `uname`.chomp == 'Darwin' then
         end
       end
     
-      diff = `git diff -U0 #{BASENAME}`
-      if diff.chomp.empty? or diff.count("\n") == 7 and diff =~ /Last update/ then
+      diff = `git diff -U0 '#{BASENAME}'`
+      if diff.chomp.empty? or (diff.count("\n") == 7 and diff =~ /Last update/) then
         puts "Only date has changed; ignoring"
-        sh "git checkout #{BASENAME}"
+        sh "git checkout '#{BASENAME}'"
       else
         sh "git commit -am 'To Do list refresh' && git push"
       end
