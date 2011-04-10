@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="Gosu"
 	ProjectGUID="{4989339B-019C-4399-86F5-1D9245C420C6}"
 	RootNamespace="Gosu"
@@ -152,130 +152,6 @@
 	</References>
 	<Files>
 		<Filter
-			Name="zlib and libpng"
-			>
-			<File
-				RelativePath=".\..\dependencies\zlib\adler32.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\zlib\compress.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\zlib\crc32.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\zlib\deflate.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\zlib\gzio.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\zlib\infback.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\zlib\inffast.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\zlib\inflate.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\zlib\inftrees.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\zlib\minigzip.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\png.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\pngerror.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\pnggccrd.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\pngget.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\pngmem.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\pngpread.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\pngread.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\pngrio.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\pngrtran.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\pngrutil.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\pngset.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\pngtrans.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\pngvcrd.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\pngwio.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\pngwrite.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\pngwtran.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\libpng\pngwutil.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\zlib\trees.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\zlib\uncompr.c"
-				>
-			</File>
-			<File
-				RelativePath=".\..\dependencies\zlib\zutil.c"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="Implementation"
 			>
 			<File
@@ -354,19 +230,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\GosuImpl\Graphics\BitmapBMP.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\GosuImpl\Graphics\BitmapColorKey.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\GosuImpl\Graphics\BitmapGDIplus.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GosuImpl\Graphics\BitmapPNG.cpp"
 					>
 				</File>
 				<File
@@ -543,11 +411,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
+				RelativePath="..\Gosu\Sockets.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Gosu\Sockets.hpp"
+				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
 				>
 			</File>
 			<File
