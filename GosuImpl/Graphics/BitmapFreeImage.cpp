@@ -3,6 +3,7 @@
 #include <Gosu/Platform.hpp>
 #include <Gosu/Utility.hpp>
 #include <vector>
+#include <boost/cstdint.hpp>
 #include <freeimage.h>
 
 namespace
@@ -11,11 +12,17 @@ namespace
     
     Gosu::Bitmap fibToBitmap(FIBITMAP* fib)
     {
-        FreeImage_ConvertTo32Bits(fib);
         Gosu::Bitmap bitmap;
         bitmap.resize(FreeImage_GetWidth(fib), FreeImage_GetHeight(fib));
-        std::memcpy(bitmap.data(), FreeImage_GetBits(fib), bitmap.width() * bitmap.height() * 4);
+        FreeImage_ConvertToRawBits(reinterpret_cast<BYTE*>(bitmap.data()),
+            fib, bitmap.width() * 4, 32,
+            FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, TRUE);
         FreeImage_Unload(fib);
+        // Since FreeImage gracefully ignores the MASK parameters above, we
+        // manually exchange the R and B channels.
+        boost::uint32_t* p = reinterpret_cast<boost::uint32_t*>(bitmap.data());
+        for (int i = bitmap.width() * bitmap.height(); i > 0; --i, ++p)
+            *p = (*p & 0xff00ff00) | ((*p << 16) & 0x00ff0000) | ((*p >> 16) & 0x000000ff);
         return bitmap;
     }
 }

@@ -15,7 +15,7 @@ class ImageInsert < Gosu::Window
   end
   
   def draw
-    draw_quad 0, 0, Gosu::Color::RED, width, 0, Gosu::Color::RED,
+    draw_quad 0, 0, Gosu::Color::WHITE, width, 0, Gosu::Color::WHITE,
       0, height, Gosu::Color::RED, width, height, Gosu::Color::RED, 0
     @background.draw 10, 10, 0
     @cursor.draw mouse_x, mouse_y, 0
