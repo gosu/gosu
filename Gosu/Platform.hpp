@@ -5,17 +5,17 @@
 #define GOSU_PLATFORM_HPP
 
 #ifdef __BIG_ENDIAN__
-#define GOSU_IS_BIG_ENDIAN
-#define IDENTITY_FUN bigToNative
-#define IDENTITY_FUN2 nativeToBig
-#define CONV_FUN littleToNative
-#define CONV_FUN2 nativeToLittle
+# define GOSU_IS_BIG_ENDIAN
+# define IDENTITY_FUN bigToNative
+# define IDENTITY_FUN2 nativeToBig
+# define CONV_FUN littleToNative
+# define CONV_FUN2 nativeToLittle
 #else
-#define GOSU_IS_LITTLE_ENDIAN
-#define IDENTITY_FUN littleToNative
-#define IDENTITY_FUN2 nativeToLittle
-#define CONV_FUN bigToNative
-#define CONV_FUN2 nativeToBig
+# define GOSU_IS_LITTLE_ENDIAN
+# define IDENTITY_FUN littleToNative
+# define IDENTITY_FUN2 nativeToLittle
+# define CONV_FUN bigToNative
+# define CONV_FUN2 nativeToBig
 #endif
 
 #include <algorithm>
@@ -42,9 +42,9 @@ namespace Gosu
 #undef CONV_FUN2
 
 #if defined(_MSC_VER)
-#define GOSU_NORETURN __declspec(noreturn)
+# define GOSU_NORETURN __declspec(noreturn)
 #elif defined(__GNUC__)
-#define GOSU_NORETURN __attribute__ ((noreturn))
+# define GOSU_NORETURN __attribute__ ((noreturn))
 #endif
 
 #if defined(WIN32)
@@ -62,10 +62,10 @@ namespace Gosu
 # endif
 #endif
 
-#if (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
-# define GOSU_DEPRECATED  __attribute__((__deprecated__))
-#elif defined(GOSU_IS_WIN)
+#if defined(GOSU_IS_WIN)
 # define GOSU_DEPRECATED __declspec(deprecated)
+#elif (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
+# define GOSU_DEPRECATED  __attribute__((__deprecated__))
 #else
 # define GOSU_DEPRECATED 
 #endif

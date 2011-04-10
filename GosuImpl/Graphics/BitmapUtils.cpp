@@ -3,32 +3,30 @@
 #include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
 
-// OS X 64-bit and iOS use Apple APIs, Windows uses GDI+
-#if !defined(GOSU_IS_MAC) && (!defined(GOSU_IS_IPHONE) && !defined(__LP64__)) 
-Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
+Gosu::Reader Gosu::loadFromPNG(Bitmap& bitmap, Reader reader)
 {
-    Buffer buffer;
-    loadFile(buffer, filename);
-    return loadImageFile(buffer.frontReader());
+    bitmap = loadImageFile(reader);
+    reader.setPosition(reader.resource().size());
+    return reader;
 }
-#endif
 
-#if !defined(GOSU_IS_WIN)
-Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
+Gosu::Reader Gosu::loadFromBMP(Bitmap& bitmap, Reader reader)
 {
-	Bitmap bmp;
+    return loadFromPNG(bitmap, reader);
+}
 
-    char formatTester[2];
-    reader.read(formatTester, sizeof formatTester);
-    reader.setPosition(0);
-    if (formatTester[0] == 'B' && formatTester[1] == 'M')
-    {
-        loadFromBMP(bmp, reader);
-        applyColorKey(bmp, Color::FUCHSIA);
-    }
-    else
-        loadFromPNG(bmp, reader);
-	return bmp;
+Gosu::Writer Gosu::saveToPNG(const Bitmap& bitmap, Writer writer)
+{
+    saveImageFile(bitmap, writer);
+    return writer.resource().backWriter();
+}
+
+// The iPhone still uses BitmapBMP.cpp because UIImage apparently lacks BMP export.
+#ifndef GOSU_IS_IPHONE
+Gosu::Writer Gosu::saveToBMP(const Bitmap& bitmap, Writer writer)
+{
+    saveImageFile(bitmap, writer, L"bmp");
+    return writer.resource().backWriter();
 }
 #endif
 
@@ -37,7 +35,6 @@ void Gosu::applyBorderFlags(Bitmap& dest, const Bitmap& source,
     unsigned borderFlags)
 {
     dest.resize(srcWidth + 2, srcHeight + 2);
-    dest.fill(Color::NONE);
 
     // The borders are made "harder" by duplicating the original bitmap's
     // borders.

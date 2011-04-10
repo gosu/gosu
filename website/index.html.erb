@@ -18,6 +18,10 @@
       background: url("background.jpg") top center repeat-x;
     }
     
+    a img {
+      border: 0; /* GDIAF Firefox */
+    }
+    
     #main {
       padding: 25px;
       -webkit-border-radius: 1em 0.5em;
@@ -25,6 +29,8 @@
       background: white;
       width: 90%;
       margin: 106px auto 0px auto;
+      -moz-box-shadow: 0px 5px 15px white;
+      -webkit-box-shadow: 0px 5px 15px white;
     }
     
     #logo_container {
@@ -57,22 +63,27 @@
       font-weight: bold;
       width: 150px;
       height: 20px;
+      -moz-box-shadow: inset 0px 2px 3px white, inset 0px -1px 5px #bbb;
+      -webkit-box-shadow: inset 0px 2px 3px white, inset 0px -1px 5px #bbb;
     }
 
     span.active {
       background: white;
       border-bottom: 1px solid white;
+      -moz-box-shadow: 0px -1px 15px white;
+      -webkit-box-shadow: 0px -1px 15px white;
     }
     
     .quick_link {
       float: right;
       clear: right;
       padding: 20px;
-      border: 2px solid black;
       -webkit-border-radius: 1em 0.5em;
       -moz-border-radius: 0.5em;
-      width: 256px;
+      width: 260px;
       margin: -15px 0em 25px 1.5em;
+      -moz-box-shadow: 0px 1px 5px #999;
+      -webkit-box-shadow: 0px 1px 5px #999;
     }
     
     .quick_link ul {
@@ -87,7 +98,7 @@
     .quick_link#feed_link {
       background: url('feed-icon.png') 10px 20px no-repeat;
       padding-left: 100px;
-      width: 176px;
+      width: 180px;
     }
 
     .quick_link #project_of_the_day {
@@ -100,8 +111,18 @@
     }
     
     a {
-      color: red;
+      color: #f40;
+      font-weight: bold;
+      text-decoration: none;
     }
+    
+    /*
+    So much fun, so little CPU. <3 outlines
+    a:hover {
+      color: white;
+      text-shadow: 0px 0px 2px black, 0px 0px 3px black, 0px 0px 2px black;
+    }
+    */
     
     h1 {
       font-size: 115%;
@@ -127,7 +148,7 @@
     <div class="quick_link">
       Gosu is using hosted partially on this website and on <a href="http://github.com/jlnr/gosu/">GitHub</a>.
       <ul>
-        <li><a href="http://www.libgosu.org/downloads">C++ downloads</a><br>Ruby uses Gems instead!</li>
+        <li><a href="http://www.libgosu.org/downloads">C++ downloads</a><br>Ruby uses Gems instead</li>
         <li><a href="http://github.com/jlnr/gosu/">Source Code</a></li>
         <li><a href="http://github.com/jlnr/gosu/wiki">Documentation Wiki</a></li>
         <li><a href="http://github.com/jlnr/gosu/issues">Issue Tracker</a></li>

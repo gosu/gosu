@@ -20,7 +20,9 @@
 namespace Gosu
 {
     // Deprecated.
-    class Audio;
+    #ifndef SWIG
+    GOSU_DEPRECATED class Audio;
+    #endif
 
     //! An instance of a Sample playing. Can be used to stop sounds dynamically,
     //! or to check if they are finished.
@@ -94,8 +96,6 @@ namespace Gosu
         SampleInstance playPan(double pan, double volume = 1, double speed = 1,
             bool looping = false) const;
 
-
-        // Deprecated.
         #ifndef SWIG
         GOSU_DEPRECATED Sample(Audio& audio, const std::wstring& filename);
         GOSU_DEPRECATED Sample(Audio& audio, Reader reader);
@@ -150,16 +150,8 @@ namespace Gosu
         //! Called every tick by Window for management purposes.
         static void update();
 
-        // Deprecated.
         #ifndef SWIG
-        //! There are two types of songs that can be loaded as a Song: Streamed
-        //! songs (like OGG) and modules (like MOD or XM).
-        enum Type
-        {
-            stStream,
-            stModule
-        };
-
+        enum Type { stStream, stModule };
         GOSU_DEPRECATED Song(Audio&, const std::wstring& filename);
         GOSU_DEPRECATED Song(Audio&, Type type, Reader reader);
         #endif

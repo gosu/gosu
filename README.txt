@@ -1,16 +1,15 @@
  Moin and welcome to Gosu!
 
- Gosu's main website is http://www.libgosu.org/ which always has the latest
+ Gosu's main website is http://www.libgosu.org/, which always has the latest
 links to all relevant information.
 
- The actual source code, wiki, issue tracker etc. are currently moving away
-from Gosu's old Google Code project to GitHub:
+ The actual source code, wiki, issue tracker etc. are all hosted on GitHub:
 
-    http://code.google.com/p/gosu/ -> http://github.com/jlnr/gosu/
+    http://github.com/jlnr/gosu/
 
- The best entry point into Gosu's documentation is still this wiki page:
+ The best entry point into Gosu's documentation is the wiki home page:
 
-    http://code.google.com/p/gosu/wiki/DocsOverview
+    http://github.com/jlnr/gosu/wiki
 
  Try doing the tutorial there if you don't know how to start out. Or look at
 one of the games in the Gosu Users board.

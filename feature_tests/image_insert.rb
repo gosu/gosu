@@ -15,14 +15,21 @@ class ImageInsert < Gosu::Window
   end
   
   def draw
-    draw_quad 0, 0, Gosu::Color::RED, width, 0, Gosu::Color::RED,
+    draw_quad 0, 0, Gosu::Color::WHITE, width, 0, Gosu::Color::WHITE,
       0, height, Gosu::Color::RED, width, height, Gosu::Color::RED, 0
     @background.draw 10, 10, 0
     @cursor.draw mouse_x, mouse_y, 0
   end
   
   def button_down id
-    @background.insert @cursor_blob, mouse_x.to_i - 10, mouse_y.to_i - 10 if id == Gosu::MsLeft
+    case id
+    when Gosu::MsLeft then
+      @background.insert @cursor_blob, mouse_x.to_i - 10, mouse_y.to_i - 10
+    when Gosu::KbP then
+      @background.save File.expand_path("~/Desktop/Test.png")
+    when Gosu::KbB then
+      @background.save File.expand_path("~/Desktop/Test.bmp")
+    end
   end
 end
 
