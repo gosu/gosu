@@ -13,6 +13,7 @@
 #import <UIKit/UIKit.h>
 #else
 #import <AppKit/AppKit.h>
+#import <AppKit/NSStringDrawing.h>
 #endif
 
 namespace
@@ -63,7 +64,8 @@ namespace
                                     colorSpace.obj(), kCGImageAlphaPremultipliedLast)); // kCGBitmapByteOrder32Host?
         [NSGraphicsContext saveGraphicsState];
         [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:context.obj() flipped:NO]];
-        [image drawInRect:NSMakeRect(0, 0, bitmap.width(), bitmap.height())];
+        [image drawInRect:NSMakeRect(0, 0, bitmap.width(), bitmap.height()) fromRect:NSZeroRect
+            operation:NSCompositeCopy fraction:1.0];
         [NSGraphicsContext restoreGraphicsState];
     }
     #endif
