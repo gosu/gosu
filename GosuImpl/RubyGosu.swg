@@ -535,13 +535,7 @@ namespace Gosu {
 
 // Audio:
 
-%ignore Gosu::Audio;
-%Ignore Gosu::SongType;
-%ignore Gosu::Sample::Sample(Audio& audio, const std::wstring& filename);
-%ignore Gosu::Sample::Sample(Audio& audio, Reader reader);
 %ignore Gosu::Sample::Sample(Reader reader);
-%ignore Gosu::Song::Song(Audio& audio, const std::wstring& filename);
-%ignore Gosu::Song::Song(Audio& audio, Type type, Reader reader);
 %ignore Gosu::Song::Song(Reader reader);
 %rename("playing?") playing;
 %rename("paused?") paused;

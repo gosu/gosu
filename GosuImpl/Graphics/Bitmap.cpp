@@ -3,21 +3,6 @@
 #include <algorithm>
 #include <vector>
 
-Gosu::Bitmap::Bitmap()
-: w(0), h(0)
-{
-}
-
-/*unsigned Gosu::Bitmap::width() const
-{
-    return w;
-}
-
-unsigned Gosu::Bitmap::height() const
-{
-    return h;
-}*/
-
 void Gosu::Bitmap::swap(Bitmap& other)
 {
     std::swap(pixels, other.pixels);
@@ -44,22 +29,6 @@ void Gosu::Bitmap::replace(Color what, Color with)
 {
     std::replace(pixels.begin(), pixels.end(), what, with);
 }
-
-/*Gosu::Color Gosu::Bitmap::getPixel(unsigned x, unsigned y) const
-{
-    assert(x <= w);
-    assert(y <= h);
-    assert(w*h > 0);
-    return pixels[y * w + x];
-}
-
-void Gosu::Bitmap::setPixel(unsigned x, unsigned y, Color c)
-{
-    assert(x <= w);
-    assert(y <= h);
-    assert(w*h > 0);
-    pixels[y * w + x] = c;
-}*/
 
 void Gosu::Bitmap::insert(const Bitmap& source, int x, int y)
 {

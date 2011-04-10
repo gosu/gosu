@@ -3,41 +3,11 @@
 #include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
 
-// OS X 64-bit and iOS use Apple APIs, Windows uses GDI+
-#if !defined(GOSU_IS_MAC) && (!defined(GOSU_IS_IPHONE) && !defined(__LP64__)) 
-Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
-{
-    Buffer buffer;
-    loadFile(buffer, filename);
-    return loadImageFile(buffer.frontReader());
-}
-#endif
-
-#if !defined(GOSU_IS_WIN)
-Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader reader)
-{
-	Bitmap bmp;
-
-    char formatTester[2];
-    reader.read(formatTester, sizeof formatTester);
-    reader.setPosition(0);
-    if (formatTester[0] == 'B' && formatTester[1] == 'M')
-    {
-        loadFromBMP(bmp, reader);
-        applyColorKey(bmp, Color::FUCHSIA);
-    }
-    else
-        loadFromPNG(bmp, reader);
-	return bmp;
-}
-#endif
-
 void Gosu::applyBorderFlags(Bitmap& dest, const Bitmap& source,
     unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
     unsigned borderFlags)
 {
     dest.resize(srcWidth + 2, srcHeight + 2);
-    dest.fill(Color::NONE);
 
     // The borders are made "harder" by duplicating the original bitmap's
     // borders.

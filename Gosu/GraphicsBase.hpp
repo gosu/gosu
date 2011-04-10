@@ -14,15 +14,6 @@ namespace Gosu
     //! lower ZPos value, that is, they are performed last.
     typedef double ZPos;
     
-    //! The lowest possible Z position. By using this, you tell Gosu that
-    //! your drawing operation does not need Z ordering and can be performed
-    //! immediately.
-    //! Deprecated because this turned out not be very useful in optimizing.
-    #ifndef SWIG
-    GOSU_DEPRECATED
-    #endif
-    const double zImmediate = -std::numeric_limits<double>::infinity();
-    
     //! Determines the way colors are combined when one is drawn onto
     //! another.
     enum AlphaMode
@@ -64,6 +55,11 @@ namespace Gosu
         bfTileableBottom = 8,
         bfTileable = bfTileableLeft | bfTileableTop | bfTileableRight | bfTileableBottom
     };        
+    
+    #ifndef SWIG
+    // A not so useful optimization.
+    GOSU_DEPRECATED const double zImmediate = -std::numeric_limits<double>::infinity();
+    #endif
 }
 
 #endif

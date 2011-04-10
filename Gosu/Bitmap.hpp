@@ -7,6 +7,7 @@
 #include <Gosu/Color.hpp>
 #include <Gosu/Fwd.hpp>
 #include <Gosu/GraphicsBase.hpp>
+#include <Gosu/Platform.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <string>
 #include <vector>
@@ -23,18 +24,15 @@ namespace Gosu
         std::vector<Color> pixels;
 
     public:
-        Bitmap();
+        Bitmap() : w(0), h(0) {}
 
-        unsigned width() const { return w; }
+        unsigned width()  const { return w; }
         unsigned height() const { return h; }
 
         void swap(Bitmap& other);
 
         void resize(unsigned width, unsigned height, Color c = Color::NONE);
-
-        void fill(Color c);
-        void replace(Color oldColor, Color newColor);
-
+        
         //! Returns the color at the specified position. x and y must be on the
         //! bitmap.
         Color getPixel(unsigned x, unsigned y) const { return pixels[y * w + x]; }
@@ -58,17 +56,23 @@ namespace Gosu
         //! OpenGL operations.
         const unsigned* data() const { return reinterpret_cast<const unsigned*>(&pixels[0]); }
         unsigned* data() { return reinterpret_cast<unsigned*>(&pixels[0]); }
-    };
 
-    //! Loads a Windows or OS/2 BMP file into the given bitmap.
-    Reader loadFromBMP(Bitmap& bmp, Reader reader);
-    //! Saves the contents of the given bitmap into windows BMP file data.
-    Writer saveToBMP(const Bitmap& bmp, Writer writer);
-    //! Loads a PNG file into the given bitmap.
-    Reader loadFromPNG(Bitmap& bmp, Reader reader);
-    //! Saves the contents of the given bitmap into PNG file data, 24 bits.
-    Writer saveToPNG(const Bitmap& bmp, Writer writer);
+        // Work with data() instead if you need fast operations.
+        GOSU_DEPRECATED void fill(Color c);
+        GOSU_DEPRECATED void replace(Color oldColor, Color newColor);
+    };
     
+	//! Loads any supported image into a Bitmap.
+	Bitmap loadImageFile(const std::wstring& filename);
+	//! Loads any supported image into a Bitmap.
+	Bitmap loadImageFile(Reader input);
+    
+    //! Saves a Bitmap to a file.
+    void saveImageFile(const Bitmap& bitmap, const std::wstring& filename);
+    //! Saves a Bitmap to an arbitrary resource.
+    void saveImageFile(const Bitmap& bitmap, Gosu::Writer writer,
+        const std::wstring& formatHint = L"png");
+
     //! Set the alpha value of all pixels which are equal to the color key
     //! to zero. Color values are adjusted so that no borders show up when
     //! the image is stretched or rotated.
@@ -77,11 +81,12 @@ namespace Gosu
     void applyBorderFlags(Bitmap& dest, const Bitmap& source,
         unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
         unsigned borderFlags);	
-    
-	//! Loads any supported image into a Bitmap object.
-	Bitmap loadImageFile(const std::wstring& filename);
-	//! Loads any supported image into a Bitmap object.
-	Bitmap loadImageFile(Gosu::Reader input);
+
+    // Use loadImageFile/saveImageFile instead.
+    GOSU_DEPRECATED Reader loadFromBMP(Bitmap& bmp, Reader reader);
+    GOSU_DEPRECATED Writer saveToBMP(const Bitmap& bmp, Writer writer);
+    GOSU_DEPRECATED Reader loadFromPNG(Bitmap& bmp, Reader reader);
+    GOSU_DEPRECATED Writer saveToPNG(const Bitmap& bmp, Writer writer);
 }
 
 #endif

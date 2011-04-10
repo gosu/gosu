@@ -1,10 +1,11 @@
-#if defined(GOSU_IS_IPHONE) || defined(__LP64__)
-
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
 #include <Gosu/Utility.hpp>
+
+#if defined(GOSU_IS_IPHONE) || defined(__LP64__)
+
 #include <GosuImpl/MacUtility.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
