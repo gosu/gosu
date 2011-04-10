@@ -5,6 +5,9 @@
 #include <Gosu/Utility.hpp>
 #include <Gosu/WinUtility.hpp>
 #include <boost/cstdint.hpp>
+#include <boost/algorithm/string.hpp>
+#include <map>
+
 #include <objidl.h>
 #include <gdiplus.h>
 #include <windows.h>
@@ -15,10 +18,20 @@ namespace
     ULONG_PTR token;
     Gdiplus::GdiplusStartupInput input;
 
-    void check(Gdiplus::Status status, const std::string& action)
+    // TODO: Merge with BitmapFreeImage.cpp, somehow
+    void reshuffleBitmap(Gosu::Bitmap& bitmap)
+    {
+        // Since GDI+ only supports ARGB=BGRA formats, we
+        // manually exchange the R and B channels to get to ABGR=RGBA.
+        boost::uint32_t* p = reinterpret_cast<boost::uint32_t*>(bitmap.data());
+        for (int i = bitmap.width() * bitmap.height(); i > 0; --i, ++p)
+            *p = (*p & 0xff00ff00) | ((*p << 16) & 0x00ff0000) | ((*p >> 16) & 0x000000ff);
+    }    
+
+    void check(Gdiplus::Status status, const char* action)
     {
         if (status != Gdiplus::Ok)
-            throw std::runtime_error("A GDI+ error occured while " + action);
+            throw std::runtime_error(std::string("A GDI+ error occured while ") + action);
     }
 
     void closeGDIplus()
@@ -62,11 +75,7 @@ namespace
             PixelFormat32bppARGB, &target), "locking bits");
         check(bitmap.UnlockBits(&target), "unlocking bits");
         
-        // Swap R and B channels
-        // TODO: Can this be merged with the equivalent function from BitmapFreeImage?
-        boost::uint32_t* p = reinterpret_cast<boost::uint32_t*>(result.data());
-        for (int i = result.width() * result.height(); i > 0; --i, ++p)
-            *p = (*p & 0xff00ff00) | ((*p << 16) & 0x00ff0000) | ((*p >> 16) & 0x000000ff);
+        reshuffleBitmap(result);
                 
         if (guid == Gdiplus::ImageFormatBMP)
             applyColorKey(result, Gosu::Color::FUCHSIA);
@@ -95,6 +104,44 @@ namespace
         }
         return Gosu::Win::shareComPtr(stream);
     }
+    
+    CLSID& encoderFromMimeType(const std::wstring& mimeType)
+    {
+        static std::map<std::wstring, CLSID> cache;
+        if (cache.count(mimeType))
+            return cache[mimeType];
+
+        UINT num = 0, size = 0;
+        check(Gdiplus::GetImageEncodersSize(&num, &size), "counting encoders");
+        // Do the eleet int-based ceil(size / sizeof)
+        unsigned vecSize = (size + sizeof(Gdiplus::ImageCodecInfo) - 1) / sizeof(Gdiplus::ImageCodecInfo);
+        std::vector<Gdiplus::ImageCodecInfo> codecs(vecSize);
+        check(Gdiplus::GetImageEncoders(num, size,
+            &codecs[0]), "enumerating encoders");
+        for (int i = 0; i < num; ++i)
+            if (codecs[i].MimeType == mimeType)
+                return cache[mimeType] = codecs[i].Clsid;
+        throw std::runtime_error("No encoder found for " + Gosu::wstringToUTF8(mimeType));
+    }
+
+    CLSID encoderFromHint(const std::wstring& formatHint)
+    {
+        std::wstring::size_type idx = formatHint.rfind('.');
+        std::wstring mimeType = L"image/";
+        if (idx == std::wstring::npos)
+            mimeType += formatHint;
+        else
+            mimeType += formatHint.substr(idx + 1);
+        boost::to_lower(mimeType);
+
+        // Fix pitfalls
+        if (mimeType == L"image/jpg")
+            mimeType = L"image/jpeg";
+        else if (mimeType == L"image/tif")
+            mimeType = L"image/tiff";
+        
+        return encoderFromMimeType(mimeType);
+    }
 }
 
 Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
@@ -102,7 +149,7 @@ Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
     requireGDIplus();
 
     Gdiplus::Bitmap bitmap(filename.c_str());
-    check(bitmap.GetLastStatus(), "loading " + wstringToUTF8(filename));
+    check(bitmap.GetLastStatus(), ("loading " + wstringToUTF8(filename)).c_str());
     return gdiPlusToGosu(bitmap);
 }
 
@@ -118,11 +165,40 @@ Gosu::Bitmap Gosu::loadImageFile(Reader reader)
 
 void Gosu::saveImageFile(const Bitmap& bitmap, const std::wstring& filename)
 {
-    //Gdiplus::Bitmap result;
-    //gosuToGDIplus(bitmap, result);
-    //result.Save(filename.c_str(), 0, 0);
+    Bitmap input = bitmap;
+    if (boost::iends_with(filename, "bmp"))
+        unapplyColorKey(input, Color::FUCHSIA);
+    reshuffleBitmap(input);
+    Gdiplus::Bitmap output(input.width(), input.height(), input.width() * 4,
+        PixelFormat32bppARGB, (BYTE*)input.data());
+    check(output.GetLastStatus(), "creating a bitmap in memory");
+
+    check(output.Save(filename.c_str(), &encoderFromHint(filename)),
+        ("writing to " + wstringToUTF8(filename)).c_str());
 }
 
 void Gosu::saveImageFile(const Bitmap& bitmap, Writer writer, const std::wstring& formatHint)
 {
+    Bitmap input = bitmap;
+    if (boost::iends_with(formatHint, "bmp"))
+        unapplyColorKey(input, Color::FUCHSIA);
+    reshuffleBitmap(input);
+    Gdiplus::Bitmap output(input.width(), input.height(), input.width() * 4,
+        PixelFormat32bppARGB, (BYTE*)input.data());
+    check(output.GetLastStatus(), "creating a bitmap in memory");
+    
+    IStream* stream = NULL;
+    if (CreateStreamOnHGlobal(0, TRUE, &stream) != S_OK)
+        throw std::runtime_error("Could not create IStream for writing");
+    boost::shared_ptr<IStream> streamGuard(Gosu::Win::shareComPtr(stream));
+    check(output.Save(stream, &encoderFromHint(formatHint)),
+        "saving a bitmap to memory");
+
+    HGLOBAL buffer;
+    GetHGlobalFromStream(stream, &buffer);
+    void* bufferPtr = GlobalLock(buffer);
+    if (!bufferPtr)
+        Win::throwLastError();
+    writer.write(bufferPtr, GlobalSize(buffer));
+    GlobalUnlock(buffer);
 }
