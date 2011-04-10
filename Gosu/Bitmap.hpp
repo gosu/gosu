@@ -54,8 +54,8 @@ namespace Gosu
 		
 		//! Direct access to the array of color values. May be useful for optimized
         //! OpenGL operations.
-        const unsigned* data() const { return reinterpret_cast<const unsigned*>(&pixels[0]); }
-        unsigned* data() { return reinterpret_cast<unsigned*>(&pixels[0]); }
+        const Color* data() const { return &pixels[0]; }
+        Color* data()             { return &pixels[0]; }
 
         // Work with data() instead if you need fast operations.
         GOSU_DEPRECATED void fill(Color c);

@@ -4610,6 +4610,36 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Color_gl(int argc, VALUE *argv, VALUE self) {
+  Gosu::Color *arg1 = (Gosu::Color *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  boost::uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Color, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color const *","gl", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Color * >(argp1);
+  {
+    try {
+      result = ((Gosu::Color const *)arg1)->gl();
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Color_rgb(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg1 ;
   Gosu::Color::Channel arg2 ;
@@ -11101,6 +11131,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassColor.klass, "value=", VALUEFUNC(_wrap_Color_valuee___), -1);
   rb_define_method(SwigClassColor.klass, "bgr", VALUEFUNC(_wrap_Color_bgr), -1);
   rb_define_method(SwigClassColor.klass, "abgr", VALUEFUNC(_wrap_Color_abgr), -1);
+  rb_define_method(SwigClassColor.klass, "gl", VALUEFUNC(_wrap_Color_gl), -1);
   rb_define_singleton_method(SwigClassColor.klass, "rgb", VALUEFUNC(_wrap_Color_rgb), -1);
   rb_define_singleton_method(SwigClassColor.klass, "rgba", VALUEFUNC(_wrap_Color_rgba), -1);
   rb_define_singleton_method(SwigClassColor.klass, "argb", VALUEFUNC(_wrap_Color_argb), -1);

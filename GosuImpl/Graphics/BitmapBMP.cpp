@@ -1,3 +1,7 @@
+#include <Gosu/Platform.hpp>
+
+// All other platforms use OS libraries instead.
+#ifdef GOSU_IS_IPHONE
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/IO.hpp>
 #include <boost/integer.hpp>
@@ -67,3 +71,4 @@ Gosu::Writer Gosu::saveToBMP(const Bitmap& bmp, Writer writer)
     return writer;
 }
 
+#endif
