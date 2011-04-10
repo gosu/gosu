@@ -9,7 +9,7 @@
 
 namespace Gosu
 {
-    //! Represents an ARGB color value with 8 bits for each channel. Can be
+    //! Represents an RGBA color value with 8 bits for each channel. Can be
     //! implicitly constructed from literals of the form 0xaarrggbb. Has fast
     //! value semantics.
     //! The four-byte layout in memory is RGBA. On Big-Endian machines the
@@ -138,6 +138,12 @@ namespace Gosu
             return alpha() << 24 | blue() << 16 | green() << 8 | red();
         }
         
+        //! Returns the internal representation of the color (RGBA in memory).
+        boost::uint32_t gl() const
+        {
+            return rep;
+        }
+        
         static const Color NONE;
         static const Color BLACK;
         static const Color GRAY;
@@ -152,24 +158,20 @@ namespace Gosu
         static const Color CYAN;
     };
     
-    // Causes weird errors when included in the SWIG wrapping process.
-    // If, with a future version of SWIG, this can be included and
-    // require 'gosu'; include Gosu
-    // works from within Ruby, the #ifndef guard can be removed.
     #ifndef SWIG
     inline bool operator<(Color a, Color b)
     {
-        return a.argb() < b.argb();
+        return a.gl() < b.gl();
     }
     
     inline bool operator==(Color a, Color b)
     {
-        return a.argb() == b.argb();
+        return a.gl() == b.gl();
     }
 
     inline bool operator!=(Color a, Color b)
     {
-        return a.argb() != b.argb();
+        return a.gl() != b.gl();
     }
     #endif
 
