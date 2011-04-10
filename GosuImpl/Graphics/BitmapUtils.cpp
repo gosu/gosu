@@ -3,19 +3,19 @@
 #include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
 
-Gosu::Reader Gosu::loadFromPNG(Gosu::Bitmap& bitmap, Gosu::Reader reader)
+Gosu::Reader Gosu::loadFromPNG(Bitmap& bitmap, Reader reader)
 {
     bitmap = loadImageFile(reader);
     reader.setPosition(reader.resource().size());
     return reader;
 }
 
-Gosu::Reader Gosu::loadFromBMP(Gosu::Bitmap& bitmap, Gosu::Reader reader)
+Gosu::Reader Gosu::loadFromBMP(Bitmap& bitmap, Reader reader)
 {
     return loadFromPNG(bitmap, reader);
 }
 
-Gosu::Writer Gosu::saveToPNG(const Gosu::Bitmap& bitmap, Gosu::Writer writer)
+Gosu::Writer Gosu::saveToPNG(const Bitmap& bitmap, Writer writer)
 {
     saveImageFile(bitmap, writer);
     return writer.resource().backWriter();
@@ -23,7 +23,7 @@ Gosu::Writer Gosu::saveToPNG(const Gosu::Bitmap& bitmap, Gosu::Writer writer)
 
 // The iPhone still uses BitmapBMP.cpp because UIImage apparently lacks BMP export.
 #ifndef GOSU_IS_IPHONE
-Gosu::Writer Gosu::saveToBMP(const Gosu::Bitmap& bitmap, Gosu::Writer writer)
+Gosu::Writer Gosu::saveToBMP(const Bitmap& bitmap, Writer writer)
 {
     saveImageFile(bitmap, writer, L"bmp");
     return writer.resource().backWriter();

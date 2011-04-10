@@ -19,16 +19,6 @@ namespace
             *p = (*p & 0xff00ff00) | ((*p << 16) & 0x00ff0000) | ((*p >> 16) & 0x000000ff);
     }
     
-    void removeAlphaChannel(Gosu::Bitmap& bitmap, Gosu::Color color)
-    {
-        Gosu::Color* p = bitmap.data();
-        for (int i = bitmap.width() * bitmap.height(); i > 0; --i, ++p)
-            if (p->alpha() == 0)
-                *p = color;
-            else
-                p->setAlpha(255);
-    }
-    
     Gosu::Bitmap fibToBitmap(FIBITMAP* fib, FREE_IMAGE_FORMAT fif)
     {
         Gosu::Bitmap bitmap;
@@ -47,7 +37,7 @@ namespace
     {
         reshuffleBitmap(bitmap);
         if (fif == FIF_BMP)
-            removeAlphaChannel(bitmap, Gosu::Color::FUCHSIA);
+            unapplyColorKey(bitmap, Gosu::Color::FUCHSIA);
         return FreeImage_ConvertFromRawBits((BYTE*)bitmap.data(),
             bitmap.width(), bitmap.height(), bitmap.width() * 4, 32,
             FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, true);

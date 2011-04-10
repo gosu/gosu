@@ -171,14 +171,14 @@
 		D4A7E9E80CD39BA200621B24 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
 		D4A7E9E90CD39BA200621B24 /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */; };
 		D4B0132C11F823C600A804F7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4B0132B11F823C600A804F7 /* AVFoundation.framework */; };
-		D4B64D791350978F001F1CD4 /* BitmapFreeImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4B64D781350978F001F1CD4 /* BitmapFreeImage.cpp */; };
-		D4B64D7A13509FE8001F1CD4 /* BitmapFreeImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4B64D781350978F001F1CD4 /* BitmapFreeImage.cpp */; };
-		D4B64D7B13509FE8001F1CD4 /* BitmapFreeImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4B64D781350978F001F1CD4 /* BitmapFreeImage.cpp */; };
-		D4B64DC813513251001F1CD4 /* BitmapFreeImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4B64D781350978F001F1CD4 /* BitmapFreeImage.cpp */; };
 		D4B64DCD13513484001F1CD4 /* BitmapBMP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4B64DCC13513484001F1CD4 /* BitmapBMP.cpp */; };
 		D4B64DCE13513484001F1CD4 /* BitmapBMP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4B64DCC13513484001F1CD4 /* BitmapBMP.cpp */; };
 		D4B64DCF13513484001F1CD4 /* BitmapBMP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4B64DCC13513484001F1CD4 /* BitmapBMP.cpp */; };
 		D4B64DD013513484001F1CD4 /* BitmapBMP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4B64DCC13513484001F1CD4 /* BitmapBMP.cpp */; };
+		D4B655371351A3EE001F1CD4 /* BitmapApple.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A22E0F40D48300FFF378 /* BitmapApple.mm */; };
+		D4B655381351A3EE001F1CD4 /* BitmapApple.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A22E0F40D48300FFF378 /* BitmapApple.mm */; };
+		D4B655391351A3EF001F1CD4 /* BitmapApple.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A22E0F40D48300FFF378 /* BitmapApple.mm */; };
+		D4B6553A1351A3EF001F1CD4 /* BitmapApple.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A22E0F40D48300FFF378 /* BitmapApple.mm */; };
 		D4BC5D6B0CC29D0F002D4236 /* Async.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4BC5D6A0CC29D0F002D4236 /* Async.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F07B230D934C8B00FB3D99 /* TextInput.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4F07B220D934C8B00FB3D99 /* TextInput.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F07B270D93504700FB3D99 /* TextInputMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4F07B260D93504700FB3D99 /* TextInputMac.mm */; };
@@ -407,7 +407,7 @@
 		D499E6380D06B51300BA6DEC /* DrawOp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DrawOp.hpp; sourceTree = "<group>"; };
 		D49B612B12E6BE6C00C3DB80 /* Inspection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Inspection.cpp; path = ../GosuImpl/Inspection.cpp; sourceTree = SOURCE_ROOT; };
 		D49B613C12E6C09900C3DB80 /* Inspection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Inspection.hpp; path = ../Gosu/Inspection.hpp; sourceTree = SOURCE_ROOT; };
-		D4A5A1F40F40D28600FFF378 /* libgosutouch-sim.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libgosutouch-sim.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4A5A1F40F40D28600FFF378 /* libgosutouch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgosutouch.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4A5A2200F40D45200FFF378 /* InputTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = InputTouch.mm; path = ../GosuImpl/InputTouch.mm; sourceTree = SOURCE_ROOT; };
 		D4A5A2210F40D45200FFF378 /* WindowTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = WindowTouch.mm; path = ../GosuImpl/WindowTouch.mm; sourceTree = SOURCE_ROOT; };
 		D4A5A2220F40D45200FFF378 /* UtilityTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = UtilityTouch.mm; path = ../GosuImpl/UtilityTouch.mm; sourceTree = SOURCE_ROOT; };
@@ -427,7 +427,6 @@
 		D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapUtils.cpp; sourceTree = "<group>"; };
 		D4AB62F50D08BA9900D71382 /* MacUtility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MacUtility.hpp; path = ../GosuImpl/MacUtility.hpp; sourceTree = SOURCE_ROOT; };
 		D4B0132B11F823C600A804F7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		D4B64D781350978F001F1CD4 /* BitmapFreeImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapFreeImage.cpp; sourceTree = "<group>"; };
 		D4B64DCC13513484001F1CD4 /* BitmapBMP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BitmapBMP.cpp; sourceTree = "<group>"; };
 		D4BC5D6A0CC29D0F002D4236 /* Async.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Async.hpp; path = ../Gosu/Async.hpp; sourceTree = SOURCE_ROOT; };
 		D4CA89500BC68B5D00A431AC /* gosu.for_1_8.bundle */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = gosu.for_1_8.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -531,7 +530,7 @@
 				8D07F2C80486CC7A007CD1D0 /* Gosu.framework */,
 				D4CA89500BC68B5D00A431AC /* gosu.for_1_8.bundle */,
 				D459FF440BDCD23500E7F0D6 /* RubyGosu App.app */,
-				D4A5A1F40F40D28600FFF378 /* libgosutouch-sim.a */,
+				D4A5A1F40F40D28600FFF378 /* libgosutouch.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -653,7 +652,6 @@
 				D4A5A22E0F40D48300FFF378 /* BitmapApple.mm */,
 				D4B64DCC13513484001F1CD4 /* BitmapBMP.cpp */,
 				D410EAD60A801B00005C7067 /* BitmapColorKey.cpp */,
-				D4B64D781350978F001F1CD4 /* BitmapFreeImage.cpp */,
 				D4A7E9E70CD39BA200621B24 /* BitmapUtils.cpp */,
 				D410EAD80A801B00005C7067 /* BlockAllocator.cpp */,
 				D410EAD90A801B00005C7067 /* BlockAllocator.hpp */,
@@ -890,7 +888,7 @@
 			);
 			name = "Gosu Touch";
 			productName = "Gosu Touch";
-			productReference = D4A5A1F40F40D28600FFF378 /* libgosutouch-sim.a */;
+			productReference = D4A5A1F40F40D28600FFF378 /* libgosutouch.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		D4CA894F0BC68B5D00A431AC /* RubyGosu Core */ = {
@@ -1048,8 +1046,8 @@
 				D4FA74BD11C0064100E719EA /* Transform.cpp in Sources */,
 				D40C66A412D9282C00712276 /* TimingApple.cpp in Sources */,
 				D49B612D12E6BE6C00C3DB80 /* Inspection.cpp in Sources */,
-				D4B64D7A13509FE8001F1CD4 /* BitmapFreeImage.cpp in Sources */,
 				D4B64DCD13513484001F1CD4 /* BitmapBMP.cpp in Sources */,
+				D4B655371351A3EE001F1CD4 /* BitmapApple.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1109,8 +1107,8 @@
 				D4FA74D211C0071100E719EA /* Transform.cpp in Sources */,
 				D40C66A512D9282C00712276 /* TimingApple.cpp in Sources */,
 				D49B612E12E6BE6C00C3DB80 /* Inspection.cpp in Sources */,
-				D4B64D7B13509FE8001F1CD4 /* BitmapFreeImage.cpp in Sources */,
 				D4B64DCE13513484001F1CD4 /* BitmapBMP.cpp in Sources */,
+				D4B655381351A3EE001F1CD4 /* BitmapApple.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1168,8 +1166,8 @@
 				D4897E811208039800DCAFD8 /* Orientation.mm in Sources */,
 				D40C66A612D9282C00712276 /* TimingApple.cpp in Sources */,
 				D49B612F12E6BE6C00C3DB80 /* Inspection.cpp in Sources */,
-				D4B64DC813513251001F1CD4 /* BitmapFreeImage.cpp in Sources */,
 				D4B64DCF13513484001F1CD4 /* BitmapBMP.cpp in Sources */,
+				D4B6553A1351A3EF001F1CD4 /* BitmapApple.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1228,8 +1226,8 @@
 				D4FA74D311C0071300E719EA /* Transform.cpp in Sources */,
 				D40C66A312D9282C00712276 /* TimingApple.cpp in Sources */,
 				D49B612C12E6BE6C00C3DB80 /* Inspection.cpp in Sources */,
-				D4B64D791350978F001F1CD4 /* BitmapFreeImage.cpp in Sources */,
 				D4B64DD013513484001F1CD4 /* BitmapBMP.cpp in Sources */,
+				D4B655391351A3EF001F1CD4 /* BitmapApple.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

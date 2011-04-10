@@ -37,3 +37,14 @@ void Gosu::applyColorKey(Bitmap& bitmap, Color key)
                     green / surroundingColors.size(), blue / surroundingColors.size()));
             }
 }
+
+void Gosu::unapplyColorKey(Bitmap& bitmap, Color color)
+{
+    Color* p = bitmap.data();
+    for (int i = bitmap.width() * bitmap.height(); i > 0; --i, ++p)
+        if (p->alpha() == 0)
+            *p = color;
+        else
+            p->setAlpha(255);
+}
+

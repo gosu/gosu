@@ -78,6 +78,10 @@ namespace Gosu
     //! the image is stretched or rotated.
     void applyColorKey(Bitmap& bitmap, Color key);
     
+    //! The reverse of applyColorKey. Resets all fully transparent pixels by
+    //! a background color, makes all other pixels fully opaque.
+    void unapplyColorKey(Bitmap& bitmap, Color background);
+    
     void applyBorderFlags(Bitmap& dest, const Bitmap& source,
         unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
         unsigned borderFlags);	
