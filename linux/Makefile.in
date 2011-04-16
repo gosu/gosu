@@ -8,7 +8,7 @@ BASE_OBJS = Math.o Utility.o IO.o FileUnix.o TimingUnix.o WindowX.o	\
 	    Graphics/TexChunk.o Graphics/Graphics.o Graphics/Image.o	\
 	    Graphics/BlockAllocator.o		\
 	    Graphics/Texture.o Graphics/LargeImageData.o		\
-	    Graphics/BitmapPNG.o Graphics/Font.o Graphics/BitmapBMP.o	\
+	    Graphics/BitmapFreeImage.o Graphics/Font.o Graphics/BitmapBMP.o	\
 	    Graphics/TextUnix.o Graphics/Text.o	Graphics/Transform.o		\
 	    Graphics/BitmapColorKey.o DirectoriesUnix.o Audio/AudioSDL.o Inspection.o
 

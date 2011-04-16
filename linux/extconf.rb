@@ -19,7 +19,7 @@ BASE_FILES = %w(
   Graphics/Bitmap.cpp
   Graphics/BitmapBMP.cpp
   Graphics/BitmapColorKey.cpp
-  Graphics/BitmapPNG.cpp
+  Graphics/BitmapFreeImage.cpp
   Graphics/BitmapUtils.cpp
   Graphics/BlockAllocator.cpp
   Graphics/Color.cpp
