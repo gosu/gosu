@@ -182,8 +182,7 @@ namespace Gosu
 
             Bitmap result() const
             {
-                Bitmap result = bmp;
-                result.resize(result.width(),
+                Bitmap result(result.width(),
                     fontHeight * usedLines + lineSpacing * (usedLines - 1));
                 return result;
             }
@@ -309,11 +308,7 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
 
     FormattedString fs(boost::replace_all_copy(text, L"\r\n", L"\n"), fontFlags);
     if (fs.length() == 0)
-    {
-        Bitmap emptyBitmap;
-        emptyBitmap.resize(1, fontHeight);
-        return emptyBitmap;
-    }
+        return Bitmap(maxWidth, fontHeight);
     
     // Set up the builder object which will manage all the drawing and
     // conversions for us.
@@ -330,19 +325,16 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
 Gosu::Bitmap Gosu::createText(const std::wstring& text,
     const std::wstring& fontName, unsigned fontHeight, unsigned fontFlags)
 {
-    Bitmap bmp;
-    bmp.resize(1, fontHeight);
-    
     FormattedString fs(boost::replace_all_copy(text, L"\r\n", L"\n"), fontFlags);
     if (fs.length() == 0)
-        return bmp;
+        return Bitmap(1, fontHeight);
     
     vector<FormattedString> lines = fs.splitLines();
-
+    
+    Bitmap bmp(1, lines.size() * fontHeight);
+    
     for (int i = 0; i < lines.size(); ++i)
     {
-        bmp.resize(bmp.width(), (i + 1) * fontHeight);
-
         if (lines[i].length() == 0)
             continue;
         

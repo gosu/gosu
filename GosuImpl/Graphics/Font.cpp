@@ -73,9 +73,8 @@ struct Gosu::Font::Impl
         if (isFormattingChar(wc))
             charString.clear(); // Don't draw formatting characters
         unsigned charWidth = Gosu::textWidth(charString, name, height, flags);
-        Bitmap bmp;
-        bmp.resize(charWidth, height);
-        
+
+        Bitmap bmp(charWidth, height);
         drawText(bmp, charString, 0, 0, Color::WHITE, name, height, flags);
         imgPtr.reset(new Image(*graphics, bmp));
         return *imgPtr;

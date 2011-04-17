@@ -433,8 +433,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     // Too large to fit on a single texture. 
     if (srcWidth > maxSize - 2 || srcHeight > maxSize - 2)
     {
-        Bitmap bmp;
-        bmp.resize(srcWidth, srcHeight);
+        Bitmap bmp(srcWidth, srcHeight);
         bmp.insert(src, 0, 0, srcX, srcY, srcWidth, srcHeight);
         std::auto_ptr<ImageData> lidi;
         lidi.reset(new LargeImageData(*this, bmp, maxSize - 2, maxSize - 2, borderFlags));

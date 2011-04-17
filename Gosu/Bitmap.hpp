@@ -25,6 +25,7 @@ namespace Gosu
 
     public:
         Bitmap() : w(0), h(0) {}
+        Bitmap(unsigned w, unsigned h, Color c = Color::NONE) : w(w), h(h), pixels(w * h, c) {}
 
         unsigned width()  const { return w; }
         unsigned height() const { return h; }

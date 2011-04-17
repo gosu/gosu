@@ -12,10 +12,10 @@ void Gosu::Bitmap::swap(Bitmap& other)
 
 void Gosu::Bitmap::resize(unsigned width, unsigned height, Color c)
 {
-    Bitmap temp;
-    temp.pixels.resize(width * height, c);
-    temp.w = width;
-    temp.h = height;
+    if (width == w && height == h)
+        return;
+    
+    Bitmap temp(width, height, c);
     temp.insert(*this, 0, 0);
     swap(temp);
 }

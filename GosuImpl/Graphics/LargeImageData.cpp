@@ -119,8 +119,7 @@ void Gosu::LargeImageData::draw(double x1, double y1, Color c1,
 
 Gosu::Bitmap Gosu::LargeImageData::toBitmap() const
 {
-    Bitmap bitmap;
-    bitmap.resize(width(), height());
+    Bitmap bitmap(width(), height());
     for (int x = 0; x < partsX; ++x)
         for (int y = 0; y < partsY; ++y)
             bitmap.insert(parts[y * partsX + x]->toBitmap(), x * partWidth, y * partHeight);
