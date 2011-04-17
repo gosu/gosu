@@ -235,8 +235,7 @@ namespace Gosu
         unsigned width = NUM2UINT(rb_funcall(val, rb_intern("columns"), 0));
         unsigned height = NUM2UINT(rb_funcall(val, rb_intern("rows"), 0));
         
-        Bitmap result;
-        result.resize(width, height);
+        Bitmap result(width, height);
         if (width * height * 4 == RSTRING_LEN(blob))
         {
             // 32 bit per pixel, assume R8G8B8A8

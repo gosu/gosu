@@ -124,7 +124,7 @@ module Gosu
   # replaced by literals of the form 0xaarrggbb in all of Gosu.
   class Color
     attr_accessor :alpha, :red, :green, :blue, :hue, :saturation, :value
-
+    
     # a:: Integer from 0..255
     # r:: Integer from 0..255
     # g:: Integer from 0..255
@@ -132,6 +132,8 @@ module Gosu
     def initialize(a, r, g, b); end
     # Initializes a color from an 0xrrggbbaa integer.
     def initialize(argb); end
+
+    def dup; end
 
     # Same as the constructor, but with an explicit order.
     def self.rgba(r, g, b, a); end    
@@ -213,24 +215,20 @@ module Gosu
   class Image
     attr_reader :width, :height
     
-    # Loads an image from a given filename that can be drawn onto
-    # the given window.
+    # Loads an image from a given filename that can be drawn onto the
+    # given window. See the Gosu wiki for a list of supported formats.
     #
-    # This constructor can handle PNG and BMP images. A color key of #ff00ff is
-    # automatically applied to BMP type images. For more flexibility, use PNG
-    # files.
+    # A color key of #ff00ff is automatically applied to BMP type images.
     def initialize(window, filename_or_rmagick_image, tileable); end
 
-    # Loads an image from a given filename that can be drawn onto
-    # the given window.
+    # Loads an image from a given filename that can be drawn onto the
+    # given window. See the Gosu wiki for a list of supported formats.
     #
-    # This constructor can handle PNG and BMP images. A color key of #ff00ff is
-    # automatically applied to BMP type images. For more flexibility, use PNG
-    # files.
+    # A color key of #ff00ff is automatically applied to BMP type images.
     #
     # This constructor only loads a sub-rectangle of the given file. Because
     # every call of this constructor will open the image again, it is preferable
-    # to use Image#load_tiles.
+    # to use Image#load_tiles when possible.
     def initialize(window, filename_or_rmagick_image, tileable, src_x, src_y, src_width, src_height); end
     
     # Draws the image so its upper left corner is at (x; y).
@@ -265,9 +263,11 @@ module Gosu
     # align:: One of :left, :right, :center or :justify.
     def self.from_text(window, text, font_name, font_height, line_spacing, max_width, align); end
     
-    # Convenience function that splits a BMP or PNG file into an array
-    # of small rectangles and creates images from them.
-    # Returns the Array containing Image instances.
+    # Convenience function that splits an image file into an array of small rectangles and
+    # creates images from these. Returns the Array containing Image instances.
+    #
+    # A color key of #ff00ff is automatically applied to BMP type images.
+    #
     # tile_width:: If positive, specifies the width of one tile in pixels. If negative, the bitmap is divided into -tile_width rows.
     # tile_height:: See tile_width.
     def self.load_tiles(window, filename_or_rmagick_image, tile_width, tile_height, tileable); end
@@ -279,9 +279,15 @@ module Gosu
     # Useful for use with RMagick (Magick::Image.from_blob).
     def to_blob; end
     
+    # Overwrites all or parts of the Image. x and y can be negative or otherwise out of
+    # bounds, the incoming image data is clipped to the current image size.
+    # This can be used to e.g. overwrite parts of a landscape.
+    def insert(filename_or_rmagick_image, x, y); end
+    
     # Saves the texture contents as an image file. Useful, for example, to
     # pre-render text on a development machine with proper fonts installed.
-    # Saves in Windows BMP format if filename ends in ".bmp", as PNG otherwise.
+    # The file format is determined from the file extension. See the Gosu
+    # wiki for a list of portably supported formats.
     def save(filename); end
   end
 
