@@ -4,7 +4,7 @@
 #include <Gosu/Utility.hpp>
 #include <vector>
 #include <boost/cstdint.hpp>
-#include <freeimage.h>
+#include <FreeImage.h>
 
 namespace
 {

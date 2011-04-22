@@ -10,13 +10,14 @@ namespace :linux do
   desc "Build the archive #{LINUX_ARCHIVE_FILENAME}"
   task :archive => [:cpp_docs, :version] do
     files = LINUX_FILES
-    sh "cd .. && tar -czf gosu/#{LINUX_ARCHIVE_FILENAME} #{files.map { |filename| "'gosu/#{filename}'" }.join(' ')}"
+    Dir.chdir('..') do
+      tar("gosu/#{LINUX_ARCHIVE_FILENAME}", files.map { |fn| "gosu/#{fn}" })
+    end
   end
 
   desc "Releases the archive #{LINUX_ARCHIVE_FILENAME} on GitHub"
   task :release => :archive do
-    # ...gets a broken pipe error...
-    #sh "rake/upload #{LINUX_ARCHIVE_FILENAME} 'Gosu #{GOSU_VERSION} source package for Linux (C++)'"
+    upload LINUX_ARCHIVE_FILENAME
   end
   
   task :gem => [:version]
