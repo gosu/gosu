@@ -15,8 +15,7 @@ namespace :linux do
 
   desc "Releases the archive #{LINUX_ARCHIVE_FILENAME} on GitHub"
   task :release => :archive do
-    # ...gets a broken pipe error...
-    #sh "rake/upload #{LINUX_ARCHIVE_FILENAME} 'Gosu #{GOSU_VERSION} source package for Linux (C++)'"
+    upload LINUX_ARCHIVE_FILENAME
   end
   
   task :gem => [:version]

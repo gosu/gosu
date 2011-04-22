@@ -28,7 +28,7 @@ namespace :mac do
 
   desc "Releases the archive #{MAC_ARCHIVE_FILENAME} on GitHub"
   task :release => [MAC_ARCHIVE_FILENAME, 'rake/upload'] do
-    sh "rake/upload #{MAC_ARCHIVE_FILENAME} '' 'Mac C++ package'"
+    upload MAC_ARCHIVE_FILENAME
   end
 
   task :gem => [:ruby, :version]
