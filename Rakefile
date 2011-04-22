@@ -54,11 +54,21 @@ end
 #   sh 'chmod +x rake/upload'
 # end
 
-Dir['rake/*.rb'].each { |task| require task }
-
 def upload filename
-  sh "scp -P 22000 #{filename} libgosu.org:/Library/WebServer/Documents/libgosu.org/downloads/"
+  sh "scp -P 22000 '#{filename}' libgosu.org:/Library/WebServer/Documents/libgosu.org/downloads/"
 end
+
+def zip filename, files
+  sh "zip #{filename} #{files.map { |fn| "'#{fn}'" }.join(' ')}"
+  # Apparently not necessary - no weird resource forks in there? Nice!
+  # sh "zip -d #{filename} '__MACOSX*' '*.DS_Store'" if `uname`.chomp == 'Darwin'
+end
+
+def tar filename, files
+  sh "COPYFILE_DISABLE=true tar -czf #{filename} #{files.map { |fn| "'#{fn}'" }.join(' ')}"
+end
+
+Dir['rake/*.rb'].each { |task| require task }
 
 task :release => [:'mac:release', :'win:release', :'linux:release',
                   :'mac:release_gem', :'win:release_gem', :'linux:release_gem']

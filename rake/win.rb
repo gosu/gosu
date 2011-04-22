@@ -4,7 +4,7 @@ namespace :win do
   desc "Build the archive #{WINDOWS_ARCHIVE_FILENAME}"
   task :archive => [:version] do
     files = COMMON_CPP_FILES + FileList['Gosu/*.hpp', 'lib/Gosu.lib', 'lib/GosuDebug.lib', 'lib/audiere.dll']
-    sh "zip #{WINDOWS_ARCHIVE_FILENAME} #{files.map { |filename| "'#{filename}'" }.join(' ')}"
+    zip WINDOWS_ARCHIVE_FILENAME, files
   end
 
   desc "Releases the archive #{WINDOWS_ARCHIVE_FILENAME} on GitHub"
