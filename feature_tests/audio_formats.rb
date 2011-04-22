@@ -5,43 +5,50 @@ require '../lib/gosu'
 
 Dir.chdir 'audio_formats'
 FORMATS_TO_TRY = Dir['*'].sort
+FORMAT_NAMES = FORMATS_TO_TRY.map { |fn| fn[/[^\.]*/].gsub('_', ' ') }
 
-puts "|| Platform || #{FORMATS_TO_TRY.map { |fn| fn[/[^\.]*/].gsub('_', ' ') }.join(' || ')} ||"
+def test_sample format
+  si = Gosu::Sample.new(format).play
+  sleep 1
+  si.stop
+  '&#x2713;'
+rescue
+  ''
+end
 
-my_platform = case RUBY_PLATFORM
+def test_song format
+  Gosu::Song.new(format).play
+  sleep 1
+  Gosu::Song::current_song.stop if Gosu::Song::current_song
+  '&#x2713;'
+rescue
+  ''
+end
+
+class String
+  def widen(length)
+    "%#{length}s" % self
+  end
+end
+
+platform = case RUBY_PLATFORM
   when /darwin/ then 'OS X'
   when /win/, /mingw/ then 'Windows'
   else 'Linux'
 end
 
-# Sample
+format_length = FORMAT_NAMES.max_by(&:length).length
+sample_length = "Sample (#{platform})".length
+song_length   = "Song (#{platform})".length
 
-print "|| #{my_platform} (Gosu::Sample)"
-FORMATS_TO_TRY.each do |format|
-  print " || "
-  begin
-    si = Gosu::Sample.new(format).play
-    sleep 1
-    si.stop
-    print "Yes"
-  rescue
-    # Do nothing
-  end
+puts "#{'Format'.widen(format_length)}|Sample (#{platform})|Song (#{platform})"
+puts "#{'-' * format_length}|#{'-' * sample_length}|#{'-' * song_length}"
+
+FORMATS_TO_TRY.each_with_index do |format, i|
+  print FORMAT_NAMES[i].widen(format_length)
+  print '|'
+  print test_sample(format).widen(sample_length)
+  print '|'
+  print test_song(format).widen(song_length)
+  puts
 end
-puts " ||"
-
-# Song
-
-print "|| #{my_platform} (Gosu::Song) "
-FORMATS_TO_TRY.each do |format|
-  print " || "
-  begin
-    Gosu::Song.new(format).play
-    sleep 1
-    Gosu::Song::current_song.stop if Gosu::Song::current_song
-    print "Yes"
-  rescue
-    # Do nothing
-  end
-end
-puts " ||"
