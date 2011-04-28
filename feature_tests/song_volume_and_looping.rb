@@ -1,18 +1,7 @@
 # Require cutting-edge development Gosu for testing.
 require '../lib/gosu'
 
-# This kind of turned into a stress-test for song too.
-
-class Gosu::Song
-  alias old_initialize initialize
-  
-  attr_reader :format
-  
-  def initialize(window, filename)
-    old_initialize(window, filename)
-    @format = File.extname(filename)
-  end
-end
+# This kind of turned into a stress-test for Song too.
 
 class Test < Gosu::Window
   def initialize 
@@ -23,21 +12,19 @@ class Test < Gosu::Window
     
     # Taken from Wikipedia, public domain
     # (Also, best song in the world)
-    @songs << Gosu::Song.new(self, "media/JingleBells.ogg")
+    @songs << Gosu::Song.new("media/JingleBells.ogg")
     
-    @songs << Gosu::Song.new(self, "media/JingleBells.ogg")
-    
-    @songs << Gosu::Song.new(self, "audio_formats/wav_16bit_pcm.wav")
+    @songs << Gosu::Song.new("audio_formats/wav_16bit_pcm.wav")
     
     # Jingle Bells converted to MP3
-    @songs << Gosu::Song.new(self, "media/JingleBells.mp3") rescue nil
+    @songs << Gosu::Song.new("media/JingleBells.mp3") rescue nil
     
     # Green.it, taken from http://www.arachnosoft.com/main/
     # Copyright Maxime Abbey
-    @songs << Gosu::Song.new(self, "audio_formats/impulse_tracker.it") rescue nil
+    @songs << Gosu::Song.new("audio_formats/impulse_tracker.it") rescue nil
     
     # inferno.mid
-    @songs << Gosu::Song.new(self, "audio_formats/general_midi.mid") rescue nil
+    @songs << Gosu::Song.new("audio_formats/general_midi.mid") rescue nil
     
     @song = @songs.first
     @song.play(true)
@@ -51,7 +38,7 @@ class Test < Gosu::Window
     song_states = @songs.map { |s| s.paused? ? 'paused' : (s.playing? ? 'playing' : 'idle') }
     self.caption = "Vol: #{(@song.volume * 100).to_i}, " +
                    "Idx: #{@songs.index Gosu::Song.current_song}, " +
-				   "Song: #{@song.format}, paused/playing: #{song_states.inspect}"
+                   "paused/playing: #{song_states.inspect}"
   end
   
   def button_down(id)

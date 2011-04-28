@@ -182,7 +182,8 @@ namespace Gosu
 
             Bitmap result() const
             {
-                Bitmap result(result.width(),
+                Bitmap result = bmp;
+                result.resize(result.width(),
                     fontHeight * usedLines + lineSpacing * (usedLines - 1));
                 return result;
             }
