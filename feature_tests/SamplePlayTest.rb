@@ -3,7 +3,7 @@ require '../lib/gosu'
 class Test < Gosu::Window
   def initialize 
     super(640, 480, false)
-    @sample = Gosu::Sample.new(self, "media/Sample.wav")
+    @sample = Gosu::Sample.new("media/Sample.wav")
   end
   
   def update

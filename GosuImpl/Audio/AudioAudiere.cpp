@@ -55,8 +55,12 @@ namespace Gosu
             ADR_METHOD(void) streamStopped(StopEvent* event)
             {
                 if (event->getReason() == StopEvent::STREAM_ENDED)
-                    if (!clear(event->getOutputStream()) && curSong)
-                        curSong = 0;
+                    BOOST_FOREACH (NumberedStream& stream, streams)
+                        if (stream.stream == event->getOutputStream())
+                        {
+                            stream.stream = 0;
+                            break;
+                        }
             }
 
         public:
@@ -90,17 +94,6 @@ namespace Gosu
             void clear(int handle)
             {
                 streams.at(handle).stream = 0;
-            }
-
-            bool clear(OutputStreamPtr stream)
-            {
-                BOOST_FOREACH (NumberedStream& numberedStream, streams)
-                    if (numberedStream.stream == stream)
-                    {
-                        numberedStream.stream = 0;
-                        return true;
-                    }
-                return false;
             }
         };
         
@@ -148,7 +141,6 @@ namespace Gosu
             }
             return device;
         }
-        
     }
 }
 
@@ -271,6 +263,7 @@ public:
 
     virtual void play(bool looping) = 0;
     virtual bool playing() const = 0;
+    virtual bool paused() const = 0;
     virtual void pause() = 0;
     virtual void stop() = 0;
     
@@ -327,6 +320,11 @@ public:
     {
         return instance.playing();
     }
+
+    bool paused() const
+    {
+        return instance.paused();
+    }
     
     void pause()
     {
@@ -335,7 +333,7 @@ public:
     
     void stop()
     {
-        instance.pause();
+        instance.stop();
         stream->reset();
     }
     
@@ -361,9 +359,9 @@ Gosu::Song::~Song()
 
 Gosu::Song* Gosu::Song::currentSong()
 {
-    if (curSong)
+    if (curSong && (curSong->playing() || curSong->paused()))
         return curSong;
-    return 0;
+    return curSong = 0;
 }
 
 void Gosu::Song::play(bool looping)
@@ -387,7 +385,7 @@ void Gosu::Song::pause()
 
 bool Gosu::Song::paused() const
 {
-    return curSong == this && !data->playing();
+    return curSong == this && data->paused();
 }
 
 void Gosu::Song::stop()
