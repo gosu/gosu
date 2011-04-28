@@ -27,3 +27,4 @@
 /windows/*.user
 /windows/Debug
 /windows/Release
+/windows/Release with Ruby 1.9
