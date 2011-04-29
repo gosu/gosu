@@ -24,7 +24,7 @@ CXXFLAGS = -fPIC -I.. @AUDIO_INC@ -Wall @PANGO_CXX_FLAGS@ @X_INCS@ \
 	   -DNDEBUG -O3 -pipe -fomit-frame-pointer \
 	   -I/usr/include/SDL
 
-LIBS = -L@x_libraries@ -lX11 @PANGO_LIBS@ @AUDIO_LIBS@ -lpng -lstdc++ -lGL -lSDL_ttf #-lboost_thread
+LIBS = -L@x_libraries@ -lX11 @PANGO_LIBS@ @AUDIO_LIBS@ -lpng -lstdc++ -lGL -lSDL_ttf -lfreeimage #-lboost_thread
 
 all: @TO_BE_MADE@
 
@@ -46,17 +46,17 @@ install: @INSTALL_ACTION@
 uninstall: @UNINSTALL_ACTION@
 
 cpp_install:
-	cp -p ../lib/libgosu.a /usr/lib/
-	cp -p ../lib/libgosu.so /usr/lib/
-	cp -p ../bin/gosu-config /usr/bin/
-	cp -pr ../Gosu /usr/include
+	cp -p ../lib/libgosu.a /usr/local/lib/
+	cp -p ../lib/libgosu.so /usr/local/lib/
+	cp -p ../bin/gosu-config /usr/local/bin/
+	cp -pr ../Gosu /usr/local/include
 	ldconfig
 
 cpp_uninstall:
-	rm /usr/lib/libgosu.a
-	rm /usr/lib/libgosu.so
-	rm /usr/bin/gosu-config
-	rm -rf /usr/include/Gosu
+	rm /usr/local/lib/libgosu.a
+	rm /usr/local/lib/libgosu.so
+	rm /usr/local/bin/gosu-config
+	rm -rf /usr/local/include/Gosu
 	ldconfig
 
 clean:

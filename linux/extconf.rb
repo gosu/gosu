@@ -91,6 +91,7 @@ else
   have_header('SDL_mixer.h') if have_library('SDL_mixer', 'Mix_OpenAudio')
   have_header('SDL_ttf.h') if have_library('SDL_ttf', 'TTF_RenderUTF8_Blended')
   have_header('gl.h') if have_library('GL', 'glMatrixMode')
+  have_header('FreeImage.h') if have_library('freeimage', 'FreeImage_ConvertFromRawBits')
 end
 
 # Copy all relevant C++ files into the current directory
