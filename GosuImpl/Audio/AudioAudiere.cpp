@@ -1,6 +1,7 @@
 #include <Gosu/Audio.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/IO.hpp>
+#include <Gosu/Utility.hpp>
 #include <boost/foreach.hpp>
 #include <algorithm>
 #include <stdexcept>
@@ -209,6 +210,8 @@ Gosu::Sample::Sample(const std::wstring& filename)
     
     SampleSourcePtr source = OpenSampleSource(MemoryBuffer(filename), FF_AUTODETECT);
     data->buffer = CreateSampleBuffer(source);
+    if (!data->buffer)
+        throw std::runtime_error("Cannot open " + wstringToUTF8(filename));
 }
 
 Gosu::Sample::Sample(Reader reader)
@@ -217,6 +220,8 @@ Gosu::Sample::Sample(Reader reader)
     
     SampleSourcePtr source = audiere::OpenSampleSource(MemoryBuffer(reader), FF_AUTODETECT);
     data->buffer = CreateSampleBuffer(source);
+    if (!data->buffer)
+        throw std::runtime_error("Cannot open audio file");
 }
 
 Gosu::SampleInstance Gosu::Sample::play(double volume, double speed,
@@ -290,6 +295,8 @@ class Gosu::Song::StreamData : public BaseData
     {
         int handle, extra;
         stream = OpenSound(device(), buffer, true);
+        if (!stream)
+            throw std::runtime_error("Cannot open audio file for streaming");
         streams.put(stream, handle, extra);
         instance = SampleInstance(handle, extra);
         loop = false;
