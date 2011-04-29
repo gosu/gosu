@@ -14,26 +14,26 @@ class ::Numeric
   end
 end
     
-# Backwards compatibility: import the constants into Gosu::Button.
+# Backwards compatibility: import constants into Gosu::Button.
 module Gosu::Button
   Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }
 end
 
 # Backwards compatibility: Window arguments to Sample and Song
 class Gosu::Sample
-  alias new_initialize initialize
+  alias initialize_ initialize
   
   def initialize(*args)
     args.shift if args.first.is_a? Gosu::Window
-    new_initialize(*args)
+    initialize_(*args)
   end
 end
 class Gosu::Song
-  alias new_initialize initialize
+  alias initialize_ initialize
   
   def initialize(*args)
     args.shift if args.first.is_a? Gosu::Window
-    new_initialize(*args)
+    initialize_(*args)
   end
 end
 
