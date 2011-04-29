@@ -2877,14 +2877,14 @@ SwigDirector_Window::~SwigDirector_Window() {
 void SwigDirector_Window::update() {
   VALUE result;
   
-  result = rb_funcall(swig_get_self(), rb_intern("update"), 0, NULL);
+  result = rb_funcall(swig_get_self(), rb_intern("update_"), 0, NULL);
 }
 
 
 void SwigDirector_Window::draw() {
   VALUE result;
   
-  result = rb_funcall(swig_get_self(), rb_intern("draw"), 0, NULL);
+  result = rb_funcall(swig_get_self(), rb_intern("draw_"), 0, NULL);
 }
 
 
