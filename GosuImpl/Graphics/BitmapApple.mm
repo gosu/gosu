@@ -75,7 +75,9 @@ Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
 {
     ObjRef<NSString> filenameRef([[NSString alloc] initWithUTF8String: wstringToUTF8(filename).c_str()]);
     ObjRef<APPLE_IMAGE> image([[APPLE_IMAGE alloc] initWithContentsOfFile: filenameRef.obj()]);
-
+    if (!image.get())
+        throw std::runtime_error("Cannot load image file " + wstringToUTF8(filename));
+    
     Bitmap bitmap;
     appleImageToBitmap(image.obj(), bitmap);
     if (boost::iends_with(filename, L".bmp"))
@@ -96,6 +98,8 @@ Gosu::Bitmap Gosu::loadImageFile(Reader reader)
     reader.read([buffer.get() mutableBytes], length);
     
     ObjRef<APPLE_IMAGE> image([[APPLE_IMAGE alloc] initWithData: buffer.get()]);
+    if (!image.get())
+        throw std::runtime_error("Cannot load image file from stream");
     
     Bitmap bitmap;
     appleImageToBitmap(image.obj(), bitmap);
