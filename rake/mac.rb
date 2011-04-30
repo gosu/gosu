@@ -24,6 +24,7 @@ namespace :mac do
   task :app_wrapper => [FRAMEWORK_FILENAME, :ruby, :version] do
     files = FileList['RubyGosu App.app/**/*']
     tar MAC_WRAPPER_FILENAME, files
+    upload MAC_WRAPPER_FILENAME
   end
 
   desc "Releases the archive #{MAC_ARCHIVE_FILENAME} on GitHub"

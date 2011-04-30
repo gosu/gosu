@@ -71,4 +71,5 @@ end
 Dir['rake/*.rb'].each { |task| require task }
 
 task :release => [:'mac:release', :'win:release', :'linux:release',
-                  :'mac:release_gem', :'win:release_gem', :'linux:release_gem']
+                  :'mac:release_gem', :'win:release_gem', :'linux:release_gem',
+                  :'mac:app_wrapper']
