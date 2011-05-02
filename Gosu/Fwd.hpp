@@ -10,6 +10,7 @@ namespace Gosu
     class Audio;
     class Bitmap;
     class Buffer;
+    class Button;
     class Color;
     class File;
     class Font;
