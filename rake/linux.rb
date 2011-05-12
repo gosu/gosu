@@ -28,7 +28,7 @@ namespace :linux do
     s.files = COMMON_RUBY_FILES + FileList[ 'GosuImpl/**/*', 'linux/extconf.rb' ]
     s.extensions = [ 'linux/extconf.rb' ]
     s.require_path = 'lib'
-    s.requirements = ['See http://code.google.com/p/gosu/wiki/GettingStartedOnLinux']
+    s.requirements = ['See https://github.com/jlnr/gosu/wiki/Getting-Started-on-Linux']
   end
   
   Rake::GemPackageTask.new(LINUX_SPEC) { |t| t.package_dir = 'public' }

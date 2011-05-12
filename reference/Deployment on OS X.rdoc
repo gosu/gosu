@@ -1,6 +1,6 @@
 = Ruby/Gosu Packaging on Mac OS X with the Ruby 1.9.1 Bundle
 
-The Mac package of Gosu (on the Google Code Downloads list) comes with a mysterious RubyGosu App.app bundle. All you have to do to share your game with the public is following these easy steps:
+The Mac package of Gosu (on the GitHub Downloads list) comes with a mysterious RubyGosu App.app bundle. All you have to do to share your game with the public is following these easy steps:
 
 * Duplicate this bundle and open its contents via the right-click menu
 * Edit the Info.plist file, and change at least the bundle identifier.
