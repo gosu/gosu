@@ -6,6 +6,11 @@
 #include <boost/cstdint.hpp>
 #include <FreeImage.h>
 
+// Compatibility with FreeImage < 3.1.3 which is still stuck in many package repositories
+#ifndef JPEG_EXIFROTATE
+#define JPEG_EXIFROTATE 0
+#endif
+
 namespace
 {
     const int GOSU_FIFLAGS = (JPEG_EXIFROTATE | ICO_MAKEALPHA | PNG_IGNOREGAMMA);
