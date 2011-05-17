@@ -1,4 +1,4 @@
-RVM_RUBY         = "ruby-1.9.2-p0"
+RVM_RUBY         = "ruby-1.9.2-p180"
 INTERNAL_VERSION = "1.9.1"
 RUBY_DYLIB       = "libruby.#{INTERNAL_VERSION}.dylib"
 RUBY_DYLIB_ID    = "@executable_path/../Frameworks/#{RUBY_DYLIB}"
@@ -7,9 +7,11 @@ SOURCE_ROOT      = "#{ENV['HOME']}/.rvm/rubies/#{RVM_RUBY}"
 GEM_ROOT         = "#{ENV['HOME']}/.rvm/gems/#{RVM_RUBY}/gems"
 ALL_PLATFORMS    = [:ppc, :i386, :x86_64]
 LIB_KILLLIST     = %w(README irb rake* racc rdoc* *ubygems* readline* tcltk* tk* tcltklib* rss* *-darwin*)
-GEMS             = %w(chipmunk)
-# For some reasons, all of these stopped working - always compiled as host arch
-# GEMS = %w(texplay iobuffer rev eventmachine)
+GEMS             = %w(chingu texplay)
+# Retry these next time:
+# GEMS += %w(iobuffer rev eventmachine)
+# Retry this one after the chipmunk 5.* gem works again:
+# GEMS += %w(chipmunk)
 # Also, TODO: ruby-opengl needs some rake stuff?
 
 # Just to abbreviate the CFLAGS
@@ -50,6 +52,8 @@ namespace :ruby19 do
       
       # Copy headers
       sh "cp -R #{SOURCE_ROOT}/include/ruby*/* #{TARGET_ROOT}/include/"
+      # Copy rbconfig
+      sh "cp #{TARGET_ROOT}/rbconfig.rb #{TARGET_ROOT}/lib/rbconfig.rb"
       # Rename platform-specific folder so Xcode will find it
       sh "mv #{TARGET_ROOT}/include/*-darwin* #{TARGET_ROOT}/include/#{platform}"
       
