@@ -22,8 +22,7 @@ namespace :mac do
   
   desc "Publish RubyGosu App.app"
   task :app_wrapper => [FRAMEWORK_FILENAME, :ruby, :version] do
-    files = FileList['RubyGosu App.app/**/*']
-    tar MAC_WRAPPER_FILENAME, files
+    tar MAC_WRAPPER_FILENAME, 'RubyGosu App.app'
     upload MAC_WRAPPER_FILENAME
   end
 

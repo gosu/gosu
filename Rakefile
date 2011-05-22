@@ -65,7 +65,7 @@ def zip filename, files
 end
 
 def tar filename, files
-  sh "COPYFILE_DISABLE=true tar -czf #{filename} #{files.map { |fn| "'#{fn}'" }.join(' ')}"
+  sh "COPYFILE_DISABLE=true tar -czf #{filename} #{files.to_a.uniq.map { |fn| "'#{fn}'" }.join(' ')}"
 end
 
 Dir['rake/*.rb'].each { |task| require task }

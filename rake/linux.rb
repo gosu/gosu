@@ -1,7 +1,6 @@
 namespace :linux do
   LINUX_FILES = COMMON_CPP_FILES + COMMON_RUBY_FILES + FileList[
-    'Gosu/**/*', 'GosuImpl/**/*',
-    'linux/configure', 'linux/configure.ac', 'linux/Makefile.in'
+    'Gosu', 'GosuImpl', 'linux/configure', 'linux/configure.ac', 'linux/Makefile.in'
   ]
   LINUX_FILES.uniq!
 
