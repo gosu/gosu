@@ -2,12 +2,13 @@
 
 #if defined(GOSU_IS_IPHONE) || defined(__LP64__)
 
-#import <Gosu/Text.hpp>
-#import <Gosu/Bitmap.hpp>
-#import <Gosu/Utility.hpp>
-#import <GosuImpl/MacUtility.hpp>
-#import <map>
-#import <cmath>
+#include <Gosu/Text.hpp>
+#include <Gosu/Bitmap.hpp>
+#include <Gosu/Utility.hpp>
+#include <GosuImpl/MacUtility.hpp>
+#include <boost/algorithm/string.hpp>
+#include <map>
+#include <cmath>
 using namespace std;
 
 #if defined(GOSU_IS_IPHONE)
@@ -130,6 +131,9 @@ namespace
 unsigned Gosu::textWidth(const wstring& text,
     const wstring& fontName, unsigned fontHeight, unsigned fontFlags)
 {
+    if (text.find_first_of(L"\r\n") != wstring::npos)
+        throw std::invalid_argument("the argument to textWidth cannot contain line breaks");
+    
     OSXFont* font = getFont(fontName, fontFlags, fontHeight);
     
     // This will, of course, compute a too large size; fontHeight is in pixels,
@@ -141,7 +145,7 @@ unsigned Gosu::textWidth(const wstring& text,
     #else
     CGSize size = [string.obj() sizeWithFont: font];
     #endif
-                           
+    
     // Now adjust the scaling...
     return ceil(size.width / size.height * fontHeight);
 }
@@ -150,6 +154,9 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     Color c, const wstring& fontName, unsigned fontHeight,
     unsigned fontFlags)
 {
+    if (text.find_first_of(L"\r\n") != wstring::npos)
+        throw std::invalid_argument("the argument to drawText cannot contain line breaks");
+    
     OSXFont* font = getFont(fontName, fontFlags, fontHeight);
     ObjRef<NSString> string([[NSString alloc] initWithUTF8String: wstringToUTF8(text).c_str()]);
 
