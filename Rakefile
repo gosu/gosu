@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'fileutils'
 require 'date'
-require 'rake/gempackagetask'
+require 'rubygems/package_task'
 
 COMMON_FILES = FileList[
   'COPYING',
