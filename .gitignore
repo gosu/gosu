@@ -1,5 +1,6 @@
 (*)
 /Gosu.framework/
+/Gosu.framework.dSYM/
 /bin
 /lib/Gosu*.lib
 /lib/gosu.*.bundle
