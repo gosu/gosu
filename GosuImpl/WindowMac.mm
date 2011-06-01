@@ -321,6 +321,9 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     
     pimpl->interval = updateInterval;
     pimpl->mouseViz = true;
+    
+    // Clear gl error flag if it should accidentally be set. (Huh?)
+    while (glGetError() != GL_NO_ERROR);
 }
 
 Gosu::Window::~Window()

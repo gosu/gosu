@@ -1,4 +1,4 @@
-task :version do
+task :set_version do
   throw "GOSU_RELEASE_VERSION must be set" if GOSU_VERSION == '0.0.0'
 
   components = GOSU_VERSION.split('.')
