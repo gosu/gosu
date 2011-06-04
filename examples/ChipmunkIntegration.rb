@@ -4,7 +4,7 @@
 ## Date: 2007-10-05
 ## License: Same as for Gosu (MIT)
 ## Comments: Based on the Gosu Ruby Tutorial, but incorporating the Chipmunk Physics Engine
-## See http://code.google.com/p/gosu/wiki/RubyChipmunkIntegration for the accompanying text.
+## See https://github.com/jlnr/gosu/wiki/Ruby-Chipmunk-Integration for the accompanying text.
 
 require 'rubygems'
 require 'gosu'

@@ -25,7 +25,6 @@ class Test < Gosu::Window
       Gosu::Image.new(self, "media/#{filename}", true)
     end
     @macro = record { draw_grid 0, 0 }
-    puts "Macro size: #{@macro.width}x#{@macro.height}"
   end
   
   def button_down(id)
@@ -35,7 +34,7 @@ class Test < Gosu::Window
   def draw
     use_macro = !button_down?(Gosu::KbTab)
     
-    self.caption = "#{Gosu::fps} FPS, Macro: #{use_macro}"
+    self.caption = "#{Gosu::fps} FPS, Macro: #{use_macro}, Macro size: #{@macro.width}x#{@macro.height}"
     if use_macro then
       zoom = button_down?(char_to_button_id('+')) ? 100.0 : 1.0
       @macro.draw grid_x, grid_y, 0, zoom, zoom

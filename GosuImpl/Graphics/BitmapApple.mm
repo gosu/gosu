@@ -164,7 +164,8 @@ void Gosu::saveImageFile(const Bitmap& bmp, Writer writer, const std::wstring& f
     {
         Bitmap bitmap = bmp;
         unapplyColorKey(bitmap, Color::FUCHSIA);
-        return Gosu::saveToBMP(bitmap, writer);
+        Gosu::saveToBMP(bitmap, writer);
+        return;
     }
     
     ObjRef<NSAutoreleasePool> pool([NSAutoreleasePool new]);
@@ -193,7 +194,5 @@ void Gosu::saveImageFile(const Bitmap& bmp, Writer writer, const std::wstring& f
     CGImageRelease(imageRef);
     
     CGDataProviderRelease(dataProvider);
-    
-    return writer;
 }
 #endif

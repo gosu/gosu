@@ -1,11 +1,11 @@
-require 'rake/rdoctask'
+require 'rdoc/task'
 
 desc "Clean rdoc directory so all HTML will definitely be refreshed"
 task :clean_rdoc do
-  sh "rm -rf reference/rdoc/*"
+  sh "rm -rf reference/rdoc"
 end
 
-Rake::RDocTask.new do |rd|  
+RDoc::Task.new do |rd|  
   rd.main = "README.txt"
   rd.rdoc_dir = "reference/rdoc"
   rd.rdoc_files.include("reference/gosu.rb", "README.txt", "COPYING", *Dir["reference/*.rdoc"])

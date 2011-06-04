@@ -243,6 +243,9 @@ unsigned Gosu::textWidth(const std::wstring& text,
     const std::wstring& fontName, unsigned fontHeight,
     unsigned fontFlags)
 {
+    if (text.find_first_of(L"\r\n") != std::wstring::npos)
+        throw std::invalid_argument("the argument to textWidth cannot contain line breaks");
+    
     if (fontName.find(L"/") == std::wstring::npos)
         return PangoRenderer().textWidth(text, fontName, fontHeight, fontFlags);
     else
@@ -253,6 +256,9 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
     Color c, const std::wstring& fontName, unsigned fontHeight,
     unsigned fontFlags)
 {
+    if (text.find_first_of(L"\r\n") != std::wstring::npos)
+        throw std::invalid_argument("the argument to drawText cannot contain line breaks");
+    
     if (fontName.find(L"/") == std::wstring::npos)
         PangoRenderer().drawText(bitmap, text, x, y, c, fontName, fontHeight, fontFlags);
     else

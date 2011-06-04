@@ -192,10 +192,15 @@ namespace
 unsigned Gosu::textWidth(const std::wstring& text,
     const std::wstring& fontName, unsigned fontHeight, unsigned fontFlags)
 {
+    if (text.find_first_of(L"\r\n") != std::wstring::npos)
+        throw std::invalid_argument("the argument to textWidth cannot contain line breaks");
+    
+    // TODO: Why 1?
     if (text.empty())
         return 1;
-
-    // TODO: special case :///7
+    
+    // TODO: special case :(
+    // TODO: Why? I guess it was empty otherwise?
     if (text == L" ")
         return fontHeight / 3;
     
@@ -208,6 +213,9 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
     Color c, const std::wstring& fontName, unsigned fontHeight,
     unsigned fontFlags)
 {
+    if (text.find_first_of(L"\r\n") != std::wstring::npos)
+        throw std::invalid_argument("the argument to drawText cannot contain line breaks");
+    
     if (text.empty())
         return;
 

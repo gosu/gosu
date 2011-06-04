@@ -10,7 +10,7 @@ end
 
 puts 'The Gosu gem requires some libraries to be installed system-wide.'
 puts 'See the following site for a list:'
-puts 'http://code.google.com/p/gosu/wiki/GettingStartedOnLinux'
+puts 'https://github.com/jlnr/gosu/wiki/Getting-Started-on-Linux'
 puts
 
 BASE_FILES = %w(
