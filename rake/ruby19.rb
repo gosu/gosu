@@ -7,12 +7,8 @@ SOURCE_ROOT      = "#{ENV['HOME']}/.rvm/rubies/#{RVM_RUBY}"
 GEM_ROOT         = "#{ENV['HOME']}/.rvm/gems/#{RVM_RUBY}/gems"
 ALL_PLATFORMS    = [:ppc, :i386, :x86_64]
 LIB_KILLLIST     = %w(README irb rake* racc rdoc* *ubygems* readline* tcltk* tk* tcltklib* rss* *-darwin*)
-GEMS             = %w(chingu texplay)
-# Retry these next time:
-# GEMS += %w(iobuffer rev eventmachine)
-# Retry this one after the chipmunk 5.* gem works again:
-# GEMS += %w(chipmunk)
-# Also, TODO: ruby-opengl needs some rake stuff?
+GEMS             = %w(chingu texplay chipmunk)
+# ruby-opengl <- always compiles for native arch, fails because it uses STR2CSTR too
 
 # Just to abbreviate the CFLAGS
 SDK_10_4 = '/Developer/SDKs/MacOSX10.4u.sdk'
