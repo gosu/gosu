@@ -2241,6 +2241,9 @@ static VALUE mGosu;
 #include <Gosu/Utility.hpp>
 #include <Gosu/Version.hpp>
 #include <Gosu/Window.hpp>
+#ifdef GOSU_IS_WIN
+#include <FreeImage.h>
+#endif
 
 namespace Gosu {
     void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
@@ -2283,17 +2286,49 @@ namespace
     }
 }
 
-// Allow filenames and RMagick Images to be passed where Bitmaps are needed.
 namespace Gosu
 {
+	#ifdef GOSU_IS_WIN
+    void ping_FreeImage()
+    {
+        // Copied and pasted from MSDN.
+        // TODO: Remove duplication, this is also in AudioAudiere.cpp
+        #define FACILITY_VISUALCPP  ((LONG)0x6d)
+        #define VcppException(sev,err)  ((sev) | (FACILITY_VISUALCPP<<16) | err)
+        #define BAD_MOD VcppException(ERROR_SEVERITY_ERROR, ERROR_MOD_NOT_FOUND)
+        
+        __try
+        {
+            FreeImage_GetVersion();
+        }
+        __except ((GetExceptionCode() == BAD_MOD) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
+        {
+            rb_raise(rb_eRuntimeError, "unable to locate FreeImage.dll");
+        }
+        #undef BAD_MOD
+        #undef VcppException
+        #undef FACILITY_VISUALCPP
+    }
+	Bitmap loadImageFile_FreeImage(const std::wstring& filename);
+    #endif
     Gosu::Bitmap loadBitmap(VALUE val)
     {
         // Try to treat as filename first.
         if (rb_respond_to(val, rb_intern("to_str")))
         {
             VALUE to_str = rb_funcall(val, rb_intern("to_str"), 0);
-            const char* filename = StringValuePtr(to_str);
-            return loadImageFile(Gosu::utf8ToWstring(filename));
+            const char* filenameUTF8 = StringValuePtr(to_str);
+            std::wstring filename = Gosu::utf8ToWstring(filenameUTF8);
+            try {
+	            return loadImageFile(filename);
+	        } catch (const std::exception&) {
+            #ifdef GOSU_IS_WIN
+                ping_FreeImage();
+				return loadImageFile_FreeImage(filename);
+	        #else
+				throw;
+			#endif
+	        }  
         }
 
         // Otherwise, try to call .to_blob on it (works with RMagick, TexPlay etc).
@@ -2877,14 +2912,14 @@ SwigDirector_Window::~SwigDirector_Window() {
 void SwigDirector_Window::update() {
   VALUE result;
   
-  result = rb_funcall(swig_get_self(), rb_intern("update_"), 0, NULL);
+  result = rb_funcall(swig_get_self(), rb_intern("protected_update"), 0, NULL);
 }
 
 
 void SwigDirector_Window::draw() {
   VALUE result;
   
-  result = rb_funcall(swig_get_self(), rb_intern("draw_"), 0, NULL);
+  result = rb_funcall(swig_get_self(), rb_intern("protected_draw"), 0, NULL);
 }
 
 
@@ -2892,7 +2927,7 @@ bool SwigDirector_Window::needsRedraw() const {
   bool c_result ;
   VALUE result;
   
-  result = rb_funcall(swig_get_self(), rb_intern("needs_redraw?"), 0, NULL);
+  result = rb_funcall(swig_get_self(), rb_intern("protected_needs_redraw?"), 0, NULL);
   bool swig_val;
   int swig_res = SWIG_AsVal_bool(result, &swig_val);
   if (!SWIG_IsOK(swig_res)) {
@@ -2907,7 +2942,7 @@ bool SwigDirector_Window::needsCursor() const {
   bool c_result ;
   VALUE result;
   
-  result = rb_funcall(swig_get_self(), rb_intern("needs_cursor?"), 0, NULL);
+  result = rb_funcall(swig_get_self(), rb_intern("protected_needs_cursor?"), 0, NULL);
   bool swig_val;
   int swig_res = SWIG_AsVal_bool(result, &swig_val);
   if (!SWIG_IsOK(swig_res)) {
@@ -2921,7 +2956,7 @@ bool SwigDirector_Window::needsCursor() const {
 void SwigDirector_Window::loseFocus() {
   VALUE result;
   
-  result = rb_funcall(swig_get_self(), rb_intern("lose_focus"), 0, NULL);
+  result = rb_funcall(swig_get_self(), rb_intern("protected_lose_focus"), 0, NULL);
 }
 
 
@@ -2942,7 +2977,7 @@ void SwigDirector_Window::buttonDown(Gosu::Button arg0) {
     else
     obj0 = LONG2NUM((&arg0)->id());
   }
-  result = rb_funcall(swig_get_self(), rb_intern("button_down"), 1,obj0);
+  result = rb_funcall(swig_get_self(), rb_intern("protected_button_down"), 1,obj0);
 }
 
 
@@ -2956,7 +2991,7 @@ void SwigDirector_Window::buttonUp(Gosu::Button arg0) {
     else
     obj0 = LONG2NUM((&arg0)->id());
   }
-  result = rb_funcall(swig_get_self(), rb_intern("button_up"), 1,obj0);
+  result = rb_funcall(swig_get_self(), rb_intern("protected_button_up"), 1,obj0);
 }
 
 
@@ -11085,8 +11120,9 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_RubyInitializeTrackings();
   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(7)));
-  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(31)));
-  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.31"));
+  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(32)));
+  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.32"));
+  rb_define_const(mGosu, "GOSU_COPYRIGHT_NOTICE", SWIG_FromCharPtr("May contain `ogg\', `vorbis\' libraries (c) 2002-2008 Xiph.org Foundation\n\nRedistribution and use in source and binary forms, with or withoutmodification, are permitted provided that the following conditionsare met:\n\n- Redistributions of source code must retain the above copyrightnotice, this list of conditions and the following disclaimer.\n\n- Redistributions in binary form must reproduce the above copyrightnotice, this list of conditions and the following disclaimer in thedocumentation and/or other materials provided with the distribution.\n\n- Neither the name of the Xiph.org Foundation nor the names of itscontributors may be used to endorse or promote products derived fromthis software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS``AS IS\'\' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOTLIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FORA PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATIONOR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOTLIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANYTHEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USEOF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
   rb_define_module_function(mGosu, "degrees_to_radians", VALUEFUNC(_wrap_degrees_to_radians), -1);

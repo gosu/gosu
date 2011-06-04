@@ -173,6 +173,9 @@
 #include <Gosu/Utility.hpp>
 #include <Gosu/Version.hpp>
 #include <Gosu/Window.hpp>
+#ifdef GOSU_IS_WIN
+#include <FreeImage.h>
+#endif
 
 namespace Gosu {
     void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
@@ -215,17 +218,49 @@ namespace
     }
 }
 
-// Allow filenames and RMagick Images to be passed where Bitmaps are needed.
 namespace Gosu
 {
+	#ifdef GOSU_IS_WIN
+    void ping_FreeImage()
+    {
+        // Copied and pasted from MSDN.
+        // TODO: Remove duplication, this is also in AudioAudiere.cpp
+        #define FACILITY_VISUALCPP  ((LONG)0x6d)
+        #define VcppException(sev,err)  ((sev) | (FACILITY_VISUALCPP<<16) | err)
+        #define BAD_MOD VcppException(ERROR_SEVERITY_ERROR, ERROR_MOD_NOT_FOUND)
+        
+        __try
+        {
+            FreeImage_GetVersion();
+        }
+        __except ((GetExceptionCode() == BAD_MOD) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
+        {
+            rb_raise(rb_eRuntimeError, "unable to locate FreeImage.dll");
+        }
+        #undef BAD_MOD
+        #undef VcppException
+        #undef FACILITY_VISUALCPP
+    }
+	Bitmap loadImageFile_FreeImage(const std::wstring& filename);
+    #endif
     Gosu::Bitmap loadBitmap(VALUE val)
     {
         // Try to treat as filename first.
         if (rb_respond_to(val, rb_intern("to_str")))
         {
             VALUE to_str = rb_funcall(val, rb_intern("to_str"), 0);
-            const char* filename = StringValuePtr(to_str);
-            return loadImageFile(Gosu::utf8ToWstring(filename));
+            const char* filenameUTF8 = StringValuePtr(to_str);
+            std::wstring filename = Gosu::utf8ToWstring(filenameUTF8);
+            try {
+	            return loadImageFile(filename);
+	        } catch (const std::exception&) {
+            #ifdef GOSU_IS_WIN
+                ping_FreeImage();
+				return loadImageFile_FreeImage(filename);
+	        #else
+				throw;
+			#endif
+	        }  
         }
 
         // Otherwise, try to call .to_blob on it (works with RMagick, TexPlay etc).

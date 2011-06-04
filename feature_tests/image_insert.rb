@@ -11,7 +11,7 @@ class ImageInsert < Gosu::Window
   end
   
   def needs_cursor?
-    false
+    # nil works too now, yay
   end
   
   def draw
