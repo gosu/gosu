@@ -13,15 +13,23 @@ class Gosu::Window
         # Turn into a boolean result for needs_cursor? etc while we are at it.
         !!send(callback, *args)
       rescue Exception => e
-        # Try to format the message nicely, without any useless patching that we are
-        # doing here.
-        trace = e.backtrace
-        $stderr.puts "#{trace.first}: #{e.message}"
-        trace[1..-1].each do |line|
-          $stderr.puts "\tfrom #{line}" if not line.include? 'lib/gosu/swig_patches.rb'
-        end
-        exit 1
+        # Exit the message loop naturally, then re-throw
+        @_exception = e
+        close
       end
+    end
+  end
+  
+  alias show_internal show
+  def show
+    show_internal
+    # Try to format the message nicely, without any useless patching that we are
+    # doing here.
+    if @_exception then
+      if @_exception.backtrace.is_a? Array and not @_exception.backtrace.frozen? then
+        @_exception.backtrace.reject! { |line| line.include? 'lib/gosu/swig_patches.rb' }
+      end
+      raise @_exception
     end
   end
 end
