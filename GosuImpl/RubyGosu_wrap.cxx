@@ -2286,7 +2286,6 @@ namespace
     }
 }
 
-// Allow filenames and RMagick Images to be passed where Bitmaps are needed.
 namespace Gosu
 {
 	#ifdef GOSU_IS_WIN
@@ -2913,14 +2912,14 @@ SwigDirector_Window::~SwigDirector_Window() {
 void SwigDirector_Window::update() {
   VALUE result;
   
-  result = rb_funcall(swig_get_self(), rb_intern("update_"), 0, NULL);
+  result = rb_funcall(swig_get_self(), rb_intern("protected_update"), 0, NULL);
 }
 
 
 void SwigDirector_Window::draw() {
   VALUE result;
   
-  result = rb_funcall(swig_get_self(), rb_intern("draw_"), 0, NULL);
+  result = rb_funcall(swig_get_self(), rb_intern("protected_draw"), 0, NULL);
 }
 
 
@@ -2928,7 +2927,7 @@ bool SwigDirector_Window::needsRedraw() const {
   bool c_result ;
   VALUE result;
   
-  result = rb_funcall(swig_get_self(), rb_intern("needs_redraw?"), 0, NULL);
+  result = rb_funcall(swig_get_self(), rb_intern("protected_needs_redraw?"), 0, NULL);
   bool swig_val;
   int swig_res = SWIG_AsVal_bool(result, &swig_val);
   if (!SWIG_IsOK(swig_res)) {
@@ -2943,7 +2942,7 @@ bool SwigDirector_Window::needsCursor() const {
   bool c_result ;
   VALUE result;
   
-  result = rb_funcall(swig_get_self(), rb_intern("needs_cursor?"), 0, NULL);
+  result = rb_funcall(swig_get_self(), rb_intern("protected_needs_cursor?"), 0, NULL);
   bool swig_val;
   int swig_res = SWIG_AsVal_bool(result, &swig_val);
   if (!SWIG_IsOK(swig_res)) {
@@ -2957,7 +2956,7 @@ bool SwigDirector_Window::needsCursor() const {
 void SwigDirector_Window::loseFocus() {
   VALUE result;
   
-  result = rb_funcall(swig_get_self(), rb_intern("lose_focus"), 0, NULL);
+  result = rb_funcall(swig_get_self(), rb_intern("protected_lose_focus"), 0, NULL);
 }
 
 
@@ -2978,7 +2977,7 @@ void SwigDirector_Window::buttonDown(Gosu::Button arg0) {
     else
     obj0 = LONG2NUM((&arg0)->id());
   }
-  result = rb_funcall(swig_get_self(), rb_intern("button_down"), 1,obj0);
+  result = rb_funcall(swig_get_self(), rb_intern("protected_button_down"), 1,obj0);
 }
 
 
@@ -2992,7 +2991,7 @@ void SwigDirector_Window::buttonUp(Gosu::Button arg0) {
     else
     obj0 = LONG2NUM((&arg0)->id());
   }
-  result = rb_funcall(swig_get_self(), rb_intern("button_up"), 1,obj0);
+  result = rb_funcall(swig_get_self(), rb_intern("protected_button_up"), 1,obj0);
 }
 
 

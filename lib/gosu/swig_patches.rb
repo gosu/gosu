@@ -3,27 +3,30 @@
 
 # Exceptions in Window callbacks often get lost, this is especially annoying in draw/update.
 # It is not clear whether this is a SWIG issue or if some stack frame is not exception
-# compatible, but I just call update_ and draw_ in the Ruby wrapper so I can add this
+# compatible, but I just call protected_update etc. in the Ruby wrapper so I can add this
 # custom debugging help:
 class Gosu::Window
-  def update_
-    update
-  rescue Exception => e
-    puts e.inspect
-    puts e.backtrace
-    raise e
-  end
-
-  def draw_
-    draw
-  rescue Exception => e
-    puts e.inspect
-    puts e.backtrace
-    raise e
+  %w(update draw needs_redraw? needs_cursor?
+     lose_focus button_down button_up).each do |callback|
+    define_method "protected_#{callback}" do |*args|
+      begin
+        # Turn into a boolean result for needs_cursor? etc while we are at it.
+        !!send(callback, *args)
+      rescue Exception => e
+        # Try to format the message nicely, without any useless patching that we are
+        # doing here.
+        trace = e.backtrace
+        $stderr.puts "#{trace.first}: #{e.message}"
+        trace[1..-1].each do |line|
+          $stderr.puts "\tfrom #{line}" if not line.include? 'lib/gosu/swig_patches.rb'
+        end
+        exit 1
+      end
+    end
   end
 end
 
-# SWIG doesn't understand the C++ overloading.
+# SWIG doesn't understand the C++ overloading, so we need this simple check in Ruby.
 class Gosu::Image
   def self.from_text(*args)
     args.size == 4 ? from_text4(*args) : from_text7(*args)
