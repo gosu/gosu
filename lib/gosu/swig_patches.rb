@@ -11,7 +11,7 @@ class Gosu::Window
     define_method "protected_#{callback}" do |*args|
       begin
         # Turn into a boolean result for needs_cursor? etc while we are at it.
-        !!send(callback, *args)
+        !!send(callback, *args) unless @_exception
       rescue Exception => e
         # Exit the message loop naturally, then re-throw
         @_exception = e
