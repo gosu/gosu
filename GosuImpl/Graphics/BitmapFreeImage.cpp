@@ -11,6 +11,13 @@
 #define JPEG_EXIFROTATE 0
 #endif
 
+// In Windows, add a suffix to all functions so they can be used as a fallback for GDI+.
+#ifdef GOSU_IS_WIN
+#define FI(x) x##_FreeImage
+#else
+#define FI(x) x
+#endif
+
 namespace
 {
     const int GOSU_FIFLAGS = (JPEG_EXIFROTATE | ICO_MAKEALPHA | PNG_IGNOREGAMMA);
@@ -73,54 +80,57 @@ namespace
 
 // TODO: error checking w/ FreeImage_SetOutputMessage?
 
-Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
+namespace Gosu
 {
-    #ifdef GOSU_IS_WIN
-    FREE_IMAGE_FORMAT fif = GetFileTypeU(filename.c_str());
-    FIBITMAP* fib = FreeImage_LoadU(filename.c_str(), GOSU_FIFLAGS);
-    #else
-    std::string utf8Filename = wstringToUTF8(filename);
-    FREE_IMAGE_FORMAT fif = FreeImage_GetFileType(utf8Filename.c_str());
-    FIBITMAP* fib = FreeImage_Load(fif, utf8Filename.c_str(), GOSU_FIFLAGS);
-    #endif
+    Bitmap FI(loadImageFile)(const std::wstring& filename)
+    {
+        #ifdef GOSU_IS_WIN
+        FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeU(filename.c_str());
+        FIBITMAP* fib = FreeImage_LoadU(fif, filename.c_str(), GOSU_FIFLAGS);
+        #else
+        std::string utf8Filename = wstringToUTF8(filename);
+        FREE_IMAGE_FORMAT fif = FreeImage_GetFileType(utf8Filename.c_str());
+        FIBITMAP* fib = FreeImage_Load(fif, utf8Filename.c_str(), GOSU_FIFLAGS);
+        #endif
 
-    return fibToBitmap(fib, fif);
-}
+        return fibToBitmap(fib, fif);
+    }
 
-Gosu::Bitmap Gosu::loadImageFile(Gosu::Reader input)
-{
-    // Read all available input
-    std::vector<BYTE> data(input.resource().size() - input.position());
-    input.read(&data[0], data.size());
-    FIMEMORY* fim = FreeImage_OpenMemory(&data[0], data.size());
-    FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeFromMemory(fim);
-    FIBITMAP* fib = FreeImage_LoadFromMemory(fif, fim, GOSU_FIFLAGS);
+    Bitmap FI(loadImageFile)(Gosu::Reader input)
+    {
+        // Read all available input
+        std::vector<BYTE> data(input.resource().size() - input.position());
+        input.read(&data[0], data.size());
+        FIMEMORY* fim = FreeImage_OpenMemory(&data[0], data.size());
+        FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeFromMemory(fim);
+        FIBITMAP* fib = FreeImage_LoadFromMemory(fif, fim, GOSU_FIFLAGS);
 
-    return fibToBitmap(fib, fif);
-}
+        return fibToBitmap(fib, fif);
+    }
 
-void Gosu::saveImageFile(const Bitmap& bitmap, const std::wstring& filename)
-{
-    std::string utf8Filename = wstringToUTF8(filename);
-    FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(utf8Filename.c_str());
-    FIBITMAP* fib = bitmapToFIB(bitmap, fif);
+    void FI(saveImageFile)(const Bitmap& bitmap, const std::wstring& filename)
+    {
+        std::string utf8Filename = wstringToUTF8(filename);
+        FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(utf8Filename.c_str());
+        FIBITMAP* fib = bitmapToFIB(bitmap, fif);
 
-    #ifdef GOSU_IS_WIN
-    FreeImage_SaveU(fif, fib, filename.c_str());
-    #else
-    FreeImage_Save(fif, fib, utf8Filename.c_str());
-    #endif
-    FreeImage_Unload(fib);
-}
+        #ifdef GOSU_IS_WIN
+        FreeImage_SaveU(fif, fib, filename.c_str());
+        #else
+        FreeImage_Save(fif, fib, utf8Filename.c_str());
+        #endif
+        FreeImage_Unload(fib);
+    }
 
-void Gosu::saveImageFile(const Bitmap& bitmap, Gosu::Writer writer,
-    const std::wstring& formatHint)
-{
-    std::string utf8FormatHint = wstringToUTF8(formatHint);
-    FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(utf8FormatHint.c_str());
-    FIBITMAP* fib = bitmapToFIB(bitmap, fif);
-    
-    FreeImageIO fio = { NULL, WriteProc, SeekProc, TellProc };
-    FreeImage_SaveToHandle(fif, fib, &fio, &writer);
-    FreeImage_Unload(fib);
+    void FI(saveImageFile)(const Bitmap& bitmap, Gosu::Writer writer,
+        const std::wstring& formatHint)
+    {
+        std::string utf8FormatHint = wstringToUTF8(formatHint);
+        FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename(utf8FormatHint.c_str());
+        FIBITMAP* fib = bitmapToFIB(bitmap, fif);
+        
+        FreeImageIO fio = { NULL, WriteProc, SeekProc, TellProc };
+        FreeImage_SaveToHandle(fif, fib, &fio, &writer);
+        FreeImage_Unload(fib);
+    }
 }
