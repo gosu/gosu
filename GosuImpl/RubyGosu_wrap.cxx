@@ -2359,7 +2359,9 @@ namespace Gosu
     }
     
     const char* cstrFromSymbol(VALUE symbol) {
-      return rb_id2name(SYM2ID(symbol));
+        if (TYPE(symbol) != T_SYMBOL)
+            return 0; // to be caught by the caller
+        return rb_id2name(SYM2ID(symbol));
     }
 }
 
@@ -5152,26 +5154,34 @@ _wrap_interpolate(int argc, VALUE *argv, VALUE self) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
   }
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[0]) == T_FIXNUM || TYPE(argv[0]) == T_BIGNUM)
     arg1 = Gosu::Color(NUM2UINT(argv[0]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg1 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg1 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[1], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[1]) == T_FIXNUM || TYPE(argv[1]) == T_BIGNUM)
     arg2 = Gosu::Color(NUM2UINT(argv[1]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg2 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[1], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg2 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   if (argc > 2) {
     ecode3 = SWIG_AsVal_double(argv[2], &val3);
@@ -5205,26 +5215,34 @@ _wrap_multiply(int argc, VALUE *argv, VALUE self) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
   }
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[0]) == T_FIXNUM || TYPE(argv[0]) == T_BIGNUM)
     arg1 = Gosu::Color(NUM2UINT(argv[0]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg1 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg1 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[1], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[1]) == T_FIXNUM || TYPE(argv[1]) == T_BIGNUM)
     arg2 = Gosu::Color(NUM2UINT(argv[1]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg2 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[1], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg2 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   {
     try {
@@ -5550,22 +5568,28 @@ _wrap_Font_draw(int argc, VALUE *argv, VALUE self) {
   }
   if (argc > 6) {
     {
-      void* ptr;
-      int res = SWIG_ConvertPtr(argv[6], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-      if (!SWIG_IsOK(res))
-      // TODO: error checking
+      if (TYPE(argv[6]) == T_FIXNUM || TYPE(argv[6]) == T_BIGNUM)
       arg8 = Gosu::Color(NUM2UINT(argv[6]));
-      else if (!ptr)
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
       else
-      arg8 = *reinterpret_cast<Gosu::Color*>(ptr);
+      {
+        void* ptr;
+        int res = SWIG_ConvertPtr(argv[6], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+        if (!SWIG_IsOK(res))
+        SWIG_exception_fail(SWIG_ValueError, "invalid value");
+        else if (!ptr)
+        SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+        else
+        arg8 = *reinterpret_cast<Gosu::Color*>(ptr);
+      }
     }
   }
   if (argc > 7) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[7]);
       
-      if (!strcmp(cstr, "default"))
+      if (!cstr)
+      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
+      else if (!strcmp(cstr, "default"))
       arg9 = Gosu::amDefault;
       else if (!strcmp(cstr, "additive"))
       arg9 = Gosu::amAdditive;
@@ -5673,22 +5697,28 @@ _wrap_Font_draw_rel(int argc, VALUE *argv, VALUE self) {
   }
   if (argc > 8) {
     {
-      void* ptr;
-      int res = SWIG_ConvertPtr(argv[8], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-      if (!SWIG_IsOK(res))
-      // TODO: error checking
+      if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
       arg10 = Gosu::Color(NUM2UINT(argv[8]));
-      else if (!ptr)
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
       else
-      arg10 = *reinterpret_cast<Gosu::Color*>(ptr);
+      {
+        void* ptr;
+        int res = SWIG_ConvertPtr(argv[8], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+        if (!SWIG_IsOK(res))
+        SWIG_exception_fail(SWIG_ValueError, "invalid value");
+        else if (!ptr)
+        SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+        else
+        arg10 = *reinterpret_cast<Gosu::Color*>(ptr);
+      }
     }
   }
   if (argc > 9) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[9]);
       
-      if (!strcmp(cstr, "default"))
+      if (!cstr)
+      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
+      else if (!strcmp(cstr, "default"))
       arg11 = Gosu::amDefault;
       else if (!strcmp(cstr, "additive"))
       arg11 = Gosu::amAdditive;
@@ -5788,22 +5818,28 @@ _wrap_Font_draw_rot(int argc, VALUE *argv, VALUE self) {
   }
   if (argc > 7) {
     {
-      void* ptr;
-      int res = SWIG_ConvertPtr(argv[7], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-      if (!SWIG_IsOK(res))
-      // TODO: error checking
+      if (TYPE(argv[7]) == T_FIXNUM || TYPE(argv[7]) == T_BIGNUM)
       arg9 = Gosu::Color(NUM2UINT(argv[7]));
-      else if (!ptr)
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
       else
-      arg9 = *reinterpret_cast<Gosu::Color*>(ptr);
+      {
+        void* ptr;
+        int res = SWIG_ConvertPtr(argv[7], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+        if (!SWIG_IsOK(res))
+        SWIG_exception_fail(SWIG_ValueError, "invalid value");
+        else if (!ptr)
+        SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+        else
+        arg9 = *reinterpret_cast<Gosu::Color*>(ptr);
+      }
     }
   }
   if (argc > 8) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[8]);
       
-      if (!strcmp(cstr, "default"))
+      if (!cstr)
+      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
+      else if (!strcmp(cstr, "default"))
       arg10 = Gosu::amDefault;
       else if (!strcmp(cstr, "additive"))
       arg10 = Gosu::amAdditive;
@@ -6335,22 +6371,28 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
   }
   if (argc > 5) {
     {
-      void* ptr;
-      int res = SWIG_ConvertPtr(argv[5], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-      if (!SWIG_IsOK(res))
-      // TODO: error checking
+      if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
       arg7 = Gosu::Color(NUM2UINT(argv[5]));
-      else if (!ptr)
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
       else
-      arg7 = *reinterpret_cast<Gosu::Color*>(ptr);
+      {
+        void* ptr;
+        int res = SWIG_ConvertPtr(argv[5], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+        if (!SWIG_IsOK(res))
+        SWIG_exception_fail(SWIG_ValueError, "invalid value");
+        else if (!ptr)
+        SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+        else
+        arg7 = *reinterpret_cast<Gosu::Color*>(ptr);
+      }
     }
   }
   if (argc > 6) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[6]);
       
-      if (!strcmp(cstr, "default"))
+      if (!cstr)
+      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
+      else if (!strcmp(cstr, "default"))
       arg8 = Gosu::amDefault;
       else if (!strcmp(cstr, "additive"))
       arg8 = Gosu::amAdditive;
@@ -6433,54 +6475,72 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
   } 
   arg6 = static_cast< double >(val6);
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[5], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
     arg7 = Gosu::Color(NUM2UINT(argv[5]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg7 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[5], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg7 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[6], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[6]) == T_FIXNUM || TYPE(argv[6]) == T_BIGNUM)
     arg8 = Gosu::Color(NUM2UINT(argv[6]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg8 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[6], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg8 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[7], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[7]) == T_FIXNUM || TYPE(argv[7]) == T_BIGNUM)
     arg9 = Gosu::Color(NUM2UINT(argv[7]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg9 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[7], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg9 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[8], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
     arg10 = Gosu::Color(NUM2UINT(argv[8]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg10 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[8], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg10 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   if (argc > 9) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[9]);
       
-      if (!strcmp(cstr, "default"))
+      if (!cstr)
+      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
+      else if (!strcmp(cstr, "default"))
       arg11 = Gosu::amDefault;
       else if (!strcmp(cstr, "additive"))
       arg11 = Gosu::amAdditive;
@@ -6593,22 +6653,28 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
   }
   if (argc > 8) {
     {
-      void* ptr;
-      int res = SWIG_ConvertPtr(argv[8], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-      if (!SWIG_IsOK(res))
-      // TODO: error checking
+      if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
       arg10 = Gosu::Color(NUM2UINT(argv[8]));
-      else if (!ptr)
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
       else
-      arg10 = *reinterpret_cast<Gosu::Color*>(ptr);
+      {
+        void* ptr;
+        int res = SWIG_ConvertPtr(argv[8], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+        if (!SWIG_IsOK(res))
+        SWIG_exception_fail(SWIG_ValueError, "invalid value");
+        else if (!ptr)
+        SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+        else
+        arg10 = *reinterpret_cast<Gosu::Color*>(ptr);
+      }
     }
   }
   if (argc > 9) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[9]);
       
-      if (!strcmp(cstr, "default"))
+      if (!cstr)
+      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
+      else if (!strcmp(cstr, "default"))
       arg11 = Gosu::amDefault;
       else if (!strcmp(cstr, "additive"))
       arg11 = Gosu::amAdditive;
@@ -6940,15 +7006,19 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   } 
   arg3 = static_cast< double >(val3);
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[2]) == T_FIXNUM || TYPE(argv[2]) == T_BIGNUM)
     arg4 = Gosu::Color(NUM2UINT(argv[2]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg4 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg4 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   ecode5 = SWIG_AsVal_double(argv[3], &val5);
   if (!SWIG_IsOK(ecode5)) {
@@ -6961,15 +7031,19 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   } 
   arg6 = static_cast< double >(val6);
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[5], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
     arg7 = Gosu::Color(NUM2UINT(argv[5]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg7 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[5], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg7 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   ecode8 = SWIG_AsVal_double(argv[6], &val8);
   if (!SWIG_IsOK(ecode8)) {
@@ -6982,15 +7056,19 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   } 
   arg9 = static_cast< double >(val9);
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[8], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
     arg10 = Gosu::Color(NUM2UINT(argv[8]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg10 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[8], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg10 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   ecode11 = SWIG_AsVal_double(argv[9], &val11);
   if (!SWIG_IsOK(ecode11)) {
@@ -7003,15 +7081,19 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   } 
   arg12 = static_cast< double >(val12);
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[11], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[11]) == T_FIXNUM || TYPE(argv[11]) == T_BIGNUM)
     arg13 = Gosu::Color(NUM2UINT(argv[11]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg13 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[11], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg13 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   ecode14 = SWIG_AsVal_double(argv[12], &val14);
   if (!SWIG_IsOK(ecode14)) {
@@ -7022,7 +7104,9 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[13]);
       
-      if (!strcmp(cstr, "default"))
+      if (!cstr)
+      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
+      else if (!strcmp(cstr, "default"))
       arg15 = Gosu::amDefault;
       else if (!strcmp(cstr, "additive"))
       arg15 = Gosu::amAdditive;
@@ -7191,7 +7275,9 @@ _wrap_Image_from_text7(int argc, VALUE *argv, VALUE self) {
   {
     const char* cstr = Gosu::cstrFromSymbol(argv[6]);
     
-    if (!strcmp(cstr, "left"))
+    if (!cstr)
+    SWIG_exception_fail(SWIG_ValueError, "text align must be a symbol");
+    else if (!strcmp(cstr, "left"))
     arg7 = Gosu::taLeft;
     else if (!strcmp(cstr, "center"))
     arg7 = Gosu::taCenter;
@@ -9246,15 +9332,19 @@ _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
   } 
   arg3 = static_cast< double >(val3);
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[2]) == T_FIXNUM || TYPE(argv[2]) == T_BIGNUM)
     arg4 = Gosu::Color(NUM2UINT(argv[2]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg4 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg4 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   ecode5 = SWIG_AsVal_double(argv[3], &val5);
   if (!SWIG_IsOK(ecode5)) {
@@ -9267,15 +9357,19 @@ _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
   } 
   arg6 = static_cast< double >(val6);
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[5], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
     arg7 = Gosu::Color(NUM2UINT(argv[5]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg7 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[5], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg7 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   if (argc > 6) {
     ecode8 = SWIG_AsVal_double(argv[6], &val8);
@@ -9288,7 +9382,9 @@ _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[7]);
       
-      if (!strcmp(cstr, "default"))
+      if (!cstr)
+      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
+      else if (!strcmp(cstr, "default"))
       arg9 = Gosu::amDefault;
       else if (!strcmp(cstr, "additive"))
       arg9 = Gosu::amAdditive;
@@ -9361,15 +9457,19 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
   } 
   arg3 = static_cast< double >(val3);
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[2]) == T_FIXNUM || TYPE(argv[2]) == T_BIGNUM)
     arg4 = Gosu::Color(NUM2UINT(argv[2]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg4 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg4 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   ecode5 = SWIG_AsVal_double(argv[3], &val5);
   if (!SWIG_IsOK(ecode5)) {
@@ -9382,15 +9482,19 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
   } 
   arg6 = static_cast< double >(val6);
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[5], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
     arg7 = Gosu::Color(NUM2UINT(argv[5]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg7 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[5], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg7 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   ecode8 = SWIG_AsVal_double(argv[6], &val8);
   if (!SWIG_IsOK(ecode8)) {
@@ -9403,15 +9507,19 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
   } 
   arg9 = static_cast< double >(val9);
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[8], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
     arg10 = Gosu::Color(NUM2UINT(argv[8]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg10 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[8], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg10 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   if (argc > 9) {
     ecode11 = SWIG_AsVal_double(argv[9], &val11);
@@ -9424,7 +9532,9 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[10]);
       
-      if (!strcmp(cstr, "default"))
+      if (!cstr)
+      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
+      else if (!strcmp(cstr, "default"))
       arg12 = Gosu::amDefault;
       else if (!strcmp(cstr, "additive"))
       arg12 = Gosu::amAdditive;
@@ -9504,15 +9614,19 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
   } 
   arg3 = static_cast< double >(val3);
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[2]) == T_FIXNUM || TYPE(argv[2]) == T_BIGNUM)
     arg4 = Gosu::Color(NUM2UINT(argv[2]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg4 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[2], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg4 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   ecode5 = SWIG_AsVal_double(argv[3], &val5);
   if (!SWIG_IsOK(ecode5)) {
@@ -9525,15 +9639,19 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
   } 
   arg6 = static_cast< double >(val6);
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[5], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
     arg7 = Gosu::Color(NUM2UINT(argv[5]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg7 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[5], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg7 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   ecode8 = SWIG_AsVal_double(argv[6], &val8);
   if (!SWIG_IsOK(ecode8)) {
@@ -9546,15 +9664,19 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
   } 
   arg9 = static_cast< double >(val9);
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[8], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
     arg10 = Gosu::Color(NUM2UINT(argv[8]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg10 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[8], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg10 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   ecode11 = SWIG_AsVal_double(argv[9], &val11);
   if (!SWIG_IsOK(ecode11)) {
@@ -9567,15 +9689,19 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
   } 
   arg12 = static_cast< double >(val12);
   {
-    void* ptr;
-    int res = SWIG_ConvertPtr(argv[11], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-    // TODO: error checking
+    if (TYPE(argv[11]) == T_FIXNUM || TYPE(argv[11]) == T_BIGNUM)
     arg13 = Gosu::Color(NUM2UINT(argv[11]));
-    else if (!ptr)
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-    arg13 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[11], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res))
+      SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      else if (!ptr)
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      else
+      arg13 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
   }
   if (argc > 12) {
     ecode14 = SWIG_AsVal_double(argv[12], &val14);
@@ -9588,7 +9714,9 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[13]);
       
-      if (!strcmp(cstr, "default"))
+      if (!cstr)
+      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
+      else if (!strcmp(cstr, "default"))
       arg15 = Gosu::amDefault;
       else if (!strcmp(cstr, "additive"))
       arg15 = Gosu::amAdditive;
