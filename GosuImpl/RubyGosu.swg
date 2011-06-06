@@ -83,7 +83,9 @@
 %typemap(in) Gosu::AlphaMode {
     const char* cstr = Gosu::cstrFromSymbol($input);
     
-    if (!strcmp(cstr, "default"))
+    if (!cstr)
+        SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
+    else if (!strcmp(cstr, "default"))
         $1 = Gosu::amDefault;
     else if (!strcmp(cstr, "additive"))
         $1 = Gosu::amAdditive;
@@ -95,7 +97,9 @@
 %typemap(in) Gosu::TextAlign {
     const char* cstr = Gosu::cstrFromSymbol($input);
 
-    if (!strcmp(cstr, "left"))
+    if (!cstr)
+        SWIG_exception_fail(SWIG_ValueError, "text align must be a symbol");
+    else if (!strcmp(cstr, "left"))
         $1 = Gosu::taLeft;
     else if (!strcmp(cstr, "center"))
         $1 = Gosu::taCenter;
@@ -109,15 +113,19 @@
 
 // Allow integral constants to be passed in place of Color values.
 %typemap(in) Gosu::Color {    
-    void* ptr;
-    int res = SWIG_ConvertPtr($input, &ptr, SWIGTYPE_p_Gosu__Color, 0);
-    if (!SWIG_IsOK(res))
-        // TODO: error checking
+    if (TYPE($input) == T_FIXNUM || TYPE($input) == T_BIGNUM)
         $1 = Gosu::Color(NUM2UINT($input));
-    else if (!ptr)
-        SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
     else
-        $1 = *reinterpret_cast<Gosu::Color*>(ptr);
+    {
+        void* ptr;
+        int res = SWIG_ConvertPtr($input, &ptr, SWIGTYPE_p_Gosu__Color, 0);
+        if (!SWIG_IsOK(res))
+            SWIG_exception_fail(SWIG_ValueError, "invalid value");
+        else if (!ptr)
+            SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+        else
+            $1 = *reinterpret_cast<Gosu::Color*>(ptr);
+    }
 }
 
 // Allow integral constants to be passed in place of Color values.
@@ -291,7 +299,9 @@ namespace Gosu
     }
     
     const char* cstrFromSymbol(VALUE symbol) {
-      return rb_id2name(SYM2ID(symbol));
+        if (TYPE(symbol) != T_SYMBOL)
+            return 0; // to be caught by the caller
+        return rb_id2name(SYM2ID(symbol));
     }
 }
 %}
