@@ -165,6 +165,8 @@ Gosu::Bitmap Gosu::loadImageFile(Reader reader)
 
 void Gosu::saveImageFile(const Bitmap& bitmap, const std::wstring& filename)
 {
+    requireGDIplus();
+
     Bitmap input = bitmap;
     if (boost::iends_with(filename, "bmp"))
         unapplyColorKey(input, Color::FUCHSIA);
@@ -179,6 +181,8 @@ void Gosu::saveImageFile(const Bitmap& bitmap, const std::wstring& filename)
 
 void Gosu::saveImageFile(const Bitmap& bitmap, Writer writer, const std::wstring& formatHint)
 {
+    requireGDIplus();
+
     Bitmap input = bitmap;
     if (boost::iends_with(formatHint, "bmp"))
         unapplyColorKey(input, Color::FUCHSIA);
