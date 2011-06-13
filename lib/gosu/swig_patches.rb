@@ -12,7 +12,7 @@ class Gosu::Window
       begin
         # Turn into a boolean result for needs_cursor? etc while we are at it.
         # If there has been an exception, don't do anything as to not make matters worse.
-        @_exception ? false : !!send(callback, *args)
+        defined?(@_exception) ? false : !!send(callback, *args)
       rescue Exception => e
         # Exit the message loop naturally, then re-throw
         @_exception = e
@@ -26,7 +26,7 @@ class Gosu::Window
     show_internal
     # Try to format the message nicely, without any useless patching that we are
     # doing here.
-    if @_exception then
+    if defined? @_exception then
       if @_exception.backtrace.is_a? Array and not @_exception.backtrace.frozen? then
         @_exception.backtrace.reject! { |line| line.include? 'lib/gosu/swig_patches.rb' }
       end
