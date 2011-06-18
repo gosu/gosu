@@ -9,7 +9,7 @@ namespace
     std::wstring specialFolderPath(int csidl)
     {
         WCHAR buf[MAX_PATH + 2];
-        if (FAILED(SHGetFolderPath(NULL, csidl | CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, buf)))
+        if (FAILED(SHGetFolderPath(NULL, csidl | CSIDL_FLAG_CREATE, NULL, 0, buf)))
             throw std::runtime_error("Error getting special folder path");
         std::size_t len = std::wcslen(buf);
         if (buf[len - 1] != L'\\')
