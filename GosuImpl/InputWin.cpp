@@ -165,43 +165,35 @@ struct Gosu::Input::Impl
 				for (unsigned i = 0; i < inOut; ++i)
 				{
 					bool down = (data[i].dwData & 0x80) != 0 && !ignoreClicks;
-	                    
-					switch (data[i].dwOfs)
-					{
-						case DIMOFS_BUTTON0:
-						{
-							unsigned id = swapMouse ? msRight : msLeft;
-							setButton(id, down, collectEvents);
-							break;
-						}
-						case DIMOFS_BUTTON1:
-						{
-							unsigned id = swapMouse ? msLeft : msRight;
-							setButton(id, down, collectEvents);
-							break;
-						}
-						case DIMOFS_BUTTON2:
-						{
-							setButton(msMiddle, down, collectEvents);
-							break;
-						}
-						case DIMOFS_Z:
-						{
-							if (!collectEvents || data[i].dwData == 0)
-								break;
-
-							EventInfo event;
-							event.action = EventInfo::buttonDown;
-							if (int(data[i].dwData) < 0)
-								event.id = msWheelDown;
-							else
-								event.id = msWheelUp;
-							events.push_back(event);
-                            event.action = EventInfo::buttonUp;
-                            events.push_back(event);
-							break;
-						}
-					}
+                    
+                    // No switch statement here because it breaks compilation with MinGW.
+                    if (data[i].dwOfs == DIMOFS_BUTTON0)
+                    {
+                        unsigned id = swapMouse ? msRight : msLeft;
+                        setButton(id, down, collectEvents);
+                    }
+                    else if (data[i].dwOfs == DIMOFS_BUTTON1)
+                    {
+                        unsigned id = swapMouse ? msLeft : msRight;
+                        setButton(id, down, collectEvents);
+                    }
+                    else if (data[i].dwOfs == DIMOFS_BUTTON2)
+                    {
+                        setButton(msMiddle, down, collectEvents);
+                    }
+                    else if (data[i].dwOfs == DIMOFS_Z &&
+                        collectEvents && data[i].dwData)
+                    {
+                        EventInfo event;
+                        event.action = EventInfo::buttonDown;
+                        if (int(data[i].dwData) < 0)
+                            event.id = msWheelDown;
+                        else
+                            event.id = msWheelUp;
+                        events.push_back(event);
+                        event.action = EventInfo::buttonUp;
+                        events.push_back(event);
+                    }
 				}
 				break;
 			}
