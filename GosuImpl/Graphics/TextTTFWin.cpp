@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <cassert>
 #include <Gosu/Utility.hpp>
 
 // Adapted from http://www.codeproject.com/KB/GDI/xfont.aspx.
@@ -197,7 +198,7 @@ std::wstring getNameFromTTFFile(const std::wstring& filename)
 
 				if (szTemp[0] != 0)
 				{
-					_ASSERTE(strlen(szTemp) < sizeof(lpFontProps->csName));
+					assert (strlen(szTemp) < sizeof(lpFontProps->csName));
 
 					switch (ttRecord.uNameID)
 					{
