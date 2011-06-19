@@ -92,7 +92,9 @@ namespace Gosu
     void imagesFromTiledBitmap(Graphics& graphics, const std::wstring& filename,
         int tileWidth, int tileHeight, bool tileable, Container& appendTo)
     {
-		imagesFromTiledBitmap(graphics, loadImageFile(filename), tileWidth, tileHeight, tileable, appendTo);
+        Bitmap bmp;
+        loadImageFile(bmp, filename);
+        imagesFromTiledBitmap(graphics, bmp, tileWidth, tileHeight, tileable, appendTo);
     }
 
     //! Convenience function that splits a bitmap into an area of array 

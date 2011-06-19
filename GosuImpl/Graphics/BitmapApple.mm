@@ -71,21 +71,19 @@ namespace
     #endif
 }
 
-Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
+void Gosu::loadImageFile(Bitmap& bitmap, const std::wstring& filename)
 {
     ObjRef<NSString> filenameRef([[NSString alloc] initWithUTF8String: wstringToUTF8(filename).c_str()]);
     ObjRef<APPLE_IMAGE> image([[APPLE_IMAGE alloc] initWithContentsOfFile: filenameRef.obj()]);
     if (!image.get())
         throw std::runtime_error("Cannot load image file " + wstringToUTF8(filename));
     
-    Bitmap bitmap;
     appleImageToBitmap(image.obj(), bitmap);
     if (boost::iends_with(filename, L".bmp"))
         applyColorKey(bitmap, Color::FUCHSIA);
-    return bitmap;
 }
 
-Gosu::Bitmap Gosu::loadImageFile(Reader reader)
+void Gosu::loadImageFile(Bitmap& bitmap, Reader reader)
 {
     char signature[2];
     reader.read(signature, 2);
@@ -101,11 +99,9 @@ Gosu::Bitmap Gosu::loadImageFile(Reader reader)
     if (!image.get())
         throw std::runtime_error("Cannot load image file from stream");
     
-    Bitmap bitmap;
     appleImageToBitmap(image.obj(), bitmap);
     if (signature[0] == 'B' && signature[1] == 'M')
         applyColorKey(bitmap, Color::FUCHSIA);
-    return bitmap;
 }
 
 #ifndef GOSU_IS_IPHONE

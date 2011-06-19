@@ -8,7 +8,9 @@
 Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, bool tileable)
 {
 	// Forward.
-	Image(graphics, loadImageFile(filename), tileable).data.swap(data);
+	Bitmap bmp;
+	loadImageFile(bmp, filename);
+	Image(graphics, bmp, tileable).data.swap(data);
 }
 
 Gosu::Image::Image(Graphics& graphics, const std::wstring& filename,
@@ -16,7 +18,9 @@ Gosu::Image::Image(Graphics& graphics, const std::wstring& filename,
     bool tileable)
 {
 	// Forward.
-	Image(graphics, loadImageFile(filename), srcX, srcY, srcWidth, srcHeight, tileable).data.swap(data);
+	Bitmap bmp;
+	loadImageFile(bmp, filename);
+	Image(graphics, bmp, srcX, srcY, srcWidth, srcHeight, tileable).data.swap(data);
 }
 
 Gosu::Image::Image(Graphics& graphics, const Bitmap& source, bool tileable)
