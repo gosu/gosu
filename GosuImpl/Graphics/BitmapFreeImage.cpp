@@ -6,13 +6,14 @@
 #include <boost/cstdint.hpp>
 #include <FreeImage.h>
 
-// Compatibility with FreeImage < 3.1.3 which is still stuck in many package repositories
+// Compatibility with FreeImage <3.1.3. Subtly changes Gosu's behavior though.
 #ifndef JPEG_EXIFROTATE
 #define JPEG_EXIFROTATE 0
 #endif
 
-// In Windows, add a suffix to all functions so they can be used as a fallback for GDI+.
-#ifdef GOSU_IS_WIN
+// With MSVC, add a suffix so FreeImage can be linked as a fallback for GDI+.
+// With MinGW, Gosu uses FreeImage all the time, so no suffix is needed.
+#ifdef MSVC
 #define FI(x) x##_FreeImage
 #else
 #define FI(x) x
