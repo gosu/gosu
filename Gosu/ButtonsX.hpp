@@ -133,7 +133,7 @@ namespace Gosu
         gpNum = gpRangeEnd - gpRangeBegin + 1,
         
         numButtons = gpRangeEnd,
-		noButton = 0xffffffff
+        noButton = 0xffffffff
     };
 }
 

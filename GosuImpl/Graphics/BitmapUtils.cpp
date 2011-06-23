@@ -5,7 +5,7 @@
 
 Gosu::Reader Gosu::loadFromPNG(Bitmap& bitmap, Reader reader)
 {
-    bitmap = loadImageFile(reader);
+    loadImageFile(bitmap, reader);
     reader.setPosition(reader.resource().size());
     return reader;
 }

@@ -6,13 +6,14 @@
 #include <boost/cstdint.hpp>
 #include <FreeImage.h>
 
-// Compatibility with FreeImage < 3.1.3 which is still stuck in many package repositories
+// Compatibility with FreeImage <3.1.3. Subtly changes Gosu's behavior though.
 #ifndef JPEG_EXIFROTATE
 #define JPEG_EXIFROTATE 0
 #endif
 
-// In Windows, add a suffix to all functions so they can be used as a fallback for GDI+.
-#ifdef GOSU_IS_WIN
+// With MSVC, add a suffix so FreeImage can be linked as a fallback for GDI+.
+// With MinGW, Gosu uses FreeImage all the time, so no suffix is needed.
+#ifdef MSVC
 #define FI(x) x##_FreeImage
 #else
 #define FI(x) x
@@ -31,9 +32,8 @@ namespace
             *p = (*p & 0xff00ff00) | ((*p << 16) & 0x00ff0000) | ((*p >> 16) & 0x000000ff);
     }
     
-    Gosu::Bitmap fibToBitmap(FIBITMAP* fib, FREE_IMAGE_FORMAT fif)
+    void fibToBitmap(Gosu::Bitmap& bitmap, FIBITMAP* fib, FREE_IMAGE_FORMAT fif)
     {
-        Gosu::Bitmap bitmap;
         bitmap.resize(FreeImage_GetWidth(fib), FreeImage_GetHeight(fib));
         FreeImage_ConvertToRawBits(reinterpret_cast<BYTE*>(bitmap.data()),
             fib, bitmap.width() * 4, 32,
@@ -42,7 +42,6 @@ namespace
         reshuffleBitmap(bitmap);
         if (fif == FIF_BMP)
             Gosu::applyColorKey(bitmap, Gosu::Color::FUCHSIA);
-        return bitmap;
     }
     
     FIBITMAP* bitmapToFIB(Gosu::Bitmap bitmap, FREE_IMAGE_FORMAT fif)
@@ -82,7 +81,7 @@ namespace
 
 namespace Gosu
 {
-    Bitmap FI(loadImageFile)(const std::wstring& filename)
+    void FI(loadImageFile)(Bitmap& bitmap, const std::wstring& filename)
     {
         #ifdef GOSU_IS_WIN
         FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeU(filename.c_str());
@@ -93,10 +92,10 @@ namespace Gosu
         FIBITMAP* fib = FreeImage_Load(fif, utf8Filename.c_str(), GOSU_FIFLAGS);
         #endif
 
-        return fibToBitmap(fib, fif);
+        fibToBitmap(bitmap, fib, fif);
     }
 
-    Bitmap FI(loadImageFile)(Gosu::Reader input)
+    void FI(loadImageFile)(Bitmap& bitmap, Gosu::Reader input)
     {
         // Read all available input
         std::vector<BYTE> data(input.resource().size() - input.position());
@@ -105,7 +104,7 @@ namespace Gosu
         FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeFromMemory(fim);
         FIBITMAP* fib = FreeImage_LoadFromMemory(fif, fim, GOSU_FIFLAGS);
 
-        return fibToBitmap(fib, fif);
+        fibToBitmap(bitmap, fib, fif);
     }
 
     void FI(saveImageFile)(const Bitmap& bitmap, const std::wstring& filename)

@@ -48,9 +48,8 @@ namespace
         atexit(closeGDIplus);
     }
 
-    Gosu::Bitmap gdiPlusToGosu(Gdiplus::Bitmap& bitmap)
+    void gdiPlusToGosu(Gosu::Bitmap& result, Gdiplus::Bitmap& bitmap)
     {
-        Gosu::Bitmap result;
         result.resize(bitmap.GetWidth(), bitmap.GetHeight());
 
         GUID guid;
@@ -79,8 +78,6 @@ namespace
                 
         if (guid == Gdiplus::ImageFormatBMP)
             applyColorKey(result, Gosu::Color::FUCHSIA);
-        
-        return result;
     }
 
     boost::shared_ptr<IStream> readToIStream(Gosu::Reader reader)
@@ -144,23 +141,23 @@ namespace
     }
 }
 
-Gosu::Bitmap Gosu::loadImageFile(const std::wstring& filename)
+void Gosu::loadImageFile(Gosu::Bitmap& result, const std::wstring& filename)
 {
     requireGDIplus();
 
     Gdiplus::Bitmap bitmap(filename.c_str());
     check(bitmap.GetLastStatus(), ("loading " + wstringToUTF8(filename)).c_str());
-    return gdiPlusToGosu(bitmap);
+    gdiPlusToGosu(result, bitmap);
 }
 
-Gosu::Bitmap Gosu::loadImageFile(Reader reader)
+void Gosu::loadImageFile(Gosu::Bitmap& result, Reader reader)
 {
     requireGDIplus();
 
     boost::shared_ptr<IStream> stream = readToIStream(reader);
     Gdiplus::Bitmap bitmap(stream.get());
     check(bitmap.GetLastStatus(), "loading a bitmap from memory");
-    return gdiPlusToGosu(bitmap);
+    gdiPlusToGosu(result, bitmap);
 }
 
 void Gosu::saveImageFile(const Bitmap& bitmap, const std::wstring& filename)

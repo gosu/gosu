@@ -249,9 +249,9 @@ namespace Gosu
         #undef VcppException
         #undef FACILITY_VISUALCPP
     }
-	Bitmap loadImageFile_FreeImage(const std::wstring& filename);
+    void loadImageFile_FreeImage(Bitmap& result, const std::wstring& filename);
     #endif
-    Gosu::Bitmap loadBitmap(VALUE val)
+    void loadBitmap(Bitmap& bitmap, VALUE val)
     {
         // Try to treat as filename first.
         if (rb_respond_to(val, rb_intern("to_str")))
@@ -260,11 +260,13 @@ namespace Gosu
             const char* filenameUTF8 = StringValuePtr(to_str);
             std::wstring filename = Gosu::utf8ToWstring(filenameUTF8);
             try {
-	            return loadImageFile(filename);
+                loadImageFile(bitmap, filename);
+                return;
 	        } catch (const std::exception&) {
             #ifdef GOSU_IS_WIN
                 ping_FreeImage();
-				return loadImageFile_FreeImage(filename);
+                loadImageFile_FreeImage(bitmap, filename);
+                return;
 	        #else
 				throw;
 			#endif
@@ -278,24 +280,23 @@ namespace Gosu
         unsigned width = NUM2UINT(rb_funcall(val, rb_intern("columns"), 0));
         unsigned height = NUM2UINT(rb_funcall(val, rb_intern("rows"), 0));
         
-        Bitmap result(width, height);
+        bitmap.resize(width, height, Gosu::Color::NONE);
         if (width * height * 4 == RSTRING_LEN(blob))
         {
             // 32 bit per pixel, assume R8G8B8A8
-            std::memcpy(result.data(),
+            std::memcpy(bitmap.data(),
                 reinterpret_cast<const boost::uint32_t*>(RSTRING_PTR(blob)), width * height * 4);
         }
         else if (width * height * 4 * sizeof(float) == RSTRING_LEN(blob))
         {
             // 32 bit per channel, assume float/float/float/float
             const float* in = reinterpret_cast<const float*>(RSTRING_PTR(blob));
-            Gosu::Color::Channel* out = reinterpret_cast<Gosu::Color::Channel*>(result.data());
+            Gosu::Color::Channel* out = reinterpret_cast<Gosu::Color::Channel*>(bitmap.data());
             for (int i = width * height * 4; i > 0; --i)
                 *(out++) = *(in++) * 255;
         }
         else
             throw std::logic_error("Blob length mismatch!");
-        return result;
     }
     
     const char* cstrFromSymbol(VALUE symbol) {
@@ -489,11 +490,15 @@ namespace Gosu {
 %include "../Gosu/Image.hpp"
 %extend Gosu::Image {
     Image(Gosu::Window& window, VALUE source, bool tileable = false) {
-        return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source), tileable);
+        Gosu::Bitmap bmp;
+        Gosu::loadBitmap(bmp, source);
+        return new Gosu::Image(window.graphics(), bmp, tileable);
     }
     Image(Gosu::Window& window, VALUE source, bool tileable,
           unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight) {
-        return new Gosu::Image(window.graphics(), Gosu::loadBitmap(source),
+        Gosu::Bitmap bmp;
+        Gosu::loadBitmap(bmp, source);
+        return new Gosu::Image(window.graphics(), bmp,
             srcX, srcY, srcWidth, srcHeight, tileable);
     }
     #ifndef WIN32
@@ -537,7 +542,9 @@ namespace Gosu {
     {
         std::vector<Gosu::Image*> vec;
         // TODO: const correctness (<- did I mean exception safety?)
-        Gosu::imagesFromTiledBitmap(window.graphics(), Gosu::loadBitmap(source),
+        Gosu::Bitmap bmp;
+        Gosu::loadBitmap(bmp, source);
+        Gosu::imagesFromTiledBitmap(window.graphics(), bmp,
             tileWidth, tileHeight, tileable, vec);
         return vec;        
     }
@@ -568,7 +575,9 @@ namespace Gosu {
     }
     void insert(VALUE source, int x, int y)
     {
-        $self->getData().insert(Gosu::loadBitmap(source), x, y);
+        Gosu::Bitmap bmp;
+        Gosu::loadBitmap(bmp, source);
+        $self->getData().insert(bmp, x, y);
     }
 }
 

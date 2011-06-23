@@ -24,7 +24,7 @@ namespace Gosu
     //! Convenient all-in-one class that serves as the foundation of a standard
 	//! Gosu application. Manages initialization of all of Gosu's core components
     //! and provides timing functionality.
-    //! Note that you should really only use on instance of this class at the same time.
+    //! Note that you should really only use one instance of this class at the same time.
     //! This may or may not change later.
     class Window
     {
