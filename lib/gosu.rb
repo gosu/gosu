@@ -1,16 +1,12 @@
 require 'rbconfig'
 
-begin
-  if defined? RUBY_VERSION and RUBY_VERSION[0..2] == '1.9' then
-    version = '1_9'
-  else
-    version = '1_8'
-  end
-  require "#{File.dirname(__FILE__)}/gosu.for_#{version}.#{Config::CONFIG['DLEXT']}"
-  require "#{File.dirname(__FILE__)}/gosu/swig_patches.rb"
-rescue LoadError => e
-  require "#{File.dirname(__FILE__)}/gosu.#{Config::CONFIG['DLEXT']}"
-  require "#{File.dirname(__FILE__)}/gosu/swig_patches.rb"
+if File.exist? "#{File.dirname(__FILE__)}/gosu.#{Config::CONFIG['DLEXT']}"
+  require "gosu.#{Config::CONFIG['DLEXT']}"
+elsif defined? RUBY_VERSION and RUBY_VERSION.split('.')[1].to_i > 8 then
+  require "gosu.for_1_9.#{Config::CONFIG['DLEXT']}"
+else
+  require "gosu.for_1_8.#{Config::CONFIG['DLEXT']}"
 end
 
-require "#{File.dirname(__FILE__)}/gosu/patches.rb"
+require "gosu/swig_patches"
+require "gosu/patches"

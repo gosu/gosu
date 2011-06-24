@@ -1,6 +1,7 @@
 # Encoding: UTF-8
 
-require '../lib/gosu'
+$LOAD_PATH << '../lib'
+require 'gosu'
 
 class Test < Gosu::Window
   def initialize

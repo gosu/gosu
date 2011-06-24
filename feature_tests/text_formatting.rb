@@ -1,4 +1,5 @@
-require '../lib/gosu'
+$LOAD_PATH << '../lib'
+require 'gosu'
 
 TEST_STRING = "</u>H<u>al<b>lo &amp;&lt;b&gt; We<i>lt H&M Entity: &cursor; <c=ffff00>y<u>e<c=80ffff00>ll</i>ow</c></c>w</u>hite&undef;"
 

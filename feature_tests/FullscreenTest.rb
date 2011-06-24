@@ -1,4 +1,5 @@
-require '../lib/gosu'
+$LOAD_PATH << '../lib'
+require 'gosu'
 
 #### Cases that HAVE to work ####
 

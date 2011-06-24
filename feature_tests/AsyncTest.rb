@@ -1,4 +1,5 @@
-require '../lib/gosu'
+$LOAD_PATH << '../lib'
+require 'gosu'
 
 module ZOrder
   Background, Player, Stars, UI = *0..3
