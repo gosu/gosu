@@ -1,7 +1,8 @@
 # Encoding: UTF-8
 
 # Require cutting-edge development Gosu for testing.
-require '../lib/gosu'
+$LOAD_PATH << '../lib'
+require 'gosu'
 
 Dir.chdir 'audio_formats'
 FORMATS_TO_TRY = Dir['*'].sort

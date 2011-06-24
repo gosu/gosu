@@ -1,4 +1,5 @@
-require '../lib/gosu'
+$LOAD_PATH << '../lib'
+require 'gosu'
 
 Blob = Struct.new(:columns, :rows, :to_blob)
 

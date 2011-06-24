@@ -1,5 +1,6 @@
 # Require cutting-edge development Gosu for testing.
-require '../lib/gosu'
+$LOAD_PATH << '../lib'
+require 'gosu'
 
 # This kind of turned into a stress-test for Song too.
 
