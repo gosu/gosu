@@ -1,13 +1,15 @@
+# Version string of the form "0.1.2" or "0.1.2.3".
+GOSU_VERSION = :a_string
+# First component of the version.
+GOSU_MAJOR_VERSION = :a_fixnum
+# Second component of the version.
+GOSU_MINOR_VERSION = :a_fixnum
+# Third component of the version.
+GOSU_POINT_VERSION = :a_fixnum
+# A long block of legal copy that your game is obliged to display somewhere.
+GOSU_COPYRIGHT_NOTICE = :a_string
+
 module Gosu
-  # Version string of the form "0.1.2" or "0.1.2.3".
-  VERSION = :a_string
-  # First component of the version.
-  MAJOR_VERSION = :a_fixnum
-  # Second component of the version.
-  MINOR_VERSION = :a_fixnum
-  # Third component of the version.
-  POINT_VERSION = :a_fixnum
-  
   Kb0 = :implementation_defined
   Kb1 = :implementation_defined
   Kb2 = :implementation_defined
