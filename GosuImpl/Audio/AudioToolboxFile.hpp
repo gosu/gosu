@@ -12,7 +12,6 @@
 #include <Gosu/Platform.hpp>
 #include <algorithm>
 #include <vector>
-#include <boost/lexical_cast.hpp>
 #include <arpa/inet.h>
 #import <Foundation/Foundation.h>
 

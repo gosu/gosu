@@ -2,6 +2,7 @@
 #include <GosuImpl/Sockets/Sockets.hpp>
 #include <cassert>
 #include <cstring>
+#include <tr1/functional>
 #include <stdexcept>
 #include <vector>
 

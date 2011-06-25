@@ -6,16 +6,15 @@
 #include <Gosu/Utility.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/FormattedString.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/bind.hpp>
-#include <boost/foreach.hpp>
-#include <boost/shared_ptr.hpp>
+#include <tr1/functional>
+#include <tr1/memory>
 #include <cassert>
 #include <cmath>
 #include <algorithm>
 #include <map>
 #include <vector>
 using namespace std;
+using namespace tr1;
 
 namespace Gosu
 {
@@ -104,10 +103,10 @@ namespace Gosu
                 if (text.entityAt(0))
                     return entityBitmap(text.entityAt(0)).width();
                 
-                std::vector<FormattedString> parts = text.splitParts();
+                vector<FormattedString> parts = text.splitParts();
                 unsigned result = 0;
-                BOOST_FOREACH (const FormattedString& part, parts)
-                    result += Gosu::textWidth(part.unformat(), fontName, fontHeight, part.flagsAt(0));
+                for (unsigned i = 0; i < parts.size(); ++i)
+                    result += Gosu::textWidth(parts[i].unformat(), fontName, fontHeight, parts[i].flagsAt(0));
                 return result;
             }
 
@@ -145,13 +144,15 @@ namespace Gosu
                 default:
                     pos = 0;
                 }
-
+                
                 for (Words::const_iterator cur = begin; cur != end; ++cur)
                 {
-                    std::vector<FormattedString> parts = cur->text.splitParts();
+                    vector<FormattedString> parts = cur->text.splitParts();
                     int x = 0;
-                    BOOST_FOREACH (const FormattedString& part, parts)
+                    for (int i = 0; i < parts.size(); ++i)
                     {
+                        FormattedString& part = parts[i];
+                        
                         if (part.entityAt(0))
                         {
                             Gosu::Bitmap entity = entityBitmap(part.entityAt(0));
@@ -161,7 +162,7 @@ namespace Gosu
                             continue;
                         }
                         
-                        std::wstring unformattedPart = part.unformat();
+                        wstring unformattedPart = part.unformat();
                         drawText(bmp, unformattedPart, trunc(pos) + x, trunc(top),
                             part.colorAt(0), fontName, fontHeight, part.flagsAt(0));
                         x += Gosu::textWidth(unformattedPart, fontName, fontHeight,
@@ -294,20 +295,20 @@ namespace Gosu
         void processText(TextBlockBuilder& builder, const FormattedString& text)
         {
             vector<FormattedString> paragraphs = text.splitLines();
-            BOOST_FOREACH (FormattedString& fs, paragraphs)
-                processParagraph(builder, fs);
+            for (int i = 0; i < paragraphs.size(); ++i)
+                processParagraph(builder, paragraphs[i]);
         }
     }
 }
 
-Gosu::Bitmap Gosu::createText(const std::wstring& text,
-    const std::wstring& fontName, unsigned fontHeight, int lineSpacing,
+Gosu::Bitmap Gosu::createText(const wstring& text,
+    const wstring& fontName, unsigned fontHeight, int lineSpacing,
     unsigned maxWidth, TextAlign align, unsigned fontFlags)
 {
     if (lineSpacing <= -static_cast<int>(fontHeight))
-        throw std::logic_error("negative line spacing of more than line height impossible");
+        throw logic_error("negative line spacing of more than line height impossible");
 
-    FormattedString fs(boost::replace_all_copy(text, L"\r\n", L"\n"), fontFlags);
+    FormattedString fs(text.c_str(), fontFlags);
     if (fs.length() == 0)
         return Bitmap(maxWidth, fontHeight);
     
@@ -323,10 +324,10 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
 }
 
 // Very easy special case.
-Gosu::Bitmap Gosu::createText(const std::wstring& text,
-    const std::wstring& fontName, unsigned fontHeight, unsigned fontFlags)
+Gosu::Bitmap Gosu::createText(const wstring& text,
+    const wstring& fontName, unsigned fontHeight, unsigned fontFlags)
 {
-    FormattedString fs(boost::replace_all_copy(text, L"\r\n", L"\n"), fontFlags);
+    FormattedString fs(text.c_str(), fontFlags);
     if (fs.length() == 0)
         return Bitmap(1, fontHeight);
     
@@ -340,7 +341,7 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
             continue;
         
         unsigned x = 0;
-        std::vector<FormattedString> parts = lines[i].splitParts();
+        vector<FormattedString> parts = lines[i].splitParts();
         for (int p = 0; p < parts.size(); ++p)
         {
             const FormattedString& part = parts[p];
@@ -348,17 +349,17 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
             {
                 Gosu::Bitmap entity = entityBitmap(part.entityAt(0));
                 multiplyBitmapAlpha(entity, part.colorAt(0).alpha());
-                bmp.resize(std::max(bmp.width(), x + entity.width()), bmp.height());
+                bmp.resize(max(bmp.width(), x + entity.width()), bmp.height());
                 bmp.insert(entity, x, i * fontHeight);
                 x += entity.width();
                 continue;
             }
                 
             assert(part.length() > 0);
-            std::wstring unformattedText = part.unformat();
+            wstring unformattedText = part.unformat();
             unsigned partWidth =
                 textWidth(unformattedText, fontName, fontHeight, part.flagsAt(0));
-            bmp.resize(std::max(bmp.width(), x + partWidth), bmp.height());
+            bmp.resize(max(bmp.width(), x + partWidth), bmp.height());
             drawText(bmp, unformattedText, x, i * fontHeight, part.colorAt(0),
                 fontName, fontHeight, part.flagsAt(0));
             x += partWidth;
@@ -370,23 +371,23 @@ Gosu::Bitmap Gosu::createText(const std::wstring& text,
 
 namespace
 {
-    std::map<std::wstring, boost::shared_ptr<Gosu::Bitmap> > entities;
+    map<wstring, shared_ptr<Gosu::Bitmap> > entities;
 }
 
-void Gosu::registerEntity(const std::wstring& name, const Gosu::Bitmap& replacement)
+void Gosu::registerEntity(const wstring& name, const Gosu::Bitmap& replacement)
 {
     entities[name].reset(new Bitmap(replacement));
 }
 
-bool Gosu::isEntity(const std::wstring& name)
+bool Gosu::isEntity(const wstring& name)
 {
     return entities[name];
 }
 
-const Gosu::Bitmap& Gosu::entityBitmap(const std::wstring& name)
+const Gosu::Bitmap& Gosu::entityBitmap(const wstring& name)
 {
-    boost::shared_ptr<Gosu::Bitmap>& ptr = entities[name];
+    shared_ptr<Gosu::Bitmap>& ptr = entities[name];
     if (!ptr)
-        throw std::runtime_error("Unknown entity: " + Gosu::wstringToUTF8(name));
+        throw runtime_error("Unknown entity: " + Gosu::wstringToUTF8(name));
     return *ptr;
 }

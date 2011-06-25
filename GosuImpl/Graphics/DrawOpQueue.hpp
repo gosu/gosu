@@ -3,9 +3,8 @@
 
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/DrawOp.hpp>
-#include <boost/foreach.hpp>
-#include <boost/function.hpp>
-#include <boost/optional.hpp>
+#include <cassert>
+#include <tr1/functional>
 #include <algorithm>
 #include <map>
 #include <vector>
@@ -14,7 +13,7 @@ class Gosu::DrawOpQueue
 {
     typedef std::vector<DrawOp> DrawOps;
     DrawOps ops;
-    typedef std::multimap<ZPos, boost::function<void()> > CodeMap;
+    typedef std::multimap<ZPos, std::tr1::function<void()> > CodeMap;
     CodeMap code;
 
     struct ClipRect
@@ -23,15 +22,22 @@ class Gosu::DrawOpQueue
         unsigned width, height;
     };
     std::vector<ClipRect> clipRectStack;
-    boost::optional<ClipRect> effectiveRect;
+    // was boost::optional before, hackish replacement
+    ClipRect effectiveRect;
+    bool haveEffectiveRect;
+    
     void updateEffectiveRect()
     {
         if (clipRectStack.empty())
-            return effectiveRect.reset();
-
-        ClipRect result = { 0, 0, 0x7fffffff, 0x7fffffff };
-        BOOST_FOREACH (const ClipRect& rect, clipRectStack)
         {
+            haveEffectiveRect = false;
+            return;
+        }
+        
+        ClipRect result = { 0, 0, 0x7fffffff, 0x7fffffff };
+        for (int i = 0; i < clipRectStack.size(); ++i)
+        {
+            const ClipRect& rect = clipRectStack[i];
             int right = std::min<int>(result.x + result.width, rect.x + rect.width);
             int bottom = std::min<int>(result.y + result.height, rect.y + rect.height);
             result.x = std::max<int>(result.x, rect.x);
@@ -39,7 +45,7 @@ class Gosu::DrawOpQueue
             
             if (result.x >= right || result.y >= bottom)
             {
-                effectiveRect.reset();
+                haveEffectiveRect = false;
                 return;
             }
             
@@ -51,6 +57,7 @@ class Gosu::DrawOpQueue
         result.x *= fac, result.y *= fac, result.width *= fac, result.height *= fac;
         
         effectiveRect = result;
+        haveEffectiveRect = true;
     }
 
 public:
@@ -59,6 +66,7 @@ public:
     {
         clipRectStack.swap(other.clipRectStack);
         std::swap(effectiveRect, other.effectiveRect);
+        std::swap(haveEffectiveRect, other.haveEffectiveRect);
         ops.swap(other.ops);
         code.swap(other.code);
     }
@@ -70,13 +78,12 @@ public:
         assert (op.usedVertices == 4);
         #endif
         
-        if (effectiveRect)
+        if (haveEffectiveRect)
         {
-            const ClipRect& rect = *effectiveRect;
-            op.clipX = rect.x;
-            op.clipY = rect.y;
-            op.clipWidth = rect.width;
-            op.clipHeight = rect.height;
+            op.clipX      = effectiveRect.x;
+            op.clipY      = effectiveRect.y;
+            op.clipWidth  = effectiveRect.width;
+            op.clipHeight = effectiveRect.height;
         }
         else if (!clipRectStack.empty())
             // When we have no effect rect but the stack is not empty, we have clipped
@@ -87,7 +94,7 @@ public:
         ops.push_back(op);
     }
     
-    void scheduleGL(boost::function<void()> customCode, ZPos z)
+    void scheduleGL(std::tr1::function<void()> customCode, ZPos z)
     {
         code.insert(std::make_pair(z, customCode));
     }
@@ -110,8 +117,8 @@ public:
         // Allows us to make some assumptions.
         if (ops.empty())
         {
-            BOOST_FOREACH (const CodeMap::value_type& fn, code)
-                fn.second();
+            for (CodeMap::iterator it = code.begin(), end = code.end(); it != end; ++it)
+                it->second();
             return;
         }
         
@@ -179,8 +186,8 @@ public:
         
         va.reserve(ops.size());
         std::stable_sort(ops.begin(), ops.end());
-        BOOST_FOREACH (const DrawOp& op, ops)
-            op.compileTo(va);
+        for (DrawOps::const_iterator op = ops.begin(), end = ops.end(); op != end; ++op)
+            op->compileTo(va);
     }
 };
 

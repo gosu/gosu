@@ -1,7 +1,6 @@
 #import <OpenAL/al.h>
 #import <OpenAL/alc.h>
 #include <GosuImpl/MacUtility.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <algorithm>
 
 namespace Gosu
@@ -81,5 +80,5 @@ namespace Gosu
     ALCdevice* ALChannelManagement::alDevice = 0;
     ALCcontext* ALChannelManagement::alContext = 0;
     
-    boost::scoped_ptr<ALChannelManagement> alChannelManagement;
+    std::auto_ptr<ALChannelManagement> alChannelManagement;
 }

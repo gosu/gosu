@@ -72,24 +72,23 @@ unsigned Gosu::BlockAllocator::height() const
     return pimpl->height;
 }
 
-boost::optional<Gosu::BlockAllocator::Block>
-    Gosu::BlockAllocator::alloc(unsigned aWidth, unsigned aHeight)
+bool Gosu::BlockAllocator::alloc(unsigned aWidth, unsigned aHeight, Block& b)
 {
     // The rect wouldn't even fit onto the texture!
     if (aWidth > width() || aHeight > height())
-        return boost::optional<Block>();
+        return false;
 
     // We know there's no space left.
     if (aWidth > pimpl->maxW && aHeight > pimpl->maxH)
-        return boost::optional<Block>();
+        return false;
     
     // Start to look for a place next to the last returned rect. Chances are
     // good we'll find a place there.
-    Block b = Block(pimpl->firstX, pimpl->firstY, aWidth, aHeight);
+    b = Block(pimpl->firstX, pimpl->firstY, aWidth, aHeight);
     if (pimpl->isBlockFree(b))
     {
         pimpl->markBlockUsed(b, aWidth, aHeight);
-        return b;
+        return true;
     }
 
     // Brute force: Look for a free place on this texture.
@@ -110,13 +109,13 @@ boost::optional<Gosu::BlockAllocator::Block>
                 --x;
             
             pimpl->markBlockUsed(b, aWidth, aHeight);
-            return b;
+            return true;
         }
 
     // So there was no space for the bitmap. Remember this for later.
     pimpl->maxW = aWidth - 1;
     pimpl->maxH = aHeight - 1;
-    return boost::optional<Block>();
+    return false;
 }
 
 void Gosu::BlockAllocator::free(unsigned left, unsigned top)

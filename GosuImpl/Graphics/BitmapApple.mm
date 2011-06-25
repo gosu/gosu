@@ -5,8 +5,6 @@
 #include <Gosu/Utility.hpp>
 
 #include <GosuImpl/MacUtility.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/lexical_cast.hpp>
 #include <stdexcept>
 
 #ifdef GOSU_IS_IPHONE
@@ -71,6 +69,9 @@ namespace
     #endif
 }
 
+// TODO: Move into proper internal header
+namespace Gosu { bool isExtension(const wchar_t* str, const wchar_t* ext); }
+
 void Gosu::loadImageFile(Bitmap& bitmap, const std::wstring& filename)
 {
     ObjRef<NSString> filenameRef([[NSString alloc] initWithUTF8String: wstringToUTF8(filename).c_str()]);
@@ -79,7 +80,7 @@ void Gosu::loadImageFile(Bitmap& bitmap, const std::wstring& filename)
         throw std::runtime_error("Cannot load image file " + wstringToUTF8(filename));
     
     appleImageToBitmap(image.obj(), bitmap);
-    if (boost::iends_with(filename, L".bmp"))
+    if (isExtension(filename.c_str(), L".bmp"))
         applyColorKey(bitmap, Color::FUCHSIA);
 }
 
@@ -114,15 +115,15 @@ void Gosu::saveImageFile(const Bitmap& bitmap, const std::wstring& filename)
 void Gosu::saveImageFile(const Bitmap& originalBitmap, Writer writer, const std::wstring& formatHint)
 {
     NSBitmapImageFileType fileType;
-    if (boost::iends_with(formatHint, L"png"))
+    if (isExtension(formatHint.c_str(), L"png"))
         fileType = NSPNGFileType;
-    else if (boost::iends_with(formatHint, L"bmp"))
+    else if (isExtension(formatHint.c_str(), L"bmp"))
         fileType = NSBMPFileType;
-    else if (boost::iends_with(formatHint, L"gif"))
+    else if (isExtension(formatHint.c_str(), L"gif"))
         fileType = NSGIFFileType;
-    else if (boost::iends_with(formatHint, L"jpg") || boost::iends_with(formatHint, L"jpeg"))
+    else if (isExtension(formatHint.c_str(), L"jpg") || isExtension(formatHint.c_str(), L"jpeg"))
         fileType = NSJPEGFileType;
-    else if (boost::iends_with(formatHint, L"tif") || boost::iends_with(formatHint, L"tiff"))
+    else if (isExtension(formatHint.c_str(), L"tif") || isExtension(formatHint.c_str(), L"tiff"))
         fileType = NSTIFFFileType;
     else
         throw std::runtime_error("Unsupported image format for writing: " + wstringToUTF8(formatHint));
@@ -156,7 +157,7 @@ void Gosu::saveImageFile(const Bitmap& bmp, const std::wstring& filename)
 
 void Gosu::saveImageFile(const Bitmap& bmp, Writer writer, const std::wstring& formatHint)
 {    
-    if (boost::iends_with(formatHint, L"bmp"))
+    if (isExtension(formatHint.c_str(), L"bmp"))
     {
         Bitmap bitmap = bmp;
         unapplyColorKey(bitmap, Color::FUCHSIA);
@@ -178,9 +179,9 @@ void Gosu::saveImageFile(const Bitmap& bmp, Writer writer, const std::wstring& f
     ObjRef<UIImage> image([[UIImage alloc] initWithCGImage: imageRef]);
     
     NSData* data;
-    if (boost::iends_with(formatHint, L"jpeg") || boost::iends_with(formatHint, L"jpg"))
+    if (isExtension(formatHint.c_str(), L"jpeg") || isExtension(formatHint.c_str(), L"jpg"))
         data = UIImageJPEGRepresentation(image.get(), 0.0);
-    else if (boost::iends_with(formatHint, L"png"))
+    else if (isExtension(formatHint.c_str(), L"png"))
         data = UIImagePNGRepresentation(image.get());
     else
         throw std::runtime_error("Unsupported image format for writing: " + wstringToUTF8(formatHint));

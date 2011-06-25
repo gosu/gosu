@@ -3,8 +3,7 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
-#include <boost/none.hpp>
-#include <boost/shared_ptr.hpp>
+#include <tr1/memory>
 #include <vector>
 
 namespace Gosu
@@ -12,7 +11,7 @@ namespace Gosu
     class LargeImageData : public ImageData
     {
         unsigned fullWidth, fullHeight, partsX, partsY, partWidth, partHeight;
-        std::vector<boost::shared_ptr<ImageData> > parts;
+        std::vector<std::tr1::shared_ptr<ImageData> > parts;
 
     public:
         LargeImageData(Graphics& graphics, const Bitmap& source,

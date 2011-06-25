@@ -5,11 +5,11 @@
 #include <Gosu/ImageData.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/DrawOpQueue.hpp>
-#include <boost/bind.hpp>
-#include <boost/foreach.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <tr1/functional>
+#include <tr1/memory>
 #include <cmath>
 #include <algorithm>
+#include <memory>
 
 class Gosu::Macro : public Gosu::ImageData
 {
@@ -23,12 +23,13 @@ public:
     {
         queue.compileTo(vertexArray);
         double left = 0, right = 0, top = 0, bottom = 0;
-        BOOST_FOREACH (const ArrayVertex& av, vertexArray)
+        for (VertexArray::const_iterator it = vertexArray.begin(),
+             end = vertexArray.end(); it != end; ++it)
         {
-            left = std::min<double>(left, av.vertices[0]);
-            right = std::max<double>(right, av.vertices[0]);
-            top = std::min<double>(top, av.vertices[1]);
-            bottom = std::max<double>(bottom, av.vertices[1]);
+            left   = std::min<double>(left,   it->vertices[0]);
+            right  = std::max<double>(right,  it->vertices[0]);
+            top    = std::min<double>(top,    it->vertices[1]);
+            bottom = std::max<double>(bottom, it->vertices[1]);
         }
         w = std::ceil(right - left);
         h = std::ceil(bottom - top);
@@ -50,7 +51,7 @@ public:
               double x4, double y4, Color c4,
               ZPos z, AlphaMode mode) const
     {
-        boost::function<void()> f = boost::bind(&Macro::realDraw, this, x1, y1, x2, y2, x3, y3);
+        std::tr1::function<void()> f = std::tr1::bind(&Macro::realDraw, this, x1, y1, x2, y2, x3, y3);
         graphics.scheduleGL(f, z);
     }
     

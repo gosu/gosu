@@ -7,7 +7,7 @@
 
 #include <Gosu/Fwd.hpp>
 #include <tr1/memory>
-#include <boost/thread.hpp>
+#include <thread>
 #include <memory>
 #include <string>
 

@@ -5,6 +5,7 @@
 #include <Gosu/Text.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/FormattedString.hpp>
+#include <cassert>
 #include <tr1/array>
 #include <tr1/memory>
 #include <map>
@@ -117,7 +118,7 @@ unsigned Gosu::Font::flags() const
 
 double Gosu::Font::textWidth(const wstring& text, double factorX) const
 {
-    FormattedString fs(text, flags());
+    FormattedString fs(text.c_str(), flags());
     double result = 0;
     for (unsigned i = 0; i < fs.length(); ++i)
         result += pimpl->imageAt(fs, i).width() * pimpl->factorAt(fs, i);
@@ -127,7 +128,7 @@ double Gosu::Font::textWidth(const wstring& text, double factorX) const
 void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
     double factorX, double factorY, Color c, AlphaMode mode) const
 {
-    FormattedString fs(text, flags());
+    FormattedString fs(text.c_str(), flags());
 
     enum {
         LTR = 1,

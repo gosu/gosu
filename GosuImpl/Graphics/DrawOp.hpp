@@ -6,14 +6,13 @@
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/TexChunk.hpp>
 #include <GosuImpl/Graphics/RenderState.hpp>
-#include <boost/cstdint.hpp>
 
 namespace Gosu
 {
     struct ArrayVertex
     {
         float texCoords[2];
-        boost::uint32_t color;
+        unsigned color;
         float vertices[3];
     };
     typedef std::vector<ArrayVertex> VertexArray;
@@ -52,7 +51,7 @@ namespace Gosu
             static int spriteCounter = 0;
             static float spriteVertices[12 * MAX_AUTOGROUP];
             static float spriteTexcoords[12 * MAX_AUTOGROUP];
-            static boost::uint32_t spriteColors[6 * MAX_AUTOGROUP];
+            static unsigned spriteColors[6 * MAX_AUTOGROUP];
             
             // iPhone specific setup
             static bool isSetup = false;
