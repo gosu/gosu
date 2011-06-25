@@ -6,8 +6,11 @@
 
 namespace Gosu
 {
-    class ALChannelManagement : boost::noncopyable
+    class ALChannelManagement
     {
+        ALChannelManagement(const ALChannelManagement&);
+        ALChannelManagement& operator=(const ALChannelManagement&);
+        
         static ALCdevice* alDevice;
         static ALCcontext* alContext;
 

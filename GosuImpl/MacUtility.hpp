@@ -45,7 +45,6 @@ namespace Gosu
 #ifdef __OBJC__
 #import <objc/objc.h>
 #import <stdexcept>
-#import <boost/utility.hpp>
 namespace Gosu
 {
     template<typename T>

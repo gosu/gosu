@@ -2171,14 +2171,12 @@ namespace Swig {
 #define SWIGTYPE_p_Gosu__Song swig_types[9]
 #define SWIGTYPE_p_Gosu__TextInput swig_types[10]
 #define SWIGTYPE_p_Gosu__Window swig_types[11]
-#define SWIGTYPE_p_boost__optionalT_Gosu__Color_t swig_types[12]
-#define SWIGTYPE_p_boost__uint32_t swig_types[13]
-#define SWIGTYPE_p_char swig_types[14]
-#define SWIGTYPE_p_double swig_types[15]
-#define SWIGTYPE_p_std__tr1__arrayT_double_16_t swig_types[16]
-#define SWIGTYPE_p_std__wstring swig_types[17]
-static swig_type_info *swig_types[19];
-static swig_module_info swig_module = {swig_types, 18, 0, 0, 0, 0};
+#define SWIGTYPE_p_char swig_types[12]
+#define SWIGTYPE_p_double swig_types[13]
+#define SWIGTYPE_p_std__tr1__arrayT_double_16_t swig_types[14]
+#define SWIGTYPE_p_std__wstring swig_types[15]
+static swig_type_info *swig_types[17];
+static swig_module_info swig_module = {swig_types, 16, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2253,8 +2251,7 @@ namespace Gosu {
 
 #include <ctime>
 #include <sstream>
-#include <boost/algorithm/string.hpp>
-#include <boost/bind.hpp>
+#include <tr1/functional>
 
 // Preprocessor check for 1.9 (thanks banister)
 #if defined(ROBJECT_EMBED_LEN_MAX)
@@ -2346,7 +2343,7 @@ namespace Gosu
         {
             // 32 bit per pixel, assume R8G8B8A8
             std::memcpy(bitmap.data(),
-                reinterpret_cast<const boost::uint32_t*>(RSTRING_PTR(blob)), width * height * 4);
+                reinterpret_cast<const unsigned*>(RSTRING_PTR(blob)), width * height * 4);
         }
         else if (width * height * 4 * sizeof(float) == RSTRING_LEN(blob))
         {
@@ -2554,15 +2551,15 @@ SWIGINTERN Gosu::Color Gosu_Color_rgb(Gosu::Color::Channel r,Gosu::Color::Channe
 SWIGINTERN Gosu::Color Gosu_Color_rgba__SWIG_0(Gosu::Color::Channel r,Gosu::Color::Channel g,Gosu::Color::Channel b,Gosu::Color::Channel a){
         return Gosu::Color(a, r, g, b);
     }
-SWIGINTERN Gosu::Color Gosu_Color_rgba__SWIG_1(boost::uint32_t rgba){
+SWIGINTERN Gosu::Color Gosu_Color_rgba__SWIG_1(unsigned int rgba){
         return Gosu::Color(rgba & 0xff, (rgba >> 24) & 0xff,
             (rgba >> 16) & 0xff, (rgba >> 8) & 0xff);
     }
 SWIGINTERN Gosu::Color Gosu_Color_argb__SWIG_1(Gosu::Color::Channel a,Gosu::Color::Channel r,Gosu::Color::Channel g,Gosu::Color::Channel b){
         return Gosu::Color(a, r, g, b);
     }
-SWIGINTERN Gosu::Color Gosu_Color_argb__SWIG_2(boost::uint32_t argb){
-        return argb;
+SWIGINTERN Gosu::Color Gosu_Color_argb__SWIG_2(unsigned int argb){
+        return Gosu::Color(argb);
     }
 SWIGINTERN Gosu::Color Gosu_Color_dup(Gosu::Color const *self){
         return *self;
@@ -2582,8 +2579,12 @@ SWIG_From_std_string  (const std::string& s)
   return SWIG_FromCharPtrAndSize(s.data(), s.size());
 }
 
-SWIGINTERN bool Gosu_Color_operator_Se__Se_(Gosu::Color *self,boost::optional< Gosu::Color > other){
-        return other && *self == *other;
+SWIGINTERN bool Gosu_Color_operator_Se__Se_(Gosu::Color *self,VALUE other){
+        if (TYPE(other) == T_FIXNUM || TYPE(other) == T_BIGNUM)
+            return *self == Gosu::Color(NUM2UINT(other));
+        void* ptr;
+        int res = SWIG_ConvertPtr(other, &ptr, SWIGTYPE_p_Gosu__Color, 0);
+        return SWIG_IsOK(res) && ptr && *self == *reinterpret_cast<Gosu::Color*>(ptr);
     }
 
 SWIGINTERNINLINE VALUE
@@ -2701,7 +2702,7 @@ SWIGINTERN void Gosu_Image_drawAsQuad(Gosu::Image *self,double x1,double y1,Gosu
         self->getData().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
     }
 SWIGINTERN Gosu::GLTexInfo *Gosu_Image_glTexInfo(Gosu::Image const *self){
-        boost::optional<Gosu::GLTexInfo> info = self->getData().glTexInfo();
+        const Gosu::GLTexInfo* info = self->getData().glTexInfo();
         if (info)
             return new Gosu::GLTexInfo(*info);
         else
@@ -2737,13 +2738,7 @@ SWIGINTERN unsigned int Gosu_Image_rows(Gosu::Image const *self){
         return self->height();
     }
 SWIGINTERN void Gosu_Image_save(Gosu::Image const *self,std::wstring const &filename){
-        Gosu::Bitmap bmp = self->getData().toBitmap();
-        Gosu::Buffer buf;
-        if (boost::iends_with(filename, L".bmp"))
-            Gosu::saveToBMP(bmp, buf.backWriter());
-        else
-            Gosu::saveToPNG(bmp, buf.backWriter());
-        Gosu::saveFile(buf, filename);
+        Gosu::saveImageFile(self->getData().toBitmap(), filename);
     }
 SWIGINTERN void Gosu_Image_insert(Gosu::Image *self,VALUE source,int x,int y){
         Gosu::Bitmap bmp;
@@ -2819,7 +2814,7 @@ SWIGINTERN void Gosu_Window_gl__SWIG_0(Gosu::Window *self){
         self->graphics().endGL();
     }
 SWIGINTERN void Gosu_Window_gl__SWIG_1(Gosu::Window *self,Gosu::ZPos z){
-        self->graphics().scheduleGL(boost::bind(callRubyBlock, rb_block_proc()), z);
+        self->graphics().scheduleGL(std::tr1::bind(callRubyBlock, rb_block_proc()), z);
     }
 SWIGINTERN void Gosu_Window_clipTo(Gosu::Window *self,double x,double y,double width,double height){
         self->graphics().beginClipping(x, y, width, height);
@@ -4787,26 +4782,20 @@ fail:
 
 SWIGINTERN VALUE
 _wrap_Color_rgba__SWIG_1(int argc, VALUE *argv, VALUE self) {
-  boost::uint32_t arg1 ;
-  void *argp1 ;
-  int res1 = 0 ;
+  unsigned int arg1 ;
+  unsigned int val1 ;
+  int ecode1 = 0 ;
   Gosu::Color result;
   VALUE vresult = Qnil;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  {
-    res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_boost__uint32_t,  0 );
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "boost::uint32_t","Gosu_Color_rgba__SWIG_1", 1, argv[0] )); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "boost::uint32_t","Gosu_Color_rgba__SWIG_1", 1, argv[0]));
-    } else {
-      arg1 = *(reinterpret_cast< boost::uint32_t * >(argp1));
-    }
-  }
+  ecode1 = SWIG_AsVal_unsigned_SS_int(argv[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "unsigned int","Gosu_Color_rgba__SWIG_1", 1, argv[0] ));
+  } 
+  arg1 = static_cast< unsigned int >(val1);
   {
     try {
       result = Gosu_Color_rgba__SWIG_1(arg1);
@@ -4833,9 +4822,10 @@ SWIGINTERN VALUE _wrap_Color_rgba(int nargs, VALUE *args, VALUE self) {
   }
   if (argc == 1) {
     int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_boost__uint32_t, 0);
-    _v = SWIG_CheckState(res);
+    {
+      int res = SWIG_AsVal_unsigned_SS_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
     if (_v) {
       return _wrap_Color_rgba__SWIG_1(nargs, args, self);
     }
@@ -4872,7 +4862,7 @@ SWIGINTERN VALUE _wrap_Color_rgba(int nargs, VALUE *args, VALUE self) {
 fail:
   Ruby_Format_OverloadedError( argc, 4, "rgba", 
     "    Gosu::Color rgba(Gosu::Color::Channel r, Gosu::Color::Channel g, Gosu::Color::Channel b, Gosu::Color::Channel a)\n"
-    "    Gosu::Color rgba(boost::uint32_t rgba)\n");
+    "    Gosu::Color rgba(unsigned int rgba)\n");
   
   return Qnil;
 }
@@ -4934,26 +4924,20 @@ fail:
 
 SWIGINTERN VALUE
 _wrap_Color_argb__SWIG_2(int argc, VALUE *argv, VALUE self) {
-  boost::uint32_t arg1 ;
-  void *argp1 ;
-  int res1 = 0 ;
+  unsigned int arg1 ;
+  unsigned int val1 ;
+  int ecode1 = 0 ;
   Gosu::Color result;
   VALUE vresult = Qnil;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  {
-    res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_boost__uint32_t,  0 );
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "boost::uint32_t","Gosu_Color_argb__SWIG_2", 1, argv[0] )); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "boost::uint32_t","Gosu_Color_argb__SWIG_2", 1, argv[0]));
-    } else {
-      arg1 = *(reinterpret_cast< boost::uint32_t * >(argp1));
-    }
-  }
+  ecode1 = SWIG_AsVal_unsigned_SS_int(argv[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "unsigned int","Gosu_Color_argb__SWIG_2", 1, argv[0] ));
+  } 
+  arg1 = static_cast< unsigned int >(val1);
   {
     try {
       result = Gosu_Color_argb__SWIG_2(arg1);
@@ -4989,9 +4973,10 @@ SWIGINTERN VALUE _wrap_Color_argb(int nargs, VALUE *args, VALUE self) {
   }
   if (argc == 1) {
     int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_boost__uint32_t, 0);
-    _v = SWIG_CheckState(res);
+    {
+      int res = SWIG_AsVal_unsigned_SS_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
     if (_v) {
       return _wrap_Color_argb__SWIG_2(nargs, args, self);
     }
@@ -5029,7 +5014,7 @@ fail:
   Ruby_Format_OverloadedError( argc, 4, "Color.argb", 
     "    Gosu::Color Color.argb(Gosu::Color const *self)\n"
     "    Gosu::Color Color.argb(Gosu::Color::Channel a, Gosu::Color::Channel r, Gosu::Color::Channel g, Gosu::Color::Channel b)\n"
-    "    Gosu::Color Color.argb(boost::uint32_t argb)\n");
+    "    Gosu::Color Color.argb(unsigned int argb)\n");
   
   return Qnil;
 }
@@ -5116,7 +5101,7 @@ Equality comparison operator.
 SWIGINTERN VALUE
 _wrap_Color___eq__(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
-  boost::optional< Gosu::Color > arg2 ;
+  VALUE arg2 = (VALUE) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   bool result;
@@ -5130,16 +5115,7 @@ _wrap_Color___eq__(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color *","operator ==", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  {
-    if (TYPE(argv[0]) == T_FIXNUM || TYPE(argv[0]) == T_BIGNUM)
-    arg2 = Gosu::Color(NUM2UINT(argv[0]));
-    else {
-      void* ptr;
-      int res = SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-      if (SWIG_IsOK(res) && ptr)
-      arg2 = *reinterpret_cast<Gosu::Color*>(ptr);
-    }
-  }
+  arg2 = argv[0];
   {
     try {
       result = (bool)Gosu_Color_operator_Se__Se_(arg1,arg2);
@@ -10944,8 +10920,6 @@ static swig_type_info _swigt__p_Gosu__SampleInstance = {"_p_Gosu__SampleInstance
 static swig_type_info _swigt__p_Gosu__Song = {"_p_Gosu__Song", "Gosu::Song *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__TextInput = {"_p_Gosu__TextInput", "Gosu::TextInput *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Window = {"_p_Gosu__Window", "Gosu::Window *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_boost__optionalT_Gosu__Color_t = {"_p_boost__optionalT_Gosu__Color_t", "boost::optional< Gosu::Color > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_boost__uint32_t = {"_p_boost__uint32_t", "boost::uint32_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "Gosu::ZPos *|double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__tr1__arrayT_double_16_t = {"_p_std__tr1__arrayT_double_16_t", "std::tr1::array< double,16 > *|Gosu::Transform *", 0, 0, (void*)0, 0};
@@ -10964,8 +10938,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__Song,
   &_swigt__p_Gosu__TextInput,
   &_swigt__p_Gosu__Window,
-  &_swigt__p_boost__optionalT_Gosu__Color_t,
-  &_swigt__p_boost__uint32_t,
   &_swigt__p_char,
   &_swigt__p_double,
   &_swigt__p_std__tr1__arrayT_double_16_t,
@@ -10984,8 +10956,6 @@ static swig_cast_info _swigc__p_Gosu__SampleInstance[] = {  {&_swigt__p_Gosu__Sa
 static swig_cast_info _swigc__p_Gosu__Song[] = {  {&_swigt__p_Gosu__Song, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__TextInput[] = {  {&_swigt__p_Gosu__TextInput, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Window[] = {  {&_swigt__p_Gosu__Window, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_boost__optionalT_Gosu__Color_t[] = {  {&_swigt__p_boost__optionalT_Gosu__Color_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_boost__uint32_t[] = {  {&_swigt__p_boost__uint32_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__tr1__arrayT_double_16_t[] = {  {&_swigt__p_std__tr1__arrayT_double_16_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -11004,8 +10974,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__Song,
   _swigc__p_Gosu__TextInput,
   _swigc__p_Gosu__Window,
-  _swigc__p_boost__optionalT_Gosu__Color_t,
-  _swigc__p_boost__uint32_t,
   _swigc__p_char,
   _swigc__p_double,
   _swigc__p_std__tr1__arrayT_double_16_t,

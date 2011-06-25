@@ -2,9 +2,10 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/Window.hpp>
-#include <boost/bind.hpp>
+#include <tr1/functional>
 
-using namespace boost;
+using namespace std;
+using namespace std::tr1;
 
 namespace Gosu
 {
@@ -26,7 +27,7 @@ Gosu::AsyncResult<Gosu::Image>
     Gosu::asyncNewImage(Window& window, const std::wstring& filename)
 {
 	shared_ptr<try_mutex> mutex(new try_mutex);
-	shared_ptr<std::auto_ptr<Image> > image(new std::auto_ptr<Image>);
+	shared_ptr<auto_ptr<Image> > image(new std::auto_ptr<Image>);
 	thread thread(bind(asyncNewImage_Impl,
 						ref(window),
                         filename,

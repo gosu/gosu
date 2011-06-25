@@ -27,9 +27,9 @@ namespace Gosu
             double x4, double y4, Color c4,
             ZPos z, AlphaMode mode) const;
             
-        boost::optional<GLTexInfo> glTexInfo() const
+        const GLTexInfo* glTexInfo() const
         {
-            return boost::none;
+            return 0;
         }
         
         Bitmap toBitmap() const;

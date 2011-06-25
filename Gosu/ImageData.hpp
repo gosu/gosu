@@ -6,7 +6,6 @@
 
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
-#include <boost/optional.hpp>
 
 namespace Gosu
 {
@@ -48,7 +47,7 @@ namespace Gosu
             double x4, double y4, Color c4,
             ZPos z, AlphaMode mode) const = 0;
             
-        virtual boost::optional<GLTexInfo> glTexInfo() const = 0;
+        virtual const GLTexInfo* glTexInfo() const = 0;
         virtual Bitmap toBitmap() const = 0;
         
         //! Experimental and undocumented for now.

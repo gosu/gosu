@@ -7,14 +7,14 @@
 #include <memory>
 #include <vector>
 #include <stdexcept>
-#include <boost/shared_ptr.hpp>
+#include <tr1/memory>
 
 class Gosu::TexChunk : public Gosu::ImageData
 {
     Graphics* graphics;
     Transforms* transforms;
     DrawOpQueueStack* queues;
-    boost::shared_ptr<Texture> texture;
+    std::tr1::shared_ptr<Texture> texture;
     int x, y, w, h, padding;
     
     // Cached for faster access.
@@ -22,7 +22,7 @@ class Gosu::TexChunk : public Gosu::ImageData
 
 public:
     TexChunk(Graphics& graphics, Transforms& transforms, DrawOpQueueStack& queues,
-             boost::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding);
+             std::tr1::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding);
     ~TexChunk();
 
     unsigned int width() const
@@ -54,7 +54,7 @@ public:
         double x4, double y4, Color c4,
         ZPos z, AlphaMode mode) const;
         
-    boost::optional<GLTexInfo> glTexInfo() const;
+    const GLTexInfo* glTexInfo() const;
     Gosu::Bitmap toBitmap() const;
     void insert(const Bitmap& bitmap, int x, int y);
 };

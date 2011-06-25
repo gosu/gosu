@@ -62,7 +62,8 @@ GLuint Gosu::Texture::texName() const
 
 std::auto_ptr<Gosu::TexChunk>
     Gosu::Texture::tryAlloc(Graphics& graphics, Transforms& transforms,
-        DrawOpQueueStack& queues, boost::shared_ptr<Texture> ptr, const Bitmap& bmp, unsigned padding)
+        DrawOpQueueStack& queues, std::tr1::shared_ptr<Texture> ptr,
+        const Bitmap& bmp, unsigned padding)
 {
     std::auto_ptr<Gosu::TexChunk> result;
     

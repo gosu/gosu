@@ -5,7 +5,6 @@
 #include <GosuImpl/MacUtility.hpp>
 #include <Gosu/Utility.hpp>
 #include <IOKit/hidsystem/IOLLEvent.h>
-#include <boost/cstdint.hpp>
 #include <tr1/array>
 #include <map>
 #include <string>
@@ -19,9 +18,9 @@
 #include <IOKit/hid/IOHIDKeys.h>
 #include <IOKit/IOKitLib.h>
 #include <IOKit/IOCFPlugIn.h>
+#include <tr1/memory>
 #include <stdexcept>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 // USB Gamepad code, likely to be moved somewhere else later.
 // This is Frankencode until the Input redesign happens.

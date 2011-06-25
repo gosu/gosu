@@ -5,7 +5,7 @@
 #include <Gosu/Graphics.hpp>
 
 Gosu::TexChunk::TexChunk(Graphics& graphics, Transforms& transforms, DrawOpQueueStack& queues,
-    boost::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding)
+    std::tr1::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding)
 :   graphics(&graphics), transforms(&transforms), queues(&queues),
     texture(texture), x(x), y(y), w(w), h(h), padding(padding)
 {
@@ -48,9 +48,9 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1,
     queues->back().scheduleDrawOp(newDrawOp, z);
 }
 
-boost::optional<Gosu::GLTexInfo> Gosu::TexChunk::glTexInfo() const
+const Gosu::GLTexInfo* Gosu::TexChunk::glTexInfo() const
 {
-    return info;
+    return &info;
 }
 
 Gosu::Bitmap Gosu::TexChunk::toBitmap() const

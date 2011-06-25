@@ -7,9 +7,9 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
 #include <Gosu/Input.hpp>
+#include <tr1/functional>
 #include <tr1/memory>
-#include <tr1/memory>
-#include <boost/function.hpp>
+#include <memory>
 #include <string>
 
 #ifdef GOSU_IS_WIN

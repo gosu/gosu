@@ -2,7 +2,6 @@
 #define GOSUIMPL_SOCKETS_HPP
 
 #include <Gosu/Platform.hpp>
-#include <boost/utility.hpp>
 
 #ifdef GOSU_IS_WIN
     #include "winsock2.h"
@@ -27,10 +26,11 @@
 namespace Gosu
 {
     // Owns a socket and manages library initialization.
-    class Socket : boost::noncopyable
-    {
+    class Socket    {
+        Socket(const Socket&);
+        Socket& operator=(const Socket&);
+        
         SocketHandle handle_;
-
     public:
         Socket();
         ~Socket();

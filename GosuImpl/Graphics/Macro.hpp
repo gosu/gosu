@@ -83,9 +83,9 @@ public:
     #endif
     }
     
-    boost::optional<Gosu::GLTexInfo> glTexInfo() const
+    const Gosu::GLTexInfo* glTexInfo() const
     {
-        return boost::none;
+        return 0;
     }
     
     Gosu::Bitmap toBitmap() const
