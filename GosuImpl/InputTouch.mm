@@ -20,7 +20,7 @@ struct Gosu::Input::Impl {
     float updateInterval;
     
     ObjRef<NSMutableSet> currentTouchesSet;
-    boost::scoped_ptr<Gosu::Touches> currentTouchesVector;
+    std::auto_ptr<Gosu::Touches> currentTouchesVector;
     
     Touch translateTouch(UITouch* uiTouch)
     {
@@ -66,7 +66,7 @@ void Gosu::Input::feedTouchEvent(int type, void* touches)
     NSSet* uiTouches = (NSSet*)touches;
     
     pimpl->currentTouchesVector.reset();
-    boost::function<void (Touch)>* f = &onTouchMoved;
+    std::tr1::function<void (Touch)>* f = &onTouchMoved;
     if (type == 0)
         [pimpl->currentTouchesSet.get() unionSet: uiTouches], f = &onTouchBegan;
     else if (type == 2)
@@ -106,7 +106,7 @@ void Gosu::Input::setMouseFactors(double factorX, double factorY) {
 
 const Gosu::Touches& Gosu::Input::currentTouches() const
 {
-    if (!pimpl->currentTouchesVector)
+    if (!pimpl->currentTouchesVector.get())
     {
         pimpl->currentTouchesVector.reset(new Gosu::Touches);
         for (UITouch* uiTouch in pimpl->currentTouchesSet.obj())

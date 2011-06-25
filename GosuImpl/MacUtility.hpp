@@ -49,8 +49,11 @@ namespace Gosu
 namespace Gosu
 {
     template<typename T>
-    class ObjRef : boost::noncopyable
+    class ObjRef
     {
+        ObjRef(const ObjRef&);
+        ObjRef& operator=(const ObjRef&);
+        
         T* ptr;
     public:
         ObjRef(T* ptr = nil)
@@ -89,10 +92,13 @@ namespace Gosu
 namespace Gosu
 {
     template<typename CFRefType = CFTypeRef>
-    class CFRef : boost::noncopyable
+    class CFRef
     {
+        CFRef(const CFRef&);
+        CFRef& operator=(const CFRef&);
+        
         CFRefType ref;
-
+        
     public:
         CFRef(CFRefType ref)
         :   ref(ref)

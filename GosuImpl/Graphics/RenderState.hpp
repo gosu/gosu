@@ -34,11 +34,12 @@ public:
         glPopMatrix();
         glPushMatrix();
         #ifndef GOSU_IS_IPHONE
-        glMultMatrixd(newTransform->data());
+        glMultMatrixd(&(*newTransform)[0]);
         #else
-        boost::array<float, 16> matrix;
-        matrix = *newTransform;
-        glMultMatrixf(matrix.data());
+        float matrix[16];
+        for (int i = 0; i < 16; ++i)
+            matrix[i] = (*newTransform)[0];
+        glMultMatrixf(matrix);
         #endif
         transform = newTransform;
     }

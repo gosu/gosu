@@ -5,8 +5,8 @@
 #include <GosuImpl/MacUtility.hpp>
 #include <Gosu/Utility.hpp>
 #include <IOKit/hidsystem/IOLLEvent.h>
-#include <boost/array.hpp>
 #include <boost/cstdint.hpp>
+#include <tr1/array>
 #include <map>
 #include <string>
 #include <vector>
@@ -28,7 +28,7 @@
 namespace {
     using namespace std;
     using namespace Gosu;
-    using boost::shared_ptr;
+    using tr1::shared_ptr;
     
     template<typename Negatable>
     void checkTrue(Negatable cond, const char* message = "work")
@@ -42,9 +42,12 @@ namespace {
         checkTrue(val == kIOReturnSuccess, message);
     }
     
-    class IOScope : boost::noncopyable
+    class IOScope
     {
         io_object_t ref;
+        
+        IOScope(const IOScope&);
+        IOScope& operator=(const IOScope&);
     public:
         IOScope(io_object_t ref)
         :   ref(ref)
@@ -325,11 +328,10 @@ namespace {
             return devices.at(i);
         }
 
-        boost::array<bool, gpNum> poll()
+        std::tr1::array<bool, gpNum> poll()
         {
-            boost::array<bool, gpNum> result;
-            result.assign(false);
-        
+            std::tr1::array<bool, gpNum> result = { false };
+            
             IOHIDEventStruct event;
             for (int dev = 0; dev < devices.size(); ++dev)
             {
@@ -429,7 +431,7 @@ namespace Gosu
 namespace {
     const unsigned numScancodes = 128;
     
-    boost::array<wchar_t, numScancodes> idChars;
+    std::tr1::array<wchar_t, numScancodes> idChars = { 0 };
     std::map<wchar_t, unsigned> charIds;
     
     void initCharTranslation()
@@ -439,8 +441,6 @@ namespace {
             return;
         initializedCharData = true;
         
-        idChars.assign(0);
-
 #ifdef __LP64__
         CFRef<TISInputSourceRef> is(TISCopyCurrentKeyboardLayoutInputSource());
         CFRef<CFDataRef> UCHR(
@@ -507,7 +507,7 @@ namespace {
 #endif
     }
 	 
-    boost::array<bool, Gosu::numButtons> buttonStates;
+    std::tr1::array<bool, Gosu::numButtons> buttonStates = { false };
 }
 
 struct Gosu::Input::Impl
@@ -575,7 +575,6 @@ Gosu::Input::Input(void* window)
 : pimpl(new Impl(*this))
 {
     pimpl->window = static_cast<NSWindow*>(window);
-    buttonStates.assign(false);
     initCharTranslation();
 }
 
@@ -733,7 +732,7 @@ void Gosu::Input::update()
     pimpl->queue.clear();
     
     static System sys;
-    boost::array<bool, gpNum> gpState = sys.poll();
+    std::tr1::array<bool, gpNum> gpState = sys.poll();
     for (unsigned i = 0; i < gpNum; ++i)
     {
         if (buttonStates[i + gpRangeBegin] != gpState[i])

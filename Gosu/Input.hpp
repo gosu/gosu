@@ -28,8 +28,8 @@
 
 #include <Gosu/Platform.hpp>
 #include <Gosu/Fwd.hpp>
-#include <boost/function.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <tr1/functional>
+#include <tr1/memory>
 #include <vector>
 
 namespace Gosu
@@ -84,7 +84,7 @@ namespace Gosu
     class Input
     {
         struct Impl;
-        boost::scoped_ptr<Impl> pimpl;
+        const std::auto_ptr<Impl> pimpl;
 
 	public:
         #ifdef GOSU_IS_WIN
@@ -146,11 +146,11 @@ namespace Gosu
         
 		//! Assignable events that are called by update. You can bind these to your own functions.
 		//! If you use the Window class, it will assign forward these to its own methods.
-        boost::function<void (Button)> onButtonDown, onButtonUp;
+        std::tr1::function<void (Button)> onButtonDown, onButtonUp;
         
 		//! Assignable events that are called by update. You can bind these to your own functions.
 		//! If you use the Window class, it will assign forward these to its own methods.
-        boost::function<void (Touch)> onTouchBegan, onTouchMoved, onTouchEnded;
+        std::tr1::function<void (Touch)> onTouchBegan, onTouchMoved, onTouchEnded;
         
         //! Returns the currently active TextInput instance, or 0.
         TextInput* textInput() const;

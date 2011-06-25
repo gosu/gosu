@@ -17,10 +17,6 @@
 // Overriding virtuals is necessary in Gosu::TextInput.
 %feature("director") Gosu::TextInput;
 
-// Resolve typedefs that SWIG doesn't recognize.
-%apply unsigned char { boost::uint8_t };
-%apply unsigned long { boost::uint32_t };
-
 // Custom typemaps for wchar/wstring.
 #pragma SWIG nowarn=-490,-319
 %typemap(in) wchar_t {

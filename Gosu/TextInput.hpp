@@ -6,7 +6,7 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <tr1/memory>
 #include <string>
 
 namespace Gosu
@@ -23,7 +23,7 @@ namespace Gosu
     class TextInput
     {
         struct Impl;
-        boost::scoped_ptr<Impl> pimpl;
+        const std::auto_ptr<Impl> pimpl;
         
     public:
         TextInput();

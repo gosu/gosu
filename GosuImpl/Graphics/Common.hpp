@@ -61,10 +61,11 @@ namespace Gosu
     inline Transform multiply(const Transform& left, const Transform& right)
     {
         Gosu::Transform result;
-        result.assign(0);
-        for (int i = 0; i < 16; ++i)
+        for (int i = 0; i < 16; ++i) {
+            result[i] = 0;
             for (int j = 0; j < 4; ++j)
                 result[i] += left[i / 4 * 4 + j] * right[i % 4 + j * 4];
+        }
         return result;
     }
     

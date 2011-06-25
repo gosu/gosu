@@ -4,10 +4,9 @@
 #ifndef GOSU_IO_HPP
 #define GOSU_IO_HPP
 
-#include <boost/utility.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <cstddef>
 #include <algorithm>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -139,9 +138,17 @@ namespace Gosu
     //! or simply areas of allocated memory.
     //! A resource always knows its size and can resize itself, thereby either
     //! truncating its content or allocating room for more data.
-    class Resource : boost::noncopyable
+    class Resource
     {
+        // Non-copyable
+        Resource(const Resource&);
+        Resource& operator=(const Resource&);
+
     public:
+        Resource()
+        {
+        }
+        
         virtual ~Resource()
         {
         }
@@ -229,7 +236,7 @@ namespace Gosu
     class File : public Resource
     {
         struct Impl;
-        boost::scoped_ptr<Impl> pimpl;
+        const std::auto_ptr<Impl> pimpl;
 
     public:
         explicit File(const std::wstring& filename, FileMode mode = fmRead);

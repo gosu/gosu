@@ -4,9 +4,6 @@
 #ifndef GOSU_COLOR_HPP
 #define GOSU_COLOR_HPP
 
-#include <boost/cstdint.hpp>
-#include <Gosu/Platform.hpp>
-
 namespace Gosu
 {
     //! Represents an RGBA color value with 8 bits for each channel. Can be
@@ -17,7 +14,7 @@ namespace Gosu
     //! it is 0xaabbggrr.
     class Color
     {
-        boost::uint32_t rep;
+        unsigned rep;
         #ifdef GOSU_IS_LITTLE_ENDIAN
         enum { RED_OFFSET = 0, GREEN_OFFSET = 8, BLUE_OFFSET = 16, ALPHA_OFFSET = 24 };
         #else
@@ -25,7 +22,7 @@ namespace Gosu
         #endif
         
     public:
-        typedef boost::uint8_t Channel;
+        typedef unsigned char Channel;
         static const unsigned GL_FORMAT = 0x1908; // GL_RGBA
         
         //! The default constructor does not initialize the color to any value.
@@ -34,7 +31,7 @@ namespace Gosu
         }
         
         //! Conversion constructor for literals of the form 0xaarrggbb.
-        Color(boost::uint32_t argb)
+        Color(unsigned argb)
         {
             *this = Color((argb >> 24) & 0xff, (argb >> 16) & 0xff,
                           (argb >>  8) & 0xff, (argb >>  0) & 0xff);
@@ -121,25 +118,25 @@ namespace Gosu
         void setValue(double v);
 
         //! Returns the color in 0xaarrggbb representation.
-        boost::uint32_t argb() const
+        unsigned argb() const
         {
             return alpha() << 24 | red() << 16 | green() << 8 | blue();
         }
 
         //! Returns the color in 0x00bbggrr representation.
-        boost::uint32_t bgr() const
+        unsigned bgr() const
         {
             return blue() << 16 | green() << 8 | red();
         }
 
         //! Returns the color in 0xaabbggrr representation.
-        boost::uint32_t abgr() const
+        unsigned abgr() const
         {
             return alpha() << 24 | blue() << 16 | green() << 8 | red();
         }
         
         //! Returns the internal representation of the color (RGBA in memory).
-        boost::uint32_t gl() const
+        unsigned gl() const
         {
             return rep;
         }
