@@ -8,7 +8,6 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Platform.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <string>
 #include <vector>
 

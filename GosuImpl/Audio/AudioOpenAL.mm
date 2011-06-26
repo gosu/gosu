@@ -9,14 +9,10 @@
 #include <Gosu/Utility.hpp>
 #include <Gosu/Platform.hpp>
 
-#include <boost/algorithm/string.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/optional.hpp>
-#include <boost/scoped_ptr.hpp>
-
 #include <cassert>
 #include <cstdlib>
 #include <algorithm>
+#include <memory>
 #include <stdexcept>
 #include <vector>
 
@@ -32,21 +28,6 @@ using namespace std;
 namespace
 {
     using namespace Gosu;
-    
-    GOSU_NORETURN void throwLastALError(const char* action)
-    {
-        string message = "OpenAL error " +
-                         boost::lexical_cast<string>(alcGetError(ALChannelManagement::device()));
-        if (action)
-            message += " while ", message += action;
-        throw runtime_error(message);
-    }
-
-    inline void alCheck(const char* action = 0)
-    {
-        if (alcGetError(ALChannelManagement::device()) != ALC_NO_ERROR)
-            throwLastALError(action);
-    }
     
     bool isOggFile(Gosu::Reader reader)
     {
@@ -68,7 +49,7 @@ namespace
 
 #define CONSTRUCTOR_COMMON \
     ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]); \
-    if (!alChannelManagement) \
+    if (!alChannelManagement.get()) \
         alChannelManagement.reset(new ALChannelManagement)
 
 Gosu::SampleInstance::SampleInstance(int handle, int extra)
@@ -148,7 +129,7 @@ void Gosu::SampleInstance::changeSpeed(double speed)
     alSourcef(source, AL_PITCH, speed);
 }
 
-struct Gosu::Sample::SampleData : boost::noncopyable
+struct Gosu::Sample::SampleData
 {
     ALuint buffer, source;
 
@@ -167,11 +148,15 @@ struct Gosu::Sample::SampleData : boost::noncopyable
         // It's hard to free things in the right order in Ruby/Gosu.
         // Make sure buffer isn't deleted after the context/device are shut down.
         
-        if (!alChannelManagement)
+        if (!alChannelManagement.get())
             return;
             
         alDeleteBuffers(1, &buffer);
     }
+
+private:
+    SampleData(const SampleData&);
+    SampleData& operator=(const SampleData&);
 };
 
 Gosu::Sample::Sample(const std::wstring& filename)
@@ -235,8 +220,11 @@ Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
     return Gosu::SampleInstance(channelAndToken.first, channelAndToken.second);
 }
 
-class Gosu::Song::BaseData : boost::noncopyable
+class Gosu::Song::BaseData
 {
+    BaseData(const BaseData&);
+    BaseData& operator=(const BaseData&);
+    
     double volume_;
 
 protected:
@@ -324,7 +312,7 @@ public:
 // AudioToolbox impl
 class Gosu::Song::StreamData : public BaseData
 {
-    boost::scoped_ptr<AudioFile> file;
+    std::auto_ptr<AudioFile> file;
     ALuint buffers[2];
     
     void applyVolume()
@@ -377,7 +365,7 @@ public:
     
     ~StreamData()
     {
-        if (alChannelManagement)
+        if (alChannelManagement.get())
         {
             stop();
             alDeleteBuffers(2, buffers);
@@ -493,10 +481,15 @@ public:
     }
 };
 
+// TODO: Move into proper internal header
+namespace Gosu { bool isExtension(const wchar_t* str, const wchar_t* ext); }
+
 Gosu::Song::Song(const std::wstring& filename)
 {
 #ifdef GOSU_IS_IPHONE
-    if (boost::iends_with(filename, L".mp3") || boost::iends_with(filename, L".aac") || boost::iends_with(filename, L".m4a"))
+    if (isExtension(filename.c_str(), L".mp3") ||
+        isExtension(filename.c_str(), L".aac") ||
+        isExtension(filename.c_str(), L".m4a"))
         data.reset(new ModuleData(filename));
     else
 #endif
@@ -596,10 +589,10 @@ Gosu::Sample::Sample(Audio& audio, Reader reader)
 
 Gosu::Song::Song(Audio& audio, const std::wstring& filename)
 {
-    Song(filename).data.swap(data);
+    data = Song(filename).data;
 }
 
 Gosu::Song::Song(Audio& audio, Type type, Reader reader)
 {
-    Song(reader).data.swap(data);
+    data = Song(reader).data;
 }

@@ -4,11 +4,10 @@
 
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Text.hpp>
+#include <Gosu/TR1.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/IO.hpp>
 #include <GosuImpl/MacUtility.hpp>
-#include <boost/utility.hpp>
-#include <boost/cstdint.hpp>
 #include <cmath>
 #include <stdexcept>
 #include <map>
@@ -29,14 +28,17 @@ namespace Gosu
 
 namespace
 {
-    class MacBitmap : boost::noncopyable
+    class MacBitmap
     {
-        boost::uint32_t* buf;
+        std::tr1::uint32_t* buf;
         unsigned width, height;
         CGContextRef ctx;
+        
+        MacBitmap(const MacBitmap&);
+        MacBitmap& operator=(const MacBitmap&);
 
     public:
-        MacBitmap(boost::uint32_t* buf, unsigned width, unsigned height)
+        MacBitmap(std::tr1::uint32_t* buf, unsigned width, unsigned height)
         : buf(buf), width(width), height(height)
         {
             CGColorSpaceRef colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceUserRGB); 
@@ -224,7 +226,7 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
     ATSULayoutAndStyle atlas(text, fontName, fontHeight, fontFlags);
     Rect rect = atlas.textExtents();
     unsigned width = rect.right + 1 - rect.left + 1; // add one pixel on OS X
-    std::vector<boost::uint32_t> buf(width * fontHeight);
+    std::vector<std::tr1::uint32_t> buf(width * fontHeight);
     {
         MacBitmap helper(&buf[0], width, fontHeight);
         atlas.drawToContext(X2Fix(-rect.left), X2Fix(fontHeight / font.heightAt1Pt * font.descentAt1Pt),

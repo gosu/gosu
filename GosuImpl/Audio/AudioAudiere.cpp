@@ -2,7 +2,7 @@
 #include <Gosu/Math.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Utility.hpp>
-#include <boost/foreach.hpp>
+#include <cassert>
 #include <algorithm>
 #include <stdexcept>
 #include <vector>
@@ -19,11 +19,14 @@ namespace Gosu
         // Gosu::Buffer-based implementation of Audiere's File interface.
         // Provided since Audiere uses stdio to open files, which may not support Unicode
         // filenames outside of the current codepage on Windows(?).
-        class MemoryBuffer : boost::noncopyable
+        class MemoryBuffer
         {
+            MemoryBuffer(const MemoryBuffer&);
+            MemoryBuffer& operator=(const MemoryBuffer&);
+            
             Gosu::Buffer buffer;
             FilePtr file;
-
+            
         public:
             MemoryBuffer(Gosu::Reader reader)
             {
@@ -44,8 +47,11 @@ namespace Gosu
             }
         };
 
-        class StreamRegistry : public RefImplementation<StopCallback>, boost::noncopyable
+        class StreamRegistry : public RefImplementation<StopCallback>
         {
+            StreamRegistry(const StreamRegistry&);
+            StreamRegistry& operator=(const StreamRegistry);
+            
             struct NumberedStream
             {
                 int extra;
@@ -56,10 +62,10 @@ namespace Gosu
             ADR_METHOD(void) streamStopped(StopEvent* event)
             {
                 if (event->getReason() == StopEvent::STREAM_ENDED)
-                    BOOST_FOREACH (NumberedStream& stream, streams)
-                        if (stream.stream == event->getOutputStream())
+                    for (int i = 0; i < streams.size(); ++i)
+                        if (streams[i].stream == event->getOutputStream())
                         {
-                            stream.stream = 0;
+                            streams[i].stream = 0;
                             break;
                         }
             }
@@ -198,7 +204,7 @@ void Gosu::SampleInstance::changeSpeed(double speed)
         stream->setPitchShift(clamp<float>(speed, 0.5f, 2.0f));
 }
 
-struct Gosu::Sample::SampleData : boost::noncopyable
+struct Gosu::Sample::SampleData
 {
     SampleBufferPtr buffer;
 };
@@ -255,8 +261,11 @@ Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
     return instance;
 }
 
-class Gosu::Song::BaseData : boost::noncopyable
+class Gosu::Song::BaseData
 {
+    BaseData(const BaseData&);
+    BaseData& operator=(const BaseData&);
+    
     double volume_;
 
 protected:
@@ -439,10 +448,10 @@ Gosu::Sample::Sample(Audio& audio, Reader reader)
 
 Gosu::Song::Song(Audio& audio, const std::wstring& filename)
 {
-    Song(filename).data.swap(data);
+    data = Song(filename).data;
 }
 
 Gosu::Song::Song(Audio& audio, Type type, Reader reader)
 {
-    Song(reader).data.swap(data);
+    data = Song(reader).data;
 }

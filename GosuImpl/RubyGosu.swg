@@ -17,10 +17,6 @@
 // Overriding virtuals is necessary in Gosu::TextInput.
 %feature("director") Gosu::TextInput;
 
-// Resolve typedefs that SWIG doesn't recognize.
-%apply unsigned char { boost::uint8_t };
-%apply unsigned long { boost::uint32_t };
-
 // Custom typemaps for wchar/wstring.
 #pragma SWIG nowarn=-490,-319
 %typemap(in) wchar_t {
@@ -128,18 +124,6 @@
     }
 }
 
-// Allow integral constants to be passed in place of Color values.
-%typemap(in) boost::optional<Gosu::Color> {    
-    if (TYPE($input) == T_FIXNUM || TYPE($input) == T_BIGNUM)
-        $1 = Gosu::Color(NUM2UINT($input));
-    else {
-        void* ptr;
-        int res = SWIG_ConvertPtr($input, &ptr, SWIGTYPE_p_Gosu__Color, 0);
-        if (SWIG_IsOK(res) && ptr)
-            $1 = *reinterpret_cast<Gosu::Color*>(ptr);
-    }
-}
-
 // Header inclusion (order irrelevant)
 %module(directors="1") gosu
 %{
@@ -184,6 +168,7 @@
 #ifdef GOSU_IS_WIN
 #include <FreeImage.h>
 #endif
+#include <Gosu/TR1.hpp>
 
 namespace Gosu {
     void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
@@ -192,8 +177,6 @@ namespace Gosu {
 
 #include <ctime>
 #include <sstream>
-#include <boost/algorithm/string.hpp>
-#include <boost/bind.hpp>
 
 // Preprocessor check for 1.9 (thanks banister)
 #if defined(ROBJECT_EMBED_LEN_MAX)
@@ -285,7 +268,7 @@ namespace Gosu
         {
             // 32 bit per pixel, assume R8G8B8A8
             std::memcpy(bitmap.data(),
-                reinterpret_cast<const boost::uint32_t*>(RSTRING_PTR(blob)), width * height * 4);
+                reinterpret_cast<const unsigned*>(RSTRING_PTR(blob)), width * height * 4);
         }
         else if (width * height * 4 * sizeof(float) == RSTRING_LEN(blob))
         {
@@ -403,7 +386,7 @@ namespace Gosu {
         return Gosu::Color(a, r, g, b);
     }
     
-    static Gosu::Color rgba(boost::uint32_t rgba)
+    static Gosu::Color rgba(unsigned rgba)
     {
         return Gosu::Color(rgba & 0xff, (rgba >> 24) & 0xff,
             (rgba >> 16) & 0xff, (rgba >> 8) & 0xff);
@@ -415,9 +398,9 @@ namespace Gosu {
         return Gosu::Color(a, r, g, b);
     }
     
-    static Gosu::Color argb(boost::uint32_t argb)
+    static Gosu::Color argb(unsigned argb)
     {
-        return argb;
+        return Gosu::Color(argb);
     }
     
     Gosu::Color dup() const {
@@ -433,8 +416,12 @@ namespace Gosu {
         return stream.str();
     }
     
-    bool operator==(boost::optional<Gosu::Color> other) {
-        return other && *$self == *other;
+    bool operator==(VALUE other) {
+        if (TYPE(other) == T_FIXNUM || TYPE(other) == T_BIGNUM)
+            return *$self == Gosu::Color(NUM2UINT(other));
+        void* ptr;
+        int res = SWIG_ConvertPtr(other, &ptr, SWIGTYPE_p_Gosu__Color, 0);
+        return SWIG_IsOK(res) && ptr && *$self == *reinterpret_cast<Gosu::Color*>(ptr);
     }
 }
 
@@ -516,7 +503,7 @@ namespace Gosu {
     }
     %newobject glTexInfo;
     Gosu::GLTexInfo* glTexInfo() const {
-        boost::optional<Gosu::GLTexInfo> info = $self->getData().glTexInfo();
+        const Gosu::GLTexInfo* info = $self->getData().glTexInfo();
         if (info)
             return new Gosu::GLTexInfo(*info);
         else
@@ -565,13 +552,7 @@ namespace Gosu {
     }
     void save(const std::wstring& filename) const
     {
-        Gosu::Bitmap bmp = $self->getData().toBitmap();
-        Gosu::Buffer buf;
-        if (boost::iends_with(filename, L".bmp"))
-            Gosu::saveToBMP(bmp, buf.backWriter());
-        else
-            Gosu::saveToPNG(bmp, buf.backWriter());
-        Gosu::saveFile(buf, filename);
+        Gosu::saveImageFile($self->getData().toBitmap(), filename);
     }
     void insert(VALUE source, int x, int y)
     {
@@ -731,7 +712,7 @@ namespace Gosu {
         $self->graphics().endGL();
     }
     void gl(Gosu::ZPos z) {
-        $self->graphics().scheduleGL(boost::bind(callRubyBlock, rb_block_proc()), z);
+        $self->graphics().scheduleGL(std::tr1::bind(callRubyBlock, rb_block_proc()), z);
     }
     void clipTo(double x, double y, double width, double height) {
         $self->graphics().beginClipping(x, y, width, height);

@@ -6,8 +6,6 @@
 
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
-#include <boost/optional.hpp>
-#include <boost/utility.hpp>
 
 namespace Gosu
 {
@@ -25,9 +23,17 @@ namespace Gosu
     //! Graphics::createImage and usually only used to implement drawing
     //! primitives like Image, which then provide a more specialized and
     //! intuitive drawing interface.
-    class ImageData : boost::noncopyable
+    class ImageData
     {
+        // Non-copyable
+        ImageData(const ImageData&);
+        ImageData& operator=(const ImageData&);
+        
     public:
+        ImageData()
+        {
+        }
+        
         virtual ~ImageData()
         {
         }
@@ -41,7 +47,7 @@ namespace Gosu
             double x4, double y4, Color c4,
             ZPos z, AlphaMode mode) const = 0;
             
-        virtual boost::optional<GLTexInfo> glTexInfo() const = 0;
+        virtual const GLTexInfo* glTexInfo() const = 0;
         virtual Bitmap toBitmap() const = 0;
         
         //! Experimental and undocumented for now.

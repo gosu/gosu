@@ -2,6 +2,7 @@
 /Gosu.framework/
 /Gosu.framework.dSYM/
 /bin
+/lib/*.dSYM
 /lib/Gosu*.lib
 /lib/gosu.*.bundle
 /lib/gosu.*.so

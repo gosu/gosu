@@ -13,8 +13,8 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
+#include <Gosu/TR1.hpp>
+#include <memory>
 #include <string>
 
 namespace Gosu
@@ -64,7 +64,7 @@ namespace Gosu
     class Sample
     {
         struct SampleData;
-        boost::shared_ptr<SampleData> data;
+        std::tr1::shared_ptr<SampleData> data;
     
     public:
         //! Constructs a sample that can be played on the specified audio
@@ -109,7 +109,9 @@ namespace Gosu
         class BaseData;
         class ModuleData;
         class StreamData;
-        boost::scoped_ptr<BaseData> data;
+        Song(const Song&);
+        Song& operator=(const Song&);
+        std::auto_ptr<BaseData> data;
     
     public:
         //! Constructs a song that can be played on the provided audio system

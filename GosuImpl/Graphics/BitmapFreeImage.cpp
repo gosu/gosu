@@ -1,9 +1,9 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
+#include <Gosu/TR1.hpp>
 #include <Gosu/Utility.hpp>
 #include <vector>
-#include <boost/cstdint.hpp>
 #include <FreeImage.h>
 
 // Compatibility with FreeImage <3.1.3. Subtly changes Gosu's behavior though.
@@ -13,7 +13,7 @@
 
 // With MSVC, add a suffix so FreeImage can be linked as a fallback for GDI+.
 // With MinGW, Gosu uses FreeImage all the time, so no suffix is needed.
-#ifdef MSVC
+#ifdef _MSC_VER
 #define FI(x) x##_FreeImage
 #else
 #define FI(x) x
@@ -27,7 +27,7 @@ namespace
     {
         // Since FreeImage gracefully ignores the MASK parameters above, we
         // manually exchange the R and B channels.
-        boost::uint32_t* p = reinterpret_cast<boost::uint32_t*>(bitmap.data());
+        std::tr1::uint32_t* p = reinterpret_cast<std::tr1::uint32_t*>(bitmap.data());
         for (int i = bitmap.width() * bitmap.height(); i > 0; --i, ++p)
             *p = (*p & 0xff00ff00) | ((*p << 16) & 0x00ff0000) | ((*p >> 16) & 0x000000ff);
     }

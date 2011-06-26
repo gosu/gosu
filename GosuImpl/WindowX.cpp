@@ -4,15 +4,16 @@
 // understand than that! --jlnr
 
 #include <Gosu/Window.hpp>
-#include <Gosu/Timing.hpp>
-#include <Gosu/Utility.hpp>
+#include <Gosu/Audio.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/Graphics.hpp>
-#include <Gosu/Audio.hpp>
-#include <boost/bind.hpp>
-#include <stdexcept>
-#include <algorithm>
+#include <Gosu/Timing.hpp>
+#include <Gosu/TR1.hpp>
+#include <Gosu/Utility.hpp>
 #include <cstdio>
+#include <algorithm>
+#include <memory>
+#include <stdexcept>
 #include <vector>
 
 #include <GL/glx.h>
@@ -20,13 +21,15 @@
 #include <X11/Xutil.h>
 #include "X11vroot.h"
 
+using namespace std::tr1::placeholders;
+
 namespace
 {
     template<typename T>
     class scoped_resource
     {
         T* pointer;
-        typedef boost::function<void(T*)> Deleter;
+        typedef std::tr1::function<void(T*)> Deleter;
         Deleter deleter;
         
     public:
@@ -81,8 +84,8 @@ namespace Gosu
 
 struct Gosu::Window::Impl
 {
-    boost::scoped_ptr<Graphics> graphics;
-    boost::scoped_ptr<Input> input;
+    std::auto_ptr<Graphics> graphics;
+    std::auto_ptr<Input> input;
 
     ::Display* display;
     
@@ -113,7 +116,7 @@ struct Gosu::Window::Impl
         
     }
     
-    void executeAndWait(boost::function<void(Display*, ::Window)> function, int forMessage)
+    void executeAndWait(std::tr1::function<void(Display*, ::Window)> function, int forMessage)
     {
         XSelectInput(display, window, StructureNotifyMask);
         function(display, window);
@@ -267,8 +270,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     // Now set up major Gosu components
     pimpl->graphics.reset(new Graphics(pimpl->width, pimpl->height, fullscreen));
     pimpl->input.reset(new Input(pimpl->display, pimpl->window));    
-    input().onButtonDown = boost::bind(&Window::buttonDown, this, _1);
-    input().onButtonUp = boost::bind(&Window::buttonUp, this, _1);
+    input().onButtonDown = std::tr1::bind(&Window::buttonDown, this, _1);
+    input().onButtonUp = std::tr1::bind(&Window::buttonUp, this, _1);
     
     // Fix coordinates for fullscreen screen-scaling
     if (fullscreen)
@@ -408,8 +411,8 @@ Gosu::Window::SharedContext Gosu::Window::createSharedContext() {
         throw std::runtime_error("Could not create shared GLX context");
     
     return SharedContext(
-        new boost::function<void()>(boost::bind(makeCurrentContext, dpy2, pimpl->window, ctx)),
-        boost::bind(releaseContext, dpy2, ctx));
+        new std::tr1::function<void()>(std::tr1::bind(makeCurrentContext, dpy2, pimpl->window, ctx)),
+            std::tr1::bind(releaseContext, dpy2, ctx));
 }
 
 // Deprecated.

@@ -7,9 +7,8 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
 #include <Gosu/Input.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/function.hpp>
+#include <Gosu/TR1.hpp>
+#include <memory>
 #include <string>
 
 #ifdef GOSU_IS_WIN
@@ -29,7 +28,7 @@ namespace Gosu
     class Window
     {
         struct Impl;
-        boost::scoped_ptr<Impl> pimpl;
+        const std::auto_ptr<Impl> pimpl;
 	
     public:
         //! Constructs a Window.
@@ -100,7 +99,7 @@ namespace Gosu
         #ifdef GOSU_IS_UNIX
         // Context for creating shared contexts.
         // Only on Unices (so far).
-        typedef boost::shared_ptr<boost::function<void()> > SharedContext;
+        typedef std::tr1::shared_ptr<std::tr1::function<void()> > SharedContext;
         SharedContext createSharedContext();
         #endif
         

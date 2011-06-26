@@ -2,7 +2,6 @@
 #include <Gosu/Math.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Utility.hpp>
-#include <boost/algorithm/string.hpp>
 #include <cassert>
 #include <cstdlib>
 #include <algorithm>
@@ -95,7 +94,7 @@ void Gosu::SampleInstance::changeSpeed(double speed)
    * with SDL_mixer. */
 }
 
-struct Gosu::Sample::SampleData : boost::noncopyable
+struct Gosu::Sample::SampleData
 {
   Mix_Chunk* rep;
   
@@ -177,7 +176,7 @@ Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
 }
 
 // No class hierarchy here; SDL_mixer abstracts this away for us.
-class Gosu::Song::BaseData : boost::noncopyable {
+class Gosu::Song::BaseData {
 public:
     Mix_Music* music;
     //std::vector<Uint8> buffer; - used by constructor that has been commented out
@@ -308,10 +307,10 @@ Gosu::Sample::Sample(Audio& audio, Reader reader)
 
 Gosu::Song::Song(Audio& audio, const std::wstring& filename)
 {
-    Song(filename).data.swap(data);
+    data = Song(filename).data;
 }
 
 Gosu::Song::Song(Audio& audio, Type type, Reader reader)
 {
-    Song(reader).data.swap(data);
+    data = Song(reader).data;
 }

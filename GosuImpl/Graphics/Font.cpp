@@ -3,10 +3,10 @@
 #include <Gosu/Image.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/Text.hpp>
+#include <Gosu/TR1.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/FormattedString.hpp>
-#include <boost/array.hpp>
-#include <boost/shared_ptr.hpp>
+#include <cassert>
 #include <map>
 using namespace std;
 
@@ -38,16 +38,16 @@ struct Gosu::Font::Impl
     // IMPR: I couldn't find a way to determine the size of wchar_t at compile
     // time, so I can't get rid of the magic numbers or even do some #ifdef
     // magic.
-    typedef boost::array<boost::scoped_ptr<Image>, 65536> CharChunk;
-    boost::scoped_ptr<CharChunk> chunks[65536][ffCombinations];
+    typedef tr1::array<auto_ptr<Image>, 65536> CharChunk;
+    auto_ptr<CharChunk> chunks[65536][ffCombinations];
     
-    std::map<std::wstring, boost::shared_ptr<Image> > entityCache;
+    map<wstring, tr1::shared_ptr<Image> > entityCache;
 
     const Image& imageAt(const FormattedString& fs, unsigned i)
     {
         if (fs.entityAt(i))
         {
-            boost::shared_ptr<Image>& ptr = entityCache[fs.entityAt(i)];
+            tr1::shared_ptr<Image>& ptr = entityCache[fs.entityAt(i)];
             if (!ptr)
                 ptr.reset(new Image(*graphics, entityBitmap(fs.entityAt(i)), false));
             return *ptr;
@@ -61,12 +61,12 @@ struct Gosu::Font::Impl
         size_t chunkIndex = wc / 65536;
         size_t charIndex = wc % 65536;
 
-        if (!chunks[chunkIndex][flags])
+        if (!chunks[chunkIndex][flags].get())
             chunks[chunkIndex][flags].reset(new CharChunk);
 
-        boost::scoped_ptr<Image>& imgPtr = (*chunks[chunkIndex][flags])[charIndex];
+        auto_ptr<Image>& imgPtr = (*chunks[chunkIndex][flags])[charIndex];
 
-        if (imgPtr)
+        if (imgPtr.get())
             return *imgPtr;
 
         wstring charString(1, wc);
@@ -99,7 +99,7 @@ Gosu::Font::Font(Graphics& graphics, const wstring& fontName, unsigned fontHeigh
     pimpl->flags = fontFlags;
 }
 
-std::wstring Gosu::Font::name() const
+wstring Gosu::Font::name() const
 {
     return pimpl->name;
 }
@@ -114,9 +114,9 @@ unsigned Gosu::Font::flags() const
     return pimpl->flags;
 }
 
-double Gosu::Font::textWidth(const std::wstring& text, double factorX) const
+double Gosu::Font::textWidth(const wstring& text, double factorX) const
 {
-    FormattedString fs(text, flags());
+    FormattedString fs(text.c_str(), flags());
     double result = 0;
     for (unsigned i = 0; i < fs.length(); ++i)
         result += pimpl->imageAt(fs, i).width() * pimpl->factorAt(fs, i);
@@ -126,7 +126,7 @@ double Gosu::Font::textWidth(const std::wstring& text, double factorX) const
 void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
     double factorX, double factorY, Color c, AlphaMode mode) const
 {
-    FormattedString fs(text, flags());
+    FormattedString fs(text.c_str(), flags());
 
     enum {
         LTR = 1,

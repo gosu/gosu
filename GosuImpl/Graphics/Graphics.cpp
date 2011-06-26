@@ -8,9 +8,8 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/Platform.hpp>
-#include <boost/foreach.hpp>
 #if 0
-#include <boost/thread.hpp>
+#include <thread>
 #endif
 #include <cmath>
 #include <algorithm>
@@ -27,13 +26,13 @@ struct Gosu::Graphics::Impl
     unsigned physWidth, physHeight;
     bool fullscreen;
     DrawOpQueueStack queues;
-    typedef std::vector<boost::shared_ptr<Texture> > Textures;
+    typedef std::vector<std::tr1::shared_ptr<Texture> > Textures;
     Textures textures;
     Transforms currentTransforms;
     Transforms absoluteTransforms;
     
 #if 0
-    boost::mutex texMutex;
+    std::mutex texMutex;
 #endif
 
 #ifdef GOSU_IS_IPHONE
@@ -219,7 +218,7 @@ void Gosu::Graphics::endGL()
 }
 
 #ifdef GOSU_IS_IPHONE
-void Gosu::Graphics::scheduleGL(const boost::function<void()>& functor, Gosu::ZPos z)
+void Gosu::Graphics::scheduleGL(const std::tr1::function<void()>& functor, Gosu::ZPos z)
 {
     throw std::logic_error("Custom OpenGL is unsupported on the iPhone");
 }
@@ -229,9 +228,9 @@ namespace
     struct RunGLFunctor
     {
         Gosu::Graphics& graphics;
-        boost::function<void()> functor;
+        std::tr1::function<void()> functor;
         
-        RunGLFunctor(Gosu::Graphics& graphics, const boost::function<void()>& functor)
+        RunGLFunctor(Gosu::Graphics& graphics, const std::tr1::function<void()>& functor)
         : graphics(graphics), functor(functor)
         {
         }
@@ -251,7 +250,7 @@ namespace
     };
 }
 
-void Gosu::Graphics::scheduleGL(const boost::function<void()>& functor, Gosu::ZPos z)
+void Gosu::Graphics::scheduleGL(const std::tr1::function<void()>& functor, Gosu::ZPos z)
 {
     pimpl->queues.back().scheduleGL(RunGLFunctor(*this, functor), z);
 }
@@ -328,8 +327,10 @@ void Gosu::Graphics::popTransform()
 {
     pimpl->currentTransforms.pop_back();
     Transform result = scale(1);
-    BOOST_REVERSE_FOREACH (const Transform& tf, pimpl->currentTransforms)
-        result = multiply(result, tf);
+    Transforms::iterator begin = pimpl->currentTransforms.begin(),
+                            it = pimpl->currentTransforms.end();
+    while (it-- != begin)
+        result = multiply(result, *it);
     ensureBackOfList(pimpl->absoluteTransforms, result);
 }
 
@@ -407,7 +408,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
         (srcWidth & (srcWidth - 1)) == 0 &&
         srcWidth >= 64)
     {
-        boost::shared_ptr<Texture> texture(new Texture(srcWidth));
+        std::tr1::shared_ptr<Texture> texture(new Texture(srcWidth));
         std::auto_ptr<ImageData> data;
         
         // Use the source bitmap directly if the source area completely covers
@@ -444,13 +445,13 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     applyBorderFlags(bmp, src, srcX, srcY, srcWidth, srcHeight, borderFlags);
 
 #if 0
-    boost::mutex::scoped_lock lock(pimpl->texMutex);
+    std::mutex::scoped_lock lock(pimpl->texMutex);
 #endif
     
     // Try to put the bitmap into one of the already allocated textures.
     for (Impl::Textures::iterator i = pimpl->textures.begin(); i != pimpl->textures.end(); ++i)
     {
-        boost::shared_ptr<Texture> texture(*i);
+        std::tr1::shared_ptr<Texture> texture(*i);
         
         std::auto_ptr<ImageData> data;
         data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture, bmp, 1);
@@ -460,7 +461,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     
     // All textures are full: Create a new one.
     
-    boost::shared_ptr<Texture> texture;
+    std::tr1::shared_ptr<Texture> texture;
     texture.reset(new Texture(maxSize));
     pimpl->textures.push_back(texture);
     

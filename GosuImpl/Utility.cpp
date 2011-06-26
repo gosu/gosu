@@ -2,6 +2,8 @@
 #include <Gosu/Platform.hpp>
 #include <cstddef>
 #include <cstdlib>
+#include <cwctype>
+#include <cwchar>
 #include <stdexcept>
 #include <algorithm>
 #include <vector>
@@ -98,4 +100,20 @@ string Gosu::narrow(const wstring& ws)
     wcstombs(&buf.front(), ws.c_str(), buf.size());
 
     return string(buf.begin(), buf.end() - 1);
+}
+
+// TODO: This function needs to go into some internal header.
+namespace Gosu
+{
+    bool isExtension(const wchar_t* str, const wchar_t* ext)
+    {
+        size_t strLen = wcslen(str), extLen = wcslen(ext);
+        if (extLen > strLen)
+            return false;
+        str += strLen, ext += extLen;
+        while (extLen--)
+            if (towlower((wint_t)*--str) != *--ext)
+                return false;
+        return true;
+    }
 }

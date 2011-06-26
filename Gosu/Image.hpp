@@ -6,7 +6,7 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Bitmap.hpp>
-#include <boost/shared_ptr.hpp>
+#include <Gosu/TR1.hpp>
 #include <memory>
 
 namespace Gosu
@@ -14,7 +14,7 @@ namespace Gosu
     //! Provides functionality for drawing rectangular images.
     class Image
     {
-        boost::shared_ptr<ImageData> data;
+        std::tr1::shared_ptr<ImageData> data;
 
     public:
         //! Loads an image from a given filename that can be drawn onto
@@ -86,8 +86,8 @@ namespace Gosu
     //! pixels. If negative, the bitmap is divided into -tileWidth rows.
     //! \param tileHeight See tileWidth.
     //! \param appendTo STL container to which the images will be appended.
-    //! Must provide a push_back member function; std::vector<boost::shared_ptr<Image>>
-    //! or boost::ptr_vector<Image> are good choices.
+    //! Must provide a push_back member function; vector<tr1::shared_ptr<Image>>
+    //! or std::tr1::ptr_vector<Image> are good choices.
     template<typename Container>
     void imagesFromTiledBitmap(Graphics& graphics, const std::wstring& filename,
         int tileWidth, int tileHeight, bool tileable, Container& appendTo)
@@ -103,8 +103,8 @@ namespace Gosu
     //! pixels. If negative, the bitmap is divided into -tileWidth rows.
     //! \param tileHeight See tileWidth.
     //! \param appendTo STL container to which the images will be appended.
-    //! Must provide a push_back member function; std::vector<boost::shared_ptr<Image>>
-    //! or boost::ptr_vector<Image> are good choices.
+    //! Must provide a push_back member function; std::vector<std::tr1::shared_ptr<Image>>
+    //! or std::tr1::ptr_vector<Image> are good choices.
     template<typename Container>
     void imagesFromTiledBitmap(Graphics& graphics, const Bitmap& bmp,
         int tileWidth, int tileHeight, bool tileable, Container& appendTo)

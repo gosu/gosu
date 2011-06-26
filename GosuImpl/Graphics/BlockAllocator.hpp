@@ -1,15 +1,14 @@
 #ifndef GOSUIMPL_BLOCKALLOCATOR_HPP
 #define GOSUIMPL_BLOCKALLOCATOR_HPP
 
-#include <boost/optional.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace Gosu
 {
     class BlockAllocator
     {
         struct Impl;
-        boost::scoped_ptr<Impl> pimpl;
+        const std::auto_ptr<Impl> pimpl;
 
     public:
         struct Block
@@ -26,7 +25,7 @@ namespace Gosu
         unsigned width() const;
         unsigned height() const;
 
-        boost::optional<Block> alloc(unsigned width, unsigned height);
+        bool alloc(unsigned width, unsigned height, Block& block);
         void free(unsigned left, unsigned top);
     };
 }

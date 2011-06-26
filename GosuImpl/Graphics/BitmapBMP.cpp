@@ -4,14 +4,19 @@
 #ifdef GOSU_IS_IPHONE
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/IO.hpp>
-#include <boost/integer.hpp>
+#include <Gosu/TR1.hpp>
 
 namespace
 {
+    template<unsigned bits> struct UintSelector;
+    template<> struct UintSelector<8>  { typedef std::tr1::uint8_t  Type; };
+    template<> struct UintSelector<16> { typedef std::tr1::uint16_t Type; };
+    template<> struct UintSelector<32> { typedef std::tr1::uint32_t Type; };
+    
     template<unsigned bits, typename T>
     void writeVal(Gosu::Writer& writer, T value)
     {
-        typename boost::uint_t<bits>::least val = value;
+        typename UintSelector<bits>::Type val = value;
         writer.writePod(val, Gosu::boLittle);
     }
 }

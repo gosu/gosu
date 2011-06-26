@@ -1,17 +1,20 @@
-#import <Gosu/Window.hpp>
-#import <Gosu/Audio.hpp>
-#import <Gosu/Graphics.hpp>
-#import <Gosu/Input.hpp>
-#import <GosuImpl/MacUtility.hpp>
-#import <Gosu/Timing.hpp>
-#import <Gosu/Utility.hpp>
+#include <Gosu/Window.hpp>
+#include <Gosu/Audio.hpp>
+#include <Gosu/Graphics.hpp>
+#include <Gosu/Input.hpp>
+#include <GosuImpl/MacUtility.hpp>
+#include <Gosu/Timing.hpp>
+#include <Gosu/TR1.hpp>
+#include <Gosu/Utility.hpp>
+#include <OpenGL/OpenGL.h>
+#include <OpenGL/gl.h>
+#include <memory>
+#include <vector>
+using namespace std::tr1::placeholders;
+
 #import <AppKit/AppKit.h>
 #import <ApplicationServices/ApplicationServices.h>
 #import <Carbon/Carbon.h>
-#import <OpenGL/OpenGL.h>
-#import <OpenGL/gl.h>
-#import <boost/bind.hpp>
-#import <vector>
 
 namespace Gosu
 {
@@ -190,8 +193,8 @@ struct Gosu::Window::Impl
 	NSRect savedFrame;
     
     ObjRef<NSOpenGLContext> context;
-    boost::scoped_ptr<Graphics> graphics;
-    boost::scoped_ptr<Input> input;
+    std::auto_ptr<Graphics> graphics;
+    std::auto_ptr<Input> input;
     double interval;
     bool mouseViz;
     
@@ -302,8 +305,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     pimpl->graphics->setResolution(width, height);
     
     pimpl->input.reset(new Input(pimpl->window.get()));
-    pimpl->input->onButtonDown = boost::bind(&Window::buttonDown, this, _1);
-    pimpl->input->onButtonUp = boost::bind(&Window::buttonUp, this, _1);
+    pimpl->input->onButtonDown = std::tr1::bind(&Window::buttonDown, this, _1);
+    pimpl->input->onButtonUp = std::tr1::bind(&Window::buttonUp, this, _1);
     pimpl->input->setMouseFactors(1.0 * width / realWidth, 1.0 * height / realHeight);
     if (fullscreen)
         [NSApp setInput: input()];
@@ -476,8 +479,8 @@ Gosu::Window::SharedContext Gosu::Window::createSharedContext()
             initWithFormat: pf
             shareContext: pimpl->context.obj()];
     
-    return SharedContext(new boost::function<void()>(boost::bind(makeCurrentContext, ctx)),
-        boost::bind(releaseContext, ctx));
+    return SharedContext(new std::tr1::function<void()>(std::tr1::bind(makeCurrentContext, ctx)),
+        std::tr1::bind(releaseContext, ctx));
 }
 
 namespace GosusDarkSide

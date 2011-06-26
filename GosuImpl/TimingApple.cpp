@@ -9,12 +9,11 @@ void Gosu::sleep(unsigned milliseconds)
 // Thanks to this blog for the unconvoluted code example:
 // http://shiftedbits.org/2008/10/01/mach_absolute_time-on-the-iphone/
 
-#include <boost/cstdint.hpp>
 #include <mach/mach_time.h>
 
 unsigned long Gosu::milliseconds()
 {
-    static boost::uint64_t firstTick = 0;
+    static uint64_t firstTick = 0;
     static mach_timebase_info_data_t info;
     
     if (firstTick == 0)
@@ -23,6 +22,6 @@ unsigned long Gosu::milliseconds()
         firstTick = mach_absolute_time();
     }
 
-    boost::uint64_t runtime = mach_absolute_time() - firstTick;
+    uint64_t runtime = mach_absolute_time() - firstTick;
 	return runtime * info.numer / info.denom / 1000000.0;
 }

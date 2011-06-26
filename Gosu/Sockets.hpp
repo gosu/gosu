@@ -4,19 +4,17 @@
 #ifndef GOSU_SOCKETS_HPP
 #define GOSU_SOCKETS_HPP
 
-#include <boost/cstdint.hpp>
-#include <boost/function.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <Gosu/TR1.hpp>
 #include <cstddef>
 #include <string>
 
 namespace Gosu
 {
     //! Addresses are returned from and given to Gosu functions in host byte order.
-    typedef boost::uint32_t SocketAddress;
+    typedef std::tr1::uint32_t SocketAddress;
 
     //! Ports are returned from and given to Gosu functions in host byte order.
-    typedef boost::uint16_t SocketPort;
+    typedef std::tr1::uint16_t SocketPort;
     
     //! Constant that can be used as a placeholder for an arbitrary port, e.g. when
     //! starting to listen.
@@ -37,7 +35,7 @@ namespace Gosu
     class MessageSocket
     {
         struct Impl;
-        boost::scoped_ptr<Impl> pimpl;
+        const std::auto_ptr<Impl> pimpl;
 
     public:
         //! Opens a message socket for listening at the specified port.
@@ -66,7 +64,7 @@ namespace Gosu
             std::size_t size);*/
 
         //! If assigned, will be called by update for every packet received.
-        boost::function<void (SocketAddress, SocketPort, const void*,
+        std::tr1::function<void (SocketAddress, SocketPort, const void*,
             std::size_t)> onReceive;
     };
     
@@ -86,7 +84,7 @@ namespace Gosu
     class CommSocket
     {
         struct Impl;
-        boost::scoped_ptr<Impl> pimpl;
+        const std::auto_ptr<Impl> pimpl;
 
     public:
         CommSocket(CommMode mode, SocketAddress targetAddress,
@@ -110,8 +108,8 @@ namespace Gosu
         void sendPendingData();
         std::size_t pendingBytes() const;
 
-        boost::function<void (const void*, std::size_t)> onReceive;
-        boost::function<void ()> onDisconnection;
+        std::tr1::function<void (const void*, std::size_t)> onReceive;
+        std::tr1::function<void ()> onDisconnection;
     };
     
     //! Wraps a TCP socket that waits on a specific port and can create
@@ -119,7 +117,7 @@ namespace Gosu
     class ListenerSocket
     {
         struct Impl;
-        boost::scoped_ptr<Impl> pimpl;
+        const std::auto_ptr<Impl> pimpl;
 
     public:
         ListenerSocket(SocketPort port);
@@ -132,7 +130,7 @@ namespace Gosu
 
         //! This signal is fired by update() whenever someone connects
         //! to the port which is currently listened on.
-        boost::function<void (Socket&)> onConnection;
+        std::tr1::function<void (Socket&)> onConnection;
     };
 }
 

@@ -4,11 +4,12 @@
 #include <Gosu/Input.hpp>
 #include <GosuImpl/MacUtility.hpp>   
 #include <GosuImpl/Graphics/GosuView.hpp>
-#include <boost/bind.hpp>
 
 #import <CoreGraphics/CoreGraphics.h>
 #import <UIKit/UIKit.h>
 #import <OpenGLES/EAGL.h>
+
+using namespace std::tr1::placeholders;
 
 namespace Gosu
 {
@@ -35,9 +36,9 @@ class Gosu::Audio {};
 struct Gosu::Window::Impl {
     ObjRef<UIWindow> window;
     ObjRef<GosuViewController> controller;
-    boost::scoped_ptr<Graphics> graphics;
-    boost::scoped_ptr<Audio> audio;
-    boost::scoped_ptr<Input> input;
+    std::auto_ptr<Graphics> graphics;
+    std::auto_ptr<Audio> audio;
+    std::auto_ptr<Input> input;
     double interval;
 };
 
@@ -126,9 +127,9 @@ Gosu::Window::Window(unsigned width, unsigned height,
     pimpl->graphics->setResolution(screenHeight(), screenWidth());
     pimpl->audio.reset(new Audio());
     pimpl->input.reset(new Input(gosuView, updateInterval));
-    pimpl->input->onTouchBegan = boost::bind(&Window::touchBegan, this, _1);
-    pimpl->input->onTouchMoved = boost::bind(&Window::touchMoved, this, _1);
-    pimpl->input->onTouchEnded = boost::bind(&Window::touchEnded, this, _1);
+    pimpl->input->onTouchBegan = std::tr1::bind(&Window::touchBegan, this, _1);
+    pimpl->input->onTouchMoved = std::tr1::bind(&Window::touchMoved, this, _1);
+    pimpl->input->onTouchEnded = std::tr1::bind(&Window::touchEnded, this, _1);
     pimpl->interval = updateInterval;
 
     [pimpl->window.obj() makeKeyAndVisible];

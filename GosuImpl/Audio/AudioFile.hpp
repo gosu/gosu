@@ -1,17 +1,20 @@
 #ifndef GOSUIMPL_AUDIO_AUDIOFILE_HPP
 #define GOSUIMPL_AUDIO_AUDIOFILE_HPP
 
-#include <boost/noncopyable.hpp>
 #include <vector>
 #import <OpenAL/al.h>
 
 namespace Gosu
 {
-    class AudioFile : boost::noncopyable
+    class AudioFile
     {
+        AudioFile(const AudioFile&);
+        AudioFile& operator=(const AudioFile&);
+        
         std::vector<char> decodedData_;
         
     public:
+        AudioFile() {}
         virtual ~AudioFile() {}
         virtual ALenum format() const = 0;
         virtual ALuint sampleRate() const = 0;

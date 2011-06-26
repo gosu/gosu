@@ -3,8 +3,7 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
-#include <boost/none.hpp>
-#include <boost/shared_ptr.hpp>
+#include <Gosu/TR1.hpp>
 #include <vector>
 
 namespace Gosu
@@ -12,7 +11,7 @@ namespace Gosu
     class LargeImageData : public ImageData
     {
         unsigned fullWidth, fullHeight, partsX, partsY, partWidth, partHeight;
-        std::vector<boost::shared_ptr<ImageData> > parts;
+        std::vector<std::tr1::shared_ptr<ImageData> > parts;
 
     public:
         LargeImageData(Graphics& graphics, const Bitmap& source,
@@ -27,9 +26,9 @@ namespace Gosu
             double x4, double y4, Color c4,
             ZPos z, AlphaMode mode) const;
             
-        boost::optional<GLTexInfo> glTexInfo() const
+        const GLTexInfo* glTexInfo() const
         {
-            return boost::none;
+            return 0;
         }
         
         Bitmap toBitmap() const;

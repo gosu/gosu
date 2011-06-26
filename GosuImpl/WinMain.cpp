@@ -1,4 +1,3 @@
-#include <boost/lexical_cast.hpp>
 #include <windows.h>
 #include <exception>
 #include <string>

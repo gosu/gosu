@@ -8,8 +8,7 @@
 
 #include <windows.h>
 #include <Gosu/Platform.hpp>
-#include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
+#include <Gosu/TR1.hpp>
 #include <string>
 
 namespace Gosu
@@ -31,7 +30,7 @@ namespace Gosu
         //! Registers a function to be called by handleMessage and
         //! processMessages. Every message is passed to the hooks and not
         //! processed further if any hook function returns true.
-        void registerMessageHook(const boost::function<bool (MSG&)>& hook);
+        void registerMessageHook(const std::tr1::function<bool (MSG&)>& hook);
         
         //! Throws an exception according to the error which GetLastError()
         //! returns, optionally prefixed with "While (action), the following
@@ -58,11 +57,11 @@ namespace Gosu
         }
 
         //! Small helper function that transfers ownership of a COM interface
-        //! to a boost::shared_ptr.
+        //! to a std::tr1::shared_ptr.
         template<typename T>
-        inline boost::shared_ptr<T> shareComPtr(T* ptr)
+        inline std::tr1::shared_ptr<T> shareComPtr(T* ptr)
         {
-            return boost::shared_ptr<T>(ptr, releaseComPtr<T>);
+            return std::tr1::shared_ptr<T>(ptr, releaseComPtr<T>);
         }
 
         //! Returns the executable's filename.

@@ -7,9 +7,7 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
-#include <boost/array.hpp>
-#include <boost/function.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <Gosu/TR1.hpp>
 #include <memory>
 
 namespace Gosu
@@ -25,7 +23,7 @@ namespace Gosu
     //! Useful when extending Gosu using OpenGL.
     unsigned const MAX_TEXTURE_SIZE = 1024;
     
-    typedef boost::array<double, 16> Transform;
+    typedef std::tr1::array<double, 16> Transform;
     Transform translate(double x, double y);
     Transform rotate(double angle, double aroundX = 0, double aroundY = 0);
     Transform scale(double factor);
@@ -37,7 +35,7 @@ namespace Gosu
     class Graphics
     {
         struct Impl;
-        boost::scoped_ptr<Impl> pimpl;
+        const std::auto_ptr<Impl> pimpl;
 
     public:
         Graphics(unsigned physicalWidth, unsigned physicalHeight, bool fullscreen);
@@ -73,7 +71,7 @@ namespace Gosu
         //! of custom GL functors is NOT DEFINED.
         //! Note: You may not call any Gosu rendering functions from within the
         //! functor, and you must schedule it from within Window::draw's call tree.
-        void scheduleGL(const boost::function<void()>& functor, ZPos z);
+        void scheduleGL(const std::tr1::function<void()>& functor, ZPos z);
         
         //! Enables clipping to a specified rectangle.
         void beginClipping(double x, double y, double width, double height);

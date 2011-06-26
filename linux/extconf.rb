@@ -64,9 +64,10 @@ $INCFLAGS << " -I../ -I../GosuImpl"
 if `uname`.chomp == 'Darwin' then
   SOURCE_FILES = BASE_FILES + MAC_FILES
   
-  # The X11 paths are here because Apple curiously distributes libpng only inside X11
-  $INCFLAGS << " -I/usr/local/include -I/usr/X11/include"
-  $CFLAGS   << " -x objective-c++ -fobjc-gc" # Never hurts!
+  # Apple curiously distributes libpng only inside X11
+  $INCFLAGS << " -I/usr/X11/include"
+  # To make everything work with the Objective C runtime
+  $CFLAGS   << " -x objective-c++ -fobjc-gc"
   $LDFLAGS  << " -L/usr/local/lib -L/usr/X11/lib -logg -lvorbis -lvorbisfile -liconv"
   %w(AudioToolbox IOKit OpenAL OpenGL AppKit ApplicationServices Foundation Carbon).each do |f|
     $INCFLAGS << " -framework #{f}"
