@@ -9,10 +9,13 @@
 #include <Gosu/Input.hpp>
 #include <Gosu/TextInput.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
-#include <boost/bind.hpp>
+#include <tr1/functional>
 #include <cassert>
+#include <memory>
 #include <stdexcept>
 #include <vector>
+
+using namespace std::tr1::placeholders;
 
 // TODO: Put fullscreen logic in different file, track fullscreen state and
 // enable dynamic toggling between fullscreen and window.
@@ -173,8 +176,8 @@ struct Gosu::Window::Impl
 {
     HWND handle;
 	HDC hdc;
-    boost::scoped_ptr<Graphics> graphics;
-    boost::scoped_ptr<Input> input;
+    std::auto_ptr<Graphics> graphics;
+    std::auto_ptr<Input> input;
 	double updateInterval;
     bool iconified;
 
@@ -286,8 +289,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
 	graphics().setResolution(pimpl->originalWidth, pimpl->originalHeight);
     pimpl->input.reset(new Gosu::Input(handle()));
 	input().setMouseFactors(1.0 * pimpl->originalWidth / width, 1.0 * pimpl->originalHeight / height);
-    input().onButtonDown = boost::bind(&Window::buttonDown, this, _1);
-    input().onButtonUp = boost::bind(&Window::buttonUp, this, _1);
+    input().onButtonDown = std::tr1::bind(&Window::buttonDown, this, _1);
+    input().onButtonUp = std::tr1::bind(&Window::buttonUp, this, _1);
 
     pimpl->updateInterval = updateInterval;
 }

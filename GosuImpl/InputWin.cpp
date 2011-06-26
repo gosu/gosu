@@ -1,8 +1,8 @@
 #include <Gosu/Input.hpp>
 #include <Gosu/Platform.hpp>
 #include <Gosu/WinUtility.hpp>
-#include <boost/array.hpp>
-#include <boost/shared_ptr.hpp>
+#include <tr1/array>
+#include <tr1/memory>
 #include <cwchar>
 #include <iomanip>
 #include <sstream>
@@ -15,7 +15,7 @@
 #include <dinput.h>
 
 namespace {
-	boost::array<bool, Gosu::numButtons> buttons;
+    std::tr1::array<bool, Gosu::numButtons> buttons;
 }
 
 struct Gosu::Input::Impl
@@ -24,14 +24,14 @@ struct Gosu::Input::Impl
     Impl() : textInput(0) {}
 
     HWND window;
-    boost::shared_ptr<IDirectInput8> input;
+    str::tr1::shared_ptr<IDirectInput8> input;
 
-    typedef boost::shared_ptr<IDirectInputDevice8> Device;
+    typedef str::tr1::shared_ptr<IDirectInputDevice8> Device;
     Device keyboard, mouse;
     std::vector<Device> gamepads;
 
     double mouseX, mouseY;
-	double mouseFactorX, mouseFactorY;
+    double mouseFactorX, mouseFactorY;
     bool swapMouse;
 
     struct EventInfo
@@ -132,39 +132,39 @@ struct Gosu::Input::Impl
         return DIENUM_CONTINUE;
     }
 
-	void updateMousePos()
-	{
-		POINT pos;
-		if (!::GetCursorPos(&pos))
-			return;
+    void updateMousePos()
+    {
+        POINT pos;
+        if (!::GetCursorPos(&pos))
+            return;
 
-		Win::check(::ScreenToClient(window, &pos));
+        Win::check(::ScreenToClient(window, &pos));
 
-		mouseX = pos.x;
-		mouseY = pos.y;
-	}
+        mouseX = pos.x;
+        mouseY = pos.y;
+    }
 
-	void updateButtons(bool collectEvents)
-	{
-		DIDEVICEOBJECTDATA data[inputBufferSize];
-		DWORD inOut;
-		HRESULT hr;
+    void updateButtons(bool collectEvents)
+    {
+        DIDEVICEOBJECTDATA data[inputBufferSize];
+        DWORD inOut;
+        HRESULT hr;
         
         RECT rect;
         ::GetClientRect(window, &rect);
         bool ignoreClicks = mouseX < 0 || mouseX > rect.right || mouseY < 0 || mouseY > rect.bottom;
 
-		inOut = inputBufferSize;
-		hr = mouse->GetDeviceData(sizeof data[0], data, &inOut, 0);
-		switch(hr)
-		{
-			case DI_OK:
-			case DI_BUFFEROVERFLOW:
-			{
-				// Everything's ok: Update buttons and fire events.
-				for (unsigned i = 0; i < inOut; ++i)
-				{
-					bool down = (data[i].dwData & 0x80) != 0 && !ignoreClicks;
+        inOut = inputBufferSize;
+        hr = mouse->GetDeviceData(sizeof data[0], data, &inOut, 0);
+        switch(hr)
+        {
+            case DI_OK:
+            case DI_BUFFEROVERFLOW:
+            {
+                // Everything's ok: Update buttons and fire events.
+                for (unsigned i = 0; i < inOut; ++i)
+                {
+                    bool down = (data[i].dwData & 0x80) != 0 && !ignoreClicks;
                     
                     // No switch statement here because it breaks compilation with MinGW.
                     if (data[i].dwOfs == DIMOFS_BUTTON0)
@@ -194,86 +194,85 @@ struct Gosu::Input::Impl
                         event.action = EventInfo::buttonUp;
                         events.push_back(event);
                     }
-				}
-				break;
-			}
+                }
+                break;
+            }
 
-			case DIERR_NOTACQUIRED:
-			case DIERR_INPUTLOST:
-			{
-				// Cannot fetch new events: Release all buttons.
-				for (unsigned id = msRangeBegin; id < msRangeEnd; ++id)
-					setButton(id, false, collectEvents);
-				mouse->Acquire();
-				break;
-			}
-		}
+            case DIERR_NOTACQUIRED:
+            case DIERR_INPUTLOST:
+            {
+                // Cannot fetch new events: Release all buttons.
+                for (unsigned id = msRangeBegin; id < msRangeEnd; ++id)
+                    setButton(id, false, collectEvents);
+                mouse->Acquire();
+                break;
+            }
+        }
         
         keyboard:
 
-		inOut = inputBufferSize;
-		hr = keyboard->GetDeviceData(sizeof data[0], data, &inOut, 0);
-		switch (hr)
-		{
-			case DI_OK:
-			case DI_BUFFEROVERFLOW:
-			{
-				for (unsigned i = 0; i < inOut; ++i)
-					forceButton(data[i].dwOfs, (data[i].dwData & 0x80) != 0, collectEvents);
-				break;
-			}
+        inOut = inputBufferSize;
+        hr = keyboard->GetDeviceData(sizeof data[0], data, &inOut, 0);
+        switch (hr)
+        {
+            case DI_OK:
+            case DI_BUFFEROVERFLOW:
+            {
+                for (unsigned i = 0; i < inOut; ++i)
+                    forceButton(data[i].dwOfs, (data[i].dwData & 0x80) != 0, collectEvents);
+                break;
+            }
 
-			case DIERR_NOTACQUIRED:
-			case DIERR_INPUTLOST:
-			{
-				for (unsigned id = kbRangeBegin; id < kbRangeEnd; ++id)
-					setButton(id, false, collectEvents);
-				keyboard->Acquire();
-				break;
-			}
-		}
+            case DIERR_NOTACQUIRED:
+            case DIERR_INPUTLOST:
+            {
+                for (unsigned id = kbRangeBegin; id < kbRangeEnd; ++id)
+                    setButton(id, false, collectEvents);
+                keyboard->Acquire();
+                break;
+            }
+        }
 
-		boost::array<bool, gpNum> gpBuffer;
-		gpBuffer.assign(false);
-		for (unsigned gp = 0; gp < gamepads.size(); ++gp)
-		{
-			gamepads[gp]->Poll();
+        std::tr1::array<bool, gpNum> gpBuffer = { false };
+        for (unsigned gp = 0; gp < gamepads.size(); ++gp)
+        {
+            gamepads[gp]->Poll();
+            
+            DIJOYSTATE joy;
+            hr = gamepads[gp]->GetDeviceState(sizeof joy, &joy);
+            switch (hr)
+            {
+                case DI_OK:
+                {
+                    if (joy.lX < -stickThreshold)
+                        gpBuffer[gpLeft - gpRangeBegin] = true;
+                    else if (joy.lX > stickThreshold)
+                        gpBuffer[gpRight - gpRangeBegin] = true;
 
-			DIJOYSTATE joy;
-			hr = gamepads[gp]->GetDeviceState(sizeof joy, &joy);
-			switch (hr)
-			{
-				case DI_OK:
-				{
-					if (joy.lX < -stickThreshold)
-						gpBuffer[gpLeft - gpRangeBegin] = true;
-					else if (joy.lX > stickThreshold)
-						gpBuffer[gpRight - gpRangeBegin] = true;
+                    if (joy.lY < -stickThreshold)
+                        gpBuffer[gpUp - gpRangeBegin] = true;
+                    else if (joy.lY > stickThreshold)
+                        gpBuffer[gpDown - gpRangeBegin] = true;
 
-					if (joy.lY < -stickThreshold)
-						gpBuffer[gpUp - gpRangeBegin] = true;
-					else if (joy.lY > stickThreshold)
-						gpBuffer[gpDown - gpRangeBegin] = true;
+                    for (unsigned id = gpButton0; id < gpRangeEnd; ++id)
+                        if (joy.rgbButtons[id - gpButton0])
+                            gpBuffer[id - gpRangeBegin] = true;
+                    
+                    break;
+                }
 
-					for (unsigned id = gpButton0; id < gpRangeEnd; ++id)
-						if (joy.rgbButtons[id - gpButton0])
-                    		gpBuffer[id - gpRangeBegin] = true;
-					
-					break;
-				}
+                case DIERR_NOTACQUIRED:
+                case DIERR_INPUTLOST:
+                {
+                    gamepads[gp]->Acquire();
 
-				case DIERR_NOTACQUIRED:
-				case DIERR_INPUTLOST:
-				{
-					gamepads[gp]->Acquire();
-
-					break;
-				}
-			}
-		}
-		for (unsigned id = gpRangeBegin; id < gpRangeEnd; ++id)
-			setButton(id, gpBuffer[id - gpRangeBegin], collectEvents);
-	}
+                    break;
+                }
+            }
+        }
+        for (unsigned id = gpRangeBegin; id < gpRangeEnd; ++id)
+            setButton(id, gpBuffer[id - gpRangeBegin], collectEvents);
+    }
 };
 
 Gosu::Input::Input(HWND window)
@@ -347,7 +346,7 @@ Gosu::Input::Input(HWND window)
 
     // Get into a usable default state.
 
-	pimpl->mouseX = pimpl->mouseY = 0;
+    pimpl->mouseX = pimpl->mouseY = 0;
     pimpl->updateMousePos();
     buttons.assign(false);
 }
@@ -364,7 +363,7 @@ Gosu::Button Gosu::Input::charToId(wchar_t ch)
     if (HIBYTE(vkey) == static_cast<unsigned char>(-1) &&
         LOBYTE(vkey) == static_cast<unsigned char>(-1))
     {
-		return noButton;
+        return noButton;
     }
 
     // Key needs special modifier keys?
@@ -377,7 +376,7 @@ Gosu::Button Gosu::Input::charToId(wchar_t ch)
 
 wchar_t Gosu::Input::idToChar(Gosu::Button btn)
 {
-	// Only translate keyboard ids.
+    // Only translate keyboard ids.
     if (btn.id() > 255)
         return 0;
 
@@ -389,16 +388,16 @@ wchar_t Gosu::Input::idToChar(Gosu::Button btn)
     // (Three elements so too-long names will make GKNT return 3 and we'll know.)
     wchar_t buf[3];
     if (::GetKeyNameText(btn.id() << 16, buf, 3) == 1)
-		return /*std::*/towlower(buf[0]);
+        return /*std::*/towlower(buf[0]);
 
     return 0;
 }
 
 bool Gosu::Input::down(Button btn) const
 {
-	// The invalid button is never pressed (but can be passed to this function).
-	if (btn == noButton || btn.id() >= numButtons)
-		return false;
+    // The invalid button is never pressed (but can be passed to this function).
+    if (btn == noButton || btn.id() >= numButtons)
+        return false;
     
     return buttons.at(btn.id());
 }
@@ -415,16 +414,16 @@ double Gosu::Input::mouseY() const
 
 void Gosu::Input::setMousePosition(double x, double y)
 {
-	POINT pos = { x / pimpl->mouseFactorX, y / pimpl->mouseFactorY };
-	::ClientToScreen(pimpl->window, &pos);
-	::SetCursorPos(pos.x, pos.y);
-	pimpl->updateMousePos();
+    POINT pos = { x / pimpl->mouseFactorX, y / pimpl->mouseFactorY };
+    ::ClientToScreen(pimpl->window, &pos);
+    ::SetCursorPos(pos.x, pos.y);
+    pimpl->updateMousePos();
 }
 
 void Gosu::Input::setMouseFactors(double factorX, double factorY)
 {
-	pimpl->mouseFactorX = factorX;
-	pimpl->mouseFactorY = factorY;
+    pimpl->mouseFactorX = factorX;
+    pimpl->mouseFactorY = factorY;
 }
 
 const Gosu::Touches& Gosu::Input::currentTouches() const
@@ -452,7 +451,7 @@ void Gosu::Input::update()
 {
     pimpl->updateMousePos();
     pimpl->updateButtons(true);
-	Impl::Events events;
+    Impl::Events events;
     events.swap(pimpl->events);
     for (unsigned i = 0; i < events.size(); ++i)
     {

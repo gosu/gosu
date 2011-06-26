@@ -22,9 +22,8 @@ class Gosu::DrawOpQueue
         unsigned width, height;
     };
     std::vector<ClipRect> clipRectStack;
-    // was boost::optional before, hackish replacement
     ClipRect effectiveRect;
-    bool haveEffectiveRect;
+    bool haveEffectiveRect; // is effectiveRect valid?
     
     void updateEffectiveRect()
     {

@@ -5,7 +5,6 @@
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/WinUtility.hpp>
-#include <boost/utility.hpp>
 #include <cstdlib>
 #include <cwchar>
 #include <algorithm>
@@ -27,8 +26,11 @@ namespace Gosu
 
     namespace
     {
-        class WinBitmap : boost::noncopyable
+        class WinBitmap
         {
+            WinBitmap(const WinBitmap&);
+            WinBitmap& operator=(const WinBitmap&);
+            
             HDC dc;
             HBITMAP bitmap;
             char* pixels;

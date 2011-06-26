@@ -5,7 +5,7 @@
 
 namespace
 {
-    typedef std::vector<boost::function<bool (MSG&)> > Hooks;
+    typedef std::vector<std::tr1::function<bool (MSG&)> > Hooks;
     Hooks hooks;
 
     bool handledByHook(MSG& message)
@@ -68,7 +68,7 @@ void Gosu::Win::processMessages()
         }
 }
 
-void Gosu::Win::registerMessageHook(const boost::function<bool (MSG&)>& hook)
+void Gosu::Win::registerMessageHook(const std::tr1::function<bool (MSG&)>& hook)
 {
     hooks.push_back(hook);
 }

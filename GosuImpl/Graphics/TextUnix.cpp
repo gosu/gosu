@@ -7,7 +7,6 @@
 #include <glib.h>
 #include <SDL/SDL_ttf.h>
 
-#include <boost/utility.hpp>
 #include <string>
 #include <cstring>
 #include <stdexcept>
@@ -21,8 +20,11 @@ namespace Gosu
 {
     // Used for system fonts
     // Adapted from original version by Jan Lücker
-    class PangoRenderer : boost::noncopyable
+    class PangoRenderer
     {
+        PangoRenderer(const PangoRenderer&);
+        PangoRenderer& operator=(const PangoRenderer&);
+        
         int width, height;
 
         PangoContext* context;
@@ -161,12 +163,18 @@ namespace Gosu
 
     // Used for custom TTF files
     // Adapted from customFont class by José Tomás Tocino García (TheOm3ga)
-    class SDLTTFRenderer : boost::noncopyable
+    class SDLTTFRenderer
     {
+        SDLTTFRenderer(const SDLTTFRenderer&);
+        SDLTTFRenderer& operator=(const SDLTTFRenderer&);
+        
         TTF_Font* font;
         
-        class SDLSurface : boost::noncopyable
+        class SDLSurface
         {
+            SDLSurface(const SDLSurface&);
+            SDLSurface& operator=(const SDLSurface&);
+            
             SDL_Surface* surface;
             
         public:

@@ -3,7 +3,6 @@
 #include <Gosu/Platform.hpp>
 #include <Gosu/Utility.hpp>
 #include <vector>
-#include <boost/cstdint.hpp>
 #include <FreeImage.h>
 
 // Compatibility with FreeImage <3.1.3. Subtly changes Gosu's behavior though.
@@ -27,7 +26,7 @@ namespace
     {
         // Since FreeImage gracefully ignores the MASK parameters above, we
         // manually exchange the R and B channels.
-        boost::uint32_t* p = reinterpret_cast<boost::uint32_t*>(bitmap.data());
+        unsigned* p = reinterpret_cast<unsigned*>(bitmap.data());
         for (int i = bitmap.width() * bitmap.height(); i > 0; --i, ++p)
             *p = (*p & 0xff00ff00) | ((*p << 16) & 0x00ff0000) | ((*p >> 16) & 0x000000ff);
     }

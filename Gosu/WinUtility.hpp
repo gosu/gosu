@@ -8,7 +8,7 @@
 
 #include <windows.h>
 #include <Gosu/Platform.hpp>
-#include <boost/function.hpp>
+#include <tr1/functional>
 #include <tr1/memory>
 #include <string>
 
