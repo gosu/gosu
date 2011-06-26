@@ -19,9 +19,9 @@
 // games (or intermediate UI toolkits) to be built upon it.
 
 #include <Gosu/Gosu.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <cwctype>
 #include <algorithm>
+#include <memory>
 
 class TextField : public Gosu::TextInput
 {
@@ -127,9 +127,9 @@ std::size_t lengthof(const T(&) [Len])
 
 class TextInputWindow : public Gosu::Window
 {
-    boost::scoped_ptr<Gosu::Font> font;
-    boost::scoped_ptr<TextField> textFields[3];
-    boost::scoped_ptr<Gosu::Image> cursor;
+    std::auto_ptr<Gosu::Font> font;
+    std::auto_ptr<TextField> textFields[3];
+    std::auto_ptr<Gosu::Image> cursor;
 
 public:
     TextInputWindow()
