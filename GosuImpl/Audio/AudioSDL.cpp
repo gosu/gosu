@@ -307,10 +307,10 @@ Gosu::Sample::Sample(Audio& audio, Reader reader)
 
 Gosu::Song::Song(Audio& audio, const std::wstring& filename)
 {
-    Song(filename).data.swap(data);
+    data = Song(filename).data;
 }
 
 Gosu::Song::Song(Audio& audio, Type type, Reader reader)
 {
-    Song(reader).data.swap(data);
+    data = Song(reader).data;
 }

@@ -411,11 +411,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
+				RelativePath="..\Gosu\Sockets.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Gosu\Sockets.hpp"
+				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
 				>
 			</File>
 			<File
@@ -428,6 +428,10 @@
 			</File>
 			<File
 				RelativePath="..\Gosu\Timing.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Gosu\TR1.hpp"
 				>
 			</File>
 			<File

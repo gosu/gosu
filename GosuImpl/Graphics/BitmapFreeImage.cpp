@@ -13,7 +13,7 @@
 
 // With MSVC, add a suffix so FreeImage can be linked as a fallback for GDI+.
 // With MinGW, Gosu uses FreeImage all the time, so no suffix is needed.
-#ifdef MSVC
+#ifdef _MSC_VER
 #define FI(x) x##_FreeImage
 #else
 #define FI(x) x

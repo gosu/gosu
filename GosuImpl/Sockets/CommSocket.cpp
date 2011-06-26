@@ -43,7 +43,7 @@ struct Gosu::CommSocket::Impl
                         break;
 
                     // Message size is already here, convert it.
-                    uint32_t msgSize = *reinterpret_cast<uint32_t*>(&inbox[0]);
+                    std::tr1::uint32_t msgSize = *reinterpret_cast<std::tr1::uint32_t*>(&inbox[0]);
                     msgSize = ntohl(msgSize);
 
                     // Can't really handle zero-size messages. IMPR?!
@@ -241,7 +241,7 @@ void Gosu::CommSocket::send(const void* buffer, std::size_t size)
     // In managed mode, also send the length of the buffer.
     if (mode() == cmManaged)
     {
-        uint32_t netSize = htonl(size);
+        std::tr1::uint32_t netSize = htonl(size);
         const char* charBuf = reinterpret_cast<const char*>(&netSize);
         pimpl->outbox.insert(pimpl->outbox.end(), charBuf,
             charBuf + sizeof netSize);

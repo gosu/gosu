@@ -188,7 +188,7 @@ void Gosu::saveImageFile(const Bitmap& bitmap, Writer writer, const wstring& for
     requireGDIplus();
 
     Bitmap input = bitmap;
-    if (isExtension(filename.c_str(), L".bmp"))
+    if (isExtension(formatHint.c_str(), L".bmp"))
         unapplyColorKey(input, Color::FUCHSIA);
     reshuffleBitmap(input);
     Gdiplus::Bitmap output(input.width(), input.height(), input.width() * 4,

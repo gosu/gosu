@@ -4,7 +4,7 @@
 #ifndef GOSU_TR1_HPP
 #define GOSU_TR1_HPP
 
-#ifdef MSVC
+#ifdef _MSC_VER
     #include <array>
     #include <memory>
     #include <functional>

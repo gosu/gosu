@@ -466,7 +466,7 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
 
     if (message == WM_PAINT)
     {
-        if (pimpl->graphics && graphics().begin())
+        if (pimpl->graphics.get() && graphics().begin())
         {
             try
             {
@@ -499,7 +499,7 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
         }
     }
 
-    if (pimpl->input && input().textInput() && input().textInput()->feedMessage(message, wparam, lparam))
+    if (pimpl->input.get() && input().textInput() && input().textInput()->feedMessage(message, wparam, lparam))
         return 0;
 
     return DefWindowProc(handle(), message, wparam, lparam);

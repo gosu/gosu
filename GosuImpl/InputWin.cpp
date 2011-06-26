@@ -23,9 +23,9 @@ struct Gosu::Input::Impl
     Impl() : textInput(0) {}
 
     HWND window;
-    str::tr1::shared_ptr<IDirectInput8> input;
+    std::tr1::shared_ptr<IDirectInput8> input;
 
-    typedef str::tr1::shared_ptr<IDirectInputDevice8> Device;
+    typedef std::tr1::shared_ptr<IDirectInputDevice8> Device;
     Device keyboard, mouse;
     std::vector<Device> gamepads;
 
