@@ -3,14 +3,12 @@
 #include <Gosu/Image.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/Text.hpp>
+#include <Gosu/TR1.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/FormattedString.hpp>
 #include <cassert>
-#include <tr1/array>
-#include <tr1/memory>
 #include <map>
 using namespace std;
-using namespace std::tr1;
 
 namespace
 {
@@ -43,13 +41,13 @@ struct Gosu::Font::Impl
     typedef tr1::array<auto_ptr<Image>, 65536> CharChunk;
     auto_ptr<CharChunk> chunks[65536][ffCombinations];
     
-    map<wstring, shared_ptr<Image> > entityCache;
+    map<wstring, tr1::shared_ptr<Image> > entityCache;
 
     const Image& imageAt(const FormattedString& fs, unsigned i)
     {
         if (fs.entityAt(i))
         {
-            shared_ptr<Image>& ptr = entityCache[fs.entityAt(i)];
+            tr1::shared_ptr<Image>& ptr = entityCache[fs.entityAt(i)];
             if (!ptr)
                 ptr.reset(new Image(*graphics, entityBitmap(fs.entityAt(i)), false));
             return *ptr;

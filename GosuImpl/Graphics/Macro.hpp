@@ -3,10 +3,9 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
+#include <Gosu/TR1.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/DrawOpQueue.hpp>
-#include <tr1/functional>
-#include <tr1/memory>
 #include <cmath>
 #include <algorithm>
 #include <memory>

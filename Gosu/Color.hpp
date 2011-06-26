@@ -5,6 +5,7 @@
 #define GOSU_COLOR_HPP
 
 #include <Gosu/Platform.hpp>
+#include <Gosu/TR1.hpp>
 
 namespace Gosu
 {
@@ -16,7 +17,7 @@ namespace Gosu
     //! it is 0xaabbggrr.
     class Color
     {
-        unsigned rep;
+        std::tr1::uint32_t rep;
         #ifdef GOSU_IS_LITTLE_ENDIAN
         enum { RED_OFFSET = 0, GREEN_OFFSET = 8, BLUE_OFFSET = 16, ALPHA_OFFSET = 24 };
         #else
@@ -24,7 +25,7 @@ namespace Gosu
         #endif
         
     public:
-        typedef unsigned char Channel;
+        typedef std::tr1::uint8_t Channel;
         static const unsigned GL_FORMAT = 0x1908; // GL_RGBA
         
         //! The default constructor does not initialize the color to any value.

@@ -8,8 +8,8 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/TextInput.hpp>
+#include <Gosu/TR1.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
-#include <tr1/functional>
 #include <cassert>
 #include <memory>
 #include <stdexcept>

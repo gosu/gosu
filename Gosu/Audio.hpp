@@ -13,7 +13,7 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
-#include <tr1/memory>
+#include <Gosu/TR1.hpp>
 #include <memory>
 #include <string>
 

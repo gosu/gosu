@@ -4,14 +4,14 @@
 #ifdef GOSU_IS_IPHONE
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/IO.hpp>
-#include <stdint.h> // C++ style include not portable
+#include <Gosu/TR1.hpp>
 
 namespace
 {
     template<unsigned bits> struct UintSelector;
-    template<> struct UintSelector<8>  { typedef uint8_t  Type; };
-    template<> struct UintSelector<16> { typedef uint16_t Type; };
-    template<> struct UintSelector<32> { typedef uint32_t Type; };
+    template<> struct UintSelector<8>  { typedef std::tr1::uint8_t  Type; };
+    template<> struct UintSelector<16> { typedef std::tr1::uint16_t Type; };
+    template<> struct UintSelector<32> { typedef std::tr1::uint32_t Type; };
     
     template<unsigned bits, typename T>
     void writeVal(Gosu::Writer& writer, T value)

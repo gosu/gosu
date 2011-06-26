@@ -168,6 +168,7 @@
 #ifdef GOSU_IS_WIN
 #include <FreeImage.h>
 #endif
+#include <Gosu/TR1.hpp>
 
 namespace Gosu {
     void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
@@ -176,7 +177,6 @@ namespace Gosu {
 
 #include <ctime>
 #include <sstream>
-#include <tr1/functional>
 
 // Preprocessor check for 1.9 (thanks banister)
 #if defined(ROBJECT_EMBED_LEN_MAX)

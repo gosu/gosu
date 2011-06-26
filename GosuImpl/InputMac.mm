@@ -3,9 +3,9 @@
 #include <Gosu/Input.hpp>
 #include <Gosu/TextInput.hpp>
 #include <GosuImpl/MacUtility.hpp>
+#include <Gosu/TR1.hpp>
 #include <Gosu/Utility.hpp>
 #include <IOKit/hidsystem/IOLLEvent.h>
-#include <tr1/array>
 #include <map>
 #include <string>
 #include <vector>
@@ -18,7 +18,6 @@
 #include <IOKit/hid/IOHIDKeys.h>
 #include <IOKit/IOKitLib.h>
 #include <IOKit/IOCFPlugIn.h>
-#include <tr1/memory>
 #include <stdexcept>
 #include <vector>
 

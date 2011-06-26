@@ -1,8 +1,8 @@
 #include <Gosu/Async.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
+#include <Gosu/TR1.hpp>
 #include <Gosu/Window.hpp>
-#include <tr1/functional>
 
 using namespace std;
 using namespace std::tr1;

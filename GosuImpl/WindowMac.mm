@@ -1,19 +1,20 @@
-#import <Gosu/Window.hpp>
-#import <Gosu/Audio.hpp>
-#import <Gosu/Graphics.hpp>
-#import <Gosu/Input.hpp>
-#import <GosuImpl/MacUtility.hpp>
-#import <Gosu/Timing.hpp>
-#import <Gosu/Utility.hpp>
+#include <Gosu/Window.hpp>
+#include <Gosu/Audio.hpp>
+#include <Gosu/Graphics.hpp>
+#include <Gosu/Input.hpp>
+#include <GosuImpl/MacUtility.hpp>
+#include <Gosu/Timing.hpp>
+#include <Gosu/TR1.hpp>
+#include <Gosu/Utility.hpp>
+#include <OpenGL/OpenGL.h>
+#include <OpenGL/gl.h>
+#include <memory>
+#include <vector>
+using namespace std::tr1::placeholders;
+
 #import <AppKit/AppKit.h>
 #import <ApplicationServices/ApplicationServices.h>
 #import <Carbon/Carbon.h>
-#import <OpenGL/OpenGL.h>
-#import <OpenGL/gl.h>
-#import <tr1/functional>
-#import <memory>
-#import <vector>
-using namespace std::tr1::placeholders;
 
 namespace Gosu
 {

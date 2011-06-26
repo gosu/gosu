@@ -1,6 +1,7 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
+#include <Gosu/TR1.hpp>
 #include <Gosu/Utility.hpp>
 #include <vector>
 #include <FreeImage.h>
@@ -26,7 +27,7 @@ namespace
     {
         // Since FreeImage gracefully ignores the MASK parameters above, we
         // manually exchange the R and B channels.
-        unsigned* p = reinterpret_cast<unsigned*>(bitmap.data());
+        std::tr1::uint32_t* p = reinterpret_cast<std::tr1::uint32_t*>(bitmap.data());
         for (int i = bitmap.width() * bitmap.height(); i > 0; --i, ++p)
             *p = (*p & 0xff00ff00) | ((*p << 16) & 0x00ff0000) | ((*p >> 16) & 0x000000ff);
     }

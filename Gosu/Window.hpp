@@ -7,8 +7,7 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
 #include <Gosu/Input.hpp>
-#include <tr1/functional>
-#include <tr1/memory>
+#include <Gosu/TR1.hpp>
 #include <memory>
 #include <string>
 

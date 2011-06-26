@@ -4,13 +4,13 @@
 // understand than that! --jlnr
 
 #include <Gosu/Window.hpp>
-#include <Gosu/Timing.hpp>
-#include <Gosu/Utility.hpp>
+#include <Gosu/Audio.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/Graphics.hpp>
-#include <Gosu/Audio.hpp>
+#include <Gosu/Timing.hpp>
+#include <Gosu/TR1.hpp>
+#include <Gosu/Utility.hpp>
 #include <cstdio>
-#include <tr1/functional>
 #include <algorithm>
 #include <memory>
 #include <stdexcept>

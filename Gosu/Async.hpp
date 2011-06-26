@@ -6,7 +6,7 @@
 #define GOSU_ASYNC_HPP
 
 #include <Gosu/Fwd.hpp>
-#include <tr1/memory>
+#include <Gosu/TR1.hpp>
 #include <thread>
 #include <memory>
 #include <string>

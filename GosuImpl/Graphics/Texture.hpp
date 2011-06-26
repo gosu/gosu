@@ -3,10 +3,10 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Bitmap.hpp>
+#include <Gosu/TR1.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/TexChunk.hpp>
 #include <GosuImpl/Graphics/BlockAllocator.hpp>
-#include <tr1/memory>
 #include <vector>
 
 namespace Gosu

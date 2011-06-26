@@ -3,18 +3,16 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/Math.hpp>
+#include <Gosu/TR1.hpp>
 #include <Gosu/Utility.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/FormattedString.hpp>
-#include <tr1/functional>
-#include <tr1/memory>
 #include <cassert>
 #include <cmath>
 #include <algorithm>
 #include <map>
 #include <vector>
 using namespace std;
-using namespace tr1;
 
 namespace Gosu
 {
@@ -371,7 +369,7 @@ Gosu::Bitmap Gosu::createText(const wstring& text,
 
 namespace
 {
-    map<wstring, shared_ptr<Gosu::Bitmap> > entities;
+    map<wstring, tr1::shared_ptr<Gosu::Bitmap> > entities;
 }
 
 void Gosu::registerEntity(const wstring& name, const Gosu::Bitmap& replacement)
@@ -386,7 +384,7 @@ bool Gosu::isEntity(const wstring& name)
 
 const Gosu::Bitmap& Gosu::entityBitmap(const wstring& name)
 {
-    shared_ptr<Gosu::Bitmap>& ptr = entities[name];
+    tr1::shared_ptr<Gosu::Bitmap>& ptr = entities[name];
     if (!ptr)
         throw runtime_error("Unknown entity: " + Gosu::wstringToUTF8(name));
     return *ptr;

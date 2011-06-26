@@ -4,19 +4,17 @@
 #ifndef GOSU_SOCKETS_HPP
 #define GOSU_SOCKETS_HPP
 
-#include <stdint.h>
-#include <tr1/functional>
-#include <tr1/memory>
+#include <Gosu/TR1.hpp>
 #include <cstddef>
 #include <string>
 
 namespace Gosu
 {
     //! Addresses are returned from and given to Gosu functions in host byte order.
-    typedef uint32_t SocketAddress;
+    typedef std::tr1::uint32_t SocketAddress;
 
     //! Ports are returned from and given to Gosu functions in host byte order.
-    typedef uint16_t SocketPort;
+    typedef std::tr1::uint16_t SocketPort;
     
     //! Constant that can be used as a placeholder for an arbitrary port, e.g. when
     //! starting to listen.

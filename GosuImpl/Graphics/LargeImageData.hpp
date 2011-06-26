@@ -3,7 +3,7 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
-#include <tr1/memory>
+#include <Gosu/TR1.hpp>
 #include <vector>
 
 namespace Gosu

@@ -7,9 +7,7 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
-#include <tr1/array>
-#include <tr1/functional>
-#include <tr1/memory>
+#include <Gosu/TR1.hpp>
 #include <memory>
 
 namespace Gosu

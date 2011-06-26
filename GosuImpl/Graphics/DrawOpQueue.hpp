@@ -1,10 +1,10 @@
 #ifndef GOSUIMPL_GRAPHICS_DRAWOPQUEUE_HPP
 #define GOSUIMPL_GRAPHICS_DRAWOPQUEUE_HPP
 
+#include <Gosu/TR1.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/DrawOp.hpp>
 #include <cassert>
-#include <tr1/functional>
 #include <algorithm>
 #include <map>
 #include <vector>

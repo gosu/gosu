@@ -1,8 +1,7 @@
 #include <Gosu/Input.hpp>
 #include <Gosu/Platform.hpp>
+#include <Gosu/TR1.hpp>
 #include <Gosu/WinUtility.hpp>
-#include <tr1/array>
-#include <tr1/memory>
 #include <cwchar>
 #include <iomanip>
 #include <sstream>

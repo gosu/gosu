@@ -1,12 +1,10 @@
 #include <Gosu/Sockets.hpp>
+#include <Gosu/TR1.hpp>
 #include <GosuImpl/Sockets/Sockets.hpp>
 #include <cassert>
 #include <cstring>
-#include <tr1/functional>
 #include <stdexcept>
 #include <vector>
-
-#include <stdint.h> // C++ style header not yet portable
 
 struct Gosu::CommSocket::Impl
 {
