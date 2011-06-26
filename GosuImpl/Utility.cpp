@@ -107,7 +107,7 @@ namespace Gosu
 {
     bool isExtension(const wchar_t* str, const wchar_t* ext)
     {
-        unsigned strLen = wcslen(str), extLen = wcslen(ext);
+        size_t strLen = wcslen(str), extLen = wcslen(ext);
         if (extLen > strLen)
             return false;
         str += strLen, ext += extLen;

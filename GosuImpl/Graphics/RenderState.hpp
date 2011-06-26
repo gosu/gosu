@@ -38,7 +38,7 @@ public:
         #else
         float matrix[16];
         for (int i = 0; i < 16; ++i)
-            matrix[i] = (*newTransform)[0];
+            matrix[i] = (*newTransform)[i];
         glMultMatrixf(matrix);
         #endif
         transform = newTransform;

@@ -4,6 +4,8 @@
 #ifndef GOSU_COLOR_HPP
 #define GOSU_COLOR_HPP
 
+#include <Gosu/Platform.hpp>
+
 namespace Gosu
 {
     //! Represents an RGBA color value with 8 bits for each channel. Can be

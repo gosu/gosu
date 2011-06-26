@@ -61,6 +61,8 @@ class Gosu::DrawOpQueue
     }
 
 public:
+    DrawOpQueue() : haveEffectiveRect(false) {}
+    
     // I really wish I would trust ADL. :|
     void swap(DrawOpQueue& other)
     {
