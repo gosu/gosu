@@ -327,10 +327,11 @@ void Gosu::Graphics::popTransform()
 {
     pimpl->currentTransforms.pop_back();
     Transform result = scale(1);
-
-		for (Transforms::reverse_iterator it = pimpl->currentTransforms.rbegin(); it != pimpl->currentTransforms.rend(); ++it)
-			result = multiply(result, *it);
-
+    
+    for (Transforms::reverse_iterator it = pimpl->currentTransforms.rbegin(),
+         end = pimpl->currentTransforms.rend(); it != end; ++it)
+        result = multiply(result, *it);
+    
     ensureBackOfList(pimpl->absoluteTransforms, result);
 }
 
