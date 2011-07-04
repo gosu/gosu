@@ -3,8 +3,10 @@
 
 #include <Gosu/Color.hpp>
 #include <Gosu/Utility.hpp>
+#include <Gosu/TR1.hpp>
 #include <cassert>
 #include <cwchar>
+#include <cwctype>
 #include <stdexcept>
 #include <utility>
 #include <vector>
@@ -31,7 +33,7 @@ namespace Gosu
         unsigned simpleFlags;
         // If not characters.empty(), ignore above fields and use this.
         std::vector<FormattedChar> characters;
-                
+        
         static unsigned flags(int b, int u, int i)
         {
             unsigned flags = 0;
@@ -165,7 +167,9 @@ namespace Gosu
                     int endOfEntity = pos + 1;
                     while (html[endOfEntity] != L';')
                     {
-                        using namespace std; // never know where the wchar_t stuff is ...
+                        // Never know where the wchar_t stuff is...what a mess!
+                        using namespace std;
+                        using namespace std::tr1;
                         if (!iswalnum(static_cast<wint_t>(html[endOfEntity])))
                             goto normalCharacter;
                         endOfEntity += 1;
