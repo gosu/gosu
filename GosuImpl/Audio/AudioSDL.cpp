@@ -134,7 +134,6 @@ Gosu::Sample::Sample(Reader reader)
     data->rep = Mix_LoadWAV_RW(SDL_RWFromMem(buffer, bufsize), 1);
     if (data->rep == NULL)
         throwLastSDLError();
-    free(buffer);
 }
 
 Gosu::SampleInstance Gosu::Sample::play(double volume, double speed,
