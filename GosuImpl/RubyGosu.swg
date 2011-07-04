@@ -17,6 +17,10 @@
 // Overriding virtuals is necessary in Gosu::TextInput.
 %feature("director") Gosu::TextInput;
 
+// Resolve typedefs that SWIG doesn't recognize.
+%apply unsigned char { std::tr1::uint8_t };
+%apply unsigned long { std::tr1::uint32_t };
+
 // Custom typemaps for wchar/wstring.
 #pragma SWIG nowarn=-490,-319
 %typemap(in) wchar_t {
@@ -175,6 +179,7 @@ namespace Gosu {
     void register_entity(const std::wstring& name, Gosu::Image* image) { registerEntity(name, image->getData().toBitmap()); }
 }
 
+#include <cstring>
 #include <ctime>
 #include <sstream>
 
@@ -386,7 +391,7 @@ namespace Gosu {
         return Gosu::Color(a, r, g, b);
     }
     
-    static Gosu::Color rgba(unsigned rgba)
+    static Gosu::Color rgba(std::tr1::uint32_t rgba)
     {
         return Gosu::Color(rgba & 0xff, (rgba >> 24) & 0xff,
             (rgba >> 16) & 0xff, (rgba >> 8) & 0xff);
@@ -398,7 +403,7 @@ namespace Gosu {
         return Gosu::Color(a, r, g, b);
     }
     
-    static Gosu::Color argb(unsigned argb)
+    static Gosu::Color argb(std::tr1::uint32_t argb)
     {
         return Gosu::Color(argb);
     }

@@ -18,7 +18,6 @@ BASE_FILES = %w(
   FileUnix.cpp
   Graphics/Bitmap.cpp
   Graphics/BitmapColorKey.cpp
-  Graphics/BitmapFreeImage.cpp
   Graphics/BitmapUtils.cpp
   Graphics/BlockAllocator.cpp
   Graphics/Color.cpp
@@ -50,6 +49,7 @@ MAC_FILES = %w(
 
 LINUX_FILES = %w(
   Audio/AudioSDL.cpp
+  Graphics/BitmapFreeImage.cpp
   Graphics/TextUnix.cpp
   InputX.cpp
   TextInputX.cpp
@@ -70,7 +70,7 @@ if `uname`.chomp == 'Darwin' then
   $CFLAGS   << " -x objective-c++ -fobjc-gc"
   $LDFLAGS  << " -L/usr/local/lib -L/usr/X11/lib -logg -lvorbis -lvorbisfile -liconv"
   %w(AudioToolbox IOKit OpenAL OpenGL AppKit ApplicationServices Foundation Carbon).each do |f|
-    $INCFLAGS << " -framework #{f}"
+    #$INCFLAGS << " -framework #{f}" <- not necessary? I only get lots of warnings
     $LDFLAGS  << " -framework #{f}"
   end
 
