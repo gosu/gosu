@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <cassert>
+#include <cstdio>
 #include <Gosu/Utility.hpp>
 
 // Adapted from http://www.codeproject.com/KB/GDI/xfont.aspx.
