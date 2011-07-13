@@ -1,3 +1,5 @@
+DESTDIR = 
+
 PKG_CONFIG = @PKG_CONFIG@
 
 GOSU_DIR = @abs_top_srcdir@/..
@@ -19,12 +21,33 @@ OBJS = @GOSU_A_OBJS@
 
 XPLS = $(GOSU_DIR)/examples/Tutorial $(GOSU_DIR)/examples/TextInput
 
-CXXFLAGS = -fPIC -I.. @AUDIO_INC@ -Wall @PANGO_CXX_FLAGS@ @X_INCS@ \
+CXXFLAGS =
+
+ALL_CXXFLAGS = -fPIC -I.. @AUDIO_INC@ -Wall @PANGO_CXX_FLAGS@ @X_INCS@ \
 	   @HAVE_SYS_STAT_H@ \
 	   -DNDEBUG -O3 -pipe -fomit-frame-pointer \
-	   -I/usr/include/SDL
+	   -I/usr/include/SDL $(CXXFLAGS)
 
 LIBS = -L@x_libraries@ -lX11 @PANGO_LIBS@ @AUDIO_LIBS@ -lpng -lstdc++ -lGL -lSDL_ttf -lfreeimage #-lboost_thread
+
+SHELL = /bin/sh
+AR = ar
+CXX = g++
+LDCONFIG = ldconfig
+LD = ld
+INSTALL = install
+RMDIR = rmdir --ignore-fail-on-non-empty
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=@bindir@
+includedir=@includedir@
+libdir=@libdir@
+
+INSTALL_PROGRAM = $(INSTALL)
+INSTALL_DATA = $(INSTALL) -m 644
+
+.SUFFIXES: .cpp .o
 
 all: @TO_BE_MADE@
 
@@ -36,40 +59,53 @@ directories:
 	if [ \! -d Audio ]; then mkdir Audio; fi
 
 ../lib/libgosu.a: $(OBJS)
-	ar -r ../lib/libgosu.a @GOSU_A_OBJS@
+	$(AR) -r ../lib/libgosu.a @GOSU_A_OBJS@
 
 ../lib/libgosu.so: 
-	g++ -shared -o ../lib/libgosu.so ${LIBS} @GOSU_A_OBJS@
+	$(CXX) -shared -o ../lib/libgosu.so ${LIBS} @GOSU_A_OBJS@
 
 install: @INSTALL_ACTION@
 
 uninstall: @UNINSTALL_ACTION@
 
 cpp_install:
-	cp -p ../lib/libgosu.a /usr/local/lib/
-	cp -p ../lib/libgosu.so /usr/local/lib/
-	cp -p ../bin/gosu-config /usr/local/bin/
-	cp -pr ../Gosu /usr/local/include
-	ldconfig
+	test -d $(DESTDIR) || mkdir $(DESTDIR)
+	test -d $(DESTDIR)$(prefix) || mkdir $(DESTDIR)$(prefix)
+	test -d $(DESTDIR)$(exec_prefix) || mkdir $(DESTDIR)$(exec_prefix)
+	test -d $(DESTDIR)$(bindir) || mkdir $(DESTDIR)$(bindir)
+	test -d $(DESTDIR)$(libdir) || mkdir $(DESTDIR)$(libdir)
+	test -d $(DESTDIR)$(includedir) || mkdir $(DESTDIR)$(includedir)
+	$(INSTALL_DATA) ../lib/libgosu.a $(DESTDIR)$(libdir)
+	$(INSTALL_PROGRAM) ../lib/libgosu.so $(DESTDIR)$(libdir)
+	$(INSTALL_PROGRAM) ../bin/gosu-config $(DESTDIR)$(bindir)
+	test -d $(DESTDIR)$(includedir)/Gosu || mkdir $(DESTDIR)$(includedir)/Gosu 
+	$(INSTALL_DATA) ../Gosu/* $(DESTDIR)$(includedir)/Gosu
+	$(LDCONFIG) -n $(libdir)
 
 cpp_uninstall:
-	rm /usr/local/lib/libgosu.a
-	rm /usr/local/lib/libgosu.so
-	rm /usr/local/bin/gosu-config
-	rm -rf /usr/local/include/Gosu
-	ldconfig
+	-rm $(libdir)/libgosu.a
+	-rm $(libdir)/libgosu.so
+	-rm $(bindir)/gosu-config
+	-rm -rf $(includedir)/Gosu
+	-test -z $(DESTDIR)$(includedir) || $(RMDIR) $(DESTDIR)$(includedir)
+	-test -z $(DESTDIR)$(libdir) || $(RMDIR) $(DESTDIR)$(libdir)
+	-test -z $(DESTDIR)$(bindir) || $(RMDIR) $(DESTDIR)$(bindir)
+	-test -z $(DESTDIR)$(exec_prefix) || $(RMDIR) $(DESTDIR)$(exec_prefix)
+	-test -z $(DESTDIR)$(prefix) || $(RMDIR) $(DESTDIR)$(prefix)
+	-test -z $(DESTDIR) || $(RMDIR) $(DESTDIR)
+	$(LDCONFIG) -n $(libdir)
 
 clean:
 	rm -f $(OBJS) $(XPLS) ../lib/libgosu* ../lib/gosu?* ../bin/gosu-config
 	rmdir Audio Graphics Sockets
 
 $(OBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cpp
-	$(CXX) $(GOSU_DIR)/GosuImpl/$*.cpp -o $@ $(CXXFLAGS) -c
+	$(CXX) $(GOSU_DIR)/GosuImpl/$*.cpp -o $@ $(ALL_CXXFLAGS) -c
 
 examples: $(XPLS) ../lib/libgosu.a
 
 $(XPLS): %: %.cpp ../lib/libgosu.a
-	$(CXX) $@.cpp -o $@ $(CXXFLAGS) $(LIBS) ../lib/libgosu.a
+	$(CXX) $@.cpp -o $@ $(ALL_CXXFLAGS) $(LIBS) ../lib/libgosu.a
 
 ../bin/gosu-config:
 	echo "#!/bin/bash" > ../bin/gosu-config
@@ -78,9 +114,8 @@ $(XPLS): %: %.cpp ../lib/libgosu.a
 	echo "    --libs)" >> ../bin/gosu-config
 	echo '    echo "$(LIBS)";;' >> ../bin/gosu-config
 	echo "    --cxxflags)" >> ../bin/gosu-config
-	echo '    echo "$(CXXFLAGS)";;' >> ../bin/gosu-config
+	echo '    echo "$(ALL_CXXFLAGS)";;' >> ../bin/gosu-config
 	echo "    esac" >> ../bin/gosu-config
 	echo "    shift" >> ../bin/gosu-config
 	echo "done" >> ../bin/gosu-config
 	chmod u+x ../bin/gosu-config
-
