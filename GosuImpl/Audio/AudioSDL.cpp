@@ -97,6 +97,7 @@ void Gosu::SampleInstance::changeSpeed(double speed)
 struct Gosu::Sample::SampleData
 {
   Mix_Chunk* rep;
+  std::vector<Uint8> buffer;
   
   SampleData(): rep(0) {}
   ~SampleData() {
@@ -120,21 +121,19 @@ Gosu::Sample::Sample(const std::wstring& filename)
 }
 
 Gosu::Sample::Sample(Reader reader)
+: data(new SampleData)
 {
     requireSDLMixer();
 
     if (noSound)
         return;
 
-    std::size_t bufsize = reader.resource().size() - reader.position();
-    Uint8* buffer = static_cast<Uint8*>(malloc(bufsize));
-    reader.read(buffer, bufsize);
+    data->buffer.resize(reader.resource().size() - reader.position());
+    reader.read(&data->buffer[0], data->buffer.size());
 
-    data.reset(new SampleData);
-    data->rep = Mix_LoadWAV_RW(SDL_RWFromMem(buffer, bufsize), 1);
+    data->rep = Mix_LoadWAV_RW(SDL_RWFromMem(&data->buffer[0], data->buffer.size()), 1);
     if (data->rep == NULL)
         throwLastSDLError();
-    free(buffer);
 }
 
 Gosu::SampleInstance Gosu::Sample::play(double volume, double speed,
@@ -180,7 +179,7 @@ Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
 class Gosu::Song::BaseData {
 public:
     Mix_Music* music;
-    //std::vector<Uint8> buffer; - used by constructor that has been commented out
+    // std::vector<Uint8> buffer; - used by constructor that has been commented out
     double volume;
     
     BaseData() : music(0), volume(1.0) {}
@@ -218,9 +217,8 @@ Gosu::Song::Song(Reader reader)
 #if 0
     // This is traditionally broken in SDL_mixer. File bugs :)
     
-    std::size_t bufsize = reader.resource().size() - reader.position();
-    data->buffer.resize(bufsize);
-    reader.read(data->buffer.data(), bufsize);
+    data->buffer.resize(reader.resource().size() - reader.position());
+    reader.read(data->buffer.data(), data->buffer.size());
     data->music = Mix_LoadMUS_RW(SDL_RWFromMem(data->buffer.data(), bufsize));
     if (data->music == NULL)
         throwLastSDLError();

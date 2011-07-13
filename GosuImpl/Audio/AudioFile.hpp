@@ -2,7 +2,7 @@
 #define GOSUIMPL_AUDIO_AUDIOFILE_HPP
 
 #include <vector>
-#import <OpenAL/al.h>
+#include <OpenAL/al.h>
 
 namespace Gosu
 {

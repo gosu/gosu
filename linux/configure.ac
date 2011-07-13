@@ -70,6 +70,9 @@ AC_SUBST(TO_BE_MADE)
 AC_CHECK_LIB(rt, sched_setscheduler, LIBS="$LIBS -lrt", AC_CHECK_LIB(c, sched_setscheduler, , AC_MSG_ERROR(Missing librt functionality), ), )
 AC_SUBST(HAVE_LIBRT)
 
+# freeimage
+AC_CHECK_HEADER(FreeImage.h, [], AC_MSG_ERROR([freeimage is not installed.]))
+
 INSTALL_ACTION="cpp_install"
 UNINSTALL_ACTION="cpp_uninstall"
 AC_SUBST(INSTALL_ACTION)

@@ -1,5 +1,4 @@
 #include <GosuImpl/MacUtility.hpp>
-#include <GosuImpl/Audio/AudioToolboxFile.hpp>
 #include <GosuImpl/Audio/ALChannelManagement.hpp>
 #include <GosuImpl/Audio/OggFile.hpp>
 
@@ -19,6 +18,15 @@
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
 
+#ifdef GOSU_IS_MAC
+#import <Foundation/Foundation.h>
+#include <GosuImpl/Audio/AudioToolboxFile.hpp>
+#define WAVE_FILE AudioToolboxFile
+#else
+#include <GosuImpl/Audio/SndFile.hpp>
+#define WAVE_FILE SndFile
+#endif
+
 #ifdef GOSU_IS_IPHONE
 #import <AVFoundation/AVFoundation.h>
 #endif
@@ -37,7 +45,7 @@ namespace
                magicBytes[2] == 'g' && magicBytes[3] == 'S';
     }
 
-    bool isOggFile(const std::wstring& filename)
+    bool isOggFile(const wstring& filename)
     {
         Gosu::File file(filename);
         return isOggFile(file.frontReader());
@@ -47,10 +55,17 @@ namespace
     bool curSongLooping;
 }
 
-#define CONSTRUCTOR_COMMON \
-    ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]); \
-    if (!alChannelManagement.get()) \
-        alChannelManagement.reset(new ALChannelManagement)
+// TODO: What is the NSAutoreleasePool good for?
+#ifdef GOSU_IS_MAC
+    #define CONSTRUCTOR_COMMON \
+        ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]); \
+        if (!alChannelManagement.get()) \
+            alChannelManagement.reset(new ALChannelManagement)
+#else
+    #define CONSTRUCTOR_COMMON \
+        if (!alChannelManagement.get()) \
+            alChannelManagement.reset(new ALChannelManagement)
+#endif    
 
 Gosu::SampleInstance::SampleInstance(int handle, int extra)
 : handle(handle), extra(extra)
@@ -172,7 +187,7 @@ Gosu::Sample::Sample(const std::wstring& filename)
     }
     else
     {
-        AudioToolboxFile audioFile(filename);
+        WAVE_FILE audioFile(filename);
         data.reset(new SampleData(audioFile));
     }
 }
@@ -188,7 +203,7 @@ Gosu::Sample::Sample(Reader reader)
     }
     else
     {
-        AudioToolboxFile audioFile(reader);
+        WAVE_FILE audioFile(reader);
         data.reset(new SampleData(audioFile));
     }
 }
@@ -309,7 +324,7 @@ public:
 };
 #endif
 
-// AudioToolbox impl
+// AudioFile impl
 class Gosu::Song::StreamData : public BaseData
 {
     std::auto_ptr<AudioFile> file;
@@ -350,7 +365,7 @@ public:
             file.reset(new OggFile(sourceFile.frontReader()));
         }
         else
-            file.reset(new AudioToolboxFile(filename));
+            file.reset(new WAVE_FILE(filename));
         alGenBuffers(2, buffers);
     }
 
@@ -359,7 +374,7 @@ public:
         if (isOggFile(reader))
             file.reset(new OggFile(reader));
         else
-            file.reset(new AudioToolboxFile(reader));
+            file.reset(new WAVE_FILE(reader));
         alGenBuffers(2, buffers);
     }
     

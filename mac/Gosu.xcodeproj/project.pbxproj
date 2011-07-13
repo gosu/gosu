@@ -404,7 +404,7 @@
 		D499E6380D06B51300BA6DEC /* DrawOp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DrawOp.hpp; sourceTree = "<group>"; };
 		D49B612B12E6BE6C00C3DB80 /* Inspection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Inspection.cpp; path = ../GosuImpl/Inspection.cpp; sourceTree = SOURCE_ROOT; };
 		D49B613C12E6C09900C3DB80 /* Inspection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Inspection.hpp; path = ../Gosu/Inspection.hpp; sourceTree = SOURCE_ROOT; };
-		D4A5A1F40F40D28600FFF378 /* libgosutouch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgosutouch.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4A5A1F40F40D28600FFF378 /* libgosutouch-sim.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libgosutouch-sim.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4A5A2200F40D45200FFF378 /* InputTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = InputTouch.mm; path = ../GosuImpl/InputTouch.mm; sourceTree = SOURCE_ROOT; };
 		D4A5A2210F40D45200FFF378 /* WindowTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = WindowTouch.mm; path = ../GosuImpl/WindowTouch.mm; sourceTree = SOURCE_ROOT; };
 		D4A5A2220F40D45200FFF378 /* UtilityTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = UtilityTouch.mm; path = ../GosuImpl/UtilityTouch.mm; sourceTree = SOURCE_ROOT; };
@@ -528,7 +528,7 @@
 				8D07F2C80486CC7A007CD1D0 /* Gosu.framework */,
 				D4CA89500BC68B5D00A431AC /* gosu.for_1_8.bundle */,
 				D459FF440BDCD23500E7F0D6 /* RubyGosu App.app */,
-				D4A5A1F40F40D28600FFF378 /* libgosutouch.a */,
+				D4A5A1F40F40D28600FFF378 /* libgosutouch-sim.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -884,7 +884,7 @@
 			);
 			name = "Gosu Touch";
 			productName = "Gosu Touch";
-			productReference = D4A5A1F40F40D28600FFF378 /* libgosutouch.a */;
+			productReference = D4A5A1F40F40D28600FFF378 /* libgosutouch-sim.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		D4CA894F0BC68B5D00A431AC /* RubyGosu Core */ = {
@@ -1264,10 +1264,7 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_STYLE = DYNAMIC;
 				MACH_O_TYPE = mh_dylib;
-				OTHER_LDFLAGS = (
-					/usr/local/lib/libfreeimage.dylib,
-					"-liconv",
-				);
+				OTHER_LDFLAGS = "-liconv";
 				PRODUCT_NAME = Gosu;
 				WRAPPER_EXTENSION = framework;
 				ZERO_LINK = NO;
