@@ -4,12 +4,19 @@ SRCS = GosuImpl/Sockets/CommSocket.cpp GosuImpl/DirectoriesWin.cpp GosuImpl/File
 
 OBJS = $(SRCS:.cpp=.o)
 
-DXINCLUDE = "C:/Program Files (x86)/Microsoft DirectX SDK (March 2009)/Include"
+DXINSTALL = $(shell 'cmd.exe' /c 'reg query HKLM\Software\Microsoft\DirectX /s' | grep InstallPath | sed 's/.*REG_SZ\s//' | head -1)
+DXINCLUDE = "$(DXINSTALL)\Include"
 
 CXXFLAGS = -g -I. -I$(DXINCLUDE) -DUNICODE -D_UNICODE -DMINGW
 
-all: $(OBJS)
+all: directx_sdk $(OBJS)
 	ar rcs lib/libgosu.a $(OBJS)
+
+directx_sdk:
+ifeq ($(DXINSTALL),)
+	@echo Cannot find installed DirectX SDK.
+	@false
+endif
 
 clean:
 	rm -f $(OBJS) lib/libgosu.a
