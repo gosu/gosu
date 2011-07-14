@@ -1,6 +1,12 @@
-#import <OpenAL/al.h>
-#import <OpenAL/alc.h>
+#include <Gosu/Platform.hpp>
+#ifdef GOSU_IS_MAC
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
 #include <GosuImpl/MacUtility.hpp>
+#else
+#include <AL/al.h>
+#include <AL/alc.h>
+#endif
 #include <algorithm>
 
 namespace Gosu
@@ -35,7 +41,7 @@ namespace Gosu
             alGenSources(NUM_SOURCES, alSources);
             currentToken = 0;
             std::fill(currentTokens, currentTokens + NUM_SOURCES,
-                static_cast<NSUInteger>(NO_TOKEN));
+                static_cast<ALuint>(NO_TOKEN));
         }
         
         ~ALChannelManagement()

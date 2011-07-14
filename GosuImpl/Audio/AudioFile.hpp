@@ -2,7 +2,12 @@
 #define GOSUIMPL_AUDIO_AUDIOFILE_HPP
 
 #include <vector>
+#include <Gosu/Platform.hpp>
+#ifdef GOSU_IS_MAC
 #include <OpenAL/al.h>
+#else
+#include <AL/al.h>
+#endif
 
 namespace Gosu
 {
