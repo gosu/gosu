@@ -61,7 +61,7 @@ directories:
 ../lib/libgosu.a: $(OBJS)
 	$(AR) -r ../lib/libgosu.a @GOSU_A_OBJS@
 
-../lib/libgosu.so: 
+../lib/libgosu.so: $(OBJS)
 	$(CXX) -shared -o ../lib/libgosu.so ${LIBS} @GOSU_A_OBJS@
 
 install: @INSTALL_ACTION@
