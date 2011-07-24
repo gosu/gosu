@@ -28,7 +28,7 @@ ALL_CXXFLAGS = -fPIC -I.. @AUDIO_INC@ -Wall @PANGO_CXX_FLAGS@ @X_INCS@ \
 	   -DNDEBUG -O3 -pipe -fomit-frame-pointer \
 	   -I/usr/include/SDL $(CXXFLAGS)
 
-LIBS = -L@x_libraries@ -lX11 @PANGO_LIBS@ @AUDIO_LIBS@ -lpng -lstdc++ -lGL -lSDL_ttf -lfreeimage #-lboost_thread
+LIBS = -L@x_libraries@ -lX11 @PANGO_LIBS@ @AUDIO_LIBS@ -lpng -lstdc++ -lGL -lSDL_ttf -lfreeimage -lXdamage #-lboost_thread
 
 SHELL = /bin/sh
 AR = ar
