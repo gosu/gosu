@@ -3993,6 +3993,26 @@ fi
 
 
 
+# libXdamage
+ac_fn_c_check_header_mongrel "$LINENO" "X11/extensions/Xdamage.h" "ac_cv_header_X11_extensions_Xdamage_h" "$ac_includes_default"
+if test "x$ac_cv_header_X11_extensions_Xdamage_h" = x""yes; then :
+
+else
+  as_fn_error $? "libxdamage is not installed" "$LINENO" 5
+fi
+
+
+
+# freeimage
+ac_fn_c_check_header_mongrel "$LINENO" "FreeImage.h" "ac_cv_header_FreeImage_h" "$ac_includes_default"
+if test "x$ac_cv_header_FreeImage_h" = x""yes; then :
+
+else
+  as_fn_error $? "freeimage is not installed." "$LINENO" 5
+fi
+
+
+
 INSTALL_ACTION="cpp_install"
 UNINSTALL_ACTION="cpp_uninstall"
 
