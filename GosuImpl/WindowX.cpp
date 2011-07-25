@@ -13,6 +13,7 @@
 #include <cstdio>
 #include <algorithm>
 #include <memory>
+#include <sstream>
 #include <stdexcept>
 #include <vector>
 
@@ -204,6 +205,18 @@ struct Gosu::Window::Impl
             glXSwapBuffers(display, this->window);
         }
     }
+
+    // The ICCCM standard requires that compositing window managers acquire
+    // ownership of a selection named _NET_WM_CM_Sn, where n is the screen
+    // number
+    bool isComposited()
+    {
+        std::ostringstream atomName;
+        atomName << "_NET_WM_CM_S" << XDefaultScreen(display);
+        const std::string& tmp = atomName.str();
+        Atom selection = XInternAtom(display, tmp.c_str(), False);
+        return XGetSelectionOwner(display, selection) != None;
+    }
 };
 
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
@@ -302,15 +315,20 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
                   1.0 * height / pimpl->height);
     }
 
-    // Register our intent to monitor this window for damage
-    XDamageQueryExtension(pimpl->display, &pimpl->damageEvent, &pimpl->damageError);
-    pimpl->damage = XDamageCreate(pimpl->display, pimpl->window,
-            XDamageReportNonEmpty);
+    // Composited windows, by nature, don't need to monitor XDamage
+    if (!pimpl->isComposited())
+    {
+        // Register our intent to monitor this window for damage
+        XDamageQueryExtension(pimpl->display, &pimpl->damageEvent, &pimpl->damageError);
+        pimpl->damage = XDamageCreate(pimpl->display, pimpl->window,
+                XDamageReportNonEmpty);
+    }
 }
 
 Gosu::Window::~Window()
 {
-    XDamageDestroy(pimpl->display, pimpl->damage);
+    if (!pimpl->isComposited())
+        XDamageDestroy(pimpl->display, pimpl->damage);
     XFreeCursor(pimpl->display, pimpl->emptyCursor);
     XDestroyWindow(pimpl->display, pimpl->window);
     XSync(pimpl->display, false);
