@@ -7,6 +7,7 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 #endif
+#include <cstdlib>
 #include <algorithm>
 
 namespace Gosu
@@ -20,9 +21,9 @@ namespace Gosu
         static ALCcontext* alContext;
 
         enum { NUM_SOURCES = 32 }; // This is what the iPhone supports, I hear.
-        ALuint alSources[NUM_SOURCES];
-        ALuint currentToken;
-        ALuint currentTokens[NUM_SOURCES];
+        static ALuint alSources[NUM_SOURCES];
+        static ALuint currentToken;
+        static ALuint currentTokens[NUM_SOURCES];
         
     public:
         enum { NO_TOKEN = -1, NO_SOURCE = -1, NO_FREE_CHANNEL = -1 };
@@ -35,11 +36,18 @@ namespace Gosu
         ALChannelManagement()
         {
             // Open preferred device
+            #ifdef GOSU_IS_WIN
+            // Choose the 'dsound' backend because this one will not cause a
+            // segmentation fault on DLL unload if alcCloseDevice was not called.
+            // This doesn't matter with C++ and reliable destructors, but it does
+            // with Ruby.
+            alDevice = alcOpenDevice("dsound");
+            #else
             alDevice = alcOpenDevice(0);
+            #endif
             alContext = alcCreateContext(alDevice, 0);
             alcMakeContextCurrent(alContext);
             alGenSources(NUM_SOURCES, alSources);
-            currentToken = 0;
             std::fill(currentTokens, currentTokens + NUM_SOURCES,
                 static_cast<ALuint>(NO_TOKEN));
         }
@@ -85,6 +93,9 @@ namespace Gosu
     };
     ALCdevice* ALChannelManagement::alDevice = 0;
     ALCcontext* ALChannelManagement::alContext = 0;
-    
+    ALuint ALChannelManagement::alSources[NUM_SOURCES];
+    ALuint ALChannelManagement::currentToken = 0;
+    ALuint ALChannelManagement::currentTokens[NUM_SOURCES];
+
     std::auto_ptr<ALChannelManagement> alChannelManagement;
 }

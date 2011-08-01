@@ -163,10 +163,8 @@ struct Gosu::Sample::SampleData
     {
         // It's hard to free things in the right order in Ruby/Gosu.
         // Make sure buffer isn't deleted after the context/device are shut down.
-        puts("SampleData#1");fflush(0);
         if (!alChannelManagement.get())
             return;
-        puts("SampleData#2");fflush(0);
             
         alDeleteBuffers(1, &buffer);
     }
