@@ -4,6 +4,7 @@
 #include <GosuImpl/Audio/AudioFile.hpp>
 #include <Gosu/IO.hpp>
 #include <vorbis/vorbisfile.h>
+#include <cassert>
 #include <algorithm>
 #include <stdexcept>
 

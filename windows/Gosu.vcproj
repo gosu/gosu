@@ -40,9 +40,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/I&quot;..\dependencies\zlib&quot; /I&quot;..\dependencies\libpng&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../&quot;;$(NOINHERIT)"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../&quot;;&quot;$(SolutionDir)/../dependencies/libogg/include/&quot;;&quot;$(SolutionDir)/../dependencies/libvorbis/include/&quot;;$(NOINHERIT)"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="3"
@@ -62,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="Gdiplus.lib audiere.lib opengl32.lib dinput8.lib winmm.lib dxguid.lib ws2_32.lib delayimp.lib"
+				AdditionalDependencies="Gdiplus.lib openal32.lib libsndfile.lib opengl32.lib dinput8.lib winmm.lib dxguid.lib ws2_32.lib delayimp.lib"
 				OutputFile="$(OutDir)\$(ProjectName)Debug.lib"
 			/>
 			<Tool
@@ -106,12 +105,11 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/I&quot;..\dependencies\zlib&quot; /I&quot;..\dependencies\libpng&quot;"
 				Optimization="3"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../&quot;;$(NOINHERIT)"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../&quot;;&quot;$(SolutionDir)/../dependencies/libogg/include/&quot;;&quot;$(SolutionDir)/../dependencies/libvorbis/include/&quot;;$(NOINHERIT)"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -129,7 +127,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="Gdiplus.lib audiere.lib opengl32.lib dinput8.lib winmm.lib dxguid.lib ws2_32.lib delayimp.lib"
+				AdditionalDependencies="Gdiplus.lib openal32.lib libsndfile.lib opengl32.lib dinput8.lib winmm.lib dxguid.lib ws2_32.lib delayimp.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -330,7 +328,23 @@
 				Name="Audio"
 				>
 				<File
-					RelativePath="..\GosuImpl\Audio\AudioAudiere.cpp"
+					RelativePath="..\GosuImpl\Audio\ALChannelManagement.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Audio\AudioFile.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Audio\AudioOpenAL.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Audio\OggFile.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\GosuImpl\Audio\SndFile.hpp"
 					>
 				</File>
 			</Filter>
@@ -411,11 +425,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Gosu\Sockets.hpp"
+				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
+				RelativePath="..\Gosu\Sockets.hpp"
 				>
 			</File>
 			<File
@@ -450,6 +464,114 @@
 				RelativePath="..\Gosu\WinUtility.hpp"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="Dependencies"
+			>
+			<Filter
+				Name="libogg"
+				>
+				<File
+					RelativePath="..\dependencies\libogg\src\bitwise.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libogg\src\framing.c"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="libvorbis"
+				>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\analysis.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\bitrate.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\block.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\codebook.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\envelope.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\floor0.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\floor1.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\info.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\lookup.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\lpc.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\lsp.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\mapping0.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\mdct.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\psy.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\registry.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\res0.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\sharedbook.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\smallft.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\synthesis.c"
+					>
+				</File>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\window.c"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="libvorbisfile"
+				>
+				<File
+					RelativePath="..\dependencies\libvorbis\lib\vorbisfile.c"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

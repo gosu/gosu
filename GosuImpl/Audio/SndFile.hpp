@@ -15,6 +15,40 @@ namespace Gosu
         Reader reader;
         Buffer buffer;
         
+        // Cannot use /DELAYLOAD with libsndfile-1.dll because it was compiled
+        // using arcane GNU tools of dark magic (or maybe it's the filename).
+        #ifdef GOSU_IS_WIN
+        static HMODULE dll()
+        {
+            static HMODULE dll = LoadLibrary(L"libsndfile.dll");
+            if (!dll)
+                throw std::runtime_error("Cannot find libsndfile.dll");
+            return dll;
+        }
+        
+        #define CREATE_STUB(NAME, RETURN, PARAMS, NAMES)            \
+        static RETURN NAME PARAMS                                   \
+        {                                                           \
+            typedef RETURN (*NAME##_ptr) PARAMS;                    \
+            static NAME##_ptr f = (NAME##_ptr)GetProcAddress(dll(), #NAME); \
+            if (!f)                                               \
+                throw std::runtime_error("Cannot find " ## #NAME);  \
+            return f NAMES;                                       \
+        }
+        CREATE_STUB(sf_open_virtual, SNDFILE*,
+            (SF_VIRTUAL_IO* sfvirtual, int mode, SF_INFO* sfinfo, void* user_data),
+            (sfvirtual, mode, sfinfo, user_data))
+        CREATE_STUB(sf_close, int,
+            (SNDFILE *sndfile),
+            (sndfile))
+        CREATE_STUB(sf_read_short, sf_count_t,
+            (SNDFILE *sndfile, short *ptr, sf_count_t items),
+            (sndfile, ptr, items))
+        CREATE_STUB(sf_seek, sf_count_t,
+            (SNDFILE *sndfile, sf_count_t frames, int whence),
+            (sndfile, frames, whence))
+        #endif
+
         static sf_count_t get_filelen(SndFile *self)
         {
             return self->buffer.size();

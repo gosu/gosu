@@ -7,6 +7,8 @@ class Test < Gosu::Window
     @sample = Gosu::Sample.new("media/Sample.wav")
   end
   
+  def needs_cursor?; true; end
+  
   def update
     @instance = nil if @instance and not @instance.playing?
     self.caption = "Playing: #{not @instance.nil?}"
