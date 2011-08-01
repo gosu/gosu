@@ -13,12 +13,14 @@
 #include <cstdio>
 #include <algorithm>
 #include <memory>
+#include <sstream>
 #include <stdexcept>
 #include <vector>
 
 #include <GL/glx.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/extensions/Xdamage.h>
 #include "X11vroot.h"
 
 using namespace std::tr1::placeholders;
@@ -97,6 +99,10 @@ struct Gosu::Window::Impl
     ::GLXContext context;
     ::Window window;
     ::XVisualInfo* visual;
+
+    // We use the XDamage extension to detect when we need to redraw ourselves
+    Damage damage;
+    int damageEvent, damageError;
     
     // Last set title
     std::wstring title;
@@ -136,7 +142,7 @@ struct Gosu::Window::Impl
         {
             XEvent event;
             XNextEvent(display, &event);
-            
+
             // Override redirect fix (thanks go to the Pyglet folks again):
             if (event.type == ButtonPress && fullscreen && !active)
                 XSetInputFocus(display, this->window, RevertToParent, CurrentTime);
@@ -158,6 +164,22 @@ struct Gosu::Window::Impl
                     active = true;
                 else if (event.type == FocusOut)
                     active = false;
+            }
+
+            // Force redraw on window damage; don't check needsRedraw()
+            if (event.type == damageEvent + XDamageNotify)
+            {
+                XDamageNotifyEvent* dev = (XDamageNotifyEvent*)&event;
+                XDamageSubtract(display, dev->damage, None, None);
+                // If there are more events queued up right after this one, we
+                // don't need to redraw just yet
+                if (dev->more == false &&
+                        window->graphics().begin(Colors::black))
+                {
+                    window->draw();
+                    window->graphics().end();
+                    glXSwapBuffers(display, this->window);
+                }
             }
         }
         
@@ -182,6 +204,18 @@ struct Gosu::Window::Impl
             window->graphics().end();
             glXSwapBuffers(display, this->window);
         }
+    }
+
+    // The ICCCM standard requires that compositing window managers acquire
+    // ownership of a selection named _NET_WM_CM_Sn, where n is the screen
+    // number
+    bool isComposited()
+    {
+        std::ostringstream atomName;
+        atomName << "_NET_WM_CM_S" << XDefaultScreen(display);
+        const std::string& tmp = atomName.str();
+        Atom selection = XInternAtom(display, tmp.c_str(), False);
+        return XGetSelectionOwner(display, selection) != None;
     }
 };
 
@@ -280,10 +314,21 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         input().setMouseFactors(1.0 * width / pimpl->width,
                   1.0 * height / pimpl->height);
     }
+
+    // Composited windows, by nature, don't need to monitor XDamage
+    if (!pimpl->isComposited())
+    {
+        // Register our intent to monitor this window for damage
+        XDamageQueryExtension(pimpl->display, &pimpl->damageEvent, &pimpl->damageError);
+        pimpl->damage = XDamageCreate(pimpl->display, pimpl->window,
+                XDamageReportNonEmpty);
+    }
 }
 
 Gosu::Window::~Window()
-{    
+{
+    if (!pimpl->isComposited())
+        XDamageDestroy(pimpl->display, pimpl->damage);
     XFreeCursor(pimpl->display, pimpl->emptyCursor);
     XDestroyWindow(pimpl->display, pimpl->window);
     XSync(pimpl->display, false);
@@ -406,8 +451,8 @@ Gosu::Window::SharedContext Gosu::Window::createSharedContext() {
     if (!dpy2)
         throw std::runtime_error("Could not duplicate X display");
     
-	GLXContext ctx = glXCreateContext(dpy2, pimpl->visual, pimpl->context, True);
-	if (!ctx)
+    GLXContext ctx = glXCreateContext(dpy2, pimpl->visual, pimpl->context, True);
+    if (!ctx)
         throw std::runtime_error("Could not create shared GLX context");
     
     return SharedContext(
