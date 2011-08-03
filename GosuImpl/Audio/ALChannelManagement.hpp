@@ -36,15 +36,7 @@ namespace Gosu
         ALChannelManagement()
         {
             // Open preferred device
-            #ifdef GOSU_IS_WIN
-            // Choose the 'dsound' backend because this one will not cause a
-            // segmentation fault on DLL unload if alcCloseDevice was not called.
-            // This doesn't matter with C++ and reliable destructors, but it does
-            // with Ruby.
-            alDevice = alcOpenDevice("dsound");
-            #else
             alDevice = alcOpenDevice(0);
-            #endif
             alContext = alcCreateContext(alDevice, 0);
             alcMakeContextCurrent(alContext);
             alGenSources(NUM_SOURCES, alSources);

@@ -26,14 +26,14 @@ namespace Gosu
             return dll;
         }
         
-        #define CREATE_STUB(NAME, RETURN, PARAMS, NAMES)            \
-        static RETURN NAME PARAMS                                   \
-        {                                                           \
-            typedef RETURN (*NAME##_ptr) PARAMS;                    \
+        #define CREATE_STUB(NAME, RETURN, PARAMS, NAMES)                    \
+        static RETURN NAME PARAMS                                           \
+        {                                                                   \
+            typedef RETURN (__cdecl *NAME##_ptr) PARAMS;                            \
             static NAME##_ptr f = (NAME##_ptr)GetProcAddress(dll(), #NAME); \
-            if (!f)                                               \
-                throw std::runtime_error("Cannot find " ## #NAME);  \
-            return f NAMES;                                       \
+            if (!f)                                                         \
+                throw std::runtime_error("Cannot find " ## #NAME);          \
+            return f NAMES;                                                 \
         }
         CREATE_STUB(sf_open_virtual, SNDFILE*,
             (SF_VIRTUAL_IO* sfvirtual, int mode, SF_INFO* sfinfo, void* user_data),
@@ -47,8 +47,11 @@ namespace Gosu
         CREATE_STUB(sf_seek, sf_count_t,
             (SNDFILE *sndfile, sf_count_t frames, int whence),
             (sndfile, frames, whence))
+        CREATE_STUB(sf_strerror, const char*,
+            (SNDFILE* sndfile),
+            (sndfile))
         #endif
-
+        
         static sf_count_t get_filelen(SndFile *self)
         {
             return self->buffer.size();
