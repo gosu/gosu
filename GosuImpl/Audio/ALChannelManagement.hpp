@@ -9,6 +9,7 @@
 #endif
 #include <cstdlib>
 #include <algorithm>
+#include <memory>
 
 namespace Gosu
 {
