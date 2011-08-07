@@ -9,7 +9,7 @@ GOSU_A_OBJS=${GOSU_A_OBJS}" \$(NET_OBJS)"
 
 TO_BE_MADE="directories ../lib/libgosu.a ../lib/libgosu.so examples ../bin/gosu-config"
 
-# pkg-config...whatever that is.
+# pkg-config
 AC_PROG_CXX
 if test -z "$PKG_CONFIG"; then
   PKG_CONFIG=pkg-config
@@ -34,11 +34,11 @@ if test $x_libraries; then
 fi
 
 # Pango/Freetype
-AC_MSG_CHECKING(for pangoft2)
+AC_MSG_CHECKING(for libpangoft2)
 pkg-config --exists pangoft2
 if test $? -ne 0; then
   AC_MSG_RESULT(no)
-  AC_MSG_ERROR(Missing pangoft2)
+  AC_MSG_ERROR(Missing libpangoft2)
 fi
 AC_MSG_RESULT(yes)
 
@@ -47,13 +47,32 @@ AC_SUBST(PANGO_CXX_FLAGS)
 PANGO_LIBS=`pkg-config pangoft2 --libs`
 AC_SUBST(PANGO_LIBS)
 
-#AC_MSG_CHECKING(for SDL_mixer)
-GOSU_A_OBJS=${GOSU_A_OBJS}" \$(SDLMIXER_OBJ)"
-AUDIO_LIBS="`sdl-config --libs` -lSDL_mixer"
-AUDIO_INC=`sdl-config --cflags`
-#AC_MSG_RESULT(yes)
-AC_SUBST(AUDIO_LIBS)
-AC_SUBST(AUDIO_INC)
+# OpenAL
+AC_MSG_CHECKING(for libopenal)
+pkg-config --exists openal
+if test $? -ne 0; then
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR(Missing libopenal)
+fi
+AC_MSG_RESULT(yes)
+
+# libvorbisfile
+AC_MSG_CHECKING(for libvorbisfile)
+pkg-config --exists vorbisfile
+if test $? -ne 0; then
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR(Missing vorbisfile some distros carry it in the vorbis package)
+fi
+AC_MSG_RESULT(yes)
+
+# libsndfile
+AC_MSG_CHECKING(for libsndfile)
+pkg-config --exists sndfile
+if test $? -ne 0; then
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR(Missing sndfile)
+fi
+AC_MSG_RESULT(yes)
 
 # stat.h
 AC_CHECK_HEADER(sys/stat.h, HAVE_SYS_STAT_H=-DHAVE_SYS_STAT_H)
@@ -70,8 +89,11 @@ AC_SUBST(TO_BE_MADE)
 AC_CHECK_LIB(rt, sched_setscheduler, LIBS="$LIBS -lrt", AC_CHECK_LIB(c, sched_setscheduler, , AC_MSG_ERROR(Missing librt functionality), ), )
 AC_SUBST(HAVE_LIBRT)
 
-# freeimage
-AC_CHECK_HEADER(FreeImage.h, [], AC_MSG_ERROR([freeimage is not installed.]))
+# libXdamage
+AC_CHECK_HEADER(X11/extensions/Xdamage.h, [], AC_MSG_ERROR([libxdamage is not installed]))
+
+# libfreeimage
+AC_CHECK_HEADER(FreeImage.h, [], AC_MSG_ERROR([libfreeimage is not installed.]))
 
 INSTALL_ACTION="cpp_install"
 UNINSTALL_ACTION="cpp_uninstall"
