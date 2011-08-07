@@ -604,8 +604,6 @@ DLOPEN_LIB
 HAVE_SYS_STAT_H
 EGREP
 GREP
-AUDIO_INC
-AUDIO_LIBS
 PANGO_LIBS
 PANGO_CXX_FLAGS
 x_libraries
@@ -2068,7 +2066,7 @@ GOSU_A_OBJS=${GOSU_A_OBJS}" \$(NET_OBJS)"
 
 TO_BE_MADE="directories ../lib/libgosu.a ../lib/libgosu.so examples ../bin/gosu-config"
 
-# pkg-config...whatever that is.
+# pkg-config
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -3516,13 +3514,13 @@ if test $x_libraries; then
 fi
 
 # Pango/Freetype
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pangoft2" >&5
-$as_echo_n "checking for pangoft2... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libpangoft2" >&5
+$as_echo_n "checking for libpangoft2... " >&6; }
 pkg-config --exists pangoft2
 if test $? -ne 0; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-  as_fn_error $? "Missing pangoft2" "$LINENO" 5
+  as_fn_error $? "Missing libpangoft2" "$LINENO" 5
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -3532,13 +3530,41 @@ PANGO_CXX_FLAGS=`pkg-config pangoft2 --cflags`
 PANGO_LIBS=`pkg-config pangoft2 --libs`
 
 
-#AC_MSG_CHECKING(for SDL_mixer)
-GOSU_A_OBJS=${GOSU_A_OBJS}" \$(SDLMIXER_OBJ)"
-AUDIO_LIBS="`sdl-config --libs` -lSDL_mixer"
-AUDIO_INC=`sdl-config --cflags`
-#AC_MSG_RESULT(yes)
+# OpenAL
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libopenal" >&5
+$as_echo_n "checking for libopenal... " >&6; }
+pkg-config --exists openal
+if test $? -ne 0; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+  as_fn_error $? "Missing libopenal" "$LINENO" 5
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
 
+# libvorbisfile
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libvorbisfile" >&5
+$as_echo_n "checking for libvorbisfile... " >&6; }
+pkg-config --exists vorbisfile
+if test $? -ne 0; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+  as_fn_error $? "Missing vorbisfile some distros carry it in the vorbis package" "$LINENO" 5
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
 
+# libsndfile
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libsndfile" >&5
+$as_echo_n "checking for libsndfile... " >&6; }
+pkg-config --exists sndfile
+if test $? -ne 0; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+  as_fn_error $? "Missing sndfile" "$LINENO" 5
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
 
 # stat.h
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for grep that handles long lines and -e" >&5
@@ -3989,6 +4015,26 @@ else
   as_fn_error $? "Missing librt functionality" "$LINENO" 5
 fi
 
+fi
+
+
+
+# libXdamage
+ac_fn_c_check_header_mongrel "$LINENO" "X11/extensions/Xdamage.h" "ac_cv_header_X11_extensions_Xdamage_h" "$ac_includes_default"
+if test "x$ac_cv_header_X11_extensions_Xdamage_h" = x""yes; then :
+
+else
+  as_fn_error $? "libxdamage is not installed" "$LINENO" 5
+fi
+
+
+
+# libfreeimage
+ac_fn_c_check_header_mongrel "$LINENO" "FreeImage.h" "ac_cv_header_FreeImage_h" "$ac_includes_default"
+if test "x$ac_cv_header_FreeImage_h" = x""yes; then :
+
+else
+  as_fn_error $? "libfreeimage is not installed." "$LINENO" 5
 fi
 
 
