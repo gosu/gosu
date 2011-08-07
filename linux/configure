@@ -604,12 +604,6 @@ DLOPEN_LIB
 HAVE_SYS_STAT_H
 EGREP
 GREP
-SNDFILE_LIBS
-SNDFILE_INCS
-VORBISFILE_LIBS
-VORBISFILE_INCS
-OPENAL_LIBS
-OPENAL_INCS
 PANGO_LIBS
 PANGO_CXX_FLAGS
 x_libraries
@@ -2072,7 +2066,7 @@ GOSU_A_OBJS=${GOSU_A_OBJS}" \$(NET_OBJS)"
 
 TO_BE_MADE="directories ../lib/libgosu.a ../lib/libgosu.so examples ../bin/gosu-config"
 
-# pkg-config...whatever that is.
+# pkg-config
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -3520,13 +3514,13 @@ if test $x_libraries; then
 fi
 
 # Pango/Freetype
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pangoft2" >&5
-$as_echo_n "checking for pangoft2... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libpangoft2" >&5
+$as_echo_n "checking for libpangoft2... " >&6; }
 pkg-config --exists pangoft2
 if test $? -ne 0; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-  as_fn_error $? "Missing pangoft2" "$LINENO" 5
+  as_fn_error $? "Missing libpangoft2" "$LINENO" 5
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -3548,11 +3542,6 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-OPENAL_INCS=`pkg-config --cflags openal`
-OPENAL_LIBS=`pkg-config --libs openal`
-
-
-
 # libvorbisfile
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libvorbisfile" >&5
 $as_echo_n "checking for libvorbisfile... " >&6; }
@@ -3565,11 +3554,6 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-VORBISFILE_INCS=`pkg-config --cflags vorbisfile`
-VORBISFILE_LIBS=`pkg-config --libs vorbisfile`
-
-
-
 # libsndfile
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libsndfile" >&5
 $as_echo_n "checking for libsndfile... " >&6; }
@@ -3581,11 +3565,6 @@ $as_echo "no" >&6; }
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-
-SNDFILE_INCS=`pkg-config --cflags sndfile`
-SNDFILE_LIBS=`pkg-config --libs sndfile`
-
-
 
 # stat.h
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for grep that handles long lines and -e" >&5
@@ -4050,12 +4029,12 @@ fi
 
 
 
-# freeimage
+# libfreeimage
 ac_fn_c_check_header_mongrel "$LINENO" "FreeImage.h" "ac_cv_header_FreeImage_h" "$ac_includes_default"
 if test "x$ac_cv_header_FreeImage_h" = x""yes; then :
 
 else
-  as_fn_error $? "freeimage is not installed." "$LINENO" 5
+  as_fn_error $? "libfreeimage is not installed." "$LINENO" 5
 fi
 
 
