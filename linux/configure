@@ -604,8 +604,12 @@ DLOPEN_LIB
 HAVE_SYS_STAT_H
 EGREP
 GREP
-AUDIO_INC
-AUDIO_LIBS
+SNDFILE_LIBS
+SNDFILE_INCS
+VORBISFILE_LIBS
+VORBISFILE_INCS
+OPENAL_LIBS
+OPENAL_INCS
 PANGO_LIBS
 PANGO_CXX_FLAGS
 x_libraries
@@ -3532,11 +3536,54 @@ PANGO_CXX_FLAGS=`pkg-config pangoft2 --cflags`
 PANGO_LIBS=`pkg-config pangoft2 --libs`
 
 
-#AC_MSG_CHECKING(for SDL_mixer)
-GOSU_A_OBJS=${GOSU_A_OBJS}" \$(SDLMIXER_OBJ)"
-AUDIO_LIBS="`sdl-config --libs` -lSDL_mixer"
-AUDIO_INC=`sdl-config --cflags`
-#AC_MSG_RESULT(yes)
+# OpenAL
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libopenal" >&5
+$as_echo_n "checking for libopenal... " >&6; }
+pkg-config --exists openal
+if test $? -ne 0; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+  as_fn_error $? "Missing libopenal" "$LINENO" 5
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+OPENAL_INCS=`pkg-config --cflags openal`
+OPENAL_LIBS=`pkg-config --libs openal`
+
+
+
+# libvorbisfile
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libvorbisfile" >&5
+$as_echo_n "checking for libvorbisfile... " >&6; }
+pkg-config --exists vorbisfile
+if test $? -ne 0; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+  as_fn_error $? "Missing vorbisfile some distros carry it in the vorbis package" "$LINENO" 5
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+VORBISFILE_INCS=`pkg-config --cflags vorbisfile`
+VORBISFILE_LIBS=`pkg-config --libs vorbisfile`
+
+
+
+# libsndfile
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libsndfile" >&5
+$as_echo_n "checking for libsndfile... " >&6; }
+pkg-config --exists sndfile
+if test $? -ne 0; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+  as_fn_error $? "Missing sndfile" "$LINENO" 5
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+SNDFILE_INCS=`pkg-config --cflags sndfile`
+SNDFILE_LIBS=`pkg-config --libs sndfile`
 
 
 

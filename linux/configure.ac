@@ -47,13 +47,47 @@ AC_SUBST(PANGO_CXX_FLAGS)
 PANGO_LIBS=`pkg-config pangoft2 --libs`
 AC_SUBST(PANGO_LIBS)
 
-#AC_MSG_CHECKING(for SDL_mixer)
-GOSU_A_OBJS=${GOSU_A_OBJS}" \$(SDLMIXER_OBJ)"
-AUDIO_LIBS="`sdl-config --libs` -lSDL_mixer"
-AUDIO_INC=`sdl-config --cflags`
-#AC_MSG_RESULT(yes)
-AC_SUBST(AUDIO_LIBS)
-AC_SUBST(AUDIO_INC)
+# OpenAL
+AC_MSG_CHECKING(for libopenal)
+pkg-config --exists openal
+if test $? -ne 0; then
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR(Missing libopenal)
+fi
+AC_MSG_RESULT(yes)
+
+OPENAL_INCS=`pkg-config --cflags openal`
+OPENAL_LIBS=`pkg-config --libs openal`
+AC_SUBST(OPENAL_INCS)
+AC_SUBST(OPENAL_LIBS)
+
+# libvorbisfile
+AC_MSG_CHECKING(for libvorbisfile)
+pkg-config --exists vorbisfile
+if test $? -ne 0; then
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR(Missing vorbisfile some distros carry it in the vorbis package)
+fi
+AC_MSG_RESULT(yes)
+
+VORBISFILE_INCS=`pkg-config --cflags vorbisfile`
+VORBISFILE_LIBS=`pkg-config --libs vorbisfile`
+AC_SUBST(VORBISFILE_INCS)
+AC_SUBST(VORBISFILE_LIBS)
+
+# libsndfile
+AC_MSG_CHECKING(for libsndfile)
+pkg-config --exists sndfile
+if test $? -ne 0; then
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR(Missing sndfile)
+fi
+AC_MSG_RESULT(yes)
+
+SNDFILE_INCS=`pkg-config --cflags sndfile`
+SNDFILE_LIBS=`pkg-config --libs sndfile`
+AC_SUBST(SNDFILE_INCS)
+AC_SUBST(SNDFILE_LIBS)
 
 # stat.h
 AC_CHECK_HEADER(sys/stat.h, HAVE_SYS_STAT_H=-DHAVE_SYS_STAT_H)
