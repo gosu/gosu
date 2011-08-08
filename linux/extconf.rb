@@ -68,7 +68,7 @@ if `uname`.chomp == 'Darwin' then
   $INCFLAGS << " -I/usr/X11/include"
   # To make everything work with the Objective C runtime
   $CFLAGS   << " -x objective-c++ -fobjc-gc"
-  $LDFLAGS  << " -L/usr/local/lib -L/usr/X11/lib -logg -lvorbis -lvorbisfile -liconv"
+  $LDFLAGS  << " -L/usr/X11/lib -logg -lvorbis -lvorbisfile -liconv"
   %w(AudioToolbox IOKit OpenAL OpenGL AppKit ApplicationServices Foundation Carbon).each do |f|
     #$INCFLAGS << " -framework #{f}" <- not necessary? I only get lots of warnings
     $LDFLAGS  << " -framework #{f}"
@@ -93,6 +93,10 @@ else
   have_header('SDL_ttf.h') if have_library('SDL_ttf', 'TTF_RenderUTF8_Blended')
   have_header('gl.h') if have_library('GL', 'glMatrixMode')
   have_header('FreeImage.h') if have_library('freeimage', 'FreeImage_ConvertFromRawBits')
+  have_header('vorbisfile.h') if have_library('vorbisfile', 'ov_open_callbacks')
+  have_header('AL/al.h') if have_library('openal')
+  have_header('sndfile.h') if have_library('sndfile')
+  have_header('X11/extensions/Xdamage.h')
 end
 
 # Copy all relevant C++ files into the current directory
