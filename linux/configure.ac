@@ -70,7 +70,7 @@ AC_MSG_CHECKING(for libsndfile)
 pkg-config --exists sndfile
 if test $? -ne 0; then
   AC_MSG_RESULT(no)
-  AC_MSG_ERROR(Missing sndfile)
+  AC_MSG_ERROR(Missing libsndfile)
 fi
 AC_MSG_RESULT(yes)
 
@@ -90,10 +90,10 @@ AC_CHECK_LIB(rt, sched_setscheduler, LIBS="$LIBS -lrt", AC_CHECK_LIB(c, sched_se
 AC_SUBST(HAVE_LIBRT)
 
 # libXdamage
-AC_CHECK_HEADER(X11/extensions/Xdamage.h, [], AC_MSG_ERROR([libxdamage is not installed]))
+AC_CHECK_HEADER(X11/extensions/Xdamage.h, [], AC_MSG_ERROR([Missing libxdamage]))
 
 # libfreeimage
-AC_CHECK_HEADER(FreeImage.h, [], AC_MSG_ERROR([libfreeimage is not installed.]))
+AC_CHECK_HEADER(FreeImage.h, [], AC_MSG_ERROR([Missing libfreeimage]))
 
 INSTALL_ACTION="cpp_install"
 UNINSTALL_ACTION="cpp_uninstall"
