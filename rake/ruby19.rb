@@ -1,4 +1,4 @@
-RVM_RUBY         = "ruby-1.9.2-p180"
+RVM_RUBY         = "ruby-1.9.2-p290"
 INTERNAL_VERSION = "1.9.1"
 RUBY_DYLIB       = "libruby.#{INTERNAL_VERSION}.dylib"
 RUBY_DYLIB_ID    = "@executable_path/../Frameworks/#{RUBY_DYLIB}"
