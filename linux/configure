@@ -3561,7 +3561,7 @@ pkg-config --exists sndfile
 if test $? -ne 0; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-  as_fn_error $? "Missing sndfile" "$LINENO" 5
+  as_fn_error $? "Missing libsndfile" "$LINENO" 5
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -4024,7 +4024,7 @@ ac_fn_c_check_header_mongrel "$LINENO" "X11/extensions/Xdamage.h" "ac_cv_header_
 if test "x$ac_cv_header_X11_extensions_Xdamage_h" = x""yes; then :
 
 else
-  as_fn_error $? "libxdamage is not installed" "$LINENO" 5
+  as_fn_error $? "Missing libxdamage" "$LINENO" 5
 fi
 
 
@@ -4034,7 +4034,7 @@ ac_fn_c_check_header_mongrel "$LINENO" "FreeImage.h" "ac_cv_header_FreeImage_h" 
 if test "x$ac_cv_header_FreeImage_h" = x""yes; then :
 
 else
-  as_fn_error $? "libfreeimage is not installed." "$LINENO" 5
+  as_fn_error $? "Missing libfreeimage" "$LINENO" 5
 fi
 
 
