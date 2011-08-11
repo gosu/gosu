@@ -194,6 +194,7 @@ struct Gosu::Window::Impl
             showingCursor = true;
         }
         
+        Song::update();
         window->input().update();
         window->update();
 
