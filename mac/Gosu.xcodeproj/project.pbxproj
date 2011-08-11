@@ -1298,7 +1298,7 @@
 				GCC_FAST_MATH = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = __MACOSX__;
 				GCC_VERSION = 4.0;
-				GCC_VERSION_x86_64 = com.apple.compilers.llvmgcc42;
+				GCC_VERSION_x86_64 = 4.2;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				HEADER_SEARCH_PATHS = (
 					..,
@@ -1307,7 +1307,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = .;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				SDKROOT_x86_64 = /Developer/SDKs/MacOSX10.6.sdk;
+				SDKROOT_x86_64 = "/Developer-3.2.6/SDKs/MacOSX10.6.sdk";
 			};
 			name = Debug;
 		};
@@ -1323,7 +1323,7 @@
 					NDEBUG,
 				);
 				GCC_VERSION = 4.0;
-				GCC_VERSION_x86_64 = com.apple.compilers.llvmgcc42;
+				GCC_VERSION_x86_64 = 4.2;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				HEADER_SEARCH_PATHS = (
 					..,
@@ -1332,7 +1332,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = .;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				SDKROOT_x86_64 = /Developer/SDKs/MacOSX10.6.sdk;
+				SDKROOT_x86_64 = "/Developer-3.2.6/SDKs/MacOSX10.6.sdk";
 			};
 			name = Release;
 		};
@@ -1430,7 +1430,7 @@
 					NDEBUG,
 				);
 				GCC_VERSION = 4.0;
-				GCC_VERSION_x86_64 = com.apple.compilers.llvmgcc42;
+				GCC_VERSION_x86_64 = 4.2;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				HEADER_SEARCH_PATHS = (
 					..,
@@ -1439,7 +1439,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = .;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				SDKROOT_x86_64 = /Developer/SDKs/MacOSX10.6.sdk;
+				SDKROOT_x86_64 = "/Developer-3.2.6/SDKs/MacOSX10.6.sdk";
 			};
 			name = "Release with 1.9";
 		};
