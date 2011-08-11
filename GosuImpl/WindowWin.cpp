@@ -5,6 +5,7 @@
 #include <Gosu/Window.hpp>
 #include <Gosu/WinUtility.hpp>
 #include <Gosu/Timing.hpp>
+#include <Gosu/Audio.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/TextInput.hpp>
@@ -360,6 +361,7 @@ void Gosu::Window::show()
 			if (ms < lastTick || ms - lastTick >= static_cast<unsigned>(pimpl->updateInterval))
 			{
 				lastTick = ms;
+                Song::update();
 				input().update();
 				// TODO: Bad heuristic -- this causes flickering cursor on right and bottom border of the
 				// window.
