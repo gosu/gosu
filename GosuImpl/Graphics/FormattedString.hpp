@@ -65,7 +65,10 @@ namespace Gosu
                 html = unixified.c_str();
             }
             
-            if (!std::wcsstr(html, L"<&"))
+            std::size_t len = std::wcslen(html);
+            
+            // Just skip all this if there are entities or formatting tags in the string.
+            if (std::wcscspn(html, L"<&") == len)
             {
                 simpleString = html;
                 simpleFlags = baseFlags;
@@ -78,7 +81,6 @@ namespace Gosu
                 i = (baseFlags & ffItalic) ? 1 : 0;
             std::vector<Gosu::Color> c;
             c.push_back(0xffffffff);
-            std::size_t len = std::wcslen(html);
             while (pos < len)
             {
                 if (!std::wcsncmp(html + pos, L"<b>", 3))
@@ -137,7 +139,8 @@ namespace Gosu
                 }
                 if (!std::wcsncmp(html + pos, L"</c>", 4))
                 {
-                    c.pop_back();
+                    if (c.size() > 1)
+                        c.pop_back();
                     pos += 4;
                     continue;
                 }
@@ -148,7 +151,7 @@ namespace Gosu
                     pos += 4;
                     continue;
                 }
-                if (!std::wcsncmp(html + pos, L"&lt;", 4))
+                if (!std::wcsncmp(html + pos, L"&gt;", 4))
                 {
                     FormattedChar fc = { L'>', c.back(), flags(b,u,i) };
                     characters.push_back(fc);
