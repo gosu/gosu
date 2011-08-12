@@ -483,7 +483,7 @@ void Gosu::Graphics::gl(GraphicsBlock block)
     endGL();
 }
 
-void Gosu::Graphics::clip(double x, double y, double width, double height, GraphicsBlock block)
+void Gosu::Graphics::clipTo(double x, double y, double width, double height, GraphicsBlock block)
 {
     beginClipping(x, y, width, height);
     block();
