@@ -21,7 +21,7 @@
 namespace Gosu
 {
     //! Convenient all-in-one class that serves as the foundation of a standard
-	//! Gosu application. Manages initialization of all of Gosu's core components
+    //! Gosu application. Manages initialization of all of Gosu's core components
     //! and provides timing functionality.
     //! Note that you should really only use one instance of this class at the same time.
     //! This may or may not change later.
@@ -43,7 +43,8 @@ namespace Gosu
         
         double updateInterval() const;
 
-        //! Enters a modal loop where the Window is visible on screen and receives calls to draw, update etc.
+        //! Enters a modal loop where the Window is visible on screen and
+        //! receives calls to draw, update etc.
         void show();
         //! Closes the window if it is currently shown.
         void close();
@@ -61,9 +62,9 @@ namespace Gosu
         //! By default, the window is redrawn all the time.
         virtual bool needsRedraw() const { return true; }
 
-		//! If this function returns true, the system arrow cursor is drawn while
-		//! over the window.
-		virtual bool needsCursor() const { return false; }
+        //! If this function returns true, the system arrow cursor is drawn while
+        //! over the window.
+        virtual bool needsCursor() const { return false; }
         
         //! This function is called when the window loses focus on some platforms.
         //! Most importantly, it is called on the iPhone or iPad when the user
