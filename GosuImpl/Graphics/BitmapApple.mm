@@ -54,9 +54,10 @@ namespace
         
         bitmap.resize([rep pixelsWide], [rep pixelsHigh]);
         
-        // Use a temporary context to draw the NSImage to the buffer.
+        // Use a temporary context to draw the NSImage to the buffer. For that, construct a color
+        // space that does not alter the colors while drawing from the NSImage to the CGBitmapContext.
         
-        static Gosu::CFRef<CGColorSpaceRef> colorSpace(CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB));
+        static Gosu::CFRef<CGColorSpaceRef> colorSpace(CGColorSpaceCreateDeviceRGB());
         Gosu::CFRef<CGContextRef> context(CGBitmapContextCreate(bitmap.data(), bitmap.width(), bitmap.height(),
                                     8, bitmap.width() * 4,
                                     colorSpace.obj(), kCGImageAlphaPremultipliedLast)); // kCGBitmapByteOrder32Host?
