@@ -160,7 +160,7 @@ public:
         setCaption(L"Gosu Tutorial Game");
 
         std::wstring filename = Gosu::sharedResourcePrefix() + L"media/Space.png";
-        backgroundImage.reset(new Gosu::Image(graphics(), filename, false));
+        backgroundImage.reset(new Gosu::Image(graphics(), filename));
 
         filename = Gosu::sharedResourcePrefix() + L"media/Star.png";
         Gosu::imagesFromTiledBitmap(graphics(), filename, 25, 25, false, starAnim);
