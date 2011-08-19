@@ -48,7 +48,7 @@ MAC_FILES = %w(
 )
 
 LINUX_FILES = %w(
-  Audio/AudioSDL.cpp
+  Audio/AudioOpenAL.cpp
   Graphics/BitmapFreeImage.cpp
   Graphics/TextUnix.cpp
   InputX.cpp
@@ -88,7 +88,7 @@ else
   pango_config = "pkg-config pangoft2"
 
   $INCFLAGS << " `#{sdl_config} --cflags` `#{pango_config} --cflags`"
-  $LDFLAGS  << " `#{sdl_config} --libs`   `#{pango_config} --libs` -lX11"
+  $LDFLAGS  << " `#{sdl_config} --libs`   `#{pango_config} --libs` -lXdamage -lX11"
   have_header('SDL_mixer.h') if have_library('SDL_mixer', 'Mix_OpenAudio')
   have_header('SDL_ttf.h') if have_library('SDL_ttf', 'TTF_RenderUTF8_Blended')
   have_header('gl.h') if have_library('GL', 'glMatrixMode')
