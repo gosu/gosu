@@ -64,7 +64,7 @@ directories:
 ../lib/libgosu.so: $(OBJS)
 	$(CXX) -shared -o ../lib/libgosu.so ${LIBS} @GOSU_A_OBJS@
 
-install: @INSTALL_ACTION@
+install: all @INSTALL_ACTION@
 
 uninstall: @UNINSTALL_ACTION@
 
