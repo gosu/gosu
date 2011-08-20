@@ -36,7 +36,7 @@ CXX = g++
 LDCONFIG = ldconfig
 LD = ld
 INSTALL = install
-RMDIR = rm -rf
+RMDIR = rmdir --ignore-fail-on-non-empty
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
@@ -97,7 +97,7 @@ cpp_uninstall:
 
 clean:
 	rm -f $(OBJS) $(XPLS) ../lib/libgosu* ../lib/gosu?* ../bin/gosu-config
-	$(RMDIR) Audio Graphics Sockets
+	rm -rf Audio Graphics Sockets
 
 $(OBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cpp
 	$(CXX) $(GOSU_DIR)/GosuImpl/$*.cpp -o $@ $(ALL_CXXFLAGS) -c
