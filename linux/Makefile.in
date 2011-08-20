@@ -25,7 +25,7 @@ CXXFLAGS =
 
 ALL_CXXFLAGS = -fPIC -I.. -Wall @PANGO_CXX_FLAGS@ @X_INCS@ \
 	   @HAVE_SYS_STAT_H@ \
-	   -DNDEBUG -O3 -pipe -fomit-frame-pointer \
+	   -DNDEBUG -O3 -pipe \
 	   -I/usr/include/SDL $(CXXFLAGS)
 
 LIBS = -L@x_libraries@ -lX11 @PANGO_LIBS@ -lsndfile -lvorbisfile -lvorbis -logg -lm -lopenal -lpng -lstdc++ -lGL -lSDL_ttf -lfreeimage -lXdamage
@@ -64,7 +64,7 @@ directories:
 ../lib/libgosu.so: $(OBJS)
 	$(CXX) -shared -o ../lib/libgosu.so ${LIBS} @GOSU_A_OBJS@
 
-install: @INSTALL_ACTION@
+install: all @INSTALL_ACTION@
 
 uninstall: @UNINSTALL_ACTION@
 
@@ -97,7 +97,7 @@ cpp_uninstall:
 
 clean:
 	rm -f $(OBJS) $(XPLS) ../lib/libgosu* ../lib/gosu?* ../bin/gosu-config
-	rmdir Audio Graphics Sockets
+	rm -rf Audio Graphics Sockets
 
 $(OBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cpp
 	$(CXX) $(GOSU_DIR)/GosuImpl/$*.cpp -o $@ $(ALL_CXXFLAGS) -c

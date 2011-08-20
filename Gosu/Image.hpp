@@ -19,16 +19,16 @@ namespace Gosu
     public:
         //! Loads an image from a given filename that can be drawn onto
         //! graphics.
-		//! This constructor can handle PNG and BMP images. A color key of #ff00ff is
-		//! automatically applied to BMP type images. For more flexibility, use the
-		//! corresponding constructor that uses a Bitmap object.
+        //! This constructor can handle PNG and BMP images. A color key of #ff00ff is
+        //! automatically applied to BMP type images. For more flexibility, use the
+        //! corresponding constructor that uses a Bitmap object.
         Image(Graphics& graphics, const std::wstring& filename,
               bool tileable = false);
         //! Loads a portion of the the image at the given filename that can be
         //! drawn onto graphics.
-		//! This constructor can handle PNG and BMP images. A color key of #ff00ff is
-		//! automatically applied to BMP type images. For more flexibility, use the
-		//! corresponding constructor that uses a Bitmap object.
+        //! This constructor can handle PNG and BMP images. A color key of #ff00ff is
+        //! automatically applied to BMP type images. For more flexibility, use the
+        //! corresponding constructor that uses a Bitmap object.
         Image(Graphics& graphics, const std::wstring& filename, unsigned srcX,
               unsigned srcY, unsigned srcWidth, unsigned srcHeight,
               bool tileable = false);
@@ -80,8 +80,8 @@ namespace Gosu
         ImageData& getData() const;
     };
 
-	//! Convenience function that splits a BMP or PNG file into an array
-	//! of small rectangles and creates images from them.
+    //! Convenience function that splits a BMP or PNG file into an array
+    //! of small rectangles and creates images from them.
     //! \param tileWidth If positive, specifies the width of one tile in
     //! pixels. If negative, the bitmap is divided into -tileWidth rows.
     //! \param tileHeight See tileWidth.

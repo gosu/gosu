@@ -33,42 +33,42 @@
 
 namespace Gosu
 {
-	//! Very lightweight class that identifies a button (keyboard, mouse or other device).
-	class Button
-	{
-		unsigned id_;
-		
-	public:
-		//! For internal use.
-		explicit Button(unsigned id) : id_(id) {}
-		//! For internal use.
-		unsigned id() const { return id_; }
+    //! Very lightweight class that identifies a button (keyboard, mouse or other device).
+    class Button
+    {
+        unsigned id_;
+        
+    public:
+        //! For internal use.
+        explicit Button(unsigned id) : id_(id) {}
+        //! For internal use.
+        unsigned id() const { return id_; }
 
-		//! Default constructor; == noButton.
-		Button() : id_(noButton) {}
+        //! Default constructor; == noButton.
+        Button() : id_(noButton) {}
 
-		//! Conversion from ButtonName constants.
-		Button(ButtonName name) : id_(name) {}
-	};
+        //! Conversion from ButtonName constants.
+        Button(ButtonName name) : id_(name) {}
+    };
     
-	//! Tests whether two Buttons identify the same physical button.
-	inline bool operator==(Button lhs, Button rhs)
-	{
-		return lhs.id() == rhs.id();
-	}
-	inline bool operator!=(Button lhs, Button rhs)
-	{
-		return !(lhs == rhs);
-	}
+    //! Tests whether two Buttons identify the same physical button.
+    inline bool operator==(Button lhs, Button rhs)
+    {
+        return lhs.id() == rhs.id();
+    }
+    inline bool operator!=(Button lhs, Button rhs)
+    {
+        return !(lhs == rhs);
+    }
     inline bool operator<(Button lhs, Button rhs)
     {
         return lhs.id() < rhs.id();
     }
-	
+    
     //! Struct that saves information about a touch on the surface of a multi-
     //! touch device.
-	//! Available even on non-iPhone platforms to make it easier to compile the
-	//! same source for multiple platforms.
+    //! Available even on non-iPhone platforms to make it easier to compile the
+    //! same source for multiple platforms.
     struct Touch
     {
         //! Allows for identification of a touch across calls.
@@ -79,13 +79,13 @@ namespace Gosu
     typedef std::vector<Touch> Touches;
     
     //! Manages initialization and shutdown of the input system. Only one Input
-	//! instance can exist per application.
+    //! instance can exist per application.
     class Input
     {
         struct Impl;
         const std::auto_ptr<Impl> pimpl;
 
-	public:
+    public:
         #ifdef GOSU_IS_WIN
         Input(HWND window);
         #endif
@@ -113,9 +113,9 @@ namespace Gosu
         //! given character, or noButton.
         static Button charToId(wchar_t ch);
         
-		//! Returns true if a button is currently pressed.
+        //! Returns true if a button is currently pressed.
         //! Updated every tick.
-		bool down(Button btn) const;
+        bool down(Button btn) const;
         
         //! Returns the horizontal position of the mouse relative to the top
         //! left corner of the window given to Input's constructor.
@@ -143,12 +143,12 @@ namespace Gosu
         //! mouse is and calls onButtonUp/onButtonDown, if assigned.
         void update();
         
-		//! Assignable events that are called by update. You can bind these to your own functions.
-		//! If you use the Window class, it will assign forward these to its own methods.
+        //! Assignable events that are called by update. You can bind these to your own functions.
+        //! If you use the Window class, it will assign forward these to its own methods.
         std::tr1::function<void (Button)> onButtonDown, onButtonUp;
         
-		//! Assignable events that are called by update. You can bind these to your own functions.
-		//! If you use the Window class, it will assign forward these to its own methods.
+        //! Assignable events that are called by update. You can bind these to your own functions.
+        //! If you use the Window class, it will assign forward these to its own methods.
         std::tr1::function<void (Touch)> onTouchBegan, onTouchMoved, onTouchEnded;
         
         //! Returns the currently active TextInput instance, or 0.

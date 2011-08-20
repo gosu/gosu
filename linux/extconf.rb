@@ -89,7 +89,6 @@ else
 
   $INCFLAGS << " `#{sdl_config} --cflags` `#{pango_config} --cflags`"
   $LDFLAGS  << " `#{sdl_config} --libs`   `#{pango_config} --libs` -lXdamage -lX11"
-  have_header('SDL_mixer.h') if have_library('SDL_mixer', 'Mix_OpenAudio')
   have_header('SDL_ttf.h') if have_library('SDL_ttf', 'TTF_RenderUTF8_Blended')
   have_header('gl.h') if have_library('GL', 'glMatrixMode')
   have_header('FreeImage.h') if have_library('freeimage', 'FreeImage_ConvertFromRawBits')

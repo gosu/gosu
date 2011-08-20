@@ -1,15 +1,11 @@
 #include <Gosu/Gosu.hpp>
 // Makes life easier for Windows users compiling this.
 #include <Gosu/AutoLink.hpp>
-// Pointers used throughout this tutorial.
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
-// Could also use <sstream>. Just for int <-> string conversion
-#include <boost/lexical_cast.hpp> 
 
 #include <cmath>
 #include <cstdlib>
 #include <list>
+#include <sstream> // Just for int <-> string conversion
 #include <vector>
 
 enum ZOrder
@@ -20,7 +16,7 @@ enum ZOrder
     zUI
 };
 
-typedef std::vector<boost::shared_ptr<Gosu::Image> > Animation;
+typedef std::vector<std::tr1::shared_ptr<Gosu::Image> > Animation;
 
 class Star
 {
@@ -60,20 +56,20 @@ public:
 
 class Player
 {
-    boost::scoped_ptr<Gosu::Image> image;
-    boost::scoped_ptr<Gosu::Sample> beep;
+    std::auto_ptr<Gosu::Image> image;
+    std::auto_ptr<Gosu::Sample> beep;
     double posX, posY, velX, velY, angle;
     unsigned score;
 
 
 public:
-    Player(Gosu::Graphics& graphics, Gosu::Audio& audio)
+    Player(Gosu::Graphics& graphics)
     {
         std::wstring filename = Gosu::sharedResourcePrefix() + L"media/Starfighter.bmp";
         image.reset(new Gosu::Image(graphics, filename));
 
         filename = Gosu::sharedResourcePrefix() + L"media/Beep.wav";
-        beep.reset(new Gosu::Sample(audio, filename));
+        beep.reset(new Gosu::Sample(filename));
 
         posX = posY = velX = velY = angle = 0;
         score = 0;
@@ -148,7 +144,7 @@ public:
 
 class GameWindow : public Gosu::Window
 {
-    boost::scoped_ptr<Gosu::Image> backgroundImage;
+    std::auto_ptr<Gosu::Image> backgroundImage;
     Animation starAnim;
     Gosu::Font font;
 
@@ -159,12 +155,12 @@ public:
     GameWindow()
     : Window(640, 480, false),
         font(graphics(), Gosu::defaultFontName(), 20),
-        player(graphics(), audio())
+        player(graphics())
     {
         setCaption(L"Gosu Tutorial Game");
 
         std::wstring filename = Gosu::sharedResourcePrefix() + L"media/Space.png";
-        backgroundImage.reset(new Gosu::Image(graphics(), filename, false));
+        backgroundImage.reset(new Gosu::Image(graphics(), filename));
 
         filename = Gosu::sharedResourcePrefix() + L"media/Star.png";
         Gosu::imagesFromTiledBitmap(graphics(), filename, 25, 25, false, starAnim);
@@ -198,8 +194,10 @@ public:
             i->draw();
         }
 
-        font.draw(L"Score: " + boost::lexical_cast<std::wstring>(player.getScore()),
-            10, 10, zUI, 1, 1, Gosu::Colors::yellow);
+        std::wstringstream score;
+        score << player.getScore();
+        font.draw(L"Score: " + score.str(), 10, 10, zUI, 1, 1,
+                Gosu::Colors::yellow);
     }
 
     void buttonDown(Gosu::Button btn)
