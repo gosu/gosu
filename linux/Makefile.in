@@ -67,8 +67,8 @@ uninstall:
 	rm -f $(libdir)/libgosu.so
 	rm -f $(bindir)/gosu-config
 	rm -rf $(includedir)/Gosu
-	$(TRY_RMDIR) $(includedir) $(libdir) $(bindir) $(prefix)
 	$(LDCONFIG) -n $(libdir)
+	$(TRY_RMDIR) $(includedir) $(libdir) $(bindir) $(prefix)
 
 clean:
 	rm -f $(OBJS) $(XPLS) ../lib/libgosu* ../lib/gosu.for* ../bin/gosu-config
