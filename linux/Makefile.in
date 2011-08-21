@@ -54,7 +54,7 @@ directories:
 install: all
 	$(MKDIR) $(prefix) $(exec_prefix) $(bindir) $(libdir) $(includedir)
 	$(INSTALL_DATA) ../lib/libgosu.a $(libdir)
-	$(INSTALL_PROGRAM) ../lib/libgosu.so $(libdir)
+	$(INSTALL_DATA) ../lib/libgosu.so $(libdir)
 	$(INSTALL_PROGRAM) ../bin/gosu-config $(bindir)
 	$(MKDIR) $(includedir)/Gosu 
 	$(INSTALL_DATA) ../Gosu/* $(includedir)/Gosu
