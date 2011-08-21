@@ -46,10 +46,10 @@ directories:
 	$(MKDIR) ../bin ../lib Graphics Sockets Audio
 
 ../lib/libgosu.a: $(OBJS)
-	$(AR) -r ../lib/libgosu.a @GOSU_A_OBJS@
+	$(AR) -r ../lib/libgosu.a $(OBJS)
 
 ../lib/libgosu.so: $(OBJS)
-	$(CXX) -shared -o ../lib/libgosu.so ${LIBS} @GOSU_A_OBJS@
+	$(CXX) -shared -o ../lib/libgosu.so ${LIBS} $(OBJS)
 
 install: all @INSTALL_ACTION@
 
