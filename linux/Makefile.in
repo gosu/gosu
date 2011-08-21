@@ -1,7 +1,3 @@
-DESTDIR = 
-
-PKG_CONFIG = @PKG_CONFIG@
-
 GOSU_DIR = @abs_top_srcdir@/..
 
 BASE_OBJS = Math.o Utility.o IO.o FileUnix.o TimingUnix.o WindowX.o	\
@@ -12,7 +8,8 @@ BASE_OBJS = Math.o Utility.o IO.o FileUnix.o TimingUnix.o WindowX.o	\
 	    Graphics/Texture.o Graphics/LargeImageData.o		\
 	    Graphics/BitmapFreeImage.o Graphics/Font.o \
 	    Graphics/TextUnix.o Graphics/Text.o	Graphics/Transform.o		\
-	    Graphics/BitmapColorKey.o DirectoriesUnix.o Audio/AudioOpenAL.o Inspection.o
+	    Graphics/BitmapColorKey.o DirectoriesUnix.o Audio/AudioOpenAL.o \
+	    Inspection.o
 
 NET_OBJS = Sockets/CommSocket.o Sockets/ListenerSocket.o	\
 	   Sockets/Socket.o Sockets/MessageSocket.o
@@ -21,22 +18,18 @@ OBJS = @GOSU_A_OBJS@
 
 XPLS = $(GOSU_DIR)/examples/Tutorial $(GOSU_DIR)/examples/TextInput
 
-CXXFLAGS =
-
 ALL_CXXFLAGS = -fPIC -I.. -Wall @PANGO_CXX_FLAGS@ @X_INCS@ \
 	   @HAVE_SYS_STAT_H@ \
 	   -DNDEBUG -O3 -pipe \
 	   -I/usr/include/SDL $(CXXFLAGS)
 
-LIBS = -L@x_libraries@ -lX11 @PANGO_LIBS@ -lsndfile -lvorbisfile -lvorbis -logg -lm -lopenal -lpng -lstdc++ -lGL -lSDL_ttf -lfreeimage -lXdamage
+LIBS = -L@x_libraries@ -lX11 @PANGO_LIBS@ -lsndfile -lvorbisfile -lvorbis -logg \
+       -lm -lopenal -lpng -lstdc++ -lGL -lSDL_ttf -lfreeimage -lXdamage
 
-SHELL = /bin/sh
-AR = ar
-CXX = g++
 LDCONFIG = ldconfig
-LD = ld
 INSTALL = install
-RMDIR = rmdir --ignore-fail-on-non-empty
+MKDIR = mkdir -p
+TRY_RMDIR = rmdir --ignore-fail-on-non-empty
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
@@ -49,54 +42,36 @@ INSTALL_DATA = $(INSTALL) -m 644
 
 .SUFFIXES: .cpp .o
 
-all: @TO_BE_MADE@
+all: directories ../lib/libgosu.a ../lib/libgosu.so examples ../bin/gosu-config
 
 directories:
-	if [ \! -d ../bin ]; then mkdir ../bin; fi
-	if [ \! -d ../lib ]; then mkdir ../lib; fi
-	if [ \! -d Graphics ]; then mkdir Graphics; fi
-	if [ \! -d Sockets ]; then mkdir Sockets; fi
-	if [ \! -d Audio ]; then mkdir Audio; fi
+	$(MKDIR) ../bin ../lib Graphics Sockets Audio
 
 ../lib/libgosu.a: $(OBJS)
-	$(AR) -r ../lib/libgosu.a @GOSU_A_OBJS@
+	$(AR) -r ../lib/libgosu.a $(OBJS)
 
 ../lib/libgosu.so: $(OBJS)
-	$(CXX) -shared -o ../lib/libgosu.so ${LIBS} @GOSU_A_OBJS@
+	$(CXX) -shared -o ../lib/libgosu.so ${LIBS} $(OBJS)
 
-install: all @INSTALL_ACTION@
-
-uninstall: @UNINSTALL_ACTION@
-
-cpp_install:
-	test -d $(DESTDIR) || mkdir $(DESTDIR)
-	test -d $(DESTDIR)$(prefix) || mkdir $(DESTDIR)$(prefix)
-	test -d $(DESTDIR)$(exec_prefix) || mkdir $(DESTDIR)$(exec_prefix)
-	test -d $(DESTDIR)$(bindir) || mkdir $(DESTDIR)$(bindir)
-	test -d $(DESTDIR)$(libdir) || mkdir $(DESTDIR)$(libdir)
-	test -d $(DESTDIR)$(includedir) || mkdir $(DESTDIR)$(includedir)
-	$(INSTALL_DATA) ../lib/libgosu.a $(DESTDIR)$(libdir)
-	$(INSTALL_PROGRAM) ../lib/libgosu.so $(DESTDIR)$(libdir)
-	$(INSTALL_PROGRAM) ../bin/gosu-config $(DESTDIR)$(bindir)
-	test -d $(DESTDIR)$(includedir)/Gosu || mkdir $(DESTDIR)$(includedir)/Gosu 
-	$(INSTALL_DATA) ../Gosu/* $(DESTDIR)$(includedir)/Gosu
+install: all
+	$(MKDIR) $(bindir) $(libdir) $(includedir)
+	$(INSTALL_DATA) ../lib/libgosu.a $(libdir)
+	$(INSTALL_DATA) ../lib/libgosu.so $(libdir)
+	$(INSTALL_PROGRAM) ../bin/gosu-config $(bindir)
+	$(MKDIR) $(includedir)/Gosu 
+	$(INSTALL_DATA) ../Gosu/* $(includedir)/Gosu
 	$(LDCONFIG) -n $(libdir)
 
-cpp_uninstall:
-	-rm $(libdir)/libgosu.a
-	-rm $(libdir)/libgosu.so
-	-rm $(bindir)/gosu-config
-	-rm -rf $(includedir)/Gosu
-	-test -z $(DESTDIR)$(includedir) || $(RMDIR) $(DESTDIR)$(includedir)
-	-test -z $(DESTDIR)$(libdir) || $(RMDIR) $(DESTDIR)$(libdir)
-	-test -z $(DESTDIR)$(bindir) || $(RMDIR) $(DESTDIR)$(bindir)
-	-test -z $(DESTDIR)$(exec_prefix) || $(RMDIR) $(DESTDIR)$(exec_prefix)
-	-test -z $(DESTDIR)$(prefix) || $(RMDIR) $(DESTDIR)$(prefix)
-	-test -z $(DESTDIR) || $(RMDIR) $(DESTDIR)
+uninstall:
+	rm -f $(libdir)/libgosu.a
+	rm -f $(libdir)/libgosu.so
+	rm -f $(bindir)/gosu-config
+	rm -rf $(includedir)/Gosu
 	$(LDCONFIG) -n $(libdir)
+	$(TRY_RMDIR) $(includedir) $(libdir) $(bindir) $(prefix)
 
 clean:
-	rm -f $(OBJS) $(XPLS) ../lib/libgosu* ../lib/gosu?* ../bin/gosu-config
+	rm -f $(OBJS) $(XPLS) ../lib/libgosu* ../lib/gosu.for* ../bin/gosu-config
 	rm -rf Audio Graphics Sockets
 
 $(OBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cpp

@@ -7,14 +7,7 @@ AC_INIT(Gosu, 0.7, julian@raschke.de)
 GOSU_A_OBJS=\$\(BASE_OBJS\)
 GOSU_A_OBJS=${GOSU_A_OBJS}" \$(NET_OBJS)"
 
-TO_BE_MADE="directories ../lib/libgosu.a ../lib/libgosu.so examples ../bin/gosu-config"
-
-# pkg-config
 AC_PROG_CXX
-if test -z "$PKG_CONFIG"; then
-  PKG_CONFIG=pkg-config
-fi
-AC_SUBST(PKG_CONFIG)
 
 # OpenGL.
 AC_CHECK_LIB([GL], [glMatrixMode], , AC_MSG_ERROR(Missing GL), -lpthread)
@@ -29,9 +22,6 @@ if test $x_includes; then
 fi
 AC_SUBST(X_INCS)
 AC_SUBST(x_libraries)
-if test $x_libraries; then
-  LIBS="$LIBS -L$x_libraries"
-fi
 
 # Pango/Freetype
 AC_MSG_CHECKING(for libpangoft2)
@@ -83,7 +73,6 @@ AC_CHECK_LIB(dl, dlopen, LIBS="$LIBS -ldl", AC_CHECK_LIB(c, dlopen, ,AC_MSG_ERRO
 AC_SUBST(DLOPEN_LIB)
 
 AC_SUBST(GOSU_A_OBJS)
-AC_SUBST(TO_BE_MADE)
 
 # librt
 AC_CHECK_LIB(rt, sched_setscheduler, LIBS="$LIBS -lrt", AC_CHECK_LIB(c, sched_setscheduler, , AC_MSG_ERROR(Missing librt functionality), ), )
@@ -94,10 +83,5 @@ AC_CHECK_HEADER(X11/extensions/Xdamage.h, [], AC_MSG_ERROR([Missing libxdamage])
 
 # libfreeimage
 AC_CHECK_HEADER(FreeImage.h, [], AC_MSG_ERROR([Missing libfreeimage]))
-
-INSTALL_ACTION="cpp_install"
-UNINSTALL_ACTION="cpp_uninstall"
-AC_SUBST(INSTALL_ACTION)
-AC_SUBST(UNINSTALL_ACTION)
 
 AC_OUTPUT(Makefile)
