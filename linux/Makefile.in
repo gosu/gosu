@@ -26,6 +26,7 @@ LIBS = -L@x_libraries@ -lX11 @PANGO_LIBS@ -lsndfile -lvorbisfile -lvorbis -logg 
 
 LDCONFIG = ldconfig
 INSTALL = install
+MKDIR = mkdir -p
 RMDIR = rmdir --ignore-fail-on-non-empty
 
 prefix=@prefix@
@@ -42,11 +43,7 @@ INSTALL_DATA = $(INSTALL) -m 644
 all: directories ../lib/libgosu.a ../lib/libgosu.so examples ../bin/gosu-config
 
 directories:
-	if [ \! -d ../bin ]; then mkdir ../bin; fi
-	if [ \! -d ../lib ]; then mkdir ../lib; fi
-	if [ \! -d Graphics ]; then mkdir Graphics; fi
-	if [ \! -d Sockets ]; then mkdir Sockets; fi
-	if [ \! -d Audio ]; then mkdir Audio; fi
+	$(MKDIR) ../bin ../lib Graphics Sockets Audio
 
 ../lib/libgosu.a: $(OBJS)
 	$(AR) -r ../lib/libgosu.a @GOSU_A_OBJS@
@@ -59,16 +56,16 @@ install: all @INSTALL_ACTION@
 uninstall: @UNINSTALL_ACTION@
 
 cpp_install:
-	test -d $(DESTDIR) || mkdir $(DESTDIR)
-	test -d $(DESTDIR)$(prefix) || mkdir $(DESTDIR)$(prefix)
-	test -d $(DESTDIR)$(exec_prefix) || mkdir $(DESTDIR)$(exec_prefix)
-	test -d $(DESTDIR)$(bindir) || mkdir $(DESTDIR)$(bindir)
-	test -d $(DESTDIR)$(libdir) || mkdir $(DESTDIR)$(libdir)
-	test -d $(DESTDIR)$(includedir) || mkdir $(DESTDIR)$(includedir)
+	$(MKDIR) $(DESTDIR)
+	$(MKDIR) $(DESTDIR)$(prefix)
+	$(MKDIR) $(DESTDIR)$(exec_prefix)
+	$(MKDIR) $(DESTDIR)$(bindir)
+	$(MKDIR) $(DESTDIR)$(libdir)
+	$(MKDIR) $(DESTDIR)$(includedir)
 	$(INSTALL_DATA) ../lib/libgosu.a $(DESTDIR)$(libdir)
 	$(INSTALL_PROGRAM) ../lib/libgosu.so $(DESTDIR)$(libdir)
 	$(INSTALL_PROGRAM) ../bin/gosu-config $(DESTDIR)$(bindir)
-	test -d $(DESTDIR)$(includedir)/Gosu || mkdir $(DESTDIR)$(includedir)/Gosu 
+	$(MKDIR) $(DESTDIR)$(includedir)/Gosu 
 	$(INSTALL_DATA) ../Gosu/* $(DESTDIR)$(includedir)/Gosu
 	$(LDCONFIG) -n $(libdir)
 
