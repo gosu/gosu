@@ -8,7 +8,8 @@ BASE_OBJS = Math.o Utility.o IO.o FileUnix.o TimingUnix.o WindowX.o	\
 	    Graphics/Texture.o Graphics/LargeImageData.o		\
 	    Graphics/BitmapFreeImage.o Graphics/Font.o \
 	    Graphics/TextUnix.o Graphics/Text.o	Graphics/Transform.o		\
-	    Graphics/BitmapColorKey.o DirectoriesUnix.o Audio/AudioOpenAL.o Inspection.o
+	    Graphics/BitmapColorKey.o DirectoriesUnix.o Audio/AudioOpenAL.o \
+	    Inspection.o
 
 NET_OBJS = Sockets/CommSocket.o Sockets/ListenerSocket.o	\
 	   Sockets/Socket.o Sockets/MessageSocket.o
@@ -22,7 +23,8 @@ ALL_CXXFLAGS = -fPIC -I.. -Wall @PANGO_CXX_FLAGS@ @X_INCS@ \
 	   -DNDEBUG -O3 -pipe \
 	   -I/usr/include/SDL $(CXXFLAGS)
 
-LIBS = -L@x_libraries@ -lX11 @PANGO_LIBS@ -lsndfile -lvorbisfile -lvorbis -logg -lm -lopenal -lpng -lstdc++ -lGL -lSDL_ttf -lfreeimage -lXdamage
+LIBS = -L@x_libraries@ -lX11 @PANGO_LIBS@ -lsndfile -lvorbisfile -lvorbis -logg \
+       -lm -lopenal -lpng -lstdc++ -lGL -lSDL_ttf -lfreeimage -lXdamage
 
 LDCONFIG = ldconfig
 INSTALL = install
