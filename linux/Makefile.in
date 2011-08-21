@@ -54,11 +54,10 @@ directories:
 	$(CXX) -shared -o ../lib/libgosu.so ${LIBS} $(OBJS)
 
 install: all
-	$(MKDIR) $(bindir) $(libdir) $(includedir)
+	$(MKDIR) $(bindir) $(libdir) $(includedir)/Gosu
 	$(INSTALL_DATA) ../lib/libgosu.a $(libdir)
 	$(INSTALL_DATA) ../lib/libgosu.so $(libdir)
 	$(INSTALL_PROGRAM) ../bin/gosu-config $(bindir)
-	$(MKDIR) $(includedir)/Gosu 
 	$(INSTALL_DATA) ../Gosu/* $(includedir)/Gosu
 	$(LDCONFIG) -n $(libdir)
 
