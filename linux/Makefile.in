@@ -79,7 +79,7 @@ uninstall:
 	$(LDCONFIG) -n $(libdir)
 
 clean:
-	rm -f $(OBJS) $(XPLS) ../lib/libgosu* ../lib/gosu?* ../bin/gosu-config
+	rm -f $(OBJS) $(XPLS) ../lib/libgosu* ../lib/gosu.for* ../bin/gosu-config
 	rm -rf Audio Graphics Sockets
 
 $(OBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cpp
