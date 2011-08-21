@@ -27,7 +27,7 @@ LIBS = -L@x_libraries@ -lX11 @PANGO_LIBS@ -lsndfile -lvorbisfile -lvorbis -logg 
 LDCONFIG = ldconfig
 INSTALL = install
 MKDIR = mkdir -p
-RMDIR = rmdir --ignore-fail-on-non-empty
+TRY_RMDIR = rmdir --ignore-fail-on-non-empty
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
@@ -52,11 +52,7 @@ directories:
 	$(CXX) -shared -o ../lib/libgosu.so ${LIBS} $(OBJS)
 
 install: all
-	$(MKDIR) $(prefix)
-	$(MKDIR) $(exec_prefix)
-	$(MKDIR) $(bindir)
-	$(MKDIR) $(libdir)
-	$(MKDIR) $(includedir)
+	$(MKDIR) $(prefix) $(exec_prefix) $(bindir) $(libdir) $(includedir)
 	$(INSTALL_DATA) ../lib/libgosu.a $(libdir)
 	$(INSTALL_PROGRAM) ../lib/libgosu.so $(libdir)
 	$(INSTALL_PROGRAM) ../bin/gosu-config $(bindir)
@@ -69,11 +65,7 @@ uninstall:
 	-rm $(libdir)/libgosu.so
 	-rm $(bindir)/gosu-config
 	-rm -rf $(includedir)/Gosu
-	-test -z $(includedir) || $(RMDIR) $(includedir)
-	-test -z $(libdir) || $(RMDIR) $(libdir)
-	-test -z $(bindir) || $(RMDIR) $(bindir)
-	-test -z $(exec_prefix) || $(RMDIR) $(exec_prefix)
-	-test -z $(prefix) || $(RMDIR) $(prefix)
+	-$(TRY_RMDIR) $(includedir) $(libdir) $(bindir) $(exec_dir) $(prefix)
 	$(LDCONFIG) -n $(libdir)
 
 clean:
