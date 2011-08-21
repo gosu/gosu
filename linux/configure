@@ -595,10 +595,7 @@ ac_includes_default="\
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-UNINSTALL_ACTION
-INSTALL_ACTION
 HAVE_LIBRT
-TO_BE_MADE
 GOSU_A_OBJS
 DLOPEN_LIB
 HAVE_SYS_STAT_H
@@ -613,7 +610,6 @@ XMKMF
 ac_ct_CC
 CFLAGS
 CC
-PKG_CONFIG
 OBJEXT
 EXEEXT
 ac_ct_CXX
@@ -2064,9 +2060,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 GOSU_A_OBJS=\$\(BASE_OBJS\)
 GOSU_A_OBJS=${GOSU_A_OBJS}" \$(NET_OBJS)"
 
-TO_BE_MADE="directories ../lib/libgosu.a ../lib/libgosu.so examples ../bin/gosu-config"
-
-# pkg-config
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -2573,10 +2566,6 @@ ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-if test -z "$PKG_CONFIG"; then
-  PKG_CONFIG=pkg-config
-fi
 
 
 # OpenGL.
@@ -3509,9 +3498,6 @@ if test $x_includes; then
 fi
 
 
-if test $x_libraries; then
-  LIBS="$LIBS -L$x_libraries"
-fi
 
 # Pango/Freetype
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libpangoft2" >&5
@@ -3927,7 +3913,6 @@ fi
 
 
 
-
 # librt
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for sched_setscheduler in -lrt" >&5
 $as_echo_n "checking for sched_setscheduler in -lrt... " >&6; }
@@ -4036,11 +4021,6 @@ if test "x$ac_cv_header_FreeImage_h" = x""yes; then :
 else
   as_fn_error $? "Missing libfreeimage" "$LINENO" 5
 fi
-
-
-
-INSTALL_ACTION="cpp_install"
-UNINSTALL_ACTION="cpp_uninstall"
 
 
 

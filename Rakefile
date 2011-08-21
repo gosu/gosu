@@ -16,9 +16,7 @@ COMMON_CPP_FILES = COMMON_FILES + FileList[
 
 COMMON_RUBY_FILES = COMMON_FILES + FileList[
   'Gosu/**/*', # include headers to make inline-C extensions possible
-  'lib/gosu.rb',
-  'lib/gosu/patches.rb',
-  'lib/gosu/swig_patches.rb',
+  'lib/*.rb',
   'examples/*.rb',
   'examples/media/*',
 ]
