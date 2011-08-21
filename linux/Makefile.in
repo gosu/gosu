@@ -52,17 +52,16 @@ directories:
 	$(CXX) -shared -o ../lib/libgosu.so ${LIBS} $(OBJS)
 
 install: all
-	$(MKDIR) $(DESTDIR)
-	$(MKDIR) $(DESTDIR)$(prefix)
-	$(MKDIR) $(DESTDIR)$(exec_prefix)
-	$(MKDIR) $(DESTDIR)$(bindir)
-	$(MKDIR) $(DESTDIR)$(libdir)
-	$(MKDIR) $(DESTDIR)$(includedir)
-	$(INSTALL_DATA) ../lib/libgosu.a $(DESTDIR)$(libdir)
-	$(INSTALL_PROGRAM) ../lib/libgosu.so $(DESTDIR)$(libdir)
-	$(INSTALL_PROGRAM) ../bin/gosu-config $(DESTDIR)$(bindir)
-	$(MKDIR) $(DESTDIR)$(includedir)/Gosu 
-	$(INSTALL_DATA) ../Gosu/* $(DESTDIR)$(includedir)/Gosu
+	$(MKDIR) $(prefix)
+	$(MKDIR) $(exec_prefix)
+	$(MKDIR) $(bindir)
+	$(MKDIR) $(libdir)
+	$(MKDIR) $(includedir)
+	$(INSTALL_DATA) ../lib/libgosu.a $(libdir)
+	$(INSTALL_PROGRAM) ../lib/libgosu.so $(libdir)
+	$(INSTALL_PROGRAM) ../bin/gosu-config $(bindir)
+	$(MKDIR) $(includedir)/Gosu 
+	$(INSTALL_DATA) ../Gosu/* $(includedir)/Gosu
 	$(LDCONFIG) -n $(libdir)
 
 uninstall:
@@ -70,12 +69,11 @@ uninstall:
 	-rm $(libdir)/libgosu.so
 	-rm $(bindir)/gosu-config
 	-rm -rf $(includedir)/Gosu
-	-test -z $(DESTDIR)$(includedir) || $(RMDIR) $(DESTDIR)$(includedir)
-	-test -z $(DESTDIR)$(libdir) || $(RMDIR) $(DESTDIR)$(libdir)
-	-test -z $(DESTDIR)$(bindir) || $(RMDIR) $(DESTDIR)$(bindir)
-	-test -z $(DESTDIR)$(exec_prefix) || $(RMDIR) $(DESTDIR)$(exec_prefix)
-	-test -z $(DESTDIR)$(prefix) || $(RMDIR) $(DESTDIR)$(prefix)
-	-test -z $(DESTDIR) || $(RMDIR) $(DESTDIR)
+	-test -z $(includedir) || $(RMDIR) $(includedir)
+	-test -z $(libdir) || $(RMDIR) $(libdir)
+	-test -z $(bindir) || $(RMDIR) $(bindir)
+	-test -z $(exec_prefix) || $(RMDIR) $(exec_prefix)
+	-test -z $(prefix) || $(RMDIR) $(prefix)
 	$(LDCONFIG) -n $(libdir)
 
 clean:
