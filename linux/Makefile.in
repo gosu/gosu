@@ -63,11 +63,11 @@ install: all
 	$(LDCONFIG) -n $(libdir)
 
 uninstall:
-	-rm $(libdir)/libgosu.a
-	-rm $(libdir)/libgosu.so
-	-rm $(bindir)/gosu-config
-	-rm -rf $(includedir)/Gosu
-	-$(TRY_RMDIR) $(includedir) $(libdir) $(bindir) $(prefix)
+	rm -f $(libdir)/libgosu.a
+	rm -f $(libdir)/libgosu.so
+	rm -f $(bindir)/gosu-config
+	rm -rf $(includedir)/Gosu
+	$(TRY_RMDIR) $(includedir) $(libdir) $(bindir) $(prefix)
 	$(LDCONFIG) -n $(libdir)
 
 clean:
