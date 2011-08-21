@@ -51,11 +51,7 @@ directories:
 ../lib/libgosu.so: $(OBJS)
 	$(CXX) -shared -o ../lib/libgosu.so ${LIBS} $(OBJS)
 
-install: all @INSTALL_ACTION@
-
-uninstall: @UNINSTALL_ACTION@
-
-cpp_install:
+install: all
 	$(MKDIR) $(DESTDIR)
 	$(MKDIR) $(DESTDIR)$(prefix)
 	$(MKDIR) $(DESTDIR)$(exec_prefix)
@@ -69,7 +65,7 @@ cpp_install:
 	$(INSTALL_DATA) ../Gosu/* $(DESTDIR)$(includedir)/Gosu
 	$(LDCONFIG) -n $(libdir)
 
-cpp_uninstall:
+uninstall:
 	-rm $(libdir)/libgosu.a
 	-rm $(libdir)/libgosu.so
 	-rm $(bindir)/gosu-config

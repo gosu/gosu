@@ -84,9 +84,4 @@ AC_CHECK_HEADER(X11/extensions/Xdamage.h, [], AC_MSG_ERROR([Missing libxdamage])
 # libfreeimage
 AC_CHECK_HEADER(FreeImage.h, [], AC_MSG_ERROR([Missing libfreeimage]))
 
-INSTALL_ACTION="cpp_install"
-UNINSTALL_ACTION="cpp_uninstall"
-AC_SUBST(INSTALL_ACTION)
-AC_SUBST(UNINSTALL_ACTION)
-
 AC_OUTPUT(Makefile)
