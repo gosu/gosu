@@ -39,7 +39,7 @@ INSTALL_DATA = $(INSTALL) -m 644
 
 .SUFFIXES: .cpp .o
 
-all: @TO_BE_MADE@
+all: directories ../lib/libgosu.a ../lib/libgosu.so examples ../bin/gosu-config
 
 directories:
 	if [ \! -d ../bin ]; then mkdir ../bin; fi
