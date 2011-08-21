@@ -1,7 +1,3 @@
-DESTDIR = 
-
-PKG_CONFIG = @PKG_CONFIG@
-
 GOSU_DIR = @abs_top_srcdir@/..
 
 BASE_OBJS = Math.o Utility.o IO.o FileUnix.o TimingUnix.o WindowX.o	\
@@ -21,8 +17,6 @@ OBJS = @GOSU_A_OBJS@
 
 XPLS = $(GOSU_DIR)/examples/Tutorial $(GOSU_DIR)/examples/TextInput
 
-CXXFLAGS =
-
 ALL_CXXFLAGS = -fPIC -I.. -Wall @PANGO_CXX_FLAGS@ @X_INCS@ \
 	   @HAVE_SYS_STAT_H@ \
 	   -DNDEBUG -O3 -pipe \
@@ -30,11 +24,7 @@ ALL_CXXFLAGS = -fPIC -I.. -Wall @PANGO_CXX_FLAGS@ @X_INCS@ \
 
 LIBS = -L@x_libraries@ -lX11 @PANGO_LIBS@ -lsndfile -lvorbisfile -lvorbis -logg -lm -lopenal -lpng -lstdc++ -lGL -lSDL_ttf -lfreeimage -lXdamage
 
-SHELL = /bin/sh
-AR = ar
-CXX = g++
 LDCONFIG = ldconfig
-LD = ld
 INSTALL = install
 RMDIR = rmdir --ignore-fail-on-non-empty
 
