@@ -54,7 +54,7 @@ directories:
 	$(CXX) -shared -o ../lib/libgosu.so ${LIBS} $(OBJS)
 
 install: all
-	$(MKDIR) $(prefix) $(exec_prefix) $(bindir) $(libdir) $(includedir)
+	$(MKDIR) $(bindir) $(libdir) $(includedir)
 	$(INSTALL_DATA) ../lib/libgosu.a $(libdir)
 	$(INSTALL_DATA) ../lib/libgosu.so $(libdir)
 	$(INSTALL_PROGRAM) ../bin/gosu-config $(bindir)
@@ -67,7 +67,7 @@ uninstall:
 	-rm $(libdir)/libgosu.so
 	-rm $(bindir)/gosu-config
 	-rm -rf $(includedir)/Gosu
-	-$(TRY_RMDIR) $(includedir) $(libdir) $(bindir) $(exec_dir) $(prefix)
+	-$(TRY_RMDIR) $(includedir) $(libdir) $(bindir) $(prefix)
 	$(LDCONFIG) -n $(libdir)
 
 clean:
