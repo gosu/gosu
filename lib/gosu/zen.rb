@@ -19,6 +19,10 @@ def update(&proc)
   Gosu::ZenWindow.send :define_method, :update, proc
 end
 
+# WIP - needs all other callbacks, even with arguments
+
+# WIP - needs to be compatible with gosu/preview.rb later
+
 at_exit do
   Gosu::ZenWindow.instance.show
 end
