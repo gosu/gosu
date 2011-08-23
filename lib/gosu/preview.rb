@@ -89,4 +89,28 @@ module Gosu
       yield
     end
   end
+  
+  def self.translate *args
+    $window.translate *args do
+      yield
+    end
+  end
+  
+  def self.scale *args
+    $window.scale *args do
+      yield
+    end
+  end
+  
+  def self.rotate *args
+    $window.rotate *args do
+      yield
+    end
+  end
+  
+  def self.transform *args
+    $window.transform *args do
+      yield
+    end
+  end
 end
