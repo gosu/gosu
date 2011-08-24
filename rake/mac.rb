@@ -15,14 +15,14 @@ namespace :mac do
     sh "cd mac && #{xcb_prefix}xcodebuild -project Gosu.xcodeproj -target 'RubyGosu App'  -configuration 'Release with 1.9'"
   end
   
-  MAC_ARCHIVE_FILENAME = "public/gosu-mac-#{GOSU_VERSION}.tar.gz"
+  MAC_ARCHIVE_FILENAME = "pkg/gosu-mac-#{GOSU_VERSION}.tar.gz"
   
   file MAC_ARCHIVE_FILENAME => [FRAMEWORK_FILENAME, :set_version] do
     files = COMMON_CPP_FILES + FileList['Gosu.framework/**/*']
     tar MAC_ARCHIVE_FILENAME, files
   end
   
-  MAC_WRAPPER_FILENAME = "public/gosu-mac-wrapper-#{GOSU_VERSION}.tar.gz"
+  MAC_WRAPPER_FILENAME = "pkg/gosu-mac-wrapper-#{GOSU_VERSION}.tar.gz"
   
   desc "Publish RubyGosu App.app"
   task :app_wrapper => [FRAMEWORK_FILENAME, :ruby, :set_version] do
@@ -30,8 +30,8 @@ namespace :mac do
     upload MAC_WRAPPER_FILENAME
   end
 
-  desc "Releases the archive #{MAC_ARCHIVE_FILENAME} on GitHub"
-  task :release => [MAC_ARCHIVE_FILENAME, 'rake/upload'] do
+  desc "Releases the archive #{MAC_ARCHIVE_FILENAME}"
+  task :release => MAC_ARCHIVE_FILENAME do
     upload MAC_ARCHIVE_FILENAME
   end
 
@@ -40,11 +40,11 @@ namespace :mac do
   MAC_SPEC = Gem::Specification.new do |s|
     apply_gemspec_defaults s
     s.platform = 'universal-darwin'
-    s.files = COMMON_RUBY_FILES + %w(lib/gosu.for_1_8.bundle lib/gosu.for_1_9.bundle)
+    s.files = COMMON_RUBY_FILES + FileList['lib/gosu.*.bundle']
   end
-  Gem::PackageTask.new(MAC_SPEC) { |t| t.package_dir = 'public' }
+  Gem::PackageTask.new(MAC_SPEC)
   
   task :release_gem => :gem do
-    sh "gem push public/gosu-#{GOSU_VERSION}-universal-darwin.gem"
+    sh "gem push pkg/gosu-#{GOSU_VERSION}-universal-darwin.gem"
   end
 end

@@ -232,7 +232,7 @@ namespace Gosu
         __except ((GetExceptionCode() == BAD_MOD) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
         {
             rb_raise(rb_eRuntimeError,
-                "Cannot neither load image %s nor locate FreeImage.dll to retry with it",
+                "Could neither load image %s nor locate FreeImage.dll to retry with it",
                 filename);
         }
         #undef BAD_MOD

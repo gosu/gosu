@@ -3,8 +3,8 @@
 
 #define GOSU_MAJOR_VERSION 0
 #define GOSU_MINOR_VERSION 7
-#define GOSU_POINT_VERSION 35
-#define GOSU_VERSION "0.7.35"
+#define GOSU_POINT_VERSION 36
+#define GOSU_VERSION "0.7.36"
 
 #define GOSU_COPYRIGHT_NOTICE \
   "May contain `ogg', `vorbis' libraries (c) 2002-2008 Xiph.org Foundation" \

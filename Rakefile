@@ -35,9 +35,9 @@ def apply_gemspec_defaults s
   and text (accelerated by 3D hardware), sound samples and music as well as
   keyboard, mouse and gamepad/joystick input.
 
-  Also includes demos for integration with RMagick, Chipmunk and Ruby-OpenGL.
+  Also includes demos for integration with RMagick, Chipmunk and OpenGL.
 EOS
-  s.authors = ['Julian Raschke', 'Jan Luecker']
+  s.authors = ['Julian Raschke']
   s.date = Time.now.strftime '%Y-%m-%d'
   s.email = 'julian@raschke.de'
   s.homepage = 'http://libgosu.org/'
@@ -46,20 +46,12 @@ EOS
   s.summary = '2D game development library.'
 end
 
-# Broken :( - using scp for now.
-# file 'rake/upload' do
-#   sh 'curl https://github.com/jlnr/github-upload/raw/master/upload.rb > rake/upload'
-#   sh 'chmod +x rake/upload'
-# end
-
 def upload filename
   sh "scp -P 22000 '#{filename}' libgosu.org:/Library/WebServer/Documents/libgosu.org/downloads/"
 end
 
 def zip filename, files
   sh "zip #{filename} #{files.map { |fn| "'#{fn}'" }.join(' ')}"
-  # Apparently not necessary - no weird resource forks in there? Nice!
-  # sh "zip -d #{filename} '__MACOSX*' '*.DS_Store'" if `uname`.chomp == 'Darwin'
 end
 
 def tar filename, files
