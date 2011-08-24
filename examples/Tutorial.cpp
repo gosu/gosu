@@ -1,10 +1,14 @@
+// All of Gosu.
 #include <Gosu/Gosu.hpp>
+// To safely include std::tr1::shared_ptr
+#include <Gosu/TR1.hpp> 
 // Makes life easier for Windows users compiling this.
 #include <Gosu/AutoLink.hpp>
 
 #include <cmath>
 #include <cstdlib>
 #include <list>
+#include <memory>
 #include <sstream> // For int <-> string conversion
 #include <vector>
 
@@ -140,14 +144,14 @@ class GameWindow : public Gosu::Window
 
 public:
     GameWindow()
-    : Window(640, 480, false),
+    :   Window(640, 480, false),
         font(graphics(), Gosu::defaultFontName(), 20),
         player(graphics())
     {
         setCaption(L"Gosu Tutorial Game");
 
         std::wstring filename = Gosu::sharedResourcePrefix() + L"media/Space.png";
-        backgroundImage.reset(new Gosu::Image(graphics(), filename));
+        backgroundImage.reset(new Gosu::Image(graphics(), filename, true));
 
         filename = Gosu::sharedResourcePrefix() + L"media/Star.png";
         Gosu::imagesFromTiledBitmap(graphics(), filename, 25, 25, false, starAnim);
