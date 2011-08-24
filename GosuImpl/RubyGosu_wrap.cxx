@@ -2274,7 +2274,7 @@ namespace GosusDarkSide
     
     void yieldToOtherRubyThreads()
     {
-		rb_thread_schedule();
+        rb_thread_schedule();
     }
 }
 
@@ -2287,7 +2287,7 @@ namespace
 
 namespace Gosu
 {
-	#ifdef GOSU_IS_WIN
+    #ifdef GOSU_IS_WIN
     void requireFreeImageFor(const char* filename)
     {
         // Copied and pasted from MSDN.
@@ -2323,7 +2323,7 @@ namespace Gosu
             try {
                 loadImageFile(bitmap, filename);
                 return;
-	        } catch (const std::exception&) {
+            } catch (const std::exception&) {
             #ifdef GOSU_IS_WIN
                 requireFreeImageFor(filenameUTF8);
                 try {
@@ -2335,10 +2335,10 @@ namespace Gosu
                         filenameUTF8, error.what());
                 }
                 return;
-	        #else
-				throw;
-			#endif
-	        }  
+            #else
+                throw;
+            #endif
+            }  
         }
 
         // Otherwise, try to call .to_blob on it (works with RMagick, TexPlay etc).
@@ -2795,11 +2795,11 @@ SWIGINTERN void Gosu_Window_setTextInput(Gosu::Window *self,Gosu::TextInput *ti)
         self->input().setTextInput(ti);
     }
 SWIGINTERN double Gosu_Window_mouseX(Gosu::Window const *self){
-		return self->input().mouseX();
-	}
+        return self->input().mouseX();
+    }
 SWIGINTERN double Gosu_Window_mouseY(Gosu::Window const *self){
-		return self->input().mouseY();
-	}
+        return self->input().mouseY();
+    }
 SWIGINTERN void Gosu_Window_setMousePosition(Gosu::Window *self,double x,double y){
         self->input().setMousePosition(x, y);
     }
@@ -2810,11 +2810,11 @@ SWIGINTERN void Gosu_Window_setMouseY(Gosu::Window *self,double y){
         self->input().setMousePosition(self->input().mouseX(), y);
     }
 SWIGINTERN int Gosu_Window_width(Gosu::Window const *self){
-		return self->graphics().width();
-	}
+        return self->graphics().width();
+    }
 SWIGINTERN int Gosu_Window_height(Gosu::Window const *self){
-		return self->graphics().height();
-	}
+        return self->graphics().height();
+    }
 SWIGINTERN bool Gosu_Window_fullscreen(Gosu::Window const *self){
         return self->graphics().fullscreen();
     }
