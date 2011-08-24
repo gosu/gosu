@@ -2326,7 +2326,14 @@ namespace Gosu
 	        } catch (const std::exception&) {
             #ifdef GOSU_IS_WIN
                 requireFreeImageFor(filenameUTF8);
-                loadImageFile_FreeImage(bitmap, filename);
+                try {
+                    loadImageFile_FreeImage(bitmap, filename);
+                }
+                catch (const std::runtime_error& error) {
+                    rb_raise(rb_eRuntimeError,
+                        "Could not load image %s using either GDI+ or FreeImage: %s",
+                        filenameUTF8, error.what());
+                }
                 return;
 	        #else
 				throw;

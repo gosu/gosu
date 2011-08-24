@@ -75,9 +75,32 @@ namespace
     {
         return ((Gosu::Writer*)handle)->position();
     }
+    
+    // TODO: This is not thread safe!
+    
+    std::string lastFreeImageError;
+    
+    void DLL_CALLCONV FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message)
+    {
+        lastFreeImageError = (message && message[0]) ? message : "Unknown error";
+        if (fif != FIF_UNKNOWN)
+            if (const char* format = FreeImage_GetFormatFromFIF(fif))
+                lastFreeImageError += std::string(" (in ") + format + " parser)";
+    }
+    
+    void checkForFreeImageErrors(bool value = true)
+    {
+        if (!value || !lastFreeImageError.empty())
+        {
+            std::string message = lastFreeImageError;
+            if (message.empty())
+                message = "Unknown error";
+            else
+                lastFreeImageError.clear();
+            throw std::runtime_error(message);
+        }
+    }
 }
-
-// TODO: error checking w/ FreeImage_SetOutputMessage?
 
 namespace Gosu
 {
@@ -91,7 +114,7 @@ namespace Gosu
         FREE_IMAGE_FORMAT fif = FreeImage_GetFileType(utf8Filename.c_str());
         FIBITMAP* fib = FreeImage_Load(fif, utf8Filename.c_str(), GOSU_FIFLAGS);
         #endif
-
+        checkForFreeImageErrors(fib);
         fibToBitmap(bitmap, fib, fif);
     }
 
@@ -103,7 +126,7 @@ namespace Gosu
         FIMEMORY* fim = FreeImage_OpenMemory(&data[0], data.size());
         FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeFromMemory(fim);
         FIBITMAP* fib = FreeImage_LoadFromMemory(fif, fim, GOSU_FIFLAGS);
-
+        checkForFreeImageErrors(fib);
         fibToBitmap(bitmap, fib, fif);
     }
 
@@ -119,6 +142,7 @@ namespace Gosu
         FreeImage_Save(fif, fib, utf8Filename.c_str());
         #endif
         FreeImage_Unload(fib);
+        checkForFreeImageErrors();
     }
 
     void FI(saveImageFile)(const Bitmap& bitmap, Gosu::Writer writer,
@@ -131,5 +155,6 @@ namespace Gosu
         FreeImageIO fio = { NULL, WriteProc, SeekProc, TellProc };
         FreeImage_SaveToHandle(fif, fib, &fio, &writer);
         FreeImage_Unload(fib);
+        checkForFreeImageErrors();
     }
 }
