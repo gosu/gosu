@@ -5,7 +5,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <list>
-#include <sstream> // Just for int <-> string conversion
+#include <sstream> // For int <-> string conversion
 #include <vector>
 
 enum ZOrder
@@ -20,15 +20,14 @@ typedef std::vector<std::tr1::shared_ptr<Gosu::Image> > Animation;
 
 class Star
 {
-    Animation* animation;
+    Animation& animation;
     Gosu::Color color;
     double posX, posY;
 
 public:
-    explicit Star(Animation& anim)
+    explicit Star(Animation& animation)
+    :   animation(animation)
     {
-        animation = &anim;
-	
         color.setAlpha(255);
         double red = Gosu::random(40, 255);
         color.setRed(static_cast<Gosu::Color::Channel>(red));
@@ -46,8 +45,8 @@ public:
 
     void draw() const
     {
-        Gosu::Image& image = 
-            *animation->at(Gosu::milliseconds() / 100 % animation->size());
+        Gosu::Image& image =
+            *animation.at(Gosu::milliseconds() / 100 % animation.size());
 
         image.draw(posX - image.width() / 2.0, posY - image.height() / 2.0,
             zStars, 1, 1, color, Gosu::amAdditive);
@@ -56,21 +55,16 @@ public:
 
 class Player
 {
-    std::auto_ptr<Gosu::Image> image;
-    std::auto_ptr<Gosu::Sample> beep;
+    Gosu::Image image;
+    Gosu::Sample beep;
     double posX, posY, velX, velY, angle;
     unsigned score;
 
-
 public:
     Player(Gosu::Graphics& graphics)
+    :   image(graphics, Gosu::sharedResourcePrefix() + L"media/Starfighter.bmp"),
+        beep(Gosu::sharedResourcePrefix() + L"media/Beep.wav")
     {
-        std::wstring filename = Gosu::sharedResourcePrefix() + L"media/Starfighter.bmp";
-        image.reset(new Gosu::Image(graphics, filename));
-
-        filename = Gosu::sharedResourcePrefix() + L"media/Beep.wav";
-        beep.reset(new Gosu::Sample(filename));
-
         posX = posY = velX = velY = angle = 0;
         score = 0;
     }
@@ -105,16 +99,9 @@ public:
     void move()
     {
         posX += velX;
-        while (posX < 0)
-            posX += 640;
-        while (posX > 640)
-            posX -= 640;
-
+        posX = Gosu::wrap(posX, 0.0, 640.0);
         posY += velY;
-        while (posY < 0)
-            posY += 480;
-        while (posY > 480)
-            posY -= 480;
+        posY = Gosu::wrap(posY, 0.0, 480.0);
 
         velX *= 0.95;
         velY *= 0.95;
@@ -122,9 +109,9 @@ public:
 
     void draw() const
     {
-        image->drawRot(posX, posY, zPlayer, angle);
+        image.drawRot(posX, posY, zPlayer, angle);
     }
-    
+
     void collectStars(std::list<Star>& stars)
     {
         std::list<Star>::iterator cur = stars.begin();
@@ -134,7 +121,7 @@ public:
             {
                 cur = stars.erase(cur);
                 score += 10;
-                beep->play();
+                beep.play();
             }
             else
                 ++cur;
@@ -175,7 +162,7 @@ public:
         if (input().down(Gosu::kbRight) || input().down(Gosu::gpRight))
             player.turnRight();
         if (input().down(Gosu::kbUp) || input().down(Gosu::gpButton0))
-              player.accelerate();
+            player.accelerate();
         player.move();
         player.collectStars(stars);
 
@@ -195,9 +182,9 @@ public:
         }
 
         std::wstringstream score;
+        score << L"Score: "; 
         score << player.getScore();
-        font.draw(L"Score: " + score.str(), 10, 10, zUI, 1, 1,
-                Gosu::Colors::yellow);
+        font.draw(score.str(), 10, 10, zUI, 1, 1, Gosu::Colors::yellow);
     }
 
     void buttonDown(Gosu::Button btn)
@@ -207,7 +194,7 @@ public:
     }
 };
 
-int main(int argc, char* argv[])
+int main()
 {
     GameWindow window;
     window.show();
