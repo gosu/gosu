@@ -32,7 +32,7 @@ namespace :linux do
     s.requirements = ['See https://github.com/jlnr/gosu/wiki/Getting-Started-on-Linux']
   end
   
-  Gem::PackageTask.new(LINUX_SPEC)
+  Gem::PackageTask.new(LINUX_SPEC).define
 
   task :release_gem => :gem do
     sh "gem push pkg/gosu-#{GOSU_VERSION}.gem"

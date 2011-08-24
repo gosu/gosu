@@ -23,7 +23,7 @@ namespace :win do
     s.files = COMMON_RUBY_FILES
     s.files += FileList['lib/gosu.for_*.so', 'lib/*.dll']
   end
-  Gem::PackageTask.new(WINDOWS_SPEC)
+  Gem::PackageTask.new(WINDOWS_SPEC).define
   
   task :release_gem => :gem do
     sh "gem push pkg/gosu-#{GOSU_VERSION}-x86-mingw32.gem"
