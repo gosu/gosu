@@ -217,7 +217,7 @@ namespace
 namespace Gosu
 {
 	#ifdef GOSU_IS_WIN
-    void ping_FreeImage()
+    void requireFreeImageFor(const char* filename)
     {
         // Copied and pasted from MSDN.
         // TODO: Remove duplication, this is also in AudioAudiere.cpp
@@ -231,7 +231,9 @@ namespace Gosu
         }
         __except ((GetExceptionCode() == BAD_MOD) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
         {
-            rb_raise(rb_eRuntimeError, "unable to locate FreeImage.dll");
+            rb_raise(rb_eRuntimeError,
+                "Cannot neither load image %s nor locate FreeImage.dll to retry with it",
+                filename);
         }
         #undef BAD_MOD
         #undef VcppException
@@ -252,7 +254,7 @@ namespace Gosu
                 return;
 	        } catch (const std::exception&) {
             #ifdef GOSU_IS_WIN
-                ping_FreeImage();
+                requireFreeImageFor(filenameUTF8);
                 loadImageFile_FreeImage(bitmap, filename);
                 return;
 	        #else
