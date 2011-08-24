@@ -21,8 +21,7 @@
 /mac/Ruby/include/
 /mac/Ruby/lib/
 /mac/Ruby/libruby.1.9.1.dylib
-/public/
-/rake/upload
+/pkg/
 /reference/cpp/
 /reference/rdoc/
 /RubyGosu App.app/

@@ -26,7 +26,7 @@
 %typemap(in) wchar_t {
     VALUE localTemporary = rb_obj_as_string($input);
     std::wstring localTemporary2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
-	$1 = localTemporary2.empty() ? 0 : localTemporary2.at(0);
+    $1 = localTemporary2.empty() ? 0 : localTemporary2.at(0);
 }
 %typemap(out) wchar_t {
     if ($1 == 0)
@@ -203,7 +203,7 @@ namespace GosusDarkSide
     
     void yieldToOtherRubyThreads()
     {
-		rb_thread_schedule();
+        rb_thread_schedule();
     }
 }
 
@@ -216,8 +216,8 @@ namespace
 
 namespace Gosu
 {
-	#ifdef GOSU_IS_WIN
-    void ping_FreeImage()
+    #ifdef GOSU_IS_WIN
+    void requireFreeImageFor(const char* filename)
     {
         // Copied and pasted from MSDN.
         // TODO: Remove duplication, this is also in AudioAudiere.cpp
@@ -231,7 +231,9 @@ namespace Gosu
         }
         __except ((GetExceptionCode() == BAD_MOD) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
         {
-            rb_raise(rb_eRuntimeError, "unable to locate FreeImage.dll");
+            rb_raise(rb_eRuntimeError,
+                "Could neither load image %s nor locate FreeImage.dll to retry with it",
+                filename);
         }
         #undef BAD_MOD
         #undef VcppException
@@ -250,15 +252,22 @@ namespace Gosu
             try {
                 loadImageFile(bitmap, filename);
                 return;
-	        } catch (const std::exception&) {
+            } catch (const std::exception&) {
             #ifdef GOSU_IS_WIN
-                ping_FreeImage();
-                loadImageFile_FreeImage(bitmap, filename);
+                requireFreeImageFor(filenameUTF8);
+                try {
+                    loadImageFile_FreeImage(bitmap, filename);
+                }
+                catch (const std::runtime_error& error) {
+                    rb_raise(rb_eRuntimeError,
+                        "Could not load image %s using either GDI+ or FreeImage: %s",
+                        filenameUTF8, error.what());
+                }
                 return;
-	        #else
-				throw;
-			#endif
-	        }  
+            #else
+                throw;
+            #endif
+            }  
         }
 
         // Otherwise, try to call .to_blob on it (works with RMagick, TexPlay etc).
@@ -590,8 +599,8 @@ namespace Gosu {
 %include "../Gosu/ButtonsMac.hpp"
 %init %{
     GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
-	// While we are at it, to some healthy srand() - otherwise unavailable to Ruby people
-	std::srand(static_cast<unsigned int>(std::time(0)));
+    // While we are at it, to some healthy srand() - otherwise unavailable to Ruby people
+    std::srand(static_cast<unsigned int>(std::time(0)));
     std::rand(); // and flush the first value
 %}
 
@@ -685,12 +694,12 @@ namespace Gosu {
         $self->input().setTextInput(ti);
     }
     
-	double mouseX() const {
-		return $self->input().mouseX();
-	}
-	double mouseY() const {
-		return $self->input().mouseY();
-	}
+    double mouseX() const {
+        return $self->input().mouseX();
+    }
+    double mouseY() const {
+        return $self->input().mouseY();
+    }
     void setMousePosition(double x, double y) {
         $self->input().setMousePosition(x, y);
     }
@@ -701,12 +710,12 @@ namespace Gosu {
         $self->input().setMousePosition($self->input().mouseX(), y);
     }
     
-	int width() const {
-		return $self->graphics().width();
-	}
-	int height() const {
-		return $self->graphics().height();
-	}
+    int width() const {
+        return $self->graphics().width();
+    }
+    int height() const {
+        return $self->graphics().height();
+    }
     bool fullscreen() const {
         return $self->graphics().fullscreen();
     }

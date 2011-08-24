@@ -54,11 +54,10 @@ directories:
 	$(CXX) -shared -o ../lib/libgosu.so ${LIBS} $(OBJS)
 
 install: all
-	$(MKDIR) $(bindir) $(libdir) $(includedir)
+	$(MKDIR) $(bindir) $(libdir) $(includedir)/Gosu
 	$(INSTALL_DATA) ../lib/libgosu.a $(libdir)
 	$(INSTALL_DATA) ../lib/libgosu.so $(libdir)
 	$(INSTALL_PROGRAM) ../bin/gosu-config $(bindir)
-	$(MKDIR) $(includedir)/Gosu 
 	$(INSTALL_DATA) ../Gosu/* $(includedir)/Gosu
 	$(LDCONFIG) -n $(libdir)
 
@@ -87,7 +86,7 @@ $(XPLS): %: %.cpp ../lib/libgosu.a
 	echo "while test \$$# -gt 0; do" >> ../bin/gosu-config
 	echo "    case \$$1 in" >> ../bin/gosu-config
 	echo "    --libs)" >> ../bin/gosu-config
-	echo '    echo "$(LIBS)";;' >> ../bin/gosu-config
+	echo '    echo "-lgosu $(LIBS)";;' >> ../bin/gosu-config
 	echo "    --cxxflags)" >> ../bin/gosu-config
 	echo '    echo "$(ALL_CXXFLAGS)";;' >> ../bin/gosu-config
 	echo "    esac" >> ../bin/gosu-config
