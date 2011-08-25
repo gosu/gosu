@@ -3,6 +3,7 @@
 #include <Gosu/Platform.hpp>
 #include <Gosu/TR1.hpp>
 #include <Gosu/Utility.hpp>
+#include <stdexcept>
 #include <vector>
 #include <FreeImage.h>
 
