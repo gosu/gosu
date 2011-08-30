@@ -1,10 +1,12 @@
 #include <Gosu/Utility.hpp>
+#include <Gosu/Platform.hpp>
 #include <GosuImpl/MacUtility.hpp>
 #import <Foundation/Foundation.h>
 #include <stdexcept>
 #include <vector>
 using namespace std;
 
+#ifdef GOSU_IS_IPHONE // (but could also be used for OS X)
 wstring Gosu::utf8ToWstring(const string& s)
 {
     if (s.empty())
@@ -43,3 +45,24 @@ string Gosu::narrow(const std::wstring& ws)
 {
     return wstringToUTF8(ws);
 }
+#endif
+
+#if defined(GOSU_IS_IPHONE) || __MAC_OS_X_VERSION_MAX_ALLOWED >= 1050
+// iOS 2.0+, OS X 10.5+
+string Gosu::currentLanguage()
+{
+    ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]);
+    NSString* language = [[NSLocale preferredLanguages] objectAtIndex:0];
+    return [language UTF8String];
+}
+#else
+// OS X 10.4
+string Gosu::currentLanguage()
+{
+    ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]);
+    NSUserDefaults* defs = [NSUserDefaults standardUserDefaults];
+    NSArray* languages = [defs objectForKey:@"AppleLanguages"];
+    NSString* language = [languages objectAtIndex:0];
+    return [language UTF8String];
+}
+#endif

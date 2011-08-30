@@ -44,6 +44,7 @@ MAC_FILES = %w(
   InputMac.mm
   TextInputMac.mm
   TimingApple.cpp
+  UtilityApple.mm
   WindowMac.mm
 )
 
