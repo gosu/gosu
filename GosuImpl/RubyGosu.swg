@@ -59,6 +59,10 @@
     VALUE localTemporary = rb_obj_as_string($1);
     $result = Gosu::utf8ToWstring(StringValueCStr(localTemporary));;
 }
+%typemap(out) std::string {
+    $result = rb_str_new2($1.c_str());
+    FIX_ENCODING($result);
+}
 
 %typemap(in) Gosu::Button {
     if (NIL_P($input))
@@ -359,8 +363,9 @@ namespace Gosu
 %constant unsigned MAX_TEXTURE_SIZE = Gosu::MAX_TEXTURE_SIZE;
 
 namespace Gosu {
-    void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
-    void register_entity(const std::wstring& name, Gosu::Image* image) { registerEntity(name, image->getData().toBitmap()); }
+    std::string currentLanguage();
+    void enableUndocumentedRetrofication();
+    void register_entity(const std::wstring& name, Gosu::Image* image);
 }
 
 // Color
