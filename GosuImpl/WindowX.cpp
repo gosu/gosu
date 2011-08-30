@@ -138,7 +138,7 @@ struct Gosu::Window::Impl
 
     void doTick(Window* window)
     {
-        while (XPending(display))
+        for (int i = XPending(display); i > 0; --i)
         {
             XEvent event;
             XNextEvent(display, &event);
