@@ -41,3 +41,8 @@ class Gosu::Image
     args.size == 4 ? from_text4(*args) : from_text7(*args)
   end
 end
+
+# SWIG won't let me rename my method to '[]='.
+class Gosu::Font
+  alias []= set_image
+end

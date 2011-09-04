@@ -24,9 +24,15 @@
 // Custom typemaps for wchar/wstring.
 #pragma SWIG nowarn=-490,-319
 %typemap(in) wchar_t {
-    VALUE localTemporary = rb_obj_as_string($input);
-    std::wstring localTemporary2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
-    $1 = localTemporary2.empty() ? 0 : localTemporary2.at(0);
+    VALUE rbString = rb_obj_as_string($input);
+    char* utf8String = StringValueCStr(rbString);
+    std::wstring ucsString = Gosu::utf8ToWstring(utf8String);
+    if (ucsString.length() != 1)
+        rb_raise(rb_eArgError,
+                 "A single-character string was expected, but `%s' given",
+                 utf8String);
+    
+    $1 = ucsString[0];
 }
 %typemap(out) wchar_t {
     if ($1 == 0)
@@ -445,13 +451,21 @@ namespace Gosu {
 }
 
 // Font
-// Hackishly allow the user to pass Window& instead of Graphics&.
 %ignore Gosu::Font::Font(Graphics& graphics, const std::wstring& fontName,
     unsigned height, unsigned flags);
+%ignore Gosu::Font::setImage;
 %include "../Gosu/Font.hpp"
 %extend Gosu::Font {
     Font(Gosu::Window& window, const std::wstring& fontName, unsigned height) {
         return new Gosu::Font(window.graphics(), fontName, height);
+    }
+    void set_image(wchar_t wc, VALUE source) {
+        // TODO: Super super super ugly hack that relies on the layout of std::tr1::shared_ptr.
+        // To be removed once Image creation does not require a Graphics anymore.
+        Gosu::Graphics& graphics = ***reinterpret_cast<Gosu::Graphics***>($self);
+        Gosu::Bitmap bitmap;
+        Gosu::loadBitmap(bitmap, source);
+        $self->setImage(wc, Gosu::Image(graphics, bitmap, false));
     }
 }
 
