@@ -10,9 +10,11 @@ class Test < Gosu::Window
     Gosu::register_entity "cursor", Gosu::Image.new(self, "media/Cursor.png", false)
     
     @font = Gosu::Font.new(self, Gosu::default_font_name, 40)
+    not_an_a = Gosu::Image.from_text(self, 'ä', 'Times New Roman', 40)
+    @font['a'] = not_an_a
     
     @simple_text = Gosu::Image.from_text(self, "#{TEST_STRING}\n#{TEST_STRING}", Gosu::default_font_name, 40)
-
+    
     @complex_text = Gosu::Image.from_text(self, "#{TEST_STRING} #{TEST_STRING} a b c test 123  #{TEST_STRING}" * 4, Gosu::default_font_name, 25, 5, 350, :left)
   end
   

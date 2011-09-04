@@ -10,39 +10,39 @@
 #include <map>
 using namespace std;
 
-namespace
-{
-    bool isRtlChar(wchar_t wc)
-    {
-        return wc == 0x202e;
-    }
-    
-    bool isLtrChar(wchar_t wc)
-    {
-        return wc == 0x202d;
-    }
-    
-    bool isFormattingChar(wchar_t wc)
-    {
-        return isLtrChar(wc) || isRtlChar(wc);
-    }
-}
-
 struct Gosu::Font::Impl
 {
     Graphics* graphics;
     wstring name;
     unsigned height, flags;
 
-    // Chunk of 2^16 characters (on Windows, there'll only be one of them).
-    // IMPR: I couldn't find a way to determine the size of wchar_t at compile
-    // time, so I can't get rid of the magic numbers or even do some #ifdef
-    // magic.
-    typedef tr1::array<auto_ptr<Image>, 65536> CharChunk;
-    auto_ptr<CharChunk> chunks[65536][ffCombinations];
+    // Unicode planes of 2^16 characters each. On Windows, where wchar_t is only 16 bits wide, only
+    // the first plane will ever be touched.
+    struct CharInfo
+    {
+        auto_ptr<Image> image;
+        double factor;
+    };
+    typedef tr1::array<CharInfo, 65536> Plane;
+    auto_ptr<Plane> planes[16][ffCombinations];
     
     map<wstring, tr1::shared_ptr<Image> > entityCache;
-
+    
+    CharInfo& charInfo(wchar_t wc, unsigned flags)
+    {
+        size_t planeIndex = wc / 65536;
+        size_t charIndex  = wc % 65536;
+        
+        if (planeIndex >= 16)
+            throw invalid_argument("Unicode plane out of reach");
+        if (flags >= ffCombinations)
+            throw invalid_argument("Font flags out of range");
+        
+        if (!planes[planeIndex][flags].get())
+            planes[planeIndex][flags].reset(new Plane);
+        return (*planes[planeIndex][flags])[charIndex];
+    }
+    
     const Image& imageAt(const FormattedString& fs, unsigned i)
     {
         if (fs.entityAt(i))
@@ -55,37 +55,29 @@ struct Gosu::Font::Impl
         
         wchar_t wc = fs.charAt(i);
         unsigned flags = fs.flagsAt(i);
+        CharInfo& info = charInfo(wc, flags);
         
-        assert(flags < ffCombinations);
-    
-        size_t chunkIndex = wc / 65536;
-        size_t charIndex = wc % 65536;
-
-        if (!chunks[chunkIndex][flags].get())
-            chunks[chunkIndex][flags].reset(new CharChunk);
-
-        auto_ptr<Image>& imgPtr = (*chunks[chunkIndex][flags])[charIndex];
-
-        if (imgPtr.get())
-            return *imgPtr;
-
+        if (info.image.get())
+            return *info.image;
+        
         wstring charString(1, wc);
-        if (isFormattingChar(wc))
-            charString.clear(); // Don't draw formatting characters
+        // TODO: Would be nice to have.
+        // if (isFormattingChar(wc))
+        //     charString.clear();
         unsigned charWidth = Gosu::textWidth(charString, name, height, flags);
-
-        Bitmap bmp(charWidth, height);
-        drawText(bmp, charString, 0, 0, Color::WHITE, name, height, flags);
-        imgPtr.reset(new Image(*graphics, bmp));
-        return *imgPtr;
+        
+        Bitmap bitmap(charWidth, height);
+        drawText(bitmap, charString, 0, 0, Color::WHITE, name, height, flags);
+        info.image.reset(new Image(*graphics, bitmap));
+        info.factor = 0.5;
+        return *info.image;
     }
     
-    double factorAt(const FormattedString& fs, unsigned index) const
+    double factorAt(const FormattedString& fs, unsigned index)
     {
         if (fs.entityAt(index))
             return 1;
-        else
-            return 0.5;
+        return charInfo(fs.charAt(index), fs.flagsAt(index)).factor;
     }
 };
 
@@ -119,7 +111,11 @@ double Gosu::Font::textWidth(const wstring& text, double factorX) const
     FormattedString fs(text.c_str(), flags());
     double result = 0;
     for (unsigned i = 0; i < fs.length(); ++i)
-        result += pimpl->imageAt(fs, i).width() * pimpl->factorAt(fs, i);
+    {
+        const Image& image = pimpl->imageAt(fs, i);
+        double factor = pimpl->factorAt(fs, i);
+        result += image.width() * factor;
+    }
     return result * factorX;
 }
 
@@ -127,45 +123,16 @@ void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
     double factorX, double factorY, Color c, AlphaMode mode) const
 {
     FormattedString fs(text.c_str(), flags());
-
-    enum {
-        LTR = 1,
-        RTL = -1
-    } dir = LTR;
-
+    
     for (unsigned i = 0; i < fs.length(); ++i)
     {
-        /*
-        
-        Sorry, LTR/RTL support taken out until somebody uses it
-        
-        if (isLtrChar(text[i]))
-        {
-            if (dir == RTL)
-                x -= 2 * textWidth(text.substr(i + 1, wstring::npos)) * factorX, dir = LTR;
-            continue;
-        }
-        if (isRtlChar(text[i]))
-        {
-            if (dir == LTR)
-                x += 2 * textWidth(text.substr(i + 1, wstring::npos)) * factorX, dir = RTL;
-            continue;
-        }*/
-        
-        const Image& curChar = pimpl->imageAt(fs, i);
-        double curFactor;
-        Gosu::Color color;
-        if (fs.entityAt(i))
-            curFactor = 1.0, color = Gosu::Color(fs.colorAt(i).alpha() * c.alpha() / 255, 255, 255, 255);
-        else
-            curFactor = 0.5, color = Gosu::multiply(fs.colorAt(i), c);
-
-        //if (dir == LTR)
-            curChar.draw(x, y, z, factorX * curFactor, factorY * curFactor, color, mode);
-        //else
-        //    curChar.draw(x - curChar.width() * factorX, y, z, factorX, factorY, c, mode);
-        
-        x += curChar.width() * factorX * curFactor * dir;
+        const Image& image = pimpl->imageAt(fs, i);
+        double factor = pimpl->factorAt(fs, i);
+        Gosu::Color color = fs.entityAt(i)
+                          ? Gosu::Color(fs.colorAt(i).alpha() * c.alpha() / 255, 255, 255, 255)
+                          : Gosu::multiply(fs.colorAt(i), c);
+        image.draw(x, y, z, factorX * factor, factorY * factor, color, mode);
+        x += image.width() * factorX * factor;
     }
 }
 
@@ -177,6 +144,21 @@ void Gosu::Font::drawRel(const wstring& text, double x, double y, ZPos z,
     y -= height() * factorY * relY;
     
     draw(text, x, y, z, factorX, factorY, c, mode);
+}
+
+void Gosu::Font::setImage(wchar_t wc, const Image& image)
+{
+    for (unsigned flags = 0; flags < ffCombinations; ++flags)
+        setImage(wc, flags, image);
+}
+
+void Gosu::Font::setImage(wchar_t wc, unsigned fontFlags, const Image& image)
+{
+    Impl::CharInfo& ci = pimpl->charInfo(wc, fontFlags);
+    if (ci.image.get())
+        throw logic_error("Cannot set image for the same Font character twice or after it has been drawn");
+    ci.image.reset(new Gosu::Image(image));
+    ci.factor = 1.0;
 }
 
 void Gosu::Font::drawRot(const wstring& text, double x, double y, ZPos z, double angle,

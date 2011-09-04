@@ -2651,6 +2651,14 @@ SWIG_AsVal_int (VALUE obj, int *val)
 SWIGINTERN Gosu::Font *new_Gosu_Font(Gosu::Window &window,std::wstring const &fontName,unsigned int height){
         return new Gosu::Font(window.graphics(), fontName, height);
     }
+SWIGINTERN void Gosu_Font_set_image(Gosu::Font *self,wchar_t wc,VALUE source){
+        // TODO: Super super super ugly hack that relies on the layout of std::tr1::shared_ptr.
+        // To be removed once Image creation does not require a Graphics anymore.
+        Gosu::Graphics& graphics = ***reinterpret_cast<Gosu::Graphics***>(self);
+        Gosu::Bitmap bitmap;
+        Gosu::loadBitmap(bitmap, source);
+        self->setImage(wc, Gosu::Image(graphics, bitmap, false));
+    }
 
 #include <float.h>
 
@@ -5954,6 +5962,47 @@ _wrap_new_Font(int argc, VALUE *argv, VALUE self) {
     }
   }
   return self;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Font_set_image(int argc, VALUE *argv, VALUE self) {
+  Gosu::Font *arg1 = (Gosu::Font *) 0 ;
+  wchar_t arg2 ;
+  VALUE arg3 = (VALUE) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Font, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Font *","set_image", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Font * >(argp1);
+  {
+    VALUE rbString = rb_obj_as_string(argv[0]);
+    char* utf8String = StringValueCStr(rbString);
+    std::wstring ucsString = Gosu::utf8ToWstring(utf8String);
+    if (ucsString.length() != 1)
+    rb_raise(rb_eArgError,
+      "A single-character string was expected, but `%s' given",
+      utf8String);
+    
+    arg2 = ucsString[0];
+  }
+  arg3 = argv[1];
+  {
+    try {
+      Gosu_Font_set_image(arg1,arg2,arg3);
+    } catch(const std::runtime_error& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
 fail:
   return Qnil;
 }
@@ -9844,9 +9893,15 @@ _wrap_Window_char_to_button_id(int argc, VALUE *argv, VALUE self) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
   {
-    VALUE localTemporary = rb_obj_as_string(argv[0]);
-    std::wstring localTemporary2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
-    arg1 = localTemporary2.empty() ? 0 : localTemporary2.at(0);
+    VALUE rbString = rb_obj_as_string(argv[0]);
+    char* utf8String = StringValueCStr(rbString);
+    std::wstring ucsString = Gosu::utf8ToWstring(utf8String);
+    if (ucsString.length() != 1)
+    rb_raise(rb_eArgError,
+      "A single-character string was expected, but `%s' given",
+      utf8String);
+    
+    arg1 = ucsString[0];
   }
   {
     try {
@@ -11357,6 +11412,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassFont.klass, "draw", VALUEFUNC(_wrap_Font_draw), -1);
   rb_define_method(SwigClassFont.klass, "draw_rel", VALUEFUNC(_wrap_Font_draw_rel), -1);
   rb_define_method(SwigClassFont.klass, "draw_rot", VALUEFUNC(_wrap_Font_draw_rot), -1);
+  rb_define_method(SwigClassFont.klass, "set_image", VALUEFUNC(_wrap_Font_set_image), -1);
   SwigClassFont.mark = 0;
   SwigClassFont.destroy = (void (*)(void *)) free_Gosu_Font;
   SwigClassFont.trackObjects = 1;
