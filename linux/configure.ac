@@ -78,9 +78,6 @@ AC_SUBST(GOSU_A_OBJS)
 AC_CHECK_LIB(rt, sched_setscheduler, LIBS="$LIBS -lrt", AC_CHECK_LIB(c, sched_setscheduler, , AC_MSG_ERROR(Missing librt functionality), ), )
 AC_SUBST(HAVE_LIBRT)
 
-# libXdamage
-AC_CHECK_HEADER(X11/extensions/Xdamage.h, [], AC_MSG_ERROR([Missing libxdamage]))
-
 # libfreeimage
 AC_CHECK_HEADER(FreeImage.h, [], AC_MSG_ERROR([Missing libfreeimage]))
 
