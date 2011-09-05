@@ -24,7 +24,7 @@ ALL_CXXFLAGS = -fPIC -I.. -Wall @PANGO_CXX_FLAGS@ @X_INCS@ \
 	   -I/usr/include/SDL $(CXXFLAGS)
 
 LIBS = -L@x_libraries@ -lX11 @PANGO_LIBS@ -lsndfile -lvorbisfile -lvorbis -logg \
-       -lm -lopenal -lpng -lstdc++ -lGL -lSDL_ttf -lfreeimage -lXdamage
+       -lm -lopenal -lpng -lstdc++ -lGL -lSDL_ttf -lfreeimage
 
 LDCONFIG = ldconfig
 INSTALL = install

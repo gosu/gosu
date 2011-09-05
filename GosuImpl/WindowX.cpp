@@ -20,7 +20,6 @@
 #include <GL/glx.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <X11/extensions/Xdamage.h>
 #include "X11vroot.h"
 
 using namespace std::tr1::placeholders;
@@ -99,10 +98,6 @@ struct Gosu::Window::Impl
     ::GLXContext context;
     ::Window window;
     ::XVisualInfo* visual;
-
-    // We use the XDamage extension to detect when we need to redraw ourselves
-    Damage damage;
-    int damageEvent, damageError;
     
     // Last set title
     std::wstring title;
@@ -111,13 +106,15 @@ struct Gosu::Window::Impl
     // Last known size
     int width, height;
 
+    // Last time screen was drawn in milliseconds
+    unsigned long lastDraw;
     double updateInterval;
     bool fullscreen;
 
     Impl(unsigned width, unsigned height, unsigned fullscreen, double updateInterval)
     :   mapped(false), showing(false), active(true),
         x(0), y(0), width(width), height(height),
-        updateInterval(updateInterval), fullscreen(fullscreen)
+        lastDraw(0), updateInterval(updateInterval), fullscreen(fullscreen)
     {
         
     }
@@ -134,6 +131,14 @@ struct Gosu::Window::Impl
                 break;
         }
         XSelectInput(display, window, 0x1ffffff & ~PointerMotionHintMask & ~ResizeRedirectMask);
+    }
+
+    // Gosu apps must draw at least once every second to prevent visual artifacts from building up.
+    bool redrawDemanded()
+    {
+        unsigned long now = milliseconds();
+        return now > lastDraw + 1000 ||
+               now < lastDraw; // Handle time overflow.
     }
 
     void doTick(Window* window)
@@ -165,22 +170,6 @@ struct Gosu::Window::Impl
                 else if (event.type == FocusOut)
                     active = false;
             }
-
-            // Force redraw on window damage; don't check needsRedraw()
-            if (event.type == damageEvent + XDamageNotify)
-            {
-                XDamageNotifyEvent* dev = (XDamageNotifyEvent*)&event;
-                XDamageSubtract(display, dev->damage, None, None);
-                // If there are more events queued up right after this one, we
-                // don't need to redraw just yet
-                if (dev->more == false &&
-                        window->graphics().begin(Colors::black))
-                {
-                    window->draw();
-                    window->graphics().end();
-                    glXSwapBuffers(display, this->window);
-                }
-            }
         }
         
         if (showingCursor && !window->needsCursor())
@@ -198,25 +187,14 @@ struct Gosu::Window::Impl
         window->input().update();
         window->update();
 
-        if (window->needsRedraw() && window->graphics().begin(Colors::black))
+        if ((redrawDemanded() || window->needsRedraw()) && window->graphics().begin(Colors::black))
         {
+            lastDraw = milliseconds();
             FPS::registerFrame();
             window->draw();
             window->graphics().end();
             glXSwapBuffers(display, this->window);
         }
-    }
-
-    // The ICCCM standard requires that compositing window managers acquire
-    // ownership of a selection named _NET_WM_CM_Sn, where n is the screen
-    // number
-    bool isComposited()
-    {
-        std::ostringstream atomName;
-        atomName << "_NET_WM_CM_S" << XDefaultScreen(display);
-        const std::string& tmp = atomName.str();
-        Atom selection = XInternAtom(display, tmp.c_str(), False);
-        return XGetSelectionOwner(display, selection) != None;
     }
 };
 
@@ -315,21 +293,10 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         input().setMouseFactors(1.0 * width / pimpl->width,
                   1.0 * height / pimpl->height);
     }
-
-    // Composited windows, by nature, don't need to monitor XDamage
-    if (!pimpl->isComposited())
-    {
-        // Register our intent to monitor this window for damage
-        XDamageQueryExtension(pimpl->display, &pimpl->damageEvent, &pimpl->damageError);
-        pimpl->damage = XDamageCreate(pimpl->display, pimpl->window,
-                XDamageReportNonEmpty);
-    }
 }
 
 Gosu::Window::~Window()
 {
-    if (!pimpl->isComposited())
-        XDamageDestroy(pimpl->display, pimpl->damage);
     XFreeCursor(pimpl->display, pimpl->emptyCursor);
     XDestroyWindow(pimpl->display, pimpl->window);
     XSync(pimpl->display, false);
