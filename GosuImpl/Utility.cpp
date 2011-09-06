@@ -52,7 +52,6 @@ namespace Gosu {
         return iconvert<vector<unsigned short>, UCS_2_INTERNAL, UCS_4_INTERNAL>(ws);
     }
 }
-
 #endif
 #else
 #ifndef NOMINMAX
@@ -117,3 +116,10 @@ namespace Gosu
         return true;
     }
 }
+
+#if defined(GOSU_IS_UNIX) && !defined(GOSU_IS_MAC)
+string Gosu::currentLanguage()
+{
+    return getenv("LANG");
+}
+#endif
