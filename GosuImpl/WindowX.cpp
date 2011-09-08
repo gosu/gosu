@@ -160,6 +160,13 @@ struct Gosu::Window::Impl
                 else if (event.type == FocusOut)
                     active = false;
             }
+            if (event.type == Expose && event.xexpose.count == 0 &&
+                        window->graphics().begin(Colors::black)) {
+                FPS::registerFrame();
+                window->draw();
+                window->graphics().end();
+                glXSwapBuffers(display, this->window);
+            }
         }
         
         if (showingCursor && !window->needsCursor())
