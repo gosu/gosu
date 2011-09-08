@@ -106,15 +106,13 @@ struct Gosu::Window::Impl
     // Last known size
     int width, height;
 
-    // Last time screen was drawn in milliseconds
-    unsigned long lastDraw;
     double updateInterval;
     bool fullscreen;
 
     Impl(unsigned width, unsigned height, unsigned fullscreen, double updateInterval)
     :   mapped(false), showing(false), active(true),
         x(0), y(0), width(width), height(height),
-        lastDraw(0), updateInterval(updateInterval), fullscreen(fullscreen)
+        updateInterval(updateInterval), fullscreen(fullscreen)
     {
         
     }
@@ -131,14 +129,6 @@ struct Gosu::Window::Impl
                 break;
         }
         XSelectInput(display, window, 0x1ffffff & ~PointerMotionHintMask & ~ResizeRedirectMask);
-    }
-
-    // Gosu apps must draw at least once every second to prevent visual artifacts from building up.
-    bool redrawDemanded()
-    {
-        unsigned long now = milliseconds();
-        return now > lastDraw + 1000 ||
-               now < lastDraw; // Handle time overflow.
     }
 
     void doTick(Window* window)
@@ -187,9 +177,8 @@ struct Gosu::Window::Impl
         window->input().update();
         window->update();
 
-        if ((redrawDemanded() || window->needsRedraw()) && window->graphics().begin(Colors::black))
+        if (window->needsRedraw() && window->graphics().begin(Colors::black))
         {
-            lastDraw = milliseconds();
             FPS::registerFrame();
             window->draw();
             window->graphics().end();
