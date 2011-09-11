@@ -6,8 +6,8 @@ using namespace std;
 string Gosu::language()
 {
     LCID lcid = GetUserDefaultLCID();
-    char[9] buffer;
+    char buffer[9];
     Win::check(
-        GetLocaleInfoA(lcid, LOCALE_SISO639LANGNAME, &buffer, sizeof buffer));
+        GetLocaleInfoA(lcid, LOCALE_SISO639LANGNAME, buffer, sizeof buffer));
     return buffer;
 }
