@@ -3712,7 +3712,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_current_language(int argc, VALUE *argv, VALUE self) {
+_wrap_language(int argc, VALUE *argv, VALUE self) {
   std::string result;
   VALUE vresult = Qnil;
   
@@ -3721,7 +3721,7 @@ _wrap_current_language(int argc, VALUE *argv, VALUE self) {
   }
   {
     try {
-      result = Gosu::currentLanguage();
+      result = Gosu::language();
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -11330,9 +11330,8 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_RubyInitializeTrackings();
   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(7)));
-  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(36)));
-  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.36.2"));
-  rb_define_const(mGosu, "GOSU_COPYRIGHT_NOTICE", SWIG_FromCharPtr("May contain `ogg\', `vorbis\' libraries (c) 2002-2008 Xiph.org Foundation\n\nRedistribution and use in source and binary forms, with or withoutmodification, are permitted provided that the following conditionsare met:\n\n- Redistributions of source code must retain the above copyrightnotice, this list of conditions and the following disclaimer.\n\n- Redistributions in binary form must reproduce the above copyrightnotice, this list of conditions and the following disclaimer in thedocumentation and/or other materials provided with the distribution.\n\n- Neither the name of the Xiph.org Foundation nor the names of itscontributors may be used to endorse or promote products derived fromthis software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS``AS IS\'\' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOTLIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FORA PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATIONOR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOTLIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANYTHEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USEOF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."));
+  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(37)));
+  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.37"));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
   rb_define_module_function(mGosu, "degrees_to_radians", VALUEFUNC(_wrap_degrees_to_radians), -1);
@@ -11350,7 +11349,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "rotate", VALUEFUNC(_wrap_rotate), -1);
   rb_define_module_function(mGosu, "scale", VALUEFUNC(_wrap_scale), -1);
   rb_define_const(mGosu, "MAX_TEXTURE_SIZE", SWIG_From_unsigned_SS_int(static_cast< unsigned int >(Gosu::MAX_TEXTURE_SIZE)));
-  rb_define_module_function(mGosu, "current_language", VALUEFUNC(_wrap_current_language), -1);
+  rb_define_module_function(mGosu, "language", VALUEFUNC(_wrap_language), -1);
   rb_define_module_function(mGosu, "enable_undocumented_retrofication", VALUEFUNC(_wrap_enable_undocumented_retrofication), -1);
   rb_define_module_function(mGosu, "register_entity", VALUEFUNC(_wrap_register_entity), -1);
   

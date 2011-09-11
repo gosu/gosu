@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../&quot;;&quot;$(SolutionDir)/../dependencies/libogg/include/&quot;;&quot;$(SolutionDir)/../dependencies/libvorbis/include/&quot;;$(NOINHERIT)"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../&quot;;&quot;$(SolutionDir)/../dependencies/libsndfile/&quot;;&quot;$(SolutionDir)/../dependencies/libogg/include/&quot;;&quot;$(SolutionDir)/../dependencies/libvorbis/include/&quot;;$(NOINHERIT)"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="3"
@@ -109,7 +109,7 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../&quot;;&quot;$(SolutionDir)/../dependencies/libogg/include/&quot;;&quot;$(SolutionDir)/../dependencies/libvorbis/include/&quot;;$(NOINHERIT)"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../&quot;;&quot;$(SolutionDir)/../dependencies/libsndfile/&quot;;&quot;$(SolutionDir)/../dependencies/libogg/include/&quot;;&quot;$(SolutionDir)/../dependencies/libvorbis/include/&quot;;$(NOINHERIT)"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -206,6 +206,10 @@
 			</File>
 			<File
 				RelativePath="..\GosuImpl\Utility.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\GosuImpl\UtilityWin.cpp"
 				>
 			</File>
 			<File
@@ -425,11 +429,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Gosu\Sockets.hpp"
+				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\GosuImpl\Sockets\Sockets.hpp"
+				RelativePath="..\Gosu\Sockets.hpp"
 				>
 			</File>
 			<File
@@ -569,6 +573,14 @@
 				>
 				<File
 					RelativePath="..\dependencies\libvorbis\lib\vorbisfile.c"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="libsndfile"
+				>
+				<File
+					RelativePath="..\dependencies\libsndfile\sndfile.h"
 					>
 				</File>
 			</Filter>
