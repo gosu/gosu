@@ -3712,7 +3712,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_current_language(int argc, VALUE *argv, VALUE self) {
+_wrap_language(int argc, VALUE *argv, VALUE self) {
   std::string result;
   VALUE vresult = Qnil;
   
@@ -3721,7 +3721,7 @@ _wrap_current_language(int argc, VALUE *argv, VALUE self) {
   }
   {
     try {
-      result = Gosu::currentLanguage();
+      result = Gosu::language();
     } catch(const std::runtime_error& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -11350,7 +11350,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "rotate", VALUEFUNC(_wrap_rotate), -1);
   rb_define_module_function(mGosu, "scale", VALUEFUNC(_wrap_scale), -1);
   rb_define_const(mGosu, "MAX_TEXTURE_SIZE", SWIG_From_unsigned_SS_int(static_cast< unsigned int >(Gosu::MAX_TEXTURE_SIZE)));
-  rb_define_module_function(mGosu, "current_language", VALUEFUNC(_wrap_current_language), -1);
+  rb_define_module_function(mGosu, "language", VALUEFUNC(_wrap_language), -1);
   rb_define_module_function(mGosu, "enable_undocumented_retrofication", VALUEFUNC(_wrap_enable_undocumented_retrofication), -1);
   rb_define_module_function(mGosu, "register_entity", VALUEFUNC(_wrap_register_entity), -1);
   

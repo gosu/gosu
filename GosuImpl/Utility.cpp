@@ -118,7 +118,7 @@ namespace Gosu
 }
 
 #if defined(GOSU_IS_UNIX) && !defined(GOSU_IS_MAC)
-string Gosu::currentLanguage()
+string Gosu::language()
 {
     return getenv("LANG");
 }

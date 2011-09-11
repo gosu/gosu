@@ -24,7 +24,7 @@ namespace Gosu
     #ifndef GOSU_IS_WIN
     //! Returns the user's preferred language, at the moment of calling the function. Expect return
     //! values such as 'en_US', 'de_DE.UTF-8', 'ja', 'zh-Hans'.
-    std::string currentLanguage();
+    std::string language();
     #endif
 }
 

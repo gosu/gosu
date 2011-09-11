@@ -49,7 +49,7 @@ string Gosu::narrow(const std::wstring& ws)
 
 #if defined(GOSU_IS_IPHONE) || __MAC_OS_X_VERSION_MAX_ALLOWED >= 1050
 // iOS 2.0+, OS X 10.5+
-string Gosu::currentLanguage()
+string Gosu::language()
 {
     ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]);
     NSString* language = [[NSLocale preferredLanguages] objectAtIndex:0];
@@ -57,7 +57,7 @@ string Gosu::currentLanguage()
 }
 #else
 // OS X 10.4
-string Gosu::currentLanguage()
+string Gosu::language()
 {
     ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]);
     NSUserDefaults* defs = [NSUserDefaults standardUserDefaults];

@@ -369,7 +369,7 @@ namespace Gosu
 %constant unsigned MAX_TEXTURE_SIZE = Gosu::MAX_TEXTURE_SIZE;
 
 namespace Gosu {
-    std::string currentLanguage();
+    std::string language();
     void enableUndocumentedRetrofication();
     void register_entity(const std::wstring& name, Gosu::Image* image);
 }
