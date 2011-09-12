@@ -20,7 +20,8 @@ namespace Gosu
     std::string narrow(const std::wstring& ws);
     
     //! Returns the user's preferred language, at the moment of calling the function. Expect return
-    //! values such as 'en_US', 'de_DE.UTF-8', 'ja', 'zh-Hans'.
+    //! values such as 'en_US', 'de_DE.UTF-8', 'ja', 'zh-Hans'. You can rely only on the first two letters
+    //! being a common language abbreviation.
     std::string language();
 }
 
