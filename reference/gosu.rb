@@ -208,7 +208,10 @@ module Gosu
     # rel_x:: Determines where the text is drawn horizontally. If relX is 0.0, the text will be to the right of x, if it is 1.0, the text will be to the left of x, if it is 0.5, it will be centered on x. Of course, all real numbers are possible values.
     # rel_y:: See rel_x.
     def draw_rel(text, x, y, z, rel_x, rel_y, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
-      
+    
+    # Sets the image to be used for a certain character. Must not be called twice for the same character, or after the character has been drawn already.
+    def []=(character, image); end
+    
     # DEPRECATED: Analogous to draw, but rotates the text by a given angle.
     def draw_rot(text, x, y, z, angle, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
   end
@@ -529,31 +532,36 @@ module Gosu
   
   # Returns the horizontal distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
   def offset_x(angle, dist); end 
-
+  
   # Returns the vertical distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
   def offset_y(angle, dist); end
-
+  
   # Returns the angle from point 1 to point 2 in degrees, where 0.0 means upwards. Returns 0 if both points are equal.
   def angle(x1, y1, x2, y2); end
-
+  
   # Returns the smallest angle that can be added to angle1 to get to angle2 (can be negative if counter-clockwise movement is shorter).
   def angle_diff(angle1, angle2); end
-
+  
   # Returns the distance between two points.
   def distance(x1, y1, x2, y2); end
-
+  
   # Incrementing, possibly wrapping millisecond timer.
   def milliseconds(); end
-
+  
   # Returns the name of a neutral font that is available on the current
   # platform.
   def default_font_name(); end
-
+  
   # Returns the width, in pixels, of the user's primary screen.
   def screen_width(); end
-
+  
   # Returns the height, in pixels, of the user's primary screen.
   def screen_height(); end
+  
+  # Returns the user's preferred language, at the moment of calling the function. Expect return
+  # values such as 'en_US', 'de_DE.UTF-8', 'ja', 'zh-Hans'. You can rely only on the first two letters
+  # being a common language abbreviation.
+  def language(); end
 end
 
 # Small additions to Numeric to make it easier to integrate Gosu with
