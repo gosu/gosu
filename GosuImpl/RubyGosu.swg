@@ -318,7 +318,7 @@ namespace Gosu
 %exception {
     try {
         $action
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
     }
 }
