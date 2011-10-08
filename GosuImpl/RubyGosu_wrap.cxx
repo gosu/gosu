@@ -2533,22 +2533,6 @@ SWIG_AsVal_unsigned_SS_int (VALUE obj, unsigned int *val)
 }
 
 
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_char (VALUE obj, unsigned char *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
-  if (SWIG_IsOK(res)) {
-    if ((v > UCHAR_MAX)) {
-      return SWIG_OverflowError;
-    } else {
-      if (val) *val = static_cast< unsigned char >(v);
-    }
-  }  
-  return res;
-}
-
-
 SWIGINTERNINLINE VALUE
 SWIG_From_unsigned_SS_char  (unsigned char value)
 {    
@@ -3961,18 +3945,15 @@ SWIGINTERN VALUE _wrap_new_Color(int nargs, VALUE *args, VALUE self) {
   if (argc == 3) {
     int _v;
     {
-      int res = SWIG_AsVal_unsigned_SS_char(argv[0], NULL);
-      _v = SWIG_CheckState(res);
+      _v = !!rb_respond_to(argv[0], rb_intern("to_i"));
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_char(argv[1], NULL);
-        _v = SWIG_CheckState(res);
+        _v = !!rb_respond_to(argv[1], rb_intern("to_i"));
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_char(argv[2], NULL);
-          _v = SWIG_CheckState(res);
+          _v = !!rb_respond_to(argv[2], rb_intern("to_i"));
         }
         if (_v) {
           return _wrap_new_Color__SWIG_2(nargs, args, self);
@@ -3983,23 +3964,19 @@ SWIGINTERN VALUE _wrap_new_Color(int nargs, VALUE *args, VALUE self) {
   if (argc == 4) {
     int _v;
     {
-      int res = SWIG_AsVal_unsigned_SS_char(argv[0], NULL);
-      _v = SWIG_CheckState(res);
+      _v = !!rb_respond_to(argv[0], rb_intern("to_i"));
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_char(argv[1], NULL);
-        _v = SWIG_CheckState(res);
+        _v = !!rb_respond_to(argv[1], rb_intern("to_i"));
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_char(argv[2], NULL);
-          _v = SWIG_CheckState(res);
+          _v = !!rb_respond_to(argv[2], rb_intern("to_i"));
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_char(argv[3], NULL);
-            _v = SWIG_CheckState(res);
+            _v = !!rb_respond_to(argv[3], rb_intern("to_i"));
           }
           if (_v) {
             return _wrap_new_Color__SWIG_3(nargs, args, self);
@@ -4800,23 +4777,19 @@ SWIGINTERN VALUE _wrap_Color_rgba(int nargs, VALUE *args, VALUE self) {
   if (argc == 4) {
     int _v;
     {
-      int res = SWIG_AsVal_unsigned_SS_char(argv[0], NULL);
-      _v = SWIG_CheckState(res);
+      _v = !!rb_respond_to(argv[0], rb_intern("to_i"));
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_char(argv[1], NULL);
-        _v = SWIG_CheckState(res);
+        _v = !!rb_respond_to(argv[1], rb_intern("to_i"));
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_char(argv[2], NULL);
-          _v = SWIG_CheckState(res);
+          _v = !!rb_respond_to(argv[2], rb_intern("to_i"));
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_char(argv[3], NULL);
-            _v = SWIG_CheckState(res);
+            _v = !!rb_respond_to(argv[3], rb_intern("to_i"));
           }
           if (_v) {
             return _wrap_Color_rgba__SWIG_0(nargs, args, self);
@@ -4935,23 +4908,19 @@ SWIGINTERN VALUE _wrap_Color_argb(int nargs, VALUE *args, VALUE self) {
   if (argc == 4) {
     int _v;
     {
-      int res = SWIG_AsVal_unsigned_SS_char(argv[0], NULL);
-      _v = SWIG_CheckState(res);
+      _v = !!rb_respond_to(argv[0], rb_intern("to_i"));
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_char(argv[1], NULL);
-        _v = SWIG_CheckState(res);
+        _v = !!rb_respond_to(argv[1], rb_intern("to_i"));
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_char(argv[2], NULL);
-          _v = SWIG_CheckState(res);
+          _v = !!rb_respond_to(argv[2], rb_intern("to_i"));
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_char(argv[3], NULL);
-            _v = SWIG_CheckState(res);
+            _v = !!rb_respond_to(argv[3], rb_intern("to_i"));
           }
           if (_v) {
             return _wrap_Color_argb__SWIG_1(nargs, args, self);

@@ -142,6 +142,10 @@
 %typemap(in) Gosu::Color::Channel {
     $1 = Gosu::clamp<int>(NUM2ULONG($input), 0, 255);
 }
+// To allow for overloading with Channel values.
+%typemap(typecheck) Gosu::Color::Channel {
+    $1 = !!rb_respond_to($input, rb_intern("to_i"));
+}
 
 // Header inclusion (order irrelevant)
 %module(directors="1") gosu
