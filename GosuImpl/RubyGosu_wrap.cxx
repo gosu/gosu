@@ -2345,8 +2345,8 @@ namespace Gosu
         VALUE conversion = rb_str_new2("to_blob { self.format = 'RGBA'; self.depth = 8 }");
         VALUE blob = rb_obj_instance_eval(1, &conversion, val);
         rb_check_safe_obj(blob);
-        unsigned width = NUM2UINT(rb_funcall(val, rb_intern("columns"), 0));
-        unsigned height = NUM2UINT(rb_funcall(val, rb_intern("rows"), 0));
+        unsigned width = NUM2ULONG(rb_funcall(val, rb_intern("columns"), 0));
+        unsigned height = NUM2ULONG(rb_funcall(val, rb_intern("rows"), 0));
         
         bitmap.resize(width, height, Gosu::Color::NONE);
         if (width * height * 4 == RSTRING_LEN(blob))
@@ -2591,7 +2591,7 @@ SWIG_From_std_string  (const std::string& s)
 
 SWIGINTERN bool Gosu_Color_operator_Se__Se_(Gosu::Color *self,VALUE other){
         if (TYPE(other) == T_FIXNUM || TYPE(other) == T_BIGNUM)
-            return *self == Gosu::Color(NUM2UINT(other));
+            return *self == Gosu::Color(NUM2ULONG(other));
         void* ptr;
         int res = SWIG_ConvertPtr(other, &ptr, SWIGTYPE_p_Gosu__Color, 0);
         return SWIG_IsOK(res) && ptr && *self == *reinterpret_cast<Gosu::Color*>(ptr);
@@ -3849,33 +3849,21 @@ _wrap_new_Color__SWIG_2(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg1 ;
   Gosu::Color::Channel arg2 ;
   Gosu::Color::Channel arg3 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
-  unsigned char val3 ;
-  int ecode3 = 0 ;
   const char *classname SWIGUNUSED = "Gosu::Color";
   Gosu::Color *result = 0 ;
   
   if ((argc < 3) || (argc > 3)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color", 1, argv[0] ));
-  } 
-  arg1 = static_cast< Gosu::Color::Channel >(val1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color", 2, argv[1] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_char(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color", 3, argv[2] ));
-  } 
-  arg3 = static_cast< Gosu::Color::Channel >(val3);
+  {
+    arg1 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[1]), 0, 255);
+  }
+  {
+    arg3 = Gosu::clamp<int>(NUM2ULONG(argv[2]), 0, 255);
+  }
   {
     try {
       result = (Gosu::Color *)new Gosu::Color(arg1,arg2,arg3);
@@ -3914,40 +3902,24 @@ _wrap_new_Color__SWIG_3(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg2 ;
   Gosu::Color::Channel arg3 ;
   Gosu::Color::Channel arg4 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
-  unsigned char val3 ;
-  int ecode3 = 0 ;
-  unsigned char val4 ;
-  int ecode4 = 0 ;
   const char *classname SWIGUNUSED = "Gosu::Color";
   Gosu::Color *result = 0 ;
   
   if ((argc < 4) || (argc > 4)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color", 1, argv[0] ));
-  } 
-  arg1 = static_cast< Gosu::Color::Channel >(val1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color", 2, argv[1] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_char(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color", 3, argv[2] ));
-  } 
-  arg3 = static_cast< Gosu::Color::Channel >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_char(argv[3], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color", 4, argv[3] ));
-  } 
-  arg4 = static_cast< Gosu::Color::Channel >(val4);
+  {
+    arg1 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[1]), 0, 255);
+  }
+  {
+    arg3 = Gosu::clamp<int>(NUM2ULONG(argv[2]), 0, 255);
+  }
+  {
+    arg4 = Gosu::clamp<int>(NUM2ULONG(argv[3]), 0, 255);
+  }
   {
     try {
       result = (Gosu::Color *)new Gosu::Color(arg1,arg2,arg3,arg4);
@@ -4100,8 +4072,6 @@ _wrap_Color_from_ahsv(int argc, VALUE *argv, VALUE self) {
   double arg2 ;
   double arg3 ;
   double arg4 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
   double val2 ;
   int ecode2 = 0 ;
   double val3 ;
@@ -4114,11 +4084,9 @@ _wrap_Color_from_ahsv(int argc, VALUE *argv, VALUE self) {
   if ((argc < 4) || (argc > 4)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color::fromAHSV", 1, argv[0] ));
-  } 
-  arg1 = static_cast< Gosu::Color::Channel >(val1);
+  {
+    arg1 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
   ecode2 = SWIG_AsVal_double(argv[1], &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","Gosu::Color::fromAHSV", 2, argv[1] ));
@@ -4274,8 +4242,6 @@ _wrap_Color_rede___(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
@@ -4285,11 +4251,9 @@ _wrap_Color_rede___(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color *","setRed", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","setRed", 2, argv[0] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
   {
     try {
       (arg1)->setRed(arg2);
@@ -4309,8 +4273,6 @@ _wrap_Color_greene___(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
@@ -4320,11 +4282,9 @@ _wrap_Color_greene___(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color *","setGreen", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","setGreen", 2, argv[0] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
   {
     try {
       (arg1)->setGreen(arg2);
@@ -4344,8 +4304,6 @@ _wrap_Color_bluee___(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
@@ -4355,11 +4313,9 @@ _wrap_Color_bluee___(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color *","setBlue", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","setBlue", 2, argv[0] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
   {
     try {
       (arg1)->setBlue(arg2);
@@ -4379,8 +4335,6 @@ _wrap_Color_alphae___(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
@@ -4390,11 +4344,9 @@ _wrap_Color_alphae___(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color *","setAlpha", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","setAlpha", 2, argv[0] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
   {
     try {
       (arg1)->setAlpha(arg2);
@@ -4728,33 +4680,21 @@ _wrap_Color_rgb(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg1 ;
   Gosu::Color::Channel arg2 ;
   Gosu::Color::Channel arg3 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
-  unsigned char val3 ;
-  int ecode3 = 0 ;
   Gosu::Color result;
   VALUE vresult = Qnil;
   
   if ((argc < 3) || (argc > 3)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_rgb", 1, argv[0] ));
-  } 
-  arg1 = static_cast< Gosu::Color::Channel >(val1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_rgb", 2, argv[1] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_char(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_rgb", 3, argv[2] ));
-  } 
-  arg3 = static_cast< Gosu::Color::Channel >(val3);
+  {
+    arg1 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[1]), 0, 255);
+  }
+  {
+    arg3 = Gosu::clamp<int>(NUM2ULONG(argv[2]), 0, 255);
+  }
   {
     try {
       result = Gosu_Color_rgb(arg1,arg2,arg3);
@@ -4775,40 +4715,24 @@ _wrap_Color_rgba__SWIG_0(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg2 ;
   Gosu::Color::Channel arg3 ;
   Gosu::Color::Channel arg4 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
-  unsigned char val3 ;
-  int ecode3 = 0 ;
-  unsigned char val4 ;
-  int ecode4 = 0 ;
   Gosu::Color result;
   VALUE vresult = Qnil;
   
   if ((argc < 4) || (argc > 4)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_rgba__SWIG_0", 1, argv[0] ));
-  } 
-  arg1 = static_cast< Gosu::Color::Channel >(val1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_rgba__SWIG_0", 2, argv[1] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_char(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_rgba__SWIG_0", 3, argv[2] ));
-  } 
-  arg3 = static_cast< Gosu::Color::Channel >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_char(argv[3], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_rgba__SWIG_0", 4, argv[3] ));
-  } 
-  arg4 = static_cast< Gosu::Color::Channel >(val4);
+  {
+    arg1 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[1]), 0, 255);
+  }
+  {
+    arg3 = Gosu::clamp<int>(NUM2ULONG(argv[2]), 0, 255);
+  }
+  {
+    arg4 = Gosu::clamp<int>(NUM2ULONG(argv[3]), 0, 255);
+  }
   {
     try {
       result = Gosu_Color_rgba__SWIG_0(arg1,arg2,arg3,arg4);
@@ -4917,40 +4841,24 @@ _wrap_Color_argb__SWIG_1(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg2 ;
   Gosu::Color::Channel arg3 ;
   Gosu::Color::Channel arg4 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
-  unsigned char val3 ;
-  int ecode3 = 0 ;
-  unsigned char val4 ;
-  int ecode4 = 0 ;
   Gosu::Color result;
   VALUE vresult = Qnil;
   
   if ((argc < 4) || (argc > 4)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_argb__SWIG_1", 1, argv[0] ));
-  } 
-  arg1 = static_cast< Gosu::Color::Channel >(val1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_argb__SWIG_1", 2, argv[1] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_char(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_argb__SWIG_1", 3, argv[2] ));
-  } 
-  arg3 = static_cast< Gosu::Color::Channel >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_char(argv[3], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_argb__SWIG_1", 4, argv[3] ));
-  } 
-  arg4 = static_cast< Gosu::Color::Channel >(val4);
+  {
+    arg1 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[1]), 0, 255);
+  }
+  {
+    arg3 = Gosu::clamp<int>(NUM2ULONG(argv[2]), 0, 255);
+  }
+  {
+    arg4 = Gosu::clamp<int>(NUM2ULONG(argv[3]), 0, 255);
+  }
   {
     try {
       result = Gosu_Color_argb__SWIG_1(arg1,arg2,arg3,arg4);
@@ -5194,7 +5102,7 @@ _wrap_interpolate(int argc, VALUE *argv, VALUE self) {
   }
   {
     if (TYPE(argv[0]) == T_FIXNUM || TYPE(argv[0]) == T_BIGNUM)
-    arg1 = Gosu::Color(NUM2UINT(argv[0]));
+    arg1 = Gosu::Color(NUM2ULONG(argv[0]));
     else
     {
       void* ptr;
@@ -5209,7 +5117,7 @@ _wrap_interpolate(int argc, VALUE *argv, VALUE self) {
   }
   {
     if (TYPE(argv[1]) == T_FIXNUM || TYPE(argv[1]) == T_BIGNUM)
-    arg2 = Gosu::Color(NUM2UINT(argv[1]));
+    arg2 = Gosu::Color(NUM2ULONG(argv[1]));
     else
     {
       void* ptr;
@@ -5255,7 +5163,7 @@ _wrap_multiply(int argc, VALUE *argv, VALUE self) {
   }
   {
     if (TYPE(argv[0]) == T_FIXNUM || TYPE(argv[0]) == T_BIGNUM)
-    arg1 = Gosu::Color(NUM2UINT(argv[0]));
+    arg1 = Gosu::Color(NUM2ULONG(argv[0]));
     else
     {
       void* ptr;
@@ -5270,7 +5178,7 @@ _wrap_multiply(int argc, VALUE *argv, VALUE self) {
   }
   {
     if (TYPE(argv[1]) == T_FIXNUM || TYPE(argv[1]) == T_BIGNUM)
-    arg2 = Gosu::Color(NUM2UINT(argv[1]));
+    arg2 = Gosu::Color(NUM2ULONG(argv[1]));
     else
     {
       void* ptr;
@@ -5608,7 +5516,7 @@ _wrap_Font_draw(int argc, VALUE *argv, VALUE self) {
   if (argc > 6) {
     {
       if (TYPE(argv[6]) == T_FIXNUM || TYPE(argv[6]) == T_BIGNUM)
-      arg8 = Gosu::Color(NUM2UINT(argv[6]));
+      arg8 = Gosu::Color(NUM2ULONG(argv[6]));
       else
       {
         void* ptr;
@@ -5737,7 +5645,7 @@ _wrap_Font_draw_rel(int argc, VALUE *argv, VALUE self) {
   if (argc > 8) {
     {
       if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
-      arg10 = Gosu::Color(NUM2UINT(argv[8]));
+      arg10 = Gosu::Color(NUM2ULONG(argv[8]));
       else
       {
         void* ptr;
@@ -5858,7 +5766,7 @@ _wrap_Font_draw_rot(int argc, VALUE *argv, VALUE self) {
   if (argc > 7) {
     {
       if (TYPE(argv[7]) == T_FIXNUM || TYPE(argv[7]) == T_BIGNUM)
-      arg9 = Gosu::Color(NUM2UINT(argv[7]));
+      arg9 = Gosu::Color(NUM2ULONG(argv[7]));
       else
       {
         void* ptr;
@@ -6452,7 +6360,7 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
   if (argc > 5) {
     {
       if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
-      arg7 = Gosu::Color(NUM2UINT(argv[5]));
+      arg7 = Gosu::Color(NUM2ULONG(argv[5]));
       else
       {
         void* ptr;
@@ -6556,7 +6464,7 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
   arg6 = static_cast< double >(val6);
   {
     if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
-    arg7 = Gosu::Color(NUM2UINT(argv[5]));
+    arg7 = Gosu::Color(NUM2ULONG(argv[5]));
     else
     {
       void* ptr;
@@ -6571,7 +6479,7 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
   }
   {
     if (TYPE(argv[6]) == T_FIXNUM || TYPE(argv[6]) == T_BIGNUM)
-    arg8 = Gosu::Color(NUM2UINT(argv[6]));
+    arg8 = Gosu::Color(NUM2ULONG(argv[6]));
     else
     {
       void* ptr;
@@ -6586,7 +6494,7 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
   }
   {
     if (TYPE(argv[7]) == T_FIXNUM || TYPE(argv[7]) == T_BIGNUM)
-    arg9 = Gosu::Color(NUM2UINT(argv[7]));
+    arg9 = Gosu::Color(NUM2ULONG(argv[7]));
     else
     {
       void* ptr;
@@ -6601,7 +6509,7 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
   }
   {
     if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
-    arg10 = Gosu::Color(NUM2UINT(argv[8]));
+    arg10 = Gosu::Color(NUM2ULONG(argv[8]));
     else
     {
       void* ptr;
@@ -6734,7 +6642,7 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
   if (argc > 8) {
     {
       if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
-      arg10 = Gosu::Color(NUM2UINT(argv[8]));
+      arg10 = Gosu::Color(NUM2ULONG(argv[8]));
       else
       {
         void* ptr;
@@ -7087,7 +6995,7 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   arg3 = static_cast< double >(val3);
   {
     if (TYPE(argv[2]) == T_FIXNUM || TYPE(argv[2]) == T_BIGNUM)
-    arg4 = Gosu::Color(NUM2UINT(argv[2]));
+    arg4 = Gosu::Color(NUM2ULONG(argv[2]));
     else
     {
       void* ptr;
@@ -7112,7 +7020,7 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   arg6 = static_cast< double >(val6);
   {
     if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
-    arg7 = Gosu::Color(NUM2UINT(argv[5]));
+    arg7 = Gosu::Color(NUM2ULONG(argv[5]));
     else
     {
       void* ptr;
@@ -7137,7 +7045,7 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   arg9 = static_cast< double >(val9);
   {
     if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
-    arg10 = Gosu::Color(NUM2UINT(argv[8]));
+    arg10 = Gosu::Color(NUM2ULONG(argv[8]));
     else
     {
       void* ptr;
@@ -7162,7 +7070,7 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   arg12 = static_cast< double >(val12);
   {
     if (TYPE(argv[11]) == T_FIXNUM || TYPE(argv[11]) == T_BIGNUM)
-    arg13 = Gosu::Color(NUM2UINT(argv[11]));
+    arg13 = Gosu::Color(NUM2ULONG(argv[11]));
     else
     {
       void* ptr;
@@ -9413,7 +9321,7 @@ _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
   arg3 = static_cast< double >(val3);
   {
     if (TYPE(argv[2]) == T_FIXNUM || TYPE(argv[2]) == T_BIGNUM)
-    arg4 = Gosu::Color(NUM2UINT(argv[2]));
+    arg4 = Gosu::Color(NUM2ULONG(argv[2]));
     else
     {
       void* ptr;
@@ -9438,7 +9346,7 @@ _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
   arg6 = static_cast< double >(val6);
   {
     if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
-    arg7 = Gosu::Color(NUM2UINT(argv[5]));
+    arg7 = Gosu::Color(NUM2ULONG(argv[5]));
     else
     {
       void* ptr;
@@ -9538,7 +9446,7 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
   arg3 = static_cast< double >(val3);
   {
     if (TYPE(argv[2]) == T_FIXNUM || TYPE(argv[2]) == T_BIGNUM)
-    arg4 = Gosu::Color(NUM2UINT(argv[2]));
+    arg4 = Gosu::Color(NUM2ULONG(argv[2]));
     else
     {
       void* ptr;
@@ -9563,7 +9471,7 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
   arg6 = static_cast< double >(val6);
   {
     if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
-    arg7 = Gosu::Color(NUM2UINT(argv[5]));
+    arg7 = Gosu::Color(NUM2ULONG(argv[5]));
     else
     {
       void* ptr;
@@ -9588,7 +9496,7 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
   arg9 = static_cast< double >(val9);
   {
     if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
-    arg10 = Gosu::Color(NUM2UINT(argv[8]));
+    arg10 = Gosu::Color(NUM2ULONG(argv[8]));
     else
     {
       void* ptr;
@@ -9695,7 +9603,7 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
   arg3 = static_cast< double >(val3);
   {
     if (TYPE(argv[2]) == T_FIXNUM || TYPE(argv[2]) == T_BIGNUM)
-    arg4 = Gosu::Color(NUM2UINT(argv[2]));
+    arg4 = Gosu::Color(NUM2ULONG(argv[2]));
     else
     {
       void* ptr;
@@ -9720,7 +9628,7 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
   arg6 = static_cast< double >(val6);
   {
     if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
-    arg7 = Gosu::Color(NUM2UINT(argv[5]));
+    arg7 = Gosu::Color(NUM2ULONG(argv[5]));
     else
     {
       void* ptr;
@@ -9745,7 +9653,7 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
   arg9 = static_cast< double >(val9);
   {
     if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
-    arg10 = Gosu::Color(NUM2UINT(argv[8]));
+    arg10 = Gosu::Color(NUM2ULONG(argv[8]));
     else
     {
       void* ptr;
@@ -9770,7 +9678,7 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
   arg12 = static_cast< double >(val12);
   {
     if (TYPE(argv[11]) == T_FIXNUM || TYPE(argv[11]) == T_BIGNUM)
-    arg13 = Gosu::Color(NUM2UINT(argv[11]));
+    arg13 = Gosu::Color(NUM2ULONG(argv[11]));
     else
     {
       void* ptr;

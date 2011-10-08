@@ -124,7 +124,7 @@
 // Allow integral constants to be passed in place of Color values.
 %typemap(in) Gosu::Color {    
     if (TYPE($input) == T_FIXNUM || TYPE($input) == T_BIGNUM)
-        $1 = Gosu::Color(NUM2UINT($input));
+        $1 = Gosu::Color(NUM2ULONG($input));
     else
     {
         void* ptr;
@@ -136,6 +136,11 @@
         else
             $1 = *reinterpret_cast<Gosu::Color*>(ptr);
     }
+}
+
+// Make color channels less strict.
+%typemap(in) Gosu::Color::Channel {
+    $1 = Gosu::clamp<int>(NUM2ULONG($input), 0, 255);
 }
 
 // Header inclusion (order irrelevant)
@@ -284,8 +289,8 @@ namespace Gosu
         VALUE conversion = rb_str_new2("to_blob { self.format = 'RGBA'; self.depth = 8 }");
         VALUE blob = rb_obj_instance_eval(1, &conversion, val);
         rb_check_safe_obj(blob);
-        unsigned width = NUM2UINT(rb_funcall(val, rb_intern("columns"), 0));
-        unsigned height = NUM2UINT(rb_funcall(val, rb_intern("rows"), 0));
+        unsigned width = NUM2ULONG(rb_funcall(val, rb_intern("columns"), 0));
+        unsigned height = NUM2ULONG(rb_funcall(val, rb_intern("rows"), 0));
         
         bitmap.resize(width, height, Gosu::Color::NONE);
         if (width * height * 4 == RSTRING_LEN(blob))
@@ -446,7 +451,7 @@ namespace Gosu {
     
     bool operator==(VALUE other) {
         if (TYPE(other) == T_FIXNUM || TYPE(other) == T_BIGNUM)
-            return *$self == Gosu::Color(NUM2UINT(other));
+            return *$self == Gosu::Color(NUM2ULONG(other));
         void* ptr;
         int res = SWIG_ConvertPtr(other, &ptr, SWIGTYPE_p_Gosu__Color, 0);
         return SWIG_IsOK(res) && ptr && *$self == *reinterpret_cast<Gosu::Color*>(ptr);
