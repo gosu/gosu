@@ -2345,8 +2345,8 @@ namespace Gosu
         VALUE conversion = rb_str_new2("to_blob { self.format = 'RGBA'; self.depth = 8 }");
         VALUE blob = rb_obj_instance_eval(1, &conversion, val);
         rb_check_safe_obj(blob);
-        unsigned width = NUM2UINT(rb_funcall(val, rb_intern("columns"), 0));
-        unsigned height = NUM2UINT(rb_funcall(val, rb_intern("rows"), 0));
+        unsigned width = NUM2ULONG(rb_funcall(val, rb_intern("columns"), 0));
+        unsigned height = NUM2ULONG(rb_funcall(val, rb_intern("rows"), 0));
         
         bitmap.resize(width, height, Gosu::Color::NONE);
         if (width * height * 4 == RSTRING_LEN(blob))
@@ -2533,22 +2533,6 @@ SWIG_AsVal_unsigned_SS_int (VALUE obj, unsigned int *val)
 }
 
 
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_char (VALUE obj, unsigned char *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
-  if (SWIG_IsOK(res)) {
-    if ((v > UCHAR_MAX)) {
-      return SWIG_OverflowError;
-    } else {
-      if (val) *val = static_cast< unsigned char >(v);
-    }
-  }  
-  return res;
-}
-
-
 SWIGINTERNINLINE VALUE
 SWIG_From_unsigned_SS_char  (unsigned char value)
 {    
@@ -2591,7 +2575,7 @@ SWIG_From_std_string  (const std::string& s)
 
 SWIGINTERN bool Gosu_Color_operator_Se__Se_(Gosu::Color *self,VALUE other){
         if (TYPE(other) == T_FIXNUM || TYPE(other) == T_BIGNUM)
-            return *self == Gosu::Color(NUM2UINT(other));
+            return *self == Gosu::Color(NUM2ULONG(other));
         void* ptr;
         int res = SWIG_ConvertPtr(other, &ptr, SWIGTYPE_p_Gosu__Color, 0);
         return SWIG_IsOK(res) && ptr && *self == *reinterpret_cast<Gosu::Color*>(ptr);
@@ -3031,7 +3015,7 @@ _wrap_milliseconds(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (unsigned long)Gosu::milliseconds();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3069,7 +3053,7 @@ _wrap_random(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)Gosu::random(arg1,arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3099,7 +3083,7 @@ _wrap_degrees_to_radians(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)Gosu::degreesToRadians(arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3129,7 +3113,7 @@ _wrap_radians_to_degrees(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)Gosu::radiansToDegrees(arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3167,7 +3151,7 @@ _wrap_offset_x(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)Gosu::offsetX(arg1,arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3205,7 +3189,7 @@ _wrap_offset_y(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)Gosu::offsetY(arg1,arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3269,7 +3253,7 @@ _wrap_angle(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)Gosu::angle(arg1,arg2,arg3,arg4,arg5);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3307,7 +3291,7 @@ _wrap_angle_diff(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)Gosu::angleDiff(arg1,arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3337,7 +3321,7 @@ _wrap_normalize_angle(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)Gosu::normalizeAngle(arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3391,7 +3375,7 @@ _wrap_distance(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)Gosu::distance(arg1,arg2,arg3,arg4);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3413,7 +3397,7 @@ _wrap_default_font_name(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu::defaultFontName();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3438,7 +3422,7 @@ _wrap_screen_width(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (unsigned int)Gosu::screenWidth();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3460,7 +3444,7 @@ _wrap_screen_height(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (unsigned int)Gosu::screenHeight();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3498,7 +3482,7 @@ _wrap_translate(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu::translate(arg1,arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3548,7 +3532,7 @@ _wrap_rotate(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu::rotate(arg1,arg2,arg3);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3578,7 +3562,7 @@ _wrap_scale__SWIG_0(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu::scale(arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3636,7 +3620,7 @@ _wrap_scale__SWIG_1(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu::scale(arg1,arg2,arg3,arg4);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3722,7 +3706,7 @@ _wrap_language(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu::language();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3744,7 +3728,7 @@ _wrap_enable_undocumented_retrofication(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu::enableUndocumentedRetrofication();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3778,7 +3762,7 @@ _wrap_register_entity(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu::register_entity((std::wstring const &)*arg1,arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3803,7 +3787,7 @@ _wrap_new_Color__SWIG_0(int argc, VALUE *argv, VALUE self) {
       result = (Gosu::Color *)new Gosu::Color();
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3834,7 +3818,7 @@ _wrap_new_Color__SWIG_1(int argc, VALUE *argv, VALUE self) {
       result = (Gosu::Color *)new Gosu::Color(arg1);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3849,39 +3833,27 @@ _wrap_new_Color__SWIG_2(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg1 ;
   Gosu::Color::Channel arg2 ;
   Gosu::Color::Channel arg3 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
-  unsigned char val3 ;
-  int ecode3 = 0 ;
   const char *classname SWIGUNUSED = "Gosu::Color";
   Gosu::Color *result = 0 ;
   
   if ((argc < 3) || (argc > 3)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color", 1, argv[0] ));
-  } 
-  arg1 = static_cast< Gosu::Color::Channel >(val1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color", 2, argv[1] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_char(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color", 3, argv[2] ));
-  } 
-  arg3 = static_cast< Gosu::Color::Channel >(val3);
+  {
+    arg1 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[1]), 0, 255);
+  }
+  {
+    arg3 = Gosu::clamp<int>(NUM2ULONG(argv[2]), 0, 255);
+  }
   {
     try {
       result = (Gosu::Color *)new Gosu::Color(arg1,arg2,arg3);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3914,46 +3886,30 @@ _wrap_new_Color__SWIG_3(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg2 ;
   Gosu::Color::Channel arg3 ;
   Gosu::Color::Channel arg4 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
-  unsigned char val3 ;
-  int ecode3 = 0 ;
-  unsigned char val4 ;
-  int ecode4 = 0 ;
   const char *classname SWIGUNUSED = "Gosu::Color";
   Gosu::Color *result = 0 ;
   
   if ((argc < 4) || (argc > 4)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color", 1, argv[0] ));
-  } 
-  arg1 = static_cast< Gosu::Color::Channel >(val1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color", 2, argv[1] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_char(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color", 3, argv[2] ));
-  } 
-  arg3 = static_cast< Gosu::Color::Channel >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_char(argv[3], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color", 4, argv[3] ));
-  } 
-  arg4 = static_cast< Gosu::Color::Channel >(val4);
+  {
+    arg1 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[1]), 0, 255);
+  }
+  {
+    arg3 = Gosu::clamp<int>(NUM2ULONG(argv[2]), 0, 255);
+  }
+  {
+    arg4 = Gosu::clamp<int>(NUM2ULONG(argv[3]), 0, 255);
+  }
   {
     try {
       result = (Gosu::Color *)new Gosu::Color(arg1,arg2,arg3,arg4);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -3989,18 +3945,15 @@ SWIGINTERN VALUE _wrap_new_Color(int nargs, VALUE *args, VALUE self) {
   if (argc == 3) {
     int _v;
     {
-      int res = SWIG_AsVal_unsigned_SS_char(argv[0], NULL);
-      _v = SWIG_CheckState(res);
+      _v = !!rb_respond_to(argv[0], rb_intern("to_i"));
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_char(argv[1], NULL);
-        _v = SWIG_CheckState(res);
+        _v = !!rb_respond_to(argv[1], rb_intern("to_i"));
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_char(argv[2], NULL);
-          _v = SWIG_CheckState(res);
+          _v = !!rb_respond_to(argv[2], rb_intern("to_i"));
         }
         if (_v) {
           return _wrap_new_Color__SWIG_2(nargs, args, self);
@@ -4011,23 +3964,19 @@ SWIGINTERN VALUE _wrap_new_Color(int nargs, VALUE *args, VALUE self) {
   if (argc == 4) {
     int _v;
     {
-      int res = SWIG_AsVal_unsigned_SS_char(argv[0], NULL);
-      _v = SWIG_CheckState(res);
+      _v = !!rb_respond_to(argv[0], rb_intern("to_i"));
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_char(argv[1], NULL);
-        _v = SWIG_CheckState(res);
+        _v = !!rb_respond_to(argv[1], rb_intern("to_i"));
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_char(argv[2], NULL);
-          _v = SWIG_CheckState(res);
+          _v = !!rb_respond_to(argv[2], rb_intern("to_i"));
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_char(argv[3], NULL);
-            _v = SWIG_CheckState(res);
+            _v = !!rb_respond_to(argv[3], rb_intern("to_i"));
           }
           if (_v) {
             return _wrap_new_Color__SWIG_3(nargs, args, self);
@@ -4083,7 +4032,7 @@ _wrap_Color_from_hsv(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu::Color::fromHSV(arg1,arg2,arg3);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4100,8 +4049,6 @@ _wrap_Color_from_ahsv(int argc, VALUE *argv, VALUE self) {
   double arg2 ;
   double arg3 ;
   double arg4 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
   double val2 ;
   int ecode2 = 0 ;
   double val3 ;
@@ -4114,11 +4061,9 @@ _wrap_Color_from_ahsv(int argc, VALUE *argv, VALUE self) {
   if ((argc < 4) || (argc > 4)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu::Color::fromAHSV", 1, argv[0] ));
-  } 
-  arg1 = static_cast< Gosu::Color::Channel >(val1);
+  {
+    arg1 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
   ecode2 = SWIG_AsVal_double(argv[1], &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","Gosu::Color::fromAHSV", 2, argv[1] ));
@@ -4137,7 +4082,7 @@ _wrap_Color_from_ahsv(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu::Color::fromAHSV(arg1,arg2,arg3,arg4);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4167,7 +4112,7 @@ _wrap_Color_red(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = ((Gosu::Color const *)arg1)->red();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4197,7 +4142,7 @@ _wrap_Color_green(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = ((Gosu::Color const *)arg1)->green();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4227,7 +4172,7 @@ _wrap_Color_blue(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = ((Gosu::Color const *)arg1)->blue();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4257,7 +4202,7 @@ _wrap_Color_alpha(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = ((Gosu::Color const *)arg1)->alpha();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4274,8 +4219,6 @@ _wrap_Color_rede___(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
@@ -4285,15 +4228,13 @@ _wrap_Color_rede___(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color *","setRed", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","setRed", 2, argv[0] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
   {
     try {
       (arg1)->setRed(arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4309,8 +4250,6 @@ _wrap_Color_greene___(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
@@ -4320,15 +4259,13 @@ _wrap_Color_greene___(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color *","setGreen", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","setGreen", 2, argv[0] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
   {
     try {
       (arg1)->setGreen(arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4344,8 +4281,6 @@ _wrap_Color_bluee___(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
@@ -4355,15 +4290,13 @@ _wrap_Color_bluee___(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color *","setBlue", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","setBlue", 2, argv[0] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
   {
     try {
       (arg1)->setBlue(arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4379,8 +4312,6 @@ _wrap_Color_alphae___(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
@@ -4390,15 +4321,13 @@ _wrap_Color_alphae___(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color *","setAlpha", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","setAlpha", 2, argv[0] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
   {
     try {
       (arg1)->setAlpha(arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4427,7 +4356,7 @@ _wrap_Color_hue(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)((Gosu::Color const *)arg1)->hue();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4463,7 +4392,7 @@ _wrap_Color_huee___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->setHue(arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4492,7 +4421,7 @@ _wrap_Color_saturation(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)((Gosu::Color const *)arg1)->saturation();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4528,7 +4457,7 @@ _wrap_Color_saturatione___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->setSaturation(arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4557,7 +4486,7 @@ _wrap_Color_value(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)((Gosu::Color const *)arg1)->value();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4593,7 +4522,7 @@ _wrap_Color_valuee___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->setValue(arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4622,7 +4551,7 @@ _wrap_Color_argb__SWIG_0(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = ((Gosu::Color const *)arg1)->argb();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4652,7 +4581,7 @@ _wrap_Color_bgr(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = ((Gosu::Color const *)arg1)->bgr();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4682,7 +4611,7 @@ _wrap_Color_abgr(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = ((Gosu::Color const *)arg1)->abgr();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4712,7 +4641,7 @@ _wrap_Color_gl(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = ((Gosu::Color const *)arg1)->gl();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4728,37 +4657,25 @@ _wrap_Color_rgb(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg1 ;
   Gosu::Color::Channel arg2 ;
   Gosu::Color::Channel arg3 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
-  unsigned char val3 ;
-  int ecode3 = 0 ;
   Gosu::Color result;
   VALUE vresult = Qnil;
   
   if ((argc < 3) || (argc > 3)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_rgb", 1, argv[0] ));
-  } 
-  arg1 = static_cast< Gosu::Color::Channel >(val1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_rgb", 2, argv[1] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_char(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_rgb", 3, argv[2] ));
-  } 
-  arg3 = static_cast< Gosu::Color::Channel >(val3);
+  {
+    arg1 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[1]), 0, 255);
+  }
+  {
+    arg3 = Gosu::clamp<int>(NUM2ULONG(argv[2]), 0, 255);
+  }
   {
     try {
       result = Gosu_Color_rgb(arg1,arg2,arg3);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4775,44 +4692,28 @@ _wrap_Color_rgba__SWIG_0(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg2 ;
   Gosu::Color::Channel arg3 ;
   Gosu::Color::Channel arg4 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
-  unsigned char val3 ;
-  int ecode3 = 0 ;
-  unsigned char val4 ;
-  int ecode4 = 0 ;
   Gosu::Color result;
   VALUE vresult = Qnil;
   
   if ((argc < 4) || (argc > 4)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_rgba__SWIG_0", 1, argv[0] ));
-  } 
-  arg1 = static_cast< Gosu::Color::Channel >(val1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_rgba__SWIG_0", 2, argv[1] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_char(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_rgba__SWIG_0", 3, argv[2] ));
-  } 
-  arg3 = static_cast< Gosu::Color::Channel >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_char(argv[3], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_rgba__SWIG_0", 4, argv[3] ));
-  } 
-  arg4 = static_cast< Gosu::Color::Channel >(val4);
+  {
+    arg1 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[1]), 0, 255);
+  }
+  {
+    arg3 = Gosu::clamp<int>(NUM2ULONG(argv[2]), 0, 255);
+  }
+  {
+    arg4 = Gosu::clamp<int>(NUM2ULONG(argv[3]), 0, 255);
+  }
   {
     try {
       result = Gosu_Color_rgba__SWIG_0(arg1,arg2,arg3,arg4);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4842,7 +4743,7 @@ _wrap_Color_rgba__SWIG_1(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu_Color_rgba__SWIG_1(arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4876,23 +4777,19 @@ SWIGINTERN VALUE _wrap_Color_rgba(int nargs, VALUE *args, VALUE self) {
   if (argc == 4) {
     int _v;
     {
-      int res = SWIG_AsVal_unsigned_SS_char(argv[0], NULL);
-      _v = SWIG_CheckState(res);
+      _v = !!rb_respond_to(argv[0], rb_intern("to_i"));
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_char(argv[1], NULL);
-        _v = SWIG_CheckState(res);
+        _v = !!rb_respond_to(argv[1], rb_intern("to_i"));
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_char(argv[2], NULL);
-          _v = SWIG_CheckState(res);
+          _v = !!rb_respond_to(argv[2], rb_intern("to_i"));
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_char(argv[3], NULL);
-            _v = SWIG_CheckState(res);
+            _v = !!rb_respond_to(argv[3], rb_intern("to_i"));
           }
           if (_v) {
             return _wrap_Color_rgba__SWIG_0(nargs, args, self);
@@ -4917,44 +4814,28 @@ _wrap_Color_argb__SWIG_1(int argc, VALUE *argv, VALUE self) {
   Gosu::Color::Channel arg2 ;
   Gosu::Color::Channel arg3 ;
   Gosu::Color::Channel arg4 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
-  unsigned char val3 ;
-  int ecode3 = 0 ;
-  unsigned char val4 ;
-  int ecode4 = 0 ;
   Gosu::Color result;
   VALUE vresult = Qnil;
   
   if ((argc < 4) || (argc > 4)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_argb__SWIG_1", 1, argv[0] ));
-  } 
-  arg1 = static_cast< Gosu::Color::Channel >(val1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_argb__SWIG_1", 2, argv[1] ));
-  } 
-  arg2 = static_cast< Gosu::Color::Channel >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_char(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_argb__SWIG_1", 3, argv[2] ));
-  } 
-  arg3 = static_cast< Gosu::Color::Channel >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_char(argv[3], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "Gosu::Color::Channel","Gosu_Color_argb__SWIG_1", 4, argv[3] ));
-  } 
-  arg4 = static_cast< Gosu::Color::Channel >(val4);
+  {
+    arg1 = Gosu::clamp<int>(NUM2ULONG(argv[0]), 0, 255);
+  }
+  {
+    arg2 = Gosu::clamp<int>(NUM2ULONG(argv[1]), 0, 255);
+  }
+  {
+    arg3 = Gosu::clamp<int>(NUM2ULONG(argv[2]), 0, 255);
+  }
+  {
+    arg4 = Gosu::clamp<int>(NUM2ULONG(argv[3]), 0, 255);
+  }
   {
     try {
       result = Gosu_Color_argb__SWIG_1(arg1,arg2,arg3,arg4);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -4984,7 +4865,7 @@ _wrap_Color_argb__SWIG_2(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu_Color_argb__SWIG_2(arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -5027,23 +4908,19 @@ SWIGINTERN VALUE _wrap_Color_argb(int nargs, VALUE *args, VALUE self) {
   if (argc == 4) {
     int _v;
     {
-      int res = SWIG_AsVal_unsigned_SS_char(argv[0], NULL);
-      _v = SWIG_CheckState(res);
+      _v = !!rb_respond_to(argv[0], rb_intern("to_i"));
     }
     if (_v) {
       {
-        int res = SWIG_AsVal_unsigned_SS_char(argv[1], NULL);
-        _v = SWIG_CheckState(res);
+        _v = !!rb_respond_to(argv[1], rb_intern("to_i"));
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_char(argv[2], NULL);
-          _v = SWIG_CheckState(res);
+          _v = !!rb_respond_to(argv[2], rb_intern("to_i"));
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_unsigned_SS_char(argv[3], NULL);
-            _v = SWIG_CheckState(res);
+            _v = !!rb_respond_to(argv[3], rb_intern("to_i"));
           }
           if (_v) {
             return _wrap_Color_argb__SWIG_1(nargs, args, self);
@@ -5091,7 +4968,7 @@ _wrap_Color_dup(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu_Color_dup((Gosu::Color const *)arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -5121,7 +4998,7 @@ _wrap_Color_to_s(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu_Color_toS((Gosu::Color const *)arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -5162,7 +5039,7 @@ _wrap_Color___eq__(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (bool)Gosu_Color_operator_Se__Se_(arg1,arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -5194,7 +5071,7 @@ _wrap_interpolate(int argc, VALUE *argv, VALUE self) {
   }
   {
     if (TYPE(argv[0]) == T_FIXNUM || TYPE(argv[0]) == T_BIGNUM)
-    arg1 = Gosu::Color(NUM2UINT(argv[0]));
+    arg1 = Gosu::Color(NUM2ULONG(argv[0]));
     else
     {
       void* ptr;
@@ -5209,7 +5086,7 @@ _wrap_interpolate(int argc, VALUE *argv, VALUE self) {
   }
   {
     if (TYPE(argv[1]) == T_FIXNUM || TYPE(argv[1]) == T_BIGNUM)
-    arg2 = Gosu::Color(NUM2UINT(argv[1]));
+    arg2 = Gosu::Color(NUM2ULONG(argv[1]));
     else
     {
       void* ptr;
@@ -5232,7 +5109,7 @@ _wrap_interpolate(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu::interpolate(arg1,arg2,arg3);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -5255,7 +5132,7 @@ _wrap_multiply(int argc, VALUE *argv, VALUE self) {
   }
   {
     if (TYPE(argv[0]) == T_FIXNUM || TYPE(argv[0]) == T_BIGNUM)
-    arg1 = Gosu::Color(NUM2UINT(argv[0]));
+    arg1 = Gosu::Color(NUM2ULONG(argv[0]));
     else
     {
       void* ptr;
@@ -5270,7 +5147,7 @@ _wrap_multiply(int argc, VALUE *argv, VALUE self) {
   }
   {
     if (TYPE(argv[1]) == T_FIXNUM || TYPE(argv[1]) == T_BIGNUM)
-    arg2 = Gosu::Color(NUM2UINT(argv[1]));
+    arg2 = Gosu::Color(NUM2ULONG(argv[1]));
     else
     {
       void* ptr;
@@ -5286,7 +5163,7 @@ _wrap_multiply(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu::multiply(arg1,arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -5417,7 +5294,7 @@ _wrap_Font_name(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = ((Gosu::Font const *)arg1)->name();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -5450,7 +5327,7 @@ _wrap_Font_height(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (unsigned int)((Gosu::Font const *)arg1)->height();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -5480,7 +5357,7 @@ _wrap_Font_flags(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (unsigned int)((Gosu::Font const *)arg1)->flags();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -5527,7 +5404,7 @@ _wrap_Font_text_width(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)((Gosu::Font const *)arg1)->textWidth((std::wstring const &)*arg2,arg3);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -5608,7 +5485,7 @@ _wrap_Font_draw(int argc, VALUE *argv, VALUE self) {
   if (argc > 6) {
     {
       if (TYPE(argv[6]) == T_FIXNUM || TYPE(argv[6]) == T_BIGNUM)
-      arg8 = Gosu::Color(NUM2UINT(argv[6]));
+      arg8 = Gosu::Color(NUM2ULONG(argv[6]));
       else
       {
         void* ptr;
@@ -5641,7 +5518,7 @@ _wrap_Font_draw(int argc, VALUE *argv, VALUE self) {
   {
     try {
       ((Gosu::Font const *)arg1)->draw((std::wstring const &)*arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -5737,7 +5614,7 @@ _wrap_Font_draw_rel(int argc, VALUE *argv, VALUE self) {
   if (argc > 8) {
     {
       if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
-      arg10 = Gosu::Color(NUM2UINT(argv[8]));
+      arg10 = Gosu::Color(NUM2ULONG(argv[8]));
       else
       {
         void* ptr;
@@ -5770,7 +5647,7 @@ _wrap_Font_draw_rel(int argc, VALUE *argv, VALUE self) {
   {
     try {
       ((Gosu::Font const *)arg1)->drawRel((std::wstring const &)*arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -5858,7 +5735,7 @@ _wrap_Font_draw_rot(int argc, VALUE *argv, VALUE self) {
   if (argc > 7) {
     {
       if (TYPE(argv[7]) == T_FIXNUM || TYPE(argv[7]) == T_BIGNUM)
-      arg9 = Gosu::Color(NUM2UINT(argv[7]));
+      arg9 = Gosu::Color(NUM2ULONG(argv[7]));
       else
       {
         void* ptr;
@@ -5891,7 +5768,7 @@ _wrap_Font_draw_rot(int argc, VALUE *argv, VALUE self) {
   {
     try {
       ((Gosu::Font const *)arg1)->drawRot((std::wstring const &)*arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -5957,7 +5834,7 @@ _wrap_new_Font(int argc, VALUE *argv, VALUE self) {
       result = (Gosu::Font *)new_Gosu_Font(*arg1,(std::wstring const &)*arg2,arg3);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -5998,7 +5875,7 @@ _wrap_Font_set_image(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Font_set_image(arg1,arg2,arg3);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -6311,7 +6188,7 @@ _wrap_new_GLTexInfo(int argc, VALUE *argv, VALUE self) {
       result = (Gosu::GLTexInfo *)new Gosu::GLTexInfo();
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -6348,7 +6225,7 @@ _wrap_Image_width(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (unsigned int)((Gosu::Image const *)arg1)->width();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -6378,7 +6255,7 @@ _wrap_Image_height(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (unsigned int)((Gosu::Image const *)arg1)->height();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -6452,7 +6329,7 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
   if (argc > 5) {
     {
       if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
-      arg7 = Gosu::Color(NUM2UINT(argv[5]));
+      arg7 = Gosu::Color(NUM2ULONG(argv[5]));
       else
       {
         void* ptr;
@@ -6485,7 +6362,7 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
   {
     try {
       ((Gosu::Image const *)arg1)->draw(arg2,arg3,arg4,arg5,arg6,arg7,arg8);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -6556,7 +6433,7 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
   arg6 = static_cast< double >(val6);
   {
     if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
-    arg7 = Gosu::Color(NUM2UINT(argv[5]));
+    arg7 = Gosu::Color(NUM2ULONG(argv[5]));
     else
     {
       void* ptr;
@@ -6571,7 +6448,7 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
   }
   {
     if (TYPE(argv[6]) == T_FIXNUM || TYPE(argv[6]) == T_BIGNUM)
-    arg8 = Gosu::Color(NUM2UINT(argv[6]));
+    arg8 = Gosu::Color(NUM2ULONG(argv[6]));
     else
     {
       void* ptr;
@@ -6586,7 +6463,7 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
   }
   {
     if (TYPE(argv[7]) == T_FIXNUM || TYPE(argv[7]) == T_BIGNUM)
-    arg9 = Gosu::Color(NUM2UINT(argv[7]));
+    arg9 = Gosu::Color(NUM2ULONG(argv[7]));
     else
     {
       void* ptr;
@@ -6601,7 +6478,7 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
   }
   {
     if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
-    arg10 = Gosu::Color(NUM2UINT(argv[8]));
+    arg10 = Gosu::Color(NUM2ULONG(argv[8]));
     else
     {
       void* ptr;
@@ -6633,7 +6510,7 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
   {
     try {
       ((Gosu::Image const *)arg1)->drawMod(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -6734,7 +6611,7 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
   if (argc > 8) {
     {
       if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
-      arg10 = Gosu::Color(NUM2UINT(argv[8]));
+      arg10 = Gosu::Color(NUM2ULONG(argv[8]));
       else
       {
         void* ptr;
@@ -6767,7 +6644,7 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
   {
     try {
       ((Gosu::Image const *)arg1)->drawRot(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -6796,7 +6673,7 @@ _wrap_Image_get_data(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::ImageData *) &((Gosu::Image const *)arg1)->getData();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -6843,7 +6720,7 @@ _wrap_new_Image__SWIG_0(int argc, VALUE *argv, VALUE self) {
       result = (Gosu::Image *)new_Gosu_Image__SWIG_0(*arg1,arg2,arg3);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -6936,7 +6813,7 @@ _wrap_new_Image__SWIG_1(int argc, VALUE *argv, VALUE self) {
       result = (Gosu::Image *)new_Gosu_Image__SWIG_1(*arg1,arg2,arg3,arg4,arg5,arg6,arg7);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7087,7 +6964,7 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   arg3 = static_cast< double >(val3);
   {
     if (TYPE(argv[2]) == T_FIXNUM || TYPE(argv[2]) == T_BIGNUM)
-    arg4 = Gosu::Color(NUM2UINT(argv[2]));
+    arg4 = Gosu::Color(NUM2ULONG(argv[2]));
     else
     {
       void* ptr;
@@ -7112,7 +6989,7 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   arg6 = static_cast< double >(val6);
   {
     if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
-    arg7 = Gosu::Color(NUM2UINT(argv[5]));
+    arg7 = Gosu::Color(NUM2ULONG(argv[5]));
     else
     {
       void* ptr;
@@ -7137,7 +7014,7 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   arg9 = static_cast< double >(val9);
   {
     if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
-    arg10 = Gosu::Color(NUM2UINT(argv[8]));
+    arg10 = Gosu::Color(NUM2ULONG(argv[8]));
     else
     {
       void* ptr;
@@ -7162,7 +7039,7 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   arg12 = static_cast< double >(val12);
   {
     if (TYPE(argv[11]) == T_FIXNUM || TYPE(argv[11]) == T_BIGNUM)
-    arg13 = Gosu::Color(NUM2UINT(argv[11]));
+    arg13 = Gosu::Color(NUM2ULONG(argv[11]));
     else
     {
       void* ptr;
@@ -7199,7 +7076,7 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Image_drawAsQuad(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13,arg14,arg15);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7228,7 +7105,7 @@ _wrap_Image_gl_tex_info(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::GLTexInfo *)Gosu_Image_glTexInfo((Gosu::Image const *)arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7283,7 +7160,7 @@ _wrap_Image_from_text4(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::Image *)Gosu_Image_fromText4(*arg1,(std::wstring const &)*arg2,(std::wstring const &)*arg3,arg4);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7371,7 +7248,7 @@ _wrap_Image_from_text7(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::Image *)Gosu_Image_fromText7(*arg1,(std::wstring const &)*arg2,(std::wstring const &)*arg3,arg4,arg5,arg6,arg7);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7430,7 +7307,7 @@ _wrap_Image_load_tiles(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu_Image_loadTiles(*arg1,arg2,arg3,arg4,arg5);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7466,7 +7343,7 @@ _wrap_Image_to_blob(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu_Image_toBlob((Gosu::Image const *)arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7496,7 +7373,7 @@ _wrap_Image_columns(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (unsigned int)Gosu_Image_columns((Gosu::Image const *)arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7526,7 +7403,7 @@ _wrap_Image_rows(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (unsigned int)Gosu_Image_rows((Gosu::Image const *)arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7561,7 +7438,7 @@ _wrap_Image_save(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Image_save((Gosu::Image const *)arg1,(std::wstring const &)*arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7615,7 +7492,7 @@ _wrap_Image_insert(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Image_insert(arg1,arg2,arg3,arg4);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7642,7 +7519,7 @@ _wrap_fps(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (int)Gosu::fps();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7701,7 +7578,7 @@ _wrap_new_SampleInstance(int argc, VALUE *argv, VALUE self) {
       result = (Gosu::SampleInstance *)new Gosu::SampleInstance(arg1,arg2);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7730,7 +7607,7 @@ _wrap_SampleInstance_playingq___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (bool)((Gosu::SampleInstance const *)arg1)->playing();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7760,7 +7637,7 @@ _wrap_SampleInstance_pausedq___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (bool)((Gosu::SampleInstance const *)arg1)->paused();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7788,7 +7665,7 @@ _wrap_SampleInstance_pause(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->pause();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7815,7 +7692,7 @@ _wrap_SampleInstance_resume(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->resume();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7842,7 +7719,7 @@ _wrap_SampleInstance_stop(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->stop();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7877,7 +7754,7 @@ _wrap_SampleInstance_volumee___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->changeVolume(arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7912,7 +7789,7 @@ _wrap_SampleInstance_pane___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->changePan(arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -7947,7 +7824,7 @@ _wrap_SampleInstance_speede___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->changeSpeed(arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8002,7 +7879,7 @@ _wrap_new_Sample(int argc, VALUE *argv, VALUE self) {
       result = (Gosu::Sample *)new Gosu::Sample((std::wstring const &)*arg1);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8061,7 +7938,7 @@ _wrap_Sample_play(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = ((Gosu::Sample const *)arg1)->play(arg2,arg3,arg4);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8129,7 +8006,7 @@ _wrap_Sample_play_pan(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = ((Gosu::Sample const *)arg1)->playPan(arg2,arg3,arg4,arg5);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8185,7 +8062,7 @@ _wrap_new_Song(int argc, VALUE *argv, VALUE self) {
       result = (Gosu::Song *)new Gosu::Song((std::wstring const &)*arg1);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8212,7 +8089,7 @@ _wrap_Song_current_song(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::Song *)Gosu::Song::currentSong();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8250,7 +8127,7 @@ _wrap_Song_play(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->play(arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8277,7 +8154,7 @@ _wrap_Song_pause(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->pause();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8306,7 +8183,7 @@ _wrap_Song_pausedq___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (bool)((Gosu::Song const *)arg1)->paused();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8334,7 +8211,7 @@ _wrap_Song_stop(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->stop();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8363,7 +8240,7 @@ _wrap_Song_playingq___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (bool)((Gosu::Song const *)arg1)->playing();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8393,7 +8270,7 @@ _wrap_Song_volume(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)((Gosu::Song const *)arg1)->volume();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8429,7 +8306,7 @@ _wrap_Song_volumee___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->changeVolume(arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8447,7 +8324,7 @@ _wrap_Song_update(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu::Song::update();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8497,7 +8374,7 @@ _wrap_new_TextInput(int argc, VALUE *argv, VALUE self) {
       
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8532,7 +8409,7 @@ _wrap_TextInput_text(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = ((Gosu::TextInput const *)arg1)->text();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8570,7 +8447,7 @@ _wrap_TextInput_texte___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->setText((std::wstring const &)*arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8605,7 +8482,7 @@ _wrap_TextInput_caret_pose___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->setCaretPos(arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8640,7 +8517,7 @@ _wrap_TextInput_selection_starte___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->setSelectionStart(arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8685,7 +8562,7 @@ _wrap_TextInput_filter(int argc, VALUE *argv, VALUE self) {
         } else {
           result = ((Gosu::TextInput const *)arg1)->filter((std::wstring const &)*arg2);
         }
-      } catch(const std::runtime_error& e) {
+      } catch (const std::exception& e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
     }
@@ -8722,7 +8599,7 @@ _wrap_TextInput_caret_pos(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (unsigned int)Gosu_TextInput_caret_pos((Gosu::TextInput const *)arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8752,7 +8629,7 @@ _wrap_TextInput_selection_start(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (unsigned int)Gosu_TextInput_selection_start((Gosu::TextInput const *)arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8862,7 +8739,7 @@ _wrap_new_Window(int argc, VALUE *argv, VALUE self) {
       
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8897,7 +8774,7 @@ _wrap_Window_caption(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = ((Gosu::Window const *)arg1)->caption();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8935,7 +8812,7 @@ _wrap_Window_captione___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->setCaption((std::wstring const &)*arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8964,7 +8841,7 @@ _wrap_Window_update_interval(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)((Gosu::Window const *)arg1)->updateInterval();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -8992,7 +8869,7 @@ _wrap_Window_show(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->show();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -9019,7 +8896,7 @@ _wrap_Window_close(int argc, VALUE *argv, VALUE self) {
   {
     try {
       (arg1)->close();
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -9055,7 +8932,7 @@ _wrap_Window_update(int argc, VALUE *argv, VALUE self) {
         } else {
           (arg1)->update();
         }
-      } catch(const std::runtime_error& e) {
+      } catch (const std::exception& e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
     }
@@ -9095,7 +8972,7 @@ _wrap_Window_draw(int argc, VALUE *argv, VALUE self) {
         } else {
           (arg1)->draw();
         }
-      } catch(const std::runtime_error& e) {
+      } catch (const std::exception& e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
     }
@@ -9137,7 +9014,7 @@ _wrap_Window_needs_redrawq___(int argc, VALUE *argv, VALUE self) {
         } else {
           result = (bool)((Gosu::Window const *)arg1)->needsRedraw();
         }
-      } catch(const std::runtime_error& e) {
+      } catch (const std::exception& e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
     }
@@ -9180,7 +9057,7 @@ _wrap_Window_needs_cursorq___(int argc, VALUE *argv, VALUE self) {
         } else {
           result = (bool)((Gosu::Window const *)arg1)->needsCursor();
         }
-      } catch(const std::runtime_error& e) {
+      } catch (const std::exception& e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
     }
@@ -9221,7 +9098,7 @@ _wrap_Window_lose_focus(int argc, VALUE *argv, VALUE self) {
         } else {
           (arg1)->loseFocus();
         }
-      } catch(const std::runtime_error& e) {
+      } catch (const std::exception& e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
     }
@@ -9261,7 +9138,7 @@ _wrap_Window_release_memory(int argc, VALUE *argv, VALUE self) {
         } else {
           (arg1)->releaseMemory();
         }
-      } catch(const std::runtime_error& e) {
+      } catch (const std::exception& e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
     }
@@ -9308,7 +9185,7 @@ _wrap_Window_button_down(int argc, VALUE *argv, VALUE self) {
         } else {
           (arg1)->buttonDown(arg2);
         }
-      } catch(const std::runtime_error& e) {
+      } catch (const std::exception& e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
     }
@@ -9355,7 +9232,7 @@ _wrap_Window_button_up(int argc, VALUE *argv, VALUE self) {
         } else {
           (arg1)->buttonUp(arg2);
         }
-      } catch(const std::runtime_error& e) {
+      } catch (const std::exception& e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
       }
     }
@@ -9413,7 +9290,7 @@ _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
   arg3 = static_cast< double >(val3);
   {
     if (TYPE(argv[2]) == T_FIXNUM || TYPE(argv[2]) == T_BIGNUM)
-    arg4 = Gosu::Color(NUM2UINT(argv[2]));
+    arg4 = Gosu::Color(NUM2ULONG(argv[2]));
     else
     {
       void* ptr;
@@ -9438,7 +9315,7 @@ _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
   arg6 = static_cast< double >(val6);
   {
     if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
-    arg7 = Gosu::Color(NUM2UINT(argv[5]));
+    arg7 = Gosu::Color(NUM2ULONG(argv[5]));
     else
     {
       void* ptr;
@@ -9477,7 +9354,7 @@ _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_drawLine(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -9538,7 +9415,7 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
   arg3 = static_cast< double >(val3);
   {
     if (TYPE(argv[2]) == T_FIXNUM || TYPE(argv[2]) == T_BIGNUM)
-    arg4 = Gosu::Color(NUM2UINT(argv[2]));
+    arg4 = Gosu::Color(NUM2ULONG(argv[2]));
     else
     {
       void* ptr;
@@ -9563,7 +9440,7 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
   arg6 = static_cast< double >(val6);
   {
     if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
-    arg7 = Gosu::Color(NUM2UINT(argv[5]));
+    arg7 = Gosu::Color(NUM2ULONG(argv[5]));
     else
     {
       void* ptr;
@@ -9588,7 +9465,7 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
   arg9 = static_cast< double >(val9);
   {
     if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
-    arg10 = Gosu::Color(NUM2UINT(argv[8]));
+    arg10 = Gosu::Color(NUM2ULONG(argv[8]));
     else
     {
       void* ptr;
@@ -9627,7 +9504,7 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_drawTriangle(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -9695,7 +9572,7 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
   arg3 = static_cast< double >(val3);
   {
     if (TYPE(argv[2]) == T_FIXNUM || TYPE(argv[2]) == T_BIGNUM)
-    arg4 = Gosu::Color(NUM2UINT(argv[2]));
+    arg4 = Gosu::Color(NUM2ULONG(argv[2]));
     else
     {
       void* ptr;
@@ -9720,7 +9597,7 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
   arg6 = static_cast< double >(val6);
   {
     if (TYPE(argv[5]) == T_FIXNUM || TYPE(argv[5]) == T_BIGNUM)
-    arg7 = Gosu::Color(NUM2UINT(argv[5]));
+    arg7 = Gosu::Color(NUM2ULONG(argv[5]));
     else
     {
       void* ptr;
@@ -9745,7 +9622,7 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
   arg9 = static_cast< double >(val9);
   {
     if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM)
-    arg10 = Gosu::Color(NUM2UINT(argv[8]));
+    arg10 = Gosu::Color(NUM2ULONG(argv[8]));
     else
     {
       void* ptr;
@@ -9770,7 +9647,7 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
   arg12 = static_cast< double >(val12);
   {
     if (TYPE(argv[11]) == T_FIXNUM || TYPE(argv[11]) == T_BIGNUM)
-    arg13 = Gosu::Color(NUM2UINT(argv[11]));
+    arg13 = Gosu::Color(NUM2ULONG(argv[11]));
     else
     {
       void* ptr;
@@ -9809,7 +9686,7 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_drawQuad(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13,arg14,arg15);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -9836,7 +9713,7 @@ _wrap_Window_flush(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_flush(arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -9872,7 +9749,7 @@ _wrap_Window_button_downq___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (bool)Gosu_Window_isButtonDown((Gosu::Window const *)arg1,arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -9906,7 +9783,7 @@ _wrap_Window_char_to_button_id(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu_Window_charToButtonId(arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -9940,7 +9817,7 @@ _wrap_Window_button_id_to_char(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = Gosu_Window_buttonIdToChar(arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -9979,7 +9856,7 @@ _wrap_Window_text_input(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::TextInput *)Gosu_Window_textInput((Gosu::Window const *)arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10020,7 +9897,7 @@ _wrap_Window_text_inpute___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_setTextInput(arg1,arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10049,7 +9926,7 @@ _wrap_Window_mouse_x(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)Gosu_Window_mouseX((Gosu::Window const *)arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10079,7 +9956,7 @@ _wrap_Window_mouse_y(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (double)Gosu_Window_mouseY((Gosu::Window const *)arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10123,7 +10000,7 @@ _wrap_Window_set_mouse_position(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_setMousePosition(arg1,arg2,arg3);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10158,7 +10035,7 @@ _wrap_Window_mouse_xe___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_setMouseX(arg1,arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10193,7 +10070,7 @@ _wrap_Window_mouse_ye___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_setMouseY(arg1,arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10222,7 +10099,7 @@ _wrap_Window_width(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (int)Gosu_Window_width((Gosu::Window const *)arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10252,7 +10129,7 @@ _wrap_Window_height(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (int)Gosu_Window_height((Gosu::Window const *)arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10282,7 +10159,7 @@ _wrap_Window_fullscreenq___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (bool)Gosu_Window_fullscreen((Gosu::Window const *)arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10310,7 +10187,7 @@ _wrap_Window_gl__SWIG_0(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_gl__SWIG_0(arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10345,7 +10222,7 @@ _wrap_Window_gl__SWIG_1(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_gl__SWIG_1(arg1,arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10449,7 +10326,7 @@ _wrap_Window_clip_to(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_clipTo(arg1,arg2,arg3,arg4,arg5);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10478,7 +10355,7 @@ _wrap_Window_record(int argc, VALUE *argv, VALUE self) {
   {
     try {
       result = (Gosu::Image *)Gosu_Window_record(arg1);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10634,7 +10511,7 @@ _wrap_Window_transform(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_transform(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13,arg14,arg15,arg16,arg17);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10689,7 +10566,7 @@ _wrap_Window_rotate(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_rotate(arg1,arg2,arg3,arg4);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10724,7 +10601,7 @@ _wrap_Window_scale__SWIG_0(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_scale__SWIG_0(arg1,arg2);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10767,7 +10644,7 @@ _wrap_Window_scale__SWIG_1(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_scale__SWIG_1(arg1,arg2,arg3);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10826,7 +10703,7 @@ _wrap_Window_scale__SWIG_2(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_scale__SWIG_2(arg1,arg2,arg3,arg4,arg5);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
@@ -10960,7 +10837,7 @@ _wrap_Window_translate(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_translate(arg1,arg2,arg3);
-    } catch(const std::runtime_error& e) {
+    } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }

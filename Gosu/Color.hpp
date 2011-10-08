@@ -126,7 +126,7 @@ namespace Gosu
             return alpha() << 24 | red() << 16 | green() << 8 | blue();
         }
 
-        //! Returns the color in 0x00bbggrr representation.
+        //! Returns the color in 0x00bbggrr representation. Useful for Win32 programming.
         std::tr1::uint32_t bgr() const
         {
             return blue() << 16 | green() << 8 | red();
