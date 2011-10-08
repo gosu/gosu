@@ -162,6 +162,9 @@ module Gosu
     # v:: Float from 0..1.
     def self.from_ahsv(a, h, s, v); end
     
+    # 32-bit unsigned value for use with OpenGL ('RGBA' octet in memory).
+    def gl; end
+    
     # constant
     NONE    = Gosu::Color.argb(0x00000000)
     # constant

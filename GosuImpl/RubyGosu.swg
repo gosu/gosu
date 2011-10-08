@@ -384,6 +384,9 @@ namespace Gosu {
 %rename("value=") setValue;
 %include "std_string.i"
 
+%ignore Gosu::Color::argb();
+%ignore Gosu::Color::bgr();
+%ignore Gosu::Color::abgr();
 %ignore Gosu::Color::NONE;
 %ignore Gosu::Color::BLACK;
 %ignore Gosu::Color::GRAY;

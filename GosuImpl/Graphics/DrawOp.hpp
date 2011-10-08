@@ -62,6 +62,7 @@ namespace Gosu
                 glEnableClientState(GL_VERTEX_ARRAY);
                 glTexCoordPointer(2, GL_FLOAT, 0, spriteTexcoords);
                 glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+                // TODO: See if I can somehow change the format of the color pointer, or maybe change the internal color representation on iOS.
                 glColorPointer(4, GL_UNSIGNED_BYTE, 0, spriteColors);
                 glEnableClientState(GL_COLOR_ARRAY);
                 
