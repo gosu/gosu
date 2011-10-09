@@ -466,6 +466,9 @@ module Gosu
     def button_up(id); end
     
     # Draws a line from one point to another (last pixel exclusive).
+    # Note: OpenGL lines are not reliable at all and may have a missing pixel at the start
+    # or end point. Please only use this for debugging purposes. Otherwise, use a quad or
+    # image to simulate lines, or contribute a better draw_line to Gosu.
     def draw_line(x1, y1, c1, x2, y2, c2, z=0, mode=:default); end
       
     def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=:default); end

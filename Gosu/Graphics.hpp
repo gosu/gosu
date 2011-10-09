@@ -90,6 +90,9 @@ namespace Gosu
         void popTransform();
 
         //! Draws a line from one point to another (last pixel exclusive).
+        //! Note: OpenGL lines are not reliable at all and may have a missing pixel at the start
+        //! or end point. Please only use this for debugging purposes. Otherwise, use a quad or
+        //! image to simulate lines, or contribute a better drawLine to Gosu.
         void drawLine(double x1, double y1, Color c1,
             double x2, double y2, Color c2,
             ZPos z, AlphaMode mode = amDefault);
