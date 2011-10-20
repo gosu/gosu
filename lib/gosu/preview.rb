@@ -42,7 +42,12 @@ module Gosu
       else
         source = args[0]
         tileable = !args[1] || args[1][:tileable]
-        initialize07 $window, source, !!tileable
+        rect = args[1] && args[1][:rect]
+        if rect then
+          initialize07 $window, source, !!tileable, *rect
+        else
+          initialize07 $window, source, !!tileable
+        end
       end
     end
     
