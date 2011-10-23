@@ -75,7 +75,7 @@ class Star
   def draw  
     img = @animation[Gosu::milliseconds / 100 % @animation.size]
     img.draw(@x - img.width / 2.0, @y - img.height / 2.0,
-        ZOrder::Stars, 1, 1, @color, :additive)
+        ZOrder::Stars, 1, 1, @color, :add)
   end
 end
 

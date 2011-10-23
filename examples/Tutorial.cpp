@@ -53,7 +53,7 @@ public:
             *animation.at(Gosu::milliseconds() / 100 % animation.size());
 
         image.draw(posX - image.width() / 2.0, posY - image.height() / 2.0,
-            zStars, 1, 1, color, Gosu::amAdditive);
+            zStars, 1, 1, color, Gosu::amAdd);
     }
 };
 

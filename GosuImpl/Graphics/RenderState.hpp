@@ -96,7 +96,7 @@ public:
         if (newMode == mode)
             return;
         mode = newMode;
-        if (mode == amAdditive)
+        if (mode == amAdd)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
         else if (mode == amMultiply)
             glBlendFunc(GL_DST_COLOR, GL_ZERO);
