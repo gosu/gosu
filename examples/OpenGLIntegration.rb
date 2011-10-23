@@ -157,7 +157,7 @@ class Star
 
   def draw  
     img = @animation[Gosu::milliseconds / 100 % @animation.size];
-    img.draw_rot(@x, @y, ZOrder::Stars, @y, 0.5, 0.5, 1, 1, @color, :additive)
+    img.draw_rot(@x, @y, ZOrder::Stars, @y, 0.5, 0.5, 1, 1, @color, :add)
   end
   
   def update

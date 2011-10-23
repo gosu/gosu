@@ -24,7 +24,8 @@ namespace Gosu
         //! The colors' channels will be added. The alpha channel specifies
         //! the percentage of the new color's channels that will be added
         //! to the old color's channels.
-        amAdditive,
+        amAdd,
+        amAdditive = amAdd,
         //! The color's channels will be multiplied with each other.
         amMultiply
     };

@@ -97,6 +97,8 @@
         SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
     else if (!strcmp(cstr, "default"))
         $1 = Gosu::amDefault;
+    else if (!strcmp(cstr, "add"))
+        $1 = Gosu::amAdditive;
     else if (!strcmp(cstr, "additive"))
         $1 = Gosu::amAdditive;
     else if (!strcmp(cstr, "multiply"))
