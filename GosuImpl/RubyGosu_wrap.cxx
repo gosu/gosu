@@ -5507,6 +5507,8 @@ _wrap_Font_draw(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
       else if (!strcmp(cstr, "default"))
       arg9 = Gosu::amDefault;
+      else if (!strcmp(cstr, "add"))
+      arg9 = Gosu::amAdditive;
       else if (!strcmp(cstr, "additive"))
       arg9 = Gosu::amAdditive;
       else if (!strcmp(cstr, "multiply"))
@@ -5636,6 +5638,8 @@ _wrap_Font_draw_rel(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
       else if (!strcmp(cstr, "default"))
       arg11 = Gosu::amDefault;
+      else if (!strcmp(cstr, "add"))
+      arg11 = Gosu::amAdditive;
       else if (!strcmp(cstr, "additive"))
       arg11 = Gosu::amAdditive;
       else if (!strcmp(cstr, "multiply"))
@@ -5757,6 +5761,8 @@ _wrap_Font_draw_rot(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
       else if (!strcmp(cstr, "default"))
       arg10 = Gosu::amDefault;
+      else if (!strcmp(cstr, "add"))
+      arg10 = Gosu::amAdditive;
       else if (!strcmp(cstr, "additive"))
       arg10 = Gosu::amAdditive;
       else if (!strcmp(cstr, "multiply"))
@@ -6351,6 +6357,8 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
       else if (!strcmp(cstr, "default"))
       arg8 = Gosu::amDefault;
+      else if (!strcmp(cstr, "add"))
+      arg8 = Gosu::amAdditive;
       else if (!strcmp(cstr, "additive"))
       arg8 = Gosu::amAdditive;
       else if (!strcmp(cstr, "multiply"))
@@ -6499,6 +6507,8 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
       else if (!strcmp(cstr, "default"))
       arg11 = Gosu::amDefault;
+      else if (!strcmp(cstr, "add"))
+      arg11 = Gosu::amAdditive;
       else if (!strcmp(cstr, "additive"))
       arg11 = Gosu::amAdditive;
       else if (!strcmp(cstr, "multiply"))
@@ -6633,6 +6643,8 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
       else if (!strcmp(cstr, "default"))
       arg11 = Gosu::amDefault;
+      else if (!strcmp(cstr, "add"))
+      arg11 = Gosu::amAdditive;
       else if (!strcmp(cstr, "additive"))
       arg11 = Gosu::amAdditive;
       else if (!strcmp(cstr, "multiply"))
@@ -7065,6 +7077,8 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
       else if (!strcmp(cstr, "default"))
       arg15 = Gosu::amDefault;
+      else if (!strcmp(cstr, "add"))
+      arg15 = Gosu::amAdditive;
       else if (!strcmp(cstr, "additive"))
       arg15 = Gosu::amAdditive;
       else if (!strcmp(cstr, "multiply"))
@@ -9343,6 +9357,8 @@ _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
       else if (!strcmp(cstr, "default"))
       arg9 = Gosu::amDefault;
+      else if (!strcmp(cstr, "add"))
+      arg9 = Gosu::amAdditive;
       else if (!strcmp(cstr, "additive"))
       arg9 = Gosu::amAdditive;
       else if (!strcmp(cstr, "multiply"))
@@ -9493,6 +9509,8 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
       else if (!strcmp(cstr, "default"))
       arg12 = Gosu::amDefault;
+      else if (!strcmp(cstr, "add"))
+      arg12 = Gosu::amAdditive;
       else if (!strcmp(cstr, "additive"))
       arg12 = Gosu::amAdditive;
       else if (!strcmp(cstr, "multiply"))
@@ -9675,6 +9693,8 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
       SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
       else if (!strcmp(cstr, "default"))
       arg15 = Gosu::amDefault;
+      else if (!strcmp(cstr, "add"))
+      arg15 = Gosu::amAdditive;
       else if (!strcmp(cstr, "additive"))
       arg15 = Gosu::amAdditive;
       else if (!strcmp(cstr, "multiply"))
