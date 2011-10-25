@@ -52,10 +52,10 @@ namespace Gosu
         void insert(const Bitmap& source, int x, int y, unsigned srcX,
             unsigned srcY, unsigned srcWidth, unsigned srcHeight);
 		
-		//! Direct access to the array of color values. May be useful for optimized
+        //! Direct access to the array of color values. May be useful for optimized
         //! OpenGL operations.
         const Color* data() const { return &pixels[0]; }
-        Color* data()             { return &pixels[0]; }
+        Color* data() { return &pixels[0]; }
 
         // Work with data() instead if you need fast operations.
         GOSU_DEPRECATED void fill(Color c);

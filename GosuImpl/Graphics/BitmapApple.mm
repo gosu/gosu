@@ -27,6 +27,20 @@ namespace
         CGContextDrawImage(context.obj(), CGRectMake(0.0, 0.0, bitmap.width(), bitmap.height()), imageRef);
     }
     
+    void unmultiplyAlpha(Gosu::Bitmap& bitmap)
+    {
+        int pixels = bitmap.width() * bitmap.height();
+        for (unsigned char* ptr = reinterpret_cast<unsigned char*>(bitmap.data()); pixels--; ptr += 4)
+        {
+            // Avoid division-by-zero weirdness
+            if (!ptr[3])
+                continue;
+            ptr[0] = ptr[0] * 255 / ptr[3];
+            ptr[1] = ptr[1] * 255 / ptr[3];
+            ptr[2] = ptr[2] * 255 / ptr[3];
+        }
+    }
+    
     #ifdef GOSU_IS_IPHONE
     #define APPLE_IMAGE UIImage
     void appleImageToBitmap(UIImage* image, Gosu::Bitmap& bitmap)
@@ -39,10 +53,13 @@ namespace
     {
         // If we have CGImageForProposedRect (10.6+), use it. This is important because the code below
         // started to break in 10.6:
-           http://stackoverflow.com/questions/2239785/nsimage-color-shift-on-snow-leopard
+        http://stackoverflow.com/questions/2239785/nsimage-color-shift-on-snow-leopard
 
         if ([image respondsToSelector:@selector(CGImageForProposedRect:context:hints:)])
-            return CGImageToBitmap((CGImageRef)[image CGImageForProposedRect:NULL context:nil hints:nil], bitmap);
+        {
+            CGImageToBitmap((CGImageRef)[image CGImageForProposedRect:NULL context:nil hints:nil], bitmap);
+            unmultiplyAlpha(bitmap);
+        }
         
         // Otherwise, take the slow route using -drawInRect:fromRect:operation:fraction:
         // TODO: Support vector graphics (we rely on NSBitmapImageRep right now for pixelsWide/pixelsHigh)
@@ -56,16 +73,20 @@ namespace
         
         // Use a temporary context to draw the NSImage to the buffer. For that, construct a color
         // space that does not alter the colors while drawing from the NSImage to the CGBitmapContext.
-        
         static Gosu::CFRef<CGColorSpaceRef> colorSpace(CGColorSpaceCreateDeviceRGB());
+        
+        // We do NOT want premultiplied alpha (yet?) in Gosu. However, with kCGImageAlphaLast, this
+        // call mysteriously fails.
         Gosu::CFRef<CGContextRef> context(CGBitmapContextCreate(bitmap.data(), bitmap.width(), bitmap.height(),
                                     8, bitmap.width() * 4,
-                                    colorSpace.obj(), kCGImageAlphaPremultipliedLast)); // kCGBitmapByteOrder32Host?
+                                    colorSpace.obj(), kCGImageAlphaPremultipliedLast));
+        
         [NSGraphicsContext saveGraphicsState];
         [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:context.obj() flipped:NO]];
         [image drawInRect:NSMakeRect(0, 0, bitmap.width(), bitmap.height()) fromRect:NSZeroRect
             operation:NSCompositeCopy fraction:1.0];
         [NSGraphicsContext restoreGraphicsState];
+        unmultiplyAlpha(bitmap);
     }
     #endif
 }
