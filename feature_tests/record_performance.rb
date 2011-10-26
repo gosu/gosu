@@ -2,7 +2,7 @@
 $LOAD_PATH << '../lib'
 require 'gosu'
 
-class Test < Gosu::Window
+class RecordPerformanceTest < Gosu::Window
   def grid_x
     20 + Math.sin(Gosu::milliseconds / 200.0) * 10
   end
@@ -45,4 +45,4 @@ class Test < Gosu::Window
   end
 end
 
-Test.new.show
+RecordPerformanceTest.new.show
