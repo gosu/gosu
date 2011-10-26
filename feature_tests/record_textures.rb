@@ -135,11 +135,13 @@ class Map
         end
       end
     end
+
+    @macro ||= window.record { draw_static }
   end
   
   def draw
-    @macro ||= record { oldschool_draw }
     @macro.draw 0, 0, 0
+    @gems.each { |c| c.draw }
   end
   
   # Solid at a given pixel position?
@@ -149,7 +151,7 @@ class Map
   
   private
 
-  def oldschool_draw
+  def draw_static
     # Very primitive drawing function:
     # Draws all the tiles, some off-screen, some on-screen.
     @height.times do |y|
@@ -162,7 +164,6 @@ class Map
         end
       end
     end
-    @gems.each { |c| c.draw }
   end
 end
 
