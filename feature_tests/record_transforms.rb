@@ -112,7 +112,7 @@ class Map
   
   def initialize(window, filename)
     # Load 60x60 tiles, 5px overlap in all four directions.
-    @tileset = Image.load_tiles(window, "media/CptnRuby Tileset 64.png", 64, 64, true)
+    @tileset = Image.load_tiles(window, "media/CptnRuby Tileset.png", 60, 60, true)
 
     gem_img = Image.new(window, "media/CptnRuby Gem.png", false)
     @gems = []
@@ -139,19 +139,14 @@ class Map
     @macro ||= window.record { draw_static }
   end
   
-  def draw camera_x, camera_y
-    # Does not respect transforms yet
-    @macro.draw -camera_x, -camera_y, 0
+  def draw
+    @macro.draw 0, 0, 0
     @gems.each { |c| c.draw }
   end
   
   # Solid at a given pixel position?
   def solid?(x, y)
     y < 0 || @tiles[x / 50][y / 50]
-  end
-  
-  def texture_info
-    @tileset.map { |img| "texName=#{img.gl_tex_info.tex_name}" }.join(" ")
   end
   
   private
@@ -177,9 +172,9 @@ class Game < Window
 
   def initialize
     super(640, 480, false)
-    @sky = Image.new(self, "media/WallpaperXXL.png", true)
+    self.caption = "Cptn. Ruby"
+    @sky = Image.new(self, "media/Space.png", true)
     @map = Map.new(self, "media/CptnRuby Map.txt")
-    self.caption = @map.texture_info
     @cptn = CptnRuby.new(self, 400, 100)
     # The scrolling position is stored as top left corner of the screen.
     @camera_x = @camera_y = 0
@@ -197,7 +192,7 @@ class Game < Window
   def draw
     @sky.draw 0, 0, 0
     translate(-@camera_x, -@camera_y) do
-      @map.draw @camera_x, @camera_y
+      @map.draw
       @cptn.draw
     end
   end
