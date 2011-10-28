@@ -89,14 +89,13 @@ else
   pango_config = "pkg-config pangoft2"
 
   $INCFLAGS << " `#{sdl_config} --cflags` `#{pango_config} --cflags`"
-  $LDFLAGS  << " `#{sdl_config} --libs`   `#{pango_config} --libs` -lXdamage -lX11"
+  $LDFLAGS  << " `#{sdl_config} --libs`   `#{pango_config} --libs` -lX11"
   have_header('SDL_ttf.h') if have_library('SDL_ttf', 'TTF_RenderUTF8_Blended')
   have_header('gl.h') if have_library('GL', 'glMatrixMode')
   have_header('FreeImage.h') if have_library('freeimage', 'FreeImage_ConvertFromRawBits')
   have_header('vorbisfile.h') if have_library('vorbisfile', 'ov_open_callbacks')
   have_header('AL/al.h') if have_library('openal')
   have_header('sndfile.h') if have_library('sndfile')
-  have_header('X11/extensions/Xdamage.h')
 end
 
 # Copy all relevant C++ files into the current directory

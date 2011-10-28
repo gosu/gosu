@@ -58,7 +58,7 @@ def tar filename, files
   sh "COPYFILE_DISABLE=true tar -czf #{filename} #{files.to_a.uniq.map { |fn| "'#{fn}'" }.join(' ')}"
 end
 
-Dir['rake/*.rb'].each { |task| require task }
+Dir['./rake/*.rb'].each { |task| require task }
 
 task :release => [:'mac:release', :'win:release', :'linux:release',
                   :'mac:release_gem', :'win:release_gem', :'linux:release_gem',
