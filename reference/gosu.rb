@@ -134,9 +134,9 @@ module Gosu
     def initialize(a, r, g, b); end
     # Initializes a color from an 0xrrggbbaa integer.
     def initialize(argb); end
-
+    
     def dup; end
-
+    
     # Same as the constructor, but with an explicit order.
     def self.rgba(r, g, b, a); end    
     
@@ -154,7 +154,7 @@ module Gosu
     # s:: Float from 0..1
     # v:: Float from 0..1.
     def self.from_hsv(h, s, v); end
-
+    
     # Converts a HSV triple into a color, with a given alpha.
     # a:: Integer from 0..255
     # h:: Integer from 0..360
@@ -199,8 +199,8 @@ module Gosu
     # height:: Height of the font, in pixels.
     def initialize(window, font_name, height); end
     
-    # Returns the width, in pixels, the given text would occupy if drawn.
-    def text_width(text, factor_x=1); end
+    # Sets the image to be used for a certain character. Must not be called twice for the same character, or after the character has been drawn already.
+    def []=(character, image); end
     
     # Draws text so the top left corner of the text is at (x; y).
     #
@@ -212,8 +212,8 @@ module Gosu
     # rel_y:: See rel_x.
     def draw_rel(text, x, y, z, rel_x, rel_y, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
     
-    # Sets the image to be used for a certain character. Must not be called twice for the same character, or after the character has been drawn already.
-    def []=(character, image); end
+    # Returns the width, in pixels, the given text would occupy if drawn.
+    def text_width(text, factor_x=1); end
     
     # DEPRECATED: Analogous to draw, but rotates the text by a given angle.
     def draw_rot(text, x, y, z, angle, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
@@ -228,7 +228,7 @@ module Gosu
     #
     # A color key of #ff00ff is automatically applied to BMP type images.
     def initialize(window, filename_or_rmagick_image, tileable); end
-
+    
     # Loads an image from a given filename that can be drawn onto the
     # given window. See the Gosu wiki for a list of supported formats.
     #
@@ -249,7 +249,7 @@ module Gosu
     # Like Window#draw_quad, but with this texture instead of colors. Can be used to implement advanced, non-rectangular drawing techniques and takes four points and the modulation color at each of them.
     # The points can be in clockwise order, or in a Z shape, starting at the top left.
     def draw_as_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode=:default); end
-
+    
     # Creates an Image containing a line of text.
     #
     # The text is always rendered in white. If you want to draw it in a
@@ -257,7 +257,7 @@ module Gosu
     # font_name:: Name of a system font, or a filename to a TTF file (must contain '/').
     # font_height:: Height of the font in pixels.
     def self.from_text(window, text, font_name, font_height); end
-
+    
     # Creates an Image that is filled with the text given to the function.
     #
     # The text may contain line breaks.
@@ -298,7 +298,7 @@ module Gosu
     # wiki for a list of portably supported formats.
     def save(filename); end
   end
-
+  
   # A sample is a short sound that is completely loaded in memory, can be
   # played multiple times at once and offers very flexible playback
   # parameters. Use samples for everything that's not music.
@@ -321,7 +321,7 @@ module Gosu
     # speed:: Playback speed is only limited by the underlying audio library, and can accept very high or low values. Use 1.0 for normal playback speed.
     def play_pan(pan=0, vol=1, speed=1, looping=false); end
   end
-    
+  
   # An instance of a Sample playing. Can be used to stop sounds dynamically,
   # or to check if they are finished.
   # It is recommended that you throw away sample instances if possible,
@@ -340,7 +340,7 @@ module Gosu
     def resume; end
     def playing?; end
   end
-    
+  
   # Songs are less flexible than samples in that they can only be played
   # one at a time and without panning or speed parameters.
   class Song
@@ -355,7 +355,7 @@ module Gosu
     
     # Starts or resumes playback of the song. This will stop all other
     # songs and set the current song to this object.
-    def play(looping = false); end
+    def play(looping=false); end
     
     # Pauses playback of the song. It is not considered being played.
     # current_song will stay the same.
@@ -389,7 +389,7 @@ module Gosu
     attr_accessor :text
     attr_accessor :caret_pos
     attr_accessor :selection_start
-
+    
     # Overridable filter that is applied to all new text that is entered.
     # Allows for context-sensitive filtering/extending/... of the text.
     # The text will be inserted at caretPos afterwards.
@@ -421,11 +421,11 @@ module Gosu
     # update_interval:: Interval in milliseconds between two calls
     # to the update member function. The default means the game will run
     # at 60 FPS, which is ideal on standard 60 Hz TFT screens.
-    def initialize(width, height, fullscreen, update_interval = 16.666666); end
+    def initialize(width, height, fullscreen, update_interval=16.666666); end
     
     # Enters a modal loop where the Window is visible on screen and receives calls to draw, update etc.
     def show; end
-
+    
     # Tells the window to end the current show loop as soon as possible.
     def close; end 
     
@@ -456,9 +456,6 @@ module Gosu
     # must return either true or false, not e.g. nil.
     def needs_cursor?; end
     
-    # DEPRECATED.
-    def set_mouse_position(x, y); end
-    
     # Called before update when the user pressed a button while the
     # window had the focus.
     def button_down(id); end
@@ -470,7 +467,7 @@ module Gosu
     # or end point. Please only use this for debugging purposes. Otherwise, use a quad or
     # image to simulate lines, or contribute a better draw_line to Gosu.
     def draw_line(x1, y1, c1, x2, y2, c2, z=0, mode=:default); end
-      
+    
     def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=:default); end
     
     # Draws a rectangle (two triangles) with given corners and corresponding
@@ -503,16 +500,16 @@ module Gosu
     # an equal z position is undefined, and so is the precedence between GL blocks and images
     # with the same z position.
     # See examples/OpenGLIntegration.rb for an example.
-    def gl(z = nil, &custom_gl_code); end
+    def gl(z=nil, &custom_gl_code); end
     
     # Limits the drawing area to a given rectangle while evaluating the code inside of the block.
     def clip_to(x, y, w, h, &drawing_code); end
     
     # Rotates everything drawn in the block around (around_x, around_y).
-    def rotate(angle, around_x = 0, around_y = 0, &drawing_code); end
+    def rotate(angle, around_x=0, around_y=0, &drawing_code); end
     
     # Scales everything drawn in the block by a factor.
-    def scale(factor_x, factor_y = factor_x, &drawing_code); end
+    def scale(factor_x, factor_y=factor_x, &drawing_code); end
     
     # Scales everything drawn in the block by a factor for each dimension.
     def scale(factor_x, factor_y, around_x, around_y, &drawing_code); end
@@ -522,6 +519,9 @@ module Gosu
     
     # Applies a free-form matrix rotation to everything drawn in the block.
     def transform(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, &drawing_code); end
+    
+    # DEPRECATED.
+    def set_mouse_position(x, y); end
   end
   
   # Contains information about the underlying OpenGL texture and the u/v space used for image data.
