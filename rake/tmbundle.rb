@@ -1,4 +1,3 @@
-# TODO respect DEPRECATED comment
 # TODO Support for offset_x etc. (module methods)
 # TODO add constructor snippets from initialize method
 # TODO huge Window / game snippet
@@ -16,11 +15,24 @@ def for_each_gosu_method
     class_body.scan(/def ([a-z_.]+)(\(.+\))/) do
       method_name = $1
       args = $2[1..-2].split(', ')
+      
+      # Ignore methods whose previous comment starts with DEPRECATED
+      if class_body =~ /# DEPRECATED.*\n    def #{method_name}\(/
+        puts "Skipped #{class_name}##{method_name} (deprecated)"
+        next
+      end
+      
       # Support for static methods
       # e.g. self.load_tiles<tab> => Image.load_tiles<tab>
-      method_name.sub! "self.", "#{class_name}."
+      if class_name != 'Window' then
+        method_name.sub! "self.", "#{class_name}."
+      else
+        # Not in the window though
+        method_name.sub! "self.", ""
+      end
       
-      next if %w(initialize).include? method_name
+      # Ignore methods that are never called directly.
+      next if %w(initialize button_up button_down).include? method_name
       
       if args.last[0, 1] == '&' then
         block_name = args.last[1..-1].gsub('_', ' ') + ' here'
@@ -43,19 +55,25 @@ SNIPPET_ROOT = "#{BUNDLE_ROOT}/Snippets"
 def build_snippet! class_name, method_name, args, block_name
   uuid = next_uuid
   
+  # Add a leading dot to non-static triggers, except in Window
+  trigger = method_name
+  if not method_name.include? '.' and class_name != 'Window' then
+    trigger = ".#{trigger}"
+  end
+  
   content_args = (0...args.size).map { |i| "${#{i + 1}:#{args[i]}}" }
   if method_name =~ /draw/ then
-    content = "#{method_name} #{content_args.join(', ')}"
+    content = "#{trigger} #{content_args.join(', ')}"
   else
-    content = "#{method_name}(#{content_args.join(', ')})"
+    content = "#{trigger}(#{content_args.join(', ')})"
   end
   if block_name then
     content = "#{content} do\n  ${#{args.size + 1}:# #{block_name}}\nend"
   end
   name_args = args.map { |arg| arg[/^[^=]+/] }
   name = "#{method_name}(#{name_args.join(', ')})"
+  name = "#{class_name}##{name}" unless method_name.include? '.'
   
-  mkdir_p SNIPPET_ROOT
   File.open("#{SNIPPET_ROOT}/#{uuid}.tmSnippet", "w+") do |io|
     io.puts <<-END.gsub(/^ {6}/, '')
       <?xml version="1.0" encoding="UTF-8"?>
@@ -69,7 +87,7 @@ def build_snippet! class_name, method_name, args, block_name
         <key>scope</key>
         <string>source.ruby</string>
         <key>tabTrigger</key>
-        <string>#{method_name}</string>
+        <string>#{trigger}</string>
         <key>uuid</key>
         <string>#{uuid}</string>
       </dict>
@@ -94,7 +112,7 @@ def build_plist! methods_of_classes
           <key>items</key>
           <array>
             #{methods_of_classes.keys.sort.map do |class_name|
-              "      <string>#{class_uuids[class_name]}</string>\n"
+              "<string>#{class_uuids[class_name]}</string>"
             end.join}
           </array>
           <key>submenus</key>
@@ -108,7 +126,7 @@ def build_plist! methods_of_classes
                   <key>items</key>
                   <array>
                     #{methods_of_classes[class_name].map do |method_uuid|
-                      "      <string>#{method_uuid}</string>\n"
+                      "<string>#{method_uuid}</string>"
                     end.join}
                   </array>
                 </dict>
@@ -133,6 +151,8 @@ namespace :tmbundle do
   
   task :build => :clean do
     methods_of_classes = {}
+    
+    mkdir_p SNIPPET_ROOT
     
     for_each_gosu_method do |class_name, method_name, args, block_name|
       method_uuid = build_snippet!(class_name, method_name, args, block_name)
