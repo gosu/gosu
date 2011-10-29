@@ -199,8 +199,8 @@ module Gosu
     # height:: Height of the font, in pixels.
     def initialize(window, font_name, height); end
     
-    # Returns the width, in pixels, the given text would occupy if drawn.
-    def text_width(text, factor_x=1); end
+    # Sets the image to be used for a certain character. Must not be called twice for the same character, or after the character has been drawn already.
+    def []=(character, image); end
     
     # Draws text so the top left corner of the text is at (x; y).
     #
@@ -212,8 +212,8 @@ module Gosu
     # rel_y:: See rel_x.
     def draw_rel(text, x, y, z, rel_x, rel_y, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
     
-    # Sets the image to be used for a certain character. Must not be called twice for the same character, or after the character has been drawn already.
-    def []=(character, image); end
+    # Returns the width, in pixels, the given text would occupy if drawn.
+    def text_width(text, factor_x=1); end
     
     # DEPRECATED: Analogous to draw, but rotates the text by a given angle.
     def draw_rot(text, x, y, z, angle, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
@@ -456,9 +456,6 @@ module Gosu
     # must return either true or false, not e.g. nil.
     def needs_cursor?; end
     
-    # DEPRECATED.
-    def set_mouse_position(x, y); end
-    
     # Called before update when the user pressed a button while the
     # window had the focus.
     def button_down(id); end
@@ -522,6 +519,9 @@ module Gosu
     
     # Applies a free-form matrix rotation to everything drawn in the block.
     def transform(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, &drawing_code); end
+    
+    # DEPRECATED.
+    def set_mouse_position(x, y); end
   end
   
   # Contains information about the underlying OpenGL texture and the u/v space used for image data.

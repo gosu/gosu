@@ -1,12 +1,12 @@
-# TODO respect block args
-# TODO make proper submenus
 # TODO respect DEPRECATED comment
 # TODO Support for offset_x etc. (module methods)
 # TODO add constructor snippets from initialize method
-# TODO huge Window snippet
+# TODO huge Window / game snippet
 
 # TODO use YARD for Gosu and use its output here instead of hacking around
-# (But boy is it fun)
+# (But but but it was fun!!)
+# TODO use ruby-plist gem to generate all this
+# (But but but it was so mind bending!!)
 def for_each_gosu_method
   File.read('reference/gosu.rb').scan(/\n  class ([A-Za-z_]+)\n((    .*\n)*)/) do
     class_name, class_body = $1, $2
@@ -81,6 +81,8 @@ def build_snippet! class_name, method_name, args, block_name
 end
 
 def build_plist! methods_of_classes
+  class_uuids = Hash.new { |hash, key| hash[key] = next_uuid }
+  
   File.open("#{BUNDLE_ROOT}/info.plist", "w+") do |io|
     io.puts <<-END.gsub(/^ {6}/, '')
       <?xml version="1.0" encoding="UTF-8"?>
@@ -91,10 +93,28 @@ def build_plist! methods_of_classes
         <dict>
           <key>items</key>
           <array>
-            #{methods_of_classes.map do |class_name, method_uuids|
-              method_uuids.map { |uuid| "      <string>#{uuid}</string>\n" }.join
-            end}
+            #{methods_of_classes.keys.sort.map do |class_name|
+              "      <string>#{class_uuids[class_name]}</string>\n"
+            end.join}
           </array>
+          <key>submenus</key>
+          <dict>
+            #{methods_of_classes.keys.map do |class_name|
+              <<-INNER_END.gsub(/^ {10}/, '')
+                <key>#{class_uuids[class_name]}</key>
+                <dict>
+                  <key>name</key>
+                  <string>#{class_name}</string>
+                  <key>items</key>
+                  <array>
+                    #{methods_of_classes[class_name].map do |method_uuid|
+                      "      <string>#{method_uuid}</string>\n"
+                    end.join}
+                  </array>
+                </dict>
+              INNER_END
+            end.join}
+          </dict>
         </dict>
         <key>name</key>
         <string>RubyGosu</string>
