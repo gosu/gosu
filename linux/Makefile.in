@@ -42,7 +42,7 @@ INSTALL_DATA = $(INSTALL) -m 644
 
 .SUFFIXES: .cpp .o
 
-all: directories ../lib/libgosu.a ../lib/libgosu.so examples ../bin/gosu-config
+all: directories ../lib/libgosu.a ../lib/libgosu.so ../bin/gosu-config
 
 directories:
 	$(MKDIR) ../bin ../lib Graphics Sockets Audio
@@ -75,6 +75,8 @@ clean:
 
 $(OBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cpp
 	$(CXX) $(GOSU_DIR)/GosuImpl/$*.cpp -o $@ $(ALL_CXXFLAGS) -c
+
+test: examples
 
 examples: $(XPLS) ../lib/libgosu.a
 
