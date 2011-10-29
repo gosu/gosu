@@ -78,7 +78,7 @@ $(OBJS): %.o: $(GOSU_DIR)/GosuImpl/%.cpp
 
 test: examples
 
-examples: $(XPLS) ../lib/libgosu.a
+examples: $(XPLS)
 
 $(XPLS): %: %.cpp ../lib/libgosu.a
 	$(CXX) $@.cpp -o $@ $(ALL_CXXFLAGS) $(LIBS) ../lib/libgosu.a
