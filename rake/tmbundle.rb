@@ -1,3 +1,5 @@
+# TODO respect block args
+# TODO make proper submenus
 # TODO respect DEPRECATED comment
 # TODO Support for offset_x etc. (module methods)
 # TODO add constructor snippets from initialize method
@@ -47,7 +49,9 @@ def build_snippet! class_name, method_name, args, block_name
   else
     content = "#{method_name}(#{content_args.join(', ')})"
   end
-  
+  if block_name then
+    content = "#{content} do\n  ${#{args.size + 1}:# #{block_name}}\nend"
+  end
   name_args = args.map { |arg| arg[/^[^=]+/] }
   name = "#{method_name}(#{name_args.join(', ')})"
   
@@ -95,7 +99,7 @@ def build_plist! methods_of_classes
         <key>name</key>
         <string>RubyGosu</string>
         <key>uuid</key>
-        <string>#{next_uuid}</string>
+        <string>#{srand(20878642); "TODO make this cleaner"; next_uuid}</string>
       </dict>
       </plist>
     END
