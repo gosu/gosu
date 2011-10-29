@@ -1,6 +1,3 @@
-# TODO add constructor snippets from initialize method
-# TODO huge Window / game snippet
-
 # TODO use YARD for Gosu and use its output here instead of hacking around
 # (But but but it was fun!!)
 # TODO use ruby-plist gem to generate all this
@@ -41,7 +38,12 @@ def for_each_gosu_method
       end
       
       # Ignore methods that are never called directly.
-      next if %w(initialize button_up button_down).include? method_name
+      next if %w(button_up button_down).include? method_name
+      
+      if method_name == 'initialize' then
+        next if class_name == 'Window' # Nobody wants to call Window.new
+        method_name = "#{class_name}.new"
+      end
       
       if args.last[0, 1] == '&' then
         block_name = args.last[1..-1].gsub('_', ' ') + ' here'
