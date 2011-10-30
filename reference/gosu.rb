@@ -462,6 +462,9 @@ module Gosu
     # Same as buttonDown. Called then the user released a button.
     def button_up(id); end
     
+    # Returns true if a button is currently pressed. Updated every tick.
+    def button_down?(id); end
+    
     # Draws a line from one point to another (last pixel exclusive).
     # Note: OpenGL lines are not reliable at all and may have a missing pixel at the start
     # or end point. Please only use this for debugging purposes. Otherwise, use a quad or
@@ -479,16 +482,6 @@ module Gosu
     # is useful when drawing several parts of code on top of each other that use conflicting
     # z positions.
     def flush; end
-    
-    # Returns true if a button is currently pressed. Updated every tick.
-    def button_down?(id); end
-    
-    # Returns the character a button usually produces, or nil. To implement real text-input
-    # facilities, look at the TextInput class instead.
-    def self.button_id_to_char(id); end
-    
-    # Returns the button that has to be pressed to produce the given character, or nil.
-    def self.char_to_button_id(char); end
     
     # For custom OpenGL calls. Executes the given block in a clean OpenGL environment.
     # Use the ruby-opengl gem to access OpenGL function (if you manage to get it to work).
@@ -519,6 +512,13 @@ module Gosu
     
     # Applies a free-form matrix rotation to everything drawn in the block.
     def transform(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, &drawing_code); end
+    
+    # Returns the character a button usually produces, or nil. To implement real text-input
+    # facilities, look at the TextInput class instead.
+    def self.button_id_to_char(id); end
+    
+    # Returns the button that has to be pressed to produce the given character, or nil.
+    def self.char_to_button_id(char); end
     
     # DEPRECATED.
     def set_mouse_position(x, y); end
