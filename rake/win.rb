@@ -19,7 +19,7 @@ namespace :win do
 
   WINDOWS_SPEC = Gem::Specification.new do |s|
     apply_gemspec_defaults s
-    s.platform = 'i386-mingw32'
+    s.platform = 'x86-mingw32'
     s.files = COMMON_RUBY_FILES
     s.files += FileList['lib/gosu.for_*.so', 'lib/*.dll']
   end
