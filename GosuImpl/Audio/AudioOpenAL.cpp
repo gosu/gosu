@@ -382,7 +382,6 @@ public:
     {
         if (alChannelManagement.get())
         {
-            stop();
             alDeleteBuffers(2, buffers);
         }
     }
