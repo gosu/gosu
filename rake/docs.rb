@@ -1,25 +1,13 @@
-require 'rdoc/task'
-
-desc "Clean rdoc directory so all HTML will definitely be refreshed"
-task :clean_rdoc do
-  sh "rm -rf reference/rdoc"
-end
-
-RDoc::Task.new do |rd|  
-  rd.main = "README.txt"
-  rd.rdoc_dir = "reference/rdoc"
-  rd.rdoc_files.include("reference/gosu.rb", "README.txt", "COPYING", *Dir["reference/*.rdoc"])
-  rd.title = "RubyGosu rdoc Reference"
-  rd.template = "reference/rdoc-template/lib/allison"
-end
-
-desc "Build Ruby reference with rdoc"
-task :ruby_docs => [:clean_rdoc, :rdoc] do
-  # Copy the stylesheet over, wee!
-  sh "cp reference/rdoc-style.css reference/rdoc/rdoc-style.css"
+# For some reason, YARD::Rake::YardocTask does not work for me at all.
+desc "Build Ruby reference with YARD"
+task :ruby_docs do
+  # Also work around the fact that yardoc does not work at all for me in 1.8
+  # (Blaming a missing rdoc gem)
+  # Oh, and not in 1.9.2 either...
+  sh "rvm 1.9.3 do yardoc || yardoc"
 end
 
 desc "Build C++ reference with doxygen"
 task :cpp_docs do
-  sh "cd reference && doxygen > /dev/null"
+  sh "cd reference && doxygen &> /dev/null"
 end
