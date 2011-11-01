@@ -37,13 +37,14 @@ def apply_gemspec_defaults s
 
   Also includes demos for integration with RMagick, Chipmunk and OpenGL.
 EOS
-  s.authors = ['Julian Raschke']
+  s.author = 'Julian Raschke'
   s.date = Time.now.strftime '%Y-%m-%d'
   s.email = 'julian@raschke.de'
-  s.homepage = 'http://libgosu.org/'
-  s.require_paths = ['lib']
+  s.homepage = 'http://www.libgosu.org/'
   s.required_ruby_version = Gem::Requirement.new('>= 1.8.2')
   s.summary = '2D game development library.'
+  s.rdoc_options = %w(README.txt COPYING reference/gosu.rb reference/*.rdoc
+    --title Gosu --main README.txt)
 end
 
 def upload filename
