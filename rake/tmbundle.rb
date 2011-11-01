@@ -22,9 +22,9 @@ def for_each_gosu_method
       method_name = $1
       args = $2[1..-2].split(', ')
       
-      # Ignore methods whose previous comment starts with DEPRECATED
-      if class_body =~ /# DEPRECATED.*\n    def #{method_name}\(/
-        puts "Skipped #{class_name}##{method_name} (deprecated)"
+      # Ignore methods whose previous comment starts with @deprecated
+      if class_body =~ /# @deprecated.*\n    def #{method_name}\(/
+        puts "Skipped #{class_name}##{method_name} (@deprecated)"
         next
       end
       

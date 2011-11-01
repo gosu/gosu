@@ -215,7 +215,8 @@ module Gosu
     # Returns the width, in pixels, the given text would occupy if drawn.
     def text_width(text, factor_x=1); end
     
-    # DEPRECATED: Analogous to draw, but rotates the text by a given angle.
+    # Analogous to draw, but rotates the text by a given angle.
+    # @deprecated Use a combination of Window#rotate and Font#draw instead.
     def draw_rot(text, x, y, z, angle, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
   end
   
@@ -443,17 +444,11 @@ module Gosu
     #
     # By default, the window is redrawn all the time (i.e. Window#needs_redraw?
     # always returns true.)
-    #
-    # NOTE: Because of the way SWIG translates this between C++ and Ruby, you
-    # must return either true or false, not e.g. nil.
     def needs_redraw?; end
     
     # Can be overriden to show the system cursor when necessary, e.g. in level
     # editors or other situations where introducing a custom cursor is not
     # desired.
-    #
-    # NOTE: Because of the way SWIG translates this between C++ and Ruby, you
-    # must return either true or false, not e.g. nil.
     def needs_cursor?; end
     
     # Called before update when the user pressed a button while the
@@ -520,7 +515,7 @@ module Gosu
     # Returns the button that has to be pressed to produce the given character, or nil.
     def self.char_to_button_id(char); end
     
-    # DEPRECATED.
+    # @deprecated Use Window#mouse_x= and Window#mouse_y= instead.
     def set_mouse_position(x, y); end
   end
   
