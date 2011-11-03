@@ -1,37 +1,43 @@
-# TODO use YARD for Gosu and use its output here instead of hacking around
-# (But but but it was fun!!)
+# TODO refactor (this was just superficially patched to use YARD)
+
 # TODO use ruby-plist gem to generate all this
 # (But but but it was so mind bending!!)
+
 def for_each_gosu_method
-  gosu_interface = File.read("reference/gosu.rb")
+  require 'yard'
+  YARD::Registry.load!
+  
   # Utility functions
-  gosu_interface.scan(/\n  def ([a-z_.]+)(\(.+\))/) do
-    method_name = $1
-    args = $2[1..-2].split(', ')
-    
-    yield "Math Helpers", "Gosu::#{method_name}", args, nil
+  YARD::Registry.at("Gosu").meths.each do |meth|
+    args = meth.parameters.map { |arg| arg.compact.join(' = ') }
+    yield "Math Helpers", "Gosu::#{meth.name}", args, nil
   end
   
-  # Class methods
-  gosu_interface.scan(/\n  class ([A-Za-z_]+)\n((    .*\n)*)/) do
-    class_name, class_body = $1, $2
+  # Methods and class methods
+  YARD::Registry.all(:class).each do |cls|
+    next if %w(Color GLTexInfo).include? cls.name
     
-    next if %w(Color GLTexInfo).include? class_name
-    
-    class_body.scan(/def ([a-z_.]+)(\(.+\))/) do
-      method_name = $1
-      args = $2[1..-2].split(', ')
-      
+    cls.meths.each do |meth|
       # Ignore methods whose previous comment starts with @deprecated
-      if class_body =~ /# @deprecated.*\n    def #{method_name}\(/
-        puts "Skipped #{class_name}##{method_name} (@deprecated)"
+      if meth.has_tag? :deprecated then
+        puts "Skipped #{meth.path} (@deprecated)"
         next
       end
       
+      # Ignore explicit and attr setters (methods that end in a =)
+      next if meth.name.to_s[-1, 1] == '='
+      
+      # Ignore methods with only one argument
+      next if meth.parameters.empty?
+      
+      method_name = meth.name.to_s
+      method_name = "self.#{method_name}" if meth.scope == :class
+      args = meth.parameters.map { |arg| arg.compact.join(' = ') }
+      
       # Support for static methods
       # e.g. self.load_tiles<tab> => Image.load_tiles<tab>
-      if class_name != 'Window' then
-        method_name.sub! "self.", "#{class_name}."
+      if cls.name != :Window then
+        method_name.sub! "self.", "#{cls.name}."
       else
         # Not in the window though
         method_name.sub! "self.", ""
@@ -41,8 +47,8 @@ def for_each_gosu_method
       next if %w(button_up button_down).include? method_name
       
       if method_name == 'initialize' then
-        next if class_name == 'Window' # Nobody wants to call Window.new
-        method_name = "#{class_name}.new"
+        next if cls.name == :Window # Nobody wants to call Window.new
+        method_name = "#{cls.name}.new"
       end
       
       if args.last[0, 1] == '&' then
@@ -50,7 +56,7 @@ def for_each_gosu_method
         args.pop
       end
       
-      yield class_name, method_name, args, block_name
+      yield cls.name.to_s, method_name, args, block_name
     end
   end
 end
@@ -81,7 +87,7 @@ def build_snippet! class_name, method_name, args, block_name
   if block_name then
     content = "#{content} do\n  ${#{args.size + 1}:# #{block_name}}\nend"
   end
-  name_args = args.map { |arg| arg[/^[^=]+/] }
+  name_args = args.map { |arg| arg[/^[^ =]+/] }
   name = "#{method_name}(#{name_args.join(', ')})"
   name = "#{class_name}##{name}" unless method_name =~ /\.|\:\:/
   
@@ -160,7 +166,7 @@ namespace :tmbundle do
     rm_rf "pkg/RubyGosu.tmbundle"
   end
   
-  task :build => :clean do
+  task :build => [:ruby_docs, :clean] do
     methods_of_classes = {}
     
     mkdir_p SNIPPET_ROOT
