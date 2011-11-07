@@ -5,12 +5,12 @@ if defined? RUBY_PLATFORM and
   ENV['PATH'] = "#{File.dirname(__FILE__)};#{ENV['PATH']}"
 end
 
-if File.exist? "#{File.dirname(__FILE__)}/gosu.#{Config::CONFIG['DLEXT']}"
-  require "gosu.#{Config::CONFIG['DLEXT']}"
+if File.exist? "#{File.dirname(__FILE__)}/gosu.#{RbConfig::CONFIG['DLEXT']}"
+  require "gosu.#{RbConfig::CONFIG['DLEXT']}"
 elsif defined? RUBY_VERSION and RUBY_VERSION >= '1.9' then
-  require "gosu.for_1_9.#{Config::CONFIG['DLEXT']}"
+  require "gosu.for_1_9.#{RbConfig::CONFIG['DLEXT']}"
 else
-  require "gosu.for_1_8.#{Config::CONFIG['DLEXT']}"
+  require "gosu.for_1_8.#{RbConfig::CONFIG['DLEXT']}"
 end
 
 require "gosu/swig_patches"
