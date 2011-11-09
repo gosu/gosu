@@ -67,7 +67,7 @@ int Gosu::clipRectBaseFactor()
         CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
         
         eaglLayer.opaque = YES;
-        /*eaglLayer.drawableProperties = [NSDictionary new]; /*dictionaryWithObjectsAndKeys:
+        /*eaglLayer.drawableProperties = dictionaryWithObjectsAndKeys:
                                         [NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking,
                                         kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];*/
         

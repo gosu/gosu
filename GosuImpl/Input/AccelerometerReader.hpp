@@ -2,7 +2,7 @@
 
 typedef UIAccelerationValue Acceleration[3];
 
-@interface AccelerometerReader : NSObject {
+@interface AccelerometerReader : NSObject <UIAccelerometerDelegate> {
     Acceleration acceleration;
 }
 -(AccelerometerReader*)initWithUpdateInterval:(float)updateInterval;
