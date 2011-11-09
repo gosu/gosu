@@ -180,6 +180,7 @@
 		D4B655381351A3EE001F1CD4 /* BitmapApple.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A22E0F40D48300FFF378 /* BitmapApple.mm */; };
 		D4B655391351A3EF001F1CD4 /* BitmapApple.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A22E0F40D48300FFF378 /* BitmapApple.mm */; };
 		D4B6553A1351A3EF001F1CD4 /* BitmapApple.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4A5A22E0F40D48300FFF378 /* BitmapApple.mm */; };
+		D4B737E2146B031900D18F25 /* Utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D410EA300A8019FA005C7067 /* Utility.cpp */; };
 		D4BC5D6B0CC29D0F002D4236 /* Async.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4BC5D6A0CC29D0F002D4236 /* Async.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4E9CDDE13B72AA9002022D4 /* TR1.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4E9CDDD13B72AA9002022D4 /* TR1.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F07B230D934C8B00FB3D99 /* TextInput.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4F07B220D934C8B00FB3D99 /* TextInput.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1169,6 +1170,7 @@
 				D4B64DCF13513484001F1CD4 /* BitmapBMP.cpp in Sources */,
 				D4B6553A1351A3EF001F1CD4 /* BitmapApple.mm in Sources */,
 				D4774A35140D12CD00B448DB /* UtilityApple.mm in Sources */,
+				D4B737E2146B031900D18F25 /* Utility.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1554,6 +1556,12 @@
 		D46C29740FADB59600A33476 /* Release with 1.9 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
+				PREBINDING = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = "Release with 1.9";
 		};
@@ -1561,15 +1569,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				CONFIGURATION_BUILD_DIR = ../lib;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
 				PREBINDING = NO;
 				PRODUCT_NAME = "gosutouch-sim";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1577,18 +1588,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				CONFIGURATION_BUILD_DIR = ../lib;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_FAST_MATH = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_THREADSAFE_STATICS = NO;
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
 				PREBINDING = NO;
 				PRODUCT_NAME = gosutouch;
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				ZERO_LINK = NO;
 			};
 			name = Release;

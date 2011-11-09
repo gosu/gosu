@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <vector>
 
+#ifndef GOSU_IS_IPHONE
+
 #ifndef GOSU_IS_WIN
 #include <GosuImpl/Iconv.hpp>
 #endif
@@ -100,6 +102,8 @@ string Gosu::narrow(const wstring& ws)
 
     return string(buf.begin(), buf.end() - 1);
 }
+
+#endif
 
 // TODO: This function needs to go into some internal header.
 namespace Gosu
