@@ -1,28 +1,50 @@
 html {
-	margin: 0px;
-	height: 100%;
-	background-color: white;
-	padding: 0;
+  margin: 0px;
+  height: 100%;
+  background-color: white;
+  padding: 0;
   background: url("http://www.libgosu.org/background.jpg") top center repeat-x;
 }
 
 body {
-  margin: 0;
+  margin: 23px;
+  padding: 2px;
   font-family: "Lucida Grande", Verdana, sans-serif;
-	padding: 25px;
-	padding-top: 125px;
-	background: url("http://www.libgosu.org/forum_header.png") 25px 25px no-repeat;
+  padding-top: 100px;
+  background: url("http://www.libgosu.org/forum_header.png") no-repeat;
+  background-position: top right;
 }
 
 div.everything {
   -webkit-border-radius: 1em 0.5em;
   -moz-border-radius: 0.5em;
+  -moz-box-shadow: 0px 5px 15px white;
+  -webkit-box-shadow: 0px 5px 15px white;
   background: white;
-  padding: 1.5em 0em;
 }
 
-div.contents {
-  padding: 2em;
+.headertitle {
+  position: absolute;
+  left: 25px;
+  top: 37px;
+  margin-right: 240px;
+  font-weight: bold;
+  font-size: 250%;
+  text-shadow: 0px 0px 4px white, 0px 0px 6px white;
+  text-transform: lowercase;
+}
+
+.header a {
+  text-decoration: none;
+}
+
+.contents, .footer {
+  padding: 25px;
+}
+
+.footer {
+  color: gray;
+  font-size: 80%;
 }
 
 div.memitem {
@@ -41,14 +63,12 @@ td.indexkey {
   padding: 0.5em;
 }
 
-p.footer {
-  color: #aaa;
-  padding: 2em;
-}
-
 a {
   color: red;
 }
+
+.tabs { margin-top: 10px; }
+.tabs2 ul { clear: both;}
 
 DIV.tabs
 {
