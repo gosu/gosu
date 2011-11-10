@@ -17,13 +17,13 @@ namespace Gosu
     };
     typedef std::vector<ArrayVertex> VertexArray;
     
+    // This looks like it may include a RenderStateDescriptor later.
     struct DrawOp
     {
         ZPos z;
                 
         Gosu::Transform* transform;
-        int clipX, clipY;
-        unsigned clipWidth, clipHeight;
+        ClipRect clipRect;
         
         struct Vertex
         {
@@ -39,8 +39,9 @@ namespace Gosu
         AlphaMode mode;
         
         DrawOp(Gosu::Transform& transform)
-        :   transform(&transform), clipWidth(NO_CLIPPING), chunk(0)
+        :   transform(&transform), chunk(0)
         {
+            clipRect.width = NO_CLIPPING;
         }
         
         void perform(RenderState& current, const DrawOp* next) const
@@ -70,7 +71,7 @@ namespace Gosu
             }
             #endif
             
-            current.setClipRect(clipX, clipY, clipWidth, clipHeight);
+            current.setClipRect(clipRect);
             current.setTransform(transform);
             current.setAlphaMode(mode);
             

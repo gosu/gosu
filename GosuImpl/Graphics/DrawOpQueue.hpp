@@ -3,6 +3,7 @@
 
 #include <Gosu/TR1.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
+#include <GosuImpl/Graphics/ClipRectStack.hpp>
 #include <GosuImpl/Graphics/DrawOp.hpp>
 #include <cassert>
 #include <algorithm>
@@ -11,63 +12,18 @@
 
 class Gosu::DrawOpQueue
 {
+    ClipRectStack clipRectStack;
+    
     typedef std::vector<DrawOp> DrawOps;
     DrawOps ops;
     typedef std::multimap<ZPos, std::tr1::function<void()> > CodeMap;
     CodeMap code;
-
-    struct ClipRect
-    {
-        int x, y;
-        unsigned width, height;
-    };
-    std::vector<ClipRect> clipRectStack;
-    ClipRect effectiveRect;
-    bool haveEffectiveRect; // is effectiveRect valid?
     
-    void updateEffectiveRect()
-    {
-        if (clipRectStack.empty())
-        {
-            haveEffectiveRect = false;
-            return;
-        }
-        
-        ClipRect result = { 0, 0, 0x7fffffff, 0x7fffffff };
-        for (int i = 0; i < clipRectStack.size(); ++i)
-        {
-            const ClipRect& rect = clipRectStack[i];
-            int right = std::min<int>(result.x + result.width, rect.x + rect.width);
-            int bottom = std::min<int>(result.y + result.height, rect.y + rect.height);
-            result.x = std::max<int>(result.x, rect.x);
-            result.y = std::max<int>(result.y, rect.y);
-            
-            if (result.x >= right || result.y >= bottom)
-            {
-                haveEffectiveRect = false;
-                return;
-            }
-            
-            result.width = right - result.x;
-            result.height = bottom - result.y;
-        }
-        
-        int fac = clipRectBaseFactor();
-        result.x *= fac, result.y *= fac, result.width *= fac, result.height *= fac;
-        
-        effectiveRect = result;
-        haveEffectiveRect = true;
-    }
-
 public:
-    DrawOpQueue() : haveEffectiveRect(false) {}
-    
     // I really wish I would trust ADL. :|
     void swap(DrawOpQueue& other)
     {
         clipRectStack.swap(other.clipRectStack);
-        std::swap(effectiveRect, other.effectiveRect);
-        std::swap(haveEffectiveRect, other.haveEffectiveRect);
         ops.swap(other.ops);
         code.swap(other.code);
     }
@@ -79,19 +35,14 @@ public:
         assert (op.usedVertices == 4);
         #endif
         
-        if (haveEffectiveRect)
-        {
-            op.clipX      = effectiveRect.x;
-            op.clipY      = effectiveRect.y;
-            op.clipWidth  = effectiveRect.width;
-            op.clipHeight = effectiveRect.height;
-        }
-        else if (!clipRectStack.empty())
-            // When we have no effect rect but the stack is not empty, we have clipped
-            // the whole world away and don't need to render things.
+        if (clipRectStack.clippedWorldAway())
             return;
         
+        if (const ClipRect* cr = clipRectStack.maybeEffectiveRect())
+            op.clipRect = *cr;
+        
         op.z = z;
+        
         ops.push_back(op);
     }
     
@@ -100,17 +51,14 @@ public:
         code.insert(std::make_pair(z, customCode));
     }
     
-    void beginClipping(int x, int y, unsigned width, unsigned height)
+    void beginClipping(int x, int y, int width, int height)
     {
-        ClipRect rect = { x, y, width, height };
-        clipRectStack.push_back(rect);
-        updateEffectiveRect();
+        clipRectStack.beginClipping(x, y, width, height);
     }
     
     void endClipping()
     {
-        clipRectStack.pop_back();
-        updateEffectiveRect();
+        clipRectStack.endClipping();
     }
 
     void performDrawOpsAndCode()
