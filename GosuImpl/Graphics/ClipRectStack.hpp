@@ -9,6 +9,7 @@ class Gosu::ClipRectStack
     
     void updateEffectiveRect()
     {
+        // Nothing to do, no clipping in place.
         if (stack.empty())
         {
             hasEffectiveRect = false;
@@ -19,19 +20,20 @@ class Gosu::ClipRectStack
         for (int i = 0, end = stack.size(); i < end; ++i)
         {
             const ClipRect& rect = stack[i];
-            int right = std::min(result.x + result.width, rect.x + rect.width);
-            int bottom = std::min(result.y + result.height, rect.y + rect.height);
+            int resultRight = std::min(result.x + result.width, rect.x + rect.width);
+            int resultBottom = std::min(result.y + result.height, rect.y + rect.height);
             result.x = std::max(result.x, rect.x);
             result.y = std::max(result.y, rect.y);
             
-            if (result.x >= right || result.y >= bottom)
+            if (result.x >= resultRight || result.y >= resultBottom)
             {
+                // We have clipped the world away!
                 hasEffectiveRect = false;
                 return;
             }
             
-            result.width = right - result.x;
-            result.height = bottom - result.y;
+            result.width = resultRight - result.x;
+            result.height = resultBottom - result.y;
         }
         
         // On the iPhone, we may have to multiple everything by 2 for retina displays.
@@ -39,6 +41,7 @@ class Gosu::ClipRectStack
         int fac = clipRectBaseFactor();
         result.x *= fac, result.y *= fac, result.width *= fac, result.height *= fac;
         
+        // Normal clipping.
         effectiveRect = result;
         hasEffectiveRect = true;
     }

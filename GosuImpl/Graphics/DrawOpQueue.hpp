@@ -121,9 +121,6 @@ public:
     
     void clear()
     {
-        // Not sure if Graphics::begin() should implicitly do that.
-        //clipRectStack.clear();
-        //effectiveRect.reset();
         code.clear();
         ops.clear();
     }
