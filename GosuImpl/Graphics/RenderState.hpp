@@ -3,16 +3,38 @@
 
 #include <GosuImpl/Graphics/Common.hpp>
 
-class Gosu::RenderState
+// Properties that potentially need to be changed between each draw operation.
+// This does not include the color or vertex data of the actual quads.
+struct Gosu::RenderStateDescriptor
 {
     GLuint texName;
     Transform* transform;
-    unsigned clipX, clipY, clipWidth, clipHeight;
+    ClipRect clipRect;
     AlphaMode mode;
+    
+    RenderStateDescriptor()
+    : texName(NO_TEXTURE), transform(0), mode(amDefault)
+    {
+        clipRect.width = NO_CLIPPING;
+    }
+    
+    bool operator==(const RenderStateDescriptor& rhs) const
+    {
+        return texName == rhs.texName && transform == rhs.transform &&
+            clipRect == rhs.clipRect && mode == rhs.mode;
+    }
+};
+
+// Manages the OpenGL rendering state. It caches the current state, only forwarding the
+// changes to OpenGL if the new state is really different.
+class Gosu::RenderState : private Gosu::RenderStateDescriptor
+{
+    // Not copyable
+    RenderState(const RenderState&);
+    RenderState& operator=(const RenderState&);
     
 public:
     RenderState()
-    :   texName(NO_TEXTURE), transform(0), clipWidth(NO_CLIPPING), mode(amDefault)
     {
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
@@ -21,29 +43,21 @@ public:
     
     ~RenderState()
     {
-        setClipRect(NO_CLIPPING, NO_CLIPPING, NO_CLIPPING, NO_CLIPPING);
+        ClipRect noClipping;
+        noClipping.width = NO_CLIPPING;
+        setClipRect(noClipping);
         setTexName(NO_TEXTURE);
         glPopMatrix();
     }
     
-    void setTransform(Transform* newTransform)
+    void setRenderState(const RenderStateDescriptor& rsd)
     {
-        if (newTransform == transform)
-            return;
-            
-        glPopMatrix();
-        glPushMatrix();
-        #ifndef GOSU_IS_IPHONE
-        glMultMatrixd(&(*newTransform)[0]);
-        #else
-        float matrix[16];
-        for (int i = 0; i < 16; ++i)
-            matrix[i] = (*newTransform)[i];
-        glMultMatrixf(matrix);
-        #endif
-        transform = newTransform;
+        setTexName(rsd.texName);
+        setTransform(rsd.transform);
+        setClipRect(rsd.clipRect);
+        setAlphaMode(rsd.mode);
     }
-
+    
     void setTexName(GLuint newTexName)
     {
         if (newTexName == texName)
@@ -60,33 +74,49 @@ public:
         texName = newTexName;
     }
     
-    void setClipRect(unsigned newClipX, unsigned newClipY,
-        unsigned newClipWidth, unsigned newClipHeight)
+    void setTransform(Transform* newTransform)
     {
-        if (newClipWidth == NO_CLIPPING)
+        if (newTransform == transform)
+            return;
+        
+        glPopMatrix();
+        glPushMatrix();
+        #ifndef GOSU_IS_IPHONE
+        glMultMatrixd(&(*newTransform)[0]);
+        #else
+        float matrix[16];
+        for (int i = 0; i < 16; ++i)
+            matrix[i] = (*newTransform)[i];
+        glMultMatrixf(matrix);
+        #endif
+        transform = newTransform;
+    }
+
+    void setClipRect(const ClipRect& newClipRect)
+    {
+        if (newClipRect.width == NO_CLIPPING)
         {
             // Disable clipping
-            if (clipWidth != NO_CLIPPING)
+            if (clipRect.width != NO_CLIPPING)
             {
                 glDisable(GL_SCISSOR_TEST);
-                clipWidth = NO_CLIPPING;
+                clipRect.width = NO_CLIPPING;
             }
         }
         else
         {
             // Enable clipping if off
-            if (clipWidth == NO_CLIPPING)
+            if (clipRect.width == NO_CLIPPING)
             {
                 glEnable(GL_SCISSOR_TEST);
-                glScissor(clipX = newClipX, clipY = newClipY,
-                    clipWidth = newClipWidth, clipHeight = newClipHeight);
+                clipRect = newClipRect;
+                glScissor(clipRect.x, clipRect.y, clipRect.width, clipRect.height);
             }
             // Adjust clipping if necessary
-            else if (clipX != newClipX || clipY != newClipY ||
-                clipWidth != newClipWidth || clipHeight != newClipHeight)
+            else if (!(clipRect == newClipRect))
             {
-                glScissor(clipX = newClipX, clipY = newClipY,
-                    clipWidth = newClipWidth, clipHeight = newClipHeight);
+                clipRect = newClipRect;
+                glScissor(clipRect.x, clipRect.y, clipRect.width, clipRect.height);
             }
         }
     }

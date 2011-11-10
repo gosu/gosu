@@ -28,6 +28,8 @@ namespace Gosu
 {
     class Texture;
     class TexChunk;
+    class ClipRectStack;
+    struct RenderStateDescriptor;
     class RenderState;
     struct DrawOp;
     class DrawOpQueue;
@@ -37,6 +39,21 @@ namespace Gosu
     
     const GLuint NO_TEXTURE = static_cast<GLuint>(-1);
     const unsigned NO_CLIPPING = 0xffffffff;
+    
+    // In various places in Gosu, width==NO_CLIPPING conventionally means
+    // that no clipping should happen.
+    struct ClipRect
+    {
+        int x, y, width, height;
+        
+        bool operator==(const ClipRect& other) const
+        {
+            // No clipping
+            return (width == NO_CLIPPING && other.width == NO_CLIPPING) ||
+            // Clipping, but same
+                (x == other.x && y == other.y && width == other.width && height == other.height);
+        }
+    };
     
     template<typename T>
     bool isPToTheLeftOfAB(T xa, T ya,
