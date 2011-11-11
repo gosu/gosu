@@ -33,6 +33,32 @@ class Gosu::RenderState : private Gosu::RenderStateDescriptor
     RenderState(const RenderState&);
     RenderState& operator=(const RenderState&);
     
+    void applyTransform()
+    {
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        
+        #ifndef GOSU_IS_IPHONE
+        glMultMatrixd(&(*transform)[0]);
+        #else
+        // TODO: Ouch, should always use floats!
+        float matrix[16];
+        for (int i = 0; i < 16; ++i)
+            matrix[i] = (*transform)[i];
+        glMultMatrixf(matrix);
+        #endif
+    }
+    
+    void applyAlphaMode()
+    {
+        if (mode == amAdd)
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        else if (mode == amMultiply)
+            glBlendFunc(GL_DST_COLOR, GL_ZERO);
+        else
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+    
 public:
     RenderState()
     {
@@ -78,18 +104,9 @@ public:
     {
         if (newTransform == transform)
             return;
-        
-        glPopMatrix();
-        glPushMatrix();
-        #ifndef GOSU_IS_IPHONE
-        glMultMatrixd(&(*newTransform)[0]);
-        #else
-        float matrix[16];
-        for (int i = 0; i < 16; ++i)
-            matrix[i] = (*newTransform)[i];
-        glMultMatrixf(matrix);
-        #endif
         transform = newTransform;
+        
+        applyTransform();
     }
 
     void setClipRect(const ClipRect& newClipRect)
@@ -126,12 +143,34 @@ public:
         if (newMode == mode)
             return;
         mode = newMode;
-        if (mode == amAdd)
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-        else if (mode == amMultiply)
-            glBlendFunc(GL_DST_COLOR, GL_ZERO);
+        applyAlphaMode();
+    }
+    
+    // The cached values may have been messed with. Reset them again.
+    void enforceAfterUntrustedGL()
+    {
+        // TODO: Actually, we don't have to worry about anything pushed
+        // using glPushAttribts because beginGL/endGL will take care of that.
+        
+        if (texName == NO_TEXTURE)
+            glDisable(GL_TEXTURE_2D);
         else
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        {
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, texName);
+        }
+        
+        applyTransform();
+        
+        if (clipRect.width == NO_CLIPPING)
+            glDisable(GL_SCISSOR_TEST);
+        else
+        {
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(clipRect.x, clipRect.y, clipRect.width, clipRect.height);
+        }
+
+        applyAlphaMode();
     }
 };
     

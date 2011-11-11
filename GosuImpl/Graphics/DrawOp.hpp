@@ -6,6 +6,7 @@
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/TexChunk.hpp>
 #include <GosuImpl/Graphics/RenderState.hpp>
+#include <cassert>
 
 namespace Gosu
 {
@@ -21,8 +22,8 @@ namespace Gosu
     struct DrawOp
     {
         ZPos z;
-                
-        Gosu::Transform* transform;
+        
+        Transform* transform;
         ClipRect clipRect;
         
         struct Vertex
@@ -34,18 +35,23 @@ namespace Gosu
         };
         
         Vertex vertices[4];
-        unsigned usedVertices;
+        // Number of vertices used, or: complement index of code block
+        int verticesOrBlockIndex;
         const TexChunk* chunk;
         AlphaMode mode;
         
-        DrawOp(Gosu::Transform& transform)
-        :   transform(&transform), chunk(0)
+        DrawOp(Transform& transform, int verticesOrBlockIndex = 4)
+        : transform(&transform), verticesOrBlockIndex(verticesOrBlockIndex), chunk(0)
         {
             clipRect.width = NO_CLIPPING;
         }
         
         void perform(RenderState& current, const DrawOp* next) const
         {
+            // This should not be called on GL code ops.
+            assert (verticesOrBlockIndex >= 2);
+            assert (verticesOrBlockIndex <= 4);
+            
             #ifdef GOSU_IS_IPHONE
             static const unsigned MAX_AUTOGROUP = 24;
             
@@ -101,18 +107,18 @@ namespace Gosu
                 current.setTexName(NO_TEXTURE);
 
             #ifndef GOSU_IS_IPHONE
-            if (usedVertices == 2)
+            if (verticesOrBlockIndex == 2)
                 glBegin(GL_LINES);
-            else if (usedVertices == 3)
+            else if (verticesOrBlockIndex == 3)
                 glBegin(GL_TRIANGLES);
-            else if (usedVertices == 4)
+            else // if (verticesOrBlockIndex == 4)
                 glBegin(GL_QUADS);
 
             float left, top, right, bottom;
             if (chunk)
                 chunk->getCoords(left, top, right, bottom);
             
-            for (unsigned i = 0; i < usedVertices; i++)
+            for (unsigned i = 0; i < verticesOrBlockIndex; i++)
             {
                 glColor4ubv(reinterpret_cast<const GLubyte*>(&vertices[i].c));
                 if (chunk)
@@ -150,10 +156,10 @@ namespace Gosu
             }
             
             ++spriteCounter;
-            if (spriteCounter == MAX_AUTOGROUP or next == 0 or
-                chunk == 0 or next->chunk == 0 or next->transform != transform or
-                next->chunk->texName() != chunk->texName() or next->mode != mode or
-                clipWidth != NO_CLIPPING or next->clipWidth != NO_CLIPPING)
+            if (spriteCounter == MAX_AUTOGROUP || next == 0 ||
+                chunk == 0 || next->chunk == 0 || next->transform != transform ||
+                next->chunk->texName() != chunk->texName() || next->mode != mode ||
+                clipWidth != NO_CLIPPING || next->clipWidth != NO_CLIPPING)
             {
                 glDrawArrays(GL_TRIANGLES, 0, 6 * spriteCounter);
                 //if (spriteCounter > 1)
