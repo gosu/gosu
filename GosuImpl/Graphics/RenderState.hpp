@@ -36,7 +36,8 @@ class Gosu::RenderState : private Gosu::RenderStateDescriptor
     void applyTransform()
     {
         glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
+        glPopMatrix();
+        glPushMatrix();
         
         #ifndef GOSU_IS_IPHONE
         glMultMatrixd(&(*transform)[0]);

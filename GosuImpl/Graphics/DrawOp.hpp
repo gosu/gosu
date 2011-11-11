@@ -5,19 +5,10 @@
 #include <Gosu/Color.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/TexChunk.hpp>
-#include <GosuImpl/Graphics/RenderState.hpp>
 #include <cassert>
 
 namespace Gosu
 {
-    struct ArrayVertex
-    {
-        float texCoords[2];
-        unsigned color;
-        float vertices[3];
-    };
-    typedef std::vector<ArrayVertex> VertexArray;
-    
     // This looks like it may include a RenderStateDescriptor later.
     struct DrawOp
     {
@@ -39,6 +30,18 @@ namespace Gosu
         int verticesOrBlockIndex;
         const TexChunk* chunk;
         AlphaMode mode;
+        
+        RenderStateDescriptor impliedRenderState() const
+        {
+            assert (verticesOrBlockIndex == 4);
+            
+            RenderStateDescriptor rsd;
+            rsd.texName = chunk ? chunk->texName() : NO_TEXTURE;
+            rsd.transform = transform;
+            rsd.clipRect = clipRect;
+            rsd.mode = mode;
+            return rsd;
+        }
         
         DrawOp(Transform& transform, int verticesOrBlockIndex = 4)
         : transform(&transform), verticesOrBlockIndex(verticesOrBlockIndex), chunk(0)
@@ -77,14 +80,10 @@ namespace Gosu
             }
             #endif
             
-            current.setClipRect(clipRect);
-            current.setTransform(transform);
-            current.setAlphaMode(mode);
+            current.setRenderState(impliedRenderState());
             
             if (chunk)
             {
-                current.setTexName(chunk->texName());
-                
                 #ifdef GOSU_IS_IPHONE
                 float left, top, right, bottom;
                 chunk->getCoords(left, top, right, bottom);
@@ -103,8 +102,6 @@ namespace Gosu
                 spriteTexcoords[spriteCounter*12 + 11] = bottom;
                 #endif
             }
-            else
-                current.setTexName(NO_TEXTURE);
 
             #ifndef GOSU_IS_IPHONE
             if (verticesOrBlockIndex == 2)
@@ -169,10 +166,18 @@ namespace Gosu
             #endif
         }
         
-        void compileTo(VertexArray& va) const
+        void compileTo(VertexArrays& vas) const
         {
-            ArrayVertex result[4];
+            RenderStateDescriptor rsd = impliedRenderState();
+            if (vas.empty() || !(vas.front().renderState == rsd))
+            {
+                if (!vas.empty())
+                    puts("Oh no!! Splitting up vertex array!!"); fflush(0);
+                vas.push_back(VertexArray());
+                vas.back().renderState = rsd;
+            }
             
+            ArrayVertex result[4];
             for (int i = 0; i < 4; ++i)
             {
                 result[i].vertices[0] = vertices[i].x;
@@ -180,15 +185,14 @@ namespace Gosu
                 result[i].vertices[2] = 0;
                 result[i].color = vertices[i].c.abgr();
             }
-
             float left, top, right, bottom;
             chunk->getCoords(left, top, right, bottom);
-            result[0].texCoords[0] = left,  result[0].texCoords[1] = top;
+            result[0].texCoords[0] = left, result[0].texCoords[1] = top;
             result[1].texCoords[0] = right, result[1].texCoords[1] = top;
             result[2].texCoords[0] = right, result[2].texCoords[1] = bottom;
-            result[3].texCoords[0] = left,  result[3].texCoords[1] = bottom;
-
-            va.insert(va.end(), result, result + 4);
+            result[3].texCoords[0] = left, result[3].texCoords[1] = bottom;
+            
+            vas.back().vertices.insert(vas.back().vertices.end(), result, result + 4);
         }
         
         bool operator<(const DrawOp& other) const

@@ -115,15 +115,14 @@ public:
         ops.clear();
     }
     
-    void compileTo(VertexArray& va)
+    void compileTo(VertexArrays& vas)
     {
         if (!glBlocks.empty())
             throw std::logic_error("Custom code cannot be recorded into a macro");
         
         std::stable_sort(ops.begin(), ops.end());
-        va.reserve(ops.size());
         for (DrawOps::const_iterator op = ops.begin(), end = ops.end(); op != end; ++op)
-            op->compileTo(va);
+            op->compileTo(vas);
     }
 };
 
