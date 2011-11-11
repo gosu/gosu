@@ -64,7 +64,7 @@ public:
     {
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        applyAlphaMode();
     }
     
     ~RenderState()

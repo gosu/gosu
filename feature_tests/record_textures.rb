@@ -139,9 +139,8 @@ class Map
     @macro ||= window.record { draw_static }
   end
   
-  def draw camera_x, camera_y
-    # Does not respect transforms yet
-    @macro.draw -camera_x, -camera_y, 0
+  def draw
+    @macro.draw 0, 0, 0
     @gems.each { |c| c.draw }
   end
   
@@ -197,7 +196,7 @@ class Game < Window
   def draw
     @sky.draw 0, 0, 0
     translate(-@camera_x, -@camera_y) do
-      @map.draw @camera_x, @camera_y
+      @map.draw
       @cptn.draw
     end
   end

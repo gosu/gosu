@@ -93,9 +93,14 @@ public:
                 current->perform(renderState, 0); // next unused on desktop
             else
             {
+                // Apply stuff to GL as well
+                // TODO: Should be merged?!
+                renderState.setClipRect(current->clipRect);
+                renderState.setTransform(current->transform);
+                
                 // GL code
                 int blockIndex = ~current->verticesOrBlockIndex;
-                assert (blockIndex > 0);
+                assert (blockIndex >= 0);
                 assert (blockIndex < glBlocks.size());
                 glBlocks[blockIndex]();
                 renderState.enforceAfterUntrustedGL();
