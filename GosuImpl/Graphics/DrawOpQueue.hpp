@@ -16,8 +16,8 @@ class Gosu::DrawOpQueue
     
     typedef std::vector<DrawOp> DrawOps;
     DrawOps ops;
-    typedef std::multimap<ZPos, std::tr1::function<void()> > CodeMap;
-    CodeMap code;
+    typedef std::vector<std::tr1::function<void()> > GLBlocks;
+    GLBlocks glBlocks;
     
 public:
     // I really wish I would trust ADL. :|
@@ -25,14 +25,14 @@ public:
     {
         clipRectStack.swap(other.clipRectStack);
         ops.swap(other.ops);
-        code.swap(other.code);
+        glBlocks.swap(other.glBlocks);
     }
     
     void scheduleDrawOp(DrawOp op, ZPos z)
     {
         #ifdef GOSU_IS_IPHONE
         // No triangles, no lines supported
-        assert (op.usedVertices == 4);
+        assert (op.verticesOrBlockIndex == 4);
         #endif
         
         if (clipRectStack.clippedWorldAway())
@@ -46,9 +46,18 @@ public:
         ops.push_back(op);
     }
     
-    void scheduleGL(std::tr1::function<void()> customCode, ZPos z)
+    void scheduleGL(Transform& transform, std::tr1::function<void()> glBlock, ZPos z)
     {
-        code.insert(std::make_pair(z, customCode));
+        int complementOfBlockIndex = ~(int)glBlocks.size();
+        glBlocks.push_back(glBlock);
+        DrawOp op(transform, complementOfBlockIndex);
+        
+        if (const ClipRect* cr = clipRectStack.maybeEffectiveRect())
+            op.clipRect = *cr;
+        
+        op.z = z;
+        
+        ops.push_back(op);
     }
     
     void beginClipping(int x, int y, int width, int height)
@@ -63,80 +72,57 @@ public:
 
     void performDrawOpsAndCode()
     {
-        // Allows us to make some assumptions.
-        if (ops.empty())
-        {
-            for (CodeMap::iterator it = code.begin(), end = code.end(); it != end; ++it)
-                it->second();
-            return;
-        }
-        
         // Apply Z-Ordering.
         std::stable_sort(ops.begin(), ops.end());
         
-        // We will loop: Drawing DrawOps, execute custom code.
-        // This means if there is no code, we just draw one batch
-        // of DrawOps, so no performance is sacrified.
-        DrawOps::const_iterator current = ops.begin(), last = ops.begin();
-        CodeMap::const_iterator it = code.begin();
+        RenderState renderState;
+        #ifdef GOSU_IS_IPHONE
+        if (ops.empty())
+            return;
         
-        while (true)
+        DrawOps::const_iterator current = ops.begin(), last = ops.end() - 1;
+        for (; current != last; ++current)
+            current->perform(renderState, &*(current + 1));
+        last->perform(renderState, 0);
+        #else
+        for (DrawOps::const_iterator current = ops.begin(), last = ops.end();
+            current != last; ++current)
         {
-            if (it == code.end())
-                // Last or only batch of DrawOps:
-                // Just draw everything.
-                last = ops.end() - 1;
+            if (current->verticesOrBlockIndex >= 0)
+                // Normal DrawOp, no GL code
+                current->perform(renderState, 0); // next unused on desktop
             else
             {
-                // There is code waiting:
-                // Only draw up to this Z level.
-                while (last != ops.end() - 1 && (last + 1)->z < it->first)
-                    ++last;
-            }
-            
-            if (current <= last)
-            {
-                // Draw DrawOps until next code is due
-                RenderState renderState;
-                while (current < last)
-                {
-                    DrawOps::const_iterator next = current + 1;
-                    current->perform(renderState, &*next);
-                    current = next;
-                }
-                last->perform(renderState, 0);
-                ++current;
-            }
-            
-            // Draw next code, or break if there is none
-            if (it == code.end())
-                break;
-            else
-            {
-                it->second();
-                ++it;
+                // Apply stuff to GL as well
+                // TODO: Should be merged?!
+                renderState.setClipRect(current->clipRect);
+                renderState.setTransform(current->transform);
+                
+                // GL code
+                int blockIndex = ~current->verticesOrBlockIndex;
+                assert (blockIndex >= 0);
+                assert (blockIndex < glBlocks.size());
+                glBlocks[blockIndex]();
+                renderState.enforceAfterUntrustedGL();
             }
         }
+        #endif
     }
     
     void clear()
     {
-        // Not sure if Graphics::begin() should implicitly do that.
-        //clipRectStack.clear();
-        //effectiveRect.reset();
-        code.clear();
+        glBlocks.clear();
         ops.clear();
     }
     
-    void compileTo(VertexArray& va)
+    void compileTo(VertexArrays& vas)
     {
-        if (!code.empty())
+        if (!glBlocks.empty())
             throw std::logic_error("Custom code cannot be recorded into a macro");
         
-        va.reserve(ops.size());
         std::stable_sort(ops.begin(), ops.end());
         for (DrawOps::const_iterator op = ops.begin(), end = ops.end(); op != end; ++op)
-            op->compileTo(va);
+            op->compileTo(vas);
     }
 };
 

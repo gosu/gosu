@@ -26,17 +26,9 @@
 
 namespace Gosu
 {
-    class Texture;
-    class TexChunk;
-    class ClipRectStack;
     struct RenderStateDescriptor;
     class RenderState;
-    struct DrawOp;
-    class DrawOpQueue;
-    typedef std::list<Transform> Transforms;
-    typedef std::vector<DrawOpQueue> DrawOpQueueStack;
-    class Macro;
-    
+
     const GLuint NO_TEXTURE = static_cast<GLuint>(-1);
     const unsigned NO_CLIPPING = 0xffffffff;
     
@@ -54,6 +46,32 @@ namespace Gosu
                 (x == other.x && y == other.y && width == other.width && height == other.height);
         }
     };
+}
+
+#include <GosuImpl/Graphics/RenderState.hpp>
+
+namespace Gosu
+{
+    class Texture;
+    class TexChunk;
+    class ClipRectStack;
+    struct DrawOp;
+    class DrawOpQueue;
+    typedef std::list<Transform> Transforms;
+    typedef std::vector<DrawOpQueue> DrawOpQueueStack;
+    class Macro;
+    struct ArrayVertex
+    {
+        GLfloat texCoords[2];
+        GLuint color;
+        GLfloat vertices[3];
+    };
+    struct VertexArray
+    {
+        RenderStateDescriptor renderState;
+        std::vector<ArrayVertex> vertices;
+    };
+    typedef std::list<VertexArray> VertexArrays;
     
     template<typename T>
     bool isPToTheLeftOfAB(T xa, T ya,

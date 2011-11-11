@@ -140,9 +140,8 @@ class Map
   end
   
   def draw camera_x, camera_y
-    # Does not respect transforms yet
     @macro.draw -camera_x, -camera_y, 0
-    @gems.each { |c| c.draw }
+    $window.translate(-camera_x, -camera_y) { @gems.each &:draw }
   end
   
   # Solid at a given pixel position?
@@ -177,6 +176,7 @@ class Game < Window
 
   def initialize
     super(640, 480, false)
+    $window = self
     @sky = Image.new(self, "media/WallpaperXXL.png", true)
     @map = Map.new(self, "media/CptnRuby Map.txt")
     self.caption = @map.texture_info
@@ -196,8 +196,8 @@ class Game < Window
   end
   def draw
     @sky.draw 0, 0, 0
+    @map.draw @camera_x, @camera_y
     translate(-@camera_x, -@camera_y) do
-      @map.draw @camera_x, @camera_y
       @cptn.draw
     end
   end

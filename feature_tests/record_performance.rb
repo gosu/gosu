@@ -14,7 +14,9 @@ class RecordPerformanceTest < Gosu::Window
   def draw_grid base_x, base_y
     400.times do |x|
       300.times do |y|
-        @images[x % 2].draw base_x + x * 2, base_y + y * 2, 0, 0.01, 0.01, 0x80ffffff
+        # This will split the VertexArray into single operations - harrgggghh!!
+        #@images[x % 2].draw base_x + x * 2, base_y + y * 2, 0, 0.01, 0.01, 0x80ffffff
+        @images[0].draw base_x + x * 2, base_y + y * 2, 0, 0.01, 0.01, 0x80ffffff
       end
     end
   end

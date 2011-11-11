@@ -83,7 +83,9 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     std::swap(pimpl->virtWidth, pimpl->virtHeight);
     #endif
     pimpl->fullscreen = fullscreen;
-
+    
+    // Should be merged into RenderState altogether.
+    
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, physWidth, physHeight);
@@ -252,7 +254,7 @@ namespace
 
 void Gosu::Graphics::scheduleGL(const std::tr1::function<void()>& functor, Gosu::ZPos z)
 {
-    pimpl->queues.back().scheduleGL(RunGLFunctor(*this, functor), z);
+    pimpl->queues.back().scheduleGL(pimpl->absoluteTransforms.back(), RunGLFunctor(*this, functor), z);
 }
 #endif
 
@@ -342,7 +344,7 @@ void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
     DrawOp op(pimpl->absoluteTransforms.back());
     
     op.mode = mode;
-    op.usedVertices = 2;
+    op.verticesOrBlockIndex = 2;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
 
@@ -357,12 +359,12 @@ void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
     DrawOp op(pimpl->absoluteTransforms.back());
         
     op.mode = mode;
-    op.usedVertices = 3;
+    op.verticesOrBlockIndex = 3;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
     op.vertices[2] = DrawOp::Vertex(x3, y3, c3);
 #ifdef GOSU_IS_IPHONE
-    op.usedVertices = 4;
+    op.verticesOrBlockIndex = 4;
     op.vertices[3] = op.vertices[2];
 #endif
     
@@ -380,7 +382,7 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
     DrawOp op(pimpl->absoluteTransforms.back());
     
     op.mode = mode;
-    op.usedVertices = 4;
+    op.verticesOrBlockIndex = 4;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
 // TODO: Should be harmonized
