@@ -364,7 +364,7 @@ void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
     op.vertices[2] = DrawOp::Vertex(x3, y3, c3);
 #ifdef GOSU_IS_IPHONE
-    op.usedVertices = 4;
+    op.verticesOrBlockIndex = 4;
     op.vertices[3] = op.vertices[2];
 #endif
     

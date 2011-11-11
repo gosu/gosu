@@ -32,7 +32,7 @@ public:
     {
         #ifdef GOSU_IS_IPHONE
         // No triangles, no lines supported
-        assert (op.usedVertices == 4);
+        assert (op.verticesOrBlockIndex == 4);
         #endif
         
         if (clipRectStack.clippedWorldAway())
