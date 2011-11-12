@@ -7,6 +7,8 @@
 #include <GosuImpl/Graphics/TexChunk.hpp>
 #include <cassert>
 
+#include <stdio.h>
+
 namespace Gosu
 {
     // This looks like it may include a RenderStateDescriptor later.

@@ -16,11 +16,14 @@
 #include <sstream>
 #include <stdexcept>
 #include <vector>
+#include <iostream>
 
 #include <GL/glx.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include "X11vroot.h"
+
+#include <X11/extensions/Xinerama.h>
 
 using namespace std::tr1::placeholders;
 
@@ -236,20 +239,52 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     Atom atoms[] = { XInternAtom(pimpl->display, "WM_DELETE_WINDOW", false) };
     XSetWMProtocols(pimpl->display, pimpl->window, atoms, 1);
 
+    // Get xinerama screen info
+    int screen_count = 0;
+    XineramaScreenInfo *screen_info = XineramaQueryScreens(pimpl->display, &screen_count);
+
+    // Holders for screen info
+    int screen_origin_x = 0;
+    int screen_origin_y = 0;
+    int screen_width = 0;
+    int screen_height = 0;
+
+    // Literal X screen, different from Xinerama screens
     Screen* screen = XScreenOfDisplay(pimpl->display,
                         DefaultScreen(pimpl->display));
 
+    // Get origin/size from first xinerama screen if it
+    // exists; convention seems to be that the first
+    // screen is always the default screen with xinerama.
+    if(screen_info != NULL){
+        screen_origin_x = screen_info[0].x_org;
+        screen_origin_y = screen_info[0].y_org;
+        screen_width = screen_info[0].width;
+        screen_height = screen_info[0].height;
+    
+    // ... or just use the whole X screen if we don't
+    // seem to have any xinerama information.
+    }else{
+        screen_width = screen->width;
+        screen_height = screen->height;
+    }
+
+    // Free the screen info, cause I guess we don't
+    // need it after this?
+    XFree(screen_info);
+
     if (fullscreen)
     {
-        pimpl->width = screen->width;
-        pimpl->height = screen->height;
-        XMoveResizeWindow(pimpl->display, pimpl->window, 0, 0,
-            screen->width, screen->height);
+        pimpl->width = screen_width;
+        pimpl->height = screen_height;
+        XMoveResizeWindow(pimpl->display, pimpl->window, screen_origin_x, screen_origin_y,
+            screen_width, screen_height);
             
         XSetWindowAttributes windowAttributes;
         windowAttributes.override_redirect = true;
         unsigned mask = CWOverrideRedirect;
         XChangeWindowAttributes(pimpl->display, pimpl->window, mask, &windowAttributes);
+        
     }
     else
         ; // Window already has requested size
@@ -348,9 +383,11 @@ void Gosu::Window::show()
     // Make glx current
     glXMakeCurrent(pimpl->display, pimpl->window, pimpl->context);
     
-    if (pimpl->fullscreen)
+    if (pimpl->fullscreen){
         XSetInputFocus(pimpl->display, pimpl->window, RevertToParent, CurrentTime);
-
+        XGrabPointer(pimpl->display, pimpl->window, true, 0, GrabModeAsync, GrabModeAsync, pimpl->window, None, CurrentTime);
+    }
+    
     setCaption(pimpl->title);
 
     unsigned startTime, endTime;

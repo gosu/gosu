@@ -23,7 +23,7 @@ ALL_CXXFLAGS = -fPIC -I.. -Wall @PANGO_CXX_FLAGS@ @X_INCS@ \
 	   -DNDEBUG -O3 -pipe \
 	   -I/usr/include/SDL $(CXXFLAGS)
 
-LIBS = -L@x_libraries@ -lX11 @PANGO_LIBS@ -lsndfile -lvorbisfile -lvorbis -logg \
+LIBS = -L@x_libraries@ -lX11 -lXinerama @PANGO_LIBS@ -lsndfile -lvorbisfile -lvorbis -logg \
        -lm -lopenal -lpng -lstdc++ -lGL -lSDL_ttf -lSDL -lfreeimage
 
 LDCONFIG = ldconfig
