@@ -4,7 +4,6 @@
 #include <GosuImpl/Audio/AudioFile.hpp>
 #include <Gosu/IO.hpp>
 #include <vorbis/vorbisfile.h>
-#include <cassert>
 #include <algorithm>
 #include <stdexcept>
 
@@ -91,14 +90,12 @@ namespace Gosu
                 result = ov_read(&file_, ptr + size, length - size,
                                  OGG_ENDIANNESS, 2 /* 16-bit */,
                                  1 /* signed */, &section);
-                assert(section == 0);
                 if (result > 0)
                     size += result;
+                else if (result < 0)
+                    throw std::runtime_error("error reading vorbis stream");
                 else
-                    if (result < 0)
-                        throw std::runtime_error("error reading vorbis stream");
-                    else
-                        break;
+                    break;
             }
             
             return size;

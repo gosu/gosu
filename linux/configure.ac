@@ -23,6 +23,8 @@ fi
 AC_SUBST(X_INCS)
 AC_SUBST(x_libraries)
 
+AC_CHECK_LIB(Xinerama, XineramaQueryScreens, LIBS="$LIBS -lXinerama", AC_MSG_ERROR(Missing Xinerama), )
+
 # Pango/Freetype
 AC_MSG_CHECKING(for libpangoft2)
 pkg-config --exists pangoft2
@@ -82,3 +84,4 @@ AC_SUBST(HAVE_LIBRT)
 AC_CHECK_HEADER(FreeImage.h, [], AC_MSG_ERROR([Missing libfreeimage]))
 
 AC_OUTPUT(Makefile)
+
