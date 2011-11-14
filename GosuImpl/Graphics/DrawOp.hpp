@@ -7,8 +7,6 @@
 #include <GosuImpl/Graphics/TexChunk.hpp>
 #include <cassert>
 
-#include <stdio.h>
-
 namespace Gosu
 {
     // This looks like it may include a RenderStateDescriptor later.
@@ -173,8 +171,8 @@ namespace Gosu
             RenderStateDescriptor rsd = impliedRenderState();
             if (vas.empty() || !(vas.front().renderState == rsd))
             {
-                if (!vas.empty())
-                    puts("Oh no!! Splitting up vertex array!!"); fflush(0);
+                //if (!vas.empty())
+                //    puts("Oh no!! Splitting up vertex array!!"); fflush(0);
                 vas.push_back(VertexArray());
                 vas.back().renderState = rsd;
             }

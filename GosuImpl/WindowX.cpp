@@ -16,7 +16,6 @@
 #include <sstream>
 #include <stdexcept>
 #include <vector>
-#include <iostream>
 
 #include <GL/glx.h>
 #include <X11/Xlib.h>
