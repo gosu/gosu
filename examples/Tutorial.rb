@@ -65,9 +65,9 @@ class Star
   def initialize(animation)
     @animation = animation
     @color = Gosu::Color.new(0xff000000)
-    @color.red = rand(255 - 40) + 40
-    @color.green = rand(255 - 40) + 40
-    @color.blue = rand(255 - 40) + 40
+    @color.red = rand(256 - 40) + 40
+    @color.green = rand(256 - 40) + 40
+    @color.blue = rand(256 - 40) + 40
     @x = rand * 640
     @y = rand * 480
   end
