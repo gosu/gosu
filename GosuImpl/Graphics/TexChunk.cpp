@@ -27,25 +27,28 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1,
     double x4, double y4, Color c4,
     ZPos z, AlphaMode mode) const
 {
-    DrawOp newDrawOp(transforms->back());
+    DrawOp op;
+    op.renderState.texName = texName();
+    op.renderState.transform = &transforms->back();
+    op.renderState.mode = mode;
     
     reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
     
-    newDrawOp.verticesOrBlockIndex = 4;
-    newDrawOp.vertices[0] = DrawOp::Vertex(x1, y1, c1);
-    newDrawOp.vertices[1] = DrawOp::Vertex(x2, y2, c2);
+    op.verticesOrBlockIndex = 4;
+    op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
+    op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
 // TODO: Should be harmonized
 #ifdef GOSU_IS_IPHONE
-    newDrawOp.vertices[2] = DrawOp::Vertex(x3, y3, c3);
-    newDrawOp.vertices[3] = DrawOp::Vertex(x4, y4, c4);
+    op.vertices[2] = DrawOp::Vertex(x3, y3, c3);
+    op.vertices[3] = DrawOp::Vertex(x4, y4, c4);
 #else
-    newDrawOp.vertices[3] = DrawOp::Vertex(x3, y3, c3);
-    newDrawOp.vertices[2] = DrawOp::Vertex(x4, y4, c4);
+    op.vertices[3] = DrawOp::Vertex(x3, y3, c3);
+    op.vertices[2] = DrawOp::Vertex(x4, y4, c4);
 #endif
-    newDrawOp.chunk = this;
-    newDrawOp.mode = mode;
+    getCoords(op.left, op.top, op.right, op.bottom);
     
-    queues->back().scheduleDrawOp(newDrawOp, z);
+    op.z = z;
+    queues->back().scheduleDrawOp(op);
 }
 
 const Gosu::GLTexInfo* Gosu::TexChunk::glTexInfo() const

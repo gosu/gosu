@@ -341,14 +341,14 @@ void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
     double x2, double y2, Color c2,
     ZPos z, AlphaMode mode)
 {
-    DrawOp op(pimpl->absoluteTransforms.back());
-    
-    op.mode = mode;
+    DrawOp op;
+    op.renderState.transform = &pimpl->absoluteTransforms.back();
+    op.renderState.mode = mode;
     op.verticesOrBlockIndex = 2;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
-
-    pimpl->queues.back().scheduleDrawOp(op, z);
+    op.z = z;
+    pimpl->queues.back().scheduleDrawOp(op);
 }
 
 void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
@@ -356,9 +356,9 @@ void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
     double x3, double y3, Color c3,
     ZPos z, AlphaMode mode)
 {
-    DrawOp op(pimpl->absoluteTransforms.back());
-        
-    op.mode = mode;
+    DrawOp op;
+    op.renderState.transform = &pimpl->absoluteTransforms.back();
+    op.renderState.mode = mode;
     op.verticesOrBlockIndex = 3;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
@@ -367,8 +367,8 @@ void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
     op.verticesOrBlockIndex = 4;
     op.vertices[3] = op.vertices[2];
 #endif
-    
-    pimpl->queues.back().scheduleDrawOp(op, z);
+    op.z = z;
+    pimpl->queues.back().scheduleDrawOp(op);
 }
 
 void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
@@ -379,9 +379,9 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
 {
     reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
-    DrawOp op(pimpl->absoluteTransforms.back());
-    
-    op.mode = mode;
+    DrawOp op;
+    op.renderState.transform = &pimpl->absoluteTransforms.back();
+    op.renderState.mode = mode;
     op.verticesOrBlockIndex = 4;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
@@ -393,8 +393,8 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
     op.vertices[3] = DrawOp::Vertex(x3, y3, c3);
     op.vertices[2] = DrawOp::Vertex(x4, y4, c4);
 #endif
-
-    pimpl->queues.back().scheduleDrawOp(op, z);
+    op.z = z;
+    pimpl->queues.back().scheduleDrawOp(op);
 }
 
 std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(

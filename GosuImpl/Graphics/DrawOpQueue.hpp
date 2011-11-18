@@ -28,39 +28,36 @@ public:
         glBlocks.swap(other.glBlocks);
     }
     
-    void scheduleDrawOp(DrawOp op, ZPos z)
+    void scheduleDrawOp(DrawOp op)
     {
+        if (clipRectStack.clippedWorldAway())
+            return;
+        
         #ifdef GOSU_IS_IPHONE
         // No triangles, no lines supported
         assert (op.verticesOrBlockIndex == 4);
         #endif
         
-        if (clipRectStack.clippedWorldAway())
-            return;
-        
         if (const ClipRect* cr = clipRectStack.maybeEffectiveRect())
-            op.clipRect = *cr;
-        
-        op.z = z;
-        
+            op.renderState.clipRect = *cr;
         ops.push_back(op);
     }
     
     void scheduleGL(Transform& transform, std::tr1::function<void()> glBlock, ZPos z)
     {
-        int complementOfBlockIndex = ~(int)glBlocks.size();
-        glBlocks.push_back(glBlock);
-        DrawOp op(transform, complementOfBlockIndex);
-        
-        // TODO: Document this case!
+        // TODO: Document this case: Clipped-away GL blocks are *not* being run.
         if (clipRectStack.clippedWorldAway())
             return;
         
+        int complementOfBlockIndex = ~(int)glBlocks.size();
+        glBlocks.push_back(glBlock);
+        
+        DrawOp op;
+        op.renderState.transform = &transform;
+        op.verticesOrBlockIndex = complementOfBlockIndex;
         if (const ClipRect* cr = clipRectStack.maybeEffectiveRect())
-            op.clipRect = *cr;
-        
+            op.renderState.clipRect = *cr;
         op.z = z;
-        
         ops.push_back(op);
     }
     
@@ -99,8 +96,8 @@ public:
             {
                 // Apply stuff to GL as well
                 // TODO: Should be merged?!
-                renderState.setClipRect(current->clipRect);
-                renderState.setTransform(current->transform);
+                renderState.setClipRect(current->renderState.clipRect);
+                renderState.setTransform(current->renderState.transform);
                 
                 // GL code
                 int blockIndex = ~current->verticesOrBlockIndex;

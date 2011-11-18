@@ -17,7 +17,7 @@ class Gosu::Macro : public Gosu::ImageData
     VertexArrays vertexArrays;
     std::vector<Transform> embeddedTransforms;
     int givenWidth, givenHeight;
-
+    
     void realDraw(double x1, double y1, double x2, double y3) const
     {
         // TODO: Macros should not be split up because they have different transforms! This is insane.
@@ -77,10 +77,10 @@ public:
     }
     
     void draw(double x1, double y1, Color c1,
-              double x2, double y2, Color c2,
-              double x3, double y3, Color c3,
-              double x4, double y4, Color c4,
-              ZPos z, AlphaMode mode) const
+        double x2, double y2, Color c2,
+        double x3, double y3, Color c3,
+        double x4, double y4, Color c4,
+        ZPos z, AlphaMode mode) const
     {
         if (x1 != x3 || x2 != x4 || y1 != y2 || y3 != y4)
             throw std::invalid_argument("Macros cannot be rotated yet");
@@ -89,7 +89,7 @@ public:
         std::tr1::function<void()> f = std::tr1::bind(&Macro::realDraw, this, x1, y1, x2, y3);
         graphics.scheduleGL(f, z);
     }
-        
+    
     const Gosu::GLTexInfo* glTexInfo() const
     {
         return 0;
@@ -97,12 +97,12 @@ public:
     
     Gosu::Bitmap toBitmap() const
     {
-        throw std::logic_error("Gosu::Macro cannot be rendered as Gosu::Bitmap");
+        throw std::logic_error("Gosu::Macro cannot be rendered as Gosu::Bitmap yet");
     }
     
     void insert(const Bitmap& bitmap, int x, int y)
     {
-        throw std::logic_error("Gosu::Macro cannot be updated with a Gosu::Bitmap");
+        throw std::logic_error("Gosu::Macro cannot be updated with a Gosu::Bitmap yet");
     }
 };
 

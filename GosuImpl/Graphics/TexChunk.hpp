@@ -19,7 +19,7 @@ class Gosu::TexChunk : public Gosu::ImageData
     
     // Cached for faster access.
     GLTexInfo info;
-
+    
 public:
     TexChunk(Graphics& graphics, Transforms& transforms, DrawOpQueueStack& queues,
              std::tr1::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding);
