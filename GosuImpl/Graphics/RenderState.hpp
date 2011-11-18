@@ -5,52 +5,37 @@
 
 // Properties that potentially need to be changed between each draw operation.
 // This does not include the color or vertex data of the actual quads.
-struct Gosu::RenderStateDescriptor
+struct Gosu::RenderState
 {
     GLuint texName;
     Transform* transform;
     ClipRect clipRect;
     AlphaMode mode;
     
-    RenderStateDescriptor()
+    RenderState()
     : texName(NO_TEXTURE), transform(0), mode(amDefault)
     {
         clipRect.width = NO_CLIPPING;
     }
     
-    bool operator==(const RenderStateDescriptor& rhs) const
+    bool operator==(const RenderState& rhs) const
     {
         return texName == rhs.texName && transform == rhs.transform &&
             clipRect == rhs.clipRect && mode == rhs.mode;
     }
-};
-
-// Manages the OpenGL rendering state. It caches the current state, only forwarding the
-// changes to OpenGL if the new state is really different.
-class Gosu::RenderState : private Gosu::RenderStateDescriptor
-{
-    // Not copyable
-    RenderState(const RenderState&);
-    RenderState& operator=(const RenderState&);
     
-    void applyTransform()
+    void applyTexture() const
     {
-        glMatrixMode(GL_MODELVIEW);
-        glPopMatrix();
-        glPushMatrix();
-        
-        #ifndef GOSU_IS_IPHONE
-        glMultMatrixd(&(*transform)[0]);
-        #else
-        // TODO: Ouch, should always use floats!
-        float matrix[16];
-        for (int i = 0; i < 16; ++i)
-            matrix[i] = (*transform)[i];
-        glMultMatrixf(matrix);
-        #endif
+        if (texName == NO_TEXTURE)
+            glDisable(GL_TEXTURE_2D);
+        else
+        {
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, texName);
+        }
     }
     
-    void applyAlphaMode()
+    void applyAlphaMode() const
     {
         if (mode == amAdd)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -60,15 +45,63 @@ class Gosu::RenderState : private Gosu::RenderStateDescriptor
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
     
+    void applyClipRect() const
+    {
+        if (clipRect.width == NO_CLIPPING)
+            glDisable(GL_SCISSOR_TEST);
+        else
+        {
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(clipRect.x, clipRect.y, clipRect.width, clipRect.height);
+        }
+    }
+    
+    // Only used by Macro so far
+    #ifndef GOSU_IS_IPHONE
+    void apply() const
+    {
+        applyTexture();
+        glMultMatrixd(transform->data());
+        // cliprect from the outside is okay
+        applyAlphaMode();
+    }
+    #endif
+};
+
+// Manages the OpenGL rendering state. It caches the current state, only forwarding the
+// changes to OpenGL if the new state is really different.
+class Gosu::RenderStateManager : private Gosu::RenderState
+{
+    // Not copyable
+    RenderStateManager(const RenderStateManager&);
+    RenderStateManager& operator=(const RenderStateManager&);
+    
+    void applyTransform() const
+    {
+        glMatrixMode(GL_MODELVIEW);
+        glPopMatrix();
+        glPushMatrix();
+        
+        #ifndef GOSU_IS_IPHONE
+        glMultMatrixd(transform->data());
+        #else
+        // TODO: Ouch, should always use floats!
+        GLfloat matrix[16];
+        for (int i = 0; i < 16; ++i)
+            matrix[i] = (*transform)[i];
+        glMultMatrixf(matrix);
+        #endif
+    }
+    
 public:
-    RenderState()
+    RenderStateManager()
     {
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
         applyAlphaMode();
     }
     
-    ~RenderState()
+    ~RenderStateManager()
     {
         ClipRect noClipping;
         noClipping.width = NO_CLIPPING;
@@ -77,12 +110,12 @@ public:
         glPopMatrix();
     }
     
-    void setRenderState(const RenderStateDescriptor& rsd)
+    void setRenderState(const RenderState& rs)
     {
-        setTexName(rsd.texName);
-        setTransform(rsd.transform);
-        setClipRect(rsd.clipRect);
-        setAlphaMode(rsd.mode);
+        setTexName(rs.texName);
+        setTransform(rs.transform);
+        setClipRect(rs.clipRect);
+        setAlphaMode(rs.mode);
     }
     
     void setTexName(GLuint newTexName)
@@ -148,29 +181,14 @@ public:
     }
     
     // The cached values may have been messed with. Reset them again.
-    void enforceAfterUntrustedGL()
+    void enforceAfterUntrustedGL() const
     {
         // TODO: Actually, we don't have to worry about anything pushed
-        // using glPushAttribts because beginGL/endGL will take care of that.
+        // using glPushAttribs because beginGL/endGL will take care of that.
         
-        if (texName == NO_TEXTURE)
-            glDisable(GL_TEXTURE_2D);
-        else
-        {
-            glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, texName);
-        }
-        
+        applyTexture();
         applyTransform();
-        
-        if (clipRect.width == NO_CLIPPING)
-            glDisable(GL_SCISSOR_TEST);
-        else
-        {
-            glEnable(GL_SCISSOR_TEST);
-            glScissor(clipRect.x, clipRect.y, clipRect.width, clipRect.height);
-        }
-
+        applyClipRect();
         applyAlphaMode();
     }
 };

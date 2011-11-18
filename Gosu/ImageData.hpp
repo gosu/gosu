@@ -38,8 +38,8 @@ namespace Gosu
         {
         }
 
-        virtual unsigned width() const = 0;
-        virtual unsigned height() const = 0;
+        virtual int width() const = 0;
+        virtual int height() const = 0;
 
         virtual void draw(double x1, double y1, Color c1,
             double x2, double y2, Color c2,

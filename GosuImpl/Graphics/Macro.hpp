@@ -9,53 +9,14 @@
 #include <cmath>
 #include <algorithm>
 #include <memory>
+#include <stdexcept>
 
 class Gosu::Macro : public Gosu::ImageData
 {
-    VertexArrays vertexArrays;
-    unsigned w, h;
-    
     Graphics& graphics;
-public:
-    Macro(Graphics& graphics, DrawOpQueue& queue)
-    : graphics(graphics)
-    {
-        queue.compileTo(vertexArrays);
-        // TODO: Not sure what is the most intuitive behavior here.
-        // Also, shouldn't this respect each render state's transform? Ugh.
-        float left = 0, right = 0, top = 0, bottom = 0;
-        for (VertexArrays::const_iterator it = vertexArrays.begin(), end = vertexArrays.end(); it != end; ++it)
-            for (int i = 0, num = it->vertices.size(); i < num; ++i)
-            {
-                // Don't consider anything drawn left and top of the origin.
-                //left = std::min(left, it->vertices[i].vertices[0]);
-                //top = std::min(top, it->vertices[i].vertices[1]);
-                right = std::max(right, it->vertices[i].vertices[0]);
-                bottom = std::max(bottom, it->vertices[i].vertices[1]);
-            }
-        w = std::ceil(right - left);
-        h = std::ceil(bottom - top);
-    }
-    
-    unsigned int width() const
-    {
-        return w;
-    }
-    
-    unsigned int height() const
-    {
-        return h;
-    }
-    
-    void draw(double x1, double y1, Color c1,
-              double x2, double y2, Color c2,
-              double x3, double y3, Color c3,
-              double x4, double y4, Color c4,
-              ZPos z, AlphaMode mode) const
-    {
-        std::tr1::function<void()> f = std::tr1::bind(&Macro::realDraw, this, x1, y1, x2, y3);
-        graphics.scheduleGL(f, z);
-    }
+    VertexArrays vertexArrays;
+    std::vector<Transform> embeddedTransforms;
+    int givenWidth, givenHeight;
     
     void realDraw(double x1, double y1, double x2, double y3) const
     {
@@ -66,23 +27,67 @@ public:
         #ifndef GOSU_IS_IPHONE
         glEnable(GL_BLEND);
         glMatrixMode(GL_MODELVIEW);
-        RenderState rs;
         
         for (VertexArrays::const_iterator it = vertexArrays.begin(), end = vertexArrays.end(); it != end; ++it)
         {
-            rs.setRenderState(it->renderState);
-            
-            // TODO: Calculate the transform as a matrix and use RenderState::setTransform.
             glPushMatrix();
+            it->renderState.apply();
+            
             glTranslated(x1, y1, 0);
             glScaled((x2 - x1) / width(), (y3 - y1) / height(), 1);
-
+            
             glInterleavedArrays(GL_T2F_C4UB_V3F, 0, &it->vertices[0]);
             glDrawArrays(GL_QUADS, 0, it->vertices.size());
-            //glFlush();
             glPopMatrix();
         }
         #endif
+    }
+    
+public:
+    Macro(Graphics& graphics, DrawOpQueue& queue, int width, int height)
+    : graphics(graphics), givenWidth(width), givenHeight(height)
+    {
+        queue.compileTo(vertexArrays);
+        
+        // Very important fix: RenderState only contains a (non-owned) pointer to a Transform.
+        // If we want to use this Macro in more than a single frame, the pointer would be
+        // invalidated. Hence, we copy the transform into this macro and just let the
+        // RenderState refer to that one.
+        
+        // TODO: As the next step, we should flatten all the transforms into a single one. But
+        // maybe not here, as the VertexArrays are already split up, possibly because their
+        // transforms differed.
+        
+        embeddedTransforms.reserve(vertexArrays.size());
+        for (VertexArrays::iterator it = vertexArrays.begin(), end = vertexArrays.end(); it != end; ++it)
+        {
+            embeddedTransforms.push_back(*it->renderState.transform);
+            it->renderState.transform = &embeddedTransforms.back();
+        }
+    }
+    
+    int width() const
+    {
+        return givenWidth;
+    }
+    
+    int height() const
+    {
+        return givenHeight;
+    }
+    
+    void draw(double x1, double y1, Color c1,
+        double x2, double y2, Color c2,
+        double x3, double y3, Color c3,
+        double x4, double y4, Color c4,
+        ZPos z, AlphaMode mode) const
+    {
+        if (x1 != x3 || x2 != x4 || y1 != y2 || y3 != y4)
+            throw std::invalid_argument("Macros cannot be rotated yet");
+        if (c1 != 0xffffffff || c2 != 0xffffffff || c3 != 0xffffffff || c4 != 0xffffffff)
+            throw std::invalid_argument("Macros cannot be tinted with colors yet");
+        std::tr1::function<void()> f = std::tr1::bind(&Macro::realDraw, this, x1, y1, x2, y3);
+        graphics.scheduleGL(f, z);
     }
     
     const Gosu::GLTexInfo* glTexInfo() const
@@ -92,14 +97,13 @@ public:
     
     Gosu::Bitmap toBitmap() const
     {
-        throw std::logic_error("Gosu::Macro cannot be rendered as Gosu::Bitmap");
+        throw std::logic_error("Gosu::Macro cannot be rendered as Gosu::Bitmap yet");
     }
     
     void insert(const Bitmap& bitmap, int x, int y)
     {
-        throw std::logic_error("Gosu::Macro cannot be updated with a Gosu::Bitmap");
+        throw std::logic_error("Gosu::Macro cannot be updated with a Gosu::Bitmap yet");
     }
 };
 
 #endif
-

@@ -767,10 +767,10 @@ namespace Gosu {
         $self->graphics().endClipping();
     }
     %newobject record;
-    Gosu::Image* record() {
+    Gosu::Image* record(int width, int height) {
         $self->graphics().beginRecording();
         rb_yield(Qnil);
-        return new Gosu::Image($self->graphics().endRecording());
+        return new Gosu::Image($self->graphics().endRecording(width, height));
     }
     void transform(double m0, double m1, double m2, double m3, double m4, double m5, double m6, double m7,
         double m8, double m9, double m10, double m11, double m12, double m13, double m14, double m15) {

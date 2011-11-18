@@ -2823,10 +2823,10 @@ SWIGINTERN void Gosu_Window_clipTo(Gosu::Window *self,double x,double y,double w
         rb_yield(Qnil);
         self->graphics().endClipping();
     }
-SWIGINTERN Gosu::Image *Gosu_Window_record(Gosu::Window *self){
+SWIGINTERN Gosu::Image *Gosu_Window_record(Gosu::Window *self,int width,int height){
         self->graphics().beginRecording();
         rb_yield(Qnil);
-        return new Gosu::Image(self->graphics().endRecording());
+        return new Gosu::Image(self->graphics().endRecording(width, height));
     }
 SWIGINTERN void Gosu_Window_transform(Gosu::Window *self,double m0,double m1,double m2,double m3,double m4,double m5,double m6,double m7,double m8,double m9,double m10,double m11,double m12,double m13,double m14,double m15){
         Gosu::Transform transform = {
@@ -10359,22 +10359,38 @@ fail:
 SWIGINTERN VALUE
 _wrap_Window_record(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  int arg2 ;
+  int arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
   Gosu::Image *result = 0 ;
   VALUE vresult = Qnil;
   
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","record", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","record", 2, argv[0] ));
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "int","record", 3, argv[1] ));
+  } 
+  arg3 = static_cast< int >(val3);
   {
     try {
-      result = (Gosu::Image *)Gosu_Window_record(arg1);
+      result = (Gosu::Image *)Gosu_Window_record(arg1,arg2,arg3);
     } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }

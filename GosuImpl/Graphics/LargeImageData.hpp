@@ -17,8 +17,8 @@ namespace Gosu
         LargeImageData(Graphics& graphics, const Bitmap& source,
             unsigned partWidth, unsigned partHeight, unsigned borderFlags);
 
-        unsigned width() const;
-        unsigned height() const;
+        int width() const;
+        int height() const;
 
         void draw(double x1, double y1, Color c1,
             double x2, double y2, Color c2,

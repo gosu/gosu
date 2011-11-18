@@ -9,14 +9,16 @@
 
 namespace Gosu
 {
-    // This looks like it may include a RenderStateDescriptor later.
     struct DrawOp
     {
+        // For sorting before drawing the queue.
         ZPos z;
         
-        Transform* transform;
-        ClipRect clipRect;
+        RenderState renderState;
+        // Only valid if renderState.texName != NO_TEXTURE
+        GLfloat top, left, bottom, right;
         
+        // TODO: Merge with Gosu::ArrayVertex.
         struct Vertex
         {
             float x, y;
@@ -24,32 +26,12 @@ namespace Gosu
             Vertex() {}
             Vertex(float x, float y, Color c) : x(x), y(y), c(c) {}
         };
-        
         Vertex vertices[4];
+        
         // Number of vertices used, or: complement index of code block
         int verticesOrBlockIndex;
-        const TexChunk* chunk;
-        AlphaMode mode;
         
-        RenderStateDescriptor impliedRenderState() const
-        {
-            assert (verticesOrBlockIndex == 4);
-            
-            RenderStateDescriptor rsd;
-            rsd.texName = chunk ? chunk->texName() : NO_TEXTURE;
-            rsd.transform = transform;
-            rsd.clipRect = clipRect;
-            rsd.mode = mode;
-            return rsd;
-        }
-        
-        DrawOp(Transform& transform, int verticesOrBlockIndex = 4)
-        : transform(&transform), verticesOrBlockIndex(verticesOrBlockIndex), chunk(0)
-        {
-            clipRect.width = NO_CLIPPING;
-        }
-        
-        void perform(RenderState& current, const DrawOp* next) const
+        void perform(const DrawOp* next) const
         {
             // This should not be called on GL code ops.
             assert (verticesOrBlockIndex >= 2);
@@ -80,13 +62,9 @@ namespace Gosu
             }
             #endif
             
-            current.setRenderState(impliedRenderState());
-            
-            if (chunk)
+            #ifdef GOSU_IS_IPHONE
+            if (renderState.texName != NO_TEXTURE)
             {
-                #ifdef GOSU_IS_IPHONE
-                float left, top, right, bottom;
-                chunk->getCoords(left, top, right, bottom);
                 spriteTexcoords[spriteCounter*12 + 0] = left;
                 spriteTexcoords[spriteCounter*12 + 1] = top;
                 spriteTexcoords[spriteCounter*12 + 2] = right;
@@ -100,9 +78,9 @@ namespace Gosu
                 spriteTexcoords[spriteCounter*12 + 9] = bottom;
                 spriteTexcoords[spriteCounter*12 + 10] = right;
                 spriteTexcoords[spriteCounter*12 + 11] = bottom;
-                #endif
             }
-
+            #endif
+            
             #ifndef GOSU_IS_IPHONE
             if (verticesOrBlockIndex == 2)
                 glBegin(GL_LINES);
@@ -110,15 +88,11 @@ namespace Gosu
                 glBegin(GL_TRIANGLES);
             else // if (verticesOrBlockIndex == 4)
                 glBegin(GL_QUADS);
-
-            float left, top, right, bottom;
-            if (chunk)
-                chunk->getCoords(left, top, right, bottom);
             
             for (unsigned i = 0; i < verticesOrBlockIndex; i++)
             {
                 glColor4ubv(reinterpret_cast<const GLubyte*>(&vertices[i].c));
-                if (chunk)
+                if (renderState.texName != NO_TEXTURE)
                     switch (i)
                     {
                     case 0:
@@ -153,10 +127,7 @@ namespace Gosu
             }
             
             ++spriteCounter;
-            if (spriteCounter == MAX_AUTOGROUP || next == 0 ||
-                chunk == 0 || next->chunk == 0 || next->transform != transform ||
-                next->chunk->texName() != chunk->texName() || next->mode != mode ||
-                !(clipRect == next->clipRect))
+            if (spriteCounter == MAX_AUTOGROUP || next == 0 || next->renderState != renderState)
             {
                 glDrawArrays(GL_TRIANGLES, 0, 6 * spriteCounter);
                 //if (spriteCounter > 1)
@@ -168,13 +139,10 @@ namespace Gosu
         
         void compileTo(VertexArrays& vas) const
         {
-            RenderStateDescriptor rsd = impliedRenderState();
-            if (vas.empty() || !(vas.front().renderState == rsd))
+            if (vas.empty() || !(vas.back().renderState == renderState))
             {
-                //if (!vas.empty())
-                //    puts("Oh no!! Splitting up vertex array!!"); fflush(0);
                 vas.push_back(VertexArray());
-                vas.back().renderState = rsd;
+                vas.back().renderState = renderState;
             }
             
             ArrayVertex result[4];
@@ -185,8 +153,6 @@ namespace Gosu
                 result[i].vertices[2] = 0;
                 result[i].color = vertices[i].c.abgr();
             }
-            float left, top, right, bottom;
-            chunk->getCoords(left, top, right, bottom);
             result[0].texCoords[0] = left, result[0].texCoords[1] = top;
             result[1].texCoords[0] = right, result[1].texCoords[1] = top;
             result[2].texCoords[0] = right, result[2].texCoords[1] = bottom;

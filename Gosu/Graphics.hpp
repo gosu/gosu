@@ -81,8 +81,11 @@ namespace Gosu
         //! Starts recording a macro. Cannot be nested.
         void beginRecording();
         //! Finishes building the macro and returns it as a drawable object.
+        //! The width and height affect nothing about the recording process,
+        //! the resulting macro will simply return these values when you ask
+        //! it.
         //! Most usually, the return value is passed to Image::Image().
-        std::auto_ptr<Gosu::ImageData> endRecording();
+        std::auto_ptr<Gosu::ImageData> endRecording(int width, int height);
         
         //! Pushes one transformation onto the transformation stack.
         void pushTransform(const Transform& transform);

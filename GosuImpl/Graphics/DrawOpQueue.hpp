@@ -28,35 +28,36 @@ public:
         glBlocks.swap(other.glBlocks);
     }
     
-    void scheduleDrawOp(DrawOp op, ZPos z)
+    void scheduleDrawOp(DrawOp op)
     {
+        if (clipRectStack.clippedWorldAway())
+            return;
+        
         #ifdef GOSU_IS_IPHONE
         // No triangles, no lines supported
         assert (op.verticesOrBlockIndex == 4);
         #endif
         
-        if (clipRectStack.clippedWorldAway())
-            return;
-        
         if (const ClipRect* cr = clipRectStack.maybeEffectiveRect())
-            op.clipRect = *cr;
-        
-        op.z = z;
-        
+            op.renderState.clipRect = *cr;
         ops.push_back(op);
     }
     
     void scheduleGL(Transform& transform, std::tr1::function<void()> glBlock, ZPos z)
     {
+        // TODO: Document this case: Clipped-away GL blocks are *not* being run.
+        if (clipRectStack.clippedWorldAway())
+            return;
+        
         int complementOfBlockIndex = ~(int)glBlocks.size();
         glBlocks.push_back(glBlock);
-        DrawOp op(transform, complementOfBlockIndex);
         
+        DrawOp op;
+        op.renderState.transform = &transform;
+        op.verticesOrBlockIndex = complementOfBlockIndex;
         if (const ClipRect* cr = clipRectStack.maybeEffectiveRect())
-            op.clipRect = *cr;
-        
+            op.renderState.clipRect = *cr;
         op.z = z;
-        
         ops.push_back(op);
     }
     
@@ -75,35 +76,33 @@ public:
         // Apply Z-Ordering.
         std::stable_sort(ops.begin(), ops.end());
         
-        RenderState renderState;
+        RenderStateManager manager;
         #ifdef GOSU_IS_IPHONE
         if (ops.empty())
             return;
         
         DrawOps::const_iterator current = ops.begin(), last = ops.end() - 1;
         for (; current != last; ++current)
-            current->perform(renderState, &*(current + 1));
+            current->perform(&*(current + 1));
         last->perform(renderState, 0);
         #else
         for (DrawOps::const_iterator current = ops.begin(), last = ops.end();
             current != last; ++current)
         {
+            manager.setRenderState(current->renderState);
             if (current->verticesOrBlockIndex >= 0)
+            {
                 // Normal DrawOp, no GL code
-                current->perform(renderState, 0); // next unused on desktop
+                current->perform(0); // next unused on desktop
+            }
             else
             {
-                // Apply stuff to GL as well
-                // TODO: Should be merged?!
-                renderState.setClipRect(current->clipRect);
-                renderState.setTransform(current->transform);
-                
                 // GL code
                 int blockIndex = ~current->verticesOrBlockIndex;
                 assert (blockIndex >= 0);
                 assert (blockIndex < glBlocks.size());
                 glBlocks[blockIndex]();
-                renderState.enforceAfterUntrustedGL();
+                manager.enforceAfterUntrustedGL();
             }
         }
         #endif

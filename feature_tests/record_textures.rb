@@ -135,8 +135,8 @@ class Map
         end
       end
     end
-
-    @macro ||= window.record { draw_static }
+    
+    @macro ||= window.record(width * 50, height * 50) { draw_static }
   end
   
   def draw camera_x, camera_y
