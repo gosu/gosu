@@ -127,7 +127,7 @@ namespace Gosu
             }
             
             ++spriteCounter;
-            if (spriteCounter == MAX_AUTOGROUP || next == 0 || next->renderState != renderState)
+            if (spriteCounter == MAX_AUTOGROUP || next == 0 || !(next->renderState == renderState))
             {
                 glDrawArrays(GL_TRIANGLES, 0, 6 * spriteCounter);
                 //if (spriteCounter > 1)

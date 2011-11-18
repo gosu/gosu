@@ -83,8 +83,12 @@ public:
         
         DrawOps::const_iterator current = ops.begin(), last = ops.end() - 1;
         for (; current != last; ++current)
+        {
+            manager.setRenderState(current->renderState);
             current->perform(&*(current + 1));
-        last->perform(renderState, 0);
+        }
+        manager.setRenderState(last->renderState);
+        last->perform(0);
         #else
         for (DrawOps::const_iterator current = ops.begin(), last = ops.end();
             current != last; ++current)
