@@ -87,7 +87,7 @@ namespace Gosu
     //! \param tileHeight See tileWidth.
     //! \param appendTo STL container to which the images will be appended.
     //! Must provide a push_back member function; vector<tr1::shared_ptr<Image>>
-    //! or std::tr1::ptr_vector<Image> are good choices.
+    //! or boost::ptr_vector<Image> are good choices.
     template<typename Container>
     void imagesFromTiledBitmap(Graphics& graphics, const std::wstring& filename,
         int tileWidth, int tileHeight, bool tileable, Container& appendTo)
@@ -104,7 +104,7 @@ namespace Gosu
     //! \param tileHeight See tileWidth.
     //! \param appendTo STL container to which the images will be appended.
     //! Must provide a push_back member function; std::vector<std::tr1::shared_ptr<Image>>
-    //! or std::tr1::ptr_vector<Image> are good choices.
+    //! or boost::ptr_vector<Image> are good choices.
     template<typename Container>
     void imagesFromTiledBitmap(Graphics& graphics, const Bitmap& bmp,
         int tileWidth, int tileHeight, bool tileable, Container& appendTo)
