@@ -295,12 +295,12 @@ void Gosu::Graphics::beginRecording()
     pimpl->queues.resize(pimpl->queues.size() + 1);
 }
 
-std::auto_ptr<Gosu::ImageData> Gosu::Graphics::endRecording()
+std::auto_ptr<Gosu::ImageData> Gosu::Graphics::endRecording(int width, int height)
 {
     if (pimpl->queues.size() == 1)
         throw std::logic_error("No macro recording in progress that can be captured");
     
-    std::auto_ptr<ImageData> result(new Macro(*this, pimpl->queues.back()));
+    std::auto_ptr<ImageData> result(new Macro(*this, pimpl->queues.back(), width, height));
     pimpl->queues.pop_back();
     return result;
 }

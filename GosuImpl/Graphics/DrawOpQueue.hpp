@@ -52,6 +52,10 @@ public:
         glBlocks.push_back(glBlock);
         DrawOp op(transform, complementOfBlockIndex);
         
+        // TODO: Document this case!
+        if (clipRectStack.clippedWorldAway())
+            return;
+        
         if (const ClipRect* cr = clipRectStack.maybeEffectiveRect())
             op.clipRect = *cr;
         

@@ -27,7 +27,7 @@ class RecordPerformanceTest < Gosu::Window
     @images = %w(Wallpaper.png SquareTexture.png).map do |filename|
       Gosu::Image.new(self, "media/#{filename}", true)
     end
-    @macro = record { draw_grid 0, 0 }
+    @macro = record(1000, 1000) { draw_grid 0, 0 }
   end
   
   def button_down(id)
