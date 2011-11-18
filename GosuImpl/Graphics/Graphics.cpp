@@ -261,7 +261,7 @@ void Gosu::Graphics::scheduleGL(const std::tr1::function<void()>& functor, Gosu:
 void Gosu::Graphics::beginClipping(double x, double y, double width, double height)
 {
     if (pimpl->queues.size() > 1)
-        throw std::logic_error("Clipping not allowed while creating a macro");
+        throw std::logic_error("Clipping not allowed while creating a macro yet");
     
     // Apply current transformation.
     
@@ -320,6 +320,9 @@ namespace
 
 void Gosu::Graphics::pushTransform(const Gosu::Transform& transform)
 {
+    if (pimpl->queues.size() > 1)
+        throw std::logic_error("Transforms not allowed while creating a macro yet");
+    
     pimpl->currentTransforms.push_back(transform);
     Transform result = multiply(transform, pimpl->absoluteTransforms.back());
     ensureBackOfList(pimpl->absoluteTransforms, result);
