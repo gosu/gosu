@@ -144,7 +144,7 @@ namespace Gosu
         
         void compileTo(VertexArrays& vas) const
         {
-            if (vas.empty() || !(vas.front().renderState == renderState))
+            if (vas.empty() || !(vas.back().renderState == renderState))
             {
                 vas.push_back(VertexArray());
                 vas.back().renderState = renderState;
