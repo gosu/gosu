@@ -482,31 +482,41 @@ module Gosu
     # Use the ruby-opengl gem to access OpenGL function (if you manage to get it to work).
     # IF no z position is given, it will execute the given block immediately, otherwise,
     # the code will be scheduled to be called between Gosu drawing operations.
+    #
     # Note: You cannot call Gosu rendering functions within this block, and you can only
     # call the gl function in the call tree of Window#draw.
-    # Note: Against Gosu's usual convention, the order of execution among GL blocks with
-    # an equal z position is undefined, and so is the precedence between GL blocks and images
-    # with the same z position.
+    #
     # See examples/OpenGLIntegration.rb for an example.
     def gl(z=nil, &custom_gl_code); end
     
     # Limits the drawing area to a given rectangle while evaluating the code inside of the block.
-    def clip_to(x, y, w, h, &drawing_code); end
+    def clip_to(x, y, w, h, &rendering_code); end
+    
+    # Returns a Gosu::Image that containes everything rendered within the given block. It can be
+    # used to optimize rendering of many static images, e.g. the map. There are still several
+    # restrictions that you will be informed about via exceptions.
+    #
+    # The returned Gosu::Image will have the width and height you pass as arguments, regardless
+    # of how the area you draw on. It is important to pass accurate values if you plan on using
+    # Gosu::Image#draw_as_quad or Gosu::Image#draw_rot with the result later.
+    #
+    # @return [Gosu::Image]
+    def record(width, height, &rendering_code); end
     
     # Rotates everything drawn in the block around (around_x, around_y).
-    def rotate(angle, around_x=0, around_y=0, &drawing_code); end
+    def rotate(angle, around_x=0, around_y=0, &rendering_code); end
     
     # Scales everything drawn in the block by a factor.
-    def scale(factor_x, factor_y=factor_x, &drawing_code); end
+    def scale(factor_x, factor_y=factor_x, &rendering_code); end
     
     # Scales everything drawn in the block by a factor for each dimension.
-    def scale(factor_x, factor_y, around_x, around_y, &drawing_code); end
+    def scale(factor_x, factor_y, around_x, around_y, &rendering_code); end
     
     # Moves everything drawn in the block by an offset in each dimension.
-    def translate(x, y, &drawing_code); end
+    def translate(x, y, &rendering_code); end
     
     # Applies a free-form matrix rotation to everything drawn in the block.
-    def transform(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, &drawing_code); end
+    def transform(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, &rendering_code); end
     
     # Returns the character a button usually produces, or nil. To implement real text-input
     # facilities, look at the TextInput class instead.
