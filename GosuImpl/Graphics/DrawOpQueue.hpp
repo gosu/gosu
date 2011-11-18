@@ -76,35 +76,33 @@ public:
         // Apply Z-Ordering.
         std::stable_sort(ops.begin(), ops.end());
         
-        RenderState renderState;
+        RenderStateManager manager;
         #ifdef GOSU_IS_IPHONE
         if (ops.empty())
             return;
         
         DrawOps::const_iterator current = ops.begin(), last = ops.end() - 1;
         for (; current != last; ++current)
-            current->perform(renderState, &*(current + 1));
+            current->perform(&*(current + 1));
         last->perform(renderState, 0);
         #else
         for (DrawOps::const_iterator current = ops.begin(), last = ops.end();
             current != last; ++current)
         {
+            manager.setRenderState(current->renderState);
             if (current->verticesOrBlockIndex >= 0)
+            {
                 // Normal DrawOp, no GL code
-                current->perform(renderState, 0); // next unused on desktop
+                current->perform(0); // next unused on desktop
+            }
             else
             {
-                // Apply stuff to GL as well
-                // TODO: Should be merged?!
-                renderState.setClipRect(current->renderState.clipRect);
-                renderState.setTransform(current->renderState.transform);
-                
                 // GL code
                 int blockIndex = ~current->verticesOrBlockIndex;
                 assert (blockIndex >= 0);
                 assert (blockIndex < glBlocks.size());
                 glBlocks[blockIndex]();
-                renderState.enforceAfterUntrustedGL();
+                manager.enforceAfterUntrustedGL();
             }
         }
         #endif

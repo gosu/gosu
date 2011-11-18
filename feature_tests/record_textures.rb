@@ -135,7 +135,7 @@ class Map
         end
       end
     end
-
+    
     @macro ||= window.record(width * 50, height * 50) { draw_static }
   end
   

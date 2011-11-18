@@ -26,8 +26,8 @@
 
 namespace Gosu
 {
-    struct RenderStateDescriptor;
-    class RenderState;
+    struct RenderState;
+    class RenderStateManager;
 
     const GLuint NO_TEXTURE = static_cast<GLuint>(-1);
     const unsigned NO_CLIPPING = 0xffffffff;
@@ -68,7 +68,7 @@ namespace Gosu
     };
     struct VertexArray
     {
-        RenderStateDescriptor renderState;
+        RenderState renderState;
         std::vector<ArrayVertex> vertices;
     };
     typedef std::list<VertexArray> VertexArrays;

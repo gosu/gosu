@@ -49,10 +49,10 @@ public:
     {
         queue.compileTo(vertexArrays);
         
-        // Very important fix: RenderStateDescriptor only contains a (non-owned) pointer to
-        // a Transform. If we want to use this Macro in more than a single frame, the pointer
-        // would be invalidated. Hence, we copy the transform into this macro and just let the
-        // RSD refer to that one.
+        // Very important fix: RenderState only contains a (non-owned) pointer to a Transform.
+        // If we want to use this Macro in more than a single frame, the pointer would be
+        // invalidated. Hence, we copy the transform into this macro and just let the
+        // RenderState refer to that one.
         
         // TODO: As the next step, we should flatten all the transforms into a single one. But
         // maybe not here, as the VertexArrays are already split up, possibly because their
@@ -66,12 +66,12 @@ public:
         }
     }
     
-    unsigned width() const
+    int width() const
     {
         return givenWidth;
     }
     
-    unsigned height() const
+    int height() const
     {
         return givenHeight;
     }
@@ -107,4 +107,3 @@ public:
 };
 
 #endif
-

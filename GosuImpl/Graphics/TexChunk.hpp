@@ -25,12 +25,12 @@ public:
              std::tr1::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding);
     ~TexChunk();
 
-    unsigned int width() const
+    int width() const
     {
         return w;
     }
     
-    unsigned int height() const
+    int height() const
     {
         return h;
     }
@@ -40,14 +40,6 @@ public:
         return info.texName;
     }
     
-    void getCoords(float& left, float& top, float& right, float& bottom) const
-    {
-        left = info.left;
-        top = info.top;
-        right = info.right;
-        bottom = info.bottom;
-    }
-
     void draw(double x1, double y1, Color c1,
         double x2, double y2, Color c2,
         double x3, double y3, Color c3,

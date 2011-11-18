@@ -10,10 +10,11 @@ Gosu::TexChunk::TexChunk(Graphics& graphics, Transforms& transforms, DrawOpQueue
     texture(texture), x(x), y(y), w(w), h(h), padding(padding)
 {
     info.texName = texture->texName();
-    info.left    = float(x) / texture->size();
-    info.top     = float(y) / texture->size();
-    info.right   = float(x + w) / texture->size();
-    info.bottom  = float(y + h) / texture->size();
+    float textureSize = texture->size();
+    info.left = x / textureSize;
+    info.top = y / textureSize;
+    info.right = (x + w) / textureSize;
+    info.bottom = (y + h) / textureSize;
 }
 
 Gosu::TexChunk::~TexChunk()
@@ -45,7 +46,10 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1,
     op.vertices[3] = DrawOp::Vertex(x3, y3, c3);
     op.vertices[2] = DrawOp::Vertex(x4, y4, c4);
 #endif
-    getCoords(op.left, op.top, op.right, op.bottom);
+    op.left = info.left;
+    op.top = info.top;
+    op.right = info.right;
+    op.bottom = info.bottom;
     
     op.z = z;
     queues->back().scheduleDrawOp(op);
@@ -87,7 +91,7 @@ void Gosu::TexChunk::insert(const Bitmap& original, int x, int y)
         bitmap = &alternate;
     }
     
-    glBindTexture(GL_TEXTURE_2D, texture->texName());
+    glBindTexture(GL_TEXTURE_2D, texName());
     glTexSubImage2D(GL_TEXTURE_2D, 0, this->x + x, this->y + y, bitmap->width(), bitmap->height(),
         Color::GL_FORMAT, GL_UNSIGNED_BYTE, bitmap->data());
 }

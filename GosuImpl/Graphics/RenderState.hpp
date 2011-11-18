@@ -5,20 +5,20 @@
 
 // Properties that potentially need to be changed between each draw operation.
 // This does not include the color or vertex data of the actual quads.
-struct Gosu::RenderStateDescriptor
+struct Gosu::RenderState
 {
     GLuint texName;
     Transform* transform;
     ClipRect clipRect;
     AlphaMode mode;
     
-    RenderStateDescriptor()
+    RenderState()
     : texName(NO_TEXTURE), transform(0), mode(amDefault)
     {
         clipRect.width = NO_CLIPPING;
     }
     
-    bool operator==(const RenderStateDescriptor& rhs) const
+    bool operator==(const RenderState& rhs) const
     {
         return texName == rhs.texName && transform == rhs.transform &&
             clipRect == rhs.clipRect && mode == rhs.mode;
@@ -70,11 +70,11 @@ struct Gosu::RenderStateDescriptor
 
 // Manages the OpenGL rendering state. It caches the current state, only forwarding the
 // changes to OpenGL if the new state is really different.
-class Gosu::RenderState : public Gosu::RenderStateDescriptor
+class Gosu::RenderStateManager : private Gosu::RenderState
 {
     // Not copyable
-    RenderState(const RenderState&);
-    RenderState& operator=(const RenderState&);
+    RenderStateManager(const RenderStateManager&);
+    RenderStateManager& operator=(const RenderStateManager&);
     
     void applyTransform() const
     {
@@ -94,14 +94,14 @@ class Gosu::RenderState : public Gosu::RenderStateDescriptor
     }
     
 public:
-    RenderState()
+    RenderStateManager()
     {
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
         applyAlphaMode();
     }
     
-    ~RenderState()
+    ~RenderStateManager()
     {
         ClipRect noClipping;
         noClipping.width = NO_CLIPPING;
@@ -110,12 +110,12 @@ public:
         glPopMatrix();
     }
     
-    void setRenderState(const RenderStateDescriptor& rsd)
+    void setRenderState(const RenderState& rs)
     {
-        setTexName(rsd.texName);
-        setTransform(rsd.transform);
-        setClipRect(rsd.clipRect);
-        setAlphaMode(rsd.mode);
+        setTexName(rs.texName);
+        setTransform(rs.transform);
+        setClipRect(rs.clipRect);
+        setAlphaMode(rs.mode);
     }
     
     void setTexName(GLuint newTexName)

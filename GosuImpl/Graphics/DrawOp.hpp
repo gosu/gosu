@@ -14,11 +14,11 @@ namespace Gosu
         // For sorting before drawing the queue.
         ZPos z;
         
-        RenderStateDescriptor renderState;
+        RenderState renderState;
         // Only valid if renderState.texName != NO_TEXTURE
         GLfloat top, left, bottom, right;
         
-        // TODO: Merge with Gosu::ArrayVertex
+        // TODO: Merge with Gosu::ArrayVertex.
         struct Vertex
         {
             float x, y;
@@ -31,7 +31,7 @@ namespace Gosu
         // Number of vertices used, or: complement index of code block
         int verticesOrBlockIndex;
         
-        void perform(RenderState& current, const DrawOp* next) const
+        void perform(const DrawOp* next) const
         {
             // This should not be called on GL code ops.
             assert (verticesOrBlockIndex >= 2);
@@ -61,8 +61,6 @@ namespace Gosu
                 isSetup = true;
             }
             #endif
-            
-            current.setRenderState(renderState);
             
             #ifdef GOSU_IS_IPHONE
             if (renderState.texName != NO_TEXTURE)
@@ -129,10 +127,7 @@ namespace Gosu
             }
             
             ++spriteCounter;
-            if (spriteCounter == MAX_AUTOGROUP || next == 0 ||
-                chunk == 0 || next->chunk == 0 || next->transform != transform ||
-                next->chunk->texName() != chunk->texName() || next->mode != mode ||
-                !(clipRect == next->clipRect))
+            if (spriteCounter == MAX_AUTOGROUP || next == 0 || next->renderState != renderState)
             {
                 glDrawArrays(GL_TRIANGLES, 0, 6 * spriteCounter);
                 //if (spriteCounter > 1)

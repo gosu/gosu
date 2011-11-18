@@ -48,12 +48,12 @@ Gosu::LargeImageData::LargeImageData(Graphics& graphics,
         }
 }
 
-unsigned Gosu::LargeImageData::width() const
+int Gosu::LargeImageData::width() const
 {
     return fullWidth;
 }
 
-unsigned Gosu::LargeImageData::height() const
+int Gosu::LargeImageData::height() const
 {
     return fullHeight;
 }
