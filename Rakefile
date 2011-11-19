@@ -4,6 +4,7 @@ require 'date'
 require 'rubygems/package_task'
 
 COMMON_FILES = FileList[
+  '.yardopts',
   'COPYING',
   'README.txt',
 ]
