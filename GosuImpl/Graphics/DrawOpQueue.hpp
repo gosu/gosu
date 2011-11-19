@@ -12,6 +12,8 @@
 
 class Gosu::DrawOpQueue
 {
+    Transforms individualTransforms;
+    Transforms absoluteTransforms;
     ClipRectStack clipRectStack;
     
     typedef std::vector<DrawOp> DrawOps;
@@ -19,13 +21,29 @@ class Gosu::DrawOpQueue
     typedef std::vector<std::tr1::function<void()> > GLBlocks;
     GLBlocks glBlocks;
     
-public:
-    // I really wish I would trust ADL. :|
-    void swap(DrawOpQueue& other)
+    void makeCurrentTransform(const Transform& transform)
     {
-        clipRectStack.swap(other.clipRectStack);
-        ops.swap(other.ops);
-        glBlocks.swap(other.glBlocks);
+        Transforms::iterator oldPosition =
+            std::find(absoluteTransforms.begin(), absoluteTransforms.end(), transform);
+        if (oldPosition == absoluteTransforms.end())
+            absoluteTransforms.push_back(transform);
+        else
+            absoluteTransforms.splice(absoluteTransforms.end(), absoluteTransforms, oldPosition);
+    }
+    
+    Transform& currentTransform()
+    {
+        return absoluteTransforms.back();
+    }
+    
+public:
+    DrawOpQueue()
+    {
+        // Every queue has a base transform that is always the current transform.
+        // This keeps the code a bit more uniform, and allows the window to
+        // set a base transform in the main rendering queue.
+        individualTransforms.push_back(scale(1));
+        absoluteTransforms.push_back(scale(1));
     }
     
     void scheduleDrawOp(DrawOp op)
@@ -38,12 +56,13 @@ public:
         assert (op.verticesOrBlockIndex == 4);
         #endif
         
+        op.renderState.transform = &currentTransform();
         if (const ClipRect* cr = clipRectStack.maybeEffectiveRect())
             op.renderState.clipRect = *cr;
         ops.push_back(op);
     }
     
-    void scheduleGL(Transform& transform, std::tr1::function<void()> glBlock, ZPos z)
+    void scheduleGL(std::tr1::function<void()> glBlock, ZPos z)
     {
         // TODO: Document this case: Clipped-away GL blocks are *not* being run.
         if (clipRectStack.clippedWorldAway())
@@ -53,24 +72,71 @@ public:
         glBlocks.push_back(glBlock);
         
         DrawOp op;
-        op.renderState.transform = &transform;
         op.verticesOrBlockIndex = complementOfBlockIndex;
+        op.renderState.transform = &currentTransform();
         if (const ClipRect* cr = clipRectStack.maybeEffectiveRect())
             op.renderState.clipRect = *cr;
         op.z = z;
         ops.push_back(op);
     }
     
-    void beginClipping(int x, int y, int width, int height)
+    void beginClipping(int x, int y, int width, int height, int screenHeight)
     {
-        clipRectStack.beginClipping(x, y, width, height);
+        // Apply current transformation.
+        
+        double left = x, right = x + width;
+        double top = y, bottom = y + height;
+        
+        applyTransform(currentTransform(), left, top);
+        applyTransform(currentTransform(), right, bottom);
+        
+        int physX = std::min(left, right);
+        int physY = std::min(top, bottom);
+        int physWidth = std::abs(left - right);
+        int physHeight = std::abs(top - bottom);
+        
+        // Adjust for OpenGL having the wrong idea of where y=0 is.
+        // TODO: This should really happen *right before* setting up
+        // the glScissor.
+        physY = screenHeight - physY - physHeight;
+        
+        clipRectStack.beginClipping(physX, physY, physWidth, physHeight);
     }
     
     void endClipping()
     {
         clipRectStack.endClipping();
     }
-
+    
+    void setBaseTransform(const Transform& baseTransform)
+    {
+        assert (individualTransforms.size() == 1);
+        assert (absoluteTransforms.size() == 1);
+        
+        individualTransforms.front() = absoluteTransforms.front() = baseTransform;
+    }
+    
+    void pushTransform(const Transform& transform)
+    {
+        individualTransforms.push_back(transform);
+        Transform result = multiply(transform, currentTransform());
+        makeCurrentTransform(result);
+    }
+    
+    void popTransform()
+    {
+        assert (individualTransforms.size() > 1);
+        
+        individualTransforms.pop_back();
+        // TODO: If currentTransform() wouldn't have to be .back(), then I think
+        // this could be optimized away and just be pop_back too. Or not?
+        Transform result = scale(1);
+        for (Transforms::reverse_iterator it = individualTransforms.rbegin(),
+                end = individualTransforms.rend(); it != end; ++it)
+            result = multiply(result, *it);
+        makeCurrentTransform(result);
+    }
+    
     void performDrawOpsAndCode()
     {
         // Apply Z-Ordering.
@@ -95,10 +161,7 @@ public:
         {
             manager.setRenderState(current->renderState);
             if (current->verticesOrBlockIndex >= 0)
-            {
-                // Normal DrawOp, no GL code
-                current->perform(0); // next unused on desktop
-            }
+                current->perform(0);
             else
             {
                 // GL code
@@ -112,12 +175,6 @@ public:
         #endif
     }
     
-    void clear()
-    {
-        glBlocks.clear();
-        ops.clear();
-    }
-    
     void compileTo(VertexArrays& vas)
     {
         if (!glBlocks.empty())
@@ -125,7 +182,22 @@ public:
         
         std::stable_sort(ops.begin(), ops.end());
         for (DrawOps::const_iterator op = ops.begin(), end = ops.end(); op != end; ++op)
+        {
+            // TODO premultiply transforms
             op->compileTo(vas);
+        }
+    }
+    
+    void clear()
+    {
+        absoluteTransforms.resize(1);
+        // Important!! Due to all the swapping, the first entry in the list is not necessarily
+        // the base matrix. We need to restore it.
+        absoluteTransforms.front() = scale(1);
+        individualTransforms.resize(1);
+        clipRectStack.clear();
+        glBlocks.clear();
+        ops.clear();
     }
 };
 

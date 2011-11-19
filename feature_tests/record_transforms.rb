@@ -135,11 +135,10 @@ class Map
         end
       end
     end
-
-    @macro ||= window.record(width * 50, height * 50) { draw_static }
   end
   
   def draw
+    @macro ||= $window.record(width * 50, height * 50) { draw_static }
     @macro.draw 0, 0, 0
     @gems.each { |c| c.draw }
   end
@@ -156,8 +155,7 @@ class Map
     # Draws all the tiles, some off-screen, some on-screen.
     @height.times do |y|
       @width.times do |x|
-        tile = @tiles[x][y]
-        if tile
+        if tile = @tiles[x][y] then
           # Draw the tile with an offset (tile images have some overlap)
           # Scrolling is implemented here just as in the game objects.
           @tileset[tile].draw(x * 50 - 5, y * 50 - 5, 0)
@@ -172,6 +170,7 @@ class Game < Window
 
   def initialize
     super(640, 480, false)
+    $window = self
     self.caption = "Cptn. Ruby"
     @sky = Image.new(self, "media/Space.png", true)
     @map = Map.new(self, "media/CptnRuby Map.txt")

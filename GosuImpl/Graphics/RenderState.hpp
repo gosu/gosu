@@ -61,6 +61,7 @@ struct Gosu::RenderState
     void apply() const
     {
         applyTexture();
+        // TODO: This is not really cool- why does apply multiply and not set?
         glMultMatrixd(&(*transform)[0]);
         // cliprect from the outside is okay
         applyAlphaMode();
@@ -79,8 +80,7 @@ class Gosu::RenderStateManager : private Gosu::RenderState
     void applyTransform() const
     {
         glMatrixMode(GL_MODELVIEW);
-        glPopMatrix();
-        glPushMatrix();
+        glLoadIdentity();
         
         #ifndef GOSU_IS_IPHONE
         glMultMatrixd(&(*transform)[0]);
@@ -96,9 +96,10 @@ class Gosu::RenderStateManager : private Gosu::RenderState
 public:
     RenderStateManager()
     {
+        applyAlphaMode();
+        // Preserve previous MV matrix
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
-        applyAlphaMode();
     }
     
     ~RenderStateManager()
@@ -107,6 +108,8 @@ public:
         noClipping.width = NO_CLIPPING;
         setClipRect(noClipping);
         setTexName(NO_TEXTURE);
+        // Return to previous MV matrix
+        glMatrixMode(GL_MODELVIEW);
         glPopMatrix();
     }
     
@@ -139,7 +142,6 @@ public:
         if (newTransform == transform)
             return;
         transform = newTransform;
-        
         applyTransform();
     }
 
