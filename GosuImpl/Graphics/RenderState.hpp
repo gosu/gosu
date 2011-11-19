@@ -61,7 +61,7 @@ struct Gosu::RenderState
     void apply() const
     {
         applyTexture();
-        glMultMatrixd(transform->data());
+        glMultMatrixd(&(*transform)[0]);
         // cliprect from the outside is okay
         applyAlphaMode();
     }
@@ -83,7 +83,7 @@ class Gosu::RenderStateManager : private Gosu::RenderState
         glPushMatrix();
         
         #ifndef GOSU_IS_IPHONE
-        glMultMatrixd(transform->data());
+        glMultMatrixd(&(*transform)[0]);
         #else
         // TODO: Ouch, should always use floats!
         GLfloat matrix[16];
