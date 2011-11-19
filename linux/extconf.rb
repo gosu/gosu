@@ -96,6 +96,7 @@ else
   have_header('vorbisfile.h') if have_library('vorbisfile', 'ov_open_callbacks')
   have_header('AL/al.h') if have_library('openal')
   have_header('sndfile.h') if have_library('sndfile')
+  have_header('X11/extensions/Xinerama.h') if have_library('Xinerama', 'XineramaQueryScreens')
 end
 
 # Copy all relevant C++ files into the current directory
