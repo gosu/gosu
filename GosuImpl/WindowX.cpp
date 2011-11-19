@@ -26,45 +26,6 @@
 
 using namespace std::tr1::placeholders;
 
-namespace
-{
-    template<typename T>
-    class scoped_resource
-    {
-        T* pointer;
-        typedef std::tr1::function<void(T*)> Deleter;
-        Deleter deleter;
-        
-    public:
-        scoped_resource(T* pointer, const Deleter& deleter)
-        : pointer(pointer), deleter(deleter)
-        {
-        }
-        
-        void reset(T* newPointer = 0)
-        {
-            if (pointer)
-                deleter(pointer);
-            pointer = newPointer;
-        }
-        
-        T* get() const
-        {
-            return pointer;
-        }
-        
-        T* operator->() const
-        {
-            return get();
-        }
-        
-        ~scoped_resource()
-        {
-            reset(0);
-        }
-    };
-}
-
 namespace Gosu
 {
     namespace FPS
@@ -72,16 +33,61 @@ namespace Gosu
         void registerFrame();
     }
 
+    void screenMetrics(int *x_org, int *y_org, int *width, int *height){
+        // Open the X Display; passing NULL returns the default display.
+        Display* display = XOpenDisplay(NULL);
+        
+        // Raw screen information from the X server.
+        Screen* screen = XScreenOfDisplay(display, DefaultScreen(display));
+        
+        // Xinerama screen information; if available, this info is more accurate.
+        // This is especially important for multi-monitor configurations.
+        int screen_count = 0;
+        XineramaScreenInfo *screen_info = XineramaQueryScreens(display, &screen_count);
+    
+        // If screen_info is not NULL, we got preferred measurements from Xinerama,
+        // otherwise we use the measurements from the X server.
+        if(screen_info != NULL){
+            // screen_info is an array of length screen_count
+            // Index zero should hold the "default" or "primary"
+            // screen as configured by the user.
+            *x_org = screen_info[0].x_org;
+            *y_org = screen_info[0].y_org;
+            *width = screen_info[0].width;
+            *height = screen_info[0].height;
+        }else{
+            // screen is a reference to the default X Server screen
+            // Since we know Xinerama isn't running, this screen
+            // should correspond to exactly one physical display.
+            *x_org = 0;
+            *y_org = 0;
+            *width = screen->width;
+            *height = screen->height;
+        }
+    
+        // Release the Xinerama screen info, if we have it.
+        if(screen_info != NULL){
+            XFree(screen_info);
+        }
+        
+        // Release the connection to the X Display
+        XCloseDisplay(display);
+        
+        return;
+    }
+
     unsigned screenWidth()
     {
-        scoped_resource<Display> display(XOpenDisplay(NULL), XCloseDisplay);
-        return DisplayWidth(display.get(), DefaultScreen(display.get()));
+        int x_org, y_org, width, height;
+        screenMetrics(&x_org, &y_org, &width, &height);
+        return width;
     }
     
     unsigned screenHeight()
     {
-        scoped_resource<Display> display(XOpenDisplay(NULL), XCloseDisplay);
-        return DisplayHeight(display.get(), DefaultScreen(display.get()));
+        int x_org, y_org, width, height;
+        screenMetrics(&x_org, &y_org, &width, &height);
+        return height;
     }
 }
 
@@ -238,63 +244,38 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     Atom atoms[] = { XInternAtom(pimpl->display, "WM_DELETE_WINDOW", false) };
     XSetWMProtocols(pimpl->display, pimpl->window, atoms, 1);
 
-    // Get xinerama screen info
-    int screen_count = 0;
-    XineramaScreenInfo *screen_info = XineramaQueryScreens(pimpl->display, &screen_count);
 
-    // Holders for screen info
-    int screen_origin_x = 0;
-    int screen_origin_y = 0;
-    int screen_width = 0;
-    int screen_height = 0;
-
-    // Literal X screen, different from Xinerama screens
+    // Get reference to X Screen
     Screen* screen = XScreenOfDisplay(pimpl->display,
-                        DefaultScreen(pimpl->display));
+                     DefaultScreen(pimpl->display));
 
-    // Get origin/size from first xinerama screen if it
-    // exists; convention seems to be that the first
-    // screen is always the default screen with xinerama.
-    if(screen_info != NULL){
-        screen_origin_x = screen_info[0].x_org;
-        screen_origin_y = screen_info[0].y_org;
-        screen_width = screen_info[0].width;
-        screen_height = screen_info[0].height;
-    
-    // ... or just use the whole X screen if we don't
-    // seem to have any xinerama information.
-    }else{
-        screen_width = screen->width;
-        screen_height = screen->height;
-    }
-
-    // Free the screen info, cause I guess we don't
-    // need it after this?
-    XFree(screen_info);
-
-    if (fullscreen)
-    {
+    if (fullscreen){
+        // If we're going fullscreen, replace the window
+        // position and size with our screen metrics.
+        int screen_x_org, screen_y_org, screen_width, screen_height;
+        Gosu::screenMetrics(&screen_x_org, &screen_y_org, &screen_width, &screen_height);
         pimpl->width = screen_width;
         pimpl->height = screen_height;
-        XMoveResizeWindow(pimpl->display, pimpl->window, screen_origin_x, screen_origin_y,
-            screen_width, screen_height);
-            
+        pimpl->x = screen_x_org;
+        pimpl->y = screen_y_org;
+
+        // Override Redirect (JohnColburn says: I don't actually know what this is for.)
         XSetWindowAttributes windowAttributes;
         windowAttributes.override_redirect = true;
         unsigned mask = CWOverrideRedirect;
         XChangeWindowAttributes(pimpl->display, pimpl->window, mask, &windowAttributes);
-        
     }
-    else
-        ; // Window already has requested size
+    
+    // Move and resize the window to its current position and size.
+    XMoveResizeWindow(pimpl->display, pimpl->window, pimpl->x, pimpl->y, pimpl->width, pimpl->height);
 
-    // Set window to be non resizable
-    scoped_resource<XSizeHints> sizeHints(XAllocSizeHints(), XFree);
+    // Set window to be non-resizable
+    XSizeHints *sizeHints = XAllocSizeHints();
     sizeHints->flags = PMinSize | PMaxSize;
     sizeHints->min_width = sizeHints->max_width = pimpl->width;
     sizeHints->min_height = sizeHints->max_height = pimpl->height;
-    XSetWMNormalHints(pimpl->display, pimpl->window, sizeHints.get());
-    sizeHints.reset();
+    XSetWMNormalHints(pimpl->display, pimpl->window, sizeHints);
+    XFree(sizeHints);
 
     // TODO: Window style (_MOTIF_WM_HINTS)?        
 
