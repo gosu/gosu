@@ -160,8 +160,7 @@ class Map
     # Draws all the tiles, some off-screen, some on-screen.
     @height.times do |y|
       @width.times do |x|
-        tile = @tiles[x][y]
-        if tile
+        if tile = @tiles[x][y] then
           # Draw the tile with an offset (tile images have some overlap)
           # Scrolling is implemented here just as in the game objects.
           @tileset[tile].draw(x * 50 - 5, y * 50 - 5, 0)

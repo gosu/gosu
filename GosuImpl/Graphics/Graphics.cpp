@@ -28,8 +28,6 @@ struct Gosu::Graphics::Impl
     DrawOpQueueStack queues;
     typedef std::vector<std::tr1::shared_ptr<Texture> > Textures;
     Textures textures;
-    Transforms currentTransforms;
-    Transforms absoluteTransforms;
     
 #if 0
     std::mutex texMutex;
@@ -52,7 +50,7 @@ struct Gosu::Graphics::Impl
             result = multiply(scale(1.0 * physHeight / virtWidth, 1.0 * physWidth / virtHeight), result);
             return result;
         }
-    } 
+    }
     
     Orientation orientation;
     
@@ -66,7 +64,7 @@ struct Gosu::Graphics::Impl
         if (orientation != currentOrientation())
         {
             orientation = currentOrientation();
-            currentTransforms.front() = transformForOrientation(orientation);
+            queues.front().setBaseTransform(transformForOrientation(orientation));
         }
     }
 #endif
@@ -102,10 +100,6 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     
     // Create default draw-op queue.
     pimpl->queues.resize(1);
-    
-    // Push one identity matrix as the default transform.
-    pimpl->currentTransforms.push_back(scale(1));
-    pimpl->absoluteTransforms.push_back(scale(1));
 }
 
 Gosu::Graphics::~Graphics()
@@ -114,14 +108,12 @@ Gosu::Graphics::~Graphics()
 
 unsigned Gosu::Graphics::width() const
 {
-    double size[2] = { pimpl->virtWidth, pimpl->virtHeight };
-    return size[0];
+    return pimpl->virtWidth;
 }
 
 unsigned Gosu::Graphics::height() const
 {
-    double size[2] = { pimpl->virtWidth, pimpl->virtHeight };
-    return size[1];
+    return pimpl->virtHeight;
 }
 
 bool Gosu::Graphics::fullscreen() const
@@ -136,33 +128,28 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
     
     pimpl->virtWidth = virtualWidth, pimpl->virtHeight = virtualHeight;
     #ifdef GOSU_IS_IPHONE
-    pimpl->orientation = static_cast<Gosu::Orientation>(-1);
+    pimpl->orientation = static_cast<Orientation>(-1);
     #else
     Transform baseTransform;
     baseTransform = scale(1.0 / virtualWidth  * pimpl->physWidth,
                           1.0 / virtualHeight * pimpl->physHeight);
-    pimpl->currentTransforms.front() = pimpl->absoluteTransforms.front() = baseTransform;
+    pimpl->queues.front().setBaseTransform(baseTransform);
     #endif
 }
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 {
-    // If there is a recording in process, stop it.
-    // TODO: Raise exception?
+    // If recording is in process, cancel it.
+    assert (pimpl->queues.size() == 1);
     pimpl->queues.resize(1);
     // Clear leftover clippings.
     pimpl->queues.front().clear();
     
-    pimpl->currentTransforms.resize(1);
     #ifdef GOSU_IS_IPHONE
     pimpl->updateBaseTransform();
     #endif
-    pimpl->absoluteTransforms = pimpl->currentTransforms;
-    
-    glClearColor(clearWithColor.red()/255.0,
-                 clearWithColor.green()/255.0,
-                 clearWithColor.blue()/255.0,
-                 clearWithColor.alpha()/255.0);
+    glClearColor(clearWithColor.red() / 255.f, clearWithColor.green() / 255.f,
+        clearWithColor.blue() / 255.f, clearWithColor.alpha() / 255.f);
     glClear(GL_COLOR_BUFFER_BIT);
     
     return true;
@@ -170,18 +157,22 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 
 void Gosu::Graphics::end()
 {
+    // If recording is in process, cancel it.
+    assert (pimpl->queues.size() == 1);
+    pimpl->queues.resize(1);
+    
     flush();
-
+    
     glFlush();
 }
 
 void Gosu::Graphics::flush()
 {
-    // If there is a recording in process, cancel it.
-    pimpl->queues.resize(1);
+    if (pimpl->queues.size() != 1)
+        throw std::logic_error("Flushing to screen is not allowed while creating a macro");
     
-    pimpl->queues.at(0).performDrawOpsAndCode();
-    pimpl->queues.at(0).clear();
+    pimpl->queues.front().performDrawOpsAndCode();
+    pimpl->queues.front().clear();
 }
 
 void Gosu::Graphics::beginGL()
@@ -225,14 +216,14 @@ void Gosu::Graphics::scheduleGL(const std::tr1::function<void()>& functor, Gosu:
     throw std::logic_error("Custom OpenGL is unsupported on the iPhone");
 }
 #else
-namespace
+namespace Gosu
 {
     struct RunGLFunctor
     {
-        Gosu::Graphics& graphics;
+        Graphics& graphics;
         std::tr1::function<void()> functor;
         
-        RunGLFunctor(Gosu::Graphics& graphics, const std::tr1::function<void()>& functor)
+        RunGLFunctor(Graphics& graphics, const std::tr1::function<void()>& functor)
         : graphics(graphics), functor(functor)
         {
         }
@@ -243,7 +234,7 @@ namespace
             glPushAttrib(GL_ALL_ATTRIB_BITS);
             glDisable(GL_BLEND);
             while (glGetError() != GL_NO_ERROR);
-
+            
             functor();
             
             // Does not have to be inlined.
@@ -254,39 +245,20 @@ namespace
 
 void Gosu::Graphics::scheduleGL(const std::tr1::function<void()>& functor, Gosu::ZPos z)
 {
-    pimpl->queues.back().scheduleGL(pimpl->absoluteTransforms.back(), RunGLFunctor(*this, functor), z);
+    pimpl->queues.back().scheduleGL(RunGLFunctor(*this, functor), z);
 }
 #endif
 
 void Gosu::Graphics::beginClipping(double x, double y, double width, double height)
 {
     if (pimpl->queues.size() > 1)
-        throw std::logic_error("Clipping not allowed while creating a macro yet");
+        throw std::logic_error("Clipping is not allowed while creating a macro yet");
     
-    // Apply current transformation.
-    
-    double left = x, right = x + width;
-    double top = y, bottom = y + height;
-    
-    applyTransform(pimpl->absoluteTransforms.back(), left, top);
-    applyTransform(pimpl->absoluteTransforms.back(), right, bottom);
-    
-    int physX = std::min(left, right);
-    int physY = std::min(top, bottom);
-    int physWidth = std::abs(left - right);
-    int physHeight = std::abs(top - bottom);
-    
-    // Apply OpenGL's counting from the wrong side ;)
-    physY = pimpl->physHeight - physY - physHeight;
-    
-    pimpl->queues.back().beginClipping(physX, physY, physWidth, physHeight);
+    pimpl->queues.back().beginClipping(x, y, width, height, pimpl->physHeight);
 }
 
 void Gosu::Graphics::endClipping()
 {
-    if (pimpl->queues.size() > 1)
-        throw std::logic_error("Clipping is not allowed while creating a macro");
-    
     pimpl->queues.back().endClipping();
 }
 
@@ -305,47 +277,20 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::endRecording(int width, int heigh
     return result;
 }
 
-namespace
-{
-    void ensureBackOfList(Gosu::Transforms& list, const Gosu::Transform& transform)
-    {
-        Gosu::Transforms::iterator oldPosition =
-            std::find(list.begin(), list.end(), transform);
-        if (oldPosition == list.end())
-            list.push_back(transform);
-        else
-            list.splice(list.end(), list, oldPosition);
-    }
-}
-
 void Gosu::Graphics::pushTransform(const Gosu::Transform& transform)
 {
-    if (pimpl->queues.size() > 1)
-        throw std::logic_error("Transforms not allowed while creating a macro yet");
-    
-    pimpl->currentTransforms.push_back(transform);
-    Transform result = multiply(transform, pimpl->absoluteTransforms.back());
-    ensureBackOfList(pimpl->absoluteTransforms, result);
+    pimpl->queues.back().pushTransform(transform);
 }
 
 void Gosu::Graphics::popTransform()
 {
-    pimpl->currentTransforms.pop_back();
-    Transform result = scale(1);
-    
-    for (Transforms::reverse_iterator it = pimpl->currentTransforms.rbegin(),
-         end = pimpl->currentTransforms.rend(); it != end; ++it)
-        result = multiply(result, *it);
-    
-    ensureBackOfList(pimpl->absoluteTransforms, result);
+    pimpl->queues.back().popTransform();
 }
 
 void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
-    double x2, double y2, Color c2,
-    ZPos z, AlphaMode mode)
+    double x2, double y2, Color c2, ZPos z, AlphaMode mode)
 {
     DrawOp op;
-    op.renderState.transform = &pimpl->absoluteTransforms.back();
     op.renderState.mode = mode;
     op.verticesOrBlockIndex = 2;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
@@ -355,12 +300,10 @@ void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
 }
 
 void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
-    double x2, double y2, Color c2,
-    double x3, double y3, Color c3,
+    double x2, double y2, Color c2, double x3, double y3, Color c3,
     ZPos z, AlphaMode mode)
 {
     DrawOp op;
-    op.renderState.transform = &pimpl->absoluteTransforms.back();
     op.renderState.mode = mode;
     op.verticesOrBlockIndex = 3;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
@@ -375,15 +318,12 @@ void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
 }
 
 void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
-    double x2, double y2, Color c2,
-    double x3, double y3, Color c3,
-    double x4, double y4, Color c4,
-    ZPos z, AlphaMode mode)
+    double x2, double y2, Color c2, double x3, double y3, Color c3,
+    double x4, double y4, Color c4, ZPos z, AlphaMode mode)
 {
     reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
     DrawOp op;
-    op.renderState.transform = &pimpl->absoluteTransforms.back();
     op.renderState.mode = mode;
     op.verticesOrBlockIndex = 4;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
@@ -422,14 +362,14 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
         if (srcX == 0 && srcWidth == src.width() &&
             srcY == 0 && srcHeight == src.height())
         {
-            data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture, src, 0);
+            data = texture->tryAlloc(*this, pimpl->queues, texture, src, 0);
         }
         else
         {
             Bitmap trimmedSrc;
             trimmedSrc.resize(srcWidth, srcHeight);
             trimmedSrc.insert(src, 0, 0, srcX, srcY, srcWidth, srcHeight);
-            data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture, trimmedSrc, 0);
+            data = texture->tryAlloc(*this, pimpl->queues, texture, trimmedSrc, 0);
         }
         
         if (!data.get())
@@ -460,7 +400,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
         std::tr1::shared_ptr<Texture> texture(*i);
         
         std::auto_ptr<ImageData> data;
-        data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture, bmp, 1);
+        data = texture->tryAlloc(*this, pimpl->queues, texture, bmp, 1);
         if (data.get())
             return data;
     }
@@ -472,7 +412,7 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     pimpl->textures.push_back(texture);
     
     std::auto_ptr<ImageData> data;
-    data = texture->tryAlloc(*this, pimpl->absoluteTransforms, pimpl->queues, texture, bmp, 1);
+    data = texture->tryAlloc(*this, pimpl->queues, texture, bmp, 1);
     if (!data.get())
         throw std::logic_error("Internal texture block allocation error");
 

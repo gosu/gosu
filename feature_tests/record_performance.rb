@@ -37,7 +37,7 @@ class RecordPerformanceTest < Gosu::Window
   def draw
     use_macro = !button_down?(Gosu::KbTab)
     
-    self.caption = "#{Gosu::fps} FPS, Macro: #{use_macro}, Macro size: #{@macro.width}x#{@macro.height}"
+    self.caption = "#{Gosu::fps} FPS, Macro? #{use_macro}"
     if use_macro then
       zoom = button_down?(char_to_button_id('+')) ? 100.0 : 1.0
       @macro.draw grid_x, grid_y, 0, zoom, zoom

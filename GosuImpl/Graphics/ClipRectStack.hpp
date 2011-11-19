@@ -1,6 +1,10 @@
 #ifndef GOSUIMPL_GRAPHICS_CLIPRECTSTACK_HPP
 #define GOSUIMPL_GRAPHICS_CLIPRECTSTACK_HPP
 
+#include <GosuImpl/Graphics/Common.hpp>
+#include <cassert>
+#include <vector>
+
 class Gosu::ClipRectStack
 {
     std::vector<ClipRect> stack;
@@ -52,6 +56,12 @@ public:
     {
     }
     
+    void clear()
+    {
+        stack.clear();
+        hasEffectiveRect = false;
+    }
+    
     void beginClipping(int x, int y, int width, int height)
     {
         ClipRect rect = { x, y, width, height };
@@ -61,6 +71,7 @@ public:
     
     void endClipping()
     {
+        assert (!stack.empty());
         stack.pop_back();
         updateEffectiveRect();
     }

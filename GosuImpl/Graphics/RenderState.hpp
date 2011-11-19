@@ -61,8 +61,7 @@ struct Gosu::RenderState
     void apply() const
     {
         applyTexture();
-        glMultMatrixd(transform->data());
-        // cliprect from the outside is okay
+        // TODO: No inner clipRect yet - how would this work?!
         applyAlphaMode();
     }
     #endif
@@ -79,11 +78,10 @@ class Gosu::RenderStateManager : private Gosu::RenderState
     void applyTransform() const
     {
         glMatrixMode(GL_MODELVIEW);
-        glPopMatrix();
-        glPushMatrix();
+        glLoadIdentity();
         
         #ifndef GOSU_IS_IPHONE
-        glMultMatrixd(transform->data());
+        glMultMatrixd(&(*transform)[0]);
         #else
         // TODO: Ouch, should always use floats!
         GLfloat matrix[16];
@@ -96,9 +94,10 @@ class Gosu::RenderStateManager : private Gosu::RenderState
 public:
     RenderStateManager()
     {
+        applyAlphaMode();
+        // Preserve previous MV matrix
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
-        applyAlphaMode();
     }
     
     ~RenderStateManager()
@@ -107,6 +106,8 @@ public:
         noClipping.width = NO_CLIPPING;
         setClipRect(noClipping);
         setTexName(NO_TEXTURE);
+        // Return to previous MV matrix
+        glMatrixMode(GL_MODELVIEW);
         glPopMatrix();
     }
     
@@ -139,7 +140,6 @@ public:
         if (newTransform == transform)
             return;
         transform = newTransform;
-        
         applyTransform();
     }
 

@@ -67,8 +67,6 @@ namespace Gosu
         //! Schedules a custom GL functor to be executed at a certain Z level.
         //! The functor is called in a clean GL context (as given by beginGL/endGL).
         //! Gosu's rendering up to the Z level may not yet have been glFlush()ed.
-        //! Note: Unlike normal drawing operations on the same Z level, the order
-        //! of custom GL functors is NOT DEFINED.
         //! Note: You may not call any Gosu rendering functions from within the
         //! functor, and you must schedule it from within Window::draw's call tree.
         void scheduleGL(const std::tr1::function<void()>& functor, ZPos z);

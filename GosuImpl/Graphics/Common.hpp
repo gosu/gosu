@@ -104,10 +104,11 @@ namespace Gosu
         return result;
     }
     
-    inline void applyTransform(const Transform& transform, double& x, double& y)
+    template<typename Float>
+    void applyTransform(const Transform& transform, Float& x, Float& y)
     {
-        double in[4] = { x, y, 0, 1 };
-        double out[4] = { 0, 0, 0, 0 };
+        Float in[4] = { x, y, 0, 1 };
+        Float out[4] = { 0, 0, 0, 0 };
         for (int i = 0; i < 4; ++i)
             for (int j = 0; j < 4; ++j)
                 out[i] += in[j] * transform[j * 4 + i];
