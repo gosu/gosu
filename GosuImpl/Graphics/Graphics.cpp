@@ -250,7 +250,10 @@ void Gosu::Graphics::scheduleGL(const std::tr1::function<void()>& functor, Gosu:
 #endif
 
 void Gosu::Graphics::beginClipping(double x, double y, double width, double height)
-{    
+{
+    if (pimpl->queues.size() > 1)
+        throw std::logic_error("Clipping is not allowed while creating a macro yet");
+    
     pimpl->queues.back().beginClipping(x, y, width, height, pimpl->physHeight);
 }
 

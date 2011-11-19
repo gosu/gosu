@@ -139,12 +139,9 @@ namespace Gosu
         
         void compileTo(VertexArrays& vas) const
         {
-            if (vas.empty() || !(vas.back().renderState == renderState))
-            {
-                vas.push_back(VertexArray());
-                vas.back().renderState = renderState;
-            }
-            
+            // Copy vertex data and apply & forget about the transform.
+            // This is important because the pointed-to transform will be gone by the next
+            // frame anyway.
             ArrayVertex result[4];
             for (int i = 0; i < 4; ++i)
             {
@@ -152,11 +149,21 @@ namespace Gosu
                 result[i].vertices[1] = vertices[i].y;
                 result[i].vertices[2] = 0;
                 result[i].color = vertices[i].c.abgr();
+                applyTransform(*renderState.transform, result[i].vertices[0], result[i].vertices[1]);
             }
+            RenderState vaRenderState = renderState;
+            vaRenderState.transform = 0;
+            
             result[0].texCoords[0] = left, result[0].texCoords[1] = top;
             result[1].texCoords[0] = right, result[1].texCoords[1] = top;
             result[2].texCoords[0] = right, result[2].texCoords[1] = bottom;
             result[3].texCoords[0] = left, result[3].texCoords[1] = bottom;
+            
+            if (vas.empty() || !(vas.back().renderState == vaRenderState))
+            {
+                vas.push_back(VertexArray());
+                vas.back().renderState = vaRenderState;
+            }
             
             vas.back().vertices.insert(vas.back().vertices.end(), result, result + 4);
         }

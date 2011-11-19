@@ -182,10 +182,7 @@ public:
         
         std::stable_sort(ops.begin(), ops.end());
         for (DrawOps::const_iterator op = ops.begin(), end = ops.end(); op != end; ++op)
-        {
-            // TODO premultiply transforms
             op->compileTo(vas);
-        }
     }
     
     void clear()

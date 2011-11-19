@@ -15,7 +15,6 @@ class Gosu::Macro : public Gosu::ImageData
 {
     Graphics& graphics;
     VertexArrays vertexArrays;
-    std::vector<Transform> embeddedTransforms;
     int givenWidth, givenHeight;
     
     void realDraw(double x1, double y1, double x2, double y3) const
@@ -48,22 +47,6 @@ public:
     : graphics(graphics), givenWidth(width), givenHeight(height)
     {
         queue.compileTo(vertexArrays);
-        
-        // Very important fix: RenderState only contains a (non-owned) pointer to a Transform.
-        // If we want to use this Macro in more than a single frame, the pointer would be
-        // invalidated. Hence, we copy the transform into this macro and just let the
-        // RenderState refer to that one.
-        
-        // TODO: As the next step, we should flatten all the transforms into a single one. But
-        // maybe not here, as the VertexArrays are already split up, possibly because their
-        // transforms differed.
-        
-        embeddedTransforms.reserve(vertexArrays.size());
-        for (VertexArrays::iterator it = vertexArrays.begin(), end = vertexArrays.end(); it != end; ++it)
-        {
-            embeddedTransforms.push_back(*it->renderState.transform);
-            it->renderState.transform = &embeddedTransforms.back();
-        }
     }
     
     int width() const

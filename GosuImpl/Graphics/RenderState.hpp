@@ -61,9 +61,7 @@ struct Gosu::RenderState
     void apply() const
     {
         applyTexture();
-        // TODO: This is not really cool- why does apply multiply and not set?
-        glMultMatrixd(&(*transform)[0]);
-        // cliprect from the outside is okay
+        // TODO: No inner clipRect yet - how would this work?!
         applyAlphaMode();
     }
     #endif

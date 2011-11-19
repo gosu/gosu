@@ -158,7 +158,11 @@ class Map
         if tile = @tiles[x][y] then
           # Draw the tile with an offset (tile images have some overlap)
           # Scrolling is implemented here just as in the game objects.
-          @tileset[tile].draw(x * 50 - 5, y * 50 - 5, 0)
+          $window.translate(x * 50, y * 50) do
+            $window.rotate(Gosu::random(-5, 5)) do
+              @tileset[tile].draw -5, -5, 0
+            end
+          end
         end
       end
     end
