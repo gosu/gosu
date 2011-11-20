@@ -32,10 +32,23 @@ namespace
         for (int i = bitmap.width() * bitmap.height(); i > 0; --i, ++p)
             *p = (*p & 0xff00ff00) | ((*p << 16) & 0x00ff0000) | ((*p >> 16) & 0x000000ff);
     }
+
+    FIBITMAP* ensure32bits(FIBITMAP* fib)
+    {
+        int bpp = FreeImage_GetBPP(fib);
+        FREE_IMAGE_TYPE image_type = FreeImage_GetImageType(fib);
+        if (bpp != 32 && (image_type == FIT_BITMAP || image_type == FIT_RGBA16)) {
+            FIBITMAP* fib32 = FreeImage_ConvertTo32Bits(fib);
+            FreeImage_Unload(fib);
+            fib = fib32;
+        }
+        return fib;
+    }
     
     void fibToBitmap(Gosu::Bitmap& bitmap, FIBITMAP* fib, FREE_IMAGE_FORMAT fif)
     {
         bitmap.resize(FreeImage_GetWidth(fib), FreeImage_GetHeight(fib));
+        fib = ensure32bits(fib);
         FreeImage_ConvertToRawBits(reinterpret_cast<BYTE*>(bitmap.data()),
             fib, bitmap.width() * 4, 32,
             FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, TRUE);
