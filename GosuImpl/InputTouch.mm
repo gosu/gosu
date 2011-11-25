@@ -16,6 +16,7 @@ unsigned Gosu::TextInput::selectionStart() const { return 0; }
 
 struct Gosu::Input::Impl {
     GosuView* view;
+    float mouseX, mouseY;
     float factorX, factorY;
     float updateInterval;
     
@@ -55,6 +56,7 @@ Gosu::Input::Input(void* view, float updateInterval)
     pimpl->view = (GosuView*)view;
     pimpl->updateInterval = updateInterval;
     pimpl->currentTouchesSet.reset([[NSMutableSet alloc] init]);
+    pimpl->mouseX = pimpl->mouseY = -1000;
     setMouseFactors(1, 1);
 }
 
@@ -89,14 +91,16 @@ bool Gosu::Input::down(Button btn) const {
 }
 
 double Gosu::Input::mouseX() const {
-    return -1000;
+    return pimpl->mouseX;
 }
 
 double Gosu::Input::mouseY() const {
-    return -1000;
+    return pimpl->mouseY;
 }
 
 void Gosu::Input::setMousePosition(double x, double y) {
+    pimpl->mouseX = x;
+    pimpl->mouseY = y;
 }
 
 void Gosu::Input::setMouseFactors(double factorX, double factorY) {
