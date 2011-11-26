@@ -27,8 +27,14 @@ namespace Gosu
 }
 
 int main(int argc, char *argv[]) {
-    [[NSAutoreleasePool alloc] init];
-	return UIApplicationMain(argc, argv, nil, @"GosuAppDelegate");
+    try {
+        [[NSAutoreleasePool alloc] init];
+        return UIApplicationMain(argc, argv, nil, @"GosuAppDelegate");
+    }
+    catch (const std::exception& e) {
+        NSLog(@"Terminating due to C++ exception: %s", e.what());
+        throw;
+    }
 }
 
 class Gosu::Audio {};
