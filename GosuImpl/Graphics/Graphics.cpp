@@ -142,8 +142,8 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
     // If recording is in process, cancel it.
     assert (pimpl->queues.size() == 1);
     pimpl->queues.resize(1);
-    // Clear leftover clippings.
-    pimpl->queues.front().clear();
+    // Clear leftover transforms, clip rects etc.
+    pimpl->queues.front().reset();
     
     #ifdef GOSU_IS_IPHONE
     pimpl->updateBaseTransform();
@@ -172,7 +172,7 @@ void Gosu::Graphics::flush()
         throw std::logic_error("Flushing to screen is not allowed while creating a macro");
     
     pimpl->queues.front().performDrawOpsAndCode();
-    pimpl->queues.front().clear();
+    pimpl->queues.front().clearQueue();
 }
 
 void Gosu::Graphics::beginGL()
