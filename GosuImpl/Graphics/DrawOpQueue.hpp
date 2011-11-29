@@ -185,7 +185,16 @@ public:
             op->compileTo(vas);
     }
     
-    void clear()
+    // This retains the current stack of transforms and clippings.
+    void clearQueue()
+    {
+        glBlocks.clear();
+        ops.clear();
+    }
+    
+    // This clears the queue and starts with new stacks. This must not be called
+    // when endClipping/popTransform calls might still be pending.
+    void reset()
     {
         absoluteTransforms.resize(1);
         // Important!! Due to all the swapping, the first entry in the list is not necessarily
@@ -193,8 +202,7 @@ public:
         absoluteTransforms.front() = scale(1);
         individualTransforms.resize(1);
         clipRectStack.clear();
-        glBlocks.clear();
-        ops.clear();
+        clearQueue();
     }
 };
 

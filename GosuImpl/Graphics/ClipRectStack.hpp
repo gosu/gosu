@@ -76,13 +76,6 @@ public:
         updateEffectiveRect();
     }
     
-    void swap(ClipRectStack& other)
-    {
-        stack.swap(other.stack); // don't trust ADL :/
-        std::swap(hasEffectiveRect, other.hasEffectiveRect);
-        std::swap(effectiveRect, other.effectiveRect);
-    }
-    
     const ClipRect* maybeEffectiveRect() const
     {
         return hasEffectiveRect ? &effectiveRect : 0;
