@@ -52,20 +52,9 @@ struct Gosu::Graphics::Impl
         }
     }
     
-    Orientation orientation;
-    
-    Impl()
-    : orientation(currentOrientation())
-    {
-    }
-    
     void updateBaseTransform()
     {
-        if (orientation != currentOrientation())
-        {
-            orientation = currentOrientation();
-            queues.front().setBaseTransform(transformForOrientation(orientation));
-        }
+        queues.front().setBaseTransform(transformForOrientation(currentOrientation()));
     }
 #endif
 };
@@ -127,9 +116,8 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
         throw std::invalid_argument("Invalid virtual resolution.");
     
     pimpl->virtWidth = virtualWidth, pimpl->virtHeight = virtualHeight;
-    #ifdef GOSU_IS_IPHONE
-    pimpl->orientation = static_cast<Orientation>(-1);
-    #else
+    #ifndef GOSU_IS_IPHONE
+    // on the iPhone, updateCurrentTransform will handle this (yuck)
     Transform baseTransform;
     baseTransform = scale(1.0 / virtualWidth  * pimpl->physWidth,
                           1.0 / virtualHeight * pimpl->physHeight);
