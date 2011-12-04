@@ -68,7 +68,7 @@ if `uname`.chomp == 'Darwin' then
   # Apple curiously distributes libpng only inside X11
   $INCFLAGS << " -I/usr/X11/include"
   # To make everything work with the Objective C runtime
-  $CFLAGS   << " -x objective-c++ -fobjc-gc"
+  $CFLAGS   << " -x objective-c++ -fobjc-gc -DNDEBUG"
   $LDFLAGS  << " -L/usr/X11/lib -logg -lvorbis -lvorbisfile -liconv"
   %w(AudioToolbox IOKit OpenAL OpenGL AppKit ApplicationServices Foundation Carbon).each do |f|
     #$INCFLAGS << " -framework #{f}" <- not necessary? I only get lots of warnings
