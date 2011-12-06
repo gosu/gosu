@@ -79,7 +79,7 @@ namespace
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
     [UIDevice.currentDevice beginGeneratingDeviceOrientationNotifications];
-    UIApplication.sharedApplication.idleTimerDisabled = YES;
+    //UIApplication.sharedApplication.idleTimerDisabled = YES;
     UIApplication.sharedApplication.statusBarOrientation = UIInterfaceOrientationLandscapeRight;
     
     windowInstance();
@@ -188,4 +188,9 @@ void Gosu::Window::show()
 void Gosu::Window::close()
 {
     throw std::logic_error("Cannot close windows manually on iOS");
+}
+
+void* Gosu::Window::rootViewController() const
+{
+    return pimpl->controller.get();
 }
