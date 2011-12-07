@@ -19,8 +19,8 @@ Gosu::Orientation Gosu::currentOrientation()
     
     static Orientation orientation = Gosu::Orientation(-1);
     static unsigned waitingForChangeSince = now;
-
-    if (!UIDeviceOrientationIsLandscape(newOrientation) || orientationToGosu(newOrientation) == orientation)
+    
+    if (not UIDeviceOrientationIsLandscape(newOrientation) or orientationToGosu(newOrientation) == orientation)
         waitingForChangeSince = now;
     
     if (now - waitingForChangeSince >= CHANGE_AFTER_MS or orientation == Gosu::Orientation(-1))

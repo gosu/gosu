@@ -27,11 +27,13 @@ namespace Gosu
 }
 
 int main(int argc, char *argv[]) {
-    try {
+    try
+    {
         [[NSAutoreleasePool alloc] init];
         return UIApplicationMain(argc, argv, nil, @"GosuAppDelegate");
     }
-    catch (const std::exception& e) {
+    catch (const std::exception& e)
+    {
         NSLog(@"Terminating due to C++ exception: %s", e.what());
         throw;
     }
@@ -39,7 +41,8 @@ int main(int argc, char *argv[]) {
 
 class Gosu::Audio {};
 
-struct Gosu::Window::Impl {
+struct Gosu::Window::Impl
+{
     ObjRef<UIWindow> window;
     ObjRef<GosuViewController> controller;
     std::auto_ptr<Graphics> graphics;
@@ -63,18 +66,15 @@ namespace
 
 @implementation GosuAppDelegate
 // Required according to docs...
-- (void)applicationProtectedDataWillBecomeUnavailable:(UIApplication *)application
-{
+- (void)applicationProtectedDataWillBecomeUnavailable:(UIApplication *)application {
 }
 
 // Required according to docs...
-- (void)applicationProtectedDataDidBecomeAvailable:(UIApplication *)application
-{
+- (void)applicationProtectedDataDidBecomeAvailable:(UIApplication *)application {
 }
 
 // Required according to docs...
-- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
-{
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
 }
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
@@ -145,11 +145,13 @@ Gosu::Window::~Window()
 {
 }
 
-std::wstring Gosu::Window::caption() const {
+std::wstring Gosu::Window::caption() const
+{
     return L"";
 }
 
-void Gosu::Window::setCaption(const std::wstring& caption) {
+void Gosu::Window::setCaption(const std::wstring& caption)
+{
 }
 
 double Gosu::Window::updateInterval() const
@@ -157,27 +159,33 @@ double Gosu::Window::updateInterval() const
     return pimpl->interval;
 }
 
-const Gosu::Graphics& Gosu::Window::graphics() const {
+const Gosu::Graphics& Gosu::Window::graphics() const
+{
     return *pimpl->graphics;
 }
 
-Gosu::Graphics& Gosu::Window::graphics() {
+Gosu::Graphics& Gosu::Window::graphics()
+{
     return *pimpl->graphics;
 }
 
-const Gosu::Audio& Gosu::Window::audio() const {
+const Gosu::Audio& Gosu::Window::audio() const
+{
     return *pimpl->audio;
 }
 
-Gosu::Audio& Gosu::Window::audio() {
+Gosu::Audio& Gosu::Window::audio()
+{
     return *pimpl->audio;
 }
 
-const Gosu::Input& Gosu::Window::input() const {
+const Gosu::Input& Gosu::Window::input() const
+{
     return *pimpl->input;
 }
 
-Gosu::Input& Gosu::Window::input() {
+Gosu::Input& Gosu::Window::input()
+{
     return *pimpl->input;
 }
 
