@@ -1,10 +1,10 @@
 #include <Gosu/Input.hpp>
 #include <Gosu/TextInput.hpp>
 
-#import <GosuImpl/MacUtility.hpp>
-#import <GosuImpl/Orientation.hpp>
-#import <GosuImpl/Graphics/GosuView.hpp>
-#import <GosuImpl/Input/AccelerometerReader.hpp>
+#include <GosuImpl/MacUtility.hpp>
+#include <GosuImpl/Orientation.hpp>
+#include <GosuImpl/Input/AccelerometerReader.hpp>
+#import <UIKit/UIKit.h>
 
 struct Gosu::TextInput::Impl {};
 Gosu::TextInput::TextInput() {}
@@ -14,8 +14,9 @@ void Gosu::TextInput::setText(const std::wstring& text) {}
 unsigned Gosu::TextInput::caretPos() const { return 0; }
 unsigned Gosu::TextInput::selectionStart() const { return 0; }
 
-struct Gosu::Input::Impl {
-    GosuView* view;
+struct Gosu::Input::Impl
+{
+    UIView* view;
     float mouseX, mouseY;
     float factorX, factorY;
     float updateInterval;
@@ -53,14 +54,15 @@ struct Gosu::Input::Impl {
 Gosu::Input::Input(void* view, float updateInterval)
 : pimpl(new Impl)
 {
-    pimpl->view = (GosuView*)view;
+    pimpl->view = (UIView*)view;
     pimpl->updateInterval = updateInterval;
     pimpl->currentTouchesSet.reset([[NSMutableSet alloc] init]);
     pimpl->mouseX = pimpl->mouseY = -1000;
     setMouseFactors(1, 1);
 }
 
-Gosu::Input::~Input() {
+Gosu::Input::~Input()
+{
 }
 
 void Gosu::Input::feedTouchEvent(int type, void* touches)
@@ -78,23 +80,28 @@ void Gosu::Input::feedTouchEvent(int type, void* touches)
             (*f)(pimpl->translateTouch(uiTouch));        
 }
 
-wchar_t Gosu::Input::idToChar(Button btn) {
+wchar_t Gosu::Input::idToChar(Button btn)
+{
     return 0;
 }
 
-Gosu::Button Gosu::Input::charToId(wchar_t ch) {
+Gosu::Button Gosu::Input::charToId(wchar_t ch)
+{
     return noButton;
 }
         
-bool Gosu::Input::down(Button btn) const {
+bool Gosu::Input::down(Button btn) const
+{
     return false;
 }
 
-double Gosu::Input::mouseX() const {
+double Gosu::Input::mouseX() const
+{
     return pimpl->mouseX;
 }
 
-double Gosu::Input::mouseY() const {
+double Gosu::Input::mouseY() const
+{
     return pimpl->mouseY;
 }
 
@@ -119,19 +126,23 @@ const Gosu::Touches& Gosu::Input::currentTouches() const
     return *pimpl->currentTouchesVector;
 }
 
-double Gosu::Input::accelerometerX() const {
+double Gosu::Input::accelerometerX() const
+{
     return pimpl->acceleration(0);
 }
 
-double Gosu::Input::accelerometerY() const {
+double Gosu::Input::accelerometerY() const
+{
     return pimpl->acceleration(1);
 }
 
-double Gosu::Input::accelerometerZ() const {
+double Gosu::Input::accelerometerZ() const
+{
     return pimpl->acceleration(2);
 }
 
-void Gosu::Input::update() {
+void Gosu::Input::update()
+{
     // Check for dead touches and remove from vector if
     // necessary
 
@@ -144,7 +155,7 @@ void Gosu::Input::update() {
             phase == UITouchPhaseMoved ||
             phase == UITouchPhaseStationary)
             continue;
-            
+        
         // Something was deleted, we will need the set.
         if (!deadTouches.get())
             deadTouches.reset([[NSMutableSet alloc] init]);
@@ -162,10 +173,12 @@ void Gosu::Input::update() {
     }
 }
 
-Gosu::TextInput* Gosu::Input::textInput() const {
+Gosu::TextInput* Gosu::Input::textInput() const
+{
     return 0;
 }
 
-void Gosu::Input::setTextInput(TextInput* input) {
+void Gosu::Input::setTextInput(TextInput* input)
+{
     throw "NYI";
 }

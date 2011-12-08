@@ -36,7 +36,7 @@ int Gosu::clipRectBaseFactor()
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return NO;//UIInterfaceOrientationIsLandscape(interfaceOrientation);
+    return NO;
 }
 
 - (void)didReceiveMemoryWarning {
