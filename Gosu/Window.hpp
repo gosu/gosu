@@ -122,4 +122,8 @@ namespace Gosu
     };
 }
 
+#ifdef GOSU_IS_IPHONE
+Gosu::Window& windowInstance();
+#endif
+
 #endif
