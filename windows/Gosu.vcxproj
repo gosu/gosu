@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4989339B-019C-4399-86F5-1D9245C420C6}</ProjectGuid>
+    <RootNamespace>Gosu</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\lib</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\lib</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)Debug</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../;$(SolutionDir)/../dependencies/libsndfile/;$(SolutionDir)/../dependencies/libogg/include/;$(SolutionDir)/../dependencies/libvorbis/include/</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>Gdiplus.lib;openal32.lib;opengl32.lib;dinput8.lib;winmm.lib;dxguid.lib;ws2_32.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)Debug.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../;$(SolutionDir)/../dependencies/libsndfile/;$(SolutionDir)/../dependencies/libogg/include/;$(SolutionDir)/../dependencies/libvorbis/include/</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>Gdiplus.lib;openal32.lib;opengl32.lib;dinput8.lib;winmm.lib;dxguid.lib;ws2_32.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\GosuImpl\Sockets\CommSocket.cpp" />
+    <ClCompile Include="..\GosuImpl\DirectoriesWin.cpp" />
+    <ClCompile Include="..\GosuImpl\FileWin.cpp" />
+    <ClCompile Include="..\GosuImpl\InputWin.cpp" />
+    <ClCompile Include="..\GosuImpl\Inspection.cpp" />
+    <ClCompile Include="..\GosuImpl\IO.cpp" />
+    <ClCompile Include="..\GosuImpl\Sockets\ListenerSocket.cpp" />
+    <ClCompile Include="..\GosuImpl\Math.cpp" />
+    <ClCompile Include="..\GosuImpl\Sockets\MessageSocket.cpp" />
+    <ClCompile Include="..\GosuImpl\Sockets\Socket.cpp" />
+    <ClCompile Include="..\GosuImpl\TextInputWin.cpp" />
+    <ClCompile Include="..\GosuImpl\TimingWin.cpp" />
+    <ClCompile Include="..\GosuImpl\Utility.cpp" />
+    <ClCompile Include="..\GosuImpl\UtilityWin.cpp" />
+    <ClCompile Include="..\GosuImpl\WindowWin.cpp" />
+    <ClCompile Include="..\GosuImpl\WinMain.cpp" />
+    <ClCompile Include="..\GosuImpl\WinUtility.cpp" />
+    <ClCompile Include="..\GosuImpl\Graphics\Bitmap.cpp" />
+    <ClCompile Include="..\GosuImpl\Graphics\BitmapColorKey.cpp" />
+    <ClCompile Include="..\GosuImpl\Graphics\BitmapGDIplus.cpp" />
+    <ClCompile Include="..\GosuImpl\Graphics\BitmapUtils.cpp" />
+    <ClCompile Include="..\GosuImpl\Graphics\BlockAllocator.cpp" />
+    <ClCompile Include="..\GosuImpl\Graphics\Color.cpp" />
+    <ClCompile Include="..\GosuImpl\Graphics\Font.cpp" />
+    <ClCompile Include="..\GosuImpl\Graphics\Graphics.cpp" />
+    <ClCompile Include="..\GosuImpl\Graphics\Image.cpp" />
+    <ClCompile Include="..\GosuImpl\Graphics\LargeImageData.cpp" />
+    <ClCompile Include="..\GosuImpl\Graphics\TexChunk.cpp" />
+    <ClCompile Include="..\GosuImpl\Graphics\Text.cpp" />
+    <ClCompile Include="..\GosuImpl\Graphics\TextTTFWin.cpp" />
+    <ClCompile Include="..\GosuImpl\Graphics\Texture.cpp" />
+    <ClCompile Include="..\GosuImpl\Graphics\TextWin.cpp" />
+    <ClCompile Include="..\GosuImpl\Graphics\Transform.cpp" />
+    <ClCompile Include="..\GosuImpl\Audio\AudioOpenAL.cpp" />
+    <ClCompile Include="..\dependencies\libogg\src\bitwise.c" />
+    <ClCompile Include="..\dependencies\libogg\src\framing.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\analysis.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\bitrate.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\block.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\codebook.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\envelope.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\floor0.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\floor1.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\info.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\lookup.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\lpc.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\lsp.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\mapping0.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\mdct.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\psy.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\registry.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\res0.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\sharedbook.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\smallft.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\synthesis.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\window.c" />
+    <ClCompile Include="..\dependencies\libvorbis\lib\vorbisfile.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Gosu\Gosu.hpp" />
+    <ClInclude Include="..\GosuImpl\Graphics\BlockAllocator.hpp" />
+    <ClInclude Include="..\GosuImpl\Graphics\Common.hpp" />
+    <ClInclude Include="..\GosuImpl\Graphics\DrawOp.hpp" />
+    <ClInclude Include="..\GosuImpl\Graphics\DrawOpQueue.hpp" />
+    <ClInclude Include="..\GosuImpl\Graphics\LargeImageData.hpp" />
+    <ClInclude Include="..\GosuImpl\Graphics\Macro.hpp" />
+    <ClInclude Include="..\GosuImpl\Graphics\RenderState.hpp" />
+    <ClInclude Include="..\GosuImpl\Graphics\TexChunk.hpp" />
+    <ClInclude Include="..\GosuImpl\Graphics\Texture.hpp" />
+    <ClInclude Include="..\GosuImpl\Audio\ALChannelManagement.hpp" />
+    <ClInclude Include="..\GosuImpl\Audio\AudioFile.hpp" />
+    <ClInclude Include="..\GosuImpl\Audio\OggFile.hpp" />
+    <ClInclude Include="..\GosuImpl\Audio\SndFile.hpp" />
+    <ClInclude Include="..\Gosu\Audio.hpp" />
+    <ClInclude Include="..\Gosu\AutoLink.hpp" />
+    <ClInclude Include="..\Gosu\Bitmap.hpp" />
+    <ClInclude Include="..\Gosu\ButtonsWin.hpp" />
+    <ClInclude Include="..\Gosu\Color.hpp" />
+    <ClInclude Include="..\Gosu\Directories.hpp" />
+    <ClInclude Include="..\Gosu\Font.hpp" />
+    <ClInclude Include="..\Gosu\Fwd.hpp" />
+    <ClInclude Include="..\Gosu\Graphics.hpp" />
+    <ClInclude Include="..\Gosu\GraphicsBase.hpp" />
+    <ClInclude Include="..\Gosu\Image.hpp" />
+    <ClInclude Include="..\Gosu\ImageData.hpp" />
+    <ClInclude Include="..\Gosu\Input.hpp" />
+    <ClInclude Include="..\Gosu\Inspection.hpp" />
+    <ClInclude Include="..\Gosu\IO.hpp" />
+    <ClInclude Include="..\Gosu\MacUtility.hpp" />
+    <ClInclude Include="..\Gosu\Math.hpp" />
+    <ClInclude Include="..\Gosu\Platform.hpp" />
+    <ClInclude Include="..\GosuImpl\Sockets\Sockets.hpp" />
+    <ClInclude Include="..\Gosu\Sockets.hpp" />
+    <ClInclude Include="..\Gosu\Text.hpp" />
+    <ClInclude Include="..\Gosu\TextInput.hpp" />
+    <ClInclude Include="..\Gosu\Timing.hpp" />
+    <ClInclude Include="..\Gosu\TR1.hpp" />
+    <ClInclude Include="..\Gosu\Utility.hpp" />
+    <ClInclude Include="..\Gosu\Version.hpp" />
+    <ClInclude Include="..\Gosu\Window.hpp" />
+    <ClInclude Include="..\Gosu\WinUtility.hpp" />
+    <ClInclude Include="..\dependencies\libsndfile\sndfile.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
