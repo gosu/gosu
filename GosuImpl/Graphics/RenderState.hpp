@@ -126,11 +126,14 @@ public:
     
         if (newTexName != NO_TEXTURE)
         {
+            // New texture *is* really a texture - change to it.
+            
             if (texName == NO_TEXTURE)
                 glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, newTexName);
         }
-        else if (texName != NO_TEXTURE)
+        else
+            // New texture is NO_TEXTURE, disable texturing.
             glDisable(GL_TEXTURE_2D);
         texName = newTexName;
     }
