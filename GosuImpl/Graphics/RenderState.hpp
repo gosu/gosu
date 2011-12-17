@@ -8,7 +8,7 @@
 struct Gosu::RenderState
 {
     GLuint texName;
-    Transform* transform;
+    const Transform* transform;
     ClipRect clipRect;
     AlphaMode mode;
     
@@ -138,7 +138,7 @@ public:
         texName = newTexName;
     }
     
-    void setTransform(Transform* newTransform)
+    void setTransform(const Transform* newTransform)
     {
         if (newTransform == transform)
             return;

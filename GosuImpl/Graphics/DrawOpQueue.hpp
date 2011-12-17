@@ -3,6 +3,7 @@
 
 #include <Gosu/TR1.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
+#include <GosuImpl/Graphics/TransformStack.hpp>
 #include <GosuImpl/Graphics/ClipRectStack.hpp>
 #include <GosuImpl/Graphics/DrawOp.hpp>
 #include <cassert>
@@ -12,8 +13,7 @@
 
 class Gosu::DrawOpQueue
 {
-    Transforms individualTransforms;
-    Transforms absoluteTransforms;
+    TransformStack transformStack;
     ClipRectStack clipRectStack;
     
     typedef std::vector<DrawOp> DrawOps;
@@ -21,29 +21,10 @@ class Gosu::DrawOpQueue
     typedef std::vector<std::tr1::function<void()> > GLBlocks;
     GLBlocks glBlocks;
     
-    void makeCurrentTransform(const Transform& transform)
-    {
-        Transforms::iterator oldPosition =
-            std::find(absoluteTransforms.begin(), absoluteTransforms.end(), transform);
-        if (oldPosition == absoluteTransforms.end())
-            absoluteTransforms.push_back(transform);
-        else
-            absoluteTransforms.splice(absoluteTransforms.end(), absoluteTransforms, oldPosition);
-    }
-    
-    Transform& currentTransform()
-    {
-        return absoluteTransforms.back();
-    }
-    
 public:
     DrawOpQueue()
     {
-        // Every queue has a base transform that is always the current transform.
-        // This keeps the code a bit more uniform, and allows the window to
-        // set a base transform in the main rendering queue.
-        individualTransforms.push_back(scale(1));
-        absoluteTransforms.push_back(scale(1));
+        reset();
     }
     
     void scheduleDrawOp(DrawOp op)
@@ -56,7 +37,7 @@ public:
         assert (op.verticesOrBlockIndex == 4);
         #endif
         
-        op.renderState.transform = &currentTransform();
+        op.renderState.transform = &transformStack.current();
         if (const ClipRect* cr = clipRectStack.maybeEffectiveRect())
             op.renderState.clipRect = *cr;
         ops.push_back(op);
@@ -73,7 +54,7 @@ public:
         
         DrawOp op;
         op.verticesOrBlockIndex = complementOfBlockIndex;
-        op.renderState.transform = &currentTransform();
+        op.renderState.transform = &transformStack.current();
         if (const ClipRect* cr = clipRectStack.maybeEffectiveRect())
             op.renderState.clipRect = *cr;
         op.z = z;
@@ -87,8 +68,8 @@ public:
         double left = x, right = x + width;
         double top = y, bottom = y + height;
         
-        applyTransform(currentTransform(), left, top);
-        applyTransform(currentTransform(), right, bottom);
+        applyTransform(transformStack.current(), left, top);
+        applyTransform(transformStack.current(), right, bottom);
         
         int physX = std::min(left, right);
         int physY = std::min(top, bottom);
@@ -110,31 +91,17 @@ public:
     
     void setBaseTransform(const Transform& baseTransform)
     {
-        assert (individualTransforms.size() == 1);
-        assert (absoluteTransforms.size() == 1);
-        
-        individualTransforms.front() = absoluteTransforms.front() = baseTransform;
+        transformStack.setBaseTransform(baseTransform);
     }
     
     void pushTransform(const Transform& transform)
     {
-        individualTransforms.push_back(transform);
-        Transform result = multiply(transform, currentTransform());
-        makeCurrentTransform(result);
+        transformStack.push(transform);
     }
     
     void popTransform()
     {
-        assert (individualTransforms.size() > 1);
-        
-        individualTransforms.pop_back();
-        // TODO: If currentTransform() wouldn't have to be .back(), then I think
-        // this could be optimized away and just be pop_back too. Or not?
-        Transform result = scale(1);
-        for (Transforms::reverse_iterator it = individualTransforms.rbegin(),
-                end = individualTransforms.rend(); it != end; ++it)
-            result = multiply(result, *it);
-        makeCurrentTransform(result);
+        transformStack.pop();
     }
     
     void performDrawOpsAndCode()
@@ -196,11 +163,7 @@ public:
     // when endClipping/popTransform calls might still be pending.
     void reset()
     {
-        absoluteTransforms.resize(1);
-        // Important!! Due to all the swapping, the first entry in the list is not necessarily
-        // the base matrix. We need to restore it.
-        absoluteTransforms.front() = scale(1);
-        individualTransforms.resize(1);
+        transformStack.reset();
         clipRectStack.clear();
         clearQueue();
     }
