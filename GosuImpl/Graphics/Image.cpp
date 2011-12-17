@@ -111,3 +111,38 @@ Gosu::ImageData& Gosu::Image::getData() const
 {
     return *data;
 }
+
+std::vector<Gosu::Image> Gosu::loadTiles(Graphics& graphics, const Bitmap& bmp, int tileWidth, int tileHeight, bool tileable)
+{
+    int tilesX, tilesY;
+    std::vector<Image> images;
+    
+    if (tileWidth > 0)
+        tilesX = bmp.width() / tileWidth;
+    else
+    {
+        tilesX = -tileWidth;
+        tileWidth = bmp.width() / tilesX;
+    }
+    
+    if (tileHeight > 0)
+        tilesY = bmp.height() / tileHeight;
+    else
+    {
+        tilesY = -tileHeight;
+        tileHeight = bmp.height() / tilesY;
+    }
+    
+    for (int y = 0; y < tilesY; ++y)
+        for (int x = 0; x < tilesX; ++x)
+            images.push_back(Image(graphics, bmp, x * tileWidth, y * tileHeight, tileWidth, tileHeight, tileable));
+    
+    return images;
+}
+
+std::vector<Gosu::Image> Gosu::loadTiles(Graphics& graphics, const std::wstring& filename, int tileWidth, int tileHeight, bool tileable)
+{
+    Bitmap bmp;
+    loadImageFile(bmp, filename);
+    return loadTiles(graphics, bmp, tileWidth, tileHeight, tileable);
+}
