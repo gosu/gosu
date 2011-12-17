@@ -5,9 +5,11 @@
 #define GOSU_IMAGE_HPP
 
 #include <Gosu/Fwd.hpp>
-#include <Gosu/Bitmap.hpp>
+#include <Gosu/Color.hpp>
+#include <Gosu/GraphicsBase.hpp>
 #include <Gosu/TR1.hpp>
 #include <memory>
+#include <vector>
 
 namespace Gosu
 {
@@ -79,7 +81,10 @@ namespace Gosu
         //! Provides access to the underlying image data object.
         ImageData& getData() const;
     };
-
+    
+    std::vector<Gosu::Image> loadTiles(Graphics& graphics, const Bitmap& bmp, int tileWidth, int tileHeight, bool tileable);
+    std::vector<Gosu::Image> loadTiles(Graphics& graphics, const std::wstring& bmp, int tileWidth, int tileHeight, bool tileable);
+    
     //! Convenience function that splits a BMP or PNG file into an array
     //! of small rectangles and creates images from them.
     //! \param tileWidth If positive, specifies the width of one tile in
@@ -89,14 +94,13 @@ namespace Gosu
     //! Must provide a push_back member function; vector<tr1::shared_ptr<Image>>
     //! or boost::ptr_vector<Image> are good choices.
     template<typename Container>
-    void imagesFromTiledBitmap(Graphics& graphics, const std::wstring& filename,
-        int tileWidth, int tileHeight, bool tileable, Container& appendTo)
+    void imagesFromTiledBitmap(Graphics& graphics, const std::wstring& filename, int tileWidth, int tileHeight, bool tileable, Container& appendTo)
     {
-        Bitmap bmp;
-        loadImageFile(bmp, filename);
-        imagesFromTiledBitmap(graphics, bmp, tileWidth, tileHeight, tileable, appendTo);
+        std::vector<Gosu::Image> tiles = loadTiles(graphics, filename, tileWidth, tileHeight, tileable);
+        for (int i = 0, num = tiles.size(); i < num; ++i)
+            appendTo.push_back(typename Container::value_type(new Gosu::Image(tiles[i])));
     }
-
+    
     //! Convenience function that splits a bitmap into an area of array 
     //! rectangles and creates images from them.
     //! \param tileWidth If positive, specifies the width of one tile in
@@ -109,29 +113,9 @@ namespace Gosu
     void imagesFromTiledBitmap(Graphics& graphics, const Bitmap& bmp,
         int tileWidth, int tileHeight, bool tileable, Container& appendTo)
     {
-        int tilesX, tilesY;
-
-        if (tileWidth > 0)
-            tilesX = bmp.width() / tileWidth;
-        else
-        {
-            tilesX = -tileWidth;
-            tileWidth = bmp.width() / tilesX;
-        }
-        
-        if (tileHeight > 0)
-            tilesY = bmp.height() / tileHeight;
-        else
-        {
-            tilesY = -tileHeight;
-            tileHeight = bmp.height() / tilesY;
-        }
-        
-        for (int y = 0; y < tilesY; ++y)
-            for (int x = 0; x < tilesX; ++x)
-                appendTo.push_back(typename Container::value_type(new Image(graphics, bmp,
-                    x * tileWidth, y * tileHeight, tileWidth, tileHeight,
-                    tileable)));
+        std::vector<Gosu::Image> tiles = loadTiles(graphics, bmp, tileWidth, tileHeight, tileable);
+        for (int i = 0, num = tiles.size(); i < num; ++i)
+            appendTo.push_back(typename Container::value_type(new Gosu::Image(tiles[i])));
     }
 }
 

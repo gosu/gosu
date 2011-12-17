@@ -2208,6 +2208,7 @@ static VALUE mGosu;
 #undef close
 #undef read
 #undef bind
+#undef send
 #undef sleep
 #undef Sleep
 #undef int8_t
@@ -2223,23 +2224,7 @@ static VALUE mGosu;
 //#include <Gosu/Async.hpp>
 //#endif
 
-#include <Gosu/Audio.hpp>
-#include <Gosu/Color.hpp>
-#include <Gosu/Font.hpp>
-#include <Gosu/GraphicsBase.hpp>
-#include <Gosu/Graphics.hpp>
-#include <Gosu/Image.hpp>
-#include <Gosu/ImageData.hpp>
-#include <Gosu/Inspection.hpp>
-#include <Gosu/Input.hpp>
-#include <Gosu/IO.hpp>
-#include <Gosu/Math.hpp>
-#include <Gosu/Text.hpp>
-#include <Gosu/TextInput.hpp>
-#include <Gosu/Timing.hpp>
-#include <Gosu/Utility.hpp>
-#include <Gosu/Version.hpp>
-#include <Gosu/Window.hpp>
+#include <Gosu/Gosu.hpp>
 #ifdef GOSU_IS_WIN
 #include <FreeImage.h>
 #endif
@@ -11243,8 +11228,8 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_RubyInitializeTrackings();
   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(7)));
-  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(40)));
-  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.40"));
+  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(41)));
+  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.7.41"));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
   rb_define_module_function(mGosu, "degrees_to_radians", VALUEFUNC(_wrap_degrees_to_radians), -1);

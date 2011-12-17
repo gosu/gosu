@@ -109,6 +109,64 @@
 		D44A4E6D146B2AC300B715D1 /* synthesis.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E59146B2AC300B715D1 /* synthesis.c */; };
 		D44A4E6E146B2AC300B715D1 /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E5A146B2AC300B715D1 /* window.c */; };
 		D44A4E71146B2AE000B715D1 /* vorbisfile.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E70146B2AE000B715D1 /* vorbisfile.c */; };
+		D4C6071C1498B6E500483C3C /* FileUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DD3146B288100B715D1 /* FileUnix.cpp */; };
+		D4C6071E1498B6E500483C3C /* Inspection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DD5146B288100B715D1 /* Inspection.cpp */; };
+		D4C6071F1498B6E500483C3C /* IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DD6146B288100B715D1 /* IO.cpp */; };
+		D4C607201498B6E500483C3C /* MacUtility.hpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DD7146B288100B715D1 /* MacUtility.hpp */; };
+		D4C607211498B6E500483C3C /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DD8146B288100B715D1 /* Math.cpp */; };
+		D4C607221498B6E500483C3C /* Orientation.hpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DD9146B288100B715D1 /* Orientation.hpp */; };
+		D4C607241498B6E500483C3C /* TimingApple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DDB146B288100B715D1 /* TimingApple.cpp */; };
+		D4C607251498B6E500483C3C /* Utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DDC146B288100B715D1 /* Utility.cpp */; };
+		D4C607261498B6E500483C3C /* UtilityApple.mm in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DDD146B288100B715D1 /* UtilityApple.mm */; };
+		D4C607281498B71700483C3C /* CommSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DED146B289600B715D1 /* CommSocket.cpp */; };
+		D4C607291498B71700483C3C /* ListenerSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DEE146B289600B715D1 /* ListenerSocket.cpp */; };
+		D4C6072A1498B71700483C3C /* MessageSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DEF146B289600B715D1 /* MessageSocket.cpp */; };
+		D4C6072B1498B71700483C3C /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DF0146B289600B715D1 /* Socket.cpp */; };
+		D4C6072C1498B72B00483C3C /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DFD146B28CE00B715D1 /* Bitmap.cpp */; };
+		D4C6072D1498B72B00483C3C /* BitmapApple.mm in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DFE146B28CE00B715D1 /* BitmapApple.mm */; };
+		D4C6072E1498B72B00483C3C /* BitmapBMP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DFF146B28CE00B715D1 /* BitmapBMP.cpp */; };
+		D4C6072F1498B72B00483C3C /* BitmapColorKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E00146B28CE00B715D1 /* BitmapColorKey.cpp */; };
+		D4C607301498B72B00483C3C /* BitmapUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E01146B28CE00B715D1 /* BitmapUtils.cpp */; };
+		D4C607311498B72B00483C3C /* BlockAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E02146B28CE00B715D1 /* BlockAllocator.cpp */; };
+		D4C607321498B72B00483C3C /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E04146B28CE00B715D1 /* Color.cpp */; };
+		D4C607331498B72B00483C3C /* Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E08146B28CE00B715D1 /* Font.cpp */; };
+		D4C607351498B72B00483C3C /* Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E0C146B28CE00B715D1 /* Graphics.cpp */; };
+		D4C607361498B72B00483C3C /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E0D146B28CE00B715D1 /* Image.cpp */; };
+		D4C607371498B72B00483C3C /* LargeImageData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E0E146B28CE00B715D1 /* LargeImageData.cpp */; };
+		D4C607381498B72B00483C3C /* TexChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E12146B28CE00B715D1 /* TexChunk.cpp */; };
+		D4C607391498B72B00483C3C /* Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E14146B28CE00B715D1 /* Text.cpp */; };
+		D4C6073A1498B72B00483C3C /* TextTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E15146B28CE00B715D1 /* TextTouch.mm */; };
+		D4C6073B1498B72B00483C3C /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E16146B28CE00B715D1 /* Texture.cpp */; };
+		D4C6073C1498B72B00483C3C /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E18146B28CE00B715D1 /* Transform.cpp */; };
+		D4C6073D1498B73200483C3C /* AudioOpenAL.mm in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E38146B28EA00B715D1 /* AudioOpenAL.mm */; };
+		D4C6074A1498B98D00483C3C /* DirectoriesMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4C607451498B98D00483C3C /* DirectoriesMac.mm */; };
+		D4C6074B1498B98D00483C3C /* DirectoriesUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4C607461498B98D00483C3C /* DirectoriesUnix.cpp */; };
+		D4C6074C1498B98D00483C3C /* InputMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4C607471498B98D00483C3C /* InputMac.mm */; };
+		D4C6074D1498B98D00483C3C /* TextInputMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4C607481498B98D00483C3C /* TextInputMac.mm */; };
+		D4C6074E1498B98D00483C3C /* WindowMac.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4C607491498B98D00483C3C /* WindowMac.mm */; };
+		D4C607561498BA5500483C3C /* bitwise.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E42146B2A7B00B715D1 /* bitwise.c */; };
+		D4C607571498BA5500483C3C /* framing.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E43146B2A7B00B715D1 /* framing.c */; };
+		D4C607581498BA5A00483C3C /* analysis.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E47146B2AC300B715D1 /* analysis.c */; };
+		D4C607591498BA5A00483C3C /* bitrate.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E48146B2AC300B715D1 /* bitrate.c */; };
+		D4C6075A1498BA5A00483C3C /* block.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E49146B2AC300B715D1 /* block.c */; };
+		D4C6075B1498BA5A00483C3C /* codebook.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E4A146B2AC300B715D1 /* codebook.c */; };
+		D4C6075C1498BA5A00483C3C /* envelope.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E4B146B2AC300B715D1 /* envelope.c */; };
+		D4C6075D1498BA5A00483C3C /* floor0.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E4C146B2AC300B715D1 /* floor0.c */; };
+		D4C6075E1498BA5A00483C3C /* floor1.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E4D146B2AC300B715D1 /* floor1.c */; };
+		D4C6075F1498BA5A00483C3C /* info.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E4E146B2AC300B715D1 /* info.c */; };
+		D4C607601498BA5A00483C3C /* lookup.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E4F146B2AC300B715D1 /* lookup.c */; };
+		D4C607611498BA5A00483C3C /* lpc.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E50146B2AC300B715D1 /* lpc.c */; };
+		D4C607621498BA5A00483C3C /* lsp.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E51146B2AC300B715D1 /* lsp.c */; };
+		D4C607631498BA5A00483C3C /* mapping0.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E52146B2AC300B715D1 /* mapping0.c */; };
+		D4C607641498BA5A00483C3C /* mdct.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E53146B2AC300B715D1 /* mdct.c */; };
+		D4C607651498BA5A00483C3C /* psy.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E54146B2AC300B715D1 /* psy.c */; };
+		D4C607661498BA5A00483C3C /* registry.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E55146B2AC300B715D1 /* registry.c */; };
+		D4C607671498BA5A00483C3C /* res0.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E56146B2AC300B715D1 /* res0.c */; };
+		D4C607681498BA5A00483C3C /* sharedbook.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E57146B2AC300B715D1 /* sharedbook.c */; };
+		D4C607691498BA5A00483C3C /* smallft.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E58146B2AC300B715D1 /* smallft.c */; };
+		D4C6076A1498BA5A00483C3C /* synthesis.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E59146B2AC300B715D1 /* synthesis.c */; };
+		D4C6076B1498BA5A00483C3C /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E5A146B2AC300B715D1 /* window.c */; };
+		D4C6076C1498BA6300483C3C /* vorbisfile.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E70146B2AE000B715D1 /* vorbisfile.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -215,6 +273,14 @@
 		D44A4E59146B2AC300B715D1 /* synthesis.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = synthesis.c; path = ../dependencies/libvorbis/lib/synthesis.c; sourceTree = "<group>"; };
 		D44A4E5A146B2AC300B715D1 /* window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = window.c; path = ../dependencies/libvorbis/lib/window.c; sourceTree = "<group>"; };
 		D44A4E70146B2AE000B715D1 /* vorbisfile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = vorbisfile.c; path = ../dependencies/libvorbis/lib/vorbisfile.c; sourceTree = "<group>"; };
+		D4C6070D1498B58000483C3C /* libGosu.a */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libGosu.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4C607111498B58000483C3C /* GosuProj.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = GosuProj.xcconfig; sourceTree = "<group>"; };
+		D4C607121498B58000483C3C /* GosuTarget.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = GosuTarget.xcconfig; sourceTree = "<group>"; };
+		D4C607451498B98D00483C3C /* DirectoriesMac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DirectoriesMac.mm; path = ../GosuImpl/DirectoriesMac.mm; sourceTree = "<group>"; };
+		D4C607461498B98D00483C3C /* DirectoriesUnix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DirectoriesUnix.cpp; path = ../GosuImpl/DirectoriesUnix.cpp; sourceTree = "<group>"; };
+		D4C607471498B98D00483C3C /* InputMac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = InputMac.mm; path = ../GosuImpl/InputMac.mm; sourceTree = "<group>"; };
+		D4C607481498B98D00483C3C /* TextInputMac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextInputMac.mm; path = ../GosuImpl/TextInputMac.mm; sourceTree = "<group>"; };
+		D4C607491498B98D00483C3C /* WindowMac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = WindowMac.mm; path = ../GosuImpl/WindowMac.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,6 +289,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D44A4CF0146B26F500B715D1 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D4C6070A1498B58000483C3C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,6 +308,7 @@
 				D44A4D9E146B280000B715D1 /* Interface */,
 				D44A4DD1146B283F00B715D1 /* Implementation */,
 				D44A4E40146B2A3F00B715D1 /* Dependencies */,
+				D4C6070E1498B58000483C3C /* Gosu */,
 				D44A4CEE146B26F500B715D1 /* Frameworks */,
 				D44A4CED146B26F500B715D1 /* Products */,
 			);
@@ -244,6 +318,7 @@
 			isa = PBXGroup;
 			children = (
 				D44A4CEC146B26F500B715D1 /* libGosuTouch.a */,
+				D4C6070D1498B58000483C3C /* libGosu.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -295,18 +370,21 @@
 				D44A4DFC146B28B200B715D1 /* Graphics */,
 				D44A4DF7146B289900B715D1 /* Input */,
 				D44A4DEC146B288700B715D1 /* Sockets */,
+				D4C607451498B98D00483C3C /* DirectoriesMac.mm */,
 				D44A4DD2146B288100B715D1 /* DirectoriesTouch.mm */,
+				D4C607461498B98D00483C3C /* DirectoriesUnix.cpp */,
 				D44A4DD3146B288100B715D1 /* FileUnix.cpp */,
-				D44A4DD4146B288100B715D1 /* InputTouch.mm */,
 				D44A4DD5146B288100B715D1 /* Inspection.cpp */,
 				D44A4DD6146B288100B715D1 /* IO.cpp */,
 				D44A4DD7146B288100B715D1 /* MacUtility.hpp */,
 				D44A4DD8146B288100B715D1 /* Math.cpp */,
 				D44A4DD9146B288100B715D1 /* Orientation.hpp */,
 				D44A4DDA146B288100B715D1 /* Orientation.mm */,
+				D4C607481498B98D00483C3C /* TextInputMac.mm */,
 				D44A4DDB146B288100B715D1 /* TimingApple.cpp */,
 				D44A4DDC146B288100B715D1 /* Utility.cpp */,
 				D44A4DDD146B288100B715D1 /* UtilityApple.mm */,
+				D4C607491498B98D00483C3C /* WindowMac.mm */,
 				D44A4DDE146B288100B715D1 /* WindowTouch.mm */,
 			);
 			name = Implementation;
@@ -329,6 +407,8 @@
 			children = (
 				D44A4DF8146B28AB00B715D1 /* AccelerometerReader.hpp */,
 				D44A4DF9146B28AB00B715D1 /* AccelerometerReader.mm */,
+				D4C607471498B98D00483C3C /* InputMac.mm */,
+				D44A4DD4146B288100B715D1 /* InputTouch.mm */,
 			);
 			name = Input;
 			sourceTree = "<group>";
@@ -434,6 +514,15 @@
 			name = libvorbisfile;
 			sourceTree = "<group>";
 		};
+		D4C6070E1498B58000483C3C /* Gosu */ = {
+			isa = PBXGroup;
+			children = (
+				D4C607111498B58000483C3C /* GosuProj.xcconfig */,
+				D4C607121498B58000483C3C /* GosuTarget.xcconfig */,
+			);
+			path = Gosu;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -488,6 +577,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D4C6070B1498B58000483C3C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -507,6 +603,23 @@
 			productName = GosuTouch;
 			productReference = D44A4CEC146B26F500B715D1 /* libGosuTouch.a */;
 			productType = "com.apple.product-type.library.static";
+		};
+		D4C6070C1498B58000483C3C /* Gosu */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D4C607191498B58000483C3C /* Build configuration list for PBXNativeTarget "Gosu" */;
+			buildPhases = (
+				D4C607091498B58000483C3C /* Sources */,
+				D4C6070A1498B58000483C3C /* Frameworks */,
+				D4C6070B1498B58000483C3C /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Gosu;
+			productName = Gosu;
+			productReference = D4C6070D1498B58000483C3C /* libGosu.a */;
+			productType = "com.apple.product-type.library.dynamic";
 		};
 /* End PBXNativeTarget section */
 
@@ -530,6 +643,7 @@
 			projectRoot = "";
 			targets = (
 				D44A4CEB146B26F400B715D1 /* GosuTouch */,
+				D4C6070C1498B58000483C3C /* Gosu */,
 			);
 		};
 /* End PBXProject section */
@@ -599,6 +713,71 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D4C607091498B58000483C3C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4C6073D1498B73200483C3C /* AudioOpenAL.mm in Sources */,
+				D4C6072C1498B72B00483C3C /* Bitmap.cpp in Sources */,
+				D4C6072D1498B72B00483C3C /* BitmapApple.mm in Sources */,
+				D4C6072E1498B72B00483C3C /* BitmapBMP.cpp in Sources */,
+				D4C6072F1498B72B00483C3C /* BitmapColorKey.cpp in Sources */,
+				D4C607301498B72B00483C3C /* BitmapUtils.cpp in Sources */,
+				D4C607311498B72B00483C3C /* BlockAllocator.cpp in Sources */,
+				D4C607321498B72B00483C3C /* Color.cpp in Sources */,
+				D4C607331498B72B00483C3C /* Font.cpp in Sources */,
+				D4C607351498B72B00483C3C /* Graphics.cpp in Sources */,
+				D4C607361498B72B00483C3C /* Image.cpp in Sources */,
+				D4C607371498B72B00483C3C /* LargeImageData.cpp in Sources */,
+				D4C607381498B72B00483C3C /* TexChunk.cpp in Sources */,
+				D4C607391498B72B00483C3C /* Text.cpp in Sources */,
+				D4C6073A1498B72B00483C3C /* TextTouch.mm in Sources */,
+				D4C6073B1498B72B00483C3C /* Texture.cpp in Sources */,
+				D4C6073C1498B72B00483C3C /* Transform.cpp in Sources */,
+				D4C607281498B71700483C3C /* CommSocket.cpp in Sources */,
+				D4C607291498B71700483C3C /* ListenerSocket.cpp in Sources */,
+				D4C6072A1498B71700483C3C /* MessageSocket.cpp in Sources */,
+				D4C6072B1498B71700483C3C /* Socket.cpp in Sources */,
+				D4C6071C1498B6E500483C3C /* FileUnix.cpp in Sources */,
+				D4C6071E1498B6E500483C3C /* Inspection.cpp in Sources */,
+				D4C6071F1498B6E500483C3C /* IO.cpp in Sources */,
+				D4C607201498B6E500483C3C /* MacUtility.hpp in Sources */,
+				D4C607211498B6E500483C3C /* Math.cpp in Sources */,
+				D4C607221498B6E500483C3C /* Orientation.hpp in Sources */,
+				D4C607241498B6E500483C3C /* TimingApple.cpp in Sources */,
+				D4C607251498B6E500483C3C /* Utility.cpp in Sources */,
+				D4C607261498B6E500483C3C /* UtilityApple.mm in Sources */,
+				D4C6074A1498B98D00483C3C /* DirectoriesMac.mm in Sources */,
+				D4C6074B1498B98D00483C3C /* DirectoriesUnix.cpp in Sources */,
+				D4C6074C1498B98D00483C3C /* InputMac.mm in Sources */,
+				D4C6074D1498B98D00483C3C /* TextInputMac.mm in Sources */,
+				D4C6074E1498B98D00483C3C /* WindowMac.mm in Sources */,
+				D4C607561498BA5500483C3C /* bitwise.c in Sources */,
+				D4C607571498BA5500483C3C /* framing.c in Sources */,
+				D4C607581498BA5A00483C3C /* analysis.c in Sources */,
+				D4C607591498BA5A00483C3C /* bitrate.c in Sources */,
+				D4C6075A1498BA5A00483C3C /* block.c in Sources */,
+				D4C6075B1498BA5A00483C3C /* codebook.c in Sources */,
+				D4C6075C1498BA5A00483C3C /* envelope.c in Sources */,
+				D4C6075D1498BA5A00483C3C /* floor0.c in Sources */,
+				D4C6075E1498BA5A00483C3C /* floor1.c in Sources */,
+				D4C6075F1498BA5A00483C3C /* info.c in Sources */,
+				D4C607601498BA5A00483C3C /* lookup.c in Sources */,
+				D4C607611498BA5A00483C3C /* lpc.c in Sources */,
+				D4C607621498BA5A00483C3C /* lsp.c in Sources */,
+				D4C607631498BA5A00483C3C /* mapping0.c in Sources */,
+				D4C607641498BA5A00483C3C /* mdct.c in Sources */,
+				D4C607651498BA5A00483C3C /* psy.c in Sources */,
+				D4C607661498BA5A00483C3C /* registry.c in Sources */,
+				D4C607671498BA5A00483C3C /* res0.c in Sources */,
+				D4C607681498BA5A00483C3C /* sharedbook.c in Sources */,
+				D4C607691498BA5A00483C3C /* smallft.c in Sources */,
+				D4C6076A1498BA5A00483C3C /* synthesis.c in Sources */,
+				D4C6076B1498BA5A00483C3C /* window.c in Sources */,
+				D4C6076C1498BA6300483C3C /* vorbisfile.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -621,6 +800,11 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					..,
+					../dependencies/libvorbis/include,
+					../dependencies/libogg/include,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				SDKROOT = iphoneos;
 			};
@@ -640,6 +824,11 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					..,
+					../dependencies/libvorbis/include,
+					../dependencies/libogg/include,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -650,11 +839,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/GosuTouch.dst;
-				HEADER_SEARCH_PATHS = (
-					..,
-					../dependencies/libvorbis/include,
-					../dependencies/libogg/include,
-				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -667,16 +851,46 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/GosuTouch.dst;
-				HEADER_SEARCH_PATHS = (
-					..,
-					../dependencies/libvorbis/include,
-					../dependencies/libogg/include,
-				);
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D4C607171498B58000483C3C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				EXECUTABLE_EXTENSION = a;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = libGosu;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		D4C607181498B58000483C3C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_EXTENSION = a;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				PRODUCT_NAME = libGosu;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -697,6 +911,15 @@
 			buildConfigurations = (
 				D44A4CFA146B26F500B715D1 /* Debug */,
 				D44A4CFB146B26F500B715D1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D4C607191498B58000483C3C /* Build configuration list for PBXNativeTarget "Gosu" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4C607171498B58000483C3C /* Debug */,
+				D4C607181498B58000483C3C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

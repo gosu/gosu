@@ -13,20 +13,25 @@ using namespace std::tr1::placeholders;
 
 namespace Gosu
 {
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    static CGRect &screenRect()
+    {
+        static CGRect screenRect = [[UIScreen mainScreen] bounds];
+        return screenRect;
+    }
     
     unsigned screenWidth()
     {
-        return screenRect.size.width;
+        return screenRect().size.width;
     }
     
     unsigned screenHeight()
     {
-        return screenRect.size.height;
+        return screenRect().size.height;
     }
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     try
     {
         [[NSAutoreleasePool alloc] init];
@@ -81,9 +86,7 @@ namespace
     [UIDevice.currentDevice beginGeneratingDeviceOrientationNotifications];
     //UIApplication.sharedApplication.idleTimerDisabled = YES;
     UIApplication.sharedApplication.statusBarOrientation = UIInterfaceOrientationLandscapeRight;
-    
-    windowInstance();
-    
+        
     [[NSTimer scheduledTimerWithTimeInterval: windowInstance().updateInterval() / 1000.0
               target: self
               selector: @selector(doTick:)

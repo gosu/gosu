@@ -158,6 +158,7 @@
 #undef close
 #undef read
 #undef bind
+#undef send
 #undef sleep
 #undef Sleep
 #undef int8_t
@@ -173,23 +174,7 @@
 //#include <Gosu/Async.hpp>
 //#endif
 
-#include <Gosu/Audio.hpp>
-#include <Gosu/Color.hpp>
-#include <Gosu/Font.hpp>
-#include <Gosu/GraphicsBase.hpp>
-#include <Gosu/Graphics.hpp>
-#include <Gosu/Image.hpp>
-#include <Gosu/ImageData.hpp>
-#include <Gosu/Inspection.hpp>
-#include <Gosu/Input.hpp>
-#include <Gosu/IO.hpp>
-#include <Gosu/Math.hpp>
-#include <Gosu/Text.hpp>
-#include <Gosu/TextInput.hpp>
-#include <Gosu/Timing.hpp>
-#include <Gosu/Utility.hpp>
-#include <Gosu/Version.hpp>
-#include <Gosu/Window.hpp>
+#include <Gosu/Gosu.hpp>
 #ifdef GOSU_IS_WIN
 #include <FreeImage.h>
 #endif
@@ -521,6 +506,7 @@ namespace Gosu {
 %ignore Gosu::Image::Image(Graphics& graphics, const Bitmap& source, bool tileable = false);
 %ignore Gosu::Image::Image(Graphics& graphics, const Bitmap& source, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, bool tileable = false);
 %ignore Gosu::Image::Image(std::auto_ptr<ImageData> data);
+%ignore Gosu::loadTiles;
 %include "../Gosu/Image.hpp"
 %extend Gosu::Image {
     Image(Gosu::Window& window, VALUE source, bool tileable = false) {
