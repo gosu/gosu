@@ -28,6 +28,7 @@ namespace Gosu
         TransformStack()
         {
             reset();
+            individual.front() = absolute.front() = scale(1);
         }
                 
         void reset()

@@ -22,11 +22,6 @@ class Gosu::DrawOpQueue
     GLBlocks glBlocks;
     
 public:
-    DrawOpQueue()
-    {
-        reset();
-    }
-    
     void scheduleDrawOp(DrawOp op)
     {
         if (clipRectStack.clippedWorldAway())
