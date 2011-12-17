@@ -2223,23 +2223,7 @@ static VALUE mGosu;
 //#include <Gosu/Async.hpp>
 //#endif
 
-#include <Gosu/Audio.hpp>
-#include <Gosu/Color.hpp>
-#include <Gosu/Font.hpp>
-#include <Gosu/GraphicsBase.hpp>
-#include <Gosu/Graphics.hpp>
-#include <Gosu/Image.hpp>
-#include <Gosu/ImageData.hpp>
-#include <Gosu/Inspection.hpp>
-#include <Gosu/Input.hpp>
-#include <Gosu/IO.hpp>
-#include <Gosu/Math.hpp>
-#include <Gosu/Text.hpp>
-#include <Gosu/TextInput.hpp>
-#include <Gosu/Timing.hpp>
-#include <Gosu/Utility.hpp>
-#include <Gosu/Version.hpp>
-#include <Gosu/Window.hpp>
+#include <Gosu/Gosu.hpp>
 #ifdef GOSU_IS_WIN
 #include <FreeImage.h>
 #endif

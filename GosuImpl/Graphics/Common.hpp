@@ -58,7 +58,7 @@ namespace Gosu
     struct DrawOp;
     class DrawOpQueue;
     typedef std::list<Transform> Transforms;
-    typedef std::vector<DrawOpQueue> DrawOpQueueStack;
+    typedef std::list<DrawOpQueue> DrawOpQueueStack;
     class Macro;
     struct ArrayVertex
     {
