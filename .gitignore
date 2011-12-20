@@ -40,4 +40,10 @@
 /windows/Release with Ruby 1.9
 
 .yardoc/
-ios/GosuTouch.xcodeproj/xcuserdata/
+ios/GosuTouch.xcodeproj/xcuserdata/Gosu.config
+
+# QtCreator project files
+Gosu.config
+Gosu.creator
+Gosu.files
+Gosu.includes
