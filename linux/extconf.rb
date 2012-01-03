@@ -59,6 +59,8 @@ LINUX_FILES = %w(
 )
 
 require 'mkmf'
+require 'fileutils'
+
 
 $INCFLAGS << " -I../ -I../GosuImpl"
 
@@ -77,30 +79,36 @@ if `uname`.chomp == 'Darwin' then
 
   # Symlink our pretty gosu.so into ../lib
   # FIXME gosu.rb should just look in the right place.
-  `ln -s ../linux/gosu.bundle ../lib/gosu.bundle`
+	FileUtils.ln_s("../linux/gosu.bundle","../lib/gosu.bundle")
 else
   SOURCE_FILES = BASE_FILES + LINUX_FILES
 
   # Symlink our pretty gosu.so into ../lib
   # FIXME gosu.rb should just look in the right place.
-  `ln -s ../linux/gosu.so ../lib/gosu.so`
+	FileUtils.ln_s("../linux/gosu.so","../lib/gosu.so")
 
-  sdl_config = with_config("sdl-config", "sdl-config")
-  pango_config = "pkg-config pangoft2"
+  pkg_config("sdl")
+	pkg_config("pangoft2")
+	pkg_config("x11")
+  
+	pkg_config("gl")
+	pkg_config("vorbisfile")
+	pkg_config("openal")
+	pkg_config("sndfile")
+	pkg_config("xinerama")
 
-  $INCFLAGS << " `#{sdl_config} --cflags` `#{pango_config} --cflags`"
-  $LDFLAGS  << " `#{sdl_config} --libs`   `#{pango_config} --libs` -lX11"
-  have_header('SDL_ttf.h') if have_library('SDL_ttf', 'TTF_RenderUTF8_Blended')
-  have_header('gl.h') if have_library('GL', 'glMatrixMode')
+	
+	have_header('SDL_ttf.h') if have_library('SDL_ttf', 'TTF_RenderUTF8_Blended')
+#	have_header('gl.h') if have_library('GL', 'glMatrixMode')
   have_header('FreeImage.h') if have_library('freeimage', 'FreeImage_ConvertFromRawBits')
-  have_header('vorbisfile.h') if have_library('vorbisfile', 'ov_open_callbacks')
+#	have_header('vorbisfile.h') if have_library('vorbisfile', 'ov_open_callbacks')
   have_header('AL/al.h') if have_library('openal')
-  have_header('sndfile.h') if have_library('sndfile')
-  have_header('X11/extensions/Xinerama.h') if have_library('Xinerama', 'XineramaQueryScreens')
+#	have_header('sndfile.h') if have_library('sndfile')
+#	have_header('X11/extensions/Xinerama.h') if have_library('Xinerama', 'XineramaQueryScreens')
 end
 
 # Copy all relevant C++ files into the current directory
 # FIXME Could be done by gem task instead.
-SOURCE_FILES.each { |file| `cp ../GosuImpl/#{file} #{File.basename(file).sub(/\.mm$/, '.cpp')}` }
+SOURCE_FILES.each { |file| FileUtils.cp("../GosuImpl/#{file}",File.basename(file).sub(/\.mm$/, '.cpp')) }
 
 create_makefile("gosu")
