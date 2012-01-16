@@ -67,8 +67,8 @@ namespace Gosu
         kbRightControl = XK_Control_R,
         kbLeftAlt = XK_Alt_L,
         kbRightAlt = XK_Alt_R,
-        kbLeftMeta = 0, // TODO?!
-        kbRightMeta = 0,
+        kbLeftMeta = XK_Meta_L,
+        kbRightMeta = XK_Meta_R,
         kbBackspace = XK_BackSpace,
         kbLeft = XK_Left,
         kbRight = XK_Right,
