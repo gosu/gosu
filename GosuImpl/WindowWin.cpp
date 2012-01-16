@@ -468,6 +468,9 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
 
     if (message == WM_PAINT)
     {
+        PAINTSTRUCT ps;
+        pimpl->hdc = BeginPaint(handle(), &ps);
+        
         if (pimpl->graphics.get() && graphics().begin())
         {
             try
@@ -481,11 +484,12 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
             }
             graphics().end();
         }
+        
         SwapBuffers(pimpl->hdc);
-        ValidateRect(handle(), 0);
+        EndPaint(handle(), &ps);
         return 0;
     }
-
+    
     if (message == WM_SYSCOMMAND)
     {
         switch(wparam)
