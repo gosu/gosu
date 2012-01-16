@@ -107,5 +107,3 @@ SOURCE_FILES.each do |file|
 end
 
 create_makefile("gosu")
-  have_header('AL/al.h') if have_library('openal')
-  have_header('AL/al.h') if have_library('openal')
