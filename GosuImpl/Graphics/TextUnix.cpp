@@ -180,7 +180,9 @@ namespace Gosu
         public:
             SDLSurface(TTF_Font* font, const std::wstring& text, Gosu::Color c)
             {
-                SDL_Color color = { c.red(), c.green(), c.blue() };
+                // This is intentionally re-ordered to BGR. This way, the surface pixels do not
+                // have to be converted from RGB to BGR later in the process.
+                SDL_Color color = { c.blue(), c.green(), c.red() };
                 surface = TTF_RenderUTF8_Blended(font, Gosu::wstringToUTF8(text).c_str(), color);
                 if (!surface)
                     throw std::runtime_error("Could not render text " + Gosu::wstringToUTF8(text));
