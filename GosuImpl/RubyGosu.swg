@@ -657,8 +657,7 @@ namespace Gosu {
 %markfunc Gosu::Window "markWindow";
 %include "../Gosu/Window.hpp"
 
-// TODO: Why is this even necessary, does the GC not trace into my Window privates?
-// If necessary, can I fake this using an @ivar?
+// TODO: Can I fake this using an @ivar?
 %header %{
     static void markWindow(void* window) {
         #ifndef __MACRUBY__
@@ -739,12 +738,12 @@ namespace Gosu {
         return $self->graphics().fullscreen();
     }
     
-    void gl() {
+    void unsafe_gl() {
         $self->graphics().beginGL();
         rb_yield(Qnil);
         $self->graphics().endGL();
     }
-    void gl(Gosu::ZPos z) {
+    void unsafe_gl(Gosu::ZPos z) {
         $self->graphics().scheduleGL(std::tr1::bind(callRubyBlock, rb_block_proc()), z);
     }
     void clipTo(double x, double y, double width, double height) {

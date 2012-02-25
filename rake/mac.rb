@@ -1,18 +1,16 @@
 namespace :mac do
-  ALTERNATIVE_XCODE = '/Developer-3.2.6/usr/bin/'
-  # Prefer Xcode 3.2.6 if on Lion
-  xcb_prefix = ALTERNATIVE_XCODE if File.directory? ALTERNATIVE_XCODE
+  XCODE_BIN = '/Developer/usr/bin/'
 
   FRAMEWORK_FILENAME = "Gosu.framework"
   file FRAMEWORK_FILENAME => [:set_version, :cpp_docs] do
-    sh "cd mac && #{xcb_prefix}xcodebuild -project Gosu.xcodeproj -target Gosu -configuration Release"
+    sh "cd mac && #{XCODE_BIN}xcodebuild -project Gosu.xcodeproj -target Gosu -configuration Release"
   end
   
   desc "Build lib/gosu.for_1_8.bundle, lib/gosu.for_1_9.bundle and RubyGosu App.app"
   task :ruby => [:set_version, :ruby_docs] do
-    sh "cd mac && #{xcb_prefix}xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Core' -configuration 'Release'"
-    sh "cd mac && #{xcb_prefix}xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Core' -configuration 'Release with 1.9'"
-    sh "cd mac && #{xcb_prefix}xcodebuild -project Gosu.xcodeproj -target 'RubyGosu App'  -configuration 'Release with 1.9'"
+    sh "cd mac && #{XCODE_BIN}xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Core' -configuration 'Release'"
+    sh "cd mac && #{XCODE_BIN}xcodebuild -project Gosu.xcodeproj -target 'RubyGosu Core' -configuration 'Release with 1.9'"
+    sh "cd mac && #{XCODE_BIN}xcodebuild -project Gosu.xcodeproj -target 'RubyGosu App'  -configuration 'Release with 1.9'"
   end
   
   MAC_ARCHIVE_FILENAME = "pkg/gosu-mac-#{GOSU_VERSION}.tar.gz"

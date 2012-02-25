@@ -10,8 +10,8 @@ class Gosu::Window
      lose_focus button_down button_up).each do |callback|
     define_method "protected_#{callback}" do |*args|
       begin
-        # Turn into a boolean result for needs_cursor? etc while we are at it.
         # If there has been an exception, don't do anything as to not make matters worse.
+        # Conveniently turn the return value into a boolean result (for needs_cursor? etc).
         defined?(@_exception) ? false : !!send(callback, *args)
       rescue Exception => e
         # Exit the message loop naturally, then re-throw
@@ -19,6 +19,17 @@ class Gosu::Window
         close
       end
     end
+  end
+  
+  def protected_draw_2
+    protected_draw
+    $gosu_gl_blocks = nil
+  end
+  
+  def gl(*args, &block)
+    $gosu_blocks ||= []
+    $gosu_blocks << block
+    unsafe_gl(*args, &block)
   end
   
   alias show_internal show

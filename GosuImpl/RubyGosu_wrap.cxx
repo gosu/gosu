@@ -2795,12 +2795,12 @@ SWIGINTERN int Gosu_Window_height(Gosu::Window const *self){
 SWIGINTERN bool Gosu_Window_fullscreen(Gosu::Window const *self){
         return self->graphics().fullscreen();
     }
-SWIGINTERN void Gosu_Window_gl__SWIG_0(Gosu::Window *self){
+SWIGINTERN void Gosu_Window_unsafe_gl__SWIG_0(Gosu::Window *self){
         self->graphics().beginGL();
         rb_yield(Qnil);
         self->graphics().endGL();
     }
-SWIGINTERN void Gosu_Window_gl__SWIG_1(Gosu::Window *self,Gosu::ZPos z){
+SWIGINTERN void Gosu_Window_unsafe_gl__SWIG_1(Gosu::Window *self,Gosu::ZPos z){
         self->graphics().scheduleGL(std::tr1::bind(callRubyBlock, rb_block_proc()), z);
     }
 SWIGINTERN void Gosu_Window_clipTo(Gosu::Window *self,double x,double y,double width,double height){
@@ -2913,7 +2913,7 @@ void SwigDirector_Window::update() {
 void SwigDirector_Window::draw() {
   VALUE result;
   
-  result = rb_funcall(swig_get_self(), rb_intern("protected_draw"), 0, NULL);
+  result = rb_funcall(swig_get_self(), rb_intern("protected_draw_2"), 0, NULL);
 }
 
 
@@ -10176,7 +10176,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Window_gl__SWIG_0(int argc, VALUE *argv, VALUE self) {
+_wrap_Window_unsafe_gl__SWIG_0(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -10186,12 +10186,12 @@ _wrap_Window_gl__SWIG_0(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","gl", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","unsafe_gl", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
     try {
-      Gosu_Window_gl__SWIG_0(arg1);
+      Gosu_Window_unsafe_gl__SWIG_0(arg1);
     } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -10203,7 +10203,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Window_gl__SWIG_1(int argc, VALUE *argv, VALUE self) {
+_wrap_Window_unsafe_gl__SWIG_1(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   Gosu::ZPos arg2 ;
   void *argp1 = 0 ;
@@ -10216,17 +10216,17 @@ _wrap_Window_gl__SWIG_1(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","gl", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","unsafe_gl", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   ecode2 = SWIG_AsVal_double(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::ZPos","gl", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "Gosu::ZPos","unsafe_gl", 2, argv[0] ));
   } 
   arg2 = static_cast< Gosu::ZPos >(val2);
   {
     try {
-      Gosu_Window_gl__SWIG_1(arg1,arg2);
+      Gosu_Window_unsafe_gl__SWIG_1(arg1,arg2);
     } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -10237,7 +10237,7 @@ fail:
 }
 
 
-SWIGINTERN VALUE _wrap_Window_gl(int nargs, VALUE *args, VALUE self) {
+SWIGINTERN VALUE _wrap_Window_unsafe_gl(int nargs, VALUE *args, VALUE self) {
   int argc;
   VALUE argv[3];
   int ii;
@@ -10254,7 +10254,7 @@ SWIGINTERN VALUE _wrap_Window_gl(int nargs, VALUE *args, VALUE self) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      return _wrap_Window_gl__SWIG_0(nargs, args, self);
+      return _wrap_Window_unsafe_gl__SWIG_0(nargs, args, self);
     }
   }
   if (argc == 2) {
@@ -10268,15 +10268,15 @@ SWIGINTERN VALUE _wrap_Window_gl(int nargs, VALUE *args, VALUE self) {
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        return _wrap_Window_gl__SWIG_1(nargs, args, self);
+        return _wrap_Window_unsafe_gl__SWIG_1(nargs, args, self);
       }
     }
   }
   
 fail:
-  Ruby_Format_OverloadedError( argc, 3, "gl", 
-    "    void gl()\n"
-    "    void gl(Gosu::ZPos z)\n");
+  Ruby_Format_OverloadedError( argc, 3, "unsafe_gl", 
+    "    void unsafe_gl()\n"
+    "    void unsafe_gl(Gosu::ZPos z)\n");
   
   return Qnil;
 }
@@ -11579,7 +11579,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "width", VALUEFUNC(_wrap_Window_width), -1);
   rb_define_method(SwigClassWindow.klass, "height", VALUEFUNC(_wrap_Window_height), -1);
   rb_define_method(SwigClassWindow.klass, "fullscreen?", VALUEFUNC(_wrap_Window_fullscreenq___), -1);
-  rb_define_method(SwigClassWindow.klass, "gl", VALUEFUNC(_wrap_Window_gl), -1);
+  rb_define_method(SwigClassWindow.klass, "unsafe_gl", VALUEFUNC(_wrap_Window_unsafe_gl), -1);
   rb_define_method(SwigClassWindow.klass, "clip_to", VALUEFUNC(_wrap_Window_clip_to), -1);
   rb_define_method(SwigClassWindow.klass, "record", VALUEFUNC(_wrap_Window_record), -1);
   rb_define_method(SwigClassWindow.klass, "transform", VALUEFUNC(_wrap_Window_transform), -1);

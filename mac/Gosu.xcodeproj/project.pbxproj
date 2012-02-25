@@ -1142,7 +1142,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = .;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				SDKROOT_x86_64 = "/Developer-3.2.6/SDKs/MacOSX10.6.sdk";
+				SDKROOT_x86_64 = /Developer/SDKs/MacOSX10.6.sdk;
 			};
 			name = Debug;
 		};
@@ -1167,7 +1167,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = .;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				SDKROOT_x86_64 = "/Developer-3.2.6/SDKs/MacOSX10.6.sdk";
+				SDKROOT_x86_64 = /Developer/SDKs/MacOSX10.6.sdk;
 			};
 			name = Release;
 		};
@@ -1274,7 +1274,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = .;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				SDKROOT_x86_64 = "/Developer-3.2.6/SDKs/MacOSX10.6.sdk";
+				SDKROOT_x86_64 = /Developer/SDKs/MacOSX10.6.sdk;
 			};
 			name = "Release with 1.9";
 		};

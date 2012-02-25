@@ -10,7 +10,7 @@ if ENV['USER'] == 'jlnr' and `uname`.chomp == 'Darwin' then
     
       File.open "../Gosu Wiki/#{BASENAME}", "w" do |wiki_page|
         doc = Appscript.app("OmniFocus").default_document
-        my_projects = doc.folders["Einzelprojekte"].projects.get
+        my_projects = doc.folders["Solo Game-Dev"].projects.get
         gosu_projects = my_projects.select { |p| p.name.get =~ /^Gosu/ }
       
         wiki_page.puts "# To Do list"
