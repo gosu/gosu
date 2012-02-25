@@ -13,7 +13,7 @@
    VALUE result;
    
 -  result = rb_funcall(swig_get_self(), rb_intern("draw"), 0, NULL);
-+  result = rb_funcall(swig_get_self(), rb_intern("protected_draw"), 0, NULL);
++  result = rb_funcall(swig_get_self(), rb_intern("protected_draw_2"), 0, NULL);
  }
  
  
