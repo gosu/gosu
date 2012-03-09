@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    mysql (2.8.1)
     rake (0.8.7)
     rb-appscript (0.6.1)
     yard (0.7.5)
@@ -9,6 +10,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  mysql
   rake (< 0.9)
   rb-appscript
   yard

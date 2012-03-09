@@ -6,6 +6,7 @@ source :rubygems
 
 gem 'yard'
 gem 'rake', '< 0.9'
+gem 'mysql'
 case RUBY_PLATFORM
 when /darwin/
   gem 'rb-appscript'
