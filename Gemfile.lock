@@ -1,0 +1,14 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    rake (0.8.7)
+    rb-appscript (0.6.1)
+    yard (0.7.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  rake (< 0.9)
+  rb-appscript
+  yard
