@@ -85,6 +85,14 @@ module Gosu
     end
   end
   
+  def self.draw_line *args
+    $window.draw_line *args
+  end
+  
+  def self.draw_triangle *args
+    $window.draw_triangle *args
+  end
+  
   def self.draw_quad *args
     $window.draw_quad *args
   end
