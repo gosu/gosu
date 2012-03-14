@@ -97,33 +97,23 @@ module Gosu
     $window.draw_quad *args
   end
   
-  def self.clip_to *args
-    $window.clip_to *args do
-      yield
-    end
+  def self.clip_to *args, &draw
+    $window.clip_to *args, &draw
   end
   
-  def self.translate *args
-    $window.translate *args do
-      yield
-    end
+  def self.translate *args, &draw
+    $window.translate *args, &draw
   end
   
-  def self.scale *args
-    $window.scale *args do
-      yield
-    end
+  def self.scale *args, &draw
+    $window.scale *args, &draw
   end
   
-  def self.rotate *args
-    $window.rotate *args do
-      yield
-    end
+  def self.rotate *args, &draw
+    $window.rotate *args, &draw
   end
   
-  def self.transform *args
-    $window.transform *args do
-      yield
-    end
+  def self.transform *args, &draw
+    $window.transform *args, &draw
   end
 end
