@@ -85,6 +85,18 @@ module Gosu
     end
   end
   
+  def self.button_down? id
+    $window.button_down? id
+  end
+  
+  def self.mouse_x
+    $window.mouse_x
+  end
+  
+  def self.mouse_y
+    $window.mouse_y
+  end
+  
   def self.draw_line *args
     $window.draw_line *args
   end
@@ -97,33 +109,31 @@ module Gosu
     $window.draw_quad *args
   end
   
-  def self.clip_to *args
-    $window.clip_to *args do
-      yield
-    end
+  def self.clip_to *args, &draw
+    $window.clip_to *args, &draw
   end
   
-  def self.translate *args
-    $window.translate *args do
-      yield
-    end
+  def self.translate *args, &draw
+    $window.translate *args, &draw
   end
   
-  def self.scale *args
-    $window.scale *args do
-      yield
-    end
+  def self.scale *args, &draw
+    $window.scale *args, &draw
   end
   
-  def self.rotate *args
-    $window.rotate *args do
-      yield
-    end
+  def self.rotate *args, &draw
+    $window.rotate *args, &draw
   end
   
-  def self.transform *args
-    $window.transform *args do
-      yield
-    end
+  def self.transform *args, &draw
+    $window.transform *args, &draw
+  end
+  
+  def self.record width, height, &draw
+    $window.record width, height, &draw
+  end
+  
+  def self.gl *args, &draw
+    $window.gl *args, &draw
   end
 end
