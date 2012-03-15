@@ -3,17 +3,16 @@ require 'gosu/preview'
 module Gosu
   module Zen
     
-    @@video_mode = [800, 600, {}]
+    @@window_args = [800, 600, {}]
     @@options = {}
     
-    def video width, height, options = nil
+    def window width, height, options = nil
       if $window.nil?
-        puts @@video_mode.inspect
-        @@video_mode[0] = width
-        @@video_mode[1] = height
-        @@video_mode[2].merge! options
+        @@window_args[0] = width
+        @@window_args[1] = height
+        @@window_args[2].merge! options if options
       else
-        raise "video mode can only be set before the window is created"
+        raise "window size can only be set before the window is created"
       end
     end
     
@@ -44,7 +43,7 @@ module Gosu
     end
     
     def run!
-      window = ZenWindow.new *@@video_mode
+      window = ZenWindow.new *@@window_args
       @@options.each do |opt, value|
         window.send "#{opt}=", value
       end
@@ -58,7 +57,6 @@ module Gosu
   end
   
   class ZenWindow < Window
-    
     def button_down id
       m = :"button_down_#{id}"
       respond_to?(m) ? send(m) : button_down_other(id)
