@@ -51,7 +51,7 @@ module Gosu
     end
     
     def Zen.included mod
-      at_exit &method(:run!)
+      at_exit { run! unless $! }
     end
     
   end
