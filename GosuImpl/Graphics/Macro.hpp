@@ -50,11 +50,17 @@ class Gosu::Macro : public Gosu::ImageData
         
         static const Transform nullTransform = { 0 };
         
-        // Row 7 is useless
+        // Row 7 is completely useless
         if (x2 == x4 && x3 == x4)
             return nullTransform;
-        // Row 8 is useless
+        // Row 8 is completely useless
         if (y2 == y3 && y3 == y4)
+            return nullTransform;
+        // Col 7 is completely useless
+        if (x2 == x4 && y2 == y4)
+            return nullTransform;
+        // Col 8 is completely useless
+        if (x3 == x4 && y3 == y4)
             return nullTransform;
         
         Float c[8];
@@ -62,31 +68,54 @@ class Gosu::Macro : public Gosu::ImageData
         // Rows 1, 2
         c[2] = x1, c[5] = y1;
         
+        // The logic below assumes x2 != x4, i.e. row7 can be used to eliminate
+        // the leftmost value in row 8 and afterwards the values in rows 3 & 4.
+        // If x2 == x4, we need to exchange rows 7 and 8.
+        
+        // TODO: x2==x4 is the normal case where an image is
+        // drawn upright; the code should rather swap in the rare case that x3==x4!
+        
+        Float leftCell7 = (x2-x4)*w, rightCell7 = (x3-x4)*h, origRightSide7 = (x1-x2-x3+x4);
+        Float leftCell8 = (y2-y4)*w, rightCell8 = (y3-y4)*h, origRightSide8 = (y1-y2-y3+y4);
+        
+        bool swapRows78 = x2 == x4;
+        if (swapRows78)
+        {
+            std::swap(leftCell7, leftCell8);
+            std::swap(rightCell7, rightCell8);
+            std::swap(origRightSide7, origRightSide8);
+        }
+        
+        // 0, 0, 1, 0, 0, 0,         0,           0 | x1
+        // 0, 0, 0, 0, 0, 1,         0,           0 | y1
+        // w, 0, 0, 0, 0, 0,      -x2w,           0 | x2-x1
+        // 0, 0, 0, w, 0, 0,      -y2w,           0 | y2-y1
+        // 0, h, 0, 0, 0, 0,         0,        -x3h | x3-x1
+        // 0, 0, 0, 0, h, 0,         0,        -y3h | y3-y1
+        // 0, 0, 0, 0, 0, 0, leftCell7, rightCell7 | origRightSide7
+        // 0, 0, 0, 0, 0, 0, leftCell8, rightCell8 | origRightSide8
+        
         // Use row 7 to eliminate the left cell in row 8
         // Row8 = Row8 - factor78 * Row7
-        assert (x2 != x4);
-        Float factor78 = (y2-y4) / (x2-x4);
-        Float remCell8 = (y3-y4)*h - (x3-x4)*h * factor78;
-        Float rightSide8 = (y1-y2-y3+y4) - (x1-x2-x3+x4) * factor78;
-        assert (remCell8 != 0);
+        Float factor78 = leftCell8 / leftCell7;
+        Float remCell8 = rightCell8 - rightCell7 * factor78;
+        Float rightSide8 = origRightSide8 - origRightSide7 * factor78;
         c[7] = rightSide8 / remCell8;
         
-        // 0, 0, 1, 0, 0, 0,        0,        0 | x1
-        // 0, 0, 0, 0, 0, 1,        0,        0 | y1
-        // w, 0, 0, 0, 0, 0,     -x2w,        0 | x2-x1
-        // 0, 0, 0, w, 0, 0,     -y2w,        0 | y2-y1
-        // 0, h, 0, 0, 0, 0,        0,     -x3h | x3-x1
-        // 0, 0, 0, 0, h, 0,        0,     -y3h | y3-y1
-        // 0, 0, 0, 0, 0, 0, (x2-x4)w, (x3-x4)h | x1-x2-x3+x4
-        // 0, 0, 0, 0, 0, 0,        0, remCell8 | rightSide8
+        // 0, 0, 1, 0, 0, 0,         0,          0 | x1
+        // 0, 0, 0, 0, 0, 1,         0,          0 | y1
+        // w, 0, 0, 0, 0, 0,      -x2w,          0 | x2-x1
+        // 0, 0, 0, w, 0, 0,      -y2w,          0 | y2-y1
+        // 0, h, 0, 0, 0, 0,         0,       -x3h | x3-x1
+        // 0, 0, 0, 0, h, 0,         0,       -y3h | y3-y1
+        // 0, 0, 0, 0, 0, 0, leftCell7, rightCell7 | origRightSide7
+        // 0, 0, 0, 0, 0, 0,         0,   remCell8 | rightSide8
         
         // Use the remainding value in row 8 to eliminate the right value in row 7.
         // Row7 = Row7 - factor87 * Row8
-        assert (remCell8 != 0);
-        Float factor87 = (x3-x4)*h / remCell8;
-        Float remCell7 = (x2-x4)*w;
-        Float rightSide7 = (x1-x2-x3+x4) - rightSide8 * factor87;
-        assert (remCell7 != 0);
+        Float factor87 = rightCell7 / remCell8;
+        Float remCell7 = leftCell7;
+        Float rightSide7 = origRightSide7 - rightSide8 * factor87;
         c[6] = rightSide7 / remCell7;
         
         // 0, 0, 1, 0, 0, 0,        0,        0 | x1
@@ -119,7 +148,12 @@ class Gosu::Macro : public Gosu::ImageData
         Float remCell6 = h;
         Float rightSide6 = (y3-y1) - rightSide8 * factor86;
         c[4] = rightSide6 / remCell6;
-                
+        
+        if (swapRows78)
+            std::swap(c[6], c[7]);
+        
+        // Let's hope I never have to debug/understand this again! :D
+        
         Transform result = {
             c[0], c[3], 0, c[6],
             c[1], c[4], 0, c[7],
