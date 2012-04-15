@@ -93,7 +93,6 @@ else
   pkg_config("vorbisfile")
   pkg_config("openal")
   pkg_config("sndfile")
-  pkg_config("xinerama")
   
   have_header('SDL_ttf.h')   if have_library('SDL_ttf', 'TTF_RenderUTF8_Blended')
   have_header('FreeImage.h') if have_library('freeimage', 'FreeImage_ConvertFromRawBits')
