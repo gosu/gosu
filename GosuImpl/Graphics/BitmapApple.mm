@@ -96,6 +96,7 @@ namespace Gosu { bool isExtension(const wchar_t* str, const wchar_t* ext); }
 
 void Gosu::loadImageFile(Bitmap& bitmap, const std::wstring& filename)
 {
+    ObjRef<NSAutoreleasePool> pool([NSAutoreleasePool new]);
     ObjRef<NSString> filenameRef([[NSString alloc] initWithUTF8String: wstringToUTF8(filename).c_str()]);
     ObjRef<APPLE_IMAGE> image([[APPLE_IMAGE alloc] initWithContentsOfFile: filenameRef.obj()]);
     if (!image.get())
