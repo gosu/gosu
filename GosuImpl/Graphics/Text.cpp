@@ -301,18 +301,18 @@ namespace Gosu
 
 Gosu::Bitmap Gosu::createText(const wstring& text,
     const wstring& fontName, unsigned fontHeight, int lineSpacing,
-    unsigned maxWidth, TextAlign align, unsigned fontFlags)
+    unsigned width, TextAlign align, unsigned fontFlags)
 {
     if (lineSpacing <= -static_cast<int>(fontHeight))
         throw logic_error("negative line spacing of more than line height impossible");
 
     FormattedString fs(text.c_str(), fontFlags);
     if (fs.length() == 0)
-        return Bitmap(maxWidth, fontHeight);
+        return Bitmap(width, fontHeight);
     
     // Set up the builder object which will manage all the drawing and
     // conversions for us.
-    TextBlockBuilder builder(fontName, fontHeight, lineSpacing, maxWidth, align);
+    TextBlockBuilder builder(fontName, fontHeight, lineSpacing, width, align);
     
     // Let the process* functions draw everything.
     processText(builder, fs);
