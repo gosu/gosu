@@ -53,14 +53,14 @@ namespace Gosu
     //! \param fontHeight Height of the font in pixels.
     //! \param lineSpacing Spacing between two lines of text in pixels. Can be negative to make
     //! text stick together more closely.
-    //! \param maxWidth Width of the bitmap that will be returned. Text
+    //! \param width Width of the bitmap that will be returned. Text
     //! will be split into multiple lines to avoid drawing over the right
     //! border. When a single word is too long, it will be truncated.
     //! \param fontFlags Binary combination of members of the FontFlags
     //! enum.
     Bitmap createText(const std::wstring& text,
         const std::wstring& fontName, unsigned fontHeight, 
-        int lineSpacing, unsigned maxWidth, TextAlign align,
+        int lineSpacing, unsigned width, TextAlign align,
         unsigned fontFlags = 0);
     
     //! Registers a new HTML-style entity that can subsequently be used

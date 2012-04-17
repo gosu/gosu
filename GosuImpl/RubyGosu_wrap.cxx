@@ -2699,8 +2699,8 @@ SWIGINTERN Gosu::Image *Gosu_Image_fromText4(Gosu::Window &window,std::wstring c
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight);
         return new Gosu::Image(window.graphics(), bmp);
     }
-SWIGINTERN Gosu::Image *Gosu_Image_fromText7(Gosu::Window &window,std::wstring const &text,std::wstring const &fontName,unsigned int fontHeight,int lineSpacing,unsigned int maxWidth,Gosu::TextAlign align){
-        Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
+SWIGINTERN Gosu::Image *Gosu_Image_fromText7(Gosu::Window &window,std::wstring const &text,std::wstring const &fontName,unsigned int fontHeight,int lineSpacing,unsigned int width,Gosu::TextAlign align){
+        Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, width, align);
         return new Gosu::Image(window.graphics(), bmp);
     }
 SWIGINTERN std::vector< Gosu::Image * > Gosu_Image_loadTiles(Gosu::Window &window,VALUE source,int tileWidth,int tileHeight,bool tileable){

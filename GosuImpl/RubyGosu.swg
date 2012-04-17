@@ -552,9 +552,9 @@ namespace Gosu {
     %newobject fromText7;
     static Gosu::Image* fromText7(Gosu::Window& window, const std::wstring& text,
             const std::wstring& fontName, unsigned fontHeight,
-            int lineSpacing, unsigned maxWidth, TextAlign align)
+            int lineSpacing, unsigned width, TextAlign align)
     {
-        Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
+        Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, width, align);
         return new Gosu::Image(window.graphics(), bmp);
     }
     static std::vector<Gosu::Image*> loadTiles(Gosu::Window& window,
