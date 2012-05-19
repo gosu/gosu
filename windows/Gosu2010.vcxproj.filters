@@ -1,0 +1,336 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Implementation">
+      <UniqueIdentifier>{69af265d-158b-4908-855e-4ce591f303ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Implementation\Graphics">
+      <UniqueIdentifier>{fbcb02e4-b84a-493f-9b68-a232e62d88ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Implementation\Audio">
+      <UniqueIdentifier>{9261c88c-12e8-4ee6-b74e-4ef2f446bfb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{43ca2af9-fc4e-430c-8f27-8a5041b69570}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies">
+      <UniqueIdentifier>{daf917d3-8395-436f-ae0a-7fe037804145}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\libogg">
+      <UniqueIdentifier>{228b2418-fca2-40d8-a602-f26af73a0f06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\libvorbis">
+      <UniqueIdentifier>{03568985-7164-40ae-b722-06a85f5deeb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\libvorbisfile">
+      <UniqueIdentifier>{013bc85f-22d4-4020-860a-85f7a86a8940}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\libsndfile">
+      <UniqueIdentifier>{c897d85f-0c87-4f72-b9c1-c41035736656}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\GosuImpl\Sockets\CommSocket.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\DirectoriesWin.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\FileWin.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\InputWin.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Inspection.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\IO.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Sockets\ListenerSocket.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Math.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Sockets\MessageSocket.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Sockets\Socket.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\TextInputWin.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\TimingWin.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Utility.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\UtilityWin.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\WindowWin.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\WinMain.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\WinUtility.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Graphics\Bitmap.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Graphics\BitmapColorKey.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Graphics\BitmapGDIplus.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Graphics\BitmapUtils.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Graphics\BlockAllocator.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Graphics\Color.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Graphics\Font.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Graphics\Graphics.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Graphics\Image.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Graphics\LargeImageData.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Graphics\TexChunk.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Graphics\Text.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Graphics\TextTTFWin.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Graphics\Texture.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Graphics\TextWin.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Graphics\Transform.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GosuImpl\Audio\AudioOpenAL.cpp">
+      <Filter>Implementation\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libogg\src\bitwise.c">
+      <Filter>Dependencies\libogg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libogg\src\framing.c">
+      <Filter>Dependencies\libogg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\analysis.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\bitrate.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\block.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\codebook.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\envelope.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\floor0.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\floor1.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\info.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\lookup.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\lpc.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\lsp.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\mapping0.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\mdct.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\psy.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\registry.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\res0.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\sharedbook.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\smallft.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\synthesis.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\window.c">
+      <Filter>Dependencies\libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\vorbisfile.c">
+      <Filter>Dependencies\libvorbisfile</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Gosu\Gosu.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GosuImpl\Graphics\BlockAllocator.hpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GosuImpl\Graphics\Common.hpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GosuImpl\Graphics\DrawOp.hpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GosuImpl\Graphics\DrawOpQueue.hpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GosuImpl\Graphics\LargeImageData.hpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GosuImpl\Graphics\Macro.hpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GosuImpl\Graphics\RenderState.hpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GosuImpl\Graphics\TexChunk.hpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GosuImpl\Graphics\Texture.hpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GosuImpl\Audio\ALChannelManagement.hpp">
+      <Filter>Implementation\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GosuImpl\Audio\AudioFile.hpp">
+      <Filter>Implementation\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GosuImpl\Audio\OggFile.hpp">
+      <Filter>Implementation\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GosuImpl\Audio\SndFile.hpp">
+      <Filter>Implementation\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Audio.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\AutoLink.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Bitmap.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\ButtonsWin.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Color.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Directories.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Font.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Fwd.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Graphics.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\GraphicsBase.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Image.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\ImageData.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Input.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Inspection.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\IO.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\MacUtility.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Math.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Platform.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GosuImpl\Sockets\Sockets.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Sockets.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Text.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\TextInput.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Timing.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\TR1.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Utility.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Version.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Window.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\WinUtility.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\libsndfile\sndfile.h">
+      <Filter>Dependencies\libsndfile</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

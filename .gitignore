@@ -38,6 +38,9 @@
 /windows/Debug
 /windows/Release
 /windows/Release with Ruby 1.9
+/windows/*.opensdf
+/windows/*.sdf
+/windows/ipch
 
 .yardoc/
 ios/GosuTouch.xcodeproj/xcuserdata/
