@@ -147,6 +147,7 @@
     <ClCompile Include="..\dependencies\libvorbis\lib\vorbisfile.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\GosuImpl\Graphics\FormattedString.hpp" />
     <ClInclude Include="..\Gosu\Gosu.hpp" />
     <ClInclude Include="..\GosuImpl\Graphics\BlockAllocator.hpp" />
     <ClInclude Include="..\GosuImpl\Graphics\Common.hpp" />

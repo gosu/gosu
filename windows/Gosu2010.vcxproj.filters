@@ -332,5 +332,8 @@
     <ClInclude Include="..\dependencies\libsndfile\sndfile.h">
       <Filter>Dependencies\libsndfile</Filter>
     </ClInclude>
+    <ClInclude Include="..\GosuImpl\Graphics\FormattedString.hpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
