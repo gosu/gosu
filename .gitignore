@@ -33,6 +33,7 @@
 /website/potd_values.rb
 /website/rdoc/
 /windows/*.ncb
+/windows/*.sdf
 /windows/*.suo
 /windows/*.user
 /windows/Debug
