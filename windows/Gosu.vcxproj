@@ -168,7 +168,6 @@
     <ClInclude Include="..\Gosu\Input.hpp" />
     <ClInclude Include="..\Gosu\Inspection.hpp" />
     <ClInclude Include="..\Gosu\IO.hpp" />
-    <ClInclude Include="..\Gosu\MacUtility.hpp" />
     <ClInclude Include="..\Gosu\Math.hpp" />
     <ClInclude Include="..\Gosu\Platform.hpp" />
     <ClInclude Include="..\GosuImpl\Sockets\Sockets.hpp" />
