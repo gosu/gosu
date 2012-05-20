@@ -290,9 +290,6 @@
     <ClInclude Include="..\Gosu\IO.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\Gosu\MacUtility.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
     <ClInclude Include="..\Gosu\Math.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
