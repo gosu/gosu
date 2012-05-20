@@ -33,7 +33,7 @@ namespace Gosu
         unsigned simpleFlags;
         // If not characters.empty(), ignore above fields and use this.
         std::vector<FormattedChar> characters;
-        
+
         static unsigned flags(int b, int u, int i)
         {
             unsigned flags = 0;
@@ -48,7 +48,9 @@ namespace Gosu
         {
         }
         
-        explicit FormattedString(const wchar_t* html, unsigned baseFlags)
+        //! If baseFlags is set, it has priority over b, u and i.
+        //! If baseFlags is 0, it is constructed out of b, u and i.
+        explicit FormattedString(const wchar_t* html, unsigned baseFlags, int b = 0, int u = 0, int i = 0)
         {
             // Remove \r characters if existent. Avoid a copy if we don't need one.
             std::wstring unixified;
@@ -67,6 +69,17 @@ namespace Gosu
             
             std::size_t len = std::wcslen(html);
             
+            // If we don't have baseFlags, try to create them out of b, u, i.
+            if (!baseFlags)
+              baseFlags = FormattedString::flags(b, u, i);
+            // Otherwise, create b, u, i out of baseFlags.
+            else
+            {
+              b = (baseFlags & ffBold) ? 1 : 0;
+              u = (baseFlags & ffUnderline) ? 1 : 0;
+              i = (baseFlags & ffItalic) ? 1 : 0;
+            }
+
             // Just skip all this if there are entities or formatting tags in the string.
             if (std::wcscspn(html, L"<&") == len)
             {
@@ -74,11 +87,8 @@ namespace Gosu
                 simpleFlags = baseFlags;
                 return;
             }
-            
+
             unsigned pos = 0;
-            int b = (baseFlags & ffBold) ? 1 : 0,
-                u = (baseFlags & ffUnderline) ? 1 : 0,
-                i = (baseFlags & ffItalic) ? 1 : 0;
             std::vector<Gosu::Color> c;
             c.push_back(0xffffffff);
             while (pos < len)

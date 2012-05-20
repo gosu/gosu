@@ -44,12 +44,28 @@ namespace Gosu
         //! Returns the width, in pixels, the given text would occupy if drawn.
         double textWidth(const std::wstring& text, double factorX = 1) const;
         
+        //! Returns the width, in pixels, the given text with those flags
+        //! would occupy if drawn.
+        double textWidthDefined(const std::wstring& text, unsigned flags, double factorX = 1.0) const;
+
         //! Draws text so the top left corner of the text is at (x; y).
         //! \param text Formatted text without line-breaks.
         void draw(const std::wstring& text, double x, double y, ZPos z,
             double factorX = 1, double factorY = 1,
             Color c = Color::WHITE, AlphaMode mode = amDefault) const;
         
+        //! Draws text so the top left corner of the text is at (x; y).
+        //! Unlike draw, this function ignores the default font flags
+        //! and is behaving as if that many tags have been opened.
+        //! \param text Formatted text without line-breaks.
+        //! \param bold Amount of <b> tags opened.
+        //! \param underline Amount of <u> tags opened.
+        //! \param italic Amount of <i> tags opened.
+        void drawDefined(const std::wstring& text, double x, double y, ZPos z,
+            double factorX = 1, double factorY = 1,
+            int bold = 0, int underline = 0, int italic = 0,
+            Color c = Color::WHITE, AlphaMode mode = amDefault) const;
+
         //! Draws text at a position relative to (x; y).
         //! \param relX Determines where the text is drawn horizontally. If
         //! relX is 0.0, the text will be to the right of x, if it is 1.0,

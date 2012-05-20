@@ -106,9 +106,9 @@ unsigned Gosu::Font::flags() const
     return pimpl->flags;
 }
 
-double Gosu::Font::textWidth(const wstring& text, double factorX) const
+double Gosu::Font::textWidthDefined(const wstring& text, unsigned flags, double factorX) const
 {
-    FormattedString fs(text.c_str(), flags());
+    FormattedString fs(text.c_str(), flags);
     double result = 0;
     for (unsigned i = 0; i < fs.length(); ++i)
     {
@@ -117,6 +117,10 @@ double Gosu::Font::textWidth(const wstring& text, double factorX) const
         result += image.width() * factor;
     }
     return result * factorX;
+}
+
+double Gosu::Font::textWidth(const wstring& text, double factorX) const {
+  return textWidthDefined(text, flags(), factorX);
 }
 
 void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
@@ -134,6 +138,24 @@ void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
         image.draw(x, y, z, factorX * factor, factorY * factor, color, mode);
         x += image.width() * factorX * factor;
     }
+}
+
+void Gosu::Font::drawDefined(const wstring& text, double x, double y, ZPos z,
+    double factorX, double factorY, int bold, int underline, int italic, Color c, AlphaMode mode) const
+{
+  // The only thing that makes us different from the "normal" Font::draw.
+  FormattedString fs(text.c_str(), 0, bold, underline, italic);
+
+  for (unsigned i = 0; i < fs.length(); ++i)
+  {
+      const Image& image = pimpl->imageAt(fs, i);
+      double factor = pimpl->factorAt(fs, i);
+      Gosu::Color color = fs.entityAt(i)
+                        ? Gosu::Color(fs.colorAt(i).alpha() * c.alpha() / 255, 255, 255, 255)
+                        : Gosu::multiply(fs.colorAt(i), c);
+      image.draw(x, y, z, factorX * factor, factorY * factor, color, mode);
+      x += image.width() * factorX * factor;
+  }
 }
 
 void Gosu::Font::drawRel(const wstring& text, double x, double y, ZPos z,
