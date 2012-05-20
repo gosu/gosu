@@ -6,10 +6,18 @@
 #ifndef GOSU_AUTOLINK_HPP
 #define GOSU_AUTOLINK_HPP
 
-#ifdef NDEBUG
-#pragma comment(lib, "Gosu.lib")
+#if _MSC_VER >= 1600
+#	ifdef NDEBUG
+#		pragma comment(lib, "Gosuv100.lib")
+#	else
+#		pragma comment(lib, "GosuDebugv100.lib")
+#	endif
 #else
-#pragma comment(lib, "GosuDebug.lib")
+#	ifdef NDEBUG
+#		pragma comment(lib, "Gosu.lib")
+#	else
+#		pragma comment(lib, "GosuDebug.lib")
+#	endif
 #endif
 
 #endif
