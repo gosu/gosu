@@ -46,7 +46,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../;$(ProjectDir)/../dependencies/libsndfile/;$(ProjectDir)/../dependencies/libogg/include/;$(ProjectDir)/../dependencies/libvorbis/include/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/../;$(ProjectDir)/../dependencies/libsndfile/;$(ProjectDir)/../dependencies/libogg/include/;$(ProjectDir)/../dependencies/libvorbis/include/;$(ProjectDir)/../dependencies/</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -59,6 +59,7 @@
     <Lib>
       <AdditionalDependencies>Gdiplus.lib;openal32.lib;opengl32.lib;dinput8.lib;winmm.lib;dxguid.lib;ws2_32.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)Debug.lib</OutputFile>
+      <AdditionalLibraryDirectories>$(ProjectDir)/../dependencies/al/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
