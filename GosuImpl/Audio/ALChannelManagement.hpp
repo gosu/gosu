@@ -21,7 +21,14 @@ namespace Gosu
         static ALCdevice* alDevice;
         static ALCcontext* alContext;
 
-        enum { NUM_SOURCES = 32 }; // This is what the iPhone supports, I hear.
+        // Only on Windows for now as testing progresses, see:
+        // https://github.com/jlnr/gosu/issues/129
+#ifdef GOSU_IS_WIN
+        enum { NUM_SOURCES = 255 };
+#else
+        // iOS system limit (possibly not for newer devices)
+        enum { NUM_SOURCES = 32 };
+#endif
         static ALuint alSources[NUM_SOURCES];
         static ALuint currentToken;
         static ALuint currentTokens[NUM_SOURCES];
