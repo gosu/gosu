@@ -68,7 +68,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../;$(ProjectDir)/../dependencies/libsndfile/;$(ProjectDir)/../dependencies/libogg/include/;$(ProjectDir)/../dependencies/libvorbis/include/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)/../;$(ProjectDir)/../dependencies/libsndfile/;$(ProjectDir)/../dependencies/libogg/include/;$(ProjectDir)/../dependencies/libvorbis/include/;$(ProjectDir)/../dependencies/</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
