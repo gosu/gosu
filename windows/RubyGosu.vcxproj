@@ -46,6 +46,10 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">false</GenerateManifest>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">.so</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.so</TargetExt>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">gosu.for_1_9</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">gosu.for_1_8</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
