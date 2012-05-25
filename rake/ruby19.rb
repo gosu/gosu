@@ -7,9 +7,7 @@ SOURCE_ROOT      = "#{ENV['HOME']}/.rvm/rubies/#{RVM_RUBY}"
 GEM_ROOT         = "#{ENV['HOME']}/.rvm/gems/#{RVM_RUBY}/gems"
 ALL_PLATFORMS    = [:ppc, :i386, :x86_64]
 LIB_KILLLIST     = %w(README irb rake* rdoc* *ubygems* readline* tcltk* tk* tcltklib* rss* *-darwin*)
-GEMS             = %w(texplay chipmunk)
-# chingu <- maybe included again when it is not --pre anymore
-# ruby-opengl <- always compiles for native arch, fails because it uses STR2CSTR too
+GEMS             = %w(texplay chipmunk ruby-opengl2)
 
 # Just to abbreviate the CFLAGS
 SDK_10_4 = '/Developer/SDKs/MacOSX10.4u.sdk'
