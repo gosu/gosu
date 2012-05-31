@@ -17,15 +17,16 @@ namespace
 
 unsigned long Gosu::milliseconds()
 {
-    static bool init = false;
-    if (!init)
+		static unsigned long start = 0;
+
+    if (!start)
     {
         if (::timeBeginPeriod(1) != TIMERR_NOERROR)
             std::atexit(resetTGT);
-        init = true;
+				start = ::timeGetTime();
     }
     // Truncate to 2^30, C++ users shouldn't mind and Ruby users will
     // have a happy GC on 32-bit systems.
     // No, don't ask why this is an unsigned long then :)
-    return ::timeGetTime() & 0x1fffffff;
+    return (::timeGetTime() - start) & 0x1fffffff;
 }
