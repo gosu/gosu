@@ -182,6 +182,7 @@
 
 namespace Gosu {
     void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
+    void releaseAllOpenALResources();
     void register_entity(const std::wstring& name, Gosu::Image* image) { registerEntity(name, image->getData().toBitmap()); }
 }
 
@@ -364,9 +365,12 @@ namespace Gosu
 
 %constant unsigned MAX_TEXTURE_SIZE = Gosu::MAX_TEXTURE_SIZE;
 
+%rename("_release_all_openal_resources") releaseAllOpenALResources;
+
 namespace Gosu {
     std::string language();
     void enableUndocumentedRetrofication();
+    void releaseAllOpenALResources();
     void register_entity(const std::wstring& name, Gosu::Image* image);
 }
 

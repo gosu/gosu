@@ -2232,6 +2232,7 @@ static VALUE mGosu;
 
 namespace Gosu {
     void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
+    void releaseAllOpenALResources();
     void register_entity(const std::wstring& name, Gosu::Image* image) { registerEntity(name, image->getData().toBitmap()); }
 }
 
@@ -3713,6 +3714,24 @@ _wrap_enable_undocumented_retrofication(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu::enableUndocumentedRetrofication();
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap__release_all_openal_resources(int argc, VALUE *argv, VALUE self) {
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  {
+    try {
+      Gosu::releaseAllOpenALResources();
     } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -11249,6 +11268,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "MAX_TEXTURE_SIZE", SWIG_From_unsigned_SS_int(static_cast< unsigned int >(Gosu::MAX_TEXTURE_SIZE)));
   rb_define_module_function(mGosu, "language", VALUEFUNC(_wrap_language), -1);
   rb_define_module_function(mGosu, "enable_undocumented_retrofication", VALUEFUNC(_wrap_enable_undocumented_retrofication), -1);
+  rb_define_module_function(mGosu, "_release_all_openal_resources", VALUEFUNC(_wrap__release_all_openal_resources), -1);
   rb_define_module_function(mGosu, "register_entity", VALUEFUNC(_wrap_register_entity), -1);
   
   SwigClassColor.klass = rb_define_class_under(mGosu, "Color", rb_cObject);

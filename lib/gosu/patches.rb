@@ -73,3 +73,6 @@ class Gosu::Window
     self.class.char_to_button_id(ch)
   end
 end
+
+# Release OpenAL resources during Ruby's shutdown, not Gosu's.
+at_exit { Gosu::_release_all_openal_resources }
