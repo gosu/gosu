@@ -28,7 +28,7 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1,
     ZPos z, AlphaMode mode) const
 {
     DrawOp op;
-    op.renderState.texName = texName();
+    op.renderState.texture = texture;
     op.renderState.mode = mode;
     
     reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);

@@ -20,6 +20,8 @@ COMMON_RUBY_FILES = COMMON_FILES + FileList[
   'lib/**/*.rb',
   'examples/*.rb',
   'examples/media/*',
+  'reference/**/*.rb',
+  'reference/**/*.rdoc',
 ]
 
 GOSU_VERSION = ENV['GOSU_RELEASE_VERSION'] || '0.0.0'

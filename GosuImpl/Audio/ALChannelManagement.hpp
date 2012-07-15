@@ -21,14 +21,12 @@ namespace Gosu
         static ALCdevice* alDevice;
         static ALCcontext* alContext;
 
-        // Only on Windows for now as testing progresses, see:
-        // https://github.com/jlnr/gosu/issues/129
-#ifdef GOSU_IS_WIN
-        enum { NUM_SOURCES = 255 };
-#else
+	#ifdef GOSU_IS_IPHONE
         // iOS system limit (possibly not for newer devices)
         enum { NUM_SOURCES = 32 };
-#endif
+	#else
+        enum { NUM_SOURCES = 255 };
+	#endif
         static ALuint alSources[NUM_SOURCES];
         static ALuint currentToken;
         static ALuint currentTokens[NUM_SOURCES];
@@ -98,4 +96,9 @@ namespace Gosu
     ALuint ALChannelManagement::currentTokens[NUM_SOURCES];
 
     std::auto_ptr<ALChannelManagement> alChannelManagement;
+    
+    void releaseAllOpenALResources()
+    {
+        alChannelManagement.reset();
+    }
 }
