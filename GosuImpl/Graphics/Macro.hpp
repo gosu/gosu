@@ -111,7 +111,7 @@ class Gosu::Macro : public Gosu::ImageData
         // 0, 0, 0, 0, 0, 0, leftCell7, rightCell7 | origRightSide7
         // 0, 0, 0, 0, 0, 0,         0,   remCell8 | rightSide8
         
-        // Use the remainding value in row 8 to eliminate the right value in row 7.
+        // Use the remaining value in row 8 to eliminate the right value in row 7.
         // Row7 = Row7 - factor87 * Row8
         Float factor87 = rightCell7 / remCell8;
         Float remCell7 = leftCell7;
@@ -165,7 +165,7 @@ class Gosu::Macro : public Gosu::ImageData
     
     void drawVertexArrays(Float x1, Float y1, Float x2, Float y2, Float x3, Float y3, Float x4, Float y4) const
     {
-        // TODO: Macros should not be split up because they have different transforms! This is insane.
+        // TODO: Macros should not be split up just because they have different transforms! This is insane.
         // They should be premultiplied and have the same transform by definition. Then, the transformation
         // only had to be performed here once.
         
