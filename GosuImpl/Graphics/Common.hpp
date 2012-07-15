@@ -48,8 +48,6 @@ namespace Gosu
     };
 }
 
-#include <GosuImpl/Graphics/RenderState.hpp>
-
 namespace Gosu
 {
     class Texture;
@@ -66,12 +64,6 @@ namespace Gosu
         GLuint color;
         GLfloat vertices[3];
     };
-    struct VertexArray
-    {
-        RenderState renderState;
-        std::vector<ArrayVertex> vertices;
-    };
-    typedef std::list<VertexArray> VertexArrays;
     
     template<typename T>
     bool isPToTheLeftOfAB(T xa, T ya,

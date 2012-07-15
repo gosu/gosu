@@ -2,37 +2,38 @@
 #define GOSUIMPL_GRAPHICS_RENDERSTATE_HPP
 
 #include <GosuImpl/Graphics/Common.hpp>
+#include <GosuImpl/Graphics/Texture.hpp>
 
 // Properties that potentially need to be changed between each draw operation.
 // This does not include the color or vertex data of the actual quads.
 struct Gosu::RenderState
 {
-    GLuint texName;
+    std::tr1::shared_ptr<Texture> texture;
     const Transform* transform;
     ClipRect clipRect;
     AlphaMode mode;
     
     RenderState()
-    : texName(NO_TEXTURE), transform(0), mode(amDefault)
+    : transform(0), mode(amDefault)
     {
         clipRect.width = NO_CLIPPING;
     }
     
     bool operator==(const RenderState& rhs) const
     {
-        return texName == rhs.texName && transform == rhs.transform &&
+        return texture == rhs.texture && transform == rhs.transform &&
             clipRect == rhs.clipRect && mode == rhs.mode;
     }
     
     void applyTexture() const
     {
-        if (texName == NO_TEXTURE)
-            glDisable(GL_TEXTURE_2D);
-        else
+        if (texture)
         {
             glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, texName);
+            glBindTexture(GL_TEXTURE_2D, texture->texName());
         }
+        else
+            glDisable(GL_TEXTURE_2D);
     }
     
     void applyAlphaMode() const
@@ -105,7 +106,7 @@ public:
         ClipRect noClipping;
         noClipping.width = NO_CLIPPING;
         setClipRect(noClipping);
-        setTexName(NO_TEXTURE);
+        setTexture(std::tr1::shared_ptr<Texture>());
         // Return to previous MV matrix
         glMatrixMode(GL_MODELVIEW);
         glPopMatrix();
@@ -113,29 +114,29 @@ public:
     
     void setRenderState(const RenderState& rs)
     {
-        setTexName(rs.texName);
+        setTexture(rs.texture);
         setTransform(rs.transform);
         setClipRect(rs.clipRect);
         setAlphaMode(rs.mode);
     }
     
-    void setTexName(GLuint newTexName)
+    void setTexture(std::tr1::shared_ptr<Texture> newTexture)
     {
-        if (newTexName == texName)
+        if (newTexture == texture)
             return;
     
-        if (newTexName != NO_TEXTURE)
+        if (newTexture)
         {
             // New texture *is* really a texture - change to it.
             
-            if (texName == NO_TEXTURE)
+            if (!texture)
                 glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, newTexName);
+            glBindTexture(GL_TEXTURE_2D, newTexture->texName());
         }
         else
             // New texture is NO_TEXTURE, disable texturing.
             glDisable(GL_TEXTURE_2D);
-        texName = newTexName;
+        texture = newTexture;
     }
     
     void setTransform(const Transform* newTransform)
@@ -195,5 +196,15 @@ public:
         applyAlphaMode();
     }
 };
+
+namespace Gosu
+{
+    struct VertexArray
+    {
+        RenderState renderState;
+        std::vector<ArrayVertex> vertices;
+    };
+    typedef std::list<VertexArray> VertexArrays;    
+}
     
 #endif

@@ -4,6 +4,7 @@
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Color.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
+#include <GosuImpl/Graphics/RenderState.hpp>
 #include <GosuImpl/Graphics/TexChunk.hpp>
 #include <cassert>
 
@@ -63,7 +64,7 @@ namespace Gosu
             #endif
             
             #ifdef GOSU_IS_IPHONE
-            if (renderState.texName != NO_TEXTURE)
+            if (renderState.texture)
             {
                 spriteTexcoords[spriteCounter*12 + 0] = left;
                 spriteTexcoords[spriteCounter*12 + 1] = top;
@@ -92,7 +93,7 @@ namespace Gosu
             for (unsigned i = 0; i < verticesOrBlockIndex; i++)
             {
                 glColor4ubv(reinterpret_cast<const GLubyte*>(&vertices[i].c));
-                if (renderState.texName != NO_TEXTURE)
+                if (renderState.texture)
                     switch (i)
                     {
                     case 0:
