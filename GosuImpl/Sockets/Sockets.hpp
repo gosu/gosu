@@ -9,6 +9,7 @@
     namespace Gosu { typedef SOCKET SocketHandle; }
     typedef int socklen_t;
 #else
+    #include <unistd.h>
     #include <sys/errno.h>
     #include <sys/socket.h>
     #include <netinet/in.h>
