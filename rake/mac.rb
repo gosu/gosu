@@ -38,7 +38,7 @@ namespace :mac do
   MAC_SPEC = Gem::Specification.new do |s|
     apply_gemspec_defaults s
     s.platform = 'universal-darwin'
-    s.files = COMMON_RUBY_FILES + 'lib/gosu.for_1_8.bundle' + 'lib/gosu.for_1_9.bundle'
+    s.files = COMMON_RUBY_FILES + %w(lib/gosu.for_1_8.bundle lib/gosu.for_1_9.bundle)
   end
   Gem::PackageTask.new(MAC_SPEC).define
   
