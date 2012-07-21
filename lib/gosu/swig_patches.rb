@@ -27,8 +27,8 @@ class Gosu::Window
   end
   
   def gl(*args, &block)
-    $gosu_blocks ||= []
-    $gosu_blocks << block
+    $gosu_gl_blocks ||= []
+    $gosu_gl_blocks << block
     unsafe_gl(*args, &block)
   end
   
