@@ -449,14 +449,15 @@ Gosu::Input& Gosu::Window::input()
 
 namespace
 {
-    void makeCurrentContext(NSOpenGLContext* context)
+    void makeCurrentContext(NSOpenGLContext *context)
     {
         [context makeCurrentContext];
     }
     
-    void releaseContext(NSOpenGLContext* context)
+    void releaseContextAndDelete(NSOpenGLContext *context, std::tr1::function<void()> *function)
     {
         [context release];
+        delete function;
     }
 }
 
@@ -479,8 +480,11 @@ Gosu::Window::SharedContext Gosu::Window::createSharedContext()
             initWithFormat: pf
             shareContext: pimpl->context.obj()];
     
-    return SharedContext(new std::tr1::function<void()>(std::tr1::bind(makeCurrentContext, ctx)),
-        std::tr1::bind(releaseContext, ctx));
+    std::tr1::function<void()> *makeCurrent =
+        new std::tr1::function<void()>(std::tr1::bind(makeCurrentContext, ctx))
+    std::tr1::function<void()> releaseAndDelete =
+        std::tr1::bind(releaseContextAndDelete(ctx, makeCurrent);
+    return SharedContext(makeCurrent, releaseAndDelete);
 }
 
 namespace GosusDarkSide
