@@ -109,6 +109,7 @@
 		D44A4E6D146B2AC300B715D1 /* synthesis.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E59146B2AC300B715D1 /* synthesis.c */; };
 		D44A4E6E146B2AC300B715D1 /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E5A146B2AC300B715D1 /* window.c */; };
 		D44A4E71146B2AE000B715D1 /* vorbisfile.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E70146B2AE000B715D1 /* vorbisfile.c */; };
+		D4AA452615CECC6600C9DE96 /* TextMac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4AA452315CECC5400C9DE96 /* TextMac.cpp */; };
 		D4C6071C1498B6E500483C3C /* FileUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DD3146B288100B715D1 /* FileUnix.cpp */; };
 		D4C6071E1498B6E500483C3C /* Inspection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DD5146B288100B715D1 /* Inspection.cpp */; };
 		D4C6071F1498B6E500483C3C /* IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DD6146B288100B715D1 /* IO.cpp */; };
@@ -273,6 +274,7 @@
 		D44A4E59146B2AC300B715D1 /* synthesis.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = synthesis.c; path = ../dependencies/libvorbis/lib/synthesis.c; sourceTree = "<group>"; };
 		D44A4E5A146B2AC300B715D1 /* window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = window.c; path = ../dependencies/libvorbis/lib/window.c; sourceTree = "<group>"; };
 		D44A4E70146B2AE000B715D1 /* vorbisfile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = vorbisfile.c; path = ../dependencies/libvorbis/lib/vorbisfile.c; sourceTree = "<group>"; };
+		D4AA452315CECC5400C9DE96 /* TextMac.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextMac.cpp; path = ../GosuImpl/Graphics/TextMac.cpp; sourceTree = "<group>"; };
 		D4C6070D1498B58000483C3C /* libGosu.a */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libGosu.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4C607111498B58000483C3C /* GosuProj.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = GosuProj.xcconfig; sourceTree = "<group>"; };
 		D4C607121498B58000483C3C /* GosuTarget.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = GosuTarget.xcconfig; sourceTree = "<group>"; };
@@ -440,6 +442,7 @@
 				D44A4E12146B28CE00B715D1 /* TexChunk.cpp */,
 				D44A4E13146B28CE00B715D1 /* TexChunk.hpp */,
 				D44A4E14146B28CE00B715D1 /* Text.cpp */,
+				D4AA452315CECC5400C9DE96 /* TextMac.cpp */,
 				D44A4E15146B28CE00B715D1 /* TextTouch.mm */,
 				D44A4E16146B28CE00B715D1 /* Texture.cpp */,
 				D44A4E17146B28CE00B715D1 /* Texture.hpp */,
@@ -775,6 +778,7 @@
 				D4C6076A1498BA5A00483C3C /* synthesis.c in Sources */,
 				D4C6076B1498BA5A00483C3C /* window.c in Sources */,
 				D4C6076C1498BA6300483C3C /* vorbisfile.c in Sources */,
+				D4AA452615CECC6600C9DE96 /* TextMac.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -863,6 +867,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CONFIGURATION_BUILD_DIR = ../lib;
 				EXECUTABLE_EXTENSION = a;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -880,6 +885,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CONFIGURATION_BUILD_DIR = ../lib;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				EXECUTABLE_EXTENSION = a;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
