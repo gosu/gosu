@@ -480,11 +480,11 @@ Gosu::Window::SharedContext Gosu::Window::createSharedContext()
             initWithFormat: pf
             shareContext: pimpl->context.obj()];
     
+    // TODO: Exception safety? Oh man, is this construction really worth it? :)
     std::tr1::function<void()> *makeCurrent =
-        new std::tr1::function<void()>(std::tr1::bind(makeCurrentContext, ctx))
-    std::tr1::function<void()> releaseAndDelete =
-        std::tr1::bind(releaseContextAndDelete(ctx, makeCurrent);
-    return SharedContext(makeCurrent, releaseAndDelete);
+        new std::tr1::function<void()>(std::tr1::bind(makeCurrentContext, ctx));
+    return SharedContext(makeCurrent,
+        std::tr1::bind(releaseContextAndDelete, ctx, _1));
 }
 
 namespace GosusDarkSide
