@@ -439,7 +439,6 @@ namespace {
             return;
         initializedCharData = true;
         
-#ifdef __LP64__
         CFRef<TISInputSourceRef> is(TISCopyCurrentKeyboardLayoutInputSource());
         CFRef<CFDataRef> UCHR(
             static_cast<CFDataRef>(TISGetInputSourceProperty(is.obj(), kTISPropertyUnicodeKeyLayoutData)));
@@ -475,34 +474,6 @@ namespace {
             idChars[code] = value[0];
             charIds[value[0]] = code;
         }
-#else
-        // The very old-school way.
-		const void* KCHR = reinterpret_cast<const void*>(GetScriptManagerVariable(smKCHRCache));
-		if (!KCHR)
-			return;
-        
-        // Reverse for() to prefer lower IDs in charToId
-        for (int code = numScancodes - 1; code >= 0; --code)
-        {
-            UInt32 deadKeyState = 0;
-			UInt32 value = KeyTranslate(KCHR, code, &deadKeyState);
-			// If this key triggered a dead key, hit it again to obtain the actual value.
-			if (deadKeyState != 0)
-				value = KeyTranslate(KCHR, code, &deadKeyState);
-			
-            // Ignore special characters except newline.
-            if (value == 3)
-                value = 13; // convert Enter to Return
-            if (value < 32 && value != 13)
-                continue;
-			
-			std::string str(1, char(value));
-			wchar_t ch = Gosu::macRomanToWstring(str).at(0);
-			
-            idChars[code] = ch;
-            charIds[ch] = code;
-        }
-#endif
     }
 	 
     std::tr1::array<bool, Gosu::numButtons> buttonStates = { false };

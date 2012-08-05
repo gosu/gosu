@@ -109,15 +109,19 @@ namespace Gosu
             // Easy formats
             format_ = 0;
             if (desc.mChannelsPerFrame == 1)
+            {
                 /*if (desc.mBitsPerChannel == 8)
                     format_ = AL_FORMAT_MONO8;
                 else*/ if (desc.mBitsPerChannel == 16)
                     format_ = AL_FORMAT_MONO16;
+            }
             else if (desc.mChannelsPerFrame == 2)
+            {
                 /*if (desc.mBitsPerChannel == 8)
                     format_ = AL_FORMAT_STEREO8;
                 else */if (desc.mBitsPerChannel == 16)
                     format_ = AL_FORMAT_STEREO16;
+            }
             
             if (format_ == 0 ||
                 // If format not native for OpenAL, set client data format

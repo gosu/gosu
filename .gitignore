@@ -49,3 +49,7 @@ Gosu.config
 Gosu.creator
 Gosu.files
 Gosu.includes
+
+/ios/GosuTouch.xcodeproj/project.xcworkspace/xcuserdata/
+/mac/Gosu.xcodeproj/project.xcworkspace/
+/mac/Gosu.xcodeproj/xcuserdata/
