@@ -106,7 +106,7 @@ namespace
         
         // Calculate metrics (for space allocations) and create CachedFontInfo entry.
         CachedFontInfo newFont;
-        newFont.fontId = FMGetFontFromATSFontRef(atsRef);
+        newFont.fontId = (ATSUFontID)atsRef;
 
         ATSFontMetrics metrics;
         CHECK_OS(ATSFontGetHorizontalMetrics(newFont.fontId, kATSOptionFlagsDefault, &metrics));
