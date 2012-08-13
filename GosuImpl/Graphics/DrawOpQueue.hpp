@@ -56,7 +56,7 @@ public:
         ops.push_back(op);
     }
     
-    void beginClipping(int x, int y, int width, int height, int screenHeight)
+    void beginClipping(double x, double y, double width, double height, double screenHeight)
     {
         // Apply current transformation.
         
@@ -66,10 +66,10 @@ public:
         applyTransform(transformStack.current(), left, top);
         applyTransform(transformStack.current(), right, bottom);
         
-        int physX = std::min(left, right);
-        int physY = std::min(top, bottom);
-        int physWidth = std::abs(int(left - right));
-        int physHeight = std::abs(int(top - bottom));
+        double physX = std::min(left, right);
+        double physY = std::min(top, bottom);
+        double physWidth = std::abs(left - right);
+        double physHeight = std::abs(top - bottom);
         
         // Adjust for OpenGL having the wrong idea of where y=0 is.
         // TODO: This should really happen *right before* setting up
