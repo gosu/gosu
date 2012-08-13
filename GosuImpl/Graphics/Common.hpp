@@ -36,7 +36,7 @@ namespace Gosu
     // that no clipping should happen.
     struct ClipRect
     {
-        int x, y, width, height;
+        double x, y, width, height;
         
         bool operator==(const ClipRect& other) const
         {
