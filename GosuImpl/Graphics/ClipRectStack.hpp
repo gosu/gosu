@@ -20,7 +20,7 @@ class Gosu::ClipRectStack
             return;
         }
         
-        ClipRect result = { 0, 0, 0x7fffffff, 0x7fffffff };
+        ClipRect result = { 0.0, 0.0, 1e10, 1e10 };
         for (int i = 0, end = stack.size(); i < end; ++i)
         {
             const ClipRect& rect = stack[i];
@@ -62,7 +62,7 @@ public:
         hasEffectiveRect = false;
     }
     
-    void beginClipping(int x, int y, int width, int height)
+    void beginClipping(double x, double y, double width, double height)
     {
         ClipRect rect = { x, y, width, height };
         stack.push_back(rect);
