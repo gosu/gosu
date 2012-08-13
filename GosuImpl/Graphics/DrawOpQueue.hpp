@@ -68,8 +68,8 @@ public:
         
         double physX = std::min(left, right);
         double physY = std::min(top, bottom);
-        double physWidth = std::abs(int(left - right));
-        double physHeight = std::abs(int(top - bottom));
+        double physWidth = std::abs(left - right);
+        double physHeight = std::abs(top - bottom);
         
         // Adjust for OpenGL having the wrong idea of where y=0 is.
         // TODO: This should really happen *right before* setting up
