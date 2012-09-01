@@ -2,8 +2,16 @@ namespace :linux do
   LINUX_FILES = COMMON_CPP_FILES +
                 COMMON_RUBY_FILES +
                 FileList['Gosu', 'GosuImpl',
-                  'linux/configure', 'linux/configure.ac',
-                  'linux/Makefile.in']
+                  'cmake/CMakeLists.txt',
+                  'cmake/GosuConfig.cmake.in',
+                  'cmake/gosu.pc.in',
+                  'cmake/CMakeLists.txt.in',
+                  'cmake/build.sh',
+                  'cmake/create_deb_package.sh',
+                  'cmake/create_tgz_package.sh',
+                  'cmake/Packaging.cmake',
+                  'cmake/GosuImpl.cmake',
+                  ]
   LINUX_FILES.uniq!
 
   LINUX_ARCHIVE_FILENAME = "pkg/gosu-linux-#{GOSU_VERSION}.tar.gz"
