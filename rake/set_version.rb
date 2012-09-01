@@ -3,6 +3,17 @@ task :set_version do
 
   components = GOSU_VERSION.split('.')
   
+  File.open('cmake/CMakeLists.txt', 'w') do |file|
+    file.puts <<-EOF
+SET(GOSU_VERSION_MAJOR "#{components[0]}")
+SET(GOSU_VERSION_MINOR "#{components[1]}")
+SET(GOSU_VERSION_PATCH "#{components[2]}")
+#{File.readlines('cmake/CMakeLists.txt.in').map do |line|
+        "#{line.chomp}\n"
+        end.join()}
+    EOF
+  end
+  
   File.open('Gosu/Version.hpp', 'w') do |file|
     file.puts <<-EOF
 #ifndef GOSU_VERSION_HPP
