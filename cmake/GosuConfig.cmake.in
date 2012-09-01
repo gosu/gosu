@@ -1,0 +1,106 @@
+# Find Gosu includes and library
+#
+# This module defines
+#  Gosu_INCLUDE_DIRS
+#  Gosu_LIBRARIES, the libraries to link against to use Gosu.
+#  Gosu_LIBRARY_DIRS, the location of the libraries
+#  Gosu_FOUND, If false, do not try to use Gosu
+#
+###############################################
+#
+#Copyright (c) 2005-2012 Matt Williams <matt@volumesoffun.com>
+#Copyright (c) 2005-2012 David Williams <david@volumesoffun.com>
+#Copyright (c) 2012 Oliver Schneider <mail@oli-obk.de>
+#
+#This software is provided 'as-is', without any express or implied
+#warranty. In no event will the authors be held liable for any damages
+#arising from the use of this software.
+#
+#Permission is granted to anyone to use this software for any purpose,
+#including commercial applications, and to alter it and redistribute it
+#freely, subject to the following restrictions:
+#
+# 1. The origin of this software must not be misrepresented; you must not
+# claim that you wrote the original software. If you use this software
+# in a product, an acknowledgment in the product documentation would be
+# appreciated but is not required.
+#
+# 2. Altered source versions must be plainly marked as such, and must not be
+# misrepresented as being the original software.
+#
+# 3. This notice may not be removed or altered from any source
+# distribution.
+#
+###############################################
+
+include(FindPackageMessage)
+
+if(Gosu_FIND_REQUIRED)
+    set(Gosu_FIND_TYPE REQUIRED)
+elseif(Gosu_FIND_QUIETLY)
+    set(Gosu_FIND_TYPE QUIETLY)
+else()
+    message("you are probably compiling gosu itself, otherwise you messed up")
+endif()
+
+get_filename_component(THIS_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+if(WIN32)
+	set(PREFIX ${THIS_DIR}/..)
+else()
+	set(PREFIX ${THIS_DIR}/../../..)
+endif()
+
+set(Gosu_LIBRARY_DIRS "${PREFIX}/@Gosu_LIBRARY_INSTALL_DIRS@")
+
+set(Gosu_INCLUDE_DIR "${PREFIX}/@Gosu_INCLUDE_INSTALL_DIRS@")
+set(Gosu_INCLUDE_DIRS ${Gosu_INCLUDE_DIR}) # do not add dependency dirs, you should not use the dependencies through gosu, find them yourself
+
+find_package(Freetype REQUIRED)
+find_package(OpenAL REQUIRED)
+find_package(SDL_ttf REQUIRED)
+find_package(X11 REQUIRED)
+find_package(OpenGL REQUIRED)
+
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(PANGO REQUIRED pango)
+pkg_check_modules(PANGOFT REQUIRED pangoft2)
+pkg_check_modules(XINERAMA REQUIRED xinerama)
+pkg_check_modules(VORBIS REQUIRED vorbisfile)
+
+#freeimage does neither have a Find*.cmake file nor a .pc file... search manually
+#pkg_check_modules(FREEIMAGE REQUIRED freeimage)
+find_path(FREEIMAGE_INCLUDE_DIRS FreeImage.h)
+find_library(FREEIMAGE_LIBRARIES freeimage)
+if(NOT FREEIMAGE_INCLUDE_DIRS OR NOT FREEIMAGE_LIBRARIES)
+    message(FATAL_ERROR "Freeimage could not be found")
+endif()
+
+#no include_directories here, let the FindGosu.cmake user handle that through return variables
+
+set( LINK_LIBRARIES
+    ${FREETYPE_LINK_LIBRARIES}
+    ${OPENAL_LIBRARY}
+    ${SDLTTF_LIBRARY}
+    ${X11_LIBRARY}
+    ${OPENGL_LIBRARY}
+    ${PANGO_LIBRARIES}
+    ${PANGOFT_LIBRARIES}
+    ${FREEIMAGE_LIBRARIES}
+    ${XINERAMA_LIBRARIES}
+    ${VORBIS_LIBRARIES}
+)
+foreach(it ${LINK_LIBRARIES})
+#message(${it})
+set(LINKER_FLAGS ${LINKER_FLAGS} " -l" ${it})
+endforeach()
+
+#message(FATAL_ERROR "blub")
+
+set(Gosu_LIBRARY "Gosu")
+set(Gosu_LIBRARIES ${Gosu_LIBRARY} ${LINK_LIBRARIES})
+find_package_handle_standard_args(Gosu DEFAULT_MSG Gosu_LIBRARY Gosu_INCLUDE_DIR)
+mark_as_advanced(Gosu_INCLUDE_DIR Gosu_LIBRARY)
+
+#message(STATUS "Found Gosu")
+#message(STATUS "  libraries : '${Gosu_LIBRARY}' from ${Gosu_LIBRARY_DIRS}")
+#message(STATUS "  includes  : ${Gosu_INCLUDE_DIRS}")

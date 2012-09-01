@@ -7,14 +7,6 @@
 /lib/gosu.*.bundle
 /lib/gosu.*.so
 /lib/libgosu*
-/linux/Audio
-/linux/Graphics
-/linux/Input
-/linux/Sockets
-/linux/Makefile
-/linux/*.o
-/linux/config.log
-/linux/config.status
 /mac/build/
 /mac/Gosu.xcodeproj/*.pbxuser
 /mac/Gosu.xcodeproj/*.perspectivev3
@@ -53,3 +45,6 @@ Gosu.includes
 /ios/GosuTouch.xcodeproj/project.xcworkspace/xcuserdata/
 /mac/Gosu.xcodeproj/project.xcworkspace/
 /mac/Gosu.xcodeproj/xcuserdata/
+
+
+/cmake/build/*
