@@ -492,8 +492,6 @@
   "That's all there is to it!" \
   "\n\n" \
 \
-  "See http://www.gnu.org/copyleft/lesser.html." \
-\
   "May contain `ogg', `vorbis' libraries (c) 2002-2008 Xiph.org Foundation" \
   "\n\n" \
   "Redistribution and use in source and binary forms, with or without" \
@@ -521,6 +519,8 @@
   "DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY" \
   "THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT" \
   "(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE" \
-  "OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+  "OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE." \
+\
+  "See http://www.gnu.org/copyleft/lesser.html."
   
 #endif
