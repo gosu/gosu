@@ -29,8 +29,8 @@ enum PacketType
 };
 
 
-#define PADSIZE 20
-#define BALLSIZE 7
+#define PAD_SIZE 20
+#define BALL_SIZE 7
 
 class GameWindow : public Gosu::Window
 {
@@ -38,8 +38,8 @@ protected:
     Gosu::Font font;
     double ballX, ballY;
     double ballXSpeed, ballYSpeed;
-    double m_dPlayer1_y, m_dPlayer2_y;
-    unsigned player1_score, player2_score;
+    double player1Y, Player2Y;
+    unsigned player1Score, player2Score;
 public:
     GameWindow()
     :   Window(640, 480, false),
@@ -48,8 +48,8 @@ public:
         setCaption(L"Gosu Multiplayer Pong");
         ballX = 640/2;
         ballY = 480/2;
-        player1_score = 0;
-        player2_score = 0;
+        player1Score = 0;
+        player2Score = 0;
         ballXSpeed = 2.0;
         ballYSpeed = 2.0;
     }
@@ -58,19 +58,19 @@ public:
 
     void draw()
     {
-        graphics().drawLine(10, m_dPlayer1_y - PADSIZE, Gosu::Colors::blue, 10, m_dPlayer1_y + PADSIZE, Gosu::Colors::blue, zPads);
-        graphics().drawLine(graphics().width() - 10, m_dPlayer2_y - PADSIZE, Gosu::Colors::red, graphics().width() - 10, m_dPlayer2_y + PADSIZE, Gosu::Colors::red, zPads);
+        graphics().drawLine(10, player1Y - PAD_SIZE, Gosu::Colors::blue, 10, player1Y + PAD_SIZE, Gosu::Colors::blue, zPads);
+        graphics().drawLine(graphics().width() - 10, Player2Y - PAD_SIZE, Gosu::Colors::red, graphics().width() - 10, Player2Y + PAD_SIZE, Gosu::Colors::red, zPads);
         
         graphics().drawQuad(
-           ballX-BALLSIZE, ballY-BALLSIZE, Gosu::Colors::white,
-           ballX+BALLSIZE, ballY-BALLSIZE, Gosu::Colors::white,
-           ballX+BALLSIZE, ballY+BALLSIZE, Gosu::Colors::white,
-           ballX-BALLSIZE, ballY+BALLSIZE, Gosu::Colors::white,
+           ballX-BALL_SIZE, ballY-BALL_SIZE, Gosu::Colors::white,
+           ballX+BALL_SIZE, ballY-BALL_SIZE, Gosu::Colors::white,
+           ballX+BALL_SIZE, ballY+BALL_SIZE, Gosu::Colors::white,
+           ballX-BALL_SIZE, ballY+BALL_SIZE, Gosu::Colors::white,
            zBall
         );
 
         std::wstringstream score;
-        score << L"Score: " << player1_score << ":" << player2_score;
+        score << L"Score: " << player1Score << ":" << player2Score;
         font.draw(score.str(), 10, 10, zUI, 1, 1, Gosu::Colors::yellow);
     }
 
@@ -96,7 +96,7 @@ public:
     {
         std::cout << "incoming connection" << std::endl;
         if (connection.get()) {
-            std::cout << "cannot accept a second client" << std::endl;
+            std::cerr << "cannot accept a second client" << std::endl;
             Gosu::CommSocket cs(Gosu::cmManaged, sock);
             cs.disconnect();
             return;
@@ -108,7 +108,7 @@ public:
     
     void update()
     {
-        m_dPlayer1_y = input().mouseY();
+        player1Y = input().mouseY();
         listenerSocket.update();
         if (!connection.get()) return;
         if (!connection->connected()) return;
@@ -118,18 +118,18 @@ public:
         if (ballX < 0) {
             ballX = graphics().width()/2;
             ballY = graphics().height()/2;
-            player2_score++;
+            player2Score++;
         } else if (ballX > graphics().width()) {
             ballX = graphics().width()/2;
             ballY = graphics().height()/2;
-            player1_score++;
+            player1Score++;
         }
         if (ballX < 15) {
-            if (std::abs(ballY - m_dPlayer1_y) < PADSIZE) {
+            if (std::abs(ballY - player1Y) < PAD_SIZE) {
                 ballXSpeed *= -1;
             }
         } else if (ballX > graphics().width() - 15) {
-            if (std::abs(ballY - m_dPlayer2_y) < PADSIZE) {
+            if (std::abs(ballY - Player2Y) < PAD_SIZE) {
                 ballXSpeed *= -1;
             }
         }
@@ -141,7 +141,7 @@ public:
         {
             std::stringstream ss;
             ss << ptPadPosition << " ";
-            ss << m_dPlayer1_y;
+            ss << player1Y;
             std::string data = ss.str();
             connection->send(data.c_str(), data.size());
         }
@@ -156,8 +156,8 @@ public:
         {
             std::stringstream ss;
             ss << ptScoreUpdate << " ";
-            ss << player1_score << " ";
-            ss << player2_score;
+            ss << player1Score << " ";
+            ss << player2Score;
             std::string data = ss.str();
             connection->send(data.c_str(), data.size());
         }
@@ -169,20 +169,20 @@ public:
         std::stringstream stream(std::string(static_cast<const char*>(data), static_cast<const char*>(data)+size));
         int inttype;
         if (!(stream >> inttype)) {
-            std::cout << "could not read type from stream" << std::endl;
-            std::cout << stream << std::endl;
+            std::cerr << "could not read type from stream" << std::endl;
+            std::cerr << stream << std::endl;
             return;
         }
         PacketType type = static_cast<PacketType>(inttype);
         switch(type) {
             case ptPadPosition:
-                if (!(stream >> m_dPlayer2_y)) {
-                    std::cout << "could not read player paddle position" << std::endl;
-                    std::cout << stream << std::endl;
+                if (!(stream >> Player2Y)) {
+                    std::cerr << "could not read player paddle position" << std::endl;
+                    std::cerr << stream << std::endl;
                 }
             break;
             default:
-                std::cout << "invalid packet received" << std::endl;
+                std::cerr << "invalid packet received" << std::endl;
             break;
         }
     }
@@ -200,10 +200,10 @@ public:
     
     void update()
     {
-        m_dPlayer2_y = input().mouseY();
+        Player2Y = input().mouseY();
         std::stringstream ss;
         ss << ptPadPosition << " ";
-        ss << m_dPlayer2_y;
+        ss << Player2Y;
         std::string strdata = ss.str();
         connection.send(strdata.c_str(), strdata.size());
         connection.update();
@@ -214,45 +214,45 @@ public:
         std::stringstream stream(std::string(static_cast<const char*>(data), static_cast<const char*>(data)+size));
         int inttype;
         if (!(stream >> inttype)) {
-            std::cout << "could not read type from stream" << std::endl;
-            std::cout << stream << std::endl;
+            std::cerr << "could not read type from stream" << std::endl;
+            std::cerr << stream << std::endl;
             return;
         }
         PacketType type = static_cast<PacketType>(inttype);
         switch(type) {
             case ptPadPosition:
-                if (!(stream >> m_dPlayer1_y)) {
-                    std::cout << "could not read player1 paddle pos" << std::endl;
-                    std::cout << stream << std::endl;
+                if (!(stream >> player1Y)) {
+                    std::cerr << "could not read player1 paddle pos" << std::endl;
+                    std::cerr << stream << std::endl;
                     return;
                 }
             break;
             case ptBallPosition:
                 if (!(stream >> ballX)) {
-                    std::cout << "could not read ball x pos" << std::endl;
-                    std::cout << stream << std::endl;
+                    std::cerr << "could not read ball x pos" << std::endl;
+                    std::cerr << stream << std::endl;
                     return;
                 }
                 if (!(stream >> ballY)) {
-                    std::cout << "could not read ball y pos" << std::endl;
-                    std::cout << stream << std::endl;
+                    std::cerr << "could not read ball y pos" << std::endl;
+                    std::cerr << stream << std::endl;
                     return;
                 }
             break;
             case ptScoreUpdate:
-                if (!(stream >> player1_score)) {
-                    std::cout << "could not read player1 score" << std::endl;
-                    std::cout << stream << std::endl;
+                if (!(stream >> player1Score)) {
+                    std::cerr << "could not read player1 score" << std::endl;
+                    std::cerr << stream << std::endl;
                     return;
                 }
-                if (!(stream >> player2_score)) {
-                    std::cout << "could not read player2 score" << std::endl;
-                    std::cout << stream << std::endl;
+                if (!(stream >> player2Score)) {
+                    std::cerr << "could not read player2 score" << std::endl;
+                    std::cerr << stream << std::endl;
                     return;
                 }
             break;
             default:
-                std::cout << "unknown packet received" << std::endl;
+                std::cerr << "unknown packet received" << std::endl;
             break;
         }
     }
@@ -274,7 +274,7 @@ int main(int argc, char** argv)
             server.show();
             return(0);
         } catch(const std::runtime_error& e) {
-            std::cout << e.what() << std::endl;
+            std::cout << "Could not start server, probably one is already running, connecting to it" << std::endl;
             addr = "localhost";
         }
     }
