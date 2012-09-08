@@ -6,6 +6,7 @@
 
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
+#include <Gosu/Fwd.hpp>
 
 namespace Gosu
 {
