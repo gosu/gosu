@@ -36,6 +36,9 @@ namespace :linux do
     s.platform = 'ruby'
     s.files = COMMON_RUBY_FILES
     s.files += FileList['GosuImpl/**/*', 'linux/extconf.rb']
+    # For building the gem on OS X
+    s.files += FileList['dependencies/libogg/**/*', 'dependencies/libvorbis/**/*', 'dependencies/ogg_vorbis.license']
+    
     s.extensions = ['linux/extconf.rb']
     s.requirements = ['See https://github.com/jlnr/gosu/wiki/Getting-Started-on-Linux']
   end
