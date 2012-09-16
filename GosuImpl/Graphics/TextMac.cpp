@@ -225,16 +225,19 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
     
     ATSULayoutAndStyle atlas(text, fontName, fontHeight, fontFlags);
     Rect rect = atlas.textExtents();
-    unsigned width = rect.right + 1 - rect.left + 1; // add one pixel on OS X
+    int width = rect.right + 1 - rect.left + 1; // add one pixel on OS X
     std::vector<std::tr1::uint32_t> buf(width * fontHeight);
     {
         MacBitmap helper(&buf[0], width, fontHeight);
         atlas.drawToContext(X2Fix(-rect.left), X2Fix(fontHeight / font.heightAt1Pt * font.descentAt1Pt),
                             helper.context());
     }
-
-    for (unsigned relY = 0; relY < fontHeight; ++relY)
-        for (unsigned relX = 0; relX < width; ++relX)
+    
+    int effectiveWidth = Gosu::clamp<int>(width, 0, bitmap.width() - x);
+    int effectiveHeight = Gosu::clamp<int>(fontHeight, 0, bitmap.height() - y);
+    
+    for (int relY = 0; relY < effectiveWidth; ++relY)
+        for (int relX = 0; relX < effectiveHeight; ++relX)
         {
 #ifdef __BIG_ENDIAN__
             Color::Channel alpha = buf[relY * width + relX];
