@@ -5,6 +5,7 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/TR1.hpp>
+#include <Gosu/Math.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/IO.hpp>
 #include <GosuImpl/MacUtility.hpp>
