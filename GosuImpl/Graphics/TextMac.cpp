@@ -237,8 +237,8 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
     int effectiveWidth = Gosu::clamp<int>(width, 0, bitmap.width() - x);
     int effectiveHeight = Gosu::clamp<int>(fontHeight, 0, bitmap.height() - y);
     
-    for (int relY = 0; relY < effectiveWidth; ++relY)
-        for (int relX = 0; relX < effectiveHeight; ++relX)
+    for (int relY = 0; relY < effectiveHeight; ++relY)
+        for (int relX = 0; relX < effectiveWidth; ++relX)
         {
 #ifdef __BIG_ENDIAN__
             Color::Channel alpha = buf[relY * width + relX];
