@@ -5,6 +5,7 @@
 #include <Gosu/Text.hpp>
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Utility.hpp>
+#include <Gosu/Math.hpp>
 #include <GosuImpl/MacUtility.hpp>
 #include <map>
 #include <cmath>
@@ -207,13 +208,16 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     #endif
     CGContextRelease(context);
 
+    int effectiveWidth = Gosu::clamp<int>(width, 0, bitmap.width() - x);
+    int effectiveHeight = Gosu::clamp<int>(fontHeight, 0, bitmap.height() - y);
+    
     // Now copy the set pixels back.
-    for (unsigned srcY = 0; srcY < fontHeight; ++srcY)
-        for (unsigned srcX = 0; srcX < width; ++srcX)
+    for (int relY = 0; relY < effectiveHeight; ++relY)
+        for (int relX = 0; relX < effectiveWidth; ++relX)
         {
-            c.setAlpha(bmp.getPixel(srcX, srcY).alpha());
+            c.setAlpha(bmp.getPixel(relX, relY).alpha());
             if (c.alpha())
-                bitmap.setPixel(x + srcX, y + srcY, c);
+                bitmap.setPixel(x + relX, y + relY, c);
         }
 }
 
