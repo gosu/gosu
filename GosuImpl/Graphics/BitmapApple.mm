@@ -164,7 +164,7 @@ void Gosu::saveImageFile(const Bitmap& originalBitmap, Writer writer, const std:
         initWithBitmapDataPlanes:&plane pixelsWide:bitmap.width() pixelsHigh:bitmap.height()
         bitsPerSample:8 samplesPerPixel:4 hasAlpha:YES isPlanar:NO
         colorSpaceName:NSDeviceRGBColorSpace // Nobody really seems to know which one to use
-        bitmapFormat:NSAlphaNonpremultipliedBitmapFormat bytesPerRow:0 bitsPerPixel:0]);
+        bitmapFormat:NSAlphaNonpremultipliedBitmapFormat bytesPerRow:bitmap.width() * 4 bitsPerPixel:32]);
 
     ObjRef<NSAutoreleasePool> pool([NSAutoreleasePool new]);
     NSData* data = [rep.obj() representationUsingType:fileType properties:nil];

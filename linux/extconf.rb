@@ -58,19 +58,32 @@ LINUX_FILES = %w(
   WindowX.cpp
 )
 
+OGG_VORBIS_FILES = Dir['../dependencies/libogg/src/*.c'] +
+                   Dir['../dependencies/libvorbis/lib/vorbisfile.c'] +
+                   %w(analysis bitrate block codebook envelope floor0 floor1
+                      info lookup lpc lsp mapping0 mdct psy registry res0
+                      sharedbook smallft synthesis window).map do |basename|
+                     "../dependencies/libvorbis/lib/#{basename}.c"
+                   end
+
 require 'mkmf'
 require 'fileutils'
 
 $INCFLAGS << " -I../ -I../GosuImpl"
 
 if `uname`.chomp == 'Darwin' then
-  SOURCE_FILES = BASE_FILES + MAC_FILES
+  SOURCE_FILES = BASE_FILES + MAC_FILES + OGG_VORBIS_FILES
   
   # Apple curiously distributes libpng only inside X11
   $INCFLAGS  << " -I/usr/X11/include"
+  # Use included libogg, libvorbis to make Gosu easier to install on OS X
+  $INCFLAGS  << " -I../dependencies/libogg/include"
+  $INCFLAGS  << " -I../dependencies/libvorbis/include"
+  $INCFLAGS  << " -I../dependencies/libvorbis/lib"
   # To make everything work with the Objective C runtime
-  $CFLAGS    << " -x objective-c++ -fobjc-gc -DNDEBUG"
-  $LDFLAGS   << " -L/usr/X11/lib -logg -lvorbis -lvorbisfile -liconv"
+  $CFLAGS    << " -x objective-c -fobjc-gc -DNDEBUG"
+  CONFIG['CXXFLAGS'] =  "#{CONFIG['CXXFLAGS']} -x objective-c++" # cheat a little here
+  $LDFLAGS   << " -L/usr/X11/lib -liconv"
   %w(AudioToolbox IOKit OpenAL OpenGL AppKit ApplicationServices Foundation Carbon).each do |f|
     $LDFLAGS << " -framework #{f}"
   end
