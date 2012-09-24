@@ -398,6 +398,12 @@ void Gosu::Window::close()
         ChangeDisplaySettings(NULL, CDS_FULLSCREEN);
 }
 
+void Gosu::Window::panic(std::exception& e) {
+	// Show the message to the user.
+	::MessageBoxA(0, e.what(), "Panic", MB_OK | MB_ICONERROR);
+	abort();
+}
+
 const Gosu::Graphics& Gosu::Window::graphics() const
 {
     return *pimpl->graphics;
@@ -477,10 +483,10 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
             {
                 draw();
             }
-            catch (...)
+            catch (std::exception& e)
             {
                 graphics().end();
-                throw;
+                panic(e);
             }
             graphics().end();
         }

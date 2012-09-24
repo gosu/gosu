@@ -75,6 +75,11 @@ namespace Gosu
         //! So far, it is only called in iOS applications.
         virtual void releaseMemory() {}
         
+				//! This function may be called on some platforms when some window callbacks
+				//! encounter an uncaught exception and cannot handle it themselves, i.e.
+				//! the exception wouldn't reach show().
+				virtual void panic(std::exception& e);
+
         //! Called before update when the user pressed a button while the
         //! window had the focus.
         virtual void buttonDown(Gosu::Button) {}
