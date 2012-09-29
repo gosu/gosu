@@ -4,7 +4,6 @@
 #include <vector>
 using namespace std;
 
-// IMPR: Check for security issues. I hacked this together.
 vector<string> splitCmdLine()
 {
     vector<string> result;
@@ -29,12 +28,12 @@ vector<string> splitCmdLine()
                 argBegin = 0;
             }
         }
-        else if (!isspace(*cmdLine) && argBegin == 0)
+        else if (!isspace((unsigned char)*cmdLine) && argBegin == 0)
         {
             argBegin = cmdLine;
             isQuotedArg = false;
         }
-        else if (isspace(*cmdLine) && argBegin != 0 && !isQuotedArg)
+        else if (isspace((unsigned char)*cmdLine) && argBegin != 0 && !isQuotedArg)
         {
             result.push_back(std::string(argBegin, cmdLine + 1));
             argBegin = 0;
@@ -58,7 +57,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         vector<char*> argv(arguments.size());
         for (unsigned i = 0; i < argv.size(); ++i)
             argv[i] = const_cast<char*>(arguments[i].c_str());
-	    return main(argv.size(), &argv[0]);
+        return main(argv.size(), &argv[0]);
     }
     catch (const std::exception& e)
     {
