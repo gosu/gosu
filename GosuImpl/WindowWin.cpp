@@ -117,7 +117,7 @@ namespace Gosu
         void setupVSync()
         {
             char* extensions = (char*)glGetString(GL_EXTENSIONS);
-			// The Intel BootCamp drivers will actually have a proc address for wglSwapInterval
+            // The Intel BootCamp drivers will actually have a proc address for wglSwapInterval
             // that doesn't do much, so check the string instead of just getting the address.
             if (!strstr(extensions, "WGL_EXT_swap_control"))
                 return;
@@ -176,10 +176,10 @@ namespace Gosu
 struct Gosu::Window::Impl
 {
     HWND handle;
-	HDC hdc;
+    HDC hdc;
     std::auto_ptr<Graphics> graphics;
     std::auto_ptr<Input> input;
-	double updateInterval;
+    double updateInterval;
     bool iconified;
 
     unsigned originalWidth, originalHeight;
@@ -225,22 +225,22 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         Win::instance(), 0);
     Win::check(pimpl->handle);
 
-	pimpl->hdc = GetDC(handle());
+    pimpl->hdc = GetDC(handle());
     Win::check(pimpl->hdc);
 
-	PIXELFORMATDESCRIPTOR pfd;
-	ZeroMemory(&pfd, sizeof pfd);
+    PIXELFORMATDESCRIPTOR pfd;
+    ZeroMemory(&pfd, sizeof pfd);
     pfd.nSize        = sizeof pfd;
     pfd.nVersion     = 1;
     pfd.dwFlags      = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
     pfd.iLayerType   = PFD_MAIN_PLANE;
     pfd.iPixelType   = PFD_TYPE_RGBA;
     pfd.cColorBits   = 32;
-	int pf = ChoosePixelFormat(pimpl->hdc, &pfd);
+    int pf = ChoosePixelFormat(pimpl->hdc, &pfd);
     Win::check(pf);
     Win::check(SetPixelFormat(pimpl->hdc, pf, &pfd));
 
-	HGLRC hrc = Win::check(wglCreateContext(pimpl->hdc), "creating rendering context");
+    HGLRC hrc = Win::check(wglCreateContext(pimpl->hdc), "creating rendering context");
     Win::check(wglMakeCurrent(pimpl->hdc, hrc), "selecting the rendering context");
 
     setupVSync();
@@ -256,12 +256,12 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     
     if (!fullscreen)
     {
-		double factor = std::min(0.9 * screenWidth() / width,
-								 0.8 * screenHeight() / height);
-	    
-		if (factor < 1)
-			width *= factor, height *= factor;
-	}
+        double factor = std::min(0.9 * screenWidth() / width,
+                                 0.8 * screenHeight() / height);
+        
+        if (factor < 1)
+            width *= factor, height *= factor;
+    }
 
     // Determine the size the window needs to have including UI chrome.
     RECT rc = { 0, 0, width, height };
@@ -287,9 +287,9 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     MoveWindow(handle(), windowX, windowY, windowW, windowH, false);
 
     pimpl->graphics.reset(new Gosu::Graphics(width, height, fullscreen));
-	graphics().setResolution(pimpl->originalWidth, pimpl->originalHeight);
+    graphics().setResolution(pimpl->originalWidth, pimpl->originalHeight);
     pimpl->input.reset(new Gosu::Input(handle()));
-	input().setMouseFactors(1.0 * pimpl->originalWidth / width, 1.0 * pimpl->originalHeight / height);
+    input().setMouseFactors(1.0 * pimpl->originalWidth / width, 1.0 * pimpl->originalHeight / height);
     input().onButtonDown = std::tr1::bind(&Window::buttonDown, this, _1);
     input().onButtonUp = std::tr1::bind(&Window::buttonUp, this, _1);
 
@@ -343,46 +343,46 @@ void Gosu::Window::show()
     {
         Win::processMessages();
 
-		unsigned lastTick = 0;
+        unsigned lastTick = 0;
 
-		for (;;)
-	    {
-			Win::processMessages();
+        for (;;)
+        {
+            Win::processMessages();
 
-			if (!::IsWindowVisible(handle()))
-			{
+            if (!::IsWindowVisible(handle()))
+            {
                 // TODO: Find out what the Sleep here is doing...
-				Sleep(50);
-				return;
-			}
+                Sleep(50);
+                return;
+            }
 
-			unsigned ms = milliseconds();
+            unsigned ms = milliseconds();
 
-			if (ms < lastTick || ms - lastTick >= static_cast<unsigned>(pimpl->updateInterval))
-			{
-				lastTick = ms;
+            if (ms < lastTick || ms - lastTick >= static_cast<unsigned>(pimpl->updateInterval))
+            {
+                lastTick = ms;
                 Song::update();
-				input().update();
-				// TODO: Bad heuristic -- this causes flickering cursor on right and bottom border of the
-				// window.
-				if (input().mouseX() >= 0 && input().mouseY() >= 0)
-					SendMessage(handle(), WM_SETCURSOR, reinterpret_cast<WPARAM>(handle()), HTCLIENT);
-			    update();
+                input().update();
+                // TODO: Bad heuristic -- this causes flickering cursor on right and bottom border of the
+                // window.
+                if (input().mouseX() >= 0 && input().mouseY() >= 0)
+                    SendMessage(handle(), WM_SETCURSOR, reinterpret_cast<WPARAM>(handle()), HTCLIENT);
+                update();
                 if (needsRedraw())
                 {
-      				::InvalidateRect(handle(), 0, FALSE);
+                    ::InvalidateRect(handle(), 0, FALSE);
                     FPS::registerFrame();
                 }
-				// There probably should be a proper "oncePerTick" handler
-				// system in the future. Right now, this is necessary to give
-				// timeslices to Ruby's green threads in Ruby/Gosu.
-		        if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
-			}
+                // There probably should be a proper "oncePerTick" handler
+                // system in the future. Right now, this is necessary to give
+                // timeslices to Ruby's green threads in Ruby/Gosu.
+                if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
+            }
             else if (pimpl->updateInterval - (ms - lastTick) > 5)
-				// More than 5 ms left until next update: Sleep to reduce
-				// processur usage, Sleep() is accurate enough for that.
-				Sleep(5);
-		}
+                // More than 5 ms left until next update: Sleep to reduce
+                // processur usage, Sleep() is accurate enough for that.
+                Sleep(5);
+        }
     }
     catch (...)
     {
@@ -432,15 +432,15 @@ HWND Gosu::Window::handle() const
 
 LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
 {
-	if (message == WM_SETCURSOR)
+    if (message == WM_SETCURSOR)
     {
-		if (LOWORD(lparam) != HTCLIENT || GetForegroundWindow() != handle() || needsCursor())
-		{
-			static const HCURSOR arrowCursor = LoadCursor(0, IDC_ARROW);
-			SetCursor(arrowCursor);
-	    }
-		else
-			SetCursor(NULL);
+        if (LOWORD(lparam) != HTCLIENT || GetForegroundWindow() != handle() || needsCursor())
+        {
+            static const HCURSOR arrowCursor = LoadCursor(0, IDC_ARROW);
+            SetCursor(arrowCursor);
+        }
+        else
+            SetCursor(NULL);
         return TRUE;
     }
 
