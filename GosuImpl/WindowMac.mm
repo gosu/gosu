@@ -427,6 +427,11 @@ void Gosu::Window::close()
                                data2:0] atStart:NO];
 }
 
+void Gosu::Window::panic(const std::exception& e)
+{
+    throw e;
+}
+
 const Gosu::Graphics& Gosu::Window::graphics() const
 {
     return *pimpl->graphics;

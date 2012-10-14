@@ -394,6 +394,11 @@ void Gosu::Window::close()
     pimpl->showing = false;
 }
 
+void Gosu::Window::panic(const std::exception& e)
+{
+    throw e;
+}
+
 const Gosu::Graphics& Gosu::Window::graphics() const
 {
     return *pimpl->graphics;
