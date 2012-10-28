@@ -434,14 +434,22 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
 {
     if (message == WM_SETCURSOR)
     {
-        if (LOWORD(lparam) != HTCLIENT || GetForegroundWindow() != handle() || needsCursor())
+        try
         {
-            static const HCURSOR arrowCursor = LoadCursor(0, IDC_ARROW);
-            SetCursor(arrowCursor);
+            if (LOWORD(lparam) != HTCLIENT || GetForegroundWindow() != handle() || needsCursor())
+            {
+                static const HCURSOR arrowCursor = LoadCursor(0, IDC_ARROW);
+                SetCursor(arrowCursor);
+            }
+            else
+                SetCursor(NULL);
+            return TRUE;
         }
-        else
-            SetCursor(NULL);
-        return TRUE;
+        catch (std::exception& e)
+        {
+            panic(e);
+            // If panic() returns normally, we will fall through to DefWindowProc.
+        }
     }
 
     if (message == WM_SETFOCUS && graphics().fullscreen() && IsWindowVisible(pimpl->handle))
