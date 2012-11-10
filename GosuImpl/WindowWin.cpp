@@ -491,13 +491,12 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
             try
             {
                 draw();
+                graphics().end();
             }
             catch (std::exception& e)
             {
-                graphics().end();
                 panic(e);
             }
-            graphics().end();
         }
         
         SwapBuffers(pimpl->hdc);
