@@ -35,6 +35,7 @@
 
 .yardoc/
 ios/GosuTouch.xcodeproj/xcuserdata/
+ios/GosuTouch.xcodeproj/project.xcworkspace/xcuserdata/
 
 # QtCreator project files
 Gosu.config
