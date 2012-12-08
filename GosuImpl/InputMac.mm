@@ -173,7 +173,7 @@ namespace {
                 "a usage page");
             SInt32 usage = getDictSInt32(properties, CFSTR(kIOHIDPrimaryUsageKey),
                 "a usage value");
-            // Device uninteresting?
+            // Device interesting?
             return page == kHIDPage_GenericDesktop &&
                 (usage == kHIDUsage_GD_Joystick ||
                  usage == kHIDUsage_GD_GamePad ||
@@ -333,6 +333,11 @@ namespace {
             IOHIDEventStruct event;
             for (int dev = 0; dev < devices.size(); ++dev)
             {
+                int rangeOffset = -gpRangeBegin;
+                if (dev < numGamepads) {
+                    rangeOffset += dev * gpNumPerGamepad;
+                }
+                
                 // Axis
                 for (int ax = 0; ax < devices[dev].axis.size(); ++ax)
                 {
@@ -344,12 +349,12 @@ namespace {
                     if (event.value < (3 * a.min + 1 * a.max) / 4.0)
                     {
                         if (a.wasNeutralOnce)
-                            result[(a.role == Axis::mainX ? gpLeft : gpUp) - gpRangeBegin] = true;
+                            result[(a.role == Axis::mainX ? gpLeft : gpUp) + rangeOffset] = true;
                     }
                     else if (event.value > (1 * a.min + 3 * a.max) / 4.0)
                     {
                         if (a.wasNeutralOnce)
-                            result[(a.role == Axis::mainX ? gpRight : gpDown) - gpRangeBegin] = true;
+                            result[(a.role == Axis::mainX ? gpRight : gpDown) + rangeOffset] = true;
                     }
                     else
                         a.wasNeutralOnce = true;
@@ -373,32 +378,32 @@ namespace {
                     {
                         // Must...resist...doing...crappy...fallthrough...magic... 
                         case 0:
-                            result[gpUp - gpRangeBegin] = true;
+                            result[gpUp + rangeOffset] = true;
                             break;
                         case 1:
-                            result[gpUp - gpRangeBegin] = true;
-                            result[gpRight - gpRangeBegin] = true;
+                            result[gpUp + rangeOffset] = true;
+                            result[gpRight + rangeOffset] = true;
                             break;
                         case 2:
-                            result[gpRight - gpRangeBegin] = true;
+                            result[gpRight + rangeOffset] = true;
                             break;
                         case 3:
-                            result[gpDown - gpRangeBegin] = true;
-                            result[gpRight - gpRangeBegin] = true;
+                            result[gpDown + rangeOffset] = true;
+                            result[gpRight + rangeOffset] = true;
                             break;
                         case 4:
-                            result[gpDown - gpRangeBegin] = true;
+                            result[gpDown + rangeOffset] = true;
                             break;
                         case 5:
-                            result[gpDown - gpRangeBegin] = true;
-                            result[gpLeft - gpRangeBegin] = true;
+                            result[gpDown + rangeOffset] = true;
+                            result[gpLeft + rangeOffset] = true;
                             break;
                         case 6:
-                            result[gpLeft - gpRangeBegin] = true;
+                            result[gpLeft + rangeOffset] = true;
                             break;
                         case 7:
-                            result[gpUp - gpRangeBegin] = true;
-                            result[gpLeft - gpRangeBegin] = true;
+                            result[gpUp + rangeOffset] = true;
+                            result[gpLeft + rangeOffset] = true;
                             break;
                     }
                 }
@@ -411,7 +416,13 @@ namespace {
                         devices[dev].buttons[btn].cookie, &event));
                     
                     if (event.value >= 1)
-                        result[gpButton0 + btn - gpRangeBegin] = true;
+                        result[gpButton0 + btn + rangeOffset] = true;
+                }
+            }
+            
+            for (int dev = 0; dev < numGamepads && dev < devices.size(); ++dev) {
+                for (int index = 0; index < gpNumPerGamepad; ++index) {
+                    result[index] = result[index] || result[index + dev * gpNumPerGamepad];
                 }
             }
             
