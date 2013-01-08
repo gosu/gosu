@@ -101,6 +101,7 @@ else
   pkg_config("sdl")
   pkg_config("pangoft2")
   pkg_config("x11")
+  pkg_config("xinerama")
   
   pkg_config("gl")
   pkg_config("vorbisfile")
