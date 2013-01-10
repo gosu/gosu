@@ -118,9 +118,8 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
     pimpl->virtWidth = virtualWidth, pimpl->virtHeight = virtualHeight;
     #ifndef GOSU_IS_IPHONE
     // on the iPhone, updateCurrentTransform will handle this (yuck)
-    Transform baseTransform;
-    baseTransform = scale(1.0 / virtualWidth  * pimpl->physWidth,
-                          1.0 / virtualHeight * pimpl->physHeight);
+    Transform baseTransform = scale(1.0 / virtualWidth  * pimpl->physWidth,
+                                    1.0 / virtualHeight * pimpl->physHeight);
     pimpl->queues.front().setBaseTransform(baseTransform);
     #endif
 }

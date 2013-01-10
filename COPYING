@@ -1,4 +1,4 @@
-Copyright (C) 2004-2012 Julian Raschke, Jan Lücker and all contributors.
+Copyright (C) 2004-2013 Julian Raschke, Jan Lücker and all contributors.
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -18,17 +18,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 
-                  Julian Raschke  julian@raschke.de
-                  Jan Lücker     jan.luecker@gmx.de
+            Julian Raschke <julian@raschke.de> & contributors
                         http://www.libgosu.org/
 
                                   ***
 
-This does NOT apply to audiere.dll shipped with the Windows versions of
-Gosu. Audiere is a separate library licensed under the Lesser General
-Public License. Please consult http://audiere.sf.net/ for more details.
-
-This does also NOT apply to libogg and libvorbis, which are included in
-all source and binary distributions of Gosu, sometimes via audiere. These
-projects are licensed under a BSD-like license, and their copyright terms
-need to be supplied even with binary redistributions (e.g. Gosu games).
+This does NOT apply to libogg and libvorbis, which are included in all source
+and binary distributions of Gosu. These projects are licensed under a BSD-like
+license, and their copyright terms need to be supplied even with binary
+redistributions (e.g. Gosu games).
