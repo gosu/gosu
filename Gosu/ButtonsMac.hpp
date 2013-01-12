@@ -172,7 +172,7 @@ namespace Gosu
         
         numButtons = gpRangeEnd + 1,
         numGamepads = 2,
-		noButton = 0xffffffff,
+        noButton = 0xffffffff,
         
         kbNum = kbRangeEnd - kbRangeBegin + 1,
         msNum = msRangeEnd - msRangeBegin + 1,
