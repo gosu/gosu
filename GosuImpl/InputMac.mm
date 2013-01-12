@@ -333,10 +333,7 @@ namespace {
             IOHIDEventStruct event;
             for (int dev = 0; dev < devices.size(); ++dev)
             {
-                int rangeOffset = -gpRangeBegin;
-                if (dev < numGamepads) {
-                    rangeOffset += dev * gpNumPerGamepad;
-                }
+                int rangeOffset = (dev + 1) * gpNumPerGamepad - gpRangeBegin;
                 
                 // Axis
                 for (int ax = 0; ax < devices[dev].axis.size(); ++ax)
