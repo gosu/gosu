@@ -23,7 +23,7 @@ namespace Gosu
         void registerFrame();
     }
     
-    NSRect screenRect = [[[NSScreen screens] objectAtIndex: 0] frame];
+    NSRect screenRect = [[NSScreen mainScreen] frame];
     
     unsigned screenWidth()
     {
@@ -33,6 +33,19 @@ namespace Gosu
     unsigned screenHeight()
     {
         return screenRect.size.height;
+    }
+    
+    static NSUInteger windowStyleMask = NSTitledWindowMask | NSMiniaturizableWindowMask | NSClosableWindowMask;
+    
+    void scaleDownWindowIfNecessary(unsigned& width, unsigned& height)
+    {
+        NSRect usableFrameRect = [[NSScreen mainScreen] visibleFrame];
+        NSRect usableContentRect = [NSWindow contentRectForFrameRect:usableFrameRect styleMask:windowStyleMask];
+        double factor = std::min(usableContentRect.size.width / width, usableContentRect.size.height / height);
+        if (factor < 1) {
+            width *= factor;
+            height *= factor;
+        }
     }
 }
 
@@ -201,8 +214,7 @@ struct Gosu::Window::Impl
     void createWindow(unsigned width, unsigned height)
     {
         NSRect rect = NSMakeRect(0, 0, width, height);
-        unsigned style = NSTitledWindowMask | NSMiniaturizableWindowMask | NSClosableWindowMask;
-        window.reset([[GosuWindow alloc] initWithContentRect:rect styleMask:style 
+        window.reset([[GosuWindow alloc] initWithContentRect:rect styleMask:windowStyleMask 
                                          backing:NSBackingStoreBuffered defer:NO]);
         [window.obj() retain]; // TODO: Why?
         
@@ -283,15 +295,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     }
     else
     {
-        // Windowed: Create window large enough to display stuff
-        // This is a pretty brutal heuristic I guess.
-        
-        double factor = std::min(0.9 * screenWidth() / width,
-                                 0.8 * screenHeight() / height);
-        
-        if (factor < 1)
-            realWidth *= factor, realHeight *= factor;
-        
+        scaleDownWindowIfNecessary(realWidth, realHeight);
         pimpl->createWindow(realWidth, realHeight);
         // Tell context to draw on this window.
         [pimpl->context.obj() setView:[pimpl->window.obj() contentView]];
