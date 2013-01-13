@@ -51,12 +51,13 @@ namespace Gosu
 
 #ifndef __LP64__
 // Workaround for Apple NSScreen bug :(
+// TODO - fill in the details ... on which systems does Gosu break without this?
 @interface NSScreen (NSScreenAccess)
-- (void) setFrame:(NSRect)frame;
+- (void)setFrame:(NSRect)frame;
 @end
 
 @implementation NSScreen (NSScreenAccess)
-- (void) setFrame:(NSRect)frame;
+- (void)setFrame:(NSRect)frame;
 {
     _frame = frame;
 }
@@ -107,40 +108,40 @@ namespace
 
 typedef void (*WindowProc)(Gosu::Window&);
 
-@interface GosuForwarder : NSObject
+@interface GosuForwarder : NSObject<NSWindowDelegate>
 {
     Gosu::Window* win;
     WindowProc pr;
 }
-- (id)initWithWindow: (Gosu::Window*)window withProc:(WindowProc)proc;
-- (void)doTick: (NSTimer*)timer;
-- (BOOL)windowShouldClose: (id)sender;
+- (id)initWithWindow:(Gosu::Window *)window withProc:(WindowProc)proc;
+- (void)doTick:(NSTimer *)timer;
+- (BOOL)windowShouldClose:(id)sender;
 @end
 
 @implementation GosuForwarder
-- (id)initWithWindow: (Gosu::Window*)window withProc:(WindowProc)proc
+- (id)initWithWindow:(Gosu::Window*)window withProc:(WindowProc)proc
 {
-    if (![super init])
-        return nil;
-    win = window;
-    pr = proc;
+    if ((self = [super init])) {
+        win = window;
+        pr = proc;
+    }
     return self;
 }
 
-- (void)doTick: (NSTimer*)timer
+- (void)doTick:(NSTimer*)timer
 {
     pr(*win);
 }
 
-- (BOOL)windowShouldClose: (id)sender
+- (BOOL)windowShouldClose:(id)sender
 {
-    [NSApp stop: nil];
+    [NSApp stop:nil];
     return YES;
 }
 @end
 
 #define OVERRIDE_METHOD(method)       \
-    - (void) method: (NSEvent*) event \
+    - (void)method:(NSEvent*) event   \
     {                                 \
         _input->feedNSEvent(event);   \
     }
@@ -151,7 +152,7 @@ typedef void (*WindowProc)(Gosu::Window&);
 }
 @end
 @implementation GosuWindow
-- (void) setInput: (Gosu::Input*)input
+- (void)setInput:(Gosu::Input *)input
 {
     _input = input;
 }
@@ -168,11 +169,11 @@ OVERRIDE_METHOD(scrollWheel);
 
 @interface GosuView : NSView
 {
-    Gosu::Input* _input;
+    Gosu::Input *_input;
 }
 @end
 @implementation GosuView
-- (void) setInput: (Gosu::Input*)input
+- (void)setInput:(Gosu::Input *)input
 {
     _input = input;
     
@@ -218,7 +219,7 @@ struct Gosu::Window::Impl
                                          backing:NSBackingStoreBuffered defer:NO]);
         [window.obj() retain]; // TODO: Why?
         
-        [window.obj() setContentView: [[GosuView alloc] init]];
+        [window.obj() setContentView:[[GosuView alloc] init]];
         [window.obj() center];
     }
     
@@ -266,11 +267,11 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     
     // Create pixel format and OpenGL context
     ObjRef<NSOpenGLPixelFormat> fmt([[NSOpenGLPixelFormat alloc] initWithAttributes:attrs]);
-    if (not fmt.get())
+    if (! fmt.get())
         throw std::runtime_error("Could not find a suitable OpenGL pixel format");
-    ::context = [[NSOpenGLContext alloc] initWithFormat: fmt.obj() shareContext:nil];
+    ::context = [[NSOpenGLContext alloc] initWithFormat:fmt.obj() shareContext:nil];
     pimpl->context.reset(context);
-    if (not pimpl->context.get())
+    if (! pimpl->context.get())
         throw std::runtime_error("Unable to create an OpenGL context with the supplied pixel format");
     
     unsigned realWidth = width, realHeight = height;
@@ -280,7 +281,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         
         // Save old mode and retrieve BPP
         pimpl->savedMode = CGDisplayCurrentMode(kCGDirectMainDisplay);
-		pimpl->savedFrame = [[NSScreen mainScreen] frame];
+        pimpl->savedFrame = [[NSScreen mainScreen] frame];
         int bpp;
         CFNumberGetValue((CFNumberRef)CFDictionaryGetValue(pimpl->savedMode, kCGDisplayBitsPerPixel),
                          kCFNumberIntType, &bpp);
@@ -313,15 +314,15 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     pimpl->input->onButtonUp = std::tr1::bind(&Window::buttonUp, this, _1);
     pimpl->input->setMouseFactors(1.0 * width / realWidth, 1.0 * height / realHeight);
     if (fullscreen)
-        [NSApp setInput: input()];
+        [NSApp setInput:input()];
     
-    pimpl->forwarder.reset([[GosuForwarder alloc] initWithWindow: this withProc: &Impl::doTick]);
+    pimpl->forwarder.reset([[GosuForwarder alloc] initWithWindow:this withProc:&Impl::doTick]);
     
-    if (not fullscreen)
+    if (! fullscreen)
     {
-        [pimpl->window.obj() setDelegate: pimpl->forwarder.obj()];
-        [pimpl->window.obj() setInput: pimpl->input.get()];
-        [(GosuView*)[pimpl->window.obj() contentView] setInput: pimpl->input.get()];
+        [pimpl->window.obj() setDelegate:pimpl->forwarder.obj()];
+        [pimpl->window.obj() setInput:pimpl->input.get()];
+        [(GosuView*)[pimpl->window.obj() contentView] setInput:pimpl->input.get()];
         // Finally, safely hide the window.
         [pimpl->window.obj() orderOut:nil];
     }
@@ -347,7 +348,7 @@ Gosu::Window::~Window()
 
 std::wstring Gosu::Window::caption() const
 {
-    if (not pimpl->window.get())
+    if (! pimpl->window.get())
         return L"";
     
     ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]);
@@ -357,11 +358,11 @@ std::wstring Gosu::Window::caption() const
 
 void Gosu::Window::setCaption(const std::wstring& caption)
 {
-    if (not pimpl->window.get())
+    if (! pimpl->window.get())
         return;
     
     std::string utf8 = wstringToUTF8(caption);
-    ObjRef<NSString> title([[NSString alloc] initWithUTF8String: utf8.c_str()]);
+    ObjRef<NSString> title([[NSString alloc] initWithUTF8String:utf8.c_str()]);
     [pimpl->window.obj() setTitle: title.obj()];
 }
 
@@ -372,15 +373,15 @@ double Gosu::Window::updateInterval() const
 
 void Gosu::Window::show()
 {
-	// This is for Ruby/Gosu and misc. hackery:
-	// Usually, applications on the Mac can only get keyboard and mouse input if
-	// run by double-clicking an .app. So if this is run from the Terminal (i.e.
-	// during Ruby/Gosu game development), tell the OS we need input in any case.
-	ProcessSerialNumber psn = { 0, kCurrentProcess };
-	TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+    // This is for Ruby/Gosu and misc. hackery:
+    // Usually, applications on the Mac can only get keyboard and mouse input if
+    // run by double-clicking an .app. So if this is run from the Terminal (i.e.
+    // during Ruby/Gosu game development), tell the OS we need input in any case.
+    ProcessSerialNumber psn = { 0, kCurrentProcess };
+    TransformProcessType(&psn, kProcessTransformToForegroundApplication);
     SetFrontProcess(&psn);
 
-    [NSThread setThreadPriority: 1.0];
+    [NSThread setThreadPriority:1.0];
  
     if (graphics().fullscreen())
     {
@@ -394,7 +395,7 @@ void Gosu::Window::show()
     else
         [pimpl->window.obj() makeKeyAndOrderFront:nil];
 
-    NSTimer* timer = [NSTimer scheduledTimerWithTimeInterval: pimpl->interval / 1000.0
+    NSTimer* timer = [NSTimer scheduledTimerWithTimeInterval:pimpl->interval / 1000.0
                             target:pimpl->forwarder.obj() selector:@selector(doTick:)
                             userInfo:nil repeats:YES];
     [NSApp run];
@@ -420,15 +421,15 @@ void Gosu::Window::close()
     // NSApp doesn't check its 'stopped' flag until it finishes processing
     // the next event (timers are not events), so here's a rather hacky way
     // to make sure it has one in its queue
-    [NSApp postEvent: [NSEvent otherEventWithType:NSApplicationDefined
-                               location:NSZeroPoint
-                               modifierFlags:0
-                               timestamp:0.0
-                               windowNumber:0
-                               context:NULL
-                               subtype:0
-                               data1:0
-                               data2:0] atStart:NO];
+    [NSApp postEvent:[NSEvent otherEventWithType:NSApplicationDefined
+                              location:NSZeroPoint
+                              modifierFlags:0
+                              timestamp:0.0
+                              windowNumber:0
+                              context:NULL
+                              subtype:0
+                              data1:0
+                              data2:0] atStart:NO];
 }
 
 void Gosu::Window::panic(const std::exception& e)
@@ -509,7 +510,7 @@ void Gosu::Window::Impl::doTick(Window& window)
 {
     // Enable vsync.
     GLint value = 1;
-    [window.pimpl->context.obj() setValues: &value forParameter: NSOpenGLCPSwapInterval];
+    [window.pimpl->context.obj() setValues:&value forParameter:NSOpenGLCPSwapInterval];
     
     if ((window.graphics().fullscreen() ||
         NSPointInRect([window.pimpl->window.obj() mouseLocationOutsideOfEventStream],
@@ -522,7 +523,7 @@ void Gosu::Window::Impl::doTick(Window& window)
     }
     else
     {
-        if (not window.pimpl->mouseViz)
+        if (! window.pimpl->mouseViz)
             [NSCursor unhide];
         window.pimpl->mouseViz = true;
     }
