@@ -23,7 +23,17 @@ namespace Gosu
     //! Useful when extending Gosu using OpenGL.
     unsigned const MAX_TEXTURE_SIZE = 1024;
     
+    #ifdef GOSU_IS_MAC
+    struct Transform
+    {
+        double value[16];
+        bool operator==(const Transform &other) { for (int i = 0; i < 16; ++i) if ((*this)[i] != other[i]) return false; return true; }
+        const double &operator[](std::size_t idx) const { return value[idx]; }
+        double &operator[](std::size_t idx) { return value[idx]; }
+    };
+    #else
     typedef std::tr1::array<double, 16> Transform;
+    #endif
     Transform translate(double x, double y);
     Transform rotate(double angle, double aroundX = 0, double aroundY = 0);
     Transform scale(double factor);
