@@ -128,13 +128,14 @@ void Gosu::loadImageFile(Bitmap& bitmap, Reader reader)
         applyColorKey(bitmap, Color::FUCHSIA);
 }
 
-#ifndef GOSU_IS_IPHONE
 void Gosu::saveImageFile(const Bitmap& bitmap, const std::wstring& filename)
 {
-    File file(filename, fmReplace);
-    saveImageFile(bitmap, file.backWriter(), filename);
+    Buffer buffer;
+    saveImageFile(bitmap, buffer.backWriter(), filename);
+    saveFile(buffer, filename);
 }
 
+#ifndef GOSU_IS_IPHONE
 void Gosu::saveImageFile(const Bitmap& originalBitmap, Writer writer, const std::wstring& formatHint)
 {
     NSBitmapImageFileType fileType;
@@ -171,13 +172,6 @@ void Gosu::saveImageFile(const Bitmap& originalBitmap, Writer writer, const std:
     writer.write([data bytes], [data length]);
 }
 #else
-void Gosu::saveImageFile(const Bitmap& bmp, const std::wstring& filename)
-{
-    Buffer buffer;
-    saveImageFile(bmp, buffer.backWriter());
-    saveFile(buffer, filename);
-}
-
 void Gosu::saveImageFile(const Bitmap& bmp, Writer writer, const std::wstring& formatHint)
 {    
     if (isExtension(formatHint.c_str(), L"bmp"))
