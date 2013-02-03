@@ -1,5 +1,5 @@
 #include <Gosu/TextInput.hpp>
-#include <Gosu/ButtonsWin.hpp>
+#include <Gosu/Buttons.hpp>
 #include <algorithm>
 #include <vector>
 #include <wctype.h>

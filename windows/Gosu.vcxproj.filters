@@ -254,7 +254,7 @@
     <ClInclude Include="..\Gosu\Bitmap.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\Gosu\ButtonsWin.hpp">
+    <ClInclude Include="..\Gosu\Buttons.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\Gosu\Color.hpp">

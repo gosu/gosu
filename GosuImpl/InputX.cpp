@@ -139,12 +139,7 @@ void Gosu::Input::update()
 
         if (event.type == KeyPress)
         {
-            // char buf[8];
-            // unsigned chars = XLookupString(&event.xkey, buf, sizeof buf, 0, 0);
-            // unsigned keysym = XKeycodeToKeysym(pimpl->display, event.xkey.keycode, 0);
-            // unsigned id = (chars == 0) ? keysym : widen(buf).at(0);
-
-            unsigned id = XKeycodeToKeysym(pimpl->display, event.xkey.keycode, 0);
+            unsigned id = event.xkey.keycode - 8;
 
             pimpl->keyMap[id] = true;
             if (onButtonDown)
@@ -152,11 +147,6 @@ void Gosu::Input::update()
         }
         else if (event.type == KeyRelease)
         {
-            // char buf[8];
-            // unsigned chars = XLookupString(&event.xkey, buf, sizeof buf, 0, 0);
-            // unsigned keysym = XKeycodeToKeysym(pimpl->display, event.xkey.keycode, 0);
-            // unsigned id = (chars == 0) ? keysym : widen(buf).at(0);
-
             if (i < pimpl->eventList.size() - 1)
             {
                 ::XEvent nextEvent = pimpl->eventList[i + 1];
@@ -167,7 +157,7 @@ void Gosu::Input::update()
                 }
             }
 
-            unsigned id = XKeycodeToKeysym(pimpl->display, event.xkey.keycode, 0);
+            unsigned id = event.xkey.keycode - 8;
 
             pimpl->keyMap[id] = false;
             if (onButtonUp)
