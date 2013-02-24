@@ -235,6 +235,11 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
                      double updateInterval)
 : pimpl(new Impl)
 {
+    if (fullscreen) {
+        NSLog(@"Fullscreen mode is temporarily unavailable on OS X; see https://github.com/jlnr/gosu/issues/157");
+        fullscreen = false;
+    }
+    
     pimpl->pool.reset([[NSAutoreleasePool alloc] init]); // <- necessary...?
     
     // Create NSApp global variable
