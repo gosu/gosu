@@ -482,13 +482,9 @@ Gosu::Window::SharedContext Gosu::Window::createSharedContext()
         (NSOpenGLPixelFormatAttribute)0
     };
     
-    NSOpenGLPixelFormat* pf =
-        [[[NSOpenGLPixelFormat alloc]
-            initWithAttributes:attributes] autorelease];
+    NSOpenGLPixelFormat* pf = [[[NSOpenGLPixelFormat alloc] initWithAttributes:attributes] autorelease];
 
-    NSOpenGLContext* ctx = [[NSOpenGLContext alloc]
-            initWithFormat: pf
-            shareContext: pimpl->context.obj()];
+    NSOpenGLContext* ctx = [[NSOpenGLContext alloc] initWithFormat:pf shareContext:pimpl->context.obj()];
     
     // TODO: Exception safety? Oh man, is this construction really worth it? :)
     std::tr1::function<void()> *makeCurrent =
