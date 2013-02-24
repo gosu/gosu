@@ -235,6 +235,11 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
                      double updateInterval)
 : pimpl(new Impl)
 {
+    if (fullscreen) {
+        NSLog(@"Fullscreen mode is temporarily unavailable on OS X; see https://github.com/jlnr/gosu/issues/157");
+        fullscreen = false;
+    }
+    
     pimpl->pool.reset([[NSAutoreleasePool alloc] init]); // <- necessary...?
     
     // Create NSApp global variable
@@ -482,13 +487,9 @@ Gosu::Window::SharedContext Gosu::Window::createSharedContext()
         (NSOpenGLPixelFormatAttribute)0
     };
     
-    NSOpenGLPixelFormat* pf =
-        [[[NSOpenGLPixelFormat alloc]
-            initWithAttributes:attributes] autorelease];
+    NSOpenGLPixelFormat* pf = [[[NSOpenGLPixelFormat alloc] initWithAttributes:attributes] autorelease];
 
-    NSOpenGLContext* ctx = [[NSOpenGLContext alloc]
-            initWithFormat: pf
-            shareContext: pimpl->context.obj()];
+    NSOpenGLContext* ctx = [[NSOpenGLContext alloc] initWithFormat:pf shareContext:pimpl->context.obj()];
     
     // TODO: Exception safety? Oh man, is this construction really worth it? :)
     std::tr1::function<void()> *makeCurrent =

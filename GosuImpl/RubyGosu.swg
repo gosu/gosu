@@ -619,6 +619,17 @@ namespace Gosu {
 
 // Button ID constants
 // Does not matter that it's the Mac file, %include only analyses symbols to export, not their values.
+%ignore Gosu::kbRangeBegin;
+%ignore Gosu::kbRangeEnd;
+%ignore Gosu::msRangeBegin;
+%ignore Gosu::msRangeEnd;
+%ignore Gosu::gpRangeBegin;
+%ignore Gosu::gpRangeEnd;
+%ignore Gosu::kbNum;
+%ignore Gosu::msNum;
+%ignore Gosu::gpNum;
+%ignore Gosu::numButtons;
+%ignore Gosu::noButton;
 %include "../Gosu/ButtonsMac.hpp"
 %init %{
     GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
