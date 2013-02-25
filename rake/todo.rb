@@ -31,7 +31,7 @@ if ENV['USER'] == 'jlnr' and `uname`.chomp == 'Darwin' then
         end  
       
         gosu_projects.each do |project|
-          wiki_page.puts "## #{project.name.get}"
+          wiki_page.puts "\n## #{project.name.get}"
           wiki_page.list_tasks_in project
         end
       end
