@@ -36,7 +36,6 @@ public:
     virtual bool needsCursor() const;
     virtual void loseFocus();
     virtual void releaseMemory();
-    virtual void panic(std::exception const &e);
     virtual void buttonDown(Gosu::Button arg0);
     virtual void buttonUp(Gosu::Button arg0);
 };

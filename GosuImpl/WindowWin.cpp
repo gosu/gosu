@@ -398,13 +398,6 @@ void Gosu::Window::close()
         ChangeDisplaySettings(NULL, CDS_FULLSCREEN);
 }
 
-void Gosu::Window::panic(const std::exception& e)
-{
-  // Show the message to the user.
-  ::MessageBoxA(0, e.what(), "Panic", MB_OK | MB_ICONERROR);
-  abort();
-}
-
 const Gosu::Graphics& Gosu::Window::graphics() const
 {
     return *pimpl->graphics;
@@ -447,8 +440,7 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
         }
         catch (std::exception& e)
         {
-            panic(e);
-            // If panic() returns normally, we will fall through to DefWindowProc.
+            // TODO - mark needsCursor() as noexcept and remove this try/catch block altogether
         }
     }
 
@@ -495,7 +487,8 @@ LRESULT Gosu::Window::handleMessage(UINT message, WPARAM wparam, LPARAM lparam)
             }
             catch (std::exception& e)
             {
-                panic(e);
+                ::MessageBoxA(0, e.what(), "Error", MB_OK | MB_ICONERROR);
+                abort();
             }
         }
         
