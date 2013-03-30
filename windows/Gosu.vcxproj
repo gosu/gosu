@@ -158,7 +158,7 @@
     <ClInclude Include="..\Gosu\Audio.hpp" />
     <ClInclude Include="..\Gosu\AutoLink.hpp" />
     <ClInclude Include="..\Gosu\Bitmap.hpp" />
-    <ClInclude Include="..\Gosu\ButtonsWin.hpp" />
+    <ClInclude Include="..\Gosu\Buttons.hpp" />
     <ClInclude Include="..\Gosu\Color.hpp" />
     <ClInclude Include="..\Gosu\Directories.hpp" />
     <ClInclude Include="..\Gosu\Font.hpp" />

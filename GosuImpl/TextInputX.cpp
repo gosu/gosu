@@ -65,7 +65,9 @@ bool Gosu::TextInput::feedXEvent(void* display, void* event)
     bool shiftDown	= (ev->xkey.state & ShiftMask);
 
     KeySym lower, upper;
-    XConvertCase(XKeycodeToKeysym((Display*)display, ev->xkey.keycode, 0), &lower, &upper);
+    int keysyms_per_keycode_return;
+    KeySym keysym = (KeySym)XGetKeyboardMapping((Display*)display, ev->xkey.keycode, 0, &keysyms_per_keycode_return);
+    XConvertCase(keysym, &lower, &upper);
 
     wchar_t ch = static_cast<wchar_t>(shiftDown ? upper : lower);
 

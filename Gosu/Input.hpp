@@ -8,7 +8,7 @@
 #include <Gosu/Platform.hpp>
 
 #ifdef GOSU_IS_WIN
-#include <Gosu/ButtonsWin.hpp>
+#include <Gosu/Buttons.hpp>
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -20,10 +20,9 @@
 #endif
 
 #ifdef GOSU_IS_X
+#include <Gosu/Buttons.hpp>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <X11/keysym.h>
-#include <Gosu/ButtonsX.hpp>
 #endif
 
 #include <Gosu/Platform.hpp>

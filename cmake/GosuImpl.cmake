@@ -160,7 +160,7 @@ SET(CORE_INC_FILES
 if(WIN32)
 SET(CORE_INC_FILES ${CORE_INC_FILES}
     ../Gosu/WinUtility.hpp
-    ../Gosu/ButtonsWin.hpp
+    ../Gosu/Buttons.hpp
 )
 elseif(APPLE)
 SET(CORE_INC_FILES ${CORE_INC_FILES}
@@ -169,7 +169,7 @@ SET(CORE_INC_FILES ${CORE_INC_FILES}
 )
 else()
 SET(CORE_INC_FILES ${CORE_INC_FILES}
-    ../Gosu/ButtonsX.hpp
+    ../Gosu/Buttons.hpp
     ../Gosu/Utility.hpp
 )
 endif()
