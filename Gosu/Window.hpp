@@ -74,11 +74,6 @@ namespace Gosu
         //! This function is called when the operating system's memory is low.
         //! So far, it is only called in iOS applications.
         virtual void releaseMemory() {}
-        
-        //! This function may be called on some platforms when some window callbacks
-        //! encounter an uncaught exception and cannot handle it themselves, i.e.
-        //! the exception wouldn't reach show().
-        virtual void panic(const std::exception& e);
 
         //! Called before update when the user pressed a button while the
         //! window had the focus.
