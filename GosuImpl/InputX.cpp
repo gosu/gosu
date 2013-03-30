@@ -4,8 +4,6 @@
 #include <vector>
 #include <map>
 
-#include <GosuImpl/Iconv.hpp>
-
 struct Gosu::Input::Impl
 {
     TextInput* textInput;
@@ -58,37 +56,20 @@ bool Gosu::Input::down(Gosu::Button btn) const
 
 Gosu::Button Gosu::Input::charToId(wchar_t ch)
 {
-    // ASCII chars
+    // TODO - Does this always work for ISO Latin 1 (which the lowest Unicode byte maps to)?
     if (ch >= 32 && ch <= 255)
-        return Button(ch);
-    // Other chars are conceptually not findable :(
+        return Button(XKeysymToKeycode(ch) - 8);
+        
+    // TODO - no idea how other characters can be found. Maybe with the code above?
     return noButton;
-}
-
-namespace
-{
-    extern const char LATIN[] = "ISO8859-1";
-    extern const char UCS_4_INTERNAL[] = "UCS-4LE";
 }
 
 wchar_t Gosu::Input::idToChar(Button btn)
 {
-    // ASCII chars
-    if (btn.id() >= 32 && btn.id() <= 255)
-        return btn.id();
-    
-    // Looking at SDL source suggests that this is to be interpreted depending on the third byte.
-    // Should find solid literature on that if it exists.
-    // Commented out: This is pretty pointless since LATIN-1 maps to Unicode directly...
-    // BUT could serve as a basis for more?!
-    //if ((btn.id() >> 8) == 0)
-    //{
-    //    unsigned char in[] = { btn.id() & 0xff, 0 };
-    //    std::wstring converted = iconvert<std::wstring, UCS_4_INTERNAL, LATIN>(std::string(reinterpret_cast<char*>(in)));
-    //    return converted.at(0);
-    //}
-
-    return 0;
+    KeySym keySym = XKeycodeToKeysym(btn.id() + 8);
+    if (keySym == NoSymbol || keySym < 32 || keySym > 255)
+        return 0;
+    return keySym;
 }
 
 double Gosu::Input::mouseX() const
