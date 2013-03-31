@@ -51,8 +51,7 @@ EOS
 end
 
 def upload filename
-  # TODO: Use github upload (steal from Releasy gem)
-  #sh "scp -P 22000 '#{filename}' libgosu.org:/Library/WebServer/Documents/libgosu.org/downloads/"
+  sh "scp -P 22000 '#{filename}' libgosu.org:/Library/WebServer/Documents/libgosu.org/downloads/"
 end
 
 def zip filename, files
@@ -65,6 +64,7 @@ end
 
 Dir['./rake/*.rb'].each { |task| require task }
 
-task :release => [:'mac:release', :'win:release', :'linux:release',
-                  :'mac:release_gem', :'win:release_gem', :'linux:release_gem',
-                  :'mac:app_wrapper']
+task :release => [# Broken - these can only be built on a 10.4-10.6 Machine
+                  # :'mac:release', :'mac:release_gem', :'mac:app_wrapper',
+                  :'win:release', :'win:release_gem',
+                  :'linux:release', :'linux:release_gem']
