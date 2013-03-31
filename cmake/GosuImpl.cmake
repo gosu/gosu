@@ -34,6 +34,9 @@ else()
     OPTION(BUILD_DYNAMIC_LIBRARIES "Should the dynamic libraries be built? WARNING enable at your own risk" OFF)
 endif()
 
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug)
+endif()
 
 
 if(WIN32)
