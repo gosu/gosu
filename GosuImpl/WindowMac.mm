@@ -108,7 +108,10 @@ namespace
 
 typedef void (*WindowProc)(Gosu::Window&);
 
-@interface GosuForwarder : NSObject<NSWindowDelegate>
+@interface GosuForwarder : NSObject
+#ifdef __LP64__
+                                    <NSWindowDelegate>
+#endif
 {
     Gosu::Window* win;
     WindowProc pr;
