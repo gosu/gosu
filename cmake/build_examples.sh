@@ -2,7 +2,7 @@ cd ..
 cd examples
 
 cd Tutorial
-mkdir build
+mkdir -p build
 cd build
 cmake ..
 make
@@ -10,7 +10,7 @@ make
 cd ../..
 
 cd TextInput
-mkdir build
+mkdir -p build
 cd build
 cmake ..
 make
@@ -18,7 +18,7 @@ make
 cd ../..
 
 cd NetworkPong
-mkdir build
+mkdir -p build
 cd build
 cmake ..
 make

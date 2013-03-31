@@ -57,6 +57,9 @@ set(Gosu_INCLUDE_DIRS ${Gosu_INCLUDE_DIR}) # do not add dependency dirs, you sho
 find_package(Freetype REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(SDL_ttf REQUIRED)
+mark_as_advanced(SDLTTF_INCLUDE_DIR)
+mark_as_advanced(SDLTTF_LIBRARY)
+
 find_package(X11 REQUIRED)
 find_package(OpenGL REQUIRED)
 
@@ -73,6 +76,8 @@ find_library(FREEIMAGE_LIBRARIES freeimage)
 if(NOT FREEIMAGE_INCLUDE_DIRS OR NOT FREEIMAGE_LIBRARIES)
     message(FATAL_ERROR "Freeimage could not be found")
 endif()
+mark_as_advanced(FREEIMAGE_INCLUDE_DIRS)
+mark_as_advanced(FREEIMAGE_LIBRARIES)
 
 #no include_directories here, let the FindGosu.cmake user handle that through return variables
 
