@@ -1141,7 +1141,7 @@
 					../dependencies/libogg/include,
 				);
 				LIBRARY_SEARCH_PATHS = .;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SDKROOT_x86_64 = /Developer/SDKs/MacOSX10.6.sdk;
 			};
 			name = Debug;
@@ -1166,7 +1166,7 @@
 					../dependencies/libogg/include,
 				);
 				LIBRARY_SEARCH_PATHS = .;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SDKROOT_x86_64 = /Developer/SDKs/MacOSX10.6.sdk;
 			};
 			name = Release;
@@ -1273,7 +1273,7 @@
 					../dependencies/libogg/include,
 				);
 				LIBRARY_SEARCH_PATHS = .;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SDKROOT_x86_64 = /Developer/SDKs/MacOSX10.6.sdk;
 			};
 			name = "Release with 1.9";

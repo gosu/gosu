@@ -27,9 +27,9 @@
 		<key>x86_64</key>
 		<string>10.6.0</string>
 		<key>i386</key>
-		<string>10.4.0</string>
+		<string>10.5.0</string>
 		<key>ppc</key>
-		<string>10.4.0</string>
+		<string>10.5.0</string>
 	</dict>
 </dict>
 </plist>
