@@ -1,4 +1,6 @@
 (*)
+/.bundle
+/vendor
 /Gosu.framework/
 /Gosu.framework.dSYM/
 /bin
