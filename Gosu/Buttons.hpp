@@ -38,12 +38,26 @@ namespace Gosu
 		kbLeftShift = 0x2a,
 		kbRightShift = 0x36,
 		kbLeftControl = 0x1d,
+#if defined(GOSU_IS_WIN)
 		kbRightControl = 0x9d,
+#elif defined(GOSU_IS_X)
+		kbRightControl = 0x61,
+#else
+# error this should not happen
+#endif
 		kbLeftAlt = 0x38,
+#if defined(GOSU_IS_WIN)
 		kbRightAlt = 0xb8,
 		kbLeftMeta = 0xdb,
 		kbRightMeta = 0xdc,
+#elif defined(GOSU_IS_X)
+		kbRightAlt = 0x64,
+		kbLeftMeta = 0x7d,
+#else
+# error this should not happen
+#endif
 		kbBackspace = 0x0e,
+#if defined(GOSU_IS_WIN)
 		kbLeft = 0xcb,
 		kbRight = 0xcd,
 		kbUp = 0xc8,
@@ -55,6 +69,21 @@ namespace Gosu
 		kbPageUp = 0xc9,
 		kbPageDown = 0xd1,
 		kbEnter = 0x9c,
+#elif defined(GOSU_IS_X)
+		kbLeft = 0x69,
+		kbRight = 0x6a,
+		kbUp = 0x67,
+		kbDown = 0x6c,
+		kbHome = 0x66,
+		kbEnd = 0x6b,
+		kbInsert = 0x6e,
+		kbDelete = 0x6f,
+		kbPageUp = 0x68,
+		kbPageDown = 0x6d,
+		kbEnter = 0x60,
+#else
+# error this should not happen
+#endif
 		kbA = 0x1e,
 		kbB = 0x30,
 		kbC = 0x2e,

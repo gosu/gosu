@@ -34,6 +34,9 @@ else()
     OPTION(BUILD_DYNAMIC_LIBRARIES "Should the dynamic libraries be built? WARNING enable at your own risk" OFF)
 endif()
 
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug)
+endif()
 
 
 if(WIN32)
@@ -283,6 +286,10 @@ ELSE(WIN32)
 			ARCHIVE DESTINATION lib COMPONENT library
 		)
 	ENDIF()
+	
+	SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -Wall -Wextra -pedantic")
+	SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")
+	SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O2 -g")
 
 	#Install the core header files, including the ones in the Gosu subfolder.
 	#this also installs windows headers, TODO: fix?
