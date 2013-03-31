@@ -10,10 +10,14 @@ struct Gosu::Input::Impl
     std::vector< ::XEvent> eventList;
     std::map<unsigned int, bool> keyMap;
     double mouseX, mouseY, mouseFactorX, mouseFactorY;
-    ::Display* display;
+    static ::Display* display;
 	::Window window;
     Impl() : textInput(0) {}
 };
+
+// TODO - ugly, but necessary for charToId/idToChar, since they are static functions.
+// TODO - should instead create a global, shared connection to X11
+::Display* Gosu::Input::Impl::display = NULL;
 
 Gosu::Input::Input(::Display* dpy, ::Window wnd)
     : pimpl(new Impl)
@@ -27,6 +31,7 @@ Gosu::Input::Input(::Display* dpy, ::Window wnd)
 
 Gosu::Input::~Input()
 {
+    Impl::display = NULL;
 }
 
 bool Gosu::Input::feedXEvent(::XEvent& event)
@@ -56,9 +61,14 @@ bool Gosu::Input::down(Gosu::Button btn) const
 
 Gosu::Button Gosu::Input::charToId(wchar_t ch)
 {
+    // TODO - Effectively, this is now a member function of Input again, not a
+    // static member function.
+    if (! Impl::display)
+        return noButton;
+    
     // TODO - Does this always work for ISO Latin 1 (which the lowest Unicode byte maps to)?
     if (ch >= 32 && ch <= 255)
-        return Button(XKeysymToKeycode(ch) - 8);
+        return Button(XKeysymToKeycode(Impl::display, ch) - 8);
         
     // TODO - no idea how other characters can be found. Maybe with the code above?
     return noButton;
@@ -66,7 +76,12 @@ Gosu::Button Gosu::Input::charToId(wchar_t ch)
 
 wchar_t Gosu::Input::idToChar(Button btn)
 {
-    KeySym keySym = XKeycodeToKeysym(btn.id() + 8);
+    // TODO - Effectively, this is now a member function of Input again, not a
+    // static member function.
+    if (! Impl::display)
+        return 0;
+    
+    KeySym keySym = XKeycodeToKeysym(Impl::display, btn.id() + 8, 0);
     if (keySym == NoSymbol || keySym < 32 || keySym > 255)
         return 0;
     return keySym;
