@@ -51,8 +51,7 @@ EOS
 end
 
 def upload filename
-  # TODO: Use github upload (steal from Releasy gem)
-  #sh "scp -P 22000 '#{filename}' libgosu.org:/Library/WebServer/Documents/libgosu.org/downloads/"
+  sh "scp -P 22000 '#{filename}' libgosu.org:/Library/WebServer/Documents/libgosu.org/downloads/"
 end
 
 def zip filename, files
