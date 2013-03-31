@@ -66,7 +66,7 @@ bool Gosu::TextInput::feedXEvent(void* display, void* event)
 
     KeySym lower, upper;
     int keysyms_per_keycode_return;
-    KeySym keysym = (KeySym)XGetKeyboardMapping((Display*)display, ev->xkey.keycode, 0, &keysyms_per_keycode_return);
+    KeySym keysym = *XGetKeyboardMapping((Display*)display, ev->xkey.keycode, 1, &keysyms_per_keycode_return);
     XConvertCase(keysym, &lower, &upper);
 
     wchar_t ch = static_cast<wchar_t>(shiftDown ? upper : lower);
@@ -90,8 +90,10 @@ bool Gosu::TextInput::feedXEvent(void* display, void* event)
         return true;
     }
 
+    Button btn(ev->xkey.keycode-8);
+
     // Char left
-    if (ch == kbLeft && !ctrlDown)
+    if (btn == kbLeft && !ctrlDown)
     {
         if (CARET_POS > 0)
             CARET_POS -= 1;
@@ -103,7 +105,7 @@ bool Gosu::TextInput::feedXEvent(void* display, void* event)
     }
 
     // Char right
-    if (ch == kbRight && !ctrlDown)
+    if (btn == kbRight && !ctrlDown)
     {
         if (CARET_POS < pimpl->text.length())
             CARET_POS += 1;
@@ -115,7 +117,7 @@ bool Gosu::TextInput::feedXEvent(void* display, void* event)
     }
     
     // Home
-    if (ch == kbHome)
+    if (btn == kbHome)
     {
         CARET_POS = 0;
 
@@ -126,7 +128,7 @@ bool Gosu::TextInput::feedXEvent(void* display, void* event)
     }
 
     // End
-    if (ch == kbEnd)
+    if (btn == kbEnd)
     {
         CARET_POS = pimpl->text.length();
 
@@ -137,7 +139,7 @@ bool Gosu::TextInput::feedXEvent(void* display, void* event)
     }
 
     // Word left
-    if (ch == kbLeft && ctrlDown)
+    if (btn == kbLeft && ctrlDown)
     {
         if (CARET_POS == pimpl->text.length())
             --CARET_POS;
@@ -155,7 +157,7 @@ bool Gosu::TextInput::feedXEvent(void* display, void* event)
     }
 
     // Word right
-    if (ch == kbRight && ctrlDown)
+    if (btn == kbRight && ctrlDown)
     {
         while (CARET_POS < pimpl->text.length() && iswspace(pimpl->text.at(CARET_POS)))
             ++CARET_POS;
@@ -170,7 +172,7 @@ bool Gosu::TextInput::feedXEvent(void* display, void* event)
     }
 
     // Delete existant selection
-    if (ch == kbBackspace)
+    if (btn == kbBackspace)
     {
         if (SEL_START != CARET_POS)
         {
@@ -191,7 +193,7 @@ bool Gosu::TextInput::feedXEvent(void* display, void* event)
     }
 
     // Delete existant selection
-    if (ch == kbDelete)
+    if (btn == kbDelete)
     {
         if (SEL_START != CARET_POS)
         {
