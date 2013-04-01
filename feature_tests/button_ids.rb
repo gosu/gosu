@@ -9,7 +9,7 @@ class ButtonIDs < Gosu::Window
   end
   
   def button_down(id)
-    @constants << Gosu.constants.find { |c| c.upcase != c and Gosu.const_get(c) == id }
+    @constants << "#{id} = #{Gosu.constants.find { |c| c.upcase != c and Gosu.const_get(c) == id }}"
   end
   
   def draw
