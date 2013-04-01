@@ -322,7 +322,7 @@ namespace {
             std::tr1::array<bool, gpNum> result = { false };
             
             IOHIDEventStruct event;
-            for (int dev = 0; dev < devices.size(); ++dev)
+            for (int dev = 0; dev < devices.size() && dev < numGamepads; ++dev)
             {
                 int rangeOffset = (dev + 1) * gpNumPerGamepad - gpRangeBegin;
                 
@@ -410,7 +410,7 @@ namespace {
             
             for (int dev = 0; dev < numGamepads && dev < devices.size(); ++dev) {
                 for (int index = 0; index < gpNumPerGamepad; ++index) {
-                    result[index] = result[index] || result[index + dev * gpNumPerGamepad];
+                    result[index] = (result[index] || result[index + (dev + 1) * gpNumPerGamepad]);
                 }
             }
             
