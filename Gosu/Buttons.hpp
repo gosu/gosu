@@ -1,5 +1,5 @@
-#ifndef GOSU_BUTTONSWIN_HPP
-#define GOSU_BUTTONSWIN_HPP
+#ifndef GOSU_BUTTONS_HPP
+#define GOSU_BUTTONS_HPP
 
 namespace Gosu
 {
@@ -132,7 +132,7 @@ namespace Gosu
         msMiddle,
         msWheelUp,
         msWheelDown,
-        msRangeEnd = msWheelDown,
+        msRangeEnd = 0x110,
         
         gpRangeBegin,
         gpLeft = gpRangeBegin,

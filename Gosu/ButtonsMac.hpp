@@ -95,7 +95,7 @@ namespace Gosu
         kbNumpadSubtract = 0x4e,
         kbNumpadMultiply = 0x43,
         kbNumpadDivide = 0x4b,
-        kbRangeEnd = 0xffff,
+        kbRangeEnd = 0xff,
         
         msRangeBegin,
         msLeft = msRangeBegin,
@@ -103,7 +103,7 @@ namespace Gosu
         msMiddle,
         msWheelUp,
         msWheelDown,
-        msRangeEnd,
+        msRangeEnd = 0x110,
         
         gpRangeBegin,
         gpLeft = gpRangeBegin,
