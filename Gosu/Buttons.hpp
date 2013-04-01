@@ -24,7 +24,7 @@ namespace Gosu
 	{
         kbRangeBegin,
 		kbEscape = GOSU_SCANCODE(0x35, 0x01),
-		kbF1 = GOSU_SCANCODE(0x74, 0x3b),
+		kbF1 = GOSU_SCANCODE(0x7a, 0x3b),
 		kbF2 = GOSU_SCANCODE(0x78, 0x3c),
 		kbF3 = GOSU_SCANCODE(0x63, 0x3d),
 		kbF4 = GOSU_SCANCODE(0x76, 0x3e),
