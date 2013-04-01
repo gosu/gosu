@@ -63,6 +63,7 @@ namespace {
         char buf[256];
         CFStringRef str = 
             (CFStringRef)CFDictionaryGetValue(dict, key);
+        // TODO - make sure that this uses UTF8!
         checkTrue(str && CFStringGetCString(str, buf, sizeof buf, CFStringGetSystemEncoding()),
             what);
         return buf;
@@ -114,9 +115,9 @@ namespace {
                 "a min value");
             SInt32 max = getDictSInt32(dict, CFSTR(kIOHIDElementMaxKey),
                 "a max value");
-            if ((max - min) == 3)
+            if ((max - min) + 1 == 4)
                 kind = fourWay;
-            else if ((max - min) == 7)
+            else if ((max - min) + 1 == 8)
                 kind = eightWay;
             else
                 kind = unknown;
@@ -316,16 +317,6 @@ namespace {
             }
         }
         
-        unsigned countDevices() const
-        {
-            return devices.size();
-        }
-        
-        const Device& getDevice(unsigned i) const
-        {
-            return devices.at(i);
-        }
-
         std::tr1::array<bool, gpNum> poll()
         {
             std::tr1::array<bool, gpNum> result = { false };
