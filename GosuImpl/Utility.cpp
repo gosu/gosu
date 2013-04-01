@@ -40,15 +40,10 @@ string Gosu::wstringToUTF8(const std::wstring& ws)
 // from this file.
 
 namespace {
-    extern const char MACROMAN[] = "MacRoman";
     extern const char UCS_2_INTERNAL[] = "UCS-2-INTERNAL";
 }
 
 namespace Gosu {
-    wstring macRomanToWstring(const string& s)
-    {
-        return iconvert<wstring, UCS_4_INTERNAL, MACROMAN>(s);
-    }
     vector<unsigned short> wstringToUniChars(const wstring& ws)
     {
         return iconvert<vector<unsigned short>, UCS_2_INTERNAL, UCS_4_INTERNAL>(ws);

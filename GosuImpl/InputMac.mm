@@ -419,12 +419,6 @@ namespace {
     };
 }
 
-// Needed for char translation.
-namespace Gosu
-{
-	std::wstring macRomanToWstring(const std::string& s);
-}
-
 namespace {
     const unsigned numScancodes = 128;
     
