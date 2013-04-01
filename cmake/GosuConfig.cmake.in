@@ -51,7 +51,7 @@ endif()
 
 #set(Gosu_LIBRARY_DIRS "${PREFIX}/@Gosu_LIBRARY_INSTALL_DIRS@")
 
-set(Gosu_INCLUDE_DIR "${PREFIX}/@Gosu_INCLUDE_INSTALL_DIRS@")
+set(Gosu_INCLUDE_DIR "${PREFIX}/@Gosu_INCLUDE_INSTALL_DIRS@/..")
 set(Gosu_INCLUDE_DIRS ${Gosu_INCLUDE_DIR}) # do not add dependency dirs, you should not use the dependencies through gosu, find them yourself
 
 find_package(Freetype REQUIRED)
