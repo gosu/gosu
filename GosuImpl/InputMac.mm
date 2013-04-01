@@ -579,9 +579,13 @@ bool Gosu::Input::feedNSEvent(void* event)
             pimpl->enqueue(msRight, false);
             return true;
         case NSOtherMouseDown:
+            if ([ev buttonNumber] >= 10)
+                return false;
             pimpl->enqueue(msOther0 + [ev buttonNumber] - 2, true);
             return true;
         case NSOtherMouseUp:
+            if ([ev buttonNumber] >= 10)
+                return false;
             pimpl->enqueue(msOther0 + [ev buttonNumber] - 2, false);
             return true;
         case NSScrollWheel:
@@ -601,7 +605,7 @@ bool Gosu::Input::feedNSEvent(void* event)
     }
 	
     // Handle other keys.
-    if (type == NSKeyDown || type == NSKeyUp)
+    if ((type == NSKeyDown || type == NSKeyUp) && [ev keyCode] <= kbRangeEnd)
     {
         pimpl->enqueue([ev keyCode], type == NSKeyDown);
         return true;
@@ -631,7 +635,7 @@ bool Gosu::Input::down(Gosu::Button btn) const
     if (btn == noButton || btn.id() >= numButtons)
         return false;
 
-    return buttonStates.at(btn.id());
+    return buttonStates[btn.id()];
 }
 
 double Gosu::Input::mouseX() const
@@ -694,7 +698,7 @@ void Gosu::Input::update()
     for (unsigned i = 0; i < pimpl->queue.size(); ++i)
     {
         Impl::WaitingButton& wb = pimpl->queue[i];
-        buttonStates.at(wb.btn.id()) = wb.down;
+        buttonStates[wb.btn.id()] = wb.down;
         if (wb.down && onButtonDown)
             onButtonDown(wb.btn);
         else if (!wb.down && onButtonUp)
