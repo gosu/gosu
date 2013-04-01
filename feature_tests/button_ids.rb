@@ -1,4 +1,4 @@
-require 'rubygems'
+$LOAD_PATH << '../lib'
 require 'gosu'
 
 class ButtonIDs < Gosu::Window

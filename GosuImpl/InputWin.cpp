@@ -201,15 +201,13 @@ struct Gosu::Input::Impl
             case DIERR_INPUTLOST:
             {
                 // Cannot fetch new events: Release all buttons.
-                for (unsigned id = msRangeBegin; id < msRangeEnd; ++id)
+                for (unsigned id = msRangeBegin; id <= msRangeEnd; ++id)
                     setButton(id, false, collectEvents);
                 mouse->Acquire();
                 break;
             }
         }
         
-        keyboard:
-
         inOut = inputBufferSize;
         hr = keyboard->GetDeviceData(sizeof data[0], data, &inOut, 0);
         switch (hr)
@@ -225,7 +223,7 @@ struct Gosu::Input::Impl
             case DIERR_NOTACQUIRED:
             case DIERR_INPUTLOST:
             {
-                for (unsigned id = kbRangeBegin; id < kbRangeEnd; ++id)
+                for (unsigned id = kbRangeBegin; id <= kbRangeEnd; ++id)
                     setButton(id, false, collectEvents);
                 keyboard->Acquire();
                 break;
@@ -233,10 +231,12 @@ struct Gosu::Input::Impl
         }
 
         std::tr1::array<bool, gpNum> gpBuffer = { false };
-        for (unsigned gp = 0; gp < gamepads.size(); ++gp)
+        for (unsigned gp = 0; gp < gamepads.size() && gp < numGamepads; ++gp)
         {
             gamepads[gp]->Poll();
             
+            int rangeOffset = (gp + 1) * gpNumPerGamepad - gpRangeBegin;
+
             DIJOYSTATE joy;
             hr = gamepads[gp]->GetDeviceState(sizeof joy, &joy);
             switch (hr)
@@ -244,18 +244,18 @@ struct Gosu::Input::Impl
                 case DI_OK:
                 {
                     if (joy.lX < -stickThreshold)
-                        gpBuffer[gpLeft - gpRangeBegin] = true;
+                        gpBuffer[gpLeft + rangeOffset] = true;
                     else if (joy.lX > stickThreshold)
-                        gpBuffer[gpRight - gpRangeBegin] = true;
+                        gpBuffer[gpRight + rangeOffset] = true;
 
                     if (joy.lY < -stickThreshold)
-                        gpBuffer[gpUp - gpRangeBegin] = true;
+                        gpBuffer[gpUp + rangeOffset] = true;
                     else if (joy.lY > stickThreshold)
-                        gpBuffer[gpDown - gpRangeBegin] = true;
+                        gpBuffer[gpDown + rangeOffset] = true;
 
-                    for (unsigned id = gpButton0; id < gpRangeEnd; ++id)
+                    for (unsigned id = gpButton0; id <= gpButton15; ++id)
                         if (joy.rgbButtons[id - gpButton0])
-                            gpBuffer[id - gpRangeBegin] = true;
+                            gpBuffer[id + rangeOffset] = true;
                     
                     break;
                 }
@@ -268,8 +268,13 @@ struct Gosu::Input::Impl
                     break;
                 }
             }
+
+            // Merge these results into the area for "all gamepads OR'ed together"
+            for (int index = 0; index < gpNumPerGamepad; ++index)
+                gpBuffer[index] = (gpBuffer[index] || gpBuffer[index + (gp + 1) * gpNumPerGamepad]);
         }
-        for (unsigned id = gpRangeBegin; id < gpRangeEnd; ++id)
+
+        for (unsigned id = gpRangeBegin; id <= gpRangeEnd; ++id)
             setButton(id, gpBuffer[id - gpRangeBegin], collectEvents);
     }
 };

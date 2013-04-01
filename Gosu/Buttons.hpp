@@ -132,7 +132,7 @@ namespace Gosu
         msMiddle,
         msWheelUp,
         msWheelDown,
-        msRangeEnd,
+        msRangeEnd = msWheelDown,
         
         gpRangeBegin,
         gpLeft = gpRangeBegin,
