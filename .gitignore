@@ -3,12 +3,11 @@
 /vendor
 /Gosu.framework/
 /Gosu.framework.dSYM/
-/bin
 /lib/*.dSYM
 /lib/Gosu*.lib
 /lib/gosu.*.bundle
 /lib/gosu.*.so
-/lib/libgosu*
+/lib/libgosu*.a
 /mac/build/
 /mac/Gosu.xcodeproj/*.pbxuser
 /mac/Gosu.xcodeproj/*.perspectivev3
@@ -36,8 +35,8 @@
 /windows/Release with Ruby 1.9
 
 .yardoc/
-ios/GosuTouch.xcodeproj/xcuserdata/
-ios/GosuTouch.xcodeproj/project.xcworkspace/xcuserdata/
+/xcode/Gosu.xcodeproj/xcuserdata/
+/xcode/Gosu.xcodeproj/project.xcworkspace/xcuserdata/
 
 # QtCreator project files
 Gosu.config
@@ -45,10 +44,5 @@ Gosu.creator
 Gosu.files
 Gosu.includes
 
-/ios/GosuTouch.xcodeproj/project.xcworkspace/xcuserdata/
-/mac/Gosu.xcodeproj/project.xcworkspace/
-/mac/Gosu.xcodeproj/xcuserdata/
-
-cmake/build/*
-examples/*/build/*
-
+/cmake/build/*
+/examples/*/build/*

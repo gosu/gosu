@@ -10,7 +10,6 @@
 		D44A4CF0146B26F500B715D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44A4CEF146B26F500B715D1 /* Foundation.framework */; };
 		D44A4DA0146B281700B715D1 /* Audio.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D44A4D9F146B281700B715D1 /* Audio.hpp */; };
 		D44A4DA8146B282400B715D1 /* Bitmap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D44A4DA1146B282400B715D1 /* Bitmap.hpp */; };
-		D44A4DA9146B282400B715D1 /* ButtonsMac.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D44A4DA2146B282400B715D1 /* ButtonsMac.hpp */; };
 		D44A4DAA146B282400B715D1 /* Color.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D44A4DA3146B282400B715D1 /* Color.hpp */; };
 		D44A4DAB146B282400B715D1 /* Directories.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D44A4DA4146B282400B715D1 /* Directories.hpp */; };
 		D44A4DAC146B282400B715D1 /* Font.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D44A4DA5146B282400B715D1 /* Font.hpp */; };
@@ -110,6 +109,7 @@
 		D44A4E6E146B2AC300B715D1 /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E5A146B2AC300B715D1 /* window.c */; };
 		D44A4E71146B2AE000B715D1 /* vorbisfile.c in Sources */ = {isa = PBXBuildFile; fileRef = D44A4E70146B2AE000B715D1 /* vorbisfile.c */; };
 		D4AA452615CECC6600C9DE96 /* TextMac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4AA452315CECC5400C9DE96 /* TextMac.cpp */; };
+		D4BFC69D17099D380062A51C /* Buttons.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D4BFC69C17099D380062A51C /* Buttons.hpp */; };
 		D4C6071C1498B6E500483C3C /* FileUnix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DD3146B288100B715D1 /* FileUnix.cpp */; };
 		D4C6071E1498B6E500483C3C /* Inspection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DD5146B288100B715D1 /* Inspection.cpp */; };
 		D4C6071F1498B6E500483C3C /* IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DD6146B288100B715D1 /* IO.cpp */; };
@@ -171,11 +171,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D44A4CEC146B26F500B715D1 /* libGosuTouch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGosuTouch.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D44A4CEC146B26F500B715D1 /* libgosutouch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgosutouch.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D44A4CEF146B26F500B715D1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D44A4D9F146B281700B715D1 /* Audio.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Audio.hpp; path = ../Gosu/Audio.hpp; sourceTree = "<group>"; };
 		D44A4DA1146B282400B715D1 /* Bitmap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Bitmap.hpp; path = ../Gosu/Bitmap.hpp; sourceTree = "<group>"; };
-		D44A4DA2146B282400B715D1 /* ButtonsMac.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ButtonsMac.hpp; path = ../Gosu/ButtonsMac.hpp; sourceTree = "<group>"; };
 		D44A4DA3146B282400B715D1 /* Color.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Color.hpp; path = ../Gosu/Color.hpp; sourceTree = "<group>"; };
 		D44A4DA4146B282400B715D1 /* Directories.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Directories.hpp; path = ../Gosu/Directories.hpp; sourceTree = "<group>"; };
 		D44A4DA5146B282400B715D1 /* Font.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Font.hpp; path = ../Gosu/Font.hpp; sourceTree = "<group>"; };
@@ -275,7 +274,8 @@
 		D44A4E5A146B2AC300B715D1 /* window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = window.c; path = ../dependencies/libvorbis/lib/window.c; sourceTree = "<group>"; };
 		D44A4E70146B2AE000B715D1 /* vorbisfile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = vorbisfile.c; path = ../dependencies/libvorbis/lib/vorbisfile.c; sourceTree = "<group>"; };
 		D4AA452315CECC5400C9DE96 /* TextMac.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextMac.cpp; path = ../GosuImpl/Graphics/TextMac.cpp; sourceTree = "<group>"; };
-		D4C6070D1498B58000483C3C /* libGosu.a */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libGosu.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4BFC69C17099D380062A51C /* Buttons.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Buttons.hpp; path = ../Gosu/Buttons.hpp; sourceTree = "<group>"; };
+		D4C6070D1498B58000483C3C /* libgosu.a */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libgosu.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4C607111498B58000483C3C /* GosuProj.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = GosuProj.xcconfig; sourceTree = "<group>"; };
 		D4C607121498B58000483C3C /* GosuTarget.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = GosuTarget.xcconfig; sourceTree = "<group>"; };
 		D4C607451498B98D00483C3C /* DirectoriesMac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DirectoriesMac.mm; path = ../GosuImpl/DirectoriesMac.mm; sourceTree = "<group>"; };
@@ -319,8 +319,8 @@
 		D44A4CED146B26F500B715D1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D44A4CEC146B26F500B715D1 /* libGosuTouch.a */,
-				D4C6070D1498B58000483C3C /* libGosu.a */,
+				D44A4CEC146B26F500B715D1 /* libgosutouch.a */,
+				D4C6070D1498B58000483C3C /* libgosu.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -338,7 +338,7 @@
 			children = (
 				D44A4D9F146B281700B715D1 /* Audio.hpp */,
 				D44A4DA1146B282400B715D1 /* Bitmap.hpp */,
-				D44A4DA2146B282400B715D1 /* ButtonsMac.hpp */,
+				D4BFC69C17099D380062A51C /* Buttons.hpp */,
 				D44A4DA3146B282400B715D1 /* Color.hpp */,
 				D44A4DA4146B282400B715D1 /* Directories.hpp */,
 				D44A4DA5146B282400B715D1 /* Font.hpp */,
@@ -535,7 +535,6 @@
 			files = (
 				D44A4DA0146B281700B715D1 /* Audio.hpp in Headers */,
 				D44A4DA8146B282400B715D1 /* Bitmap.hpp in Headers */,
-				D44A4DA9146B282400B715D1 /* ButtonsMac.hpp in Headers */,
 				D44A4DAA146B282400B715D1 /* Color.hpp in Headers */,
 				D44A4DAB146B282400B715D1 /* Directories.hpp in Headers */,
 				D44A4DAC146B282400B715D1 /* Font.hpp in Headers */,
@@ -577,6 +576,7 @@
 				D44A4E3C146B28EA00B715D1 /* AudioFile.hpp in Headers */,
 				D44A4E3E146B28EA00B715D1 /* AudioToolboxFile.hpp in Headers */,
 				D44A4E3F146B28EA00B715D1 /* OggFile.hpp in Headers */,
+				D4BFC69D17099D380062A51C /* Buttons.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -604,7 +604,7 @@
 			);
 			name = GosuTouch;
 			productName = GosuTouch;
-			productReference = D44A4CEC146B26F500B715D1 /* libGosuTouch.a */;
+			productReference = D44A4CEC146B26F500B715D1 /* libgosutouch.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		D4C6070C1498B58000483C3C /* Gosu */ = {
@@ -621,7 +621,7 @@
 			);
 			name = Gosu;
 			productName = Gosu;
-			productReference = D4C6070D1498B58000483C3C /* libGosu.a */;
+			productReference = D4C6070D1498B58000483C3C /* libgosu.a */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 /* End PBXNativeTarget section */
@@ -631,9 +631,9 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0420;
-				ORGANIZATIONNAME = "Raschke & Ludwig GbR";
+				ORGANIZATIONNAME = "Julian Raschke";
 			};
-			buildConfigurationList = D44A4CE6146B26F400B715D1 /* Build configuration list for PBXProject "GosuTouch" */;
+			buildConfigurationList = D44A4CE6146B26F400B715D1 /* Build configuration list for PBXProject "Gosu" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -789,18 +789,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					armv6,
-					armv7,
-				);
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -809,8 +804,6 @@
 					../dependencies/libvorbis/include,
 					../dependencies/libogg/include,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
-				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
@@ -818,12 +811,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					armv6,
-					armv7,
-				);
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				COPY_PHASE_STRIP = YES;
-				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PREPROCESSOR_DEFINITIONS = "NDEBUG=1";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -833,8 +823,6 @@
 					../dependencies/libvorbis/include,
 					../dependencies/libogg/include,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
-				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -843,9 +831,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/GosuTouch.dst;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = gosutouch;
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -855,9 +844,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/GosuTouch.dst;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = gosutouch;
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -870,13 +860,9 @@
 				CONFIGURATION_BUILD_DIR = ../lib;
 				EXECUTABLE_EXTENSION = a;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				MACH_O_TYPE = staticlib;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = libGosu;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				PRODUCT_NAME = libgosu;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -889,11 +875,9 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				EXECUTABLE_EXTENSION = a;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				MACH_O_TYPE = staticlib;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				PRODUCT_NAME = libGosu;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				PRODUCT_NAME = libgosu;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -901,7 +885,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D44A4CE6146B26F400B715D1 /* Build configuration list for PBXProject "GosuTouch" */ = {
+		D44A4CE6146B26F400B715D1 /* Build configuration list for PBXProject "Gosu" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D44A4CF7146B26F500B715D1 /* Debug */,
