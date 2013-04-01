@@ -24,6 +24,10 @@ namespace Gosu
     unsigned const MAX_TEXTURE_SIZE = 1024;
     
     #ifdef GOSU_IS_MAC
+    // TODO: Without this gigantic hack, Gosu crashes in the "scale" function,
+    // but _only_ when used from Ruby 1.9. It is unclear what might cause this -
+    // maybe a compiler bug that tries to use SSE functions with the wrong
+    // alignment. Adding __attribute__((aligned(16))) does not help, though.
     struct Transform
     {
         double value[16];
