@@ -1,6 +1,20 @@
 #ifndef GOSU_BUTTONS_HPP
 #define GOSU_BUTTONS_HPP
 
+#include <Gosu/Platform.hpp>
+
+#ifdef GOSU_IS_MAC
+    #define GOSU_SCANCODE(mac, windows_or_linux) mac
+    #define GOSU_SPECIAL_SCANCODE(mac, windows, linux) mac
+#else
+    #define GOSU_SCANCODE(mac, linux_or_windows) linux_or_windows
+    #ifdef GOSU_IS_WIN
+        #define GOSU_SPECIAL_SCANCODE(mac, windows, linux) windows
+    #else
+        #define GOSU_SPECIAL_SCANCODE(mac, windows, linux) linux
+    #endif
+#endif
+
 namespace Gosu
 {
     //! List of button ids that can be used with Gosu::Input.
@@ -8,122 +22,93 @@ namespace Gosu
     //! mouse buttons and mouse wheel (ms*) and gamepad buttons (gp*).
     enum ButtonName
 	{
-        kbRangeBegin = 0x00,
-		kbEscape = 0x01,
-		kbF1 = 0x3b,
-		kbF2 = 0x3c,
-		kbF3 = 0x3d,
-		kbF4 = 0x3e,
-		kbF5 = 0x3f,
-		kbF6 = 0x40,
-		kbF7 = 0x41,
-		kbF8 = 0x42,
-		kbF9 = 0x43,
-		kbF10 = 0x44,
-		kbF11 = 0x57,
-		kbF12 = 0x58,
-		kb0 = 0x0b,
-		kb1 = 0x02,
-		kb2 = 0x03,
-		kb3 = 0x04,
-		kb4 = 0x05,
-		kb5 = 0x06,
-		kb6 = 0x07,
-		kb7 = 0x08,
-		kb8 = 0x09,
-		kb9 = 0x0a,
-		kbTab = 0x0f,
-		kbReturn = 0x1c,
-		kbSpace = 0x39,
-		kbLeftShift = 0x2a,
-		kbRightShift = 0x36,
-		kbLeftControl = 0x1d,
-#if defined(GOSU_IS_WIN)
-		kbRightControl = 0x9d,
-#elif defined(GOSU_IS_X)
-		kbRightControl = 0x61,
-#else
-# error this should not happen
-#endif
-		kbLeftAlt = 0x38,
-#if defined(GOSU_IS_WIN)
-		kbRightAlt = 0xb8,
-		kbLeftMeta = 0xdb,
-		kbRightMeta = 0xdc,
-#elif defined(GOSU_IS_X)
-		kbRightAlt = 0x64,
-		kbLeftMeta = 0x7d,
-#else
-# error this should not happen
-#endif
-		kbBackspace = 0x0e,
-#if defined(GOSU_IS_WIN)
-		kbLeft = 0xcb,
-		kbRight = 0xcd,
-		kbUp = 0xc8,
-		kbDown = 0xd0,
-		kbHome = 0xc7,
-		kbEnd = 0xcf,
-		kbInsert = 0xd2,
-		kbDelete = 0xd3,
-		kbPageUp = 0xc9,
-		kbPageDown = 0xd1,
-		kbEnter = 0x9c,
-#elif defined(GOSU_IS_X)
-		kbLeft = 0x69,
-		kbRight = 0x6a,
-		kbUp = 0x67,
-		kbDown = 0x6c,
-		kbHome = 0x66,
-		kbEnd = 0x6b,
-		kbInsert = 0x6e,
-		kbDelete = 0x6f,
-		kbPageUp = 0x68,
-		kbPageDown = 0x6d,
-		kbEnter = 0x60,
-#else
-# error this should not happen
-#endif
-		kbA = 0x1e,
-		kbB = 0x30,
-		kbC = 0x2e,
-		kbD = 0x20,
-		kbE = 0x12,
-		kbF = 0x21,
-		kbG = 0x22,
-		kbH = 0x23,
-		kbI = 0x17,
-		kbJ = 0x24,
-		kbK = 0x25,
-		kbL = 0x26,
-		kbM = 0x32,
-		kbN = 0x31,
-		kbO = 0x18,
-		kbP = 0x19,
-		kbQ = 0x10,
-		kbR = 0x13,
-		kbS = 0x1f,
-		kbT = 0x14,
-		kbU = 0x16,
-		kbV = 0x2f,
-		kbW = 0x11,
-		kbX = 0x2d,
-		kbY = 0x15,
-		kbZ = 0x2c,
-		kbNumpad0 = 0x52,
-		kbNumpad1 = 0x4f,
-		kbNumpad2 = 0x50,
-		kbNumpad3 = 0x51,
-		kbNumpad4 = 0x4b,
-		kbNumpad5 = 0x4c,
-		kbNumpad6 = 0x4d,
-		kbNumpad7 = 0x47,
-		kbNumpad8 = 0x48,
-		kbNumpad9 = 0x49,
-		kbNumpadAdd = 0x4e,
-		kbNumpadSubtract = 0x4a,
-		kbNumpadMultiply = 0x37,
-		kbNumpadDivide = 0xb5,
+        kbRangeBegin,
+		kbEscape = GOSU_SCANCODE(0x35, 0x01),
+		kbF1 = GOSU_SCANCODE(0x74, 0x3b),
+		kbF2 = GOSU_SCANCODE(0x78, 0x3c),
+		kbF3 = GOSU_SCANCODE(0x63, 0x3d),
+		kbF4 = GOSU_SCANCODE(0x76, 0x3e),
+		kbF5 = GOSU_SCANCODE(0x60, 0x3f),
+		kbF6 = GOSU_SCANCODE(0x61, 0x40),
+		kbF7 = GOSU_SCANCODE(0x62, 0x41),
+		kbF8 = GOSU_SCANCODE(0x64, 0x42),
+		kbF9 = GOSU_SCANCODE(0x65, 0x43),
+		kbF10 = GOSU_SCANCODE(0x6d, 0x44),
+		kbF11 = GOSU_SCANCODE(0x67, 0x57),
+		kbF12 = GOSU_SCANCODE(0x6f, 0x58),
+		kb0 = GOSU_SCANCODE(0x1d, 0x0b),
+		kb1 = GOSU_SCANCODE(0x12, 0x02),
+		kb2 = GOSU_SCANCODE(0x13, 0x03),
+		kb3 = GOSU_SCANCODE(0x14, 0x04),
+		kb4 = GOSU_SCANCODE(0x15, 0x05),
+		kb5 = GOSU_SCANCODE(0x17, 0x06),
+		kb6 = GOSU_SCANCODE(0x16, 0x07),
+		kb7 = GOSU_SCANCODE(0x1a, 0x08),
+		kb8 = GOSU_SCANCODE(0x1c, 0x09),
+		kb9 = GOSU_SCANCODE(0x19, 0x0a),
+		kbTab = GOSU_SCANCODE(0x30, 0x0f),
+		kbReturn = GOSU_SCANCODE(0x24, 0x1c),
+		kbSpace = GOSU_SCANCODE(0x31, 0x39),
+		kbLeftShift = GOSU_SCANCODE(0x38, 0x2a),
+		kbRightShift = GOSU_SCANCODE(0x3c, 0x36),
+		kbLeftControl = GOSU_SCANCODE(0x3b, 0x1d),
+		kbRightControl = GOSU_SPECIAL_SCANCODE(0x3e, 0x9d, 0x61),
+		kbLeftAlt = GOSU_SCANCODE(0x3a, 0x38),
+		kbRightAlt = GOSU_SPECIAL_SCANCODE(0x3d, 0xb8, 0x64),
+		kbLeftMeta = GOSU_SPECIAL_SCANCODE(0x37, 0xdb, 0x7d),
+		kbRightMeta = GOSU_SPECIAL_SCANCODE(0x36, 0xdc, 0x7e),
+		kbBackspace = GOSU_SCANCODE(0x33, 0x0e),
+		kbLeft = GOSU_SPECIAL_SCANCODE(0x7b, 0xcb, 0x69),
+		kbRight = GOSU_SPECIAL_SCANCODE(0x7c, 0xcd, 0x6a),
+		kbUp = GOSU_SPECIAL_SCANCODE(0x7e, 0xc8, 0x67),
+		kbDown = GOSU_SPECIAL_SCANCODE(0x7d, 0xd0, 0x6c),
+		kbHome = GOSU_SPECIAL_SCANCODE(0x73, 0xc7, 0x66),
+		kbEnd = GOSU_SPECIAL_SCANCODE(0x77, 0xcf, 0x6b),
+		kbInsert = GOSU_SPECIAL_SCANCODE(0x72, 0xd2, 0x6e),
+		kbDelete = GOSU_SPECIAL_SCANCODE(0x75, 0xd3, 0x6f),
+		kbPageUp = GOSU_SPECIAL_SCANCODE(0x74, 0xc9, 0x68),
+		kbPageDown = GOSU_SPECIAL_SCANCODE(0x79, 0xd1, 0x6d),
+		kbEnter = GOSU_SPECIAL_SCANCODE(0x4c, 0x9c, 0x60),
+		kbA = GOSU_SCANCODE(0x00, 0x1e),
+		kbB = GOSU_SCANCODE(0x0b, 0x30),
+		kbC = GOSU_SCANCODE(0x08, 0x2e),
+		kbD = GOSU_SCANCODE(0x02, 0x20),
+		kbE = GOSU_SCANCODE(0x0e, 0x12),
+		kbF = GOSU_SCANCODE(0x03, 0x21),
+		kbG = GOSU_SCANCODE(0x05, 0x22),
+		kbH = GOSU_SCANCODE(0x04, 0x23),
+		kbI = GOSU_SCANCODE(0x22, 0x17),
+		kbJ = GOSU_SCANCODE(0x26, 0x24),
+		kbK = GOSU_SCANCODE(0x28, 0x25),
+		kbL = GOSU_SCANCODE(0x25, 0x26),
+		kbM = GOSU_SCANCODE(0x2e, 0x32),
+		kbN = GOSU_SCANCODE(0x2d, 0x31),
+		kbO = GOSU_SCANCODE(0x1f, 0x18),
+		kbP = GOSU_SCANCODE(0x23, 0x19),
+		kbQ = GOSU_SCANCODE(0x0c, 0x10),
+		kbR = GOSU_SCANCODE(0x0f, 0x13),
+		kbS = GOSU_SCANCODE(0x01, 0x1f),
+		kbT = GOSU_SCANCODE(0x11, 0x14),
+		kbU = GOSU_SCANCODE(0x20, 0x16),
+		kbV = GOSU_SCANCODE(0x09, 0x2f),
+		kbW = GOSU_SCANCODE(0x0d, 0x11),
+		kbX = GOSU_SCANCODE(0x07, 0x2d),
+		kbY = GOSU_SCANCODE(0x10, 0x15),
+		kbZ = GOSU_SCANCODE(0x06, 0x2c),
+		kbNumpad0 = GOSU_SCANCODE(0x52, 0x52),
+		kbNumpad1 = GOSU_SCANCODE(0x53, 0x4f),
+		kbNumpad2 = GOSU_SCANCODE(0x54, 0x50),
+		kbNumpad3 = GOSU_SCANCODE(0x55, 0x51),
+		kbNumpad4 = GOSU_SCANCODE(0x56, 0x4b),
+		kbNumpad5 = GOSU_SCANCODE(0x57, 0x4c),
+		kbNumpad6 = GOSU_SCANCODE(0x58, 0x4d),
+		kbNumpad7 = GOSU_SCANCODE(0x59, 0x47),
+		kbNumpad8 = GOSU_SCANCODE(0x5b, 0x48),
+		kbNumpad9 = GOSU_SCANCODE(0x5c, 0x49),
+		kbNumpadAdd = GOSU_SCANCODE(0x45, 0x4e),
+		kbNumpadSubtract = GOSU_SCANCODE(0x4e, 0x4a),
+		kbNumpadMultiply = GOSU_SCANCODE(0x43, 0x37),
+		kbNumpadDivide = GOSU_SCANCODE(0x4b, 0xb5),
 		kbRangeEnd = 0xff,
 
         msRangeBegin,
@@ -252,5 +237,8 @@ namespace Gosu
         gpNumPerGamepad = gpNum / (numGamepads + 1),
 	};
 }
+
+#undef GOSU_SCANCODE
+#undef GOSU_SPECIAL_SCANCODE
 
 #endif

@@ -158,22 +158,13 @@ SET(CORE_INC_FILES
     ../Gosu/Color.hpp
     ../Gosu/Image.hpp
     ../Gosu/TextInput.hpp
+    ../Gosu/Buttons.hpp
+    ../Gosu/Utility.hpp
 )
 
 if(WIN32)
 SET(CORE_INC_FILES ${CORE_INC_FILES}
     ../Gosu/WinUtility.hpp
-    ../Gosu/Buttons.hpp
-)
-elseif(APPLE)
-SET(CORE_INC_FILES ${CORE_INC_FILES}
-    ../Gosu/ButtonsMac.hpp
-    ../Gosu/Utility.hpp
-)
-else()
-SET(CORE_INC_FILES ${CORE_INC_FILES}
-    ../Gosu/Buttons.hpp
-    ../Gosu/Utility.hpp
 )
 endif()
 

@@ -618,7 +618,6 @@ namespace Gosu {
 // Input and Window:
 
 // Button ID constants
-// Does not matter that it's the Mac file, %include only analyses symbols to export, not their values.
 %ignore Gosu::kbRangeBegin;
 %ignore Gosu::kbRangeEnd;
 %ignore Gosu::msRangeBegin;
@@ -628,9 +627,11 @@ namespace Gosu {
 %ignore Gosu::kbNum;
 %ignore Gosu::msNum;
 %ignore Gosu::gpNum;
+%ignore Gosu::gpNumPerGamepad;
 %ignore Gosu::numButtons;
+%ignore Gosu::numGamepads;
 %ignore Gosu::noButton;
-%include "../Gosu/ButtonsMac.hpp"
+%include "../Gosu/Buttons.hpp"
 %init %{
     GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
     // While we are at it, to some healthy srand() - otherwise unavailable to Ruby people

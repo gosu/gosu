@@ -6,28 +6,21 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
+#include <Gosu/Buttons.hpp>
+#include <Gosu/TR1.hpp>
 
 #ifdef GOSU_IS_WIN
-#include <Gosu/Buttons.hpp>
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
 #include <windows.h>
 #endif
 
-#ifdef GOSU_IS_MAC
-#include <Gosu/ButtonsMac.hpp>
-#endif
-
 #ifdef GOSU_IS_X
-#include <Gosu/Buttons.hpp>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #endif
 
-#include <Gosu/Platform.hpp>
-#include <Gosu/Fwd.hpp>
-#include <Gosu/TR1.hpp>
 #include <vector>
 
 namespace Gosu

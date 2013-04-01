@@ -1,5 +1,5 @@
 #include <Gosu/TextInput.hpp>
-#include <Gosu/ButtonsMac.hpp>
+#include <Gosu/Buttons.hpp>
 #include <GosuImpl/MacUtility.hpp>
 #include <algorithm>
 #include <vector>
