@@ -81,6 +81,8 @@ namespace Gosu
         case NSLeftMouseUp:
         case NSRightMouseDown:
         case NSRightMouseUp:
+        case NSOtherMouseDown:
+        case NSOtherMouseUp:
         case NSScrollWheel:
         case NSKeyUp:
         case NSKeyDown:
@@ -167,6 +169,8 @@ OVERRIDE_METHOD(mouseDown);
 OVERRIDE_METHOD(mouseUp);
 OVERRIDE_METHOD(rightMouseDown);
 OVERRIDE_METHOD(rightMouseUp);
+OVERRIDE_METHOD(otherMouseDown);
+OVERRIDE_METHOD(otherMouseUp);
 OVERRIDE_METHOD(scrollWheel);
 @end
 

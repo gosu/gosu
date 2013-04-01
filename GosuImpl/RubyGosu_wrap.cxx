@@ -11508,6 +11508,14 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "MsMiddle", SWIG_From_int(static_cast< int >(Gosu::msMiddle)));
   rb_define_const(mGosu, "MsWheelUp", SWIG_From_int(static_cast< int >(Gosu::msWheelUp)));
   rb_define_const(mGosu, "MsWheelDown", SWIG_From_int(static_cast< int >(Gosu::msWheelDown)));
+  rb_define_const(mGosu, "MsOther0", SWIG_From_int(static_cast< int >(Gosu::msOther0)));
+  rb_define_const(mGosu, "MsOther1", SWIG_From_int(static_cast< int >(Gosu::msOther1)));
+  rb_define_const(mGosu, "MsOther2", SWIG_From_int(static_cast< int >(Gosu::msOther2)));
+  rb_define_const(mGosu, "MsOther3", SWIG_From_int(static_cast< int >(Gosu::msOther3)));
+  rb_define_const(mGosu, "MsOther4", SWIG_From_int(static_cast< int >(Gosu::msOther4)));
+  rb_define_const(mGosu, "MsOther5", SWIG_From_int(static_cast< int >(Gosu::msOther5)));
+  rb_define_const(mGosu, "MsOther6", SWIG_From_int(static_cast< int >(Gosu::msOther6)));
+  rb_define_const(mGosu, "MsOther7", SWIG_From_int(static_cast< int >(Gosu::msOther7)));
   rb_define_const(mGosu, "GpLeft", SWIG_From_int(static_cast< int >(Gosu::gpLeft)));
   rb_define_const(mGosu, "GpRight", SWIG_From_int(static_cast< int >(Gosu::gpRight)));
   rb_define_const(mGosu, "GpUp", SWIG_From_int(static_cast< int >(Gosu::gpUp)));
