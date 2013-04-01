@@ -579,10 +579,10 @@ bool Gosu::Input::feedNSEvent(void* event)
             pimpl->enqueue(msRight, false);
             return true;
         case NSOtherMouseDown:
-            pimpl->enqueue(msOther0 + [event buttonNumber] - 2, true);
+            pimpl->enqueue(msOther0 + [ev buttonNumber] - 2, true);
             return true;
         case NSOtherMouseUp:
-            pimpl->enqueue(msOther0 + [event buttonNumber] - 2, false);
+            pimpl->enqueue(msOther0 + [ev buttonNumber] - 2, false);
             return true;
         case NSScrollWheel:
             if ([ev deltaY] > 0)
