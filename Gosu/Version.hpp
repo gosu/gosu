@@ -3,8 +3,8 @@
 
 #define GOSU_MAJOR_VERSION 0
 #define GOSU_MINOR_VERSION 7
-#define GOSU_POINT_VERSION 46
-#define GOSU_VERSION "0.7.46"
+#define GOSU_POINT_VERSION 47
+#define GOSU_VERSION "0.7.47"
 
 #define GOSU_COPYRIGHT_NOTICE \
   " " \
