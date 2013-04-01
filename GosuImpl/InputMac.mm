@@ -161,10 +161,9 @@ namespace {
             for (unsigned i = 0; i < self.devices.size(); ++i)
                 if (self.devices[i].interface.get() == refcon)
                 {
-                    self.devices.erase(self.devices.begin() + i);
+                    self.devices[i] = Device();
                     return;
                 }
-            assert(false);
         }
         
         bool isDeviceInteresting(CFMutableDictionaryRef properties)
@@ -324,15 +323,20 @@ namespace {
             IOHIDEventStruct event;
             for (int dev = 0; dev < devices.size() && dev < numGamepads; ++dev)
             {
-                int rangeOffset = (dev + 1) * gpNumPerGamepad - gpRangeBegin;
+                if (! devices[dev].interface)
+                    // Device has been disconnected.
+                    continue;
                 
+                int rangeOffset = (dev + 1) * gpNumPerGamepad - gpRangeBegin;
+            
                 // Axis
                 for (int ax = 0; ax < devices[dev].axis.size(); ++ax)
                 {
-                    checkIO((*devices[dev].interface)->getElementValue(
+                    if ((*devices[dev].interface)->getElementValue(
                         devices[dev].interface.get(),
-                        devices[dev].axis[ax].cookie, &event));
-                        
+                        devices[dev].axis[ax].cookie, &event) != kIOReturnSuccess)
+                        break;
+                    
                     Axis& a = devices[dev].axis[ax];
                     if (event.value < (3 * a.min + 1 * a.max) / 4.0)
                     {
@@ -351,20 +355,20 @@ namespace {
                 // Hats (merge into axis)
                 for (int hat = 0; hat < devices[dev].hats.size(); ++hat)
                 {
-                    checkIO((*devices[dev].interface)->getElementValue(
+                    if ((*devices[dev].interface)->getElementValue(
                         devices[dev].interface.get(),
-                        devices[dev].hats[hat].cookie, &event));
-                     
+                        devices[dev].hats[hat].cookie, &event) != kIOReturnSuccess)
+                        break;
+                 
                     // In case device does not start at 0 as expected.
                     event.value -= devices[dev].hats[hat].min;
-                     
+                 
                     // Treat all hats as being 8-way.
                     if (devices[dev].hats[hat].kind == Hat::fourWay)
                         event.value *= 2;
 
                     switch (event.value)
                     {
-                        // Must...resist...doing...crappy...fallthrough...magic... 
                         case 0:
                             result[gpUp + rangeOffset] = true;
                             break;
@@ -399,10 +403,11 @@ namespace {
                 // Buttons
                 for (int btn = 0; btn < devices[dev].buttons.size() && btn < 16; ++btn)
                 {
-                    checkIO((*devices[dev].interface)->getElementValue(
+                    if ((*devices[dev].interface)->getElementValue(
                         devices[dev].interface.get(),
-                        devices[dev].buttons[btn].cookie, &event));
-                    
+                        devices[dev].buttons[btn].cookie, &event) != kIOReturnSuccess)
+                        break;
+                
                     if (event.value >= 1)
                         result[gpButton0 + btn + rangeOffset] = true;
                 }
