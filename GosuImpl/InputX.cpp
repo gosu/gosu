@@ -169,14 +169,19 @@ void Gosu::Input::update()
             case Button3: id = msRight; break;
             case Button4: id = msWheelUp; break;
             case Button5: id = msWheelDown; break;
+            case 6: id = msOther0; break;
+            case 7: id = msOther1; break;
+            case 8: id = msOther2; break;
+            case 9: id = msOther3; break;
+            case 10: id = msOther4; break;
+            case 11: id = msOther5; break;
+            case 12: id = msOther6; break;
+            case 13: id = msOther7; break;
             default: continue;
             }
             pimpl->keyMap[id] = true;
-            // TODO: Here, above, below, who came up with that cast? Uh :)
             if (onButtonDown)
                 onButtonDown(Button(id));
-            if (onButtonUp and id == msWheelUp or id == msWheelDown)
-                onButtonUp(Button(id));
         }
         else if (event.type == ButtonRelease)
         {
@@ -186,11 +191,21 @@ void Gosu::Input::update()
             case Button1: id = msLeft; break;
             case Button2: id = msMiddle; break;
             case Button3: id = msRight; break;
+            case Button4: id = msWheelUp; break;
+            case Button5: id = msWheelDown; break;
+            case 6: id = msOther0; break;
+            case 7: id = msOther1; break;
+            case 8: id = msOther2; break;
+            case 9: id = msOther3; break;
+            case 10: id = msOther4; break;
+            case 11: id = msOther5; break;
+            case 12: id = msOther6; break;
+            case 13: id = msOther7; break;
             default: continue;
             }
             pimpl->keyMap[id] = false;
             if (onButtonUp)
-                onButtonUp(*reinterpret_cast<Button*>(&id));
+                onButtonUp(Button(id));
         }
         else if (event.type == MotionNotify)
         {
