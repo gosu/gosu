@@ -62,6 +62,14 @@ def tar filename, files
   sh "COPYFILE_DISABLE=true tar -czf #{filename} #{files.to_a.uniq.map { |fn| "'#{fn}'" }.join(' ')}"
 end
 
+# Usually this is handled by my Xcode 3 project. Until the Xcode 4 project is
+# complete, this Rake task should do the trick.
+task :swig do
+  sh "swig -c++ -ruby -autorename GosuImpl/RubyGosu.swg"
+  sh "patch --no-backup-if-mismatch -p0 <GosuImpl/RubyGosu_SWIG_GC_PATCH.patch"
+  sh "patch --no-backup-if-mismatch -p0 <GosuImpl/RubyGosu_SWIG_RENAME_PATCH.patch"
+end
+
 Dir['./rake/*.rb'].each { |task| require task }
 
 task :release => [# Broken - these can only be built on a 10.4-10.6 Machine
