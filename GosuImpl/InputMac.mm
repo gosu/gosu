@@ -411,12 +411,10 @@ namespace {
                     if (event.value >= 1)
                         result[gpButton0 + btn + rangeOffset] = true;
                 }
-            }
-            
-            for (int dev = 0; dev < numGamepads && dev < devices.size(); ++dev) {
-                for (int index = 0; index < gpNumPerGamepad; ++index) {
+                
+                // Merge these results into the area for "all gamepads OR'ed together"
+                for (int index = 0; index < gpNumPerGamepad; ++index)
                     result[index] = (result[index] || result[index + (dev + 1) * gpNumPerGamepad]);
-                }
             }
             
             return result;
