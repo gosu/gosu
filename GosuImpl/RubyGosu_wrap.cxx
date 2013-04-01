@@ -11463,6 +11463,17 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "KbPageUp", SWIG_From_int(static_cast< int >(Gosu::kbPageUp)));
   rb_define_const(mGosu, "KbPageDown", SWIG_From_int(static_cast< int >(Gosu::kbPageDown)));
   rb_define_const(mGosu, "KbEnter", SWIG_From_int(static_cast< int >(Gosu::kbEnter)));
+  rb_define_const(mGosu, "KbBacktick", SWIG_From_int(static_cast< int >(Gosu::kbBacktick)));
+  rb_define_const(mGosu, "KbMinus", SWIG_From_int(static_cast< int >(Gosu::kbMinus)));
+  rb_define_const(mGosu, "KbEqual", SWIG_From_int(static_cast< int >(Gosu::kbEqual)));
+  rb_define_const(mGosu, "KbBracketLeft", SWIG_From_int(static_cast< int >(Gosu::kbBracketLeft)));
+  rb_define_const(mGosu, "KbBracketRight", SWIG_From_int(static_cast< int >(Gosu::kbBracketRight)));
+  rb_define_const(mGosu, "KbBackslash", SWIG_From_int(static_cast< int >(Gosu::kbBackslash)));
+  rb_define_const(mGosu, "KbSemicolon", SWIG_From_int(static_cast< int >(Gosu::kbSemicolon)));
+  rb_define_const(mGosu, "KbApostrophe", SWIG_From_int(static_cast< int >(Gosu::kbApostrophe)));
+  rb_define_const(mGosu, "KbComma", SWIG_From_int(static_cast< int >(Gosu::kbComma)));
+  rb_define_const(mGosu, "KbPeriod", SWIG_From_int(static_cast< int >(Gosu::kbPeriod)));
+  rb_define_const(mGosu, "KbSlash", SWIG_From_int(static_cast< int >(Gosu::kbSlash)));
   rb_define_const(mGosu, "KbA", SWIG_From_int(static_cast< int >(Gosu::kbA)));
   rb_define_const(mGosu, "KbB", SWIG_From_int(static_cast< int >(Gosu::kbB)));
   rb_define_const(mGosu, "KbC", SWIG_From_int(static_cast< int >(Gosu::kbC)));
