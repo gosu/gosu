@@ -82,7 +82,13 @@ if `uname`.chomp == 'Darwin' then
   $INCFLAGS  << " -I../dependencies/libvorbis/lib"
   # To make everything work with the Objective C runtime
   $CFLAGS    << " -x objective-c -fobjc-gc -DNDEBUG"
-  CONFIG['CXXFLAGS'] =  "#{CONFIG['CXXFLAGS']} -x objective-c++" # cheat a little here
+  # Compile all C++ files as Objective C++ on OS X since mkmf does not support .mm
+  # files.
+  # Also undefine two debug flags that cause exceptions to randomly crash
+  # otherwise; see:
+  # https://trac.macports.org/ticket/27237#comment:21
+  # http://newartisans.com/2009/10/a-c-gotcha-on-snow-leopard/#comment-893
+  CONFIG['CXXFLAGS'] =  "#{CONFIG['CXXFLAGS']} -x objective-c++ -U_GLIBCXX_DEBUG -U_GLIBCXX_DEBUG_PEDANTIC"
   $LDFLAGS   << " -L/usr/X11/lib -liconv"
   %w(AudioToolbox IOKit OpenAL OpenGL AppKit ApplicationServices Foundation Carbon).each do |f|
     $LDFLAGS << " -framework #{f}"
