@@ -27,7 +27,7 @@ SET(GOSU_VERSION_PATCH "#{components[2]}")
 #define GOSU_COPYRIGHT_NOTICE \\
 #{Dir['dependencies/*.license'].map do |fn|
   File.readlines(fn).map do |line|
-    "  \"#{line.chomp}\""
+    "  \"#{line.gsub('"', '\"').chomp}\""
   end.join(" \\\n").gsub("  \"\"", "  \"\\n\\n\"")
 end.join(" \\\n\\\n")}
   
