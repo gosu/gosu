@@ -74,7 +74,7 @@ namespace Gosu
             }
             ++currentToken;
             currentTokens[i] = currentToken;
-            return std::make_pair<int, int>(i, currentToken);
+            return std::make_pair(i, int(currentToken));
         }
         
         int sourceIfStillPlaying(int channel, int token) const

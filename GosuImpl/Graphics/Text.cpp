@@ -379,7 +379,7 @@ void Gosu::registerEntity(const wstring& name, const Gosu::Bitmap& replacement)
 
 bool Gosu::isEntity(const wstring& name)
 {
-    return entities[name];
+    return entities[name].get();
 }
 
 const Gosu::Bitmap& Gosu::entityBitmap(const wstring& name)
