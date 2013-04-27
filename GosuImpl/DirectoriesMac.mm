@@ -1,5 +1,5 @@
 #import <Gosu/Directories.hpp>
-#import <GosuImpl/MacUtility.hpp>
+#import "MacUtility.hpp"
 #import <Gosu/Utility.hpp>
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSBundle.h>

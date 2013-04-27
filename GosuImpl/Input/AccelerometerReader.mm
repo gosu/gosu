@@ -2,7 +2,7 @@
 // This is adapted from his MIT-licensed Gosu fork
 // on GitHub.
 
-#import <GosuImpl/Input/AccelerometerReader.hpp>
+#import "AccelerometerReader.hpp"
 
 @implementation AccelerometerReader
 - (AccelerometerReader*)initWithUpdateInterval: (float)updateInterval

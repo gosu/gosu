@@ -2,7 +2,7 @@
 #include <Gosu/Audio.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Input.hpp>
-#include <GosuImpl/MacUtility.hpp>
+#include "MacUtility.hpp"
 #include <Gosu/Timing.hpp>
 #include <Gosu/TR1.hpp>
 #include <Gosu/Utility.hpp>

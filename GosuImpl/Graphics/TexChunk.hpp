@@ -4,7 +4,7 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
 #include <Gosu/TR1.hpp>
-#include <GosuImpl/Graphics/Common.hpp>
+#include "Common.hpp"
 #include <memory>
 #include <vector>
 #include <stdexcept>

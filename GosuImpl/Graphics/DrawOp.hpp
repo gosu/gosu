@@ -3,9 +3,9 @@
 
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Color.hpp>
-#include <GosuImpl/Graphics/Common.hpp>
-#include <GosuImpl/Graphics/RenderState.hpp>
-#include <GosuImpl/Graphics/TexChunk.hpp>
+#include "Common.hpp"
+#include "RenderState.hpp"
+#include "TexChunk.hpp"
 #include <cassert>
 
 namespace Gosu

@@ -2,7 +2,7 @@
 #import <Carbon/Carbon.h>
 #include <Gosu/Input.hpp>
 #include <Gosu/TextInput.hpp>
-#include <GosuImpl/MacUtility.hpp>
+#include "MacUtility.hpp"
 #include <Gosu/TR1.hpp>
 #include <Gosu/Utility.hpp>
 #include <IOKit/hidsystem/IOLLEvent.h>

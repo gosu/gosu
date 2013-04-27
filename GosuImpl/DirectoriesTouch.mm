@@ -1,6 +1,6 @@
 #import <Gosu/Directories.hpp>
 #import <Gosu/Utility.hpp>
-#import <GosuImpl/MacUtility.hpp>
+#import "MacUtility.hpp"
 #import <Foundation/Foundation.h>
 
 std::wstring Gosu::userSettingsPrefix()

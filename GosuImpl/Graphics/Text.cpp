@@ -5,8 +5,8 @@
 #include <Gosu/Math.hpp>
 #include <Gosu/TR1.hpp>
 #include <Gosu/Utility.hpp>
-#include <GosuImpl/Graphics/Common.hpp>
-#include <GosuImpl/Graphics/FormattedString.hpp>
+#include "Common.hpp"
+#include "FormattedString.hpp"
 #include <cassert>
 #include <cmath>
 #include <algorithm>

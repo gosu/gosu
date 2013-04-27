@@ -1,6 +1,6 @@
 #include <Gosu/TextInput.hpp>
 #include <Gosu/Buttons.hpp>
-#include <GosuImpl/MacUtility.hpp>
+#include "MacUtility.hpp"
 #include <algorithm>
 #include <vector>
 #include <wctype.h>

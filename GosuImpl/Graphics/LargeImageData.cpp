@@ -1,5 +1,5 @@
-#include <GosuImpl/Graphics/LargeImageData.hpp>
-#include <GosuImpl/Graphics/Common.hpp>
+#include "LargeImageData.hpp"
+#include "Common.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Math.hpp>

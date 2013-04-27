@@ -3,7 +3,7 @@
 
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Math.hpp>
-#include <GosuImpl/Graphics/Common.hpp>
+#include "Common.hpp"
 #include <cmath>
 
 Gosu::Transform

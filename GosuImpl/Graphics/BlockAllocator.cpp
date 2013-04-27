@@ -1,4 +1,4 @@
-#include <GosuImpl/Graphics/BlockAllocator.hpp>
+#include "BlockAllocator.hpp"
 #include <stdexcept>
 #include <vector>
 

@@ -3,8 +3,8 @@
 #import <UIKit/UIKit.h>
 
 #import <Gosu/Graphics.hpp>
-#import <GosuImpl/Graphics/Common.hpp>
-#import <GosuImpl/Graphics/GosuView.hpp>
+#import "Common.hpp"
+#import "GosuView.hpp"
 
 Gosu::Window& windowInstance();
 

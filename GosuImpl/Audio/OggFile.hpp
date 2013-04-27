@@ -1,7 +1,7 @@
 #ifndef GOSUIMPL_AUDIO_OGGFILE_HPP
 #define GOSUIMPL_AUDIO_OGGFILE_HPP
 
-#include <GosuImpl/Audio/AudioFile.hpp>
+#include "AudioFile.hpp"
 #include <Gosu/IO.hpp>
 #include <vorbis/vorbisfile.h>
 #include <algorithm>

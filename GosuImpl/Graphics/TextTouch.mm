@@ -6,7 +6,7 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/Math.hpp>
-#include <GosuImpl/MacUtility.hpp>
+#include "../MacUtility.hpp"
 #include <map>
 #include <cmath>
 using namespace std;

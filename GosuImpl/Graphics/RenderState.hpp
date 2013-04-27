@@ -1,8 +1,8 @@
 #ifndef GOSUIMPL_GRAPHICS_RENDERSTATE_HPP
 #define GOSUIMPL_GRAPHICS_RENDERSTATE_HPP
 
-#include <GosuImpl/Graphics/Common.hpp>
-#include <GosuImpl/Graphics/Texture.hpp>
+#include "Common.hpp"
+#include "Texture.hpp"
 
 // Properties that potentially need to be changed between each draw operation.
 // This does not include the color or vertex data of the actual quads.

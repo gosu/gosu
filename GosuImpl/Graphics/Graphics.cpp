@@ -1,10 +1,10 @@
 #include <Gosu/Graphics.hpp>
-#include <GosuImpl/Graphics/Common.hpp>
-#include <GosuImpl/Graphics/DrawOp.hpp>
-#include <GosuImpl/Graphics/Texture.hpp>
-#include <GosuImpl/Graphics/TexChunk.hpp>
-#include <GosuImpl/Graphics/LargeImageData.hpp>
-#include <GosuImpl/Graphics/Macro.hpp>
+#include "Common.hpp"
+#include "DrawOp.hpp"
+#include "Texture.hpp"
+#include "TexChunk.hpp"
+#include "LargeImageData.hpp"
+#include "Macro.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/Platform.hpp>
@@ -17,7 +17,7 @@
 
 #ifdef GOSU_IS_IPHONE
 #import <UIKit/UIKit.h>
-#include <GosuImpl/Orientation.hpp>
+#include "../Orientation.hpp"
 #endif
 
 struct Gosu::Graphics::Impl

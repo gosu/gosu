@@ -2,7 +2,7 @@
 #ifdef GOSU_IS_MAC
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
-#include <GosuImpl/MacUtility.hpp>
+#include "../MacUtility.hpp"
 #else
 #include <AL/al.h>
 #include <AL/alc.h>

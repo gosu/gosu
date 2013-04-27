@@ -4,7 +4,7 @@
 #include <Gosu/Platform.hpp>
 #include <Gosu/Utility.hpp>
 
-#include <GosuImpl/MacUtility.hpp>
+#include "MacUtility.hpp"
 #include <stdexcept>
 
 #ifdef GOSU_IS_IPHONE

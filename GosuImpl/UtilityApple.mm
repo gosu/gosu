@@ -1,6 +1,6 @@
 #include <Gosu/Utility.hpp>
 #include <Gosu/Platform.hpp>
-#include <GosuImpl/MacUtility.hpp>
+#include "MacUtility.hpp"
 #import <Foundation/Foundation.h>
 #include <stdexcept>
 #include <vector>

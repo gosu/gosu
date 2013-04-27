@@ -1,13 +1,13 @@
 #ifndef GOSU_AUDIO_AUDIOFILE_MAC_HPP
 #define GOSU_AUDIO_AUDIOFILE_MAC_HPP
 
-#include <GosuImpl/Audio/AudioFile.hpp>
+#include "AudioFile.hpp"
 #include <AudioToolbox/AudioToolbox.h>
 #include <AudioToolbox/AudioConverter.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 #include <OpenAL/al.h>
 #include <Gosu/IO.hpp>
-#include <GosuImpl/MacUtility.hpp>
+#include "MacUtility.hpp"
 #include <Gosu/Utility.hpp>
 #include <Gosu/Platform.hpp>
 #include <algorithm>

@@ -11,7 +11,7 @@
 #ifndef GOSU_IS_IPHONE
 
 #ifndef GOSU_IS_WIN
-#include <GosuImpl/Iconv.hpp>
+#include "Iconv.hpp"
 #endif
 using namespace std;
 

@@ -1,5 +1,5 @@
-#include <GosuImpl/Audio/ALChannelManagement.hpp>
-#include <GosuImpl/Audio/OggFile.hpp>
+#include "ALChannelManagement.hpp"
+#include "OggFile.hpp"
 
 #include <Gosu/Audio.hpp>
 #include <Gosu/Math.hpp>
@@ -18,12 +18,12 @@
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
 #import <Foundation/Foundation.h>
-#include <GosuImpl/Audio/AudioToolboxFile.hpp>
+#include "AudioToolboxFile.hpp"
 #define WAVE_FILE AudioToolboxFile
 #else
 #include <AL/al.h>
 #include <AL/alc.h>
-#include <GosuImpl/Audio/SndFile.hpp>
+#include "SndFile.hpp"
 #define WAVE_FILE SndFile
 #endif
 
@@ -57,7 +57,7 @@ namespace
 
 // TODO: What is the NSAutoreleasePool good for?
 #ifdef GOSU_IS_MAC
-#include <GosuImpl/MacUtility.hpp>
+#include "MacUtility.hpp"
     #define CONSTRUCTOR_COMMON \
         ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]); \
         if (!alChannelManagement.get()) \

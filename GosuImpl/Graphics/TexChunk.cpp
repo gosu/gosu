@@ -1,6 +1,6 @@
-#include <GosuImpl/Graphics/TexChunk.hpp>
-#include <GosuImpl/Graphics/Texture.hpp>
-#include <GosuImpl/Graphics/DrawOpQueue.hpp>
+#include "TexChunk.hpp"
+#include "Texture.hpp"
+#include "DrawOpQueue.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 

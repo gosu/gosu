@@ -2,10 +2,10 @@
 #define GOSUIMPL_GRAPHICS_DRAWOPQUEUE_HPP
 
 #include <Gosu/TR1.hpp>
-#include <GosuImpl/Graphics/Common.hpp>
-#include <GosuImpl/Graphics/TransformStack.hpp>
-#include <GosuImpl/Graphics/ClipRectStack.hpp>
-#include <GosuImpl/Graphics/DrawOp.hpp>
+#include "Common.hpp"
+#include "TransformStack.hpp"
+#include "ClipRectStack.hpp"
+#include "DrawOp.hpp"
 #include <cassert>
 #include <algorithm>
 #include <map>
