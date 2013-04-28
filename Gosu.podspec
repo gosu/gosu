@@ -73,7 +73,7 @@ Pod::Spec.new do |s|
     TimingApple.cpp
     UtilityApple.mm
     WindowMac.mm).map { |basename| "GosuImpl/#{basename}" }
-    ss.preserve_files = 'GosuImpl/Audio/AudioOpenAL.cpp'
+    ss.preserve_paths = 'GosuImpl/Audio/AudioOpenAL.cpp'
     
     ss.platform = :osx, '10.5'
   end
