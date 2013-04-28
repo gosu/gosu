@@ -17,7 +17,8 @@ Pod::Spec.new do |s|
   s.subspec 'libogg' do |ss|
     ss.header_dir = 'ogg'
     ss.public_header_files = 'dependencies/libogg/include/ogg'
-    ss.source_files = 'dependencies/libogg/include/ogg'
+    ss.source_files = 'dependencies/libogg/include/ogg',
+                      'dependencies/libogg/src'
   end
   
   s.subspec 'libvorbis' do |ss|
@@ -27,7 +28,7 @@ Pod::Spec.new do |s|
     ss.public_header_files = 'dependencies/libvorbis/include/vorbis'
     ss.source_files = %w(analysis bitrate block codebook envelope floor0 floor1
         info lookup lpc lsp mapping0 mdct psy registry res0
-        sharedbook smallft synthesis window libvorbisfile).map do |basename|
+        sharedbook smallft synthesis vorbisfile window).map do |basename|
       "dependencies/libvorbis/lib/#{basename}.c"
     end + ['dependencies/libvorbis/include/vorbis', 'dependencies/libvorbis/lib/*.h']
   end
@@ -38,8 +39,9 @@ Pod::Spec.new do |s|
     ss.frameworks = 'OpenGL', 'OpenAL', 'IOKit', 'Carbon', 'Cocoa', 'AudioToolbox', 'ApplicationServices'
     ss.library   = 'iconv'
     # To find libpng headers, TODO use compiler flags for that, does not need to leak into client project
-    ss.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/X11/include' }
+    ss.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/X11/include', 'CLANG_CXX_LIBRARY' => 'libstdc++' }
     
+    ss.public_header_files = 'Gosu/*.hpp'
     ss.source_files = ['Gosu/*.hpp', 'GosuImpl/**/*.hpp'] +
     # Implementation files for OS X, taken from extconf.rb
     # TODO - keep in sync with extconf & project - how?
