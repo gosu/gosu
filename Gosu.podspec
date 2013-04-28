@@ -72,7 +72,10 @@ Pod::Spec.new do |s|
     TextInputMac.mm
     TimingApple.cpp
     UtilityApple.mm
-    WindowMac.mm).map { |basename| "GosuImpl/#{basename}" }
+    WindowMac.mm).map { |basename| "GosuImpl/#{basename}" } +
+    # This one is necessary for C++ development, but not Ruby
+    %w(GosuImpl/DirectoriesMac.mm)
+    # TODO add sockets too
     ss.preserve_paths = 'GosuImpl/Audio/AudioOpenAL.cpp'
     
     ss.platform = :osx, '10.5'
