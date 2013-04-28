@@ -1,24 +1,24 @@
-# Be sure to run `pod spec lint Example.podspec.podspec' to ensure this is a
-# valid spec.
-#
-# For details see: https://github.com/CocoaPods/CocoaPods/wiki/The-podspec-format
-#
+# TODO:
+# - Gosu Touch subspec for iOS
+# - Make the part of Gosu Touch that wraps main() yet another subspec, so users
+#   can keep their main() function and still use GosuView
+# - 
+
 Pod::Spec.new do |s|
   s.name         = "Gosu"
-  s.version      = "0.7.47"
+  s.version      = "0.0.1"
   s.summary      = "2D game development library."
   s.homepage     = "http://libgosu.org/"
 
   s.license      = { :type => 'MIT', :file => 'COPYING' }
   s.author       = { "Julian Raschke" => "julian@raschke.de" }
 
-  s.source       = { :git => "https://github.com/jlnr/gosu.git", :tag => "v0.7.47" }
+  s.source       = { :git => "https://github.com/jlnr/gosu.git", :commit => "4b52ee0f70" }
 
   s.subspec 'libogg' do |ss|
     ss.header_dir = 'ogg'
     ss.public_header_files = 'dependencies/libogg/include/ogg'
-    ss.source_files = 'dependencies/libogg/include/ogg',
-                      'dependencies/libogg/src'
+    ss.source_files = 'dependencies/libogg/include/ogg', 'dependencies/libogg/src'
   end
   
   s.subspec 'libvorbis' do |ss|
@@ -73,6 +73,7 @@ Pod::Spec.new do |s|
     TimingApple.cpp
     UtilityApple.mm
     WindowMac.mm).map { |basename| "GosuImpl/#{basename}" }
+    ss.preserve_files = 'GosuImpl/Audio/AudioOpenAL.cpp'
     
     ss.platform = :osx, '10.5'
   end
