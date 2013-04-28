@@ -1,5 +1,5 @@
 #include <Gosu/Sockets.hpp>
-#include <GosuImpl/Sockets/Sockets.hpp>
+#include "Socket.hpp"
 #ifdef GOSU_IS_WIN
 #include <Gosu/WinUtility.hpp>
 #endif

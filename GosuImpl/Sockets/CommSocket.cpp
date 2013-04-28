@@ -1,6 +1,6 @@
 #include <Gosu/Sockets.hpp>
 #include <Gosu/TR1.hpp>
-#include <GosuImpl/Sockets/Sockets.hpp>
+#include "Socket.hpp"
 #include <cassert>
 #include <cstring>
 #include <stdexcept>

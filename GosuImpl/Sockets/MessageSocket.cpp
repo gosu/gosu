@@ -1,5 +1,5 @@
 #include <Gosu/Sockets.hpp>
-#include <GosuImpl/Sockets/Sockets.hpp>
+#include "Socket.hpp"
 #include <cassert>
 #include <cstring>
 #include <vector>

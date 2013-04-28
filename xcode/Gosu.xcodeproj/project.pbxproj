@@ -49,7 +49,7 @@
 		D44A4DF3146B289600B715D1 /* ListenerSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DEE146B289600B715D1 /* ListenerSocket.cpp */; };
 		D44A4DF4146B289600B715D1 /* MessageSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DEF146B289600B715D1 /* MessageSocket.cpp */; };
 		D44A4DF5146B289600B715D1 /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DF0146B289600B715D1 /* Socket.cpp */; };
-		D44A4DF6146B289600B715D1 /* Sockets.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D44A4DF1146B289600B715D1 /* Sockets.hpp */; };
+		D44A4DF6146B289600B715D1 /* Socket.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D44A4DF1146B289600B715D1 /* Socket.hpp */; };
 		D44A4DFA146B28AB00B715D1 /* AccelerometerReader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D44A4DF8146B28AB00B715D1 /* AccelerometerReader.hpp */; };
 		D44A4DFB146B28AB00B715D1 /* AccelerometerReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DF9146B28AB00B715D1 /* AccelerometerReader.mm */; };
 		D44A4E19146B28CE00B715D1 /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D44A4DFD146B28CE00B715D1 /* Bitmap.cpp */; };
@@ -214,7 +214,7 @@
 		D44A4DEE146B289600B715D1 /* ListenerSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ListenerSocket.cpp; path = ../GosuImpl/Sockets/ListenerSocket.cpp; sourceTree = "<group>"; };
 		D44A4DEF146B289600B715D1 /* MessageSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MessageSocket.cpp; path = ../GosuImpl/Sockets/MessageSocket.cpp; sourceTree = "<group>"; };
 		D44A4DF0146B289600B715D1 /* Socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Socket.cpp; path = ../GosuImpl/Sockets/Socket.cpp; sourceTree = "<group>"; };
-		D44A4DF1146B289600B715D1 /* Sockets.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Sockets.hpp; path = ../GosuImpl/Sockets/Sockets.hpp; sourceTree = "<group>"; };
+		D44A4DF1146B289600B715D1 /* Socket.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Socket.hpp; path = ../GosuImpl/Sockets/Socket.hpp; sourceTree = "<group>"; };
 		D44A4DF8146B28AB00B715D1 /* AccelerometerReader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = AccelerometerReader.hpp; path = ../GosuImpl/Input/AccelerometerReader.hpp; sourceTree = "<group>"; };
 		D44A4DF9146B28AB00B715D1 /* AccelerometerReader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AccelerometerReader.mm; path = ../GosuImpl/Input/AccelerometerReader.mm; sourceTree = "<group>"; };
 		D44A4DFD146B28CE00B715D1 /* Bitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Bitmap.cpp; path = ../GosuImpl/Graphics/Bitmap.cpp; sourceTree = "<group>"; };
@@ -399,7 +399,7 @@
 				D44A4DEE146B289600B715D1 /* ListenerSocket.cpp */,
 				D44A4DEF146B289600B715D1 /* MessageSocket.cpp */,
 				D44A4DF0146B289600B715D1 /* Socket.cpp */,
-				D44A4DF1146B289600B715D1 /* Sockets.hpp */,
+				D44A4DF1146B289600B715D1 /* Socket.hpp */,
 			);
 			name = Sockets;
 			sourceTree = "<group>";
@@ -559,7 +559,7 @@
 				D44A4DD0146B283300B715D1 /* Window.hpp in Headers */,
 				D44A4DE4146B288100B715D1 /* MacUtility.hpp in Headers */,
 				D44A4DE6146B288100B715D1 /* Orientation.hpp in Headers */,
-				D44A4DF6146B289600B715D1 /* Sockets.hpp in Headers */,
+				D44A4DF6146B289600B715D1 /* Socket.hpp in Headers */,
 				D44A4DFA146B28AB00B715D1 /* AccelerometerReader.hpp in Headers */,
 				D44A4E1F146B28CE00B715D1 /* BlockAllocator.hpp in Headers */,
 				D44A4E21146B28CE00B715D1 /* Common.hpp in Headers */,
