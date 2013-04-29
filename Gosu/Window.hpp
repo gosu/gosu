@@ -106,14 +106,11 @@ namespace Gosu
         
         #ifdef GOSU_IS_IPHONE
         void* rootViewController() const;
-        // iPhone-only callbacks for touch events.
-        // Note that it does not hurt to override them even if you compile
-        // for another platform; if you don't specify "virtual" the code
-        // should even be stripped away cleanly.
+        #endif
+        
         virtual void touchBegan(Touch touch) {}
         virtual void touchMoved(Touch touch) {}
         virtual void touchEnded(Touch touch) {}
-        #endif        
         
         const Audio& audio() const;
         Audio& audio();
@@ -122,7 +119,7 @@ namespace Gosu
     };
 }
 
-#ifdef GOSU_IS_IPHONE
+#if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_ANDROID)
 Gosu::Window& windowInstance();
 #endif
 
