@@ -19,9 +19,10 @@
 
 namespace Gosu
 {
-    // Deprecated.
+    // Deprecated - does not use GOSU_DEPRECATED because it causes too much
+    // noise in this case.
     #ifndef SWIG
-    GOSU_DEPRECATED class Audio;
+    class Audio;
     #endif
 
     //! An instance of a Sample playing. Can be used to stop sounds dynamically,
