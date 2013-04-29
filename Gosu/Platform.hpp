@@ -51,7 +51,9 @@ namespace Gosu
 # define GOSU_IS_WIN
 #else
 # define GOSU_IS_UNIX
-# if defined(__linux) || defined(__FreeBSD__)
+# if defined(__ANDROID_API__)
+#  define GOSU_IS_ANDROID
+# elif defined(__linux) || defined(__FreeBSD__)
 #  define GOSU_IS_X
 # else
 #  define GOSU_IS_MAC
