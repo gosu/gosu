@@ -14,6 +14,10 @@
 #elif defined(GOSU_IS_IPHONE)
 #include <OpenGLES/ES1/gl.h>
 #include <OpenGLES/ES1/glext.h>
+#elif defined (GOSU_IS_ANDROID)
+#include <EGL/egl.h>
+#include <GLES/gl.h>
+#include <GLES/glext.h>
 #elif defined(GOSU_IS_MAC)
 #include <OpenGL/gl.h>
 #else
