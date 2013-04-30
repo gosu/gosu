@@ -6,16 +6,34 @@
 #include <cwchar>
 #include <stdexcept>
 #include <algorithm>
+#include <string>
 #include <vector>
-
-#ifndef GOSU_IS_IPHONE
-
-#ifndef GOSU_IS_WIN
-#include "Iconv.hpp"
-#endif
 using namespace std;
 
-#ifndef GOSU_IS_WIN
+#ifdef GOSU_IS_WIN
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+wstring Gosu::utf8ToWstring(const string& utf8)
+{
+	vector<wchar_t> buffer(utf8.size() + 1);
+	MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), utf8.size() + 1, &buffer[0], buffer.size());
+	return &buffer[0];
+}	
+string Gosu::wstringToUTF8(const wstring& ws)
+{
+	unsigned size = WideCharToMultiByte(CP_UTF8, 0, ws.c_str(), ws.size(), 0, 0, 0, 0);
+	vector<char> buffer(size + 1);
+	WideCharToMultiByte(CP_UTF8, 0, ws.c_str(), ws.size(), &buffer[0], buffer.size(), 0, 0);
+	return &buffer[0];
+}
+#endif
+
+#if !defined(GOSU_IS_IPHONE) && !defined(GOSU_IS_ANDROID) && !defined(GOSU_IS_WIN)
+
+#include "Iconv.hpp"
+
 namespace {
     extern const char UTF_8[] = "UTF-8";
 #ifdef __BIG_ENDIAN__
@@ -50,25 +68,6 @@ namespace Gosu {
     }
 }
 #endif
-#else
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-#include <windows.h>
-wstring Gosu::utf8ToWstring(const string& utf8)
-{
-	vector<wchar_t> buffer(utf8.size() + 1);
-	MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), utf8.size() + 1, &buffer[0], buffer.size());
-	return &buffer[0];
-}	
-string Gosu::wstringToUTF8(const wstring& ws)
-{
-	unsigned size = WideCharToMultiByte(CP_UTF8, 0, ws.c_str(), ws.size(), 0, 0, 0, 0);
-	vector<char> buffer(size + 1);
-	WideCharToMultiByte(CP_UTF8, 0, ws.c_str(), ws.size(), &buffer[0], buffer.size(), 0, 0);
-	return &buffer[0];
-}
-#endif
 
 wstring Gosu::widen(const string& s)
 {
@@ -97,7 +96,18 @@ string Gosu::narrow(const wstring& ws)
 
     return string(buf.begin(), buf.end() - 1);
 }
+#endif
 
+#ifdef GOSU_IS_ANDROID
+wstring Gosu::utf8ToWstring(const string& s)
+{
+    return widen(s);
+}
+
+string Gosu::wstringToUTF8(const std::wstring& ws)
+{
+    return narrow(ws);
+}
 #endif
 
 // TODO: This function needs to go into some internal header.
