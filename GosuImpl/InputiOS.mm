@@ -97,12 +97,12 @@ bool Gosu::Input::down(Button btn) const
 
 double Gosu::Input::mouseX() const
 {
-    return pimpl->mouseX;
+    return pimpl->mouseX * pimpl->factorX;
 }
 
 double Gosu::Input::mouseY() const
 {
-    return pimpl->mouseY;
+    return pimpl->mouseY * pimpl->factorY;
 }
 
 void Gosu::Input::setMousePosition(double x, double y) {

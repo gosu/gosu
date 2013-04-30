@@ -97,6 +97,10 @@ namespace Gosu
         bool feedXEvent(::XEvent& event);
         #endif
         
+        #ifdef GOSU_IS_ANDROID
+        Input();
+        #endif
+        
         ~Input();
         
         //! Returns the character a button usually produces, or 0.
