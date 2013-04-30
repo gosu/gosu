@@ -11,9 +11,7 @@
 using namespace std;
 
 #if !defined(GOSU_IS_IPHONE) && !defined(GOSU_IS_ANDROID) && !defined(GOSU_IS_WIN)
-
 #include "Iconv.hpp"
-
 namespace {
     extern const char UTF_8[] = "UTF-8";
 #ifdef __BIG_ENDIAN__
@@ -27,28 +25,26 @@ wstring Gosu::utf8ToWstring(const string& s)
 {
     return iconvert<wstring, UCS_4_INTERNAL, UTF_8>(s);
 }
+
 string Gosu::wstringToUTF8(const std::wstring& ws)
 {
     return iconvert<string, UTF_8, UCS_4_INTERNAL>(ws);
 }
+#endif
 
-#ifdef GOSU_IS_MAC
-// This is only necessary on OS X (for text output)
-// TODO: Move to respective files now that iconvert<> has been extracted
-// from this file.
-
-namespace {
-    extern const char UCS_2_INTERNAL[] = "UCS-2-INTERNAL";
+#if defined(GOSU_IS_ANDROID)
+wstring Gosu::utf8ToWstring(const string& s)
+{
+    return widen(s);
 }
 
-namespace Gosu {
-    vector<unsigned short> wstringToUniChars(const wstring& ws)
-    {
-        return iconvert<vector<unsigned short>, UCS_2_INTERNAL, UCS_4_INTERNAL>(ws);
-    }
+string Gosu::wstringToUTF8(const std::wstring& ws)
+{
+    return narrow(ws);
 }
 #endif
 
+#ifndef GOSU_IS_IPHONE
 wstring Gosu::widen(const string& s)
 {
 #ifdef GOSU_IS_X
@@ -75,18 +71,6 @@ string Gosu::narrow(const wstring& ws)
     wcstombs(&buf.front(), ws.c_str(), buf.size());
 
     return string(buf.begin(), buf.end() - 1);
-}
-#endif
-
-#ifdef GOSU_IS_ANDROID
-wstring Gosu::utf8ToWstring(const string& s)
-{
-    return widen(s);
-}
-
-string Gosu::wstringToUTF8(const std::wstring& ws)
-{
-    return narrow(ws);
 }
 #endif
 

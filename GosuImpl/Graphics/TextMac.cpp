@@ -14,6 +14,7 @@
 #include <map>
 #include <vector>
 #include <ApplicationServices/ApplicationServices.h>
+#include "../Iconv.hpp"
 
 std::wstring Gosu::defaultFontName()
 {
@@ -22,13 +23,14 @@ std::wstring Gosu::defaultFontName()
     return L"Arial";
 }
 
-namespace Gosu
-{
-    std::vector<unsigned short> wstringToUniChars(const std::wstring& ws);
-}
-
 namespace
 {
+    extern const char UCS_2_INTERNAL[] = "UCS-2-INTERNAL";
+    std::vector<unsigned short> wstringToUniChars(const wstring& ws)
+    {
+        return iconvert<vector<unsigned short>, UCS_2_INTERNAL, UCS_4_INTERNAL>(ws);
+    }
+
     class MacBitmap
     {
         std::tr1::uint32_t* buf;
