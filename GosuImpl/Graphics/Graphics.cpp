@@ -17,6 +17,8 @@
 
 #ifdef GOSU_IS_IPHONE
 #import <UIKit/UIKit.h>
+#endif
+#if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_ANDROID)
 #include "../Orientation.hpp"
 #endif
 
@@ -33,7 +35,7 @@ struct Gosu::Graphics::Impl
     std::mutex texMutex;
 #endif
 
-#ifdef GOSU_IS_IPHONE
+#if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_ANDROID)
     Transform transformForOrientation(Orientation orientation)
     {
         Transform result;
@@ -66,7 +68,7 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     pimpl->physHeight = physHeight;
     pimpl->virtWidth  = physWidth;
     pimpl->virtHeight = physHeight;
-    #ifdef GOSU_IS_IPHONE
+    #if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_ANDROID)
     std::swap(pimpl->virtWidth, pimpl->virtHeight);
     #endif
     pimpl->fullscreen = fullscreen;
@@ -76,7 +78,7 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, physWidth, physHeight);
-    #ifdef GOSU_IS_IPHONE
+    #if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_ANDROID)
     glOrthof(0, physWidth, physHeight, 0, -1, 1);
     #else
     glOrtho(0, physWidth, physHeight, 0, -1, 1);
@@ -116,7 +118,7 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
         throw std::invalid_argument("Invalid virtual resolution.");
     
     pimpl->virtWidth = virtualWidth, pimpl->virtHeight = virtualHeight;
-    #ifndef GOSU_IS_IPHONE
+    #if !defined(GOSU_IS_IPHONE) && !defined(GOSU_IS_ANDROID)
     // on the iPhone, updateCurrentTransform will handle this (yuck)
     Transform baseTransform = scale(1.0 / virtualWidth  * pimpl->physWidth,
                                     1.0 / virtualHeight * pimpl->physHeight);
@@ -132,7 +134,7 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
     // Clear leftover transforms, clip rects etc.
     pimpl->queues.front().reset();
     
-    #ifdef GOSU_IS_IPHONE
+    #if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_ANDROID)
     pimpl->updateBaseTransform();
     #endif
     glClearColor(clearWithColor.red() / 255.f, clearWithColor.green() / 255.f,
@@ -167,8 +169,8 @@ void Gosu::Graphics::beginGL()
     if (pimpl->queues.size() > 1)
         throw std::logic_error("Custom OpenGL is not allowed while creating a macro");
     
-#ifdef GOSU_IS_IPHONE
-    throw std::logic_error("Custom OpenGL is unsupported on the iPhone");
+#if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_ANDROID)
+    throw std::logic_error("Custom OpenGLES code is not supported");
 #else
     flush();
     glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -179,8 +181,8 @@ void Gosu::Graphics::beginGL()
 
 void Gosu::Graphics::endGL()
 {
-#ifdef GOSU_IS_IPHONE
-    throw std::logic_error("Custom OpenGL is unsupported on the iPhone");
+#if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_ANDROID)
+    throw std::logic_error("Custom OpenGLES code is not supported");
 #else
     glPopAttrib();
 
@@ -197,10 +199,10 @@ void Gosu::Graphics::endGL()
 #endif
 }
 
-#ifdef GOSU_IS_IPHONE
+#if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_ANDROID)
 void Gosu::Graphics::scheduleGL(const std::tr1::function<void()>& functor, Gosu::ZPos z)
 {
-    throw std::logic_error("Custom OpenGL is unsupported on the iPhone");
+    throw std::logic_error("Custom OpenGLES code is not supported");
 }
 #else
 namespace Gosu
@@ -296,7 +298,7 @@ void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
     op.vertices[2] = DrawOp::Vertex(x3, y3, c3);
-#ifdef GOSU_IS_IPHONE
+#if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_ANDROID)
     op.verticesOrBlockIndex = 4;
     op.vertices[3] = op.vertices[2];
 #endif
@@ -316,7 +318,7 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
 // TODO: Should be harmonized
-#ifdef GOSU_IS_IPHONE
+#if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_ANDROID)
     op.vertices[2] = DrawOp::Vertex(x3, y3, c3);
     op.vertices[3] = DrawOp::Vertex(x4, y4, c4);
 #else

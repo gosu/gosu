@@ -169,7 +169,7 @@ class Gosu::Macro : public Gosu::ImageData
         // They should be premultiplied and have the same transform by definition. Then, the transformation
         // only had to be performed here once.
         
-        #ifndef GOSU_IS_IPHONE
+        #if !defined(GOSU_IS_IPHONE) && !defined(GOSU_IS_ANDROID)
         glEnable(GL_BLEND);
         glMatrixMode(GL_MODELVIEW);
         

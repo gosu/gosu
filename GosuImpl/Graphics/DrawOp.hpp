@@ -38,7 +38,7 @@ namespace Gosu
             assert (verticesOrBlockIndex >= 2);
             assert (verticesOrBlockIndex <= 4);
             
-            #ifdef GOSU_IS_IPHONE
+            #if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_ANDROID)
             static const unsigned MAX_AUTOGROUP = 24;
             
             static int spriteCounter = 0;
@@ -61,9 +61,7 @@ namespace Gosu
                 
                 isSetup = true;
             }
-            #endif
-            
-            #ifdef GOSU_IS_IPHONE
+
             if (renderState.texture)
             {
                 spriteTexcoords[spriteCounter*12 + 0] = left;
@@ -80,9 +78,31 @@ namespace Gosu
                 spriteTexcoords[spriteCounter*12 + 10] = right;
                 spriteTexcoords[spriteCounter*12 + 11] = bottom;
             }
-            #endif
             
-            #ifndef GOSU_IS_IPHONE
+            for (int i = 0; i < 3; ++i)
+            {
+                spriteVertices[spriteCounter*12 + i*2] = vertices[i].x;
+                spriteVertices[spriteCounter*12 + i*2+1] = vertices[i].y;
+                spriteColors[spriteCounter*6 + i] = vertices[i].c.abgr();
+            }
+            for (int i = 0; i < 3; ++i)
+            {
+                spriteVertices[spriteCounter*12 + 6 + i*2] = vertices[i + 1].x;
+                spriteVertices[spriteCounter*12 + 6 + i*2+1] = vertices[i + 1].y;
+                spriteColors[spriteCounter*6 + 3 + i] = vertices[i + 1].c.abgr();
+            }
+            
+            ++spriteCounter;
+            if (spriteCounter == MAX_AUTOGROUP || next == 0 || !(next->renderState == renderState))
+            {
+                glDrawArrays(GL_TRIANGLES, 0, 6 * spriteCounter);
+                //if (spriteCounter > 1)
+                //    printf("grouped %d quads\n", spriteCounter);
+                spriteCounter = 0;
+            }
+
+            #else
+            
             if (verticesOrBlockIndex == 2)
                 glBegin(GL_LINES);
             else if (verticesOrBlockIndex == 3)
@@ -113,28 +133,6 @@ namespace Gosu
             }
             
             glEnd();
-            #else
-            for (int i = 0; i < 3; ++i)
-            {
-                spriteVertices[spriteCounter*12 + i*2] = vertices[i].x;
-                spriteVertices[spriteCounter*12 + i*2+1] = vertices[i].y;
-                spriteColors[spriteCounter*6 + i] = vertices[i].c.abgr();
-            }
-            for (int i = 0; i < 3; ++i)
-            {
-                spriteVertices[spriteCounter*12 + 6 + i*2] = vertices[i + 1].x;
-                spriteVertices[spriteCounter*12 + 6 + i*2+1] = vertices[i + 1].y;
-                spriteColors[spriteCounter*6 + 3 + i] = vertices[i + 1].c.abgr();
-            }
-            
-            ++spriteCounter;
-            if (spriteCounter == MAX_AUTOGROUP || next == 0 || !(next->renderState == renderState))
-            {
-                glDrawArrays(GL_TRIANGLES, 0, 6 * spriteCounter);
-                //if (spriteCounter > 1)
-                //    printf("grouped %d quads\n", spriteCounter);
-                spriteCounter = 0;
-            }
             #endif
         }
         

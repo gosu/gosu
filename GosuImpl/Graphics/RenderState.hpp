@@ -81,14 +81,14 @@ class Gosu::RenderStateManager : private Gosu::RenderState
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         
-        #ifndef GOSU_IS_IPHONE
-        glMultMatrixd(&(*transform)[0]);
-        #else
+        #if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_ANDROID)
         // TODO: Ouch, should always use floats!
         GLfloat matrix[16];
         for (int i = 0; i < 16; ++i)
             matrix[i] = (*transform)[i];
         glMultMatrixf(matrix);
+        #else
+        glMultMatrixd(&(*transform)[0]);
         #endif
     }
     
