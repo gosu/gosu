@@ -37,7 +37,7 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1,
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
 // TODO: Should be harmonized
-#ifdef GOSU_IS_IPHONE
+#if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_ANDROID)
     op.vertices[2] = DrawOp::Vertex(x3, y3, c3);
     op.vertices[3] = DrawOp::Vertex(x4, y4, c4);
 #else
