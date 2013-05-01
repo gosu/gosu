@@ -89,6 +89,10 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     
     glEnable(GL_BLEND);
     
+    glDisable(GL_CULL_FACE);
+
+    
+    
     // Create default draw-op queue.
     pimpl->queues.resize(1);
 }
