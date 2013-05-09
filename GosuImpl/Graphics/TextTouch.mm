@@ -1,4 +1,4 @@
-#import <Gosu/Platform.hpp>
+#include <Gosu/Platform.hpp>
 
 #if defined(GOSU_IS_IPHONE) || defined(__LP64__)
 
