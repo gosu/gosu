@@ -108,6 +108,10 @@ namespace Gosu
         void* rootViewController() const;
         #endif
         
+        #ifdef GOSU_IS_ANDROID
+        void* androidApp() const;
+        #endif
+        
         virtual void touchBegan(Touch touch) {}
         virtual void touchMoved(Touch touch) {}
         virtual void touchEnded(Touch touch) {}

@@ -67,19 +67,23 @@ const Gosu::Touches& Gosu::Input::currentTouches() const
     return none;
 }
 
+namespace Gosu {
+    float accelX = 0, accelY = 0, accelZ = 0;
+}
+
 double Gosu::Input::accelerometerX() const
 {
-    return 0;
+    return accelX;
 }
 
 double Gosu::Input::accelerometerY() const
 {
-    return 0;
+    return accelY;
 }
 
 double Gosu::Input::accelerometerZ() const
 {
-    return 0;
+    return accelZ;
 }
 
 void Gosu::Input::update()
