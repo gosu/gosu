@@ -661,6 +661,9 @@ module Gosu
     # Incrementing, possibly wrapping millisecond timer.
     def milliseconds(); end
 
+    # Return current framerate (frames per second.)
+    def fps(); end
+
     # Returns the name of a neutral font that is available on the current
     # platform.
     def default_font_name(); end
