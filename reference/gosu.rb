@@ -638,42 +638,47 @@ module Gosu
   class GLTexInfo
     attr_reader :tex_name, :left, :right, :top, :bottom
   end
-  
-  # Returns a random double between min (inclusive) and max (exclusive).
-  def random(min, max); end
-  
-  # Returns the horizontal distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
-  def offset_x(angle, dist); end 
-  
-  # Returns the vertical distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
-  def offset_y(angle, dist); end
-  
-  # Returns the angle from point 1 to point 2 in degrees, where 0.0 means upwards. Returns 0 if both points are equal.
-  def angle(x1, y1, x2, y2); end
-  
-  # Returns the smallest angle that can be added to angle1 to get to angle2 (can be negative if counter-clockwise movement is shorter).
-  def angle_diff(angle1, angle2); end
-  
-  # Returns the distance between two points.
-  def distance(x1, y1, x2, y2); end
-  
-  # Incrementing, possibly wrapping millisecond timer.
-  def milliseconds(); end
-  
-  # Returns the name of a neutral font that is available on the current
-  # platform.
-  def default_font_name(); end
-  
-  # Returns the width, in pixels, of the user's primary screen.
-  def screen_width(); end
-  
-  # Returns the height, in pixels, of the user's primary screen.
-  def screen_height(); end
-  
-  # Returns the user's preferred language, at the moment of calling the function. Expect return
-  # values such as 'en_US', 'de_DE.UTF-8', 'ja', 'zh-Hans'. You can rely only on the first two letters
-  # being a common language abbreviation.
-  def language(); end
+
+  class << self
+    # Returns a random double between min (inclusive) and max (exclusive).
+    def random(min, max); end
+
+    # Returns the horizontal distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
+    def offset_x(angle, dist); end
+
+    # Returns the vertical distance between the origin and the point to which you would get if you moved radius pixels in the direction specified by angle.
+    def offset_y(angle, dist); end
+
+    # Returns the angle from point 1 to point 2 in degrees, where 0.0 means upwards. Returns 0 if both points are equal.
+    def angle(x1, y1, x2, y2); end
+
+    # Returns the smallest angle that can be added to angle1 to get to angle2 (can be negative if counter-clockwise movement is shorter).
+    def angle_diff(angle1, angle2); end
+
+    # Returns the distance between two points.
+    def distance(x1, y1, x2, y2); end
+
+    # Incrementing, possibly wrapping millisecond timer.
+    def milliseconds(); end
+
+    # Return current framerate (frames per second.)
+    def fps(); end
+
+    # Returns the name of a neutral font that is available on the current
+    # platform.
+    def default_font_name(); end
+
+    # Returns the width, in pixels, of the user's primary screen.
+    def screen_width(); end
+
+    # Returns the height, in pixels, of the user's primary screen.
+    def screen_height(); end
+
+    # Returns the user's preferred language, at the moment of calling the function. Expect return
+    # values such as 'en_US', 'de_DE.UTF-8', 'ja', 'zh-Hans'. You can rely only on the first two letters
+    # being a common language abbreviation.
+    def language(); end
+  end
 end
 
 # Small additions to Numeric to make it easier to integrate Gosu with
