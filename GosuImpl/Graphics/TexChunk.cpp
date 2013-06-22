@@ -26,6 +26,7 @@ Gosu::TexChunk::TexChunk(const TexChunk& parentChunk, int x, int y, int w, int h
     x(parentChunk.x + x), y(parentChunk.y + y), w(w), h(h), padding(0)
 {
     setTexInfo();
+    texture->block(this->x, this->y, this->w, this->h);
 }
 
 Gosu::TexChunk::~TexChunk()
