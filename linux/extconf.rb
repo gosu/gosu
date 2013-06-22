@@ -119,10 +119,16 @@ else
   have_header 'AL/al.h'     if have_library('openal')
 end
 
-# Copy all relevant C++ files into the current directory
-# FIXME Could be done by gem task instead.
+# And now it gets ridiculous (or I am overcomplicating things...):
+# mkmf will compile all .c/.cpp files in this directory, but if they are nested
+# inside folders, it will not find the resulting .o files during linking.
+# So we create a shim .c/.cpp file for each file that we want to compile, ensuring
+# that all .o files are built into the current directory, without any nesting.
 SOURCE_FILES.each do |file|
-  FileUtils.cp "../GosuImpl/#{file}", File.basename(file).sub(/\.mm$/, '.cpp')
+  shim_name = File.basename(file).sub(/\.mm$/, '.cpp')
+  File.open(shim_name, "w") do |shim|
+    shim.puts "#include \"../GosuImpl/#{file}\""
+  end
 end
 
 create_makefile 'gosu'
