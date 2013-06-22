@@ -96,13 +96,13 @@ if `uname`.chomp == 'Darwin' then
   
   # Symlink our pretty gosu.so into ../lib
   # FIXME gosu.rb should just look in the right place.
-  FileUtils.ln_s("../linux/gosu.bundle", "../lib/gosu.bundle")
+  FileUtils.ln_s "../linux/gosu.bundle", "../lib/gosu.bundle"
 else
   SOURCE_FILES = BASE_FILES + LINUX_FILES
 
   # Symlink our pretty gosu.so into ../lib
   # FIXME gosu.rb should just look in the right place.
-  FileUtils.ln_s("../linux/gosu.so", "../lib/gosu.so")
+  FileUtils.ln_s "../linux/gosu.so", "../lib/gosu.so"
 
   pkg_config("sdl")
   pkg_config("pangoft2")
@@ -122,7 +122,7 @@ end
 # Copy all relevant C++ files into the current directory
 # FIXME Could be done by gem task instead.
 SOURCE_FILES.each do |file|
-  FileUtils.cp("../GosuImpl/#{file}", File.basename(file).sub(/\.mm$/, '.cpp'))
+  FileUtils.cp "../GosuImpl/#{file}", File.basename(file).sub(/\.mm$/, '.cpp')
 end
 
 create_makefile("gosu")
