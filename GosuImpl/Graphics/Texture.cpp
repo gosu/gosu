@@ -83,9 +83,14 @@ std::auto_ptr<Gosu::TexChunk>
     return result;
 }
 
-void Gosu::Texture::free(unsigned x, unsigned y)
+void Gosu::Texture::block(unsigned x, unsigned y, unsigned width, unsigned height)
 {
-    allocator.free(x, y);
+    allocator.block(x, y, width, height);
+}
+
+void Gosu::Texture::free(unsigned x, unsigned y, unsigned width, unsigned height)
+{
+    allocator.free(x, y, width, height);
 }
 
 Gosu::Bitmap Gosu::Texture::toBitmap(unsigned x, unsigned y, unsigned width, unsigned height) const

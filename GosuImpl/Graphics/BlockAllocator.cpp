@@ -118,12 +118,17 @@ bool Gosu::BlockAllocator::alloc(unsigned aWidth, unsigned aHeight, Block& b)
     return false;
 }
 
-void Gosu::BlockAllocator::free(unsigned left, unsigned top)
+void Gosu::BlockAllocator::block(unsigned left, unsigned top, unsigned width, unsigned height)
+{
+    pimpl->blocks.push_back(Block(left, top, width, height));
+}
+
+void Gosu::BlockAllocator::free(unsigned left, unsigned top, unsigned width, unsigned height)
 {
     for (Impl::Blocks::iterator i = pimpl->blocks.begin();
         i != pimpl->blocks.end(); ++i)
     {
-        if (i->left == left && i->top == top)
+        if (i->left == left && i->top == top && i->width == width && i->height == height)
         {
             pimpl->blocks.erase(i);
 			// Be optimistic again!

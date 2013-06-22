@@ -19,9 +19,12 @@ class Gosu::TexChunk : public Gosu::ImageData
     // Cached for faster access.
     GLTexInfo info;
     
+    void setTexInfo();
+    
 public:
     TexChunk(Graphics& graphics, DrawOpQueueStack& queues,
              std::tr1::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding);
+    TexChunk(const TexChunk& parentChunk, int x, int y, int w, int h);
     ~TexChunk();
 
     int width() const
@@ -47,6 +50,7 @@ public:
         
     const GLTexInfo* glTexInfo() const;
     Gosu::Bitmap toBitmap() const;
+    std::auto_ptr<ImageData> subimage(int x, int y, int width, int height) const;
     void insert(const Bitmap& bitmap, int x, int y);
 };
 

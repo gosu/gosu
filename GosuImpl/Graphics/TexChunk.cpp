@@ -4,9 +4,7 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 
-Gosu::TexChunk::TexChunk(Graphics& graphics, DrawOpQueueStack& queues,
-    std::tr1::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding)
-: graphics(graphics), queues(queues), texture(texture), x(x), y(y), w(w), h(h), padding(padding)
+void Gosu::TexChunk::setTexInfo()
 {
     info.texName = texture->texName();
     float textureSize = texture->size();
@@ -16,9 +14,23 @@ Gosu::TexChunk::TexChunk(Graphics& graphics, DrawOpQueueStack& queues,
     info.bottom = (y + h) / textureSize;
 }
 
+Gosu::TexChunk::TexChunk(Graphics& graphics, DrawOpQueueStack& queues,
+    std::tr1::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding)
+: graphics(graphics), queues(queues), texture(texture), x(x), y(y), w(w), h(h), padding(padding)
+{
+    setTexInfo();
+}
+
+Gosu::TexChunk::TexChunk(const TexChunk& parentChunk, int x, int y, int w, int h)
+: graphics(parentChunk.graphics), queues(parentChunk.queues), texture(parentChunk.texture),
+    x(parentChunk.x + x), y(parentChunk.y + y), w(w), h(h), padding(0)
+{
+    setTexInfo();
+}
+
 Gosu::TexChunk::~TexChunk()
 {
-    texture->free(x - padding, y - padding);
+    texture->free(x - padding, y - padding, w + 2 * padding, h + 2 * padding);
 }
 
 void Gosu::TexChunk::draw(double x1, double y1, Color c1,
@@ -61,6 +73,11 @@ const Gosu::GLTexInfo* Gosu::TexChunk::glTexInfo() const
 Gosu::Bitmap Gosu::TexChunk::toBitmap() const
 {
     return texture->toBitmap(x, y, w, h);
+}
+
+std::auto_ptr<Gosu::ImageData> Gosu::TexChunk::subimage(int x, int y, int width, int height) const
+{
+    return std::auto_ptr<Gosu::ImageData>(new TexChunk(*this, x, y, width, height));
 }
 
 void Gosu::TexChunk::insert(const Bitmap& original, int x, int y)

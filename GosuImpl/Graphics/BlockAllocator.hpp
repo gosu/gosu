@@ -26,7 +26,8 @@ namespace Gosu
         unsigned height() const;
 
         bool alloc(unsigned width, unsigned height, Block& block);
-        void free(unsigned left, unsigned top);
+        void block(unsigned left, unsigned top, unsigned width, unsigned height);
+        void free(unsigned left, unsigned top, unsigned width, unsigned height);
     };
 }
 

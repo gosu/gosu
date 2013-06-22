@@ -227,6 +227,11 @@ public:
         throw std::logic_error("Gosu::Macro cannot be rendered as Gosu::Bitmap yet");
     }
     
+    std::auto_ptr<ImageData> subimage(int x, int y, int width, int height) const
+    {
+        return std::auto_ptr<ImageData>();
+    }
+    
     void insert(const Bitmap& bitmap, int x, int y)
     {
         throw std::logic_error("Gosu::Macro cannot be updated with a Gosu::Bitmap yet");

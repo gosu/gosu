@@ -4,6 +4,7 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
 #include <Gosu/TR1.hpp>
+#include <stdexcept>
 #include <vector>
 
 namespace Gosu
@@ -29,6 +30,11 @@ namespace Gosu
         const GLTexInfo* glTexInfo() const
         {
             return 0;
+        }
+        
+        std::auto_ptr<ImageData> subimage(int x, int y, int w, int h) const
+        {
+            return std::auto_ptr<ImageData>();
         }
         
         Bitmap toBitmap() const;
