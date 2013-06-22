@@ -15,7 +15,6 @@ namespace Gosu
     {
         BlockAllocator allocator;
         GLuint name;
-        unsigned num;
 
     public:
         Texture(unsigned size);

@@ -11,7 +11,7 @@ namespace Gosu
 }
 
 Gosu::Texture::Texture(unsigned size)
-: allocator(size, size), num(0)
+: allocator(size, size)
 {
     // Create texture name.
     glGenTextures(1, &name);
@@ -80,14 +80,12 @@ std::auto_ptr<Gosu::TexChunk>
     glTexSubImage2D(GL_TEXTURE_2D, 0, block.left, block.top, block.width, block.height,
                  Color::GL_FORMAT, GL_UNSIGNED_BYTE, bmp.data());
 
-    num += 1;
     return result;
 }
 
 void Gosu::Texture::free(unsigned x, unsigned y)
 {
     allocator.free(x, y);
-    num -= 1;
 }
 
 Gosu::Bitmap Gosu::Texture::toBitmap(unsigned x, unsigned y, unsigned width, unsigned height) const
