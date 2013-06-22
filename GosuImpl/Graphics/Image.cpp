@@ -4,6 +4,7 @@
 #include <Gosu/ImageData.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/IO.hpp>
+#include <stdexcept>
 
 Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, bool tileable)
 {
@@ -40,6 +41,8 @@ Gosu::Image::Image(Graphics& graphics, const Bitmap& source,
 Gosu::Image::Image(std::auto_ptr<ImageData> data)
 :   data(data.release())
 {
+    if (data.get() == 0)
+        throw std::invalid_argument("Gosu::Image cannot be initialized with an ImageData null pointer");
 }
 
 unsigned Gosu::Image::width() const
