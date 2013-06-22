@@ -104,19 +104,19 @@ else
   # FIXME gosu.rb should just look in the right place.
   FileUtils.ln_s "../linux/gosu.so", "../lib/gosu.so"
 
-  pkg_config("sdl")
-  pkg_config("pangoft2")
-  pkg_config("x11")
-  pkg_config("xinerama")
+  pkg_config 'sdl'
+  pkg_config 'pangoft2'
+  pkg_config 'x11'
+  pkg_config 'xinerama'
   
-  pkg_config("gl")
-  pkg_config("vorbisfile")
-  pkg_config("openal")
-  pkg_config("sndfile")
+  pkg_config 'gl'
+  pkg_config 'vorbisfile'
+  pkg_config 'openal'
+  pkg_config 'sndfile'
   
-  have_header('SDL_ttf.h')   if have_library('SDL_ttf', 'TTF_RenderUTF8_Blended')
-  have_header('FreeImage.h') if have_library('freeimage', 'FreeImage_ConvertFromRawBits')
-  have_header('AL/al.h')     if have_library('openal')
+  have_header 'SDL_ttf.h'   if have_library('SDL_ttf', 'TTF_RenderUTF8_Blended')
+  have_header 'FreeImage.h' if have_library('freeimage', 'FreeImage_ConvertFromRawBits')
+  have_header 'AL/al.h'     if have_library('openal')
 end
 
 # Copy all relevant C++ files into the current directory
@@ -125,4 +125,4 @@ SOURCE_FILES.each do |file|
   FileUtils.cp "../GosuImpl/#{file}", File.basename(file).sub(/\.mm$/, '.cpp')
 end
 
-create_makefile("gosu")
+create_makefile 'gosu'
