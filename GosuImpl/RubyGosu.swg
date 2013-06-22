@@ -546,6 +546,12 @@ namespace Gosu {
         else
             return 0;
     }
+    %newobject subimage;
+    Gosu::Image* subimage(int x, int y, int w, int h)
+    {
+        std::auto_ptr<Gosu::ImageData> imageData = $self->getData().subimage(x, y, w, h);
+        return imageData.get() ? new Gosu::Image(imageData) : 0;
+    }
     %newobject fromText4;
     static Gosu::Image* fromText4(Gosu::Window& window, const std::wstring& text,
                                  const std::wstring& fontName, unsigned fontHeight)
