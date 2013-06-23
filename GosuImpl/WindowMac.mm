@@ -201,6 +201,12 @@ OVERRIDE_METHOD(scrollWheel);
 
 #undef OVERRIDE_METHOD
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED < 1070
+@interface NSView (GosuProvideMissingMethodDeclaration)
+- (NSRect)convertRectToBacking:(NSRect)aRect
+@end
+#endif
+
 struct Gosu::Window::Impl
 {
     ObjRef<NSAutoreleasePool> pool;
@@ -219,7 +225,7 @@ struct Gosu::Window::Impl
     double interval;
     bool mouseViz;
     
-    void createWindow(unsigned width, unsigned height)
+    void createWindowAndAdjustWidthHeight(unsigned& width, unsigned& height)
     {
         NSRect rect = NSMakeRect(0, 0, width, height);
         window.reset([[GosuWindow alloc] initWithContentRect:rect styleMask:windowStyleMask 
@@ -227,14 +233,22 @@ struct Gosu::Window::Impl
         [window.obj() retain]; // TODO: Why?
         
         [window.obj() setContentView:[[GosuView alloc] init]];
+        if ([[window.obj() contentView] respondsToSelector:@selector(wantsBestResolutionOpenGLSurface)])
+        {
+            [[window.obj() contentView] setValue:[NSNumber numberWithBool:YES] forKey:@"wantsBestResolutionOpenGLSurface"];
+            NSRect pointRect = NSMakeRect(0, 0, width, height);
+            NSRect backingRect = [(id)[window.obj() contentView] convertRectToBacking:pointRect];
+            width = backingRect.size.width;
+            height = backingRect.size.height;
+        }
         [window.obj() center];
     }
     
     static void doTick(Window& window);
 };
 
-// Without this variable, the context seems to get eaten by the GC. Oh
-// wow, this sounds hacky and fragile. I am scared :(
+// An addition for MacRuby support:
+// Without this variable, the context seems to get eaten by the GC. (?)
 
 static NSOpenGLContext* context;
 
@@ -287,6 +301,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
         throw std::runtime_error("Unable to create an OpenGL context with the supplied pixel format");
     
     unsigned realWidth = width, realHeight = height;
+    unsigned pixelWidth = width, pixelHeight = height;
     
     if (fullscreen) {
         // Fullscreen: Create no window, instead change resolution.
@@ -309,7 +324,9 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     else
     {
         scaleDownWindowIfNecessary(realWidth, realHeight);
-        pimpl->createWindow(realWidth, realHeight);
+        pixelWidth = realWidth;
+        pixelHeight = realHeight;
+        pimpl->createWindowAndAdjustWidthHeight(pixelWidth, pixelHeight);
         // Tell context to draw on this window.
         [pimpl->context.obj() setView:[pimpl->window.obj() contentView]];
     }
@@ -318,7 +335,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen,
     
     [pimpl->context.obj() makeCurrentContext];
     
-    pimpl->graphics.reset(new Gosu::Graphics(realWidth, realHeight, fullscreen));
+    pimpl->graphics.reset(new Gosu::Graphics(pixelWidth, pixelHeight, fullscreen));
     pimpl->graphics->setResolution(width, height);
     
     pimpl->input.reset(new Input(pimpl->window.get()));
