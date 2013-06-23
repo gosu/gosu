@@ -203,7 +203,7 @@ OVERRIDE_METHOD(scrollWheel);
 
 #if __MAC_OS_X_VERSION_MAX_ALLOWED < 1070
 @interface NSView (GosuProvideMissingMethodDeclaration)
-- (NSRect)convertRectToBacking:(NSRect)aRect
+- (NSRect)convertRectToBacking:(NSRect)aRect;
 @end
 #endif
 
