@@ -377,22 +377,16 @@ Gosu::Window::~Window()
 
 std::wstring Gosu::Window::caption() const
 {
-    if (! pimpl->window.get())
-        return L"";
-    
     ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]);
-    const char* utf8 = [[pimpl->window.obj() title] UTF8String];
+    const char* utf8 = [[pimpl->window.get() title] UTF8String];
     return utf8 ? Gosu::utf8ToWstring(utf8) : std::wstring();
 }
 
 void Gosu::Window::setCaption(const std::wstring& caption)
 {
-    if (! pimpl->window.get())
-        return;
-    
     std::string utf8 = wstringToUTF8(caption);
     ObjRef<NSString> title([[NSString alloc] initWithUTF8String:utf8.c_str()]);
-    [pimpl->window.obj() setTitle: title.obj()];
+    [pimpl->window.get() setTitle:title.obj()];
 }
 
 double Gosu::Window::updateInterval() const
