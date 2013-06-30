@@ -12,10 +12,13 @@ if ENV['USER'] == 'jlnr' and `uname`.chomp == 'Darwin' then
       sh "cd website && ruby potd.rb && erb -r potd_values.rb index.html.erb > index.html"
     end
     
-    task :docs => [:ruby_docs, :cpp_docs] do
+    task :docs => [:ruby_docs, :cpp_docs, :"tmbundle:build"] do
       rm_rf "website/rdoc"
       rm_rf "website/cpp"
       sh "mv reference/rdoc reference/cpp website"
+      
+      rm_rf "website/Gosu.tmbundle.zip"
+      sh "zip website/Gosu.tmbundle.zip pkg/Gosu.tmbundle"
     end
     
     task :update => [:forum_maintenance, :docs, :rebuild_index]
