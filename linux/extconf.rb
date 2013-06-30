@@ -93,16 +93,8 @@ if `uname`.chomp == 'Darwin' then
   %w(AudioToolbox IOKit OpenAL OpenGL AppKit ApplicationServices Foundation Carbon).each do |f|
     $LDFLAGS << " -framework #{f}"
   end
-  
-  # Symlink our pretty gosu.so into ../lib
-  # FIXME gosu.rb should just look in the right place.
-  FileUtils.ln_s "../linux/gosu.bundle", "../lib/gosu.bundle"
 else
   SOURCE_FILES = BASE_FILES + LINUX_FILES
-
-  # Symlink our pretty gosu.so into ../lib
-  # FIXME gosu.rb should just look in the right place.
-  FileUtils.ln_s "../linux/gosu.so", "../lib/gosu.so"
 
   pkg_config 'sdl'
   pkg_config 'pangoft2'
@@ -119,11 +111,20 @@ else
   have_header 'AL/al.h'     if have_library('openal')
 end
 
+# Symlink our pretty gosu.so into ../lib
+# TODO gosu.rb should just look in the right place.
+unless File.exist? "../lib/gosu.#{RbConfig::CONFIG['DLEXT']}"
+  FileUtils.ln_s "../linux/gosu.#{RbConfig::CONFIG['DLEXT']}",
+                 "../lib/gosu.#{RbConfig::CONFIG['DLEXT']}"
+end
+
 # And now it gets ridiculous (or I am overcomplicating things...):
 # mkmf will compile all .c/.cpp files in this directory, but if they are nested
 # inside folders, it will not find the resulting .o files during linking.
 # So we create a shim .c/.cpp file for each file that we want to compile, ensuring
 # that all .o files are built into the current directory, without any nesting.
+# TODO - would be nicer if the Rakefile would just create these shim files and
+# ship them along with the gem
 SOURCE_FILES.each do |file|
   shim_name = File.basename(file).sub(/\.mm$/, '.cpp')
   File.open(shim_name, "w") do |shim|
