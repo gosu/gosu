@@ -17,8 +17,8 @@ if ENV['USER'] == 'jlnr' and `uname`.chomp == 'Darwin' then
       rm_rf "website/cpp"
       sh "mv reference/rdoc reference/cpp website"
       
-      rm_rf "website/Gosu.tmbundle.zip"
-      sh "zip website/Gosu.tmbundle.zip pkg/Gosu.tmbundle"
+      rm_rf "website/RubyGosu.tmbundle.zip"
+      sh "zip website/RubyGosu.tmbundle.zip pkg/RubyGosu.tmbundle"
     end
     
     task :update => [:forum_maintenance, :docs, :rebuild_index]
