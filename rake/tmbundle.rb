@@ -3,6 +3,9 @@
 # TODO use ruby-plist gem to generate all this
 # (But but but it was so mind bending!!)
 
+# TODO do not generate snippets for functions like Gosu::fps()
+# TODO consider generating Gosu::sh for Gosu::screen_height etc
+
 def for_each_gosu_method
   require 'yard'
   YARD::Registry.load!
@@ -63,7 +66,8 @@ end
 
 def next_uuid
   gen = lambda { |n| (0...n).map { rand(16).to_s(16).upcase } }
-  (gen[8] + %w(-) + gen[4] + %w(-) + gen[4] + %w(-) + gen[4] + %w(-) + gen[12]).join
+  # Very weak pseudo UUID v4, see https://en.wikipedia.org/wiki/Uuid
+  (gen[8] + %w(-) + gen[4] + %w(-4) + gen[3] + %w(a-) + gen[3] + %w(-) + gen[12]).join
 end
 
 BUNDLE_ROOT = "pkg/RubyGosu.tmbundle"
