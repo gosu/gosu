@@ -1,9 +1,9 @@
 #include <Gosu/Input.hpp>
 #include <Gosu/TextInput.hpp>
 
-#include <GosuImpl/MacUtility.hpp>
-#include <GosuImpl/Orientation.hpp>
-#include <GosuImpl/Input/AccelerometerReader.hpp>
+#include "MacUtility.hpp"
+#include "Orientation.hpp"
+#include "Input/AccelerometerReader.hpp"
 #import <UIKit/UIKit.h>
 
 struct Gosu::TextInput::Impl {};

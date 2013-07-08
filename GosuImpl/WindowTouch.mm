@@ -2,8 +2,8 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Audio.hpp>
 #include <Gosu/Input.hpp>
-#include <GosuImpl/MacUtility.hpp>   
-#include <GosuImpl/Graphics/GosuView.hpp>
+#include "MacUtility.hpp"
+#include "Graphics/GosuView.hpp"
 
 #import <CoreGraphics/CoreGraphics.h>
 #import <UIKit/UIKit.h>

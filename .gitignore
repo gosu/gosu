@@ -47,3 +47,6 @@ Gosu.includes
 
 /cmake/build/*
 /examples/*/build/*
+
+/**/xcuserdata
+/**/Pods

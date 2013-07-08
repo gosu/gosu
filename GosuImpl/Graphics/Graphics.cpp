@@ -16,7 +16,6 @@
 #include <limits>
 
 #ifdef GOSU_IS_IPHONE
-#import <UIKit/UIKit.h>
 #include "../Orientation.hpp"
 #endif
 
