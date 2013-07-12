@@ -132,4 +132,9 @@ SOURCE_FILES.each do |file|
   end
 end
 
+if RUBY_VERSION >= '2.0.0' then
+  # See http://bugs.ruby-lang.org/issues/8315
+  CONFIG['CXXFLAGS'] = "#$CFLAGS #{CONFIG['CXXFLAGS']}"
+end
+
 create_makefile 'gosu'
