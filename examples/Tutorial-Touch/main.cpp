@@ -20,6 +20,8 @@ enum ZOrder
     zUI
 };
 
+static const unsigned WIDTH = 1024, HEIGHT = 768;
+
 typedef std::vector<std::tr1::shared_ptr<Gosu::Image> > Animation;
 
 class Star
@@ -40,8 +42,8 @@ public:
         double blue = Gosu::random(40, 255);
         color.setBlue(static_cast<Gosu::Color::Channel>(blue));
 
-        posX = Gosu::random(0, 640);
-        posY = Gosu::random(0, 480);
+        posX = Gosu::random(0, WIDTH);
+        posY = Gosu::random(0, HEIGHT);
     }
 
     double x() const { return posX; }
@@ -84,14 +86,10 @@ public:
         posY = y;
     }
 
-    void turnLeft()
+    void rotateTowards(double x, double y)
     {
-        angle -= 4.5;
-    }
-
-    void turnRight()
-    {
-        angle += 4.5;
+        double targetAngle = Gosu::angle(posX, posY, x, y);
+        angle = angle + 0.1 * Gosu::angleDiff(angle, targetAngle);
     }
 
     void accelerate()
@@ -103,9 +101,7 @@ public:
     void move()
     {
         posX += velX;
-        posX = Gosu::wrap(posX, 0.0, 640.0);
         posY += velY;
-        posY = Gosu::wrap(posY, 0.0, 480.0);
 
         velX *= 0.95;
         velY *= 0.95;
@@ -144,7 +140,7 @@ class GameWindow : public Gosu::Window
 
 public:
     GameWindow()
-    :   Window(640, 480, false),
+    :   Window(WIDTH, HEIGHT, false),
         font(graphics(), Gosu::defaultFontName(), 20),
         player(graphics())
     {
@@ -156,17 +152,17 @@ public:
         filename = Gosu::sharedResourcePrefix() + L"media/Star.png";
         Gosu::imagesFromTiledBitmap(graphics(), filename, 25, 25, false, starAnim);
 
-        player.warp(320, 240);
+        player.warp(WIDTH / 2, HEIGHT / 2);
     }
 
     void update()
     {
-        if (input().down(Gosu::kbLeft) || input().down(Gosu::gpLeft))
-            player.turnLeft();
-        if (input().down(Gosu::kbRight) || input().down(Gosu::gpRight))
-            player.turnRight();
-        if (input().down(Gosu::kbUp) || input().down(Gosu::gpButton0))
+        if (! input().currentTouches().empty())
+        {
+            Gosu::Touch targetTouch = input().currentTouches().front();
+            player.rotateTowards(targetTouch.x, targetTouch.y);
             player.accelerate();
+        }
         player.move();
         player.collectStars(stars);
 
@@ -177,7 +173,9 @@ public:
     void draw()
     {
         player.draw();
-        backgroundImage->draw(0, 0, zBackground);
+        backgroundImage->draw(0, 0, zBackground,
+            1.0 * WIDTH / backgroundImage->width(),
+            1.0 * HEIGHT / backgroundImage->height());
 
         for (std::list<Star>::const_iterator i = stars.begin();
             i != stars.end(); ++i)
@@ -189,12 +187,6 @@ public:
         score << L"Score: "; 
         score << player.getScore();
         font.draw(score.str(), 10, 10, zUI, 1, 1, Gosu::Colors::yellow);
-    }
-
-    void buttonDown(Gosu::Button btn)
-    {
-        if (btn == Gosu::kbEscape)
-           close();
     }
 };
 
