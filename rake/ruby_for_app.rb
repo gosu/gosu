@@ -1,5 +1,5 @@
-RVM_RUBY         = "ruby-1.9.2-p290"
-INTERNAL_VERSION = "1.9.1"
+RVM_RUBY         = "ruby-2.0.0-p247"
+INTERNAL_VERSION = "2.0.0"
 RUBY_DYLIB       = "libruby.#{INTERNAL_VERSION}.dylib"
 RUBY_DYLIB_ID    = "@executable_path/../Frameworks/#{RUBY_DYLIB}"
 TARGET_ROOT      = "mac/Ruby"
@@ -7,20 +7,19 @@ SOURCE_ROOT      = "#{ENV['HOME']}/.rvm/rubies/#{RVM_RUBY}"
 GEM_ROOT         = "#{ENV['HOME']}/.rvm/gems/#{RVM_RUBY}/gems"
 ALL_PLATFORMS    = [:ppc, :i386, :x86_64]
 LIB_KILLLIST     = %w(README irb rake* rdoc* *ubygems* readline* tcltk* tk* tcltklib* rss* *-darwin*)
-GEMS             = %w(texplay chipmunk)#  ruby-opengl2??
+GEMS             = %w(gosu texplay chipmunk ruby-opengl2)
 
 # Just to abbreviate the CFLAGS
-SDK_10_4 = '/Developer/SDKs/MacOSX10.4u.sdk'
-SDK_10_6 = '/Developer/SDKs/MacOSX10.6.sdk'
+SDK_10_5 = '/Developer/SDKs/MacOSX10.5.sdk'
 
 CFLAGS           = {
-  :ppc    => "'-isysroot #{SDK_10_4} -mmacosx-version-min=10.4 -I#{SDK_10_4}/usr/lib/gcc/powerpc-apple-darwin10/4.0.1/include -I#{SDK_10_4}/usr/include/c++/4.0.0 -I#{SDK_10_4}/usr/include/c++/4.0.0/powerpc-apple-darwin8'",
-  :i386   => "'-isysroot #{SDK_10_4} -mmacosx-version-min=10.4 -I#{SDK_10_4}/usr/lib/gcc/i686-apple-darwin10/4.0.1/include -I#{SDK_10_4}/usr/include/c++/4.0.0 -I#{SDK_10_4}/usr/include/c++/4.0.0/i686-apple-darwin8'",
-  :x86_64 => "'-isysroot #{SDK_10_6} -mmacosx-version-min=10.6 -include #{File.expand_path(TARGET_ROOT)}/define_environ.h'"
+  :ppc    => "''",
+  :i386   => "'-isysroot #{SDK_10_5} -mmacosx-version-min=10.5 -I#{SDK_10_5}/usr/lib/gcc/i686-apple-darwin10/4.0.1/include -I#{SDK_10_5}/usr/include/c++/4.0.0 -I#{SDK_10_5}/usr/include/c++/4.0.0/i686-apple-darwin9'",
+  :x86_64 => "'-include #{File.expand_path(TARGET_ROOT)}/define_environ.h'"
 }
 BUILD            = {
-  :ppc    => %(powerpc-apple-darwin8.0),
-  :i386   => %(i686-apple-darwin8.0),
+  :ppc    => %(powerpc-apple-darwin9.0),
+  :i386   => %(i686-apple-darwin9.0),
   :x86_64 => %(x86_64-apple-darwin10.0),
 }
 
@@ -33,7 +32,7 @@ def merge_lib source_file, target_file
   end
 end
 
-namespace :ruby19 do
+namespace :ruby_for_app do
   ALL_PLATFORMS.each do |platform|
     task platform.to_sym do
       mkdir_p "#{TARGET_ROOT}/include"
@@ -95,9 +94,7 @@ namespace :ruby19 do
     end
   end
   
-  task :build => [:clean] + ALL_PLATFORMS do
-    # yessir
-  end
+  task :build => [:clean] + ALL_PLATFORMS
   
   task :clean do
     sh "rm -rf #{TARGET_ROOT}/#{RUBY_DYLIB}"

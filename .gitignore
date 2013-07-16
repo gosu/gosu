@@ -13,7 +13,7 @@
 /mac/Gosu.xcodeproj/*.perspectivev3
 /mac/Ruby/include/
 /mac/Ruby/lib/
-/mac/Ruby/libruby.1.9.1.dylib
+/mac/Ruby/libruby.?.?.?.dylib
 /pkg/
 /reference/cpp/
 /reference/rdoc/
