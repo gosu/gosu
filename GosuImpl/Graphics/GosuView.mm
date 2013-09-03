@@ -3,6 +3,7 @@
 #import <UIKit/UIKit.h>
 
 #import <Gosu/Graphics.hpp>
+#import <Gosu/Window.hpp>
 #import "Common.hpp"
 #import "GosuView.hpp"
 
@@ -31,38 +32,47 @@ int Gosu::clipRectBaseFactor()
 
 // A controller to allow for autorotation.
 @implementation GosuViewController
-- (void)loadView {
+- (void)loadView
+{
     self.view = [[GosuView alloc] init];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
     return NO;
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     windowInstance().releaseMemory();
 }
 @end
 
 // A class extension to declare private methods
 @interface GosuView ()
-
-@property (nonatomic, retain) EAGLContext *context;
-
-- (BOOL) createFramebuffer;
-- (void) destroyFramebuffer;
-
+@property (nonatomic, strong) EAGLContext *context;
 @end
 
 @implementation GosuView
+{
+    // The pixel dimensions of the backbuffer
+    GLint backingWidth;
+    GLint backingHeight;
 
-@synthesize context;
+    // OpenGL names for the renderbuffer and framebuffers used to render to this view
+    GLuint viewRenderbuffer, viewFramebuffer;
 
-+ (Class)layerClass {
+    NSMutableSet* currentTouches;
+    Gosu::Touches* currentTouchesVector;
+}
+    
++ (Class)layerClass
+{
     return [CAEAGLLayer class];
 }
 
-- (id)init {
+- (id)init
+{
     if ((self = [super initWithFrame: [[UIScreen mainScreen] bounds]])) {
         CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
         
@@ -71,9 +81,9 @@ int Gosu::clipRectBaseFactor()
                                         [NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking,
                                         kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];*/
         
-        context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+        self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
         
-        if (!context || ![EAGLContext setCurrentContext:context]) {
+        if (!self.context || ![EAGLContext setCurrentContext:self.context]) {
             [self release];
             return nil;
         }
@@ -81,13 +91,14 @@ int Gosu::clipRectBaseFactor()
     return self;
 }
 
-- (void)drawView {
+- (void)drawView
+{
     if (not windowInstance().needsRedraw())
         return;
     
     Gosu::FPS::registerFrame();
     
-    [EAGLContext setCurrentContext:context];
+    [EAGLContext setCurrentContext:self.context];
     glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
     glViewport(0, 0, backingWidth, backingHeight);
     
@@ -97,11 +108,12 @@ int Gosu::clipRectBaseFactor()
     }
     
     glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
-    [context presentRenderbuffer:GL_RENDERBUFFER_OES];
+    [self.context presentRenderbuffer:GL_RENDERBUFFER_OES];
 }
 
-- (void)layoutSubviews {
-    [EAGLContext setCurrentContext:context];
+- (void)layoutSubviews
+{
+    [EAGLContext setCurrentContext:self.context];
     [self destroyFramebuffer];
     if ([self respondsToSelector:@selector(contentScaleFactor)])
         self.contentScaleFactor = Gosu::clipRectBaseFactor();
@@ -109,13 +121,14 @@ int Gosu::clipRectBaseFactor()
     [self drawView];
 }
 
-- (BOOL)createFramebuffer {
+- (BOOL)createFramebuffer
+{
     glGenFramebuffersOES(1, &viewFramebuffer);
     glGenRenderbuffersOES(1, &viewRenderbuffer);
     
     glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
     glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
-    [context renderbufferStorage:GL_RENDERBUFFER_OES fromDrawable:(CAEAGLLayer*)self.layer];
+    [self.context renderbufferStorage:GL_RENDERBUFFER_OES fromDrawable:(CAEAGLLayer*)self.layer];
     glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_RENDERBUFFER_OES, viewRenderbuffer);
     
     glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &backingWidth);
@@ -129,43 +142,51 @@ int Gosu::clipRectBaseFactor()
     return YES;
 }
 
-- (void)destroyFramebuffer {
+- (void)destroyFramebuffer
+{
     glDeleteFramebuffersOES(1, &viewFramebuffer);
     viewFramebuffer = 0;
     glDeleteRenderbuffersOES(1, &viewRenderbuffer);
     viewRenderbuffer = 0;
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     delete currentTouchesVector;
     [currentTouches release];
     [EAGLContext setCurrentContext:nil];
-    [context release];
+    [self.context release];
     [super dealloc];
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {    
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
     windowInstance().input().feedTouchEvent(0, touches);
 }
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
     windowInstance().input().feedTouchEvent(1, touches);
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
     windowInstance().input().feedTouchEvent(2, touches);
 }
 
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
     // TODO: Should be differentiated on the Gosu side.
-    [self touchesEnded: touches withEvent: event];
+    [self touchesEnded:touches withEvent:event];
 }
 
-- (BOOL)isMultipleTouchEnabled {
+- (BOOL)isMultipleTouchEnabled
+{
     return YES;
 }
 
-- (BOOL)isExclusiveTouch {
+- (BOOL)isExclusiveTouch
+{
     return YES;
 }
 
