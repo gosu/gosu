@@ -115,7 +115,6 @@ Pod::Spec.new do |s|
     Inspection.cpp
     IO.cpp
     Math.cpp
-    Orientation.mm
     TimingApple.cpp
     Utility.cpp
     UtilityApple.mm

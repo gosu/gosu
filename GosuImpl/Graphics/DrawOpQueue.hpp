@@ -73,8 +73,6 @@ public:
         double physHeight = std::abs(top - bottom);
 
         // Adjust for OpenGL having the wrong idea of where y=0 is.
-        // TODO: This should really happen *right before* setting up
-        // the glScissor.
         physY = screenHeight - physY - physHeight;
 
         clipRectStack.beginClipping(physX, physY, physWidth, physHeight);

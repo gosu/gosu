@@ -2,7 +2,6 @@
 #include <Gosu/TextInput.hpp>
 
 #include "MacUtility.hpp"
-#include "Orientation.hpp"
 #include "Input/AccelerometerReader.hpp"
 #import <UIKit/UIKit.h>
 

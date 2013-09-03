@@ -15,10 +15,6 @@
 #include <algorithm>
 #include <limits>
 
-#ifdef GOSU_IS_IPHONE
-#include "../Orientation.hpp"
-#endif
-
 struct Gosu::Graphics::Impl
 {
     unsigned virtWidth, virtHeight;
@@ -30,29 +26,6 @@ struct Gosu::Graphics::Impl
     
 #if 0
     std::mutex texMutex;
-#endif
-
-#ifdef GOSU_IS_IPHONE
-    Transform transformForOrientation(Orientation orientation)
-    {
-        Transform result;
-        switch (orientation)
-        {
-        case orLandscapeLeft:
-            result = translate(0, 0);
-            result = multiply(scale(1.0 * physWidth / virtWidth, 1.0 * physHeight / virtHeight), result);
-            return result;
-        default:
-            result = translate(0, 0);
-            result = multiply(scale(1.0 * physWidth / virtWidth, 1.0 * physHeight / virtHeight), result);
-            return result;
-        }
-    }
-    
-    void updateBaseTransform()
-    {
-        queues.front().setBaseTransform(transformForOrientation(currentOrientation()));
-    }
 #endif
 };
 
@@ -110,12 +83,9 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
         throw std::invalid_argument("Invalid virtual resolution.");
     
     pimpl->virtWidth = virtualWidth, pimpl->virtHeight = virtualHeight;
-    #ifndef GOSU_IS_IPHONE
-    // on the iPhone, updateCurrentTransform will handle this (yuck)
-    Transform baseTransform = scale(1.0 / virtualWidth  * pimpl->physWidth,
-                                    1.0 / virtualHeight * pimpl->physHeight);
-    pimpl->queues.front().setBaseTransform(baseTransform);
-    #endif
+    double scaleX = 1.0 / virtualWidth * pimpl->physWidth;
+    double scaleY = 1.0 / virtualHeight * pimpl->physHeight;
+    pimpl->queues.front().setBaseTransform(scale(scaleX, scaleY));
 }
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
@@ -126,9 +96,6 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
     // Clear leftover transforms, clip rects etc.
     pimpl->queues.front().reset();
     
-    #ifdef GOSU_IS_IPHONE
-    pimpl->updateBaseTransform();
-    #endif
     glClearColor(clearWithColor.red() / 255.f, clearWithColor.green() / 255.f,
         clearWithColor.blue() / 255.f, clearWithColor.alpha() / 255.f);
     glClear(GL_COLOR_BUFFER_BIT);
