@@ -86,12 +86,17 @@ namespace
     [UIDevice.currentDevice beginGeneratingDeviceOrientationNotifications];
     //UIApplication.sharedApplication.idleTimerDisabled = YES;
     UIApplication.sharedApplication.statusBarOrientation = UIInterfaceOrientationLandscapeRight;
-        
-    [[NSTimer scheduledTimerWithTimeInterval: windowInstance().updateInterval() / 1000.0
-              target: self
-              selector: @selector(doTick:)
-              userInfo: nil
-              repeats: YES] retain];
+    
+    NSInteger targetFPS = round(1000.0 / windowInstance().updateInterval());
+    
+    if (60 % targetFPS != 0) {
+        [NSTimer scheduledTimerWithTimeInterval:windowInstance().updateInterval() / 1000.0 target:self selector:@selector(doTick:) userInfo:nil repeats:YES];
+    }
+    else {
+        CADisplayLink *displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(doTick:)];
+        displayLink.frameInterval = 60 / targetFPS;
+        [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -114,7 +119,8 @@ namespace
     paused = false;
 }
 
-- (void)doTick:(NSTimer*)timer {
+- (void)doTick:(id)sender
+{
     if (!paused)
         windowInstance().update();
     [gosuView drawView];
