@@ -8,9 +8,6 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/Platform.hpp>
-#if 0
-#include <thread>
-#endif
 #include <cmath>
 #include <algorithm>
 #include <limits>
@@ -23,10 +20,6 @@ struct Gosu::Graphics::Impl
     DrawOpQueueStack queues;
     typedef std::vector<std::tr1::shared_ptr<Texture> > Textures;
     Textures textures;
-    
-#if 0
-    std::mutex texMutex;
-#endif
 };
 
 Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscreen)
@@ -338,10 +331,6 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     Bitmap bmp;
     applyBorderFlags(bmp, src, srcX, srcY, srcWidth, srcHeight, borderFlags);
 
-#if 0
-    std::mutex::scoped_lock lock(pimpl->texMutex);
-#endif
-    
     // Try to put the bitmap into one of the already allocated textures.
     for (Impl::Textures::iterator i = pimpl->textures.begin(); i != pimpl->textures.end(); ++i)
     {
