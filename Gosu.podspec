@@ -36,7 +36,7 @@ Pod::Spec.new do |s|
   s.subspec 'Gosu' do |ss|
     ss.dependency 'Gosu/libvorbis' 
 
-    ss.frameworks = 'OpenGLES', 'OpenAL', 'IOKit', 'Carbon', 'Cocoa', 'AudioToolbox', 'ApplicationServices'
+    ss.frameworks = 'OpenGL', 'OpenAL', 'IOKit', 'Carbon', 'Cocoa', 'AudioToolbox', 'ApplicationServices'
     ss.library   = 'iconv'
     # To find libpng headers, TODO use compiler flags for that, does not need to leak into client project
     ss.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/X11/include', 'CLANG_CXX_LIBRARY' => 'libstdc++' }
