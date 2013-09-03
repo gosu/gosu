@@ -125,9 +125,9 @@ Gosu::Window::Window(unsigned width, unsigned height,
 	pimpl->window.reset([[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]]);
     pimpl->controller.reset([[GosuViewController alloc] init]);
     gosuView = (GosuView*)pimpl->controller.obj().view;
-	[pimpl->window.obj() addSubview: gosuView];
+    pimpl->window.obj().rootViewController = pimpl->controller.obj();
     
-    pimpl->graphics.reset(new Graphics(screenWidth(), screenHeight(), false));
+    pimpl->graphics.reset(new Graphics(screenHeight(), screenWidth(), false));
     pimpl->graphics->setResolution(screenHeight(), screenWidth());
     pimpl->audio.reset(new Audio());
     pimpl->input.reset(new Input(gosuView, updateInterval));
@@ -136,7 +136,8 @@ Gosu::Window::Window(unsigned width, unsigned height,
     pimpl->input->onTouchEnded = std::tr1::bind(&Window::touchEnded, this, _1);
     pimpl->interval = updateInterval;
 
-    [pimpl->window.obj() makeKeyAndVisible];
+    // TODO: Get rid of performSelector:withObject:afterDelay:, without causing a C++ static initialization error
+    [pimpl->window.obj() performSelector:@selector(makeKeyAndVisible) withObject:nil afterDelay:0];
 }
 
 Gosu::Window::~Window()

@@ -39,14 +39,12 @@ struct Gosu::Graphics::Impl
         switch (orientation)
         {
         case orLandscapeLeft:
-            result = translate(physWidth, 0);
-            result = multiply(rotate(90), result);
-            result = multiply(scale(1.0 * physHeight / virtWidth, 1.0 * physWidth / virtHeight), result);
+            result = translate(0, 0);
+            result = multiply(scale(1.0 * physWidth / virtWidth, 1.0 * physHeight / virtHeight), result);
             return result;
         default:
-            result = translate(0, physHeight);
-            result = multiply(rotate(-90), result);
-            result = multiply(scale(1.0 * physHeight / virtWidth, 1.0 * physWidth / virtHeight), result);
+            result = translate(0, 0);
+            result = multiply(scale(1.0 * physWidth / virtWidth, 1.0 * physHeight / virtHeight), result);
             return result;
         }
     }
@@ -65,9 +63,6 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     pimpl->physHeight = physHeight;
     pimpl->virtWidth  = physWidth;
     pimpl->virtHeight = physHeight;
-    #ifdef GOSU_IS_IPHONE
-    std::swap(pimpl->virtWidth, pimpl->virtHeight);
-    #endif
     pimpl->fullscreen = fullscreen;
     
     // Should be merged into RenderState altogether.

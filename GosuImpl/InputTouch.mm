@@ -27,16 +27,7 @@ struct Gosu::Input::Impl
     Touch translateTouch(UITouch* uiTouch)
     {
         CGPoint point = [uiTouch locationInView: view];
-        Touch touch = { uiTouch, point.y, point.x };
-        switch (currentOrientation())
-        {
-        case orLandscapeLeft:
-            touch.y = [view bounds].size.width - touch.y;
-            break;
-        default:
-            touch.x = [view bounds].size.height - touch.x;
-            break;
-        }
+        Touch touch = { uiTouch, point.x, point.y };
         touch.x *= factorX, touch.y *= factorY;
         return touch;
     }
@@ -77,7 +68,7 @@ void Gosu::Input::feedTouchEvent(int type, void* touches)
         [pimpl->currentTouchesSet.get() minusSet: uiTouches], f = &onTouchEnded;
     for (UITouch* uiTouch in uiTouches)
         if (*f)
-            (*f)(pimpl->translateTouch(uiTouch));        
+            (*f)(pimpl->translateTouch(uiTouch));
 }
 
 wchar_t Gosu::Input::idToChar(Button btn)
