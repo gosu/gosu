@@ -8,6 +8,7 @@
 #import <CoreGraphics/CoreGraphics.h>
 #import <UIKit/UIKit.h>
 #import <OpenGLES/EAGL.h>
+#import <QuartzCore/QuartzCore.h>
 
 using namespace std::tr1::placeholders;
 
@@ -70,21 +71,9 @@ namespace
 }
 
 @implementation GosuAppDelegate
-// Required according to docs...
-- (void)applicationProtectedDataWillBecomeUnavailable:(UIApplication *)application {
-}
-
-// Required according to docs...
-- (void)applicationProtectedDataDidBecomeAvailable:(UIApplication *)application {
-}
-
-// Required according to docs...
-- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-}
-
-- (void)applicationDidFinishLaunching:(UIApplication *)application {
-    [UIDevice.currentDevice beginGeneratingDeviceOrientationNotifications];
-    //UIApplication.sharedApplication.idleTimerDisabled = YES;
+- (void)applicationDidFinishLaunching:(UIApplication *)application
+{
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     UIApplication.sharedApplication.statusBarOrientation = UIInterfaceOrientationLandscapeRight;
     
     NSInteger targetFPS = round(1000.0 / windowInstance().updateInterval());
@@ -99,9 +88,9 @@ namespace
     }
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application {
-	if (Gosu::Song::currentSong())
-    {
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+	if (Gosu::Song::currentSong()) {
         Gosu::Song::currentSong()->pause();
         pausedSong = true;
     }
@@ -109,9 +98,9 @@ namespace
     windowInstance().loseFocus();
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-	if (pausedSong)
-    {
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+	if (pausedSong) {
         if (Gosu::Song::currentSong())
             Gosu::Song::currentSong()->play();
         pausedSong = false;
