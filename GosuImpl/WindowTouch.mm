@@ -73,9 +73,6 @@ namespace
 @implementation GosuAppDelegate
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {
-    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    UIApplication.sharedApplication.statusBarOrientation = UIInterfaceOrientationLandscapeRight;
-    
     NSInteger targetFPS = round(1000.0 / windowInstance().updateInterval());
     
     if (60 % targetFPS != 0) {
