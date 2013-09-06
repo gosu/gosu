@@ -52,7 +52,6 @@ struct Gosu::Window::Impl
     ObjRef<UIWindow> window;
     ObjRef<GosuViewController> controller;
     std::auto_ptr<Graphics> graphics;
-    std::auto_ptr<Audio> audio;
     std::auto_ptr<Input> input;
     double interval;
 };
@@ -126,7 +125,6 @@ Gosu::Window::Window(unsigned width, unsigned height,
     
     pimpl->graphics.reset(new Graphics(screenHeight(), screenWidth(), false));
     pimpl->graphics->setResolution(screenHeight(), screenWidth());
-    pimpl->audio.reset(new Audio());
     pimpl->input.reset(new Input(gosuView, updateInterval));
     pimpl->input->onTouchBegan = std::tr1::bind(&Window::touchBegan, this, _1);
     pimpl->input->onTouchMoved = std::tr1::bind(&Window::touchMoved, this, _1);
@@ -167,12 +165,14 @@ Gosu::Graphics& Gosu::Window::graphics()
 
 const Gosu::Audio& Gosu::Window::audio() const
 {
-    return *pimpl->audio;
+    static Gosu::Audio audio;
+    return audio;
 }
 
 Gosu::Audio& Gosu::Window::audio()
 {
-    return *pimpl->audio;
+    static Gosu::Audio audio;
+    return audio;
 }
 
 const Gosu::Input& Gosu::Window::input() const
