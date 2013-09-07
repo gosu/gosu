@@ -67,21 +67,35 @@ namespace
     GosuView* gosuView = nil;
     bool pausedSong = false;
     bool paused = false;
+
+    id timerOrDisplayLink = nil;
 }
 
 @implementation GosuAppDelegate
-- (void)applicationDidFinishLaunching:(UIApplication *)application
+- (void)setupTimerOrDisplayLink
 {
-    NSInteger targetFPS = round(1000.0 / windowInstance().updateInterval());
+    if (timerOrDisplayLink)
+        return;
     
+    NSInteger targetFPS = round(1000.0 / windowInstance().updateInterval());
+        
     if (60 % targetFPS != 0) {
-        [NSTimer scheduledTimerWithTimeInterval:windowInstance().updateInterval() / 1000.0 target:self selector:@selector(doTick:) userInfo:nil repeats:YES];
+        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:windowInstance().updateInterval() / 1000.0 target:self selector:@selector(doTick:) userInfo:nil repeats:YES];
+        
+        timerOrDisplayLink = [timer retain];
     }
     else {
         CADisplayLink *displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(doTick:)];
         displayLink.frameInterval = 60 / targetFPS;
         [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+        
+        timerOrDisplayLink = [displayLink retain];
     }
+}
+
+- (void)applicationDidFinishLaunching:(UIApplication *)application
+{
+    [self setupTimerOrDisplayLink];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -102,6 +116,18 @@ namespace
         pausedSong = false;
     }
     paused = false;
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    [timerOrDisplayLink invalidate];
+    [timerOrDisplayLink release];
+    timerOrDisplayLink = nil;
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    [self setupTimerOrDisplayLink];
 }
 
 - (void)doTick:(id)sender
