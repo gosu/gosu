@@ -14,9 +14,12 @@ Pod::Spec.new do |s|
   s.author       = { "Julian Raschke" => "julian@raschke.de" }
 
   s.source       = { :git => "https://github.com/jlnr/gosu.git" }
-
+  
+  s.compiler_flags = '-DGOSU_DEPRECATED='
+  
   s.subspec 'libogg' do |ss|
     ss.header_dir = 'ogg'
+    
     ss.public_header_files = 'dependencies/libogg/include/ogg'
     ss.source_files = 'dependencies/libogg/include/ogg', 'dependencies/libogg/src'
   end
