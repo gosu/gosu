@@ -87,6 +87,8 @@ Pod::Spec.new do |s|
     ss.platform = :osx, '10.5'
   end
   
+  # TODO - use multi-platform support for this
+  # http://docs.cocoapods.org/specification.html#ios
   s.subspec 'GosuTouch' do |ss|
     ss.dependency 'Gosu/libvorbis' 
 
