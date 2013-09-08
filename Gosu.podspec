@@ -27,6 +27,9 @@ Pod::Spec.new do |s|
   s.subspec 'libvorbis' do |ss|
     ss.dependency 'Gosu/libogg'
     
+    # Silence one warning in psy.c
+    ss.compiler_flags = '-Wno-comment'
+    
     ss.header_dir = 'vorbis'
     ss.public_header_files = 'dependencies/libvorbis/include/vorbis'
     ss.source_files = %w(analysis bitrate block codebook envelope floor0 floor1
