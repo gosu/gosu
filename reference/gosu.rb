@@ -303,7 +303,7 @@ module Gosu
     # @see argb
     def self.rgba(*args); end
     
-    # This method is equivalent to calling +Color.new+, but the name makes the parameter order explicit.
+    # This method is equivalent to calling `Color.new`, but the name makes the parameter order explicit.
     # 
     # @return (see #initialize)
     # @overload argb(argb)
@@ -406,14 +406,14 @@ module Gosu
     # 
     # @see #draw_rel
     # @see Gosu::Image.from_text
-    # @see file:reference/Drawing_with_Colors.rdoc Drawing with Colors
-    # @see file:reference/Z_Ordering.rdoc Z-ordering
+    # @see file:reference/Drawing_with_Colors.mdown Drawing with Colors
+    # @see file:reference/Z-Ordering.mdown
     def draw(text, x, y, z, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
     
     ##
     # Draws a single line of text relative to (x, y).
     # 
-    # The text is aligned to the drawing location according to the +rel_x+ and +rel_y+ parameters: a value of 0.0 corresponds to top and left, while 1.0 corresponds to bottom and right. A value of 0.5 naturally corresponds to the center of the text.
+    # The text is aligned to the drawing location according to the `rel_x` and `rel_y` parameters: a value of 0.0 corresponds to top and left, while 1.0 corresponds to bottom and right. A value of 0.5 naturally corresponds to the center of the text.
     # 
     # All real numbers are valid alignment values and will be interpolated (or extrapolated) accordingly.
     # 
@@ -423,8 +423,8 @@ module Gosu
     # @param (see #draw)
     # 
     # @see #draw
-    # @see file:reference/Drawing_with_Colors.rdoc Drawing with Colors
-    # @see file:reference/Z_Ordering.rdoc Z-ordering
+    # @see file:reference/Drawing_with_Colors.mdown Drawing with Colors
+    # @see file:reference/Z-Ordering.mdown
     def draw_rel(text, x, y, z, rel_x, rel_y, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
     
     ##
@@ -479,13 +479,13 @@ module Gosu
     # 
     # @see load_tiles
     # @see from_text
-    # @see file:reference/Tileability.rdoc
+    # @see file:reference/Tileability.mdown
     def initialize(window, source, tileable, left, top, width, height); end
     
     ##
     # Creates a reusable image from one or more lines of text.
     #
-    # The text is always rendered in white. To draw it in a different color, use the +color+ parameter of {#draw}, et al.
+    # The text is always rendered in white. To draw it in a different color, use the `color` parameter of {#draw}, et al.
     # 
     # @overload from_text(window, text, font_name, font_height)
     # @overload from_text(window, text, font_name, font_height, line_spacing, width, align)
@@ -514,7 +514,7 @@ module Gosu
     # @param tile_height [Fixnum] If positive, this is the height of the individual tiles; if negative, the image is divided into -tile_height rows.
     # @param tileable [true, false]
     # 
-    # @see file:reference/Tileability.rdoc
+    # @see file:reference/Tileability.mdown
     def self.load_tiles(window, source, tile_width, tile_height, tileable); end
     
     # @!endgroup
@@ -535,8 +535,8 @@ module Gosu
     # 
     # @see #draw_rot
     # @see #draw_as_quad
-    # @see file:reference/Drawing_with_Colors.rdoc Drawing with Colors
-    # @see file:reference/Z_Ordering.rdoc Z-ordering
+    # @see file:reference/Drawing_with_Colors.mdown Drawing with Colors
+    # @see file:reference/Z-Ordering.mdown
     def draw(x, y, z, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
     
     ##
@@ -549,8 +549,8 @@ module Gosu
     # @param (see #draw)
     # 
     # @see #draw
-    # @see file:reference/Drawing_with_Colors.rdoc Drawing with Colors
-    # @see file:reference/Z_Ordering.rdoc Z-ordering
+    # @see file:reference/Drawing_with_Colors.mdown Drawing with Colors
+    # @see file:reference/Z-Ordering.mdown
     def draw_rot(x, y, z, angle, center_x=0.5, center_y=0.5, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
     
     ##
@@ -573,9 +573,9 @@ module Gosu
     # @param mode [:default, :additive] the blending mode to use.
     # 
     # @see #draw
-    # @see file:reference/Drawing_with_Colors.rdoc Drawing with Colors
-    # @see file:reference/Order_of_Corners.rdoc Order of Corners
-    # @see file:reference/Z_Ordering.rdoc Z-ordering
+    # @see file:reference/Drawing_with_Colors.mdown Drawing with Colors
+    # @see file:reference/Order_of_Corners.mdown Order of Corners
+    # @see file:reference/Z-Ordering.mdown
     def draw_as_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode=:default); end
     
     # @!endgroup
@@ -648,7 +648,7 @@ module Gosu
     ##
     # Plays the sample with panning.
     # 
-    # @note Samples played with this method will not be as loud as those played with {#play}, even if +pan+ is 0. This is due to a limitation in the way panning works.
+    # @note Samples played with this method will not be as loud as those played with {#play}, even if `pan` is 0. This is due to a limitation in the way panning works.
     #
     # @return [SampleInstance]
     # @param pan [Float] the amount of panning. 0 is centered.
@@ -670,7 +670,7 @@ module Gosu
     ##
     # Stops playback of this sample instance. After calling this method, the sample instance is useless and can be discarded.
     # 
-    # Calling +stop+ after the sample has finished is harmless and has no effect.
+    # Calling `stop` after the sample has finished is harmless and has no effect.
     # 
     # @return [void]
     def stop; end
@@ -727,7 +727,7 @@ module Gosu
     # 
     # If another song is currently playing, it will be stopped and this song will be set as the current song.
     # 
-    # If +looping+ is false, the current song will be set to +nil+ when this song finishes.
+    # If `looping` is false, the current song will be set to `nil` when this song finishes.
     # 
     # @return [void]
     # @param looping [true, false] whether the song should play in a loop.
@@ -745,7 +745,7 @@ module Gosu
     def paused?; end
     
     ##
-    # Stops playback if this song is the current song. The current song is set to +nil+.
+    # Stops playback if this song is the current song. The current song is set to `nil`.
     # 
     # @return [void]
     def stop; end
@@ -758,7 +758,7 @@ module Gosu
   ##
   # A TextInput is an invisible object that handles input using the operating system's input manager.
   #
-  # At its most basic, you only need to set {Gosu::Window#text_input} to an instance of this class. The TextInput will then handle all keyboard input until {Gosu::Window#text_input} is set to +nil+. Any text the user has typed is available through {#text}.
+  # At its most basic, you only need to set {Gosu::Window#text_input} to an instance of this class. The TextInput will then handle all keyboard input until {Gosu::Window#text_input} is set to `nil`. Any text the user has typed is available through {#text}.
   #
   # This class is purely back-end and does not come with a GUI; drawing the input field is up to you, the programmer. The best way to do that is left completely open. TextInput only aims to provide a foundation for you to build your own GUI.
   # 
@@ -922,7 +922,7 @@ module Gosu
     # @!endgroup
     
     ##
-    # Returns whether the button +id+ is currently pressed. Button states are updated once per tick, so repeated calls during the same tick will always yeild the same result.
+    # Returns whether the button `id` is currently pressed. Button states are updated once per tick, so repeated calls during the same tick will always yeild the same result.
     # 
     # @return [true, false] whether the button is currently pressed.
     # @param (see #button_down)
@@ -950,8 +950,8 @@ module Gosu
     # 
     # @see #draw_triangle
     # @see #draw_quad
-    # @see file:reference/Drawing_with_Colors.rdoc Drawing with Colors
-    # @see file:reference/Z_Ordering.rdoc Z-ordering
+    # @see file:reference/Drawing_with_Colors.mdown Drawing with Colors
+    # @see file:reference/Z-Ordering.mdown
     def draw_line(x1, y1, c1, x2, y2, c2, z=0, mode=:default); end
     
     ##
@@ -972,8 +972,8 @@ module Gosu
     #
     # @see #draw_line
     # @see #draw_quad
-    # @see file:reference/Drawing_with_Colors.rdoc Drawing with Colors
-    # @see file:reference/Z_Ordering.rdoc Z-ordering
+    # @see file:reference/Drawing_with_Colors.mdown Drawing with Colors
+    # @see file:reference/Z-Ordering.mdown
     def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=:default); end
     
     ##
@@ -997,9 +997,9 @@ module Gosu
     #
     # @see #draw_line
     # @see #draw_triangle
-    # @see file:reference/Drawing_with_Colors.rdoc Drawing with Colors
-    # @see file:reference/Order_of_Corners.rdoc Order of Corners
-    # @see file:reference/Z_Ordering.rdoc Z-ordering
+    # @see file:reference/Drawing_with_Colors.mdown Drawing with Colors
+    # @see file:reference/Order_of_Corners.mdown Order of Corners
+    # @see file:reference/Z-Ordering.mdown
     def draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=:default); end
     
     # @!endgroup
@@ -1025,7 +1025,7 @@ module Gosu
     # @yield OpenGL code.
     # 
     # @see #draw
-    # @see file:reference/Z_Ordering Z-ordering
+    # @see file:reference/Z-Ordering
     # @see file:examples/OpenGLIntegration.rb
     def gl(z=nil); end
     
