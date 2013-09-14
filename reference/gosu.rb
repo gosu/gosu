@@ -359,7 +359,7 @@ module Gosu
   ##
   # A font can be used to draw text on a Window object very flexibly.
   # Fonts are ideal for small texts that change regularly. For large,
-  # static texts you should use {Image#from_text}.
+  # static texts you should use {Gosu::Image#from_text}.
   class Font
     ##
     # The font's name. This may be the name of a system font or a filename.
@@ -474,7 +474,7 @@ module Gosu
     # @overload initialize(window, source, tileable, left, top, width, height)
     #   Loads a rectangular slice of the image.
     #   
-    #   If you need to load multiple tiles from a texture atlas, {from_tiles} is almost always a better choice.
+    #   If you need to load multiple tiles from a texture atlas, {load_tiles} is almost always a better choice.
     #   
     # 
     # @see load_tiles
@@ -554,25 +554,13 @@ module Gosu
     def draw_rot(x, y, z, angle, center_x=0.5, center_y=0.5, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
     
     ##
-    # This method can be used for advanced non-rectangular drawing techniques, e.g., faking perspective or .
+    # Draws the image as an arbitrary quad. This method can be used for advanced non-rectangular drawing techniques, e.g., faking perspective or isometric projection.
     # 
     # @return [void]
-    # @param x1 [Float] the X coordinate of the first vertex.
-    # @param y1 [Float] the Y coordinate of the first vertex.
-    # @param c1 [Gosu::Color] the color of the first vertex.
-    # @param x2 [Float] the X coordinate of the second vertex.
-    # @param y2 [Float] the Y coordinate of the second vertex.
-    # @param c2 [Gosu::Color] the color of the second vertex.
-    # @param x3 [Float] the X coordinate of the third vertex.
-    # @param y3 [Float] the Y coordinate of the third vertex.
-    # @param c3 [Gosu::Color] the color of the third vertex.
-    # @param x4 [Float] the X coordinate of the fourth vertex.
-    # @param y4 [Float] the Y coordinate of the fourth vertex.
-    # @param c4 [Gosu::Color] the color of the fourth vertex.
-    # @param z [Float] the Z-order.
-    # @param mode [:default, :additive] the blending mode to use.
+    # @param (see Gosu::Window#draw_quad)
     # 
     # @see #draw
+    # @see Gosu::Window#draw_quad
     # @see file:reference/Drawing_with_Colors.mdown Drawing with Colors
     # @see file:reference/Order_of_Corners.mdown Order of Corners
     # @see file:reference/Z-Ordering.mdown
