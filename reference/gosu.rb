@@ -495,7 +495,7 @@ module Gosu
     # @param text [String]
     # @param font_name [String] the name of a system font, or a path to a TrueType Font (TTF) file. A path must contain at least one '/' character to distinguish it from a system font.
     # @param font_height [Fixnum] the height of the font, in pixels.
-    # @param line_spacing [Fixnum] the vertical spacing beteen lines, in pixels.
+    # @param line_spacing [Fixnum] the vertical spacing beteen lines.
     # @param width [Fixnum] the width of the image, in pixels. Long lines will be automatically wrapped around to avoid overflow, but overlong words will be truncated.
     # @param align [:left, :right, :center, :justify] the text alignment.
     # 
@@ -557,17 +557,17 @@ module Gosu
     # This method can be used for advanced non-rectangular drawing techniques, e.g., faking perspective or .
     # 
     # @return [void]
-    # @param x1 [Float] the X coordinate of the first vertex, in pixels.
-    # @param y1 [Float] the Y coordinate of the first vertex, in pixels.
+    # @param x1 [Float] the X coordinate of the first vertex.
+    # @param y1 [Float] the Y coordinate of the first vertex.
     # @param c1 [Gosu::Color] the color of the first vertex.
-    # @param x2 [Float] the X coordinate of the second vertex, in pixels.
-    # @param y2 [Float] the Y coordinate of the second vertex, in pixels.
+    # @param x2 [Float] the X coordinate of the second vertex.
+    # @param y2 [Float] the Y coordinate of the second vertex.
     # @param c2 [Gosu::Color] the color of the second vertex.
-    # @param x3 [Float] the X coordinate of the third vertex, in pixels.
-    # @param y3 [Float] the Y coordinate of the third vertex, in pixels.
+    # @param x3 [Float] the X coordinate of the third vertex.
+    # @param y3 [Float] the Y coordinate of the third vertex.
     # @param c3 [Gosu::Color] the color of the third vertex.
-    # @param x4 [Float] the X coordinate of the fourth vertex, in pixels.
-    # @param y4 [Float] the Y coordinate of the fourth vertex, in pixels.
+    # @param x4 [Float] the X coordinate of the fourth vertex.
+    # @param y4 [Float] the Y coordinate of the fourth vertex.
     # @param c4 [Gosu::Color] the color of the fourth vertex.
     # @param z [Float] the Z-order.
     # @param mode [:default, :additive] the blending mode to use.
