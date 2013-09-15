@@ -1,4 +1,4 @@
-= Drawing with Colors
+# Drawing with Colors
 
 Almost all image drawing functions accept modulation colors. The colors of all pixels on the source image will be multiplied with these colors, where a channel value of 255 corresponds to the maximum value of 1.0. This means modulation colors can be used only to reduce particular channels of an image.
 

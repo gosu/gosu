@@ -21,7 +21,7 @@ COMMON_RUBY_FILES = COMMON_FILES + FileList[
   'examples/*.rb',
   'examples/media/*',
   'reference/**/*.rb',
-  'reference/**/*.rdoc',
+  'reference/**/*.mdown',
 ]
 
 GOSU_VERSION = ENV['GOSU_RELEASE_VERSION'] || '0.0.0'
@@ -46,8 +46,6 @@ EOS
   s.homepage = 'http://www.libgosu.org/'
   s.required_ruby_version = Gem::Requirement.new('>= 1.8.2')
   s.summary = '2D game development library.'
-  s.rdoc_options = %w(README.txt COPYING reference/gosu.rb) +
-    Dir['reference/*.rdoc'] + %w(--title Gosu --main README.txt)
 end
 
 def upload filename
