@@ -8,6 +8,8 @@
 #include <Gosu/Input.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Bitmap.hpp>
+#include <Gosu/Image.hpp>
+#include <Gosu/ImageData.hpp>
 #include <Gosu/Timing.hpp>
 #include <Gosu/TR1.hpp>
 #include <Gosu/Utility.hpp>
@@ -346,34 +348,30 @@ void Gosu::Window::setCaption(const std::wstring& caption)
     XSync(pimpl->display, false);
 }
 
-void Gosu::Window::setIcon(Gosu::Bitmap icon) {
-
-    int size;
-    unsigned long *data;
+void Gosu::Window::setIcon(const Gosu::Image& image) {
+ 
+    Gosu::Bitmap icon = image.getData().toBitmap();
     
     unsigned width = icon.width();
     unsigned height = icon.height();
     
-    size = 2 + (width * height);
-    data = new unsigned long[size * sizeof(long)];
-    int x, y;
-    Gosu::Color color;
-      
+    int size = 2 + (width * height);
+
+    std::vector<unsigned long> data(size);
     data[0] = width;
-    data[1] = height;
-      
-    for (y = 0; y < height; y++) {
-      for (x = 0; x < width; x++) {
-	color = icon.getPixel(x, y);
-	data[2 + y * width + x] = color.argb();	  
+    data[1] = height;        
+    
+    Gosu::Color color;
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        color = icon.getPixel(x, y);
+        data[2 + y * width + x] = color.argb();
       }
     }
-      
+
     Atom _NET_WM_ICON = XInternAtom(pimpl->display, "_NET_WM_ICON", False);
     XChangeProperty(pimpl->display, pimpl->window, _NET_WM_ICON, XA_CARDINAL, 32,
-		    PropModeReplace, (unsigned char *)data, size);
-    
-    delete []data;
+                   PropModeReplace, reinterpret_cast<unsigned char*>(data.data()), size);
 }
 
 namespace GosusDarkSide

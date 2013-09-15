@@ -40,7 +40,8 @@ namespace Gosu
 
         std::wstring caption() const;
         void setCaption(const std::wstring& caption);
-        
+        void setIcon(const Gosu::Image& image);
+	
         double updateInterval() const;
 
         //! Enters a modal loop where the Window is visible on screen and
@@ -98,7 +99,6 @@ namespace Gosu
         #endif
         
         #ifdef GOSU_IS_UNIX
-	void setIcon(Gosu::Bitmap);
         // Context for creating shared contexts.
         // Only on Unices (so far).
         typedef std::tr1::shared_ptr<std::tr1::function<void()> > SharedContext;
