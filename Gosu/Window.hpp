@@ -98,6 +98,7 @@ namespace Gosu
         #endif
         
         #ifdef GOSU_IS_UNIX
+	void setIcon(Gosu::Bitmap);
         // Context for creating shared contexts.
         // Only on Unices (so far).
         typedef std::tr1::shared_ptr<std::tr1::function<void()> > SharedContext;
