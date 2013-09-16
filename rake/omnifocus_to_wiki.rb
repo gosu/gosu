@@ -1,8 +1,15 @@
+# This is a very ad-hoc rake task that I (@jlnr) can use to export my current
+# OmniFocus To Do list to github. In an ideal world, we would be using github
+# issues for everything, but there is just a lot less friction if I can use a
+# desktop app, especially while I'm on the (rail)road.
+
 TODO_BASENAME = 'To Do.md'
 
 desc "Publish OmniFocus tasks on ToDo wiki page"
-task :todo do
+task :omnifocus_to_wiki do
   require 'appscript'
+  
+  # Requires the Gosu wiki to be checked out in parallel to Gosu itself.
   Dir.chdir('../Gosu Wiki') do
     sh 'git pull >/dev/null'
     
