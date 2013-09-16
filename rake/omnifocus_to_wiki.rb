@@ -18,8 +18,6 @@ task :omnifocus_to_wiki do
       my_projects = doc.folders["Solo Game-Dev"].projects.get
       gosu_projects = my_projects.select { |p| p.name.get =~ /^Gosu/ }
       
-      wiki_page.puts "# To Do list"
-      wiki_page.puts
       wiki_page.puts "This list of tasks is exported automatically from my OmniFocus projects."
       wiki_page.puts "(Last update: #{Date.today})"
       wiki_page.puts
@@ -30,7 +28,7 @@ task :omnifocus_to_wiki do
         root.tasks.get.each do |task|
           next if $shown_tasks.include? task or task.completed.get
           $shown_tasks << task
-          puts "#{' ' * (indent * 2)}* #{task.name.get.gsub('_', '\_')}"
+          puts "#{' ' * (indent * 2)}* #{task.name.get.gsub('_', '\_').gsub('<', '&lt;')}"
           list_tasks_in task, indent.succ unless task.tasks.get.empty?
         end
       end
