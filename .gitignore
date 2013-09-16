@@ -1,23 +1,14 @@
 (*)
 /.bundle
 /vendor
-/Gosu.framework/
-/Gosu.framework.dSYM/
 /lib/*.dSYM
 /lib/Gosu*.lib
 /lib/gosu.*.bundle
 /lib/gosu.*.so
 /lib/libgosu*.a
-/mac/build/
-/mac/Gosu.xcodeproj/*.pbxuser
-/mac/Gosu.xcodeproj/*.perspectivev3
-/mac/Ruby/include/
-/mac/Ruby/lib/
-/mac/Ruby/libruby.?.?.?.dylib
 /pkg/
 /reference/cpp/
 /reference/rdoc/
-/RubyGosu App.app/
 /website/downloads/
 /website/cpp/
 /website/index.html
@@ -36,8 +27,6 @@
 /windows/Release with Ruby 1.9
 
 .yardoc/
-/xcode/Gosu.xcodeproj/xcuserdata/
-/xcode/Gosu.xcodeproj/project.xcworkspace/xcuserdata/
 
 # QtCreator project files
 Gosu.config
