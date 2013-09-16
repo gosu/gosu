@@ -5,6 +5,7 @@
 source 'https://rubygems.org'
 
 gem 'yard'
+gem 'rdiscount'
 gem 'rake', '< 0.9'
 gem 'mysql'
 gem 'rmagick'

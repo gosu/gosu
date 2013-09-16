@@ -1,1 +1,1 @@
-reference/*.rb - README.txt COPYING reference/*.mdown --markup markdown --output reference/rdoc
+reference/*.rb - README.txt COPYING reference/*.md --markup markdown -M rdiscount --output reference/rdoc
