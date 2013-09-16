@@ -1,12 +1,12 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    mysql (2.8.1)
+    mysql (2.9.1)
     rake (0.8.7)
     rb-appscript (0.6.1)
     rdiscount (2.1.6)
-    rmagick (2.13.1)
-    yard (0.7.5)
+    rmagick (2.13.2)
+    yard (0.8.7.1)
 
 PLATFORMS
   ruby
