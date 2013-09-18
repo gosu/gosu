@@ -149,6 +149,11 @@
     $1 = !!rb_respond_to($input, rb_intern("to_i"));
 }
 
+// Conversion of Gosu::Image to Gosu::Bitmap
+%typemap(in) Gosu::Image {
+  $1 = $input.toData().toBitmap();
+}
+
 // Header inclusion (order irrelevant)
 %module(directors="1") gosu
 %{
@@ -668,7 +673,9 @@ namespace Gosu {
 };
 
 // Window
+%ignore Gosu::Window::setIcon(const Gosu::Bitmap& icon);
 %rename("caption=") setCaption;
+%rename("icon=") setIcon;
 %rename("button_down?") isButtonDown;
 %rename("text_input=") setTextInput;
 %rename("mouse_x=") setMouseX;
@@ -758,6 +765,10 @@ namespace Gosu {
     }
     bool fullscreen() const {
         return $self->graphics().fullscreen();
+    }
+    
+    void setIcon(const Gosu::Image& icon) {
+        $self->setIcon(icon.getData().toBitmap());
     }
     
     void unsafe_gl() {

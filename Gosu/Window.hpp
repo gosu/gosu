@@ -40,7 +40,7 @@ namespace Gosu
 
         std::wstring caption() const;
         void setCaption(const std::wstring& caption);
-        void setIcon(const Gosu::Image& image);
+        void setIcon(const Gosu::Bitmap& icon);
 	
         double updateInterval() const;
 

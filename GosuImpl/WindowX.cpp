@@ -348,9 +348,7 @@ void Gosu::Window::setCaption(const std::wstring& caption)
     XSync(pimpl->display, false);
 }
 
-void Gosu::Window::setIcon(const Gosu::Image& image) {
- 
-    Gosu::Bitmap icon = image.getData().toBitmap();
+void Gosu::Window::setIcon(const Gosu::Bitmap& icon) {
     
     unsigned width = icon.width();
     unsigned height = icon.height();
