@@ -48,7 +48,7 @@ class Gosu::Macro : public Gosu::ImageData
         
         // Since this matrix is relatively sparse, we unroll all three solving paths.
         
-        static const Transform nullTransform = { 0 };
+        static const Transform nullTransform = {{ 0 }};
         
         // Row 7 is completely useless
         if (x2 == x4 && x3 == x4)
@@ -154,12 +154,12 @@ class Gosu::Macro : public Gosu::ImageData
         
         // Let's hope I never have to debug/understand this again! :D
         
-        Transform result = {
+        Transform result = {{
             c[0], c[3], 0, c[6],
             c[1], c[4], 0, c[7],
             0, 0, 1, 0,
             c[2], c[5], 0, 1
-        };
+        }};
         return result;
     }
     
@@ -211,7 +211,7 @@ public:
         double x4, double y4, Color c4,
         ZPos z, AlphaMode mode) const
     {
-        if (c1 != 0xffffffff || c2 != 0xffffffff || c3 != 0xffffffff || c4 != 0xffffffff)
+        if (c1 != Color::WHITE || c2 != Color::WHITE || c3 != Color::WHITE || c4 != Color::WHITE)
             throw std::invalid_argument("Macros cannot be tinted with colors yet");
         std::tr1::function<void()> f = std::tr1::bind(&Macro::drawVertexArrays, this, x1, y1, x2, y2, x3, y3, x4, y4);
         graphics.scheduleGL(f, z);

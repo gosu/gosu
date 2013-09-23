@@ -169,7 +169,7 @@ struct Gosu::Window::Impl
                     active = false;
             }
             if (event.type == Expose && event.xexpose.count == 0 &&
-                        window->graphics().begin(Colors::black)) {
+                        window->graphics().begin(Color::BLACK)) {
                 FPS::registerFrame();
                 window->draw();
                 window->graphics().end();
@@ -192,7 +192,7 @@ struct Gosu::Window::Impl
         window->input().update();
         window->update();
 
-        if (window->needsRedraw() && window->graphics().begin(Colors::black))
+        if (window->needsRedraw() && window->graphics().begin(Color::BLACK))
         {
             FPS::registerFrame();
             window->draw();

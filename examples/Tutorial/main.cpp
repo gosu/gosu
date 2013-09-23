@@ -188,7 +188,7 @@ public:
         std::wstringstream score;
         score << L"Score: "; 
         score << player.getScore();
-        font.draw(score.str(), 10, 10, zUI, 1, 1, Gosu::Colors::yellow);
+        font.draw(score.str(), 10, 10, zUI, 1, 1, Gosu::Color::YELLOW);
     }
 
     void buttonDown(Gosu::Button btn)

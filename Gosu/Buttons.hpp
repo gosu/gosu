@@ -253,7 +253,7 @@ namespace Gosu
         kbNum = kbRangeEnd - kbRangeBegin + 1,
         msNum = msRangeEnd - msRangeBegin + 1,
         gpNum = gpRangeEnd - gpRangeBegin + 1,
-        gpNumPerGamepad = gpNum / (numGamepads + 1),
+        gpNumPerGamepad = gpNum / (numGamepads + 1)
 	};
 }
 
