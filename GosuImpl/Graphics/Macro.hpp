@@ -48,7 +48,7 @@ class Gosu::Macro : public Gosu::ImageData
         
         // Since this matrix is relatively sparse, we unroll all three solving paths.
         
-        static const Transform nullTransform = { 0 };
+        static const Transform nullTransform = {{ 0 }};
         
         // Row 7 is completely useless
         if (x2 == x4 && x3 == x4)
@@ -154,12 +154,12 @@ class Gosu::Macro : public Gosu::ImageData
         
         // Let's hope I never have to debug/understand this again! :D
         
-        Transform result = {
+        Transform result = {{
             c[0], c[3], 0, c[6],
             c[1], c[4], 0, c[7],
             0, 0, 1, 0,
             c[2], c[5], 0, 1
-        };
+        }};
         return result;
     }
     
