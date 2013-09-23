@@ -58,20 +58,20 @@ public:
 
     void draw()
     {
-        graphics().drawLine(10, player1Y - PAD_SIZE, Gosu::Colors::blue, 10, player1Y + PAD_SIZE, Gosu::Colors::blue, zPads);
-        graphics().drawLine(graphics().width() - 10, Player2Y - PAD_SIZE, Gosu::Colors::red, graphics().width() - 10, Player2Y + PAD_SIZE, Gosu::Colors::red, zPads);
+        graphics().drawLine(10, player1Y - PAD_SIZE, Gosu::Color::BLUE, 10, player1Y + PAD_SIZE, Gosu::Color::BLUE, zPads);
+        graphics().drawLine(graphics().width() - 10, Player2Y - PAD_SIZE, Gosu::Color::RED, graphics().width() - 10, Player2Y + PAD_SIZE, Gosu::Color::RED, zPads);
         
         graphics().drawQuad(
-           ballX-BALL_SIZE, ballY-BALL_SIZE, Gosu::Colors::white,
-           ballX+BALL_SIZE, ballY-BALL_SIZE, Gosu::Colors::white,
-           ballX+BALL_SIZE, ballY+BALL_SIZE, Gosu::Colors::white,
-           ballX-BALL_SIZE, ballY+BALL_SIZE, Gosu::Colors::white,
+           ballX-BALL_SIZE, ballY-BALL_SIZE, Gosu::Color::WHITE,
+           ballX+BALL_SIZE, ballY-BALL_SIZE, Gosu::Color::WHITE,
+           ballX+BALL_SIZE, ballY+BALL_SIZE, Gosu::Color::WHITE,
+           ballX-BALL_SIZE, ballY+BALL_SIZE, Gosu::Color::WHITE,
            zBall
         );
 
         std::wstringstream score;
         score << L"Score: " << player1Score << ":" << player2Score;
-        font.draw(score.str(), 10, 10, zUI, 1, 1, Gosu::Colors::yellow);
+        font.draw(score.str(), 10, 10, zUI, 1, 1, Gosu::Color::YELLOW);
     }
 
     void buttonDown(Gosu::Button btn)

@@ -211,7 +211,7 @@ public:
         double x4, double y4, Color c4,
         ZPos z, AlphaMode mode) const
     {
-        if (c1 != 0xffffffff || c2 != 0xffffffff || c3 != 0xffffffff || c4 != 0xffffffff)
+        if (c1 != Color::WHITE || c2 != Color::WHITE || c3 != Color::WHITE || c4 != Color::WHITE)
             throw std::invalid_argument("Macros cannot be tinted with colors yet");
         std::tr1::function<void()> f = std::tr1::bind(&Macro::drawVertexArrays, this, x1, y1, x2, y2, x3, y3, x4, y4);
         graphics.scheduleGL(f, z);
