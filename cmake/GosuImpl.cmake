@@ -61,7 +61,6 @@ endif()
 
 #Projects source files
 SET(CORE_SRC_FILES
-    #Async.cpp
     Inspection.cpp
     IO.cpp
     Math.cpp
@@ -133,7 +132,6 @@ endforeach()
 
 #Projects headers files
 SET(CORE_INC_FILES
-    ../Gosu/Async.hpp
     ../Gosu/Directories.hpp
     ../Gosu/Input.hpp
     ../Gosu/Timing.hpp
@@ -195,9 +193,11 @@ INCLUDE_DIRECTORIES(
     ${CMAKE_CURRENT_SOURCE_DIR}/..
     ${FREETYPE_INCLUDE_DIRS}
     ${OPENAL_INCLUDE_DIRS}
-    ${SDLTTF_INCLUDE_DIRS}
+    ${SDL_TTF_INCLUDE_DIRS}
+    ${SDL_INCLUDE_DIR}
     ${X11_INCLUDE_DIRS}
     ${OPENGL_INCLUDE_DIRS}
+    ${SNDFILE_INCLUDE_DIRS}
     ${PANGO_INCLUDE_DIRS}
     ${PANGOFT_INCLUDE_DIRS}
     ${XINERAMA_INCLUDE_DIRS}

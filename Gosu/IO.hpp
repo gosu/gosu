@@ -189,7 +189,8 @@ namespace Gosu
         }
 
         Buffer(const Buffer& other)
-        : buf(other.buf)
+        : Resource()
+        , buf(other.buf)
         {
         }
 
