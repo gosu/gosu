@@ -57,13 +57,17 @@ set(Gosu_INCLUDE_DIRS ${Gosu_INCLUDE_DIR}) # do not add dependency dirs, you sho
 find_package(Freetype REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(SDL_ttf REQUIRED)
+find_package(SDL REQUIRED)
 mark_as_advanced(SDLTTF_INCLUDE_DIR)
 mark_as_advanced(SDLTTF_LIBRARY)
+mark_as_advanced(SDL_INCLUDE_DIR)
+mark_as_advanced(SDL_LIBRARY)
 
 find_package(X11 REQUIRED)
 find_package(OpenGL REQUIRED)
 
 find_package(PkgConfig REQUIRED)
+pkg_check_modules(SNDFILE REQUIRED sndfile)
 pkg_check_modules(PANGO REQUIRED pango)
 pkg_check_modules(PANGOFT REQUIRED pangoft2)
 pkg_check_modules(XINERAMA REQUIRED xinerama)
@@ -84,9 +88,11 @@ mark_as_advanced(FREEIMAGE_LIBRARIES)
 set( LINK_LIBRARIES
     ${FREETYPE_LINK_LIBRARIES}
     ${OPENAL_LIBRARY}
-    ${SDLTTF_LIBRARY}
+    ${SDL_TTF_LIBRARIES}
+    ${SDL_LIBRARY}
     ${X11_LIBRARY}
     ${OPENGL_LIBRARY}
+    ${SNDFILE_LIBRARIES}
     ${PANGO_LIBRARIES}
     ${PANGOFT_LIBRARIES}
     ${FREEIMAGE_LIBRARIES}
