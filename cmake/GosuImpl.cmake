@@ -61,7 +61,6 @@ endif()
 
 #Projects source files
 SET(CORE_SRC_FILES
-    #Async.cpp
     Inspection.cpp
     IO.cpp
     Math.cpp
@@ -133,7 +132,6 @@ endforeach()
 
 #Projects headers files
 SET(CORE_INC_FILES
-    ../Gosu/Async.hpp
     ../Gosu/Directories.hpp
     ../Gosu/Input.hpp
     ../Gosu/Timing.hpp
