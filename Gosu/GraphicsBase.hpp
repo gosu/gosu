@@ -59,6 +59,19 @@ namespace Gosu
         ffCombinations = 8
     };
     
+#if defined(GOSU_CPP11_ENABLED)
+    enum class TextAlign
+    {
+        Left,
+        Right,
+        Center,
+        Justify
+    };
+    GOSU_DEPRECATED static const TextAlign taLeft = TextAlign::Left;
+    GOSU_DEPRECATED static const TextAlign taRight = TextAlign::Right;
+    GOSU_DEPRECATED static const TextAlign taCenter = TextAlign::Center;
+    GOSU_DEPRECATED static const TextAlign taJustify = TextAlign::Justify;
+#else
     enum TextAlign
     {
         taLeft,
@@ -66,6 +79,7 @@ namespace Gosu
         taCenter,
         taJustify
     };
+#endif
     
     //! Flags that affect the tileability of an image.
     enum BorderFlags
