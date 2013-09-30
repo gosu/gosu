@@ -45,7 +45,7 @@ Pod::Spec.new do |s|
     ss.frameworks = 'OpenGL', 'OpenAL', 'IOKit', 'Carbon', 'Cocoa', 'AudioToolbox', 'ApplicationServices'
     ss.library   = 'iconv'
     # To find libpng headers, TODO use compiler flags for that, does not need to leak into client project
-    ss.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/X11/include', 'CLANG_CXX_LIBRARY' => 'libstdc++' }
+    ss.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/X11/include' }
     
     ss.public_header_files = 'Gosu/*.hpp'
     ss.source_files = ['Gosu/*.hpp', 'GosuImpl/**/*.hpp'] +
@@ -94,7 +94,6 @@ Pod::Spec.new do |s|
 
     ss.frameworks = 'CoreGraphics', 'OpenGLES', 'OpenAL', 'AudioToolbox', 'AVFoundation', 'QuartzCore'
     ss.library   = 'iconv'
-    ss.xcconfig = { 'CLANG_CXX_LIBRARY' => 'libstdc++' }
     
     ss.public_header_files = 'Gosu/*.hpp'
     ss.source_files = ['Gosu/*.hpp', 'GosuImpl/**/*.hpp'] +
