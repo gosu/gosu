@@ -5,7 +5,8 @@ Please follow these style guidelines for C++ & Objective C code:
 * Follow the C++ 2003 (TR1) standard.
   The `<Gosu/TR1.hpp>` header facilitates this.
 * Use `JavaClassNames`, `javaVariables.javaMethods()`, `AND_JAVA_CONSTANTS`.
-  For enums, follow the Delphi style: `enum AlphaMode { amDefault, amAdditive }`
+  For C enums, follow the Delphi style: `enum AlphaMode { amDefault, amAdditive };`
+  For C++11 enums, follow the Java style: `enum class AlphaMode { DEFAULT, ADDITIVE };`
 * Don't worry too much about trailing spaces or Windows/UNIX newlines.
   But please ensure that your commit does not change lines or files that you haven't touched otherwise.
 * Indent in multiples of four spaces (not tabs). Don't use formatting that will break when using a proportional font.
