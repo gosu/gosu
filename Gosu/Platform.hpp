@@ -68,6 +68,14 @@ namespace Gosu
 # endif
 #endif
 
+#ifdef GOSU_CPP11_ENABLED
+# define GOSU_UNIQUE_PTR std::unique_ptr
+# define GOSU_MOVE_UNIQUE_PTR(ptr) std::move(ptr)
+#else
+# define GOSU_UNIQUE_PTR std::auto_ptr
+# define GOSU_MOVE_UNIQUE_PTR(ptr) (ptr)
+#endif
+
 #ifndef GOSU_DEPRECATED
 # if defined(GOSU_IS_WIN)
 #  define GOSU_DEPRECATED __declspec(deprecated)

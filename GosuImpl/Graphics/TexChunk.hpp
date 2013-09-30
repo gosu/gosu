@@ -50,7 +50,7 @@ public:
         
     const GLTexInfo* glTexInfo() const;
     Gosu::Bitmap toBitmap() const;
-    std::auto_ptr<ImageData> subimage(int x, int y, int width, int height) const;
+    GOSU_UNIQUE_PTR<ImageData> subimage(int x, int y, int width, int height) const;
     void insert(const Bitmap& bitmap, int x, int y);
 };
 

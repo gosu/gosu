@@ -46,7 +46,7 @@ namespace Gosu
             bool tileable = false);
         
         //! Creates an Image from a user-supplied instance of the ImageData interface.
-        explicit Image(std::auto_ptr<ImageData> data);
+        explicit Image(GOSU_UNIQUE_PTR<ImageData> data);
 
         unsigned width() const;
         unsigned height() const;

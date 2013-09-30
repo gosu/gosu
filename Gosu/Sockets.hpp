@@ -7,6 +7,7 @@
 #include <Gosu/TR1.hpp>
 #include <cstddef>
 #include <string>
+#include <Gosu/Platform.hpp>
 
 namespace Gosu
 {
@@ -35,7 +36,13 @@ namespace Gosu
     class MessageSocket
     {
         struct Impl;
-        const std::auto_ptr<Impl> pimpl;
+        const GOSU_UNIQUE_PTR<Impl> pimpl;
+#if defined(GOSU_CPP11_ENABLED)
+        MessageSocket(const MessageSocket&) = delete;
+        MessageSocket& operator=(const MessageSocket&) = delete;
+        MessageSocket(MessageSocket&&) = delete;
+        MessageSocket& operator=(MessageSocket&&) = delete;
+#endif
 
     public:
         //! Opens a message socket for listening at the specified port.
@@ -84,7 +91,13 @@ namespace Gosu
     class CommSocket
     {
         struct Impl;
-        const std::auto_ptr<Impl> pimpl;
+        const GOSU_UNIQUE_PTR<Impl> pimpl;
+#if defined(GOSU_CPP11_ENABLED)
+        CommSocket(const CommSocket&) = delete;
+        CommSocket& operator=(const CommSocket&) = delete;
+        CommSocket(CommSocket&&) = delete;
+        CommSocket& operator=(CommSocket&&) = delete;
+#endif
 
     public:
         CommSocket(CommMode mode, SocketAddress targetAddress,
@@ -117,7 +130,13 @@ namespace Gosu
     class ListenerSocket
     {
         struct Impl;
-        const std::auto_ptr<Impl> pimpl;
+        const GOSU_UNIQUE_PTR<Impl> pimpl;
+#if defined(GOSU_CPP11_ENABLED)
+        ListenerSocket(const ListenerSocket&) = delete;
+        ListenerSocket& operator=(const ListenerSocket&) = delete;
+        ListenerSocket(ListenerSocket&&) = delete;
+        ListenerSocket& operator=(ListenerSocket&&) = delete;
+#endif
 
     public:
         ListenerSocket(SocketPort port);

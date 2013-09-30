@@ -7,6 +7,7 @@
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Fwd.hpp>
+#include <Gosu/Platform.hpp>
 
 namespace Gosu
 {
@@ -51,7 +52,7 @@ namespace Gosu
         virtual const GLTexInfo* glTexInfo() const = 0;
         virtual Bitmap toBitmap() const = 0;
         
-        virtual std::auto_ptr<ImageData> subimage(int x, int y, int width, int height) const = 0;
+        virtual GOSU_UNIQUE_PTR<ImageData> subimage(int x, int y, int width, int height) const = 0;
         
         virtual void insert(const Bitmap& bitmap, int x, int y) = 0;
     };

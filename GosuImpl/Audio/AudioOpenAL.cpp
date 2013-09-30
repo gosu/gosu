@@ -327,7 +327,7 @@ public:
 // AudioFile impl
 class Gosu::Song::StreamData : public BaseData
 {
-    std::auto_ptr<AudioFile> file;
+    GOSU_UNIQUE_PTR<AudioFile> file;
     ALuint buffers[2];
     
     void applyVolume()
