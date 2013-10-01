@@ -32,6 +32,11 @@ int Gosu::clipRectBaseFactor()
 
 // A controller to allow for autorotation.
 @implementation GosuViewController
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
 - (void)loadView
 {
     self.view = [[GosuView alloc] init];
