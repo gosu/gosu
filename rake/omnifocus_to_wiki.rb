@@ -15,7 +15,7 @@ task :omnifocus_to_wiki do
     
     File.open "../Gosu Wiki/#{TODO_BASENAME}", "w" do |wiki_page|
       doc = Appscript.app("OmniFocus").default_document
-      my_projects = doc.folders["Solo Game-Dev"].projects.get
+      my_projects = doc.folders["Solo Dev"].projects.get
       gosu_projects = my_projects.select { |p| p.name.get =~ /^Gosu/ }
       
       wiki_page.puts "This list of tasks is exported automatically from my OmniFocus projects."
