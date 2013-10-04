@@ -47,6 +47,16 @@ int Gosu::clipRectBaseFactor()
     return UIInterfaceOrientationIsLandscape(interfaceOrientation);
 }
 
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskLandscape;
+}
+
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
 - (void)didReceiveMemoryWarning
 {
     windowInstance().releaseMemory();

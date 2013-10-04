@@ -95,6 +95,7 @@ namespace
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {
+    [UIApplication sharedApplication].statusBarHidden = YES;
     [self setupTimerOrDisplayLink];
 }
 
