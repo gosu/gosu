@@ -97,9 +97,23 @@ namespace Gosu { bool isExtension(const wchar_t* str, const wchar_t* ext); }
 void Gosu::loadImageFile(Bitmap& bitmap, const std::wstring& filename)
 {
     ObjRef<NSAutoreleasePool> pool([NSAutoreleasePool new]);
+    ObjRef<APPLE_IMAGE> image;
     ObjRef<NSString> filenameRef([[NSString alloc] initWithUTF8String: wstringToUTF8(filename).c_str()]);
-    ObjRef<APPLE_IMAGE> image([[APPLE_IMAGE alloc] initWithContentsOfFile: filenameRef.obj()]);
-    if (!image.get())
+    
+#ifdef GOSU_IS_IPHONE
+    if ([UIScreen mainScreen].scale > 1) {
+#endif
+        // Prevent app from automatically appending @2x to full filenames by loading into an NSData object first
+        NSData *data = [NSData dataWithContentsOfFile:filenameRef.obj()];
+        image.reset([[APPLE_IMAGE alloc] initWithData:data]);
+#ifdef GOSU_IS_IPHONE
+    }
+    else {
+        image.reset([[APPLE_IMAGE alloc] initWithContentsOfFile:filenameRef.obj()]);
+    }
+#endif
+    
+    if (! image.get())
         throw std::runtime_error("Cannot load image file " + wstringToUTF8(filename));
     
     appleImageToBitmap(image.obj(), bitmap);
