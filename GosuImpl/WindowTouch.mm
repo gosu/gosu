@@ -10,6 +10,9 @@
 #import <OpenGLES/EAGL.h>
 #import <QuartzCore/QuartzCore.h>
 
+#include <OpenAL/alc.h>
+#include <AudioToolbox/AudioSession.h>
+
 using namespace std::tr1::placeholders;
 
 namespace Gosu
@@ -28,6 +31,17 @@ namespace Gosu
     unsigned screenHeight()
     {
         return screenRect().size.height;
+    }
+    
+    ALCcontext *sharedContext();
+}
+
+static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
+{
+    if (inInterruptionState == kAudioSessionBeginInterruption) {
+        alcMakeContextCurrent(NULL);
+    } else if (inInterruptionState == kAudioSessionEndInterruption) {
+        alcMakeContextCurrent(Gosu::sharedContext());
     }
 }
 
@@ -97,6 +111,8 @@ namespace
 {
     [UIApplication sharedApplication].statusBarHidden = YES;
     [self setupTimerOrDisplayLink];
+    
+    AudioSessionInitialize(NULL, NULL, handleAudioInterruption, NULL);
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

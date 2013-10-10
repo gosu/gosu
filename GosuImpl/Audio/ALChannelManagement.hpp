@@ -39,6 +39,11 @@ namespace Gosu
             return alDevice;
         }
         
+        static ALCcontext* context()
+        {
+            return alContext;
+        }
+        
         ALChannelManagement()
         {
             // Open preferred device
@@ -100,5 +105,10 @@ namespace Gosu
     void releaseAllOpenALResources()
     {
         alChannelManagement.reset();
+    }
+    
+    ALCcontext *sharedContext()
+    {
+        return ALChannelManagement::context();
     }
 }
