@@ -23,7 +23,13 @@ namespace Gosu
     class TextInput
     {
         struct Impl;
-        const std::auto_ptr<Impl> pimpl;
+        const GOSU_UNIQUE_PTR<Impl> pimpl;
+#if defined(GOSU_CPP11_ENABLED)
+        TextInput(TextInput&&) = delete;
+        TextInput& operator=(TextInput&&) = delete;
+        TextInput(const TextInput&) = delete;
+        TextInput& operator=(const TextInput&) = delete;
+#endif
         
     public:
         TextInput();

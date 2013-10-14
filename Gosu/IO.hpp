@@ -9,6 +9,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <Gosu/Platform.hpp>
 
 namespace Gosu
 {
@@ -141,8 +142,16 @@ namespace Gosu
     class Resource
     {
         // Non-copyable
+#if defined(GOSU_CPP11_ENABLED)
+        Resource(const Resource&) = delete;
+        Resource& operator=(const Resource&) = delete;
+        // and non-movable
+        Resource(Resource&&) = delete;
+        Resource& operator=(Resource&&) = delete;
+#else
         Resource(const Resource&);
         Resource& operator=(const Resource&);
+#endif
 
     public:
         Resource()
@@ -237,7 +246,7 @@ namespace Gosu
     class File : public Resource
     {
         struct Impl;
-        const std::auto_ptr<Impl> pimpl;
+        const GOSU_UNIQUE_PTR<Impl> pimpl;
 
     public:
         explicit File(const std::wstring& filename, FileMode mode = fmRead);

@@ -177,8 +177,8 @@ struct Gosu::Window::Impl
 {
     HWND handle;
     HDC hdc;
-    std::auto_ptr<Graphics> graphics;
-    std::auto_ptr<Input> input;
+    GOSU_UNIQUE_PTR<Graphics> graphics;
+    GOSU_UNIQUE_PTR<Input> input;
     double updateInterval;
     bool iconified;
 
