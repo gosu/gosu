@@ -40,7 +40,8 @@ namespace Gosu
 
         std::wstring caption() const;
         void setCaption(const std::wstring& caption);
-        
+        void setIcon(const Gosu::Bitmap& icon);
+	
         double updateInterval() const;
 
         //! Enters a modal loop where the Window is visible on screen and

@@ -7,6 +7,9 @@
 #include <Gosu/Audio.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/Graphics.hpp>
+#include <Gosu/Bitmap.hpp>
+#include <Gosu/Image.hpp>
+#include <Gosu/ImageData.hpp>
 #include <Gosu/Timing.hpp>
 #include <Gosu/TR1.hpp>
 #include <Gosu/Utility.hpp>
@@ -20,6 +23,8 @@
 #include <GL/glx.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/Xatom.h>
+
 #include "X11vroot.h"
 
 #include <X11/extensions/Xinerama.h>
@@ -341,6 +346,30 @@ void Gosu::Window::setCaption(const std::wstring& caption)
     XSetWMName(pimpl->display, pimpl->window, &titleprop);
     XFree(titleprop.value);
     XSync(pimpl->display, false);
+}
+
+void Gosu::Window::setIcon(const Gosu::Bitmap& icon) {
+    
+    unsigned width = icon.width();
+    unsigned height = icon.height();
+    
+    int size = 2 + (width * height);
+
+    std::vector<unsigned long> data(size);
+    data[0] = width;
+    data[1] = height;        
+    
+    Gosu::Color color;
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        color = icon.getPixel(x, y);
+        data[2 + y * width + x] = color.argb();
+      }
+    }
+
+    Atom _NET_WM_ICON = XInternAtom(pimpl->display, "_NET_WM_ICON", False);
+    XChangeProperty(pimpl->display, pimpl->window, _NET_WM_ICON, XA_CARDINAL, 32,
+                   PropModeReplace, reinterpret_cast<unsigned char*>(data.data()), size);
 }
 
 namespace GosusDarkSide
