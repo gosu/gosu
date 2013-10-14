@@ -19,6 +19,7 @@ MESSAGE(STATUS "-------")
 MESSAGE(STATUS "Static libraries:    " ${BUILD_STATIC_LIBRARIES})
 MESSAGE(STATUS "Dynamic libraries:   " ${BUILD_DYNAMIC_LIBRARIES})
 MESSAGE(STATUS "Build Type:          " ${CMAKE_BUILD_TYPE})
+MESSAGE(STATUS "Enable c++11:        " ${GOSU_CPP11_ENABLED})
 MESSAGE(STATUS "Build examples:      " ${ENABLE_EXAMPLES})
 MESSAGE(STATUS "")
 

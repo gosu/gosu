@@ -63,11 +63,11 @@ GLuint Gosu::Texture::texName() const
     return name;
 }
 
-std::auto_ptr<Gosu::TexChunk>
+GOSU_UNIQUE_PTR<Gosu::TexChunk>
     Gosu::Texture::tryAlloc(Graphics& graphics, DrawOpQueueStack& queues,
         std::tr1::shared_ptr<Texture> ptr, const Bitmap& bmp, unsigned padding)
 {
-    std::auto_ptr<Gosu::TexChunk> result;
+    GOSU_UNIQUE_PTR<Gosu::TexChunk> result;
     
     BlockAllocator::Block block;
     if (!allocator.alloc(bmp.width(), bmp.height(), block))
@@ -80,7 +80,7 @@ std::auto_ptr<Gosu::TexChunk>
     glTexSubImage2D(GL_TEXTURE_2D, 0, block.left, block.top, block.width, block.height,
                  Color::GL_FORMAT, GL_UNSIGNED_BYTE, bmp.data());
 
-    return result;
+    return GOSU_MOVE_UNIQUE_PTR(result);
 }
 
 void Gosu::Texture::block(unsigned x, unsigned y, unsigned width, unsigned height)

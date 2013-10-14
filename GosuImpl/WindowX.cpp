@@ -93,8 +93,8 @@ namespace Gosu
 
 struct Gosu::Window::Impl
 {
-    std::auto_ptr<Graphics> graphics;
-    std::auto_ptr<Input> input;
+    GOSU_UNIQUE_PTR<Graphics> graphics;
+    GOSU_UNIQUE_PTR<Input> input;
 
     ::Display* display;
     

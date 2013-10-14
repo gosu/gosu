@@ -62,6 +62,20 @@ namespace Gosu
 # endif
 #endif
 
+#ifndef SWIG
+# if (defined(_MSC_VER) && _MSC_VER >= 1700) || ((__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && defined(__GXX_EXPERIMENTAL_CXX0X__))
+#  define GOSU_CPP11_ENABLED
+# endif
+#endif
+
+#ifdef GOSU_CPP11_ENABLED
+# define GOSU_UNIQUE_PTR std::unique_ptr
+# define GOSU_MOVE_UNIQUE_PTR(ptr) std::move(ptr)
+#else
+# define GOSU_UNIQUE_PTR std::auto_ptr
+# define GOSU_MOVE_UNIQUE_PTR(ptr) (ptr)
+#endif
+
 #ifndef GOSU_DEPRECATED
 # if defined(GOSU_IS_WIN)
 #  define GOSU_DEPRECATED __declspec(deprecated)

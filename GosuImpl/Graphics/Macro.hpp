@@ -4,6 +4,7 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
 #include <Gosu/TR1.hpp>
+#include <Gosu/Platform.hpp>
 #include "Common.hpp"
 #include "DrawOpQueue.hpp"
 #include <cmath>
@@ -227,9 +228,9 @@ public:
         throw std::logic_error("Gosu::Macro cannot be rendered as Gosu::Bitmap yet");
     }
     
-    std::auto_ptr<ImageData> subimage(int x, int y, int width, int height) const
+    GOSU_UNIQUE_PTR<ImageData> subimage(int x, int y, int width, int height) const
     {
-        return std::auto_ptr<ImageData>();
+        return GOSU_UNIQUE_PTR<ImageData>();
     }
     
     void insert(const Bitmap& bitmap, int x, int y)

@@ -4,6 +4,7 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
 #include <Gosu/TR1.hpp>
+#include <Gosu/Platform.hpp>
 #include <stdexcept>
 #include <vector>
 
@@ -32,9 +33,9 @@ namespace Gosu
             return 0;
         }
         
-        std::auto_ptr<ImageData> subimage(int x, int y, int w, int h) const
+        GOSU_UNIQUE_PTR<ImageData> subimage(int x, int y, int w, int h) const
         {
-            return std::auto_ptr<ImageData>();
+            return GOSU_UNIQUE_PTR<ImageData>();
         }
         
         Bitmap toBitmap() const;

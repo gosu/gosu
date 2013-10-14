@@ -34,6 +34,8 @@ else()
     OPTION(BUILD_DYNAMIC_LIBRARIES "Should the dynamic libraries be built? WARNING enable at your own risk" OFF)
 endif()
 
+OPTION(GOSU_CPP11_ENABLED "Should Gosu's c++11 features get enabled? (this is probably only relevant on linux)" ON)
+
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
 endif()
@@ -281,6 +283,9 @@ ELSE(WIN32)
 	SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -Wall -Wextra -pedantic")
 	SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")
 	SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O2 -g")
+	if(GOSU_CPP11_ENABLED)
+	    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+	endif()
 
 	#Install the core header files, including the ones in the Gosu subfolder.
 	#this also installs windows headers, TODO: fix?

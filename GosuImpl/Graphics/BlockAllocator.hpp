@@ -2,13 +2,14 @@
 #define GOSUIMPL_BLOCKALLOCATOR_HPP
 
 #include <memory>
+#include <Gosu/Platform.hpp>
 
 namespace Gosu
 {
     class BlockAllocator
     {
         struct Impl;
-        const std::auto_ptr<Impl> pimpl;
+        const GOSU_UNIQUE_PTR<Impl> pimpl;
 
     public:
         struct Block
