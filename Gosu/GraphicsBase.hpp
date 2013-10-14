@@ -6,6 +6,9 @@
 
 #include <Gosu/Platform.hpp>
 #include <limits>
+#if defined(GOSU_CPP11_ENABLED)
+#include <type_traits>
+#endif
 
 namespace Gosu
 {
@@ -51,13 +54,55 @@ namespace Gosu
     };
 #endif
     
+#if defined(GOSU_CPP11_ENABLED)
+    enum class FontFlags
+    {
+        NONE = 0,
+        BOLD = 1,
+        ITALIC = 2,
+        UNDERLINE = 4
+    };
+    static const typename std::underlying_type<FontFlags>::type FontFlagCombinations = 8;
+    GOSU_DEPRECATED static const typename std::underlying_type<FontFlags>::type ffCombinations = FontFlagCombinations;
+    GOSU_DEPRECATED static const FontFlags ffNone = FontFlags::NONE;
+    GOSU_DEPRECATED static const FontFlags ffBold = FontFlags::BOLD;
+    GOSU_DEPRECATED static const FontFlags ffItalic = FontFlags::ITALIC;
+    GOSU_DEPRECATED static const FontFlags ffUnderline = FontFlags::UNDERLINE;
+    inline FontFlags operator|(const FontFlags& lhs, const FontFlags& rhs)
+    {
+        typedef typename std::underlying_type<FontFlags>::type int_type;
+        return static_cast<FontFlags>(static_cast<int_type>(lhs)|static_cast<int_type>(rhs));
+    }
+    inline FontFlags operator&(const FontFlags& lhs, const FontFlags& rhs)
+    {
+        typedef typename std::underlying_type<FontFlags>::type int_type;
+        return static_cast<FontFlags>(static_cast<int_type>(lhs)&static_cast<int_type>(rhs));
+    }
+    inline FontFlags& operator|=(FontFlags& lhs, const FontFlags& rhs)
+    {
+        lhs = lhs | rhs;
+        return lhs;
+    }
+    inline FontFlags& operator&=(FontFlags& lhs, const FontFlags& rhs)
+    {
+        lhs = lhs & rhs;
+        return lhs;
+    }
+    inline FontFlags operator~(const FontFlags& rhs)
+    {
+        typedef typename std::underlying_type<FontFlags>::type int_type;
+        return static_cast<FontFlags>(~static_cast<int_type>(rhs));
+    }
+#else
     enum FontFlags
     {
+        ffNone         = 0,
         ffBold         = 1,
         ffItalic       = 2,
-        ffUnderline    = 4,
-        ffCombinations = 8
+        ffUnderline    = 4
     };
+    static const size_t ffCombinations = 8;
+#endif
     
 #if defined(GOSU_CPP11_ENABLED)
     enum class TextAlign

@@ -85,7 +85,7 @@ namespace Gosu
                 this->lineSpacing = lineSpacing;
                 this->align = align;
 
-                spaceWidth_ = textWidth(FormattedString(L" ", 0));
+                spaceWidth_ = textWidth(FormattedString(L" ", ffNone));
             }
 
             unsigned width() const
@@ -301,7 +301,7 @@ namespace Gosu
 
 Gosu::Bitmap Gosu::createText(const wstring& text,
     const wstring& fontName, unsigned fontHeight, int lineSpacing,
-    unsigned width, TextAlign align, unsigned fontFlags)
+    unsigned width, TextAlign align, FontFlags fontFlags)
 {
     if (lineSpacing <= -static_cast<int>(fontHeight))
         throw logic_error("negative line spacing of more than line height impossible");
@@ -323,7 +323,7 @@ Gosu::Bitmap Gosu::createText(const wstring& text,
 
 // Very easy special case.
 Gosu::Bitmap Gosu::createText(const wstring& text,
-    const wstring& fontName, unsigned fontHeight, unsigned fontFlags)
+    const wstring& fontName, unsigned fontHeight, FontFlags fontFlags)
 {
     FormattedString fs(text.c_str(), fontFlags);
     if (fs.length() == 0)
