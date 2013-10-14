@@ -49,6 +49,7 @@ namespace Gosu
     class Graphics
     {
         struct Impl;
+        const GOSU_UNIQUE_PTR<Impl> pimpl;
         
 #if defined(GOSU_CPP11_ENABLED)
         // explicitly forbid copying and moving
@@ -57,7 +58,6 @@ namespace Gosu
         Graphics(const Graphics&) = delete;
         Graphics& operator=(const Graphics&) = delete;
 #endif
-        const GOSU_UNIQUE_PTR<Impl> pimpl;
 
     public:
         Graphics(unsigned physicalWidth, unsigned physicalHeight, bool fullscreen);

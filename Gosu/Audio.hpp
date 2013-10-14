@@ -109,6 +109,8 @@ namespace Gosu
         class BaseData;
         class ModuleData;
         class StreamData;
+        GOSU_UNIQUE_PTR<BaseData> data;
+
 #if defined(GOSU_CPP11_ENABLED)
         Song(Song&&) = delete;
         Song& operator=(Song&&) = delete;
@@ -118,7 +120,6 @@ namespace Gosu
         Song(const Song&);
         Song& operator=(const Song&);
 #endif
-        GOSU_UNIQUE_PTR<BaseData> data;
 
     public:
         //! Constructs a song that can be played on the provided audio system
