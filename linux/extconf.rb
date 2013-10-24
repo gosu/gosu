@@ -69,6 +69,9 @@ OGG_VORBIS_FILES = Dir['../dependencies/libogg/src/*.c'] +
 require 'mkmf'
 require 'fileutils'
 
+# Silence internal deprecation warnings in Gosu
+$CFLAGS << " -DGOSU_DEPRECATED="
+
 $INCFLAGS << " -I../ -I../GosuImpl"
 
 if `uname`.chomp == 'Darwin' then
