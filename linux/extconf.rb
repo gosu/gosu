@@ -84,7 +84,7 @@ if `uname`.chomp == 'Darwin' then
   $INCFLAGS  << " -I../dependencies/libvorbis/include"
   $INCFLAGS  << " -I../dependencies/libvorbis/lib"
   # To make everything work with the Objective C runtime
-  $CFLAGS    << " -x objective-c -fobjc-gc -DNDEBUG"
+  $CFLAGS    << " -x objective-c -DNDEBUG"
   # Compile all C++ files as Objective C++ on OS X since mkmf does not support .mm
   # files.
   # Also undefine two debug flags that cause exceptions to randomly crash
