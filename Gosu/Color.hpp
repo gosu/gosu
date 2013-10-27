@@ -173,7 +173,6 @@ namespace Gosu
     {
         return a.gl() != b.gl();
     }
-    #endif
 
     //! Interpolates linearly between two colors, with a given weight towards
     //! the second color.
@@ -199,6 +198,7 @@ namespace Gosu
         GOSU_DEPRECATED const Color fuchsia  (0xffff00ff);
         GOSU_DEPRECATED const Color cyan     (0xff00ffff);
     }
+    #endif
 }
 
 #endif
