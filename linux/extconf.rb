@@ -91,7 +91,12 @@ if `uname`.chomp == 'Darwin' then
   # otherwise; see:
   # https://trac.macports.org/ticket/27237#comment:21
   # http://newartisans.com/2009/10/a-c-gotcha-on-snow-leopard/#comment-893
-  CONFIG['CXXFLAGS'] =  "#{CONFIG['CXXFLAGS']} -x objective-c++ -U_GLIBCXX_DEBUG -U_GLIBCXX_DEBUG_PEDANTIC"
+  CONFIG['CXXFLAGS'] = "#{CONFIG['CXXFLAGS']} -x objective-c++ -U_GLIBCXX_DEBUG -U_GLIBCXX_DEBUG_PEDANTIC"
+  if `uname -r`.to_i >= 13 then
+    # Use C++11 on Mavericks and above
+    # TODO: This can probably be enabled starting from 10.6?
+    CONFIG['CXXFLAGS'] << " -std=gnu++11"
+  end
   $LDFLAGS   << " -L/usr/X11/lib -liconv"
   %w(AudioToolbox IOKit OpenAL OpenGL AppKit ApplicationServices Foundation Carbon).each do |f|
     $LDFLAGS << " -framework #{f}"

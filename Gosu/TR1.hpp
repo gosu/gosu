@@ -23,6 +23,10 @@
             typedef signed long long int64_t;
             
             #ifdef _LIBCPP_MEMORY
+            namespace placeholders
+            {
+                using namespace std::placeholders;
+            }
             using std::array;
             using std::bind;
             using std::function;
