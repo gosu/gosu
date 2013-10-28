@@ -70,7 +70,6 @@ end
 
 Dir['./rake/*.rb'].each { |task| require task }
 
-task :release => [# Broken - these can only be built on a 10.4-10.6 Machine
-                  # :'mac:release', :'mac:release_gem', :'mac:app_wrapper',
-                  :'win:release', :'win:release_gem',
+# The mac:app_wrapper task needs to be built on a 10.4-10.6 machine.
+task :release => [:'win:release', :'win:release_gem',
                   :'linux:release', :'linux:release_gem']
