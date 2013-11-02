@@ -70,7 +70,9 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(SNDFILE REQUIRED sndfile)
 pkg_check_modules(PANGO REQUIRED pango)
 pkg_check_modules(PANGOFT REQUIRED pangoft2)
-pkg_check_modules(XINERAMA REQUIRED xinerama)
+if (NOT APPLE)
+    pkg_check_modules(XINERAMA REQUIRED xinerama)
+endif ()
 pkg_check_modules(VORBIS REQUIRED vorbisfile)
 
 #freeimage does neither have a Find*.cmake file nor a .pc file... search manually
@@ -106,8 +108,34 @@ endforeach()
 
 #message(FATAL_ERROR "blub")
 
+if(APPLE)
+    set(Gosu_APPLE_FRAMEWORKS "-framework OpenAL -framework IOKit -framework OpenGL -framework Carbon -framework Cocoa -framework AudioToolbox -framework ApplicationServices")
+    set( LINK_LIBRARIES
+    ${LINK_LIBRARIES}
+    freeimage
+    vorbisfile
+    iconv
+    )
+endif()
+
 set(Gosu_LIBRARY ${PREFIX}/@Gosu_LIBRARY_INSTALL_DIRS@/libGosu.a)
 set(Gosu_LIBRARIES ${Gosu_LIBRARY} ${LINK_LIBRARIES})
+set(Gosu_LIBRARY_DIRS
+    ${PREFIX}/@Gosu_LIBRARY_INSTALL_DIRS@
+    ${FREETYPE_LIBRARY_DIRS}
+    ${OPENAL_LIBRARY_DIRS}
+    ${SDL_TTF_LIBRARY_DIRS}
+    ${SDL_LIBRARY_DIRS}
+    ${X11_LIBRARY_DIRS}
+    ${OPENGL_LIBRARY_DIRS}
+    ${SNDFILE_LIBRARY_DIRS}
+    ${PANGO_LIBRARY_DIRS}
+    ${PANGOFT_LIBRARY_DIRS}
+    ${FREEIMAGE_LIBRARY_DIRS}
+    ${XINERAMA_LIBRARY_DIRS}
+    ${VORBIS_LIBRARY_DIRS}
+    /opt/X11/lib/
+    )
 find_package_handle_standard_args(Gosu DEFAULT_MSG Gosu_LIBRARY Gosu_INCLUDE_DIR)
 mark_as_advanced(Gosu_INCLUDE_DIR Gosu_LIBRARY)
 

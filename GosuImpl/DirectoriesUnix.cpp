@@ -17,7 +17,6 @@ namespace
     }
 }
 
-#ifndef GOSU_IS_MAC
 std::wstring Gosu::resourcePrefix()
 {
     return std::wstring();
@@ -27,7 +26,6 @@ std::wstring Gosu::sharedResourcePrefix()
 {
     return std::wstring();
 }
-#endif
 
 std::wstring Gosu::userSettingsPrefix()
 {
