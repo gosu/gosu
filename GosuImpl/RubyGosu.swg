@@ -505,7 +505,12 @@ namespace Gosu {
     }
 }
 
-%ignore Gosu::Image::Image;
+%ignore Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, bool tileable = false);
+%ignore Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, bool tileable = false);
+%ignore Gosu::Image::Image(Graphics& graphics, const Bitmap& source, bool tileable = false);
+%ignore Gosu::Image::Image(Graphics& graphics, const Bitmap& source, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, bool tileable = false);
+%ignore Gosu::Image::Image(std::unique_ptr<ImageData> data);
+%ignore Gosu::Image::Image(std::auto_ptr<ImageData> data);
 %ignore Gosu::loadTiles;
 %include "../Gosu/Image.hpp"
 %extend Gosu::Image {
