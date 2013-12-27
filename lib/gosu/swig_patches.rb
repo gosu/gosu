@@ -23,6 +23,7 @@ class Gosu::Window
   
   def protected_draw_2
     protected_draw
+    $gosu_gl_blocks_2 = $gosu_gl_blocks
     $gosu_gl_blocks = nil
   end
   
