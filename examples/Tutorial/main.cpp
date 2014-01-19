@@ -66,8 +66,8 @@ class Player
 
 public:
     Player(Gosu::Graphics& graphics)
-    :   image(graphics, Gosu::sharedResourcePrefix() + L"media/Starfighter.bmp"),
-        beep(Gosu::sharedResourcePrefix() + L"media/Beep.wav")
+    :   image(graphics, Gosu::resourcePrefix() + L"media/Starfighter.bmp"),
+        beep(Gosu::resourcePrefix() + L"media/Beep.wav")
     {
         posX = posY = velX = velY = angle = 0;
         score = 0;
@@ -150,10 +150,10 @@ public:
     {
         setCaption(L"Gosu Tutorial Game");
 
-        std::wstring filename = Gosu::sharedResourcePrefix() + L"media/Space.png";
+        std::wstring filename = Gosu::resourcePrefix() + L"media/Space.png";
         backgroundImage.reset(new Gosu::Image(graphics(), filename, true));
 
-        filename = Gosu::sharedResourcePrefix() + L"media/Star.png";
+        filename = Gosu::resourcePrefix() + L"media/Star.png";
         Gosu::imagesFromTiledBitmap(graphics(), filename, 25, 25, false, starAnim);
 
         player.warp(320, 240);

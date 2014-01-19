@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>5C56F964-A73E-4B62-BA77-DB100BA8AAFC</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Tutorial</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>E35297D7-9AAF-42F4-8B13-8BF083A50547</key>
+		<string>https://github.com/jlnr/gosu</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>examples/Tutorial/Tutorial/Tutorial.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>E35297D7-9AAF-42F4-8B13-8BF083A50547</key>
+		<string>../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/jlnr/gosu</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>E35297D7-9AAF-42F4-8B13-8BF083A50547</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E35297D7-9AAF-42F4-8B13-8BF083A50547</string>
+			<key>IDESourceControlWCCName</key>
+			<string>GosuSL</string>
+		</dict>
+	</array>
+</dict>
+</plist>

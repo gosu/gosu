@@ -37,5 +37,9 @@ Gosu.includes
 /cmake/build/*
 /examples/*/build/*
 
+# Files from Mac builds & CocoaPod installs
+/**/*.xcworkspace
 /**/xcuserdata
 /**/Pods
+/**/Podfile.lock
+/**/*.app
