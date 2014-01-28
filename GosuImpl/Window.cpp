@@ -42,7 +42,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     SDL_GL_SetSwapInterval(1);
     
     pimpl->graphics.reset(new Graphics(width, height, fullscreen));
-    pimpl->input.reset(new Input(nullptr));
+    pimpl->input.reset(new Input());
     pimpl->updateInterval = updateInterval;
 }
 
@@ -80,14 +80,16 @@ void Gosu::Window::show()
     SetFrontProcess(&psn);
     #endif
     
-	while (true) {
+    while (true) {
         SDL_Event e;
-		while (SDL_PollEvent(&e)) {
-			if (e.type == SDL_QUIT ||
-                e.type == SDL_KEYDOWN ||
-                e.type == SDL_MOUSEBUTTONDOWN)
-				return;
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_QUIT)
+                return;
+            else
+                input().feedSDLEvent(&e);
 		}
+        
+        input().update();
         
         update();
         
