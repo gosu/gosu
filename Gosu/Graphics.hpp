@@ -43,6 +43,10 @@ namespace Gosu
     Transform scale(double factor);
     Transform scale(double factorX, double factorY, double fromX = 0, double fromY = 0);
     
+#ifdef __BLOCKS__
+    typedef void (^GraphicsBlock)(void);
+#endif
+    
     //! Serves as the target of all drawing and provides primitive drawing
     //! functionality.
     //! Usually created internally by Gosu::Window.
@@ -136,6 +140,22 @@ namespace Gosu
         GOSU_UNIQUE_PTR<ImageData> createImage(const Bitmap& src,
             unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
             unsigned borderFlags);
+
+#ifdef __BLOCKS__
+        //! Executes the block in a clean OpenGL environment, resetting Gosu
+        //! to its default rendering state after the block returns.
+        void gl(GraphicsBlock block);
+        
+        //! Executes the block with all drawing clipped to a specified rectangle.
+        void clipTo(double x, double y, double width, double height, GraphicsBlock block);
+        
+        //! Executes the block, applying a specified transformation to all
+        //! drawing operations.
+        void transform(const Transform& transform, GraphicsBlock block);
+        
+        //! Records the block as a macro, returning the result as a drawable object.
+        std::auto_ptr<Gosu::ImageData> record(GraphicsBlock block);
+#endif
     };
 }
 

@@ -355,3 +355,35 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
 
     return GOSU_MOVE_UNIQUE_PTR(data);
 }
+
+#ifdef __BLOCKS__
+
+void Gosu::Graphics::gl(GraphicsBlock block)
+{
+    beginGL();
+    block();
+    endGL();
+}
+
+void Gosu::Graphics::clipTo(double x, double y, double width, double height, GraphicsBlock block)
+{
+    beginClipping(x, y, width, height);
+    block();
+    endClipping();
+}
+
+void Gosu::Graphics::transform(const Transform& transform, GraphicsBlock block)
+{
+    pushTransform(transform);
+    block();
+    popTransform();
+}
+
+std::auto_ptr<Gosu::ImageData> Gosu::Graphics::record(GraphicsBlock block)
+{
+    beginRecording();
+    block();
+    return endRecording();
+}
+
+#endif
