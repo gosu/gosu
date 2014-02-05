@@ -53,13 +53,19 @@ Gosu::Input::~Input()
 
 bool Gosu::Input::feedSDLEvent(void* event)
 {
-    const SDL_Event* e = static_cast<SDL_Event *>(event);
+    const SDL_Event* e = static_cast<SDL_Event*>(event);
     switch (e->type) {
-    case SDL_KEYDOWN:
-        return true;
-    default:
-        return false;
+        case SDL_KEYDOWN:
+        case SDL_KEYUP: {
+            if (e->key.repeat == 0 && e->key.keysym.scancode <= kbRangeEnd) {
+                pimpl->enqueue(e->key.keysym.scancode, e->type == SDL_KEYDOWN);
+                return true;
+            }
+            
+            break;
+        }
     }
+    return false;
 }
 
 wchar_t Gosu::Input::idToChar(Button btn)
