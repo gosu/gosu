@@ -10,8 +10,8 @@
 		9DD467166BA5492BB4FAF268 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B46B32856A9F4322B3EA3F0A /* libPods.a */; };
 		D42CEBD91872343300FDD5A7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42CEBD81872343300FDD5A7 /* Cocoa.framework */; };
 		D42CEBE31872343300FDD5A7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D42CEBE11872343300FDD5A7 /* InfoPlist.strings */; };
-		D42CEC0D1872353600FDD5A7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D42CEC0C1872353600FDD5A7 /* main.cpp */; };
 		D454B42C188C4DD8007C3B58 /* media in Resources */ = {isa = PBXBuildFile; fileRef = D454B42B188C4DD8007C3B58 /* media */; };
+		D4E8009218A2C78C00C7AB2D /* Tutorial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4E8009118A2C78C00C7AB2D /* Tutorial.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,8 +24,8 @@
 		D42CEBDD1872343300FDD5A7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D42CEBE01872343300FDD5A7 /* Tutorial-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tutorial-Info.plist"; sourceTree = "<group>"; };
 		D42CEBE21872343300FDD5A7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		D42CEC0C1872353600FDD5A7 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = SOURCE_ROOT; };
 		D454B42B188C4DD8007C3B58 /* media */ = {isa = PBXFileReference; lastKnownFileType = folder; name = media; path = ../../media; sourceTree = "<group>"; };
+		D4E8009118A2C78C00C7AB2D /* Tutorial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Tutorial.cpp; path = ../../Tutorial.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,7 +82,7 @@
 		D42CEBDE1872343300FDD5A7 /* Tutorial */ = {
 			isa = PBXGroup;
 			children = (
-				D42CEC0C1872353600FDD5A7 /* main.cpp */,
+				D4E8009118A2C78C00C7AB2D /* Tutorial.cpp */,
 				D42CEBDF1872343300FDD5A7 /* Supporting Files */,
 			);
 			path = Tutorial;
@@ -197,7 +197,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D42CEC0D1872353600FDD5A7 /* main.cpp in Sources */,
+				D4E8009218A2C78C00C7AB2D /* Tutorial.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
