@@ -61,7 +61,20 @@ bool Gosu::Input::feedSDLEvent(void* event)
                 pimpl->enqueue(e->key.keysym.scancode, e->type == SDL_KEYDOWN);
                 return true;
             }
-            
+            break;
+        }
+        case SDL_MOUSEBUTTONDOWN:
+        case SDL_MOUSEBUTTONUP: {
+            if (e->button.button <= 2) {
+                pimpl->enqueue(msLeft + e->button.button, e->type == SDL_MOUSEBUTTONDOWN);
+                return true;
+            }
+            break;
+        }
+        case SDL_MOUSEWHEEL: {
+            unsigned id = e->wheel.y < 0 ? msWheelUp : msWheelDown;
+            pimpl->enqueue(id, true);
+            pimpl->enqueue(id, false);
             break;
         }
     }
