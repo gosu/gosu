@@ -61,33 +61,36 @@ bool Gosu::TextInput::feedXEvent(void* display, void* event)
     if (ev->type != KeyPress)
         return false;
 
+    // XEvent tagged as KeyPress is type XKeyEvent
     bool ctrlDown	= (ev->xkey.state & ControlMask);
     bool shiftDown	= (ev->xkey.state & ShiftMask);
 
-    KeySym lower, upper;
-    int keysyms_per_keycode_return;
-    KeySym keysym = *XGetKeyboardMapping((Display*)display, ev->xkey.keycode, 1, &keysyms_per_keycode_return);
-    XConvertCase(keysym, &lower, &upper);
+    const int output_buffer_size = 50;
+    char output_buffer[output_buffer_size + 1];
+    const int stored = XLookupString(&ev->xkey, output_buffer, output_buffer_size, NULL, NULL);
 
-    wchar_t ch = static_cast<wchar_t>(shiftDown ? upper : lower);
-
-    if (ch >= 32 && ch != 127 && ch <= 255)
+    if (1 == stored)
     {
-        // Delete (overwrite) previous selection.
-        if (CARET_POS != SEL_START)
+        const wchar_t ch = output_buffer[0];
+        if (ch >= 32 && ch != 127 && ch <= 255)
         {
-            unsigned min = std::min(CARET_POS, SEL_START);
-            unsigned max = std::max(CARET_POS, SEL_START);
-            pimpl->text.erase(pimpl->text.begin() + min, pimpl->text.begin() + max);
-            CARET_POS = SEL_START = min;
+
+            // Delete (overwrite) previous selection.
+            if (CARET_POS != SEL_START)
+            {
+                unsigned min = std::min(CARET_POS, SEL_START);
+                unsigned max = std::max(CARET_POS, SEL_START);
+                pimpl->text.erase(pimpl->text.begin() + min, pimpl->text.begin() + max);
+                CARET_POS = SEL_START = min;
+            }
+            
+            wchar_t text[] = { ch, 0 };
+            std::wstring filteredText = filter(text);
+            pimpl->text.insert(pimpl->text.begin() + CARET_POS, filteredText.begin(), filteredText.end());
+            CARET_POS += filteredText.length();
+            SEL_START = CARET_POS;
+            return true;
         }
-        
-        wchar_t text[] = { ch, 0 };
-        std::wstring filteredText = filter(text);
-        pimpl->text.insert(pimpl->text.begin() + CARET_POS, filteredText.begin(), filteredText.end());
-        CARET_POS += filteredText.length();
-        SEL_START = CARET_POS;
-        return true;
     }
 
     Button btn(ev->xkey.keycode-8);
