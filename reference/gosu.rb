@@ -842,7 +842,7 @@ module Gosu
     # @param width [Fixnum] the desired window width.
     # @param height [Fixnum] the desired window height.
     # @param fullscreen [true, false] whether to create a full-screen window.
-    # @param update_interval [Float] the interval between calls to {#update}, in milliseconsd. For the default value of 16.666666, the game will attempt to run at approximately 60 FPS, which is ideal on standard 60 Hz TFT screens.
+    # @param update_interval [Float] the interval between calls to {#update}, in milliseconds. For the default value of 16.666666, the game will attempt to run at approximately 60 FPS, which is ideal on standard 60 Hz TFT screens.
     def initialize(width, height, fullscreen, update_interval=16.666666); end
     
     ##
