@@ -30,7 +30,7 @@ namespace Gosu
         //! \param fontFlags Flags used to render individual characters of
         //!        the font.
         Font(Graphics& graphics, const std::wstring& fontName,
-            unsigned fontHeight, unsigned fontFlags = ffBold);
+            unsigned fontHeight, FontFlags fontFlags = ffBold);
         
         //! Returns the name of the font that was used to create it.
         std::wstring name() const;
@@ -39,7 +39,7 @@ namespace Gosu
         unsigned height() const;
         
         //! Returns the flags used to create the font characters.
-        unsigned flags() const;
+        FontFlags flags() const;
         
         //! Returns the width, in pixels, the given text would occupy if drawn.
         double textWidth(const std::wstring& text, double factorX = 1) const;
@@ -64,7 +64,7 @@ namespace Gosu
         //! Gosu's built-in text rendering. This can only be called once per
         //! character, and the character must not have been drawn before.
         //! This ensures that Fonts are still sort of immutable.
-        void setImage(wchar_t wc, unsigned fontFlags, const Gosu::Image& image);
+        void setImage(wchar_t wc, FontFlags fontFlags, const Gosu::Image& image);
         //! A shortcut for mapping a character to an image regardless of fontFlags.
         //! Later versions might apply faux italics or faux bold to it (to be decided!).
         void setImage(wchar_t wc, const Gosu::Image& image);

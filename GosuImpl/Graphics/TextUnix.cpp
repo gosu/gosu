@@ -52,7 +52,7 @@ namespace Gosu
         }
         unsigned textWidth(const std::wstring& text,
             const std::wstring& fontFace, unsigned fontHeight,
-            unsigned fontFlags)
+            FontFlags fontFlags)
         {
             g_type_init();
 
@@ -69,10 +69,10 @@ namespace Gosu
             pango_font_description_set_family(font_description,
                 g_strdup(narrow(fontFace).c_str()));
             pango_font_description_set_style(font_description,
-                (fontFlags & ffItalic) ? PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL);
+                ((fontFlags & ffItalic) == ffItalic) ? PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL);
             pango_font_description_set_variant(font_description, PANGO_VARIANT_NORMAL);
             pango_font_description_set_weight(font_description,
-                (fontFlags & ffBold) ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL);
+                ((fontFlags & ffBold) == ffBold) ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL);
             pango_font_description_set_stretch(font_description, PANGO_STRETCH_NORMAL);
             int init_scale = int(fontHeight/2.0 + 0.5);
             pango_font_description_set_size(font_description, init_scale * PANGO_SCALE);
@@ -83,7 +83,7 @@ namespace Gosu
             layout = pango_layout_new(context);
 
 
-            if(fontFlags & ffUnderline)
+            if((fontFlags & ffUnderline) == ffUnderline)
             {
         //        PangoAttribute *attr;
                 attr = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
@@ -118,7 +118,7 @@ namespace Gosu
         }
         void drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
             Color c, const std::wstring& fontFace, unsigned fontHeight,
-            unsigned fontFlags)
+            FontFlags fontFlags)
         {
             textWidth(text, fontFace, fontHeight, fontFlags);
 
@@ -251,7 +251,7 @@ namespace Gosu
 
 unsigned Gosu::textWidth(const std::wstring& text,
     const std::wstring& fontName, unsigned fontHeight,
-    unsigned fontFlags)
+    FontFlags fontFlags)
 {
     if (text.find_first_of(L"\r\n") != std::wstring::npos)
         throw std::invalid_argument("the argument to textWidth cannot contain line breaks");
@@ -264,7 +264,7 @@ unsigned Gosu::textWidth(const std::wstring& text,
 
 void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
     Color c, const std::wstring& fontName, unsigned fontHeight,
-    unsigned fontFlags)
+    FontFlags fontFlags)
 {
     if (text.find_first_of(L"\r\n") != std::wstring::npos)
         throw std::invalid_argument("the argument to drawText cannot contain line breaks");

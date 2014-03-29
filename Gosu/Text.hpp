@@ -22,7 +22,7 @@ namespace Gosu
     //! \param fontName Name of a system font, or a filename to a TTF file (must contain '/').
     unsigned textWidth(const std::wstring& text,
         const std::wstring& fontName, unsigned fontHeight,
-        unsigned fontFlags = 0);
+        FontFlags fontFlags = ffNone);
 
     //! Draws a line of unformatted text on a bitmap. This is a very low-level function that does not understand
     //! any of Gosu's HTML-like markup.
@@ -33,7 +33,7 @@ namespace Gosu
     //! enum.
     void drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
         Color c, const std::wstring& fontName, unsigned fontHeight,
-        unsigned fontFlags = 0);
+        FontFlags fontFlags = ffNone);
 
     //! Creates a bitmap that is filled with a line of formatted text given to the function.
     //! The line can contain line breaks and HTML-like markup.
@@ -44,7 +44,7 @@ namespace Gosu
     //! enum.
     Bitmap createText(const std::wstring& text,
         const std::wstring& fontName, unsigned fontHeight,
-        unsigned fontFlags = 0);
+        FontFlags fontFlags = ffNone);
 
     //! Creates a bitmap that is filled with the formatted text given to the function.
     //! The line can contain line breaks and HTML-like markup.
@@ -61,7 +61,7 @@ namespace Gosu
     Bitmap createText(const std::wstring& text,
         const std::wstring& fontName, unsigned fontHeight, 
         int lineSpacing, unsigned width, TextAlign align,
-        unsigned fontFlags = 0);
+        FontFlags fontFlags = ffNone);
     
     //! Registers a new HTML-style entity that can subsequently be used
     //! with Gosu::Font and Gosu::createText. The name is given without & and ;.

@@ -19,7 +19,7 @@ namespace Gosu
         {
             wchar_t wc;
             Gosu::Color color;
-            unsigned flags;
+            FontFlags flags;
             std::wstring entity;
             
             bool sameStyleAs(const FormattedChar& other) const
@@ -30,13 +30,13 @@ namespace Gosu
         
         // If characters.empty(), use these for the whole string.
         std::wstring simpleString;
-        unsigned simpleFlags;
+        FontFlags simpleFlags;
         // If not characters.empty(), ignore above fields and use this.
         std::vector<FormattedChar> characters;
         
-        static unsigned flags(int b, int u, int i)
+        static FontFlags flags(int b, int u, int i)
         {
-            unsigned flags = 0;
+            FontFlags flags = FontFlags::NONE;
             if (b > 0) flags |= ffBold;
             if (u > 0) flags |= ffUnderline;
             if (i > 0) flags |= ffItalic;
@@ -48,7 +48,7 @@ namespace Gosu
         {
         }
         
-        explicit FormattedString(const wchar_t* html, unsigned baseFlags)
+        explicit FormattedString(const wchar_t* html, FontFlags baseFlags)
         {
             // Remove \r characters if existent. Avoid a copy if we don't need one.
             std::wstring unixified;
@@ -76,9 +76,9 @@ namespace Gosu
             }
             
             unsigned pos = 0;
-            int b = (baseFlags & ffBold) ? 1 : 0,
-                u = (baseFlags & ffUnderline) ? 1 : 0,
-                i = (baseFlags & ffItalic) ? 1 : 0;
+            int b = ((baseFlags & ffBold) == ffBold) ? 1 : 0,
+                u = ((baseFlags & ffUnderline) == ffBold) ? 1 : 0,
+                i = ((baseFlags & ffItalic) == ffBold) ? 1 : 0;
             std::vector<Gosu::Color> c;
             c.push_back(0xffffffff);
             while (pos < len)
@@ -179,7 +179,7 @@ namespace Gosu
                         if (endOfEntity >= len)
                             goto normalCharacter;
                     }
-                    FormattedChar fc = { 0, c.back(), 0, std::wstring(html + pos + 1, html + endOfEntity) };
+                    FormattedChar fc = { 0, c.back(), FontFlags::NONE, std::wstring(html + pos + 1, html + endOfEntity) };
                     if (!isEntity(fc.entity))
                         goto normalCharacter;
                     characters.push_back(fc);
@@ -225,7 +225,7 @@ namespace Gosu
                 return characters[index].wc;
         }
         
-        unsigned flagsAt(unsigned index) const
+        FontFlags flagsAt(unsigned index) const
         {
             if (characters.empty())
                 return simpleFlags;
