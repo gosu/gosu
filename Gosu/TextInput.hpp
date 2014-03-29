@@ -24,12 +24,12 @@ namespace Gosu
     {
         struct Impl;
         const GOSU_UNIQUE_PTR<Impl> pimpl;
-#if defined(GOSU_CPP11_ENABLED)
+    #if defined(GOSU_CPP11_ENABLED)
         TextInput(TextInput&&) = delete;
         TextInput& operator=(TextInput&&) = delete;
         TextInput(const TextInput&) = delete;
         TextInput& operator=(const TextInput&) = delete;
-#endif
+    #endif
         
     public:
         TextInput();
@@ -55,13 +55,7 @@ namespace Gosu
         void setSelectionStart(unsigned pos);
         
         // Platform-specific communication with Gosu::Input.
-        #if defined(GOSU_IS_MAC)
-        bool feedNSEvent(void* event);
-        #elif defined(GOSU_IS_WIN)
-        bool feedMessage(unsigned long message, unsigned long wparam, unsigned long lparam);
-        #elif defined(GOSU_IS_X)
-        bool feedXEvent(void* display, void* event);
-        #endif
+        bool feedSDLEvent(void* event);
 
         //! Overridable filter that is applied to all new text that is entered.
         //! Allows for context-sensitive filtering/extending/... of the text.

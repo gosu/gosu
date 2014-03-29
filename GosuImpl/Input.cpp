@@ -1,4 +1,5 @@
 #include <Gosu/Input.hpp>
+#include <Gosu/TextInput.hpp>
 #include <Gosu/TR1.hpp>
 #include <SDL.h>
 #include <algorithm>
@@ -31,17 +32,18 @@ struct Gosu::Input::Impl
     
     void dispatchEnqueuedEvents()
     {
-        for (unsigned i = 0; i < eventQueue.size(); ++i)
-        {
+        for (unsigned i = 0; i < eventQueue.size(); ++i) {
             int event = eventQueue[i];
             bool down = (event >= 0);
             Button button(down ? event : ~event);
             
             buttonStates[button.id()] = down;
-            if (down && input.onButtonDown)
+            if (down && input.onButtonDown) {
                 input.onButtonDown(button);
-            else if (!down && input.onButtonUp)
+            }
+            else if (!down && input.onButtonUp) {
                 input.onButtonUp(button);
+            }
         }
         eventQueue.clear();
     }
@@ -49,8 +51,8 @@ struct Gosu::Input::Impl
     void initializeGamepads()
     {
         int numGamepads = std::min<int>(Gosu::numGamepads, SDL_NumJoysticks());
-        for (int i = 0; i < numGamepads; ++i)
-        {
+        
+        for (int i = 0; i < numGamepads; ++i) {
             SDL_Joystick *joystick = SDL_JoystickOpen(i);
             if (joystick) {
                 joysticks.push_back(joystick);
@@ -100,13 +102,13 @@ struct Gosu::Input::Impl
             }
             
             for (int button = 0; button < buttons; ++button) {
-                auto value = SDL_JoystickGetButton(joysticks[i], button);
-                
-                if (value)
+                if (SDL_JoystickGetButton(joysticks[i], button)) {
                     currentGamepad[gpButton0 + button - gpRangeBegin] = true;
+                }
             }
             
-            int offset = gpRangeBegin + gpNumPerGamepad * (i + 1) ;
+            int offset = gpRangeBegin + gpNumPerGamepad * (i + 1);
+            
             for (int j = 0; j < currentGamepad.size(); ++j) {
                 anyGamepad[j] = anyGamepad[j] || currentGamepad[j];
                 
@@ -157,6 +159,11 @@ Gosu::Input::~Input()
 bool Gosu::Input::feedSDLEvent(void* event)
 {
     const SDL_Event* e = static_cast<SDL_Event*>(event);
+    
+    if (pimpl->textInput && pimpl->textInput->feedSDLEvent(event)) {
+        return true;
+    }
+    
     switch (e->type) {
         case SDL_KEYDOWN:
         case SDL_KEYUP: {
@@ -175,9 +182,14 @@ bool Gosu::Input::feedSDLEvent(void* event)
             break;
         }
         case SDL_MOUSEWHEEL: {
-            unsigned id = e->wheel.y < 0 ? msWheelUp : msWheelDown;
-            pimpl->enqueueEvent(id, true);
-            pimpl->enqueueEvent(id, false);
+            if (e->wheel.y < 0) {
+                pimpl->enqueueEvent(msWheelUp, true);
+                return true;
+            }
+            else if (e->wheel.y > 0) {
+                pimpl->enqueueEvent(msWheelDown, false);
+                return true;
+            }
             break;
         }
     }
@@ -186,11 +198,13 @@ bool Gosu::Input::feedSDLEvent(void* event)
 
 wchar_t Gosu::Input::idToChar(Button btn)
 {
+    // TODO - implement this for SDL
     return 0;
 }
 
 Gosu::Button Gosu::Input::charToId(wchar_t ch)
 {
+    // TODO - implement this for SDL
     return Button(Gosu::noButton);
 }
 
@@ -214,7 +228,8 @@ double Gosu::Input::mouseY() const
 
 void Gosu::Input::setMousePosition(double x, double y)
 {
-    throw "NYI";
+    // TODO - Input needs SDL Window handle to pass into this
+    SDL_WarpMouseInWindow(nullptr, x, y);
 }
 
 void Gosu::Input::setMouseFactors(double factorX, double factorY)
@@ -258,5 +273,12 @@ Gosu::TextInput* Gosu::Input::textInput() const
 
 void Gosu::Input::setTextInput(TextInput* textInput)
 {
+    if (pimpl->textInput && textInput == nullptr) {
+        SDL_StopTextInput();
+    }
+    else if (pimpl->textInput == nullptr && textInput) {
+        SDL_StartTextInput();
+    }
+    
     pimpl->textInput = textInput;
 }
