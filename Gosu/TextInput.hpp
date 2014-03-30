@@ -60,9 +60,9 @@ namespace Gosu
         //! Overridable filter that is applied to all new text that is entered.
         //! Allows for context-sensitive filtering/extending/... of the text.
         //! The text will be inserted at caretPos afterwards.
-        virtual std::wstring filter(const std::wstring& textIn) const
+        virtual std::wstring filter(const std::wstring& text) const
         {
-            return textIn;
+            return text;
         }
     };
 }

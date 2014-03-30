@@ -73,7 +73,7 @@ namespace Gosu
         kbMinus = 45,
         kbEqual = 46,        // TODO: Rename ->kbEquals
         kbBracketLeft = 47,  // TODO: Rename ->kbLeftBracket
-        kbBracketRight = 48, // TODO: Ranem ->kbRightBracket
+        kbBracketRight = 48, // TODO: Rename ->kbRightBracket
         kbBackslash = 49,
         kbSemicolon = 51,
         kbApostrophe = 52,
