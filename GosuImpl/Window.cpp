@@ -11,6 +11,26 @@ namespace Gosu
     {
         void registerFrame();
     }
+    
+    SDL_DisplayMode desktopDisplayMode = { 0, 0 };
+}
+
+unsigned Gosu::screenWidth()
+{
+    // TODO - not thread-safe
+    if (desktopDisplayMode.w == 0) {
+        SDL_GetDesktopDisplayMode(0, &desktopDisplayMode);
+    }
+    return desktopDisplayMode.w;
+}
+
+unsigned Gosu::screenHeight()
+{
+    // TODO - not thread-safe
+    if (desktopDisplayMode.h == 0) {
+        SDL_GetDesktopDisplayMode(0, &desktopDisplayMode);
+    }
+    return desktopDisplayMode.h;
 }
 
 struct Gosu::Window::Impl
