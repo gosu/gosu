@@ -1,8 +1,5 @@
 #include <Gosu/Gosu.hpp>
 #include <SDL.h>
-#ifdef GOSU_IS_MAC
-#include <Carbon/Carbon.h>
-#endif
 #include <cstdlib>
 #include <memory>
 
@@ -32,13 +29,11 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         throw std::runtime_error("Failed to initialize SDL Video");
     
-    std::atexit(SDL_Quit);
-    
     pimpl->window = SDL_CreateWindow("",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         width, height,
         SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI |
-            (fullscreen ? SDL_WINDOW_FULLSCREEN : 0));
+            (fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0));
     pimpl->context = SDL_GL_CreateContext(pimpl->window);
     SDL_GL_MakeCurrent(pimpl->window, pimpl->context);
     SDL_GL_SetSwapInterval(1);
@@ -54,6 +49,8 @@ Gosu::Window::~Window()
 {
     SDL_GL_DeleteContext(pimpl->context);
     SDL_DestroyWindow(pimpl->window);
+    
+    SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
 std::wstring Gosu::Window::caption() const
@@ -74,16 +71,6 @@ double Gosu::Window::updateInterval() const
 
 void Gosu::Window::show()
 {
-    #ifdef GOSU_IS_MAC
-    // This is for Ruby/Gosu on OS X:
-    // Usually, applications on the Mac can only get keyboard and mouse input if
-    // run by double-clicking an .app. So if this is run from the Terminal (i.e.
-    // during Ruby/Gosu game development), explicitly tell the OS we need input.
-    ProcessSerialNumber psn = { 0, kCurrentProcess };
-    TransformProcessType(&psn, kProcessTransformToForegroundApplication);
-    SetFrontProcess(&psn);
-    #endif
-    
     while (true) {
         auto startTime = milliseconds();
         
