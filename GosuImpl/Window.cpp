@@ -123,6 +123,8 @@ void Gosu::Window::show()
                 input().feedSDLEvent(&e);
 		}
         
+        Song::update();
+        
         input().update();
         
         update();
