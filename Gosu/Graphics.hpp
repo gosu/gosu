@@ -43,9 +43,9 @@ namespace Gosu
         Graphics(unsigned physicalWidth, unsigned physicalHeight, bool fullscreen);
         ~Graphics();
 
-        // Undocumented until I have thought about this...
-        void setResolution(unsigned virtualWidth, unsigned virtualHeight);
-        // End of Undocumented
+        // TODO: Replace by setBaseTransform()
+        void setResolution(unsigned virtualWidth, unsigned virtualHeight,
+            double horizontalBlackBarWidth = 0, double verticalBlackBarHeight = 0);
         
         unsigned width() const;
         unsigned height() const;

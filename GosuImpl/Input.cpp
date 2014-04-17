@@ -13,11 +13,15 @@ struct Gosu::Input::Impl
     std::tr1::array<bool, Gosu::numButtons> buttonStates;
     double mouseX, mouseY;
     double mouseFactorX, mouseFactorY;
+    double mouseOffsetX, mouseOffsetY;
     
     Impl(Input& input)
-    : input(input), textInput(nullptr), mouseFactorX(1), mouseFactorY(1)
+    : input(input), textInput(nullptr)
     {
         std::fill(buttonStates.begin(), buttonStates.end(), false);
+        
+        mouseFactorX = mouseFactorY = 1;
+        mouseOffsetX = mouseOffsetY = 0;
     }
     
     void updateMousePosition()
@@ -252,24 +256,29 @@ bool Gosu::Input::down(Gosu::Button btn) const
 
 double Gosu::Input::mouseX() const
 {
-    return pimpl->mouseX * pimpl->mouseFactorX;
+    return pimpl->mouseX * pimpl->mouseFactorX + pimpl->mouseOffsetX;
 }
 
 double Gosu::Input::mouseY() const
 {
-    return pimpl->mouseY * pimpl->mouseFactorY;
+    return pimpl->mouseY * pimpl->mouseFactorY + pimpl->mouseOffsetY;
 }
 
 void Gosu::Input::setMousePosition(double x, double y)
 {
     // TODO - Input needs SDL Window handle to pass into this
-    SDL_WarpMouseInWindow(nullptr, x, y);
+    SDL_WarpMouseInWindow(nullptr,
+        (x - pimpl->mouseOffsetX) / pimpl->mouseFactorX,
+        (y - pimpl->mouseOffsetY) / pimpl->mouseFactorY);
 }
 
-void Gosu::Input::setMouseFactors(double factorX, double factorY)
+void Gosu::Input::setMouseFactors(double factorX, double factorY,
+    double blackBarWidth, double blackBarHeight)
 {
     pimpl->mouseFactorX = factorX;
     pimpl->mouseFactorY = factorY;
+    pimpl->mouseOffsetX = -blackBarWidth;
+    pimpl->mouseOffsetY = -blackBarHeight;
 }
 
 const Gosu::Touches& Gosu::Input::currentTouches() const

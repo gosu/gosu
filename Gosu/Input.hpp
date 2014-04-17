@@ -117,7 +117,7 @@ namespace Gosu
         void setMousePosition(double x, double y);
 
         // Undocumented for the moment. Also applies to currentTouches().
-        void setMouseFactors(double factorX, double factorY);
+        void setMouseFactors(double factorX, double factorY, double offsetX = 0, double offsetY = 0);
         
         //! Currently known touches.
         const Touches& currentTouches() const;

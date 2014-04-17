@@ -51,10 +51,24 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     
     unsigned actualWidth = width;
     unsigned actualHeight = height;
+    double scaleFactor = 1.0;
+    double blackBarWidth = 0;
+    double blackBarHeight = 0;
     
     if (fullscreen) {
         actualWidth = Gosu::screenWidth();
         actualHeight = Gosu::screenHeight();
+
+        double scaleX = 1.0 * actualWidth / width;
+        double scaleY = 1.0 * actualHeight / height;
+        scaleFactor = std::min(scaleX, scaleY);
+
+        if (scaleX < scaleY) {
+            blackBarHeight = (actualHeight / scaleX - height) / 2;
+        }
+        else if (scaleY < scaleX) {
+            blackBarWidth = (actualWidth / scaleY - width) / 2;
+        }
     }
     else {
         // TODO - get platform-specific best width/height we could get
@@ -63,9 +77,9 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
         double maxHeight = Gosu::screenHeight() * 0.8;
         
         if (width > maxWidth || height > maxHeight) {
-            double factor = std::min(maxWidth / width, maxHeight / height);
-            actualWidth = width * factor;
-            actualHeight = height * factor;
+            scaleFactor = std::min(maxWidth / width, maxHeight / height);
+            actualWidth = width * scaleFactor;
+            actualHeight = height * scaleFactor;
         }
     }
     
@@ -79,8 +93,9 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     SDL_GL_SetSwapInterval(1);
     
     pimpl->graphics.reset(new Graphics(actualWidth, actualHeight, fullscreen));
-    pimpl->graphics->setResolution(width, height);
+    pimpl->graphics->setResolution(width, height, blackBarWidth, blackBarHeight);
     pimpl->input.reset(new Input());
+    pimpl->input->setMouseFactors(1 / scaleFactor, 1 / scaleFactor, blackBarWidth, blackBarHeight);
     input().onButtonDown = std::tr1::bind(&Window::buttonDown, this, _1);
     input().onButtonUp = std::tr1::bind(&Window::buttonUp, this, _1);
     pimpl->updateInterval = updateInterval;

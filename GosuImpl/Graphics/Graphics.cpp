@@ -72,27 +72,21 @@ bool Gosu::Graphics::fullscreen() const
     return pimpl->fullscreen;
 }
 
-void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight)
+void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight,
+    double horizontalBlackBarWidth, double verticalBlackBarHeight)
 {
     if (virtualWidth == 0 || virtualHeight == 0)
         throw std::invalid_argument("Invalid virtual resolution.");
     
     pimpl->virtWidth = virtualWidth;
     pimpl->virtHeight = virtualHeight;
+    pimpl->blackWidth = horizontalBlackBarWidth;
+    pimpl->blackHeight = verticalBlackBarHeight;
+
     double scaleX = 1.0 * pimpl->physWidth / virtualWidth;
     double scaleY = 1.0 * pimpl->physHeight / virtualHeight;
     double scaleFactor = std::min(scaleX, scaleY);
-    
-    pimpl->blackWidth = 0;
-    pimpl->blackHeight = 0;
 
-    if (scaleX < scaleY) {
-        pimpl->blackHeight = (pimpl->physHeight / scaleX - virtualHeight) / 2;
-    }
-    else if (scaleY < scaleX) {
-        pimpl->blackWidth = (pimpl->physWidth / scaleY - virtualWidth) / 2;
-    }
-    
     Transform scaleTransform = scale(scaleFactor);
     Transform translateTransform = translate(pimpl->blackWidth, pimpl->blackHeight);
     Transform baseTransform = concat(translateTransform, scaleTransform);
