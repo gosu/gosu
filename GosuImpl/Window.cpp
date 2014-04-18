@@ -1,7 +1,8 @@
 #include <Gosu/Gosu.hpp>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <cstdlib>
 #include <memory>
+#include <stdexcept>
 
 using namespace std::tr1::placeholders;
 
@@ -128,7 +129,7 @@ double Gosu::Window::updateInterval() const
 void Gosu::Window::show()
 {
     while (true) {
-        auto startTime = milliseconds();
+        unsigned long startTime = milliseconds();
         
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
@@ -152,7 +153,7 @@ void Gosu::Window::show()
         SDL_GL_SwapWindow(pimpl->window);
         
         // Sleep to keep this loop from eating 100% CPU.
-        auto frameTime = milliseconds() - startTime;
+        unsigned int frameTime = milliseconds() - startTime;
         if (frameTime > 0 && frameTime < pimpl->updateInterval) {
             sleep(pimpl->updateInterval - frameTime);
         }

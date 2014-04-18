@@ -2,7 +2,7 @@
 #include <Gosu/TextInput.hpp>
 #include <Gosu/TR1.hpp>
 #include <Gosu/Utility.hpp>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <algorithm>
 #include <cwctype>
 
@@ -16,7 +16,7 @@ struct Gosu::Input::Impl
     double mouseOffsetX, mouseOffsetY;
     
     Impl(Input& input)
-    : input(input), textInput(nullptr)
+    : input(input), textInput(NULL)
     {
         std::fill(buttonStates.begin(), buttonStates.end(), false);
         
@@ -68,17 +68,17 @@ struct Gosu::Input::Impl
     
     void pollGamepads()
     {
-        std::array<bool, gpNumPerGamepad> anyGamepad = { false };
+        std::tr1::array<bool, gpNumPerGamepad> anyGamepad = { false };
         
         for (int i = 0; i < joysticks.size(); ++i) {
-            std::array<bool, gpNumPerGamepad> currentGamepad = { false };
+            std::tr1::array<bool, gpNumPerGamepad> currentGamepad = { false };
             
             int axes = SDL_JoystickNumAxes(joysticks[i]),
                 hats = SDL_JoystickNumHats(joysticks[i]),
                 buttons = std::min<int>(gpNumPerGamepad - 4, SDL_JoystickNumButtons(joysticks[i]));
             
             for (int axis = 0; axis < axes; ++axis) {
-                auto value = SDL_JoystickGetAxis(joysticks[i], axis);
+                Sint16 value = SDL_JoystickGetAxis(joysticks[i], axis);
 
                 if (value < -(1 << 14)) {
                     if (axis % 2 == 0)
@@ -95,7 +95,7 @@ struct Gosu::Input::Impl
             }
             
             for (int hat = 0; hat < hats; ++hat) {
-                auto value = SDL_JoystickGetHat(joysticks[i], hat);
+                Uint8 value = SDL_JoystickGetHat(joysticks[i], hat);
                 
                 if (value == SDL_HAT_LEFT || value == SDL_HAT_LEFTUP || value == SDL_HAT_LEFTDOWN)
                     currentGamepad[gpLeft - gpRangeBegin] = true;
@@ -216,7 +216,7 @@ wchar_t Gosu::Input::idToChar(Button btn)
         return 0;
     
     const char* name = SDL_GetKeyName(keycode);
-    if (name == nullptr)
+    if (name == NULL)
         return 0;
     
     std::wstring wname = utf8ToWstring(name);
@@ -267,7 +267,7 @@ double Gosu::Input::mouseY() const
 void Gosu::Input::setMousePosition(double x, double y)
 {
     // TODO - Input needs SDL Window handle to pass into this
-    SDL_WarpMouseInWindow(nullptr,
+    SDL_WarpMouseInWindow(NULL,
         (x - pimpl->mouseOffsetX) / pimpl->mouseFactorX,
         (y - pimpl->mouseOffsetY) / pimpl->mouseFactorY);
 }
@@ -318,10 +318,10 @@ Gosu::TextInput* Gosu::Input::textInput() const
 
 void Gosu::Input::setTextInput(TextInput* textInput)
 {
-    if (pimpl->textInput && textInput == nullptr) {
+    if (pimpl->textInput && textInput == NULL) {
         SDL_StopTextInput();
     }
-    else if (pimpl->textInput == nullptr && textInput) {
+    else if (pimpl->textInput == NULL && textInput) {
         SDL_StartTextInput();
     }
     
