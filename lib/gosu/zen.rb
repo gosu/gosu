@@ -24,6 +24,10 @@ module Gosu
       end
     end
     
+    def init &body
+      ZenWindow.send :define_method, :init, &body
+    end
+    
     def button_down id = nil, &body
       m = id ? "button_down_#{id}" : :button_down_other
       ZenWindow.send :define_method, m, &body
@@ -57,6 +61,14 @@ module Gosu
   end
   
   class ZenWindow < Window
+    def initialize *args
+      super
+      init
+    end
+    
+    def init
+    end
+    
     def button_down id
       m = :"button_down_#{id}"
       respond_to?(m) ? send(m) : button_down_other(id)
