@@ -74,6 +74,20 @@ class Gosu::Window
   end
 end
 
+# Workaround for draw before update on Windows
+# https://github.com/jlnr/gosu/issues/208
+if defined? RUBY_PLATFORM and
+    %w(-win32 win32- mswin mingw32).any? { |s| RUBY_PLATFORM.include? s } then
+  class Gosu::Window
+    alias show_ show
+    
+    def show
+      update
+      show_
+    end
+  end
+end
+
 # Release OpenAL resources during Ruby's shutdown, not Gosu's.
 at_exit do
   Gosu::Song.current_song.stop if Gosu::Song.current_song
