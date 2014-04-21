@@ -11,7 +11,7 @@
 		D42CEBD91872343300FDD5A7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D42CEBD81872343300FDD5A7 /* Cocoa.framework */; };
 		D42CEBE31872343300FDD5A7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D42CEBE11872343300FDD5A7 /* InfoPlist.strings */; };
 		D454B42C188C4DD8007C3B58 /* media in Resources */ = {isa = PBXBuildFile; fileRef = D454B42B188C4DD8007C3B58 /* media */; };
-		D4C2BFFA189069F4001F1465 /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4C2BFF9189069F4001F1465 /* libSDL2.a */; };
+		D4B7D49719057BCA002D7056 /* libSDL2-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D4B7D49619057BCA002D7056 /* libSDL2-2.0.0.dylib */; };
 		D4C2BFFC18906A0A001F1465 /* ForceFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4C2BFFB18906A0A001F1465 /* ForceFeedback.framework */; };
 		D4C2C00018906A20001F1465 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4C2BFFF18906A20001F1465 /* AudioUnit.framework */; };
 		D4C2C00218906A29001F1465 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4C2C00118906A29001F1465 /* CoreAudio.framework */; };
@@ -29,6 +29,7 @@
 		D42CEBE01872343300FDD5A7 /* Tutorial-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tutorial-Info.plist"; sourceTree = "<group>"; };
 		D42CEBE21872343300FDD5A7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D454B42B188C4DD8007C3B58 /* media */ = {isa = PBXFileReference; lastKnownFileType = folder; name = media; path = ../../media; sourceTree = "<group>"; };
+		D4B7D49619057BCA002D7056 /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "../../../../../../usr/local/Cellar/sdl2/2.0.3/lib/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
 		D4C2BFF7189069E9001F1465 /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "../../dependencies/libsdl/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
 		D4C2BFF9189069F4001F1465 /* libSDL2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2.a; path = ../../dependencies/libsdl/libSDL2.a; sourceTree = "<group>"; };
 		D4C2BFFB18906A0A001F1465 /* ForceFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ForceFeedback.framework; path = System/Library/Frameworks/ForceFeedback.framework; sourceTree = SDKROOT; };
@@ -43,10 +44,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4B7D49719057BCA002D7056 /* libSDL2-2.0.0.dylib in Frameworks */,
 				D4C2C00218906A29001F1465 /* CoreAudio.framework in Frameworks */,
 				D4C2C00018906A20001F1465 /* AudioUnit.framework in Frameworks */,
 				D4C2BFFC18906A0A001F1465 /* ForceFeedback.framework in Frameworks */,
-				D4C2BFFA189069F4001F1465 /* libSDL2.a in Frameworks */,
 				D42CEBD91872343300FDD5A7 /* Cocoa.framework in Frameworks */,
 				9DD467166BA5492BB4FAF268 /* libPods.a in Frameworks */,
 			);
@@ -76,6 +77,7 @@
 		D42CEBD71872343200FDD5A7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D4B7D49619057BCA002D7056 /* libSDL2-2.0.0.dylib */,
 				D4C2C00118906A29001F1465 /* CoreAudio.framework */,
 				D4C2BFFF18906A20001F1465 /* AudioUnit.framework */,
 				D4C2BFFD18906A10001F1465 /* AudioToolbox.framework */,
@@ -242,6 +244,11 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				COPY_PHASE_STRIP = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -256,6 +263,11 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};
@@ -269,7 +281,7 @@
 				INFOPLIST_FILE = "Tutorial/Tutorial-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/jlnr/Projects/Gosu/dependencies/libsdl,
+					/usr/local/Cellar/sdl2/2.0.3/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -284,7 +296,7 @@
 				INFOPLIST_FILE = "Tutorial/Tutorial-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/jlnr/Projects/Gosu/dependencies/libsdl,
+					/usr/local/Cellar/sdl2/2.0.3/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
