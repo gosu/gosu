@@ -126,6 +126,15 @@ double Gosu::Window::updateInterval() const
     return pimpl->updateInterval;
 }
 
+namespace GosusDarkSide
+{
+    // TODO: Find a way for this to fit into Gosu's design.
+    // This can point to a function that wants to be called every
+    // frame, e.g. rb_thread_schedule.
+    typedef void (*HookOfHorror)();
+    HookOfHorror oncePerTick = 0;
+}
+
 void Gosu::Window::show()
 {
     while (true) {
@@ -148,9 +157,12 @@ void Gosu::Window::show()
         if (graphics().begin()) {
             draw();
             graphics().end();
+            FPS::registerFrame();
         }
 	    
         SDL_GL_SwapWindow(pimpl->window);
+        
+        if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
         
         // Sleep to keep this loop from eating 100% CPU.
         unsigned int frameTime = milliseconds() - startTime;
