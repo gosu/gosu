@@ -7,7 +7,7 @@
 struct Gosu::TextInput::Impl
 {
     // These two strings contain UTF-8 data.
-    // See this Wiki page for an idea of what is going on here:
+    // See this Wiki page for an overview of what is going on here:
     // http://wiki.libsdl.org/Tutorials/TextInput#CandidateList
     std::wstring text, composition;
     unsigned caretPos, selectionStart;

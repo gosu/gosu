@@ -62,8 +62,12 @@ namespace Gosu
 # endif
 #endif
 
+#if defined (GOSU_IS_IPHONE) || defined(__arm__)
+# define GOSU_IS_OPENGLES
+#endif
+
 #ifndef SWIG
-# if (defined(_MSC_VER) && _MSC_VER >= 1700) || ((__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && defined(__GXX_EXPERIMENTAL_CXX0X__))
+# if _MSC_VER >= 1700 || ((__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && defined(__GXX_EXPERIMENTAL_CXX0X__))
 #  define GOSU_CPP11_ENABLED
 # endif
 #endif

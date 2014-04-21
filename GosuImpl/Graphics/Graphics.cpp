@@ -38,7 +38,7 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, physWidth, physHeight);
-    #ifdef GOSU_IS_IPHONE
+    #ifdef GOSU_IS_OPENGLES
     glOrthof(0, physWidth, physHeight, 0, -1, 1);
     #else
     glOrtho(0, physWidth, physHeight, 0, -1, 1);
@@ -157,8 +157,8 @@ void Gosu::Graphics::beginGL()
     if (pimpl->queues.size() > 1)
         throw std::logic_error("Custom OpenGL is not allowed while creating a macro");
     
-#ifdef GOSU_IS_IPHONE
-    throw std::logic_error("Custom OpenGL is unsupported on the iPhone");
+#ifdef GOSU_IS_OPENGLES
+    throw std::logic_error("Custom OpenGL ES is not supported yet");
 #else
     flush();
     glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -169,8 +169,8 @@ void Gosu::Graphics::beginGL()
 
 void Gosu::Graphics::endGL()
 {
-#ifdef GOSU_IS_IPHONE
-    throw std::logic_error("Custom OpenGL is unsupported on the iPhone");
+#ifdef GOSU_IS_OPENGLES
+    throw std::logic_error("Custom OpenGL ES is not supported yet");
 #else
     glPopAttrib();
 
@@ -188,10 +188,10 @@ void Gosu::Graphics::endGL()
 #endif
 }
 
-#ifdef GOSU_IS_IPHONE
+#ifdef GOSU_IS_OPENGLES
 void Gosu::Graphics::scheduleGL(const std::tr1::function<void()>& functor, Gosu::ZPos z)
 {
-    throw std::logic_error("Custom OpenGL is unsupported on the iPhone");
+    throw std::logic_error("Custom OpenGL ES is not supported yet");
 }
 #else
 namespace Gosu
@@ -287,7 +287,7 @@ void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
     op.vertices[2] = DrawOp::Vertex(x3, y3, c3);
-#ifdef GOSU_IS_IPHONE
+#ifdef GOSU_IS_OPENGLES
     op.verticesOrBlockIndex = 4;
     op.vertices[3] = op.vertices[2];
 #endif
@@ -307,7 +307,7 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
 // TODO: Should be harmonized
-#ifdef GOSU_IS_IPHONE
+#ifdef GOSU_IS_OPENGLES
     op.vertices[2] = DrawOp::Vertex(x3, y3, c3);
     op.vertices[3] = DrawOp::Vertex(x4, y4, c4);
 #else

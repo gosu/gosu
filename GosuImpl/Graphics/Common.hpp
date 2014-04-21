@@ -16,6 +16,8 @@
 #include <OpenGLES/ES1/glext.h>
 #elif defined(GOSU_IS_MAC)
 #include <OpenGL/gl.h>
+#elif defined GOSU_IS_OPENGLES
+#include <GLES/gl.h>
 #else
 #include <GL/gl.h>
 #endif
