@@ -29,11 +29,14 @@ BASE_FILES = %w(
   Graphics/Text.cpp
   Graphics/Texture.cpp
   Graphics/Transform.cpp
+  Input.cpp
   Inspection.cpp
   IO.cpp
   Math.cpp
   RubyGosu_wrap.cxx
   Utility.cpp
+  TextInput.cpp
+  Window.cpp
 )
 
 MAC_FILES = %w(
@@ -41,21 +44,15 @@ MAC_FILES = %w(
   Graphics/BitmapApple.mm
   Graphics/TextMac.cpp
   Graphics/TextTouch.mm
-  InputMac.mm
-  TextInputMac.mm
   TimingApple.cpp
   UtilityApple.mm
-  WindowMac.mm
 )
 
 LINUX_FILES = %w(
   Audio/AudioOpenAL.cpp
   Graphics/BitmapFreeImage.cpp
   Graphics/TextUnix.cpp
-  InputX.cpp
-  TextInputX.cpp
   TimingUnix.cpp
-  WindowX.cpp
 )
 
 OGG_VORBIS_FILES = Dir['../dependencies/libogg/src/*.c'] +
@@ -104,10 +101,8 @@ if `uname`.chomp == 'Darwin' then
 else
   SOURCE_FILES = BASE_FILES + LINUX_FILES
 
-  pkg_config 'sdl'
+  pkg_config 'sdl2'
   pkg_config 'pangoft2'
-  pkg_config 'x11'
-  pkg_config 'xinerama'
   
   pkg_config 'gl'
   pkg_config 'vorbisfile'

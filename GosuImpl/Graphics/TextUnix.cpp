@@ -5,7 +5,7 @@
 #include <pango/pango.h>
 #include <pango/pangoft2.h>
 #include <glib.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 
 #include <string>
 #include <cstring>
