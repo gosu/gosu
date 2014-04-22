@@ -24,8 +24,13 @@ module Gosu
       end
     end
     
-    def init &body
+    def init options = nil, &body
       ZenWindow.send :define_method, :init, &body
+      if options
+        width  = options.delete(:width)  || @@window_args[0]
+        height = options.delete(:height) || @@window_args[1]
+        window width, height, options
+      end
     end
     
     def button_down id = nil, &body
