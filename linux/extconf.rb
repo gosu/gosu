@@ -72,14 +72,14 @@ $CFLAGS << " -DGOSU_DEPRECATED="
 $INCFLAGS << " -I../ -I../GosuImpl"
 
 if `uname`.chomp == 'Darwin' then
-  SOURCE_FILES = BASE_FILES + MAC_FILES# + OGG_VORBIS_FILES
+  SOURCE_FILES = BASE_FILES + MAC_FILES + OGG_VORBIS_FILES
   
   # Apple curiously distributes libpng only inside X11
   $INCFLAGS  << " -I/usr/X11/include"
   # Use included libogg, libvorbis to make Gosu easier to install on OS X
-  #$INCFLAGS  << " -I../dependencies/libogg/include"
-  #$INCFLAGS  << " -I../dependencies/libvorbis/include"
-  #$INCFLAGS  << " -I../dependencies/libvorbis/lib"
+  $INCFLAGS  << " -I../dependencies/libogg/include"
+  $INCFLAGS  << " -I../dependencies/libvorbis/include"
+  $INCFLAGS  << " -I../dependencies/libvorbis/lib"
   # To make everything work with the Objective C runtime
   $CFLAGS    << " -x objective-c -DNDEBUG"
   # Compile all C++ files as Objective C++ on OS X since mkmf does not support .mm
@@ -93,7 +93,7 @@ if `uname`.chomp == 'Darwin' then
     # TODO: This can probably be enabled starting from 10.6?
     CONFIG['CXXFLAGS'] << " -std=gnu++11"
   end
-  $LDFLAGS   << " -L/usr/X11/lib -liconv -lSDL2 -logg -lvorbis -lvorbisfile"
+  $LDFLAGS   << " -L/usr/X11/lib -liconv -lSDL2"
   %w(AudioToolbox IOKit OpenAL OpenGL AppKit ApplicationServices Foundation Carbon).each do |f|
     $LDFLAGS << " -framework #{f}"
   end
@@ -128,7 +128,7 @@ end
 # TODO - would be nicer if the Rakefile would just create these shim files and
 # ship them along with the gem
 SOURCE_FILES.each do |file|
-  shim_name = File.basename(file).sub(/\.mm$/, '.cpp')
+  shim_name = file.gsub('/', '-').sub(/\.mm$/, '.cpp')
   File.open(shim_name, "w") do |shim|
     shim.puts "#include \"../GosuImpl/#{file}\""
   end
