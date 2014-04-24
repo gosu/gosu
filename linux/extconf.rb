@@ -72,20 +72,19 @@ $CFLAGS << " -DGOSU_DEPRECATED="
 $INCFLAGS << " -I../ -I../GosuImpl"
 
 if `uname`.chomp == 'Darwin' then
-  SOURCE_FILES = BASE_FILES + MAC_FILES + OGG_VORBIS_FILES
+  SOURCE_FILES = BASE_FILES + MAC_FILES# + OGG_VORBIS_FILES
   
   # Apple curiously distributes libpng only inside X11
   $INCFLAGS  << " -I/usr/X11/include"
   # Use included libogg, libvorbis to make Gosu easier to install on OS X
-  $INCFLAGS  << " -I../dependencies/libogg/include"
-  $INCFLAGS  << " -I../dependencies/libvorbis/include"
-  $INCFLAGS  << " -I../dependencies/libvorbis/lib"
+  #$INCFLAGS  << " -I../dependencies/libogg/include"
+  #$INCFLAGS  << " -I../dependencies/libvorbis/include"
+  #$INCFLAGS  << " -I../dependencies/libvorbis/lib"
   # To make everything work with the Objective C runtime
   $CFLAGS    << " -x objective-c -DNDEBUG"
   # Compile all C++ files as Objective C++ on OS X since mkmf does not support .mm
   # files.
-  # Also undefine two debug flags that cause exceptions to randomly crash
-  # otherwise; see:
+  # Also undefine two debug flags that cause exceptions to randomly crash, see:
   # https://trac.macports.org/ticket/27237#comment:21
   # http://newartisans.com/2009/10/a-c-gotcha-on-snow-leopard/#comment-893
   CONFIG['CXXFLAGS'] = "#{CONFIG['CXXFLAGS']} -x objective-c++ -U_GLIBCXX_DEBUG -U_GLIBCXX_DEBUG_PEDANTIC"
@@ -94,7 +93,7 @@ if `uname`.chomp == 'Darwin' then
     # TODO: This can probably be enabled starting from 10.6?
     CONFIG['CXXFLAGS'] << " -std=gnu++11"
   end
-  $LDFLAGS   << " -L/usr/X11/lib -liconv"
+  $LDFLAGS   << " -L/usr/X11/lib -liconv -lSDL2 -logg -lvorbis -lvorbisfile"
   %w(AudioToolbox IOKit OpenAL OpenGL AppKit ApplicationServices Foundation Carbon).each do |f|
     $LDFLAGS << " -framework #{f}"
   end
