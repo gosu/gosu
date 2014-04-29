@@ -89,6 +89,12 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
         actualWidth, actualHeight,
         SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI |
             (fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0));
+
+#ifdef GOSU_IS_OPENGLES
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+#endif
+
     pimpl->context = SDL_GL_CreateContext(pimpl->window);
     SDL_GL_MakeCurrent(pimpl->window, pimpl->context);
     SDL_GL_SetSwapInterval(1);

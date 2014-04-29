@@ -101,14 +101,23 @@ else
   SOURCE_FILES = BASE_FILES + LINUX_FILES
 
   pkg_config 'sdl2'
+
+  if /Raspbian/ =~ `cat /etc/issue` then
+    $INCFLAGS << " -I/opt/vc/include/GLES"
+    $INCFLAGS << " -I/opt/vc/include"
+    $CFLAGS   << " -DGOSU_IS_RASPBERRY_PI"
+    $LDFLAGS  << " -L/opt/vc/lib"
+    $LDFLAGS  << " -lGLESv1_CM"
+  else
+    pkg_config 'gl'
+  end
+
   pkg_config 'pangoft2'
-  
-  pkg_config 'gl'
   pkg_config 'vorbisfile'
   pkg_config 'openal'
   pkg_config 'sndfile'
   
-  have_header 'SDL_ttf.h'   if have_library('SDL_ttf', 'TTF_RenderUTF8_Blended')
+  have_header 'SDL_ttf.h'   if have_library('SDL2_ttf', 'TTF_RenderUTF8_Blended')
   have_header 'FreeImage.h' if have_library('freeimage', 'FreeImage_ConvertFromRawBits')
   have_header 'AL/al.h'     if have_library('openal')
 end
