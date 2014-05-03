@@ -105,7 +105,6 @@ else
   if /Raspbian/ =~ `cat /etc/issue` then
     $INCFLAGS << " -I/opt/vc/include/GLES"
     $INCFLAGS << " -I/opt/vc/include"
-    $CFLAGS   << " -DGOSU_IS_RASPBERRY_PI"
     $LDFLAGS  << " -L/opt/vc/lib"
     $LDFLAGS  << " -lGLESv1_CM"
   else
