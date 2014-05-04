@@ -80,6 +80,7 @@ SET(CORE_SRC_FILES
     Graphics/TexChunk.cpp
     Graphics/Texture.cpp
     Graphics/Transform.cpp
+    Graphics/Text.cpp
     Sockets/CommSocket.cpp
     Sockets/ListenerSocket.cpp
     Sockets/MessageSocket.cpp
@@ -105,12 +106,21 @@ if(WIN32)
 elseif(APPLE)
     set(CORE_SRC_FILES ${CORE_SRC_FILES}
     Graphics/TextMac.cpp
+    Graphics/TextTouch.mm
+    Graphics/BitmapApple.mm
     TimingApple.cpp
+    InputMac.mm
+    TextInputMac.mm
+    UtilityApple.mm
+    WindowMac.mm
     )
 else()
     set(CORE_SRC_FILES ${CORE_SRC_FILES}
     Graphics/TextUnix.cpp
     TimingUnix.cpp
+    InputX.cpp
+    TextInputX.cpp
+    WindowX.cpp
     )
 endif()
 
@@ -118,9 +128,6 @@ if(NOT WIN32)
     set(CORE_SRC_FILES ${CORE_SRC_FILES}
     DirectoriesUnix.cpp
     FileUnix.cpp
-    InputX.cpp
-    TextInputX.cpp
-    WindowX.cpp
     Utility.cpp
     Graphics/Text.cpp
     )
@@ -193,6 +200,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gosu.pc DESTINATION ${INSTALL_PKGCONFI
 #Tell CMake the paths
 INCLUDE_DIRECTORIES(
     ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_SOURCE_DIR}/../GosuImpl/
     ${FREETYPE_INCLUDE_DIRS}
     ${OPENAL_INCLUDE_DIRS}
     ${SDL_TTF_INCLUDE_DIRS}
@@ -223,6 +231,9 @@ IF(BUILD_STATIC_LIBRARIES)
 	IF(MSVC)
 			SET_TARGET_PROPERTIES(GosuStatic PROPERTIES COMPILE_FLAGS "/W4 /wd4251 /wd4127") #Disable warning on STL exports
 	ENDIF(MSVC)
+    IF(APPLE)
+        SET_TARGET_PROPERTIES(GosuStatic PROPERTIES COMPILE_FLAGS "-x objective-c++")
+    ENDIF()
 	SET(Gosu_LIBRARY "GosuStatic")
 ENDIF()
 IF(BUILD_DYNAMIC_LIBRARIES)
@@ -233,6 +244,9 @@ IF(BUILD_DYNAMIC_LIBRARIES)
 	IF(MSVC)
 			SET_TARGET_PROPERTIES(GosuDynamic PROPERTIES COMPILE_FLAGS "/W4 /wd4251 /wd4127") #Disable warning on STL exports
 	ENDIF(MSVC)
+    IF(APPLE)
+        SET_TARGET_PROPERTIES(GosuDynamic PROPERTIES COMPILE_FLAGS "-x objective-c++")
+    ENDIF()
 	# out of SOME reason, we cannot link to gl in the executable
     find_package(OpenGL REQUIRED)
 	target_link_libraries(GosuDynamic ${OPENGL_LIBRARY})
