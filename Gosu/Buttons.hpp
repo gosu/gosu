@@ -126,8 +126,8 @@ namespace Gosu
 
         msRangeBegin,
         msLeft = msRangeBegin,
-        msRight,
         msMiddle,
+        msRight,
         msWheelUp,
         msWheelDown,
         msOther0,
