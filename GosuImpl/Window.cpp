@@ -85,6 +85,8 @@ void Gosu::Window::show()
     #endif
     
     while (true) {
+        auto startTime = milliseconds();
+        
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT)
@@ -104,8 +106,11 @@ void Gosu::Window::show()
 	    
         SDL_GL_SwapWindow(pimpl->window);
         
-        // TODO: Do not let this loop eat 100% CPU if the window is obscured.
-        // (It seems that vsync does not slow us down in that case.)
+        // Sleep to keep this loop from eating 100% CPU.
+        auto frameTime = milliseconds() - startTime;
+        if (frameTime > 0 && frameTime < pimpl->updateInterval) {
+            sleep(pimpl->updateInterval - frameTime);
+        }
     }
 }
 
