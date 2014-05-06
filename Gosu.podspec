@@ -9,7 +9,8 @@ Pod::Spec.new do |s|
   s.version      = "0.0.1"
   s.summary      = "2D game development library."
   s.homepage     = "http://libgosu.org/"
-
+  s.documentation_url = 'http://libgosu.org/cpp/'
+  
   s.license      = { :type => 'MIT', :file => 'COPYING' }
   s.author       = { "Julian Raschke" => "julian@raschke.de" }
 
@@ -20,6 +21,8 @@ Pod::Spec.new do |s|
   s.subspec 'libogg' do |ss|
     ss.header_dir = 'ogg'
     
+    ss.compiler_flags = '-Wno-comment -Wno-unused-variable -Wno-shift-op-parentheses -Wno-shorten-64-to-32'
+    
     ss.public_header_files = 'dependencies/libogg/include/ogg'
     ss.source_files = 'dependencies/libogg/include/ogg', 'dependencies/libogg/src'
   end
@@ -27,8 +30,7 @@ Pod::Spec.new do |s|
   s.subspec 'libvorbis' do |ss|
     ss.dependency 'Gosu/libogg'
     
-    # Silence one warning in psy.c, and one in codebook.c
-    ss.compiler_flags = '-Wno-comment -Wno-shift-op-parentheses'
+    ss.compiler_flags = '-Wno-comment -Wno-unused-variable -Wno-shift-op-parentheses -Wno-shorten-64-to-32'
     
     ss.header_dir = 'vorbis'
     ss.public_header_files = 'dependencies/libvorbis/include/vorbis'
@@ -41,53 +43,53 @@ Pod::Spec.new do |s|
 
   s.subspec 'Gosu' do |ss|
     ss.dependency 'Gosu/libvorbis' 
-
-    ss.frameworks = 'OpenGL', 'OpenAL', 'IOKit', 'Carbon', 'Cocoa', 'AudioToolbox', 'ApplicationServices'
-    ss.library   = 'iconv'
-    # To find libpng headers, TODO use compiler flags for that, does not need to leak into client project
-    ss.xcconfig = { 'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/X11/include' }
+    
+    ss.frameworks = 'OpenGL', 'OpenAL', 'IOKit', 'Carbon', 'Cocoa', 'AudioToolbox', 'ApplicationServices', 'ForceFeedback', 'AudioUnit', 'CoreAudio'
+    ss.libraries  = 'iconv'
+    ss.compiler_flags = '-I/usr/local/include'
+    ss.xcconfig = { 'OTHER_LDFLAGS' => '/usr/local/lib/libSDL2.a' }
     
     ss.public_header_files = 'Gosu/*.hpp'
-    ss.source_files = ['Gosu/*.hpp', 'GosuImpl/**/*.hpp'] +
-    # Implementation files for OS X, taken from extconf.rb
-    # TODO - keep in sync with extconf & project - how?
-    %w(Audio/AudioOpenAL.mm
-    DirectoriesUnix.cpp
-    FileUnix.cpp
-    Graphics/Bitmap.cpp
-    Graphics/BitmapApple.mm
-    Graphics/BitmapColorKey.cpp
-    Graphics/BitmapUtils.cpp
-    Graphics/BlockAllocator.cpp
-    Graphics/Color.cpp
-    Graphics/Font.cpp
-    Graphics/Graphics.cpp
-    Graphics/Image.cpp
-    Graphics/LargeImageData.cpp
-    Graphics/TexChunk.cpp
-    Graphics/Text.cpp
-    Graphics/TextMac.cpp
-    Graphics/TextTouch.mm
-    Graphics/Texture.cpp
-    Graphics/Transform.cpp
-    InputMac.mm
-    Inspection.cpp
-    IO.cpp
-    Math.cpp
-    TextInputMac.mm
-    TimingApple.cpp
-    Utility.cpp
-    UtilityApple.mm
-    WindowMac.mm).map { |basename| "GosuImpl/#{basename}" } +
-    # This one is necessary for C++ development, but not Ruby
-    %w(GosuImpl/DirectoriesMac.mm)
+    ss.source_files = ['Gosu/*.hpp', 'src/**/*.hpp'] +
+      %w(Audio/AudioOpenAL.mm
+         Bitmap/Bitmap.cpp
+         Bitmap/BitmapApple.mm
+         Bitmap/BitmapColorKey.cpp
+         Bitmap/BitmapUtils.cpp
+         DirectoriesMac.mm
+         DirectoriesUnix.cpp
+         FileUnix.cpp
+         Graphics/BlockAllocator.cpp
+         Graphics/Color.cpp
+         Graphics/Graphics.cpp
+         Graphics/Image.cpp
+         Graphics/LargeImageData.cpp
+         Graphics/TexChunk.cpp
+         Graphics/Texture.cpp
+         Graphics/Transform.cpp
+         Input/Input.cpp
+         Input/TextInput.cpp
+         Inspection.cpp
+         IO.cpp
+         Math.cpp
+         TimingApple.cpp
+         Text/Font.cpp
+         Text/Text.cpp
+         Text/TextMac.cpp
+         Text/TextApple.mm
+         Utility.cpp
+         UtilityApple.mm
+         Window.cpp).map { |basename| "src/#{basename}" }
     # TODO add sockets too
-    ss.preserve_paths = 'GosuImpl/Audio/AudioOpenAL.cpp'
+    
+    # This path needs to be preserved because it is included by AudioOpenAL.mm (yuck)
+    ss.preserve_paths = 'src/Audio/AudioOpenAL.cpp'
     
     ss.platform = :osx, '10.5'
   end
   
   # TODO - use multi-platform support for this
+  # TODO - This is completely outdated anyway
   # http://docs.cocoapods.org/specification.html#ios
   s.subspec 'GosuTouch' do |ss|
     ss.dependency 'Gosu/libvorbis' 
