@@ -75,10 +75,10 @@ double Gosu::Window::updateInterval() const
 void Gosu::Window::show()
 {
     #ifdef GOSU_IS_MAC
-    // This is for Ruby/Gosu and misc. hackery:
+    // This is for Ruby/Gosu on OS X:
     // Usually, applications on the Mac can only get keyboard and mouse input if
     // run by double-clicking an .app. So if this is run from the Terminal (i.e.
-    // during Ruby/Gosu game development), tell the OS we need input in any case.
+    // during Ruby/Gosu game development), explicitly tell the OS we need input.
     ProcessSerialNumber psn = { 0, kCurrentProcess };
     TransformProcessType(&psn, kProcessTransformToForegroundApplication);
     SetFrontProcess(&psn);
@@ -103,6 +103,9 @@ void Gosu::Window::show()
         }
 	    
         SDL_GL_SwapWindow(pimpl->window);
+        
+        // TODO: Do not let this loop eat 100% CPU if the window is obscured.
+        // (It seems that vsync does not slow us down in that case.)
     }
 }
 
