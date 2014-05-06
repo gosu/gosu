@@ -355,6 +355,10 @@ namespace Gosu
 %ignore Gosu::FontFlags;
 %ignore Gosu::TextAlign;
 %ignore Gosu::BorderFlags;
+%ignore Gosu::concat;
+%ignore Gosu::translate;
+%ignore Gosu::rotate;
+%ignore Gosu::scale;
 %include "../Gosu/GraphicsBase.hpp"
 
 // For screenWidth/screenHeight
@@ -647,6 +651,7 @@ namespace Gosu {
 
 // TextInput
 %ignore Gosu::TextInput::feedNSEvent(void*);
+%ignore Gosu::TextInput::feedSDLEvent(void*);
 %ignore Gosu::TextInput::feedMessage(unsigned long, unsigned long, unsigned long);
 %ignore Gosu::TextInput::feedButtonId(unsigned);
 %ignore Gosu::TextInput::caretPos() const;
