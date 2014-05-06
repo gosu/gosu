@@ -1,7 +1,7 @@
 #include <Gosu/TextInput.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/Utility.hpp>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <cwctype>
 
 struct Gosu::TextInput::Impl
