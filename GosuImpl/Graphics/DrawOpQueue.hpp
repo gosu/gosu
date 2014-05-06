@@ -28,7 +28,7 @@ public:
         if (clipRectStack.clippedWorldAway())
             return;
 
-        #ifdef GOSU_IS_IPHONE
+        #ifdef GOSU_IS_OPENGLES
         // No triangles, no lines supported
         assert (op.verticesOrBlockIndex == 4);
         #endif
@@ -104,7 +104,7 @@ public:
         std::stable_sort(ops.begin(), ops.end());
 
         RenderStateManager manager;
-        #ifdef GOSU_IS_IPHONE
+        #ifdef GOSU_IS_OPENGLES
         if (ops.empty())
             return;
 

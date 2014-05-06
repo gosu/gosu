@@ -58,7 +58,7 @@ struct Gosu::RenderState
     }
     
     // Only used by Macro so far
-    #ifndef GOSU_IS_IPHONE
+    #ifndef GOSU_IS_OPENGLES
     void apply() const
     {
         applyTexture();
@@ -81,7 +81,7 @@ class Gosu::RenderStateManager : private Gosu::RenderState
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         
-        #ifndef GOSU_IS_IPHONE
+        #ifndef GOSU_IS_OPENGLES
         glMultMatrixd(&(*transform)[0]);
         #else
         // TODO: Ouch, should always use floats!

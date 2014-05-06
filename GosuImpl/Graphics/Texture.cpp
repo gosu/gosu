@@ -20,7 +20,7 @@ Gosu::Texture::Texture(unsigned size)
    
     // Create empty texture.
     glBindTexture(GL_TEXTURE_2D, name);
-#ifdef GOSU_IS_IPHONE
+#ifdef GOSU_IS_OPENGLES
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, allocator.width(), allocator.height(), 0,
                  GL_RGBA, GL_UNSIGNED_BYTE, 0);
 #else
@@ -95,7 +95,7 @@ void Gosu::Texture::free(unsigned x, unsigned y, unsigned width, unsigned height
 
 Gosu::Bitmap Gosu::Texture::toBitmap(unsigned x, unsigned y, unsigned width, unsigned height) const
 {
-#ifdef GOSU_IS_IPHONE
+#ifdef GOSU_IS_OPENGLES
     throw std::logic_error("Texture::toBitmap not supported on iOS");
 #else
     Gosu::Bitmap fullTexture(size(), size());

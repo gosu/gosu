@@ -170,7 +170,7 @@ class Gosu::Macro : public Gosu::ImageData
         // They should be premultiplied and have the same transform by definition. Then, the transformation
         // only had to be performed here once.
         
-        #ifndef GOSU_IS_IPHONE
+        #ifndef GOSU_IS_OPENGLES
         glEnable(GL_BLEND);
         glMatrixMode(GL_MODELVIEW);
         
