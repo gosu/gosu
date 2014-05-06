@@ -1,8 +1,10 @@
 #include <Gosu/Input.hpp>
 #include <Gosu/TextInput.hpp>
 #include <Gosu/TR1.hpp>
+#include <Gosu/Utility.hpp>
 #include <SDL.h>
 #include <algorithm>
+#include <cwctype>
 
 struct Gosu::Input::Impl
 {
@@ -198,14 +200,46 @@ bool Gosu::Input::feedSDLEvent(void* event)
 
 wchar_t Gosu::Input::idToChar(Button btn)
 {
-    // TODO - implement this for SDL
-    return 0;
+    if (btn.id() > kbRangeEnd)
+        return 0;
+    
+    // SDL_GetKeyName would return "Space" for this value.
+    if (btn.id() == kbSpace)
+        return L' ';
+    
+    SDL_Keycode keycode = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(btn.id()));
+    if (keycode == SDLK_UNKNOWN)
+        return 0;
+    
+    const char* name = SDL_GetKeyName(keycode);
+    if (name == nullptr)
+        return 0;
+    
+    std::wstring wname = utf8ToWstring(name);
+    if (wname.length() != 1)
+        return 0;
+    
+    // Convert to lower case to be consistent with previous versions of Gosu.
+    // Also, German umlauts are already reported in lower-case by the SDL, so
+    // this makes everything a little more consistent.
+    //
+    // This should handle Turkish i/I just fine because it uses the current
+    // locale, but if we ever receive bug reports from Turkish users, they are
+    // likely caused by a combination of this line and an invalid locale :)
+    return std::towlower(wname[0]);
 }
 
 Gosu::Button Gosu::Input::charToId(wchar_t ch)
 {
-    // TODO - implement this for SDL
-    return Button(Gosu::noButton);
+    std::wstring string(1, ch);
+    SDL_Keycode keycode = SDL_GetKeyFromName(wstringToUTF8(string).c_str());
+    
+    if (keycode == SDLK_UNKNOWN) {
+        return noButton;
+    }
+    else {
+        return Button(SDL_GetScancodeFromKey(keycode));
+    }
 }
 
 bool Gosu::Input::down(Gosu::Button btn) const
@@ -240,6 +274,8 @@ void Gosu::Input::setMouseFactors(double factorX, double factorY)
 
 const Gosu::Touches& Gosu::Input::currentTouches() const
 {
+    // Note: We can actually use the SDL's touch API to implement this, even on OS X! Neat.
+    
     static Gosu::Touches none;
     return none;
 }

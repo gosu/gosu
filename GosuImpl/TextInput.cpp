@@ -98,15 +98,13 @@ struct Gosu::TextInput::Impl
     
     void deleteBackward()
     {
-        if (selectionStart != caretPos)
-        {
+        if (selectionStart != caretPos) {
             unsigned min = std::min(caretPos, selectionStart);
             unsigned max = std::max(caretPos, selectionStart);
             text.erase(text.begin() + min, text.begin() + max);
             selectionStart = caretPos = min;
         }
-        else if (caretPos > 0)
-        {
+        else if (caretPos > 0) {
             unsigned oldCaret = caretPos;
             caretPos -= 1;
             text.erase(text.begin() + caretPos, text.begin() + oldCaret);
@@ -116,15 +114,13 @@ struct Gosu::TextInput::Impl
     
     void deleteForward()
     {
-        if (selectionStart != caretPos)
-        {
+        if (selectionStart != caretPos) {
             unsigned min = std::min(caretPos, selectionStart);
             unsigned max = std::max(caretPos, selectionStart);
             text.erase(text.begin() + min, text.begin() + max);
             selectionStart = caretPos = min;
         }
-        else if (caretPos < text.length())
-        {
+        else if (caretPos < text.length()) {
             unsigned oldCaret = caretPos;
             caretPos += 1;
             text.erase(text.begin() + oldCaret, text.begin() + caretPos);
@@ -199,8 +195,9 @@ bool Gosu::TextInput::feedSDLEvent(void* event)
         // Emulate "standard" Windows/X11 keyboard behavior.
         case SDL_KEYDOWN: {
             // ...but not if the IME is currently compositing.
-            if (! pimpl->composition.empty())
+            if (! pimpl->composition.empty()) {
                 return false;
+            }
             
             bool ctrlDown = (e->key.keysym.mod & (KMOD_LCTRL | KMOD_RCTRL));
             bool shiftDown = (e->key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
