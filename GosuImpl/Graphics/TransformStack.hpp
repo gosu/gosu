@@ -79,7 +79,7 @@ namespace Gosu
         void push(const Transform& transform)
         {
             individual.push_back(transform);
-            Transform result = multiply(transform, current());
+            Transform result = concat(transform, current());
             makeCurrent(result);
         }
         
@@ -91,7 +91,7 @@ namespace Gosu
             Transform result = scale(1);
             for (Transforms::reverse_iterator it = individual.rbegin(),
                     end = individual.rend(); it != end; ++it)
-                result = multiply(result, *it);
+                result = concat(result, *it);
             makeCurrent(result);
         }
     };
