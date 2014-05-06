@@ -16,6 +16,7 @@ struct Gosu::Graphics::Impl
 {
     unsigned virtWidth, virtHeight;
     unsigned physWidth, physHeight;
+    double blackWidth, blackHeight;
     bool fullscreen;
     DrawOpQueueStack queues;
     typedef std::vector<std::tr1::shared_ptr<Texture> > Textures;
@@ -31,8 +32,7 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     pimpl->virtHeight = physHeight;
     pimpl->fullscreen = fullscreen;
     
-    // Should be merged into RenderState altogether.
-    
+    // TODO: Should be merged into RenderState and removed from Graphics.
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, physWidth, physHeight);
@@ -76,9 +76,24 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
         throw std::invalid_argument("Invalid virtual resolution.");
     
     pimpl->virtWidth = virtualWidth, pimpl->virtHeight = virtualHeight;
-    double scaleX = 1.0 / virtualWidth * pimpl->physWidth;
-    double scaleY = 1.0 / virtualHeight * pimpl->physHeight;
-    pimpl->queues.front().setBaseTransform(scale(scaleX, scaleY));
+    double scaleX = 1.0 * pimpl->physWidth / virtualWidth;
+    double scaleY = 1.0 * pimpl->physHeight / virtualHeight;
+    double scaleFactor = std::min(scaleX, scaleY);
+    
+    if (scaleX < scaleY) {
+        pimpl->blackWidth = 0;
+        pimpl->blackHeight = (pimpl->physHeight / scaleX - virtualHeight) / 2;
+    }
+    else if (scaleY < scaleX) {
+        pimpl->blackHeight = 0;
+        pimpl->blackWidth = (pimpl->physWidth / scaleY - virtualWidth) / 2;
+    }
+    
+    Transform scaleTransform = scale(scaleFactor);
+    Transform translateTransform = translate(pimpl->blackWidth, pimpl->blackHeight);
+    Transform baseTransform = concat(translateTransform, scaleTransform);
+    
+    pimpl->queues.front().setBaseTransform(baseTransform);
 }
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
@@ -99,10 +114,34 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 void Gosu::Graphics::end()
 {
     // If recording is in process, cancel it.
-    assert (pimpl->queues.size() == 1);
     pimpl->queues.resize(1);
     
     flush();
+    
+    
+    if (pimpl->blackHeight || pimpl->blackWidth) {
+        if (pimpl->blackHeight) {
+            drawQuad(0, -pimpl->blackHeight, Color::BLACK,
+                     width(), -pimpl->blackHeight, Color::BLACK,
+                     0, 0, Color::BLACK,
+                     width(), 0, Color::BLACK, 0);
+            drawQuad(0, height(), Color::BLACK,
+                     width(), height(), Color::BLACK,
+                     0, height() + pimpl->blackHeight, Color::BLACK,
+                     width(), height() + pimpl->blackHeight, Color::BLACK, 0);
+        }
+        else if (pimpl->blackWidth) {
+            drawQuad(-pimpl->blackWidth, 0, Color::BLACK,
+                     0, 0, Color::BLACK,
+                     -pimpl->blackWidth, height(), Color::BLACK,
+                     0, height(), Color::BLACK, 0);
+            drawQuad(width(), 0, Color::BLACK,
+                     width() + pimpl->blackWidth, 0, Color::BLACK,
+                     width(), height(), Color::BLACK,
+                     width() + pimpl->blackWidth, height(), Color::BLACK, 0);
+        }
+        flush();
+    }
     
     glFlush();
 }
@@ -139,7 +178,8 @@ void Gosu::Graphics::endGL()
     glPopAttrib();
 
     // Restore matrices.
-    
+    // TODO: Should be merged into RenderState and removed from Graphics.
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, pimpl->physWidth, pimpl->physHeight);

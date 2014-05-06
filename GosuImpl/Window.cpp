@@ -49,16 +49,25 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         throw std::runtime_error("Failed to initialize SDL Video");
     
+    unsigned actualWidth = width;
+    unsigned actualHeight = height;
+    
+    if (fullscreen) {
+        actualWidth = Gosu::screenWidth();
+        actualHeight = Gosu::screenHeight();
+    }
+    
     pimpl->window = SDL_CreateWindow("",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        width, height,
+        actualWidth, actualHeight,
         SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI |
             (fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0));
     pimpl->context = SDL_GL_CreateContext(pimpl->window);
     SDL_GL_MakeCurrent(pimpl->window, pimpl->context);
     SDL_GL_SetSwapInterval(1);
     
-    pimpl->graphics.reset(new Graphics(width, height, fullscreen));
+    pimpl->graphics.reset(new Graphics(actualWidth, actualHeight, fullscreen));
+    pimpl->graphics->setResolution(width, height);
     pimpl->input.reset(new Input());
     input().onButtonDown = std::tr1::bind(&Window::buttonDown, this, _1);
     input().onButtonUp = std::tr1::bind(&Window::buttonUp, this, _1);
