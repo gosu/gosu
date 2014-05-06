@@ -31,6 +31,8 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     pimpl->virtWidth  = physWidth;
     pimpl->virtHeight = physHeight;
     pimpl->fullscreen = fullscreen;
+    pimpl->blackWidth = 0;
+    pimpl->blackHeight = 0;
     
     // TODO: Should be merged into RenderState and removed from Graphics.
     glMatrixMode(GL_PROJECTION);
@@ -75,17 +77,19 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
     if (virtualWidth == 0 || virtualHeight == 0)
         throw std::invalid_argument("Invalid virtual resolution.");
     
-    pimpl->virtWidth = virtualWidth, pimpl->virtHeight = virtualHeight;
+    pimpl->virtWidth = virtualWidth;
+    pimpl->virtHeight = virtualHeight;
     double scaleX = 1.0 * pimpl->physWidth / virtualWidth;
     double scaleY = 1.0 * pimpl->physHeight / virtualHeight;
     double scaleFactor = std::min(scaleX, scaleY);
     
+    pimpl->blackWidth = 0;
+    pimpl->blackHeight = 0;
+
     if (scaleX < scaleY) {
-        pimpl->blackWidth = 0;
         pimpl->blackHeight = (pimpl->physHeight / scaleX - virtualHeight) / 2;
     }
     else if (scaleY < scaleX) {
-        pimpl->blackHeight = 0;
         pimpl->blackWidth = (pimpl->physWidth / scaleY - virtualWidth) / 2;
     }
     
@@ -117,7 +121,6 @@ void Gosu::Graphics::end()
     pimpl->queues.resize(1);
     
     flush();
-    
     
     if (pimpl->blackHeight || pimpl->blackWidth) {
         if (pimpl->blackHeight) {
