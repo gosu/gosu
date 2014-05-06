@@ -175,8 +175,8 @@ bool Gosu::Input::feedSDLEvent(void* event)
         }
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP: {
-            if (e->button.button <= 2) {
-                pimpl->enqueueEvent(msLeft + e->button.button, e->type == SDL_MOUSEBUTTONDOWN);
+            if (e->button.button >= 1 && e->button.button <= 3) {
+                pimpl->enqueueEvent(msLeft + e->button.button - 1, e->type == SDL_MOUSEBUTTONDOWN);
                 return true;
             }
             break;
