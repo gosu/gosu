@@ -2,16 +2,18 @@
 
 WINDOWS_HINTS = %w(-win32 win32- mswin mingw32)
 
-if defined? RUBY_PLATFORM and WINDOWS_HINTS.any? { |hint| RUBY_PLATFORM.include? hint } then
+if RUBY_PLATFORM =~ /mswin|mingw32|mingw64|win32\-|\-win32/ then
   puts 'This gem is not meant to be installed on Windows. Instead, please use:'
   puts 'gem install gosu --platform=i386-mingw32'
   exit 1
 end
 
-puts 'The Gosu gem requires some libraries to be installed system-wide.'
-puts 'See the following site for a list:'
-puts 'https://github.com/jlnr/gosu/wiki/Getting-Started-on-Linux'
-puts
+if `uname`.chomp != "Darwin" then
+  puts 'The Gosu gem requires some libraries to be installed system-wide.'
+  puts 'See the following site for a list:'
+  puts 'https://github.com/jlnr/gosu/wiki/Getting-Started-on-Linux'
+  puts
+end
 
 BASE_FILES = %w(
   DirectoriesUnix.cpp
@@ -61,13 +63,11 @@ require 'fileutils'
 # Silence internal deprecation warnings in Gosu
 $CFLAGS << " -DGOSU_DEPRECATED="
 
-$INCFLAGS << " -I../ -I../GosuImpl"
+$INCFLAGS << " -I../ -I../src"
 
 if `uname`.chomp == 'Darwin' then
   SOURCE_FILES = BASE_FILES + MAC_FILES
   
-  # Apple curiously distributes libpng only inside X11
-  $INCFLAGS  << " -I/usr/X11/include"
   # To make everything work with the Objective C runtime
   $CFLAGS    << " -x objective-c -DNDEBUG"
   # Compile all C++ files as Objective C++ on OS X since mkmf does not support .mm
@@ -81,14 +81,12 @@ if `uname`.chomp == 'Darwin' then
     # TODO: This can probably be enabled starting from 10.6?
     CONFIG['CXXFLAGS'] << " -std=gnu++11"
   end
-  $LDFLAGS   << " -L/usr/X11/lib -liconv -lSDL2 -logg -lvorbis -lvorbisfile"
+  $LDFLAGS   << " -liconv -lSDL2 -logg -lvorbis -lvorbisfile"
   %w(AudioToolbox IOKit OpenAL OpenGL AppKit ApplicationServices Foundation Carbon).each do |f|
     $LDFLAGS << " -framework #{f}"
   end
 else
   SOURCE_FILES = BASE_FILES + LINUX_FILES
-
-  pkg_config 'sdl2'
 
   if /Raspbian/ =~ `cat /etc/issue` then
     $INCFLAGS << " -I/opt/vc/include/GLES"
@@ -99,6 +97,7 @@ else
     pkg_config 'gl'
   end
 
+  pkg_config 'sdl2'
   pkg_config 'pangoft2'
   pkg_config 'vorbisfile'
   pkg_config 'openal'
@@ -107,13 +106,6 @@ else
   have_header 'SDL_ttf.h'   if have_library('SDL2_ttf', 'TTF_RenderUTF8_Blended')
   have_header 'FreeImage.h' if have_library('freeimage', 'FreeImage_ConvertFromRawBits')
   have_header 'AL/al.h'     if have_library('openal')
-end
-
-# Symlink our pretty gosu.so into ../lib
-# TODO gosu.rb should just look in the right place.
-unless File.exist? "../lib/gosu.#{RbConfig::CONFIG['DLEXT']}"
-  FileUtils.ln_s "../linux/gosu.#{RbConfig::CONFIG['DLEXT']}",
-                 "../lib/gosu.#{RbConfig::CONFIG['DLEXT']}"
 end
 
 # And now it gets ridiculous (or I am overcomplicating things...):
@@ -126,7 +118,7 @@ end
 SOURCE_FILES.each do |file|
   shim_name = file.gsub('/', '-').sub(/\.mm$/, '.cpp')
   File.open(shim_name, "w") do |shim|
-    shim.puts "#include \"../GosuImpl/#{file}\""
+    shim.puts "#include \"../src/#{file}\""
   end
 end
 

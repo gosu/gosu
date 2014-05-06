@@ -1,16 +1,15 @@
 require 'rbconfig'
 
-if defined? RUBY_PLATFORM and
-    %w(-win32 win32- mswin mingw32).any? { |s| RUBY_PLATFORM.include? s } then
+if RUBY_PLATFORM =~ /mswin|mingw32|mingw64|win32\-|\-win32/ then
+  # Add this gem to the PATH on Windows so that DLLs can be found
   ENV['PATH'] = "#{File.dirname(__FILE__)};#{ENV['PATH']}"
 end
 
-if File.exist? "#{File.dirname(__FILE__)}/gosu.#{RbConfig::CONFIG['DLEXT']}"
+begin
+  RUBY_VERSION =~ /(\d+.\d+)/
+  require "#{$1}/gosu.#{RbConfig::CONFIG['DLEXT']}"
+rescue LoadError
   require "gosu.#{RbConfig::CONFIG['DLEXT']}"
-elsif defined? RUBY_VERSION and RUBY_VERSION >= '1.9' then
-  require "gosu.for_1_9.#{RbConfig::CONFIG['DLEXT']}"
-else
-  require "gosu.for_1_8.#{RbConfig::CONFIG['DLEXT']}"
 end
 
 require "gosu/swig_patches"
