@@ -65,7 +65,6 @@ namespace Gosu
         void beginGL();
         //! Resets Gosu into its default rendering state.
         void endGL();
-        //! (Experimental)
         //! Schedules a custom GL functor to be executed at a certain Z level.
         //! The functor is called in a clean GL context (as given by beginGL/endGL).
         //! Gosu's rendering up to the Z level may not yet have been glFlush()ed.
