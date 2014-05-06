@@ -56,6 +56,18 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
         actualWidth = Gosu::screenWidth();
         actualHeight = Gosu::screenHeight();
     }
+    else {
+        // TODO - get platform-specific best width/height we could get
+        
+        double maxWidth = Gosu::screenWidth() * 0.9;
+        double maxHeight = Gosu::screenHeight() * 0.8;
+        
+        if (width > maxWidth || height > maxHeight) {
+            double factor = std::min(maxWidth / width, maxHeight / height);
+            actualWidth = width * factor;
+            actualHeight = height * factor;
+        }
+    }
     
     pimpl->window = SDL_CreateWindow("",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
