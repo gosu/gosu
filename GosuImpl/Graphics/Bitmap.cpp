@@ -38,6 +38,8 @@ void Gosu::Bitmap::insert(const Bitmap& source, int x, int y)
 void Gosu::Bitmap::insert(const Bitmap& source, int x, int y, unsigned srcX,
     unsigned srcY, unsigned srcWidth, unsigned srcHeight)
 {
+    // TODO: This should use memcpy if possible (x == 0 && srcWidth == this->width())
+    
     if (x < 0)
     {
         unsigned clipLeft = -x;
