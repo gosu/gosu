@@ -88,7 +88,7 @@ if `uname`.chomp == 'Darwin' then
 else
   SOURCE_FILES = BASE_FILES + LINUX_FILES
 
-  if /Raspbian/ =~ `cat /etc/issue` then
+  if /Raspbian/ =~ `cat /etc/issue` or /BCM2708/ =~ `cat /proc/cpuinfo` then
     $INCFLAGS << " -I/opt/vc/include/GLES"
     $INCFLAGS << " -I/opt/vc/include"
     $LDFLAGS  << " -L/opt/vc/lib"
