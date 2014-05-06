@@ -76,13 +76,13 @@ namespace Gosu
     {
         struct Impl;
         const GOSU_UNIQUE_PTR<Impl> pimpl;
-#if defined(GOSU_CPP11_ENABLED)
+        #if defined(GOSU_CPP11_ENABLED)
         // explicitly forbid copying and moving
         Input(Input&&) = delete;
         Input& operator=(Input&&) = delete;
         Input(const Input&) = delete;
         Input& operator=(const Input&) = delete;
-#endif
+        #endif
 
     public:
         #ifdef GOSU_IS_WIN
@@ -94,8 +94,10 @@ namespace Gosu
         Input(void* view, float updateInterval);
         void feedTouchEvent(int type, void* touches);
         #else
-        Input(void* window);
-        bool feedNSEvent(void* event);
+        Input();
+        bool feedSDLEvent(void* event);
+        //Input(void* window);
+        //bool feedNSEvent(void* event);
         #endif
         #endif
         
