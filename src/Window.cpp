@@ -50,8 +50,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         throw std::runtime_error("Failed to initialize SDL Video");
     
-    unsigned actualWidth = width;
-    unsigned actualHeight = height;
+    int actualWidth = width;
+    int actualHeight = height;
     double scaleFactor = 1.0;
     double blackBarWidth = 0;
     double blackBarHeight = 0;
@@ -95,6 +95,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 #endif
 
+    SDL_GL_GetDrawableSize(pimpl->window, &actualWidth, &actualHeight);
+    
     pimpl->context = SDL_GL_CreateContext(pimpl->window);
     SDL_GL_MakeCurrent(pimpl->window, pimpl->context);
     SDL_GL_SetSwapInterval(1);

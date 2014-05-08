@@ -40,7 +40,8 @@ class Gosu::ClipRectStack
             result.height = resultBottom - result.y;
         }
         
-        // On the iPhone, we may have to multiple everything by 2 for retina displays.
+        // On the iPhone, we may have to multiply everything by 2 for Retina displays.
+        // TODO: Doesn't this affect Retina Macs as well?
         // TODO: This should be handled by a global transform.
         int fac = clipRectBaseFactor();
         result.x *= fac, result.y *= fac, result.width *= fac, result.height *= fac;
