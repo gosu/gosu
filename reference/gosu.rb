@@ -1190,7 +1190,7 @@ module Gosu
     def random(min, max); end
 
     ##
-    # @return [Float] the X component of a vector of angle theta and magnitude r, or the vertical distance covered by moving r pixels in the direction given by theta.
+    # @return [Float] the X component of a vector of angle theta and magnitude r, or the horizontal distance covered by moving r pixels in the direction given by theta.
     # @param theta [Float]
     # @param r [Float]
     def offset_x(theta, r); end
