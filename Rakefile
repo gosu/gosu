@@ -63,9 +63,9 @@ end
 # Usually this is handled by my Xcode 3 project. Until the Xcode 4 project is
 # complete, this Rake task should do the trick.
 task :swig do
-  sh "swig -c++ -ruby -autorename GosuImpl/RubyGosu.swg"
-  sh "patch --no-backup-if-mismatch -p0 <GosuImpl/RubyGosu_SWIG_GC_PATCH.patch"
-  sh "patch --no-backup-if-mismatch -p0 <GosuImpl/RubyGosu_SWIG_RENAME_PATCH.patch"
+  sh "swig -c++ -ruby -autorename ext/gosu/gosu.swg"
+  sh "patch --no-backup-if-mismatch -p0 <ext/gosu/gosu_SWIG_GC_PATCH.patch"
+  sh "patch --no-backup-if-mismatch -p0 <ext/gosu/gosu_SWIG_RENAME_PATCH.patch"
 end
 
 Dir.glob('./rake/*.rb') { |task| require task }

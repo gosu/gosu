@@ -325,11 +325,11 @@ namespace Gosu
 %rename("MINOR_VERSION") GOSU_MINOR_VERSION;
 %rename("POINT_VERSION") GOSU_POINT_VERSION;
 %rename("VERSION") GOSU_VERSION;
-%include "../Gosu/Version.hpp"
+%include "../../Gosu/Version.hpp"
 
 // Miscellaneous functions (timing, math)
 %ignore Gosu::sleep;
-%include "../Gosu/Timing.hpp"
+%include "../../Gosu/Timing.hpp"
 %ignore Gosu::pi;
 %ignore Gosu::distanceSqr;
 %ignore Gosu::round;
@@ -339,13 +339,13 @@ namespace Gosu
 %ignore Gosu::wrap;
 %ignore Gosu::radiansToGosu;
 %ignore Gosu::gosuToRadians;
-%include "../Gosu/Math.hpp"
+%include "../../Gosu/Math.hpp"
 %ignore Gosu::textWidth;
 %ignore Gosu::createText;
 %ignore Gosu::textHeight;
 %ignore Gosu::drawText;
 %ignore Gosu::registerEntity;
-%include "../Gosu/Text.hpp"
+%include "../../Gosu/Text.hpp"
 
 
 // Graphics:
@@ -359,13 +359,13 @@ namespace Gosu
 %ignore Gosu::translate;
 %ignore Gosu::rotate;
 %ignore Gosu::scale;
-%include "../Gosu/GraphicsBase.hpp"
+%include "../../Gosu/GraphicsBase.hpp"
 
 // For screenWidth/screenHeight
 %ignore Gosu::Graphics;
 %ignore Gosu::BorderFlags;
 %ignore Gosu::MAX_TEXTURE_SIZE;
-%include "../Gosu/Graphics.hpp"
+%include "../../Gosu/Graphics.hpp"
 
 %constant unsigned MAX_TEXTURE_SIZE = Gosu::MAX_TEXTURE_SIZE;
 
@@ -403,7 +403,7 @@ namespace Gosu {
 %ignore Gosu::Color::FUCHSIA;
 %ignore Gosu::Color::CYAN;
 
-%include "../Gosu/Color.hpp"
+%include "../../Gosu/Color.hpp"
 
 %extend Gosu::Color {
     static Gosu::Color rgb(Gosu::Color::Channel r, Gosu::Color::Channel g,
@@ -461,7 +461,7 @@ namespace Gosu {
 %ignore Gosu::Font::Font(Graphics& graphics, const std::wstring& fontName,
     unsigned height, unsigned flags);
 %ignore Gosu::Font::setImage;
-%include "../Gosu/Font.hpp"
+%include "../../Gosu/Font.hpp"
 %extend Gosu::Font {
     Font(Gosu::Window& window, const std::wstring& fontName, unsigned height) {
         return new Gosu::Font(window.graphics(), fontName, height);
@@ -482,7 +482,7 @@ namespace Gosu {
 //%ignore Gosu::asyncNewImage;
 //%ignore Gosu::asyncNewImage_Impl;
 //%ignore Gosu::AsyncResult::takeValue;
-//%include "../Gosu/Async.hpp"
+//%include "../../Gosu/Async.hpp"
 //%extend Gosu::AsyncResult {
 //    %newobject value;
 //    Gosu::Image* value() {
@@ -494,7 +494,7 @@ namespace Gosu {
 
 %ignore Gosu::ImageData;
 %rename("tex_name") texName;
-%include "../Gosu/ImageData.hpp"
+%include "../../Gosu/ImageData.hpp"
 
 // Image
 // Allow the user to pass Window& instead of Graphics&.
@@ -515,7 +515,7 @@ namespace Gosu {
 %ignore Gosu::Image::Image(Graphics& graphics, const Bitmap& source, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, bool tileable = false);
 %ignore Gosu::Image::Image(GOSU_UNIQUE_PTR<ImageData> data);
 %ignore Gosu::loadTiles;
-%include "../Gosu/Image.hpp"
+%include "../../Gosu/Image.hpp"
 %extend Gosu::Image {
     Image(Gosu::Window& window, VALUE source, bool tileable = false) {
         Gosu::Bitmap bmp;
@@ -611,7 +611,7 @@ namespace Gosu {
 
 // Inspection:
 
-%include "../Gosu/Inspection.hpp"
+%include "../../Gosu/Inspection.hpp"
 
 
 // Audio:
@@ -623,7 +623,7 @@ namespace Gosu {
 %rename("volume=") changeVolume;
 %rename("pan=") changePan;
 %rename("speed=") changeSpeed;
-%include "../Gosu/Audio.hpp"
+%include "../../Gosu/Audio.hpp"
 
 // Input and Window:
 
@@ -641,7 +641,7 @@ namespace Gosu {
 %ignore Gosu::numButtons;
 %ignore Gosu::numGamepads;
 %ignore Gosu::noButton;
-%include "../Gosu/Buttons.hpp"
+%include "../../Gosu/Buttons.hpp"
 %init %{
     GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
     // While we are at it, to some healthy srand() - otherwise unavailable to Ruby people
@@ -659,7 +659,7 @@ namespace Gosu {
 %rename("text=") setText;
 %rename("caret_pos=") setCaretPos;
 %rename("selection_start=") setSelectionStart;
-%include "../Gosu/TextInput.hpp"
+%include "../../Gosu/TextInput.hpp"
 %extend Gosu::TextInput {
     // Fix indices into UTF-8 string
     unsigned caret_pos() const {
@@ -682,7 +682,7 @@ namespace Gosu {
 %rename("needs_redraw?") needsRedraw;
 %rename("fullscreen?") fullscreen;
 %markfunc Gosu::Window "markWindow";
-%include "../Gosu/Window.hpp"
+%include "../../Gosu/Window.hpp"
 
 // TODO: Can I fake this using an @ivar?
 %header %{

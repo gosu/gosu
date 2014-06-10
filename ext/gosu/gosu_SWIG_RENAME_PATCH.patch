@@ -1,5 +1,5 @@
---- GosuImpl/RubyGosu_wrap.cxx
-+++ GosuImpl/RubyGosu_wrap.cxx
+--- ext/gosu/gosu_wrap.cxx
++++ ext/gosu/gosu_wrap.cxx
 @@ -2912,14 +2912,14 @@ SwigDirector_Window::~SwigDirector_Window() {
  void SwigDirector_Window::update() {
    VALUE result;

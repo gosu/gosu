@@ -2848,7 +2848,7 @@ SWIGINTERN void Gosu_Window_translate(Gosu::Window *self,double x,double y){
  * C++ director class methods
  * --------------------------------------------------- */
 
-#include "RubyGosu_wrap.h"
+#include "gosu_wrap.h"
 
 SwigDirector_TextInput::SwigDirector_TextInput(VALUE self): Gosu::TextInput(), Swig::Director(self) {
   
@@ -11073,6 +11073,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "KbX", SWIG_From_int(static_cast< int >(Gosu::kbX)));
   rb_define_const(mGosu, "KbY", SWIG_From_int(static_cast< int >(Gosu::kbY)));
   rb_define_const(mGosu, "KbZ", SWIG_From_int(static_cast< int >(Gosu::kbZ)));
+  rb_define_const(mGosu, "KbISO", SWIG_From_int(static_cast< int >(Gosu::kbISO)));
   rb_define_const(mGosu, "KbNumpad0", SWIG_From_int(static_cast< int >(Gosu::kbNumpad0)));
   rb_define_const(mGosu, "KbNumpad1", SWIG_From_int(static_cast< int >(Gosu::kbNumpad1)));
   rb_define_const(mGosu, "KbNumpad2", SWIG_From_int(static_cast< int >(Gosu::kbNumpad2)));
@@ -11088,8 +11089,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "KbNumpadMultiply", SWIG_From_int(static_cast< int >(Gosu::kbNumpadMultiply)));
   rb_define_const(mGosu, "KbNumpadDivide", SWIG_From_int(static_cast< int >(Gosu::kbNumpadDivide)));
   rb_define_const(mGosu, "MsLeft", SWIG_From_int(static_cast< int >(Gosu::msLeft)));
-  rb_define_const(mGosu, "MsRight", SWIG_From_int(static_cast< int >(Gosu::msRight)));
   rb_define_const(mGosu, "MsMiddle", SWIG_From_int(static_cast< int >(Gosu::msMiddle)));
+  rb_define_const(mGosu, "MsRight", SWIG_From_int(static_cast< int >(Gosu::msRight)));
   rb_define_const(mGosu, "MsWheelUp", SWIG_From_int(static_cast< int >(Gosu::msWheelUp)));
   rb_define_const(mGosu, "MsWheelDown", SWIG_From_int(static_cast< int >(Gosu::msWheelDown)));
   rb_define_const(mGosu, "MsOther0", SWIG_From_int(static_cast< int >(Gosu::msOther0)));

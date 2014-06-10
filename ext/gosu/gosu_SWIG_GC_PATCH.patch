@@ -1,7 +1,7 @@
-Index: GosuImpl/RubyGosu_wrap.cxx
+Index: ext/gosu/gosu_wrap.cxx
 ===================================================================
---- GosuImpl/RubyGosu_wrap.cxx	(Revision 993)
-+++ GosuImpl/RubyGosu_wrap.cxx	(Arbeitskopie)
+--- ext/gosu/gosu_wrap.cxx	(Revision 993)
++++ ext/gosu/gosu_wrap.cxx	(Arbeitskopie)
 @@ -8,6 +8,10 @@
   * interface file instead. 
   * ----------------------------------------------------------------------------- */
