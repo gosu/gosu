@@ -68,8 +68,7 @@ task :swig do
   sh "patch --no-backup-if-mismatch -p0 <GosuImpl/RubyGosu_SWIG_RENAME_PATCH.patch"
 end
 
-Dir['./rake/*.rb'].each { |task| require task }
+Dir.glob('./rake/*.rb') { |task| require task }
 
-# The mac:app_wrapper task needs to be built on a 10.4-10.6 machine.
 task :release => [:'win:release', :'win:release_gem',
                   :'linux:release', :'linux:release_gem']

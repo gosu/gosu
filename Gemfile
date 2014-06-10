@@ -1,14 +1,14 @@
 # This Gemfile lists requirements for tasks in the Rakefile, not for Gosu
 # itself. Most of these gems are only necessary to update the Gosu website.
-# (Especially rake loves to break out of nowhere)
 
 source 'https://rubygems.org'
 
 gem 'yard'
 gem 'rdiscount'
-gem 'rake', '< 0.9'
+gem 'rake'
 gem 'mysql'
 gem 'rmagick'
+gem 'rake-compiler'
 case RUBY_PLATFORM
 when /darwin/
   gem 'rb-appscript'
