@@ -16,44 +16,43 @@ if `uname`.chomp != "Darwin" then
 end
 
 BASE_FILES = %w(
+  Bitmap/Bitmap.cpp
+  Bitmap/BitmapColorKey.cpp
+  Bitmap/BitmapUtils.cpp
   DirectoriesUnix.cpp
   FileUnix.cpp
-  Graphics/Bitmap.cpp
-  Graphics/BitmapColorKey.cpp
-  Graphics/BitmapUtils.cpp
   Graphics/BlockAllocator.cpp
   Graphics/Color.cpp
-  Graphics/Font.cpp
   Graphics/Graphics.cpp
   Graphics/Image.cpp
   Graphics/LargeImageData.cpp
   Graphics/TexChunk.cpp
-  Graphics/Text.cpp
   Graphics/Texture.cpp
   Graphics/Transform.cpp
-  Input.cpp
+  Input/Input.cpp
+  Input/TextInput.cpp
   Inspection.cpp
   IO.cpp
   Math.cpp
-  RubyGosu_wrap.cxx
+  Text/Font.cpp
+  Text/Text.cpp
   Utility.cpp
-  TextInput.cpp
   Window.cpp
 )
 
 MAC_FILES = %w(
   Audio/AudioOpenAL.mm
-  Graphics/BitmapApple.mm
-  Graphics/TextMac.cpp
-  Graphics/TextTouch.mm
+  Bitmap/BitmapApple.mm
+  Text/TextApple.mm
+  Text/TextMac.cpp
   TimingApple.cpp
   UtilityApple.mm
 )
 
 LINUX_FILES = %w(
   Audio/AudioOpenAL.cpp
-  Graphics/BitmapFreeImage.cpp
-  Graphics/TextUnix.cpp
+  Bitmap/BitmapFreeImage.cpp
+  Text/TextUnix.cpp
   TimingUnix.cpp
 )
 
@@ -63,7 +62,7 @@ require 'fileutils'
 # Silence internal deprecation warnings in Gosu
 $CFLAGS << " -DGOSU_DEPRECATED="
 
-$INCFLAGS << " -I../ -I../src"
+$INCFLAGS << " -I../.. -I../../src"
 
 if `uname`.chomp == 'Darwin' then
   SOURCE_FILES = BASE_FILES + MAC_FILES
@@ -118,7 +117,7 @@ end
 SOURCE_FILES.each do |file|
   shim_name = file.gsub('/', '-').sub(/\.mm$/, '.cpp')
   File.open(shim_name, "w") do |shim|
-    shim.puts "#include \"../src/#{file}\""
+    shim.puts "#include \"../../src/#{file}\""
   end
 end
 

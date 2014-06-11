@@ -4,7 +4,7 @@
 #include <Gosu/Math.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/TR1.hpp>
-#include "Common.hpp"
+#include "../Graphics/Common.hpp"
 #include "FormattedString.hpp"
 #include <cassert>
 #include <map>

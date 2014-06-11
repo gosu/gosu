@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'fileutils'
 require 'date'
-require 'rubygems/package_task'
+require 'rake/extensiontask'
 
 COMMON_FILES = FileList[
   '.yardopts',
@@ -26,28 +26,6 @@ COMMON_RUBY_FILES = COMMON_FILES + FileList[
 
 GOSU_VERSION = ENV['GOSU_RELEASE_VERSION'] || '0.0.0'
 
-# Sets everything except 'platform' and 'files'.
-def apply_gemspec_defaults s
-  s.name = 'gosu'
-  s.version = GOSU_VERSION.dup
-  s.summary = '2D game development library.'
-  s.description = <<EOS
-  2D game development library.
-
-  Gosu features easy to use and game-friendly interfaces to 2D graphics
-  and text (accelerated by 3D hardware), sound samples and music as well as
-  keyboard, mouse and gamepad/joystick input.
-
-  Also includes demos for integration with RMagick, Chipmunk and OpenGL.
-EOS
-  s.author = 'Julian Raschke'
-  s.date = Time.now.strftime '%Y-%m-%d'
-  s.email = 'julian@raschke.de'
-  s.homepage = 'http://www.libgosu.org/'
-  s.required_ruby_version = Gem::Requirement.new('>= 1.8.2')
-  s.summary = '2D game development library.'
-end
-
 def upload filename
   sh "scp -P 22000 '#{filename}' libgosu.org:/Library/WebServer/Documents/libgosu.org/downloads/"
 end
@@ -60,15 +38,13 @@ def tar filename, files
   sh "COPYFILE_DISABLE=true tar -czf #{filename} #{files.to_a.uniq.map { |fn| "'#{fn}'" }.join(' ')}"
 end
 
-# Usually this is handled by my Xcode 3 project. Until the Xcode 4 project is
-# complete, this Rake task should do the trick.
+Dir.glob('./rake/*.rb') { |task| require task }
+
 task :swig do
   sh "swig -c++ -ruby -autorename ext/gosu/gosu.swg"
   sh "patch --no-backup-if-mismatch -p0 <ext/gosu/gosu_SWIG_GC_PATCH.patch"
   sh "patch --no-backup-if-mismatch -p0 <ext/gosu/gosu_SWIG_RENAME_PATCH.patch"
 end
-
-Dir.glob('./rake/*.rb') { |task| require task }
 
 task :release => [:'win:release', :'win:release_gem',
                   :'linux:release', :'linux:release_gem']
