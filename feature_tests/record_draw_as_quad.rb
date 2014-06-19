@@ -1,4 +1,4 @@
-$LOAD_PATH << '../lib'
+require 'rubygems'
 require 'gosu/preview'
 
 DEST = [[12, 295], [300, 265], [23, 42], [101, 11]]
@@ -9,7 +9,7 @@ class FindMatrix < Gosu::Window
     
     self.caption = "Macro draw_as_quad - hold <tab> to to see Image draw_as_quad"
     
-    @image = Gosu::Image.new('/Users/jlnr/Pictures/Internetz/sadsadrobot.jpg')
+    @image = Gosu::Image.new('media/Wallpaper.png')
     @macro = record(@image.width, @image.height) { @image.draw 0, 0, 0 }
   end
   
