@@ -30,106 +30,106 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\GosuImpl\Sockets\CommSocket.cpp">
+    <ClCompile Include="..\src\Sockets\CommSocket.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\DirectoriesWin.cpp">
+    <ClCompile Include="..\src\DirectoriesWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\FileWin.cpp">
+    <ClCompile Include="..\src\FileWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\InputWin.cpp">
+    <ClCompile Include="..\src\InputWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Inspection.cpp">
+    <ClCompile Include="..\src\Inspection.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\IO.cpp">
+    <ClCompile Include="..\src\IO.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Sockets\ListenerSocket.cpp">
+    <ClCompile Include="..\src\Sockets\ListenerSocket.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Math.cpp">
+    <ClCompile Include="..\src\Math.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Sockets\MessageSocket.cpp">
+    <ClCompile Include="..\src\Sockets\MessageSocket.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Sockets\Socket.cpp">
+    <ClCompile Include="..\src\Sockets\Socket.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\TextInputWin.cpp">
+    <ClCompile Include="..\src\TextInputWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\TimingWin.cpp">
+    <ClCompile Include="..\src\TimingWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Utility.cpp">
+    <ClCompile Include="..\src\Utility.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\UtilityWin.cpp">
+    <ClCompile Include="..\src\UtilityWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\WindowWin.cpp">
+    <ClCompile Include="..\src\WindowWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\WinMain.cpp">
+    <ClCompile Include="..\src\WinMain.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\WinUtility.cpp">
+    <ClCompile Include="..\src\WinUtility.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Graphics\Bitmap.cpp">
+    <ClCompile Include="..\src\Graphics\Bitmap.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Graphics\BitmapColorKey.cpp">
+    <ClCompile Include="..\src\Graphics\BitmapColorKey.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Graphics\BitmapGDIplus.cpp">
+    <ClCompile Include="..\src\Graphics\BitmapGDIplus.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Graphics\BitmapUtils.cpp">
+    <ClCompile Include="..\src\Graphics\BitmapUtils.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Graphics\BlockAllocator.cpp">
+    <ClCompile Include="..\src\Graphics\BlockAllocator.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Graphics\Color.cpp">
+    <ClCompile Include="..\src\Graphics\Color.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Graphics\Font.cpp">
+    <ClCompile Include="..\src\Graphics\Font.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Graphics\Graphics.cpp">
+    <ClCompile Include="..\src\Graphics\Graphics.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Graphics\Image.cpp">
+    <ClCompile Include="..\src\Graphics\Image.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Graphics\LargeImageData.cpp">
+    <ClCompile Include="..\src\Graphics\LargeImageData.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Graphics\TexChunk.cpp">
+    <ClCompile Include="..\src\Graphics\TexChunk.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Graphics\Text.cpp">
+    <ClCompile Include="..\src\Graphics\Text.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Graphics\TextTTFWin.cpp">
+    <ClCompile Include="..\src\Graphics\TextTTFWin.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Graphics\Texture.cpp">
+    <ClCompile Include="..\src\Graphics\Texture.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Graphics\TextWin.cpp">
+    <ClCompile Include="..\src\Graphics\TextWin.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Graphics\Transform.cpp">
+    <ClCompile Include="..\src\Graphics\Transform.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\GosuImpl\Audio\AudioOpenAL.cpp">
+    <ClCompile Include="..\src\Audio\AudioOpenAL.cpp">
       <Filter>Implementation\Audio</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\libogg\src\bitwise.c">
@@ -206,43 +206,43 @@
     <ClInclude Include="..\Gosu\Gosu.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="..\GosuImpl\Graphics\BlockAllocator.hpp">
+    <ClInclude Include="..\src\Graphics\BlockAllocator.hpp">
       <Filter>Implementation\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\GosuImpl\Graphics\Common.hpp">
+    <ClInclude Include="..\src\Graphics\Common.hpp">
       <Filter>Implementation\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\GosuImpl\Graphics\DrawOp.hpp">
+    <ClInclude Include="..\src\Graphics\DrawOp.hpp">
       <Filter>Implementation\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\GosuImpl\Graphics\DrawOpQueue.hpp">
+    <ClInclude Include="..\src\Graphics\DrawOpQueue.hpp">
       <Filter>Implementation\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\GosuImpl\Graphics\LargeImageData.hpp">
+    <ClInclude Include="..\src\Graphics\LargeImageData.hpp">
       <Filter>Implementation\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\GosuImpl\Graphics\Macro.hpp">
+    <ClInclude Include="..\src\Graphics\Macro.hpp">
       <Filter>Implementation\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\GosuImpl\Graphics\RenderState.hpp">
+    <ClInclude Include="..\src\Graphics\RenderState.hpp">
       <Filter>Implementation\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\GosuImpl\Graphics\TexChunk.hpp">
+    <ClInclude Include="..\src\Graphics\TexChunk.hpp">
       <Filter>Implementation\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\GosuImpl\Graphics\Texture.hpp">
+    <ClInclude Include="..\src\Graphics\Texture.hpp">
       <Filter>Implementation\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\GosuImpl\Audio\ALChannelManagement.hpp">
+    <ClInclude Include="..\src\Audio\ALChannelManagement.hpp">
       <Filter>Implementation\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="..\GosuImpl\Audio\AudioFile.hpp">
+    <ClInclude Include="..\src\Audio\AudioFile.hpp">
       <Filter>Implementation\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="..\GosuImpl\Audio\OggFile.hpp">
+    <ClInclude Include="..\src\Audio\OggFile.hpp">
       <Filter>Implementation\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="..\GosuImpl\Audio\SndFile.hpp">
+    <ClInclude Include="..\src\Audio\SndFile.hpp">
       <Filter>Implementation\Audio</Filter>
     </ClInclude>
     <ClInclude Include="..\Gosu\Audio.hpp">
@@ -296,7 +296,7 @@
     <ClInclude Include="..\Gosu\Platform.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\GosuImpl\Sockets\Sockets.hpp">
+    <ClInclude Include="..\src\Sockets\Sockets.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\Gosu\Sockets.hpp">

@@ -110,27 +110,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\GosuImpl\Graphics\BitmapFreeImage.cpp" />
-    <ClCompile Include="..\GosuImpl\RubyGosu_wrap.cxx">
+    <ClCompile Include="..\src\Graphics\BitmapFreeImage.cpp" />
+    <ClCompile Include="..\src\RubyGosu_wrap.cxx">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">string;iostream;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">string;iostream;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\GosuImpl\RubyGosu.swg">
+    <CustomBuild Include="..\src\RubyGosu.swg">
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">true</ExcludedFromBuild>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">swig -c++ -ruby -autorename -DWIN32 ../GosuImpl/RubyGosu.swg
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">swig -c++ -ruby -autorename -DWIN32 ../src/RubyGosu.swg
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">RubyGosu_wrap.cxx;RubyGosu_wrap.h;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">swig -c++ -ruby -autorename -DWIN32 ../GosuImpl/RubyGosu.swg
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">swig -c++ -ruby -autorename -DWIN32 ../src/RubyGosu.swg
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">RubyGosu_wrap.cxx;RubyGosu_wrap.h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\GosuImpl\RubyGosu_wrap.h" />
+    <ClInclude Include="..\src\RubyGosu_wrap.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Gosu.vcxproj">
