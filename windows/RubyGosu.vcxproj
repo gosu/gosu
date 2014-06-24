@@ -110,27 +110,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\Graphics\BitmapFreeImage.cpp" />
-    <ClCompile Include="..\src\RubyGosu_wrap.cxx">
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">string;iostream;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">string;iostream;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="..\src\RubyGosu.swg">
-      <FileType>Document</FileType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">true</ExcludedFromBuild>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">swig -c++ -ruby -autorename -DWIN32 ../src/RubyGosu.swg
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">RubyGosu_wrap.cxx;RubyGosu_wrap.h;%(Outputs)</Outputs>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">swig -c++ -ruby -autorename -DWIN32 ../src/RubyGosu.swg
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">RubyGosu_wrap.cxx;RubyGosu_wrap.h;%(Outputs)</Outputs>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\src\RubyGosu_wrap.h" />
+    <ClCompile Include="..\ext\gosu\gosu_wrap.cxx" />
+    <ClCompile Include="..\src\Bitmap\BitmapFreeImage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Gosu.vcxproj">

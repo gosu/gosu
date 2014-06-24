@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="libogg">
+      <UniqueIdentifier>{d148775f-4d1f-448d-b6b1-f89b5a8d1334}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libvorbis">
+      <UniqueIdentifier>{cf23b7f5-9169-4849-855c-babcfb7d71bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libvorbisfile">
+      <UniqueIdentifier>{3b51dad4-560b-47e5-af10-4c93fadd3a1e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\dependencies\libogg\src\bitwise.c">
+      <Filter>libogg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libogg\src\framing.c">
+      <Filter>libogg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\analysis.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\bitrate.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\block.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\codebook.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\envelope.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\floor0.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\floor1.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\info.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\lookup.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\lpc.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\lsp.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\mapping0.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\mdct.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\psy.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\registry.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\res0.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\sharedbook.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\smallft.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\synthesis.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\window.c">
+      <Filter>libvorbis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\libvorbis\lib\vorbisfile.c">
+      <Filter>libvorbisfile</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

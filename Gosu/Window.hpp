@@ -96,13 +96,6 @@ namespace Gosu
         const Input& input() const;
         Input& input();
         
-        #ifdef GOSU_IS_WIN
-        // Only on Windows, used for integrating with GUI toolkits.
-        HWND handle() const;
-        virtual LRESULT handleMessage(UINT message, WPARAM wparam,
-            LPARAM lparam);
-        #endif
-        
         #ifdef GOSU_IS_UNIX
         // Context for creating shared contexts.
         // Only on Unices (so far).

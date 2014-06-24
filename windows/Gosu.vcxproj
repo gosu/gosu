@@ -47,7 +47,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)/../;$(ProjectDir)/../dependencies/libsndfile/;$(ProjectDir)/../dependencies/libogg/include/;$(ProjectDir)/../dependencies/libvorbis/include/;$(ProjectDir)/../dependencies/</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GOSU_DEPRECATED=;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -57,7 +57,7 @@
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>Gdiplus.lib;openal32.lib;opengl32.lib;dinput8.lib;winmm.lib;dxguid.lib;ws2_32.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)$(Configuration)/dependencies.lib;SDL2.lib;gdiplus.lib;opengl32.lib;openal32.lib;winmm.lib;ws2_32.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>$(ProjectDir)/../dependencies/al/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
@@ -69,7 +69,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <AdditionalIncludeDirectories>$(ProjectDir)/../;$(ProjectDir)/../dependencies/libsndfile/;$(ProjectDir)/../dependencies/libogg/include/;$(ProjectDir)/../dependencies/libvorbis/include/;$(ProjectDir)/../dependencies/</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GOSU_DEPRECATED=;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -77,68 +77,45 @@
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>Gdiplus.lib;openal32.lib;opengl32.lib;dinput8.lib;winmm.lib;dxguid.lib;ws2_32.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)$(Configuration)/dependencies.lib;SDL2.lib;gdiplus.lib;opengl32.lib;openal32.lib;winmm.lib;ws2_32.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)/../dependencies/al/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Bitmap\Bitmap.cpp" />
+    <ClCompile Include="..\src\Bitmap\BitmapColorKey.cpp" />
+    <ClCompile Include="..\src\Bitmap\BitmapGDIplus.cpp" />
+    <ClCompile Include="..\src\Bitmap\BitmapUtils.cpp" />
+    <ClCompile Include="..\src\Input\Input.cpp" />
+    <ClCompile Include="..\src\Input\TextInput.cpp" />
     <ClCompile Include="..\src\Sockets\CommSocket.cpp" />
     <ClCompile Include="..\src\DirectoriesWin.cpp" />
     <ClCompile Include="..\src\FileWin.cpp" />
-    <ClCompile Include="..\src\InputWin.cpp" />
     <ClCompile Include="..\src\Inspection.cpp" />
     <ClCompile Include="..\src\IO.cpp" />
     <ClCompile Include="..\src\Sockets\ListenerSocket.cpp" />
     <ClCompile Include="..\src\Math.cpp" />
     <ClCompile Include="..\src\Sockets\MessageSocket.cpp" />
     <ClCompile Include="..\src\Sockets\Socket.cpp" />
-    <ClCompile Include="..\src\TextInputWin.cpp" />
+    <ClCompile Include="..\src\Text\Font.cpp" />
+    <ClCompile Include="..\src\Text\Text.cpp" />
+    <ClCompile Include="..\src\Text\TextTTFWin.cpp" />
+    <ClCompile Include="..\src\Text\TextWin.cpp" />
     <ClCompile Include="..\src\TimingWin.cpp" />
     <ClCompile Include="..\src\Utility.cpp" />
     <ClCompile Include="..\src\UtilityWin.cpp" />
-    <ClCompile Include="..\src\WindowWin.cpp" />
+    <ClCompile Include="..\src\Window.cpp" />
     <ClCompile Include="..\src\WinMain.cpp" />
     <ClCompile Include="..\src\WinUtility.cpp" />
-    <ClCompile Include="..\src\Graphics\Bitmap.cpp" />
-    <ClCompile Include="..\src\Graphics\BitmapColorKey.cpp" />
-    <ClCompile Include="..\src\Graphics\BitmapGDIplus.cpp" />
-    <ClCompile Include="..\src\Graphics\BitmapUtils.cpp" />
     <ClCompile Include="..\src\Graphics\BlockAllocator.cpp" />
     <ClCompile Include="..\src\Graphics\Color.cpp" />
-    <ClCompile Include="..\src\Graphics\Font.cpp" />
     <ClCompile Include="..\src\Graphics\Graphics.cpp" />
     <ClCompile Include="..\src\Graphics\Image.cpp" />
     <ClCompile Include="..\src\Graphics\LargeImageData.cpp" />
     <ClCompile Include="..\src\Graphics\TexChunk.cpp" />
-    <ClCompile Include="..\src\Graphics\Text.cpp" />
-    <ClCompile Include="..\src\Graphics\TextTTFWin.cpp" />
     <ClCompile Include="..\src\Graphics\Texture.cpp" />
-    <ClCompile Include="..\src\Graphics\TextWin.cpp" />
     <ClCompile Include="..\src\Graphics\Transform.cpp" />
     <ClCompile Include="..\src\Audio\AudioOpenAL.cpp" />
-    <ClCompile Include="..\dependencies\libogg\src\bitwise.c" />
-    <ClCompile Include="..\dependencies\libogg\src\framing.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\analysis.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\bitrate.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\block.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\codebook.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\envelope.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\floor0.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\floor1.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\info.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\lookup.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\lpc.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\lsp.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\mapping0.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\mdct.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\psy.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\registry.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\res0.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\sharedbook.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\smallft.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\synthesis.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\window.c" />
-    <ClCompile Include="..\dependencies\libvorbis\lib\vorbisfile.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Gosu\Gosu.hpp" />
@@ -182,7 +159,6 @@
     <ClInclude Include="..\Gosu\Version.hpp" />
     <ClInclude Include="..\Gosu\Window.hpp" />
     <ClInclude Include="..\Gosu\WinUtility.hpp" />
-    <ClInclude Include="..\dependencies\libsndfile\sndfile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -13,33 +13,24 @@
     <Filter Include="Interface">
       <UniqueIdentifier>{defefcfa-47f2-4cf5-9be9-79c759d06bc6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dependencies">
-      <UniqueIdentifier>{c396cdf6-ab03-439d-87ab-bb3692006dc6}</UniqueIdentifier>
+    <Filter Include="Implementation\Input">
+      <UniqueIdentifier>{4ccfad9c-b5ff-40f0-9131-5c1b5f43e8b8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dependencies\libogg">
-      <UniqueIdentifier>{30201f5b-1091-471f-80b5-1bb2fb2a6576}</UniqueIdentifier>
+    <Filter Include="Implementation\Sockets">
+      <UniqueIdentifier>{696b095c-cd5a-4b0f-88ea-ecce15f5a6b3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dependencies\libvorbis">
-      <UniqueIdentifier>{153671f9-5089-4a2c-bf30-ef0e893ba13c}</UniqueIdentifier>
+    <Filter Include="Implementation\Text">
+      <UniqueIdentifier>{ecb0c8af-b127-4dd1-9acb-9cef5c1ef2f3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dependencies\libvorbisfile">
-      <UniqueIdentifier>{1a6ed573-e8f3-4259-b095-0874dacfb135}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Dependencies\libsndfile">
-      <UniqueIdentifier>{fbfb1537-4487-4c7f-9fde-0a82350cac86}</UniqueIdentifier>
+    <Filter Include="Implementation\Bitmap">
+      <UniqueIdentifier>{20d151a7-7430-467f-8fe5-6e69a43c5a23}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\Sockets\CommSocket.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\DirectoriesWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\FileWin.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\InputWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Inspection.cpp">
@@ -48,19 +39,7 @@
     <ClCompile Include="..\src\IO.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Sockets\ListenerSocket.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Math.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Sockets\MessageSocket.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Sockets\Socket.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TextInputWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\TimingWin.cpp">
@@ -72,34 +51,16 @@
     <ClCompile Include="..\src\UtilityWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\WindowWin.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\WinMain.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\WinUtility.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Graphics\Bitmap.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Graphics\BitmapColorKey.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Graphics\BitmapGDIplus.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Graphics\BitmapUtils.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Graphics\BlockAllocator.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Graphics\Color.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Graphics\Font.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Graphics\Graphics.cpp">
@@ -114,16 +75,7 @@
     <ClCompile Include="..\src\Graphics\TexChunk.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Graphics\Text.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Graphics\TextTTFWin.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Graphics\Texture.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Graphics\TextWin.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Graphics\Transform.cpp">
@@ -132,74 +84,50 @@
     <ClCompile Include="..\src\Audio\AudioOpenAL.cpp">
       <Filter>Implementation\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\libogg\src\bitwise.c">
-      <Filter>Dependencies\libogg</Filter>
+    <ClCompile Include="..\src\Input\Input.cpp">
+      <Filter>Implementation\Input</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\libogg\src\framing.c">
-      <Filter>Dependencies\libogg</Filter>
+    <ClCompile Include="..\src\Input\TextInput.cpp">
+      <Filter>Implementation\Input</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\analysis.c">
-      <Filter>Dependencies\libvorbis</Filter>
+    <ClCompile Include="..\src\Sockets\CommSocket.cpp">
+      <Filter>Implementation\Sockets</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\bitrate.c">
-      <Filter>Dependencies\libvorbis</Filter>
+    <ClCompile Include="..\src\Sockets\MessageSocket.cpp">
+      <Filter>Implementation\Sockets</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\block.c">
-      <Filter>Dependencies\libvorbis</Filter>
+    <ClCompile Include="..\src\Sockets\ListenerSocket.cpp">
+      <Filter>Implementation\Sockets</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\codebook.c">
-      <Filter>Dependencies\libvorbis</Filter>
+    <ClCompile Include="..\src\Sockets\Socket.cpp">
+      <Filter>Implementation\Sockets</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\envelope.c">
-      <Filter>Dependencies\libvorbis</Filter>
+    <ClCompile Include="..\src\Window.cpp">
+      <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\floor0.c">
-      <Filter>Dependencies\libvorbis</Filter>
+    <ClCompile Include="..\src\Text\Font.cpp">
+      <Filter>Implementation\Text</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\floor1.c">
-      <Filter>Dependencies\libvorbis</Filter>
+    <ClCompile Include="..\src\Text\Text.cpp">
+      <Filter>Implementation\Text</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\info.c">
-      <Filter>Dependencies\libvorbis</Filter>
+    <ClCompile Include="..\src\Text\TextTTFWin.cpp">
+      <Filter>Implementation\Text</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\lookup.c">
-      <Filter>Dependencies\libvorbis</Filter>
+    <ClCompile Include="..\src\Text\TextWin.cpp">
+      <Filter>Implementation\Text</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\lpc.c">
-      <Filter>Dependencies\libvorbis</Filter>
+    <ClCompile Include="..\src\Bitmap\Bitmap.cpp">
+      <Filter>Implementation\Bitmap</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\lsp.c">
-      <Filter>Dependencies\libvorbis</Filter>
+    <ClCompile Include="..\src\Bitmap\BitmapColorKey.cpp">
+      <Filter>Implementation\Bitmap</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\mapping0.c">
-      <Filter>Dependencies\libvorbis</Filter>
+    <ClCompile Include="..\src\Bitmap\BitmapGDIplus.cpp">
+      <Filter>Implementation\Bitmap</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\mdct.c">
-      <Filter>Dependencies\libvorbis</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\psy.c">
-      <Filter>Dependencies\libvorbis</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\registry.c">
-      <Filter>Dependencies\libvorbis</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\res0.c">
-      <Filter>Dependencies\libvorbis</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\sharedbook.c">
-      <Filter>Dependencies\libvorbis</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\smallft.c">
-      <Filter>Dependencies\libvorbis</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\synthesis.c">
-      <Filter>Dependencies\libvorbis</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\window.c">
-      <Filter>Dependencies\libvorbis</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\libvorbis\lib\vorbisfile.c">
-      <Filter>Dependencies\libvorbisfile</Filter>
+    <ClCompile Include="..\src\Bitmap\BitmapUtils.cpp">
+      <Filter>Implementation\Bitmap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -325,9 +253,6 @@
     </ClInclude>
     <ClInclude Include="..\Gosu\WinUtility.hpp">
       <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\libsndfile\sndfile.h">
-      <Filter>Dependencies\libsndfile</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
