@@ -68,13 +68,13 @@ if `uname`.chomp == 'Darwin' then
   SOURCE_FILES = BASE_FILES + MAC_FILES
   
   # To make everything work with the Objective C runtime
-  $CFLAGS    << " -x objective-c -DNDEBUG"
+  $CFLAGS    << " -I/usr/local/include -x objective-c -DNDEBUG"
   # Compile all C++ files as Objective C++ on OS X since mkmf does not support .mm
   # files.
   # Also undefine two debug flags that cause exceptions to randomly crash, see:
   # https://trac.macports.org/ticket/27237#comment:21
   # http://newartisans.com/2009/10/a-c-gotcha-on-snow-leopard/#comment-893
-  CONFIG['CXXFLAGS'] = "#{CONFIG['CXXFLAGS']} -x objective-c++ -U_GLIBCXX_DEBUG -U_GLIBCXX_DEBUG_PEDANTIC"
+  CONFIG['CXXFLAGS'] = "#{CONFIG['CXXFLAGS']} -I/usr/local/include -x objective-c++ -U_GLIBCXX_DEBUG -U_GLIBCXX_DEBUG_PEDANTIC"
   if `uname -r`.to_i >= 13 then
     # Use C++11 on Mavericks and above
     # TODO: This can probably be enabled starting from 10.6?
