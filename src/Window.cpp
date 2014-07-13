@@ -162,6 +162,8 @@ void Gosu::Window::show()
         
         update();
         
+        SDL_ShowCursor(needsCursor());
+        
         if (graphics().begin()) {
             draw();
             graphics().end();
