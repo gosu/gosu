@@ -65,6 +65,9 @@ $CFLAGS << " -DGOSU_DEPRECATED="
 $INCFLAGS << " -I../.. -I../../src"
 
 if `uname`.chomp == 'Darwin' then
+  HOMEBREW_DEPENDENCIES = %w(SDL2 ogg vorbis vorbisfile)
+  FRAMEWORKS = %w(AudioToolbox IOKit OpenAL OpenGL AppKit ApplicationServices Foundation Carbon)
+
   SOURCE_FILES = BASE_FILES + MAC_FILES
   
   # To make everything work with the Objective C runtime
@@ -80,10 +83,18 @@ if `uname`.chomp == 'Darwin' then
     # TODO: This can probably be enabled starting from 10.6?
     CONFIG['CXXFLAGS'] << " -std=gnu++11"
   end
-  $LDFLAGS   << " -liconv -lSDL2 -logg -lvorbis -lvorbisfile"
-  %w(AudioToolbox IOKit OpenAL OpenGL AppKit ApplicationServices Foundation Carbon).each do |f|
-    $LDFLAGS << " -framework #{f}"
+  
+  $LDFLAGS << " -liconv"
+  
+  if enable_config('static-homebrew-dependencies') then
+    # TODO: For some reason this only works after deleting both SDL2 dylib files from /usr/local/lib.
+    # Otherwise, the resulting gosu.bundle is still dependent on libSDL2-2.0.0.dylib, see `otool -L gosu.bundle`
+    $LDFLAGS << HOMEBREW_DEPENDENCIES.map { |lib| " /usr/local/lib/lib#{lib}.a" }.join
+  else
+    $LDFLAGS << HOMEBREW_DEPENDENCIES.map { |lib| " -l#{lib}" }.join
   end
+
+  $LDFLAGS << FRAMEWORKS.map { |f| " -framework #{f}" }.join
 else
   SOURCE_FILES = BASE_FILES + LINUX_FILES
 
