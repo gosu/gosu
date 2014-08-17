@@ -38,18 +38,18 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\lib\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\lib\1.8\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">..\lib\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">..\lib\1.9\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">false</GenerateManifest>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">.so</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.so</TargetExt>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">gosu.for_1_9</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">gosu.for_1_8</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release with Ruby 1.9|Win32'">gosu</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">gosu</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -65,7 +65,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>C:\Ruby18-mswin32\lib\msvcrt-ruby18.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)gosu.for_1_8.so</OutputFile>
+      <OutputFile>$(OutDir)gosu.so</OutputFile>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <DelayLoadDLLs>OpenAL32.dll;FreeImage.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
@@ -94,7 +94,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>C:\Ruby19-mswin32\lib\msvcrt-ruby191.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)gosu.for_1_9.so</OutputFile>
+      <OutputFile>$(OutDir)gosu.so</OutputFile>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <DelayLoadDLLs>OpenAL32.dll;FreeImage.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
