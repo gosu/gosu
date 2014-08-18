@@ -1,6 +1,17 @@
+LICENSES = <<-EOF
+  This software uses the following third-party libraries:
+  
+  Gosu, http://www.libgosu.org, MIT License, http://opensource.org/licenses/MIT
+  SDL 2, http://www.libsdl.org, MIT License, http://opensource.org/licenses/MIT
+  FreeImage, http://freeimage.sourceforge.net, FreeImage Public License
+  libogg & libvorbis, http://www.xiph.org, BSD License, 3-Clause Version, http://www.xiph.org/licenses/bsd
+  libsndfile, http://www.mega-nerd.com/libsndfile, GNU LGPL 3, http://www.gnu.org/copyleft/lesser.html
+  OpenAL Soft, http://kcat.strangesoft.net/openal.html, GNU LGPL 2, http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html
+EOF
+
 task :set_version do
   throw "GOSU_RELEASE_VERSION must be set" if GOSU_VERSION == '0.0.0'
-
+  
   components = GOSU_VERSION.split('.')
   
   File.open('cmake/CMakeLists.txt', 'w') do |file|
@@ -25,11 +36,7 @@ SET(GOSU_VERSION_PATCH "#{components[2]}")
 #define GOSU_VERSION "#{GOSU_VERSION}"
 
 #define GOSU_COPYRIGHT_NOTICE \\
-#{Dir['dependencies/*.license'].map do |fn|
-  File.readlines(fn).map do |line|
-    "  \"#{line.gsub('"', '\"').chomp}\""
-  end.join(" \\\n").gsub("  \"\"", "  \"\\n\\n\"")
-end.join(" \\\n\\\n")}
+#{LICENSES.split("\n").map { |line| "    \"#{line.gsub(/^ */, '')}\\n\"" }.join("\n")};
   
 #endif
     EOF
