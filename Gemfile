@@ -4,7 +4,7 @@
 source 'https://rubygems.org'
 
 gem 'yard'
-gem 'rdiscount'
+gem 'kramdown'
 gem 'rake'
 gem 'mysql'
 gem 'rmagick'
