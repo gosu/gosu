@@ -36,7 +36,7 @@ SET(GOSU_VERSION_PATCH "#{components[2]}")
 #define GOSU_VERSION "#{GOSU_VERSION}"
 
 #define GOSU_COPYRIGHT_NOTICE \\
-#{LICENSES.split("\n").map { |line| "    \"#{line.gsub(/^ */, '')}\\n\"" }.join("\n")};
+#{LICENSES.split("\n").map { |line| "    \"#{line.gsub(/^ */, '')}\\n\"" }.join(" \\\n")}
   
 #endif
     EOF
