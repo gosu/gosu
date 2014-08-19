@@ -62,16 +62,16 @@ std::wstring getNameFromTTFFile(const std::wstring& filename)
 	HANDLE hFile = INVALID_HANDLE_VALUE;
 	hFile = ::CreateFile(filename.c_str(),
 						 GENERIC_READ,// | GENERIC_WRITE,
-						 0,
+						 FILE_SHARE_READ,
 						 NULL,
-						 OPEN_ALWAYS,
+						 OPEN_EXISTING,
 						 FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,
 						 NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE)
 	{
         TRACE(_T("ERROR:  failed to open '%s'\n"), Gosu::narrow(filename).c_str());
-		TRACE(_T("ERROR: %s failed\n"), _T("CreateFile"));
+		TRACE(_T("ERROR: %s failed, GetLastError() = 0x%x\n"), _T("CreateFile"), (int)GetLastError());
 		return filename;
 	}
 
