@@ -17,9 +17,6 @@ std::wstring Gosu::defaultFontName()
     return L"Arial";
 }
 
-// IMPR: throwLastError/check is used a lot here, Win9x doesn't provide GDI
-// error codes though. Wait until 9x is dead or fix this!
-
 namespace Gosu
 {
     std::wstring getNameFromTTFFile(const std::wstring& filename);
