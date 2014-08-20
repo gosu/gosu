@@ -13,25 +13,29 @@ namespace Gosu
         void registerFrame();
     }
     
-    SDL_DisplayMode desktopDisplayMode = { 0, 0 };
+    SDL_DisplayMode currentDisplayMode = { 0, 0 };
 }
 
 unsigned Gosu::screenWidth()
 {
     // TODO - not thread-safe
-    if (desktopDisplayMode.w == 0) {
-        SDL_GetDesktopDisplayMode(0, &desktopDisplayMode);
+    if (currentDisplayMode.w == 0) {
+        SDL_Init(SDL_INIT_VIDEO);
+        SDL_GetDisplayMode(0, 0, &currentDisplayMode);
+        SDL_QuitSubSystem(SDL_INIT_VIDEO);
     }
-    return desktopDisplayMode.w;
+    return currentDisplayMode.w;
 }
 
 unsigned Gosu::screenHeight()
 {
     // TODO - not thread-safe
-    if (desktopDisplayMode.h == 0) {
-        SDL_GetDesktopDisplayMode(0, &desktopDisplayMode);
+    if (currentDisplayMode.h == 0) {
+        SDL_Init(SDL_INIT_VIDEO);
+        SDL_GetDisplayMode(0, 0, &currentDisplayMode);
+        SDL_QuitSubSystem(SDL_INIT_VIDEO);
     }
-    return desktopDisplayMode.h;
+    return currentDisplayMode.h;
 }
 
 struct Gosu::Window::Impl
