@@ -8,12 +8,14 @@ if RUBY_PLATFORM =~ /mswin|mingw32|mingw64|win32\-|\-win32/ then
   exit 1
 end
 
-if `uname`.chomp != "Darwin" then
-  puts 'The Gosu gem requires some libraries to be installed system-wide.'
-  puts 'See the following site for a list:'
+puts 'The Gosu gem requires some libraries to be installed system-wide.'
+puts 'See the following site for a list:'
+if `uname`.chomp == "Darwin" then
+  puts 'https://github.com/jlnr/gosu/wiki/Getting-Started-on-OS-X'
+else
   puts 'https://github.com/jlnr/gosu/wiki/Getting-Started-on-Linux'
-  puts
 end
+puts
 
 BASE_FILES = %w(
   Bitmap/Bitmap.cpp
