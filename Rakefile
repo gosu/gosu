@@ -38,7 +38,7 @@ def tar filename, files
   sh "COPYFILE_DISABLE=true tar -czf #{filename} #{files.to_a.uniq.map { |fn| "'#{fn}'" }.join(' ')}"
 end
 
-Dir.glob('./rake/*.rb') { |task| require task }
+Dir.glob('./rake/*.rb').sort.each { |task| require task }
 
 task :swig do
   sh "swig -c++ -ruby -autorename ext/gosu/gosu.swg"
