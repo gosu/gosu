@@ -188,12 +188,12 @@ bool Gosu::Input::feedSDLEvent(void* event)
             break;
         }
         case SDL_MOUSEWHEEL: {
-            if (e->wheel.y < 0) {
+            if (e->wheel.y > 0) {
                 pimpl->enqueueEvent(msWheelUp, true);
                 pimpl->enqueueEvent(msWheelUp, false);
                 return true;
             }
-            else if (e->wheel.y > 0) {
+            else if (e->wheel.y < 0) {
                 pimpl->enqueueEvent(msWheelDown, true);
                 pimpl->enqueueEvent(msWheelDown, false);
                 return true;
