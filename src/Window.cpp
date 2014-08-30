@@ -92,8 +92,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         actualWidth, actualHeight,
         SDL_WINDOW_OPENGL |
-// Note: This flag is not available in all versions of SDL 2, e.g. SDL 2.0.0 on OpenSuSE 13.1.
-#ifdef SDL_WINDOW_ALLOW_HIGHDPI
+#if SDL_VERSION_ATLEAST(2, 0, 1)
         SDL_WINDOW_ALLOW_HIGHDPI |
 #endif
         (fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0));
