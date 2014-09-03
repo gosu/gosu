@@ -119,6 +119,7 @@
     <ClCompile Include="..\src\Bitmap\BitmapColorKey.cpp" />
     <ClCompile Include="..\src\Bitmap\BitmapGDIplus.cpp" />
     <ClCompile Include="..\src\Bitmap\BitmapUtils.cpp" />
+    <ClCompile Include="..\src\Graphics\Resolution.cpp" />
     <ClCompile Include="..\src\Input\Input.cpp" />
     <ClCompile Include="..\src\Input\TextInput.cpp" />
     <ClCompile Include="..\src\Sockets\CommSocket.cpp" />

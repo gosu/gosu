@@ -129,6 +129,9 @@
     <ClCompile Include="..\src\Bitmap\BitmapUtils.cpp">
       <Filter>Implementation\Bitmap</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Graphics\Resolution.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Gosu\Gosu.hpp">
