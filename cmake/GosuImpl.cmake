@@ -31,10 +31,10 @@ option(BUILD_STATIC_LIBRARIES "Build static libraries" ON)
 if(WIN32)
 	option(BUILD_DYNAMIC_LIBRARIES "Build dynamic libraries" OFF)
 else()
-    OPTION(BUILD_DYNAMIC_LIBRARIES "Should the dynamic libraries be built? WARNING enable at your own risk" OFF)
+    OPTION(BUILD_DYNAMIC_LIBRARIES "Should the dynamic libraries be built? WARNING: Enable at your own risk" OFF)
 endif()
 
-OPTION(GOSU_CPP11_ENABLED "Should Gosu's c++11 features get enabled? (this is probably only relevant on linux)" ON)
+OPTION(GOSU_CPP11_ENABLED "Should Gosu's c++11 features get enabled? (this is probably only relevant on Linux)" ON)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
@@ -42,7 +42,7 @@ endif()
 
 
 if(WIN32)
-	#If both are enabled then diable the dyanamic build
+	#If both are enabled then disable the dyanamic build
 	if(BUILD_STATIC_LIBRARIES AND BUILD_DYNAMIC_LIBRARIES)
 		message(STATUS "Building both static and dynamic libraries is not supported on Windows. Disabling dynamic libraries.")
 		set(BUILD_DYNAMIC_LIBRARIES OFF CACHE BOOL "Build dynamic libraries" FORCE)
@@ -53,7 +53,7 @@ if(WIN32)
 		set(BUILD_STATIC_LIBRARIES ON CACHE BOOL "Build static libraries" FORCE)
 	endif()
 else()
-	#It's nonsense to disble both so on Linux, re-enable both.
+	#It's nonsense to disable both so on Linux, re-enable both.
 	if(NOT BUILD_STATIC_LIBRARIES AND NOT BUILD_DYNAMIC_LIBRARIES)
 		message(STATUS "Both dynamic and static libraries were disabled - re-enabling both.")
 		set(BUILD_STATIC_LIBRARIES ON CACHE BOOL "Build static libraries" FORCE)
@@ -77,6 +77,7 @@ SET(CORE_SRC_FILES
     Graphics/Graphics.cpp
     Graphics/Image.cpp
     Graphics/LargeImageData.cpp
+    Graphics/Resolution.cpp
     Graphics/TexChunk.cpp
     Graphics/Texture.cpp
     Graphics/Transform.cpp
@@ -104,6 +105,7 @@ if(WIN32)
     )
 elseif(APPLE)
     set(CORE_SRC_FILES ${CORE_SRC_FILES}
+    Graphics/ResolutionApple.mm
     Graphics/TextMac.cpp
     TimingApple.cpp
     )
