@@ -163,8 +163,8 @@ void Gosu::Window::show()
         if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
         
         // Sleep to keep this loop from eating 100% CPU.
-        unsigned int frameTime = milliseconds() - startTime;
-        if (frameTime > 0 && frameTime < pimpl->updateInterval) {
+        unsigned long frameTime = milliseconds() - startTime;
+        if (frameTime < pimpl->updateInterval) {
             sleep(pimpl->updateInterval - frameTime);
         }
     }
