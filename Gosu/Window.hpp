@@ -80,8 +80,8 @@ namespace Gosu
         virtual void draw() {}
         
         //! Gives the game a chance to say no to being redrawn.
-        //! This is not a definitive answer. The operating system can still cause
-        //! redraws for one reason or another.
+        //! This is not a definitive answer. The operating system can still force
+        //! the window to redraw itself.
         //! By default, the window is redrawn all the time.
         virtual bool needsRedraw() const { return true; }
 

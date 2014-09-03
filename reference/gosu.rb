@@ -1240,14 +1240,25 @@ module Gosu
     def default_font_name(); end
 
     ##
-    # @return [Fixnum] the width, in pixels, of the user's primary screen.
+    # @return [Fixnum] the width (in pixels) of the user's primary screen.
     def screen_width(); end
 
-    # @return [Fixnum] the height, in pixels, of the user's primary screen.
+    # @return [Fixnum] the height (in pixels) of the user's primary screen.
     def screen_height(); end
 
     ##
-    # Returns the language code for the user's preferred language. Expect return values such as 'en_US', 'de_DE.UTF-8', 'ja', 'zh-Hans', etc. You can rely only on the first two letters being a common language abbreviation.
+    # @return [Fixnum] the maximum width (in 'points') that is available for a non-fullscreen Window.
+    # All windows larger than this size will automatically be shrunk to fit.
+    def available_width(); end
+
+    # @return [Fixnum] the maximum height (in 'points') that is available for a non-fullscreen Window.
+    # All windows larger than this size will automatically be shrunk to fit.
+    def available_height(); end
+
+    ##
+    # Returns the language code for the user's preferred language.
+    # Expect return values such as 'en_US', 'de_DE.UTF-8', 'ja', 'zh-Hans', etc.
+    # You can rely only the first two letters being a language abbreviation.
     # 
     # @return [String] the user's preferred language.
     def language(); end
