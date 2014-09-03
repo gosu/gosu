@@ -33,7 +33,9 @@ struct Gosu::RenderState
             glBindTexture(GL_TEXTURE_2D, texture->texName());
         }
         else
+        {
             glDisable(GL_TEXTURE_2D);
+        }
     }
     
     void applyAlphaMode() const
@@ -49,7 +51,9 @@ struct Gosu::RenderState
     void applyClipRect() const
     {
         if (clipRect.width == NO_CLIPPING)
+        {
             glDisable(GL_SCISSOR_TEST);
+        }
         else
         {
             glEnable(GL_SCISSOR_TEST);
@@ -187,9 +191,6 @@ public:
     // The cached values may have been messed with. Reset them again.
     void enforceAfterUntrustedGL() const
     {
-        // TODO: Actually, we don't have to worry about anything pushed
-        // using glPushAttribs because beginGL/endGL will take care of that.
-        
         applyTexture();
         applyTransform();
         applyClipRect();
