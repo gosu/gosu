@@ -152,15 +152,17 @@ void Gosu::Window::show()
         
         SDL_ShowCursor(needsCursor());
         
-        if (graphics().begin()) {
-            draw();
-            graphics().end();
-            FPS::registerFrame();
+        if (needsRedraw()) {
+            if (graphics().begin()) {
+                draw();
+                graphics().end();
+                FPS::registerFrame();
+            }
+            
+            SDL_GL_SwapWindow(pimpl->window);
+            
+            if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
         }
-	    
-        SDL_GL_SwapWindow(pimpl->window);
-        
-        if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
         
         // Sleep to keep this loop from eating 100% CPU.
         unsigned long frameTime = milliseconds() - startTime;
