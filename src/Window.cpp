@@ -12,30 +12,6 @@ namespace Gosu
     {
         void registerFrame();
     }
-    
-    SDL_DisplayMode currentDisplayMode = { 0, 0 };
-}
-
-unsigned Gosu::screenWidth()
-{
-    // TODO - not thread-safe
-    if (currentDisplayMode.w == 0) {
-        SDL_Init(SDL_INIT_VIDEO);
-        SDL_GetDisplayMode(0, 0, &currentDisplayMode);
-        SDL_QuitSubSystem(SDL_INIT_VIDEO);
-    }
-    return currentDisplayMode.w;
-}
-
-unsigned Gosu::screenHeight()
-{
-    // TODO - not thread-safe
-    if (currentDisplayMode.h == 0) {
-        SDL_Init(SDL_INIT_VIDEO);
-        SDL_GetDisplayMode(0, 0, &currentDisplayMode);
-        SDL_QuitSubSystem(SDL_INIT_VIDEO);
-    }
-    return currentDisplayMode.h;
 }
 
 struct Gosu::Window::Impl
@@ -78,8 +54,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     else {
         // TODO - get platform-specific best width/height we could get
         
-        double maxWidth = Gosu::screenWidth() * 0.9;
-        double maxHeight = Gosu::screenHeight() * 0.8;
+        double maxWidth = Gosu::availableWidth();
+        double maxHeight = Gosu::availableHeight();
         
         if (width > maxWidth || height > maxHeight) {
             scaleFactor = std::min(maxWidth / width, maxHeight / height);

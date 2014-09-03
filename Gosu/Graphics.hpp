@@ -12,12 +12,6 @@
 
 namespace Gosu
 {
-    //! Returns the width, in pixels, of the user's primary screen.
-    unsigned screenWidth();
-    
-    //! Returns the height, in pixels, of the user's primary screen.
-    unsigned screenHeight();
-    
     //! Returns the maximum size of an texture that will be allocated
     //! internally by Gosu.
     //! Useful when extending Gosu using OpenGL.

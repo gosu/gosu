@@ -2,7 +2,6 @@
 # - Gosu Touch subspec for iOS
 # - Make the part of Gosu Touch that wraps main() yet another subspec, so users
 #   can keep their main() function and still use GosuView
-# - 
 
 Pod::Spec.new do |s|
   s.name         = "Gosu"
@@ -64,6 +63,7 @@ Pod::Spec.new do |s|
          Graphics/Graphics.cpp
          Graphics/Image.cpp
          Graphics/LargeImageData.cpp
+         Graphics/Resolution.cpp
          Graphics/TexChunk.cpp
          Graphics/Texture.cpp
          Graphics/Transform.cpp

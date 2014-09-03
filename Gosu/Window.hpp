@@ -20,6 +20,20 @@
 
 namespace Gosu
 {
+    //! Returns the width (in pixels) of the user's primary screen.
+    unsigned screenWidth();
+    
+    //! Returns the height (in pixels) of the user's primary screen.
+    unsigned screenHeight();
+    
+    //! Returns the maximum width (in 'points') that is available for a non-fullscreen Window.
+    //! All windows larger than this size will automatically be shrunk to fit.
+    unsigned availableWidth();
+    
+    //! Returns the maximum height (in 'points') that is available for a non-fullscreen Window.
+    //! All windows larger than this size will automatically be shrunk to fit.
+    unsigned availableHeight();
+    
     //! Convenient all-in-one class that serves as the foundation of a standard
     //! Gosu application. Manages initialization of all of Gosu's core components
     //! and provides timing functionality.
@@ -38,6 +52,9 @@ namespace Gosu
 	
     public:
         //! Constructs a Window.
+        //! \param width Width of the window in points; that is, pixels on a normal display, and 'virtual pixels' on a
+        //! high-resolution display.
+        //! \param height See width.
         //! \param updateInterval Interval in milliseconds between two calls
         //! to the update member function.
         Window(unsigned width, unsigned height, bool fullscreen,
