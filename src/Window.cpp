@@ -88,14 +88,17 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
         }
     }
     
+    Uint32 flags = SDL_WINDOW_OPENGL;
+#if SDL_VERSION_ATLEAST(2, 0, 1)
+    flags |= SDL_WINDOW_ALLOW_HIGHDPI;
+#endif
+    if (fullscreen) {
+        flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+    }
+    
     pimpl->window = SDL_CreateWindow("",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        actualWidth, actualHeight,
-        SDL_WINDOW_OPENGL |
-#if SDL_VERSION_ATLEAST(2, 0, 1)
-        SDL_WINDOW_ALLOW_HIGHDPI |
-#endif
-        (fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0));
+        actualWidth, actualHeight, flags);
 
 #ifdef GOSU_IS_OPENGLES
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
