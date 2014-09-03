@@ -183,7 +183,7 @@ class Gosu::Macro : public Gosu::ImageData
             it->renderState.apply();
             glMultMatrixd(&transform[0]);
             glInterleavedArrays(GL_T2F_C4UB_V3F, 0, &it->vertices[0]);
-            glDrawArrays(GL_QUADS, 0, it->vertices.size());
+            glDrawArrays(GL_QUADS, 0, (GLsizei)it->vertices.size());
             glPopMatrix();
         }
         #endif

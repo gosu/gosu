@@ -123,7 +123,7 @@ namespace Gosu
                     len >= pos + 10 && html[pos + 9] == L'>')
                 {
                     using namespace std;
-                    unsigned rgb = wcstoul(html + pos + 3, 0, 16);
+                    unsigned rgb = static_cast<std::tr1::uint32_t>(wcstoul(html + pos + 3, 0, 16));
                     c.push_back(0xff000000 | rgb);
                     pos += 10;
                     continue;
@@ -132,7 +132,7 @@ namespace Gosu
                     len >= pos + 12 && html[pos + 11] == L'>')
                 {
                     using namespace std;
-                    unsigned argb = wcstoul(html + pos + 3, 0, 16);
+                    unsigned argb = static_cast<std::tr1::uint32_t>(wcstoul(html + pos + 3, 0, 16));
                     c.push_back(argb);
                     pos += 12;
                     continue;
@@ -241,15 +241,15 @@ namespace Gosu
                 return characters[index].color;
         }
         
-        unsigned length() const
+        std::size_t length() const
         {
-            if (unsigned len = characters.size())
+            if (std::size_t len = characters.size())
                 return len;
             else
                 return simpleString.length();
         }
         
-        FormattedString range(unsigned begin, unsigned end) const
+        FormattedString range(std::size_t begin, std::size_t end) const
         {
             FormattedString result;
             if (characters.empty())

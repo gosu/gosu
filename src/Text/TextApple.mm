@@ -168,7 +168,7 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     CGSize size = [string.obj() sizeWithFont: font];
     #endif
     
-    unsigned width = round(size.width / size.height * fontHeight);
+    unsigned width = static_cast<unsigned>(round(size.width / size.height * fontHeight));
 
     // Get the width and height of the image
     Bitmap bmp(width, fontHeight);

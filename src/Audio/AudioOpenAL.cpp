@@ -155,7 +155,7 @@ struct Gosu::Sample::SampleData
         alBufferData(buffer,
                      audioFile.format(),
                      &audioFile.decodedData().front(),
-                     audioFile.decodedData().size(),
+                     (ALsizei)audioFile.decodedData().size(),
                      audioFile.sampleRate());
     }
     
@@ -352,7 +352,7 @@ class Gosu::Song::StreamData : public BaseData
         char audioData[BUFFER_SIZE];
         std::size_t readBytes = file->readData(audioData, BUFFER_SIZE);
         if (readBytes > 0)
-            alBufferData(buffer, file->format(), audioData, readBytes, file->sampleRate());
+            alBufferData(buffer, file->format(), audioData, (ALsizei)readBytes, file->sampleRate());
         return readBytes > 0;
     }
     

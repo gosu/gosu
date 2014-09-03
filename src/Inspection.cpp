@@ -5,12 +5,13 @@ namespace Gosu
 {
     namespace FPS
     {
-        int fps, accum, sec;
+        int fps, accum;
+        unsigned long sec;
 
         void registerFrame()
         {
             ++accum;
-            int newSec = Gosu::milliseconds() / 1000;
+            unsigned long newSec = Gosu::milliseconds() / 1000;
             if (sec != newSec)
             {
                 sec = newSec;

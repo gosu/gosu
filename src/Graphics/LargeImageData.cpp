@@ -12,8 +12,8 @@ Gosu::LargeImageData::LargeImageData(Graphics& graphics,
 {
     fullWidth = source.width();
     fullHeight = source.height();
-    partsX = trunc(ceil(1.0 * source.width() / partWidth));
-    partsY = trunc(ceil(1.0 * source.height() / partHeight));
+    partsX = static_cast<unsigned>(trunc(ceil(1.0 * source.width() / partWidth)));
+    partsY = static_cast<unsigned>(trunc(ceil(1.0 * source.height() / partHeight)));
     this->partWidth = partWidth;
     this->partHeight = partHeight;
 

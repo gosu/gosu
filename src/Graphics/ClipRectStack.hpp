@@ -21,7 +21,7 @@ class Gosu::ClipRectStack
         }
         
         ClipRect result = { 0.0, 0.0, 1e10, 1e10 };
-        for (int i = 0, end = stack.size(); i < end; ++i)
+        for (std::size_t i = 0, end = stack.size(); i < end; ++i)
         {
             const ClipRect& rect = stack[i];
             int resultRight = std::min(result.x + result.width, rect.x + rect.width);
