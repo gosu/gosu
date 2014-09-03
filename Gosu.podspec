@@ -64,6 +64,7 @@ Pod::Spec.new do |s|
          Graphics/Image.cpp
          Graphics/LargeImageData.cpp
          Graphics/Resolution.cpp
+         Graphics/ResolutionApple.mm
          Graphics/TexChunk.cpp
          Graphics/Texture.cpp
          Graphics/Transform.cpp

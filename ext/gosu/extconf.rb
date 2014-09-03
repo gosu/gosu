@@ -46,6 +46,7 @@ BASE_FILES = %w(
 MAC_FILES = %w(
   Audio/AudioOpenAL.mm
   Bitmap/BitmapApple.mm
+  Graphics/ResolutionApple.mm
   Text/TextApple.mm
   Text/TextMac.cpp
   TimingApple.cpp

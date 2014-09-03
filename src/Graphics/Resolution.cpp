@@ -33,6 +33,9 @@ unsigned Gosu::screenHeight()
     return currentDisplayMode.h;
 }
 
+// Pessimistic fallback implementation for availableWidth / availableHeight.
+
+#if !defined(GOSU_IS_MAC)
 unsigned Gosu::availableWidth()
 {
     return Gosu::screenWidth() * 0.9;
@@ -42,3 +45,4 @@ unsigned Gosu::availableHeight()
 {
     return Gosu::screenHeight() * 0.8;
 }
+#endif
