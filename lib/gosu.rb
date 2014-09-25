@@ -1,6 +1,6 @@
 require 'rbconfig'
 
-if RUBY_PLATFORM =~ /mswin|commodore64|mingw32|mingw64|win32\-|\-win32/ then
+if RUBY_PLATFORM =~ /mswin|commodore64|amiga32|mingw32|mingw64|win32\-|\-win32/ then
   # Add this gem to the PATH on Windows so that DLLs can be found
   ENV['PATH'] = "#{File.dirname(__FILE__)};#{ENV['PATH']}"
 end
