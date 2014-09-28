@@ -65,6 +65,7 @@ require 'fileutils'
 
 # Silence internal deprecation warnings in Gosu
 $CFLAGS << " -DGOSU_DEPRECATED="
+$CXXFLAGS ||= ''
 
 $INCFLAGS << " -I../.. -I../../src"
 
@@ -81,16 +82,16 @@ if `uname`.chomp == 'Darwin' then
   # Also undefine two debug flags that cause exceptions to randomly crash, see:
   # https://trac.macports.org/ticket/27237#comment:21
   # http://newartisans.com/2009/10/a-c-gotcha-on-snow-leopard/#comment-893
-  CONFIG['CXXFLAGS'] = "#{CONFIG['CXXFLAGS']} -I/usr/local/include -x objective-c++ -U_GLIBCXX_DEBUG -U_GLIBCXX_DEBUG_PEDANTIC"
+  $CXXFLAGS << " -I/usr/local/include -x objective-c++ -U_GLIBCXX_DEBUG -U_GLIBCXX_DEBUG_PEDANTIC"
   if `uname -r`.to_i >= 13 then
     # rvm-specific fix:
     # Explicitly set libc++ as the C++ standard library. Otherwise the gem will
     # end up being compiled against libstdc++, but linked against libc++, and
     # fail to load, see: https://github.com/shawn42/gamebox/issues/96
-    CONFIG['CXXFLAGS'] << " -stdlib=libc++"
-    # Enable C++ 11 on Mavericks and above. This will improve performance thanks
-    # to move semantics, etc.
-    CONFIG['CXXFLAGS'] << " -std=gnu++11"
+    $CXXFLAGS << " -stdlib=libc++"
+    # Enable C++ 11 on Mavericks and above. Gosu will not compile without this,
+    # as 
+    $CXXFLAGS << " -std=gnu++11"
   end
   
   $LDFLAGS << " -liconv"
@@ -142,8 +143,11 @@ SOURCE_FILES.each do |file|
 end
 
 if RUBY_VERSION >= '2.0.0' then
+  # In some versions of Ruby 2.x, the $CXXFLAGS variable is ignored, and $CLAGS
+  # are not being inherited into it either. In these versions of Ruby we can
+  # modify CONFIG instead, and our changes will end up in the Makefile.
   # See http://bugs.ruby-lang.org/issues/8315
-  CONFIG['CXXFLAGS'] = "#$CFLAGS #{CONFIG['CXXFLAGS']}"
+  CONFIG['CXXFLAGS'] = "#$CFLAGS #$CXXFLAGS"
 end
 
 create_makefile 'gosu'
