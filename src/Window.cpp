@@ -12,6 +12,12 @@ namespace Gosu
     {
         void registerFrame();
     }
+    
+    void throwSDLError(const std::string& operation)
+    {
+        const char *error = SDL_GetError();
+        throw std::runtime_error(operation + ": " + (error ? error : "(unknown error)"));
+    }
 }
 
 struct Gosu::Window::Impl
@@ -28,7 +34,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
 : pimpl(new Impl)
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
-        throw std::runtime_error("Failed to initialize SDL Video");
+        throwSDLError("Could not initialize SDL Video");
     
     int actualWidth = width;
     int actualHeight = height;
@@ -75,6 +81,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     pimpl->window = SDL_CreateWindow("",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         actualWidth, actualHeight, flags);
+    if (! pimpl->window)
+        throwSDLError("Could not open window");
 
 #ifdef GOSU_IS_OPENGLES
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
@@ -86,6 +94,9 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
 #endif
     
     pimpl->context = SDL_GL_CreateContext(pimpl->window);
+    if (! pimpl->context)
+        throwSDLError("Could not create OpenGL context");
+    
     SDL_GL_MakeCurrent(pimpl->window, pimpl->context);
     SDL_GL_SetSwapInterval(1);
     
