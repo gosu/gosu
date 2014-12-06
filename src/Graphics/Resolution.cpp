@@ -2,8 +2,8 @@
 
 #ifdef GOSU_IS_WIN
 #include <windows.h>
-// Note: This does not use the SDL2 variant below, which reports 2560x1920 in my Windows VM, which is running at 2560x1080. Last checked with SDL 2.0.3.
-// TODO: Try this on a real Windows machine.
+
+// Note: On Windows, do not use the SDL 2 code below. It reports 2560x1920 in my Windows VM, which is running at 2560x1080. (SDL 2.0.3)
 
 unsigned Gosu::screenWidth()
 {
@@ -15,7 +15,6 @@ unsigned Gosu::screenHeight()
     return GetSystemMetrics(SM_CYSCREEN);
 }
 
-// Note: It is okay for this couple of functions to be OS-specific.
 namespace
 {
     SIZE calculateAvailableSize()

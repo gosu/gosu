@@ -4,7 +4,7 @@
 #include <Gosu/Utility.hpp>
 
 // Adapted from http://www.codeproject.com/KB/GDI/xfont.aspx.
-// Credits go to Philip Patrick and Hans Dietrich!
+// Kudos to Philip Patrick and Hans Dietrich!
 
 struct FONT_PROPERTIES_ANSI
 {

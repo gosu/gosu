@@ -58,8 +58,6 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
         }
     }
     else {
-        // TODO - get platform-specific best width/height we could get
-        
         double maxWidth = Gosu::availableWidth();
         double maxHeight = Gosu::availableHeight();
         
