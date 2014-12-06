@@ -128,7 +128,7 @@ namespace Gosu
         FREE_IMAGE_FORMAT fif = FreeImage_GetFileType(utf8Filename.c_str());
         FIBITMAP* fib = FreeImage_Load(fif, utf8Filename.c_str(), GOSU_FIFLAGS);
         #endif
-        checkForFreeImageErrors(fib);
+        checkForFreeImageErrors(fib != 0);
         fibToBitmap(bitmap, fib, fif);
     }
 
@@ -140,7 +140,7 @@ namespace Gosu
         FIMEMORY* fim = FreeImage_OpenMemory(&data[0], data.size());
         FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeFromMemory(fim);
         FIBITMAP* fib = FreeImage_LoadFromMemory(fif, fim, GOSU_FIFLAGS);
-        checkForFreeImageErrors(fib);
+        checkForFreeImageErrors(fib != 0);
         fibToBitmap(bitmap, fib, fif);
     }
 

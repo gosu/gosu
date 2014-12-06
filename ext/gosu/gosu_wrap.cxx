@@ -2297,11 +2297,11 @@ namespace Gosu
         }
         else if (width * height * 4 * sizeof(float) == RSTRING_LEN(blob))
         {
-            // 32 bit per channel, assume float/float/float/float
+            // 128 bit per channel, assume float/float/float/float
             const float* in = reinterpret_cast<const float*>(RSTRING_PTR(blob));
             Gosu::Color::Channel* out = reinterpret_cast<Gosu::Color::Channel*>(bitmap.data());
             for (int i = width * height * 4; i > 0; --i)
-                *(out++) = *(in++) * 255;
+                *(out++) = static_cast<Color::Channel>(*(in++) * 255);
         }
         else
             throw std::logic_error("Blob length mismatch!");
