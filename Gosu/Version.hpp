@@ -3,8 +3,8 @@
 
 #define GOSU_MAJOR_VERSION 0
 #define GOSU_MINOR_VERSION 8
-#define GOSU_POINT_VERSION 5
-#define GOSU_VERSION "0.8.5"
+#define GOSU_POINT_VERSION 6
+#define GOSU_VERSION "0.8.6"
 
 #define GOSU_COPYRIGHT_NOTICE \
     "This software uses the following third-party libraries:\n" \
