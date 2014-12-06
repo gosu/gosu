@@ -38,5 +38,8 @@ Gosu.includes
 /**/Pods
 /**/Podfile.lock
 /**/*.app
-/windows/dependencies-Release
-/windows/Release with Ruby 1.9
+
+# MSVC clutter
+/windows/ipch
+/windows/*Release*
+/windows/*Debug*
