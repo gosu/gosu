@@ -20,15 +20,9 @@ namespace Gosu
         #ifdef GOSU_IS_WIN
         static HMODULE dll()
         {
-            #ifdef _WIN64
-            static HMODULE dll = LoadLibrary(L"libsndfile64.dll");
-            if (!dll)
-                throw std::runtime_error("Cannot find libsndfile64.dll");
-            #else
             static HMODULE dll = LoadLibrary(L"libsndfile.dll");
             if (!dll)
                 throw std::runtime_error("Cannot find libsndfile.dll");
-            #endif
 
             return dll;
         }
