@@ -17,6 +17,10 @@ generate a `.lib` file like so:
 
 https://adrianhenke.wordpress.com/2008/12/05/create-lib-file-from-dll/
 
+(Note: For 64-bit versions, it seems to work if you follow these steps from a
+Windows SDK 7.1 command prompt, but not from the 32-bit Visual C++ Express
+command prompt, even when using `/MACHINE:x64`.
+
 We can also use most of the headers included in the Ruby Installer packages.
 However we need a platform- and compiler-specific `ruby/config.h` for our
 version of Visual C++.
