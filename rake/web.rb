@@ -1,4 +1,4 @@
-if ENV['USER'] == 'jlnr' and `uname`.chomp == 'Darwin' then
+if ENV['USER'] == 'jlnr' then
   CGI_PATH = '/Library/WebServer/CGI-Executables/libgosu.org'
   
   namespace :web do

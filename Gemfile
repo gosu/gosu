@@ -6,10 +6,10 @@ source 'https://rubygems.org'
 gem 'yard'
 gem 'kramdown'
 gem 'rake'
-gem 'mysql'
-gem 'rmagick'
 gem 'rake-compiler'
 case RUBY_PLATFORM
 when /darwin/
+  gem 'mysql'
+  gem 'rmagick'
   gem 'rb-appscript'
 end

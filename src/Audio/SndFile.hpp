@@ -15,14 +15,21 @@ namespace Gosu
         Reader reader;
         Buffer buffer;
         
-        // Cannot use /DELAYLOAD with libsndfile-1.dll because it was compiled
+        // Cannot use /DELAYLOAD with libsndfile.dll because it was compiled
         // using arcane GNU tools of dark magic (or maybe it's the filename).
         #ifdef GOSU_IS_WIN
         static HMODULE dll()
         {
+            #ifdef _WIN64
+            static HMODULE dll = LoadLibrary(L"libsndfile64.dll");
+            if (!dll)
+                throw std::runtime_error("Cannot find libsndfile64.dll");
+            #else
             static HMODULE dll = LoadLibrary(L"libsndfile.dll");
             if (!dll)
                 throw std::runtime_error("Cannot find libsndfile.dll");
+            #endif
+
             return dll;
         }
         
