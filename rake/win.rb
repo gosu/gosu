@@ -41,7 +41,8 @@ end
       s.files += Dir["examples/*.rb"] + Dir["examples/media/**/*"]
     end
     
-    Gem::PackageTask.new(spec)
+    Gem::PackageTask.new(spec) do
+    end
     
     task :release_gem => :gem do
       sh "gem push pkg/gosu-#{GOSU_VERSION}-#{spec.platform}.gem"

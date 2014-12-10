@@ -1,8 +1,8 @@
 (*)
 /.bundle
 /vendor
-/lib/Gosu*.lib
-/lib/?.?
+/lib*/Gosu*.lib
+/lib*/?.?
 /pkg/
 /reference/cpp/
 /reference/rdoc/
@@ -13,13 +13,6 @@
 /website/potd*
 /website/rdoc/
 /website/RubyGosu.tmbundle.zip
-/windows/*.ncb
-/windows/*.sdf
-/windows/*.suo
-/windows/*.user
-/windows/ipch
-/windows/Debug
-/windows/Release
 
 .yardoc/
 
@@ -41,5 +34,10 @@ Gosu.includes
 
 # MSVC clutter
 /windows/ipch
-/windows/*Release*
-/windows/*Debug*
+/windows/Win32
+/windows/x64
+/windows/*.ncb
+/windows/*.sdf
+/windows/*.suo
+/windows/*.user
+/windows/ipch
