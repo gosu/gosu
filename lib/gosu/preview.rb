@@ -1,25 +1,25 @@
 require 'gosu'
 
-# Wrapper around Gosu 0.7 that provides the work-in-progress 0.8 interface
+# Wrapper around Gosu 0.4-0.8 that provides the work-in-progress 0.9 interface
 
 module Gosu
   class Font
-    alias :initialize07 :initialize
+    alias :initialize_old :initialize
     
     def initialize *args
       if args.first.is_a? Gosu::Window then
-        initialize07 *args
+        initialize_old *args
       else
         height  = args[0]
         options = args[1] || {}
         name = options[:name] || Gosu::default_font_name
-        initialize07 $window, name, height
+        initialize_old $window, name, height
       end
     end
   end
   
   class Window
-    alias :initialize07 :initialize
+    alias :initialize_old :initialize
     
     def initialize width, height, *args
       if args.empty? or args.first.is_a? Hash then
@@ -29,40 +29,40 @@ module Gosu
       else
        fullscreen, update_interval = *args
       end
-      $window = initialize07 width, height, fullscreen, update_interval
+      $window = initialize_old width, height, fullscreen, update_interval
     end
   end
   
   class Image
-    alias :initialize07 :initialize
+    alias :initialize_old :initialize
     
     def initialize *args
       if args.first.is_a? Gosu::Window then
-        initialize07 *args
+        initialize_old *args
       else
         source = args[0]
         tileable = !args[1] || args[1][:tileable]
         rect = args[1] && args[1][:rect]
         if rect then
-          initialize07 $window, source, !!tileable, *rect
+          initialize_old $window, source, !!tileable, *rect
         else
-          initialize07 $window, source, !!tileable
+          initialize_old $window, source, !!tileable
         end
       end
     end
     
     class <<self
-      alias load_tiles07 load_tiles
+      alias load_tiles_old load_tiles
     end
     
     def self.load_tiles *args
       if args.first.is_a? Gosu::Window then
-        load_tiles07 *args
+        load_tiles_old *args
       else
         source = args[0]
         x, y = args[1..2]
         tileable = !args[3] || args[3][:tileable]
-        load_tiles07 $window, source, x, y, !!tileable
+        load_tiles_old $window, source, x, y, !!tileable
       end
     end
     
