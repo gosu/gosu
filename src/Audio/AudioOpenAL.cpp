@@ -55,9 +55,9 @@ namespace
     bool curSongLooping;
 }
 
-// TODO: What is the NSAutoreleasePool good for?
+// TODO: What is this NSAutoreleasePool good for?
 #ifdef GOSU_IS_MAC
-#include "MacUtility.hpp"
+#include "../MacUtility.hpp"
     #define CONSTRUCTOR_COMMON \
         ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]); \
         if (!alChannelManagement.get()) \

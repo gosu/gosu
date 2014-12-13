@@ -7,9 +7,9 @@
 #include <AudioToolbox/ExtendedAudioFile.h>
 #include <OpenAL/al.h>
 #include <Gosu/IO.hpp>
-#include "MacUtility.hpp"
 #include <Gosu/Utility.hpp>
 #include <Gosu/Platform.hpp>
+#include "../MacUtility.hpp"
 #include <algorithm>
 #include <vector>
 #include <arpa/inet.h>
