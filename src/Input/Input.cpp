@@ -59,6 +59,15 @@ struct Gosu::Input::Impl
         int numGamepads = std::min<int>(Gosu::numGamepads, SDL_NumJoysticks());
         
         for (int i = 0; i < numGamepads; ++i) {
+            // Prefer the SDL_GameController API...
+            if (SDL_IsGameController(i)) {
+                SDL_GameController *gameController = SDL_GameControllerOpen(i);
+                if (gameController) {
+                    gameControllers.push_back(gameController);
+                    continue;
+                }
+            }
+            // ...but fall back on the good, old SDL_Joystick API :)
             SDL_Joystick *joystick = SDL_JoystickOpen(i);
             if (joystick) {
                 joysticks.push_back(joystick);
@@ -66,55 +75,41 @@ struct Gosu::Input::Impl
         }
     }
     
+    void releaseGamepads()
+    {
+        std::for_each(joysticks.begin(), joysticks.end(), &SDL_JoystickClose);
+        joysticks.clear();
+        std::for_each(gameControllers.begin(), gameControllers.end(), &SDL_GameControllerClose);
+        gameControllers.clear();
+    }
+    
+    typedef std::tr1::array<bool, gpNumPerGamepad> GamepadBuffer;
+    
     void pollGamepads()
     {
-        std::tr1::array<bool, gpNumPerGamepad> anyGamepad = { false };
+        // This gamepad is an OR-ed version of all the other gamepads. If button
+        // 3 is pressed on any attached gamepad, down(gpButton3) will return
+        // true. This is handy for singleplayer games.
+        GamepadBuffer anyGamepad = { false };
         
-        for (int i = 0; i < joysticks.size(); ++i) {
-            std::tr1::array<bool, gpNumPerGamepad> currentGamepad = { false };
+        std::size_t availableGamepads = gameControllers.size() + joysticks.size();
+        
+        for (int i = 0; i < availableGamepads; ++i) {
+            GamepadBuffer currentGamepad = { false };
             
-            int axes = SDL_JoystickNumAxes(joysticks[i]),
-                hats = SDL_JoystickNumHats(joysticks[i]),
-                buttons = std::min<int>(gpNumPerGamepad - 4, SDL_JoystickNumButtons(joysticks[i]));
-            
-            for (int axis = 0; axis < axes; ++axis) {
-                Sint16 value = SDL_JoystickGetAxis(joysticks[i], axis);
-
-                if (value < -(1 << 14)) {
-                    if (axis % 2 == 0)
-                        currentGamepad[gpLeft - gpRangeBegin] = true;
-                    else
-                        currentGamepad[gpUp - gpRangeBegin] = true;
-                }
-                else if (value > +(1 << 14)) {
-                    if (axis % 2 == 0)
-                        currentGamepad[gpRight - gpRangeBegin] = true;
-                    else
-                        currentGamepad[gpDown - gpRangeBegin] = true;
-                }
+            // Poll data from SDL, using either of two API interfaces.
+            if (i < gameControllers.size()) {
+                SDL_GameController *gameController = gameControllers[i];
+                pollGameController(gameController, currentGamepad);
+            }
+            else {
+                SDL_Joystick *joystick = joysticks[i];
+                pollJoystick(joystick, currentGamepad);
             }
             
-            for (int hat = 0; hat < hats; ++hat) {
-                Uint8 value = SDL_JoystickGetHat(joysticks[i], hat);
-                
-                if (value == SDL_HAT_LEFT || value == SDL_HAT_LEFTUP || value == SDL_HAT_LEFTDOWN)
-                    currentGamepad[gpLeft - gpRangeBegin] = true;
-                if (value == SDL_HAT_RIGHT || value == SDL_HAT_RIGHTUP || value == SDL_HAT_RIGHTDOWN)
-                    currentGamepad[gpRight - gpRangeBegin] = true;
-                if (value == SDL_HAT_UP || value == SDL_HAT_LEFTUP || value == SDL_HAT_RIGHTUP)
-                    currentGamepad[gpUp - gpRangeBegin] = true;
-                if (value == SDL_HAT_DOWN || value == SDL_HAT_LEFTDOWN || value == SDL_HAT_RIGHTDOWN)
-                    currentGamepad[gpDown - gpRangeBegin] = true;
-            }
-            
-            for (int button = 0; button < buttons; ++button) {
-                if (SDL_JoystickGetButton(joysticks[i], button)) {
-                    currentGamepad[gpButton0 + button - gpRangeBegin] = true;
-                }
-            }
-            
+            // Now at the same time, enqueue all events for this particular
+            // gamepad, and OR the keyboard state into anyGamepad.
             int offset = gpRangeBegin + gpNumPerGamepad * (i + 1);
-            
             for (int j = 0; j < currentGamepad.size(); ++j) {
                 anyGamepad[j] = anyGamepad[j] || currentGamepad[j];
                 
@@ -129,6 +124,7 @@ struct Gosu::Input::Impl
             }
         }
         
+        // And lastly, enqueue events for the virtual "any" gamepad.
         for (int j = 0; j < anyGamepad.size(); ++j) {
             if (anyGamepad[j] && !buttonStates[j + gpRangeBegin]) {
                 buttonStates[j + gpRangeBegin] = true;
@@ -147,19 +143,98 @@ private:
     std::vector<int> eventQueue;
     
     std::vector<SDL_Joystick*> joysticks;
+    std::vector<SDL_GameController*> gameControllers;
+    
+    // SDL returns axis values in the range -2^15 through 2^15-1, so we consider
+    // -2^14 through 2^14 the dead zone.
+    
+    enum { DEAD_ZONE = (1 << 14) };
+    
+    void pollGameController(SDL_GameController *gameController, GamepadBuffer& gamepad)
+    {
+        gamepad[gpLeft - gpRangeBegin] =
+            SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_DPAD_LEFT) ||
+            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_LEFTX) < -DEAD_ZONE ||
+            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_RIGHTX) < -DEAD_ZONE;
+        
+        gamepad[gpRight - gpRangeBegin] =
+            SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) ||
+            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_LEFTX) > +DEAD_ZONE ||
+            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_RIGHTX) > +DEAD_ZONE;
+        
+        gamepad[gpUp - gpRangeBegin] =
+            SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_DPAD_UP) ||
+            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_LEFTY) < -DEAD_ZONE ||
+            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_RIGHTY) < -DEAD_ZONE;
+        
+        gamepad[gpDown - gpRangeBegin] =
+            SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_DPAD_DOWN) ||
+            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_LEFTY) > +DEAD_ZONE ||
+            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_RIGHTY) > +DEAD_ZONE;
+        
+        for (int button = SDL_CONTROLLER_BUTTON_A; button < SDL_CONTROLLER_BUTTON_DPAD_UP; ++button) {
+            gamepad[gpButton0 - gpRangeBegin + button - SDL_CONTROLLER_BUTTON_A] =
+                SDL_GameControllerGetButton(gameController, (SDL_GameControllerButton)button);
+        }
+    }
+    
+    void pollJoystick(SDL_Joystick *joystick, GamepadBuffer& gamepad)
+    {
+        int axes = SDL_JoystickNumAxes(joystick),
+            hats = SDL_JoystickNumHats(joystick),
+            buttons = std::min<int>(gpNumPerGamepad - 4, SDL_JoystickNumButtons(joystick));
+        
+        for (int axis = 0; axis < axes; ++axis) {
+            Sint16 value = SDL_JoystickGetAxis(joystick, axis);
+            
+            if (value < -DEAD_ZONE) {
+                if (axis % 2 == 0)
+                    gamepad[gpLeft - gpRangeBegin] = true;
+                else
+                    gamepad[gpUp - gpRangeBegin] = true;
+            }
+            else if (value > +DEAD_ZONE) {
+                if (axis % 2 == 0)
+                    gamepad[gpRight - gpRangeBegin] = true;
+                else
+                    gamepad[gpDown - gpRangeBegin] = true;
+            }
+        }
+        
+        for (int hat = 0; hat < hats; ++hat) {
+            Uint8 value = SDL_JoystickGetHat(joystick, hat);
+            
+            if (value & SDL_HAT_LEFT)
+                gamepad[gpLeft - gpRangeBegin] = true;
+            if (value & SDL_HAT_RIGHT)
+                gamepad[gpRight - gpRangeBegin] = true;
+            if (value & SDL_HAT_UP)
+                gamepad[gpUp - gpRangeBegin] = true;
+            if (value & SDL_HAT_DOWN)
+                gamepad[gpDown - gpRangeBegin] = true;
+        }
+        
+        for (int button = 0; button < buttons; ++button) {
+            if (SDL_JoystickGetButton(joystick, button)) {
+                gamepad[gpButton0 + button - gpRangeBegin] = true;
+            }
+        }
+    }
 };
 
 Gosu::Input::Input()
 : pimpl(new Impl(*this))
 {
-    SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+    SDL_InitSubSystem(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER);
     
     pimpl->initializeGamepads();
 }
 
 Gosu::Input::~Input()
 {
-    SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
+    pimpl->releaseGamepads();
+    
+    SDL_QuitSubSystem(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER);
 }
 
 bool Gosu::Input::feedSDLEvent(void* event)
