@@ -131,8 +131,8 @@ namespace Gosu
         virtual void touchEnded(Touch touch) {}
         #endif        
         
-        const Audio& audio() const;
-        Audio& audio();
+        GOSU_DEPRECATED const Audio& audio() const;
+        GOSU_DEPRECATED Audio& audio();
 
         #endif
     };
