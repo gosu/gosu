@@ -80,17 +80,19 @@ struct Gosu::Input::Impl
             for (int axis = 0; axis < axes; ++axis) {
                 Sint16 value = SDL_JoystickGetAxis(joysticks[i], axis);
 
-                if (value < -(1 << 14)) {
-                    if (axis % 2 == 0)
-                        currentGamepad[gpLeft - gpRangeBegin] = true;
-                    else
-                        currentGamepad[gpUp - gpRangeBegin] = true;
-                }
-                else if (value > +(1 << 14)) {
-                    if (axis % 2 == 0)
-                        currentGamepad[gpRight - gpRangeBegin] = true;
-                    else
-                        currentGamepad[gpDown - gpRangeBegin] = true;
+                if (axis == 0 || axis == 1) {
+                    if (value < -(1 << 14) && ) {
+                        if (axis % 2 == 0)
+                            currentGamepad[gpLeft - gpRangeBegin] = true;
+                        else
+                            currentGamepad[gpUp - gpRangeBegin] = true;
+                    }
+                    else if (value > +(1 << 14)) {
+                        if (axis % 2 == 0)
+                            currentGamepad[gpRight - gpRangeBegin] = true;
+                        else
+                            currentGamepad[gpDown - gpRangeBegin] = true;
+                    }
                 }
             }
             
