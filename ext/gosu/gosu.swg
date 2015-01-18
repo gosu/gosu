@@ -298,7 +298,6 @@ namespace Gosu
             Gosu::Color::Channel* out = reinterpret_cast<Gosu::Color::Channel*>(bitmap.data());
             for (int i = width * height * 4; i > 0; --i)
                 *(out++) = static_cast<Color::Channel>(*(in++) * 255);
-                *(out++) = *(in++) * 255;
         }
         else
             throw std::logic_error("Blob length mismatch!");
