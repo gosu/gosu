@@ -109,7 +109,7 @@ module Gosu
     $window.draw_quad *args
   end
   
-  def self.draw_rect x, y, width, height, color = 0xffffffff, z, mode = :default
+  def self.draw_rect x, y, width, height, color = 0xffffffff, z = 0, mode = :default
     $window.draw_quad x, y, color, x + width, y, color, x, y + height, color, x + width, y + height, color, z, mode
   end
   
