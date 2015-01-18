@@ -103,7 +103,7 @@ struct Gosu::Input::Impl
                 pollGameController(gameController, currentGamepad);
             }
             else {
-                SDL_Joystick *joystick = joysticks[i];
+                SDL_Joystick *joystick = joysticks[i - gameControllers.size()];
                 pollJoystick(joystick, currentGamepad);
             }
             
