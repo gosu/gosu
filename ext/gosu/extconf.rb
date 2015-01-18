@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 
-WINDOWS_HINTS = %w(-win32 win32- mswin mingw32)
-
-if RUBY_PLATFORM =~ /mswin|mingw32|mingw64|win32\-|\-win32/ then
-  puts 'This gem is not meant to be installed on Windows. Instead, please use:'
-  puts 'gem install gosu --platform=i386-mingw32'
+if RUBY_PLATFORM =~ /mswin$|mingw32|mingw64|win32\-|\-win32/ then
+  platform = (RUBY_PLATFORM =~ /^x64-/ ? 'x64-mingw32' : 'i386-mingw32')
+  
+  puts "This gem is not meant to be installed on Windows. Instead, please use:"
+  puts "gem install gosu --platform=#{platform}"
   exit 1
 end
 
