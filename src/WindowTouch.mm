@@ -19,7 +19,7 @@ namespace Gosu
 {
     static CGRect &screenRect()
     {
-        static CGRect screenRect = [[UIScreen mainScreen] bounds];
+        static CGRect screenRect = [[UIScreen mainScreen] nativeBounds];
         return screenRect;
     }
     
@@ -167,7 +167,7 @@ Gosu::Window::Window(unsigned width, unsigned height,
     pimpl->window.obj().rootViewController = pimpl->controller.obj();
     
     pimpl->graphics.reset(new Graphics(screenHeight(), screenWidth(), false));
-    pimpl->graphics->setResolution(screenHeight(), screenWidth());
+    pimpl->graphics->setResolution(width, height);
     pimpl->input.reset(new Input(gosuView, updateInterval));
     pimpl->input->onTouchBegan = std::tr1::bind(&Window::touchBegan, this, _1);
     pimpl->input->onTouchMoved = std::tr1::bind(&Window::touchMoved, this, _1);

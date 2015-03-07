@@ -14,13 +14,14 @@
 		D401FB79178A37F600AE9A52 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D401FB77178A37F600AE9A52 /* InfoPlist.strings */; };
 		D401FB81178A37F600AE9A52 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = D401FB80178A37F600AE9A52 /* Default.png */; };
 		D401FB83178A37F600AE9A52 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D401FB82178A37F600AE9A52 /* Default@2x.png */; };
-		D401FB8C178A39FE00AE9A52 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D401FB8B178A39FE00AE9A52 /* main.cpp */; };
 		D401FB97178A435600AE9A52 /* media in Resources */ = {isa = PBXBuildFile; fileRef = D401FB96178A435600AE9A52 /* media */; };
+		D467DF8D1AAB02470036E5B0 /* Tutorial-Touch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D467DF8C1AAB02470036E5B0 /* Tutorial-Touch.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1909FDF2AF92458D81D439D7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
+		03BC130504D0C6CFC30D51FB /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		8533CB918A4E4092BE7C59C7 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD7F796DA11C371DCBDF4C61 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		D401FB6B178A37F600AE9A52 /* Tutorial-Touch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tutorial-Touch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D401FB6E178A37F600AE9A52 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D401FB70178A37F600AE9A52 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -30,8 +31,8 @@
 		D401FB7C178A37F600AE9A52 /* Tutorial-Touch-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tutorial-Touch-Prefix.pch"; sourceTree = "<group>"; };
 		D401FB80178A37F600AE9A52 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		D401FB82178A37F600AE9A52 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		D401FB8B178A39FE00AE9A52 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = SOURCE_ROOT; };
 		D401FB96178A435600AE9A52 /* media */ = {isa = PBXFileReference; lastKnownFileType = folder; name = media; path = ../../media; sourceTree = "<group>"; };
+		D467DF8C1AAB02470036E5B0 /* Tutorial-Touch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "Tutorial-Touch.cpp"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,13 +50,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CF8435788DA5AD5A523D9533 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				03BC130504D0C6CFC30D51FB /* Pods.debug.xcconfig */,
+				BD7F796DA11C371DCBDF4C61 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		D401FB62178A37F600AE9A52 = {
 			isa = PBXGroup;
 			children = (
 				D401FB74178A37F600AE9A52 /* Tutorial-Touch */,
 				D401FB6D178A37F600AE9A52 /* Frameworks */,
 				D401FB6C178A37F600AE9A52 /* Products */,
-				1909FDF2AF92458D81D439D7 /* Pods.xcconfig */,
+				CF8435788DA5AD5A523D9533 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -81,7 +91,7 @@
 		D401FB74178A37F600AE9A52 /* Tutorial-Touch */ = {
 			isa = PBXGroup;
 			children = (
-				D401FB8B178A39FE00AE9A52 /* main.cpp */,
+				D467DF8C1AAB02470036E5B0 /* Tutorial-Touch.cpp */,
 				D401FB96178A435600AE9A52 /* media */,
 				D401FB75178A37F600AE9A52 /* Supporting Files */,
 			);
@@ -189,7 +199,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -198,7 +208,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D401FB8C178A39FE00AE9A52 /* main.cpp in Sources */,
+				D467DF8D1AAB02470036E5B0 /* Tutorial-Touch.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,10 +237,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -240,7 +248,6 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -258,13 +265,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -274,11 +279,13 @@
 		};
 		D401FB89178A37F600AE9A52 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1909FDF2AF92458D81D439D7 /* Pods.xcconfig */;
+			baseConfigurationReference = 03BC130504D0C6CFC30D51FB /* Pods.debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tutorial-Touch/Tutorial-Touch-Prefix.pch";
 				INFOPLIST_FILE = "Tutorial-Touch/Tutorial-Touch-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -286,11 +293,13 @@
 		};
 		D401FB8A178A37F600AE9A52 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1909FDF2AF92458D81D439D7 /* Pods.xcconfig */;
+			baseConfigurationReference = BD7F796DA11C371DCBDF4C61 /* Pods.release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tutorial-Touch/Tutorial-Touch-Prefix.pch";
 				INFOPLIST_FILE = "Tutorial-Touch/Tutorial-Touch-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

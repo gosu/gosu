@@ -1,3 +1,7 @@
-platform :ios, '4.3'
+platform :ios, '5.1.1'
 
-pod 'Gosu', :path => '~/Projekte/Gosu'
+pod 'Gosu', :path => '../..'
+
+# In a real project, you would use:
+# pod 'Gosu', :git => 'https://github.com/jlnr/gosu.git'
+

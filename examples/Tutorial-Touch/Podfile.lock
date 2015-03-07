@@ -1,9 +1,9 @@
 PODS:
   - Gosu (0.0.1):
-    - Gosu/Gosu
-    - Gosu/GosuTouch
-    - Gosu/libogg
-    - Gosu/libvorbis
+    - Gosu/Gosu (= 0.0.1)
+    - Gosu/GosuTouch (= 0.0.1)
+    - Gosu/libogg (= 0.0.1)
+    - Gosu/libvorbis (= 0.0.1)
   - Gosu/GosuTouch (0.0.1):
     - Gosu/libvorbis
   - Gosu/libogg (0.0.1)
@@ -11,13 +11,13 @@ PODS:
     - Gosu/libogg
 
 DEPENDENCIES:
-  - Gosu (from `~/Projekte/Gosu`)
+  - Gosu (from `../..`)
 
 EXTERNAL SOURCES:
   Gosu:
-    :path: ~/Projekte/Gosu
+    :path: ../..
 
 SPEC CHECKSUMS:
-  Gosu: 90b9c2d0b14123305b19de20bb42adb6051e9285
+  Gosu: 9fc44fac7ad0e683f390f03bdd72a76752a3ce75
 
-COCOAPODS: 0.21.0
+COCOAPODS: 0.35.0
