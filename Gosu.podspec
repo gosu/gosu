@@ -86,7 +86,9 @@ Pod::Spec.new do |s|
     # This path needs to be preserved because it is included by AudioOpenAL.mm (yuck)
     ss.preserve_paths = 'src/Audio/AudioOpenAL.cpp'
     
-    ss.platform = :osx, '10.5'
+    ss.requires_arc = false
+    
+    ss.platform = :osx, '10.7'
   end
   
   # TODO - use multi-platform support for this
@@ -132,6 +134,8 @@ Pod::Spec.new do |s|
     # TODO add sockets too
     ss.preserve_paths = 'GosuImpl/Audio/AudioOpenAL.cpp'
     
+    ss.requires_arc = false
+
     ss.platform = :ios, '4.3'
   end
 end
