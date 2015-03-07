@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
 
   s.source       = { :git => "https://github.com/jlnr/gosu.git" }
   
-  s.compiler_flags = '-DGOSU_DEPRECATED='
+  s.compiler_flags = '-DGOSU_DEPRECATED= -Wno-conversion'
   
   s.subspec 'libogg' do |ss|
     ss.header_dir = 'ogg'
@@ -73,11 +73,11 @@ Pod::Spec.new do |s|
          Inspection.cpp
          IO.cpp
          Math.cpp
-         TimingApple.cpp
          Text/Font.cpp
          Text/Text.cpp
          Text/TextMac.cpp
          Text/TextApple.mm
+         TimingApple.cpp
          Utility.cpp
          UtilityApple.mm
          Window.cpp).map { |basename| "src/#{basename}" }
@@ -101,38 +101,38 @@ Pod::Spec.new do |s|
     ss.library   = 'iconv'
     
     ss.public_header_files = 'Gosu/*.hpp'
-    ss.source_files = ['Gosu/*.hpp', 'GosuImpl/**/*.hpp'] +
-    %w(Audio/AudioOpenAL.mm
-    DirectoriesTouch.mm
-    FileUnix.cpp
-    Graphics/Bitmap.cpp
-    Graphics/BitmapApple.mm
-    Graphics/BitmapBMP.cpp
-    Graphics/BitmapColorKey.cpp
-    Graphics/BitmapUtils.cpp
-    Graphics/BlockAllocator.cpp
-    Graphics/Color.cpp
-    Graphics/Font.cpp
-    Graphics/GosuView.mm
-    Graphics/Graphics.cpp
-    Graphics/Image.cpp
-    Graphics/LargeImageData.cpp
-    Graphics/TexChunk.cpp
-    Graphics/Text.cpp
-    Graphics/TextTouch.mm
-    Graphics/Texture.cpp
-    Graphics/Transform.cpp
-    Input/AccelerometerReader.mm
-    InputTouch.mm
-    Inspection.cpp
-    IO.cpp
-    Math.cpp
-    TimingApple.cpp
-    Utility.cpp
-    UtilityApple.mm
-    WindowTouch.mm).map { |basename| "GosuImpl/#{basename}" }
+    ss.source_files = ['Gosu/*.hpp', 'src/**/*.hpp'] +
+      %w(Audio/AudioOpenAL.mm
+         Bitmap/Bitmap.cpp
+         Bitmap/BitmapApple.mm
+         Bitmap/BitmapBMP.cpp
+         Bitmap/BitmapColorKey.cpp
+         Bitmap/BitmapUtils.cpp
+         DirectoriesTouch.mm
+         FileUnix.cpp
+         GosuView.mm
+         Graphics/BlockAllocator.cpp
+         Graphics/Color.cpp
+         Graphics/Graphics.cpp
+         Graphics/Image.cpp
+         Graphics/LargeImageData.cpp
+         Graphics/TexChunk.cpp
+         Graphics/Texture.cpp
+         Graphics/Transform.cpp
+         Input/AccelerometerReader.mm
+         Input/InputTouch.mm
+         Inspection.cpp
+         IO.cpp
+         Math.cpp
+         Text/Font.cpp
+         Text/Text.cpp
+         Text/TextApple.mm
+         TimingApple.cpp
+         Utility.cpp
+         UtilityApple.mm
+         WindowTouch.mm).map { |basename| "src/#{basename}" }
     # TODO add sockets too
-    ss.preserve_paths = 'GosuImpl/Audio/AudioOpenAL.cpp'
+    ss.preserve_paths = 'src/Audio/AudioOpenAL.cpp'
     
     ss.requires_arc = false
 

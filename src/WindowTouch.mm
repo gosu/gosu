@@ -3,7 +3,7 @@
 #include <Gosu/Audio.hpp>
 #include <Gosu/Input.hpp>
 #include "MacUtility.hpp"
-#include "Graphics/GosuView.hpp"
+#include "GosuView.hpp"
 
 #import <CoreGraphics/CoreGraphics.h>
 #import <UIKit/UIKit.h>

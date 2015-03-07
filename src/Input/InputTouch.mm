@@ -2,7 +2,7 @@
 #include <Gosu/TextInput.hpp>
 
 #include "MacUtility.hpp"
-#include "Input/AccelerometerReader.hpp"
+#include "AccelerometerReader.hpp"
 #import <UIKit/UIKit.h>
 
 struct Gosu::TextInput::Impl {};
@@ -26,7 +26,7 @@ struct Gosu::Input::Impl
     Touch translateTouch(UITouch* uiTouch)
     {
         CGPoint point = [uiTouch locationInView: view];
-        Touch touch = { uiTouch, point.x, point.y };
+        Touch touch = { uiTouch, (float)point.x, (float)point.y };
         touch.x *= factorX, touch.y *= factorY;
         return touch;
     }
@@ -100,9 +100,11 @@ void Gosu::Input::setMousePosition(double x, double y) {
     pimpl->mouseY = y;
 }
 
-void Gosu::Input::setMouseFactors(double factorX, double factorY) {
+void Gosu::Input::setMouseFactors(double factorX, double factorY, double offsetX, double offsetY) {
     pimpl->factorX = factorX;
     pimpl->factorY = factorY;
+    
+    // TODO - use offset
 }
 
 const Gosu::Touches& Gosu::Input::currentTouches() const
