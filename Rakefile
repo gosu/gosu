@@ -26,10 +26,6 @@ COMMON_RUBY_FILES = COMMON_FILES + FileList[
 
 GOSU_VERSION = ENV['GOSU_RELEASE_VERSION'] || '0.0.0'
 
-def upload filename
-  sh "scp -P 22000 '#{filename}' libgosu.org:/Library/WebServer/Documents/libgosu.org/downloads/"
-end
-
 def zip filename, files
   sh "zip #{filename} #{files.map { |fn| "'#{fn}'" }.join(' ')}"
 end

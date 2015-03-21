@@ -10,10 +10,10 @@ namespace :win do
     zip WINDOWS_ARCHIVE_FILENAME, files
   end
   
-  desc "Releases the archive #{WINDOWS_ARCHIVE_FILENAME}"
-  task :release => :archive do
-    upload WINDOWS_ARCHIVE_FILENAME
-  end
+  # desc "Releases the archive #{WINDOWS_ARCHIVE_FILENAME}"
+  # task :release => :archive do
+  #   upload WINDOWS_ARCHIVE_FILENAME
+  # end
 end
 
 [32, 64].each do |bits|
