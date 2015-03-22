@@ -1,5 +1,0 @@
-# Order of Corners
-
-In all functions that expect arguments for all four corners of a rectangle or quadrilateral, you can either pass clockwise coordinates, or coordinates in the following order (a Z shape):
-
-![](http://www.libgosu.org/wiki_images/corner_indices.png)

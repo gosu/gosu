@@ -1,5 +1,0 @@
-# Drawing with Colors
-
-Almost all image drawing functions accept modulation colors. The colors of all pixels on the source image will be multiplied with these colors, where a channel value of 255 corresponds to the maximum value of 1.0. This means modulation colors can be used only to reduce particular channels of an image.
-
-The most obvious use of this is to supply a color with an alpha value less than 255 so the image will drawn transparently, but you can also use this to darken images or to draw them in a different hue (which works best if the original image is mostly grayscale).

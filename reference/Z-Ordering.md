@@ -1,5 +1,0 @@
-# Z-Ordering
-
-All drawing operations in Gosu accept a floating-point value called "z" (technically, a double). Things drawn with a higher z position will be drawn over those with a lower one. If two things have the same z position, they will be drawn in the order the drawing functions were called.
-
-If you do not wish to use z ordering, just pass the same constant all the time.
