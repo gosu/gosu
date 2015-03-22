@@ -22,12 +22,19 @@ EOS
   s.files += Dir["lib/**/*.rb"]
   # SWIG-generated Ruby wrapper
   s.files += Dir["ext/gosu/gosu_wrap.{h,cxx}"]
-  # C++ Gosu source code
+  # osu source code
   s.files += Dir["src/**/*.{h,hpp,c,cpp,m,mm}"]
-  # C++ Gosu header files, for compiling the gem & for using inline C++ from Ruby
+  # Gosu header files, for compiling the gem & for using inline C++ from Ruby
   s.files += Dir["Gosu/*.hpp"]
   # Examples
-  s.files += Dir["examples/*.rb"] + Dir["examples/media/**/*"]
+  s.files += Dir["examples/*.rb", "examples/media/**/*"]
+  # RDoc setup
+  # The docs will never look great in rdoc, though, because we are using
+  # some yard-specific syntax in rdoc/gosu.rb.
+  # To generate more useful documentation, run 'yard' in the git root.
+  s.files += Dir["README.txt", "COPYING", "rdoc/gosu.rb"]
+  s.rdoc_options += %w(-m README.txt -x lib)
+  s.extra_rdoc_files = %w(README.txt COPYING rdoc/gosu.rb)
 end
 
 Gem::PackageTask.new(GEM_SPEC) do |pkg|
