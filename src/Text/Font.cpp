@@ -48,7 +48,7 @@ struct Gosu::Font::Impl
         {
             tr1::shared_ptr<Image>& ptr = entityCache[fs.entityAt(i)];
             if (!ptr)
-                ptr.reset(new Image(entityBitmap(fs.entityAt(i)), false));
+                ptr.reset(new Image(entityBitmap(fs.entityAt(i)), ifSmooth));
             return *ptr;
         }
         

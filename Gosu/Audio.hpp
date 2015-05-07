@@ -36,6 +36,7 @@ namespace Gosu
 
 	public:
         //! Called by Sample, do not use.
+        // TODO: See if we can use 'friend' here.
 		SampleInstance(int handle, int extra);
 
 		bool playing() const;

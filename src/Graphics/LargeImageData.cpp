@@ -7,7 +7,7 @@
 using namespace std;
 
 Gosu::LargeImageData::LargeImageData(const Bitmap& source,
-    unsigned partWidth, unsigned partHeight, unsigned borderFlags)
+    unsigned partWidth, unsigned partHeight, unsigned flags)
 {
     fullWidth = source.width();
     fullHeight = source.height();
@@ -31,19 +31,19 @@ Gosu::LargeImageData::LargeImageData(const Bitmap& source,
             if (y == partsY - 1 && source.height() % partHeight != 0)
                 srcHeight = source.height() % partHeight;
 
-            unsigned localBorderFlags = bfTileable;
+            unsigned localFlags = ifTileable;
             if (x == 0)
-                localBorderFlags = (localBorderFlags & ~bfTileableLeft) | (borderFlags & bfTileableLeft);
+                localFlags = (localFlags & ~ifTileableLeft) | (flags & ifTileableLeft);
             if (x == partsX - 1)
-                localBorderFlags = (localBorderFlags & ~bfTileableRight) | (borderFlags & bfTileableRight);
+                localFlags = (localFlags & ~ifTileableRight) | (flags & ifTileableRight);
             if (y == 0)
-                localBorderFlags = (localBorderFlags & ~bfTileableTop) | (borderFlags & bfTileableTop);
+                localFlags = (localFlags & ~ifTileableTop) | (flags & ifTileableTop);
             if (y == partsY - 1)
-                localBorderFlags = (localBorderFlags & ~bfTileableBottom) | (borderFlags & bfTileableBottom);
+                localFlags = (localFlags & ~ifTileableBottom) | (flags & ifTileableBottom);
             
             parts[y * partsX + x].reset(Graphics::createImage(source,
                 x * partWidth, y * partHeight, srcWidth, srcHeight,
-                localBorderFlags).release());
+                localFlags).release());
         }
 }
 

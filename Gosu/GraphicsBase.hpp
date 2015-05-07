@@ -31,11 +31,11 @@ namespace Gosu
         //! The color's channels will be multiplied with each other.
         MULTIPLY
     };
-    GOSU_DEPRECATED constexpr AlphaMode amDefault = AlphaMode::DEFAULT;
-    GOSU_DEPRECATED constexpr AlphaMode amInterpolate = AlphaMode::INTERPOLATE;
-    GOSU_DEPRECATED constexpr AlphaMode amAdd = AlphaMode::ADD;
-    GOSU_DEPRECATED constexpr AlphaMode amAdditive = AlphaMode::ADD;
-    GOSU_DEPRECATED constexpr AlphaMode amMultiply = AlphaMode::MULTIPLY;
+    constexpr AlphaMode amDefault = AlphaMode::DEFAULT;
+    constexpr AlphaMode amInterpolate = AlphaMode::INTERPOLATE;
+    constexpr AlphaMode amAdd = AlphaMode::ADD;
+    constexpr AlphaMode amAdditive = AlphaMode::ADD;
+    constexpr AlphaMode amMultiply = AlphaMode::MULTIPLY;
 #else
     enum AlphaMode
     {
@@ -68,15 +68,19 @@ namespace Gosu
         taJustify
     };
     
-    //! Flags that affect the tileability of an image.
-    enum BorderFlags
+    enum ImageFlags
     {
-        bfSmooth = 0,
-        bfTileableLeft = 1,
-        bfTileableTop = 2,
-        bfTileableRight = 4,
-        bfTileableBottom = 8,
-        bfTileable = bfTileableLeft | bfTileableTop | bfTileableRight | bfTileableBottom
+        //! Flags that affect the tileability of an image.
+        ifSmooth = 0,
+        // Note: No constant for '1', but Gosu treats '1' as ifTileable for
+        // backward compatibility reasons (this used to be a bool).
+        ifTileableLeft = 2,
+        ifTileableTop = 4,
+        ifTileableRight = 8,
+        ifTileableBottom = 16,
+        ifTileable = ifTileableLeft | ifTileableTop | ifTileableRight | ifTileableBottom
+        
+        // TODO - ifNearestNeighbor to replace undocumentedRetrofication.
     };
     
 #ifdef GOSU_IS_MAC

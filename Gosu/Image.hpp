@@ -23,23 +23,24 @@ namespace Gosu
         //!
         //! A color key of #ff00ff is automatically applied to BMP image files.
         //! For more flexibility, use the corresponding constructor that uses a Bitmap object.
-        explicit Image(const std::wstring& filename,
-              bool tileable = false);
+        explicit Image(const std::wstring& filename, unsigned flags = ifTileable);
+        
         //! Loads a portion of the the image at the given filename..
         //!
         //! A color key of #ff00ff is automatically applied to BMP image files.
         //! For more flexibility, use the corresponding constructor that uses a Bitmap object.
         Image(const std::wstring& filename, unsigned srcX,
               unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-              bool tileable = false);
+              unsigned flags = ifTileable);
         
         //! Converts the given bitmap into an image.
         explicit Image(const Bitmap& source,
-            bool tileable = false);
+            unsigned flags = ifTileable);
+        
         //! Converts a portion of the given bitmap into an image.
         Image(const Bitmap& source, unsigned srcX,
             unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-            bool tileable = false);
+            unsigned flags = ifTileable);
         
         //! Creates an Image from a user-supplied instance of the ImageData interface.
         explicit Image(GOSU_UNIQUE_PTR<ImageData> data);
@@ -52,8 +53,8 @@ namespace Gosu
             double factorX = 1, double factorY = 1,
             Color c = Color::WHITE,
             AlphaMode mode = amDefault) const;
-        //! Like draw(), but allows to give modulation colors for all four
-        //! corners.
+        //! Like draw(), but with modulation colors for all four corners.
+        //! TODO: This can be an overload of draw() - in any case the name is terrible.
         void drawMod(double x, double y, ZPos z,
             double factorX, double factorY,
             Color c1, Color c2, Color c3, Color c4,
@@ -73,7 +74,7 @@ namespace Gosu
             double factorX = 1, double factorY = 1,
             Color c = Color::WHITE,
             AlphaMode mode = amDefault) const;
-
+        
         //! Provides access to the underlying image data object.
         ImageData& getData() const;
         
@@ -95,14 +96,13 @@ namespace Gosu
     //! \param tileWidth If positive, specifies the width of one tile in pixels.
     //! If negative, the bitmap is divided into -tileWidth rows.
     //! \param tileHeight See tileWidth.
-    std::vector<Gosu::Image> loadTiles(const Bitmap& bmp, int tileWidth, int tileHeight, bool tileable);
+    std::vector<Gosu::Image> loadTiles(const Bitmap& bmp, int tileWidth, int tileHeight, unsigned flags = ifTileable);
     
     //! Convenience function that slices a bitmap into a grid and creates images from them.
     //! \param tileWidth If positive, specifies the width of one tile in pixels.
     //! If negative, the bitmap is divided into -tileWidth rows.
     //! \param tileHeight See tileWidth.
-    std::vector<Gosu::Image> loadTiles(const std::wstring& filename, int tileWidth, int tileHeight, bool tileable);
-
+    std::vector<Gosu::Image> loadTiles(const std::wstring& filename, int tileWidth, int tileHeight, unsigned flags = ifTileable);
     
     GOSU_DEPRECATED std::vector<Gosu::Image> loadTiles(Graphics& graphics, const Bitmap& bmp, int tileWidth, int tileHeight, bool tileable);
     GOSU_DEPRECATED std::vector<Gosu::Image> loadTiles(Graphics& graphics, const std::wstring& bmp, int tileWidth, int tileHeight, bool tileable);

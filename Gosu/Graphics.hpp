@@ -118,7 +118,7 @@ namespace Gosu
         //! Turns a portion of a bitmap into something that can be drawn on a Graphics object.
         static GOSU_UNIQUE_PTR<ImageData> createImage(const Bitmap& src,
             unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-            unsigned borderFlags);
+            unsigned imageFlags);
     };
 }
 

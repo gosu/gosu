@@ -379,17 +379,21 @@ void Gosu::Graphics::scheduleDrawOp(const Gosu::DrawOp &op)
 
 GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
     const Bitmap& src, unsigned srcX, unsigned srcY,
-    unsigned srcWidth, unsigned srcHeight, unsigned borderFlags)
+    unsigned srcWidth, unsigned srcHeight, unsigned flags)
 {
     static const unsigned maxSize = MAX_TEXTURE_SIZE;
+    
+    // Backwards compatibility: This used to be 'bool tileable'.
+    if (flags == 1)
+        flags = ifTileable;
 
-    // Special case: If the texture is supposed to have hard borders,
-    // is quadratic, has a size that is at least 64 pixels but less than 256
+    // Special case: If the texture is supposed to have hard borders, is
+    // quadratic, has a size that is at least 64 pixels but no more than maxSize
     // pixels and a power of two, create a single texture just for this image.
-    if ((borderFlags & bfTileable) == bfTileable &&
+    if ((flags & ifTileable) == ifTileable &&
         srcWidth == srcHeight &&
         (srcWidth & (srcWidth - 1)) == 0 &&
-        srcWidth >= 64)
+        srcWidth >= 64 && srcWidth <= maxSize)
     {
         std::tr1::shared_ptr<Texture> texture(new Texture(srcWidth));
         GOSU_UNIQUE_PTR<ImageData> data;
@@ -420,12 +424,12 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
         Bitmap bmp(srcWidth, srcHeight);
         bmp.insert(src, 0, 0, srcX, srcY, srcWidth, srcHeight);
         GOSU_UNIQUE_PTR<ImageData> lidi;
-        lidi.reset(new LargeImageData(bmp, maxSize - 2, maxSize - 2, borderFlags));
+        lidi.reset(new LargeImageData(bmp, maxSize - 2, maxSize - 2, flags));
         return GOSU_MOVE_UNIQUE_PTR(lidi);
     }
     
     Bitmap bmp;
-    applyBorderFlags(bmp, src, srcX, srcY, srcWidth, srcHeight, borderFlags);
+    applyBorderFlags(bmp, src, srcX, srcY, srcWidth, srcHeight, flags);
 
     // Try to put the bitmap into one of the already allocated textures.
     for (Textures::iterator i = textures.begin(); i != textures.end(); ++i)

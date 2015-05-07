@@ -57,7 +57,7 @@ namespace Gosu
         //! \param height See width.
         //! \param updateInterval Interval in milliseconds between two calls
         //! to the update member function.
-        Window(unsigned width, unsigned height, bool fullscreen,
+        Window(unsigned width, unsigned height, bool fullscreen = false,
             double updateInterval = 16.666666);
         virtual ~Window();
 
@@ -112,13 +112,6 @@ namespace Gosu
         
         const Input& input() const;
         Input& input();
-        
-        #ifdef GOSU_IS_UNIX
-        // Context for creating shared contexts.
-        // Only on Unices (so far).
-        typedef std::tr1::shared_ptr<std::tr1::function<void()> > SharedContext;
-        SharedContext createSharedContext();
-        #endif
         
         #ifdef GOSU_IS_IPHONE
         void* rootViewController() const;
