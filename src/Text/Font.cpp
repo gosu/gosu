@@ -12,7 +12,6 @@ using namespace std;
 
 struct Gosu::Font::Impl
 {
-    Graphics* graphics;
     wstring name;
     unsigned height, flags;
 
@@ -49,7 +48,7 @@ struct Gosu::Font::Impl
         {
             tr1::shared_ptr<Image>& ptr = entityCache[fs.entityAt(i)];
             if (!ptr)
-                ptr.reset(new Image(*graphics, entityBitmap(fs.entityAt(i)), false));
+                ptr.reset(new Image(entityBitmap(fs.entityAt(i)), false));
             return *ptr;
         }
         
@@ -68,7 +67,7 @@ struct Gosu::Font::Impl
         
         Bitmap bitmap(charWidth, height);
         drawText(bitmap, charString, 0, 0, Color::WHITE, name, height, flags);
-        info.image.reset(new Image(*graphics, bitmap));
+        info.image.reset(new Image(bitmap));
         info.factor = 0.5;
         return *info.image;
     }
@@ -81,11 +80,9 @@ struct Gosu::Font::Impl
     }
 };
 
-Gosu::Font::Font(Graphics& graphics, const wstring& fontName, unsigned fontHeight,
-    unsigned fontFlags)
+Gosu::Font::Font(unsigned fontHeight, const wstring& fontName, unsigned fontFlags)
 : pimpl(new Impl)
 {
-    pimpl->graphics = &graphics;
     pimpl->name = fontName;
     pimpl->height = fontHeight * 2;
     pimpl->flags = fontFlags;
@@ -164,7 +161,15 @@ void Gosu::Font::setImage(wchar_t wc, unsigned fontFlags, const Image& image)
 void Gosu::Font::drawRot(const wstring& text, double x, double y, ZPos z, double angle,
     double factorX, double factorY, Color c, AlphaMode mode) const
 {
-    pimpl->graphics->pushTransform(rotate(angle, x, y));
+    Gosu::Graphics::pushTransform(rotate(angle, x, y));
     draw(text, x, y, z, factorX, factorY, c, mode);
-    pimpl->graphics->popTransform();
+    Gosu::Graphics::popTransform();
+}
+
+// Deprecated constructors
+
+Gosu::Font::Font(Graphics& graphics, const wstring& fontName, unsigned fontHeight,
+    unsigned fontFlags)
+{
+    Font(fontHeight, fontName, fontFlags).pimpl.swap(pimpl);
 }
