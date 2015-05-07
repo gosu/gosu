@@ -11,8 +11,6 @@
 
 class Gosu::TexChunk : public Gosu::ImageData
 {
-    Graphics& graphics;
-    DrawOpQueueStack& queues;
     std::tr1::shared_ptr<Texture> texture;
     int x, y, w, h, padding;
     
@@ -22,8 +20,7 @@ class Gosu::TexChunk : public Gosu::ImageData
     void setTexInfo();
     
 public:
-    TexChunk(Graphics& graphics, DrawOpQueueStack& queues,
-             std::tr1::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding);
+    TexChunk(std::tr1::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding);
     TexChunk(const TexChunk& parentChunk, int x, int y, int w, int h);
     ~TexChunk();
 

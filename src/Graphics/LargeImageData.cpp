@@ -6,9 +6,8 @@
 #include <cmath>
 using namespace std;
 
-Gosu::LargeImageData::LargeImageData(Graphics& graphics,
-    const Bitmap& source, unsigned partWidth, unsigned partHeight,
-    unsigned borderFlags)
+Gosu::LargeImageData::LargeImageData(const Bitmap& source,
+    unsigned partWidth, unsigned partHeight, unsigned borderFlags)
 {
     fullWidth = source.width();
     fullHeight = source.height();
@@ -42,7 +41,7 @@ Gosu::LargeImageData::LargeImageData(Graphics& graphics,
             if (y == partsY - 1)
                 localBorderFlags = (localBorderFlags & ~bfTileableBottom) | (borderFlags & bfTileableBottom);
             
-            parts[y * partsX + x].reset(graphics.createImage(source,
+            parts[y * partsX + x].reset(Graphics::createImage(source,
                 x * partWidth, y * partHeight, srcWidth, srcHeight,
                 localBorderFlags).release());
         }

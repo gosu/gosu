@@ -22,8 +22,7 @@ namespace Gosu
         unsigned size() const;
         GLuint texName() const;
         GOSU_UNIQUE_PTR<TexChunk>
-            tryAlloc(Graphics& graphics, DrawOpQueueStack& queues,
-                std::tr1::shared_ptr<Texture> ptr, const Bitmap& bmp, unsigned padding);
+            tryAlloc(std::tr1::shared_ptr<Texture> ptr, const Bitmap& bmp, unsigned padding);
         void block(unsigned x, unsigned y, unsigned width, unsigned height);
         void free(unsigned x, unsigned y, unsigned width, unsigned height);
         Gosu::Bitmap toBitmap(unsigned x, unsigned y, unsigned width, unsigned height) const;

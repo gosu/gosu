@@ -19,29 +19,25 @@ namespace Gosu
         std::tr1::shared_ptr<ImageData> data;
 
     public:
-        //! Loads an image from a given filename that can be drawn onto
-        //! graphics.
-        //! This constructor can handle PNG and BMP images. A color key of #ff00ff is
-        //! automatically applied to BMP type images. For more flexibility, use the
-        //! corresponding constructor that uses a Bitmap object.
-        Image(Graphics& graphics, const std::wstring& filename,
+        //! Loads an image from a given filename.
+        //!
+        //! A color key of #ff00ff is automatically applied to BMP image files.
+        //! For more flexibility, use the corresponding constructor that uses a Bitmap object.
+        explicit Image(const std::wstring& filename,
               bool tileable = false);
-        //! Loads a portion of the the image at the given filename that can be
-        //! drawn onto graphics.
-        //! This constructor can handle PNG and BMP images. A color key of #ff00ff is
-        //! automatically applied to BMP type images. For more flexibility, use the
-        //! corresponding constructor that uses a Bitmap object.
-        Image(Graphics& graphics, const std::wstring& filename, unsigned srcX,
+        //! Loads a portion of the the image at the given filename..
+        //!
+        //! A color key of #ff00ff is automatically applied to BMP image files.
+        //! For more flexibility, use the corresponding constructor that uses a Bitmap object.
+        Image(const std::wstring& filename, unsigned srcX,
               unsigned srcY, unsigned srcWidth, unsigned srcHeight,
               bool tileable = false);
         
-        //! Converts the given bitmap into an image that can be drawn onto
-        //! graphics.
-        Image(Graphics& graphics, const Bitmap& source,
+        //! Converts the given bitmap into an image.
+        explicit Image(const Bitmap& source,
             bool tileable = false);
-        //! Converts a portion of the given bitmap into an image that can be
-        //! drawn onto graphics.
-        Image(Graphics& graphics, const Bitmap& source, unsigned srcX,
+        //! Converts a portion of the given bitmap into an image.
+        Image(const Bitmap& source, unsigned srcX,
             unsigned srcY, unsigned srcWidth, unsigned srcHeight,
             bool tileable = false);
         
@@ -80,37 +76,45 @@ namespace Gosu
 
         //! Provides access to the underlying image data object.
         ImageData& getData() const;
+        
+        #ifndef SWIG
+        GOSU_DEPRECATED Image(Graphics& graphics, const std::wstring& filename,
+              bool tileable = false);
+        GOSU_DEPRECATED Image(Graphics& graphics, const std::wstring& filename, unsigned srcX,
+              unsigned srcY, unsigned srcWidth, unsigned srcHeight,
+              bool tileable = false);
+        GOSU_DEPRECATED Image(Graphics& graphics, const Bitmap& source,
+              bool tileable = false);
+        GOSU_DEPRECATED Image(Graphics& graphics, const Bitmap& source, unsigned srcX,
+              unsigned srcY, unsigned srcWidth, unsigned srcHeight,
+              bool tileable = false);
+        #endif
     };
     
-    std::vector<Gosu::Image> loadTiles(Graphics& graphics, const Bitmap& bmp, int tileWidth, int tileHeight, bool tileable);
-    std::vector<Gosu::Image> loadTiles(Graphics& graphics, const std::wstring& bmp, int tileWidth, int tileHeight, bool tileable);
-    
-    //! Convenience function that splits a BMP or PNG file into an array
-    //! of small rectangles and creates images from them.
-    //! \param tileWidth If positive, specifies the width of one tile in
-    //! pixels. If negative, the bitmap is divided into -tileWidth rows.
+    //! Convenience function that slices an image file into a grid and creates images from them.
+    //! \param tileWidth If positive, specifies the width of one tile in pixels.
+    //! If negative, the bitmap is divided into -tileWidth rows.
     //! \param tileHeight See tileWidth.
-    //! \param appendTo STL container to which the images will be appended.
-    //! Must provide a push_back member function; vector<tr1::shared_ptr<Image>>
-    //! or boost::ptr_vector<Image> are good choices.
+    std::vector<Gosu::Image> loadTiles(const Bitmap& bmp, int tileWidth, int tileHeight, bool tileable);
+    
+    //! Convenience function that slices a bitmap into a grid and creates images from them.
+    //! \param tileWidth If positive, specifies the width of one tile in pixels.
+    //! If negative, the bitmap is divided into -tileWidth rows.
+    //! \param tileHeight See tileWidth.
+    std::vector<Gosu::Image> loadTiles(const std::wstring& filename, int tileWidth, int tileHeight, bool tileable);
+
+    
+    GOSU_DEPRECATED std::vector<Gosu::Image> loadTiles(Graphics& graphics, const Bitmap& bmp, int tileWidth, int tileHeight, bool tileable);
+    GOSU_DEPRECATED std::vector<Gosu::Image> loadTiles(Graphics& graphics, const std::wstring& bmp, int tileWidth, int tileHeight, bool tileable);
     template<typename Container>
-    void imagesFromTiledBitmap(Graphics& graphics, const std::wstring& filename, int tileWidth, int tileHeight, bool tileable, Container& appendTo)
+    GOSU_DEPRECATED void imagesFromTiledBitmap(Graphics& graphics, const std::wstring& filename, int tileWidth, int tileHeight, bool tileable, Container& appendTo)
     {
         std::vector<Gosu::Image> tiles = loadTiles(graphics, filename, tileWidth, tileHeight, tileable);
         for (int i = 0, num = tiles.size(); i < num; ++i)
             appendTo.push_back(typename Container::value_type(new Gosu::Image(tiles[i])));
     }
-    
-    //! Convenience function that splits a bitmap into an area of array 
-    //! rectangles and creates images from them.
-    //! \param tileWidth If positive, specifies the width of one tile in
-    //! pixels. If negative, the bitmap is divided into -tileWidth rows.
-    //! \param tileHeight See tileWidth.
-    //! \param appendTo STL container to which the images will be appended.
-    //! Must provide a push_back member function; std::vector<std::tr1::shared_ptr<Image>>
-    //! or boost::ptr_vector<Image> are good choices.
     template<typename Container>
-    void imagesFromTiledBitmap(Graphics& graphics, const Bitmap& bmp,
+    GOSU_DEPRECATED void imagesFromTiledBitmap(Graphics& graphics, const Bitmap& bmp,
         int tileWidth, int tileHeight, bool tileable, Container& appendTo)
     {
         std::vector<Gosu::Image> tiles = loadTiles(graphics, bmp, tileWidth, tileHeight, tileable);

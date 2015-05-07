@@ -14,16 +14,15 @@ void Gosu::TexChunk::setTexInfo()
     info.bottom = (y + h) / textureSize;
 }
 
-Gosu::TexChunk::TexChunk(Graphics& graphics, DrawOpQueueStack& queues,
-    std::tr1::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding)
-: graphics(graphics), queues(queues), texture(texture), x(x), y(y), w(w), h(h), padding(padding)
+Gosu::TexChunk::TexChunk(std::tr1::shared_ptr<Texture> texture,
+    int x, int y, int w, int h, int padding)
+: texture(texture), x(x), y(y), w(w), h(h), padding(padding)
 {
     setTexInfo();
 }
 
 Gosu::TexChunk::TexChunk(const TexChunk& parentChunk, int x, int y, int w, int h)
-: graphics(parentChunk.graphics), queues(parentChunk.queues), texture(parentChunk.texture),
-    x(parentChunk.x + x), y(parentChunk.y + y), w(w), h(h), padding(0)
+: texture(parentChunk.texture), x(parentChunk.x + x), y(parentChunk.y + y), w(w), h(h), padding(0)
 {
     setTexInfo();
     texture->block(this->x, this->y, this->w, this->h);
@@ -63,7 +62,7 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1,
     op.bottom = info.bottom;
     
     op.z = z;
-    queues.back().scheduleDrawOp(op);
+    Graphics::scheduleDrawOp(op);
 }
 
 const Gosu::GLTexInfo* Gosu::TexChunk::glTexInfo() const

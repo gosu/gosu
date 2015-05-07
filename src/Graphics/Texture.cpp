@@ -64,8 +64,7 @@ GLuint Gosu::Texture::texName() const
 }
 
 GOSU_UNIQUE_PTR<Gosu::TexChunk>
-    Gosu::Texture::tryAlloc(Graphics& graphics, DrawOpQueueStack& queues,
-        std::tr1::shared_ptr<Texture> ptr, const Bitmap& bmp, unsigned padding)
+    Gosu::Texture::tryAlloc(std::tr1::shared_ptr<Texture> ptr, const Bitmap& bmp, unsigned padding)
 {
     GOSU_UNIQUE_PTR<Gosu::TexChunk> result;
     
@@ -73,7 +72,7 @@ GOSU_UNIQUE_PTR<Gosu::TexChunk>
     if (!allocator.alloc(bmp.width(), bmp.height(), block))
         return result;
     
-    result.reset(new TexChunk(graphics, queues, ptr, block.left + padding, block.top + padding,
+    result.reset(new TexChunk(ptr, block.left + padding, block.top + padding,
                               block.width - 2 * padding, block.height - 2 * padding, padding));
     
     glBindTexture(GL_TEXTURE_2D, name);

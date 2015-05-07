@@ -16,7 +16,7 @@ namespace Gosu
         std::vector<std::tr1::shared_ptr<ImageData> > parts;
 
     public:
-        LargeImageData(Graphics& graphics, const Bitmap& source,
+        LargeImageData(const Bitmap& source,
             unsigned partWidth, unsigned partHeight, unsigned borderFlags);
 
         int width() const;
