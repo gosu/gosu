@@ -13,6 +13,8 @@ namespace Gosu
 Gosu::Texture::Texture(unsigned size)
 : allocator(size, size)
 {
+    ensureCurrentContext();
+    
     // Create texture name.
     glGenTextures(1, &name);
     if (name == static_cast<GLuint>(-1))
@@ -50,6 +52,8 @@ Gosu::Texture::Texture(unsigned size)
 
 Gosu::Texture::~Texture()
 {
+    ensureCurrentContext();
+    
     glDeleteTextures(1, &name);
 }
 
@@ -75,6 +79,8 @@ GOSU_UNIQUE_PTR<Gosu::TexChunk>
     result.reset(new TexChunk(ptr, block.left + padding, block.top + padding,
                               block.width - 2 * padding, block.height - 2 * padding, padding));
     
+    ensureCurrentContext();
+    
     glBindTexture(GL_TEXTURE_2D, name);
     glTexSubImage2D(GL_TEXTURE_2D, 0, block.left, block.top, block.width, block.height,
                  Color::GL_FORMAT, GL_UNSIGNED_BYTE, bmp.data());
@@ -97,6 +103,8 @@ Gosu::Bitmap Gosu::Texture::toBitmap(unsigned x, unsigned y, unsigned width, uns
 #ifdef GOSU_IS_OPENGLES
     throw std::logic_error("Texture::toBitmap not supported on iOS");
 #else
+    ensureCurrentContext();
+    
     Gosu::Bitmap fullTexture(size(), size());
     glBindTexture(GL_TEXTURE_2D, name);
     glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, fullTexture.data());
