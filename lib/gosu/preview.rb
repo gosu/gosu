@@ -33,26 +33,6 @@ module Gosu
     end
   end
   
-  class Image
-    def self.from_text *args
-      if args.first.is_a? Gosu::Window then
-        args.size == 4 ? from_text4(*args) : from_text7(*args)
-      else
-        text      = args[0]
-        height    = args[1]
-        options   = args[2] || {}
-        font      = options[:font]    || Gosu::default_font_name
-        if width  = options[:width] then
-          spacing = options[:spacing] || 0
-          align   = options[:align]   || :left
-          Gosu::Image.from_text7 $window, text, font, height, spacing, width, align
-        else
-          Gosu::Image.from_text4 $window, text, font, height
-        end
-      end
-    end
-  end
-  
   def self.button_down? id
     $window.button_down? id
   end

@@ -460,7 +460,7 @@ module Gosu
     ##
     # Loads an image from a file or an RMagick image.
     # 
-    # (Passing a Window reference is not necessary anymore, please use the first overload instead.)
+    # (Passing a Window reference is not necessary anymore, please use the first overload from now on.)
     # 
     # @note For Windows Bitmap (BMP) images, magenta (FF00FF, often called "magic pink" in this context) is treated as a chroma key and all pixels of that color are automatically rendered fully transparent.
     # 
@@ -469,34 +469,38 @@ module Gosu
     # @option arguments [Boolean] :tileable (false) if true, the Image will not have soft edges when scaled
     # @option arguments [Array] :rect ([0, 0, image_width, image_height]) the source rectangle in the image
     # 
-    # @overload initialize(source, arguments)
-    # @overload initialize(window, source, tileable)
+    # @overload initialize(source, arguments = {})
+    # @overload initialize(window, source, tileable = false)
     # @overload initialize(window, source, tileable, left, top, width, height)
     # 
     # @see load_tiles
     # @see from_text
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#tileability Tileability explained in the Gosu Wiki
-    def initialize(source, arguments); end
+    def initialize(source, arguments = {}); end
     
     ##
     # Creates a reusable image from one or more lines of text.
     #
-    # The text is always rendered in white. To draw it in a different color, use the `color` parameter of {#draw}, et al.
+    # (Passing a Window reference is not necessary anymore, please use the first overload from now on.)
     # 
-    # @overload from_text(window, text, font_name, font_height)
-    # @overload from_text(window, text, font_name, font_height, line_spacing, width, align)
+    # @note The text is always rendered in white. To draw it in a different color, use the color parameter of {#draw}, et al.
+    # 
+    # @overload from_text(text, line_height, arguments = {})
+    # @overload from_text(window, text, font_name, line_height)
+    # @overload from_text(window, text, font_name, line_height, line_spacing, width, align)
     # 
     # @return [Gosu::Image]
-    # @param window [Gosu::Window]
-    # @param text [String]
-    # @param font_name [String] the name of a system font, or a path to a TrueType Font (TTF) file. A path must contain at least one '/' character to distinguish it from a system font.
-    # @param font_height [Fixnum] the height of the font, in pixels.
-    # @param line_spacing [Fixnum] the vertical spacing beteen lines.
-    # @param width [Fixnum] the width of the image, in pixels. Long lines will be automatically wrapped around to avoid overflow, but overlong words will be truncated.
-    # @param align [:left, :right, :center, :justify] the text alignment.
+    # @param [String] text
+    # @param [Fixnum] line_height the line height, in pixels.
+    # @param [Hash] arguments
+    # @option arguments [String] :font (Gosu::default_font_name) the name of a system font, or a path to a TrueType Font (TTF) file. A path must contain at least one '/' character to distinguish it from a system font.
+    # @option arguments [Fixnum] :width the width of the image, in pixels. Long lines will be automatically wrapped around to avoid overflow, but overlong words will be truncated. If this option is omitted, lines will not be wrapped, and :align and :spacing will be ignored as well.
+    # @option arguments [Fixnum] :spacing (0) the spacing between lines, in pixels.
+    # @option arguments [:left, :right, :center, :justify] :align (:left) the text alignment.
     # 
     # @see Gosu::Font
-    def self.from_text(window, text, font_name, font_height, line_spacing, width, align); end
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
+    def self.from_text(text, line_height, arguments = {}); end
     
     ##
     # Loads an image from a file or an RMagick image, then divides the image into an array of equal-sized tiles.
@@ -511,13 +515,13 @@ module Gosu
     # @param [Hash] arguments
     # @option arguments [Boolean] :tileable (false) if true, the Image will not have soft edges when scaled
     # 
-    # @overload initialize(source, tile_width, tile_height, arguments)
-    # @overload initialize(window, source, tile_width, tile_height, tileable)
+    # @overload initialize(source, tile_width, tile_height, arguments = {})
+    # @overload initialize(window, source, tile_width, tile_height, tileable = false)
     # 
-    # (Passing a Window reference is not necessary anymore, please use the first overload instead.)
+    # (Passing a Window reference is not necessary anymore, please use the first overload from now on.)
     # 
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#tileability Tileability explained in the Gosu Wiki
-    def self.load_tiles(source, tile_width, tile_height, arguments); end
+    def self.load_tiles(source, tile_width, tile_height, arguments = {}); end
     
     # @!endgroup
     
@@ -618,7 +622,7 @@ module Gosu
     ##
     # Loads a sample from a file.
     # 
-    # (Passing a Window reference is not necessary anymore, please use the first overload instead.)
+    # (Passing a Window reference is not necessary anymore, please use the first overload from now on.)
     # 
     # @overload initialize(filename)
     # @overload initialize(window, filename)

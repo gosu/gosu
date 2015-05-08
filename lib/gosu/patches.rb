@@ -19,21 +19,44 @@ module Gosu::Button
   Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }
 end
 
-# Backwards compatibility: Window arguments to Sample and Song
-class Gosu::Sample
-  alias initialize_ initialize
+# Backwards compatibility:
+# Now-obsolete Window arguments.
+class Gosu::Image
+  class << self
+    alias from_text_without_window from_text
+  end
   
-  def initialize(*args)
-    args.shift if args.first.is_a? Gosu::Window
-    initialize_(*args)
+  def self.from_text(*args)
+    if args.size == 4
+      from_text_without_window(args[1], args[3], :font => args[2])
+    elsif args.size == 7
+      from_text_without_window(args[1], args[3], :font => args[2],
+        :spacing => args[4], :width => args[5], :align => args[6])
+    else
+      from_text_without_window(*args)
+    end
   end
 end
-class Gosu::Song
-  alias initialize_ initialize
+
+# Backwards compatibility:
+# Now-obsolete Window arguments.
+class Gosu::Sample
+  alias initialize_without_window initialize
   
   def initialize(*args)
     args.shift if args.first.is_a? Gosu::Window
-    initialize_(*args)
+    initialize_without_window(*args)
+  end
+end
+
+# Backwards compatibility:
+# Now-obsolete Window arguments.
+class Gosu::Song
+  alias initialize_without_window initialize
+  
+  def initialize(*args)
+    args.shift if args.first.is_a? Gosu::Window
+    initialize_without_window(*args)
   end
 end
 

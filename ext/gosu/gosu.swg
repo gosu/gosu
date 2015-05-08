@@ -116,7 +116,7 @@
     else if (!strcmp(cstr, "justify"))
         $1 = Gosu::taJustify;
     else
-        SWIG_exception_fail(SWIG_ValueError, "invalid text align");
+        SWIG_exception_fail(SWIG_ValueError, "invalid text alignment (expected one of :left, :center, :right, :justify)");
 }
 
 // Allow integral constants to be passed in place of Color values.
@@ -564,20 +564,64 @@ namespace Gosu {
         std::auto_ptr<Gosu::ImageData> imageData = $self->getData().subimage(x, y, w, h);
         return imageData.get() ? new Gosu::Image(imageData) : 0;
     }
-    %newobject fromText4;
-    static Gosu::Image* fromText4(Gosu::Window& window, const std::wstring& text,
-                                 const std::wstring& fontName, unsigned fontHeight)
+    
+    %newobject fromText;
+    static Gosu::Image* fromText(const std::wstring& text, unsigned fontHeight, VALUE arguments = 0)
     {
-        Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight);
-        return new Gosu::Image(bmp, Gosu::ifSmooth);
-    }
-    %newobject fromText7;
-    static Gosu::Image* fromText7(Gosu::Window& window, const std::wstring& text,
-            const std::wstring& fontName, unsigned fontHeight,
-            int lineSpacing, unsigned width, TextAlign align)
-    {
-        Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, width, align);
-        return new Gosu::Image(bmp, Gosu::ifSmooth);
+        std::wstring font = Gosu::defaultFontName();
+        unsigned width = 0xfefefefe;
+        unsigned spacing = 0;
+        Gosu::TextAlign align = align;
+        
+        if (arguments) {
+            Check_Type(arguments, T_HASH);
+            
+            VALUE keys = rb_funcall(arguments, rb_intern("keys"), 0, NULL);
+            int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
+            
+            for (int i = 0; i < keysSize; ++i) {
+                VALUE key = rb_ary_entry(keys, i);
+                const char* keyString = Gosu::cstrFromSymbol(key);
+                
+                VALUE value = rb_hash_aref(arguments, key);
+                if (!strcmp(keyString, "font")) {
+                    const char* fontUTF8 = StringValuePtr(value);
+                    font = Gosu::utf8ToWstring(fontUTF8);
+                }
+                else if (!strcmp(keyString, "align")) {
+                    const char* cstr = Gosu::cstrFromSymbol(value);
+
+                    if (!strcmp(cstr, "left"))
+                        align = Gosu::taLeft;
+                    else if (!strcmp(cstr, "center"))
+                        align = Gosu::taCenter;
+                    else if (!strcmp(cstr, "right"))
+                        align = Gosu::taRight;
+                    else if (!strcmp(cstr, "justify"))
+                        align = Gosu::taJustify;
+                    else
+                        rb_raise(rb_eArgError, "Argument passed to :align must be a valid text alignment (:left, :center, :right, :justify)");
+                }
+                else if (!strcmp(keyString, "width")) {
+                    width = NUM2INT(value);
+                }
+                else if (!strcmp(keyString, "spacing")) {
+                    spacing = NUM2INT(value);
+                }
+                else {
+                    static bool issuedWarning = false;
+                    if (!issuedWarning) {
+                        issuedWarning = true;
+                        rb_warn("Unknown keyword argument: :%s", keyString);
+                    }
+                }
+            }
+        }
+        
+        if (width == 0xfefefefe)
+            return new Gosu::Image(Gosu::createText(text, font, fontHeight));
+        else
+            return new Gosu::Image(Gosu::createText(text, font, fontHeight, spacing, width, align));
     }
     static std::vector<Gosu::Image> loadTiles(VALUE source, int tileWidth, int tileHeight, VALUE arguments = 0)
     {

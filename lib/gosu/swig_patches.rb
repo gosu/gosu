@@ -47,13 +47,6 @@ class Gosu::Window
   end
 end
 
-# SWIG doesn't understand the C++ overloading, so we need this simple check in Ruby.
-class Gosu::Image
-  def self.from_text(*args)
-    args.size == 4 ? from_text4(*args) : from_text7(*args)
-  end
-end
-
 # SWIG won't let me rename my method to '[]='.
 class Gosu::Font
   alias []= set_image
