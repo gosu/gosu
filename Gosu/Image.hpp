@@ -75,10 +75,10 @@ namespace Gosu
             Color c = Color::WHITE,
             AlphaMode mode = amDefault) const;
         
+        #ifndef SWIG
         //! Provides access to the underlying image data object.
         ImageData& getData() const;
         
-        #ifndef SWIG
         GOSU_DEPRECATED Image(Graphics& graphics, const std::wstring& filename,
               bool tileable = false);
         GOSU_DEPRECATED Image(Graphics& graphics, const std::wstring& filename, unsigned srcX,
@@ -92,6 +92,7 @@ namespace Gosu
         #endif
     };
     
+    #ifndef SWIG
     //! Convenience function that slices an image file into a grid and creates images from them.
     //! \param tileWidth If positive, specifies the width of one tile in pixels.
     //! If negative, the bitmap is divided into -tileWidth rows.
@@ -121,6 +122,7 @@ namespace Gosu
         for (int i = 0, num = tiles.size(); i < num; ++i)
             appendTo.push_back(typename Container::value_type(new Gosu::Image(tiles[i])));
     }
+    #endif
 }
 
 #endif
