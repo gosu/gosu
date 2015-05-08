@@ -93,9 +93,7 @@
 %typemap(in) Gosu::AlphaMode {
     const char* cstr = Gosu::cstrFromSymbol($input);
     
-    if (!cstr)
-        SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
-    else if (!strcmp(cstr, "default"))
+    if (!strcmp(cstr, "default"))
         $1 = Gosu::amDefault;
     else if (!strcmp(cstr, "add"))
         $1 = Gosu::amAdditive;
@@ -109,9 +107,7 @@
 %typemap(in) Gosu::TextAlign {
     const char* cstr = Gosu::cstrFromSymbol($input);
 
-    if (!cstr)
-        SWIG_exception_fail(SWIG_ValueError, "text align must be a symbol");
-    else if (!strcmp(cstr, "left"))
+    if (!strcmp(cstr, "left"))
         $1 = Gosu::taLeft;
     else if (!strcmp(cstr, "center"))
         $1 = Gosu::taCenter;
@@ -298,9 +294,9 @@ namespace Gosu
             throw std::logic_error("Blob length mismatch!");
     }
     
-    const char* cstrFromSymbol(VALUE symbol) {
-        if (TYPE(symbol) != T_SYMBOL)
-            return 0; // to be caught by the caller
+    const char* cstrFromSymbol(VALUE symbol)
+    {
+        Check_Type(symbol, T_SYMBOL);
         return rb_id2name(SYM2ID(symbol));
     }
 }
@@ -471,8 +467,6 @@ namespace Gosu {
 %include "../../Gosu/ImageData.hpp"
 
 // Image
-// Allow the user to pass Window& instead of Graphics&.
-// Also, provide convenience functions.
 
 // Typemap to return an array of images (for loadTiles)
 %typemap(out) std::vector<Gosu::Image*> {
@@ -491,6 +485,54 @@ namespace Gosu {
 %ignore Gosu::loadTiles;
 %include "../../Gosu/Image.hpp"
 %extend Gosu::Image {
+    Image(VALUE source, VALUE arguments = 0) {
+        Gosu::Bitmap bmp;
+        Gosu::loadBitmap(bmp, source);
+        
+        unsigned srcX = 0, srcY = 0, srcWidth = bmp.width(), srcHeight = bmp.height();
+        unsigned flags = Gosu::ifTileable;
+        
+        if (arguments) {
+            Check_Type(arguments, T_HASH);
+            
+            VALUE keys = rb_funcall(arguments, rb_intern("keys"), 0, NULL);
+            int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
+            
+            for (int i = 0; i < keysSize; ++i) {
+                VALUE key = rb_ary_entry(keys, i);
+                const char* keyString = Gosu::cstrFromSymbol(key);
+                
+                VALUE value = rb_hash_aref(arguments, key);
+                if (!strcmp(keyString, "tileable")) {
+                    if (RTEST(value))
+                        flags |= Gosu::ifTileable;
+                    else
+                        flags &= ~Gosu::ifTileable;
+                }
+                else if (!strcmp(keyString, "rect")) {
+                    Check_Type(value, T_ARRAY);
+                    
+                    int rectSize = NUM2INT(rb_funcall(value, rb_intern("size"), 0, NULL));
+                    if (rectSize != 4)
+                        rb_raise(rb_eArgError, "Argument passed to :rect must be a four-element Array (x, y, width, height)");
+                    
+                    srcX = NUM2INT(rb_ary_entry(value, 0));
+                    srcY = NUM2INT(rb_ary_entry(value, 1));
+                    srcWidth = NUM2INT(rb_ary_entry(value, 2));
+                    srcHeight = NUM2INT(rb_ary_entry(value, 3));
+                }
+                else {
+                    static bool issuedWarning = false;
+                    if (!issuedWarning) {
+                        issuedWarning = true;
+                        rb_warn("Unknown keyword argument: :%s", keyString);
+                    }
+                }
+            }
+        }
+        
+        return new Gosu::Image(bmp, srcX, srcY, srcWidth, srcHeight, flags);
+    }
     Image(Gosu::Window& window, VALUE source, bool tileable = false) {
         Gosu::Bitmap bmp;
         Gosu::loadBitmap(bmp, source);

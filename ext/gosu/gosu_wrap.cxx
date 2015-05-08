@@ -2300,9 +2300,9 @@ namespace Gosu
             throw std::logic_error("Blob length mismatch!");
     }
     
-    const char* cstrFromSymbol(VALUE symbol) {
-        if (TYPE(symbol) != T_SYMBOL)
-            return 0; // to be caught by the caller
+    const char* cstrFromSymbol(VALUE symbol)
+    {
+        Check_Type(symbol, T_SYMBOL);
         return rb_id2name(SYM2ID(symbol));
     }
 }
@@ -2620,6 +2620,54 @@ SWIG_From_float  (float value)
   return SWIG_From_double  (value);
 }
 
+SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_0(VALUE source,VALUE arguments=0){
+        Gosu::Bitmap bmp;
+        Gosu::loadBitmap(bmp, source);
+        
+        unsigned srcX = 0, srcY = 0, srcWidth = bmp.width(), srcHeight = bmp.height();
+        unsigned flags = Gosu::ifTileable;
+        
+        if (arguments) {
+            Check_Type(arguments, T_HASH);
+            
+            VALUE keys = rb_funcall(arguments, rb_intern("keys"), 0, NULL);
+            int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
+            
+            for (int i = 0; i < keysSize; ++i) {
+                VALUE key = rb_ary_entry(keys, i);
+                const char* keyString = Gosu::cstrFromSymbol(key);
+                
+                VALUE value = rb_hash_aref(arguments, key);
+                if (!strcmp(keyString, "tileable")) {
+                    if (RTEST(value))
+                        flags |= Gosu::ifTileable;
+                    else
+                        flags &= ~Gosu::ifTileable;
+                }
+                else if (!strcmp(keyString, "rect")) {
+                    Check_Type(value, T_ARRAY);
+                    
+                    int rectSize = NUM2INT(rb_funcall(value, rb_intern("size"), 0, NULL));
+                    if (rectSize != 4)
+                        rb_raise(rb_eArgError, "Argument passed to :rect must be a four-element Array (x, y, width, height)");
+                    
+                    srcX = NUM2INT(rb_ary_entry(value, 0));
+                    srcY = NUM2INT(rb_ary_entry(value, 1));
+                    srcWidth = NUM2INT(rb_ary_entry(value, 2));
+                    srcHeight = NUM2INT(rb_ary_entry(value, 3));
+                }
+                else {
+                    static bool issuedWarning = false;
+                    if (!issuedWarning) {
+                        issuedWarning = true;
+                        rb_warn("Unknown keyword argument: :%s", keyString);
+                    }
+                }
+            }
+        }
+        
+        return new Gosu::Image(bmp, srcX, srcY, srcWidth, srcHeight, flags);
+    }
 
 SWIGINTERN int
 SWIG_AsVal_bool (VALUE obj, bool *val)
@@ -2640,12 +2688,12 @@ SWIG_AsVal_bool (VALUE obj, bool *val)
   return SWIG_TypeError;
 }
 
-SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_0(Gosu::Window &window,VALUE source,bool tileable=false){
+SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_1(Gosu::Window &window,VALUE source,bool tileable=false){
         Gosu::Bitmap bmp;
         Gosu::loadBitmap(bmp, source);
         return new Gosu::Image(bmp, tileable ? Gosu::ifTileable : Gosu::ifSmooth);
     }
-SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_1(Gosu::Window &window,VALUE source,bool tileable,unsigned int srcX,unsigned int srcY,unsigned int srcWidth,unsigned int srcHeight){
+SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_2(Gosu::Window &window,VALUE source,bool tileable,unsigned int srcX,unsigned int srcY,unsigned int srcWidth,unsigned int srcHeight){
         Gosu::Bitmap bmp;
         Gosu::loadBitmap(bmp, source);
         return new Gosu::Image(bmp, srcX, srcY, srcWidth, srcHeight,
@@ -4986,9 +5034,7 @@ _wrap_Font_draw(int argc, VALUE *argv, VALUE self) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[7]);
       
-      if (!cstr)
-      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
-      else if (!strcmp(cstr, "default"))
+      if (!strcmp(cstr, "default"))
       arg9 = Gosu::amDefault;
       else if (!strcmp(cstr, "add"))
       arg9 = Gosu::amAdditive;
@@ -5117,9 +5163,7 @@ _wrap_Font_draw_rel(int argc, VALUE *argv, VALUE self) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[9]);
       
-      if (!cstr)
-      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
-      else if (!strcmp(cstr, "default"))
+      if (!strcmp(cstr, "default"))
       arg11 = Gosu::amDefault;
       else if (!strcmp(cstr, "add"))
       arg11 = Gosu::amAdditive;
@@ -5240,9 +5284,7 @@ _wrap_Font_draw_rot(int argc, VALUE *argv, VALUE self) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[8]);
       
-      if (!cstr)
-      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
-      else if (!strcmp(cstr, "default"))
+      if (!strcmp(cstr, "default"))
       arg10 = Gosu::amDefault;
       else if (!strcmp(cstr, "add"))
       arg10 = Gosu::amAdditive;
@@ -5836,9 +5878,7 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[6]);
       
-      if (!cstr)
-      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
-      else if (!strcmp(cstr, "default"))
+      if (!strcmp(cstr, "default"))
       arg8 = Gosu::amDefault;
       else if (!strcmp(cstr, "add"))
       arg8 = Gosu::amAdditive;
@@ -5986,9 +6026,7 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[9]);
       
-      if (!cstr)
-      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
-      else if (!strcmp(cstr, "default"))
+      if (!strcmp(cstr, "default"))
       arg11 = Gosu::amDefault;
       else if (!strcmp(cstr, "add"))
       arg11 = Gosu::amAdditive;
@@ -6122,9 +6160,7 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[9]);
       
-      if (!cstr)
-      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
-      else if (!strcmp(cstr, "default"))
+      if (!strcmp(cstr, "default"))
       arg11 = Gosu::amDefault;
       else if (!strcmp(cstr, "add"))
       arg11 = Gosu::amAdditive;
@@ -6151,6 +6187,35 @@ fail:
 
 SWIGINTERN VALUE
 _wrap_new_Image__SWIG_0(int argc, VALUE *argv, VALUE self) {
+  VALUE arg1 = (VALUE) 0 ;
+  VALUE arg2 = (VALUE) 0 ;
+  const char *classname SWIGUNUSED = "Gosu::Image";
+  Gosu::Image *result = 0 ;
+  
+  if ((argc < 1) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  arg1 = argv[0];
+  if (argc > 1) {
+    arg2 = argv[1];
+  }
+  {
+    try {
+      result = (Gosu::Image *)new_Gosu_Image__SWIG_0(arg1,arg2);
+      DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return self;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_new_Image__SWIG_1(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
   VALUE arg2 = (VALUE) 0 ;
   bool arg3 = (bool) false ;
@@ -6182,7 +6247,7 @@ _wrap_new_Image__SWIG_0(int argc, VALUE *argv, VALUE self) {
   }
   {
     try {
-      result = (Gosu::Image *)new_Gosu_Image__SWIG_0(*arg1,arg2,arg3);
+      result = (Gosu::Image *)new_Gosu_Image__SWIG_1(*arg1,arg2,arg3);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
     } catch (const std::exception& e) {
@@ -6213,7 +6278,7 @@ _wrap_Image_allocate(VALUE self) {
   
 
 SWIGINTERN VALUE
-_wrap_new_Image__SWIG_1(int argc, VALUE *argv, VALUE self) {
+_wrap_new_Image__SWIG_2(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
   VALUE arg2 = (VALUE) 0 ;
   bool arg3 ;
@@ -6275,7 +6340,7 @@ _wrap_new_Image__SWIG_1(int argc, VALUE *argv, VALUE self) {
   arg7 = static_cast< unsigned int >(val7);
   {
     try {
-      result = (Gosu::Image *)new_Gosu_Image__SWIG_1(*arg1,arg2,arg3,arg4,arg5,arg6,arg7);
+      result = (Gosu::Image *)new_Gosu_Image__SWIG_2(*arg1,arg2,arg3,arg4,arg5,arg6,arg7);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
     } catch (const std::exception& e) {
@@ -6298,6 +6363,19 @@ SWIGINTERN VALUE _wrap_new_Image(int nargs, VALUE *args, VALUE self) {
   for (ii = 0; (ii < argc); ++ii) {
     argv[ii] = args[ii];
   }
+  if ((argc >= 1) && (argc <= 2)) {
+    int _v;
+    _v = (argv[0] != 0);
+    if (_v) {
+      if (argc <= 1) {
+        return _wrap_new_Image__SWIG_0(nargs, args, self);
+      }
+      _v = (argv[1] != 0);
+      if (_v) {
+        return _wrap_new_Image__SWIG_0(nargs, args, self);
+      }
+    }
+  }
   if ((argc >= 2) && (argc <= 3)) {
     int _v;
     void *vptr = 0;
@@ -6307,14 +6385,14 @@ SWIGINTERN VALUE _wrap_new_Image(int nargs, VALUE *args, VALUE self) {
       _v = (argv[1] != 0);
       if (_v) {
         if (argc <= 2) {
-          return _wrap_new_Image__SWIG_0(nargs, args, self);
+          return _wrap_new_Image__SWIG_1(nargs, args, self);
         }
         {
           int res = SWIG_AsVal_bool(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
-          return _wrap_new_Image__SWIG_0(nargs, args, self);
+          return _wrap_new_Image__SWIG_1(nargs, args, self);
         }
       }
     }
@@ -6352,7 +6430,7 @@ SWIGINTERN VALUE _wrap_new_Image(int nargs, VALUE *args, VALUE self) {
                   _v = SWIG_CheckState(res);
                 }
                 if (_v) {
-                  return _wrap_new_Image__SWIG_1(nargs, args, self);
+                  return _wrap_new_Image__SWIG_2(nargs, args, self);
                 }
               }
             }
@@ -6364,6 +6442,7 @@ SWIGINTERN VALUE _wrap_new_Image(int nargs, VALUE *args, VALUE self) {
   
 fail:
   Ruby_Format_OverloadedError( argc, 7, "Image.new", 
+    "    Image.new(VALUE source, VALUE arguments)\n"
     "    Image.new(Gosu::Window &window, VALUE source, bool tileable)\n"
     "    Image.new(Gosu::Window &window, VALUE source, bool tileable, unsigned int srcX, unsigned int srcY, unsigned int srcWidth, unsigned int srcHeight)\n");
   
@@ -6526,9 +6605,7 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[13]);
       
-      if (!cstr)
-      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
-      else if (!strcmp(cstr, "default"))
+      if (!strcmp(cstr, "default"))
       arg15 = Gosu::amDefault;
       else if (!strcmp(cstr, "add"))
       arg15 = Gosu::amAdditive;
@@ -6761,9 +6838,7 @@ _wrap_Image_from_text7(int argc, VALUE *argv, VALUE self) {
   {
     const char* cstr = Gosu::cstrFromSymbol(argv[6]);
     
-    if (!cstr)
-    SWIG_exception_fail(SWIG_ValueError, "text align must be a symbol");
-    else if (!strcmp(cstr, "left"))
+    if (!strcmp(cstr, "left"))
     arg7 = Gosu::taLeft;
     else if (!strcmp(cstr, "center"))
     arg7 = Gosu::taCenter;
@@ -8958,9 +9033,7 @@ _wrap_Window_draw_line(int argc, VALUE *argv, VALUE self) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[7]);
       
-      if (!cstr)
-      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
-      else if (!strcmp(cstr, "default"))
+      if (!strcmp(cstr, "default"))
       arg9 = Gosu::amDefault;
       else if (!strcmp(cstr, "add"))
       arg9 = Gosu::amAdditive;
@@ -9110,9 +9183,7 @@ _wrap_Window_draw_triangle(int argc, VALUE *argv, VALUE self) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[10]);
       
-      if (!cstr)
-      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
-      else if (!strcmp(cstr, "default"))
+      if (!strcmp(cstr, "default"))
       arg12 = Gosu::amDefault;
       else if (!strcmp(cstr, "add"))
       arg12 = Gosu::amAdditive;
@@ -9294,9 +9365,7 @@ _wrap_Window_draw_quad(int argc, VALUE *argv, VALUE self) {
     {
       const char* cstr = Gosu::cstrFromSymbol(argv[13]);
       
-      if (!cstr)
-      SWIG_exception_fail(SWIG_ValueError, "alpha mode must be a symbol");
-      else if (!strcmp(cstr, "default"))
+      if (!strcmp(cstr, "default"))
       arg15 = Gosu::amDefault;
       else if (!strcmp(cstr, "add"))
       arg15 = Gosu::amAdditive;

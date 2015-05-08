@@ -34,23 +34,6 @@ module Gosu
   end
   
   class Image
-    alias :initialize_old :initialize
-    
-    def initialize *args
-      if args.first.is_a? Gosu::Window then
-        initialize_old *args
-      else
-        source = args[0]
-        tileable = !args[1] || args[1][:tileable]
-        rect = args[1] && args[1][:rect]
-        if rect then
-          initialize_old $window, source, !!tileable, *rect
-        else
-          initialize_old $window, source, !!tileable
-        end
-      end
-    end
-    
     class <<self
       alias load_tiles_old load_tiles
     end
