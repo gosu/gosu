@@ -2491,13 +2491,10 @@ SWIGINTERN Gosu::Color Gosu_Color_argb__SWIG_2(std::tr1::uint32_t argb){
 SWIGINTERN Gosu::Color Gosu_Color_dup(Gosu::Color const *self){
         return *self;
     }
-SWIGINTERN std::string Gosu_Color_toS(Gosu::Color const *self){
-        std::ostringstream stream;
-        stream << "(ARGB: " << static_cast<int>(self->alpha())
-               << "/" << static_cast<int>(self->red()) 
-               << "/" << static_cast<int>(self->green())
-               << "/" << static_cast<int>(self->blue()) << ")";
-        return stream.str();
+SWIGINTERN std::string Gosu_Color_inspect(Gosu::Color const *self){
+        char buffer[31];
+        std::snprintf(buffer, sizeof buffer, "#<Gosu::Color:ARGB=0x%08x>", self->argb());
+        return buffer;
     }
 
 SWIGINTERNINLINE VALUE
@@ -4673,8 +4670,17 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Color.inspect
+
+  call-seq:
+    inspect -> std::string
+
+Inspect class and its contents.
+*/
 SWIGINTERN VALUE
-_wrap_Color_to_s(int argc, VALUE *argv, VALUE self) {
+_wrap_Color_inspect(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -4686,12 +4692,12 @@ _wrap_Color_to_s(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Color, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color const *","toS", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color const *","inspect", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
   {
     try {
-      result = Gosu_Color_toS((Gosu::Color const *)arg1);
+      result = Gosu_Color_inspect((Gosu::Color const *)arg1);
     } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -10876,7 +10882,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_singleton_method(SwigClassColor.klass, "rgba", VALUEFUNC(_wrap_Color_rgba), -1);
   rb_define_singleton_method(SwigClassColor.klass, "argb", VALUEFUNC(_wrap_Color_argb), -1);
   rb_define_method(SwigClassColor.klass, "dup", VALUEFUNC(_wrap_Color_dup), -1);
-  rb_define_method(SwigClassColor.klass, "to_s", VALUEFUNC(_wrap_Color_to_s), -1);
+  rb_define_method(SwigClassColor.klass, "inspect", VALUEFUNC(_wrap_Color_inspect), -1);
   rb_define_method(SwigClassColor.klass, "==", VALUEFUNC(_wrap_Color___eq__), -1);
   SwigClassColor.mark = 0;
   SwigClassColor.destroy = (void (*)(void *)) free_Gosu_Color;

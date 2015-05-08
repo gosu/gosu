@@ -435,13 +435,10 @@ namespace Gosu {
         return *$self;
     }
 
-    std::string toS() const {
-        std::ostringstream stream;
-        stream << "(ARGB: " << static_cast<int>($self->alpha())
-               << "/" << static_cast<int>($self->red()) 
-               << "/" << static_cast<int>($self->green())
-               << "/" << static_cast<int>($self->blue()) << ")";
-        return stream.str();
+    std::string inspect() const {
+        char buffer[31];
+        std::snprintf(buffer, sizeof buffer, "#<Gosu::Color:ARGB=0x%08x>", $self->argb());
+        return buffer;
     }
     
     bool operator==(VALUE other) {
