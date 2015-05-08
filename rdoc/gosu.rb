@@ -460,27 +460,23 @@ module Gosu
     ##
     # Loads an image from a file or an RMagick image.
     # 
-    # @note For Windows Bitmap (BMP) images, magenta (FF00FF, often called "magic pink" in this context) is treated as a chroma key and all pixels of that color are automatically rendered fully transparent.
-    #
-    # @param window [Window]
-    # @param source [String, Magick::Image] the filename or RMagick image to load from.
-    # @param tileable [true, false]
-    # @param left [Fixnum]
-    # @param top [Fixnum]
-    # @param width [Fixnum]
-    # @param height [Fixnum]
+    # (Passing a Window reference is not necessary anymore, please use the first overload instead.)
     # 
+    # @note For Windows Bitmap (BMP) images, magenta (FF00FF, often called "magic pink" in this context) is treated as a chroma key and all pixels of that color are automatically rendered fully transparent.
+    # 
+    # @param [String, Magick::Image] source the filename or RMagick image to load from.
+    # @param [Hash] arguments
+    # @option arguments [Boolean] :tileable (true) if true, the Image will not have soft edges when scaled
+    # @option arguments [Array] :rect ([0, 0, image_width, image_height]) the source rectangle in the image
+    # 
+    # @overload initialize(source, arguments)
     # @overload initialize(window, source, tileable)
     # @overload initialize(window, source, tileable, left, top, width, height)
-    #   Loads a rectangular slice of the image.
-    #   
-    #   If you need to load multiple tiles from a texture atlas, {load_tiles} is almost always a better choice.
-    #   
     # 
     # @see load_tiles
     # @see from_text
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#tileability Tileability explained in the Gosu Wiki
-    def initialize(window, source, tileable, left, top, width, height); end
+    def initialize(source, arguments); end
     
     ##
     # Creates a reusable image from one or more lines of text.
@@ -616,9 +612,13 @@ module Gosu
     ##
     # Loads a sample from a file.
     # 
-    # @param window [Gosu::Window]
+    # (Passing a Window reference is not necessary anymore, please use the first overload instead.)
+    # 
+    # @overload initialize(filename)
+    # @overload initialize(window, filename)
+    #
     # @param filename [String] the path to load the sample from.
-    def initialize(window, filename); end
+    def initialize(filename); end
     
     ##
     # Plays the sample without panning.
@@ -706,7 +706,11 @@ module Gosu
     ##
     # Loads a song from a file.
     # 
-    # @param window [Gosu::Window]
+    # (Passing a Window reference is not necessary anymore, please use the first overload instead.)
+    # 
+    # @overload initialize(filename)
+    # @overload initialize(window, filename)
+    #
     # @param filename [String] the path to load the song from.
     def initialize(window, filename); end
     
