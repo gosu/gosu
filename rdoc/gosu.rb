@@ -11,8 +11,8 @@ GOSU_MINOR_VERSION = :a_fixnum
 GOSU_POINT_VERSION = :a_fixnum
 
 ##
-# A version string of the form "0.1.2" or "0.1.2.3".
-GOSU_VERSION = "#{GOSU_MAJOR_VERSION}.#{GOSU_MINOR_VERSION}.#{GOSU_POINT_VERSION}"
+# A version string of the form "0.1.2", "0.1.2.3" or "0.1.2pre4".
+GOSU_VERSION = :a_string
 
 ##
 # A long block of legal copy that your game is obliged to display somewhere.
@@ -357,9 +357,9 @@ module Gosu
   end
   
   ##
-  # A font can be used to draw text on a Window object very flexibly.
-  # Fonts are ideal for small texts that change regularly. For large,
-  # static texts you should use {Gosu::Image#from_text}.
+  # A Font can be used to draw text on a Window object very flexibly.
+  # Fonts are ideal for small texts that change regularly.
+  # For large, static texts you should use {Gosu::Image#from_text}.
   class Font
     ##
     # The font's name. This may be the name of a system font or a filename.
@@ -399,16 +399,16 @@ module Gosu
     # @param x [Number] the X coordinate
     # @param y [Number] the Y coordinate
     # @param z [Number] the Z-order.
-    # @param factor_x [Float] the horizontal scaling factor.
-    # @param factor_y [Float] the vertical scaling factor.
+    # @param scale_x [Float] the horizontal scaling factor.
+    # @param scale_y [Float] the vertical scaling factor.
     # @param color [Color, Fixnum]
     # @param mode [:default, :additive] the blending mode to use.
     # 
     # @see #draw_rel
     # @see Gosu::Image.from_text
-    # @see file:reference/Drawing_with_Colors.md Drawing with Colors
-    # @see file:reference/Z-Ordering.md
-    def draw(text, x, y, z, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
+    def draw(text, x, y, z, scale_x=1, scale_y=1, color=0xffffffff, mode=:default); end
     
     ##
     # Draws a single line of text relative to (x, y).
@@ -423,16 +423,16 @@ module Gosu
     # @param (see #draw)
     # 
     # @see #draw
-    # @see file:reference/Drawing_with_Colors.md Drawing with Colors
-    # @see file:reference/Z-Ordering.md
-    def draw_rel(text, x, y, z, rel_x, rel_y, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
+    def draw_rel(text, x, y, z, rel_x, rel_y, scale_x=1, scale_y=1, color=0xffffffff, mode=:default); end
     
     ##
     # @deprecated Use {#draw} in conjunction with {Window#rotate} instead.
     # 
     # @see #draw
     # @see Gosu::Window#rotate
-    def draw_rot(text, x, y, z, angle, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
+    def draw_rot(text, x, y, z, angle, scale_x=1, scale_y=1, color=0xffffffff, mode=:default); end
     
     # @!endgroup
     
@@ -441,7 +441,7 @@ module Gosu
     # 
     # @return [Fixnum] the width of the text, in pixels.
     # @param text [String]
-    def text_width(text, factor_x=1); end
+    def text_width(text, scale_x=1); end
   end
   
   ##
@@ -479,7 +479,7 @@ module Gosu
     # 
     # @see load_tiles
     # @see from_text
-    # @see file:reference/Tileability.md
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#tileability Tileability explained in the Gosu Wiki
     def initialize(window, source, tileable, left, top, width, height); end
     
     ##
@@ -514,7 +514,7 @@ module Gosu
     # @param tile_height [Fixnum] If positive, this is the height of the individual tiles; if negative, the image is divided into -tile_height rows.
     # @param tileable [true, false]
     # 
-    # @see file:reference/Tileability.md
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#tileability Tileability explained in the Gosu Wiki
     def self.load_tiles(window, source, tile_width, tile_height, tileable); end
     
     # @!endgroup
@@ -528,16 +528,16 @@ module Gosu
     # @param x [Float] the X coordinate.
     # @param y [Float] the X coordinate.
     # @param z [Float] the Z-order.
-    # @param factor_x [Float] the horizontal scaling factor.
-    # @param factor_y [Float] the vertical scaling factor.
+    # @param scale_x [Float] the horizontal scaling factor.
+    # @param scale_y [Float] the vertical scaling factor.
     # @param color [Gosu::Color, Integer]
     # @param mode [:default, :additive] the blending mode to use.
     # 
     # @see #draw_rot
     # @see #draw_as_quad
-    # @see file:reference/Drawing_with_Colors.md Drawing with Colors
-    # @see file:reference/Z-Ordering.md
-    def draw(x, y, z, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
+    def draw(x, y, z, scale_x=1, scale_y=1, color=0xffffffff, mode=:default); end
     
     ##
     # Draws the image rotated, with its rotational center at (x, y).
@@ -549,9 +549,9 @@ module Gosu
     # @param (see #draw)
     # 
     # @see #draw
-    # @see file:reference/Drawing_with_Colors.md Drawing with Colors
-    # @see file:reference/Z-Ordering.md
-    def draw_rot(x, y, z, angle, center_x=0.5, center_y=0.5, factor_x=1, factor_y=1, color=0xffffffff, mode=:default); end
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
+    def draw_rot(x, y, z, angle, center_x=0.5, center_y=0.5, scale_x=1, scale_y=1, color=0xffffffff, mode=:default); end
     
     ##
     # Draws the image as an arbitrary quad. This method can be used for advanced non-rectangular drawing techniques, e.g., faking perspective or isometric projection.
@@ -561,9 +561,9 @@ module Gosu
     # 
     # @see #draw
     # @see Gosu::Window#draw_quad
-    # @see file:reference/Drawing_with_Colors.md Drawing with Colors
-    # @see file:reference/Order_of_Corners.md Order of Corners
-    # @see file:reference/Z-Ordering.md
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#order-of-corners The order of corners explained in the Gosu Wiki
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
     def draw_as_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode=:default); end
     
     # @!endgroup
@@ -938,8 +938,8 @@ module Gosu
     # 
     # @see #draw_triangle
     # @see #draw_quad
-    # @see file:reference/Drawing_with_Colors.md Drawing with Colors
-    # @see file:reference/Z-Ordering.md
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
     def draw_line(x1, y1, c1, x2, y2, c2, z=0, mode=:default); end
     
     ##
@@ -960,8 +960,8 @@ module Gosu
     #
     # @see #draw_line
     # @see #draw_quad
-    # @see file:reference/Drawing_with_Colors.md Drawing with Colors
-    # @see file:reference/Z-Ordering.md
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
     def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=:default); end
     
     ##
@@ -985,9 +985,10 @@ module Gosu
     #
     # @see #draw_line
     # @see #draw_triangle
-    # @see file:reference/Drawing_with_Colors.md Drawing with Colors
-    # @see file:reference/Order_of_Corners.md Order of Corners
-    # @see file:reference/Z-Ordering.md
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#order-of-corners The order of corners explained in the Gosu Wiki
+    
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
     def draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=:default); end
     
     # @!endgroup
@@ -1064,12 +1065,12 @@ module Gosu
     ##
     # Scales all drawing operations inside the block.
     # 
-    # @overload scale(factor_x, factor_y = factor_x) { ... }
-    # @overload scale(factor_x, factor_y, around_x, around_y) { ... }
+    # @overload scale(scale_x, scale_y = scale_x) { ... }
+    # @overload scale(scale_x, scale_y, around_x, around_y) { ... }
     # 
     # @return [void]
-    # @param factor_x [Float] the horizontal scaling factor.
-    # @param factor_y [Float] the vertical scaling factor.
+    # @param scale_x [Float] the horizontal scaling factor.
+    # @param scale_y [Float] the vertical scaling factor.
     # @param around_x [Float] the X coordinate of the scaling origin.
     # @param around_y [Float] the Y coordinate of the scaling origin.
     # @yield rendering code.
@@ -1078,7 +1079,7 @@ module Gosu
     # @see #rotate
     # @see #translate
     # @see #transform
-    def scale(factor_x, factor_y, around_x, around_y); end
+    def scale(scale_x, scale_y, around_x, around_y); end
     
     ##
     # Offsets all drawing operations inside the block.
