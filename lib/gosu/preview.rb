@@ -34,21 +34,6 @@ module Gosu
   end
   
   class Image
-    class <<self
-      alias load_tiles_old load_tiles
-    end
-    
-    def self.load_tiles *args
-      if args.first.is_a? Gosu::Window then
-        load_tiles_old *args
-      else
-        source = args[0]
-        x, y = args[1..2]
-        tileable = !args[3] || args[3][:tileable]
-        load_tiles_old $window, source, x, y, !!tileable
-      end
-    end
-    
     def self.from_text *args
       if args.first.is_a? Gosu::Window then
         args.size == 4 ? from_text4(*args) : from_text7(*args)

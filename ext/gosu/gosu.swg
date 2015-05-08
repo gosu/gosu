@@ -469,11 +469,11 @@ namespace Gosu {
 // Image
 
 // Typemap to return an array of images (for loadTiles)
-%typemap(out) std::vector<Gosu::Image*> {
+%typemap(out) std::vector<Gosu::Image> {
     $result = rb_ary_new2($1.size());
     for (unsigned i = 0; i < $1.size(); i++) {
-        VALUE curImg = SWIG_NewPointerObj(SWIG_as_voidptr((*&$1)[i]), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN);
-        rb_ary_store($result, i, curImg);
+        VALUE image = SWIG_NewPointerObj(SWIG_as_voidptr(new Gosu::Image((*&$1)[i])), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN);
+        rb_ary_store($result, i, image);
     }
 }
 
@@ -579,18 +579,46 @@ namespace Gosu {
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, width, align);
         return new Gosu::Image(bmp, Gosu::ifSmooth);
     }
-    static std::vector<Gosu::Image*> loadTiles(Gosu::Window& window,
-            VALUE source, int tileWidth, int tileHeight, bool tileable)
+    static std::vector<Gosu::Image> loadTiles(VALUE source, int tileWidth, int tileHeight, VALUE arguments = 0)
     {
-        // TODO: const correctness (<- did I mean exception safety?)
         Gosu::Bitmap bmp;
         Gosu::loadBitmap(bmp, source);
-        std::vector<Gosu::Image> images = Gosu::loadTiles(bmp,
-            tileWidth, tileHeight, tileable ? Gosu::ifTileable : Gosu::ifSmooth);
-        std::vector<Gosu::Image*> pointers;
-        for (unsigned i = 0; i < images.size(); ++i)
-            pointers.push_back(new Gosu::Image(images[i]));
-        return pointers;
+        
+        unsigned flags = 0;
+        
+        if (arguments) {
+            Check_Type(arguments, T_HASH);
+            
+            VALUE keys = rb_funcall(arguments, rb_intern("keys"), 0, NULL);
+            int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
+            
+            for (int i = 0; i < keysSize; ++i) {
+                VALUE key = rb_ary_entry(keys, i);
+                const char* keyString = Gosu::cstrFromSymbol(key);
+                
+                VALUE value = rb_hash_aref(arguments, key);
+                if (!strcmp(keyString, "tileable")) {
+                    if (RTEST(value))
+                        flags |= Gosu::ifTileable;
+                }
+                else {
+                    static bool issuedWarning = false;
+                    if (!issuedWarning) {
+                        issuedWarning = true;
+                        rb_warn("Unknown keyword argument: :%s", keyString);
+                    }
+                }
+            }
+        }
+        return Gosu::loadTiles(bmp, tileWidth, tileHeight, flags);
+    }
+    static std::vector<Gosu::Image> loadTiles(Gosu::Window& window,
+            VALUE source, int tileWidth, int tileHeight, bool tileable)
+    {
+        Gosu::Bitmap bmp;
+        Gosu::loadBitmap(bmp, source);
+        
+        return Gosu::loadTiles(bmp, tileWidth, tileHeight, tileable ? Gosu::ifTileable : Gosu::ifSmooth);
     }
     std::string toBlob() const
     {

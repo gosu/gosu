@@ -508,10 +508,16 @@ module Gosu
     # @param source [String, Magick::Image]
     # @param tile_width [Fixnum] If positive, this is the width of the individual tiles; if negative, the image is divided into -tile_width columns.
     # @param tile_height [Fixnum] If positive, this is the height of the individual tiles; if negative, the image is divided into -tile_height rows.
-    # @param tileable [true, false]
+    # @param [Hash] arguments
+    # @option arguments [Boolean] :tileable (false) if true, the Image will not have soft edges when scaled
+    # 
+    # @overload initialize(source, tile_width, tile_height, arguments)
+    # @overload initialize(window, source, tile_width, tile_height, tileable)
+    # 
+    # (Passing a Window reference is not necessary anymore, please use the first overload instead.)
     # 
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#tileability Tileability explained in the Gosu Wiki
-    def self.load_tiles(window, source, tile_width, tile_height, tileable); end
+    def self.load_tiles(source, tile_width, tile_height, arguments); end
     
     # @!endgroup
     

@@ -2719,16 +2719,43 @@ SWIGINTERN Gosu::Image *Gosu_Image_fromText7(Gosu::Window &window,std::wstring c
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, width, align);
         return new Gosu::Image(bmp, Gosu::ifSmooth);
     }
-SWIGINTERN std::vector< Gosu::Image * > Gosu_Image_loadTiles(Gosu::Window &window,VALUE source,int tileWidth,int tileHeight,bool tileable){
-        // TODO: const correctness (<- did I mean exception safety?)
+SWIGINTERN std::vector< Gosu::Image > Gosu_Image_loadTiles__SWIG_0(VALUE source,int tileWidth,int tileHeight,VALUE arguments=0){
         Gosu::Bitmap bmp;
         Gosu::loadBitmap(bmp, source);
-        std::vector<Gosu::Image> images = Gosu::loadTiles(bmp,
-            tileWidth, tileHeight, tileable ? Gosu::ifTileable : Gosu::ifSmooth);
-        std::vector<Gosu::Image*> pointers;
-        for (unsigned i = 0; i < images.size(); ++i)
-            pointers.push_back(new Gosu::Image(images[i]));
-        return pointers;
+        
+        unsigned flags = 0;
+        
+        if (arguments) {
+            Check_Type(arguments, T_HASH);
+            
+            VALUE keys = rb_funcall(arguments, rb_intern("keys"), 0, NULL);
+            int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
+            
+            for (int i = 0; i < keysSize; ++i) {
+                VALUE key = rb_ary_entry(keys, i);
+                const char* keyString = Gosu::cstrFromSymbol(key);
+                
+                VALUE value = rb_hash_aref(arguments, key);
+                if (!strcmp(keyString, "tileable")) {
+                    if (RTEST(value))
+                        flags |= Gosu::ifTileable;
+                }
+                else {
+                    static bool issuedWarning = false;
+                    if (!issuedWarning) {
+                        issuedWarning = true;
+                        rb_warn("Unknown keyword argument: :%s", keyString);
+                    }
+                }
+            }
+        }
+        return Gosu::loadTiles(bmp, tileWidth, tileHeight, flags);
+    }
+SWIGINTERN std::vector< Gosu::Image > Gosu_Image_loadTiles__SWIG_1(Gosu::Window &window,VALUE source,int tileWidth,int tileHeight,bool tileable){
+        Gosu::Bitmap bmp;
+        Gosu::loadBitmap(bmp, source);
+        
+        return Gosu::loadTiles(bmp, tileWidth, tileHeight, tileable ? Gosu::ifTileable : Gosu::ifSmooth);
     }
 SWIGINTERN std::string Gosu_Image_toBlob(Gosu::Image const *self){
         // TODO: Optimize with direct copy into a Ruby string
@@ -6862,7 +6889,57 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Image_load_tiles(int argc, VALUE *argv, VALUE self) {
+_wrap_Image_load_tiles__SWIG_0(int argc, VALUE *argv, VALUE self) {
+  VALUE arg1 = (VALUE) 0 ;
+  int arg2 ;
+  int arg3 ;
+  VALUE arg4 = (VALUE) 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  SwigValueWrapper< std::vector< Gosu::Image > > result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 3) || (argc > 4)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
+  }
+  arg1 = argv[0];
+  ecode2 = SWIG_AsVal_int(argv[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","Gosu_Image_loadTiles__SWIG_0", 2, argv[1] ));
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(argv[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "int","Gosu_Image_loadTiles__SWIG_0", 3, argv[2] ));
+  } 
+  arg3 = static_cast< int >(val3);
+  if (argc > 3) {
+    arg4 = argv[3];
+  }
+  {
+    try {
+      result = Gosu_Image_loadTiles__SWIG_0(arg1,arg2,arg3,arg4);
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  {
+    vresult = rb_ary_new2((&result)->size());
+    for (unsigned i = 0; i < (&result)->size(); i++) {
+      VALUE image = SWIG_NewPointerObj(SWIG_as_voidptr(new Gosu::Image((*&result)[i])), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN);
+      rb_ary_store(vresult, i, image);
+    }
+  }
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Image_load_tiles__SWIG_1(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
   VALUE arg2 = (VALUE) 0 ;
   int arg3 ;
@@ -6876,7 +6953,7 @@ _wrap_Image_load_tiles(int argc, VALUE *argv, VALUE self) {
   int ecode4 = 0 ;
   bool val5 ;
   int ecode5 = 0 ;
-  SwigValueWrapper< std::vector< Gosu::Image * > > result;
+  SwigValueWrapper< std::vector< Gosu::Image > > result;
   VALUE vresult = Qnil;
   
   if ((argc < 5) || (argc > 5)) {
@@ -6884,31 +6961,31 @@ _wrap_Image_load_tiles(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Gosu__Window,  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window &","Gosu_Image_loadTiles", 1, argv[0] )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window &","Gosu_Image_loadTiles__SWIG_1", 1, argv[0] )); 
   }
   if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Gosu::Window &","Gosu_Image_loadTiles", 1, argv[0])); 
+    SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Gosu::Window &","Gosu_Image_loadTiles__SWIG_1", 1, argv[0])); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   arg2 = argv[1];
   ecode3 = SWIG_AsVal_int(argv[2], &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "int","Gosu_Image_loadTiles", 3, argv[2] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "int","Gosu_Image_loadTiles__SWIG_1", 3, argv[2] ));
   } 
   arg3 = static_cast< int >(val3);
   ecode4 = SWIG_AsVal_int(argv[3], &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "int","Gosu_Image_loadTiles", 4, argv[3] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "int","Gosu_Image_loadTiles__SWIG_1", 4, argv[3] ));
   } 
   arg4 = static_cast< int >(val4);
   ecode5 = SWIG_AsVal_bool(argv[4], &val5);
   if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), Ruby_Format_TypeError( "", "bool","Gosu_Image_loadTiles", 5, argv[4] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode5), Ruby_Format_TypeError( "", "bool","Gosu_Image_loadTiles__SWIG_1", 5, argv[4] ));
   } 
   arg5 = static_cast< bool >(val5);
   {
     try {
-      result = Gosu_Image_loadTiles(*arg1,arg2,arg3,arg4,arg5);
+      result = Gosu_Image_loadTiles__SWIG_1(*arg1,arg2,arg3,arg4,arg5);
     } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -6916,12 +6993,87 @@ _wrap_Image_load_tiles(int argc, VALUE *argv, VALUE self) {
   {
     vresult = rb_ary_new2((&result)->size());
     for (unsigned i = 0; i < (&result)->size(); i++) {
-      VALUE curImg = SWIG_NewPointerObj(SWIG_as_voidptr((*&result)[i]), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN);
-      rb_ary_store(vresult, i, curImg);
+      VALUE image = SWIG_NewPointerObj(SWIG_as_voidptr(new Gosu::Image((*&result)[i])), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN);
+      rb_ary_store(vresult, i, image);
     }
   }
   return vresult;
 fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE _wrap_Image_load_tiles(int nargs, VALUE *args, VALUE self) {
+  int argc;
+  VALUE argv[5];
+  int ii;
+  
+  argc = nargs;
+  if (argc > 5) SWIG_fail;
+  for (ii = 0; (ii < argc); ++ii) {
+    argv[ii] = args[ii];
+  }
+  if ((argc >= 3) && (argc <= 4)) {
+    int _v;
+    _v = (argv[0] != 0);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_int(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          if (argc <= 3) {
+            return _wrap_Image_load_tiles__SWIG_0(nargs, args, self);
+          }
+          _v = (argv[3] != 0);
+          if (_v) {
+            return _wrap_Image_load_tiles__SWIG_0(nargs, args, self);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 5) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      _v = (argv[1] != 0);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          {
+            int res = SWIG_AsVal_int(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            {
+              int res = SWIG_AsVal_bool(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              return _wrap_Image_load_tiles__SWIG_1(nargs, args, self);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  Ruby_Format_OverloadedError( argc, 5, "load_tiles", 
+    "    std::vector< Gosu::Image > load_tiles(VALUE source, int tileWidth, int tileHeight, VALUE arguments)\n"
+    "    std::vector< Gosu::Image > load_tiles(Gosu::Window &window, VALUE source, int tileWidth, int tileHeight, bool tileable)\n");
+  
   return Qnil;
 }
 
