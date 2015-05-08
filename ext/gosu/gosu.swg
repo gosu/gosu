@@ -490,7 +490,7 @@ namespace Gosu {
         Gosu::loadBitmap(bmp, source);
         
         unsigned srcX = 0, srcY = 0, srcWidth = bmp.width(), srcHeight = bmp.height();
-        unsigned flags = Gosu::ifTileable;
+        unsigned flags = 0;
         
         if (arguments) {
             Check_Type(arguments, T_HASH);
@@ -506,8 +506,6 @@ namespace Gosu {
                 if (!strcmp(keyString, "tileable")) {
                     if (RTEST(value))
                         flags |= Gosu::ifTileable;
-                    else
-                        flags &= ~Gosu::ifTileable;
                 }
                 else if (!strcmp(keyString, "rect")) {
                     Check_Type(value, T_ARRAY);

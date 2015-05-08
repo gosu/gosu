@@ -23,7 +23,8 @@ namespace Gosu
         //!
         //! A color key of #ff00ff is automatically applied to BMP image files.
         //! For more flexibility, use the corresponding constructor that uses a Bitmap object.
-        explicit Image(const std::wstring& filename, unsigned flags = ifTileable);
+        explicit Image(const std::wstring& filename,
+            unsigned imageFlags = ifSmooth);
         
         //! Loads a portion of the the image at the given filename..
         //!
@@ -31,16 +32,16 @@ namespace Gosu
         //! For more flexibility, use the corresponding constructor that uses a Bitmap object.
         Image(const std::wstring& filename, unsigned srcX,
               unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-              unsigned flags = ifTileable);
+              unsigned imageFlags = ifSmooth);
         
         //! Converts the given bitmap into an image.
         explicit Image(const Bitmap& source,
-            unsigned flags = ifTileable);
+            unsigned imageFlags = ifSmooth);
         
         //! Converts a portion of the given bitmap into an image.
         Image(const Bitmap& source, unsigned srcX,
             unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-            unsigned flags = ifTileable);
+            unsigned imageFlags = ifSmooth);
         
         //! Creates an Image from a user-supplied instance of the ImageData interface.
         explicit Image(GOSU_UNIQUE_PTR<ImageData> data);
@@ -97,13 +98,15 @@ namespace Gosu
     //! \param tileWidth If positive, specifies the width of one tile in pixels.
     //! If negative, the bitmap is divided into -tileWidth rows.
     //! \param tileHeight See tileWidth.
-    std::vector<Gosu::Image> loadTiles(const Bitmap& bmp, int tileWidth, int tileHeight, unsigned flags = ifTileable);
+    std::vector<Gosu::Image> loadTiles(const Bitmap& bmp,
+        int tileWidth, int tileHeight, unsigned imageFlags = ifSmooth);
     
     //! Convenience function that slices a bitmap into a grid and creates images from them.
     //! \param tileWidth If positive, specifies the width of one tile in pixels.
     //! If negative, the bitmap is divided into -tileWidth rows.
     //! \param tileHeight See tileWidth.
-    std::vector<Gosu::Image> loadTiles(const std::wstring& filename, int tileWidth, int tileHeight, unsigned flags = ifTileable);
+    std::vector<Gosu::Image> loadTiles(const std::wstring& filename,
+        int tileWidth, int tileHeight, unsigned imageFlags = ifSmooth);
     
     GOSU_DEPRECATED std::vector<Gosu::Image> loadTiles(Graphics& graphics, const Bitmap& bmp, int tileWidth, int tileHeight, bool tileable);
     GOSU_DEPRECATED std::vector<Gosu::Image> loadTiles(Graphics& graphics, const std::wstring& bmp, int tileWidth, int tileHeight, bool tileable);

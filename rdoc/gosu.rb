@@ -466,7 +466,7 @@ module Gosu
     # 
     # @param [String, Magick::Image] source the filename or RMagick image to load from.
     # @param [Hash] arguments
-    # @option arguments [Boolean] :tileable (true) if true, the Image will not have soft edges when scaled
+    # @option arguments [Boolean] :tileable (false) if true, the Image will not have soft edges when scaled
     # @option arguments [Array] :rect ([0, 0, image_width, image_height]) the source rectangle in the image
     # 
     # @overload initialize(source, arguments)
