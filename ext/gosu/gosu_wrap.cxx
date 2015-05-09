@@ -2711,13 +2711,61 @@ SWIGINTERN Gosu::Image *Gosu_Image_subimage(Gosu::Image *self,int x,int y,int w,
         std::auto_ptr<Gosu::ImageData> imageData = self->getData().subimage(x, y, w, h);
         return imageData.get() ? new Gosu::Image(imageData) : 0;
     }
-SWIGINTERN Gosu::Image *Gosu_Image_fromText4(Gosu::Window &window,std::wstring const &text,std::wstring const &fontName,unsigned int fontHeight){
-        Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight);
-        return new Gosu::Image(bmp, Gosu::ifSmooth);
-    }
-SWIGINTERN Gosu::Image *Gosu_Image_fromText7(Gosu::Window &window,std::wstring const &text,std::wstring const &fontName,unsigned int fontHeight,int lineSpacing,unsigned int width,Gosu::TextAlign align){
-        Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, width, align);
-        return new Gosu::Image(bmp, Gosu::ifSmooth);
+SWIGINTERN Gosu::Image *Gosu_Image_fromText(std::wstring const &text,unsigned int fontHeight,VALUE arguments=0){
+        std::wstring font = Gosu::defaultFontName();
+        unsigned width = 0xfefefefe;
+        unsigned spacing = 0;
+        Gosu::TextAlign align = align;
+        
+        if (arguments) {
+            Check_Type(arguments, T_HASH);
+            
+            VALUE keys = rb_funcall(arguments, rb_intern("keys"), 0, NULL);
+            int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
+            
+            for (int i = 0; i < keysSize; ++i) {
+                VALUE key = rb_ary_entry(keys, i);
+                const char* keyString = Gosu::cstrFromSymbol(key);
+                
+                VALUE value = rb_hash_aref(arguments, key);
+                if (!strcmp(keyString, "font")) {
+                    const char* fontUTF8 = StringValuePtr(value);
+                    font = Gosu::utf8ToWstring(fontUTF8);
+                }
+                else if (!strcmp(keyString, "align")) {
+                    const char* cstr = Gosu::cstrFromSymbol(value);
+
+                    if (!strcmp(cstr, "left"))
+                        align = Gosu::taLeft;
+                    else if (!strcmp(cstr, "center"))
+                        align = Gosu::taCenter;
+                    else if (!strcmp(cstr, "right"))
+                        align = Gosu::taRight;
+                    else if (!strcmp(cstr, "justify"))
+                        align = Gosu::taJustify;
+                    else
+                        rb_raise(rb_eArgError, "Argument passed to :align must be a valid text alignment (:left, :center, :right, :justify)");
+                }
+                else if (!strcmp(keyString, "width")) {
+                    width = NUM2INT(value);
+                }
+                else if (!strcmp(keyString, "spacing")) {
+                    spacing = NUM2INT(value);
+                }
+                else {
+                    static bool issuedWarning = false;
+                    if (!issuedWarning) {
+                        issuedWarning = true;
+                        rb_warn("Unknown keyword argument: :%s", keyString);
+                    }
+                }
+            }
+        }
+        
+        if (width == 0xfefefefe)
+            return new Gosu::Image(Gosu::createText(text, font, fontHeight));
+        else
+            return new Gosu::Image(Gosu::createText(text, font, fontHeight, spacing, width, align));
     }
 SWIGINTERN std::vector< Gosu::Image > Gosu_Image_loadTiles__SWIG_0(VALUE source,int tileWidth,int tileHeight,VALUE arguments=0){
         Gosu::Bitmap bmp;
@@ -6748,135 +6796,35 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Image_from_text4(int argc, VALUE *argv, VALUE self) {
-  Gosu::Window *arg1 = 0 ;
-  std::wstring *arg2 = 0 ;
-  std::wstring *arg3 = 0 ;
-  unsigned int arg4 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  std::wstring temp2 ;
-  std::wstring temp3 ;
-  unsigned int val4 ;
-  int ecode4 = 0 ;
+_wrap_Image_from_text(int argc, VALUE *argv, VALUE self) {
+  std::wstring *arg1 = 0 ;
+  unsigned int arg2 ;
+  VALUE arg3 = (VALUE) 0 ;
+  std::wstring temp1 ;
+  unsigned int val2 ;
+  int ecode2 = 0 ;
   Gosu::Image *result = 0 ;
   VALUE vresult = Qnil;
   
-  if ((argc < 4) || (argc > 4)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Gosu__Window,  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window &","Gosu_Image_fromText4", 1, argv[0] )); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Gosu::Window &","Gosu_Image_fromText4", 1, argv[0])); 
-  }
-  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  {
-    VALUE localTemporary = rb_obj_as_string(argv[1]);
-    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
-    arg2 = &temp2;
+  if ((argc < 2) || (argc > 3)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
   }
   {
-    VALUE localTemporary = rb_obj_as_string(argv[2]);
-    temp3 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
-    arg3 = &temp3;
+    VALUE localTemporary = rb_obj_as_string(argv[0]);
+    temp1 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
+    arg1 = &temp1;
   }
-  ecode4 = SWIG_AsVal_unsigned_SS_int(argv[3], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "unsigned int","Gosu_Image_fromText4", 4, argv[3] ));
+  ecode2 = SWIG_AsVal_unsigned_SS_int(argv[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned int","Gosu_Image_fromText", 2, argv[1] ));
   } 
-  arg4 = static_cast< unsigned int >(val4);
-  {
-    try {
-      result = (Gosu::Image *)Gosu_Image_fromText4(*arg1,(std::wstring const &)*arg2,(std::wstring const &)*arg3,arg4);
-    } catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Image_from_text7(int argc, VALUE *argv, VALUE self) {
-  Gosu::Window *arg1 = 0 ;
-  std::wstring *arg2 = 0 ;
-  std::wstring *arg3 = 0 ;
-  unsigned int arg4 ;
-  int arg5 ;
-  unsigned int arg6 ;
-  Gosu::TextAlign arg7 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  std::wstring temp2 ;
-  std::wstring temp3 ;
-  unsigned int val4 ;
-  int ecode4 = 0 ;
-  int val5 ;
-  int ecode5 = 0 ;
-  unsigned int val6 ;
-  int ecode6 = 0 ;
-  Gosu::Image *result = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 7) || (argc > 7)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 7)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Gosu__Window,  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window &","Gosu_Image_fromText7", 1, argv[0] )); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Gosu::Window &","Gosu_Image_fromText7", 1, argv[0])); 
-  }
-  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  {
-    VALUE localTemporary = rb_obj_as_string(argv[1]);
-    temp2 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
-    arg2 = &temp2;
-  }
-  {
-    VALUE localTemporary = rb_obj_as_string(argv[2]);
-    temp3 = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
-    arg3 = &temp3;
-  }
-  ecode4 = SWIG_AsVal_unsigned_SS_int(argv[3], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "unsigned int","Gosu_Image_fromText7", 4, argv[3] ));
-  } 
-  arg4 = static_cast< unsigned int >(val4);
-  ecode5 = SWIG_AsVal_int(argv[4], &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), Ruby_Format_TypeError( "", "int","Gosu_Image_fromText7", 5, argv[4] ));
-  } 
-  arg5 = static_cast< int >(val5);
-  ecode6 = SWIG_AsVal_unsigned_SS_int(argv[5], &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), Ruby_Format_TypeError( "", "unsigned int","Gosu_Image_fromText7", 6, argv[5] ));
-  } 
-  arg6 = static_cast< unsigned int >(val6);
-  {
-    const char* cstr = Gosu::cstrFromSymbol(argv[6]);
-    
-    if (!strcmp(cstr, "left"))
-    arg7 = Gosu::taLeft;
-    else if (!strcmp(cstr, "center"))
-    arg7 = Gosu::taCenter;
-    else if (!strcmp(cstr, "right"))
-    arg7 = Gosu::taRight;
-    else if (!strcmp(cstr, "justify"))
-    arg7 = Gosu::taJustify;
-    else
-    SWIG_exception_fail(SWIG_ValueError, "invalid text align");
+  arg2 = static_cast< unsigned int >(val2);
+  if (argc > 2) {
+    arg3 = argv[2];
   }
   {
     try {
-      result = (Gosu::Image *)Gosu_Image_fromText7(*arg1,(std::wstring const &)*arg2,(std::wstring const &)*arg3,arg4,arg5,arg6,arg7);
+      result = (Gosu::Image *)Gosu_Image_fromText((std::wstring const &)*arg1,arg2,arg3);
     } catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
@@ -11153,8 +11101,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassImage.klass, "draw_as_quad", VALUEFUNC(_wrap_Image_draw_as_quad), -1);
   rb_define_method(SwigClassImage.klass, "gl_tex_info", VALUEFUNC(_wrap_Image_gl_tex_info), -1);
   rb_define_method(SwigClassImage.klass, "subimage", VALUEFUNC(_wrap_Image_subimage), -1);
-  rb_define_singleton_method(SwigClassImage.klass, "from_text4", VALUEFUNC(_wrap_Image_from_text4), -1);
-  rb_define_singleton_method(SwigClassImage.klass, "from_text7", VALUEFUNC(_wrap_Image_from_text7), -1);
+  rb_define_singleton_method(SwigClassImage.klass, "from_text", VALUEFUNC(_wrap_Image_from_text), -1);
   rb_define_singleton_method(SwigClassImage.klass, "load_tiles", VALUEFUNC(_wrap_Image_load_tiles), -1);
   rb_define_method(SwigClassImage.klass, "to_blob", VALUEFUNC(_wrap_Image_to_blob), -1);
   rb_define_method(SwigClassImage.klass, "columns", VALUEFUNC(_wrap_Image_columns), -1);
