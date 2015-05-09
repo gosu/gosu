@@ -1,26 +1,31 @@
-# Extend Numeric with simple angle conversion methods.
+# Extend Numeric with simple angle conversion methods,
+# for easier integration with Chipmunk.
 class ::Numeric
   def degrees_to_radians
     self * Math::PI / 180.0
   end
+  
   def radians_to_degrees
     self * 180.0 / Math::PI
   end
+  
   def gosu_to_radians
     (self - 90) * Math::PI / 180.0
   end
+  
   def radians_to_gosu
     self * 180.0 / Math::PI + 90
   end
 end
-    
-# Backwards compatibility: import constants into Gosu::Button.
+
+# Backwards compatibility:
+# Import constants into Gosu::Button.
 module Gosu::Button
   Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }
 end
 
 # Backwards compatibility:
-# Now-obsolete Window arguments.
+# The old version of from_text has been deprecated in Gosu 0.9.
 class Gosu::Image
   class << self
     alias from_text_without_window from_text
@@ -39,7 +44,7 @@ class Gosu::Image
 end
 
 # Backwards compatibility:
-# Now-obsolete Window arguments.
+# Passing a Window Sample#initialize has been deprecated in Gosu 0.7.17.
 class Gosu::Sample
   alias initialize_without_window initialize
   
@@ -50,7 +55,7 @@ class Gosu::Sample
 end
 
 # Backwards compatibility:
-# Now-obsolete Window arguments.
+# Passing a Window to Song#initialize has been deprecated in Gosu 0.7.17.
 class Gosu::Song
   alias initialize_without_window initialize
   
@@ -60,34 +65,42 @@ class Gosu::Song
   end
 end
 
-# Color constants (SWIG messes up constants somehow)
-class Gosu::Color
-  class Constant < Gosu::Color
-  private
-    def alpha=; end
-    def red=; end
-    def green=; end
-    def blue=; end
-    def hue=; end
-    def saturation=; end
-    def value=; end
+# Color constants.
+# This is cleaner than having SWIG define them.
+module Gosu
+  class ImmutableColor < Color
+    private :alpha=, :red=, :green=, :blue=, :hue=, :saturation=, :value=
   end
   
-  NONE    = Gosu::Color::Constant.argb(0x00000000)
-  BLACK   = Gosu::Color::Constant.argb(0xff000000)
-  GRAY    = Gosu::Color::Constant.argb(0xff808080)
-  WHITE   = Gosu::Color::Constant.argb(0xffffffff)            
-  AQUA    = Gosu::Color::Constant.argb(0xff00ffff)
-  RED     = Gosu::Color::Constant.argb(0xffff0000)
-  GREEN   = Gosu::Color::Constant.argb(0xff00ff00)
-  BLUE    = Gosu::Color::Constant.argb(0xff0000ff)
-  YELLOW  = Gosu::Color::Constant.argb(0xffffff00)
-  FUCHSIA = Gosu::Color::Constant.argb(0xffff00ff)
-  CYAN    = Gosu::Color::Constant.argb(0xff00ffff)
+  class Color
+    NONE    = Gosu::ImmutableColor.new(0x00000000)
+    BLACK   = Gosu::ImmutableColor.new(0xff000000)
+    GRAY    = Gosu::ImmutableColor.new(0xff808080)
+    WHITE   = Gosu::ImmutableColor.new(0xffffffff)
+    AQUA    = Gosu::ImmutableColor.new(0xff00ffff)
+    RED     = Gosu::ImmutableColor.new(0xffff0000)
+    GREEN   = Gosu::ImmutableColor.new(0xff00ff00)
+    BLUE    = Gosu::ImmutableColor.new(0xff0000ff)
+    YELLOW  = Gosu::ImmutableColor.new(0xffffff00)
+    FUCHSIA = Gosu::ImmutableColor.new(0xffff00ff)
+    CYAN    = Gosu::ImmutableColor.new(0xff00ffff)
+  end
 end
 
-# Instance methods for button_id_to_char and char_to_button_id
+# Backwards compatibility:
+# Instance methods that have been turned into module methods.
 class Gosu::Window
+  # alias initialize_with_hash initialize
+  # 
+  # def initialize width, height, args_or_fullscreen = {}, update_interval = nil
+  #   if args_or_fullscreen.is_a? Hash and update_interval.nil?
+  #     initialize_with_hash width, height, args_or_fullscreen
+  #   else
+  #     initialize_with_hash width, height,
+  #       :fullscreen => args_or_fullscreen, :update_interval => (update_interval || 16.66)
+  #   end
+  # end
+  # 
   def button_id_to_char(id)
     self.class.button_id_to_char(id)
   end

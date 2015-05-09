@@ -407,10 +407,9 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
         }
         else
         {
-            Bitmap trimmedSrc;
-            trimmedSrc.resize(srcWidth, srcHeight);
-            trimmedSrc.insert(src, 0, 0, srcX, srcY, srcWidth, srcHeight);
-            data = texture->tryAlloc(texture, trimmedSrc, 0);
+            Bitmap bmp(srcWidth, srcHeight);
+            bmp.insert(src, 0, 0, srcX, srcY, srcWidth, srcHeight);
+            data = texture->tryAlloc(texture, bmp, 0);
         }
         
         if (!data.get())

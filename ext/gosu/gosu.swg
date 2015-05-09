@@ -485,24 +485,24 @@ namespace Gosu {
 %ignore Gosu::loadTiles;
 %include "../../Gosu/Image.hpp"
 %extend Gosu::Image {
-    Image(VALUE source, VALUE arguments = 0) {
+    Image(VALUE source, VALUE options = 0) {
         Gosu::Bitmap bmp;
         Gosu::loadBitmap(bmp, source);
         
         unsigned srcX = 0, srcY = 0, srcWidth = bmp.width(), srcHeight = bmp.height();
         unsigned flags = 0;
         
-        if (arguments) {
-            Check_Type(arguments, T_HASH);
+        if (options) {
+            Check_Type(options, T_HASH);
             
-            VALUE keys = rb_funcall(arguments, rb_intern("keys"), 0, NULL);
+            VALUE keys = rb_funcall(options, rb_intern("keys"), 0, NULL);
             int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
             
             for (int i = 0; i < keysSize; ++i) {
                 VALUE key = rb_ary_entry(keys, i);
                 const char* keyString = Gosu::cstrFromSymbol(key);
                 
-                VALUE value = rb_hash_aref(arguments, key);
+                VALUE value = rb_hash_aref(options, key);
                 if (!strcmp(keyString, "tileable")) {
                     if (RTEST(value))
                         flags |= Gosu::ifTileable;
@@ -566,24 +566,24 @@ namespace Gosu {
     }
     
     %newobject fromText;
-    static Gosu::Image* fromText(const std::wstring& text, unsigned fontHeight, VALUE arguments = 0)
+    static Gosu::Image* fromText(const std::wstring& text, unsigned fontHeight, VALUE options = 0)
     {
         std::wstring font = Gosu::defaultFontName();
         unsigned width = 0xfefefefe;
         unsigned spacing = 0;
         Gosu::TextAlign align = align;
         
-        if (arguments) {
-            Check_Type(arguments, T_HASH);
+        if (options) {
+            Check_Type(options, T_HASH);
             
-            VALUE keys = rb_funcall(arguments, rb_intern("keys"), 0, NULL);
+            VALUE keys = rb_funcall(options, rb_intern("keys"), 0, NULL);
             int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
             
             for (int i = 0; i < keysSize; ++i) {
                 VALUE key = rb_ary_entry(keys, i);
                 const char* keyString = Gosu::cstrFromSymbol(key);
                 
-                VALUE value = rb_hash_aref(arguments, key);
+                VALUE value = rb_hash_aref(options, key);
                 if (!strcmp(keyString, "font")) {
                     const char* fontUTF8 = StringValuePtr(value);
                     font = Gosu::utf8ToWstring(fontUTF8);
@@ -623,24 +623,24 @@ namespace Gosu {
         else
             return new Gosu::Image(Gosu::createText(text, font, fontHeight, spacing, width, align));
     }
-    static std::vector<Gosu::Image> loadTiles(VALUE source, int tileWidth, int tileHeight, VALUE arguments = 0)
+    static std::vector<Gosu::Image> loadTiles(VALUE source, int tileWidth, int tileHeight, VALUE options = 0)
     {
         Gosu::Bitmap bmp;
         Gosu::loadBitmap(bmp, source);
         
         unsigned flags = 0;
         
-        if (arguments) {
-            Check_Type(arguments, T_HASH);
+        if (options) {
+            Check_Type(options, T_HASH);
             
-            VALUE keys = rb_funcall(arguments, rb_intern("keys"), 0, NULL);
+            VALUE keys = rb_funcall(options, rb_intern("keys"), 0, NULL);
             int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
             
             for (int i = 0; i < keysSize; ++i) {
                 VALUE key = rb_ary_entry(keys, i);
                 const char* keyString = Gosu::cstrFromSymbol(key);
                 
-                VALUE value = rb_hash_aref(arguments, key);
+                VALUE value = rb_hash_aref(options, key);
                 if (!strcmp(keyString, "tileable")) {
                     if (RTEST(value))
                         flags |= Gosu::ifTileable;

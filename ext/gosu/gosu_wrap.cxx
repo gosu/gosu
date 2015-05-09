@@ -2620,24 +2620,24 @@ SWIG_From_float  (float value)
   return SWIG_From_double  (value);
 }
 
-SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_0(VALUE source,VALUE arguments=0){
+SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_0(VALUE source,VALUE options=0){
         Gosu::Bitmap bmp;
         Gosu::loadBitmap(bmp, source);
         
         unsigned srcX = 0, srcY = 0, srcWidth = bmp.width(), srcHeight = bmp.height();
         unsigned flags = 0;
         
-        if (arguments) {
-            Check_Type(arguments, T_HASH);
+        if (options) {
+            Check_Type(options, T_HASH);
             
-            VALUE keys = rb_funcall(arguments, rb_intern("keys"), 0, NULL);
+            VALUE keys = rb_funcall(options, rb_intern("keys"), 0, NULL);
             int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
             
             for (int i = 0; i < keysSize; ++i) {
                 VALUE key = rb_ary_entry(keys, i);
                 const char* keyString = Gosu::cstrFromSymbol(key);
                 
-                VALUE value = rb_hash_aref(arguments, key);
+                VALUE value = rb_hash_aref(options, key);
                 if (!strcmp(keyString, "tileable")) {
                     if (RTEST(value))
                         flags |= Gosu::ifTileable;
@@ -2711,23 +2711,23 @@ SWIGINTERN Gosu::Image *Gosu_Image_subimage(Gosu::Image *self,int x,int y,int w,
         std::auto_ptr<Gosu::ImageData> imageData = self->getData().subimage(x, y, w, h);
         return imageData.get() ? new Gosu::Image(imageData) : 0;
     }
-SWIGINTERN Gosu::Image *Gosu_Image_fromText(std::wstring const &text,unsigned int fontHeight,VALUE arguments=0){
+SWIGINTERN Gosu::Image *Gosu_Image_fromText(std::wstring const &text,unsigned int fontHeight,VALUE options=0){
         std::wstring font = Gosu::defaultFontName();
         unsigned width = 0xfefefefe;
         unsigned spacing = 0;
         Gosu::TextAlign align = align;
         
-        if (arguments) {
-            Check_Type(arguments, T_HASH);
+        if (options) {
+            Check_Type(options, T_HASH);
             
-            VALUE keys = rb_funcall(arguments, rb_intern("keys"), 0, NULL);
+            VALUE keys = rb_funcall(options, rb_intern("keys"), 0, NULL);
             int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
             
             for (int i = 0; i < keysSize; ++i) {
                 VALUE key = rb_ary_entry(keys, i);
                 const char* keyString = Gosu::cstrFromSymbol(key);
                 
-                VALUE value = rb_hash_aref(arguments, key);
+                VALUE value = rb_hash_aref(options, key);
                 if (!strcmp(keyString, "font")) {
                     const char* fontUTF8 = StringValuePtr(value);
                     font = Gosu::utf8ToWstring(fontUTF8);
@@ -2767,23 +2767,23 @@ SWIGINTERN Gosu::Image *Gosu_Image_fromText(std::wstring const &text,unsigned in
         else
             return new Gosu::Image(Gosu::createText(text, font, fontHeight, spacing, width, align));
     }
-SWIGINTERN std::vector< Gosu::Image > Gosu_Image_loadTiles__SWIG_0(VALUE source,int tileWidth,int tileHeight,VALUE arguments=0){
+SWIGINTERN std::vector< Gosu::Image > Gosu_Image_loadTiles__SWIG_0(VALUE source,int tileWidth,int tileHeight,VALUE options=0){
         Gosu::Bitmap bmp;
         Gosu::loadBitmap(bmp, source);
         
         unsigned flags = 0;
         
-        if (arguments) {
-            Check_Type(arguments, T_HASH);
+        if (options) {
+            Check_Type(options, T_HASH);
             
-            VALUE keys = rb_funcall(arguments, rb_intern("keys"), 0, NULL);
+            VALUE keys = rb_funcall(options, rb_intern("keys"), 0, NULL);
             int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
             
             for (int i = 0; i < keysSize; ++i) {
                 VALUE key = rb_ary_entry(keys, i);
                 const char* keyString = Gosu::cstrFromSymbol(key);
                 
-                VALUE value = rb_hash_aref(arguments, key);
+                VALUE value = rb_hash_aref(options, key);
                 if (!strcmp(keyString, "tileable")) {
                     if (RTEST(value))
                         flags |= Gosu::ifTileable;
@@ -6515,7 +6515,7 @@ SWIGINTERN VALUE _wrap_new_Image(int nargs, VALUE *args, VALUE self) {
   
 fail:
   Ruby_Format_OverloadedError( argc, 7, "Image.new", 
-    "    Image.new(VALUE source, VALUE arguments)\n"
+    "    Image.new(VALUE source, VALUE options)\n"
     "    Image.new(Gosu::Window &window, VALUE source, bool tileable)\n"
     "    Image.new(Gosu::Window &window, VALUE source, bool tileable, unsigned int srcX, unsigned int srcY, unsigned int srcWidth, unsigned int srcHeight)\n");
   
@@ -7019,7 +7019,7 @@ SWIGINTERN VALUE _wrap_Image_load_tiles(int nargs, VALUE *args, VALUE self) {
   
 fail:
   Ruby_Format_OverloadedError( argc, 5, "load_tiles", 
-    "    std::vector< Gosu::Image > load_tiles(VALUE source, int tileWidth, int tileHeight, VALUE arguments)\n"
+    "    std::vector< Gosu::Image > load_tiles(VALUE source, int tileWidth, int tileHeight, VALUE options)\n"
     "    std::vector< Gosu::Image > load_tiles(Gosu::Window &window, VALUE source, int tileWidth, int tileHeight, bool tileable)\n");
   
   return Qnil;
