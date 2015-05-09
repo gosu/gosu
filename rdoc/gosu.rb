@@ -853,11 +853,15 @@ module Gosu
     # 
     # @note The actual window may be smaller if the requested size is too large for the current display resolution; in that case, Gosu will automatically scale all coordinates to transparently emulate a larger window. No need to thank us.
     # 
+    # @overload initialize(width, height, options = {})
+    # @overload initialize(width, height, fullscreen, update_interval = 16.666666)
+    # 
     # @param width [Fixnum] the desired window width.
     # @param height [Fixnum] the desired window height.
-    # @param fullscreen [true, false] whether to create a full-screen window.
-    # @param update_interval [Float] the interval between calls to {#update}, in milliseconds. For the default value of 16.666666, the game will attempt to run at approximately 60 FPS, which is ideal on standard 60 Hz TFT screens.
-    def initialize(width, height, fullscreen, update_interval=16.666666); end
+    # @param [Hash] options
+    # @option options [Boolean] :fullscreen (false) whether to present the window in fullscreen mode.
+    # @option options [Float] :update_interval (16.666666) the interval between frames, in milliseconds.
+    def initialize(width, height, options); end
     
     ##
     # Enters a modal loop where the Window is visible on screen and receives calls to draw, update etc.

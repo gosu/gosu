@@ -6,6 +6,19 @@
 # compatible, but I just call protected_update etc. in the Ruby wrapper so I can add this
 # custom debugging help:
 class Gosu::Window
+  alias initialize_without_hash initialize
+  
+  def initialize width, height, *args
+    if args.empty? or args.first.is_a? Hash then
+      options = args.first || {}
+      fullscreen = options[:fullscreen]
+      update_interval = options[:update_interval]
+    else
+      fullscreen, update_interval = *args
+    end
+    initialize_without_hash width, height, !!fullscreen, update_interval || 16.666666
+  end
+  
   %w(update draw needs_redraw? needs_cursor?
      lose_focus button_down button_up).each do |callback|
     define_method "protected_#{callback}" do |*args|

@@ -18,21 +18,6 @@ module Gosu
     end
   end
   
-  class Window
-    alias :initialize_old :initialize
-    
-    def initialize width, height, *args
-      if args.empty? or args.first.is_a? Hash then
-       options = args.first || {}
-       fullscreen = !!options[:fullscreen]
-       update_interval = options[:update_interval] || 16.66
-      else
-       fullscreen, update_interval = *args
-      end
-      $window = initialize_old width, height, fullscreen, update_interval
-    end
-  end
-  
   def self.button_down? id
     $window.button_down? id
   end

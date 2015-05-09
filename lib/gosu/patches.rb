@@ -90,17 +90,6 @@ end
 # Backwards compatibility:
 # Instance methods that have been turned into module methods.
 class Gosu::Window
-  # alias initialize_with_hash initialize
-  # 
-  # def initialize width, height, args_or_fullscreen = {}, update_interval = nil
-  #   if args_or_fullscreen.is_a? Hash and update_interval.nil?
-  #     initialize_with_hash width, height, args_or_fullscreen
-  #   else
-  #     initialize_with_hash width, height,
-  #       :fullscreen => args_or_fullscreen, :update_interval => (update_interval || 16.66)
-  #   end
-  # end
-  # 
   def button_id_to_char(id)
     self.class.button_id_to_char(id)
   end
