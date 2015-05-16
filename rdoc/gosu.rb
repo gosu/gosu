@@ -435,10 +435,10 @@ module Gosu
     # Draws the image as an arbitrary quad. This method can be used for advanced non-rectangular drawing techniques, e.g., faking perspective or isometric projection.
     # 
     # @return [void]
-    # @param (see Gosu::Window#draw_quad)
+    # @param (see Gosu.draw_quad)
     # 
     # @see #draw
-    # @see Gosu::Window#draw_quad
+    # @see Gosu.draw_quad
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#order-of-corners The order of corners explained in the Gosu Wiki
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
@@ -884,10 +884,31 @@ module Gosu
     # @param mode [:default, :additive] the blending mode to use.
     #
     # @see draw_line
+    # @see draw_rect
     # @see draw_quad
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
     def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=:default); end
+    
+    ##
+    # Draws a rectangle (actually a quad, or two triangles).
+    # 
+    # @return [void]
+    # @param x [Float] the X coordinate of the rectangle’s top left corner.
+    # @param y [Float] the Y coordinate of the rectangle’s top left corner.
+    # @param width [Float] the width of the rectangle.
+    # @param height [Float] the height of the rectangle.
+    # @param c [Gosu::Color] the color of the rectangle.
+    # @param z [Float] the Z-order.
+    # @param mode [:default, :additive] the blending mode to use.
+    #
+    # @see draw_line
+    # @see draw_triangle
+    # @see draw_quad
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#order-of-corners The order of corners explained in the Gosu Wiki
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
+    def draw_rect(x, y, width, height, c, z=0, mode=:default); end
     
     ##
     # Draws a quad (actually two triangles).
@@ -910,6 +931,7 @@ module Gosu
     #
     # @see draw_line
     # @see draw_triangle
+    # @see draw_rect
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#order-of-corners The order of corners explained in the Gosu Wiki
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
