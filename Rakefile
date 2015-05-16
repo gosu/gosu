@@ -42,5 +42,8 @@ task :swig do
   sh "patch --no-backup-if-mismatch -p0 <ext/gosu/gosu_SWIG_RENAME_PATCH.patch"
 end
 
-task :release => [:'win:release', :'win:release_gem',
-                  :'linux:release', :'linux:release_gem']
+task :update_rdoc do
+  sh "rm -rf doc/*"
+  sh "yardoc"
+  sh "scp -r doc/* #{ENV['PROJECTS_HOST']}:#{ENV['PROJECTS_ROOT']}/libgosu.org/rdoc"
+end
