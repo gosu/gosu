@@ -20,7 +20,7 @@ namespace
         }
     }
     
-    std::tr1::array<bool, Gosu::numButtons> buttonStates { { false } };
+    std::tr1::array<bool, Gosu::numButtons> buttonStates = { { false } };
 }
 
 struct Gosu::Input::Impl
