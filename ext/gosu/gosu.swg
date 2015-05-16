@@ -300,6 +300,102 @@ namespace Gosu
         return rb_id2name(SYM2ID(symbol));
     }
 }
+    
+// Global input functions
+
+namespace Gosu {
+    Gosu::Button charToButtonId(wchar_t ch) {
+        return Gosu::Input::charToId(ch);
+    }
+    wchar_t buttonIdToChar(Gosu::Button btn) {
+        return Gosu::Input::idToChar(btn);
+    }
+}
+
+// Global graphics functions
+namespace Gosu {
+    void drawLine(double x1, double y1, Gosu::Color c1,
+                  double x2, double y2, Gosu::Color c2,
+                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault) {
+        Gosu::Graphics::drawLine(x1, y1, c1, x2, y2, c2,
+                                   z, mode);
+    }
+    void drawTriangle(double x1, double y1, Gosu::Color c1,
+                      double x2, double y2, Gosu::Color c2,
+                      double x3, double y3, Gosu::Color c3,
+                      Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault) {
+        Gosu::Graphics::drawTriangle(x1, y1, c1, x2, y2, c2, x3, y3, c3,
+                                       z, mode);
+    }
+    void drawQuad(double x1, double y1, Gosu::Color c1,
+                  double x2, double y2, Gosu::Color c2,
+                  double x3, double y3, Gosu::Color c3,
+                  double x4, double y4, Gosu::Color c4,
+                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault) {
+        Gosu::Graphics::drawQuad(x1, y1, c1, x2, y2, c2,
+                                   x3, y3, c3, x4, y4, c4,
+                                   z, mode);
+    }
+    void flush() {
+        return Gosu::Graphics::flush();
+    }
+    void unsafe_gl() {
+        Gosu::Graphics::beginGL();
+        rb_yield(Qnil);
+        Gosu::Graphics::endGL();
+    }
+    void unsafe_gl(Gosu::ZPos z) {
+        Gosu::Graphics::scheduleGL(std::tr1::bind(callRubyBlock, rb_block_proc()), z);
+    }
+    void clipTo(double x, double y, double width, double height) {
+        Gosu::Graphics::beginClipping(x, y, width, height);
+        rb_yield(Qnil);
+        Gosu::Graphics::endClipping();
+    }
+    Gosu::Image* record(int width, int height) {
+        Gosu::Graphics::beginRecording();
+        rb_yield(Qnil);
+        return new Gosu::Image(Gosu::Graphics::endRecording(width, height));
+    }
+    
+    // This method cannot be called "transform" because then it would be an ambiguous overload of Gosu::Transform Gosu::transform(...).
+    // So it has to be renamed via %rename below... :( - same for the other transformations.
+    
+    void transformForRuby(double m0, double m1, double m2, double m3, double m4, double m5, double m6, double m7,
+        double m8, double m9, double m10, double m11, double m12, double m13, double m14, double m15) {
+        Gosu::Transform transform = {
+            m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15
+        };
+        Gosu::Graphics::pushTransform(transform);
+        rb_yield(Qnil);
+        Gosu::Graphics::popTransform();
+    }
+    void rotateForRuby(double angle, double aroundX = 0, double aroundY = 0) {
+        Gosu::Graphics::pushTransform(Gosu::rotate(angle, aroundX, aroundY));
+        rb_yield(Qnil);
+        Gosu::Graphics::popTransform();
+    }
+    void scaleForRuby(double factor) {
+        Gosu::Graphics::pushTransform(Gosu::scale(factor));
+        rb_yield(Qnil);
+        Gosu::Graphics::popTransform();
+    }
+    void scaleForRuby(double factorX, double factorY) {
+        Gosu::Graphics::pushTransform(Gosu::scale(factorX, factorY));
+        rb_yield(Qnil);
+        Gosu::Graphics::popTransform();
+    }
+    void scaleForRuby(double factorX, double factorY, double aroundX, double aroundY) {
+        Gosu::Graphics::pushTransform(Gosu::scale(factorX, factorY, aroundX, aroundY));
+        rb_yield(Qnil);
+        Gosu::Graphics::popTransform();
+    }
+    void translateForRuby(double x, double y) {
+        Gosu::Graphics::pushTransform(Gosu::translate(x, y));
+        rb_yield(Qnil);
+        Gosu::Graphics::popTransform();
+    }
+}
 %}
 
 // Exception wrapping
@@ -851,45 +947,13 @@ namespace Gosu {
     }
     */
     
-    void drawLine(double x1, double y1, Gosu::Color c1,
-                  double x2, double y2, Gosu::Color c2,
-                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault) {
-        Gosu::Graphics::drawLine(x1, y1, c1, x2, y2, c2,
-                                   z, mode);
-    }
-    void drawTriangle(double x1, double y1, Gosu::Color c1,
-                      double x2, double y2, Gosu::Color c2,
-                      double x3, double y3, Gosu::Color c3,
-                      Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault) {
-        Gosu::Graphics::drawTriangle(x1, y1, c1, x2, y2, c2, x3, y3, c3,
-                                       z, mode);
-    }
-    void drawQuad(double x1, double y1, Gosu::Color c1,
-                  double x2, double y2, Gosu::Color c2,
-                  double x3, double y3, Gosu::Color c3,
-                  double x4, double y4, Gosu::Color c4,
-                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault) {
-        Gosu::Graphics::drawQuad(x1, y1, c1, x2, y2, c2,
-                                   x3, y3, c3, x4, y4, c4,
-                                   z, mode);
-    }
-    void flush() {
-        return Gosu::Graphics::flush();
-    }
     bool isButtonDown(Gosu::Button btn) const {
         return $self->input().down(btn);
-    }
-    static Gosu::Button charToButtonId(wchar_t ch) {
-        return Gosu::Input::charToId(ch);
-    }
-    static wchar_t buttonIdToChar(Gosu::Button btn) {
-        return Gosu::Input::idToChar(btn);
     }
     
     TextInput* textInput() const {
         return $self->input().textInput();
     }
-    
     void setTextInput(TextInput* ti) {
         $self->input().setTextInput(ti);
     }
@@ -919,58 +983,51 @@ namespace Gosu {
     bool fullscreen() const {
         return $self->graphics().fullscreen();
     }
-    
-    void unsafe_gl() {
-        Gosu::Graphics::beginGL();
-        rb_yield(Qnil);
-        Gosu::Graphics::endGL();
-    }
-    void unsafe_gl(Gosu::ZPos z) {
-        Gosu::Graphics::scheduleGL(std::tr1::bind(callRubyBlock, rb_block_proc()), z);
-    }
-    void clipTo(double x, double y, double width, double height) {
-        Gosu::Graphics::beginClipping(x, y, width, height);
-        rb_yield(Qnil);
-        Gosu::Graphics::endClipping();
-    }
-    %newobject record;
-    Gosu::Image* record(int width, int height) {
-        Gosu::Graphics::beginRecording();
-        rb_yield(Qnil);
-        return new Gosu::Image(Gosu::Graphics::endRecording(width, height));
-    }
-    void transform(double m0, double m1, double m2, double m3, double m4, double m5, double m6, double m7,
-        double m8, double m9, double m10, double m11, double m12, double m13, double m14, double m15) {
-        Gosu::Transform transform = {
-            m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15
-        };
-        Gosu::Graphics::pushTransform(transform);
-        rb_yield(Qnil);
-        Gosu::Graphics::popTransform();
-    }
-    void rotate(double angle, double aroundX = 0, double aroundY = 0) {
-        Gosu::Graphics::pushTransform(Gosu::rotate(angle, aroundX, aroundY));
-        rb_yield(Qnil);
-        Gosu::Graphics::popTransform();
-    }
-    void scale(double factor) {
-        Gosu::Graphics::pushTransform(Gosu::scale(factor));
-        rb_yield(Qnil);
-        Gosu::Graphics::popTransform();
-    }
-    void scale(double factorX, double factorY) {
-        Gosu::Graphics::pushTransform(Gosu::scale(factorX, factorY));
-        rb_yield(Qnil);
-        Gosu::Graphics::popTransform();
-    }
-    void scale(double factorX, double factorY, double aroundX, double aroundY) {
-        Gosu::Graphics::pushTransform(Gosu::scale(factorX, factorY, aroundX, aroundY));
-        rb_yield(Qnil);
-        Gosu::Graphics::popTransform();
-    }
-    void translate(double x, double y) {
-        Gosu::Graphics::pushTransform(Gosu::translate(x, y));
-        rb_yield(Qnil);
-        Gosu::Graphics::popTransform();
-    }
 };
+
+// Global input functions
+
+namespace Gosu {
+    Gosu::Button charToButtonId(wchar_t ch) {
+        return Gosu::Input::charToId(ch);
+    }
+    wchar_t buttonIdToChar(Gosu::Button btn) {
+        return Gosu::Input::idToChar(btn);
+    }
+}
+
+// Global graphics functions
+namespace Gosu {
+    void drawLine(double x1, double y1, Gosu::Color c1,
+                  double x2, double y2, Gosu::Color c2,
+                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault);
+    void drawTriangle(double x1, double y1, Gosu::Color c1,
+                      double x2, double y2, Gosu::Color c2,
+                      double x3, double y3, Gosu::Color c3,
+                      Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault);
+    void drawQuad(double x1, double y1, Gosu::Color c1,
+                  double x2, double y2, Gosu::Color c2,
+                  double x3, double y3, Gosu::Color c3,
+                  double x4, double y4, Gosu::Color c4,
+                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault);
+    void flush();
+    void unsafe_gl();
+    void unsafe_gl(Gosu::ZPos z);
+    void clipTo(double x, double y, double width, double height);
+    %newobject record;
+    Gosu::Image* record(int width, int height);
+    
+    %rename("transform") transformForRuby;
+    %rename("rotate")    rotateForRuby;
+    %rename("scale")     scaleForRuby;
+    %rename("translate") translateForRuby;
+    
+    void transformForRuby(double m0, double m1, double m2, double m3, double m4, double m5, double m6, double m7,
+        double m8, double m9, double m10, double m11, double m12, double m13, double m14, double m15);
+    void rotateForRuby(double angle, double aroundX = 0, double aroundY = 0);
+    void scaleForRuby(double factor);
+    void scaleForRuby(double factorX, double factorY);
+    void scaleForRuby(double factorX, double factorY, double aroundX, double aroundY);
+    void translateForRuby(double x, double y);
+}
+

@@ -40,12 +40,6 @@ class Gosu::Window
     $gosu_gl_blocks = nil
   end
   
-  def gl(*args, &block)
-    $gosu_gl_blocks ||= []
-    $gosu_gl_blocks << block
-    unsafe_gl(*args, &block)
-  end
-  
   alias show_internal show
   def show
     show_internal
@@ -57,6 +51,16 @@ class Gosu::Window
       end
       raise @_exception
     end
+  end
+end
+
+module Gosu
+  # Keep a reference to these blocks that is only cleared after Window#draw.
+  # Otherwise, the GC might free these blocks while Gosu is still rendering.
+  def self.gl(*args, &block)
+    $gosu_gl_blocks ||= []
+    $gosu_gl_blocks << block
+    unsafe_gl(*args, &block)
   end
 end
 

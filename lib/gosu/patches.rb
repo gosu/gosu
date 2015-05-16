@@ -87,15 +87,26 @@ module Gosu
   end
 end
 
-# Backwards compatibility:
-# Instance methods that have been turned into module methods.
 class Gosu::Window
-  def button_id_to_char(id)
-    self.class.button_id_to_char(id)
+  # Backwards compatibility:
+  # Class methods that have been turned into module methods.
+  def self.button_id_to_char(id)
+    Gosu.button_id_to_char(id)
   end
   
-  def char_to_button_id(ch)
-    self.class.char_to_button_id(ch)
+  def self.char_to_button_id(ch)
+    Gosu.char_to_button_id(ch)
+  end
+  
+  # Backwards compatibility:
+  # Instance methods taht have been turned into module methods.
+  %w(draw_line draw_triangle draw_quad
+     flush gl clip_to record
+     transform translate rotate scale
+     button_id_to_char char_to_button_id).each do |method|
+    define_method method.to_sym do |*args|
+      Gosu.send method, *args
+    end
   end
 end
 
