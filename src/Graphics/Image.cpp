@@ -6,35 +6,34 @@
 #include <Gosu/IO.hpp>
 #include <stdexcept>
 
-Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, bool tileable)
+Gosu::Image::Image(const std::wstring& filename, unsigned flags)
 {
 	// Forward.
 	Bitmap bmp;
 	loadImageFile(bmp, filename);
-	Image(graphics, bmp, tileable).data.swap(data);
+	Image(bmp, flags).data.swap(data);
 }
 
-Gosu::Image::Image(Graphics& graphics, const std::wstring& filename,
+Gosu::Image::Image(const std::wstring& filename,
     unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-    bool tileable)
+    unsigned flags)
 {
 	// Forward.
 	Bitmap bmp;
 	loadImageFile(bmp, filename);
-	Image(graphics, bmp, srcX, srcY, srcWidth, srcHeight, tileable).data.swap(data);
+	Image(bmp, srcX, srcY, srcWidth, srcHeight, flags).data.swap(data);
 }
 
-Gosu::Image::Image(Graphics& graphics, const Bitmap& source, bool tileable)
+Gosu::Image::Image(const Bitmap& source, unsigned flags)
 {
 	// Forward.
-	Image(graphics, source, 0, 0, source.width(), source.height(), tileable).data.swap(data);
+	Image(source, 0, 0, source.width(), source.height(), flags).data.swap(data);
 }
 
-Gosu::Image::Image(Graphics& graphics, const Bitmap& source,
+Gosu::Image::Image(const Bitmap& source,
         unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-        bool tileable)
-:   data(graphics.createImage(source, srcX, srcY, srcWidth, srcHeight,
-        tileable ? Gosu::bfTileable : Gosu::bfSmooth).release())
+        unsigned flags)
+:   data(Graphics::createImage(source, srcX, srcY, srcWidth, srcHeight, flags).release())
 {
 }
 
@@ -115,7 +114,8 @@ Gosu::ImageData& Gosu::Image::getData() const
     return *data;
 }
 
-std::vector<Gosu::Image> Gosu::loadTiles(Graphics& graphics, const Bitmap& bmp, int tileWidth, int tileHeight, bool tileable)
+std::vector<Gosu::Image> Gosu::loadTiles(const Bitmap& bmp,
+    int tileWidth, int tileHeight, unsigned flags)
 {
     int tilesX, tilesY;
     std::vector<Image> images;
@@ -138,14 +138,56 @@ std::vector<Gosu::Image> Gosu::loadTiles(Graphics& graphics, const Bitmap& bmp, 
     
     for (int y = 0; y < tilesY; ++y)
         for (int x = 0; x < tilesX; ++x)
-            images.push_back(Image(graphics, bmp, x * tileWidth, y * tileHeight, tileWidth, tileHeight, tileable));
+            images.push_back(Image(bmp, x * tileWidth, y * tileHeight, tileWidth, tileHeight, flags));
     
     return images;
 }
 
-std::vector<Gosu::Image> Gosu::loadTiles(Graphics& graphics, const std::wstring& filename, int tileWidth, int tileHeight, bool tileable)
+std::vector<Gosu::Image> Gosu::loadTiles(const std::wstring& filename,
+    int tileWidth, int tileHeight, unsigned flags)
 {
     Bitmap bmp;
     loadImageFile(bmp, filename);
-    return loadTiles(graphics, bmp, tileWidth, tileHeight, tileable);
+    return loadTiles(bmp, tileWidth, tileHeight, flags);
 }
+
+// Deprecated constructors.
+
+Gosu::Image::Image(Graphics& graphics, const std::wstring& filename, bool tileable)
+{
+    Image(filename, tileable).data.swap(data);
+}
+
+Gosu::Image::Image(Graphics& graphics, const std::wstring& filename,
+                   unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
+                   bool tileable)
+{
+    Image(filename, srcX, srcY, srcWidth, srcHeight, tileable).data.swap(data);
+}
+
+Gosu::Image::Image(Graphics& graphics, const Bitmap& source, bool tileable)
+{
+    Image(source, tileable).data.swap(data);
+}
+
+Gosu::Image::Image(Graphics& graphics, const Bitmap& source,
+                   unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
+                   bool tileable)
+{
+    Image(source, srcX, srcY, srcWidth, srcHeight, tileable).data.swap(data);
+}
+
+// Deprecated helpers.
+
+std::vector<Gosu::Image> Gosu::loadTiles(Gosu::Graphics& graphics, const Bitmap& bmp,
+    int tileWidth, int tileHeight, bool tileable)
+{
+    return Gosu::loadTiles(bmp, tileWidth, tileHeight, tileable);
+}
+
+std::vector<Gosu::Image> Gosu::loadTiles(Gosu::Graphics& graphics, const std::wstring& filename,
+    int tileWidth, int tileHeight, bool tileable)
+{
+    return Gosu::loadTiles(filename, tileWidth, tileHeight, tileable);
+}
+

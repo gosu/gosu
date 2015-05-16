@@ -8,6 +8,7 @@
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Platform.hpp>
+#include <Gosu/Text.hpp>
 #include <Gosu/TR1.hpp>
 #include <string>
 
@@ -29,8 +30,8 @@ namespace Gosu
         //! \param fontHeight Height of the font, in pixels.
         //! \param fontFlags Flags used to render individual characters of
         //!        the font.
-        Font(Graphics& graphics, const std::wstring& fontName,
-            unsigned fontHeight, unsigned fontFlags = ffBold);
+        Font(unsigned fontHeight, const std::wstring& fontName = defaultFontName(),
+            unsigned fontFlags = ffBold);
         
         //! Returns the name of the font that was used to create it.
         std::wstring name() const;
@@ -70,10 +71,13 @@ namespace Gosu
         void setImage(wchar_t wc, const Gosu::Image& image);
         
         #ifndef SWIG
+        GOSU_DEPRECATED Font(Graphics& graphics, const std::wstring& fontName,
+            unsigned fontHeight, unsigned fontFlags = ffBold);
+        
         GOSU_DEPRECATED
         #endif
-        //! DEPRECATED: Analogous to draw, but rotates the text by a given angle. Use 
-        //! a simple pushTransform to achieve the same effect.
+        //! DEPRECATED: Analogous to draw, but rotates the text by a given angle.
+        //! Use Graphics::pushTransform to achieve the same effect.
         void drawRot(const std::wstring& text, double x, double y, ZPos z, double angle,
             double factorX = 1, double factorY = 1,
             Color c = Color::WHITE, AlphaMode mode = amDefault) const;

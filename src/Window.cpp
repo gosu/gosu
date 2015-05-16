@@ -1,4 +1,5 @@
 #include <Gosu/Gosu.hpp>
+#include "Graphics/Common.hpp"
 #include <SDL2/SDL.h>
 #include <cstdlib>
 #include <memory>
@@ -18,12 +19,56 @@ namespace Gosu
         const char *error = SDL_GetError();
         throw std::runtime_error(operation + ": " + (error ? error : "(unknown error)"));
     }
+    
+    SDL_Window* sharedWindow()
+    {
+        static SDL_Window *window = 0;
+        if (window == 0)
+        {
+            if (SDL_Init(SDL_INIT_VIDEO) < 0)
+                throwSDLError("Could not initialize SDL Video");
+            
+            atexit(SDL_Quit);
+            
+            Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN;
+            
+            #if SDL_VERSION_ATLEAST(2, 0, 1)
+            flags |= SDL_WINDOW_ALLOW_HIGHDPI;
+            #endif
+            
+            window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 64, flags);
+            if (window == 0)
+                throwSDLError("Could not create window");
+        }
+        return window;
+    }
+    
+    SDL_GLContext sharedGLContext()
+    {
+        static SDL_GLContext context = 0;
+        if (context == 0)
+        {
+            #ifdef GOSU_IS_OPENGLES
+            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
+            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+            #endif
+            
+            context = SDL_GL_CreateContext(sharedWindow());
+            
+            if (context == 0)
+                throwSDLError("Could not create OpenGL context");
+        }
+        return context;
+    }
+    
+    void ensureCurrentContext()
+    {
+        SDL_GL_MakeCurrent(sharedWindow(), sharedGLContext());
+    }
 }
 
 struct Gosu::Window::Impl
 {
-    SDL_Window *window;
-    SDL_GLContext context;
     double updateInterval;
     
     std::auto_ptr<Graphics> graphics;
@@ -33,8 +78,6 @@ struct Gosu::Window::Impl
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double updateInterval)
 : pimpl(new Impl)
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-        throwSDLError("Could not initialize SDL Video");
     
     int actualWidth = width;
     int actualHeight = height;
@@ -68,34 +111,22 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
         }
     }
     
-    Uint32 flags = SDL_WINDOW_OPENGL;
-#if SDL_VERSION_ATLEAST(2, 0, 1)
-    flags |= SDL_WINDOW_ALLOW_HIGHDPI;
-#endif
-    if (fullscreen) {
-        flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+    // TODO - it would be better/enough to only do this in show()
+    
+    SDL_SetWindowTitle(sharedWindow(), "");
+    SDL_SetWindowSize(sharedWindow(), actualWidth, actualHeight);
+    SDL_SetWindowPosition(sharedWindow(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+    if (fullscreen)
+    {
+        SDL_SetWindowFullscreen(sharedWindow(), fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
     }
-    
-    pimpl->window = SDL_CreateWindow("",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        actualWidth, actualHeight, flags);
-    if (! pimpl->window)
-        throwSDLError("Could not open window");
+    SDL_ShowWindow(sharedWindow());
 
-#ifdef GOSU_IS_OPENGLES
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-#endif
-
-#if SDL_VERSION_ATLEAST(2, 0, 1)
-    SDL_GL_GetDrawableSize(pimpl->window, &actualWidth, &actualHeight);
-#endif
+    #if SDL_VERSION_ATLEAST(2, 0, 1)
+    SDL_GL_GetDrawableSize(sharedWindow(), &actualWidth, &actualHeight);
+    #endif
     
-    pimpl->context = SDL_GL_CreateContext(pimpl->window);
-    if (! pimpl->context)
-        throwSDLError("Could not create OpenGL context");
-    
-    SDL_GL_MakeCurrent(pimpl->window, pimpl->context);
+    ensureCurrentContext();
     SDL_GL_SetSwapInterval(1);
     
     pimpl->graphics.reset(new Graphics(actualWidth, actualHeight, fullscreen));
@@ -109,21 +140,18 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
 
 Gosu::Window::~Window()
 {
-    SDL_GL_DeleteContext(pimpl->context);
-    SDL_DestroyWindow(pimpl->window);
-    
-    SDL_QuitSubSystem(SDL_INIT_VIDEO);
+    SDL_HideWindow(sharedWindow());
 }
 
 std::wstring Gosu::Window::caption() const
 {
-    return utf8ToWstring(SDL_GetWindowTitle(pimpl->window));
+    return utf8ToWstring(SDL_GetWindowTitle(sharedWindow()));
 }
 
 void Gosu::Window::setCaption(const std::wstring& caption)
 {
     std::string utf8 = wstringToUTF8(caption);
-    SDL_SetWindowTitle(pimpl->window, utf8.c_str());
+    SDL_SetWindowTitle(sharedWindow(), utf8.c_str());
 }
 
 double Gosu::Window::updateInterval() const
@@ -162,13 +190,14 @@ void Gosu::Window::show()
         SDL_ShowCursor(needsCursor());
         
         if (needsRedraw()) {
+            ensureCurrentContext();
             if (graphics().begin()) {
                 draw();
                 graphics().end();
                 FPS::registerFrame();
             }
             
-            SDL_GL_SwapWindow(pimpl->window);
+            SDL_GL_SwapWindow(sharedWindow());
             
             if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
         }

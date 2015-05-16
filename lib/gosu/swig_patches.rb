@@ -6,6 +6,19 @@
 # compatible, but I just call protected_update etc. in the Ruby wrapper so I can add this
 # custom debugging help:
 class Gosu::Window
+  alias initialize_without_hash initialize
+  
+  def initialize width, height, *args
+    if args.empty? or args.first.is_a? Hash then
+      options = args.first || {}
+      fullscreen = options[:fullscreen]
+      update_interval = options[:update_interval]
+    else
+      fullscreen, update_interval = *args
+    end
+    initialize_without_hash width, height, !!fullscreen, update_interval || 16.666666
+  end
+  
   %w(update draw needs_redraw? needs_cursor?
      lose_focus button_down button_up).each do |callback|
     define_method "protected_#{callback}" do |*args|
@@ -27,12 +40,6 @@ class Gosu::Window
     $gosu_gl_blocks = nil
   end
   
-  def gl(*args, &block)
-    $gosu_gl_blocks ||= []
-    $gosu_gl_blocks << block
-    unsafe_gl(*args, &block)
-  end
-  
   alias show_internal show
   def show
     show_internal
@@ -47,10 +54,13 @@ class Gosu::Window
   end
 end
 
-# SWIG doesn't understand the C++ overloading, so we need this simple check in Ruby.
-class Gosu::Image
-  def self.from_text(*args)
-    args.size == 4 ? from_text4(*args) : from_text7(*args)
+module Gosu
+  # Keep a reference to these blocks that is only cleared after Window#draw.
+  # Otherwise, the GC might free these blocks while Gosu is still rendering.
+  def self.gl(*args, &block)
+    $gosu_gl_blocks ||= []
+    $gosu_gl_blocks << block
+    unsafe_gl(*args, &block)
   end
 end
 

@@ -34,7 +34,7 @@ namespace Gosu
     const GLuint NO_TEXTURE = static_cast<GLuint>(-1);
     const unsigned NO_CLIPPING = 0xffffffff;
     
-    // In various places in Gosu, width==NO_CLIPPING conventionally means
+    // In various places in Gosu, width==NO_CLIPPING by convention means
     // that no clipping should happen.
     struct ClipRect
     {
@@ -118,6 +118,8 @@ namespace Gosu
     
     bool isEntity(const std::wstring& name);
     const Bitmap& entityBitmap(const std::wstring& name);
+    
+    void ensureCurrentContext();
 }
 
 #endif

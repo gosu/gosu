@@ -12,6 +12,8 @@
 
 namespace Gosu
 {
+    struct DrawOp;
+    
     //! Returns the maximum size of an texture that will be allocated
     //! internally by Gosu.
     //! Useful when extending Gosu using OpenGL.
@@ -20,9 +22,15 @@ namespace Gosu
     //! Serves as the target of all drawing and provides primitive drawing
     //! functionality.
     //! Usually created internally by Gosu::Window.
+    //
+    // TODO: This class should be separated into a Gosu::Viewport class, which
+    // carries the width/height/fullscreen attributes, and global Gosu::drawFoo
+    // functions. A Window then has a Viewport, and in theory, multiple windows
+    // could have their own viewports etc.
     class Graphics
     {
         struct Impl;
+        
         const GOSU_UNIQUE_PTR<Impl> pimpl;
         
     #if defined(GOSU_CPP11_ENABLED)
@@ -37,7 +45,6 @@ namespace Gosu
         Graphics(unsigned physicalWidth, unsigned physicalHeight, bool fullscreen);
         ~Graphics();
 
-        // TODO: Replace by setBaseTransform()
         void setResolution(unsigned virtualWidth, unsigned virtualHeight,
             double horizontalBlackBarWidth = 0, double verticalBlackBarHeight = 0);
         
@@ -50,65 +57,68 @@ namespace Gosu
         bool begin(Color clearWithColor = Color::BLACK);
         //! Every call to begin must have a matching call to end.
         void end();
+        
         //! Flushes the Z queue to the screen and starts a new one.
         //! Useful for games that are *very* composite in nature (splitscreen).
-        void flush();
+        static void flush();
         
         //! Finishes all pending Gosu drawing operations and executes
         //! the following OpenGL code in a clean environment.
-        void beginGL();
+        static void beginGL();
         //! Resets Gosu into its default rendering state.
-        void endGL();
+        static void endGL();
         //! Schedules a custom GL functor to be executed at a certain Z level.
         //! The functor is called in a clean GL context (as given by beginGL/endGL).
         //! Gosu's rendering up to the Z level may not yet have been glFlush()ed.
         //! Note: You may not call any Gosu rendering functions from within the
         //! functor, and you must schedule it from within Window::draw's call tree.
-        void scheduleGL(const std::tr1::function<void()>& functor, ZPos z);
+        static void scheduleGL(const std::tr1::function<void()>& functor, ZPos z);
         
         //! Enables clipping to a specified rectangle.
-        void beginClipping(double x, double y, double width, double height);
+        static void beginClipping(double x, double y, double width, double height);
         //! Disables clipping.
-        void endClipping();
+        static void endClipping();
         
         //! Starts recording a macro. Cannot be nested.
-        void beginRecording();
+        static void beginRecording();
         //! Finishes building the macro and returns it as a drawable object.
         //! The width and height affect nothing about the recording process,
         //! the resulting macro will simply return these values when you ask
         //! it.
         //! Most usually, the return value is passed to Image::Image().
-        GOSU_UNIQUE_PTR<Gosu::ImageData> endRecording(int width, int height);
+        static GOSU_UNIQUE_PTR<Gosu::ImageData> endRecording(int width, int height);
         
         //! Pushes one transformation onto the transformation stack.
-        void pushTransform(const Transform& transform);
+        static void pushTransform(const Transform& transform);
         //! Pops one transformation from the transformation stack.
-        void popTransform();
+        static void popTransform();
 
         //! Draws a line from one point to another (last pixel exclusive).
         //! Note: OpenGL lines are not reliable at all and may have a missing pixel at the start
         //! or end point. Please only use this for debugging purposes. Otherwise, use a quad or
         //! image to simulate lines, or contribute a better drawLine to Gosu.
-        void drawLine(double x1, double y1, Color c1,
+        static void drawLine(double x1, double y1, Color c1,
             double x2, double y2, Color c2,
             ZPos z, AlphaMode mode = amDefault);
 
-        void drawTriangle(double x1, double y1, Color c1,
+        static void drawTriangle(double x1, double y1, Color c1,
             double x2, double y2, Color c2,
             double x3, double y3, Color c3,
             ZPos z, AlphaMode mode = amDefault);
 
-        void drawQuad(double x1, double y1, Color c1,
+        static void drawQuad(double x1, double y1, Color c1,
             double x2, double y2, Color c2,
             double x3, double y3, Color c3,
             double x4, double y4, Color c4,
             ZPos z, AlphaMode mode = amDefault);
+        
+        //! For internal use only.
+        static void scheduleDrawOp(const DrawOp& op);
 
-        //! Turns a portion of a bitmap into something that can be drawn on
-        //! this graphics object.
-        GOSU_UNIQUE_PTR<ImageData> createImage(const Bitmap& src,
+        //! Turns a portion of a bitmap into something that can be drawn on a Graphics object.
+        static GOSU_UNIQUE_PTR<ImageData> createImage(const Bitmap& src,
             unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-            unsigned borderFlags);
+            unsigned imageFlags);
     };
 }
 

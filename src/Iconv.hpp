@@ -1,5 +1,5 @@
-#ifndef GOSIMPL_ICONV_HPP
-#define GOSIMPL_ICONV_HPP
+#ifndef GOSUIMPL_ICONV_HPP
+#define GOSUIMPL_ICONV_HPP
 
 #include <Gosu/Platform.hpp>
 

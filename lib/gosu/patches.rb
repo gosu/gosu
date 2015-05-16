@@ -1,76 +1,112 @@
-# Extend Numeric with simple angle conversion methods.
+# Extend Numeric with simple angle conversion methods,
+# for easier integration with Chipmunk.
 class ::Numeric
   def degrees_to_radians
     self * Math::PI / 180.0
   end
+  
   def radians_to_degrees
     self * 180.0 / Math::PI
   end
+  
   def gosu_to_radians
     (self - 90) * Math::PI / 180.0
   end
+  
   def radians_to_gosu
     self * 180.0 / Math::PI + 90
   end
 end
-    
-# Backwards compatibility: import constants into Gosu::Button.
+
+# Backwards compatibility:
+# Import constants into Gosu::Button.
 module Gosu::Button
   Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }
 end
 
-# Backwards compatibility: Window arguments to Sample and Song
+# Backwards compatibility:
+# The old version of from_text has been deprecated in Gosu 0.9.
+class Gosu::Image
+  class << self
+    alias from_text_without_window from_text
+  end
+  
+  def self.from_text(*args)
+    if args.size == 4
+      from_text_without_window(args[1], args[3], :font => args[2])
+    elsif args.size == 7
+      from_text_without_window(args[1], args[3], :font => args[2],
+        :spacing => args[4], :width => args[5], :align => args[6])
+    else
+      from_text_without_window(*args)
+    end
+  end
+end
+
+# Backwards compatibility:
+# Passing a Window Sample#initialize has been deprecated in Gosu 0.7.17.
 class Gosu::Sample
-  alias initialize_ initialize
+  alias initialize_without_window initialize
   
   def initialize(*args)
     args.shift if args.first.is_a? Gosu::Window
-    initialize_(*args)
+    initialize_without_window(*args)
   end
 end
+
+# Backwards compatibility:
+# Passing a Window to Song#initialize has been deprecated in Gosu 0.7.17.
 class Gosu::Song
-  alias initialize_ initialize
+  alias initialize_without_window initialize
   
   def initialize(*args)
     args.shift if args.first.is_a? Gosu::Window
-    initialize_(*args)
+    initialize_without_window(*args)
   end
 end
 
-# Color constants (SWIG messes up constants somehow)
-class Gosu::Color
-  class Constant < Gosu::Color
-  private
-    def alpha=; end
-    def red=; end
-    def green=; end
-    def blue=; end
-    def hue=; end
-    def saturation=; end
-    def value=; end
+# Color constants.
+# This is cleaner than having SWIG define them.
+module Gosu
+  class ImmutableColor < Color
+    private :alpha=, :red=, :green=, :blue=, :hue=, :saturation=, :value=
   end
   
-  NONE    = Gosu::Color::Constant.argb(0x00000000)
-  BLACK   = Gosu::Color::Constant.argb(0xff000000)
-  GRAY    = Gosu::Color::Constant.argb(0xff808080)
-  WHITE   = Gosu::Color::Constant.argb(0xffffffff)            
-  AQUA    = Gosu::Color::Constant.argb(0xff00ffff)
-  RED     = Gosu::Color::Constant.argb(0xffff0000)
-  GREEN   = Gosu::Color::Constant.argb(0xff00ff00)
-  BLUE    = Gosu::Color::Constant.argb(0xff0000ff)
-  YELLOW  = Gosu::Color::Constant.argb(0xffffff00)
-  FUCHSIA = Gosu::Color::Constant.argb(0xffff00ff)
-  CYAN    = Gosu::Color::Constant.argb(0xff00ffff)
+  class Color
+    NONE    = Gosu::ImmutableColor.new(0x00_000000)
+    BLACK   = Gosu::ImmutableColor.new(0xff_000000)
+    GRAY    = Gosu::ImmutableColor.new(0xff_808080)
+    WHITE   = Gosu::ImmutableColor.new(0xff_ffffff)
+    AQUA    = Gosu::ImmutableColor.new(0xff_00ffff)
+    RED     = Gosu::ImmutableColor.new(0xff_ff0000)
+    GREEN   = Gosu::ImmutableColor.new(0xff_00ff00)
+    BLUE    = Gosu::ImmutableColor.new(0xff_0000ff)
+    YELLOW  = Gosu::ImmutableColor.new(0xff_ffff00)
+    FUCHSIA = Gosu::ImmutableColor.new(0xff_ff00ff)
+    CYAN    = Gosu::ImmutableColor.new(0xff_00ffff)
+  end
 end
 
-# Instance methods for button_id_to_char and char_to_button_id
 class Gosu::Window
-  def button_id_to_char(id)
-    self.class.button_id_to_char(id)
+  # Backwards compatibility:
+  # Class methods that have been turned into module methods.
+  def self.button_id_to_char(id)
+    Gosu.button_id_to_char(id)
   end
   
-  def char_to_button_id(ch)
-    self.class.char_to_button_id(ch)
+  def self.char_to_button_id(ch)
+    Gosu.char_to_button_id(ch)
+  end
+  
+  # Backwards compatibility:
+  # Instance methods taht have been turned into module methods.
+  %w(draw_line draw_triangle draw_quad
+     flush gl clip_to record
+     transform translate rotate scale
+     button_id_to_char char_to_button_id button_down?).each do |method|
+    define_method method.to_sym do |*args, &block|
+      Gosu.send method, *args, &block
+    end
   end
 end
 

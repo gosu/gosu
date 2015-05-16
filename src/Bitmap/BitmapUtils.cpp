@@ -32,7 +32,7 @@ Gosu::Writer Gosu::saveToBMP(const Bitmap& bitmap, Writer writer)
 
 void Gosu::applyBorderFlags(Bitmap& dest, const Bitmap& source,
     unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-    unsigned borderFlags)
+    unsigned imageFlags)
 {
     dest.resize(srcWidth + 2, srcHeight + 2);
 
@@ -40,34 +40,34 @@ void Gosu::applyBorderFlags(Bitmap& dest, const Bitmap& source,
     // borders.
 
     // Top.
-    if (borderFlags & bfTileableTop)
+    if (imageFlags & ifTileableTop)
         dest.insert(source, 1, 0, srcX, srcY, srcWidth, 1);
     // Bottom.
-    if (borderFlags & bfTileableBottom)
+    if (imageFlags & ifTileableBottom)
         dest.insert(source, 1, dest.height() - 1,
             srcX, srcY + srcHeight - 1, srcWidth, 1);
     // Left.
-    if (borderFlags & bfTileableLeft)
+    if (imageFlags & ifTileableLeft)
         dest.insert(source, 0, 1, srcX, srcY, 1, srcHeight);
     // Right.
-    if (borderFlags & bfTileableRight)
+    if (imageFlags & ifTileableRight)
         dest.insert(source, dest.width() - 1, 1, 
             srcX + srcWidth - 1, srcY, 1, srcHeight);
 
     // Top left.
-    if ((borderFlags & bfTileableTop) && (borderFlags & bfTileableLeft))
+    if ((imageFlags & ifTileableTop) && (imageFlags & ifTileableLeft))
         dest.setPixel(0, 0,
             source.getPixel(srcX, srcY));
     // Top right.
-    if ((borderFlags & bfTileableTop) && (borderFlags & bfTileableRight))
+    if ((imageFlags & ifTileableTop) && (imageFlags & ifTileableRight))
         dest.setPixel(dest.width() - 1, 0,
             source.getPixel(srcX + srcWidth - 1, srcY));
     // Bottom left.
-    if ((borderFlags & bfTileableBottom) && (borderFlags & bfTileableLeft))
+    if ((imageFlags & ifTileableBottom) && (imageFlags & ifTileableLeft))
         dest.setPixel(0, dest.height() - 1,
             source.getPixel(srcX, srcY + srcHeight - 1));
     // Bottom right.
-    if ((borderFlags & bfTileableBottom) && (borderFlags & bfTileableRight))
+    if ((imageFlags & ifTileableBottom) && (imageFlags & ifTileableRight))
         dest.setPixel(dest.width() - 1, dest.height() - 1,
             source.getPixel(srcX + srcWidth - 1, srcY + srcHeight - 1));
 

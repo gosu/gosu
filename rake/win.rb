@@ -37,8 +37,6 @@ end
       end
       # C++ Gosu header files, for using inline C++ from Ruby
       s.files += Dir["Gosu/*.hpp"]
-      # Examples
-      s.files += Dir["examples/*.rb"] + Dir["examples/media/**/*"]
     end
     
     Gem::PackageTask.new(spec) do
