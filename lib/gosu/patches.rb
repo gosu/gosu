@@ -104,8 +104,8 @@ class Gosu::Window
      flush gl clip_to record
      transform translate rotate scale
      button_id_to_char char_to_button_id button_down?).each do |method|
-    define_method method.to_sym do |*args|
-      Gosu.send method, *args
+    define_method method.to_sym do |*args, &block|
+      Gosu.send method, *args, &block
     end
   end
 end
