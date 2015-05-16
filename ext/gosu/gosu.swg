@@ -148,7 +148,8 @@
 // Header inclusion (order irrelevant)
 %module(directors="1") gosu
 %{
-// Avoid Ruby Macro Hell on Windows...
+    
+// Escape from ruby.h macro hell on Windows.
 #undef accept
 #undef write
 #undef close
@@ -538,7 +539,9 @@ namespace Gosu {
 
     std::string inspect() const {
         char buffer[31];
-        std::snprintf(buffer, sizeof buffer, "#<Gosu::Color:ARGB=0x%08x>", $self->argb());
+        // snprintf is either member of std:: (C++11), or a #define for ruby_snprintf.
+        using namespace std;
+        snprintf(buffer, sizeof buffer, "#<Gosu::Color:ARGB=0x%08x>", $self->argb());
         return buffer;
     }
     

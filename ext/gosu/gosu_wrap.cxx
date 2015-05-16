@@ -2154,7 +2154,8 @@ static VALUE mGosu;
 #include <stdexcept>
 
 
-// Avoid Ruby Macro Hell on Windows...
+    
+// Escape from ruby.h macro hell on Windows.
 #undef accept
 #undef write
 #undef close
@@ -2598,7 +2599,9 @@ SWIGINTERN Gosu::Color Gosu_Color_dup(Gosu::Color const *self){
     }
 SWIGINTERN std::string Gosu_Color_inspect(Gosu::Color const *self){
         char buffer[31];
-        std::snprintf(buffer, sizeof buffer, "#<Gosu::Color:ARGB=0x%08x>", self->argb());
+        // snprintf is either member of std:: (C++11), or a #define for ruby_snprintf.
+        using namespace std;
+        snprintf(buffer, sizeof buffer, "#<Gosu::Color:ARGB=0x%08x>", self->argb());
         return buffer;
     }
 
