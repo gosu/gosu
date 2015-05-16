@@ -2126,9 +2126,8 @@ namespace Swig {
 #define SWIGTYPE_p_char swig_types[10]
 #define SWIGTYPE_p_double swig_types[11]
 #define SWIGTYPE_p_std__tr1__arrayT_double_16_t swig_types[12]
-#define SWIGTYPE_p_std__wstring swig_types[13]
-static swig_type_info *swig_types[15];
-static swig_module_info swig_module = {swig_types, 14, 0, 0, 0, 0};
+static swig_type_info *swig_types[14];
+static swig_module_info swig_module = {swig_types, 13, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -5579,9 +5578,9 @@ SWIGINTERN VALUE _wrap_new_Font(int nargs, VALUE *args, VALUE self) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      void *vptr = 0;
-      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__wstring, 0);
-      _v = SWIG_CheckState(res);
+      {
+        _v = !!rb_respond_to(argv[1], rb_intern("to_str"));
+      }
       if (_v) {
         {
           int res = SWIG_AsVal_unsigned_SS_int(argv[2], NULL);
@@ -10795,7 +10794,6 @@ static swig_type_info _swigt__p_Gosu__Window = {"_p_Gosu__Window", "Gosu::Window
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "Gosu::ZPos *|double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__tr1__arrayT_double_16_t = {"_p_std__tr1__arrayT_double_16_t", "std::tr1::array< double,16 > *|Gosu::Transform *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__wstring = {"_p_std__wstring", "std::wstring *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__Button,
@@ -10811,7 +10809,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_char,
   &_swigt__p_double,
   &_swigt__p_std__tr1__arrayT_double_16_t,
-  &_swigt__p_std__wstring,
 };
 
 static swig_cast_info _swigc__p_Gosu__Button[] = {  {&_swigt__p_Gosu__Button, 0, 0, 0},{0, 0, 0, 0}};
@@ -10827,7 +10824,6 @@ static swig_cast_info _swigc__p_Gosu__Window[] = {  {&_swigt__p_Gosu__Window, 0,
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__tr1__arrayT_double_16_t[] = {  {&_swigt__p_std__tr1__arrayT_double_16_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__wstring[] = {  {&_swigt__p_std__wstring, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__Button,
@@ -10843,7 +10839,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_char,
   _swigc__p_double,
   _swigc__p_std__tr1__arrayT_double_16_t,
-  _swigc__p_std__wstring,
 };
 
 
