@@ -211,17 +211,17 @@ module Gosu
     # @return [Color] a copy of the color.
     def dup; end
     
-    NONE    = Gosu::Color.argb(0x00000000)
-    BLACK   = Gosu::Color.argb(0xff000000)
-    GRAY    = Gosu::Color.argb(0xff808080)
-    WHITE   = Gosu::Color.argb(0xffffffff)
-    AQUA    = Gosu::Color.argb(0xff00ffff)
-    RED     = Gosu::Color.argb(0xffff0000)
-    GREEN   = Gosu::Color.argb(0xff00ff00)
-    BLUE    = Gosu::Color.argb(0xff0000ff)
-    YELLOW  = Gosu::Color.argb(0xffffff00)
-    FUCHSIA = Gosu::Color.argb(0xffff00ff)
-    CYAN    = Gosu::Color.argb(0xff00ffff)
+    NONE    = Gosu::Color.argb(0x00_000000)
+    BLACK   = Gosu::Color.argb(0xff_000000)
+    GRAY    = Gosu::Color.argb(0xff_808080)
+    WHITE   = Gosu::Color.argb(0xff_ffffff)
+    AQUA    = Gosu::Color.argb(0xff_00ffff)
+    RED     = Gosu::Color.argb(0xff_ff0000)
+    GREEN   = Gosu::Color.argb(0xff_00ff00)
+    BLUE    = Gosu::Color.argb(0xff_0000ff)
+    YELLOW  = Gosu::Color.argb(0xff_ffff00)
+    FUCHSIA = Gosu::Color.argb(0xff_ff00ff)
+    CYAN    = Gosu::Color.argb(0xff_00ffff)
   end
   
   ##
@@ -236,16 +236,21 @@ module Gosu
     attr_reader :name
     
     ##
-    # @return [Fixnum] The font's height in pixels.
+    # @return [Fixnum] the font's height in pixels.
     attr_reader :height
     
     ##
     # Load a font from the system fonts or a file.
     # 
-    # @param window [Gosu::Window]
-    # @param font_name [String] the name of a system font, or a path to a TrueType Font (TTF) file. A path must contain at least one '/' character to distinguish it from a system font.
+    # (Passing a Window reference is not necessary anymore, please use the first overload from now on.)
+    # 
     # @param height [Fixnum] the height of the font, in pixels.
-    def initialize(window, font_name, height); end
+    # @param [Hash] options
+    # @option options [String] :name the name of a system font, or a path to a TrueType Font (TTF) file. A path must contain at least one '/' character to distinguish it from a system font.
+    # 
+    # @overload initialize(height, options = {})
+    # @overload initialize(window, font_name, height)
+    def initialize(height, options = {}); end
     
     ##
     # Overrides the image for a character.
@@ -296,7 +301,7 @@ module Gosu
     def draw_rel(text, x, y, z, rel_x, rel_y, scale_x=1, scale_y=1, color=0xffffffff, mode=:default); end
     
     ##
-    # @deprecated Use {#draw} in conjunction with {Window#rotate} instead.
+    # @deprecated Use {#draw} in conjunction with {Gosu.rotate} instead.
     # 
     # @see #draw
     # @see Gosu::Window#rotate
@@ -334,7 +339,7 @@ module Gosu
     # 
     # @param [String, Magick::Image] source the filename or RMagick image to load from.
     # @param [Hash] options
-    # @option options [Boolean] :tileable (false) if true, the Image will not have soft edges when scaled
+    # @option options [true, false] :tileable (false) if true, the Image will not have soft edges when scaled
     # @option options [Array] :rect ([0, 0, image_width, image_height]) the source rectangle in the image
     # 
     # @overload initialize(source, options = {})
@@ -376,12 +381,11 @@ module Gosu
     # @note For Windows Bitmap (BMP) images, magenta (FF00FF, often called "magic pink" in this context) is treated as a chroma key and all pixels of that color are automatically rendered fully transparent.
     #
     # @return [Array<Gosu::Image>]
-    # @param window [Window]
     # @param source [String, Magick::Image]
     # @param tile_width [Fixnum] If positive, this is the width of the individual tiles; if negative, the image is divided into -tile_width columns.
     # @param tile_height [Fixnum] If positive, this is the height of the individual tiles; if negative, the image is divided into -tile_height rows.
     # @param [Hash] options
-    # @option options [Boolean] :tileable (false) if true, the Image will not have soft edges when scaled
+    # @option options [true, false] :tileable (false) if true, the Image will not have soft edges when scaled
     # 
     # @overload initialize(source, tile_width, tile_height, options = {})
     # @overload initialize(window, source, tile_width, tile_height, tileable = false)
@@ -727,7 +731,7 @@ module Gosu
     # @param width [Fixnum] the desired window width.
     # @param height [Fixnum] the desired window height.
     # @param [Hash] options
-    # @option options [Boolean] :fullscreen (false) whether to present the window in fullscreen mode.
+    # @option options [true, false] :fullscreen (false) whether to present the window in fullscreen mode.
     # @option options [Float] :update_interval (16.666666) the interval between frames, in milliseconds.
     def initialize(width, height, options); end
     
@@ -780,7 +784,7 @@ module Gosu
     # @param id [Fixnum] the button's platform-defined id.
     # 
     # @see #button_up
-    # @see #button_down?
+    # @see Gosu.button_down?
     def button_down(id); end
     
     ##
@@ -790,250 +794,10 @@ module Gosu
     # @param (see #button_down)
     # 
     # @see #button_down
-    # @see #button_down?
+    # @see Gosu.button_down?
     def button_up(id); end
     
     # @!endgroup
-    
-    ##
-    # Returns whether the button `id` is currently pressed. Button states are updated once per tick, so repeated calls during the same tick will always yeild the same result.
-    # 
-    # @return [true, false] whether the button is currently pressed.
-    # @param (see #button_down)
-    # 
-    # @see #button_down
-    # @see #button_up
-    def button_down?(id); end
-    
-    # @!group Drawing primitives
-    
-    ##
-    # Draws a line from one point to another---inconsistently.
-    # 
-    # @note OpenGL lines are not reliable at all and may have a missing pixel at the start or end point. Relying on your machine's behavior can only end in tears. Recommended for debugging purposes only.
-    # 
-    # @return [void]
-    # @param x1 [Float] the X coordinate of the start point.
-    # @param y1 [Float] the Y coordinate of the start point.
-    # @param c1 [Gosu::Color] the color of the start point.
-    # @param x2 [Float] the X coordinate of the end point.
-    # @param y2 [Float] the Y coordinate of the end point.
-    # @param c2 [Gosu::Color] the color of the end point.
-    # @param z [Float] the Z-order.
-    # @param mode [:default, :additive] the blending mode to use.
-    # 
-    # @see #draw_triangle
-    # @see #draw_quad
-    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
-    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
-    def draw_line(x1, y1, c1, x2, y2, c2, z=0, mode=:default); end
-    
-    ##
-    # Draws a triangle.
-    # 
-    # @return [void]
-    # @param x1 [Float] the X coordinate of the first vertex.
-    # @param y1 [Float] the Y coordinate of the first vertex.
-    # @param c1 [Gosu::Color] the color of the first vertex.
-    # @param x2 [Float] the X coordinate of the second vertex.
-    # @param y2 [Float] the Y coordinate of the second vertex.
-    # @param c2 [Gosu::Color] the color of the second vertex.
-    # @param x3 [Float] the X coordinate of the third vertex.
-    # @param y3 [Float] the Y coordinate of the third vertex.
-    # @param c3 [Gosu::Color] the color of the third vertex.
-    # @param z [Float] the Z-order.
-    # @param mode [:default, :additive] the blending mode to use.
-    #
-    # @see #draw_line
-    # @see #draw_quad
-    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
-    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
-    def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=:default); end
-    
-    ##
-    # Draws a quad (actually two triangles).
-    # 
-    # @return [void]
-    # @param x1 [Float] the X coordinate of the first vertex.
-    # @param y1 [Float] the Y coordinate of the first vertex.
-    # @param c1 [Gosu::Color] the color of the first vertex.
-    # @param x2 [Float] the X coordinate of the second vertex.
-    # @param y2 [Float] the Y coordinate of the second vertex.
-    # @param c2 [Gosu::Color] the color of the second vertex.
-    # @param x3 [Float] the X coordinate of the third vertex.
-    # @param y3 [Float] the Y coordinate of the third vertex.
-    # @param c3 [Gosu::Color] the color of the third vertex.
-    # @param x4 [Float] the X coordinate of the fourth vertex.
-    # @param y4 [Float] the Y coordinate of the fourth vertex.
-    # @param c4 [Gosu::Color] the color of the fourth vertex.
-    # @param z [Float] the Z-order.
-    # @param mode [:default, :additive] the blending mode to use.
-    #
-    # @see #draw_line
-    # @see #draw_triangle
-    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
-    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#order-of-corners The order of corners explained in the Gosu Wiki
-    
-    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
-    def draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=:default); end
-    
-    # @!endgroup
-    # @!group Manipulating the drawing context
-    
-    ##
-    # Flushes all drawing operations to OpenGL so that Z-ordering can start anew. This is useful for drawing multiple layers that may not have knowledge of each other's Z-ordering, e.g., drawing a HUD on top of the game world or ensuring that a custom cursor is always drawn above everything else.
-    # 
-    # @return [void]
-    def flush; end
-    
-    ##
-    # Runs the block in a clean OpenGL environment.
-    # 
-    # If a Z-order is given, the block will be scheduled to run between Gosu drawing operations as normal; otherwise, all prior drawing operations will be flushed and the block will be executed immediately.
-    # 
-    # @note Gosu does not provide access to the underlying OpenGL APIs. A gem like ruby-opengl is required to use custom OpenGL drawing code.
-    #
-    # @note Gosu rendering functions MUST NOT be used within the block, and {#gl} MUST be used only within the call tree of {#draw}.
-    # 
-    # @return [void]
-    # @param z [Float] the Z-order.
-    # @yield OpenGL code.
-    # 
-    # @see #draw
-    # @see file:reference/Z-Ordering
-    # @see file:examples/OpenGLIntegration.rb
-    def gl(z=nil); end
-    
-    ##
-    # Masks the drawing area inside the block.
-    # 
-    # @return [void]
-    # @param x [Float] the X coordinate of the top left corner,.
-    # @param y [Float] the Y coordinate of the top left corner.
-    # @param w [Float] the width of the clipping area.
-    # @param h [Float] the height of the clipping area.
-    # @yield rendering code.
-    # 
-    # @see #draw
-    def clip_to(x, y, w, h); end
-    
-    ##
-    # Records all drawing operatons inside the block as a reusable "image". This method can be used to speed rendering of multiple static images, e.g., a fixed tile map.
-    # 
-    # @note Because the returned object is not a true image---it's implemented using vertex buffers and is not backed by a texture---there are restrictions on how it can be used.
-    #
-    # @note The width and height of the returned object will be the same values you passed to {#record}, regardless of the area you draw on. It is important to pass accurate values if you plan on using {Gosu::Image#draw_as_quad} or {Gosu::Image#draw_rot} with the result later.
-    #
-    # @return [Gosu::Image] the recorded drawing operations.
-    # @param width [Float] the width of the recorded image.
-    # @param height [Float] the height of the recorded image.
-    # @yield rendering code.
-    # 
-    # @see #draw
-    # @see Gosu::Image
-    def record(width, height); end
-    
-    ##
-    # Rotates all drawing operatons inside the block.
-    # 
-    # @return [void]
-    # @param angle [Float] the rotation angle.
-    # @param around_x [Float] the X coorinate of the rotation origin.
-    # @param around_y [Float] the Y coordinate of the rotation origin.
-    # @yield rendering code.
-    # 
-    # @see #draw
-    # @see #scale
-    # @see #translate
-    # @see #transform
-    def rotate(angle, around_x=0, around_y=0); end
-    
-    ##
-    # Scales all drawing operations inside the block.
-    # 
-    # @overload scale(scale_x, scale_y = scale_x) { ... }
-    # @overload scale(scale_x, scale_y, around_x, around_y) { ... }
-    # 
-    # @return [void]
-    # @param scale_x [Float] the horizontal scaling factor.
-    # @param scale_y [Float] the vertical scaling factor.
-    # @param around_x [Float] the X coordinate of the scaling origin.
-    # @param around_y [Float] the Y coordinate of the scaling origin.
-    # @yield rendering code.
-    # 
-    # @see #draw
-    # @see #rotate
-    # @see #translate
-    # @see #transform
-    def scale(scale_x, scale_y, around_x, around_y); end
-    
-    ##
-    # Offsets all drawing operations inside the block.
-    # 
-    # @return [void]
-    # @param x [Float] the X offset.
-    # @param y [Float] the Y offset.
-    # @yield rendering code.
-    # 
-    # @see #draw
-    # @see #rotate
-    # @see #scale
-    # @see #transform
-    def translate(x, y); end
-    
-    ##
-    # Applies a free-form matrix transformation to everything drawn in the block.
-    # 
-    # @return [void]
-    # @param m0 [Float]
-    # @param m1 [Float]
-    # @param m2 [Float]
-    # @param m3 [Float]
-    # @param m4 [Float]
-    # @param m5 [Float]
-    # @param m6 [Float]
-    # @param m7 [Float]
-    # @param m8 [Float]
-    # @param m9 [Float]
-    # @param m10 [Float]
-    # @param m11 [Float]
-    # @param m12 [Float]
-    # @param m13 [Float]
-    # @param m14 [Float]
-    # @param m15 [Float]
-    # @yield rendering code.
-    # 
-    # @see #draw
-    # @see #rotate
-    # @see #scale
-    # @see #translate
-    def transform(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15); end
-    
-    # @!endgroup
-    
-    ##
-    # Returns the character a button usually produces, if any.
-    # 
-    # @note For real text input, look at {TextInput} instead.
-    # 
-    # @return [String?] the character the button usually produces.
-    # @param id [Fixnum] the button's platform-defined id.
-    # 
-    # @see char_to_button_id
-    # @see #text_input
-    # @see TextInput
-    def self.button_id_to_char(id); end
-    
-    ##
-    # Returns the button that usually produces a character, if any.
-    # 
-    # @return [Fixnum?] the button that usually produces the character.
-    # @param char [String] the character to query.
-    # 
-    # @see button_id_to_char
-    # @see #text_input
-    # @see TextInput
-    def self.char_to_button_id(char); end
     
     ##
     # @deprecated Use {#mouse_x=} and {#mouse_y=} instead.
@@ -1070,6 +834,245 @@ module Gosu
   end
 
   class << self
+    ##
+    # Returns whether the button `id` is currently pressed. Button states are updated once per tick, so repeated calls during the same tick will always yield the same result.
+    # 
+    # @return [true, false] whether the button is currently pressed.
+    # @param (see #button_down)
+    # 
+    # @see Window#button_down
+    # @see Window#button_up
+    def button_down?(id); end
+    
+    # @!group Drawing primitives
+    
+    ##
+    # Draws a line from one point to another---inconsistently.
+    # 
+    # @note OpenGL lines are not reliable at all and may have a missing pixel at the start or end point. Relying on your machine's behavior can only end in tears. Recommended for debugging purposes only.
+    # 
+    # @return [void]
+    # @param x1 [Float] the X coordinate of the start point.
+    # @param y1 [Float] the Y coordinate of the start point.
+    # @param c1 [Gosu::Color] the color of the start point.
+    # @param x2 [Float] the X coordinate of the end point.
+    # @param y2 [Float] the Y coordinate of the end point.
+    # @param c2 [Gosu::Color] the color of the end point.
+    # @param z [Float] the Z-order.
+    # @param mode [:default, :additive] the blending mode to use.
+    # 
+    # @see draw_triangle
+    # @see draw_quad
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
+    def draw_line(x1, y1, c1, x2, y2, c2, z=0, mode=:default); end
+    
+    ##
+    # Draws a triangle.
+    # 
+    # @return [void]
+    # @param x1 [Float] the X coordinate of the first vertex.
+    # @param y1 [Float] the Y coordinate of the first vertex.
+    # @param c1 [Gosu::Color] the color of the first vertex.
+    # @param x2 [Float] the X coordinate of the second vertex.
+    # @param y2 [Float] the Y coordinate of the second vertex.
+    # @param c2 [Gosu::Color] the color of the second vertex.
+    # @param x3 [Float] the X coordinate of the third vertex.
+    # @param y3 [Float] the Y coordinate of the third vertex.
+    # @param c3 [Gosu::Color] the color of the third vertex.
+    # @param z [Float] the Z-order.
+    # @param mode [:default, :additive] the blending mode to use.
+    #
+    # @see draw_line
+    # @see draw_quad
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
+    def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=:default); end
+    
+    ##
+    # Draws a quad (actually two triangles).
+    # 
+    # @return [void]
+    # @param x1 [Float] the X coordinate of the first vertex.
+    # @param y1 [Float] the Y coordinate of the first vertex.
+    # @param c1 [Gosu::Color] the color of the first vertex.
+    # @param x2 [Float] the X coordinate of the second vertex.
+    # @param y2 [Float] the Y coordinate of the second vertex.
+    # @param c2 [Gosu::Color] the color of the second vertex.
+    # @param x3 [Float] the X coordinate of the third vertex.
+    # @param y3 [Float] the Y coordinate of the third vertex.
+    # @param c3 [Gosu::Color] the color of the third vertex.
+    # @param x4 [Float] the X coordinate of the fourth vertex.
+    # @param y4 [Float] the Y coordinate of the fourth vertex.
+    # @param c4 [Gosu::Color] the color of the fourth vertex.
+    # @param z [Float] the Z-order.
+    # @param mode [:default, :additive] the blending mode to use.
+    #
+    # @see draw_line
+    # @see draw_triangle
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#order-of-corners The order of corners explained in the Gosu Wiki
+    # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
+    def draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=:default); end
+    
+    # @!endgroup
+    # @!group Manipulating the current drawing context
+    
+    ##
+    # Flushes all drawing operations to OpenGL so that Z-ordering can start anew. This is useful for drawing multiple layers that may not have knowledge of each other's Z-ordering, e.g., drawing a HUD on top of the game world or ensuring that a custom cursor is always drawn above everything else.
+    # 
+    # @return [void]
+    def flush; end
+    
+    ##
+    # Runs the block in a clean OpenGL environment.
+    # 
+    # If a Z-order is given, the block will be scheduled to run between Gosu drawing operations as normal; otherwise, all prior drawing operations will be flushed and the block will be executed immediately.
+    # 
+    # @note Gosu does not provide access to the underlying OpenGL APIs. A gem like ruby-opengl is required to use custom OpenGL drawing code.
+    #
+    # @note Gosu rendering functions MUST NOT be used within the block, and {gl} MUST be used only within the call tree of {Window#draw}.
+    # 
+    # @return [void]
+    # @param z [Float] the Z-order.
+    # @yield OpenGL code.
+    # 
+    # @see Window#draw
+    # @see file:reference/Z-Ordering
+    # @see file:examples/OpenGLIntegration.rb
+    def gl(z=nil); end
+    
+    ##
+    # Masks the drawing area inside the block.
+    # 
+    # @return [void]
+    # @param x [Float] the X coordinate of the top left corner,.
+    # @param y [Float] the Y coordinate of the top left corner.
+    # @param w [Float] the width of the clipping area.
+    # @param h [Float] the height of the clipping area.
+    # @yield rendering code.
+    # 
+    # @see Window#draw
+    def clip_to(x, y, w, h); end
+    
+    ##
+    # Records all drawing operatons inside the block as a reusable "image". This method can be used to speed rendering of multiple static images, e.g., a fixed tile map.
+    # 
+    # @note Because the returned object is not a true image---it's implemented using vertex buffers and is not backed by a texture---there are restrictions on how it can be used.
+    #
+    # @note The width and height of the returned object will be the same values you passed to {record}, regardless of the area you draw on. It is important to pass accurate values if you plan on using {Gosu::Image#draw_as_quad} or {Gosu::Image#draw_rot} with the result later.
+    #
+    # @return [Gosu::Image] the recorded drawing operations.
+    # @param width [Float] the width of the recorded image.
+    # @param height [Float] the height of the recorded image.
+    # @yield rendering code.
+    # 
+    # @see Window#draw
+    # @see Gosu::Image
+    def record(width, height); end
+    
+    ##
+    # Rotates all drawing operatons inside the block.
+    # 
+    # @return [void]
+    # @param angle [Float] the rotation angle.
+    # @param around_x [Float] the X coorinate of the rotation origin.
+    # @param around_y [Float] the Y coordinate of the rotation origin.
+    # @yield rendering code.
+    # 
+    # @see Window#draw
+    # @see scale
+    # @see translate
+    # @see transform
+    def rotate(angle, around_x=0, around_y=0); end
+    
+    ##
+    # Scales all drawing operations inside the block.
+    # 
+    # @overload scale(scale_x, scale_y = scale_x) { ... }
+    # @overload scale(scale_x, scale_y, around_x, around_y) { ... }
+    # 
+    # @return [void]
+    # @param scale_x [Float] the horizontal scaling factor.
+    # @param scale_y [Float] the vertical scaling factor.
+    # @param around_x [Float] the X coordinate of the scaling origin.
+    # @param around_y [Float] the Y coordinate of the scaling origin.
+    # @yield rendering code.
+    # 
+    # @see Window#draw
+    # @see rotate
+    # @see translate
+    # @see transform
+    def scale(scale_x, scale_y, around_x, around_y); end
+    
+    ##
+    # Offsets all drawing operations inside the block.
+    # 
+    # @return [void]
+    # @param x [Float] the X offset.
+    # @param y [Float] the Y offset.
+    # @yield rendering code.
+    # 
+    # @see Window#draw
+    # @see rotate
+    # @see scale
+    # @see transform
+    def translate(x, y); end
+    
+    ##
+    # Applies a free-form matrix transformation to everything drawn in the block.
+    # 
+    # @return [void]
+    # @param m0 [Float]
+    # @param m1 [Float]
+    # @param m2 [Float]
+    # @param m3 [Float]
+    # @param m4 [Float]
+    # @param m5 [Float]
+    # @param m6 [Float]
+    # @param m7 [Float]
+    # @param m8 [Float]
+    # @param m9 [Float]
+    # @param m10 [Float]
+    # @param m11 [Float]
+    # @param m12 [Float]
+    # @param m13 [Float]
+    # @param m14 [Float]
+    # @param m15 [Float]
+    # @yield rendering code.
+    # 
+    # @see Window#draw
+    # @see rotate
+    # @see scale
+    # @see translate
+    def transform(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15); end
+    
+    # @!endgroup
+    
+    ##
+    # Returns the character a button usually produces, if any.
+    # 
+    # @note For real text input, look at {TextInput} instead.
+    # 
+    # @return [String?] the character the button usually produces.
+    # @param id [Fixnum] the button's platform-defined id.
+    # 
+    # @see char_to_button_id
+    # @see Window#text_input
+    # @see TextInput
+    def self.button_id_to_char(id); end
+    
+    ##
+    # Returns the button that usually produces a character, if any.
+    # 
+    # @return [Fixnum?] the button that usually produces the character.
+    # @param char [String] the character to query.
+    # 
+    # @see button_id_to_char
+    # @see Window#text_input
+    # @see TextInput
+    def self.char_to_button_id(char); end
+    
     ##
     # @return [Float] a random number in the range (min...max).
     # @param min [Float] the minimum value, inclusive.
