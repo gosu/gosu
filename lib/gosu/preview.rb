@@ -3,21 +3,6 @@ require 'gosu'
 # Wrapper around Gosu 0.4-0.8 that provides the work-in-progress 0.9 interface
 
 module Gosu
-  class Font
-    alias :initialize_old :initialize
-    
-    def initialize *args
-      if args.first.is_a? Gosu::Window then
-        initialize_old *args
-      else
-        height  = args[0]
-        options = args[1] || {}
-        name = options[:name] || Gosu::default_font_name
-        initialize_old $window, name, height
-      end
-    end
-  end
-  
   def self.button_down? id
     $window.button_down? id
   end

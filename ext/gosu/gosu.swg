@@ -455,6 +455,38 @@ namespace Gosu {
     Font(Gosu::Window& window, const std::wstring& fontName, unsigned height) {
         return new Gosu::Font(height, fontName);
     }
+    Font(unsigned height, VALUE options = 0) {
+        std::wstring fontName = Gosu::defaultFontName();
+        
+        if (options) {
+            Check_Type(options, T_HASH);
+            
+            VALUE keys = rb_funcall(options, rb_intern("keys"), 0, NULL);
+            int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
+            
+            for (int i = 0; i < keysSize; ++i) {
+                VALUE key = rb_ary_entry(keys, i);
+                const char* keyString = Gosu::cstrFromSymbol(key);
+                
+                VALUE value = rb_hash_aref(options, key);
+                if (!strcmp(keyString, "name")) {
+                    VALUE rbString = rb_obj_as_string(value);
+                    char* utf8String = StringValueCStr(rbString);
+                    fontName = Gosu::utf8ToWstring(utf8String);
+                }
+                // TODO - would be nice & trivial to support :bold => false and :italic => true here
+                else {
+                    static bool issuedWarning = false;
+                    if (!issuedWarning) {
+                        issuedWarning = true;
+                        rb_warn("Unknown keyword argument: :%s", keyString);
+                    }
+                }
+            }
+        }
+        
+        return new Gosu::Font(height, fontName);
+    }
     void set_image(wchar_t wc, VALUE source) {
         Gosu::Bitmap bitmap;
         Gosu::loadBitmap(bitmap, source);

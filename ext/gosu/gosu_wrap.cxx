@@ -2562,7 +2562,39 @@ SWIG_AsVal_int (VALUE obj, int *val)
   return res;
 }
 
-SWIGINTERN Gosu::Font *new_Gosu_Font(Gosu::Window &window,std::wstring const &fontName,unsigned int height){
+SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_0(Gosu::Window &window,std::wstring const &fontName,unsigned int height){
+        return new Gosu::Font(height, fontName);
+    }
+SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_1(unsigned int height,VALUE options=0){
+        std::wstring fontName = Gosu::defaultFontName();
+        
+        if (options) {
+            Check_Type(options, T_HASH);
+            
+            VALUE keys = rb_funcall(options, rb_intern("keys"), 0, NULL);
+            int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
+            
+            for (int i = 0; i < keysSize; ++i) {
+                VALUE key = rb_ary_entry(keys, i);
+                const char* keyString = Gosu::cstrFromSymbol(key);
+                
+                VALUE value = rb_hash_aref(options, key);
+                if (!strcmp(keyString, "name")) {
+                    VALUE rbString = rb_obj_as_string(value);
+                    char* utf8String = StringValueCStr(rbString);
+                    fontName = Gosu::utf8ToWstring(utf8String);
+                }
+                // TODO - would be nice & trivial to support :bold => false and :italic => true here
+                else {
+                    static bool issuedWarning = false;
+                    if (!issuedWarning) {
+                        issuedWarning = true;
+                        rb_warn("Unknown keyword argument: :%s", keyString);
+                    }
+                }
+            }
+        }
+        
         return new Gosu::Font(height, fontName);
     }
 SWIGINTERN void Gosu_Font_set_image(Gosu::Font *self,wchar_t wc,VALUE source){
@@ -5382,25 +5414,8 @@ fail:
 }
 
 
-#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
 SWIGINTERN VALUE
-_wrap_Font_allocate(VALUE self) {
-#else
-  SWIGINTERN VALUE
-  _wrap_Font_allocate(int argc, VALUE *argv, VALUE self) {
-#endif
-    
-    
-    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_Gosu__Font);
-#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
-    rb_obj_call_init(vresult, argc, argv);
-#endif
-    return vresult;
-  }
-  
-
-SWIGINTERN VALUE
-_wrap_new_Font(int argc, VALUE *argv, VALUE self) {
+_wrap_new_Font__SWIG_0(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
   std::wstring *arg2 = 0 ;
   unsigned int arg3 ;
@@ -5435,7 +5450,7 @@ _wrap_new_Font(int argc, VALUE *argv, VALUE self) {
   arg3 = static_cast< unsigned int >(val3);
   {
     try {
-      result = (Gosu::Font *)new_Gosu_Font(*arg1,(std::wstring const &)*arg2,arg3);
+      result = (Gosu::Font *)new_Gosu_Font__SWIG_0(*arg1,(std::wstring const &)*arg2,arg3);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
     } catch (const std::exception& e) {
@@ -5444,6 +5459,114 @@ _wrap_new_Font(int argc, VALUE *argv, VALUE self) {
   }
   return self;
 fail:
+  return Qnil;
+}
+
+
+#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
+SWIGINTERN VALUE
+_wrap_Font_allocate(VALUE self) {
+#else
+  SWIGINTERN VALUE
+  _wrap_Font_allocate(int argc, VALUE *argv, VALUE self) {
+#endif
+    
+    
+    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_Gosu__Font);
+#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
+    rb_obj_call_init(vresult, argc, argv);
+#endif
+    return vresult;
+  }
+  
+
+SWIGINTERN VALUE
+_wrap_new_Font__SWIG_1(int argc, VALUE *argv, VALUE self) {
+  unsigned int arg1 ;
+  VALUE arg2 = (VALUE) 0 ;
+  unsigned int val1 ;
+  int ecode1 = 0 ;
+  const char *classname SWIGUNUSED = "Gosu::Font";
+  Gosu::Font *result = 0 ;
+  
+  if ((argc < 1) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  ecode1 = SWIG_AsVal_unsigned_SS_int(argv[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "unsigned int","Font", 1, argv[0] ));
+  } 
+  arg1 = static_cast< unsigned int >(val1);
+  if (argc > 1) {
+    arg2 = argv[1];
+  }
+  {
+    try {
+      result = (Gosu::Font *)new_Gosu_Font__SWIG_1(arg1,arg2);
+      DATA_PTR(self) = result;
+      SWIG_RubyAddTracking(result, self);
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return self;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE _wrap_new_Font(int nargs, VALUE *args, VALUE self) {
+  int argc;
+  VALUE argv[3];
+  int ii;
+  
+  argc = nargs;
+  if (argc > 3) SWIG_fail;
+  for (ii = 0; (ii < argc); ++ii) {
+    argv[ii] = args[ii];
+  }
+  if ((argc >= 1) && (argc <= 2)) {
+    int _v;
+    {
+      int res = SWIG_AsVal_unsigned_SS_int(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      if (argc <= 1) {
+        return _wrap_new_Font__SWIG_1(nargs, args, self);
+      }
+      _v = (argv[1] != 0);
+      if (_v) {
+        return _wrap_new_Font__SWIG_1(nargs, args, self);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_std__wstring, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_unsigned_SS_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_new_Font__SWIG_0(nargs, args, self);
+        }
+      }
+    }
+  }
+  
+fail:
+  Ruby_Format_OverloadedError( argc, 3, "Font.new", 
+    "    Font.new(Gosu::Window &window, std::wstring const &fontName, unsigned int height)\n"
+    "    Font.new(unsigned int height, VALUE options)\n");
+  
   return Qnil;
 }
 
