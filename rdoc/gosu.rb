@@ -978,7 +978,7 @@ module Gosu
     def clip_to(x, y, w, h); end
     
     ##
-    # Records all drawing operatons inside the block as a reusable "image". This method can be used to speed rendering of multiple static images, e.g., a fixed tile map.
+    # Records all drawing operations inside the block as a reusable "image". This method can be used to speed rendering of multiple static images, e.g., a fixed tile map.
     # 
     # @note Because the returned object is not a true image---it's implemented using vertex buffers and is not backed by a texture---there are restrictions on how it can be used.
     #
@@ -994,7 +994,7 @@ module Gosu
     def record(width, height); end
     
     ##
-    # Rotates all drawing operatons inside the block.
+    # Rotates all drawing operations inside the block.
     # 
     # @return [void]
     # @param angle [Float] the rotation angle.
