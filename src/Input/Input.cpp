@@ -3,8 +3,23 @@
 #include <Gosu/TR1.hpp>
 #include <Gosu/Utility.hpp>
 #include <SDL2/SDL.h>
-#include <algorithm>
 #include <cwctype>
+#include <cstdlib>
+#include <algorithm>
+
+namespace
+{
+    void requireSDLVideo()
+    {
+        static bool initializedSDLVideo = false;
+        if (!initializedSDLVideo)
+        {
+            SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
+            std::atexit(SDL_Quit);
+            initializedSDLVideo = true;
+        }
+    }
+}
 
 struct Gosu::Input::Impl
 {
@@ -225,7 +240,7 @@ private:
 Gosu::Input::Input()
 : pimpl(new Impl(*this))
 {
-    SDL_InitSubSystem(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER);
+    requireSDLVideo();
     
     pimpl->initializeGamepads();
 }
@@ -233,8 +248,6 @@ Gosu::Input::Input()
 Gosu::Input::~Input()
 {
     pimpl->releaseGamepads();
-    
-    SDL_QuitSubSystem(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER);
 }
 
 bool Gosu::Input::feedSDLEvent(void* event)
@@ -281,6 +294,8 @@ bool Gosu::Input::feedSDLEvent(void* event)
 
 wchar_t Gosu::Input::idToChar(Button btn)
 {
+    requireSDLVideo();
+    
     if (btn.id() > kbRangeEnd)
         return 0;
     
@@ -312,6 +327,8 @@ wchar_t Gosu::Input::idToChar(Button btn)
 
 Gosu::Button Gosu::Input::charToId(wchar_t ch)
 {
+    requireSDLVideo();
+    
     std::wstring string(1, ch);
     SDL_Keycode keycode = SDL_GetKeyFromName(wstringToUTF8(string).c_str());
     
