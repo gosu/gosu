@@ -3,10 +3,6 @@ require 'gosu'
 # Wrapper around Gosu 0.4-0.8 that provides the work-in-progress 0.9 interface
 
 module Gosu
-  def self.button_down? id
-    $window.button_down? id
-  end
-  
   def self.mouse_x
     $window.mouse_x
   end

@@ -19,13 +19,14 @@ namespace
             initializedSDLVideo = true;
         }
     }
+    
+    std::tr1::array<bool, Gosu::numButtons> buttonStates { { false } };
 }
 
 struct Gosu::Input::Impl
 {
     Input& input;
     TextInput* textInput;
-    std::tr1::array<bool, Gosu::numButtons> buttonStates;
     double mouseX, mouseY;
     double mouseFactorX, mouseFactorY;
     double mouseOffsetX, mouseOffsetY;
@@ -33,8 +34,6 @@ struct Gosu::Input::Impl
     Impl(Input& input)
     : input(input), textInput(NULL)
     {
-        std::fill(buttonStates.begin(), buttonStates.end(), false);
-        
         mouseFactorX = mouseFactorY = 1;
         mouseOffsetX = mouseOffsetY = 0;
     }
@@ -340,12 +339,12 @@ Gosu::Button Gosu::Input::charToId(wchar_t ch)
     }
 }
 
-bool Gosu::Input::down(Gosu::Button btn) const
+bool Gosu::Input::down(Gosu::Button btn)
 {
     if (btn == noButton || btn.id() >= numButtons)
         return false;
     
-    return pimpl->buttonStates[btn.id()];
+    return buttonStates[btn.id()];
 }
 
 double Gosu::Input::mouseX() const

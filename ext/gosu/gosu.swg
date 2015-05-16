@@ -310,6 +310,9 @@ namespace Gosu {
     wchar_t buttonIdToChar(Gosu::Button btn) {
         return Gosu::Input::idToChar(btn);
     }
+    bool isButtonDown(Gosu::Button btn) {
+        return Gosu::Input::down(btn);
+    }
 }
 
 // Global graphics functions
@@ -333,8 +336,14 @@ namespace Gosu {
                   double x4, double y4, Gosu::Color c4,
                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault) {
         Gosu::Graphics::drawQuad(x1, y1, c1, x2, y2, c2,
-                                   x3, y3, c3, x4, y4, c4,
-                                   z, mode);
+                                 x3, y3, c3, x4, y4, c4,
+                                 z, mode);
+    }
+    void drawRect(double x, double y, double width, double height, Gosu::Color c,
+                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault) {
+        Gosu::Graphics::drawQuad(x, y, c, x + width, y, c,
+                                 x, y + height, c, x + width, y + height, c,
+                                 z, mode);
     }
     void flush() {
         return Gosu::Graphics::flush();
@@ -884,7 +893,6 @@ namespace Gosu {
 
 // Window
 %rename("caption=") setCaption;
-%rename("button_down?") isButtonDown;
 %rename("text_input=") setTextInput;
 %rename("mouse_x=") setMouseX;
 %rename("mouse_y=") setMouseY;
@@ -947,10 +955,6 @@ namespace Gosu {
     }
     */
     
-    bool isButtonDown(Gosu::Button btn) const {
-        return $self->input().down(btn);
-    }
-    
     TextInput* textInput() const {
         return $self->input().textInput();
     }
@@ -988,12 +992,10 @@ namespace Gosu {
 // Global input functions
 
 namespace Gosu {
-    Gosu::Button charToButtonId(wchar_t ch) {
-        return Gosu::Input::charToId(ch);
-    }
-    wchar_t buttonIdToChar(Gosu::Button btn) {
-        return Gosu::Input::idToChar(btn);
-    }
+    Gosu::Button charToButtonId(wchar_t ch);
+    wchar_t buttonIdToChar(Gosu::Button btn);
+    %rename("button_down?") isButtonDown;
+    bool isButtonDown(Gosu::Button btn);
 }
 
 // Global graphics functions
@@ -1009,6 +1011,8 @@ namespace Gosu {
                   double x2, double y2, Gosu::Color c2,
                   double x3, double y3, Gosu::Color c3,
                   double x4, double y4, Gosu::Color c4,
+                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault);
+    void drawRect(double x, double y, double width, double height, Gosu::Color c,
                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault);
     void flush();
     void unsafe_gl();

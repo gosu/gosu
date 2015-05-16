@@ -103,7 +103,7 @@ namespace Gosu
         
         //! Returns true if a button is currently pressed.
         //! Updated every tick.
-        bool down(Button btn) const;
+        static bool down(Button btn);
         
         //! Returns the horizontal position of the mouse relative to the top
         //! left corner of the window given to Input's constructor.
