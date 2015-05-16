@@ -73,17 +73,17 @@ module Gosu
   end
   
   class Color
-    NONE    = Gosu::ImmutableColor.new(0x00000000)
-    BLACK   = Gosu::ImmutableColor.new(0xff000000)
-    GRAY    = Gosu::ImmutableColor.new(0xff808080)
-    WHITE   = Gosu::ImmutableColor.new(0xffffffff)
-    AQUA    = Gosu::ImmutableColor.new(0xff00ffff)
-    RED     = Gosu::ImmutableColor.new(0xffff0000)
-    GREEN   = Gosu::ImmutableColor.new(0xff00ff00)
-    BLUE    = Gosu::ImmutableColor.new(0xff0000ff)
-    YELLOW  = Gosu::ImmutableColor.new(0xffffff00)
-    FUCHSIA = Gosu::ImmutableColor.new(0xffff00ff)
-    CYAN    = Gosu::ImmutableColor.new(0xff00ffff)
+    NONE    = Gosu::ImmutableColor.new(0x00_000000)
+    BLACK   = Gosu::ImmutableColor.new(0xff_000000)
+    GRAY    = Gosu::ImmutableColor.new(0xff_808080)
+    WHITE   = Gosu::ImmutableColor.new(0xff_ffffff)
+    AQUA    = Gosu::ImmutableColor.new(0xff_00ffff)
+    RED     = Gosu::ImmutableColor.new(0xff_ff0000)
+    GREEN   = Gosu::ImmutableColor.new(0xff_00ff00)
+    BLUE    = Gosu::ImmutableColor.new(0xff_0000ff)
+    YELLOW  = Gosu::ImmutableColor.new(0xff_ffff00)
+    FUCHSIA = Gosu::ImmutableColor.new(0xff_ff00ff)
+    CYAN    = Gosu::ImmutableColor.new(0xff_00ffff)
   end
 end
 
@@ -103,7 +103,7 @@ class Gosu::Window
   %w(draw_line draw_triangle draw_quad
      flush gl clip_to record
      transform translate rotate scale
-     button_id_to_char char_to_button_id).each do |method|
+     button_id_to_char char_to_button_id button_down?).each do |method|
     define_method method.to_sym do |*args|
       Gosu.send method, *args
     end
