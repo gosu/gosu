@@ -112,8 +112,8 @@ namespace Gosu
         double mouseY() const;
         
         //! Immediately moves the mouse as far towards the desired position
-        //! as possible. x and y are relativ to the window just as in the mouse
-        //! position accessors.
+        //! as possible. x and y are relative to the window, just as in mouseX()
+        //! and mouseY(), so (0, 0) is the top left corner of the window..
         void setMousePosition(double x, double y);
 
         // Undocumented for the moment. Also applies to currentTouches().
@@ -132,11 +132,11 @@ namespace Gosu
         void update();
         
         //! Assignable events that are called by update. You can bind these to your own functions.
-        //! If you use the Window class, it will assign forward these to its own methods.
+        //! If you use the Window class, it will assign these to its own methods.
         std::tr1::function<void (Button)> onButtonDown, onButtonUp;
         
         //! Assignable events that are called by update. You can bind these to your own functions.
-        //! If you use the Window class, it will assign forward these to its own methods.
+        //! If you use the Window class, it will assign these to its own methods.
         std::tr1::function<void (Touch)> onTouchBegan, onTouchMoved, onTouchEnded;
         
         //! Returns the currently active TextInput instance, or 0.

@@ -281,7 +281,7 @@ module Gosu
     # @see Gosu::Image.from_text
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
-    def draw(text, x, y, z, scale_x=1, scale_y=1, color=0xffffffff, mode=:default); end
+    def draw(text, x, y, z, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
     
     ##
     # Draws a single line of text relative to (x, y).
@@ -298,14 +298,14 @@ module Gosu
     # @see #draw
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
-    def draw_rel(text, x, y, z, rel_x, rel_y, scale_x=1, scale_y=1, color=0xffffffff, mode=:default); end
+    def draw_rel(text, x, y, z, rel_x, rel_y, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
     
     ##
     # @deprecated Use {#draw} in conjunction with {Gosu.rotate} instead.
     # 
     # @see #draw
     # @see Gosu::Window#rotate
-    def draw_rot(text, x, y, z, angle, scale_x=1, scale_y=1, color=0xffffffff, mode=:default); end
+    def draw_rot(text, x, y, z, angle, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
     
     # @!endgroup
     
@@ -415,7 +415,7 @@ module Gosu
     # @see #draw_as_quad
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
-    def draw(x, y, z, scale_x=1, scale_y=1, color=0xffffffff, mode=:default); end
+    def draw(x, y, z, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
     
     ##
     # Draws the image rotated, with its rotational center at (x, y).
@@ -429,7 +429,7 @@ module Gosu
     # @see #draw
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
     # @see https://github.com/jlnr/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
-    def draw_rot(x, y, z, angle, center_x=0.5, center_y=0.5, scale_x=1, scale_y=1, color=0xffffffff, mode=:default); end
+    def draw_rot(x, y, z, angle, center_x=0.5, center_y=0.5, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
     
     ##
     # Draws the image as an arbitrary quad. This method can be used for advanced non-rectangular drawing techniques, e.g., faking perspective or isometric projection.
