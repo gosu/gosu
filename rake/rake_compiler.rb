@@ -26,8 +26,6 @@ EOS
   s.files += Dir["src/**/*.{h,hpp,c,cpp,m,mm}"]
   # Gosu header files, for compiling the gem & for using inline C++ from Ruby
   s.files += Dir["Gosu/*.hpp"]
-  # Examples
-  s.files += Dir["examples/*.rb", "examples/media/**/*"]
   # RDoc setup
   # The docs will never look great in rdoc, though, because we are using
   # some yard-specific syntax in rdoc/gosu.rb.
