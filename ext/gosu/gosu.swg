@@ -538,10 +538,10 @@ namespace Gosu {
     }
 
     std::string inspect() const {
-        char buffer[31];
+        char buffer[32];
         // snprintf is either member of std:: (C++11), or a #define for ruby_snprintf.
         using namespace std;
-        snprintf(buffer, sizeof buffer, "#<Gosu::Color:ARGB=0x%08x>", $self->argb());
+        snprintf(buffer, sizeof buffer, "#<Gosu::Color:ARGB=0x%02x_%06x>", $self->alpha(), $self->argb() & 0xffffff);
         return buffer;
     }
     
