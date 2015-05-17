@@ -9,17 +9,24 @@
 
 namespace
 {
+    void cleanup();
+
     void requireSDLVideo()
     {
-        static bool initializedSDLVideo = false;
-        if (!initializedSDLVideo)
+        static bool initialized = false;
+        if (!initialized)
         {
-            SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
-            std::atexit(SDL_Quit);
-            initializedSDLVideo = true;
+            SDL_InitSubSystem(SDL_INIT_VIDEO);
+            initialized = true;
+            std::atexit(cleanup);
         }
     }
     
+    void cleanup()
+    {
+        SDL_QuitSubSystem(SDL_INIT_VIDEO);
+    }
+
     std::tr1::array<bool, Gosu::numButtons> buttonStates = { { false } };
 }
 
@@ -70,6 +77,8 @@ struct Gosu::Input::Impl
     
     void initializeGamepads()
     {
+        SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
+
         int numGamepads = std::min<int>(Gosu::numGamepads, SDL_NumJoysticks());
         
         for (int i = 0; i < numGamepads; ++i) {
@@ -95,6 +104,8 @@ struct Gosu::Input::Impl
         joysticks.clear();
         std::for_each(gameControllers.begin(), gameControllers.end(), &SDL_GameControllerClose);
         gameControllers.clear();
+        
+        SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
     }
     
     typedef std::tr1::array<bool, gpNumPerGamepad> GamepadBuffer;

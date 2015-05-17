@@ -19,7 +19,9 @@ namespace Gosu
         const char *error = SDL_GetError();
         throw std::runtime_error(operation + ": " + (error ? error : "(unknown error)"));
     }
-    
+
+    void cleanup();
+
     SDL_Window* sharedWindow()
     {
         static SDL_Window *window = 0;
@@ -27,9 +29,9 @@ namespace Gosu
         {
             if (SDL_Init(SDL_INIT_VIDEO) < 0)
                 throwSDLError("Could not initialize SDL Video");
-            
-            atexit(SDL_Quit);
-            
+
+            std::atexit(cleanup);
+
             Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN;
             
             #if SDL_VERSION_ATLEAST(2, 0, 1)
@@ -65,6 +67,13 @@ namespace Gosu
     {
         SDL_GL_MakeCurrent(sharedWindow(), sharedGLContext());
     }
+
+    void cleanup()
+    {
+        SDL_GL_DeleteContext(sharedGLContext());
+        SDL_DestroyWindow(sharedWindow());
+        SDL_QuitSubSystem(SDL_INIT_VIDEO);
+    }
 }
 
 struct Gosu::Window::Impl
@@ -78,7 +87,6 @@ struct Gosu::Window::Impl
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double updateInterval)
 : pimpl(new Impl)
 {
-    
     int actualWidth = width;
     int actualHeight = height;
     double scaleFactor = 1.0;
@@ -208,6 +216,8 @@ void Gosu::Window::show()
             sleep(pimpl->updateInterval - frameTime);
         }
     }
+
+    SDL_HideWindow(sharedWindow());
 }
 
 void Gosu::Window::close()
