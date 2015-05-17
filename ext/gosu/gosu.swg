@@ -48,6 +48,9 @@
     temp = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
     $1 = &temp;
 }
+%typemap(typecheck) const std::wstring& {
+    $1 = !!rb_respond_to($input, rb_intern("to_str"));
+}
 %apply const std::wstring& { std::wstring, const std::string };
 %typemap(out) std::wstring {
     $result = rb_str_new2(Gosu::wstringToUTF8($1).c_str());
