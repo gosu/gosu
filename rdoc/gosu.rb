@@ -676,28 +676,27 @@ module Gosu
   # Gosu application. Manages initialization of all of Gosu's core components
   # and provides timing functionality.
   #
-  # Note that all coordinates, even the mouse position, are in client
-  # coordinates relative to the window. This means that the mouse position
-  # can be negative or larger than the window size.
+  # Note that all coordinates, even the mouse position, are in client coordinates, relative to the window’s top left corner.
+  # This means that the mouse position can be negative or larger than the window size.
   #
-  # @note There should really only be one instance of this class at a time. This may or may not change later, but for right now, having two or more windows and loading samples or songs on both of them will result in an exception.
+  # @note There should really only be one instance of this class at a time. This may or may not change later.
   class Window
     ##
     # @return [String] the window's caption, usually dispalyed in the title bar.
     attr_accessor :caption
     
     ##
-    # @return [Fixnum] the mouse pointer's window-based X coordinate.
+    # @return [Float] the mouse pointer's window-based X coordinate.
     attr_accessor :mouse_x
     
     ##
-    # @return [Fixnum] the mouse pointer's window-based Y coordinate.
+    # @return [Float] the mouse pointer's window-based Y coordinate.
     attr_accessor :mouse_y
     
     ##
     # The currently active {TextInput}. If not nil, all keyboard input will be handled by this object.
     # 
-    # @return [TextInput?] the currently active text input.
+    # @return [TextInput?] the currently active text input, if any.
     attr_accessor :text_input
     
     ##
