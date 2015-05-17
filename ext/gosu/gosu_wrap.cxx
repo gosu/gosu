@@ -2854,7 +2854,7 @@ SWIGINTERN Gosu::Image *Gosu_Image_fromText(std::wstring const &text,unsigned in
         std::wstring font = Gosu::defaultFontName();
         unsigned width = 0xfefefefe;
         unsigned spacing = 0;
-        Gosu::TextAlign align = align;
+        Gosu::TextAlign align = Gosu::taLeft;
         
         if (options) {
             Check_Type(options, T_HASH);
