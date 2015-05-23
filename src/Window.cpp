@@ -139,7 +139,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     
     pimpl->graphics.reset(new Graphics(actualWidth, actualHeight, fullscreen));
     pimpl->graphics->setResolution(width, height, blackBarWidth, blackBarHeight);
-    pimpl->input.reset(new Input());
+    pimpl->input.reset(new Input(sharedWindow()));
     pimpl->input->setMouseFactors(1 / scaleFactor, 1 / scaleFactor, blackBarWidth, blackBarHeight);
     input().onButtonDown = std::tr1::bind(&Window::buttonDown, this, _1);
     input().onButtonUp = std::tr1::bind(&Window::buttonUp, this, _1);

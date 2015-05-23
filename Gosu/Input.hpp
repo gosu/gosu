@@ -89,7 +89,7 @@ namespace Gosu
         Input(void* view, float updateInterval);
         void feedTouchEvent(int type, void* touches);
     #else
-        Input();
+        Input(void* window);
         bool feedSDLEvent(void* event);
     #endif
         

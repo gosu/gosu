@@ -33,13 +33,14 @@ namespace
 struct Gosu::Input::Impl
 {
     Input& input;
+    SDL_Window* window;
     TextInput* textInput;
     double mouseX, mouseY;
     double mouseFactorX, mouseFactorY;
     double mouseOffsetX, mouseOffsetY;
     
-    Impl(Input& input)
-    : input(input), textInput(NULL)
+    Impl(Input& input, SDL_Window* window)
+    : input(input), window(window), textInput(NULL)
     {
         mouseFactorX = mouseFactorY = 1;
         mouseOffsetX = mouseOffsetY = 0;
@@ -47,9 +48,16 @@ struct Gosu::Input::Impl
     
     void updateMousePosition()
     {
+    #if SDL_VERSION_ATLEAST(2, 0, 4)
+        int x, y, windowX, windowY;
+        SDL_GetWindowPosition(window, &windowX, &windowY);
+        SDL_GetGlobalMouseState(&x, &y);
+        mouseX = x - windowX, mouseY = y - windowY;
+    #else
         int x, y;
         SDL_GetMouseState(&x, &y);
         mouseX = x, mouseY = y;
+    #endif
     }
     
     void enqueueEvent(int id, bool down)
@@ -247,8 +255,8 @@ private:
     }
 };
 
-Gosu::Input::Input()
-: pimpl(new Impl(*this))
+Gosu::Input::Input(void* window)
+: pimpl(new Impl(*this, (SDL_Window*)window))
 {
     requireSDLVideo();
     
@@ -370,8 +378,7 @@ double Gosu::Input::mouseY() const
 
 void Gosu::Input::setMousePosition(double x, double y)
 {
-    // TODO - Input needs SDL Window handle to pass into this
-    SDL_WarpMouseInWindow(NULL,
+    SDL_WarpMouseInWindow(pimpl->window,
         (x - pimpl->mouseOffsetX) / pimpl->mouseFactorX,
         (y - pimpl->mouseOffsetY) / pimpl->mouseFactorY);
 }
