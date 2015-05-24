@@ -20,8 +20,8 @@ Global
 		Release (Ruby 1.9)|x64 = Release (Ruby 1.9)|x64
 		Release (Ruby 2.0)|Win32 = Release (Ruby 2.0)|Win32
 		Release (Ruby 2.0)|x64 = Release (Ruby 2.0)|x64
-		Release (Ruby 2.2)|Win32 = Release (Ruby 2.2)|Win32
-		Release (Ruby 2.2)|x64 = Release (Ruby 2.2)|x64
+		Release (Ruby 2.1)|Win32 = Release (Ruby 2.1)|Win32
+		Release (Ruby 2.1)|x64 = Release (Ruby 2.1)|x64
 		Release|Win32 = Release|Win32
 		Release|x64 = Release|x64
 	EndGlobalSection
@@ -42,11 +42,11 @@ Global
 		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.0)|Win32.Build.0 = Release|Win32
 		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.0)|x64.ActiveCfg = Release|x64
 		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.0)|x64.Build.0 = Release|x64
-		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.2)|Win32.ActiveCfg = Release|x64
-		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.2)|x64.ActiveCfg = Release|x64
-		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.2)|x64.Build.0 = Release|x64
+		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.1)|Win32.ActiveCfg = Release|Win32
+		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.1)|Win32.Build.0 = Release|Win32
+		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.1)|x64.ActiveCfg = Release|x64
+		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.1)|x64.Build.0 = Release|x64
 		{4989339B-019C-4399-86F5-1D9245C420C6}.Release|Win32.ActiveCfg = Release|Win32
-		{4989339B-019C-4399-86F5-1D9245C420C6}.Release|Win32.Build.0 = Release|Win32
 		{4989339B-019C-4399-86F5-1D9245C420C6}.Release|x64.ActiveCfg = Release|x64
 		{4989339B-019C-4399-86F5-1D9245C420C6}.Release|x64.Build.0 = Release|x64
 		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Debug|Win32.ActiveCfg = Release (Ruby 2.1)|Win32
@@ -61,14 +61,14 @@ Global
 		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.0)|Win32.ActiveCfg = Release (Ruby 2.0)|Win32
 		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.0)|Win32.Build.0 = Release (Ruby 2.0)|Win32
 		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.0)|x64.ActiveCfg = Release (Ruby 2.0)|x64
-		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.2)|Win32.ActiveCfg = Release (Ruby 2.2)|Win32
-		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.2)|Win32.Build.0 = Release (Ruby 2.2)|Win32
-		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.2)|x64.ActiveCfg = Release (Ruby 2.2)|x64
-		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.2)|x64.Build.0 = Release (Ruby 2.2)|x64
-		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release|Win32.ActiveCfg = Release (Ruby 2.1)|Win32
-		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release|Win32.Build.0 = Release (Ruby 2.1)|Win32
-		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release|x64.ActiveCfg = Release (Ruby 2.1)|x64
-		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release|x64.Build.0 = Release (Ruby 2.1)|x64
+		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.1)|Win32.ActiveCfg = Release (Ruby 2.1)|Win32
+		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.1)|Win32.Build.0 = Release (Ruby 2.1)|Win32
+		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.1)|x64.ActiveCfg = Release (Ruby 2.1)|x64
+		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.1)|x64.Build.0 = Release (Ruby 2.1)|x64
+		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release|Win32.ActiveCfg = Release (Ruby 2.2)|Win32
+		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release|Win32.Build.0 = Release (Ruby 2.2)|Win32
+		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release|x64.ActiveCfg = Release (Ruby 2.2)|x64
+		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release|x64.Build.0 = Release (Ruby 2.2)|x64
 		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Debug|Win32.ActiveCfg = Debug|Win32
 		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Debug|Win32.Build.0 = Debug|Win32
 		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Debug|x64.ActiveCfg = Debug|x64
@@ -85,11 +85,11 @@ Global
 		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Release (Ruby 2.0)|Win32.Build.0 = Release|Win32
 		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Release (Ruby 2.0)|x64.ActiveCfg = Release|x64
 		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Release (Ruby 2.0)|x64.Build.0 = Release|x64
-		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Release (Ruby 2.2)|Win32.ActiveCfg = Release|x64
-		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Release (Ruby 2.2)|x64.ActiveCfg = Release|x64
-		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Release (Ruby 2.2)|x64.Build.0 = Release|x64
+		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Release (Ruby 2.1)|Win32.ActiveCfg = Release|Win32
+		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Release (Ruby 2.1)|Win32.Build.0 = Release|Win32
+		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Release (Ruby 2.1)|x64.ActiveCfg = Release|x64
+		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Release (Ruby 2.1)|x64.Build.0 = Release|x64
 		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Release|Win32.ActiveCfg = Release|Win32
-		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Release|Win32.Build.0 = Release|Win32
 		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Release|x64.ActiveCfg = Release|x64
 		{FF01DBAF-B716-4660-9F2E-F82A6FD34816}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
