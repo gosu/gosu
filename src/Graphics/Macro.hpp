@@ -16,7 +16,6 @@ class Gosu::Macro : public Gosu::ImageData
 {
     typedef double Float;
     
-    Graphics& graphics;
     VertexArrays vertexArrays;
     int w, h;
     
@@ -167,8 +166,8 @@ class Gosu::Macro : public Gosu::ImageData
     void drawVertexArrays(Float x1, Float y1, Float x2, Float y2, Float x3, Float y3, Float x4, Float y4) const
     {
         // TODO: Macros should not be split up just because they have different transforms! This is insane.
-        // They should be premultiplied and have the same transform by definition. Then, the transformation
-        // only had to be performed here once.
+        // They should be premultiplied and have the same transform by definition. Then the transformation
+        // only has to be performed once.
         
         #ifndef GOSU_IS_OPENGLES
         glEnable(GL_BLEND);
@@ -190,8 +189,8 @@ class Gosu::Macro : public Gosu::ImageData
     }
     
 public:
-    Macro(Graphics& graphics, DrawOpQueue& queue, int width, int height)
-    : graphics(graphics), w(width), h(height)
+    Macro(DrawOpQueue& queue, int width, int height)
+    : w(width), h(height)
     {
         queue.compileTo(vertexArrays);
     }
@@ -214,8 +213,9 @@ public:
     {
         if (c1 != Color::WHITE || c2 != Color::WHITE || c3 != Color::WHITE || c4 != Color::WHITE)
             throw std::invalid_argument("Macros cannot be tinted with colors yet");
+        
         std::tr1::function<void()> f = std::tr1::bind(&Macro::drawVertexArrays, this, x1, y1, x2, y2, x3, y3, x4, y4);
-        graphics.scheduleGL(f, z);
+        Gosu::Graphics::scheduleGL(f, z);
     }
     
     const Gosu::GLTexInfo* glTexInfo() const

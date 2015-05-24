@@ -28,6 +28,15 @@ namespace Gosu
         
         typedef std::vector<std::tr1::shared_ptr<Texture> > Textures;
         Textures textures;
+        
+        DrawOpQueueStack queues;
+        
+        DrawOpQueue& currentQueue()
+        {
+            if (queues.empty())
+                throw std::logic_error("There is no rendering queue for this operation");
+            return queues.back();
+        }
     }
 }
 
@@ -37,7 +46,7 @@ struct Gosu::Graphics::Impl
     unsigned physWidth, physHeight;
     double blackWidth, blackHeight;
     bool fullscreen;
-    DrawOpQueueStack queues;
+    Transform baseTransform;
 };
 
 Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscreen)
@@ -65,9 +74,6 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscree
     glLoadIdentity();
     
     glEnable(GL_BLEND);
-    
-    // Create default draw-op queue.
-    pimpl->queues.resize(1);
 }
 
 Gosu::Graphics::~Graphics()
@@ -108,25 +114,25 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
 
     Transform scaleTransform = scale(scaleFactor);
     Transform translateTransform = translate(pimpl->blackWidth, pimpl->blackHeight);
-    Transform baseTransform = concat(translateTransform, scaleTransform);
-    
-    pimpl->queues.front().setBaseTransform(baseTransform);
+    pimpl-> baseTransform = concat(translateTransform, scaleTransform);
 }
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 {
-    // If recording is in process, cancel it.
-    assert (pimpl->queues.size() == 1);
-    pimpl->queues.resize(1);
+    if (currentGraphicsPointer != 0)
+        throw std::logic_error("Cannot nest calls to Gosu::Graphics::begin()");
+    
+    // Cancel all recording or whatever that might still be in progress...
+    queues.clear();
+    
+    // Create default draw-op queue.
+    queues.resize(1);
+    queues.back().setBaseTransform(pimpl->baseTransform);
     // Clear leftover transforms, clip rects etc.
-    pimpl->queues.front().reset();
     
     glClearColor(clearWithColor.red() / 255.f, clearWithColor.green() / 255.f,
         clearWithColor.blue() / 255.f, clearWithColor.alpha() / 255.f);
     glClear(GL_COLOR_BUFFER_BIT);
-    
-    if (currentGraphicsPointer != 0)
-        throw std::logic_error("Cannot nest calls to Gosu::Graphics::begin()");
     
     currentGraphicsPointer = this;
     
@@ -136,10 +142,12 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 void Gosu::Graphics::end()
 {
     // If recording is in process, cancel it.
-    pimpl->queues.resize(1);
+    while (currentQueue().recording()) {
+        queues.pop_back();
+    }
     
     flush();
-
+    
     if (pimpl->blackHeight || pimpl->blackWidth) {
         if (pimpl->blackHeight) {
             drawQuad(0, -pimpl->blackHeight, Color::BLACK,
@@ -165,26 +173,20 @@ void Gosu::Graphics::end()
     }
     
     glFlush();
-
+    
     currentGraphicsPointer = 0;
+    queues.clear();
 }
 
 void Gosu::Graphics::flush()
 {
-    Graphics& cg = currentGraphics();
-    
-    if (cg.pimpl->queues.size() != 1)
-        throw std::logic_error("Flushing to screen is not allowed while creating a macro");
-    
-    cg.pimpl->queues.front().performDrawOpsAndCode();
-    cg.pimpl->queues.front().clearQueue();
+    currentQueue().performDrawOpsAndCode();
+    currentQueue().clearQueue();
 }
 
 void Gosu::Graphics::beginGL()
 {
-    Graphics& cg = currentGraphics();
-    
-    if (cg.pimpl->queues.size() > 1)
+    if (currentQueue().recording())
         throw std::logic_error("Custom OpenGL is not allowed while creating a macro");
     
 #ifdef GOSU_IS_OPENGLES
@@ -247,90 +249,71 @@ namespace Gosu
             
             functor();
             
-            // Does not have to be inlined.
-            graphics.endGL();            
+            graphics.endGL();
         }
     };
 }
 
 void Gosu::Graphics::scheduleGL(const std::tr1::function<void()>& functor, Gosu::ZPos z)
 {
-    Graphics& cg = currentGraphics();
-    
-    cg.pimpl->queues.back().scheduleGL(RunGLFunctor(cg, functor), z);
+    currentQueue().scheduleGL(RunGLFunctor(currentGraphics(), functor), z);
 }
 #endif
 
 void Gosu::Graphics::beginClipping(double x, double y, double width, double height)
 {
-    Graphics& cg = currentGraphics();
-    
-    if (cg.pimpl->queues.size() > 1)
-        throw std::logic_error("Clipping is not allowed while creating a macro yet");
-    
-    cg.pimpl->queues.back().beginClipping(x, y, width, height, cg.pimpl->physHeight);
+    double screenHeight = currentGraphics().pimpl->physHeight;
+    currentQueue().beginClipping(x, y, width, height, screenHeight);
 }
 
 void Gosu::Graphics::endClipping()
 {
-    Graphics& cg = currentGraphics();
-    
-    cg.pimpl->queues.back().endClipping();
+    currentQueue().endClipping();
 }
 
 void Gosu::Graphics::beginRecording()
 {
-    Graphics& cg = currentGraphics();
-    
-    cg.pimpl->queues.resize(cg.pimpl->queues.size() + 1);
+    queues.resize(queues.size() + 1);
+    currentQueue().setRecording();
 }
 
 GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::endRecording(int width, int height)
 {
-    Graphics& cg = currentGraphics();
-    
-    if (cg.pimpl->queues.size() == 1)
+    if (! currentQueue().recording())
         throw std::logic_error("No macro recording in progress that can be captured");
     
-    GOSU_UNIQUE_PTR<ImageData> result(new Macro(cg, cg.pimpl->queues.back(), width, height));
-    cg.pimpl->queues.pop_back();
+    GOSU_UNIQUE_PTR<ImageData> result(new Macro(currentQueue(), width, height));
+    queues.pop_back();
     return result;
 }
 
 void Gosu::Graphics::pushTransform(const Gosu::Transform& transform)
 {
-    Graphics& cg = currentGraphics();
-    
-    cg.pimpl->queues.back().pushTransform(transform);
+    currentQueue().pushTransform(transform);
 }
 
 void Gosu::Graphics::popTransform()
 {
-    Graphics& cg = currentGraphics();
-    
-    cg.pimpl->queues.back().popTransform();
+    currentQueue().popTransform();
 }
 
 void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
     double x2, double y2, Color c2, ZPos z, AlphaMode mode)
 {
-    Graphics& cg = currentGraphics();
-    
     DrawOp op;
     op.renderState.mode = mode;
     op.verticesOrBlockIndex = 2;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
     op.z = z;
-    cg.pimpl->queues.back().scheduleDrawOp(op);
+    
+    currentQueue().scheduleDrawOp(op);
 }
 
 void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
     double x2, double y2, Color c2, double x3, double y3, Color c3,
     ZPos z, AlphaMode mode)
 {
-    Graphics& cg = currentGraphics();
-    
     DrawOp op;
     op.renderState.mode = mode;
     op.verticesOrBlockIndex = 3;
@@ -342,15 +325,14 @@ void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
     op.vertices[3] = op.vertices[2];
 #endif
     op.z = z;
-    cg.pimpl->queues.back().scheduleDrawOp(op);
+    
+    currentQueue().scheduleDrawOp(op);
 }
 
 void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
     double x2, double y2, Color c2, double x3, double y3, Color c3,
     double x4, double y4, Color c4, ZPos z, AlphaMode mode)
 {
-    Graphics& cg = currentGraphics();
-    
     reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
     DrawOp op;
@@ -367,14 +349,13 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
     op.vertices[2] = DrawOp::Vertex(x4, y4, c4);
 #endif
     op.z = z;
-    cg.pimpl->queues.back().scheduleDrawOp(op);
+    
+    currentQueue().scheduleDrawOp(op);
 }
 
 void Gosu::Graphics::scheduleDrawOp(const Gosu::DrawOp &op)
 {
-    Graphics& cg = currentGraphics();
-    
-    cg.pimpl->queues.back().scheduleDrawOp(op);
+    currentQueue().scheduleDrawOp(op);
 }
 
 GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(

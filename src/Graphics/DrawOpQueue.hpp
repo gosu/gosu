@@ -16,6 +16,7 @@ class Gosu::DrawOpQueue
 {
     TransformStack transformStack;
     ClipRectStack clipRectStack;
+    bool rec;
 
     typedef std::vector<DrawOp> DrawOps;
     DrawOps ops;
@@ -23,6 +24,21 @@ class Gosu::DrawOpQueue
     GLBlocks glBlocks;
 
 public:
+    DrawOpQueue()
+    : rec(false)
+    {
+    }
+    
+    bool recording() const
+    {
+        return rec;
+    }
+    
+    void setRecording()
+    {
+        rec = true;
+    }
+    
     void scheduleDrawOp(DrawOp op)
     {
         if (clipRectStack.clippedWorldAway())
@@ -59,6 +75,9 @@ public:
 
     void beginClipping(double x, double y, double width, double height, double screenHeight)
     {
+        if (recording())
+            throw std::logic_error("Clipping is not allowed while creating a macro yet");
+        
         // Apply current transformation.
 
         double left = x, right = x + width;
@@ -100,6 +119,9 @@ public:
 
     void performDrawOpsAndCode()
     {
+        if (recording())
+            throw std::logic_error("Flushing to the screen is not allowed while recording a macro");
+        
         // Apply Z-Ordering.
         std::stable_sort(ops.begin(), ops.end());
 
@@ -139,7 +161,7 @@ public:
     void compileTo(VertexArrays& vas)
     {
         if (!glBlocks.empty())
-            throw std::logic_error("Custom code cannot be recorded into a macro");
+            throw std::logic_error("Custom OpenGL code cannot be recorded as a macro");
 
         std::stable_sort(ops.begin(), ops.end());
         for (DrawOps::const_iterator op = ops.begin(), end = ops.end(); op != end; ++op)
