@@ -183,6 +183,7 @@
     <ClCompile Include="..\src\Graphics\Graphics.cpp" />
     <ClCompile Include="..\src\Graphics\Image.cpp" />
     <ClCompile Include="..\src\Graphics\LargeImageData.cpp" />
+    <ClCompile Include="..\src\Graphics\Macro.cpp" />
     <ClCompile Include="..\src\Graphics\TexChunk.cpp" />
     <ClCompile Include="..\src\Graphics\Texture.cpp" />
     <ClCompile Include="..\src\Graphics\Transform.cpp" />

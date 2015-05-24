@@ -63,6 +63,7 @@ Pod::Spec.new do |s|
          Graphics/Graphics.cpp
          Graphics/Image.cpp
          Graphics/LargeImageData.cpp
+         Graphics/Macro.cpp
          Graphics/Resolution.cpp
          Graphics/ResolutionApple.mm
          Graphics/TexChunk.cpp
@@ -116,6 +117,7 @@ Pod::Spec.new do |s|
          Graphics/Graphics.cpp
          Graphics/Image.cpp
          Graphics/LargeImageData.cpp
+         Graphics/Macro.cpp
          Graphics/TexChunk.cpp
          Graphics/Texture.cpp
          Graphics/Transform.cpp

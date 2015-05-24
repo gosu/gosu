@@ -28,6 +28,7 @@ BASE_FILES = %w(
   Graphics/Graphics.cpp
   Graphics/Image.cpp
   Graphics/LargeImageData.cpp
+  Graphics/Macro.cpp
   Graphics/Resolution.cpp
   Graphics/TexChunk.cpp
   Graphics/Texture.cpp

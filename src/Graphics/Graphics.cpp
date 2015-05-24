@@ -1,6 +1,7 @@
 #include <Gosu/Graphics.hpp>
 #include "Common.hpp"
 #include "DrawOp.hpp"
+#include "DrawOpQueue.hpp"
 #include "Texture.hpp"
 #include "TexChunk.hpp"
 #include "LargeImageData.hpp"

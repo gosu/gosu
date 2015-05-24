@@ -72,6 +72,9 @@
     <ClCompile Include="..\src\Graphics\LargeImageData.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Graphics\Macro.cpp">
+      <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Graphics\TexChunk.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
