@@ -48,6 +48,8 @@ struct Gosu::Graphics::Impl
     double blackWidth, blackHeight;
     bool fullscreen;
     Transform baseTransform;
+    
+    DrawOpQueueStack warmedUpQueues;
 };
 
 Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscreen)
@@ -126,10 +128,21 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
     // Cancel all recording or whatever that might still be in progress...
     queues.clear();
     
-    // Create default draw-op queue.
-    queues.resize(1);
+    if (pimpl->warmedUpQueues.size() == 1)
+    {
+        // If we already have a "warmed up" queue, use that instead.
+        // -> All internals std::vectors will already have a lot of capacity.
+        // This helps reduce allocations during normal operation.
+        queues.clear();
+        queues.swap(pimpl->warmedUpQueues);
+    }
+    else
+    {
+        // Create default draw-op queue.
+        queues.resize(1);
+    }
+    
     queues.back().setBaseTransform(pimpl->baseTransform);
-    // Clear leftover transforms, clip rects etc.
     
     glClearColor(clearWithColor.red() / 255.f, clearWithColor.green() / 255.f,
         clearWithColor.blue() / 255.f, clearWithColor.alpha() / 255.f);
@@ -176,7 +189,17 @@ void Gosu::Graphics::end()
     glFlush();
     
     currentGraphicsPointer = 0;
-    queues.clear();
+    
+    // Clear leftover transforms, clip rects etc.
+    if (queues.size() == 1)
+    {
+        queues.swap(pimpl->warmedUpQueues);
+        pimpl->warmedUpQueues.back().reset();
+    }
+    else
+    {
+        queues.clear();
+    }
 }
 
 void Gosu::Graphics::flush()
