@@ -33,7 +33,7 @@ end
         s.files += FileList['lib/?.?/gosu.so', 'lib/*.dll']
       else
         s.files += FileList['lib64/?.?/gosu.so', 'lib64/*.dll']
-        s.required_ruby_version = '~> 2.1.0'
+        s.required_ruby_version = '>= 2.1.0'
       end
       # C++ Gosu header files, for using inline C++ from Ruby
       s.files += Dir["Gosu/*.hpp"]
