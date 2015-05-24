@@ -41,3 +41,5 @@ Gosu.includes
 /windows/*.suo
 /windows/*.user
 /windows/ipch
+/windows/Release (Ruby ?.?)/*.exp
+/windows/Release (Ruby ?.?)/*.lib
