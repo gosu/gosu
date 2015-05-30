@@ -72,7 +72,7 @@ $INCFLAGS << " -I../.. -I../../src"
 
 if `uname`.chomp == 'Darwin' then
   HOMEBREW_DEPENDENCIES = %w(SDL2 ogg vorbis vorbisfile)
-  FRAMEWORKS = %w(AudioToolbox IOKit OpenAL OpenGL AppKit ApplicationServices Foundation Carbon)
+  FRAMEWORKS = %w(AppKit ApplicationServices AudioToolbox Carbon ForceFeedback Foundation IOKit OpenAL OpenGL)
 
   SOURCE_FILES = BASE_FILES + MAC_FILES
   
