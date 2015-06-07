@@ -682,7 +682,7 @@ module Gosu
   # @note There should really only be one instance of this class at a time. This may or may not change later.
   class Window
     ##
-    # @return [String] the window's caption, usually dispalyed in the title bar.
+    # @return [String] the window's caption, usually displayed in the title bar.
     attr_accessor :caption
     
     ##
