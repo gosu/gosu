@@ -63,6 +63,8 @@ int Gosu::clipRectBaseFactor()
 }
 @end
 
+static EAGLContext __weak *globalContext;
+
 // A class extension to declare private methods
 @interface GosuView ()
 @property (nonatomic, strong) EAGLContext *context;
@@ -102,6 +104,8 @@ int Gosu::clipRectBaseFactor()
             [self release];
             return nil;
         }
+        
+        globalContext = self.context;
     }
     return self;
 }
@@ -206,3 +210,11 @@ int Gosu::clipRectBaseFactor()
 }
 
 @end
+
+namespace Gosu
+{
+    void ensureCurrentContext()
+    {
+        [EAGLContext setCurrentContext:globalContext];
+    }
+}

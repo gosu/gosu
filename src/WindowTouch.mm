@@ -17,20 +17,18 @@ using namespace std::tr1::placeholders;
 
 namespace Gosu
 {
-    static CGRect &screenRect()
-    {
-        static CGRect screenRect = [[UIScreen mainScreen] nativeBounds];
-        return screenRect;
-    }
-    
     unsigned screenWidth()
     {
-        return screenRect().size.width;
+        static CGSize screenSize = [UIScreen mainScreen].bounds.size;
+        static CGFloat width = MIN(screenSize.width, screenSize.height);
+        return width;
     }
     
     unsigned screenHeight()
     {
-        return screenRect().size.height;
+        static CGSize screenSize = [UIScreen mainScreen].bounds.size;
+        static CGFloat width = MAX(screenSize.width, screenSize.height);
+        return width;
     }
     
     ALCcontext *sharedContext();

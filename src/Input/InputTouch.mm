@@ -80,7 +80,7 @@ Gosu::Button Gosu::Input::charToId(wchar_t ch)
     return noButton;
 }
         
-bool Gosu::Input::down(Button btn) const
+bool Gosu::Input::down(Button btn)
 {
     return false;
 }
