@@ -5,19 +5,6 @@
 
 #import <CoreFoundation/CoreFoundation.h>
 
-#ifndef GOSU_IS_IPHONE
-#import <ApplicationServices/ApplicationServices.h>
-
-// Not defined on 10.4 Tiger SDK which Gosu uses.
-#if __LP64__ || NS_BUILD_32_LIKE_64
-typedef long NSInteger;
-typedef unsigned long NSUInteger;
-#else
-typedef int NSInteger;
-typedef unsigned int NSUInteger;
-#endif
-#endif
-
 #include <iostream>
 #include <ostream>
 #include <sstream>
@@ -54,6 +41,7 @@ namespace Gosu
         ObjRef& operator=(const ObjRef&);
         
         T* ptr;
+        
     public:
         ObjRef(T* ptr = nil)
         : ptr(ptr) 
@@ -62,14 +50,12 @@ namespace Gosu
         
         ~ObjRef() 
         {
-            if (ptr)
-                [ptr release];
+            [ptr release];
         }
         
         void reset(T* newPtr = nil)
         { 
-            if (ptr)
-                [ptr release]; 
+            [ptr release]; 
             ptr = newPtr;
         }
         
@@ -81,7 +67,7 @@ namespace Gosu
         T* obj() const
         {
             if (!ptr)
-                throw std::logic_error("Tried dereferencing nil");
+                throw std::logic_error("Objective-C reference is nil");
             return ptr;
         }
     };
@@ -104,21 +90,21 @@ namespace Gosu
         {
         }
         
-        CFRef()
+        ~CFRef()
         {
             if (ref)
                 CFRelease(ref);
         }
         
-        CFRefType get()
+        CFRefType get() const
         {
             return ref;
         }
         
-        CFRefType obj()
+        CFRefType obj() const
         {
             if (!ref)
-                throw std::logic_error("CF reference invalid (null)");
+                throw std::logic_error("CoreFoundation reference is NULL");
             return ref;
         }
     };
