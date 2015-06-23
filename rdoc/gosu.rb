@@ -404,7 +404,7 @@ module Gosu
     #
     # @return [void]
     # @param x [Float] the X coordinate.
-    # @param y [Float] the X coordinate.
+    # @param y [Float] the Y coordinate.
     # @param z [Float] the Z-order.
     # @param scale_x [Float] the horizontal scaling factor.
     # @param scale_y [Float] the vertical scaling factor.
@@ -997,7 +997,7 @@ module Gosu
     #
     # @return [void]
     # @param angle [Float] the rotation angle.
-    # @param around_x [Float] the X coorinate of the rotation origin.
+    # @param around_x [Float] the X coordinate of the rotation origin.
     # @param around_y [Float] the Y coordinate of the rotation origin.
     # @yield rendering code.
     #
