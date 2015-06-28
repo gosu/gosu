@@ -27,6 +27,13 @@ namespace
         CGContextDrawImage(context.obj(), CGRectMake(0.0, 0.0, bitmap.width(), bitmap.height()), imageRef);
     }
     
+    #ifdef GOSU_IS_IPHONE
+    #define APPLE_IMAGE UIImage
+    void appleImageToBitmap(UIImage* image, Gosu::Bitmap& bitmap)
+    {
+        CGImageToBitmap([image CGImage], bitmap);
+    }
+    #else
     void unmultiplyAlpha(Gosu::Bitmap& bitmap)
     {
         int pixels = bitmap.width() * bitmap.height();
@@ -41,13 +48,6 @@ namespace
         }
     }
     
-    #ifdef GOSU_IS_IPHONE
-    #define APPLE_IMAGE UIImage
-    void appleImageToBitmap(UIImage* image, Gosu::Bitmap& bitmap)
-    {
-        CGImageToBitmap([image CGImage], bitmap);
-    }
-    #else
     #define APPLE_IMAGE NSImage
     void appleImageToBitmap(NSImage* image, Gosu::Bitmap& bitmap)
     {
@@ -75,8 +75,8 @@ namespace
         // space that does not alter the colors while drawing from the NSImage to the CGBitmapContext.
         static Gosu::CFRef<CGColorSpaceRef> colorSpace(CGColorSpaceCreateDeviceRGB());
         
-        // We do NOT want premultiplied alpha (yet?) in Gosu. However, with kCGImageAlphaLast, this
-        // call mysteriously fails.
+        // With kCGImageAlphaLast, this call mysteriously fails.
+        // So use premultiplied alpha, then manually unmultiply the image's pixels.
         Gosu::CFRef<CGContextRef> context(CGBitmapContextCreate(bitmap.data(), bitmap.width(), bitmap.height(),
                                     8, bitmap.width() * 4,
                                     colorSpace.obj(), kCGImageAlphaPremultipliedLast));
