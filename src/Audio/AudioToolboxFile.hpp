@@ -143,22 +143,7 @@ namespace Gosu
         {
             ObjRef<NSString> utf8Filename([[NSString alloc] initWithUTF8String: wstringToUTF8(filename).c_str()]);
             ObjRef<NSURL> url([[NSURL alloc] initFileURLWithPath: utf8Filename.get()]);
-            #ifdef GOSU_IS_IPHONE
             CHECK_OS(ExtAudioFileOpenURL((CFURLRef)url.get(), &file_));
-            #else
-            // Use FSRef for compatibility with 10.4 Tiger.
-            FSRef fsRef;
-            CFURLGetFSRef(reinterpret_cast<CFURLRef>(url.get()), &fsRef);
-            try
-            {
-                CHECK_OS(ExtAudioFileOpen(&fsRef, &file_));
-            }
-            catch (const std::runtime_error&)
-            {
-                throw std::runtime_error("Unsupported audio file type (" +
-                    Gosu::wstringToUTF8(filename) + ")");
-            }
-            #endif
             
             fileID_ = 0;
             
