@@ -2,7 +2,7 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Audio.hpp>
 #include <Gosu/Input.hpp>
-#include "MacUtility.hpp"
+#include "AppleUtility.hpp"
 #include "GosuView.hpp"
 
 #import <CoreGraphics/CoreGraphics.h>
@@ -61,8 +61,8 @@ class Gosu::Audio {};
 
 struct Gosu::Window::Impl
 {
-    ObjRef<UIWindow> window;
-    ObjRef<GosuViewController> controller;
+    ObjCRef<::UIWindow> window;
+    ObjCRef<GosuViewController> controller;
     std::auto_ptr<Graphics> graphics;
     std::auto_ptr<Input> input;
     double interval;
@@ -79,7 +79,7 @@ namespace
     GosuView* gosuView = nil;
     bool pausedSong = false;
     bool paused = false;
-
+    
     id timerOrDisplayLink = nil;
 }
 
@@ -90,7 +90,7 @@ namespace
         return;
     
     NSInteger targetFPS = round(1000.0 / windowInstance().updateInterval());
-        
+    
     if (60 % targetFPS != 0) {
         NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:windowInstance().updateInterval() / 1000.0 target:self selector:@selector(doTick:) userInfo:nil repeats:YES];
         
@@ -115,7 +115,7 @@ namespace
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-	if (Gosu::Song::currentSong()) {
+    if (Gosu::Song::currentSong()) {
         Gosu::Song::currentSong()->pause();
         pausedSong = true;
     }
@@ -125,7 +125,7 @@ namespace
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-	if (pausedSong) {
+    if (pausedSong) {
         if (Gosu::Song::currentSong())
             Gosu::Song::currentSong()->play();
         pausedSong = false;
@@ -159,7 +159,7 @@ Gosu::Window::Window(unsigned width, unsigned height,
     bool fullscreen, double updateInterval)
 : pimpl(new Impl)
 {
-	pimpl->window.reset([[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]]);
+    pimpl->window.reset([[::UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]]);
     pimpl->controller.reset([[GosuViewController alloc] init]);
     gosuView = (GosuView*)pimpl->controller.obj().view;
     pimpl->window.obj().rootViewController = pimpl->controller.obj();
@@ -171,7 +171,7 @@ Gosu::Window::Window(unsigned width, unsigned height,
     pimpl->input->onTouchMoved = std::tr1::bind(&Window::touchMoved, this, _1);
     pimpl->input->onTouchEnded = std::tr1::bind(&Window::touchEnded, this, _1);
     pimpl->interval = updateInterval;
-
+    
     // TODO: Get rid of performSelector:withObject:afterDelay:, without causing a C++ static initialization error
     [pimpl->window.obj() performSelector:@selector(makeKeyAndVisible) withObject:nil afterDelay:0];
 }
@@ -235,7 +235,7 @@ void Gosu::Window::close()
     throw std::logic_error("Cannot close windows manually on iOS");
 }
 
-void* Gosu::Window::rootViewController() const
+void* Gosu::Window::UIWindow() const
 {
-    return pimpl->controller.get();
+    return pimpl->window.get();
 }

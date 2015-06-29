@@ -6,7 +6,7 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/Math.hpp>
-#include "../MacUtility.hpp"
+#include "../AppleUtility.hpp"
 #include <map>
 #include <cmath>
 using namespace std;
@@ -22,7 +22,7 @@ typedef NSFont OSXFont;
 
 namespace
 {
-    using Gosu::ObjRef;
+    using Gosu::ObjCRef;
     using Gosu::CFRef;
 
     // If a font is a filename, loads the font and returns its family name that can be used
@@ -81,7 +81,7 @@ namespace
         OSXFont* result = usedFonts[make_pair(fontName, make_pair(fontFlags, height))];
         if (!result)
         {
-            ObjRef<NSString> name([[NSString alloc] initWithUTF8String: Gosu::wstringToUTF8(fontName).c_str()]);
+            ObjCRef<NSString> name([[NSString alloc] initWithUTF8String: Gosu::wstringToUTF8(fontName).c_str()]);
             #ifdef GOSU_IS_IPHONE
             result = [OSXFont fontWithName: name.obj() size: height];
             #else
@@ -120,7 +120,7 @@ namespace
                 nil];
         if (fontFlags & Gosu::ffUnderline)
         {
-            Gosu::ObjRef<NSNumber> underline([[NSNumber alloc] initWithInt:NSUnderlineStyleSingle]);
+            Gosu::ObjCRef<NSNumber> underline([[NSNumber alloc] initWithInt:NSUnderlineStyleSingle]);
             [dict setValue: underline.obj() forKey:NSUnderlineStyleAttributeName];
         }
         return dict;
@@ -138,9 +138,9 @@ unsigned Gosu::textWidth(const wstring& text,
     
     // This will, of course, compute a too large size; fontHeight is in pixels,
     // the method expects point.
-    ObjRef<NSString> string([[NSString alloc] initWithUTF8String: wstringToUTF8(text).c_str()]);
+    ObjCRef<NSString> string([[NSString alloc] initWithUTF8String: wstringToUTF8(text).c_str()]);
     #ifndef GOSU_IS_IPHONE
-    ObjRef<NSDictionary> attributes(attributeDictionary(font, fontFlags));
+    ObjCRef<NSDictionary> attributes(attributeDictionary(font, fontFlags));
     NSSize size = [string.obj() sizeWithAttributes: attributes.get()];
     #else
     CGSize size = [string.obj() sizeWithFont: font];
@@ -158,11 +158,11 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
         throw std::invalid_argument("the argument to drawText cannot contain line breaks");
     
     OSXFont* font = getFont(fontName, fontFlags, fontHeight);
-    ObjRef<NSString> string([[NSString alloc] initWithUTF8String: wstringToUTF8(text).c_str()]);
+    ObjCRef<NSString> string([[NSString alloc] initWithUTF8String: wstringToUTF8(text).c_str()]);
 
     // This will, of course, compute a too large size; fontHeight is in pixels, the method expects point.
     #ifndef GOSU_IS_IPHONE
-    ObjRef<NSDictionary> attributes(attributeDictionary(font, fontFlags));
+    ObjCRef<NSDictionary> attributes(attributeDictionary(font, fontFlags));
     NSSize size = [string.obj() sizeWithAttributes: attributes.get()];
     #else
     CGSize size = [string.obj() sizeWithFont: font];

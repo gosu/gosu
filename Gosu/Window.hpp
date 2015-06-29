@@ -107,6 +107,11 @@ namespace Gosu
         // Ignore when SWIG is wrapping this class for Ruby/Gosu.
         #ifndef SWIG
         
+        // Callbacks for touch events. So far these are only used on iOS.
+        virtual void touchBegan(Touch touch) {}
+        virtual void touchMoved(Touch touch) {}
+        virtual void touchEnded(Touch touch) {}
+        
         const Graphics& graphics() const;
         Graphics& graphics();
         
@@ -114,14 +119,7 @@ namespace Gosu
         Input& input();
         
         #ifdef GOSU_IS_IPHONE
-        void* rootViewController() const;
-        // iPhone-only callbacks for touch events.
-        // Note that it does not hurt to override them even if you compile
-        // for another platform; if you don't specify "virtual" the code
-        // should even be stripped away cleanly.
-        virtual void touchBegan(Touch touch) {}
-        virtual void touchMoved(Touch touch) {}
-        virtual void touchEnded(Touch touch) {}
+        void* UIWindow() const;
         #endif        
         
         GOSU_DEPRECATED const Audio& audio() const;

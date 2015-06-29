@@ -57,9 +57,9 @@ namespace
 
 // TODO: What is this NSAutoreleasePool good for?
 #ifdef GOSU_IS_MAC
-#include "../MacUtility.hpp"
+#include "../AppleUtility.hpp"
     #define CONSTRUCTOR_COMMON \
-        ObjRef<NSAutoreleasePool> pool([[NSAutoreleasePool alloc] init]); \
+        ObjCRef<NSAutoreleasePool> pool([NSAutoreleasePool new]); \
         if (!alChannelManagement.get()) \
             alChannelManagement.reset(new ALChannelManagement)
 #else
@@ -273,7 +273,7 @@ public:
 // AVAudioPlayer impl
 class Gosu::Song::ModuleData : public BaseData
 {
-    ObjRef<AVAudioPlayer> player;
+    ObjCRef<AVAudioPlayer> player;
     
     void applyVolume()
     {
@@ -284,9 +284,9 @@ public:
     ModuleData(const std::wstring& filename)
     {
         std::string utf8Filename = Gosu::wstringToUTF8(filename);
-        ObjRef<NSString> nsFilename([[NSString alloc] initWithUTF8String: utf8Filename.c_str()]);
-        ObjRef<NSURL> url([[NSURL alloc] initFileURLWithPath: nsFilename.obj()]);
-        player.reset([[AVAudioPlayer alloc] initWithContentsOfURL: url.obj() error: NULL]);
+        ObjCRef<NSString> nsFilename([[NSString alloc] initWithUTF8String:utf8Filename.c_str()]);
+        ObjCRef<NSURL> url([[NSURL alloc] initFileURLWithPath:nsFilename.obj()]);
+        player.reset([[AVAudioPlayer alloc] initWithContentsOfURL:url.obj() error:NULL]);
     }
     
     void play(bool looping)

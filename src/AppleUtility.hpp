@@ -1,5 +1,5 @@
-#ifndef GOSU_MACUTILITY_HPP
-#define GOSU_MACUTILITY_HPP
+#ifndef GOSU_APPLEUTILITY_HPP
+#define GOSU_APPLEUTILITY_HPP
 
 #include <Gosu/Platform.hpp>
 
@@ -35,20 +35,20 @@ namespace Gosu
 namespace Gosu
 {
     template<typename T>
-    class ObjRef
+    class ObjCRef
     {
-        ObjRef(const ObjRef&);
-        ObjRef& operator=(const ObjRef&);
+        ObjCRef(const ObjCRef&);
+        ObjCRef& operator=(const ObjCRef&);
         
         T* ptr;
         
     public:
-        ObjRef(T* ptr = nil)
+        ObjCRef(T* ptr = nil)
         : ptr(ptr) 
         {
         }
         
-        ~ObjRef() 
+        ~ObjCRef() 
         {
             [ptr release];
         }

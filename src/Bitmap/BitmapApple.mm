@@ -4,7 +4,7 @@
 #include <Gosu/Platform.hpp>
 #include <Gosu/Utility.hpp>
 
-#include "../MacUtility.hpp"
+#include "../AppleUtility.hpp"
 #include <stdexcept>
 
 #ifdef GOSU_IS_IPHONE
@@ -96,9 +96,9 @@ namespace Gosu { bool isExtension(const wchar_t* str, const wchar_t* ext); }
 
 void Gosu::loadImageFile(Bitmap& bitmap, const std::wstring& filename)
 {
-    ObjRef<NSAutoreleasePool> pool([NSAutoreleasePool new]);
-    ObjRef<APPLE_IMAGE> image;
-    ObjRef<NSString> filenameRef([[NSString alloc] initWithUTF8String: wstringToUTF8(filename).c_str()]);
+    ObjCRef<NSAutoreleasePool> pool([NSAutoreleasePool new]);
+    ObjCRef<APPLE_IMAGE> image;
+    ObjCRef<NSString> filenameRef([[NSString alloc] initWithUTF8String: wstringToUTF8(filename).c_str()]);
     
 #ifdef GOSU_IS_IPHONE
     if ([UIScreen mainScreen].scale > 1) {
@@ -127,13 +127,13 @@ void Gosu::loadImageFile(Bitmap& bitmap, Reader reader)
     reader.read(signature, 2);
     reader.seek(-2);
     
-    ObjRef<NSAutoreleasePool> pool([NSAutoreleasePool new]);
+    ObjCRef<NSAutoreleasePool> pool([NSAutoreleasePool new]);
     
     std::size_t length = reader.resource().size() - reader.position();
-    ObjRef<NSMutableData> buffer([[NSMutableData alloc] initWithLength: length]);
+    ObjCRef<NSMutableData> buffer([[NSMutableData alloc] initWithLength: length]);
     reader.read([buffer.get() mutableBytes], length);
     
-    ObjRef<APPLE_IMAGE> image([[APPLE_IMAGE alloc] initWithData: buffer.get()]);
+    ObjCRef<APPLE_IMAGE> image([[APPLE_IMAGE alloc] initWithData: buffer.get()]);
     if (!image.get())
         throw std::runtime_error("Cannot load image file from stream");
     
@@ -175,13 +175,13 @@ void Gosu::saveImageFile(const Bitmap& originalBitmap, Writer writer, const std:
     }
 
     unsigned char* plane = (unsigned char*)bitmap.data();
-    ObjRef<NSBitmapImageRep> rep([[NSBitmapImageRep alloc]
+    ObjCRef<NSBitmapImageRep> rep([[NSBitmapImageRep alloc]
         initWithBitmapDataPlanes:&plane pixelsWide:bitmap.width() pixelsHigh:bitmap.height()
         bitsPerSample:8 samplesPerPixel:4 hasAlpha:YES isPlanar:NO
         colorSpaceName:NSDeviceRGBColorSpace // Nobody really seems to know which one to use
         bitmapFormat:NSAlphaNonpremultipliedBitmapFormat bytesPerRow:bitmap.width() * 4 bitsPerPixel:32]);
 
-    ObjRef<NSAutoreleasePool> pool([NSAutoreleasePool new]);
+    ObjCRef<NSAutoreleasePool> pool([NSAutoreleasePool new]);
     NSData* data = [rep.obj() representationUsingType:fileType properties:nil];
     writer.write([data bytes], [data length]);
 }
@@ -196,7 +196,7 @@ void Gosu::saveImageFile(const Bitmap& bmp, Writer writer, const std::wstring& f
         return;
     }
     
-    ObjRef<NSAutoreleasePool> pool([NSAutoreleasePool new]);
+    ObjCRef<NSAutoreleasePool> pool([NSAutoreleasePool new]);
     
     CGDataProviderRef dataProvider =
         CGDataProviderCreateWithData(0, bmp.data(), bmp.width() * bmp.height() * 4, 0);
@@ -207,7 +207,7 @@ void Gosu::saveImageFile(const Bitmap& bmp, Writer writer, const std::wstring& f
         CGImageCreate(bmp.width(), bmp.height(), 8, 32, bmp.width() * 4, colorspace,
                       kCGImageAlphaLast, dataProvider, 0, false, kCGRenderingIntentDefault);
     
-    ObjRef<UIImage> image([[UIImage alloc] initWithCGImage: imageRef]);
+    ObjCRef<UIImage> image([[UIImage alloc] initWithCGImage: imageRef]);
     
     NSData* data;
     if (isExtension(formatHint.c_str(), L"jpeg") || isExtension(formatHint.c_str(), L"jpg"))

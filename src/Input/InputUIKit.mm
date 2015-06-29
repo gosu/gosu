@@ -1,8 +1,7 @@
 #include <Gosu/Input.hpp>
 #include <Gosu/TextInput.hpp>
 
-#include "MacUtility.hpp"
-#include "AccelerometerReader.hpp"
+#include "AppleUtility.hpp"
 #import <UIKit/UIKit.h>
 
 struct Gosu::TextInput::Impl {};
@@ -20,7 +19,7 @@ struct Gosu::Input::Impl
     float factorX, factorY;
     float updateInterval;
     
-    ObjRef<NSMutableSet> currentTouchesSet;
+    ObjCRef<NSMutableSet> currentTouchesSet;
     std::auto_ptr<Gosu::Touches> currentTouchesVector;
     
     Touch translateTouch(UITouch* uiTouch)
@@ -29,15 +28,6 @@ struct Gosu::Input::Impl
         Touch touch = { uiTouch, (float)point.x, (float)point.y };
         touch.x *= factorX, touch.y *= factorY;
         return touch;
-    }
-    
-    ObjRef<AccelerometerReader> accelerometerReader;
-    
-    float acceleration(int index)
-    {
-        if (accelerometerReader.get() == 0)
-            accelerometerReader.reset([[AccelerometerReader alloc] initWithUpdateInterval: updateInterval]);
-        return [accelerometerReader.obj() acceleration][index];
     }
 };
 
@@ -120,17 +110,17 @@ const Gosu::Touches& Gosu::Input::currentTouches() const
 
 double Gosu::Input::accelerometerX() const
 {
-    return pimpl->acceleration(0);
+    return 0;
 }
 
 double Gosu::Input::accelerometerY() const
 {
-    return pimpl->acceleration(1);
+    return 0;
 }
 
 double Gosu::Input::accelerometerZ() const
 {
-    return pimpl->acceleration(2);
+    return 0;
 }
 
 void Gosu::Input::update()
@@ -138,7 +128,7 @@ void Gosu::Input::update()
     // Check for dead touches and remove from vector if
     // necessary
 
-    ObjRef<NSMutableSet> deadTouches;
+    ObjCRef<NSMutableSet> deadTouches;
 
     for (UITouch* touch in pimpl->currentTouchesSet.obj())
     {

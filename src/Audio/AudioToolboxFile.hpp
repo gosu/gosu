@@ -9,7 +9,7 @@
 #include <Gosu/IO.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/Platform.hpp>
-#include "../MacUtility.hpp"
+#include "../AppleUtility.hpp"
 #include <algorithm>
 #include <vector>
 #include <arpa/inet.h>
@@ -141,8 +141,8 @@ namespace Gosu
     public:
         AudioToolboxFile(const std::wstring& filename)
         {
-            ObjRef<NSString> utf8Filename([[NSString alloc] initWithUTF8String: wstringToUTF8(filename).c_str()]);
-            ObjRef<NSURL> url([[NSURL alloc] initFileURLWithPath: utf8Filename.get()]);
+            ObjCRef<NSString> utf8Filename([[NSString alloc] initWithUTF8String:wstringToUTF8(filename).c_str()]);
+            ObjCRef<NSURL> url([[NSURL alloc] initFileURLWithPath:utf8Filename.get()]);
             CHECK_OS(ExtAudioFileOpenURL((CFURLRef)url.get(), &file_));
             
             fileID_ = 0;

@@ -123,9 +123,10 @@ namespace Gosu
         const Touches& currentTouches() const;
         
         //! Accelerometer positions in all three dimensions (smoothened).
-        double accelerometerX() const;
-        double accelerometerY() const;
-        double accelerometerZ() const;
+        //! Note: Not really deprecated - but temporarily defunct.
+        GOSU_DEPRECATED double accelerometerX() const;
+        GOSU_DEPRECATED double accelerometerY() const;
+        GOSU_DEPRECATED double accelerometerZ() const;
         
         //! Collects new information about which buttons are pressed, where the
         //! mouse is and calls onButtonUp/onButtonDown, if assigned.

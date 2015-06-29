@@ -1,6 +1,5 @@
 # TODO:
-# - Gosu Touch subspec for iOS
-# - Make the part of Gosu Touch that wraps main() yet another subspec, so users
+# - Make the part of GosuTouch that wraps main() yet another subspec, so users
 #   can keep their main() function and still use GosuView
 
 Pod::Spec.new do |s|
@@ -44,45 +43,45 @@ Pod::Spec.new do |s|
     ss.dependency 'Gosu/libvorbis' 
     
     ss.frameworks = 'OpenGL', 'OpenAL', 'IOKit', 'Carbon', 'Cocoa', 'AudioToolbox', 'ApplicationServices', 'ForceFeedback', 'AudioUnit', 'CoreAudio'
-    ss.libraries  = 'iconv'
+    ss.libraries = 'iconv'
     ss.compiler_flags = '-I/usr/local/include'
     ss.xcconfig = { 'OTHER_LDFLAGS' => '/usr/local/lib/libSDL2.a' }
     
     ss.public_header_files = 'Gosu/*.hpp'
-    ss.source_files = ['Gosu/*.hpp', 'src/**/*.hpp'] +
-      %w(Audio/AudioOpenAL.mm
-         Bitmap/Bitmap.cpp
-         Bitmap/BitmapApple.mm
-         Bitmap/BitmapColorKey.cpp
-         Bitmap/BitmapUtils.cpp
-         DirectoriesMac.mm
-         DirectoriesUnix.cpp
-         FileUnix.cpp
-         Graphics/BlockAllocator.cpp
-         Graphics/Color.cpp
-         Graphics/Graphics.cpp
-         Graphics/Image.cpp
-         Graphics/LargeImageData.cpp
-         Graphics/Macro.cpp
-         Graphics/Resolution.cpp
-         Graphics/ResolutionApple.mm
-         Graphics/TexChunk.cpp
-         Graphics/Texture.cpp
-         Graphics/Transform.cpp
-         Input/Input.cpp
-         Input/TextInput.cpp
-         Inspection.cpp
-         IO.cpp
-         Math.cpp
-         Text/Font.cpp
-         Text/Text.cpp
-         Text/TextMac.cpp
-         Text/TextApple.mm
-         TimingApple.cpp
-         Utility.cpp
-         UtilityApple.mm
-         Window.cpp).map { |basename| "src/#{basename}" }
-    # TODO add sockets too
+    ss.source_files = ['Gosu/*.hpp', 'src/**/*.{h,hpp}'] +
+      %w(src/Audio/AudioOpenAL.mm
+         src/Bitmap/Bitmap.cpp
+         src/Bitmap/BitmapApple.mm
+         src/Bitmap/BitmapColorKey.cpp
+         src/Bitmap/BitmapUtils.cpp
+         src/DirectoriesApple.mm
+         src/DirectoriesUnix.cpp
+         src/FileUnix.cpp
+         src/Graphics/BlockAllocator.cpp
+         src/Graphics/Color.cpp
+         src/Graphics/Graphics.cpp
+         src/Graphics/Image.cpp
+         src/Graphics/LargeImageData.cpp
+         src/Graphics/Macro.cpp
+         src/Graphics/Resolution.cpp
+         src/Graphics/ResolutionApple.mm
+         src/Graphics/TexChunk.cpp
+         src/Graphics/Texture.cpp
+         src/Graphics/Transform.cpp
+         src/Input/Input.cpp
+         src/Input/TextInput.cpp
+         src/Inspection.cpp
+         src/IO.cpp
+         src/Math.cpp
+         src/Text/Font.cpp
+         src/Text/Text.cpp
+         src/Text/TextApple.mm
+         src/Text/TextMac.cpp
+         src/TimingApple.cpp
+         src/Utility.cpp
+         src/UtilityApple.mm
+         src/Window.cpp)
+         # TODO add sockets
     
     # This path needs to be preserved because it is included by AudioOpenAL.mm (yuck)
     ss.preserve_paths = 'src/Audio/AudioOpenAL.cpp'
@@ -93,51 +92,50 @@ Pod::Spec.new do |s|
   end
   
   # TODO - use multi-platform support for this
-  # TODO - This is completely outdated anyway
   # http://docs.cocoapods.org/specification.html#ios
   s.subspec 'GosuTouch' do |ss|
     ss.dependency 'Gosu/libvorbis' 
 
     ss.frameworks = 'CoreGraphics', 'OpenGLES', 'OpenAL', 'AudioToolbox', 'AVFoundation', 'QuartzCore'
-    ss.library   = 'iconv'
+    ss.libraries = 'iconv'
     
     ss.public_header_files = 'Gosu/*.hpp'
-    ss.source_files = ['Gosu/*.hpp', 'src/**/*.hpp'] +
-      %w(Audio/AudioOpenAL.mm
-         Bitmap/Bitmap.cpp
-         Bitmap/BitmapApple.mm
-         Bitmap/BitmapBMP.cpp
-         Bitmap/BitmapColorKey.cpp
-         Bitmap/BitmapUtils.cpp
-         DirectoriesTouch.mm
-         FileUnix.cpp
-         GosuView.mm
-         Graphics/BlockAllocator.cpp
-         Graphics/Color.cpp
-         Graphics/Graphics.cpp
-         Graphics/Image.cpp
-         Graphics/LargeImageData.cpp
-         Graphics/Macro.cpp
-         Graphics/TexChunk.cpp
-         Graphics/Texture.cpp
-         Graphics/Transform.cpp
-         Input/AccelerometerReader.mm
-         Input/InputTouch.mm
-         Inspection.cpp
-         IO.cpp
-         Math.cpp
-         Text/Font.cpp
-         Text/Text.cpp
-         Text/TextApple.mm
-         TimingApple.cpp
-         Utility.cpp
-         UtilityApple.mm
-         WindowTouch.mm).map { |basename| "src/#{basename}" }
-    # TODO add sockets too
+    ss.source_files = ['Gosu/*.hpp', 'src/**/*.{h,hpp}'] +
+      %w(src/Audio/AudioOpenAL.mm
+         src/Bitmap/Bitmap.cpp
+         src/Bitmap/BitmapApple.mm
+         src/Bitmap/BitmapBMP.cpp
+         src/Bitmap/BitmapColorKey.cpp
+         src/Bitmap/BitmapUtils.cpp
+         src/DirectoriesApple.mm
+         src/FileUnix.cpp
+         src/GosuView.mm
+         src/Graphics/BlockAllocator.cpp
+         src/Graphics/Color.cpp
+         src/Graphics/Graphics.cpp
+         src/Graphics/Image.cpp
+         src/Graphics/LargeImageData.cpp
+         src/Graphics/Macro.cpp
+         src/Graphics/TexChunk.cpp
+         src/Graphics/Texture.cpp
+         src/Graphics/Transform.cpp
+         src/Input/InputUIKit.mm
+         src/Inspection.cpp
+         src/IO.cpp
+         src/Math.cpp
+         src/Text/Font.cpp
+         src/Text/Text.cpp
+         src/Text/TextApple.mm
+         src/TimingApple.cpp
+         src/Utility.cpp
+         src/UtilityApple.mm
+         src/WindowUIKit.mm)
+         # TODO add sockets
+    
     ss.preserve_paths = 'src/Audio/AudioOpenAL.cpp'
     
     ss.requires_arc = false
 
-    ss.platform = :ios, '4.3'
+    ss.platform = :ios, '5.1.1'
   end
 end
