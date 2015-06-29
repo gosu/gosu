@@ -72,6 +72,7 @@ struct Gosu::Window::Impl
 Gosu::Window& windowInstance();
 
 @interface GosuAppDelegate : NSObject <UIApplicationDelegate>
+@property (nonatomic, strong) UIWindow *window;
 @end
 
 namespace
@@ -109,6 +110,11 @@ namespace
 - (void)applicationDidFinishLaunching:(UIApplication *)application
 {
     [UIApplication sharedApplication].statusBarHidden = YES;
+    
+    self.window = (UIWindow *)windowInstance().UIWindow();
+    gosuView = (GosuView *)self.window.rootViewController.view;
+    [self.window makeKeyAndVisible];
+    
     [self setupTimerOrDisplayLink];
     
     AudioSessionInitialize(NULL, NULL, handleAudioInterruption, NULL);
@@ -162,19 +168,20 @@ Gosu::Window::Window(unsigned width, unsigned height,
 {
     pimpl->window.reset([[::UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]]);
     pimpl->controller.reset([[GosuViewController alloc] init]);
-    gosuView = (GosuView*)pimpl->controller.obj().view;
     pimpl->window.obj().rootViewController = pimpl->controller.obj();
+    
+    // It is important to load the view before creating the Graphics instance.
+    [pimpl->controller.obj() loadView];
     
     pimpl->graphics.reset(new Graphics(screenHeight(), screenWidth(), false));
     pimpl->graphics->setResolution(width, height);
-    pimpl->input.reset(new Input(gosuView, updateInterval));
+    
+    pimpl->input.reset(new Input(pimpl->controller.obj().view, updateInterval));
     pimpl->input->onTouchBegan = std::tr1::bind(&Window::touchBegan, this, _1);
     pimpl->input->onTouchMoved = std::tr1::bind(&Window::touchMoved, this, _1);
     pimpl->input->onTouchEnded = std::tr1::bind(&Window::touchEnded, this, _1);
-    pimpl->interval = updateInterval;
     
-    // TODO: Get rid of performSelector:withObject:afterDelay:, without causing a C++ static initialization error
-    [pimpl->window.obj() performSelector:@selector(makeKeyAndVisible) withObject:nil afterDelay:0];
+    pimpl->interval = updateInterval;
 }
 
 Gosu::Window::~Window()
