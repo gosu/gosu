@@ -66,6 +66,7 @@ struct Gosu::Window::Impl
     std::auto_ptr<Graphics> graphics;
     std::auto_ptr<Input> input;
     double interval;
+    std::wstring caption;
 };
 
 Gosu::Window& windowInstance();
@@ -182,11 +183,12 @@ Gosu::Window::~Window()
 
 std::wstring Gosu::Window::caption() const
 {
-    return L"";
+    return pimpl->caption;
 }
 
 void Gosu::Window::setCaption(const std::wstring& caption)
 {
+    pimpl->caption = caption;
 }
 
 double Gosu::Window::updateInterval() const
