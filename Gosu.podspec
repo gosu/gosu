@@ -109,7 +109,6 @@ Pod::Spec.new do |s|
          src/Bitmap/BitmapUtils.cpp
          src/DirectoriesApple.mm
          src/FileUnix.cpp
-         src/GosuView.mm
          src/Graphics/BlockAllocator.cpp
          src/Graphics/Color.cpp
          src/Graphics/Graphics.cpp
@@ -127,6 +126,9 @@ Pod::Spec.new do |s|
          src/Text/Text.cpp
          src/Text/TextApple.mm
          src/TimingApple.cpp
+         src/UIKit/GosuAppDelegate.mm
+         src/UIKit/GosuGLView.mm
+         src/UIKit/GosuViewController.mm
          src/Utility.cpp
          src/UtilityApple.mm
          src/WindowUIKit.mm)

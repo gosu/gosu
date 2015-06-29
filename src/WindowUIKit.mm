@@ -1,19 +1,6 @@
-#include <Gosu/Window.hpp>
-#include <Gosu/Graphics.hpp>
-#include <Gosu/Audio.hpp>
-#include <Gosu/Input.hpp>
+#include <Gosu/Gosu.hpp>
 #include "AppleUtility.hpp"
-#include "GosuView.hpp"
-
-#import <CoreGraphics/CoreGraphics.h>
-#import <UIKit/UIKit.h>
-#import <OpenGLES/EAGL.h>
-#import <QuartzCore/QuartzCore.h>
-
-#include <OpenAL/alc.h>
-#include <AudioToolbox/AudioSession.h>
-
-using namespace std::tr1::placeholders;
+#include "UIKit/GosuViewController.h"
 
 namespace Gosu
 {
@@ -30,31 +17,6 @@ namespace Gosu
         static CGFloat width = MAX(screenSize.width, screenSize.height);
         return width;
     }
-    
-    ALCcontext *sharedContext();
-}
-
-static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
-{
-    if (inInterruptionState == kAudioSessionBeginInterruption) {
-        alcMakeContextCurrent(NULL);
-    } else if (inInterruptionState == kAudioSessionEndInterruption) {
-        alcMakeContextCurrent(Gosu::sharedContext());
-    }
-}
-
-int main(int argc, char *argv[])
-{
-    try
-    {
-        [[NSAutoreleasePool alloc] init];
-        return UIApplicationMain(argc, argv, nil, @"GosuAppDelegate");
-    }
-    catch (const std::exception& e)
-    {
-        NSLog(@"Terminating due to C++ exception: %s", e.what());
-        throw;
-    }
 }
 
 class Gosu::Audio {};
@@ -69,105 +31,13 @@ struct Gosu::Window::Impl
     std::wstring caption;
 };
 
-Gosu::Window& windowInstance();
-
-@interface GosuAppDelegate : NSObject <UIApplicationDelegate>
-@property (nonatomic, strong) UIWindow *window;
-@end
-
-namespace
-{
-    // Ugly patching to bridge the C++ and ObjC sides.
-    GosuView* gosuView = nil;
-    bool pausedSong = false;
-    bool paused = false;
-    
-    id timerOrDisplayLink = nil;
-}
-
-@implementation GosuAppDelegate
-- (void)setupTimerOrDisplayLink
-{
-    if (timerOrDisplayLink)
-        return;
-    
-    NSInteger targetFPS = round(1000.0 / windowInstance().updateInterval());
-    
-    if (60 % targetFPS != 0) {
-        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:windowInstance().updateInterval() / 1000.0 target:self selector:@selector(doTick:) userInfo:nil repeats:YES];
-        
-        timerOrDisplayLink = [timer retain];
-    }
-    else {
-        CADisplayLink *displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(doTick:)];
-        displayLink.frameInterval = 60 / targetFPS;
-        [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-        
-        timerOrDisplayLink = [displayLink retain];
-    }
-}
-
-- (void)applicationDidFinishLaunching:(UIApplication *)application
-{
-    [UIApplication sharedApplication].statusBarHidden = YES;
-    
-    self.window = (UIWindow *)windowInstance().UIWindow();
-    gosuView = (GosuView *)self.window.rootViewController.view;
-    [self.window makeKeyAndVisible];
-    
-    [self setupTimerOrDisplayLink];
-    
-    AudioSessionInitialize(NULL, NULL, handleAudioInterruption, NULL);
-}
-
-- (void)applicationWillResignActive:(UIApplication *)application
-{
-    if (Gosu::Song::currentSong()) {
-        Gosu::Song::currentSong()->pause();
-        pausedSong = true;
-    }
-    paused = true;
-    windowInstance().loseFocus();
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    if (pausedSong) {
-        if (Gosu::Song::currentSong())
-            Gosu::Song::currentSong()->play();
-        pausedSong = false;
-    }
-    paused = false;
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
-    [timerOrDisplayLink invalidate];
-    [timerOrDisplayLink release];
-    timerOrDisplayLink = nil;
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    [self setupTimerOrDisplayLink];
-}
-
-- (void)doTick:(id)sender
-{
-    if (!paused)
-        windowInstance().update();
-    [gosuView drawView];
-    Gosu::Song::update();
-    windowInstance().input().update();
-}
-@end
-
 Gosu::Window::Window(unsigned width, unsigned height,
     bool fullscreen, double updateInterval)
 : pimpl(new Impl)
 {
     pimpl->window.reset([[::UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]]);
     pimpl->controller.reset([[GosuViewController alloc] init]);
+    pimpl->controller.obj().gosuWindow = this;
     pimpl->window.obj().rootViewController = pimpl->controller.obj();
     
     // It is important to load the view before creating the Graphics instance.
@@ -177,6 +47,8 @@ Gosu::Window::Window(unsigned width, unsigned height,
     pimpl->graphics->setResolution(width, height);
     
     pimpl->input.reset(new Input(pimpl->controller.obj().view, updateInterval));
+    
+    using namespace std::tr1::placeholders;
     pimpl->input->onTouchBegan = std::tr1::bind(&Window::touchBegan, this, _1);
     pimpl->input->onTouchMoved = std::tr1::bind(&Window::touchMoved, this, _1);
     pimpl->input->onTouchEnded = std::tr1::bind(&Window::touchEnded, this, _1);
