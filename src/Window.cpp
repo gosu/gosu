@@ -216,8 +216,6 @@ void Gosu::Window::show()
             sleep(pimpl->updateInterval - frameTime);
         }
     }
-
-    SDL_HideWindow(sharedWindow());
 }
 
 void Gosu::Window::close()
