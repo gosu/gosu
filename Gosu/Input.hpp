@@ -9,18 +9,6 @@
 #include <Gosu/Buttons.hpp>
 #include <Gosu/TR1.hpp>
 
-#ifdef GOSU_IS_WIN
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-#include <windows.h>
-#endif
-
-#ifdef GOSU_IS_X
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#endif
-
 #include <vector>
 
 namespace Gosu
