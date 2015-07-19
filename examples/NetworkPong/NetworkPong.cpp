@@ -170,7 +170,7 @@ public:
         int inttype;
         if (!(stream >> inttype)) {
             std::cerr << "could not read type from stream" << std::endl;
-            std::cerr << stream << std::endl;
+            std::cerr << stream.str() << std::endl;
             return;
         }
         PacketType type = static_cast<PacketType>(inttype);
@@ -178,7 +178,7 @@ public:
             case ptPadPosition:
                 if (!(stream >> Player2Y)) {
                     std::cerr << "could not read player paddle position" << std::endl;
-                    std::cerr << stream << std::endl;
+                    std::cerr << stream.str() << std::endl;
                 }
             break;
             default:
@@ -215,7 +215,7 @@ public:
         int inttype;
         if (!(stream >> inttype)) {
             std::cerr << "could not read type from stream" << std::endl;
-            std::cerr << stream << std::endl;
+            std::cerr << stream.str() << std::endl;
             return;
         }
         PacketType type = static_cast<PacketType>(inttype);
@@ -223,31 +223,31 @@ public:
             case ptPadPosition:
                 if (!(stream >> player1Y)) {
                     std::cerr << "could not read player1 paddle pos" << std::endl;
-                    std::cerr << stream << std::endl;
+                    std::cerr << stream.str() << std::endl;
                     return;
                 }
             break;
             case ptBallPosition:
                 if (!(stream >> ballX)) {
                     std::cerr << "could not read ball x pos" << std::endl;
-                    std::cerr << stream << std::endl;
+                    std::cerr << stream.str() << std::endl;
                     return;
                 }
                 if (!(stream >> ballY)) {
                     std::cerr << "could not read ball y pos" << std::endl;
-                    std::cerr << stream << std::endl;
+                    std::cerr << stream.str() << std::endl;
                     return;
                 }
             break;
             case ptScoreUpdate:
                 if (!(stream >> player1Score)) {
                     std::cerr << "could not read player1 score" << std::endl;
-                    std::cerr << stream << std::endl;
+                    std::cerr << stream.str() << std::endl;
                     return;
                 }
                 if (!(stream >> player2Score)) {
                     std::cerr << "could not read player2 score" << std::endl;
-                    std::cerr << stream << std::endl;
+                    std::cerr << stream.str() << std::endl;
                     return;
                 }
             break;

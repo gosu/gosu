@@ -15,9 +15,9 @@ task :set_version do
   major, minor, patch = *GOSU_VERSION.split('.')
   
   cmake_lists = File.read('cmake/CMakeLists.txt')
-  cmake_lists.sub! /(SET\(GOSU_VERSION_MAJOR ")[^"]+("\))/, "\\1#{major}\\2"
-  cmake_lists.sub! /(SET\(GOSU_VERSION_MINOR ")[^"]+("\))/, "\\1#{minor}\\2"
-  cmake_lists.sub! /(SET\(GOSU_VERSION_PATCH ")[^"]+("\))/, "\\1#{patch}\\2"
+  cmake_lists.sub! /(set\(GOSU_VERSION_MAJOR ")[^"]+("\))/, "\\1#{major}\\2"
+  cmake_lists.sub! /(set\(GOSU_VERSION_MINOR ")[^"]+("\))/, "\\1#{minor}\\2"
+  cmake_lists.sub! /(set\(GOSU_VERSION_PATCH ")[^"]+("\))/, "\\1#{patch}\\2"
   File.open('cmake/CMakeLists.txt', 'w') do |file|
     file.write cmake_lists
   end

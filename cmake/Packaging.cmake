@@ -38,13 +38,12 @@ SET(CPACK_PACKAGE_VERSION_PATCH ${GOSU_VERSION_PATCH})
 SET(CPACK_PACKAGE_INSTALL_DIRECTORY "Gosu${GOSU_VERSION}")
 SET(CPACK_PACKAGE_CONTACT "Oliver Schneider <mail@oli-obk.de>")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER ${CPACK_PACKAGE_CONTACT})
+# TODO - outdated!
 SET(CPACK_DEBIAN_PACKAGE_DEPENDS "build-essential, freeglut3-dev, libfreeimage-dev, libgl1-mesa-dev, libopenal-dev, libpango1.0-dev, libsdl-mixer1.2-dev, libsdl-ttf2.0-dev, libsndfile-dev, libxinerama-dev")
 IF(WIN32 AND NOT UNIX)
   # There is a bug in NSIS that does not handle full unix paths properly.
   # Make sure there is at least one set of four backslashes.
-  #SET(CPACK_PACKAGE_ICON "${CMake_SOURCE_DIR}/Utilities/Release\\\\InstallIcon.bmp")
-  #SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\MyExecutable.exe")
-  #SET(CPACK_NSIS_DISPLAY_NAME "Gosu${GOSU_VERSION}")
+  SET(CPACK_NSIS_DISPLAY_NAME "Gosu ${GOSU_VERSION}")
   SET(CPACK_NSIS_HELP_LINK "http:\\\\\\\\libgosu.org/")
   SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\libgosu.org")
   SET(CPACK_NSIS_MODIFY_PATH ON)
@@ -52,7 +51,6 @@ ELSE(WIN32 AND NOT UNIX)
   #SET(CPACK_STRIP_FILES "bin/MyExecutable")
   #SET(CPACK_SOURCE_STRIP_FILES "")
 ENDIF(WIN32 AND NOT UNIX)
-#SET(CPACK_PACKAGE_EXECUTABLES "MyExecutable" "My Executable")
 
 INCLUDE(CPack)
 

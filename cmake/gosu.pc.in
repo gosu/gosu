@@ -1,10 +1,12 @@
 prefix=@CMAKE_INSTALL_PREFIX@
-exec_prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib@LIB_SUFFIX@
+includedir=${prefix}/include
 
 Name: gosu
-Description: gosu 2D game development library
-Version: @VERSION@
+Description: The Gosu 2D game development library
+URL: https://libgosu.org/
+Version: @GOSU_VERSION@
 
-Requires:
-Libs: -L@Gosu_LIBRARY_INSTALL_DIRS@ @LINKER_FLAGS@
-Cflags: -I@Gosu_INCLUDE_DIR@
+Libs: -L${libdir} -lGosu
+Cflags: -I${includedir}

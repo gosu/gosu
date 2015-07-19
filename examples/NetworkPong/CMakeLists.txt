@@ -1,33 +1,34 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+cmake_minimum_required(VERSION 2.6)
 
-PROJECT(NetworkPongExample)
+project(NetworkPong)
 
-#Projects source files
-SET(SRC_FILES
+set(SOURCE_FILES
 	NetworkPong.cpp
 	)
 
-#Projects headers files	
-SET(INC_FILES
+set(HEADER_FILES
 	)
 
-#"Sources" and "Headers" are the group names in Visual Studio.
-#They may have other uses too...
-SOURCE_GROUP("Sources" FILES ${SRC_FILES})
-SOURCE_GROUP("Headers" FILES ${INC_FILES})
+# "Sources" and "Headers" are the group names in Visual Studio.
+source_group("Sources" FILES ${SOURCE_FILES})
+source_group("Headers" FILES ${INC_FILES})
 
-find_package(Gosu REQUIRED)
+add_executable(NetworkPongExample ${SOURCE_FILES})
 
-INCLUDE_DIRECTORIES(${Gosu_INCLUDE_DIRS})
-LINK_DIRECTORIES(${Gosu_LIBRARY_DIRS})
+# Gosu's own examples have to be built into the parent directory so that they
+# can find the shared 'media' directory. You do not have to do this in your own
+# Gosu projects.
+get_filename_component(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR} PATH CACHE)
+set_target_properties(NetworkPongExample PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PARENT_DIR})
 
-#Build
-ADD_EXECUTABLE(NetworkPongExample ${SRC_FILES})
-set_target_properties(NetworkPongExample PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..)
+# Platform-dependent compiler flags.
+if(MSVC)
+	set_target_properties(NetworkPongExample PROPERTIES COMPILE_FLAGS "/W4 /wd4127")
+else()
+	set_target_properties(NetworkPongExample PROPERTIES COMPILE_FLAGS "-g -std=c++0x")
+endif()
 
-IF(MSVC)
-	SET_TARGET_PROPERTIES(NetworkPongExample PROPERTIES COMPILE_FLAGS "/W4 /wd4127")
-ELSE(MSVC)
-	SET_TARGET_PROPERTIES(NetworkPongExample PROPERTIES COMPILE_FLAGS "-g -std=c++0x")
-ENDIF(MSVC)
-TARGET_LINK_LIBRARIES(NetworkPongExample ${Gosu_LIBRARIES})
+find_package(Gosu REQUIRED development)
+include_directories(${GOSU_INCLUDE_DIRS})
+link_directories(${GOSU_LIBRARY_DIRS})
+target_link_libraries(NetworkPongExample ${GOSU_LIBRARIES})
