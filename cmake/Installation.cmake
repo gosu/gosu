@@ -1,5 +1,5 @@
 if(WIN32)
-    install(TARGETS Gosu
+    install(TARGETS gosu
         RUNTIME DESTINATION Gosu/bin COMPONENT library
         LIBRARY DESTINATION Gosu/lib COMPONENT library
         ARCHIVE DESTINATION Gosu/lib COMPONENT library)
@@ -19,7 +19,7 @@ if(WIN32)
         DESTINATION Gosu/lib
         CONFIGURATIONS RelWithDebInfo)
 else(WIN32)
-    install(TARGETS Gosu
+    install(TARGETS gosu
         RUNTIME DESTINATION bin COMPONENT library
         LIBRARY DESTINATION lib COMPONENT library
         ARCHIVE DESTINATION lib COMPONENT library)
@@ -29,3 +29,4 @@ else(WIN32)
         DESTINATION include
         COMPONENT development)
 endif(WIN32)
+

@@ -35,7 +35,7 @@ set(GOSU_DEPENDENCIES
 
 if(NOT WIN32 AND NOT APPLE)
     find_package(Freetype REQUIRED)
-    pkg_check_modules(SDL2_ttf REQUIRED)
+    pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
     find_package(X11 REQUIRED)
     pkg_check_modules(PANGO REQUIRED pango)
     pkg_check_modules(PANGOFT REQUIRED pangoft2)
@@ -52,7 +52,7 @@ if(NOT WIN32 AND NOT APPLE)
     mark_as_advanced(FREEIMAGE_LIBRARIES)
     
     set(GOSU_DEPENDENCIES ${GOSU_DEPENDENCIES}
-        ${FREEIMAGE_LIBRARIES}
+        ${FREETYPE_LIBRARIES}
         ${SDL2_TTF_LIBRARIES}
         ${SNDFILE_LIBRARIES}
         ${PANGO_LIBRARIES}
@@ -86,7 +86,7 @@ if(APPLE)
     )
 endif()
 
-set(GOSU_LIBRARY "Gosu")
+set(GOSU_LIBRARY "gosu")
 set(GOSU_LIBRARIES "${GOSU_LIBRARY}")
 find_package_handle_standard_args(Gosu DEFAULT_MSG GOSU_LIBRARY GOSU_INCLUDE_DIR)
 mark_as_advanced(GOSU_INCLUDE_DIR GOSU_LIBRARY)

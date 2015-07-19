@@ -8,5 +8,5 @@ Description: The Gosu 2D game development library
 URL: https://libgosu.org/
 Version: @GOSU_VERSION@
 
-Libs: -L${libdir} -lGosu
+Libs: -L${libdir} -lgosu
 Cflags: -I${includedir}

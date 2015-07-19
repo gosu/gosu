@@ -145,18 +145,17 @@ include_directories(
 source_group("Sources" FILES ${SOURCE_FILES})
 source_group("Headers" FILES ${HEADER_FILES})
 
-add_library(Gosu ${SOURCE_FILES} ${HEADER_FILES})
-set_target_properties(Gosu PROPERTIES OUTPUT_NAME "Gosu")
-set_target_properties(Gosu PROPERTIES COMPILE_FLAGS "-DGOSU_SHARED_EXPORTS")
-set_target_properties(Gosu PROPERTIES VERSION ${GOSU_VERSION} SOVERSION ${GOSU_VERSION_MAJOR})
+add_library(gosu ${SOURCE_FILES} ${HEADER_FILES})
+set_target_properties(gosu PROPERTIES COMPILE_FLAGS "-DGOSU_SHARED_EXPORTS")
+set_target_properties(gosu PROPERTIES VERSION ${GOSU_VERSION} SOVERSION ${GOSU_VERSION_MAJOR})
 if(MSVC)
     # Disable warning on STL exports
-    set_target_properties(Gosu PROPERTIES COMPILE_FLAGS "/W4 /wd4251 /wd4127")
+    set_target_properties(gosu PROPERTIES COMPILE_FLAGS "/W4 /wd4251 /wd4127")
 else()
     # TODO - use CMake's own C++ standard selection
     if(GOSU_CPP11_ENABLED)
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
     endif()
 endif()
 
-target_link_libraries(Gosu ${GOSU_DEPENDENCIES})
+target_link_libraries(gosu ${GOSU_DEPENDENCIES})
