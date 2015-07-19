@@ -4,7 +4,7 @@ PROJECT(NetworkPongExample)
 
 #Projects source files
 SET(SRC_FILES
-	main.cpp
+	NetworkPong.cpp
 	)
 
 #Projects headers files	

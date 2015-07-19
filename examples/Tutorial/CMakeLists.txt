@@ -4,7 +4,7 @@ PROJECT(TutorialExample)
 
 #Projects source files
 SET(SRC_FILES
-	main.cpp
+	Tutorial.cpp
 	)
 
 #Projects headers files	

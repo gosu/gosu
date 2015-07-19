@@ -4,7 +4,7 @@ PROJECT(TextInputExample)
 
 #Projects source files
 SET(SRC_FILES
-	main.cpp
+	TextInput.cpp
 	)
 
 #Projects headers files	
