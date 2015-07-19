@@ -25,8 +25,8 @@
 #
 ################################################################################
 
-#By default only build static libraries
-#If we ever require CMake 2.8 then use http://www.kitware.com/blog/home/post/82
+# By default only build static libraries
+# If we ever require CMake 2.8 then use http://www.kitware.com/blog/home/post/82
 option(BUILD_STATIC_LIBRARIES "Build static libraries" ON)
 if(WIN32)
     option(BUILD_DYNAMIC_LIBRARIES "Build dynamic libraries" OFF)
@@ -42,18 +42,18 @@ endif()
 
 
 if(WIN32)
-    #If both are enabled then disable the dynamic build
+    # If both are enabled then disable the dynamic build
     if(BUILD_STATIC_LIBRARIES AND BUILD_DYNAMIC_LIBRARIES)
         message(STATUS "Building both static and dynamic libraries is not supported on Windows. Disabling dynamic libraries.")
         set(BUILD_DYNAMIC_LIBRARIES OFF CACHE BOOL "Build dynamic libraries" FORCE)
     endif()
-    #If both are disabled then re-enable the static build
+    # If both are disabled then re-enable the static build
     if(NOT BUILD_STATIC_LIBRARIES AND NOT BUILD_DYNAMIC_LIBRARIES)
         message(STATUS "Both dynamic and static libraries were disabled - re-enabling static build.")
         set(BUILD_STATIC_LIBRARIES ON CACHE BOOL "Build static libraries" FORCE)
     endif()
 else()
-    #It's nonsense to disable both so on Linux, re-enable both.
+    # It's nonsense to disable both so on Linux, re-enable both.
     if(NOT BUILD_STATIC_LIBRARIES AND NOT BUILD_DYNAMIC_LIBRARIES)
         message(STATUS "Both dynamic and static libraries were disabled - re-enabling both.")
         set(BUILD_STATIC_LIBRARIES ON CACHE BOOL "Build static libraries" FORCE)
@@ -61,7 +61,7 @@ else()
     endif()
 endif()
 
-#Projects source files
+# Projects source files
 SET(CORE_SRC_FILES
     Bitmap/Bitmap.cpp
     Bitmap/BitmapColorKey.cpp
@@ -190,27 +190,22 @@ include(${CMAKE_CURRENT_BINARY_DIR}/GosuConfig.cmake)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gosu.pc.in ${CMAKE_CURRENT_BINARY_DIR}/gosu.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gosu.pc DESTINATION ${INSTALL_PKGCONFIG_DIR} COMPONENT development)
 
-#Tell CMake the paths
 INCLUDE_DIRECTORIES(
     ${CMAKE_CURRENT_SOURCE_DIR}/..
     ${FREETYPE_INCLUDE_DIRS}
     ${OPENAL_INCLUDE_DIRS}
-    ${SDL_TTF_INCLUDE_DIRS}
-    ${SDL_INCLUDE_DIR}
-    ${X11_INCLUDE_DIRS}
+    ${SDL2_TTF_INCLUDE_DIRS}
+    ${SDL2_INCLUDE_DIR}
     ${OPENGL_INCLUDE_DIRS}
     ${SNDFILE_INCLUDE_DIRS}
     ${PANGO_INCLUDE_DIRS}
     ${PANGOFT_INCLUDE_DIRS}
-    ${XINERAMA_INCLUDE_DIRS}
     ${FREEIMAGE_INCLUDE_DIRS}
     ${VORBIS_INCLUDE_DIRS}
 )
 
-#NOTE: The following line should be uncommented when building shared libs.
-
-#"Sources" and "Headers" are the group names in Visual Studio.
-#They may have other uses too...
+# "Sources" and "Headers" are the group names in Visual Studio.
+# They may have other uses too...
 SOURCE_GROUP("Sources" FILES ${CORE_SRC_FILES})
 SOURCE_GROUP("Headers" FILES ${CORE_INC_FILES})
 
@@ -256,7 +251,7 @@ IF(WIN32)
         )
     ENDIF()
 
-    #Install the core header files, including the ones in the Gosu subfolder.
+    # Install the core header files, including the ones in the Gosu subfolder.
     INSTALL(DIRECTORY ../Gosu DESTINATION Gosu COMPONENT development PATTERN "*.svn*" EXCLUDE)
     
     #On windows, we also install the debug information. It's unfortunate that we have to hard-code
@@ -287,9 +282,6 @@ ELSE(WIN32)
         SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
     endif()
 
-    #Install the core header files, including the ones in the Gosu subfolder.
-    #this also installs windows headers, TODO: fix?
+    # Install the core header files, including the ones in the Gosu subfolder.
     INSTALL(DIRECTORY ../Gosu DESTINATION include COMPONENT development PATTERN "*.svn*" EXCLUDE PATTERN "*~" EXCLUDE)
 ENDIF(WIN32)
-
-

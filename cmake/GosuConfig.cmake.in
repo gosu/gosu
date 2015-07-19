@@ -49,10 +49,8 @@ else()
     set(PREFIX ${THIS_DIR}/../../..)
 endif()
 
-#set(Gosu_LIBRARY_DIRS "${PREFIX}/@Gosu_LIBRARY_INSTALL_DIRS@")
-
 set(Gosu_INCLUDE_DIR "${PREFIX}/@Gosu_INCLUDE_INSTALL_DIRS@/..")
-set(Gosu_INCLUDE_DIRS ${Gosu_INCLUDE_DIR}) # do not add dependency dirs, you should not use the dependencies through gosu, find them yourself
+set(Gosu_INCLUDE_DIRS ${Gosu_INCLUDE_DIR})
 
 find_package(OpenAL REQUIRED)
 mark_as_advanced(SDLTTF_INCLUDE_DIR)
@@ -73,8 +71,8 @@ if(NOT WIN32 AND NOT APPLE)
     pkg_check_modules(PANGO REQUIRED pango)
     pkg_check_modules(PANGOFT REQUIRED pangoft2)
     pkg_check_modules(SNDFILE REQUIRED sndfile)
-    #freeimage does neither have a Find*.cmake file nor a .pc file... search manually
-    #pkg_check_modules(FREEIMAGE REQUIRED freeimage)
+    # FreeImage has neither either a Find*.cmake file nor a .pc file - search manually
+    # pkg_check_modules(FREEIMAGE REQUIRED freeimage)
     find_path(FREEIMAGE_INCLUDE_DIRS FreeImage.h)
     find_library(FREEIMAGE_LIBRARIES freeimage)
     if(NOT FREEIMAGE_INCLUDE_DIRS OR NOT FREEIMAGE_LIBRARIES)
@@ -84,35 +82,25 @@ if(NOT WIN32 AND NOT APPLE)
     mark_as_advanced(FREEIMAGE_LIBRARIES)
 endif ()
 
-
-#no include_directories here, let the FindGosu.cmake user handle that through return variables
+# No include_directories here, let the FindGosu.cmake user handle that through return variables
 
 set( LINK_LIBRARIES
     ${FREETYPE_LINK_LIBRARIES}
     ${OPENAL_LIBRARY}
-    ${SDL_TTF_LIBRARIES}
-    ${SDL_LIBRARY}
-    ${X11_LIBRARY}
+    ${SDL2_TTF_LIBRARIES}
+    ${SDL2_LIBRARY}
     ${OPENGL_LIBRARY}
     ${SNDFILE_LIBRARIES}
     ${PANGO_LIBRARIES}
     ${PANGOFT_LIBRARIES}
     ${FREEIMAGE_LIBRARIES}
-    ${XINERAMA_LIBRARIES}
     ${VORBIS_LIBRARIES}
 )
 foreach(it ${LINK_LIBRARIES})
-#message(${it})
-set(LINKER_FLAGS ${LINKER_FLAGS} " -l" ${it})
+    set(LINKER_FLAGS ${LINKER_FLAGS} " -l" ${it})
 endforeach()
-
-#message(FATAL_ERROR "blub")
 
 set(Gosu_LIBRARY ${PREFIX}/@Gosu_LIBRARY_INSTALL_DIRS@/libGosu.a)
 set(Gosu_LIBRARIES ${Gosu_LIBRARY} ${LINK_LIBRARIES})
 find_package_handle_standard_args(Gosu DEFAULT_MSG Gosu_LIBRARY Gosu_INCLUDE_DIR)
 mark_as_advanced(Gosu_INCLUDE_DIR Gosu_LIBRARY)
-
-#message(STATUS "Found Gosu")
-#message(STATUS "  libraries : '${Gosu_LIBRARY}' from ${Gosu_LIBRARY_DIRS}")
-#message(STATUS "  includes  : ${Gosu_INCLUDE_DIRS}")
