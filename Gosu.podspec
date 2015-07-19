@@ -55,7 +55,6 @@ Pod::Spec.new do |s|
          src/Bitmap/BitmapColorKey.cpp
          src/Bitmap/BitmapUtils.cpp
          src/DirectoriesApple.mm
-         src/DirectoriesUnix.cpp
          src/FileUnix.cpp
          src/Graphics/BlockAllocator.cpp
          src/Graphics/Color.cpp
