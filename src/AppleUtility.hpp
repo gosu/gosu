@@ -3,37 +3,33 @@
 
 #include <Gosu/Platform.hpp>
 
-#import <CoreFoundation/CoreFoundation.h>
+#ifdef __OBJC__
 
 #include <iostream>
 #include <ostream>
 #include <sstream>
 #include <string>
 #include <stdexcept>
+#include <objc/objc.h>
+#import <CoreFoundation/CoreFoundation.h>
+#import <Foundation/Foundation.h>
 
 namespace Gosu
 {
     inline void throwOSError(OSStatus status, unsigned line)
     {
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
         std::ostringstream str;
-        #ifdef GOSU_IS_IPHONE
-        str << "Error on line " << line << " (Code " << status << ")";
-        #else
         str << "Error on line " << line << " (Code " << status << "): "
-            << GetMacOSStatusErrorString(status)
-            << " (" << GetMacOSStatusCommentString(status) << ")";
-        #endif
+        << [[error localizedDescription] UTF8String]
+        << " (" << [[error description] UTF8String] << ")";
+        [pool release];
         throw std::runtime_error(str.str());
     }
     
     #define CHECK_OS(status) if (!(status)) {} else Gosu::throwOSError(status, __LINE__)
-}
 
-#ifdef __OBJC__
-#import <objc/objc.h>
-#import <stdexcept>
-namespace Gosu
-{
     template<typename T>
     class ObjCRef
     {
