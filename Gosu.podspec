@@ -1,7 +1,3 @@
-# TODO:
-# - Make the part of GosuTouch that wraps main() yet another subspec, so users
-#   can keep their main() function and still use GosuView
-
 Pod::Spec.new do |s|
   s.name         = "Gosu"
   s.version      = "0.0.1"
@@ -92,7 +88,7 @@ Pod::Spec.new do |s|
   
   # TODO - use multi-platform support for this
   # http://docs.cocoapods.org/specification.html#ios
-  s.subspec 'GosuTouch' do |ss|
+  s.subspec 'MobileGosu' do |ss|
     ss.dependency 'Gosu/libvorbis' 
 
     ss.frameworks = 'CoreGraphics', 'OpenGLES', 'OpenAL', 'AudioToolbox', 'AVFoundation', 'QuartzCore'
@@ -137,6 +133,17 @@ Pod::Spec.new do |s|
     
     ss.requires_arc = false
 
+    ss.platform = :ios, '5.1.1'
+  end
+  
+  s.subspec 'MobileGosuMain' do |ss|
+    ss.dependency 'Gosu/MobileGosu' 
+    
+    ss.source_files =
+      %w(src/UIKit/GosuAppDelegate.mm)
+    
+    ss.requires_arc = false
+    
     ss.platform = :ios, '5.1.1'
   end
 end

@@ -1,5 +1,5 @@
 #import "GosuAppDelegate.h"
-#import <Gosu/Window.hpp>
+#import <Gosu/Gosu.hpp>
 
 
 @implementation GosuAppDelegate
@@ -18,6 +18,7 @@
 int main(int argc, char *argv[])
 {
     @autoreleasepool {
+        Gosu::useResourceDirectory();
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([GosuAppDelegate class]));
     }
 }

@@ -9,20 +9,6 @@
 
 namespace Gosu
 {
-    unsigned screenWidth()
-    {
-        static CGSize screenSize = [UIScreen mainScreen].bounds.size;
-        static CGFloat width = MIN(screenSize.width, screenSize.height);
-        return width;
-    }
-    
-    unsigned screenHeight()
-    {
-        static CGSize screenSize = [UIScreen mainScreen].bounds.size;
-        static CGFloat width = MAX(screenSize.width, screenSize.height);
-        return width;
-    }
-    
     namespace FPS
     {
         void registerFrame();
