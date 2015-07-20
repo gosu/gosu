@@ -47,17 +47,33 @@ Gosu::Input::~Input()
 
 void Gosu::Input::feedTouchEvent(int type, void* touches)
 {
-    NSSet* uiTouches = (NSSet*)touches;
+    NSSet *uiTouches = (NSSet *)touches;
     
     pimpl->currentTouchesVector.reset();
-    std::tr1::function<void (Touch)>* f = &onTouchMoved;
-    if (type == 0)
-        [pimpl->currentTouchesSet.get() unionSet: uiTouches], f = &onTouchBegan;
-    else if (type == 2)
-        [pimpl->currentTouchesSet.get() minusSet: uiTouches], f = &onTouchEnded;
-    for (UITouch* uiTouch in uiTouches)
-        if (*f)
-            (*f)(pimpl->translateTouch(uiTouch));
+    
+    std::tr1::function<void (Touch)>* callback = nullptr;
+    
+    if (type == 0) {
+        [pimpl->currentTouchesSet.get() unionSet:uiTouches];
+        callback = &onTouchBegan;
+    }
+    else if (type == 1) {
+        callback = &onTouchMoved;
+    }
+    else if (type == 2) {
+        [pimpl->currentTouchesSet.get() minusSet:uiTouches];
+        callback = &onTouchEnded;
+    }
+    else if (type == 3) {
+        [pimpl->currentTouchesSet.get() minusSet:uiTouches];
+        callback = &onTouchCancelled;
+    }
+    
+    if (callback && *callback) {
+        for (UITouch *uiTouch in uiTouches) {
+            (*callback)(pimpl->translateTouch(uiTouch));
+        }
+    }
 }
 
 wchar_t Gosu::Input::idToChar(Button btn)

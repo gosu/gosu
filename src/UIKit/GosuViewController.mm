@@ -208,8 +208,7 @@ static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    // TODO: Should have a different event in Gosu! Not the same as Ended.
-    [self touchesEnded:touches withEvent:event];
+    self.gosuWindowReference.input().feedTouchEvent(3, touches);
 }
 
 @end

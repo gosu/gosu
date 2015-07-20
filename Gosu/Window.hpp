@@ -111,6 +111,7 @@ namespace Gosu
         virtual void touchBegan(Touch touch) {}
         virtual void touchMoved(Touch touch) {}
         virtual void touchEnded(Touch touch) {}
+        virtual void touchCancelled(Touch touch) {}
         
         const Graphics& graphics() const;
         Graphics& graphics();

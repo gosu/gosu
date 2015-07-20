@@ -126,7 +126,7 @@ namespace Gosu
         
         //! Assignable events that are called by update. You can bind these to your own functions.
         //! If you use the Window class, it will assign these to its own methods.
-        std::tr1::function<void (Touch)> onTouchBegan, onTouchMoved, onTouchEnded;
+        std::tr1::function<void (Touch)> onTouchBegan, onTouchMoved, onTouchEnded, onTouchCancelled;
         
         //! Returns the currently active TextInput instance, or 0.
         TextInput* textInput() const;
