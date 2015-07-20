@@ -10,27 +10,27 @@ namespace Gosu
     bool undocumentedRetrofication = false;
 }
 
-Gosu::Texture::Texture(unsigned size)
-: allocator(size, size)
+Gosu::Texture::Texture(unsigned size, bool retro)
+: allocator_(size, size), retro_(retro)
 {
     ensureCurrentContext();
     
     // Create texture name.
-    glGenTextures(1, &name);
-    if (name == static_cast<GLuint>(-1))
+    glGenTextures(1, &texName_);
+    if (texName_ == static_cast<GLuint>(-1))
         throw std::runtime_error("Couldn't create OpenGL texture");
    
     // Create empty texture.
-    glBindTexture(GL_TEXTURE_2D, name);
+    glBindTexture(GL_TEXTURE_2D, texName_);
 #ifdef GOSU_IS_OPENGLES
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, allocator.width(), allocator.height(), 0,
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, allocator_.width(), allocator_.height(), 0,
                  GL_RGBA, GL_UNSIGNED_BYTE, 0);
 #else
-    glTexImage2D(GL_TEXTURE_2D, 0, 4, allocator.width(), allocator.height(), 0,
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, allocator_.width(), allocator_.height(), 0,
                  GL_RGBA, GL_UNSIGNED_BYTE, 0);
 #endif
     
-    if (undocumentedRetrofication)
+    if (retro || undocumentedRetrofication)
     {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -54,17 +54,22 @@ Gosu::Texture::~Texture()
 {
     ensureCurrentContext();
     
-    glDeleteTextures(1, &name);
+    glDeleteTextures(1, &texName_);
 }
 
 unsigned Gosu::Texture::size() const
 {
-    return allocator.width(); // == height
+    return allocator_.width(); // == height
 }
 
 GLuint Gosu::Texture::texName() const
 {
-    return name;
+    return texName_;
+}
+
+bool Gosu::Texture::retro() const
+{
+    return retro_;
 }
 
 GOSU_UNIQUE_PTR<Gosu::TexChunk>
@@ -73,7 +78,7 @@ GOSU_UNIQUE_PTR<Gosu::TexChunk>
     GOSU_UNIQUE_PTR<Gosu::TexChunk> result;
     
     BlockAllocator::Block block;
-    if (!allocator.alloc(bmp.width(), bmp.height(), block))
+    if (!allocator_.alloc(bmp.width(), bmp.height(), block))
         return result;
     
     result.reset(new TexChunk(ptr, block.left + padding, block.top + padding,
@@ -81,7 +86,7 @@ GOSU_UNIQUE_PTR<Gosu::TexChunk>
     
     ensureCurrentContext();
     
-    glBindTexture(GL_TEXTURE_2D, name);
+    glBindTexture(GL_TEXTURE_2D, texName_);
     glTexSubImage2D(GL_TEXTURE_2D, 0, block.left, block.top, block.width, block.height,
                  Color::GL_FORMAT, GL_UNSIGNED_BYTE, bmp.data());
 
@@ -90,12 +95,12 @@ GOSU_UNIQUE_PTR<Gosu::TexChunk>
 
 void Gosu::Texture::block(unsigned x, unsigned y, unsigned width, unsigned height)
 {
-    allocator.block(x, y, width, height);
+    allocator_.block(x, y, width, height);
 }
 
 void Gosu::Texture::free(unsigned x, unsigned y, unsigned width, unsigned height)
 {
-    allocator.free(x, y, width, height);
+    allocator_.free(x, y, width, height);
 }
 
 Gosu::Bitmap Gosu::Texture::toBitmap(unsigned x, unsigned y, unsigned width, unsigned height) const
@@ -106,7 +111,7 @@ Gosu::Bitmap Gosu::Texture::toBitmap(unsigned x, unsigned y, unsigned width, uns
     ensureCurrentContext();
     
     Gosu::Bitmap fullTexture(size(), size());
-    glBindTexture(GL_TEXTURE_2D, name);
+    glBindTexture(GL_TEXTURE_2D, texName());
     glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, fullTexture.data());
     Gosu::Bitmap bitmap(width, height);
     bitmap.insert(fullTexture, -int(x), -int(y));

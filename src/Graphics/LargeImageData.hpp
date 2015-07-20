@@ -17,7 +17,7 @@ namespace Gosu
 
     public:
         LargeImageData(const Bitmap& source,
-            unsigned partWidth, unsigned partHeight, unsigned borderFlags);
+            unsigned partWidth, unsigned partHeight, unsigned imageFlags);
 
         int width() const;
         int height() const;

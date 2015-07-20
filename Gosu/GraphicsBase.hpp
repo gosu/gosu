@@ -68,19 +68,23 @@ namespace Gosu
         taJustify
     };
     
+    //! Flags that affect the tileability or interpolation of an image.
     enum ImageFlags
     {
-        //! Flags that affect the tileability of an image.
         ifSmooth = 0,
-        // Note: No constant for '1', but Gosu treats '1' as ifTileable for
-        // backward compatibility reasons (this used to be a bool).
-        ifTileableLeft = 2,
-        ifTileableTop = 4,
-        ifTileableRight = 8,
-        ifTileableBottom = 16,
-        ifTileable = ifTileableLeft | ifTileableTop | ifTileableRight | ifTileableBottom
         
-        // TODO - ifNearestNeighbor to replace undocumentedRetrofication.
+        // Note: No constant for '1', but Gosu treats '1' as ifTileable for
+        // backward compatibility reasons (this parameter used to be a bool).
+        
+        ifTileableLeft   = 1 << 1,
+        ifTileableTop    = 1 << 2,
+        ifTileableRight  = 1 << 3,
+        ifTileableBottom = 1 << 4,
+        ifTileable       = ifTileableLeft | ifTileableTop | ifTileableRight | ifTileableBottom,
+        
+        //! Apply nearest-neighbor interpolation when scaling this image up or
+        //! down.
+        ifRetro          = 1 << 5
     };
     
 #ifdef GOSU_IS_MAC

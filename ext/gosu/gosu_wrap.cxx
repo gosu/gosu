@@ -2781,6 +2781,10 @@ SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_0(VALUE source,VALUE options=0){
                     if (RTEST(value))
                         flags |= Gosu::ifTileable;
                 }
+                else if (!strcmp(keyString, "retro")) {
+                    if (RTEST(value))
+                        flags |= Gosu::ifRetro;
+                }
                 else if (!strcmp(keyString, "rect")) {
                     Check_Type(value, T_ARRAY);
                     

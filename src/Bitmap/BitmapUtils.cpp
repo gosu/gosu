@@ -34,6 +34,10 @@ void Gosu::applyBorderFlags(Bitmap& dest, const Bitmap& source,
     unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
     unsigned imageFlags)
 {
+    // Backwards compatibility: This used to be 'bool tileable'.
+    if (imageFlags == 1)
+        imageFlags = ifTileable;
+    
     dest.resize(srcWidth + 2, srcHeight + 2);
 
     // The borders are made "harder" by duplicating the original bitmap's

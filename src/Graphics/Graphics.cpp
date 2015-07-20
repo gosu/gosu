@@ -392,6 +392,8 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
     if (flags == 1)
         flags = ifTileable;
 
+    bool wantsRetro = (flags & ifRetro);
+    
     // Special case: If the texture is supposed to have hard borders, is
     // quadratic, has a size that is at least 64 pixels but no more than maxSize
     // pixels and a power of two, create a single texture just for this image.
@@ -400,7 +402,7 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
         (srcWidth & (srcWidth - 1)) == 0 &&
         srcWidth >= 64 && srcWidth <= maxSize)
     {
-        std::tr1::shared_ptr<Texture> texture(new Texture(srcWidth));
+        std::tr1::shared_ptr<Texture> texture(new Texture(srcWidth, wantsRetro));
         GOSU_UNIQUE_PTR<ImageData> data;
         
         // Use the source bitmap directly if the source area completely covers
@@ -440,6 +442,9 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
     {
         std::tr1::shared_ptr<Texture> texture(*i);
         
+        if (texture->retro() != wantsRetro)
+            continue;
+        
         GOSU_UNIQUE_PTR<ImageData> data;
         data = texture->tryAlloc(texture, bmp, 1);
         if (data.get())
@@ -449,7 +454,7 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
     // All textures are full: Create a new one.
     
     std::tr1::shared_ptr<Texture> texture;
-    texture.reset(new Texture(maxSize));
+    texture.reset(new Texture(maxSize, wantsRetro));
     textures.push_back(texture);
     
     GOSU_UNIQUE_PTR<ImageData> data;

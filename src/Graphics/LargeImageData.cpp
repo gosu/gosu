@@ -7,7 +7,7 @@
 using namespace std;
 
 Gosu::LargeImageData::LargeImageData(const Bitmap& source,
-    unsigned partWidth, unsigned partHeight, unsigned flags)
+    unsigned partWidth, unsigned partHeight, unsigned imageFlags)
 {
     fullWidth = source.width();
     fullHeight = source.height();
@@ -31,15 +31,15 @@ Gosu::LargeImageData::LargeImageData(const Bitmap& source,
             if (y == partsY - 1 && source.height() % partHeight != 0)
                 srcHeight = source.height() % partHeight;
 
-            unsigned localFlags = ifTileable;
+            unsigned localFlags = ifTileable | imageFlags;
             if (x == 0)
-                localFlags = (localFlags & ~ifTileableLeft) | (flags & ifTileableLeft);
+                localFlags = (localFlags & ~ifTileableLeft) | (imageFlags & ifTileableLeft);
             if (x == partsX - 1)
-                localFlags = (localFlags & ~ifTileableRight) | (flags & ifTileableRight);
+                localFlags = (localFlags & ~ifTileableRight) | (imageFlags & ifTileableRight);
             if (y == 0)
-                localFlags = (localFlags & ~ifTileableTop) | (flags & ifTileableTop);
+                localFlags = (localFlags & ~ifTileableTop) | (imageFlags & ifTileableTop);
             if (y == partsY - 1)
-                localFlags = (localFlags & ~ifTileableBottom) | (flags & ifTileableBottom);
+                localFlags = (localFlags & ~ifTileableBottom) | (imageFlags & ifTileableBottom);
             
             parts[y * partsX + x].reset(Graphics::createImage(source,
                 x * partWidth, y * partHeight, srcWidth, srcHeight,

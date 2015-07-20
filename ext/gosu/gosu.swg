@@ -650,6 +650,10 @@ namespace Gosu {
                     if (RTEST(value))
                         flags |= Gosu::ifTileable;
                 }
+                else if (!strcmp(keyString, "retro")) {
+                    if (RTEST(value))
+                        flags |= Gosu::ifRetro;
+                }
                 else if (!strcmp(keyString, "rect")) {
                     Check_Type(value, T_ARRAY);
                     
