@@ -1,5 +1,5 @@
-#ifndef GOSUIMPL_AUDIO_OGGFILE_HPP
-#define GOSUIMPL_AUDIO_OGGFILE_HPP
+#ifndef GOSU_SRC_AUDIO_OGGFILE_HPP
+#define GOSU_SRC_AUDIO_OGGFILE_HPP
 
 #include "AudioFile.hpp"
 #include <Gosu/IO.hpp>

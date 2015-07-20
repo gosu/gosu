@@ -1,5 +1,5 @@
-#ifndef GOSUIMPL_GRAPHICS_TEXTURE_HPP
-#define GOSUIMPL_GRAPHICS_TEXTURE_HPP
+#ifndef GOSU_SRC_GRAPHICS_TEXTURE_HPP
+#define GOSU_SRC_GRAPHICS_TEXTURE_HPP
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Bitmap.hpp>

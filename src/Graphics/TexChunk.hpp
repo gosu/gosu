@@ -1,5 +1,5 @@
-#ifndef GOSUIMPL_GRAPHICS_TEXCHUNK_HPP
-#define GOSUIMPL_GRAPHICS_TEXCHUNK_HPP
+#ifndef GOSU_SRC_GRAPHICS_TEXCHUNK_HPP
+#define GOSU_SRC_GRAPHICS_TEXCHUNK_HPP
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>

@@ -1,5 +1,5 @@
-#ifndef GOSUIMPL_LARGEIMAGEDATA_HPP
-#define GOSUIMPL_LARGEIMAGEDATA_HPP
+#ifndef GOSU_SRC_LARGEIMAGEDATA_HPP
+#define GOSU_SRC_LARGEIMAGEDATA_HPP
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>

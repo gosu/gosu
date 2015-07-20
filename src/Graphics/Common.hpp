@@ -1,5 +1,5 @@
-#ifndef GOSUIMPL_GRAPHICS_COMMON_HPP
-#define GOSUIMPL_GRAPHICS_COMMON_HPP
+#ifndef GOSU_SRC_GRAPHICS_COMMON_HPP
+#define GOSU_SRC_GRAPHICS_COMMON_HPP
 
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>

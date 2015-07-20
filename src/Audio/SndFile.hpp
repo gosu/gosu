@@ -1,5 +1,5 @@
-#ifndef GOSUIMPL_AUDIO_SNDFILE_HPP
-#define GOSUIMPL_AUDIO_SNDFILE_HPP
+#ifndef GOSU_SRC_AUDIO_SNDFILE_HPP
+#define GOSU_SRC_AUDIO_SNDFILE_HPP
 
 #include <Gosu/Audio.hpp>
 #include <Gosu/Platform.hpp>

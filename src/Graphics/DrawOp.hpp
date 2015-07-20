@@ -1,5 +1,5 @@
-#ifndef GOSUIMPL_DRAWOP_HPP
-#define GOSUIMPL_DRAWOP_HPP
+#ifndef GOSU_SRC_DRAWOP_HPP
+#define GOSU_SRC_DRAWOP_HPP
 
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Color.hpp>

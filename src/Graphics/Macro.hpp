@@ -1,5 +1,5 @@
-#ifndef GOSUIMPL_GRAPHICS_MACRO_HPP
-#define GOSUIMPL_GRAPHICS_MACRO_HPP
+#ifndef GOSU_SRC_GRAPHICS_MACRO_HPP
+#define GOSU_SRC_GRAPHICS_MACRO_HPP
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>

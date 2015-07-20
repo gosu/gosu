@@ -1,5 +1,5 @@
-#ifndef GOSUIMPL_BLOCKALLOCATOR_HPP
-#define GOSUIMPL_BLOCKALLOCATOR_HPP
+#ifndef GOSU_SRC_BLOCKALLOCATOR_HPP
+#define GOSU_SRC_BLOCKALLOCATOR_HPP
 
 #include <memory>
 #include <Gosu/Platform.hpp>

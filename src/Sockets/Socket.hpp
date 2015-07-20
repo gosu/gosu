@@ -1,5 +1,5 @@
-#ifndef GOSUIMPL_SOCKETS_HPP
-#define GOSUIMPL_SOCKETS_HPP
+#ifndef GOSU_SRC_SOCKETS_HPP
+#define GOSU_SRC_SOCKETS_HPP
 
 #include <Gosu/Platform.hpp>
 

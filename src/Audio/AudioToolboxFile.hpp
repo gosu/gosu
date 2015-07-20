@@ -1,5 +1,5 @@
-#ifndef GOSU_AUDIO_AUDIOFILE_MAC_HPP
-#define GOSU_AUDIO_AUDIOFILE_MAC_HPP
+#ifndef GOSU_SRC_AUDIO_AUDIOFILE_MAC_HPP
+#define GOSU_SRC_AUDIO_AUDIOFILE_MAC_HPP
 
 #include "AudioFile.hpp"
 #include <AudioToolbox/AudioToolbox.h>
