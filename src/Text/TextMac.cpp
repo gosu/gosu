@@ -8,7 +8,7 @@
 #include <Gosu/Math.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/IO.hpp>
-#include "../MacUtility.hpp"
+#include "../AppleUtility.hpp"
 #include <cmath>
 #include <stdexcept>
 #include <map>
