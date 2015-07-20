@@ -47,11 +47,13 @@ Gosu::Window::Window(unsigned width, unsigned height,
     pimpl->graphics->setResolution(width, height);
     
     pimpl->input.reset(new Input(pimpl->controller.obj().view, updateInterval));
+    pimpl->input->setMouseFactors(1.0 * width / screenHeight(), 1.0 * height / screenWidth());
     
     using namespace std::tr1::placeholders;
     pimpl->input->onTouchBegan = std::tr1::bind(&Window::touchBegan, this, _1);
     pimpl->input->onTouchMoved = std::tr1::bind(&Window::touchMoved, this, _1);
     pimpl->input->onTouchEnded = std::tr1::bind(&Window::touchEnded, this, _1);
+    pimpl->input->onTouchCancelled = std::tr1::bind(&Window::touchCancelled, this, _1);
     
     pimpl->interval = updateInterval;
 }
