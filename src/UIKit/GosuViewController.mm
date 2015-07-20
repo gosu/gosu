@@ -203,4 +203,27 @@ static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
     Gosu::Song::update();
 }
 
+#pragma mark - Touch forwarding
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    self.gosuWindowReference.input().feedTouchEvent(0, touches);
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    self.gosuWindowReference.input().feedTouchEvent(1, touches);
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    self.gosuWindowReference.input().feedTouchEvent(2, touches);
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    // TODO: Should have a different event in Gosu! Not the same as Ended.
+    [self touchesEnded:touches withEvent:event];
+}
+
 @end
