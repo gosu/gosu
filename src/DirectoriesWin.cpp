@@ -21,6 +21,11 @@ namespace
     }
 }
 
+void Gosu::useResourceDirectory()
+{
+    SetCurrentDirectory(resourcePrefix().c_str());
+}
+
 std::wstring Gosu::resourcePrefix()
 {
     return Win::appDirectory();

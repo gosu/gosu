@@ -2,10 +2,17 @@
 #import <Gosu/Utility.hpp>
 #import "AppleUtility.hpp"
 #import <Foundation/Foundation.h>
+#import <unistd.h>
+
 
 static std::wstring stringFromNSString(NSString* string, const std::wstring& def)
 {
     return string ? Gosu::utf8ToWstring([string UTF8String]) : def;
+}
+
+void Gosu::useResourceDirectory()
+{
+    chdir(Gosu::wstringToUTF8(resourcePrefix()).c_str());
 }
 
 std::wstring Gosu::userSettingsPrefix()

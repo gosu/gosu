@@ -15,6 +15,11 @@ namespace
     }
 }
 
+void Gosu::useResourceDirectory()
+{
+    // Do nothing - the current directory HAS to be correct on Linux.
+}
+
 std::wstring Gosu::resourcePrefix()
 {
     return std::wstring();
