@@ -381,6 +381,8 @@ void Gosu::Input::setMousePosition(double x, double y)
     SDL_WarpMouseInWindow(pimpl->window,
         (x - pimpl->mouseOffsetX) / pimpl->mouseFactorX,
         (y - pimpl->mouseOffsetY) / pimpl->mouseFactorY);
+    
+    pimpl->updateMousePosition();
 }
 
 void Gosu::Input::setMouseFactors(double factorX, double factorY,
