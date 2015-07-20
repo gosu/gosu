@@ -64,6 +64,7 @@ namespace Gosu
 
 #if defined (GOSU_IS_IPHONE) || defined(__arm__)
 # define GOSU_IS_OPENGLES
+# define GOSU_IS_MOBILE
 #endif
 
 #ifndef SWIG
