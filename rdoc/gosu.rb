@@ -340,6 +340,7 @@ module Gosu
     # @param [String, Magick::Image] source the filename or RMagick image to load from.
     # @param [Hash] options
     # @option options [true, false] :tileable (false) if true, the Image will not have soft edges when scaled
+    # @option options [true, false] :retro (false) if true, the image will not be interpolated when it is scaled up or down. When :retro it set, :tileable has no effect.
     # @option options [Array] :rect ([0, 0, image_width, image_height]) the source rectangle in the image
     #
     # @overload initialize(source, options = {})
@@ -386,6 +387,7 @@ module Gosu
     # @param tile_height [Fixnum] If positive, this is the height of the individual tiles; if negative, the image is divided into -tile_height rows.
     # @param [Hash] options
     # @option options [true, false] :tileable (false) if true, the Image will not have soft edges when scaled
+    # @option options [true, false] :retro (false) if true, the image will not be interpolated when it is scaled up or down. When :retro it set, :tileable has no effect.
     #
     # @overload initialize(source, tile_width, tile_height, options = {})
     # @overload initialize(window, source, tile_width, tile_height, tileable = false)
