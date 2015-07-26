@@ -40,7 +40,7 @@ Pod::Spec.new do |s|
     
     ss.frameworks = 'OpenGL', 'OpenAL', 'IOKit', 'Carbon', 'Cocoa', 'AudioToolbox', 'ApplicationServices', 'ForceFeedback', 'AudioUnit', 'CoreAudio'
     ss.libraries = 'iconv'
-    ss.compiler_flags = '-I/usr/local/include'
+    ss.compiler_flags = '-I/usr/local/include -I/usr/local/include/SDL2'
     ss.xcconfig = { 'OTHER_LDFLAGS' => '/usr/local/lib/libSDL2.a' }
     
     ss.public_header_files = 'Gosu/*.hpp'
