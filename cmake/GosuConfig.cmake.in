@@ -2,7 +2,8 @@
 #
 # This module defines
 #  GOSU_INCLUDE_DIRS
-#  GOSU_DEPENDENCIES, the libraries to link against to use Gosu.
+#  GOSU_LIBRARY, the Gosu library name to link against.
+#  GOSU_DEPENDENCIES, the libraries that a static Gosu library needs to be linked against.
 #  GOSU_FOUND, If false, do not try to use Gosu
 #
 
@@ -33,10 +34,14 @@ set(GOSU_DEPENDENCIES
     ${VORBIS_LIBRARIES}
 )
 
+link_directories(
+    ${SDL2_LIBRARY_DIRS}
+    ${VORBIS_LIBRARY_DIRS}
+)
+
 if(NOT WIN32 AND NOT APPLE)
     find_package(Freetype REQUIRED)
     pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
-    find_package(X11 REQUIRED)
     pkg_check_modules(PANGO REQUIRED pango)
     pkg_check_modules(PANGOFT REQUIRED pangoft2)
     pkg_check_modules(SNDFILE REQUIRED sndfile)
@@ -58,6 +63,13 @@ if(NOT WIN32 AND NOT APPLE)
         ${PANGO_LIBRARIES}
         ${PANGOFT_LIBRARIES}
         ${FREEIMAGE_LIBRARIES}
+    )
+    
+    link_directories(
+        ${SDL2_TTF_LIBRARY_DIRS}
+        ${SNDFILE_LIBRARY_DIRS}
+        ${PANGO_LIBRARY_DIRS}
+        ${PANGOFT_LIBRARY_DIRS}
     )
 endif ()
 
