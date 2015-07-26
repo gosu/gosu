@@ -24,7 +24,7 @@ else(WIN32)
         LIBRARY DESTINATION lib COMPONENT library
         ARCHIVE DESTINATION lib COMPONENT library)
     
-    # Install the core header files, including the ones in the Gosu subfolder.
+    # Install the header files in the Gosu.
     install(DIRECTORY ../Gosu
         DESTINATION include
         COMPONENT development)

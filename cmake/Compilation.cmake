@@ -146,8 +146,14 @@ source_group("Sources" FILES ${SOURCE_FILES})
 source_group("Headers" FILES ${HEADER_FILES})
 
 add_library(gosu ${SOURCE_FILES} ${HEADER_FILES})
-set_target_properties(gosu PROPERTIES COMPILE_FLAGS "-DGOSU_SHARED_EXPORTS")
-set_target_properties(gosu PROPERTIES VERSION ${GOSU_VERSION} SOVERSION ${GOSU_VERSION_MAJOR})
+
+set_target_properties(gosu PROPERTIES
+    COMPILE_FLAGS "-DGOSU_SHARED_EXPORTS"
+    INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}
+    VERSION ${GOSU_VERSION}
+    SOVERSION ${GOSU_VERSION_MAJOR}
+)
+
 if(MSVC)
     # Disable warning on STL exports
     set_target_properties(gosu PROPERTIES COMPILE_FLAGS "/W4 /wd4251 /wd4127")
