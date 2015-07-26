@@ -77,32 +77,37 @@ if `uname`.chomp == 'Darwin' then
   SOURCE_FILES = BASE_FILES + MAC_FILES
   
   # To make everything work with the Objective C runtime
-  $CFLAGS    << " -I/usr/local/include -x objective-c -DNDEBUG"
+  $CFLAGS    << " -x objective-c -DNDEBUG"
   # Compile all C++ files as Objective C++ on OS X since mkmf does not support .mm
   # files.
   # Also undefine two debug flags that cause exceptions to randomly crash, see:
   # https://trac.macports.org/ticket/27237#comment:21
   # http://newartisans.com/2009/10/a-c-gotcha-on-snow-leopard/#comment-893
-  $CXXFLAGS << " -I/usr/local/include -x objective-c++ -U_GLIBCXX_DEBUG -U_GLIBCXX_DEBUG_PEDANTIC"
+  $CXXFLAGS << " -x objective-c++ -U_GLIBCXX_DEBUG -U_GLIBCXX_DEBUG_PEDANTIC"
+
+  # Enable C++ 11 on Mavericks and above.
   if `uname -r`.to_i >= 13 then
+    $CXXFLAGS << " -std=gnu++11"
+    
     # rvm-specific fix:
     # Explicitly set libc++ as the C++ standard library. Otherwise the gem will
     # end up being compiled against libstdc++, but linked against libc++, and
     # fail to load, see: https://github.com/shawn42/gamebox/issues/96
     $CXXFLAGS << " -stdlib=libc++"
-    # Enable C++ 11 on Mavericks and above. Gosu will not compile without this,
-    # as 
-    $CXXFLAGS << " -std=gnu++11"
   end
   
-  $LDFLAGS << " -liconv"
+  # Dependencies...
+  $CFLAGS   << " -I/usr/local/include"
+  $CXXFLAGS << " -I/usr/local/include -I/usr/local/include/SDL2"
+  $LDFLAGS  << " -liconv"
   
   if enable_config('static-homebrew-dependencies') then
     # TODO: For some reason this only works after deleting both SDL2 dylib files from /usr/local/lib.
     # Otherwise, the resulting gosu.bundle is still dependent on libSDL2-2.0.0.dylib, see `otool -L gosu.bundle`
     $LDFLAGS << HOMEBREW_DEPENDENCIES.map { |lib| " /usr/local/lib/lib#{lib}.a" }.join
   else
-    $LDFLAGS << " -L/usr/local/lib " << HOMEBREW_DEPENDENCIES.map { |lib| " -l#{lib}" }.join
+    $LDFLAGS << " -L/usr/local/lib"
+    $LDFLAGS << HOMEBREW_DEPENDENCIES.map { |lib| " -l#{lib}" }.join
   end
 
   $LDFLAGS << FRAMEWORKS.map { |f| " -framework #{f}" }.join
