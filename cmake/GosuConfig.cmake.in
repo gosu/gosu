@@ -80,6 +80,7 @@ if(APPLE)
     find_library(APPLICATION_SERVICES_LIBRARY ApplicationServices)
     find_library(AUDIO_TOOLBOX_LIBRARY AudioToolbox)
     find_library(ICONV_LIBRARY iconv)
+    
     mark_as_advanced(
         FOUNDATION_LIBRARY
         COCOA_LIBRARY
@@ -88,6 +89,7 @@ if(APPLE)
         AUDIO_TOOLBOX_LIBRARY
         ICONV_LIBRARY
     )
+    
     set(GOSU_DEPENDENCIES ${GOSU_DEPENDENCIES}
         ${FOUNDATION_LIBRARY}
         ${COCOA_LIBRARY}
@@ -98,7 +100,7 @@ if(APPLE)
     )
 endif()
 
-set(GOSU_LIBRARY "gosu")
+find_library(GOSU_LIBRARY NAMES gosu libgosu)
 set(GOSU_LIBRARIES "${GOSU_LIBRARY}")
 find_package_handle_standard_args(Gosu DEFAULT_MSG GOSU_LIBRARY GOSU_INCLUDE_DIR)
 mark_as_advanced(GOSU_INCLUDE_DIR GOSU_LIBRARY)
