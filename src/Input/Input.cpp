@@ -2,7 +2,7 @@
 #include <Gosu/TextInput.hpp>
 #include <Gosu/TR1.hpp>
 #include <Gosu/Utility.hpp>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <cwctype>
 #include <cstdlib>
 #include <algorithm>

@@ -1,6 +1,6 @@
 #include <Gosu/Gosu.hpp>
 #include "Graphics/Common.hpp"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <cstdlib>
 #include <memory>
 #include <stdexcept>

@@ -46,7 +46,7 @@ unsigned Gosu::availableHeight()
     return availableSize.cy;
 }
 #else
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 namespace
 {
