@@ -23,7 +23,8 @@ Gosu.files
 Gosu.includes
 
 /cmake/build/*
-/examples/*/build/*
+/examples/build/*
+/examples/*Example
 
 # Files from Mac builds & CocoaPod installs
 /**/*.xcworkspace
