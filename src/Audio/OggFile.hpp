@@ -3,9 +3,12 @@
 
 #include "AudioFile.hpp"
 #include <Gosu/IO.hpp>
-#include <vorbis/vorbisfile.h>
 #include <algorithm>
 #include <stdexcept>
+#include <sstream>
+
+#define STB_VORBIS_HEADER_ONLY
+#include "../stb_vorbis.c"
 
 // Based on the Drama Sound Engine for D
 
@@ -13,58 +16,55 @@ namespace Gosu
 {
     class OggFile : public AudioFile
     {
+        Gosu::Buffer contents_;
         Gosu::Buffer buffer_;
-        Gosu::Reader reader_;
-        ALenum format_;
+        int channels_;
         ALenum sampleRate_;
-        OggVorbis_File file_;
+        stb_vorbis* stream_;
 
-        // extern "C"
-        static std::size_t readCallback(void* ptr, std::size_t size, std::size_t nmemb, void* datasource)
+        void open()
         {
-            OggFile* oggFile = static_cast<OggFile*>(datasource);
-            size = std::min(size * nmemb,
-                oggFile->buffer_.size() - oggFile->reader_.position());
-            oggFile->reader_.read(ptr, size);
-            return size;
+            int error = 0;
+            
+            const unsigned char *mem = static_cast<const unsigned char*>(contents_.data());
+            stream_ = stb_vorbis_open_memory(mem, contents_.size(), &error, 0);
+            
+            if (stream_ == 0)
+            {
+                std::ostringstream message;
+                message << "Cannot open Ogg Vorbis file, error code: " << error;
+                throw std::runtime_error(message.str());
+            }
+            
+            stb_vorbis_info info = stb_vorbis_get_info(stream_);
+            channels_ = info.channels;
+            sampleRate_ = info.sample_rate;
+            buffer_.resize(info.temp_memory_required);
         }
         
-        void setup()
+        void close()
         {
-            static const ov_callbacks cbs = { readCallback, 0, 0, 0 };
-            ov_open_callbacks(this, &file_, 0, 0, cbs);
-            
-            vorbis_info* info = ov_info(&file_, -1); // -1 is current bitstream
-            if (ov_streams(&file_) != 1)
-                throw std::runtime_error("multi-stream vorbis files not supported");
-            
-            format_ = info->channels == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
-            sampleRate_ = info->rate;
-        }
-        
-        void teardown()
-        {
-            ov_clear(&file_);
+            stb_vorbis_close(stream_);
+            stream_ = 0;
         }
         
     public:
         OggFile(Gosu::Reader reader)
-        : reader_(buffer_.frontReader())
         {
-            buffer_.resize(reader.resource().size() - reader.position());
-            reader.read(buffer_.data(), buffer_.size());
+            contents_.resize(reader.resource().size() - reader.position());
+            reader.read(contents_.data(), contents_.size());
             
-            setup();
+            open();
         }
         
         ~OggFile()
         {
-            teardown();
+            close();
         }
         
         ALenum format() const
         {
-            return format_;
+            return (channels_ == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16);
         }
         
         ALuint sampleRate() const
@@ -74,38 +74,26 @@ namespace Gosu
         
         std::size_t readData(void* dest, std::size_t length)
         {
-            static const unsigned OGG_ENDIANNESS =
-            #ifdef GOSU_IS_BIG_ENDIAN
-                1;
-            #else
-                0;
-            #endif
+            int samples = 0;
+            int maxSamples = length / sizeof(short);
             
-            char* ptr = static_cast<char*>(dest);
-            std::size_t size = 0;
-            int result;
-            int section;
-            while (size < length)
-            {
-                result = ov_read(&file_, ptr + size, length - size,
-                                 OGG_ENDIANNESS, 2 /* 16-bit */,
-                                 1 /* signed */, &section);
-                if (result > 0)
-                    size += result;
-                else if (result < 0)
-                    throw std::runtime_error("error reading vorbis stream");
-                else
+            while (samples < maxSamples) {
+                int samplesPerChannel =
+                    stb_vorbis_get_samples_short_interleaved(stream_, channels_,
+                        static_cast<short*>(dest) + samples, maxSamples - samples);
+                
+                if (samplesPerChannel == 0)
                     break;
+                
+                samples += samplesPerChannel * channels_;
             }
             
-            return size;
+            return samples * sizeof(short);
         }
         
         void rewind()
         {
-            teardown();
-            reader_ = buffer_.frontReader();
-            setup();
+            stb_vorbis_seek_start(stream_);
         }
     };
 }

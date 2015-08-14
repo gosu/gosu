@@ -12,32 +12,7 @@ Pod::Spec.new do |s|
   
   s.compiler_flags = '-DGOSU_DEPRECATED= -Wno-conversion'
   
-  s.subspec 'libogg' do |ss|
-    ss.header_dir = 'ogg'
-    
-    ss.compiler_flags = '-Wno-comment -Wno-unused-variable -Wno-shift-op-parentheses -Wno-shorten-64-to-32'
-    
-    ss.public_header_files = 'dependencies/libogg/include/ogg'
-    ss.source_files = 'dependencies/libogg/include/ogg', 'dependencies/libogg/src'
-  end
-  
-  s.subspec 'libvorbis' do |ss|
-    ss.dependency 'Gosu/libogg'
-    
-    ss.compiler_flags = '-Wno-comment -Wno-unused-variable -Wno-shift-op-parentheses -Wno-shorten-64-to-32'
-    
-    ss.header_dir = 'vorbis'
-    ss.public_header_files = 'dependencies/libvorbis/include/vorbis'
-    ss.source_files = %w(analysis bitrate block codebook envelope floor0 floor1
-        info lookup lpc lsp mapping0 mdct psy registry res0
-        sharedbook smallft synthesis vorbisfile window).map do |basename|
-      "dependencies/libvorbis/lib/#{basename}.c"
-    end + ['dependencies/libvorbis/include/vorbis', 'dependencies/libvorbis/lib/*.h']
-  end
-
   s.subspec 'Gosu' do |ss|
-    ss.dependency 'Gosu/libvorbis' 
-    
     ss.frameworks = 'OpenGL', 'OpenAL', 'IOKit', 'Carbon', 'Cocoa', 'AudioToolbox', 'ApplicationServices', 'ForceFeedback', 'AudioUnit', 'CoreAudio'
     ss.libraries = 'iconv'
     ss.compiler_flags = '-I/usr/local/include -I/usr/local/include/SDL2'
@@ -75,8 +50,8 @@ Pod::Spec.new do |s|
          src/TimingApple.cpp
          src/Utility.cpp
          src/UtilityApple.mm
-         src/Window.cpp)
-         # TODO add sockets
+         src/Window.cpp
+         src/stb_vorbis.c)
     
     # This path needs to be preserved because it is included by AudioOpenAL.mm (yuck)
     ss.preserve_paths = 'src/Audio/AudioOpenAL.cpp'
@@ -89,8 +64,6 @@ Pod::Spec.new do |s|
   # TODO - use multi-platform support for this
   # http://docs.cocoapods.org/specification.html#ios
   s.subspec 'MobileGosu' do |ss|
-    ss.dependency 'Gosu/libvorbis' 
-
     ss.frameworks = 'CoreGraphics', 'OpenGLES', 'OpenAL', 'AudioToolbox', 'AVFoundation', 'QuartzCore'
     ss.libraries = 'iconv'
     
@@ -126,8 +99,8 @@ Pod::Spec.new do |s|
          src/UIKit/GosuViewController.mm
          src/Utility.cpp
          src/UtilityApple.mm
-         src/WindowUIKit.mm)
-         # TODO add sockets
+         src/WindowUIKit.mm
+         src/stb_vorbis.c)
     
     ss.preserve_paths = 'src/Audio/AudioOpenAL.cpp'
     
