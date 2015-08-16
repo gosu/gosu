@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
     
     ss.public_header_files = 'Gosu/*.hpp'
     ss.source_files = ['Gosu/*.hpp', 'src/**/*.{h,hpp}'] +
-      %w(src/Audio/AudioOpenAL.mm
+      %w(src/Audio/Audio.mm
          src/Bitmap/Bitmap.cpp
          src/Bitmap/BitmapApple.mm
          src/Bitmap/BitmapColorKey.cpp
@@ -51,10 +51,11 @@ Pod::Spec.new do |s|
          src/Utility.cpp
          src/UtilityApple.mm
          src/Window.cpp
+         
          src/stb_vorbis.c)
     
-    # This path needs to be preserved because it is included by AudioOpenAL.mm (yuck)
-    ss.preserve_paths = 'src/Audio/AudioOpenAL.cpp'
+    # This path needs to be preserved because it is included by Audio.mm (yuck)
+    ss.preserve_paths = 'src/Audio/Audio.cpp'
     
     ss.requires_arc = false
     
@@ -69,7 +70,7 @@ Pod::Spec.new do |s|
     
     ss.public_header_files = 'Gosu/*.hpp'
     ss.source_files = ['Gosu/*.hpp', 'src/**/*.{h,hpp}'] +
-      %w(src/Audio/AudioOpenAL.mm
+      %w(src/Audio/Audio.mm
          src/Bitmap/Bitmap.cpp
          src/Bitmap/BitmapApple.mm
          src/Bitmap/BitmapBMP.cpp
@@ -100,9 +101,11 @@ Pod::Spec.new do |s|
          src/Utility.cpp
          src/UtilityApple.mm
          src/WindowUIKit.mm
+         
          src/stb_vorbis.c)
     
-    ss.preserve_paths = 'src/Audio/AudioOpenAL.cpp'
+    # This path needs to be preserved because it is included by Audio.mm (yuck)
+    ss.preserve_paths = 'src/Audio/Audio.cpp'
     
     ss.requires_arc = false
 

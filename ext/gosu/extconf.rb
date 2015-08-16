@@ -45,7 +45,7 @@ BASE_FILES = %w(
 )
 
 MAC_FILES = %w(
-  Audio/AudioOpenAL.mm
+  Audio/Audio.mm
   Bitmap/BitmapApple.mm
   Graphics/ResolutionApple.mm
   Text/TextApple.mm
@@ -55,7 +55,7 @@ MAC_FILES = %w(
 )
 
 LINUX_FILES = %w(
-  Audio/AudioOpenAL.cpp
+  Audio/Audio.cpp
   Bitmap/BitmapFreeImage.cpp
   Text/TextUnix.cpp
   TimingUnix.cpp

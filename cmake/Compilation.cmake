@@ -25,11 +25,13 @@ set(SOURCE_FILES
     ../src/Text/Text.cpp
     ../src/Utility.cpp
     ../src/Window.cpp
+    
+    ../src/stb_vorbis.c
 )
 
 if(WIN32)
     set(SOURCE_FILES ${SOURCE_FILES}
-        ../src/Audio/AudioOpenAL.cpp
+        ../src/Audio/Audio.cpp
         ../src/Bitmap/BitmapGDIplus.cpp
         ../src/DirectoriesWin.cpp
         ../src/FileWin.cpp
@@ -42,7 +44,7 @@ if(WIN32)
     )
 elseif(APPLE)
     set(SOURCE_FILES ${SOURCE_FILES}
-        ../src/Audio/AudioOpenAL.mm
+        ../src/Audio/Audio.mm
         ../src/Bitmap/BitmapApple.mm
         ../src/DirectoriesApple.mm
         ../src/FileUnix.cpp
@@ -138,7 +140,6 @@ include_directories(
     ${PANGO_INCLUDE_DIRS}
     ${PANGOFT_INCLUDE_DIRS}
     ${FREEIMAGE_INCLUDE_DIRS}
-    ${VORBIS_INCLUDE_DIRS}
 )
 
 # "Sources" and "Headers" are the group names in Visual Studio.

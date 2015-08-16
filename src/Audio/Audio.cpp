@@ -133,7 +133,6 @@ void Gosu::SampleInstance::changePan(double pan)
     ALuint source = alChannelManagement->sourceIfStillPlaying(handle, extra);
     if (source == ALChannelManagement::NO_SOURCE)
         return;
-    // TODO: This is not the old panning behavior!
     alSource3f(source, AL_POSITION, pan * 10, 0, 0);
 }
 
