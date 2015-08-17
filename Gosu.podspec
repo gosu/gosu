@@ -22,9 +22,7 @@ Pod::Spec.new do |s|
     ss.source_files = ['Gosu/*.hpp', 'src/**/*.{h,hpp}'] +
       %w(src/Audio/Audio.mm
          src/Bitmap/Bitmap.cpp
-         src/Bitmap/BitmapApple.mm
-         src/Bitmap/BitmapColorKey.cpp
-         src/Bitmap/BitmapUtils.cpp
+         src/Bitmap/BitmapIO.cpp
          src/DirectoriesApple.mm
          src/FileUnix.cpp
          src/Graphics/BlockAllocator.cpp
@@ -72,10 +70,7 @@ Pod::Spec.new do |s|
     ss.source_files = ['Gosu/*.hpp', 'src/**/*.{h,hpp}'] +
       %w(src/Audio/Audio.mm
          src/Bitmap/Bitmap.cpp
-         src/Bitmap/BitmapApple.mm
-         src/Bitmap/BitmapBMP.cpp
-         src/Bitmap/BitmapColorKey.cpp
-         src/Bitmap/BitmapUtils.cpp
+         src/Bitmap/BitmapIO.cpp
          src/DirectoriesApple.mm
          src/FileUnix.cpp
          src/Graphics/BlockAllocator.cpp

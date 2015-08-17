@@ -51,7 +51,7 @@ namespace Gosu
         //! clipped away.
         void insert(const Bitmap& source, int x, int y, unsigned srcX,
             unsigned srcY, unsigned srcWidth, unsigned srcHeight);
-		
+
         //! Direct access to the array of color values. May be useful for optimized
         //! OpenGL operations.
         const Color* data() const { return &pixels[0]; }
@@ -70,7 +70,7 @@ namespace Gosu
     //! Saves a Bitmap to a file.
     void saveImageFile(const Bitmap& bitmap, const std::wstring& filename);
     //! Saves a Bitmap to an arbitrary resource.
-    void saveImageFile(const Bitmap& bitmap, Gosu::Writer writer,
+    void saveImageFile(const Bitmap& bitmap, Writer writer,
         const std::wstring& formatHint = L"png");
 
     //! Set the alpha value of all pixels which are equal to the color key
@@ -84,7 +84,7 @@ namespace Gosu
     
     void applyBorderFlags(Bitmap& dest, const Bitmap& source,
         unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-        unsigned borderFlags);	
+        unsigned borderFlags);
 
     // Use loadImageFile/saveImageFile instead.
     GOSU_DEPRECATED Reader loadFromBMP(Bitmap& bmp, Reader reader);
