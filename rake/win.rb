@@ -5,8 +5,6 @@ namespace :win do
   task :archive => :set_version do
     files = COMMON_CPP_FILES
     files += FileList['Gosu/*.hpp', 'lib{,64}/*.{dll,lib}']
-    # Not yet supported in C++
-    files -= ['lib{,64}/FreeImage.dll']
     zip WINDOWS_ARCHIVE_FILENAME, files
   end
   

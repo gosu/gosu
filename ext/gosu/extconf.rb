@@ -19,8 +19,7 @@ puts
 
 BASE_FILES = %w(
   Bitmap/Bitmap.cpp
-  Bitmap/BitmapColorKey.cpp
-  Bitmap/BitmapUtils.cpp
+  Bitmap/BitmapIO.cpp
   DirectoriesUnix.cpp
   FileUnix.cpp
   Graphics/BlockAllocator.cpp
@@ -46,7 +45,6 @@ BASE_FILES = %w(
 
 MAC_FILES = %w(
   Audio/Audio.mm
-  Bitmap/BitmapApple.mm
   Graphics/ResolutionApple.mm
   Text/TextApple.mm
   Text/TextMac.cpp
@@ -56,7 +54,6 @@ MAC_FILES = %w(
 
 LINUX_FILES = %w(
   Audio/Audio.cpp
-  Bitmap/BitmapFreeImage.cpp
   Text/TextUnix.cpp
   TimingUnix.cpp
 )
@@ -71,7 +68,7 @@ $CXXFLAGS ||= ''
 $INCFLAGS << " -I../.. -I../../src"
 
 if `uname`.chomp == 'Darwin' then
-  HOMEBREW_DEPENDENCIES = %w(SDL2 ogg vorbis vorbisfile)
+  HOMEBREW_DEPENDENCIES = %w(SDL2)
   FRAMEWORKS = %w(AppKit ApplicationServices AudioToolbox Carbon ForceFeedback Foundation IOKit OpenAL OpenGL)
 
   SOURCE_FILES = BASE_FILES + MAC_FILES
@@ -130,7 +127,6 @@ else
   pkg_config 'sndfile'
   
   have_header 'SDL_ttf.h'   if have_library('SDL2_ttf', 'TTF_RenderUTF8_Blended')
-  have_header 'FreeImage.h' if have_library('freeimage', 'FreeImage_ConvertFromRawBits')
   have_header 'AL/al.h'     if have_library('openal')
 end
 

@@ -43,23 +43,12 @@ if(NOT WIN32 AND NOT APPLE)
     pkg_check_modules(PANGOFT REQUIRED pangoft2)
     pkg_check_modules(SNDFILE REQUIRED sndfile)
     
-    # FreeImage has neither either a Find*.cmake file nor a .pc file - search manually
-    # pkg_check_modules(FREEIMAGE REQUIRED freeimage)
-    find_path(FREEIMAGE_INCLUDE_DIRS FreeImage.h)
-    find_library(FREEIMAGE_LIBRARIES freeimage)
-    if(NOT FREEIMAGE_INCLUDE_DIRS OR NOT FREEIMAGE_LIBRARIES)
-        message(FATAL_ERROR "FreeImage could not be found")
-    endif()
-    mark_as_advanced(FREEIMAGE_INCLUDE_DIRS)
-    mark_as_advanced(FREEIMAGE_LIBRARIES)
-    
     set(GOSU_DEPENDENCIES ${GOSU_DEPENDENCIES}
         ${FREETYPE_LIBRARIES}
         ${SDL2_TTF_LIBRARIES}
         ${SNDFILE_LIBRARIES}
         ${PANGO_LIBRARIES}
         ${PANGOFT_LIBRARIES}
-        ${FREEIMAGE_LIBRARIES}
     )
     
     link_directories(

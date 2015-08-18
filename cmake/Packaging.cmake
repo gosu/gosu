@@ -11,7 +11,7 @@ set(CPACK_PACKAGE_CONTACT "Oliver Schneider <mail@oli-obk.de>")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER ${CPACK_PACKAGE_CONTACT})
 # Taken from https://github.com/gosu/gosu/wiki/Getting-Started-on-Linux
 set(CPACK_DEBIAN_PACKAGE_DEPENDS
-    "libsdl2-dev, libsdl2-ttf-dev, libpango1.0-dev, libgl1-mesa-dev, libfreeimage-dev, libopenal-dev, libsndfile-dev")
+    "libsdl2-dev, libsdl2-ttf-dev, libpango1.0-dev, libgl1-mesa-dev, libopenal-dev, libsndfile-dev")
 
 if(WIN32 AND NOT UNIX)
   # There is a bug in NSIS that does not handle full unix paths properly.

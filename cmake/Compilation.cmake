@@ -1,7 +1,6 @@
 set(SOURCE_FILES
     ../src/Bitmap/Bitmap.cpp
-    ../src/Bitmap/BitmapColorKey.cpp
-    ../src/Bitmap/BitmapUtils.cpp
+    ../src/Bitmap/BitmapIO.cpp
     ../src/Graphics/BlockAllocator.cpp
     ../src/Graphics/Color.cpp
     ../src/Graphics/Graphics.cpp
@@ -32,7 +31,6 @@ set(SOURCE_FILES
 if(WIN32)
     set(SOURCE_FILES ${SOURCE_FILES}
         ../src/Audio/Audio.cpp
-        ../src/Bitmap/BitmapGDIplus.cpp
         ../src/DirectoriesWin.cpp
         ../src/FileWin.cpp
         ../src/Graphics/TextWin.cpp
@@ -45,7 +43,6 @@ if(WIN32)
 elseif(APPLE)
     set(SOURCE_FILES ${SOURCE_FILES}
         ../src/Audio/Audio.mm
-        ../src/Bitmap/BitmapApple.mm
         ../src/DirectoriesApple.mm
         ../src/FileUnix.cpp
         ../src/Graphics/ResolutionApple.mm
@@ -56,8 +53,7 @@ elseif(APPLE)
     )
 else()
     set(SOURCE_FILES ${SOURCE_FILES}
-        ../src/Audio/AudioOpenAL.cpp
-        ../src/Bitmap/BitmapFreeImage.cpp
+        ../src/Audio/Audio.cpp
         ../src/DirectoriesUnix.cpp
         ../src/FileUnix.cpp
         ../src/Text/TextUnix.cpp
@@ -139,7 +135,6 @@ include_directories(
     ${SNDFILE_INCLUDE_DIRS}
     ${PANGO_INCLUDE_DIRS}
     ${PANGOFT_INCLUDE_DIRS}
-    ${FREEIMAGE_INCLUDE_DIRS}
 )
 
 # "Sources" and "Headers" are the group names in Visual Studio.
