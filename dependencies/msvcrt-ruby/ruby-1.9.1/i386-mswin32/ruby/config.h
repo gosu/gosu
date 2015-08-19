@@ -127,6 +127,11 @@
 #define HAVE_COSH 1
 #define HAVE_SINH 1
 #define HAVE_TANH 1
+#define HAVE_ACOSH 1
+#define HAVE_ERF 1
+#define HAVE_TGAMMA 1
+#define HAVE_CBRT 1
+#define HAVE_STRUCT_TIMESPEC 1
 #define HAVE_SIGNBIT 1
 #define HAVE_TZNAME 1
 #define HAVE_DAYLIGHT 1
