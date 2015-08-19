@@ -11095,9 +11095,9 @@ SWIGEXPORT void Init_gosu(void) {
   
   SWIG_RubyInitializeTrackings();
   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
-  rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(9)));
-  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(2)));
-  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.9.2"));
+  rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(10)));
+  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(0)));
+  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.10.0"));
   rb_define_const(mGosu, "GOSU_COPYRIGHT_NOTICE", SWIG_FromCharPtr("This software uses the following third-party libraries:\n\nGosu, http://www.libgosu.org, MIT License, http://opensource.org/licenses/MIT\nSDL 2, http://www.libsdl.org, MIT License, http://opensource.org/licenses/MIT\nlibsndfile, http://www.mega-nerd.com/libsndfile, GNU LGPL 3, http://www.gnu.org/copyleft/lesser.html\nOpenAL Soft, http://kcat.strangesoft.net/openal.html, GNU LGPL 2, http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html\n"));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
