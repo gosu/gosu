@@ -23,7 +23,6 @@
 #include <Gosu/IO.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/Platform.hpp>
-#include <Gosu/Sockets.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/TextInput.hpp>
 #include <Gosu/Timing.hpp>

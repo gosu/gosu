@@ -16,10 +16,6 @@ set(SOURCE_FILES
     ../src/Inspection.cpp
     ../src/IO.cpp
     ../src/Math.cpp
-    ../src/Sockets/CommSocket.cpp
-    ../src/Sockets/ListenerSocket.cpp
-    ../src/Sockets/MessageSocket.cpp
-    ../src/Sockets/Socket.cpp
     ../src/Text/Font.cpp
     ../src/Text/Text.cpp
     ../src/Utility.cpp
@@ -80,7 +76,6 @@ set(HEADER_FILES
     ../Gosu/IO.hpp
     ../Gosu/Math.hpp
     ../Gosu/Platform.hpp
-    ../Gosu/Sockets.hpp
     ../Gosu/Text.hpp
     ../Gosu/TextInput.hpp
     ../Gosu/Timing.hpp
