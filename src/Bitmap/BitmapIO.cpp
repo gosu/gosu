@@ -19,7 +19,7 @@ namespace
         return actualSize;
     }
 
-     void skipCallback(void* user, int n)
+    void skipCallback(void* user, int n)
     {
         Gosu::Reader* reader = static_cast<Gosu::Reader*>(user);
         reader->setPosition(reader->position() + n);
@@ -29,6 +29,17 @@ namespace
     {
         Gosu::Reader* reader = static_cast<Gosu::Reader*>(user);
         return reader->position() == reader->resource().size();
+    }
+
+    bool isBMP(Gosu::Reader reader)
+    {
+        std::size_t remaining = reader.resource().size() - reader.position();
+        if (remaining < 2)
+            return false;
+        char magicBytes[2];
+        reader.read(magicBytes, sizeof magicBytes);
+        reader.seek(sizeof magicBytes);
+        return magicBytes[0] == 'B' && magicBytes[1] == 'M';
     }
 }
 
@@ -41,6 +52,8 @@ void Gosu::loadImageFile(Gosu::Bitmap& bitmap, const std::wstring& filename)
 
 void Gosu::loadImageFile(Gosu::Bitmap& bitmap, Reader input)
 {
+    bool needsColorKey = isBMP(input);
+    
     stbi_io_callbacks callbacks;
     callbacks.read = readCallback;
     callbacks.skip = skipCallback;
@@ -57,6 +70,9 @@ void Gosu::loadImageFile(Gosu::Bitmap& bitmap, Reader input)
     std::memcpy(bitmap.data(), bytes, x * y * sizeof(Gosu::Color));
 
     stbi_image_free(bytes);
+    
+    if (needsColorKey)
+        applyColorKey(bitmap, Gosu::Color::FUCHSIA);
 }
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
