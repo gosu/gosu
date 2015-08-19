@@ -1,3 +1,7 @@
 platform :osx, '10.7'
 
-pod 'Gosu', :path => "#{File.dirname(__FILE__)}/../.."
+pod 'Gosu', :path => "../.."
+
+# In a real project, you would use this instead of a relative path:
+#
+# pod 'Gosu', :git => 'https://github.com/gosu/gosu.git'
