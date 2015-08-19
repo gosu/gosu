@@ -2848,8 +2848,8 @@ SWIGINTERN Gosu::GLTexInfo *Gosu_Image_glTexInfo(Gosu::Image const *self){
             return 0;
     }
 SWIGINTERN Gosu::Image *Gosu_Image_subimage(Gosu::Image *self,int x,int y,int w,int h){
-        std::auto_ptr<Gosu::ImageData> imageData = self->getData().subimage(x, y, w, h);
-        return imageData.get() ? new Gosu::Image(imageData) : 0;
+        GOSU_UNIQUE_PTR<Gosu::ImageData> imageData = self->getData().subimage(x, y, w, h);
+        return imageData.get() ? new Gosu::Image(GOSU_MOVE_UNIQUE_PTR(imageData)) : 0;
     }
 SWIGINTERN Gosu::Image *Gosu_Image_fromText(std::wstring const &text,unsigned int fontHeight,VALUE options=0){
         std::wstring font = Gosu::defaultFontName();
