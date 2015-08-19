@@ -1,3 +1,4 @@
+
 (*)
 /.bundle
 /vendor
@@ -41,6 +42,7 @@ Gosu.includes
 /windows/*.sdf
 /windows/*.suo
 /windows/*.user
-/windows/ipch
+/windows/*.vs
+/windows/*.opensdf
 /windows/Release (Ruby ?.?)/*.exp
 /windows/Release (Ruby ?.?)/*.lib

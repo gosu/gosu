@@ -16,9 +16,6 @@
     <Filter Include="Implementation\Input">
       <UniqueIdentifier>{4ccfad9c-b5ff-40f0-9131-5c1b5f43e8b8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Implementation\Sockets">
-      <UniqueIdentifier>{696b095c-cd5a-4b0f-88ea-ecce15f5a6b3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Implementation\Text">
       <UniqueIdentifier>{ecb0c8af-b127-4dd1-9acb-9cef5c1ef2f3}</UniqueIdentifier>
     </Filter>
@@ -51,9 +48,6 @@
     <ClCompile Include="..\src\UtilityWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\WinMain.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\WinUtility.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
@@ -84,26 +78,11 @@
     <ClCompile Include="..\src\Graphics\Transform.cpp">
       <Filter>Implementation\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Audio\AudioOpenAL.cpp">
-      <Filter>Implementation\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Input\Input.cpp">
       <Filter>Implementation\Input</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Input\TextInput.cpp">
       <Filter>Implementation\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Sockets\CommSocket.cpp">
-      <Filter>Implementation\Sockets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Sockets\MessageSocket.cpp">
-      <Filter>Implementation\Sockets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Sockets\ListenerSocket.cpp">
-      <Filter>Implementation\Sockets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Sockets\Socket.cpp">
-      <Filter>Implementation\Sockets</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Window.cpp">
       <Filter>Implementation</Filter>
@@ -123,17 +102,17 @@
     <ClCompile Include="..\src\Bitmap\Bitmap.cpp">
       <Filter>Implementation\Bitmap</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Bitmap\BitmapColorKey.cpp">
-      <Filter>Implementation\Bitmap</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Bitmap\BitmapGDIplus.cpp">
-      <Filter>Implementation\Bitmap</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Bitmap\BitmapUtils.cpp">
-      <Filter>Implementation\Bitmap</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Graphics\Resolution.cpp">
       <Filter>Implementation\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Bitmap\BitmapIO.cpp">
+      <Filter>Implementation\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Audio\Audio.cpp">
+      <Filter>Implementation\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\stb_vorbis.c">
+      <Filter>Implementation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

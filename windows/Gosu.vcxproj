@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -22,25 +22,30 @@
     <ProjectGuid>{4989339B-019C-4399-86F5-1D9245C420C6}</ProjectGuid>
     <RootNamespace>Gosu</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -70,26 +75,40 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)Debug</TargetName>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\dependencies-$(Configuration);..\dependencies\AL\x86;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\dependencies-$(Configuration);..\dependencies\AL\x86;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\dependencies-$(Configuration);..\dependencies\AL\x64;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\dependencies-$(Configuration);..\dependencies\AL\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\dependencies\al_soft\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\dependencies\al_soft\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\dependencies\al_soft\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\dependencies\al_soft\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>..;..\dependencies\libsndfile;..\dependencies\al_soft;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>..;..\dependencies\libsndfile;..\dependencies\al_soft;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>..;..\dependencies\libsndfile;..\dependencies\al_soft;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>..;..\dependencies\libsndfile;..\dependencies\al_soft;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../;$(ProjectDir)/../dependencies/libsndfile/;$(ProjectDir)/../dependencies/libogg/include/;$(ProjectDir)/../dependencies/libvorbis/include/;$(ProjectDir)/../dependencies/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GOSU_DEPRECATED=;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>dependencies.lib;SDL2.lib;gdiplus.lib;opengl32.lib;openal32.lib;winmm.lib;ws2_32.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
@@ -98,18 +117,20 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../;$(ProjectDir)/../dependencies/libsndfile/;$(ProjectDir)/../dependencies/libogg/include/;$(ProjectDir)/../dependencies/libvorbis/include/;$(ProjectDir)/../dependencies/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GOSU_DEPRECATED=;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>dependencies.lib;SDL2.lib;gdiplus.lib;opengl32.lib;openal32.lib;winmm.lib;ws2_32.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
@@ -119,16 +140,14 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../;$(ProjectDir)/../dependencies/libsndfile/;$(ProjectDir)/../dependencies/libogg/include/;$(ProjectDir)/../dependencies/libvorbis/include/;$(ProjectDir)/../dependencies/</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GOSU_DEPRECATED=;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>dependencies.lib;SDL2.lib;gdiplus.lib;opengl32.lib;openal32.lib;winmm.lib;ws2_32.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
     </Lib>
@@ -139,35 +158,29 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)/../;$(ProjectDir)/../dependencies/libsndfile/;$(ProjectDir)/../dependencies/libogg/include/;$(ProjectDir)/../dependencies/libvorbis/include/;$(ProjectDir)/../dependencies/</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GOSU_DEPRECATED=;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>dependencies.lib;SDL2.lib;gdiplus.lib;opengl32.lib;openal32.lib;winmm.lib;ws2_32.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Audio\Audio.cpp" />
     <ClCompile Include="..\src\Bitmap\Bitmap.cpp" />
-    <ClCompile Include="..\src\Bitmap\BitmapColorKey.cpp" />
-    <ClCompile Include="..\src\Bitmap\BitmapGDIplus.cpp" />
-    <ClCompile Include="..\src\Bitmap\BitmapUtils.cpp" />
+    <ClCompile Include="..\src\Bitmap\BitmapIO.cpp" />
     <ClCompile Include="..\src\Graphics\Resolution.cpp" />
     <ClCompile Include="..\src\Input\Input.cpp" />
     <ClCompile Include="..\src\Input\TextInput.cpp" />
-    <ClCompile Include="..\src\Sockets\CommSocket.cpp" />
     <ClCompile Include="..\src\DirectoriesWin.cpp" />
     <ClCompile Include="..\src\FileWin.cpp" />
     <ClCompile Include="..\src\Inspection.cpp" />
     <ClCompile Include="..\src\IO.cpp" />
-    <ClCompile Include="..\src\Sockets\ListenerSocket.cpp" />
     <ClCompile Include="..\src\Math.cpp" />
-    <ClCompile Include="..\src\Sockets\MessageSocket.cpp" />
-    <ClCompile Include="..\src\Sockets\Socket.cpp" />
+    <ClCompile Include="..\src\stb_vorbis.c" />
     <ClCompile Include="..\src\Text\Font.cpp" />
     <ClCompile Include="..\src\Text\Text.cpp" />
     <ClCompile Include="..\src\Text\TextTTFWin.cpp" />
@@ -176,7 +189,6 @@
     <ClCompile Include="..\src\Utility.cpp" />
     <ClCompile Include="..\src\UtilityWin.cpp" />
     <ClCompile Include="..\src\Window.cpp" />
-    <ClCompile Include="..\src\WinMain.cpp" />
     <ClCompile Include="..\src\WinUtility.cpp" />
     <ClCompile Include="..\src\Graphics\BlockAllocator.cpp" />
     <ClCompile Include="..\src\Graphics\Color.cpp" />
@@ -187,7 +199,6 @@
     <ClCompile Include="..\src\Graphics\TexChunk.cpp" />
     <ClCompile Include="..\src\Graphics\Texture.cpp" />
     <ClCompile Include="..\src\Graphics\Transform.cpp" />
-    <ClCompile Include="..\src\Audio\AudioOpenAL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Gosu\Gosu.hpp" />

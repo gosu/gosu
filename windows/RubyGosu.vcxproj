@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Release (Ruby 1.8)|x64">
       <Configuration>Release (Ruby 1.8)</Configuration>
@@ -51,52 +51,52 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.9)|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.9)|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.0)|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.0)|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.8)|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.8)|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -194,26 +194,46 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.0)|x64'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|x64'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|x64'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.8)|Win32'">..\dependencies\freeimage;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.9)|Win32'">..\dependencies\freeimage;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.0)|Win32'">..\dependencies\freeimage;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|Win32'">..\dependencies\freeimage;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|Win32'">..\dependencies\freeimage;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.8)|x64'">..\dependencies\freeimage;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.9)|x64'">..\dependencies\freeimage;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.0)|x64'">..\dependencies\freeimage;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|x64'">..\dependencies\freeimage;$(IncludePath)</IncludePath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|x64'">..\dependencies\freeimage;$(IncludePath)</IncludePath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.8)|Win32'">..\dependencies\freeimage\x86;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.9)|Win32'">..\dependencies\freeimage\x86;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.0)|Win32'">..\dependencies\freeimage\x86;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|Win32'">..\dependencies\freeimage\x86;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|Win32'">..\dependencies\freeimage\x86;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.8)|x64'">..\dependencies\freeimage\x64;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.9)|x64'">..\dependencies\freeimage\x64;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.0)|x64'">..\dependencies\freeimage\x64;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|x64'">..\dependencies\freeimage\x64;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|x64'">..\dependencies\freeimage\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|Win32'">
+    <IncludePath>..;$(IncludePath)</IncludePath>
+    <LibraryPath>..\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.0)|Win32'">
+    <IncludePath>..;$(IncludePath)</IncludePath>
+    <LibraryPath>..\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|Win32'">
+    <IncludePath>..;$(IncludePath)</IncludePath>
+    <LibraryPath>..\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.9)|Win32'">
+    <IncludePath>..;$(IncludePath)</IncludePath>
+    <LibraryPath>..\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.8)|Win32'">
+    <IncludePath>..;$(IncludePath)</IncludePath>
+    <LibraryPath>..\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|x64'">
+    <IncludePath>..;$(IncludePath)</IncludePath>
+    <LibraryPath>..\lib64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.0)|x64'">
+    <IncludePath>..;$(IncludePath)</IncludePath>
+    <LibraryPath>..\lib64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|x64'">
+    <IncludePath>..;$(IncludePath)</IncludePath>
+    <LibraryPath>..\lib64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.9)|x64'">
+    <IncludePath>..;$(IncludePath)</IncludePath>
+    <LibraryPath>..\lib64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.8)|x64'">
+    <IncludePath>..;$(IncludePath)</IncludePath>
+    <LibraryPath>..\lib64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.8)|Win32'">
     <ClCompile>
@@ -228,10 +248,9 @@
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\dependencies\msvcrt-ruby\msvcrt-ruby18.lib;FreeImage.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\dependencies\msvcrt-ruby\msvcrt-ruby18.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)gosu.so</OutputFile>
-      <DelayLoadDLLs>OpenAL32.dll;FreeImage.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <DelayLoadDLLs>OpenAL32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -254,8 +273,7 @@
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)gosu.so</OutputFile>
-      <DelayLoadDLLs>OpenAL32.dll;FreeImage.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <DelayLoadDLLs>OpenAL32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -277,10 +295,9 @@
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\dependencies\msvcrt-ruby\msvcrt-ruby191.lib;FreeImage.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\dependencies\msvcrt-ruby\msvcrt-ruby191.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)gosu.so</OutputFile>
-      <DelayLoadDLLs>OpenAL32.dll;FreeImage.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <DelayLoadDLLs>OpenAL32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -303,8 +320,7 @@
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)gosu.so</OutputFile>
-      <DelayLoadDLLs>OpenAL32.dll;FreeImage.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <DelayLoadDLLs>OpenAL32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -326,10 +342,9 @@
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\dependencies\msvcrt-ruby\msvcrt-ruby200.lib;FreeImage.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\dependencies\msvcrt-ruby\msvcrt-ruby200.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)gosu.so</OutputFile>
-      <DelayLoadDLLs>OpenAL32.dll;FreeImage.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <DelayLoadDLLs>OpenAL32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -352,8 +367,7 @@
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)gosu.so</OutputFile>
-      <DelayLoadDLLs>OpenAL32.dll;FreeImage.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <DelayLoadDLLs>OpenAL32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -375,10 +389,9 @@
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\dependencies\msvcrt-ruby\msvcrt-ruby210.lib;FreeImage.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\dependencies\msvcrt-ruby\msvcrt-ruby210.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)gosu.so</OutputFile>
-      <DelayLoadDLLs>OpenAL32.dll;FreeImage.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <DelayLoadDLLs>OpenAL32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -401,10 +414,9 @@
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\dependencies\msvcrt-ruby\msvcrt-ruby220.lib;FreeImage.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\dependencies\msvcrt-ruby\msvcrt-ruby220.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)gosu.so</OutputFile>
-      <DelayLoadDLLs>OpenAL32.dll;FreeImage.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <DelayLoadDLLs>OpenAL32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -427,10 +439,9 @@
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\dependencies\msvcrt-ruby\x64-msvcrt-ruby210.lib;FreeImage.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\dependencies\msvcrt-ruby\x64-msvcrt-ruby210.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)gosu.so</OutputFile>
-      <DelayLoadDLLs>OpenAL32.dll;FreeImage.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <DelayLoadDLLs>OpenAL32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -452,10 +463,9 @@
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\dependencies\msvcrt-ruby\x64-msvcrt-ruby220.lib;FreeImage.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\dependencies\msvcrt-ruby\x64-msvcrt-ruby220.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)gosu.so</OutputFile>
-      <DelayLoadDLLs>OpenAL32.dll;FreeImage.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <DelayLoadDLLs>OpenAL32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -466,7 +476,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\ext\gosu\gosu_wrap.cxx" />
-    <ClCompile Include="..\src\Bitmap\BitmapFreeImage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Gosu.vcxproj">
