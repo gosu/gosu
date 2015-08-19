@@ -171,9 +171,6 @@
 #undef uint64_t
 
 #include <Gosu/Gosu.hpp>
-#ifdef GOSU_IS_WIN
-#include <FreeImage.h>
-#endif
 #include <Gosu/TR1.hpp>
 
 namespace Gosu {
@@ -219,30 +216,6 @@ namespace
 
 namespace Gosu
 {
-    #ifdef GOSU_IS_WIN
-    void requireFreeImageFor(const char* filename)
-    {
-        // Catch lazy loading errors on Windows; from MSDN.
-        #define FACILITY_VISUALCPP  ((LONG)0x6d)
-        #define VcppException(sev,err)  ((sev) | (FACILITY_VISUALCPP<<16) | err)
-        #define BAD_MOD VcppException(ERROR_SEVERITY_ERROR, ERROR_MOD_NOT_FOUND)
-        
-        __try
-        {
-            FreeImage_GetVersion();
-        }
-        __except ((GetExceptionCode() == BAD_MOD) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
-        {
-            rb_raise(rb_eRuntimeError,
-                "Could neither load image %s nor locate FreeImage.dll to retry with it",
-                filename);
-        }
-        #undef BAD_MOD
-        #undef VcppException
-        #undef FACILITY_VISUALCPP
-    }
-    void loadImageFile_FreeImage(Bitmap& result, const std::wstring& filename);
-    #endif
     void loadBitmap(Bitmap& bitmap, VALUE val)
     {
         // Try to treat as filename first.
@@ -251,25 +224,8 @@ namespace Gosu
             VALUE to_str = rb_funcall(val, rb_intern("to_str"), 0);
             const char* filenameUTF8 = StringValuePtr(to_str);
             std::wstring filename = Gosu::utf8ToWstring(filenameUTF8);
-            try {
-                loadImageFile(bitmap, filename);
-                return;
-            } catch (const std::exception&) {
-            #ifdef GOSU_IS_WIN
-                requireFreeImageFor(filenameUTF8);
-                try {
-                    loadImageFile_FreeImage(bitmap, filename);
-                }
-                catch (const std::runtime_error& error) {
-                    rb_raise(rb_eRuntimeError,
-                        "Could not load image %s using either GDI+ or FreeImage: %s",
-                        filenameUTF8, error.what());
-                }
-                return;
-            #else
-                throw;
-            #endif
-            }  
+            loadImageFile(bitmap, filename);
+            return;
         }
 
         // Otherwise, try to call .to_blob on it (works with RMagick, TexPlay etc).
