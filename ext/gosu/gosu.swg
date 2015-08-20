@@ -675,6 +675,7 @@ namespace Gosu {
         unsigned width = 0xfefefefe;
         unsigned spacing = 0;
         Gosu::TextAlign align = Gosu::taLeft;
+        unsigned flags = 0;
         
         if (options) {
             Check_Type(options, T_HASH);
@@ -711,6 +712,10 @@ namespace Gosu {
                 else if (!strcmp(keyString, "spacing")) {
                     spacing = NUM2INT(value);
                 }
+                else if (!strcmp(keyString, "retro")) {
+                    if (RTEST(value))
+                        flags |= Gosu::ifRetro;
+                }
                 else {
                     static bool issuedWarning = false;
                     if (!issuedWarning) {
@@ -722,9 +727,9 @@ namespace Gosu {
         }
         
         if (width == 0xfefefefe)
-            return new Gosu::Image(Gosu::createText(text, font, fontHeight));
+            return new Gosu::Image(Gosu::createText(text, font, fontHeight), flags);
         else
-            return new Gosu::Image(Gosu::createText(text, font, fontHeight, spacing, width, align));
+            return new Gosu::Image(Gosu::createText(text, font, fontHeight, spacing, width, align), flags);
     }
     static std::vector<Gosu::Image> loadTiles(VALUE source, int tileWidth, int tileHeight, VALUE options = 0)
     {
@@ -747,6 +752,10 @@ namespace Gosu {
                 if (!strcmp(keyString, "tileable")) {
                     if (RTEST(value))
                         flags |= Gosu::ifTileable;
+                }
+                else if (!strcmp(keyString, "retro")) {
+                    if (RTEST(value))
+                        flags |= Gosu::ifRetro;
                 }
                 else {
                     static bool issuedWarning = false;

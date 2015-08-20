@@ -2856,6 +2856,7 @@ SWIGINTERN Gosu::Image *Gosu_Image_fromText(std::wstring const &text,unsigned in
         unsigned width = 0xfefefefe;
         unsigned spacing = 0;
         Gosu::TextAlign align = Gosu::taLeft;
+        unsigned flags = 0;
         
         if (options) {
             Check_Type(options, T_HASH);
@@ -2892,6 +2893,10 @@ SWIGINTERN Gosu::Image *Gosu_Image_fromText(std::wstring const &text,unsigned in
                 else if (!strcmp(keyString, "spacing")) {
                     spacing = NUM2INT(value);
                 }
+                else if (!strcmp(keyString, "retro")) {
+                    if (RTEST(value))
+                        flags |= Gosu::ifRetro;
+                }
                 else {
                     static bool issuedWarning = false;
                     if (!issuedWarning) {
@@ -2903,9 +2908,9 @@ SWIGINTERN Gosu::Image *Gosu_Image_fromText(std::wstring const &text,unsigned in
         }
         
         if (width == 0xfefefefe)
-            return new Gosu::Image(Gosu::createText(text, font, fontHeight));
+            return new Gosu::Image(Gosu::createText(text, font, fontHeight), flags);
         else
-            return new Gosu::Image(Gosu::createText(text, font, fontHeight, spacing, width, align));
+            return new Gosu::Image(Gosu::createText(text, font, fontHeight, spacing, width, align), flags);
     }
 SWIGINTERN std::vector< Gosu::Image > Gosu_Image_loadTiles__SWIG_0(VALUE source,int tileWidth,int tileHeight,VALUE options=0){
         Gosu::Bitmap bmp;
@@ -2927,6 +2932,10 @@ SWIGINTERN std::vector< Gosu::Image > Gosu_Image_loadTiles__SWIG_0(VALUE source,
                 if (!strcmp(keyString, "tileable")) {
                     if (RTEST(value))
                         flags |= Gosu::ifTileable;
+                }
+                else if (!strcmp(keyString, "retro")) {
+                    if (RTEST(value))
+                        flags |= Gosu::ifRetro;
                 }
                 else {
                     static bool issuedWarning = false;
