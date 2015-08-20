@@ -42,7 +42,7 @@ namespace Gosu
         CREATE_STUB(sf_close, int,
             (SNDFILE *sndfile),
             (sndfile))
-        CREATE_STUB(sf_read_short, sf_count_t,
+        CREATE_STUB(sf_readf_short, sf_count_t,
             (SNDFILE *sndfile, short *ptr, sf_count_t items),
             (sndfile, ptr, items))
         CREATE_STUB(sf_seek, sf_count_t,
@@ -65,7 +65,12 @@ namespace Gosu
             case SEEK_SET: self->reader.setPosition(offset); break;
             case SEEK_CUR: self->reader.seek(offset); break;
             case SEEK_END: self->reader.setPosition(self->buffer.size() - offset); break;
-            };
+            }
+
+            if (self->reader.position() > self->buffer.size()) {
+                self->reader.setPosition(self->buffer.size());
+            }
+			
             return 0;
         }
         
@@ -145,8 +150,8 @@ namespace Gosu
         
         std::size_t readData(void* dest, std::size_t length)
         {
-            int itemSize = 2 * info.channels;
-            return sf_read_short(file, (short*)dest, length / itemSize) * itemSize;
+            int frameSize = sizeof(short) * info.channels;
+            return sf_readf_short(file, (short*)dest, length / frameSize) * frameSize;
         }
         
         void rewind()
