@@ -10,13 +10,13 @@ COMMON_FILES = FileList[
 ]
 
 COMMON_CPP_FILES = COMMON_FILES + FileList[
-  'examples/*.cpp',
+  'examples/**/*.{cpp}',
   'examples/media/*',
   'reference/cpp/**/*',
 ]
 
 COMMON_RUBY_FILES = COMMON_FILES + FileList[
-  'Gosu/**/*', # include headers to make inline-C extensions possible
+  'Gosu/**/*',
   'lib/**/*.rb',
   'examples/*.rb',
   'examples/media/*',
@@ -31,7 +31,7 @@ def zip filename, files
 end
 
 def tar filename, files
-  sh "COPYFILE_DISABLE=true tar -czf #{filename} #{files.to_a.uniq.map { |fn| "'#{fn}'" }.join(' ')}"
+  sh "gtar -c --transform 's,^,gosu-#{GOSU_VERSION}/,' -zf #{filename} #{files.map { |fn| "'#{fn}'" }.join(' ')}"
 end
 
 Dir.glob('./rake/*.rb').sort.each { |task| require task }

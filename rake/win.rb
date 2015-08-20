@@ -1,11 +1,13 @@
 namespace :win do
+  WINDOWS_FILES = COMMON_CPP_FILES +
+                  FileList['Gosu/*.hpp', 'lib{,64}/*.{dll,lib}']
+  WINDOWS_FILES.uniq!
+  
   WINDOWS_ARCHIVE_FILENAME = "pkg/gosu-windows-#{GOSU_VERSION}.zip"
   
   desc "Build the archive #{WINDOWS_ARCHIVE_FILENAME}"
   task :archive => :set_version do
-    files = COMMON_CPP_FILES
-    files += FileList['Gosu/*.hpp', 'lib{,64}/*.{dll,lib}']
-    zip WINDOWS_ARCHIVE_FILENAME, files
+    zip WINDOWS_ARCHIVE_FILENAME, WINDOWS_FILES
   end
   
   desc "Releases the archive #{WINDOWS_ARCHIVE_FILENAME}"
