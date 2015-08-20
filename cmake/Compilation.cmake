@@ -110,6 +110,9 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/GosuConfig.cmake
     DESTINATION ${CONFIG_FILE_DIR}
     COMPONENT development)
 
+set(COMPILING_GOSU 1)
+mark_as_advanced(COMPILING_GOSU)
+
 include(${CMAKE_CURRENT_BINARY_DIR}/GosuConfig.cmake)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gosu.pc.in
