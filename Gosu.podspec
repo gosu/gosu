@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.license      = { :type => 'MIT', :file => 'COPYING' }
   s.author       = { "Julian Raschke" => "julian@raschke.de" }
 
-  s.source       = { :git => "https://github.com/jlnr/gosu.git" }
+  s.source       = { :git => "https://github.com/jlnr/gosu.git", :tag => "v0.10.0" }
   
   s.compiler_flags = '-DGOSU_DEPRECATED= -Wno-conversion'
   
