@@ -43,7 +43,12 @@ task :swig do
 end
 
 task :update_rdoc do
-  sh "rm -rf doc/*"
   sh "yardoc"
   sh "scp -r doc/* #{ENV['PROJECTS_HOST']}:#{ENV['PROJECTS_ROOT']}/libgosu.org/rdoc"
+  sh "rm -rf doc/*"
+end
+
+task :update_doxygen do
+  sh "ssh #{ENV['PROJECTS_HOST']} 'cd #{ENV['PROJECTS_ROOT']}/libgosu.org/ && " +
+       "svn checkout https://github.com/gosu/gosu/trunk/Gosu && PATH=../doxygen/bin:$PATH doxygen'"
 end
