@@ -371,6 +371,7 @@ module Gosu
     # @option options [Fixnum] :width the width of the image, in pixels. Long lines will be automatically wrapped around to avoid overflow, but overlong words will be truncated. If this option is omitted, lines will not be wrapped, and :align and :spacing will be ignored as well.
     # @option options [Fixnum] :spacing (0) the spacing between lines, in pixels.
     # @option options [:left, :right, :center, :justify] :align (:left) the text alignment.
+    # @option options [true, false] :retro (false) if true, the image will not be interpolated when it is scaled up or down.
     #
     # @see Gosu::Font
     # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
@@ -596,7 +597,7 @@ module Gosu
     # @overload initialize(window, filename)
     #
     # @param filename [String] the path to load the song from.
-    def initialize(window, filename); end
+    def initialize(filename); end
 
     ##
     # Starts or resumes playback of the song.
