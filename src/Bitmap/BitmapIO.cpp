@@ -3,6 +3,8 @@
 #include <Gosu/IO.hpp>
 #include <Gosu/Utility.hpp>
 
+#include <stdexcept>
+
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_NO_STDIO
 #define STBI_NO_LINEAR
