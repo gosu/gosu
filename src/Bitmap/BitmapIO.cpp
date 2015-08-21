@@ -3,6 +3,7 @@
 #include <Gosu/IO.hpp>
 #include <Gosu/Utility.hpp>
 
+#include <cstring>
 #include <stdexcept>
 
 #define STB_IMAGE_IMPLEMENTATION
