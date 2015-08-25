@@ -41,6 +41,8 @@ BASE_FILES = %w(
   Text/Text.cpp
   Utility.cpp
   Window.cpp
+  
+  stb_vorbis.c
 )
 
 MAC_FILES = %w(
