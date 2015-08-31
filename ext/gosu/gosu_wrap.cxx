@@ -2236,20 +2236,6 @@ namespace Gosu {
 #define RUBY_18_19(r18, r19) r18
 #endif
 
-namespace GosusDarkSide
-{
-    // TODO: Find a way for this to fit into Gosu's design.
-    // This can point to a function that wants to be called every
-    // frame, e.g. rb_thread_schedule.
-    typedef void (*HookOfHorror)();
-    extern HookOfHorror oncePerTick;
-    
-    void yieldToOtherRubyThreads()
-    {
-        rb_thread_schedule();
-    }
-}
-
 namespace
 {
     void callRubyBlock(VALUE block) {
@@ -3068,6 +3054,28 @@ SwigDirector_Window::SwigDirector_Window(VALUE self, unsigned int width, unsigne
 
 SwigDirector_Window::~SwigDirector_Window() {
 }
+
+void SwigDirector_Window::show() {
+  VALUE result;
+  
+  result = rb_funcall(swig_get_self(), rb_intern("show"), 0, NULL);
+}
+
+
+bool SwigDirector_Window::tick() {
+  bool c_result ;
+  VALUE result;
+  
+  result = rb_funcall(swig_get_self(), rb_intern("tick"), 0, NULL);
+  bool swig_val;
+  int swig_res = SWIG_AsVal_bool(result, &swig_val);
+  if (!SWIG_IsOK(swig_res)) {
+    Swig::DirectorTypeMismatchException::raise(SWIG_ErrorType(SWIG_ArgError(swig_res)), "in output value of type '""bool""'");
+  }
+  c_result = static_cast< bool >(swig_val);
+  return (bool) c_result;
+}
+
 
 void SwigDirector_Window::update() {
   VALUE result;
@@ -8813,6 +8821,8 @@ _wrap_Window_show(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  Swig::Director *director = 0;
+  bool upcall = false;
   
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
@@ -8822,14 +8832,68 @@ _wrap_Window_show(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","show", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  {
-    try {
-      (arg1)->show();
-    } catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
+  director = dynamic_cast<Swig::Director *>(arg1);
+  upcall = (director && (director->swig_get_self() == self));
+  try {
+    {
+      try {
+        if (upcall) {
+          (arg1)->Gosu::Window::show();
+        } else {
+          (arg1)->show();
+        }
+      } catch (const std::exception& e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
     }
+  } catch (Swig::DirectorException& e) {
+    rb_exc_raise(e.getError());
+    SWIG_fail;
   }
   return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Window_tick(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  Swig::Director *director = 0;
+  bool upcall = false;
+  bool result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","tick", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  director = dynamic_cast<Swig::Director *>(arg1);
+  upcall = (director && (director->swig_get_self() == self));
+  try {
+    {
+      try {
+        if (upcall) {
+          result = (bool)(arg1)->Gosu::Window::tick();
+        } else {
+          result = (bool)(arg1)->tick();
+        }
+      } catch (const std::exception& e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
+    }
+  } catch (Swig::DirectorException& e) {
+    rb_exc_raise(e.getError());
+    SWIG_fail;
+  }
+  vresult = SWIG_From_bool(static_cast< bool >(result));
+  return vresult;
 fail:
   return Qnil;
 }
@@ -11105,8 +11169,8 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_RubyInitializeTrackings();
   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(10)));
-  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(1)));
-  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.10.1"));
+  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(2)));
+  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.10.2.pre1"));
   rb_define_const(mGosu, "GOSU_COPYRIGHT_NOTICE", SWIG_FromCharPtr("This software uses the following third-party libraries:\n\nGosu, http://www.libgosu.org, MIT License, http://opensource.org/licenses/MIT\nSDL 2, http://www.libsdl.org, MIT License, http://opensource.org/licenses/MIT\nlibsndfile, http://www.mega-nerd.com/libsndfile, GNU LGPL 3, http://www.gnu.org/copyleft/lesser.html\nOpenAL Soft, http://kcat.strangesoft.net/openal.html, GNU LGPL 2, http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html\n"));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
@@ -11470,12 +11534,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "Gp3Button13", SWIG_From_int(static_cast< int >(Gosu::gp3Button13)));
   rb_define_const(mGosu, "Gp3Button14", SWIG_From_int(static_cast< int >(Gosu::gp3Button14)));
   rb_define_const(mGosu, "Gp3Button15", SWIG_From_int(static_cast< int >(Gosu::gp3Button15)));
-  
-  GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
-  // While we are at it, call srand() - otherwise unavailable to Ruby people
-  std::srand(static_cast<unsigned int>(std::time(0)));
-  std::rand(); // and flush the first value
-  
   rb_define_module_function(mGosu, "disown_TextInput", VALUEFUNC(_wrap_disown_TextInput), -1);
   
   SwigClassTextInput.klass = rb_define_class_under(mGosu, "TextInput", rb_cObject);
@@ -11506,6 +11564,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "caption=", VALUEFUNC(_wrap_Window_captione___), -1);
   rb_define_method(SwigClassWindow.klass, "update_interval", VALUEFUNC(_wrap_Window_update_interval), -1);
   rb_define_method(SwigClassWindow.klass, "show", VALUEFUNC(_wrap_Window_show), -1);
+  rb_define_method(SwigClassWindow.klass, "tick", VALUEFUNC(_wrap_Window_tick), -1);
   rb_define_method(SwigClassWindow.klass, "close", VALUEFUNC(_wrap_Window_close), -1);
   rb_define_method(SwigClassWindow.klass, "update", VALUEFUNC(_wrap_Window_update), -1);
   rb_define_method(SwigClassWindow.klass, "draw", VALUEFUNC(_wrap_Window_draw), -1);

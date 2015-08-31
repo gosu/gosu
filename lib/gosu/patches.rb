@@ -90,6 +90,7 @@ end
 class Gosu::Window
   # Backwards compatibility:
   # Class methods that have been turned into module methods.
+  
   def self.button_id_to_char(id)
     Gosu.button_id_to_char(id)
   end
@@ -99,7 +100,8 @@ class Gosu::Window
   end
   
   # Backwards compatibility:
-  # Instance methods taht have been turned into module methods.
+  # Instance methods that have been turned into module methods.
+  
   %w(draw_line draw_triangle draw_quad
      flush gl clip_to record
      transform translate rotate scale
@@ -107,6 +109,16 @@ class Gosu::Window
     define_method method.to_sym do |*args, &block|
       Gosu.send method, *args, &block
     end
+  end
+  
+  # Call Thread.pass every tick, which may or may not be necessary for friendly co-existence with
+  # Ruby's Thread class.
+  
+  alias _tick tick
+  
+  def tick
+    Thread.pass
+    _tick
   end
 end
 

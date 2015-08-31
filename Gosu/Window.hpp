@@ -65,10 +65,20 @@ namespace Gosu
         void setCaption(const std::wstring& caption);
         
         double updateInterval() const;
-
+        
         //! Enters a modal loop where the Window is visible on screen and
         //! receives calls to draw, update etc.
-        void show();
+        virtual void show();
+        
+        //! Performs a single mainloop step.
+        //! This method is only useful if you want to integrate Gosu with
+        //! another library that has its own main loop.
+        //! This method implicitly shows the window if it was hidden before, and
+        //! returns false when the window has been closed.
+        //! If you discard the return value and keep calling tick(), the window will be shown again,
+        //! or keep being shown.
+        virtual bool tick();
+        
         //! Closes the window if it is currently shown.
         void close();
 

@@ -113,6 +113,11 @@ void Gosu::Window::show()
 {
 }
 
+bool Gosu::Window::tick()
+{
+    return true;
+}
+
 void Gosu::Window::close()
 {
     throw std::logic_error("Cannot close windows manually on iOS");

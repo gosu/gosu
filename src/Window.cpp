@@ -167,55 +167,50 @@ double Gosu::Window::updateInterval() const
     return pimpl->updateInterval;
 }
 
-namespace GosusDarkSide
-{
-    // TODO: Find a way for this to fit into Gosu's design.
-    // This can point to a function that wants to be called every
-    // frame, e.g. rb_thread_schedule.
-    typedef void (*HookOfHorror)();
-    HookOfHorror oncePerTick = 0;
-}
-
 void Gosu::Window::show()
 {
-    while (true) {
-        unsigned long startTime = milliseconds();
-        
-        SDL_Event e;
-        while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT)
-                return;
-            else
-                input().feedSDLEvent(&e);
-		}
-        
-        Song::update();
-        
-        input().update();
-        
-        update();
-        
-        SDL_ShowCursor(needsCursor());
-        
-        if (needsRedraw()) {
-            ensureCurrentContext();
-            if (graphics().begin()) {
-                draw();
-                graphics().end();
-                FPS::registerFrame();
-            }
-            
-            SDL_GL_SwapWindow(sharedWindow());
-            
-            if (GosusDarkSide::oncePerTick) GosusDarkSide::oncePerTick();
-        }
-        
+    unsigned long timeBeforeTick = milliseconds();
+    
+    while (tick()) {
         // Sleep to keep this loop from eating 100% CPU.
-        unsigned long frameTime = milliseconds() - startTime;
-        if (frameTime < pimpl->updateInterval) {
-            sleep(pimpl->updateInterval - frameTime);
-        }
+        unsigned long tickTime = milliseconds() - timeBeforeTick;
+        if (tickTime < updateInterval())
+            sleep(updateInterval() - tickTime);
+        
+        timeBeforeTick = milliseconds();
     }
+}
+
+bool Gosu::Window::tick()
+{
+    SDL_Event e;
+    while (SDL_PollEvent(&e)) {
+        if (e.type == SDL_QUIT)
+            return false;
+        else
+            input().feedSDLEvent(&e);
+    }
+    
+    Song::update();
+    
+    input().update();
+    
+    update();
+    
+    SDL_ShowCursor(needsCursor());
+    
+    if (needsRedraw()) {
+        ensureCurrentContext();
+        if (graphics().begin()) {
+            draw();
+            graphics().end();
+            FPS::registerFrame();
+        }
+        
+        SDL_GL_SwapWindow(sharedWindow());
+    }
+    
+    return true;
 }
 
 void Gosu::Window::close()

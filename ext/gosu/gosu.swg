@@ -193,20 +193,6 @@ namespace Gosu {
 #define RUBY_18_19(r18, r19) r18
 #endif
 
-namespace GosusDarkSide
-{
-    // TODO: Find a way for this to fit into Gosu's design.
-    // This can point to a function that wants to be called every
-    // frame, e.g. rb_thread_schedule.
-    typedef void (*HookOfHorror)();
-    extern HookOfHorror oncePerTick;
-    
-    void yieldToOtherRubyThreads()
-    {
-        rb_thread_schedule();
-    }
-}
-
 namespace
 {
     void callRubyBlock(VALUE block) {
@@ -836,12 +822,6 @@ namespace Gosu {
 %ignore Gosu::numGamepads;
 %ignore Gosu::noButton;
 %include "../../Gosu/Buttons.hpp"
-%init %{
-    GosusDarkSide::oncePerTick = GosusDarkSide::yieldToOtherRubyThreads;
-    // While we are at it, call srand() - otherwise unavailable to Ruby people
-    std::srand(static_cast<unsigned int>(std::time(0)));
-    std::rand(); // and flush the first value
-%}
 
 // TextInput
 %ignore Gosu::TextInput::feedNSEvent(void*);
