@@ -116,9 +116,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Gosu\Gosu.hpp">
-      <Filter>Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Graphics\BlockAllocator.hpp">
       <Filter>Implementation\Graphics</Filter>
     </ClInclude>
@@ -237,6 +234,9 @@
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\Gosu\WinUtility.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Gosu.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
   </ItemGroup>
