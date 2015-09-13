@@ -1,7 +1,5 @@
 #import <Gosu/Platform.hpp>
 
-#if defined(GOSU_IS_IPHONE) || defined(__LP64__)
-
 #include <Gosu/Text.hpp>
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Utility.hpp>
@@ -29,6 +27,8 @@ namespace
     // like any system font. Otherwise, just returns the family name.
     std::wstring normalizeFont(const std::wstring& fontName)
     {
+        // On iOS, we have no support for loading font files yet. However if you register your fonts
+        // via your app's Info.plist, you should be able to reference them by their name.
         #ifdef GOSU_IS_IPHONE
         return fontName;
         #else
@@ -48,8 +48,7 @@ namespace
                 fontName.length() * sizeof(wchar_t),
                 kCFStringEncodingUTF32LE, NO));
         CFRef<CFURLRef> url(
-            CFURLCreateWithFileSystemPath(NULL, urlString.obj(),
-                kCFURLPOSIXPathStyle, YES));
+            CFURLCreateWithFileSystemPath(NULL, urlString.obj(), kCFURLPOSIXPathStyle, YES));
         if (!url.get())
             return familyOfFiles[fontName] = Gosu::defaultFontName();
             
@@ -57,17 +56,15 @@ namespace
             CTFontManagerCreateFontDescriptorsFromURL(url.obj()));
 
         if (array.get() == NULL || CFArrayGetCount(array.obj()) < 1 ||
-            !CTFontManagerRegisterFontsForURL(url.obj(),
-                    kCTFontManagerScopeProcess, NULL))
+            !CTFontManagerRegisterFontsForURL(url.obj(), kCTFontManagerScopeProcess, NULL))
             return familyOfFiles[fontName] = Gosu::defaultFontName();
 
         CTFontDescriptorRef ref =
             (CTFontDescriptorRef)CFArrayGetValueAtIndex(array.get(), 0);
         CFRef<CFStringRef> fontNameStr(
             (CFStringRef)CTFontDescriptorCopyAttribute(ref, kCTFontFamilyNameAttribute));
-                
-        const char* utf8FontName =
-            [(NSString*)fontNameStr.obj() cStringUsingEncoding: NSUTF8StringEncoding];
+        
+        const char* utf8FontName = [(NSString*)fontNameStr.obj() UTF8String];
         return familyOfFiles[fontName] = Gosu::utf8ToWstring(utf8FontName);
         #endif
     }
@@ -81,9 +78,9 @@ namespace
         OSXFont* result = usedFonts[make_pair(fontName, make_pair(fontFlags, height))];
         if (!result)
         {
-            ObjCRef<NSString> name([[NSString alloc] initWithUTF8String: Gosu::wstringToUTF8(fontName).c_str()]);
+            ObjCRef<NSString> name([[NSString alloc] initWithUTF8String:Gosu::wstringToUTF8(fontName).c_str()]);
             #ifdef GOSU_IS_IPHONE
-            result = [OSXFont fontWithName: name.obj() size: height];
+            result = [OSXFont fontWithName:name.obj() size:height];
             #else
             NSFontDescriptor* desc = [[NSFontDescriptor fontDescriptorWithFontAttributes:nil] fontDescriptorWithFamily:name.obj()];
             result = [[NSFont fontWithDescriptor:desc size:height] retain];
@@ -103,8 +100,6 @@ namespace
 
 wstring Gosu::defaultFontName()
 {
-    // OF COURSE Helvetica is better - but the dots above my capital umlauts get
-    // eaten when I use it with Gosu. Until this is fixed, keep Arial. (TODO)
     return L"Arial";
 }
 
@@ -121,7 +116,7 @@ namespace
         if (fontFlags & Gosu::ffUnderline)
         {
             Gosu::ObjCRef<NSNumber> underline([[NSNumber alloc] initWithInt:NSUnderlineStyleSingle]);
-            [dict setValue: underline.obj() forKey:NSUnderlineStyleAttributeName];
+            [dict setValue:underline.obj() forKey:NSUnderlineStyleAttributeName];
         }
         return dict;
     }
@@ -138,12 +133,12 @@ unsigned Gosu::textWidth(const wstring& text,
     
     // This will, of course, compute a too large size; fontHeight is in pixels,
     // the method expects point.
-    ObjCRef<NSString> string([[NSString alloc] initWithUTF8String: wstringToUTF8(text).c_str()]);
+    ObjCRef<NSString> string([[NSString alloc] initWithUTF8String:wstringToUTF8(text).c_str()]);
     #ifndef GOSU_IS_IPHONE
     ObjCRef<NSDictionary> attributes(attributeDictionary(font, fontFlags));
-    NSSize size = [string.obj() sizeWithAttributes: attributes.get()];
+    NSSize size = [string.obj() sizeWithAttributes:attributes.get()];
     #else
-    CGSize size = [string.obj() sizeWithFont: font];
+    CGSize size = [string.obj() sizeWithFont:font];
     #endif
     
     // Now adjust the scaling...
@@ -158,14 +153,14 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
         throw std::invalid_argument("the argument to drawText cannot contain line breaks");
     
     OSXFont* font = getFont(fontName, fontFlags, fontHeight);
-    ObjCRef<NSString> string([[NSString alloc] initWithUTF8String: wstringToUTF8(text).c_str()]);
+    ObjCRef<NSString> string([[NSString alloc] initWithUTF8String:wstringToUTF8(text).c_str()]);
 
-    // This will, of course, compute a too large size; fontHeight is in pixels, the method expects point.
+    // Note that fontHeight is in pixels, the method expects points, so we have to scale this down.
     #ifndef GOSU_IS_IPHONE
     ObjCRef<NSDictionary> attributes(attributeDictionary(font, fontFlags));
-    NSSize size = [string.obj() sizeWithAttributes: attributes.get()];
+    NSSize size = [string.obj() sizeWithAttributes:attributes.get()];
     #else
-    CGSize size = [string.obj() sizeWithFont: font];
+    CGSize size = [string.obj() sizeWithFont:font];
     #endif
     
     unsigned width = static_cast<unsigned>(round(size.width / size.height * fontHeight));
@@ -194,7 +189,7 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     CGContextTranslateCTM(context, 0, fontHeight);
     CGContextScaleCTM(context, 1, -1);
     UIGraphicsPushContext(context);
-        [string.obj() drawAtPoint: CGPointZero withFont: font];
+        [string.obj() drawAtPoint:CGPointZero withFont:font];
     UIGraphicsPopContext();
     #else
     NSPoint NSPointZero = { 0, 0 };
@@ -203,7 +198,7 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     [NSGraphicsContext saveGraphicsState];
     [NSGraphicsContext setCurrentContext:
         [NSGraphicsContext graphicsContextWithGraphicsPort:(void *)context flipped:false]];
-    [string.obj() drawAtPoint: NSPointZero withAttributes: attributes.get()];
+    [string.obj() drawAtPoint:NSPointZero withAttributes:attributes.get()];
     [NSGraphicsContext restoreGraphicsState];
     #endif
     CGContextRelease(context);
@@ -220,5 +215,3 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
                 bitmap.setPixel(x + relX, y + relY, c);
         }
 }
-
-#endif

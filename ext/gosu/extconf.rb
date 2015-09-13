@@ -49,7 +49,6 @@ MAC_FILES = %w(
   Audio/Audio.mm
   Graphics/ResolutionApple.mm
   Text/TextApple.mm
-  Text/TextMac.cpp
   TimingApple.cpp
   UtilityApple.mm
 )

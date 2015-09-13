@@ -44,7 +44,6 @@ Pod::Spec.new do |s|
          src/Text/Font.cpp
          src/Text/Text.cpp
          src/Text/TextApple.mm
-         src/Text/TextMac.cpp
          src/TimingApple.cpp
          src/Utility.cpp
          src/UtilityApple.mm
