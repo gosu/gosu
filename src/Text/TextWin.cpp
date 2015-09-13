@@ -119,7 +119,7 @@ namespace Gosu
                         DEFAULT_PITCH | FF_DONTCARE };
                     
                     // Don't rely on wcsncpy being in std::...
-                    using namepace std;
+                    using namespace std;
                     wcsncpy(logfont.lfFaceName, fontName.c_str(), LF_FACESIZE);
                     logfont.lfFaceName[LF_FACESIZE - 1] = 0;
                     
