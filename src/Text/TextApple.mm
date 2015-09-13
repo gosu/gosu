@@ -166,7 +166,7 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     unsigned width = static_cast<unsigned>(round(size.width / size.height * fontHeight));
 
     // Get the width and height of the image
-    Bitmap bmp(width, fontHeight);
+    Bitmap bmp(width, fontHeight, 0x00ffffff);
     
     // Use a temporary context to draw the CGImage to the buffer.
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -189,7 +189,7 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     CGContextTranslateCTM(context, 0, fontHeight);
     CGContextScaleCTM(context, 1, -1);
     UIGraphicsPushContext(context);
-        [string.obj() drawAtPoint:CGPointZero withFont:font];
+    [string.obj() drawAtPoint:CGPointZero withFont:font];
     UIGraphicsPopContext();
     #else
     NSPoint NSPointZero = { 0, 0 };

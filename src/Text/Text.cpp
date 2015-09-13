@@ -67,7 +67,7 @@ namespace Gosu
                     allocatedLines += 10;
                     bmp.resize(bmp.width(),
                         fontHeight * allocatedLines + lineSpacing * (allocatedLines - 1),
-                        Color::NONE);
+                        0x00ffffff);
                 }
             }
 
@@ -183,7 +183,7 @@ namespace Gosu
             {
                 Bitmap result = bmp;
                 result.resize(result.width(),
-                    fontHeight * usedLines + lineSpacing * (usedLines - 1));
+                    fontHeight * usedLines + lineSpacing * (usedLines - 1), 0x00ffffff);
                 return result;
             }
             
@@ -347,7 +347,7 @@ Gosu::Bitmap Gosu::createText(const wstring& text,
             {
                 Gosu::Bitmap entity = entityBitmap(part.entityAt(0));
                 multiplyBitmapAlpha(entity, part.colorAt(0).alpha());
-                bmp.resize(max(bmp.width(), x + entity.width()), bmp.height());
+                bmp.resize(max(bmp.width(), x + entity.width()), bmp.height(), 0x00ffffff);
                 bmp.insert(entity, x, i * fontHeight);
                 x += entity.width();
                 continue;
@@ -357,7 +357,7 @@ Gosu::Bitmap Gosu::createText(const wstring& text,
             wstring unformattedText = part.unformat();
             unsigned partWidth =
                 textWidth(unformattedText, fontName, fontHeight, part.flagsAt(0));
-            bmp.resize(max(bmp.width(), x + partWidth), bmp.height());
+            bmp.resize(max(bmp.width(), x + partWidth), bmp.height(), 0x00ffffff);
             drawText(bmp, unformattedText, x, i * fontHeight, part.colorAt(0),
                 fontName, fontHeight, part.flagsAt(0));
             x += partWidth;

@@ -79,11 +79,6 @@ namespace Gosu
                 return bitmap;
             }
 
-            /*char* data() const
-            {
-                return pixels;
-            }*/
-
             void selectFont(std::wstring fontName, unsigned fontHeight,
                 unsigned fontFlags) const
             {
@@ -123,8 +118,9 @@ namespace Gosu
                         CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
                         DEFAULT_PITCH | FF_DONTCARE };
                     
-                    // Note: This will truncate the font value, but that's the way stuff works.
-                    /*std::*/wcsncpy(logfont.lfFaceName, fontName.c_str(), LF_FACESIZE);
+                    // Don't rely on wcsncpy being in std::...
+                    using namepace std;
+                    wcsncpy(logfont.lfFaceName, fontName.c_str(), LF_FACESIZE);
                     logfont.lfFaceName[LF_FACESIZE - 1] = 0;
                     
                     font = loadedFonts[key] = Win::check(::CreateFontIndirect(&logfont),
