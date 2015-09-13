@@ -742,6 +742,18 @@ module Gosu
     #
     # @return [void]
     def show; end
+    
+    ##
+    # EXPERIMENTAL - MAY DISAPPEAR WITHOUT WARNING:
+    # Performs a single step in the main loop. This can be useful for integrating Gosu with other
+    # libraries that have their own main loop, e.g. Ruby/Tk.
+    # 
+    # See: https://www.libgosu.org/cgi-bin/mwf/topic_show.pl?tid=1218
+    # 
+    # If you find a good way to use this, please post it on the forum. Thank you!
+    # 
+    # @return [true, false] whether the Window should still be shown after this tick
+    def tick; end
 
     ##
     # Tells the window to end the current run loop as soon as possible. Calling this method will not prevent execution of lines after it.
