@@ -9,7 +9,7 @@
 #include <cstdlib>
 #include <list>
 #include <memory>
-#include <sstream> // For int <-> string conversion
+#include <string>
 #include <vector>
 
 enum ZOrder
@@ -20,16 +20,16 @@ enum ZOrder
     zUI
 };
 
-typedef std::vector<std::tr1::shared_ptr<Gosu::Image> > Animation;
+typedef std::vector<Gosu::Image> Animation;
 
 class Star
 {
-    Animation& animation;
+    Animation animation;
     Gosu::Color color;
     double posX, posY;
 
 public:
-    explicit Star(Animation& animation)
+    explicit Star(Animation animation)
     :   animation(animation)
     {
         color.setAlpha(255);
@@ -49,8 +49,8 @@ public:
 
     void draw() const
     {
-        Gosu::Image& image =
-            *animation.at(Gosu::milliseconds() / 100 % animation.size());
+        const Gosu::Image& image =
+            animation.at(Gosu::milliseconds() / 100 % animation.size());
 
         image.draw(posX - image.width() / 2.0, posY - image.height() / 2.0,
             zStars, 1, 1, color, Gosu::amAdd);
@@ -65,8 +65,8 @@ class Player
     unsigned score;
 
 public:
-    Player(Gosu::Graphics& graphics)
-    :   image(graphics, Gosu::resourcePrefix() + L"media/Starfighter.bmp"),
+    Player()
+    :   image(Gosu::resourcePrefix() + L"media/Starfighter.bmp"),
         beep(Gosu::resourcePrefix() + L"media/Beep.wav")
     {
         posX = posY = velX = velY = angle = 0;
@@ -102,10 +102,8 @@ public:
 
     void move()
     {
-        posX += velX;
-        posX = Gosu::wrap(posX, 0.0, 640.0);
-        posY += velY;
-        posY = Gosu::wrap(posY, 0.0, 480.0);
+        posX = Gosu::wrap(posX + velX, 0.0, 640.0);
+        posY = Gosu::wrap(posY + velY, 0.0, 480.0);
 
         velX *= 0.95;
         velY *= 0.95;
@@ -144,28 +142,26 @@ class GameWindow : public Gosu::Window
 
 public:
     GameWindow()
-    :   Window(640, 480, false),
-        font(graphics(), Gosu::defaultFontName(), 20),
-        player(graphics())
+    :   Window(640, 480), font(20)
     {
         setCaption(L"Gosu Tutorial Game");
 
         std::wstring filename = Gosu::resourcePrefix() + L"media/Space.png";
-        backgroundImage.reset(new Gosu::Image(graphics(), filename, true));
+        backgroundImage.reset(new Gosu::Image(filename, Gosu::ifTileable));
 
         filename = Gosu::resourcePrefix() + L"media/Star.png";
-        Gosu::imagesFromTiledBitmap(graphics(), filename, 25, 25, false, starAnim);
+        starAnim = Gosu::loadTiles(filename, 25, 25);
 
         player.warp(320, 240);
     }
 
     void update()
     {
-        if (input().down(Gosu::kbLeft) || input().down(Gosu::gpLeft))
+        if (Gosu::Input::down(Gosu::kbLeft) || Gosu::Input::down(Gosu::gpLeft))
             player.turnLeft();
-        if (input().down(Gosu::kbRight) || input().down(Gosu::gpRight))
+        if (Gosu::Input::down(Gosu::kbRight) || Gosu::Input::down(Gosu::gpRight))
             player.turnRight();
-        if (input().down(Gosu::kbUp) || input().down(Gosu::gpButton0))
+        if (Gosu::Input::down(Gosu::kbUp) || Gosu::Input::down(Gosu::gpButton0))
             player.accelerate();
         player.move();
         player.collectStars(stars);
@@ -179,16 +175,10 @@ public:
         player.draw();
         backgroundImage->draw(0, 0, zBackground);
 
-        for (std::list<Star>::const_iterator i = stars.begin();
-            i != stars.end(); ++i)
-        {
-            i->draw();
-        }
+        for (Star& star : stars)
+            star.draw();
 
-        std::wstringstream score;
-        score << L"Score: "; 
-        score << player.getScore();
-        font.draw(score.str(), 10, 10, zUI, 1, 1, Gosu::Color::YELLOW);
+        font.draw(L"Score: " + std::to_wstring(player.getScore()), 10, 10, zUI, 1, 1, Gosu::Color::YELLOW);
     }
 
     void buttonDown(Gosu::Button btn)
