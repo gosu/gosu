@@ -1,5 +1,6 @@
 #include <Gosu/TextInput.hpp>
 #include <Gosu/Input.hpp>
+#include <Gosu/Platform.hpp>
 #include <Gosu/Utility.hpp>
 #include <SDL.h>
 #include <cwctype>
@@ -199,26 +200,47 @@ bool Gosu::TextInput::feedSDLEvent(void* event)
                 return false;
             }
             
-            bool ctrlDown = (e->key.keysym.mod & (KMOD_LCTRL | KMOD_RCTRL));
+        #ifdef GOSU_IS_MAC
+            bool words = (e->key.keysym.mod & (KMOD_LALT | KMOD_RALT));
+            bool commandDown = (e->key.keysym.mod & (KMOD_LGUI | KMOD_RGUI));
+        #else
+            bool words = (e->key.keysym.mod & (KMOD_LCTRL | KMOD_RCTRL));
+        #endif
             bool shiftDown = (e->key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
             SDL_Keycode key = e->key.keysym.sym;
             
             switch (key) {
                 case SDLK_LEFT:
-                    if (ctrlDown)
+                #ifdef GOSU_IS_MAC
+                    if (commandDown)
+                        pimpl->moveToBeginningOfLine(! shiftDown);
+                    else
+                #endif
+                    if (words)
                         pimpl->moveWordLeft(! shiftDown);
                     else
                         pimpl->moveLeft(! shiftDown);
                     return true;
                 case SDLK_RIGHT:
-                    if (ctrlDown)
+                #ifdef GOSU_IS_MAC
+                    if (commandDown)
+                        pimpl->moveToEndOfLine(! shiftDown);
+                    else
+                #endif
+                    if (words)
                         pimpl->moveWordRight(! shiftDown);
                     else
                         pimpl->moveRight(! shiftDown);
                     return true;
+            #ifdef GOSU_IS_MAC
+                case SDLK_UP:
+            #endif
                 case SDLK_HOME:
                     pimpl->moveToBeginningOfLine(! shiftDown);
                     return true;
+            #ifdef GOSU_IS_MAC
+                case SDLK_DOWN:
+            #endif
                 case SDLK_END:
                     pimpl->moveToEndOfLine(! shiftDown);
                     return true;

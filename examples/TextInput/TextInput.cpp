@@ -26,7 +26,7 @@
 class TextField : public Gosu::TextInput
 {
     Gosu::Window& window;
-    Gosu::Font& font;
+    Gosu::Font font;
     double x, y;
     
 public:
@@ -38,19 +38,18 @@ public:
     static const unsigned long CARET_COLOR     = 0xffffffff;
     static const int PADDING = 5;
     
-    TextField(Gosu::Window& window, Gosu::Font& font, double x, double y)
+    TextField(Gosu::Window& window, Gosu::Font font, double x, double y)
     : window(window), font(font), x(x), y(y)
     {
         // Start with a self-explanatory text in each field.
         setText(L"Click to change text");
-    
     }
-
+    
     // Local helper.
     static wchar_t toUpper(wchar_t in)
     {
-        // In case towupper is not in std::, we use a 'using' here.
-        // (It's actually a C99 function.)
+        // This will work no matter if towupper is in namespace std or not.
+        // (Depends on your compiler/standard library.)
         using namespace std;
         return towupper((wint_t)in);
     }
@@ -74,27 +73,28 @@ public:
             backgroundColor = ACTIVE_COLOR;
         else
             backgroundColor = INACTIVE_COLOR;
-        window.graphics().drawQuad(x - PADDING,           y - PADDING,            backgroundColor,
-                                   x + width() + PADDING, y - PADDING,            backgroundColor,
-                                   x - PADDING,           y + height() + PADDING, backgroundColor,
-                                   x + width() + PADDING, y + height() + PADDING, backgroundColor, 0);
-    
+        
+        Gosu::Graphics::drawQuad(x - PADDING,           y - PADDING,            backgroundColor,
+                                 x + width() + PADDING, y - PADDING,            backgroundColor,
+                                 x - PADDING,           y + height() + PADDING, backgroundColor,
+                                 x + width() + PADDING, y + height() + PADDING, backgroundColor, 0);
+        
         // Calculate the position of the caret and the selection start.
         double posX = x + font.textWidth(text().substr(0, caretPos()));
         double selX = x + font.textWidth(text().substr(0, selectionStart()));
-
+        
         // Draw the selection background, if any; if not, sel_x and pos_x will be
         // the same value, making this quad empty.
-        window.graphics().drawQuad(selX, y,            SELECTION_COLOR,
-                                   posX, y,            SELECTION_COLOR,
-                                   selX, y + height(), SELECTION_COLOR,
-                                   posX, y + height(), SELECTION_COLOR, 0);
+        Gosu::Graphics::drawQuad(selX, y,            SELECTION_COLOR,
+                                 posX, y,            SELECTION_COLOR,
+                                 selX, y + height(), SELECTION_COLOR,
+                                 posX, y + height(), SELECTION_COLOR, 0);
 
         // Draw the caret; again, only if this is the currently selected field.
         if (window.input().textInput() == this)
-          window.graphics().drawLine(posX, y,            CARET_COLOR,
+            Gosu::Graphics::drawLine(posX, y,            CARET_COLOR,
                                      posX, y + height(), CARET_COLOR, 0);
-
+        
         // Finally, draw the text itself!
         font.draw(text(), x, y, 0);
     }
@@ -114,45 +114,44 @@ public:
     bool isUnderPoint(double mouseX, double mouseY)
     {
         return mouseX > x - PADDING && mouseX < x + width() + PADDING &&
-            mouseY > y - PADDING and mouseY < y + height() + PADDING;
+               mouseY > y - PADDING and mouseY < y + height() + PADDING;
     }
 };
 
-// Helper magic to get size of static array, MUCH safer than sizeof hackery.
+// Helper to get the size static arrays.
 template<typename T, std::size_t Len>
 std::size_t lengthof(const T(&) [Len])
 {
     return Len;
 }
 
-class TextInputWindow : public Gosu::Window
+class Window : public Gosu::Window
 {
-    std::auto_ptr<Gosu::Font> font;
     std::auto_ptr<TextField> textFields[3];
-    std::auto_ptr<Gosu::Image> cursor;
-
+    
 public:
-    TextInputWindow()
-    : Gosu::Window(300, 200, false)
+    Window()
+    : Gosu::Window(300, 200)
     {
         setCaption(L"Text Input Example");
-    
-        font.reset(new Gosu::Font(graphics(), Gosu::defaultFontName(), 20));
+        
+        Gosu::Font font(20);
         
         for (int index = 0; index < lengthof(textFields); ++index)
-            textFields[index].reset(new TextField(*this, *font, 50, 30 + index * 50));
-        
-        cursor.reset(new Gosu::Image(graphics(), L"media/Cursor.png", false));
+            textFields[index].reset(new TextField(*this, font, 50, 30 + index * 50));
     }
-
+    
+    bool needsCursor() const
+    {
+        return true;
+    }
+    
     void draw()
     {
         for (int i = 0; i < lengthof(textFields); ++i)
             textFields[i]->draw();
-            
-        cursor->draw(input().mouseX(), input().mouseY(), 0);
     }
-  
+    
     void buttonDown(Gosu::Button btn)
     {
         if (btn == Gosu::kbTab)
@@ -186,7 +185,7 @@ public:
 
 int main(int argc, char* argv[])
 {
-    TextInputWindow win;
-    win.show();
+    Window window;
+    window.show();
     return 0;
 }
