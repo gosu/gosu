@@ -15,8 +15,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		37014B4A171F4845BC5CECE3 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		8CA753D9749BA740C881953B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		B46B32856A9F4322B3EA3F0A /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B74AB1E719BAB8FA1BEBBF17 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		D42CEBD51872343200FDD5A7 /* Tutorial.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tutorial.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D42CEBD81872343300FDD5A7 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D42CEBDB1872343300FDD5A7 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -41,13 +42,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D2D7400B2C6624819681F254 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B74AB1E719BAB8FA1BEBBF17 /* Pods.debug.xcconfig */,
+				8CA753D9749BA740C881953B /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		D42CEBCC1872343200FDD5A7 = {
 			isa = PBXGroup;
 			children = (
 				D42CEBDE1872343300FDD5A7 /* Tutorial */,
 				D42CEBD71872343200FDD5A7 /* Frameworks */,
 				D42CEBD61872343200FDD5A7 /* Products */,
-				37014B4A171F4845BC5CECE3 /* Pods.xcconfig */,
+				D2D7400B2C6624819681F254 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -126,7 +136,7 @@
 		D42CEBCD1872343200FDD5A7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Gosu contributors";
 			};
 			buildConfigurationList = D42CEBD01872343200FDD5A7 /* Build configuration list for PBXProject "Tutorial" */;
@@ -187,7 +197,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -243,10 +253,11 @@
 		};
 		D42CEC071872343300FDD5A7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 37014B4A171F4845BC5CECE3 /* Pods.xcconfig */;
+			baseConfigurationReference = B74AB1E719BAB8FA1BEBBF17 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "Tutorial/Tutorial-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.libgosu.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -254,10 +265,11 @@
 		};
 		D42CEC081872343300FDD5A7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 37014B4A171F4845BC5CECE3 /* Pods.xcconfig */;
+			baseConfigurationReference = 8CA753D9749BA740C881953B /* Pods.release.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "Tutorial/Tutorial-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.libgosu.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
