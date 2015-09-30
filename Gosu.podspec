@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Gosu"
-  s.version      = "0.10.2"
+  s.version      = "0.10.3"
   s.summary      = "2D game development library."
   s.homepage     = "http://libgosu.org/"
   s.documentation_url = 'http://libgosu.org/cpp/'
@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.license      = { :type => 'MIT', :file => 'COPYING' }
   s.author       = { "Julian Raschke" => "julian@raschke.de" }
 
-  s.source       = { :git => "https://github.com/jlnr/gosu.git", :tag => "v0.10.1" }
+  s.source       = { :git => "https://github.com/jlnr/gosu.git", :tag => "v0.10.3" }
   
   s.compiler_flags = '-DGOSU_DEPRECATED= -Wno-conversion'
   
