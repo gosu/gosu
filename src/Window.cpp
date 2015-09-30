@@ -119,8 +119,6 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
         }
     }
     
-    // TODO - it would be better/enough to only do this in show()
-    
     SDL_SetWindowTitle(sharedWindow(), "");
     SDL_SetWindowSize(sharedWindow(), actualWidth, actualHeight);
     SDL_SetWindowPosition(sharedWindow(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
@@ -128,8 +126,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     {
         SDL_SetWindowFullscreen(sharedWindow(), fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
     }
-    SDL_ShowWindow(sharedWindow());
-
+    
     #if SDL_VERSION_ATLEAST(2, 0, 1)
     SDL_GL_GetDrawableSize(sharedWindow(), &actualWidth, &actualHeight);
     #endif
@@ -183,12 +180,19 @@ void Gosu::Window::show()
 
 bool Gosu::Window::tick()
 {
+    if (SDL_GetWindowFlags(sharedWindow()) & SDL_WINDOW_HIDDEN) {
+        SDL_ShowWindow(sharedWindow());
+    }
+    
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
-        if (e.type == SDL_QUIT)
+        if (e.type == SDL_QUIT) {
+            SDL_HideWindow(sharedWindow());
             return false;
-        else
+        }
+        else {
             input().feedSDLEvent(&e);
+        }
     }
     
     Song::update();
