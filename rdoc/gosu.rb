@@ -398,6 +398,30 @@ module Gosu
     # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#tileability Tileability explained in the Gosu Wiki
     def self.load_tiles(source, tile_width, tile_height, options = {}); end
 
+    ##
+    # EXPERIMENTAL - MAY DISAPPEAR WITHOUT WARNING.
+    # 
+    # Returns an image that is a smaller, rectangular view of this {Image}.
+    # 
+    # This is a very fast operation, and no new textures are allocated.
+    # If you update this {Image} or the {#subimage} using {#insert}, the other {Image} will be affected as well.
+    # 
+    # This method can be used to load texture atlases created with third-party tools.
+    # The texture atlas must be a power of two (512x512 or 1024x1024) and loaded with :tileable => true.
+    # The individual {Image}s can then be loaded efficiently with {#subimage}.
+    # {#gl_tex_info} will work on a {#subimage}.
+    # 
+    # Caveats:
+    # * {#subimage} only works if the image lives on a single texture.
+    #   If the image was too large and had to be split up into several OpenGL textures, subimage will return nil (same as {#gl_tex_info}).
+    # * If you stretch or rotate a {#subimage}, the pixels adjacent to it might bleed into it, as Gosu does not manage the 'tileability' of subimages.
+    # 
+    # If you find a good way to use {#subimage}, please let us know on the forum and we can make this a part of Gosu's stable interface.
+    # Thank you!
+    # 
+    # @return [Image?] an image that represents a portion of the containing image
+    def subimage(left, top, width, height); end
+
     # @!endgroup
 
     # @!group Drawing an image
@@ -744,15 +768,17 @@ module Gosu
     def show; end
     
     ##
-    # EXPERIMENTAL - MAY DISAPPEAR WITHOUT WARNING:
-    # Performs a single step in the main loop. This can be useful for integrating Gosu with other
-    # libraries that have their own main loop, e.g. Ruby/Tk.
+    # EXPERIMENTAL - MAY DISAPPEAR WITHOUT WARNING.
+    # 
+    # Performs a single step in the main loop.
+    # This can be useful for integrating Gosu with other libraries that have their own main loop, e.g. Ruby/Tk.
     # 
     # See: https://www.libgosu.org/cgi-bin/mwf/topic_show.pl?tid=1218
     # 
-    # If you find a good way to use this, please post it on the forum. Thank you!
+    # If you find a good way to use {#tick}, please let us know on the forum and we can make this a part of Gosu's stable interface.
+    # Thank you!
     # 
-    # @return [true, false] whether the Window should still be shown after this tick
+    # @return [true, false] whether the {Window} should still be shown after this tick
     def tick; end
 
     ##
