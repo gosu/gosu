@@ -620,18 +620,6 @@ namespace Gosu {
         
         return new Gosu::Image(bmp, srcX, srcY, srcWidth, srcHeight, flags);
     }
-    Image(Gosu::Window& window, VALUE source, bool tileable = false) {
-        Gosu::Bitmap bmp;
-        Gosu::loadBitmap(bmp, source);
-        return new Gosu::Image(bmp, tileable ? Gosu::ifTileable : Gosu::ifSmooth);
-    }
-    Image(Gosu::Window& window, VALUE source, bool tileable,
-          unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight) {
-        Gosu::Bitmap bmp;
-        Gosu::loadBitmap(bmp, source);
-        return new Gosu::Image(bmp, srcX, srcY, srcWidth, srcHeight,
-            tileable ? Gosu::ifTileable : Gosu::ifSmooth);
-    }
     void drawAsQuad(double x1, double y1, Color c1,
             double x2, double y2, Color c2,
             double x3, double y3, Color c3,

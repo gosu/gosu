@@ -2742,7 +2742,7 @@ SWIG_From_float  (float value)
   return SWIG_From_double  (value);
 }
 
-SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_0(VALUE source,VALUE options=0){
+SWIGINTERN Gosu::Image *new_Gosu_Image(VALUE source,VALUE options=0){
         Gosu::Bitmap bmp;
         Gosu::loadBitmap(bmp, source);
         
@@ -2791,37 +2791,6 @@ SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_0(VALUE source,VALUE options=0){
         }
         
         return new Gosu::Image(bmp, srcX, srcY, srcWidth, srcHeight, flags);
-    }
-
-SWIGINTERN int
-SWIG_AsVal_bool (VALUE obj, bool *val)
-{
-  if (obj == Qtrue) {
-    if (val) *val = true;
-    return SWIG_OK;
-  } else if (obj == Qfalse) {
-    if (val) *val = false;
-    return SWIG_OK;
-  } else {
-    int res = 0;
-    if (SWIG_AsVal_int (obj, &res) == SWIG_OK) {    
-      if (val) *val = res ? true : false;
-      return SWIG_OK;
-    }
-  }  
-  return SWIG_TypeError;
-}
-
-SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_1(Gosu::Window &window,VALUE source,bool tileable=false){
-        Gosu::Bitmap bmp;
-        Gosu::loadBitmap(bmp, source);
-        return new Gosu::Image(bmp, tileable ? Gosu::ifTileable : Gosu::ifSmooth);
-    }
-SWIGINTERN Gosu::Image *new_Gosu_Image__SWIG_2(Gosu::Window &window,VALUE source,bool tileable,unsigned int srcX,unsigned int srcY,unsigned int srcWidth,unsigned int srcHeight){
-        Gosu::Bitmap bmp;
-        Gosu::loadBitmap(bmp, source);
-        return new Gosu::Image(bmp, srcX, srcY, srcWidth, srcHeight,
-            tileable ? Gosu::ifTileable : Gosu::ifSmooth);
     }
 SWIGINTERN void Gosu_Image_drawAsQuad(Gosu::Image *self,double x1,double y1,Gosu::Color c1,double x2,double y2,Gosu::Color c2,double x3,double y3,Gosu::Color c3,double x4,double y4,Gosu::Color c4,Gosu::ZPos z,Gosu::AlphaMode mode=Gosu::amDefault){
         self->getData().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
@@ -2934,6 +2903,26 @@ SWIGINTERN std::vector< Gosu::Image > Gosu_Image_loadTiles__SWIG_0(VALUE source,
         }
         return Gosu::loadTiles(bmp, tileWidth, tileHeight, flags);
     }
+
+SWIGINTERN int
+SWIG_AsVal_bool (VALUE obj, bool *val)
+{
+  if (obj == Qtrue) {
+    if (val) *val = true;
+    return SWIG_OK;
+  } else if (obj == Qfalse) {
+    if (val) *val = false;
+    return SWIG_OK;
+  } else {
+    int res = 0;
+    if (SWIG_AsVal_int (obj, &res) == SWIG_OK) {    
+      if (val) *val = res ? true : false;
+      return SWIG_OK;
+    }
+  }  
+  return SWIG_TypeError;
+}
+
 SWIGINTERN std::vector< Gosu::Image > Gosu_Image_loadTiles__SWIG_1(Gosu::Window &window,VALUE source,int tileWidth,int tileHeight,bool tileable){
         Gosu::Bitmap bmp;
         Gosu::loadBitmap(bmp, source);
@@ -6430,81 +6419,6 @@ fail:
 }
 
 
-SWIGINTERN VALUE
-_wrap_new_Image__SWIG_0(int argc, VALUE *argv, VALUE self) {
-  VALUE arg1 = (VALUE) 0 ;
-  VALUE arg2 = (VALUE) 0 ;
-  const char *classname SWIGUNUSED = "Gosu::Image";
-  Gosu::Image *result = 0 ;
-  
-  if ((argc < 1) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  arg1 = argv[0];
-  if (argc > 1) {
-    arg2 = argv[1];
-  }
-  {
-    try {
-      result = (Gosu::Image *)new_Gosu_Image__SWIG_0(arg1,arg2);
-      DATA_PTR(self) = result;
-      SWIG_RubyAddTracking(result, self);
-    } catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return self;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_new_Image__SWIG_1(int argc, VALUE *argv, VALUE self) {
-  Gosu::Window *arg1 = 0 ;
-  VALUE arg2 = (VALUE) 0 ;
-  bool arg3 = (bool) false ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  bool val3 ;
-  int ecode3 = 0 ;
-  const char *classname SWIGUNUSED = "Gosu::Image";
-  Gosu::Image *result = 0 ;
-  
-  if ((argc < 2) || (argc > 3)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Gosu__Window,  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window &","Image", 1, argv[0] )); 
-  }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Gosu::Window &","Image", 1, argv[0])); 
-  }
-  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  arg2 = argv[1];
-  if (argc > 2) {
-    ecode3 = SWIG_AsVal_bool(argv[2], &val3);
-    if (!SWIG_IsOK(ecode3)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "bool","Image", 3, argv[2] ));
-    } 
-    arg3 = static_cast< bool >(val3);
-  }
-  {
-    try {
-      result = (Gosu::Image *)new_Gosu_Image__SWIG_1(*arg1,arg2,arg3);
-      DATA_PTR(self) = result;
-      SWIG_RubyAddTracking(result, self);
-    } catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return self;
-fail:
-  return Qnil;
-}
-
-
 #ifdef HAVE_RB_DEFINE_ALLOC_FUNC
 SWIGINTERN VALUE
 _wrap_Image_allocate(VALUE self) {
@@ -6523,69 +6437,22 @@ _wrap_Image_allocate(VALUE self) {
   
 
 SWIGINTERN VALUE
-_wrap_new_Image__SWIG_2(int argc, VALUE *argv, VALUE self) {
-  Gosu::Window *arg1 = 0 ;
+_wrap_new_Image(int argc, VALUE *argv, VALUE self) {
+  VALUE arg1 = (VALUE) 0 ;
   VALUE arg2 = (VALUE) 0 ;
-  bool arg3 ;
-  unsigned int arg4 ;
-  unsigned int arg5 ;
-  unsigned int arg6 ;
-  unsigned int arg7 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  bool val3 ;
-  int ecode3 = 0 ;
-  unsigned int val4 ;
-  int ecode4 = 0 ;
-  unsigned int val5 ;
-  int ecode5 = 0 ;
-  unsigned int val6 ;
-  int ecode6 = 0 ;
-  unsigned int val7 ;
-  int ecode7 = 0 ;
   const char *classname SWIGUNUSED = "Gosu::Image";
   Gosu::Image *result = 0 ;
   
-  if ((argc < 7) || (argc > 7)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 7)",argc); SWIG_fail;
+  if ((argc < 1) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Gosu__Window,  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window &","Image", 1, argv[0] )); 
+  arg1 = argv[0];
+  if (argc > 1) {
+    arg2 = argv[1];
   }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Gosu::Window &","Image", 1, argv[0])); 
-  }
-  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  arg2 = argv[1];
-  ecode3 = SWIG_AsVal_bool(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "bool","Image", 3, argv[2] ));
-  } 
-  arg3 = static_cast< bool >(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_int(argv[3], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "unsigned int","Image", 4, argv[3] ));
-  } 
-  arg4 = static_cast< unsigned int >(val4);
-  ecode5 = SWIG_AsVal_unsigned_SS_int(argv[4], &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), Ruby_Format_TypeError( "", "unsigned int","Image", 5, argv[4] ));
-  } 
-  arg5 = static_cast< unsigned int >(val5);
-  ecode6 = SWIG_AsVal_unsigned_SS_int(argv[5], &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), Ruby_Format_TypeError( "", "unsigned int","Image", 6, argv[5] ));
-  } 
-  arg6 = static_cast< unsigned int >(val6);
-  ecode7 = SWIG_AsVal_unsigned_SS_int(argv[6], &val7);
-  if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), Ruby_Format_TypeError( "", "unsigned int","Image", 7, argv[6] ));
-  } 
-  arg7 = static_cast< unsigned int >(val7);
   {
     try {
-      result = (Gosu::Image *)new_Gosu_Image__SWIG_2(*arg1,arg2,arg3,arg4,arg5,arg6,arg7);
+      result = (Gosu::Image *)new_Gosu_Image(arg1,arg2);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
     } catch (const std::exception& e) {
@@ -6594,103 +6461,6 @@ _wrap_new_Image__SWIG_2(int argc, VALUE *argv, VALUE self) {
   }
   return self;
 fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE _wrap_new_Image(int nargs, VALUE *args, VALUE self) {
-  int argc;
-  VALUE argv[7];
-  int ii;
-  
-  argc = nargs;
-  if (argc > 7) SWIG_fail;
-  for (ii = 0; (ii < argc); ++ii) {
-    argv[ii] = args[ii];
-  }
-  if ((argc >= 1) && (argc <= 2)) {
-    int _v;
-    _v = (argv[0] != 0);
-    if (_v) {
-      if (argc <= 1) {
-        return _wrap_new_Image__SWIG_0(nargs, args, self);
-      }
-      _v = (argv[1] != 0);
-      if (_v) {
-        return _wrap_new_Image__SWIG_0(nargs, args, self);
-      }
-    }
-  }
-  if ((argc >= 2) && (argc <= 3)) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      _v = (argv[1] != 0);
-      if (_v) {
-        if (argc <= 2) {
-          return _wrap_new_Image__SWIG_1(nargs, args, self);
-        }
-        {
-          int res = SWIG_AsVal_bool(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          return _wrap_new_Image__SWIG_1(nargs, args, self);
-        }
-      }
-    }
-  }
-  if (argc == 7) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      _v = (argv[1] != 0);
-      if (_v) {
-        {
-          int res = SWIG_AsVal_bool(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          {
-            int res = SWIG_AsVal_unsigned_SS_int(argv[3], NULL);
-            _v = SWIG_CheckState(res);
-          }
-          if (_v) {
-            {
-              int res = SWIG_AsVal_unsigned_SS_int(argv[4], NULL);
-              _v = SWIG_CheckState(res);
-            }
-            if (_v) {
-              {
-                int res = SWIG_AsVal_unsigned_SS_int(argv[5], NULL);
-                _v = SWIG_CheckState(res);
-              }
-              if (_v) {
-                {
-                  int res = SWIG_AsVal_unsigned_SS_int(argv[6], NULL);
-                  _v = SWIG_CheckState(res);
-                }
-                if (_v) {
-                  return _wrap_new_Image__SWIG_2(nargs, args, self);
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  
-fail:
-  Ruby_Format_OverloadedError( argc, 7, "Image.new", 
-    "    Image.new(VALUE source, VALUE options)\n"
-    "    Image.new(Gosu::Window &window, VALUE source, bool tileable)\n"
-    "    Image.new(Gosu::Window &window, VALUE source, bool tileable, unsigned int srcX, unsigned int srcY, unsigned int srcWidth, unsigned int srcHeight)\n");
-  
   return Qnil;
 }
 
@@ -11169,8 +10939,8 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_RubyInitializeTrackings();
   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(10)));
-  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(3)));
-  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.10.3"));
+  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(4)));
+  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.10.4"));
   rb_define_const(mGosu, "GOSU_COPYRIGHT_NOTICE", SWIG_FromCharPtr("This software uses the following third-party libraries:\n\nGosu, http://www.libgosu.org, MIT License, http://opensource.org/licenses/MIT\nSDL 2, http://www.libsdl.org, MIT License, http://opensource.org/licenses/MIT\nlibsndfile, http://www.mega-nerd.com/libsndfile, GNU LGPL 3, http://www.gnu.org/copyleft/lesser.html\nOpenAL Soft, http://kcat.strangesoft.net/openal.html, GNU LGPL 2, http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html\n"));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);

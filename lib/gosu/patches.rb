@@ -25,8 +25,22 @@ module Gosu::Button
 end
 
 # Backwards compatibility:
-# The old version of from_text has been deprecated in Gosu 0.9.
+# Passing a Window to initialize and from_text has been deprecated in Gosu 0.9.
 class Gosu::Image
+  alias initialize_without_window initialize
+  
+  def initialize(*args)
+    if args[0].is_a? Gosu::Window then
+      if args.size == 7 then
+        initialize_without_window args[1], :tileable => args[2], :rect => args[3..-1]
+      else
+        initialize_without_window args[1], :tileable => args[2]
+      end
+    else
+      initialize_without_window(*args)
+    end
+  end
+  
   class << self
     alias from_text_without_window from_text
   end
@@ -44,7 +58,7 @@ class Gosu::Image
 end
 
 # Backwards compatibility:
-# Passing a Window Sample#initialize has been deprecated in Gosu 0.7.17.
+# Passing a Window to Sample#initialize has been deprecated in Gosu 0.7.17.
 class Gosu::Sample
   alias initialize_without_window initialize
   
