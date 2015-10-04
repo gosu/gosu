@@ -390,8 +390,8 @@ module Gosu
     # @option options [true, false] :tileable (false) if true, the Image will not have soft edges when scaled
     # @option options [true, false] :retro (false) if true, the image will not be interpolated when it is scaled up or down. When :retro it set, :tileable has no effect.
     #
-    # @overload initialize(source, tile_width, tile_height, options = {})
-    # @overload initialize(window, source, tile_width, tile_height, tileable = false)
+    # @overload load_tiles(source, tile_width, tile_height, options = {})
+    # @overload load_tiles(window, source, tile_width, tile_height, tileable)
     #
     # (Passing a Window reference is not necessary anymore, please use the first overload from now on.)
     #
