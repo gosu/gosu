@@ -30,9 +30,9 @@ EOS
   # The docs will never look great in rdoc, though, because we are using
   # some yard-specific syntax in rdoc/gosu.rb.
   # To generate more useful documentation, run 'yard' in the git root.
-  s.files += Dir["README.txt", "COPYING", "rdoc/gosu.rb"]
-  s.rdoc_options += %w(-m README.txt -x lib)
-  s.extra_rdoc_files = %w(README.txt COPYING rdoc/gosu.rb)
+  s.files += Dir["README.md", "COPYING", "rdoc/gosu.rb"]
+  s.rdoc_options += %w(-m README.md -x lib)
+  s.extra_rdoc_files = %w(README.md COPYING rdoc/gosu.rb)
 end
 
 Gem::PackageTask.new(GEM_SPEC) do |pkg|

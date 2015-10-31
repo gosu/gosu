@@ -6,7 +6,7 @@ require 'rake/extensiontask'
 COMMON_FILES = FileList[
   '.yardopts',
   'COPYING',
-  'README.txt',
+  'README.md',
 ]
 
 COMMON_CPP_FILES = COMMON_FILES + FileList[
