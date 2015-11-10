@@ -95,8 +95,7 @@ if `uname`.chomp == 'Darwin' then
   end
   
   # Dependencies...
-  $CFLAGS   << " -I/usr/local/include"
-  $CXXFLAGS << " -I/usr/local/include -I/usr/local/include/SDL2"
+  $CXXFLAGS << " #{`sdl2-config --cflags`.chomp}"
   $LDFLAGS  << " -liconv"
   
   if enable_config('static-homebrew-dependencies') then
@@ -104,8 +103,7 @@ if `uname`.chomp == 'Darwin' then
     # Otherwise, the resulting gosu.bundle is still dependent on libSDL2-2.0.0.dylib, see `otool -L gosu.bundle`
     $LDFLAGS << HOMEBREW_DEPENDENCIES.map { |lib| " /usr/local/lib/lib#{lib}.a" }.join
   else
-    $LDFLAGS << " -L/usr/local/lib"
-    $LDFLAGS << HOMEBREW_DEPENDENCIES.map { |lib| " -l#{lib}" }.join
+    $LDFLAGS << " #{`sdl2-config --cflags`.chomp}"
   end
 
   $LDFLAGS << FRAMEWORKS.map { |f| " -framework #{f}" }.join
