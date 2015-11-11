@@ -103,7 +103,7 @@ if `uname`.chomp == 'Darwin' then
     # Otherwise, the resulting gosu.bundle is still dependent on libSDL2-2.0.0.dylib, see `otool -L gosu.bundle`
     $LDFLAGS << HOMEBREW_DEPENDENCIES.map { |lib| " /usr/local/lib/lib#{lib}.a" }.join
   else
-    $LDFLAGS << " #{`sdl2-config --cflags`.chomp}"
+    $LDFLAGS << " #{`sdl2-config --libs`.chomp}"
   end
 
   $LDFLAGS << FRAMEWORKS.map { |f| " -framework #{f}" }.join
