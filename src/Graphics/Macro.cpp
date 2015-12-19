@@ -209,6 +209,8 @@ void Gosu::Macro::draw(double x1, double y1, Color c1,
     if (c1 != Color::WHITE || c2 != Color::WHITE || c3 != Color::WHITE || c4 != Color::WHITE)
         throw std::invalid_argument("Macros cannot be tinted with colors yet");
     
+    reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
+    
     std::tr1::function<void()> f = std::tr1::bind(&Impl::drawVertexArrays, pimpl, x1, y1, x2, y2, x3, y3, x4, y4);
     Gosu::Graphics::scheduleGL(f, z);
 }
