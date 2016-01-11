@@ -112,6 +112,8 @@ void Gosu::saveImageFile(const Gosu::Bitmap& bitmap, Gosu::Writer writer,
     unsigned char* rgba =
         const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(bitmap.data()));
     
+    // TODO: Use the new *_to_func functions in stb_imagewrite.h instead:
+    // https://github.com/nothings/stb/blob/master/stb_image_write.h#L39
     int length;
     unsigned char* png =
         stbi_write_png_to_mem(rgba, 0, bitmap.width(), bitmap.height(), 4, &length);
