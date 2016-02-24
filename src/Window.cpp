@@ -182,6 +182,13 @@ bool Gosu::Window::tick()
 {
     if (SDL_GetWindowFlags(sharedWindow()) & SDL_WINDOW_HIDDEN) {
         SDL_ShowWindow(sharedWindow());
+
+        // SDL_GL_GetDrawableSize returns different values before and after showing the window.
+        // -> When first showing the window, update the physical size of Graphics (=glViewport).
+        // Fixes https://github.com/gosu/gosu/issues/318
+        int width, height;
+        SDL_GL_GetDrawableSize(sharedWindow(), &width, &height);
+        graphics().setPhysicalResolution(width, height);
     }
     
     SDL_Event e;

@@ -45,7 +45,7 @@ namespace Gosu
         Graphics(unsigned physicalWidth, unsigned physicalHeight, bool fullscreen);
         ~Graphics();
 
-        void setResolution(unsigned virtualWidth, unsigned virtualHeight,
+        void setResolution(unsigned logicalWidth, unsigned logicalHeight,
             double horizontalBlackBarWidth = 0, double verticalBlackBarHeight = 0);
         
         unsigned width() const;
@@ -111,7 +111,10 @@ namespace Gosu
             double x3, double y3, Color c3,
             double x4, double y4, Color c4,
             ZPos z, AlphaMode mode = amDefault);
-        
+
+        //! For internal use only.
+        void setPhysicalResolution(unsigned physicalWidth, unsigned physicalHeight);
+
         //! For internal use only.
         static void scheduleDrawOp(const DrawOp& op);
 

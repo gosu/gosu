@@ -50,33 +50,34 @@ struct Gosu::Graphics::Impl
     Transform baseTransform;
     
     DrawOpQueueStack warmedUpQueues;
+
+    void updateBaseTransform()
+    {
+        double scaleX = 1.0 * physWidth / virtWidth;
+        double scaleY = 1.0 * physHeight / virtHeight;
+        double scaleFactor = std::min(scaleX, scaleY);
+
+        Transform scaleTransform = scale(scaleFactor);
+        Transform translateTransform = translate(blackWidth, blackHeight);
+        baseTransform = concat(translateTransform, scaleTransform);
+    }
 };
 
 Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscreen)
 : pimpl(new Impl)
 {
-    pimpl->physWidth  = physWidth;
-    pimpl->physHeight = physHeight;
     pimpl->virtWidth  = physWidth;
     pimpl->virtHeight = physHeight;
     pimpl->fullscreen = fullscreen;
     pimpl->blackWidth = 0;
     pimpl->blackHeight = 0;
-    
+
     // TODO: Should be merged into RenderState and removed from Graphics.
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glViewport(0, 0, physWidth, physHeight);
-    #ifdef GOSU_IS_OPENGLES
-    glOrthof(0, physWidth, physHeight, 0, -1, 1);
-    #else
-    glOrtho(0, physWidth, physHeight, 0, -1, 1);
-    #endif
-    
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    
     glEnable(GL_BLEND);
+
+    setPhysicalResolution(physWidth, physHeight);
 }
 
 Gosu::Graphics::~Graphics()
@@ -111,13 +112,7 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
     pimpl->blackWidth = horizontalBlackBarWidth;
     pimpl->blackHeight = verticalBlackBarHeight;
 
-    double scaleX = 1.0 * pimpl->physWidth / virtualWidth;
-    double scaleY = 1.0 * pimpl->physHeight / virtualHeight;
-    double scaleFactor = std::min(scaleX, scaleY);
-
-    Transform scaleTransform = scale(scaleFactor);
-    Transform translateTransform = translate(pimpl->blackWidth, pimpl->blackHeight);
-    pimpl-> baseTransform = concat(translateTransform, scaleTransform);
+    pimpl->updateBaseTransform();
 }
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
@@ -380,6 +375,23 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
 void Gosu::Graphics::scheduleDrawOp(const Gosu::DrawOp &op)
 {
     currentQueue().scheduleDrawOp(op);
+}
+
+void Gosu::Graphics::setPhysicalResolution(unsigned physWidth, unsigned physHeight)
+{
+    pimpl->physWidth = physWidth;
+    pimpl->physHeight = physHeight;
+    // TODO: Should be merged into RenderState and removed from Graphics.
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glViewport(0, 0, physWidth, physHeight);
+#ifdef GOSU_IS_OPENGLES
+    glOrthof(0, physWidth, physHeight, 0, -1, 1);
+#else
+    glOrtho(0, physWidth, physHeight, 0, -1, 1);
+#endif
+
+    pimpl->updateBaseTransform();
 }
 
 GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(

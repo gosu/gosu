@@ -43,6 +43,7 @@ Gosu.includes
 /windows/*.suo
 /windows/*.user
 /windows/*.vs
+/windows/*.opendb
 /windows/*.opensdf
 /windows/Release (Ruby ?.?)/*.exp
 /windows/Release (Ruby ?.?)/*.lib
