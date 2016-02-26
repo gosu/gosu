@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Gosu"
-  s.version      = "0.10.5"
+  s.version      = "0.10.6"
   s.summary      = "2D game development library."
   s.homepage     = "http://libgosu.org/"
   s.documentation_url = 'http://libgosu.org/cpp/'
