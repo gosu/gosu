@@ -87,21 +87,7 @@ namespace Gosu
         ifRetro          = 1 << 5
     };
     
-#ifdef GOSU_IS_MAC
-    // TODO: Without this gigantic hack, Gosu crashes in the "scale" function,
-    // but _only_ when used from Ruby 1.9. It is unclear what might cause this -
-    // maybe a compiler bug that tries to use SSE functions with the wrong
-    // alignment. Adding __attribute__((aligned(16))) does not help, though.
-    struct Transform
-    {
-        double value[16];
-        bool operator==(const Transform &other) { for (int i = 0; i < 16; ++i) if ((*this)[i] != other[i]) return false; return true; }
-        const double &operator[](std::size_t idx) const { return value[idx]; }
-        double &operator[](std::size_t idx) { return value[idx]; }
-    };
-#else
     typedef std::tr1::array<double, 16> Transform;
-#endif
     Transform translate(double x, double y);
     Transform rotate(double angle, double aroundX = 0, double aroundY = 0);
     Transform scale(double factor);
