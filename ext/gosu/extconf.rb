@@ -134,8 +134,8 @@ end
 # inside folders, it will not find the resulting .o files during linking.
 # So we create a shim .c/.cpp file for each file that we want to compile, ensuring
 # that all .o files are built into the current directory, without any nesting.
-# TODO - would be nicer if the Rakefile would just create these shim files and
-# ship them along with the gem
+# TODO: Just move all of Gosu's source files back into a flat hierarchy again.
+# The nested directory structure has really not been worth it.
 SOURCE_FILES.each do |file|
   shim_name = file.gsub('/', '-').sub(/\.mm$/, '.cpp')
   File.open(shim_name, "w") do |shim|
@@ -143,11 +143,11 @@ SOURCE_FILES.each do |file|
   end
 end
 
-if RUBY_VERSION >= '2.0.0' then
-  # In some versions of Ruby 2.x, the $CXXFLAGS variable is ignored, and $CLAGS
-  # are not being inherited into it either. In these versions of Ruby we can
-  # modify CONFIG instead, and our changes will end up in the Makefile.
+if RUBY_VERSION >= '1.9.3' and RUBY_VERSION < '2.2.0' then
+  # In some versions of Ruby and mkmf, the $CXXFLAGS variable is badly broken.
+  # We can modify CONFIG instead, and our changes will end up in the Makefile.
   # See http://bugs.ruby-lang.org/issues/8315
+  # The lower bound was reduced to 1.9.3 here: https://github.com/gosu/gosu/issues/321
   CONFIG['CXXFLAGS'] = "#$CFLAGS #$CXXFLAGS"
 end
 
