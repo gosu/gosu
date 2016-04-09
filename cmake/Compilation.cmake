@@ -43,7 +43,7 @@ elseif(APPLE)
         ../src/FileUnix.cpp
         ../src/Graphics/ResolutionApple.mm
         ../src/Text/TextApple.mm
-        ../src/Text/TextMac.cpp
+        ../src/Text/TextApple.cpp
         ../src/TimingApple.cpp
         ../src/UtilityApple.mm
     )
