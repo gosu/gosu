@@ -11,9 +11,9 @@ end
 puts 'The Gosu gem requires some libraries to be installed system-wide.'
 puts 'See the following site for a list:'
 if `uname`.chomp == "Darwin" then
-  puts 'https://github.com/jlnr/gosu/wiki/Getting-Started-on-OS-X'
+  puts 'https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X'
 else
-  puts 'https://github.com/jlnr/gosu/wiki/Getting-Started-on-Linux'
+  puts 'https://github.com/gosu/gosu/wiki/Getting-Started-on-Linux'
 end
 puts
 

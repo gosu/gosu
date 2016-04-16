@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.license      = { :type => 'MIT', :file => 'COPYING' }
   s.author       = { "Julian Raschke" => "julian@raschke.de" }
 
-  s.source       = { :git => "https://github.com/jlnr/gosu.git", :tag => "v0.10.6" }
+  s.source       = { :git => "https://github.com/gosu/gosu.git", :tag => "v0.10.6" }
 
   s.subspec 'Gosu' do |ss|
     ss.osx.deployment_target = '10.7'
