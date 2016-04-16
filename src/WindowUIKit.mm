@@ -17,6 +17,16 @@ namespace Gosu
         static CGFloat width = MAX(screenSize.width, screenSize.height);
         return width;
     }
+    
+    unsigned availableWidth()
+    {
+        return screenWidth();
+    }
+    
+    unsigned availableHeight()
+    {
+        return screenHeight();
+    }
 }
 
 class Gosu::Audio {};
