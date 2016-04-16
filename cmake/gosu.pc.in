@@ -5,7 +5,7 @@ includedir=${prefix}/include
 
 Name: gosu
 Description: The Gosu 2D game development library
-URL: https://libgosu.org/
+URL: https://www.libgosu.org/
 Version: @GOSU_VERSION@
 
 Libs: -L${libdir} -lgosu

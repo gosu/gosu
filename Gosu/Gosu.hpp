@@ -5,7 +5,7 @@
 //!
 //! These pages serve as a reference on the C++ interface of Gosu. For a higher-level
 //! discussion of concepts and ideas behind the library, see the Wiki entries linked
-//! from the official website, http://www.libgosu.org/.
+//! from the official website, https://www.libgosu.org/.
 
 #ifndef GOSU_GOSU_HPP
 #define GOSU_GOSU_HPP

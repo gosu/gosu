@@ -14,7 +14,7 @@ EOS
   s.author = 'Julian Raschke'
   s.date = Time.now.strftime '%Y-%m-%d'
   s.email = 'julian@raschke.de'
-  s.homepage = 'http://www.libgosu.org/'
+  s.homepage = 'https://www.libgosu.org/'
   s.required_ruby_version = Gem::Requirement.new('>= 1.8.2')
   s.platform = Gem::Platform::RUBY
   s.extensions = FileList["ext/**/extconf.rb"]

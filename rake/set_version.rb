@@ -1,7 +1,7 @@
 LICENSES = <<-EOF
   This software uses the following third-party libraries:
   
-  Gosu, http://www.libgosu.org, MIT License, http://opensource.org/licenses/MIT
+  Gosu, https://www.libgosu.org, MIT License, http://opensource.org/licenses/MIT
   SDL 2, http://www.libsdl.org, MIT License, http://opensource.org/licenses/MIT
   libsndfile, http://www.mega-nerd.com/libsndfile, GNU LGPL 3, http://www.gnu.org/copyleft/lesser.html
   OpenAL Soft, http://kcat.strangesoft.net/openal.html, GNU LGPL 2, http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html
