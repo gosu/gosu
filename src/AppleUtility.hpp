@@ -2,72 +2,27 @@
 #define GOSU_APPLEUTILITY_HPP
 
 #include <Gosu/Platform.hpp>
+#include <CoreFoundation/CoreFoundation.h>
 
 #ifdef __OBJC__
 
-#include <iostream>
-#include <ostream>
-#include <sstream>
 #include <string>
 #include <stdexcept>
-#include <objc/objc.h>
-#import <CoreFoundation/CoreFoundation.h>
 #import <Foundation/Foundation.h>
 
-namespace Gosu
+inline static void throwOSError(OSStatus status, unsigned line)
 {
-    inline void throwOSError(OSStatus status, unsigned line)
-    {
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
         NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
-        std::ostringstream str;
-        str << "Error on line " << line << " (Code " << status << "): "
-        << [[error localizedDescription] UTF8String]
-        << " (" << [[error description] UTF8String] << ")";
-        [pool release];
-        throw std::runtime_error(str.str());
+        throw std::runtime_error("Error on line " + std::to_string(line) +
+                                 " (Code " + std::to_string(status) + "): " +
+                                 error.localizedDescription.UTF8String +
+                                 " (" + error.description.UTF8String + ")");
     }
-    
-    #define CHECK_OS(status) if (!(status)) {} else Gosu::throwOSError(status, __LINE__)
-
-    template<typename T>
-    class ObjCRef
-    {
-        ObjCRef(const ObjCRef&);
-        ObjCRef& operator=(const ObjCRef&);
-        
-        T* ptr;
-        
-    public:
-        ObjCRef(T* ptr = nil)
-        : ptr(ptr) 
-        {
-        }
-        
-        ~ObjCRef() 
-        {
-            [ptr release];
-        }
-        
-        void reset(T* newPtr = nil)
-        { 
-            [ptr release]; 
-            ptr = newPtr;
-        }
-        
-        T* get() const 
-        {
-            return ptr; 
-        }
-        
-        T* obj() const
-        {
-            if (!ptr)
-                throw std::logic_error("Objective-C reference is nil");
-            return ptr;
-        }
-    };
 }
+
+#define CHECK_OS(status) do { if (status) throwOSError(status, __LINE__); } while (0)
+
 #endif
 
 namespace Gosu
@@ -75,23 +30,24 @@ namespace Gosu
     template<typename CFRefType = CFTypeRef>
     class CFRef
     {
-        CFRef(const CFRef&);
-        CFRef& operator=(const CFRef&);
-        
         CFRefType ref;
         
     public:
         CFRef(CFRefType ref)
-        :   ref(ref)
+        : ref(ref)
         {
         }
         
         ~CFRef()
         {
-            if (ref)
+            if (ref) {
                 CFRelease(ref);
+            }
         }
-        
+
+        CFRef(const CFRef&) = delete;
+        CFRef& operator=(const CFRef&) = delete;
+
         CFRefType get() const
         {
             return ref;
@@ -99,8 +55,9 @@ namespace Gosu
         
         CFRefType obj() const
         {
-            if (!ref)
+            if (!ref) {
                 throw std::logic_error("CoreFoundation reference is NULL");
+            }
             return ref;
         }
     };

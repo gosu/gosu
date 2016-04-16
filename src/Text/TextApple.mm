@@ -20,7 +20,6 @@ typedef NSFont OSXFont;
 
 namespace
 {
-    using Gosu::ObjCRef;
     using Gosu::CFRef;
 
     // If a font is a filename, loads the font and returns its family name that can be used
@@ -35,12 +34,14 @@ namespace
         static map<wstring, wstring> familyOfFiles;
         
         // Not a path name: It is already a family name
-        if (fontName.find(L"/") == std::wstring::npos)
+        if (fontName.find(L"/") == std::wstring::npos) {
             return fontName;
+        }
         
         // Already activated font & extracted family name
-        if (familyOfFiles.count(fontName) > 0)
+        if (familyOfFiles.count(fontName) > 0) {
             return familyOfFiles[fontName];
+        }
         
         CFRef<CFStringRef> urlString(
             CFStringCreateWithBytes(NULL,
@@ -49,22 +50,24 @@ namespace
                 kCFStringEncodingUTF32LE, NO));
         CFRef<CFURLRef> url(
             CFURLCreateWithFileSystemPath(NULL, urlString.obj(), kCFURLPOSIXPathStyle, YES));
-        if (!url.get())
+        if (!url.get()) {
             return familyOfFiles[fontName] = Gosu::defaultFontName();
-            
+        }
+        
         CFRef<CFArrayRef> array(
             CTFontManagerCreateFontDescriptorsFromURL(url.obj()));
 
         if (array.get() == NULL || CFArrayGetCount(array.obj()) < 1 ||
-            !CTFontManagerRegisterFontsForURL(url.obj(), kCTFontManagerScopeProcess, NULL))
+                !CTFontManagerRegisterFontsForURL(url.obj(), kCTFontManagerScopeProcess, NULL)) {
             return familyOfFiles[fontName] = Gosu::defaultFontName();
+        }
 
         CTFontDescriptorRef ref =
             (CTFontDescriptorRef)CFArrayGetValueAtIndex(array.get(), 0);
         CFRef<CFStringRef> fontNameStr(
             (CFStringRef)CTFontDescriptorCopyAttribute(ref, kCTFontFamilyNameAttribute));
         
-        const char* utf8FontName = [(NSString*)fontNameStr.obj() UTF8String];
+        const char *utf8FontName = [(__bridge NSString *)fontNameStr.obj() UTF8String];
         return familyOfFiles[fontName] = Gosu::utf8ToWstring(utf8FontName);
         #endif
     }
@@ -78,21 +81,25 @@ namespace
         OSXFont* result = usedFonts[make_pair(fontName, make_pair(fontFlags, height))];
         if (!result)
         {
-            ObjCRef<NSString> name([[NSString alloc] initWithUTF8String:Gosu::wstringToUTF8(fontName).c_str()]);
+            NSString *name = [NSString stringWithUTF8String:Gosu::wstringToUTF8(fontName).c_str()];
             #ifdef GOSU_IS_IPHONE
-            result = [OSXFont fontWithName:name.obj() size:height];
+            result = [OSXFont fontWithName:name size:height];
             #else
-            NSFontDescriptor* desc = [[NSFontDescriptor fontDescriptorWithFontAttributes:nil] fontDescriptorWithFamily:name.obj()];
-            result = [[NSFont fontWithDescriptor:desc size:height] retain];
-            if (result && (fontFlags & Gosu::ffBold))
+            NSFontDescriptor* desc = [[NSFontDescriptor fontDescriptorWithFontAttributes:nil]
+                                      fontDescriptorWithFamily:name];
+            result = [NSFont fontWithDescriptor:desc size:height];
+            if (result && (fontFlags & Gosu::ffBold)) {
                 result = [[NSFontManager sharedFontManager] convertFont:result toHaveTrait:NSFontBoldTrait];
-            if (result && (fontFlags & Gosu::ffItalic))
+            }
+            if (result && (fontFlags & Gosu::ffItalic)) {
                 result = [[NSFontManager sharedFontManager] convertFont:result toHaveTrait:NSFontItalicTrait];
+            }
             #endif
-            if (!result && fontName != Gosu::defaultFontName())
+            if (!result && fontName != Gosu::defaultFontName()) {
                 result = getFont(Gosu::defaultFontName(), 0, height);
+            }
             assert(result);
-            usedFonts[make_pair(fontName, make_pair(fontFlags, height))] = [result retain];
+            usedFonts[make_pair(fontName, make_pair(fontFlags, height))] = result;
         }
         return result;
     }
@@ -106,17 +113,16 @@ wstring Gosu::defaultFontName()
 #ifndef GOSU_IS_IPHONE
 namespace
 {
-    NSDictionary* attributeDictionary(NSFont* font, unsigned fontFlags)
+    NSDictionary *attributeDictionary(NSFont* font, unsigned fontFlags)
     {
-        NSMutableDictionary* dict =
-            [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                font, NSFontAttributeName,
-                [NSColor whiteColor], NSForegroundColorAttributeName,
-                nil];
-        if (fontFlags & Gosu::ffUnderline)
-        {
-            Gosu::ObjCRef<NSNumber> underline([[NSNumber alloc] initWithInt:NSUnderlineStyleSingle]);
-            [dict setValue:underline.obj() forKey:NSUnderlineStyleAttributeName];
+        NSDictionary* dict = @{
+            NSFontAttributeName: font,
+            NSForegroundColorAttributeName: [NSColor whiteColor]
+        };
+        if (fontFlags & Gosu::ffUnderline) {
+            NSMutableDictionary *mutableDict = [dict mutableCopy];
+            mutableDict[NSUnderlineStyleAttributeName] = @(NSUnderlineStyleSingle);
+            dict = [mutableDict copy];
         }
         return dict;
     }
@@ -126,19 +132,20 @@ namespace
 unsigned Gosu::textWidth(const wstring& text,
     const wstring& fontName, unsigned fontHeight, unsigned fontFlags)
 {
-    if (text.find_first_of(L"\r\n") != wstring::npos)
+    if (text.find_first_of(L"\r\n") != wstring::npos) {
         throw std::invalid_argument("the argument to textWidth cannot contain line breaks");
+    }
     
-    OSXFont* font = getFont(fontName, fontFlags, fontHeight);
+    OSXFont *font = getFont(fontName, fontFlags, fontHeight);
     
     // This will, of course, compute a too large size; fontHeight is in pixels,
     // the method expects point.
-    ObjCRef<NSString> string([[NSString alloc] initWithUTF8String:wstringToUTF8(text).c_str()]);
+    NSString *string = [NSString stringWithUTF8String:wstringToUTF8(text).c_str()];
     #ifndef GOSU_IS_IPHONE
-    ObjCRef<NSDictionary> attributes(attributeDictionary(font, fontFlags));
-    NSSize size = [string.obj() sizeWithAttributes:attributes.get()];
+    NSDictionary *attributes = attributeDictionary(font, fontFlags);
+    NSSize size = [string sizeWithAttributes:attributes];
     #else
-    CGSize size = [string.obj() sizeWithFont:font];
+    CGSize size = [string sizeWithFont:font];
     #endif
     
     // Now adjust the scaling...
@@ -149,18 +156,19 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     Color c, const wstring& fontName, unsigned fontHeight,
     unsigned fontFlags)
 {
-    if (text.find_first_of(L"\r\n") != wstring::npos)
+    if (text.find_first_of(L"\r\n") != wstring::npos) {
         throw std::invalid_argument("the argument to drawText cannot contain line breaks");
+    }
     
-    OSXFont* font = getFont(fontName, fontFlags, fontHeight);
-    ObjCRef<NSString> string([[NSString alloc] initWithUTF8String:wstringToUTF8(text).c_str()]);
+    OSXFont *font = getFont(fontName, fontFlags, fontHeight);
+    NSString *string = [NSString stringWithUTF8String:wstringToUTF8(text).c_str()];
 
     // Note that fontHeight is in pixels, the method expects points, so we have to scale this down.
     #ifndef GOSU_IS_IPHONE
-    ObjCRef<NSDictionary> attributes(attributeDictionary(font, fontFlags));
-    NSSize size = [string.obj() sizeWithAttributes:attributes.get()];
+    NSDictionary *attributes = attributeDictionary(font, fontFlags);
+    NSSize size = [string sizeWithAttributes:attributes];
     #else
-    CGSize size = [string.obj() sizeWithFont:font];
+    CGSize size = [string sizeWithFont:font];
     #endif
     
     unsigned width = static_cast<unsigned>(round(size.width / size.height * fontHeight));
@@ -189,16 +197,16 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
     CGContextTranslateCTM(context, 0, fontHeight);
     CGContextScaleCTM(context, 1, -1);
     UIGraphicsPushContext(context);
-    [string.obj() drawAtPoint:CGPointZero withFont:font];
+    [string drawAtPoint:CGPointZero withFont:font];
     UIGraphicsPopContext();
     #else
     NSPoint NSPointZero = { 0, 0 };
-    attributes.reset(attributeDictionary(font, fontFlags));
+    attributes = attributeDictionary(font, fontFlags);
     
     [NSGraphicsContext saveGraphicsState];
     [NSGraphicsContext setCurrentContext:
         [NSGraphicsContext graphicsContextWithGraphicsPort:(void *)context flipped:false]];
-    [string.obj() drawAtPoint:NSPointZero withAttributes:attributes.get()];
+    [string drawAtPoint:NSPointZero withAttributes:attributes];
     [NSGraphicsContext restoreGraphicsState];
     #endif
     CGContextRelease(context);
@@ -211,7 +219,8 @@ void Gosu::drawText(Bitmap& bitmap, const wstring& text, int x, int y,
         for (int relX = 0; relX < effectiveWidth; ++relX)
         {
             c.setAlpha(bmp.getPixel(relX, relY).alpha());
-            if (c.alpha())
+            if (c.alpha()) {
                 bitmap.setPixel(x + relX, y + relY, c);
+            }
         }
 }

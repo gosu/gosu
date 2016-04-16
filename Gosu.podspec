@@ -12,8 +12,9 @@ Pod::Spec.new do |s|
 
   s.osx.deployment_target = '10.7'
   s.ios.deployment_target = '5.1.1'
-  s.requires_arc = false
+  s.requires_arc          = true
   
+  # Ignore Gosu using deprecated Gosu APIs internally.
   s.compiler_flags = '-DGOSU_DEPRECATED= -Wno-conversion'
   
   s.libraries      = 'iconv'

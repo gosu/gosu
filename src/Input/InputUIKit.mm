@@ -14,29 +14,32 @@ unsigned Gosu::TextInput::selectionStart() const { return 0; }
 
 struct Gosu::Input::Impl
 {
-    UIView* view;
+    UIView *view;
     float mouseX, mouseY;
     float factorX, factorY;
     float updateInterval;
     
-    ObjCRef<NSMutableSet> currentTouchesSet;
-    std::auto_ptr<Gosu::Touches> currentTouchesVector;
+    NSMutableSet *currentTouchesSet;
+    std::unique_ptr<Gosu::Touches> currentTouchesVector;
     
-    Touch translateTouch(UITouch* uiTouch)
+    Touch translateTouch(UITouch *uiTouch)
     {
-        CGPoint point = [uiTouch locationInView: view];
-        Touch touch = { uiTouch, (float)point.x, (float)point.y };
-        touch.x *= factorX, touch.y *= factorY;
-        return touch;
+        CGPoint point = [uiTouch locationInView:view];
+        
+        return (Touch) {
+            .id = (__bridge void *)uiTouch,
+            .x = (float) point.x * factorX,
+            .y = (float) point.y * factorY,
+        };
     }
 };
 
 Gosu::Input::Input(void* view, float updateInterval)
 : pimpl(new Impl)
 {
-    pimpl->view = (UIView*)view;
+    pimpl->view = (__bridge UIView *)view;
     pimpl->updateInterval = updateInterval;
-    pimpl->currentTouchesSet.reset([[NSMutableSet alloc] init]);
+    pimpl->currentTouchesSet = [NSMutableSet new];
     pimpl->mouseX = pimpl->mouseY = -1000;
     setMouseFactors(1, 1);
 }
@@ -45,27 +48,27 @@ Gosu::Input::~Input()
 {
 }
 
-void Gosu::Input::feedTouchEvent(int type, void* touches)
+void Gosu::Input::feedTouchEvent(int type, void *touches)
 {
-    NSSet *uiTouches = (NSSet *)touches;
+    NSSet *uiTouches = (__bridge NSSet *)touches;
     
     pimpl->currentTouchesVector.reset();
     
     std::tr1::function<void (Touch)>* callback = nullptr;
     
     if (type == 0) {
-        [pimpl->currentTouchesSet.get() unionSet:uiTouches];
+        [pimpl->currentTouchesSet unionSet:uiTouches];
         callback = &onTouchBegan;
     }
     else if (type == 1) {
         callback = &onTouchMoved;
     }
     else if (type == 2) {
-        [pimpl->currentTouchesSet.get() minusSet:uiTouches];
+        [pimpl->currentTouchesSet minusSet:uiTouches];
         callback = &onTouchEnded;
     }
     else if (type == 3) {
-        [pimpl->currentTouchesSet.get() minusSet:uiTouches];
+        [pimpl->currentTouchesSet minusSet:uiTouches];
         callback = &onTouchCancelled;
     }
     
@@ -115,11 +118,11 @@ void Gosu::Input::setMouseFactors(double factorX, double factorY, double offsetX
 
 const Gosu::Touches& Gosu::Input::currentTouches() const
 {
-    if (!pimpl->currentTouchesVector.get())
-    {
+    if (!pimpl->currentTouchesVector.get()) {
         pimpl->currentTouchesVector.reset(new Gosu::Touches);
-        for (UITouch* uiTouch in pimpl->currentTouchesSet.obj())
+        for (UITouch* uiTouch in pimpl->currentTouchesSet) {
             pimpl->currentTouchesVector->push_back(pimpl->translateTouch(uiTouch));
+        }
     }
     return *pimpl->currentTouchesVector;
 }
@@ -144,30 +147,35 @@ void Gosu::Input::update()
     // Check for dead touches and remove from vector if
     // necessary
 
-    ObjCRef<NSMutableSet> deadTouches;
+    NSMutableSet *deadTouches = nil;
 
-    for (UITouch* touch in pimpl->currentTouchesSet.obj())
+    for (UITouch *touch in pimpl->currentTouchesSet)
     {
         UITouchPhase phase = [touch phase];
         if (phase == UITouchPhaseBegan ||
-            phase == UITouchPhaseMoved ||
-            phase == UITouchPhaseStationary)
+                phase == UITouchPhaseMoved ||
+                phase == UITouchPhaseStationary) {
             continue;
+        }
         
         // Something was deleted, we will need the set.
-        if (!deadTouches.get())
-            deadTouches.reset([[NSMutableSet alloc] init]);
-        [deadTouches.obj() addObject:touch];
+        if (!deadTouches) {
+            deadTouches = [NSMutableSet new];
+        }
+        [deadTouches addObject:touch];
     }
     
     // Has something been deleted?
-    if (deadTouches.get())
+    if (deadTouches)
     {
         pimpl->currentTouchesVector.reset();
-        [pimpl->currentTouchesSet.obj() minusSet: deadTouches.obj()];
-        for (UITouch* uiTouch in deadTouches.obj())
-            if (onTouchEnded)
+        [pimpl->currentTouchesSet minusSet: deadTouches];
+        
+        if (onTouchEnded) {
+            for (UITouch *uiTouch in deadTouches) {
                 onTouchEnded(pimpl->translateTouch(uiTouch));
+            }
+        }
     }
 }
 

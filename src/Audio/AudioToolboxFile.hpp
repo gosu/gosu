@@ -29,7 +29,7 @@ namespace Gosu
         ALuint sampleRate_;
         UInt32 bytesPerFrame_;
         bool bigEndian_;
-                
+        
         static OSStatus AudioFile_ReadProc(void* inClientData, SInt64 inPosition,
             UInt32 requestCount, void* buffer, UInt32* actualCount)
         {
@@ -81,9 +81,7 @@ namespace Gosu
             
             initSeekOffset();
                 
-            format_ = clientData.mChannelsPerFrame == 1 ?
-                      AL_FORMAT_MONO16 :
-                      AL_FORMAT_STEREO16;
+            format_ = clientData.mChannelsPerFrame == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
         }
         
         void init()
@@ -124,26 +122,28 @@ namespace Gosu
             }
             
             if (format_ == 0 ||
-                // If format not native for OpenAL, set client data format
-                // to enable conversion
-                desc.mFormatFlags & kAudioFormatFlagIsBigEndian ||
-                desc.mFormatFlags & kAudioFormatFlagIsFloat ||
-                !(desc.mFormatFlags & kAudioFormatFlagIsSignedInteger))
-                    initClientFormatBasedOn(desc);
-            else
+                    // If format not native for OpenAL, set client data format
+                    // to enable conversion
+                    desc.mFormatFlags & kAudioFormatFlagIsBigEndian ||
+                    desc.mFormatFlags & kAudioFormatFlagIsFloat ||
+                    !(desc.mFormatFlags & kAudioFormatFlagIsSignedInteger)) {
+                initClientFormatBasedOn(desc);
+            }
+            else {
                 // Just set the old format as the client format so
                 // ExtAudioFileSeek will work for us.
                 CHECK_OS(ExtAudioFileSetProperty(file_,
                     kExtAudioFileProperty_ClientDataFormat,
                     sizeof desc, &desc));
+            }
         }
         
     public:
         AudioToolboxFile(const std::wstring& filename)
         {
-            ObjCRef<NSString> utf8Filename([[NSString alloc] initWithUTF8String:wstringToUTF8(filename).c_str()]);
-            ObjCRef<NSURL> url([[NSURL alloc] initFileURLWithPath:utf8Filename.get()]);
-            CHECK_OS(ExtAudioFileOpenURL((CFURLRef)url.get(), &file_));
+            NSString *utf8Filename = [NSString stringWithUTF8String:wstringToUTF8(filename).c_str()];
+            NSURL *URL = [NSURL fileURLWithPath:utf8Filename];
+            CHECK_OS(ExtAudioFileOpenURL((__bridge CFURLRef)URL, &file_));
             
             fileID_ = 0;
             
@@ -155,14 +155,14 @@ namespace Gosu
             buffer_.resize(reader.resource().size() - reader.position());
             reader.read(buffer_.data(), buffer_.size());
             
-            // TODO: For some reason, this fails on the iPhone with at least MP3 files.
-            // If this turns into a serious problem, the plain AudioFile API could be
-            // used which works for non-compressed formats at least.
+            // TODO: This fails on iOS with MP3 files.
+            // TODO: ^ Is the comment above still true on non-ancient iOS versions?
             
             void* clientData = &buffer_;
             CHECK_OS(AudioFileOpenWithCallbacks(clientData, AudioFile_ReadProc, 0,
                                                 AudioFile_GetSizeProc, 0, 0, &fileID_));
             CHECK_OS(ExtAudioFileWrapAudioFileID(fileID_, false, &file_));
+            
             init();
         }
         
@@ -170,8 +170,9 @@ namespace Gosu
         {
             ExtAudioFileDispose(file_);
         
-            if (fileID_)
+            if (fileID_) {
                 AudioFileClose(fileID_);
+            }
         }
         
         ALenum format() const

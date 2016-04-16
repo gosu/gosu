@@ -74,8 +74,6 @@ namespace Gosu
 - (void)dealloc
 {
     [EAGLContext setCurrentContext:nil];
-    [_context release];
-    [super dealloc];
 }
 
 - (void)redrawGL:(void (^)())code

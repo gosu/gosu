@@ -58,15 +58,18 @@ namespace
 // TODO: What is this NSAutoreleasePool good for?
 #ifdef GOSU_IS_MAC
 #include "../AppleUtility.hpp"
-    #define CONSTRUCTOR_COMMON \
-        ObjCRef<NSAutoreleasePool> pool([NSAutoreleasePool new]); \
+    #define CONSTRUCTOR_BEGIN \
+        @autoreleasepool { \
         if (!alChannelManagement.get()) \
             alChannelManagement.reset(new ALChannelManagement)
+    #define CONSTRUCTOR_END \
+        }
 #else
-    #define CONSTRUCTOR_COMMON \
+    #define CONSTRUCTOR_BEGIN \
         if (!alChannelManagement.get()) \
             alChannelManagement.reset(new ALChannelManagement)
-#endif    
+    #define CONSTRUCTOR_END
+#endif
 
 Gosu::SampleInstance::SampleInstance(int handle, int extra)
 : handle(handle), extra(extra)
@@ -175,7 +178,7 @@ private:
 
 Gosu::Sample::Sample(const std::wstring& filename)
 {
-    CONSTRUCTOR_COMMON;
+    CONSTRUCTOR_BEGIN;
 
     if (isOggFile(filename))
     {
@@ -189,11 +192,13 @@ Gosu::Sample::Sample(const std::wstring& filename)
         WAVE_FILE audioFile(filename);
         data.reset(new SampleData(audioFile));
     }
+    
+    CONSTRUCTOR_END
 }
 
 Gosu::Sample::Sample(Reader reader)
 {
-    CONSTRUCTOR_COMMON;
+    CONSTRUCTOR_BEGIN;
 
     if (isOggFile(reader))
     {
@@ -205,6 +210,8 @@ Gosu::Sample::Sample(Reader reader)
         WAVE_FILE audioFile(reader);
         data.reset(new SampleData(audioFile));
     }
+    
+    CONSTRUCTOR_END
 }
 
 Gosu::SampleInstance Gosu::Sample::play(double volume, double speed,
@@ -219,7 +226,7 @@ Gosu::SampleInstance Gosu::Sample::playPan(double pan, double volume,
     std::pair<int, int> channelAndToken = alChannelManagement->reserveChannel();
     if (channelAndToken.first == ALChannelManagement::NO_FREE_CHANNEL)
         return Gosu::SampleInstance(channelAndToken.first, channelAndToken.second);
-        
+    
     ALuint source = alChannelManagement->sourceIfStillPlaying(channelAndToken.first,
                                                                   channelAndToken.second);
     assert(source != ALChannelManagement::NO_SOURCE);
@@ -272,49 +279,49 @@ public:
 // AVAudioPlayer impl
 class Gosu::Song::ModuleData : public BaseData
 {
-    ObjCRef<AVAudioPlayer> player;
+    AVAudioPlayer *player;
     
     void applyVolume()
     {
-        player.obj().volume = volume();
+        player.volume = volume();
     }
     
 public:
     ModuleData(const std::wstring& filename)
     {
         std::string utf8Filename = Gosu::wstringToUTF8(filename);
-        ObjCRef<NSString> nsFilename([[NSString alloc] initWithUTF8String:utf8Filename.c_str()]);
-        ObjCRef<NSURL> url([[NSURL alloc] initFileURLWithPath:nsFilename.obj()]);
-        player.reset([[AVAudioPlayer alloc] initWithContentsOfURL:url.obj() error:NULL]);
+        NSURL *URL = [NSURL fileURLWithPath:[NSString stringWithUTF8String:utf8Filename.c_str()]];
+        player = [[AVAudioPlayer alloc] initWithContentsOfURL:URL error:NULL];
     }
     
     void play(bool looping)
     {
-        if (paused())
+        if (paused()) {
             stop();
-        player.obj().numberOfLoops = looping ? -1 : 0;
-        [player.obj() play];
+        }
+        player.numberOfLoops = looping ? -1 : 0;
+        [player play];
     }
     
     void pause()
     {
-        [player.obj() pause];
+        [player pause];
     }
     
     void resume()
     {
-        [player.obj() play];
+        [player play];
     }
     
     bool paused() const
     {
-        return !player.obj().playing;
+        return !player.playing;
     };
     
     void stop()
     {
-        [player.obj() stop];
-        player.obj().currentTime = 0;
+        [player stop];
+        player.currentTime = 0;
     }
     
     void update()
@@ -507,16 +514,17 @@ Gosu::Song::Song(const std::wstring& filename)
     else
 #endif
     {
-        CONSTRUCTOR_COMMON;
+        CONSTRUCTOR_BEGIN;
         data.reset(new StreamData(filename));
+        CONSTRUCTOR_END
     }
 }
 
 Gosu::Song::Song(Reader reader)
 {
-    CONSTRUCTOR_COMMON;
-
+    CONSTRUCTOR_BEGIN;
     data.reset(new StreamData(reader));
+    CONSTRUCTOR_END
 }
 
 Gosu::Song::~Song()

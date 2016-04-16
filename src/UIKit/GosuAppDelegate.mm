@@ -6,7 +6,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = (UIWindow *)windowInstance().UIWindow();
+    self.window = (__bridge UIWindow *)windowInstance().UIWindow();
     [self.window makeKeyAndVisible];
     
     return YES;

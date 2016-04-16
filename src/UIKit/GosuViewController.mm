@@ -42,7 +42,7 @@ static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
 
 - (void)loadView
 {
-    self.view = [[[GosuGLView alloc] initWithFrame:[UIScreen mainScreen].bounds] autorelease];
+    self.view = [[GosuGLView alloc] initWithFrame:[UIScreen mainScreen].bounds];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -95,8 +95,6 @@ static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    [super dealloc];
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
@@ -128,7 +126,6 @@ static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
     [_timerOrDisplayLink invalidate];
-    [_timerOrDisplayLink release];
     _timerOrDisplayLink = nil;
 }
 
@@ -154,14 +151,14 @@ static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
         NSTimeInterval interval = self.gosuWindowReference.updateInterval() / 1000.0;
         NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(updateAndDraw:) userInfo:nil repeats:YES];
         
-        _timerOrDisplayLink = [timer retain];
+        _timerOrDisplayLink = timer;
     }
     else {
         CADisplayLink *displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateAndDraw:)];
         displayLink.frameInterval = 60 / targetFPS;
         [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
         
-        _timerOrDisplayLink = [displayLink retain];
+        _timerOrDisplayLink = displayLink;
     }
 }
 
@@ -193,22 +190,22 @@ static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    self.gosuWindowReference.input().feedTouchEvent(0, touches);
+    self.gosuWindowReference.input().feedTouchEvent(0, (__bridge void *)touches);
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    self.gosuWindowReference.input().feedTouchEvent(1, touches);
+    self.gosuWindowReference.input().feedTouchEvent(1, (__bridge void *)touches);
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    self.gosuWindowReference.input().feedTouchEvent(2, touches);
+    self.gosuWindowReference.input().feedTouchEvent(2, (__bridge void *)touches);
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    self.gosuWindowReference.input().feedTouchEvent(3, touches);
+    self.gosuWindowReference.input().feedTouchEvent(3, (__bridge void *)touches);
 }
 
 @end

@@ -23,10 +23,10 @@ class Gosu::Audio {};
 
 struct Gosu::Window::Impl
 {
-    ObjCRef<::UIWindow> window;
-    ObjCRef<GosuViewController> controller;
-    std::auto_ptr<Graphics> graphics;
-    std::auto_ptr<Input> input;
+    ::UIWindow *window;
+    GosuViewController *controller;
+    std::unique_ptr<Graphics> graphics;
+    std::unique_ptr<Input> input;
     double interval;
     std::wstring caption;
 };
@@ -35,18 +35,18 @@ Gosu::Window::Window(unsigned width, unsigned height,
     bool fullscreen, double updateInterval)
 : pimpl(new Impl)
 {
-    pimpl->window.reset([[::UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]]);
-    pimpl->controller.reset([[GosuViewController alloc] init]);
-    pimpl->controller.obj().gosuWindow = this;
-    pimpl->window.obj().rootViewController = pimpl->controller.obj();
+    pimpl->window = [[::UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    pimpl->controller = [GosuViewController new];
+    pimpl->controller.gosuWindow = this;
+    pimpl->window.rootViewController = pimpl->controller;
     
     // It is important to load the view before creating the Graphics instance.
-    [pimpl->controller.obj() loadView];
+    [pimpl->controller loadView];
     
     pimpl->graphics.reset(new Graphics(screenHeight(), screenWidth(), false));
     pimpl->graphics->setResolution(width, height);
     
-    pimpl->input.reset(new Input(pimpl->controller.obj().view, updateInterval));
+    pimpl->input.reset(new Input((__bridge void *)pimpl->controller.view, updateInterval));
     pimpl->input->setMouseFactors(1.0 * width / screenHeight(), 1.0 * height / screenWidth());
     
     using namespace std::tr1::placeholders;
@@ -123,7 +123,7 @@ void Gosu::Window::close()
     throw std::logic_error("Cannot close windows manually on iOS");
 }
 
-void* Gosu::Window::UIWindow() const
+void *Gosu::Window::UIWindow() const
 {
-    return pimpl->window.get();
+    return (__bridge void *)pimpl->window;
 }
