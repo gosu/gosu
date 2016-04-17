@@ -65,7 +65,7 @@ struct Gosu::Font::Impl
         //     charString.clear();
         unsigned charWidth = Gosu::textWidth(charString, name, height, flags);
         
-        Bitmap bitmap(charWidth, height);
+        Bitmap bitmap(charWidth, height, 0x00ffffff);
         drawText(bitmap, charString, 0, 0, Color::WHITE, name, height, flags);
         info.image.reset(new Image(bitmap));
         info.factor = 0.5;
