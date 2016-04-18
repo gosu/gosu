@@ -1,21 +1,20 @@
 language: cpp
 
-# Compiler and OS selection.
-compiler:
-- clang
-- gcc
-os:
-- linux
-# Note: Xcode is badly outdated right now. https://docs.travis-ci.com/user/osx-ci-environment
-- osx
 matrix:
-  exclude:
-    - compiler: gcc
+  include:
+    # Ubuntu 14.04 Trusty Tahr
+    - os: linux
+      dist: trusty
+      sudo: required
+      compiler: gcc
+    # OS X 10.11 El Capitan
     - os: osx
-# See: https://docs.travis-ci.com/user/ci-environment/
-# Ubuntu 14.04 is much more relevant to Gosu than 12.04 is.
-sudo: required
-dist: trusty
+      osx_image: xcode7.3
+      compiler: clang
+    # OS X 10.9 Mavericks
+    - os: osx
+      osx_image: beta-xcode6.2
+      compiler: clang
 
 # Linux dependencies
 addons:
