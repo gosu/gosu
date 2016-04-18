@@ -17,12 +17,20 @@ matrix:
 sudo: required
 dist: trusty
 
-# Dependencies intentionally missing for now. (I want to see ONE failing build ;) )
-# See: https://docs.travis-ci.com/user/installing-dependencies/
-# We can use $TRAVIS_OS_NAME: https://github.com/rubinius/rubinius/blob/master/.travis.yml
-# Package list for apt:
-# https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
-# (Not sure which of this applies to Trusty.)
+# Linux dependencies
+addons:
+  apt:
+    packages:
+      - libsdl2-dev
+      - libsdl2-ttf-dev
+      - libpango1.0-dev
+      - libgl1-mesa-dev
+      - libfreeimage-dev
+      - libopenal-dev
+      - libsndfile-dev
+before_install:
+  - gem install rake-compiler
+  - if [ $TRAVIS_OS_NAME == linux ]; then brew install sdl2; fi
 
 # Minimal git coverage (for now).
 branches:
@@ -36,5 +44,5 @@ env:
   global:
     - GOSU_RELEASE_VERSION=9.9.9
 
-install: gem install rake-compiler
-script: "rake gem && gem install pkg/gosu-9.9.9.gem && ruby -rgosu -e 'puts Gosu::VERSION'"
+install: rake gem && gem install pkg/gosu-9.9.9.gem
+script: ruby -rgosu -e 'puts Gosu::VERSION'

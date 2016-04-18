@@ -14,3 +14,5 @@ Complaints, questions, feedback?
 - Visit the [boards](https://www.libgosu.org/)
 - Try your luck in the (mostly idle) [IRC channel](https://webchat.freenode.net/?channels=gosu)
 - Or [email me](mailto:julian@raschke.de) :)
+
+[![Build Status](https://travis-ci.org/gosu/gosu.svg?branch=master)](https://travis-ci.org/gosu/gosu)
