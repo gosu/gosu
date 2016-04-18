@@ -47,5 +47,5 @@ env:
   global:
     - GOSU_RELEASE_VERSION=9.9.9
 
-install: rake gem && gem install pkg/gosu-9.9.9.gem
+install: rake gem && cd "$TRAVIS_BUILD_DIR" && gem install pkg/gosu-9.9.9.gem
 script: ruby -rgosu -e 'puts Gosu::VERSION'
