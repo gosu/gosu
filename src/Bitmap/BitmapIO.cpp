@@ -106,32 +106,40 @@ void Gosu::saveImageFile(const Gosu::Bitmap& bitmap, const std::wstring& filenam
         throw std::runtime_error("Could not save image data to file: " + utf8);
 }
 
+namespace
+{
+    void stbiWriteToWriter(void *context, void *data, int size)
+    {
+        Gosu::Writer *writer = reinterpret_cast<Gosu::Writer*>(context);
+        writer->write(data, size);
+    }
+}
+
 void Gosu::saveImageFile(const Gosu::Bitmap& bitmap, Gosu::Writer writer,
     const std::wstring& formatHint)
 {
-    unsigned char* rgba =
-        const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(bitmap.data()));
+    int ok;
     
-    // TODO: Use the new *_to_func functions in stb_imagewrite.h instead:
-    // https://github.com/nothings/stb/blob/master/stb_image_write.h#L39
-    int length;
-    unsigned char* png =
-        stbi_write_png_to_mem(rgba, 0, bitmap.width(), bitmap.height(), 4, &length);
-    
-    if (png == 0)
-        throw std::runtime_error("Could not save image data to memory");
-    
-    try
+    if (isExtension(formatHint.c_str(), L"bmp"))
     {
-        writer.write(png, length);
+        ok = stbi_write_bmp_to_func(stbiWriteToWriter, &writer,
+                                    bitmap.width(), bitmap.height(), 4, bitmap.data());
     }
-    catch (...)
+    else if (isExtension(formatHint.c_str(), L"tga"))
     {
-        STBIW_FREE(png);
-        throw;
+        stbi_write_tga_with_rle = 0;
+        ok = stbi_write_tga_to_func(stbiWriteToWriter, &writer,
+                                    bitmap.width(), bitmap.height(), 4, bitmap.data());
+    }
+    else
+    {
+        ok = stbi_write_png_to_func(stbiWriteToWriter, &writer,
+                                    bitmap.width(), bitmap.height(), 4, bitmap.data(), 0);
     }
     
-    STBIW_FREE(png);
+    if (ok == 0)
+        throw std::runtime_error("Could not save image data to memory (format hint = '" +
+                                 Gosu::wstringToUTF8(formatHint) + "'");
 }
 
 // Deprecated methods.
