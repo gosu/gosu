@@ -1,0 +1,40 @@
+language: cpp
+
+# Compiler and OS selection.
+compiler:
+- clang
+- gcc
+os:
+- linux
+# Note: Xcode is badly outdated right now. https://docs.travis-ci.com/user/osx-ci-environment
+- osx
+matrix:
+  exclude:
+    - compiler: gcc
+    - os: osx
+# See: https://docs.travis-ci.com/user/ci-environment/
+# Ubuntu 14.04 is much more relevant to Gosu than 12.04 is.
+sudo: required
+dist: trusty
+
+# Dependencies intentionally missing for now. (I want to see ONE failing build ;) )
+# See: https://docs.travis-ci.com/user/installing-dependencies/
+# We can use $TRAVIS_OS_NAME: https://github.com/rubinius/rubinius/blob/master/.travis.yml
+# Package list for apt:
+# https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
+# (Not sure which of this applies to Trusty.)
+
+# Minimal git coverage (for now).
+branches:
+  only:
+  - master
+git:
+  depth: 3
+
+# 'rake gem' relies on this.
+env:
+  global:
+    - GOSU_RELEASE_VERSION=9.9.9
+
+install: gem install rake-compiler
+script: "rake gem && gem install pkg/gosu-9.9.9.gem && ruby -rgosu -e 'puts Gosu::VERSION'"
