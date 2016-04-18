@@ -33,7 +33,7 @@ before_install:
   - gem install rake-compiler
   - if [ $TRAVIS_OS_NAME == osx ]; then brew install sdl2; fi
   # TODO: Remove once we have access to the libsndfile-dev package.
-  - if [ $TRAVIS_OS_NAME == linux ]; then wget http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.26.tar.gz && tar -xzvf libsndfile-1.0.26.tar.gz && cd libsndfile-1.0.26.tar.gz && ./configure --prefix=/usr && make && sudo make install; fi
+  - if [ $TRAVIS_OS_NAME == linux ]; then wget http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.26.tar.gz && tar -xzvf libsndfile-1.0.26.tar.gz && cd libsndfile-1.0.26 && ./configure --prefix=/usr && make && sudo make install; fi
 
 # Minimal git coverage (for now).
 branches:
