@@ -11342,6 +11342,11 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "Gp3Button13", SWIG_From_int(static_cast< int >(Gosu::gp3Button13)));
   rb_define_const(mGosu, "Gp3Button14", SWIG_From_int(static_cast< int >(Gosu::gp3Button14)));
   rb_define_const(mGosu, "Gp3Button15", SWIG_From_int(static_cast< int >(Gosu::gp3Button15)));
+  
+  // Call srand() so that Gosu::random() is actually random in Ruby scripts
+  std::srand(static_cast<unsigned int>(std::time(0)));
+  std::rand(); // and flush the first value
+  
   rb_define_module_function(mGosu, "disown_TextInput", VALUEFUNC(_wrap_disown_TextInput), -1);
   
   SwigClassTextInput.klass = rb_define_class_under(mGosu, "TextInput", rb_cObject);

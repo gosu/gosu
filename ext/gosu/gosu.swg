@@ -810,6 +810,11 @@ namespace Gosu {
 %ignore Gosu::numGamepads;
 %ignore Gosu::noButton;
 %include "../../Gosu/Buttons.hpp"
+%init %{
+    // Call srand() so that Gosu::random() is actually random in Ruby scripts
+    std::srand(static_cast<unsigned int>(std::time(0)));
+    std::rand(); // and flush the first value
+%}
 
 // TextInput
 %ignore Gosu::TextInput::feedNSEvent(void*);
