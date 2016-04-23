@@ -48,7 +48,11 @@ struct Gosu::Input::Impl
     
     void updateMousePosition()
     {
-    #if SDL_VERSION_ATLEAST(2, 0, 4)
+    // Do not use GetGlobalMouseState on Linux for now to prevent this bug:
+    // https://github.com/gosu/gosu/issues/326
+    // Once SDL 2.0.5 has been released, we can use this function as a workaround:
+    // https://wiki.libsdl.org/SDL_GetWindowBordersSize
+    #if SDL_VERSION_ATLEAST(2, 0, 4) && !defined(GOSU_IS_X)
         int x, y, windowX, windowY;
         SDL_GetWindowPosition(window, &windowX, &windowY);
         SDL_GetGlobalMouseState(&x, &y);
