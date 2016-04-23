@@ -64,6 +64,22 @@ struct Gosu::Input::Impl
     #endif
     }
     
+    void setMousePosition(double x, double y)
+    {
+        SDL_WarpMouseInWindow(window,
+            (x - mouseOffsetX) / mouseFactorX, (y - mouseOffsetY) / mouseFactorY);
+
+    #if SDL_VERSION_ATLEAST(2, 0, 4) && !defined(GOSU_IS_X)
+        // On systems where we have a working GetGlobalMouseState, we can warp the mouse and
+        // retrieve its position directly afterwards.
+        updateMousePosition();
+    #else
+        // Otherwise, we have to assume that setting the position worked, because if we update the
+        // mouse position now, we'll get the previous position.
+        mouseX = x, mouseY = y;
+    #endif
+    }
+    
     void enqueueEvent(int id, bool down)
     {
         eventQueue.push_back(down ? id : ~id);
@@ -382,11 +398,7 @@ double Gosu::Input::mouseY() const
 
 void Gosu::Input::setMousePosition(double x, double y)
 {
-    SDL_WarpMouseInWindow(pimpl->window,
-        (x - pimpl->mouseOffsetX) / pimpl->mouseFactorX,
-        (y - pimpl->mouseOffsetY) / pimpl->mouseFactorY);
-    
-    pimpl->updateMousePosition();
+    pimpl->setMousePosition(x, y);
 }
 
 void Gosu::Input::setMouseFactors(double factorX, double factorY,
