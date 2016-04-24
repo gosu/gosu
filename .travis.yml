@@ -17,6 +17,7 @@ matrix:
       compiler: clang
 
 # Linux dependencies
+# See: https://github.com/gosu/gosu/wiki/Getting-Started-on-Linux
 addons:
   apt:
     packages:
@@ -27,8 +28,12 @@ addons:
       - libfreeimage-dev
       - libopenal-dev
       - libsndfile1-dev
+
 before_install:
-  - if [ $TRAVIS_OS_NAME == osx ]; then brew update; brew install sdl2; rvm use 2.1; fi
+  # Mac dependencies
+  # See: https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X
+  - if [ $TRAVIS_OS_NAME == osx ]; then brew update; brew install sdl2; rvm install 2.1; rvm use 2.1; fi
+  # Dependencies for 'rake gem' (not for actually using Gosu)
   - gem update --system && gem install rake-compiler
 
 # Minimal git coverage (for now).
