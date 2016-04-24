@@ -45,5 +45,6 @@ Gosu.includes
 /windows/*.vs
 /windows/*.opendb
 /windows/*.opensdf
+/windows/Gosu.VC.db
 /windows/Release (Ruby ?.?)/*.exp
 /windows/Release (Ruby ?.?)/*.lib
