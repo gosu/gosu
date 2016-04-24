@@ -17,13 +17,10 @@ a `.lib` file like so:
 
 https://adrianhenke.wordpress.com/2008/12/05/create-lib-file-from-dll/
 
-(Note: For 64-bit versions, it seems to work if you follow these steps from a
-Windows SDK 7.1 command prompt, but not from the 32-bit Visual C++ Express
-command prompt, even when using `/MACHINE:x64`.)
-
 We can also use most of the headers included in the Ruby Installer packages.
 However we need a platform- and compiler-specific `ruby/config.h` for our
 version of Visual C++.
+
 For this, it is enough to start compilation of Ruby on Windows from a Visual C++
 command prompt, like this:
 
@@ -42,7 +39,11 @@ So for a new version x.y.z of Ruby, these are the steps to add support in Gosu:
   * In the `ruby-x.y.z` directory, run `win32\configure.bat && nmake`.
     Even if compilation fails, there should be a `.ext` folder in `win32` that
     includes the compiler-specific `ruby/config.h` header.
-    Copy its parent directory into `ruby-x.y.z`.
+    Copy this directory into `ruby-x.y.z`. It's typically called
+    `i386-mswin32-140`. The last three digits are the MSVC compiler version,
+    and using files generated for older compilers did not seem to hurt so far.
+  * To generate the header file for the x64 DLL, run
+    `win32\configure.bat --target x64-mswin64`.
   * Create a new build configuration in `RubyGosu.vcproj` called "Release
     (Ruby 2.x)".
     Adjust the include paths and linker input file to match the new `.lib` file
