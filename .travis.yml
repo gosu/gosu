@@ -28,13 +28,19 @@ addons:
       - libfreeimage-dev
       - libopenal-dev
       - libsndfile1-dev
+      - ruby-dev
 
 before_install:
   # Mac dependencies
   # See: https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X
-  - if [ $TRAVIS_OS_NAME == osx ]; then brew update; brew install sdl2; rvm install 2.1; rvm use 2.1; fi
+  - if [ $TRAVIS_OS_NAME == osx ]; then brew update; brew install sdl2; fi
+  # To not use RVM - it's been a mess for compiling Gosu on OS X.
+  - rvm use system
+  # But update the system RubyGems on OS X.
+  - if [ $TRAVIS_OS_NAME == osx ]; then sudo gem update --system; fi
   # Dependencies for 'rake gem' (not for actually using Gosu)
-  - gem update --system && gem install rake-compiler
+  # We have to install binaries into ~ because of Apple's System Integrity Protection.
+  - sudo gem install rake rake-compiler --no-ri --no-rdoc -n ~
 
 # Minimal git coverage (for now).
 branches:
@@ -52,5 +58,8 @@ notifications:
   email:
     - info@libgosu.org
 
-install: rake gem && cd "$TRAVIS_BUILD_DIR" && gem install pkg/gosu-9.9.9.gem
+install:
+  - ~/rake gem
+  - sudo gem install pkg/gosu-9.9.9.gem --no-ri --no-rdoc
+
 script: ruby -rgosu -e 'puts Gosu::VERSION'
