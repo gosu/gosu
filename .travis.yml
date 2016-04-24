@@ -28,7 +28,10 @@ addons:
       - libfreeimage-dev
       - libopenal-dev
       - libsndfile1-dev
+      # For Ruby
       - ruby-dev
+      # For C++
+      - cmake
 
 before_install:
   # Mac dependencies
@@ -59,7 +62,14 @@ notifications:
     - info@libgosu.org
 
 install:
+  # Ruby/Gosu
   - ~/rake gem
   - sudo gem install pkg/gosu-9.9.9.gem --no-ri --no-rdoc
+  # Gosu for C++ using CMake
+  - mkdir -p cmake/build && cd cmake/build && cmake .. && make && sudo make install && cd ../..
 
-script: ruby -rgosu -e 'puts Gosu::VERSION'
+script:
+  # Ruby/Gosu
+  - ruby -rgosu -e 'puts Gosu::VERSION'
+  # Compile C++ examples
+  - mkdir -p examples/build && cd examples/build && cmake .. && make && cd ../..
