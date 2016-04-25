@@ -9,11 +9,6 @@ namespace :win do
   task :archive => :set_version do
     zip WINDOWS_ARCHIVE_FILENAME, WINDOWS_FILES
   end
-  
-  desc "Releases the archive #{WINDOWS_ARCHIVE_FILENAME}"
-  task :release => :archive do
-    sh "scp '#{WINDOWS_ARCHIVE_FILENAME}' #{ENV['PROJECTS_HOST']}:#{ENV['PROJECTS_ROOT']}/libgosu.org/downloads/"
-  end
 end
 
 [32, 64].each do |bits|
