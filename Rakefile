@@ -30,10 +30,6 @@ def zip filename, files
   sh "zip #{filename} #{files.map { |fn| "'#{fn}'" }.join(' ')}"
 end
 
-def tar filename, files
-  sh "gtar -c --transform 's,^,gosu-#{GOSU_VERSION}/,' -zf #{filename} #{files.map { |fn| "'#{fn}'" }.join(' ')}"
-end
-
 Dir.glob('./rake/*.rb').sort.each { |task| require task }
 
 task :swig do
