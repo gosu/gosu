@@ -17,6 +17,7 @@ matrix:
       compiler: clang
 
 # Linux dependencies
+# See: https://github.com/gosu/gosu/wiki/Getting-Started-on-Linux
 addons:
   apt:
     packages:
@@ -26,13 +27,23 @@ addons:
       - libgl1-mesa-dev
       - libfreeimage-dev
       - libopenal-dev
-      # See: https://github.com/travis-ci/apt-package-whitelist/issues/2859
-      # - libsndfile-dev
+      - libsndfile1-dev
+      # For Ruby
+      - ruby-dev
+      # For C++
+      - cmake
+
 before_install:
-  - if [ $TRAVIS_OS_NAME == osx ]; then brew update; brew install sdl2; rvm use 2.1; fi
-  - gem update --system && gem install rake-compiler
-  # TODO: Remove once we have access to the libsndfile-dev package.
-  - if [ $TRAVIS_OS_NAME == linux ]; then wget http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.26.tar.gz && tar -xzvf libsndfile-1.0.26.tar.gz && cd libsndfile-1.0.26 && ./configure --prefix=/usr && make && sudo make install; fi
+  # Mac dependencies
+  # See: https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X
+  - if [ $TRAVIS_OS_NAME == osx ]; then brew update; brew install sdl2; fi
+  # To not use RVM - it's been a mess for compiling Gosu on OS X.
+  - rvm use system
+  # But update the system RubyGems on OS X.
+  - if [ $TRAVIS_OS_NAME == osx ]; then sudo gem update --system; fi
+  # Dependencies for 'rake gem' (not for actually using Gosu)
+  # We have to install binaries into ~ because of Apple's System Integrity Protection.
+  - sudo gem install rake rake-compiler --no-ri --no-rdoc -n ~
 
 # Minimal git coverage (for now).
 branches:
@@ -50,5 +61,15 @@ notifications:
   email:
     - info@libgosu.org
 
-install: rake gem && cd "$TRAVIS_BUILD_DIR" && gem install pkg/gosu-9.9.9.gem
-script: ruby -rgosu -e 'puts Gosu::VERSION'
+install:
+  # Ruby/Gosu
+  - ~/rake gem
+  - sudo gem install pkg/gosu-9.9.9.gem --no-ri --no-rdoc
+  # Gosu for C++ using CMake
+  - mkdir -p cmake/build && cd cmake/build && cmake .. && make && sudo make install && cd ../..
+
+script:
+  # Ruby/Gosu
+  - ruby -rgosu -e 'puts Gosu::VERSION'
+  # Compile C++ examples
+  - mkdir -p examples/build && cd examples/build && cmake .. && make && cd ../..

@@ -15,6 +15,6 @@ Complaints, questions, feedback?
 - Try your luck in the (mostly idle) [IRC channel](https://webchat.freenode.net/?channels=gosu)
 - Or [email me](mailto:julian@raschke.de) :)
 
-Linux and OS X builds: [![Build Status](https://travis-ci.org/gosu/gosu.svg?branch=master)](https://travis-ci.org/gosu/gosu)
+[![Build Status](https://travis-ci.org/gosu/gosu.svg?branch=master)](https://travis-ci.org/gosu/gosu) Linux and OS X builds
 
-Windows builds: [![Build status](https://ci.appveyor.com/api/projects/status/v0liohs47jono1eq?svg=true)](https://ci.appveyor.com/project/gosu-ci/gosu)
+[![Build status](https://ci.appveyor.com/api/projects/status/v0liohs47jono1eq?svg=true)](https://ci.appveyor.com/project/gosu-ci/gosu) Windows builds
