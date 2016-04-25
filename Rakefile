@@ -27,7 +27,11 @@ COMMON_RUBY_FILES = COMMON_FILES + FileList[
 GOSU_VERSION = ENV['GOSU_RELEASE_VERSION'] || '0.0.0'
 
 def zip filename, files
-  sh "zip #{filename} #{files.map { |fn| "'#{fn}'" }.join(' ')}"
+  if RUBY_PLATFORM =~ /mswin$|mingw32|mingw64|win32\-|\-win32/ then
+    sh "7z a #{filename} #{files.map { |fn| "\"#{fn}\"" }.join(' ')}"
+  else
+    sh "zip #{filename} #{files.map { |fn| "'#{fn}'" }.join(' ')}"
+  end
 end
 
 Dir.glob('./rake/*.rb').sort.each { |task| require task }
