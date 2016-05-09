@@ -487,6 +487,12 @@ module Gosu
     ##
     # Returns the associated texture contents as binary string of packed RGBA values, useful for use with RMagick (Magick::Image.from_blob).
     #
+    #    magick_image = Magick::Image.from_blob(image.to_blob) {
+    #      self.format = "RGBA"
+    #      self.size = "#{image.width}x#{image.height}"
+    #      self.depth = 8
+    #    }.first
+    #
     # @return [String] a binary string of packed RGBA values.
     def to_blob; end
 
