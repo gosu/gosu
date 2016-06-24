@@ -98,6 +98,11 @@ module Gosu
     YELLOW  = Gosu::ImmutableColor.new(0xff_ffff00)
     FUCHSIA = Gosu::ImmutableColor.new(0xff_ff00ff)
     CYAN    = Gosu::ImmutableColor.new(0xff_00ffff)
+
+    alias hash gl
+    def eql?(other)
+      gl == other.gl
+    end
   end
 end
 
