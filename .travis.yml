@@ -44,7 +44,9 @@ before_install:
   # Do not use RVM - it's been a mess for compiling Gosu on OS X.
   - rvm use system
   # But update the system RubyGems on OS X and install CocoaPods.
-  - if [ $TRAVIS_OS_NAME == osx ]; then sudo gem update --system; sudo gem install cocoapods; fi
+  # Also install a very specific version of ActiveSupport, see:
+  # https://github.com/CocoaPods/CocoaPods/issues/4711#issuecomment-230096751
+  - if [ $TRAVIS_OS_NAME == osx ]; then sudo gem update --system; sudo gem install activesupport -v 4.2.6; sudo gem install cocoapods; fi
   # Dependencies for 'rake gem' (not for actually using Gosu)
   # We have to install binaries into ~ because of Apple's System Integrity Protection.
   - sudo gem install rake rake-compiler --no-ri --no-rdoc -n ~
