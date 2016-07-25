@@ -4,7 +4,7 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
-#include <Gosu/WinUtility.hpp>
+#include "../WinUtility.hpp"
 #include <cstdlib>
 #include <cwchar>
 #include <algorithm>

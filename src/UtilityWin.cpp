@@ -1,5 +1,5 @@
 #include <Gosu/Utility.hpp>
-#include <Gosu/WinUtility.hpp>
+#include "WinUtility.hpp"
 #include <windows.h>
 using namespace std;
 

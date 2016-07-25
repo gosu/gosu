@@ -1,5 +1,5 @@
 #include <Gosu/Directories.hpp>
-#include <Gosu/WinUtility.hpp>
+#include "WinUtility.hpp"
 #include <cwchar>
 #include <stdexcept>
 #include <shlobj.h>
@@ -19,6 +19,19 @@ namespace
         }
         return buf;
     }
+
+    std::wstring exeFilename()
+    {
+        static std::wstring result;
+        if (!result.empty())
+            return result;
+
+        wchar_t buffer[MAX_PATH * 2];
+        Gosu::Win::check(::GetModuleFileName(0, buffer, MAX_PATH * 2),
+            "getting the module filename");
+        result = buffer;
+        return result;
+    }
 }
 
 void Gosu::useResourceDirectory()
@@ -28,12 +41,21 @@ void Gosu::useResourceDirectory()
 
 std::wstring Gosu::resourcePrefix()
 {
-    return Win::appDirectory();
+    static std::wstring result;
+    if (result.empty()) {
+        result = exeFilename();
+        std::wstring::size_type lastDelim = result.find_last_of(L"\\/");
+        if (lastDelim != std::wstring::npos)
+            result.resize(lastDelim + 1);
+        else
+            result = L"";
+    }
+    return result;
 }
 
 std::wstring Gosu::sharedResourcePrefix()
 {
-    return Win::appDirectory();
+    return resourcePrefix();
 }
 
 std::wstring Gosu::userSettingsPrefix()

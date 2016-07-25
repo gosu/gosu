@@ -241,7 +241,9 @@
     <ClInclude Include="..\Gosu\Utility.hpp" />
     <ClInclude Include="..\Gosu\Version.hpp" />
     <ClInclude Include="..\Gosu\Window.hpp" />
-    <ClInclude Include="..\Gosu\WinUtility.hpp" />
+    <ClInclude Include="..\src\stb_image.h" />
+    <ClInclude Include="..\src\stb_image_write.h" />
+    <ClInclude Include="..\src\WinUtility.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

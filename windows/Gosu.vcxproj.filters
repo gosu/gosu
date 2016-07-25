@@ -233,11 +233,17 @@
     <ClInclude Include="..\Gosu\Window.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\Gosu\WinUtility.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
     <ClInclude Include="..\Gosu\Gosu.hpp">
       <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\stb_image.h">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\stb_image_write.h">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WinUtility.hpp">
+      <Filter>Implementation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
