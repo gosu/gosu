@@ -1,7 +1,5 @@
 // All of Gosu.
 #include <Gosu/Gosu.hpp>
-// To safely include std::tr1::shared_ptr
-#include <Gosu/TR1.hpp> 
 // Makes life easier for Windows users compiling this.
 #include <Gosu/AutoLink.hpp>
 

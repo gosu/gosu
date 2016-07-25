@@ -58,10 +58,13 @@ branches:
 git:
   depth: 1
 
-# 'rake gem' relies on this.
 env:
   global:
+    # 'rake gem' relies on this.
     - GOSU_RELEASE_VERSION=9.9.9
+    # To silence this warning:
+    # "WARNING: CocoaPods requires your terminal to be using UTF-8 encoding."
+    - LANG=en_US.UTF-8
 
 install:
   # Ruby/Gosu
@@ -72,7 +75,7 @@ install:
   # Gosu for OS X using CocoaPods
   - if [ $TRAVIS_OS_NAME == osx ]; then cd examples/Tutorial && pod install && xcodebuild build -workspace Tutorial.xcworkspace -scheme Tutorial && cd ../..; fi
   # Gosu for iOS using CocoaPods
-  - if [ $TRAVIS_OS_NAME == osx ]; then cd examples/Tutorial-Touch && pod install && xcodebuild build -workspace Tutorial-Touch.xcworkspace -scheme Tutorial-Touch && cd ../..; fi
+  - if [ $TRAVIS_OS_NAME == osx ]; then cd examples/Tutorial-Touch && pod install && xcodebuild build -workspace Tutorial-Touch.xcworkspace -scheme Tutorial-Touch -destination 'generic/platform=iOS Simulator' && cd ../..; fi
 
 script:
   # Ruby/Gosu

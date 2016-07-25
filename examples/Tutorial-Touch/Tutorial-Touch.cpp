@@ -1,7 +1,5 @@
 // All of Gosu.
 #include <Gosu/Gosu.hpp>
-// To safely include std::tr1::shared_ptr
-#include <Gosu/TR1.hpp> 
 // Makes life easier for Windows users compiling this.
 #include <Gosu/AutoLink.hpp>
 
@@ -9,7 +7,7 @@
 #include <cstdlib>
 #include <list>
 #include <memory>
-#include <sstream> // For int <-> string conversion
+#include <string>
 #include <vector>
 
 enum ZOrder
@@ -22,16 +20,16 @@ enum ZOrder
 
 static const unsigned WIDTH = 1024, HEIGHT = 768;
 
-typedef std::vector<std::tr1::shared_ptr<Gosu::Image> > Animation;
+typedef std::vector<Gosu::Image> Animation;
 
 class Star
 {
-    Animation& animation;
+    Animation animation;
     Gosu::Color color;
     double posX, posY;
 
 public:
-    explicit Star(Animation& animation)
+    explicit Star(Animation animation)
     :   animation(animation)
     {
         color.setAlpha(255);
@@ -51,8 +49,8 @@ public:
 
     void draw() const
     {
-        Gosu::Image& image =
-            *animation.at(Gosu::milliseconds() / 100 % animation.size());
+        const Gosu::Image& image =
+            animation.at(Gosu::milliseconds() / 100 % animation.size());
 
         image.draw(posX - image.width() / 2.0, posY - image.height() / 2.0,
             zStars, 1, 1, color, Gosu::amAdd);
@@ -67,9 +65,9 @@ class Player
     unsigned score;
 
 public:
-    Player(Gosu::Graphics& graphics)
-    :   image(graphics, Gosu::sharedResourcePrefix() + L"media/Starfighter.bmp"),
-        beep(Gosu::sharedResourcePrefix() + L"media/Beep.wav")
+    Player()
+    :   image(Gosu::resourcePrefix() + L"media/Starfighter.bmp"),
+        beep(Gosu::resourcePrefix() + L"media/Beep.wav")
     {
         posX = posY = velX = velY = angle = 0;
         score = 0;
@@ -140,17 +138,15 @@ class GameWindow : public Gosu::Window
 
 public:
     GameWindow()
-    :   Window(WIDTH, HEIGHT, false),
-        font(graphics(), Gosu::defaultFontName(), 20),
-        player(graphics())
+    :   Window(WIDTH, HEIGHT), font(20)
     {
         setCaption(L"Gosu Tutorial Game");
 
-        std::wstring filename = Gosu::sharedResourcePrefix() + L"media/Space.png";
-        backgroundImage.reset(new Gosu::Image(graphics(), filename, true));
+        std::wstring filename = Gosu::resourcePrefix() + L"media/Space.png";
+        backgroundImage.reset(new Gosu::Image(filename, Gosu::ifTileable));
 
-        filename = Gosu::sharedResourcePrefix() + L"media/Star.png";
-        Gosu::imagesFromTiledBitmap(graphics(), filename, 25, 25, false, starAnim);
+        filename = Gosu::resourcePrefix() + L"media/Star.png";
+        starAnim = Gosu::loadTiles(filename, 25, 25);
 
         player.warp(WIDTH / 2, HEIGHT / 2);
     }
@@ -176,17 +172,10 @@ public:
         backgroundImage->draw(0, 0, zBackground,
             1.0 * WIDTH / backgroundImage->width(),
             1.0 * HEIGHT / backgroundImage->height());
+        for (Star& star : stars)
+            star.draw();
 
-        for (std::list<Star>::const_iterator i = stars.begin();
-            i != stars.end(); ++i)
-        {
-            i->draw();
-        }
-
-        std::wstringstream score;
-        score << L"Score: "; 
-        score << player.getScore();
-        font.draw(score.str(), 10, 10, zUI, 1, 1, Gosu::Colors::yellow);
+        font.draw(L"Score: " + std::to_wstring(player.getScore()), 10, 10, zUI, 1, 1, Gosu::Color::YELLOW);
     }
 };
 
