@@ -75,7 +75,7 @@ install:
   # Gosu for OS X using CocoaPods
   - if [ $TRAVIS_OS_NAME == osx ]; then cd examples/Tutorial && pod install && xcodebuild build -workspace Tutorial.xcworkspace -scheme Tutorial && cd ../..; fi
   # Gosu for iOS using CocoaPods
-  - if [ $TRAVIS_OS_NAME == osx ]; then cd examples/Tutorial-Touch && pod install && xcodebuild build -workspace Tutorial-Touch.xcworkspace -scheme Tutorial-Touch -destination 'generic/platform=iOS Simulator' && cd ../..; fi
+  - if [ $TRAVIS_OS_NAME == osx ]; then cd examples/Tutorial-Touch && pod install && xcodebuild build -workspace Tutorial-Touch.xcworkspace -scheme Tutorial-Touch -destination 'platform=iOS Simulator,name=iPad Air' && cd ../..; fi
 
 script:
   # Ruby/Gosu
