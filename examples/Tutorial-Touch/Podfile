@@ -1,7 +1,8 @@
 platform :ios, '5.1.1'
 
-pod 'Gosu', :path => '../..'
-
-# In a real project, you would use this instead of a relative path:
-#
-# pod 'Gosu', :git => 'https://github.com/gosu/gosu.git'
+target 'Tutorial-Touch' do
+  pod 'Gosu', :path => '../..'
+  
+  # In a real project, you would use this instead of a relative path:
+  # pod 'Gosu', :git => 'https://github.com/gosu/gosu.git'
+end

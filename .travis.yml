@@ -15,6 +15,10 @@ matrix:
     - os: osx
       osx_image: xcode7.3
       compiler: clang
+    # Xcode 8 beta
+    - os: osx
+      osx_image: xcode8
+      compiler: clang
 
 # Linux dependencies
 # See: https://github.com/gosu/gosu/wiki/Getting-Started-on-Linux
@@ -66,10 +70,14 @@ install:
   - ~/rake gem
   - sudo gem install pkg/gosu-9.9.9.gem --no-ri --no-rdoc
   # Gosu for C++ using CMake
-  - mkdir -p cmake/build && cd cmake/build && cmake .. && make && sudo make install && cd ../..
+  - mkdir -p cmake/build; cd cmake/build && cmake .. && make && sudo make install; cd ../..
+  # Gosu for OS X using CocoaPods
+  - cd examples/Tutorial; pod install && xcodebuild build -workspace Tutorial.xcworkspace -scheme Tutorial; cd ../..
+  # Gosu for iOS using CocoaPods
+  - cd examples/Tutorial-Touch; pod install && xcodebuild build -workspace Tutorial-Touch.xcworkspace -scheme Tutorial-Touch; cd ../..
 
 script:
   # Ruby/Gosu
   - ruby -rgosu -e 'puts Gosu::VERSION'
   # Compile C++ examples
-  - mkdir -p examples/build && cd examples/build && cmake .. && make && cd ../..
+  - mkdir -p examples/build && cd examples/build; cmake .. && make; cd ../..
