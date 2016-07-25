@@ -41,7 +41,7 @@ before_install:
   # Mac dependencies
   # See: https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X
   - if [ $TRAVIS_OS_NAME == osx ]; then brew update; brew install sdl2; fi
-  # To not use RVM - it's been a mess for compiling Gosu on OS X.
+  # Do not use RVM - it's been a mess for compiling Gosu on OS X.
   - rvm use system
   # But update the system RubyGems on OS X.
   - if [ $TRAVIS_OS_NAME == osx ]; then sudo gem update --system; fi
@@ -70,14 +70,14 @@ install:
   - ~/rake gem
   - sudo gem install pkg/gosu-9.9.9.gem --no-ri --no-rdoc
   # Gosu for C++ using CMake
-  - mkdir -p cmake/build; cd cmake/build && cmake .. && make && sudo make install; cd ../..
+  - mkdir -p cmake/build && cd cmake/build && cmake .. && make && sudo make install && cd ../..
   # Gosu for OS X using CocoaPods
-  - cd examples/Tutorial; pod install && xcodebuild build -workspace Tutorial.xcworkspace -scheme Tutorial; cd ../..
+  - cd examples/Tutorial && pod install && xcodebuild build -workspace Tutorial.xcworkspace -scheme Tutorial && cd ../..
   # Gosu for iOS using CocoaPods
-  - cd examples/Tutorial-Touch; pod install && xcodebuild build -workspace Tutorial-Touch.xcworkspace -scheme Tutorial-Touch; cd ../..
+  - cd examples/Tutorial-Touch && pod install && xcodebuild build -workspace Tutorial-Touch.xcworkspace -scheme Tutorial-Touch && cd ../..
 
 script:
   # Ruby/Gosu
   - ruby -rgosu -e 'puts Gosu::VERSION'
   # Compile C++ examples
-  - mkdir -p examples/build && cd examples/build; cmake .. && make; cd ../..
+  - mkdir -p examples/build && cd examples/build && cmake .. && make && cd ../..
