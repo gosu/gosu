@@ -1,15 +1,14 @@
 GEM_SPEC = Gem::Specification.new do |s|
   s.name = 'gosu'
   s.version = GOSU_VERSION.dup
+  s.license = 'MIT'
   s.summary = '2D game development library.'
   s.description = <<EOS
     2D game development library.
 
-    Gosu features easy to use and game-friendly interfaces to 2D graphics
+    Gosu provides simple and game-friendly interfaces to 2D graphics
     and text (accelerated by 3D hardware), sound samples and music as well as
     keyboard, mouse and gamepad/joystick input.
-
-    Also includes demos for integration with RMagick, Chipmunk and OpenGL.
 EOS
   s.author = 'Julian Raschke'
   s.date = Time.now.strftime '%Y-%m-%d'

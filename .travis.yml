@@ -43,8 +43,8 @@ before_install:
   - if [ $TRAVIS_OS_NAME == osx ]; then brew update; brew install sdl2; fi
   # Do not use RVM - it's been a mess for compiling Gosu on OS X.
   - rvm use system
-  # But update the system RubyGems on OS X.
-  - if [ $TRAVIS_OS_NAME == osx ]; then sudo gem update --system; fi
+  # But update the system RubyGems on OS X and install CocoaPods.
+  - if [ $TRAVIS_OS_NAME == osx ]; then sudo gem update --system; sudo gem install cocoapods; fi
   # Dependencies for 'rake gem' (not for actually using Gosu)
   # We have to install binaries into ~ because of Apple's System Integrity Protection.
   - sudo gem install rake rake-compiler --no-ri --no-rdoc -n ~
@@ -54,16 +54,12 @@ branches:
   only:
   - master
 git:
-  depth: 3
+  depth: 1
 
 # 'rake gem' relies on this.
 env:
   global:
     - GOSU_RELEASE_VERSION=9.9.9
-
-notifications:
-  email:
-    - info@libgosu.org
 
 install:
   # Ruby/Gosu
@@ -72,9 +68,9 @@ install:
   # Gosu for C++ using CMake
   - mkdir -p cmake/build && cd cmake/build && cmake .. && make && sudo make install && cd ../..
   # Gosu for OS X using CocoaPods
-  - cd examples/Tutorial && pod install && xcodebuild build -workspace Tutorial.xcworkspace -scheme Tutorial && cd ../..
+  - if [ $TRAVIS_OS_NAME == osx ]; then cd examples/Tutorial && pod install && xcodebuild build -workspace Tutorial.xcworkspace -scheme Tutorial && cd ../..; fi
   # Gosu for iOS using CocoaPods
-  - cd examples/Tutorial-Touch && pod install && xcodebuild build -workspace Tutorial-Touch.xcworkspace -scheme Tutorial-Touch && cd ../..
+  - if [ $TRAVIS_OS_NAME == osx ]; then cd examples/Tutorial-Touch && pod install && xcodebuild build -workspace Tutorial-Touch.xcworkspace -scheme Tutorial-Touch && cd ../..; fi
 
 script:
   # Ruby/Gosu
