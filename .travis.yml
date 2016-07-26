@@ -46,7 +46,8 @@ before_install:
   # But update the system RubyGems on OS X and install CocoaPods.
   # Also install a very specific version of ActiveSupport, see:
   # https://github.com/CocoaPods/CocoaPods/issues/4711#issuecomment-230096751
-  - if [ $TRAVIS_OS_NAME == osx ]; then sudo gem update --system; sudo gem install activesupport -v 4.2.6; sudo gem install cocoapods; fi
+  # Also install gem binaries into /usr/local/bin to work around SIP on macOS 10.11+
+  - if [ $TRAVIS_OS_NAME == osx ]; then sudo gem update --system; sudo gem install activesupport -v 4.2.6; sudo gem install cocoapods -n /usr/local/bin; fi
   # Dependencies for 'rake gem' (not for actually using Gosu)
   # We have to install binaries into ~ because of Apple's System Integrity Protection.
   - sudo gem install rake rake-compiler --no-ri --no-rdoc -n ~
