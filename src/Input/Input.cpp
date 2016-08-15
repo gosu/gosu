@@ -225,10 +225,15 @@ private:
             SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_LEFTY) > +DEAD_ZONE ||
             SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_RIGHTY) > +DEAD_ZONE;
         
-        for (int button = SDL_CONTROLLER_BUTTON_A; button < SDL_CONTROLLER_BUTTON_DPAD_UP; ++button) {
-            gamepad[gpButton0 - gpRangeBegin + button - SDL_CONTROLLER_BUTTON_A] =
+        int button = 0;
+        for (button; button < SDL_CONTROLLER_BUTTON_DPAD_UP; ++button) {
+            gamepad[gpButton0 + button - gpRangeBegin] =
                 SDL_GameControllerGetButton(gameController, (SDL_GameControllerButton)button);
         }
+        gamepad[gpButton0 + button++ - gpRangeBegin] =
+            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_TRIGGERLEFT) > +DEAD_ZONE;
+        gamepad[gpButton0 + button++ - gpRangeBegin] =
+            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > +DEAD_ZONE;
     }
     
     void pollJoystick(SDL_Joystick *joystick, GamepadBuffer& gamepad)
