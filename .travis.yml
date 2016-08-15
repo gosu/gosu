@@ -45,6 +45,8 @@ before_install:
   - if [ $TRAVIS_OS_NAME == osx ]; then brew update; brew install sdl2; fi
   # Do not use RVM - it's been a mess for compiling Gosu on OS X.
   - rvm use system
+  # Print the Ruby configuration to see what's up with CXXFLAGS etc.
+  - ruby -rrbconfig -e 'RbConfig::CONFIG.each { |k, v| puts [k, v].join("=") }'
   # But update the system RubyGems on OS X and install CocoaPods.
   # Also install a very specific version of ActiveSupport, see:
   # https://github.com/CocoaPods/CocoaPods/issues/4711#issuecomment-230096751
