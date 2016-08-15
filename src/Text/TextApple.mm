@@ -121,7 +121,8 @@ namespace
         };
         if (fontFlags & Gosu::ffUnderline) {
             NSMutableDictionary *mutableDict = [dict mutableCopy];
-            mutableDict[NSUnderlineStyleAttributeName] = @(NSUnderlineStyleSingle);
+            // Cannot use accessor syntax here without breaking compilation with OS X 10.7/Xcode 4.6.3.
+            [mutableDict setObject:@(NSUnderlineStyleSingle) forKey:NSUnderlineStyleAttributeName];
             dict = [mutableDict copy];
         }
         return dict;

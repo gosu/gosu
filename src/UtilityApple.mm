@@ -56,7 +56,8 @@ string Gosu::narrow(const std::wstring& ws)
 string Gosu::language()
 {
     @autoreleasepool {
-        NSString *language = [[NSLocale preferredLanguages] firstObject];
-        return [language UTF8String] ?: "en";
+        // Cannot use accessor syntax here without breaking compilation with OS X 10.7/Xcode 4.6.3.
+        NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
+        return language.UTF8String ?: "en";
     }
 }
