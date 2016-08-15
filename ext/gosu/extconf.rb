@@ -10,12 +10,11 @@ end
 
 puts 'The Gosu gem requires some libraries to be installed system-wide.'
 puts 'See the following site for a list:'
-if `uname`.chomp == "Darwin" then
+if `uname`.chomp == 'Darwin' then
   puts 'https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X'
 else
   puts 'https://github.com/gosu/gosu/wiki/Getting-Started-on-Linux'
 end
-puts
 
 BASE_FILES = %w(
   Bitmap/Bitmap.cpp
@@ -64,49 +63,29 @@ require 'fileutils'
 
 # Silence internal deprecation warnings in Gosu
 $CFLAGS << " -DGOSU_DEPRECATED="
+
 $CXXFLAGS ||= ''
 
 $INCFLAGS << " -I../.. -I../../src"
 
 if `uname`.chomp == 'Darwin' then
-  HOMEBREW_DEPENDENCIES = %w(SDL2)
-  FRAMEWORKS = %w(AppKit ApplicationServices AudioToolbox Carbon ForceFeedback Foundation IOKit OpenAL OpenGL)
-
   SOURCE_FILES = BASE_FILES + MAC_FILES
   
   # To make everything work with the Objective C runtime
-  $CFLAGS    << " -x objective-c -DNDEBUG"
+  $CFLAGS   << " -x objective-c -fobjc-arc -DNDEBUG"
   # Compile all C++ files as Objective C++ on OS X since mkmf does not support .mm
   # files.
-  # Also undefine two debug flags that cause exceptions to randomly crash, see:
-  # https://trac.macports.org/ticket/27237#comment:21
-  # http://newartisans.com/2009/10/a-c-gotcha-on-snow-leopard/#comment-893
-  $CXXFLAGS << " -x objective-c++ -U_GLIBCXX_DEBUG -U_GLIBCXX_DEBUG_PEDANTIC"
+  $CXXFLAGS << " -x objective-c++ -fobjc-arc -DNDEBUG"
 
-  # Enable C++ 11 on Mavericks and above.
-  if `uname -r`.to_i >= 13 then
-    $CXXFLAGS << " -std=gnu++11"
-    
-    # rvm-specific fix:
-    # Explicitly set libc++ as the C++ standard library. Otherwise the gem will
-    # end up being compiled against libstdc++, but linked against libc++, and
-    # fail to load, see: https://github.com/shawn42/gamebox/issues/96
-    $CXXFLAGS << " -stdlib=libc++"
-  end
+  # Enable C++ 11, and explicitly specify libc++ as the standard library.
+  # rvm will sometimes try to override this:
+  # https://github.com/shawn42/gamebox/issues/96
+  $CXXFLAGS << " -std=gnu++11 -stdlib=libc++"
   
-  # Dependencies...
+  # Dependencies.
   $CXXFLAGS << " #{`sdl2-config --cflags`.chomp}"
-  $LDFLAGS  << " -liconv"
-  
-  if enable_config('static-homebrew-dependencies') then
-    # TODO: For some reason this only works after deleting both SDL2 dylib files from /usr/local/lib.
-    # Otherwise, the resulting gosu.bundle is still dependent on libSDL2-2.0.0.dylib, see `otool -L gosu.bundle`
-    $LDFLAGS << HOMEBREW_DEPENDENCIES.map { |lib| " /usr/local/lib/lib#{lib}.a" }.join
-  else
-    $LDFLAGS << " #{`sdl2-config --libs`.chomp}"
-  end
-
-  $LDFLAGS << FRAMEWORKS.map { |f| " -framework #{f}" }.join
+  # Prefer statically linking SDL 2.
+  $LDFLAGS  << " #{`sdl2-config --static-libs`.chomp} -framework OpenGL -framework OpenAL"
 else
   SOURCE_FILES = BASE_FILES + LINUX_FILES
 
