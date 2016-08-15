@@ -86,6 +86,13 @@ if `uname`.chomp == 'Darwin' then
   $CXXFLAGS << " #{`sdl2-config --cflags`.chomp}"
   # Prefer statically linking SDL 2.
   $LDFLAGS  << " #{`sdl2-config --static-libs`.chomp} -framework OpenGL -framework OpenAL"
+  
+  # Disable building of 32-bit slices in Apple's Ruby.
+  # (RbConfig::CONFIG['CXXFLAGS'] on 10.11: -arch x86_64 -arch i386 -g -Os -pipe)
+  $CFLAGS.gsub! "-arch i386", ""
+  $CXXFLAGS.gsub! "-arch i386", ""
+  $LDFLAGS.gsub! "-arch i386", ""
+  CONFIG['LDSHARED'].gsub! "-arch i386", ""
 else
   SOURCE_FILES = BASE_FILES + LINUX_FILES
 
@@ -121,6 +128,9 @@ SOURCE_FILES.each do |file|
     shim.puts "#include \"../../src/#{file}\""
   end
 end
+
+# This is necessary to build on stock Ruby on OS X 10.7.
+CONFIG['CXXFLAGS'] ||= $CXXFLAGS
 
 if RUBY_VERSION >= '1.9.3' and RUBY_VERSION < '2.2.0' then
   # In some versions of Ruby and mkmf, the $CXXFLAGS variable is badly broken.
