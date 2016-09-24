@@ -92,6 +92,7 @@ if `uname`.chomp == 'Darwin' then
   $CFLAGS.gsub! "-arch i386", ""
   $CXXFLAGS.gsub! "-arch i386", ""
   $LDFLAGS.gsub! "-arch i386", ""
+  $ARCH_FLAG.gsub! "-arch i386", ""
   CONFIG['LDSHARED'].gsub! "-arch i386", ""
 else
   SOURCE_FILES = BASE_FILES + LINUX_FILES
