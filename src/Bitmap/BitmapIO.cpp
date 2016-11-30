@@ -150,7 +150,7 @@ void Gosu::saveImageFile(const Gosu::Bitmap& bitmap, Gosu::Writer writer,
 }
 
 // Deprecated methods.
-
+#pragma warning( disable : 4996)
 Gosu::Reader Gosu::loadFromPNG(Bitmap& bitmap, Reader reader)
 {
     loadImageFile(bitmap, reader);
@@ -174,3 +174,4 @@ Gosu::Writer Gosu::saveToBMP(const Bitmap& bitmap, Writer writer)
     saveImageFile(bitmap, writer, L".bmp");
     return writer.resource().backWriter();
 }
+#pragma warning( enable : 4996)

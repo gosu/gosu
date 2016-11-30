@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <cassert>
 #include <cstdio>
+#include <Gosu/platform.hpp>
 #include <Gosu/Utility.hpp>
 
 // Adapted from http://www.codeproject.com/KB/GDI/xfont.aspx.
@@ -60,6 +61,9 @@ std::wstring getNameFromTTFFile(const std::wstring& filename)
 	memset(lpFontProps, 0, sizeof(FONT_PROPERTIES_ANSI));
 
 	HANDLE hFile = INVALID_HANDLE_VALUE;
+#if defined(GOSU_IS_UWP)
+	hFile = ::CreateFile2(filename.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, NULL);
+#else
 	hFile = ::CreateFile(filename.c_str(),
 						 GENERIC_READ,// | GENERIC_WRITE,
 						 FILE_SHARE_READ,
@@ -67,7 +71,7 @@ std::wstring getNameFromTTFFile(const std::wstring& filename)
 						 OPEN_EXISTING,
 						 FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,
 						 NULL);
-
+#endif
 	if (hFile == INVALID_HANDLE_VALUE)
 	{
         TRACE(_T("ERROR:  failed to open '%s'\n"), Gosu::narrow(filename).c_str());
@@ -76,7 +80,12 @@ std::wstring getNameFromTTFFile(const std::wstring& filename)
 	}
 
 	// get the file size
-	DWORD dwFileSize = ::GetFileSize(hFile, NULL);
+	LARGE_INTEGER size;
+	DWORD dwFileSize = 0;
+	if (::GetFileSizeEx(hFile, &size))
+	{
+		dwFileSize = size.QuadPart;
+	}
 
 	if (dwFileSize == INVALID_FILE_SIZE)
 	{
@@ -145,7 +154,7 @@ std::wstring getNameFromTTFFile(const std::wstring& filename)
 		index += sizeof(TT_TABLE_DIRECTORY);
 
 		strncpy(szTemp, tblDir.szTag, 4);
-		if (stricmp(szTemp, "name") == 0)
+		if (_stricmp(szTemp, "name") == 0)
 		{
 			bFound = TRUE;
 			tblDir.uLength = SWAPLONG(tblDir.uLength);

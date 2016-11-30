@@ -23,8 +23,10 @@
 #else
 #include <AL/al.h>
 #include <AL/alc.h>
-#include "SndFile.hpp"
-#define WAVE_FILE SndFile
+# if !defined(GOSU_IS_UWP)
+#  include "SndFile.hpp"
+#  define WAVE_FILE SndFile
+# endif
 #endif
 
 #ifdef GOSU_IS_IPHONE
@@ -189,8 +191,12 @@ Gosu::Sample::Sample(const std::wstring& filename)
     }
     else
     {
+#if !defined(GOSU_IS_UWP)
         WAVE_FILE audioFile(filename);
         data.reset(new SampleData(audioFile));
+#else
+		throw std::logic_error("Gosu::Audio only accepts ogg files in UWP");
+#endif
     }
     
     CONSTRUCTOR_END
@@ -207,8 +213,12 @@ Gosu::Sample::Sample(Reader reader)
     }
     else
     {
+#if !defined(GOSU_IS_UWP)
         WAVE_FILE audioFile(reader);
         data.reset(new SampleData(audioFile));
+#else
+		throw std::logic_error("Gosu::Audio only accepts ogg files in UWP");
+#endif
     }
     
     CONSTRUCTOR_END
@@ -370,17 +380,31 @@ public:
             Gosu::File sourceFile(filename);
             file.reset(new OggFile(sourceFile.frontReader()));
         }
-        else
-            file.reset(new WAVE_FILE(filename));
+		else
+		{
+#if !defined(GOSU_IS_UWP)
+			file.reset(new WAVE_FILE(filename));
+#else
+			throw std::logic_error("Gosu::Audio only accepts ogg files in UWP");
+#endif
+		}
         alGenBuffers(2, buffers);
     }
 
     StreamData(Reader reader)
     {
-        if (isOggFile(reader))
-            file.reset(new OggFile(reader));
-        else
-            file.reset(new WAVE_FILE(reader));
+		if (isOggFile(reader))
+		{
+			file.reset(new OggFile(reader));
+		}
+		else
+		{
+#if !defined(GOSU_IS_UWP)
+			file.reset(new WAVE_FILE(reader));
+#else
+			throw std::logic_error("Gosu::Audio only accepts ogg files in UWP");
+#endif
+		}
         alGenBuffers(2, buffers);
     }
     

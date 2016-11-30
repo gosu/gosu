@@ -1,10 +1,13 @@
-#define _WIN32_WINNT 0x0500 
+//#define _WIN32_WINNT 0x0500 
 #include <windows.h>
 
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
+
 #include "../WinUtility.hpp"
+#include "TextSDLTTF.hpp"
+
 #include <cstdlib>
 #include <cwchar>
 #include <algorithm>
@@ -21,6 +24,7 @@ namespace Gosu
 {
     std::wstring getNameFromTTFFile(const std::wstring& filename);
 
+#if !defined(GOSU_IS_UWP)
     namespace
     {
         class WinBitmap
@@ -133,8 +137,32 @@ namespace Gosu
             }
         };
     }
+#endif
+
 };
 
+#if defined(GOSU_IS_UWP)
+
+unsigned Gosu::textWidth(const std::wstring& text,
+	const std::wstring& fontName, unsigned fontHeight,
+	unsigned fontFlags)
+{
+	if (text.find_first_of(L"\r\n") != std::wstring::npos)
+		throw std::invalid_argument("the argument to textWidth cannot contain line breaks");
+
+		return SDLTTFRenderer(fontName, fontHeight).textWidth(text);
+}
+
+void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
+	Color c, const std::wstring& fontName, unsigned fontHeight,
+	unsigned fontFlags)
+{
+	if (text.find_first_of(L"\r\n") != std::wstring::npos)
+		throw std::invalid_argument("the argument to drawText cannot contain line breaks");
+
+		SDLTTFRenderer(fontName, fontHeight).drawText(bitmap, text, x, y, c);
+}
+#else
 unsigned Gosu::textWidth(const std::wstring& text,
     const std::wstring& fontName, unsigned fontHeight, unsigned fontFlags)
 {
@@ -184,3 +212,4 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
                 bitmap.setPixel(x + relX, y + relY, pixel);
         }
 }
+#endif
