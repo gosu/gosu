@@ -51,3 +51,4 @@ Gosu.includes
 
 #WinRT stuff
 /winrt/obj
+/winrt/*.VC.db
