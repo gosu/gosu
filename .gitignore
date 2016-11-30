@@ -48,3 +48,6 @@ Gosu.includes
 /windows/Gosu.VC.db
 /windows/Release (Ruby ?.?)/*.exp
 /windows/Release (Ruby ?.?)/*.lib
+
+#WinRT stuff
+/winrt/obj

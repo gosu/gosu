@@ -1,0 +1,327 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Gosu\Audio.hpp" />
+    <ClInclude Include="..\Gosu\AutoLink.hpp" />
+    <ClInclude Include="..\Gosu\Bitmap.hpp" />
+    <ClInclude Include="..\Gosu\Buttons.hpp" />
+    <ClInclude Include="..\Gosu\Color.hpp" />
+    <ClInclude Include="..\Gosu\Directories.hpp" />
+    <ClInclude Include="..\Gosu\Font.hpp" />
+    <ClInclude Include="..\Gosu\Fwd.hpp" />
+    <ClInclude Include="..\Gosu\Gosu.hpp" />
+    <ClInclude Include="..\Gosu\Graphics.hpp" />
+    <ClInclude Include="..\Gosu\GraphicsBase.hpp" />
+    <ClInclude Include="..\Gosu\Image.hpp" />
+    <ClInclude Include="..\Gosu\ImageData.hpp" />
+    <ClInclude Include="..\Gosu\Input.hpp" />
+    <ClInclude Include="..\Gosu\Inspection.hpp" />
+    <ClInclude Include="..\Gosu\IO.hpp" />
+    <ClInclude Include="..\Gosu\Math.hpp" />
+    <ClInclude Include="..\Gosu\platform.hpp" />
+    <ClInclude Include="..\Gosu\Text.hpp" />
+    <ClInclude Include="..\Gosu\TextInput.hpp" />
+    <ClInclude Include="..\Gosu\Timing.hpp" />
+    <ClInclude Include="..\Gosu\TR1.hpp" />
+    <ClInclude Include="..\Gosu\Utility.hpp" />
+    <ClInclude Include="..\Gosu\Version.hpp" />
+    <ClInclude Include="..\Gosu\Window.hpp" />
+    <ClInclude Include="..\src\Audio\ALChannelManagement.hpp" />
+    <ClInclude Include="..\src\Audio\AudioFile.hpp" />
+    <ClInclude Include="..\src\Audio\OggFile.hpp" />
+    <ClInclude Include="..\src\Audio\SndFile.hpp" />
+    <ClInclude Include="..\src\Graphics\BlockAllocator.hpp" />
+    <ClInclude Include="..\src\Graphics\ClipRectStack.hpp" />
+    <ClInclude Include="..\src\Graphics\Common.hpp" />
+    <ClInclude Include="..\src\Graphics\DrawOp.hpp" />
+    <ClInclude Include="..\src\Graphics\DrawOpQueue.hpp" />
+    <ClInclude Include="..\src\Graphics\LargeImageData.hpp" />
+    <ClInclude Include="..\src\Graphics\Macro.hpp" />
+    <ClInclude Include="..\src\Graphics\RenderState.hpp" />
+    <ClInclude Include="..\src\Graphics\TexChunk.hpp" />
+    <ClInclude Include="..\src\Graphics\Texture.hpp" />
+    <ClInclude Include="..\src\Graphics\TransformStack.hpp" />
+    <ClInclude Include="..\src\Iconv.hpp" />
+    <ClInclude Include="..\src\stb_image.h" />
+    <ClInclude Include="..\src\stb_image_write.h" />
+    <ClInclude Include="..\src\Text\FormattedString.hpp" />
+    <ClInclude Include="..\src\Text\TextSDLTTF.hpp" />
+    <ClInclude Include="..\src\WinUtility.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\Audio\Audio.cpp" />
+    <ClCompile Include="..\src\Bitmap\Bitmap.cpp" />
+    <ClCompile Include="..\src\Bitmap\BitmapIO.cpp" />
+    <ClCompile Include="..\src\DirectoriesWin.cpp" />
+    <ClCompile Include="..\src\FileWin.cpp" />
+    <ClCompile Include="..\src\Graphics\BlockAllocator.cpp" />
+    <ClCompile Include="..\src\Graphics\Color.cpp" />
+    <ClCompile Include="..\src\Graphics\Graphics.cpp" />
+    <ClCompile Include="..\src\Graphics\Image.cpp" />
+    <ClCompile Include="..\src\Graphics\LargeImageData.cpp" />
+    <ClCompile Include="..\src\Graphics\Macro.cpp" />
+    <ClCompile Include="..\src\Graphics\Resolution.cpp" />
+    <ClCompile Include="..\src\Graphics\TexChunk.cpp" />
+    <ClCompile Include="..\src\Graphics\Texture.cpp" />
+    <ClCompile Include="..\src\Graphics\Transform.cpp" />
+    <ClCompile Include="..\src\Input\Input.cpp" />
+    <ClCompile Include="..\src\Input\TextInput.cpp" />
+    <ClCompile Include="..\src\Inspection.cpp" />
+    <ClCompile Include="..\src\IO.cpp" />
+    <ClCompile Include="..\src\Math.cpp" />
+    <ClCompile Include="..\src\stb_vorbis.c" />
+    <ClCompile Include="..\src\Text\Font.cpp" />
+    <ClCompile Include="..\src\Text\Text.cpp" />
+    <ClCompile Include="..\src\Text\TextSDLTTF.cpp" />
+    <ClCompile Include="..\src\Text\TextTTFWin.cpp" />
+    <ClCompile Include="..\src\Text\TextWin.cpp" />
+    <ClCompile Include="..\src\TimingWin.cpp" />
+    <ClCompile Include="..\src\Utility.cpp" />
+    <ClCompile Include="..\src\UtilityWin.cpp" />
+    <ClCompile Include="..\src\Window.cpp" />
+    <ClCompile Include="..\src\WinMain.cpp" />
+    <ClCompile Include="..\src\WinUtility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="openal-soft-winrt\winrt.vs2015\OpenAL\OpenAL.vcxproj">
+      <Project>{a4ec741a-2f08-4dab-a9b1-472540cbce2e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="SDL2\VisualC-WinRT\UWP_VS2015\SDL-UWP.vcxproj">
+      <Project>{89e9b32e-a86a-47c3-a948-d2b1622925ce}</Project>
+    </ProjectReference>
+    <ProjectReference Include="SDL2_ttf\VisualC-WinRT\UWP_VS2015\SDL2_ttf-UWP.vcxproj">
+      <Project>{abe3bd38-2cd6-4c94-af1c-5a29e8f77d75}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{c83a24b0-0401-4bf5-9895-7e1651272f95}</ProjectGuid>
+    <Keyword>StaticLibrary</Keyword>
+    <RootNamespace>Gosu</RootNamespace>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <AppContainerApplication>true</AppContainerApplication>
+    <ApplicationType>Windows Store</ApplicationType>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.10240.0</WindowsTargetPlatformMinVersion>
+    <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <GenerateManifest>false</GenerateManifest>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <GenerateManifest>false</GenerateManifest>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <GenerateManifest>false</GenerateManifest>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <GenerateManifest>false</GenerateManifest>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <GenerateManifest>false</GenerateManifest>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <GenerateManifest>false</GenerateManifest>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)SDL2_ttf;$(SolutionDir)openal-soft-winrt\include;$(SolutionDir)SDL2\include;$(SolutionDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>SDL2.lib;SDL2_ttf.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)SDL2_ttf;$(SolutionDir)openal-soft-winrt\include;$(SolutionDir)SDL2\include;$(SolutionDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>SDL2.lib;SDL2_ttf.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|arm'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)SDL2_ttf;$(SolutionDir)openal-soft-winrt\include;$(SolutionDir)SDL2\include;$(SolutionDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|arm'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)SDL2_ttf;$(SolutionDir)openal-soft-winrt\include;$(SolutionDir)SDL2\include;$(SolutionDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)SDL2_ttf;$(SolutionDir)openal-soft-winrt\include;$(SolutionDir)SDL2\include;$(SolutionDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)SDL2_ttf;$(SolutionDir)openal-soft-winrt\include;$(SolutionDir)SDL2\include;$(SolutionDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
