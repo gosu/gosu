@@ -1,7 +1,7 @@
 #include <Gosu/Text.hpp>
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Utility.hpp>
-#include "Gosu/TextSDLTTF.hpp"
+#include "TextSDLTTF.hpp"
 
 #include <pango/pango.h>
 #include <pango/pangoft2.h>
