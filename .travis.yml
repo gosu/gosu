@@ -29,7 +29,6 @@ addons:
       - libsdl2-ttf-dev
       - libpango1.0-dev
       - libgl1-mesa-dev
-      - libfreeimage-dev
       - libopenal-dev
       - libsndfile1-dev
       # For Ruby
