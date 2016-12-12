@@ -840,6 +840,7 @@ namespace Gosu {
 };
 
 // Window
+%rename("update_interval=") setUpdateInterval;
 %rename("caption=") setCaption;
 %rename("text_input=") setTextInput;
 %rename("mouse_x=") setMouseX;

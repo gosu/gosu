@@ -92,6 +92,11 @@ double Gosu::Window::updateInterval() const
     return pimpl->updateInterval;
 }
 
+void Gosu::Window::setUpdateInterval(double updateInterval)
+{
+    throw std::logic_error("Cannot change the update interval on iOS");
+}
+
 std::wstring Gosu::Window::caption() const
 {
     return pimpl->caption;

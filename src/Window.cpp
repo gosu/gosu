@@ -168,6 +168,11 @@ double Gosu::Window::updateInterval() const
     return pimpl->updateInterval;
 }
 
+void Gosu::Window::setUpdateInterval(double updateInterval)
+{
+    pimpl->updateInterval = updateInterval;
+}
+
 std::wstring Gosu::Window::caption() const
 {
     return utf8ToWstring(SDL_GetWindowTitle(sharedWindow()));

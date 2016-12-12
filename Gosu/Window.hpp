@@ -69,7 +69,7 @@ namespace Gosu
         // void setFullscreen(bool fullscreen);
         
         double updateInterval() const;
-        // void setUpdateInterval(double updateInterval);
+        void setUpdateInterval(double updateInterval);
 
         std::wstring caption() const;
         void setCaption(const std::wstring& caption);
