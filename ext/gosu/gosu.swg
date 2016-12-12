@@ -862,47 +862,6 @@ namespace Gosu {
 %}
 
 %extend Gosu::Window {
-    /* Does not work - SWIG's director does not pick up this constructor.
-       Defined in pure Ruby instead, see lib/gosu/swig_patches.rb.
-       
-       TODO: File a bug?!
-    
-    Window(unsigned width, unsigned height, VALUE optionsOrFullscreen) {
-        double updateInterval = 16.666666;
-        bool fullscreen = false;
-        
-        if (TYPE(optionsOrFullscreen) == T_HASH) {
-            VALUE keys = rb_funcall(optionsOrFullscreen, rb_intern("keys"), 0, NULL);
-            int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
-            
-            for (int i = 0; i < keysSize; ++i) {
-                VALUE key = rb_ary_entry(keys, i);
-                const char* keyString = Gosu::cstrFromSymbol(key);
-                
-                VALUE value = rb_hash_aref(optionsOrFullscreen, key);
-                if (!strcmp(keyString, "fullscreen")) {
-                    fullscreen = RTEST(value);
-                }
-                else if (!strcmp(keyString, "update_interval")) {
-                    updateInterval = NUM2DBL(value);
-                }
-                else {
-                    static bool issuedWarning = false;
-                    if (!issuedWarning) {
-                        issuedWarning = true;
-                        rb_warn("Unknown keyword argument: :%s", keyString);
-                    }
-                }
-            }
-        }
-        else {
-            fullscreen = RTEST(optionsOrFullscreen);
-        }
-        
-        return new Gosu::Window(width, height, fullscreen, updateInterval);
-    }
-    */
-    
     TextInput* textInput() const {
         return $self->input().textInput();
     }
@@ -924,16 +883,6 @@ namespace Gosu {
     }
     void setMouseY(double y) {
         $self->input().setMousePosition($self->input().mouseX(), y);
-    }
-    
-    int width() const {
-        return $self->graphics().width();
-    }
-    int height() const {
-        return $self->graphics().height();
-    }
-    bool fullscreen() const {
-        return $self->graphics().fullscreen();
     }
 };
 

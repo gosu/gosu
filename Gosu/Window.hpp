@@ -52,7 +52,7 @@ namespace Gosu
 	
     public:
         //! Constructs a Window.
-        //! \param width Width of the window in points; that is, pixels on a normal display, and 'virtual pixels' on a
+        //! \param width Width of the window in points; that is, pixels on a normal display, and 'points' on a
         //! high-resolution display.
         //! \param height See width.
         //! \param updateInterval Interval in milliseconds between two calls
@@ -61,11 +61,19 @@ namespace Gosu
             double updateInterval = 16.666666);
         virtual ~Window();
 
-        std::wstring caption() const;
-        void setCaption(const std::wstring& caption);
+        unsigned width() const;
+        unsigned height() const;
+        // void resize(unsigned width, unsigned height);
+        
+        bool fullscreen() const;
+        // void setFullscreen(bool fullscreen);
         
         double updateInterval() const;
-        
+        // void setUpdateInterval(double updateInterval);
+
+        std::wstring caption() const;
+        void setCaption(const std::wstring& caption);
+
         //! Enters a modal loop where the Window is visible on screen and
         //! receives calls to draw, update etc.
         virtual void show();

@@ -37,7 +37,7 @@ struct Gosu::Window::Impl
     GosuViewController *controller;
     std::unique_ptr<Graphics> graphics;
     std::unique_ptr<Input> input;
-    double interval;
+    double updateInterval;
     std::wstring caption;
 };
 
@@ -65,11 +65,31 @@ Gosu::Window::Window(unsigned width, unsigned height,
     pimpl->input->onTouchEnded = std::tr1::bind(&Window::touchEnded, this, _1);
     pimpl->input->onTouchCancelled = std::tr1::bind(&Window::touchCancelled, this, _1);
     
-    pimpl->interval = updateInterval;
+    pimpl->updateInterval = updateInterval;
 }
 
 Gosu::Window::~Window()
 {
+}
+
+unsigned Gosu::Window::width() const
+{
+    return graphics().width();
+}
+
+unsigned Gosu::Window::height() const
+{
+    return graphics().height();
+}
+
+bool Gosu::Window::fullscreen() const
+{
+    return graphics().fullscreen();
+}
+
+double Gosu::Window::updateInterval() const
+{
+    return pimpl->updateInterval;
 }
 
 std::wstring Gosu::Window::caption() const
@@ -80,11 +100,6 @@ std::wstring Gosu::Window::caption() const
 void Gosu::Window::setCaption(const std::wstring& caption)
 {
     pimpl->caption = caption;
-}
-
-double Gosu::Window::updateInterval() const
-{
-    return pimpl->interval;
 }
 
 const Gosu::Graphics& Gosu::Window::graphics() const

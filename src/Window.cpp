@@ -148,6 +148,26 @@ Gosu::Window::~Window()
     SDL_HideWindow(sharedWindow());
 }
 
+unsigned Gosu::Window::width() const
+{
+    return graphics().width();
+}
+
+unsigned Gosu::Window::height() const
+{
+    return graphics().height();
+}
+
+bool Gosu::Window::fullscreen() const
+{
+    return graphics().fullscreen();
+}
+
+double Gosu::Window::updateInterval() const
+{
+    return pimpl->updateInterval;
+}
+
 std::wstring Gosu::Window::caption() const
 {
     return utf8ToWstring(SDL_GetWindowTitle(sharedWindow()));
@@ -157,11 +177,6 @@ void Gosu::Window::setCaption(const std::wstring& caption)
 {
     std::string utf8 = wstringToUTF8(caption);
     SDL_SetWindowTitle(sharedWindow(), utf8.c_str());
-}
-
-double Gosu::Window::updateInterval() const
-{
-    return pimpl->updateInterval;
 }
 
 void Gosu::Window::show()

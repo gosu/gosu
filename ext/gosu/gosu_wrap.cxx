@@ -2504,7 +2504,7 @@ SWIG_ruby_failed(void)
 } 
 
 
-/*@SWIG:/usr/local/Cellar/swig/3.0.10/share/swig/3.0.10/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
+/*@SWIG:/usr/local/Cellar/swig/3.0.10_1/share/swig/3.0.10/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
 SWIGINTERN VALUE SWIG_AUX_NUM2DBL(VALUE *args)
 {
   VALUE obj = args[0];
@@ -2546,7 +2546,7 @@ SWIG_From_unsigned_SS_int  (unsigned int value)
 #include <string>
 
 
-/*@SWIG:/usr/local/Cellar/swig/3.0.10/share/swig/3.0.10/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
+/*@SWIG:/usr/local/Cellar/swig/3.0.10_1/share/swig/3.0.10/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
 SWIGINTERN VALUE SWIG_AUX_NUM2ULONG(VALUE *args)
 {
   VALUE obj = args[0];
@@ -2645,7 +2645,7 @@ SWIG_From_bool  (bool value)
 }
 
 
-/*@SWIG:/usr/local/Cellar/swig/3.0.10/share/swig/3.0.10/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
+/*@SWIG:/usr/local/Cellar/swig/3.0.10_1/share/swig/3.0.10/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
 SWIGINTERN VALUE SWIG_AUX_NUM2LONG(VALUE *args)
 {
   VALUE obj = args[0];
@@ -3017,15 +3017,6 @@ SWIGINTERN void Gosu_Window_setMouseX(Gosu::Window *self,double x){
     }
 SWIGINTERN void Gosu_Window_setMouseY(Gosu::Window *self,double y){
         self->input().setMousePosition(self->input().mouseX(), y);
-    }
-SWIGINTERN int Gosu_Window_width(Gosu::Window const *self){
-        return self->graphics().width();
-    }
-SWIGINTERN int Gosu_Window_height(Gosu::Window const *self){
-        return self->graphics().height();
-    }
-SWIGINTERN bool Gosu_Window_fullscreen(Gosu::Window const *self){
-        return self->graphics().fullscreen();
     }
 
     static void markWindow(void* window) {
@@ -8521,6 +8512,126 @@ free_Gosu_Window(void *self) {
 }
 
 SWIGINTERN VALUE
+_wrap_Window_width(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","width", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  {
+    try {
+      result = (unsigned int)((Gosu::Window const *)arg1)->width();
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Window_height(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","height", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  {
+    try {
+      result = (unsigned int)((Gosu::Window const *)arg1)->height();
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Window_fullscreenq___(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","fullscreen", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  {
+    try {
+      result = (bool)((Gosu::Window const *)arg1)->fullscreen();
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_bool(static_cast< bool >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Window_update_interval(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","updateInterval", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  {
+    try {
+      result = (double)((Gosu::Window const *)arg1)->updateInterval();
+    } catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Window_caption(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
@@ -8582,36 +8693,6 @@ _wrap_Window_captione___(int argc, VALUE *argv, VALUE self) {
     }
   }
   return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Window_update_interval(int argc, VALUE *argv, VALUE self) {
-  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","updateInterval", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  {
-    try {
-      result = (double)((Gosu::Window const *)arg1)->updateInterval();
-    } catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_double(static_cast< double >(result));
-  return vresult;
 fail:
   return Qnil;
 }
@@ -9306,96 +9387,6 @@ _wrap_Window_mouse_ye___(int argc, VALUE *argv, VALUE self) {
     }
   }
   return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Window_width(int argc, VALUE *argv, VALUE self) {
-  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","width", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  {
-    try {
-      result = (int)Gosu_Window_width((Gosu::Window const *)arg1);
-    } catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_int(static_cast< int >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Window_height(int argc, VALUE *argv, VALUE self) {
-  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","height", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  {
-    try {
-      result = (int)Gosu_Window_height((Gosu::Window const *)arg1);
-    } catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_int(static_cast< int >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Window_fullscreenq___(int argc, VALUE *argv, VALUE self) {
-  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  bool result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","fullscreen", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  {
-    try {
-      result = (bool)Gosu_Window_fullscreen((Gosu::Window const *)arg1);
-    } catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_bool(static_cast< bool >(result));
-  return vresult;
 fail:
   return Qnil;
 }
@@ -11366,9 +11357,12 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Window, (void *) &SwigClassWindow);
   rb_define_alloc_func(SwigClassWindow.klass, _wrap_Window_allocate);
   rb_define_method(SwigClassWindow.klass, "initialize", VALUEFUNC(_wrap_new_Window), -1);
+  rb_define_method(SwigClassWindow.klass, "width", VALUEFUNC(_wrap_Window_width), -1);
+  rb_define_method(SwigClassWindow.klass, "height", VALUEFUNC(_wrap_Window_height), -1);
+  rb_define_method(SwigClassWindow.klass, "fullscreen?", VALUEFUNC(_wrap_Window_fullscreenq___), -1);
+  rb_define_method(SwigClassWindow.klass, "update_interval", VALUEFUNC(_wrap_Window_update_interval), -1);
   rb_define_method(SwigClassWindow.klass, "caption", VALUEFUNC(_wrap_Window_caption), -1);
   rb_define_method(SwigClassWindow.klass, "caption=", VALUEFUNC(_wrap_Window_captione___), -1);
-  rb_define_method(SwigClassWindow.klass, "update_interval", VALUEFUNC(_wrap_Window_update_interval), -1);
   rb_define_method(SwigClassWindow.klass, "show", VALUEFUNC(_wrap_Window_show), -1);
   rb_define_method(SwigClassWindow.klass, "tick", VALUEFUNC(_wrap_Window_tick), -1);
   rb_define_method(SwigClassWindow.klass, "close", VALUEFUNC(_wrap_Window_close), -1);
@@ -11387,9 +11381,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "set_mouse_position", VALUEFUNC(_wrap_Window_set_mouse_position), -1);
   rb_define_method(SwigClassWindow.klass, "mouse_x=", VALUEFUNC(_wrap_Window_mouse_xe___), -1);
   rb_define_method(SwigClassWindow.klass, "mouse_y=", VALUEFUNC(_wrap_Window_mouse_ye___), -1);
-  rb_define_method(SwigClassWindow.klass, "width", VALUEFUNC(_wrap_Window_width), -1);
-  rb_define_method(SwigClassWindow.klass, "height", VALUEFUNC(_wrap_Window_height), -1);
-  rb_define_method(SwigClassWindow.klass, "fullscreen?", VALUEFUNC(_wrap_Window_fullscreenq___), -1);
   SwigClassWindow.mark = (void (*)(void *)) markWindow;
   SwigClassWindow.destroy = (void (*)(void *)) free_Gosu_Window;
   SwigClassWindow.trackObjects = 1;
