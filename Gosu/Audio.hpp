@@ -150,12 +150,6 @@ namespace Gosu
         
         //! Called every tick by Window for management purposes.
         static void update();
-
-        #ifndef SWIG
-        enum Type { stStream, stModule };
-        GOSU_DEPRECATED Song(Audio&, const std::wstring& filename);
-        GOSU_DEPRECATED Song(Audio&, Type type, Reader reader);
-        #endif
     };
 }
 
