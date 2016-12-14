@@ -19,11 +19,6 @@
 
 namespace Gosu
 {
-    // Deprecated.
-    #ifndef SWIG
-    class Audio;
-    #endif
-
     //! An instance of a Sample playing. Can be used to stop sounds dynamically,
     //! or to check if they are finished.
     //! It is recommended that you throw away sample instances if possible,
@@ -96,11 +91,6 @@ namespace Gosu
         //! or low values. Use 1.0 for normal playback speed.
         SampleInstance playPan(double pan, double volume = 1, double speed = 1,
             bool looping = false) const;
-
-        #ifndef SWIG
-        GOSU_DEPRECATED Sample(Audio& audio, const std::wstring& filename);
-        GOSU_DEPRECATED Sample(Audio& audio, Reader reader);
-        #endif
     };
 
     //! Songs are less flexible than samples in that they can only be played

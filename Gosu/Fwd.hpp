@@ -7,7 +7,6 @@
 //! The library's main namespace.
 namespace Gosu
 {
-    class Audio;
     class Bitmap;
     class Buffer;
     class Button;

@@ -289,18 +289,3 @@ Gosu::Input& Gosu::Window::input()
 {
     return *pimpl->input;
 }
-
-// Deprecated.
-
-class Gosu::Audio {};
-namespace { Gosu::Audio dummyAudio; }
-
-const Gosu::Audio& Gosu::Window::audio() const
-{
-    return dummyAudio;
-}
-
-Gosu::Audio& Gosu::Window::audio()
-{
-    return dummyAudio;
-}

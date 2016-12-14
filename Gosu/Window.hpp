@@ -139,9 +139,6 @@ namespace Gosu
         void* UIWindow() const;
         #endif        
         
-        GOSU_DEPRECATED const Audio& audio() const;
-        GOSU_DEPRECATED Audio& audio();
-
         #endif
     };
 }

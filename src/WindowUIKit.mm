@@ -29,8 +29,6 @@ namespace Gosu
     }
 }
 
-class Gosu::Audio {};
-
 struct Gosu::Window::Impl
 {
     ::UIWindow *window;
@@ -122,18 +120,6 @@ const Gosu::Graphics& Gosu::Window::graphics() const
 Gosu::Graphics& Gosu::Window::graphics()
 {
     return *pimpl->graphics;
-}
-
-const Gosu::Audio& Gosu::Window::audio() const
-{
-    static Gosu::Audio audio;
-    return audio;
-}
-
-Gosu::Audio& Gosu::Window::audio()
-{
-    static Gosu::Audio audio;
-    return audio;
 }
 
 const Gosu::Input& Gosu::Window::input() const
