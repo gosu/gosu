@@ -37,12 +37,13 @@ struct Gosu::Window::Impl
     GosuViewController *controller;
     std::unique_ptr<Graphics> graphics;
     std::unique_ptr<Input> input;
+    
+    bool fullscreen;
     double updateInterval;
     std::wstring caption;
 };
 
-Gosu::Window::Window(unsigned width, unsigned height,
-    bool fullscreen, double updateInterval)
+Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double updateInterval)
 : pimpl(new Impl)
 {
     pimpl->window = [[::UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -53,7 +54,7 @@ Gosu::Window::Window(unsigned width, unsigned height,
     // It is important to load the view before creating the Graphics instance.
     [pimpl->controller loadView];
     
-    pimpl->graphics.reset(new Graphics(screenHeight(), screenWidth(), false));
+    pimpl->graphics.reset(new Graphics(screenHeight(), screenWidth()));
     pimpl->graphics->setResolution(width, height);
     
     pimpl->input.reset(new Input((__bridge void *)pimpl->controller.view, updateInterval));
@@ -65,6 +66,7 @@ Gosu::Window::Window(unsigned width, unsigned height,
     pimpl->input->onTouchEnded = std::tr1::bind(&Window::touchEnded, this, _1);
     pimpl->input->onTouchCancelled = std::tr1::bind(&Window::touchCancelled, this, _1);
     
+    pimpl->fullscreen = fullscreen;
     pimpl->updateInterval = updateInterval;
 }
 
@@ -84,7 +86,12 @@ unsigned Gosu::Window::height() const
 
 bool Gosu::Window::fullscreen() const
 {
-    return graphics().fullscreen();
+    return pimpl->fullscreen;
+}
+
+void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
+{
+    throw std::logic_error("Cannot resize windows on iOS");
 }
 
 double Gosu::Window::updateInterval() const

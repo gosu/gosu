@@ -78,6 +78,7 @@ namespace Gosu
 
 struct Gosu::Window::Impl
 {
+    bool fullscreen;
     double updateInterval;
     
     std::auto_ptr<Graphics> graphics;
@@ -87,6 +88,45 @@ struct Gosu::Window::Impl
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double updateInterval)
 : pimpl(new Impl)
 {
+    // This will implicitly create graphics() and input(), and make the OpenGL context current.
+    resize(width, height, fullscreen);
+    
+    SDL_GL_SetSwapInterval(1);
+
+    pimpl->updateInterval = updateInterval;
+
+    if (!fullscreen) {
+        SDL_SetWindowPosition(sharedWindow(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+    }
+    
+    input().onButtonDown = std::tr1::bind(&Window::buttonDown, this, _1);
+    input().onButtonUp = std::tr1::bind(&Window::buttonUp, this, _1);
+}
+
+Gosu::Window::~Window()
+{
+    SDL_HideWindow(sharedWindow());
+}
+
+unsigned Gosu::Window::width() const
+{
+    return graphics().width();
+}
+
+unsigned Gosu::Window::height() const
+{
+    return graphics().height();
+}
+
+bool Gosu::Window::fullscreen() const
+{
+    return pimpl->fullscreen;
+}
+
+void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
+{
+    pimpl->fullscreen = fullscreen;
+    
     int actualWidth = width;
     int actualHeight = height;
     double scaleFactor = 1.0;
@@ -119,48 +159,27 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
         }
     }
     
-    SDL_SetWindowTitle(sharedWindow(), "");
+    SDL_SetWindowFullscreen(sharedWindow(), fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
     SDL_SetWindowSize(sharedWindow(), actualWidth, actualHeight);
-    SDL_SetWindowPosition(sharedWindow(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-    if (fullscreen)
-    {
-        SDL_SetWindowFullscreen(sharedWindow(), fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
-    }
     
-    #if SDL_VERSION_ATLEAST(2, 0, 1)
+#if SDL_VERSION_ATLEAST(2, 0, 1)
     SDL_GL_GetDrawableSize(sharedWindow(), &actualWidth, &actualHeight);
-    #endif
+#endif
     
     ensureCurrentContext();
-    SDL_GL_SetSwapInterval(1);
     
-    pimpl->graphics.reset(new Graphics(actualWidth, actualHeight, fullscreen));
+    if (pimpl->graphics.get() == 0) {
+        pimpl->graphics.reset(new Graphics(actualWidth, actualHeight));
+    }
+    else {
+        pimpl->graphics->setPhysicalResolution(actualWidth, actualHeight);
+    }
     pimpl->graphics->setResolution(width, height, blackBarWidth, blackBarHeight);
-    pimpl->input.reset(new Input(sharedWindow()));
+    
+    if (pimpl->input.get() == 0) {
+        pimpl->input.reset(new Input(sharedWindow()));
+    }
     pimpl->input->setMouseFactors(1 / scaleFactor, 1 / scaleFactor, blackBarWidth, blackBarHeight);
-    input().onButtonDown = std::tr1::bind(&Window::buttonDown, this, _1);
-    input().onButtonUp = std::tr1::bind(&Window::buttonUp, this, _1);
-    pimpl->updateInterval = updateInterval;
-}
-
-Gosu::Window::~Window()
-{
-    SDL_HideWindow(sharedWindow());
-}
-
-unsigned Gosu::Window::width() const
-{
-    return graphics().width();
-}
-
-unsigned Gosu::Window::height() const
-{
-    return graphics().height();
-}
-
-bool Gosu::Window::fullscreen() const
-{
-    return graphics().fullscreen();
 }
 
 double Gosu::Window::updateInterval() const

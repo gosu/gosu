@@ -46,7 +46,6 @@ struct Gosu::Graphics::Impl
     unsigned virtWidth, virtHeight;
     unsigned physWidth, physHeight;
     double blackWidth, blackHeight;
-    bool fullscreen;
     Transform baseTransform;
     
     DrawOpQueueStack warmedUpQueues;
@@ -63,12 +62,11 @@ struct Gosu::Graphics::Impl
     }
 };
 
-Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscreen)
+Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight)
 : pimpl(new Impl)
 {
-    pimpl->virtWidth  = physWidth;
+    pimpl->virtWidth = physWidth;
     pimpl->virtHeight = physHeight;
-    pimpl->fullscreen = fullscreen;
     pimpl->blackWidth = 0;
     pimpl->blackHeight = 0;
 
@@ -94,11 +92,6 @@ unsigned Gosu::Graphics::width() const
 unsigned Gosu::Graphics::height() const
 {
     return pimpl->virtHeight;
-}
-
-bool Gosu::Graphics::fullscreen() const
-{
-    return pimpl->fullscreen;
 }
 
 void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight,

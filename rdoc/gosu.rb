@@ -736,21 +736,21 @@ module Gosu
     # The window's width, in pixels. This only counts the drawable area and does not include any borders or decorations added by the window manager.
     #
     # @return [Fixnum] the window's width, in pixels.
-    attr_reader :width
+    attr_accessor :width
 
     ##
     # The window's height, in pixels. This only counts the drawable area and does not include any borders or decorations added by the window manager.
     #
     # @return [Fixnum] the window's height, in pixels.
-    attr_reader :height
+    attr_accessor :height
 
     ##
     # @return [true, false] whether this is a full-screen window.
-    attr_reader :fullscreen?
+    attr_accessor :fullscreen?
 
     ##
     # @return [Float] the interval between calls to {#update}, in milliseconds.
-    attr_reader :update_interval
+    attr_accessor :update_interval
 
     ##
     # Creates a new window with the requested size.

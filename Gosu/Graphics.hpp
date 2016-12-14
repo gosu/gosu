@@ -42,7 +42,7 @@ namespace Gosu
     #endif
 
     public:
-        Graphics(unsigned physicalWidth, unsigned physicalHeight, bool fullscreen);
+        Graphics(unsigned physicalWidth, unsigned physicalHeight);
         ~Graphics();
 
         void setResolution(unsigned logicalWidth, unsigned logicalHeight,
@@ -50,7 +50,6 @@ namespace Gosu
         
         unsigned width() const;
         unsigned height() const;
-        bool fullscreen() const;
 
         //! Prepares the graphics object for drawing. Nothing must be drawn
         //! without calling begin.

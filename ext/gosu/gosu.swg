@@ -817,10 +817,7 @@ namespace Gosu {
 %}
 
 // TextInput
-%ignore Gosu::TextInput::feedNSEvent(void*);
 %ignore Gosu::TextInput::feedSDLEvent(void*);
-%ignore Gosu::TextInput::feedMessage(unsigned long, unsigned long, unsigned long);
-%ignore Gosu::TextInput::feedButtonId(unsigned);
 %ignore Gosu::TextInput::caretPos() const;
 %ignore Gosu::TextInput::selectionStart() const;
 %rename("text=") setText;
@@ -840,6 +837,10 @@ namespace Gosu {
 };
 
 // Window
+%ignore Gosu::Window::resize(unsigned, unsigned, bool);
+%rename("width=") setWidth;
+%rename("height=") setHeight;
+%rename("fullscreen=") setFullscreen;
 %rename("update_interval=") setUpdateInterval;
 %rename("caption=") setCaption;
 %rename("text_input=") setTextInput;
@@ -851,18 +852,26 @@ namespace Gosu {
 %markfunc Gosu::Window "markWindow";
 %include "../../Gosu/Window.hpp"
 
-// TODO: Can I fake this using an @ivar?
 %header %{
+    // Also mark the TextInput instance alive when the window is being marked.
     static void markWindow(void* window) {
-        #ifndef __MACRUBY__
         Gosu::TextInput* ti = static_cast<Gosu::Window*>(window)->input().textInput();
         if (VALUE ti_value = SWIG_RubyInstanceFor(ti))
             rb_gc_mark(ti_value);
-        #endif
     }
 %}
 
 %extend Gosu::Window {
+    void setWidth(unsigned width) {
+        $self->resize(width, $self->height(), $self->fullscreen());
+    }
+    void setHeight(unsigned height) {
+        $self->resize($self->width(), height, $self->fullscreen());
+    }
+    void setFullscreen(bool fullscreen) {
+        $self->resize($self->width(), $self->height(), fullscreen);
+    }
+    
     TextInput* textInput() const {
         return $self->input().textInput();
     }
@@ -888,7 +897,6 @@ namespace Gosu {
 };
 
 // Global input functions
-
 namespace Gosu {
     Gosu::Button charToButtonId(wchar_t ch);
     wchar_t buttonIdToChar(Gosu::Button btn);
