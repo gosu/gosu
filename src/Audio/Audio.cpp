@@ -595,25 +595,3 @@ void Gosu::Song::update()
     if (currentSong())
         currentSong()->data->update();
 }
-
-// Deprecated constructors.
-
-Gosu::Sample::Sample(Audio& audio, const std::wstring& filename)
-{
-    Sample(filename).data.swap(data);
-}
-
-Gosu::Sample::Sample(Audio& audio, Reader reader)
-{
-    Sample(reader).data.swap(data);
-}
-
-Gosu::Song::Song(Audio& audio, const std::wstring& filename)
-{
-    data = Song(filename).data;
-}
-
-Gosu::Song::Song(Audio& audio, Type type, Reader reader)
-{
-    data = Song(reader).data;
-}
