@@ -63,8 +63,10 @@ require 'fileutils'
 
 # Silence internal deprecation warnings in Gosu
 $CFLAGS << " -DGOSU_DEPRECATED="
+$CFLAGS << " "
 
-$CXXFLAGS ||= ''
+$CXXFLAGS ||= ""
+$CXXFLAGS << "-std=gnu++11"
 
 $INCFLAGS << " -I../.. -I../../src"
 
@@ -77,10 +79,10 @@ if `uname`.chomp == 'Darwin' then
   # files.
   $CXXFLAGS << " -x objective-c++ -fobjc-arc -DNDEBUG"
 
-  # Enable C++ 11, and explicitly specify libc++ as the standard library.
+  # Explicitly specify libc++ as the standard library.
   # rvm will sometimes try to override this:
   # https://github.com/shawn42/gamebox/issues/96
-  $CXXFLAGS << " -std=gnu++11 -stdlib=libc++"
+  $CXXFLAGS << " -stdlib=libc++"
   
   # Dependencies.
   $CXXFLAGS << " #{`sdl2-config --cflags`.chomp}"
@@ -100,8 +102,8 @@ else
   if /Raspbian/ =~ `cat /etc/issue` or /BCM2708/ =~ `cat /proc/cpuinfo` then
     $INCFLAGS << " -I/opt/vc/include/GLES"
     $INCFLAGS << " -I/opt/vc/include"
-    $LDFLAGS  << " -L/opt/vc/lib"
-    $LDFLAGS  << " -lGLESv1_CM"
+    $LDFLAGS << " -L/opt/vc/lib"
+    $LDFLAGS << " -lGLESv1_CM"
   else
     pkg_config 'gl'
   end
@@ -112,8 +114,8 @@ else
   pkg_config 'openal'
   pkg_config 'sndfile'
   
-  have_header 'SDL_ttf.h'   if have_library('SDL2_ttf', 'TTF_RenderUTF8_Blended')
-  have_header 'AL/al.h'     if have_library('openal')
+  have_header 'SDL_ttf.h' if have_library('SDL2_ttf', 'TTF_RenderUTF8_Blended')
+  have_header 'AL/al.h'   if have_library('openal')
 end
 
 # And now it gets ridiculous (or I am overcomplicating things...):
