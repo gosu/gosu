@@ -1,8 +1,7 @@
 //! \file Input.hpp
 //! Interface of the Input class.
 
-#ifndef GOSU_INPUT_HPP
-#define GOSU_INPUT_HPP
+#pragma once
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
@@ -134,5 +133,3 @@ namespace Gosu
         void setTextInput(TextInput* input);
     };
 }
-
-#endif

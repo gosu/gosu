@@ -1,8 +1,7 @@
 //! \file Timing.hpp
 //! Functions for timing.
 
-#ifndef GOSU_TIMING_HPP
-#define GOSU_TIMING_HPP
+#pragma once
 
 namespace Gosu
 {
@@ -12,5 +11,3 @@ namespace Gosu
     //! Incrementing, possibly wrapping millisecond timer.
     unsigned long milliseconds();
 }
-
-#endif

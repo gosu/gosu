@@ -1,8 +1,7 @@
 //! \file Inspection.hpp
 //! A special set of functions designed for tuning Gosu games.
 
-#ifndef GOSU_INSPECTION_HPP
-#define GOSU_INSPECTION_HPP
+#pragma once
 
 namespace Gosu
 {
@@ -10,5 +9,3 @@ namespace Gosu
     //! horrible algorithm.
     int fps();
 }
-
-#endif

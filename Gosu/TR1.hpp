@@ -1,8 +1,7 @@
 //! \file TR1.hpp
 //! Includes all parts of C++03 (TR1) that are relevant for Gosu. It makes available the following members of the std::tr1 namespace: array, bind, function, shared_ptr, uint*_t and int*_t.
 
-#ifndef GOSU_TR1_HPP
-#define GOSU_TR1_HPP
+#pragma once
 
 #include <memory>
 
@@ -51,6 +50,4 @@
     #else
         #include <tr1/cstdint>
     #endif
-#endif
-
 #endif

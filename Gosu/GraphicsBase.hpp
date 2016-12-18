@@ -1,8 +1,7 @@
 //! \file GraphicsBase.hpp
 //! Contains general typedefs and enums related to graphics.
 
-#ifndef GOSU_GRAPHICSBASE_HPP
-#define GOSU_GRAPHICSBASE_HPP
+#pragma once
 
 #include <Gosu/Platform.hpp>
 #include <Gosu/TR1.hpp>
@@ -100,5 +99,3 @@ namespace Gosu
     GOSU_DEPRECATED const double zImmediate = -std::numeric_limits<double>::infinity();
 #endif
 }
-
-#endif

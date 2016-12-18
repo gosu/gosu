@@ -1,5 +1,4 @@
-#ifndef GOSU_WINUTILITY_HPP
-#define GOSU_WINUTILITY_HPP
+#pragma once
 
 #include <Gosu/Platform.hpp>
 #include <string>
@@ -26,5 +25,3 @@ namespace Gosu
         }
     }
 }
-
-#endif

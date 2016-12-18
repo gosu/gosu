@@ -1,8 +1,7 @@
 //! \file Bitmap.hpp
 //! Interface of the Bitmap class.
 
-#ifndef GOSU_BITMAP_HPP
-#define GOSU_BITMAP_HPP
+#pragma once
 
 #include <Gosu/Color.hpp>
 #include <Gosu/Fwd.hpp>
@@ -92,5 +91,3 @@ namespace Gosu
     GOSU_DEPRECATED Reader loadFromPNG(Bitmap& bmp, Reader reader);
     GOSU_DEPRECATED Writer saveToPNG(const Bitmap& bmp, Writer writer);
 }
-
-#endif

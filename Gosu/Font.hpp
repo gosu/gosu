@@ -1,8 +1,7 @@
 //! \file Font.hpp
 //! Interface of the Font class.
 
-#ifndef GOSU_FONT_HPP
-#define GOSU_FONT_HPP
+#pragma once
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Color.hpp>
@@ -83,5 +82,3 @@ namespace Gosu
             Color c = Color::WHITE, AlphaMode mode = amDefault) const;
     };
 }
-
-#endif

@@ -1,8 +1,7 @@
 //! \file Directories.hpp
 //! Access to a small set of system paths.
 
-#ifndef GOSU_DIRECTORIES_HPP
-#define GOSU_DIRECTORIES_HPP
+#pragma once
 
 #include <string>
 
@@ -35,5 +34,3 @@ namespace Gosu
     //! On Linux, the home directory.
     std::wstring userDocsPrefix();
 }
-
-#endif

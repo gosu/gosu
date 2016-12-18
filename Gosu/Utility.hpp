@@ -1,8 +1,7 @@
 //! \file Utility.hpp
 //! General purpose utility functions.
 
-#ifndef GOSU_UTILITY_HPP
-#define GOSU_UTILITY_HPP
+#pragma once
 
 #include <string>
 #include <vector>
@@ -24,5 +23,3 @@ namespace Gosu
     //! being a common language abbreviation.
     std::string language();
 }
-
-#endif

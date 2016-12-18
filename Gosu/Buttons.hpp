@@ -1,5 +1,4 @@
-#ifndef GOSU_BUTTONS_HPP
-#define GOSU_BUTTONS_HPP
+#pragma once
 
 #include <Gosu/Platform.hpp>
 
@@ -261,5 +260,3 @@ namespace Gosu
 
 #undef GOSU_SCANCODE
 #undef GOSU_SPECIAL_SCANCODE
-
-#endif

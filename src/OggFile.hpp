@@ -1,5 +1,4 @@
-#ifndef GOSU_SRC_OGGFILE_HPP
-#define GOSU_SRC_OGGFILE_HPP
+#pragma once
 
 #include "AudioFile.hpp"
 #include <Gosu/IO.hpp>
@@ -97,5 +96,3 @@ namespace Gosu
         }
     };
 }
-
-#endif

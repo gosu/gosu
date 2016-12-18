@@ -1,5 +1,4 @@
-#ifndef GOSU_SRC_AUDIOFILE_HPP
-#define GOSU_SRC_AUDIOFILE_HPP
+#pragma once
 
 #include <vector>
 #include <Gosu/Platform.hpp>
@@ -49,5 +48,3 @@ namespace Gosu
         }
     };
 }
-
-#endif

@@ -7,8 +7,7 @@
 //! discussion of concepts and ideas behind the library, see the Wiki entries linked
 //! from the official website, https://www.libgosu.org/.
 
-#ifndef GOSU_GOSU_HPP
-#define GOSU_GOSU_HPP
+#pragma once
 
 #include <Gosu/Audio.hpp>
 #include <Gosu/Bitmap.hpp>
@@ -29,5 +28,3 @@
 #include <Gosu/Utility.hpp>
 #include <Gosu/Version.hpp>
 #include <Gosu/Window.hpp>
-
-#endif

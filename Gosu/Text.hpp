@@ -1,8 +1,7 @@
 //! \file Text.hpp
 //! Functions to output text on bitmaps.
 
-#ifndef GOSU_TEXT_HPP
-#define GOSU_TEXT_HPP
+#pragma once
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Color.hpp>
@@ -67,5 +66,3 @@ namespace Gosu
     //! with Gosu::Font and Gosu::createText. The name is given without & and ;.
     void registerEntity(const std::wstring& name, const Bitmap& replacement);
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef GOSU_SRC_TRANSFORMSTACK_HPP
-#define GOSU_SRC_TRANSFORMSTACK_HPP
+#pragma once
 
 #include "GraphicsImpl.hpp"
 #include <cassert>
@@ -96,5 +95,3 @@ namespace Gosu
         }
     };
 }
-
-#endif

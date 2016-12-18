@@ -1,5 +1,4 @@
-#ifndef GOSU_SRC_MACRO_HPP
-#define GOSU_SRC_MACRO_HPP
+#pragma once
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
@@ -32,5 +31,3 @@ public:
     
     void insert(const Bitmap& bitmap, int x, int y);
 };
-
-#endif

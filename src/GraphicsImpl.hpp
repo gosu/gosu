@@ -1,5 +1,4 @@
-#ifndef GOSU_SRC_GRAPHICSIMPL_HPP
-#define GOSU_SRC_GRAPHICSIMPL_HPP
+#pragma once
 
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
@@ -121,5 +120,3 @@ namespace Gosu
     
     void ensureCurrentContext();
 }
-
-#endif

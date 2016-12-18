@@ -1,5 +1,4 @@
-#ifndef GOSU_SRC_TEXTURE_HPP
-#define GOSU_SRC_TEXTURE_HPP
+#pragma once
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Bitmap.hpp>
@@ -30,5 +29,3 @@ namespace Gosu
         Gosu::Bitmap toBitmap(unsigned x, unsigned y, unsigned width, unsigned height) const;
     };
 }
-
-#endif

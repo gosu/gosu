@@ -1,5 +1,4 @@
-#ifndef GOSU_SRC_DRAWOPQUEUE_HPP
-#define GOSU_SRC_DRAWOPQUEUE_HPP
+#pragma once
 
 #include <Gosu/TR1.hpp>
 #include "GraphicsImpl.hpp"
@@ -184,5 +183,3 @@ public:
         clearQueue();
     }
 };
-
-#endif
