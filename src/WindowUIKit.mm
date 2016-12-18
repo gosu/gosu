@@ -1,6 +1,6 @@
 #include <Gosu/Gosu.hpp>
 #include "AppleUtility.hpp"
-#include "UIKit/GosuViewController.h"
+#include "GosuViewController.h"
 
 namespace Gosu
 {

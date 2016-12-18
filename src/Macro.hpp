@@ -1,11 +1,11 @@
-#ifndef GOSU_SRC_GRAPHICS_MACRO_HPP
-#define GOSU_SRC_GRAPHICS_MACRO_HPP
+#ifndef GOSU_SRC_MACRO_HPP
+#define GOSU_SRC_MACRO_HPP
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
 #include <Gosu/TR1.hpp>
 #include <Gosu/Platform.hpp>
-#include "Common.hpp"
+#include "GraphicsImpl.hpp"
 
 class Gosu::Macro : public Gosu::ImageData
 {

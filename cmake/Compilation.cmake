@@ -1,57 +1,56 @@
 set(SOURCE_FILES
-    ../src/Bitmap/Bitmap.cpp
-    ../src/Bitmap/BitmapIO.cpp
-    ../src/Graphics/BlockAllocator.cpp
-    ../src/Graphics/Color.cpp
-    ../src/Graphics/Graphics.cpp
-    ../src/Graphics/Image.cpp
-    ../src/Graphics/LargeImageData.cpp
-    ../src/Graphics/Macro.cpp
-    ../src/Graphics/Resolution.cpp
-    ../src/Graphics/TexChunk.cpp
-    ../src/Graphics/Texture.cpp
-    ../src/Graphics/Transform.cpp
-    ../src/Input/Input.cpp
-    ../src/Input/TextInput.cpp
+    ../src/Bitmap.cpp
+    ../src/BitmapIO.cpp
+    ../src/BlockAllocator.cpp
+    ../src/Color.cpp
+    ../src/Font.cpp
+    ../src/Graphics.cpp
+    ../src/Image.cpp
+    ../src/Input.cpp
     ../src/Inspection.cpp
     ../src/IO.cpp
+    ../src/LargeImageData.cpp
+    ../src/Macro.cpp
     ../src/Math.cpp
-    ../src/Text/Font.cpp
-    ../src/Text/Text.cpp
+    ../src/Resolution.cpp
+    ../src/TexChunk.cpp
+    ../src/Text.cpp
+    ../src/TextInput.cpp
+    ../src/Texture.cpp
+    ../src/Transform.cpp
     ../src/Utility.cpp
     ../src/Window.cpp
-    
     ../src/stb_vorbis.c
 )
 
 if(WIN32)
     set(SOURCE_FILES ${SOURCE_FILES}
-        ../src/Audio/Audio.cpp
+        ../src/Audio.cpp
         ../src/DirectoriesWin.cpp
         ../src/FileWin.cpp
-        ../src/Graphics/TextWin.cpp
-        ../src/Graphics/TextTTFWin.cpp
         ../src/InputWin.cpp
+        ../src/TextTTFWin.cpp
+        ../src/TextWin.cpp
         ../src/TimingWin.cpp
         ../src/UtilityWin.cpp
         ../src/WinUtility.cpp
     )
 elseif(APPLE)
     set(SOURCE_FILES ${SOURCE_FILES}
-        ../src/Audio/Audio.mm
+        ../src/Audio.mm
         ../src/DirectoriesApple.mm
         ../src/FileUnix.cpp
-        ../src/Graphics/ResolutionApple.mm
-        ../src/Text/TextApple.mm
+        ../src/ResolutionApple.mm
+        ../src/TextApple.mm
         ../src/TimingApple.cpp
         ../src/UtilityApple.mm
     )
 else()
     set(SOURCE_FILES ${SOURCE_FILES}
-        ../src/Audio/Audio.cpp
+        ../src/Audio.cpp
         ../src/DirectoriesUnix.cpp
         ../src/FileUnix.cpp
-        ../src/Text/TextUnix.cpp
+        ../src/TextUnix.cpp
         ../src/TimingUnix.cpp
     )
 endif()
@@ -151,10 +150,7 @@ if(MSVC)
     # Disable warning on STL exports
     set_target_properties(gosu PROPERTIES COMPILE_FLAGS "/W4 /wd4251 /wd4127")
 else()
-    # TODO - use CMake's own C++ standard selection
-    if(GOSU_CPP11_ENABLED)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-    endif()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
 target_link_libraries(gosu ${GOSU_DEPENDENCIES})

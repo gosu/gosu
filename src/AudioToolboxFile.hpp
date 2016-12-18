@@ -1,5 +1,5 @@
-#ifndef GOSU_SRC_AUDIO_AUDIOFILE_MAC_HPP
-#define GOSU_SRC_AUDIO_AUDIOFILE_MAC_HPP
+#ifndef GOSU_SRC_AUDIOTOOLBOXFILE_HPP
+#define GOSU_SRC_AUDIOTOOLBOXFILE_HPP
 
 #include "AudioFile.hpp"
 #include <AudioToolbox/AudioToolbox.h>
@@ -9,7 +9,7 @@
 #include <Gosu/IO.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/Platform.hpp>
-#include "../AppleUtility.hpp"
+#include "AppleUtility.hpp"
 #include <algorithm>
 #include <vector>
 #include <arpa/inet.h>

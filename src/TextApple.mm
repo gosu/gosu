@@ -4,7 +4,7 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/Math.hpp>
-#include "../AppleUtility.hpp"
+#include "AppleUtility.hpp"
 #include <map>
 #include <cmath>
 using namespace std;

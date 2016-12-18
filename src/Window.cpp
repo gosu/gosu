@@ -1,5 +1,4 @@
 #include <Gosu/Gosu.hpp>
-#include "Graphics/Common.hpp"
 #include <SDL.h>
 #include <cstdlib>
 #include <memory>

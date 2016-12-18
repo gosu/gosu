@@ -1,7 +1,7 @@
-#ifndef GOSU_SRC_GRAPHICS_CLIPRECTSTACK_HPP
-#define GOSU_SRC_GRAPHICS_CLIPRECTSTACK_HPP
+#ifndef GOSU_SRC_CLIPRECTSTACK_HPP
+#define GOSU_SRC_CLIPRECTSTACK_HPP
 
-#include "Common.hpp"
+#include "GraphicsImpl.hpp"
 #include <cassert>
 #include <vector>
 

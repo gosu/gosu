@@ -17,44 +17,43 @@ else
 end
 
 BASE_FILES = %w(
-  Bitmap/Bitmap.cpp
-  Bitmap/BitmapIO.cpp
+  Bitmap.cpp
+  BitmapIO.cpp
+  BlockAllocator.cpp
+  Color.cpp
   DirectoriesUnix.cpp
   FileUnix.cpp
-  Graphics/BlockAllocator.cpp
-  Graphics/Color.cpp
-  Graphics/Graphics.cpp
-  Graphics/Image.cpp
-  Graphics/LargeImageData.cpp
-  Graphics/Macro.cpp
-  Graphics/Resolution.cpp
-  Graphics/TexChunk.cpp
-  Graphics/Texture.cpp
-  Graphics/Transform.cpp
-  Input/Input.cpp
-  Input/TextInput.cpp
+  Font.cpp
+  Graphics.cpp
+  Image.cpp
+  Input.cpp
   Inspection.cpp
   IO.cpp
+  LargeImageData.cpp
+  Macro.cpp
   Math.cpp
-  Text/Font.cpp
-  Text/Text.cpp
+  Resolution.cpp
+  TexChunk.cpp
+  Text.cpp
+  TextInput.cpp
+  Texture.cpp
+  Transform.cpp
   Utility.cpp
   Window.cpp
-  
   stb_vorbis.c
 )
 
 MAC_FILES = %w(
-  Audio/Audio.mm
-  Graphics/ResolutionApple.mm
-  Text/TextApple.mm
+  Audio.mm
+  ResolutionApple.mm
+  TextApple.mm
   TimingApple.cpp
   UtilityApple.mm
 )
 
 LINUX_FILES = %w(
-  Audio/Audio.cpp
-  Text/TextUnix.cpp
+  Audio.cpp
+  TextUnix.cpp
   TimingUnix.cpp
 )
 
@@ -65,7 +64,7 @@ require 'fileutils'
 $CFLAGS << " -DGOSU_DEPRECATED="
 
 $CXXFLAGS ||= ""
-$CXXFLAGS << "-std=gnu++11"
+$CXXFLAGS << " -std=gnu++11"
 
 $INCFLAGS << " -I../.. -I../../src"
 
@@ -117,24 +116,11 @@ else
   have_header 'AL/al.h'   if have_library('openal')
 end
 
-# And now it gets ridiculous (or I am overcomplicating things...):
-# mkmf will compile all .c/.cpp files in this directory, but if they are nested
-# inside folders, it will not find the resulting .o files during linking.
-# So we create a shim .c/.cpp file for each file that we want to compile, ensuring
-# that all .o files are built into the current directory, without any nesting.
-# TODO: Just move all of Gosu's source files back into a flat hierarchy again.
-# The nested directory structure has really not been worth it.
-SOURCE_FILES.each do |file|
-  shim_name = file.gsub('/', '-').sub(/\.mm$/, '.cpp')
-  File.open(shim_name, "w") do |shim|
-    shim.puts "#include \"../../src/#{file}\""
-  end
-end
-
 # This is necessary to build on stock Ruby on OS X 10.7.
 CONFIG['CXXFLAGS'] ||= $CXXFLAGS
 
-if RUBY_VERSION >= '1.9.3' and RUBY_VERSION < '2.2.0'
+if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("1.9.3") and
+   Gem::Version.new(RUBY_VERSION) < Gem::Version.new("2.2.0")
   # In some versions of Ruby and mkmf, the $CXXFLAGS variable is badly broken.
   # We can modify CONFIG instead, and our changes will end up in the Makefile.
   # See http://bugs.ruby-lang.org/issues/8315
