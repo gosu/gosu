@@ -1,5 +1,4 @@
-#ifndef GOSU_SRC_RENDERSTATE_HPP
-#define GOSU_SRC_RENDERSTATE_HPP
+#pragma once
 
 #include "GraphicsImpl.hpp"
 #include "Texture.hpp"
@@ -207,5 +206,3 @@ namespace Gosu
     };
     typedef std::list<VertexArray> VertexArrays;    
 }
-    
-#endif

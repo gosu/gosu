@@ -1,5 +1,4 @@
-#ifndef GOSU_SRC_CLIPRECTSTACK_HPP
-#define GOSU_SRC_CLIPRECTSTACK_HPP
+#pragma once
 
 #include "GraphicsImpl.hpp"
 #include <cassert>
@@ -89,5 +88,3 @@ public:
         return !hasEffectiveRect && !stack.empty();
     }
 };
-
-#endif

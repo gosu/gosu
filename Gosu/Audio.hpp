@@ -1,8 +1,7 @@
 //! \file Audio.hpp
 //! Contains all the classes of Gosu's audio system.
 
-#ifndef GOSU_AUDIO_HPP
-#define GOSU_AUDIO_HPP
+#pragma once
 
 #ifdef WIN32
 #ifndef NOMINMAX
@@ -152,5 +151,3 @@ namespace Gosu
         static void update();
     };
 }
-
-#endif

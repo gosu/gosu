@@ -1,8 +1,7 @@
 //! \file Image.hpp
 //! Interface of the Image class and helper functions.
 
-#ifndef GOSU_IMAGE_HPP
-#define GOSU_IMAGE_HPP
+#pragma once
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Color.hpp>
@@ -127,5 +126,3 @@ namespace Gosu
     }
     #endif
 }
-
-#endif

@@ -3,8 +3,7 @@
 //! automatically.
 
 #ifdef _MSC_VER
-#ifndef GOSU_AUTOLINK_HPP
-#define GOSU_AUTOLINK_HPP
+#pragma once
 
 #ifdef NDEBUG
 #pragma comment(lib, "Gosu.lib")
@@ -12,5 +11,4 @@
 #pragma comment(lib, "GosuDebug.lib")
 #endif
 
-#endif
 #endif

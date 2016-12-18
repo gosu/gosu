@@ -1,8 +1,7 @@
 //! \file Graphics.hpp
 //! Interface of the Graphics class.
 
-#ifndef GOSU_GRAPHICS_HPP
-#define GOSU_GRAPHICS_HPP
+#pragma once
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Color.hpp>
@@ -123,5 +122,3 @@ namespace Gosu
             unsigned imageFlags);
     };
 }
-
-#endif

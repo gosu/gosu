@@ -1,5 +1,4 @@
-#ifndef GOSU_SRC_ICONV_HPP
-#define GOSU_SRC_ICONV_HPP
+#pragma once
 
 #include <Gosu/Platform.hpp>
 
@@ -54,7 +53,3 @@ namespace Gosu
         }        
     }
 }
-
-
-#endif
-

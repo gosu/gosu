@@ -1,8 +1,7 @@
 //! \file Fwd.hpp
 //! Contains declarations of all of Gosu's available classes.
 
-#ifndef GOSU_FWD_HPP
-#define GOSU_FWD_HPP
+#pragma once
 
 //! The library's main namespace.
 namespace Gosu
@@ -26,5 +25,3 @@ namespace Gosu
     class Window;
     class Writer;
 }
-
-#endif

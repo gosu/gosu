@@ -22,8 +22,7 @@ task :set_version do
   
   File.open('Gosu/Version.hpp', 'w') do |file|
     file.puts <<-EOF
-#ifndef GOSU_VERSION_HPP
-#define GOSU_VERSION_HPP
+#pragma once
 
 #define GOSU_MAJOR_VERSION #{major}
 #define GOSU_MINOR_VERSION #{minor}
@@ -32,8 +31,6 @@ task :set_version do
 
 #define GOSU_COPYRIGHT_NOTICE \\
 #{LICENSES.split("\n").map { |line| "    \"#{line.gsub(/^ */, '')}\\n\"" }.join(" \\\n")}
-  
-#endif
     EOF
   end
 end

@@ -1,5 +1,4 @@
-#ifndef GOSU_APPLEUTILITY_HPP
-#define GOSU_APPLEUTILITY_HPP
+#pragma once
 
 #include <Gosu/Platform.hpp>
 #include <CoreFoundation/CoreFoundation.h>
@@ -62,5 +61,3 @@ namespace Gosu
         }
     };
 }
-
-#endif

@@ -1,8 +1,7 @@
 //! \file Window.hpp
 //! Interface of the Window class.
 
-#ifndef GOSU_WINDOW_HPP
-#define GOSU_WINDOW_HPP
+#pragma once
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
@@ -145,6 +144,4 @@ namespace Gosu
 
 #ifdef GOSU_IS_IPHONE
 Gosu::Window& windowInstance();
-#endif
-
 #endif

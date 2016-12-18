@@ -1,8 +1,7 @@
 //! \file IO.hpp
 //! Contains everything related to input and output.
 
-#ifndef GOSU_IO_HPP
-#define GOSU_IO_HPP
+#pragma once
 
 #include <cstddef>
 #include <algorithm>
@@ -265,5 +264,3 @@ namespace Gosu
     //! Creates or overwrites a file with the contents of a buffer.
     void saveFile(const Buffer& buffer, const std::wstring& filename);
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef GOSU_SRC_FORMATTEDSTRING_H
-#define GOSU_SRC_FORMATTEDSTRING_H
+#pragma once
 
 #include <Gosu/Color.hpp>
 #include <Gosu/Utility.hpp>
@@ -294,5 +293,3 @@ namespace Gosu
         }
     };
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef GOSU_SRC_SNDFILE_HPP
-#define GOSU_SRC_SNDFILE_HPP
+#pragma once
 
 #include <Gosu/Audio.hpp>
 #include <Gosu/Platform.hpp>
@@ -160,5 +159,3 @@ namespace Gosu
         }
     };
 }
-
-#endif

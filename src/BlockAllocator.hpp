@@ -1,5 +1,4 @@
-#ifndef GOSU_SRC_BLOCKALLOCATOR_HPP
-#define GOSU_SRC_BLOCKALLOCATOR_HPP
+#pragma once
 
 #include <memory>
 #include <Gosu/Platform.hpp>
@@ -31,5 +30,3 @@ namespace Gosu
         void free(unsigned left, unsigned top, unsigned width, unsigned height);
     };
 }
-
-#endif

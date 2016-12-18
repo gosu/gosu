@@ -1,8 +1,7 @@
 //! \file TextInput.hpp
 //! Interface of the TextInput class.
 
-#ifndef GOSU_TEXTINPUT_HPP
-#define GOSU_TEXTINPUT_HPP
+#pragma once
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
@@ -66,5 +65,3 @@ namespace Gosu
         }
     };
 }
-
-#endif

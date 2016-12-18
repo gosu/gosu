@@ -1,5 +1,4 @@
-#ifndef GOSU_SRC_AUDIOTOOLBOXFILE_HPP
-#define GOSU_SRC_AUDIOTOOLBOXFILE_HPP
+#pragma once
 
 #include "AudioFile.hpp"
 #include <AudioToolbox/AudioToolbox.h>
@@ -203,5 +202,3 @@ namespace Gosu
         }
     };
 }
-
-#endif

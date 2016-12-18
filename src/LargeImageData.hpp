@@ -1,5 +1,4 @@
-#ifndef GOSU_SRC_LARGEIMAGEDATA_HPP
-#define GOSU_SRC_LARGEIMAGEDATA_HPP
+#pragma once
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
@@ -42,5 +41,3 @@ namespace Gosu
         void insert(const Bitmap& bitmap, int x, int y);
     };
 }
-
-#endif

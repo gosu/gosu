@@ -1,8 +1,7 @@
 //! \file ImageData.hpp
 //! Interface of the ImageData class.
 
-#ifndef GOSU_IMAGEDATA_HPP
-#define GOSU_IMAGEDATA_HPP
+#pragma once
 
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
@@ -57,5 +56,3 @@ namespace Gosu
         virtual void insert(const Bitmap& bitmap, int x, int y) = 0;
     };
 }
-
-#endif

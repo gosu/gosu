@@ -1,8 +1,7 @@
 //! \file Color.hpp
 //! Interface of the Color class.
 
-#ifndef GOSU_COLOR_HPP
-#define GOSU_COLOR_HPP
+#pragma once
 
 #include <Gosu/Platform.hpp>
 #include <Gosu/TR1.hpp>
@@ -200,5 +199,3 @@ namespace Gosu
     }
     #endif
 }
-
-#endif

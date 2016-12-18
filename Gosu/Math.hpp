@@ -1,8 +1,7 @@
 //! \file Math.hpp
 //! Contains simple math functionality.
 
-#ifndef GOSU_MATH_HPP
-#define GOSU_MATH_HPP
+#pragma once
 
 namespace Gosu
 {
@@ -29,13 +28,13 @@ namespace Gosu
     //! Uses std::rand, so you should call std::srand before using it.
     double random(double min, double max);
     
-    //! Translates between Gosu's angle system (where 0¡ is at the top)
+    //! Translates between Gosu's angle system (where 0 is at the top)
     //! and radians (where 0 is at the right).
     inline double gosuToRadians(double angle)
     {
         return (angle - 90) * pi / 180;
     }
-    //! Translates between Gosu's angle system (where 0¡ is at the top)
+    //! Translates between Gosu's angle system (where 0 is at the top)
     //! and radians (where 0 is at the right).
     inline double radiansToGosu(double angle)
     {
@@ -131,5 +130,3 @@ namespace Gosu
         return a * (1.0 - weight) + b * weight;
     }
 }
-
-#endif

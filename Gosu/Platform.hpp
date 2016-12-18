@@ -1,8 +1,7 @@
 //! \file Platform.hpp
 //! Macros and utility functions to facilitate programming on all of Gosu's supported platforms.
 
-#ifndef GOSU_PLATFORM_HPP
-#define GOSU_PLATFORM_HPP
+#pragma once
 
 #ifdef __BIG_ENDIAN__
 # define GOSU_IS_BIG_ENDIAN
@@ -89,6 +88,4 @@ namespace Gosu
 # else
 #  define GOSU_DEPRECATED
 # endif
-#endif
-
 #endif
