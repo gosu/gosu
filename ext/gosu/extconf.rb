@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-if RUBY_PLATFORM =~ /mswin$|mingw32|mingw64|win32\-|\-win32/ then
+if RUBY_PLATFORM =~ /mswin$|mingw32|mingw64|win32\-|\-win32/
   platform = (RUBY_PLATFORM =~ /^x64-/ ? 'x64-mingw32' : 'i386-mingw32')
   
   puts "This gem is not meant to be installed on Windows. Instead, please use:"
@@ -10,7 +10,7 @@ end
 
 puts 'The Gosu gem requires some libraries to be installed system-wide.'
 puts 'See the following site for a list:'
-if `uname`.chomp == 'Darwin' then
+if `uname`.chomp == 'Darwin'
   puts 'https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X'
 else
   puts 'https://github.com/gosu/gosu/wiki/Getting-Started-on-Linux'
@@ -64,11 +64,12 @@ require 'fileutils'
 # Silence internal deprecation warnings in Gosu
 $CFLAGS << " -DGOSU_DEPRECATED="
 
-$CXXFLAGS ||= ''
+$CXXFLAGS ||= ""
+$CXXFLAGS << "-std=gnu++11"
 
 $INCFLAGS << " -I../.. -I../../src"
 
-if `uname`.chomp == 'Darwin' then
+if `uname`.chomp == 'Darwin'
   SOURCE_FILES = BASE_FILES + MAC_FILES
   
   # To make everything work with the Objective C runtime
@@ -77,10 +78,10 @@ if `uname`.chomp == 'Darwin' then
   # files.
   $CXXFLAGS << " -x objective-c++ -fobjc-arc -DNDEBUG"
 
-  # Enable C++ 11, and explicitly specify libc++ as the standard library.
+  # Explicitly specify libc++ as the standard library.
   # rvm will sometimes try to override this:
   # https://github.com/shawn42/gamebox/issues/96
-  $CXXFLAGS << " -std=gnu++11 -stdlib=libc++"
+  $CXXFLAGS << " -stdlib=libc++"
   
   # Dependencies.
   $CXXFLAGS << " #{`sdl2-config --cflags`.chomp}"
@@ -97,11 +98,11 @@ if `uname`.chomp == 'Darwin' then
 else
   SOURCE_FILES = BASE_FILES + LINUX_FILES
 
-  if /Raspbian/ =~ `cat /etc/issue` or /BCM2708/ =~ `cat /proc/cpuinfo` then
+  if /Raspbian/ =~ `cat /etc/issue` or /BCM2708/ =~ `cat /proc/cpuinfo`
     $INCFLAGS << " -I/opt/vc/include/GLES"
     $INCFLAGS << " -I/opt/vc/include"
-    $LDFLAGS  << " -L/opt/vc/lib"
-    $LDFLAGS  << " -lGLESv1_CM"
+    $LDFLAGS << " -L/opt/vc/lib"
+    $LDFLAGS << " -lGLESv1_CM"
   else
     pkg_config 'gl'
   end
@@ -112,8 +113,8 @@ else
   pkg_config 'openal'
   pkg_config 'sndfile'
   
-  have_header 'SDL_ttf.h'   if have_library('SDL2_ttf', 'TTF_RenderUTF8_Blended')
-  have_header 'AL/al.h'     if have_library('openal')
+  have_header 'SDL_ttf.h' if have_library('SDL2_ttf', 'TTF_RenderUTF8_Blended')
+  have_header 'AL/al.h'   if have_library('openal')
 end
 
 # And now it gets ridiculous (or I am overcomplicating things...):
@@ -133,7 +134,7 @@ end
 # This is necessary to build on stock Ruby on OS X 10.7.
 CONFIG['CXXFLAGS'] ||= $CXXFLAGS
 
-if RUBY_VERSION >= '1.9.3' and RUBY_VERSION < '2.2.0' then
+if RUBY_VERSION >= '1.9.3' and RUBY_VERSION < '2.2.0'
   # In some versions of Ruby and mkmf, the $CXXFLAGS variable is badly broken.
   # We can modify CONFIG instead, and our changes will end up in the Makefile.
   # See http://bugs.ruby-lang.org/issues/8315
