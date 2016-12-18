@@ -1,10 +1,10 @@
-#ifndef GOSU_SRC_GRAPHICS_TEXTURE_HPP
-#define GOSU_SRC_GRAPHICS_TEXTURE_HPP
+#ifndef GOSU_SRC_TEXTURE_HPP
+#define GOSU_SRC_TEXTURE_HPP
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/TR1.hpp>
-#include "Common.hpp"
+#include "GraphicsImpl.hpp"
 #include "TexChunk.hpp"
 #include "BlockAllocator.hpp"
 #include <vector>

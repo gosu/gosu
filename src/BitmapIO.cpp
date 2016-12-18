@@ -16,7 +16,7 @@
 #define STBI_NO_SIMD
 #endif
 
-#include "../stb_image.h"
+#include "stb_image.h"
 
 namespace
 {
@@ -86,7 +86,7 @@ void Gosu::loadImageFile(Gosu::Bitmap& bitmap, Reader input)
 }
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "../stb_image_write.h"
+#include "stb_image_write.h"
 
 // TODO: Move into proper internal header
 namespace Gosu { bool isExtension(const wchar_t* str, const wchar_t* ext); }

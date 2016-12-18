@@ -1,5 +1,5 @@
-#ifndef GOSU_SRC_AUDIO_AUDIOFILE_HPP
-#define GOSU_SRC_AUDIO_AUDIOFILE_HPP
+#ifndef GOSU_SRC_AUDIOFILE_HPP
+#define GOSU_SRC_AUDIOFILE_HPP
 
 #include <vector>
 #include <Gosu/Platform.hpp>

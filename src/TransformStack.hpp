@@ -1,7 +1,7 @@
-#ifndef GOSU_SRC_GRAPHICS_TRANSFORMSTACK_HPP
-#define GOSU_SRC_GRAPHICS_TRANSFORMSTACK_HPP
+#ifndef GOSU_SRC_TRANSFORMSTACK_HPP
+#define GOSU_SRC_TRANSFORMSTACK_HPP
 
-#include "Common.hpp"
+#include "GraphicsImpl.hpp"
 #include <cassert>
 #include <algorithm>
 

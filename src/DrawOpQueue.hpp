@@ -1,8 +1,8 @@
-#ifndef GOSU_SRC_GRAPHICS_DRAWOPQUEUE_HPP
-#define GOSU_SRC_GRAPHICS_DRAWOPQUEUE_HPP
+#ifndef GOSU_SRC_DRAWOPQUEUE_HPP
+#define GOSU_SRC_DRAWOPQUEUE_HPP
 
 #include <Gosu/TR1.hpp>
-#include "Common.hpp"
+#include "GraphicsImpl.hpp"
 #include "TransformStack.hpp"
 #include "ClipRectStack.hpp"
 #include "DrawOp.hpp"

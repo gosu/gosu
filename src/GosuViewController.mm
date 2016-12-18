@@ -1,6 +1,6 @@
 #import "GosuViewController.h"
 #import "GosuGLView.h"
-#import "../Graphics/Common.hpp"
+#import "GraphicsImpl.hpp"
 #import <Gosu/Gosu.hpp>
 
 #import <OpenAL/alc.h>

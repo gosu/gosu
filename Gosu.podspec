@@ -30,54 +30,53 @@ Pod::Spec.new do |s|
     ss.osx.xcconfig       = { 'OTHER_LDFLAGS' => '/usr/local/lib/libSDL2.a' }
   
     ss.public_header_files = 'Gosu/*.hpp'
-    ss.source_files = ['Gosu/*.hpp', 'src/**/*.{h,hpp}'] +
-      %w(src/Audio/Audio.mm
-         src/Bitmap/Bitmap.cpp
-         src/Bitmap/BitmapIO.cpp
+    ss.source_files = ['Gosu/*.hpp', 'src/*.{h,hpp}'] +
+      %w(src/Audio.mm
+         src/Bitmap.cpp
+         src/BitmapIO.cpp
+         src/BlockAllocator.cpp
+         src/Color.cpp
          src/DirectoriesApple.mm
          src/FileUnix.cpp
-         src/Graphics/BlockAllocator.cpp
-         src/Graphics/Color.cpp
-         src/Graphics/Graphics.cpp
-         src/Graphics/Image.cpp
-         src/Graphics/LargeImageData.cpp
-         src/Graphics/Macro.cpp
-         src/Graphics/TexChunk.cpp
-         src/Graphics/Texture.cpp
-         src/Graphics/Transform.cpp
+         src/Font.cpp
+         src/Graphics.cpp
+         src/Image.cpp
          src/Inspection.cpp
          src/IO.cpp
+         src/LargeImageData.cpp
+         src/Macro.cpp
          src/Math.cpp
-         src/Text/Font.cpp
-         src/Text/Text.cpp
-         src/Text/TextApple.mm
+         src/TexChunk.cpp
+         src/Text.cpp
+         src/TextApple.mm
+         src/Texture.cpp
          src/TimingApple.cpp
+         src/Transform.cpp
          src/Utility.cpp
          src/UtilityApple.mm
-       
          src/stb_vorbis.c)
 
     ss.osx.source_files =
-      %w(src/Graphics/Resolution.cpp
-         src/Graphics/ResolutionApple.mm
-         src/Input/Input.cpp
-         src/Input/TextInput.cpp
+      %w(src/Input.cpp
+         src/Resolution.cpp
+         src/ResolutionApple.mm
+         src/TextInput.cpp
          src/Window.cpp)
    
     ss.ios.source_files =
-      %w(src/Input/InputUIKit.mm
+      %w(src/GosuGLView.mm
+         src/GosuViewController.mm
+         src/InputUIKit.mm
          src/Inspection.cpp
-         src/UIKit/GosuGLView.mm
-         src/UIKit/GosuViewController.mm
          src/WindowUIKit.mm)
    
     # This path needs to be preserved because it is included by Audio.mm (yuck)
-    ss.preserve_paths = 'src/Audio/Audio.cpp'
+    ss.preserve_paths = 'src/Audio.cpp'
   end
   
   s.subspec 'GosuAppDelegateMain' do |ss|
     ss.dependency 'Gosu/Gosu'
-    ss.source_files = 'src/UIKit/GosuAppDelegate.mm'
+    ss.source_files = 'src/GosuAppDelegate.mm'
     ss.platform = :ios, '5.1.1'
   end
 

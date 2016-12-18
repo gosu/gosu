@@ -1,5 +1,5 @@
-#ifndef GOSU_SRC_AUDIO_OGGFILE_HPP
-#define GOSU_SRC_AUDIO_OGGFILE_HPP
+#ifndef GOSU_SRC_OGGFILE_HPP
+#define GOSU_SRC_OGGFILE_HPP
 
 #include "AudioFile.hpp"
 #include <Gosu/IO.hpp>
@@ -8,7 +8,7 @@
 #include <sstream>
 
 #define STB_VORBIS_HEADER_ONLY
-#include "../stb_vorbis.c"
+#include "stb_vorbis.c"
 
 // Based on the Drama Sound Engine for D
 

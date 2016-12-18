@@ -3,7 +3,7 @@
 
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Color.hpp>
-#include "Common.hpp"
+#include "GraphicsImpl.hpp"
 #include "RenderState.hpp"
 #include "TexChunk.hpp"
 #include <cassert>

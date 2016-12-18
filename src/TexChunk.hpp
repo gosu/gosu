@@ -1,10 +1,10 @@
-#ifndef GOSU_SRC_GRAPHICS_TEXCHUNK_HPP
-#define GOSU_SRC_GRAPHICS_TEXCHUNK_HPP
+#ifndef GOSU_SRC_TEXCHUNK_HPP
+#define GOSU_SRC_TEXCHUNK_HPP
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
 #include <Gosu/TR1.hpp>
-#include "Common.hpp"
+#include "GraphicsImpl.hpp"
 #include <memory>
 #include <vector>
 #include <stdexcept>

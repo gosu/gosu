@@ -1,5 +1,5 @@
-#ifndef GOSU_SRC_GRAPHICS_TEXTFORMATTING
-#define GOSU_SRC_GRAPHICS_TEXTFORMATTING
+#ifndef GOSU_SRC_FORMATTEDSTRING_H
+#define GOSU_SRC_FORMATTEDSTRING_H
 
 #include <Gosu/Color.hpp>
 #include <Gosu/Utility.hpp>

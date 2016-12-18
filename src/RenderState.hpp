@@ -1,7 +1,7 @@
-#ifndef GOSU_SRC_GRAPHICS_RENDERSTATE_HPP
-#define GOSU_SRC_GRAPHICS_RENDERSTATE_HPP
+#ifndef GOSU_SRC_RENDERSTATE_HPP
+#define GOSU_SRC_RENDERSTATE_HPP
 
-#include "Common.hpp"
+#include "GraphicsImpl.hpp"
 #include "Texture.hpp"
 
 // Properties that potentially need to be changed between each draw operation.

@@ -13,7 +13,6 @@ if(WIN32)
 else()
     option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 endif()
-option(GOSU_CPP11_ENABLED "Enable C++11 features" ON)
 
 option(CMAKE_BUILD_TYPE "Build type (Debug, Release, RelWithDebInfo or MinSizeRel)" RelWithDebInfo)
 
