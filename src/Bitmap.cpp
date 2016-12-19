@@ -102,11 +102,11 @@ void Gosu::applyColorKey(Bitmap& bitmap, Color key)
                 }
 
                 unsigned red = 0, green = 0, blue = 0;
-                for (unsigned i = 0; i < surroundingColors.size(); ++i)
+                for (auto& color : surroundingColors)
                 {
-                    red += surroundingColors[i].red();
-                    green += surroundingColors[i].green();
-                    blue += surroundingColors[i].blue();
+                    red += color.red();
+                    green += color.green();
+                    blue += color.blue();
                 }
                 bitmap.setPixel(x, y, Color(0, red / surroundingColors.size(),
                     green / surroundingColors.size(), blue / surroundingColors.size()));

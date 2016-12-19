@@ -24,10 +24,10 @@ Gosu::Texture::Texture(unsigned size, bool retro)
     glBindTexture(GL_TEXTURE_2D, texName_);
 #ifdef GOSU_IS_OPENGLES
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, allocator_.width(), allocator_.height(), 0,
-                 GL_RGBA, GL_UNSIGNED_BYTE, 0);
+                 GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 #else
     glTexImage2D(GL_TEXTURE_2D, 0, 4, allocator_.width(), allocator_.height(), 0,
-                 GL_RGBA, GL_UNSIGNED_BYTE, 0);
+                 GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 #endif
     
     if (retro || undocumentedRetrofication)

@@ -170,13 +170,13 @@ struct Gosu::Macro::Impl
         Transform transform =
         findTransformForTarget(x1, y1, x2, y2, x3, y3, x4, y4);
         
-        for (VertexArrays::const_iterator it = vertexArrays.begin(), end = vertexArrays.end(); it != end; ++it)
+        for (const auto& vertexArray : vertexArrays)
         {
             glPushMatrix();
-            it->renderState.apply();
+            vertexArray.renderState.apply();
             glMultMatrixd(&transform[0]);
-            glInterleavedArrays(GL_T2F_C4UB_V3F, 0, &it->vertices[0]);
-            glDrawArrays(GL_QUADS, 0, (GLsizei)it->vertices.size());
+            glInterleavedArrays(GL_T2F_C4UB_V3F, 0, &vertexArray.vertices[0]);
+            glDrawArrays(GL_QUADS, 0, (GLsizei)vertexArray.vertices.size());
             glPopMatrix();
         }
     #endif
@@ -218,7 +218,7 @@ void Gosu::Macro::draw(double x1, double y1, Color c1,
 
 const Gosu::GLTexInfo* Gosu::Macro::glTexInfo() const
 {
-    return 0;
+    return nullptr;
 }
 
 Gosu::Bitmap Gosu::Macro::toBitmap() const

@@ -102,8 +102,8 @@ namespace Gosu
                 
                 vector<FormattedString> parts = text.splitParts();
                 unsigned result = 0;
-                for (unsigned i = 0; i < parts.size(); ++i)
-                    result += Gosu::textWidth(parts[i].unformat(), fontName, fontHeight, parts[i].flagsAt(0));
+                for (auto& part : parts)
+                    result += Gosu::textWidth(part.unformat(), fontName, fontHeight, part.flagsAt(0));
                 return result;
             }
 
@@ -116,7 +116,7 @@ namespace Gosu
                 
                 unsigned totalSpacing = 0;
                 if (begin < end)
-                    for (Words::const_iterator i = begin; i != end - 1; ++i)
+                    for (auto i = begin; i != end - 1; ++i)
                         totalSpacing += i->spaceWidth;
 
                 // Where does the line start? (y)
@@ -142,14 +142,12 @@ namespace Gosu
                     pos = 0;
                 }
                 
-                for (Words::const_iterator cur = begin; cur != end; ++cur)
+                for (auto cur = begin; cur != end; ++cur)
                 {
                     vector<FormattedString> parts = cur->text.splitParts();
                     int x = 0;
-                    for (int i = 0; i < parts.size(); ++i)
+                    for (auto& part : parts)
                     {
-                        FormattedString& part = parts[i];
-                        
                         if (part.entityAt(0))
                         {
                             Gosu::Bitmap entity = entityBitmap(part.entityAt(0));
@@ -198,7 +196,7 @@ namespace Gosu
                 return builder.addEmptyLine();
 
             // Index into words to the first word in the current line.
-            Words::const_iterator lineBegin = words.begin();
+            auto lineBegin = words.begin();
 
             // Used width, in pixels, of the words [lineBegin..w[.
             unsigned wordsWidth = 0;
@@ -206,7 +204,7 @@ namespace Gosu
             // Used width of the spaces between (w-lineBegin) words.
             unsigned spacesWidth = 0;
 
-            for (Words::const_iterator w = words.begin(); w != words.end(); ++w)
+            for (auto w = words.begin(); w != words.end(); ++w)
             {
                 unsigned newWordsWidth = wordsWidth + w->width;
 
@@ -292,8 +290,8 @@ namespace Gosu
         void processText(TextBlockBuilder& builder, const FormattedString& text)
         {
             vector<FormattedString> paragraphs = text.splitLines();
-            for (int i = 0; i < paragraphs.size(); ++i)
-                processParagraph(builder, paragraphs[i]);
+            for (auto& paragraph : paragraphs)
+                processParagraph(builder, paragraph);
         }
     }
 }
@@ -339,9 +337,8 @@ Gosu::Bitmap Gosu::createText(const wstring& text,
         
         unsigned x = 0;
         vector<FormattedString> parts = lines[i].splitParts();
-        for (int p = 0; p < parts.size(); ++p)
+        for (auto& part : parts)
         {
-            const FormattedString& part = parts[p];
             if (part.length() == 1 && part.entityAt(0))
             {
                 Gosu::Bitmap entity = entityBitmap(part.entityAt(0));

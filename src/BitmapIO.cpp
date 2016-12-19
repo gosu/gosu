@@ -71,7 +71,7 @@ void Gosu::loadImageFile(Gosu::Bitmap& bitmap, Reader input)
     int x, y, n;
     stbi_uc* bytes = stbi_load_from_callbacks(&callbacks, &input, &x, &y, &n, STBI_rgb_alpha);
 
-    if (bytes == 0) {
+    if (bytes == nullptr) {
         // TODO - stbi_failure_reason is not thread safe. Everything here should be wrapped in a mutex.
         throw std::runtime_error("Cannot load image: " + std::string(stbi_failure_reason()));
     }

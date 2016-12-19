@@ -56,7 +56,7 @@ Gosu::File::File(const std::wstring& filename, FileMode mode)
         throw std::runtime_error("Cannot open file " + narrow(filename));
     
     if (mode == fmRead && size() > 0)
-        pimpl->mapping = mmap(0, size(), PROT_READ, 0, pimpl->fd, 0);
+        pimpl->mapping = mmap(nullptr, size(), PROT_READ, 0, pimpl->fd, 0);
 }
 
 Gosu::File::~File()

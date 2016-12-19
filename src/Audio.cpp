@@ -51,7 +51,7 @@ namespace
         return isOggFile(file.frontReader());
     }
     
-    Song* curSong = 0;
+    Song* curSong = nullptr;
     bool curSongLooping;
 }
 
@@ -252,7 +252,7 @@ protected:
     virtual void applyVolume() = 0;
 
 public:
-    virtual ~BaseData() {}
+    virtual ~BaseData() = default;
     
     virtual void play(bool looping) = 0;
     virtual void pause() = 0;
@@ -495,7 +495,7 @@ public:
                 play(true);
             else
                 // Let the world know we're finished.
-                curSong = 0;
+                curSong = nullptr;
         }
     }
 };
@@ -544,10 +544,10 @@ void Gosu::Song::play(bool looping)
     if (curSong && curSong != this)
     {
         curSong->stop();
-        assert(curSong == 0);
+        assert(curSong == nullptr);
     }
     
-    if (curSong == 0)
+    if (curSong == nullptr)
         data->play(looping);
     
     curSong = this;
@@ -570,7 +570,7 @@ void Gosu::Song::stop()
     if (curSong == this)
     {
         data->stop();
-        curSong = 0;
+        curSong = nullptr;
     }
 }
 

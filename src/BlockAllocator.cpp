@@ -6,8 +6,7 @@ struct Gosu::BlockAllocator::Impl
 {
     unsigned width, height;
 
-    typedef std::vector<Block> Blocks;
-    Blocks blocks;
+    std::vector<Block> blocks;
     unsigned firstX, firstY;
     unsigned maxW, maxH;
     
@@ -24,7 +23,7 @@ struct Gosu::BlockAllocator::Impl
 
     bool isBlockFree(const Block& block) const
     {
-        // (The right-th column and the bottom-th row are outside of the block.)
+        // right and bottom are exclusive (not part of the block).
         unsigned right = block.left + block.width;
         unsigned bottom = block.top + block.height;
 
@@ -33,10 +32,9 @@ struct Gosu::BlockAllocator::Impl
             return false;
 
         // Test if the block collides with any existing rects.
-        Blocks::const_iterator i, end = blocks.end();
-        for (i = blocks.begin(); i != end; ++i)
-            if (i->left < right && block.left < i->left + i->width &&
-                i->top < bottom && block.top < i->top + i->height)
+        for (auto b : blocks)
+            if (b.left < right && block.left < b.left + b.width &&
+                b.top < bottom && block.top < b.top + b.height)
             {
                 return false;
             }
@@ -125,13 +123,12 @@ void Gosu::BlockAllocator::block(unsigned left, unsigned top, unsigned width, un
 
 void Gosu::BlockAllocator::free(unsigned left, unsigned top, unsigned width, unsigned height)
 {
-    for (Impl::Blocks::iterator i = pimpl->blocks.begin();
-        i != pimpl->blocks.end(); ++i)
+    for (auto it = pimpl->blocks.begin(), end = pimpl->blocks.end(); it != end; ++it)
     {
-        if (i->left == left && i->top == top && i->width == width && i->height == height)
+        if (it->left == left && it->top == top && it->width == width && it->height == height)
         {
-            pimpl->blocks.erase(i);
-			// Be optimistic again!
+            pimpl->blocks.erase(it);
+            // Be optimistic again, since we might have deleted the largest/only block.
             pimpl->maxW = pimpl->width - 1;
             pimpl->maxH = pimpl->height - 1;
             return;

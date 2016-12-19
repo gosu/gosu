@@ -40,7 +40,7 @@ Gosu::Image::Image(const Bitmap& source,
 Gosu::Image::Image(GOSU_UNIQUE_PTR<ImageData> data)
 :   data(data.release())
 {
-    if (this->data.get() == 0)
+    if (this->data.get() == nullptr)
         throw std::invalid_argument("Gosu::Image cannot be initialized with an ImageData null pointer");
 }
 

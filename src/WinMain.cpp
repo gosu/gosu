@@ -10,14 +10,14 @@ vector<string> splitCmdLine()
 
     const char* cmdLine = ::GetCommandLineA();
 
-    const char* argBegin = 0;
+    const char* argBegin = nullptr;
     bool isQuotedArg = false;
 
     while (*cmdLine)
     {
         if (*cmdLine == '"')
         {
-            if (argBegin == 0)
+            if (argBegin == nullptr)
             {
                 argBegin = cmdLine + 1;
                 isQuotedArg = true;
@@ -25,18 +25,18 @@ vector<string> splitCmdLine()
             else if (isQuotedArg)
             {
                 result.push_back(std::string(argBegin, cmdLine));
-                argBegin = 0;
+                argBegin = nullptr;
             }
         }
-        else if (!isspace((unsigned char)*cmdLine) && argBegin == 0)
+        else if (!isspace((unsigned char)*cmdLine) && argBegin == nullptr)
         {
             argBegin = cmdLine;
             isQuotedArg = false;
         }
-        else if (isspace((unsigned char)*cmdLine) && argBegin != 0 && !isQuotedArg)
+        else if (isspace((unsigned char)*cmdLine) && argBegin != nullptr && !isQuotedArg)
         {
             result.push_back(std::string(argBegin, cmdLine + 1));
-            argBegin = 0;
+            argBegin = nullptr;
         }
         ++cmdLine;
     }

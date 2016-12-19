@@ -12,7 +12,7 @@ unsigned long Gosu::milliseconds()
 		static unsigned long start = 0;
 
     timeval tp;
-    gettimeofday(&tp, NULL);
+    gettimeofday(&tp, nullptr);
 
 		if (!start)
 			start = tp.tv_usec / 1000UL + tp.tv_sec * 1000UL;

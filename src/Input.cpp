@@ -40,7 +40,7 @@ struct Gosu::Input::Impl
     double mouseOffsetX, mouseOffsetY;
     
     Impl(Input& input, SDL_Window* window)
-    : input(input), window(window), textInput(NULL)
+    : input(input), window(window), textInput(nullptr)
     {
         mouseFactorX = mouseFactorY = 1;
         mouseOffsetX = mouseOffsetY = 0;
@@ -87,8 +87,7 @@ struct Gosu::Input::Impl
     
     void dispatchEnqueuedEvents()
     {
-        for (unsigned i = 0; i < eventQueue.size(); ++i) {
-            int event = eventQueue[i];
+        for (int event : eventQueue) {
             bool down = (event >= 0);
             Button button(down ? event : ~event);
             
@@ -351,7 +350,7 @@ wchar_t Gosu::Input::idToChar(Button btn)
         return 0;
     
     const char* name = SDL_GetKeyName(keycode);
-    if (name == NULL)
+    if (name == nullptr)
         return 0;
     
     std::wstring wname = utf8ToWstring(name);
@@ -452,10 +451,10 @@ Gosu::TextInput* Gosu::Input::textInput() const
 
 void Gosu::Input::setTextInput(TextInput* textInput)
 {
-    if (pimpl->textInput && textInput == NULL) {
+    if (pimpl->textInput && textInput == nullptr) {
         SDL_StopTextInput();
     }
-    else if (pimpl->textInput == NULL && textInput) {
+    else if (pimpl->textInput == nullptr && textInput) {
         SDL_StartTextInput();
     }
     
