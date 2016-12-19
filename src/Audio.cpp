@@ -252,7 +252,7 @@ protected:
     virtual void applyVolume() = 0;
 
 public:
-    virtual ~BaseData() = default;
+    virtual ~BaseData() {}
     
     virtual void play(bool looping) = 0;
     virtual void pause() = 0;
