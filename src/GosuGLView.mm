@@ -12,12 +12,12 @@ static EAGLContext __weak *globalContext;
 
 namespace Gosu
 {
-    void ensureCurrentContext()
+    void ensure_current_context()
     {
         [EAGLContext setCurrentContext:globalContext];
     }
     
-    int clipRectBaseFactor()
+    int clip_rect_base_factor()
     {
         static int result = [UIScreen mainScreen].scale;
         return result;
@@ -97,8 +97,8 @@ namespace Gosu
 {
     [EAGLContext setCurrentContext:_context];
     [self destroyFramebuffer];
-    self.contentScaleFactor = Gosu::clipRectBaseFactor();
     [self createFramebuffer];
+    self.contentScaleFactor = Gosu::clip_rect_base_factor();
 }
 
 - (BOOL)createFramebuffer

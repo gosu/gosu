@@ -15,7 +15,7 @@ namespace Gosu
 {
     //! A font can be used to draw text on a Graphics object very flexibly.
     //! Fonts are ideal for small texts that change regularly. For large,
-    //! static texts you should use createBitmap and turn the result into
+    //! static texts you should use create_bitmap and turn the result into
     //! an image.
     class Font
     {
@@ -24,13 +24,13 @@ namespace Gosu
 
     public:
         //! Constructs a font that can be drawn onto the graphics object.
-        //! \param fontName Name of a system font, or a filename to a TTF
+        //! \param font_name Name of a system font, or a filename to a TTF
         //!        file (must contain '/', does not work on Linux).
-        //! \param fontHeight Height of the font, in pixels.
-        //! \param fontFlags Flags used to render individual characters of
+        //! \param font_height Height of the font, in pixels.
+        //! \param font_flags Flags used to render individual characters of
         //!        the font.
-        Font(unsigned fontHeight, const std::wstring& fontName = defaultFontName(),
-            unsigned fontFlags = ffBold);
+        Font(unsigned font_height, const std::wstring& font_name = default_font_name(),
+            unsigned font_flags = FF_BOLD);
         
         //! Returns the name of the font that was used to create it.
         std::wstring name() const;
@@ -42,40 +42,40 @@ namespace Gosu
         unsigned flags() const;
         
         //! Returns the width, in pixels, the given text would occupy if drawn.
-        double textWidth(const std::wstring& text, double factorX = 1) const;
+        double text_width(const std::wstring& text, double scale_x = 1) const;
         
         //! Draws text so the top left corner of the text is at (x; y).
         //! \param text Formatted text without line-breaks.
         void draw(const std::wstring& text, double x, double y, ZPos z,
-            double factorX = 1, double factorY = 1,
-            Color c = Color::WHITE, AlphaMode mode = amDefault) const;
+            double scale_x = 1, double scale_y = 1,
+            Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
         
         //! Draws text at a position relative to (x; y).
-        //! \param relX Determines where the text is drawn horizontally. If
-        //! relX is 0.0, the text will be to the right of x, if it is 1.0,
+        //! \param rel_x Determines where the text is drawn horizontally. If
+        //! rel_x is 0.0, the text will be to the right of x, if it is 1.0,
         //! the text will be to the left of x, if it is 0.5, it will be
         //! centered on x. Of course, all real numbers are possible values.
-        //! \param relY See relX.
-        void drawRel(const std::wstring& text, double x, double y, ZPos z,
-            double relX, double relY, double factorX = 1, double factorY = 1,
-            Color c = Color::WHITE, AlphaMode mode = amDefault) const;
+        //! \param rel_y See rel_x.
+        void draw_rel(const std::wstring& text, double x, double y, ZPos z,
+            double rel_x, double rel_y, double scale_x = 1, double scale_y = 1,
+            Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
         
         //! Maps a letter to a specific image instead of generating one using
         //! Gosu's built-in text rendering. This can only be called once per
         //! character, and the character must not have been drawn before.
         //! This ensures that Fonts are still sort of immutable.
-        void setImage(wchar_t wc, unsigned fontFlags, const Gosu::Image& image);
-        //! A shortcut for mapping a character to an image regardless of fontFlags.
+        void set_image(wchar_t wc, unsigned font_flags, const Gosu::Image& image);
+        //! A shortcut for mapping a character to an image regardless of font_flags.
         //! Later versions might apply faux italics or faux bold to it (to be decided!).
-        void setImage(wchar_t wc, const Gosu::Image& image);
+        void set_image(wchar_t wc, const Gosu::Image& image);
         
         #ifndef SWIG
         GOSU_DEPRECATED
         #endif
         //! DEPRECATED: Analogous to draw, but rotates the text by a given angle.
-        //! Use Graphics::pushTransform to achieve the same effect.
-        void drawRot(const std::wstring& text, double x, double y, ZPos z, double angle,
-            double factorX = 1, double factorY = 1,
-            Color c = Color::WHITE, AlphaMode mode = amDefault) const;
+        //! Use Graphics::push_transform to achieve the same effect.
+        void draw_rot(const std::wstring& text, double x, double y, ZPos z, double angle,
+            double scale_x = 1, double scale_y = 1,
+            Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
     };
 }

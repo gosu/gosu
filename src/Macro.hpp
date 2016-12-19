@@ -22,9 +22,9 @@ public:
         double x4, double y4, Color c4,
         ZPos z, AlphaMode mode) const;
     
-    const Gosu::GLTexInfo* glTexInfo() const;
+    const Gosu::GLTexInfo* gl_tex_info() const;
     
-    Gosu::Bitmap toBitmap() const;
+    Gosu::Bitmap to_bitmap() const;
     
     std::unique_ptr<ImageData> subimage(int x, int y, int width, int height) const;
     

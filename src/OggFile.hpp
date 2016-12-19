@@ -18,7 +18,7 @@ namespace Gosu
         Gosu::Buffer contents_;
         Gosu::Buffer buffer_;
         int channels_;
-        ALenum sampleRate_;
+        ALenum sample_rate_;
         stb_vorbis* stream_;
 
         void open()
@@ -37,7 +37,7 @@ namespace Gosu
             
             stb_vorbis_info info = stb_vorbis_get_info(stream_);
             channels_ = info.channels;
-            sampleRate_ = info.sample_rate;
+            sample_rate_ = info.sample_rate;
             buffer_.resize(info.temp_memory_required);
         }
         
@@ -66,25 +66,25 @@ namespace Gosu
             return (channels_ == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16);
         }
         
-        ALuint sampleRate() const
+        ALuint sample_rate() const
         {
-            return sampleRate_;
+            return sample_rate_;
         }
         
-        std::size_t readData(void* dest, std::size_t length)
+        std::size_t read_data(void* dest, std::size_t length)
         {
             int samples = 0;
-            int maxSamples = length / sizeof(short);
+            int max_samples = length / sizeof(short);
             
-            while (samples < maxSamples) {
-                int samplesPerChannel =
+            while (samples < max_samples) {
+                int samples_per_channel =
                     stb_vorbis_get_samples_short_interleaved(stream_, channels_,
-                        static_cast<short*>(dest) + samples, maxSamples - samples);
+                        static_cast<short*>(dest) + samples, max_samples - samples);
                 
-                if (samplesPerChannel == 0)
+                if (samples_per_channel == 0)
                     break;
                 
-                samples += samplesPerChannel * channels_;
+                samples += samples_per_channel * channels_;
             }
             
             return samples * sizeof(short);

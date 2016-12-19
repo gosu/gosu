@@ -11,22 +11,22 @@ namespace Gosu
 {
     namespace FPS
     {
-        void registerFrame();
+        void register_frame();
     }
     
-    ALCcontext *sharedContext();
+    ALCcontext *shared_openal_context();
 }
 
 
 // TODO: This has been written on iOS 3.x.
 // Is this still the best way to handle interruptions?
-static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
+static void handle_audio_interruption(void *unused, UInt32 inInterruptionState)
 {
     if (inInterruptionState == kAudioSessionBeginInterruption) {
         alcMakeContextCurrent(nullptr);
     }
     else if (inInterruptionState == kAudioSessionEndInterruption) {
-        alcMakeContextCurrent(Gosu::sharedContext());
+        alcMakeContextCurrent(Gosu::shared_openal_context());
     }
 }
 
@@ -84,7 +84,7 @@ static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
 {
     [super viewDidLoad];
     
-    AudioSessionInitialize(NULL, NULL, handleAudioInterruption, NULL);
+    AudioSessionInitialize(NULL, NULL, handle_audio_interruption, NULL);
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
@@ -100,8 +100,8 @@ static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     if (_musicPaused) {
-        if (Gosu::Song::currentSong())
-            Gosu::Song::currentSong()->play();
+        if (Gosu::Song::current_song())
+            Gosu::Song::current_song()->play();
         _musicPaused = NO;
     }
     _paused = NO;
@@ -109,13 +109,13 @@ static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
 
 - (void)applicationWillResignActive:(NSNotification *)notification
 {
-    if (Gosu::Song::currentSong()) {
-        Gosu::Song::currentSong()->pause();
+    if (Gosu::Song::current_song()) {
+        Gosu::Song::current_song()->pause();
         _musicPaused = YES;
     }
     _paused = YES;
     
-    self.gosuWindowReference.loseFocus();
+    self.gosuWindowReference.lose_focus();
 }
 
 - (void)applicationWillEnterForeground:(NSNotification *)notification
@@ -145,10 +145,10 @@ static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
     if (_timerOrDisplayLink)
         return;
     
-    NSInteger targetFPS = round(1000.0 / self.gosuWindowReference.updateInterval());
+    NSInteger targetFPS = round(1000.0 / self.gosuWindowReference.update_interval());
     
     if (60 % targetFPS != 0) {
-        NSTimeInterval interval = self.gosuWindowReference.updateInterval() / 1000.0;
+        NSTimeInterval interval = self.gosuWindowReference.update_interval() / 1000.0;
         NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(updateAndDraw:) userInfo:nil repeats:YES];
         
         _timerOrDisplayLink = timer;
@@ -172,13 +172,13 @@ static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
         window.update();
     }
     
-    if (window.needsRedraw()) {
+    if (window.needs_redraw()) {
         [self.GLView redrawGL:^{
             if (window.graphics().begin()) {
                 window.draw();
                 window.graphics().end();
                 
-                Gosu::FPS::registerFrame();
+                Gosu::FPS::register_frame();
             }
         }];
     }
@@ -190,22 +190,22 @@ static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    self.gosuWindowReference.input().feedTouchEvent(0, (__bridge void *)touches);
+    self.gosuWindowReference.input().feed_touch_event(0, (__bridge void *)touches);
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    self.gosuWindowReference.input().feedTouchEvent(1, (__bridge void *)touches);
+    self.gosuWindowReference.input().feed_touch_event(1, (__bridge void *)touches);
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    self.gosuWindowReference.input().feedTouchEvent(2, (__bridge void *)touches);
+    self.gosuWindowReference.input().feed_touch_event(2, (__bridge void *)touches);
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    self.gosuWindowReference.input().feedTouchEvent(3, (__bridge void *)touches);
+    self.gosuWindowReference.input().feed_touch_event(3, (__bridge void *)touches);
 }
 
 @end

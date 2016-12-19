@@ -15,11 +15,11 @@ class Gosu::TexChunk : public Gosu::ImageData
     // Cached for faster access.
     GLTexInfo info;
     
-    void setTexInfo();
+    void set_tex_info();
     
 public:
     TexChunk(std::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding);
-    TexChunk(const TexChunk& parentChunk, int x, int y, int w, int h);
+    TexChunk(const TexChunk& parent_chunk, int x, int y, int w, int h);
     ~TexChunk();
 
     int width() const
@@ -32,9 +32,9 @@ public:
         return h;
     }
     
-    GLuint texName() const
+    GLuint tex_name() const
     {
-        return info.texName;
+        return info.tex_name;
     }
     
     void draw(double x1, double y1, Color c1,
@@ -43,8 +43,8 @@ public:
         double x4, double y4, Color c4,
         ZPos z, AlphaMode mode) const;
         
-    const GLTexInfo* glTexInfo() const;
-    Gosu::Bitmap toBitmap() const;
+    const GLTexInfo* gl_tex_info() const;
+    Gosu::Bitmap to_bitmap() const;
     std::unique_ptr<ImageData> subimage(int x, int y, int width, int height) const;
     void insert(const Bitmap& bitmap, int x, int y);
 };

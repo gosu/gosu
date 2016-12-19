@@ -11,121 +11,121 @@ struct Gosu::TextInput::Impl
     // See this Wiki page for an overview of what is going on here:
     // http://wiki.libsdl.org/Tutorials/TextInput#CandidateList
     std::wstring text, composition;
-    unsigned caretPos, selectionStart;
+    unsigned caret_pos, selection_start;
     
     Impl()
-    : caretPos(0), selectionStart(0)
+    : caret_pos(0), selection_start(0)
     {
     }
     
-    void insertText(const std::wstring& newText)
+    void insert_text(const std::wstring& new_text)
     {
         // Stop IME composition.
         composition.clear();
 
         // Delete (overwrite) previous selection.
-        if (caretPos != selectionStart) {
-            unsigned min = std::min(caretPos, selectionStart);
-            unsigned max = std::max(caretPos, selectionStart);
+        if (caret_pos != selection_start) {
+            unsigned min = std::min(caret_pos, selection_start);
+            unsigned max = std::max(caret_pos, selection_start);
             text.erase(text.begin() + min, text.begin() + max);
-            caretPos = selectionStart = min;
+            caret_pos = selection_start = min;
         }
         
-        text.insert(text.begin() + caretPos, newText.begin(), newText.end());
-        caretPos += newText.size();
-        selectionStart = caretPos;
+        text.insert(text.begin() + caret_pos, new_text.begin(), new_text.end());
+        caret_pos += new_text.size();
+        selection_start = caret_pos;
     }
     
-    void moveLeft(bool modifySelection)
+    void move_left(bool modify_selection)
     {
-        if (caretPos > 0)
-            caretPos -= 1;
+        if (caret_pos > 0)
+            caret_pos -= 1;
         
-        if (modifySelection)
-            selectionStart = caretPos;
+        if (modify_selection)
+            selection_start = caret_pos;
     }
     
-    void moveRight(bool modifySelection)
+    void move_right(bool modify_selection)
     {
-        if (caretPos < text.length())
-            caretPos += 1;
+        if (caret_pos < text.length())
+            caret_pos += 1;
         
-        if (modifySelection)
-            selectionStart = caretPos;
+        if (modify_selection)
+            selection_start = caret_pos;
     }
     
-    void moveWordLeft(bool modifySelection)
+    void move_word_left(bool modify_selection)
     {
-        if (caretPos == text.length())
-            --caretPos;
+        if (caret_pos == text.length())
+            --caret_pos;
         
-        while (caretPos > 0 && std::iswspace(text.at(caretPos - 1)))
-            --caretPos;
+        while (caret_pos > 0 && std::iswspace(text.at(caret_pos - 1)))
+            --caret_pos;
         
-        while (caretPos > 0 && !std::iswspace(text.at(caretPos - 1)))
-            --caretPos;
+        while (caret_pos > 0 && !std::iswspace(text.at(caret_pos - 1)))
+            --caret_pos;
         
-        if (modifySelection)
-            selectionStart = caretPos;
+        if (modify_selection)
+            selection_start = caret_pos;
     }
 
-    void moveWordRight(bool modifySelection)
+    void move_word_right(bool modify_selection)
     {
-        while (caretPos < text.length() && std::iswspace(text.at(caretPos)))
-            ++caretPos;
+        while (caret_pos < text.length() && std::iswspace(text.at(caret_pos)))
+            ++caret_pos;
         
-        while (caretPos < text.length() && !std::iswspace(text.at(caretPos)))
-            ++caretPos;
+        while (caret_pos < text.length() && !std::iswspace(text.at(caret_pos)))
+            ++caret_pos;
         
-        if (modifySelection)
-            selectionStart = caretPos;
+        if (modify_selection)
+            selection_start = caret_pos;
     }
     
-    void moveToBeginningOfLine(bool modifySelection)
+    void move_to_beginning_ofLine(bool modify_selection)
     {
-        caretPos = 0;
+        caret_pos = 0;
         
-        if (modifySelection)
-            selectionStart = caretPos;
+        if (modify_selection)
+            selection_start = caret_pos;
     }
     
-    void moveToEndOfLine(bool modifySelection)
+    void move_to_end_ofLine(bool modify_selection)
     {
-        caretPos = static_cast<unsigned>(text.length());
+        caret_pos = static_cast<unsigned>(text.length());
         
-        if (modifySelection)
-            selectionStart = caretPos;
+        if (modify_selection)
+            selection_start = caret_pos;
     }
     
-    void deleteBackward()
+    void delete_backward()
     {
-        if (selectionStart != caretPos) {
-            unsigned min = std::min(caretPos, selectionStart);
-            unsigned max = std::max(caretPos, selectionStart);
+        if (selection_start != caret_pos) {
+            unsigned min = std::min(caret_pos, selection_start);
+            unsigned max = std::max(caret_pos, selection_start);
             text.erase(text.begin() + min, text.begin() + max);
-            selectionStart = caretPos = min;
+            selection_start = caret_pos = min;
         }
-        else if (caretPos > 0) {
-            unsigned oldCaret = caretPos;
-            caretPos -= 1;
-            text.erase(text.begin() + caretPos, text.begin() + oldCaret);
-            selectionStart = caretPos;
+        else if (caret_pos > 0) {
+            unsigned old_caret = caret_pos;
+            caret_pos -= 1;
+            text.erase(text.begin() + caret_pos, text.begin() + old_caret);
+            selection_start = caret_pos;
         }
     }
     
-    void deleteForward()
+    void delete_forward()
     {
-        if (selectionStart != caretPos) {
-            unsigned min = std::min(caretPos, selectionStart);
-            unsigned max = std::max(caretPos, selectionStart);
+        if (selection_start != caret_pos) {
+            unsigned min = std::min(caret_pos, selection_start);
+            unsigned max = std::max(caret_pos, selection_start);
             text.erase(text.begin() + min, text.begin() + max);
-            selectionStart = caretPos = min;
+            selection_start = caret_pos = min;
         }
-        else if (caretPos < text.length()) {
-            unsigned oldCaret = caretPos;
-            caretPos += 1;
-            text.erase(text.begin() + oldCaret, text.begin() + caretPos);
-            selectionStart = caretPos = oldCaret;
+        else if (caret_pos < text.length()) {
+            unsigned old_caret = caret_pos;
+            caret_pos += 1;
+            text.erase(text.begin() + old_caret, text.begin() + caret_pos);
+            selection_start = caret_pos = old_caret;
         }
         
     }
@@ -142,55 +142,55 @@ Gosu::TextInput::~TextInput()
 
 std::wstring Gosu::TextInput::text() const
 {
-    std::wstring composedText = pimpl->text;
+    std::wstring composed_text = pimpl->text;
     if (! pimpl->composition.empty()) {
-        composedText.insert(pimpl->caretPos, pimpl->composition);
+        composed_text.insert(pimpl->caret_pos, pimpl->composition);
     }
-    return composedText;
+    return composed_text;
 }
 
-void Gosu::TextInput::setText(const std::wstring& text)
+void Gosu::TextInput::set_text(const std::wstring& text)
 {
 	pimpl->text = text;
     pimpl->composition.clear();
-	pimpl->caretPos = pimpl->selectionStart = static_cast<unsigned>(text.length());
+	pimpl->caret_pos = pimpl->selection_start = static_cast<unsigned>(text.length());
 }
 
-unsigned Gosu::TextInput::caretPos() const
+unsigned Gosu::TextInput::caret_pos() const
 {
-    return static_cast<unsigned>(pimpl->caretPos);
+    return static_cast<unsigned>(pimpl->caret_pos);
 }
 
-void Gosu::TextInput::setCaretPos(unsigned pos)
+void Gosu::TextInput::set_caret_pos(unsigned pos)
 {
-    pimpl->caretPos = pos;
+    pimpl->caret_pos = pos;
 }
 
-unsigned Gosu::TextInput::selectionStart() const
+unsigned Gosu::TextInput::selection_start() const
 {
-    return static_cast<unsigned>(pimpl->selectionStart);
+    return static_cast<unsigned>(pimpl->selection_start);
 }
 
-void Gosu::TextInput::setSelectionStart(unsigned pos)
+void Gosu::TextInput::set_selection_start(unsigned pos)
 {
-    pimpl->selectionStart = pos;
+    pimpl->selection_start = pos;
 }
 
-bool Gosu::TextInput::feedSDLEvent(void* event)
+bool Gosu::TextInput::feed_sdl_event(void* event)
 {
     const SDL_Event* e = static_cast<SDL_Event*>(event);
     
     switch (e->type) {
         // Direct text input, and sent after IME composition completes.
         case SDL_TEXTINPUT: {
-            std::wstring textToInsert = utf8ToWstring(e->text.text);
-            textToInsert = filter(textToInsert);
-            pimpl->insertText(textToInsert);
+            std::wstring text_to_insert = utf8_to_wstring(e->text.text);
+            text_to_insert = filter(text_to_insert);
+            pimpl->insert_text(text_to_insert);
             return true;
         }
         // IME composition in progress.
         case SDL_TEXTEDITING: {
-            pimpl->composition = utf8ToWstring(e->edit.text);
+            pimpl->composition = utf8_to_wstring(e->edit.text);
             return true;
         }
         // Emulate "standard" Windows/X11 keyboard behavior.
@@ -202,53 +202,53 @@ bool Gosu::TextInput::feedSDLEvent(void* event)
             
         #ifdef GOSU_IS_MAC
             bool words = (e->key.keysym.mod & (KMOD_LALT | KMOD_RALT));
-            bool commandDown = (e->key.keysym.mod & (KMOD_LGUI | KMOD_RGUI));
+            bool command_down = (e->key.keysym.mod & (KMOD_LGUI | KMOD_RGUI));
         #else
             bool words = (e->key.keysym.mod & (KMOD_LCTRL | KMOD_RCTRL));
         #endif
-            bool shiftDown = (e->key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
+            bool shift_down = (e->key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
             SDL_Keycode key = e->key.keysym.sym;
             
             switch (key) {
                 case SDLK_LEFT:
                 #ifdef GOSU_IS_MAC
-                    if (commandDown)
-                        pimpl->moveToBeginningOfLine(! shiftDown);
+                    if (command_down)
+                        pimpl->move_to_beginning_ofLine(! shift_down);
                     else
                 #endif
                     if (words)
-                        pimpl->moveWordLeft(! shiftDown);
+                        pimpl->move_word_left(! shift_down);
                     else
-                        pimpl->moveLeft(! shiftDown);
+                        pimpl->move_left(! shift_down);
                     return true;
                 case SDLK_RIGHT:
                 #ifdef GOSU_IS_MAC
-                    if (commandDown)
-                        pimpl->moveToEndOfLine(! shiftDown);
+                    if (command_down)
+                        pimpl->move_to_end_ofLine(! shift_down);
                     else
                 #endif
                     if (words)
-                        pimpl->moveWordRight(! shiftDown);
+                        pimpl->move_word_right(! shift_down);
                     else
-                        pimpl->moveRight(! shiftDown);
+                        pimpl->move_right(! shift_down);
                     return true;
             #ifdef GOSU_IS_MAC
                 case SDLK_UP:
             #endif
                 case SDLK_HOME:
-                    pimpl->moveToBeginningOfLine(! shiftDown);
+                    pimpl->move_to_beginning_ofLine(! shift_down);
                     return true;
             #ifdef GOSU_IS_MAC
                 case SDLK_DOWN:
             #endif
                 case SDLK_END:
-                    pimpl->moveToEndOfLine(! shiftDown);
+                    pimpl->move_to_end_ofLine(! shift_down);
                     return true;
                 case SDLK_BACKSPACE:
-                    pimpl->deleteBackward();
+                    pimpl->delete_backward();
                     return true;
                 case SDLK_DELETE:
-                    pimpl->deleteForward();
+                    pimpl->delete_forward();
                     return true;
             }
             break;

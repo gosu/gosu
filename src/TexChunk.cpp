@@ -4,27 +4,27 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 
-void Gosu::TexChunk::setTexInfo()
+void Gosu::TexChunk::set_tex_info()
 {
-    info.texName = texture->texName();
-    float textureSize = texture->size();
-    info.left = x / textureSize;
-    info.top = y / textureSize;
-    info.right = (x + w) / textureSize;
-    info.bottom = (y + h) / textureSize;
+    info.tex_name = texture->tex_name();
+    float texture_size = texture->size();
+    info.left = x / texture_size;
+    info.top = y / texture_size;
+    info.right = (x + w) / texture_size;
+    info.bottom = (y + h) / texture_size;
 }
 
 Gosu::TexChunk::TexChunk(std::shared_ptr<Texture> texture,
     int x, int y, int w, int h, int padding)
 : texture(texture), x(x), y(y), w(w), h(h), padding(padding)
 {
-    setTexInfo();
+    set_tex_info();
 }
 
-Gosu::TexChunk::TexChunk(const TexChunk& parentChunk, int x, int y, int w, int h)
-: texture(parentChunk.texture), x(parentChunk.x + x), y(parentChunk.y + y), w(w), h(h), padding(0)
+Gosu::TexChunk::TexChunk(const TexChunk& parent_chunk, int x, int y, int w, int h)
+: texture(parent_chunk.texture), x(parent_chunk.x + x), y(parent_chunk.y + y), w(w), h(h), padding(0)
 {
-    setTexInfo();
+    set_tex_info();
     texture->block(this->x, this->y, this->w, this->h);
 }
 
@@ -40,12 +40,12 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1,
     ZPos z, AlphaMode mode) const
 {
     DrawOp op;
-    op.renderState.texture = texture;
-    op.renderState.mode = mode;
+    op.render_state.texture = texture;
+    op.render_state.mode = mode;
     
-    reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
+    reorder_coordinates_if_necessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
     
-    op.verticesOrBlockIndex = 4;
+    op.vertices_or_block_index = 4;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
 // TODO: Should be harmonized
@@ -62,17 +62,17 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1,
     op.bottom = info.bottom;
     
     op.z = z;
-    Graphics::scheduleDrawOp(op);
+    Graphics::schedule_draw_op(op);
 }
 
-const Gosu::GLTexInfo* Gosu::TexChunk::glTexInfo() const
+const Gosu::GLTexInfo* Gosu::TexChunk::gl_tex_info() const
 {
     return &info;
 }
 
-Gosu::Bitmap Gosu::TexChunk::toBitmap() const
+Gosu::Bitmap Gosu::TexChunk::to_bitmap() const
 {
-    return texture->toBitmap(x, y, w, h);
+    return texture->to_bitmap(x, y, w, h);
 }
 
 std::unique_ptr<Gosu::ImageData> Gosu::TexChunk::subimage(int x, int y, int width, int height) const
@@ -82,31 +82,31 @@ std::unique_ptr<Gosu::ImageData> Gosu::TexChunk::subimage(int x, int y, int widt
 
 void Gosu::TexChunk::insert(const Bitmap& original, int x, int y)
 {
-    // TODO: Should respect borderFlags.
+    // TODO: Should respect border_flags.
     
     Bitmap alternate;
     const Bitmap* bitmap = &original;
     if (x < 0 || y < 0 || x + original.width() > w || y + original.height() > h)
     {
-        int offsetX = 0, offsetY = 0, trimmedWidth = original.width(), trimmedHeight = original.height();
+        int offset_x = 0, offset_y = 0, trimmed_width = original.width(), trimmed_height = original.height();
         if (x < 0)
-            offsetX = x, trimmedWidth  += x, x = 0;
+            offset_x = x, trimmed_width  += x, x = 0;
         if (y < 0)
-            offsetY = y, trimmedHeight += y, y = 0;
-        if (x + trimmedWidth > w)
-            trimmedWidth  -= (w - x - trimmedWidth);
-        if (y + trimmedHeight > h)
-            trimmedHeight -= (h - y - trimmedHeight);
+            offset_y = y, trimmed_height += y, y = 0;
+        if (x + trimmed_width > w)
+            trimmed_width  -= (w - x - trimmed_width);
+        if (y + trimmed_height > h)
+            trimmed_height -= (h - y - trimmed_height);
             
-        if (trimmedWidth <= 0 || trimmedHeight <= 0)
+        if (trimmed_width <= 0 || trimmed_height <= 0)
             return;
         
-        alternate.resize(trimmedWidth, trimmedHeight);
-        alternate.insert(original, offsetX, offsetY);
+        alternate.resize(trimmed_width, trimmed_height);
+        alternate.insert(original, offset_x, offset_y);
         bitmap = &alternate;
     }
     
-    glBindTexture(GL_TEXTURE_2D, texName());
+    glBindTexture(GL_TEXTURE_2D, tex_name());
     glTexSubImage2D(GL_TEXTURE_2D, 0, this->x + x, this->y + y, bitmap->width(), bitmap->height(),
         Color::GL_FORMAT, GL_UNSIGNED_BYTE, bitmap->data());
 }

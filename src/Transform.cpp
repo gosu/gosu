@@ -7,18 +7,18 @@
 #include <cmath>
 
 Gosu::Transform
-Gosu::rotate(double angle, double aroundX, double aroundY)
+Gosu::rotate(double angle, double around_x, double around_y)
 {
-    double c = std::cos(degreesToRadians(angle));
-    double s = std::sin(degreesToRadians(angle));
+    double c = std::cos(degrees_to_radians(angle));
+    double s = std::sin(degrees_to_radians(angle));
     Gosu::Transform result = {
         +c, +s, 0, 0,
         -s, +c, 0, 0,
         0,  0,  1, 0,
         0,  0,  0, 1
     };
-    if (aroundX != 0 || aroundY != 0)
-        result = concat(concat(translate(-aroundX, -aroundY), result), translate(aroundX, aroundY));
+    if (around_x != 0 || around_y != 0)
+        result = concat(concat(translate(-around_x, -around_y), result), translate(around_x, around_y));
     return result;
 }
 
@@ -47,16 +47,16 @@ Gosu::scale(double factor)
 }
 
 Gosu::Transform
-Gosu::scale(double factorX, double factorY, double aroundX, double aroundY)
+Gosu::scale(double scale_x, double scale_y, double around_x, double around_y)
 {
     Gosu::Transform result = {
-        factorX, 0,       0, 0,
-        0,       factorY, 0, 0,
+        scale_x, 0,       0, 0,
+        0,       scale_y, 0, 0,
         0,       0,       1, 0,
         0,       0,       0, 1
     };
-    if (aroundX != 0 || aroundY != 0)
-        result = concat(concat(translate(-aroundX, -aroundY), result), translate(aroundX, aroundY));
+    if (around_x != 0 || around_y != 0)
+        result = concat(concat(translate(-around_x, -around_y), result), translate(around_x, around_y));
     return result;
 }
 

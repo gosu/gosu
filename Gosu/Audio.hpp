@@ -28,8 +28,7 @@ namespace Gosu
         bool alive() const;		
 
 	public:
-        //! Called by Sample, do not use.
-        // TODO: See if we can use 'friend' here.
+        //! Called internally by Sample, do not use.
 		SampleInstance(int handle, int extra);
 
 		bool playing() const;
@@ -43,13 +42,13 @@ namespace Gosu
 
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
         //! volume).
-        void changeVolume(double volume);
+        void change_volume(double volume);
         //! \param pan Can be anything from -1.0 (left) to 1.0 (right).
-        void changePan(double pan);
+        void change_pan(double pan);
         //! \param speed Playback speed is only limited by FMOD's
         //! capabilities and can accept very high or low values. Use 1.0 for
         //! normal playback speed.
-        void changeSpeed(double speed);
+        void change_speed(double speed);
 	};
 
     //! A sample is a short sound that is completely loaded in memory, can be
@@ -87,7 +86,7 @@ namespace Gosu
         //! \param speed Playback speed is only limited by by the underlying audio library,
         //! and can accept very high
         //! or low values. Use 1.0 for normal playback speed.
-        SampleInstance playPan(double pan, double volume = 1, double speed = 1,
+        SampleInstance play_pan(double pan, double volume = 1, double speed = 1,
             bool looping = false) const;
     };
 
@@ -119,26 +118,27 @@ namespace Gosu
         //! Returns the song currently being played or paused, or 0 if
         //! no song has been played yet or the last song has finished
         //! playing.
-        static Song* currentSong();
+        static Song* current_song();
         
         //! Starts or resumes playback of the song. This will stop all other
         //! songs and set the current song to this object.
         void play(bool looping = false);
         //! Pauses playback of the song. It is not considered being played.
-        //! currentSong will stay the same.
+        //! current_song will stay the same.
         void pause();
         //! Returns true if the song is the current song, but in paused
         //! mode.
         bool paused() const;
         //! Stops playback of this song if it is currently played or paused.
-        //! Afterwards, currentSong will return 0.
+        //! Afterwards, current_song will return nullptr.
         void stop();
         //! Returns true if the song is currently playing.
         bool playing() const;
         //! Returns the current volume of the song.
         double volume() const;
-        //! Changes the volume of the song.
-        void changeVolume(double volume);
+        //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
+        //! volume).
+        void change_volume(double volume);
         
         //! Called every tick by Window for management purposes.
         static void update();

@@ -9,7 +9,7 @@
 #include <stdexcept>
 #import <Foundation/Foundation.h>
 
-inline static void throwOSError(OSStatus status, unsigned line)
+inline static void throw_os_error(OSStatus status, unsigned line)
 {
     @autoreleasepool {
         NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
@@ -20,7 +20,7 @@ inline static void throwOSError(OSStatus status, unsigned line)
     }
 }
 
-#define CHECK_OS(status) do { if (status) throwOSError(status, __LINE__); } while (0)
+#define CHECK_OS(status) do { if (status) throw_os_error(status, __LINE__); } while (0)
 
 #endif
 

@@ -13,15 +13,15 @@ void Gosu::sleep(unsigned milliseconds)
 
 unsigned long Gosu::milliseconds()
 {
-    static uint64_t firstTick = 0;
+    static uint64_t first_tick = 0;
     static mach_timebase_info_data_t info;
     
-    if (firstTick == 0)
+    if (first_tick == 0)
     {
         mach_timebase_info(&info);
-        firstTick = mach_absolute_time();
+        first_tick = mach_absolute_time();
     }
 
-    uint64_t runtime = mach_absolute_time() - firstTick;
+    uint64_t runtime = mach_absolute_time() - first_tick;
 	return runtime * info.numer / info.denom / 1000000.0;
 }

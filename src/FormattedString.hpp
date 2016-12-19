@@ -21,24 +21,24 @@ namespace Gosu
             unsigned flags;
             std::wstring entity;
             
-            bool sameStyleAs(const FormattedChar& other) const
+            bool same_style_as(const FormattedChar& other) const
             {
                 return wc && other.wc && color == other.color && flags == other.flags;
             }
         };
         
         // If characters.empty(), use these for the whole string.
-        std::wstring simpleString;
-        unsigned simpleFlags;
+        std::wstring simple_string;
+        unsigned simple_flags;
         // If not characters.empty(), ignore above fields and use this.
         std::vector<FormattedChar> characters;
         
         static unsigned flags(int b, int u, int i)
         {
             unsigned flags = 0;
-            if (b > 0) flags |= ffBold;
-            if (u > 0) flags |= ffUnderline;
-            if (i > 0) flags |= ffItalic;
+            if (b > 0) flags |= FF_BOLD;
+            if (u > 0) flags |= FF_UNDERLINE;
+            if (i > 0) flags |= FF_ITALIC;
             return flags;
         }
         
@@ -47,7 +47,7 @@ namespace Gosu
         {
         }
         
-        explicit FormattedString(const wchar_t* html, unsigned baseFlags)
+        explicit FormattedString(const wchar_t* html, unsigned base_flags)
         {
             // Remove \r characters if existent. Avoid a copy if we don't need one.
             std::wstring unixified;
@@ -69,15 +69,15 @@ namespace Gosu
             // Just skip all this if there are entities or formatting tags in the string.
             if (std::wcscspn(html, L"<&") == len)
             {
-                simpleString = html;
-                simpleFlags = baseFlags;
+                simple_string = html;
+                simple_flags = base_flags;
                 return;
             }
             
             unsigned pos = 0;
-            int b = (baseFlags & ffBold) ? 1 : 0,
-                u = (baseFlags & ffUnderline) ? 1 : 0,
-                i = (baseFlags & ffItalic) ? 1 : 0;
+            int b = (base_flags & FF_BOLD) ? 1 : 0,
+                u = (base_flags & FF_UNDERLINE) ? 1 : 0,
+                i = (base_flags & FF_ITALIC) ? 1 : 0;
             std::vector<Gosu::Color> c;
             c.push_back(0xffffffff);
             while (pos < len)
@@ -166,26 +166,26 @@ namespace Gosu
                 }
                 if (html[pos] == L'&' && html[pos + 1])
                 {
-                    int endOfEntity = pos + 1;
-                    while (html[endOfEntity] != L';')
+                    int end_of_entity = pos + 1;
+                    while (html[end_of_entity] != L';')
                     {
                         // Never know where the wchar_t stuff is...what a mess!
                         using namespace std;
-                        if (!iswalnum(static_cast<wint_t>(html[endOfEntity])))
-                            goto normalCharacter;
-                        endOfEntity += 1;
-                        if (endOfEntity >= len)
-                            goto normalCharacter;
+                        if (!iswalnum(static_cast<wint_t>(html[end_of_entity])))
+                            goto normal_character;
+                        end_of_entity += 1;
+                        if (end_of_entity >= len)
+                            goto normal_character;
                     }
-                    FormattedChar fc = { 0, c.back(), 0, std::wstring(html + pos + 1, html + endOfEntity) };
-                    if (!isEntity(fc.entity))
-                        goto normalCharacter;
+                    FormattedChar fc = { 0, c.back(), 0, std::wstring(html + pos + 1, html + end_of_entity) };
+                    if (!is_entity(fc.entity))
+                        goto normal_character;
                     characters.push_back(fc);
-                    pos = endOfEntity + 1;
+                    pos = end_of_entity + 1;
                     continue;
                 }
                 
-            normalCharacter:                
+            normal_character:                
                 FormattedChar fc = { html[pos], c.back(), flags(b,u,i) };
                 characters.push_back(fc);
                 pos += 1;
@@ -195,7 +195,7 @@ namespace Gosu
         std::wstring unformat() const
         {
             if (characters.empty())
-                return simpleString;
+                return simple_string;
             
             std::wstring result(characters.size(), 0);
             for (int i = 0; i < characters.size(); ++i)
@@ -203,7 +203,7 @@ namespace Gosu
             return result;
         }
         
-        const wchar_t* entityAt(unsigned index) const
+        const wchar_t* entity_at(unsigned index) const
         {
             if (characters.empty())
                 return 0;
@@ -215,23 +215,23 @@ namespace Gosu
             return characters[index].entity.c_str();
         }
         
-        wchar_t charAt(unsigned index) const
+        wchar_t char_at(unsigned index) const
         {
             if (characters.empty())
-                return simpleString[index];
+                return simple_string[index];
             else
                 return characters[index].wc;
         }
         
-        unsigned flagsAt(unsigned index) const
+        unsigned flags_at(unsigned index) const
         {
             if (characters.empty())
-                return simpleFlags;
+                return simple_flags;
             else
                 return characters[index].flags;
         }
         
-        Gosu::Color colorAt(unsigned index) const
+        Gosu::Color color_at(unsigned index) const
         {
             if (characters.empty())
                 return Color::WHITE;
@@ -244,7 +244,7 @@ namespace Gosu
             if (std::size_t len = characters.size())
                 return len;
             else
-                return simpleString.length();
+                return simple_string.length();
         }
         
         FormattedString range(std::size_t begin, std::size_t end) const
@@ -252,20 +252,20 @@ namespace Gosu
             FormattedString result;
             if (characters.empty())
             {
-                result.simpleString.assign(simpleString.begin() + begin, simpleString.begin() + end);
-                result.simpleFlags = simpleFlags;
+                result.simple_string.assign(simple_string.begin() + begin, simple_string.begin() + end);
+                result.simple_flags = simple_flags;
             }
             else
                 result.characters.assign(characters.begin() + begin, characters.begin() + end);
             return result;
         }
         
-        std::vector<FormattedString> splitLines() const
+        std::vector<FormattedString> split_lines() const
         {
             std::vector<FormattedString> result;
             unsigned begin = 0;
             for (unsigned cur = 0; cur < length(); ++cur)
-                if (charAt(cur) == L'\n')
+                if (char_at(cur) == L'\n')
                 {
                     result.push_back(range(begin, cur));
                     begin = cur + 1;
@@ -274,7 +274,7 @@ namespace Gosu
             return result;
         }
         
-        std::vector<FormattedString> splitParts() const
+        std::vector<FormattedString> split_parts() const
         {
             if (characters.empty())
                 return std::vector<FormattedString>(1, *this);
@@ -282,7 +282,7 @@ namespace Gosu
             std::vector<FormattedString> result;
             unsigned begin = 0;
             for (unsigned cur = 1; cur < length(); ++cur)
-                if (!characters[begin].sameStyleAs(characters[cur]))
+                if (!characters[begin].same_style_as(characters[cur]))
                 {
                     result.push_back(range(begin, cur));
                     begin = cur;

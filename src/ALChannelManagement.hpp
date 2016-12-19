@@ -15,99 +15,101 @@ namespace Gosu
 {
     class ALChannelManagement
     {
-        ALChannelManagement(const ALChannelManagement&);
-        ALChannelManagement& operator=(const ALChannelManagement&);
+        ALChannelManagement(const ALChannelManagement&) = delete;
+        ALChannelManagement& operator=(const ALChannelManagement&) = delete;
+        ALChannelManagement(ALChannelManagement&&) = delete;
+        ALChannelManagement& operator=(ALChannelManagement&&) = delete;
         
-        static ALCdevice* alDevice;
-        static ALCcontext* alContext;
+        static ALCdevice* al_device;
+        static ALCcontext* al_context;
 
 	#ifdef GOSU_IS_IPHONE
-        // iOS system limit (possibly not for newer devices)
+        // iOS system limit.
         enum { NUM_SOURCES = 32 };
 	#else
         enum { NUM_SOURCES = 255 };
 	#endif
-        static ALuint alSources[NUM_SOURCES];
-        static ALuint currentToken;
-        static ALuint currentTokens[NUM_SOURCES];
+        static ALuint al_sources[NUM_SOURCES];
+        static ALuint current_token;
+        static ALuint current_tokens[NUM_SOURCES];
         
     public:
         enum { NO_TOKEN = -1, NO_SOURCE = -1, NO_FREE_CHANNEL = -1 };
         
         static ALCdevice* device()
         {
-            return alDevice;
+            return al_device;
         }
         
         static ALCcontext* context()
         {
-            return alContext;
+            return al_context;
         }
         
         ALChannelManagement()
         {
             // Open preferred device
-            alDevice = alcOpenDevice(0);
-            alContext = alcCreateContext(alDevice, 0);
-            alcMakeContextCurrent(alContext);
-            alGenSources(NUM_SOURCES, alSources);
-            std::fill(currentTokens, currentTokens + NUM_SOURCES,
+            al_device = alcOpenDevice(0);
+            al_context = alcCreateContext(al_device, 0);
+            alcMakeContextCurrent(al_context);
+            alGenSources(NUM_SOURCES, al_sources);
+            std::fill(current_tokens, current_tokens + NUM_SOURCES,
                 static_cast<ALuint>(NO_TOKEN));
         }
         
         ~ALChannelManagement()
         {
-            alDeleteSources(NUM_SOURCES, alSources);
+            alDeleteSources(NUM_SOURCES, al_sources);
             alcMakeContextCurrent(0);
-            alcDestroyContext(alContext);
-            alcCloseDevice(alDevice);
+            alcDestroyContext(al_context);
+            alcCloseDevice(al_device);
         }
         
-        std::pair<int, int> reserveChannel()
+        std::pair<int, int> reserve_channel()
         {
             int i;
             for (i = 1; i <= NUM_SOURCES; ++i)
             {
                 if (i == NUM_SOURCES)
                     return std::make_pair<int, int>(NO_FREE_CHANNEL, NO_TOKEN);
-                if (currentTokens[i] == NO_TOKEN)
+                if (current_tokens[i] == NO_TOKEN)
                     break;
                 ALint state;
-                alGetSourcei(alSources[i], AL_SOURCE_STATE, &state);
+                alGetSourcei(al_sources[i], AL_SOURCE_STATE, &state);
                 if (state != AL_PLAYING && state != AL_PAUSED)
                     break;
             }
-            ++currentToken;
-            currentTokens[i] = currentToken;
-            return std::make_pair(i, int(currentToken));
+            ++current_token;
+            current_tokens[i] = current_token;
+            return std::make_pair(i, int(current_token));
         }
         
-        int sourceIfStillPlaying(int channel, int token) const
+        int source_if_still_playing(int channel, int token) const
         {
-            if (channel != NO_FREE_CHANNEL && currentTokens[channel] == token)
-                return alSources[channel];
+            if (channel != NO_FREE_CHANNEL && current_tokens[channel] == token)
+                return al_sources[channel];
             return NO_SOURCE;
         }
         
-        int sourceForSongs() const
+        int source_for_songs() const
         {
-            return alSources[0];
+            return al_sources[0];
         }
     };
-    ALCdevice* ALChannelManagement::alDevice = 0;
-    ALCcontext* ALChannelManagement::alContext = 0;
-    ALuint ALChannelManagement::alSources[NUM_SOURCES];
-    ALuint ALChannelManagement::currentToken = 0;
-    ALuint ALChannelManagement::currentTokens[NUM_SOURCES];
+    ALCdevice* ALChannelManagement::al_device = 0;
+    ALCcontext* ALChannelManagement::al_context = 0;
+    ALuint ALChannelManagement::al_sources[NUM_SOURCES];
+    ALuint ALChannelManagement::current_token = 0;
+    ALuint ALChannelManagement::current_tokens[NUM_SOURCES];
 
-    std::unique_ptr<ALChannelManagement> alChannelManagement;
+    std::unique_ptr<ALChannelManagement> al_channel_management;
     
-    void releaseAllOpenALResources()
+    void release_all_openal_resources()
     {
-        alChannelManagement.reset();
+        al_channel_management.reset();
     }
     
-    ALCcontext *sharedContext()
+    ALCcontext *shared_openal_context()
     {
         return ALChannelManagement::context();
     }

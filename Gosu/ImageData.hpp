@@ -16,13 +16,13 @@ namespace Gosu
     //! to use them in OpenGL operations.
     struct GLTexInfo
     {
-        int texName;
+        int tex_name;
         float left, right, top, bottom;
     };
 
     //! The ImageData class is an abstract base class for drawable images.
     //! Instances of classes derived by ImageData are usually returned by
-    //! Graphics::createImage and usually only used to implement drawing
+    //! Graphics::create_image and usually only used to implement drawing
     //! primitives like Image, which then provide a more specialized and
     //! intuitive drawing interface.
     class ImageData
@@ -49,8 +49,8 @@ namespace Gosu
             double x4, double y4, Color c4,
             ZPos z, AlphaMode mode) const = 0;
             
-        virtual const GLTexInfo* glTexInfo() const = 0;
-        virtual Bitmap toBitmap() const = 0;
+        virtual const GLTexInfo* gl_tex_info() const = 0;
+        virtual Bitmap to_bitmap() const = 0;
         
         virtual std::unique_ptr<ImageData> subimage(int x, int y, int width, int height) const = 0;
         

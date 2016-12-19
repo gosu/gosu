@@ -5,16 +5,16 @@
 
 #ifdef __BIG_ENDIAN__
 # define GOSU_IS_BIG_ENDIAN
-# define IDENTITY_FUN bigToNative
-# define IDENTITY_FUN2 nativeToBig
-# define CONV_FUN littleToNative
-# define CONV_FUN2 nativeToLittle
+# define IDENTITY_FUN big_to_native
+# define IDENTITY_FUN2 native_to_big
+# define CONV_FUN little_to_native
+# define CONV_FUN2 native_to_little
 #else
 # define GOSU_IS_LITTLE_ENDIAN
-# define IDENTITY_FUN littleToNative
-# define IDENTITY_FUN2 nativeToLittle
-# define CONV_FUN bigToNative
-# define CONV_FUN2 nativeToBig
+# define IDENTITY_FUN little_to_native
+# define IDENTITY_FUN2 native_to_little
+# define CONV_FUN big_to_native
+# define CONV_FUN2 native_to_big
 #endif
 
 #include <algorithm>

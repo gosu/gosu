@@ -7,15 +7,15 @@
 class Gosu::ClipRectStack
 {
     std::vector<ClipRect> stack;
-    bool hasEffectiveRect; // is effectiveRect valid?
-    ClipRect effectiveRect;
+    bool has_effective_rect; // is effective_rect valid?
+    ClipRect effective_rect;
     
-    void updateEffectiveRect()
+    void update_effective_rect()
     {
         // Nothing to do, no clipping in place.
         if (stack.empty())
         {
-            hasEffectiveRect = false;
+            has_effective_rect = false;
             return;
         }
         
@@ -23,68 +23,68 @@ class Gosu::ClipRectStack
         for (std::size_t i = 0, end = stack.size(); i < end; ++i)
         {
             const ClipRect& rect = stack[i];
-            int resultRight = std::min(result.x + result.width, rect.x + rect.width);
-            int resultBottom = std::min(result.y + result.height, rect.y + rect.height);
+            int result_right = std::min(result.x + result.width, rect.x + rect.width);
+            int result_bottom = std::min(result.y + result.height, rect.y + rect.height);
             result.x = std::max(result.x, rect.x);
             result.y = std::max(result.y, rect.y);
             
-            if (result.x >= resultRight || result.y >= resultBottom)
+            if (result.x >= result_right || result.y >= result_bottom)
             {
                 // We have clipped the world away!
-                hasEffectiveRect = false;
+                has_effective_rect = false;
                 return;
             }
             
-            result.width = resultRight - result.x;
-            result.height = resultBottom - result.y;
+            result.width = result_right - result.x;
+            result.height = result_bottom - result.y;
         }
         
         // On the iPhone, we may have to multiply everything by 2 for Retina displays.
         // TODO: Doesn't this affect Retina Macs as well?
         // TODO: This should be handled by a global transform.
-        int fac = clipRectBaseFactor();
+        int fac = clip_rect_base_factor();
         result.x *= fac, result.y *= fac, result.width *= fac, result.height *= fac;
         
         // Normal clipping.
-        effectiveRect = result;
-        hasEffectiveRect = true;
+        effective_rect = result;
+        has_effective_rect = true;
     }
     
 public:    
     ClipRectStack()
-    : hasEffectiveRect(false)
+    : has_effective_rect(false)
     {
     }
     
     void clear()
     {
         stack.clear();
-        hasEffectiveRect = false;
+        has_effective_rect = false;
     }
     
-    void beginClipping(double x, double y, double width, double height)
+    void begin_clipping(double x, double y, double width, double height)
     {
         ClipRect rect = { x, y, width, height };
         stack.push_back(rect);
-        updateEffectiveRect();
+        update_effective_rect();
     }
     
-    void endClipping()
+    void end_clipping()
     {
         assert (!stack.empty());
         stack.pop_back();
-        updateEffectiveRect();
+        update_effective_rect();
     }
     
-    const ClipRect* maybeEffectiveRect() const
+    const ClipRect* maybe_effective_rect() const
     {
-        return hasEffectiveRect ? &effectiveRect : 0;
+        return has_effective_rect ? &effective_rect : 0;
     }
     
-    bool clippedWorldAway() const
+    bool clipped_world_away() const
     {
         // When we have no effective rect but the stack is not empty, we have clipped
         // the whole world away and don't need to render things.
-        return !hasEffectiveRect && !stack.empty();
+        return !has_effective_rect && !stack.empty();
     }
 };

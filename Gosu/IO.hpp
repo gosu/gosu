@@ -14,11 +14,11 @@ namespace Gosu
 {
     class Resource;
     
-    enum ByteOrder { boLittle, boBig, boDontCare };
+    enum ByteOrder { BO_LITTLE, BO_BIG, BO_DONT_CARE };
 #ifdef __BIG_ENDIAN__
-    const ByteOrder nativeByteOrder = boBig, otherByteOrder = boLittle;
+    const ByteOrder BO_NATIVE = BO_BIG, BO_OTHER = BO_LITTLE;
 #else
-    const ByteOrder nativeByteOrder = boLittle, otherByteOrder = boBig;
+    const ByteOrder BO_NATIVE = BO_LITTLE, BO_OTHER = BO_BIG;
 #endif
 
     //! Utility class that points to a specific position in a resource
@@ -44,7 +44,7 @@ namespace Gosu
             return pos;
         }
 
-        void setPosition(std::size_t value)
+        void set_position(std::size_t value)
         {
             // TODO: Check?
             pos = value;
@@ -56,26 +56,26 @@ namespace Gosu
             pos += offset;
         }
 
-        void read(void* destBuffer, std::size_t length);
+        void read(void* dest_buffer, std::size_t length);
         
         //! Convenience function; equivalent to read(&t, sizeof t).
         template<typename T>
-        void readPod(T& t, ByteOrder bo = boDontCare)
+        void read_pod(T& t, ByteOrder bo = BO_DONT_CARE)
         {
             read(&t, sizeof t);
-            if (bo == otherByteOrder)
+            if (bo == BO_OTHER)
             {
                 char* begin = reinterpret_cast<char*>(&t);
                 std::reverse(begin, begin + sizeof t);
             }
         }
 
-        //! Similar to readPod(T&), but returns the read value instead.
+        //! Similar to read_pod(T&), but returns the read value instead.
         template<typename T>
-        T getPod(ByteOrder bo = boDontCare)
+        T get_pod(ByteOrder bo = BO_DONT_CARE)
         {
             T t;
-            readPod<T>(t, bo);
+            read_pod<T>(t, bo);
             return t;
         }
     };
@@ -103,7 +103,7 @@ namespace Gosu
             return pos;
         }
 
-        void setPosition(std::size_t value)
+        void set_position(std::size_t value)
         {
             // TODO: Check?
             pos = value;
@@ -115,13 +115,13 @@ namespace Gosu
             pos += offset;
         }
 
-        void write(const void* sourceBuffer, std::size_t length);
+        void write(const void* source_buffer, std::size_t length);
 
         //! Convenience function; equivalent to write(&t, sizeof t).
         template<typename T>
-        void writePod(const T& t, ByteOrder bo = boDontCare)
+        void write_pod(const T& t, ByteOrder bo = BO_DONT_CARE)
         {
-            if (bo == otherByteOrder)
+            if (bo == BO_OTHER)
             {
                 char buf[sizeof t];
                 const char* begin = reinterpret_cast<const char*>(&t);
@@ -129,7 +129,9 @@ namespace Gosu
                 write(buf, sizeof buf);
             }
             else
+            {
                 write(&t, sizeof t);
+            }
         }
     };
 
@@ -157,27 +159,27 @@ namespace Gosu
 
         //! Convenience: Creates a new Reader that reads from the start of
         //! the resource.
-        Reader frontReader() const
+        Reader front_reader() const
         {
             return Reader(*this, 0);
         }
 
         //! Convenience: Creates a new Writer that appends data at the
         //! end of the resource.
-        Writer backWriter()
+        Writer back_writer()
         {
             return Writer(*this, size());
         }
 
         virtual std::size_t size() const = 0;
 
-        virtual void resize(std::size_t newSize) = 0;
+        virtual void resize(std::size_t new_size) = 0;
 
         virtual void read(std::size_t offset, std::size_t length,
-            void* destBuffer) const = 0;
+            void* dest_buffer) const = 0;
 
         virtual void write(std::size_t offset, std::size_t length,
-            const void* sourceBuffer) = 0;
+            const void* source_buffer) = 0;
     };
 
     //! Piece of memory with the Resource interface.
@@ -203,13 +205,13 @@ namespace Gosu
         }
 
         std::size_t size() const;
-        void resize(std::size_t newSize);
+        void resize(std::size_t new_size);
 
         void read(std::size_t offset, std::size_t length,
-            void* destBuffer) const;
+            void* dest_buffer) const;
 
         void write(std::size_t offset, std::size_t length,
-            const void* sourceBuffer);
+            const void* source_buffer);
 
         const void* data() const
         {
@@ -226,13 +228,13 @@ namespace Gosu
     {
         //! Opens an existing file for reading; throws an exception if the file
         //! cannot be found.
-        fmRead,
+        FM_READ,
         //! Writes data to a file. If the file already exists, is emptied on
         //! opening. If the file does not exist, it is created.
-        fmReplace,
+        FM_REPLACE,
         //! Opens or creates a file with writing access, but does not clear
         //! existing contents.
-        fmAlter
+        FM_ALTER
     };
 
     //! File with the Resource interface.
@@ -242,19 +244,19 @@ namespace Gosu
         const std::unique_ptr<Impl> pimpl;
 
     public:
-        explicit File(const std::wstring& filename, FileMode mode = fmRead);
+        explicit File(const std::wstring& filename, FileMode mode = FM_READ);
         ~File();
 
         std::size_t size() const;
-        void resize(std::size_t newSize);
+        void resize(std::size_t new_size);
         void read(std::size_t offset, std::size_t length,
-            void* destBuffer) const;
+            void* dest_buffer) const;
         void write(std::size_t offset, std::size_t length,
-            const void* sourceBuffer);
+            const void* source_buffer);
     };
 
     //! Loads a whole file into a buffer.
-    void loadFile(Buffer& buffer, const std::wstring& filename);
+    void load_file(Buffer& buffer, const std::wstring& filename);
     //! Creates or overwrites a file with the contents of a buffer.
-    void saveFile(const Buffer& buffer, const std::wstring& filename);
+    void save_file(const Buffer& buffer, const std::wstring& filename);
 }

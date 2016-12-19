@@ -6,7 +6,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = (__bridge UIWindow *)windowInstance().UIWindow();
+    self.window = (__bridge UIWindow *)window_instance().UIWindow();
     [self.window makeKeyAndVisible];
     
     return YES;
@@ -18,7 +18,7 @@
 int main(int argc, char *argv[])
 {
     @autoreleasepool {
-        Gosu::useResourceDirectory();
+        Gosu::use_resource_directory();
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([GosuAppDelegate class]));
     }
 }

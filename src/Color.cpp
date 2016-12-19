@@ -6,7 +6,7 @@ namespace
 {
     struct HSV { double h, s, v; };
     
-    HSV colorToHSV(const Gosu::Color& c)
+    HSV color_to_hsv(const Gosu::Color& c)
     {
         double r = c.red() / 255.0;
         double g = c.green() / 255.0;
@@ -41,19 +41,19 @@ namespace
     }
 }
 
-Gosu::Color Gosu::Color::fromHSV(double h, double s, double v)
+Gosu::Color Gosu::Color::from_hsv(double h, double s, double v)
 {
-    return fromAHSV(255, h, s, v);
+    return from_ahsv(255, h, s, v);
 }
 
-Gosu::Color Gosu::Color::fromAHSV(Channel alpha, double h, double s, double v)
+Gosu::Color Gosu::Color::from_ahsv(Channel alpha, double h, double s, double v)
 {
 	if (s == 0)
 		// Grey.
         return Color(alpha, v * 255, v * 255, v * 255);
     
     // Normalize hue
-    h = normalizeAngle(h);
+    h = normalize_angle(h);
     
 	int sector = h / 60;
     double factorial = h / 60 - sector;
@@ -81,32 +81,32 @@ Gosu::Color Gosu::Color::fromAHSV(Channel alpha, double h, double s, double v)
 
 double Gosu::Color::hue() const
 {
-    return colorToHSV(*this).h;
+    return color_to_hsv(*this).h;
 }
 
-void Gosu::Color::setHue(double h)
+void Gosu::Color::set_hue(double h)
 {
-    *this = fromAHSV(alpha(), h, saturation(), value());
+    *this = from_ahsv(alpha(), h, saturation(), value());
 }
 
 double Gosu::Color::saturation() const
 {
-    return colorToHSV(*this).s;
+    return color_to_hsv(*this).s;
 }
 
-void Gosu::Color::setSaturation(double s)
+void Gosu::Color::set_saturation(double s)
 {
-    *this = fromAHSV(alpha(), hue(), s, value());
+    *this = from_ahsv(alpha(), hue(), s, value());
 }
 
 double Gosu::Color::value() const
 {
-    return colorToHSV(*this).v;
+    return color_to_hsv(*this).v;
 }
 
-void Gosu::Color::setValue(double v)
+void Gosu::Color::set_value(double v)
 {
-    *this = fromAHSV(alpha(), hue(), saturation(), v);
+    *this = from_ahsv(alpha(), hue(), saturation(), v);
 }
 
 Gosu::Color Gosu::interpolate(Color a, Color b, double weight)

@@ -13,14 +13,14 @@ namespace Gosu
         // All the absolute matrices that have been created since last reset.
         Transforms absolute;
         // Points to one absolute transform.
-        Transforms::const_iterator currentIterator;
+        Transforms::const_iterator current_iterator;
         
-        void makeCurrent(const Transform& transform)
+        void make_current(const Transform& transform)
         {
-            currentIterator =
+            current_iterator =
                 std::find(absolute.begin(), absolute.end(), transform);
-            if (currentIterator == absolute.end())
-                currentIterator = absolute.insert(absolute.end(), transform);
+            if (current_iterator == absolute.end())
+                current_iterator = absolute.insert(absolute.end(), transform);
         }
         
     public:
@@ -37,7 +37,7 @@ namespace Gosu
             // set a base transform in the main rendering queue.
             individual.resize(1);
             absolute.resize(1);
-            currentIterator = absolute.begin();
+            current_iterator = absolute.begin();
         }
         
         TransformStack(const TransformStack& other)
@@ -45,41 +45,41 @@ namespace Gosu
             *this = other;
         }
         
-        // Custom assignment to ensure valid currentIterator
+        // Custom assignment to ensure valid current_iterator
         TransformStack& operator=(const TransformStack &other)
         {
             individual = other.individual;
             absolute = other.absolute;
             
-            // Reset our currentIterator to point to the respective element
+            // Reset our current_iterator to point to the respective element
             // in our own 'absolute' transforms by iterating both lists up to
             // the other lists' current iterator
-            currentIterator = absolute.begin();
-            Transforms::const_iterator otherIterator = other.absolute.begin();
-            while (otherIterator != other.currentIterator)
-                ++currentIterator, ++otherIterator;
+            current_iterator = absolute.begin();
+            Transforms::const_iterator other_iterator = other.absolute.begin();
+            while (other_iterator != other.current_iterator)
+                ++current_iterator, ++other_iterator;
             
             return *this;
         }
         
-        void setBaseTransform(const Transform& baseTransform)
+        void set_base_transform(const Transform& base_transform)
         {
             assert (individual.size() == 1);
             assert (absolute.size() == 1);
             
-            individual.front() = absolute.front() = baseTransform;
+            individual.front() = absolute.front() = base_transform;
         }
         
         const Transform& current()
         {
-            return *currentIterator;
+            return *current_iterator;
         }
         
         void push(const Transform& transform)
         {
             individual.push_back(transform);
             Transform result = concat(transform, current());
-            makeCurrent(result);
+            make_current(result);
         }
         
         void pop()
@@ -91,7 +91,7 @@ namespace Gosu
             for (Transforms::reverse_iterator it = individual.rbegin(),
                     end = individual.rend(); it != end; ++it)
                 result = concat(result, *it);
-            makeCurrent(result);
+            make_current(result);
         }
     };
 }

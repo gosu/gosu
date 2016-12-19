@@ -15,36 +15,36 @@ namespace Gosu
         AudioFile(const AudioFile&);
         AudioFile& operator=(const AudioFile&);
         
-        std::vector<char> decodedData_;
+        std::vector<char> decoded_data_;
         
     public:
         AudioFile() {}
         virtual ~AudioFile() {}
         virtual ALenum format() const = 0;
-        virtual ALuint sampleRate() const = 0;
-        virtual std::size_t readData(void* dest, std::size_t length) = 0;
+        virtual ALuint sample_rate() const = 0;
+        virtual std::size_t read_data(void* dest, std::size_t length) = 0;
         virtual void rewind() = 0;
         
-        const std::vector<char>& decodedData()
+        const std::vector<char>& decoded_data()
         {
             static const unsigned INCREMENT = 512*1024;
             
-            if (!decodedData_.empty())
-                return decodedData_;
+            if (!decoded_data_.empty())
+                return decoded_data_;
             
             for (;;)
             {
-                decodedData_.resize(decodedData_.size() + INCREMENT);
-                int readBytes = readData(&decodedData_[decodedData_.size() - INCREMENT],
+                decoded_data_.resize(decoded_data_.size() + INCREMENT);
+                int read_bytes = read_data(&decoded_data_[decoded_data_.size() - INCREMENT],
                                     INCREMENT);
-                if (readBytes < INCREMENT)
+                if (read_bytes < INCREMENT)
                 {
-                    decodedData_.resize(decodedData_.size() - INCREMENT + readBytes);
+                    decoded_data_.resize(decoded_data_.size() - INCREMENT + read_bytes);
                     break;
                 }
             }
             
-            return decodedData_;
+            return decoded_data_;
         }
     };
 }

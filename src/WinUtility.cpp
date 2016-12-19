@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <windows.h>
 
-void Gosu::Win::throwLastError(const std::string& action)
+void Gosu::Win::throw_last_error(const std::string& action)
 {
     // Obtain error message from Windows.
     char* buffer;

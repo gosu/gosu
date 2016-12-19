@@ -4,14 +4,13 @@
 #pragma once
 
 #include <string>
-#include <vector>
 
 namespace Gosu
 {
     //! Converts an std::string into an std::wstring.
-    std::wstring utf8ToWstring(const std::string& utf8);
+    std::wstring utf8_to_wstring(const std::string& utf8);
     //! Converts an std::wstring into an std::string.
-    std::string wstringToUTF8(const std::wstring& ws);
+    std::string wstring_to_utf8(const std::wstring& ws);
     
     //! Converts an std::string into an std::wstring using local encoding.
     std::wstring widen(const std::string& s);

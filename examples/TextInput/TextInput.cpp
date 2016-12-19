@@ -42,11 +42,11 @@ public:
     : window(window), font(font), x(x), y(y)
     {
         // Start with a self-explanatory text in each field.
-        setText(L"Click to change text");
+        set_text(L"Click to change text");
     }
     
     // Local helper.
-    static wchar_t toUpper(wchar_t in)
+    static wchar_t to_upper(wchar_t in)
     {
         // This will work no matter if towupper is in namespace std or not.
         // (Depends on your compiler/standard library.)
@@ -56,11 +56,11 @@ public:
     
     // Example filter member function. You can truncate the text to employ a length limit,
     // limit the text to certain characters etc.
-    std::wstring filter(const std::wstring& string) const
+    std::wstring filter(const std::wstring& string) const override
     {
         std::wstring result;
         result.resize(string.length());
-        std::transform(string.begin(), string.end(), result.begin(), toUpper);
+        std::transform(string.begin(), string.end(), result.begin(), to_upper);
         return result;
     }
     
@@ -68,42 +68,43 @@ public:
     {
         // Depending on whether this is the currently selected input or not, change the
         // background's color.
-        Gosu::Color backgroundColor;
-        if (window.input().textInput() == this)
-            backgroundColor = ACTIVE_COLOR;
+        Gosu::Color background_color;
+        if (window.input().text_input() == this)
+            background_color = ACTIVE_COLOR;
         else
-            backgroundColor = INACTIVE_COLOR;
+            background_color = INACTIVE_COLOR;
         
-        Gosu::Graphics::drawQuad(x - PADDING,           y - PADDING,            backgroundColor,
-                                 x + width() + PADDING, y - PADDING,            backgroundColor,
-                                 x - PADDING,           y + height() + PADDING, backgroundColor,
-                                 x + width() + PADDING, y + height() + PADDING, backgroundColor, 0);
+        Gosu::Graphics::draw_quad(x - PADDING,           y - PADDING,            background_color,
+                                  x + width() + PADDING, y - PADDING,            background_color,
+                                  x - PADDING,           y + height() + PADDING, background_color,
+                                  x + width() + PADDING, y + height() + PADDING, background_color, 0);
         
         // Calculate the position of the caret and the selection start.
-        double posX = x + font.textWidth(text().substr(0, caretPos()));
-        double selX = x + font.textWidth(text().substr(0, selectionStart()));
+        double pos_x = x + font.text_width(text().substr(0, caret_pos()));
+        double sel_x = x + font.text_width(text().substr(0, selection_start()));
         
         // Draw the selection background, if any; if not, sel_x and pos_x will be
         // the same value, making this quad empty.
-        Gosu::Graphics::drawQuad(selX, y,            SELECTION_COLOR,
-                                 posX, y,            SELECTION_COLOR,
-                                 selX, y + height(), SELECTION_COLOR,
-                                 posX, y + height(), SELECTION_COLOR, 0);
+        Gosu::Graphics::draw_quad(sel_x, y,            SELECTION_COLOR,
+                                  pos_x, y,            SELECTION_COLOR,
+                                  sel_x, y + height(), SELECTION_COLOR,
+                                  pos_x, y + height(), SELECTION_COLOR, 0);
 
         // Draw the caret; again, only if this is the currently selected field.
-        if (window.input().textInput() == this)
-            Gosu::Graphics::drawLine(posX, y,            CARET_COLOR,
-                                     posX, y + height(), CARET_COLOR, 0);
+        if (window.input().text_input() == this) {
+            Gosu::Graphics::draw_line(pos_x, y,            CARET_COLOR,
+                                      pos_x, y + height(), CARET_COLOR, 0);
+        }
         
         // Finally, draw the text itself!
         font.draw(text(), x, y, 0);
     }
     
     // This text field grows with the text that's being entered.
-    // (Usually one would use beginClipping/endClipping and scroll around on the text field.)
+    // (Usually one would use begin_clipping/end_clipping and scroll around on the text field.)
     double width() const
     {
-        return font.textWidth(text());
+        return font.text_width(text());
     }
     
     double height() const
@@ -111,74 +112,75 @@ public:
         return font.height();
     }
     
-    bool isUnderPoint(double mouseX, double mouseY)
+    bool is_under_point(double mouse_x, double mouse_y)
     {
-        return mouseX > x - PADDING && mouseX < x + width() + PADDING &&
-               mouseY > y - PADDING and mouseY < y + height() + PADDING;
+        return mouse_x > x - PADDING && mouse_x < x + width() + PADDING &&
+               mouse_y > y - PADDING and mouse_y < y + height() + PADDING;
     }
 };
 
 // Helper to get the size static arrays.
-template<typename T, std::size_t Len>
-std::size_t lengthof(const T(&) [Len])
+template<typename T, std::size_t Length>
+std::size_t lengthof(const T(&) [Length])
 {
-    return Len;
+    return Length;
 }
 
 class Window : public Gosu::Window
 {
-    std::auto_ptr<TextField> textFields[3];
+    std::unique_ptr<TextField> text_fields[3];
     
 public:
     Window()
     : Gosu::Window(300, 200)
     {
-        setCaption(L"Text Input Example");
+        set_caption(L"Text Input Example");
         
         Gosu::Font font(20);
         
-        for (int index = 0; index < lengthof(textFields); ++index)
-            textFields[index].reset(new TextField(*this, font, 50, 30 + index * 50));
+        for (int index = 0; index < lengthof(text_fields); ++index) {
+            text_fields[index].reset(new TextField(*this, font, 50, 30 + index * 50));
+        }
     }
     
-    bool needsCursor() const
+    bool needs_cursor() const override
     {
         return true;
     }
     
-    void draw()
+    void draw() override
     {
-        for (int i = 0; i < lengthof(textFields); ++i)
-            textFields[i]->draw();
+        for (auto& text_field : text_fields) {
+            text_field->draw();
+        }
     }
     
-    void buttonDown(Gosu::Button btn)
+    void button_down(Gosu::Button btn) override
     {
-        if (btn == Gosu::kbTab)
-        {
+        if (btn == Gosu::KB_TAB) {
             // Tab key will not be 'eaten' by text fields; use for switching through
             // text fields.
             int index = -1;
-            for (int i = 0; i < lengthof(textFields); ++i)
-                if (input().textInput() == textFields[i].get())
+            for (int i = 0; i < lengthof(text_fields); ++i)
+                if (input().text_input() == text_fields[i].get())
                     index = i;
-            input().setTextInput(textFields[(index + 1) % lengthof(textFields)].get());
+            input().set_text_input(text_fields[(index + 1) % lengthof(text_fields)].get());
         }
-        else if (btn == Gosu::kbEscape)
-        {
+        else if (btn == Gosu::KB_ESCAPE) {
             // Escape key will not be 'eaten' by text fields; use for deselecting.
-            if (input().textInput())
-                input().setTextInput(0);
+            if (input().text_input())
+                input().set_text_input(0);
             else
                 close();
         }
-        else if (btn == Gosu::msLeft)
-        {
+        else if (btn == Gosu::MS_LEFT) {
             // Mouse click: Select text field based on mouse position.
-            input().setTextInput(0);
-            for (int i = 0; i < lengthof(textFields); ++i)
-                if (textFields[i]->isUnderPoint(input().mouseX(), input().mouseY()))
-                    input().setTextInput(textFields[i].get());
+            input().set_text_input(0);
+            for (int i = 0; i < lengthof(text_fields); ++i) {
+                if (text_fields[i]->is_under_point(input().mouse_x(), input().mouse_y())) {
+                    input().set_text_input(text_fields[i].get());
+                }
+            }
         }
     }
 };

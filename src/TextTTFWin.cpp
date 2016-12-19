@@ -53,7 +53,7 @@ struct TT_NAME_RECORD
 
 namespace Gosu
 {
-std::wstring getNameFromTTFFile(const std::wstring& filename)
+std::wstring get_name_from_ttf_file(const std::wstring& filename)
 {
 	FONT_PROPERTIES_ANSI fp;
 	FONT_PROPERTIES_ANSI * lpFontProps = &fp;
