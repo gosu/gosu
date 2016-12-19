@@ -165,11 +165,3 @@ void Gosu::Font::drawRot(const wstring& text, double x, double y, ZPos z, double
     draw(text, x, y, z, factorX, factorY, c, mode);
     Gosu::Graphics::popTransform();
 }
-
-// Deprecated constructors
-
-Gosu::Font::Font(Graphics& graphics, const wstring& fontName, unsigned fontHeight,
-    unsigned fontFlags)
-{
-    Font(fontHeight, fontName, fontFlags).pimpl.swap(pimpl);
-}

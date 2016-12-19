@@ -148,29 +148,3 @@ void Gosu::saveImageFile(const Gosu::Bitmap& bitmap, Gosu::Writer writer,
         throw std::runtime_error("Could not save image data to memory (format hint = '" +
                                  Gosu::wstringToUTF8(formatHint) + "'");
 }
-
-// Deprecated methods.
-
-Gosu::Reader Gosu::loadFromPNG(Bitmap& bitmap, Reader reader)
-{
-    loadImageFile(bitmap, reader);
-    reader.setPosition(reader.resource().size());
-    return reader;
-}
-
-Gosu::Reader Gosu::loadFromBMP(Bitmap& bitmap, Reader reader)
-{
-    return loadFromPNG(bitmap, reader);
-}
-
-Gosu::Writer Gosu::saveToPNG(const Bitmap& bitmap, Writer writer)
-{
-    saveImageFile(bitmap, writer, L".png");
-    return writer.resource().backWriter();
-}
-
-Gosu::Writer Gosu::saveToBMP(const Bitmap& bitmap, Writer writer)
-{
-    saveImageFile(bitmap, writer, L".bmp");
-    return writer.resource().backWriter();
-}

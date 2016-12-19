@@ -180,21 +180,5 @@ namespace Gosu
     //! Combines two colors as if their channels were mapped to the 0..1 range
     //! and then multiplied with each other.
     Color multiply(Color a, Color b);
-
-    namespace Colors
-    {
-        GOSU_DEPRECATED const Color none     (0x00000000);
-        GOSU_DEPRECATED const Color black    (0xff000000);
-        GOSU_DEPRECATED const Color gray     (0xff808080);
-        GOSU_DEPRECATED const Color white    (0xffffffff);
-        
-        GOSU_DEPRECATED const Color aqua     (0xff00ffff);
-        GOSU_DEPRECATED const Color red      (0xffff0000);
-        GOSU_DEPRECATED const Color green    (0xff00ff00);
-        GOSU_DEPRECATED const Color blue     (0xff0000ff);
-        GOSU_DEPRECATED const Color yellow   (0xffffff00);
-        GOSU_DEPRECATED const Color fuchsia  (0xffff00ff);
-        GOSU_DEPRECATED const Color cyan     (0xff00ffff);
-    }
     #endif
 }

@@ -77,17 +77,6 @@ namespace Gosu
         #ifndef SWIG
         //! Provides access to the underlying image data object.
         ImageData& getData() const;
-        
-        GOSU_DEPRECATED Image(Graphics& graphics, const std::wstring& filename,
-              bool tileable = false);
-        GOSU_DEPRECATED Image(Graphics& graphics, const std::wstring& filename, unsigned srcX,
-              unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-              bool tileable = false);
-        GOSU_DEPRECATED Image(Graphics& graphics, const Bitmap& source,
-              bool tileable = false);
-        GOSU_DEPRECATED Image(Graphics& graphics, const Bitmap& source, unsigned srcX,
-              unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-              bool tileable = false);
         #endif
     };
     
@@ -105,23 +94,5 @@ namespace Gosu
     //! \param tileHeight See tileWidth.
     std::vector<Gosu::Image> loadTiles(const std::wstring& filename,
         int tileWidth, int tileHeight, unsigned imageFlags = ifSmooth);
-    
-    GOSU_DEPRECATED std::vector<Gosu::Image> loadTiles(Graphics& graphics, const Bitmap& bmp, int tileWidth, int tileHeight, bool tileable);
-    GOSU_DEPRECATED std::vector<Gosu::Image> loadTiles(Graphics& graphics, const std::wstring& bmp, int tileWidth, int tileHeight, bool tileable);
-    template<typename Container>
-    GOSU_DEPRECATED void imagesFromTiledBitmap(Graphics& graphics, const std::wstring& filename, int tileWidth, int tileHeight, bool tileable, Container& appendTo)
-    {
-        std::vector<Gosu::Image> tiles = loadTiles(graphics, filename, tileWidth, tileHeight, tileable);
-        for (int i = 0, num = tiles.size(); i < num; ++i)
-            appendTo.push_back(typename Container::value_type(new Gosu::Image(tiles[i])));
-    }
-    template<typename Container>
-    GOSU_DEPRECATED void imagesFromTiledBitmap(Graphics& graphics, const Bitmap& bmp,
-        int tileWidth, int tileHeight, bool tileable, Container& appendTo)
-    {
-        std::vector<Gosu::Image> tiles = loadTiles(graphics, bmp, tileWidth, tileHeight, tileable);
-        for (int i = 0, num = tiles.size(); i < num; ++i)
-            appendTo.push_back(typename Container::value_type(new Gosu::Image(tiles[i])));
-    }
     #endif
 }
