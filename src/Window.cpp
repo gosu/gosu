@@ -4,8 +4,6 @@
 #include <memory>
 #include <stdexcept>
 
-using namespace std::placeholders;
-
 namespace Gosu
 {
     namespace FPS
@@ -98,8 +96,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
         SDL_SetWindowPosition(sharedWindow(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
     }
     
-    input().onButtonDown = std::bind(&Window::buttonDown, this, _1);
-    input().onButtonUp = std::bind(&Window::buttonUp, this, _1);
+    input().onButtonDown = [this](Gosu::Button button) { buttonDown(button); };
+    input().onButtonUp = [this](Gosu::Button button) { buttonUp(button); };
 }
 
 Gosu::Window::~Window()
