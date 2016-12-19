@@ -56,7 +56,6 @@ namespace
 }
 
 #ifdef GOSU_IS_MAC
-#include "AppleUtility.hpp"
     #define CONSTRUCTOR_BEGIN \
         @autoreleasepool { \
         if (!alChannelManagement.get()) \

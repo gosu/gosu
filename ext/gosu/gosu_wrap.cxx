@@ -5217,10 +5217,8 @@ _wrap_Font_draw(int argc, VALUE *argv, VALUE self) {
       
       if (!strcmp(cstr, "default"))
       arg9 = Gosu::amDefault;
-      else if (!strcmp(cstr, "add"))
-      arg9 = Gosu::amAdditive;
-      else if (!strcmp(cstr, "additive"))
-      arg9 = Gosu::amAdditive;
+      else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive"))
+      arg9 = Gosu::amAdd;
       else if (!strcmp(cstr, "multiply"))
       arg9 = Gosu::amMultiply;
       else
@@ -5346,10 +5344,8 @@ _wrap_Font_draw_rel(int argc, VALUE *argv, VALUE self) {
       
       if (!strcmp(cstr, "default"))
       arg11 = Gosu::amDefault;
-      else if (!strcmp(cstr, "add"))
-      arg11 = Gosu::amAdditive;
-      else if (!strcmp(cstr, "additive"))
-      arg11 = Gosu::amAdditive;
+      else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive"))
+      arg11 = Gosu::amAdd;
       else if (!strcmp(cstr, "multiply"))
       arg11 = Gosu::amMultiply;
       else
@@ -5467,10 +5463,8 @@ _wrap_Font_draw_rot(int argc, VALUE *argv, VALUE self) {
       
       if (!strcmp(cstr, "default"))
       arg10 = Gosu::amDefault;
-      else if (!strcmp(cstr, "add"))
-      arg10 = Gosu::amAdditive;
-      else if (!strcmp(cstr, "additive"))
-      arg10 = Gosu::amAdditive;
+      else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive"))
+      arg10 = Gosu::amAdd;
       else if (!strcmp(cstr, "multiply"))
       arg10 = Gosu::amMultiply;
       else
@@ -6150,10 +6144,8 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
       
       if (!strcmp(cstr, "default"))
       arg8 = Gosu::amDefault;
-      else if (!strcmp(cstr, "add"))
-      arg8 = Gosu::amAdditive;
-      else if (!strcmp(cstr, "additive"))
-      arg8 = Gosu::amAdditive;
+      else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive"))
+      arg8 = Gosu::amAdd;
       else if (!strcmp(cstr, "multiply"))
       arg8 = Gosu::amMultiply;
       else
@@ -6298,10 +6290,8 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
       
       if (!strcmp(cstr, "default"))
       arg11 = Gosu::amDefault;
-      else if (!strcmp(cstr, "add"))
-      arg11 = Gosu::amAdditive;
-      else if (!strcmp(cstr, "additive"))
-      arg11 = Gosu::amAdditive;
+      else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive"))
+      arg11 = Gosu::amAdd;
       else if (!strcmp(cstr, "multiply"))
       arg11 = Gosu::amMultiply;
       else
@@ -6432,10 +6422,8 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
       
       if (!strcmp(cstr, "default"))
       arg11 = Gosu::amDefault;
-      else if (!strcmp(cstr, "add"))
-      arg11 = Gosu::amAdditive;
-      else if (!strcmp(cstr, "additive"))
-      arg11 = Gosu::amAdditive;
+      else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive"))
+      arg11 = Gosu::amAdd;
       else if (!strcmp(cstr, "multiply"))
       arg11 = Gosu::amMultiply;
       else
@@ -6656,10 +6644,8 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
       
       if (!strcmp(cstr, "default"))
       arg15 = Gosu::amDefault;
-      else if (!strcmp(cstr, "add"))
-      arg15 = Gosu::amAdditive;
-      else if (!strcmp(cstr, "additive"))
-      arg15 = Gosu::amAdditive;
+      else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive"))
+      arg15 = Gosu::amAdd;
       else if (!strcmp(cstr, "multiply"))
       arg15 = Gosu::amMultiply;
       else
@@ -9757,10 +9743,8 @@ _wrap_draw_line(int argc, VALUE *argv, VALUE self) {
       
       if (!strcmp(cstr, "default"))
       arg8 = Gosu::amDefault;
-      else if (!strcmp(cstr, "add"))
-      arg8 = Gosu::amAdditive;
-      else if (!strcmp(cstr, "additive"))
-      arg8 = Gosu::amAdditive;
+      else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive"))
+      arg8 = Gosu::amAdd;
       else if (!strcmp(cstr, "multiply"))
       arg8 = Gosu::amMultiply;
       else
@@ -9899,10 +9883,8 @@ _wrap_draw_triangle(int argc, VALUE *argv, VALUE self) {
       
       if (!strcmp(cstr, "default"))
       arg11 = Gosu::amDefault;
-      else if (!strcmp(cstr, "add"))
-      arg11 = Gosu::amAdditive;
-      else if (!strcmp(cstr, "additive"))
-      arg11 = Gosu::amAdditive;
+      else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive"))
+      arg11 = Gosu::amAdd;
       else if (!strcmp(cstr, "multiply"))
       arg11 = Gosu::amMultiply;
       else
@@ -10073,10 +10055,8 @@ _wrap_draw_quad(int argc, VALUE *argv, VALUE self) {
       
       if (!strcmp(cstr, "default"))
       arg14 = Gosu::amDefault;
-      else if (!strcmp(cstr, "add"))
-      arg14 = Gosu::amAdditive;
-      else if (!strcmp(cstr, "additive"))
-      arg14 = Gosu::amAdditive;
+      else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive"))
+      arg14 = Gosu::amAdd;
       else if (!strcmp(cstr, "multiply"))
       arg14 = Gosu::amMultiply;
       else
@@ -10167,10 +10147,8 @@ _wrap_draw_rect(int argc, VALUE *argv, VALUE self) {
       
       if (!strcmp(cstr, "default"))
       arg7 = Gosu::amDefault;
-      else if (!strcmp(cstr, "add"))
-      arg7 = Gosu::amAdditive;
-      else if (!strcmp(cstr, "additive"))
-      arg7 = Gosu::amAdditive;
+      else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive"))
+      arg7 = Gosu::amAdd;
       else if (!strcmp(cstr, "multiply"))
       arg7 = Gosu::amMultiply;
       else

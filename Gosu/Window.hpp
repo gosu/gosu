@@ -40,14 +40,9 @@ namespace Gosu
     class Window
     {
         struct Impl;
+        // Non-movable (const) to avoid dangling internal references.
         const std::unique_ptr<Impl> pimpl;
-#if defined(GOSU_CPP11_ENABLED)
-        Window(Window&&) = delete;
-        Window& operator=(Window&&) = delete;
-        Window(const Window&) = delete;
-        Window& operator=(const Window&) = delete;
-#endif
-	
+
     public:
         //! Constructs a Window.
         //! \param width Width of the window in points; that is, pixels on a normal display, and 'points' on a

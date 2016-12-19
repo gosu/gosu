@@ -98,10 +98,8 @@
     
     if (!strcmp(cstr, "default"))
         $1 = Gosu::amDefault;
-    else if (!strcmp(cstr, "add"))
-        $1 = Gosu::amAdditive;
-    else if (!strcmp(cstr, "additive"))
-        $1 = Gosu::amAdditive;
+    else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive"))
+        $1 = Gosu::amAdd;
     else if (!strcmp(cstr, "multiply"))
         $1 = Gosu::amMultiply;
     else
