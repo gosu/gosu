@@ -6,7 +6,6 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
 #include <Gosu/Input.hpp>
-#include <Gosu/TR1.hpp>
 #include <memory>
 #include <string>
 

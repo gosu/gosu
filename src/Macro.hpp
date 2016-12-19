@@ -2,14 +2,13 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
-#include <Gosu/TR1.hpp>
 #include <Gosu/Platform.hpp>
 #include "GraphicsImpl.hpp"
 
 class Gosu::Macro : public Gosu::ImageData
 {
     struct Impl;
-    std::tr1::shared_ptr<Impl> pimpl;
+    std::shared_ptr<Impl> pimpl;
     
 public:
     Macro(DrawOpQueue& queue, int width, int height);

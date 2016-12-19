@@ -73,7 +73,7 @@ bool Gosu::Texture::retro() const
 }
 
 GOSU_UNIQUE_PTR<Gosu::TexChunk>
-    Gosu::Texture::tryAlloc(std::tr1::shared_ptr<Texture> ptr, const Bitmap& bmp, unsigned padding)
+    Gosu::Texture::tryAlloc(std::shared_ptr<Texture> ptr, const Bitmap& bmp, unsigned padding)
 {
     GOSU_UNIQUE_PTR<Gosu::TexChunk> result;
     

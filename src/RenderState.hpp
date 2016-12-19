@@ -7,7 +7,7 @@
 // This does not include the color or vertex data of the actual quads.
 struct Gosu::RenderState
 {
-    std::tr1::shared_ptr<Texture> texture;
+    std::shared_ptr<Texture> texture;
     const Transform* transform;
     ClipRect clipRect;
     AlphaMode mode;
@@ -109,7 +109,7 @@ public:
         ClipRect noClipping;
         noClipping.width = NO_CLIPPING;
         setClipRect(noClipping);
-        setTexture(std::tr1::shared_ptr<Texture>());
+        setTexture(std::shared_ptr<Texture>());
         // Return to previous MV matrix
         glMatrixMode(GL_MODELVIEW);
         glPopMatrix();
@@ -123,7 +123,7 @@ public:
         setAlphaMode(rs.mode);
     }
     
-    void setTexture(std::tr1::shared_ptr<Texture> newTexture)
+    void setTexture(std::shared_ptr<Texture> newTexture)
     {
         if (newTexture == texture)
             return;

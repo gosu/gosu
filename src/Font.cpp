@@ -3,9 +3,9 @@
 #include <Gosu/Image.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/Text.hpp>
-#include <Gosu/TR1.hpp>
 #include "GraphicsImpl.hpp"
 #include "FormattedString.hpp"
+#include <array>
 #include <cassert>
 #include <map>
 using namespace std;
@@ -22,10 +22,10 @@ struct Gosu::Font::Impl
         GOSU_UNIQUE_PTR<Image> image;
         double factor;
     };
-    typedef tr1::array<CharInfo, 65536> Plane;
+    typedef array<CharInfo, 65536> Plane;
     GOSU_UNIQUE_PTR<Plane> planes[16][ffCombinations];
     
-    map<wstring, tr1::shared_ptr<Image> > entityCache;
+    map<wstring, shared_ptr<Image> > entityCache;
     
     CharInfo& charInfo(wchar_t wc, unsigned flags)
     {
@@ -46,7 +46,7 @@ struct Gosu::Font::Impl
     {
         if (fs.entityAt(i))
         {
-            tr1::shared_ptr<Image>& ptr = entityCache[fs.entityAt(i)];
+            shared_ptr<Image>& ptr = entityCache[fs.entityAt(i)];
             if (!ptr)
                 ptr.reset(new Image(entityBitmap(fs.entityAt(i)), ifSmooth));
             return *ptr;

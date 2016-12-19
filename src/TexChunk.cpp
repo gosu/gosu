@@ -14,7 +14,7 @@ void Gosu::TexChunk::setTexInfo()
     info.bottom = (y + h) / textureSize;
 }
 
-Gosu::TexChunk::TexChunk(std::tr1::shared_ptr<Texture> texture,
+Gosu::TexChunk::TexChunk(std::shared_ptr<Texture> texture,
     int x, int y, int w, int h, int padding)
 : texture(texture), x(x), y(y), w(w), h(h), padding(padding)
 {

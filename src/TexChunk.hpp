@@ -2,7 +2,6 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
-#include <Gosu/TR1.hpp>
 #include "GraphicsImpl.hpp"
 #include <memory>
 #include <vector>
@@ -10,7 +9,7 @@
 
 class Gosu::TexChunk : public Gosu::ImageData
 {
-    std::tr1::shared_ptr<Texture> texture;
+    std::shared_ptr<Texture> texture;
     int x, y, w, h, padding;
     
     // Cached for faster access.
@@ -19,7 +18,7 @@ class Gosu::TexChunk : public Gosu::ImageData
     void setTexInfo();
     
 public:
-    TexChunk(std::tr1::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding);
+    TexChunk(std::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding);
     TexChunk(const TexChunk& parentChunk, int x, int y, int w, int h);
     ~TexChunk();
 

@@ -1,11 +1,11 @@
 #include <Gosu/Input.hpp>
 #include <Gosu/TextInput.hpp>
-#include <Gosu/TR1.hpp>
 #include <Gosu/Utility.hpp>
 #include <SDL.h>
 #include <cwctype>
 #include <cstdlib>
 #include <algorithm>
+#include <array>
 
 namespace
 {
@@ -27,7 +27,7 @@ namespace
         SDL_QuitSubSystem(SDL_INIT_VIDEO);
     }
 
-    std::tr1::array<bool, Gosu::numButtons> buttonStates = { { false } };
+    std::array<bool, Gosu::numButtons> buttonStates = { { false } };
 }
 
 struct Gosu::Input::Impl
@@ -136,7 +136,7 @@ struct Gosu::Input::Impl
         SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
     }
     
-    typedef std::tr1::array<bool, gpNumPerGamepad> GamepadBuffer;
+    typedef std::array<bool, gpNumPerGamepad> GamepadBuffer;
     
     void pollGamepads()
     {

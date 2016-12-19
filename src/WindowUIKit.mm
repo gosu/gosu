@@ -58,11 +58,11 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     pimpl->input.reset(new Input((__bridge void *)pimpl->controller.view, updateInterval));
     pimpl->input->setMouseFactors(1.0 * width / screenHeight(), 1.0 * height / screenWidth());
     
-    using namespace std::tr1::placeholders;
-    pimpl->input->onTouchBegan = std::tr1::bind(&Window::touchBegan, this, _1);
-    pimpl->input->onTouchMoved = std::tr1::bind(&Window::touchMoved, this, _1);
-    pimpl->input->onTouchEnded = std::tr1::bind(&Window::touchEnded, this, _1);
-    pimpl->input->onTouchCancelled = std::tr1::bind(&Window::touchCancelled, this, _1);
+    using namespace std::placeholders;
+    pimpl->input->onTouchBegan = std::bind(&Window::touchBegan, this, _1);
+    pimpl->input->onTouchMoved = std::bind(&Window::touchMoved, this, _1);
+    pimpl->input->onTouchEnded = std::bind(&Window::touchEnded, this, _1);
+    pimpl->input->onTouchCancelled = std::bind(&Window::touchCancelled, this, _1);
     
     pimpl->fullscreen = fullscreen;
     pimpl->updateInterval = updateInterval;

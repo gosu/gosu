@@ -2,7 +2,6 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Bitmap.hpp>
-#include <Gosu/TR1.hpp>
 #include "GraphicsImpl.hpp"
 #include "TexChunk.hpp"
 #include "BlockAllocator.hpp"
@@ -23,7 +22,7 @@ namespace Gosu
         GLuint texName() const;
         bool retro() const;
         GOSU_UNIQUE_PTR<TexChunk>
-            tryAlloc(std::tr1::shared_ptr<Texture> ptr, const Bitmap& bmp, unsigned padding);
+            tryAlloc(std::shared_ptr<Texture> ptr, const Bitmap& bmp, unsigned padding);
         void block(unsigned x, unsigned y, unsigned width, unsigned height);
         void free(unsigned x, unsigned y, unsigned width, unsigned height);
         Gosu::Bitmap toBitmap(unsigned x, unsigned y, unsigned width, unsigned height) const;

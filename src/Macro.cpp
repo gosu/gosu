@@ -2,6 +2,7 @@
 #include "DrawOpQueue.hpp"
 #include <cmath>
 #include <algorithm>
+#include <functional>
 #include <memory>
 #include <stdexcept>
 
@@ -211,7 +212,7 @@ void Gosu::Macro::draw(double x1, double y1, Color c1,
     
     reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
     
-    std::tr1::function<void()> f = std::tr1::bind(&Impl::drawVertexArrays, pimpl, x1, y1, x2, y2, x3, y3, x4, y4);
+    std::function<void()> f = std::bind(&Impl::drawVertexArrays, pimpl, x1, y1, x2, y2, x3, y3, x4, y4);
     Gosu::Graphics::scheduleGL(f, z);
 }
 

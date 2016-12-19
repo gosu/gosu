@@ -8,7 +8,7 @@
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Platform.hpp>
 #include <Gosu/Text.hpp>
-#include <Gosu/TR1.hpp>
+#include <memory>
 #include <string>
 
 namespace Gosu
@@ -20,7 +20,7 @@ namespace Gosu
     class Font
     {
         struct Impl;
-        std::tr1::shared_ptr<Impl> pimpl;
+        std::shared_ptr<Impl> pimpl;
 
     public:
         //! Constructs a font that can be drawn onto the graphics object.

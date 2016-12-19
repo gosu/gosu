@@ -1,15 +1,15 @@
 #pragma once
 
-#include <Gosu/TR1.hpp>
 #include "GraphicsImpl.hpp"
 #include "TransformStack.hpp"
 #include "ClipRectStack.hpp"
 #include "DrawOp.hpp"
-#include <cassert>
 #include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <functional>
 #include <map>
 #include <vector>
-#include <cmath>
 
 class Gosu::DrawOpQueue
 {
@@ -19,7 +19,7 @@ class Gosu::DrawOpQueue
 
     typedef std::vector<DrawOp> DrawOps;
     DrawOps ops;
-    typedef std::vector<std::tr1::function<void()> > GLBlocks;
+    typedef std::vector<std::function<void()> > GLBlocks;
     GLBlocks glBlocks;
 
 public:
@@ -54,7 +54,7 @@ public:
         ops.push_back(op);
     }
 
-    void scheduleGL(std::tr1::function<void()> glBlock, ZPos z)
+    void scheduleGL(std::function<void()> glBlock, ZPos z)
     {
         // TODO: Document this case: Clipped-away GL blocks are *not* being run.
         if (clipRectStack.clippedWorldAway())

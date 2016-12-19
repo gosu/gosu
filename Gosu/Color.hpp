@@ -4,7 +4,6 @@
 #pragma once
 
 #include <Gosu/Platform.hpp>
-#include <Gosu/TR1.hpp>
 
 namespace Gosu
 {
@@ -16,7 +15,7 @@ namespace Gosu
     //! it is 0xaabbggrr.
     class Color
     {
-        std::tr1::uint32_t rep;
+        std::uint32_t rep;
         #ifdef GOSU_IS_LITTLE_ENDIAN
         enum { RED_OFFSET = 0, GREEN_OFFSET = 8, BLUE_OFFSET = 16, ALPHA_OFFSET = 24 };
         #else
@@ -24,7 +23,7 @@ namespace Gosu
         #endif
         
     public:
-        typedef std::tr1::uint8_t Channel;
+        typedef std::uint8_t Channel;
         static const unsigned GL_FORMAT = 0x1908; // GL_RGBA
         
         //! The default constructor does not initialize the color to any value.
@@ -120,25 +119,25 @@ namespace Gosu
         void setValue(double v);
 
         //! Returns the color in 0xaarrggbb representation.
-        std::tr1::uint32_t argb() const
+        std::uint32_t argb() const
         {
             return alpha() << 24 | red() << 16 | green() << 8 | blue();
         }
 
         //! Returns the color in 0x00bbggrr representation. Useful for Win32 programming.
-        std::tr1::uint32_t bgr() const
+        std::uint32_t bgr() const
         {
             return blue() << 16 | green() << 8 | red();
         }
 
         //! Returns the color in 0xaabbggrr representation.
-        std::tr1::uint32_t abgr() const
+        std::uint32_t abgr() const
         {
             return alpha() << 24 | blue() << 16 | green() << 8 | red();
         }
         
         //! Returns the internal representation of the color (RGBA in memory).
-        std::tr1::uint32_t gl() const
+        std::uint32_t gl() const
         {
             return rep;
         }

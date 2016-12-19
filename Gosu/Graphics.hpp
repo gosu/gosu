@@ -6,7 +6,7 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
-#include <Gosu/TR1.hpp>
+#include <functional>
 #include <memory>
 
 namespace Gosu
@@ -70,7 +70,7 @@ namespace Gosu
         //! Gosu's rendering up to the Z level may not yet have been glFlush()ed.
         //! Note: You may not call any Gosu rendering functions from within the
         //! functor, and you must schedule it from within Window::draw's call tree.
-        static void scheduleGL(const std::tr1::function<void()>& functor, ZPos z);
+        static void scheduleGL(const std::function<void()>& functor, ZPos z);
         
         //! Enables clipping to a specified rectangle.
         static void beginClipping(double x, double y, double width, double height);

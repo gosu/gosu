@@ -4,7 +4,7 @@
 #include <memory>
 #include <stdexcept>
 
-using namespace std::tr1::placeholders;
+using namespace std::placeholders;
 
 namespace Gosu
 {
@@ -98,8 +98,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
         SDL_SetWindowPosition(sharedWindow(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
     }
     
-    input().onButtonDown = std::tr1::bind(&Window::buttonDown, this, _1);
-    input().onButtonUp = std::tr1::bind(&Window::buttonUp, this, _1);
+    input().onButtonDown = std::bind(&Window::buttonDown, this, _1);
+    input().onButtonUp = std::bind(&Window::buttonUp, this, _1);
 }
 
 Gosu::Window::~Window()

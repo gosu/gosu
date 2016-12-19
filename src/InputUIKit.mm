@@ -1,7 +1,7 @@
-#include <Gosu/Input.hpp>
-#include <Gosu/TextInput.hpp>
-
-#include "AppleUtility.hpp"
+#import <Gosu/Input.hpp>
+#import "AppleUtility.hpp"
+#import <Gosu/TextInput.hpp>
+#import <functional>
 #import <UIKit/UIKit.h>
 
 struct Gosu::TextInput::Impl {};
@@ -54,7 +54,7 @@ void Gosu::Input::feedTouchEvent(int type, void *touches)
     
     pimpl->currentTouchesVector.reset();
     
-    std::tr1::function<void (Touch)>* callback = nullptr;
+    std::function<void (Touch)>* callback = nullptr;
     
     if (type == 0) {
         [pimpl->currentTouchesSet unionSet:uiTouches];
