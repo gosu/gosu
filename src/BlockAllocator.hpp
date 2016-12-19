@@ -8,7 +8,7 @@ namespace Gosu
     class BlockAllocator
     {
         struct Impl;
-        const GOSU_UNIQUE_PTR<Impl> pimpl;
+        const std::unique_ptr<Impl> pimpl;
 
     public:
         struct Block

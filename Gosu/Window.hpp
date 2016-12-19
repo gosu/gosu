@@ -40,7 +40,7 @@ namespace Gosu
     class Window
     {
         struct Impl;
-        const GOSU_UNIQUE_PTR<Impl> pimpl;
+        const std::unique_ptr<Impl> pimpl;
 #if defined(GOSU_CPP11_ENABLED)
         Window(Window&&) = delete;
         Window& operator=(Window&&) = delete;

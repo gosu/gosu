@@ -19,11 +19,11 @@ struct Gosu::Font::Impl
     // the first plane will ever be touched.
     struct CharInfo
     {
-        GOSU_UNIQUE_PTR<Image> image;
+        std::unique_ptr<Image> image;
         double factor;
     };
     typedef array<CharInfo, 65536> Plane;
-    GOSU_UNIQUE_PTR<Plane> planes[16][ffCombinations];
+    std::unique_ptr<Plane> planes[16][ffCombinations];
     
     map<wstring, shared_ptr<Image> > entityCache;
     

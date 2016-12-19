@@ -226,9 +226,9 @@ Gosu::Bitmap Gosu::Macro::toBitmap() const
     throw std::logic_error("Gosu::Macro cannot be rendered as Gosu::Bitmap yet");
 }
 
-GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Macro::subimage(int x, int y, int width, int height) const
+std::unique_ptr<Gosu::ImageData> Gosu::Macro::subimage(int x, int y, int width, int height) const
 {
-    return GOSU_UNIQUE_PTR<ImageData>();
+    return std::unique_ptr<ImageData>();
 }
 
 void Gosu::Macro::insert(const Bitmap& bitmap, int x, int y)

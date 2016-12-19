@@ -290,12 +290,12 @@ void Gosu::Graphics::beginRecording()
     currentQueue().setRecording();
 }
 
-GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::endRecording(int width, int height)
+std::unique_ptr<Gosu::ImageData> Gosu::Graphics::endRecording(int width, int height)
 {
     if (! currentQueue().recording())
         throw std::logic_error("No macro recording in progress that can be captured");
     
-    GOSU_UNIQUE_PTR<ImageData> result(new Macro(currentQueue(), width, height));
+    std::unique_ptr<ImageData> result(new Macro(currentQueue(), width, height));
     queues.pop_back();
     return result;
 }
@@ -388,7 +388,7 @@ void Gosu::Graphics::setPhysicalResolution(unsigned physWidth, unsigned physHeig
     pimpl->updateBaseTransform();
 }
 
-GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
+std::unique_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     const Bitmap& src, unsigned srcX, unsigned srcY,
     unsigned srcWidth, unsigned srcHeight, unsigned flags)
 {
@@ -409,7 +409,7 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
         srcWidth >= 64 && srcWidth <= maxSize)
     {
         std::shared_ptr<Texture> texture(new Texture(srcWidth, wantsRetro));
-        GOSU_UNIQUE_PTR<ImageData> data;
+        std::unique_ptr<ImageData> data;
         
         // Use the source bitmap directly if the source area completely covers
         // it.
@@ -427,7 +427,7 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
         
         if (!data.get())
             throw std::logic_error("Internal texture block allocation error");
-        return GOSU_MOVE_UNIQUE_PTR(data);
+        return std::move(data);
     }
     
     // Too large to fit on a single texture. 
@@ -435,9 +435,9 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
     {
         Bitmap bmp(srcWidth, srcHeight);
         bmp.insert(src, 0, 0, srcX, srcY, srcWidth, srcHeight);
-        GOSU_UNIQUE_PTR<ImageData> lidi;
+        std::unique_ptr<ImageData> lidi;
         lidi.reset(new LargeImageData(bmp, maxSize - 2, maxSize - 2, flags));
-        return GOSU_MOVE_UNIQUE_PTR(lidi);
+        return std::move(lidi);
     }
     
     Bitmap bmp;
@@ -449,10 +449,10 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
         if (texture->retro() != wantsRetro)
             continue;
         
-        GOSU_UNIQUE_PTR<ImageData> data;
+        std::unique_ptr<ImageData> data;
         data = texture->tryAlloc(texture, bmp, 1);
         if (data.get())
-            return GOSU_MOVE_UNIQUE_PTR(data);
+            return std::move(data);
     }
     
     // All textures are full: Create a new one.
@@ -461,10 +461,10 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
     texture.reset(new Texture(maxSize, wantsRetro));
     textures.push_back(texture);
     
-    GOSU_UNIQUE_PTR<ImageData> data;
+    std::unique_ptr<ImageData> data;
     data = texture->tryAlloc(texture, bmp, 1);
     if (!data.get())
         throw std::logic_error("Internal texture block allocation error");
 
-    return GOSU_MOVE_UNIQUE_PTR(data);
+    return std::move(data);
 }
