@@ -181,7 +181,7 @@ void Gosu::Input::update()
 
 Gosu::TextInput* Gosu::Input::textInput() const
 {
-    return 0;
+    return nullptr;
 }
 
 void Gosu::Input::setTextInput(TextInput* input)

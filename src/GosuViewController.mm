@@ -23,7 +23,7 @@ namespace Gosu
 static void handleAudioInterruption(void *unused, UInt32 inInterruptionState)
 {
     if (inInterruptionState == kAudioSessionBeginInterruption) {
-        alcMakeContextCurrent(NULL);
+        alcMakeContextCurrent(nullptr);
     }
     else if (inInterruptionState == kAudioSessionEndInterruption) {
         alcMakeContextCurrent(Gosu::sharedContext());
