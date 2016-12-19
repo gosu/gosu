@@ -116,15 +116,23 @@ else
   have_header 'AL/al.h'   if have_library('openal')
 end
 
-# This is necessary to build on stock Ruby on OS X 10.7.
+# This is necessary to build with stock Ruby on OS X 10.7.
 CONFIG['CXXFLAGS'] ||= $CXXFLAGS
 
-if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("1.9.3") and
-   Gem::Version.new(RUBY_VERSION) < Gem::Version.new("2.2.0")
-  # In some versions of Ruby and mkmf, the $CXXFLAGS variable is badly broken.
-  # We can modify CONFIG instead, and our changes will end up in the Makefile.
-  # See http://bugs.ruby-lang.org/issues/8315
-  # The lower bound was reduced to 1.9.3 here: https://github.com/gosu/gosu/issues/321
+# Gem::Version#initialize is apparently broken in some versions of Ruby, so use a local helper.
+def ruby_newer_than?(want_version)
+  have_parts = RUBY_VERSION.split('.').map { |part| part.to_i }
+  want_parts = want_version.split('.').map { |part| part.to_i }
+  have_parts << 0 while have_parts.size < want_parts.size
+  want_parts << 0 while want_parts.size < have_parts.size
+  (have_parts <=> want_parts) == 1
+end
+
+# In some versions of Ruby/mkmf, the $CXXFLAGS variable does not work.
+# We can modify CONFIG instead, and our changes will end up in the Makefile.
+# See: http://bugs.ruby-lang.org/issues/8315
+# The lower bound was reduced to 1.9.3 here: https://github.com/gosu/gosu/issues/321
+if ruby_newer_than?("1.9.2") and not ruby_newer_than?("2.2.0")
   CONFIG['CXXFLAGS'] = "#$CFLAGS #$CXXFLAGS"
 end
 
