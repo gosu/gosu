@@ -5,7 +5,6 @@
 
 #include <Gosu/Platform.hpp>
 #include <array>
-#include <limits>
 
 namespace Gosu
 {
@@ -92,10 +91,4 @@ namespace Gosu
     Transform scale(double factor);
     Transform scale(double factorX, double factorY, double fromX = 0, double fromY = 0);
     Transform concat(const Transform& lhs, const Transform& rhs);
-    
-#ifndef SWIG
-    // A not so useful optimization - this was supposed to bypass the Z queue for immediate rendering.
-    // In retrospect, the only useful optimization would be to work down the Z queue on a second thread.
-    GOSU_DEPRECATED const double zImmediate = -std::numeric_limits<double>::infinity();
-#endif
 }

@@ -55,10 +55,6 @@ namespace Gosu
         //! OpenGL operations.
         const Color* data() const { return &pixels[0]; }
         Color* data() { return &pixels[0]; }
-
-        // Work with data() instead if you need fast operations.
-        GOSU_DEPRECATED void fill(Color c);
-        GOSU_DEPRECATED void replace(Color oldColor, Color newColor);
     };
     
     //! Loads any supported image into a Bitmap.
@@ -84,10 +80,4 @@ namespace Gosu
     void applyBorderFlags(Bitmap& dest, const Bitmap& source,
         unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
         unsigned borderFlags);
-
-    // Use loadImageFile/saveImageFile instead.
-    GOSU_DEPRECATED Reader loadFromBMP(Bitmap& bmp, Reader reader);
-    GOSU_DEPRECATED Writer saveToBMP(const Bitmap& bmp, Writer writer);
-    GOSU_DEPRECATED Reader loadFromPNG(Bitmap& bmp, Reader reader);
-    GOSU_DEPRECATED Writer saveToPNG(const Bitmap& bmp, Writer writer);
 }

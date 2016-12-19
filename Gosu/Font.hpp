@@ -70,9 +70,6 @@ namespace Gosu
         void setImage(wchar_t wc, const Gosu::Image& image);
         
         #ifndef SWIG
-        GOSU_DEPRECATED Font(Graphics& graphics, const std::wstring& fontName,
-            unsigned fontHeight, unsigned fontFlags = ffBold);
-        
         GOSU_DEPRECATED
         #endif
         //! DEPRECATED: Analogous to draw, but rotates the text by a given angle.

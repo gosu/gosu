@@ -20,16 +20,6 @@ void Gosu::Bitmap::resize(unsigned width, unsigned height, Color c)
     swap(temp);
 }
 
-void Gosu::Bitmap::fill(Color c)
-{
-    std::fill(pixels.begin(), pixels.end(), c);
-}
-
-void Gosu::Bitmap::replace(Color what, Color with)
-{
-    std::replace(pixels.begin(), pixels.end(), what, with);
-}
-
 void Gosu::Bitmap::insert(const Bitmap& source, int x, int y)
 {
     insert(source, x, y, 0, 0, source.width(), source.height());
