@@ -32,9 +32,9 @@ namespace Gosu
             return 0;
         }
         
-        GOSU_UNIQUE_PTR<ImageData> subimage(int x, int y, int w, int h) const
+        std::unique_ptr<ImageData> subimage(int x, int y, int w, int h) const
         {
-            return GOSU_UNIQUE_PTR<ImageData>();
+            return std::unique_ptr<ImageData>();
         }
         
         Bitmap toBitmap() const;

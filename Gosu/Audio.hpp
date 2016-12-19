@@ -98,7 +98,7 @@ namespace Gosu
         class BaseData;
         class ModuleData;
         class StreamData;
-        GOSU_UNIQUE_PTR<BaseData> data;
+        std::unique_ptr<BaseData> data;
 
 #if defined(GOSU_CPP11_ENABLED)
         Song(Song&&) = delete;

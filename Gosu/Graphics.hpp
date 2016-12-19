@@ -30,7 +30,7 @@ namespace Gosu
     {
         struct Impl;
         
-        const GOSU_UNIQUE_PTR<Impl> pimpl;
+        const std::unique_ptr<Impl> pimpl;
         
     #if defined(GOSU_CPP11_ENABLED)
         // explicitly forbid copying and moving
@@ -84,7 +84,7 @@ namespace Gosu
         //! the resulting macro will simply return these values when you ask
         //! it.
         //! Most usually, the return value is passed to Image::Image().
-        static GOSU_UNIQUE_PTR<Gosu::ImageData> endRecording(int width, int height);
+        static std::unique_ptr<Gosu::ImageData> endRecording(int width, int height);
         
         //! Pushes one transformation onto the transformation stack.
         static void pushTransform(const Transform& transform);
@@ -117,7 +117,7 @@ namespace Gosu
         static void scheduleDrawOp(const DrawOp& op);
 
         //! Turns a portion of a bitmap into something that can be drawn on a Graphics object.
-        static GOSU_UNIQUE_PTR<ImageData> createImage(const Bitmap& src,
+        static std::unique_ptr<ImageData> createImage(const Bitmap& src,
             unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
             unsigned imageFlags);
     };

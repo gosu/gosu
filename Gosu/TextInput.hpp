@@ -22,7 +22,7 @@ namespace Gosu
     class TextInput
     {
         struct Impl;
-        const GOSU_UNIQUE_PTR<Impl> pimpl;
+        const std::unique_ptr<Impl> pimpl;
     #if defined(GOSU_CPP11_ENABLED)
         TextInput(TextInput&&) = delete;
         TextInput& operator=(TextInput&&) = delete;

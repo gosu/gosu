@@ -37,7 +37,7 @@ Gosu::Image::Image(const Bitmap& source,
 {
 }
 
-Gosu::Image::Image(GOSU_UNIQUE_PTR<ImageData> data)
+Gosu::Image::Image(std::unique_ptr<ImageData> data)
 :   data(data.release())
 {
     if (this->data.get() == nullptr)

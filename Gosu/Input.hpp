@@ -62,7 +62,7 @@ namespace Gosu
     class Input
     {
         struct Impl;
-        const GOSU_UNIQUE_PTR<Impl> pimpl;
+        const std::unique_ptr<Impl> pimpl;
     #if defined(GOSU_CPP11_ENABLED)
         // explicitly forbid copying and moving
         Input(Input&&) = delete;

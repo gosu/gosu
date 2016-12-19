@@ -100,7 +100,7 @@ namespace Gosu
     ALuint ALChannelManagement::currentToken = 0;
     ALuint ALChannelManagement::currentTokens[NUM_SOURCES];
 
-    GOSU_UNIQUE_PTR<ALChannelManagement> alChannelManagement;
+    std::unique_ptr<ALChannelManagement> alChannelManagement;
     
     void releaseAllOpenALResources()
     {

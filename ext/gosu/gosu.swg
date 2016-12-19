@@ -566,7 +566,7 @@ namespace Gosu {
 %ignore Gosu::Image::Image(const std::wstring& filename, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, unsigned flags);
 %ignore Gosu::Image::Image(const Bitmap& source, unsigned flags);
 %ignore Gosu::Image::Image(const Bitmap& source, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, unsigned flags);
-%ignore Gosu::Image::Image(GOSU_UNIQUE_PTR<ImageData> data);
+%ignore Gosu::Image::Image(std::unique_ptr<ImageData> data);
 %ignore Gosu::loadTiles;
 %include "../../Gosu/Image.hpp"
 %extend Gosu::Image {
@@ -638,8 +638,8 @@ namespace Gosu {
     %newobject subimage;
     Gosu::Image* subimage(int x, int y, int w, int h)
     {
-        GOSU_UNIQUE_PTR<Gosu::ImageData> imageData = $self->getData().subimage(x, y, w, h);
-        return imageData.get() ? new Gosu::Image(GOSU_MOVE_UNIQUE_PTR(imageData)) : 0;
+        std::unique_ptr<Gosu::ImageData> imageData = $self->getData().subimage(x, y, w, h);
+        return imageData.get() ? new Gosu::Image(std::move(imageData)) : 0;
     }
     
     %newobject fromText;

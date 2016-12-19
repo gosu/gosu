@@ -42,7 +42,7 @@ namespace Gosu
             unsigned imageFlags = ifSmooth);
         
         //! Creates an Image from a user-supplied instance of the ImageData interface.
-        explicit Image(GOSU_UNIQUE_PTR<ImageData> data);
+        explicit Image(std::unique_ptr<ImageData> data);
 
         unsigned width() const;
         unsigned height() const;

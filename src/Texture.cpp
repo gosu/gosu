@@ -72,17 +72,16 @@ bool Gosu::Texture::retro() const
     return retro_;
 }
 
-GOSU_UNIQUE_PTR<Gosu::TexChunk>
+std::unique_ptr<Gosu::TexChunk>
     Gosu::Texture::tryAlloc(std::shared_ptr<Texture> ptr, const Bitmap& bmp, unsigned padding)
 {
-    GOSU_UNIQUE_PTR<Gosu::TexChunk> result;
-    
     BlockAllocator::Block block;
     if (!allocator_.alloc(bmp.width(), bmp.height(), block))
-        return result;
+        return nullptr;
     
-    result.reset(new TexChunk(ptr, block.left + padding, block.top + padding,
-                              block.width - 2 * padding, block.height - 2 * padding, padding));
+    std::unique_ptr<Gosu::TexChunk>
+        result(new TexChunk(ptr, block.left + padding, block.top + padding,
+                            block.width - 2 * padding, block.height - 2 * padding, padding));
     
     ensureCurrentContext();
     
@@ -90,7 +89,7 @@ GOSU_UNIQUE_PTR<Gosu::TexChunk>
     glTexSubImage2D(GL_TEXTURE_2D, 0, block.left, block.top, block.width, block.height,
                  Color::GL_FORMAT, GL_UNSIGNED_BYTE, bmp.data());
 
-    return GOSU_MOVE_UNIQUE_PTR(result);
+    return std::move(result);
 }
 
 void Gosu::Texture::block(unsigned x, unsigned y, unsigned width, unsigned height)

@@ -75,9 +75,9 @@ Gosu::Bitmap Gosu::TexChunk::toBitmap() const
     return texture->toBitmap(x, y, w, h);
 }
 
-GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::TexChunk::subimage(int x, int y, int width, int height) const
+std::unique_ptr<Gosu::ImageData> Gosu::TexChunk::subimage(int x, int y, int width, int height) const
 {
-    return GOSU_UNIQUE_PTR<Gosu::ImageData>(new TexChunk(*this, x, y, width, height));
+    return std::unique_ptr<Gosu::ImageData>(new TexChunk(*this, x, y, width, height));
 }
 
 void Gosu::TexChunk::insert(const Bitmap& original, int x, int y)

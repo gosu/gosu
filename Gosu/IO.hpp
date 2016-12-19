@@ -245,7 +245,7 @@ namespace Gosu
     class File : public Resource
     {
         struct Impl;
-        const GOSU_UNIQUE_PTR<Impl> pimpl;
+        const std::unique_ptr<Impl> pimpl;
 
     public:
         explicit File(const std::wstring& filename, FileMode mode = fmRead);
