@@ -18,11 +18,11 @@ namespace Gosu
 {
     namespace
     {
-        Graphics* currentGraphicsPointer = 0;
+        Graphics* currentGraphicsPointer = nullptr;
         
         Graphics& currentGraphics()
         {
-            if (currentGraphicsPointer == 0)
+            if (currentGraphicsPointer == nullptr)
                 throw std::logic_error("Gosu::Graphics can only be drawn to while rendering");
             
             return *currentGraphicsPointer;
@@ -82,7 +82,7 @@ Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight)
 Gosu::Graphics::~Graphics()
 {
     if (currentGraphicsPointer == this)
-        currentGraphicsPointer = 0;
+        currentGraphicsPointer = nullptr;
 }
 
 unsigned Gosu::Graphics::width() const
@@ -111,7 +111,7 @@ void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 {
-    if (currentGraphicsPointer != 0)
+    if (currentGraphicsPointer != nullptr)
         throw std::logic_error("Cannot nest calls to Gosu::Graphics::begin()");
     
     // Cancel all recording or whatever that might still be in progress...
@@ -177,7 +177,7 @@ void Gosu::Graphics::end()
     
     glFlush();
     
-    currentGraphicsPointer = 0;
+    currentGraphicsPointer = nullptr;
     
     // Clear leftover transforms, clip rects etc.
     if (queues.size() == 1)
@@ -444,10 +444,8 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
     applyBorderFlags(bmp, src, srcX, srcY, srcWidth, srcHeight, flags);
 
     // Try to put the bitmap into one of the already allocated textures.
-    for (Textures::iterator i = textures.begin(); i != textures.end(); ++i)
+    for (auto texture : textures)
     {
-        std::shared_ptr<Texture> texture(*i);
-        
         if (texture->retro() != wantsRetro)
             continue;
         

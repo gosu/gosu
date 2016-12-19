@@ -23,8 +23,8 @@ namespace Gosu
 
     SDL_Window* sharedWindow()
     {
-        static SDL_Window *window = 0;
-        if (window == 0)
+        static SDL_Window *window = nullptr;
+        if (window == nullptr)
         {
             if (SDL_Init(SDL_INIT_VIDEO) < 0)
                 throwSDLError("Could not initialize SDL Video");
@@ -38,7 +38,7 @@ namespace Gosu
             #endif
             
             window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 64, flags);
-            if (window == 0)
+            if (window == nullptr)
                 throwSDLError("Could not create window");
         }
         return window;
@@ -46,8 +46,8 @@ namespace Gosu
     
     SDL_GLContext sharedGLContext()
     {
-        static SDL_GLContext context = 0;
-        if (context == 0)
+        static SDL_GLContext context = nullptr;
+        if (context == nullptr)
         {
             #ifdef GOSU_IS_OPENGLES
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
@@ -56,7 +56,7 @@ namespace Gosu
             
             context = SDL_GL_CreateContext(sharedWindow());
             
-            if (context == 0)
+            if (context == nullptr)
                 throwSDLError("Could not create OpenGL context");
         }
         return context;
@@ -80,8 +80,8 @@ struct Gosu::Window::Impl
     bool fullscreen;
     double updateInterval;
     
-    std::auto_ptr<Graphics> graphics;
-    std::auto_ptr<Input> input;
+    std::unique_ptr<Graphics> graphics;
+    std::unique_ptr<Input> input;
 };
 
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double updateInterval)
@@ -167,7 +167,7 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
     
     ensureCurrentContext();
     
-    if (pimpl->graphics.get() == 0) {
+    if (pimpl->graphics.get() == nullptr) {
         pimpl->graphics.reset(new Graphics(actualWidth, actualHeight));
     }
     else {
@@ -175,7 +175,7 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
     }
     pimpl->graphics->setResolution(width, height, blackBarWidth, blackBarHeight);
     
-    if (pimpl->input.get() == 0) {
+    if (pimpl->input.get() == nullptr) {
         pimpl->input.reset(new Input(sharedWindow()));
     }
     pimpl->input->setMouseFactors(1 / scaleFactor, 1 / scaleFactor, blackBarWidth, blackBarHeight);

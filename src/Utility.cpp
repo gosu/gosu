@@ -76,7 +76,7 @@ wstring Gosu::widen(const string& s)
     setlocale(LC_ALL, "");
 #endif
 
-    size_t wideLen = std::mbstowcs(0, s.c_str(), 0);
+    size_t wideLen = std::mbstowcs(nullptr, s.c_str(), 0);
     if (wideLen == static_cast<size_t>(-1))
         throw std::runtime_error("Could not convert from string to wstring: " + s);
 
@@ -88,7 +88,7 @@ wstring Gosu::widen(const string& s)
 
 string Gosu::narrow(const wstring& ws)
 {
-    size_t narrowLen = std::wcstombs(0, ws.c_str(), 0);
+    size_t narrowLen = std::wcstombs(nullptr, ws.c_str(), 0);
     if (narrowLen == static_cast<size_t>(-1))
         throw std::runtime_error("Could not convert from wstring to string: " + string(ws.begin(), ws.end()));
 
