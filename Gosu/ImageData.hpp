@@ -7,6 +7,7 @@
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
+#include <memory>
 
 namespace Gosu
 {

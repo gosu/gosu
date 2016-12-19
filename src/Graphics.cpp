@@ -11,7 +11,8 @@
 #include <Gosu/Platform.hpp>
 #include <cmath>
 #include <algorithm>
-#include <limits>
+#include <functional>
+#include <memory>
 
 namespace Gosu
 {
@@ -27,7 +28,7 @@ namespace Gosu
             return *currentGraphicsPointer;
         }
         
-        typedef std::vector<std::tr1::shared_ptr<Texture> > Textures;
+        typedef std::vector<std::shared_ptr<Texture> > Textures;
         Textures textures;
         
         DrawOpQueueStack queues;
@@ -235,7 +236,7 @@ void Gosu::Graphics::endGL()
 }
 
 #ifdef GOSU_IS_OPENGLES
-void Gosu::Graphics::scheduleGL(const std::tr1::function<void()>& functor, Gosu::ZPos z)
+void Gosu::Graphics::scheduleGL(const std::function<void()>& functor, Gosu::ZPos z)
 {
     throw std::logic_error("Custom OpenGL ES is not supported yet");
 }
@@ -245,9 +246,9 @@ namespace Gosu
     struct RunGLFunctor
     {
         Graphics& graphics;
-        std::tr1::function<void()> functor;
+        std::function<void()> functor;
         
-        RunGLFunctor(Graphics& graphics, const std::tr1::function<void()>& functor)
+        RunGLFunctor(Graphics& graphics, const std::function<void()>& functor)
         : graphics(graphics), functor(functor)
         {
         }
@@ -266,7 +267,7 @@ namespace Gosu
     };
 }
 
-void Gosu::Graphics::scheduleGL(const std::tr1::function<void()>& functor, Gosu::ZPos z)
+void Gosu::Graphics::scheduleGL(const std::function<void()>& functor, Gosu::ZPos z)
 {
     currentQueue().scheduleGL(RunGLFunctor(currentGraphics(), functor), z);
 }
@@ -407,7 +408,7 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
         (srcWidth & (srcWidth - 1)) == 0 &&
         srcWidth >= 64 && srcWidth <= maxSize)
     {
-        std::tr1::shared_ptr<Texture> texture(new Texture(srcWidth, wantsRetro));
+        std::shared_ptr<Texture> texture(new Texture(srcWidth, wantsRetro));
         GOSU_UNIQUE_PTR<ImageData> data;
         
         // Use the source bitmap directly if the source area completely covers
@@ -445,7 +446,7 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
     // Try to put the bitmap into one of the already allocated textures.
     for (Textures::iterator i = textures.begin(); i != textures.end(); ++i)
     {
-        std::tr1::shared_ptr<Texture> texture(*i);
+        std::shared_ptr<Texture> texture(*i);
         
         if (texture->retro() != wantsRetro)
             continue;
@@ -458,7 +459,7 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
     
     // All textures are full: Create a new one.
     
-    std::tr1::shared_ptr<Texture> texture;
+    std::shared_ptr<Texture> texture;
     texture.reset(new Texture(maxSize, wantsRetro));
     textures.push_back(texture);
     

@@ -12,7 +12,6 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
-#include <Gosu/TR1.hpp>
 #include <memory>
 #include <string>
 
@@ -59,7 +58,7 @@ namespace Gosu
     class Sample
     {
         struct SampleData;
-        std::tr1::shared_ptr<SampleData> data;
+        std::shared_ptr<SampleData> data;
     
     public:
         //! Constructs a sample that can be played on the specified audio

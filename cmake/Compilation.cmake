@@ -77,7 +77,6 @@ set(HEADER_FILES
     ../Gosu/Text.hpp
     ../Gosu/TextInput.hpp
     ../Gosu/Timing.hpp
-    ../Gosu/TR1.hpp
     ../Gosu/Utility.hpp
     ../Gosu/Version.hpp
     ../Gosu/Window.hpp

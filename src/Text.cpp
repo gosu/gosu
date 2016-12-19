@@ -3,7 +3,6 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/Math.hpp>
-#include <Gosu/TR1.hpp>
 #include <Gosu/Utility.hpp>
 #include "GraphicsImpl.hpp"
 #include "FormattedString.hpp"
@@ -369,7 +368,7 @@ Gosu::Bitmap Gosu::createText(const wstring& text,
 
 namespace
 {
-    map<wstring, tr1::shared_ptr<Gosu::Bitmap> > entities;
+    map<wstring, shared_ptr<Gosu::Bitmap> > entities;
 }
 
 void Gosu::registerEntity(const wstring& name, const Gosu::Bitmap& replacement)
@@ -384,7 +383,7 @@ bool Gosu::isEntity(const wstring& name)
 
 const Gosu::Bitmap& Gosu::entityBitmap(const wstring& name)
 {
-    tr1::shared_ptr<Gosu::Bitmap>& ptr = entities[name];
+    shared_ptr<Gosu::Bitmap>& ptr = entities[name];
     if (!ptr)
         throw runtime_error("Unknown entity: " + Gosu::wstringToUTF8(name));
     return *ptr;

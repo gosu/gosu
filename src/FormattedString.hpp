@@ -2,8 +2,8 @@
 
 #include <Gosu/Color.hpp>
 #include <Gosu/Utility.hpp>
-#include <Gosu/TR1.hpp>
 #include <cassert>
+#include <cstdint>
 #include <cwchar>
 #include <cwctype>
 #include <stdexcept>
@@ -122,7 +122,7 @@ namespace Gosu
                     len >= pos + 10 && html[pos + 9] == L'>')
                 {
                     using namespace std;
-                    unsigned rgb = static_cast<std::tr1::uint32_t>(wcstoul(html + pos + 3, 0, 16));
+                    unsigned rgb = static_cast<std::uint32_t>(wcstoul(html + pos + 3, 0, 16));
                     c.push_back(0xff000000 | rgb);
                     pos += 10;
                     continue;
@@ -131,7 +131,7 @@ namespace Gosu
                     len >= pos + 12 && html[pos + 11] == L'>')
                 {
                     using namespace std;
-                    unsigned argb = static_cast<std::tr1::uint32_t>(wcstoul(html + pos + 3, 0, 16));
+                    unsigned argb = static_cast<std::uint32_t>(wcstoul(html + pos + 3, 0, 16));
                     c.push_back(argb);
                     pos += 12;
                     continue;
@@ -171,7 +171,6 @@ namespace Gosu
                     {
                         // Never know where the wchar_t stuff is...what a mess!
                         using namespace std;
-                        using namespace std::tr1;
                         if (!iswalnum(static_cast<wint_t>(html[endOfEntity])))
                             goto normalCharacter;
                         endOfEntity += 1;

@@ -6,7 +6,6 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
-#include <Gosu/TR1.hpp>
 #include <memory>
 #include <vector>
 
@@ -15,7 +14,7 @@ namespace Gosu
     //! Provides functionality for drawing rectangular images.
     class Image
     {
-        std::tr1::shared_ptr<ImageData> data;
+        std::shared_ptr<ImageData> data;
 
     public:
         //! Loads an image from a given filename.

@@ -6,8 +6,8 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
 #include <Gosu/Buttons.hpp>
-#include <Gosu/TR1.hpp>
-
+#include <functional>
+#include <memory>
 #include <vector>
 
 namespace Gosu
@@ -121,11 +121,11 @@ namespace Gosu
         
         //! Assignable events that are called by update. You can bind these to your own functions.
         //! If you use the Window class, it will assign these to its own methods.
-        std::tr1::function<void (Button)> onButtonDown, onButtonUp;
+        std::function<void (Button)> onButtonDown, onButtonUp;
         
         //! Assignable events that are called by update. You can bind these to your own functions.
         //! If you use the Window class, it will assign these to its own methods.
-        std::tr1::function<void (Touch)> onTouchBegan, onTouchMoved, onTouchEnded, onTouchCancelled;
+        std::function<void (Touch)> onTouchBegan, onTouchMoved, onTouchEnded, onTouchCancelled;
         
         //! Returns the currently active TextInput instance, or 0.
         TextInput* textInput() const;

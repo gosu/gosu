@@ -5,7 +5,7 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
-#include <Gosu/TR1.hpp>
+#include <memory>
 #include <string>
 
 namespace Gosu

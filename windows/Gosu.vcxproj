@@ -235,7 +235,6 @@
     <ClInclude Include="..\Gosu\Text.hpp" />
     <ClInclude Include="..\Gosu\TextInput.hpp" />
     <ClInclude Include="..\Gosu\Timing.hpp" />
-    <ClInclude Include="..\Gosu\TR1.hpp" />
     <ClInclude Include="..\Gosu\Utility.hpp" />
     <ClInclude Include="..\Gosu\Version.hpp" />
     <ClInclude Include="..\Gosu\Window.hpp" />

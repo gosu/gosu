@@ -4,7 +4,7 @@
 #pragma once
 
 #include <Gosu/Platform.hpp>
-#include <Gosu/TR1.hpp>
+#include <array>
 #include <limits>
 
 namespace Gosu
@@ -86,7 +86,7 @@ namespace Gosu
         ifRetro          = 1 << 5
     };
     
-    typedef std::tr1::array<double, 16> Transform;
+    typedef std::array<double, 16> Transform;
     Transform translate(double x, double y);
     Transform rotate(double angle, double aroundX = 0, double aroundY = 0);
     Transform scale(double factor);

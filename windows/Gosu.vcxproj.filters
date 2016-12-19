@@ -215,9 +215,6 @@
     <ClInclude Include="..\Gosu\Timing.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\Gosu\TR1.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
     <ClInclude Include="..\Gosu\Utility.hpp">
       <Filter>Interface</Filter>
     </ClInclude>

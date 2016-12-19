@@ -18,8 +18,8 @@
 %feature("director") Gosu::TextInput;
 
 // Resolve typedefs that SWIG doesn't recognize.
-%apply unsigned char { std::tr1::uint8_t };
-%apply unsigned long { std::tr1::uint32_t };
+%apply unsigned char { std::uint8_t };
+%apply unsigned long { std::uint32_t };
 
 // Custom typemaps for wchar/wstring.
 #pragma SWIG nowarn=-490,-319
@@ -171,7 +171,6 @@
 #undef uint64_t
 
 #include <Gosu/Gosu.hpp>
-#include <Gosu/TR1.hpp>
 
 namespace Gosu {
     void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
@@ -300,7 +299,8 @@ namespace Gosu {
         Gosu::Graphics::endGL();
     }
     void unsafe_gl(Gosu::ZPos z) {
-        Gosu::Graphics::scheduleGL(std::tr1::bind(callRubyBlock, rb_block_proc()), z);
+        VALUE block = rb_block_proc();
+        Gosu::Graphics::scheduleGL([block] { callRubyBlock(block); }, z);
     }
     void clipTo(double x, double y, double width, double height) {
         Gosu::Graphics::beginClipping(x, y, width, height);
@@ -461,7 +461,7 @@ namespace Gosu {
         return Gosu::Color(a, r, g, b);
     }
     
-    static Gosu::Color rgba(std::tr1::uint32_t rgba)
+    static Gosu::Color rgba(std::uint32_t rgba)
     {
         return Gosu::Color(rgba & 0xff, (rgba >> 24) & 0xff,
             (rgba >> 16) & 0xff, (rgba >> 8) & 0xff);
@@ -473,7 +473,7 @@ namespace Gosu {
         return Gosu::Color(a, r, g, b);
     }
     
-    static Gosu::Color argb(std::tr1::uint32_t argb)
+    static Gosu::Color argb(std::uint32_t argb)
     {
         return Gosu::Color(argb);
     }

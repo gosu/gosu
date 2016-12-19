@@ -2,8 +2,8 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
-#include <Gosu/TR1.hpp>
 #include <Gosu/Platform.hpp>
+#include <memory>
 #include <stdexcept>
 #include <vector>
 
@@ -12,7 +12,7 @@ namespace Gosu
     class LargeImageData : public ImageData
     {
         unsigned fullWidth, fullHeight, partsX, partsY, partWidth, partHeight;
-        std::vector<std::tr1::shared_ptr<ImageData> > parts;
+        std::vector<std::shared_ptr<ImageData> > parts;
 
     public:
         LargeImageData(const Bitmap& source,
