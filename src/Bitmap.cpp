@@ -25,149 +25,149 @@ void Gosu::Bitmap::insert(const Bitmap& source, int x, int y)
     insert(source, x, y, 0, 0, source.width(), source.height());
 }
 
-void Gosu::Bitmap::insert(const Bitmap& source, int x, int y, unsigned srcX,
-    unsigned srcY, unsigned srcWidth, unsigned srcHeight)
+void Gosu::Bitmap::insert(const Bitmap& source, int x, int y, unsigned src_x,
+    unsigned src_y, unsigned src_width, unsigned src_height)
 {
-    // TODO: This should use memcpy if possible (x == 0 && srcWidth == this->width())
+    // TODO: This should use memcpy if possible (x == 0 && src_width == this->width())
 
     if (x < 0)
     {
-        unsigned clipLeft = -x;
+        unsigned clip_left = -x;
 
-        if (clipLeft >= srcWidth)
+        if (clip_left >= src_width)
             return;
 
-        srcX += clipLeft;
-        srcWidth -= clipLeft;
+        src_x += clip_left;
+        src_width -= clip_left;
         x = 0;
     }
 
     if (y < 0)
     {
-        unsigned clipTop = -y;
+        unsigned clip_top = -y;
 
-        if (clipTop >= srcHeight)
+        if (clip_top >= src_height)
             return;
 
-        srcY += clipTop;
-        srcHeight -= clipTop;
+        src_y += clip_top;
+        src_height -= clip_top;
         y = 0;
     }
 
-    if (x + srcWidth > w)
+    if (x + src_width > w)
     {
         if (static_cast<unsigned>(x) >= w)
             return;
 
-        srcWidth = w - x;
+        src_width = w - x;
     }
 
-    if (y + srcHeight > h)
+    if (y + src_height > h)
     {
         if (static_cast<unsigned>(y) >= h)
             return;
 
-        srcHeight = h - y;
+        src_height = h - y;
     }
 
-    for (unsigned relY = 0; relY < srcHeight; ++relY)
-        for (unsigned relX = 0; relX < srcWidth; ++relX)
-            setPixel(x + relX, y + relY,
-                source.getPixel(srcX + relX, srcY + relY));
+    for (unsigned rel_y = 0; rel_y < src_height; ++rel_y)
+        for (unsigned rel_x = 0; rel_x < src_width; ++rel_x)
+            set_pixel(x + rel_x, y + rel_y,
+                source.get_pixel(src_x + rel_x, src_y + rel_y));
 }
 
-void Gosu::applyColorKey(Bitmap& bitmap, Color key)
+void Gosu::apply_color_key(Bitmap& bitmap, Color key)
 {
-    std::vector<Color> surroundingColors;
-    surroundingColors.reserve(4);
+    std::vector<Color> surrounding_colors;
+    surrounding_colors.reserve(4);
 
     for (unsigned y = 0; y < bitmap.height(); ++y)
         for (unsigned x = 0; x < bitmap.width(); ++x)
-            if (bitmap.getPixel(x, y) == key)
+            if (bitmap.get_pixel(x, y) == key)
             {
-                surroundingColors.clear();
-                if (x > 0 && bitmap.getPixel(x - 1, y) != key)
-                    surroundingColors.push_back(bitmap.getPixel(x - 1, y));
-                if (x < bitmap.width() - 1 && bitmap.getPixel(x + 1, y) != key)
-                    surroundingColors.push_back(bitmap.getPixel(x + 1, y));
-                if (y > 0 && bitmap.getPixel(x, y - 1) != key)
-                    surroundingColors.push_back(bitmap.getPixel(x, y - 1));
-                if (y < bitmap.height() - 1 && bitmap.getPixel(x, y + 1) != key)
-                    surroundingColors.push_back(bitmap.getPixel(x, y + 1));
+                surrounding_colors.clear();
+                if (x > 0 && bitmap.get_pixel(x - 1, y) != key)
+                    surrounding_colors.push_back(bitmap.get_pixel(x - 1, y));
+                if (x < bitmap.width() - 1 && bitmap.get_pixel(x + 1, y) != key)
+                    surrounding_colors.push_back(bitmap.get_pixel(x + 1, y));
+                if (y > 0 && bitmap.get_pixel(x, y - 1) != key)
+                    surrounding_colors.push_back(bitmap.get_pixel(x, y - 1));
+                if (y < bitmap.height() - 1 && bitmap.get_pixel(x, y + 1) != key)
+                    surrounding_colors.push_back(bitmap.get_pixel(x, y + 1));
 
-                if (surroundingColors.empty())
+                if (surrounding_colors.empty())
                 {
-                    bitmap.setPixel(x, y, Color::NONE);
+                    bitmap.set_pixel(x, y, Color::NONE);
                     continue;
                 }
 
                 unsigned red = 0, green = 0, blue = 0;
-                for (auto& color : surroundingColors)
+                for (auto& color : surrounding_colors)
                 {
                     red += color.red();
                     green += color.green();
                     blue += color.blue();
                 }
-                bitmap.setPixel(x, y, Color(0, red / surroundingColors.size(),
-                    green / surroundingColors.size(), blue / surroundingColors.size()));
+                bitmap.set_pixel(x, y, Color(0, red / surrounding_colors.size(),
+                    green / surrounding_colors.size(), blue / surrounding_colors.size()));
             }
 }
 
-void Gosu::unapplyColorKey(Bitmap& bitmap, Color color)
+void Gosu::unapply_color_key(Bitmap& bitmap, Color color)
 {
     Color* p = bitmap.data();
     for (int i = bitmap.width() * bitmap.height(); i > 0; --i, ++p)
         if (p->alpha() == 0)
             *p = color;
         else
-            p->setAlpha(255);
+            p->set_alpha(255);
 }
 
-void Gosu::applyBorderFlags(Bitmap& dest, const Bitmap& source,
-    unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-    unsigned imageFlags)
+void Gosu::apply_border_flags(Bitmap& dest, const Bitmap& source,
+    unsigned src_x, unsigned src_y, unsigned src_width, unsigned src_height,
+    unsigned image_flags)
 {
     // Backwards compatibility: This used to be 'bool tileable'.
-    if (imageFlags == 1)
-        imageFlags = ifTileable;
+    if (image_flags == 1)
+        image_flags = IF_TILEABLE;
 
-    dest.resize(srcWidth + 2, srcHeight + 2);
+    dest.resize(src_width + 2, src_height + 2);
 
     // The borders are made "harder" by duplicating the original bitmap's
     // borders.
 
     // Top.
-    if (imageFlags & ifTileableTop)
-        dest.insert(source, 1, 0, srcX, srcY, srcWidth, 1);
+    if (image_flags & IF_TILEABLE_TOP)
+        dest.insert(source, 1, 0, src_x, src_y, src_width, 1);
     // Bottom.
-    if (imageFlags & ifTileableBottom)
+    if (image_flags & IF_TILEABLE_BOTTOM)
         dest.insert(source, 1, dest.height() - 1,
-            srcX, srcY + srcHeight - 1, srcWidth, 1);
+            src_x, src_y + src_height - 1, src_width, 1);
     // Left.
-    if (imageFlags & ifTileableLeft)
-        dest.insert(source, 0, 1, srcX, srcY, 1, srcHeight);
+    if (image_flags & IF_TILEABLE_LEFT)
+        dest.insert(source, 0, 1, src_x, src_y, 1, src_height);
     // Right.
-    if (imageFlags & ifTileableRight)
+    if (image_flags & IF_TILEABLE_RIGHT)
         dest.insert(source, dest.width() - 1, 1,
-            srcX + srcWidth - 1, srcY, 1, srcHeight);
+            src_x + src_width - 1, src_y, 1, src_height);
 
     // Top left.
-    if ((imageFlags & ifTileableTop) && (imageFlags & ifTileableLeft))
-        dest.setPixel(0, 0,
-            source.getPixel(srcX, srcY));
+    if ((image_flags & IF_TILEABLE_TOP) && (image_flags & IF_TILEABLE_LEFT))
+        dest.set_pixel(0, 0,
+            source.get_pixel(src_x, src_y));
     // Top right.
-    if ((imageFlags & ifTileableTop) && (imageFlags & ifTileableRight))
-        dest.setPixel(dest.width() - 1, 0,
-            source.getPixel(srcX + srcWidth - 1, srcY));
+    if ((image_flags & IF_TILEABLE_TOP) && (image_flags & IF_TILEABLE_RIGHT))
+        dest.set_pixel(dest.width() - 1, 0,
+            source.get_pixel(src_x + src_width - 1, src_y));
     // Bottom left.
-    if ((imageFlags & ifTileableBottom) && (imageFlags & ifTileableLeft))
-        dest.setPixel(0, dest.height() - 1,
-            source.getPixel(srcX, srcY + srcHeight - 1));
+    if ((image_flags & IF_TILEABLE_BOTTOM) && (image_flags & IF_TILEABLE_LEFT))
+        dest.set_pixel(0, dest.height() - 1,
+            source.get_pixel(src_x, src_y + src_height - 1));
     // Bottom right.
-    if ((imageFlags & ifTileableBottom) && (imageFlags & ifTileableRight))
-        dest.setPixel(dest.width() - 1, dest.height() - 1,
-            source.getPixel(srcX + srcWidth - 1, srcY + srcHeight - 1));
+    if ((image_flags & IF_TILEABLE_BOTTOM) && (image_flags & IF_TILEABLE_RIGHT))
+        dest.set_pixel(dest.width() - 1, dest.height() - 1,
+            source.get_pixel(src_x + src_width - 1, src_y + src_height - 1));
 
     // Now put the final image into the prepared borders.
-    dest.insert(source, 1, 1, srcX, srcY, srcWidth, srcHeight);
+    dest.insert(source, 1, 1, src_x, src_y, src_width, src_height);
 }

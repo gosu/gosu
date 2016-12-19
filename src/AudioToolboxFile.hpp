@@ -19,68 +19,68 @@ namespace Gosu
     class AudioToolboxFile : public AudioFile
     {
         Gosu::Buffer buffer_;
-        AudioFileID fileID_;
+        AudioFileID file_id_;
         ExtAudioFileRef file_;
         SInt64 position_;
-        SInt64 seekOffset_;
+        SInt64 seek_offset_;
         
         ALenum format_;
-        ALuint sampleRate_;
-        UInt32 bytesPerFrame_;
-        bool bigEndian_;
+        ALuint sample_rate_;
+        UInt32 bytes_per_frame_;
+        bool big_endian_;
         
-        static OSStatus AudioFile_ReadProc(void* inClientData, SInt64 inPosition,
-            UInt32 requestCount, void* buffer, UInt32* actualCount)
+        static OSStatus AudioFile_ReadProc(void* in_client_data, SInt64 in_position,
+            UInt32 request_count, void* buffer, UInt32* actual_count)
         {
-            const Resource& res = *static_cast<Resource*>(inClientData);
-            *actualCount = std::min<UInt32>(requestCount, res.size() - inPosition);
-            res.read(inPosition, *actualCount, buffer);
+            const Resource& res = *static_cast<Resource*>(in_client_data);
+            *actual_count = std::min<UInt32>(request_count, res.size() - in_position);
+            res.read(in_position, *actual_count, buffer);
             return noErr;
         }
         
-        static SInt64 AudioFile_GetSizeProc(void* inClientData)
+        static SInt64 AudioFile_GetSizeProc(void* in_client_data)
         {
-            const Resource& res = *static_cast<Resource*>(inClientData);
+            const Resource& res = *static_cast<Resource*>(in_client_data);
             return res.size();
         }
         
-        void initSeekOffset()
+        void init_seek_offset()
         {
-            AudioConverterRef acRef;
-            UInt32 acrSize = sizeof acRef;
+            AudioConverterRef ac_ref;
+            UInt32 acr_size = sizeof ac_ref;
             CHECK_OS(ExtAudioFileGetProperty(file_, kExtAudioFileProperty_AudioConverter,
-                &acrSize, &acRef));
+                &acr_size, &ac_ref));
             
-            AudioConverterPrimeInfo primeInfo;
-            UInt32 piSize = sizeof primeInfo;
-            OSStatus result = AudioConverterGetProperty(acRef, kAudioConverterPrimeInfo,
-                &piSize, &primeInfo);
+            AudioConverterPrimeInfo prime_info;
+            UInt32 pi_size = sizeof prime_info;
+            OSStatus result = AudioConverterGetProperty(ac_ref, kAudioConverterPrimeInfo,
+                &pi_size, &prime_info);
             if (result != kAudioConverterErr_PropertyNotSupported)
             {
                 CHECK_OS(result);
-                seekOffset_ = primeInfo.leadingFrames;
+                seek_offset_ = prime_info.leadingFrames;
             }
         }
         
-        void initClientFormatBasedOn(const AudioStreamBasicDescription& base)
+        void init_client_format_based_on(const AudioStreamBasicDescription& base)
         {
-            AudioStreamBasicDescription clientData = { 0 };
-            sampleRate_ = clientData.mSampleRate = 22050;
-            clientData.mFormatID = kAudioFormatLinearPCM;
-            clientData.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-            clientData.mBitsPerChannel = 16;
-            clientData.mChannelsPerFrame = base.mChannelsPerFrame;
-            clientData.mFramesPerPacket = 1;
-            clientData.mBytesPerPacket =
-                clientData.mBytesPerFrame =
-                    clientData.mChannelsPerFrame * clientData.mBitsPerChannel / 8;
+            AudioStreamBasicDescription client_data = { 0 };
+            sample_rate_ = client_data.mSampleRate = 22050;
+            client_data.mFormatID = kAudioFormatLinearPCM;
+            client_data.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
+            client_data.mBitsPerChannel = 16;
+            client_data.mChannelsPerFrame = base.mChannelsPerFrame;
+            client_data.mFramesPerPacket = 1;
+            client_data.mBytesPerPacket =
+                client_data.mBytesPerFrame =
+                    client_data.mChannelsPerFrame * client_data.mBitsPerChannel / 8;
             CHECK_OS(ExtAudioFileSetProperty(file_,
                 kExtAudioFileProperty_ClientDataFormat,
-                sizeof clientData, &clientData));
+                sizeof client_data, &client_data));
             
-            initSeekOffset();
+            init_seek_offset();
                 
-            format_ = clientData.mChannelsPerFrame == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
+            format_ = client_data.mChannelsPerFrame == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
         }
         
         void init()
@@ -89,15 +89,15 @@ namespace Gosu
             position_ = 0;
             
             // Unless overridden later, assume that the index into seek() is 0-based
-            seekOffset_ = 0;
+            seek_offset_ = 0;
             
             AudioStreamBasicDescription desc;
-            UInt32 sizeOfProperty = sizeof desc;
+            UInt32 size_of_property = sizeof desc;
             CHECK_OS(ExtAudioFileGetProperty(file_, kExtAudioFileProperty_FileDataFormat,
-                &sizeOfProperty, &desc));
+                &size_of_property, &desc));
 
             // Sample rate for OpenAL
-            sampleRate_ = desc.mSampleRate;
+            sample_rate_ = desc.mSampleRate;
             
             // Sanity checks
             if (desc.mFormatFlags & kAudioFormatFlagIsNonInterleaved)
@@ -126,7 +126,7 @@ namespace Gosu
                     desc.mFormatFlags & kAudioFormatFlagIsBigEndian ||
                     desc.mFormatFlags & kAudioFormatFlagIsFloat ||
                     !(desc.mFormatFlags & kAudioFormatFlagIsSignedInteger)) {
-                initClientFormatBasedOn(desc);
+                init_client_format_based_on(desc);
             }
             else {
                 // Just set the old format as the client format so
@@ -140,11 +140,11 @@ namespace Gosu
     public:
         AudioToolboxFile(const std::wstring& filename)
         {
-            NSString *utf8Filename = [NSString stringWithUTF8String:wstringToUTF8(filename).c_str()];
-            NSURL *URL = [NSURL fileURLWithPath:utf8Filename];
+            NSString *utf8_filename = [NSString stringWithUTF8String:wstring_to_utf8(filename).c_str()];
+            NSURL *URL = [NSURL fileURLWithPath:utf8_filename];
             CHECK_OS(ExtAudioFileOpenURL((__bridge CFURLRef)URL, &file_));
             
-            fileID_ = 0;
+            file_id_ = 0;
             
             init();
         }
@@ -157,10 +157,10 @@ namespace Gosu
             // TODO: This fails on iOS with MP3 files.
             // TODO: ^ Is the comment above still true on non-ancient iOS versions?
             
-            void* clientData = &buffer_;
-            CHECK_OS(AudioFileOpenWithCallbacks(clientData, AudioFile_ReadProc, 0,
-                                                AudioFile_GetSizeProc, 0, 0, &fileID_));
-            CHECK_OS(ExtAudioFileWrapAudioFileID(fileID_, false, &file_));
+            void* client_data = &buffer_;
+            CHECK_OS(AudioFileOpenWithCallbacks(client_data, AudioFile_ReadProc, 0,
+                                                AudioFile_GetSizeProc, 0, 0, &file_id_));
+            CHECK_OS(ExtAudioFileWrapAudioFileID(file_id_, false, &file_));
             
             init();
         }
@@ -169,8 +169,8 @@ namespace Gosu
         {
             ExtAudioFileDispose(file_);
         
-            if (fileID_) {
-                AudioFileClose(fileID_);
+            if (file_id_) {
+                AudioFileClose(file_id_);
             }
         }
         
@@ -179,17 +179,17 @@ namespace Gosu
             return format_;
         }
         
-        ALuint sampleRate() const
+        ALuint sample_rate() const
         {
-            return sampleRate_;
+            return sample_rate_;
         }
         
         void rewind()
         {
-            CHECK_OS(ExtAudioFileSeek(file_, 0 + seekOffset_));
+            CHECK_OS(ExtAudioFileSeek(file_, 0 + seek_offset_));
         }
         
-        std::size_t readData(void* dest, size_t length)
+        std::size_t read_data(void* dest, size_t length)
         {
             AudioBufferList abl;
             abl.mNumberBuffers = 1;

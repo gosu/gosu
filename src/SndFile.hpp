@@ -61,13 +61,13 @@ namespace Gosu
         {
             switch (whence)
             {
-            case SEEK_SET: self->reader.setPosition(offset); break;
+            case SEEK_SET: self->reader.set_position(offset); break;
             case SEEK_CUR: self->reader.seek(offset); break;
-            case SEEK_END: self->reader.setPosition(self->buffer.size() - offset); break;
+            case SEEK_END: self->reader.set_position(self->buffer.size() - offset); break;
             }
 
             if (self->reader.position() > self->buffer.size()) {
-                self->reader.setPosition(self->buffer.size());
+                self->reader.set_position(self->buffer.size());
             }
 			
             return 0;
@@ -86,7 +86,7 @@ namespace Gosu
             return self->reader.position();
         }
         
-        static SF_VIRTUAL_IO* ioInterface()
+        static SF_VIRTUAL_IO* io_interface()
         {
             static SF_VIRTUAL_IO io;
             io.get_filelen = (sf_vio_get_filelen)&get_filelen;
@@ -99,25 +99,25 @@ namespace Gosu
         
     public:
         SndFile(Reader reader)
-        :   file(NULL), reader(buffer.frontReader())
+        :   file(NULL), reader(buffer.front_reader())
         {
             info.format = 0;
             buffer.resize(reader.resource().size() - reader.position());
             reader.read(buffer.data(), buffer.size());
-            file = sf_open_virtual(ioInterface(), SFM_READ, &info, this);
+            file = sf_open_virtual(io_interface(), SFM_READ, &info, this);
             if (!file)
                 throw std::runtime_error(std::string(sf_strerror(NULL)));
         }
         
         SndFile(const std::wstring& filename)
-        :   file(NULL), reader(buffer.frontReader())
+        :   file(NULL), reader(buffer.front_reader())
         {
             info.format = 0;
             #ifdef GOSU_IS_WIN
-            loadFile(buffer, filename);
-            file = sf_open_virtual(ioInterface(), SFM_READ, &info, this);
+            load_file(buffer, filename);
+            file = sf_open_virtual(io_interface(), SFM_READ, &info, this);
             #else
-            file = sf_open(wstringToUTF8(filename).c_str(), SFM_READ, &info);
+            file = sf_open(wstring_to_utf8(filename).c_str(), SFM_READ, &info);
             #endif
             if (!file)
                 throw std::runtime_error(std::string(sf_strerror(NULL)));
@@ -142,15 +142,15 @@ namespace Gosu
             };
         }
         
-        ALuint sampleRate() const
+        ALuint sample_rate() const
         {
             return info.samplerate;
         }
         
-        std::size_t readData(void* dest, std::size_t length)
+        std::size_t read_data(void* dest, std::size_t length)
         {
-            int frameSize = sizeof(short) * info.channels;
-            return sf_readf_short(file, (short*)dest, length / frameSize) * frameSize;
+            int frame_size = sizeof(short) * info.channels;
+            return sf_readf_short(file, (short*)dest, length / frame_size) * frame_size;
         }
         
         void rewind()

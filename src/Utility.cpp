@@ -25,11 +25,11 @@ namespace {
 #endif
 }
 
-wstring Gosu::utf8ToWstring(const string& s)
+wstring Gosu::utf8_to_wstring(const string& s)
 {
     return iconvert<wstring, UCS_4_INTERNAL, UTF_8>(s);
 }
-string Gosu::wstringToUTF8(const std::wstring& ws)
+string Gosu::wstring_to_utf8(const std::wstring& ws)
 {
     return iconvert<string, UTF_8, UCS_4_INTERNAL>(ws);
 }
@@ -44,7 +44,7 @@ namespace {
 }
 
 namespace Gosu {
-    vector<unsigned short> wstringToUniChars(const wstring& ws)
+    vector<unsigned short> wstring_to_uni_chars(const wstring& ws)
     {
         return iconvert<vector<unsigned short>, UCS_2_INTERNAL, UCS_4_INTERNAL>(ws);
     }
@@ -55,13 +55,13 @@ namespace Gosu {
 #define NOMINMAX
 #endif
 #include <windows.h>
-wstring Gosu::utf8ToWstring(const string& utf8)
+wstring Gosu::utf8_to_wstring(const string& utf8)
 {
 	vector<wchar_t> buffer(utf8.size() + 1);
 	MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), utf8.size() + 1, &buffer[0], buffer.size());
 	return &buffer[0];
 }	
-string Gosu::wstringToUTF8(const wstring& ws)
+string Gosu::wstring_to_utf8(const wstring& ws)
 {
 	unsigned size = WideCharToMultiByte(CP_UTF8, 0, ws.c_str(), ws.size(), 0, 0, 0, 0);
 	vector<char> buffer(size + 1);
@@ -76,11 +76,11 @@ wstring Gosu::widen(const string& s)
     setlocale(LC_ALL, "");
 #endif
 
-    size_t wideLen = std::mbstowcs(nullptr, s.c_str(), 0);
-    if (wideLen == static_cast<size_t>(-1))
+    size_t wide_len = std::mbstowcs(nullptr, s.c_str(), 0);
+    if (wide_len == static_cast<size_t>(-1))
         throw std::runtime_error("Could not convert from string to wstring: " + s);
 
-    vector<wchar_t> buf(wideLen + 1);
+    vector<wchar_t> buf(wide_len + 1);
     mbstowcs(&buf.front(), s.c_str(), buf.size());
 
     return wstring(buf.begin(), buf.end() - 1);
@@ -88,11 +88,11 @@ wstring Gosu::widen(const string& s)
 
 string Gosu::narrow(const wstring& ws)
 {
-    size_t narrowLen = std::wcstombs(nullptr, ws.c_str(), 0);
-    if (narrowLen == static_cast<size_t>(-1))
+    size_t narrow_len = std::wcstombs(nullptr, ws.c_str(), 0);
+    if (narrow_len == static_cast<size_t>(-1))
         throw std::runtime_error("Could not convert from wstring to string: " + string(ws.begin(), ws.end()));
 
-    vector<char> buf(narrowLen + 1);
+    vector<char> buf(narrow_len + 1);
     wcstombs(&buf.front(), ws.c_str(), buf.size());
 
     return string(buf.begin(), buf.end() - 1);
@@ -103,13 +103,13 @@ string Gosu::narrow(const wstring& ws)
 // TODO: This function needs to go into some internal header.
 namespace Gosu
 {
-    bool isExtension(const wchar_t* str, const wchar_t* ext)
+    bool is_extension(const wchar_t* str, const wchar_t* ext)
     {
-        size_t strLen = wcslen(str), extLen = wcslen(ext);
-        if (extLen > strLen)
+        size_t str_len = wcslen(str), ext_len = wcslen(ext);
+        if (ext_len > str_len)
             return false;
-        str += strLen, ext += extLen;
-        while (extLen--)
+        str += str_len, ext += ext_len;
+        while (ext_len--)
             if (towlower((wint_t)*--str) != *--ext)
                 return false;
         return true;

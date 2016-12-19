@@ -23,8 +23,8 @@ namespace Gosu
         //! For internal use.
         unsigned id() const { return id_; }
 
-        //! Default constructor; == noButton.
-        Button() : id_(noButton) {}
+        //! Default constructor; == no_button.
+        Button() : id_(NO_BUTTON) {}
 
         //! Conversion from ButtonName constants.
         Button(ButtonName name) : id_(name) {}
@@ -67,20 +67,20 @@ namespace Gosu
 
     public:
     #ifdef GOSU_IS_IPHONE
-        Input(void* view, float updateInterval);
-        void feedTouchEvent(int type, void* touches);
+        Input(void* view, float update_interval);
+        void feed_touch_event(int type, void* touches);
     #else
         Input(void* window);
-        bool feedSDLEvent(void* event);
+        bool feed_sdl_event(void* event);
     #endif
         
         ~Input();
         
         //! Returns the character a button usually produces, or 0.
-        static wchar_t idToChar(Button btn);
+        static wchar_t id_to_char(Button btn);
         //! Returns the button that has to be pressed to produce the
-        //! given character, or noButton.
-        static Button charToId(wchar_t ch);
+        //! given character, or no_button.
+        static Button char_to_id(wchar_t ch);
         
         //! Returns true if a button is currently pressed.
         //! Updated every tick.
@@ -88,42 +88,42 @@ namespace Gosu
         
         //! Returns the horizontal position of the mouse relative to the top
         //! left corner of the window given to Input's constructor.
-        double mouseX() const;
-        //! See mouseX.
-        double mouseY() const;
+        double mouse_x() const;
+        //! See mouse_x.
+        double mouse_y() const;
         
         //! Immediately moves the mouse as far towards the desired position
-        //! as possible. x and y are relative to the window, just as in mouseX()
-        //! and mouseY(), so (0, 0) is the top left corner of the window..
-        void setMousePosition(double x, double y);
+        //! as possible. x and y are relative to the window, just as in mouse_x()
+        //! and mouse_y(), so (0, 0) is the top left corner of the window..
+        void set_mouse_position(double x, double y);
 
-        // Undocumented for the moment. Also applies to currentTouches().
-        void setMouseFactors(double factorX, double factorY, double offsetX = 0, double offsetY = 0);
+        // Undocumented for the moment. Also applies to current_touches().
+        void set_mouse_factors(double factor_x, double factor_y, double offset_x = 0, double offset_y = 0);
         
         //! Currently known touches.
-        const Touches& currentTouches() const;
+        const Touches& current_touches() const;
         
         //! Accelerometer positions in all three dimensions (smoothened).
         //! Note: Not really deprecated - but temporarily defunct.
-        GOSU_DEPRECATED double accelerometerX() const;
-        GOSU_DEPRECATED double accelerometerY() const;
-        GOSU_DEPRECATED double accelerometerZ() const;
+        GOSU_DEPRECATED double accelerometer_x() const;
+        GOSU_DEPRECATED double accelerometer_y() const;
+        GOSU_DEPRECATED double accelerometer_z() const;
         
         //! Collects new information about which buttons are pressed, where the
-        //! mouse is and calls onButtonUp/onButtonDown, if assigned.
+        //! mouse is and calls on_button_up/on_button_down, if assigned.
         void update();
         
         //! Assignable events that are called by update. You can bind these to your own functions.
         //! If you use the Window class, it will assign these to its own methods.
-        std::function<void (Button)> onButtonDown, onButtonUp;
+        std::function<void (Button)> on_button_down, on_button_up;
         
         //! Assignable events that are called by update. You can bind these to your own functions.
         //! If you use the Window class, it will assign these to its own methods.
-        std::function<void (Touch)> onTouchBegan, onTouchMoved, onTouchEnded, onTouchCancelled;
+        std::function<void (Touch)> on_touch_began, on_touch_moved, on_touch_ended, on_touch_cancelled;
         
         //! Returns the currently active TextInput instance, or 0.
-        TextInput* textInput() const;
+        TextInput* text_input() const;
         //! Sets the currently active TextInput, or clears it (input = 0).
-        void setTextInput(TextInput* input);
+        void set_text_input(TextInput* input);
     };
 }

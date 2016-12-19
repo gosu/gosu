@@ -7,21 +7,21 @@ struct Gosu::BlockAllocator::Impl
     unsigned width, height;
 
     std::vector<Block> blocks;
-    unsigned firstX, firstY;
-    unsigned maxW, maxH;
+    unsigned first_x, first_y;
+    unsigned max_w, max_h;
     
-    void markBlockUsed(const Block& block, unsigned aWidth, unsigned aHeight)
+    void mark_block_used(const Block& block, unsigned a_width, unsigned a_height)
     {
-        firstX += aWidth;
-        if (firstX + aWidth >= width)
+        first_x += a_width;
+        if (first_x + a_width >= width)
         {
-            firstX = 0;
-            firstY += aHeight;
+            first_x = 0;
+            first_y += a_height;
         }
         blocks.push_back(block);
     }
 
-    bool isBlockFree(const Block& block) const
+    bool is_block_free(const Block& block) const
     {
         // right and bottom are exclusive (not part of the block).
         unsigned right = block.left + block.width;
@@ -49,11 +49,11 @@ Gosu::BlockAllocator::BlockAllocator(unsigned width, unsigned height)
     pimpl->width = width;
     pimpl->height = height;
 
-    pimpl->firstX = 0;
-    pimpl->firstY = 0;
+    pimpl->first_x = 0;
+    pimpl->first_y = 0;
 
-    pimpl->maxW = width;
-    pimpl->maxH = height;
+    pimpl->max_w = width;
+    pimpl->max_h = height;
 }
 
 Gosu::BlockAllocator::~BlockAllocator()
@@ -70,49 +70,49 @@ unsigned Gosu::BlockAllocator::height() const
     return pimpl->height;
 }
 
-bool Gosu::BlockAllocator::alloc(unsigned aWidth, unsigned aHeight, Block& b)
+bool Gosu::BlockAllocator::alloc(unsigned a_width, unsigned a_height, Block& b)
 {
     // The rect wouldn't even fit onto the texture!
-    if (aWidth > width() || aHeight > height())
+    if (a_width > width() || a_height > height())
         return false;
 
     // We know there's no space left.
-    if (aWidth > pimpl->maxW && aHeight > pimpl->maxH)
+    if (a_width > pimpl->max_w && a_height > pimpl->max_h)
         return false;
     
     // Start to look for a place next to the last returned rect. Chances are
     // good we'll find a place there.
-    b = Block(pimpl->firstX, pimpl->firstY, aWidth, aHeight);
-    if (pimpl->isBlockFree(b))
+    b = Block(pimpl->first_x, pimpl->first_y, a_width, a_height);
+    if (pimpl->is_block_free(b))
     {
-        pimpl->markBlockUsed(b, aWidth, aHeight);
+        pimpl->mark_block_used(b, a_width, a_height);
         return true;
     }
 
     // Brute force: Look for a free place on this texture.
     unsigned& x = b.left;
     unsigned& y = b.top;
-    for (y = 0; y <= height() - aHeight; y += 16)
-        for (x = 0; x <= width() - aWidth; x += 8)
+    for (y = 0; y <= height() - a_height; y += 16)
+        for (x = 0; x <= width() - a_width; x += 8)
         {
-            if (!pimpl->isBlockFree(b))
+            if (!pimpl->is_block_free(b))
                 continue;
 
             // Found a nice place!
 
             // Try to make up for the large for()-stepping.
-            while (y > 0 && pimpl->isBlockFree(Block(x, y - 1, aWidth, aHeight)))
+            while (y > 0 && pimpl->is_block_free(Block(x, y - 1, a_width, a_height)))
                 --y;
-            while (x > 0 && pimpl->isBlockFree(Block(x - 1, y, aWidth, aHeight)))
+            while (x > 0 && pimpl->is_block_free(Block(x - 1, y, a_width, a_height)))
                 --x;
             
-            pimpl->markBlockUsed(b, aWidth, aHeight);
+            pimpl->mark_block_used(b, a_width, a_height);
             return true;
         }
 
     // So there was no space for the bitmap. Remember this for later.
-    pimpl->maxW = aWidth - 1;
-    pimpl->maxH = aHeight - 1;
+    pimpl->max_w = a_width - 1;
+    pimpl->max_h = a_height - 1;
     return false;
 }
 
@@ -129,8 +129,8 @@ void Gosu::BlockAllocator::free(unsigned left, unsigned top, unsigned width, uns
         {
             pimpl->blocks.erase(it);
             // Be optimistic again, since we might have deleted the largest/only block.
-            pimpl->maxW = pimpl->width - 1;
-            pimpl->maxH = pimpl->height - 1;
+            pimpl->max_w = pimpl->width - 1;
+            pimpl->max_h = pimpl->height - 1;
             return;
         }
     }

@@ -7,7 +7,7 @@
 using namespace std;
 
 #ifdef GOSU_IS_IPHONE // (but could also be used for OS X)
-wstring Gosu::utf8ToWstring(const string& s)
+wstring Gosu::utf8_to_wstring(const string& s)
 {
     if (s.empty()) {
         return wstring();
@@ -15,20 +15,20 @@ wstring Gosu::utf8ToWstring(const string& s)
     
     NSString *str = [NSString stringWithUTF8String:s.c_str()];
     vector<wchar_t> buffer(s.size());
-    NSUInteger usedBufferCount;
+    NSUInteger used_buffer_count;
     if (![str getBytes:&buffer[0]
              maxLength:buffer.size() * sizeof(wchar_t)
-            usedLength:&usedBufferCount
+            usedLength:&used_buffer_count
               encoding:NSUTF32LittleEndianStringEncoding
                options:0
                  range:NSMakeRange(0, str.length)
             remainingRange:NULL]) {
         throw std::runtime_error("String " + s + " could not be converted to Unicode");
     }
-    return wstring(&buffer[0], &buffer[0] + usedBufferCount / sizeof(wchar_t));
+    return wstring(&buffer[0], &buffer[0] + used_buffer_count / sizeof(wchar_t));
 }
 
-string Gosu::wstringToUTF8(const std::wstring& ws)
+string Gosu::wstring_to_utf8(const std::wstring& ws)
 {
     if (ws.empty()) {
         return string();
@@ -44,12 +44,12 @@ string Gosu::wstringToUTF8(const std::wstring& ws)
 
 wstring Gosu::widen(const string& s)
 {
-    return utf8ToWstring(s);
+    return utf8_to_wstring(s);
 }
 
 string Gosu::narrow(const std::wstring& ws)
 {
-    return wstringToUTF8(ws);
+    return wstring_to_utf8(ws);
 }
 #endif
 

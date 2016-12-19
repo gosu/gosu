@@ -20,54 +20,54 @@
 
 namespace
 {
-    int readCallback(void* user, char* data, int size)
+    int read_callback(void* user, char* data, int size)
     {
         Gosu::Reader* reader = static_cast<Gosu::Reader*>(user);
         std::size_t remaining = reader->resource().size() - reader->position();
-        std::size_t actualSize = (size < remaining ? size : remaining);
-        reader->read(data, actualSize);
-        return actualSize;
+        std::size_t actual_size = (size < remaining ? size : remaining);
+        reader->read(data, actual_size);
+        return actual_size;
     }
 
-    void skipCallback(void* user, int n)
+    void skip_callback(void* user, int n)
     {
         Gosu::Reader* reader = static_cast<Gosu::Reader*>(user);
-        reader->setPosition(reader->position() + n);
+        reader->set_position(reader->position() + n);
     }
 
-    int eofCallback(void* user)
+    int eof_callback(void* user)
     {
         Gosu::Reader* reader = static_cast<Gosu::Reader*>(user);
         return reader->position() == reader->resource().size();
     }
 
-    bool isBMP(Gosu::Reader reader)
+    bool is_bmp(Gosu::Reader reader)
     {
         std::size_t remaining = reader.resource().size() - reader.position();
         if (remaining < 2)
             return false;
-        char magicBytes[2];
-        reader.read(magicBytes, sizeof magicBytes);
-        reader.seek(sizeof magicBytes);
-        return magicBytes[0] == 'B' && magicBytes[1] == 'M';
+        char magic_bytes[2];
+        reader.read(magic_bytes, sizeof magic_bytes);
+        reader.seek(sizeof magic_bytes);
+        return magic_bytes[0] == 'B' && magic_bytes[1] == 'M';
     }
 }
 
-void Gosu::loadImageFile(Gosu::Bitmap& bitmap, const std::wstring& filename)
+void Gosu::load_image_file(Gosu::Bitmap& bitmap, const std::wstring& filename)
 {
     Buffer buffer;
-    loadFile(buffer, filename);
-    loadImageFile(bitmap, buffer.frontReader());
+    load_file(buffer, filename);
+    load_image_file(bitmap, buffer.front_reader());
 }
 
-void Gosu::loadImageFile(Gosu::Bitmap& bitmap, Reader input)
+void Gosu::load_image_file(Gosu::Bitmap& bitmap, Reader input)
 {
-    bool needsColorKey = isBMP(input);
+    bool needs_color_key = is_bmp(input);
     
     stbi_io_callbacks callbacks;
-    callbacks.read = readCallback;
-    callbacks.skip = skipCallback;
-    callbacks.eof = eofCallback;
+    callbacks.read = read_callback;
+    callbacks.skip = skip_callback;
+    callbacks.eof = eof_callback;
     int x, y, n;
     stbi_uc* bytes = stbi_load_from_callbacks(&callbacks, &input, &x, &y, &n, STBI_rgb_alpha);
 
@@ -81,26 +81,26 @@ void Gosu::loadImageFile(Gosu::Bitmap& bitmap, Reader input)
 
     stbi_image_free(bytes);
     
-    if (needsColorKey)
-        applyColorKey(bitmap, Gosu::Color::FUCHSIA);
+    if (needs_color_key)
+        apply_color_key(bitmap, Gosu::Color::FUCHSIA);
 }
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
 // TODO: Move into proper internal header
-namespace Gosu { bool isExtension(const wchar_t* str, const wchar_t* ext); }
+namespace Gosu { bool is_extension(const wchar_t* str, const wchar_t* ext); }
 
-void Gosu::saveImageFile(const Gosu::Bitmap& bitmap, const std::wstring& filename)
+void Gosu::save_image_file(const Gosu::Bitmap& bitmap, const std::wstring& filename)
 {
     int ok;
-    std::string utf8 = Gosu::wstringToUTF8(filename);
+    std::string utf8 = Gosu::wstring_to_utf8(filename);
     
-    if (isExtension(filename.c_str(), L"bmp"))
+    if (is_extension(filename.c_str(), L"bmp"))
     {
         ok = stbi_write_bmp(utf8.c_str(), bitmap.width(), bitmap.height(), 4, bitmap.data());
     }
-    else if (isExtension(filename.c_str(), L"tga"))
+    else if (is_extension(filename.c_str(), L"tga"))
     {
         ok = stbi_write_tga(utf8.c_str(), bitmap.width(), bitmap.height(), 4, bitmap.data());
     }
@@ -115,36 +115,36 @@ void Gosu::saveImageFile(const Gosu::Bitmap& bitmap, const std::wstring& filenam
 
 namespace
 {
-    void stbiWriteToWriter(void *context, void *data, int size)
+    void stbi_write_to_writer(void *context, void *data, int size)
     {
         Gosu::Writer *writer = reinterpret_cast<Gosu::Writer*>(context);
         writer->write(data, size);
     }
 }
 
-void Gosu::saveImageFile(const Gosu::Bitmap& bitmap, Gosu::Writer writer,
-    const std::wstring& formatHint)
+void Gosu::save_image_file(const Gosu::Bitmap& bitmap, Gosu::Writer writer,
+    const std::wstring& format_hint)
 {
     int ok;
     
-    if (isExtension(formatHint.c_str(), L"bmp"))
+    if (is_extension(format_hint.c_str(), L"bmp"))
     {
-        ok = stbi_write_bmp_to_func(stbiWriteToWriter, &writer,
+        ok = stbi_write_bmp_to_func(stbi_write_to_writer, &writer,
                                     bitmap.width(), bitmap.height(), 4, bitmap.data());
     }
-    else if (isExtension(formatHint.c_str(), L"tga"))
+    else if (is_extension(format_hint.c_str(), L"tga"))
     {
         stbi_write_tga_with_rle = 0;
-        ok = stbi_write_tga_to_func(stbiWriteToWriter, &writer,
+        ok = stbi_write_tga_to_func(stbi_write_to_writer, &writer,
                                     bitmap.width(), bitmap.height(), 4, bitmap.data());
     }
     else
     {
-        ok = stbi_write_png_to_func(stbiWriteToWriter, &writer,
+        ok = stbi_write_png_to_func(stbi_write_to_writer, &writer,
                                     bitmap.width(), bitmap.height(), 4, bitmap.data(), 0);
     }
     
     if (ok == 0)
         throw std::runtime_error("Could not save image data to memory (format hint = '" +
-                                 Gosu::wstringToUTF8(formatHint) + "'");
+                                 Gosu::wstring_to_utf8(format_hint) + "'");
 }

@@ -53,8 +53,8 @@ namespace Gosu
         //! Ranges of these values are given as 0..360, 0..1 and 0..1,
         //! respectively.
         //! The alpha value is set to 1 from this method.
-        static Color fromHSV(double h, double s, double v);
-        static Color fromAHSV(Channel alpha, double h, double s, double v);
+        static Color from_hsv(double h, double s, double v);
+        static Color from_ahsv(Channel alpha, double h, double s, double v);
 
         Channel red() const
         {
@@ -76,25 +76,25 @@ namespace Gosu
             return static_cast<Channel>(rep >> ALPHA_OFFSET);
         }
 
-        void setRed(Channel value)
+        void set_red(Channel value)
         {
             rep &= ~(0xff << RED_OFFSET);
             rep |= value << RED_OFFSET;
         }
 
-        void setGreen(Channel value)
+        void set_green(Channel value)
         {
             rep &= ~(0xff << GREEN_OFFSET);
             rep |= value << GREEN_OFFSET;
         }
 
-        void setBlue(Channel value)
+        void set_blue(Channel value)
         {
             rep &= ~(0xff << BLUE_OFFSET);
             rep |= value << BLUE_OFFSET;
         }
 
-        void setAlpha(Channel value)
+        void set_alpha(Channel value)
         {
             rep &= ~(0xff << ALPHA_OFFSET);
             rep |= value << ALPHA_OFFSET;
@@ -104,19 +104,19 @@ namespace Gosu
         double hue() const;
         
         //! Changes the current color so hue() will return h.
-        void setHue(double h);
+        void set_hue(double h);
         
         //! Returns the saturation of the color, in the range of 0..1.
         double saturation() const;
         
         //! Changes the current color so saturation() will return s.
-        void setSaturation(double s);
+        void set_saturation(double s);
         
         //! Returns the value (brightness) of the color, in the range of 0..1.
         double value() const;
         
         //! Changes the current color so value() will return v.
-        void setValue(double v);
+        void set_value(double v);
 
         //! Returns the color in 0xaarrggbb representation.
         std::uint32_t argb() const

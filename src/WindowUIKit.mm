@@ -4,28 +4,28 @@
 
 namespace Gosu
 {
-    unsigned screenWidth()
+    unsigned screen_width()
     {
-        static CGSize screenSize = [UIScreen mainScreen].bounds.size;
-        static CGFloat width = MIN(screenSize.width, screenSize.height);
+        static CGSize screen_size = [UIScreen mainScreen].bounds.size;
+        static CGFloat width = MIN(screen_size.width, screen_size.height);
         return width;
     }
     
-    unsigned screenHeight()
+    unsigned screen_height()
     {
-        static CGSize screenSize = [UIScreen mainScreen].bounds.size;
-        static CGFloat width = MAX(screenSize.width, screenSize.height);
+        static CGSize screen_size = [UIScreen mainScreen].bounds.size;
+        static CGFloat width = MAX(screen_size.width, screen_size.height);
         return width;
     }
     
-    unsigned availableWidth()
+    unsigned available_width()
     {
-        return screenWidth();
+        return screen_width();
     }
     
-    unsigned availableHeight()
+    unsigned available_height()
     {
-        return screenHeight();
+        return screen_height();
     }
 }
 
@@ -37,11 +37,11 @@ struct Gosu::Window::Impl
     std::unique_ptr<Input> input;
     
     bool fullscreen;
-    double updateInterval;
+    double update_interval;
     std::wstring caption;
 };
 
-Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double updateInterval)
+Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval)
 : pimpl(new Impl)
 {
     pimpl->window = [[::UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -52,19 +52,19 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     // It is important to load the view before creating the Graphics instance.
     [pimpl->controller loadView];
     
-    pimpl->graphics.reset(new Graphics(screenHeight(), screenWidth()));
-    pimpl->graphics->setResolution(width, height);
+    pimpl->graphics.reset(new Graphics(screen_height(), screen_width()));
+    pimpl->graphics->set_resolution(width, height);
     
-    pimpl->input.reset(new Input((__bridge void *)pimpl->controller.view, updateInterval));
-    pimpl->input->setMouseFactors(1.0 * width / screenHeight(), 1.0 * height / screenWidth());
+    pimpl->input.reset(new Input((__bridge void *)pimpl->controller.view, update_interval));
+    pimpl->input->set_mouse_factors(1.0 * width / screen_height(), 1.0 * height / screen_width());
     
-    pimpl->input->onTouchBegan = [this](Gosu::Touch touch) { touchBegan(touch); };
-    pimpl->input->onTouchMoved = [this](Gosu::Touch touch) { touchMoved(touch); };
-    pimpl->input->onTouchEnded = [this](Gosu::Touch touch) { touchEnded(touch); };
-    pimpl->input->onTouchCancelled = [this](Gosu::Touch touch) { touchCancelled(touch); };
+    pimpl->input->on_touch_began = [this](Gosu::Touch touch) { touch_began(touch); };
+    pimpl->input->on_touch_moved = [this](Gosu::Touch touch) { touch_moved(touch); };
+    pimpl->input->on_touch_ended = [this](Gosu::Touch touch) { touch_ended(touch); };
+    pimpl->input->on_touch_cancelled = [this](Gosu::Touch touch) { touch_cancelled(touch); };
     
     pimpl->fullscreen = fullscreen;
-    pimpl->updateInterval = updateInterval;
+    pimpl->update_interval = update_interval;
 }
 
 Gosu::Window::~Window()
@@ -91,12 +91,12 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
     throw std::logic_error("Cannot resize windows on iOS");
 }
 
-double Gosu::Window::updateInterval() const
+double Gosu::Window::update_interval() const
 {
-    return pimpl->updateInterval;
+    return pimpl->update_interval;
 }
 
-void Gosu::Window::setUpdateInterval(double updateInterval)
+void Gosu::Window::set_update_interval(double update_interval)
 {
     throw std::logic_error("Cannot change the update interval on iOS");
 }
@@ -106,7 +106,7 @@ std::wstring Gosu::Window::caption() const
     return pimpl->caption;
 }
 
-void Gosu::Window::setCaption(const std::wstring& caption)
+void Gosu::Window::set_caption(const std::wstring& caption)
 {
     pimpl->caption = caption;
 }

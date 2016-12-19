@@ -23,69 +23,69 @@ struct Gosu::Font::Impl
         double factor;
     };
     typedef array<CharInfo, 65536> Plane;
-    std::unique_ptr<Plane> planes[16][ffCombinations];
+    std::unique_ptr<Plane> planes[16][FF_COMBINATIONS];
     
-    map<wstring, shared_ptr<Image> > entityCache;
+    map<wstring, shared_ptr<Image> > entity_cache;
     
-    CharInfo& charInfo(wchar_t wc, unsigned flags)
+    CharInfo& char_info(wchar_t wc, unsigned flags)
     {
-        size_t planeIndex = wc / 65536;
-        size_t charIndex  = wc % 65536;
+        size_t plane_index = wc / 65536;
+        size_t char_index  = wc % 65536;
         
-        if (planeIndex >= 16)
+        if (plane_index >= 16)
             throw invalid_argument("Unicode plane out of reach");
-        if (flags >= ffCombinations)
+        if (flags >= FF_COMBINATIONS)
             throw invalid_argument("Font flags out of range");
         
-        if (!planes[planeIndex][flags].get())
-            planes[planeIndex][flags].reset(new Plane);
-        return (*planes[planeIndex][flags])[charIndex];
+        if (!planes[plane_index][flags].get())
+            planes[plane_index][flags].reset(new Plane);
+        return (*planes[plane_index][flags])[char_index];
     }
     
-    const Image& imageAt(const FormattedString& fs, unsigned i)
+    const Image& image_at(const FormattedString& fs, unsigned i)
     {
-        if (fs.entityAt(i))
+        if (fs.entity_at(i))
         {
-            shared_ptr<Image>& ptr = entityCache[fs.entityAt(i)];
+            shared_ptr<Image>& ptr = entity_cache[fs.entity_at(i)];
             if (!ptr)
-                ptr.reset(new Image(entityBitmap(fs.entityAt(i)), ifSmooth));
+                ptr.reset(new Image(entity_bitmap(fs.entity_at(i)), IF_SMOOTH));
             return *ptr;
         }
         
-        wchar_t wc = fs.charAt(i);
-        unsigned flags = fs.flagsAt(i);
-        CharInfo& info = charInfo(wc, flags);
+        wchar_t wc = fs.char_at(i);
+        unsigned flags = fs.flags_at(i);
+        CharInfo& info = char_info(wc, flags);
         
         if (info.image.get())
             return *info.image;
         
-        wstring charString(1, wc);
+        wstring char_string(1, wc);
         // TODO: Would be nice to have.
-        // if (isFormattingChar(wc))
-        //     charString.clear();
-        unsigned charWidth = Gosu::textWidth(charString, name, height, flags);
+        // if (is_formatting_char(wc))
+        //     char_string.clear();
+        unsigned char_width = Gosu::text_width(char_string, name, height, flags);
         
-        Bitmap bitmap(charWidth, height, 0x00ffffff);
-        drawText(bitmap, charString, 0, 0, Color::WHITE, name, height, flags);
+        Bitmap bitmap(char_width, height, 0x00ffffff);
+        draw_text(bitmap, char_string, 0, 0, Color::WHITE, name, height, flags);
         info.image.reset(new Image(bitmap));
         info.factor = 0.5;
         return *info.image;
     }
     
-    double factorAt(const FormattedString& fs, unsigned index)
+    double factor_at(const FormattedString& fs, unsigned index)
     {
-        if (fs.entityAt(index))
+        if (fs.entity_at(index))
             return 1;
-        return charInfo(fs.charAt(index), fs.flagsAt(index)).factor;
+        return char_info(fs.char_at(index), fs.flags_at(index)).factor;
     }
 };
 
-Gosu::Font::Font(unsigned fontHeight, const wstring& fontName, unsigned fontFlags)
+Gosu::Font::Font(unsigned font_height, const wstring& font_name, unsigned font_flags)
 : pimpl(new Impl)
 {
-    pimpl->name = fontName;
-    pimpl->height = fontHeight * 2;
-    pimpl->flags = fontFlags;
+    pimpl->name = font_name;
+    pimpl->height = font_height * 2;
+    pimpl->flags = font_flags;
 }
 
 wstring Gosu::Font::name() const
@@ -103,65 +103,65 @@ unsigned Gosu::Font::flags() const
     return pimpl->flags;
 }
 
-double Gosu::Font::textWidth(const wstring& text, double factorX) const
+double Gosu::Font::text_width(const wstring& text, double scale_x) const
 {
     FormattedString fs(text.c_str(), flags());
     double result = 0;
     for (unsigned i = 0; i < fs.length(); ++i)
     {
-        const Image& image = pimpl->imageAt(fs, i);
-        double factor = pimpl->factorAt(fs, i);
+        const Image& image = pimpl->image_at(fs, i);
+        double factor = pimpl->factor_at(fs, i);
         result += image.width() * factor;
     }
-    return result * factorX;
+    return result * scale_x;
 }
 
 void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
-    double factorX, double factorY, Color c, AlphaMode mode) const
+    double scale_x, double scale_y, Color c, AlphaMode mode) const
 {
     FormattedString fs(text.c_str(), flags());
     
     for (unsigned i = 0; i < fs.length(); ++i)
     {
-        const Image& image = pimpl->imageAt(fs, i);
-        double factor = pimpl->factorAt(fs, i);
-        Gosu::Color color = fs.entityAt(i)
-                          ? Gosu::Color(fs.colorAt(i).alpha() * c.alpha() / 255, 255, 255, 255)
-                          : Gosu::multiply(fs.colorAt(i), c);
-        image.draw(x, y, z, factorX * factor, factorY * factor, color, mode);
-        x += image.width() * factorX * factor;
+        const Image& image = pimpl->image_at(fs, i);
+        double factor = pimpl->factor_at(fs, i);
+        Gosu::Color color = fs.entity_at(i)
+                          ? Gosu::Color(fs.color_at(i).alpha() * c.alpha() / 255, 255, 255, 255)
+                          : Gosu::multiply(fs.color_at(i), c);
+        image.draw(x, y, z, scale_x * factor, scale_y * factor, color, mode);
+        x += image.width() * scale_x * factor;
     }
 }
 
-void Gosu::Font::drawRel(const wstring& text, double x, double y, ZPos z,
-    double relX, double relY, double factorX, double factorY, Color c,
+void Gosu::Font::draw_rel(const wstring& text, double x, double y, ZPos z,
+    double rel_x, double rel_y, double scale_x, double scale_y, Color c,
     AlphaMode mode) const
 {
-    x -= textWidth(text) * factorX * relX;
-    y -= height() * factorY * relY;
+    x -= text_width(text) * scale_x * rel_x;
+    y -= height() * scale_y * rel_y;
     
-    draw(text, x, y, z, factorX, factorY, c, mode);
+    draw(text, x, y, z, scale_x, scale_y, c, mode);
 }
 
-void Gosu::Font::setImage(wchar_t wc, const Image& image)
+void Gosu::Font::set_image(wchar_t wc, const Image& image)
 {
-    for (unsigned flags = 0; flags < ffCombinations; ++flags)
-        setImage(wc, flags, image);
+    for (unsigned flags = 0; flags < FF_COMBINATIONS; ++flags)
+        set_image(wc, flags, image);
 }
 
-void Gosu::Font::setImage(wchar_t wc, unsigned fontFlags, const Image& image)
+void Gosu::Font::set_image(wchar_t wc, unsigned font_flags, const Image& image)
 {
-    Impl::CharInfo& ci = pimpl->charInfo(wc, fontFlags);
+    Impl::CharInfo& ci = pimpl->char_info(wc, font_flags);
     if (ci.image.get())
         throw logic_error("Cannot set image for the same Font character twice or after it has been drawn");
     ci.image.reset(new Gosu::Image(image));
     ci.factor = 1.0;
 }
 
-void Gosu::Font::drawRot(const wstring& text, double x, double y, ZPos z, double angle,
-    double factorX, double factorY, Color c, AlphaMode mode) const
+void Gosu::Font::draw_rot(const wstring& text, double x, double y, ZPos z, double angle,
+    double scale_x, double scale_y, Color c, AlphaMode mode) const
 {
-    Gosu::Graphics::pushTransform(rotate(angle, x, y));
-    draw(text, x, y, z, factorX, factorY, c, mode);
-    Gosu::Graphics::popTransform();
+    Gosu::Graphics::push_transform(rotate(angle, x, y));
+    draw(text, x, y, z, scale_x, scale_y, c, mode);
+    Gosu::Graphics::pop_transform();
 }

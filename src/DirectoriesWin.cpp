@@ -6,7 +6,7 @@
 
 namespace
 {
-    std::wstring specialFolderPath(int csidl)
+    std::wstring special_folder_path(int csidl)
     {
         WCHAR buf[MAX_PATH + 2];
         if (FAILED(SHGetFolderPath(NULL, csidl | CSIDL_FLAG_CREATE, NULL, 0, buf)))
@@ -20,7 +20,7 @@ namespace
         return buf;
     }
 
-    std::wstring exeFilename()
+    std::wstring exe_filename()
     {
         static std::wstring result;
         if (!result.empty())
@@ -34,36 +34,36 @@ namespace
     }
 }
 
-void Gosu::useResourceDirectory()
+void Gosu::use_resource_directory()
 {
-    SetCurrentDirectory(resourcePrefix().c_str());
+    SetCurrentDirectory(resource_prefix().c_str());
 }
 
-std::wstring Gosu::resourcePrefix()
+std::wstring Gosu::resource_prefix()
 {
     static std::wstring result;
     if (result.empty()) {
-        result = exeFilename();
-        std::wstring::size_type lastDelim = result.find_last_of(L"\\/");
-        if (lastDelim != std::wstring::npos)
-            result.resize(lastDelim + 1);
+        result = exe_filename();
+        std::wstring::size_type last_delim = result.find_last_of(L"\\/");
+        if (last_delim != std::wstring::npos)
+            result.resize(last_delim + 1);
         else
             result = L"";
     }
     return result;
 }
 
-std::wstring Gosu::sharedResourcePrefix()
+std::wstring Gosu::shared_resource_prefix()
 {
-    return resourcePrefix();
+    return resource_prefix();
 }
 
-std::wstring Gosu::userSettingsPrefix()
+std::wstring Gosu::user_settings_prefix()
 {
-    return specialFolderPath(CSIDL_APPDATA);
+    return special_folder_path(CSIDL_APPDATA);
 }
 
-std::wstring Gosu::userDocsPrefix()
+std::wstring Gosu::user_documents_prefix()
 {
-    return specialFolderPath(CSIDL_PERSONAL);
+    return special_folder_path(CSIDL_PERSONAL);
 }

@@ -27,24 +27,24 @@ Gosu::File::File(const std::wstring& filename, FileMode mode)
     DWORD access;
     switch (mode)
     {
-    case fmRead:
+    case FM_READ:
         access = GENERIC_READ;
         break;
-    case fmReplace:
+    case FM_REPLACE:
         access = GENERIC_WRITE;
         break;
-    case fmAlter:
+    case FM_ALTER:
         access = GENERIC_READ | GENERIC_WRITE;
         break;
     }
-    DWORD shareMode = FILE_SHARE_READ;
-    DWORD creationDisp = (mode == fmRead) ? OPEN_EXISTING : OPEN_ALWAYS;
+    DWORD share_mode = FILE_SHARE_READ;
+    DWORD creation_disp = (mode == FM_READ) ? OPEN_EXISTING : OPEN_ALWAYS;
 
-    pimpl->handle = ::CreateFile(filename.c_str(), access, shareMode, 0,
-        creationDisp, FILE_ATTRIBUTE_NORMAL, 0);
+    pimpl->handle = ::CreateFile(filename.c_str(), access, share_mode, 0,
+        creation_disp, FILE_ATTRIBUTE_NORMAL, 0);
     if (pimpl->handle == INVALID_HANDLE_VALUE)
-        Win::throwLastError("opening " + Gosu::narrow(filename));
-    if (mode == fmReplace)
+        Win::throw_last_error("opening " + Gosu::narrow(filename));
+    if (mode == FM_REPLACE)
         resize(0);
 }
 
@@ -57,27 +57,27 @@ std::size_t Gosu::File::size() const
     return ::GetFileSize(pimpl->handle, 0);
 }
 
-void Gosu::File::resize(std::size_t newSize)
+void Gosu::File::resize(std::size_t new_size)
 {
-    if (::SetFilePointer(pimpl->handle, newSize, 0, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
-        Win::throwLastError("setting the file pointer");
+    if (::SetFilePointer(pimpl->handle, new_size, 0, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
+        Win::throw_last_error("setting the file pointer");
     Win::check(::SetEndOfFile(pimpl->handle), "resizing a file");
 }
 
 void Gosu::File::read(std::size_t offset, std::size_t length,
-    void* destBuffer) const
+    void* dest_buffer) const
 {
     if (::SetFilePointer(pimpl->handle, offset, 0, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
-        Win::throwLastError("setting the file pointer");
+        Win::throw_last_error("setting the file pointer");
     DWORD dummy;
-    Win::check(::ReadFile(pimpl->handle, destBuffer, length, &dummy, 0));
+    Win::check(::ReadFile(pimpl->handle, dest_buffer, length, &dummy, 0));
 }
 
 void Gosu::File::write(std::size_t offset, std::size_t length,
-    const void* sourceBuffer)
+    const void* source_buffer)
 {
     if (::SetFilePointer(pimpl->handle, offset, 0, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
-        Win::throwLastError("setting the file pointer");
+        Win::throw_last_error("setting the file pointer");
     DWORD dummy;
-    Win::check(::WriteFile(pimpl->handle, sourceBuffer, length, &dummy, 0));
+    Win::check(::WriteFile(pimpl->handle, source_buffer, length, &dummy, 0));
 }

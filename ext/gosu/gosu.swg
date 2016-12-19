@@ -1,7 +1,3 @@
-// Mini SWIG file TODO List:
-// - %predicate instead of %rename where applicable
-// - use Python names for op overloading for easier porting to other languages
-
 %trackobjects;
 %include exception.i  
 
@@ -24,28 +20,28 @@
 // Custom typemaps for wchar/wstring.
 #pragma SWIG nowarn=-490,-319
 %typemap(in) wchar_t {
-    VALUE rbString = rb_obj_as_string($input);
-    char* utf8String = StringValueCStr(rbString);
-    std::wstring ucsString = Gosu::utf8ToWstring(utf8String);
-    if (ucsString.length() != 1)
+    VALUE ruby_string = rb_obj_as_string($input);
+    char* utf8_string = StringValueCStr(ruby_string);
+    std::wstring ucs_string = Gosu::utf8_to_wstring(utf8_string);
+    if (ucs_string.length() != 1) {
         rb_raise(rb_eArgError,
                  "A single-character string was expected, but `%s' given",
-                 utf8String);
-    
-    $1 = ucsString[0];
+                 utf8_string);
+    }
+    $1 = ucs_string[0];
 }
 %typemap(out) wchar_t {
-    if ($1 == 0)
+    if ($1 == 0) {
         $result = Qnil;
-    else
-    {
-        $result = rb_str_new2(Gosu::wstringToUTF8(std::wstring(1, $1)).c_str());
-        FIX_ENCODING($result);
+    }
+    else {
+        $result = rb_str_new2(Gosu::wstring_to_utf8(std::wstring(1, $1)).c_str());
+        ENFORCE_UTF8($result);
     }
 }
 %typemap(in) const std::wstring& (std::wstring temp) {
-    VALUE localTemporary = rb_obj_as_string($input);
-    temp = Gosu::utf8ToWstring(StringValueCStr(localTemporary));
+    VALUE local_temporary = rb_obj_as_string($input);
+    temp = Gosu::utf8_to_wstring(StringValueCStr(local_temporary));
     $1 = &temp;
 }
 %typemap(typecheck) const std::wstring& {
@@ -53,79 +49,72 @@
 }
 %apply const std::wstring& { std::wstring, const std::string };
 %typemap(out) std::wstring {
-    $result = rb_str_new2(Gosu::wstringToUTF8($1).c_str());
-    FIX_ENCODING($result);
+    $result = rb_str_new2(Gosu::wstring_to_utf8($1).c_str());
+    ENFORCE_UTF8($result);
 }
 %typemap(out) const std::wstring& {
-    $result = rb_str_new2(Gosu::wstringToUTF8($1).c_str());
-    FIX_ENCODING($result);
+    $result = rb_str_new2(Gosu::wstring_to_utf8($1).c_str());
+    ENFORCE_UTF8($result);
 }
 %typemap(directorin) const std::wstring& {
-    $input = rb_str_new2(Gosu::wstringToUTF8($1).c_str());
-    FIX_ENCODING($input);
+    $input = rb_str_new2(Gosu::wstring_to_utf8($1).c_str());
+    ENFORCE_UTF8($input);
 }
 %typemap(directorout) std::wstring {
-    VALUE localTemporary = rb_obj_as_string($1);
-    $result = Gosu::utf8ToWstring(StringValueCStr(localTemporary));;
+    VALUE local_temporary = rb_obj_as_string($1);
+    $result = Gosu::utf8_to_wstring(StringValueCStr(local_temporary));;
 }
 %typemap(out) std::string {
     $result = rb_str_new2($1.c_str());
-    FIX_ENCODING($result);
+    ENFORCE_UTF8($result);
 }
 
 %typemap(in) Gosu::Button {
-    if (NIL_P($input))
-        $1 = Gosu::noButton;
-    else
-        $1 = Gosu::Button(NUM2LONG($input));
+    $1 = NIL_P($input) ? Gosu::NO_BUTTON : Gosu::Button(NUM2LONG($input));
 }
 %typemap(out) Gosu::Button {
-    if ($1 == Gosu::noButton)
-        $result = Qnil;
-    else
-        $result = LONG2NUM($1.id());
+    $result = $1 == Gosu::NO_BUTTON ? Qnil : LONG2NUM($1.id());
 }
 %typemap(directorin) Gosu::Button {
-    if ($1 == Gosu::noButton)
-        $input = Qnil;
-    else
-        $input = LONG2NUM($1.id());
+    $input = $1 == Gosu::NO_BUTTON ? Qnil : LONG2NUM($1.id());
 }
 
 // Typemaps for enums that should be given in as symbols.
 %typemap(in) Gosu::AlphaMode {
-    const char* cstr = Gosu::cstrFromSymbol($input);
+    const char* cstr = Gosu::cstr_from_symbol($input);
     
     if (!strcmp(cstr, "default"))
-        $1 = Gosu::amDefault;
+        $1 = Gosu::AM_DEFAULT;
     else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive"))
-        $1 = Gosu::amAdd;
+        $1 = Gosu::AM_ADD;
     else if (!strcmp(cstr, "multiply"))
-        $1 = Gosu::amMultiply;
+        $1 = Gosu::AM_MULTIPLY;
     else
-        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode");
+        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
+            ":multiply)");
 }
-%typemap(in) Gosu::TextAlign {
-    const char* cstr = Gosu::cstrFromSymbol($input);
+%typemap(in) Gosu::Alignment {
+    const char* cstr = Gosu::cstr_from_symbol($input);
 
     if (!strcmp(cstr, "left"))
-        $1 = Gosu::taLeft;
+        $1 = Gosu::AL_LEFT;
     else if (!strcmp(cstr, "center"))
-        $1 = Gosu::taCenter;
+        $1 = Gosu::AL_CENTER;
     else if (!strcmp(cstr, "right"))
-        $1 = Gosu::taRight;
+        $1 = Gosu::AL_RIGHT;
     else if (!strcmp(cstr, "justify"))
-        $1 = Gosu::taJustify;
+        $1 = Gosu::AL_JUSTIFY;
     else
-        SWIG_exception_fail(SWIG_ValueError, "invalid text alignment (expected one of :left, :center, :right, :justify)");
+        SWIG_exception_fail(SWIG_ValueError, "invalid text alignment (expected one of :left, "
+            ":center, :right, :justify)");
 }
 
 // Allow integral constants to be passed in place of Color values.
 %typemap(in) Gosu::Color {    
-    if (TYPE($input) == T_FIXNUM || TYPE($input) == T_BIGNUM)
+    if (TYPE($input) == T_FIXNUM || TYPE($input) == T_BIGNUM) {
         $1 = Gosu::Color(NUM2ULONG($input));
-    else
-    {
+    }
+    else {
         void* ptr;
         int res = SWIG_ConvertPtr($input, &ptr, SWIGTYPE_p_Gosu__Color, 0);
         if (!SWIG_IsOK(res))
@@ -170,10 +159,19 @@
 
 #include <Gosu/Gosu.hpp>
 
-namespace Gosu {
-    void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
-    void releaseAllOpenALResources();
-    void register_entity(const std::wstring& name, Gosu::Image* image) { registerEntity(name, image->getData().toBitmap()); }
+namespace Gosu
+{
+    void enable_undocumented_retrofication()
+    {
+        extern bool undocumented_retrofication; undocumented_retrofication = true;
+    }
+    
+    void release_all_openal_resources();
+    
+    void register_entity(const std::wstring& name, Gosu::Image* image)
+    {
+        register_entity(name, image->data().to_bitmap());
+    }
 }
 
 #include <cstring>
@@ -182,32 +180,28 @@ namespace Gosu {
 
 // Preprocessor check for 1.9 or higher (thanks banister)
 #if defined(ROBJECT_EMBED_LEN_MAX)
-#define FIX_ENCODING(var) \
-    rb_funcall(var, rb_intern("force_encoding"), 1, rb_str_new2("UTF-8"));
+#define ENFORCE_UTF8(var) rb_funcall(var, rb_intern("force_encoding"), 1, rb_str_new2("UTF-8"));
 #define RUBY_18_19(r18, r19) r19
 #else
-#define FIX_ENCODING(var)
+#define ENFORCE_UTF8(var)
 #define RUBY_18_19(r18, r19) r18
 #endif
 
-namespace
-{
-    void callRubyBlock(VALUE block) {
-        rb_funcall(block, rb_intern("call"), 0);
-    }
-}
-
 namespace Gosu
 {
-    void loadBitmap(Bitmap& bitmap, VALUE val)
+    void call_ruby_block(VALUE block)
+    {
+        rb_funcall(block, rb_intern("call"), 0);
+    }
+
+    void load_bitmap(Bitmap& bitmap, VALUE val)
     {
         // Try to treat as filename first.
-        if (rb_respond_to(val, rb_intern("to_str")))
-        {
+        if (rb_respond_to(val, rb_intern("to_str"))) {
             VALUE to_str = rb_funcall(val, rb_intern("to_str"), 0);
-            const char* filenameUTF8 = StringValuePtr(to_str);
-            std::wstring filename = Gosu::utf8ToWstring(filenameUTF8);
-            loadImageFile(bitmap, filename);
+            const char* filename_utf8 = StringValuePtr(to_str);
+            std::wstring filename = Gosu::utf8_to_wstring(filename_utf8);
+            load_image_file(bitmap, filename);
             return;
         }
 
@@ -219,25 +213,24 @@ namespace Gosu
         unsigned height = NUM2ULONG(rb_funcall(val, rb_intern("rows"), 0));
         
         bitmap.resize(width, height, Gosu::Color::NONE);
-        if (width * height * 4 == RSTRING_LEN(blob))
-        {
+        if (width * height * 4 == RSTRING_LEN(blob)) {
             // 32 bit per pixel, assume R8G8B8A8
             std::memcpy(bitmap.data(),
                 reinterpret_cast<const unsigned*>(RSTRING_PTR(blob)), width * height * 4);
         }
-        else if (width * height * 4 * sizeof(float) == RSTRING_LEN(blob))
-        {
+        else if (width * height * 4 * sizeof(float) == RSTRING_LEN(blob)) {
             // 128 bit per channel, assume float/float/float/float
             const float* in = reinterpret_cast<const float*>(RSTRING_PTR(blob));
             Gosu::Color::Channel* out = reinterpret_cast<Gosu::Color::Channel*>(bitmap.data());
             for (int i = width * height * 4; i > 0; --i)
                 *(out++) = static_cast<Color::Channel>(*(in++) * 255);
         }
-        else
+        else {
             throw std::logic_error("Blob length mismatch!");
+        }
     }
     
-    const char* cstrFromSymbol(VALUE symbol)
+    const char* cstr_from_symbol(VALUE symbol)
     {
         Check_Type(symbol, T_SYMBOL);
         return rb_id2name(SYM2ID(symbol));
@@ -246,107 +239,141 @@ namespace Gosu
     
 // Global input functions
 
-namespace Gosu {
-    Gosu::Button charToButtonId(wchar_t ch) {
-        return Gosu::Input::charToId(ch);
+namespace Gosu
+{
+    Gosu::Button char_to_button_id(wchar_t ch)
+    {
+        return Gosu::Input::char_to_id(ch);
     }
-    wchar_t buttonIdToChar(Gosu::Button btn) {
-        return Gosu::Input::idToChar(btn);
+    
+    wchar_t button_id_to_char(Gosu::Button btn)
+    {
+        return Gosu::Input::id_to_char(btn);
     }
-    bool isButtonDown(Gosu::Button btn) {
+    
+    bool is_button_down(Gosu::Button btn)
+    {
         return Gosu::Input::down(btn);
     }
 }
 
 // Global graphics functions
 namespace Gosu {
-    void drawLine(double x1, double y1, Gosu::Color c1,
-                  double x2, double y2, Gosu::Color c2,
-                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault) {
-        Gosu::Graphics::drawLine(x1, y1, c1, x2, y2, c2,
-                                   z, mode);
+    void draw_line(double x1, double y1, Gosu::Color c1,
+                   double x2, double y2, Gosu::Color c2,
+                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
+    {
+        Gosu::Graphics::draw_line(x1, y1, c1, x2, y2, c2,
+                                  z, mode);
     }
-    void drawTriangle(double x1, double y1, Gosu::Color c1,
-                      double x2, double y2, Gosu::Color c2,
-                      double x3, double y3, Gosu::Color c3,
-                      Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault) {
-        Gosu::Graphics::drawTriangle(x1, y1, c1, x2, y2, c2, x3, y3, c3,
-                                       z, mode);
+    
+    void draw_triangle(double x1, double y1, Gosu::Color c1,
+                       double x2, double y2, Gosu::Color c2,
+                       double x3, double y3, Gosu::Color c3,
+                       Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
+    {
+        Gosu::Graphics::draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3,
+                                      z, mode);
     }
-    void drawQuad(double x1, double y1, Gosu::Color c1,
-                  double x2, double y2, Gosu::Color c2,
-                  double x3, double y3, Gosu::Color c3,
-                  double x4, double y4, Gosu::Color c4,
-                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault) {
-        Gosu::Graphics::drawQuad(x1, y1, c1, x2, y2, c2,
-                                 x3, y3, c3, x4, y4, c4,
-                                 z, mode);
+    
+    void draw_quad(double x1, double y1, Gosu::Color c1,
+                   double x2, double y2, Gosu::Color c2,
+                   double x3, double y3, Gosu::Color c3,
+                   double x4, double y4, Gosu::Color c4,
+                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
+    {
+        Gosu::Graphics::draw_quad(x1, y1, c1, x2, y2, c2,
+                                  x3, y3, c3, x4, y4, c4,
+                                  z, mode);
     }
-    void drawRect(double x, double y, double width, double height, Gosu::Color c,
-                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault) {
-        Gosu::Graphics::drawQuad(x, y, c, x + width, y, c,
-                                 x, y + height, c, x + width, y + height, c,
-                                 z, mode);
+    
+    void draw_rect(double x, double y, double width, double height, Gosu::Color c,
+                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
+    {
+        Gosu::Graphics::draw_quad(x, y, c, x + width, y, c,
+                                  x, y + height, c, x + width, y + height, c,
+                                  z, mode);
     }
-    void flush() {
+    
+    void flush()
+    {
         return Gosu::Graphics::flush();
     }
-    void unsafe_gl() {
-        Gosu::Graphics::beginGL();
+    
+    void unsafe_gl()
+    {
+        Gosu::Graphics::begin_gl();
         rb_yield(Qnil);
-        Gosu::Graphics::endGL();
+        Gosu::Graphics::end_gl();
     }
-    void unsafe_gl(Gosu::ZPos z) {
+    
+    void unsafe_gl(Gosu::ZPos z)
+    {
         VALUE block = rb_block_proc();
-        Gosu::Graphics::scheduleGL([block] { callRubyBlock(block); }, z);
+        Gosu::Graphics::gl([block] { Gosu::call_ruby_block(block); }, z);
     }
-    void clipTo(double x, double y, double width, double height) {
-        Gosu::Graphics::beginClipping(x, y, width, height);
+    
+    void clip_to(double x, double y, double width, double height)
+    {
+        Gosu::Graphics::begin_clipping(x, y, width, height);
         rb_yield(Qnil);
-        Gosu::Graphics::endClipping();
+        Gosu::Graphics::end_clipping();
     }
+    
     Gosu::Image* record(int width, int height) {
-        Gosu::Graphics::beginRecording();
+        Gosu::Graphics::begin_recording();
         rb_yield(Qnil);
-        return new Gosu::Image(Gosu::Graphics::endRecording(width, height));
+        return new Gosu::Image(Gosu::Graphics::end_recording(width, height));
     }
     
     // This method cannot be called "transform" because then it would be an ambiguous overload of Gosu::Transform Gosu::transform(...).
     // So it has to be renamed via %rename below... :( - same for the other transformations.
     
-    void transformForRuby(double m0, double m1, double m2, double m3, double m4, double m5, double m6, double m7,
-        double m8, double m9, double m10, double m11, double m12, double m13, double m14, double m15) {
+    void transform_for_ruby(double m0, double m1, double m2, double m3, double m4, double m5,
+        double m6, double m7, double m8, double m9, double m10, double m11, double m12, double m13,
+        double m14, double m15)
+    {
         Gosu::Transform transform = {
             m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15
         };
-        Gosu::Graphics::pushTransform(transform);
+        Gosu::Graphics::push_transform(transform);
         rb_yield(Qnil);
-        Gosu::Graphics::popTransform();
+        Gosu::Graphics::pop_transform();
     }
-    void rotateForRuby(double angle, double aroundX = 0, double aroundY = 0) {
-        Gosu::Graphics::pushTransform(Gosu::rotate(angle, aroundX, aroundY));
+    
+    void rotate_for_ruby(double angle, double around_x = 0, double around_y = 0)
+    {
+        Gosu::Graphics::push_transform(Gosu::rotate(angle, around_x, around_y));
         rb_yield(Qnil);
-        Gosu::Graphics::popTransform();
+        Gosu::Graphics::pop_transform();
     }
-    void scaleForRuby(double factor) {
-        Gosu::Graphics::pushTransform(Gosu::scale(factor));
+    
+    void scale_for_ruby(double factor)
+    {
+        Gosu::Graphics::push_transform(Gosu::scale(factor));
         rb_yield(Qnil);
-        Gosu::Graphics::popTransform();
+        Gosu::Graphics::pop_transform();
     }
-    void scaleForRuby(double factorX, double factorY) {
-        Gosu::Graphics::pushTransform(Gosu::scale(factorX, factorY));
+    
+    void scale_for_ruby(double scale_x, double scale_y)
+    {
+        Gosu::Graphics::push_transform(Gosu::scale(scale_x, scale_y));
         rb_yield(Qnil);
-        Gosu::Graphics::popTransform();
+        Gosu::Graphics::pop_transform();
     }
-    void scaleForRuby(double factorX, double factorY, double aroundX, double aroundY) {
-        Gosu::Graphics::pushTransform(Gosu::scale(factorX, factorY, aroundX, aroundY));
+    
+    void scale_for_ruby(double scale_x, double scale_y, double around_x, double around_y)
+    {
+        Gosu::Graphics::push_transform(Gosu::scale(scale_x, scale_y, around_x, around_y));
         rb_yield(Qnil);
-        Gosu::Graphics::popTransform();
+        Gosu::Graphics::pop_transform();
     }
-    void translateForRuby(double x, double y) {
-        Gosu::Graphics::pushTransform(Gosu::translate(x, y));
+    
+    void translate_for_ruby(double x, double y)
+    {
+        Gosu::Graphics::push_transform(Gosu::translate(x, y));
         rb_yield(Qnil);
-        Gosu::Graphics::popTransform();
+        Gosu::Graphics::pop_transform();
     }
 }
 %}
@@ -355,7 +382,8 @@ namespace Gosu {
 %exception {
     try {
         $action
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception& e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
     }
 }
@@ -370,30 +398,27 @@ namespace Gosu {
 // Miscellaneous functions (timing, math)
 %ignore Gosu::sleep;
 %include "../../Gosu/Timing.hpp"
-%ignore Gosu::pi;
-%ignore Gosu::distanceSqr;
+%ignore Gosu::distance_sqr;
 %ignore Gosu::round;
 %ignore Gosu::trunc;
-%ignore Gosu::boundBy;
 %ignore Gosu::clamp;
 %ignore Gosu::wrap;
-%ignore Gosu::radiansToGosu;
-%ignore Gosu::gosuToRadians;
+%ignore Gosu::radians_to_gosu;
+%ignore Gosu::gosu_to_radians;
 %include "../../Gosu/Math.hpp"
-%ignore Gosu::textWidth;
-%ignore Gosu::createText;
-%ignore Gosu::textHeight;
-%ignore Gosu::drawText;
-%ignore Gosu::registerEntity;
+%ignore Gosu::text_width;
+%ignore Gosu::create_text;
+%ignore Gosu::draw_text;
+%ignore Gosu::register_entity;
 %include "../../Gosu/Text.hpp"
 
 
 // Graphics:
 
-// ZPos, AlphaMode, FontFlags, TextAlign
+// ZPos, AlphaMode, FontFlags, Alignment
 %ignore Gosu::AlphaMode;
 %ignore Gosu::FontFlags;
-%ignore Gosu::TextAlign;
+%ignore Gosu::Alignment;
 %ignore Gosu::ImageFlags;
 %ignore Gosu::concat;
 %ignore Gosu::translate;
@@ -401,7 +426,7 @@ namespace Gosu {
 %ignore Gosu::scale;
 %include "../../Gosu/GraphicsBase.hpp"
 
-// For screenWidth/screenHeight
+// For screen_width/screen_height
 %ignore Gosu::Graphics;
 %ignore Gosu::BorderFlags;
 %ignore Gosu::MAX_TEXTURE_SIZE;
@@ -409,23 +434,24 @@ namespace Gosu {
 
 %constant unsigned MAX_TEXTURE_SIZE = Gosu::MAX_TEXTURE_SIZE;
 
-%rename("_release_all_openal_resources") releaseAllOpenALResources;
+%rename("_release_all_openal_resources") release_all_openal_resources;
 
-namespace Gosu {
+namespace Gosu
+{
     std::string language();
-    void enableUndocumentedRetrofication();
-    void releaseAllOpenALResources();
+    void enable_undocumented_retrofication();
+    void release_all_openal_resources();
     void register_entity(const std::wstring& name, Gosu::Image* image);
 }
 
 // Color
-%rename("alpha=") setAlpha;
-%rename("red=") setRed;
-%rename("green=") setGreen;
-%rename("blue=") setBlue;
-%rename("hue=") setHue;
-%rename("saturation=") setSaturation;
-%rename("value=") setValue;
+%rename("alpha=") set_alpha;
+%rename("red=") set_red;
+%rename("green=") set_green;
+%rename("blue=") set_blue;
+%rename("hue=") set_hue;
+%rename("saturation=") set_saturation;
+%rename("value=") set_value;
 %include "std_string.i"
 
 %ignore Gosu::Color::Channel;
@@ -476,21 +502,26 @@ namespace Gosu {
         return Gosu::Color(argb);
     }
     
-    Gosu::Color dup() const {
+    Gosu::Color dup() const
+    {
         return *$self;
     }
 
-    std::string inspect() const {
+    std::string inspect() const
+    {
         char buffer[32];
-        // snprintf is either member of std:: (C++11), or a #define for ruby_snprintf.
+        // snprintf is either member of std:: or a #define for ruby_snprintf.
         using namespace std;
-        snprintf(buffer, sizeof buffer, "#<Gosu::Color:ARGB=0x%02x_%06x>", $self->alpha(), $self->argb() & 0xffffff);
+        snprintf(buffer, sizeof buffer, "#<Gosu::Color:ARGB=0x%02x_%06x>",
+            $self->alpha(), $self->argb() & 0xffffff);
         return buffer;
     }
     
-    bool operator==(VALUE other) {
-        if (TYPE(other) == T_FIXNUM || TYPE(other) == T_BIGNUM)
+    bool operator==(VALUE other) const
+    {
+        if (TYPE(other) == T_FIXNUM || TYPE(other) == T_BIGNUM) {
             return *$self == Gosu::Color(NUM2ULONG(other));
+        }
         void* ptr;
         int res = SWIG_ConvertPtr(other, &ptr, SWIGTYPE_p_Gosu__Color, 0);
         return SWIG_IsOK(res) && ptr && *$self == *reinterpret_cast<Gosu::Color*>(ptr);
@@ -498,215 +529,235 @@ namespace Gosu {
 }
 
 // Font
-%ignore Gosu::Font::Font(unsigned height, const std::wstring& fontName,
-    unsigned flags);
-%ignore Gosu::Font::setImage;
+%ignore Gosu::Font::Font(unsigned height, const std::wstring& font_name, unsigned flags);
+%ignore Gosu::Font::set_image(wchar_t wc, unsigned font_flags, const Gosu::Image& image);
+%ignore Gosu::Font::set_image(wchar_t wc, const Gosu::Image& image);
+
 %include "../../Gosu/Font.hpp"
 %extend Gosu::Font {
-    Font(Gosu::Window& window, const std::wstring& fontName, unsigned height) {
-        return new Gosu::Font(height, fontName);
+    Font(Gosu::Window& window, const std::wstring& font_name, unsigned height)
+    {
+        return new Gosu::Font(height, font_name);
     }
-    Font(unsigned height, VALUE options = 0) {
-        std::wstring fontName = Gosu::defaultFontName();
+    
+    Font(unsigned height, VALUE options = 0)
+    {
+        std::wstring font_name = Gosu::default_font_name();
         
         if (options) {
             Check_Type(options, T_HASH);
             
             VALUE keys = rb_funcall(options, rb_intern("keys"), 0, NULL);
-            int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
+            int keys_size = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
             
-            for (int i = 0; i < keysSize; ++i) {
+            for (int i = 0; i < keys_size; ++i) {
                 VALUE key = rb_ary_entry(keys, i);
-                const char* keyString = Gosu::cstrFromSymbol(key);
+                const char* key_string = Gosu::cstr_from_symbol(key);
                 
                 VALUE value = rb_hash_aref(options, key);
-                if (!strcmp(keyString, "name")) {
-                    VALUE rbString = rb_obj_as_string(value);
-                    char* utf8String = StringValueCStr(rbString);
-                    fontName = Gosu::utf8ToWstring(utf8String);
+                if (!strcmp(key_string, "name")) {
+                    VALUE rb_string = rb_obj_as_string(value);
+                    char* utf8_string = StringValueCStr(rb_string);
+                    font_name = Gosu::utf8_to_wstring(utf8_string);
                 }
                 // TODO - would be nice & trivial to support :bold => false and :italic => true here
                 else {
-                    static bool issuedWarning = false;
-                    if (!issuedWarning) {
-                        issuedWarning = true;
-                        rb_warn("Unknown keyword argument: :%s", keyString);
+                    static bool issued_warning = false;
+                    if (!issued_warning) {
+                        issued_warning = true;
+                        rb_warn("Unknown keyword argument: :%s", key_string);
                     }
                 }
             }
         }
         
-        return new Gosu::Font(height, fontName);
+        return new Gosu::Font(height, font_name);
     }
-    void set_image(wchar_t wc, VALUE source) {
+    
+    void set_image(wchar_t wc, VALUE source)
+    {
         Gosu::Bitmap bitmap;
-        Gosu::loadBitmap(bitmap, source);
-        $self->setImage(wc, Gosu::Image(bitmap, Gosu::ifSmooth));
+        Gosu::load_bitmap(bitmap, source);
+        $self->set_image(wc, Gosu::Image(bitmap, Gosu::IF_SMOOTH));
     }
 }
 
 %ignore Gosu::ImageData;
-%rename("tex_name") texName;
 %include "../../Gosu/ImageData.hpp"
 
 // Image
 
-// Typemap to return an array of images (for loadTiles)
+// Typemap to return an array of images (for load_tiles)
 %typemap(out) std::vector<Gosu::Image> {
     $result = rb_ary_new2($1.size());
     for (unsigned i = 0; i < $1.size(); i++) {
-        VALUE image = SWIG_NewPointerObj(SWIG_as_voidptr(new Gosu::Image((*&$1)[i])), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN);
+        VALUE image = SWIG_NewPointerObj(SWIG_as_voidptr(new Gosu::Image((*&$1)[i])),
+                          SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN);
         rb_ary_store($result, i, image);
     }
 }
 
 %ignore Gosu::Image::Image(const std::wstring& filename, unsigned flags);
-%ignore Gosu::Image::Image(const std::wstring& filename, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, unsigned flags);
+%ignore Gosu::Image::Image(const std::wstring& filename, unsigned src_x, unsigned src_y,
+                           unsigned src_width, unsigned src_height, unsigned flags);
 %ignore Gosu::Image::Image(const Bitmap& source, unsigned flags);
-%ignore Gosu::Image::Image(const Bitmap& source, unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight, unsigned flags);
-%ignore Gosu::Image::Image(std::unique_ptr<ImageData> data);
-%ignore Gosu::loadTiles;
+%ignore Gosu::Image::Image(const Bitmap& source, unsigned src_x, unsigned src_y, unsigned src_width,
+                           unsigned src_height, unsigned flags);
+%ignore Gosu::Image::Image(std::unique_ptr<ImageData>&& data);
+%ignore Gosu::load_tiles;
 %include "../../Gosu/Image.hpp"
 %extend Gosu::Image {
-    Image(VALUE source, VALUE options = 0) {
+    Image(VALUE source, VALUE options = 0)
+    {
         Gosu::Bitmap bmp;
-        Gosu::loadBitmap(bmp, source);
+        Gosu::load_bitmap(bmp, source);
         
-        unsigned srcX = 0, srcY = 0, srcWidth = bmp.width(), srcHeight = bmp.height();
+        unsigned src_x = 0, src_y = 0, src_width = bmp.width(), src_height = bmp.height();
         unsigned flags = 0;
         
         if (options) {
             Check_Type(options, T_HASH);
             
             VALUE keys = rb_funcall(options, rb_intern("keys"), 0, NULL);
-            int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
+            int keys_size = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
             
-            for (int i = 0; i < keysSize; ++i) {
+            for (int i = 0; i < keys_size; ++i) {
                 VALUE key = rb_ary_entry(keys, i);
-                const char* keyString = Gosu::cstrFromSymbol(key);
+                const char* key_string = Gosu::cstr_from_symbol(key);
                 
                 VALUE value = rb_hash_aref(options, key);
-                if (!strcmp(keyString, "tileable")) {
+                if (!strcmp(key_string, "tileable")) {
                     if (RTEST(value))
-                        flags |= Gosu::ifTileable;
+                        flags |= Gosu::IF_TILEABLE;
                 }
-                else if (!strcmp(keyString, "retro")) {
+                else if (!strcmp(key_string, "retro")) {
                     if (RTEST(value))
-                        flags |= Gosu::ifRetro;
+                        flags |= Gosu::IF_RETRO;
                 }
-                else if (!strcmp(keyString, "rect")) {
+                else if (!strcmp(key_string, "rect")) {
                     Check_Type(value, T_ARRAY);
                     
-                    int rectSize = NUM2INT(rb_funcall(value, rb_intern("size"), 0, NULL));
-                    if (rectSize != 4)
-                        rb_raise(rb_eArgError, "Argument passed to :rect must be a four-element Array (x, y, width, height)");
+                    int rect_size = NUM2INT(rb_funcall(value, rb_intern("size"), 0, NULL));
+                    if (rect_size != 4) {
+                        rb_raise(rb_eArgError, "Argument passed to :rect must be a four-element "
+                            "Array (x, y, width, height)");
+                    }
                     
-                    srcX = NUM2INT(rb_ary_entry(value, 0));
-                    srcY = NUM2INT(rb_ary_entry(value, 1));
-                    srcWidth = NUM2INT(rb_ary_entry(value, 2));
-                    srcHeight = NUM2INT(rb_ary_entry(value, 3));
+                    src_x = NUM2INT(rb_ary_entry(value, 0));
+                    src_y = NUM2INT(rb_ary_entry(value, 1));
+                    src_width = NUM2INT(rb_ary_entry(value, 2));
+                    src_height = NUM2INT(rb_ary_entry(value, 3));
                 }
                 else {
-                    static bool issuedWarning = false;
-                    if (!issuedWarning) {
-                        issuedWarning = true;
-                        rb_warn("Unknown keyword argument: :%s", keyString);
+                    static bool issued_warning = false;
+                    if (!issued_warning) {
+                        issued_warning = true;
+                        rb_warn("Unknown keyword argument: :%s", key_string);
                     }
                 }
             }
         }
         
-        return new Gosu::Image(bmp, srcX, srcY, srcWidth, srcHeight, flags);
+        return new Gosu::Image(bmp, src_x, src_y, src_width, src_height, flags);
     }
-    void drawAsQuad(double x1, double y1, Color c1,
-            double x2, double y2, Color c2,
-            double x3, double y3, Color c3,
-            double x4, double y4, Color c4,
-            ZPos z, AlphaMode mode = Gosu::amDefault) {
-        $self->getData().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
+    
+    void draw_as_quad(double x1, double y1, Color c1,
+                      double x2, double y2, Color c2,
+                      double x3, double y3, Color c3,
+                      double x4, double y4, Color c4,
+                      ZPos z, AlphaMode mode = Gosu::AM_DEFAULT)
+    {
+        $self->data().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
     }
-    %newobject glTexInfo;
-    Gosu::GLTexInfo* glTexInfo() const {
-        const Gosu::GLTexInfo* info = $self->getData().glTexInfo();
-        if (info)
-            return new Gosu::GLTexInfo(*info);
-        else
-            return 0;
+    
+    %newobject gl_tex_info;
+    Gosu::GLTexInfo* gl_tex_info() const
+    {
+        const Gosu::GLTexInfo* info = $self->data().gl_tex_info();
+        return info ? new Gosu::GLTexInfo(*info) : nullptr;
     }
+    
     %newobject subimage;
     Gosu::Image* subimage(int x, int y, int w, int h)
     {
-        std::unique_ptr<Gosu::ImageData> imageData = $self->getData().subimage(x, y, w, h);
-        return imageData.get() ? new Gosu::Image(std::move(imageData)) : 0;
+        std::unique_ptr<Gosu::ImageData> image_data = $self->data().subimage(x, y, w, h);
+        return image_data.get() ? new Gosu::Image(std::move(image_data)) : nullptr;
     }
     
-    %newobject fromText;
-    static Gosu::Image* fromText(const std::wstring& text, unsigned fontHeight, VALUE options = 0)
+    %newobject from_text;
+    static Gosu::Image* from_text(const std::wstring& text, unsigned font_height, VALUE options = 0)
     {
-        std::wstring font = Gosu::defaultFontName();
+        std::wstring font = Gosu::default_font_name();
         unsigned width = 0xfefefefe;
         unsigned spacing = 0;
-        Gosu::TextAlign align = Gosu::taLeft;
+        Gosu::Alignment align = Gosu::AL_LEFT;
         unsigned flags = 0;
         
         if (options) {
             Check_Type(options, T_HASH);
             
             VALUE keys = rb_funcall(options, rb_intern("keys"), 0, NULL);
-            int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
+            int keys_size = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
             
-            for (int i = 0; i < keysSize; ++i) {
+            for (int i = 0; i < keys_size; ++i) {
                 VALUE key = rb_ary_entry(keys, i);
-                const char* keyString = Gosu::cstrFromSymbol(key);
+                const char* key_string = Gosu::cstr_from_symbol(key);
                 
                 VALUE value = rb_hash_aref(options, key);
-                if (!strcmp(keyString, "font")) {
-                    const char* fontUTF8 = StringValuePtr(value);
-                    font = Gosu::utf8ToWstring(fontUTF8);
+                if (!strcmp(key_string, "font")) {
+                    const char* font_uTF8 = StringValuePtr(value);
+                    font = Gosu::utf8_to_wstring(font_uTF8);
                 }
-                else if (!strcmp(keyString, "align")) {
-                    const char* cstr = Gosu::cstrFromSymbol(value);
+                else if (!strcmp(key_string, "align")) {
+                    const char* cstr = Gosu::cstr_from_symbol(value);
 
                     if (!strcmp(cstr, "left"))
-                        align = Gosu::taLeft;
+                        align = Gosu::AL_LEFT;
                     else if (!strcmp(cstr, "center"))
-                        align = Gosu::taCenter;
+                        align = Gosu::AL_CENTER;
                     else if (!strcmp(cstr, "right"))
-                        align = Gosu::taRight;
+                        align = Gosu::AL_RIGHT;
                     else if (!strcmp(cstr, "justify"))
-                        align = Gosu::taJustify;
+                        align = Gosu::AL_JUSTIFY;
                     else
-                        rb_raise(rb_eArgError, "Argument passed to :align must be a valid text alignment (:left, :center, :right, :justify)");
+                        rb_raise(rb_eArgError, "Argument passed to :align must be a valid text "
+                            "alignment (:left, :center, :right, :justify)");
                 }
-                else if (!strcmp(keyString, "width")) {
+                else if (!strcmp(key_string, "width")) {
                     width = NUM2INT(value);
                 }
-                else if (!strcmp(keyString, "spacing")) {
+                else if (!strcmp(key_string, "spacing")) {
                     spacing = NUM2INT(value);
                 }
-                else if (!strcmp(keyString, "retro")) {
+                else if (!strcmp(key_string, "retro")) {
                     if (RTEST(value))
-                        flags |= Gosu::ifRetro;
+                        flags |= Gosu::IF_RETRO;
                 }
                 else {
-                    static bool issuedWarning = false;
-                    if (!issuedWarning) {
-                        issuedWarning = true;
-                        rb_warn("Unknown keyword argument: :%s", keyString);
+                    static bool issued_warning = false;
+                    if (!issued_warning) {
+                        issued_warning = true;
+                        rb_warn("Unknown keyword argument: :%s", key_string);
                     }
                 }
             }
         }
         
-        if (width == 0xfefefefe)
-            return new Gosu::Image(Gosu::createText(text, font, fontHeight), flags);
-        else
-            return new Gosu::Image(Gosu::createText(text, font, fontHeight, spacing, width, align), flags);
+        Gosu::Bitmap bitmap;
+        if (width == 0xfefefefe) {
+            bitmap = Gosu::create_text(text, font, font_height);
+        }
+        else {
+            bitmap = Gosu::create_text(text, font, font_height, spacing, width, align);
+        }
+        return new Gosu::Image(bitmap, flags);
     }
-    static std::vector<Gosu::Image> loadTiles(VALUE source, int tileWidth, int tileHeight, VALUE options = 0)
+    
+    static std::vector<Gosu::Image> load_tiles(VALUE source, int tile_width, int tile_height,
+                                               VALUE options = 0)
     {
         Gosu::Bitmap bmp;
-        Gosu::loadBitmap(bmp, source);
+        Gosu::load_bitmap(bmp, source);
         
         unsigned flags = 0;
         
@@ -714,64 +765,72 @@ namespace Gosu {
             Check_Type(options, T_HASH);
             
             VALUE keys = rb_funcall(options, rb_intern("keys"), 0, NULL);
-            int keysSize = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
+            int keys_size = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
             
-            for (int i = 0; i < keysSize; ++i) {
+            for (int i = 0; i < keys_size; ++i) {
                 VALUE key = rb_ary_entry(keys, i);
-                const char* keyString = Gosu::cstrFromSymbol(key);
+                const char* key_string = Gosu::cstr_from_symbol(key);
                 
                 VALUE value = rb_hash_aref(options, key);
-                if (!strcmp(keyString, "tileable")) {
+                if (!strcmp(key_string, "tileable")) {
                     if (RTEST(value))
-                        flags |= Gosu::ifTileable;
+                        flags |= Gosu::IF_TILEABLE;
                 }
-                else if (!strcmp(keyString, "retro")) {
+                else if (!strcmp(key_string, "retro")) {
                     if (RTEST(value))
-                        flags |= Gosu::ifRetro;
+                        flags |= Gosu::IF_RETRO;
                 }
                 else {
-                    static bool issuedWarning = false;
-                    if (!issuedWarning) {
-                        issuedWarning = true;
-                        rb_warn("Unknown keyword argument: :%s", keyString);
+                    static bool issued_warning = false;
+                    if (!issued_warning) {
+                        issued_warning = true;
+                        rb_warn("Unknown keyword argument: :%s", key_string);
                     }
                 }
             }
         }
-        return Gosu::loadTiles(bmp, tileWidth, tileHeight, flags);
+        return Gosu::load_tiles(bmp, tile_width, tile_height, flags);
     }
-    static std::vector<Gosu::Image> loadTiles(Gosu::Window& window,
-            VALUE source, int tileWidth, int tileHeight, bool tileable)
+    
+    static std::vector<Gosu::Image> load_tiles(Gosu::Window& window,
+            VALUE source, int tile_width, int tile_height, bool tileable)
     {
         Gosu::Bitmap bmp;
-        Gosu::loadBitmap(bmp, source);
+        Gosu::load_bitmap(bmp, source);
         
-        return Gosu::loadTiles(bmp, tileWidth, tileHeight, tileable ? Gosu::ifTileable : Gosu::ifSmooth);
+        return Gosu::load_tiles(bmp, tile_width, tile_height,
+            tileable ? Gosu::IF_TILEABLE : Gosu::IF_SMOOTH);
     }
-    std::string toBlob() const
+    
+    std::string to_blob() const
     {
         // TODO: Optimize with direct copy into a Ruby string
-        Gosu::Bitmap bmp = $self->getData().toBitmap();
+        Gosu::Bitmap bmp = $self->data().to_bitmap();
+        size_t length = bmp.width() * bmp.height() * 4;
         return std::string(reinterpret_cast<const char*>(bmp.data()),
-                           reinterpret_cast<const char*>(bmp.data()) + bmp.width() * bmp.height() * 4);
+                           reinterpret_cast<const char*>(bmp.data()) + length);
     }
+    
     unsigned columns() const
     {
         return $self->width();
     }
+    
     unsigned rows() const
     {
         return $self->height();
     }
+    
     void save(const std::wstring& filename) const
     {
-        Gosu::saveImageFile($self->getData().toBitmap(), filename);
+        Gosu::save_image_file($self->data().to_bitmap(), filename);
     }
+    
     void insert(VALUE source, int x, int y)
     {
         Gosu::Bitmap bmp;
-        Gosu::loadBitmap(bmp, source);
-        $self->getData().insert(bmp, x, y);
+        Gosu::load_bitmap(bmp, source);
+        $self->data().insert(bmp, x, y);
     }
 }
 
@@ -786,27 +845,27 @@ namespace Gosu {
 %ignore Gosu::Song::Song(Reader reader);
 %rename("playing?") playing;
 %rename("paused?") paused;
-%rename("volume=") changeVolume;
-%rename("pan=") changePan;
-%rename("speed=") changeSpeed;
+%rename("volume=") change_volume;
+%rename("pan=") change_pan;
+%rename("speed=") change_speed;
 %include "../../Gosu/Audio.hpp"
 
 // Input and Window:
 
 // Button ID constants
-%ignore Gosu::kbRangeBegin;
-%ignore Gosu::kbRangeEnd;
-%ignore Gosu::msRangeBegin;
-%ignore Gosu::msRangeEnd;
-%ignore Gosu::gpRangeBegin;
-%ignore Gosu::gpRangeEnd;
-%ignore Gosu::kbNum;
-%ignore Gosu::msNum;
-%ignore Gosu::gpNum;
-%ignore Gosu::gpNumPerGamepad;
-%ignore Gosu::numButtons;
-%ignore Gosu::numGamepads;
-%ignore Gosu::noButton;
+%ignore Gosu::KB_RANGE_BEGIN;
+%ignore Gosu::KB_RANGE_END;
+%ignore Gosu::MS_RANGE_BEGIN;
+%ignore Gosu::MS_RANGE_END;
+%ignore Gosu::GP_RANGE_BEGIN;
+%ignore Gosu::GP_RANGE_END;
+%ignore Gosu::KB_NUM;
+%ignore Gosu::MS_NUM;
+%ignore Gosu::GP_NUM;
+%ignore Gosu::GP_NUM_PER_GAMEPAD;
+%ignore Gosu::NUM_BUTTONS;
+%ignore Gosu::NUM_GAMEPADS;
+%ignore Gosu::NO_BUTTON;
 %include "../../Gosu/Buttons.hpp"
 %init %{
     // Call srand() so that Gosu::random() is actually random in Ruby scripts
@@ -815,127 +874,154 @@ namespace Gosu {
 %}
 
 // TextInput
-%ignore Gosu::TextInput::feedSDLEvent(void*);
-%ignore Gosu::TextInput::caretPos() const;
-%ignore Gosu::TextInput::selectionStart() const;
-%rename("text=") setText;
-%rename("caret_pos=") setCaretPos;
-%rename("selection_start=") setSelectionStart;
+%ignore Gosu::TextInput::feed_sdl_event(void*);
+%ignore Gosu::TextInput::caret_pos() const;
+%ignore Gosu::TextInput::selection_start() const;
+%rename("text=") set_text;
+%rename("caret_pos=") set_caret_pos;
+%rename("selection_start=") set_selection_start;
 %include "../../Gosu/TextInput.hpp"
 %extend Gosu::TextInput {
-    // Fix indices into UTF-8 string
-    unsigned caret_pos() const {
-        return RUBY_18_19(Gosu::wstringToUTF8($self->text().substr(0, $self->caretPos())).size(),
-            $self->caretPos());
+    // Fix indices into UTF-8 string in Ruby 1.8
+    unsigned caret_pos() const
+    {
+        return RUBY_18_19(
+            Gosu::wstring_to_utf8($self->text().substr(0, $self->caret_pos())).size(),
+            $self->caret_pos()
+        );
     }
-    unsigned selection_start() const {
-        return RUBY_18_19(Gosu::wstringToUTF8($self->text().substr(0, $self->selectionStart())).size(),
-            $self->selectionStart());
+    // Fix indices into UTF-8 string in Ruby 1.8
+    unsigned selection_start() const
+    {
+        return RUBY_18_19(
+            Gosu::wstring_to_utf8($self->text().substr(0, $self->selection_start())).size(),
+            $self->selection_start()
+        );
     }
 };
 
 // Window
 %ignore Gosu::Window::resize(unsigned, unsigned, bool);
-%rename("width=") setWidth;
-%rename("height=") setHeight;
-%rename("fullscreen=") setFullscreen;
-%rename("update_interval=") setUpdateInterval;
-%rename("caption=") setCaption;
-%rename("text_input=") setTextInput;
-%rename("mouse_x=") setMouseX;
-%rename("mouse_y=") setMouseY;
-%rename("needs_cursor?") needsCursor;
-%rename("needs_redraw?") needsRedraw;
+%rename("width=") set_width;
+%rename("height=") set_height;
+%rename("fullscreen=") set_fullscreen;
+%rename("update_interval=") set_update_interval;
+%rename("caption=") set_caption;
+%rename("text_input=") set_text_input;
+%rename("mouse_x=") set_mouseX;
+%rename("mouse_y=") set_mouseY;
+%rename("needs_cursor?") needs_cursor;
+%rename("needs_redraw?") needs_redraw;
 %rename("fullscreen?") fullscreen;
-%markfunc Gosu::Window "markWindow";
+%markfunc Gosu::Window "mark_window";
 %include "../../Gosu/Window.hpp"
 
 %header %{
     // Also mark the TextInput instance alive when the window is being marked.
-    static void markWindow(void* window) {
-        Gosu::TextInput* ti = static_cast<Gosu::Window*>(window)->input().textInput();
+    static void mark_window(void* window)
+    {
+        Gosu::TextInput* ti = static_cast<Gosu::Window*>(window)->input().text_input();
         if (VALUE ti_value = SWIG_RubyInstanceFor(ti))
             rb_gc_mark(ti_value);
     }
 %}
 
 %extend Gosu::Window {
-    void setWidth(unsigned width) {
+    void set_width(unsigned width)
+    {
         $self->resize(width, $self->height(), $self->fullscreen());
     }
-    void setHeight(unsigned height) {
+    
+    void set_height(unsigned height)
+    {
         $self->resize($self->width(), height, $self->fullscreen());
     }
-    void setFullscreen(bool fullscreen) {
+    
+    void set_fullscreen(bool fullscreen)
+    {
         $self->resize($self->width(), $self->height(), fullscreen);
     }
     
-    TextInput* textInput() const {
-        return $self->input().textInput();
-    }
-    void setTextInput(TextInput* ti) {
-        $self->input().setTextInput(ti);
+    TextInput* text_input() const
+    {
+        return $self->input().text_input();
     }
     
-    double mouseX() const {
-        return $self->input().mouseX();
+    void set_text_input(TextInput* ti)
+    {
+        $self->input().set_text_input(ti);
     }
-    double mouseY() const {
-        return $self->input().mouseY();
+    
+    double mouse_x() const {
+        return $self->input().mouse_x();
     }
-    void setMousePosition(double x, double y) {
-        $self->input().setMousePosition(x, y);
+    
+    double mouse_y() const {
+        return $self->input().mouse_y();
     }
-    void setMouseX(double x) {
-        $self->input().setMousePosition(x, $self->input().mouseY());
+    
+    void set_mouse_position(double x, double y) {
+        $self->input().set_mouse_position(x, y);
     }
-    void setMouseY(double y) {
-        $self->input().setMousePosition($self->input().mouseX(), y);
+    
+    void set_mouse_x(double x) {
+        $self->input().set_mouse_position(x, $self->input().mouse_y());
+    }
+    
+    void set_mouse_y(double y) {
+        $self->input().set_mouse_position($self->input().mouse_x(), y);
     }
 };
 
 // Global input functions
-namespace Gosu {
-    Gosu::Button charToButtonId(wchar_t ch);
-    wchar_t buttonIdToChar(Gosu::Button btn);
-    %rename("button_down?") isButtonDown;
-    bool isButtonDown(Gosu::Button btn);
+namespace Gosu
+{
+    Gosu::Button char_to_button_id(wchar_t ch);
+    wchar_t button_id_to_char(Gosu::Button btn);
+    %rename("button_down?") is_button_down;
+    bool is_button_down(Gosu::Button btn);
 }
 
 // Global graphics functions
 namespace Gosu {
-    void drawLine(double x1, double y1, Gosu::Color c1,
+    void draw_line(double x1, double y1, Gosu::Color c1,
                   double x2, double y2, Gosu::Color c2,
-                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault);
-    void drawTriangle(double x1, double y1, Gosu::Color c1,
+                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT);
+
+    void draw_triangle(double x1, double y1, Gosu::Color c1,
                       double x2, double y2, Gosu::Color c2,
                       double x3, double y3, Gosu::Color c3,
-                      Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault);
-    void drawQuad(double x1, double y1, Gosu::Color c1,
+                      Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT);
+
+    void draw_quad(double x1, double y1, Gosu::Color c1,
                   double x2, double y2, Gosu::Color c2,
                   double x3, double y3, Gosu::Color c3,
                   double x4, double y4, Gosu::Color c4,
-                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault);
-    void drawRect(double x, double y, double width, double height, Gosu::Color c,
-                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::amDefault);
+                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT);
+
+    void draw_rect(double x, double y, double width, double height, Gosu::Color c,
+                  Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT);
+
     void flush();
     void unsafe_gl();
     void unsafe_gl(Gosu::ZPos z);
-    void clipTo(double x, double y, double width, double height);
+    void clip_to(double x, double y, double width, double height);
+
     %newobject record;
     Gosu::Image* record(int width, int height);
     
-    %rename("transform") transformForRuby;
-    %rename("rotate")    rotateForRuby;
-    %rename("scale")     scaleForRuby;
-    %rename("translate") translateForRuby;
-    
-    void transformForRuby(double m0, double m1, double m2, double m3, double m4, double m5, double m6, double m7,
-        double m8, double m9, double m10, double m11, double m12, double m13, double m14, double m15);
-    void rotateForRuby(double angle, double aroundX = 0, double aroundY = 0);
-    void scaleForRuby(double factor);
-    void scaleForRuby(double factorX, double factorY);
-    void scaleForRuby(double factorX, double factorY, double aroundX, double aroundY);
-    void translateForRuby(double x, double y);
+    %rename("transform") transform_for_ruby;
+    %rename("rotate")    rotate_for_ruby;
+    %rename("scale")     scale_for_ruby;
+    %rename("translate") translate_for_ruby;
+
+    void transform_for_ruby(double m0, double m1, double m2, double m3, double m4, double m5,
+        double m6, double m7, double m8, double m9, double m10, double m11, double m12, double m13,
+        double m14, double m15);
+    void rotate_for_ruby(double angle, double around_x = 0, double around_y = 0);
+    void scale_for_ruby(double factor);
+    void scale_for_ruby(double factor_x, double factor_y);
+    void scale_for_ruby(double factor_x, double factor_y, double around_x, double around_y);
+    void translate_for_ruby(double x, double y);
 }
 

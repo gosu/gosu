@@ -11,12 +11,12 @@ namespace Gosu
 {
     class LargeImageData : public ImageData
     {
-        unsigned fullWidth, fullHeight, partsX, partsY, partWidth, partHeight;
+        unsigned full_width, full_height, parts_x, parts_y, part_width, part_height;
         std::vector<std::shared_ptr<ImageData> > parts;
 
     public:
         LargeImageData(const Bitmap& source,
-            unsigned partWidth, unsigned partHeight, unsigned imageFlags);
+            unsigned part_width, unsigned part_height, unsigned image_flags);
 
         int width() const;
         int height() const;
@@ -27,7 +27,7 @@ namespace Gosu
             double x4, double y4, Color c4,
             ZPos z, AlphaMode mode) const;
             
-        const GLTexInfo* glTexInfo() const
+        const GLTexInfo* gl_tex_info() const
         {
             return 0;
         }
@@ -37,7 +37,7 @@ namespace Gosu
             return std::unique_ptr<ImageData>();
         }
         
-        Bitmap toBitmap() const;
+        Bitmap to_bitmap() const;
         void insert(const Bitmap& bitmap, int x, int y);
     };
 }

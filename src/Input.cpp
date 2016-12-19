@@ -11,7 +11,7 @@ namespace
 {
     void cleanup();
 
-    void requireSDLVideo()
+    void require_sdl_video()
     {
         static bool initialized = false;
         if (!initialized)
@@ -27,93 +27,93 @@ namespace
         SDL_QuitSubSystem(SDL_INIT_VIDEO);
     }
 
-    std::array<bool, Gosu::numButtons> buttonStates = { { false } };
+    std::array<bool, Gosu::NUM_BUTTONS> button_states = { { false } };
 }
 
 struct Gosu::Input::Impl
 {
     Input& input;
     SDL_Window* window;
-    TextInput* textInput;
-    double mouseX, mouseY;
-    double mouseFactorX, mouseFactorY;
-    double mouseOffsetX, mouseOffsetY;
+    TextInput* text_input;
+    double mouse_x, mouse_y;
+    double mouse_scale_x, mouse_scale_y;
+    double mouse_offset_x, mouse_offset_y;
     
     Impl(Input& input, SDL_Window* window)
-    : input(input), window(window), textInput(nullptr)
+    : input(input), window(window), text_input(nullptr)
     {
-        mouseFactorX = mouseFactorY = 1;
-        mouseOffsetX = mouseOffsetY = 0;
+        mouse_scale_x = mouse_scale_y = 1;
+        mouse_offset_x = mouse_offset_y = 0;
     }
     
-    void updateMousePosition()
+    void update_mouse_position()
     {
     // Do not use GetGlobalMouseState on Linux for now to prevent this bug:
     // https://github.com/gosu/gosu/issues/326
     // Once SDL 2.0.5 has been released, we can use this function as a workaround:
     // https://wiki.libsdl.org/SDL_GetWindowBordersSize
     #if SDL_VERSION_ATLEAST(2, 0, 4) && !defined(GOSU_IS_X)
-        int x, y, windowX, windowY;
-        SDL_GetWindowPosition(window, &windowX, &windowY);
+        int x, y, window_x, window_y;
+        SDL_GetWindowPosition(window, &window_x, &window_y);
         SDL_GetGlobalMouseState(&x, &y);
-        mouseX = x - windowX, mouseY = y - windowY;
+        mouse_x = x - window_x, mouse_y = y - window_y;
     #else
         int x, y;
         SDL_GetMouseState(&x, &y);
-        mouseX = x, mouseY = y;
+        mouse_x = x, mouse_y = y;
     #endif
     }
     
-    void setMousePosition(double x, double y)
+    void set_mouse_position(double x, double y)
     {
         SDL_WarpMouseInWindow(window,
-            (x - mouseOffsetX) / mouseFactorX, (y - mouseOffsetY) / mouseFactorY);
+            (x - mouse_offset_x) / mouse_scale_x, (y - mouse_offset_y) / mouse_scale_y);
 
     #if SDL_VERSION_ATLEAST(2, 0, 4) && !defined(GOSU_IS_X)
         // On systems where we have a working GetGlobalMouseState, we can warp the mouse and
         // retrieve its position directly afterwards.
-        updateMousePosition();
+        update_mouse_position();
     #else
         // Otherwise, we have to assume that setting the position worked, because if we update the
         // mouse position now, we'll get the previous position.
-        mouseX = x, mouseY = y;
+        mouse_x = x, mouse_y = y;
     #endif
     }
     
-    void enqueueEvent(int id, bool down)
+    void enqueue_event(int id, bool down)
     {
-        eventQueue.push_back(down ? id : ~id);
+        event_queue.push_back(down ? id : ~id);
     }
     
-    void dispatchEnqueuedEvents()
+    void dispatch_enqueued_events()
     {
-        for (int event : eventQueue) {
+        for (int event : event_queue) {
             bool down = (event >= 0);
             Button button(down ? event : ~event);
             
-            buttonStates[button.id()] = down;
-            if (down && input.onButtonDown) {
-                input.onButtonDown(button);
+            button_states[button.id()] = down;
+            if (down && input.on_button_down) {
+                input.on_button_down(button);
             }
-            else if (!down && input.onButtonUp) {
-                input.onButtonUp(button);
+            else if (!down && input.on_button_up) {
+                input.on_button_up(button);
             }
         }
-        eventQueue.clear();
+        event_queue.clear();
     }
     
-    void initializeGamepads()
+    void initialize_gamepads()
     {
         SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
 
-        int numGamepads = std::min<int>(Gosu::numGamepads, SDL_NumJoysticks());
+        int num_gamepads = std::min<int>(Gosu::NUM_GAMEPADS, SDL_NumJoysticks());
         
-        for (int i = 0; i < numGamepads; ++i) {
+        for (int i = 0; i < num_gamepads; ++i) {
             // Prefer the SDL_GameController API...
             if (SDL_IsGameController(i)) {
-                SDL_GameController *gameController = SDL_GameControllerOpen(i);
-                if (gameController) {
-                    gameControllers.push_back(gameController);
+                SDL_GameController *game_controller = SDL_GameControllerOpen(i);
+                if (game_controller) {
+                    game_controllers.push_back(game_controller);
                     continue;
                 }
             }
@@ -125,66 +125,66 @@ struct Gosu::Input::Impl
         }
     }
     
-    void releaseGamepads()
+    void release_gamepads()
     {
         std::for_each(joysticks.begin(), joysticks.end(), &SDL_JoystickClose);
         joysticks.clear();
-        std::for_each(gameControllers.begin(), gameControllers.end(), &SDL_GameControllerClose);
-        gameControllers.clear();
+        std::for_each(game_controllers.begin(), game_controllers.end(), &SDL_GameControllerClose);
+        game_controllers.clear();
         
         SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
     }
     
-    typedef std::array<bool, gpNumPerGamepad> GamepadBuffer;
+    typedef std::array<bool, GP_NUM_PER_GAMEPAD> GamepadBuffer;
     
-    void pollGamepads()
+    void poll_gamepads()
     {
         // This gamepad is an OR-ed version of all the other gamepads. If button
-        // 3 is pressed on any attached gamepad, down(gpButton3) will return
+        // 3 is pressed on any attached gamepad, down(GP_BUTTON_3) will return
         // true. This is handy for singleplayer games.
-        GamepadBuffer anyGamepad = { false };
+        GamepadBuffer any_gamepad = { false };
         
-        std::size_t availableGamepads = gameControllers.size() + joysticks.size();
+        std::size_t available_gamepads = game_controllers.size() + joysticks.size();
         
-        for (int i = 0; i < availableGamepads; ++i) {
-            GamepadBuffer currentGamepad = { false };
+        for (int i = 0; i < available_gamepads; ++i) {
+            GamepadBuffer current_gamepad = { false };
             
             // Poll data from SDL, using either of two API interfaces.
-            if (i < gameControllers.size()) {
-                SDL_GameController *gameController = gameControllers[i];
-                pollGameController(gameController, currentGamepad);
+            if (i < game_controllers.size()) {
+                SDL_GameController *game_controller = game_controllers[i];
+                poll_game_controller(game_controller, current_gamepad);
             }
             else {
-                SDL_Joystick *joystick = joysticks[i - gameControllers.size()];
-                pollJoystick(joystick, currentGamepad);
+                SDL_Joystick *joystick = joysticks[i - game_controllers.size()];
+                poll_joystick(joystick, current_gamepad);
             }
             
             // Now at the same time, enqueue all events for this particular
-            // gamepad, and OR the keyboard state into anyGamepad.
-            int offset = gpRangeBegin + gpNumPerGamepad * (i + 1);
-            for (int j = 0; j < currentGamepad.size(); ++j) {
-                anyGamepad[j] = anyGamepad[j] || currentGamepad[j];
+            // gamepad, and OR the keyboard state into any_gamepad.
+            int offset = GP_RANGE_BEGIN + GP_NUM_PER_GAMEPAD * (i + 1);
+            for (int j = 0; j < current_gamepad.size(); ++j) {
+                any_gamepad[j] = any_gamepad[j] || current_gamepad[j];
                 
-                if (currentGamepad[j] && !buttonStates[j + offset]) {
-                    buttonStates[j + offset] = true;
-                    enqueueEvent(j + offset, true);
+                if (current_gamepad[j] && !button_states[j + offset]) {
+                    button_states[j + offset] = true;
+                    enqueue_event(j + offset, true);
                 }
-                else if (!currentGamepad[j] && buttonStates[j + offset]) {
-                    buttonStates[j + offset] = false;
-                    enqueueEvent(j + offset, false);
+                else if (!current_gamepad[j] && button_states[j + offset]) {
+                    button_states[j + offset] = false;
+                    enqueue_event(j + offset, false);
                 }
             }
         }
         
         // And lastly, enqueue events for the virtual "any" gamepad.
-        for (int j = 0; j < anyGamepad.size(); ++j) {
-            if (anyGamepad[j] && !buttonStates[j + gpRangeBegin]) {
-                buttonStates[j + gpRangeBegin] = true;
-                enqueueEvent(j + gpRangeBegin, true);
+        for (int j = 0; j < any_gamepad.size(); ++j) {
+            if (any_gamepad[j] && !button_states[j + GP_RANGE_BEGIN]) {
+                button_states[j + GP_RANGE_BEGIN] = true;
+                enqueue_event(j + GP_RANGE_BEGIN, true);
             }
-            else if (!anyGamepad[j] && buttonStates[j + gpRangeBegin]) {
-                buttonStates[j + gpRangeBegin] = false;
-                enqueueEvent(j + gpRangeBegin, false);
+            else if (!any_gamepad[j] && button_states[j + GP_RANGE_BEGIN]) {
+                button_states[j + GP_RANGE_BEGIN] = false;
+                enqueue_event(j + GP_RANGE_BEGIN, false);
             }
         }
     }
@@ -192,69 +192,69 @@ struct Gosu::Input::Impl
 private:
     // For button down event: Button name value (>= 0)
     // For button up event: ~Button name value (< 0)
-    std::vector<int> eventQueue;
+    std::vector<int> event_queue;
     
     std::vector<SDL_Joystick*> joysticks;
-    std::vector<SDL_GameController*> gameControllers;
+    std::vector<SDL_GameController*> game_controllers;
     
     // SDL returns axis values in the range -2^15 through 2^15-1, so we consider
     // -2^14 through 2^14 the dead zone.
     
     enum { DEAD_ZONE = (1 << 14) };
     
-    void pollGameController(SDL_GameController *gameController, GamepadBuffer& gamepad)
+    void poll_game_controller(SDL_GameController *game_controller, GamepadBuffer& gamepad)
     {
-        gamepad[gpLeft - gpRangeBegin] =
-            SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_DPAD_LEFT) ||
-            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_LEFTX) < -DEAD_ZONE ||
-            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_RIGHTX) < -DEAD_ZONE;
+        gamepad[GP_LEFT - GP_RANGE_BEGIN] =
+            SDL_GameControllerGetButton(game_controller, SDL_CONTROLLER_BUTTON_DPAD_LEFT) ||
+            SDL_GameControllerGetAxis(game_controller, SDL_CONTROLLER_AXIS_LEFTX) < -DEAD_ZONE ||
+            SDL_GameControllerGetAxis(game_controller, SDL_CONTROLLER_AXIS_RIGHTX) < -DEAD_ZONE;
         
-        gamepad[gpRight - gpRangeBegin] =
-            SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) ||
-            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_LEFTX) > +DEAD_ZONE ||
-            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_RIGHTX) > +DEAD_ZONE;
+        gamepad[GP_RIGHT - GP_RANGE_BEGIN] =
+            SDL_GameControllerGetButton(game_controller, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) ||
+            SDL_GameControllerGetAxis(game_controller, SDL_CONTROLLER_AXIS_LEFTX) > +DEAD_ZONE ||
+            SDL_GameControllerGetAxis(game_controller, SDL_CONTROLLER_AXIS_RIGHTX) > +DEAD_ZONE;
         
-        gamepad[gpUp - gpRangeBegin] =
-            SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_DPAD_UP) ||
-            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_LEFTY) < -DEAD_ZONE ||
-            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_RIGHTY) < -DEAD_ZONE;
+        gamepad[GP_UP - GP_RANGE_BEGIN] =
+            SDL_GameControllerGetButton(game_controller, SDL_CONTROLLER_BUTTON_DPAD_UP) ||
+            SDL_GameControllerGetAxis(game_controller, SDL_CONTROLLER_AXIS_LEFTY) < -DEAD_ZONE ||
+            SDL_GameControllerGetAxis(game_controller, SDL_CONTROLLER_AXIS_RIGHTY) < -DEAD_ZONE;
         
-        gamepad[gpDown - gpRangeBegin] =
-            SDL_GameControllerGetButton(gameController, SDL_CONTROLLER_BUTTON_DPAD_DOWN) ||
-            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_LEFTY) > +DEAD_ZONE ||
-            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_RIGHTY) > +DEAD_ZONE;
+        gamepad[GP_DOWN - GP_RANGE_BEGIN] =
+            SDL_GameControllerGetButton(game_controller, SDL_CONTROLLER_BUTTON_DPAD_DOWN) ||
+            SDL_GameControllerGetAxis(game_controller, SDL_CONTROLLER_AXIS_LEFTY) > +DEAD_ZONE ||
+            SDL_GameControllerGetAxis(game_controller, SDL_CONTROLLER_AXIS_RIGHTY) > +DEAD_ZONE;
         
         int button = 0;
         for (button; button < SDL_CONTROLLER_BUTTON_DPAD_UP; ++button) {
-            gamepad[gpButton0 + button - gpRangeBegin] =
-                SDL_GameControllerGetButton(gameController, (SDL_GameControllerButton)button);
+            gamepad[GP_BUTTON_0 + button - GP_RANGE_BEGIN] =
+                SDL_GameControllerGetButton(game_controller, (SDL_GameControllerButton)button);
         }
-        gamepad[gpButton0 + button++ - gpRangeBegin] =
-            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_TRIGGERLEFT) > +DEAD_ZONE;
-        gamepad[gpButton0 + button++ - gpRangeBegin] =
-            SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > +DEAD_ZONE;
+        gamepad[GP_BUTTON_0 + button++ - GP_RANGE_BEGIN] =
+            SDL_GameControllerGetAxis(game_controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT) > +DEAD_ZONE;
+        gamepad[GP_BUTTON_0 + button++ - GP_RANGE_BEGIN] =
+            SDL_GameControllerGetAxis(game_controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > +DEAD_ZONE;
     }
     
-    void pollJoystick(SDL_Joystick *joystick, GamepadBuffer& gamepad)
+    void poll_joystick(SDL_Joystick *joystick, GamepadBuffer& gamepad)
     {
         int axes = SDL_JoystickNumAxes(joystick),
             hats = SDL_JoystickNumHats(joystick),
-            buttons = std::min<int>(gpNumPerGamepad - 4, SDL_JoystickNumButtons(joystick));
+            buttons = std::min<int>(GP_NUM_PER_GAMEPAD - 4, SDL_JoystickNumButtons(joystick));
         
         for (int axis = 0; axis < axes; ++axis) {
             Sint16 value = SDL_JoystickGetAxis(joystick, axis);
             
             if (value < -DEAD_ZONE) {
                 if (axis % 2 == 0)
-                    gamepad[gpLeft - gpRangeBegin] = true;
+                    gamepad[GP_LEFT - GP_RANGE_BEGIN] = true;
                 else
-                    gamepad[gpUp - gpRangeBegin] = true;
+                    gamepad[GP_UP - GP_RANGE_BEGIN] = true;
             }
             else if (value > +DEAD_ZONE) {
                 if (axis % 2 == 0)
-                    gamepad[gpRight - gpRangeBegin] = true;
+                    gamepad[GP_RIGHT - GP_RANGE_BEGIN] = true;
                 else
-                    gamepad[gpDown - gpRangeBegin] = true;
+                    gamepad[GP_DOWN - GP_RANGE_BEGIN] = true;
             }
         }
         
@@ -262,18 +262,18 @@ private:
             Uint8 value = SDL_JoystickGetHat(joystick, hat);
             
             if (value & SDL_HAT_LEFT)
-                gamepad[gpLeft - gpRangeBegin] = true;
+                gamepad[GP_LEFT - GP_RANGE_BEGIN] = true;
             if (value & SDL_HAT_RIGHT)
-                gamepad[gpRight - gpRangeBegin] = true;
+                gamepad[GP_RIGHT - GP_RANGE_BEGIN] = true;
             if (value & SDL_HAT_UP)
-                gamepad[gpUp - gpRangeBegin] = true;
+                gamepad[GP_UP - GP_RANGE_BEGIN] = true;
             if (value & SDL_HAT_DOWN)
-                gamepad[gpDown - gpRangeBegin] = true;
+                gamepad[GP_DOWN - GP_RANGE_BEGIN] = true;
         }
         
         for (int button = 0; button < buttons; ++button) {
             if (SDL_JoystickGetButton(joystick, button)) {
-                gamepad[gpButton0 + button - gpRangeBegin] = true;
+                gamepad[GP_BUTTON_0 + button - GP_RANGE_BEGIN] = true;
             }
         }
     }
@@ -282,29 +282,29 @@ private:
 Gosu::Input::Input(void* window)
 : pimpl(new Impl(*this, (SDL_Window*)window))
 {
-    requireSDLVideo();
+    require_sdl_video();
     
-    pimpl->initializeGamepads();
+    pimpl->initialize_gamepads();
 }
 
 Gosu::Input::~Input()
 {
-    pimpl->releaseGamepads();
+    pimpl->release_gamepads();
 }
 
-bool Gosu::Input::feedSDLEvent(void* event)
+bool Gosu::Input::feed_sdl_event(void* event)
 {
     const SDL_Event* e = static_cast<SDL_Event*>(event);
     
-    if (pimpl->textInput && pimpl->textInput->feedSDLEvent(event)) {
+    if (pimpl->text_input && pimpl->text_input->feed_sdl_event(event)) {
         return true;
     }
     
     switch (e->type) {
         case SDL_KEYDOWN:
         case SDL_KEYUP: {
-            if (e->key.repeat == 0 && e->key.keysym.scancode <= kbRangeEnd) {
-                pimpl->enqueueEvent(e->key.keysym.scancode, e->type == SDL_KEYDOWN);
+            if (e->key.repeat == 0 && e->key.keysym.scancode <= KB_RANGE_END) {
+                pimpl->enqueue_event(e->key.keysym.scancode, e->type == SDL_KEYDOWN);
                 return true;
             }
             break;
@@ -312,20 +312,20 @@ bool Gosu::Input::feedSDLEvent(void* event)
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP: {
             if (e->button.button >= 1 && e->button.button <= 3) {
-                pimpl->enqueueEvent(msLeft + e->button.button - 1, e->type == SDL_MOUSEBUTTONDOWN);
+                pimpl->enqueue_event(MS_LEFT + e->button.button - 1, e->type == SDL_MOUSEBUTTONDOWN);
                 return true;
             }
             break;
         }
         case SDL_MOUSEWHEEL: {
             if (e->wheel.y > 0) {
-                pimpl->enqueueEvent(msWheelUp, true);
-                pimpl->enqueueEvent(msWheelUp, false);
+                pimpl->enqueue_event(MS_WHEEL_UP, true);
+                pimpl->enqueue_event(MS_WHEEL_UP, false);
                 return true;
             }
             else if (e->wheel.y < 0) {
-                pimpl->enqueueEvent(msWheelDown, true);
-                pimpl->enqueueEvent(msWheelDown, false);
+                pimpl->enqueue_event(MS_WHEEL_DOWN, true);
+                pimpl->enqueue_event(MS_WHEEL_DOWN, false);
                 return true;
             }
             break;
@@ -334,15 +334,15 @@ bool Gosu::Input::feedSDLEvent(void* event)
     return false;
 }
 
-wchar_t Gosu::Input::idToChar(Button btn)
+wchar_t Gosu::Input::id_to_char(Button btn)
 {
-    requireSDLVideo();
+    require_sdl_video();
     
-    if (btn.id() > kbRangeEnd)
+    if (btn.id() > KB_RANGE_END)
         return 0;
     
     // SDL_GetKeyName would return "Space" for this value.
-    if (btn.id() == kbSpace)
+    if (btn.id() == KB_SPACE)
         return L' ';
     
     SDL_Keycode keycode = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(btn.id()));
@@ -353,7 +353,7 @@ wchar_t Gosu::Input::idToChar(Button btn)
     if (name == nullptr)
         return 0;
     
-    std::wstring wname = utf8ToWstring(name);
+    std::wstring wname = utf8_to_wstring(name);
     if (wname.length() != 1)
         return 0;
     
@@ -367,15 +367,15 @@ wchar_t Gosu::Input::idToChar(Button btn)
     return std::towlower(wname[0]);
 }
 
-Gosu::Button Gosu::Input::charToId(wchar_t ch)
+Gosu::Button Gosu::Input::char_to_id(wchar_t ch)
 {
-    requireSDLVideo();
+    require_sdl_video();
     
     std::wstring string(1, ch);
-    SDL_Keycode keycode = SDL_GetKeyFromName(wstringToUTF8(string).c_str());
+    SDL_Keycode keycode = SDL_GetKeyFromName(wstring_to_utf8(string).c_str());
     
     if (keycode == SDLK_UNKNOWN) {
-        return noButton;
+        return NO_BUTTON;
     }
     else {
         return Button(SDL_GetScancodeFromKey(keycode));
@@ -384,37 +384,37 @@ Gosu::Button Gosu::Input::charToId(wchar_t ch)
 
 bool Gosu::Input::down(Gosu::Button btn)
 {
-    if (btn == noButton || btn.id() >= numButtons)
+    if (btn == NO_BUTTON || btn.id() >= NUM_BUTTONS)
         return false;
     
-    return buttonStates[btn.id()];
+    return button_states[btn.id()];
 }
 
-double Gosu::Input::mouseX() const
+double Gosu::Input::mouse_x() const
 {
-    return pimpl->mouseX * pimpl->mouseFactorX + pimpl->mouseOffsetX;
+    return pimpl->mouse_x * pimpl->mouse_scale_x + pimpl->mouse_offset_x;
 }
 
-double Gosu::Input::mouseY() const
+double Gosu::Input::mouse_y() const
 {
-    return pimpl->mouseY * pimpl->mouseFactorY + pimpl->mouseOffsetY;
+    return pimpl->mouse_y * pimpl->mouse_scale_y + pimpl->mouse_offset_y;
 }
 
-void Gosu::Input::setMousePosition(double x, double y)
+void Gosu::Input::set_mouse_position(double x, double y)
 {
-    pimpl->setMousePosition(x, y);
+    pimpl->set_mouse_position(x, y);
 }
 
-void Gosu::Input::setMouseFactors(double factorX, double factorY,
-    double blackBarWidth, double blackBarHeight)
+void Gosu::Input::set_mouse_factors(double scale_x, double scale_y,
+    double black_bar_width, double black_bar_height)
 {
-    pimpl->mouseFactorX = factorX;
-    pimpl->mouseFactorY = factorY;
-    pimpl->mouseOffsetX = -blackBarWidth;
-    pimpl->mouseOffsetY = -blackBarHeight;
+    pimpl->mouse_scale_x = scale_x;
+    pimpl->mouse_scale_y = scale_y;
+    pimpl->mouse_offset_x = -black_bar_width;
+    pimpl->mouse_offset_y = -black_bar_height;
 }
 
-const Gosu::Touches& Gosu::Input::currentTouches() const
+const Gosu::Touches& Gosu::Input::current_touches() const
 {
     // Note: We can actually use the SDL's touch API to implement this, even on OS X! Neat.
     
@@ -422,41 +422,41 @@ const Gosu::Touches& Gosu::Input::currentTouches() const
     return none;
 }
 
-double Gosu::Input::accelerometerX() const
+double Gosu::Input::accelerometer_x() const
 {
     return 0.0;
 }
 
-double Gosu::Input::accelerometerY() const
+double Gosu::Input::accelerometer_y() const
 {
     return 0.0;
 }
 
-double Gosu::Input::accelerometerZ() const
+double Gosu::Input::accelerometer_z() const
 {
     return 0.0;
 }
 
 void Gosu::Input::update()
 {
-    pimpl->updateMousePosition();
-    pimpl->dispatchEnqueuedEvents();
-    pimpl->pollGamepads();
+    pimpl->update_mouse_position();
+    pimpl->dispatch_enqueued_events();
+    pimpl->poll_gamepads();
 }
 
-Gosu::TextInput* Gosu::Input::textInput() const
+Gosu::TextInput* Gosu::Input::text_input() const
 {
-    return pimpl->textInput;
+    return pimpl->text_input;
 }
 
-void Gosu::Input::setTextInput(TextInput* textInput)
+void Gosu::Input::set_text_input(TextInput* text_input)
 {
-    if (pimpl->textInput && textInput == nullptr) {
+    if (pimpl->text_input && text_input == nullptr) {
         SDL_StopTextInput();
     }
-    else if (pimpl->textInput == nullptr && textInput) {
+    else if (pimpl->text_input == nullptr && text_input) {
         SDL_StartTextInput();
     }
     
-    pimpl->textInput = textInput;
+    pimpl->text_input = text_input;
 }

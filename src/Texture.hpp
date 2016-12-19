@@ -12,19 +12,19 @@ namespace Gosu
     class Texture
     {
         BlockAllocator allocator_;
-        GLuint texName_;
+        GLuint tex_name_;
         bool retro_;
 
     public:
         Texture(unsigned size, bool retro);
         ~Texture();
         unsigned size() const;
-        GLuint texName() const;
+        GLuint tex_name() const;
         bool retro() const;
         std::unique_ptr<TexChunk>
-            tryAlloc(std::shared_ptr<Texture> ptr, const Bitmap& bmp, unsigned padding);
+            try_alloc(std::shared_ptr<Texture> ptr, const Bitmap& bmp, unsigned padding);
         void block(unsigned x, unsigned y, unsigned width, unsigned height);
         void free(unsigned x, unsigned y, unsigned width, unsigned height);
-        Gosu::Bitmap toBitmap(unsigned x, unsigned y, unsigned width, unsigned height) const;
+        Gosu::Bitmap to_bitmap(unsigned x, unsigned y, unsigned width, unsigned height) const;
     };
 }

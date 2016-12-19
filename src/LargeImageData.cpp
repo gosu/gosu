@@ -7,54 +7,54 @@
 using namespace std;
 
 Gosu::LargeImageData::LargeImageData(const Bitmap& source,
-    unsigned partWidth, unsigned partHeight, unsigned imageFlags)
+    unsigned part_width, unsigned part_height, unsigned image_flags)
 {
-    fullWidth = source.width();
-    fullHeight = source.height();
-    partsX = static_cast<unsigned>(trunc(ceil(1.0 * source.width() / partWidth)));
-    partsY = static_cast<unsigned>(trunc(ceil(1.0 * source.height() / partHeight)));
-    this->partWidth = partWidth;
-    this->partHeight = partHeight;
+    full_width = source.width();
+    full_height = source.height();
+    parts_x = static_cast<unsigned>(trunc(ceil(1.0 * source.width() / part_width)));
+    parts_y = static_cast<unsigned>(trunc(ceil(1.0 * source.height() / part_height)));
+    this->part_width = part_width;
+    this->part_height = part_height;
 
-    parts.resize(partsX * partsY);
+    parts.resize(parts_x * parts_y);
 
-    for (unsigned y = 0; y < partsY; ++y)
-        for (unsigned x = 0; x < partsX; ++x)
+    for (unsigned y = 0; y < parts_y; ++y)
+        for (unsigned x = 0; x < parts_x; ++x)
         {
             // The right-most parts don't necessarily have the full width.
-            unsigned srcWidth = partWidth;
-            if (x == partsX - 1 && source.width() % partWidth != 0)
-                srcWidth = source.width() % partWidth;
+            unsigned src_width = part_width;
+            if (x == parts_x - 1 && source.width() % part_width != 0)
+                src_width = source.width() % part_width;
 
             // Same for the parts on the bottom.
-            unsigned srcHeight = partHeight;
-            if (y == partsY - 1 && source.height() % partHeight != 0)
-                srcHeight = source.height() % partHeight;
+            unsigned src_height = part_height;
+            if (y == parts_y - 1 && source.height() % part_height != 0)
+                src_height = source.height() % part_height;
 
-            unsigned localFlags = ifTileable | imageFlags;
+            unsigned local_flags = IF_TILEABLE | image_flags;
             if (x == 0)
-                localFlags = (localFlags & ~ifTileableLeft) | (imageFlags & ifTileableLeft);
-            if (x == partsX - 1)
-                localFlags = (localFlags & ~ifTileableRight) | (imageFlags & ifTileableRight);
+                local_flags = (local_flags & ~IF_TILEABLE_LEFT) | (image_flags & IF_TILEABLE_LEFT);
+            if (x == parts_x - 1)
+                local_flags = (local_flags & ~IF_TILEABLE_RIGHT) | (image_flags & IF_TILEABLE_RIGHT);
             if (y == 0)
-                localFlags = (localFlags & ~ifTileableTop) | (imageFlags & ifTileableTop);
-            if (y == partsY - 1)
-                localFlags = (localFlags & ~ifTileableBottom) | (imageFlags & ifTileableBottom);
+                local_flags = (local_flags & ~IF_TILEABLE_TOP) | (image_flags & IF_TILEABLE_TOP);
+            if (y == parts_y - 1)
+                local_flags = (local_flags & ~IF_TILEABLE_BOTTOM) | (image_flags & IF_TILEABLE_BOTTOM);
             
-            parts[y * partsX + x].reset(Graphics::createImage(source,
-                x * partWidth, y * partHeight, srcWidth, srcHeight,
-                localFlags).release());
+            parts[y * parts_x + x].reset(Graphics::create_image(source,
+                x * part_width, y * part_height, src_width, src_height,
+                local_flags).release());
         }
 }
 
 int Gosu::LargeImageData::width() const
 {
-    return fullWidth;
+    return full_width;
 }
 
 int Gosu::LargeImageData::height() const
 {
-    return fullHeight;
+    return full_height;
 }
 
 namespace
@@ -69,10 +69,10 @@ namespace
     Gosu::Color ipl(Gosu::Color a, Gosu::Color b, double ratio)
     {
         Gosu::Color result;
-        result.setAlpha(Gosu::round(ipl(a.alpha(), b.alpha(), ratio)));
-        result.setRed  (Gosu::round(ipl(a.red(),   b.red(),   ratio)));
-        result.setGreen(Gosu::round(ipl(a.green(), b.green(), ratio)));
-        result.setBlue (Gosu::round(ipl(a.blue(),  b.blue(),  ratio)));
+        result.set_alpha(Gosu::round(ipl(a.alpha(), b.alpha(), ratio)));
+        result.set_red  (Gosu::round(ipl(a.red(),   b.red(),   ratio)));
+        result.set_green(Gosu::round(ipl(a.green(), b.green(), ratio)));
+        result.set_blue (Gosu::round(ipl(a.blue(),  b.blue(),  ratio)));
         return result;
     }
 }
@@ -84,50 +84,50 @@ void Gosu::LargeImageData::draw(double x1, double y1, Color c1,
     if (parts.empty())
         return;
 
-    reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
+    reorder_coordinates_if_necessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
     
-    for (unsigned py = 0; py < partsY; ++py)
-        for (unsigned px = 0; px < partsX; ++px)
+    for (unsigned py = 0; py < parts_y; ++py)
+        for (unsigned px = 0; px < parts_x; ++px)
         {
-            ImageData& part = *parts[py * partsX + px];
+            ImageData& part = *parts[py * parts_x + px];
 
-            double relXL = static_cast<double>(px * partWidth) / width();
-            double relXR = static_cast<double>(px * partWidth + part.width()) / width();
-            double relYT = static_cast<double>(py * partHeight) / height();
-            double relYB = static_cast<double>(py * partHeight + part.height()) / height();
+            double rel_x_l = static_cast<double>(px * part_width) / width();
+            double rel_x_r = static_cast<double>(px * part_width + part.width()) / width();
+            double rel_y_t = static_cast<double>(py * part_height) / height();
+            double rel_y_b = static_cast<double>(py * part_height + part.height()) / height();
 
-            double absXTL = ipl(ipl(x1, x3, relYT), ipl(x2, x4, relYT), relXL);
-            double absXTR = ipl(ipl(x1, x3, relYT), ipl(x2, x4, relYT), relXR);
-            double absXBL = ipl(ipl(x1, x3, relYB), ipl(x2, x4, relYB), relXL);
-            double absXBR = ipl(ipl(x1, x3, relYB), ipl(x2, x4, relYB), relXR);
+            double abs_x_t_l = ipl(ipl(x1, x3, rel_y_t), ipl(x2, x4, rel_y_t), rel_x_l);
+            double abs_x_t_r = ipl(ipl(x1, x3, rel_y_t), ipl(x2, x4, rel_y_t), rel_x_r);
+            double abs_x_b_l = ipl(ipl(x1, x3, rel_y_b), ipl(x2, x4, rel_y_b), rel_x_l);
+            double abs_x_b_r = ipl(ipl(x1, x3, rel_y_b), ipl(x2, x4, rel_y_b), rel_x_r);
 
-            double absYTL = ipl(ipl(y1, y3, relYT), ipl(y2, y4, relYT), relXL);
-            double absYTR = ipl(ipl(y1, y3, relYT), ipl(y2, y4, relYT), relXR);
-            double absYBL = ipl(ipl(y1, y3, relYB), ipl(y2, y4, relYB), relXL);
-            double absYBR = ipl(ipl(y1, y3, relYB), ipl(y2, y4, relYB), relXR);
+            double abs_y_t_l = ipl(ipl(y1, y3, rel_y_t), ipl(y2, y4, rel_y_t), rel_x_l);
+            double abs_y_t_r = ipl(ipl(y1, y3, rel_y_t), ipl(y2, y4, rel_y_t), rel_x_r);
+            double abs_y_b_l = ipl(ipl(y1, y3, rel_y_b), ipl(y2, y4, rel_y_b), rel_x_l);
+            double abs_y_b_r = ipl(ipl(y1, y3, rel_y_b), ipl(y2, y4, rel_y_b), rel_x_r);
 
-            Color absCTL = ipl(ipl(c1, c3, relYT), ipl(c2, c4, relYT), relXL);
-            Color absCTR = ipl(ipl(c1, c3, relYT), ipl(c2, c4, relYT), relXR);
-            Color absCBL = ipl(ipl(c1, c3, relYB), ipl(c2, c4, relYB), relXL);
-            Color absCBR = ipl(ipl(c1, c3, relYB), ipl(c2, c4, relYB), relXR);
+            Color abs_c_t_l = ipl(ipl(c1, c3, rel_y_t), ipl(c2, c4, rel_y_t), rel_x_l);
+            Color abs_c_t_r = ipl(ipl(c1, c3, rel_y_t), ipl(c2, c4, rel_y_t), rel_x_r);
+            Color abs_c_b_l = ipl(ipl(c1, c3, rel_y_b), ipl(c2, c4, rel_y_b), rel_x_l);
+            Color abs_c_b_r = ipl(ipl(c1, c3, rel_y_b), ipl(c2, c4, rel_y_b), rel_x_r);
 
-            part.draw(absXTL, absYTL, absCTL, absXTR, absYTR, absCTR,
-                absXBL, absYBL, absCBL, absXBR, absYBR, absCBR, z, mode);
+            part.draw(abs_x_t_l, abs_y_t_l, abs_c_t_l, abs_x_t_r, abs_y_t_r, abs_c_t_r,
+                abs_x_b_l, abs_y_b_l, abs_c_b_l, abs_x_b_r, abs_y_b_r, abs_c_b_r, z, mode);
         }
 }
 
-Gosu::Bitmap Gosu::LargeImageData::toBitmap() const
+Gosu::Bitmap Gosu::LargeImageData::to_bitmap() const
 {
     Bitmap bitmap(width(), height());
-    for (int x = 0; x < partsX; ++x)
-        for (int y = 0; y < partsY; ++y)
-            bitmap.insert(parts[y * partsX + x]->toBitmap(), x * partWidth, y * partHeight);
+    for (int x = 0; x < parts_x; ++x)
+        for (int y = 0; y < parts_y; ++y)
+            bitmap.insert(parts[y * parts_x + x]->to_bitmap(), x * part_width, y * part_height);
     return bitmap;
 }
 
-void Gosu::LargeImageData::insert(const Bitmap& bitmap, int atX, int atY)
+void Gosu::LargeImageData::insert(const Bitmap& bitmap, int at_x, int at_y)
 {
-    for (int x = 0; x < partsX; ++x)
-        for (int y = 0; y < partsY; ++y)
-            parts[y * partsX + x]->insert(bitmap, atX - x * partWidth, atY - y * partHeight);
+    for (int x = 0; x < parts_x; ++x)
+        for (int y = 0; y < parts_y; ++y)
+            parts[y * parts_x + x]->insert(bitmap, at_x - x * part_width, at_y - y * part_height);
 }

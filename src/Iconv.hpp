@@ -13,14 +13,14 @@ namespace Gosu
         if (in.empty())
             return Out();
     
-        const size_t bufferLen = 128;
+        const size_t buffer_len = 128;
         typedef typename In::value_type InElem;
         typedef typename Out::value_type OutElem;
 
         static iconv_t cd = iconv_open(to, from);
         
         Out result;
-        OutElem buffer[bufferLen];
+        OutElem buffer[buffer_len];
         
         char* inbuf = const_cast<char*>(reinterpret_cast<const char*>(&in[0]));
         size_t inbytesleft = in.size() * sizeof(InElem);
@@ -40,14 +40,14 @@ namespace Gosu
             else if (ret == static_cast<size_t>(-1) && errno == E2BIG)
             {
                 // Append new characters, reset out buffer, then repeat loop.
-                result.insert(result.end(), buffer, buffer + bufferLen);
+                result.insert(result.end(), buffer, buffer + buffer_len);
                 outbuf = reinterpret_cast<char*>(buffer);
                 outbytesleft = sizeof buffer;
             }
             else
             {
                 // Append what's new in the buffer, then LEAVE loop.
-                result.insert(result.end(), buffer, buffer + bufferLen - outbytesleft / sizeof(OutElem));
+                result.insert(result.end(), buffer, buffer + buffer_len - outbytesleft / sizeof(OutElem));
                 return result;
             }
         }        

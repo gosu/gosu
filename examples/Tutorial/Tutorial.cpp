@@ -12,10 +12,10 @@
 
 enum ZOrder
 {
-    zBackground,
-    zStars,
-    zPlayer,
-    zUI
+    Z_BACKGROUND,
+    Z_STARS,
+    Z_PLAYER,
+    Z_UI
 };
 
 typedef std::vector<Gosu::Image> Animation;
@@ -24,34 +24,34 @@ class Star
 {
     Animation animation;
     Gosu::Color color;
-    double posX, posY;
+    double pos_x, pos_y;
 
 public:
     explicit Star(Animation animation)
     :   animation(animation)
     {
-        color.setAlpha(255);
+        color.set_alpha(255);
         double red = Gosu::random(40, 255);
-        color.setRed(static_cast<Gosu::Color::Channel>(red));
+        color.set_red(static_cast<Gosu::Color::Channel>(red));
         double green = Gosu::random(40, 255);
-        color.setGreen(static_cast<Gosu::Color::Channel>(green));
+        color.set_green(static_cast<Gosu::Color::Channel>(green));
         double blue = Gosu::random(40, 255);
-        color.setBlue(static_cast<Gosu::Color::Channel>(blue));
+        color.set_blue(static_cast<Gosu::Color::Channel>(blue));
 
-        posX = Gosu::random(0, 640);
-        posY = Gosu::random(0, 480);
+        pos_x = Gosu::random(0, 640);
+        pos_y = Gosu::random(0, 480);
     }
 
-    double x() const { return posX; }
-    double y() const { return posY; }
+    double x() const { return pos_x; }
+    double y() const { return pos_y; }
 
     void draw() const
     {
         const Gosu::Image& image =
             animation.at(Gosu::milliseconds() / 100 % animation.size());
 
-        image.draw(posX - image.width() / 2.0, posY - image.height() / 2.0,
-            zStars, 1, 1, color, Gosu::amAdd);
+        image.draw(pos_x - image.width() / 2.0, pos_y - image.height() / 2.0,
+            Z_STARS, 1, 1, color, Gosu::AM_ADD);
     }
 };
 
@@ -59,65 +59,65 @@ class Player
 {
     Gosu::Image image;
     Gosu::Sample beep;
-    double posX, posY, velX, velY, angle;
+    double pos_x, pos_y, vel_x, vel_y, angle;
     unsigned score;
 
 public:
     Player()
-    :   image(Gosu::resourcePrefix() + L"media/Starfighter.bmp"),
-        beep(Gosu::resourcePrefix() + L"media/Beep.wav")
+    :   image(Gosu::resource_prefix() + L"media/Starfighter.bmp"),
+        beep(Gosu::resource_prefix() + L"media/Beep.wav")
     {
-        posX = posY = velX = velY = angle = 0;
+        pos_x = pos_y = vel_x = vel_y = angle = 0;
         score = 0;
     }
 
-    unsigned getScore() const
+    unsigned get_score() const
     {
         return score;
     }
 
     void warp(double x, double y)
     {
-        posX = x;
-        posY = y;
+        pos_x = x;
+        pos_y = y;
     }
 
-    void turnLeft()
+    void turn_left()
     {
         angle -= 4.5;
     }
 
-    void turnRight()
+    void turn_right()
     {
         angle += 4.5;
     }
 
     void accelerate()
     {
-        velX += Gosu::offsetX(angle, 0.5);
-        velY += Gosu::offsetY(angle, 0.5);
+        vel_x += Gosu::offset_x(angle, 0.5);
+        vel_y += Gosu::offset_y(angle, 0.5);
     }
 
     void move()
     {
-        posX = Gosu::wrap(posX + velX, 0.0, 640.0);
-        posY = Gosu::wrap(posY + velY, 0.0, 480.0);
+        pos_x = Gosu::wrap(pos_x + vel_x, 0.0, 640.0);
+        pos_y = Gosu::wrap(pos_y + vel_y, 0.0, 480.0);
 
-        velX *= 0.95;
-        velY *= 0.95;
+        vel_x *= 0.95;
+        vel_y *= 0.95;
     }
 
     void draw() const
     {
-        image.drawRot(posX, posY, zPlayer, angle);
+        image.draw_rot(pos_x, pos_y, Z_PLAYER, angle);
     }
 
-    void collectStars(std::list<Star>& stars)
+    void collect_stars(std::list<Star>& stars)
     {
         std::list<Star>::iterator cur = stars.begin();
         while (cur != stars.end())
         {
-            if (Gosu::distance(posX, posY, cur->x(), cur->y()) < 35)
+            if (Gosu::distance(pos_x, pos_y, cur->x(), cur->y()) < 35)
             {
                 cur = stars.erase(cur);
                 score += 10;
@@ -131,8 +131,8 @@ public:
 
 class GameWindow : public Gosu::Window
 {
-    std::auto_ptr<Gosu::Image> backgroundImage;
-    Animation starAnim;
+    std::unique_ptr<Gosu::Image> background_image;
+    Animation star_anim;
     Gosu::Font font;
 
     Player player;
@@ -142,46 +142,46 @@ public:
     GameWindow()
     :   Window(640, 480), font(20)
     {
-        setCaption(L"Gosu Tutorial Game");
+        set_caption(L"Gosu Tutorial Game");
 
-        std::wstring filename = Gosu::resourcePrefix() + L"media/Space.png";
-        backgroundImage.reset(new Gosu::Image(filename, Gosu::ifTileable));
+        std::wstring filename = Gosu::resource_prefix() + L"media/Space.png";
+        background_image.reset(new Gosu::Image(filename, Gosu::IF_TILEABLE));
 
-        filename = Gosu::resourcePrefix() + L"media/Star.png";
-        starAnim = Gosu::loadTiles(filename, 25, 25);
+        filename = Gosu::resource_prefix() + L"media/Star.png";
+        star_anim = Gosu::load_tiles(filename, 25, 25);
 
         player.warp(320, 240);
     }
 
-    void update()
+    void update() override
     {
-        if (Gosu::Input::down(Gosu::kbLeft) || Gosu::Input::down(Gosu::gpLeft))
-            player.turnLeft();
-        if (Gosu::Input::down(Gosu::kbRight) || Gosu::Input::down(Gosu::gpRight))
-            player.turnRight();
-        if (Gosu::Input::down(Gosu::kbUp) || Gosu::Input::down(Gosu::gpButton0))
+        if (Gosu::Input::down(Gosu::KB_LEFT) || Gosu::Input::down(Gosu::GP_LEFT))
+            player.turn_left();
+        if (Gosu::Input::down(Gosu::KB_RIGHT) || Gosu::Input::down(Gosu::GP_RIGHT))
+            player.turn_right();
+        if (Gosu::Input::down(Gosu::KB_UP) || Gosu::Input::down(Gosu::GP_BUTTON_0))
             player.accelerate();
         player.move();
-        player.collectStars(stars);
+        player.collect_stars(stars);
 
         if (std::rand() % 25 == 0 && stars.size() < 25)
-            stars.push_back(Star(starAnim));
+            stars.push_back(Star(star_anim));
     }
 
-    void draw()
+    void draw() override
     {
         player.draw();
-        backgroundImage->draw(0, 0, zBackground);
+        background_image->draw(0, 0, Z_BACKGROUND);
 
         for (Star& star : stars)
             star.draw();
 
-        font.draw(L"Score: " + std::to_wstring(player.getScore()), 10, 10, zUI, 1, 1, Gosu::Color::YELLOW);
+        font.draw(L"Score: " + std::to_wstring(player.get_score()), 10, 10, Z_UI, 1, 1, Gosu::Color::YELLOW);
     }
 
-    void buttonDown(Gosu::Button btn)
+    void button_down(Gosu::Button btn) override
     {
-        if (btn == Gosu::kbEscape)
+        if (btn == Gosu::KB_ESCAPE)
            close();
     }
 };

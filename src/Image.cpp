@@ -10,143 +10,143 @@ Gosu::Image::Image(const std::wstring& filename, unsigned flags)
 {
 	// Forward.
 	Bitmap bmp;
-	loadImageFile(bmp, filename);
-	Image(bmp, flags).data.swap(data);
+	load_image_file(bmp, filename);
+	Image(bmp, flags).data_.swap(data_);
 }
 
 Gosu::Image::Image(const std::wstring& filename,
-    unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
+    unsigned src_x, unsigned src_y, unsigned src_width, unsigned src_height,
     unsigned flags)
 {
 	// Forward.
 	Bitmap bmp;
-	loadImageFile(bmp, filename);
-	Image(bmp, srcX, srcY, srcWidth, srcHeight, flags).data.swap(data);
+	load_image_file(bmp, filename);
+	Image(bmp, src_x, src_y, src_width, src_height, flags).data_.swap(data_);
 }
 
 Gosu::Image::Image(const Bitmap& source, unsigned flags)
 {
 	// Forward.
-	Image(source, 0, 0, source.width(), source.height(), flags).data.swap(data);
+	Image(source, 0, 0, source.width(), source.height(), flags).data_.swap(data_);
 }
 
 Gosu::Image::Image(const Bitmap& source,
-        unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
+        unsigned src_x, unsigned src_y, unsigned src_width, unsigned src_height,
         unsigned flags)
-:   data(Graphics::createImage(source, srcX, srcY, srcWidth, srcHeight, flags).release())
+:   data_(Graphics::create_image(source, src_x, src_y, src_width, src_height, flags).release())
 {
 }
 
-Gosu::Image::Image(std::unique_ptr<ImageData> data)
-:   data(data.release())
+Gosu::Image::Image(std::unique_ptr<ImageData>&& data)
+: data_(data.release())
 {
-    if (this->data.get() == nullptr)
+    if (this->data_.get() == nullptr)
         throw std::invalid_argument("Gosu::Image cannot be initialized with an ImageData null pointer");
 }
 
 unsigned Gosu::Image::width() const
 {
-    return data->width();
+    return data_->width();
 }
 
 unsigned Gosu::Image::height() const
 {
-    return data->height();
+    return data_->height();
 }
 
 void Gosu::Image::draw(double x, double y, ZPos z,
-    double factorX, double factorY,
+    double scale_x, double scale_y,
     Color c,
     AlphaMode mode) const
 {
-    double x2 = x + width() * factorX;
-    double y2 = y + height() * factorY;
+    double x2 = x + width() * scale_x;
+    double y2 = y + height() * scale_y;
 
-    data->draw(x, y, c, x2, y, c, x, y2, c, x2, y2, c, z, mode);
+    data_->draw(x, y, c, x2, y, c, x, y2, c, x2, y2, c, z, mode);
 }
 
-void Gosu::Image::drawMod(double x, double y, ZPos z,
-    double factorX, double factorY,
+void Gosu::Image::draw_mod(double x, double y, ZPos z,
+    double scale_x, double scale_y,
     Color c1, Color c2, Color c3, Color c4,
     AlphaMode mode) const
 {
-    double x2 = x + width() * factorX;
-    double y2 = y + height() * factorY;
+    double x2 = x + width() * scale_x;
+    double y2 = y + height() * scale_y;
 
-    data->draw(x, y, c1, x2, y, c2, x, y2, c3, x2, y2, c4, z, mode);
+    data_->draw(x, y, c1, x2, y, c2, x, y2, c3, x2, y2, c4, z, mode);
 }
 
-void Gosu::Image::drawRot(double x, double y, ZPos z,
-    double angle, double centerX, double centerY,
-    double factorX, double factorY,
+void Gosu::Image::draw_rot(double x, double y, ZPos z,
+    double angle, double center_x, double center_y,
+    double scale_x, double scale_y,
     Color c,
     AlphaMode mode) const
 {
-    double sizeX = width()  * factorX;
-    double sizeY = height() * factorY;
-    double offsX = offsetX(angle, 1);
-    double offsY = offsetY(angle, 1);
+    double size_x = width()  * scale_x;
+    double size_y = height() * scale_y;
+    double offs_x = offset_x(angle, 1);
+    double offs_y = offset_y(angle, 1);
 
     // Offset to the centers of the original Image's edges when it is rotated
     // by <angle> degrees.
-    double distToLeftX   = +offsY * sizeX * centerX;
-    double distToLeftY   = -offsX * sizeX * centerX;
-    double distToRightX  = -offsY * sizeX * (1 - centerX);
-    double distToRightY  = +offsX * sizeX * (1 - centerX);
-    double distToTopX    = +offsX * sizeY * centerY;
-    double distToTopY    = +offsY * sizeY * centerY;
-    double distToBottomX = -offsX * sizeY * (1 - centerY);
-    double distToBottomY = -offsY * sizeY * (1 - centerY);
+    double dist_to_left_x   = +offs_y * size_x * center_x;
+    double dist_to_left_y   = -offs_x * size_x * center_x;
+    double dist_to_right_x  = -offs_y * size_x * (1 - center_x);
+    double dist_to_right_y  = +offs_x * size_x * (1 - center_x);
+    double dist_to_top_x    = +offs_x * size_y * center_y;
+    double dist_to_top_y    = +offs_y * size_y * center_y;
+    double dist_to_bottom_x = -offs_x * size_y * (1 - center_y);
+    double dist_to_bottom_y = -offs_y * size_y * (1 - center_y);
 
-    data->draw(x + distToLeftX  + distToTopX,
-               y + distToLeftY  + distToTopY, c,
-               x + distToRightX + distToTopX,
-               y + distToRightY + distToTopY, c,
-               x + distToLeftX  + distToBottomX,
-               y + distToLeftY  + distToBottomY, c,
-               x + distToRightX + distToBottomX,
-               y + distToRightY + distToBottomY,
-               c, z, mode);
+    data_->draw(x + dist_to_left_x  + dist_to_top_x,
+                y + dist_to_left_y  + dist_to_top_y, c,
+                 x + dist_to_right_x + dist_to_top_x,
+                y + dist_to_right_y + dist_to_top_y, c,
+                x + dist_to_left_x  + dist_to_bottom_x,
+                y + dist_to_left_y  + dist_to_bottom_y, c,
+                x + dist_to_right_x + dist_to_bottom_x,
+                y + dist_to_right_y + dist_to_bottom_y,
+                c, z, mode);
 }
 
-Gosu::ImageData& Gosu::Image::getData() const
+Gosu::ImageData& Gosu::Image::data() const
 {
-    return *data;
+    return *data_;
 }
 
-std::vector<Gosu::Image> Gosu::loadTiles(const Bitmap& bmp,
-    int tileWidth, int tileHeight, unsigned flags)
+std::vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bmp,
+    int tile_width, int tile_height, unsigned flags)
 {
-    int tilesX, tilesY;
+    int tiles_x, tiles_y;
     std::vector<Image> images;
     
-    if (tileWidth > 0)
-        tilesX = bmp.width() / tileWidth;
+    if (tile_width > 0)
+        tiles_x = bmp.width() / tile_width;
     else
     {
-        tilesX = -tileWidth;
-        tileWidth = bmp.width() / tilesX;
+        tiles_x = -tile_width;
+        tile_width = bmp.width() / tiles_x;
     }
     
-    if (tileHeight > 0)
-        tilesY = bmp.height() / tileHeight;
+    if (tile_height > 0)
+        tiles_y = bmp.height() / tile_height;
     else
     {
-        tilesY = -tileHeight;
-        tileHeight = bmp.height() / tilesY;
+        tiles_y = -tile_height;
+        tile_height = bmp.height() / tiles_y;
     }
     
-    for (int y = 0; y < tilesY; ++y)
-        for (int x = 0; x < tilesX; ++x)
-            images.push_back(Image(bmp, x * tileWidth, y * tileHeight, tileWidth, tileHeight, flags));
+    for (int y = 0; y < tiles_y; ++y)
+        for (int x = 0; x < tiles_x; ++x)
+            images.push_back(Image(bmp, x * tile_width, y * tile_height, tile_width, tile_height, flags));
     
     return images;
 }
 
-std::vector<Gosu::Image> Gosu::loadTiles(const std::wstring& filename,
-    int tileWidth, int tileHeight, unsigned flags)
+std::vector<Gosu::Image> Gosu::load_tiles(const std::wstring& filename,
+    int tile_width, int tile_height, unsigned flags)
 {
     Bitmap bmp;
-    loadImageFile(bmp, filename);
-    return loadTiles(bmp, tileWidth, tileHeight, flags);
+    load_image_file(bmp, filename);
+    return load_tiles(bmp, tile_width, tile_height, flags);
 }

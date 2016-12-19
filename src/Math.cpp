@@ -1,5 +1,4 @@
 #include <Gosu/Math.hpp>
-#include <cmath>
 #include <cstdlib>
 
 double Gosu::random(double min, double max)
@@ -8,34 +7,34 @@ double Gosu::random(double min, double max)
     return rnd / (static_cast<double>(RAND_MAX) + 1) * (max - min) + min;
 }
 
-double Gosu::offsetX(double angle, double radius)
+double Gosu::offset_x(double angle, double radius)
 {
-    return +std::sin(angle / 180 * pi) * radius;
+    return +std::sin(angle / 180 * M_PI) * radius;
 }
 
-double Gosu::offsetY(double angle, double radius)
+double Gosu::offset_y(double angle, double radius)
 {
-    return -std::cos(angle / 180 * pi) * radius;
+    return -std::cos(angle / 180 * M_PI) * radius;
 }
 
-double Gosu::angle(double fromX, double fromY, double toX, double toY,
+double Gosu::angle(double from_x, double from_y, double to_x, double to_y,
     double def)
 {
-    double distX = toX - fromX;
-    double distY = toY - fromY;
+    double dist_x = to_x - from_x;
+    double dist_y = to_y - from_y;
 
-    if (distX == 0 && distY == 0)
+    if (dist_x == 0 && dist_y == 0)
         return def;
     else
-        return normalizeAngle(radiansToGosu(std::atan2(distY, distX)));
+        return normalize_angle(radians_to_gosu(std::atan2(dist_y, dist_x)));
 }
 
-double Gosu::angleDiff(double from, double to)
+double Gosu::angle_diff(double from, double to)
 {
-    return Gosu::normalizeAngle(to - from + 180) - 180;
+    return Gosu::normalize_angle(to - from + 180) - 180;
 }
 
-double Gosu::normalizeAngle(double angle)
+double Gosu::normalize_angle(double angle)
 {
     return wrap(angle, 0.0, 360.0);
 }
@@ -69,5 +68,5 @@ double Gosu::wrap(double value, double min, double max)
 
 double Gosu::distance(double x1, double y1, double x2, double y2)
 {
-    return std::sqrt(distanceSqr(x1, y1, x2, y2));
+    return std::sqrt(distance_sqr(x1, y1, x2, y2));
 }

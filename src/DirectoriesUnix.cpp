@@ -7,7 +7,7 @@
 
 namespace 
 {
-    std::wstring homeDir()
+    std::wstring home_dir()
     {   
         passwd* pwd = getpwuid(geteuid());
         assert(pwd);
@@ -15,27 +15,27 @@ namespace
     }
 }
 
-void Gosu::useResourceDirectory()
+void Gosu::use_resource_directory()
 {
     // Do nothing - the current directory HAS to be correct on Linux.
 }
 
-std::wstring Gosu::resourcePrefix()
+std::wstring Gosu::resource_prefix()
 {
     return std::wstring();
 }
 
-std::wstring Gosu::sharedResourcePrefix()
+std::wstring Gosu::shared_resource_prefix()
 {
     return std::wstring();
 }
 
-std::wstring Gosu::userSettingsPrefix()
+std::wstring Gosu::user_settings_prefix()
 {
-    return homeDir() + L"/.";
+    return home_dir() + L"/.";
 }
 
-std::wstring Gosu::userDocsPrefix()
+std::wstring Gosu::user_documents_prefix()
 {
-    return homeDir() + L"/";
+    return home_dir() + L"/";
 }

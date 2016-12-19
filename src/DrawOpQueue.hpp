@@ -13,14 +13,14 @@
 
 class Gosu::DrawOpQueue
 {
-    TransformStack transformStack;
-    ClipRectStack clipRectStack;
+    TransformStack transform_stack;
+    ClipRectStack clip_rect_stack;
     bool rec;
 
     typedef std::vector<DrawOp> DrawOps;
     DrawOps ops;
     typedef std::vector<std::function<void()> > GLBlocks;
-    GLBlocks glBlocks;
+    GLBlocks gl_blocks;
 
 public:
     DrawOpQueue()
@@ -33,46 +33,46 @@ public:
         return rec;
     }
     
-    void setRecording()
+    void set_recording()
     {
         rec = true;
     }
     
-    void scheduleDrawOp(DrawOp op)
+    void schedule_draw_op(DrawOp op)
     {
-        if (clipRectStack.clippedWorldAway())
+        if (clip_rect_stack.clipped_world_away())
             return;
 
         #ifdef GOSU_IS_OPENGLES
         // No triangles, no lines supported
-        assert (op.verticesOrBlockIndex == 4);
+        assert (op.vertices_or_block_index == 4);
         #endif
 
-        op.renderState.transform = &transformStack.current();
-        if (const ClipRect* cr = clipRectStack.maybeEffectiveRect())
-            op.renderState.clipRect = *cr;
+        op.render_state.transform = &transform_stack.current();
+        if (const ClipRect* cr = clip_rect_stack.maybe_effective_rect())
+            op.render_state.clip_rect = *cr;
         ops.push_back(op);
     }
 
-    void scheduleGL(std::function<void()> glBlock, ZPos z)
+    void gl(std::function<void()> gl_block, ZPos z)
     {
         // TODO: Document this case: Clipped-away GL blocks are *not* being run.
-        if (clipRectStack.clippedWorldAway())
+        if (clip_rect_stack.clipped_world_away())
             return;
 
-        int complementOfBlockIndex = ~(int)glBlocks.size();
-        glBlocks.push_back(glBlock);
+        int complement_of_block_index = ~(int)gl_blocks.size();
+        gl_blocks.push_back(gl_block);
 
         DrawOp op;
-        op.verticesOrBlockIndex = complementOfBlockIndex;
-        op.renderState.transform = &transformStack.current();
-        if (const ClipRect* cr = clipRectStack.maybeEffectiveRect())
-            op.renderState.clipRect = *cr;
+        op.vertices_or_block_index = complement_of_block_index;
+        op.render_state.transform = &transform_stack.current();
+        if (const ClipRect* cr = clip_rect_stack.maybe_effective_rect())
+            op.render_state.clip_rect = *cr;
         op.z = z;
         ops.push_back(op);
     }
 
-    void beginClipping(double x, double y, double width, double height, double screenHeight)
+    void begin_clipping(double x, double y, double width, double height, double screen_height)
     {
         if (recording())
             throw std::logic_error("Clipping is not allowed while creating a macro yet");
@@ -82,41 +82,41 @@ public:
         double left = x, right = x + width;
         double top = y, bottom = y + height;
 
-        applyTransform(transformStack.current(), left, top);
-        applyTransform(transformStack.current(), right, bottom);
+        apply_transform(transform_stack.current(), left, top);
+        apply_transform(transform_stack.current(), right, bottom);
 
-        double physX = std::min(left, right);
-        double physY = std::min(top, bottom);
-        double physWidth = std::abs(left - right);
-        double physHeight = std::abs(top - bottom);
+        double phys_x = std::min(left, right);
+        double phys_y = std::min(top, bottom);
+        double phys_width = std::abs(left - right);
+        double phys_height = std::abs(top - bottom);
 
         // Adjust for OpenGL having the wrong idea of where y=0 is.
-        physY = screenHeight - physY - physHeight;
+        phys_y = screen_height - phys_y - phys_height;
 
-        clipRectStack.beginClipping(physX, physY, physWidth, physHeight);
+        clip_rect_stack.begin_clipping(phys_x, phys_y, phys_width, phys_height);
     }
 
-    void endClipping()
+    void end_clipping()
     {
-        clipRectStack.endClipping();
+        clip_rect_stack.end_clipping();
     }
 
-    void setBaseTransform(const Transform& baseTransform)
+    void set_base_transform(const Transform& base_transform)
     {
-        transformStack.setBaseTransform(baseTransform);
+        transform_stack.set_base_transform(base_transform);
     }
 
-    void pushTransform(const Transform& transform)
+    void push_transform(const Transform& transform)
     {
-        transformStack.push(transform);
+        transform_stack.push(transform);
     }
 
-    void popTransform()
+    void pop_transform()
     {
-        transformStack.pop();
+        transform_stack.pop();
     }
 
-    void performDrawOpsAndCode()
+    void perform_draw_ops_andCode()
     {
         if (recording())
             throw std::logic_error("Flushing to the screen is not allowed while recording a macro");
@@ -132,54 +132,54 @@ public:
         DrawOps::const_iterator current = ops.begin(), last = ops.end() - 1;
         for (; current != last; ++current)
         {
-            manager.setRenderState(current->renderState);
+            manager.set_render_state(current->render_state);
             current->perform(&*(current + 1));
         }
-        manager.setRenderState(last->renderState);
+        manager.set_render_state(last->render_state);
         last->perform(0);
         #else
         for (DrawOps::const_iterator current = ops.begin(), last = ops.end();
             current != last; ++current)
         {
-            manager.setRenderState(current->renderState);
-            if (current->verticesOrBlockIndex >= 0)
+            manager.set_render_state(current->render_state);
+            if (current->vertices_or_block_index >= 0)
                 current->perform(0);
             else
             {
                 // GL code
-                int blockIndex = ~current->verticesOrBlockIndex;
-                assert (blockIndex >= 0);
-                assert (blockIndex < glBlocks.size());
-                glBlocks[blockIndex]();
-                manager.enforceAfterUntrustedGL();
+                int block_index = ~current->vertices_or_block_index;
+                assert (block_index >= 0);
+                assert (block_index < gl_blocks.size());
+                gl_blocks[block_index]();
+                manager.enforce_after_untrusted_gL();
             }
         }
         #endif
     }
 
-    void compileTo(VertexArrays& vas)
+    void compile_to(VertexArrays& vas)
     {
-        if (!glBlocks.empty())
+        if (!gl_blocks.empty())
             throw std::logic_error("Custom OpenGL code cannot be recorded as a macro");
 
         std::stable_sort(ops.begin(), ops.end());
         for (DrawOps::const_iterator op = ops.begin(), end = ops.end(); op != end; ++op)
-            op->compileTo(vas);
+            op->compile_to(vas);
     }
 
     // This retains the current stack of transforms and clippings.
-    void clearQueue()
+    void clear_queue()
     {
-        glBlocks.clear();
+        gl_blocks.clear();
         ops.clear();
     }
 
     // This clears the queue and starts with new stacks. This must not be called
-    // when endClipping/popTransform calls might still be pending.
+    // when end_clipping/pop_transform calls might still be pending.
     void reset()
     {
-        transformStack.reset();
-        clipRectStack.clear();
-        clearQueue();
+        transform_stack.reset();
+        clip_rect_stack.clear();
+        clear_queue();
     }
 };

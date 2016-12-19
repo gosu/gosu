@@ -19,18 +19,18 @@
 namespace Gosu
 {
     //! Returns the width (in pixels) of the user's primary screen.
-    unsigned screenWidth();
+    unsigned screen_width();
     
     //! Returns the height (in pixels) of the user's primary screen.
-    unsigned screenHeight();
+    unsigned screen_height();
     
     //! Returns the maximum width (in 'points') that is available for a non-fullscreen Window.
     //! All windows larger than this size will automatically be shrunk to fit.
-    unsigned availableWidth();
+    unsigned available_width();
     
     //! Returns the maximum height (in 'points') that is available for a non-fullscreen Window.
     //! All windows larger than this size will automatically be shrunk to fit.
-    unsigned availableHeight();
+    unsigned available_height();
     
     //! Convenient all-in-one class that serves as the foundation of a standard
     //! Gosu application. Manages initialization of all of Gosu's core components
@@ -48,10 +48,10 @@ namespace Gosu
         //! \param width Width of the window in points; that is, pixels on a normal display, and 'points' on a
         //! high-resolution display.
         //! \param height See width.
-        //! \param updateInterval Interval in milliseconds between two calls
+        //! \param update_interval Interval in milliseconds between two calls
         //! to the update member function.
         Window(unsigned width, unsigned height, bool fullscreen = false,
-            double updateInterval = 16.666666);
+            double update_interval = 16.666666);
         virtual ~Window();
 
         unsigned width() const;
@@ -59,11 +59,11 @@ namespace Gosu
         bool fullscreen() const;
         void resize(unsigned width, unsigned height, bool fullscreen);
         
-        double updateInterval() const;
-        void setUpdateInterval(double updateInterval);
+        double update_interval() const;
+        void set_update_interval(double update_interval);
 
         std::wstring caption() const;
-        void setCaption(const std::wstring& caption);
+        void set_caption(const std::wstring& caption);
 
         //! Enters a modal loop where the Window is visible on screen and
         //! receives calls to draw, update etc.
@@ -81,7 +81,7 @@ namespace Gosu
         //! Closes the window if it is currently shown.
         void close();
 
-        //! Called every updateInterval milliseconds while the window is being
+        //! Called every update_interval milliseconds while the window is being
         //! shown. Your application's main game logic goes here.
         virtual void update() {}
         //! Called after every update and when the OS wants the window to
@@ -92,35 +92,35 @@ namespace Gosu
         //! This is not a definitive answer. The operating system can still force
         //! the window to redraw itself.
         //! By default, the window is redrawn all the time.
-        virtual bool needsRedraw() const { return true; }
+        virtual bool needs_redraw() const { return true; }
 
         //! If this function returns true, the system arrow cursor is drawn while
         //! over the window.
-        virtual bool needsCursor() const { return false; }
+        virtual bool needs_cursor() const { return false; }
         
         //! This function is called when the window loses focus on some platforms.
-        //! Most importantly, it is called on the iPhone or iPad when the user
+        //! Most importantly, it is called on the i_phone or i_pad when the user
         //! locks the screen.
-        virtual void loseFocus() {}
+        virtual void lose_focus() {}
         
         //! This function is called when the operating system's memory is low.
-        //! So far, it is only called in iOS applications.
-        virtual void releaseMemory() {}
+        //! So far, it is only called in i_o_s applications.
+        virtual void release_memory() {}
 
         //! Called before update when the user pressed a button while the
         //! window had the focus.
-        virtual void buttonDown(Gosu::Button) {}
-        //! Same as buttonDown. Called then the user released a button.
-        virtual void buttonUp(Gosu::Button) {}
+        virtual void button_down(Gosu::Button) {}
+        //! Same as button_down. Called then the user released a button.
+        virtual void button_up(Gosu::Button) {}
         
         // Ignore when SWIG is wrapping this class for Ruby/Gosu.
         #ifndef SWIG
         
-        // Callbacks for touch events. So far these are only used on iOS.
-        virtual void touchBegan(Touch touch) {}
-        virtual void touchMoved(Touch touch) {}
-        virtual void touchEnded(Touch touch) {}
-        virtual void touchCancelled(Touch touch) {}
+        // Callbacks for touch events. So far these are only used on i_o_s.
+        virtual void touch_began(Touch touch) {}
+        virtual void touch_moved(Touch touch) {}
+        virtual void touch_ended(Touch touch) {}
+        virtual void touch_cancelled(Touch touch) {}
         
         const Graphics& graphics() const;
         Graphics& graphics();
@@ -137,5 +137,5 @@ namespace Gosu
 }
 
 #ifdef GOSU_IS_IPHONE
-Gosu::Window& windowInstance();
+Gosu::Window& window_instance();
 #endif

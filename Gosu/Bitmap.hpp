@@ -34,11 +34,11 @@ namespace Gosu
         
         //! Returns the color at the specified position. x and y must be on the
         //! bitmap.
-        Color getPixel(unsigned x, unsigned y) const { return pixels[y * w + x]; }
+        Color get_pixel(unsigned x, unsigned y) const { return pixels[y * w + x]; }
 
         //! Sets the pixel at the specified position to a color. x and y must
         //! be on the bitmap.
-        void setPixel(unsigned x, unsigned y, Color c) { pixels[y * w + x] = c; }
+        void set_pixel(unsigned x, unsigned y, Color c) { pixels[y * w + x] = c; }
 
         //! Inserts a bitmap at the given position. Parts of the inserted
         //! bitmap that would be outside of the target bitmap will be
@@ -48,8 +48,8 @@ namespace Gosu
         //! Inserts a portion of a bitmap at the given position. Parts of the
         //! inserted bitmap that would be outside of the target bitmap will be
         //! clipped away.
-        void insert(const Bitmap& source, int x, int y, unsigned srcX,
-            unsigned srcY, unsigned srcWidth, unsigned srcHeight);
+        void insert(const Bitmap& source, int x, int y, unsigned src_x,
+            unsigned src_y, unsigned src_width, unsigned src_height);
 
         //! Direct access to the array of color values. May be useful for optimized
         //! OpenGL operations.
@@ -58,26 +58,26 @@ namespace Gosu
     };
     
     //! Loads any supported image into a Bitmap.
-    void loadImageFile(Bitmap& bitmap, const std::wstring& filename);
+    void load_image_file(Bitmap& bitmap, const std::wstring& filename);
     //! Loads any supported image into a Bitmap.
-    void loadImageFile(Bitmap& bitmap, Reader input);
+    void load_image_file(Bitmap& bitmap, Reader input);
     
     //! Saves a Bitmap to a file.
-    void saveImageFile(const Bitmap& bitmap, const std::wstring& filename);
+    void save_image_file(const Bitmap& bitmap, const std::wstring& filename);
     //! Saves a Bitmap to an arbitrary resource.
-    void saveImageFile(const Bitmap& bitmap, Writer writer,
-        const std::wstring& formatHint = L"png");
+    void save_image_file(const Bitmap& bitmap, Writer writer,
+        const std::wstring& format_hint = L"png");
 
     //! Set the alpha value of all pixels which are equal to the color key
     //! to zero. Color values are adjusted so that no borders show up when
     //! the image is stretched or rotated.
-    void applyColorKey(Bitmap& bitmap, Color key);
+    void apply_color_key(Bitmap& bitmap, Color key);
     
-    //! The reverse of applyColorKey. Resets all fully transparent pixels by
+    //! The reverse of apply_color_key. Resets all fully transparent pixels by
     //! a background color, makes all other pixels fully opaque.
-    void unapplyColorKey(Bitmap& bitmap, Color background);
+    void unapply_color_key(Bitmap& bitmap, Color background);
     
-    void applyBorderFlags(Bitmap& dest, const Bitmap& source,
-        unsigned srcX, unsigned srcY, unsigned srcWidth, unsigned srcHeight,
-        unsigned borderFlags);
+    void apply_border_flags(Bitmap& dest, const Bitmap& source,
+        unsigned src_x, unsigned src_y, unsigned src_width, unsigned src_height,
+        unsigned border_flags);
 }

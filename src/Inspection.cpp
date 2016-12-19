@@ -8,13 +8,13 @@ namespace Gosu
         int fps, accum;
         unsigned long sec;
 
-        void registerFrame()
+        void register_frame()
         {
             ++accum;
-            unsigned long newSec = Gosu::milliseconds() / 1000;
-            if (sec != newSec)
+            unsigned long new_sec = Gosu::milliseconds() / 1000;
+            if (sec != new_sec)
             {
-                sec = newSec;
+                sec = new_sec;
                 fps = accum;
                 accum = 0;
             }

@@ -18,14 +18,14 @@ namespace Gosu
 {
     namespace
     {
-        Graphics* currentGraphicsPointer = nullptr;
+        Graphics* current_graphics_pointer = nullptr;
         
-        Graphics& currentGraphics()
+        Graphics& current_graphics()
         {
-            if (currentGraphicsPointer == nullptr)
+            if (current_graphics_pointer == nullptr)
                 throw std::logic_error("Gosu::Graphics can only be drawn to while rendering");
             
-            return *currentGraphicsPointer;
+            return *current_graphics_pointer;
         }
         
         typedef std::vector<std::shared_ptr<Texture> > Textures;
@@ -33,7 +33,7 @@ namespace Gosu
         
         DrawOpQueueStack queues;
         
-        DrawOpQueue& currentQueue()
+        DrawOpQueue& current_queue()
         {
             if (queues.empty())
                 throw std::logic_error("There is no rendering queue for this operation");
@@ -44,86 +44,86 @@ namespace Gosu
 
 struct Gosu::Graphics::Impl
 {
-    unsigned virtWidth, virtHeight;
-    unsigned physWidth, physHeight;
-    double blackWidth, blackHeight;
-    Transform baseTransform;
+    unsigned virt_width, virt_height;
+    unsigned phys_width, phys_height;
+    double black_width, black_height;
+    Transform base_transform;
     
-    DrawOpQueueStack warmedUpQueues;
+    DrawOpQueueStack warmed_up_queues;
 
-    void updateBaseTransform()
+    void update_base_transform()
     {
-        double scaleX = 1.0 * physWidth / virtWidth;
-        double scaleY = 1.0 * physHeight / virtHeight;
-        double scaleFactor = std::min(scaleX, scaleY);
+        double scale_x = 1.0 * phys_width / virt_width;
+        double scale_y = 1.0 * phys_height / virt_height;
+        double scale_factor = std::min(scale_x, scale_y);
 
-        Transform scaleTransform = scale(scaleFactor);
-        Transform translateTransform = translate(blackWidth, blackHeight);
-        baseTransform = concat(translateTransform, scaleTransform);
+        Transform scale_transform = scale(scale_factor);
+        Transform translate_transform = translate(black_width, black_height);
+        base_transform = concat(translate_transform, scale_transform);
     }
 };
 
-Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight)
+Gosu::Graphics::Graphics(unsigned phys_width, unsigned phys_height)
 : pimpl(new Impl)
 {
-    pimpl->virtWidth = physWidth;
-    pimpl->virtHeight = physHeight;
-    pimpl->blackWidth = 0;
-    pimpl->blackHeight = 0;
+    pimpl->virt_width = phys_width;
+    pimpl->virt_height = phys_height;
+    pimpl->black_width = 0;
+    pimpl->black_height = 0;
 
     // TODO: Should be merged into RenderState and removed from Graphics.
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glEnable(GL_BLEND);
 
-    setPhysicalResolution(physWidth, physHeight);
+    set_physical_resolution(phys_width, phys_height);
 }
 
 Gosu::Graphics::~Graphics()
 {
-    if (currentGraphicsPointer == this)
-        currentGraphicsPointer = nullptr;
+    if (current_graphics_pointer == this)
+        current_graphics_pointer = nullptr;
 }
 
 unsigned Gosu::Graphics::width() const
 {
-    return pimpl->virtWidth;
+    return pimpl->virt_width;
 }
 
 unsigned Gosu::Graphics::height() const
 {
-    return pimpl->virtHeight;
+    return pimpl->virt_height;
 }
 
-void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight,
-    double horizontalBlackBarWidth, double verticalBlackBarHeight)
+void Gosu::Graphics::set_resolution(unsigned virtual_width, unsigned virtual_height,
+    double horizontal_black_bar_width, double vertical_black_bar_height)
 {
-    if (virtualWidth == 0 || virtualHeight == 0)
+    if (virtual_width == 0 || virtual_height == 0)
         throw std::invalid_argument("Invalid virtual resolution.");
     
-    pimpl->virtWidth = virtualWidth;
-    pimpl->virtHeight = virtualHeight;
-    pimpl->blackWidth = horizontalBlackBarWidth;
-    pimpl->blackHeight = verticalBlackBarHeight;
+    pimpl->virt_width = virtual_width;
+    pimpl->virt_height = virtual_height;
+    pimpl->black_width = horizontal_black_bar_width;
+    pimpl->black_height = vertical_black_bar_height;
 
-    pimpl->updateBaseTransform();
+    pimpl->update_base_transform();
 }
 
-bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
+bool Gosu::Graphics::begin(Gosu::Color clear_with_color)
 {
-    if (currentGraphicsPointer != nullptr)
+    if (current_graphics_pointer != nullptr)
         throw std::logic_error("Cannot nest calls to Gosu::Graphics::begin()");
     
     // Cancel all recording or whatever that might still be in progress...
     queues.clear();
     
-    if (pimpl->warmedUpQueues.size() == 1)
+    if (pimpl->warmed_up_queues.size() == 1)
     {
         // If we already have a "warmed up" queue, use that instead.
         // -> All internals std::vectors will already have a lot of capacity.
         // This helps reduce allocations during normal operation.
         queues.clear();
-        queues.swap(pimpl->warmedUpQueues);
+        queues.swap(pimpl->warmed_up_queues);
     }
     else
     {
@@ -131,13 +131,13 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
         queues.resize(1);
     }
     
-    queues.back().setBaseTransform(pimpl->baseTransform);
+    queues.back().set_base_transform(pimpl->base_transform);
     
-    glClearColor(clearWithColor.red() / 255.f, clearWithColor.green() / 255.f,
-        clearWithColor.blue() / 255.f, clearWithColor.alpha() / 255.f);
+    glClearColor(clear_with_color.red() / 255.f, clear_with_color.green() / 255.f,
+        clear_with_color.blue() / 255.f, clear_with_color.alpha() / 255.f);
     glClear(GL_COLOR_BUFFER_BIT);
     
-    currentGraphicsPointer = this;
+    current_graphics_pointer = this;
     
     return true;
 }
@@ -145,45 +145,45 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 void Gosu::Graphics::end()
 {
     // If recording is in process, cancel it.
-    while (currentQueue().recording()) {
+    while (current_queue().recording()) {
         queues.pop_back();
     }
     
     flush();
     
-    if (pimpl->blackHeight || pimpl->blackWidth) {
-        if (pimpl->blackHeight) {
-            drawQuad(0, -pimpl->blackHeight, Color::BLACK,
-                     width(), -pimpl->blackHeight, Color::BLACK,
+    if (pimpl->black_height || pimpl->black_width) {
+        if (pimpl->black_height) {
+            draw_quad(0, -pimpl->black_height, Color::BLACK,
+                     width(), -pimpl->black_height, Color::BLACK,
                      0, 0, Color::BLACK,
                      width(), 0, Color::BLACK, 0);
-            drawQuad(0, height(), Color::BLACK,
+            draw_quad(0, height(), Color::BLACK,
                      width(), height(), Color::BLACK,
-                     0, height() + pimpl->blackHeight, Color::BLACK,
-                     width(), height() + pimpl->blackHeight, Color::BLACK, 0);
+                     0, height() + pimpl->black_height, Color::BLACK,
+                     width(), height() + pimpl->black_height, Color::BLACK, 0);
         }
-        else if (pimpl->blackWidth) {
-            drawQuad(-pimpl->blackWidth, 0, Color::BLACK,
+        else if (pimpl->black_width) {
+            draw_quad(-pimpl->black_width, 0, Color::BLACK,
                      0, 0, Color::BLACK,
-                     -pimpl->blackWidth, height(), Color::BLACK,
+                     -pimpl->black_width, height(), Color::BLACK,
                      0, height(), Color::BLACK, 0);
-            drawQuad(width(), 0, Color::BLACK,
-                     width() + pimpl->blackWidth, 0, Color::BLACK,
+            draw_quad(width(), 0, Color::BLACK,
+                     width() + pimpl->black_width, 0, Color::BLACK,
                      width(), height(), Color::BLACK,
-                     width() + pimpl->blackWidth, height(), Color::BLACK, 0);
+                     width() + pimpl->black_width, height(), Color::BLACK, 0);
         }
         flush();
     }
     
     glFlush();
     
-    currentGraphicsPointer = nullptr;
+    current_graphics_pointer = nullptr;
     
     // Clear leftover transforms, clip rects etc.
     if (queues.size() == 1)
     {
-        queues.swap(pimpl->warmedUpQueues);
-        pimpl->warmedUpQueues.back().reset();
+        queues.swap(pimpl->warmed_up_queues);
+        pimpl->warmed_up_queues.back().reset();
     }
     else
     {
@@ -193,13 +193,13 @@ void Gosu::Graphics::end()
 
 void Gosu::Graphics::flush()
 {
-    currentQueue().performDrawOpsAndCode();
-    currentQueue().clearQueue();
+    current_queue().perform_draw_ops_andCode();
+    current_queue().clear_queue();
 }
 
-void Gosu::Graphics::beginGL()
+void Gosu::Graphics::begin_gl()
 {
-    if (currentQueue().recording())
+    if (current_queue().recording())
         throw std::logic_error("Custom OpenGL is not allowed while creating a macro");
     
 #ifdef GOSU_IS_OPENGLES
@@ -212,12 +212,12 @@ void Gosu::Graphics::beginGL()
 #endif
 }
 
-void Gosu::Graphics::endGL()
+void Gosu::Graphics::end_gl()
 {
 #ifdef GOSU_IS_OPENGLES
     throw std::logic_error("Custom OpenGL ES is not supported yet");
 #else
-    Graphics& cg = currentGraphics();
+    Graphics& cg = current_graphics();
     
     glPopAttrib();
 
@@ -226,8 +226,8 @@ void Gosu::Graphics::endGL()
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glViewport(0, 0, cg.pimpl->physWidth, cg.pimpl->physHeight);
-    glOrtho(0, cg.pimpl->physWidth, cg.pimpl->physHeight, 0, -1, 1);
+    glViewport(0, 0, cg.pimpl->phys_width, cg.pimpl->phys_height);
+    glOrtho(0, cg.pimpl->phys_width, cg.pimpl->phys_height, 0, -1, 1);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -236,7 +236,7 @@ void Gosu::Graphics::endGL()
 }
 
 #ifdef GOSU_IS_OPENGLES
-void Gosu::Graphics::scheduleGL(const std::function<void()>& functor, Gosu::ZPos z)
+void Gosu::Graphics::gl(const std::function<void()>& functor, Gosu::ZPos z)
 {
     throw std::logic_error("Custom OpenGL ES is not supported yet");
 }
@@ -255,102 +255,102 @@ namespace Gosu
         
         void operator()() const
         {
-            // Inlined beginGL() to avoid flushing.
+            // Inlined begin_gl() to avoid flushing.
             glPushAttrib(GL_ALL_ATTRIB_BITS);
             glDisable(GL_BLEND);
             while (glGetError() != GL_NO_ERROR);
             
             functor();
             
-            graphics.endGL();
+            graphics.end_gl();
         }
     };
 }
 
-void Gosu::Graphics::scheduleGL(const std::function<void()>& functor, Gosu::ZPos z)
+void Gosu::Graphics::gl(const std::function<void()>& functor, Gosu::ZPos z)
 {
-    currentQueue().scheduleGL(RunGLFunctor(currentGraphics(), functor), z);
+    current_queue().gl(RunGLFunctor(current_graphics(), functor), z);
 }
 #endif
 
-void Gosu::Graphics::beginClipping(double x, double y, double width, double height)
+void Gosu::Graphics::begin_clipping(double x, double y, double width, double height)
 {
-    double screenHeight = currentGraphics().pimpl->physHeight;
-    currentQueue().beginClipping(x, y, width, height, screenHeight);
+    double screen_height = current_graphics().pimpl->phys_height;
+    current_queue().begin_clipping(x, y, width, height, screen_height);
 }
 
-void Gosu::Graphics::endClipping()
+void Gosu::Graphics::end_clipping()
 {
-    currentQueue().endClipping();
+    current_queue().end_clipping();
 }
 
-void Gosu::Graphics::beginRecording()
+void Gosu::Graphics::begin_recording()
 {
     queues.resize(queues.size() + 1);
-    currentQueue().setRecording();
+    current_queue().set_recording();
 }
 
-std::unique_ptr<Gosu::ImageData> Gosu::Graphics::endRecording(int width, int height)
+std::unique_ptr<Gosu::ImageData> Gosu::Graphics::end_recording(int width, int height)
 {
-    if (! currentQueue().recording())
+    if (! current_queue().recording())
         throw std::logic_error("No macro recording in progress that can be captured");
     
-    std::unique_ptr<ImageData> result(new Macro(currentQueue(), width, height));
+    std::unique_ptr<ImageData> result(new Macro(current_queue(), width, height));
     queues.pop_back();
     return result;
 }
 
-void Gosu::Graphics::pushTransform(const Gosu::Transform& transform)
+void Gosu::Graphics::push_transform(const Gosu::Transform& transform)
 {
-    currentQueue().pushTransform(transform);
+    current_queue().push_transform(transform);
 }
 
-void Gosu::Graphics::popTransform()
+void Gosu::Graphics::pop_transform()
 {
-    currentQueue().popTransform();
+    current_queue().pop_transform();
 }
 
-void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
+void Gosu::Graphics::draw_line(double x1, double y1, Color c1,
     double x2, double y2, Color c2, ZPos z, AlphaMode mode)
 {
     DrawOp op;
-    op.renderState.mode = mode;
-    op.verticesOrBlockIndex = 2;
+    op.render_state.mode = mode;
+    op.vertices_or_block_index = 2;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
     op.z = z;
     
-    currentQueue().scheduleDrawOp(op);
+    current_queue().schedule_draw_op(op);
 }
 
-void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
+void Gosu::Graphics::draw_triangle(double x1, double y1, Color c1,
     double x2, double y2, Color c2, double x3, double y3, Color c3,
     ZPos z, AlphaMode mode)
 {
     DrawOp op;
-    op.renderState.mode = mode;
-    op.verticesOrBlockIndex = 3;
+    op.render_state.mode = mode;
+    op.vertices_or_block_index = 3;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
     op.vertices[2] = DrawOp::Vertex(x3, y3, c3);
 #ifdef GOSU_IS_OPENGLES
-    op.verticesOrBlockIndex = 4;
+    op.vertices_or_block_index = 4;
     op.vertices[3] = op.vertices[2];
 #endif
     op.z = z;
     
-    currentQueue().scheduleDrawOp(op);
+    current_queue().schedule_draw_op(op);
 }
 
-void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
+void Gosu::Graphics::draw_quad(double x1, double y1, Color c1,
     double x2, double y2, Color c2, double x3, double y3, Color c3,
     double x4, double y4, Color c4, ZPos z, AlphaMode mode)
 {
-    reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
+    reorder_coordinates_if_necessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
     DrawOp op;
-    op.renderState.mode = mode;
-    op.verticesOrBlockIndex = 4;
+    op.render_state.mode = mode;
+    op.vertices_or_block_index = 4;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
 // TODO: Should be harmonized
@@ -363,66 +363,66 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
 #endif
     op.z = z;
     
-    currentQueue().scheduleDrawOp(op);
+    current_queue().schedule_draw_op(op);
 }
 
-void Gosu::Graphics::scheduleDrawOp(const Gosu::DrawOp &op)
+void Gosu::Graphics::schedule_draw_op(const Gosu::DrawOp &op)
 {
-    currentQueue().scheduleDrawOp(op);
+    current_queue().schedule_draw_op(op);
 }
 
-void Gosu::Graphics::setPhysicalResolution(unsigned physWidth, unsigned physHeight)
+void Gosu::Graphics::set_physical_resolution(unsigned phys_width, unsigned phys_height)
 {
-    pimpl->physWidth = physWidth;
-    pimpl->physHeight = physHeight;
+    pimpl->phys_width = phys_width;
+    pimpl->phys_height = phys_height;
     // TODO: Should be merged into RenderState and removed from Graphics.
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glViewport(0, 0, physWidth, physHeight);
+    glViewport(0, 0, phys_width, phys_height);
 #ifdef GOSU_IS_OPENGLES
-    glOrthof(0, physWidth, physHeight, 0, -1, 1);
+    glOrthof(0, phys_width, phys_height, 0, -1, 1);
 #else
-    glOrtho(0, physWidth, physHeight, 0, -1, 1);
+    glOrtho(0, phys_width, phys_height, 0, -1, 1);
 #endif
 
-    pimpl->updateBaseTransform();
+    pimpl->update_base_transform();
 }
 
-std::unique_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
-    const Bitmap& src, unsigned srcX, unsigned srcY,
-    unsigned srcWidth, unsigned srcHeight, unsigned flags)
+std::unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(
+    const Bitmap& src, unsigned src_x, unsigned src_y,
+    unsigned src_width, unsigned src_height, unsigned flags)
 {
-    static const unsigned maxSize = MAX_TEXTURE_SIZE;
+    static const unsigned max_size = MAX_TEXTURE_SIZE;
     
     // Backwards compatibility: This used to be 'bool tileable'.
     if (flags == 1)
-        flags = ifTileable;
+        flags = IF_TILEABLE;
 
-    bool wantsRetro = (flags & ifRetro);
+    bool wants_retro = (flags & IF_RETRO);
     
     // Special case: If the texture is supposed to have hard borders, is
-    // quadratic, has a size that is at least 64 pixels but no more than maxSize
+    // quadratic, has a size that is at least 64 pixels but no more than max_size
     // pixels and a power of two, create a single texture just for this image.
-    if ((flags & ifTileable) == ifTileable &&
-        srcWidth == srcHeight &&
-        (srcWidth & (srcWidth - 1)) == 0 &&
-        srcWidth >= 64 && srcWidth <= maxSize)
+    if ((flags & IF_TILEABLE) == IF_TILEABLE &&
+        src_width == src_height &&
+        (src_width & (src_width - 1)) == 0 &&
+        src_width >= 64 && src_width <= max_size)
     {
-        std::shared_ptr<Texture> texture(new Texture(srcWidth, wantsRetro));
+        std::shared_ptr<Texture> texture(new Texture(src_width, wants_retro));
         std::unique_ptr<ImageData> data;
         
         // Use the source bitmap directly if the source area completely covers
         // it.
-        if (srcX == 0 && srcWidth == src.width() &&
-            srcY == 0 && srcHeight == src.height())
+        if (src_x == 0 && src_width == src.width() &&
+            src_y == 0 && src_height == src.height())
         {
-            data = texture->tryAlloc(texture, src, 0);
+            data = texture->try_alloc(texture, src, 0);
         }
         else
         {
-            Bitmap bmp(srcWidth, srcHeight);
-            bmp.insert(src, 0, 0, srcX, srcY, srcWidth, srcHeight);
-            data = texture->tryAlloc(texture, bmp, 0);
+            Bitmap bmp(src_width, src_height);
+            bmp.insert(src, 0, 0, src_x, src_y, src_width, src_height);
+            data = texture->try_alloc(texture, bmp, 0);
         }
         
         if (!data.get())
@@ -431,26 +431,26 @@ std::unique_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     }
     
     // Too large to fit on a single texture. 
-    if (srcWidth > maxSize - 2 || srcHeight > maxSize - 2)
+    if (src_width > max_size - 2 || src_height > max_size - 2)
     {
-        Bitmap bmp(srcWidth, srcHeight);
-        bmp.insert(src, 0, 0, srcX, srcY, srcWidth, srcHeight);
+        Bitmap bmp(src_width, src_height);
+        bmp.insert(src, 0, 0, src_x, src_y, src_width, src_height);
         std::unique_ptr<ImageData> lidi;
-        lidi.reset(new LargeImageData(bmp, maxSize - 2, maxSize - 2, flags));
+        lidi.reset(new LargeImageData(bmp, max_size - 2, max_size - 2, flags));
         return std::move(lidi);
     }
     
     Bitmap bmp;
-    applyBorderFlags(bmp, src, srcX, srcY, srcWidth, srcHeight, flags);
+    apply_border_flags(bmp, src, src_x, src_y, src_width, src_height, flags);
 
     // Try to put the bitmap into one of the already allocated textures.
     for (auto texture : textures)
     {
-        if (texture->retro() != wantsRetro)
+        if (texture->retro() != wants_retro)
             continue;
         
         std::unique_ptr<ImageData> data;
-        data = texture->tryAlloc(texture, bmp, 1);
+        data = texture->try_alloc(texture, bmp, 1);
         if (data.get())
             return std::move(data);
     }
@@ -458,11 +458,11 @@ std::unique_ptr<Gosu::ImageData> Gosu::Graphics::createImage(
     // All textures are full: Create a new one.
     
     std::shared_ptr<Texture> texture;
-    texture.reset(new Texture(maxSize, wantsRetro));
+    texture.reset(new Texture(max_size, wants_retro));
     textures.push_back(texture);
     
     std::unique_ptr<ImageData> data;
-    data = texture->tryAlloc(texture, bmp, 1);
+    data = texture->try_alloc(texture, bmp, 1);
     if (!data.get())
         throw std::logic_error("Internal texture block allocation error");
 
