@@ -21,25 +21,12 @@ namespace Gosu
     //! Serves as the target of all drawing and provides primitive drawing
     //! functionality.
     //! Usually created internally by Gosu::Window.
-    //
-    // TODO: This class should be separated into a Gosu::Viewport class, which
-    // carries the width/height/fullscreen attributes, and global Gosu::drawFoo
-    // functions. A Window then has a Viewport, and in theory, multiple windows
-    // could have their own viewports etc.
     class Graphics
     {
         struct Impl;
-        
+        // Non-movable (const) to avoid dangling internal references.
         const std::unique_ptr<Impl> pimpl;
         
-    #if defined(GOSU_CPP11_ENABLED)
-        // explicitly forbid copying and moving
-        Graphics(Graphics&&) = delete;
-        Graphics& operator=(Graphics&&) = delete;
-        Graphics(const Graphics&) = delete;
-        Graphics& operator=(const Graphics&) = delete;
-    #endif
-
     public:
         Graphics(unsigned physicalWidth, unsigned physicalHeight);
         ~Graphics();

@@ -62,14 +62,8 @@ namespace Gosu
     class Input
     {
         struct Impl;
+        // Non-movable (const) to avoid dangling internal references.
         const std::unique_ptr<Impl> pimpl;
-    #if defined(GOSU_CPP11_ENABLED)
-        // explicitly forbid copying and moving
-        Input(Input&&) = delete;
-        Input& operator=(Input&&) = delete;
-        Input(const Input&) = delete;
-        Input& operator=(const Input&) = delete;
-    #endif
 
     public:
     #ifdef GOSU_IS_IPHONE

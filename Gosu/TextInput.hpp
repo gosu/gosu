@@ -22,13 +22,8 @@ namespace Gosu
     class TextInput
     {
         struct Impl;
+        // Non-movable (const) to avoid dangling internal references.
         const std::unique_ptr<Impl> pimpl;
-    #if defined(GOSU_CPP11_ENABLED)
-        TextInput(TextInput&&) = delete;
-        TextInput& operator=(TextInput&&) = delete;
-        TextInput(const TextInput&) = delete;
-        TextInput& operator=(const TextInput&) = delete;
-    #endif
         
     public:
         TextInput();

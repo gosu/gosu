@@ -140,17 +140,11 @@ namespace Gosu
     //! truncating its content or allocating room for more data.
     class Resource
     {
-        // Non-copyable
-#if defined(GOSU_CPP11_ENABLED)
+        // Non-copyable and non-movable to avoid slicing.
         Resource(const Resource&) = delete;
         Resource& operator=(const Resource&) = delete;
-        // and non-movable
         Resource(Resource&&) = delete;
         Resource& operator=(Resource&&) = delete;
-#else
-        Resource(const Resource&);
-        Resource& operator=(const Resource&);
-#endif
 
     public:
         Resource()

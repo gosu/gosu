@@ -91,24 +91,18 @@ namespace Gosu
             bool looping = false) const;
     };
 
-    //! Songs are less flexible than samples in that they can only be played
-    //! one at a time and without panning or speed parameters.
+    //! Songs are less flexible than samples. Only Song can be played at any given time,
+    //! and there is no way to control its pan (stereo position) or speed.
     class Song
     {
         class BaseData;
         class ModuleData;
         class StreamData;
         std::unique_ptr<BaseData> data;
-
-#if defined(GOSU_CPP11_ENABLED)
+        
+        // Non-movable to avoid dangling internal references.
         Song(Song&&) = delete;
         Song& operator=(Song&&) = delete;
-        Song(const Song&) = delete;
-        Song& operator=(const Song&) = delete;
-#else
-        Song(const Song&);
-        Song& operator=(const Song&);
-#endif
 
     public:
         //! Constructs a song that can be played on the provided audio system
