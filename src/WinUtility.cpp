@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_WIN)
+
 #include <Gosu/Utility.hpp>
 #include "WinUtility.hpp"
 #include <stdexcept>
@@ -37,3 +40,5 @@ void Gosu::Win::throw_last_error(const std::string& action)
     // Now throw it.
     throw std::runtime_error(message);
  }
+
+#endif

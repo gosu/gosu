@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_IPHONE)
+
 #import <Gosu/Input.hpp>
 #import "AppleUtility.hpp"
 #import <Gosu/TextInput.hpp>
@@ -188,3 +191,5 @@ void Gosu::Input::set_text_input(TextInput* input)
 {
     throw "NYI";
 }
+
+#endif

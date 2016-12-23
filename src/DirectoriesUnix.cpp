@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_X)
+
 #include <Gosu/Directories.hpp>
 #include <Gosu/Utility.hpp>
 #include <cassert>
@@ -39,3 +42,5 @@ std::wstring Gosu::user_documents_prefix()
 {
     return home_dir() + L"/";
 }
+
+#endif

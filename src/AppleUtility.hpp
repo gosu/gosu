@@ -2,11 +2,11 @@
 
 #include <Gosu/Platform.hpp>
 #include <CoreFoundation/CoreFoundation.h>
+#include <stdexcept>
 
 #ifdef __OBJC__
 
 #include <string>
-#include <stdexcept>
 #import <Foundation/Foundation.h>
 
 inline static void throw_os_error(OSStatus status, unsigned line)

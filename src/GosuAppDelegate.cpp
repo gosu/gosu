@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_IPHONE)
+
 #import "GosuAppDelegate.h"
 #import <Gosu/Gosu.hpp>
 
@@ -22,3 +25,5 @@ int main(int argc, char *argv[])
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([GosuAppDelegate class]));
     }
 }
+
+#endif

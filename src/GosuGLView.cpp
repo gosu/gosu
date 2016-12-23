@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_IPHONE)
+
 #import "GosuGLView.h"
 
 #import <QuartzCore/QuartzCore.h>
@@ -126,3 +129,5 @@ namespace Gosu
 }
 
 @end
+
+#endif

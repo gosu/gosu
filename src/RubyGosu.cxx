@@ -3084,7 +3084,7 @@ SWIGINTERN void Gosu_Window_set_mouse_y(Gosu::Window *self,double y){
  * C++ director class methods
  * --------------------------------------------------- */
 
-#include "gosu_wrap.h"
+#include "RubyGosu.h"
 
 SwigDirector_TextInput::SwigDirector_TextInput(VALUE self): Gosu::TextInput(), Swig::Director(self) {
   

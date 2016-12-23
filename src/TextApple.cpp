@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_MAC)
+
 #import <Gosu/Platform.hpp>
 
 #include <Gosu/Text.hpp>
@@ -225,3 +228,5 @@ void Gosu::draw_text(Bitmap& bitmap, const wstring& text, int x, int y,
             }
         }
 }
+
+#endif

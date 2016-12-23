@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if !defined(GOSU_IS_IPHONE)
+
 #include <Gosu/Input.hpp>
 #include <Gosu/TextInput.hpp>
 #include <Gosu/Utility.hpp>
@@ -460,3 +463,5 @@ void Gosu::Input::set_text_input(TextInput* text_input)
     
     pimpl->text_input = text_input;
 }
+
+#endif

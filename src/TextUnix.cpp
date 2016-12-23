@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_X)
+
 #include <Gosu/Text.hpp>
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Utility.hpp>
@@ -274,3 +277,5 @@ void Gosu::draw_text(Bitmap& bitmap, const std::wstring& text, int x, int y,
     else
         SDLTTFRenderer(font_name, font_height).draw_text(bitmap, text, x, y, c);
 }
+
+#endif

@@ -16,47 +16,6 @@ else
   puts 'https://github.com/gosu/gosu/wiki/Getting-Started-on-Linux'
 end
 
-BASE_FILES = %w(
-  Bitmap.cpp
-  BitmapIO.cpp
-  BlockAllocator.cpp
-  Color.cpp
-  DirectoriesUnix.cpp
-  FileUnix.cpp
-  Font.cpp
-  Graphics.cpp
-  Image.cpp
-  Input.cpp
-  Inspection.cpp
-  IO.cpp
-  LargeImageData.cpp
-  Macro.cpp
-  Math.cpp
-  Resolution.cpp
-  TexChunk.cpp
-  Text.cpp
-  TextInput.cpp
-  Texture.cpp
-  Transform.cpp
-  Utility.cpp
-  Window.cpp
-  stb_vorbis.c
-)
-
-MAC_FILES = %w(
-  Audio.mm
-  ResolutionApple.mm
-  TextApple.mm
-  TimingApple.cpp
-  UtilityApple.mm
-)
-
-LINUX_FILES = %w(
-  Audio.cpp
-  TextUnix.cpp
-  TimingUnix.cpp
-)
-
 require 'mkmf'
 require 'fileutils'
 
@@ -66,15 +25,13 @@ $CFLAGS << " -DGOSU_DEPRECATED="
 $CXXFLAGS ||= ""
 $CXXFLAGS << " -std=gnu++11"
 
-$INCFLAGS << " -I../.. -I../../src"
+# For #include <Gosu/...>
+$INCFLAGS << " -I../.."
 
 if `uname`.chomp == 'Darwin'
-  SOURCE_FILES = BASE_FILES + MAC_FILES
-  
   # To make everything work with the Objective C runtime
   $CFLAGS   << " -x objective-c -fobjc-arc -DNDEBUG"
-  # Compile all C++ files as Objective C++ on OS X since mkmf does not support .mm
-  # files.
+  # Compile all C++ files as Objective C++ on macOS since mkmf does not support .mm files.
   $CXXFLAGS << " -x objective-c++ -fobjc-arc -DNDEBUG"
 
   # Explicitly specify libc++ as the standard library.
@@ -95,8 +52,6 @@ if `uname`.chomp == 'Darwin'
   $ARCH_FLAG.gsub! "-arch i386", ""
   CONFIG['LDSHARED'].gsub! "-arch i386", ""
 else
-  SOURCE_FILES = BASE_FILES + LINUX_FILES
-
   if /Raspbian/ =~ `cat /etc/issue` or /BCM2708/ =~ `cat /proc/cpuinfo`
     $INCFLAGS << " -I/opt/vc/include/GLES"
     $INCFLAGS << " -I/opt/vc/include"
@@ -136,4 +91,4 @@ if ruby_newer_than?("1.9.2") and not ruby_newer_than?("2.2.0")
   CONFIG['CXXFLAGS'] = "#$CFLAGS #$CXXFLAGS"
 end
 
-create_makefile 'gosu'
+create_makefile "gosu", "../../src"

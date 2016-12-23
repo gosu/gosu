@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_MAC)
+
 #include <Gosu/Utility.hpp>
 #include <Gosu/Platform.hpp>
 #include "AppleUtility.hpp"
@@ -61,3 +64,5 @@ string Gosu::language()
         return language.UTF8String ?: "en";
     }
 }
+
+#endif

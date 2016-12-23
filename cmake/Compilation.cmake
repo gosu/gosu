@@ -1,86 +1,11 @@
-set(SOURCE_FILES
-    ../src/Bitmap.cpp
-    ../src/BitmapIO.cpp
-    ../src/BlockAllocator.cpp
-    ../src/Color.cpp
-    ../src/Font.cpp
-    ../src/Graphics.cpp
-    ../src/Image.cpp
-    ../src/Input.cpp
-    ../src/Inspection.cpp
-    ../src/IO.cpp
-    ../src/LargeImageData.cpp
-    ../src/Macro.cpp
-    ../src/Math.cpp
-    ../src/Resolution.cpp
-    ../src/TexChunk.cpp
-    ../src/Text.cpp
-    ../src/TextInput.cpp
-    ../src/Texture.cpp
-    ../src/Transform.cpp
-    ../src/Utility.cpp
-    ../src/Window.cpp
-    ../src/stb_vorbis.c
-)
+file(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/*.cpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/../src/*.c)
+file(GLOB HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../Gosu/*.hpp)
 
-if(WIN32)
-    set(SOURCE_FILES ${SOURCE_FILES}
-        ../src/Audio.cpp
-        ../src/DirectoriesWin.cpp
-        ../src/FileWin.cpp
-        ../src/InputWin.cpp
-        ../src/TextTTFWin.cpp
-        ../src/TextWin.cpp
-        ../src/TimingWin.cpp
-        ../src/UtilityWin.cpp
-        ../src/WinUtility.cpp
-    )
-elseif(APPLE)
-    set(SOURCE_FILES ${SOURCE_FILES}
-        ../src/Audio.mm
-        ../src/DirectoriesApple.mm
-        ../src/FileUnix.cpp
-        ../src/ResolutionApple.mm
-        ../src/TextApple.mm
-        ../src/TimingApple.cpp
-        ../src/UtilityApple.mm
-    )
-else()
-    set(SOURCE_FILES ${SOURCE_FILES}
-        ../src/Audio.cpp
-        ../src/DirectoriesUnix.cpp
-        ../src/FileUnix.cpp
-        ../src/TextUnix.cpp
-        ../src/TimingUnix.cpp
-    )
+# Compile all C++ files as Objective C++ on macOS.
+if(APPLE)
+    set_source_files_properties(${SOURCE_FILES} PROPERTIES COMPILE_FLAGS "-x objective-c++")
 endif()
-
-set(HEADER_FILES
-    ../Gosu/Audio.hpp
-    ../Gosu/AutoLink.hpp
-    ../Gosu/Bitmap.hpp
-    ../Gosu/Buttons.hpp
-    ../Gosu/Color.hpp
-    ../Gosu/Directories.hpp
-    ../Gosu/Font.hpp
-    ../Gosu/Fwd.hpp
-    ../Gosu/Gosu.hpp
-    ../Gosu/Graphics.hpp
-    ../Gosu/GraphicsBase.hpp
-    ../Gosu/Image.hpp
-    ../Gosu/ImageData.hpp
-    ../Gosu/Input.hpp
-    ../Gosu/Inspection.hpp
-    ../Gosu/IO.hpp
-    ../Gosu/Math.hpp
-    ../Gosu/Platform.hpp
-    ../Gosu/Text.hpp
-    ../Gosu/TextInput.hpp
-    ../Gosu/Timing.hpp
-    ../Gosu/Utility.hpp
-    ../Gosu/Version.hpp
-    ../Gosu/Window.hpp
-)
 
 # TODO - this should probably go into Installation.cmake?
 # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
@@ -149,7 +74,7 @@ if(MSVC)
     # Disable warning on STL exports
     set_target_properties(gosu PROPERTIES COMPILE_FLAGS "/W4 /wd4251 /wd4127")
 else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 endif()
 
 target_link_libraries(gosu ${GOSU_DEPENDENCIES})

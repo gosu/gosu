@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_WIN)
+
 #include <Gosu/Directories.hpp>
 #include "WinUtility.hpp"
 #include <cwchar>
@@ -67,3 +70,5 @@ std::wstring Gosu::user_documents_prefix()
 {
     return special_folder_path(CSIDL_PERSONAL);
 }
+
+#endif
