@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if !defined(GOSU_IS_IPHONE)
+
 #include <Gosu/TextInput.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/Platform.hpp>
@@ -259,3 +262,5 @@ bool Gosu::TextInput::feed_sdl_event(void* event)
     
     return false;
 }
+
+#endif

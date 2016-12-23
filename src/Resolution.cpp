@@ -45,7 +45,7 @@ unsigned Gosu::available_height()
 {
     return available_size.cy;
 }
-#else
+#elif !defined(GOSU_IS_IPHONE)
 #include <SDL.h>
 
 namespace

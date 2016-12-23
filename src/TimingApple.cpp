@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_MAC)
+
 #include <Gosu/Timing.hpp>
 #include <unistd.h>
 
@@ -25,3 +28,5 @@ unsigned long Gosu::milliseconds()
     uint64_t runtime = mach_absolute_time() - first_tick;
 	return runtime * info.numer / info.denom / 1000000.0;
 }
+
+#endif

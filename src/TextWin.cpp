@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_WIN)
+
 #define _WIN32_WINNT 0x0500 
 #include <windows.h>
 
@@ -184,3 +187,5 @@ void Gosu::draw_text(Bitmap& bitmap, const std::wstring& text, int x, int y,
                 bitmap.set_pixel(x + rel_x, y + rel_y, pixel);
         }
 }
+
+#endif

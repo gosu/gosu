@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_WIN)
+
 #include <windows.h>
 #include <exception>
 #include <string>
@@ -65,3 +68,5 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         return EXIT_FAILURE;
     }
 }
+
+#endif

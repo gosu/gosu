@@ -25,7 +25,7 @@ set_target_properties(TextInputExample PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PAR
 if(MSVC)
 	set_target_properties(TextInputExample PROPERTIES COMPILE_FLAGS "/W4 /wd4127")
 else()
-	set_target_properties(TextInputExample PROPERTIES COMPILE_FLAGS "-g -std=c++0x")
+	set_target_properties(TextInputExample PROPERTIES COMPILE_FLAGS "-g -std=gnu++11")
 endif()
 
 find_package(Gosu REQUIRED development)

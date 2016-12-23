@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_WIN)
+
 #include <windows.h>
 #include <cassert>
 #include <cstdio>
@@ -247,3 +250,5 @@ std::wstring get_name_from_ttf_file(const std::wstring& filename)
     return Gosu::widen(lpFontProps->csName);
 }
 }
+
+#endif

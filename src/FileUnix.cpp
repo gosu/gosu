@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if !defined(GOSU_IS_WIN)
+
 #include <Gosu/IO.hpp>
 #include <Gosu/Utility.hpp>
 #include <stdexcept>
@@ -98,3 +101,5 @@ void Gosu::File::write(std::size_t offset, std::size_t length,
     lseek(pimpl->fd, offset, SEEK_SET);
     ::write(pimpl->fd, source_buffer, length);
 }
+
+#endif

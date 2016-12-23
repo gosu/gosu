@@ -19,10 +19,8 @@ EOS
   s.extensions = FileList["ext/**/extconf.rb"]
   # Ruby frontend for C++ extension
   s.files += Dir["lib/**/*.rb"]
-  # SWIG-generated Ruby wrapper
-  s.files += Dir["ext/gosu/gosu_wrap.{h,cxx}"]
-  # osu source code
-  s.files += Dir["src/**/*.{h,hpp,c,cpp,m,mm}"]
+  # Gosu source code including the Ruby interface (.cxx)
+  s.files += Dir["src/**/*.{h,hpp,c,cpp,m,mm,cxx}"]
   # Gosu header files, for compiling the gem & for using inline C++ from Ruby
   s.files += Dir["Gosu/*.hpp"]
   # RDoc setup

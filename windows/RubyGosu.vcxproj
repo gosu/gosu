@@ -569,7 +569,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\ext\gosu\gosu_wrap.cxx" />
+    <ClCompile Include="..\src\RubyGosu.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Gosu.vcxproj">

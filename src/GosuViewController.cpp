@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_IPHONE)
+
 #import "GosuViewController.h"
 #import "GosuGLView.h"
 #import "GraphicsImpl.hpp"
@@ -209,3 +212,5 @@ static void handle_audio_interruption(void *unused, UInt32 inInterruptionState)
 }
 
 @end
+
+#endif

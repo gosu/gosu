@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if !defined(GOSU_IS_IPHONE)
+
 #include <Gosu/Gosu.hpp>
 #include <SDL.h>
 #include <cstdlib>
@@ -286,3 +289,5 @@ Gosu::Input& Gosu::Window::input()
 {
     return *pimpl->input;
 }
+
+#endif

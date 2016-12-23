@@ -4,8 +4,8 @@
 #include <Gosu/Audio.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/IO.hpp>
-#include <Gosu/Utility.hpp>
 #include <Gosu/Platform.hpp>
+#include <Gosu/Utility.hpp>
 
 #include <cassert>
 #include <cstdlib>

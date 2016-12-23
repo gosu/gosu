@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_X)
+
 #include <Gosu/Timing.hpp>
 #include <unistd.h>
 #include <sys/time.h>
@@ -22,3 +25,5 @@ unsigned long Gosu::milliseconds()
     // No, don't ask why this is an unsigned long then :)
     return (tp.tv_usec / 1000UL + tp.tv_sec * 1000UL - start) & 0x1fffffff;
 }
+
+#endif

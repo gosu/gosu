@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_WIN)
+
 #include <Gosu/IO.hpp>
 #include <Gosu/Utility.hpp>
 #include "WinUtility.hpp"
@@ -81,3 +84,5 @@ void Gosu::File::write(std::size_t offset, std::size_t length,
     DWORD dummy;
     Win::check(::WriteFile(pimpl->handle, source_buffer, length, &dummy, 0));
 }
+
+#endif

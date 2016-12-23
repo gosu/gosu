@@ -16,7 +16,8 @@ Pod::Spec.new do |s|
     ss.requires_arc          = true
   
     # Ignore Gosu using deprecated Gosu APIs internally.
-    ss.compiler_flags = '-DGOSU_DEPRECATED= -Wno-conversion'
+    # Compile all .cpp files as Objective-C++ so we can use ObjC frameworks.
+    ss.compiler_flags = '-DGOSU_DEPRECATED= -x objective-c++'
   
     ss.libraries      = 'iconv'
     ss.frameworks     = 'AudioToolbox', 'OpenAL'
@@ -30,45 +31,7 @@ Pod::Spec.new do |s|
     ss.osx.xcconfig       = { 'OTHER_LDFLAGS' => '/usr/local/lib/libSDL2.a' }
   
     ss.public_header_files = 'Gosu/*.hpp'
-    ss.source_files = ['Gosu/*.hpp', 'src/*.{h,hpp}'] +
-      %w(src/Audio.mm
-         src/Bitmap.cpp
-         src/BitmapIO.cpp
-         src/BlockAllocator.cpp
-         src/Color.cpp
-         src/DirectoriesApple.mm
-         src/FileUnix.cpp
-         src/Font.cpp
-         src/Graphics.cpp
-         src/Image.cpp
-         src/Inspection.cpp
-         src/IO.cpp
-         src/LargeImageData.cpp
-         src/Macro.cpp
-         src/Math.cpp
-         src/TexChunk.cpp
-         src/Text.cpp
-         src/TextApple.mm
-         src/Texture.cpp
-         src/TimingApple.cpp
-         src/Transform.cpp
-         src/Utility.cpp
-         src/UtilityApple.mm
-         src/stb_vorbis.c)
-
-    ss.osx.source_files =
-      %w(src/Input.cpp
-         src/Resolution.cpp
-         src/ResolutionApple.mm
-         src/TextInput.cpp
-         src/Window.cpp)
-   
-    ss.ios.source_files =
-      %w(src/GosuGLView.mm
-         src/GosuViewController.mm
-         src/InputUIKit.mm
-         src/Inspection.cpp
-         src/WindowUIKit.mm)
+    ss.source_files = ['Gosu/*.hpp', 'src/*.{h,hpp,c,cpp}']
    
     # This path needs to be preserved because it is included by Audio.mm (yuck)
     ss.preserve_paths = 'src/Audio.cpp'

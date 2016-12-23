@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_MAC) && !defined(GOSU_IS_IPHONE)
+
 #include <Gosu/Gosu.hpp>
 #import <AppKit/AppKit.h>
 
@@ -15,3 +18,5 @@ unsigned Gosu::available_height()
 {
     return available_content_frame.size.height;
 }
+
+#endif

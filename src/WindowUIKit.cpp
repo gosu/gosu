@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_IPHONE)
+
 #include <Gosu/Gosu.hpp>
 #include "AppleUtility.hpp"
 #include "GosuViewController.h"
@@ -149,3 +152,5 @@ void *Gosu::Window::UIWindow() const
 {
     return (__bridge void *)pimpl->window;
 }
+
+#endif

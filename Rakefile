@@ -21,7 +21,6 @@ COMMON_RUBY_FILES = COMMON_FILES + FileList[
   'examples/*.rb',
   'examples/media/*',
   'reference/**/*.rb',
-  'reference/**/*.mdown',
 ]
 
 GOSU_VERSION = ENV['GOSU_RELEASE_VERSION'] || '0.0.0'
@@ -37,7 +36,7 @@ end
 Dir.glob('./rake/*.rb').sort.each { |task| require task }
 
 task :swig do
-  sh "swig -c++ -ruby -autorename ext/gosu/gosu.swg"
+  sh "swig -c++ -ruby -autorename -o src/RubyGosu.cxx ext/gosu/gosu.i"
   sh "patch --no-backup-if-mismatch -p0 <ext/gosu/gosu_SWIG_RENAME_PATCH.patch"
 end
 

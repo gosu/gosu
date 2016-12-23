@@ -1,3 +1,6 @@
+#include <Gosu/Platform.hpp>
+#if defined(GOSU_IS_MAC)
+
 #import <Gosu/Directories.hpp>
 #import <Gosu/Utility.hpp>
 #import "AppleUtility.hpp"
@@ -68,3 +71,5 @@ std::wstring Gosu::shared_resource_prefix()
     return result;
 #endif
 }
+
+#endif
