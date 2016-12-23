@@ -19,9 +19,13 @@ class ::Numeric
 end
 
 # Backwards compatibility:
-# Import constants into Gosu::Button.
-module Gosu::Button
-  Gosu.constants.each { |c| const_set(c, Gosu.const_get(c)) }
+# Support for KbLeft instead of KB_LEFT and Gp3Button2 instead of GP_3_BUTTON_2.
+# Also import old-style constants into Gosu::Button.
+module Gosu::Button; end
+Gosu.constants.grep(/^KB_|MS_|GP_/).each do |c|
+  old_name = c.to_s.capitalize.gsub(/_(.)/) { $1.upcase }
+  Gosu.const_set old_name, Gosu.const_get(c)
+  Gosu::Button.const_set old_name, Gosu.const_get(c)
 end
 
 # Backwards compatibility:
