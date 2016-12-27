@@ -244,7 +244,7 @@ namespace Gosu
         const std::unique_ptr<Impl> pimpl;
 
     public:
-        explicit File(const std::wstring& filename, FileMode mode = FM_READ);
+        explicit File(const std::string& filename, FileMode mode = FM_READ);
         ~File();
 
         std::size_t size() const;
@@ -256,7 +256,7 @@ namespace Gosu
     };
 
     //! Loads a whole file into a buffer.
-    void load_file(Buffer& buffer, const std::wstring& filename);
+    void load_file(Buffer& buffer, const std::string& filename);
     //! Creates or overwrites a file with the contents of a buffer.
-    void save_file(const Buffer& buffer, const std::wstring& filename);
+    void save_file(const Buffer& buffer, const std::string& filename);
 }

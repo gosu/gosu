@@ -138,10 +138,9 @@ namespace Gosu
         }
         
     public:
-        AudioToolboxFile(const std::wstring& filename)
+        AudioToolboxFile(const std::string& filename)
         {
-            NSString *utf8_filename = [NSString stringWithUTF8String:wstring_to_utf8(filename).c_str()];
-            NSURL *URL = [NSURL fileURLWithPath:utf8_filename];
+            NSURL *URL = [NSURL fileURLWithPath:[NSString stringWithUTF8String:filename.c_str()]];
             CHECK_OS(ExtAudioFileOpenURL((__bridge CFURLRef)URL, &file_));
             
             file_id_ = 0;

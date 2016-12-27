@@ -12,7 +12,7 @@ namespace Gosu
 {
     //! Returns the name of a neutral font that is available on the current
     //! platform.
-    std::wstring default_font_name();
+    std::string default_font_name();
 
     //! Returns the width an unformatted line of text would span on a bitmap if it were drawn using
     //! draw_text with the same arguments. This is a very low-level function that does not understand
@@ -20,7 +20,7 @@ namespace Gosu
     //! \param text Unformatted text.
     //! \param font_name Name of a system font, or a filename to a TTF file (must contain '/').
     unsigned text_width(const std::wstring& text,
-        const std::wstring& font_name, unsigned font_height,
+        const std::string& font_name, unsigned font_height,
         unsigned font_flags = 0);
 
     //! Draws a line of unformatted text on a bitmap. This is a very low-level function that does not understand
@@ -31,7 +31,7 @@ namespace Gosu
     //! \param font_flags Binary combination of members of the FontFlags
     //! enum.
     void draw_text(Bitmap& bitmap, const std::wstring& text, int x, int y,
-        Color c, const std::wstring& font_name, unsigned font_height,
+        Color c, const std::string& font_name, unsigned font_height,
         unsigned font_flags = 0);
 
     //! Creates a bitmap that is filled with a line of formatted text given to the function.
@@ -42,7 +42,7 @@ namespace Gosu
     //! \param font_flags Binary combination of members of the FontFlags
     //! enum.
     Bitmap create_text(const std::wstring& text,
-        const std::wstring& font_name, unsigned font_height,
+        const std::string& font_name, unsigned font_height,
         unsigned font_flags = 0);
 
     //! Creates a bitmap that is filled with the formatted text given to the function.
@@ -58,7 +58,7 @@ namespace Gosu
     //! \param font_flags Binary combination of members of the FontFlags
     //! enum.
     Bitmap create_text(const std::wstring& text,
-        const std::wstring& font_name, unsigned font_height, 
+        const std::string& font_name, unsigned font_height, 
         int line_spacing, unsigned width, Alignment align,
         unsigned font_flags = 0);
     

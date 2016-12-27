@@ -12,7 +12,7 @@ using namespace std;
 
 struct Gosu::Font::Impl
 {
-    wstring name;
+    string name;
     unsigned height, flags;
 
     // Unicode planes of 2^16 characters each. On Windows, where wchar_t is only 16 bits wide, only
@@ -80,7 +80,7 @@ struct Gosu::Font::Impl
     }
 };
 
-Gosu::Font::Font(unsigned font_height, const wstring& font_name, unsigned font_flags)
+Gosu::Font::Font(unsigned font_height, const string& font_name, unsigned font_flags)
 : pimpl(new Impl)
 {
     pimpl->name = font_name;
@@ -88,7 +88,7 @@ Gosu::Font::Font(unsigned font_height, const wstring& font_name, unsigned font_f
     pimpl->flags = font_flags;
 }
 
-wstring Gosu::Font::name() const
+string Gosu::Font::name() const
 {
     return pimpl->name;
 }

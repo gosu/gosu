@@ -33,7 +33,7 @@ struct Gosu::File::Impl
     }
 };
 
-Gosu::File::File(const std::wstring& filename, FileMode mode)
+Gosu::File::File(const std::string& filename, FileMode mode)
 : pimpl(new Impl)
 {
     int flags;
@@ -53,10 +53,10 @@ Gosu::File::File(const std::wstring& filename, FileMode mode)
 
     // TODO: Locking flags?
 
-    pimpl->fd = open(narrow(filename).c_str(), flags,
+    pimpl->fd = open(filename.c_str(), flags,
         S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
     if (pimpl->fd < 0)
-        throw std::runtime_error("Cannot open file " + narrow(filename));
+        throw std::runtime_error("Cannot open file " + filename);
     
     if (mode == FM_READ && size() > 0)
         pimpl->mapping = mmap(nullptr, size(), PROT_READ, 0, pimpl->fd, 0);

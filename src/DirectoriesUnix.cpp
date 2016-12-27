@@ -8,39 +8,36 @@
 #include <unistd.h>
 #include <pwd.h>
 
-namespace 
-{
-    std::wstring home_dir()
-    {   
-        passwd* pwd = getpwuid(geteuid());
-        assert(pwd);
-        return Gosu::widen(pwd->pw_dir);
-    }
+static std::string home_dir()
+{   
+    passwd* pwd = getpwuid(geteuid());
+    assert(pwd && pwd->pw_dir);
+    return pwd->pw_dir;
 }
 
 void Gosu::use_resource_directory()
 {
-    // Do nothing - the current directory HAS to be correct on Linux.
+    // Do nothing, we expect the user to have the correct cwd on Linux.
 }
 
-std::wstring Gosu::resource_prefix()
+std::string Gosu::resource_prefix()
 {
-    return std::wstring();
+    return std::string();
 }
 
-std::wstring Gosu::shared_resource_prefix()
+std::string Gosu::shared_resource_prefix()
 {
-    return std::wstring();
+    return std::string();
 }
 
-std::wstring Gosu::user_settings_prefix()
+std::string Gosu::user_settings_prefix()
 {
-    return home_dir() + L"/.";
+    return home_dir() + "/.";
 }
 
-std::wstring Gosu::user_documents_prefix()
+std::string Gosu::user_documents_prefix()
 {
-    return home_dir() + L"/";
+    return home_dir() + "/";
 }
 
 #endif

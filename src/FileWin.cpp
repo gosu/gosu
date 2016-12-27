@@ -6,7 +6,7 @@
 #include "WinUtility.hpp"
 #include <windows.h>
 
-// IMPR: Error checking
+// TODO: Error checking
 
 struct Gosu::File::Impl
 {
@@ -24,7 +24,7 @@ struct Gosu::File::Impl
     }
 };
 
-Gosu::File::File(const std::wstring& filename, FileMode mode)
+Gosu::File::File(const std::string& filename, FileMode mode)
 : pimpl(new Impl)
 {
     DWORD access;
@@ -43,10 +43,11 @@ Gosu::File::File(const std::wstring& filename, FileMode mode)
     DWORD share_mode = FILE_SHARE_READ;
     DWORD creation_disp = (mode == FM_READ) ? OPEN_EXISTING : OPEN_ALWAYS;
 
-    pimpl->handle = ::CreateFile(filename.c_str(), access, share_mode, 0,
+    std::wstring wfilename = utf8_to_wstring(filename);
+    pimpl->handle = ::CreateFile(wfilename.c_str(), access, share_mode, 0,
         creation_disp, FILE_ATTRIBUTE_NORMAL, 0);
     if (pimpl->handle == INVALID_HANDLE_VALUE)
-        Win::throw_last_error("opening " + Gosu::narrow(filename));
+        Win::throw_last_error("opening " + filename);
     if (mode == FM_REPLACE)
         resize(0);
 }

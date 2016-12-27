@@ -27,17 +27,17 @@ namespace
 
     // If a font is a filename, loads the font and returns its family name that can be used
     // like any system font. Otherwise, just returns the family name.
-    std::wstring normalize_font(const std::wstring& font_name)
+    std::string normalize_font(const std::string& font_name)
     {
         // On iOS, we have no support for loading font files yet. However if you register your fonts
         // via your app's Info.plist, you should be able to reference them by their name.
         #ifdef GOSU_IS_IPHONE
         return font_name;
         #else
-        static map<wstring, wstring> family_of_files;
+        static map<string, string> family_of_files;
         
         // Not a path name: It is already a family name
-        if (font_name.find(L"/") == std::wstring::npos) {
+        if (font_name.find("/") == std::string::npos) {
             return font_name;
         }
         
@@ -47,10 +47,7 @@ namespace
         }
         
         CFRef<CFStringRef> url_string(
-            CFStringCreateWithBytes(NULL,
-                reinterpret_cast<const UInt8*>(font_name.c_str()),
-                font_name.length() * sizeof(wchar_t),
-                kCFStringEncodingUTF32LE, NO));
+            CFStringCreateWithCString(NULL, font_name.c_str(), kCFStringEncodingUTF8));
         CFRef<CFURLRef> url(
             CFURLCreateWithFileSystemPath(NULL, url_string.obj(), kCFURLPOSIXPathStyle, YES));
         if (!url.get()) {
@@ -71,20 +68,20 @@ namespace
             (CFStringRef)CTFontDescriptorCopyAttribute(ref, kCTFontFamilyNameAttribute));
         
         const char *utf8_font_name = [(__bridge NSString *)font_name_str.obj() UTF8String];
-        return family_of_files[font_name] = Gosu::utf8_to_wstring(utf8_font_name);
+        return family_of_files[font_name] = std::string(utf8_font_name ?: "");
         #endif
     }
 
-    OSXFont* get_font(wstring font_name, unsigned font_flags, double height)
+    OSXFont* get_font(string font_name, unsigned font_flags, double height)
     {
         font_name = normalize_font(font_name);
     
-        static map<pair<wstring, pair<unsigned, double> >, OSXFont*> used_fonts;
+        static map<pair<string, pair<unsigned, double> >, OSXFont*> used_fonts;
         
         OSXFont* result = used_fonts[make_pair(font_name, make_pair(font_flags, height))];
         if (!result)
         {
-            NSString *name = [NSString stringWithUTF8String:Gosu::wstring_to_utf8(font_name).c_str()];
+            NSString *name = [NSString stringWithUTF8String:font_name.c_str()];
             #ifdef GOSU_IS_IPHONE
             result = [OSXFont fontWithName:name size:height];
             #else
@@ -108,9 +105,9 @@ namespace
     }
 }
 
-wstring Gosu::default_font_name()
+string Gosu::default_font_name()
 {
-    return L"Arial";
+    return "Arial";
 }
 
 #ifndef GOSU_IS_IPHONE
@@ -134,7 +131,7 @@ namespace
 #endif
 
 unsigned Gosu::text_width(const wstring& text,
-    const wstring& font_name, unsigned font_height, unsigned font_flags)
+    const string& font_name, unsigned font_height, unsigned font_flags)
 {
     if (text.find_first_of(L"\r\n") != wstring::npos) {
         throw std::invalid_argument("the argument to text_width cannot contain line breaks");
@@ -157,7 +154,7 @@ unsigned Gosu::text_width(const wstring& text,
 }
 
 void Gosu::draw_text(Bitmap& bitmap, const wstring& text, int x, int y,
-    Color c, const wstring& font_name, unsigned font_height,
+    Color c, const string& font_name, unsigned font_height,
     unsigned font_flags)
 {
     if (text.find_first_of(L"\r\n") != wstring::npos) {

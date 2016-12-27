@@ -199,8 +199,7 @@ namespace Gosu
         // Try to treat as filename first.
         if (rb_respond_to(val, rb_intern("to_str"))) {
             VALUE to_str = rb_funcall(val, rb_intern("to_str"), 0);
-            const char* filename_utf8 = StringValuePtr(to_str);
-            std::wstring filename = Gosu::utf8_to_wstring(filename_utf8);
+            const char* filename = StringValuePtr(to_str);
             load_image_file(bitmap, filename);
             return;
         }
@@ -529,20 +528,20 @@ namespace Gosu
 }
 
 // Font
-%ignore Gosu::Font::Font(unsigned height, const std::wstring& font_name, unsigned flags);
+%ignore Gosu::Font::Font(unsigned height, const std::string& font_name, unsigned flags);
 %ignore Gosu::Font::set_image(wchar_t wc, unsigned font_flags, const Gosu::Image& image);
 %ignore Gosu::Font::set_image(wchar_t wc, const Gosu::Image& image);
 
 %include "../../Gosu/Font.hpp"
 %extend Gosu::Font {
-    Font(Gosu::Window& window, const std::wstring& font_name, unsigned height)
+    Font(Gosu::Window& window, const std::string& font_name, unsigned height)
     {
         return new Gosu::Font(height, font_name);
     }
     
     Font(unsigned height, VALUE options = 0)
     {
-        std::wstring font_name = Gosu::default_font_name();
+        std::string font_name = Gosu::default_font_name();
         
         if (options) {
             Check_Type(options, T_HASH);
@@ -557,8 +556,7 @@ namespace Gosu
                 VALUE value = rb_hash_aref(options, key);
                 if (!strcmp(key_string, "name")) {
                     VALUE rb_string = rb_obj_as_string(value);
-                    char* utf8_string = StringValueCStr(rb_string);
-                    font_name = Gosu::utf8_to_wstring(utf8_string);
+                    font_name = StringValueCStr(rb_string);
                 }
                 // TODO - would be nice & trivial to support :bold => false and :italic => true here
                 else {
@@ -597,8 +595,8 @@ namespace Gosu
     }
 }
 
-%ignore Gosu::Image::Image(const std::wstring& filename, unsigned flags);
-%ignore Gosu::Image::Image(const std::wstring& filename, unsigned src_x, unsigned src_y,
+%ignore Gosu::Image::Image(const std::string& filename, unsigned flags);
+%ignore Gosu::Image::Image(const std::string& filename, unsigned src_x, unsigned src_y,
                            unsigned src_width, unsigned src_height, unsigned flags);
 %ignore Gosu::Image::Image(const Bitmap& source, unsigned flags);
 %ignore Gosu::Image::Image(const Bitmap& source, unsigned src_x, unsigned src_y, unsigned src_width,
@@ -687,7 +685,7 @@ namespace Gosu
     %newobject from_text;
     static Gosu::Image* from_text(const std::wstring& text, unsigned font_height, VALUE options = 0)
     {
-        std::wstring font = Gosu::default_font_name();
+        std::string font = Gosu::default_font_name();
         unsigned width = 0xfefefefe;
         unsigned spacing = 0;
         Gosu::Alignment align = Gosu::AL_LEFT;
@@ -705,8 +703,7 @@ namespace Gosu
                 
                 VALUE value = rb_hash_aref(options, key);
                 if (!strcmp(key_string, "font")) {
-                    const char* font_uTF8 = StringValuePtr(value);
-                    font = Gosu::utf8_to_wstring(font_uTF8);
+                    font = StringValuePtr(value);
                 }
                 else if (!strcmp(key_string, "align")) {
                     const char* cstr = Gosu::cstr_from_symbol(value);
@@ -821,7 +818,7 @@ namespace Gosu
         return $self->height();
     }
     
-    void save(const std::wstring& filename) const
+    void save(const std::string& filename) const
     {
         Gosu::save_image_file($self->data().to_bitmap(), filename);
     }

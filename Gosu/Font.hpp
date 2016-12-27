@@ -29,11 +29,11 @@ namespace Gosu
         //! \param font_height Height of the font, in pixels.
         //! \param font_flags Flags used to render individual characters of
         //!        the font.
-        Font(unsigned font_height, const std::wstring& font_name = default_font_name(),
+        Font(unsigned font_height, const std::string& font_name = default_font_name(),
             unsigned font_flags = FF_BOLD);
         
         //! Returns the name of the font that was used to create it.
-        std::wstring name() const;
+        std::string name() const;
         
         //! Returns the height of the font, in pixels.
         unsigned height() const;

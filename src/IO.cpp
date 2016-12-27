@@ -44,14 +44,14 @@ void Gosu::Buffer::write(std::size_t offset, std::size_t length,
         std::memcpy(&buf[offset], source_buffer, length);
 }
 
-void Gosu::load_file(Buffer& buffer, const std::wstring& filename)
+void Gosu::load_file(Buffer& buffer, const std::string& filename)
 {
     File file(filename);
     buffer.resize(file.size());
     file.read(0, buffer.size(), buffer.data());
 }
 
-void Gosu::save_file(const Buffer& buffer, const std::wstring& filename)
+void Gosu::save_file(const Buffer& buffer, const std::string& filename)
 {
     File file(filename, FM_REPLACE);
     file.write(0, buffer.size(), buffer.data());

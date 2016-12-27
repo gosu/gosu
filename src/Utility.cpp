@@ -2,6 +2,7 @@
 #include <Gosu/Platform.hpp>
 #include <cstddef>
 #include <cstdlib>
+#include <cstring>
 #include <cwctype>
 #include <cwchar>
 #include <stdexcept>

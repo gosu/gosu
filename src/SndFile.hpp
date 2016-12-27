@@ -5,6 +5,11 @@
 #include <Gosu/Utility.hpp>
 #include <sndfile.h>
 
+#ifdef GOSU_IS_WIN
+#define NOMINMAX
+#include <windows.h>
+#endif
+
 namespace Gosu
 {
     class SndFile : public AudioFile
@@ -109,15 +114,17 @@ namespace Gosu
                 throw std::runtime_error(std::string(sf_strerror(NULL)));
         }
         
-        SndFile(const std::wstring& filename)
+        SndFile(const std::string& filename)
         :   file(NULL), reader(buffer.front_reader())
         {
             info.format = 0;
+            // TODO: Not sure if this is still necessary?
+            // Can libsndfile open UTF-8 filenames on Windows?
             #ifdef GOSU_IS_WIN
             load_file(buffer, filename);
             file = sf_open_virtual(io_interface(), SFM_READ, &info, this);
             #else
-            file = sf_open(wstring_to_utf8(filename).c_str(), SFM_READ, &info);
+            file = sf_open(filename.c_str(), SFM_READ, &info);
             #endif
             if (!file)
                 throw std::runtime_error(std::string(sf_strerror(NULL)));

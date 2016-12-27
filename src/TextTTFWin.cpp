@@ -56,7 +56,7 @@ struct TT_NAME_RECORD
 
 namespace Gosu
 {
-std::wstring get_name_from_ttf_file(const std::wstring& filename)
+std::string get_name_from_ttf_file(const std::wstring& filename)
 {
 	FONT_PROPERTIES_ANSI fp;
 	FONT_PROPERTIES_ANSI * lpFontProps = &fp;
@@ -73,9 +73,9 @@ std::wstring get_name_from_ttf_file(const std::wstring& filename)
 
 	if (hFile == INVALID_HANDLE_VALUE)
 	{
-        TRACE(_T("ERROR:  failed to open '%s'\n"), Gosu::narrow(filename).c_str());
+        TRACE(_T("ERROR:  failed to open '%s'\n"), wstring_to_utf8(filename).c_str());
 		TRACE(_T("ERROR: %s failed, GetLastError() = 0x%x\n"), _T("CreateFile"), (int)GetLastError());
-		return filename;
+		return wstring_to_utf8(filename);
 	}
 
 	// get the file size
@@ -85,7 +85,7 @@ std::wstring get_name_from_ttf_file(const std::wstring& filename)
 	{
 		TRACE(_T("ERROR: %s failed\n"), _T("GetFileSize"));
 		::CloseHandle(hFile);
-		return filename;
+		return wstring_to_utf8(filename);
 	}
 
 	//TRACE(_T("dwFileSize = %d\n"), dwFileSize);
@@ -103,7 +103,7 @@ std::wstring get_name_from_ttf_file(const std::wstring& filename)
 	{
 		TRACE(_T("ERROR: %s failed\n"), _T("CreateFileMapping"));
 		::CloseHandle(hFile);
-		return filename;
+		return wstring_to_utf8(filename);
 	}
 
 	LPBYTE lpMapAddress = (LPBYTE) ::MapViewOfFile(hMappedFile,		// handle to file-mapping object
@@ -117,7 +117,7 @@ std::wstring get_name_from_ttf_file(const std::wstring& filename)
 		TRACE(_T("ERROR: %s failed\n"), _T("MapViewOfFile"));
 		::CloseHandle(hMappedFile);
 		::CloseHandle(hFile);
-		return filename;
+		return wstring_to_utf8(filename);
 	}
 
 	BOOL bRetVal = FALSE;
@@ -133,7 +133,7 @@ std::wstring get_name_from_ttf_file(const std::wstring& filename)
 
 	//check is this is a true type font and the version is 1.0
 	if (ttOffsetTable.uMajorVersion != 1 || ttOffsetTable.uMinorVersion != 0)
-		return L"";
+		return wstring_to_utf8(filename);
 
 	TT_TABLE_DIRECTORY tblDir;
 	memset(&tblDir, 0, sizeof(TT_TABLE_DIRECTORY));
@@ -244,10 +244,7 @@ std::wstring get_name_from_ttf_file(const std::wstring& filename)
 	::CloseHandle(hMappedFile);
 	::CloseHandle(hFile);
 
-	if (lpFontProps->csName[0] == 0)
-		strcpy(lpFontProps->csName, lpFontProps->csFamily);
-
-    return Gosu::widen(lpFontProps->csName);
+    return lpFontProps->csName[0] ? lpFontProps->csName : lpFontProps->csFamily;
 }
 }
 
