@@ -44,16 +44,6 @@ string Gosu::wstring_to_utf8(const std::wstring& ws)
         return str.UTF8String ?: string();
     }
 }
-
-wstring Gosu::widen(const string& s)
-{
-    return utf8_to_wstring(s);
-}
-
-string Gosu::narrow(const std::wstring& ws)
-{
-    return wstring_to_utf8(ws);
-}
 #endif
 
 string Gosu::language()

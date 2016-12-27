@@ -21,14 +21,14 @@ namespace Gosu
         //!
         //! A color key of #ff00ff is automatically applied to BMP image files.
         //! For more flexibility, use the corresponding constructor that uses a Bitmap object.
-        explicit Image(const std::wstring& filename,
+        explicit Image(const std::string& filename,
             unsigned image_flags = IF_SMOOTH);
         
         //! Loads a portion of the the image at the given filename..
         //!
         //! A color key of #ff00ff is automatically applied to BMP image files.
         //! For more flexibility, use the corresponding constructor that uses a Bitmap object.
-        Image(const std::wstring& filename, unsigned src_x,
+        Image(const std::string& filename, unsigned src_x,
               unsigned src_y, unsigned src_width, unsigned src_height,
               unsigned image_flags = IF_SMOOTH);
         
@@ -91,7 +91,7 @@ namespace Gosu
     //! \param tile_width If positive, specifies the width of one tile in pixels.
     //! If negative, the bitmap is divided into -tile_width rows.
     //! \param tile_height See tile_width.
-    std::vector<Gosu::Image> load_tiles(const std::wstring& filename,
+    std::vector<Gosu::Image> load_tiles(const std::string& filename,
         int tile_width, int tile_height, unsigned image_flags = IF_SMOOTH);
     #endif
 }

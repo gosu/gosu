@@ -7,15 +7,14 @@
 
 namespace Gosu
 {
-    //! Converts an std::string into an std::wstring.
+    //! Converts an UTF-8 to UCS-4 or UTF-16, depending on the platform's interpretation of wstring.
     std::wstring utf8_to_wstring(const std::string& utf8);
-    //! Converts an std::wstring into an std::string.
+    //! Converts an UCS-4 or UTF-16 to UTF-8, depending on the platform's interpretation of wstring.
     std::string wstring_to_utf8(const std::wstring& ws);
     
-    //! Converts an std::string into an std::wstring using local encoding.
-    std::wstring widen(const std::string& s);
-    //! Converts an std::wstring into an std::string using local encoding.
-    std::string narrow(const std::wstring& ws);
+    //! Returns true if the filename has the given extension.
+    //! The comparison is case-insensitive, but you must pass the extension in lower case.
+    bool has_extension(const std::string& filename, const char* extension);
     
     //! Returns the user's preferred language, at the moment of calling the function. Expect return
     //! values such as 'en_US', 'de_DE.UTF-8', 'ja', 'zh-Hans'.

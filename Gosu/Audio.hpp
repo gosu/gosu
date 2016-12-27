@@ -56,7 +56,7 @@ namespace Gosu
     public:
         //! Constructs a sample that can be played on the specified audio
         //! system and loads the sample from a file.
-        explicit Sample(const std::wstring& filename);
+        explicit Sample(const std::string& filename);
         
         //! Constructs a sample that can be played on the specified audio
         //! system and loads the sample data from a stream.
@@ -101,7 +101,7 @@ namespace Gosu
         //! Constructs a song that can be played on the provided audio system
         //! and loads the song from a file. The type is determined from the
         //! filename.
-        explicit Song(const std::wstring& filename);
+        explicit Song(const std::string& filename);
         
         //! Constructs a song of the specified type that can be played on the
         //! provided audio system and loads the song data from a stream.

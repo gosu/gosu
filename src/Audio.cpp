@@ -45,7 +45,7 @@ namespace
                magic_bytes[2] == 'g' && magic_bytes[3] == 'S';
     }
 
-    bool is_ogg_file(const wstring& filename)
+    bool is_ogg_file(const string& filename)
     {
         Gosu::File file(filename);
         return is_ogg_file(file.front_reader());
@@ -174,7 +174,7 @@ private:
     SampleData& operator=(const SampleData&);
 };
 
-Gosu::Sample::Sample(const std::wstring& filename)
+Gosu::Sample::Sample(const std::string& filename)
 {
     CONSTRUCTOR_BEGIN;
 
@@ -285,10 +285,9 @@ class Gosu::Song::ModuleData : public BaseData
     }
     
 public:
-    ModuleData(const std::wstring& filename)
+    ModuleData(const std::string& filename)
     {
-        std::string utf8_filename = Gosu::wstring_to_utf8(filename);
-        NSURL *URL = [NSURL fileURLWithPath:[NSString stringWithUTF8String:utf8_filename.c_str()]];
+        NSURL *URL = [NSURL fileURLWithPath:[NSString stringWithUTF8String:filename.c_str()]];
         player = [[AVAudioPlayer alloc] initWithContentsOfURL:URL error:NULL];
     }
     
@@ -361,7 +360,7 @@ class Gosu::Song::StreamData : public BaseData
     }
     
 public:
-    StreamData(const std::wstring& filename)
+    StreamData(const std::string& filename)
     {
         if (is_ogg_file(filename))
         {
@@ -491,29 +490,29 @@ public:
         }
         else if (!active)
         {
-            // We got starved and there is nothing to play left.
-            // In any case, shut down the playback logic for a moment.
+            // We got starved and there is nothing left to play.
             stop();
 
             if (cur_song_looping)
+            {
                 // Start anew.
                 play(true);
+            }
             else
+            {
                 // Let the world know we're finished.
                 cur_song = nullptr;
+            }
         }
     }
 };
 
-// TODO: Move into proper internal header
-namespace Gosu { bool is_extension(const wchar_t* str, const wchar_t* ext); }
-
-Gosu::Song::Song(const std::wstring& filename)
+Gosu::Song::Song(const std::string& filename)
 {
 #ifdef GOSU_IS_IPHONE
-    if (is_extension(filename.c_str(), L".mp3") ||
-        is_extension(filename.c_str(), L".aac") ||
-        is_extension(filename.c_str(), L".m4a"))
+    if (has_extension(filename, ".mp3") ||
+        has_extension(filename, ".aac") ||
+        has_extension(filename, ".m4a"))
     {
         data.reset(new ModuleData(filename));
     }

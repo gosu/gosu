@@ -58,15 +58,15 @@ namespace Gosu
     };
     
     //! Loads any supported image into a Bitmap.
-    void load_image_file(Bitmap& bitmap, const std::wstring& filename);
+    void load_image_file(Bitmap& bitmap, const std::string& filename);
     //! Loads any supported image into a Bitmap.
     void load_image_file(Bitmap& bitmap, Reader input);
     
     //! Saves a Bitmap to a file.
-    void save_image_file(const Bitmap& bitmap, const std::wstring& filename);
+    void save_image_file(const Bitmap& bitmap, const std::string& filename);
     //! Saves a Bitmap to an arbitrary resource.
     void save_image_file(const Bitmap& bitmap, Writer writer,
-        const std::wstring& format_hint = L"png");
+        const std::string& format_hint = "png");
 
     //! Set the alpha value of all pixels which are equal to the color key
     //! to zero. Color values are adjusted so that no borders show up when

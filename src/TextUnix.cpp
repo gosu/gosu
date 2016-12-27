@@ -14,9 +14,9 @@
 #include <cstring>
 #include <stdexcept>
 
-std::wstring Gosu::default_font_name()
+std::string Gosu::default_font_name()
 {
-    return L"sans";
+    return "sans";
 }
 
 namespace Gosu
@@ -54,7 +54,7 @@ namespace Gosu
                 pango_attribute_destroy(attr);
         }
         unsigned text_width(const std::wstring& text,
-            const std::wstring& font_face, unsigned font_height,
+            const std::string& font_face, unsigned font_height,
             unsigned font_flags)
         {
             g_type_init();
@@ -63,14 +63,14 @@ namespace Gosu
 
             context = pango_ft2_get_context(dpi_x, dpi_y);
 
-            pango_context_set_language(context, pango_language_from_string ("en_US"));
+            pango_context_set_language(context, pango_language_from_string("en_US"));
             PangoDirection init_dir = PANGO_DIRECTION_LTR;
             pango_context_set_base_dir(context, init_dir);
 
             font_description = pango_font_description_new();
 
             pango_font_description_set_family(font_description,
-                g_strdup(narrow(font_face).c_str()));
+                g_strdup(font_face.c_str()));
             pango_font_description_set_style(font_description,
                 (font_flags & FF_ITALIC) ? PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL);
             pango_font_description_set_variant(font_description, PANGO_VARIANT_NORMAL);
@@ -120,7 +120,7 @@ namespace Gosu
             return width;
         }
         void draw_text(Bitmap& bitmap, const std::wstring& text, int x, int y,
-            Color c, const std::wstring& font_face, unsigned font_height,
+            Color c, const std::string& font_face, unsigned font_height,
             unsigned font_flags)
         {
             text_width(text, font_face, font_height, font_flags);
@@ -213,24 +213,24 @@ namespace Gosu
         };
         
     public:
-        SDLTTFRenderer(const std::wstring& font_name, unsigned font_height)
+        SDLTTFRenderer(const std::string& font_name, unsigned font_height)
         {
             static int init_result = TTF_Init();
             if (init_result < 0)
                 throw std::runtime_error("Could not initialize SDL_TTF");
 
-	          // Try to open the font at the given path
-	          font = TTF_OpenFont(Gosu::wstring_to_utf8(font_name).c_str(), font_height);
-	          if (!font)
-                throw std::runtime_error("Could not open TTF file " + Gosu::wstring_to_utf8(font_name));
+            // Try to open the font at the given path
+            font = TTF_OpenFont(font_name.c_str(), font_height);
+            if (!font)
+                throw std::runtime_error("Could not open TTF file " + font_name);
             
             // Re-open with scaled height so that ascenders/descenders fit
             int too_large_height = TTF_FontHeight(font);
             int real_height = font_height * font_height / too_large_height;
             TTF_CloseFont(font);
-	          font = TTF_OpenFont(Gosu::wstring_to_utf8(font_name).c_str(), real_height);
-	          if (!font)
-                throw std::runtime_error("Could not open TTF file " + Gosu::wstring_to_utf8(font_name));
+            font = TTF_OpenFont(font_name.c_str(), real_height);
+            if (!font)
+                throw std::runtime_error("Could not open TTF file " + font_name);
         }
         
         ~SDLTTFRenderer()
@@ -253,26 +253,26 @@ namespace Gosu
 }
 
 unsigned Gosu::text_width(const std::wstring& text,
-    const std::wstring& font_name, unsigned font_height,
+    const std::string& font_name, unsigned font_height,
     unsigned font_flags)
 {
     if (text.find_first_of(L"\r\n") != std::wstring::npos)
         throw std::invalid_argument("the argument to text_width cannot contain line breaks");
     
-    if (font_name.find(L"/") == std::wstring::npos)
+    if (font_name.find("/") == std::string::npos)
         return PangoRenderer().text_width(text, font_name, font_height, font_flags);
     else
         return SDLTTFRenderer(font_name, font_height).text_width(text);
 }
 
 void Gosu::draw_text(Bitmap& bitmap, const std::wstring& text, int x, int y,
-    Color c, const std::wstring& font_name, unsigned font_height,
+    Color c, const std::string& font_name, unsigned font_height,
     unsigned font_flags)
 {
     if (text.find_first_of(L"\r\n") != std::wstring::npos)
         throw std::invalid_argument("the argument to draw_text cannot contain line breaks");
     
-    if (font_name.find(L"/") == std::wstring::npos)
+    if (font_name.find("/") == std::string::npos)
         PangoRenderer().draw_text(bitmap, text, x, y, c, font_name, font_height, font_flags);
     else
         SDLTTFRenderer(font_name, font_height).draw_text(bitmap, text, x, y, c);

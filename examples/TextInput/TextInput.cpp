@@ -134,7 +134,7 @@ public:
     Window()
     : Gosu::Window(300, 200)
     {
-        set_caption(L"Text Input Example");
+        set_caption("Text Input Example");
         
         Gosu::Font font(20);
         

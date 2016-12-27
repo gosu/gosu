@@ -2292,8 +2292,7 @@ namespace Gosu
         // Try to treat as filename first.
         if (rb_respond_to(val, rb_intern("to_str"))) {
             VALUE to_str = rb_funcall(val, rb_intern("to_str"), 0);
-            const char* filename_utf8 = StringValuePtr(to_str);
-            std::wstring filename = Gosu::utf8_to_wstring(filename_utf8);
+            const char* filename = StringValuePtr(to_str);
             load_image_file(bitmap, filename);
             return;
         }
@@ -2729,11 +2728,76 @@ SWIG_AsVal_int (VALUE obj, int *val)
   return res;
 }
 
-SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_0(Gosu::Window &window,std::wstring const &font_name,unsigned int height){
+
+SWIGINTERN int
+SWIG_AsCharPtrAndSize(VALUE obj, char** cptr, size_t* psize, int *alloc)
+{
+  if (TYPE(obj) == T_STRING) {
+    char *cstr = StringValuePtr(obj); 
+    size_t size = RSTRING_LEN(obj) + 1;
+    if (cptr)  {
+      if (alloc) {
+	if (*alloc == SWIG_NEWOBJ) {
+	  *cptr = reinterpret_cast< char* >(memcpy((new char[size]), cstr, sizeof(char)*(size)));
+	} else {
+	  *cptr = cstr;
+	  *alloc = SWIG_OLDOBJ;
+	}
+      }
+    }
+    if (psize) *psize = size;
+    return SWIG_OK;
+  } else {
+    swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
+    if (pchar_descriptor) {
+      void* vptr = 0;
+      if (SWIG_ConvertPtr(obj, &vptr, pchar_descriptor, 0) == SWIG_OK) {
+	if (cptr) *cptr = (char *)vptr;
+	if (psize) *psize = vptr ? (strlen((char*)vptr) + 1) : 0;
+	if (alloc) *alloc = SWIG_OLDOBJ;
+	return SWIG_OK;
+      }
+    }
+  }  
+  return SWIG_TypeError;
+}
+
+
+SWIGINTERN int
+SWIG_AsPtr_std_string (VALUE obj, std::string **val) 
+{
+  char* buf = 0 ; size_t size = 0; int alloc = SWIG_OLDOBJ;
+  if (SWIG_IsOK((SWIG_AsCharPtrAndSize(obj, &buf, &size, &alloc)))) {
+    if (buf) {
+      if (val) *val = new std::string(buf, size - 1);
+      if (alloc == SWIG_NEWOBJ) delete[] buf;
+      return SWIG_NEWOBJ;
+    } else {
+      if (val) *val = 0;
+      return SWIG_OLDOBJ;
+    }
+  } else {
+    static int init = 0;
+    static swig_type_info* descriptor = 0;
+    if (!init) {
+      descriptor = SWIG_TypeQuery("std::string" " *");
+      init = 1;
+    }
+    if (descriptor) {
+      std::string *vptr;
+      int res = SWIG_ConvertPtr(obj, (void**)&vptr, descriptor, 0);
+      if (SWIG_IsOK(res) && val) *val = vptr;
+      return res;
+    }
+  }
+  return SWIG_ERROR;
+}
+
+SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_0(Gosu::Window &window,std::string const &font_name,unsigned int height){
         return new Gosu::Font(height, font_name);
     }
 SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_1(unsigned int height,VALUE options=0){
-        std::wstring font_name = Gosu::default_font_name();
+        std::string font_name = Gosu::default_font_name();
         
         if (options) {
             Check_Type(options, T_HASH);
@@ -2748,8 +2812,7 @@ SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_1(unsigned int height,VALUE options=0
                 VALUE value = rb_hash_aref(options, key);
                 if (!strcmp(key_string, "name")) {
                     VALUE rb_string = rb_obj_as_string(value);
-                    char* utf8_string = StringValueCStr(rb_string);
-                    font_name = Gosu::utf8_to_wstring(utf8_string);
+                    font_name = StringValueCStr(rb_string);
                 }
                 // TODO - would be nice & trivial to support :bold => false and :italic => true here
                 else {
@@ -2886,7 +2949,7 @@ SWIGINTERN Gosu::Image *Gosu_Image_subimage(Gosu::Image *self,int x,int y,int w,
         return image_data.get() ? new Gosu::Image(std::move(image_data)) : nullptr;
     }
 SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::wstring const &text,unsigned int font_height,VALUE options=0){
-        std::wstring font = Gosu::default_font_name();
+        std::string font = Gosu::default_font_name();
         unsigned width = 0xfefefefe;
         unsigned spacing = 0;
         Gosu::Alignment align = Gosu::AL_LEFT;
@@ -2904,8 +2967,7 @@ SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::wstring const &text,unsigned i
                 
                 VALUE value = rb_hash_aref(options, key);
                 if (!strcmp(key_string, "font")) {
-                    const char* font_uTF8 = StringValuePtr(value);
-                    font = Gosu::utf8_to_wstring(font_uTF8);
+                    font = StringValuePtr(value);
                 }
                 else if (!strcmp(key_string, "align")) {
                     const char* cstr = Gosu::cstr_from_symbol(value);
@@ -3027,7 +3089,7 @@ SWIGINTERN unsigned int Gosu_Image_columns(Gosu::Image const *self){
 SWIGINTERN unsigned int Gosu_Image_rows(Gosu::Image const *self){
         return self->height();
     }
-SWIGINTERN void Gosu_Image_save(Gosu::Image const *self,std::wstring const &filename){
+SWIGINTERN void Gosu_Image_save(Gosu::Image const *self,std::string const &filename){
         Gosu::save_image_file(self->data().to_bitmap(), filename);
     }
 SWIGINTERN void Gosu_Image_insert(Gosu::Image *self,VALUE source,int x,int y){
@@ -3618,7 +3680,7 @@ fail:
 
 SWIGINTERN VALUE
 _wrap_default_font_name(int argc, VALUE *argv, VALUE self) {
-  std::wstring result;
+  std::string result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -3633,7 +3695,7 @@ _wrap_default_font_name(int argc, VALUE *argv, VALUE self) {
     }
   }
   {
-    vresult = rb_str_new2(Gosu::wstring_to_utf8(result).c_str());
+    vresult = rb_str_new2((&result)->c_str());
     ENFORCE_UTF8(vresult);
   }
   return vresult;
@@ -5037,7 +5099,7 @@ _wrap_Font_name(int argc, VALUE *argv, VALUE self) {
   Gosu::Font *arg1 = (Gosu::Font *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  std::wstring result;
+  std::string result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -5056,10 +5118,7 @@ _wrap_Font_name(int argc, VALUE *argv, VALUE self) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  {
-    vresult = rb_str_new2(Gosu::wstring_to_utf8(result).c_str());
-    ENFORCE_UTF8(vresult);
-  }
+  vresult = SWIG_From_std_string(static_cast< std::string >(result));
   return vresult;
 fail:
   return Qnil;
@@ -5542,11 +5601,11 @@ fail:
 SWIGINTERN VALUE
 _wrap_new_Font__SWIG_0(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
-  std::wstring *arg2 = 0 ;
+  std::string *arg2 = 0 ;
   unsigned int arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  std::wstring temp2 ;
+  int res2 = SWIG_OLDOBJ ;
   unsigned int val3 ;
   int ecode3 = 0 ;
   const char *classname SWIGUNUSED = "Gosu::Font";
@@ -5564,9 +5623,15 @@ _wrap_new_Font__SWIG_0(int argc, VALUE *argv, VALUE self) {
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
-    VALUE local_temporary = rb_obj_as_string(argv[1]);
-    temp2 = Gosu::utf8_to_wstring(StringValueCStr(local_temporary));
-    arg2 = &temp2;
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(argv[1], &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "std::string const &","Font", 2, argv[1] )); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "std::string const &","Font", 2, argv[1])); 
+    }
+    arg2 = ptr;
   }
   ecode3 = SWIG_AsVal_unsigned_SS_int(argv[2], &val3);
   if (!SWIG_IsOK(ecode3)) {
@@ -5575,7 +5640,7 @@ _wrap_new_Font__SWIG_0(int argc, VALUE *argv, VALUE self) {
   arg3 = static_cast< unsigned int >(val3);
   {
     try {
-      result = (Gosu::Font *)new_Gosu_Font__SWIG_0(*arg1,(std::wstring const &)*arg2,arg3);
+      result = (Gosu::Font *)new_Gosu_Font__SWIG_0(*arg1,(std::string const &)*arg2,arg3);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
     }
@@ -5583,8 +5648,10 @@ _wrap_new_Font__SWIG_0(int argc, VALUE *argv, VALUE self) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return self;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return Qnil;
 }
 
@@ -5672,9 +5739,8 @@ SWIGINTERN VALUE _wrap_new_Font(int nargs, VALUE *args, VALUE self) {
     int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Window, 0);
     _v = SWIG_CheckState(res);
     if (_v) {
-      {
-        _v = !!rb_respond_to(argv[1], rb_intern("to_str"));
-      }
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
       if (_v) {
         {
           int res = SWIG_AsVal_unsigned_SS_int(argv[2], NULL);
@@ -5689,7 +5755,7 @@ SWIGINTERN VALUE _wrap_new_Font(int nargs, VALUE *args, VALUE self) {
   
 fail:
   Ruby_Format_OverloadedError( argc, 3, "Font.new", 
-    "    Font.new(Gosu::Window &window, std::wstring const &font_name, unsigned int height)\n"
+    "    Font.new(Gosu::Window &window, std::string const &font_name, unsigned int height)\n"
     "    Font.new(unsigned int height, VALUE options)\n");
   
   return Qnil;
@@ -7161,10 +7227,10 @@ fail:
 SWIGINTERN VALUE
 _wrap_Image_save(int argc, VALUE *argv, VALUE self) {
   Gosu::Image *arg1 = (Gosu::Image *) 0 ;
-  std::wstring *arg2 = 0 ;
+  std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  std::wstring temp2 ;
+  int res2 = SWIG_OLDOBJ ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
@@ -7175,20 +7241,28 @@ _wrap_Image_save(int argc, VALUE *argv, VALUE self) {
   }
   arg1 = reinterpret_cast< Gosu::Image * >(argp1);
   {
-    VALUE local_temporary = rb_obj_as_string(argv[0]);
-    temp2 = Gosu::utf8_to_wstring(StringValueCStr(local_temporary));
-    arg2 = &temp2;
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(argv[0], &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "std::string const &","save", 2, argv[0] )); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "std::string const &","save", 2, argv[0])); 
+    }
+    arg2 = ptr;
   }
   {
     try {
-      Gosu_Image_save((Gosu::Image const *)arg1,(std::wstring const &)*arg2);
+      Gosu_Image_save((Gosu::Image const *)arg1,(std::string const &)*arg2);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return Qnil;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return Qnil;
 }
 
@@ -7615,8 +7689,8 @@ _wrap_Sample_allocate(int argc, VALUE *argv, VALUE self)
 
 SWIGINTERN VALUE
 _wrap_new_Sample(int argc, VALUE *argv, VALUE self) {
-  std::wstring *arg1 = 0 ;
-  std::wstring temp1 ;
+  std::string *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
   const char *classname SWIGUNUSED = "Gosu::Sample";
   Gosu::Sample *result = 0 ;
   
@@ -7624,13 +7698,19 @@ _wrap_new_Sample(int argc, VALUE *argv, VALUE self) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
   {
-    VALUE local_temporary = rb_obj_as_string(argv[0]);
-    temp1 = Gosu::utf8_to_wstring(StringValueCStr(local_temporary));
-    arg1 = &temp1;
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(argv[0], &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "std::string const &","Sample", 1, argv[0] )); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "std::string const &","Sample", 1, argv[0])); 
+    }
+    arg1 = ptr;
   }
   {
     try {
-      result = (Gosu::Sample *)new Gosu::Sample((std::wstring const &)*arg1);
+      result = (Gosu::Sample *)new Gosu::Sample((std::string const &)*arg1);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
     }
@@ -7638,8 +7718,10 @@ _wrap_new_Sample(int argc, VALUE *argv, VALUE self) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
+  if (SWIG_IsNewObj(res1)) delete arg1;
   return self;
 fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
   return Qnil;
 }
 
@@ -7800,8 +7882,8 @@ _wrap_Song_allocate(int argc, VALUE *argv, VALUE self)
 
 SWIGINTERN VALUE
 _wrap_new_Song(int argc, VALUE *argv, VALUE self) {
-  std::wstring *arg1 = 0 ;
-  std::wstring temp1 ;
+  std::string *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
   const char *classname SWIGUNUSED = "Gosu::Song";
   Gosu::Song *result = 0 ;
   
@@ -7809,13 +7891,19 @@ _wrap_new_Song(int argc, VALUE *argv, VALUE self) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
   {
-    VALUE local_temporary = rb_obj_as_string(argv[0]);
-    temp1 = Gosu::utf8_to_wstring(StringValueCStr(local_temporary));
-    arg1 = &temp1;
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(argv[0], &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "std::string const &","Song", 1, argv[0] )); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "std::string const &","Song", 1, argv[0])); 
+    }
+    arg1 = ptr;
   }
   {
     try {
-      result = (Gosu::Song *)new Gosu::Song((std::wstring const &)*arg1);
+      result = (Gosu::Song *)new Gosu::Song((std::string const &)*arg1);
       DATA_PTR(self) = result;
       SWIG_RubyAddTracking(result, self);
     }
@@ -7823,8 +7911,10 @@ _wrap_new_Song(int argc, VALUE *argv, VALUE self) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
+  if (SWIG_IsNewObj(res1)) delete arg1;
   return self;
 fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
   return Qnil;
 }
 
@@ -8726,7 +8816,7 @@ _wrap_Window_caption(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  std::wstring result;
+  std::string result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -8745,10 +8835,7 @@ _wrap_Window_caption(int argc, VALUE *argv, VALUE self) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  {
-    vresult = rb_str_new2(Gosu::wstring_to_utf8(result).c_str());
-    ENFORCE_UTF8(vresult);
-  }
+  vresult = SWIG_From_std_string(static_cast< std::string >(result));
   return vresult;
 fail:
   return Qnil;
@@ -8758,10 +8845,10 @@ fail:
 SWIGINTERN VALUE
 _wrap_Window_captione___(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
-  std::wstring *arg2 = 0 ;
+  std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  std::wstring temp2 ;
+  int res2 = SWIG_OLDOBJ ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
@@ -8772,20 +8859,28 @@ _wrap_Window_captione___(int argc, VALUE *argv, VALUE self) {
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
-    VALUE local_temporary = rb_obj_as_string(argv[0]);
-    temp2 = Gosu::utf8_to_wstring(StringValueCStr(local_temporary));
-    arg2 = &temp2;
+    std::string *ptr = (std::string *)0;
+    res2 = SWIG_AsPtr_std_string(argv[0], &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "std::string const &","set_caption", 2, argv[0] )); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "std::string const &","set_caption", 2, argv[0])); 
+    }
+    arg2 = ptr;
   }
   {
     try {
-      (arg1)->set_caption((std::wstring const &)*arg2);
+      (arg1)->set_caption((std::string const &)*arg2);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return Qnil;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return Qnil;
 }
 

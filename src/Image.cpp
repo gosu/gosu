@@ -6,7 +6,7 @@
 #include <Gosu/IO.hpp>
 #include <stdexcept>
 
-Gosu::Image::Image(const std::wstring& filename, unsigned flags)
+Gosu::Image::Image(const std::string& filename, unsigned flags)
 {
 	// Forward.
 	Bitmap bmp;
@@ -14,7 +14,7 @@ Gosu::Image::Image(const std::wstring& filename, unsigned flags)
 	Image(bmp, flags).data_.swap(data_);
 }
 
-Gosu::Image::Image(const std::wstring& filename,
+Gosu::Image::Image(const std::string& filename,
     unsigned src_x, unsigned src_y, unsigned src_width, unsigned src_height,
     unsigned flags)
 {
@@ -143,7 +143,7 @@ std::vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bmp,
     return images;
 }
 
-std::vector<Gosu::Image> Gosu::load_tiles(const std::wstring& filename,
+std::vector<Gosu::Image> Gosu::load_tiles(const std::string& filename,
     int tile_width, int tile_height, unsigned flags)
 {
     Bitmap bmp;

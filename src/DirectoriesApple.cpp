@@ -8,64 +8,59 @@
 #import <unistd.h>
 
 
-static std::wstring string_from_ns_string(NSString *string, const wchar_t *fallback)
-{
-    return string ? Gosu::utf8_to_wstring([string UTF8String]) : fallback;
-}
-
 void Gosu::use_resource_directory()
 {
-    chdir(Gosu::wstring_to_utf8(resource_prefix()).c_str());
+    chdir(resource_prefix().c_str());
 }
 
-std::wstring Gosu::user_settings_prefix()
+std::string Gosu::user_settings_prefix()
 {
-    static std::wstring result = [] {
+    static std::string result = [] {
         @autoreleasepool {
             NSString *library =
                 NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES)[0];
             NSString *preferences = [library stringByAppendingPathComponent:@"Preferences"];
             
-            return string_from_ns_string(preferences, L".") + L"/";
+            return std::string(preferences.UTF8String ?: ".") + "/";
         }
     }();
     return result;
 }
 
-std::wstring Gosu::user_documents_prefix()
+std::string Gosu::user_documents_prefix()
 {
-    static std::wstring result = [] {
+    static std::string result = [] {
         @autoreleasepool {
             NSString *documents =
                 NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
             
-            return string_from_ns_string(documents, L".") + L"/";
+            return std::string(documents.UTF8String ?: ".") + "/";
         }
     }();
     return result;
 }
 
-std::wstring Gosu::resource_prefix()
+std::string Gosu::resource_prefix()
 {
-    static std::wstring result = [] {
+    static std::string result = [] {
         @autoreleasepool {
             NSString *resources = [NSBundle mainBundle].resourcePath;
-            return string_from_ns_string(resources, L".") + L"/";
+            return std::string(resources.UTF8String ?: ".") + "/";
         }
     }();
     return result;
 }
 
-std::wstring Gosu::shared_resource_prefix()
+std::string Gosu::shared_resource_prefix()
 {
 #ifdef GOSU_IS_IPHONE
     return resource_prefix();
 #else
-    static std::wstring result = [] {
+    static std::string result = [] {
         @autoreleasepool {
             NSString *bundle_path = [NSBundle mainBundle].bundlePath;
             NSString *containing_path = [bundle_path stringByDeletingLastPathComponent];
-            return string_from_ns_string(containing_path, L".");
+            return std::string(containing_path.UTF8String ?: ".");
         }
     }();
     return result;

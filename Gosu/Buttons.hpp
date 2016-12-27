@@ -93,7 +93,7 @@ namespace Gosu
         KB_X = 27,
         KB_Y = 28,
         KB_Z = 29,
-        // ` ON US/UK MAC, < ON EU MAC, \ IN US/UK WINDOWS
+        // ` on US/UK macOS, < ON EU macOS, \ in US/UK Windows
         KB_ISO = 100,
         KB_NUMPAD_0 = 98,
         KB_NUMPAD_1 = 89,

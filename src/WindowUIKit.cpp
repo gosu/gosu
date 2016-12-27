@@ -41,7 +41,7 @@ struct Gosu::Window::Impl
     
     bool fullscreen;
     double update_interval;
-    std::wstring caption;
+    std::string caption;
 };
 
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval)
@@ -104,12 +104,12 @@ void Gosu::Window::set_update_interval(double update_interval)
     throw std::logic_error("Cannot change the update interval on iOS");
 }
 
-std::wstring Gosu::Window::caption() const
+std::string Gosu::Window::caption() const
 {
     return pimpl->caption;
 }
 
-void Gosu::Window::set_caption(const std::wstring& caption)
+void Gosu::Window::set_caption(const std::string& caption)
 {
     pimpl->caption = caption;
 }

@@ -15,14 +15,14 @@
 #include <map>
 #include <set>
 
-std::wstring Gosu::default_font_name()
+std::string Gosu::default_font_name()
 {
-    return L"Arial";
+    return "Arial";
 }
 
 namespace Gosu
 {
-    std::wstring get_name_from_ttf_file(const std::wstring& filename);
+    std::string get_name_from_ttf_file(const std::wstring& filename);
 
     namespace
     {
@@ -82,7 +82,7 @@ namespace Gosu
                 return bitmap;
             }
 
-            void select_font(std::wstring font_name, unsigned font_height,
+            void select_font(std::string font_name, unsigned font_height,
                 unsigned font_flags) const
             {
                 // TODO for ASYNC support:
@@ -93,23 +93,24 @@ namespace Gosu
                 // performance on my test system.
                 // In case of trouble, it can be taken out without worrying too much.
 
-                static std::map<std::wstring, std::wstring> custom_fonts;
+                static std::map<std::string, std::string> custom_fonts;
                 
-                if (font_name.find(L"/") != std::wstring::npos)
+                if (font_name.find("/") != std::string::npos)
                 {
                     if (custom_fonts.count(font_name) == 0)
                     {
-                        AddFontResourceEx(font_name.c_str(), FR_PRIVATE, 0);
-                        font_name = custom_fonts[font_name] = get_name_from_ttf_file(font_name);
+                        std::wstring wfont_name = utf8_to_wstring(font_name);
+                        AddFontResourceEx(wfont_name.c_str(), FR_PRIVATE, 0);
+                        font_name = custom_fonts[font_name] = get_name_from_ttf_file(wfont_name);
                     }
                     else
                         font_name = custom_fonts[font_name];
                 }
                 
-				static std::map<std::pair<std::wstring, unsigned>, HFONT> loaded_fonts;
+				static std::map<std::pair<std::string, unsigned>, HFONT> loaded_fonts;
                 
                 HFONT font;
-				std::pair<std::wstring, unsigned> key =
+				std::pair<std::string, unsigned> key =
 					std::make_pair(font_name, font_height | font_flags << 16);
                 if (loaded_fonts.count(key) == 0)
                 {
@@ -121,16 +122,19 @@ namespace Gosu
                         CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
                         DEFAULT_PITCH | FF_DONTCARE };
                     
+                    std::wstring wfont_name = utf8_to_wstring(font_name);
                     // Don't rely on wcsncpy being in std::...
                     using namespace std;
-                    wcsncpy(logfont.lfFaceName, font_name.c_str(), LF_FACESIZE);
+                    wcsncpy(logfont.lfFaceName, wfont_name.c_str(), LF_FACESIZE);
                     logfont.lfFaceName[LF_FACESIZE - 1] = 0;
                     
                     font = loaded_fonts[key] = Win::check(::CreateFontIndirect(&logfont),
-                        "creating font object for " + narrow(font_name));
+                        "creating font object for " + font_name);
                 }
                 else
+                {
                     font = loaded_fonts[key];
+                }
 
                 ::SelectObject(dc, font);
             }
@@ -139,7 +143,7 @@ namespace Gosu
 };
 
 unsigned Gosu::text_width(const std::wstring& text,
-    const std::wstring& font_name, unsigned font_height, unsigned font_flags)
+    const std::string& font_name, unsigned font_height, unsigned font_flags)
 {
     if (text.find_first_of(L"\r\n") != std::wstring::npos)
         throw std::invalid_argument("the argument to text_width cannot contain line breaks");
@@ -155,7 +159,7 @@ unsigned Gosu::text_width(const std::wstring& text,
 }
 
 void Gosu::draw_text(Bitmap& bitmap, const std::wstring& text, int x, int y,
-    Color c, const std::wstring& font_name, unsigned font_height,
+    Color c, const std::string& font_name, unsigned font_height,
     unsigned font_flags)
 {
     if (text.find_first_of(L"\r\n") != std::wstring::npos)

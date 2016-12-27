@@ -192,15 +192,15 @@ void Gosu::Window::set_update_interval(double update_interval)
     pimpl->update_interval = update_interval;
 }
 
-std::wstring Gosu::Window::caption() const
+std::string Gosu::Window::caption() const
 {
-    return utf8_to_wstring(SDL_GetWindowTitle(shared_window()));
+    const char* title = SDL_GetWindowTitle(shared_window());
+    return title ? title : "";
 }
 
-void Gosu::Window::set_caption(const std::wstring& caption)
+void Gosu::Window::set_caption(const std::string& caption)
 {
-    std::string utf8 = wstring_to_utf8(caption);
-    SDL_SetWindowTitle(shared_window(), utf8.c_str());
+    SDL_SetWindowTitle(shared_window(), caption.c_str());
 }
 
 void Gosu::Window::show()

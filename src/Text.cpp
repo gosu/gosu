@@ -51,7 +51,7 @@ namespace Gosu
             Bitmap bmp;
             unsigned used_lines, allocated_lines;
 
-            wstring font_name;
+            string font_name;
             unsigned font_height;
             int line_spacing;
             Alignment align;
@@ -71,7 +71,7 @@ namespace Gosu
             }
 
         public:
-            TextBlockBuilder(const wstring& font_name, unsigned font_height,
+            TextBlockBuilder(const string& font_name, unsigned font_height,
                 int line_spacing, unsigned width, Alignment align)
             {
                 used_lines = 0;
@@ -297,7 +297,7 @@ namespace Gosu
 }
 
 Gosu::Bitmap Gosu::create_text(const wstring& text,
-    const wstring& font_name, unsigned font_height, int line_spacing,
+    const string& font_name, unsigned font_height, int line_spacing,
     unsigned width, Alignment align, unsigned font_flags)
 {
     if (line_spacing <= -static_cast<int>(font_height))
@@ -320,7 +320,7 @@ Gosu::Bitmap Gosu::create_text(const wstring& text,
 
 // Very easy special case.
 Gosu::Bitmap Gosu::create_text(const wstring& text,
-    const wstring& font_name, unsigned font_height, unsigned font_flags)
+    const string& font_name, unsigned font_height, unsigned font_flags)
 {
     FormattedString fs(text.c_str(), font_flags);
     if (fs.length() == 0)
