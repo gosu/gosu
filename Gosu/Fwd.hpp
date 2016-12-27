@@ -1,5 +1,5 @@
 //! \file Fwd.hpp
-//! Contains declarations of all of Gosu's available classes.
+//! Contains forward declarations of all of Gosu's available classes.
 
 #pragma once
 

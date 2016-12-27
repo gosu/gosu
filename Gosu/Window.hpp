@@ -62,8 +62,8 @@ namespace Gosu
         double update_interval() const;
         void set_update_interval(double update_interval);
 
-        std::wstring caption() const;
-        void set_caption(const std::wstring& caption);
+        std::string caption() const;
+        void set_caption(const std::string& caption);
 
         //! Enters a modal loop where the Window is visible on screen and
         //! receives calls to draw, update etc.
@@ -135,7 +135,3 @@ namespace Gosu
         #endif
     };
 }
-
-#ifdef GOSU_IS_IPHONE
-Gosu::Window& window_instance();
-#endif

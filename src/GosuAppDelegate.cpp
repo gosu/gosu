@@ -5,6 +5,8 @@
 #import <Gosu/Gosu.hpp>
 
 
+Gosu::Window &window_instance();
+
 @implementation GosuAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions

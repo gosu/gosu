@@ -5,7 +5,7 @@
 
 #include <cmath>
 
-// Portability: Define M_PI, which <cmath> on Windows does not do by default.
+// Portability: Define M_PI, which MSVC's <cmath> does not do by default.
 #ifndef M_PI
 #define M_PI 3.14159265358979323846264338327950288
 #endif

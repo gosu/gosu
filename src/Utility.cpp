@@ -34,22 +34,6 @@ string Gosu::wstring_to_utf8(const std::wstring& ws)
     return iconvert<string, UTF_8, UCS_4_INTERNAL>(ws);
 }
 
-#ifdef GOSU_IS_MAC
-// This is only necessary on OS X (for text output)
-// TODO: Move to respective files now that iconvert<> has been extracted
-// from this file.
-
-namespace {
-    extern const char UCS_2_INTERNAL[] = "UCS-2-INTERNAL";
-}
-
-namespace Gosu {
-    vector<unsigned short> wstring_to_uni_chars(const wstring& ws)
-    {
-        return iconvert<vector<unsigned short>, UCS_2_INTERNAL, UCS_4_INTERNAL>(ws);
-    }
-}
-#endif
 #else
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -69,51 +53,24 @@ string Gosu::wstring_to_utf8(const wstring& ws)
 	return &buffer[0];
 }
 #endif
-
-wstring Gosu::widen(const string& s)
-{
-#ifdef GOSU_IS_X
-    setlocale(LC_ALL, "");
 #endif
 
-    size_t wide_len = std::mbstowcs(nullptr, s.c_str(), 0);
-    if (wide_len == static_cast<size_t>(-1))
-        throw std::runtime_error("Could not convert from string to wstring: " + s);
-
-    vector<wchar_t> buf(wide_len + 1);
-    mbstowcs(&buf.front(), s.c_str(), buf.size());
-
-    return wstring(buf.begin(), buf.end() - 1);
-}
-
-string Gosu::narrow(const wstring& ws)
+bool Gosu::has_extension(const std::string& filename, const char* extension)
 {
-    size_t narrow_len = std::wcstombs(nullptr, ws.c_str(), 0);
-    if (narrow_len == static_cast<size_t>(-1))
-        throw std::runtime_error("Could not convert from wstring to string: " + string(ws.begin(), ws.end()));
-
-    vector<char> buf(narrow_len + 1);
-    wcstombs(&buf.front(), ws.c_str(), buf.size());
-
-    return string(buf.begin(), buf.end() - 1);
-}
-
-#endif
-
-// TODO: This function needs to go into some internal header.
-namespace Gosu
-{
-    bool is_extension(const wchar_t* str, const wchar_t* ext)
-    {
-        size_t str_len = wcslen(str), ext_len = wcslen(ext);
-        if (ext_len > str_len)
-            return false;
-        str += str_len, ext += ext_len;
-        while (ext_len--)
-            if (towlower((wint_t)*--str) != *--ext)
-                return false;
-        return true;
+    size_t ext_len = strlen(extension);
+    if (ext_len > filename.length()) {
+        return false;
     }
+
+    const char *str = filename.c_str() + filename.length();
+    const char *ext = extension + ext_len;
+    while (ext_len--) {
+        if (tolower((int) *--str) != *--ext) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 #if defined(GOSU_IS_UNIX) && !defined(GOSU_IS_MAC)

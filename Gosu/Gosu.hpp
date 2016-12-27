@@ -1,5 +1,5 @@
 //! \file Gosu.hpp
-//! Umbrella header for lazy people with fast compilers, or pre-compiled headers.
+//! Umbrella header for all of Gosu.
 
 //! \mainpage Gosu C++ Documentation
 //!
