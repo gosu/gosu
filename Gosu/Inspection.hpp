@@ -5,7 +5,6 @@
 
 namespace Gosu
 {
-    //! Returns the current framerate, as determined by an unspecified and possibly
-    //! horrible algorithm.
+    //! Returns the current framerate.
     int fps();
 }
