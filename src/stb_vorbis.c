@@ -549,21 +549,23 @@ enum STBVorbisError
 #endif
 
 #ifndef STB_VORBIS_NO_CRT
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <math.h>
-#if !(defined(__APPLE__) || defined(MACOSX) || defined(macintosh) || defined(Macintosh))
-#include <malloc.h>
-#if defined(__linux__) || defined(__linux) || defined(__EMSCRIPTEN__)
-#include <alloca.h>
-#endif
-#endif
+   #include <stdlib.h>
+   #include <string.h>
+   #include <assert.h>
+   #include <math.h>
+
+   // find definition of alloca if it's not in stdlib.h:
+   #ifdef _MSC_VER
+      #include <malloc.h>
+   #endif
+   #if defined(__linux__) || defined(__linux) || defined(__EMSCRIPTEN__)
+      #include <alloca.h>
+   #endif
 #else // STB_VORBIS_NO_CRT
-#define NULL 0
-#define malloc(s)   0
-#define free(s)     ((void) 0)
-#define realloc(s)  0
+   #define NULL 0
+   #define malloc(s)   0
+   #define free(s)     ((void) 0)
+   #define realloc(s)  0
 #endif // STB_VORBIS_NO_CRT
 
 #include <limits.h>
@@ -1268,12 +1270,12 @@ static void neighbors(uint16 *x, int n, int *plow, int *phigh)
 typedef struct
 {
    uint16 x,y;
-} Point;
+} stbv__point;
 
 static int STBV_CDECL point_compare(const void *p, const void *q)
 {
-   Point *a = (Point *) p;
-   Point *b = (Point *) q;
+   stbv__point *a = (stbv__point *) p;
+   stbv__point *b = (stbv__point *) q;
    return a->x < b->x ? -1 : a->x > b->x;
 }
 
@@ -3869,7 +3871,7 @@ static int start_decoder(vorb *f)
             g->book_list[j] = get_bits(f,8);
          return error(f, VORBIS_feature_not_supported);
       } else {
-         Point p[31*8+2];
+         stbv__point p[31*8+2];
          Floor1 *g = &f->floor_config[i].floor1;
          int max_class = -1; 
          g->partitions = get_bits(f, 5);
