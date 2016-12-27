@@ -9,29 +9,26 @@ platform:
 - x86
 clone_depth: 3
 environment:
-  SDL2_INCLUDE: C:\SDL2-2.0.4\include
-  SDL2_LIB: C:\SDL2-2.0.4\lib\x86
-  SDL2_LIB64: C:\SDL2-2.0.4\lib\x64
+  SDL2_INCLUDE: C:\SDL2-2.0.5\include
+  SDL2_LIB: C:\SDL2-2.0.5\lib\x86
+  SDL2_LIB64: C:\SDL2-2.0.5\lib\x64
 install:
 - ps: >-
-    Start-FileDownload http://libsdl.org/release/SDL2-devel-2.0.4-VC.zip
+    Start-FileDownload http://libsdl.org/release/SDL2-devel-2.0.5-VC.zip
 
-    7z x SDL2-devel-2.0.4-VC.zip -oC:\
+    7z x SDL2-devel-2.0.5-VC.zip -oC:\
 build:
   verbosity: minimal
 after_build:
 - ps: >-
     cd "$env:APPVEYOR_BUILD_FOLDER\lib"
 
-
     $OLD_PATH = $env:PATH
-
 
     If ($env:PLATFORM -Eq "x64") {
       $env:PATH = "C:\Ruby23-x64\bin;$OLD_PATH"
       ruby -I. -r./gosu.rb -e "puts RUBY_VERSION, Gosu::VERSION"
     }
-
     Else {
       $env:PATH = "C:\Ruby23\bin;$OLD_PATH"
       ruby -I. -r./gosu.rb -e "puts RUBY_VERSION, Gosu::VERSION"
