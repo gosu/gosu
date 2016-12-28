@@ -3,7 +3,7 @@ Welcome to Gosu!
 
 Gosu is a 2D game development library for Ruby and C++.
 
-Gosu’s main website is [libgosu.org](https://www.libgosu.org/).
+The main website is [www.libgosu.org](https://www.libgosu.org/).
 The source code, wiki, issue tracker and change log are all hosted on [GitHub](https://github.com/gosu/gosu).
 
 Gosu is released under the MIT license.
@@ -18,7 +18,7 @@ or look at existing projects in the [Gosu Showcase](https://www.libgosu.org/cgi-
 Community
 ---------
 
-- Visit the [our message board](https://www.libgosu.org/cgi-bin/mwf/forum.pl) or [the r/gosu subreddit](https://reddit.com/r/gosu).
+- Visit our [message board](https://www.libgosu.org/cgi-bin/mwf/forum.pl) or the [r/gosu subreddit](https://reddit.com/r/gosu).
 - There’s also an IRC room, [#gosu on freenode](https://webchat.freenode.net/?channels=gosu). The regulars are spread across many timezones, so you’ll need some patience.
 - You can file bugs and feature requests as [issues on GitHub](https://github.com/gosu/gosu/issues).
 - Or [simply email me](mailto:julian@raschke.de) :)
