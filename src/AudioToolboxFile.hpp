@@ -1,18 +1,33 @@
 #pragma once
 
-#include "AudioFile.hpp"
-#include <AudioToolbox/AudioToolbox.h>
-#include <AudioToolbox/AudioConverter.h>
-#include <AudioToolbox/ExtendedAudioFile.h>
-#include <OpenAL/al.h>
-#include <Gosu/IO.hpp>
-#include <Gosu/Utility.hpp>
-#include <Gosu/Platform.hpp>
-#include "AppleUtility.hpp"
-#include <algorithm>
-#include <vector>
-#include <arpa/inet.h>
+#import "AudioFile.hpp"
+#import <AudioToolbox/AudioToolbox.h>
+#import <AudioToolbox/AudioConverter.h>
+#import <AudioToolbox/ExtendedAudioFile.h>
+#import <OpenAL/al.h>
+#import <Gosu/IO.hpp>
+#import <Gosu/Utility.hpp>
+#import <Gosu/Platform.hpp>
+#import <algorithm>
+#import <stdexcept>
+#import <vector>
+#import <arpa/inet.h>
 #import <Foundation/Foundation.h>
+#import <CoreFoundation/CoreFoundation.h>
+
+inline static void throw_os_error(OSStatus status, unsigned line)
+{
+    std::string what;
+    @autoreleasepool {
+        NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
+        NSString *message = [NSString stringWithFormat:@"Error 0x%x on line %u: %@",
+                             line, status, error.localizedDescription];
+        what = message.UTF8String;
+    }
+    throw std::runtime_error(what);
+}
+
+#define CHECK_OS(status) do { if (status) throw_os_error(status, __LINE__); } while (0)
 
 namespace Gosu
 {

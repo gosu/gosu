@@ -19,7 +19,7 @@ namespace Gosu
     //! any of Gosu's HTML-like markup.
     //! \param text Unformatted text.
     //! \param font_name Name of a system font, or a filename to a TTF file (must contain '/').
-    unsigned text_width(const std::wstring& text,
+    unsigned text_width(const std::string& text,
         const std::string& font_name, unsigned font_height,
         unsigned font_flags = 0);
 
@@ -30,7 +30,7 @@ namespace Gosu
     //! \param font_height Height, in pixels, of the text.
     //! \param font_flags Binary combination of members of the FontFlags
     //! enum.
-    void draw_text(Bitmap& bitmap, const std::wstring& text, int x, int y,
+    void draw_text(Bitmap& bitmap, const std::string& text, int x, int y,
         Color c, const std::string& font_name, unsigned font_height,
         unsigned font_flags = 0);
 
@@ -41,7 +41,7 @@ namespace Gosu
     //! \param font_height Height of the font in pixels.
     //! \param font_flags Binary combination of members of the FontFlags
     //! enum.
-    Bitmap create_text(const std::wstring& text,
+    Bitmap create_text(const std::string& text,
         const std::string& font_name, unsigned font_height,
         unsigned font_flags = 0);
 
@@ -57,12 +57,12 @@ namespace Gosu
     //! border. When a single word is too long, it will be truncated.
     //! \param font_flags Binary combination of members of the FontFlags
     //! enum.
-    Bitmap create_text(const std::wstring& text,
+    Bitmap create_text(const std::string& text,
         const std::string& font_name, unsigned font_height, 
         int line_spacing, unsigned width, Alignment align,
         unsigned font_flags = 0);
     
     //! Registers a new HTML-style entity that can subsequently be used
     //! with Gosu::Font and Gosu::create_text. The name is given without & and ;.
-    void register_entity(const std::wstring& name, const Bitmap& replacement);
+    void register_entity(const std::string& name, const Bitmap& replacement);
 }

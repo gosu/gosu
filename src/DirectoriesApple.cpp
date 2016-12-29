@@ -2,8 +2,6 @@
 #if defined(GOSU_IS_MAC)
 
 #import <Gosu/Directories.hpp>
-#import <Gosu/Utility.hpp>
-#import "AppleUtility.hpp"
 #import <Foundation/Foundation.h>
 #import <unistd.h>
 

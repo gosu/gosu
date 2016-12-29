@@ -19,7 +19,7 @@ namespace Gosu
             wchar_t wc;
             Gosu::Color color;
             unsigned flags;
-            std::wstring entity;
+            std::string entity;
             
             bool same_style_as(const FormattedChar& other) const
             {
@@ -169,7 +169,6 @@ namespace Gosu
                     int end_of_entity = pos + 1;
                     while (html[end_of_entity] != L';')
                     {
-                        // Never know where the wchar_t stuff is...what a mess!
                         using namespace std;
                         if (!iswalnum(static_cast<wint_t>(html[end_of_entity])))
                             goto normal_character;
@@ -177,7 +176,8 @@ namespace Gosu
                         if (end_of_entity >= len)
                             goto normal_character;
                     }
-                    FormattedChar fc = { 0, c.back(), 0, std::wstring(html + pos + 1, html + end_of_entity) };
+                    std::wstring entity(html + pos + 1, html + end_of_entity);
+                    FormattedChar fc = { 0, c.back(), 0, wstring_to_utf8(entity) };
                     if (!is_entity(fc.entity))
                         goto normal_character;
                     characters.push_back(fc);
@@ -203,15 +203,14 @@ namespace Gosu
             return result;
         }
         
-        const wchar_t* entity_at(unsigned index) const
+        const char* entity_at(unsigned index) const
         {
             if (characters.empty())
-                return 0;
-            
-            assert (index <= characters.size());
+                return nullptr;
             
             if (characters[index].wc != 0 || characters[index].entity.empty())
-                return 0;
+                return nullptr;
+            
             return characters[index].entity.c_str();
         }
         

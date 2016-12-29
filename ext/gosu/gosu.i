@@ -17,7 +17,7 @@
 %apply unsigned char { std::uint8_t };
 %apply unsigned long { std::uint32_t };
 
-// Custom typemaps for wchar/wstring.
+// Custom typemap for wchar_t, only used for Gosu::Font.
 #pragma SWIG nowarn=-490,-319
 %typemap(in) wchar_t {
     VALUE ruby_string = rb_obj_as_string($input);
@@ -30,40 +30,8 @@
     }
     $1 = ucs_string[0];
 }
-%typemap(out) wchar_t {
-    if ($1 == 0) {
-        $result = Qnil;
-    }
-    else {
-        $result = rb_str_new2(Gosu::wstring_to_utf8(std::wstring(1, $1)).c_str());
-        ENFORCE_UTF8($result);
-    }
-}
-%typemap(in) const std::wstring& (std::wstring temp) {
-    VALUE local_temporary = rb_obj_as_string($input);
-    temp = Gosu::utf8_to_wstring(StringValueCStr(local_temporary));
-    $1 = &temp;
-}
-%typemap(typecheck) const std::wstring& {
-    $1 = !!rb_respond_to($input, rb_intern("to_str"));
-}
-%apply const std::wstring& { std::wstring, const std::string };
-%typemap(out) std::wstring {
-    $result = rb_str_new2(Gosu::wstring_to_utf8($1).c_str());
-    ENFORCE_UTF8($result);
-}
-%typemap(out) const std::wstring& {
-    $result = rb_str_new2(Gosu::wstring_to_utf8($1).c_str());
-    ENFORCE_UTF8($result);
-}
-%typemap(directorin) const std::wstring& {
-    $input = rb_str_new2(Gosu::wstring_to_utf8($1).c_str());
-    ENFORCE_UTF8($input);
-}
-%typemap(directorout) std::wstring {
-    VALUE local_temporary = rb_obj_as_string($1);
-    $result = Gosu::utf8_to_wstring(StringValueCStr(local_temporary));;
-}
+
+// Custom typemap to enforce UTF-8 encoding on all created strings.
 %typemap(out) std::string {
     $result = rb_str_new2($1.c_str());
     ENFORCE_UTF8($result);
@@ -157,6 +125,13 @@
 #undef int64_t
 #undef uint64_t
 
+// Escape from windows.h macro hell.
+#define NOMINMAX
+#ifdef min
+#undef min
+#undef max
+#endif
+
 #include <Gosu/Gosu.hpp>
 
 namespace Gosu
@@ -168,7 +143,7 @@ namespace Gosu
     
     void release_all_openal_resources();
     
-    void register_entity(const std::wstring& name, Gosu::Image* image)
+    void register_entity(const std::string& name, Gosu::Image* image)
     {
         register_entity(name, image->data().to_bitmap());
     }
@@ -181,10 +156,8 @@ namespace Gosu
 // Preprocessor check for 1.9 or higher (thanks banister)
 #if defined(ROBJECT_EMBED_LEN_MAX)
 #define ENFORCE_UTF8(var) rb_funcall(var, rb_intern("force_encoding"), 1, rb_str_new2("UTF-8"));
-#define RUBY_18_19(r18, r19) r19
 #else
 #define ENFORCE_UTF8(var)
-#define RUBY_18_19(r18, r19) r18
 #endif
 
 namespace Gosu
@@ -240,12 +213,12 @@ namespace Gosu
 
 namespace Gosu
 {
-    Gosu::Button char_to_button_id(wchar_t ch)
+    Gosu::Button char_to_button_id(std::string ch)
     {
         return Gosu::Input::char_to_id(ch);
     }
     
-    wchar_t button_id_to_char(Gosu::Button btn)
+    std::string button_id_to_char(Gosu::Button btn)
     {
         return Gosu::Input::id_to_char(btn);
     }
@@ -440,7 +413,7 @@ namespace Gosu
     std::string language();
     void enable_undocumented_retrofication();
     void release_all_openal_resources();
-    void register_entity(const std::wstring& name, Gosu::Image* image);
+    void register_entity(const std::string& name, Gosu::Image* image);
 }
 
 // Color
@@ -683,7 +656,7 @@ namespace Gosu
     }
     
     %newobject from_text;
-    static Gosu::Image* from_text(const std::wstring& text, unsigned font_height, VALUE options = 0)
+    static Gosu::Image* from_text(const std::string& text, unsigned font_height, VALUE options = 0)
     {
         std::string font = Gosu::default_font_name();
         unsigned width = 0xfefefefe;
@@ -873,27 +846,47 @@ namespace Gosu
 // TextInput
 %ignore Gosu::TextInput::feed_sdl_event(void*);
 %ignore Gosu::TextInput::caret_pos() const;
+%ignore Gosu::TextInput::set_caret_pos(unsigned);
 %ignore Gosu::TextInput::selection_start() const;
+%ignore Gosu::TextInput::set_selection_start(unsigned);
 %rename("text=") set_text;
 %rename("caret_pos=") set_caret_pos;
 %rename("selection_start=") set_selection_start;
 %include "../../Gosu/TextInput.hpp"
+
+// Make sure that the indices in caret_pos/selection_start are valid Ruby string indices.
+// (In C++, these methods return/accept UTF-8 byte indices.)
 %extend Gosu::TextInput {
-    // Fix indices into UTF-8 string in Ruby 1.8
-    unsigned caret_pos() const
+    VALUE caret_pos()
     {
-        return RUBY_18_19(
-            Gosu::wstring_to_utf8($self->text().substr(0, $self->caret_pos())).size(),
-            $self->caret_pos()
-        );
+        std::string prefix = $self->text().substr(0, $self->caret_pos());
+        VALUE rb_prefix = rb_str_new2(prefix.c_str());
+        ENFORCE_UTF8(rb_prefix);
+        return rb_funcall(rb_prefix, rb_intern("length"), 0);
     }
-    // Fix indices into UTF-8 string in Ruby 1.8
-    unsigned selection_start() const
+    
+    void set_caret_pos(VALUE caret_pos)
     {
-        return RUBY_18_19(
-            Gosu::wstring_to_utf8($self->text().substr(0, $self->selection_start())).size(),
-            $self->selection_start()
-        );
+        VALUE rb_text = rb_str_new2($self->text().c_str());
+        VALUE rb_prefix = rb_funcall(rb_text, rb_intern("slice"), 2, LONG2NUM(0), caret_pos);
+        std::string prefix = StringValueCStr(rb_prefix);
+        $self->set_caret_pos(std::min(prefix.length(), $self->text().length()));
+    }
+    
+    VALUE selection_start()
+    {
+        std::string prefix = $self->text().substr(0, $self->selection_start());
+        VALUE rb_prefix = rb_str_new2(prefix.c_str());
+        ENFORCE_UTF8(rb_prefix);
+        return rb_str_length(rb_prefix);
+    }
+    
+    void set_selection_start(VALUE selection_start)
+    {
+        VALUE rb_text = rb_str_new2($self->text().c_str());
+        VALUE rb_prefix = rb_funcall(rb_text, rb_intern("slice"), 2, LONG2NUM(0), selection_start);
+        std::string prefix = StringValueCStr(rb_prefix);
+        $self->set_selection_start(std::min(prefix.length(), $self->text().length()));
     }
 };
 
@@ -918,8 +911,9 @@ namespace Gosu
     static void mark_window(void* window)
     {
         Gosu::TextInput* ti = static_cast<Gosu::Window*>(window)->input().text_input();
-        if (VALUE ti_value = SWIG_RubyInstanceFor(ti))
+        if (VALUE ti_value = SWIG_RubyInstanceFor(ti)) {
             rb_gc_mark(ti_value);
+        }
     }
 %}
 
@@ -973,8 +967,8 @@ namespace Gosu
 // Global input functions
 namespace Gosu
 {
-    Gosu::Button char_to_button_id(wchar_t ch);
-    wchar_t button_id_to_char(Gosu::Button btn);
+    Gosu::Button char_to_button_id(std::string ch);
+    std::string button_id_to_char(Gosu::Button btn);
     %rename("button_down?") is_button_down;
     bool is_button_down(Gosu::Button btn);
 }

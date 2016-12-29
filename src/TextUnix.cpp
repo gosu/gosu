@@ -53,7 +53,7 @@ namespace Gosu
             if(attr)
                 pango_attribute_destroy(attr);
         }
-        unsigned text_width(const std::wstring& text,
+        unsigned text_width(const std::string& text,
             const std::string& font_face, unsigned font_height,
             unsigned font_flags)
         {
@@ -100,10 +100,7 @@ namespace Gosu
             }
 
 
-            // IMPR: Catch errors? (Last NULL-Pointer)
-            gchar* utf8_str = g_ucs4_to_utf8((gunichar*)text.c_str(), text.length(), NULL, NULL, NULL);
-            pango_layout_set_text(layout, utf8_str, -1);
-            g_free(utf8_str);
+            pango_layout_set_text(layout, text.c_str(), -1);
 
             PangoDirection base_dir = pango_context_get_base_dir(context);
             pango_layout_set_alignment(layout,
@@ -119,7 +116,7 @@ namespace Gosu
 
             return width;
         }
-        void draw_text(Bitmap& bitmap, const std::wstring& text, int x, int y,
+        void draw_text(Bitmap& bitmap, const std::string& text, int x, int y,
             Color c, const std::string& font_face, unsigned font_height,
             unsigned font_flags)
         {
@@ -181,14 +178,14 @@ namespace Gosu
             SDL_Surface* surface;
             
         public:
-            SDLSurface(TTF_Font* font, const std::wstring& text, Gosu::Color c)
+            SDLSurface(TTF_Font* font, const std::string& text, Gosu::Color c)
             {
                 // This is intentionally re-ordered to BGR. This way, the surface pixels do not
                 // have to be converted from RGB to BGR later in the process.
                 SDL_Color color = { c.blue(), c.green(), c.red() };
-                surface = TTF_RenderUTF8_Blended(font, Gosu::wstring_to_utf8(text).c_str(), color);
+                surface = TTF_RenderUTF8_Blended(font, text.c_str(), color);
                 if (!surface)
-                    throw std::runtime_error("Could not render text " + Gosu::wstring_to_utf8(text));
+                    throw std::runtime_error("Could not render text: " + text);
             }
             
             ~SDLSurface()
@@ -238,11 +235,11 @@ namespace Gosu
             TTF_CloseFont(font);
         }
 
-        unsigned text_width(const std::wstring& text){
+        unsigned text_width(const std::string& text){
             return SDLSurface(font, text, 0xffffff).width();
         }
 
-        void draw_text(Bitmap& bmp, const std::wstring& text, int x, int y, Gosu::Color c) {
+        void draw_text(Bitmap& bmp, const std::string& text, int x, int y, Gosu::Color c) {
             SDLSurface surf(font, text, c);
             Gosu::Bitmap temp;
             temp.resize(surf.width(), surf.height());
@@ -252,27 +249,27 @@ namespace Gosu
     };
 }
 
-unsigned Gosu::text_width(const std::wstring& text,
+unsigned Gosu::text_width(const std::string& text,
     const std::string& font_name, unsigned font_height,
     unsigned font_flags)
 {
-    if (text.find_first_of(L"\r\n") != std::wstring::npos)
+    if (text.find_first_of("\r\n") != text.npos)
         throw std::invalid_argument("the argument to text_width cannot contain line breaks");
     
-    if (font_name.find("/") == std::string::npos)
+    if (font_name.find("/") == font_name.npos)
         return PangoRenderer().text_width(text, font_name, font_height, font_flags);
     else
         return SDLTTFRenderer(font_name, font_height).text_width(text);
 }
 
-void Gosu::draw_text(Bitmap& bitmap, const std::wstring& text, int x, int y,
+void Gosu::draw_text(Bitmap& bitmap, const std::string& text, int x, int y,
     Color c, const std::string& font_name, unsigned font_height,
     unsigned font_flags)
 {
-    if (text.find_first_of(L"\r\n") != std::wstring::npos)
+    if (text.find_first_of("\r\n") != text.npos)
         throw std::invalid_argument("the argument to draw_text cannot contain line breaks");
     
-    if (font_name.find("/") == std::string::npos)
+    if (font_name.find("/") == font_name.npos)
         PangoRenderer().draw_text(bitmap, text, x, y, c, font_name, font_height, font_flags);
     else
         SDLTTFRenderer(font_name, font_height).draw_text(bitmap, text, x, y, c);

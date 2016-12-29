@@ -115,8 +115,8 @@ namespace Gosu
     inline int clip_rect_base_factor() { return 1; }
     #endif
     
-    bool is_entity(const std::wstring& name);
-    const Bitmap& entity_bitmap(const std::wstring& name);
+    bool is_entity(const std::string& name);
+    const Bitmap& entity_bitmap(const std::string& name);
     
     void ensure_current_context();
 }

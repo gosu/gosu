@@ -21,7 +21,7 @@ class SwigDirector_TextInput : public Gosu::TextInput, public Swig::Director {
 public:
     SwigDirector_TextInput(VALUE self);
     virtual ~SwigDirector_TextInput();
-    virtual std::wstring filter(std::wstring const &text) const;
+    virtual std::string filter(std::string text) const;
 };
 
 

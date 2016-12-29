@@ -13,7 +13,7 @@ namespace
     std::string special_folder_path(int csidl)
     {
         WCHAR buf[MAX_PATH + 2];
-        if (FAILED(SHGetFolderPath(NULL, csidl | CSIDL_FLAG_CREATE, NULL, 0, buf)))
+        if (FAILED(SHGetFolderPathW(NULL, csidl | CSIDL_FLAG_CREATE, NULL, 0, buf)))
             throw std::runtime_error("Error getting special folder path");
         std::size_t len = std::wcslen(buf);
         if (buf[len - 1] != L'\\')
@@ -28,8 +28,8 @@ namespace
     {
         static std::string result;
         if (result.empty()) {
-            wchar_t buffer[MAX_PATH * 2];
-            Gosu::Win::check(::GetModuleFileName(0, buffer, MAX_PATH * 2),
+            WCHAR buffer[MAX_PATH * 2];
+            Gosu::winapi_check(GetModuleFileNameW(0, buffer, MAX_PATH * 2),
                 "getting the module filename");
             result = Gosu::wstring_to_utf8(buffer);
         }

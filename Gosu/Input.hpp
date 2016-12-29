@@ -76,11 +76,12 @@ namespace Gosu
         
         ~Input();
         
-        //! Returns the character a button usually produces, or 0.
-        static wchar_t id_to_char(Button btn);
-        //! Returns the button that has to be pressed to produce the
-        //! given character, or no_button.
-        static Button char_to_id(wchar_t ch);
+        //! Returns the character (as a UTF-8 encoded string) that a button usually produces.
+        //! Returns the empty string if nothing can be found.
+        static std::string id_to_char(Button btn);
+        //! Returns the button that has to be pressed to produce the given character (as a UTF-8
+        //! encoded string), or NO_BUTTON.
+        static Button char_to_id(std::string ch);
         
         //! Returns true if a button is currently pressed.
         //! Updated every tick.
@@ -104,7 +105,7 @@ namespace Gosu
         const Touches& current_touches() const;
         
         //! Accelerometer positions in all three dimensions (smoothened).
-        //! Note: Not really deprecated - but temporarily defunct.
+        //! Note: Not really deprecated, but temporarily defunct.
         GOSU_DEPRECATED double accelerometer_x() const;
         GOSU_DEPRECATED double accelerometer_y() const;
         GOSU_DEPRECATED double accelerometer_z() const;
@@ -121,9 +122,9 @@ namespace Gosu
         //! If you use the Window class, it will assign these to its own methods.
         std::function<void (Touch)> on_touch_began, on_touch_moved, on_touch_ended, on_touch_cancelled;
         
-        //! Returns the currently active TextInput instance, or 0.
+        //! Returns the currently active TextInput instance, or nullptr.
         TextInput* text_input() const;
-        //! Sets the currently active TextInput, or clears it (input = 0).
+        //! Sets the currently active TextInput, or resets it to the nullptr.
         void set_text_input(TextInput* input);
     };
 }

@@ -2,7 +2,6 @@
 #ifdef GOSU_IS_MAC
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
-#include "AppleUtility.hpp"
 #else
 #include <AL/al.h>
 #include <AL/alc.h>
@@ -53,8 +52,7 @@ namespace Gosu
             al_context = alcCreateContext(al_device, 0);
             alcMakeContextCurrent(al_context);
             alGenSources(NUM_SOURCES, al_sources);
-            std::fill(current_tokens, current_tokens + NUM_SOURCES,
-                static_cast<ALuint>(NO_TOKEN));
+            std::fill(current_tokens, current_tokens + NUM_SOURCES, static_cast<ALuint>(NO_TOKEN));
         }
         
         ~ALChannelManagement()
