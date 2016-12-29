@@ -2,6 +2,30 @@
 #include <exception>
 #include <string>
 #include <vector>
+#include <Gosu/platform.hpp>
+
+#define SDL_MAIN_HANDLED
+
+#if defined(GOSU_IS_UWP)
+# include "SDL_main.h"
+# include <wrl.h>
+
+# ifndef SDL_WINRT_METADATA_FILE_AVAILABLE
+#  ifndef __cplusplus_winrt
+#   error SDL_winrt_main_NonXAML.cpp must be compiled with /ZW, otherwise build errors due to missing .winmd files can occur.
+#  endif
+#endif
+
+# ifdef _MSC_VER
+#  pragma warning(disable:4447)
+# endif
+
+/* Make sure the function to initialize the Windows Runtime gets linked in. */
+# ifdef _MSC_VER
+#  pragma comment(lib, "runtimeobject.lib")
+# endif
+#endif
+
 using namespace std;
 
 vector<string> splitCmdLine()
@@ -49,6 +73,10 @@ vector<string> splitCmdLine()
 
 int main(int argc, char* argv[]);
 
+// if its Win32, use the normal WinMain
+// if its UWP then use SDL_WinRTRunApp
+#if !defined(GOSU_IS_UWP)
+
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
     try
@@ -65,3 +93,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         return EXIT_FAILURE;
     }
 }
+
+#else
+
+int CALLBACK WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+{
+	if (FAILED(Windows::Foundation::Initialize(RO_INIT_MULTITHREADED))) {
+		return 1;
+	}
+
+	SDL_WinRTRunApp(main, NULL);
+	return 0;
+}
+
+#endif

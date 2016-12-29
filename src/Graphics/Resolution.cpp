@@ -1,6 +1,6 @@
 #include <Gosu/Gosu.hpp>
 
-#ifdef GOSU_IS_WIN
+#if defined(GOSU_IS_WIN) && !defined(GOSU_IS_UWP)
 #include <windows.h>
 
 // Note: On Windows, do not use the SDL 2 code below. It reports 2560x1920 in my Windows VM, which is running at 2560x1080. (SDL 2.0.3)

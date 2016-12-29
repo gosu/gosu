@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\src\DirectoriesWin.cpp" />
+    <ClCompile Include="..\src\FileWin.cpp" />
+    <ClCompile Include="..\src\Inspection.cpp" />
+    <ClCompile Include="..\src\IO.cpp" />
+    <ClCompile Include="..\src\Math.cpp" />
+    <ClCompile Include="..\src\stb_vorbis.c" />
+    <ClCompile Include="..\src\TimingWin.cpp" />
+    <ClCompile Include="..\src\Utility.cpp" />
+    <ClCompile Include="..\src\UtilityWin.cpp" />
+    <ClCompile Include="..\src\Window.cpp" />
+    <ClCompile Include="..\src\WinMain.cpp" />
+    <ClCompile Include="..\src\WinUtility.cpp" />
+    <ClCompile Include="..\src\Bitmap\Bitmap.cpp">
+      <Filter>Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Bitmap\BitmapIO.cpp">
+      <Filter>Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Audio\Audio.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Input\Input.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Input\TextInput.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Text\Font.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Text\Text.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Text\TextSDLTTF.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Text\TextTTFWin.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Text\TextWin.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\BlockAllocator.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\Color.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\Graphics.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\Image.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\LargeImageData.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\Macro.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\Resolution.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\TexChunk.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\Texture.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics\Transform.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\Iconv.hpp" />
+    <ClInclude Include="..\src\stb_image.h" />
+    <ClInclude Include="..\src\stb_image_write.h" />
+    <ClInclude Include="..\src\WinUtility.hpp" />
+    <ClInclude Include="..\src\Audio\ALChannelManagement.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Audio\AudioFile.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Audio\SndFile.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Audio\OggFile.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Audio.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Bitmap.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Buttons.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Color.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Directories.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Font.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Fwd.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Graphics.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\GraphicsBase.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Image.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\ImageData.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Input.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Inspection.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\IO.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Math.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\platform.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Text.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\TextInput.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Timing.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\TR1.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Utility.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Version.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Window.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\AutoLink.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Text\FormattedString.hpp">
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Text\TextSDLTTF.hpp">
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Graphics\BlockAllocator.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Graphics\ClipRectStack.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Graphics\Common.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Graphics\DrawOp.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Graphics\DrawOpQueue.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Graphics\LargeImageData.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Graphics\Macro.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Graphics\RenderState.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Graphics\TexChunk.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Graphics\Texture.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Graphics\TransformStack.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Gosu.hpp">
+      <Filter>Gosu</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{eb4b724c-296a-4aad-afbd-fcd7f0e719a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bitmap">
+      <UniqueIdentifier>{c222dd2f-75f8-47c1-ba5f-9600eb291873}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{6e487c09-db4a-40cf-95a8-082ced27171e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{8a877c23-13aa-4905-8f36-d831468486e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Text">
+      <UniqueIdentifier>{fcc8cb1b-c449-4369-bd0c-6951724a4e88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gosu">
+      <UniqueIdentifier>{e108f336-772e-41c8-bac3-4d814d29eedb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

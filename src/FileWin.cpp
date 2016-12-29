@@ -40,8 +40,12 @@ Gosu::File::File(const std::wstring& filename, FileMode mode)
     DWORD shareMode = FILE_SHARE_READ;
     DWORD creationDisp = (mode == fmRead) ? OPEN_EXISTING : OPEN_ALWAYS;
 
-    pimpl->handle = ::CreateFile(filename.c_str(), access, shareMode, 0,
-        creationDisp, FILE_ATTRIBUTE_NORMAL, 0);
+#if defined(GOSU_IS_UWP)
+	pimpl->handle = ::CreateFile2(filename.c_str(), access, shareMode, NULL, NULL);
+#else
+	pimpl->handle = ::CreateFile(filename.c_str(), access, shareMode, 0,
+		creationDisp, FILE_ATTRIBUTE_NORMAL, 0);
+#endif
     if (pimpl->handle == INVALID_HANDLE_VALUE)
         Win::throwLastError("opening " + Gosu::narrow(filename));
     if (mode == fmReplace)
@@ -54,7 +58,14 @@ Gosu::File::~File()
 
 std::size_t Gosu::File::size() const
 {
-    return ::GetFileSize(pimpl->handle, 0);
+	LARGE_INTEGER size;
+	bool result = ::GetFileSizeEx(pimpl->handle, &size);
+	if (result)
+	{
+		// not sure about this
+		return (std::size_t)size.QuadPart;
+	}
+	return 0;
 }
 
 void Gosu::File::resize(std::size_t newSize)

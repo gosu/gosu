@@ -47,8 +47,13 @@ namespace Gosu
 # define GOSU_NORETURN __attribute__ ((noreturn))
 #endif
 
-#if defined(WIN32)
+#if defined(_WIN32)
 # define GOSU_IS_WIN
+# include <winapifamily.h>
+# if defined(WINAPI_FAMILY_SYSTEM)
+#  define GOSU_IS_OPENGLES
+#  define GOSU_IS_UWP
+#  endif
 #else
 # define GOSU_IS_UNIX
 # if defined(__linux) || defined(__FreeBSD__)
