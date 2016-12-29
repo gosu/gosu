@@ -30,8 +30,7 @@ class TextField : public Gosu::TextInput
     double x, y;
     
 public:
-    // Some constants that define our appearance.
-    // (Can't use Gosu::Color that easily as a class constant, thanks to C++.)
+    // Some ARGB constants that define our appearance.
     static const unsigned long INACTIVE_COLOR  = 0xcc666666;
     static const unsigned long ACTIVE_COLOR    = 0xccff6666;
     static const unsigned long SELECTION_COLOR = 0xcc0000ff;
@@ -42,32 +41,26 @@ public:
     : window(window), font(font), x(x), y(y)
     {
         // Start with a self-explanatory text in each field.
-        set_text(L"Click to change text");
-    }
-    
-    // Local helper.
-    static wchar_t to_upper(wchar_t in)
-    {
-        // This will work no matter if towupper is in namespace std or not.
-        // (Depends on your compiler/standard library.)
-        using namespace std;
-        return towupper((wint_t)in);
+        set_text("Click to change text");
     }
     
     // Example filter member function. You can truncate the text to employ a length limit,
     // limit the text to certain characters etc.
-    std::wstring filter(const std::wstring& string) const override
+    std::string filter(std::string string) const override
     {
-        std::wstring result;
-        result.resize(string.length());
-        std::transform(string.begin(), string.end(), result.begin(), to_upper);
-        return result;
+        std::wstring wide_string = Gosu::utf8_to_wstring(string);
+        std::transform(wide_string.begin(), wide_string.end(), wide_string.begin(), [](wchar_t in) {
+            // Use namespace std so it doesn't matter whether towupper is part of it or not.
+            // (Depends on your compiler/standard library.)
+            using namespace std;
+            return towupper((wint_t)in);
+        });
+        return Gosu::wstring_to_utf8(wide_string);
     }
     
     void draw() const
     {
-        // Depending on whether this is the currently selected input or not, change the
-        // background's color.
+        // Highlight this text field if it is currently selected.
         Gosu::Color background_color;
         if (window.input().text_input() == this)
             background_color = ACTIVE_COLOR;

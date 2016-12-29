@@ -337,52 +337,42 @@ bool Gosu::Input::feed_sdl_event(void* event)
     return false;
 }
 
-wchar_t Gosu::Input::id_to_char(Button btn)
+std::string Gosu::Input::id_to_char(Button btn)
 {
     require_sdl_video();
     
     if (btn.id() > KB_RANGE_END)
-        return 0;
+        return "";
     
-    // SDL_GetKeyName would return "Space" for this value.
+    // SDL_GetKeyName returns "Space" for this value, but we want the character value.
     if (btn.id() == KB_SPACE)
-        return L' ';
+        return " ";
     
     SDL_Keycode keycode = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(btn.id()));
     if (keycode == SDLK_UNKNOWN)
-        return 0;
+        return "";
     
     const char* name = SDL_GetKeyName(keycode);
     if (name == nullptr)
-        return 0;
+        return "";
     
     std::wstring wname = utf8_to_wstring(name);
     if (wname.length() != 1)
-        return 0;
+        return "";
     
     // Convert to lower case to be consistent with previous versions of Gosu.
-    // Also, German umlauts are already reported in lower-case by the SDL, so
-    // this makes everything a little more consistent.
-    //
-    // This should handle Turkish i/I just fine because it uses the current
-    // locale, but if we ever receive bug reports from Turkish users, they are
-    // likely caused by a combination of this line and an invalid locale :)
-    return std::towlower(wname[0]);
+    // German umlauts are already reported in lower-case by SDL, anyway.
+    // (This should handle Turkish i/I just fine because it uses the current locale.)
+    wname[0] = (wchar_t) std::towlower((int) wname[0]);
+    return wstring_to_utf8(wname);
 }
 
-Gosu::Button Gosu::Input::char_to_id(wchar_t ch)
+Gosu::Button Gosu::Input::char_to_id(std::string ch)
 {
     require_sdl_video();
     
-    std::wstring string(1, ch);
-    SDL_Keycode keycode = SDL_GetKeyFromName(wstring_to_utf8(string).c_str());
-    
-    if (keycode == SDLK_UNKNOWN) {
-        return NO_BUTTON;
-    }
-    else {
-        return Button(SDL_GetScancodeFromKey(keycode));
-    }
+    SDL_Keycode keycode = SDL_GetKeyFromName(ch.c_str());
+    return keycode == SDLK_UNKNOWN ? NO_BUTTON : Button(SDL_GetScancodeFromKey(keycode));
 }
 
 bool Gosu::Input::down(Gosu::Button btn)

@@ -103,7 +103,7 @@ namespace Gosu
                 vector<FormattedString> parts = text.split_parts();
                 unsigned result = 0;
                 for (auto& part : parts)
-                    result += Gosu::text_width(part.unformat(), font_name, font_height, part.flags_at(0));
+                    result += Gosu::text_width(wstring_to_utf8(part.unformat()), font_name, font_height, part.flags_at(0));
                 return result;
             }
 
@@ -157,7 +157,7 @@ namespace Gosu
                             continue;
                         }
                         
-                        wstring unformatted_part = part.unformat();
+                        string unformatted_part = wstring_to_utf8(part.unformat());
                         draw_text(bmp, unformatted_part, trunc(pos) + x, trunc(top),
                             part.color_at(0), font_name, font_height, part.flags_at(0));
                         x += Gosu::text_width(unformatted_part, font_name, font_height,
@@ -296,14 +296,15 @@ namespace Gosu
     }
 }
 
-Gosu::Bitmap Gosu::create_text(const wstring& text,
+Gosu::Bitmap Gosu::create_text(const string& text,
     const string& font_name, unsigned font_height, int line_spacing,
     unsigned width, Alignment align, unsigned font_flags)
 {
     if (line_spacing <= -static_cast<int>(font_height))
         throw logic_error("negative line spacing of more than line height impossible");
 
-    FormattedString fs(text.c_str(), font_flags);
+    wstring wtext = utf8_to_wstring(text);
+    FormattedString fs(wtext.c_str(), font_flags);
     if (fs.length() == 0)
         return Bitmap(width, font_height);
     
@@ -319,10 +320,11 @@ Gosu::Bitmap Gosu::create_text(const wstring& text,
 }
 
 // Very easy special case.
-Gosu::Bitmap Gosu::create_text(const wstring& text,
+Gosu::Bitmap Gosu::create_text(const string& text,
     const string& font_name, unsigned font_height, unsigned font_flags)
 {
-    FormattedString fs(text.c_str(), font_flags);
+    wstring wtext = utf8_to_wstring(text);
+    FormattedString fs(wtext.c_str(), font_flags);
     if (fs.length() == 0)
         return Bitmap(1, font_height);
     
@@ -350,7 +352,7 @@ Gosu::Bitmap Gosu::create_text(const wstring& text,
             }
                 
             assert(part.length() > 0);
-            wstring unformatted_text = part.unformat();
+            string unformatted_text = wstring_to_utf8(part.unformat());
             unsigned part_width =
                 text_width(unformatted_text, font_name, font_height, part.flags_at(0));
             bmp.resize(max(bmp.width(), x + part_width), bmp.height(), 0x00ffffff);
@@ -363,25 +365,22 @@ Gosu::Bitmap Gosu::create_text(const wstring& text,
     return bmp;
 }
 
-namespace
-{
-    map<wstring, shared_ptr<Gosu::Bitmap> > entities;
-}
+static map<string, shared_ptr<Gosu::Bitmap> > entities;
 
-void Gosu::register_entity(const wstring& name, const Gosu::Bitmap& replacement)
+void Gosu::register_entity(const string& name, const Gosu::Bitmap& replacement)
 {
     entities[name].reset(new Bitmap(replacement));
 }
 
-bool Gosu::is_entity(const wstring& name)
+bool Gosu::is_entity(const string& name)
 {
     return entities[name].get();
 }
 
-const Gosu::Bitmap& Gosu::entity_bitmap(const wstring& name)
+const Gosu::Bitmap& Gosu::entity_bitmap(const string& name)
 {
     shared_ptr<Gosu::Bitmap>& ptr = entities[name];
     if (!ptr)
-        throw runtime_error("Unknown entity: " + Gosu::wstring_to_utf8(name));
+        throw runtime_error("Unknown entity: " + name);
     return *ptr;
 }

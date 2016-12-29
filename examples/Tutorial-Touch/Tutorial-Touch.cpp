@@ -175,7 +175,7 @@ public:
         for (Star& star : stars)
             star.draw();
 
-        font.draw(L"Score: " + std::to_wstring(player.get_score()), 10, 10, Z_UI, 1, 1, Gosu::Color::YELLOW);
+        font.draw("Score: " + std::to_string(player.get_score()), 10, 10, Z_UI, 1, 1, Gosu::Color::YELLOW);
     }
 };
 

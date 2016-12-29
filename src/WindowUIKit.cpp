@@ -2,7 +2,6 @@
 #if defined(GOSU_IS_IPHONE)
 
 #include <Gosu/Gosu.hpp>
-#include "AppleUtility.hpp"
 #include "GosuViewController.h"
 
 namespace Gosu

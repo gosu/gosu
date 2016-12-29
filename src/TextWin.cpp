@@ -38,8 +38,7 @@ namespace Gosu
         public:
             WinBitmap(unsigned width, unsigned height)
             {
-                dc = Win::check(::CreateCompatibleDC(0),
-                    "creating a device context");
+                dc = winapi_check(CreateCompatibleDC(0), "creating a device context");
 
                 BITMAPCOREHEADER core_header;
                 core_header.bcSize     = sizeof core_header;
@@ -48,28 +47,28 @@ namespace Gosu
                 core_header.bcPlanes   = 1;
                 core_header.bcBitCount = 24;
 
-                bitmap = ::CreateDIBSection(dc,
+                bitmap = CreateDIBSection(dc,
                     reinterpret_cast<BITMAPINFO*>(&core_header), DIB_RGB_COLORS,
                     reinterpret_cast<VOID**>(&pixels), 0, 0);
                 if (bitmap == 0)
                 {
-                    ::DeleteDC(dc);
-                    Win::throw_last_error("creating a bitmap");
+                    DeleteDC(dc);
+                    throw_last_winapi_error("creating a bitmap");
                 }
 
-                ::SelectObject(dc, bitmap);
+                SelectObject(dc, bitmap);
 
-                HBRUSH brush = ::CreateSolidBrush(0x000000);
+                HBRUSH brush = CreateSolidBrush(0x000000);
                 RECT rc = { 0, 0, width, height };
-                ::FillRect(dc, &rc, brush);
-                ::DeleteObject(brush);
+                FillRect(dc, &rc, brush);
+                DeleteObject(brush);
             }
 
             ~WinBitmap()
             {
-                ::DeleteObject(bitmap);
-                ::SelectObject(dc, ::GetStockObject(SYSTEM_FONT));
-                ::DeleteDC(dc);
+                DeleteObject(bitmap);
+                SelectObject(dc, GetStockObject(SYSTEM_FONT));
+                DeleteDC(dc);
             }
 
             HDC context() const
@@ -100,7 +99,7 @@ namespace Gosu
                     if (custom_fonts.count(font_name) == 0)
                     {
                         std::wstring wfont_name = utf8_to_wstring(font_name);
-                        AddFontResourceEx(wfont_name.c_str(), FR_PRIVATE, 0);
+                        AddFontResourceExW(wfont_name.c_str(), FR_PRIVATE, 0);
                         font_name = custom_fonts[font_name] = get_name_from_ttf_file(wfont_name);
                     }
                     else
@@ -128,7 +127,7 @@ namespace Gosu
                     wcsncpy(logfont.lfFaceName, wfont_name.c_str(), LF_FACESIZE);
                     logfont.lfFaceName[LF_FACESIZE - 1] = 0;
                     
-                    font = loaded_fonts[key] = Win::check(::CreateFontIndirect(&logfont),
+                    font = loaded_fonts[key] = winapi_check(CreateFontIndirect(&logfont),
                         "creating font object for " + font_name);
                 }
                 else
@@ -136,33 +135,34 @@ namespace Gosu
                     font = loaded_fonts[key];
                 }
 
-                ::SelectObject(dc, font);
+                SelectObject(dc, font);
             }
         };
     }
 };
 
-unsigned Gosu::text_width(const std::wstring& text,
+unsigned Gosu::text_width(const std::string& text,
     const std::string& font_name, unsigned font_height, unsigned font_flags)
 {
-    if (text.find_first_of(L"\r\n") != std::wstring::npos)
+    if (text.find_first_of("\r\n") != text.npos)
         throw std::invalid_argument("the argument to text_width cannot contain line breaks");
     
     WinBitmap helper(1, 1);
     helper.select_font(font_name, font_height, font_flags);
     
+    std::wstring wtext = utf8_to_wstring(text);
     SIZE size;
-    if (!::GetTextExtentPoint32(helper.context(), text.c_str(), text.length(), &size))
-        Win::throw_last_error("calculating the width of a text");
+    if (!GetTextExtentPoint32W(helper.context(), wtext.c_str(), text.length(), &size))
+        throw_last_winapi_error("calculating the width of a text");
     
     return size.cx;
 }
 
-void Gosu::draw_text(Bitmap& bitmap, const std::wstring& text, int x, int y,
+void Gosu::draw_text(Bitmap& bitmap, const std::string& text, int x, int y,
     Color c, const std::string& font_name, unsigned font_height,
     unsigned font_flags)
 {
-    if (text.find_first_of(L"\r\n") != std::wstring::npos)
+    if (text.find_first_of("\r\n") != text.npos)
         throw std::invalid_argument("the argument to draw_text cannot contain line breaks");
     
     unsigned width = text_width(text, font_name, font_height, font_flags);
@@ -170,13 +170,14 @@ void Gosu::draw_text(Bitmap& bitmap, const std::wstring& text, int x, int y,
     WinBitmap helper(width, font_height);
     helper.select_font(font_name, font_height, font_flags);
 
-    if (::SetTextColor(helper.context(), 0xffffff) == CLR_INVALID)
-        Win::throw_last_error("setting the text color");
+    if (SetTextColor(helper.context(), 0xffffff) == CLR_INVALID)
+        throw_last_winapi_error("setting the text color");
 
-    Win::check(::SetBkMode(helper.context(), TRANSPARENT),
+    winapi_check(SetBkMode(helper.context(), TRANSPARENT),
         "setting a bitmap's background mode to TRANSPARENT");
 
-    ::ExtTextOut(helper.context(), 0, 0, 0, 0, text.c_str(), text.length(), 0);
+    std::wstring wtext = utf8_to_wstring(text);
+    ExtTextOutW(helper.context(), 0, 0, 0, 0, wtext.c_str(), text.length(), 0);
     
     for (unsigned rel_y = 0; rel_y < font_height; ++rel_y)
         for (unsigned rel_x = 0; rel_x < width; ++rel_x)
@@ -187,8 +188,9 @@ void Gosu::draw_text(Bitmap& bitmap, const std::wstring& text, int x, int y,
                 continue;
             pixel = multiply(c, Color(src_alpha, 255, 255, 255));
             if (pixel != 0 && x + rel_x >= 0 && x + rel_x < bitmap.width() &&
-                y + rel_y >= 0 && y + rel_y < bitmap.height())
+                    y + rel_y >= 0 && y + rel_y < bitmap.height()) {
                 bitmap.set_pixel(x + rel_x, y + rel_y, pixel);
+            }
         }
 }
 

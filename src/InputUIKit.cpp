@@ -2,7 +2,6 @@
 #if defined(GOSU_IS_IPHONE)
 
 #import <Gosu/Input.hpp>
-#import "AppleUtility.hpp"
 #import <Gosu/TextInput.hpp>
 #import <functional>
 #import <UIKit/UIKit.h>
@@ -10,10 +9,12 @@
 struct Gosu::TextInput::Impl {};
 Gosu::TextInput::TextInput() {}
 Gosu::TextInput::~TextInput() {}
-std::wstring Gosu::TextInput::text() const { return L""; }
-void Gosu::TextInput::set_text(const std::wstring& text) {}
+std::string Gosu::TextInput::text() const { return ""; }
+void Gosu::TextInput::set_text(const std::string& text) {}
 unsigned Gosu::TextInput::caret_pos() const { return 0; }
+void Gosu::TextInput::set_caret_pos(unsigned) {}
 unsigned Gosu::TextInput::selection_start() const { return 0; }
+void Gosu::TextInput::set_selection_start(unsigned) {}
 
 struct Gosu::Input::Impl
 {
@@ -82,12 +83,12 @@ void Gosu::Input::feed_touch_event(int type, void *touches)
     }
 }
 
-wchar_t Gosu::Input::id_to_char(Button btn)
+std::string Gosu::Input::id_to_char(Button btn)
 {
-    return 0;
+    return std::string();
 }
 
-Gosu::Button Gosu::Input::char_to_id(wchar_t ch)
+Gosu::Button Gosu::Input::char_to_id(std::string ch)
 {
     return NO_BUTTON;
 }

@@ -25,7 +25,7 @@ struct Gosu::Font::Impl
     typedef array<CharInfo, 65536> Plane;
     std::unique_ptr<Plane> planes[16][FF_COMBINATIONS];
     
-    map<wstring, shared_ptr<Image> > entity_cache;
+    map<string, shared_ptr<Image> > entity_cache;
     
     CharInfo& char_info(wchar_t wc, unsigned flags)
     {
@@ -44,9 +44,9 @@ struct Gosu::Font::Impl
     
     const Image& image_at(const FormattedString& fs, unsigned i)
     {
-        if (fs.entity_at(i))
+        if (const char* entity = fs.entity_at(i))
         {
-            shared_ptr<Image>& ptr = entity_cache[fs.entity_at(i)];
+            shared_ptr<Image>& ptr = entity_cache[entity];
             if (!ptr)
                 ptr.reset(new Image(entity_bitmap(fs.entity_at(i)), IF_SMOOTH));
             return *ptr;
@@ -59,7 +59,7 @@ struct Gosu::Font::Impl
         if (info.image.get())
             return *info.image;
         
-        wstring char_string(1, wc);
+        std::string char_string = wstring_to_utf8(std::wstring(1, wc));
         // TODO: Would be nice to have.
         // if (is_formatting_char(wc))
         //     char_string.clear();
@@ -103,9 +103,10 @@ unsigned Gosu::Font::flags() const
     return pimpl->flags;
 }
 
-double Gosu::Font::text_width(const wstring& text, double scale_x) const
+double Gosu::Font::text_width(const string& text, double scale_x) const
 {
-    FormattedString fs(text.c_str(), flags());
+    std::wstring wtext = utf8_to_wstring(text);
+    FormattedString fs(wtext.c_str(), flags());
     double result = 0;
     for (unsigned i = 0; i < fs.length(); ++i)
     {
@@ -116,10 +117,11 @@ double Gosu::Font::text_width(const wstring& text, double scale_x) const
     return result * scale_x;
 }
 
-void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
+void Gosu::Font::draw(const string& text, double x, double y, ZPos z,
     double scale_x, double scale_y, Color c, AlphaMode mode) const
 {
-    FormattedString fs(text.c_str(), flags());
+    std::wstring wtext = utf8_to_wstring(text);
+    FormattedString fs(wtext.c_str(), flags());
     
     for (unsigned i = 0; i < fs.length(); ++i)
     {
@@ -133,7 +135,7 @@ void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
     }
 }
 
-void Gosu::Font::draw_rel(const wstring& text, double x, double y, ZPos z,
+void Gosu::Font::draw_rel(const string& text, double x, double y, ZPos z,
     double rel_x, double rel_y, double scale_x, double scale_y, Color c,
     AlphaMode mode) const
 {
@@ -158,7 +160,7 @@ void Gosu::Font::set_image(wchar_t wc, unsigned font_flags, const Image& image)
     ci.factor = 1.0;
 }
 
-void Gosu::Font::draw_rot(const wstring& text, double x, double y, ZPos z, double angle,
+void Gosu::Font::draw_rot(const string& text, double x, double y, ZPos z, double angle,
     double scale_x, double scale_y, Color c, AlphaMode mode) const
 {
     Gosu::Graphics::push_transform(rotate(angle, x, y));

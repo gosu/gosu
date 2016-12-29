@@ -1,56 +1,52 @@
 #include <Gosu/Platform.hpp>
 #if defined(GOSU_IS_MAC)
 
-#include <Gosu/Utility.hpp>
-#include <Gosu/Platform.hpp>
-#include "AppleUtility.hpp"
+#import <Gosu/Utility.hpp>
 #import <Foundation/Foundation.h>
-#include <stdexcept>
-#include <vector>
-using namespace std;
+#import <stdexcept>
+#import <vector>
 
-#ifdef GOSU_IS_IPHONE // (but could also be used for OS X)
-wstring Gosu::utf8_to_wstring(const string& s)
+#ifdef GOSU_IS_IPHONE
+std::wstring Gosu::utf8_to_wstring(const std::string& s)
 {
     if (s.empty()) {
-        return wstring();
+        return std::wstring();
     }
     
-    NSString *str = [NSString stringWithUTF8String:s.c_str()];
-    vector<wchar_t> buffer(s.size());
-    NSUInteger used_buffer_count;
-    if (![str getBytes:&buffer[0]
-             maxLength:buffer.size() * sizeof(wchar_t)
-            usedLength:&used_buffer_count
-              encoding:NSUTF32LittleEndianStringEncoding
-               options:0
-                 range:NSMakeRange(0, str.length)
-            remainingRange:NULL]) {
-        throw std::runtime_error("String " + s + " could not be converted to Unicode");
+    NSString *string = [NSString stringWithUTF8String:s.c_str()];
+    std::vector<wchar_t> buffer(s.size());
+    NSUInteger buffer_size;
+    if (![string getBytes:&buffer[0]
+                maxLength:buffer.size() * sizeof(wchar_t)
+               usedLength:&buffer_size
+                 encoding:NSUTF32LittleEndianStringEncoding
+                  options:0
+                    range:NSMakeRange(0, string.length)
+           remainingRange:NULL]) {
+        throw std::runtime_error("String " + s + " could not be converted to UTF-32");
     }
-    return wstring(&buffer[0], &buffer[0] + used_buffer_count / sizeof(wchar_t));
+    return std::wstring(&buffer[0], &buffer[0] + buffer_size / sizeof(wchar_t));
 }
 
-string Gosu::wstring_to_utf8(const std::wstring& ws)
+std::string Gosu::wstring_to_utf8(const std::wstring& ws)
 {
     if (ws.empty()) {
-        return string();
+        return std::string();
     }
 
     @autoreleasepool {
-        NSString *str = [[NSString alloc] initWithBytes:ws.data()
-                                                 length:ws.size() * sizeof(wchar_t)
-                                               encoding:NSUTF32LittleEndianStringEncoding];
-        return str.UTF8String ?: string();
+        NSString *string = [[NSString alloc] initWithBytes:ws.data()
+                                                    length:ws.size() * sizeof(wchar_t)
+                                                  encoding:NSUTF32LittleEndianStringEncoding];
+        return string.UTF8String ?: std::string();
     }
 }
 #endif
 
-string Gosu::language()
+std::string Gosu::language()
 {
     @autoreleasepool {
-        // Cannot use accessor syntax here without breaking compilation with OS X 10.7/Xcode 4.6.3.
-        NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
+        NSString *language = [NSLocale preferredLanguages][0];
         return language.UTF8String ?: "en";
     }
 }

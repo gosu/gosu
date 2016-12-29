@@ -42,11 +42,11 @@ namespace Gosu
         unsigned flags() const;
         
         //! Returns the width, in pixels, the given text would occupy if drawn.
-        double text_width(const std::wstring& text, double scale_x = 1) const;
+        double text_width(const std::string& text, double scale_x = 1) const;
         
         //! Draws text so the top left corner of the text is at (x; y).
         //! \param text Formatted text without line-breaks.
-        void draw(const std::wstring& text, double x, double y, ZPos z,
+        void draw(const std::string& text, double x, double y, ZPos z,
             double scale_x = 1, double scale_y = 1,
             Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
         
@@ -56,14 +56,14 @@ namespace Gosu
         //! the text will be to the left of x, if it is 0.5, it will be
         //! centered on x. Of course, all real numbers are possible values.
         //! \param rel_y See rel_x.
-        void draw_rel(const std::wstring& text, double x, double y, ZPos z,
+        void draw_rel(const std::string& text, double x, double y, ZPos z,
             double rel_x, double rel_y, double scale_x = 1, double scale_y = 1,
             Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
         
         //! Maps a letter to a specific image instead of generating one using
         //! Gosu's built-in text rendering. This can only be called once per
         //! character, and the character must not have been drawn before.
-        //! This ensures that Fonts are still sort of immutable.
+        //! This ensures that Fonts are still (sort of) immutable.
         void set_image(wchar_t wc, unsigned font_flags, const Gosu::Image& image);
         //! A shortcut for mapping a character to an image regardless of font_flags.
         //! Later versions might apply faux italics or faux bold to it (to be decided!).
@@ -74,7 +74,7 @@ namespace Gosu
         #endif
         //! DEPRECATED: Analogous to draw, but rotates the text by a given angle.
         //! Use Graphics::push_transform to achieve the same effect.
-        void draw_rot(const std::wstring& text, double x, double y, ZPos z, double angle,
+        void draw_rot(const std::string& text, double x, double y, ZPos z, double angle,
             double scale_x = 1, double scale_y = 1,
             Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
     };
