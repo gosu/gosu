@@ -17,11 +17,11 @@ namespace Gosu
 {
     namespace
     {
-        Graphics* currentGraphicsPointer = 0;
+        Graphics* currentGraphicsPointer = nullptr;
         
         Graphics& currentGraphics()
         {
-            if (currentGraphicsPointer == 0)
+            if (currentGraphicsPointer == nullptr)
                 throw std::logic_error("Gosu::Graphics can only be drawn to while rendering");
             
             return *currentGraphicsPointer;
@@ -443,9 +443,9 @@ GOSU_UNIQUE_PTR<Gosu::ImageData> Gosu::Graphics::createImage(
     applyBorderFlags(bmp, src, srcX, srcY, srcWidth, srcHeight, flags);
 
     // Try to put the bitmap into one of the already allocated textures.
-    for (Textures::iterator i = textures.begin(); i != textures.end(); ++i)
+    for (auto weakTexture : textures)
     {
-        std::tr1::shared_ptr<Texture> texture(*i);
+        std::tr1::shared_ptr<Texture> texture(weakTexture);
         
         if (texture->retro() != wantsRetro)
             continue;
