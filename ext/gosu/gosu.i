@@ -772,13 +772,11 @@ namespace Gosu
             tileable ? Gosu::IF_TILEABLE : Gosu::IF_SMOOTH);
     }
     
-    std::string to_blob() const
+    VALUE to_blob() const
     {
-        // TODO: Optimize with direct copy into a Ruby string
         Gosu::Bitmap bmp = $self->data().to_bitmap();
-        size_t length = bmp.width() * bmp.height() * 4;
-        return std::string(reinterpret_cast<const char*>(bmp.data()),
-                           reinterpret_cast<const char*>(bmp.data()) + length);
+        auto size = bmp.width() * bmp.height() * sizeof(Gosu::Color);
+        return rb_str_new(reinterpret_cast<const char *>(bmp.data()), size);
     }
     
     unsigned columns() const

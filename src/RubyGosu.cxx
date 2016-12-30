@@ -2670,7 +2670,9 @@ SWIGINTERN std::string Gosu_Color_inspect(Gosu::Color const *self){
 SWIGINTERNINLINE VALUE
 SWIG_From_std_string  (const std::string& s)
 {
-  return SWIG_FromCharPtrAndSize(s.data(), s.size());
+  VALUE string = SWIG_FromCharPtrAndSize(s.data(), s.size());
+  ENFORCE_UTF8(string);
+  return string;
 }
 
 SWIGINTERN bool Gosu_Color_operator_Se__Se_(Gosu::Color const *self,VALUE other){
@@ -3081,12 +3083,10 @@ SWIGINTERN std::vector< Gosu::Image > Gosu_Image_load_tiles__SWIG_1(Gosu::Window
         return Gosu::load_tiles(bmp, tile_width, tile_height,
             tileable ? Gosu::IF_TILEABLE : Gosu::IF_SMOOTH);
     }
-SWIGINTERN std::string Gosu_Image_to_blob(Gosu::Image const *self){
-        // TODO: Optimize with direct copy into a Ruby string
+SWIGINTERN VALUE Gosu_Image_to_blob(Gosu::Image const *self){
         Gosu::Bitmap bmp = self->data().to_bitmap();
-        size_t length = bmp.width() * bmp.height() * 4;
-        return std::string(reinterpret_cast<const char*>(bmp.data()),
-                           reinterpret_cast<const char*>(bmp.data()) + length);
+        auto size = bmp.width() * bmp.height() * sizeof(Gosu::Color);
+        return rb_str_new(reinterpret_cast<const char *>(bmp.data()), size);
     }
 SWIGINTERN unsigned int Gosu_Image_columns(Gosu::Image const *self){
         return self->width();
@@ -7206,7 +7206,7 @@ _wrap_Image_to_blob(int argc, VALUE *argv, VALUE self) {
   Gosu::Image *arg1 = (Gosu::Image *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  std::string result;
+  VALUE result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -7219,13 +7219,13 @@ _wrap_Image_to_blob(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Image * >(argp1);
   {
     try {
-      result = Gosu_Image_to_blob((Gosu::Image const *)arg1);
+      result = (VALUE)Gosu_Image_to_blob((Gosu::Image const *)arg1);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  vresult = SWIG_From_std_string(static_cast< std::string >(result));
+  vresult = result;
   return vresult;
 fail:
   return Qnil;

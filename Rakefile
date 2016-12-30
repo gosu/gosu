@@ -38,6 +38,7 @@ Dir.glob('./rake/*.rb').sort.each { |task| require task }
 task :swig do
   sh "swig -c++ -ruby -autorename -o src/RubyGosu.cxx ext/gosu/gosu.i"
   sh "patch --no-backup-if-mismatch -p0 <ext/gosu/gosu_SWIG_RENAME_PATCH.patch"
+  sh "patch --no-backup-if-mismatch -p0 <ext/gosu/gosu_SWIG_UTF8_PATCH.patch"
 end
 
 task :update_rdoc do
