@@ -23,7 +23,15 @@ end
 # Also import old-style constants into Gosu::Button.
 module Gosu::Button; end
 Gosu.constants.grep(/^KB_|MS_|GP_/).each do |c|
-  old_name = c.to_s.capitalize.gsub(/_(.)/) { $1.upcase }
+  old_name = case c
+  when :KB_ISO then "KbISO"
+  when :KB_NUMPAD_PLUS then "KbNumpadAdd"
+  when :KB_NUMPAD_MINUS then "KbNumpadSubtract"
+  when :KB_EQUALS then "KbEqual"
+  when :KB_LEFT_BRACKET then "KbBracketLeft"
+  when :KB_RIGHT_BRACKET then "KbBracketRight"
+  else c.to_s.capitalize.gsub(/_(.)/) { $1.upcase }
+  end
   Gosu.const_set old_name, Gosu.const_get(c)
   Gosu::Button.const_set old_name, Gosu.const_get(c)
 end
