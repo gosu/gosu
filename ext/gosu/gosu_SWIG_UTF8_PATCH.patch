@@ -1,0 +1,13 @@
+--- src/RubyGosu.cxx
++++ src/RubyGosu.cxx
+@@ -2670,7 +2670,9 @@ SWIGINTERN std::string Gosu_Color_inspect(Gosu::Color const *self){
+ SWIGINTERNINLINE VALUE
+ SWIG_From_std_string  (const std::string& s)
+ {
+-  return SWIG_FromCharPtrAndSize(s.data(), s.size());
++  VALUE string = SWIG_FromCharPtrAndSize(s.data(), s.size());
++  ENFORCE_UTF8(string);
++  return string;
+ }
+ 
+ SWIGINTERN bool Gosu_Color_operator_Se__Se_(Gosu::Color const *self,VALUE other){
