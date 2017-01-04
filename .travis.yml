@@ -7,10 +7,6 @@ matrix:
       dist: trusty
       sudo: required
       compiler: gcc
-    # OS X 10.9 Mavericks
-    - os: osx
-      osx_image: beta-xcode6.2
-      compiler: clang
     # OS X 10.11 El Capitan
     - os: osx
       osx_image: xcode7.3
