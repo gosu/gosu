@@ -188,6 +188,7 @@
     <ClCompile Include="..\src\TimingWin.cpp" />
     <ClCompile Include="..\src\Utility.cpp" />
     <ClCompile Include="..\src\UtilityWin.cpp" />
+    <ClCompile Include="..\src\Version.cpp" />
     <ClCompile Include="..\src\Window.cpp" />
     <ClCompile Include="..\src\WinUtility.cpp" />
     <ClCompile Include="..\src\BlockAllocator.cpp" />

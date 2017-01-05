@@ -27,10 +27,10 @@ after_build:
 
     If ($env:PLATFORM -Eq "x64") {
       $env:PATH = "C:\Ruby23-x64\bin;$OLD_PATH"
-      ruby -I. -r./gosu.rb -e "puts RUBY_VERSION, Gosu::VERSION"
+      ruby -I. -r./gosu.rb -e "puts RUBY_VERSION, Gosu::VERSION, Gosu::LICENSES"
     }
     Else {
       $env:PATH = "C:\Ruby23\bin;$OLD_PATH"
-      ruby -I. -r./gosu.rb -e "puts RUBY_VERSION, Gosu::VERSION"
+      ruby -I. -r./gosu.rb -e "puts RUBY_VERSION, Gosu::VERSION, Gosu::LICENSES"
     }
 test: off
