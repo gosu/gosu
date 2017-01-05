@@ -3,33 +3,27 @@
 
 #include <Gosu/IO.hpp>
 #include <Gosu/Utility.hpp>
-#include <stdexcept>
 #include <cstring>
 #include <fcntl.h>
-#include <unistd.h>
-#include <sys/types.h>
+#include <stdexcept>
 #include <sys/mman.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #ifdef HAVE_SYS_STAT_H
 #include <sys/stat.h>
 #endif
 
-namespace
-{
-    // According to my man page, Unix folks just don't trust the 0, it's got to be a crippled -1.
-    void* const no_mapping = reinterpret_cast<void*>(-1);
-}
-
 struct Gosu::File::Impl
 {
-    int fd;
-    void* mapping;
+    int fd = -1;
+    void* mapping = MAP_FAILED;
     
-    Impl() : fd(-1), mapping(no_mapping) {}
     ~Impl()
     {
-        if (fd > 0)
+        if (fd >= 0) {
             close(fd);
+        }
     }
 };
 
@@ -38,8 +32,7 @@ Gosu::File::File(const std::string& filename, FileMode mode)
 {
     int flags;
 
-    switch (mode)
-    {
+    switch (mode) {
     case FM_READ:
         flags = O_RDONLY;
         break;
@@ -53,51 +46,47 @@ Gosu::File::File(const std::string& filename, FileMode mode)
 
     // TODO: Locking flags?
 
-    pimpl->fd = open(filename.c_str(), flags,
-        S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
-    if (pimpl->fd < 0)
+    pimpl->fd = open(filename.c_str(), flags, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
+    if (pimpl->fd < 0) {
         throw std::runtime_error("Cannot open file " + filename);
+    }
     
-    if (mode == FM_READ && size() > 0)
+    if (mode == FM_READ && size() > 0) {
         pimpl->mapping = mmap(nullptr, size(), PROT_READ, 0, pimpl->fd, 0);
+    }
 }
 
 Gosu::File::~File()
 {
-    if (pimpl->mapping != no_mapping)
+    if (pimpl->mapping != MAP_FAILED) {
         munmap(pimpl->mapping, size());
+    }
 }
 
 std::size_t Gosu::File::size() const
 {
-    // IMPR: Error checking?
+    // TODO: Error checking?
     return lseek(pimpl->fd, 0, SEEK_END);
 }
 
-void Gosu::File::resize(std::size_t new_size)
-{
-    ftruncate(pimpl->fd, new_size);
-}
+void Gosu::File::resize(std::size_t new_size) { ftruncate(pimpl->fd, new_size); }
 
-void Gosu::File::read(std::size_t offset, std::size_t length,
-    void* dest_buffer) const
+void Gosu::File::read(std::size_t offset, std::size_t length, void* dest_buffer) const
 {
-    // TODO: err checking
-    if (pimpl->mapping != no_mapping)
-    {
+    // TODO: Bounds checks?
+    if (pimpl->mapping != MAP_FAILED) {
         std::memcpy(dest_buffer, static_cast<const char*>(pimpl->mapping) + offset, length);
-        return;
     }
-    
-    // IMPR: Error checking?
-    lseek(pimpl->fd, offset, SEEK_SET);
-    ::read(pimpl->fd, dest_buffer, length);
+    else {
+        // TODO: Error checking?
+        lseek(pimpl->fd, offset, SEEK_SET);
+        ::read(pimpl->fd, dest_buffer, length);
+    }
 }
 
-void Gosu::File::write(std::size_t offset, std::size_t length,
-    const void* source_buffer)
+void Gosu::File::write(std::size_t offset, std::size_t length, const void* source_buffer)
 {
-    // IMPR: Error checking?
+    // TODO: Error checking?
     lseek(pimpl->fd, offset, SEEK_SET);
     ::write(pimpl->fd, source_buffer, length);
 }

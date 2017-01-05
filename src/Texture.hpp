@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Gosu/Fwd.hpp>
-#include <Gosu/Bitmap.hpp>
+#include "BlockAllocator.hpp"
 #include "GraphicsImpl.hpp"
 #include "TexChunk.hpp"
-#include "BlockAllocator.hpp"
+#include <Gosu/Fwd.hpp>
+#include <Gosu/Bitmap.hpp>
 #include <vector>
 
 namespace Gosu

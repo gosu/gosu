@@ -1,6 +1,5 @@
 namespace :win do
-  WINDOWS_FILES = COMMON_CPP_FILES +
-                  FileList['Gosu/*.hpp', 'lib{,64}/*.{dll,lib}']
+  WINDOWS_FILES = COMMON_CPP_FILES + FileList["Gosu/*.hpp", "lib{,64}/*.{dll,lib}"]
   WINDOWS_FILES.uniq!
   
   WINDOWS_ARCHIVE_FILENAME = "pkg/gosu-windows-#{GOSU_VERSION}.zip"
@@ -16,7 +15,7 @@ end
     task :gem => :set_version
     
     spec = Gem::Specification.new do |s|
-      # Copy most fields from the 'normal' Ruby gem's specification
+      # Copy most fields from the "normal" Ruby gem"s specification
       %w(name version summary description author date email homepage).each do |field|
         s.send "#{field}=", GEM_SPEC.send(field)
       end
@@ -24,11 +23,11 @@ end
       # Ruby frontend for C++ extension
       s.files += Dir["lib/**/*.rb"]
       # Ruby-specific binaries for C++ extension
-      if bits == 32 then
-        s.files += FileList['lib/?.?/gosu.so', 'lib/*.dll']
+      if bits == 32
+        s.files += FileList["lib/?.?/gosu.so", "lib/*.dll"]
       else
-        s.files += FileList['lib64/?.?/gosu.so', 'lib64/*.dll']
-        s.required_ruby_version = '>= 2.1.0'
+        s.files += FileList["lib64/?.?/gosu.so", "lib64/*.dll"]
+        s.required_ruby_version = ">= 2.1.0"
       end
     end
     

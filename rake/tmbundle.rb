@@ -7,12 +7,12 @@
 # TODO consider generating Gosu::sh for Gosu::screen_height etc
 
 def for_each_gosu_method
-  require 'yard'
+  require "yard"
   YARD::Registry.load!
   
   # Utility functions
   YARD::Registry.at("Gosu").meths.each do |meth|
-    args = meth.parameters.map { |arg| arg.compact.join(' = ') }
+    args = meth.parameters.map { |arg| arg.compact.join(" = ") }
     yield "Math Helpers", "Gosu::#{meth.name}", args, nil
   end
   
@@ -22,24 +22,24 @@ def for_each_gosu_method
     
     cls.meths.each do |meth|
       # Ignore methods whose previous comment starts with @deprecated
-      if meth.has_tag? :deprecated then
+      if meth.has_tag? :deprecated
         puts "Skipped #{meth.path} (@deprecated)"
         next
       end
       
       # Ignore explicit and attr setters (methods that end in a =)
-      next if meth.name.to_s[-1, 1] == '='
+      next if meth.name.to_s[-1, 1] == "="
       
       # Ignore methods with only one argument
       next if meth.parameters.empty?
       
       method_name = meth.name.to_s
       method_name = "self.#{method_name}" if meth.scope == :class
-      args = meth.parameters.map { |arg| arg.compact.join(' = ') }
+      args = meth.parameters.map { |arg| arg.compact.join(" = ") }
       
       # Support for static methods
       # e.g. self.load_tiles<tab> => Image.load_tiles<tab>
-      if cls.name != :Window then
+      if cls.name != :Window
         method_name.sub! "self.", "#{cls.name}."
       else
         # Not in the window though
@@ -49,13 +49,13 @@ def for_each_gosu_method
       # Ignore methods that are never called directly.
       next if %w(button_up button_down).include? method_name
       
-      if method_name == 'initialize' then
+      if method_name == "initialize"
         next if cls.name == :Window # Nobody wants to call Window.new
         method_name = "#{cls.name}.new"
       end
       
-      if args.last[0, 1] == '&' then
-        block_name = args.last[1..-1].gsub('_', ' ') + ' here'
+      if args.last[0, 1] == "&"
+        block_name = args.last[1..-1].gsub("_", " ") + " here"
         args.pop
       end
       
@@ -78,25 +78,25 @@ def build_snippet! class_name, method_name, args, block_name
   
   # Add a leading dot to non-static triggers, except in Window
   trigger = method_name
-  if not method_name[/\.|\:\:/] and class_name != 'Window' then
+  if not method_name[/\.|\:\:/] and class_name != "Window"
     trigger = ".#{trigger}"
   end
   
   content_args = (0...args.size).map { |i| "${#{i + 1}:#{args[i]}}" }
-  if method_name =~ /draw/ then
-    content = "#{trigger} #{content_args.join(', ')}"
+  if method_name =~ /draw/
+    content = "#{trigger} #{content_args.join(", ")}"
   else
-    content = "#{trigger}(#{content_args.join(', ')})"
+    content = "#{trigger}(#{content_args.join(", ")})"
   end
-  if block_name then
+  if block_name
     content = "#{content} do\n  ${#{args.size + 1}:# #{block_name}}\nend"
   end
   name_args = args.map { |arg| arg[/^[^ =]+/] }
-  name = "#{method_name}(#{name_args.join(', ')})"
+  name = "#{method_name}(#{name_args.join(", ")})"
   name = "#{class_name}##{name}" unless method_name =~ /\.|\:\:/
   
   File.open("#{SNIPPET_ROOT}/#{uuid}.tmSnippet", "w+") do |io|
-    io.puts <<-END.gsub(/^ {6}/, '')
+    io.puts <<-END.gsub(/^ {6}/, "")
       <?xml version="1.0" encoding="UTF-8"?>
       <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
       <plist version="1.0">
@@ -123,7 +123,7 @@ def build_plist! methods_of_classes
   class_uuids = Hash.new { |hash, key| hash[key] = next_uuid }
   
   File.open("#{BUNDLE_ROOT}/info.plist", "w+") do |io|
-    io.puts <<-END.gsub(/^ {6}/, '')
+    io.puts <<-END.gsub(/^ {6}/, "")
       <?xml version="1.0" encoding="UTF-8"?>
       <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
       <plist version="1.0">
@@ -139,7 +139,7 @@ def build_plist! methods_of_classes
           <key>submenus</key>
           <dict>
             #{methods_of_classes.keys.map do |class_name|
-              <<-INNER_END.gsub(/^ {10}/, '')
+              <<-INNER_END.gsub(/^ {10}/, "")
                 <key>#{class_uuids[class_name]}</key>
                 <dict>
                   <key>name</key>

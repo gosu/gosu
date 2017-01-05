@@ -15,8 +15,7 @@ namespace
         double min = std::min(std::min(r, g), b);
         double max = std::max(std::max(r, g), b);
 
-        if (max == 0)
-        {
+        if (max == 0) {
             HSV hsv = { 0, 0, 0 };
             return hsv;
         }
@@ -29,12 +28,15 @@ namespace
         hsv.s = delta / max;
         
         // Hue.
-        if (r == max)
+        if (r == max) {
             hsv.h = (g - b) / delta + (g < b ? 6 : 0);
-        else if (g == max)
+        }
+        else if (g == max) {
             hsv.h = (b - r) / delta + 2;
-        else
+        }
+        else {
             hsv.h = (r - g) / delta + 4;
+        }
         hsv.h *= 60;
         
         return hsv;
@@ -48,22 +50,22 @@ Gosu::Color Gosu::Color::from_hsv(double h, double s, double v)
 
 Gosu::Color Gosu::Color::from_ahsv(Channel alpha, double h, double s, double v)
 {
-	if (s == 0)
-		// Grey.
+    if (s == 0) {
+        // Grey.
         return Color(alpha, v * 255, v * 255, v * 255);
+    }
     
     // Normalize hue
     h = normalize_angle(h);
     
-	int sector = h / 60;
+    int sector       = h / 60;
     double factorial = h / 60 - sector;
     
-	double p = v * (1 - s);
-	double q = v * (1 - s * factorial);
-	double t = v * (1 - s * (1 - factorial));
-	
-    switch (sector) 
-    {
+    double p = v * (1 - s);
+    double q = v * (1 - s * factorial);
+    double t = v * (1 - s * (1 - factorial));
+    
+    switch (sector) {
     case 0:
         return Color(alpha, v * 255, t * 255, p * 255);
     case 1:

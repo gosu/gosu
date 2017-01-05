@@ -17,16 +17,14 @@ double Gosu::offset_y(double angle, double radius)
     return -std::cos(angle / 180 * M_PI) * radius;
 }
 
-double Gosu::angle(double from_x, double from_y, double to_x, double to_y,
-    double def)
+double Gosu::angle(double from_x, double from_y, double to_x, double to_y, double def)
 {
     double dist_x = to_x - from_x;
     double dist_y = to_y - from_y;
 
-    if (dist_x == 0 && dist_y == 0)
-        return def;
-    else
-        return normalize_angle(radians_to_gosu(std::atan2(dist_y, dist_x)));
+    if (dist_x == 0 && dist_y == 0) return def;
+
+    return normalize_angle(radians_to_gosu(std::atan2(dist_y, dist_x)));
 }
 
 double Gosu::angle_diff(double from, double to)
@@ -42,28 +40,19 @@ double Gosu::normalize_angle(double angle)
 int Gosu::wrap(int value, int min, int max)
 {
     int result = (value - min) % (max - min);
-    if (result < 0)
-        return result + max;
-    else
-        return result + min;
+    return result < 0 ? result + max : result + min;
 }
 
 float Gosu::wrap(float value, float min, float max)
 {
     double result = std::fmod(value - min, max - min);
-    if (result < 0)
-        return result + max;
-    else
-        return result + min;
+    return result < 0 ? result + max : result + min;
 }
 
 double Gosu::wrap(double value, double min, double max)
 {
     double result = std::fmod(value - min, max - min);
-    if (result < 0)
-        return result + max;
-    else
-        return result + min;
+    return result < 0 ? result + max : result + min;
 }
 
 double Gosu::distance(double x1, double y1, double x2, double y2)

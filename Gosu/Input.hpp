@@ -4,8 +4,8 @@
 #pragma once
 
 #include <Gosu/Fwd.hpp>
-#include <Gosu/Platform.hpp>
 #include <Gosu/Buttons.hpp>
+#include <Gosu/Platform.hpp>
 #include <functional>
 #include <memory>
 #include <vector>
@@ -31,18 +31,9 @@ namespace Gosu
     };
     
     //! Tests whether two Buttons identify the same physical button.
-    inline bool operator==(Button lhs, Button rhs)
-    {
-        return lhs.id() == rhs.id();
-    }
-    inline bool operator!=(Button lhs, Button rhs)
-    {
-        return !(lhs == rhs);
-    }
-    inline bool operator<(Button lhs, Button rhs)
-    {
-        return lhs.id() < rhs.id();
-    }
+    inline bool operator==(Button lhs, Button rhs) { return lhs.id() == rhs.id(); }
+    inline bool operator!=(Button lhs, Button rhs) { return !(lhs == rhs); }
+    inline bool operator<(Button lhs, Button rhs) { return lhs.id() < rhs.id(); }
     
     //! Struct that saves information about a touch on the surface of a multi-
     //! touch device.
@@ -99,7 +90,8 @@ namespace Gosu
         void set_mouse_position(double x, double y);
 
         // Undocumented for the moment. Also applies to current_touches().
-        void set_mouse_factors(double factor_x, double factor_y, double offset_x = 0, double offset_y = 0);
+        void set_mouse_factors(double factor_x, double factor_y,
+            double offset_x = 0, double offset_y = 0);
         
         //! Currently known touches.
         const Touches& current_touches() const;
@@ -120,7 +112,8 @@ namespace Gosu
         
         //! Assignable events that are called by update. You can bind these to your own functions.
         //! If you use the Window class, it will assign these to its own methods.
-        std::function<void (Touch)> on_touch_began, on_touch_moved, on_touch_ended, on_touch_cancelled;
+        std::function<void (Touch)> on_touch_began, on_touch_moved, on_touch_ended,
+            on_touch_cancelled;
         
         //! Returns the currently active TextInput instance, or nullptr.
         TextInput* text_input() const;

@@ -4,14 +4,14 @@
 #import "GosuAppDelegate.h"
 #import <Gosu/Gosu.hpp>
 
-
-Gosu::Window &window_instance();
+Gosu::Window& window_instance();
 
 @implementation GosuAppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+- (BOOL)application:(UIApplication*)application
+    didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
-    self.window = (__bridge UIWindow *)window_instance().UIWindow();
+    self.window = (__bridge UIWindow*) window_instance().UIWindow();
     [self.window makeKeyAndVisible];
     
     return YES;
@@ -19,8 +19,7 @@ Gosu::Window &window_instance();
 
 @end
 
-
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     @autoreleasepool {
         Gosu::use_resource_directory();

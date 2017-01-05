@@ -20,41 +20,42 @@ struct Gosu::RenderState
     
     bool operator==(const RenderState& rhs) const
     {
-        return texture == rhs.texture && transform == rhs.transform &&
-            clip_rect == rhs.clip_rect && mode == rhs.mode;
+        return texture == rhs.texture &&
+            transform == rhs.transform &&
+            clip_rect == rhs.clip_rect &&
+            mode == rhs.mode;
     }
     
     void apply_texture() const
     {
-        if (texture)
-        {
+        if (texture) {
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, texture->tex_name());
         }
-        else
-        {
+        else {
             glDisable(GL_TEXTURE_2D);
         }
     }
     
     void apply_alpha_mode() const
     {
-        if (mode == AM_ADD)
+        if (mode == AM_ADD) {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-        else if (mode == AM_MULTIPLY)
+        }
+        else if (mode == AM_MULTIPLY) {
             glBlendFunc(GL_DST_COLOR, GL_ZERO);
-        else
+        }
+        else {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        }
     }
     
     void apply_clip_rect() const
     {
-        if (clip_rect.width == NO_CLIPPING)
-        {
+        if (clip_rect.width == NO_CLIPPING) {
             glDisable(GL_SCISSOR_TEST);
         }
-        else
-        {
+        else {
             glEnable(GL_SCISSOR_TEST);
             glScissor(clip_rect.x, clip_rect.y, clip_rect.width, clip_rect.height);
         }
@@ -89,8 +90,9 @@ class Gosu::RenderStateManager : private Gosu::RenderState
         #else
         // TODO: Ouch, should always use floats!
         GLfloat matrix[16];
-        for (int i = 0; i < 16; ++i)
+        for (int i = 0; i < 16; ++i) {
             matrix[i] = (*transform)[i];
+        }
         glMultMatrixf(matrix);
         #endif
     }
@@ -125,54 +127,49 @@ public:
     
     void set_texture(std::shared_ptr<Texture> new_texture)
     {
-        if (new_texture == texture)
-            return;
-    
-        if (new_texture)
-        {
+        if (new_texture == texture) return;
+
+        if (new_texture) {
             // New texture *is* really a texture - change to it.
             
-            if (!texture)
+            if (!texture) {
                 glEnable(GL_TEXTURE_2D);
+            }
             glBindTexture(GL_TEXTURE_2D, new_texture->tex_name());
         }
-        else
+        else {
             // New texture is NO_TEXTURE, disable texturing.
             glDisable(GL_TEXTURE_2D);
+        }
         texture = new_texture;
     }
     
     void set_transform(const Transform* new_transform)
     {
-        if (new_transform == transform)
-            return;
+        if (new_transform == transform) return;
+        
         transform = new_transform;
         apply_transform();
     }
 
     void set_clip_rect(const ClipRect& new_clip_rect)
     {
-        if (new_clip_rect.width == NO_CLIPPING)
-        {
+        if (new_clip_rect.width == NO_CLIPPING) {
             // Disable clipping
-            if (clip_rect.width != NO_CLIPPING)
-            {
+            if (clip_rect.width != NO_CLIPPING) {
                 glDisable(GL_SCISSOR_TEST);
                 clip_rect.width = NO_CLIPPING;
             }
         }
-        else
-        {
+        else {
             // Enable clipping if off
-            if (clip_rect.width == NO_CLIPPING)
-            {
+            if (clip_rect.width == NO_CLIPPING) {
                 glEnable(GL_SCISSOR_TEST);
                 clip_rect = new_clip_rect;
                 glScissor(clip_rect.x, clip_rect.y, clip_rect.width, clip_rect.height);
             }
             // Adjust clipping if necessary
-            else if (!(clip_rect == new_clip_rect))
-            {
+            else if (!(clip_rect == new_clip_rect)) {
                 clip_rect = new_clip_rect;
                 glScissor(clip_rect.x, clip_rect.y, clip_rect.width, clip_rect.height);
             }
@@ -181,8 +178,8 @@ public:
     
     void set_alpha_mode(AlphaMode new_mode)
     {
-        if (new_mode == mode)
-            return;
+        if (new_mode == mode) return;
+        
         mode = new_mode;
         apply_alpha_mode();
     }
@@ -204,5 +201,5 @@ namespace Gosu
         RenderState render_state;
         std::vector<ArrayVertex> vertices;
     };
-    typedef std::list<VertexArray> VertexArrays;    
+    typedef std::list<VertexArray> VertexArrays;
 }

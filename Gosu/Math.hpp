@@ -22,10 +22,12 @@ namespace Gosu
     //! Rounds a real value towards the next integer.
     inline long round(double value)
     {
-        if (value >= 0)
+        if (value >= 0) {
             return static_cast<long>(value + 0.5);
-        else
+        }
+        else {
             return static_cast<long>(value - 0.5);
+        }
     }
     
     //! Returns a real value between min (inclusive) and max (exclusive).
@@ -70,8 +72,7 @@ namespace Gosu
     double offset_y(double angle, double radius);
     //! Returns the angle from point 1 to point 2 in degrees, where 0.0 means
     //! upwards. Returns def if both points are equal.
-    double angle(double from_x, double from_y, double to_x, double to_y,
-        double def = 0);
+    double angle(double from_x, double from_y, double to_x, double to_y, double def = 0);
     //! Returns the smallest angle that can be added to angle1 to get to
     //! angle2 (can be negative if counter-clockwise movement is shorter).
     double angle_diff(double angle1, double angle2);
@@ -90,10 +91,8 @@ namespace Gosu
     template<typename T>
     T clamp(T value, T min, T max)
     {
-        if (value < min)
-            return min;
-        if (value > max)
-            return max;
+        if (value < min) return min;
+        if (value > max) return max;
         return value;
     }
     
@@ -120,7 +119,8 @@ namespace Gosu
     double distance(double x1, double y1, double x2, double y2);
     
     //! Interpolates a value between a and b, weight being the bias towards the second value.
-    //! Examples: interpolate(0, 10, 0.5) == 5, interpolate(-10, 10, 0.25) == 5, interpolate(0, 10, -0.5) == -5.
+    //! Examples: interpolate(0, 10, 0.5) == 5, interpolate(-10, 10, 0.25) == 5,
+    //! interpolate(0, 10, -0.5) == -5.
     template<typename T>
     T interpolate(T a, T b, double weight = 0.5)
     {

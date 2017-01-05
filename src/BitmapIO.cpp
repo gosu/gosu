@@ -1,8 +1,7 @@
 #include <Gosu/Bitmap.hpp>
-#include <Gosu/Platform.hpp>
 #include <Gosu/IO.hpp>
+#include <Gosu/Platform.hpp>
 #include <Gosu/Utility.hpp>
-
 #include <cstring>
 #include <stdexcept>
 
@@ -44,8 +43,9 @@ namespace
     bool is_bmp(Gosu::Reader reader)
     {
         std::size_t remaining = reader.resource().size() - reader.position();
-        if (remaining < 2)
+        if (remaining < 2) {
             return false;
+        }
         char magic_bytes[2];
         reader.read(magic_bytes, sizeof magic_bytes);
         reader.seek(sizeof magic_bytes);
@@ -72,7 +72,8 @@ void Gosu::load_image_file(Gosu::Bitmap& bitmap, Reader input)
     stbi_uc* bytes = stbi_load_from_callbacks(&callbacks, &input, &x, &y, &n, STBI_rgb_alpha);
 
     if (bytes == nullptr) {
-        // TODO - stbi_failure_reason is not thread safe. Everything here should be wrapped in a mutex.
+        // TODO - stbi_failure_reason is not thread safe. Everything here should be wrapped in a
+        // mutex.
         throw std::runtime_error("Cannot load image: " + std::string(stbi_failure_reason()));
     }
 
@@ -81,8 +82,9 @@ void Gosu::load_image_file(Gosu::Bitmap& bitmap, Reader input)
 
     stbi_image_free(bytes);
     
-    if (needs_color_key)
+    if (needs_color_key) {
         apply_color_key(bitmap, Gosu::Color::FUCHSIA);
+    }
 }
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -92,55 +94,47 @@ void Gosu::save_image_file(const Gosu::Bitmap& bitmap, const std::string& filena
 {
     int ok;
     
-    if (has_extension(filename, "bmp"))
-    {
+    if (has_extension(filename, "bmp")) {
         ok = stbi_write_bmp(filename.c_str(), bitmap.width(), bitmap.height(), 4, bitmap.data());
     }
-    else if (has_extension(filename, "tga"))
-    {
+    else if (has_extension(filename, "tga")) {
         ok = stbi_write_tga(filename.c_str(), bitmap.width(), bitmap.height(), 4, bitmap.data());
     }
-    else
-    {
+    else {
         ok = stbi_write_png(filename.c_str(), bitmap.width(), bitmap.height(), 4, bitmap.data(), 0);
     }
     
-    if (ok == 0)
-    {
+    if (ok == 0) {
         throw std::runtime_error("Could not save image data to file: " + filename);
     }
 }
 
-static void stbi_write_to_writer(void *context, void *data, int size)
+static void stbi_write_to_writer(void* context, void* data, int size)
 {
-    Gosu::Writer *writer = reinterpret_cast<Gosu::Writer*>(context);
+    Gosu::Writer* writer = reinterpret_cast<Gosu::Writer*>(context);
     writer->write(data, size);
 }
 
 void Gosu::save_image_file(const Gosu::Bitmap& bitmap, Gosu::Writer writer,
-    const std::string& format_hint)
+                           const std::string& format_hint)
 {
     int ok;
     
-    if (has_extension(format_hint, "bmp"))
-    {
-        ok = stbi_write_bmp_to_func(stbi_write_to_writer, &writer,
-                                    bitmap.width(), bitmap.height(), 4, bitmap.data());
+    if (has_extension(format_hint, "bmp")) {
+        ok = stbi_write_bmp_to_func(stbi_write_to_writer, &writer, bitmap.width(), bitmap.height(),
+                                    4, bitmap.data());
     }
-    else if (has_extension(format_hint, "tga"))
-    {
+    else if (has_extension(format_hint, "tga")) {
         stbi_write_tga_with_rle = 0;
-        ok = stbi_write_tga_to_func(stbi_write_to_writer, &writer,
-                                    bitmap.width(), bitmap.height(), 4, bitmap.data());
+        ok = stbi_write_tga_to_func(stbi_write_to_writer, &writer, bitmap.width(), bitmap.height(),
+                                    4, bitmap.data());
     }
-    else
-    {
-        ok = stbi_write_png_to_func(stbi_write_to_writer, &writer,
-                                    bitmap.width(), bitmap.height(), 4, bitmap.data(), 0);
+    else {
+        ok = stbi_write_png_to_func(stbi_write_to_writer, &writer, bitmap.width(), bitmap.height(),
+                                    4, bitmap.data(), 0);
     }
     
-    if (ok == 0)
-    {
+    if (ok == 0) {
         throw std::runtime_error("Could not save image data to memory (format hint = '" +
                                  format_hint + "'");
     }

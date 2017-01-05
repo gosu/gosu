@@ -12,8 +12,7 @@ namespace Gosu
         {
             ++accum;
             unsigned long new_sec = Gosu::milliseconds() / 1000;
-            if (sec != new_sec)
-            {
+            if (sec != new_sec) {
                 sec = new_sec;
                 fps = accum;
                 accum = 0;

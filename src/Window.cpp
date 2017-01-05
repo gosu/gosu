@@ -16,7 +16,7 @@ namespace Gosu
     
     void throw_sdl_error(const std::string& operation)
     {
-        const char *error = SDL_GetError();
+        const char* error = SDL_GetError();
         throw std::runtime_error(operation + ": " + (error ? error : "(unknown error)"));
     }
 
@@ -24,23 +24,25 @@ namespace Gosu
 
     SDL_Window* shared_window()
     {
-        static SDL_Window *window = nullptr;
-        if (window == nullptr)
-        {
-            if (SDL_Init(SDL_INIT_VIDEO) < 0)
+        static SDL_Window* window = nullptr;
+        if (window == nullptr) {
+            if (SDL_Init(SDL_INIT_VIDEO) < 0) {
                 throw_sdl_error("Could not initialize SDL Video");
+            }
 
             std::atexit(cleanup);
 
             Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN;
             
-            #if SDL_VERSION_ATLEAST(2, 0, 1)
+        #if SDL_VERSION_ATLEAST(2, 0, 1)
             flags |= SDL_WINDOW_ALLOW_HIGHDPI;
-            #endif
+        #endif
             
-            window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 64, flags);
-            if (window == nullptr)
+            window =
+                SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 64, flags);
+            if (window == nullptr) {
                 throw_sdl_error("Could not create window");
+            }
         }
         return window;
     }
@@ -48,17 +50,17 @@ namespace Gosu
     SDL_GLContext shared_gl_context()
     {
         static SDL_GLContext context = nullptr;
-        if (context == nullptr)
-        {
-            #ifdef GOSU_IS_OPENGLES
+        if (context == nullptr) {
+        #ifdef GOSU_IS_OPENGLES
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-            #endif
+        #endif
             
             context = SDL_GL_CreateContext(shared_window());
             
-            if (context == nullptr)
+            if (context == nullptr) {
                 throw_sdl_error("Could not create OpenGL context");
+            }
         }
         return context;
     }
@@ -179,7 +181,8 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
     if (pimpl->input.get() == nullptr) {
         pimpl->input.reset(new Input(shared_window()));
     }
-    pimpl->input->set_mouse_factors(1 / scale_factor, 1 / scale_factor, black_bar_width, black_bar_height);
+    pimpl->input->set_mouse_factors(1 / scale_factor, 1 / scale_factor,
+                                    black_bar_width, black_bar_height);
 }
 
 double Gosu::Window::update_interval() const
@@ -210,8 +213,9 @@ void Gosu::Window::show()
     while (tick()) {
         // Sleep to keep this loop from eating 100% CPU.
         unsigned long tick_time = milliseconds() - time_before_tick;
-        if (tick_time < update_interval())
+        if (tick_time < update_interval()) {
             sleep(update_interval() - tick_time);
+        }
         
         time_before_tick = milliseconds();
     }

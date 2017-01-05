@@ -8,19 +8,19 @@ LICENSES = <<-EOF
 EOF
 
 task :set_version do
-  throw "GOSU_RELEASE_VERSION must be set" if GOSU_VERSION == '0.0.0'
+  throw "GOSU_RELEASE_VERSION must be set" if GOSU_VERSION == "0.0.0"
   
-  major, minor, patch = *GOSU_VERSION.split('.')
+  major, minor, patch = *GOSU_VERSION.split(".")
   
-  cmake_lists = File.read('cmake/CMakeLists.txt')
+  cmake_lists = File.read("cmake/CMakeLists.txt")
   cmake_lists.sub! /(set\(GOSU_VERSION_MAJOR ")[^"]+("\))/, "\\1#{major}\\2"
   cmake_lists.sub! /(set\(GOSU_VERSION_MINOR ")[^"]+("\))/, "\\1#{minor}\\2"
   cmake_lists.sub! /(set\(GOSU_VERSION_PATCH ")[^"]+("\))/, "\\1#{patch}\\2"
-  File.open('cmake/CMakeLists.txt', 'w') do |file|
+  File.open("cmake/CMakeLists.txt", "w") do |file|
     file.write cmake_lists
   end
   
-  File.open('Gosu/Version.hpp', 'w') do |file|
+  File.open("Gosu/Version.hpp", "w") do |file|
     file.puts <<-EOF
 #pragma once
 
@@ -30,7 +30,7 @@ task :set_version do
 #define GOSU_VERSION "#{GOSU_VERSION}"
 
 #define GOSU_COPYRIGHT_NOTICE \\
-#{LICENSES.split("\n").map { |line| "    \"#{line.gsub(/^ */, '')}\\n\"" }.join(" \\\n")}
+#{LICENSES.split("\n").map { |line| "    \"#{line.gsub(/^ */, "")}\\n\"" }.join(" \\\n")}
     EOF
   end
 end

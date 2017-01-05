@@ -3,9 +3,9 @@
 
 #pragma once
 
+#include <Gosu/Fwd.hpp>
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
-#include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
 #include <memory>
 
@@ -32,15 +32,12 @@ namespace Gosu
         ImageData& operator=(const ImageData&);
         
     public:
-        ImageData()
-        {
-        }
+        ImageData() {}
         
-        virtual ~ImageData()
-        {
-        }
+        virtual ~ImageData() {}
 
         virtual int width() const = 0;
+        
         virtual int height() const = 0;
 
         virtual void draw(double x1, double y1, Color c1,
@@ -48,8 +45,9 @@ namespace Gosu
             double x3, double y3, Color c3,
             double x4, double y4, Color c4,
             ZPos z, AlphaMode mode) const = 0;
-            
+
         virtual const GLTexInfo* gl_tex_info() const = 0;
+        
         virtual Bitmap to_bitmap() const = 0;
         
         virtual std::unique_ptr<ImageData> subimage(int x, int y, int width, int height) const = 0;

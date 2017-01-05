@@ -1,13 +1,16 @@
 #include <Gosu/Platform.hpp>
 #if defined(GOSU_IS_MAC) && !defined(GOSU_IS_IPHONE)
 
-#include <Gosu/Gosu.hpp>
+#import <Gosu/Gosu.hpp>
 #import <AppKit/AppKit.h>
 
-static NSUInteger style_mask_from_sdl2 = NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask;
-// Cannot use accessor syntax here without breaking compilation with OS X 10.7/Xcode 4.6.3.
-static NSRect available_frame = [[[NSScreen screens] objectAtIndex:0] visibleFrame];
-static NSRect available_content_frame = [NSWindow contentRectForFrameRect:available_frame styleMask:style_mask_from_sdl2];
+static const NSUInteger STYLE_MASK_FROM_SDL2 =
+    NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask;
+
+static const NSRect available_frame = [[NSScreen screens][0] visibleFrame];
+
+static const NSRect available_content_frame =
+    [NSWindow contentRectForFrameRect:available_frame styleMask:STYLE_MASK_FROM_SDL2];
 
 unsigned Gosu::available_width()
 {

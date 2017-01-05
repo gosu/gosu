@@ -4,16 +4,16 @@
 #define _WIN32_WINNT 0x0500 
 #include <windows.h>
 
+#include "WinUtility.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
-#include "WinUtility.hpp"
 #include <cstdlib>
 #include <cwchar>
 #include <algorithm>
-#include <stdexcept>
 #include <map>
 #include <set>
+#include <stdexcept>
 
 std::string Gosu::default_font_name()
 {
@@ -41,17 +41,15 @@ namespace Gosu
                 dc = winapi_check(CreateCompatibleDC(0), "creating a device context");
 
                 BITMAPCOREHEADER core_header;
-                core_header.bcSize     = sizeof core_header;
-                core_header.bcWidth    = width;
-                core_header.bcHeight   = height;
-                core_header.bcPlanes   = 1;
+                core_header.bcSize = sizeof core_header;
+                core_header.bcWidth = width;
+                core_header.bcHeight = height;
+                core_header.bcPlanes = 1;
                 core_header.bcBitCount = 24;
 
-                bitmap = CreateDIBSection(dc,
-                    reinterpret_cast<BITMAPINFO*>(&core_header), DIB_RGB_COLORS,
-                    reinterpret_cast<VOID**>(&pixels), 0, 0);
-                if (bitmap == 0)
-                {
+                bitmap = CreateDIBSection(dc, reinterpret_cast<BITMAPINFO*>(&core_header),
+                                          DIB_RGB_COLORS, reinterpret_cast<VOID**>(&pixels), 0, 0);
+                if (bitmap == 0) {
                     DeleteDC(dc);
                     throw_last_winapi_error("creating a bitmap");
                 }
@@ -81,8 +79,7 @@ namespace Gosu
                 return bitmap;
             }
 
-            void select_font(std::string font_name, unsigned font_height,
-                unsigned font_flags) const
+            void select_font(std::string font_name, unsigned font_height, unsigned font_flags) const
             {
                 // TODO for ASYNC support:
                 // Use a lock on both maps.
@@ -94,32 +91,32 @@ namespace Gosu
 
                 static std::map<std::string, std::string> custom_fonts;
                 
-                if (font_name.find("/") != std::string::npos)
-                {
-                    if (custom_fonts.count(font_name) == 0)
-                    {
+                if (font_name.find("/") != font_name.npos) {
+                    if (custom_fonts.count(font_name) == 0) {
                         std::wstring wfont_name = utf8_to_wstring(font_name);
                         AddFontResourceExW(wfont_name.c_str(), FR_PRIVATE, 0);
                         font_name = custom_fonts[font_name] = get_name_from_ttf_file(wfont_name);
                     }
-                    else
+                    else {
                         font_name = custom_fonts[font_name];
+                    }
                 }
                 
-				static std::map<std::pair<std::string, unsigned>, HFONT> loaded_fonts;
+                static std::map<std::pair<std::string, unsigned>, HFONT> loaded_fonts;
                 
                 HFONT font;
-				std::pair<std::string, unsigned> key =
-					std::make_pair(font_name, font_height | font_flags << 16);
-                if (loaded_fonts.count(key) == 0)
-                {
-                    LOGFONT logfont = { font_height, 0, 0, 0,
+                std::pair<std::string, unsigned> key =
+                    std::make_pair(font_name, font_height | font_flags << 16);
+                
+                if (loaded_fonts.count(key) == 0) {
+                    LOGFONT logfont = {
+                        font_height, 0, 0, 0,
                         font_flags & FF_BOLD ? FW_BOLD : FW_NORMAL,
                         font_flags & FF_ITALIC ? TRUE : FALSE,
-                        font_flags & FF_UNDERLINE ? TRUE : FALSE,
-                        FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
-                        CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
-                        DEFAULT_PITCH | FF_DONTCARE };
+                        font_flags & FF_UNDERLINE ? TRUE : FALSE, FALSE, DEFAULT_CHARSET,
+                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
+                        DEFAULT_PITCH | FF_DONTCARE
+                    };
                     
                     std::wstring wfont_name = utf8_to_wstring(font_name);
                     // Don't rely on wcsncpy being in std::...
@@ -128,10 +125,9 @@ namespace Gosu
                     logfont.lfFaceName[LF_FACESIZE - 1] = 0;
                     
                     font = loaded_fonts[key] = winapi_check(CreateFontIndirect(&logfont),
-                        "creating font object for " + font_name);
+                                                            "CreateFontIndirect for " + font_name);
                 }
-                else
-                {
+                else {
                     font = loaded_fonts[key];
                 }
 
@@ -141,37 +137,38 @@ namespace Gosu
     }
 };
 
-unsigned Gosu::text_width(const std::string& text,
-    const std::string& font_name, unsigned font_height, unsigned font_flags)
+unsigned Gosu::text_width(const std::string& text, const std::string& font_name,
+    unsigned font_height, unsigned font_flags)
 {
-    if (text.find_first_of("\r\n") != text.npos)
+    if (text.find_first_of("\r\n") != text.npos) {
         throw std::invalid_argument("the argument to text_width cannot contain line breaks");
+    }
     
     WinBitmap helper(1, 1);
     helper.select_font(font_name, font_height, font_flags);
     
     std::wstring wtext = utf8_to_wstring(text);
     SIZE size;
-    if (!GetTextExtentPoint32W(helper.context(), wtext.c_str(), text.length(), &size))
-        throw_last_winapi_error("calculating the width of a text");
+    winapi_check(GetTextExtentPoint32W(helper.context(), wtext.c_str(), text.length(), &size),
+        "calculating the width of a text");
     
     return size.cx;
 }
 
-void Gosu::draw_text(Bitmap& bitmap, const std::string& text, int x, int y,
-    Color c, const std::string& font_name, unsigned font_height,
-    unsigned font_flags)
+void Gosu::draw_text(Bitmap& bitmap, const std::string& text, int x, int y, Color c,
+    const std::string& font_name, unsigned font_height, unsigned font_flags)
 {
-    if (text.find_first_of("\r\n") != text.npos)
+    if (text.find_first_of("\r\n") != text.npos) {
         throw std::invalid_argument("the argument to draw_text cannot contain line breaks");
+    }
     
     unsigned width = text_width(text, font_name, font_height, font_flags);
 
     WinBitmap helper(width, font_height);
     helper.select_font(font_name, font_height, font_flags);
 
-    if (SetTextColor(helper.context(), 0xffffff) == CLR_INVALID)
-        throw_last_winapi_error("setting the text color");
+    winapi_check(SetTextColor(helper.context(), 0xffffff) != CLR_INVALID,
+        "setting the text color");
 
     winapi_check(SetBkMode(helper.context(), TRANSPARENT),
         "setting a bitmap's background mode to TRANSPARENT");
@@ -180,12 +177,12 @@ void Gosu::draw_text(Bitmap& bitmap, const std::string& text, int x, int y,
     ExtTextOutW(helper.context(), 0, 0, 0, 0, wtext.c_str(), text.length(), 0);
     
     for (unsigned rel_y = 0; rel_y < font_height; ++rel_y)
-        for (unsigned rel_x = 0; rel_x < width; ++rel_x)
-        {
+        for (unsigned rel_x = 0; rel_x < width; ++rel_x) {
             Color pixel = c;
             Color::Channel src_alpha = GetPixel(helper.context(), rel_x, rel_y) & 0xff;
-            if (src_alpha == 0)
-                continue;
+            
+            if (src_alpha == 0) continue;
+            
             pixel = multiply(c, Color(src_alpha, 255, 255, 255));
             if (pixel != 0 && x + rel_x >= 0 && x + rel_x < bitmap.width() &&
                     y + rel_y >= 0 && y + rel_y < bitmap.height()) {

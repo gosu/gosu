@@ -1,4 +1,7 @@
 #include <Gosu/Platform.hpp>
+#include <cstdlib>
+#include <algorithm>
+#include <memory>
 #ifdef GOSU_IS_MAC
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
@@ -6,9 +9,6 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 #endif
-#include <cstdlib>
-#include <algorithm>
-#include <memory>
 
 namespace Gosu
 {
@@ -22,12 +22,12 @@ namespace Gosu
         static ALCdevice* al_device;
         static ALCcontext* al_context;
 
-	#ifdef GOSU_IS_IPHONE
+        #ifdef GOSU_IS_IPHONE
         // iOS system limit.
         enum { NUM_SOURCES = 32 };
-	#else
+        #else
         enum { NUM_SOURCES = 255 };
-	#endif
+        #endif
         static ALuint al_sources[NUM_SOURCES];
         static ALuint current_token;
         static ALuint current_tokens[NUM_SOURCES];
@@ -66,16 +66,18 @@ namespace Gosu
         std::pair<int, int> reserve_channel()
         {
             int i;
-            for (i = 1; i <= NUM_SOURCES; ++i)
-            {
-                if (i == NUM_SOURCES)
+            for (i = 1; i <= NUM_SOURCES; ++i) {
+                if (i == NUM_SOURCES) {
                     return std::make_pair<int, int>(NO_FREE_CHANNEL, NO_TOKEN);
-                if (current_tokens[i] == NO_TOKEN)
+                }
+                if (current_tokens[i] == NO_TOKEN) {
                     break;
+                }
                 ALint state;
                 alGetSourcei(al_sources[i], AL_SOURCE_STATE, &state);
-                if (state != AL_PLAYING && state != AL_PAUSED)
+                if (state != AL_PLAYING && state != AL_PAUSED) {
                     break;
+                }
             }
             ++current_token;
             current_tokens[i] = current_token;
@@ -84,9 +86,12 @@ namespace Gosu
         
         int source_if_still_playing(int channel, int token) const
         {
-            if (channel != NO_FREE_CHANNEL && current_tokens[channel] == token)
+            if (channel != NO_FREE_CHANNEL && current_tokens[channel] == token) {
                 return al_sources[channel];
-            return NO_SOURCE;
+            }
+            else {
+                return NO_SOURCE;
+            }
         }
         
         int source_for_songs() const

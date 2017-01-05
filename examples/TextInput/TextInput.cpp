@@ -53,24 +53,24 @@ public:
             // Use namespace std so it doesn't matter whether towupper is part of it or not.
             // (Depends on your compiler/standard library.)
             using namespace std;
-            return towupper((wint_t)in);
+            return towupper((wint_t) in);
         });
         return Gosu::wstring_to_utf8(wide_string);
     }
     
     void draw() const
     {
+        Gosu::Color background_color = INACTIVE_COLOR;
         // Highlight this text field if it is currently selected.
-        Gosu::Color background_color;
-        if (window.input().text_input() == this)
+        if (window.input().text_input() == this) {
             background_color = ACTIVE_COLOR;
-        else
-            background_color = INACTIVE_COLOR;
+        }
         
         Gosu::Graphics::draw_quad(x - PADDING,           y - PADDING,            background_color,
                                   x + width() + PADDING, y - PADDING,            background_color,
                                   x - PADDING,           y + height() + PADDING, background_color,
-                                  x + width() + PADDING, y + height() + PADDING, background_color, 0);
+                                  x + width() + PADDING, y + height() + PADDING, background_color,
+                                  0);
         
         // Calculate the position of the caret and the selection start.
         double pos_x = x + font.text_width(text().substr(0, caret_pos()));
@@ -108,7 +108,7 @@ public:
     bool is_under_point(double mouse_x, double mouse_y)
     {
         return mouse_x > x - PADDING && mouse_x < x + width() + PADDING &&
-               mouse_y > y - PADDING and mouse_y < y + height() + PADDING;
+               mouse_y > y - PADDING && mouse_y < y + height() + PADDING;
     }
 };
 
@@ -154,17 +154,21 @@ public:
             // Tab key will not be 'eaten' by text fields; use for switching through
             // text fields.
             int index = -1;
-            for (int i = 0; i < lengthof(text_fields); ++i)
-                if (input().text_input() == text_fields[i].get())
+            for (int i = 0; i < lengthof(text_fields); ++i) {
+                if (input().text_input() == text_fields[i].get()) {
                     index = i;
+                }
+            }
             input().set_text_input(text_fields[(index + 1) % lengthof(text_fields)].get());
         }
         else if (btn == Gosu::KB_ESCAPE) {
             // Escape key will not be 'eaten' by text fields; use for deselecting.
-            if (input().text_input())
+            if (input().text_input()) {
                 input().set_text_input(0);
-            else
+            }
+            else {
                 close();
+            }
         }
         else if (btn == Gosu::MS_LEFT) {
             // Mouse click: Select text field based on mouse position.

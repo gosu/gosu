@@ -1,11 +1,20 @@
-# Replace the load path
+# This script is used by Ruby.app: https://github.com/gosu/ruby_app
+
+# Replace the load path.
 $LOAD_PATH.clear
 $LOAD_PATH << File.dirname(__FILE__)[0..-6]
 $LOAD_PATH << $LOAD_PATH[0] + '/lib'
-# Ruby portions of Gosu
+
+# Ruby portions of Gosu.
 require 'gosu/patches'
 require 'gosu/swig_patches'
+
 # Let the application know it is being run from the Mac app wrapper.
 OSX_EXECUTABLE = true
-# Main application
-require 'Main'
+
+# Main application.
+begin
+  require 'Main'
+rescue LoadError
+  require 'main'
+end

@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include <cstddef>
+#include <Gosu/Platform.hpp>
 #include <algorithm>
+#include <cstddef>
 #include <memory>
 #include <string>
 #include <vector>
-#include <Gosu/Platform.hpp>
 
 namespace Gosu
 {
@@ -63,8 +63,7 @@ namespace Gosu
         void read_pod(T& t, ByteOrder bo = BO_DONT_CARE)
         {
             read(&t, sizeof t);
-            if (bo == BO_OTHER)
-            {
+            if (bo == BO_OTHER) {
                 char* begin = reinterpret_cast<char*>(&t);
                 std::reverse(begin, begin + sizeof t);
             }
@@ -121,15 +120,13 @@ namespace Gosu
         template<typename T>
         void write_pod(const T& t, ByteOrder bo = BO_DONT_CARE)
         {
-            if (bo == BO_OTHER)
-            {
+            if (bo == BO_OTHER) {
                 char buf[sizeof t];
                 const char* begin = reinterpret_cast<const char*>(&t);
                 std::reverse_copy(begin, begin + sizeof t, buf);
                 write(buf, sizeof buf);
             }
-            else
-            {
+            else {
                 write(&t, sizeof t);
             }
         }
@@ -175,11 +172,9 @@ namespace Gosu
 
         virtual void resize(std::size_t new_size) = 0;
 
-        virtual void read(std::size_t offset, std::size_t length,
-            void* dest_buffer) const = 0;
+        virtual void read(std::size_t offset, std::size_t length, void* dest_buffer) const = 0;
 
-        virtual void write(std::size_t offset, std::size_t length,
-            const void* source_buffer) = 0;
+        virtual void write(std::size_t offset, std::size_t length, const void* source_buffer) = 0;
     };
 
     //! Piece of memory with the Resource interface.
@@ -204,14 +199,13 @@ namespace Gosu
             return *this;
         }
 
-        std::size_t size() const;
-        void resize(std::size_t new_size);
+        std::size_t size() const override;
 
-        void read(std::size_t offset, std::size_t length,
-            void* dest_buffer) const;
+        void resize(std::size_t new_size) override;
 
-        void write(std::size_t offset, std::size_t length,
-            const void* source_buffer);
+        void read(std::size_t offset, std::size_t length, void* dest_buffer) const override;
+        
+        void write(std::size_t offset, std::size_t length, const void* source_buffer) override;
 
         const void* data() const
         {
@@ -247,12 +241,13 @@ namespace Gosu
         explicit File(const std::string& filename, FileMode mode = FM_READ);
         ~File();
 
-        std::size_t size() const;
-        void resize(std::size_t new_size);
-        void read(std::size_t offset, std::size_t length,
-            void* dest_buffer) const;
-        void write(std::size_t offset, std::size_t length,
-            const void* source_buffer);
+        std::size_t size() const override;
+        
+        void resize(std::size_t new_size) override;
+        
+        void read(std::size_t offset, std::size_t length, void* dest_buffer) const override;
+        
+        void write(std::size_t offset, std::size_t length, const void* source_buffer) override;
     };
 
     //! Loads a whole file into a buffer.

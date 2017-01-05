@@ -1,6 +1,6 @@
 #include "TexChunk.hpp"
-#include "Texture.hpp"
 #include "DrawOpQueue.hpp"
+#include "Texture.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 
@@ -14,15 +14,15 @@ void Gosu::TexChunk::set_tex_info()
     info.bottom = (y + h) / texture_size;
 }
 
-Gosu::TexChunk::TexChunk(std::shared_ptr<Texture> texture,
-    int x, int y, int w, int h, int padding)
+Gosu::TexChunk::TexChunk(std::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding)
 : texture(texture), x(x), y(y), w(w), h(h), padding(padding)
 {
     set_tex_info();
 }
 
 Gosu::TexChunk::TexChunk(const TexChunk& parent_chunk, int x, int y, int w, int h)
-: texture(parent_chunk.texture), x(parent_chunk.x + x), y(parent_chunk.y + y), w(w), h(h), padding(0)
+: texture(parent_chunk.texture), x(parent_chunk.x + x), y(parent_chunk.y + y), w(w), h(h),
+  padding(0)
 {
     set_tex_info();
     texture->block(this->x, this->y, this->w, this->h);
@@ -33,17 +33,14 @@ Gosu::TexChunk::~TexChunk()
     texture->free(x - padding, y - padding, w + 2 * padding, h + 2 * padding);
 }
 
-void Gosu::TexChunk::draw(double x1, double y1, Color c1,
-    double x2, double y2, Color c2,
-    double x3, double y3, Color c3,
-    double x4, double y4, Color c4,
-    ZPos z, AlphaMode mode) const
+void Gosu::TexChunk::draw(double x1, double y1, Color c1, double x2, double y2, Color c2,
+    double x3, double y3, Color c3, double x4, double y4, Color c4, ZPos z, AlphaMode mode) const
 {
     DrawOp op;
     op.render_state.texture = texture;
     op.render_state.mode = mode;
     
-    reorder_coordinates_if_necessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
+    normalize_coordinates(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
     
     op.vertices_or_block_index = 4;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
@@ -86,20 +83,28 @@ void Gosu::TexChunk::insert(const Bitmap& original, int x, int y)
     
     Bitmap alternate;
     const Bitmap* bitmap = &original;
-    if (x < 0 || y < 0 || x + original.width() > w || y + original.height() > h)
-    {
-        int offset_x = 0, offset_y = 0, trimmed_width = original.width(), trimmed_height = original.height();
-        if (x < 0)
-            offset_x = x, trimmed_width  += x, x = 0;
-        if (y < 0)
-            offset_y = y, trimmed_height += y, y = 0;
-        if (x + trimmed_width > w)
-            trimmed_width  -= (w - x - trimmed_width);
-        if (y + trimmed_height > h)
+    
+    if (x < 0 || y < 0 || x + original.width() > w || y + original.height() > h) {
+        int offset_x = 0, offset_y = 0;
+        int trimmed_width = original.width(), trimmed_height = original.height();
+        if (x < 0) {
+            offset_x = x;
+            trimmed_width += x;
+            x = 0;
+        }
+        if (y < 0) {
+            offset_y = y;
+            trimmed_height += y;
+            y = 0;
+        }
+        if (x + trimmed_width > w) {
+            trimmed_width -= (w - x - trimmed_width);
+        }
+        if (y + trimmed_height > h) {
             trimmed_height -= (h - y - trimmed_height);
-            
-        if (trimmed_width <= 0 || trimmed_height <= 0)
-            return;
+        }
+
+        if (trimmed_width <= 0 || trimmed_height <= 0) return;
         
         alternate.resize(trimmed_width, trimmed_height);
         alternate.insert(original, offset_x, offset_y);

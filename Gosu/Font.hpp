@@ -47,8 +47,8 @@ namespace Gosu
         //! Draws text so the top left corner of the text is at (x; y).
         //! \param text Formatted text without line-breaks.
         void draw(const std::string& text, double x, double y, ZPos z,
-            double scale_x = 1, double scale_y = 1,
-            Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
+            double scale_x = 1, double scale_y = 1, Color c = Color::WHITE,
+            AlphaMode mode = AM_DEFAULT) const;
         
         //! Draws text at a position relative to (x; y).
         //! \param rel_x Determines where the text is drawn horizontally. If
@@ -75,7 +75,7 @@ namespace Gosu
         //! DEPRECATED: Analogous to draw, but rotates the text by a given angle.
         //! Use Graphics::push_transform to achieve the same effect.
         void draw_rot(const std::string& text, double x, double y, ZPos z, double angle,
-            double scale_x = 1, double scale_y = 1,
-            Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
+            double scale_x = 1, double scale_y = 1, Color c = Color::WHITE,
+            AlphaMode mode = AM_DEFAULT) const;
     };
 }

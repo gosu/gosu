@@ -42,16 +42,22 @@ public:
         pos_y = Gosu::random(0, 480);
     }
 
-    double x() const { return pos_x; }
-    double y() const { return pos_y; }
+    double x() const
+    {
+        return pos_x;
+    }
+    
+    double y() const
+    {
+        return pos_y;
+    }
 
     void draw() const
     {
-        const Gosu::Image& image =
-            animation.at(Gosu::milliseconds() / 100 % animation.size());
+        const Gosu::Image& image = animation.at(Gosu::milliseconds() / 100 % animation.size());
 
-        image.draw(pos_x - image.width() / 2.0, pos_y - image.height() / 2.0,
-            Z_STARS, 1, 1, color, Gosu::AM_ADD);
+        image.draw(pos_x - image.width() / 2.0, pos_y - image.height() / 2.0, Z_STARS,
+                   1, 1, color, Gosu::AM_ADD);
     }
 };
 
@@ -115,16 +121,15 @@ public:
     void collect_stars(std::list<Star>& stars)
     {
         std::list<Star>::iterator cur = stars.begin();
-        while (cur != stars.end())
-        {
-            if (Gosu::distance(pos_x, pos_y, cur->x(), cur->y()) < 35)
-            {
+        while (cur != stars.end()) {
+            if (Gosu::distance(pos_x, pos_y, cur->x(), cur->y()) < 35) {
                 cur = stars.erase(cur);
                 score += 10;
                 beep.play();
             }
-            else
+            else {
                 ++cur;
+            }
         }
     }
 };
@@ -140,7 +145,7 @@ class GameWindow : public Gosu::Window
 
 public:
     GameWindow()
-    :   Window(640, 480), font(20)
+    : Window(640, 480), font(20)
     {
         set_caption("Gosu Tutorial Game");
 
@@ -155,17 +160,21 @@ public:
 
     void update() override
     {
-        if (Gosu::Input::down(Gosu::KB_LEFT) || Gosu::Input::down(Gosu::GP_LEFT))
+        if (Gosu::Input::down(Gosu::KB_LEFT) || Gosu::Input::down(Gosu::GP_LEFT)) {
             player.turn_left();
-        if (Gosu::Input::down(Gosu::KB_RIGHT) || Gosu::Input::down(Gosu::GP_RIGHT))
+        }
+        if (Gosu::Input::down(Gosu::KB_RIGHT) || Gosu::Input::down(Gosu::GP_RIGHT)) {
             player.turn_right();
-        if (Gosu::Input::down(Gosu::KB_UP) || Gosu::Input::down(Gosu::GP_BUTTON_0))
+        }
+        if (Gosu::Input::down(Gosu::KB_UP) || Gosu::Input::down(Gosu::GP_BUTTON_0)) {
             player.accelerate();
+        }
         player.move();
         player.collect_stars(stars);
 
-        if (std::rand() % 25 == 0 && stars.size() < 25)
+        if (std::rand() % 25 == 0 && stars.size() < 25) {
             stars.push_back(Star(star_anim));
+        }
     }
 
     void draw() override
@@ -173,16 +182,19 @@ public:
         player.draw();
         background_image->draw(0, 0, Z_BACKGROUND);
 
-        for (Star& star : stars)
+        for (Star& star : stars) {
             star.draw();
+        }
 
-        font.draw("Score: " + std::to_string(player.get_score()), 10, 10, Z_UI, 1, 1, Gosu::Color::YELLOW);
+        font.draw("Score: " + std::to_string(player.get_score()), 10, 10, Z_UI,
+                  1, 1, Gosu::Color::YELLOW);
     }
 
     void button_down(Gosu::Button btn) override
     {
-        if (btn == Gosu::KB_ESCAPE)
+        if (btn == Gosu::KB_ESCAPE) {
            close();
+       }
     }
 };
 

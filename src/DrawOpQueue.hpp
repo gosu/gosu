@@ -1,9 +1,9 @@
 #pragma once
 
-#include "GraphicsImpl.hpp"
-#include "TransformStack.hpp"
 #include "ClipRectStack.hpp"
 #include "DrawOp.hpp"
+#include "GraphicsImpl.hpp"
+#include "TransformStack.hpp"
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -17,10 +17,8 @@ class Gosu::DrawOpQueue
     ClipRectStack clip_rect_stack;
     bool rec;
 
-    typedef std::vector<DrawOp> DrawOps;
-    DrawOps ops;
-    typedef std::vector<std::function<void()> > GLBlocks;
-    GLBlocks gl_blocks;
+    std::vector<DrawOp> ops;
+    std::vector<std::function<void ()>> gl_blocks;
 
 public:
     DrawOpQueue()
@@ -40,25 +38,28 @@ public:
     
     void schedule_draw_op(DrawOp op)
     {
-        if (clip_rect_stack.clipped_world_away())
+        if (clip_rect_stack.clipped_world_away()) {
             return;
+        }
 
-        #ifdef GOSU_IS_OPENGLES
+    #ifdef GOSU_IS_OPENGLES
         // No triangles, no lines supported
         assert (op.vertices_or_block_index == 4);
-        #endif
+    #endif
 
         op.render_state.transform = &transform_stack.current();
-        if (const ClipRect* cr = clip_rect_stack.maybe_effective_rect())
+        if (const ClipRect* cr = clip_rect_stack.maybe_effective_rect()) {
             op.render_state.clip_rect = *cr;
+        }
         ops.push_back(op);
     }
 
-    void gl(std::function<void()> gl_block, ZPos z)
+    void gl(std::function<void ()> gl_block, ZPos z)
     {
         // TODO: Document this case: Clipped-away GL blocks are *not* being run.
-        if (clip_rect_stack.clipped_world_away())
+        if (clip_rect_stack.clipped_world_away()) {
             return;
+        }
 
         int complement_of_block_index = ~(int)gl_blocks.size();
         gl_blocks.push_back(gl_block);
@@ -66,16 +67,18 @@ public:
         DrawOp op;
         op.vertices_or_block_index = complement_of_block_index;
         op.render_state.transform = &transform_stack.current();
-        if (const ClipRect* cr = clip_rect_stack.maybe_effective_rect())
+        if (const ClipRect* cr = clip_rect_stack.maybe_effective_rect()) {
             op.render_state.clip_rect = *cr;
+        }
         op.z = z;
         ops.push_back(op);
     }
 
     void begin_clipping(double x, double y, double width, double height, double screen_height)
     {
-        if (recording())
-            throw std::logic_error("Clipping is not allowed while creating a macro yet");
+        if (recording()) {
+            throw std::logic_error("Clipping is not allowed while creating a macro");
+        }
         
         // Apply current transformation.
 
@@ -85,9 +88,9 @@ public:
         apply_transform(transform_stack.current(), left, top);
         apply_transform(transform_stack.current(), right, bottom);
 
-        double phys_x = std::min(left, right);
-        double phys_y = std::min(top, bottom);
-        double phys_width = std::abs(left - right);
+        double phys_x      = std::min(left, right);
+        double phys_y      = std::min(top, bottom);
+        double phys_width  = std::abs(left - right);
         double phys_height = std::abs(top - bottom);
 
         // Adjust for OpenGL having the wrong idea of where y=0 is.
@@ -118,53 +121,55 @@ public:
 
     void perform_draw_ops_andCode()
     {
-        if (recording())
+        if (recording()) {
             throw std::logic_error("Flushing to the screen is not allowed while recording a macro");
+        }
         
         // Apply Z-Ordering.
         std::stable_sort(ops.begin(), ops.end());
 
         RenderStateManager manager;
-        #ifdef GOSU_IS_OPENGLES
-        if (ops.empty())
+        
+    #ifdef GOSU_IS_OPENGLES
+        if (ops.empty()) {
             return;
+        }
 
-        DrawOps::const_iterator current = ops.begin(), last = ops.end() - 1;
-        for (; current != last; ++current)
-        {
+        auto current = ops.begin(), last = ops.end() - 1;
+        for (; current != last; ++current) {
             manager.set_render_state(current->render_state);
             current->perform(&*(current + 1));
         }
         manager.set_render_state(last->render_state);
         last->perform(0);
-        #else
-        for (DrawOps::const_iterator current = ops.begin(), last = ops.end();
-            current != last; ++current)
-        {
-            manager.set_render_state(current->render_state);
-            if (current->vertices_or_block_index >= 0)
-                current->perform(0);
-            else
-            {
+    #else
+        for (const auto& op : ops) {
+            manager.set_render_state(op.render_state);
+            if (op.vertices_or_block_index >= 0) {
+                op.perform(0);
+            }
+            else {
                 // GL code
-                int block_index = ~current->vertices_or_block_index;
+                int block_index = ~op.vertices_or_block_index;
                 assert (block_index >= 0);
                 assert (block_index < gl_blocks.size());
                 gl_blocks[block_index]();
                 manager.enforce_after_untrusted_gL();
             }
         }
-        #endif
+    #endif
     }
 
     void compile_to(VertexArrays& vas)
     {
-        if (!gl_blocks.empty())
+        if (!gl_blocks.empty()) {
             throw std::logic_error("Custom OpenGL code cannot be recorded as a macro");
+        }
 
         std::stable_sort(ops.begin(), ops.end());
-        for (DrawOps::const_iterator op = ops.begin(), end = ops.end(); op != end; ++op)
-            op->compile_to(vas);
+        for (const auto& op : ops) {
+            op.compile_to(vas);
+        }
     }
 
     // This retains the current stack of transforms and clippings.

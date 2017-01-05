@@ -16,23 +16,24 @@ namespace Gosu
     //! It is recommended that you throw away sample instances if possible,
     //! as they could accidentally refer to other sounds being played after
     //! a very long time has passed.
-	class SampleInstance
-	{
-		int handle, extra;
-        bool alive() const;		
+    class SampleInstance
+    {
+        int handle, extra;
+        bool alive() const;
 
-	public:
+    public:
         //! Called internally by Sample, do not use.
-		SampleInstance(int handle, int extra);
+        SampleInstance(int handle, int extra);
 
-		bool playing() const;
-		bool paused() const;
-        //! Pauses this instance to be resumed afterwards. It will still keep a channel filled while paused.
+        bool playing() const;
+        bool paused() const;
+        //! Pauses this instance to be resumed afterwards. It will still keep a channel filled while
+        //! paused.
         void pause();
         void resume();
         //! Stops this instance of a sound being played.
         //! Calling this twice, or too late, does not do any harm.
-		void stop();
+        void stop();
 
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
         //! volume).
@@ -43,7 +44,7 @@ namespace Gosu
         //! capabilities and can accept very high or low values. Use 1.0 for
         //! normal playback speed.
         void change_speed(double speed);
-	};
+    };
 
     //! A sample is a short sound that is completely loaded in memory, can be
     //! played multiple times at once and offers very flexible playback
@@ -52,7 +53,7 @@ namespace Gosu
     {
         struct SampleData;
         std::shared_ptr<SampleData> data;
-    
+
     public:
         //! Constructs a sample that can be played on the specified audio
         //! system and loads the sample from a file.
@@ -68,8 +69,7 @@ namespace Gosu
         //! \param speed Playback speed is only limited by the underlying audio library,
         //! and can accept very high or low values. Use 1.0 for
         //! normal playback speed.
-        SampleInstance play(double volume = 1, double speed = 1,
-            bool looping = false) const;
+        SampleInstance play(double volume = 1, double speed = 1, bool looping = false) const;
 
         //! Plays the sample with panning. Even if pan is 0.0, the sample will
         //! not be as loud as if it were played by calling play() due to the
@@ -95,6 +95,7 @@ namespace Gosu
         
         // Non-movable to avoid dangling internal references.
         Song(Song&&) = delete;
+        // Non-movable to avoid dangling internal references.
         Song& operator=(Song&&) = delete;
 
     public:

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <memory>
 #include <Gosu/Platform.hpp>
+#include <memory>
 
 namespace Gosu
 {
@@ -16,9 +16,11 @@ namespace Gosu
             unsigned left, top, width, height;
             Block() {}
             Block(unsigned a_left, unsigned a_top, unsigned a_width, unsigned a_height)
-            : left(a_left), top(a_top), width(a_width), height(a_height) {}
+            : left(a_left), top(a_top), width(a_width), height(a_height)
+            {
+            }
         };
-    
+
         BlockAllocator(unsigned width, unsigned height);
         ~BlockAllocator();
 
