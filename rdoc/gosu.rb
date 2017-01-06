@@ -16,11 +16,11 @@ module Gosu
   VERSION = :a_string
 
   ##
-  # @deprecated Use LICENSES instead as its a more appropriate name
+  # @deprecated Use LICENSES instead as it's a more appropriate name
   GOSU_COPYRIGHT_NOTICE = :a_string
 
   ##
-  # A long block of legal copy that your game is obliged to display somewhere.
+  # A block of legal copy that your game is obliged to display somewhere.
   LICENSES = :a_string
 
   Kb0 Kb1 Kb2 Kb3 Kb4 Kb5 Kb6 Kb7 Kb8 Kb9 = :implementation_defined
