@@ -2516,7 +2516,7 @@ SWIG_ruby_failed(void)
 } 
 
 
-/*@SWIG:/usr/local/share/swig/3.0.11/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
+/*@SWIG:/usr/local/Cellar/swig/3.0.11/share/swig/3.0.11/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
 SWIGINTERN VALUE SWIG_AUX_NUM2DBL(VALUE *args)
 {
   VALUE obj = args[0];
@@ -2555,7 +2555,7 @@ SWIG_From_unsigned_SS_int  (unsigned int value)
 #include <string>
 
 
-/*@SWIG:/usr/local/share/swig/3.0.11/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
+/*@SWIG:/usr/local/Cellar/swig/3.0.11/share/swig/3.0.11/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
 SWIGINTERN VALUE SWIG_AUX_NUM2ULONG(VALUE *args)
 {
   VALUE obj = args[0];
@@ -2753,7 +2753,7 @@ SWIG_AsPtr_std_string (VALUE obj, std::string **val)
 }
 
 
-/*@SWIG:/usr/local/share/swig/3.0.11/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
+/*@SWIG:/usr/local/Cellar/swig/3.0.11/share/swig/3.0.11/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
 SWIGINTERN VALUE SWIG_AUX_NUM2LONG(VALUE *args)
 {
   VALUE obj = args[0];
@@ -3128,7 +3128,7 @@ SWIGINTERN VALUE Gosu_TextInput_selection_start(Gosu::TextInput *self){
         std::string prefix = self->text().substr(0, self->selection_start());
         VALUE rb_prefix = rb_str_new2(prefix.c_str());
         ENFORCE_UTF8(rb_prefix);
-        return rb_str_length(rb_prefix);
+        return rb_funcall(rb_prefix, rb_intern("length"), 0);
     }
 SWIGINTERN void Gosu_TextInput_set_selection_start(Gosu::TextInput *self,VALUE selection_start){
         VALUE rb_text = rb_str_new2(self->text().c_str());
@@ -11516,8 +11516,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "VERSION", SWIG_From_std_string(static_cast< std::string >(Gosu::VERSION)));
   rb_define_const(mGosu, "LICENSES", SWIG_From_std_string(static_cast< std::string >(Gosu::LICENSES)));
   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
-  rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(10)));
-  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(8)));
+  rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(11)));
+  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_const(mGosu, "M_PI", SWIG_From_double(static_cast< double >(3.14159265358979323846264338327950288)));
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);

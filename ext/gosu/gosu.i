@@ -895,7 +895,7 @@ namespace Gosu
         std::string prefix = $self->text().substr(0, $self->selection_start());
         VALUE rb_prefix = rb_str_new2(prefix.c_str());
         ENFORCE_UTF8(rb_prefix);
-        return rb_str_length(rb_prefix);
+        return rb_funcall(rb_prefix, rb_intern("length"), 0);
     }
     
     void set_selection_start(VALUE selection_start)
