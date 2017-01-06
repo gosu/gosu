@@ -1,12 +1,3 @@
-LICENSES = <<-EOF
-  This software uses the following third-party libraries:
-  
-  Gosu, https://www.libgosu.org, MIT License, http://opensource.org/licenses/MIT
-  SDL 2, http://www.libsdl.org, MIT License, http://opensource.org/licenses/MIT
-  libsndfile, http://www.mega-nerd.com/libsndfile, GNU LGPL 3, http://www.gnu.org/copyleft/lesser.html
-  OpenAL Soft, http://kcat.strangesoft.net/openal.html, GNU LGPL 2, http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html
-EOF
-
 task :set_version do
   throw "GOSU_RELEASE_VERSION must be set" if GOSU_VERSION == "0.0.0"
   
@@ -27,10 +18,12 @@ task :set_version do
 #define GOSU_MAJOR_VERSION #{major}
 #define GOSU_MINOR_VERSION #{minor}
 #define GOSU_POINT_VERSION #{patch}
-#define GOSU_VERSION "#{GOSU_VERSION}"
 
-#define GOSU_COPYRIGHT_NOTICE \\
-#{LICENSES.split("\n").map { |line| "    \"#{line.gsub(/^ */, "")}\\n\"" }.join(" \\\n")}
+namespace Gosu
+{
+    extern const std::string VERSION;
+    extern const std::string LICENSES;
+}
     EOF
   end
 end
