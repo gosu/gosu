@@ -4,15 +4,15 @@ class ::Numeric
   def degrees_to_radians
     self * Math::PI / 180.0
   end
-  
+
   def radians_to_degrees
     self * 180.0 / Math::PI
   end
-  
+
   def gosu_to_radians
     (self - 90) * Math::PI / 180.0
   end
-  
+
   def radians_to_gosu
     self * 180.0 / Math::PI + 90
   end
@@ -40,7 +40,7 @@ end
 # Passing a Window to initialize and from_text has been deprecated in Gosu 0.9.
 class Gosu::Image
   alias initialize_without_window initialize
-  
+
   def initialize(*args)
     if args[0].is_a? Gosu::Window then
       if args.size == 7 then
@@ -52,11 +52,11 @@ class Gosu::Image
       initialize_without_window(*args)
     end
   end
-  
+
   class << self
     alias from_text_without_window from_text
   end
-  
+
   def self.from_text(*args)
     if args.size == 4
       from_text_without_window(args[1], args[3], :font => args[2])
@@ -73,7 +73,7 @@ end
 # Passing a Window to Sample#initialize has been deprecated in Gosu 0.7.17.
 class Gosu::Sample
   alias initialize_without_window initialize
-  
+
   def initialize(*args)
     args.shift if args.first.is_a? Gosu::Window
     initialize_without_window(*args)
@@ -84,7 +84,7 @@ end
 # Passing a Window to Song#initialize has been deprecated in Gosu 0.7.17.
 class Gosu::Song
   alias initialize_without_window initialize
-  
+
   def initialize(*args)
     args.shift if args.first.is_a? Gosu::Window
     initialize_without_window(*args)
@@ -97,7 +97,7 @@ module Gosu
   class ImmutableColor < Color
     private :alpha=, :red=, :green=, :blue=, :hue=, :saturation=, :value=
   end
-  
+
   class Color
     NONE    = Gosu::ImmutableColor.new(0x00_000000)
     BLACK   = Gosu::ImmutableColor.new(0xff_000000)
@@ -121,18 +121,18 @@ end
 class Gosu::Window
   # Backwards compatibility:
   # Class methods that have been turned into module methods.
-  
+
   def self.button_id_to_char(id)
     Gosu.button_id_to_char(id)
   end
-  
+
   def self.char_to_button_id(ch)
     Gosu.char_to_button_id(ch)
   end
-  
+
   # Backwards compatibility:
   # Instance methods that have been turned into module methods.
-  
+
   %w(draw_line draw_triangle draw_quad
      flush gl clip_to record
      transform translate rotate scale
@@ -141,17 +141,21 @@ class Gosu::Window
       Gosu.send method, *args, &block
     end
   end
-  
+
   # Call Thread.pass every tick, which may or may not be necessary for friendly co-existence with
   # Ruby's Thread class.
-  
+
   alias _tick tick
-  
+
   def tick
     Thread.pass
     _tick
   end
 end
+
+# Backwards compatibility:
+# This was renamed, because it's not actually a "copyright notice" (Wikipedia: https://en.wikipedia.org/wiki/Copyright_notice).
+Gosu::GOSU_COPYRIGHT_NOTICE = Gosu::LICENSES
 
 # Release OpenAL resources during Ruby's shutdown, not Gosu's.
 at_exit do

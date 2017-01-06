@@ -1,24 +1,28 @@
-##
-# The first component of the version.
-GOSU_MAJOR_VERSION = :an_integer
-
-##
-# The second component of the version.
-GOSU_MINOR_VERSION = :an_integer
-
-##
-# The third component of the version.
-GOSU_POINT_VERSION = :an_integer
-
-##
-# A version string of the form "0.1.2", "0.1.2.3" or "0.1.2pre4".
-GOSU_VERSION = :a_string
-
-##
-# A long block of legal copy that your game is obliged to display somewhere.
-GOSU_COPYRIGHT_NOTICE = :a_string
-
 module Gosu
+  ##
+  # The first component of the version.
+  MAJOR_VERSION = :a_fixnum
+
+  ##
+  # The second component of the version.
+  MINOR_VERSION = :a_fixnum
+
+  ##
+  # The third component of the version.
+  POINT_VERSION = :a_fixnum
+
+  ##
+  # A version string of the form "0.1.2", "0.1.2.3" or "0.1.2pre4".
+  VERSION = :a_string
+
+  ##
+  # @deprecated Use LICENSES instead as its a more appropriate name
+  GOSU_COPYRIGHT_NOTICE = :a_string
+
+  ##
+  # A long block of legal copy that your game is obliged to display somewhere.
+  LICENSES = :a_string
+
   Kb0 Kb1 Kb2 Kb3 Kb4 Kb5 Kb6 Kb7 Kb8 Kb9 = :implementation_defined
   KbA KbB KbC KbD KbE KbF KbG KbH KbI KbJ KbK KbL KbM KbN KbO KbP KbQ KbR KbS KbT KbU KbV KbW KbX KbY KbZ = :implementation_defined
   KbBackspace = :implementation_defined

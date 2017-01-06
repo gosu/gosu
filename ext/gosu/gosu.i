@@ -379,7 +379,10 @@ namespace Gosu
 %rename("MAJOR_VERSION") GOSU_MAJOR_VERSION;
 %rename("MINOR_VERSION") GOSU_MINOR_VERSION;
 %rename("POINT_VERSION") GOSU_POINT_VERSION;
-%rename("VERSION") GOSU_VERSION;
+%ignore Gosu::VERSION;
+%ignore Gosu::LICENSES;
+%constant std::string VERSION = Gosu::VERSION;
+%constant std::string LICENSES = Gosu::LICENSES;
 %include "../../Gosu/Version.hpp"
 
 // Miscellaneous functions (timing, math)
