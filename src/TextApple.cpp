@@ -3,14 +3,14 @@
 
 #include <Gosu/Text.hpp>
 #include <Gosu/Bitmap.hpp>
-#include <Gosu/Utility.hpp>
 #include <Gosu/Math.hpp>
-#include <map>
+#include <Gosu/Utility.hpp>
 #include <cmath>
+#include <map>
 
 #if defined(GOSU_IS_IPHONE)
-#import <UIKit/UIKit.h>
 #import <CoreGraphics/CoreGraphics.h>
+#import <UIKit/UIKit.h>
 typedef UIFont AppleFont;
 #else
 #import <AppKit/AppKit.h>
@@ -38,13 +38,13 @@ static std::string normalize_font(const std::string& font_name)
         return family_of_files[font_name];
     }
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithUTF8String:font_name.c_str()]];
+    NSURL* url = [NSURL URLWithString:[NSString stringWithUTF8String:font_name.c_str()]];
     if (url == nullptr) {
         return family_of_files[font_name] = Gosu::default_font_name();
     }
-    CFURLRef url_ref = (__bridge CFURLRef)url;
+    CFURLRef url_ref = (__bridge CFURLRef) url;
     
-    NSArray *descriptors = CFBridgingRelease(CTFontManagerCreateFontDescriptorsFromURL(url_ref));
+    NSArray* descriptors = CFBridgingRelease(CTFontManagerCreateFontDescriptorsFromURL(url_ref));
     if (descriptors.count < 1 ||
             !CTFontManagerRegisterFontsForURL(url_ref, kCTFontManagerScopeProcess, nullptr)) {
         return family_of_files[font_name] = Gosu::default_font_name();
@@ -52,7 +52,7 @@ static std::string normalize_font(const std::string& font_name)
 
     CTFontDescriptorRef ref = (__bridge CTFontDescriptorRef) descriptors[0];
     CFTypeRef family_name_ref = CTFontDescriptorCopyAttribute(ref, kCTFontFamilyNameAttribute);
-    NSString *family_name = CFBridgingRelease(family_name_ref);
+    NSString* family_name = CFBridgingRelease(family_name_ref);
     return family_of_files[font_name] = family_name.UTF8String ?: "";
 #endif
 }
@@ -67,22 +67,22 @@ static AppleFont* get_font(std::string font_name, unsigned font_flags, double he
     
     AppleFont* result = used_fonts[key];
     if (!result) {
-        NSString *name = [NSString stringWithUTF8String:font_name.c_str()];
-#ifdef GOSU_IS_IPHONE
+        NSString* name = [NSString stringWithUTF8String:font_name.c_str()];
+    #ifdef GOSU_IS_IPHONE
         result = [AppleFont fontWithName:name size:height];
-#else
-        NSFontDescriptor* desc = [[NSFontDescriptor fontDescriptorWithFontAttributes:nil]
-                                  fontDescriptorWithFamily:name];
+    #else
+        NSFontDescriptor* desc =
+            [[NSFontDescriptor fontDescriptorWithFontAttributes:nil] fontDescriptorWithFamily:name];
         result = [NSFont fontWithDescriptor:desc size:height];
         if (result && (font_flags & Gosu::FF_BOLD)) {
-            result = [[NSFontManager sharedFontManager] convertFont:result
-                                                        toHaveTrait:NSFontBoldTrait];
+            result =
+                [[NSFontManager sharedFontManager] convertFont:result toHaveTrait:NSFontBoldTrait];
         }
         if (result && (font_flags & Gosu::FF_ITALIC)) {
             result = [[NSFontManager sharedFontManager] convertFont:result
                                                         toHaveTrait:NSFontItalicTrait];
         }
-#endif
+    #endif
         if (result == nullptr) {
             if (font_name != Gosu::default_font_name()) {
                 result = get_font(Gosu::default_font_name(), 0, height);
@@ -102,7 +102,7 @@ std::string Gosu::default_font_name()
 }
 
 #ifndef GOSU_IS_IPHONE
-static NSDictionary *attribute_dictionary(NSFont* font, unsigned font_flags)
+static NSDictionary* attribute_dictionary(NSFont* font, unsigned font_flags)
 {
     auto underline_style =
         (font_flags & Gosu::FF_UNDERLINE) ? NSUnderlineStyleSingle : NSUnderlineStyleNone;
@@ -121,13 +121,13 @@ unsigned Gosu::text_width(const std::string& text, const std::string& font_name,
         throw std::invalid_argument("text_width cannot handle line breaks");
     }
     
-    AppleFont *font = get_font(font_name, font_flags, font_height);
+    AppleFont* font = get_font(font_name, font_flags, font_height);
     
     // This will, of course, compute a too large size; font_height is in pixels,
     // the method expects point.
-    NSString *string = [NSString stringWithUTF8String:text.c_str()];
+    NSString* string = [NSString stringWithUTF8String:text.c_str()];
 #ifndef GOSU_IS_IPHONE
-    NSDictionary *attributes = attribute_dictionary(font, font_flags);
+    NSDictionary* attributes = attribute_dictionary(font, font_flags);
     NSSize size = [string sizeWithAttributes:attributes];
 #else
     CGSize size = [string sizeWithFont:font];
@@ -144,16 +144,15 @@ void Gosu::draw_text(Bitmap& bitmap, const std::string& text, int x, int y, Colo
         throw std::invalid_argument("the argument to draw_text cannot contain line breaks");
     }
     
-    AppleFont *font = get_font(font_name, font_flags, font_height);
-    NSString *string = [NSString stringWithUTF8String:text.c_str()];
+    AppleFont* font = get_font(font_name, font_flags, font_height);
+    NSString* string = [NSString stringWithUTF8String:text.c_str()];
 
-    // Note that font_height is in pixels, the method expects points, so we have to scale this down.
-    #ifndef GOSU_IS_IPHONE
-    NSDictionary *attributes = attribute_dictionary(font, font_flags);
+#ifndef GOSU_IS_IPHONE
+    NSDictionary* attributes = attribute_dictionary(font, font_flags);
     NSSize size = [string sizeWithAttributes:attributes];
-    #else
+#else
     CGSize size = [string sizeWithFont:font];
-    #endif
+#endif
     
     unsigned width = static_cast<unsigned>(round(size.width / size.height * font_height));
 
@@ -162,11 +161,8 @@ void Gosu::draw_text(Bitmap& bitmap, const std::string& text, int x, int y, Colo
     
     // Use a temporary context to draw the CGImage to the buffer.
     CGColorSpaceRef color_space = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context =
-        CGBitmapContextCreate(bmp.data(),
-                              bmp.width(), bmp.height(), 8, bmp.width() * 4,
-                              color_space,
-                              kCGImageAlphaPremultipliedLast);
+    CGContextRef context = CGBitmapContextCreate(bmp.data(), bmp.width(), bmp.height(), 8,
+        bmp.width() * 4, color_space, kCGImageAlphaPremultipliedLast);
     CGColorSpaceRelease(color_space);
 #ifdef GOSU_IS_IPHONE
     CGFloat color[] = { 1.f, 1.f, 1.f, 0.f };
@@ -188,8 +184,9 @@ void Gosu::draw_text(Bitmap& bitmap, const std::string& text, int x, int y, Colo
     attributes = attribute_dictionary(font, font_flags);
     
     [NSGraphicsContext saveGraphicsState];
-    [NSGraphicsContext setCurrentContext:
-        [NSGraphicsContext graphicsContextWithGraphicsPort:(void *)context flipped:false]];
+    [NSGraphicsContext
+        setCurrentContext:[NSGraphicsContext graphicsContextWithGraphicsPort:(void*)context
+                                                                     flipped:false]];
     [string drawAtPoint:NSPointZero withAttributes:attributes];
     [NSGraphicsContext restoreGraphicsState];
 #endif
@@ -199,14 +196,14 @@ void Gosu::draw_text(Bitmap& bitmap, const std::string& text, int x, int y, Colo
     int effective_height = Gosu::clamp<int>(font_height, 0, bitmap.height() - y);
     
     // Now copy the set pixels back.
-    for (int rel_y = 0; rel_y < effective_height; ++rel_y)
-        for (int rel_x = 0; rel_x < effective_width; ++rel_x)
-        {
+    for (int rel_y = 0; rel_y < effective_height; ++rel_y) {
+        for (int rel_x = 0; rel_x < effective_width; ++rel_x) {
             c.set_alpha(bmp.get_pixel(rel_x, rel_y).alpha());
             if (c.alpha()) {
                 bitmap.set_pixel(x + rel_x, y + rel_y, c);
             }
         }
+    }
 }
 
 #endif

@@ -16,7 +16,7 @@ namespace Gosu
     //! Returns the maximum size of an texture that will be allocated
     //! internally by Gosu.
     //! Useful when extending Gosu using OpenGL.
-    unsigned const MAX_TEXTURE_SIZE = 1024;
+    const unsigned MAX_TEXTURE_SIZE = 1024;
     
     //! Serves as the target of all drawing and provides primitive drawing
     //! functionality.
@@ -57,7 +57,7 @@ namespace Gosu
         //! Gosu's rendering up to the Z level may not yet have been glFlush()ed.
         //! Note: You may not call any Gosu rendering functions from within the
         //! functor, and you must schedule it from within Window::draw's call tree.
-        static void gl(const std::function<void()>& functor, ZPos z);
+        static void gl(const std::function<void ()>& functor, ZPos z);
         
         //! Enables clipping to a specified rectangle.
         static void begin_clipping(double x, double y, double width, double height);

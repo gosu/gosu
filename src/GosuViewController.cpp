@@ -1,14 +1,13 @@
 #include <Gosu/Platform.hpp>
 #if defined(GOSU_IS_IPHONE)
 
-#import "GosuViewController.h"
 #import "GosuGLView.h"
+#import "GosuViewController.h"
 #import "GraphicsImpl.hpp"
 #import <Gosu/Gosu.hpp>
 
-#import <OpenAL/alc.h>
 #import <AudioToolbox/AudioSession.h>
-
+#import <OpenAL/alc.h>
 
 namespace Gosu
 {
@@ -17,13 +16,12 @@ namespace Gosu
         void register_frame();
     }
     
-    ALCcontext *shared_openal_context();
+    ALCcontext* shared_openal_context();
 }
-
 
 // TODO: This has been written on iOS 3.x.
 // Is this still the best way to handle interruptions?
-static void handle_audio_interruption(void *unused, UInt32 inInterruptionState)
+static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
 {
     if (inInterruptionState == kAudioSessionBeginInterruption) {
         alcMakeContextCurrent(nullptr);
@@ -32,7 +30,6 @@ static void handle_audio_interruption(void *unused, UInt32 inInterruptionState)
         alcMakeContextCurrent(Gosu::shared_openal_context());
     }
 }
-
 
 @implementation GosuViewController
 {
@@ -68,17 +65,16 @@ static void handle_audio_interruption(void *unused, UInt32 inInterruptionState)
     return UIInterfaceOrientationMaskLandscape;
 }
 
-- (GosuGLView *)GLView
+- (GosuGLView*)GLView
 {
-    return (GosuGLView *)self.view;
+    return (GosuGLView*)self.view;
 }
 
-- (Gosu::Window &)gosuWindowReference
+- (Gosu::Window&)gosuWindowReference
 {
-    NSAssert(self.gosuWindow,
-             @"gosuWindow needs to be set before showing GosuViewController");
+    NSAssert(self.gosuWindow, @"gosuWindow needs to be set before showing GosuViewController");
     
-    return *(Gosu::Window *)self.gosuWindow;
+    return *(Gosu::Window*)self.gosuWindow;
 }
 
 #pragma mark - Notifications (handle pausing)
@@ -87,12 +83,24 @@ static void handle_audio_interruption(void *unused, UInt32 inInterruptionState)
 {
     [super viewDidLoad];
     
-    AudioSessionInitialize(NULL, NULL, handle_audio_interruption, NULL);
+    AudioSessionInitialize(nullptr, nullptr, handle_audio_interruption, nullptr);
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidBecomeActive:)
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillResignActive:)
+                                                 name:UIApplicationWillResignActiveNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillEnterForeground:)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidEnterBackground:)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
 }
 
 - (void)dealloc
@@ -100,17 +108,18 @@ static void handle_audio_interruption(void *unused, UInt32 inInterruptionState)
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)applicationDidBecomeActive:(NSNotification *)notification
+- (void)applicationDidBecomeActive:(NSNotification*)notification
 {
     if (_musicPaused) {
-        if (Gosu::Song::current_song())
+        if (Gosu::Song::current_song()) {
             Gosu::Song::current_song()->play();
+        }
         _musicPaused = NO;
     }
     _paused = NO;
 }
 
-- (void)applicationWillResignActive:(NSNotification *)notification
+- (void)applicationWillResignActive:(NSNotification*)notification
 {
     if (Gosu::Song::current_song()) {
         Gosu::Song::current_song()->pause();
@@ -121,12 +130,12 @@ static void handle_audio_interruption(void *unused, UInt32 inInterruptionState)
     self.gosuWindowReference.lose_focus();
 }
 
-- (void)applicationWillEnterForeground:(NSNotification *)notification
+- (void)applicationWillEnterForeground:(NSNotification*)notification
 {
     [self setupTimerOrDisplayLink];
 }
 
-- (void)applicationDidEnterBackground:(NSNotification *)notification
+- (void)applicationDidEnterBackground:(NSNotification*)notification
 {
     [_timerOrDisplayLink invalidate];
     _timerOrDisplayLink = nil;
@@ -145,19 +154,25 @@ static void handle_audio_interruption(void *unused, UInt32 inInterruptionState)
 
 - (void)setupTimerOrDisplayLink
 {
-    if (_timerOrDisplayLink)
+    if (_timerOrDisplayLink) {
         return;
+    }
     
     NSInteger targetFPS = round(1000.0 / self.gosuWindowReference.update_interval());
     
     if (60 % targetFPS != 0) {
         NSTimeInterval interval = self.gosuWindowReference.update_interval() / 1000.0;
-        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(updateAndDraw:) userInfo:nil repeats:YES];
+        NSTimer* timer          = [NSTimer scheduledTimerWithTimeInterval:interval
+                                                          target:self
+                                                        selector:@selector(updateAndDraw:)
+                                                        userInfo:nil
+                                                         repeats:YES];
         
         _timerOrDisplayLink = timer;
     }
     else {
-        CADisplayLink *displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateAndDraw:)];
+        CADisplayLink* displayLink =
+            [CADisplayLink displayLinkWithTarget:self selector:@selector(updateAndDraw:)];
         displayLink.frameInterval = 60 / targetFPS;
         [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
         
@@ -191,24 +206,24 @@ static void handle_audio_interruption(void *unused, UInt32 inInterruptionState)
 
 #pragma mark - Touch forwarding
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    self.gosuWindowReference.input().feed_touch_event(0, (__bridge void *)touches);
+    self.gosuWindowReference.input().feed_touch_event(0, (__bridge void*) touches);
 }
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    self.gosuWindowReference.input().feed_touch_event(1, (__bridge void *)touches);
+    self.gosuWindowReference.input().feed_touch_event(1, (__bridge void*) touches);
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    self.gosuWindowReference.input().feed_touch_event(2, (__bridge void *)touches);
+    self.gosuWindowReference.input().feed_touch_event(2, (__bridge void*) touches);
 }
 
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    self.gosuWindowReference.input().feed_touch_event(3, (__bridge void *)touches);
+    self.gosuWindowReference.input().feed_touch_event(3, (__bridge void*) touches);
 }
 
 @end

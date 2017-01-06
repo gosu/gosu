@@ -10,11 +10,12 @@ void Gosu::throw_last_winapi_error(const std::string& action)
 {
     // Obtain error message from Windows.
     wchar_t* buffer;
+                 
     if (!FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
-        FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, 0,
-        GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-        (LPWSTR) &buffer, 0, 0) || buffer == nullptr)
-    {
+                        FORMAT_MESSAGE_FROM_SYSTEM |
+                        FORMAT_MESSAGE_IGNORE_INSERTS, 0, GetLastError(),
+                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR) &buffer, 0, 0)
+            || buffer == nullptr) {
         throw std::runtime_error("Unknown error");
     }
 
@@ -35,6 +36,6 @@ void Gosu::throw_last_winapi_error(const std::string& action)
     }
 
     throw std::runtime_error(message);
- }
+}
 
 #endif

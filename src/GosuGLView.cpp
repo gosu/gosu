@@ -3,15 +3,13 @@
 
 #import "GosuGLView.h"
 
-#import <QuartzCore/QuartzCore.h>
-#import <OpenGLES/EAGLDrawable.h>
 #import <OpenGLES/EAGL.h>
+#import <OpenGLES/EAGLDrawable.h>
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
+#import <QuartzCore/QuartzCore.h>
 
-
-static EAGLContext __weak *globalContext;
-
+static EAGLContext __weak* globalContext;
 
 namespace Gosu
 {
@@ -27,10 +25,9 @@ namespace Gosu
     }
 }
 
-
 @implementation GosuGLView
 {
-    EAGLContext *_context;
+    EAGLContext* _context;
     
     GLint _backingWidth;
     GLint _backingHeight;
@@ -38,7 +35,7 @@ namespace Gosu
     GLuint _viewRenderbuffer;
     GLuint _viewFramebuffer;
 }
-    
+
 + (Class)layerClass
 {
     return [CAEAGLLayer class];
@@ -53,7 +50,7 @@ namespace Gosu
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (id)initWithCoder:(NSCoder*)aDecoder
 {
     if ((self = [super initWithCoder:aDecoder])) {
         [self initializeGosuGLView];
@@ -64,7 +61,7 @@ namespace Gosu
 
 - (void)initializeGosuGLView
 {
-    CAEAGLLayer *layer = (CAEAGLLayer *)self.layer;
+    CAEAGLLayer* layer = (CAEAGLLayer*)self.layer;
     layer.opaque = YES;
     
     globalContext = _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
@@ -111,11 +108,14 @@ namespace Gosu
     
     glBindFramebufferOES(GL_FRAMEBUFFER_OES, _viewFramebuffer);
     glBindRenderbufferOES(GL_RENDERBUFFER_OES, _viewRenderbuffer);
-    [_context renderbufferStorage:GL_RENDERBUFFER_OES fromDrawable:(CAEAGLLayer *)self.layer];
-    glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_RENDERBUFFER_OES, _viewRenderbuffer);
+    [_context renderbufferStorage:GL_RENDERBUFFER_OES fromDrawable:(CAEAGLLayer*)self.layer];
+    glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_RENDERBUFFER_OES,
+                                 _viewRenderbuffer);
     
-    glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &_backingWidth);
-    glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_HEIGHT_OES, &_backingHeight);
+    glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES,
+                                    &_backingWidth);
+    glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_HEIGHT_OES,
+                                    &_backingHeight);
     
     return (glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES) == GL_FRAMEBUFFER_COMPLETE_OES);
 }

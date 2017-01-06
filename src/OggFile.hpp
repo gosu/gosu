@@ -4,7 +4,7 @@
 #include <Gosu/IO.hpp>
 #include <algorithm>
 #include <stdexcept>
-#include <sstream>
+#include <string>
 
 #define STB_VORBIS_HEADER_ONLY
 #include "stb_vorbis.c"
@@ -25,14 +25,12 @@ namespace Gosu
         {
             int error = 0;
             
-            const unsigned char *mem = static_cast<const unsigned char*>(contents_.data());
+            const unsigned char* mem = static_cast<const unsigned char*>(contents_.data());
             stream_ = stb_vorbis_open_memory(mem, contents_.size(), &error, 0);
             
-            if (stream_ == 0)
-            {
-                std::ostringstream message;
-                message << "Cannot open Ogg Vorbis file, error code: " << error;
-                throw std::runtime_error(message.str());
+            if (stream_ == 0) {
+                throw std::runtime_error("Cannot open Ogg Vorbis file, error code: " +
+                                         std::to_string(error));
             }
             
             stb_vorbis_info info = stb_vorbis_get_info(stream_);
@@ -79,10 +77,10 @@ namespace Gosu
             while (samples < max_samples) {
                 int samples_per_channel =
                     stb_vorbis_get_samples_short_interleaved(stream_, channels_,
-                        static_cast<short*>(dest) + samples, max_samples - samples);
+                                                             static_cast<short*>(dest) + samples,
+                                                             max_samples - samples);
                 
-                if (samples_per_channel == 0)
-                    break;
+                if (samples_per_channel == 0) break;
                 
                 samples += samples_per_channel * channels_;
             }

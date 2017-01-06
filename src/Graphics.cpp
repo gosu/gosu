@@ -1,11 +1,11 @@
 #include <Gosu/Graphics.hpp>
-#include "GraphicsImpl.hpp"
 #include "DrawOp.hpp"
 #include "DrawOpQueue.hpp"
-#include "Texture.hpp"
-#include "TexChunk.hpp"
+#include "GraphicsImpl.hpp"
 #include "LargeImageData.hpp"
 #include "Macro.hpp"
+#include "TexChunk.hpp"
+#include "Texture.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/Platform.hpp>
@@ -22,21 +22,22 @@ namespace Gosu
         
         Graphics& current_graphics()
         {
-            if (current_graphics_pointer == nullptr)
+            if (current_graphics_pointer == nullptr) {
                 throw std::logic_error("Gosu::Graphics can only be drawn to while rendering");
+            }
             
             return *current_graphics_pointer;
         }
         
-        typedef std::vector<std::shared_ptr<Texture> > Textures;
-        Textures textures;
+        std::vector<std::shared_ptr<Texture>> textures;
         
         DrawOpQueueStack queues;
         
         DrawOpQueue& current_queue()
         {
-            if (queues.empty())
+            if (queues.empty()) {
                 throw std::logic_error("There is no rendering queue for this operation");
+            }
             return queues.back();
         }
     }
@@ -66,9 +67,9 @@ struct Gosu::Graphics::Impl
 Gosu::Graphics::Graphics(unsigned phys_width, unsigned phys_height)
 : pimpl(new Impl)
 {
-    pimpl->virt_width = phys_width;
-    pimpl->virt_height = phys_height;
-    pimpl->black_width = 0;
+    pimpl->virt_width   = phys_width;
+    pimpl->virt_height  = phys_height;
+    pimpl->black_width  = 0;
     pimpl->black_height = 0;
 
     // TODO: Should be merged into RenderState and removed from Graphics.
@@ -81,8 +82,9 @@ Gosu::Graphics::Graphics(unsigned phys_width, unsigned phys_height)
 
 Gosu::Graphics::~Graphics()
 {
-    if (current_graphics_pointer == this)
+    if (current_graphics_pointer == this) {
         current_graphics_pointer = nullptr;
+    }
 }
 
 unsigned Gosu::Graphics::width() const
@@ -98,12 +100,13 @@ unsigned Gosu::Graphics::height() const
 void Gosu::Graphics::set_resolution(unsigned virtual_width, unsigned virtual_height,
     double horizontal_black_bar_width, double vertical_black_bar_height)
 {
-    if (virtual_width == 0 || virtual_height == 0)
+    if (virtual_width == 0 || virtual_height == 0) {
         throw std::invalid_argument("Invalid virtual resolution.");
+    }
     
-    pimpl->virt_width = virtual_width;
-    pimpl->virt_height = virtual_height;
-    pimpl->black_width = horizontal_black_bar_width;
+    pimpl->virt_width   = virtual_width;
+    pimpl->virt_height  = virtual_height;
+    pimpl->black_width  = horizontal_black_bar_width;
     pimpl->black_height = vertical_black_bar_height;
 
     pimpl->update_base_transform();
@@ -111,22 +114,21 @@ void Gosu::Graphics::set_resolution(unsigned virtual_width, unsigned virtual_hei
 
 bool Gosu::Graphics::begin(Gosu::Color clear_with_color)
 {
-    if (current_graphics_pointer != nullptr)
+    if (current_graphics_pointer != nullptr) {
         throw std::logic_error("Cannot nest calls to Gosu::Graphics::begin()");
+    }
     
     // Cancel all recording or whatever that might still be in progress...
     queues.clear();
     
-    if (pimpl->warmed_up_queues.size() == 1)
-    {
+    if (pimpl->warmed_up_queues.size() == 1) {
         // If we already have a "warmed up" queue, use that instead.
         // -> All internals std::vectors will already have a lot of capacity.
         // This helps reduce allocations during normal operation.
         queues.clear();
         queues.swap(pimpl->warmed_up_queues);
     }
-    else
-    {
+    else {
         // Create default draw-op queue.
         queues.resize(1);
     }
@@ -180,13 +182,11 @@ void Gosu::Graphics::end()
     current_graphics_pointer = nullptr;
     
     // Clear leftover transforms, clip rects etc.
-    if (queues.size() == 1)
-    {
+    if (queues.size() == 1) {
         queues.swap(pimpl->warmed_up_queues);
         pimpl->warmed_up_queues.back().reset();
     }
-    else
-    {
+    else {
         queues.clear();
     }
 }
@@ -199,8 +199,9 @@ void Gosu::Graphics::flush()
 
 void Gosu::Graphics::begin_gl()
 {
-    if (current_queue().recording())
+    if (current_queue().recording()) {
         throw std::logic_error("Custom OpenGL is not allowed while creating a macro");
+    }
     
 #ifdef GOSU_IS_OPENGLES
     throw std::logic_error("Custom OpenGL ES is not supported yet");
@@ -236,7 +237,7 @@ void Gosu::Graphics::end_gl()
 }
 
 #ifdef GOSU_IS_OPENGLES
-void Gosu::Graphics::gl(const std::function<void()>& functor, Gosu::ZPos z)
+void Gosu::Graphics::gl(const std::function<void ()>& functor, Gosu::ZPos z)
 {
     throw std::logic_error("Custom OpenGL ES is not supported yet");
 }
@@ -246,9 +247,9 @@ namespace Gosu
     struct RunGLFunctor
     {
         Graphics& graphics;
-        std::function<void()> functor;
+        std::function<void ()> functor;
         
-        RunGLFunctor(Graphics& graphics, const std::function<void()>& functor)
+        RunGLFunctor(Graphics& graphics, const std::function<void ()>& functor)
         : graphics(graphics), functor(functor)
         {
         }
@@ -267,7 +268,7 @@ namespace Gosu
     };
 }
 
-void Gosu::Graphics::gl(const std::function<void()>& functor, Gosu::ZPos z)
+void Gosu::Graphics::gl(const std::function<void ()>& functor, Gosu::ZPos z)
 {
     current_queue().gl(RunGLFunctor(current_graphics(), functor), z);
 }
@@ -292,8 +293,9 @@ void Gosu::Graphics::begin_recording()
 
 std::unique_ptr<Gosu::ImageData> Gosu::Graphics::end_recording(int width, int height)
 {
-    if (! current_queue().recording())
+    if (!current_queue().recording()) {
         throw std::logic_error("No macro recording in progress that can be captured");
+    }
     
     std::unique_ptr<ImageData> result(new Macro(current_queue(), width, height));
     queues.pop_back();
@@ -323,9 +325,8 @@ void Gosu::Graphics::draw_line(double x1, double y1, Color c1,
     current_queue().schedule_draw_op(op);
 }
 
-void Gosu::Graphics::draw_triangle(double x1, double y1, Color c1,
-    double x2, double y2, Color c2, double x3, double y3, Color c3,
-    ZPos z, AlphaMode mode)
+void Gosu::Graphics::draw_triangle(double x1, double y1, Color c1, double x2, double y2, Color c2,
+    double x3, double y3, Color c3, ZPos z, AlphaMode mode)
 {
     DrawOp op;
     op.render_state.mode = mode;
@@ -342,11 +343,10 @@ void Gosu::Graphics::draw_triangle(double x1, double y1, Color c1,
     current_queue().schedule_draw_op(op);
 }
 
-void Gosu::Graphics::draw_quad(double x1, double y1, Color c1,
-    double x2, double y2, Color c2, double x3, double y3, Color c3,
-    double x4, double y4, Color c4, ZPos z, AlphaMode mode)
+void Gosu::Graphics::draw_quad(double x1, double y1, Color c1, double x2, double y2, Color c2,
+    double x3, double y3, Color c3, double x4, double y4, Color c4, ZPos z, AlphaMode mode)
 {
-    reorder_coordinates_if_necessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
+    normalize_coordinates(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
     DrawOp op;
     op.render_state.mode = mode;
@@ -366,14 +366,14 @@ void Gosu::Graphics::draw_quad(double x1, double y1, Color c1,
     current_queue().schedule_draw_op(op);
 }
 
-void Gosu::Graphics::schedule_draw_op(const Gosu::DrawOp &op)
+void Gosu::Graphics::schedule_draw_op(const Gosu::DrawOp& op)
 {
     current_queue().schedule_draw_op(op);
 }
 
 void Gosu::Graphics::set_physical_resolution(unsigned phys_width, unsigned phys_height)
 {
-    pimpl->phys_width = phys_width;
+    pimpl->phys_width  = phys_width;
     pimpl->phys_height = phys_height;
     // TODO: Should be merged into RenderState and removed from Graphics.
     glMatrixMode(GL_PROJECTION);
@@ -388,15 +388,13 @@ void Gosu::Graphics::set_physical_resolution(unsigned phys_width, unsigned phys_
     pimpl->update_base_transform();
 }
 
-std::unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(
-    const Bitmap& src, unsigned src_x, unsigned src_y,
-    unsigned src_width, unsigned src_height, unsigned flags)
+std::unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src,
+    unsigned src_x, unsigned src_y, unsigned src_width, unsigned src_height, unsigned flags)
 {
     static const unsigned max_size = MAX_TEXTURE_SIZE;
     
     // Backwards compatibility: This used to be 'bool tileable'.
-    if (flags == 1)
-        flags = IF_TILEABLE;
+    if (flags == 1) flags = IF_TILEABLE;
 
     bool wants_retro = (flags & IF_RETRO);
     
@@ -404,35 +402,31 @@ std::unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(
     // quadratic, has a size that is at least 64 pixels but no more than max_size
     // pixels and a power of two, create a single texture just for this image.
     if ((flags & IF_TILEABLE) == IF_TILEABLE &&
-        src_width == src_height &&
-        (src_width & (src_width - 1)) == 0 &&
-        src_width >= 64 && src_width <= max_size)
-    {
+            src_width == src_height &&
+            (src_width & (src_width - 1)) == 0 &&
+            src_width >= 64 && src_width <= max_size) {
         std::shared_ptr<Texture> texture(new Texture(src_width, wants_retro));
         std::unique_ptr<ImageData> data;
         
         // Use the source bitmap directly if the source area completely covers
         // it.
-        if (src_x == 0 && src_width == src.width() &&
-            src_y == 0 && src_height == src.height())
-        {
+        if (src_x == 0 && src_width == src.width() && src_y == 0 && src_height == src.height()) {
             data = texture->try_alloc(texture, src, 0);
         }
-        else
-        {
+        else {
             Bitmap bmp(src_width, src_height);
             bmp.insert(src, 0, 0, src_x, src_y, src_width, src_height);
             data = texture->try_alloc(texture, bmp, 0);
         }
         
-        if (!data.get())
+        if (!data.get()) {
             throw std::logic_error("Internal texture block allocation error");
+        }
         return std::move(data);
     }
     
-    // Too large to fit on a single texture. 
-    if (src_width > max_size - 2 || src_height > max_size - 2)
-    {
+    // Too large to fit on a single texture.
+    if (src_width > max_size - 2 || src_height > max_size - 2) {
         Bitmap bmp(src_width, src_height);
         bmp.insert(src, 0, 0, src_x, src_y, src_width, src_height);
         std::unique_ptr<ImageData> lidi;
@@ -444,15 +438,14 @@ std::unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(
     apply_border_flags(bmp, src, src_x, src_y, src_width, src_height, flags);
 
     // Try to put the bitmap into one of the already allocated textures.
-    for (auto texture : textures)
-    {
-        if (texture->retro() != wants_retro)
-            continue;
+    for (auto texture : textures) {
+        if (texture->retro() != wants_retro) continue;
         
         std::unique_ptr<ImageData> data;
         data = texture->try_alloc(texture, bmp, 1);
-        if (data.get())
+        if (data.get()) {
             return std::move(data);
+        }
     }
     
     // All textures are full: Create a new one.
@@ -463,8 +456,9 @@ std::unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(
     
     std::unique_ptr<ImageData> data;
     data = texture->try_alloc(texture, bmp, 1);
-    if (!data.get())
+    if (!data.get()) {
         throw std::logic_error("Internal texture block allocation error");
+    }
 
     return std::move(data);
 }

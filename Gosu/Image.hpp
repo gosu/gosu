@@ -21,25 +21,21 @@ namespace Gosu
         //!
         //! A color key of #ff00ff is automatically applied to BMP image files.
         //! For more flexibility, use the corresponding constructor that uses a Bitmap object.
-        explicit Image(const std::string& filename,
-            unsigned image_flags = IF_SMOOTH);
+        explicit Image(const std::string& filename, unsigned image_flags = IF_SMOOTH);
         
         //! Loads a portion of the the image at the given filename..
         //!
         //! A color key of #ff00ff is automatically applied to BMP image files.
         //! For more flexibility, use the corresponding constructor that uses a Bitmap object.
-        Image(const std::string& filename, unsigned src_x,
-              unsigned src_y, unsigned src_width, unsigned src_height,
-              unsigned image_flags = IF_SMOOTH);
+        Image(const std::string& filename, unsigned src_x, unsigned src_y,
+            unsigned src_width, unsigned src_height, unsigned image_flags = IF_SMOOTH);
         
         //! Converts the given bitmap into an image.
-        explicit Image(const Bitmap& source,
-            unsigned image_flags = IF_SMOOTH);
+        explicit Image(const Bitmap& source, unsigned image_flags = IF_SMOOTH);
         
         //! Converts a portion of the given bitmap into an image.
-        Image(const Bitmap& source, unsigned src_x,
-            unsigned src_y, unsigned src_width, unsigned src_height,
-            unsigned image_flags = IF_SMOOTH);
+        Image(const Bitmap& source, unsigned src_x, unsigned src_y, unsigned src_width,
+            unsigned src_height, unsigned image_flags = IF_SMOOTH);
         
         //! Creates an Image from a user-supplied instance of the ImageData interface.
         explicit Image(std::unique_ptr<ImageData>&& data);
@@ -48,15 +44,11 @@ namespace Gosu
         unsigned height() const;
 
         //! Draws the image so its upper left corner is at (x; y).
-        void draw(double x, double y, ZPos z,
-            double scale_x = 1, double scale_y = 1,
-            Color c = Color::WHITE,
-            AlphaMode mode = AM_DEFAULT) const;
+        void draw(double x, double y, ZPos z, double scale_x = 1, double scale_y = 1,
+            Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
         //! Like draw(), but with modulation colors for all four corners.
-        void draw_mod(double x, double y, ZPos z,
-            double scale_x, double scale_y,
-            Color c1, Color c2, Color c3, Color c4,
-            AlphaMode mode = AM_DEFAULT) const;
+        void draw_mod(double x, double y, ZPos z, double scale_x, double scale_y,
+            Color c1, Color c2, Color c3, Color c4, AlphaMode mode = AM_DEFAULT) const;
 
         //! Draws the image rotated by the given angle so that its rotation
         //! center is at (x; y). Note that this is different from how all the
@@ -67,11 +59,9 @@ namespace Gosu
         //! on the image. 0 is the left border, 1 is the right border, 0.5 is
         //! the center (and default).
         //! \param center_y See center_x.
-        void draw_rot(double x, double y, ZPos z,
-            double angle, double center_x = 0.5, double center_y = 0.5,
-            double scale_x = 1, double scale_y = 1,
-            Color c = Color::WHITE,
-            AlphaMode mode = AM_DEFAULT) const;
+        void draw_rot(double x, double y, ZPos z, double angle,
+            double center_x = 0.5, double center_y = 0.5, double scale_x = 1, double scale_y = 1,
+            Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
         
         #ifndef SWIG
         //! Provides access to the underlying image data object.

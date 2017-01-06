@@ -2,7 +2,7 @@
 +++ src/RubyGosu.cxx
 @@ -2912,14 +2912,14 @@ SwigDirector_Window::~SwigDirector_Window() {
  void SwigDirector_Window::update() {
-   VALUE result;
+   VALUE SWIGUNUSED result;
    
 -  result = rb_funcall(swig_get_self(), rb_intern("update"), 0, NULL);
 +  result = rb_funcall(swig_get_self(), rb_intern("protected_update"), 0, NULL);
@@ -10,7 +10,7 @@
  
  
  void SwigDirector_Window::draw() {
-   VALUE result;
+   VALUE SWIGUNUSED result;
    
 -  result = rb_funcall(swig_get_self(), rb_intern("draw"), 0, NULL);
 +  result = rb_funcall(swig_get_self(), rb_intern("protected_draw_2"), 0, NULL);
@@ -19,7 +19,7 @@
  
 @@ -2927,7 +2927,7 @@ bool SwigDirector_Window::needsRedraw() const {
    bool c_result ;
-   VALUE result;
+   VALUE SWIGUNUSED result;
    
 -  result = rb_funcall(swig_get_self(), rb_intern("needs_redraw?"), 0, NULL);
 +  result = rb_funcall(swig_get_self(), rb_intern("protected_needs_redraw?"), 0, NULL);
@@ -28,7 +28,7 @@
    if (!SWIG_IsOK(swig_res)) {
 @@ -2942,7 +2942,7 @@ bool SwigDirector_Window::needsCursor() const {
    bool c_result ;
-   VALUE result;
+   VALUE SWIGUNUSED result;
    
 -  result = rb_funcall(swig_get_self(), rb_intern("needs_cursor?"), 0, NULL);
 +  result = rb_funcall(swig_get_self(), rb_intern("protected_needs_cursor?"), 0, NULL);
@@ -37,7 +37,7 @@
    if (!SWIG_IsOK(swig_res)) {
 @@ -2956,7 +2956,7 @@ bool SwigDirector_Window::needsCursor() const {
  void SwigDirector_Window::loseFocus() {
-   VALUE result;
+   VALUE SWIGUNUSED result;
    
 -  result = rb_funcall(swig_get_self(), rb_intern("lose_focus"), 0, NULL);
 +  result = rb_funcall(swig_get_self(), rb_intern("protected_lose_focus"), 0, NULL);

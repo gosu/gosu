@@ -15,9 +15,9 @@ std::string Gosu::user_settings_prefix()
 {
     static std::string result = [] {
         @autoreleasepool {
-            NSString *library =
+            NSString* library =
                 NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES)[0];
-            NSString *preferences = [library stringByAppendingPathComponent:@"Preferences"];
+            NSString* preferences = [library stringByAppendingPathComponent:@"Preferences"];
             
             return std::string(preferences.UTF8String ?: ".") + "/";
         }
@@ -29,7 +29,7 @@ std::string Gosu::user_documents_prefix()
 {
     static std::string result = [] {
         @autoreleasepool {
-            NSString *documents =
+            NSString* documents =
                 NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
             
             return std::string(documents.UTF8String ?: ".") + "/";
@@ -42,7 +42,7 @@ std::string Gosu::resource_prefix()
 {
     static std::string result = [] {
         @autoreleasepool {
-            NSString *resources = [NSBundle mainBundle].resourcePath;
+            NSString* resources = [NSBundle mainBundle].resourcePath;
             return std::string(resources.UTF8String ?: ".") + "/";
         }
     }();
@@ -51,18 +51,18 @@ std::string Gosu::resource_prefix()
 
 std::string Gosu::shared_resource_prefix()
 {
-#ifdef GOSU_IS_IPHONE
+    #ifdef GOSU_IS_IPHONE
     return resource_prefix();
-#else
+    #else
     static std::string result = [] {
         @autoreleasepool {
-            NSString *bundle_path = [NSBundle mainBundle].bundlePath;
-            NSString *containing_path = [bundle_path stringByDeletingLastPathComponent];
+            NSString* bundle_path = [NSBundle mainBundle].bundlePath;
+            NSString* containing_path = [bundle_path stringByDeletingLastPathComponent];
             return std::string(containing_path.UTF8String ?: ".");
         }
     }();
     return result;
-#endif
+    #endif
 }
 
 #endif

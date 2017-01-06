@@ -1,11 +1,11 @@
 #pragma once
 
+#include "GraphicsImpl.hpp"
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
-#include "GraphicsImpl.hpp"
 #include <memory>
-#include <vector>
 #include <stdexcept>
+#include <vector>
 
 class Gosu::TexChunk : public Gosu::ImageData
 {
@@ -42,7 +42,7 @@ public:
         double x3, double y3, Color c3,
         double x4, double y4, Color c4,
         ZPos z, AlphaMode mode) const;
-        
+
     const GLTexInfo* gl_tex_info() const;
     Gosu::Bitmap to_bitmap() const;
     std::unique_ptr<ImageData> subimage(int x, int y, int width, int height) const;

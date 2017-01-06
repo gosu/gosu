@@ -4,14 +4,14 @@
 #include <Gosu/Directories.hpp>
 #include <Gosu/Utility.hpp>
 #include <cassert>
+#include <pwd.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <pwd.h>
 
 static std::string home_dir()
-{   
+{
     passwd* pwd = getpwuid(geteuid());
-    assert(pwd && pwd->pw_dir);
+    assert (pwd && pwd->pw_dir);
     return pwd->pw_dir;
 }
 

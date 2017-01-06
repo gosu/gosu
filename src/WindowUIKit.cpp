@@ -1,8 +1,8 @@
 #include <Gosu/Platform.hpp>
 #if defined(GOSU_IS_IPHONE)
 
-#include <Gosu/Gosu.hpp>
 #include "GosuViewController.h"
+#include <Gosu/Gosu.hpp>
 
 namespace Gosu
 {
@@ -33,8 +33,8 @@ namespace Gosu
 
 struct Gosu::Window::Impl
 {
-    ::UIWindow *window;
-    GosuViewController *controller;
+    ::UIWindow* window;
+    GosuViewController* controller;
     std::unique_ptr<Graphics> graphics;
     std::unique_ptr<Input> input;
     
@@ -57,7 +57,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     pimpl->graphics.reset(new Graphics(screen_height(), screen_width()));
     pimpl->graphics->set_resolution(width, height);
     
-    pimpl->input.reset(new Input((__bridge void *)pimpl->controller.view, update_interval));
+    pimpl->input.reset(new Input((__bridge void*) pimpl->controller.view, update_interval));
     pimpl->input->set_mouse_factors(1.0 * width / screen_height(), 1.0 * height / screen_width());
     
     pimpl->input->on_touch_began = [this](Gosu::Touch touch) { touch_began(touch); };
@@ -147,9 +147,9 @@ void Gosu::Window::close()
     throw std::logic_error("Cannot close windows manually on iOS");
 }
 
-void *Gosu::Window::UIWindow() const
+void* Gosu::Window::UIWindow() const
 {
-    return (__bridge void *)pimpl->window;
+    return (__bridge void*) pimpl->window;
 }
 
 #endif

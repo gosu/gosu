@@ -1,8 +1,8 @@
 GEM_SPEC = Gem::Specification.new do |s|
-  s.name = 'gosu'
+  s.name = "gosu"
   s.version = GOSU_VERSION.dup
-  s.license = 'MIT'
-  s.summary = '2D game development library.'
+  s.license = "MIT"
+  s.summary = "2D game development library."
   s.description = <<EOS
     2D game development library.
 
@@ -10,23 +10,23 @@ GEM_SPEC = Gem::Specification.new do |s|
     and text (accelerated by 3D hardware), sound samples and music as well as
     keyboard, mouse and gamepad/joystick input.
 EOS
-  s.author = 'Julian Raschke'
-  s.date = Time.now.strftime '%Y-%m-%d'
-  s.email = 'julian@raschke.de'
-  s.homepage = 'https://www.libgosu.org/'
-  s.required_ruby_version = Gem::Requirement.new('>= 1.8.2')
+  s.author = "Julian Raschke"
+  s.date = Time.now.strftime "%Y-%m-%d"
+  s.email = "julian@raschke.de"
+  s.homepage = "https://www.libgosu.org/"
+  s.required_ruby_version = Gem::Requirement.new(">= 1.8.2")
   s.platform = Gem::Platform::RUBY
   s.extensions = FileList["ext/**/extconf.rb"]
-  # Ruby frontend for C++ extension
+  # Ruby frontend for C++ extension.
   s.files += Dir["lib/**/*.rb"]
-  # Gosu source code including the Ruby interface (.cxx)
+  # Gosu source code including the Ruby interface (.cxx).
   s.files += Dir["src/**/*.{h,hpp,c,cpp,m,mm,cxx}"]
-  # Gosu header files, for compiling the gem & for using inline C++ from Ruby
+  # Gosu header files, for compiling the gem & for using inline C++ from Ruby.
   s.files += Dir["Gosu/*.hpp"]
-  # RDoc setup
-  # The docs will never look great in rdoc, though, because we are using
-  # some yard-specific syntax in rdoc/gosu.rb.
-  # To generate more useful documentation, run 'yard' in the git root.
+  # RDoc setup:
+  # The docs will never look great in rdoc, though, because we are using some yard-specific syntax
+  # in rdoc/gosu.rb.
+  # To generate more useful documentation, run "yard" in the git root.
   s.files += Dir["README.md", "COPYING", "rdoc/gosu.rb"]
   s.rdoc_options += %w(-m README.md -x lib)
   s.extra_rdoc_files = %w(README.md COPYING rdoc/gosu.rb)
@@ -35,4 +35,4 @@ end
 Gem::PackageTask.new(GEM_SPEC) do |pkg|
 end
 
-Rake::ExtensionTask.new('gosu', GEM_SPEC)
+Rake::ExtensionTask.new("gosu", GEM_SPEC)

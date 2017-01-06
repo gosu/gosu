@@ -1,9 +1,9 @@
 // Default matrices, adapted from original Transform support
 // contribution by erisdiscord. Thank you!
 
+#include "GraphicsImpl.hpp"
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Math.hpp>
-#include "GraphicsImpl.hpp"
 #include <cmath>
 
 Gosu::Transform
@@ -17,8 +17,10 @@ Gosu::rotate(double angle, double around_x, double around_y)
         0,  0,  1, 0,
         0,  0,  0, 1
     };
-    if (around_x != 0 || around_y != 0)
-        result = concat(concat(translate(-around_x, -around_y), result), translate(around_x, around_y));
+    if (around_x != 0 || around_y != 0) {
+        result = concat(concat(translate(-around_x, -around_y), result),
+                        translate(around_x, around_y));
+    }
     return result;
 }
 
@@ -55,8 +57,10 @@ Gosu::scale(double scale_x, double scale_y, double around_x, double around_y)
         0,       0,       1, 0,
         0,       0,       0, 1
     };
-    if (around_x != 0 || around_y != 0)
-        result = concat(concat(translate(-around_x, -around_y), result), translate(around_x, around_y));
+    if (around_x != 0 || around_y != 0) {
+        result = concat(concat(translate(-around_x, -around_y), result),
+                        translate(around_x, around_y));
+    }
     return result;
 }
 
@@ -66,8 +70,9 @@ Gosu::concat(const Transform& left, const Transform& right)
     Gosu::Transform result;
     for (int i = 0; i < 16; ++i) {
         result[i] = 0;
-        for (int j = 0; j < 4; ++j)
+        for (int j = 0; j < 4; ++j) {
             result[i] += left[i / 4 * 4 + j] * right[i % 4 + j * 4];
+        }
     }
     return result;
 }

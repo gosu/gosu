@@ -42,16 +42,22 @@ public:
         pos_y = Gosu::random(0, HEIGHT);
     }
 
-    double x() const { return pos_x; }
-    double y() const { return pos_y; }
+    double x() const
+    {
+        return pos_x;
+    }
+    
+    double y() const
+    {
+        return pos_y;
+    }
     
     void draw() const
     {
-        const Gosu::Image& image =
-        animation.at(Gosu::milliseconds() / 100 % animation.size());
+        const Gosu::Image& image = animation.at(Gosu::milliseconds() / 100 % animation.size());
         
-        image.draw(pos_x - image.width() / 2.0, pos_y - image.height() / 2.0,
-                   Z_STARS, 1, 1, color, Gosu::AM_ADD);
+        image.draw(pos_x - image.width() / 2.0, pos_y - image.height() / 2.0, Z_STARS,
+                   1, 1, color, Gosu::AM_ADD);
     }
 };
 
@@ -111,16 +117,15 @@ public:
     void collect_stars(std::list<Star>& stars)
     {
         std::list<Star>::iterator cur = stars.begin();
-        while (cur != stars.end())
-        {
-            if (Gosu::distance(pos_x, pos_y, cur->x(), cur->y()) < 35)
-            {
+        while (cur != stars.end()) {
+            if (Gosu::distance(pos_x, pos_y, cur->x(), cur->y()) < 35) {
                 cur = stars.erase(cur);
                 score += 10;
                 beep.play();
             }
-            else
+            else {
                 ++cur;
+            }
         }
     }
 };
@@ -147,13 +152,11 @@ public:
         star_anim = Gosu::load_tiles(filename, 25, 25);
         
         player.warp(320, 240);
-
     }
 
     void update() override
     {
-        if (!input().current_touches().empty())
-        {
+        if (!input().current_touches().empty()) {
             Gosu::Touch target_touch = input().current_touches().front();
             player.rotate_towards(target_touch.x, target_touch.y);
             player.accelerate();
@@ -161,21 +164,24 @@ public:
         player.move();
         player.collect_stars(stars);
 
-        if (std::rand() % 25 == 0 && stars.size() < 25)
+        if (std::rand() % 25 == 0 && stars.size() < 25) {
             stars.push_back(Star(star_anim));
+        }
     }
 
     void draw() override
     {
         player.draw();
         background_image->draw(0, 0, Z_BACKGROUND,
-            1.0 * WIDTH / background_image->width(),
-            1.0 * HEIGHT / background_image->height());
+                               1.0 * WIDTH / background_image->width(),
+                               1.0 * HEIGHT / background_image->height());
         
-        for (Star& star : stars)
+        for (Star& star : stars) {
             star.draw();
+        }
 
-        font.draw("Score: " + std::to_string(player.get_score()), 10, 10, Z_UI, 1, 1, Gosu::Color::YELLOW);
+        font.draw("Score: " + std::to_string(player.get_score()), 10, 10, Z_UI,
+                  1, 1, Gosu::Color::YELLOW);
     }
 };
 

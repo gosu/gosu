@@ -7,12 +7,11 @@
 
 namespace Gosu
 {
-    //! Represents an RGBA color value with 8 bits for each channel. Can be
-    //! implicitly constructed from literals of the form 0xaarrggbb. Has fast
-    //! value semantics.
-    //! The four-byte layout in memory is RGBA. On Big-Endian machines the
-    //! unsigned int interpretation is 0xrrggbbaa, on Little-Endian machines
-    //! it is 0xaabbggrr.
+    //! Represents an RGBA color value with 8 bits for each channel.
+    //! Can be implicitly constructed from literals of the form 0xaarrggbb.
+    //! Has fast value semantics.
+    //! The four-byte layout in memory is RGBA. On Big-Endian machines the unsigned int will look
+    //! like 0xrrggbbaa, on Little-Endian machines it is 0xaabbggrr.
     class Color
     {
         std::uint32_t rep;
@@ -33,14 +32,13 @@ namespace Gosu
         
         //! Conversion constructor for literals of the form 0xaarrggbb.
         Color(unsigned argb)
+        : Color((argb >> 24) & 0xff, (argb >> 16) & 0xff, (argb >> 8) & 0xff, (argb >> 0) & 0xff)
         {
-            *this = Color((argb >> 24) & 0xff, (argb >> 16) & 0xff,
-                          (argb >>  8) & 0xff, (argb >>  0) & 0xff);
         }
         
         Color(Channel red, Channel green, Channel blue)
+        : Color(0xff, red, green, blue)
         {
-            *this = Color(0xff, red, green, blue);
         }
         
         Color(Channel alpha, Channel red, Channel green, Channel blue)
@@ -50,10 +48,11 @@ namespace Gosu
         }
         
         //! Constructs a color from the given hue/saturation/value triple.
-        //! Ranges of these values are given as 0..360, 0..1 and 0..1,
-        //! respectively.
-        //! The alpha value is set to 1 from this method.
+        //! Ranges of these values are given as 0..360, 0..1, and 0..1, respectively.
         static Color from_hsv(double h, double s, double v);
+        
+        //! Constructs a color from the given hue/saturation/value triple.
+        //! Ranges of these values are given as 0..360, 0..1, and 0..1, respectively.
         static Color from_ahsv(Channel alpha, double h, double s, double v);
 
         Channel red() const
@@ -119,28 +118,16 @@ namespace Gosu
         void set_value(double v);
 
         //! Returns the color in 0xaarrggbb representation.
-        std::uint32_t argb() const
-        {
-            return alpha() << 24 | red() << 16 | green() << 8 | blue();
-        }
+        std::uint32_t argb() const { return alpha() << 24 | red() << 16 | green() << 8 | blue(); }
 
         //! Returns the color in 0x00bbggrr representation. Useful for Win32 programming.
-        std::uint32_t bgr() const
-        {
-            return blue() << 16 | green() << 8 | red();
-        }
+        std::uint32_t bgr() const { return blue() << 16 | green() << 8 | red(); }
 
         //! Returns the color in 0xaabbggrr representation.
-        std::uint32_t abgr() const
-        {
-            return alpha() << 24 | blue() << 16 | green() << 8 | red();
-        }
+        std::uint32_t abgr() const { return alpha() << 24 | blue() << 16 | green() << 8 | red(); }
         
         //! Returns the internal representation of the color (RGBA in memory).
-        std::uint32_t gl() const
-        {
-            return rep;
-        }
+        std::uint32_t gl() const { return rep; }
         
         static const Color NONE;
         static const Color BLACK;
@@ -156,21 +143,10 @@ namespace Gosu
         static const Color CYAN;
     };
     
-    #ifndef SWIG
-    inline bool operator<(Color a, Color b)
-    {
-        return a.gl() < b.gl();
-    }
-    
-    inline bool operator==(Color a, Color b)
-    {
-        return a.gl() == b.gl();
-    }
-
-    inline bool operator!=(Color a, Color b)
-    {
-        return a.gl() != b.gl();
-    }
+#ifndef SWIG
+    inline bool operator<(Color a, Color b) { return a.gl() < b.gl(); }
+    inline bool operator==(Color a, Color b) { return a.gl() == b.gl(); }
+    inline bool operator!=(Color a, Color b) { return a.gl() != b.gl(); }
 
     //! Interpolates linearly between two colors, with a given weight towards
     //! the second color.
@@ -180,5 +156,5 @@ namespace Gosu
     //! Combines two colors as if their channels were mapped to the 0..1 range
     //! and then multiplied with each other.
     Color multiply(Color a, Color b);
-    #endif
+#endif
 }

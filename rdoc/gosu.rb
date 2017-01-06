@@ -1,14 +1,14 @@
 ##
 # The first component of the version.
-GOSU_MAJOR_VERSION = :a_fixnum
+GOSU_MAJOR_VERSION = :an_integer
 
 ##
 # The second component of the version.
-GOSU_MINOR_VERSION = :a_fixnum
+GOSU_MINOR_VERSION = :an_integer
 
 ##
 # The third component of the version.
-GOSU_POINT_VERSION = :a_fixnum
+GOSU_POINT_VERSION = :an_integer
 
 ##
 # A version string of the form "0.1.2", "0.1.2.3" or "0.1.2pre4".

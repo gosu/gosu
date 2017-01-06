@@ -17,10 +17,10 @@ namespace Gosu
         
         void make_current(const Transform& transform)
         {
-            current_iterator =
-                std::find(absolute.begin(), absolute.end(), transform);
-            if (current_iterator == absolute.end())
+            current_iterator = std::find(absolute.begin(), absolute.end(), transform);
+            if (current_iterator == absolute.end()) {
                 current_iterator = absolute.insert(absolute.end(), transform);
+            }
         }
         
     public:
@@ -29,7 +29,7 @@ namespace Gosu
             reset();
             individual.front() = absolute.front() = scale(1);
         }
-                
+
         void reset()
         {
             // Every queue has a base transform that is always the current transform.
@@ -46,7 +46,7 @@ namespace Gosu
         }
         
         // Custom assignment to ensure valid current_iterator
-        TransformStack& operator=(const TransformStack &other)
+        TransformStack& operator=(const TransformStack& other)
         {
             individual = other.individual;
             absolute = other.absolute;
@@ -56,8 +56,10 @@ namespace Gosu
             // the other lists' current iterator
             current_iterator = absolute.begin();
             Transforms::const_iterator other_iterator = other.absolute.begin();
-            while (other_iterator != other.current_iterator)
-                ++current_iterator, ++other_iterator;
+            while (other_iterator != other.current_iterator) {
+                ++current_iterator;
+                ++other_iterator;
+            }
             
             return *this;
         }

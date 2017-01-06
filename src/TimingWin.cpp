@@ -2,8 +2,8 @@
 #if defined(GOSU_IS_WIN)
 
 #include <Gosu/Timing.hpp>
-#include <windows.h>
 #include <cstdlib>
+#include <windows.h>
 
 void Gosu::sleep(unsigned milliseconds)
 {

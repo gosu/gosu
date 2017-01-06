@@ -10,9 +10,8 @@ namespace Gosu
     template<typename Out, const char* to, const char* from, typename In>
     Out iconvert(const In& in)
     {
-        if (in.empty())
-            return Out();
-    
+        if (in.empty()) return Out();
+
         const size_t buffer_len = 128;
         typedef typename In::value_type InElem;
         typedef typename Out::value_type OutElem;
@@ -27,29 +26,26 @@ namespace Gosu
         char* outbuf = reinterpret_cast<char*>(buffer);
         size_t outbytesleft = sizeof buffer;
         
-        for (;;)
-        {
+        for (;;) {
             size_t ret = ::iconv(cd, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
-            if (ret == static_cast<size_t>(-1) && errno == EILSEQ)
-            {
+            if (ret == static_cast<size_t>(-1) && errno == EILSEQ) {
                 // Skip illegal sequence part, repeat loop.
                 // TODO: Or retry w/ different encoding?
                 ++inbuf;
                 --inbytesleft;
             }
-            else if (ret == static_cast<size_t>(-1) && errno == E2BIG)
-            {
+            else if (ret == static_cast<size_t>(-1) && errno == E2BIG) {
                 // Append new characters, reset out buffer, then repeat loop.
                 result.insert(result.end(), buffer, buffer + buffer_len);
                 outbuf = reinterpret_cast<char*>(buffer);
                 outbytesleft = sizeof buffer;
             }
-            else
-            {
+            else {
                 // Append what's new in the buffer, then LEAVE loop.
-                result.insert(result.end(), buffer, buffer + buffer_len - outbytesleft / sizeof(OutElem));
+                result.insert(result.end(), buffer,
+                              buffer + buffer_len - outbytesleft / sizeof(OutElem));
                 return result;
             }
-        }        
+        }
     }
 }

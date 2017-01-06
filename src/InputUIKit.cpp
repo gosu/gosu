@@ -18,22 +18,22 @@ void Gosu::TextInput::set_selection_start(unsigned) {}
 
 struct Gosu::Input::Impl
 {
-    UIView *view;
+    UIView* view;
     float mouse_x, mouse_y;
     float scale_x, scale_y;
     float update_interval;
     
-    NSMutableSet *current_touches_set;
+    NSMutableSet* current_touches_set;
     std::unique_ptr<Gosu::Touches> current_touches_vector;
     
-    Touch translate_touch(UITouch *ui_touch)
+    Touch translate_touch(UITouch* ui_touch)
     {
         CGPoint point = [ui_touch locationInView:view];
         
         return (Touch) {
-            .id = (__bridge void *)ui_touch,
-            .x = (float) point.x * scale_x,
-            .y = (float) point.y * scale_y,
+            .id = (__bridge void*) ui_touch,
+            .x  = (float)point.x * scale_x,
+            .y  = (float)point.y * scale_y,
         };
     }
 };
@@ -41,7 +41,7 @@ struct Gosu::Input::Impl
 Gosu::Input::Input(void* view, float update_interval)
 : pimpl(new Impl)
 {
-    pimpl->view = (__bridge UIView *)view;
+    pimpl->view = (__bridge UIView*) view;
     pimpl->update_interval = update_interval;
     pimpl->current_touches_set = [NSMutableSet new];
     pimpl->mouse_x = pimpl->mouse_y = -1000;
@@ -52,9 +52,9 @@ Gosu::Input::~Input()
 {
 }
 
-void Gosu::Input::feed_touch_event(int type, void *touches)
+void Gosu::Input::feed_touch_event(int type, void* touches)
 {
-    NSSet *ui_touches = (__bridge NSSet *)touches;
+    NSSet* ui_touches = (__bridge NSSet*) touches;
     
     pimpl->current_touches_vector.reset();
     
@@ -77,7 +77,7 @@ void Gosu::Input::feed_touch_event(int type, void *touches)
     }
     
     if (callback && *callback) {
-        for (UITouch *ui_touch in ui_touches) {
+        for (UITouch* ui_touch in ui_touches) {
             (*callback)(pimpl->translate_touch(ui_touch));
         }
     }
@@ -92,7 +92,7 @@ Gosu::Button Gosu::Input::char_to_id(std::string ch)
 {
     return NO_BUTTON;
 }
-        
+
 bool Gosu::Input::down(Button btn)
 {
     return false;
@@ -108,12 +108,15 @@ double Gosu::Input::mouse_y() const
     return pimpl->mouse_y;
 }
 
-void Gosu::Input::set_mouse_position(double x, double y) {
+void Gosu::Input::set_mouse_position(double x, double y)
+{
     pimpl->mouse_x = x;
     pimpl->mouse_y = y;
 }
 
-void Gosu::Input::set_mouse_factors(double scale_x, double scale_y, double offset_x, double offset_y) {
+void Gosu::Input::set_mouse_factors(double scale_x, double scale_y, double offset_x,
+    double offset_y)
+{
     pimpl->scale_x = scale_x;
     pimpl->scale_y = scale_y;
     
@@ -151,10 +154,9 @@ void Gosu::Input::update()
     // Check for dead touches and remove from vector if
     // necessary
 
-    NSMutableSet *dead_touches = nil;
+    NSMutableSet* dead_touches = nil;
 
-    for (UITouch *touch in pimpl->current_touches_set)
-    {
+    for (UITouch* touch in pimpl->current_touches_set) {
         UITouchPhase phase = [touch phase];
         if (phase == UITouchPhaseBegan ||
                 phase == UITouchPhaseMoved ||
@@ -170,13 +172,12 @@ void Gosu::Input::update()
     }
     
     // Has something been deleted?
-    if (dead_touches)
-    {
+    if (dead_touches) {
         pimpl->current_touches_vector.reset();
-        [pimpl->current_touches_set minusSet: dead_touches];
+        [pimpl->current_touches_set minusSet:dead_touches];
         
         if (on_touch_ended) {
-            for (UITouch *ui_touch in dead_touches) {
+            for (UITouch* ui_touch in dead_touches) {
                 on_touch_ended(pimpl->translate_touch(ui_touch));
             }
         }

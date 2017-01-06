@@ -13,29 +13,26 @@ class Gosu::ClipRectStack
     void update_effective_rect()
     {
         // Nothing to do, no clipping in place.
-        if (stack.empty())
-        {
+        if (stack.empty()) {
             has_effective_rect = false;
             return;
         }
         
         ClipRect result = { 0.0, 0.0, 1e10, 1e10 };
-        for (std::size_t i = 0, end = stack.size(); i < end; ++i)
-        {
+        for (std::size_t i = 0, end = stack.size(); i < end; ++i) {
             const ClipRect& rect = stack[i];
-            int result_right = std::min(result.x + result.width, rect.x + rect.width);
-            int result_bottom = std::min(result.y + result.height, rect.y + rect.height);
-            result.x = std::max(result.x, rect.x);
-            result.y = std::max(result.y, rect.y);
+            int result_right     = std::min(result.x + result.width, rect.x + rect.width);
+            int result_bottom    = std::min(result.y + result.height, rect.y + rect.height);
+            result.x             = std::max(result.x, rect.x);
+            result.y             = std::max(result.y, rect.y);
             
-            if (result.x >= result_right || result.y >= result_bottom)
-            {
+            if (result.x >= result_right || result.y >= result_bottom) {
                 // We have clipped the world away!
                 has_effective_rect = false;
                 return;
             }
             
-            result.width = result_right - result.x;
+            result.width  = result_right - result.x;
             result.height = result_bottom - result.y;
         }
         
@@ -46,11 +43,11 @@ class Gosu::ClipRectStack
         result.x *= fac, result.y *= fac, result.width *= fac, result.height *= fac;
         
         // Normal clipping.
-        effective_rect = result;
+        effective_rect     = result;
         has_effective_rect = true;
     }
     
-public:    
+public:
     ClipRectStack()
     : has_effective_rect(false)
     {

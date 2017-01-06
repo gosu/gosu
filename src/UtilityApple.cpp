@@ -13,7 +13,7 @@ std::wstring Gosu::utf8_to_wstring(const std::string& s)
         return std::wstring();
     }
     
-    NSString *string = [NSString stringWithUTF8String:s.c_str()];
+    NSString* string = [NSString stringWithUTF8String:s.c_str()];
     std::vector<wchar_t> buffer(s.size());
     NSUInteger buffer_size;
     if (![string getBytes:&buffer[0]
@@ -22,7 +22,7 @@ std::wstring Gosu::utf8_to_wstring(const std::string& s)
                  encoding:NSUTF32LittleEndianStringEncoding
                   options:0
                     range:NSMakeRange(0, string.length)
-           remainingRange:NULL]) {
+           remainingRange:nullptr]) {
         throw std::runtime_error("String " + s + " could not be converted to UTF-32");
     }
     return std::wstring(&buffer[0], &buffer[0] + buffer_size / sizeof(wchar_t));
@@ -30,12 +30,10 @@ std::wstring Gosu::utf8_to_wstring(const std::string& s)
 
 std::string Gosu::wstring_to_utf8(const std::wstring& ws)
 {
-    if (ws.empty()) {
-        return std::string();
-    }
+    if (ws.empty()) return std::string();
 
     @autoreleasepool {
-        NSString *string = [[NSString alloc] initWithBytes:ws.data()
+        NSString* string = [[NSString alloc] initWithBytes:ws.data()
                                                     length:ws.size() * sizeof(wchar_t)
                                                   encoding:NSUTF32LittleEndianStringEncoding];
         return string.UTF8String ?: std::string();
@@ -46,7 +44,7 @@ std::string Gosu::wstring_to_utf8(const std::wstring& ws)
 std::string Gosu::language()
 {
     @autoreleasepool {
-        NSString *language = [NSLocale preferredLanguages][0];
+        NSString* language = [NSLocale preferredLanguages][0];
         return language.UTF8String ?: "en";
     }
 }

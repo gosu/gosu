@@ -4,24 +4,24 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <AudioToolbox/AudioConverter.h>
 #import <AudioToolbox/ExtendedAudioFile.h>
-#import <OpenAL/al.h>
+#import <CoreFoundation/CoreFoundation.h>
+#import <Foundation/Foundation.h>
 #import <Gosu/IO.hpp>
-#import <Gosu/Utility.hpp>
 #import <Gosu/Platform.hpp>
+#import <Gosu/Utility.hpp>
+#import <OpenAL/al.h>
 #import <algorithm>
+#import <arpa/inet.h>
 #import <stdexcept>
 #import <vector>
-#import <arpa/inet.h>
-#import <Foundation/Foundation.h>
-#import <CoreFoundation/CoreFoundation.h>
 
 inline static void throw_os_error(OSStatus status, unsigned line)
 {
     std::string what;
     @autoreleasepool {
-        NSError *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
-        NSString *message = [NSString stringWithFormat:@"Error 0x%x on line %u: %@",
-                             line, status, error.localizedDescription];
+        NSError* error = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
+        NSString* message = [NSString stringWithFormat:@"Error 0x%x on line %u: %@", line, status,
+                                      error.localizedDescription];
         what = message.UTF8String;
     }
     throw std::runtime_error(what);
@@ -64,14 +64,13 @@ namespace Gosu
             AudioConverterRef ac_ref;
             UInt32 acr_size = sizeof ac_ref;
             CHECK_OS(ExtAudioFileGetProperty(file_, kExtAudioFileProperty_AudioConverter,
-                &acr_size, &ac_ref));
+                                             &acr_size, &ac_ref));
             
             AudioConverterPrimeInfo prime_info;
             UInt32 pi_size = sizeof prime_info;
             OSStatus result = AudioConverterGetProperty(ac_ref, kAudioConverterPrimeInfo,
-                &pi_size, &prime_info);
-            if (result != kAudioConverterErr_PropertyNotSupported)
-            {
+                                                        &pi_size, &prime_info);
+            if (result != kAudioConverterErr_PropertyNotSupported) {
                 CHECK_OS(result);
                 seek_offset_ = prime_info.leadingFrames;
             }
@@ -89,12 +88,11 @@ namespace Gosu
             client_data.mBytesPerPacket =
                 client_data.mBytesPerFrame =
                     client_data.mChannelsPerFrame * client_data.mBitsPerChannel / 8;
-            CHECK_OS(ExtAudioFileSetProperty(file_,
-                kExtAudioFileProperty_ClientDataFormat,
-                sizeof client_data, &client_data));
+            CHECK_OS(ExtAudioFileSetProperty(file_, kExtAudioFileProperty_ClientDataFormat,
+                                             sizeof client_data, &client_data));
             
             init_seek_offset();
-                
+
             format_ = client_data.mChannelsPerFrame == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
         }
         
@@ -109,26 +107,25 @@ namespace Gosu
             AudioStreamBasicDescription desc;
             UInt32 size_of_property = sizeof desc;
             CHECK_OS(ExtAudioFileGetProperty(file_, kExtAudioFileProperty_FileDataFormat,
-                &size_of_property, &desc));
+                                             &size_of_property, &desc));
 
             // Sample rate for OpenAL
             sample_rate_ = desc.mSampleRate;
             
             // Sanity checks
-            if (desc.mFormatFlags & kAudioFormatFlagIsNonInterleaved)
+            if (desc.mFormatFlags & kAudioFormatFlagIsNonInterleaved) {
                 throw std::runtime_error("Non-interleaved formats are unsupported");
+            }
             
             // Easy formats
             format_ = 0;
-            if (desc.mChannelsPerFrame == 1)
-            {
+            if (desc.mChannelsPerFrame == 1) {
                 /*if (desc.mBitsPerChannel == 8)
                     format_ = AL_FORMAT_MONO8;
                 else*/ if (desc.mBitsPerChannel == 16)
                     format_ = AL_FORMAT_MONO16;
             }
-            else if (desc.mChannelsPerFrame == 2)
-            {
+            else if (desc.mChannelsPerFrame == 2) {
                 /*if (desc.mBitsPerChannel == 8)
                     format_ = AL_FORMAT_STEREO8;
                 else */if (desc.mBitsPerChannel == 16)
@@ -146,17 +143,16 @@ namespace Gosu
             else {
                 // Just set the old format as the client format so
                 // ExtAudioFileSeek will work for us.
-                CHECK_OS(ExtAudioFileSetProperty(file_,
-                    kExtAudioFileProperty_ClientDataFormat,
-                    sizeof desc, &desc));
+                CHECK_OS(ExtAudioFileSetProperty(file_, kExtAudioFileProperty_ClientDataFormat,
+                                                 sizeof desc, &desc));
             }
         }
         
     public:
         AudioToolboxFile(const std::string& filename)
         {
-            NSURL *URL = [NSURL fileURLWithPath:[NSString stringWithUTF8String:filename.c_str()]];
-            CHECK_OS(ExtAudioFileOpenURL((__bridge CFURLRef)URL, &file_));
+            NSURL* URL = [NSURL fileURLWithPath:[NSString stringWithUTF8String:filename.c_str()]];
+            CHECK_OS(ExtAudioFileOpenURL((__bridge CFURLRef) URL, &file_));
             
             file_id_ = 0;
             
@@ -182,7 +178,7 @@ namespace Gosu
         ~AudioToolboxFile()
         {
             ExtAudioFileDispose(file_);
-        
+
             if (file_id_) {
                 AudioFileClose(file_id_);
             }
