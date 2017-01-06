@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Gosu"
-  s.version      = "0.10.8"
+  s.version      = "0.11.0"
   s.summary      = "2D game development library."
   s.homepage     = "https://www.libgosu.org/"
   s.documentation_url = "https://www.libgosu.org/cpp/"
@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.license      = { :type => "MIT", :file => "COPYING" }
   s.author       = { "Julian Raschke" => "julian@raschke.de" }
 
-  s.source       = { :git => "https://github.com/gosu/gosu.git", :tag => "v0.10.8" }
+  s.source       = { :git => "https://github.com/gosu/gosu.git", :tag => "v0.11.0" }
 
   s.subspec "Gosu" do |ss|
     ss.osx.deployment_target = "10.7"
@@ -21,7 +21,8 @@ Pod::Spec.new do |s|
     ss.libraries = "iconv"
     ss.frameworks = "AudioToolbox", "OpenAL"
     # Include all frameworks necessary for SDL 2, because we link to it statically.
-    ss.osx.frameworks = "ApplicationServices", "AudioUnit", "Carbon", "Cocoa", "CoreAudio", "ForceFeedback", "IOKit", "OpenGL"
+    ss.osx.frameworks = "ApplicationServices", "AudioUnit", "Carbon", "Cocoa", "CoreAudio",
+                        "ForceFeedback", "IOKit", "OpenGL"
     # Frameworks used directly by Gosu for iOS.
     ss.ios.frameworks = "AVFoundation", "CoreGraphics", "OpenGLES", "QuartzCore"
     
