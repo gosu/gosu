@@ -411,7 +411,7 @@ void Gosu::Input::set_mouse_factors(double scale_x, double scale_y,
 
 const Gosu::Touches& Gosu::Input::current_touches() const
 {
-    // Note: We can actually use the SDL's touch API to implement this, even on OS X! Neat.
+    // Note: We can actually use the SDL's touch API to implement this, even on macOS! Neat.
     
     static Gosu::Touches none;
     return none;

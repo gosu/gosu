@@ -11,26 +11,26 @@ namespace Gosu
     void use_resource_directory();
     
     //! Prefix for a program's own resources.
-    //! On Windows, the executable's containing directory.
-    //! On OS X, the application's Resources subdirectory.
+    //! On Windows, the parent directory of the executable.
+    //! On macOS, the 'Resources' directory inside the .app bundle.
     //! On Linux, the current directory (empty string).
     std::string resource_prefix();
     
-    //! Prefix for resources of a group of programs.
-    //! On Windows, the executable's containing directory.
-    //! On OS X, the application's containing subdirectory.
+    //! Prefix for shared resources of a group of programs.
+    //! On Windows, the parent directory of the executable.
+    //! On macOS, the parent directory of the .app bundle.
     //! On Linux, the current directory (empty string).
     std::string shared_resource_prefix();
     
     //! Prefix for user settings.
     //! On Windows, the same as %APPDATA%.
-    //! On OS X, the user's Library/Preferences folder.
+    //! On macOS, the user's Library/Preferences folder.
     //! On Linux, the home directory plus a trailing dot for hidden files.
     std::string user_settings_prefix();
     
     //! Prefix for user documents, e.g. saved games.
     //! On Windows, the My Documents folder.
-    //! On OS X, the user's Documents folder.
+    //! On macOS, the user's Documents folder.
     //! On Linux, the home directory.
     std::string user_documents_prefix();
 }
