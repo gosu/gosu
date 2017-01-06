@@ -51,12 +51,12 @@ It is a waste of everyone's time to worry about trailing whitespace.
   **Example:** `enum SomeEnumeration { SE_FIRST, SE_SECOND }`  
   **Rationale:** This is much shorter than `SOME_ENUMERATION_FIRST` or `SomeEnumeration::FIRST`.
 * The opening braces `{` for classes, structs, enums, namespaces and functions should be on its own line.  
-  The opening braces for `if`/`for`/`while` statements should never be on its own line.
+  The opening braces for `if`/`for`/`while` statements should never be on its own line.  
   **Rationale:** Compromise between brevity and readability.
 * Keep short `if` statements on a single line (usually: early exit).  
   **Example:** `if (argument == nullptr) return;`
 * Use a space between control flow keywords (and `assert`) and the argument.  
-  **Example:** `return 5`, `if (condition)`, `switch (x)`, `assert (this_is_true)`.
+  **Example:** `return 5`, `if (condition)`, `switch (x)`, `assert (this_is_true)`.  
   **Rationale:** This makes it easier to distinguish control flow from function calls.
 
 ## Ruby
@@ -66,7 +66,7 @@ It is a waste of everyone's time to worry about trailing whitespace.
 * Use `"` for strings, only use `'` when absolutely necessary.  
   **Rationale:** Consistency.
 * Do not replace all uses of `if not` by `unless`.
-  There is a time and place for both.
+  There is a time and place for both.  
   **Rationale:** The English word "unless" is [used to describe exceptional conditions](http://dictionary.cambridge.org/de/worterbuch/englisch/unless).  
   See also [this discussion on GitHub](https://github.com/bbatsov/ruby-style-guide/issues/329).
 * Use `and`, `or` and `not` in conditions.  
