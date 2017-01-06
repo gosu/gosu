@@ -2204,8 +2204,9 @@ namespace Swig {
 #define SWIGTYPE_p_char swig_types[10]
 #define SWIGTYPE_p_double swig_types[11]
 #define SWIGTYPE_p_std__arrayT_double_16_t swig_types[12]
-static swig_type_info *swig_types[14];
-static swig_module_info swig_module = {swig_types, 13, 0, 0, 0, 0};
+#define SWIGTYPE_p_std__string swig_types[13]
+static swig_type_info *swig_types[15];
+static swig_module_info swig_module = {swig_types, 14, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2498,43 +2499,6 @@ SWIG_From_int  (int value)
 }
 
 
-SWIGINTERN swig_type_info*
-SWIG_pchar_descriptor(void)
-{
-  static int init = 0;
-  static swig_type_info* info = 0;
-  if (!init) {
-    info = SWIG_TypeQuery("_p_char");
-    init = 1;
-  }
-  return info;
-}
-
-
-SWIGINTERNINLINE VALUE 
-SWIG_FromCharPtrAndSize(const char* carray, size_t size)
-{
-  if (carray) {
-    if (size > LONG_MAX) {
-      swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
-      return pchar_descriptor ? 
-	SWIG_NewPointerObj(const_cast< char * >(carray), pchar_descriptor, 0) : Qnil;
-    } else {
-      return rb_str_new(carray, static_cast< long >(size));
-    }
-  } else {
-    return Qnil;
-  }
-}
-
-
-SWIGINTERNINLINE VALUE 
-SWIG_FromCharPtr(const char *cptr)
-{ 
-  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
-}
-
-
 SWIGINTERNINLINE VALUE
 SWIG_From_unsigned_SS_long  (unsigned long value)
 {
@@ -2552,7 +2516,7 @@ SWIG_ruby_failed(void)
 } 
 
 
-/*@SWIG:/usr/local/Cellar/swig/3.0.11/share/swig/3.0.11/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
+/*@SWIG:/usr/local/share/swig/3.0.11/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
 SWIGINTERN VALUE SWIG_AUX_NUM2DBL(VALUE *args)
 {
   VALUE obj = args[0];
@@ -2591,7 +2555,7 @@ SWIG_From_unsigned_SS_int  (unsigned int value)
 #include <string>
 
 
-/*@SWIG:/usr/local/Cellar/swig/3.0.11/share/swig/3.0.11/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
+/*@SWIG:/usr/local/share/swig/3.0.11/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
 SWIGINTERN VALUE SWIG_AUX_NUM2ULONG(VALUE *args)
 {
   VALUE obj = args[0];
@@ -2669,6 +2633,36 @@ SWIGINTERN std::string Gosu_Color_inspect(Gosu::Color const *self){
             self->alpha(), self->argb() & 0xffffff);
         return buffer;
     }
+
+SWIGINTERN swig_type_info*
+SWIG_pchar_descriptor(void)
+{
+  static int init = 0;
+  static swig_type_info* info = 0;
+  if (!init) {
+    info = SWIG_TypeQuery("_p_char");
+    init = 1;
+  }
+  return info;
+}
+
+
+SWIGINTERNINLINE VALUE 
+SWIG_FromCharPtrAndSize(const char* carray, size_t size)
+{
+  if (carray) {
+    if (size > LONG_MAX) {
+      swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
+      return pchar_descriptor ? 
+	SWIG_NewPointerObj(const_cast< char * >(carray), pchar_descriptor, 0) : Qnil;
+    } else {
+      return rb_str_new(carray, static_cast< long >(size));
+    }
+  } else {
+    return Qnil;
+  }
+}
+
 
 SWIGINTERNINLINE VALUE
 SWIG_From_std_string  (const std::string& s)
@@ -2759,7 +2753,7 @@ SWIG_AsPtr_std_string (VALUE obj, std::string **val)
 }
 
 
-/*@SWIG:/usr/local/Cellar/swig/3.0.11/share/swig/3.0.11/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
+/*@SWIG:/usr/local/share/swig/3.0.11/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
 SWIGINTERN VALUE SWIG_AUX_NUM2LONG(VALUE *args)
 {
   VALUE obj = args[0];
@@ -11216,6 +11210,7 @@ static swig_type_info _swigt__p_Gosu__Window = {"_p_Gosu__Window", "Gosu::Window
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "Gosu::ZPos *|double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__arrayT_double_16_t = {"_p_std__arrayT_double_16_t", "std::array< double,16 > *|Gosu::Transform *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__Button,
@@ -11231,6 +11226,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_char,
   &_swigt__p_double,
   &_swigt__p_std__arrayT_double_16_t,
+  &_swigt__p_std__string,
 };
 
 static swig_cast_info _swigc__p_Gosu__Button[] = {  {&_swigt__p_Gosu__Button, 0, 0, 0},{0, 0, 0, 0}};
@@ -11246,6 +11242,7 @@ static swig_cast_info _swigc__p_Gosu__Window[] = {  {&_swigt__p_Gosu__Window, 0,
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__arrayT_double_16_t[] = {  {&_swigt__p_std__arrayT_double_16_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__Button,
@@ -11261,6 +11258,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_char,
   _swigc__p_double,
   _swigc__p_std__arrayT_double_16_t,
+  _swigc__p_std__string,
 };
 
 
@@ -11515,11 +11513,11 @@ SWIGEXPORT void Init_gosu(void) {
   }
   
   SWIG_RubyInitializeTrackings();
+  rb_define_const(mGosu, "VERSION", SWIG_From_std_string(static_cast< std::string >(Gosu::VERSION)));
+  rb_define_const(mGosu, "LICENSES", SWIG_From_std_string(static_cast< std::string >(Gosu::LICENSES)));
   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(10)));
   rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(8)));
-  rb_define_const(mGosu, "VERSION", SWIG_FromCharPtr("0.10.8"));
-  rb_define_const(mGosu, "GOSU_COPYRIGHT_NOTICE", SWIG_FromCharPtr("This software uses the following third-party libraries:\n\nGosu, https://www.libgosu.org, MIT License, http://opensource.org/licenses/MIT\nSDL 2, http://www.libsdl.org, MIT License, http://opensource.org/licenses/MIT\nlibsndfile, http://www.mega-nerd.com/libsndfile, GNU LGPL 3, http://www.gnu.org/copyleft/lesser.html\nOpenAL Soft, http://kcat.strangesoft.net/openal.html, GNU LGPL 2, http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html\n"));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_const(mGosu, "M_PI", SWIG_From_double(static_cast< double >(3.14159265358979323846264338327950288)));
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);

@@ -60,3 +60,16 @@
 -  result = rb_funcall(swig_get_self(), rb_intern("button_up"), 1,obj0);
 +  result = rb_funcall(swig_get_self(), rb_intern("protected_button_up"), 1,obj0);
  }
+
+
+@@ -11515,8 +11515,8 @@ SWIGEXPORT void Init_gosu(void) {
+   }
+
+   SWIG_RubyInitializeTrackings();
+-  rb_define_const(mGosu, "VERSION", SWIG_NewPointerObj(SWIG_as_voidptr(&Gosu::VERSION),SWIGTYPE_p_std__string, 0 ));
+-  rb_define_const(mGosu, "LICENSES", SWIG_NewPointerObj(SWIG_as_voidptr(&Gosu::LICENSES),SWIGTYPE_p_std__string, 0 ));
++  rb_define_const(mGosu, "VERSION", SWIG_From_std_string(static_cast< std::string >(Gosu::VERSION)));
++  rb_define_const(mGosu, "LICENSES", SWIG_From_std_string(static_cast< std::string >(Gosu::LICENSES)));
+   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
+   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(10)));
+   rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(8)));
