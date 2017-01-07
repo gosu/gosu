@@ -29,6 +29,7 @@ addons:
       - libsndfile1-dev
       # For Ruby
       - ruby-dev
+      - rake
       # For C++
       - cmake
 
@@ -36,7 +37,7 @@ before_install:
   # Mac dependencies
   # See: https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X
   - if [ $TRAVIS_OS_NAME == osx ]; then brew update; brew install sdl2; fi
-  # Do not use RVM - it's been a mess for compiling Gosu on OS X.
+  # Do not use RVM - it's been a mess for compiling Gosu on macOS.
   - rvm use system
   # Print the Ruby configuration to see what's up with CXXFLAGS etc.
   - ruby -rrbconfig -e 'RbConfig::CONFIG.each { |k, v| puts [k, v].join("=") }'
@@ -47,7 +48,7 @@ before_install:
   - if [ $TRAVIS_OS_NAME == osx ]; then sudo gem update --system; sudo gem install activesupport -v 4.2.6; sudo gem install cocoapods -n /usr/local/bin; fi
   # Dependencies for 'rake gem' (not for actually using Gosu)
   # We have to install binaries into ~ because of Apple's System Integrity Protection.
-  - sudo gem install rake rake-compiler --no-ri --no-rdoc -n ~
+  - sudo gem install rake rake-compiler minitest --no-ri --no-rdoc -n ~
 
 # Minimal git coverage (for now).
 branches:
@@ -76,8 +77,5 @@ install:
   - if [ $TRAVIS_OS_NAME == osx ]; then cd examples/Tutorial-Touch && pod install && xcodebuild build -workspace Tutorial-Touch.xcworkspace -scheme Tutorial-Touch -destination 'platform=iOS Simulator,name=iPad Air' && cd ../..; fi
 
 script:
-  # Ruby/Gosu
-  - ruby -rgosu -e 'puts RUBY_VERSION, Gosu::VERSION, Gosu::LICENSES'
-
-  # Compile C++ examples
-  - mkdir -p examples/build && cd examples/build && cmake .. && make && cd ../..
+  # Run Ruby/Gosu tests and compile C++ examples
+  - ~/rake -rgosu test && mkdir -p examples/build && cd examples/build && cmake .. && make

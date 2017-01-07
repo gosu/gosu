@@ -159,6 +159,9 @@ Gosu::GOSU_COPYRIGHT_NOTICE = Gosu::LICENSES
 
 # Release OpenAL resources during Ruby's shutdown, not Gosu's.
 at_exit do
-  Gosu::Song.current_song.stop if Gosu::Song.current_song
-  Gosu::_release_all_openal_resources
+  begin
+    Gosu::Song.current_song.stop if Gosu::Song.current_song
+    Gosu._release_all_openal_resources
+  rescue
+  end
 end

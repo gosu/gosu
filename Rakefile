@@ -2,6 +2,7 @@ require 'rubygems'
 require 'fileutils'
 require 'date'
 require 'rake/extensiontask'
+require 'rake/testtask'
 
 COMMON_FILES = FileList[
   '.yardopts',
@@ -50,4 +51,12 @@ end
 task :update_doxygen do
   sh "ssh #{ENV['PROJECTS_HOST']} 'cd #{ENV['PROJECTS_ROOT']}/libgosu.org/ && " +
        "svn checkout https://github.com/gosu/gosu/trunk/Gosu && PATH=../doxygen/bin:$PATH doxygen'"
+end
+
+Rake::TestTask.new do |t|
+  t.verbose = true
+  t.warning = true
+  # On Windows, we want to require everything from the 'lib' directory directly.
+  # On UNIX systems, the tests should be run after installing the gosu gem instead (ignore ./lib).
+  t.libs = [] unless RUBY_PLATFORM =~ /mswin$|mingw32|mingw64|win32\-|\-win32/
 end
