@@ -393,7 +393,7 @@ std::unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src,
 {
     static const unsigned max_size = MAX_TEXTURE_SIZE;
     
-    // Backwards compatibility: This used to be 'bool tileable'.
+    // Backward compatibility: This used to be 'bool tileable'.
     if (flags == 1) flags = IF_TILEABLE;
 
     bool wants_retro = (flags & IF_RETRO);

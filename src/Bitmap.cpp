@@ -118,7 +118,7 @@ void Gosu::unapply_color_key(Bitmap& bitmap, Color color)
 void Gosu::apply_border_flags(Bitmap& dest, const Bitmap& source, unsigned src_x, unsigned src_y,
     unsigned src_width, unsigned src_height, unsigned image_flags)
 {
-    // Backwards compatibility: This used to be 'bool tileable'.
+    // Backward compatibility: This used to be 'bool tileable'.
     if (image_flags == 1)
         image_flags = IF_TILEABLE;
 
