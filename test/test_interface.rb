@@ -44,10 +44,13 @@ end
 
 class TestInterface < Minitest::Test
   DOCUMENTED_CONSTANTS = GosuDocs.constants.map { |constant| unpack_range(constant) }.flatten
-  
+
   def test_all_constants_exist
     DOCUMENTED_CONSTANTS.each do |constant|
-      assert Gosu.constants.include?(constant), "Expected constant Gosu::#{constant}"
+      # There should be no deprecated constants in the docs
+      assert_silent do
+        assert Gosu.const_defined?(constant), "Expected constant Gosu::#{constant}"
+      end
     end
   end
   
@@ -69,8 +72,10 @@ class TestInterface < Minitest::Test
   
   def test_no_extra_constants
     Gosu.constants.each do |constant|
-      next if constant =~ /Kb|Gp|Ms/ # backwards compatibility
       next if constant == :Button # backwards compatibility
+      next if constant =~ /Kb|Gp|Ms/ # backwards compatibility
+      next if constant == :GOSU_COPYRIGHT_NOTICE # backwards compatibility
+      next if constant == :DEPRECATION_STACKTRACE_LINES # implementation detail for backwards compatibility
       next if constant == :ImmutableColor # implementation detail
       next if constant == :MAX_TEXTURE_SIZE # not sure if we still need this :/
       

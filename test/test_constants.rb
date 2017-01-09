@@ -1,3 +1,5 @@
+# Encoding: UTF-8
+
 require "minitest/autorun"
 require "gosu" unless defined? Gosu
 
@@ -16,6 +18,8 @@ class TestConstants < Minitest::Test
     end
 
     # Backward compatibility
-    assert_equal Gosu::LICENSES, Gosu::GOSU_COPYRIGHT_NOTICE
+    assert_output "", /DEPRECATION WARNING: Gosu::GOSU_COPYRIGHT_NOTICE is deprecated; use LICENSES instead./ do
+      assert_equal Gosu::LICENSES, Gosu::GOSU_COPYRIGHT_NOTICE
+    end
   end
 end
