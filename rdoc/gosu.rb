@@ -18,10 +18,6 @@ module Gosu
   VERSION = :a_string
 
   ##
-  # @deprecated Use LICENSES instead as it's a more appropriate name
-  GOSU_COPYRIGHT_NOTICE = :a_string
-
-  ##
   # A block of legal copy that your game is obliged to display somewhere.
   LICENSES = :a_string
 
@@ -290,13 +286,6 @@ module Gosu
     # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
     # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
     def draw_rel(text, x, y, z, rel_x, rel_y, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
-
-    ##
-    # @deprecated Use {#draw} in conjunction with {Gosu.rotate} instead.
-    #
-    # @see #draw
-    # @see Gosu::Window#rotate
-    def draw_rot(text, x, y, z, angle, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
 
     # @!endgroup
 
@@ -848,10 +837,6 @@ module Gosu
     def button_up(id); end
 
     # @!endgroup
-
-    ##
-    # @deprecated Use {#mouse_x=} and {#mouse_y=} instead.
-    def set_mouse_position(x, y); end
   end
 
   ##

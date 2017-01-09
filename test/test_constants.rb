@@ -14,8 +14,5 @@ class TestConstants < Minitest::Test
       assert_match(/libsndfile/, Gosu::LICENSES)
       assert_match(/OpenAL/, Gosu::LICENSES) if RUBY_PLATFORM =~ /win/
     end
-
-    # Backward compatibility
-    assert_equal Gosu::LICENSES, Gosu::GOSU_COPYRIGHT_NOTICE
   end
 end
