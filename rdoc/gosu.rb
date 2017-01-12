@@ -1,15 +1,17 @@
+# Encoding: UTF-8
+
 module Gosu
   ##
   # The first component of the version.
-  MAJOR_VERSION = :a_fixnum
+  MAJOR_VERSION = :an_integer
 
   ##
   # The second component of the version.
-  MINOR_VERSION = :a_fixnum
+  MINOR_VERSION = :an_integer
 
   ##
   # The third component of the version.
-  POINT_VERSION = :a_fixnum
+  POINT_VERSION = :an_integer
 
   ##
   # A version string of the form "0.1.2", "0.1.2.3" or "0.1.2pre4".
@@ -23,231 +25,77 @@ module Gosu
   # A block of legal copy that your game is obliged to display somewhere.
   LICENSES = :a_string
 
-  Kb0 = :implementation_defined
-  Kb1 = :implementation_defined
-  Kb2 = :implementation_defined
-  Kb3 = :implementation_defined
-  Kb4 = :implementation_defined
-  Kb5 = :implementation_defined
-  Kb6 = :implementation_defined
-  Kb7 = :implementation_defined
-  Kb8 = :implementation_defined
-  Kb9 = :implementation_defined
-  KbA = :implementation_defined
-  KbB = :implementation_defined
-  KbC = :implementation_defined
-  KbD = :implementation_defined
-  KbE = :implementation_defined
-  KbF = :implementation_defined
-  KbG = :implementation_defined
-  KbH = :implementation_defined
-  KbI = :implementation_defined
-  KbJ = :implementation_defined
-  KbK = :implementation_defined
-  KbL = :implementation_defined
-  KbM = :implementation_defined
-  KbN = :implementation_defined
-  KbO = :implementation_defined
-  KbP = :implementation_defined
-  KbQ = :implementation_defined
-  KbR = :implementation_defined
-  KbS = :implementation_defined
-  KbT = :implementation_defined
-  KbU = :implementation_defined
-  KbV = :implementation_defined
-  KbW = :implementation_defined
-  KbX = :implementation_defined
-  KbY = :implementation_defined
-  KbZ = :implementation_defined
-  KbBackspace = :implementation_defined
-  KbDelete = :implementation_defined
-  KbDown = :implementation_defined
-  KbEnd = :implementation_defined
+  KB_0…KB_9 = :an_integer
+  KB_A…KB_Z = :an_integer
+  KB_APOSTROPHE = :an_integer
+  KB_BACKSLASH = :an_integer
+  KB_BACKSPACE = :an_integer
+  KB_BACKTICK = :an_integer
+  KB_COMMA = :an_integer
+  KB_DELETE = :an_integer
+  KB_DOWN = :an_integer
+  KB_END = :an_integer
 
   ##
   # This is the key on the numpad.
-  KbEnter = :implementation_defined
+  KB_ENTER = :an_integer
 
-  KbEscape = :implementation_defined
-  KbF1 = :implementation_defined
-  KbF2 = :implementation_defined
-  KbF3 = :implementation_defined
-  KbF4 = :implementation_defined
-  KbF5 = :implementation_defined
-  KbF6 = :implementation_defined
-  KbF7 = :implementation_defined
-  KbF8 = :implementation_defined
-  KbF9 = :implementation_defined
-  KbF10 = :implementation_defined
-  KbF11 = :implementation_defined
-  KbF12 = :implementation_defined
-  KbHome = :implementation_defined
-  KbInsert = :implementation_defined
-  KbISO = :implementation_defined
-  KbLeft = :implementation_defined
-  KbLeftAlt = :implementation_defined
-  KbLeftControl = :implementation_defined
-  KbLeftMeta = :implementation_defined
-  KbLeftShift = :implementation_defined
-  KbNumpad0 = :implementation_defined
-  KbNumpad1 = :implementation_defined
-  KbNumpad2 = :implementation_defined
-  KbNumpad3 = :implementation_defined
-  KbNumpad4 = :implementation_defined
-  KbNumpad5 = :implementation_defined
-  KbNumpad6 = :implementation_defined
-  KbNumpad7 = :implementation_defined
-  KbNumpad8 = :implementation_defined
-  KbNumpad9 = :implementation_defined
-  KbNumpadAdd = :implementation_defined
-  KbNumpadDivide = :implementation_defined
-  KbNumpadMultiply = :implementation_defined
-  KbNumpadSubtract = :implementation_defined
-  KbPageDown = :implementation_defined
-  KbPageUp = :implementation_defined
+  KB_EQUALS = :an_integer
+  KB_ESCAPE = :an_integer
+  KB_F1…KB_F12 = :an_integer
+  KB_HOME = :an_integer
+  KB_INSERT = :an_integer
+  KB_ISO = :an_integer
+  KB_LEFT = :an_integer
+  KB_LEFT_ALT = :an_integer
+  KB_LEFT_BRACKET = :an_integer
+  KB_LEFT_CONTROL = :an_integer
+  KB_LEFT_META = :an_integer
+  KB_LEFT_SHIFT = :an_integer
+  KB_MINUS = :an_integer
+  KB_NUMPAD_0…KB_NUMPAD_9 = :an_integer
+  KB_NUMPAD_DIVIDE = :an_integer
+  KB_NUMPAD_MINUS = :an_integer
+  KB_NUMPAD_MULTIPLY = :an_integer
+  KB_NUMPAD_PLUS = :an_integer
+  KB_PAGE_DOWN = :an_integer
+  KB_PAGE_UP = :an_integer
+  KB_PERIOD = :an_integer
 
   ##
   # This is the key above the right shift key.
-  KbReturn = :implementation_defined
+  KB_RETURN = :an_integer
 
-  KbRight = :implementation_defined
-  KbRightAlt = :implementation_defined
-  KbRightControl = :implementation_defined
-  KbRightMeta = :implementation_defined
-  KbRightShift = :implementation_defined
-  KbSpace = :implementation_defined
-  KbTab = :implementation_defined
-  KbUp = :implementation_defined
-  KbBacktick = :implementation_defined
-  KbMinus = :implementation_defined
-  KbEqual = :implementation_defined
-  KbBracketLeft = :implementation_defined
-  KbBracketRight = :implementation_defined
-  KbBackslash = :implementation_defined
-  KbSemicolon = :implementation_defined
-  KbApostrophe = :implementation_defined
-  KbComma = :implementation_defined
-  KbPeriod = :implementation_defined
-  KbSlash = :implementation_defined
+  KB_RIGHT = :an_integer
+  KB_RIGHT_ALT = :an_integer
+  KB_RIGHT_BRACKET = :an_integer
+  KB_RIGHT_CONTROL = :an_integer
+  KB_RIGHT_META = :an_integer
+  KB_RIGHT_SHIFT = :an_integer
+  KB_SEMICOLON = :an_integer
+  KB_SLASH = :an_integer
+  KB_SPACE = :an_integer
+  KB_TAB = :an_integer
+  KB_UP = :an_integer
 
-  MsLeft = :implementation_defined
-  MsMiddle = :implementation_defined
-  MsRight = :implementation_defined
-  MsWheelDown = :implementation_defined
-  MsWheelUp = :implementation_defined
-  MsOther0 = :implementation_defined
-  MsOther1 = :implementation_defined
-  MsOther2 = :implementation_defined
-  MsOther3 = :implementation_defined
-  MsOther4 = :implementation_defined
-  MsOther5 = :implementation_defined
-  MsOther6 = :implementation_defined
-  MsOther7 = :implementation_defined
+  MS_LEFT = :an_integer
+  MS_MIDDLE = :an_integer
+  MS_RIGHT = :an_integer
+  MS_WHEEL_DOWN = :an_integer
+  MS_WHEEL_UP = :an_integer
+  MS_OTHER_0…MS_OTHER_7 = :an_integer
 
-  GpButton0 = :implementation_defined
-  GpButton1 = :implementation_defined
-  GpButton2 = :implementation_defined
-  GpButton3 = :implementation_defined
-  GpButton4 = :implementation_defined
-  GpButton5 = :implementation_defined
-  GpButton6 = :implementation_defined
-  GpButton7 = :implementation_defined
-  GpButton8 = :implementation_defined
-  GpButton9 = :implementation_defined
-  GpButton10 = :implementation_defined
-  GpButton11 = :implementation_defined
-  GpButton12 = :implementation_defined
-  GpButton13 = :implementation_defined
-  GpButton14 = :implementation_defined
-  GpButton15 = :implementation_defined
-  GpDown = :implementation_defined
-  GpLeft = :implementation_defined
-  GpRight = :implementation_defined
-  GpUp = :implementation_defined
+  GP_BUTTON_0…GP_BUTTON_15 = :an_integer
+  GP_DOWN = :an_integer
+  GP_LEFT = :an_integer
+  GP_RIGHT = :an_integer
+  GP_UP = :an_integer
 
-  Gp0Button0 = :implementation_defined
-  Gp0Button1 = :implementation_defined
-  Gp0Button2 = :implementation_defined
-  Gp0Button3 = :implementation_defined
-  Gp0Button4 = :implementation_defined
-  Gp0Button5 = :implementation_defined
-  Gp0Button6 = :implementation_defined
-  Gp0Button7 = :implementation_defined
-  Gp0Button8 = :implementation_defined
-  Gp0Button9 = :implementation_defined
-  Gp0Button10 = :implementation_defined
-  Gp0Button11 = :implementation_defined
-  Gp0Button12 = :implementation_defined
-  Gp0Button13 = :implementation_defined
-  Gp0Button14 = :implementation_defined
-  Gp0Button15 = :implementation_defined
-  Gp0Down = :implementation_defined
-  Gp0Left = :implementation_defined
-  Gp0Right = :implementation_defined
-  Gp0Up = :implementation_defined
-
-  Gp1Button0 = :implementation_defined
-  Gp1Button1 = :implementation_defined
-  Gp1Button2 = :implementation_defined
-  Gp1Button3 = :implementation_defined
-  Gp1Button4 = :implementation_defined
-  Gp1Button5 = :implementation_defined
-  Gp1Button6 = :implementation_defined
-  Gp1Button7 = :implementation_defined
-  Gp1Button8 = :implementation_defined
-  Gp1Button9 = :implementation_defined
-  Gp1Button10 = :implementation_defined
-  Gp1Button11 = :implementation_defined
-  Gp1Button12 = :implementation_defined
-  Gp1Button13 = :implementation_defined
-  Gp1Button14 = :implementation_defined
-  Gp1Button15 = :implementation_defined
-  Gp1Down = :implementation_defined
-  Gp1Left = :implementation_defined
-  Gp1Right = :implementation_defined
-  Gp1Up = :implementation_defined
-
-  Gp2Button0 = :implementation_defined
-  Gp2Button1 = :implementation_defined
-  Gp2Button2 = :implementation_defined
-  Gp2Button3 = :implementation_defined
-  Gp2Button4 = :implementation_defined
-  Gp2Button5 = :implementation_defined
-  Gp2Button6 = :implementation_defined
-  Gp2Button7 = :implementation_defined
-  Gp2Button8 = :implementation_defined
-  Gp2Button9 = :implementation_defined
-  Gp2Button10 = :implementation_defined
-  Gp2Button11 = :implementation_defined
-  Gp2Button12 = :implementation_defined
-  Gp2Button13 = :implementation_defined
-  Gp2Button14 = :implementation_defined
-  Gp2Button15 = :implementation_defined
-  Gp2Down = :implementation_defined
-  Gp2Left = :implementation_defined
-  Gp2Right = :implementation_defined
-  Gp2Up = :implementation_defined
-
-  Gp3Button0 = :implementation_defined
-  Gp3Button1 = :implementation_defined
-  Gp3Button2 = :implementation_defined
-  Gp3Button3 = :implementation_defined
-  Gp3Button4 = :implementation_defined
-  Gp3Button5 = :implementation_defined
-  Gp3Button6 = :implementation_defined
-  Gp3Button7 = :implementation_defined
-  Gp3Button8 = :implementation_defined
-  Gp3Button9 = :implementation_defined
-  Gp3Button10 = :implementation_defined
-  Gp3Button11 = :implementation_defined
-  Gp3Button12 = :implementation_defined
-  Gp3Button13 = :implementation_defined
-  Gp3Button14 = :implementation_defined
-  Gp3Button15 = :implementation_defined
-  Gp3Down = :implementation_defined
-  Gp3Left = :implementation_defined
-  Gp3Right = :implementation_defined
-  Gp3Up = :implementation_defined
+  GP_0_BUTTON_0…GP_3_BUTTON_15 = :an_integer
+  GP_0_DOWN…GP_3_DOWN = :an_integer
+  GP_0_LEFT…GP_3_LEFT = :an_integer
+  GP_0_RIGHT…GP_3_RIGHT = :an_integer
+  GP_0_UP…GP_3_UP = :an_integer
 
   ##
   # Represents an ARGB color value with 8 bits for each channel. Colors can be used interchangeably with integer literals of the form 0xAARRGGBB in all Gosu APIs.

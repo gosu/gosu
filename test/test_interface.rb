@@ -1,3 +1,5 @@
+# Encoding: UTF-8
+
 require "minitest/autorun"
 require "gosu" unless defined? Gosu
 
@@ -23,18 +25,36 @@ Object.send :remove_const, :OrigGosu
   Numeric.send :undef_method, :"orig_#{helper}"
 end
 
+# This undoes the hack in rdoc/gosu.rb where constants like :KB_F1…KB_F12 are defined to keep the
+# generated rdoc short. Given this constant, it would return [:KB_F1, ..., :KB_F12].
+def unpack_range(constant)
+  case constant
+  when /^GP_(\d+)_(.+)…GP_(\d+)_(.+)$/
+    # Special case: GP_0_BUTTON_0…GP_3_BUTTON_15 needs to be unpacked into 4 * 16 constants.
+    ($1..$3).map { |n| ($2..$4).map { |suffix| :"GP_#{n}_#{suffix}" } }
+  when /^KB_F(\d+)…KB_F(\d+)$/
+    # Special case: The range from "F1" to "F12" is not what we want: "F9".succ == "G0".
+    ($1..$2).map { |n| :"KB_F#{n}"}
+  when /^(.+)…(.+)$/
+    ($1..$2).map &:to_sym
+  else
+    [constant]
+  end
+end
+
 class TestInterface < Minitest::Test
+  DOCUMENTED_CONSTANTS = GosuDocs.constants.map { |constant| unpack_range(constant) }.flatten
+  
   def test_all_constants_exist
-    GosuDocs.constants.each do |constant|
-      assert Gosu.constants.include?(constant),
-        "Expected constant Gosu::#{constant}"
+    DOCUMENTED_CONSTANTS.each do |constant|
+      assert Gosu.constants.include?(constant), "Expected constant Gosu::#{constant}"
     end
   end
   
   def test_constant_types
-    GosuDocs.constants.each do |constant|
+    DOCUMENTED_CONSTANTS.each do |constant|
       case constant
-      when /(Kb|Gp|Ms)/, /(KB_|GP_|MS_)/, /_VERSION/
+      when /(KB_|GP_|MS_)/, /_VERSION/
         expected_class = Integer
       when :VERSION, :LICENSES
         expected_class = String
@@ -43,22 +63,18 @@ class TestInterface < Minitest::Test
       end
 
       assert_kind_of expected_class, Gosu.const_get(constant),
-        "Gosu::#{constant} must be #{expected_class}, is #{Gosu.const_get(constant).class}"
+        "Gosu::#{constant} must be #{expected_class}, but is #{Gosu.const_get(constant).class}"
     end
   end
   
   def test_no_extra_constants
     Gosu.constants.each do |constant|
-      next if constant =~ /KB_|GP_|MS_/ # TODO: not yet documented
-      
+      next if constant =~ /Kb|Gp|Ms/ # backwards compatibility
       next if constant == :Button # backwards compatibility
-      
       next if constant == :ImmutableColor # implementation detail
-      
       next if constant == :MAX_TEXTURE_SIZE # not sure if we still need this :/
       
-      assert GosuDocs.constants.include?(constant),
-        "Unexpected Gosu::#{constant}"
+      assert DOCUMENTED_CONSTANTS.include?(constant), "Unexpected Gosu::#{constant}"
     end
   end
 end
