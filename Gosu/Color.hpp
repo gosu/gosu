@@ -4,6 +4,7 @@
 #pragma once
 
 #include <Gosu/Platform.hpp>
+#include <cstdint>
 
 namespace Gosu
 {
