@@ -2506,9 +2506,6 @@ SWIG_From_unsigned_SS_long  (unsigned long value)
 }
 
 
-  #define SWIG_From_double   rb_float_new 
-
-
 SWIGINTERN VALUE
 SWIG_ruby_failed(void)
 {
@@ -2543,6 +2540,9 @@ SWIG_AsVal_double (VALUE obj, double *val)
   }
   return SWIG_TypeError;
 }
+
+
+  #define SWIG_From_double   rb_float_new 
 
 
 SWIGINTERNINLINE VALUE
@@ -11519,7 +11519,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(11)));
   rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
-  rb_define_const(mGosu, "M_PI", SWIG_From_double(static_cast< double >(3.14159265358979323846264338327950288)));
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
   rb_define_module_function(mGosu, "degrees_to_radians", VALUEFUNC(_wrap_degrees_to_radians), -1);
   rb_define_module_function(mGosu, "radians_to_degrees", VALUEFUNC(_wrap_radians_to_degrees), -1);

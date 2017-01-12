@@ -15,22 +15,17 @@ environment:
 install:
 - ps: >-
     Start-FileDownload http://libsdl.org/release/SDL2-devel-2.0.5-VC.zip
-
+    
     7z x SDL2-devel-2.0.5-VC.zip -oC:\
-build:
-  verbosity: minimal
-after_build:
+test_script:
 - ps: >-
-    cd "$env:APPVEYOR_BUILD_FOLDER\lib"
-
-    $OLD_PATH = $env:PATH
-
     If ($env:PLATFORM -Eq "x64") {
-      $env:PATH = "C:\Ruby23-x64\bin;$OLD_PATH"
-      ruby -I. -r./gosu.rb -e "puts RUBY_VERSION, Gosu::VERSION, Gosu::LICENSES"
+      $env:PATH = "C:\Ruby23-x64\bin;$env:PATH"
     }
     Else {
-      $env:PATH = "C:\Ruby23\bin;$OLD_PATH"
-      ruby -I. -r./gosu.rb -e "puts RUBY_VERSION, Gosu::VERSION, Gosu::LICENSES"
+      $env:PATH = "C:\Ruby23\bin;$env:PATH"
     }
-test: off
+    
+    gem install rake rake-compiler minitest --no-ri --no-rdoc
+    
+    cmd /c rake test '2>&1'

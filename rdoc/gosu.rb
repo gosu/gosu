@@ -1,15 +1,17 @@
+# Encoding: UTF-8
+
 module Gosu
   ##
   # The first component of the version.
-  MAJOR_VERSION = :a_fixnum
+  MAJOR_VERSION = :an_integer
 
   ##
   # The second component of the version.
-  MINOR_VERSION = :a_fixnum
+  MINOR_VERSION = :an_integer
 
   ##
   # The third component of the version.
-  POINT_VERSION = :a_fixnum
+  POINT_VERSION = :an_integer
 
   ##
   # A version string of the form "0.1.2", "0.1.2.3" or "0.1.2pre4".
@@ -23,92 +25,77 @@ module Gosu
   # A block of legal copy that your game is obliged to display somewhere.
   LICENSES = :a_string
 
-  Kb0 Kb1 Kb2 Kb3 Kb4 Kb5 Kb6 Kb7 Kb8 Kb9 = :implementation_defined
-  KbA KbB KbC KbD KbE KbF KbG KbH KbI KbJ KbK KbL KbM KbN KbO KbP KbQ KbR KbS KbT KbU KbV KbW KbX KbY KbZ = :implementation_defined
-  KbBackspace = :implementation_defined
-  KbDelete = :implementation_defined
-  KbDown = :implementation_defined
-  KbEnd = :implementation_defined
+  KB_0…KB_9 = :an_integer
+  KB_A…KB_Z = :an_integer
+  KB_APOSTROPHE = :an_integer
+  KB_BACKSLASH = :an_integer
+  KB_BACKSPACE = :an_integer
+  KB_BACKTICK = :an_integer
+  KB_COMMA = :an_integer
+  KB_DELETE = :an_integer
+  KB_DOWN = :an_integer
+  KB_END = :an_integer
 
   ##
   # This is the key on the numpad.
-  KbEnter = :implementation_defined
+  KB_ENTER = :an_integer
 
-  KbEscape = :implementation_defined
-  KbF1 KbF2 KbF3 KbF4 KbF5 KbF6 KbF7 KbF8 KbF9 KbF10 KbF11 KbF12 = :implementation_defined
-  KbHome = :implementation_defined
-  KbInsert = :implementation_defined
-  KbLeft = :implementation_defined
-  KbLeftAlt = :implementation_defined
-  KbLeftControl = :implementation_defined
-  KbLeftShift = :implementation_defined
-  KbNumpad0 KbNumpad1 KbNumpad2 KbNumpad3 KbNumpad4 KbNumpad5 KbNumpad6 KbNumpad7 KbNumpad8 KbNumpad9 = :implementation_defined
-  KbNumpadAdd = :implementation_defined
-  KbNumpadDivide = :implementation_defined
-  KbNumpadMultiply = :implementation_defined
-  KbNumpadSubtract = :implementation_defined
-  KbPageDown = :implementation_defined
-  KbPageUp = :implementation_defined
+  KB_EQUALS = :an_integer
+  KB_ESCAPE = :an_integer
+  KB_F1…KB_F12 = :an_integer
+  KB_HOME = :an_integer
+  KB_INSERT = :an_integer
+  KB_ISO = :an_integer
+  KB_LEFT = :an_integer
+  KB_LEFT_ALT = :an_integer
+  KB_LEFT_BRACKET = :an_integer
+  KB_LEFT_CONTROL = :an_integer
+  KB_LEFT_META = :an_integer
+  KB_LEFT_SHIFT = :an_integer
+  KB_MINUS = :an_integer
+  KB_NUMPAD_0…KB_NUMPAD_9 = :an_integer
+  KB_NUMPAD_DIVIDE = :an_integer
+  KB_NUMPAD_MINUS = :an_integer
+  KB_NUMPAD_MULTIPLY = :an_integer
+  KB_NUMPAD_PLUS = :an_integer
+  KB_PAGE_DOWN = :an_integer
+  KB_PAGE_UP = :an_integer
+  KB_PERIOD = :an_integer
 
   ##
   # This is the key above the right shift key.
-  KbReturn = :implementation_defined
+  KB_RETURN = :an_integer
 
-  KbRight = :implementation_defined
-  KbRightAlt = :implementation_defined
-  KbRightControl = :implementation_defined
-  KbRightShift = :implementation_defined
-  KbSpace = :implementation_defined
-  KbTab = :implementation_defined
-  KbUp = :implementation_defined
-  KbBacktick = :implementation_defined
-  KbMinus = :implementation_defined
-  KbEqual = :implementation_defined
-  KbBracketLeft = :implementation_defined
-  KbBracketRight = :implementation_defined
-  KbBackslash = :implementation_defined
-  KbSemicolon = :implementation_defined
-  KbApostrophe = :implementation_defined
-  KbComma = :implementation_defined
-  KbPeriod = :implementation_defined
-  KbSlash = :implementation_defined
+  KB_RIGHT = :an_integer
+  KB_RIGHT_ALT = :an_integer
+  KB_RIGHT_BRACKET = :an_integer
+  KB_RIGHT_CONTROL = :an_integer
+  KB_RIGHT_META = :an_integer
+  KB_RIGHT_SHIFT = :an_integer
+  KB_SEMICOLON = :an_integer
+  KB_SLASH = :an_integer
+  KB_SPACE = :an_integer
+  KB_TAB = :an_integer
+  KB_UP = :an_integer
 
-  MsLeft = :implementation_defined
-  MsMiddle = :implementation_defined
-  MsRight = :implementation_defined
-  MsWheelDown = :implementation_defined
-  MsWheelUp = :implementation_defined
-  MsOther0 MsOther1 MsOther2 MsOther3 MsOther4 MsOther5 MsOther6 MsOther7 = :implementation_defined
+  MS_LEFT = :an_integer
+  MS_MIDDLE = :an_integer
+  MS_RIGHT = :an_integer
+  MS_WHEEL_DOWN = :an_integer
+  MS_WHEEL_UP = :an_integer
+  MS_OTHER_0…MS_OTHER_7 = :an_integer
 
-  GpButton0 GpButton1 GpButton2 GpButton3 GpButton4 GpButton5 GpButton6 GpButton7 GpButton8 GpButton9 GpButton10 GpButton11 GpButton12 GpButton13 GpButton14 GpButton15 = :implementation_defined
-  GpDown = :implementation_defined
-  GpLeft = :implementation_defined
-  GpRight = :implementation_defined
-  GpUp = :implementation_defined
+  GP_BUTTON_0…GP_BUTTON_15 = :an_integer
+  GP_DOWN = :an_integer
+  GP_LEFT = :an_integer
+  GP_RIGHT = :an_integer
+  GP_UP = :an_integer
 
-  Gp0Button0 Gp0Button1 Gp0Button2 Gp0Button3 Gp0Button4 Gp0Button5 Gp0Button6 Gp0Button7 Gp0Button8 Gp0Button9 Gp0Button10 Gp0Button11 Gp0Button12 Gp0Button13 Gp0Button14 Gp0Button15 = :implementation_defined
-  Gp0Down = :implementation_defined
-  Gp0Left = :implementation_defined
-  Gp0Right = :implementation_defined
-  Gp0Up = :implementation_defined
-
-  Gp1Button0 Gp1Button1 Gp1Button2 Gp1Button3 Gp1Button4 Gp1Button5 Gp1Button6 Gp1Button7 Gp1Button8 Gp1Button9 Gp1Button10 Gp1Button11 Gp1Button12 Gp1Button13 Gp1Button14 Gp1Button15 = :implementation_defined
-  Gp1Down = :implementation_defined
-  Gp1Left = :implementation_defined
-  Gp1Right = :implementation_defined
-  Gp1Up = :implementation_defined
-
-  Gp2Button0 Gp2Button1 Gp2Button2 Gp2Button3 Gp2Button4 Gp2Button5 Gp2Button6 Gp2Button7 Gp2Button8 Gp2Button9 Gp2Button10 Gp2Button11 Gp2Button12 Gp2Button13 Gp2Button14 Gp2Button15 = :implementation_defined
-  Gp2Down = :implementation_defined
-  Gp2Left = :implementation_defined
-  Gp2Right = :implementation_defined
-  Gp2Up = :implementation_defined
-
-  Gp3Button0 Gp3Button1 Gp3Button2 Gp3Button3 Gp3Button4 Gp3Button5 Gp3Button6 Gp3Button7 Gp3Button8 Gp3Button9 Gp3Button10 Gp3Button11 Gp3Button12 Gp3Button13 Gp3Button14 Gp3Button15 = :implementation_defined
-  Gp3Down = :implementation_defined
-  Gp3Left = :implementation_defined
-  Gp3Right = :implementation_defined
-  Gp3Up = :implementation_defined
+  GP_0_BUTTON_0…GP_3_BUTTON_15 = :an_integer
+  GP_0_DOWN…GP_3_DOWN = :an_integer
+  GP_0_LEFT…GP_3_LEFT = :an_integer
+  GP_0_RIGHT…GP_3_RIGHT = :an_integer
+  GP_0_UP…GP_3_UP = :an_integer
 
   ##
   # Represents an ARGB color value with 8 bits for each channel. Colors can be used interchangeably with integer literals of the form 0xAARRGGBB in all Gosu APIs.
@@ -749,8 +736,12 @@ module Gosu
     attr_accessor :height
 
     ##
-    # @return [true, false] whether this is a full-screen window.
-    attr_accessor :fullscreen?
+    # @return [true, false] whether this is a fullscreen window.
+    def fullscreen?; end
+
+    ##
+    # Toggles between windowed mode and fullscreen.
+    attr_writer :fullscreen
 
     ##
     # @return [Float] the interval between calls to {#update}, in milliseconds.
