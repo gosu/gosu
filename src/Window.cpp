@@ -4,7 +4,7 @@
 #include <Gosu/Gosu.hpp>
 #include <SDL.h>
 #include <cstdlib>
-#include <memory>
+#include <algorithm>
 #include <stdexcept>
 
 namespace Gosu
@@ -13,16 +13,16 @@ namespace Gosu
     {
         void register_frame();
     }
-    
-    void throw_sdl_error(const std::string& operation)
+
+    static void throw_sdl_error(const std::string& operation)
     {
         const char* error = SDL_GetError();
         throw std::runtime_error(operation + ": " + (error ? error : "(unknown error)"));
     }
 
-    void cleanup();
+    static void cleanup();
 
-    SDL_Window* shared_window()
+    static SDL_Window* shared_window()
     {
         static SDL_Window* window = nullptr;
         if (window == nullptr) {
@@ -46,8 +46,8 @@ namespace Gosu
         }
         return window;
     }
-    
-    SDL_GLContext shared_gl_context()
+
+    static SDL_GLContext shared_gl_context()
     {
         static SDL_GLContext context = nullptr;
         if (context == nullptr) {
@@ -70,7 +70,7 @@ namespace Gosu
         SDL_GL_MakeCurrent(shared_window(), shared_gl_context());
     }
 
-    void cleanup()
+    static void cleanup()
     {
         SDL_GL_DeleteContext(shared_gl_context());
         SDL_DestroyWindow(shared_window());
@@ -90,19 +90,21 @@ struct Gosu::Window::Impl
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval)
 : pimpl(new Impl)
 {
+    // Even in fullscreen mode, temporarily show the window in windowed mode to centre it.
+    // This ensures that the window will be centred correctly when exiting fullscreen mode.
+    // Fixes https://github.com/gosu/gosu/issues/369
+    resize(width, height, false);
+    SDL_SetWindowPosition(shared_window(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+
     // This will implicitly create graphics() and input(), and make the OpenGL context current.
     resize(width, height, fullscreen);
     
     SDL_GL_SetSwapInterval(1);
 
     pimpl->update_interval = update_interval;
-
-    if (!fullscreen) {
-        SDL_SetWindowPosition(shared_window(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-    }
     
-    input().on_button_down = [this](Gosu::Button button) { button_down(button); };
-    input().on_button_up = [this](Gosu::Button button) { button_up(button); };
+    input().on_button_down = [this](Button button) { button_down(button); };
+    input().on_button_up = [this](Button button) { button_up(button); };
 }
 
 Gosu::Window::~Window()
