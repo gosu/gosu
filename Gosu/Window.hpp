@@ -109,10 +109,10 @@ namespace Gosu
         //! Linux) or cmd+F (macOS).
         //! To support these shortcuts in your application, make sure to call Window::button_down
         //! in your implementation.
-        virtual void button_down(Button button);
+        virtual void button_down(Gosu::Button);
         
         //! Same as button_down. Called then the user releases a button.
-        virtual void button_up(Button button) {}
+        virtual void button_up(Gosu::Button) {}
         
         // Ignore when SWIG is wrapping this class for Ruby/Gosu.
         #ifndef SWIG
