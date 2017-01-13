@@ -819,7 +819,12 @@ module Gosu
     def needs_cursor?; end
 
     ##
-    # This method is called before {#update} if a button was pressed while the window had focus.
+    # This method is called before {#update} if a button is pressed while the window has focus.
+    #
+    # By default, this method  will toggle fullscreen mode if the user presses alt+enter (Windows,
+    # Linux) or cmd+F (macOS).
+    # To support these shortcuts in your application, make sure to call super in your
+    # implementation.
     #
     # @return [void]
     # @param id [Integer] the button's platform-defined id.
@@ -829,7 +834,7 @@ module Gosu
     def button_down(id); end
 
     ##
-    # This method is called before {#update} if a button was released while the window had focus.
+    # This method is called before {#update} if a button is released while the window has focus.
     #
     # @return [void]
     # @param (see #button_down)

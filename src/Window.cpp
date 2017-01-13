@@ -274,6 +274,32 @@ void Gosu::Window::close()
     SDL_PushEvent(&e);
 }
 
+void Gosu::Window::button_down(Button button)
+{
+    bool toggle_fullscreen;
+
+    // Default shortcuts for toggling fullscreen mode, see: https://github.com/gosu/gosu/issues/361
+    
+#ifdef GOSU_IS_MAC
+    // cmd+F and cmd+ctrl+F are both common shortcuts for toggling fullscreen mode on macOS.
+    toggle_fullscreen = button == KB_F &&
+        (Input::down(KB_LEFT_META) || Input::down(KB_RIGHT_META)) &&
+        !Input::down(KB_LEFT_SHIFT) && !Input::down(KB_RIGHT_SHIFT) &&
+        !Input::down(KB_LEFT_ALT) && !Input::down(KB_RIGHT_ALT);
+#else
+    // alt+enter and alt+return toggle fullscreen mode on all other platforms.
+    toggle_fullscreen = (button == KB_RETURN || button == KB_ENTER) &&
+        (Input::down(KB_LEFT_ALT) || Input::down(KB_RIGHT_ALT)) &&
+        !Input::down(KB_LEFT_CONTROL) && !Input::down(KB_RIGHT_CONTROL) &&
+        !Input::down(KB_LEFT_META) && !Input::down(KB_RIGHT_META) &&
+        !Input::down(KB_LEFT_SHIFT) && !Input::down(KB_RIGHT_SHIFT);
+#endif
+
+    if (toggle_fullscreen) {
+        resize(width(), height(), !fullscreen());
+    }
+}
+
 const Gosu::Graphics& Gosu::Window::graphics() const
 {
     return *pimpl->graphics;

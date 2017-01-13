@@ -190,11 +190,14 @@ public:
                   1, 1, Gosu::Color::YELLOW);
     }
 
-    void button_down(Gosu::Button btn) override
+    void button_down(Gosu::Button button) override
     {
-        if (btn == Gosu::KB_ESCAPE) {
+        if (button == Gosu::KB_ESCAPE) {
            close();
-       }
+        }
+        else {
+            Window::button_down(button);
+        }
     }
 };
 

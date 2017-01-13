@@ -147,6 +147,10 @@ void Gosu::Window::close()
     throw std::logic_error("Cannot close windows manually on iOS");
 }
 
+void Gosu::Window::button_down(Button button)
+{
+}
+
 void* Gosu::Window::UIWindow() const
 {
     return (__bridge void*) pimpl->window;

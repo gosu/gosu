@@ -97,18 +97,22 @@ namespace Gosu
         virtual bool needs_cursor() const { return false; }
         
         //! This function is called when the window loses focus on some platforms.
-        //! Most importantly, it is called on the i_phone or i_pad when the user locks the screen.
+        //! Most importantly, it is called on the iPhone or iPad when the user locks the screen.
         virtual void lose_focus() {}
         
         //! This function is called when the operating system's memory is low.
         //! So far, it is only called in iOS applications.
         virtual void release_memory() {}
 
-        //! Called before update when the user pressed a button while the window had the focus.
-        virtual void button_down(Gosu::Button) {}
+        //! Called before update when the user presses a button while the window has the focus.
+        //! By default, this will toggle fullscreen mode if the user presses alt+enter (Windows,
+        //! Linux) or cmd+F (macOS).
+        //! To support these shortcuts in your application, make sure to call Window::button_down
+        //! in your implementation.
+        virtual void button_down(Button button);
         
-        //! Same as button_down. Called then the user released a button.
-        virtual void button_up(Gosu::Button) {}
+        //! Same as button_down. Called then the user releases a button.
+        virtual void button_up(Button button) {}
         
         // Ignore when SWIG is wrapping this class for Ruby/Gosu.
         #ifndef SWIG
