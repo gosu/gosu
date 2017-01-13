@@ -15,8 +15,9 @@ end
     task :gem => :set_version
     
     spec = Gem::Specification.new do |s|
-      # Copy most fields from the "normal" Ruby gem"s specification
-      %w(name version summary description author date email homepage).each do |field|
+      # Copy most fields from the "normal" Ruby gem's specification
+      %w(name version license summary description author date email homepage
+         required_ruby_version).each do |field|
         s.send "#{field}=", GEM_SPEC.send(field)
       end
       s.platform = "x#{bits == 32 ? 86 : bits}-mingw32"
