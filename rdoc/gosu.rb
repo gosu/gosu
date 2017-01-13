@@ -101,23 +101,23 @@ module Gosu
   # Represents an ARGB color value with 8 bits for each channel. Colors can be used interchangeably with integer literals of the form 0xAARRGGBB in all Gosu APIs.
   class Color
     ##
-    # @return [Fixnum] the color's alpha channel.
+    # @return [Integer] the color's alpha channel.
     attr_accessor :alpha
 
     ##
-    # @return [Fixnum] the color's red channel.
+    # @return [Integer] the color's red channel.
     attr_accessor :red
 
     ##
-    # @return [Fixnum] the color's green channel.
+    # @return [Integer] the color's green channel.
     attr_accessor :green
 
     ##
-    # @return [Fixnum] the color's blue channel.
+    # @return [Integer] the color's blue channel.
     attr_accessor :blue
 
     ##
-    # @return [Fixnum] the color's hue in the range (0...360).
+    # @return [Integer] the color's hue in the range (0...360).
     attr_accessor :hue
 
     ##
@@ -132,13 +132,13 @@ module Gosu
 
     ##
     # @overload initialize(argb)
-    #   @param argb [Fixnum] an integer of the form 0xAARRGGBB.
+    #   @param argb [Integer] an integer of the form 0xAARRGGBB.
     #
     # @overload initialize(a, r, g, b)
-    #   @param a [Fixnum] the color's alpha channel in the range (0..255).
-    #   @param r [Fixnum] the color's red channel in the range (0..255).
-    #   @param g [Fixnum] the color's green channel in the range (0..255).
-    #   @param b [Fixnum] the color's blue channel in the range (0..255).
+    #   @param a [Integer] the color's alpha channel in the range (0..255).
+    #   @param r [Integer] the color's red channel in the range (0..255).
+    #   @param g [Integer] the color's green channel in the range (0..255).
+    #   @param b [Integer] the color's blue channel in the range (0..255).
     #
     # @see from_hsv
     # @see from_ahsv
@@ -150,13 +150,13 @@ module Gosu
     # @return (see #initialize)
     #
     # @overload rgba(rgba)
-    #   @param argb [Fixnum] an integer of the form 0xRRGGBBAA.
+    #   @param argb [Integer] an integer of the form 0xRRGGBBAA.
     #
     # @overload rgba(r, g, b, a)
-    #   @param r [Fixnum] the color's red channel in the range (0..255).
-    #   @param g [Fixnum] the color's green channel in the range (0..255).
-    #   @param b [Fixnum] the color's blue channel in the range (0..255).
-    #   @param a [Fixnum] the color's alpha channel in the range (0..255).
+    #   @param r [Integer] the color's red channel in the range (0..255).
+    #   @param g [Integer] the color's green channel in the range (0..255).
+    #   @param b [Integer] the color's blue channel in the range (0..255).
+    #   @param a [Integer] the color's alpha channel in the range (0..255).
     #
     # @see #initialize
     # @see argb
@@ -175,7 +175,7 @@ module Gosu
     # Converts an HSV triplet to an opaque color.
     #
     # @return [Color] a color corresponding to the HSV triplet.
-    # @param h [Fixnum] the color's hue in the range (0..360).
+    # @param h [Integer] the color's hue in the range (0..360).
     # @param s [Float] the color's saturation in the range (0..1).
     # @param v [Float] the color's value in the range (0..1).
     #
@@ -185,7 +185,7 @@ module Gosu
     # Converts an HSV triplet to a color with the alpha channel set to a given value.
     #
     # @return (see from_hsv)
-    # @param a [Fixnum] the color's opacity in the range (0..255).
+    # @param a [Integer] the color's opacity in the range (0..255).
     # @param (see from_hsv)
     #
     # @see from_hsv
@@ -195,7 +195,7 @@ module Gosu
 
     # Returns a 32-bit representation of the color suitable for use with OpenGL calls. This color is stored in a fixed order in memory and its integer value may vary depending on your system's byte order.
     #
-    # @return [Fixnum] a 32-bit OpenGL color.
+    # @return [Integer] a 32-bit OpenGL color.
     def gl; end
 
     ##
@@ -227,7 +227,7 @@ module Gosu
     attr_reader :name
 
     ##
-    # @return [Fixnum] the font's height in pixels.
+    # @return [Integer] the font's height in pixels.
     attr_reader :height
 
     ##
@@ -235,7 +235,7 @@ module Gosu
     #
     # (Passing a Window reference is not necessary anymore, please use the first overload from now on.)
     #
-    # @param height [Fixnum] the height of the font, in pixels.
+    # @param height [Integer] the height of the font, in pixels.
     # @param [Hash] options
     # @option options [String] :name the name of a system font, or a path to a TrueType Font (TTF) file. A path must contain at least one '/' character to distinguish it from a system font.
     #
@@ -265,7 +265,7 @@ module Gosu
     # @param z [Number] the Z-order.
     # @param scale_x [Float] the horizontal scaling factor.
     # @param scale_y [Float] the vertical scaling factor.
-    # @param color [Color, Fixnum]
+    # @param color [Color, Integer]
     # @param mode [:default, :additive] the blending mode to use.
     #
     # @see #draw_rel
@@ -303,7 +303,7 @@ module Gosu
     ##
     # Returns the width of a single line of text, in pixels, if it were drawn.
     #
-    # @return [Fixnum] the width of the text, in pixels.
+    # @return [Integer] the width of the text, in pixels.
     # @param text [String]
     def text_width(text, scale_x=1); end
   end
@@ -312,11 +312,11 @@ module Gosu
   # Provides functionality for drawing rectangular images.
   class Image
     ##
-    # @return [Fixnum] the image's width, in pixels.
+    # @return [Integer] the image's width, in pixels.
     attr_reader :width
 
     ##
-    # @return [Fixnum] the image's height, in pixels.
+    # @return [Integer] the image's height, in pixels.
     attr_reader :height
 
     # @!group Creating and loading images
@@ -356,11 +356,11 @@ module Gosu
     #
     # @return [Gosu::Image]
     # @param [String] text
-    # @param [Fixnum] line_height the line height, in pixels.
+    # @param [Integer] line_height the line height, in pixels.
     # @param [Hash] options
     # @option options [String] :font (Gosu::default_font_name) the name of a system font, or a path to a TrueType Font (TTF) file. A path must contain at least one '/' character to distinguish it from a system font.
-    # @option options [Fixnum] :width the width of the image, in pixels. Long lines will be automatically wrapped around to avoid overflow, but overlong words will be truncated. If this option is omitted, lines will not be wrapped, and :align and :spacing will be ignored as well.
-    # @option options [Fixnum] :spacing (0) the spacing between lines, in pixels.
+    # @option options [Integer] :width the width of the image, in pixels. Long lines will be automatically wrapped around to avoid overflow, but overlong words will be truncated. If this option is omitted, lines will not be wrapped, and :align and :spacing will be ignored as well.
+    # @option options [Integer] :spacing (0) the spacing between lines, in pixels.
     # @option options [:left, :right, :center, :justify] :align (:left) the text alignment.
     # @option options [true, false] :retro (false) if true, the image will not be interpolated when it is scaled up or down.
     #
@@ -375,8 +375,8 @@ module Gosu
     #
     # @return [Array<Gosu::Image>]
     # @param source [String, Magick::Image]
-    # @param tile_width [Fixnum] If positive, this is the width of the individual tiles; if negative, the image is divided into -tile_width columns.
-    # @param tile_height [Fixnum] If positive, this is the height of the individual tiles; if negative, the image is divided into -tile_height rows.
+    # @param tile_width [Integer] If positive, this is the width of the individual tiles; if negative, the image is divided into -tile_width columns.
+    # @param tile_height [Integer] If positive, this is the height of the individual tiles; if negative, the image is divided into -tile_height rows.
     # @param [Hash] options
     # @option options [true, false] :tileable (false) if true, the Image will not have soft edges when scaled
     # @option options [true, false] :retro (false) if true, the image will not be interpolated when it is scaled up or down. When :retro it set, :tileable has no effect.
@@ -494,8 +494,8 @@ module Gosu
     #
     # @return [void]
     # @param source [String, Magick::Image] the filename or RMagick image to load from.
-    # @param x [Fixnum] the X coordinate of the top left corner.
-    # @param y [Fixnum] the Y coordinate of the top left corner.
+    # @param x [Integer] the X coordinate of the top left corner.
+    # @param y [Integer] the Y coordinate of the top left corner.
     def insert(source, x, y); end
 
     ##
@@ -668,11 +668,11 @@ module Gosu
     attr_accessor :text
 
     ##
-    # @return [Fixnum] the position of the editing caret.
+    # @return [Integer] the position of the editing caret.
     attr_accessor :caret_pos
 
     ##
-    # @return [Fixnum] the starting position of the currently selected text.
+    # @return [Integer] the starting position of the currently selected text.
     attr_accessor :selection_start
 
     ##
@@ -726,13 +726,13 @@ module Gosu
     ##
     # The window's width, in pixels. This only counts the drawable area and does not include any borders or decorations added by the window manager.
     #
-    # @return [Fixnum] the window's width, in pixels.
+    # @return [Integer] the window's width, in pixels.
     attr_accessor :width
 
     ##
     # The window's height, in pixels. This only counts the drawable area and does not include any borders or decorations added by the window manager.
     #
-    # @return [Fixnum] the window's height, in pixels.
+    # @return [Integer] the window's height, in pixels.
     attr_accessor :height
 
     ##
@@ -755,8 +755,8 @@ module Gosu
     # @overload initialize(width, height, options = {})
     # @overload initialize(width, height, fullscreen, update_interval = 16.666666)
     #
-    # @param width [Fixnum] the desired window width.
-    # @param height [Fixnum] the desired window height.
+    # @param width [Integer] the desired window width.
+    # @param height [Integer] the desired window height.
     # @param [Hash] options
     # @option options [true, false] :fullscreen (false) whether to present the window in fullscreen mode.
     # @option options [Float] :update_interval (16.666666) the interval between frames, in milliseconds.
@@ -819,17 +819,22 @@ module Gosu
     def needs_cursor?; end
 
     ##
-    # This method is called before {#update} if a button was pressed while the window had focus.
+    # This method is called before {#update} if a button is pressed while the window has focus.
+    #
+    # By default, this method  will toggle fullscreen mode if the user presses alt+enter (Windows,
+    # Linux) or cmd+F (macOS).
+    # To support these shortcuts in your application, make sure to call super in your
+    # implementation.
     #
     # @return [void]
-    # @param id [Fixnum] the button's platform-defined id.
+    # @param id [Integer] the button's platform-defined id.
     #
     # @see #button_up
     # @see Gosu.button_down?
     def button_down(id); end
 
     ##
-    # This method is called before {#update} if a button was released while the window had focus.
+    # This method is called before {#update} if a button is released while the window has focus.
     #
     # @return [void]
     # @param (see #button_down)
@@ -854,7 +859,7 @@ module Gosu
   # @see file:examples/OpenGLIntegration.rb
   class GLTexInfo
     ##
-    # @return [Fixnum] OpenGL texture id
+    # @return [Integer] OpenGL texture id
     attr_reader :tex_name
 
     ##
@@ -1118,7 +1123,7 @@ module Gosu
     # @note For real text input, look at {TextInput} instead.
     #
     # @return [String?] the character the button usually produces.
-    # @param id [Fixnum] the button's platform-defined id.
+    # @param id [Integer] the button's platform-defined id.
     #
     # @see char_to_button_id
     # @see Window#text_input
@@ -1128,7 +1133,7 @@ module Gosu
     ##
     # Returns the button that usually produces a character, if any.
     #
-    # @return [Fixnum?] the button that usually produces the character.
+    # @return [Integer?] the button that usually produces the character.
     # @param char [String] the character to query.
     #
     # @see button_id_to_char
@@ -1179,11 +1184,11 @@ module Gosu
     ##
     # @note For long-running games, this counter will eventually wrap around to 0 again.
     #
-    # @return [Fixnum] the number of milliseconds elapsed.
+    # @return [Integer] the number of milliseconds elapsed.
     def milliseconds(); end
 
     ##
-    # @return [Fixnum] the current framerate, in frames per second.
+    # @return [Integer] the current framerate, in frames per second.
     def fps(); end
 
     # @return [String] the name of a neutral font that is available on the current platform.
@@ -1193,18 +1198,18 @@ module Gosu
     def default_font_name(); end
 
     ##
-    # @return [Fixnum] the width (in pixels) of the user's primary screen.
+    # @return [Integer] the width (in pixels) of the user's primary screen.
     def screen_width(); end
 
-    # @return [Fixnum] the height (in pixels) of the user's primary screen.
+    # @return [Integer] the height (in pixels) of the user's primary screen.
     def screen_height(); end
 
     ##
-    # @return [Fixnum] the maximum width (in 'points') that is available for a non-fullscreen Window.
+    # @return [Integer] the maximum width (in 'points') that is available for a non-fullscreen Window.
     # All windows larger than this size will automatically be shrunk to fit.
     def available_width(); end
 
-    # @return [Fixnum] the maximum height (in 'points') that is available for a non-fullscreen Window.
+    # @return [Integer] the maximum height (in 'points') that is available for a non-fullscreen Window.
     # All windows larger than this size will automatically be shrunk to fit.
     def available_height(); end
 
