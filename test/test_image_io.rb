@@ -29,5 +29,7 @@ class TestImageIO < Minitest::Test
         end
       end
     end
+  rescue RuntimeError => e
+    raise e unless e.message =~ /Could not initialize SDL Video/
   end
 end

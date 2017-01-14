@@ -36,7 +36,7 @@ def unpack_range(constant)
     # Special case: The range from "F1" to "F12" is not what we want: "F9".succ == "G0".
     ($1..$2).map { |n| :"KB_F#{n}"}
   when /^(.+)…(.+)$/
-    ($1..$2).map &:to_sym
+    ($1..$2).map { |constant| constant.to_sym }
   else
     [constant]
   end
