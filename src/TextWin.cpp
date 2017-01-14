@@ -149,7 +149,7 @@ unsigned Gosu::text_width(const std::string& text, const std::string& font_name,
     
     std::wstring wtext = utf8_to_wstring(text);
     SIZE size;
-    winapi_check(GetTextExtentPoint32W(helper.context(), wtext.c_str(), text.length(), &size),
+    winapi_check(GetTextExtentPoint32W(helper.context(), wtext.c_str(), wtext.length(), &size),
         "calculating the width of a text");
     
     return size.cx;
@@ -174,7 +174,7 @@ void Gosu::draw_text(Bitmap& bitmap, const std::string& text, int x, int y, Colo
         "setting a bitmap's background mode to TRANSPARENT");
 
     std::wstring wtext = utf8_to_wstring(text);
-    ExtTextOutW(helper.context(), 0, 0, 0, 0, wtext.c_str(), text.length(), 0);
+    ExtTextOutW(helper.context(), 0, 0, 0, 0, wtext.c_str(), wtext.length(), 0);
     
     for (unsigned rel_y = 0; rel_y < font_height; ++rel_y)
         for (unsigned rel_x = 0; rel_x < width; ++rel_x) {
