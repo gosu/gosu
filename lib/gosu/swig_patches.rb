@@ -30,6 +30,7 @@ class Gosu::Window
         # Exit the message loop naturally, then re-throw
         @_exception = e
         close
+        false
       end
     end
   end
