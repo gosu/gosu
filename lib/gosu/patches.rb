@@ -42,8 +42,8 @@ class Gosu::Image
   alias initialize_without_window initialize
 
   def initialize(*args)
-    if args[0].is_a? Gosu::Window then
-      if args.size == 7 then
+    if args[0].is_a? Gosu::Window
+      if args.size == 7
         initialize_without_window args[1], :tileable => args[2], :rect => args[3..-1]
       else
         initialize_without_window args[1], :tileable => args[2]

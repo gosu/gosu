@@ -9,7 +9,7 @@ class Gosu::Window
   alias initialize_without_hash initialize
   
   def initialize width, height, *args
-    if args.empty? or args.first.is_a? Hash then
+    if args.empty? or args.first.is_a? Hash
       options = args.first || {}
       fullscreen = options[:fullscreen]
       update_interval = options[:update_interval]
@@ -47,8 +47,8 @@ class Gosu::Window
     show_internal
     # Try to format the message nicely, without any useless patching that we are
     # doing here.
-    if defined? @_exception then
-      if @_exception.backtrace.is_a? Array and not @_exception.backtrace.frozen? then
+    if defined? @_exception
+      if @_exception.backtrace.is_a? Array and not @_exception.backtrace.frozen?
         @_exception.backtrace.reject! { |line| line.include? 'lib/gosu/swig_patches.rb' }
       end
       raise @_exception
