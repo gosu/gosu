@@ -16,6 +16,7 @@ class Gosu::Window
     else
       fullscreen, update_interval = *args
     end
+    $gosu_gl_blocks = nil
     initialize_without_hash width, height, !!fullscreen, update_interval || 16.666666
   end
   
