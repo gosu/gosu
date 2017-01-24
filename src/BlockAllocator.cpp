@@ -1,43 +1,31 @@
 #include "BlockAllocator.hpp"
+#include <algorithm>
 #include <stdexcept>
 #include <vector>
 
 struct Gosu::BlockAllocator::Impl
 {
     unsigned width, height;
+    unsigned avail_w, avail_h;
 
     std::vector<Block> blocks;
-    unsigned first_x, first_y;
-    unsigned max_w, max_h;
-    
-    void mark_block_used(const Block& block, unsigned a_width, unsigned a_height)
+    std::vector<unsigned> used; // Height table.
+
+    // Rebuild the height table where b was allocated.
+    void recalculate_used(Block b)
     {
-        first_x += a_width;
-        if (first_x + a_width >= width) {
-            first_x = 0;
-            first_y += a_height;
-        }
-        blocks.push_back(block);
-    }
-
-    bool is_block_free(const Block& block) const
-    {
-        // right and bottom are exclusive (not part of the block).
-        unsigned right = block.left + block.width;
-        unsigned bottom = block.top + block.height;
-
-        // Block isn't valid.
-        if (right > width || bottom > height) return false;
-
-        // Test if the block collides with any existing rects.
-        for (auto b : blocks) {
-            if (b.left < right && block.left < b.left + b.width && b.top < bottom
-                && block.top < b.top + b.height) {
-                return false;
+        std::fill_n(used.begin() + b.left, b.width, 0);
+        for (auto i = blocks.begin(); i != blocks.end(); ++i) {
+            if (i->left < b.left + b.width && b.left < i->left + i->width) {
+                unsigned inter_left = std::max(i->left, b.left);
+                unsigned inter_right = std::min(i->left + i->width,
+                                                b.left + b.width);
+                unsigned ibot = i->top + i->height;
+                for (int i = inter_left; i < inter_right; i++){
+                    used[i] = std::max(used[i], ibot);
+                }
             }
         }
-
-        return true;
     }
 };
 
@@ -47,11 +35,11 @@ Gosu::BlockAllocator::BlockAllocator(unsigned width, unsigned height)
     pimpl->width = width;
     pimpl->height = height;
 
-    pimpl->first_x = 0;
-    pimpl->first_y = 0;
+    pimpl->avail_w = width;
+    pimpl->avail_h = height;
 
-    pimpl->max_w = width;
-    pimpl->max_h = height;
+    auto begin = pimpl->used.begin();
+    pimpl->used.insert(begin, width, 0);
 }
 
 Gosu::BlockAllocator::~BlockAllocator()
@@ -70,46 +58,53 @@ unsigned Gosu::BlockAllocator::height() const
 
 bool Gosu::BlockAllocator::alloc(unsigned a_width, unsigned a_height, Block& b)
 {
-    // The rect wouldn't even fit onto the texture!
-    if (a_width > width() || a_height > height()) {
+    unsigned x, i;
+    unsigned bestH = height();
+    unsigned tentativeH;
+
+    if (a_width > pimpl->avail_w && a_height > pimpl->avail_h) {
         return false;
     }
 
-    // We know there's no space left.
-    if (a_width > pimpl->max_w && a_height > pimpl->max_h) {
-        return false;
-    }
-    
-    // Start to look for a place next to the last returned rect. Chances are
-    // good we'll find a place there.
-    b = Block(pimpl->first_x, pimpl->first_y, a_width, a_height);
-    if (pimpl->is_block_free(b)) {
-        pimpl->mark_block_used(b, a_width, a_height);
-        return true;
-    }
-
-    // Brute force: Look for a free place on this texture.
-    unsigned& x = b.left;
-    unsigned& y = b.top;
-    for (y = 0; y <= height() - a_height; y += 16) {
-        for (x = 0; x <= width() - a_width; x += 8) {
-            if (!pimpl->is_block_free(b)) continue;
-
-            // Found a nice place!
-
-            // Try to make up for the large for ()-stepping.
-            while (y > 0 && pimpl->is_block_free(Block(x, y - 1, a_width, a_height))) --y;
-            while (x > 0 && pimpl->is_block_free(Block(x - 1, y, a_width, a_height))) --x;
-            
-            pimpl->mark_block_used(b, a_width, a_height);
-            return true;
+    // Based on Id Software's block allocator from Quake 2, released under
+    // the GPL.
+    // See: http://fabiensanglard.net/quake2/quake2_opengl_renderer.php
+    // Search for: LM_AllocBlock
+    for (x = 0; x <= pimpl->width - a_width; x++) {
+        tentativeH = 0;
+        for (i = 0; i < a_width; i++) {
+            if (pimpl->used[x+i] >= bestH) {
+                break;
+            }
+            if (pimpl->used[x+i] > tentativeH) {
+                tentativeH = pimpl->used[x+i];
+            }
+        }
+        if (i == a_width) {
+            b.left = x;
+            b.top = bestH = tentativeH;
+            b.width = a_width;
+            b.height = a_height;
         }
     }
 
-    // So there was no space for the bitmap. Remember this for later.
-    pimpl->max_w = a_width - 1;
-    pimpl->max_h = a_height - 1;
-    return false;
+    // There wasn't enough space for the bitmap.
+    if (bestH + a_height > pimpl->height) {
+        // Remember this for later.
+        if (a_width > pimpl->avail_w && a_height > pimpl->avail_h) {
+            pimpl->avail_w = a_width - 1;
+            pimpl->avail_h = a_height - 1;
+        }
+        return false;
+    }
+
+    // We've found a valid spot.
+    for (i = 0; i < a_width; i++) {
+        pimpl->used[b.left+i] = bestH + a_height;
+    }
+    pimpl->blocks.push_back(b);
+
+    return true;
 }
 
 void Gosu::BlockAllocator::block(unsigned left, unsigned top, unsigned width, unsigned height)
@@ -121,10 +116,13 @@ void Gosu::BlockAllocator::free(unsigned left, unsigned top, unsigned width, uns
 {
     for (auto it = pimpl->blocks.begin(), end = pimpl->blocks.end(); it != end; ++it) {
         if (it->left == left && it->top == top && it->width == width && it->height == height) {
+            Block b = *it;
             pimpl->blocks.erase(it);
             // Be optimistic again, since we might have deleted the largest/only block.
-            pimpl->max_w = pimpl->width - 1;
-            pimpl->max_h = pimpl->height - 1;
+            pimpl->avail_w = pimpl->width;
+            pimpl->avail_h = pimpl->height;
+            // Look for freed-up space.
+            pimpl->recalculate_used(b);
             return;
         }
     }
