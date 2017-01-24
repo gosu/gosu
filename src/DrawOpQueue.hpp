@@ -90,8 +90,8 @@ public:
 
         double phys_x      = std::min(left, right);
         double phys_y      = std::min(top, bottom);
-        double phys_width  = std::abs(left - right);
-        double phys_height = std::abs(top - bottom);
+        double phys_width  = std::fabs(left - right);
+        double phys_height = std::fabs(top - bottom);
 
         // Adjust for OpenGL having the wrong idea of where y=0 is.
         phys_y = screen_height - phys_y - phys_height;
