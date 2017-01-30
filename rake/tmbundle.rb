@@ -13,7 +13,7 @@ def for_each_gosu_method
   # Utility functions
   YARD::Registry.at("Gosu").meths.each do |meth|
     args = meth.parameters.map { |arg| arg.compact.join(" = ") }
-    yield "Math Helpers", "Gosu::#{meth.name}", args, nil
+    yield "Module Methods", "Gosu.#{meth.name}", args, nil
   end
   
   # Methods and class methods
@@ -65,9 +65,7 @@ def for_each_gosu_method
 end
 
 def next_uuid
-  gen = lambda { |n| (0...n).map { rand(16).to_s(16).upcase } }
-  # Very weak pseudo UUID v4, see https://en.wikipedia.org/wiki/Uuid
-  (gen[8] + %w(-) + gen[4] + %w(-4) + gen[3] + %w(a-) + gen[3] + %w(-) + gen[12]).join
+  `uuidgen`.chomp
 end
 
 BUNDLE_ROOT = "pkg/RubyGosu.tmbundle"
@@ -170,7 +168,9 @@ namespace :tmbundle do
     rm_rf "pkg/RubyGosu.tmbundle"
   end
   
-  task :build => [:ruby_docs, :clean] do
+  task :build => :clean do
+    sh "yard"
+    
     methods_of_classes = {}
     
     mkdir_p SNIPPET_ROOT
