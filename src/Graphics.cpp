@@ -256,9 +256,12 @@ namespace Gosu
         
         void operator()() const
         {
-            // Inlined begin_gl() to avoid flushing.
+            // Duplicated from begin_gl() (which we don't call, to avoid flushing).
             glPushAttrib(GL_ALL_ATTRIB_BITS);
             glDisable(GL_BLEND);
+            // Reset the colour to white to avoid surprises.
+            // https://www.libgosu.org/cgi-bin/mwf/topic_show.pl?pid=9115#pid9115
+            glColor4ubv(reinterpret_cast<const GLubyte*>(&Color::WHITE));
             while (glGetError() != GL_NO_ERROR);
             
             functor();
