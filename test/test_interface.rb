@@ -77,4 +77,21 @@ class TestInterface < Minitest::Test
       assert DOCUMENTED_CONSTANTS.include?(constant), "Unexpected Gosu::#{constant}"
     end
   end
+  
+  def test_methods_exist
+    GosuDocs.constants.each do |constant|
+      doc_class = GosuDocs.const_get(constant)
+      next unless doc_class.is_a? Class
+      
+      real_class = Gosu.const_get(constant)
+      
+      doc_class.public_methods(false).each do |method|
+        assert real_class.public_methods.include?(method), "Gosu::#{constant}.#{method} missing"
+      end
+
+      doc_class.instance_methods(false).each do |method|
+        assert real_class.instance_methods.include?(method), "Gosu::#{constant}##{method} missing"
+      end
+    end
+  end
 end
