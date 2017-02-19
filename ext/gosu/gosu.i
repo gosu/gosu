@@ -915,8 +915,8 @@ namespace Gosu
 %rename("update_interval=") set_update_interval;
 %rename("caption=") set_caption;
 %rename("text_input=") set_text_input;
-%rename("mouse_x=") set_mouseX;
-%rename("mouse_y=") set_mouseY;
+%rename("mouse_x=") set_mouse_x;
+%rename("mouse_y=") set_mouse_y;
 %rename("needs_cursor?") needs_cursor;
 %rename("needs_redraw?") needs_redraw;
 %rename("fullscreen?") fullscreen;

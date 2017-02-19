@@ -9830,7 +9830,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Window_set_mouse_x(int argc, VALUE *argv, VALUE self) {
+_wrap_Window_mouse_xe___(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   double arg2 ;
   void *argp1 = 0 ;
@@ -9866,7 +9866,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Window_set_mouse_y(int argc, VALUE *argv, VALUE self) {
+_wrap_Window_mouse_ye___(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   double arg2 ;
   void *argp1 = 0 ;
@@ -11936,8 +11936,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "mouse_x", VALUEFUNC(_wrap_Window_mouse_x), -1);
   rb_define_method(SwigClassWindow.klass, "mouse_y", VALUEFUNC(_wrap_Window_mouse_y), -1);
   rb_define_method(SwigClassWindow.klass, "set_mouse_position", VALUEFUNC(_wrap_Window_set_mouse_position), -1);
-  rb_define_method(SwigClassWindow.klass, "set_mouse_x", VALUEFUNC(_wrap_Window_set_mouse_x), -1);
-  rb_define_method(SwigClassWindow.klass, "set_mouse_y", VALUEFUNC(_wrap_Window_set_mouse_y), -1);
+  rb_define_method(SwigClassWindow.klass, "mouse_x=", VALUEFUNC(_wrap_Window_mouse_xe___), -1);
+  rb_define_method(SwigClassWindow.klass, "mouse_y=", VALUEFUNC(_wrap_Window_mouse_ye___), -1);
   SwigClassWindow.mark = (void (*)(void *)) mark_window;
   SwigClassWindow.destroy = (void (*)(void *)) free_Gosu_Window;
   SwigClassWindow.trackObjects = 1;
