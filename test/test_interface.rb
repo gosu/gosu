@@ -77,4 +77,33 @@ class TestInterface < Minitest::Test
       assert DOCUMENTED_CONSTANTS.include?(constant), "Unexpected Gosu::#{constant}"
     end
   end
+  
+  def test_methods_exist
+    GosuDocs.constants.each do |constant|
+      doc_class = GosuDocs.const_get(constant)
+      next unless doc_class.is_a? Class
+      
+      real_class = Gosu.const_get(constant)
+      
+      doc_class.public_methods(false).each do |method|
+        assert real_class.public_methods.include?(method), "Gosu::#{constant}.#{method} missing"
+      end
+
+      doc_class.instance_methods(false).each do |method|
+        assert real_class.instance_methods.include?(method), "Gosu::#{constant}##{method} missing"
+      end
+    end
+  end
+  
+  # Every string argument in Gosu must accept numbers and nil (= empty string) for backwards
+  # compatibility.
+  # https://www.reddit.com/r/gosu/comments/5t79pu/expected_argument_1_of_type_stdstring_const_but
+  # This could easily be deprecated later...
+  def test_everything_is_a_string
+    font = Gosu::Font.new(20)
+    assert_equal font.text_width(1234), font.text_width("1234")
+    assert_equal font.text_width(nil), font.text_width("")
+  rescue RuntimeError => e
+    raise e unless e.message =~ /Could not initialize SDL Video/
+  end
 end

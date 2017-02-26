@@ -1,0 +1,13 @@
+--- src/RubyGosu.cxx
++++ src/RubyGosu.cxx
+@@ -2691,6 +2691,10 @@ SWIG_From_bool  (bool value)
+ SWIGINTERN int
+ SWIG_AsCharPtrAndSize(VALUE obj, char** cptr, size_t* psize, int *alloc)
+ {
++  if (TYPE(obj) != T_STRING) {
++    obj = rb_funcall(obj, rb_intern("to_s"), 0, NULL);
++  }
++
+   if (TYPE(obj) == T_STRING) {
+     char *cstr = StringValuePtr(obj); 
+     size_t size = RSTRING_LEN(obj) + 1;
