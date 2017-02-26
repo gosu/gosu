@@ -94,4 +94,16 @@ class TestInterface < Minitest::Test
       end
     end
   end
+  
+  # Every string argument in Gosu must accept numbers and nil (= empty string) for backwards
+  # compatibility.
+  # https://www.reddit.com/r/gosu/comments/5t79pu/expected_argument_1_of_type_stdstring_const_but
+  # This could easily be deprecated later...
+  def test_everything_is_a_string
+    font = Gosu::Font.new(20)
+    assert_equal font.text_width(1234), font.text_width("1234")
+    assert_equal font.text_width(nil), font.text_width("")
+  rescue RuntimeError => e
+    raise e unless e.message =~ /Could not initialize SDL Video/
+  end
 end
