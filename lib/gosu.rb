@@ -17,3 +17,4 @@ require "gosu.#{RbConfig::CONFIG['DLEXT']}"
 
 require "gosu/swig_patches"
 require "gosu/patches"
+require "gosu/compat"
