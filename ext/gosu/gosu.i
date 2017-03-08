@@ -919,6 +919,7 @@ namespace Gosu
 %rename("mouse_y=") set_mouse_y;
 %rename("needs_cursor?") needs_cursor;
 %rename("needs_redraw?") needs_redraw;
+%rename("close?") shall_close;
 %rename("fullscreen?") fullscreen;
 %markfunc Gosu::Window "mark_window";
 %include "../../Gosu/Window.hpp"

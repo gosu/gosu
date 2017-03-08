@@ -814,6 +814,14 @@ module Gosu
     def needs_cursor?; end
 
     ##
+    # Whenever an QUIT event occurs (e.g. by clicking on the X of the Window or calling #close) this method is called first. Return true to
+    # confirm the close-attempt or false to prevent it. Could be used for quit-dialogs like "You haven't save the game, do you really want to
+    # quit?". See https://github.com/gosu/gosu/issues/287#issuecomment-127010001 for more details on this.
+    #
+    # @return [bool]
+    def close?; true; end
+
+    ##
     # This method is called before {#update} if a button is pressed while the window has focus.
     #
     # By default, this method  will toggle fullscreen mode if the user presses alt+enter (Windows,

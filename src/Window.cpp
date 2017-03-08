@@ -239,8 +239,10 @@ bool Gosu::Window::tick()
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) {
-            SDL_HideWindow(shared_window());
-            return false;
+            if (shall_close()) {
+              SDL_HideWindow(shared_window());
+              return false;
+            }
         }
         else {
             input().feed_sdl_event(&e);

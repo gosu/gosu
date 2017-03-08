@@ -79,6 +79,9 @@ namespace Gosu
         //! Closes the window if it is currently shown.
         void close();
 
+        //! Gives the game a chance to say no to being closed. True by default.
+        virtual bool shall_close() const { return true; }
+
         //! Called every update_interval milliseconds while the window is being shown.
         //! Your application's main game logic goes here.
         virtual void update() {}
