@@ -44,8 +44,8 @@ class TestGosuModule < Minitest::Test
     # TODO: Test if this can be set in the CI, e.g. with xvfb
     # Link: https://docs.travis-ci.com/user/gui-and-headless-browsers/
     # otherwise just check for > 0 as done with the available_* values
-    assert 1920, Gosu.screen_height
-    assert 1080, Gosu.screen_width
+    assert_equal 1920, Gosu.screen_height
+    assert_equal 1080, Gosu.screen_width
 
     assert Gosu.available_height > 0
     assert Gosu.available_width > 0
