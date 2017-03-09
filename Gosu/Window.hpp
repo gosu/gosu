@@ -113,8 +113,11 @@ namespace Gosu
         //! in your implementation.
         virtual void button_down(Gosu::Button);
         
-        //! Same as button_down. Called then the user releases a button.
+        //! Same as button_down. Called when the user releases a button.
         virtual void button_up(Gosu::Button) {}
+
+        //! Called when you (drag &) drop a file on the window. Serves the path of the dropped file as argument.
+        virtual void drop(char* path) {}
         
         // Ignore when SWIG is wrapping this class for Ruby/Gosu.
         #ifndef SWIG

@@ -3142,6 +3142,16 @@ SWIGINTERN void Gosu_TextInput_set_selection_start(Gosu::TextInput *self,VALUE s
         std::string prefix = StringValueCStr(rb_prefix);
         self->set_selection_start(std::min(prefix.length(), self->text().length()));
     }
+
+
+
+
+SWIGINTERNINLINE VALUE 
+SWIG_FromCharPtr(const char *cptr)
+{ 
+  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
+}
+
 SWIGINTERN void Gosu_Window_set_width(Gosu::Window *self,unsigned int width){
         self->resize(width, self->height(), self->fullscreen());
     }
@@ -3339,6 +3349,15 @@ void SwigDirector_Window::button_up(Gosu::Button arg0) {
     obj0 = arg0 == Gosu::NO_BUTTON ? Qnil : LONG2NUM((&arg0)->id());
   }
   result = rb_funcall(swig_get_self(), rb_intern("protected_button_up"), 1,obj0);
+}
+
+
+void SwigDirector_Window::drop(char *path) {
+  VALUE obj0 = Qnil ;
+  VALUE SWIGUNUSED result;
+  
+  obj0 = SWIG_FromCharPtr((const char *)path);
+  result = rb_funcall(swig_get_self(), rb_intern("drop"), 1,obj0);
 }
 
 
@@ -9572,6 +9591,58 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Window_drop(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  char *arg2 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  Swig::Director *director = 0;
+  bool upcall = false;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","drop", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char *","drop", 2, argv[0] ));
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  director = dynamic_cast<Swig::Director *>(arg1);
+  upcall = (director && (director->swig_get_self() == self));
+  try {
+    {
+      try {
+        if (upcall) {
+          (arg1)->Gosu::Window::drop(arg2);
+        } else {
+          (arg1)->drop(arg2);
+        }
+      }
+      catch (const std::exception& e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
+    }
+  } catch (Swig::DirectorException& e) {
+    rb_exc_raise(e.getError());
+    SWIG_fail;
+  }
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return Qnil;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Window_widthe___(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   unsigned int arg2 ;
@@ -11985,6 +12056,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "release_memory", VALUEFUNC(_wrap_Window_release_memory), -1);
   rb_define_method(SwigClassWindow.klass, "button_down", VALUEFUNC(_wrap_Window_button_down), -1);
   rb_define_method(SwigClassWindow.klass, "button_up", VALUEFUNC(_wrap_Window_button_up), -1);
+  rb_define_method(SwigClassWindow.klass, "drop", VALUEFUNC(_wrap_Window_drop), -1);
   rb_define_method(SwigClassWindow.klass, "width=", VALUEFUNC(_wrap_Window_widthe___), -1);
   rb_define_method(SwigClassWindow.klass, "height=", VALUEFUNC(_wrap_Window_heighte___), -1);
   rb_define_method(SwigClassWindow.klass, "fullscreen=", VALUEFUNC(_wrap_Window_fullscreene___), -1);
