@@ -1,7 +1,5 @@
 # Encoding: UTF-8
-
-require "minitest/autorun"
-require "gosu" unless defined? Gosu
+require_relative 'test_helper'
 
 # Make a backup of the Gosu modules and its helpers on Numeric.
 OrigGosu = Gosu
@@ -103,7 +101,5 @@ class TestInterface < Minitest::Test
     font = Gosu::Font.new(20)
     assert_equal font.text_width(1234), font.text_width("1234")
     assert_equal font.text_width(nil), font.text_width("")
-  rescue RuntimeError => e
-    raise e unless e.message =~ /Could not initialize SDL Video/
   end
 end

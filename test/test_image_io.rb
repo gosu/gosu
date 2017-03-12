@@ -1,5 +1,5 @@
-require "minitest/autorun"
-require "gosu" unless defined? Gosu
+# Encoding: UTF-8
+require_relative 'test_helper'
 
 class TestImageIO < Minitest::Test
   # All images in each group (key) are saved and then compared to the expected image (value).
@@ -29,7 +29,5 @@ class TestImageIO < Minitest::Test
         end
       end
     end
-  rescue RuntimeError => e
-    raise e unless e.message =~ /Could not initialize SDL Video/
   end
 end

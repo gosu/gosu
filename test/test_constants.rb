@@ -1,5 +1,5 @@
-require "minitest/autorun"
-require "gosu" unless defined? Gosu
+# Encoding: UTF-8
+require_relative 'test_helper'
 
 class TestConstants < Minitest::Test
   def test_version
