@@ -919,7 +919,7 @@ namespace Gosu
 %rename("mouse_y=") set_mouse_y;
 %rename("needs_cursor?") needs_cursor;
 %rename("needs_redraw?") needs_redraw;
-%rename("close?") shall_close;
+%rename("close!") force_close;
 %rename("fullscreen?") fullscreen;
 %markfunc Gosu::Window "mark_window";
 %include "../../Gosu/Window.hpp"
@@ -984,6 +984,11 @@ namespace Gosu
     void set_mouse_y(double y)
     {
         $self->input().set_mouse_position($self->input().mouse_x(), y);
+    }
+    
+    void force_close()
+    {
+        $self->Gosu::Window::close();
     }
 };
 

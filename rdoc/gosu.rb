@@ -778,10 +778,10 @@ module Gosu
     def tick; end
 
     ##
-    # Tells the window to end the current run loop as soon as possible. Calling this method will not prevent execution of lines after it.
+    # Tells the window to end the current run loop as soon as possible.
     #
     # @return [void]
-    def close; end
+    def close!; end
 
     # @!group Callbacks
 
@@ -814,13 +814,14 @@ module Gosu
     def needs_cursor?; end
 
     ##
-    # Whenever an QUIT event occurs (e.g. by clicking on the X of the Window or calling #close) this method is called first. Return true to
-    # confirm the close-attempt or false to prevent it. Could be used for quit-dialogs like "You haven't save the game, do you really want to
-    # quit?". See https://github.com/gosu/gosu/issues/287#issuecomment-127010001 for more details on this.
+    # This method is called whenever the user tries to close the window, e.g. by clicking the [x]
+    # button in the window's title bar.
+    # If you do not want the window to close immediately, you should override this method and
+    # call the {#close!} when needed.
     #
     # @return [bool]
-    def close?; true; end
-
+    def close; end
+    
     ##
     # This method is called before {#update} if a button is pressed while the window has focus.
     #

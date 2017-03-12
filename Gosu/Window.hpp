@@ -77,10 +77,9 @@ namespace Gosu
         virtual bool tick();
         
         //! Closes the window if it is currently shown.
-        void close();
-
-        //! Gives the game a chance to say no to being closed. True by default.
-        virtual bool shall_close() const { return true; }
+        //! If you do not want the window to close immediately, you should override this method and
+        //! only call the base implementation (Window::close) when needed.
+        virtual void close();
 
         //! Called every update_interval milliseconds while the window is being shown.
         //! Your application's main game logic goes here.

@@ -32,7 +32,7 @@ public:
     virtual ~SwigDirector_Window();
     virtual void show();
     virtual bool tick();
-    virtual bool shall_close() const;
+    virtual void close();
     virtual void update();
     virtual void draw();
     virtual bool needs_redraw() const;

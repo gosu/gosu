@@ -3172,6 +3172,9 @@ SWIGINTERN void Gosu_Window_set_mouse_x(Gosu::Window *self,double x){
 SWIGINTERN void Gosu_Window_set_mouse_y(Gosu::Window *self,double y){
         self->input().set_mouse_position(self->input().mouse_x(), y);
     }
+SWIGINTERN void Gosu_Window_force_close(Gosu::Window *self){
+        self->Gosu::Window::close();
+    }
 
     // Also mark the TextInput instance alive when the window is being marked.
     static void mark_window(void* window)
@@ -3252,18 +3255,10 @@ bool SwigDirector_Window::tick() {
 }
 
 
-bool SwigDirector_Window::shall_close() const {
-  bool c_result ;
+void SwigDirector_Window::close() {
   VALUE SWIGUNUSED result;
   
-  result = rb_funcall(swig_get_self(), rb_intern("close?"), 0, NULL);
-  bool swig_val;
-  int swig_res = SWIG_AsVal_bool(result, &swig_val);
-  if (!SWIG_IsOK(swig_res)) {
-    Swig::DirectorTypeMismatchException::raise(SWIG_ErrorType(SWIG_ArgError(swig_res)), "in output value of type '""bool""'");
-  }
-  c_result = static_cast< bool >(swig_val);
-  return (bool) c_result;
+  result = rb_funcall(swig_get_self(), rb_intern("close"), 0, NULL);
 }
 
 
@@ -9198,6 +9193,8 @@ _wrap_Window_close(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  Swig::Director *director = 0;
+  bool upcall = false;
   
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
@@ -9207,47 +9204,15 @@ _wrap_Window_close(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","close", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  {
-    try {
-      (arg1)->close();
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Window_closeq___(int argc, VALUE *argv, VALUE self) {
-  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  Swig::Director *director = 0;
-  bool upcall = false;
-  bool result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","shall_close", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   director = dynamic_cast<Swig::Director *>(arg1);
   upcall = (director && (director->swig_get_self() == self));
   try {
     {
       try {
         if (upcall) {
-          result = (bool)((Gosu::Window const *)arg1)->Gosu::Window::shall_close();
+          (arg1)->Gosu::Window::close();
         } else {
-          result = (bool)((Gosu::Window const *)arg1)->shall_close();
+          (arg1)->close();
         }
       }
       catch (const std::exception& e) {
@@ -9258,8 +9223,7 @@ _wrap_Window_closeq___(int argc, VALUE *argv, VALUE self) {
     rb_exc_raise(e.getError());
     SWIG_fail;
   }
-  vresult = SWIG_From_bool(static_cast< bool >(result));
-  return vresult;
+  return Qnil;
 fail:
   return Qnil;
 }
@@ -9955,6 +9919,34 @@ _wrap_Window_mouse_ye___(int argc, VALUE *argv, VALUE self) {
   {
     try {
       Gosu_Window_set_mouse_y(arg1,arg2);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Window_closeN___(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","force_close", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  {
+    try {
+      Gosu_Window_force_close(arg1);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -11985,7 +11977,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "show", VALUEFUNC(_wrap_Window_show), -1);
   rb_define_method(SwigClassWindow.klass, "tick", VALUEFUNC(_wrap_Window_tick), -1);
   rb_define_method(SwigClassWindow.klass, "close", VALUEFUNC(_wrap_Window_close), -1);
-  rb_define_method(SwigClassWindow.klass, "close?", VALUEFUNC(_wrap_Window_closeq___), -1);
   rb_define_method(SwigClassWindow.klass, "update", VALUEFUNC(_wrap_Window_update), -1);
   rb_define_method(SwigClassWindow.klass, "draw", VALUEFUNC(_wrap_Window_draw), -1);
   rb_define_method(SwigClassWindow.klass, "needs_redraw?", VALUEFUNC(_wrap_Window_needs_redrawq___), -1);
@@ -12004,6 +11995,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "set_mouse_position", VALUEFUNC(_wrap_Window_set_mouse_position), -1);
   rb_define_method(SwigClassWindow.klass, "mouse_x=", VALUEFUNC(_wrap_Window_mouse_xe___), -1);
   rb_define_method(SwigClassWindow.klass, "mouse_y=", VALUEFUNC(_wrap_Window_mouse_ye___), -1);
+  rb_define_method(SwigClassWindow.klass, "close!", VALUEFUNC(_wrap_Window_closeN___), -1);
   SwigClassWindow.mark = (void (*)(void *)) mark_window;
   SwigClassWindow.destroy = (void (*)(void *)) free_Gosu_Window;
   SwigClassWindow.trackObjects = 1;

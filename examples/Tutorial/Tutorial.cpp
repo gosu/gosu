@@ -193,7 +193,7 @@ public:
     void button_down(Gosu::Button button) override
     {
         if (button == Gosu::KB_ESCAPE) {
-           close();
+            close();
         }
         else {
             Window::button_down(button);
