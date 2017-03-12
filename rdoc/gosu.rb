@@ -390,8 +390,6 @@ module Gosu
     def self.load_tiles(source, tile_width, tile_height, options = {}); end
 
     ##
-    # EXPERIMENTAL - MAY DISAPPEAR WITHOUT WARNING.
-    # 
     # Returns an image that is a smaller, rectangular view of this {Image}.
     # 
     # This is a very fast operation, and no new textures are allocated.
