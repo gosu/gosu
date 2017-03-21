@@ -405,9 +405,6 @@ module Gosu
     #   If the image was too large and had to be split up into several OpenGL textures, subimage will return nil (same as {#gl_tex_info}).
     # * If you stretch or rotate a {#subimage}, the pixels adjacent to it might bleed into it, as Gosu does not manage the 'tileability' of subimages.
     # 
-    # If you find a good way to use {#subimage}, please let us know on the forum and we can make this a part of Gosu's stable interface.
-    # Thank you!
-    # 
     # @return [Image?] an image that represents a portion of the containing image
     def subimage(left, top, width, height); end
 
