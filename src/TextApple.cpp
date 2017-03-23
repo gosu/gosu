@@ -38,7 +38,8 @@ static std::string normalize_font(const std::string& font_name)
         return family_of_files[font_name];
     }
     
-    NSURL* url = [NSURL URLWithString:[NSString stringWithUTF8String:font_name.c_str()]];
+    NSURL* url = [NSURL fileURLWithPath:[NSString stringWithUTF8String:font_name.c_str()]
+                            isDirectory:NO];
     if (url == nullptr) {
         return family_of_files[font_name] = Gosu::default_font_name();
     }
