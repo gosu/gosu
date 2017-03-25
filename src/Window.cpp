@@ -83,6 +83,12 @@ struct Gosu::Window::Impl
     bool fullscreen;
     double update_interval;
     
+    // A single `bool open` is not good enough to support the tick() method: When close() is called
+    // from outside the window's call graph, the next call to tick() must return false (transition
+    // from CLOSING to CLOSED), but the call after that must return show the window again
+    // (transition from CLOSED to OPEN).
+    enum { CLOSED, OPEN, CLOSING } state = CLOSED;
+    
     std::unique_ptr<Graphics> graphics;
     std::unique_ptr<Input> input;
 };
@@ -93,10 +99,11 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     // Even in fullscreen mode, temporarily show the window in windowed mode to centre it.
     // This ensures that the window will be centred correctly when exiting fullscreen mode.
     // Fixes https://github.com/gosu/gosu/issues/369
+    // (This will implicitly create graphics() and input(), and make the OpenGL context current.)
     resize(width, height, false);
     SDL_SetWindowPosition(shared_window(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
-    // This will implicitly create graphics() and input(), and make the OpenGL context current.
+    // Really enable fullscreen if desired.
     resize(width, height, fullscreen);
     
     SDL_GL_SetSwapInterval(1);
@@ -104,7 +111,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     pimpl->update_interval = update_interval;
     
     input().on_button_down = [this](Button button) { button_down(button); };
-    input().on_button_up = [this](Button button) { button_up(button); };
+    input().on_button_up   = [this](Button button) { button_up(button); };
 }
 
 Gosu::Window::~Window()
@@ -221,12 +228,20 @@ void Gosu::Window::show()
         
         time_before_tick = milliseconds();
     }
+    
+    pimpl->state = Impl::CLOSED;
 }
 
 bool Gosu::Window::tick()
 {
-    if (SDL_GetWindowFlags(shared_window()) & SDL_WINDOW_HIDDEN) {
+    if (pimpl->state == Impl::CLOSING) {
+        pimpl->state = Impl::CLOSED;
+        return false;
+    }
+    
+    if (pimpl->state == Impl::CLOSED) {
         SDL_ShowWindow(shared_window());
+        pimpl->state = Impl::OPEN;
 
         // SDL_GL_GetDrawableSize returns different values before and after showing the window.
         // -> When first showing the window, update the physical size of Graphics (=glViewport).
@@ -239,8 +254,7 @@ bool Gosu::Window::tick()
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) {
-            SDL_HideWindow(shared_window());
-            return false;
+            close();
         }
         else {
             input().feed_sdl_event(&e);
@@ -266,14 +280,17 @@ bool Gosu::Window::tick()
         SDL_GL_SwapWindow(shared_window());
     }
     
-    return true;
+    if (pimpl->state == Impl::CLOSING) {
+        pimpl->state = Impl::CLOSED;
+    }
+    
+    return pimpl->state == Impl::OPEN;
 }
 
 void Gosu::Window::close()
 {
-    SDL_Event e;
-    e.type = SDL_QUIT;
-    SDL_PushEvent(&e);
+    pimpl->state = Impl::CLOSING;
+    SDL_HideWindow(shared_window());
 }
 
 void Gosu::Window::button_down(Button button)

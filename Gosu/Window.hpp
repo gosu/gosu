@@ -77,7 +77,9 @@ namespace Gosu
         virtual bool tick();
         
         //! Closes the window if it is currently shown.
-        void close();
+        //! If you do not want the window to close immediately, you should override this method and
+        //! only call the base implementation (Window::close) when needed.
+        virtual void close();
 
         //! Called every update_interval milliseconds while the window is being shown.
         //! Your application's main game logic goes here.

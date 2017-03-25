@@ -778,10 +778,10 @@ module Gosu
     def tick; end
 
     ##
-    # Tells the window to end the current run loop as soon as possible. Calling this method will not prevent execution of lines after it.
+    # Tells the window to end the current run loop as soon as possible.
     #
     # @return [void]
-    def close; end
+    def close!; end
 
     # @!group Callbacks
 
@@ -813,6 +813,15 @@ module Gosu
     # @return [true, false] whether the system cursor should be shown.
     def needs_cursor?; end
 
+    ##
+    # This method is called whenever the user tries to close the window, e.g. by clicking the [x]
+    # button in the window's title bar.
+    # If you do not want the window to close immediately, you should override this method and
+    # call the {#close!} when needed.
+    #
+    # @return [bool]
+    def close; end
+    
     ##
     # This method is called before {#update} if a button is pressed while the window has focus.
     #
