@@ -175,7 +175,7 @@ module Gosu
     when :KB_RIGHT_BRACKET then "KbBracketRight"
     else new_name.to_s.capitalize.gsub(/_(.)/) { $1.upcase }
     end
-    Gosu.const_set old_name, new_name
+    Gosu.const_set old_name, Gosu.const_get(new_name)
 
     # Also import old-style constants into Gosu::Button.
     Gosu::Button.const_set old_name, Gosu.const_get(new_name)
