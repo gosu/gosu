@@ -22,7 +22,7 @@ std::string Gosu::default_font_name()
 
 namespace Gosu
 {
-    std::string get_name_from_ttf_file(const std::wstring& filename);
+    std::string get_name_from_ttf_file(const std::string& filename);
 
     namespace
     {
@@ -93,9 +93,8 @@ namespace Gosu
                 
                 if (font_name.find("/") != font_name.npos) {
                     if (custom_fonts.count(font_name) == 0) {
-                        std::wstring wfont_name = utf8_to_wstring(font_name);
-                        AddFontResourceExW(wfont_name.c_str(), FR_PRIVATE, 0);
-                        font_name = custom_fonts[font_name] = get_name_from_ttf_file(wfont_name);
+                        AddFontResourceExW(utf8_to_wstring(font_name).c_str(), FR_PRIVATE, 0);
+                        font_name = custom_fonts[font_name] = get_name_from_ttf_file(font_name);
                     }
                     else {
                         font_name = custom_fonts[font_name];

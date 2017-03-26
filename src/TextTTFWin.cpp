@@ -1,6 +1,7 @@
 #include <Gosu/Platform.hpp>
 #if defined(GOSU_IS_WIN)
 
+#include <Gosu/IO.hpp>
 #include <Gosu/Utility.hpp>
 #include <cassert>
 #include <cstdio>
@@ -56,69 +57,18 @@ struct TT_NAME_RECORD
 
 namespace Gosu
 {
-std::string get_name_from_ttf_file(const std::wstring& filename)
+std::string get_name_from_ttf_file(const std::string& filename)
 {
     FONT_PROPERTIES_ANSI fp;
     FONT_PROPERTIES_ANSI * lpFontProps = &fp;
     memset(lpFontProps, 0, sizeof(FONT_PROPERTIES_ANSI));
 
-    HANDLE hFile = INVALID_HANDLE_VALUE;
-    hFile = ::CreateFile(filename.c_str(),
-                         GENERIC_READ,// | GENERIC_WRITE,
-                         FILE_SHARE_READ,
-                         NULL,
-                         OPEN_EXISTING,
-                         FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,
-                         NULL);
-
-    if (hFile == INVALID_HANDLE_VALUE)
-    {
-        TRACE(_T("ERROR:  failed to open '%s'\n"), wstring_to_utf8(filename).c_str());
-        TRACE(_T("ERROR: %s failed, GetLastError() = 0x%x\n"), _T("CreateFile"), (int)GetLastError());
-        return wstring_to_utf8(filename);
-    }
+    Buffer buffer;
+    load_file(buffer, filename);
 
     // get the file size
-    DWORD dwFileSize = ::GetFileSize(hFile, NULL);
-
-    if (dwFileSize == INVALID_FILE_SIZE)
-    {
-        TRACE(_T("ERROR: %s failed\n"), _T("GetFileSize"));
-        ::CloseHandle(hFile);
-        return wstring_to_utf8(filename);
-    }
-
-    //TRACE(_T("dwFileSize = %d\n"), dwFileSize);
-
-    // Create a file mapping object that is the current size of the file
-    HANDLE hMappedFile = NULL;
-    hMappedFile = ::CreateFileMapping(hFile,
-                                      NULL,
-                                      PAGE_READONLY, //PAGE_READWRITE,
-                                      0,
-                                      dwFileSize,
-                                      NULL);
-
-    if (hMappedFile == NULL)
-    {
-        TRACE(_T("ERROR: %s failed\n"), _T("CreateFileMapping"));
-        ::CloseHandle(hFile);
-        return wstring_to_utf8(filename);
-    }
-
-    LPBYTE lpMapAddress = (LPBYTE) ::MapViewOfFile(hMappedFile,        // handle to file-mapping object
-                                            FILE_MAP_READ,//FILE_MAP_WRITE,            // access mode
-                                            0,                        // high-order DWORD of offset
-                                            0,                        // low-order DWORD of offset
-                                            0);                        // number of bytes to map
-
-    if (lpMapAddress == NULL)
-    {
-        TRACE(_T("ERROR: %s failed\n"), _T("MapViewOfFile"));
-        ::CloseHandle(hMappedFile);
-        ::CloseHandle(hFile);
-        return wstring_to_utf8(filename);
-    }
+    DWORD dwFileSize = buffer.size();
+    LPBYTE lpMapAddress = (LPBYTE) buffer.data();
 
     BOOL bRetVal = FALSE;
     int index = 0;
@@ -132,8 +82,9 @@ std::string get_name_from_ttf_file(const std::wstring& filename)
     ttOffsetTable.uMinorVersion = SWAPWORD(ttOffsetTable.uMinorVersion);
 
     //check is this is a true type font and the version is 1.0
-    if (ttOffsetTable.uMajorVersion != 1 || ttOffsetTable.uMinorVersion != 0)
-        return wstring_to_utf8(filename);
+    if (ttOffsetTable.uMajorVersion != 1 || ttOffsetTable.uMinorVersion != 0) {
+        throw std::runtime_error("Only version 1.0 of the TTF file format is supported");
+    }
 
     TT_TABLE_DIRECTORY tblDir;
     memset(&tblDir, 0, sizeof(TT_TABLE_DIRECTORY));
@@ -143,7 +94,6 @@ std::string get_name_from_ttf_file(const std::wstring& filename)
 
     for (int i = 0; i< ttOffsetTable.uNumOfTables; i++)
     {
-        //f.Read(&tblDir, sizeof(TT_TABLE_DIRECTORY));
         memcpy(&tblDir, &lpMapAddress[index], sizeof(TT_TABLE_DIRECTORY));
         index += sizeof(TT_TABLE_DIRECTORY);
 
@@ -191,7 +141,7 @@ std::string get_name_from_ttf_file(const std::wstring& filename)
 
             if (ttRecord.uNameID == 1 || ttRecord.uNameID == 0 || ttRecord.uNameID == 7)
             {
-                int nPos = index; //f.GetPosition();
+                int nPos = index;
 
                 index = tblDir.uOffset + ttRecord.uStringOffset + ttNTHeader.uStorageOffset;
 
@@ -239,10 +189,6 @@ std::string get_name_from_ttf_file(const std::wstring& filename)
             }
         }
     }
-
-    ::UnmapViewOfFile(lpMapAddress);
-    ::CloseHandle(hMappedFile);
-    ::CloseHandle(hFile);
 
     return lpFontProps->csName[0] ? lpFontProps->csName : lpFontProps->csFamily;
 }
