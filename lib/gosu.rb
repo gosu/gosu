@@ -6,7 +6,7 @@ if RUBY_PLATFORM =~ /mswin$|mingw32|mingw64|win32\-|\-win32/
   binary_path += '64' if RUBY_PLATFORM =~ /^x64-/
   
   # Add this gem to the PATH on Windows so that bundled DLLs can be found.
-  ENV['PATH'] = "#{binary_path};#{ENV['PATH']}"
+  ENV['PATH'] = "#{binary_path.encode ENV['PATH'].encoding};#{ENV['PATH']}"
   
   # Add the correct directory 
   RUBY_VERSION =~ /(\d+.\d+)/
