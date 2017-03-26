@@ -28,7 +28,7 @@ class Gosu::Window
         # Conveniently turn the return value into a boolean result (for needs_cursor? etc).
         defined?(@_exception) ? false : !!send(callback, *args)
       rescue Exception => e
-        # Exit the message loop naturally, then re-throw
+        # Exit the message loop naturally, then re-throw during the next tick.
         @_exception = e
         close
         false

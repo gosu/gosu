@@ -10,12 +10,12 @@ if RUBY_PLATFORM =~ /mswin$|mingw32|mingw64|win32\-|\-win32/
   # encoding (see #385).
   ENV["PATH"] = "#{binary_path.encode ENV["PATH"].encoding};#{ENV["PATH"]}"
   
-  # Add the correct directory 
-  RUBY_VERSION =~ /(\d+.\d+)/
-  $LOAD_PATH.unshift "#{binary_path}/#{$1}"
+  # Add the correct lib directory for the current version of Ruby (major.minor).
+  $LOAD_PATH.unshift File.join(binary_path, RUBY_VERSION[/^\d+.\d+/])
 end
 
 require "gosu.#{RbConfig::CONFIG["DLEXT"]}"
 
 require "gosu/swig_patches"
 require "gosu/patches"
+require "gosu/compat"
