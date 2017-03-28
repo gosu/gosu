@@ -9,6 +9,8 @@ require_relative 'test_helper'
 # - Calling close() between calls to tick() should make only the next call to tick() return false.
 
 class TestWindow < Minitest::Test
+  include InteractiveTests
+  
   class ShyWindow < Gosu::Window
     def update
       close!
@@ -41,5 +43,29 @@ class TestWindow < Minitest::Test
     window.close!
     assert !window.tick
     assert window.tick
+  end
+  
+  class DropWindow < Gosu::Window
+    def initialize
+      super(400,400)
+      self.caption = "Drop any number of files here!" 
+      @font = Gosu::Font.new(20)
+      @files = []
+    end
+    
+    def drop(path)
+      @files << path
+    end
+    
+    def draw
+      @files.each_with_index do |fname, idx|
+        @font.draw(fname, 10, idx * 20, 0)
+      end
+    end
+  end
+  def test_drag_and_drop
+    interactive_gui("Drop any number of files into the window. Do all filenames appear?") do
+      DropWindow.new
+    end
   end
 end

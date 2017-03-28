@@ -3142,16 +3142,6 @@ SWIGINTERN void Gosu_TextInput_set_selection_start(Gosu::TextInput *self,VALUE s
         std::string prefix = StringValueCStr(rb_prefix);
         self->set_selection_start(std::min(prefix.length(), self->text().length()));
     }
-
-
-
-
-SWIGINTERNINLINE VALUE 
-SWIG_FromCharPtr(const char *cptr)
-{ 
-  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
-}
-
 SWIGINTERN void Gosu_Window_set_width(Gosu::Window *self,unsigned int width){
         self->resize(width, self->height(), self->fullscreen());
     }
@@ -3352,11 +3342,11 @@ void SwigDirector_Window::button_up(Gosu::Button arg0) {
 }
 
 
-void SwigDirector_Window::drop(char *path) {
+void SwigDirector_Window::drop(std::string path) {
   VALUE obj0 = Qnil ;
   VALUE SWIGUNUSED result;
   
-  obj0 = SWIG_FromCharPtr((const char *)path);
+  obj0 = SWIG_From_std_string(static_cast< std::string >(path));
   result = rb_funcall(swig_get_self(), rb_intern("drop"), 1,obj0);
 }
 
@@ -9593,12 +9583,9 @@ fail:
 SWIGINTERN VALUE
 _wrap_Window_drop(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
-  char *arg2 = (char *) 0 ;
+  std::string arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
   Swig::Director *director = 0;
   bool upcall = false;
   
@@ -9610,11 +9597,15 @@ _wrap_Window_drop(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","drop", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "char *","drop", 2, argv[0] ));
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(argv[0], &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), Ruby_Format_TypeError( "", "std::string","drop", 2, argv[0] )); 
+    }
+    arg2 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
   }
-  arg2 = reinterpret_cast< char * >(buf2);
   director = dynamic_cast<Swig::Director *>(arg1);
   upcall = (director && (director->swig_get_self() == self));
   try {
@@ -9634,10 +9625,8 @@ _wrap_Window_drop(int argc, VALUE *argv, VALUE self) {
     rb_exc_raise(e.getError());
     SWIG_fail;
   }
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return Qnil;
 fail:
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return Qnil;
 }
 

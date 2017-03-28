@@ -41,7 +41,7 @@ public:
     virtual void release_memory();
     virtual void button_down(Gosu::Button arg0);
     virtual void button_up(Gosu::Button arg0);
-    virtual void drop(char *path);
+    virtual void drop(std::string path);
 };
 
 

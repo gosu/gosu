@@ -117,7 +117,7 @@ namespace Gosu
         virtual void button_up(Gosu::Button) {}
 
         //! Called when you (drag &) drop a file on the window. Serves the path of the dropped file as argument.
-        virtual void drop(char* path) {}
+        virtual void drop(std::string path) {}
         
         // Ignore when SWIG is wrapping this class for Ruby/Gosu.
         #ifndef SWIG
