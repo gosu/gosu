@@ -1,7 +1,5 @@
 # Encoding: UTF-8
-
-require "minitest/autorun"
-require "gosu" unless defined? Gosu
+require_relative 'test_helper'
 
 class TestGosuModule < Minitest::Test
   def test_drawing_primitives
