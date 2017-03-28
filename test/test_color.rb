@@ -21,12 +21,12 @@ class TestConstants < Minitest::Test
 
   def test_color_atttributes_and_types
     color = Gosu::Color.new(255,255,255,255)
-    [:alpha, :red, :green, :blue, :hue].each do |attr|
+    [:alpha, :red, :green, :blue].each do |attr|
       assert_respond_to color, attr
       assert_kind_of Integer, color.send(attr), "Color##{attr} should be kind of Integer"
     end
 
-    [:saturation, :value].each do |attr|
+    [:hue, :saturation, :value].each do |attr|
       assert_respond_to color, attr
       assert_kind_of Float, color.send(attr), "Color##{attr} should be kind of Float"
     end
