@@ -76,6 +76,12 @@ namespace Gosu
         SDL_DestroyWindow(shared_window());
         SDL_QuitSubSystem(SDL_INIT_VIDEO);
     }
+
+
+    int simple_dialog(std::string caption, std::string message)
+    {
+        return SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, caption.c_str(), message.c_str(), NULL);
+    }
 }
 
 struct Gosu::Window::Impl

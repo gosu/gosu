@@ -31,6 +31,8 @@ namespace Gosu
     //! Returns the maximum height (in 'points') that is available for a non-fullscreen Window.
     //! All windows larger than this size will automatically be shrunk to fit.
     unsigned available_height();
+
+    int simple_dialog(std::string caption, std::string message);
     
     //! Convenient all-in-one class that serves as the foundation of a standard Gosu application.
     //! Manages initialization of all of Gosu's core components and provides timing functionality.
