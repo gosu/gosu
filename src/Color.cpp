@@ -55,8 +55,11 @@ Gosu::Color Gosu::Color::from_ahsv(Channel alpha, double h, double s, double v)
         return Color(alpha, v * 255, v * 255, v * 255);
     }
     
-    // Normalize hue
+    // Normalize hue so that is always in the [0, 360) range and wraps around.
     h = normalize_angle(h);
+    // Clamp s and v for consistency with the Ruby/Gosu ARGB getters/setters.
+    s = clamp(s, 0.0, 1.0);
+    v = clamp(v, 0.0, 1.0);
     
     int sector       = h / 60;
     double factorial = h / 60 - sector;
