@@ -24,7 +24,7 @@ class TestGosuModule < Minitest::Test
       # RuntimeError: Gosu::Macro cannot be rendered as Gosu::Bitmap yet
       # that would be awesome. Making "screenshots" in general would greatly
       # extend the possibilities of automated testing.
-      # Already requestesd in https://github.com/gosu/gosu/issues/317
+      # Already requested in https://github.com/gosu/gosu/issues/317
       # img.save("/tmp/test.png")
     end
   end
@@ -36,23 +36,17 @@ class TestGosuModule < Minitest::Test
   def test_misc
     assert_match(/^[a-z]{2}/, Gosu.language)
 
-    assert_equal 0, Gosu.fps
-    assert_equal 0, Gosu.milliseconds
+    assert_equal 0, Gosu.fps, 'Gosu.fps should be 0 as there is nothing drawn'
 
-    assert_equal 'sans', Gosu.default_font_name
+    first_call = Gosu.milliseconds
+    assert_kind_of Integer, Gosu.milliseconds, 'Gosu.milliseconds should return an integer'
+    sleep 0.2
+    assert first_call < Gosu.milliseconds, 'Gosu.milliseconds should increase over time'
 
-    # TODO: Test if this can be set in the CI, e.g. with xvfb
-    # Link: https://docs.travis-ci.com/user/gui-and-headless-browsers/
-    # otherwise just check for > 0 as done with the available_* values
-    assert_equal 1920, Gosu.screen_height
-    assert_equal 1080, Gosu.screen_width
+    assert_match /(sans|Arial)/, Gosu.default_font_name
 
-    assert Gosu.available_height > 0
-    assert Gosu.available_width > 0
-
-    # Thats just an assumption, not a proven fact
-    assert Gosu.screen_height > Gosu.available_height
-    assert Gosu.screen_width > Gosu.available_width
+    assert Gosu.screen_height >= Gosu.available_height
+    assert Gosu.screen_width >= Gosu.available_width
 
     assert_match(/[Aa]/, Gosu.button_id_to_char(Gosu::KB_A))
     assert_equal Gosu::KB_A, Gosu.char_to_button_id("A")
@@ -60,7 +54,7 @@ class TestGosuModule < Minitest::Test
     refute Gosu.button_down?(Gosu::KB_A)
   end
 
-  def test_math
+  def test_math_angle
     {
       [ 0, 0] =>   0.0,
       [ 1, 0] =>  90.0,
@@ -73,7 +67,9 @@ class TestGosuModule < Minitest::Test
     }.each do |point, angle|
       assert_equal angle, Gosu.angle(0, 0, *point)
     end
+  end
 
+  def test_math_angle_diff
     {
       [90, 95] =>    5.0,
       [90, 85] =>   -5.0,
@@ -82,26 +78,32 @@ class TestGosuModule < Minitest::Test
     }.each do |(angle1, angle2), delta|
       assert_equal delta, Gosu.angle_diff(angle1, angle2)
     end
+  end
 
-    # TODO: Check test-vectors
+  def test_math_offset
     {
       [ 36.86, 5] => [ 3, -4], # a² + b² = c² | 3² + 4² = 5²
-      [  0.0 , 1] => [ 0,  1],
+      [  0.0 , 1] => [ 0, -1],
       [ 90.0 , 1] => [ 1,  0],
-      [180.0 , 1] => [ 0, -1],
+      [180.0 , 1] => [ 0,  1],
       [-90.0 , 1] => [-1,  0],
     }.each do |(angle,length),(dx, dy)|
-      assert_in_delta dx, Gosu.offset_x(angle, length), 0.1
-      assert_in_delta dy, Gosu.offset_y(angle, length), 0.1
+      assert_in_delta dx, Gosu.offset_x(angle, length), 0.1, "Angle: #{angle}, Length: #{length} | offset_x should be #{dx} but is #{Gosu.offset_x(angle, length)}"
+      assert_in_delta dy, Gosu.offset_y(angle, length), 0.1, "Angle: #{angle}, Length: #{length} | offset_y should be #{dy} but is #{Gosu.offset_x(angle, length)}"
     end
+  end
 
-    # TODO: Add more test-vectors
+  # TODO: Add more test-vectors
+  def test_math_distance
     {
       [0,0 , 3,4] => 5, # a² + b² = c² | 3² + 4² = 5²
+      [-2,-3 , -4, 4] => 7.28,
     }.each do |(x1,y1,x2,y2), dist|
-      assert_equal dist, Gosu.distance(x1, y1, x2, y2)
+      assert_in_delta dist, Gosu.distance(x1, y1, x2, y2), 0.1
     end
+  end
 
+  def test_math_random
     100.times do
       val = Gosu.random(5, 10)
       assert val.is_a?(Float)

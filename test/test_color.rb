@@ -33,18 +33,16 @@ class TestConstants < Minitest::Test
   end
 
   def test_color_attribute_ranges
-    # atm this automatically sets the values to max, min if the exceed the range ...
+    # alpha, red, green, blue are clamped to 0..255
     assert_equal Gosu::Color::WHITE, Gosu::Color.new(300, 300, 300, 300)
     assert_equal Gosu::Color::NONE,  Gosu::Color.new(-50, -50, -50, -50)
 
-    # ... but this does not. I'm actually in favor of raising and exception if either
-    # of the creation methods get invalid values or at least let them behave them# same.
-    assert_equal Gosu::Color::WHITE, Gosu::Color.from_ahsv(500,  2,  2,  2)
-    assert_equal Gosu::Color::NONE,  Gosu::Color.from_ahsv(-50, -5, -5, -5)
+    # hue wraps(!) at 360 so 361 is the same as 1 and not the maximum value 360
+    assert_equal Gosu::Color.from_ahsv(100, 1, 1.0, 1.0), Gosu::Color.from_ahsv(100, 361, 1.0, 1.0)
 
-    # Not sure about this one, but in some programs (including gimp) saturation and value
-    # accept integers in range 0..100 so we might support this?
-    assert_equal Gosu::Color.from_ahsv(255, 300, 100, 100), Gosu::Color.from_ahsv(255, 300, 1.0, 1.0)
+    # saturation and value are clamped to 0.0..1.0 (since #01120e92f7a3)
+    assert_equal Gosu::Color.from_ahsv(100, 1, 1.0, 1.0), Gosu::Color.from_ahsv(100, 361,  2.0,  2.0)
+    assert_equal Gosu::Color.from_ahsv(100, 1, 0.0, 0.0), Gosu::Color.from_ahsv(100, 361, -1.0, -1.0)
   end
 
   def test_dup_and_gl
@@ -52,7 +50,7 @@ class TestConstants < Minitest::Test
     assert_equal 0xff00ff00, Gosu::Color::GREEN.gl
   end
 
-  # introduced by #316, requested by #316 (@shawn42)
+  # introduced by #316, requested by #333 (@shawn42)
   # this is not documented in rdoc/gosu.rb
   def test_alias
     assert Gosu::Color::AQUA.eql?(Gosu::Color::CYAN)
