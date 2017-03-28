@@ -61,3 +61,8 @@ Rake::TestTask.new do |t|
   # On UNIX systems, the tests should be run after installing the gosu gem instead (ignore ./lib).
   t.libs = [] unless RUBY_PLATFORM =~ /mswin$|mingw32|mingw64|win32\-|\-win32/
 end
+
+task :test_interactive do
+  ENV['GOSU_TEST_INTERACTIVE'] = "true"
+  Rake::Task["test"].invoke
+end

@@ -127,6 +127,8 @@ class Gosu::Song
     end
     initialize_without_window(*args)
   end
+  
+  alias_method :resume, :play
 end
 
 # Moved some Window-methods to the Gosu::Module

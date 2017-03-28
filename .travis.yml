@@ -33,27 +33,26 @@ addons:
       - rake
       # For C++
       - cmake
+      # For Linux Soundtests (equivalent to xvfb)
+      - alsa-base
 
 before_install:
-  # Mac dependencies
-  # See: https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X
-  - if [ $TRAVIS_OS_NAME == osx ]; then brew update; brew install sdl2; fi
   # Do not use RVM - it's been a mess for compiling Gosu on macOS.
   - rvm use system
+
   # Print the Ruby configuration to see what's up with CXXFLAGS etc.
   - ruby -rrbconfig -e 'RbConfig::CONFIG.each { |k, v| puts [k, v].join("=") }'
-  # But update the system RubyGems on OS X and install CocoaPods.
-  # Also install a very specific version of ActiveSupport, see:
-  # https://github.com/CocoaPods/CocoaPods/issues/4711#issuecomment-230096751
-  # Also install gem binaries into /usr/local/bin to work around SIP on macOS 10.11+
-  - if [ $TRAVIS_OS_NAME == osx ]; then sudo gem update --system; sudo gem install activesupport -v 4.2.6; sudo gem install cocoapods -n /usr/local/bin; fi
+
+  # Do some OSX-Specific preparations
+  - if [ $TRAVIS_OS_NAME == osx ]; then ./.travis/before_install_osx.sh; fi
+
   # Dependencies for 'rake gem' (not for actually using Gosu)
   # We have to install binaries into ~ because of Apple's System Integrity Protection.
   - sudo gem install rake rake-compiler minitest --no-ri --no-rdoc -n ~
 
 before_script:
-  # Try to workaround the "Could not initialize SDL Video" Error on Linux
-  - if [ $TRAVIS_OS_NAME != osx ]; then export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start; sleep 3; fi
+  # Enable "dummy" devices for audio and video on Linux
+  - if [ $TRAVIS_OS_NAME != osx ]; then . ./.travis/before_script_linux.sh ;fi
 
 # Minimal git coverage (for now).
 branches:
@@ -74,13 +73,24 @@ install:
   # Ruby/Gosu
   - ~/rake gem
   - sudo gem install pkg/gosu-9.9.9.gem --no-ri --no-rdoc
+
   # Gosu for C++ using CMake
-  - mkdir -p cmake/build && cd cmake/build && cmake .. && make && sudo make install && cd ../..
-  # Gosu for OS X using CocoaPods
-  - if [ $TRAVIS_OS_NAME == osx ]; then cd examples/Tutorial && pod install && xcodebuild build -workspace Tutorial.xcworkspace -scheme Tutorial && cd ../..; fi
-  # Gosu for iOS using CocoaPods
-  - if [ $TRAVIS_OS_NAME == osx ]; then cd examples/Tutorial-Touch && pod install && xcodebuild build -workspace Tutorial-Touch.xcworkspace -scheme Tutorial-Touch -destination 'platform=iOS Simulator,name=iPad Air' && cd ../..; fi
+  - "mkdir -p cmake/build &&
+     cd cmake/build &&
+     cmake .. &&
+     make &&
+     sudo make install &&
+     cd ../.."
+
+  # Do some OSX-Specific preparations
+  - if [ $TRAVIS_OS_NAME == osx ]; then ./.travis/install_osx.sh ; fi
 
 script:
   # Run Ruby/Gosu tests and compile C++ examples
-  - ~/rake -rgosu test && mkdir -p examples/build && cd examples/build && cmake .. && make
+  - "if [ $TRAVIS_OS_NAME == osx ];
+     then
+       ~/rake -rgosu test;
+     else
+       sg audio '~/rake -rgosu test';
+     fi"
+  - mkdir -p examples/build && cd examples/build && cmake .. && make
