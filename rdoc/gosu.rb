@@ -1209,6 +1209,17 @@ module Gosu
     #
     # @return [String] the user's preferred language.
     def language(); end
+
+    ##
+    # EXPERIMENTAL - MAY DISAPPEAR WITHOUT WARNING.
+    #
+    # Shows an simple dialog box with just the provided message and an OK-Button. The look is system-dependent and can not be influenced.
+    #
+    # @param caption [String]
+    # @param message [String]
+    #
+    def simple_dialog(caption, message)
+    end
   end
 end
 
