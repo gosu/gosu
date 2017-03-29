@@ -3342,11 +3342,11 @@ void SwigDirector_Window::button_up(Gosu::Button arg0) {
 }
 
 
-void SwigDirector_Window::drop(std::string path) {
+void SwigDirector_Window::drop(std::string const &filename) {
   VALUE obj0 = Qnil ;
   VALUE SWIGUNUSED result;
   
-  obj0 = SWIG_From_std_string(static_cast< std::string >(path));
+  obj0 = SWIG_From_std_string(static_cast< std::string >(filename));
   result = rb_funcall(swig_get_self(), rb_intern("drop"), 1,obj0);
 }
 
@@ -9583,9 +9583,10 @@ fail:
 SWIGINTERN VALUE
 _wrap_Window_drop(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
-  std::string arg2 ;
+  std::string *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  int res2 = SWIG_OLDOBJ ;
   Swig::Director *director = 0;
   bool upcall = false;
   
@@ -9599,12 +9600,14 @@ _wrap_Window_drop(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
     std::string *ptr = (std::string *)0;
-    int res = SWIG_AsPtr_std_string(argv[0], &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), Ruby_Format_TypeError( "", "std::string","drop", 2, argv[0] )); 
+    res2 = SWIG_AsPtr_std_string(argv[0], &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "std::string const &","drop", 2, argv[0] )); 
     }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "std::string const &","drop", 2, argv[0])); 
+    }
+    arg2 = ptr;
   }
   director = dynamic_cast<Swig::Director *>(arg1);
   upcall = (director && (director->swig_get_self() == self));
@@ -9612,9 +9615,9 @@ _wrap_Window_drop(int argc, VALUE *argv, VALUE self) {
     {
       try {
         if (upcall) {
-          (arg1)->Gosu::Window::drop(arg2);
+          (arg1)->Gosu::Window::drop((std::string const &)*arg2);
         } else {
-          (arg1)->drop(arg2);
+          (arg1)->drop((std::string const &)*arg2);
         }
       }
       catch (const std::exception& e) {
@@ -9625,8 +9628,10 @@ _wrap_Window_drop(int argc, VALUE *argv, VALUE self) {
     rb_exc_raise(e.getError());
     SWIG_fail;
   }
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return Qnil;
 fail:
+  if (SWIG_IsNewObj(res2)) delete arg2;
   return Qnil;
 }
 

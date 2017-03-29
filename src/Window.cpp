@@ -318,7 +318,7 @@ void Gosu::Window::button_down(Button button)
         !Input::down(KB_LEFT_SHIFT) && !Input::down(KB_RIGHT_SHIFT) &&
         !Input::down(KB_LEFT_ALT) && !Input::down(KB_RIGHT_ALT);
 #else
-    // alt+enter and alt+return toggle fullscreen mode on all other platforms.
+    // Alt+Enter and Alt+Return toggle fullscreen mode on all other platforms.
     toggle_fullscreen = (button == KB_RETURN || button == KB_ENTER) &&
         (Input::down(KB_LEFT_ALT) || Input::down(KB_RIGHT_ALT)) &&
         !Input::down(KB_LEFT_CONTROL) && !Input::down(KB_RIGHT_CONTROL) &&

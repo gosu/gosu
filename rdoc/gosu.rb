@@ -814,7 +814,7 @@ module Gosu
     ##
     # This method is called before {#update} if a button is pressed while the window has focus.
     #
-    # By default, this method  will toggle fullscreen mode if the user presses alt+enter (Windows,
+    # By default, this method  will toggle fullscreen mode if the user presses Alt+Enter (Windows,
     # Linux) or cmd+F (macOS).
     # To support these shortcuts in your application, make sure to call super in your
     # implementation.
@@ -835,6 +835,12 @@ module Gosu
     # @see #button_down
     # @see Gosu.button_down?
     def button_up(id); end
+
+    ##
+    # Called when a file is dropped onto the window.
+    #
+    # @param filename [String] the filename of the dropped file. When multiple files are dropped, this method will be called several times.
+    def drop(filename); end
 
     # @!endgroup
   end
