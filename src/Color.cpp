@@ -14,21 +14,25 @@ namespace
         
         double min = std::min(std::min(r, g), b);
         double max = std::max(std::max(r, g), b);
+        double delta = max - min;
 
         if (max == 0) {
             HSV hsv = { 0, 0, 0 };
             return hsv;
         }
         
+        HSV hsv;
+
         // Value.
-        HSV hsv = { -1, -1, max };
+        hsv.v = max;
         
         // Saturation.
-        double delta = max - min;
         hsv.s = delta / max;
         
         // Hue.
-        if (r == max) {
+        if (delta == 0) {
+            hsv.h = 0;
+        } else if (r == max) {
             hsv.h = (g - b) / delta + (g < b ? 6 : 0);
         }
         else if (g == max) {

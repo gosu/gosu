@@ -113,15 +113,15 @@ module Gosu
     attr_accessor :blue
 
     ##
-    # @return [Integer] the color's hue in the range (0...360).
+    # @return [Float] the color's hue in the range [0.0; 360.0).
     attr_accessor :hue
 
     ##
-    # @return [Float] the color's saturation in the range (0..1).
+    # @return [Float] the color's saturation in the range [0.0; 1.0].
     attr_accessor :saturation
 
     ##
-    # @return [Float] the color's value in the range (0..1).
+    # @return [Float] the color's value in the range [0.0; 1.0].
     attr_accessor :value
 
     # @!group Creating colors.
@@ -131,10 +131,10 @@ module Gosu
     #   @param argb [Integer] an integer of the form 0xAARRGGBB.
     #
     # @overload initialize(a, r, g, b)
-    #   @param a [Integer] the color's alpha channel in the range (0..255).
-    #   @param r [Integer] the color's red channel in the range (0..255).
-    #   @param g [Integer] the color's green channel in the range (0..255).
-    #   @param b [Integer] the color's blue channel in the range (0..255).
+    #   @param a [Integer] the color's alpha channel in the range [0; 255].
+    #   @param r [Integer] the color's red channel in the range [0; 255].
+    #   @param g [Integer] the color's green channel in the range [0; 255].
+    #   @param b [Integer] the color's blue channel in the range [0; 255].
     #
     # @see from_hsv
     # @see from_ahsv
@@ -149,10 +149,10 @@ module Gosu
     #   @param argb [Integer] an integer of the form 0xRRGGBBAA.
     #
     # @overload rgba(r, g, b, a)
-    #   @param r [Integer] the color's red channel in the range (0..255).
-    #   @param g [Integer] the color's green channel in the range (0..255).
-    #   @param b [Integer] the color's blue channel in the range (0..255).
-    #   @param a [Integer] the color's alpha channel in the range (0..255).
+    #   @param a [Integer] the color's alpha channel in the range [0; 255].
+    #   @param r [Integer] the color's red channel in the range [0; 255].
+    #   @param g [Integer] the color's green channel in the range [0; 255].
+    #   @param b [Integer] the color's blue channel in the range [0; 255].
     #
     # @see #initialize
     # @see argb
@@ -171,9 +171,9 @@ module Gosu
     # Converts an HSV triplet to an opaque color.
     #
     # @return [Color] a color corresponding to the HSV triplet.
-    # @param h [Integer] the color's hue in the range (0..360).
-    # @param s [Float] the color's saturation in the range (0..1).
-    # @param v [Float] the color's value in the range (0..1).
+    # @param h [Float] the color's hue in the range [0.0; 360.0).
+    # @param s [Float] the color's saturation in the range [0.0; 1.0].
+    # @param v [Float] the color's value in the range [0.0; 1.0].
     #
     # @see from_ahsv
     def self.from_hsv(h, s, v); end
@@ -181,7 +181,7 @@ module Gosu
     # Converts an HSV triplet to a color with the alpha channel set to a given value.
     #
     # @return (see from_hsv)
-    # @param a [Integer] the color's opacity in the range (0..255).
+    # @param a [Integer] the color's opacity in the range [0; 255].
     # @param (see from_hsv)
     #
     # @see from_hsv
@@ -516,7 +516,7 @@ module Gosu
     # Playback speed is limited only by the underlying audio library, and both very large and very small values should work just fine.
     #
     # @return [SampleInstance]
-    # @param volume [Float] the playback volume, in the range (0..1), where 0 is completely silent and 1 is full volume.
+    # @param volume [Float] the playback volume, in the range [0.0; 1.0], where 0 is completely silent and 1 is full volume.
     # @param speed [Float] the playback speed.
     # @param looping [true, false] whether the sample should play in a loop.
     #
@@ -529,7 +529,7 @@ module Gosu
     # @note Samples played with this method will not be as loud as those played with {#play}, even if `pan` is 0. This is due to a limitation in the way panning works.
     #
     # @return [SampleInstance]
-    # @param pan [Float] the amount of panning. 0 is centered.
+    # @param pan [Float] the amount of panning. 0.0 is centered.
     # @param (see #play)
     #
     # @see #play
@@ -1131,7 +1131,7 @@ module Gosu
     def self.char_to_button_id(char); end
 
     ##
-    # @return [Float] a random number in the range (min...max).
+    # @return [Float] a random number in the range [min; max).
     # @param min [Float] the minimum value, inclusive.
     # @param max [Float] the maximum value, exclusive.
     def random(min, max); end
