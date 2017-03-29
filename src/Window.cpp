@@ -43,6 +43,7 @@ namespace Gosu
             if (window == nullptr) {
                 throw_sdl_error("Could not create window");
             }
+            SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
         }
         return window;
     }
@@ -253,11 +254,22 @@ bool Gosu::Window::tick()
     
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
-        if (e.type == SDL_QUIT) {
-            close();
-        }
-        else {
-            input().feed_sdl_event(&e);
+        switch (e.type) {
+            case (SDL_QUIT): {
+                close();
+                break;
+            }
+            case (SDL_DROPFILE): {
+                char* dropped_filedir = e.drop.file;      
+                if (dropped_filedir == nullptr) break;
+                drop(std::string(dropped_filedir));
+                SDL_free(dropped_filedir);
+                break;
+            }
+            default: {
+                input().feed_sdl_event(&e);
+                break;
+            }
         }
     }
     
@@ -306,7 +318,7 @@ void Gosu::Window::button_down(Button button)
         !Input::down(KB_LEFT_SHIFT) && !Input::down(KB_RIGHT_SHIFT) &&
         !Input::down(KB_LEFT_ALT) && !Input::down(KB_RIGHT_ALT);
 #else
-    // alt+enter and alt+return toggle fullscreen mode on all other platforms.
+    // Alt+Enter and Alt+Return toggle fullscreen mode on all other platforms.
     toggle_fullscreen = (button == KB_RETURN || button == KB_ENTER) &&
         (Input::down(KB_LEFT_ALT) || Input::down(KB_RIGHT_ALT)) &&
         !Input::down(KB_LEFT_CONTROL) && !Input::down(KB_RIGHT_CONTROL) &&

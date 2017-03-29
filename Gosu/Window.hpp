@@ -67,6 +67,7 @@ namespace Gosu
         //! receives calls to draw, update etc.
         virtual void show();
         
+        //! EXPERIMENTAL - MAY DISAPPEAR WITHOUT WARNING.
         //! Performs a single mainloop step.
         //! This method is only useful if you want to integrate Gosu with another library that has
         //! its own main loop.
@@ -107,14 +108,19 @@ namespace Gosu
         virtual void release_memory() {}
 
         //! Called before update when the user presses a button while the window has the focus.
-        //! By default, this will toggle fullscreen mode if the user presses alt+enter (Windows,
+        //! By default, this will toggle fullscreen mode if the user presses Alt+Enter (Windows,
         //! Linux) or cmd+F (macOS).
         //! To support these shortcuts in your application, make sure to call Window::button_down
         //! in your implementation.
         virtual void button_down(Gosu::Button);
         
-        //! Same as button_down. Called then the user releases a button.
+        //! Same as button_down. Called when the user releases a button.
         virtual void button_up(Gosu::Button) {}
+
+        //! Called when a file is dropped onto the window.
+        //! \param path The filename of the dropped file. When multiple files are dropped, this
+        //! method will be called several times.
+        virtual void drop(const std::string& filename) {}
         
         // Ignore when SWIG is wrapping this class for Ruby/Gosu.
         #ifndef SWIG
