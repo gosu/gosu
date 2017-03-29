@@ -10,7 +10,7 @@ class TestGosuModule < Minitest::Test
       # args: [x, y, c]{2,4}, z, mode
       draw_line: [0, 0, 0xff_ffffff, 10, 10, 0xff_ffffff, 0, :default],
       draw_triangle: [0, 0, 0xff_ffffff, 10, 10, 0xff_ffffff, 0, 10, 0xff_ffffff, 0, :default],
-      draw_quad: [0, 0, 0xff_ffffff, 10, 10, 0xff_ffffff, 0, 10, 0xff_ffffff, 0, 10, 0xff_ffffff0, 0, :default],
+      draw_quad: [0, 0, 0xff_ffffff, 10, 10, 0xff_ffffff, 0, 10, 0xff_ffffff, 0, 10, 0xff_ffffff, 0, :default],
     }.each do |method, args|
       assert_respond_to Gosu, method
 
@@ -41,27 +41,31 @@ class TestGosuModule < Minitest::Test
     sleep 0.2
     assert first_call < Gosu.milliseconds, 'Gosu.milliseconds should increase over time'
 
-    assert_match /(sans|Arial)/, Gosu.default_font_name
+    assert Gosu.default_font_name.is_a? String
+
+    assert Gosu.available_height > 0
+    assert Gosu.available_width > 0
 
     assert Gosu.screen_height >= Gosu.available_height
     assert Gosu.screen_width >= Gosu.available_width
 
-    assert_match(/[Aa]/, Gosu.button_id_to_char(Gosu::KB_A))
-    assert_equal Gosu::KB_A, Gosu.char_to_button_id("A")
+    assert_match("g", Gosu.button_id_to_char(Gosu::KB_G))
+    assert_equal Gosu::KB_G, Gosu.char_to_button_id("g")
+    assert_equal Gosu::KB_G, Gosu.char_to_button_id("G")
 
     refute Gosu.button_down?(Gosu::KB_A)
   end
 
   def test_math_angle
     {
-      [ 0, 0] =>   0.0,
-      [ 1, 0] =>  90.0,
-      [ 1, 1] => 135.0,
-      [ 0, 1] => 180.0,
-      [-1, 1] => 225.0,
-      [-1, 0] => 270.0,
-      [-1,-1] => 315.0,
-      [ 0,-1] =>   0.0, # 360.0
+      [ 0,  0] =>   0.0,
+      [ 1,  0] =>  90.0,
+      [ 1,  1] => 135.0,
+      [ 0,  1] => 180.0,
+      [-1,  1] => 225.0,
+      [-1,  0] => 270.0,
+      [-1, -1] => 315.0,
+      [ 0, -1] =>   0.0, # 360.0
     }.each do |point, angle|
       assert_equal angle, Gosu.angle(0, 0, *point)
     end
@@ -69,10 +73,10 @@ class TestGosuModule < Minitest::Test
 
   def test_math_angle_diff
     {
-      [90, 95] =>    5.0,
-      [90, 85] =>   -5.0,
-      [90,269] =>  179.0,
-      [90,271] => -179.0,
+      [90,  95] =>    5.0,
+      [90,  85] =>   -5.0,
+      [90, 269] =>  179.0,
+      [90, 271] => -179.0,
     }.each do |(angle1, angle2), delta|
       assert_equal delta, Gosu.angle_diff(angle1, angle2)
     end
@@ -81,13 +85,15 @@ class TestGosuModule < Minitest::Test
   def test_math_offset
     {
       [ 36.86, 5] => [ 3, -4], # a² + b² = c² | 3² + 4² = 5²
-      [  0.0 , 1] => [ 0, -1],
-      [ 90.0 , 1] => [ 1,  0],
-      [180.0 , 1] => [ 0,  1],
-      [-90.0 , 1] => [-1,  0],
+      [  0.0,  1] => [ 0, -1],
+      [ 90.0,  1] => [ 1,  0],
+      [180.0,  1] => [ 0,  1],
+      [-90.0,  1] => [-1,  0],
     }.each do |(angle,length),(dx, dy)|
-      assert_in_delta dx, Gosu.offset_x(angle, length), 0.1, "Angle: #{angle}, Length: #{length} | offset_x should be #{dx} but is #{Gosu.offset_x(angle, length)}"
-      assert_in_delta dy, Gosu.offset_y(angle, length), 0.1, "Angle: #{angle}, Length: #{length} | offset_y should be #{dy} but is #{Gosu.offset_x(angle, length)}"
+      assert_in_delta dx, Gosu.offset_x(angle, length), 0.1,
+        "Angle: #{angle}, Length: #{length} | offset_x should be #{dx} but is #{Gosu.offset_x(angle, length)}"
+      assert_in_delta dy, Gosu.offset_y(angle, length), 0.1,
+        "Angle: #{angle}, Length: #{length} | offset_y should be #{dy} but is #{Gosu.offset_x(angle, length)}"
     end
   end
 
