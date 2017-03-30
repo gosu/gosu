@@ -534,8 +534,19 @@ module Gosu
   #
   # It is recommended to throw away sample instances as soon as possible, as holding onto them for a long time can prevent unneeded samples being properly disposed.
   class SampleInstance
+    ##
+    # Set the playback volume, in the range [0.0; 1.0], where 0 is completely silent and 1 is full volume.
+    # @param [Float]
     attr_writer :volume
+    
+    ##
+    # Set the playback speed.
+    # @param [Float]    
     attr_writer :speed
+    
+    ##
+    # Set the amount of panning. Can be anything from -1.0 (left) to 1.0 (right). 0 is centered. 
+    # @param [Float] 
     attr_writer :pan
 
     ##
