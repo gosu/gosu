@@ -2,33 +2,34 @@
 
 #include "AudioFile.hpp"
 #include <Gosu/IO.hpp>
-#include <algorithm>
 #include <stdexcept>
 #include <string>
 
 #define STB_VORBIS_HEADER_ONLY
 #include "stb_vorbis.c"
 
-// Based on the Drama Sound Engine for D
-
 namespace Gosu
 {
     class OggFile : public AudioFile
     {
         Gosu::Buffer contents_;
-        Gosu::Buffer buffer_;
         int channels_;
         ALenum sample_rate_;
         stb_vorbis* stream_;
 
-        void open()
+    public:
+        OggFile(Gosu::Reader reader)
         {
+            contents_.resize(reader.resource().size() - reader.position());
+            reader.read(contents_.data(), contents_.size());
+            
             int error = 0;
             
-            const unsigned char* mem = static_cast<const unsigned char*>(contents_.data());
-            stream_ = stb_vorbis_open_memory(mem, static_cast<int>(contents_.size()), &error, 0);
+            auto data = static_cast<const unsigned char*>(contents_.data());
+            auto size = static_cast<int>(contents_.size());
+            stream_ = stb_vorbis_open_memory(data, size, &error, 0);
             
-            if (stream_ == 0) {
+            if (stream_ == nullptr) {
                 throw std::runtime_error("Cannot open Ogg Vorbis file, error code: " +
                                          std::to_string(error));
             }
@@ -36,40 +37,25 @@ namespace Gosu
             stb_vorbis_info info = stb_vorbis_get_info(stream_);
             channels_ = info.channels;
             sample_rate_ = info.sample_rate;
-            buffer_.resize(info.temp_memory_required);
         }
         
-        void close()
+        ~OggFile() override
         {
             stb_vorbis_close(stream_);
-            stream_ = 0;
+            stream_ = nullptr;
         }
         
-    public:
-        OggFile(Gosu::Reader reader)
-        {
-            contents_.resize(reader.resource().size() - reader.position());
-            reader.read(contents_.data(), contents_.size());
-            
-            open();
-        }
-        
-        ~OggFile()
-        {
-            close();
-        }
-        
-        ALenum format() const
+        ALenum format() const override
         {
             return (channels_ == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16);
         }
         
-        ALuint sample_rate() const
+        ALuint sample_rate() const override
         {
             return sample_rate_;
         }
         
-        std::size_t read_data(void* dest, std::size_t length)
+        std::size_t read_data(void* dest, std::size_t length) override
         {
             int samples = 0;
             int max_samples = static_cast<int>(length / sizeof(short));
@@ -88,7 +74,7 @@ namespace Gosu
             return samples * sizeof(short);
         }
         
-        void rewind()
+        void rewind() override
         {
             stb_vorbis_seek_start(stream_);
         }

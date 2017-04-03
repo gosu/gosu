@@ -175,7 +175,7 @@ namespace Gosu
             init();
         }
         
-        ~AudioToolboxFile()
+        ~AudioToolboxFile() override
         {
             ExtAudioFileDispose(file_);
 
@@ -184,22 +184,22 @@ namespace Gosu
             }
         }
         
-        ALenum format() const
+        ALenum format() const override
         {
             return format_;
         }
         
-        ALuint sample_rate() const
+        ALuint sample_rate() const override
         {
             return sample_rate_;
         }
         
-        void rewind()
+        void rewind() override
         {
             CHECK_OS(ExtAudioFileSeek(file_, 0 + seek_offset_));
         }
         
-        std::size_t read_data(void* dest, size_t length)
+        std::size_t read_data(void* dest, size_t length) override
         {
             AudioBufferList abl;
             abl.mNumberBuffers = 1;

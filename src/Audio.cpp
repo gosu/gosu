@@ -281,7 +281,7 @@ public:
         player = [[AVAudioPlayer alloc] initWithContentsOfURL:URL error:nil];
     }
     
-    void play(bool looping)
+    void play(bool looping) override
     {
         if (paused()) {
             stop();
@@ -290,28 +290,28 @@ public:
         [player play];
     }
     
-    void pause()
+    void pause() override
     {
         [player pause];
     }
     
-    void resume()
+    void resume() override
     {
         [player play];
     }
     
-    bool paused() const
+    bool paused() const override
     {
         return !player.playing;
     };
     
-    void stop()
+    void stop() override
     {
         [player stop];
         player.currentTime = 0;
     }
     
-    void update()
+    void update() override
     {
     }
 };
@@ -323,7 +323,7 @@ class Gosu::Song::StreamData : public BaseData
     std::unique_ptr<AudioFile> file;
     ALuint buffers[2];
     
-    void apply_volume()
+    void apply_volume() override
     {
         int source = lookup_source();
         if (source != ALChannelManagement::NO_SOURCE) {
@@ -383,7 +383,7 @@ public:
         }
     }
     
-    void play(bool looping)
+    void play(bool looping) override
     {
         int source = lookup_source();
         if (source != ALChannelManagement::NO_SOURCE) {
@@ -402,7 +402,7 @@ public:
         }
     }
 
-    void stop()
+    void stop() override
     {
         int source = lookup_source();
         if (source != ALChannelManagement::NO_SOURCE) {
@@ -422,7 +422,7 @@ public:
         file->rewind();
     }
     
-    void pause()
+    void pause() override
     {
         int source = lookup_source();
         if (source != ALChannelManagement::NO_SOURCE) {
@@ -430,7 +430,7 @@ public:
         }
     }
     
-    void resume()
+    void resume() override
     {
         int source = lookup_source();
         if (source != ALChannelManagement::NO_SOURCE) {
@@ -438,7 +438,7 @@ public:
         }
     }
     
-    bool paused() const
+    bool paused() const override
     {
         int source = lookup_source();
         if (source == ALChannelManagement::NO_SOURCE) {
@@ -449,7 +449,7 @@ public:
         return state == AL_PAUSED;
     }
     
-    void update()
+    void update() override
     {
         int source = lookup_source();
 
