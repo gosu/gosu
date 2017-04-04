@@ -57,13 +57,9 @@ namespace Gosu
 #  include <TargetConditionals.h>
 #  if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 #   define GOSU_IS_IPHONE
+#   define GOSU_IS_OPENGLES
 #  endif
 # endif
-#endif
-
-#if defined (GOSU_IS_IPHONE) || defined(__arm__)
-# define GOSU_IS_OPENGLES
-# define GOSU_IS_MOBILE
 #endif
 
 #ifndef GOSU_DEPRECATED

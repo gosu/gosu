@@ -52,11 +52,13 @@ if `uname`.chomp == 'Darwin'
   $ARCH_FLAG.gsub! "-arch i386", ""
   CONFIG['LDSHARED'].gsub! "-arch i386", ""
 else
-  if /Raspbian/ =~ `cat /etc/issue` or /BCM2708/ =~ `cat /proc/cpuinfo`
+  if /BCM2708/ =~ `cat /proc/cpuinfo`
     $INCFLAGS << " -I/opt/vc/include/GLES"
     $INCFLAGS << " -I/opt/vc/include"
     $LDFLAGS << " -L/opt/vc/lib"
     $LDFLAGS << " -lGLESv1_CM"
+    $CFLAGS   << " -DGOSU_IS_OPENGLES"
+    $CXXFLAGS << " -DGOSU_IS_OPENGLES"
   else
     pkg_config 'gl'
   end
