@@ -37,46 +37,38 @@ namespace Gosu
         unsigned width() const;
         unsigned height() const;
 
-        //! Prepares the graphics object for drawing. Nothing must be drawn
-        //! without calling begin.
-        bool begin(Color clear_with_color = Color::BLACK);
-        //! Every call to begin must have a matching call to end.
-        void end();
+        //! Prepares the graphics object for drawing and then runs the rendering code in f.
+        //! Nothing must be drawn outside of frame() and record().
+        void frame(const std::function<void()>& f);
         
         //! Flushes the Z queue to the screen and starts a new one.
-        //! Useful for games that are *very* composite in nature (splitscreen).
+        //! This can be useful to separate the Z queues of two parts of the game, e.g. the two
+        //! halves of a game that runs in split-screen mode.
         static void flush();
         
-        //! Finishes all pending Gosu drawing operations and executes
-        //! the following OpenGL code in a clean environment.
-        static void begin_gl();
-        //! Resets Gosu into its default rendering state.
-        static void end_gl();
+        //! Finishes all pending Gosu drawing operations and executes the code in f in a clean
+        //! OpenGL environment.
+        static void gl(const std::function<void()>& f);
+
         //! Schedules a custom GL functor to be executed at a certain Z level.
-        //! The functor is called in a clean GL context (as given by begin_gl/end_gl).
-        //! Gosu's rendering up to the Z level may not yet have been glFlush()ed.
+        //! The functor f is run in a clean GL context.
         //! Note: You may not call any Gosu rendering functions from within the
-        //! functor, and you must schedule it from within Window::draw's call tree.
-        static void gl(const std::function<void ()>& functor, ZPos z);
+        //! functor.
+        static void gl(ZPos z, const std::function<void()>& f);
         
-        //! Enables clipping to a specified rectangle.
-        static void begin_clipping(double x, double y, double width, double height);
-        //! Disables clipping.
-        static void end_clipping();
+        //! Renders everything drawn in f clipped to a rectangle on the screen.
+        static void clip_to(double x, double y, double width, double height,
+                            const std::function<void()>& f);
         
-        //! Starts recording a macro. Cannot be nested.
-        static void begin_recording();
-        //! Finishes building the macro and returns it as a drawable object.
-        //! The width and height affect nothing about the recording process,
-        //! the resulting macro will simply return these values when you ask
-        //! it.
-        //! Most usually, the return value is passed to Image::Image().
-        static std::unique_ptr<Gosu::ImageData> end_recording(int width, int height);
+        //! Records a macro and returns it as an ImageData instance.
+        //! Usually, the return value is passed to Image::Image().
+        //! Cannot be nested.
+        static std::unique_ptr<Gosu::ImageData> record(int width, int height,
+                                                       const std::function<void()>& f);
         
         //! Pushes one transformation onto the transformation stack.
-        static void push_transform(const Transform& transform);
-        //! Pops one transformation from the transformation stack.
-        static void pop_transform();
+        static void transform(const Transform& transform,
+                              const std::function<void()>& f);
 
         //! Draws a line from one point to another (last pixel exclusive).
         //! Note: OpenGL lines are not reliable at all and may have a missing pixel at the start

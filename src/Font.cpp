@@ -159,7 +159,7 @@ void Gosu::Font::set_image(wchar_t wc, unsigned font_flags, const Image& image)
 void Gosu::Font::draw_rot(const string& text, double x, double y, ZPos z, double angle,
     double scale_x, double scale_y, Color c, AlphaMode mode) const
 {
-    Gosu::Graphics::push_transform(rotate(angle, x, y));
-    draw(text, x, y, z, scale_x, scale_y, c, mode);
-    Gosu::Graphics::pop_transform();
+    Gosu::Graphics::transform(rotate(angle, x, y), [&] {
+        draw(text, x, y, z, scale_x, scale_y, c, mode);
+    });
 }

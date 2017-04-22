@@ -62,6 +62,33 @@ struct Gosu::Graphics::Impl
         Transform translate_transform = translate(black_width, black_height);
         base_transform = concat(translate_transform, scale_transform);
     }
+    
+    void begin_gl()
+    {
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glDisable(GL_BLEND);
+        // Reset the colour to white to avoid surprises.
+        // https://www.libgosu.org/cgi-bin/mwf/topic_show.pl?pid=9115#pid9115
+        glColor4ubv(reinterpret_cast<const GLubyte*>(&Color::WHITE));
+        while (glGetError() != GL_NO_ERROR);
+    }
+    
+    void end_gl()
+    {
+        glPopAttrib();
+        
+        // Restore matrices.
+        // TODO: Should be merged into RenderState and removed from Graphics.
+        
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glViewport(0, 0, phys_width, phys_height);
+        glOrtho(0, phys_width, phys_height, 0, -1, 1);
+        
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glEnable(GL_BLEND);
+    }
 };
 
 Gosu::Graphics::Graphics(unsigned phys_width, unsigned phys_height)
@@ -112,7 +139,7 @@ void Gosu::Graphics::set_resolution(unsigned virtual_width, unsigned virtual_hei
     pimpl->update_base_transform();
 }
 
-bool Gosu::Graphics::begin(Gosu::Color clear_with_color)
+void Gosu::Graphics::frame(const std::function<void()>& f)
 {
     if (current_graphics_pointer != nullptr) {
         throw std::logic_error("Cannot nest calls to Gosu::Graphics::begin()");
@@ -135,17 +162,13 @@ bool Gosu::Graphics::begin(Gosu::Color clear_with_color)
     
     queues.back().set_base_transform(pimpl->base_transform);
     
-    glClearColor(clear_with_color.red() / 255.f, clear_with_color.green() / 255.f,
-        clear_with_color.blue() / 255.f, clear_with_color.alpha() / 255.f);
+    glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     
     current_graphics_pointer = this;
     
-    return true;
-}
-
-void Gosu::Graphics::end()
-{
+    f();
+    
     // If recording is in process, cancel it.
     while (current_queue().recording()) {
         queues.pop_back();
@@ -197,7 +220,7 @@ void Gosu::Graphics::flush()
     current_queue().clear_queue();
 }
 
-void Gosu::Graphics::begin_gl()
+void Gosu::Graphics::gl(const std::function<void()>& f)
 {
     if (current_queue().recording()) {
         throw std::logic_error("Custom OpenGL is not allowed while creating a macro");
@@ -206,112 +229,59 @@ void Gosu::Graphics::begin_gl()
 #ifdef GOSU_IS_OPENGLES
     throw std::logic_error("Custom OpenGL ES is not supported yet");
 #else
-    flush();
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glDisable(GL_BLEND);
-    while (glGetError() != GL_NO_ERROR);
-#endif
-}
-
-void Gosu::Graphics::end_gl()
-{
-#ifdef GOSU_IS_OPENGLES
-    throw std::logic_error("Custom OpenGL ES is not supported yet");
-#else
     Graphics& cg = current_graphics();
+
+    flush();
     
-    glPopAttrib();
+    cg.pimpl->begin_gl();
 
-    // Restore matrices.
-    // TODO: Should be merged into RenderState and removed from Graphics.
+    f();
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glViewport(0, 0, cg.pimpl->phys_width, cg.pimpl->phys_height);
-    glOrtho(0, cg.pimpl->phys_width, cg.pimpl->phys_height, 0, -1, 1);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glEnable(GL_BLEND);
+    cg.pimpl->end_gl();
 #endif
 }
 
+void Gosu::Graphics::gl(Gosu::ZPos z, const std::function<void ()>& f)
+{
 #ifdef GOSU_IS_OPENGLES
-void Gosu::Graphics::gl(const std::function<void ()>& functor, Gosu::ZPos z)
-{
     throw std::logic_error("Custom OpenGL ES is not supported yet");
-}
 #else
-namespace Gosu
-{
-    struct RunGLFunctor
-    {
-        Graphics& graphics;
-        std::function<void ()> functor;
-        
-        RunGLFunctor(Graphics& graphics, const std::function<void ()>& functor)
-        : graphics(graphics), functor(functor)
-        {
-        }
-        
-        void operator()() const
-        {
-            // Duplicated from begin_gl() (which we don't call, to avoid flushing).
-            glPushAttrib(GL_ALL_ATTRIB_BITS);
-            glDisable(GL_BLEND);
-            // Reset the colour to white to avoid surprises.
-            // https://www.libgosu.org/cgi-bin/mwf/topic_show.pl?pid=9115#pid9115
-            glColor4ubv(reinterpret_cast<const GLubyte*>(&Color::WHITE));
-            while (glGetError() != GL_NO_ERROR);
-            
-            functor();
-            
-            graphics.end_gl();
-        }
-    };
-}
-
-void Gosu::Graphics::gl(const std::function<void ()>& functor, Gosu::ZPos z)
-{
-    current_queue().gl(RunGLFunctor(current_graphics(), functor), z);
-}
+    current_queue().gl([f] {
+        Graphics& cg = current_graphics();
+        cg.pimpl->begin_gl();
+        f();
+        cg.pimpl->end_gl();
+    }, z);
 #endif
+}
 
-void Gosu::Graphics::begin_clipping(double x, double y, double width, double height)
+void Gosu::Graphics::clip_to(double x, double y, double width, double height,
+                             const std::function<void()>& f)
 {
     double screen_height = current_graphics().pimpl->phys_height;
     current_queue().begin_clipping(x, y, width, height, screen_height);
-}
-
-void Gosu::Graphics::end_clipping()
-{
+    f();
     current_queue().end_clipping();
 }
 
-void Gosu::Graphics::begin_recording()
+std::unique_ptr<Gosu::ImageData> Gosu::Graphics::record(int width, int height,
+                                                        const std::function<void()>& f)
 {
     queues.resize(queues.size() + 1);
     current_queue().set_recording();
-}
 
-std::unique_ptr<Gosu::ImageData> Gosu::Graphics::end_recording(int width, int height)
-{
-    if (!current_queue().recording()) {
-        throw std::logic_error("No macro recording in progress that can be captured");
-    }
+    f();
     
     std::unique_ptr<ImageData> result(new Macro(current_queue(), width, height));
     queues.pop_back();
     return result;
 }
 
-void Gosu::Graphics::push_transform(const Gosu::Transform& transform)
+void Gosu::Graphics::transform(const Gosu::Transform& transform,
+                               const std::function<void()>& f)
 {
     current_queue().push_transform(transform);
-}
-
-void Gosu::Graphics::pop_transform()
-{
+    f();
     current_queue().pop_transform();
 }
 
