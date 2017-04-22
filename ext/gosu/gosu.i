@@ -286,30 +286,24 @@ namespace Gosu
     
     void unsafe_gl()
     {
-        Gosu::Graphics::begin_gl();
-        rb_yield(Qnil);
-        Gosu::Graphics::end_gl();
+        Gosu::Graphics::gl([] { rb_yield(Qnil); });
     }
     
     void unsafe_gl(Gosu::ZPos z)
     {
         VALUE block = rb_block_proc();
-        Gosu::Graphics::gl([block] {
+        Gosu::Graphics::gl(z, [block] {
             Gosu::call_ruby_block(block);
-        }, z);
+        });
     }
     
     void clip_to(double x, double y, double width, double height)
     {
-        Gosu::Graphics::begin_clipping(x, y, width, height);
-        rb_yield(Qnil);
-        Gosu::Graphics::end_clipping();
+        Gosu::Graphics::clip_to(x, y, width, height, [] { rb_yield(Qnil); });
     }
     
     Gosu::Image* record(int width, int height) {
-        Gosu::Graphics::begin_recording();
-        rb_yield(Qnil);
-        return new Gosu::Image(Gosu::Graphics::end_recording(width, height));
+        return new Gosu::Image(Gosu::Graphics::record(width, height, [] { rb_yield(Qnil); }));
     }
     
     // This method cannot be called "transform" because then it would be an ambiguous overload of
@@ -323,44 +317,38 @@ namespace Gosu
         Gosu::Transform transform = {
             m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15
         };
-        Gosu::Graphics::push_transform(transform);
-        rb_yield(Qnil);
-        Gosu::Graphics::pop_transform();
+        Gosu::Graphics::transform(transform,
+                                  [] { rb_yield(Qnil); });
     }
     
     void rotate_for_ruby(double angle, double around_x = 0, double around_y = 0)
     {
-        Gosu::Graphics::push_transform(Gosu::rotate(angle, around_x, around_y));
-        rb_yield(Qnil);
-        Gosu::Graphics::pop_transform();
+        Gosu::Graphics::transform(Gosu::rotate(angle, around_x, around_y),
+                                  [] { rb_yield(Qnil); });
     }
     
     void scale_for_ruby(double factor)
     {
-        Gosu::Graphics::push_transform(Gosu::scale(factor));
-        rb_yield(Qnil);
-        Gosu::Graphics::pop_transform();
+        Gosu::Graphics::transform(Gosu::scale(factor),
+                                  [] { rb_yield(Qnil); });
     }
     
     void scale_for_ruby(double scale_x, double scale_y)
     {
-        Gosu::Graphics::push_transform(Gosu::scale(scale_x, scale_y));
-        rb_yield(Qnil);
-        Gosu::Graphics::pop_transform();
+        Gosu::Graphics::transform(Gosu::scale(scale_x, scale_y),
+                                  [] { rb_yield(Qnil); });
     }
     
     void scale_for_ruby(double scale_x, double scale_y, double around_x, double around_y)
     {
-        Gosu::Graphics::push_transform(Gosu::scale(scale_x, scale_y, around_x, around_y));
-        rb_yield(Qnil);
-        Gosu::Graphics::pop_transform();
+        Gosu::Graphics::transform(Gosu::scale(scale_x, scale_y, around_x, around_y),
+                                  [] { rb_yield(Qnil); });
     }
     
     void translate_for_ruby(double x, double y)
     {
-        Gosu::Graphics::push_transform(Gosu::translate(x, y));
-        rb_yield(Qnil);
-        Gosu::Graphics::pop_transform();
+        Gosu::Graphics::transform(Gosu::translate(x, y),
+                                  [] { rb_yield(Qnil); });
     }
 }
 %}

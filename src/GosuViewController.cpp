@@ -192,12 +192,10 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
     
     if (window.needs_redraw()) {
         [self.GLView redrawGL:^{
-            if (window.graphics().begin()) {
+            window.graphics().frame([&window] {
                 window.draw();
-                window.graphics().end();
-                
                 Gosu::FPS::register_frame();
-            }
+            });
         }];
     }
     

@@ -26,7 +26,7 @@ namespace Gosu
             int error = 0;
             
             const unsigned char* mem = static_cast<const unsigned char*>(contents_.data());
-            stream_ = stb_vorbis_open_memory(mem, contents_.size(), &error, 0);
+            stream_ = stb_vorbis_open_memory(mem, static_cast<int>(contents_.size()), &error, 0);
             
             if (stream_ == 0) {
                 throw std::runtime_error("Cannot open Ogg Vorbis file, error code: " +
@@ -72,7 +72,7 @@ namespace Gosu
         std::size_t read_data(void* dest, std::size_t length)
         {
             int samples = 0;
-            int max_samples = length / sizeof(short);
+            int max_samples = static_cast<int>(length / sizeof(short));
             
             while (samples < max_samples) {
                 int samples_per_channel =

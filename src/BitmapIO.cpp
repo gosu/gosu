@@ -25,7 +25,7 @@ namespace
         std::size_t remaining = reader->resource().size() - reader->position();
         std::size_t actual_size = (size < remaining ? size : remaining);
         reader->read(data, actual_size);
-        return actual_size;
+        return static_cast<int>(actual_size);
     }
 
     void skip_callback(void* user, int n)

@@ -283,11 +283,10 @@ bool Gosu::Window::tick()
     
     if (needs_redraw()) {
         ensure_current_context();
-        if (graphics().begin()) {
+        graphics().frame([&] {
             draw();
-            graphics().end();
             FPS::register_frame();
-        }
+        });
         
         SDL_GL_SwapWindow(shared_window());
     }
