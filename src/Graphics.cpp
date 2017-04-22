@@ -63,6 +63,7 @@ struct Gosu::Graphics::Impl
         base_transform = concat(translate_transform, scale_transform);
     }
     
+#ifndef GOSU_IS_OPENGLES
     void begin_gl()
     {
         glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -89,6 +90,7 @@ struct Gosu::Graphics::Impl
         glLoadIdentity();
         glEnable(GL_BLEND);
     }
+#endif
 };
 
 Gosu::Graphics::Graphics(unsigned phys_width, unsigned phys_height)
