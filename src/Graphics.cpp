@@ -187,7 +187,7 @@ void Gosu::Graphics::frame(const std::function<void()>& f)
                      0, height() + pimpl->black_height, Color::BLACK,
                      width(), height() + pimpl->black_height, Color::BLACK, 0);
         }
-        else if (pimpl->black_width) {
+        if (pimpl->black_width) {
             draw_quad(-pimpl->black_width, 0, Color::BLACK,
                      0, 0, Color::BLACK,
                      -pimpl->black_width, height(), Color::BLACK,

@@ -34,7 +34,7 @@ namespace Gosu
         
         const std::vector<char>& decoded_data()
         {
-            static const unsigned INCREMENT = 512 * 1024;
+            static const std::size_t INCREMENT = 512 * 1024;
             
             if (!data_.empty()) {
                 return data_;
@@ -43,7 +43,7 @@ namespace Gosu
             for (;;) {
                 data_.resize(data_.size() + INCREMENT);
                 
-                int read_bytes = read_data(&data_[data_.size() - INCREMENT], INCREMENT);
+                auto read_bytes = read_data(&data_[data_.size() - INCREMENT], INCREMENT);
                 
                 if (read_bytes < INCREMENT) {
                     data_.resize(data_.size() - INCREMENT + read_bytes);
