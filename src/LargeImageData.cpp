@@ -115,10 +115,65 @@ void Gosu::LargeImageData::draw(double x1, double y1, Color c1,
     }
 }
 
-std::unique_ptr<Gosu::ImageData>
-    Gosu::LargeImageData::subimage(int x, int y, int width, int height) const
+unique_ptr<Gosu::ImageData>
+    Gosu::LargeImageData::subimage(int left, int top, int width, int height) const
 {
-    return nullptr;
+    if (left < 0 || top < 0 || left + width > w || top + height > h) {
+        throw invalid_argument("subimage bounds exceed those of its parent");
+    }
+    if (width <= 0 || height <= 0) {
+        throw invalid_argument("cannot create empty image");
+    }
+    
+    int sub_tiles_y = 0;
+    vector<unique_ptr<ImageData>> sub_tiles;
+    
+    int y = 0;
+    for (int ty = 0; ty < tiles_y; ++ty) {
+        int row_height = tiles[ty * tiles_x]->height();
+        
+        if (y + row_height <= top) {
+            y += tiles[ty * tiles_x]->height();
+            continue;
+        }
+        if (y >= top + height) break;
+        
+        sub_tiles_y += 1;
+
+        int x = 0;
+        for (int tx = 0; tx < tiles_x; ++tx) {
+            ImageData& tile = *tiles[ty * tiles_x + tx];
+            
+            if (x + tile.width() <= left) {
+                x += tile.width();
+                continue;
+            }
+            if (x >= left + width) break;
+            
+            int sub_left   = max(0, left - x);
+            int sub_top    = max(0, top  - y);
+            int sub_right  = min(tile.width(),  left + width  - x);
+            int sub_bottom = min(tile.height(), top  + height - y);
+            
+            sub_tiles.emplace_back(tile.subimage(sub_left, sub_top, sub_right - sub_left, sub_bottom - sub_top));
+            
+            x += tile.width();
+        }
+        y += tiles[ty * tiles_x]->height();
+    }
+    
+    if (sub_tiles.size() == 1) {
+        return move(sub_tiles[0]);
+    }
+    else {
+        unique_ptr<LargeImageData> result(new LargeImageData());
+        result->w = width;
+        result->h = height;
+        result->tiles_x = static_cast<int>(sub_tiles.size()) / sub_tiles_y;
+        result->tiles_y = sub_tiles_y;
+        result->tiles.swap(sub_tiles);
+        return move(result);
+    }
 }
 
 Gosu::Bitmap Gosu::LargeImageData::to_bitmap() const
@@ -128,7 +183,7 @@ Gosu::Bitmap Gosu::LargeImageData::to_bitmap() const
     for (int ty = 0; ty < tiles_y; ++ty) {
         int x = 0;
         for (int tx = 0; tx < tiles_x; ++tx) {
-            ImageData& tile = *tiles[ty * tiles_x + ty];
+            ImageData& tile = *tiles[ty * tiles_x + tx];
             bitmap.insert(tile.to_bitmap(), x, y);
             x += tile.width();
         }
@@ -143,7 +198,7 @@ void Gosu::LargeImageData::insert(const Bitmap& bitmap, int at_x, int at_y)
     for (int ty = 0; ty < tiles_y; ++ty) {
         int x = 0;
         for (int tx = 0; tx < tiles_x; ++tx) {
-            ImageData& tile = *tiles[ty * tiles_x + ty];
+            ImageData& tile = *tiles[ty * tiles_x + tx];
             tile.insert(bitmap, at_x - x, at_y - y);
             x += tile.width();
         }

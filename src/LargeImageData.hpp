@@ -11,7 +11,9 @@ class Gosu::LargeImageData : public Gosu::ImageData
 {
     int w, h;
     int tiles_x, tiles_y;
-    std::vector<std::shared_ptr<ImageData>> tiles;
+    std::vector<std::unique_ptr<ImageData>> tiles;
+    
+    LargeImageData() {}
 
 public:
     LargeImageData(const Bitmap& source, int tile_width, int tile_height, unsigned image_flags);
