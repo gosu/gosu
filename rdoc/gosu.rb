@@ -381,17 +381,10 @@ module Gosu
     ##
     # Returns an image that is a smaller, rectangular view of this {Image}.
     # 
-    # This is a very fast operation, and no new textures are allocated.
+    # This is a very fast operation, and no new textures will be allocated.
     # If you update this {Image} or the {#subimage} using {#insert}, the other {Image} will be affected as well.
     # 
-    # This method can be used to load texture atlases created with third-party tools.
-    # The texture atlas must be a power of two (512x512 or 1024x1024) and loaded with :tileable => true.
-    # The individual {Image}s can then be loaded efficiently with {#subimage}.
-    # {#gl_tex_info} will work on a {#subimage}.
-    # 
     # Caveats:
-    # * {#subimage} only works if the image lives on a single texture.
-    #   If the image was too large and had to be split up into several OpenGL textures, subimage will return nil (same as {#gl_tex_info}).
     # * If you stretch or rotate a {#subimage}, the pixels adjacent to it might bleed into it, as Gosu does not manage the 'tileability' of subimages.
     # 
     # @return [Image?] an image that represents a portion of the containing image
