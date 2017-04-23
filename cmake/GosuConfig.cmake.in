@@ -36,28 +36,40 @@ link_directories(
     ${SDL2_LIBRARY_DIRS}
 )
 
+if(NOT APPLE)
+    pkg_check_modules(SNDFILE REQUIRED sndfile)
+    pkg_check_modules(MPG123 REQUIRED libmpg123)
+
+    set(GOSU_DEPENDENCIES ${GOSU_DEPENDENCIES}
+        ${SNDFILE_LIBRARIES}
+        ${MPG123_LIBRARIES}
+    )
+
+    link_directories(
+        ${SNDFILE_LIBRARY_DIRS}
+        ${MPG123_LIBRARY_DIRS}
+    )
+endif()
+
 if(NOT WIN32 AND NOT APPLE)
     find_package(Freetype REQUIRED)
     pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
     pkg_check_modules(PANGO REQUIRED pango)
     pkg_check_modules(PANGOFT REQUIRED pangoft2)
-    pkg_check_modules(SNDFILE REQUIRED sndfile)
     
     set(GOSU_DEPENDENCIES ${GOSU_DEPENDENCIES}
         ${FREETYPE_LIBRARIES}
         ${SDL2_TTF_LIBRARIES}
-        ${SNDFILE_LIBRARIES}
         ${PANGO_LIBRARIES}
         ${PANGOFT_LIBRARIES}
     )
     
     link_directories(
         ${SDL2_TTF_LIBRARY_DIRS}
-        ${SNDFILE_LIBRARY_DIRS}
         ${PANGO_LIBRARY_DIRS}
         ${PANGOFT_LIBRARY_DIRS}
     )
-endif ()
+endif()
 
 if(APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)

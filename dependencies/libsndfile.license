@@ -1,1 +1,6 @@
-See http://www.gnu.org/copyleft/lesser.html.
+libsndfile is released under the terms of the GNU Lesser General Public License, of which there are
+two versions; version 2.1 <http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html> and version 3
+<http://www.gnu.org/copyleft/lesser.html>. To maximise the compatibility of libsndfile, the user
+may choose to use libsndfile under either of the above two licenses. 
+
+(from http://www.mega-nerd.com/libsndfile/)

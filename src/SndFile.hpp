@@ -137,14 +137,14 @@ namespace Gosu
             }
         }
         
-        ~SndFile()
+        ~SndFile() override
         {
             if (file) {
                 sf_close(file);
             }
         }
         
-        ALenum format() const
+        ALenum format() const override
         {
             switch (info.channels) {
             case 1:
@@ -156,18 +156,18 @@ namespace Gosu
             };
         }
         
-        ALuint sample_rate() const
+        ALuint sample_rate() const override
         {
             return info.samplerate;
         }
         
-        std::size_t read_data(void* dest, std::size_t length)
+        std::size_t read_data(void* dest, std::size_t length) override
         {
             int frame_size = sizeof(short) * info.channels;
             return sf_readf_short(file, (short*)dest, length / frame_size) * frame_size;
         }
         
-        void rewind()
+        void rewind() override
         {
             sf_seek(file, 0, SEEK_SET);
         }

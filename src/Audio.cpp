@@ -21,6 +21,7 @@
 #else
 #include <AL/al.h>
 #include <AL/alc.h>
+#include "MPEGFile.hpp"
 #include "SndFile.hpp"
 #define WAVE_FILE SndFile
 #endif
@@ -175,9 +176,8 @@ Gosu::Sample::Sample(const std::string& filename)
     CONSTRUCTOR_BEGIN;
 
     if (is_ogg_file(filename)) {
-        Gosu::Buffer buffer;
-        Gosu::load_file(buffer, filename);
-        OggFile ogg_file(buffer.front_reader());
+        Gosu::File file(filename);
+        OggFile ogg_file(file.front_reader());
         data.reset(new SampleData(ogg_file));
     }
     else {
@@ -197,8 +197,19 @@ Gosu::Sample::Sample(Reader reader)
         data.reset(new SampleData(ogg_file));
     }
     else {
-        WAVE_FILE audio_file(reader);
-        data.reset(new SampleData(audio_file));
+        try {
+            WAVE_FILE audio_file(reader);
+            data.reset(new SampleData(audio_file));
+        }
+        catch (const std::runtime_error& ex) {
+        #ifndef GOSU_IS_MAC
+            if (std::string(ex.what()).find("unknown format") != std::string::npos) {
+                MPEGFile mpeg_file(reader);
+                data.reset(new SampleData(mpeg_file));
+            } else
+        #endif
+                throw ex;
+        }
     }
     
     CONSTRUCTOR_END;
@@ -221,7 +232,6 @@ Gosu::SampleInstance Gosu::Sample::play_pan(double pan, double volume, double sp
                                                                    channel_and_token.second);
     assert (source != ALChannelManagement::NO_SOURCE);
     alSourcei(source, AL_BUFFER, data->buffer);
-    // TODO: This is not the old panning behavior!
     alSource3f(source, AL_POSITION, pan * 10, 0, 0);
     alSourcef(source, AL_GAIN, volume);
     alSourcef(source, AL_PITCH, speed);
@@ -281,7 +291,7 @@ public:
         player = [[AVAudioPlayer alloc] initWithContentsOfURL:URL error:nil];
     }
     
-    void play(bool looping)
+    void play(bool looping) override
     {
         if (paused()) {
             stop();
@@ -290,28 +300,28 @@ public:
         [player play];
     }
     
-    void pause()
+    void pause() override
     {
         [player pause];
     }
     
-    void resume()
+    void resume() override
     {
         [player play];
     }
     
-    bool paused() const
+    bool paused() const override
     {
         return !player.playing;
     };
     
-    void stop()
+    void stop() override
     {
         [player stop];
         player.currentTime = 0;
     }
     
-    void update()
+    void update() override
     {
     }
 };
@@ -323,7 +333,7 @@ class Gosu::Song::StreamData : public BaseData
     std::unique_ptr<AudioFile> file;
     ALuint buffers[2];
     
-    void apply_volume()
+    void apply_volume() override
     {
         int source = lookup_source();
         if (source != ALChannelManagement::NO_SOURCE) {
@@ -360,7 +370,19 @@ public:
             file.reset(new OggFile(source_file.front_reader()));
         }
         else {
-            file.reset(new WAVE_FILE(filename));
+            try {
+                file.reset(new WAVE_FILE(filename));
+            }
+            catch (const std::runtime_error& ex) {
+            #ifndef GOSU_IS_MAC
+                if (std::string(ex.what()).find("unknown format") != std::string::npos) {
+                    Gosu::File source_file(filename);
+                    file.reset(new MPEGFile(source_file.front_reader()));
+                }
+                else
+            #endif
+                    throw ex;
+            }
         }
         alGenBuffers(2, buffers);
     }
@@ -371,7 +393,18 @@ public:
             file.reset(new OggFile(reader));
         }
         else {
-            file.reset(new WAVE_FILE(reader));
+            try {
+                file.reset(new WAVE_FILE(reader));
+            }
+            catch (const std::runtime_error& ex) {
+            #ifndef GOSU_IS_MAC
+                if (std::string(ex.what()).find("unknown format") != std::string::npos) {
+                    file.reset(new MPEGFile(reader));
+                }
+                else
+            #endif
+                    throw ex;
+            }
         }
         alGenBuffers(2, buffers);
     }
@@ -383,7 +416,7 @@ public:
         }
     }
     
-    void play(bool looping)
+    void play(bool looping) override
     {
         int source = lookup_source();
         if (source != ALChannelManagement::NO_SOURCE) {
@@ -402,7 +435,7 @@ public:
         }
     }
 
-    void stop()
+    void stop() override
     {
         int source = lookup_source();
         if (source != ALChannelManagement::NO_SOURCE) {
@@ -422,7 +455,7 @@ public:
         file->rewind();
     }
     
-    void pause()
+    void pause() override
     {
         int source = lookup_source();
         if (source != ALChannelManagement::NO_SOURCE) {
@@ -430,7 +463,7 @@ public:
         }
     }
     
-    void resume()
+    void resume() override
     {
         int source = lookup_source();
         if (source != ALChannelManagement::NO_SOURCE) {
@@ -438,7 +471,7 @@ public:
         }
     }
     
-    bool paused() const
+    bool paused() const override
     {
         int source = lookup_source();
         if (source == ALChannelManagement::NO_SOURCE) {
@@ -449,7 +482,7 @@ public:
         return state == AL_PAUSED;
     }
     
-    void update()
+    void update() override
     {
         int source = lookup_source();
 
