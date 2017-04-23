@@ -1,35 +1,37 @@
 #include "LargeImageData.hpp"
-#include "GraphicsImpl.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Math.hpp>
 #include <cmath>
 using namespace std;
 
-Gosu::LargeImageData::LargeImageData(const Bitmap& source,
-    unsigned part_width, unsigned part_height, unsigned image_flags)
+Gosu::LargeImageData::LargeImageData(const Bitmap& source, int tile_width, int tile_height,
+                                     unsigned image_flags)
 {
-    full_width = source.width();
-    full_height = source.height();
-    parts_x = static_cast<unsigned>(trunc(ceil(1.0 * source.width() / part_width)));
-    parts_y = static_cast<unsigned>(trunc(ceil(1.0 * source.height() / part_height)));
-    this->part_width = part_width;
-    this->part_height = part_height;
+    w = source.width();
+    h = source.height();
+    tiles_x = static_cast<int>(ceil(1.0 * w / tile_width));
+    tiles_y = static_cast<int>(ceil(1.0 * h / tile_height));
 
-    parts.resize(parts_x * parts_y);
+    // When there are no tiles, set both fields to 0 to avoid entering any for() loop in this class.
+    if (tiles_x == 0 || tiles_y == 0) {
+        tiles_x = tiles_y = 0;
+    }
 
-    for (unsigned y = 0; y < parts_y; ++y) {
-        for (unsigned x = 0; x < parts_x; ++x) {
-            // The right-most parts don't necessarily have the full width.
-            unsigned src_width = part_width;
-            if (x == parts_x - 1 && source.width() % part_width != 0) {
-                src_width = source.width() % part_width;
+    tiles.reserve(tiles_x * tiles_y);
+
+    for (int y = 0; y < tiles_y; ++y) {
+        for (int x = 0; x < tiles_x; ++x) {
+            int src_width = tile_width;
+            if (x == tiles_x - 1 && w % tile_width != 0) {
+                // The right-most parts don't necessarily have the full width.
+                src_width = w % tile_width;
             }
 
-            // Same for the parts on the bottom.
-            unsigned src_height = part_height;
-            if (y == parts_y - 1 && source.height() % part_height != 0) {
-                src_height = source.height() % part_height;
+            int src_height = tile_height;
+            if (y == tiles_y - 1 && h % tile_height != 0) {
+                // Same for the parts on the bottom.
+                src_height = h % tile_height;
             }
 
             unsigned local_flags = IF_TILEABLE | image_flags;
@@ -40,7 +42,7 @@ Gosu::LargeImageData::LargeImageData(const Bitmap& source,
                 local_flags |= (image_flags & IF_TILEABLE_LEFT);
             }
             // Right edge, only tileable if requested in image_flags.
-            if (x == parts_x - 1) {
+            if (x == tiles_x - 1) {
                 local_flags &= ~IF_TILEABLE_RIGHT;
                 local_flags |= (image_flags & IF_TILEABLE_RIGHT);
             }
@@ -50,102 +52,156 @@ Gosu::LargeImageData::LargeImageData(const Bitmap& source,
                 local_flags |= (image_flags & IF_TILEABLE_TOP);
             }
             // Bottom edge, only tileable if requested in image_flags.
-            if (y == parts_y - 1) {
+            if (y == tiles_y - 1) {
                 local_flags &= ~IF_TILEABLE_BOTTOM;
                 local_flags |= (image_flags & IF_TILEABLE_BOTTOM);
             }
             
-            parts[y * parts_x + x].reset(Graphics::create_image(source,
-                                                                x * part_width, y * part_height,
-                                                                src_width, src_height,
-                                                                local_flags).release());
+            tiles.emplace_back(Graphics::create_image(source,
+                                                      x * tile_width, y * tile_height,
+                                                      src_width, src_height, local_flags));
         }
     }
 }
 
-int Gosu::LargeImageData::width() const
+void Gosu::LargeImageData::draw(double x1, double y1, Color c1,
+                                double x2, double y2, Color c2,
+                                double x3, double y3, Color c3,
+                                double x4, double y4, Color c4,
+                                ZPos z, AlphaMode mode) const
 {
-    return full_width;
-}
-
-int Gosu::LargeImageData::height() const
-{
-    return full_height;
-}
-
-namespace
-{
-    // Local interpolation helper functions. - TODO why not from Math.hpp?
-
-    double ipl(double a, double b, double ratio)
-    {
-        return a + (b - a) * ratio;
-    }
-
-    Gosu::Color ipl(Gosu::Color a, Gosu::Color b, double ratio)
-    {
-        Gosu::Color result;
-        result.set_alpha(Gosu::round(ipl(a.alpha(), b.alpha(), ratio)));
-        result.set_red  (Gosu::round(ipl(a.red(),   b.red(),   ratio)));
-        result.set_green(Gosu::round(ipl(a.green(), b.green(), ratio)));
-        result.set_blue (Gosu::round(ipl(a.blue(),  b.blue(),  ratio)));
-        return result;
-    }
-}
-
-void Gosu::LargeImageData::draw(double x1, double y1, Color c1, double x2, double y2, Color c2,
-    double x3, double y3, Color c3, double x4, double y4, Color c4, ZPos z, AlphaMode mode) const
-{
-    if (parts.empty()) return;
-
     normalize_coordinates(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
     
-    for (unsigned py = 0; py < parts_y; ++py) {
-        for (unsigned px = 0; px < parts_x; ++px) {
-            ImageData& part = *parts[py * parts_x + px];
+    double y = 0;
+    for (int ty = 0; ty < tiles_y; ++ty) {
+        double x = 0;
+        for (int tx = 0; tx < tiles_x; ++tx) {
+            ImageData& tile = *tiles[ty * tiles_x + tx];
 
-            double rel_x_l = static_cast<double>(px * part_width) / width();
-            double rel_x_r = static_cast<double>(px * part_width + part.width()) / width();
-            double rel_y_t = static_cast<double>(py * part_height) / height();
-            double rel_y_b = static_cast<double>(py * part_height + part.height()) / height();
+            double rel_x_l = x / w;
+            double rel_x_r = (x + tile.width()) / w;
+            double rel_y_t = y / h;
+            double rel_y_b = (y + tile.height()) / h;
+            
+        #define INTERPOLATE(what, x_weight, y_weight) \
+            interpolate(interpolate(what##1, what##3, y_weight), \
+                        interpolate(what##2, what##4, y_weight), \
+                        x_weight);
 
-            double abs_x_t_l = ipl(ipl(x1, x3, rel_y_t), ipl(x2, x4, rel_y_t), rel_x_l);
-            double abs_x_t_r = ipl(ipl(x1, x3, rel_y_t), ipl(x2, x4, rel_y_t), rel_x_r);
-            double abs_x_b_l = ipl(ipl(x1, x3, rel_y_b), ipl(x2, x4, rel_y_b), rel_x_l);
-            double abs_x_b_r = ipl(ipl(x1, x3, rel_y_b), ipl(x2, x4, rel_y_b), rel_x_r);
+            double x_t_l = INTERPOLATE(x, rel_x_l, rel_y_t);
+            double x_t_r = INTERPOLATE(x, rel_x_r, rel_y_t);
+            double x_b_l = INTERPOLATE(x, rel_x_l, rel_y_b);
+            double x_b_r = INTERPOLATE(x, rel_x_r, rel_y_b);
 
-            double abs_y_t_l = ipl(ipl(y1, y3, rel_y_t), ipl(y2, y4, rel_y_t), rel_x_l);
-            double abs_y_t_r = ipl(ipl(y1, y3, rel_y_t), ipl(y2, y4, rel_y_t), rel_x_r);
-            double abs_y_b_l = ipl(ipl(y1, y3, rel_y_b), ipl(y2, y4, rel_y_b), rel_x_l);
-            double abs_y_b_r = ipl(ipl(y1, y3, rel_y_b), ipl(y2, y4, rel_y_b), rel_x_r);
+            double y_t_l = INTERPOLATE(y, rel_x_l, rel_y_t);
+            double y_t_r = INTERPOLATE(y, rel_x_r, rel_y_t);
+            double y_b_l = INTERPOLATE(y, rel_x_l, rel_y_b);
+            double y_b_r = INTERPOLATE(y, rel_x_r, rel_y_b);
 
-            Color abs_c_t_l = ipl(ipl(c1, c3, rel_y_t), ipl(c2, c4, rel_y_t), rel_x_l);
-            Color abs_c_t_r = ipl(ipl(c1, c3, rel_y_t), ipl(c2, c4, rel_y_t), rel_x_r);
-            Color abs_c_b_l = ipl(ipl(c1, c3, rel_y_b), ipl(c2, c4, rel_y_b), rel_x_l);
-            Color abs_c_b_r = ipl(ipl(c1, c3, rel_y_b), ipl(c2, c4, rel_y_b), rel_x_r);
+            Color  c_t_l = INTERPOLATE(c, rel_x_l, rel_y_t);
+            Color  c_t_r = INTERPOLATE(c, rel_x_r, rel_y_t);
+            Color  c_b_l = INTERPOLATE(c, rel_x_l, rel_y_b);
+            Color  c_b_r = INTERPOLATE(c, rel_x_r, rel_y_b);
 
-            part.draw(abs_x_t_l, abs_y_t_l, abs_c_t_l, abs_x_t_r, abs_y_t_r, abs_c_t_r,
-                      abs_x_b_l, abs_y_b_l, abs_c_b_l, abs_x_b_r, abs_y_b_r, abs_c_b_r, z, mode);
+            tile.draw(x_t_l, y_t_l, c_t_l,
+                      x_t_r, y_t_r, c_t_r,
+                      x_b_l, y_b_l, c_b_l,
+                      x_b_r, y_b_r, c_b_r,
+                      z, mode);
+            
+            x += tile.width();
         }
+        y += tiles[ty * tiles_x]->height();
+    }
+}
+
+unique_ptr<Gosu::ImageData>
+    Gosu::LargeImageData::subimage(int left, int top, int width, int height) const
+{
+    if (left < 0 || top < 0 || left + width > w || top + height > h) {
+        throw invalid_argument("subimage bounds exceed those of its parent");
+    }
+    if (width <= 0 || height <= 0) {
+        throw invalid_argument("cannot create empty image");
+    }
+    
+    int sub_tiles_y = 0;
+    vector<unique_ptr<ImageData>> sub_tiles;
+    
+    int y = 0;
+    for (int ty = 0; ty < tiles_y; ++ty) {
+        int row_height = tiles[ty * tiles_x]->height();
+        
+        if (y + row_height <= top) {
+            y += tiles[ty * tiles_x]->height();
+            continue;
+        }
+        if (y >= top + height) break;
+        
+        sub_tiles_y += 1;
+
+        int x = 0;
+        for (int tx = 0; tx < tiles_x; ++tx) {
+            ImageData& tile = *tiles[ty * tiles_x + tx];
+            
+            if (x + tile.width() <= left) {
+                x += tile.width();
+                continue;
+            }
+            if (x >= left + width) break;
+            
+            int sub_left   = max(0, left - x);
+            int sub_top    = max(0, top  - y);
+            int sub_right  = min(tile.width(),  left + width  - x);
+            int sub_bottom = min(tile.height(), top  + height - y);
+            
+            sub_tiles.emplace_back(tile.subimage(sub_left, sub_top, sub_right - sub_left, sub_bottom - sub_top));
+            
+            x += tile.width();
+        }
+        y += tiles[ty * tiles_x]->height();
+    }
+    
+    if (sub_tiles.size() == 1) {
+        return move(sub_tiles[0]);
+    }
+    else {
+        unique_ptr<LargeImageData> result(new LargeImageData());
+        result->w = width;
+        result->h = height;
+        result->tiles_x = static_cast<int>(sub_tiles.size()) / sub_tiles_y;
+        result->tiles_y = sub_tiles_y;
+        result->tiles.swap(sub_tiles);
+        return move(result);
     }
 }
 
 Gosu::Bitmap Gosu::LargeImageData::to_bitmap() const
 {
     Bitmap bitmap(width(), height());
-    for (int x = 0; x < parts_x; ++x) {
-        for (int y = 0; y < parts_y; ++y) {
-            bitmap.insert(parts[y * parts_x + x]->to_bitmap(), x * part_width, y * part_height);
+    int y = 0;
+    for (int ty = 0; ty < tiles_y; ++ty) {
+        int x = 0;
+        for (int tx = 0; tx < tiles_x; ++tx) {
+            ImageData& tile = *tiles[ty * tiles_x + tx];
+            bitmap.insert(tile.to_bitmap(), x, y);
+            x += tile.width();
         }
+        y += tiles[ty * tiles_x]->height();
     }
     return bitmap;
 }
 
 void Gosu::LargeImageData::insert(const Bitmap& bitmap, int at_x, int at_y)
 {
-    for (int x = 0; x < parts_x; ++x) {
-        for (int y = 0; y < parts_y; ++y) {
-            parts[y * parts_x + x]->insert(bitmap, at_x - x * part_width, at_y - y * part_height);
+    int y = 0;
+    for (int ty = 0; ty < tiles_y; ++ty) {
+        int x = 0;
+        for (int tx = 0; tx < tiles_x; ++tx) {
+            ImageData& tile = *tiles[ty * tiles_x + tx];
+            tile.insert(bitmap, at_x - x, at_y - y);
+            x += tile.width();
         }
+        y += tiles[ty * tiles_x]->height();
     }
 }

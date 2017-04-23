@@ -3,27 +3,35 @@
 #include "Texture.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
+using namespace std;
 
 void Gosu::TexChunk::set_tex_info()
 {
+    double texture_size = texture->size();
+
     info.tex_name = texture->tex_name();
-    float texture_size = texture->size();
-    info.left = x / texture_size;
-    info.top = y / texture_size;
-    info.right = (x + w) / texture_size;
+    info.left   = x / texture_size;
+    info.top    = y / texture_size;
+    info.right  = (x + w) / texture_size;
     info.bottom = (y + h) / texture_size;
 }
 
-Gosu::TexChunk::TexChunk(std::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding)
+Gosu::TexChunk::TexChunk(shared_ptr<Texture> texture, int x, int y, int w, int h, int padding)
 : texture(texture), x(x), y(y), w(w), h(h), padding(padding)
 {
     set_tex_info();
 }
 
-Gosu::TexChunk::TexChunk(const TexChunk& parent_chunk, int x, int y, int w, int h)
-: texture(parent_chunk.texture), x(parent_chunk.x + x), y(parent_chunk.y + y), w(w), h(h),
-  padding(0)
+Gosu::TexChunk::TexChunk(const TexChunk& parent, int x, int y, int w, int h)
+: texture(parent.texture), x(parent.x + x), y(parent.y + y), w(w), h(h), padding(0)
 {
+    if (x < 0 || y < 0 || x + w > parent.w || y + h > parent.h) {
+        throw invalid_argument("subimage bounds exceed those of its parent");
+    }
+    if (w <= 0 || h <= 0) {
+        throw invalid_argument("cannot create empty image");
+    }
+    
     set_tex_info();
     texture->block(this->x, this->y, this->w, this->h);
 }
@@ -62,9 +70,9 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1, double x2, double y2, 
     Graphics::schedule_draw_op(op);
 }
 
-const Gosu::GLTexInfo* Gosu::TexChunk::gl_tex_info() const
+unique_ptr<Gosu::ImageData> Gosu::TexChunk::subimage(int x, int y, int width, int height) const
 {
-    return &info;
+    return unique_ptr<Gosu::ImageData>(new TexChunk(*this, x, y, width, height));
 }
 
 Gosu::Bitmap Gosu::TexChunk::to_bitmap() const
@@ -72,15 +80,8 @@ Gosu::Bitmap Gosu::TexChunk::to_bitmap() const
     return texture->to_bitmap(x, y, w, h);
 }
 
-std::unique_ptr<Gosu::ImageData> Gosu::TexChunk::subimage(int x, int y, int width, int height) const
-{
-    return std::unique_ptr<Gosu::ImageData>(new TexChunk(*this, x, y, width, height));
-}
-
 void Gosu::TexChunk::insert(const Bitmap& original, int x, int y)
 {
-    // TODO: Should respect border_flags.
-    
     Bitmap alternate;
     const Bitmap* bitmap = &original;
     
