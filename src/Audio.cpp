@@ -202,13 +202,13 @@ Gosu::Sample::Sample(Reader reader)
             data.reset(new SampleData(audio_file));
         }
         catch (const std::runtime_error& ex) {
+        #ifndef GOSU_IS_MAC
             if (std::string(ex.what()).find("unknown format") != std::string::npos) {
                 MPEGFile mpeg_file(reader);
                 data.reset(new SampleData(mpeg_file));
-            }
-            else {
+            } else
+        #endif
                 throw ex;
-            }
         }
     }
     
@@ -374,10 +374,14 @@ public:
                 file.reset(new WAVE_FILE(filename));
             }
             catch (const std::runtime_error& ex) {
+            #ifndef GOSU_IS_MAC
                 if (std::string(ex.what()).find("unknown format") != std::string::npos) {
                     Gosu::File source_file(filename);
                     file.reset(new MPEGFile(source_file.front_reader()));
                 }
+                else
+            #endif
+                    throw ex;
             }
         }
         alGenBuffers(2, buffers);
@@ -393,9 +397,13 @@ public:
                 file.reset(new WAVE_FILE(reader));
             }
             catch (const std::runtime_error& ex) {
+            #ifndef GOSU_IS_MAC
                 if (std::string(ex.what()).find("unknown format") != std::string::npos) {
                     file.reset(new MPEGFile(reader));
                 }
+                else
+            #endif
+                    throw ex;
             }
         }
         alGenBuffers(2, buffers);

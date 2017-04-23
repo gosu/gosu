@@ -27,6 +27,7 @@ addons:
       - libgl1-mesa-dev
       - libopenal-dev
       - libsndfile1-dev
+      - libmpg123-dev
       # For Ruby
       - ruby-dev
       - rake
