@@ -99,7 +99,7 @@ class TestAudio < Minitest::Test
     assert song.paused?
     refute song.playing?
 
-    song.resume
+    song.play
     interactive_cli("Back again?") do
       200.times do win.tick end
     end
