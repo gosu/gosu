@@ -171,7 +171,7 @@ private:
     SampleData& operator=(const SampleData&);
 };
 
-Gosu::Sample::Sample(const std::string& filename)
+Gosu::Sample::Sample(const string& filename)
 {
     CONSTRUCTOR_BEGIN;
 
@@ -201,9 +201,9 @@ Gosu::Sample::Sample(Reader reader)
             WAVE_FILE audio_file(reader);
             data.reset(new SampleData(audio_file));
         }
-        catch (const std::runtime_error& ex) {
+        catch (const runtime_error& ex) {
         #ifndef GOSU_IS_MAC
-            if (std::string(ex.what()).find("unknown format") != std::string::npos) {
+            if (string(ex.what()).find("unknown format") != string::npos) {
                 MPEGFile mpeg_file(reader);
                 data.reset(new SampleData(mpeg_file));
             }
@@ -224,7 +224,7 @@ Gosu::SampleInstance Gosu::Sample::play(double volume, double speed, bool loopin
 Gosu::SampleInstance Gosu::Sample::play_pan(double pan, double volume, double speed,
     bool looping) const
 {
-    std::pair<int, int> channel_and_token = al_channel_management->reserve_channel();
+    pair<int, int> channel_and_token = al_channel_management->reserve_channel();
     if (channel_and_token.first == ALChannelManagement::NO_FREE_CHANNEL) {
         return Gosu::SampleInstance(channel_and_token.first, channel_and_token.second);
     }
@@ -286,7 +286,7 @@ class Gosu::Song::ModuleData : public BaseData
     }
     
 public:
-    ModuleData(const std::string& filename)
+    ModuleData(const string& filename)
     {
         NSURL* URL = [NSURL fileURLWithPath:[NSString stringWithUTF8String:filename.c_str()]];
         player = [[AVAudioPlayer alloc] initWithContentsOfURL:URL error:nil];
@@ -331,7 +331,7 @@ public:
 // AudioFile impl
 class Gosu::Song::StreamData : public BaseData
 {
-    std::unique_ptr<AudioFile> file;
+    unique_ptr<AudioFile> file;
     ALuint buffers[2];
     
     void apply_volume() override
@@ -355,7 +355,7 @@ class Gosu::Song::StreamData : public BaseData
         static const unsigned BUFFER_SIZE = 4096 * 8;
         #endif
         char audio_data[BUFFER_SIZE];
-        std::size_t read_bytes = file->read_data(audio_data, BUFFER_SIZE);
+        size_t read_bytes = file->read_data(audio_data, BUFFER_SIZE);
         if (read_bytes > 0) {
             alBufferData(buffer, file->format(), audio_data,
                          static_cast<ALsizei>(read_bytes), file->sample_rate());
@@ -364,7 +364,7 @@ class Gosu::Song::StreamData : public BaseData
     }
     
 public:
-    StreamData(const std::string& filename)
+    StreamData(const string& filename)
     {
         if (is_ogg_file(filename)) {
             Gosu::File source_file(filename);
@@ -374,9 +374,9 @@ public:
             try {
                 file.reset(new WAVE_FILE(filename));
             }
-            catch (const std::runtime_error& ex) {
+            catch (const runtime_error& ex) {
             #ifndef GOSU_IS_MAC
-                if (std::string(ex.what()).find("unknown format") != std::string::npos) {
+                if (string(ex.what()).find("unknown format") != string::npos) {
                     Gosu::File source_file(filename);
                     file.reset(new MPEGFile(source_file.front_reader()));
                 }
@@ -397,9 +397,9 @@ public:
             try {
                 file.reset(new WAVE_FILE(reader));
             }
-            catch (const std::runtime_error& ex) {
+            catch (const runtime_error& ex) {
             #ifndef GOSU_IS_MAC
-                if (std::string(ex.what()).find("unknown format") != std::string::npos) {
+                if (string(ex.what()).find("unknown format") != string::npos) {
                     file.reset(new MPEGFile(reader));
                 }
                 else
@@ -522,7 +522,7 @@ public:
     }
 };
 
-Gosu::Song::Song(const std::string& filename)
+Gosu::Song::Song(const string& filename)
 {
 #ifdef GOSU_IS_IPHONE
     if (has_extension(filename, ".mp3") ||
