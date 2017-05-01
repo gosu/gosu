@@ -124,7 +124,7 @@ void Gosu::SampleInstance::change_volume(double volume)
     ALuint source = al_channel_management->source_if_still_playing(handle, extra);
     if (source == ALChannelManagement::NO_SOURCE) return;
     
-    alSourcef(source, AL_GAIN, volume);
+    alSourcef(source, AL_GAIN, max(volume, 0.0));
 }
 
 void Gosu::SampleInstance::change_pan(double pan)
@@ -234,7 +234,7 @@ Gosu::SampleInstance Gosu::Sample::play_pan(double pan, double volume, double sp
     assert (source != ALChannelManagement::NO_SOURCE);
     alSourcei(source, AL_BUFFER, data->buffer);
     alSource3f(source, AL_POSITION, pan * 10, 0, 0);
-    alSourcef(source, AL_GAIN, volume);
+    alSourcef(source, AL_GAIN, max(volume, 0.0));
     alSourcef(source, AL_PITCH, speed);
     alSourcei(source, AL_LOOPING, looping ? AL_TRUE : AL_FALSE);
     alSourcePlay(source);
@@ -338,7 +338,7 @@ class Gosu::Song::StreamData : public BaseData
     {
         int source = lookup_source();
         if (source != ALChannelManagement::NO_SOURCE) {
-            alSourcef(source, AL_GAIN, volume());
+            alSourcef(source, AL_GAIN, max(volume(), 0.0));
         }
     }
     
@@ -422,7 +422,7 @@ public:
         int source = lookup_source();
         if (source != ALChannelManagement::NO_SOURCE) {
             alSource3f(source, AL_POSITION, 0, 0, 0);
-            alSourcef(source, AL_GAIN, volume());
+            alSourcef(source, AL_GAIN, max(volume(), 0.0));
             alSourcef(source, AL_PITCH, 1);
             alSourcei(source, AL_LOOPING, AL_FALSE); // need to implement this manually...
 
