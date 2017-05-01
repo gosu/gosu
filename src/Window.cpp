@@ -260,7 +260,7 @@ bool Gosu::Window::tick()
                 break;
             }
             case (SDL_DROPFILE): {
-                char* dropped_filedir = e.drop.file;      
+                char* dropped_filedir = e.drop.file;
                 if (dropped_filedir == nullptr) break;
                 drop(std::string(dropped_filedir));
                 SDL_free(dropped_filedir);

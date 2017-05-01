@@ -141,7 +141,7 @@ void Gosu::Graphics::set_resolution(unsigned virtual_width, unsigned virtual_hei
     pimpl->update_base_transform();
 }
 
-void Gosu::Graphics::frame(const std::function<void()>& f)
+void Gosu::Graphics::frame(const std::function<void ()>& f)
 {
     if (current_graphics_pointer != nullptr) {
         throw std::logic_error("Cannot nest calls to Gosu::Graphics::begin()");
@@ -222,7 +222,7 @@ void Gosu::Graphics::flush()
     current_queue().clear_queue();
 }
 
-void Gosu::Graphics::gl(const std::function<void()>& f)
+void Gosu::Graphics::gl(const std::function<void ()>& f)
 {
     if (current_queue().recording()) {
         throw std::logic_error("Custom OpenGL is not allowed while creating a macro");
@@ -258,7 +258,7 @@ void Gosu::Graphics::gl(Gosu::ZPos z, const std::function<void ()>& f)
 }
 
 void Gosu::Graphics::clip_to(double x, double y, double width, double height,
-                             const std::function<void()>& f)
+                             const std::function<void ()>& f)
 {
     double screen_height = current_graphics().pimpl->phys_height;
     current_queue().begin_clipping(x, y, width, height, screen_height);
@@ -267,7 +267,7 @@ void Gosu::Graphics::clip_to(double x, double y, double width, double height,
 }
 
 std::unique_ptr<Gosu::ImageData> Gosu::Graphics::record(int width, int height,
-                                                        const std::function<void()>& f)
+                                                        const std::function<void ()>& f)
 {
     queues.resize(queues.size() + 1);
     current_queue().set_recording();
@@ -280,7 +280,7 @@ std::unique_ptr<Gosu::ImageData> Gosu::Graphics::record(int width, int height,
 }
 
 void Gosu::Graphics::transform(const Gosu::Transform& transform,
-                               const std::function<void()>& f)
+                               const std::function<void ()>& f)
 {
     current_queue().push_transform(transform);
     f();

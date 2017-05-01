@@ -19,7 +19,7 @@ static void require_sdl_video()
         std::atexit([] { SDL_QuitSubSystem(SDL_INIT_VIDEO); });
     }
 }
-    
+
 static std::array<bool, Gosu::NUM_BUTTONS> button_states = { { false } };
 
 struct Gosu::Input::Impl

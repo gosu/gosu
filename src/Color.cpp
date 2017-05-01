@@ -32,7 +32,8 @@ namespace
         // Hue.
         if (delta == 0) {
             hsv.h = 0;
-        } else if (r == max) {
+        }
+        else if (r == max) {
             hsv.h = (g - b) / delta + (g < b ? 6 : 0);
         }
         else if (g == max) {

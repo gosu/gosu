@@ -206,7 +206,8 @@ Gosu::Sample::Sample(Reader reader)
             if (std::string(ex.what()).find("unknown format") != std::string::npos) {
                 MPEGFile mpeg_file(reader);
                 data.reset(new SampleData(mpeg_file));
-            } else
+            }
+            else
         #endif
                 throw ex;
         }

@@ -13,7 +13,7 @@ Gosu::LargeImageData::LargeImageData(const Bitmap& source, int tile_width, int t
     tiles_x = static_cast<int>(ceil(1.0 * w / tile_width));
     tiles_y = static_cast<int>(ceil(1.0 * h / tile_height));
 
-    // When there are no tiles, set both fields to 0 to avoid entering any for() loop in this class.
+    // When there are no tiles, set both fields to 0 to avoid entering any for () loop in this class.
     if (tiles_x == 0 || tiles_y == 0) {
         tiles_x = tiles_y = 0;
     }
