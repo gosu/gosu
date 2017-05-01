@@ -4,12 +4,10 @@ require "gosu" unless defined? Gosu
 
 module TestHelper
   # TODO: Should be __dir__ after we drop Ruby 1.x support...
-  def media_path(fname='')
+  def media_path(fname = '')
     File.join(File.dirname(__FILE__), "media", fname)
   end
-end
 
-module Skipper
   def skip_on_appveyor
     skip if ENV['APPVEYOR']
   end
@@ -41,11 +39,11 @@ module InteractiveTests
   def interactive_gui(message)
     return false unless ENV["GOSU_TEST_INTERACTIVE"]
     
-    STDOUT.puts message + 'Press (Y)es or (N)o on your Keyboard'
+    STDOUT.puts message + 'Press (Y)es or (N)o on your keyboard'
     win = yield
     win.extend InteractiveWindow
     
-    assert_output "Tester answered 'Yes'", // do
+    assert_output "User answered 'Yes'", // do
       win.show
     end
   end
@@ -53,16 +51,17 @@ end
 
 module InteractiveWindow
   def button_down(id)
-    if id == Gosu::KB_Y
-      puts "Tester answered 'Yes'" 
+    case Gosu.button_id_to_char(id)
+    when 'y'
+      puts "User answered 'Yes'" 
       close!
-    elsif id == Gosu::KB_N
-      puts "Tester answered 'No'"
+    when 'n'
+      puts "User answered 'No'"
     end
   end
   
   def close
-    puts "Tester canceled the #{self.class}-Test"
+    puts "User canceled the test #{self.class}"
     close!
   end  
 end
