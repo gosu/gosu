@@ -506,12 +506,10 @@ module Gosu
     ##
     # Plays the sample without panning.
     #
-    # Playback speed is limited only by the underlying audio library, and both very large and very small values should work just fine.
-    #
     # @return [SampleInstance]
-    # @param volume [Float] the playback volume, in the range [0.0; 1.0], where 0 is completely silent and 1 is full volume.
-    # @param speed [Float] the playback speed.
-    # @param looping [true, false] whether the sample should play in a loop.
+    # @param volume [Float] see {SampleInstance#volume=}
+    # @param speed [Float] see {SampleInstance#speed=}
+    # @param looping [true, false] whether the sample should play in a loop. If you pass true, be sure to store the return value of this method so that you can later stop the looping sound.
     #
     # @see #play_pan
     def play(volume=1, speed=1, looping=false); end
@@ -519,11 +517,11 @@ module Gosu
     ##
     # Plays the sample with panning.
     #
-    # @note Samples played with this method will not be as loud as those played with {#play}, even if `pan` is 0. This is due to a limitation in the way panning works.
-    #
     # @return [SampleInstance]
-    # @param pan [Float] the amount of panning. 0.0 is centered.
-    # @param (see #play)
+    # @param pan [Float] see {SampleInstance#pan=}
+    # @param volume [Float] see {SampleInstance#volume=}
+    # @param speed [Float] see {SampleInstance#speed=}
+    # @param looping [true, false] whether the sample should play in a loop. If you pass true, be sure to store the return value of this method so that you can later stop the looping sound.
     #
     # @see #play
     def play_pan(pan=0, volume=1, speed=1, looping=false); end
@@ -535,18 +533,21 @@ module Gosu
   # It is recommended to throw away sample instances as soon as possible, as holding onto them for a long time can prevent unneeded samples being properly disposed.
   class SampleInstance
     ##
-    # Set the playback volume, in the range [0.0; 1.0], where 0 is completely silent and 1 is full volume.
+    # Sets the playback volume, in the range [0.0; 1.0], where 0 is completely silent and 1 is full volume. Values outside of this range will be clamped to [0.0; 1.0].
     # @param [Float]
+    # @return [Float]
     attr_writer :volume
     
     ##
-    # Set the playback speed.
+    # Sets the playback speed. A value of 2.0 will play the sample at 200% speed and one octave higher. A value of 0.5 will play the sample at 50% speed and one octave lower. The valid range of this property depends on the operating system, but values up to 8.0 should work.
     # @param [Float]    
+    # @return [Float]
     attr_writer :speed
     
     ##
-    # Set the amount of panning. Can be anything from -1.0 (left) to 1.0 (right). 0 is centered. 
+    # Set the amount of panning, i.e. the position of the sound when using stereo speakers. 0.0 is the centre, negative values are to the left, positive values are to the right. If something happens on the edge of the screen, a good value for pan would be ±0.1.
     # @param [Float] 
+    # @return [Float]
     attr_writer :pan
 
     ##
