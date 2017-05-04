@@ -121,6 +121,9 @@ namespace Gosu
         //! \param path The filename of the dropped file. When multiple files are dropped, this
         //! method will be called several times.
         virtual void drop(const std::string& filename) {}
+
+        //! Sets the background_color of the window
+        virtual Gosu::Color background_color() const { return Gosu::Color::RED; }
         
         // Ignore when SWIG is wrapping this class for Ruby/Gosu.
         #ifndef SWIG
