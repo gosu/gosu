@@ -808,6 +808,12 @@ module Gosu
     def needs_cursor?; end
 
     ##
+    # This method can be overriden to set the default window background color. Default is Gosu::Color::BLACK
+    #
+    # @return [Gosu::Color]
+    def background_color; end
+
+    ##
     # This method is called whenever the user tries to close the window, e.g. by clicking the [x]
     # button in the window's title bar.
     # If you do not want the window to close immediately, you should override this method and

@@ -3339,6 +3339,22 @@ void SwigDirector_Window::drop(std::string const &filename) {
 }
 
 
+Gosu::Color SwigDirector_Window::background_color() const {
+  Gosu::Color c_result ;
+  VALUE SWIGUNUSED result;
+  void *swig_argp ;
+  int swig_res = 0 ;
+  
+  result = rb_funcall(swig_get_self(), rb_intern("background_color"), 0, NULL);
+  swig_res = SWIG_ConvertPtr(result,&swig_argp,SWIGTYPE_p_Gosu__Color,  0 );
+  if (!SWIG_IsOK(swig_res)) {
+    Swig::DirectorTypeMismatchException::raise(SWIG_ErrorType(SWIG_ArgError(swig_res)), "in output value of type '""Gosu::Color""'");
+  }
+  c_result = *(reinterpret_cast< Gosu::Color * >(swig_argp));
+  return (Gosu::Color) c_result;
+}
+
+
 SWIGINTERN VALUE
 _wrap_milliseconds(int argc, VALUE *argv, VALUE self) {
   unsigned long result;
@@ -9625,6 +9641,50 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Window_background_color(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  Swig::Director *director = 0;
+  bool upcall = false;
+  Gosu::Color result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","background_color", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  director = dynamic_cast<Swig::Director *>(arg1);
+  upcall = (director && (director->swig_get_self() == self));
+  try {
+    {
+      try {
+        if (upcall) {
+          result = ((Gosu::Window const *)arg1)->Gosu::Window::background_color();
+        } else {
+          result = ((Gosu::Window const *)arg1)->background_color();
+        }
+      }
+      catch (const std::exception& e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
+    }
+  } catch (Swig::DirectorException& e) {
+    rb_exc_raise(e.getError());
+    SWIG_fail;
+  }
+  vresult = SWIG_NewPointerObj((new Gosu::Color(static_cast< const Gosu::Color& >(result))), SWIGTYPE_p_Gosu__Color, SWIG_POINTER_OWN |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Window_widthe___(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   unsigned int arg2 ;
@@ -12039,6 +12099,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "button_down", VALUEFUNC(_wrap_Window_button_down), -1);
   rb_define_method(SwigClassWindow.klass, "button_up", VALUEFUNC(_wrap_Window_button_up), -1);
   rb_define_method(SwigClassWindow.klass, "drop", VALUEFUNC(_wrap_Window_drop), -1);
+  rb_define_method(SwigClassWindow.klass, "background_color", VALUEFUNC(_wrap_Window_background_color), -1);
   rb_define_method(SwigClassWindow.klass, "width=", VALUEFUNC(_wrap_Window_widthe___), -1);
   rb_define_method(SwigClassWindow.klass, "height=", VALUEFUNC(_wrap_Window_heighte___), -1);
   rb_define_method(SwigClassWindow.klass, "fullscreen=", VALUEFUNC(_wrap_Window_fullscreene___), -1);

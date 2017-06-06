@@ -63,9 +63,35 @@ class TestWindow < Minitest::Test
       end
     end
   end
+
   def test_drag_and_drop
     interactive_gui("Drop any number of files into the window. Do all filenames appear?") do
       DropWindow.new
+    end
+  end
+
+  class ColorChanger < Gosu::Window
+    def initialize
+      super(100, 100)
+      @colors = [Gosu::Color::BLACK, Gosu::Color::WHITE, Gosu::Color::RED, Gosu::Color::BLUE]
+    end
+
+    def update
+      @now ||= Gosu.milliseconds
+      if Gosu.milliseconds - 1000 > @now
+        @colors.rotate!
+        @now = Gosu.milliseconds
+      end
+    end
+
+    def background_color
+      @colors.first
+    end
+  end
+
+  def test_background_color_change
+    interactive_gui("Does the color of the background change over timer?") do
+      ColorChanger.new
     end
   end
 end

@@ -141,7 +141,7 @@ void Gosu::Graphics::set_resolution(unsigned virtual_width, unsigned virtual_hei
     pimpl->update_base_transform();
 }
 
-void Gosu::Graphics::frame(const std::function<void ()>& f)
+void Gosu::Graphics::frame(Gosu::Color clear_with_color, const std::function<void ()>& f)
 {
     if (current_graphics_pointer != nullptr) {
         throw std::logic_error("Cannot nest calls to Gosu::Graphics::begin()");
@@ -164,7 +164,8 @@ void Gosu::Graphics::frame(const std::function<void ()>& f)
     
     queues.back().set_base_transform(pimpl->base_transform);
     
-    glClearColor(0, 0, 0, 1);
+    glClearColor(clear_with_color.red() / 255.f, clear_with_color.green() / 255.f,
+        clear_with_color.blue() / 255.f, clear_with_color.alpha() / 255.f);
     glClear(GL_COLOR_BUFFER_BIT);
     
     current_graphics_pointer = this;

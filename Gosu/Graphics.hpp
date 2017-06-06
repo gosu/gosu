@@ -39,7 +39,7 @@ namespace Gosu
 
         //! Prepares the graphics object for drawing and then runs the rendering code in f.
         //! Nothing must be drawn outside of frame() and record().
-        void frame(const std::function<void ()>& f);
+        void frame(Gosu::Color clear_with_color, const std::function<void ()>& f);
         
         //! Flushes the Z queue to the screen and starts a new one.
         //! This can be useful to separate the Z queues of two parts of the game, e.g. the two

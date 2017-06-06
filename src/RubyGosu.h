@@ -42,6 +42,7 @@ public:
     virtual void button_down(Gosu::Button arg0);
     virtual void button_up(Gosu::Button arg0);
     virtual void drop(std::string const &filename);
+    virtual Gosu::Color background_color() const;
 };
 
 

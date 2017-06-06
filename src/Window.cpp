@@ -283,7 +283,7 @@ bool Gosu::Window::tick()
     
     if (needs_redraw()) {
         ensure_current_context();
-        graphics().frame([&] {
+        graphics().frame(background_color(), [&] {
             draw();
             FPS::register_frame();
         });
