@@ -8774,6 +8774,49 @@ fail:
 }
 
 
+SWIGINTERN VALUE
+_wrap_simple_dialog(int argc, VALUE *argv, VALUE self) {
+  std::string arg1 ;
+  std::string arg2 ;
+  int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(argv[0], &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), Ruby_Format_TypeError( "", "std::string","Gosu::simple_dialog", 1, argv[0] )); 
+    }
+    arg1 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(argv[1], &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), Ruby_Format_TypeError( "", "std::string","Gosu::simple_dialog", 2, argv[1] )); 
+    }
+    arg2 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  {
+    try {
+      result = (int)Gosu::simple_dialog(arg1,arg2);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_int(static_cast< int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
 static swig_class SwigClassWindow;
 
 SWIGINTERN VALUE
@@ -12014,6 +12057,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "screen_height", VALUEFUNC(_wrap_screen_height), -1);
   rb_define_module_function(mGosu, "available_width", VALUEFUNC(_wrap_available_width), -1);
   rb_define_module_function(mGosu, "available_height", VALUEFUNC(_wrap_available_height), -1);
+  rb_define_module_function(mGosu, "simple_dialog", VALUEFUNC(_wrap_simple_dialog), -1);
   rb_define_module_function(mGosu, "disown_Window", VALUEFUNC(_wrap_disown_Window), -1);
   
   SwigClassWindow.klass = rb_define_class_under(mGosu, "Window", rb_cObject);
