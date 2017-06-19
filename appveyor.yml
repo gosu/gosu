@@ -3,7 +3,7 @@ branches:
   only:
   - master
 skip_tags: true
-configuration: Release
+configuration: Release (Ruby 2.3)
 platform:
 - x64
 - x86
