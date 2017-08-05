@@ -30,7 +30,7 @@ class Gosu::Window
       rescue Exception => e
         # Exit the message loop naturally, then re-throw during the next tick.
         @_exception = e
-        close
+        close!
         false
       end
     end
