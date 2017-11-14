@@ -99,7 +99,7 @@ static AppleFont* get_font(std::string font_name, unsigned font_flags, double he
 
 std::string Gosu::default_font_name()
 {
-    return "Arial";
+    return "Arial Unicode MS";
 }
 
 #ifndef GOSU_IS_IPHONE
