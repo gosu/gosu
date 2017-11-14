@@ -5,6 +5,12 @@
 #include <Gosu/ImageData.hpp>
 #include <Gosu/Math.hpp>
 #include <stdexcept>
+#include "EmptyImageData.hpp"
+
+Gosu::Image::Image()
+: data_(EmptyImageData::instance_ptr())
+{
+}
 
 Gosu::Image::Image(const std::string& filename, unsigned flags)
 {

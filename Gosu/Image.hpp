@@ -17,6 +17,9 @@ namespace Gosu
         std::shared_ptr<ImageData> data_;
 
     public:
+        //! Creates an empty image. It will have a width and height of 0, and not contain anything.
+        Image();
+        
         //! Loads an image from a given filename.
         //!
         //! A color key of #ff00ff is automatically applied to BMP image files.

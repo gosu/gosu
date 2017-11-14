@@ -6,7 +6,6 @@
 #include <cmath>
 #include <cstdlib>
 #include <list>
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -135,7 +134,7 @@ public:
 
 class GameWindow : public Gosu::Window
 {
-    std::unique_ptr<Gosu::Image> background_image;
+    Gosu::Image background_image;
     Animation star_anim;
     Gosu::Font font;
 
@@ -149,7 +148,7 @@ public:
         set_caption("Gosu Tutorial Game");
 
         std::string filename = Gosu::resource_prefix() + "media/Space.png";
-        background_image.reset(new Gosu::Image(filename, Gosu::IF_TILEABLE));
+        background_image = Gosu::Image(filename, Gosu::IF_TILEABLE);
 
         filename = Gosu::resource_prefix() + "media/Star.png";
         star_anim = Gosu::load_tiles(filename, 25, 25);
@@ -179,7 +178,7 @@ public:
     void draw() override
     {
         player.draw();
-        background_image->draw(0, 0, Z_BACKGROUND);
+        background_image.draw(0, 0, Z_BACKGROUND);
 
         for (Star& star : stars) {
             star.draw();

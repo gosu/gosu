@@ -574,6 +574,7 @@ namespace Gosu
     }
 }
 
+%ignore Gosu::Image::Image();
 %ignore Gosu::Image::Image(const std::string& filename, unsigned flags);
 %ignore Gosu::Image::Image(const std::string& filename, unsigned src_x, unsigned src_y,
                            unsigned src_width, unsigned src_height, unsigned flags);
