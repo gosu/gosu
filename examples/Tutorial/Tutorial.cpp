@@ -120,17 +120,16 @@ public:
 
     void collect_stars(std::list<Star>& stars)
     {
-        std::list<Star>::iterator cur = stars.begin();
-        while (cur != stars.end()) {
-            if (Gosu::distance(pos_x, pos_y, cur->x(), cur->y()) < 35) {
-                cur = stars.erase(cur);
+        stars.remove_if([this](Star& star) {
+            if (Gosu::distance(pos_x, pos_y, star.x(), star.y()) < 35) {
                 score += 10;
                 beep.play();
+                return true;
             }
             else {
-                ++cur;
+                return false;
             }
-        }
+        });
     }
 };
 
