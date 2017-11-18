@@ -5,8 +5,9 @@
 #include <Gosu/Utility.hpp>
 #include <stdexcept>
 #include <windows.h>
+using namespace std;
 
-void Gosu::throw_last_winapi_error(const std::string& action)
+void Gosu::throw_last_winapi_error(const string& action)
 {
     // Obtain error message from Windows.
     wchar_t* buffer;
@@ -16,11 +17,11 @@ void Gosu::throw_last_winapi_error(const std::string& action)
                         FORMAT_MESSAGE_IGNORE_INSERTS, 0, GetLastError(),
                         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR) &buffer, 0, 0)
             || buffer == nullptr) {
-        throw std::runtime_error("Unknown error");
+        throw runtime_error("Unknown error");
     }
 
-    // Safely move the message into a std::string.
-    std::string message;
+    // Safely move the message into a string.
+    string message;
     try {
         message = wstring_to_utf8(buffer);
     }
@@ -35,7 +36,7 @@ void Gosu::throw_last_winapi_error(const std::string& action)
         message = "While " + action + ", the following error occured: " + message;
     }
 
-    throw std::runtime_error(message);
+    throw runtime_error(message);
 }
 
 #endif

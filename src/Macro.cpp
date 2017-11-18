@@ -5,6 +5,7 @@
 #include <functional>
 #include <memory>
 #include <stdexcept>
+using namespace std;
 
 struct Gosu::Macro::Impl
 {
@@ -75,9 +76,9 @@ struct Gosu::Macro::Impl
         
         bool swap_rows78 = x2 == x4;
         if (swap_rows78) {
-            std::swap(left_cell7, left_cell8);
-            std::swap(right_cell7, right_cell8);
-            std::swap(orig_right_side7, orig_right_side8);
+            swap(left_cell7, left_cell8);
+            swap(right_cell7, right_cell8);
+            swap(orig_right_side7, orig_right_side8);
         }
         
         // 0, 0, 1, 0, 0, 0,         0,           0 | x1
@@ -144,7 +145,7 @@ struct Gosu::Macro::Impl
         c[4] = right_side6 / rem_cell6;
         
         if (swap_rows78) {
-            std::swap(c[6], c[7]);
+            swap(c[6], c[7]);
         }
         
         // Let's hope I never have to debug/understand this again! :D
@@ -205,13 +206,12 @@ void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Col
     double x3, double y3, Color c3, double x4, double y4, Color c4, ZPos z, AlphaMode mode) const
 {
     if (c1 != Color::WHITE || c2 != Color::WHITE || c3 != Color::WHITE || c4 != Color::WHITE) {
-        throw std::invalid_argument("Macros cannot be tinted with colors");
+        throw invalid_argument("Macros cannot be tinted with colors");
     }
     
     normalize_coordinates(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
     
-    std::function<void ()> f = [=] { pimpl->draw_vertex_arrays(x1, y1, x2, y2, x3, y3, x4, y4); };
-    Gosu::Graphics::gl(z, f);
+    Gosu::Graphics::gl(z, [=] { pimpl->draw_vertex_arrays(x1, y1, x2, y2, x3, y3, x4, y4); });
 }
 
 const Gosu::GLTexInfo* Gosu::Macro::gl_tex_info() const
@@ -221,15 +221,15 @@ const Gosu::GLTexInfo* Gosu::Macro::gl_tex_info() const
 
 Gosu::Bitmap Gosu::Macro::to_bitmap() const
 {
-    throw std::logic_error("Gosu::Macro cannot be rendered as Gosu::Bitmap yet");
+    throw logic_error("Gosu::Macro cannot be rendered as Gosu::Bitmap yet");
 }
 
-std::unique_ptr<Gosu::ImageData> Gosu::Macro::subimage(int x, int y, int width, int height) const
+unique_ptr<Gosu::ImageData> Gosu::Macro::subimage(int x, int y, int width, int height) const
 {
-    return std::unique_ptr<ImageData>();
+    return unique_ptr<ImageData>();
 }
 
 void Gosu::Macro::insert(const Bitmap& bitmap, int x, int y)
 {
-    throw std::logic_error("Gosu::Macro cannot be updated with a Gosu::Bitmap yet");
+    throw logic_error("Gosu::Macro cannot be updated with a Gosu::Bitmap yet");
 }

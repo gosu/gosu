@@ -6,13 +6,14 @@
 #include <Gosu/Math.hpp>
 #include <stdexcept>
 #include "EmptyImageData.hpp"
+using namespace std;
 
 Gosu::Image::Image()
 : data_(EmptyImageData::instance_ptr())
 {
 }
 
-Gosu::Image::Image(const std::string& filename, unsigned flags)
+Gosu::Image::Image(const string& filename, unsigned flags)
 {
     // Forward.
     Bitmap bmp;
@@ -20,7 +21,7 @@ Gosu::Image::Image(const std::string& filename, unsigned flags)
     Image(bmp, flags).data_.swap(data_);
 }
 
-Gosu::Image::Image(const std::string& filename, unsigned src_x, unsigned src_y, unsigned src_width,
+Gosu::Image::Image(const string& filename, unsigned src_x, unsigned src_y, unsigned src_width,
     unsigned src_height, unsigned flags)
 {
     // Forward.
@@ -41,11 +42,11 @@ Gosu::Image::Image(const Bitmap& source, unsigned src_x, unsigned src_y, unsigne
 {
 }
 
-Gosu::Image::Image(std::unique_ptr<ImageData>&& data)
+Gosu::Image::Image(unique_ptr<ImageData>&& data)
 : data_(data.release())
 {
     if (this->data_.get() == nullptr) {
-        throw std::invalid_argument("Gosu::Image cannot be initialized with nullptr");
+        throw invalid_argument("Gosu::Image cannot be initialized with nullptr");
     }
 }
 
@@ -107,11 +108,11 @@ Gosu::ImageData& Gosu::Image::data() const
     return *data_;
 }
 
-std::vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bmp, int tile_width, int tile_height,
-    unsigned flags)
+vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bmp, int tile_width, int tile_height,
+                                     unsigned flags)
 {
     int tiles_x, tiles_y;
-    std::vector<Image> images;
+    vector<Image> images;
     
     if (tile_width > 0) {
         tiles_x = bmp.width() / tile_width;
@@ -139,8 +140,8 @@ std::vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bmp, int tile_width, int
     return images;
 }
 
-std::vector<Gosu::Image> Gosu::load_tiles(const std::string& filename, int tile_width,
-    int tile_height, unsigned flags)
+vector<Gosu::Image> Gosu::load_tiles(const string& filename, int tile_width, int tile_height,
+                                     unsigned flags)
 {
     Bitmap bmp;
     load_image_file(bmp, filename);

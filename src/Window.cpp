@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <algorithm>
 #include <stdexcept>
+using namespace std;
 
 namespace Gosu
 {
@@ -14,10 +15,10 @@ namespace Gosu
         void register_frame();
     }
 
-    static void throw_sdl_error(const std::string& operation)
+    static void throw_sdl_error(const string& operation)
     {
         const char* error = SDL_GetError();
-        throw std::runtime_error(operation + ": " + (error ? error : "(unknown error)"));
+        throw runtime_error(operation + ": " + (error ? error : "(unknown error)"));
     }
 
     static void cleanup();
@@ -30,7 +31,7 @@ namespace Gosu
                 throw_sdl_error("Could not initialize SDL Video");
             }
 
-            std::atexit(cleanup);
+            atexit(cleanup);
 
             Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN;
             
@@ -90,8 +91,8 @@ struct Gosu::Window::Impl
     // (transition from CLOSED to OPEN).
     enum { CLOSED, OPEN, CLOSING } state = CLOSED;
     
-    std::unique_ptr<Graphics> graphics;
-    std::unique_ptr<Input> input;
+    unique_ptr<Graphics> graphics;
+    unique_ptr<Input> input;
 };
 
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval)
@@ -151,7 +152,7 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
 
         double scale_x = 1.0 * actual_width / width;
         double scale_y = 1.0 * actual_height / height;
-        scale_factor = std::min(scale_x, scale_y);
+        scale_factor = min(scale_x, scale_y);
 
         if (scale_x < scale_y) {
             black_bar_height = (actual_height / scale_x - height) / 2;
@@ -165,7 +166,7 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
         double max_height = Gosu::available_height();
         
         if (width > max_width || height > max_height) {
-            scale_factor = std::min(max_width / width, max_height / height);
+            scale_factor = min(max_width / width, max_height / height);
             actual_width = width * scale_factor;
             actual_height = height * scale_factor;
         }
@@ -205,13 +206,13 @@ void Gosu::Window::set_update_interval(double update_interval)
     pimpl->update_interval = update_interval;
 }
 
-std::string Gosu::Window::caption() const
+string Gosu::Window::caption() const
 {
     const char* title = SDL_GetWindowTitle(shared_window());
     return title ? title : "";
 }
 
-void Gosu::Window::set_caption(const std::string& caption)
+void Gosu::Window::set_caption(const string& caption)
 {
     SDL_SetWindowTitle(shared_window(), caption.c_str());
 }
@@ -262,7 +263,7 @@ bool Gosu::Window::tick()
             case (SDL_DROPFILE): {
                 char* dropped_filedir = e.drop.file;
                 if (dropped_filedir == nullptr) break;
-                drop(std::string(dropped_filedir));
+                drop(string(dropped_filedir));
                 SDL_free(dropped_filedir);
                 break;
             }

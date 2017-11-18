@@ -19,11 +19,11 @@ struct Gosu::Font::Impl
     // the first plane will ever be touched.
     struct CharInfo
     {
-        std::unique_ptr<Image> image;
+        unique_ptr<Image> image;
         double factor;
     };
     typedef array<CharInfo, 65536> Plane;
-    std::unique_ptr<Plane> planes[16][FF_COMBINATIONS];
+    unique_ptr<Plane> planes[16][FF_COMBINATIONS];
     
     map<string, shared_ptr<Image>> entity_cache;
     
@@ -57,7 +57,7 @@ struct Gosu::Font::Impl
         
         if (info.image.get()) return *info.image;
         
-        std::string char_string = wstring_to_utf8(std::wstring(1, wc));
+        string char_string = wstring_to_utf8(wstring(1, wc));
         // TODO: Would be nice to have.
         // if (is_formatting_char(wc))
         //     char_string.clear();
@@ -102,7 +102,7 @@ unsigned Gosu::Font::flags() const
 
 double Gosu::Font::text_width(const string& text, double scale_x) const
 {
-    std::wstring wtext = utf8_to_wstring(text);
+    wstring wtext = utf8_to_wstring(text);
     FormattedString fs(wtext.c_str(), flags());
     double result = 0;
     for (unsigned i = 0; i < fs.length(); ++i) {
@@ -116,7 +116,7 @@ double Gosu::Font::text_width(const string& text, double scale_x) const
 void Gosu::Font::draw(const string& text, double x, double y, ZPos z,
     double scale_x, double scale_y, Color c, AlphaMode mode) const
 {
-    std::wstring wtext = utf8_to_wstring(text);
+    wstring wtext = utf8_to_wstring(text);
     FormattedString fs(wtext.c_str(), flags());
     
     for (unsigned i = 0; i < fs.length(); ++i) {

@@ -5,12 +5,13 @@
 #import <Gosu/TextInput.hpp>
 #import <functional>
 #import <UIKit/UIKit.h>
+using namespace std;
 
 struct Gosu::TextInput::Impl {};
 Gosu::TextInput::TextInput() {}
 Gosu::TextInput::~TextInput() {}
-std::string Gosu::TextInput::text() const { return ""; }
-void Gosu::TextInput::set_text(const std::string& text) {}
+string Gosu::TextInput::text() const { return ""; }
+void Gosu::TextInput::set_text(const string& text) {}
 unsigned Gosu::TextInput::caret_pos() const { return 0; }
 void Gosu::TextInput::set_caret_pos(unsigned) {}
 unsigned Gosu::TextInput::selection_start() const { return 0; }
@@ -24,7 +25,7 @@ struct Gosu::Input::Impl
     float update_interval;
     
     NSMutableSet* current_touches_set;
-    std::unique_ptr<Gosu::Touches> current_touches_vector;
+    unique_ptr<Gosu::Touches> current_touches_vector;
     
     Touch translate_touch(UITouch* ui_touch)
     {
@@ -58,7 +59,7 @@ void Gosu::Input::feed_touch_event(int type, void* touches)
     
     pimpl->current_touches_vector.reset();
     
-    std::function<void (Touch)>* callback = nullptr;
+    function<void (Touch)>* callback = nullptr;
     
     if (type == 0) {
         [pimpl->current_touches_set unionSet:ui_touches];
@@ -83,12 +84,12 @@ void Gosu::Input::feed_touch_event(int type, void* touches)
     }
 }
 
-std::string Gosu::Input::id_to_char(Button btn)
+string Gosu::Input::id_to_char(Button btn)
 {
-    return std::string();
+    return string();
 }
 
-Gosu::Button Gosu::Input::char_to_id(std::string ch)
+Gosu::Button Gosu::Input::char_to_id(string ch)
 {
     return NO_BUTTON;
 }

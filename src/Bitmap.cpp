@@ -2,12 +2,13 @@
 #include <cassert>
 #include <algorithm>
 #include <vector>
+using namespace std;
 
 void Gosu::Bitmap::swap(Bitmap& other)
 {
-    std::swap(pixels, other.pixels);
-    std::swap(w, other.w);
-    std::swap(h, other.h);
+    swap(pixels, other.pixels);
+    swap(w, other.w);
+    swap(h, other.h);
 }
 
 void Gosu::Bitmap::resize(unsigned width, unsigned height, Color c)
@@ -73,7 +74,7 @@ void Gosu::Bitmap::insert(const Bitmap& source, int x, int y, unsigned src_x, un
 
 void Gosu::apply_color_key(Bitmap& bitmap, Color key)
 {
-    std::vector<Color> surrounding_colors;
+    vector<Color> surrounding_colors;
     surrounding_colors.reserve(4);
 
     for (unsigned y = 0; y < bitmap.height(); ++y)

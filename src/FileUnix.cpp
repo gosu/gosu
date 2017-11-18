@@ -14,6 +14,8 @@
 #include <sys/stat.h>
 #endif
 
+using namespace std;
+
 struct Gosu::File::Impl
 {
     int fd = -1;
@@ -27,7 +29,7 @@ struct Gosu::File::Impl
     }
 };
 
-Gosu::File::File(const std::string& filename, FileMode mode)
+Gosu::File::File(const string& filename, FileMode mode)
 : pimpl(new Impl)
 {
     int flags;
@@ -48,7 +50,7 @@ Gosu::File::File(const std::string& filename, FileMode mode)
 
     pimpl->fd = open(filename.c_str(), flags, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
     if (pimpl->fd < 0) {
-        throw std::runtime_error("Cannot open file " + filename);
+        throw runtime_error("Cannot open file " + filename);
     }
     
     if (mode == FM_READ && size() > 0) {
@@ -63,19 +65,19 @@ Gosu::File::~File()
     }
 }
 
-std::size_t Gosu::File::size() const
+size_t Gosu::File::size() const
 {
     // TODO: Error checking?
     return lseek(pimpl->fd, 0, SEEK_END);
 }
 
-void Gosu::File::resize(std::size_t new_size) { ftruncate(pimpl->fd, new_size); }
+void Gosu::File::resize(size_t new_size) { ftruncate(pimpl->fd, new_size); }
 
-void Gosu::File::read(std::size_t offset, std::size_t length, void* dest_buffer) const
+void Gosu::File::read(size_t offset, size_t length, void* dest_buffer) const
 {
     // TODO: Bounds checks?
     if (pimpl->mapping != MAP_FAILED) {
-        std::memcpy(dest_buffer, static_cast<const char*>(pimpl->mapping) + offset, length);
+        memcpy(dest_buffer, static_cast<const char*>(pimpl->mapping) + offset, length);
     }
     else {
         // TODO: Error checking?
@@ -84,7 +86,7 @@ void Gosu::File::read(std::size_t offset, std::size_t length, void* dest_buffer)
     }
 }
 
-void Gosu::File::write(std::size_t offset, std::size_t length, const void* source_buffer)
+void Gosu::File::write(size_t offset, size_t length, const void* source_buffer)
 {
     // TODO: Error checking?
     lseek(pimpl->fd, offset, SEEK_SET);
