@@ -32,8 +32,8 @@ struct Gosu::BlockAllocator::Impl
 
         // Test if the block collides with any existing rects.
         for (auto b : blocks) {
-            if (b.left < right && block.left < b.left + b.width && b.top < bottom
-                && block.top < b.top + b.height) {
+            if (b.left < right && block.left < b.left + b.width &&
+                    b.top < bottom && block.top < b.top + b.height) {
                 return false;
             }
         }
@@ -72,14 +72,10 @@ unsigned Gosu::BlockAllocator::height() const
 bool Gosu::BlockAllocator::alloc(unsigned a_width, unsigned a_height, Block& b)
 {
     // The rect wouldn't even fit onto the texture!
-    if (a_width > width() || a_height > height()) {
-        return false;
-    }
+    if (a_width > width() || a_height > height()) return false;
 
     // We know there's no space left.
-    if (a_width > pimpl->max_w && a_height > pimpl->max_h) {
-        return false;
-    }
+    if (a_width > pimpl->max_w && a_height > pimpl->max_h) return false;
     
     // Start to look for a place next to the last returned rect. Chances are
     // good we'll find a place there.

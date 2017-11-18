@@ -39,12 +39,9 @@ namespace
     bool is_bmp(Gosu::Reader reader)
     {
         size_t remaining = reader.resource().size() - reader.position();
-        if (remaining < 2) {
-            return false;
-        }
+        if (remaining < 2) return false;
         char magic_bytes[2];
         reader.read(magic_bytes, sizeof magic_bytes);
-        reader.seek(sizeof magic_bytes);
         return magic_bytes[0] == 'B' && magic_bytes[1] == 'M';
     }
 }
@@ -100,9 +97,7 @@ void Gosu::save_image_file(const Gosu::Bitmap& bitmap, const string& filename)
         ok = stbi_write_png(filename.c_str(), bitmap.width(), bitmap.height(), 4, bitmap.data(), 0);
     }
     
-    if (ok == 0) {
-        throw runtime_error("Could not save image data to file: " + filename);
-    }
+    if (ok == 0) throw runtime_error("Could not save image data to file: " + filename);
 }
 
 static void stbi_write_to_writer(void* context, void* data, int size)

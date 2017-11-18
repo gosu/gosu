@@ -149,9 +149,7 @@ void Gosu::Font::set_image(wchar_t wc, const Image& image)
 void Gosu::Font::set_image(wchar_t wc, unsigned font_flags, const Image& image)
 {
     Impl::CharInfo& ci = pimpl->char_info(wc, font_flags);
-    if (ci.image.get()) {
-        throw logic_error("Cannot set image for the same character twice");
-    }
+    if (ci.image.get()) throw logic_error("Cannot set image for the same character twice");
     ci.image.reset(new Gosu::Image(image));
     ci.factor = 1.0;
 }

@@ -49,9 +49,7 @@ Gosu::File::File(const string& filename, FileMode mode)
     // TODO: Locking flags?
 
     pimpl->fd = open(filename.c_str(), flags, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
-    if (pimpl->fd < 0) {
-        throw runtime_error("Cannot open file " + filename);
-    }
+    if (pimpl->fd < 0) throw runtime_error("Cannot open file " + filename);
     
     if (mode == FM_READ && size() > 0) {
         pimpl->mapping = mmap(nullptr, size(), PROT_READ, 0, pimpl->fd, 0);
@@ -71,7 +69,11 @@ size_t Gosu::File::size() const
     return lseek(pimpl->fd, 0, SEEK_END);
 }
 
-void Gosu::File::resize(size_t new_size) { ftruncate(pimpl->fd, new_size); }
+void Gosu::File::resize(size_t new_size)
+{
+    ftruncate(pimpl->fd, new_size);
+    
+}
 
 void Gosu::File::read(size_t offset, size_t length, void* dest_buffer) const
 {
