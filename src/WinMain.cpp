@@ -23,7 +23,7 @@ vector<string> split_cmd_line()
                 is_quoted_arg = true;
             }
             else if (is_quoted_arg) {
-                result.push_back(std::string(arg_begin, cmd_line));
+                result.push_back(string(arg_begin, cmd_line));
                 arg_begin = nullptr;
             }
         }
@@ -32,7 +32,7 @@ vector<string> split_cmd_line()
             is_quoted_arg = false;
         }
         else if (isspace((unsigned char)*cmd_line) && arg_begin != nullptr && !is_quoted_arg) {
-            result.push_back(std::string(arg_begin, cmd_line + 1));
+            result.push_back(string(arg_begin, cmd_line + 1));
             arg_begin = nullptr;
         }
         ++cmd_line;
@@ -55,7 +55,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
             argv[i] = const_cast<char*>(arguments[i].c_str());
         return main(argv.size(), &argv[0]);
     }
-    catch (const std::exception& e) {
+    catch (const exception& e) {
         ::MessageBoxA(0, e.what(), "Uncaught Exception", MB_OK | MB_ICONERROR);
         return EXIT_FAILURE;
     }

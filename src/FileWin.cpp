@@ -5,6 +5,7 @@
 #include <Gosu/IO.hpp>
 #include <Gosu/Utility.hpp>
 #include <windows.h>
+using namespace std;
 
 // TODO: Error checking
 
@@ -20,7 +21,7 @@ struct Gosu::File::Impl
     }
 };
 
-Gosu::File::File(const std::string& filename, FileMode mode)
+Gosu::File::File(const string& filename, FileMode mode)
 : pimpl(new Impl)
 {
     DWORD access;
@@ -38,7 +39,7 @@ Gosu::File::File(const std::string& filename, FileMode mode)
     DWORD share_mode = FILE_SHARE_READ;
     DWORD creation_disp = (mode == FM_READ) ? OPEN_EXISTING : OPEN_ALWAYS;
 
-    std::wstring wfilename = utf8_to_wstring(filename);
+    wstring wfilename = utf8_to_wstring(filename);
     pimpl->handle = CreateFileW(wfilename.c_str(), access, share_mode, 0, creation_disp,
                                 FILE_ATTRIBUTE_NORMAL, 0);
     if (pimpl->handle == INVALID_HANDLE_VALUE) {
@@ -53,12 +54,12 @@ Gosu::File::~File()
 {
 }
 
-std::size_t Gosu::File::size() const
+size_t Gosu::File::size() const
 {
     return GetFileSize(pimpl->handle, 0);
 }
 
-void Gosu::File::resize(std::size_t new_size)
+void Gosu::File::resize(size_t new_size)
 {
     if (SetFilePointer(pimpl->handle, new_size, 0, FILE_BEGIN) == INVALID_SET_FILE_POINTER) {
         throw_last_winapi_error("setting the file pointer");
@@ -66,7 +67,7 @@ void Gosu::File::resize(std::size_t new_size)
     winapi_check(SetEndOfFile(pimpl->handle), "resizing a file");
 }
 
-void Gosu::File::read(std::size_t offset, std::size_t length, void* dest_buffer) const
+void Gosu::File::read(size_t offset, size_t length, void* dest_buffer) const
 {
     if (SetFilePointer(pimpl->handle, offset, 0, FILE_BEGIN) == INVALID_SET_FILE_POINTER) {
         throw_last_winapi_error("setting the file pointer");
@@ -75,7 +76,7 @@ void Gosu::File::read(std::size_t offset, std::size_t length, void* dest_buffer)
     winapi_check(ReadFile(pimpl->handle, dest_buffer, length, &dummy, 0));
 }
 
-void Gosu::File::write(std::size_t offset, std::size_t length, const void* source_buffer)
+void Gosu::File::write(size_t offset, size_t length, const void* source_buffer)
 {
     if (SetFilePointer(pimpl->handle, offset, 0, FILE_BEGIN) == INVALID_SET_FILE_POINTER) {
         throw_last_winapi_error("setting the file pointer");

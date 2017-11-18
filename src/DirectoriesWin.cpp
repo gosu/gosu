@@ -7,14 +7,15 @@
 #include <cwchar>
 #include <stdexcept>
 #include <shlobj.h>
+using namespace std;
 
-static std::string special_folder_path(int csidl)
+static string special_folder_path(int csidl)
 {
     WCHAR buf[MAX_PATH + 2];
     if (FAILED(SHGetFolderPathW(nullptr, csidl | CSIDL_FLAG_CREATE, nullptr, 0, buf))) {
-        throw std::runtime_error("Error getting special folder path");
+        throw runtime_error("Error getting special folder path");
     }
-    std::size_t len = std::wcslen(buf);
+    size_t len = wcslen(buf);
     if (buf[len - 1] != L'\\') {
         buf[len] = L'\\';
         buf[len + 1] = 0;
@@ -22,9 +23,9 @@ static std::string special_folder_path(int csidl)
     return Gosu::wstring_to_utf8(buf);
 }
 
-static std::string exe_filename()
+static string exe_filename()
 {
-    static std::string result;
+    static string result;
     if (result.empty()) {
         WCHAR buffer[MAX_PATH * 2];
         Gosu::winapi_check(GetModuleFileNameW(nullptr, buffer, MAX_PATH * 2),
@@ -39,9 +40,9 @@ void Gosu::use_resource_directory()
     SetCurrentDirectory(utf8_to_wstring(resource_prefix()).c_str());
 }
 
-std::string Gosu::resource_prefix()
+string Gosu::resource_prefix()
 {
-    static std::string result;
+    static string result;
     if (result.empty()) {
         result = exe_filename();
         auto last_delim = result.find_last_of("\\/");
@@ -50,17 +51,17 @@ std::string Gosu::resource_prefix()
     return result;
 }
 
-std::string Gosu::shared_resource_prefix()
+string Gosu::shared_resource_prefix()
 {
     return resource_prefix();
 }
 
-std::string Gosu::user_settings_prefix()
+string Gosu::user_settings_prefix()
 {
     return special_folder_path(CSIDL_APPDATA);
 }
 
-std::string Gosu::user_documents_prefix()
+string Gosu::user_documents_prefix()
 {
     return special_folder_path(CSIDL_PERSONAL);
 }

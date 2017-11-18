@@ -3,6 +3,7 @@
 
 #include "GosuViewController.h"
 #include <Gosu/Gosu.hpp>
+using namespace std;
 
 namespace Gosu
 {
@@ -35,12 +36,12 @@ struct Gosu::Window::Impl
 {
     ::UIWindow* window;
     GosuViewController* controller;
-    std::unique_ptr<Graphics> graphics;
-    std::unique_ptr<Input> input;
+    unique_ptr<Graphics> graphics;
+    unique_ptr<Input> input;
     
     bool fullscreen;
     double update_interval;
-    std::string caption;
+    string caption;
 };
 
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval)
@@ -90,7 +91,7 @@ bool Gosu::Window::fullscreen() const
 
 void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
 {
-    throw std::logic_error("Cannot resize windows on iOS");
+    throw logic_error("Cannot resize windows on iOS");
 }
 
 double Gosu::Window::update_interval() const
@@ -100,15 +101,15 @@ double Gosu::Window::update_interval() const
 
 void Gosu::Window::set_update_interval(double update_interval)
 {
-    throw std::logic_error("Cannot change the update interval on iOS");
+    throw logic_error("Cannot change the update interval on iOS");
 }
 
-std::string Gosu::Window::caption() const
+string Gosu::Window::caption() const
 {
     return pimpl->caption;
 }
 
-void Gosu::Window::set_caption(const std::string& caption)
+void Gosu::Window::set_caption(const string& caption)
 {
     pimpl->caption = caption;
 }
@@ -144,7 +145,7 @@ bool Gosu::Window::tick()
 
 void Gosu::Window::close()
 {
-    throw std::logic_error("Cannot close windows manually on iOS");
+    throw logic_error("Cannot close windows manually on iOS");
 }
 
 void Gosu::Window::button_down(Button button)

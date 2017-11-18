@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <algorithm>
 #include <array>
+using namespace std;
 
 static void require_sdl_video()
 {
@@ -16,11 +17,11 @@ static void require_sdl_video()
     if (!initialized) {
         SDL_InitSubSystem(SDL_INIT_VIDEO);
         initialized = true;
-        std::atexit([] { SDL_QuitSubSystem(SDL_INIT_VIDEO); });
+        atexit([] { SDL_QuitSubSystem(SDL_INIT_VIDEO); });
     }
 }
 
-static std::array<bool, Gosu::NUM_BUTTONS> button_states = { { false } };
+static array<bool, Gosu::NUM_BUTTONS> button_states = { { false } };
 
 struct Gosu::Input::Impl
 {
@@ -41,7 +42,7 @@ struct Gosu::Input::Impl
         
         SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
         
-        int num_gamepads = std::min<int>(Gosu::NUM_GAMEPADS, SDL_NumJoysticks());
+        int num_gamepads = min<int>(Gosu::NUM_GAMEPADS, SDL_NumJoysticks());
         
         for (int i = 0; i < num_gamepads; ++i) {
             // Prefer the SDL_GameController API...
@@ -60,9 +61,9 @@ struct Gosu::Input::Impl
     
     ~Impl()
     {
-        std::for_each(joysticks.begin(), joysticks.end(), &SDL_JoystickClose);
+        for_each(joysticks.begin(), joysticks.end(), &SDL_JoystickClose);
         joysticks.clear();
-        std::for_each(game_controllers.begin(), game_controllers.end(), &SDL_GameControllerClose);
+        for_each(game_controllers.begin(), game_controllers.end(), &SDL_GameControllerClose);
         game_controllers.clear();
         
         SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
@@ -139,7 +140,7 @@ struct Gosu::Input::Impl
         return false;
     }
     
-    typedef std::array<bool, GP_NUM_PER_GAMEPAD> GamepadBuffer;
+    typedef array<bool, GP_NUM_PER_GAMEPAD> GamepadBuffer;
     
     void poll_gamepads()
     {
@@ -148,7 +149,7 @@ struct Gosu::Input::Impl
         // true. This is handy for singleplayer games.
         GamepadBuffer any_gamepad = { false };
         
-        std::size_t available_gamepads = game_controllers.size() + joysticks.size();
+        size_t available_gamepads = game_controllers.size() + joysticks.size();
         
         for (int i = 0; i < available_gamepads; ++i) {
             GamepadBuffer current_gamepad = { false };
@@ -213,15 +214,15 @@ struct Gosu::Input::Impl
 private:
     // For button down event: Button name value (>= 0)
     // For button up event: ~Button name value (< 0)
-    std::vector<int> event_queue;
+    vector<int> event_queue;
 
     void enqueue_event(int id, bool down)
     {
         event_queue.push_back(down ? id : ~id);
     }
     
-    std::vector<SDL_Joystick*> joysticks;
-    std::vector<SDL_GameController*> game_controllers;
+    vector<SDL_Joystick*> joysticks;
+    vector<SDL_GameController*> game_controllers;
     
     // SDL returns axis values in the range -2^15 through 2^15-1, so we consider -2^14 through
     // 2^14 (half of that range) the dead zone.
@@ -283,7 +284,7 @@ private:
             if (value & SDL_HAT_DOWN)  gamepad[GP_DOWN  - GP_RANGE_BEGIN] = true;
         }
         
-        int buttons = std::min<int>(GP_NUM_PER_GAMEPAD - 4, SDL_JoystickNumButtons(joystick));
+        int buttons = min<int>(GP_NUM_PER_GAMEPAD - 4, SDL_JoystickNumButtons(joystick));
         for (int button = 0; button < buttons; ++button) {
             if (SDL_JoystickGetButton(joystick, button)) {
                 gamepad[GP_BUTTON_0 + button - GP_RANGE_BEGIN] = true;
@@ -307,7 +308,7 @@ bool Gosu::Input::feed_sdl_event(void* event)
         pimpl->feed_sdl_event(static_cast<SDL_Event*>(event));
 }
 
-std::string Gosu::Input::id_to_char(Button btn)
+string Gosu::Input::id_to_char(Button btn)
 {
     require_sdl_video();
     
@@ -322,17 +323,17 @@ std::string Gosu::Input::id_to_char(Button btn)
     const char* name = SDL_GetKeyName(keycode);
     if (name == nullptr) return "";
     
-    std::wstring wname = utf8_to_wstring(name);
+    wstring wname = utf8_to_wstring(name);
     if (wname.length() != 1) return "";
     
     // Convert to lower case to be consistent with previous versions of Gosu.
     // German umlauts are already reported in lower-case by SDL, anyway.
     // (This should handle Turkish i/I just fine because it uses the current locale.)
-    wname[0] = (wchar_t) std::towlower((int) wname[0]);
+    wname[0] = (wchar_t) towlower((int) wname[0]);
     return wstring_to_utf8(wname);
 }
 
-Gosu::Button Gosu::Input::char_to_id(std::string ch)
+Gosu::Button Gosu::Input::char_to_id(string ch)
 {
     require_sdl_video();
     

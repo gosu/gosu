@@ -6,14 +6,15 @@
 #include <Gosu/Platform.hpp>
 #include <SDL.h>
 #include <cctype>
+using namespace std;
 
 struct Gosu::TextInput::Impl
 {
-    std::string text;
+    string text;
     
     // This is the current IME composition.
     // http://wiki.libsdl.org/Tutorials/TextInput#CandidateList
-    std::string composition;
+    string composition;
     
     // Indices into the UTF-8 encoded text.
     unsigned caret_pos = 0, selection_start = 0;
@@ -25,15 +26,15 @@ struct Gosu::TextInput::Impl
         return (static_cast<unsigned char>(ch) & 0xc0) == 0x80;
     }
     
-    void insert_text(const std::string& new_text)
+    void insert_text(const string& new_text)
     {
         // Stop IME composition.
         composition.clear();
 
         // Delete (overwrite) previous selection.
         if (caret_pos != selection_start) {
-            unsigned min = std::min(caret_pos, selection_start);
-            unsigned max = std::max(caret_pos, selection_start);
+            unsigned min = min(caret_pos, selection_start);
+            unsigned max = max(caret_pos, selection_start);
             text.erase(text.begin() + min, text.begin() + max);
             caret_pos = selection_start = min;
         }
@@ -77,20 +78,20 @@ struct Gosu::TextInput::Impl
     
     void move_word_left(bool modify_selection)
     {
-        while (caret_pos > 0 && std::isspace(text[caret_pos - 1])) {
+        while (caret_pos > 0 && isspace(text[caret_pos - 1])) {
             move_left(modify_selection);
         }
-        while (caret_pos > 0 && !std::isspace(text[caret_pos - 1])) {
+        while (caret_pos > 0 && !isspace(text[caret_pos - 1])) {
             move_left(modify_selection);
         }
     }
 
     void move_word_right(bool modify_selection)
     {
-        while (caret_pos < text.length() && std::isspace(text.at(caret_pos))) {
+        while (caret_pos < text.length() && isspace(text.at(caret_pos))) {
             move_right(modify_selection);
         }
-        while (caret_pos < text.length() && !std::isspace(text.at(caret_pos))) {
+        while (caret_pos < text.length() && !isspace(text.at(caret_pos))) {
             move_right(modify_selection);
         }
     }
@@ -116,8 +117,8 @@ struct Gosu::TextInput::Impl
     void delete_backward()
     {
         if (selection_start != caret_pos) {
-            unsigned min = std::min(caret_pos, selection_start);
-            unsigned max = std::max(caret_pos, selection_start);
+            unsigned min = min(caret_pos, selection_start);
+            unsigned max = max(caret_pos, selection_start);
             text.erase(text.begin() + min, text.begin() + max);
             selection_start = caret_pos = min;
         }
@@ -131,8 +132,8 @@ struct Gosu::TextInput::Impl
     void delete_forward()
     {
         if (selection_start != caret_pos) {
-            unsigned min = std::min(caret_pos, selection_start);
-            unsigned max = std::max(caret_pos, selection_start);
+            unsigned min = min(caret_pos, selection_start);
+            unsigned max = max(caret_pos, selection_start);
             text.erase(text.begin() + min, text.begin() + max);
             selection_start = caret_pos = min;
         }
@@ -153,16 +154,16 @@ Gosu::TextInput::~TextInput()
 {
 }
 
-std::string Gosu::TextInput::text() const
+string Gosu::TextInput::text() const
 {
-    std::string composed_text = pimpl->text;
+    string composed_text = pimpl->text;
     if (!pimpl->composition.empty()) {
         composed_text.insert(pimpl->caret_pos, pimpl->composition);
     }
     return composed_text;
 }
 
-void Gosu::TextInput::set_text(const std::string& text)
+void Gosu::TextInput::set_text(const string& text)
 {
     pimpl->text = text;
     pimpl->composition.clear();

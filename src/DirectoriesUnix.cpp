@@ -7,8 +7,9 @@
 #include <pwd.h>
 #include <sys/types.h>
 #include <unistd.h>
+using namespace std;
 
-static std::string home_dir()
+static string home_dir()
 {
     passwd* pwd = getpwuid(geteuid());
     assert (pwd && pwd->pw_dir);
@@ -20,22 +21,22 @@ void Gosu::use_resource_directory()
     // Do nothing, we expect the user to have the correct cwd on Linux.
 }
 
-std::string Gosu::resource_prefix()
+string Gosu::resource_prefix()
 {
-    return std::string();
+    return string();
 }
 
-std::string Gosu::shared_resource_prefix()
+string Gosu::shared_resource_prefix()
 {
-    return std::string();
+    return string();
 }
 
-std::string Gosu::user_settings_prefix()
+string Gosu::user_settings_prefix()
 {
     return home_dir() + "/.";
 }
 
-std::string Gosu::user_documents_prefix()
+string Gosu::user_documents_prefix()
 {
     return home_dir() + "/";
 }

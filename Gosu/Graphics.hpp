@@ -32,7 +32,7 @@ namespace Gosu
         ~Graphics();
 
         void set_resolution(unsigned logical_width, unsigned logical_height,
-            double horizontal_black_bar_width = 0, double vertical_black_bar_height = 0);
+                            double black_bar_width = 0, double black_bar_height = 0);
         
         unsigned width() const;
         unsigned height() const;
@@ -75,19 +75,19 @@ namespace Gosu
         //! or end point. Please only use this for debugging purposes. Otherwise, use a quad or
         //! image to simulate lines, or contribute a better draw_line to Gosu.
         static void draw_line(double x1, double y1, Color c1,
-            double x2, double y2, Color c2,
-            ZPos z, AlphaMode mode = AM_DEFAULT);
+                              double x2, double y2, Color c2,
+                              ZPos z, AlphaMode mode = AM_DEFAULT);
 
         static void draw_triangle(double x1, double y1, Color c1,
-            double x2, double y2, Color c2,
-            double x3, double y3, Color c3,
-            ZPos z, AlphaMode mode = AM_DEFAULT);
+                                  double x2, double y2, Color c2,
+                                  double x3, double y3, Color c3,
+                                  ZPos z, AlphaMode mode = AM_DEFAULT);
 
         static void draw_quad(double x1, double y1, Color c1,
-            double x2, double y2, Color c2,
-            double x3, double y3, Color c3,
-            double x4, double y4, Color c4,
-            ZPos z, AlphaMode mode = AM_DEFAULT);
+                              double x2, double y2, Color c2,
+                              double x3, double y3, Color c3,
+                              double x4, double y4, Color c4,
+                              ZPos z, AlphaMode mode = AM_DEFAULT);
 
         //! For internal use only.
         void set_physical_resolution(unsigned physical_width, unsigned physical_height);
@@ -97,7 +97,8 @@ namespace Gosu
 
         //! Turns a portion of a bitmap into something that can be drawn on a Graphics object.
         static std::unique_ptr<ImageData> create_image(const Bitmap& src,
-            unsigned src_x, unsigned src_y, unsigned src_width, unsigned src_height,
-            unsigned image_flags);
+                                                       unsigned src_x, unsigned src_y,
+                                                       unsigned src_width, unsigned src_height,
+                                                       unsigned image_flags);
     };
 }

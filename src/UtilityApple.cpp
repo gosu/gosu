@@ -5,16 +5,15 @@
 #import <Foundation/Foundation.h>
 #import <stdexcept>
 #import <vector>
+using namespace std;
 
 #ifdef GOSU_IS_IPHONE
-std::wstring Gosu::utf8_to_wstring(const std::string& s)
+wstring Gosu::utf8_to_wstring(const string& s)
 {
-    if (s.empty()) {
-        return std::wstring();
-    }
+    if (s.empty()) return wstring();
     
     NSString* string = [NSString stringWithUTF8String:s.c_str()];
-    std::vector<wchar_t> buffer(s.size());
+    vector<wchar_t> buffer(s.size());
     NSUInteger buffer_size;
     if (![string getBytes:&buffer[0]
                 maxLength:buffer.size() * sizeof(wchar_t)
@@ -23,25 +22,25 @@ std::wstring Gosu::utf8_to_wstring(const std::string& s)
                   options:0
                     range:NSMakeRange(0, string.length)
            remainingRange:nullptr]) {
-        throw std::runtime_error("String " + s + " could not be converted to UTF-32");
+        throw runtime_error("String " + s + " could not be converted to UTF-32");
     }
-    return std::wstring(&buffer[0], &buffer[0] + buffer_size / sizeof(wchar_t));
+    return wstring(&buffer[0], &buffer[0] + buffer_size / sizeof(wchar_t));
 }
 
-std::string Gosu::wstring_to_utf8(const std::wstring& ws)
+string Gosu::wstring_to_utf8(const wstring& ws)
 {
-    if (ws.empty()) return std::string();
+    if (ws.empty()) return string();
 
     @autoreleasepool {
         NSString* string = [[NSString alloc] initWithBytes:ws.data()
                                                     length:ws.size() * sizeof(wchar_t)
                                                   encoding:NSUTF32LittleEndianStringEncoding];
-        return string.UTF8String ?: std::string();
+        return string.UTF8String ?: string();
     }
 }
 #endif
 
-std::string Gosu::language()
+string Gosu::language()
 {
     @autoreleasepool {
         NSString* language = [NSLocale preferredLanguages][0];

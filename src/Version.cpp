@@ -1,12 +1,13 @@
 #include <Gosu/Version.hpp>
 #include <Gosu/Platform.hpp>
 #include <string>
+using namespace std;
 
-const std::string Gosu::VERSION = std::to_string(GOSU_MAJOR_VERSION) + '.' +
-                                  std::to_string(GOSU_MINOR_VERSION) + '.' +
-                                  std::to_string(GOSU_POINT_VERSION);
+const string Gosu::VERSION = to_string(GOSU_MAJOR_VERSION) + '.' +
+                             to_string(GOSU_MINOR_VERSION) + '.' +
+                             to_string(GOSU_POINT_VERSION);
 
-const std::string Gosu::LICENSES =
+const string Gosu::LICENSES =
     "This software may utilize code from the following third-party libraries:\n"
     "\n"
     "Gosu, https://www.libgosu.org, MIT License, https://opensource.org/licenses/MIT\n"

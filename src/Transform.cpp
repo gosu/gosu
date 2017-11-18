@@ -5,12 +5,12 @@
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Math.hpp>
 #include <cmath>
+using namespace std;
 
-Gosu::Transform
-Gosu::rotate(double angle, double around_x, double around_y)
+Gosu::Transform Gosu::rotate(double angle, double around_x, double around_y)
 {
-    double c = std::cos(degrees_to_radians(angle));
-    double s = std::sin(degrees_to_radians(angle));
+    double c = cos(degrees_to_radians(angle));
+    double s = sin(degrees_to_radians(angle));
     Gosu::Transform result = {
         +c, +s, 0, 0,
         -s, +c, 0, 0,
@@ -24,8 +24,7 @@ Gosu::rotate(double angle, double around_x, double around_y)
     return result;
 }
 
-Gosu::Transform
-Gosu::translate(double x, double y)
+Gosu::Transform Gosu::translate(double x, double y)
 {
     Gosu::Transform result = {
         1, 0, 0, 0,
@@ -36,8 +35,7 @@ Gosu::translate(double x, double y)
     return result;
 }
 
-Gosu::Transform
-Gosu::scale(double factor)
+Gosu::Transform Gosu::scale(double factor)
 {
     Gosu::Transform result = {
         factor, 0,      0, 0,
@@ -48,8 +46,7 @@ Gosu::scale(double factor)
     return result;
 }
 
-Gosu::Transform
-Gosu::scale(double scale_x, double scale_y, double around_x, double around_y)
+Gosu::Transform Gosu::scale(double scale_x, double scale_y, double around_x, double around_y)
 {
     Gosu::Transform result = {
         scale_x, 0,       0, 0,
@@ -64,8 +61,7 @@ Gosu::scale(double scale_x, double scale_y, double around_x, double around_y)
     return result;
 }
 
-Gosu::Transform
-Gosu::concat(const Transform& left, const Transform& right)
+Gosu::Transform Gosu::concat(const Transform& left, const Transform& right)
 {
     Gosu::Transform result;
     for (int i = 0; i < 16; ++i) {

@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <vector>
+using namespace std;
 
 #ifndef GOSU_IS_IPHONE
 
@@ -31,7 +32,7 @@ wstring Gosu::utf8_to_wstring(const string& s)
 {
     return iconvert<wstring, UCS_4_INTERNAL, UTF_8>(s);
 }
-string Gosu::wstring_to_utf8(const std::wstring& ws)
+string Gosu::wstring_to_utf8(const wstring& ws)
 {
     return iconvert<string, UTF_8, UCS_4_INTERNAL>(ws);
 }
@@ -57,7 +58,7 @@ string Gosu::wstring_to_utf8(const wstring& ws)
 #endif
 #endif
 
-bool Gosu::has_extension(const std::string& filename, const char* extension)
+bool Gosu::has_extension(const string& filename, const char* extension)
 {
     size_t ext_len = strlen(extension);
     if (ext_len > filename.length()) {

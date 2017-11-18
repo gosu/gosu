@@ -1,12 +1,13 @@
 #include "BlockAllocator.hpp"
 #include <stdexcept>
 #include <vector>
+using namespace std;
 
 struct Gosu::BlockAllocator::Impl
 {
     unsigned width, height;
 
-    std::vector<Block> blocks;
+    vector<Block> blocks;
     unsigned first_x, first_y;
     unsigned max_w, max_h;
     
@@ -129,5 +130,5 @@ void Gosu::BlockAllocator::free(unsigned left, unsigned top, unsigned width, uns
         }
     }
 
-    throw std::logic_error("Tried to free an invalid block");
+    throw logic_error("Tried to free an invalid block");
 }

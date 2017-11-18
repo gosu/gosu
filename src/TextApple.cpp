@@ -17,16 +17,18 @@ typedef UIFont AppleFont;
 typedef NSFont AppleFont;
 #endif
 
+using namespace std;
+
 // If a font is a filename, loads the font and returns its family name that can be used
 // like any system font. Otherwise, just returns the family name.
-static std::string normalize_font(const std::string& font_name)
+static string normalize_font(const string& font_name)
 {
 #ifdef GOSU_IS_IPHONE
     // On iOS, we have no support for loading font files yet. However, if you register your fonts
     // via your app's Info.plist, you should be able to reference them by name.
     return font_name;
 #else
-    static std::map<std::string, std::string> family_of_files;
+    static map<string, string> family_of_files;
     
     // Not a path name: It is already a family name.
     if (font_name.find("/") == font_name.npos) {
@@ -58,13 +60,13 @@ static std::string normalize_font(const std::string& font_name)
 #endif
 }
 
-static AppleFont* get_font(std::string font_name, unsigned font_flags, double height)
+static AppleFont* get_font(string font_name, unsigned font_flags, double height)
 {
     font_name = normalize_font(font_name);
 
-    static std::map<std::pair<std::string, std::pair<unsigned, double>>, AppleFont*> used_fonts;
+    static map<pair<string, pair<unsigned, double>>, AppleFont*> used_fonts;
     
-    auto key = std::make_pair(font_name, std::make_pair(font_flags, height));
+    auto key = make_pair(font_name, make_pair(font_flags, height));
     
     AppleFont* result = used_fonts[key];
     if (!result) {
@@ -89,7 +91,7 @@ static AppleFont* get_font(std::string font_name, unsigned font_flags, double he
                 result = get_font(Gosu::default_font_name(), 0, height);
             }
             else {
-                throw std::runtime_error("Cannot load default font");
+                throw runtime_error("Cannot load default font");
             }
         }
         used_fonts[key] = result;
@@ -97,7 +99,7 @@ static AppleFont* get_font(std::string font_name, unsigned font_flags, double he
     return result;
 }
 
-std::string Gosu::default_font_name()
+string Gosu::default_font_name()
 {
     return "Arial Unicode MS";
 }
@@ -115,11 +117,11 @@ static NSDictionary* attribute_dictionary(NSFont* font, unsigned font_flags)
 }
 #endif
 
-unsigned Gosu::text_width(const std::string& text, const std::string& font_name,
-    unsigned font_height, unsigned font_flags)
+unsigned Gosu::text_width(const string& text, const string& font_name,
+                          unsigned font_height, unsigned font_flags)
 {
     if (text.find_first_of("\r\n") != text.npos) {
-        throw std::invalid_argument("text_width cannot handle line breaks");
+        throw invalid_argument("text_width cannot handle line breaks");
     }
     
     AppleFont* font = get_font(font_name, font_flags, font_height);
@@ -138,11 +140,11 @@ unsigned Gosu::text_width(const std::string& text, const std::string& font_name,
     return ceil(size.width / size.height * font_height);
 }
 
-void Gosu::draw_text(Bitmap& bitmap, const std::string& text, int x, int y, Color c,
-    const std::string& font_name, unsigned font_height, unsigned font_flags)
+void Gosu::draw_text(Bitmap& bitmap, const string& text, int x, int y, Color c,
+                     const string& font_name, unsigned font_height, unsigned font_flags)
 {
     if (text.find_first_of("\r\n") != text.npos) {
-        throw std::invalid_argument("the argument to draw_text cannot contain line breaks");
+        throw invalid_argument("the argument to draw_text cannot contain line breaks");
     }
     
     AppleFont* font = get_font(font_name, font_flags, font_height);

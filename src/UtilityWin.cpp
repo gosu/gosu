@@ -4,8 +4,9 @@
 #include <Gosu/Utility.hpp>
 #include "WinUtility.hpp"
 #include <windows.h>
+using namespace std;
 
-std::string Gosu::language()
+string Gosu::language()
 {
     LCID lcid = GetUserDefaultLCID();
     char buffer[9];

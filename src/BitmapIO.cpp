@@ -17,13 +17,15 @@
 
 #include "stb_image.h"
 
+using namespace std;
+
 namespace
 {
     int read_callback(void* user, char* data, int size)
     {
         Gosu::Reader* reader = static_cast<Gosu::Reader*>(user);
-        std::size_t remaining = reader->resource().size() - reader->position();
-        std::size_t actual_size = (size < remaining ? size : remaining);
+        size_t remaining = reader->resource().size() - reader->position();
+        size_t actual_size = (size < remaining ? size : remaining);
         reader->read(data, actual_size);
         return static_cast<int>(actual_size);
     }
@@ -42,7 +44,7 @@ namespace
 
     bool is_bmp(Gosu::Reader reader)
     {
-        std::size_t remaining = reader.resource().size() - reader.position();
+        size_t remaining = reader.resource().size() - reader.position();
         if (remaining < 2) {
             return false;
         }
@@ -53,7 +55,7 @@ namespace
     }
 }
 
-void Gosu::load_image_file(Gosu::Bitmap& bitmap, const std::string& filename)
+void Gosu::load_image_file(Gosu::Bitmap& bitmap, const string& filename)
 {
     Buffer buffer;
     load_file(buffer, filename);
@@ -74,11 +76,11 @@ void Gosu::load_image_file(Gosu::Bitmap& bitmap, Reader input)
     if (bytes == nullptr) {
         // TODO - stbi_failure_reason is not thread safe. Everything here should be wrapped in a
         // mutex.
-        throw std::runtime_error("Cannot load image: " + std::string(stbi_failure_reason()));
+        throw runtime_error("Cannot load image: " + string(stbi_failure_reason()));
     }
 
     bitmap.resize(x, y);
-    std::memcpy(bitmap.data(), bytes, x * y * sizeof(Gosu::Color));
+    memcpy(bitmap.data(), bytes, x * y * sizeof(Gosu::Color));
 
     stbi_image_free(bytes);
     
@@ -90,7 +92,7 @@ void Gosu::load_image_file(Gosu::Bitmap& bitmap, Reader input)
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-void Gosu::save_image_file(const Gosu::Bitmap& bitmap, const std::string& filename)
+void Gosu::save_image_file(const Gosu::Bitmap& bitmap, const string& filename)
 {
     int ok;
     
@@ -105,7 +107,7 @@ void Gosu::save_image_file(const Gosu::Bitmap& bitmap, const std::string& filena
     }
     
     if (ok == 0) {
-        throw std::runtime_error("Could not save image data to file: " + filename);
+        throw runtime_error("Could not save image data to file: " + filename);
     }
 }
 
@@ -116,7 +118,7 @@ static void stbi_write_to_writer(void* context, void* data, int size)
 }
 
 void Gosu::save_image_file(const Gosu::Bitmap& bitmap, Gosu::Writer writer,
-                           const std::string& format_hint)
+                           const string& format_hint)
 {
     int ok;
     
@@ -135,7 +137,7 @@ void Gosu::save_image_file(const Gosu::Bitmap& bitmap, Gosu::Writer writer,
     }
     
     if (ok == 0) {
-        throw std::runtime_error("Could not save image data to memory (format hint = '" +
-                                 format_hint + "'");
+        throw runtime_error("Could not save image data to memory (format hint = '" +
+                            format_hint + "'");
     }
 }
