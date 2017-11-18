@@ -33,10 +33,10 @@ struct Gosu::TextInput::Impl
 
         // Delete (overwrite) previous selection.
         if (caret_pos != selection_start) {
-            unsigned min = min(caret_pos, selection_start);
-            unsigned max = max(caret_pos, selection_start);
-            text.erase(text.begin() + min, text.begin() + max);
-            caret_pos = selection_start = min;
+            unsigned from = min(caret_pos, selection_start);
+            unsigned to = max(caret_pos, selection_start);
+            text.erase(text.begin() + from, text.begin() + to);
+            caret_pos = selection_start = from;
         }
         
         text.insert(text.begin() + caret_pos, new_text.begin(), new_text.end());
@@ -117,10 +117,10 @@ struct Gosu::TextInput::Impl
     void delete_backward()
     {
         if (selection_start != caret_pos) {
-            unsigned min = min(caret_pos, selection_start);
-            unsigned max = max(caret_pos, selection_start);
-            text.erase(text.begin() + min, text.begin() + max);
-            selection_start = caret_pos = min;
+            unsigned from = min(caret_pos, selection_start);
+            unsigned to = max(caret_pos, selection_start);
+            text.erase(text.begin() + from, text.begin() + to);
+            selection_start = caret_pos = from;
         }
         else if (caret_pos > 0) {
             move_left(false);
@@ -132,10 +132,10 @@ struct Gosu::TextInput::Impl
     void delete_forward()
     {
         if (selection_start != caret_pos) {
-            unsigned min = min(caret_pos, selection_start);
-            unsigned max = max(caret_pos, selection_start);
-            text.erase(text.begin() + min, text.begin() + max);
-            selection_start = caret_pos = min;
+            unsigned from = min(caret_pos, selection_start);
+            unsigned to = max(caret_pos, selection_start);
+            text.erase(text.begin() + from, text.begin() + to);
+            selection_start = caret_pos = from;
         }
         else if (caret_pos < text.length()) {
             move_right(false);

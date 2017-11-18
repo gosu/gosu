@@ -6,9 +6,9 @@ using namespace std;
 
 void Gosu::Bitmap::swap(Bitmap& other)
 {
-    swap(pixels, other.pixels);
-    swap(w, other.w);
-    swap(h, other.h);
+    std::swap(pixels, other.pixels);
+    std::swap(w, other.w);
+    std::swap(h, other.h);
 }
 
 void Gosu::Bitmap::resize(unsigned width, unsigned height, Color c)
@@ -27,7 +27,7 @@ void Gosu::Bitmap::insert(const Bitmap& source, int x, int y)
 }
 
 void Gosu::Bitmap::insert(const Bitmap& source, int x, int y, unsigned src_x, unsigned src_y,
-    unsigned src_width, unsigned src_height)
+                          unsigned src_width, unsigned src_height)
 {
     // TODO: This should use memcpy if possible (x == 0 && src_width == this->width())
 
