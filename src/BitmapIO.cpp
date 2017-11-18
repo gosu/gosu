@@ -9,12 +9,6 @@
 #define STBI_NO_STDIO
 #define STBI_NO_LINEAR
 
-// Work around this bug:
-// https://bugs.launchpad.net/ubuntu/+source/gcc-5/+bug/1568899
-#ifdef GOSU_IS_X
-#define STBI_NO_SIMD
-#endif
-
 #include "stb_image.h"
 
 using namespace std;
