@@ -395,7 +395,7 @@ unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src,
         }
         
         if (!data.get()) throw logic_error("Internal texture block allocation error");
-        return move(data);
+        return data;
     }
     
     // Too large to fit on a single texture.
@@ -404,7 +404,7 @@ unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src,
         bmp.insert(src, 0, 0, src_x, src_y, src_width, src_height);
         unique_ptr<ImageData> lidi;
         lidi.reset(new LargeImageData(bmp, max_size - 2, max_size - 2, flags));
-        return move(lidi);
+        return lidi;
     }
     
     Bitmap bmp;
@@ -416,7 +416,7 @@ unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src,
         
         unique_ptr<ImageData> data;
         data = texture->try_alloc(texture, bmp, 1);
-        if (data.get()) return move(data);
+        if (data.get()) return data;
     }
     
     // All textures are full: Create a new one.
@@ -428,5 +428,5 @@ unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src,
     unique_ptr<ImageData> data;
     data = texture->try_alloc(texture, bmp, 1);
     if (!data.get()) throw logic_error("Internal texture block allocation error");
-    return move(data);
+    return data;
 }

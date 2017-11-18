@@ -55,11 +55,6 @@ Gosu::Color Gosu::Color::from_hsv(double h, double s, double v)
 
 Gosu::Color Gosu::Color::from_ahsv(Channel alpha, double h, double s, double v)
 {
-    if (s == 0) {
-        // Grey.
-        return Color(alpha, v * 255, v * 255, v * 255);
-    }
-    
     // Normalize hue so that is always in the [0, 360) range and wraps around.
     h = normalize_angle(h);
     // Clamp s and v for consistency with the Ruby/Gosu ARGB getters/setters.
@@ -121,10 +116,10 @@ void Gosu::Color::set_value(double v)
 
 Gosu::Color Gosu::interpolate(Color a, Color b, double weight)
 {
-    return Color(clamp<long>(round(Gosu::interpolate(a.alpha(), b.alpha(), weight)), 0, 255),
-                 clamp<long>(round(Gosu::interpolate(a.red(),   b.red(),   weight)), 0, 255),
-                 clamp<long>(round(Gosu::interpolate(a.green(), b.green(), weight)), 0, 255),
-                 clamp<long>(round(Gosu::interpolate(a.blue(),  b.blue(),  weight)), 0, 255));
+    return Color(clamp<long>(round(interpolate(a.alpha(), b.alpha(), weight)), 0, 255),
+                 clamp<long>(round(interpolate(a.red(),   b.red(),   weight)), 0, 255),
+                 clamp<long>(round(interpolate(a.green(), b.green(), weight)), 0, 255),
+                 clamp<long>(round(interpolate(a.blue(),  b.blue(),  weight)), 0, 255));
 }
 
 Gosu::Color Gosu::multiply(Color a, Color b)

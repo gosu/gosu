@@ -45,10 +45,11 @@ namespace Gosu
         bool big_endian_;
         
         static OSStatus AudioFile_ReadProc(void* in_client_data, SInt64 in_position,
-            UInt32 request_count, void* buffer, UInt32* actual_count)
+                                           UInt32 request_count, void* buffer, UInt32* actual_count)
         {
             const Resource& res = *static_cast<Resource*>(in_client_data);
-            *actual_count = std::min<UInt32>(request_count, res.size() - in_position);
+            *actual_count = std::min<UInt32>(request_count,
+                                             static_cast<UInt32>(res.size() - in_position));
             res.read(in_position, *actual_count, buffer);
             return noErr;
         }
@@ -81,7 +82,9 @@ namespace Gosu
             AudioStreamBasicDescription client_data = { 0 };
             sample_rate_ = client_data.mSampleRate = 22050;
             client_data.mFormatID = kAudioFormatLinearPCM;
-            client_data.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
+            client_data.mFormatFlags = kAudioFormatFlagIsSignedInteger |
+                                       kAudioFormatFlagsNativeEndian |
+                                       kAudioFormatFlagIsPacked;
             client_data.mBitsPerChannel = 16;
             client_data.mChannelsPerFrame = base.mChannelsPerFrame;
             client_data.mFramesPerPacket = 1;
@@ -119,22 +122,15 @@ namespace Gosu
             
             // Easy formats
             format_ = 0;
-            if (desc.mChannelsPerFrame == 1) {
-                /*if (desc.mBitsPerChannel == 8)
-                    format_ = AL_FORMAT_MONO8;
-                else*/ if (desc.mBitsPerChannel == 16)
-                    format_ = AL_FORMAT_MONO16;
+            if (desc.mChannelsPerFrame == 1 && desc.mBitsPerChannel == 16) {
+                format_ = AL_FORMAT_MONO16;
             }
-            else if (desc.mChannelsPerFrame == 2) {
-                /*if (desc.mBitsPerChannel == 8)
-                    format_ = AL_FORMAT_STEREO8;
-                else */if (desc.mBitsPerChannel == 16)
-                    format_ = AL_FORMAT_STEREO16;
+            else if (desc.mChannelsPerFrame == 2 && desc.mBitsPerChannel == 16) {
+                format_ = AL_FORMAT_STEREO16;
             }
             
             if (format_ == 0 ||
-                    // If format not native for OpenAL, set client data format
-                    // to enable conversion
+                    // If format not native for OpenAL, set client data format to enable conversion
                     desc.mFormatFlags & kAudioFormatFlagIsBigEndian ||
                     desc.mFormatFlags & kAudioFormatFlagIsFloat ||
                     !(desc.mFormatFlags & kAudioFormatFlagIsSignedInteger)) {
@@ -204,7 +200,7 @@ namespace Gosu
             AudioBufferList abl;
             abl.mNumberBuffers = 1;
             abl.mBuffers[0].mNumberChannels = 1;
-            abl.mBuffers[0].mDataByteSize = length;
+            abl.mBuffers[0].mDataByteSize = static_cast<UInt32>(length);
             abl.mBuffers[0].mData = dest;
             UInt32 numFrames = 0xffffffff; // give us as many frames as possible given our buffer
             CHECK_OS(ExtAudioFileRead(file_, &numFrames, &abl));

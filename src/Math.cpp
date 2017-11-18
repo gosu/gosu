@@ -30,7 +30,7 @@ double Gosu::angle(double from_x, double from_y, double to_x, double to_y, doubl
 
 double Gosu::angle_diff(double from, double to)
 {
-    return Gosu::normalize_angle(to - from + 180) - 180;
+    return normalize_angle(to - from + 180) - 180;
 }
 
 double Gosu::normalize_angle(double angle)

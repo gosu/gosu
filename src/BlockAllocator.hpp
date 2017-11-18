@@ -15,10 +15,8 @@ namespace Gosu
         {
             unsigned left, top, width, height;
             Block() {}
-            Block(unsigned a_left, unsigned a_top, unsigned a_width, unsigned a_height)
-            : left(a_left), top(a_top), width(a_width), height(a_height)
-            {
-            }
+            Block(unsigned left, unsigned top, unsigned width, unsigned height)
+            : left(left), top(top), width(width), height(height) {}
         };
 
         BlockAllocator(unsigned width, unsigned height);
