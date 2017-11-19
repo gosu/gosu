@@ -8,6 +8,25 @@ namespace :win do
   task :archive => :set_version do
     zip WINDOWS_ARCHIVE_FILENAME, WINDOWS_FILES
   end
+  
+  desc "Updates the Visual Studio project to include all files matching src/**/*.cpp"
+  task :vcxproj do
+    files = FileList["src/**/*.cpp"]
+
+    vcxproj = File.read "windows/Gosu.vcxproj"
+    vcxproj.sub! /(<ItemGroup>)(\r?\n\s*)<ClCompile.*?(\n\s*<\/ItemGroup>)/m do
+      items = files.map { |cpp| "#$2<ClCompile Include=\"..\\#{cpp.tr("/", "\\")}\" />" }
+      [$1, *items, $3].join
+    end
+    File.write "windows/Gosu.vcxproj", vcxproj
+    
+    filters = File.read "windows/Gosu.vcxproj.filters"
+    filters.sub! /(<ItemGroup>)(\r?\n\s*)<ClCompile.*?(\n\s*<\/ItemGroup>)/m do
+      items = files.map { |cpp| "#$2<ClCompile Include=\"..\\#{cpp.tr("/", "\\")}\">#$2  <Filter>Implementation</Filter>#$2</ClCompile>" }
+      [$1, *items, $3].join
+    end
+    File.write "windows/Gosu.vcxproj.filters", filters
+  end
 end
 
 [32, 64].each do |bits|

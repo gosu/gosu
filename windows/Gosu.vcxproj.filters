@@ -24,25 +24,124 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Audio.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Bitmap.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BitmapIO.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BlockAllocator.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Color.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DirectoriesApple.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DirectoriesUnix.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\DirectoriesWin.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FileUnix.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\FileWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Inspection.cpp">
+    <ClCompile Include="..\src\Font.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FormattedString.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GosuAppDelegate.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GosuGLView.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GosuViewController.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Graphics.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\IO.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Image.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Input.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\InputUIKit.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Inspection.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LargeImageData.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Macro.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Math.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Resolution.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ResolutionApple.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TexChunk.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Text.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextApple.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextInput.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextTTFWin.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextUnix.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextWin.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Texture.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TimingApple.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TimingUnix.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\TimingWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Transform.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Utility.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\UtilityApple.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\UtilityWin.cpp">
@@ -51,70 +150,16 @@
     <ClCompile Include="..\src\Version.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\WinUtility.cpp">
+    <ClCompile Include="..\src\WinMain.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\BlockAllocator.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Color.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Graphics.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Image.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\LargeImageData.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Macro.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TexChunk.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Texture.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Transform.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Input.cpp">
-      <Filter>Implementation\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TextInput.cpp">
-      <Filter>Implementation\Input</Filter>
+    <ClCompile Include="..\src\WinUtility.cpp">
+      <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Window.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Font.cpp">
-      <Filter>Implementation\Text</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Text.cpp">
-      <Filter>Implementation\Text</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TextTTFWin.cpp">
-      <Filter>Implementation\Text</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TextWin.cpp">
-      <Filter>Implementation\Text</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Bitmap.cpp">
-      <Filter>Implementation\Bitmap</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Resolution.cpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\BitmapIO.cpp">
-      <Filter>Implementation\Bitmap</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Audio.cpp">
-      <Filter>Implementation\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\stb_vorbis.c">
+    <ClCompile Include="..\src\WindowUIKit.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
   </ItemGroup>
