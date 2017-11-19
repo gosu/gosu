@@ -5,6 +5,7 @@
 #include <Gosu/Image.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/Text.hpp>
+#include <Gosu/Utility.hpp>
 #include <array>
 #include <cassert>
 #include <map>
