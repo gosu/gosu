@@ -217,6 +217,7 @@
     <ClCompile Include="..\src\WinUtility.cpp" />
     <ClCompile Include="..\src\Window.cpp" />
     <ClCompile Include="..\src\WindowUIKit.cpp" />
+    <ClCompile Include="..\src\stb_vorbis.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Gosu\Gosu.hpp" />

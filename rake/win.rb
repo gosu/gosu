@@ -11,7 +11,7 @@ namespace :win do
   
   desc "Updates the Visual Studio project to include all files matching src/**/*.cpp"
   task :vcxproj do
-    files = FileList["src/**/*.cpp"]
+    files = FileList["src/**/*.{c,cpp}"]
 
     vcxproj = File.read "windows/Gosu.vcxproj"
     vcxproj.sub! /(<ItemGroup>)(\r?\n\s*)<ClCompile.*?(\n\s*<\/ItemGroup>)/m do

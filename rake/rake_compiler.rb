@@ -20,7 +20,7 @@ EOS
   # Ruby frontend for C++ extension.
   s.files += Dir["lib/**/*.rb"]
   # Gosu source code including the Ruby interface (.cxx).
-  s.files += Dir["src/**/*.{h,hpp,c,cpp,m,mm,cxx}"]
+  s.files += Dir["src/**/*.{h,hpp,c,cpp,cxx}"]
   # Gosu header files, for compiling the gem & for using inline C++ from Ruby.
   s.files += Dir["Gosu/*.hpp"]
   # RDoc setup:

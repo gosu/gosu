@@ -162,6 +162,9 @@
     <ClCompile Include="..\src\WindowUIKit.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\stb_vorbis.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BlockAllocator.hpp">
