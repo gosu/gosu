@@ -54,7 +54,7 @@ before_install:
       brew update
       brew install sdl2
       
-      # Update the system RubyGems on OS X and install CocoaPods.
+      # Update the system RubyGems on macOS and install CocoaPods.
       # Also install a very specific version of ActiveSupport, see:
       # https://github.com/CocoaPods/CocoaPods/issues/4711#issuecomment-230096751
       # Also install gem binaries into /usr/local/bin to work around SIP on macOS 10.11+
@@ -64,8 +64,10 @@ before_install:
     fi
 
   # Dependencies for 'rake gem' (not for actually using Gosu)
+  # Only install the rake gem on macOS; on Linux we use the old version from apt.
+  - if [ $TRAVIS_OS_NAME == osx ]; then sudo gem install rake; fi
   # We have to install binaries into ~ because of Apple's System Integrity Protection.
-  - sudo gem install rake rake-compiler minitest --no-ri --no-rdoc -n ~
+  - sudo gem install rake-compiler minitest --no-ri --no-rdoc -n ~
 
 before_script:
   # Enable "dummy" devices for audio and video on Linux.

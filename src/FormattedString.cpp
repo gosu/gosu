@@ -25,7 +25,8 @@ Gosu::FormattedString::FormattedString(const wchar_t* html, unsigned base_flags)
 {
     // Remove \r characters if existent. Avoid a copy if we don't need one.
     wstring unixified;
-    if (wcschr(html, L'\r')) {
+    // We have to explicitly qualify wcschr to avoid an ambiguity on macOS.
+    if (std::wcschr(html, L'\r')) {
         unixified.resize(wcslen(html));
         unsigned pos = 0;
         while (*html) {
@@ -85,14 +86,12 @@ Gosu::FormattedString::FormattedString(const wchar_t* html, unsigned base_flags)
             continue;
         }
         if (!wcsncmp(html + pos, L"<c=", 3) && len >= pos + 10 && html[pos + 9] == L'>') {
-            using namespace std;
             unsigned rgb = static_cast<uint32_t>(wcstoul(html + pos + 3, 0, 16));
             c.push_back(0xff000000 | rgb);
             pos += 10;
             continue;
         }
         if (!wcsncmp(html + pos, L"<c=", 3) && len >= pos + 12 && html[pos + 11] == L'>') {
-            using namespace std;
             unsigned argb = static_cast<uint32_t>(wcstoul(html + pos + 3, 0, 16));
             c.push_back(argb);
             pos += 12;
@@ -126,7 +125,6 @@ Gosu::FormattedString::FormattedString(const wchar_t* html, unsigned base_flags)
         if (html[pos] == L'&' && html[pos + 1]) {
             int end_of_entity = pos + 1;
             while (html[end_of_entity] != L';') {
-                using namespace std;
                 if (!iswalnum(static_cast<wint_t>(html[end_of_entity]))) {
                     goto normal_character;
                 }
