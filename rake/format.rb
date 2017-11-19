@@ -1,3 +1,4 @@
+desc "Verify that all C++ code is formatted correctly (and fixed some issues)"
 task :format do
   Dir.glob("{Gosu,src,examples}/**/*.{hpp,cpp}") do |filename|
     lines = File.readlines(filename)

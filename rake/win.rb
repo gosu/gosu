@@ -35,6 +35,7 @@ end
     Gem::PackageTask.new(spec) do
     end
     
+    desc "Push the #{bits}-bit for Windows to rubygems.org"
     task :release_gem => :gem do
       sh "gem push pkg/gosu-#{GOSU_VERSION}-#{spec.platform}.gem"
     end

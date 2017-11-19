@@ -144,7 +144,7 @@ Gosu::FormattedString::FormattedString(const wchar_t* html, unsigned base_flags)
             pos = end_of_entity + 1;
             continue;
         }
-        
+
     normal_character:
         FormattedChar fc = { html[pos], c.back(), flags(b, u, i) };
         characters.push_back(fc);

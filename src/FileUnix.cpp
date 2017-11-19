@@ -72,7 +72,6 @@ size_t Gosu::File::size() const
 void Gosu::File::resize(size_t new_size)
 {
     ftruncate(pimpl->fd, new_size);
-    
 }
 
 void Gosu::File::read(size_t offset, size_t length, void* dest_buffer) const

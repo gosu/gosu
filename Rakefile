@@ -36,6 +36,7 @@ end
 
 Dir.glob('./rake/*.rb').sort.each { |task| require task }
 
+desc "Regenerate the SWIG wrapper that makes Gosu available as a C extension"
 task :swig do
   sh "swig -c++ -ruby -autorename -o src/RubyGosu.cxx ext/gosu/gosu.i"
   sh "patch --no-backup-if-mismatch -p0 <ext/gosu/gosu_SWIG_RENAME_PATCH.patch"
@@ -43,12 +44,7 @@ task :swig do
   sh "patch --no-backup-if-mismatch -p0 <ext/gosu/gosu_SWIG_STRING_PATCH.patch"
 end
 
-task :update_rdoc do
-  sh "yardoc"
-  sh "scp -r doc/* #{ENV['PROJECTS_HOST']}:#{ENV['PROJECTS_ROOT']}/libgosu.org/rdoc"
-  sh "rm -rf doc/*"
-end
-
+desc "Update the C++ reference on libgosu.org (needs SSH access)"
 task :update_doxygen do
   sh "ssh #{ENV['PROJECTS_HOST']} 'cd #{ENV['PROJECTS_ROOT']}/libgosu.org/ && " +
        "svn checkout https://github.com/gosu/gosu/trunk/Gosu && PATH=../doxygen/bin:$PATH doxygen'"
@@ -62,6 +58,7 @@ Rake::TestTask.new do |t|
   t.libs = [] unless RUBY_PLATFORM =~ /mswin$|mingw32|mingw64|win32\-|\-win32/
 end
 
+desc "Run all tests, even those that require human input"
 task :test_interactive do
   ENV['GOSU_TEST_INTERACTIVE'] = "true"
   Rake::Task["test"].invoke

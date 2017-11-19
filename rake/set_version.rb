@@ -1,3 +1,4 @@
+desc "Updates Version.hpp and cmake/CMakeLists.txt to match ENV['GOSU_RELEASE_VERSION']"
 task :set_version do
   throw "GOSU_RELEASE_VERSION must be set" if GOSU_VERSION == "0.0.0"
   
