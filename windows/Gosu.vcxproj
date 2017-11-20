@@ -172,9 +172,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Audio.cpp" />
+    <ClCompile Include="..\src\AudioImpl.cpp" />
     <ClCompile Include="..\src\Bitmap.cpp" />
     <ClCompile Include="..\src\BitmapIO.cpp" />
     <ClCompile Include="..\src\BlockAllocator.cpp" />
+    <ClCompile Include="..\src\Channel.cpp" />
     <ClCompile Include="..\src\Color.cpp" />
     <ClCompile Include="..\src\DirectoriesApple.cpp" />
     <ClCompile Include="..\src\DirectoriesUnix.cpp" />

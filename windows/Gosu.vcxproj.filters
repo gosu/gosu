@@ -27,6 +27,9 @@
     <ClCompile Include="..\src\Audio.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\AudioImpl.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Bitmap.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
@@ -34,6 +37,9 @@
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\BlockAllocator.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Channel.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Color.cpp">

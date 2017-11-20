@@ -506,9 +506,9 @@ module Gosu
     ##
     # Plays the sample without panning.
     #
-    # @return [SampleInstance]
-    # @param volume [Float] see {SampleInstance#volume=}
-    # @param speed [Float] see {SampleInstance#speed=}
+    # @return [Channel]
+    # @param volume [Float] see {Channel#volume=}
+    # @param speed [Float] see {Channel#speed=}
     # @param looping [true, false] whether the sample should play in a loop. If you pass true, be sure to store the return value of this method so that you can later stop the looping sound.
     #
     # @see #play_pan
@@ -517,10 +517,10 @@ module Gosu
     ##
     # Plays the sample with panning.
     #
-    # @return [SampleInstance]
-    # @param pan [Float] see {SampleInstance#pan=}
-    # @param volume [Float] see {SampleInstance#volume=}
-    # @param speed [Float] see {SampleInstance#speed=}
+    # @return [Channel]
+    # @param pan [Float] see {Channel#pan=}
+    # @param volume [Float] see {Channel#volume=}
+    # @param speed [Float] see {Channel#speed=}
     # @param looping [true, false] whether the sample should play in a loop. If you pass true, be sure to store the return value of this method so that you can later stop the looping sound.
     #
     # @see #play
@@ -528,10 +528,10 @@ module Gosu
   end
 
   ##
-  # An instance of a {Gosu::Sample} playing. Can be used to stop sounds dynamically, or to check if they are finished.
+  # {Sample#play} returns a Channel that represents the sound currently being played.
   #
-  # It is recommended to throw away sample instances as soon as possible, as holding onto them for a long time can prevent unneeded samples being properly disposed.
-  class SampleInstance
+  # This object can be used to stop sounds dynamically, or to check whether they have finished.
+  class Channel
     ##
     # Sets the playback volume, in the range [0.0; 1.0], where 0 is completely silent and 1 is full volume. Values outside of this range will be clamped to [0.0; 1.0].
     # @param [Float]

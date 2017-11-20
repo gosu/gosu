@@ -11,41 +11,36 @@
 
 namespace Gosu
 {
-    //! An instance of a Sample playing. Can be used to stop sounds dynamically,
-    //! or to check if they are finished.
-    //! It is recommended that you throw away sample instances if possible,
-    //! as they could accidentally refer to other sounds being played after
-    //! a very long time has passed.
-    class SampleInstance
+    //! Sample::play returns a Channel that represents the sound currently being played.
+    //! This object can be used to stop sounds dynamically, or to check whether they have finished.
+    class Channel
     {
-        int handle, extra;
-        bool alive() const;
+        mutable int channel, token;
 
     public:
-        //! Called internally by Sample, do not use.
-        SampleInstance(int handle, int extra);
-
+        //! For internal use only.
+        Channel(int channel, int token);
+        
+        int current_channel() const;
+        
         bool playing() const;
         bool paused() const;
-        //! Pauses this instance to be resumed afterwards. It will still keep a channel filled while
-        //! paused.
+        //! Pauses this instance to be resumed afterwards.
+        //! It will still occupy an audio channel while paused.
         void pause();
         void resume();
         //! Stops this instance of a sound being played.
         //! Calling this twice, or too late, does not do any harm.
         void stop();
 
-        //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
-        //! volume).
-        void change_volume(double volume);
+        //! \param volume Can be anything from 0.0 (silence) to 1.0 (full volume).
+        void set_volume(double volume);
         //! \param pan Can be anything from -1.0 (left) to 1.0 (right).
-        void change_pan(double pan);
-        //! \param speed Playback speed is only limited by FMOD's
-        //! capabilities and can accept very high or low values. Use 1.0 for
-        //! normal playback speed.
-        void change_speed(double speed);
+        void set_pan(double pan);
+        //! \param speed Use 1.0 for normal playback speed.
+        void set_speed(double speed);
     };
-
+    
     //! A sample is a short sound that is completely loaded in memory, can be
     //! played multiple times at once and offers very flexible playback
     //! parameters. Use samples for everything that's not music.
@@ -55,6 +50,9 @@ namespace Gosu
         std::shared_ptr<SampleData> data;
 
     public:
+        //! Constructs an empty sample that acts as if the song had a length of 0.
+        Sample();
+        
         //! Constructs a sample that can be played on the specified audio
         //! system and loads the sample from a file.
         explicit Sample(const std::string& filename);
@@ -69,7 +67,7 @@ namespace Gosu
         //! \param speed Playback speed is only limited by the underlying audio library,
         //! and can accept very high or low values. Use 1.0 for
         //! normal playback speed.
-        SampleInstance play(double volume = 1, double speed = 1, bool looping = false) const;
+        Channel play(double volume = 1, double speed = 1, bool looping = false) const;
 
         //! Plays the sample with panning. Even if pan is 0.0, the sample will
         //! not be as loud as if it were played by calling play() due to the
@@ -80,7 +78,7 @@ namespace Gosu
         //! \param speed Playback speed is only limited by by the underlying audio library,
         //! and can accept very high
         //! or low values. Use 1.0 for normal playback speed.
-        SampleInstance play_pan(double pan, double volume = 1, double speed = 1,
+        Channel play_pan(double pan, double volume = 1, double speed = 1,
             bool looping = false) const;
     };
 
@@ -133,7 +131,7 @@ namespace Gosu
         double volume() const;
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
         //! volume).
-        void change_volume(double volume);
+        void set_volume(double volume);
         
         //! Called every tick by Window for management purposes.
         static void update();

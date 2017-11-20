@@ -34,7 +34,7 @@ def unpack_range(constant)
     # Special case: The range from "F1" to "F12" is not what we want: "F9".succ == "G0".
     ($1..$2).map { |n| :"KB_F#{n}"}
   when /^(.+)…(.+)$/
-    ($1..$2).map { |constant| constant.to_sym }
+    ($1..$2).map { |c| c.to_sym }
   else
     [constant]
   end
@@ -71,6 +71,7 @@ class TestInterface < Minitest::Test
   def test_no_extra_constants
     Gosu.constants.each do |constant|
       next if constant == :Button # backwards compatibility
+      next if constant == :SampleInstance # backwards compatibility
       next if constant =~ /Kb|Gp|Ms/ # backwards compatibility
       next if constant == :GOSU_COPYRIGHT_NOTICE # backwards compatibility
       next if constant == :DEPRECATION_STACKTRACE_LINES # implementation detail for backwards compatibility

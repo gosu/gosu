@@ -4,6 +4,7 @@
 #import "GosuGLView.h"
 #import "GosuViewController.h"
 #import "GraphicsImpl.hpp"
+#import "AudioImpl.hpp"
 #import <Gosu/Gosu.hpp>
 
 #import <AudioToolbox/AudioSession.h>
@@ -15,19 +16,15 @@ namespace Gosu
     {
         void register_frame();
     }
-    
-    ALCcontext* shared_openal_context();
 }
 
-// TODO: This has been written on iOS 3.x.
-// Is this still the best way to handle interruptions?
 static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
 {
     if (inInterruptionState == kAudioSessionBeginInterruption) {
         alcMakeContextCurrent(nullptr);
     }
     else if (inInterruptionState == kAudioSessionEndInterruption) {
-        alcMakeContextCurrent(Gosu::shared_openal_context());
+        alcMakeContextCurrent(Gosu::al_context());
     }
 }
 
