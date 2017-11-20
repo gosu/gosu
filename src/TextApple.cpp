@@ -101,7 +101,11 @@ static AppleFont* get_font(string font_name, unsigned font_flags, double height)
 
 string Gosu::default_font_name()
 {
+#ifdef GOSU_IS_IPHONE
+    return "Arial";
+#else
     return "Arial Unicode MS";
+#endif
 }
 
 #ifndef GOSU_IS_IPHONE

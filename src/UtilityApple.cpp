@@ -35,7 +35,7 @@ string Gosu::wstring_to_utf8(const wstring& ws)
         NSString* string = [[NSString alloc] initWithBytes:ws.data()
                                                     length:ws.size() * sizeof(wchar_t)
                                                   encoding:NSUTF32LittleEndianStringEncoding];
-        return string.UTF8String ?: string();
+        return string.UTF8String ?: "";
     }
 }
 #endif

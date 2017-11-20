@@ -1,11 +1,11 @@
-platform :ios, '8.0'
+platform :ios, "8.0"
 
-target 'Tutorial-Touch' do
-  # GosuAppDelegateMain is a subspec of the Gosu pod that contains a 'main()' function.
+target "Tutorial-Touch" do
+  # GosuAppDelegateMain is a subspec of the Gosu pod that contains a "main()" function.
   # If you use it, you need to implement a global function `Gosu::Window& windowInstance()` that Gosu will call.
   # This is the only way to write a Gosu application for iOS in pure C++.
-  pod 'Gosu/GosuAppDelegateMain', :path => '../..'
+  pod "Gosu/GosuAppDelegateMain", path: "../.."
   
   # In a real project, you would use this instead of a relative path:
-  # pod 'Gosu/GosuAppDelegateMain', :git => 'https://github.com/gosu/gosu.git'
+  # pod "Gosu/GosuAppDelegateMain", git: "https://github.com/gosu/gosu.git"
 end
