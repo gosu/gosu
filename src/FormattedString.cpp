@@ -1,6 +1,7 @@
 #include "FormattedString.hpp"
 #include <Gosu/Utility.hpp>
 #include <cwchar>
+#include <cwctype>
 using namespace std;
 
 static unsigned flags(int b, int u, int i)

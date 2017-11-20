@@ -46,7 +46,7 @@ before_install:
   # Print the Ruby configuration to see what's defined in CXXFLAGS etc.
   - ruby -rrbconfig -e 'RbConfig::CONFIG.each { |k, v| puts [k, v].join("=") }'
 
-  # Do some OSX-Specific preparations
+  # Do some macOS-specific preparations
   - |
     if [ $TRAVIS_OS_NAME == osx ]; then
       # Mac dependencies
@@ -64,10 +64,11 @@ before_install:
     fi
 
   # Dependencies for 'rake gem' (not for actually using Gosu)
-  # Only install the rake gem on macOS; on Linux we use the old version from apt.
-  - if [ $TRAVIS_OS_NAME == osx ]; then sudo gem install rake; fi
   # We have to install binaries into ~ because of Apple's System Integrity Protection.
-  - sudo gem install rake-compiler minitest --no-ri --no-rdoc -n ~
+  - sudo gem install rake-compiler minitest --no-ri --no-rdoc -n /usr/local/bin
+  # Only install (update) the rake gem on macOS; on Linux we use the old version from apt.
+  - if [ $TRAVIS_OS_NAME == osx ]; then sudo gem install rake -n /usr/local/bin; fi
+  
 
 before_script:
   # Enable "dummy" devices for audio and video on Linux.
@@ -98,7 +99,7 @@ env:
 install:
   # Install Ruby/Gosu using RubyGems.
   - |
-    ~/rake gem
+    rake gem
     sudo gem install pkg/gosu-9.9.9.gem --no-ri --no-rdoc
 
   # Install Gosu for C++ using CMake.
@@ -126,9 +127,9 @@ script:
   # Run Ruby/Gosu tests and compile C++ examples.
   - |
     if [ $TRAVIS_OS_NAME == osx ]; then
-      ~/rake -rgosu test
+      rake -rgosu test
     else
-      sg audio '~/rake -rgosu test'
+      sg audio 'rake -rgosu test'
     fi
 
   # Compile C++ examples using CMake.
