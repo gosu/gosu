@@ -1,5 +1,5 @@
 # Encoding: UTF-8
-require_relative 'test_helper'
+require_relative "test_helper"
 
 # Desired behavior of interactions between tick, show and close:
 # - show() should present the window and start a new runloop, no matter what happened before.
@@ -24,6 +24,7 @@ class TestWindow < Minitest::Test
     assert !window.tick
   end
   
+  
   class StubbornWindow < Gosu::Window
     def close
       # Do not call super
@@ -45,12 +46,17 @@ class TestWindow < Minitest::Test
     assert window.tick
   end
   
+  
   class DropWindow < Gosu::Window
     def initialize
-      super(400,400)
+      super(400, 400)
       self.caption = "Drop any number of files here!" 
       @font = Gosu::Font.new(20)
       @files = []
+    end
+    
+    def needs_cursor?
+      true
     end
     
     def drop(path)
@@ -63,6 +69,7 @@ class TestWindow < Minitest::Test
       end
     end
   end
+  
   def test_drag_and_drop
     interactive_gui("Drop any number of files into the window. Do all filenames appear?") do
       DropWindow.new

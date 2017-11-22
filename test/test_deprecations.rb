@@ -1,5 +1,5 @@
 # Encoding: UTF-8
-require_relative 'test_helper'
+require_relative "test_helper"
 
 class TestDeprecations < Minitest::Test
   @@win = Gosu::Window.new(100, 100)
