@@ -53,7 +53,7 @@ Gosu::FormattedString::FormattedString(const wchar_t* html, unsigned base_flags)
     int b = (base_flags & FF_BOLD) ? 1 : 0,
     u = (base_flags & FF_UNDERLINE) ? 1 : 0,
     i = (base_flags & FF_ITALIC) ? 1 : 0;
-    vector<Gosu::Color> c;
+    vector<Color> c;
     c.push_back(0xffffffff);
     while (pos < len) {
         if (!wcsncmp(html + pos, L"<b>", 3)) {

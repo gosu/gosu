@@ -12,7 +12,7 @@ namespace Gosu
         struct FormattedChar
         {
             wchar_t wc;
-            Gosu::Color color;
+            Color color;
             unsigned flags;
             std::string entity;
             
@@ -34,7 +34,7 @@ namespace Gosu
         const char* entity_at(unsigned index) const;
         wchar_t char_at(unsigned index) const;
         unsigned flags_at(unsigned index) const;
-        Gosu::Color color_at(unsigned index) const;
+        Color color_at(unsigned index) const;
         
         std::size_t length() const;
         

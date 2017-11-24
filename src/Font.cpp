@@ -123,9 +123,9 @@ void Gosu::Font::draw(const string& text, double x, double y, ZPos z,
     for (unsigned i = 0; i < fs.length(); ++i) {
         const Image& image = pimpl->image_at(fs, i);
         double factor = pimpl->factor_at(fs, i);
-        Gosu::Color color = fs.entity_at(i)
-                          ? Gosu::Color(fs.color_at(i).alpha() * c.alpha() / 255, 255, 255, 255)
-                          : Gosu::multiply(fs.color_at(i), c);
+        Color color = fs.entity_at(i)
+                      ? Color(fs.color_at(i).alpha() * c.alpha() / 255, 255, 255, 255)
+                      : multiply(fs.color_at(i), c);
         image.draw(x, y, z, scale_x * factor, scale_y * factor, color, mode);
         x += image.width() * scale_x * factor;
     }
@@ -151,14 +151,14 @@ void Gosu::Font::set_image(wchar_t wc, unsigned font_flags, const Image& image)
 {
     Impl::CharInfo& ci = pimpl->char_info(wc, font_flags);
     if (ci.image.get()) throw logic_error("Cannot set image for the same character twice");
-    ci.image.reset(new Gosu::Image(image));
+    ci.image.reset(new Image(image));
     ci.factor = 1.0;
 }
 
 void Gosu::Font::draw_rot(const string& text, double x, double y, ZPos z, double angle,
     double scale_x, double scale_y, Color c, AlphaMode mode) const
 {
-    Gosu::Graphics::transform(rotate(angle, x, y), [&] {
+    Graphics::transform(rotate(angle, x, y), [&] {
         draw(text, x, y, z, scale_x, scale_y, c, mode);
     });
 }

@@ -11,7 +11,7 @@ Gosu::Transform Gosu::rotate(double angle, double around_x, double around_y)
 {
     double c = cos(degrees_to_radians(angle));
     double s = sin(degrees_to_radians(angle));
-    Gosu::Transform result = {
+    Transform result = {
         +c, +s, 0, 0,
         -s, +c, 0, 0,
         0,  0,  1, 0,
@@ -26,7 +26,7 @@ Gosu::Transform Gosu::rotate(double angle, double around_x, double around_y)
 
 Gosu::Transform Gosu::translate(double x, double y)
 {
-    Gosu::Transform result = {
+    Transform result = {
         1, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
@@ -37,7 +37,7 @@ Gosu::Transform Gosu::translate(double x, double y)
 
 Gosu::Transform Gosu::scale(double factor)
 {
-    Gosu::Transform result = {
+    Transform result = {
         factor, 0,      0, 0,
         0,      factor, 0, 0,
         0,      0,      1, 0,
@@ -48,7 +48,7 @@ Gosu::Transform Gosu::scale(double factor)
 
 Gosu::Transform Gosu::scale(double scale_x, double scale_y, double around_x, double around_y)
 {
-    Gosu::Transform result = {
+    Transform result = {
         scale_x, 0,       0, 0,
         0,       scale_y, 0, 0,
         0,       0,       1, 0,
@@ -63,7 +63,7 @@ Gosu::Transform Gosu::scale(double scale_x, double scale_y, double around_x, dou
 
 Gosu::Transform Gosu::concat(const Transform& left, const Transform& right)
 {
-    Gosu::Transform result;
+    Transform result;
     for (int i = 0; i < 16; ++i) {
         result[i] = 0;
         for (int j = 0; j < 4; ++j) {
