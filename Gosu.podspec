@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Gosu"
-  s.version      = "0.12.1"
+  s.version      = "0.13.0"
   s.summary      = "2D game development library."
   s.homepage     = "https://www.libgosu.org/"
   s.documentation_url = "https://www.libgosu.org/cpp/"
@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.license      = { :type => "MIT", :file => "COPYING" }
   s.author       = { "Julian Raschke" => "julian@raschke.de" }
 
-  s.source       = { :git => "https://github.com/gosu/gosu.git", :tag => "v0.12.0" }
+  s.source       = { :git => "https://github.com/gosu/gosu.git", :tag => "v0.13.0" }
 
   s.subspec "Gosu" do |ss|
     ss.osx.deployment_target = "10.7"
