@@ -4,7 +4,7 @@ file(GLOB HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../Gosu/*.hpp)
 
 # Compile all C++ files as Objective C++ on macOS.
 if(APPLE)
-    set_source_files_properties(${SOURCE_FILES} PROPERTIES COMPILE_FLAGS "-x objective-c++")
+    set_source_files_properties(${SOURCE_FILES} PROPERTIES COMPILE_FLAGS "-x objective-c++ -Wno-documentation")
 endif()
 
 # TODO - this should probably go into Installation.cmake?
@@ -64,7 +64,7 @@ source_group("Headers" FILES ${HEADER_FILES})
 add_library(gosu ${SOURCE_FILES} ${HEADER_FILES})
 
 set_target_properties(gosu PROPERTIES
-    COMPILE_FLAGS "-DGOSU_SHARED_EXPORTS"
+    COMPILE_FLAGS "-DGOSU_DEPRECATED="
     INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}
     VERSION ${GOSU_VERSION}
     SOVERSION ${GOSU_VERSION_MAJOR}

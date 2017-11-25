@@ -16,7 +16,8 @@ Pod::Spec.new do |s|
     
     # Ignore Gosu using deprecated Gosu APIs internally.
     # Compile all source files as Objective-C++ so we can use ObjC frameworks where necessary.
-    ss.compiler_flags = "-DGOSU_DEPRECATED= -x objective-c++"
+    # Also silence warnings about invalid doxygen markup in SDL headers.
+    ss.compiler_flags = "-DGOSU_DEPRECATED= -Wno-documentation -x objective-c++"
     
     ss.libraries = "iconv"
     ss.frameworks = "AudioToolbox", "OpenAL"

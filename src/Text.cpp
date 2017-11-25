@@ -106,7 +106,7 @@ namespace Gosu
             {
                 alloc_next_line();
                 
-                unsigned words = end - begin;
+                auto words = end - begin;
                 
                 unsigned total_spacing = 0;
                 if (begin < end) {
@@ -116,10 +116,10 @@ namespace Gosu
                 }
 
                 // Where does the line start? (y)
-                unsigned top = (used_lines - 1) * (font_height + line_spacing);
+                int top = (used_lines - 1) * (font_height + line_spacing);
 
                 // Where does the line start? (x)
-                double pos;
+                int pos;
                 switch (align) {
                 // Start so that the text touches the right border.
                 case AL_RIGHT:
@@ -144,13 +144,13 @@ namespace Gosu
                         if (part.entity_at(0)) {
                             Gosu::Bitmap entity = entity_bitmap(part.entity_at(0));
                             multiply_bitmap_alpha(entity, part.color_at(0).alpha());
-                            bmp.insert(entity, trunc(pos) + x, trunc(top));
+                            bmp.insert(entity, pos + x, top);
                             x += entity.width();
                             continue;
                         }
                         
                         string unformatted_part = wstring_to_utf8(part.unformat());
-                        draw_text(bmp, unformatted_part, trunc(pos) + x, trunc(top),
+                        draw_text(bmp, unformatted_part, pos + x, top,
                             part.color_at(0), font_name, font_height, part.flags_at(0));
                         
                         x += Gosu::text_width(unformatted_part, font_name, font_height,
@@ -320,7 +320,7 @@ Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, unsi
     
     vector<FormattedString> lines = fs.split_lines();
     
-    Bitmap bmp(1, lines.size() * font_height);
+    Bitmap bmp(1, static_cast<int>(lines.size() * font_height));
     
     for (int i = 0; i < lines.size(); ++i) {
         if (lines[i].length() == 0) continue;
