@@ -274,9 +274,7 @@ namespace Gosu
     void draw_rect(double x, double y, double width, double height, Gosu::Color c,
                    Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
     {
-        Gosu::Graphics::draw_quad(x, y, c, x + width, y, c,
-                                  x, y + height, c, x + width, y + height, c,
-                                  z, mode);
+        Gosu::Graphics::draw_rect(x, y, width, height, c, z, mode);
     }
     
     void flush()

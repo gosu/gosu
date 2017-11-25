@@ -88,6 +88,9 @@ namespace Gosu
                               double x3, double y3, Color c3,
                               double x4, double y4, Color c4,
                               ZPos z, AlphaMode mode = AM_DEFAULT);
+        
+        static void draw_rect(double x, double y, double width, double height,
+                              Color c, ZPos z, AlphaMode mode = AM_DEFAULT);
 
         //! For internal use only.
         void set_physical_resolution(unsigned physical_width, unsigned physical_height);

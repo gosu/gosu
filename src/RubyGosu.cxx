@@ -2388,9 +2388,7 @@ namespace Gosu
     void draw_rect(double x, double y, double width, double height, Gosu::Color c,
                    Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
     {
-        Gosu::Graphics::draw_quad(x, y, c, x + width, y, c,
-                                  x, y + height, c, x + width, y + height, c,
-                                  z, mode);
+        Gosu::Graphics::draw_rect(x, y, width, height, c, z, mode);
     }
     
     void flush()
@@ -11657,8 +11655,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "VERSION", SWIG_From_std_string(static_cast< std::string >(Gosu::VERSION)));
   rb_define_const(mGosu, "LICENSES", SWIG_From_std_string(static_cast< std::string >(Gosu::LICENSES)));
   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
-  rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(12)));
-  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(1)));
+  rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(13)));
+  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
   rb_define_module_function(mGosu, "degrees_to_radians", VALUEFUNC(_wrap_degrees_to_radians), -1);

@@ -341,6 +341,12 @@ void Gosu::Graphics::draw_quad(double x1, double y1, Color c1, double x2, double
     current_queue().schedule_draw_op(op);
 }
 
+void Gosu::Graphics::draw_rect(double x, double y, double width, double height, Color c,
+                               ZPos z, Gosu::AlphaMode mode)
+{
+    draw_quad(x, y, c, x + width, y, c, x, y + height, c, x + width, y + height, c, z, mode);
+}
+
 void Gosu::Graphics::schedule_draw_op(const Gosu::DrawOp& op)
 {
     current_queue().schedule_draw_op(op);
