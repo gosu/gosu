@@ -1,5 +1,5 @@
 # Encoding: UTF-8
-require_relative 'test_helper'
+require_relative "test_helper"
 
 class TestImageIO < Minitest::Test
   include TestHelper

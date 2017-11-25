@@ -154,7 +154,7 @@ namespace Gosu
         undocumented_retrofication = true;
     }
     
-    void release_all_openal_resources();
+    void al_shutdown();
     
     void register_entity(const std::string& name, Gosu::Image* image)
     {
@@ -412,13 +412,13 @@ namespace Gosu
 
 %constant unsigned MAX_TEXTURE_SIZE = Gosu::MAX_TEXTURE_SIZE;
 
-%rename("_release_all_openal_resources") release_all_openal_resources;
+%rename("_release_all_openal_resources") al_shutdown;
 
 namespace Gosu
 {
     std::string language();
     void enable_undocumented_retrofication();
-    void release_all_openal_resources();
+    void al_shutdown();
     void register_entity(const std::string& name, Gosu::Image* image);
 }
 
@@ -817,13 +817,14 @@ namespace Gosu
 
 // Audio:
 
+%ignore Gosu::Sample::Sample();
 %ignore Gosu::Sample::Sample(Reader reader);
 %ignore Gosu::Song::Song(Reader reader);
 %rename("playing?") playing;
 %rename("paused?") paused;
-%rename("volume=") change_volume;
-%rename("pan=") change_pan;
-%rename("speed=") change_speed;
+%rename("volume=") set_volume;
+%rename("pan=") set_pan;
+%rename("speed=") set_speed;
 %include "../../Gosu/Audio.hpp"
 
 // Input and Window:

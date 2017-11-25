@@ -1,5 +1,5 @@
 # Encoding: UTF-8
-require_relative 'test_helper'
+require_relative "test_helper"
 
 # All sound files are from http://www.bigsoundbank.com/
 # "These files are free and completely royalty free for all uses."
@@ -10,7 +10,7 @@ class TestAudio < Minitest::Test
   def test_sample
     skip_on_appveyor
 
-    sound = Gosu::Sample.new(media_path('0614.ogg'))
+    sound = Gosu::Sample.new(media_path("0614.ogg"))
     channel = sound.play(1, 1, true)
     interactive_cli("Do you hear a Star Wars-like Blaster sound?")
     
@@ -71,7 +71,7 @@ class TestAudio < Minitest::Test
     
     assert_nil Gosu::Song.current_song
     
-    song = Gosu::Song.new(media_path('0830.ogg'))
+    song = Gosu::Song.new(media_path("0830.ogg"))
 
     song.play(true)
     interactive_cli("Do you hear a churchbell?") do

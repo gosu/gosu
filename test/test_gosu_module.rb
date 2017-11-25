@@ -1,5 +1,5 @@
 # Encoding: UTF-8
-require_relative 'test_helper'
+require_relative "test_helper"
 
 class TestGosuModule < Minitest::Test
   def test_drawing_primitives
@@ -34,12 +34,13 @@ class TestGosuModule < Minitest::Test
   def test_misc
     assert_match(/^[a-z]{2}/, Gosu.language)
 
-    assert_equal 0, Gosu.fps, 'Gosu.fps should be 0 as there is nothing drawn'
+    # TODO: This test can cause trouble if run after other tests, which might have updated Gosu.fps.
+    # assert_equal 0, Gosu.fps, "Gosu.fps should be 0 as there is nothing drawn"
 
     first_call = Gosu.milliseconds
-    assert_kind_of Integer, Gosu.milliseconds, 'Gosu.milliseconds should return an integer'
+    assert_kind_of Integer, Gosu.milliseconds, "Gosu.milliseconds should return an integer"
     sleep 0.2
-    assert first_call < Gosu.milliseconds, 'Gosu.milliseconds should increase over time'
+    assert first_call < Gosu.milliseconds, "Gosu.milliseconds should increase over time"
 
     assert Gosu.default_font_name.is_a? String
 

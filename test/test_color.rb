@@ -1,5 +1,5 @@
 # Encoding: UTF-8
-require_relative 'test_helper'
+require_relative "test_helper"
 
 class TestConstants < Minitest::Test
   def test_predefined_colors

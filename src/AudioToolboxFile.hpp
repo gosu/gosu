@@ -33,7 +33,7 @@ namespace Gosu
 {
     class AudioToolboxFile : public AudioFile
     {
-        Gosu::Buffer buffer_;
+        Buffer buffer_;
         AudioFileID file_id_;
         ExtAudioFileRef file_;
         SInt64 position_;
@@ -155,7 +155,7 @@ namespace Gosu
             init();
         }
         
-        AudioToolboxFile(Gosu::Reader reader)
+        AudioToolboxFile(Reader reader)
         {
             buffer_.resize(reader.resource().size() - reader.position());
             reader.read(buffer_.data(), buffer_.size());
