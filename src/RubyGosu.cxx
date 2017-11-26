@@ -2308,8 +2308,8 @@ namespace Gosu
         VALUE conversion = rb_str_new2("to_blob { self.format = 'RGBA'; self.depth = 8 }");
         VALUE blob = rb_obj_instance_eval(1, &conversion, val);
         rb_check_safe_obj(blob);
-        unsigned width  = NUM2ULONG(rb_funcall(val, rb_intern("columns"), 0));
-        unsigned height = NUM2ULONG(rb_funcall(val, rb_intern("rows"), 0));
+        int width  = NUM2ULONG(rb_funcall(val, rb_intern("columns"), 0));
+        int height = NUM2ULONG(rb_funcall(val, rb_intern("rows"), 0));
         
         std::size_t size = width * height * 4;
         bitmap.resize(width, height, Gosu::Color::NONE);
@@ -2787,10 +2787,10 @@ SWIG_AsVal_int (VALUE obj, int *val)
   return res;
 }
 
-SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_0(Gosu::Window &window,std::string const &font_name,unsigned int height){
+SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_0(Gosu::Window &window,std::string const &font_name,int height){
         return new Gosu::Font(height, font_name);
     }
-SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_1(unsigned int height,VALUE options=0){
+SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_1(int height,VALUE options=0){
         std::string font_name = Gosu::default_font_name();
         
         if (options) {
@@ -2955,10 +2955,10 @@ SWIGINTERN Gosu::Image *Gosu_Image_subimage(Gosu::Image *self,int x,int y,int w,
         std::unique_ptr<Gosu::ImageData> image_data = self->data().subimage(x, y, w, h);
         return image_data.get() ? new Gosu::Image(std::move(image_data)) : nullptr;
     }
-SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::string const &text,unsigned int font_height,VALUE options=0){
+SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::string const &text,int font_height,VALUE options=0){
         std::string font = Gosu::default_font_name();
-        unsigned width = 0xfefefefe;
-        unsigned spacing = 0;
+        int width = 0;
+        int spacing = 0;
         Gosu::Alignment align = Gosu::AL_LEFT;
         unsigned flags = 0;
         
@@ -3016,7 +3016,7 @@ SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::string const &text,unsigned in
         }
         
         Gosu::Bitmap bitmap;
-        if (width == 0xfefefefe) {
+        if (width == 0) {
             bitmap = Gosu::create_text(text, font, font_height);
         }
         else {
@@ -5181,7 +5181,7 @@ _wrap_Font_height(int argc, VALUE *argv, VALUE self) {
   Gosu::Font *arg1 = (Gosu::Font *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int result;
+  int result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -5194,13 +5194,13 @@ _wrap_Font_height(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Font * >(argp1);
   {
     try {
-      result = (unsigned int)((Gosu::Font const *)arg1)->height();
+      result = (int)((Gosu::Font const *)arg1)->height();
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  vresult = SWIG_From_int(static_cast< int >(result));
   return vresult;
 fail:
   return Qnil;
@@ -5706,11 +5706,11 @@ SWIGINTERN VALUE
 _wrap_new_Font__SWIG_0(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
   std::string *arg2 = 0 ;
-  unsigned int arg3 ;
+  int arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
-  unsigned int val3 ;
+  int val3 ;
   int ecode3 = 0 ;
   const char *classname SWIGUNUSED = "Gosu::Font";
   Gosu::Font *result = 0 ;
@@ -5737,11 +5737,11 @@ _wrap_new_Font__SWIG_0(int argc, VALUE *argv, VALUE self) {
     }
     arg2 = ptr;
   }
-  ecode3 = SWIG_AsVal_unsigned_SS_int(argv[2], &val3);
+  ecode3 = SWIG_AsVal_int(argv[2], &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "unsigned int","Font", 3, argv[2] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "int","Font", 3, argv[2] ));
   } 
-  arg3 = static_cast< unsigned int >(val3);
+  arg3 = static_cast< int >(val3);
   {
     try {
       result = (Gosu::Font *)new_Gosu_Font__SWIG_0(*arg1,(std::string const &)*arg2,arg3);
@@ -5777,9 +5777,9 @@ _wrap_Font_allocate(int argc, VALUE *argv, VALUE self)
 
 SWIGINTERN VALUE
 _wrap_new_Font__SWIG_1(int argc, VALUE *argv, VALUE self) {
-  unsigned int arg1 ;
+  int arg1 ;
   VALUE arg2 = (VALUE) 0 ;
-  unsigned int val1 ;
+  int val1 ;
   int ecode1 = 0 ;
   const char *classname SWIGUNUSED = "Gosu::Font";
   Gosu::Font *result = 0 ;
@@ -5787,11 +5787,11 @@ _wrap_new_Font__SWIG_1(int argc, VALUE *argv, VALUE self) {
   if ((argc < 1) || (argc > 2)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_int(argv[0], &val1);
+  ecode1 = SWIG_AsVal_int(argv[0], &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "unsigned int","Font", 1, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "int","Font", 1, argv[0] ));
   } 
-  arg1 = static_cast< unsigned int >(val1);
+  arg1 = static_cast< int >(val1);
   if (argc > 1) {
     arg2 = argv[1];
   }
@@ -5824,7 +5824,7 @@ SWIGINTERN VALUE _wrap_new_Font(int nargs, VALUE *args, VALUE self) {
   if ((argc >= 1) && (argc <= 2)) {
     int _v;
     {
-      int res = SWIG_AsVal_unsigned_SS_int(argv[0], NULL);
+      int res = SWIG_AsVal_int(argv[0], NULL);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
@@ -5847,7 +5847,7 @@ SWIGINTERN VALUE _wrap_new_Font(int nargs, VALUE *args, VALUE self) {
       _v = SWIG_CheckState(res);
       if (_v) {
         {
-          int res = SWIG_AsVal_unsigned_SS_int(argv[2], NULL);
+          int res = SWIG_AsVal_int(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -5859,8 +5859,8 @@ SWIGINTERN VALUE _wrap_new_Font(int nargs, VALUE *args, VALUE self) {
   
 fail:
   Ruby_Format_OverloadedError( argc, 3, "Font.new", 
-    "    Font.new(Gosu::Window &window, std::string const &font_name, unsigned int height)\n"
-    "    Font.new(unsigned int height, VALUE options)\n");
+    "    Font.new(Gosu::Window &window, std::string const &font_name, int height)\n"
+    "    Font.new(int height, VALUE options)\n");
   
   return Qnil;
 }
@@ -7048,10 +7048,10 @@ fail:
 SWIGINTERN VALUE
 _wrap_Image_from_text(int argc, VALUE *argv, VALUE self) {
   std::string *arg1 = 0 ;
-  unsigned int arg2 ;
+  int arg2 ;
   VALUE arg3 = (VALUE) 0 ;
   int res1 = SWIG_OLDOBJ ;
-  unsigned int val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   Gosu::Image *result = 0 ;
   VALUE vresult = Qnil;
@@ -7070,11 +7070,11 @@ _wrap_Image_from_text(int argc, VALUE *argv, VALUE self) {
     }
     arg1 = ptr;
   }
-  ecode2 = SWIG_AsVal_unsigned_SS_int(argv[1], &val2);
+  ecode2 = SWIG_AsVal_int(argv[1], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned int","Gosu_Image_from_text", 2, argv[1] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","Gosu_Image_from_text", 2, argv[1] ));
   } 
-  arg2 = static_cast< unsigned int >(val2);
+  arg2 = static_cast< int >(val2);
   if (argc > 2) {
     arg3 = argv[2];
   }

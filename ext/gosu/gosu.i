@@ -194,8 +194,8 @@ namespace Gosu
         VALUE conversion = rb_str_new2("to_blob { self.format = 'RGBA'; self.depth = 8 }");
         VALUE blob = rb_obj_instance_eval(1, &conversion, val);
         rb_check_safe_obj(blob);
-        unsigned width  = NUM2ULONG(rb_funcall(val, rb_intern("columns"), 0));
-        unsigned height = NUM2ULONG(rb_funcall(val, rb_intern("rows"), 0));
+        int width  = NUM2ULONG(rb_funcall(val, rb_intern("columns"), 0));
+        int height = NUM2ULONG(rb_funcall(val, rb_intern("rows"), 0));
         
         std::size_t size = width * height * 4;
         bitmap.resize(width, height, Gosu::Color::NONE);
@@ -505,18 +505,18 @@ namespace Gosu
 }
 
 // Font
-%ignore Gosu::Font::Font(unsigned height, const std::string& font_name, unsigned flags);
+%ignore Gosu::Font::Font(int height, const std::string& font_name, unsigned flags);
 %ignore Gosu::Font::set_image(wchar_t wc, unsigned font_flags, const Gosu::Image& image);
 %ignore Gosu::Font::set_image(wchar_t wc, const Gosu::Image& image);
 
 %include "../../Gosu/Font.hpp"
 %extend Gosu::Font {
-    Font(Gosu::Window& window, const std::string& font_name, unsigned height)
+    Font(Gosu::Window& window, const std::string& font_name, int height)
     {
         return new Gosu::Font(height, font_name);
     }
     
-    Font(unsigned height, VALUE options = 0)
+    Font(int height, VALUE options = 0)
     {
         std::string font_name = Gosu::default_font_name();
         
@@ -660,11 +660,11 @@ namespace Gosu
     }
     
     %newobject from_text;
-    static Gosu::Image* from_text(const std::string& text, unsigned font_height, VALUE options = 0)
+    static Gosu::Image* from_text(const std::string& text, int font_height, VALUE options = 0)
     {
         std::string font = Gosu::default_font_name();
-        unsigned width = 0xfefefefe;
-        unsigned spacing = 0;
+        int width = 0;
+        int spacing = 0;
         Gosu::Alignment align = Gosu::AL_LEFT;
         unsigned flags = 0;
         
@@ -722,7 +722,7 @@ namespace Gosu
         }
         
         Gosu::Bitmap bitmap;
-        if (width == 0xfefefefe) {
+        if (width == 0) {
             bitmap = Gosu::create_text(text, font, font_height);
         }
         else {

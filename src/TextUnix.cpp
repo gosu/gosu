@@ -58,8 +58,8 @@ namespace Gosu
             }
         }
         
-        unsigned text_width(const std::string& text, const std::string& font_face,
-            unsigned font_height, unsigned font_flags)
+        int text_width(const std::string& text, const std::string& font_face,
+                       int font_height, unsigned font_flags)
         {
             g_type_init();
 
@@ -115,7 +115,7 @@ namespace Gosu
         }
         
         void draw_text(Bitmap& bitmap, const std::string& text, int x, int y, Color c,
-            const std::string& font_face, unsigned font_height, unsigned font_flags)
+            const std::string& font_face, int font_height, unsigned font_flags)
         {
             text_width(text, font_face, font_height, font_flags);
 
@@ -186,12 +186,12 @@ namespace Gosu
                 SDL_FreeSurface(surface);
             }
             
-            unsigned height() const
+            int height() const
             {
                 return surface->h;
             }
             
-            unsigned width() const
+            int width() const
             {
                 return surface->w;
             }
@@ -203,7 +203,7 @@ namespace Gosu
         };
         
     public:
-        SDLTTFRenderer(const std::string& font_name, unsigned font_height)
+        SDLTTFRenderer(const std::string& font_name, int font_height)
         {
             static int init_result = TTF_Init();
             if (init_result < 0) {
@@ -231,7 +231,7 @@ namespace Gosu
             TTF_CloseFont(font);
         }
 
-        unsigned text_width(const std::string& text)
+        int text_width(const std::string& text)
         {
             return SDLSurface(font, text, 0xffffff).width();
         }
@@ -247,8 +247,8 @@ namespace Gosu
     };
 }
 
-unsigned Gosu::text_width(const std::string& text, const std::string& font_name,
-    unsigned font_height, unsigned font_flags)
+int Gosu::text_width(const std::string& text, const std::string& font_name,
+                     int font_height, unsigned font_flags)
 {
     if (text.find_first_of("\r\n") != text.npos) {
         throw std::invalid_argument("the argument to text_width cannot contain line breaks");
@@ -263,7 +263,7 @@ unsigned Gosu::text_width(const std::string& text, const std::string& font_name,
 }
 
 void Gosu::draw_text(Bitmap& bitmap, const std::string& text, int x, int y, Color c,
-    const std::string& font_name, unsigned font_height, unsigned font_flags)
+    const std::string& font_name, int font_height, unsigned font_flags)
 {
     if (text.find_first_of("\r\n") != text.npos) {
         throw std::invalid_argument("the argument to draw_text cannot contain line breaks");

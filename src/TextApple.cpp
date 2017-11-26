@@ -117,8 +117,8 @@ static NSDictionary* attribute_dictionary(NSFont* font, unsigned font_flags)
 }
 #endif
 
-unsigned Gosu::text_width(const string& text, const string& font_name,
-                          unsigned font_height, unsigned font_flags)
+int Gosu::text_width(const string& text, const string& font_name,
+                     int font_height, unsigned font_flags)
 {
     if (text.find_first_of("\r\n") != text.npos) {
         throw invalid_argument("text_width cannot handle line breaks");
@@ -141,7 +141,7 @@ unsigned Gosu::text_width(const string& text, const string& font_name,
 }
 
 void Gosu::draw_text(Bitmap& bitmap, const string& text, int x, int y, Color c,
-                     const string& font_name, unsigned font_height, unsigned font_flags)
+                     const string& font_name, int font_height, unsigned font_flags)
 {
     if (text.find_first_of("\r\n") != text.npos) {
         throw invalid_argument("the argument to draw_text cannot contain line breaks");
@@ -157,7 +157,7 @@ void Gosu::draw_text(Bitmap& bitmap, const string& text, int x, int y, Color c,
     CGSize size = [string sizeWithFont:font];
 #endif
     
-    unsigned width = static_cast<unsigned>(round(size.width / size.height * font_height));
+    int width = static_cast<int>(round(size.width / size.height * font_height));
 
     // Get the width and height of the image
     Bitmap bmp(width, font_height, 0x00ffffff);

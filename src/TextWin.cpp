@@ -37,7 +37,7 @@ namespace Gosu
             char* pixels;
 
         public:
-            WinBitmap(unsigned width, unsigned height)
+            WinBitmap(int width, int height)
             {
                 dc = winapi_check(CreateCompatibleDC(0), "creating a device context");
 
@@ -80,7 +80,7 @@ namespace Gosu
                 return bitmap;
             }
 
-            void select_font(string font_name, unsigned font_height, unsigned font_flags) const
+            void select_font(string font_name, int font_height, unsigned font_flags) const
             {
                 // TODO for ASYNC support:
                 // Use a lock on both maps.
@@ -134,8 +134,8 @@ namespace Gosu
     }
 };
 
-unsigned Gosu::text_width(const string& text, const string& font_name,
-                          unsigned font_height, unsigned font_flags)
+int Gosu::text_width(const string& text, const string& font_name,
+                     int font_height, unsigned font_flags)
 {
     if (text.find_first_of("\r\n") != text.npos) {
         throw invalid_argument("the argument to text_width cannot contain line breaks");
@@ -153,13 +153,13 @@ unsigned Gosu::text_width(const string& text, const string& font_name,
 }
 
 void Gosu::draw_text(Bitmap& bitmap, const string& text, int x, int y, Color c,
-                     const string& font_name, unsigned font_height, unsigned font_flags)
+                     const string& font_name, int font_height, unsigned font_flags)
 {
     if (text.find_first_of("\r\n") != text.npos) {
         throw invalid_argument("the argument to draw_text cannot contain line breaks");
     }
     
-    unsigned width = text_width(text, font_name, font_height, font_flags);
+    int width = text_width(text, font_name, font_height, font_flags);
 
     WinBitmap helper(width, font_height);
     helper.select_font(font_name, font_height, font_flags);
@@ -173,8 +173,8 @@ void Gosu::draw_text(Bitmap& bitmap, const string& text, int x, int y, Color c,
     wstring wtext = utf8_to_wstring(text);
     ExtTextOutW(helper.context(), 0, 0, 0, 0, wtext.c_str(), wtext.length(), 0);
     
-    for (unsigned rel_y = 0; rel_y < font_height; ++rel_y)
-        for (unsigned rel_x = 0; rel_x < width; ++rel_x) {
+    for (int rel_y = 0; rel_y < font_height; ++rel_y)
+        for (int rel_x = 0; rel_x < width; ++rel_x) {
             Color pixel = c;
             Color::Channel src_alpha = GetPixel(helper.context(), rel_x, rel_y) & 0xff;
             
