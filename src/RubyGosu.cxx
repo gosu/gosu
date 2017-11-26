@@ -3104,6 +3104,38 @@ SWIGINTERN void Gosu_Image_insert(Gosu::Image *self,VALUE source,int x,int y){
         Gosu::load_bitmap(bmp, source);
         self->data().insert(bmp, x, y);
     }
+SWIGINTERN std::string Gosu_Image_inspect(Gosu::Image const *self,int max_width=80){
+        try {
+            Gosu::Bitmap bmp = self->data().to_bitmap();
+            // This is the scaled image width inside the ASCII art border, so make sure
+            // there will be room for a leading and trailing '#' character.
+            int w = Gosu::clamp<int>(max_width - 2, 0, bmp.width());
+            // For images with width == 0, the output will have one line per pixel.
+            // Otherwise, scale proportionally.
+            int h = (w ? bmp.height() * w / bmp.width() : bmp.height());
+            
+            // This is the length of one row in the string output, including the border
+            // and a trailing newline.
+            int stride = w + 3;
+            std::string str(stride * (h + 2), '#');
+            str[stride - 1] = '\n'; // first newline
+            str.back()      = '\n'; // last newline
+
+            for (int y = 0; y < h; ++y) {
+                for (int x = 0; x < w; ++x) {
+                    int scaled_x = x * bmp.width()  / w;
+                    int scaled_y = y * bmp.height() / h;
+                    int alpha3bit = bmp.get_pixel(scaled_x, scaled_y).alpha() / 32;
+                    str[(y + 1) * stride + (x + 1)] = " .:ioVM@"[alpha3bit];
+                }
+                str[(y + 1) * stride + (w + 2)] = '\n'; // newline after row of pixels
+            }
+            return str;
+        }
+        catch (...) {
+            return "<Gosu::Image without bitmap representation>";
+        }
+    }
 SWIGINTERN VALUE Gosu_TextInput_caret_pos(Gosu::TextInput *self){
         std::string prefix = self->text().substr(0, self->caret_pos());
         VALUE rb_prefix = rb_str_new2(prefix.c_str());
@@ -7480,6 +7512,56 @@ fail:
 }
 
 
+
+/*
+  Document-method: Gosu::Image.inspect
+
+  call-seq:
+    inspect(max_width=80) -> std::string
+
+Inspect class and its contents.
+*/
+SWIGINTERN VALUE
+_wrap_Image_inspect(int argc, VALUE *argv, VALUE self) {
+  Gosu::Image *arg1 = (Gosu::Image *) 0 ;
+  int arg2 = (int) 80 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  std::string result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Image, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Image const *","inspect", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Image * >(argp1);
+  if (argc > 0) {
+    ecode2 = SWIG_AsVal_int(argv[0], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","inspect", 2, argv[0] ));
+    } 
+    arg2 = static_cast< int >(val2);
+  }
+  {
+    try {
+      result = Gosu_Image_inspect((Gosu::Image const *)arg1,arg2);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_std_string(static_cast< std::string >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
 SWIGINTERN void
 free_Gosu_Image(void *self) {
     Gosu::Image *arg1 = (Gosu::Image *)self;
@@ -11760,6 +11842,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassImage.klass, "rows", VALUEFUNC(_wrap_Image_rows), -1);
   rb_define_method(SwigClassImage.klass, "save", VALUEFUNC(_wrap_Image_save), -1);
   rb_define_method(SwigClassImage.klass, "insert", VALUEFUNC(_wrap_Image_insert), -1);
+  rb_define_method(SwigClassImage.klass, "inspect", VALUEFUNC(_wrap_Image_inspect), -1);
   SwigClassImage.mark = 0;
   SwigClassImage.destroy = (void (*)(void *)) free_Gosu_Image;
   SwigClassImage.trackObjects = 1;

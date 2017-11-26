@@ -23,19 +23,14 @@ class TestText < Minitest::Test
     Dir.chdir media_path do
       # Gosu.register_entity "entity", Gosu::Image.new("alpha-bmp24.bmp")
 
-      Dir.mktmpdir do |tmpdir|
-        STRINGS.each do |key, string|
-          OPTION_SETS.each_with_index do |options, i|
-            # Prepend <c=000000> to each string because white-on-translucent images are hard
-            # to view (on macOS at least).
-            image = Gosu::Image.from_text("<c=000000>#{string}", 41, options)
-            
-            expected = "text-#{key}-#{i}.png" 
-            output_filename = File.join(tmpdir, expected)
-            
-            image.save output_filename
-            assert_equal Gosu::Image.new(expected), image
-          end
+      STRINGS.each do |key, string|
+        OPTION_SETS.each_with_index do |options, i|
+          expected_filename = "text-#{key}-#{i}.png"
+
+          # Prepend <c=000000> to each string because white-on-translucent images are hard
+          # to view (on macOS at least).
+          image = Gosu::Image.from_text("<c=000000>#{string}", 41, options)
+          assert_equal Gosu::Image.new(expected_filename), image
         end
       end
     end

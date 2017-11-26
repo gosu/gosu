@@ -806,6 +806,42 @@ namespace Gosu
         Gosu::load_bitmap(bmp, source);
         $self->data().insert(bmp, x, y);
     }
+    
+    // This is a very low-tech helper that maps the image's alpha channel to ASCII art.
+    // Inspired by the sample code in stb_truetype.h <3
+    std::string inspect(int max_width = 80) const
+    {
+        try {
+            Gosu::Bitmap bmp = $self->data().to_bitmap();
+            // This is the scaled image width inside the ASCII art border, so make sure
+            // there will be room for a leading and trailing '#' character.
+            int w = Gosu::clamp<int>(max_width - 2, 0, bmp.width());
+            // For images with width == 0, the output will have one line per pixel.
+            // Otherwise, scale proportionally.
+            int h = (w ? bmp.height() * w / bmp.width() : bmp.height());
+            
+            // This is the length of one row in the string output, including the border
+            // and a trailing newline.
+            int stride = w + 3;
+            std::string str(stride * (h + 2), '#');
+            str[stride - 1] = '\n'; // first newline
+            str.back()      = '\n'; // last newline
+
+            for (int y = 0; y < h; ++y) {
+                for (int x = 0; x < w; ++x) {
+                    int scaled_x = x * bmp.width()  / w;
+                    int scaled_y = y * bmp.height() / h;
+                    int alpha3bit = bmp.get_pixel(scaled_x, scaled_y).alpha() / 32;
+                    str[(y + 1) * stride + (x + 1)] = " .:ioVM@"[alpha3bit];
+                }
+                str[(y + 1) * stride + (w + 2)] = '\n'; // newline after row of pixels
+            }
+            return str;
+        }
+        catch (...) {
+            return "<Gosu::Image without bitmap representation>";
+        }
+    }
 }
 
 // Inspection:
