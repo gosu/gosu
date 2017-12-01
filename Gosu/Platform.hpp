@@ -46,7 +46,7 @@ namespace Gosu
 # define GOSU_NORETURN __attribute__ ((noreturn))
 #endif
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN64)
 # define GOSU_IS_WIN
 #else
 # define GOSU_IS_UNIX
