@@ -163,6 +163,10 @@ module Gosu
   deprecate_const :GOSU_COPYRIGHT_NOTICE, :LICENSES
   
   module Button; end
+  
+  # Channel was called SampleInstance before Gosu 0.13.0.
+  SampleInstance = Channel
+  deprecate_const :SampleInstance, :Channel
 
   # Support for KbLeft instead of KB_LEFT and Gp3Button2 instead of GP_3_BUTTON_2.
   Gosu.constants.grep(/^KB_|MS_|GP_/).each do |new_name|
