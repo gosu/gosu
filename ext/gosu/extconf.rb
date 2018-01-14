@@ -24,6 +24,7 @@ $CFLAGS << " -DGOSU_DEPRECATED="
 
 $CXXFLAGS ||= ""
 $CXXFLAGS << " -std=gnu++11"
+$CXXFLAGS << " -Wno-reserved-user-defined-literal" # see https://github.com/gosu/gosu/issues/424
 
 # For #include <Gosu/...>
 $INCFLAGS << " -I../.."

@@ -45,11 +45,6 @@ module Gosu
   end
 end
 
-module Gosu
-  # Backwards compatibility: Channel was called SampleInstance before Gosu 0.13.0.
-  SampleInstance = Channel
-end
-
 class Gosu::Window
   # Call Thread.pass every tick, which may or may not be necessary for friendly co-existence with
   # Ruby's Thread class.
