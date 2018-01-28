@@ -5,16 +5,20 @@
 #include <windows.h>
 
 #include "WinUtility.hpp"
+
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
+
 #include <cstdlib>
 #include <cwchar>
 #include <algorithm>
 #include <map>
 #include <set>
 #include <stdexcept>
+
 using namespace std;
+
 
 string Gosu::default_font_name()
 {
@@ -23,8 +27,6 @@ string Gosu::default_font_name()
 
 namespace Gosu
 {
-    string get_name_from_ttf_file(const string& filename);
-
     namespace
     {
         class WinBitmap
@@ -82,26 +84,6 @@ namespace Gosu
 
             void select_font(string font_name, int font_height, unsigned font_flags) const
             {
-                // TODO for ASYNC support:
-                // Use a lock on both maps.
-
-                // Note:
-                // The caching of opened fonts didn't really show improved text rendering
-                // performance on my test system.
-                // In case of trouble, it can be taken out without worrying too much.
-
-                static map<string, string> custom_fonts;
-                
-                if (font_name.find("/") != font_name.npos) {
-                    if (custom_fonts.count(font_name) == 0) {
-                        AddFontResourceExW(utf8_to_wstring(font_name).c_str(), FR_PRIVATE, 0);
-                        font_name = custom_fonts[font_name] = get_name_from_ttf_file(font_name);
-                    }
-                    else {
-                        font_name = custom_fonts[font_name];
-                    }
-                }
-                
                 static map<pair<string, unsigned>, HFONT> loaded_fonts;
                 
                 HFONT font;
@@ -141,6 +123,10 @@ int Gosu::text_width(const string& text, const string& font_name,
         throw invalid_argument("the argument to text_width cannot contain line breaks");
     }
     
+    if (font_name.find_first_of("./\\") != text.npos) {
+        return text_width_ttf(text, font_name, font_height, font_flags);
+    }
+    
     WinBitmap helper(1, 1);
     helper.select_font(font_name, font_height, font_flags);
     
@@ -157,6 +143,10 @@ void Gosu::draw_text(Bitmap& bitmap, const string& text, int x, int y, Color c,
 {
     if (text.find_first_of("\r\n") != text.npos) {
         throw invalid_argument("the argument to draw_text cannot contain line breaks");
+    }
+    
+    if (font_name.find_first_of("./\\") != text.npos) {
+        return draw_text_ttf(bitmap, text, x, y, c, font_name, font_height, font_flags);
     }
     
     int width = text_width(text, font_name, font_height, font_flags);

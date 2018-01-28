@@ -5,7 +5,8 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Utility.hpp>
 
-#include <SDL_ttf.h>
+#include "TextImpl.hpp"
+
 #include <glib.h>
 #include <pango/pango.h>
 #include <pango/pangoft2.h>
@@ -14,7 +15,10 @@
 #include <stdexcept>
 #include <string>
 
-std::string Gosu::default_font_name()
+using namespace std;
+
+
+string Gosu::default_font_name()
 {
     return "sans";
 }
@@ -58,7 +62,7 @@ namespace Gosu
             }
         }
         
-        int text_width(const std::string& text, const std::string& font_face,
+        int text_width(const string& text, const string& font_face,
                        int font_height, unsigned font_flags)
         {
             g_type_init();
@@ -114,15 +118,15 @@ namespace Gosu
             return width;
         }
         
-        void draw_text(Bitmap& bitmap, const std::string& text, int x, int y, Color c,
-            const std::string& font_face, int font_height, unsigned font_flags)
+        void draw_text(Bitmap& bitmap, const string& text, int x, int y, Color c,
+            const string& font_face, int font_height, unsigned font_flags)
         {
             text_width(text, font_face, font_height, font_flags);
 
             FT_Bitmap ft_bitmap;
 
             guchar* buf = new guchar[width * height];
-            std::fill(buf, buf + width * height, 0x00);
+            fill(buf, buf + width * height, 0x00);
 
             ft_bitmap.rows = height;
             ft_bitmap.width = width;
@@ -134,7 +138,7 @@ namespace Gosu
             int x_start = 0;
             pango_ft2_render_layout(&ft_bitmap, layout, x_start, 0);
 
-            int min_height = std::min<int>(height, font_height);
+            int min_height = min<int>(height, font_height);
 
             for (int y2 = 0; y2 < min_height; y2++) {
                 if (y + y2 < 0 || y + y2 >= bitmap.height()) break;
@@ -150,131 +154,34 @@ namespace Gosu
             delete[] buf;
         }
     };
-
-    // Used for custom TTF files
-    // Adapted from custom_font class by José Tomás Tocino García (TheOm3ga)
-    class SDLTTFRenderer
-    {
-        SDLTTFRenderer(const SDLTTFRenderer&) = delete;
-        SDLTTFRenderer& operator=(const SDLTTFRenderer&) = delete;
-        SDLTTFRenderer(SDLTTFRenderer&&) = delete;
-        SDLTTFRenderer& operator=(SDLTTFRenderer&&) = delete;
-        
-        TTF_Font* font;
-        
-        class SDLSurface
-        {
-            SDLSurface(const SDLSurface&);
-            SDLSurface& operator=(const SDLSurface&);
-            
-            SDL_Surface* surface;
-            
-        public:
-            SDLSurface(TTF_Font* font, const std::string& text, Gosu::Color c)
-            {
-                // This is intentionally re-ordered to BGR. This way, the surface pixels do not
-                // have to be converted from RGB to BGR later in the process.
-                SDL_Color color = { c.blue(), c.green(), c.red() };
-                surface = TTF_RenderUTF8_Blended(font, text.c_str(), color);
-                if (!surface) {
-                    throw std::runtime_error("Could not render text: " + text);
-                }
-            }
-            
-            ~SDLSurface()
-            {
-                SDL_FreeSurface(surface);
-            }
-            
-            int height() const
-            {
-                return surface->h;
-            }
-            
-            int width() const
-            {
-                return surface->w;
-            }
-            
-            const void* data() const
-            {
-                return surface->pixels;
-            }
-        };
-        
-    public:
-        SDLTTFRenderer(const std::string& font_name, int font_height)
-        {
-            static int init_result = TTF_Init();
-            if (init_result < 0) {
-                throw std::runtime_error("Could not initialize SDL_TTF");
-            }
-
-            // Try to open the font at the given path
-            font = TTF_OpenFont(font_name.c_str(), font_height);
-            if (!font) {
-                throw std::runtime_error("Could not open TTF file " + font_name);
-            }
-            
-            // Re-open with scaled height so that ascenders/descenders fit
-            int too_large_height = TTF_FontHeight(font);
-            int real_height = font_height * font_height / too_large_height;
-            TTF_CloseFont(font);
-            font = TTF_OpenFont(font_name.c_str(), real_height);
-            if (!font) {
-                throw std::runtime_error("Could not open TTF file " + font_name);
-            }
-        }
-        
-        ~SDLTTFRenderer()
-        {
-            TTF_CloseFont(font);
-        }
-
-        int text_width(const std::string& text)
-        {
-            return SDLSurface(font, text, 0xffffff).width();
-        }
-
-        void draw_text(Bitmap& bmp, const std::string& text, int x, int y, Gosu::Color c)
-        {
-            SDLSurface surf(font, text, c);
-            Gosu::Bitmap temp;
-            temp.resize(surf.width(), surf.height());
-            std::memcpy(temp.data(), surf.data(), temp.width() * temp.height() * 4);
-            bmp.insert(temp, x, y);
-        }
-    };
 }
 
-int Gosu::text_width(const std::string& text, const std::string& font_name,
+int Gosu::text_width(const string& text, const string& font_name,
                      int font_height, unsigned font_flags)
 {
     if (text.find_first_of("\r\n") != text.npos) {
-        throw std::invalid_argument("the argument to text_width cannot contain line breaks");
+        throw invalid_argument("the argument to text_width cannot contain line breaks");
     }
     
-    if (font_name.find("/") == font_name.npos) {
-        return PangoRenderer().text_width(text, font_name, font_height, font_flags);
+    if (font_name.find_first_of("./\\") != text.npos) {
+        return text_width_ttf(text, font_name, font_height, font_flags);
     }
-    else {
-        return SDLTTFRenderer(font_name, font_height).text_width(text);
-    }
+
+    return PangoRenderer().text_width(text, font_name, font_height, font_flags);
 }
 
-void Gosu::draw_text(Bitmap& bitmap, const std::string& text, int x, int y, Color c,
-    const std::string& font_name, int font_height, unsigned font_flags)
+void Gosu::draw_text(Bitmap& bitmap, const string& text, int x, int y, Color c,
+                     const string& font_name, int font_height, unsigned font_flags)
 {
     if (text.find_first_of("\r\n") != text.npos) {
-        throw std::invalid_argument("the argument to draw_text cannot contain line breaks");
+        throw invalid_argument("the argument to draw_text cannot contain line breaks");
+    }
+
+    if (font_name.find_first_of("./\\") != text.npos) {
+        return draw_text_ttf(bitmap, text, x, y, c, font_name, font_height, font_flags);
     }
     
-    if (font_name.find("/") == font_name.npos) {
-        PangoRenderer().draw_text(bitmap, text, x, y, c, font_name, font_height, font_flags);
-    }
-    else {
-        SDLTTFRenderer(font_name, font_height).draw_text(bitmap, text, x, y, c);
-    }
+    PangoRenderer().draw_text(bitmap, text, x, y, c, font_name, font_height, font_flags);
 }
 
 #endif

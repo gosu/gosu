@@ -117,6 +117,9 @@
     <ClCompile Include="..\src\TextApple.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\TextImpl.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\TextInput.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>

@@ -1,10 +1,13 @@
 #include <Gosu/Platform.hpp>
 #if defined(GOSU_IS_MAC)
 
+#include "TextImpl.hpp"
+
 #include <Gosu/Text.hpp>
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/Utility.hpp>
+
 #include <cmath>
 #include <map>
 
@@ -19,51 +22,9 @@ typedef NSFont AppleFont;
 
 using namespace std;
 
-// If a font is a filename, loads the font and returns its family name that can be used
-// like any system font. Otherwise, just returns the family name.
-static string normalize_font(const string& font_name)
-{
-#ifdef GOSU_IS_IPHONE
-    // On iOS, we have no support for loading font files yet. However, if you register your fonts
-    // via your app's Info.plist, you should be able to reference them by name.
-    return font_name;
-#else
-    static map<string, string> family_of_files;
-    
-    // Not a path name: It is already a family name.
-    if (font_name.find("/") == font_name.npos) {
-        return font_name;
-    }
-    
-    // Already activated font & extracted family name.
-    if (family_of_files.count(font_name) > 0) {
-        return family_of_files[font_name];
-    }
-    
-    NSURL* url = [NSURL fileURLWithPath:[NSString stringWithUTF8String:font_name.c_str()]
-                            isDirectory:NO];
-    if (url == nullptr) {
-        return family_of_files[font_name] = Gosu::default_font_name();
-    }
-    CFURLRef url_ref = (__bridge CFURLRef) url;
-    
-    NSArray* descriptors = CFBridgingRelease(CTFontManagerCreateFontDescriptorsFromURL(url_ref));
-    if (descriptors.count < 1 ||
-            !CTFontManagerRegisterFontsForURL(url_ref, kCTFontManagerScopeProcess, nullptr)) {
-        return family_of_files[font_name] = Gosu::default_font_name();
-    }
-
-    CTFontDescriptorRef ref = (__bridge CTFontDescriptorRef) descriptors[0];
-    CFTypeRef family_name_ref = CTFontDescriptorCopyAttribute(ref, kCTFontFamilyNameAttribute);
-    NSString* family_name = CFBridgingRelease(family_name_ref);
-    return family_of_files[font_name] = family_name.UTF8String ?: "";
-#endif
-}
 
 static AppleFont* get_font(string font_name, unsigned font_flags, double height)
 {
-    font_name = normalize_font(font_name);
-
     static map<pair<string, pair<unsigned, double>>, AppleFont*> used_fonts;
     
     auto key = make_pair(font_name, make_pair(font_flags, height));
@@ -124,6 +85,10 @@ int Gosu::text_width(const string& text, const string& font_name,
         throw invalid_argument("text_width cannot handle line breaks");
     }
     
+    if (font_name.find_first_of("./\\") != text.npos) {
+        return text_width_ttf(text, font_name, font_height, font_flags);
+    }
+    
     AppleFont* font = get_font(font_name, font_flags, font_height);
     
     // This will, of course, compute a too large size; font_height is in pixels,
@@ -145,6 +110,10 @@ void Gosu::draw_text(Bitmap& bitmap, const string& text, int x, int y, Color c,
 {
     if (text.find_first_of("\r\n") != text.npos) {
         throw invalid_argument("the argument to draw_text cannot contain line breaks");
+    }
+    
+    if (font_name.find_first_of("./\\") != text.npos) {
+        return draw_text_ttf(bitmap, text, x, y, c, font_name, font_height, font_flags);
     }
     
     AppleFont* font = get_font(font_name, font_flags, font_height);

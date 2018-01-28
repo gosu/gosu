@@ -71,7 +71,6 @@ else
   pkg_config 'sndfile'
   pkg_config 'libmpg123'
   
-  have_header 'SDL_ttf.h' if have_library('SDL2_ttf', 'TTF_RenderUTF8_Blended')
   have_header 'AL/al.h'   if have_library('openal')
 end
 

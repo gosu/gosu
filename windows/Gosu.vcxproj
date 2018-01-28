@@ -202,6 +202,7 @@
     <ClCompile Include="..\src\TexChunk.cpp" />
     <ClCompile Include="..\src\Text.cpp" />
     <ClCompile Include="..\src\TextApple.cpp" />
+    <ClCompile Include="..\src\TextImpl.cpp" />
     <ClCompile Include="..\src\TextInput.cpp" />
     <ClCompile Include="..\src\TextTTFWin.cpp" />
     <ClCompile Include="..\src\TextUnix.cpp" />
