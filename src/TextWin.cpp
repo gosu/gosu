@@ -6,176 +6,129 @@
 
 #include "WinUtility.hpp"
 
-#include <Gosu/Bitmap.hpp>
+#include "TextImpl.hpp"
+
+#include <Gosu/IO.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
 
 #include <cstdlib>
 #include <cwchar>
-#include <algorithm>
 #include <map>
-#include <set>
+#include <memory>
 #include <stdexcept>
 
 using namespace std;
 
+
+static shared_ptr<Gosu::Buffer> find_ttf_data(string font_name, unsigned font_flags)
+{
+    static map<pair<string, unsigned>, shared_ptr<Gosu::Buffer>> ttf_buffers;
+
+    auto key = make_pair(font_name, font_flags);
+    
+    auto iterator = ttf_buffers.find(key);
+    if (iterator != ttf_buffers.end()) {
+        return iterator->second;
+    }
+    
+    // A filename? Just load it.
+    if (font_name.find_first_of("./\\") != string::npos) {
+        auto buffer = make_shared<Gosu::Buffer>();
+        Gosu::load_file(*buffer, font_name);
+        // Assign this buffer to all combinations of the given filename, since Gosu::FontFlags are
+        // not yet supported for custom TTF files - this avoids loading the same file twice.
+        for (unsigned flags = 0; flags < Gosu::FF_COMBINATIONS; ++flags) {
+            ttf_buffers[make_pair(font_name, flags)] = buffer;
+        }
+        return buffer;
+    }
+    
+    LOGFONT logfont = {
+        20 /* arbitrary font height */, 0, 0, 0,
+        (font_flags & Gosu::FF_BOLD) ? FW_BOLD : FW_NORMAL,
+        (font_flags & Gosu::FF_ITALIC) ? TRUE : FALSE,
+        (font_flags & Gosu::FF_UNDERLINE) ? TRUE : FALSE,
+        FALSE /* no strikethrough */,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
+        DEFAULT_PITCH | FF_DONTCARE
+    };
+    
+    wstring wfont_name = Gosu::utf8_to_wstring(font_name);
+    wcsncpy(logfont.lfFaceName, wfont_name.c_str(), LF_FACESIZE);
+    logfont.lfFaceName[LF_FACESIZE - 1] = 0;
+    
+    if (HFONT font = CreateFontIndirect(&logfont)) {
+        if (HDC hdc = GetDC(0)) {
+            HFONT last_font = (HFONT) SelectObject(hdc, (HGDIOBJ) font);
+            auto ttf_buffer_size = GetFontData(hdc, 0, 0, nullptr, 0);
+            if (ttf_buffer_size != GDI_ERROR) {
+                auto buffer = make_shared<Gosu::Buffer>();
+                buffer->resize(ttf_buffer_size);
+                if (GetFontData(hdc, 0, 0, buffer->data(), buffer->size()) != GDI_ERROR) {
+                    if (Gosu::verify_font_name(buffer->data(), font_name)) {
+                        ttf_buffers[key] = buffer;
+                    }
+                }
+            }
+            SelectObject(hdc, (HGDIOBJ) last_font);
+            ReleaseDC(0, hdc);
+        }
+        DeleteObject((HGDIOBJ) font);
+    }
+
+    if (!ttf_buffers[key] && font_flags != 0) {
+        ttf_buffers[key] = find_ttf_data(font_name, 0);
+    }
+    if (!ttf_buffers[key] && font_name != Gosu::default_font_name()) {
+        ttf_buffers[key] = find_ttf_data(Gosu::default_font_name(), font_flags);
+    }
+    if (!ttf_buffers[key]) {
+        if (const char* windir = getenv("WINDIR")) {
+            ttf_buffers[key] = find_ttf_data(string(windir) + "/Fonts/arial.ttf", 0);
+        } else {
+            ttf_buffers[key] = find_ttf_data("C:/Windows/Fonts/arial.ttf", 0);
+        }
+    }
+    
+    return ttf_buffers[key];
+}
 
 string Gosu::default_font_name()
 {
     return "Arial";
 }
 
-namespace Gosu
-{
-    namespace
-    {
-        class WinBitmap
-        {
-            WinBitmap(const WinBitmap&);
-            WinBitmap& operator=(const WinBitmap&);
-            
-            HDC dc;
-            HBITMAP bitmap;
-            char* pixels;
-
-        public:
-            WinBitmap(int width, int height)
-            {
-                dc = winapi_check(CreateCompatibleDC(0), "creating a device context");
-
-                BITMAPCOREHEADER core_header;
-                core_header.bcSize = sizeof core_header;
-                core_header.bcWidth = width;
-                core_header.bcHeight = height;
-                core_header.bcPlanes = 1;
-                core_header.bcBitCount = 24;
-
-                bitmap = CreateDIBSection(dc, reinterpret_cast<BITMAPINFO*>(&core_header),
-                                          DIB_RGB_COLORS, reinterpret_cast<VOID**>(&pixels), 0, 0);
-                if (bitmap == 0) {
-                    DeleteDC(dc);
-                    throw_last_winapi_error("creating a bitmap");
-                }
-
-                SelectObject(dc, bitmap);
-
-                HBRUSH brush = CreateSolidBrush(0x000000);
-                RECT rc = { 0, 0, width, height };
-                FillRect(dc, &rc, brush);
-                DeleteObject(brush);
-            }
-
-            ~WinBitmap()
-            {
-                DeleteObject(bitmap);
-                SelectObject(dc, GetStockObject(SYSTEM_FONT));
-                DeleteDC(dc);
-            }
-
-            HDC context() const
-            {
-                return dc;
-            }
-
-            HBITMAP handle() const
-            {
-                return bitmap;
-            }
-
-            void select_font(string font_name, int font_height, unsigned font_flags) const
-            {
-                static map<pair<string, unsigned>, HFONT> loaded_fonts;
-                
-                HFONT font;
-                pair<string, unsigned> key = make_pair(font_name, font_height | font_flags << 16);
-                
-                if (loaded_fonts.count(key) == 0) {
-                    LOGFONT logfont = {
-                        font_height, 0, 0, 0,
-                        font_flags & FF_BOLD ? FW_BOLD : FW_NORMAL,
-                        font_flags & FF_ITALIC ? TRUE : FALSE,
-                        font_flags & FF_UNDERLINE ? TRUE : FALSE, FALSE, DEFAULT_CHARSET,
-                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
-                        DEFAULT_PITCH | FF_DONTCARE
-                    };
-                    
-                    wstring wfont_name = utf8_to_wstring(font_name);
-                    wcsncpy(logfont.lfFaceName, wfont_name.c_str(), LF_FACESIZE);
-                    logfont.lfFaceName[LF_FACESIZE - 1] = 0;
-                    
-                    font = loaded_fonts[key] = winapi_check(CreateFontIndirect(&logfont),
-                                                            "CreateFontIndirect for " + font_name);
-                }
-                else {
-                    font = loaded_fonts[key];
-                }
-
-                SelectObject(dc, font);
-            }
-        };
-    }
-};
-
 int Gosu::text_width(const string& text, const string& font_name,
                      int font_height, unsigned font_flags)
 {
-    if (text.find_first_of("\r\n") != text.npos) {
-        throw invalid_argument("the argument to text_width cannot contain line breaks");
+    if (font_flags >= FF_COMBINATIONS) {
+        throw invalid_argument("Invalid font_flags: " + to_string(font_flags));
     }
     
-    if (font_name.find_first_of("./\\") != text.npos) {
-        return text_width_ttf(text, font_name, font_height, font_flags);
+    if (text.find_first_of("\r\n") != string::npos) {
+        throw invalid_argument("text_width cannot handle line breaks");
     }
     
-    WinBitmap helper(1, 1);
-    helper.select_font(font_name, font_height, font_flags);
-    
-    wstring wtext = utf8_to_wstring(text);
-    SIZE size;
-    winapi_check(GetTextExtentPoint32W(helper.context(), wtext.c_str(), wtext.length(), &size),
-        "calculating the width of a text");
-    
-    return size.cx;
+    Gosu::Buffer& ttf_data = *find_ttf_data(font_name, font_flags);
+    return text_width_ttf(static_cast<unsigned char*>(ttf_data.data()), font_height,
+                          text);
 }
 
 void Gosu::draw_text(Bitmap& bitmap, const string& text, int x, int y, Color c,
                      const string& font_name, int font_height, unsigned font_flags)
 {
+    if (font_flags >= FF_COMBINATIONS) {
+        throw invalid_argument("Invalid font_flags: " + to_string(font_flags));
+    }
+    
     if (text.find_first_of("\r\n") != text.npos) {
         throw invalid_argument("the argument to draw_text cannot contain line breaks");
     }
     
-    if (font_name.find_first_of("./\\") != text.npos) {
-        return draw_text_ttf(bitmap, text, x, y, c, font_name, font_height, font_flags);
-    }
-    
-    int width = text_width(text, font_name, font_height, font_flags);
-
-    WinBitmap helper(width, font_height);
-    helper.select_font(font_name, font_height, font_flags);
-
-    winapi_check(SetTextColor(helper.context(), 0xffffff) != CLR_INVALID,
-        "setting the text color");
-
-    winapi_check(SetBkMode(helper.context(), TRANSPARENT),
-        "setting a bitmap's background mode to TRANSPARENT");
-
-    wstring wtext = utf8_to_wstring(text);
-    ExtTextOutW(helper.context(), 0, 0, 0, 0, wtext.c_str(), wtext.length(), 0);
-    
-    for (int rel_y = 0; rel_y < font_height; ++rel_y)
-        for (int rel_x = 0; rel_x < width; ++rel_x) {
-            Color pixel = c;
-            Color::Channel src_alpha = GetPixel(helper.context(), rel_x, rel_y) & 0xff;
-            
-            if (src_alpha == 0) continue;
-            
-            pixel = multiply(c, Color(src_alpha, 255, 255, 255));
-            if (pixel != 0 && x + rel_x >= 0 && x + rel_x < bitmap.width() &&
-                    y + rel_y >= 0 && y + rel_y < bitmap.height()) {
-                bitmap.set_pixel(x + rel_x, y + rel_y, pixel);
-            }
-        }
+    Gosu::Buffer& ttf_data = *find_ttf_data(font_name, font_flags);
+    return draw_text_ttf(static_cast<unsigned char*>(ttf_data.data()), font_height,
+                         text, bitmap, x, y, c);
 }
 
 #endif

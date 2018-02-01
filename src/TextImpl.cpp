@@ -1,8 +1,6 @@
 #include "TextImpl.hpp"
-#include <Gosu/IO.hpp>
 #include <Gosu/Utility.hpp>
 #include <map>
-#include <memory>
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #include "stb_truetype.h"
@@ -13,9 +11,6 @@ namespace Gosu
 {
     class StbTrueTypeFont
     {
-        // Use a unique_ptr to prevent the Buffer from being copied or moved, which would invalidate
-        // the info.data pointer.
-        unique_ptr<Buffer> buffer;
         stbtt_fontinfo info;
         // The ascent in internal font metrics (= arbitrary integer scale), that is, the part of the
         // font above the baseline, which TrueType consider to be at y = 0.
@@ -25,16 +20,12 @@ namespace Gosu
         double base_scale;
         
     public:
-        StbTrueTypeFont(const string& filename)
-        : buffer(new Buffer())
+        StbTrueTypeFont(const unsigned char* ttf_data)
         {
-            load_file(*buffer, filename);
-            
             // This will always use the first font in a font collection; see comment in font().
-            auto* data = static_cast<const unsigned char*>(buffer->data());
-            auto offset = stbtt_GetFontOffsetForIndex(data, 0);
-            int success = stbtt_InitFont(&info, data, offset);
-            if (!success) throw runtime_error("Cannot load TTF/OTF font: " + filename);
+            auto offset = stbtt_GetFontOffsetForIndex(ttf_data, 0);
+            int success = stbtt_InitFont(&info, ttf_data, offset);
+            if (!success) throw runtime_error("Invalid TrueType font data");
             
             // Calculate metrics.
             int descent, lineGap;
@@ -51,7 +42,7 @@ namespace Gosu
             
             auto scale = base_scale * font_height;
             
-            // TODO: utf8_to_wstring is wasteful, just iterate directly through the UTF-8 here.
+            // utf8_to_wstring is wasteful, we should just iterate directly through the UTF-8 here.
             wstring codepoints = utf8_to_wstring(text);
             
             // lsb (the "left side bearing") will usually be 0, but it could be a negative value if
@@ -141,43 +132,36 @@ namespace Gosu
         }
     };
     
-    map<pair<string, unsigned>, StbTrueTypeFont> fonts;
-    
-    StbTrueTypeFont& font(const string& filename, unsigned font_flags)
+    StbTrueTypeFont& font_for_data(const void* ttf_data)
     {
-        if (font_flags >= FF_COMBINATIONS) {
-            throw invalid_argument("Invalid font_flags: " + to_string(font_flags));
-        }
+        auto data = static_cast<const unsigned char*>(ttf_data);
         
-        // TODO: The code in this file does not support B/I/U formatting for custom TTF fonts.
-        // Options for the future:
-        // 1. Use stbtt_FindMatchingFont. This will only work for TTC font collections, and we will
-        //    have to patch stb_truetype to look for fonts only based on `int flags`, while ignoring
-        //    the name of fonts inside a bundle (who wants to deal with strings, anyway).
-        // 2. Maybe Gosu should accept filename patterns like "LibreBaskerville-*.ttf" as the font
-        //    name and then replace the * with "Regular", "Bold", "Italic" etc.?
-        // 3. As a last resort, Gosu could implement faux bold and faux italics. I think faux
-        //    underlines are a must anyway, since no font provides a dedicated TTF file for that.
-        font_flags = 0;
+        // Note: This cache is not yet thread-safe.
+        static map<const unsigned char*, StbTrueTypeFont> fonts;
         
-        // This appears to be the best way to implement lazy-loading using std::map/C++11.
-        auto key = make_pair(filename, font_flags);
-        auto iter = fonts.lower_bound(key);
-        if (iter->first != key) {
-            iter = fonts.emplace_hint(iter, key, StbTrueTypeFont(filename));
+        auto iterator = fonts.find(data);
+        if (iterator == fonts.end()) {
+            iterator = fonts.emplace(data, data).first;
         }
-        return iter->second;
+        return iterator->second;
     }
 }
 
-int Gosu::text_width_ttf(const string& text,
-                         const string& filename, int font_height, unsigned font_flags)
+int Gosu::text_width_ttf(const void* ttf_data, int font_height,
+                         const string& text)
 {
-    return font(filename, font_flags).draw_text(text, font_height, nullptr, 0, 0, Color());
+    return font_for_data(ttf_data).draw_text(text, font_height, nullptr, 0, 0, Color());
 }
 
-void Gosu::draw_text_ttf(Bitmap& bitmap, const string& text, int x, int y, Color c,
-                         const string& filename, int font_height, unsigned font_flags)
+void Gosu::draw_text_ttf(const void* ttf_data, int font_height,
+                         const string& text, Bitmap& bitmap, int x, int y, Color c)
 {
-    font(filename, font_flags).draw_text(text, font_height, &bitmap, x, y, c);
+    font_for_data(ttf_data).draw_text(text, font_height, &bitmap, x, y, c);
+}
+
+bool Gosu::verify_font_name(const void* ttf_data, const std::string &font_name)
+{
+    auto data = static_cast<const unsigned char*>(ttf_data);
+    return stbtt_FindMatchingFont(data, (font_name).c_str(), STBTT_MACSTYLE_NONE) >= 0 ||
+        stbtt_FindMatchingFont(data, (font_name).c_str(), STBTT_MACSTYLE_DONTCARE) >= 0;
 }
