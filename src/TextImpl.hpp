@@ -5,11 +5,19 @@
 
 namespace Gosu
 {
+    // These functions provide an internal facade around stb_truetype. Maybe it would be nicer if
+    // this was a TrueTypeFont class instead of a few C-ish helper functions, but I want the flow
+    // of information within Gosu to settle before I refactor this any more.
+    // Example: Maybe it would be better if these platform-agnostic helpers here would call the
+    // platform-specific methods for loading font files instead of the other way around, because the
+    // current design makes it hard to implement things like fallback fonts.
+    //
     // These functions do not yet support Gosu::FontFlags. This is fine for system fonts like Arial,
     // where the callers of these methods will typically load the correct file (e.g. ArialBold.ttf).
     // However, games which ship with their own font files (which is a good idea) can't use bold or
-    // italic text now because there is no way to associate one TTF file as the "bold variant" of
-    // another.
+    // italic text now using <b> or <i> markup because there is no way to associate one TTF file as
+    // the "bold variant" of another. (Of course games can manually use two different font files
+    // instead of using Gosu's markup, so this is no showstopper.)
     //
     // Options for the future:
     // 1. Use stbtt_FindMatchingFont. This will only work for TTC font collections, and we will

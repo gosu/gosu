@@ -44,47 +44,72 @@ namespace Gosu
             
             // utf8_to_wstring is wasteful, we should just iterate directly through the UTF-8 here.
             wstring codepoints = utf8_to_wstring(text);
-            
-            // lsb (the "left side bearing") will usually be 0, but it could be a negative value if
-            // the first letter extends to the left of its bounding box.
-            // ref: https://github.com/nothings/stb/issues/281#issuecomment-209403157
-            int first_glyph_lsb;
-            stbtt_GetCodepointHMetrics(&info, codepoints.front(), nullptr, &first_glyph_lsb);
-            
-            int width = -first_glyph_lsb;
+
+            // This is the running cursor variable at which text is rendered. It is a float because
+            // this code uses stb_truetype's subpixel rendering.
+            float fx = x;
             int last_glyph = 0;
+            int last_advance;
 
             for (wchar_t codepoint : codepoints) {
                 int glyph = stbtt_FindGlyphIndex(&info, codepoint);
+                // Skip characters that the font doesn't contain - this is the place where we could
+                // implement font fallback logic.
+                // Note that not even the last_glyph variable is being updated in this case.
                 if (glyph == 0) continue;
-                
-                int advance, lsb;
-                stbtt_GetGlyphHMetrics(&info, glyph, &advance, &lsb);
+
+                if (last_glyph) {
+                    fx += stbtt_GetGlyphKernAdvance(&info, last_glyph, glyph) * scale;
+                }
+
+                int advance;
+                stbtt_GetGlyphHMetrics(&info, glyph, &advance, nullptr);
                 
                 if (bitmap) {
-                    draw_glyph(*bitmap, x + (width + lsb) * scale, y, glyph, scale);
+                    // Do not take lsb into account here: it seems to correspond to the 'xoff' value
+                    // returned by stbtt_GetGlyphBitmapSubpixel, and adding both adds too much
+                    // spacing between letters.
+                    // Ref: https://github.com/nothings/stb/issues/281#issuecomment-361264014
+                    draw_glyph(*bitmap, fx, y, glyph, scale);
                 }
                 
-                width += advance;
-                if (last_glyph) {
-                    width += stbtt_GetGlyphKernAdvance(&info, last_glyph, glyph);
-                }
+                fx += advance * scale;
                 last_glyph = glyph;
+                last_advance = advance;
             }
-            return max<int>(0, ceil(width * scale));
+            
+
+            // The last rendered glyph affects how we calculate the resulting text width.
+            if (last_glyph) {
+                int x = static_cast<int>(fx);
+                int last_xoff, last_width;
+                stbtt_GetGlyphBitmapSubpixel(&info, scale, scale, fx - x, 0, last_glyph,
+                                             &last_width, nullptr, &last_xoff, nullptr);
+                // Move the cursor to the right if pixels have been touched by draw_glyph that are
+                // to the right of the current cursor.
+                // If the last character extends to the right of the cursor, then this prevents the
+                // rightmost pixels from being truncated.
+                // If the last character was whitespace, then last_width will be 0 (no pixel data)
+                // and the cursor is what counts.
+                fx = max<float>(fx, fx - last_advance * scale + last_xoff + last_width);
+            }
+
+            // Never return a negative value from this method because it is used to determine bitmap
+            // dimensions.
+            return max<int>(0, ceil(fx));
         }
         
-        void draw_glyph(Bitmap& bitmap, double x, int y, int glyph, double scale)
+        void draw_glyph(Bitmap& bitmap, double fx, int y, int glyph, double scale)
         {
-            int ix = static_cast<int>(x);
+            int x = static_cast<int>(fx);
             int w, h, xoff, yoff;
 
             // As an optimization, this method/class could try to re-use a buffer for rasterization
             // instead of having stb_truetype allocate a fresh one for each draw_glyph call.
-            unsigned char* pixels = stbtt_GetGlyphBitmapSubpixel(&info, scale, scale, x - ix, 0,
+            unsigned char* pixels = stbtt_GetGlyphBitmapSubpixel(&info, scale, scale, fx - x, 0,
                                                                  glyph, &w, &h, &xoff, &yoff);
             
-            blend_into_bitmap(bitmap, pixels, ix + xoff, y + ascent * scale + yoff, w, h);
+            blend_into_bitmap(bitmap, pixels, x + xoff, y + ascent * scale + yoff, w, h);
 
             free(pixels);
         }
