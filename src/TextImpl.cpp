@@ -69,7 +69,7 @@ namespace Gosu
                     // returned by stbtt_GetGlyphBitmapSubpixel, and adding both adds too much
                     // spacing between letters.
                     // Ref: https://github.com/nothings/stb/issues/281#issuecomment-361264014
-                    draw_glyph(*bitmap, fx, y, glyph, scale);
+                    draw_glyph(*bitmap, fx, y, c, glyph, scale);
                 }
                 
                 fx += advance * scale;
@@ -98,7 +98,7 @@ namespace Gosu
             return max<int>(0, ceil(fx));
         }
         
-        void draw_glyph(Bitmap& bitmap, double fx, int y, int glyph, double scale)
+        void draw_glyph(Bitmap& bitmap, double fx, int y, Gosu::Color c, int glyph, double scale)
         {
             int x = static_cast<int>(fx);
             int w, h, xoff, yoff;
@@ -108,14 +108,15 @@ namespace Gosu
             unsigned char* pixels = stbtt_GetGlyphBitmapSubpixel(&info, scale, scale, fx - x, 0,
                                                                  glyph, &w, &h, &xoff, &yoff);
             
-            blend_into_bitmap(bitmap, pixels, x + xoff, y + ascent * scale + yoff, w, h);
+            blend_into_bitmap(bitmap, pixels, x + xoff, y + ascent * scale + yoff, w, h, c);
 
             free(pixels);
         }
         
         // This implements the "over" alpha compositing operator, see:
         // https://en.wikipedia.org/wiki/Alpha_compositing
-        void blend_into_bitmap(Bitmap& bitmap, unsigned char* pixels, int x, int y, int w, int h)
+        void blend_into_bitmap(Bitmap& bitmap, unsigned char* pixels, int x, int y, int w, int h,
+                               Gosu::Color c)
         {
             int stride = w;
 
@@ -145,10 +146,10 @@ namespace Gosu
                     unsigned char inv_pixel = 255 - pixel;
                     
                     Color color = bitmap.get_pixel(x + rel_x, y + rel_y);
-                    color.set_alpha(min<int>(255, (pixel * 255 + color.alpha() * inv_pixel) / 255));
-                    color.set_red  (min<int>(255, (pixel * 255 + color.red()   * inv_pixel) / 255));
-                    color.set_green(min<int>(255, (pixel * 255 + color.green() * inv_pixel) / 255));
-                    color.set_blue (min<int>(255, (pixel * 255 + color.blue()  * inv_pixel) / 255));
+                    color.set_alpha((pixel * c.alpha() + inv_pixel * color.alpha()) / 255);
+                    color.set_red  ((pixel * c.red()   + inv_pixel * color.red())   / 255);
+                    color.set_green((pixel * c.green() + inv_pixel * color.green()) / 255);
+                    color.set_blue ((pixel * c.blue()  + inv_pixel * color.blue())  / 255);
 
                     bitmap.set_pixel(x + rel_x, y + rel_y, color);
                 }

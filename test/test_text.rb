@@ -33,7 +33,6 @@ class TestText < Minitest::Test
 
           # Prepend <c=r00> to each string because white-on-translucent images are hard
           # to view (on macOS at least).
-          # TODO: Color markup seems to be completely broken for Image.from_text?
           image = Gosu::Image.from_text("<c=ff0000>#{string}", 41, options)
           assert_equal Gosu::Image.new(expected_filename), image
         end
