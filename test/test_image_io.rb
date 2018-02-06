@@ -26,7 +26,7 @@ class TestImageIO < Minitest::Test
 
             output_filename = File.join(tmpdir, expected)
             image.save output_filename
-            assert_equal File.binread(expected), File.binread(output_filename)
+            assert_equal [File.binread(expected)].pack("m"), [File.binread(output_filename)].pack("m")
           end
         end
       end

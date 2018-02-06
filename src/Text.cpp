@@ -30,8 +30,8 @@ namespace Gosu
         struct WordInfo
         {
             FormattedString text;
-            unsigned width;
-            unsigned space_width;
+            int width;
+            int space_width;
         };
         typedef vector<WordInfo> Words;
 
@@ -40,14 +40,13 @@ namespace Gosu
         class TextBlockBuilder
         {
             Bitmap bmp;
-            unsigned used_lines, allocated_lines;
+            int used_lines, allocated_lines;
 
             string font_name;
-            unsigned font_height;
-            int line_spacing;
+            int font_height, line_spacing;
             Alignment align;
 
-            unsigned space_width_;
+            int space_width_;
 
             void alloc_next_line()
             {
@@ -61,8 +60,8 @@ namespace Gosu
             }
 
         public:
-            TextBlockBuilder(const string& font_name, unsigned font_height, int line_spacing,
-                unsigned width, Alignment align)
+            TextBlockBuilder(const string& font_name, int font_height, int line_spacing,
+                int width, Alignment align)
             {
                 used_lines = 0;
                 allocated_lines = 10;
@@ -77,12 +76,12 @@ namespace Gosu
                 space_width_ = text_width(FormattedString(L" ", 0));
             }
 
-            unsigned width() const
+            int width() const
             {
                 return bmp.width();
             }
 
-            unsigned text_width(const FormattedString& text) const
+            int text_width(const FormattedString& text) const
             {
                 if (text.length() == 0) {
                     return 0;
@@ -93,7 +92,7 @@ namespace Gosu
                 }
                 
                 vector<FormattedString> parts = text.split_parts();
-                unsigned result = 0;
+                int result = 0;
                 for (auto& part : parts) {
                     string text = wstring_to_utf8(part.unformat());
                     result += Gosu::text_width(text, font_name, font_height, part.flags_at(0));
@@ -102,13 +101,13 @@ namespace Gosu
             }
 
             void add_line(Words::const_iterator begin, Words::const_iterator end,
-                unsigned words_width, bool override_align)
+                int words_width, bool override_align)
             {
                 alloc_next_line();
                 
                 auto words = end - begin;
                 
-                unsigned total_spacing = 0;
+                int total_spacing = 0;
                 if (begin < end) {
                     for (auto i = begin; i != end - 1; ++i) {
                         total_spacing += i->space_width;
@@ -142,7 +141,7 @@ namespace Gosu
                     int x = 0;
                     for (auto& part : parts) {
                         if (part.entity_at(0)) {
-                            Gosu::Bitmap entity = entity_bitmap(part.entity_at(0));
+                            Bitmap entity = entity_bitmap(part.entity_at(0));
                             multiply_bitmap_alpha(entity, part.color_at(0).alpha());
                             bmp.insert(entity, pos + x, top);
                             x += entity.width();
@@ -180,7 +179,7 @@ namespace Gosu
                 return result;
             }
             
-            unsigned space_width() const
+            int space_width() const
             {
                 return space_width_;
             }
@@ -194,13 +193,13 @@ namespace Gosu
             auto line_begin = words.begin();
 
             // Used width, in pixels, of the words [line_begin..w[.
-            unsigned words_width = 0;
+            int words_width = 0;
 
             // Used width of the spaces between (w-line_begin) words.
-            unsigned spaces_width = 0;
+            int spaces_width = 0;
 
             for (auto w = words.begin(); w != words.end(); ++w) {
-                unsigned new_words_width = words_width + w->width;
+                int new_words_width = words_width + w->width;
 
                 if (new_words_width + spaces_width <= builder.width()) {
                     // There's enough space for the words [line_begin..w] plus
@@ -230,7 +229,7 @@ namespace Gosu
         {
             Words collected_words;
             
-            unsigned begin_of_word = 0;
+            int begin_of_word = 0;
             
             for (unsigned cur = 0; cur < paragraph.length(); ++cur) {
                 WordInfo new_word;
@@ -284,12 +283,12 @@ namespace Gosu
     }
 }
 
-Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, unsigned font_height,
-    int line_spacing, unsigned width, Alignment align, unsigned font_flags)
+Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, int font_height,
+    int line_spacing, int width, Alignment align, unsigned font_flags)
 {
-    if (line_spacing <= -static_cast<int>(font_height)) {
-        throw logic_error("negative line spacing of more than line height impossible");
-    }
+    if (font_height <= 0)            throw invalid_argument("font_height must be > 0");
+    if (width <= 0)                  throw invalid_argument("width must be > 0");
+    if (line_spacing < -font_height) throw invalid_argument("line_spacing must be ≥ -font_height");
 
     wstring wtext = utf8_to_wstring(text);
     FormattedString fs(wtext.c_str(), font_flags);
@@ -309,9 +308,11 @@ Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, unsi
 }
 
 // Very easy special case.
-Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, unsigned font_height,
+Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, int font_height,
     unsigned font_flags)
 {
+    if (font_height <= 0) throw invalid_argument("font_height must be > 0");
+
     wstring wtext = utf8_to_wstring(text);
     FormattedString fs(wtext.c_str(), font_flags);
     if (fs.length() == 0) {
@@ -325,11 +326,11 @@ Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, unsi
     for (int i = 0; i < lines.size(); ++i) {
         if (lines[i].length() == 0) continue;
         
-        unsigned x = 0;
+        int x = 0;
         vector<FormattedString> parts = lines[i].split_parts();
         for (auto& part : parts) {
             if (part.length() == 1 && part.entity_at(0)) {
-                Gosu::Bitmap entity = entity_bitmap(part.entity_at(0));
+                Bitmap entity = entity_bitmap(part.entity_at(0));
                 multiply_bitmap_alpha(entity, part.color_at(0).alpha());
                 bmp.resize(max(bmp.width(), x + entity.width()), bmp.height(), 0x00ffffff);
                 bmp.insert(entity, x, i * font_height);
@@ -339,11 +340,11 @@ Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, unsi
 
             assert (part.length() > 0);
             string unformatted_text = wstring_to_utf8(part.unformat());
-            unsigned part_width = text_width(unformatted_text, font_name, font_height,
-                                             part.flags_at(0));
-            bmp.resize(max(bmp.width(), x + part_width), bmp.height(), 0x00ffffff);
+            int part_width = text_width(unformatted_text, font_name, font_height,
+                                        part.flags_at(0));
+            bmp.resize(max<int>(bmp.width(), x + part_width), bmp.height(), 0x00ffffff);
             draw_text(bmp, unformatted_text, x, i * font_height, part.color_at(0), font_name,
-                font_height, part.flags_at(0));
+                      font_height, part.flags_at(0));
             x += part_width;
         }
     }
@@ -365,7 +366,7 @@ bool Gosu::is_entity(const string& name)
 
 const Gosu::Bitmap& Gosu::entity_bitmap(const string& name)
 {
-    shared_ptr<Gosu::Bitmap>& ptr = entities[name];
-    if (!ptr) throw runtime_error("Unknown entity: " + name);
+    shared_ptr<Bitmap>& ptr = entities[name];
+    if (!ptr) throw invalid_argument("Unknown entity: " + name);
     return *ptr;
 }

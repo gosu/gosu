@@ -194,8 +194,8 @@ namespace Gosu
         VALUE conversion = rb_str_new2("to_blob { self.format = 'RGBA'; self.depth = 8 }");
         VALUE blob = rb_obj_instance_eval(1, &conversion, val);
         rb_check_safe_obj(blob);
-        unsigned width  = NUM2ULONG(rb_funcall(val, rb_intern("columns"), 0));
-        unsigned height = NUM2ULONG(rb_funcall(val, rb_intern("rows"), 0));
+        int width  = NUM2ULONG(rb_funcall(val, rb_intern("columns"), 0));
+        int height = NUM2ULONG(rb_funcall(val, rb_intern("rows"), 0));
         
         std::size_t size = width * height * 4;
         bitmap.resize(width, height, Gosu::Color::NONE);
@@ -505,18 +505,18 @@ namespace Gosu
 }
 
 // Font
-%ignore Gosu::Font::Font(unsigned height, const std::string& font_name, unsigned flags);
+%ignore Gosu::Font::Font(int height, const std::string& font_name, unsigned flags);
 %ignore Gosu::Font::set_image(wchar_t wc, unsigned font_flags, const Gosu::Image& image);
 %ignore Gosu::Font::set_image(wchar_t wc, const Gosu::Image& image);
 
 %include "../../Gosu/Font.hpp"
 %extend Gosu::Font {
-    Font(Gosu::Window& window, const std::string& font_name, unsigned height)
+    Font(Gosu::Window& window, const std::string& font_name, int height)
     {
         return new Gosu::Font(height, font_name);
     }
     
-    Font(unsigned height, VALUE options = 0)
+    Font(int height, VALUE options = 0)
     {
         std::string font_name = Gosu::default_font_name();
         
@@ -660,11 +660,11 @@ namespace Gosu
     }
     
     %newobject from_text;
-    static Gosu::Image* from_text(const std::string& text, unsigned font_height, VALUE options = 0)
+    static Gosu::Image* from_text(const std::string& text, int font_height, VALUE options = 0)
     {
         std::string font = Gosu::default_font_name();
-        unsigned width = 0xfefefefe;
-        unsigned spacing = 0;
+        int width = 0;
+        int spacing = 0;
         Gosu::Alignment align = Gosu::AL_LEFT;
         unsigned flags = 0;
         
@@ -722,7 +722,7 @@ namespace Gosu
         }
         
         Gosu::Bitmap bitmap;
-        if (width == 0xfefefefe) {
+        if (width == 0) {
             bitmap = Gosu::create_text(text, font, font_height);
         }
         else {
@@ -805,6 +805,42 @@ namespace Gosu
         Gosu::Bitmap bmp;
         Gosu::load_bitmap(bmp, source);
         $self->data().insert(bmp, x, y);
+    }
+    
+    // This is a very low-tech helper that maps the image's alpha channel to ASCII art.
+    // Inspired by the sample code in stb_truetype.h <3
+    std::string inspect(int max_width = 80) const
+    {
+        try {
+            Gosu::Bitmap bmp = $self->data().to_bitmap();
+            // This is the scaled image width inside the ASCII art border, so make sure
+            // there will be room for a leading and trailing '#' character.
+            int w = Gosu::clamp<int>(max_width - 2, 0, bmp.width());
+            // For images with width == 0, the output will have one line per pixel.
+            // Otherwise, scale proportionally.
+            int h = (w ? bmp.height() * w / bmp.width() : bmp.height());
+            
+            // This is the length of one row in the string output, including the border
+            // and a trailing newline.
+            int stride = w + 3;
+            std::string str(stride * (h + 2), '#');
+            str[stride - 1] = '\n'; // first newline
+            str.back()      = '\n'; // last newline
+
+            for (int y = 0; y < h; ++y) {
+                for (int x = 0; x < w; ++x) {
+                    int scaled_x = x * bmp.width()  / w;
+                    int scaled_y = y * bmp.height() / h;
+                    int alpha3bit = bmp.get_pixel(scaled_x, scaled_y).alpha() / 32;
+                    str[(y + 1) * stride + (x + 1)] = " .:ioVM@"[alpha3bit];
+                }
+                str[(y + 1) * stride + (w + 2)] = '\n'; // newline after row of pixels
+            }
+            return str;
+        }
+        catch (...) {
+            return "<Gosu::Image without bitmap representation>";
+        }
     }
 }
 

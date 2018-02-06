@@ -202,8 +202,8 @@
     <ClCompile Include="..\src\TexChunk.cpp" />
     <ClCompile Include="..\src\Text.cpp" />
     <ClCompile Include="..\src\TextApple.cpp" />
+    <ClCompile Include="..\src\TextImpl.cpp" />
     <ClCompile Include="..\src\TextInput.cpp" />
-    <ClCompile Include="..\src\TextTTFWin.cpp" />
     <ClCompile Include="..\src\TextUnix.cpp" />
     <ClCompile Include="..\src\TextWin.cpp" />
     <ClCompile Include="..\src\Texture.cpp" />
@@ -223,19 +223,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Gosu\Gosu.hpp" />
-    <ClInclude Include="..\src\BlockAllocator.hpp" />
-    <ClInclude Include="..\src\Common.hpp" />
-    <ClInclude Include="..\src\DrawOp.hpp" />
-    <ClInclude Include="..\src\DrawOpQueue.hpp" />
-    <ClInclude Include="..\src\LargeImageData.hpp" />
-    <ClInclude Include="..\src\Macro.hpp" />
-    <ClInclude Include="..\src\RenderState.hpp" />
-    <ClInclude Include="..\src\TexChunk.hpp" />
-    <ClInclude Include="..\src\Texture.hpp" />
-    <ClInclude Include="..\src\ALChannelManagement.hpp" />
-    <ClInclude Include="..\src\AudioFile.hpp" />
-    <ClInclude Include="..\src\OggFile.hpp" />
-    <ClInclude Include="..\src\SndFile.hpp" />
     <ClInclude Include="..\Gosu\Audio.hpp" />
     <ClInclude Include="..\Gosu\AutoLink.hpp" />
     <ClInclude Include="..\Gosu\Bitmap.hpp" />

@@ -46,7 +46,7 @@ string Gosu::resource_prefix()
     if (result.empty()) {
         result = exe_filename();
         auto last_delim = result.find_last_of("\\/");
-        result.resize(last_delim == result.npos ? 0 : last_delim + 1);
+        result.resize(last_delim == string::npos ? 0 : last_delim + 1);
     }
     return result;
 }

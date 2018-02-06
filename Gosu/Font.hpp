@@ -29,14 +29,14 @@ namespace Gosu
         //! \param font_height Height of the font, in pixels.
         //! \param font_flags Flags used to render individual characters of
         //!        the font.
-        Font(unsigned font_height, const std::string& font_name = default_font_name(),
-            unsigned font_flags = FF_BOLD);
+        Font(int font_height, const std::string& font_name = default_font_name(),
+             unsigned font_flags = FF_BOLD);
         
         //! Returns the name of the font that was used to create it.
         std::string name() const;
         
         //! Returns the height of the font, in pixels.
-        unsigned height() const;
+        int height() const;
         
         //! Returns the flags used to create the font characters.
         unsigned flags() const;
@@ -47,8 +47,8 @@ namespace Gosu
         //! Draws text so the top left corner of the text is at (x; y).
         //! \param text Formatted text without line-breaks.
         void draw(const std::string& text, double x, double y, ZPos z,
-            double scale_x = 1, double scale_y = 1, Color c = Color::WHITE,
-            AlphaMode mode = AM_DEFAULT) const;
+                  double scale_x = 1, double scale_y = 1, Color c = Color::WHITE,
+                  AlphaMode mode = AM_DEFAULT) const;
         
         //! Draws text at a position relative to (x; y).
         //! \param rel_x Determines where the text is drawn horizontally. If
@@ -57,8 +57,8 @@ namespace Gosu
         //! centered on x. Of course, all real numbers are possible values.
         //! \param rel_y See rel_x.
         void draw_rel(const std::string& text, double x, double y, ZPos z,
-            double rel_x, double rel_y, double scale_x = 1, double scale_y = 1,
-            Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
+                      double rel_x, double rel_y, double scale_x = 1, double scale_y = 1,
+                      Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
         
         //! Maps a letter to a specific image instead of generating one using
         //! Gosu's built-in text rendering. This can only be called once per
@@ -75,7 +75,7 @@ namespace Gosu
         //! DEPRECATED: Analogous to draw, but rotates the text by a given angle.
         //! Use Graphics::push_transform to achieve the same effect.
         void draw_rot(const std::string& text, double x, double y, ZPos z, double angle,
-            double scale_x = 1, double scale_y = 1, Color c = Color::WHITE,
-            AlphaMode mode = AM_DEFAULT) const;
+                      double scale_x = 1, double scale_y = 1, Color c = Color::WHITE,
+                      AlphaMode mode = AM_DEFAULT) const;
     };
 }

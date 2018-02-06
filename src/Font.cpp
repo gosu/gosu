@@ -14,7 +14,8 @@ using namespace std;
 struct Gosu::Font::Impl
 {
     string name;
-    unsigned height, flags;
+    int height;
+    unsigned flags;
 
     // Unicode planes of 2^16 characters each. On Windows, where wchar_t is only 16 bits wide, only
     // the first plane will ever be touched.
@@ -62,7 +63,7 @@ struct Gosu::Font::Impl
         // TODO: Would be nice to have.
         // if (is_formatting_char(wc))
         //     char_string.clear();
-        unsigned char_width = Gosu::text_width(char_string, name, height, flags);
+        int char_width = Gosu::text_width(char_string, name, height, flags);
         
         Bitmap bitmap(char_width, height, 0x00ffffff);
         draw_text(bitmap, char_string, 0, 0, Color::WHITE, name, height, flags);
@@ -78,7 +79,7 @@ struct Gosu::Font::Impl
     }
 };
 
-Gosu::Font::Font(unsigned font_height, const string& font_name, unsigned font_flags)
+Gosu::Font::Font(int font_height, const string& font_name, unsigned font_flags)
 : pimpl(new Impl)
 {
     pimpl->name = font_name;
@@ -91,7 +92,7 @@ string Gosu::Font::name() const
     return pimpl->name;
 }
 
-unsigned Gosu::Font::height() const
+int Gosu::Font::height() const
 {
     return pimpl->height / 2;
 }

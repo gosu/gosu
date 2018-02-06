@@ -24,7 +24,6 @@ $CFLAGS << " -DGOSU_DEPRECATED="
 
 $CXXFLAGS ||= ""
 $CXXFLAGS << " -std=gnu++11"
-$CXXFLAGS << " -Wno-reserved-user-defined-literal" # see https://github.com/gosu/gosu/issues/424
 
 # For #include <Gosu/...>
 $INCFLAGS << " -I../.."
@@ -34,6 +33,9 @@ if `uname`.chomp == 'Darwin'
   $CFLAGS   << " -x objective-c -fobjc-arc -DNDEBUG"
   # Compile all C++ files as Objective C++ on macOS since mkmf does not support .mm files.
   $CXXFLAGS << " -x objective-c++ -fobjc-arc -DNDEBUG"
+  # Prevents issues with Apple's pre-installed Ruby 2.3 on macOS 10.13.
+  # https://github.com/gosu/gosu/issues/424
+  $CXXFLAGS << " -Wno-reserved-user-defined-literal"
 
   # Explicitly specify libc++ as the standard library.
   # rvm will sometimes try to override this:
@@ -65,17 +67,16 @@ else
   end
 
   pkg_config 'sdl2'
-  pkg_config 'pangoft2'
   pkg_config 'vorbisfile'
   pkg_config 'openal'
   pkg_config 'sndfile'
   pkg_config 'libmpg123'
+  pkg_config 'fontconfig'
   
-  have_header 'SDL_ttf.h' if have_library('SDL2_ttf', 'TTF_RenderUTF8_Blended')
   have_header 'AL/al.h'   if have_library('openal')
 end
 
-# This is necessary to build with stock Ruby on OS X 10.7.
+# This is necessary to build with Apple's pre-installed Ruby 1.8 on OS X 10.7.
 CONFIG['CXXFLAGS'] ||= $CXXFLAGS
 
 # Gem::Version#initialize is apparently broken in some versions of Ruby, so use a local helper.

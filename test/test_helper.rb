@@ -3,6 +3,18 @@ require "minitest/autorun"
 
 require "gosu" unless defined? Gosu
 
+class Gosu::Image
+  # Gosu does not implement this method by default because it is very inefficient.
+  # However, it is useful for testing, and makes it easy to use assert_equal on images.
+  def ==(other)
+    if other.is_a? Gosu::Image
+      (to_blob rescue object_id) == (other.to_blob rescue other.object_id)
+    else
+      false
+    end
+  end
+end
+
 module TestHelper
   # TODO: Should be __dir__ after we drop Ruby 1.x support...
   def media_path(fname = "")

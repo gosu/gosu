@@ -4,23 +4,8 @@
     <Filter Include="Implementation">
       <UniqueIdentifier>{aceab27f-d653-4abd-8c0a-7232843b6dc3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Implementation\Graphics">
-      <UniqueIdentifier>{f4a6eea8-59ad-4585-95a0-c759f036f9b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Implementation\Audio">
-      <UniqueIdentifier>{196e2cd0-7679-4e14-bff9-62ffafe99191}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Interface">
       <UniqueIdentifier>{defefcfa-47f2-4cf5-9be9-79c759d06bc6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Implementation\Input">
-      <UniqueIdentifier>{4ccfad9c-b5ff-40f0-9131-5c1b5f43e8b8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Implementation\Text">
-      <UniqueIdentifier>{ecb0c8af-b127-4dd1-9acb-9cef5c1ef2f3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Implementation\Bitmap">
-      <UniqueIdentifier>{20d151a7-7430-467f-8fe5-6e69a43c5a23}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -117,10 +102,10 @@
     <ClCompile Include="..\src\TextApple.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\TextInput.cpp">
+    <ClCompile Include="..\src\TextImpl.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\TextTTFWin.cpp">
+    <ClCompile Include="..\src\TextInput.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\TextUnix.cpp">
@@ -173,45 +158,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\BlockAllocator.hpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Common.hpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\DrawOp.hpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\DrawOpQueue.hpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\LargeImageData.hpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Macro.hpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\RenderState.hpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\TexChunk.hpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Texture.hpp">
-      <Filter>Implementation\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ALChannelManagement.hpp">
-      <Filter>Implementation\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\AudioFile.hpp">
-      <Filter>Implementation\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\OggFile.hpp">
-      <Filter>Implementation\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SndFile.hpp">
-      <Filter>Implementation\Audio</Filter>
-    </ClInclude>
     <ClInclude Include="..\Gosu\Audio.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
