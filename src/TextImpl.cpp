@@ -13,7 +13,7 @@ namespace Gosu
     {
         stbtt_fontinfo info;
         // The ascent in internal font metrics (= arbitrary integer scale), that is, the part of the
-        // font above the baseline, which TrueType consider to be at y = 0.
+        // font above the baseline, which TrueType considers to be at y = 0.
         int ascent;
         // Scaling factor from internal font metrics (= arbitrary integer scale) to a font with
         // height = 1px.
@@ -32,7 +32,6 @@ namespace Gosu
             stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
             int height = ascent - descent + lineGap;
             base_scale = 1.0 / height;
-            // Not sure if we also need to call stbtt_GetFontVMetricsOS2 and somehow merge results?
         }
         
         // This method always measures text, and also draws it if (bitmap != nullptr).
