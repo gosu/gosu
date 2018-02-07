@@ -7,41 +7,37 @@
 
 namespace Gosu
 {
+    class MarkupParser;
+
+    struct FormattedSubstring
+    {
+        // If entity is empty, then there must be a non-empty substring, and vice versa.
+        // If we encoded both an entity and a string in the same FormattedSubstring object, it would
+        // be hard to tell in which order they should be rendered.
+        
+        std::string entity;
+        std::string string;
+        Color color;
+        unsigned flags;
+        
+        bool can_be_merged_with(const FormattedSubstring& other) const
+        {
+            // Substrings that consist of an entity are never compatible.
+            if (! string.empty() || ! other.string.empty()) return false;
+
+            return color == other.color && flags == other.flags;
+        }
+    };
+
+    // A FormattedString is a string composed of several (or zero) substrings that can each have a
+    // distinct color or font flags.
     class FormattedString
     {
-        struct FormattedChar
-        {
-            wchar_t wc;
-            Color color;
-            unsigned flags;
-            std::string entity;
-            
-            bool same_style_as(const FormattedChar& other) const;
-        };
-        
-        // If characters.empty(), use these for the whole string.
-        std::wstring simple_string;
-        unsigned simple_flags;
-        // If not characters.empty(), ignore above fields and use this.
-        std::vector<FormattedChar> characters;
+        std::vector<FormattedSubstring> substrings;
         
     public:
         FormattedString();
-        FormattedString(const wchar_t* html, unsigned base_flags);
-        
-        std::wstring unformat() const;
-        
-        const char* entity_at(unsigned index) const;
-        wchar_t char_at(unsigned index) const;
-        unsigned flags_at(unsigned index) const;
-        Color color_at(unsigned index) const;
-        
-        std::size_t length() const;
-        
-        FormattedString range(std::size_t begin, std::size_t end) const;
-        
-        std::vector<FormattedString> split_lines() const;
-        std::vector<FormattedString> split_parts() const;
+        FormattedString(const char* markup, unsigned base_flags);
     };
 }
 
