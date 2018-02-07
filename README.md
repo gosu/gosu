@@ -19,9 +19,9 @@ Community
 ---------
 
 - Visit our [message board](https://www.libgosu.org/cgi-bin/mwf/forum.pl) or the [r/gosu subreddit](https://reddit.com/r/gosu).
-- There’s also an IRC room, [#gosu on freenode](https://webchat.freenode.net/?channels=gosu). The regulars are spread across many timezones, so you’ll need some patience.
-- You can file bugs and feature requests as [issues on GitHub](https://github.com/gosu/gosu/issues).
-- Or [simply email me](mailto:julian@raschke.de) :)
+- There’s also an IRC room, [#gosu on freenode](https://webchat.freenode.net/?channels=gosu).
+  The regulars are spread across many timezones, so you’ll need some patience.
+- Please file bugs and request features [on GitHub](https://github.com/gosu/gosu/issues).
 
 Build Status
 ------------
