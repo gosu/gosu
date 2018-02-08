@@ -51,26 +51,6 @@ if(NOT APPLE)
     )
 endif()
 
-if(NOT WIN32 AND NOT APPLE)
-    find_package(Freetype REQUIRED)
-    pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
-    pkg_check_modules(PANGO REQUIRED pango)
-    pkg_check_modules(PANGOFT REQUIRED pangoft2)
-    
-    set(GOSU_DEPENDENCIES ${GOSU_DEPENDENCIES}
-        ${FREETYPE_LIBRARIES}
-        ${SDL2_TTF_LIBRARIES}
-        ${PANGO_LIBRARIES}
-        ${PANGOFT_LIBRARIES}
-    )
-    
-    link_directories(
-        ${SDL2_TTF_LIBRARY_DIRS}
-        ${PANGO_LIBRARY_DIRS}
-        ${PANGOFT_LIBRARY_DIRS}
-    )
-endif()
-
 if(APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
     find_library(COCOA_LIBRARY Cocoa)
