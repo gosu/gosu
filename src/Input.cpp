@@ -90,8 +90,8 @@ struct Gosu::Input::Impl
     void set_mouse_position(double x, double y)
     {
         SDL_WarpMouseInWindow(window,
-                              (x - mouse_offset_x) / mouse_scale_x,
-                              (y - mouse_offset_y) / mouse_scale_y);
+                              static_cast<int>((x - mouse_offset_x) / mouse_scale_x),
+                              static_cast<int>((y - mouse_offset_y) / mouse_scale_y));
 
     #if SDL_VERSION_ATLEAST(2, 0, 4) && !defined(GOSU_IS_X)
         // On systems where we have a working GetGlobalMouseState, we can warp the mouse and
@@ -136,8 +136,10 @@ struct Gosu::Input::Impl
                 }
                 break;
             }
+            default: {
+                return false;
+            }
         }
-        return false;
     }
     
     typedef array<bool, GP_NUM_PER_GAMEPAD> GamepadBuffer;
@@ -329,7 +331,7 @@ string Gosu::Input::id_to_char(Button btn)
     // Convert to lower case to be consistent with previous versions of Gosu.
     // German umlauts are already reported in lower-case by SDL, anyway.
     // (This should handle Turkish i/I just fine because it uses the current locale.)
-    wname[0] = (wchar_t) towlower((int) wname[0]);
+    wname[0] = (wchar_t) towlower((wint_t) wname[0]);
     return wstring_to_utf8(wname);
 }
 

@@ -17,7 +17,7 @@ namespace Gosu
         int ascent;
         // Scaling factor from internal font metrics (= arbitrary integer scale) to a font with
         // height = 1px.
-        double base_scale;
+        float base_scale;
         
     public:
         StbTrueTypeFont(const unsigned char* ttf_data)
@@ -31,7 +31,7 @@ namespace Gosu
             int descent, lineGap;
             stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
             int height = ascent - descent + lineGap;
-            base_scale = 1.0 / height;
+            base_scale = 1.0f / height;
         }
         
         // This method always measures text, and also draws it if (bitmap != nullptr).
@@ -39,7 +39,7 @@ namespace Gosu
         {
             if (text.empty()) return 0;
             
-            auto scale = base_scale * font_height;
+            float scale = base_scale * font_height;
             
             // utf8_to_wstring is wasteful, we should just iterate directly through the UTF-8 here.
             wstring codepoints = utf8_to_wstring(text);

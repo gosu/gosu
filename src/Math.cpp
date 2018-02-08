@@ -46,7 +46,7 @@ int Gosu::wrap(int value, int min, int max)
 
 float Gosu::wrap(float value, float min, float max)
 {
-    double result = fmod(value - min, max - min);
+    float result = fmodf(value - min, max - min);
     return result < 0 ? result + max : result + min;
 }
 

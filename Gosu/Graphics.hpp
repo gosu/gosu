@@ -24,9 +24,8 @@ namespace Gosu
     class Graphics
     {
         struct Impl;
-        // Non-movable (const) to avoid dangling internal references.
-        const std::unique_ptr<Impl> pimpl;
-        
+        std::unique_ptr<Impl> pimpl;
+
     public:
         Graphics(unsigned physical_width, unsigned physical_height);
         ~Graphics();
@@ -100,7 +99,7 @@ namespace Gosu
 
         //! Turns a portion of a bitmap into something that can be drawn on a Graphics object.
         static std::unique_ptr<ImageData> create_image(const Bitmap& src,
-                                                       unsigned src_x, unsigned src_y,
+                                                       unsigned src_x,     unsigned src_y,
                                                        unsigned src_width, unsigned src_height,
                                                        unsigned image_flags);
     };

@@ -111,7 +111,7 @@ bool Gosu::BlockAllocator::alloc(unsigned a_width, unsigned a_height, Block& b)
 
 void Gosu::BlockAllocator::block(unsigned left, unsigned top, unsigned width, unsigned height)
 {
-    pimpl->blocks.push_back(Block(left, top, width, height));
+    pimpl->blocks.emplace_back(left, top, width, height);
 }
 
 void Gosu::BlockAllocator::free(unsigned left, unsigned top, unsigned width, unsigned height)

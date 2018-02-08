@@ -75,12 +75,12 @@ unsigned Gosu::screen_height()
 #if !defined(GOSU_IS_MAC)
 unsigned Gosu::available_width()
 {
-    return Gosu::screen_width() * 0.9;
+    return static_cast<unsigned>(Gosu::screen_width() * 0.9);
 }
 
 unsigned Gosu::available_height()
 {
-    return Gosu::screen_height() * 0.8;
+    return static_cast<unsigned>(Gosu::screen_height() * 0.8);
 }
 #endif
 #endif

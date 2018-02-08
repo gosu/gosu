@@ -44,6 +44,8 @@ Gosu::File::File(const string& filename, FileMode mode)
     case FM_ALTER:
         flags = O_RDWR | O_CREAT;
         break;
+    default:
+        throw invalid_argument("Unknown file mode: " + to_string(mode));
     }
 
     // TODO: Locking flags?
@@ -66,7 +68,7 @@ Gosu::File::~File()
 size_t Gosu::File::size() const
 {
     // TODO: Error checking?
-    return lseek(pimpl->fd, 0, SEEK_END);
+    return static_cast<size_t>(lseek(pimpl->fd, 0, SEEK_END));
 }
 
 void Gosu::File::resize(size_t new_size)
