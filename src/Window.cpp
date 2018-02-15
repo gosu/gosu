@@ -167,7 +167,7 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
         
         if (width > max_width || height > max_height) {
             scale_factor = min(max_width / width, max_height / height);
-            actual_width = width * scale_factor;
+            actual_width  = width  * scale_factor;
             actual_height = height * scale_factor;
         }
     }
@@ -181,7 +181,7 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
     
     ensure_current_context();
     
-    if (pimpl->graphics.get() == nullptr) {
+    if (!pimpl->graphics) {
         pimpl->graphics.reset(new Graphics(actual_width, actual_height));
     }
     else {
@@ -189,7 +189,7 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
     }
     pimpl->graphics->set_resolution(width, height, black_bar_width, black_bar_height);
     
-    if (pimpl->input.get() == nullptr) {
+    if (!pimpl->input) {
         pimpl->input.reset(new Input(shared_window()));
     }
     pimpl->input->set_mouse_factors(1 / scale_factor, 1 / scale_factor,
@@ -320,10 +320,10 @@ void Gosu::Window::button_down(Button button)
 #else
     // Alt+Enter and Alt+Return toggle fullscreen mode on all other platforms.
     toggle_fullscreen = (button == KB_RETURN || button == KB_ENTER) &&
-        (Input::down(KB_LEFT_ALT) || Input::down(KB_RIGHT_ALT)) &&
+        (Input::down(KB_LEFT_ALT)     || Input::down(KB_RIGHT_ALT)) &&
         !Input::down(KB_LEFT_CONTROL) && !Input::down(KB_RIGHT_CONTROL) &&
-        !Input::down(KB_LEFT_META) && !Input::down(KB_RIGHT_META) &&
-        !Input::down(KB_LEFT_SHIFT) && !Input::down(KB_RIGHT_SHIFT);
+        !Input::down(KB_LEFT_META)    && !Input::down(KB_RIGHT_META) &&
+        !Input::down(KB_LEFT_SHIFT)   && !Input::down(KB_RIGHT_SHIFT);
 #endif
 
     if (toggle_fullscreen) {

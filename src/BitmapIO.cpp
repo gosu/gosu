@@ -102,8 +102,7 @@ void Gosu::save_image_file(const Gosu::Bitmap& bitmap, const string& filename)
 
 static void stbi_write_to_writer(void* context, void* data, int size)
 {
-    Gosu::Writer* writer = reinterpret_cast<Gosu::Writer*>(context);
-    writer->write(data, size);
+    reinterpret_cast<Gosu::Writer*>(context)->write(data, size);
 }
 
 void Gosu::save_image_file(const Gosu::Bitmap& bitmap, Gosu::Writer writer,

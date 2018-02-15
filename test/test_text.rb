@@ -22,13 +22,12 @@ class TestText < Minitest::Test
     { font: "./daniel.otf", align: :center, spacing: 10 },
   ]
   
-  def test_text_rendering
-    Dir.chdir media_path do
-      # TODO: This API exists in C++, but is missing from Ruby/Gosu.
-      # Gosu.register_entity "entity", Gosu::Image.new("alpha-bmp24.bmp")
-
-      STRINGS.each do |key, string|
-        OPTION_SETS.each_with_index do |options, i|
+  STRINGS.each do |key, string|
+    OPTION_SETS.each_with_index do |options, i|
+      define_method("test_text_#{key}_#{i}") do
+        Dir.chdir media_path do
+          # TODO: This API exists in C++, but is missing from Ruby/Gosu.
+          # Gosu.register_entity "entity", Gosu::Image.new("alpha-bmp24.bmp")
           expected_filename = "text-#{key}-#{i}.png"
 
           # Prepend <c=r00> to each string because white-on-translucent images are hard

@@ -45,7 +45,7 @@ static bool cur_song_looping;
 
 struct Gosu::Sample::SampleData
 {
-    ALuint buffer, source;
+    ALuint buffer;
 
     SampleData(AudioFile& audio_file)
     {
@@ -133,8 +133,8 @@ Gosu::Channel Gosu::Sample::play_pan(double pan, double volume, double speed, bo
 
 class Gosu::Song::BaseData
 {
-    BaseData(const BaseData&);
-    BaseData& operator=(const BaseData&);
+    BaseData(const BaseData&) = delete;
+    BaseData& operator=(const BaseData&) = delete;
     
     double volume_;
 

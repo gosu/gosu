@@ -3,6 +3,8 @@
 #include "Texture.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
+#include <stdexcept>
+
 using namespace std;
 
 void Gosu::TexChunk::set_tex_info()
@@ -17,7 +19,7 @@ void Gosu::TexChunk::set_tex_info()
 }
 
 Gosu::TexChunk::TexChunk(shared_ptr<Texture> texture, int x, int y, int w, int h, int padding)
-: texture(texture), x(x), y(y), w(w), h(h), padding(padding)
+: texture(move(texture)), x(x), y(y), w(w), h(h), padding(padding)
 {
     set_tex_info();
 }

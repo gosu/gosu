@@ -61,7 +61,7 @@ Gosu::Color Gosu::Color::from_ahsv(Channel alpha, double h, double s, double v)
     s = clamp(s, 0.0, 1.0);
     v = clamp(v, 0.0, 1.0);
     
-    int sector       = h / 60;
+    int sector = static_cast<int>(h / 60);
     double factorial = h / 60 - sector;
     
     double p = v * (1 - s);
