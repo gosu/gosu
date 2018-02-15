@@ -77,7 +77,6 @@ namespace Gosu
                 last_advance = advance;
             }
             
-
             // The last rendered glyph affects how we calculate the resulting text width.
             if (last_glyph) {
                 int x = static_cast<int>(fx);
