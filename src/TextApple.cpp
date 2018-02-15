@@ -44,13 +44,13 @@ static shared_ptr<Gosu::Buffer> find_ttf_data(string font_name, unsigned font_fl
     if (font_flags & Gosu::FF_ITALIC) symbolic_traits |= kCTFontItalicTrait;
 
     NSDictionary *attributes = @{
-        ((__bridge id)kCTFontNameAttribute): [NSString stringWithUTF8String:font_name.c_str()],
-        ((__bridge id)kCTFontTraitsAttribute): @{
-            ((__bridge id)kCTFontSymbolicTrait): @(symbolic_traits)
+        ((__bridge id) kCTFontNameAttribute): [NSString stringWithUTF8String:font_name.c_str()],
+        ((__bridge id) kCTFontTraitsAttribute): @{
+            ((__bridge id) kCTFontSymbolicTrait): @(symbolic_traits)
         }
     };
     CTFontDescriptorRef descriptor =
-        CTFontDescriptorCreateWithAttributes((__bridge CFDictionaryRef)attributes);
+        CTFontDescriptorCreateWithAttributes((__bridge CFDictionaryRef) attributes);
 
     if (descriptor) {
         CTFontRef font = CTFontCreateWithFontDescriptorAndOptions(descriptor, 20, nullptr, 0);
@@ -98,8 +98,8 @@ int Gosu::text_width(const string& text, const string& font_name,
                           text);
 }
 
-void Gosu::draw_text(Bitmap& bitmap, const string& text, int x, int y, Color c,
-                     const string& font_name, int font_height, unsigned font_flags)
+int Gosu::draw_text(Bitmap& bitmap, const string& text, int x, int y, Color c,
+                    const string& font_name, int font_height, unsigned font_flags)
 {
     if (font_flags >= FF_COMBINATIONS) {
         throw invalid_argument("Invalid font_flags: " + to_string(font_flags));

@@ -155,11 +155,6 @@ namespace Gosu
     }
     
     void al_shutdown();
-    
-    void register_entity(const std::string& name, Gosu::Image* image)
-    {
-        register_entity(name, image->data().to_bitmap());
-    }
 }
 
 #include <cstring>
@@ -380,7 +375,6 @@ namespace Gosu
 %ignore Gosu::text_width;
 %ignore Gosu::create_text;
 %ignore Gosu::draw_text;
-%ignore Gosu::register_entity;
 %include "../../Gosu/Text.hpp"
 
 
@@ -412,7 +406,6 @@ namespace Gosu
     std::string language();
     void enable_undocumented_retrofication();
     void al_shutdown();
-    void register_entity(const std::string& name, Gosu::Image* image);
 }
 
 // Color
@@ -501,8 +494,6 @@ namespace Gosu
 
 // Font
 %ignore Gosu::Font::Font(int height, const std::string& font_name, unsigned flags);
-%ignore Gosu::Font::set_image(wchar_t wc, unsigned font_flags, const Gosu::Image& image);
-%ignore Gosu::Font::set_image(wchar_t wc, const Gosu::Image& image);
 
 %include "../../Gosu/Font.hpp"
 %extend Gosu::Font {
@@ -542,13 +533,6 @@ namespace Gosu
         }
         
         return new Gosu::Font(height, font_name);
-    }
-    
-    void set_image(wchar_t wc, VALUE source)
-    {
-        Gosu::Bitmap bitmap;
-        Gosu::load_bitmap(bitmap, source);
-        $self->set_image(wc, Gosu::Image(bitmap, Gosu::IF_SMOOTH));
     }
 }
 

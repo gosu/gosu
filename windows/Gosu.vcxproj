@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -185,6 +185,7 @@
     <ClCompile Include="..\src\FileWin.cpp" />
     <ClCompile Include="..\src\Font.cpp" />
     <ClCompile Include="..\src\FormattedString.cpp" />
+    <ClCompile Include="..\src\GosuAppDelegate.cpp" />
     <ClCompile Include="..\src\GosuGLView.cpp" />
     <ClCompile Include="..\src\GosuViewController.cpp" />
     <ClCompile Include="..\src\Graphics.cpp" />
@@ -195,12 +196,14 @@
     <ClCompile Include="..\src\Inspection.cpp" />
     <ClCompile Include="..\src\LargeImageData.cpp" />
     <ClCompile Include="..\src\Macro.cpp" />
+    <ClCompile Include="..\src\MarkupParser.cpp" />
     <ClCompile Include="..\src\Math.cpp" />
     <ClCompile Include="..\src\Resolution.cpp" />
     <ClCompile Include="..\src\ResolutionApple.cpp" />
     <ClCompile Include="..\src\TexChunk.cpp" />
     <ClCompile Include="..\src\Text.cpp" />
     <ClCompile Include="..\src\TextApple.cpp" />
+    <ClCompile Include="..\src\TextBuilder.cpp" />
     <ClCompile Include="..\src\TextImpl.cpp" />
     <ClCompile Include="..\src\TextInput.cpp" />
     <ClCompile Include="..\src\TextUnix.cpp" />

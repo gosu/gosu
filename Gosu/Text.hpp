@@ -28,8 +28,8 @@ namespace Gosu
     //!        '.').
     //! \param font_height Height, in pixels, of the text.
     //! \param font_flags Binary combination of members of the FontFlags enum.
-    void draw_text(Bitmap& bitmap, const std::string& text, int x, int y, Color c,
-                   const std::string& font_name, int font_height, unsigned font_flags = 0);
+    int draw_text(Bitmap& bitmap, const std::string& text, int x, int y, Color c,
+                  const std::string& font_name, int font_height, unsigned font_flags = 0);
 
     //! Creates a bitmap that is filled with a line of formatted text given to the function.
     //! The line can contain line breaks and HTML-like markup.
@@ -55,8 +55,4 @@ namespace Gosu
     //! \param font_flags Binary combination of members of the FontFlags enum.
     Bitmap create_text(const std::string& text, const std::string& font_name, int font_height,
                        int line_spacing, int width, Alignment align, unsigned font_flags = 0);
-    
-    //! Registers a new HTML-style entity that can subsequently be used
-    //! with Gosu::Font and Gosu::create_text. The name is given without & and ;.
-    void register_entity(const std::string& name, const Bitmap& replacement);
 }

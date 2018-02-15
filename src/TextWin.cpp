@@ -115,8 +115,8 @@ int Gosu::text_width(const string& text, const string& font_name,
                           text);
 }
 
-void Gosu::draw_text(Bitmap& bitmap, const string& text, int x, int y, Color c,
-                     const string& font_name, int font_height, unsigned font_flags)
+int Gosu::draw_text(Bitmap& bitmap, const string& text, int x, int y, Color c,
+                    const string& font_name, int font_height, unsigned font_flags)
 {
     if (font_flags >= FF_COMBINATIONS) {
         throw invalid_argument("Invalid font_flags: " + to_string(font_flags));

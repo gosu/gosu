@@ -33,7 +33,7 @@ namespace Gosu
              unsigned font_flags = FF_BOLD);
         
         //! Returns the name of the font that was used to create it.
-        std::string name() const;
+        const std::string& name() const;
         
         //! Returns the height of the font, in pixels.
         int height() const;
@@ -59,15 +59,6 @@ namespace Gosu
         void draw_rel(const std::string& text, double x, double y, ZPos z,
                       double rel_x, double rel_y, double scale_x = 1, double scale_y = 1,
                       Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
-        
-        //! Maps a letter to a specific image instead of generating one using
-        //! Gosu's built-in text rendering. This can only be called once per
-        //! character, and the character must not have been drawn before.
-        //! This ensures that Fonts are still (sort of) immutable.
-        void set_image(wchar_t wc, unsigned font_flags, const Gosu::Image& image);
-        //! A shortcut for mapping a character to an image regardless of font_flags.
-        //! Later versions might apply faux italics or faux bold to it (to be decided!).
-        void set_image(wchar_t wc, const Gosu::Image& image);
         
         #ifndef SWIG
         GOSU_DEPRECATED

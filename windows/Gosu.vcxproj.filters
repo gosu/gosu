@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Implementation">
@@ -51,6 +51,9 @@
     <ClCompile Include="..\src\FormattedString.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\GosuAppDelegate.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\GosuGLView.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
@@ -81,6 +84,9 @@
     <ClCompile Include="..\src\Macro.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\MarkupParser.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Math.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
@@ -97,6 +103,9 @@
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\TextApple.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextBuilder.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\TextImpl.cpp">

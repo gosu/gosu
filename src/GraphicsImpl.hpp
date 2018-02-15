@@ -118,6 +118,7 @@ namespace Gosu
     
     bool is_entity(const std::string& name);
     const Bitmap& entity_bitmap(const std::string& name);
+    const Image& entity_image(const std::string& name);
     
     void ensure_current_context();
 }
