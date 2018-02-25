@@ -147,10 +147,14 @@ namespace Gosu
             RenderState va_render_state = render_state;
             va_render_state.transform   = 0;
             
-            result[0].tex_coords[0] = left,  result[0].tex_coords[1] = top;
-            result[1].tex_coords[0] = right, result[1].tex_coords[1] = top;
-            result[2].tex_coords[0] = right, result[2].tex_coords[1] = bottom;
-            result[3].tex_coords[0] = left,  result[3].tex_coords[1] = bottom;
+            result[0].tex_coords[0] = left;
+            result[0].tex_coords[1] = top;
+            result[1].tex_coords[0] = right;
+            result[1].tex_coords[1] = top;
+            result[2].tex_coords[0] = right;
+            result[2].tex_coords[1] = bottom;
+            result[3].tex_coords[0] = left;
+            result[3].tex_coords[1] = bottom;
             
             if (vas.empty() || !(vas.back().render_state == va_render_state)) {
                 vas.push_back(VertexArray());

@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/gosu/gosu.git", :tag => "v0.13.2" }
 
   s.subspec "Gosu" do |ss|
-    ss.osx.deployment_target = "10.7"
+    ss.osx.deployment_target = "10.9"
     ss.ios.deployment_target = "5.1.1"
     
     # Ignore Gosu using deprecated Gosu APIs internally.

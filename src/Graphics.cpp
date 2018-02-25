@@ -420,8 +420,8 @@ unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src,
     for (const auto& texture : textures) {
         if (texture->retro() != wants_retro) continue;
         
-        unique_ptr<ImageData> data;
-        if (data = texture->try_alloc(texture, bmp, 1)) return data;
+        unique_ptr<ImageData> data = texture->try_alloc(texture, bmp, 1);
+        if (data) return data;
     }
     
     // All textures are full: Create a new one.

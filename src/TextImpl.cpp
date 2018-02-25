@@ -2,8 +2,18 @@
 #include <Gosu/Utility.hpp>
 #include <map>
 
+// Disable comma warnings in stb headers.
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcomma"
+#endif
+
 #define STB_TRUETYPE_IMPLEMENTATION
 #include "stb_truetype.h"
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 using namespace std;
 
@@ -48,7 +58,7 @@ namespace Gosu
             // this code uses stb_truetype's subpixel rendering.
             float fx = x;
             int last_glyph = 0;
-            int last_advance;
+            int last_advance = 0;
 
             for (wchar_t codepoint : codepoints) {
                 int glyph = stbtt_FindGlyphIndex(&info, codepoint);

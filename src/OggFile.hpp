@@ -5,8 +5,18 @@
 #include <stdexcept>
 #include <string>
 
+// Disable comma warnings in stb headers.
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcomma"
+#endif
+
 #define STB_VORBIS_HEADER_ONLY
 #include "stb_vorbis.c"
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 namespace Gosu
 {

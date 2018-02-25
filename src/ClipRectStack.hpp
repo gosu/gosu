@@ -40,7 +40,10 @@ class Gosu::ClipRectStack
         // TODO: Doesn't this affect Retina Macs as well?
         // TODO: This should be handled by a global transform.
         int fac = clip_rect_base_factor();
-        result.x *= fac, result.y *= fac, result.width *= fac, result.height *= fac;
+        result.x *= fac;
+        result.y *= fac;
+        result.width *= fac;
+        result.height *= fac;
         
         // Normal clipping.
         effective_rect     = result;

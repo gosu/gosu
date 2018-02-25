@@ -58,7 +58,8 @@ struct Gosu::Macro::Impl
         Float c[8];
         
         // Rows 1, 2
-        c[2] = x1, c[5] = y1;
+        c[2] = x1;
+        c[5] = y1;
         
         // The logic below assumes x2 != x4, i.e. row7 can be used to eliminate
         // the leftmost value in row 8 and afterwards the values in rows 3 & 4.

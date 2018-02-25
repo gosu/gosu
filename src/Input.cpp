@@ -79,11 +79,13 @@ struct Gosu::Input::Impl
         int x, y, window_x, window_y;
         SDL_GetWindowPosition(window, &window_x, &window_y);
         SDL_GetGlobalMouseState(&x, &y);
-        mouse_x = x - window_x, mouse_y = y - window_y;
+        mouse_x = x - window_x;
+        mouse_y = y - window_y;
     #else
         int x, y;
         SDL_GetMouseState(&x, &y);
-        mouse_x = x, mouse_y = y;
+        mouse_x = x;
+        mouse_y = y;
     #endif
     }
     
@@ -136,10 +138,8 @@ struct Gosu::Input::Impl
                 }
                 break;
             }
-            default: {
-                return false;
-            }
         }
+        return false;
     }
     
     typedef array<bool, GP_NUM_PER_GAMEPAD> GamepadBuffer;
