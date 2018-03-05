@@ -1,5 +1,6 @@
 gem "minitest"
 require "minitest/autorun"
+require 'tempfile'
 
 require "gosu" unless defined? Gosu
 
@@ -32,6 +33,25 @@ module TestHelper
   def skip_on_ci
     skip if ENV["APPVEYOR"] or ENV["TRAVIS"]
   end
+
+  def assert_screenshot_matches(window, expected)
+    # TODO: Resolve the mystery around the needed(?) double-tick-second-sleep
+    window.tick
+    window.tick
+    sleep 1
+
+    extension = expected.split('.')[-1]
+    output = Tempfile.new([expected, extension])
+    window.to_image.save output.path
+    if ENV['DEBUG']
+      window.to_image.save 'debug_'+expected
+      assert_equal [File.binread(File.join(media_path, expected))].pack("m"), [File.binread(output.path)].pack("m"), "Screenshot should match #{expected}!"
+    else
+      assert [File.binread(File.join(media_path, expected))].pack("m") == [File.binread(output.path)].pack("m"), "Screenshot should match #{expected}!"
+    end
+  ensure
+    output && output.close(true)
+ end
 end
 
 module InteractiveTests

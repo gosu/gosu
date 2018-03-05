@@ -772,6 +772,18 @@ module Gosu
     def tick; end
 
     ##
+    # EXPERIMENTAL - MAY DISAPPEAR WITHOUT WARNING.
+    #
+    # Creates a Gosu::Image from the current framebuffer (aka Screenshot) which can then be used for various
+    # things most commonly save it to a file.
+    #
+    # Please provide us with feedback in the forum (https://www.libgosu.org/) or at github (https://github.com/gosu/gosu)
+    # if this works as intended.
+    #
+    # @return [Gosu::Image]
+    def to_image; end
+
+    ##
     # Tells the window to end the current run loop as soon as possible.
     #
     # @return [void]

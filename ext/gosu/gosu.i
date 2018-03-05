@@ -933,6 +933,7 @@ namespace Gosu
 
 // Window
 %ignore Gosu::Window::resize(unsigned, unsigned, bool);
+%ignore Gosu::Window::to_bitmap();
 %rename("width=") set_width;
 %rename("height=") set_height;
 %rename("fullscreen=") set_fullscreen;
@@ -1013,6 +1014,11 @@ namespace Gosu
     void force_close()
     {
         $self->Gosu::Window::close();
+    }
+
+    Gosu::Image to_image()
+    {
+        return Gosu::Image($self->to_bitmap());
     }
 };
 

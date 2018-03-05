@@ -121,6 +121,11 @@ namespace Gosu
         //! \param path The filename of the dropped file. When multiple files are dropped, this
         //! method will be called several times.
         virtual void drop(const std::string& filename) {}
+
+        //! EXPERIMENTAL - MAY DISAPPEAR WITHOUT WARNING.
+        //! Creates a Gosu::Bitmap from the current framebuffer (aka Screenshot)
+        //! can then be used for various things most commonly save it to a file
+        Gosu::Bitmap to_bitmap();
         
         // Ignore when SWIG is wrapping this class for Ruby/Gosu.
         #ifndef SWIG
