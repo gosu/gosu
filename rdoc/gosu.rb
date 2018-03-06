@@ -640,6 +640,12 @@ module Gosu
     ##
     # @return [true, false] whether the song is playing.
     def playing?; end
+
+    ##
+    # Called when the song finished (doesn't get fired on pause/stop)
+    #
+    # @return [void]
+    def finished; end
   end
 
   ##

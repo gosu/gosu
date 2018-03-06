@@ -387,7 +387,9 @@ public:
                 play(true);
             }
             else {
-                // Let the world know we're finished.
+                // Let the world know we're finished by firing an "callback" as requested in https://github.com/gosu/gosu/issues/188
+                // OpenAL does not provide a true callback, so this is as close as we can get.
+                finished();
                 cur_song = nullptr;
             }
         }

@@ -57,6 +57,19 @@ class Gosu::Window
   end
 end
 
+class Gosu::Song
+  alias _initialize initialize
+
+  def initialize(filename, &block)
+    _initialize(filename)
+    @finished_callback = block
+  end
+
+  def finished
+    @finished_callback.call if @finished_callback
+  end
+end
+
 # Release OpenAL resources during Ruby's shutdown, not Gosu's.
 at_exit do
   begin
