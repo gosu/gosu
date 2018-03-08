@@ -30,13 +30,12 @@ namespace Gosu
         
         // Number of vertices used, or: complement index of code block
         int vertices_or_block_index;
-        
+
         void perform(const DrawOp* next) const
         {
             // This should not be called on GL code ops.
-            assert (vertices_or_block_index >= 2);
-            assert (vertices_or_block_index <= 4);
-            
+            assert (vertices_or_block_index == 4);
+
             #ifdef GOSU_IS_OPENGLES
             static const unsigned MAX_AUTOGROUP = 24;
             
@@ -95,15 +94,7 @@ namespace Gosu
                 sprite_counter = 0;
             }
             #else
-            if (vertices_or_block_index == 2) {
-                glBegin(GL_LINES);
-            }
-            else if (vertices_or_block_index == 3) {
-                glBegin(GL_TRIANGLES);
-            }
-            else { // vertices_or_block_index == 4
-                glBegin(GL_QUADS);
-            }
+            glBegin(GL_QUADS);
             
             for (unsigned i = 0; i < vertices_or_block_index; i++) {
                 glColor4ubv(reinterpret_cast<const GLubyte*>(&vertices[i].c));

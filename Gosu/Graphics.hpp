@@ -69,13 +69,10 @@ namespace Gosu
         static void transform(const Transform& transform,
                               const std::function<void ()>& f);
 
-        //! Draws a line from one point to another (last pixel exclusive).
-        //! Note: OpenGL lines are not reliable at all and may have a missing pixel at the start
-        //! or end point. Please only use this for debugging purposes. Otherwise, use a quad or
-        //! image to simulate lines, or contribute a better draw_line to Gosu.
         static void draw_line(double x1, double y1, Color c1,
                               double x2, double y2, Color c2,
-                              ZPos z, AlphaMode mode = AM_DEFAULT);
+                              ZPos z, AlphaMode mode = AM_DEFAULT,
+                              double thickness = 1.0);
 
         static void draw_triangle(double x1, double y1, Color c1,
                                   double x2, double y2, Color c2,

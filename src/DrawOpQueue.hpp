@@ -42,11 +42,6 @@ public:
             return;
         }
 
-    #ifdef GOSU_IS_OPENGLES
-        // No triangles, no lines supported
-        assert (op.vertices_or_block_index == 4);
-    #endif
-
         op.render_state.transform = &transform_stack.current();
         if (const ClipRect* cr = clip_rect_stack.maybe_effective_rect()) {
             op.render_state.clip_rect = *cr;
