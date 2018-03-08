@@ -57,6 +57,14 @@
       <Configuration>Release (Ruby 2.4)</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Release (Ruby 2.5)|Win32">
+      <Configuration>Release (Ruby 2.5)</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release (Ruby 2.5)|x64">
+      <Configuration>Release (Ruby 2.5)</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}</ProjectGuid>
@@ -105,6 +113,11 @@
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
@@ -121,6 +134,11 @@
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v140</PlatformToolset>
@@ -162,6 +180,9 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -172,6 +193,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.8)|Win32'" Label="PropertySheets">
@@ -198,16 +222,19 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|Win32'">..\lib\2.2\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.3)|Win32'">..\lib\2.3\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|Win32'">..\lib\2.4\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|Win32'">..\lib\2.5\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|x64'">..\lib64\2.1\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|x64'">..\lib64\2.2\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.3)|x64'">..\lib64\2.3\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|x64'">..\lib64\2.4\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|x64'">..\lib64\2.5\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.9)|Win32'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.0)|Win32'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|Win32'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|Win32'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.3)|Win32'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|Win32'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|Win32'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.9)|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.9)|x64'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.0)|Win32'">false</LinkIncremental>
@@ -216,10 +243,12 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.3)|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|x64'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|x64'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.3)|x64'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|x64'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.9)|Win32'">false</GenerateManifest>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.9)|x64'">false</GenerateManifest>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.0)|Win32'">false</GenerateManifest>
@@ -228,10 +257,12 @@
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|Win32'">false</GenerateManifest>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.3)|Win32'">false</GenerateManifest>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|Win32'">false</GenerateManifest>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|Win32'">false</GenerateManifest>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|x64'">false</GenerateManifest>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|x64'">false</GenerateManifest>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.3)|x64'">false</GenerateManifest>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|x64'">false</GenerateManifest>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|x64'">false</GenerateManifest>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.9)|Win32'">.so</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.9)|x64'">.so</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.0)|Win32'">.so</TargetExt>
@@ -240,10 +271,12 @@
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|Win32'">.so</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.3)|Win32'">.so</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|Win32'">.so</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|Win32'">.so</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|x64'">.so</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|x64'">.so</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.3)|x64'">.so</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|x64'">.so</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|x64'">.so</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.8)|Win32'">.so</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.8)|x64'">.so</TargetExt>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.9)|Win32'">gosu</TargetName>
@@ -254,10 +287,12 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|Win32'">gosu</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.3)|Win32'">gosu</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|Win32'">gosu</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|Win32'">gosu</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|x64'">gosu</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|x64'">gosu</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.3)|x64'">gosu</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|x64'">gosu</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|x64'">gosu</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.8)|Win32'">gosu</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.8)|x64'">gosu</TargetName>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 1.8)|x64'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
@@ -267,6 +302,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|x64'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.3)|x64'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|x64'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|x64'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.2)|Win32'">
     <IncludePath>..;$(IncludePath)</IncludePath>
@@ -277,6 +313,10 @@
     <LibraryPath>..\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|Win32'">
+    <IncludePath>..;$(IncludePath)</IncludePath>
+    <LibraryPath>..\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|Win32'">
     <IncludePath>..;$(IncludePath)</IncludePath>
     <LibraryPath>..\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -305,6 +345,10 @@
     <LibraryPath>..\lib64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.4)|x64'">
+    <IncludePath>..;$(IncludePath)</IncludePath>
+    <LibraryPath>..\lib64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|x64'">
     <IncludePath>..;$(IncludePath)</IncludePath>
     <LibraryPath>..\lib64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -565,6 +609,31 @@
       <ImportLibrary>$(Configuration)\Unused.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|Win32'">
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <AdditionalIncludeDirectories>..\dependencies\msvcrt-ruby\ruby-2.5.0;..\dependencies\msvcrt-ruby\ruby-2.5.0\i386-mswin32_140;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GOSU_DEPRECATED=;WIN32;NDEBUG;_WINDOWS;_USRDLL;_WSPIAPI_H_;HAVE_VSNPRINTF;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>..\dependencies\msvcrt-ruby\msvcrt-ruby250.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)gosu.so</OutputFile>
+      <DelayLoadDLLs>OpenAL32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>$(Configuration)\Unused.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.1)|x64'">
     <ClCompile>
       <Optimization>Full</Optimization>
@@ -651,6 +720,30 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\dependencies\msvcrt-ruby\x64-msvcrt-ruby240.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)gosu.so</OutputFile>
+      <DelayLoadDLLs>OpenAL32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release (Ruby 2.5)|x64'">
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <AdditionalIncludeDirectories>..\dependencies\msvcrt-ruby\ruby-2.5.0;..\dependencies\msvcrt-ruby\ruby-2.5.0\x64-mswin64_140;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GOSU_DEPRECATED=;WIN32;NDEBUG;_WINDOWS;_USRDLL;_WSPIAPI_H_;HAVE_VSNPRINTF;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>..\dependencies\msvcrt-ruby\x64-msvcrt-ruby250.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)gosu.so</OutputFile>
       <DelayLoadDLLs>OpenAL32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <SubSystem>Windows</SubSystem>
