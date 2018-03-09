@@ -45,7 +45,7 @@ if `uname`.chomp == 'Darwin'
   # Dependencies.
   $CXXFLAGS << " #{`sdl2-config --cflags`.chomp}"
   # Prefer statically linking SDL 2.
-  $LDFLAGS  << " #{`sdl2-config --static-libs`.chomp} -framework OpenGL -framework OpenAL"
+  $LDFLAGS  << " #{`sdl2-config --static-libs`.chomp} -framework OpenGL -framework Metal -framework OpenAL"
   
   # Disable building of 32-bit slices in Apple's Ruby.
   # (RbConfig::CONFIG['CXXFLAGS'] on 10.11: -arch x86_64 -arch i386 -g -Os -pipe)
