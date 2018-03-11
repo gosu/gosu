@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
     ss.frameworks = "AudioToolbox", "OpenAL"
     # Include all frameworks necessary for SDL 2, because we link to it statically.
     ss.osx.frameworks = "ApplicationServices", "AudioUnit", "Carbon", "Cocoa", "CoreAudio",
-                        "ForceFeedback", "IOKit", "OpenGL"
+                        "ForceFeedback", "IOKit", "OpenGL", "Metal"
     # Frameworks used directly by Gosu for iOS.
     ss.ios.frameworks = "AVFoundation", "CoreGraphics", "OpenGLES", "QuartzCore"
     
