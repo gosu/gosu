@@ -13,6 +13,25 @@ class Gosu::Image
       false
     end
   end
+
+  # Checks if two images are similar on a really basic level (check the difference of each channel)
+  def similar?(img, threshold=0.90)
+    return true if self == img
+    return false unless img.is_a?(Gosu::Image)
+    return false if self.width != img.width or self.height != img.height
+
+    blob = img.to_blob
+    differences = []
+
+    self.to_blob.each_byte.with_index do |by,idx|
+      delta = (by - blob.getbyte(idx)).abs
+      differences << (delta / 255.0) if delta > 0
+    end
+
+    # If the average color difference is only subtle even on "large" parts of the image its still ok (e.g. differently rendered color gradients) OR
+    # if the color difference is huge but on only a few pixels its ok too (e.g. a diagonal line may be off a few pixels)
+    (1 - (differences.inject(:+) / differences.size) >= threshold) or (1 - (differences.size / blob.size.to_f) >= threshold)
+  end
 end
 
 module TestHelper
@@ -31,6 +50,19 @@ module TestHelper
 
   def skip_on_ci
     skip if ENV["APPVEYOR"] or ENV["TRAVIS"]
+  end
+
+  def assert_screenshot_matches(window, expected)
+    # TODO: Resolve the mystery around the needed(?) double-tick-second-sleep
+    window.tick
+    window.tick
+    sleep 1
+
+    output = window.screenshot
+    output.save 'debug_' + expected if ENV['DEBUG']
+    reference = Gosu::Image.new(File.join(media_path, expected))
+
+    assert output.similar?(reference, 0.90), "Screenshot should look similar to #{expected}!#{diff([reference.to_blob].pack('m*'), [output.to_blob].pack('m*')) if ENV['DEBUG']}"
   end
 end
 

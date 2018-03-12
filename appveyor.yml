@@ -12,6 +12,7 @@ environment:
   SDL2_INCLUDE: C:\SDL2-2.0.5\include
   SDL2_LIB: C:\SDL2-2.0.5\lib\x86
   SDL2_LIB64: C:\SDL2-2.0.5\lib\x64
+  DEBUG: true
 install:
 - ps: >-
     Start-FileDownload http://libsdl.org/release/SDL2-devel-2.0.5-VC.zip
