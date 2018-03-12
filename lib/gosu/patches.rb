@@ -57,6 +57,31 @@ class Gosu::Window
   end
 end
 
+class Gosu::Image
+  def ==(img)
+    self.to_blob == img.to_blob
+  end
+
+  # Checks if two images are similar on a really basic level (check the difference of each channel)
+  def similar_to?(img, treshold=0.90)
+    return true if self == img
+    return false unless img.is_a?(Gosu::Image)
+    return false if self.width != img.width or self.height != img.height
+
+    blob = img.to_blob
+    differences = []
+
+    self.to_blob.each_byte.with_index do |by,idx|
+      delta = (by - blob.getbyte(idx)).abs
+      differences << (delta / 255.0) if delta > 0
+    end
+
+    # If the average color difference is only subtle even on "large" parts of the image its still ok (e.g. differently rendered color gradients) OR
+    # if the color difference is huge but on only a few pixels its ok too (e.g. a diagonal line may be off a few pixels)
+    (1 - (differences.inject(:+) / differences.size) >= treshold) or (1 - (differences.size / blob.size.to_f) >= treshold)
+  end
+end
+
 # Release OpenAL resources during Ruby's shutdown, not Gosu's.
 at_exit do
   begin

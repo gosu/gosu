@@ -77,13 +77,8 @@ class TestWindow < Minitest::Test
   end
 
   class ScreenshotWindow < Gosu::Window
-    COLOR = {
-      25 => 0xff_ff0000,
-      50 => 0xff_00ff00,
-      500 => 0xff_0000ff
-    }
     def draw
-      Gosu.draw_triangle(0, 0, COLOR[self.width], self.width, 0, COLOR[self.width], self.width, self.height, COLOR[self.width], 0)
+      Gosu.draw_triangle(0, 0, 0xff_ff0000, self.width, 0, 0xff_00ff00, self.width, self.height, 0xff_0000ff, 0)
     end
   end
 

@@ -1,6 +1,5 @@
 gem "minitest"
 require "minitest/autorun"
-require 'tempfile'
 
 require "gosu" unless defined? Gosu
 
@@ -40,18 +39,12 @@ module TestHelper
     window.tick
     sleep 1
 
-    extension = expected.split('.')[-1]
-    output = Tempfile.new([expected, extension])
-    window.to_image.save output.path
-    if ENV['DEBUG']
-      window.to_image.save 'debug_'+expected
-      assert_equal [File.binread(File.join(media_path, expected))].pack("m"), [File.binread(output.path)].pack("m"), "Screenshot should match #{expected}!"
-    else
-      assert [File.binread(File.join(media_path, expected))].pack("m") == [File.binread(output.path)].pack("m"), "Screenshot should match #{expected}!"
-    end
-  ensure
-    output && output.close(true)
- end
+    output = window.to_image
+    output.save 'debug_' + expected if ENV['DEBUG']
+    reference = Gosu::Image.new(File.join(media_path, expected))
+
+    assert output.similar_to?(reference, 0.90), "Screenshot should look similar to #{expected}!#{diff([reference.to_blob].pack('m*'), [output.to_blob].pack('m*')) if ENV['DEBUG']}"
+  end
 end
 
 module InteractiveTests
