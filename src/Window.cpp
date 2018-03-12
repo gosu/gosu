@@ -338,22 +338,22 @@ Gosu::Bitmap Gosu::Window::to_bitmap()
 
     Gosu::Bitmap bitmap(width(), height());
 #ifdef GL_UNSIGNED_INT_8_8_8_8_REV
-    std::vector<std::uint32_t> pixels(width()*height());
-    std::vector<std::uint32_t> flipped_pixels(width()*height());
+    std::vector<std::uint32_t> pixels(width() * height());
+    std::vector<std::uint32_t> flipped_pixels(width() * height());
 
     glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, &pixels[0]);
 
-    for (unsigned row=0; row<height(); row++) {
-        memcpy(&flipped_pixels[row*width()], &pixels[(height()-1-row)*width()], width()*4);
+    for (unsigned row=0; row < height(); row++) {
+        memcpy(&flipped_pixels[row * width()], &pixels[(height() - 1 - row) * width()], width() * 4);
     }
-    memcpy(bitmap.data(), &flipped_pixels[0], width()*height()*4);
+    memcpy(bitmap.data(), &flipped_pixels[0], width() * height() * 4);
 #else
-    std::vector<GLubyte> channels(width()*height()*4);
+    std::vector<GLubyte> channels(width() * height() * 4);
     glReadPixels(0, 0, width(), height(), GL_RGBA, GL_UNSIGNED_BYTE, &channels[0]);
-    for (unsigned row=0; row<height(); row++) {
-      for (unsigned col=0; col<width(); col++) {
+    for (unsigned row=0; row < height(); row++) {
+      for (unsigned col=0; col < width(); col++) {
         unsigned i = (row * width() + col) * 4;
-        bitmap.set_pixel(col, height()-row-1, Color(channels[3+i], channels[0+i], channels[1+i], channels[2+i]));
+        bitmap.set_pixel(col, height() - row - 1, Color(channels[3 + i], channels[0 + i], channels[1 + i], channels[2 + i]));
       }
     }
 #endif

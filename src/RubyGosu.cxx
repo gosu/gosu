@@ -3126,7 +3126,7 @@ SWIGINTERN void Gosu_Window_set_mouse_y(Gosu::Window *self,double y){
 SWIGINTERN void Gosu_Window_force_close(Gosu::Window *self){
         self->Gosu::Window::close();
     }
-SWIGINTERN Gosu::Image Gosu_Window_to_image(Gosu::Window *self){
+SWIGINTERN Gosu::Image Gosu_Window_screenshot(Gosu::Window *self){
         return Gosu::Image(self->to_bitmap());
     }
 
@@ -10059,7 +10059,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Window_to_image(int argc, VALUE *argv, VALUE self) {
+_wrap_Window_screenshot(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -10071,12 +10071,12 @@ _wrap_Window_to_image(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","to_image", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","screenshot", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
     try {
-      result = Gosu_Window_to_image(arg1);
+      result = Gosu_Window_screenshot(arg1);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -12130,7 +12130,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "mouse_x=", VALUEFUNC(_wrap_Window_mouse_xe___), -1);
   rb_define_method(SwigClassWindow.klass, "mouse_y=", VALUEFUNC(_wrap_Window_mouse_ye___), -1);
   rb_define_method(SwigClassWindow.klass, "close!", VALUEFUNC(_wrap_Window_closeN___), -1);
-  rb_define_method(SwigClassWindow.klass, "to_image", VALUEFUNC(_wrap_Window_to_image), -1);
+  rb_define_method(SwigClassWindow.klass, "screenshot", VALUEFUNC(_wrap_Window_screenshot), -1);
   SwigClassWindow.mark = (void (*)(void *)) mark_window;
   SwigClassWindow.destroy = (void (*)(void *)) free_Gosu_Window;
   SwigClassWindow.trackObjects = 1;

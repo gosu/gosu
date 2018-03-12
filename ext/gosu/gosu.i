@@ -1016,7 +1016,7 @@ namespace Gosu
         $self->Gosu::Window::close();
     }
 
-    Gosu::Image to_image()
+    Gosu::Image screenshot()
     {
         return Gosu::Image($self->to_bitmap());
     }
