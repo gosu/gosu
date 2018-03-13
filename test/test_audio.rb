@@ -114,4 +114,26 @@ class TestAudio < Minitest::Test
     
     assert_nil Gosu::Song.current_song
   end
+
+  def test_song_finished_callback
+    skip_on_appveyor
+
+    win = SongTestWindow.new
+    assert_nil Gosu::Song.current_song
+
+    song1 = Gosu::Song.new(media_path("0614.ogg"))
+    song2 = Gosu::Song.new(media_path("0830.ogg"))
+
+    song1.play(false) { song2.play }
+    assert_equal song1, Gosu::Song.current_song
+
+    assert song1.playing?
+    refute song2.playing?
+
+    (20 * 1000/win.update_interval).ceil.times{ win.tick }
+
+    refute song1.playing?
+    assert song2.playing?
+    assert_equal song2, Gosu::Song.current_song
+  end
 end

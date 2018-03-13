@@ -133,6 +133,9 @@ namespace Gosu
         //! volume).
         void set_volume(double volume);
         
+        //! Called when the song finished (doesn't get fired on pause/stop)
+        virtual void finished() {}
+
         //! Called every tick by Window for management purposes.
         static void update();
     };
