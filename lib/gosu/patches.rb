@@ -57,6 +57,17 @@ class Gosu::Window
   end
 end
 
+class Gosu::Sound
+  alias play_with_args play
+  def play(*args)
+    if args.first.is_a?(Hash)
+      play_with_args args.first[:volume] || 1.0, args.first[:speed] || 1.0, args.first[:looping] || false, args.first[:pan] || 0
+    else
+      play_with_args *args
+    end
+  end
+end
+
 # Release OpenAL resources during Ruby's shutdown, not Gosu's.
 at_exit do
   begin
