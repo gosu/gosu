@@ -24,4 +24,21 @@ class TestMacros < Minitest::Test
     end
     assert_screenshot_matches window, 'circled-lines.png'
   end
+
+  def test_rect_from_lines
+    window = RenderWindow.draw(200, 100) do
+      c = 0x80_ff0000
+      Gosu.draw_line(10, 10, c, 90, 10, c)
+      Gosu.draw_line(90, 10, c, 90, 90, c)
+      Gosu.draw_line(90, 90, c, 10, 90, c)
+      Gosu.draw_line(10, 90, c, 10, 10, c)
+
+      c = 0x80_00ff00
+      Gosu.draw_line(110, 10, c, 190, 10, c, 0, :default, 10)
+      Gosu.draw_line(190, 10, c, 190, 90, c, 0, :default, 10)
+      Gosu.draw_line(190, 90, c, 110, 90, c, 0, :default, 10)
+      Gosu.draw_line(110, 90, c, 110, 10, c, 0, :default, 10)
+    end
+    assert_screenshot_matches window, 'rectangle-lines.png'
+  end
 end
