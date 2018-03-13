@@ -297,7 +297,6 @@ void Gosu::Graphics::draw_line(double x1, double y1, Color c1,
 
     DrawOp op;
     op.render_state.mode = mode;
-    op.vertices_or_block_index = 4;
 
     double an = angle(x1, y1, x2, y2) - 90.0;
     double dx = offset_x(an, thickness/2);
@@ -318,7 +317,6 @@ void Gosu::Graphics::draw_triangle(double x1, double y1, Color c1, double x2, do
 {
     DrawOp op;
     op.render_state.mode = mode;
-    op.vertices_or_block_index = 4;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
     op.vertices[2] = DrawOp::Vertex(x3, y3, c3);
@@ -335,7 +333,6 @@ void Gosu::Graphics::draw_quad(double x1, double y1, Color c1, double x2, double
 
     DrawOp op;
     op.render_state.mode = mode;
-    op.vertices_or_block_index = 4;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
 // TODO: Should be harmonized

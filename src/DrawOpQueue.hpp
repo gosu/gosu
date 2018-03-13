@@ -56,11 +56,10 @@ public:
             return;
         }
 
-        int complement_of_block_index = ~(int)gl_blocks.size();
         gl_blocks.push_back(gl_block);
 
         DrawOp op;
-        op.vertices_or_block_index = complement_of_block_index;
+        op.block_index = (int)gl_blocks.size() - 1;
         op.render_state.transform = &transform_stack.current();
         if (const ClipRect* cr = clip_rect_stack.maybe_effective_rect()) {
             op.render_state.clip_rect = *cr;
@@ -140,15 +139,14 @@ public:
     #else
         for (const auto& op : ops) {
             manager.set_render_state(op.render_state);
-            if (op.vertices_or_block_index >= 0) {
+            if (op.block_index == -1) {
                 op.perform(0);
             }
             else {
                 // GL code
-                int block_index = ~op.vertices_or_block_index;
-                assert (block_index >= 0);
-                assert (block_index < gl_blocks.size());
-                gl_blocks[block_index]();
+                assert (op.block_index >= 0);
+                assert (op.block_index < gl_blocks.size());
+                gl_blocks[op.block_index]();
                 manager.enforce_after_untrusted_gL();
             }
         }
