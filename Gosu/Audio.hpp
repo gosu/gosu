@@ -11,10 +11,15 @@
 
 namespace Gosu
 {
-    //! Sample::play returns a Channel that represents the sound currently being played.
+    //! Sound::play returns a Channel that represents the sound currently being played.
     //! This object can be used to stop sounds dynamically, or to check whether they have finished.
     class Channel
     {
+        class BaseData;
+        class ModuleData;
+        class StreamData;
+        std::unique_ptr<BaseData> data;
+
         mutable int channel, token;
 
     public:
@@ -33,33 +38,38 @@ namespace Gosu
         //! Calling this twice, or too late, does not do any harm.
         void stop();
 
+        //! Returns the current volume of the song.
+        double volume() const;
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full volume).
         void set_volume(double volume);
+
         //! \param pan Can be anything from -1.0 (left) to 1.0 (right).
         void set_pan(double pan);
         //! \param speed Use 1.0 for normal playback speed.
         void set_speed(double speed);
     };
-    
-    //! A sample is a short sound that is completely loaded in memory, can be
-    //! played multiple times at once and offers very flexible playback
-    //! parameters. Use samples for everything that's not music.
-    class Sample
-    {
-        struct SampleData;
-        std::shared_ptr<SampleData> data;
 
+
+    //! A sound handles all your audio needs from short samples (e.g. explosions) to long songs (e.g. background music)
+    //!
+    //! Use streaming = false for everything that's not music. (Maybe add a more detailed explanation why this is better,
+    //! because some the disadvantages of song might dissappear with the merge?)
+    class Sound
+    {
+        struct SoundData;
+        std::shared_ptr<SoundData> data;
+        std::vector<Channel> current_songs;
     public:
         //! Constructs an empty sample that acts as if the song had a length of 0.
-        Sample();
+        Sound();
         
         //! Constructs a sample that can be played on the specified audio
         //! system and loads the sample from a file.
-        explicit Sample(const std::string& filename);
+        explicit Sound(const std::string& filename, bool streaming = false);
         
         //! Constructs a sample that can be played on the specified audio
         //! system and loads the sample data from a stream.
-        explicit Sample(Reader reader);
+        explicit Sound(Reader reader, bool streaming = false);
         
         //! Plays the sample without panning.
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
@@ -80,59 +90,7 @@ namespace Gosu
         //! or low values. Use 1.0 for normal playback speed.
         Channel play_pan(double pan, double volume = 1, double speed = 1,
             bool looping = false) const;
-    };
 
-    //! Songs are less flexible than samples. Only Song can be played at any given time,
-    //! and there is no way to control its pan (stereo position) or speed.
-    class Song
-    {
-        class BaseData;
-        class ModuleData;
-        class StreamData;
-        std::unique_ptr<BaseData> data;
-        
-        // Non-movable to avoid dangling internal references.
-        Song(Song&&) = delete;
-        // Non-movable to avoid dangling internal references.
-        Song& operator=(Song&&) = delete;
-
-    public:
-        //! Constructs a song that can be played on the provided audio system
-        //! and loads the song from a file. The type is determined from the
-        //! filename.
-        explicit Song(const std::string& filename);
-        
-        //! Constructs a song of the specified type that can be played on the
-        //! provided audio system and loads the song data from a stream.
-        explicit Song(Reader reader);
-        
-        ~Song();
-        
-        //! Returns the song currently being played or paused, or 0 if
-        //! no song has been played yet or the last song has finished
-        //! playing.
-        static Song* current_song();
-        
-        //! Starts or resumes playback of the song. This will stop all other
-        //! songs and set the current song to this object.
-        void play(bool looping = false);
-        //! Pauses playback of the song. It is not considered being played.
-        //! current_song will stay the same.
-        void pause();
-        //! Returns true if the song is the current song, but in paused
-        //! mode.
-        bool paused() const;
-        //! Stops playback of this song if it is currently played or paused.
-        //! Afterwards, current_song will return nullptr.
-        void stop();
-        //! Returns true if the song is currently playing.
-        bool playing() const;
-        //! Returns the current volume of the song.
-        double volume() const;
-        //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
-        //! volume).
-        void set_volume(double volume);
-        
         //! Called every tick by Window for management purposes.
         static void update();
     };
