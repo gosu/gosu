@@ -103,24 +103,26 @@ class Gosu::Image
   end
 end
 
-# No need to pass a Window to Sample.
-class Gosu::Sample
-  alias initialize_without_window initialize
-
+# No need to pass a Window to Sample and even better don't use Sample at all.
+class Gosu::Sample < Gosu::Sound
   def initialize(*args)
+    Gosu.deprecation_message("Gosu::Sample has been deprecated in Gosu 0.15; use Sound with streaming = false instead, see https://www.libgosu.org/rdoc/Gosu/Sound.html.")
+
     if args.first.is_a? Gosu::Window
       args.shift
       Gosu.deprecation_message("Passing a Window to Sample#initialize has been deprecated in Gosu 0.7.17.")
     end
-    initialize_without_window(*args)
+    super(*args, strea)
   end
 end
 
-# No need to pass a Window to Song.
+# No need to pass a Window to Song and even better don't use Song at all.
 class Gosu::Song
   alias initialize_without_window initialize
 
   def initialize(*args)
+    Gosu.deprecation_message("Gosu::Song has been deprecated in Gosu 0.15; use Sound with streaming = false instead, see https://www.libgosu.org/rdoc/Gosu/Sound.html.")
+
     if args.first.is_a? Gosu::Window
       args.shift
       Gosu.deprecation_message("Passing a Window to Song#initialize has been deprecated in Gosu 0.7.17.")
@@ -165,7 +167,6 @@ module Gosu
   module Button; end
   
   # Channel was called SampleInstance before Gosu 0.13.0.
-  SampleInstance = Channel
   deprecate_const :SampleInstance, :Channel
 
   # Support for KbLeft instead of KB_LEFT and Gp3Button2 instead of GP_3_BUTTON_2.
