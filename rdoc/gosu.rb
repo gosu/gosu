@@ -491,7 +491,7 @@ module Gosu
   # parameters. Use samples for everything that's not music.
   #
   # @see Gosu::Song
-  class Sample
+  class Sound
     ##
     # Loads a sample from a file.
     #
@@ -501,21 +501,11 @@ module Gosu
     # @overload initialize(window, filename)
     #
     # @param filename [String] the path to load the sample from.
-    def initialize(filename); end
+    # @param streaming [bool] Use streaming false for everything that is not music
+    def initialize(filename, streaming: false); end
 
     ##
-    # Plays the sample without panning.
-    #
-    # @return [Channel]
-    # @param volume [Float] see {Channel#volume=}
-    # @param speed [Float] see {Channel#speed=}
-    # @param looping [true, false] whether the sample should play in a loop. If you pass true, be sure to store the return value of this method so that you can later stop the looping sound.
-    #
-    # @see #play_pan
-    def play(volume=1, speed=1, looping=false); end
-
-    ##
-    # Plays the sample with panning.
+    # Plays the sample
     #
     # @return [Channel]
     # @param pan [Float] see {Channel#pan=}
@@ -523,8 +513,18 @@ module Gosu
     # @param speed [Float] see {Channel#speed=}
     # @param looping [true, false] whether the sample should play in a loop. If you pass true, be sure to store the return value of this method so that you can later stop the looping sound.
     #
-    # @see #play
-    def play_pan(pan=0, volume=1, speed=1, looping=false); end
+    # @return [void]
+    def play(volume: 1, speed: 1, looping: false, pan: 0); end
+
+
+    ##
+    # Performs a single step in the sound loop.
+    # This can be useful for using Gosu as Audioplayer without the need for a window.
+    #
+    # See: https://www.libgosu.org/cgi-bin/mwf/topic_show.pl?tid=1218
+    #
+    # @return [void]
+    def update; end
   end
 
   ##
@@ -578,67 +578,6 @@ module Gosu
 
     ##
     # @return [true, false] whether the sample is playing.
-    def playing?; end
-  end
-
-  ##
-  # Songs are less flexible than samples in that only one can be played at a time, with no panning or speed control.
-  #
-  # @see Gosu::Sample
-  class Song
-    class <<Song
-      ##
-      # Returns the song currently being played (even if it's paused), or nil if no song is playing.
-      #
-      # @return [Gosu::Song?] the currently playing song.
-      attr_reader :current_song
-    end
-
-    ##
-    # @return [Float] the song's playback volume.
-    attr_accessor :volume
-
-    ##
-    # Loads a song from a file.
-    #
-    # (Passing a Window reference is not necessary anymore, please use the first overload instead.)
-    #
-    # @overload initialize(filename)
-    # @overload initialize(window, filename)
-    #
-    # @param filename [String] the path to load the song from.
-    def initialize(filename); end
-
-    ##
-    # Starts or resumes playback of the song.
-    #
-    # If another song is currently playing, it will be stopped and this song will be set as the current song.
-    #
-    # If `looping` is false, the current song will be set to `nil` when this song finishes.
-    #
-    # @return [void]
-    # @param looping [true, false] whether the song should play in a loop.
-    def play(looping=false); end
-
-    ##
-    # Pauses playback of the song. The current song is unchanged.
-    #
-    # @return [void]
-    def pause; end
-
-    # Returns true if this song is the current song and playback is paused.
-    #
-    # @return [true, false] whether the song is paused.
-    def paused?; end
-
-    ##
-    # Stops playback if this song is the current song. The current song is set to `nil`.
-    #
-    # @return [void]
-    def stop; end
-
-    ##
-    # @return [true, false] whether the song is playing.
     def playing?; end
   end
 

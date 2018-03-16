@@ -103,8 +103,8 @@ class Gosu::Image
   end
 end
 
-# No need to pass a Window to Sample.
-class Gosu::Sample
+# No need to pass a Window to Sample and even better don't use Sample at all.
+class Gosu::Sound
   alias initialize_without_window initialize
 
   def initialize(*args)
@@ -114,18 +114,64 @@ class Gosu::Sample
     end
     initialize_without_window(*args)
   end
+
+  def play_pan(pan, *args)
+    Gosu.deprecation_message("Sound.play_pan has been deprecated in Gosu 0.15; use Sound.play with pan-Option instead, see https://www.libgosu.org/rdoc/Gosu/Sound.html")
+
+    opts = { pan: pan }
+    opts[:volume] = args.shift unless args.empty?
+    opts[:speed] = args.shift unless args.empty?
+    opts[:looping] = args.shift unless args.empty?
+    play(opts)
+  end
 end
 
-# No need to pass a Window to Song.
-class Gosu::Song
+# No need to pass a Window to Song and even better don't use Song at all.
+class Gosu::Song < Gosu::Sound
   alias initialize_without_window initialize
 
   def initialize(*args)
+    Gosu.deprecation_message("Gosu::Song has been deprecated in Gosu 0.15; use Sound with streaming = true instead, see https://www.libgosu.org/rdoc/Gosu/Sound.html.")
+
     if args.first.is_a? Gosu::Window
       args.shift
       Gosu.deprecation_message("Passing a Window to Song#initialize has been deprecated in Gosu 0.7.17.")
     end
-    initialize_without_window(*args)
+
+    @channel = nil
+    new(*args, streaming: true)
+  end
+
+  def self.current_song
+    # TODO: Not sure what to put here. Maybe something like @channel.finished? ? self : nil
+  end
+
+  def play(looping=true)
+    @channel = super(looping: true)
+  end
+
+  def volume
+    @channel.volume
+  end
+
+  def volume=(val)
+    @channel.volume=val
+  end
+
+  def pause
+    @channel.pause
+  end
+
+  def paused?
+    @channel.paused?
+  end
+
+  def stop
+    @channel.stop
+  end
+
+  def playing?
+    @channel.playing?
   end
 end
 
@@ -165,8 +211,8 @@ module Gosu
   module Button; end
   
   # Channel was called SampleInstance before Gosu 0.13.0.
-  SampleInstance = Channel
   deprecate_const :SampleInstance, :Channel
+  deprecate_const :Sample, :Sound
 
   # Support for KbLeft instead of KB_LEFT and Gp3Button2 instead of GP_3_BUTTON_2.
   Gosu.constants.grep(/^KB_|MS_|GP_/).each do |new_name|
