@@ -185,7 +185,6 @@
     <ClCompile Include="..\src\FileWin.cpp" />
     <ClCompile Include="..\src\Font.cpp" />
     <ClCompile Include="..\src\FormattedString.cpp" />
-    <ClCompile Include="..\src\GosuAppDelegate.cpp" />
     <ClCompile Include="..\src\GosuGLView.cpp" />
     <ClCompile Include="..\src\GosuViewController.cpp" />
     <ClCompile Include="..\src\Graphics.cpp" />

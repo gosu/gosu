@@ -51,9 +51,6 @@
     <ClCompile Include="..\src\FormattedString.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GosuAppDelegate.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\GosuGLView.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
