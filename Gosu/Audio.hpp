@@ -11,13 +11,17 @@
 
 namespace Gosu
 {
-    //! Sample::play returns a Channel that represents the sound currently being played.
-    //! This object can be used to stop sounds dynamically, or to check whether they have finished.
+    //! Sample::play returns a Channel that represents the sound being played.
+    //! This object can be used to stop sounds dynamically, or to check whether playback has
+    //! finished.
     class Channel
     {
         mutable int channel, token;
 
     public:
+        //! This creates an "empty" Channel which is never playing, and cannot be resumed.
+        Channel();
+        
         //! For internal use only.
         Channel(int channel, int token);
         

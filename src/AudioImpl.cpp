@@ -82,7 +82,7 @@ bool Gosu::channel_expired(int channel, int token)
 
 ALuint Gosu::al_source_for_channel(int channel)
 {
-    if (channel <= 0 || channel >= CHANNELS) {
+    if (channel < 0 || channel >= CHANNELS) {
         throw invalid_argument("No such channel: " + to_string(channel));
     }
     return _sources[channel];

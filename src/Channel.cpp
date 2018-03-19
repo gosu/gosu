@@ -3,13 +3,19 @@
 using namespace std;
 
 // Returns the current state of a source
-static ALint state(int& channel) {
+static ALint state(int& channel)
+{
     ALint state;
     alGetSourcei(Gosu::al_source_for_channel(channel), AL_SOURCE_STATE, &state);
     if (state != AL_PLAYING && state != AL_PAUSED) {
         channel = Gosu::NO_CHANNEL;
     }
     return state;
+}
+
+Gosu::Channel::Channel()
+: channel(NO_CHANNEL), token(0)
+{
 }
 
 Gosu::Channel::Channel(int channel, int token)
