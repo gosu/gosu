@@ -1,15 +1,21 @@
 #include <Gosu/Platform.hpp>
 #if defined(GOSU_IS_IPHONE)
 
-#import "GosuAppDelegate.h"
+#import <UIKit/UIKit.h>
 #import <Gosu/Gosu.hpp>
 
+// You will have to implement this method in C++.
 Gosu::Window& window_instance();
+
+
+@interface GosuAppDelegate : UIResponder <UIApplicationDelegate>
+@property (nonatomic, strong) UIWindow *window;
+@end
+
 
 @implementation GosuAppDelegate
 
-- (BOOL)application:(UIApplication*)application
-    didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
+- (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
     self.window = (__bridge UIWindow*) window_instance().UIWindow();
     [self.window makeKeyAndVisible];
