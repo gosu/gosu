@@ -19,22 +19,23 @@ namespace Gosu
         mutable int channel, token;
 
     public:
-        //! This creates an "empty" Channel which is never playing, and cannot be resumed.
+        //! This creates an "empty" Channel which is expired and cannot be resumed.
         Channel();
-        
         //! For internal use only.
         Channel(int channel, int token);
         
+        //! For internal use only.
         int current_channel() const;
         
         bool playing() const;
         bool paused() const;
         //! Pauses this instance to be resumed afterwards.
-        //! It will still occupy an audio channel while paused.
+        //! Avoid leaving samples paused for too long, as they will still occupy one of Gosu's
+        //! limited channels.
         void pause();
         void resume();
-        //! Stops this instance of a sound being played.
-        //! Calling this twice, or too late, does not do any harm.
+        //! Stops this channel if the sample is still being played.
+        //! If this method is called when playback has finished, it has no effect.
         void stop();
 
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full volume).
@@ -54,7 +55,7 @@ namespace Gosu
         std::shared_ptr<SampleData> data;
 
     public:
-        //! Constructs an empty sample that acts as if the song had a length of 0.
+        //! Constructs an empty sample that is inaudible when played.
         Sample();
         
         //! Constructs a sample that can be played on the specified audio
@@ -86,7 +87,7 @@ namespace Gosu
             bool looping = false) const;
     };
 
-    //! Songs are less flexible than samples. Only Song can be played at any given time,
+    //! Songs are less flexible than samples. Only one Song can be played at any given time,
     //! and there is no way to control its pan (stereo position) or speed.
     class Song
     {
@@ -102,8 +103,8 @@ namespace Gosu
 
     public:
         //! Constructs a song that can be played on the provided audio system
-        //! and loads the song from a file. The type is determined from the
-        //! filename.
+        //! and loads the song from a file.
+        //! The file type is determined by the filename.
         explicit Song(const std::string& filename);
         
         //! Constructs a song of the specified type that can be played on the
@@ -133,8 +134,7 @@ namespace Gosu
         bool playing() const;
         //! Returns the current volume of the song.
         double volume() const;
-        //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
-        //! volume).
+        //! \param volume Can be anything from 0.0 (silence) to 1.0 (full volume).
         void set_volume(double volume);
         
         //! Called every tick by Window for management purposes.

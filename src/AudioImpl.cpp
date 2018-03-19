@@ -72,7 +72,7 @@ Gosu::Channel Gosu::allocate_channel()
     }
 
     // No free channel, return an object that is immediately expired.
-    return Channel(NO_CHANNEL, 0);
+    return Channel();
 }
 
 bool Gosu::channel_expired(int channel, int token)

@@ -114,7 +114,7 @@ Gosu::Channel Gosu::Sample::play(double volume, double speed, bool looping) cons
 
 Gosu::Channel Gosu::Sample::play_pan(double pan, double volume, double speed, bool looping) const
 {
-    if (!data) return Channel(NO_CHANNEL, 0);
+    if (!data) return Channel();
 
     Channel channel = allocate_channel();
     
@@ -169,7 +169,7 @@ class Gosu::Song::ModuleData : public BaseData
 {
     AVAudioPlayer* player;
     
-    void apply_volume()
+    void apply_volume() override
     {
         player.volume = volume();
     }
