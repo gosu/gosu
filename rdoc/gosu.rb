@@ -401,29 +401,29 @@ module Gosu
     # @param x [Float] the X coordinate.
     # @param y [Float] the Y coordinate.
     # @param z [Float] the Z-order.
-    # @param scale_x [Float] the horizontal scaling factor.
-    # @param scale_y [Float] the vertical scaling factor.
-    # @param color [Gosu::Color, Integer]
-    # @param mode [:default, :additive] the blending mode to use.
+    # @param [Hash] options
+    # @option options [Float] :angle rotates the image clockwise (in degrees)
+    # @option options [Float] :center_x (0.5) the relative horizontal rotation origin. (only used when angle is set)
+    # @option options [Float] :center_y (0.5) the relative vertical rotation origin. (only used when angle is set)
+    # @option options [Float] :scale_x (1.0) the horizontal scaling factor.
+    # @option options [Float] :scale_y (1.0) the vertical scaling factor.
+    # @option options [Gosu::Color, Integer] :color (0xff_ffffff)
+    # @option options [:default, :additive, :multiply, :replace] :mode (:default) the blending mode to use.
     #
-    # @see #draw_rot
+    # @overload def draw(x, y, z, options={}); end
+    # @overload def draw(x, y, z, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
+    #
     # @see #draw_as_quad
     # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
     # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
-    def draw(x, y, z, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
+    def draw(x, y, z, options={}); end
 
     ##
     # Draws the image rotated, with its rotational center at (x, y).
     #
-    # @return [void]
-    # @param angle [Float]
-    # @param center_x [Float] the relative horizontal rotation origin.
-    # @param center_y [Float] the relative vertical rotation origin.
-    # @param (see #draw)
+    # @deprecated Use Image#draw with options (:angle, :center_x, :center_y) instead
     #
     # @see #draw
-    # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
-    # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
     def draw_rot(x, y, z, angle, center_x=0.5, center_y=0.5, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
 
     ##
@@ -534,19 +534,16 @@ module Gosu
   class Channel
     ##
     # Sets the playback volume, in the range [0.0; 1.0], where 0 is completely silent and 1 is full volume. Values outside of this range will be clamped to [0.0; 1.0].
-    # @param [Float]
     # @return [Float]
     attr_writer :volume
     
     ##
     # Sets the playback speed. A value of 2.0 will play the sample at 200% speed and one octave higher. A value of 0.5 will play the sample at 50% speed and one octave lower. The valid range of this property depends on the operating system, but values up to 8.0 should work.
-    # @param [Float]    
     # @return [Float]
     attr_writer :speed
     
     ##
     # Set the amount of panning, i.e. the position of the sound when using stereo speakers. 0.0 is the centre, negative values are to the left, positive values are to the right. If something happens on the edge of the screen, a good value for pan would be ±0.1.
-    # @param [Float] 
     # @return [Float]
     attr_writer :pan
 
@@ -1038,7 +1035,7 @@ module Gosu
     #
     # @note Because the returned object is not a true image---it's implemented using vertex buffers and is not backed by a texture---there are restrictions on how it can be used.
     #
-    # @note The width and height of the returned object will be the same values you passed to {record}, regardless of the area you draw on. It is important to pass accurate values if you plan on using {Gosu::Image#draw_as_quad} or {Gosu::Image#draw_rot} with the result later.
+    # @note The width and height of the returned object will be the same values you passed to {record}, regardless of the area you draw on. It is important to pass accurate values if you plan on using {Gosu::Image#draw_as_quad} or {Gosu::Image#draw} with an angle set with the result later.
     #
     # @return [Gosu::Image] the recorded drawing operations.
     # @param width [Float] the width of the recorded image.

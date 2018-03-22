@@ -101,6 +101,74 @@ class Gosu::Image
       from_text_without_window(*args)
     end
   end
+
+  alias _draw_rot draw_rot
+  def draw_rot(*args)
+    Gosu.deprecation_message("Image#draw_rot is deprecated in Gosu 14.0, use draw with an options hash instead, see https://www.libgosu.org/rdoc/Gosu/Image.html.")
+    _draw_rot(*args)
+  end
+
+  alias _draw draw
+  DRAW_ALIGNMENTS = {
+    :upper_left => [0, 0],
+    :up => [0.5, 0],
+    :upper_right => [1, 0],
+    :left => [0, 0.5],
+    :middle => [0.5, 0.5],
+    :right => [1, 0.5],
+    :bottom_left => [0, 1],
+    :bottom => [0.5, 1],
+    :bottom_right => [1, 1],
+  }
+  def draw(x, y, z, *args)
+    if args.last.is_a?(Hash)
+      opts = args.pop
+      scale_x  = args[0] || opts.delete(:scale_x) || opts.fetch(:scale, 1)
+      scale_y  = args[1] || opts.delete(:scale_y) || opts.fetch(:scale, 1)
+      opts.delete(:scale)
+
+      color    = args[2] || opts.delete(:color) || 0xff_ffffff
+      mode     = args[3] || opts.delete(:mode) || :default
+      center_x = opts.delete(:center_x)
+      center_y = opts.delete(:center_y)
+
+      # Shortcut with symbols
+      center = opts.delete(:center)
+      if center
+        center_x, center_y = if center.is_a?(Symbol)
+          if DRAW_ALIGNMENTS.has_key?(center)
+            DRAW_ALIGNMENTS[center]
+          else
+            raise ArgumentError, "Unknown drawing alignment: #{center} should be a float or one of: #{DRAW_ALIGNMENTS.keys.join(', ')}"
+          end
+        else
+          [center, center]
+        end
+      end
+
+      # Make draw_rot obsolete as the params are basically the same besides the rotation-specific values
+      angle = opts.delete(:angle)
+
+      raise ArgumentError, "Unknown options: #{opts.keys} should be either of [angle, center, center_x, center_y, color, mode, scale, scale_x, scale_y]" unless opts.empty?
+      if angle or center_x or center_y
+        if angle
+          center_x ||= 0.5
+          center_y ||= 0.5
+        else
+          center_x ||= 0.0
+          center_y ||= 0.0
+        end
+        angle ||= 0.0
+
+        _draw_rot(x, y, z, angle, center_x, center_y, scale_x, scale_y, color, mode)
+      else
+        _draw(x, y, z, scale_x, scale_y, color, mode)
+      end
+    else
+      Gosu.deprecation_message("Image#draw uses an options hash in Gosu 14.0, see https://www.libgosu.org/rdoc/Gosu/Image.html.") unless args.empty?
+      _draw(x, y, z,*args)
+    end
+  end
 end
 
 # No need to pass a Window to Sample.
