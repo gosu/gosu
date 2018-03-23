@@ -658,6 +658,31 @@ namespace Gosu
         std::unique_ptr<Gosu::ImageData> image_data = $self->data().subimage(x, y, w, h);
         return image_data.get() ? new Gosu::Image(std::move(image_data)) : nullptr;
     }
+
+    static Gosu::Image from_blob(const std::string& blob, int width, int height)
+    {
+        Gosu::Bitmap bitmap(width, height, Gosu::Color::NONE);
+
+        std::size_t size = width * height * 4;
+        if (blob.size() == size) {
+            // 32 bit per pixel, assume R8G8B8A8
+            std::memcpy(bitmap.data(), &blob[0], size);
+        }
+        else if (blob.size() == size * sizeof(float)) {
+            // 128 bit per channel, assume float/float/float/float
+            const float* in = reinterpret_cast<const float*>(&blob);
+            Gosu::Color::Channel* out = reinterpret_cast<Gosu::Color::Channel*>(bitmap.data());
+            for (int i = size; i > 0; --i) {
+                *(out++) = static_cast<Gosu::Color::Channel>(*(in++) * 255);
+            }
+        }
+        else {
+            rb_raise(rb_eArgError, "Blob length mismatch (%i) - must be 4 * width * height (as 32bit "
+                                   "R8G8B8A8 or 128bit float/float/float/float", blob.size());
+        }
+
+        return Gosu::Image(bitmap);
+    }
     
     %newobject from_text;
     static Gosu::Image* from_text(const std::string& text, int font_height, VALUE options = 0)

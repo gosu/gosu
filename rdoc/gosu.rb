@@ -390,6 +390,18 @@ module Gosu
     # @return [Image?] an image that represents a portion of the containing image
     def subimage(left, top, width, height); end
 
+    ##
+    # Returns an image from a binary string of packed RGBA values. (e.g. from (Image#to_blob))
+    #
+    # @param blob [String] a binary string with 1 byte per channel and pixel (RGBA) (width * height * 4) or 4 byte per channel (float values)
+    # @param width [Integer] the width of the resulting image
+    # @param height [Integer] the height of the resulting image
+    #
+    # @return [Gosu::Image]
+    #
+    # @see Image#to_blob
+    def self.from_blob(blob, width, height); end
+
     # @!endgroup
 
     # @!group Drawing an image
@@ -402,9 +414,12 @@ module Gosu
     # @param y [Float] the Y coordinate.
     # @param z [Float] the Z-order.
     # @param [Hash] options
+    #
     # @option options [Float] :angle rotates the image clockwise (in degrees)
-    # @option options [Float] :center_x (0.5) the relative horizontal rotation origin. (only used when angle is set)
-    # @option options [Float] :center_y (0.5) the relative vertical rotation origin. (only used when angle is set)
+    # @option options [Float, Symbol] :center shorthand for settings center_x and center_y to the same value (Float) or use either of: [:upper_left, :up, :upper_right, :left, :middle, :right, :bottom_left, :bottom, :bottom_right]
+    # @option options [Float] :center_x (0.5) the relative horizontal origin
+    # @option options [Float] :center_y (0.5) the relative vertical origin.
+    # @option options [Float] :scale shorthand for settings scale_x and scale_y to the same value
     # @option options [Float] :scale_x (1.0) the horizontal scaling factor.
     # @option options [Float] :scale_y (1.0) the vertical scaling factor.
     # @option options [Gosu::Color, Integer] :color (0xff_ffffff)

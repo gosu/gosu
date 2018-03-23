@@ -40,10 +40,10 @@ module TestHelper
     include TestHelper
 
     def self.draw(w, h)
-      win = new(w,h)
+      win = new(w, h)
       win.caption = "Screenshotwindow"
       win.define_singleton_method :draw do
-        yield(w,h)
+        yield(w, h)
       end
       win
     end
@@ -63,10 +63,10 @@ module TestHelper
   end
 
   def skip_on_ci
-    skip if runs_on_ci?
+    skip if ci?
   end
 
-  def runs_on_ci?
+  def ci?
     ENV["APPVEYOR"] or ENV["TRAVIS"]
   end
 
@@ -74,7 +74,7 @@ module TestHelper
     begin
       assert File.binread(reference) == File.binread(output), "#{reference} should be binary equal to #{output}!"
     rescue Minitest::Assertion => e
-      message = if runs_on_ci?
+      message = if ci?
          e.message + "\n" + diff([File.binread(reference)].pack('m*'), [File.binread(output)].pack('m*'))
       else
         debug = File.expand_path('../debug_'+File.basename(output), __FILE__)
@@ -97,7 +97,7 @@ module TestHelper
     begin
       assert output.similar?(reference, similarity), "Screenshot should look similar to #{expected}!"
     rescue Minitest::Assertion => e
-      message = if runs_on_ci?
+      message = if ci?
          e.message + "\n" + diff([reference.to_blob].pack('m*'), [output.to_blob].pack('m*'))
       else
         output.save 'debug_' + expected
