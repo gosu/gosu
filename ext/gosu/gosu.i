@@ -851,6 +851,9 @@ namespace Gosu
 
 // Audio:
 
+%ignore Gosu::Channel::Channel();
+%ignore Gosu::Channel::Channel(int, int);
+%ignore Gosu::Channel::current_channel();
 %ignore Gosu::Sample::Sample();
 %ignore Gosu::Sample::Sample(Reader reader);
 %ignore Gosu::Song::Song(Reader reader);

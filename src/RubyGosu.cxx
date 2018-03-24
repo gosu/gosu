@@ -7531,61 +7531,6 @@ fail:
 static swig_class SwigClassChannel;
 
 SWIGINTERN VALUE
-#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
-_wrap_Channel_allocate(VALUE self)
-#else
-_wrap_Channel_allocate(int argc, VALUE *argv, VALUE self)
-#endif
-{
-  VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_Gosu__Channel);
-#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
-  rb_obj_call_init(vresult, argc, argv);
-#endif
-  return vresult;
-}
-
-
-SWIGINTERN VALUE
-_wrap_new_Channel(int argc, VALUE *argv, VALUE self) {
-  int arg1 ;
-  int arg2 ;
-  int val1 ;
-  int ecode1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  const char *classname SWIGUNUSED = "Gosu::Channel";
-  Gosu::Channel *result = 0 ;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_int(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "int","Channel", 1, argv[0] ));
-  } 
-  arg1 = static_cast< int >(val1);
-  ecode2 = SWIG_AsVal_int(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","Channel", 2, argv[1] ));
-  } 
-  arg2 = static_cast< int >(val2);
-  {
-    try {
-      result = (Gosu::Channel *)new Gosu::Channel(arg1,arg2);
-      DATA_PTR(self) = result;
-      SWIG_RubyAddTracking(result, self);
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return self;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
 _wrap_Channel_current_channel(int argc, VALUE *argv, VALUE self) {
   Gosu::Channel *arg1 = (Gosu::Channel *) 0 ;
   void *argp1 = 0 ;
@@ -7947,7 +7892,7 @@ _wrap_Sample_play(int argc, VALUE *argv, VALUE self) {
   int ecode3 = 0 ;
   bool val4 ;
   int ecode4 = 0 ;
-  SwigValueWrapper< Gosu::Channel > result;
+  Gosu::Channel result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 3)) {
@@ -8011,7 +7956,7 @@ _wrap_Sample_play_pan(int argc, VALUE *argv, VALUE self) {
   int ecode4 = 0 ;
   bool val5 ;
   int ecode5 = 0 ;
-  SwigValueWrapper< Gosu::Channel > result;
+  Gosu::Channel result;
   VALUE vresult = Qnil;
   
   if ((argc < 1) || (argc > 4)) {
@@ -11817,8 +11762,7 @@ SWIGEXPORT void Init_gosu(void) {
   
   SwigClassChannel.klass = rb_define_class_under(mGosu, "Channel", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Channel, (void *) &SwigClassChannel);
-  rb_define_alloc_func(SwigClassChannel.klass, _wrap_Channel_allocate);
-  rb_define_method(SwigClassChannel.klass, "initialize", VALUEFUNC(_wrap_new_Channel), -1);
+  rb_undef_alloc_func(SwigClassChannel.klass);
   rb_define_method(SwigClassChannel.klass, "current_channel", VALUEFUNC(_wrap_Channel_current_channel), -1);
   rb_define_method(SwigClassChannel.klass, "playing?", VALUEFUNC(_wrap_Channel_playingq___), -1);
   rb_define_method(SwigClassChannel.klass, "paused?", VALUEFUNC(_wrap_Channel_pausedq___), -1);
