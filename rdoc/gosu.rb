@@ -679,9 +679,7 @@ module Gosu
     #   def input.filter(text_in)
     #     text_in.upcase.gsub(/[^A-Z0-9]/, '')
     #   end
-    def filter text_in
-      text_in
-    end
+    def filter; end
   end
 
   ##
