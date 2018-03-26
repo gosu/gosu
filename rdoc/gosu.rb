@@ -423,7 +423,7 @@ module Gosu
     # @option options [Float] :scale_x (1.0) the horizontal scaling factor.
     # @option options [Float] :scale_y (1.0) the vertical scaling factor.
     # @option options [Gosu::Color, Integer] :color (0xff_ffffff)
-    # @option options [:default, :additive, :multiply, :replace] :mode (:default) the blending mode to use.
+    # @option options [:default, :additive, :multiply] :mode (:default) the blending mode to use.
     #
     # @overload def draw(x, y, z, options={}); end
     # @overload def draw(x, y, z, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end

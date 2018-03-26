@@ -204,7 +204,7 @@ int Gosu::Macro::height() const
 }
 
 void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Color c2,
-    double x3, double y3, Color c3, double x4, double y4, Color c4, ZPos z, AlphaMode mode) const
+    double x3, double y3, Color c3, double x4, double y4, Color c4, ZPos z, BlendMode mode) const
 {
     if (c1 != Color::WHITE || c2 != Color::WHITE || c3 != Color::WHITE || c4 != Color::WHITE) {
         throw invalid_argument("Macros cannot be tinted with colors");
