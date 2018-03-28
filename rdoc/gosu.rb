@@ -598,7 +598,7 @@ module Gosu
   #
   # @see Gosu::Sample
   class Song
-    class <<Song
+    class << Song
       ##
       # Returns the song currently being played (even if it's paused), or nil if no song is playing.
       #
