@@ -1,5 +1,5 @@
-file(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/*.cpp
-                       ${CMAKE_CURRENT_SOURCE_DIR}/../src/*.c)
+file(GLOB C_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/*.c)
+file(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/*.cpp)
 file(GLOB HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../Gosu/*.hpp)
 
 # Compile all C++ files as Objective C++ on macOS.
@@ -57,10 +57,10 @@ include_directories(
 )
 
 # "Sources" and "Headers" are the group names in Visual Studio.
-source_group("Sources" FILES ${SOURCE_FILES})
+source_group("Sources" FILES ${SOURCE_FILES} ${C_FILES})
 source_group("Headers" FILES ${HEADER_FILES})
 
-add_library(gosu ${SOURCE_FILES} ${HEADER_FILES})
+add_library(gosu ${SOURCE_FILES} ${C_FILES} ${HEADER_FILES})
 
 set_target_properties(gosu PROPERTIES
     COMPILE_FLAGS "-DGOSU_DEPRECATED="

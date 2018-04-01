@@ -48,12 +48,6 @@
     <ClCompile Include="..\src\Font.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\FormattedString.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GosuAppDelegate.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\GosuGLView.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
@@ -160,6 +154,9 @@
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\stb_vorbis.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utf8proc.c">
       <Filter>Implementation</Filter>
     </ClCompile>
   </ItemGroup>

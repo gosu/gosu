@@ -5,12 +5,20 @@ Pod::Spec.new do |s|
   s.homepage     = "https://www.libgosu.org/"
   s.documentation_url = "https://www.libgosu.org/cpp/"
   
-  s.license      = { :type => "MIT", :file => "COPYING" }
+  s.license      = { type: "MIT", file: "COPYING" }
   s.author       = { "Julian Raschke" => "julian@raschke.de" }
 
-  s.source       = { :git => "https://github.com/gosu/gosu.git", :tag => "v0.13.3.1" }
+  s.source       = { git: "https://github.com/gosu/gosu.git", tag: "v0.13.3.1" }
+
+  # We can't compile utf8proc.c as C++, and we need to silence warnings in stb_vorbis.c.
+  # => Group all C dependencies into a subspec.
+  s.subspec "C" do |ss|
+    ss.compiler_flags = "-Wno-comma -Wno-conditional-uninitialized"
+    ss.source_files = "src/{stb,utf8proc}*.{h,c}"
+  end
 
   s.subspec "Gosu" do |ss|
+    ss.dependency "Gosu/C"
     ss.osx.deployment_target = "10.9"
     ss.ios.deployment_target = "5.1.1"
     
@@ -32,9 +40,9 @@ Pod::Spec.new do |s|
     ss.osx.xcconfig = { "OTHER_LDFLAGS" => "/usr/local/lib/libSDL2.a" }
     
     ss.public_header_files = "Gosu/*.hpp"
-    ss.source_files = ["Gosu/*.hpp", "src/*.{h,hpp,c,cpp}"]
+    ss.source_files = ["Gosu/*.hpp", "src/*.{hpp,cpp}"]
   end
-  
+
   s.subspec "GosuAppDelegateMain" do |ss|
     ss.dependency "Gosu/Gosu"
     ss.source_files = "src/GosuAppDelegate.mm"
