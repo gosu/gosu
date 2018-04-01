@@ -203,7 +203,7 @@ public:
     bool paused() const override
     {
         return !player.playing;
-    };
+    }
     
     void stop() override
     {
