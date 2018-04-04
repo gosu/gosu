@@ -14,7 +14,7 @@ EOS
   s.date = Time.now.strftime "%Y-%m-%d"
   s.email = "julian@raschke.de"
   s.homepage = "https://www.libgosu.org/"
-  s.required_ruby_version = Gem::Requirement.new(">= 1.8.2")
+  s.required_ruby_version = Gem::Requirement.new(">= 1.9.3")
   s.platform = Gem::Platform::RUBY
   s.extensions = FileList["ext/**/extconf.rb"]
   # Ruby frontend for C++ extension.

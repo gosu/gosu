@@ -1,6 +1,3 @@
-# SWIG workarounds
-# These are offloaded into a separate file because rb_eval_string() is weird on Ruby 1.8.
-
 # Exceptions in Window callbacks often get lost, this is especially annoying in draw/update.
 # It is not clear whether this is a SWIG issue or if some stack frame is not exception
 # compatible, but I just call protected_update etc. in the Ruby wrapper so I can add this

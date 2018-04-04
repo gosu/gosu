@@ -2280,12 +2280,7 @@ namespace Gosu
 #include <ctime>
 #include <sstream>
 
-// Preprocessor check for 1.9 or higher (thanks banister)
-#if defined(ROBJECT_EMBED_LEN_MAX)
 #define ENFORCE_UTF8(val) rb_funcall(val, rb_intern("force_encoding"), 1, rb_str_new2("UTF-8"))
-#else
-#define ENFORCE_UTF8(val)
-#endif
 
 namespace Gosu
 {
