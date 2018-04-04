@@ -5,13 +5,14 @@
 using namespace std;
 
 
-// Helper method for making Chinese/Japanese text break even in the absence of whitespace.
-static bool should_allow_break_after_codepoint(int cp)
+// Helper method for allowing CJK text have line breaks even in the absence of whitespace.
+static bool should_allow_break_after_codepoint(utf8proc_int32_t cp)
 {
     return (cp >= 0x3040 && cp <= 0x3096) || // Hiragana
            (cp >= 0x30a0 && cp <= 0x30fa) || // Katakana
            (cp >= 0x4e00 && cp <= 0x9fff) || // CJK Unified Ideographs
-           (cp >= 0x3400 && cp <= 0x4db5);   // CJK Unified Ideographs Extension A
+           (cp >= 0x3400 && cp <= 0x4db5) || // CJK Unified Ideographs Extension A
+           (cp >= 0xac00 && cp <= 0xd7af);   // Precomposed Hangul syllables
 }
 
 unsigned Gosu::MarkupParser::flags() const
@@ -205,7 +206,7 @@ void Gosu::MarkupParser::parse()
         }
 
         utf8proc_int32_t codepoint;
-        auto len = utf8proc_iterate((utf8proc_uint8_t*)markup, end_of_markup - markup, &codepoint);
+        auto len = utf8proc_iterate((utf8proc_uint8_t*) markup, end_of_markup - markup, &codepoint);
         // Cancel parsing when invalid UTF-8 is encountered.
         if (len < 1) break;
         
@@ -224,13 +225,14 @@ void Gosu::MarkupParser::parse()
             word_state = ADDING_WORD;
         }
 
-        // TODO: Need to find a solution for breaking based on Unicode codepoints here.
-        // (Asian languages without whitespace will not have linebreaks otherwise)
-        // I guess that means using utf8proc? But does that even make sense if the TTF renderer
-        // is based on UCS-4 codepoints? Maybe better to normalize to UCS-4 here and be done with
-        // it? (i.e. make FormattedSubstring contain a vector<uint32_t> string)
-
-        ++markup;
+        markup += len;
+        
+        if (should_allow_break_after_codepoint(codepoint)) {
+            // Flush each individual CJK character out as a word so that the TextBuilder can insert
+            // line breaks as needed.
+            add_current_substring();
+            flush_to_consumer();
+        }
     }
 
     add_current_substring();
