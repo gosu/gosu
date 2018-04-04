@@ -1,5 +1,6 @@
 #include "MarkupParser.hpp"
 #include <Gosu/Utility.hpp>
+#include "utf8proc.h"
 #include <cstring>
 using namespace std;
 
@@ -24,15 +25,14 @@ unsigned Gosu::MarkupParser::flags() const
 
 bool Gosu::MarkupParser::match_and_skip(const char* chars, size_t length)
 {
-    if (strncmp(markup, chars, length) == 0) {
-        // Finish building the current substring (if any) before matching.
-        add_current_substring();
-        // Skip chars.
-        markup += length;
-        substring = markup;
-        return true;
-    }
-    return false;
+    if (strncmp(markup, chars, length) != 0) return false;
+
+    // Finish building the current substring (if any) before matching.
+    add_current_substring();
+    // Skip chars.
+    markup += length;
+    substring = markup;
+    return true;
 }
 
 bool Gosu::MarkupParser::parse_markup()
@@ -182,7 +182,9 @@ Gosu::MarkupParser::MarkupParser(const char* markup, unsigned base_flags, bool s
 
 void Gosu::MarkupParser::parse()
 {
-    while (*markup) {
+    auto end_of_markup = markup + strlen(markup);
+    
+    while (markup < end_of_markup) {
         if (*markup == '<' && parse_markup()) {
             continue;
         }
@@ -202,6 +204,12 @@ void Gosu::MarkupParser::parse()
             continue;
         }
 
+        utf8proc_int32_t codepoint;
+        auto len = utf8proc_iterate((utf8proc_uint8_t*)markup, end_of_markup - markup, &codepoint);
+        // Cancel parsing when invalid UTF-8 is encountered.
+        if (len < 1) break;
+        
+        // This uses isspace(), not Unicode character properties, for consistency with TextBuilder.
         bool whitespace_except_newline = isspace(static_cast<int>(*markup));
 
         if (whitespace_except_newline && word_state == ADDING_WORD) {
