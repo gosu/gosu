@@ -76,9 +76,6 @@ else
   have_header 'AL/al.h'   if have_library('openal')
 end
 
-# This is necessary to build with Apple's pre-installed Ruby 1.8 on OS X 10.7.
-CONFIG['CXXFLAGS'] ||= $CXXFLAGS
-
 # Gem::Version#initialize is apparently broken in some versions of Ruby, so use a local helper.
 def ruby_newer_than?(want_version)
   have_parts = RUBY_VERSION.split('.').map { |part| part.to_i }
