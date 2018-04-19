@@ -6,6 +6,7 @@
 #include <Gosu/Math.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
+#include "utf8proc.h"
 #include <array>
 #include <cassert>
 #include <map>
@@ -42,6 +43,39 @@ struct Gosu::Font::Impl
         
         return *image;
     }
+    
+    template<typename Functor>
+    void for_each_grapheme(const FormattedString& fstr, const Functor& functor)
+    {
+        utf8proc_int32_t grapheme_state = 0;
+        auto* ptr = (utf8proc_uint8_t*) fstr.string.c_str();
+        auto* end_of_string = ptr + fstr.string.length();
+        auto* begin_of_grapheme = ptr;
+        utf8proc_uint32_t last_cp = 0;
+        
+        auto flush_current_grapheme = [&] {
+            if (begin_of_grapheme != ptr) {
+                functor(image(string(begin_of_grapheme, ptr), fstr.flags));
+                begin_of_grapheme = ptr;
+            }
+        };
+        
+        while (ptr < end_of_string) {
+            utf8proc_int32_t codepoint;
+            auto len = utf8proc_iterate(ptr, end_of_string - ptr, &codepoint);
+            // Cancel parsing when invalid UTF-8 is encountered.
+            if (len < 1) break;
+            
+            if (last_cp && utf8proc_grapheme_break_stateful(last_cp, codepoint, &grapheme_state)) {
+                flush_current_grapheme();
+            }
+
+            last_cp = codepoint;
+            ptr += len;
+        }
+        
+        flush_current_grapheme();
+    }
 };
 
 Gosu::Font::Font(int font_height, const string& font_name, unsigned font_flags)
@@ -75,10 +109,9 @@ double Gosu::Font::text_width(const string& text, double scale_x) const
     MarkupParser(text.c_str(), pimpl->base_flags, false, [&](vector<FormattedString>&& line) {
         int line_width = 0;
         for (auto& part : line) {
-            // TODO - split by grapheme
-            for (char ch : part.string) {
-                line_width += pimpl->image(string(1, ch), flags()).width();
-            }
+            pimpl->for_each_grapheme(part, [&](const Image& image) {
+                line_width += image.width();
+            });
         }
         width = max(width, line_width);
     }).parse();
@@ -95,14 +128,12 @@ void Gosu::Font::draw(const string& text, double x, double y, ZPos z,
     MarkupParser(text.c_str(), pimpl->base_flags, false, [&](vector<FormattedString>&& line) {
         double current_x = x;
         for (auto& part : line) {
-            // TODO - split by grapheme
-            for (char ch : part.string) {
-                auto& image = pimpl->image(string(1, ch), flags());
+            pimpl->for_each_grapheme(part, [&](const Image& image) {
                 image.draw(current_x, current_y, z,
                            scale_x / FONT_RENDER_SCALE, scale_y / FONT_RENDER_SCALE,
                            c, mode);
                 current_x += scale_x * image.width() / FONT_RENDER_SCALE;
-            }
+            });
         }
         current_y += scale_y * height();
     }).parse();
