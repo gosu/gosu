@@ -106,7 +106,7 @@ int Gosu::text_width(const string& text, const string& font_name,
         throw invalid_argument("Invalid font_flags: " + to_string(font_flags));
     }
     
-    if (text.find_first_of("\r\n") != string::npos) {
+    if (text.find('\n') != string::npos) {
         throw invalid_argument("text_width cannot handle line breaks");
     }
     
@@ -122,8 +122,8 @@ int Gosu::draw_text(Bitmap& bitmap, const string& text, int x, int y, Color c,
         throw invalid_argument("Invalid font_flags: " + to_string(font_flags));
     }
     
-    if (text.find_first_of("\r\n") != text.npos) {
-        throw invalid_argument("the argument to draw_text cannot contain line breaks");
+    if (text.find('\n') != string::npos) {
+        throw invalid_argument("draw_text cannot handle line breaks");
     }
     
     Gosu::Buffer& ttf_data = *find_ttf_data(font_name, font_flags);

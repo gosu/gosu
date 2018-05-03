@@ -61,6 +61,9 @@ namespace Gosu
             int last_advance = 0;
 
             for (wchar_t codepoint : codepoints) {
+                // Silently skip control characters, including the \r in Windows-style line breaks.
+                if (codepoint < ' ') continue;
+                
                 int glyph = stbtt_FindGlyphIndex(&info, codepoint);
                 // Skip characters that the font doesn't contain - this is the place where we could
                 // implement font fallback logic.
