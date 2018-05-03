@@ -1,6 +1,7 @@
 #include "TextBuilder.hpp"
 #include <Gosu/Text.hpp>
 #include <cassert>
+#include <cmath>
 using namespace std;
 
 Gosu::WordInfo::WordInfo(const string& font_name, int font_height, vector<FormattedString> parts)
