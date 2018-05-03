@@ -12,24 +12,6 @@
 
 namespace Gosu
 {
-    //! Truncates the fractional part of a real value. Equivalent to
-    //! static_cast<long>.
-    inline long trunc(double value)
-    {
-        return static_cast<long>(value);
-    }
-    
-    //! Rounds a real value towards the next integer.
-    inline long round(double value)
-    {
-        if (value >= 0) {
-            return static_cast<long>(value + 0.5);
-        }
-        else {
-            return static_cast<long>(value - 0.5);
-        }
-    }
-    
     //! Returns a real value between min (inclusive) and max (exclusive).
     //! Uses std::rand, so you should call std::srand before using it.
     double random(double min, double max);

@@ -61,6 +61,9 @@ namespace Gosu
             int last_advance = 0;
 
             for (wchar_t codepoint : codepoints) {
+                // Silently skip control characters, including the \r in Windows-style line breaks.
+                if (codepoint < ' ') continue;
+                
                 int glyph = stbtt_FindGlyphIndex(&info, codepoint);
                 // Skip characters that the font doesn't contain - this is the place where we could
                 // implement font fallback logic.
@@ -187,10 +190,10 @@ int Gosu::text_width_ttf(const void* ttf_data, int font_height,
     return font_for_data(ttf_data).draw_text(text, font_height, nullptr, 0, 0, Color());
 }
 
-void Gosu::draw_text_ttf(const void* ttf_data, int font_height,
-                         const string& text, Bitmap& bitmap, int x, int y, Color c)
+int Gosu::draw_text_ttf(const void* ttf_data, int font_height,
+                        const string& text, Bitmap& bitmap, int x, int y, Color c)
 {
-    font_for_data(ttf_data).draw_text(text, font_height, &bitmap, x, y, c);
+    return font_for_data(ttf_data).draw_text(text, font_height, &bitmap, x, y, c);
 }
 
 bool Gosu::verify_font_name(const void* ttf_data, const std::string &font_name)

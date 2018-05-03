@@ -1,5 +1,6 @@
 #include <Gosu/Color.hpp>
 #include <Gosu/Math.hpp>
+#include <cmath>
 #include <algorithm>
 
 namespace

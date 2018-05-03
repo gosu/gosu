@@ -1,8 +1,8 @@
 #include <Gosu/Platform.hpp>
 #if defined(GOSU_IS_IPHONE)
 
-#import "GosuGLView.h"
-#import "GosuViewController.h"
+#import "GosuGLView.hpp"
+#import "GosuViewController.hpp"
 #import "GraphicsImpl.hpp"
 #import "AudioImpl.hpp"
 #import <Gosu/Gosu.hpp>

@@ -1,7 +1,7 @@
 #include <Gosu/Platform.hpp>
 #if defined(GOSU_IS_IPHONE)
 
-#include "GosuViewController.h"
+#include "GosuViewController.hpp"
 #include <Gosu/Gosu.hpp>
 using namespace std;
 

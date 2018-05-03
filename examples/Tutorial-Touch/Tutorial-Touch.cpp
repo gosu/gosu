@@ -1,4 +1,3 @@
-// All of Gosu.
 #include <Gosu/Gosu.hpp>
 
 #include <cmath>
@@ -185,7 +184,7 @@ public:
     }
 };
 
-Gosu::Window &window_instance()
+Gosu::Window& window_instance()
 {
     static GameWindow window;
     return window;

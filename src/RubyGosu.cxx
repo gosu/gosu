@@ -2269,11 +2269,6 @@ namespace Gosu
     }
     
     void al_shutdown();
-    
-    void register_entity(const std::string& name, Gosu::Image* image)
-    {
-        register_entity(name, image->data().to_bitmap());
-    }
 }
 
 #include <cstring>
@@ -2815,11 +2810,6 @@ SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_1(int height,VALUE options=0){
         }
         
         return new Gosu::Font(height, font_name);
-    }
-SWIGINTERN void Gosu_Font_set_image(Gosu::Font *self,wchar_t wc,VALUE source){
-        Gosu::Bitmap bitmap;
-        Gosu::load_bitmap(bitmap, source);
-        self->set_image(wc, Gosu::Image(bitmap, Gosu::IF_SMOOTH));
     }
 SWIGINTERN Gosu::Image *new_Gosu_Image(VALUE source,VALUE options=0){
         Gosu::Bitmap bmp;
@@ -5113,7 +5103,7 @@ _wrap_Font_name(int argc, VALUE *argv, VALUE self) {
   Gosu::Font *arg1 = (Gosu::Font *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  std::string result;
+  std::string *result = 0 ;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -5126,13 +5116,13 @@ _wrap_Font_name(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Font * >(argp1);
   {
     try {
-      result = ((Gosu::Font const *)arg1)->name();
+      result = (std::string *) &((Gosu::Font const *)arg1)->name();
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  vresult = SWIG_From_std_string(static_cast< std::string >(result));
+  vresult = SWIG_From_std_string(static_cast< std::string >(*result));
   return vresult;
 fail:
   return Qnil;
@@ -5825,48 +5815,6 @@ fail:
     "    Font.new(Gosu::Window &window, std::string const &font_name, int height)\n"
     "    Font.new(int height, VALUE options)\n");
   
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Font_set_image(int argc, VALUE *argv, VALUE self) {
-  Gosu::Font *arg1 = (Gosu::Font *) 0 ;
-  wchar_t arg2 ;
-  VALUE arg3 = (VALUE) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Font, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Font *","set_image", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Font * >(argp1);
-  {
-    VALUE ruby_string = rb_obj_as_string(argv[0]);
-    char* utf8_string = StringValueCStr(ruby_string);
-    std::wstring ucs_string = Gosu::utf8_to_wstring(utf8_string);
-    if (ucs_string.length() != 1) {
-      rb_raise(rb_eArgError,
-        "A single-character string was expected, but `%s' given",
-        utf8_string);
-    }
-    arg2 = ucs_string[0];
-  }
-  arg3 = argv[1];
-  {
-    try {
-      Gosu_Font_set_image(arg1,arg2,arg3);
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return Qnil;
-fail:
   return Qnil;
 }
 
@@ -11707,7 +11655,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassFont.klass, "draw", VALUEFUNC(_wrap_Font_draw), -1);
   rb_define_method(SwigClassFont.klass, "draw_rel", VALUEFUNC(_wrap_Font_draw_rel), -1);
   rb_define_method(SwigClassFont.klass, "draw_rot", VALUEFUNC(_wrap_Font_draw_rot), -1);
-  rb_define_method(SwigClassFont.klass, "set_image", VALUEFUNC(_wrap_Font_set_image), -1);
   SwigClassFont.mark = 0;
   SwigClassFont.destroy = (void (*)(void *)) free_Gosu_Font;
   SwigClassFont.trackObjects = 1;

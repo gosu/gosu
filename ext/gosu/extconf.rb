@@ -29,8 +29,8 @@ $CXXFLAGS << " -std=gnu++11"
 $INCFLAGS << " -I../.."
 
 if `uname`.chomp == 'Darwin'
-  # To make everything work with the Objective C runtime
-  $CFLAGS   << " -x objective-c -fobjc-arc -DNDEBUG"
+  # Disable assertions in C code.
+  $CFLAGS   << " -DNDEBUG"
   # Compile all C++ files as Objective C++ on macOS since mkmf does not support .mm files.
   $CXXFLAGS << " -x objective-c++ -fobjc-arc -DNDEBUG"
   # Prevents issues with Apple's pre-installed Ruby 2.3 on macOS 10.13.

@@ -10,7 +10,7 @@ class TestText < Minitest::Test
     # operating systems.
     "unicode"    => "Grüße vom Test! 「己所不欲，勿施於人」 กรุงเทพมหานคร ≠ 부산 ✓",
     "whitespace" => "$ ls\n  .\t..\tfoo\r\n  bar\tqux        ",
-    "markup"     => "<b>Bold, <u>underlined &amp; <i>italic. <c=4400ff>How <c=0f3>about</c> colors?</c></i></u>&lt;&entity;&gt;</b>",
+    "markup"     => "<b>Bold, <u>underlined &amp; <i>italic. <c=4400ff>How <c=0f3>about</c> colors?</c></i></u>&lt;&gt;</b>",
     # This string will remain broken in the foreseeable future, but at least Gosu should be able
     # to correctly split it into grapheme clusters.
     # Maybe we could use this for testing later: https://github.com/emojione/emojione/
@@ -26,12 +26,10 @@ class TestText < Minitest::Test
     OPTION_SETS.each_with_index do |options, i|
       define_method("test_text_#{key}_#{i}") do
         Dir.chdir media_path do
-          # TODO: This API exists in C++, but is missing from Ruby/Gosu.
-          # Gosu.register_entity "entity", Gosu::Image.new("alpha-bmp24.bmp")
           expected_filename = "text-#{key}-#{i}.png"
 
           # Prepend <c=r00> to each string because white-on-translucent images are hard
-          # to view (on macOS at least).
+          # to view (at least on macOS).
           image = Gosu::Image.from_text("<c=ff0000>#{string}", 41, options)
           assert_equal Gosu::Image.new(expected_filename), image
         end

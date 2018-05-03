@@ -29,13 +29,16 @@ namespace Gosu
     //    underlines are a must anyway, since no font provides a dedicated TTF file for that.
     // These options are not mutually exclusive.
     
+    // Returns the width a piece of text will occupy on a bitmap when rendered.
     // The caller must ensure that the ttf_data pointer will remain valid until the process exists.
     int text_width_ttf(const void* ttf_data, int font_height,
                        const std::string& text);
 
+    // Renders a string onto a bitmap.
+    // Returns the width a piece of text occupies on the bitmap.
     // The caller must ensure that the ttf_data pointer will remain valid until the process exists.
-    void draw_text_ttf(const void* ttf_data, int font_height,
-                       const std::string& text, Bitmap& bitmap, int x, int y, Color c);
+    int draw_text_ttf(const void* ttf_data, int font_height,
+                      const std::string& text, Bitmap& bitmap, int x, int y, Color c);
     
     // Returns true if the supplied buffer seems to be a font of the given name.
     bool verify_font_name(const void* ttf_data, const std::string& font_name);
