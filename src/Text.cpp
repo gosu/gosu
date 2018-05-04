@@ -1,14 +1,30 @@
 #include "MarkupParser.hpp"
 #include "TextBuilder.hpp"
 #include "GraphicsImpl.hpp"
+#include "TrueTypeFont.hpp"
 #include <Gosu/Text.hpp>
 #include <cassert>
+#include <cmath>
 #include <algorithm>
 #include <vector>
 using namespace std;
 
-Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, int font_height,
-                               int line_spacing, int width, Alignment align, unsigned font_flags)
+double Gosu::text_width(const u32string& text,
+                        const string& font_name, double font_height, unsigned font_flags)
+{
+    auto& font = font_by_name(font_name, font_flags);
+    return font.draw_text(text, font_height, nullptr, 0, 0, Gosu::Color::NONE);
+}
+
+double Gosu::draw_text(Bitmap& bitmap, double x, double y, Color c, const u32string& text,
+                       const string& font_name, double font_height, unsigned font_flags)
+{
+    auto& font = font_by_name(font_name, font_flags);
+    return font.draw_text(text, font_height, &bitmap, x, y, c);
+}
+
+Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, double font_height,
+                               double line_spacing, int width, Alignment align, unsigned font_flags)
 {
     if (font_height <= 0)            throw invalid_argument("font_height must be > 0");
     if (width <= 0)                  throw invalid_argument("width must be > 0");
@@ -25,7 +41,7 @@ Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, int 
     return text_builder.move_into_bitmap();
 }
 
-Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, int font_height,
+Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, double font_height,
                                unsigned font_flags)
 {
     if (font_height <= 0) throw invalid_argument("font_height must be > 0");
@@ -35,8 +51,8 @@ Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, int 
     // Split the text into lines (split_words = false) since this method does not break lines.
     MarkupParser(text.c_str(), font_flags, false, [&lines](vector<FormattedString>&& line) {
         // Remove trailing \n characters from each line to avoid errors from Gosu::text_width().
-        if (line.back().string.back() == '\n') {
-            line.back().string.pop_back();
+        if (line.back().text.back() == '\n') {
+            line.back().text.pop_back();
         }
             
         lines.emplace_back(line);
@@ -47,7 +63,7 @@ Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, int 
     for (auto& line : lines) {
         int line_width = 0;
         for (auto& part : line) {
-            line_width += text_width(part.string, font_name, font_height, part.flags);
+            line_width += text_width(part.text, font_name, font_height, part.flags);
         }
         width = max(width, line_width);
     }
@@ -59,7 +75,7 @@ Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, int 
     for (auto& line : lines) {
         int x = 0;
         for (auto& part : line) {
-            x += draw_text(result, part.string, x, y, Color::WHITE, font_name, font_height);
+            x += draw_text(result, x, y, Color::WHITE, part.text, font_name, font_height);
         }
         y += font_height;
     }

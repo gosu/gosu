@@ -17,20 +17,6 @@
 %apply unsigned char { std::uint8_t };
 %apply unsigned long { std::uint32_t };
 
-// Custom typemap for wchar_t, only used for Gosu::Font.
-#pragma SWIG nowarn=-490,-319
-%typemap(in) wchar_t {
-    VALUE ruby_string = rb_obj_as_string($input);
-    char* utf8_string = StringValueCStr(ruby_string);
-    std::wstring ucs_string = Gosu::utf8_to_wstring(utf8_string);
-    if (ucs_string.length() != 1) {
-        rb_raise(rb_eArgError,
-                 "A single-character string was expected, but `%s' given",
-                 utf8_string);
-    }
-    $1 = ucs_string[0];
-}
-
 // Custom typemap to enforce UTF-8 encoding on all created strings.
 %typemap(out) std::string {
     $result = rb_str_new2($1.c_str());

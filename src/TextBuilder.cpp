@@ -2,22 +2,28 @@
 #include <Gosu/Text.hpp>
 #include <cassert>
 #include <cmath>
+#include "utf8proc.h"
 using namespace std;
 
-Gosu::WordInfo::WordInfo(const string& font_name, int font_height, vector<FormattedString> parts)
+Gosu::WordInfo::WordInfo(const string& font_name, double font_height, vector<FormattedString> parts)
 {
     assert (! parts.empty());
     
-    is_whitespace  = isspace((int) parts.front().string.front());
-    is_end_of_line = parts.back().string.back() == '\n';
+    auto* properties = utf8proc_get_property(parts.front().text.front());
+
+    // Also check the BiDi class to filter out non-breaking spaces.
+    is_whitespace = properties->category == UTF8PROC_CATEGORY_ZS &&
+                    properties->bidi_class == UTF8PROC_BIDI_CLASS_WS;
+
+    is_end_of_line = parts.back().text.back() == '\n';
     // Remove the trailing backspace character to avoid errors from Gosu::text_width().
-    if (is_end_of_line) parts.back().string.pop_back();
+    if (is_end_of_line) parts.back().text.pop_back();
     
     width = 0;
     for (const auto& part : parts) {
-        assert (! part.string.empty());
+        assert (! part.text.empty());
         
-        width += text_width(part.string, font_name, font_height, part.flags);
+        width += text_width(part.text, font_name, font_height, part.flags);
     }
     
     this->parts = move(parts);
@@ -32,6 +38,7 @@ void Gosu::TextBuilder::flush_current_line(EndOfLineReason reason)
     
     allocate_next_line();
     
+    // Remove trailing whitespace so that justifying the text across the line works.
     if (current_line.back().is_whitespace) current_line.pop_back();
     
     // Shouldn't happen because the first word on a line should never be whitespace.
@@ -55,7 +62,7 @@ void Gosu::TextBuilder::flush_current_line(EndOfLineReason reason)
         whitespace_factor = (result.width() - words_width) / whitespace_width;
     }
     
-    int y = (used_lines - 1) * (font_height + line_spacing);
+    double y = (used_lines - 1) * (font_height + line_spacing);
     
     for (const auto& word : current_line) {
         if (word.is_whitespace) {
@@ -63,8 +70,7 @@ void Gosu::TextBuilder::flush_current_line(EndOfLineReason reason)
         }
         else {
             for (const auto& part : word.parts) {
-                draw_text(result, part.string, round(x), y, part.color,
-                          font_name, font_height, part.flags);
+                draw_text(result, x, y, part.color, part.text, font_name, font_height, part.flags);
             }
             x += word.width;
         }
@@ -86,8 +92,8 @@ void Gosu::TextBuilder::allocate_next_line()
 
 void Gosu::TextBuilder::resize_to_allocated_lines()
 {
-    result.resize(result.width(),
-                  font_height * allocated_lines + line_spacing * max(0, allocated_lines - 1));
+    double new_height = font_height * allocated_lines + line_spacing * max(0, allocated_lines - 1);
+    result.resize(result.width(), ceil(new_height));
 }
 
 Gosu::TextBuilder::TextBuilder(const string& font_name, int font_height, int line_spacing,

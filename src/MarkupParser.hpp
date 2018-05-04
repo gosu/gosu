@@ -8,7 +8,7 @@ namespace Gosu
 {
     struct FormattedString
     {
-        std::string string;
+        std::u32string text;
         Color color = Color::WHITE;
         unsigned flags = 0;
         
@@ -22,8 +22,8 @@ namespace Gosu
     {
         // The current parser position.
         const char* markup;
-        // The start of the current substring range.
-        const char* substring;
+        // A substring that will be built up during parsing, then passed to the consumer.
+        std::string substring;
 
         // Current b/i/u counters. An opening tag increases by 1, a closing tag decreases by 1.
         // Text is bold/italic/underline when the respective counter is > 0.
@@ -50,7 +50,7 @@ namespace Gosu
         bool parse_escape_entity();
 
         void add_current_substring();
-        void add_substring(std::string&& substring);
+        void add_composed_substring(std::u32string&& substring);
         void flush_to_consumer();
 
     public:

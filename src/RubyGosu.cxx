@@ -5657,6 +5657,175 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Font_set_image__SWIG_0(int argc, VALUE *argv, VALUE self) {
+  Gosu::Font *arg1 = (Gosu::Font *) 0 ;
+  std::string arg2 ;
+  unsigned int arg3 ;
+  Gosu::Image *arg4 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned int val3 ;
+  int ecode3 = 0 ;
+  void *argp4 ;
+  int res4 = 0 ;
+  
+  if ((argc < 3) || (argc > 3)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Font, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Font *","set_image", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Font * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(argv[0], &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), Ruby_Format_TypeError( "", "std::string","set_image", 2, argv[0] )); 
+    }
+    arg2 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  ecode3 = SWIG_AsVal_unsigned_SS_int(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "unsigned int","set_image", 3, argv[1] ));
+  } 
+  arg3 = static_cast< unsigned int >(val3);
+  res4 = SWIG_ConvertPtr(argv[2], &argp4, SWIGTYPE_p_Gosu__Image,  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), Ruby_Format_TypeError( "", "Gosu::Image const &","set_image", 4, argv[2] )); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Gosu::Image const &","set_image", 4, argv[2])); 
+  }
+  arg4 = reinterpret_cast< Gosu::Image * >(argp4);
+  {
+    try {
+      (arg1)->set_image(arg2,arg3,(Gosu::Image const &)*arg4);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Font_set_image__SWIG_1(int argc, VALUE *argv, VALUE self) {
+  Gosu::Font *arg1 = (Gosu::Font *) 0 ;
+  std::string arg2 ;
+  Gosu::Image *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp3 ;
+  int res3 = 0 ;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Font, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Font *","set_image", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Font * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(argv[0], &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), Ruby_Format_TypeError( "", "std::string","set_image", 2, argv[0] )); 
+    }
+    arg2 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  res3 = SWIG_ConvertPtr(argv[1], &argp3, SWIGTYPE_p_Gosu__Image,  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), Ruby_Format_TypeError( "", "Gosu::Image const &","set_image", 3, argv[1] )); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Gosu::Image const &","set_image", 3, argv[1])); 
+  }
+  arg3 = reinterpret_cast< Gosu::Image * >(argp3);
+  {
+    try {
+      (arg1)->set_image(arg2,(Gosu::Image const &)*arg3);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE _wrap_Font_set_image(int nargs, VALUE *args, VALUE self) {
+  int argc;
+  VALUE argv[5];
+  int ii;
+  
+  argc = nargs + 1;
+  argv[0] = self;
+  if (argc > 5) SWIG_fail;
+  for (ii = 1; (ii < argc); ++ii) {
+    argv[ii] = args[ii-1];
+  }
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Font, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_Gosu__Image, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          return _wrap_Font_set_image__SWIG_1(nargs, args, self);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Font, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        {
+          int res = SWIG_AsVal_unsigned_SS_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          void *vptr = 0;
+          int res = SWIG_ConvertPtr(argv[3], &vptr, SWIGTYPE_p_Gosu__Image, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_Font_set_image__SWIG_0(nargs, args, self);
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  Ruby_Format_OverloadedError( argc, 5, "Font.set_image", 
+    "    void Font.set_image(std::string codepoint, unsigned int font_flags, Gosu::Image const &image)\n"
+    "    void Font.set_image(std::string codepoint, Gosu::Image const &image)\n");
+  
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_new_Font__SWIG_0(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = 0 ;
   std::string *arg2 = 0 ;
@@ -11758,6 +11927,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassFont.klass, "draw", VALUEFUNC(_wrap_Font_draw), -1);
   rb_define_method(SwigClassFont.klass, "draw_rel", VALUEFUNC(_wrap_Font_draw_rel), -1);
   rb_define_method(SwigClassFont.klass, "draw_rot", VALUEFUNC(_wrap_Font_draw_rot), -1);
+  rb_define_method(SwigClassFont.klass, "set_image", VALUEFUNC(_wrap_Font_set_image), -1);
   SwigClassFont.mark = 0;
   SwigClassFont.destroy = (void (*)(void *)) free_Gosu_Font;
   SwigClassFont.trackObjects = 1;

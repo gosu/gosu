@@ -239,6 +239,16 @@ module Gosu
     # @overload initialize(window, font_name, height)
     def initialize(height, options = {}); end
 
+    ##
+    # Overrides the image for a character.
+    #
+    # @note For any given character, this method MUST NOT be called more than once, and MUST NOT be called if a string containing the character has already been drawn.
+    #
+    # @return [void]
+    # @param character [String] the character to replace.
+    # @param image [Image] the image to use for the character.
+    def []=(character, image); end
+
     # @!group Drawing text
 
     ##

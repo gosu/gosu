@@ -6,24 +6,23 @@
 
 namespace Gosu
 {
-    struct FormattedString;
-    
     struct WordInfo
     {
         std::vector<FormattedString> parts;
         bool is_whitespace;
         bool is_end_of_line;
-        int width;
+        double width;
         
-        WordInfo(const std::string& font_name, int font_height, std::vector<FormattedString> parts);
+        WordInfo(const std::string& font_name, double font_height,
+                 std::vector<FormattedString> parts);
     };
     
     class TextBuilder
     {
         // Parameters.
         std::string font_name;
-        int font_height;
-        int line_spacing;
+        double font_height;
+        double line_spacing;
         Alignment align;
         
         enum EndOfLineReason {
