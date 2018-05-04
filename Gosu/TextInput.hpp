@@ -49,8 +49,10 @@ namespace Gosu
         //! Sets the start of the selection as returned by selection_start.
         void set_selection_start(unsigned pos);
         
+#ifndef GOSU_IS_IPHONE
         // Platform-specific communication with Gosu::Input.
         bool feed_sdl_event(void* event);
+#endif
 
         //! Overridable filter that is applied to all new text that is entered.
         //! Allows for context-sensitive filtering/extending/... of new characters.

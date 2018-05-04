@@ -7,16 +7,6 @@
 #import <UIKit/UIKit.h>
 using namespace std;
 
-struct Gosu::TextInput::Impl {};
-Gosu::TextInput::TextInput() {}
-Gosu::TextInput::~TextInput() {}
-string Gosu::TextInput::text() const { return ""; }
-void Gosu::TextInput::set_text(const string& text) {}
-unsigned Gosu::TextInput::caret_pos() const { return 0; }
-void Gosu::TextInput::set_caret_pos(unsigned) {}
-unsigned Gosu::TextInput::selection_start() const { return 0; }
-void Gosu::TextInput::set_selection_start(unsigned) {}
-
 struct Gosu::Input::Impl
 {
     UIView* view;
@@ -53,33 +43,22 @@ Gosu::Input::~Input()
 {
 }
 
-void Gosu::Input::feed_touch_event(int type, void* touches)
+void Gosu::Input::feed_touch_event(function<void (Touch)>& callback, void* touches)
 {
     NSSet* ui_touches = (__bridge NSSet*) touches;
     
     pimpl->current_touches_vector.reset();
     
-    function<void (Touch)>* callback = nullptr;
-    
-    if (type == 0) {
+    if (&callback == &on_touch_began) {
         [pimpl->current_touches_set unionSet:ui_touches];
-        callback = &on_touch_began;
     }
-    else if (type == 1) {
-        callback = &on_touch_moved;
-    }
-    else if (type == 2) {
+    else if (&callback == &on_touch_ended || &callback == &on_touch_cancelled) {
         [pimpl->current_touches_set minusSet:ui_touches];
-        callback = &on_touch_ended;
-    }
-    else if (type == 3) {
-        [pimpl->current_touches_set minusSet:ui_touches];
-        callback = &on_touch_cancelled;
     }
     
-    if (callback && *callback) {
+    if (callback) {
         for (UITouch* ui_touch in ui_touches) {
-            (*callback)(pimpl->translate_touch(ui_touch));
+            callback(pimpl->translate_touch(ui_touch));
         }
     }
 }

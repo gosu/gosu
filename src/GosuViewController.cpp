@@ -159,7 +159,7 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
     
     if (60 % targetFPS != 0) {
         NSTimeInterval interval = self.gosuWindowReference.update_interval() / 1000.0;
-        NSTimer* timer          = [NSTimer scheduledTimerWithTimeInterval:interval
+        NSTimer* timer = [NSTimer scheduledTimerWithTimeInterval:interval
                                                           target:self
                                                         selector:@selector(updateAndDraw:)
                                                         userInfo:nil
@@ -203,22 +203,26 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
 
 - (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    self.gosuWindowReference.input().feed_touch_event(0, (__bridge void*) touches);
+    auto& input = self.gosuWindowReference.input();
+    input.feed_touch_event(input.on_touch_began, (__bridge void*) touches);
 }
 
 - (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    self.gosuWindowReference.input().feed_touch_event(1, (__bridge void*) touches);
+    auto& input = self.gosuWindowReference.input();
+    input.feed_touch_event(input.on_touch_moved, (__bridge void*) touches);
 }
 
 - (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    self.gosuWindowReference.input().feed_touch_event(2, (__bridge void*) touches);
+    auto& input = self.gosuWindowReference.input();
+    input.feed_touch_event(input.on_touch_ended, (__bridge void*) touches);
 }
 
 - (void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    self.gosuWindowReference.input().feed_touch_event(3, (__bridge void*) touches);
+    auto& input = self.gosuWindowReference.input();
+    input.feed_touch_event(input.on_touch_cancelled, (__bridge void*) touches);
 }
 
 @end

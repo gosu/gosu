@@ -1,24 +1,26 @@
-#include <Gosu/Platform.hpp>
-#if !defined(GOSU_IS_IPHONE)
-
 #include <Gosu/TextInput.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/Platform.hpp>
+
+#ifndef GOSU_IS_IPHONE
 #include <SDL.h>
 #include <cctype>
+#endif
+
 using namespace std;
 
 struct Gosu::TextInput::Impl
 {
     string text;
     
-    // This is the current IME composition.
+    // This is the current IME composition (not used on iOS).
     // http://wiki.libsdl.org/Tutorials/TextInput#CandidateList
     string composition;
     
     // Indices into the UTF-8 encoded text.
     unsigned caret_pos = 0, selection_start = 0;
     
+#ifndef GOSU_IS_IPHONE
     // Skip continuation characters, see: https://en.wikipedia.org/wiki/UTF-8#Description
     // (0xc0 = 11'000000, 0x80 = 10'000000)
     bool should_skip(char ch)
@@ -143,6 +145,7 @@ struct Gosu::TextInput::Impl
             caret_pos = selection_start;
         }
     }
+#endif
 };
 
 Gosu::TextInput::TextInput()
@@ -152,6 +155,7 @@ Gosu::TextInput::TextInput()
 
 Gosu::TextInput::~TextInput()
 {
+    // TODO: Unset text_input to avoid stale pointers?
 }
 
 string Gosu::TextInput::text() const
@@ -172,12 +176,12 @@ void Gosu::TextInput::set_text(const string& text)
 
 unsigned Gosu::TextInput::caret_pos() const
 {
-    return static_cast<unsigned>(pimpl->caret_pos);
+    return pimpl->caret_pos;
 }
 
-void Gosu::TextInput::set_caret_pos(unsigned pos)
+void Gosu::TextInput::set_caret_pos(unsigned caret_pos)
 {
-    pimpl->caret_pos = pos;
+    pimpl->caret_pos = caret_pos;
 }
 
 unsigned Gosu::TextInput::selection_start() const
@@ -185,11 +189,12 @@ unsigned Gosu::TextInput::selection_start() const
     return pimpl->selection_start;
 }
 
-void Gosu::TextInput::set_selection_start(unsigned pos)
+void Gosu::TextInput::set_selection_start(unsigned selection_start)
 {
-    pimpl->selection_start = pos;
+    pimpl->selection_start = selection_start;
 }
 
+#ifndef GOSU_IS_IPHONE
 bool Gosu::TextInput::feed_sdl_event(void* event)
 {
     const SDL_Event* e = static_cast<SDL_Event*>(event);
@@ -275,5 +280,4 @@ bool Gosu::TextInput::feed_sdl_event(void* event)
     
     return false;
 }
-
 #endif
