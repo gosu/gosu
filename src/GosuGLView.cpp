@@ -43,7 +43,7 @@ namespace Gosu
 
 - (id)initWithFrame:(CGRect)frame
 {
-    if ((self = [super initWithFrame:frame])) {
+    if (self = [super initWithFrame:frame]) {
         [self initializeGosuGLView];
     }
     
@@ -52,7 +52,7 @@ namespace Gosu
 
 - (id)initWithCoder:(NSCoder*)aDecoder
 {
-    if ((self = [super initWithCoder:aDecoder])) {
+    if (self = [super initWithCoder:aDecoder]) {
         [self initializeGosuGLView];
     }
     

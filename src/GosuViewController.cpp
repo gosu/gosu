@@ -52,11 +52,6 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
     return YES;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return UIInterfaceOrientationIsLandscape(interfaceOrientation);
-}
-
 - (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskLandscape;
@@ -80,6 +75,7 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
 {
     [super viewDidLoad];
     
+    // TODO - replace with AVAudioSession https://stackoverflow.com/q/19710046
     AudioSessionInitialize(nullptr, nullptr, handle_audio_interruption, nullptr);
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -151,9 +147,7 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
 
 - (void)setupTimerOrDisplayLink
 {
-    if (_timerOrDisplayLink) {
-        return;
-    }
+    if (_timerOrDisplayLink) return;
     
     NSInteger targetFPS = round(1000.0 / self.gosuWindowReference.update_interval());
     

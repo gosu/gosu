@@ -67,7 +67,7 @@ public:
         }
         
         Gosu::Graphics::draw_rect(x - PADDING, y - PADDING,
-                                  width() + 2 * PADDING, height + 2 * PADDING,
+                                  width() + 2 * PADDING, height() + 2 * PADDING,
                                   background_color, 0);
         
         // Calculate the position of the caret and the selection start.
@@ -76,7 +76,7 @@ public:
         
         // Draw the selection background, if any; if not, sel_x and pos_x will be
         // the same value, making this rect empty and invisible.
-        Gosu::Graphics::draw_rect(sel_x, y, pos_x - sel_y, height(), SELECTION_COLOR, 0);
+        Gosu::Graphics::draw_rect(sel_x, y, pos_x - sel_x, height(), SELECTION_COLOR, 0);
 
         // Draw the caret if this is the currently selected field.
         if (window.input().text_input() == this) {

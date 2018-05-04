@@ -31,5 +31,3 @@ endif()
 find_package(Gosu REQUIRED development)
 include_directories(${GOSU_INCLUDE_DIRS})
 target_link_libraries(TextInputExample ${GOSU_LIBRARIES})
-
-
