@@ -7,19 +7,10 @@
 #import <UIKit/UIKit.h>
 using namespace std;
 
-struct Gosu::TextInput::Impl {};
-Gosu::TextInput::TextInput() {}
-Gosu::TextInput::~TextInput() {}
-string Gosu::TextInput::text() const { return ""; }
-void Gosu::TextInput::set_text(const string& text) {}
-unsigned Gosu::TextInput::caret_pos() const { return 0; }
-void Gosu::TextInput::set_caret_pos(unsigned) {}
-unsigned Gosu::TextInput::selection_start() const { return 0; }
-void Gosu::TextInput::set_selection_start(unsigned) {}
-
 struct Gosu::Input::Impl
 {
-    UIView* view;
+    UIView* view = nil;
+    TextInput* text_input = nullptr;
     float mouse_x, mouse_y;
     float scale_x, scale_y;
     float update_interval;
@@ -32,7 +23,7 @@ struct Gosu::Input::Impl
         CGPoint point = [ui_touch locationInView:view];
         
         return (Touch) {
-            .id = (__bridge void*) ui_touch,
+            .id = (__bridge void*)ui_touch,
             .x  = (float)point.x * scale_x,
             .y  = (float)point.y * scale_y,
         };
@@ -53,33 +44,22 @@ Gosu::Input::~Input()
 {
 }
 
-void Gosu::Input::feed_touch_event(int type, void* touches)
+void Gosu::Input::feed_touch_event(function<void (Touch)>& callback, void* touches)
 {
     NSSet* ui_touches = (__bridge NSSet*) touches;
     
     pimpl->current_touches_vector.reset();
     
-    function<void (Touch)>* callback = nullptr;
-    
-    if (type == 0) {
+    if (&callback == &on_touch_began) {
         [pimpl->current_touches_set unionSet:ui_touches];
-        callback = &on_touch_began;
     }
-    else if (type == 1) {
-        callback = &on_touch_moved;
-    }
-    else if (type == 2) {
+    else if (&callback == &on_touch_ended || &callback == &on_touch_cancelled) {
         [pimpl->current_touches_set minusSet:ui_touches];
-        callback = &on_touch_ended;
-    }
-    else if (type == 3) {
-        [pimpl->current_touches_set minusSet:ui_touches];
-        callback = &on_touch_cancelled;
     }
     
-    if (callback && *callback) {
+    if (callback) {
         for (UITouch* ui_touch in ui_touches) {
-            (*callback)(pimpl->translate_touch(ui_touch));
+            callback(pimpl->translate_touch(ui_touch));
         }
     }
 }
@@ -152,9 +132,7 @@ double Gosu::Input::accelerometer_z() const
 
 void Gosu::Input::update()
 {
-    // Check for dead touches and remove from vector if
-    // necessary
-
+    // Check for dead touches and remove from vector if necessary.
     NSMutableSet* dead_touches = nil;
 
     for (UITouch* touch in pimpl->current_touches_set) {
@@ -166,9 +144,7 @@ void Gosu::Input::update()
         }
         
         // Something was deleted, we will need the set.
-        if (!dead_touches) {
-            dead_touches = [NSMutableSet new];
-        }
+        if (!dead_touches) dead_touches = [NSMutableSet new];
         [dead_touches addObject:touch];
     }
     
@@ -187,12 +163,18 @@ void Gosu::Input::update()
 
 Gosu::TextInput* Gosu::Input::text_input() const
 {
-    return nullptr;
+    return pimpl->text_input;
 }
 
-void Gosu::Input::set_text_input(TextInput* input)
+void Gosu::Input::set_text_input(TextInput* text_input)
 {
-    throw "NYI";
+    if (text_input) {
+        pimpl->text_input = text_input;
+        [pimpl->view becomeFirstResponder];
+    } else {
+        [pimpl->view resignFirstResponder];
+        pimpl->text_input = nullptr;
+    }
 }
 
 #endif

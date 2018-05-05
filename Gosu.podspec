@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.subspec "Gosu" do |ss|
     ss.dependency "Gosu/C"
     ss.osx.deployment_target = "10.9"
-    ss.ios.deployment_target = "5.1.1"
+    ss.ios.deployment_target = "8.0"
     
     # Ignore Gosu using deprecated Gosu APIs internally.
     # Compile all source files as Objective-C++ so we can use ObjC frameworks where necessary.
@@ -46,7 +46,7 @@ Pod::Spec.new do |s|
   s.subspec "GosuAppDelegateMain" do |ss|
     ss.dependency "Gosu/Gosu"
     ss.source_files = "src/GosuAppDelegate.mm"
-    ss.platform = :ios, "5.1.1"
+    ss.platform = :ios, "8.0"
   end
 
   s.default_subspec = "Gosu"

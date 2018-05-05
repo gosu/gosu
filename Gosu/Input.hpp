@@ -59,7 +59,7 @@ namespace Gosu
     public:
     #ifdef GOSU_IS_IPHONE
         Input(void* view, float update_interval);
-        void feed_touch_event(int type, void* touches);
+        void feed_touch_event(std::function<void (Touch)>& callback, void* touches);
     #else
         Input(void* window);
         bool feed_sdl_event(void* event);

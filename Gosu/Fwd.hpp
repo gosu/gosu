@@ -9,6 +9,7 @@ namespace Gosu
     class Bitmap;
     class Buffer;
     class Button;
+    class Channel;
     class Color;
     class File;
     class Font;
@@ -21,7 +22,6 @@ namespace Gosu
     class Sample;
     class Song;
     class TextInput;
-    class Timer;
     class Window;
     class Writer;
 }

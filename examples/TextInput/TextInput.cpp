@@ -30,7 +30,7 @@ class TextField : public Gosu::TextInput
     double x, y;
     
 public:
-    // Some ARGB constants that define our appearance.
+    // Some ARGB constants that define the appearance of text fields.
     static const unsigned long INACTIVE_COLOR  = 0xcc666666;
     static const unsigned long ACTIVE_COLOR    = 0xccff6666;
     static const unsigned long SELECTION_COLOR = 0xcc0000ff;
@@ -66,27 +66,21 @@ public:
             background_color = ACTIVE_COLOR;
         }
         
-        Gosu::Graphics::draw_quad(x - PADDING,           y - PADDING,            background_color,
-                                  x + width() + PADDING, y - PADDING,            background_color,
-                                  x - PADDING,           y + height() + PADDING, background_color,
-                                  x + width() + PADDING, y + height() + PADDING, background_color,
-                                  0);
+        Gosu::Graphics::draw_rect(x - PADDING, y - PADDING,
+                                  width() + 2 * PADDING, height() + 2 * PADDING,
+                                  background_color, 0);
         
         // Calculate the position of the caret and the selection start.
         double pos_x = x + font.text_width(text().substr(0, caret_pos()));
         double sel_x = x + font.text_width(text().substr(0, selection_start()));
         
         // Draw the selection background, if any; if not, sel_x and pos_x will be
-        // the same value, making this quad empty.
-        Gosu::Graphics::draw_quad(sel_x, y,            SELECTION_COLOR,
-                                  pos_x, y,            SELECTION_COLOR,
-                                  sel_x, y + height(), SELECTION_COLOR,
-                                  pos_x, y + height(), SELECTION_COLOR, 0);
+        // the same value, making this rect empty and invisible.
+        Gosu::Graphics::draw_rect(sel_x, y, pos_x - sel_x, height(), SELECTION_COLOR, 0);
 
-        // Draw the caret; again, only if this is the currently selected field.
+        // Draw the caret if this is the currently selected field.
         if (window.input().text_input() == this) {
-            Gosu::Graphics::draw_line(pos_x, y,            CARET_COLOR,
-                                      pos_x, y + height(), CARET_COLOR, 0);
+            Gosu::Graphics::draw_rect(pos_x, y, 1, height(), CARET_COLOR, 0);
         }
         
         // Finally, draw the text itself!
@@ -112,7 +106,7 @@ public:
     }
 };
 
-// Helper to get the size static arrays.
+// Helper to get the size of static arrays.
 template<typename T, std::size_t Length>
 std::size_t lengthof(const T(&) [Length])
 {
@@ -151,8 +145,8 @@ public:
     void button_down(Gosu::Button btn) override
     {
         if (btn == Gosu::KB_TAB) {
-            // Tab key will not be 'eaten' by text fields; use for switching through
-            // text fields.
+            // Tab key will not be consumed by Gosu::TextInput.
+            // Move focus to next text field.
             int index = -1;
             for (int i = 0; i < lengthof(text_fields); ++i) {
                 if (input().text_input() == text_fields[i].get()) {
@@ -162,9 +156,10 @@ public:
             input().set_text_input(text_fields[(index + 1) % lengthof(text_fields)].get());
         }
         else if (btn == Gosu::KB_ESCAPE) {
-            // Escape key will not be 'eaten' by text fields; use for deselecting.
+            // Escape key will not be consumed by Gosu::TextInput.
+            // Deselect all text fields.
             if (input().text_input()) {
-                input().set_text_input(0);
+                input().set_text_input(nullptr);
             }
             else {
                 close();
@@ -172,7 +167,7 @@ public:
         }
         else if (btn == Gosu::MS_LEFT) {
             // Mouse click: Select text field based on mouse position.
-            input().set_text_input(0);
+            input().set_text_input(nullptr);
             for (int i = 0; i < lengthof(text_fields); ++i) {
                 if (text_fields[i]->is_under_point(input().mouse_x(), input().mouse_y())) {
                     input().set_text_input(text_fields[i].get());

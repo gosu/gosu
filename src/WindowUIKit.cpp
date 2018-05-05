@@ -3,7 +3,9 @@
 
 #include "GosuViewController.hpp"
 #include <Gosu/Gosu.hpp>
+
 using namespace std;
+
 
 namespace Gosu
 {
@@ -34,7 +36,7 @@ namespace Gosu
 
 struct Gosu::Window::Impl
 {
-    ::UIWindow* window;
+    UIWindow* window;
     GosuViewController* controller;
     unique_ptr<Graphics> graphics;
     unique_ptr<Input> input;
@@ -47,7 +49,7 @@ struct Gosu::Window::Impl
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval)
 : pimpl(new Impl)
 {
-    pimpl->window = [[::UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    pimpl->window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     pimpl->controller = [GosuViewController new];
     pimpl->controller.gosuWindow = this;
     pimpl->window.rootViewController = pimpl->controller;
@@ -65,6 +67,9 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     pimpl->input->on_touch_moved = [this](Gosu::Touch touch) { touch_moved(touch); };
     pimpl->input->on_touch_ended = [this](Gosu::Touch touch) { touch_ended(touch); };
     pimpl->input->on_touch_cancelled = [this](Gosu::Touch touch) { touch_cancelled(touch); };
+    
+    // Now let the controller know about our Input instance.
+    [pimpl->controller trackTextInput:*pimpl->input];
     
     pimpl->fullscreen = fullscreen;
     pimpl->update_interval = update_interval;
@@ -152,7 +157,7 @@ void Gosu::Window::button_down(Button button)
 {
 }
 
-void* Gosu::Window::UIWindow() const
+void* Gosu::Window::uikit_window() const
 {
     return (__bridge void*) pimpl->window;
 }

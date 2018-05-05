@@ -2,12 +2,15 @@
 #if defined(GOSU_IS_IPHONE)
 
 #import "GosuGLView.hpp"
+#import <Gosu/Input.hpp>
+#import <Gosu/TextInput.hpp>
 
 #import <OpenGLES/EAGL.h>
 #import <OpenGLES/EAGLDrawable.h>
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
 #import <QuartzCore/QuartzCore.h>
+
 
 static EAGLContext __weak* globalContext;
 
@@ -28,7 +31,7 @@ namespace Gosu
 @implementation GosuGLView
 {
     EAGLContext* _context;
-    
+
     GLint _backingWidth;
     GLint _backingHeight;
 
@@ -36,39 +39,20 @@ namespace Gosu
     GLuint _viewFramebuffer;
 }
 
-+ (Class)layerClass
+- (instancetype)initWithFrame:(CGRect)frame
 {
-    return [CAEAGLLayer class];
-}
-
-- (id)initWithFrame:(CGRect)frame
-{
-    if ((self = [super initWithFrame:frame])) {
-        [self initializeGosuGLView];
+    if (self = [super initWithFrame:frame]) {
+        CAEAGLLayer* layer = (CAEAGLLayer*)self.layer;
+        layer.opaque = YES;
+        
+        globalContext = _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+        [EAGLContext setCurrentContext:_context];
+        
+        self.exclusiveTouch = YES;
+        self.multipleTouchEnabled = YES;
     }
     
     return self;
-}
-
-- (id)initWithCoder:(NSCoder*)aDecoder
-{
-    if ((self = [super initWithCoder:aDecoder])) {
-        [self initializeGosuGLView];
-    }
-    
-    return self;
-}
-
-- (void)initializeGosuGLView
-{
-    CAEAGLLayer* layer = (CAEAGLLayer*)self.layer;
-    layer.opaque = YES;
-    
-    globalContext = _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
-    [EAGLContext setCurrentContext:_context];
-    
-    self.exclusiveTouch = YES;
-    self.multipleTouchEnabled = YES;
 }
 
 - (void)dealloc
@@ -91,6 +75,13 @@ namespace Gosu
     glBindRenderbufferOES(GL_RENDERBUFFER_OES, _viewRenderbuffer);
     
     [_context presentRenderbuffer:GL_RENDERBUFFER_OES];
+}
+
+#pragma mark - UIView
+
++ (Class)layerClass
+{
+    return [CAEAGLLayer class];
 }
 
 - (void)layoutSubviews
@@ -126,6 +117,32 @@ namespace Gosu
     _viewFramebuffer = 0;
     glDeleteRenderbuffersOES(1, &_viewRenderbuffer);
     _viewRenderbuffer = 0;
+}
+
+#pragma mark - NSResponder / UIKeyInput
+
+- (BOOL)canBecomeFirstResponder
+{
+    return _input && _input->text_input();
+}
+
+- (BOOL)hasText
+{
+    return _input && _input->text_input() && !_input->text_input()->text().empty();
+}
+
+- (void)insertText:(NSString*)text
+{
+    if (_input && _input->text_input()) {
+        _input->text_input()->insert_text(text.UTF8String ?: "");
+    }
+}
+
+- (void)deleteBackward
+{
+    if (_input && _input->text_input()) {
+        _input->text_input()->delete_backward();
+    }
 }
 
 @end

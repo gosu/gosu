@@ -1,18 +1,19 @@
-#include <Gosu/Platform.hpp>
-#if !defined(GOSU_IS_IPHONE)
-
 #include <Gosu/TextInput.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/Platform.hpp>
+
+#ifndef GOSU_IS_IPHONE
 #include <SDL.h>
 #include <cctype>
+#endif
+
 using namespace std;
 
 struct Gosu::TextInput::Impl
 {
     string text;
     
-    // This is the current IME composition.
+    // This is the current IME composition (not used on iOS).
     // http://wiki.libsdl.org/Tutorials/TextInput#CandidateList
     string composition;
     
@@ -152,6 +153,7 @@ Gosu::TextInput::TextInput()
 
 Gosu::TextInput::~TextInput()
 {
+    // TODO: Unset Input::text_input to avoid stale pointers?
 }
 
 string Gosu::TextInput::text() const
@@ -172,12 +174,12 @@ void Gosu::TextInput::set_text(const string& text)
 
 unsigned Gosu::TextInput::caret_pos() const
 {
-    return static_cast<unsigned>(pimpl->caret_pos);
+    return pimpl->caret_pos;
 }
 
-void Gosu::TextInput::set_caret_pos(unsigned pos)
+void Gosu::TextInput::set_caret_pos(unsigned caret_pos)
 {
-    pimpl->caret_pos = pos;
+    pimpl->caret_pos = caret_pos;
 }
 
 unsigned Gosu::TextInput::selection_start() const
@@ -185,11 +187,12 @@ unsigned Gosu::TextInput::selection_start() const
     return pimpl->selection_start;
 }
 
-void Gosu::TextInput::set_selection_start(unsigned pos)
+void Gosu::TextInput::set_selection_start(unsigned selection_start)
 {
-    pimpl->selection_start = pos;
+    pimpl->selection_start = selection_start;
 }
 
+#ifndef GOSU_IS_IPHONE
 bool Gosu::TextInput::feed_sdl_event(void* event)
 {
     const SDL_Event* e = static_cast<SDL_Event*>(event);
@@ -275,5 +278,19 @@ bool Gosu::TextInput::feed_sdl_event(void* event)
     
     return false;
 }
-
 #endif
+
+void Gosu::TextInput::insert_text(string text)
+{
+    pimpl->insert_text(text);
+}
+
+void Gosu::TextInput::delete_forward()
+{
+    pimpl->delete_forward();
+}
+
+void Gosu::TextInput::delete_backward()
+{
+    pimpl->delete_backward();
+}

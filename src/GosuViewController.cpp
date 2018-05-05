@@ -52,19 +52,9 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
     return YES;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return UIInterfaceOrientationIsLandscape(interfaceOrientation);
-}
-
 - (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskLandscape;
-}
-
-- (GosuGLView*)GLView
-{
-    return (GosuGLView*)self.view;
 }
 
 - (Gosu::Window&)gosuWindowReference
@@ -80,6 +70,7 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
 {
     [super viewDidLoad];
     
+    // TODO - replace with AVAudioSession https://stackoverflow.com/q/19710046
     AudioSessionInitialize(nullptr, nullptr, handle_audio_interruption, nullptr);
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -151,15 +142,13 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
 
 - (void)setupTimerOrDisplayLink
 {
-    if (_timerOrDisplayLink) {
-        return;
-    }
+    if (_timerOrDisplayLink) return;
     
     NSInteger targetFPS = round(1000.0 / self.gosuWindowReference.update_interval());
     
     if (60 % targetFPS != 0) {
         NSTimeInterval interval = self.gosuWindowReference.update_interval() / 1000.0;
-        NSTimer* timer          = [NSTimer scheduledTimerWithTimeInterval:interval
+        NSTimer* timer = [NSTimer scheduledTimerWithTimeInterval:interval
                                                           target:self
                                                         selector:@selector(updateAndDraw:)
                                                         userInfo:nil
@@ -188,7 +177,7 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
     }
     
     if (window.needs_redraw()) {
-        [self.GLView redrawGL:^{
+        [(GosuGLView*)self.view redrawGL:^{
             window.graphics().frame([&window] {
                 window.draw();
                 Gosu::FPS::register_frame();
@@ -199,26 +188,37 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
     Gosu::Song::update();
 }
 
+#pragma mark - Input setup
+
+- (void)trackTextInput:(Gosu::Input&)input
+{
+    ((GosuGLView*)self.view).input = &input;
+}
+
 #pragma mark - Touch forwarding
 
 - (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    self.gosuWindowReference.input().feed_touch_event(0, (__bridge void*) touches);
+    auto& input = self.gosuWindowReference.input();
+    input.feed_touch_event(input.on_touch_began, (__bridge void*)touches);
 }
 
 - (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    self.gosuWindowReference.input().feed_touch_event(1, (__bridge void*) touches);
+    auto& input = self.gosuWindowReference.input();
+    input.feed_touch_event(input.on_touch_moved, (__bridge void*)touches);
 }
 
 - (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    self.gosuWindowReference.input().feed_touch_event(2, (__bridge void*) touches);
+    auto& input = self.gosuWindowReference.input();
+    input.feed_touch_event(input.on_touch_ended, (__bridge void*)touches);
 }
 
 - (void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    self.gosuWindowReference.input().feed_touch_event(3, (__bridge void*) touches);
+    auto& input = self.gosuWindowReference.input();
+    input.feed_touch_event(input.on_touch_cancelled, (__bridge void*)touches);
 }
 
 @end
