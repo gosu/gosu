@@ -670,6 +670,18 @@ module Gosu
     #     text_in.upcase.gsub(/[^A-Z0-9]/, '')
     #   end
     def filter; end
+
+    ##
+    # Replaces the current selection (if any) and inserts the given string at the current caret position.
+    def insert_text(str); end
+
+    ##
+    # Deletes the current selection, if any, or the next character.
+    def delete_forward: end
+
+    ##
+    # Deletes the current selection, if any, or the previous character.
+    def delete_backward; end
   end
 
   ##

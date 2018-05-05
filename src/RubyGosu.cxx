@@ -8471,6 +8471,100 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_TextInput_insert_text(int argc, VALUE *argv, VALUE self) {
+  Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
+  std::string arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::TextInput *","insert_text", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::TextInput * >(argp1);
+  {
+    std::string *ptr = (std::string *)0;
+    int res = SWIG_AsPtr_std_string(argv[0], &ptr);
+    if (!SWIG_IsOK(res) || !ptr) {
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), Ruby_Format_TypeError( "", "std::string","insert_text", 2, argv[0] )); 
+    }
+    arg2 = *ptr;
+    if (SWIG_IsNewObj(res)) delete ptr;
+  }
+  {
+    try {
+      (arg1)->insert_text(arg2);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_TextInput_delete_forward(int argc, VALUE *argv, VALUE self) {
+  Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::TextInput *","delete_forward", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::TextInput * >(argp1);
+  {
+    try {
+      (arg1)->delete_forward();
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_TextInput_delete_backward(int argc, VALUE *argv, VALUE self) {
+  Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__TextInput, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::TextInput *","delete_backward", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::TextInput * >(argp1);
+  {
+    try {
+      (arg1)->delete_backward();
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_TextInput_caret_pos(int argc, VALUE *argv, VALUE self) {
   Gosu::TextInput *arg1 = (Gosu::TextInput *) 0 ;
   void *argp1 = 0 ;
@@ -11969,6 +12063,9 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassTextInput.klass, "text", VALUEFUNC(_wrap_TextInput_text), -1);
   rb_define_method(SwigClassTextInput.klass, "text=", VALUEFUNC(_wrap_TextInput_texte___), -1);
   rb_define_method(SwigClassTextInput.klass, "filter", VALUEFUNC(_wrap_TextInput_filter), -1);
+  rb_define_method(SwigClassTextInput.klass, "insert_text", VALUEFUNC(_wrap_TextInput_insert_text), -1);
+  rb_define_method(SwigClassTextInput.klass, "delete_forward", VALUEFUNC(_wrap_TextInput_delete_forward), -1);
+  rb_define_method(SwigClassTextInput.klass, "delete_backward", VALUEFUNC(_wrap_TextInput_delete_backward), -1);
   rb_define_method(SwigClassTextInput.klass, "caret_pos", VALUEFUNC(_wrap_TextInput_caret_pos), -1);
   rb_define_method(SwigClassTextInput.klass, "caret_pos=", VALUEFUNC(_wrap_TextInput_caret_pose___), -1);
   rb_define_method(SwigClassTextInput.klass, "selection_start", VALUEFUNC(_wrap_TextInput_selection_start), -1);
