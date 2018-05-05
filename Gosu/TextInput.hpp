@@ -64,6 +64,7 @@ namespace Gosu
         
         //! Replaces the current selection (if any) and inserts the given string at the current
         //! caret position.
+        //! The filter method will not be applied before appending the string.
         void insert_text(std::string text);
         
         //! Deletes the current selection, if any, or the next character.

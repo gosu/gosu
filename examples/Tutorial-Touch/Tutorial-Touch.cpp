@@ -90,7 +90,7 @@ public:
     void rotate_towards(double x, double y)
     {
         double target_angle = Gosu::angle(pos_x, pos_y, x, y);
-        angle = angle + 0.1 * Gosu::angle_diff(angle, target_angle);
+        angle += 0.1 * Gosu::angle_diff(angle, target_angle);
     }
 
     void accelerate()

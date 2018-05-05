@@ -134,7 +134,8 @@ namespace Gosu
 - (void)insertText:(NSString*)text
 {
     if (_input && _input->text_input()) {
-        _input->text_input()->insert_text(text.UTF8String ?: "");
+        auto filtered_text = _input->text_input()->filter(text.UTF8String ?: "");
+        _input->text_input()->insert_text(filtered_text);
     }
 }
 

@@ -673,6 +673,7 @@ module Gosu
 
     ##
     # Replaces the current selection (if any) and inserts the given string at the current caret position.
+    # The filter method will not be applied before appending the string.
     def insert_text(str); end
 
     ##
