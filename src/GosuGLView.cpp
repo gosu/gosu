@@ -119,7 +119,7 @@ namespace Gosu
     _viewRenderbuffer = 0;
 }
 
-#pragma mark - NSResponder / UIKeyInput
+#pragma mark - NSResponder / UIKeyInput / UITextInputTraits
 
 - (BOOL)canBecomeFirstResponder
 {
@@ -144,6 +144,16 @@ namespace Gosu
     if (_input && _input->text_input()) {
         _input->text_input()->delete_backward();
     }
+}
+
+- (UITextAutocapitalizationType)autocapitalizationType
+{
+    return UITextAutocapitalizationTypeNone;
+}
+
+- (UITextAutocorrectionType)autocorrectionType
+{
+    return UITextAutocorrectionTypeNo;
 }
 
 @end
