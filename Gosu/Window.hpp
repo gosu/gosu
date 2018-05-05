@@ -118,7 +118,7 @@ namespace Gosu
         virtual void button_up(Gosu::Button) {}
 
         //! Called when a file is dropped onto the window.
-        //! \param path The filename of the dropped file. When multiple files are dropped, this
+        //! \param filename The filename of the dropped file. When multiple files are dropped, this
         //! method will be called several times.
         virtual void drop(const std::string& filename) {}
 
@@ -143,7 +143,7 @@ namespace Gosu
         #endif
         
         #ifdef GOSU_IS_IPHONE
-        void* UIWindow() const;
+        void* uikit_window() const;
         #endif
     };
 }

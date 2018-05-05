@@ -34,7 +34,7 @@ namespace Gosu
 
 struct Gosu::Window::Impl
 {
-    ::UIWindow* window;
+    UIWindow* window;
     GosuViewController* controller;
     unique_ptr<Graphics> graphics;
     unique_ptr<Input> input;
@@ -47,7 +47,7 @@ struct Gosu::Window::Impl
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval)
 : pimpl(new Impl)
 {
-    pimpl->window = [[::UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    pimpl->window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     pimpl->controller = [GosuViewController new];
     pimpl->controller.gosuWindow = this;
     pimpl->window.rootViewController = pimpl->controller;
@@ -152,7 +152,7 @@ void Gosu::Window::button_down(Button button)
 {
 }
 
-void* Gosu::Window::UIWindow() const
+void* Gosu::Window::uikit_window() const
 {
     return (__bridge void*) pimpl->window;
 }

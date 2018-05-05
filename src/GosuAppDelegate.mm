@@ -17,7 +17,7 @@ Gosu::Window& window_instance();
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
-    self.window = (__bridge UIWindow*) window_instance().UIWindow();
+    self.window = (__bridge UIWindow*)window_instance().uikit_window();
     [self.window makeKeyAndVisible];
     
     return YES;

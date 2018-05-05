@@ -39,7 +39,8 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
 
 - (void)loadView
 {
-    self.view = [[GosuGLView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.view = [[GosuGLView alloc] initWithFrame:[UIScreen mainScreen].bounds
+                                            input:self.gosuWindowReference.input()];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -198,25 +199,25 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
 - (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
     auto& input = self.gosuWindowReference.input();
-    input.feed_touch_event(input.on_touch_began, (__bridge void*) touches);
+    input.feed_touch_event(input.on_touch_began, (__bridge void*)touches);
 }
 
 - (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
     auto& input = self.gosuWindowReference.input();
-    input.feed_touch_event(input.on_touch_moved, (__bridge void*) touches);
+    input.feed_touch_event(input.on_touch_moved, (__bridge void*)touches);
 }
 
 - (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
     auto& input = self.gosuWindowReference.input();
-    input.feed_touch_event(input.on_touch_ended, (__bridge void*) touches);
+    input.feed_touch_event(input.on_touch_ended, (__bridge void*)touches);
 }
 
 - (void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
 {
     auto& input = self.gosuWindowReference.input();
-    input.feed_touch_event(input.on_touch_cancelled, (__bridge void*) touches);
+    input.feed_touch_event(input.on_touch_cancelled, (__bridge void*)touches);
 }
 
 @end

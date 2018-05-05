@@ -9,7 +9,8 @@ using namespace std;
 
 struct Gosu::Input::Impl
 {
-    UIView* view;
+    UIView* view = nil;
+    TextInput* text_input = nullptr;
     float mouse_x, mouse_y;
     float scale_x, scale_y;
     float update_interval;
@@ -22,7 +23,7 @@ struct Gosu::Input::Impl
         CGPoint point = [ui_touch locationInView:view];
         
         return (Touch) {
-            .id = (__bridge void*) ui_touch,
+            .id = (__bridge void*)ui_touch,
             .x  = (float)point.x * scale_x,
             .y  = (float)point.y * scale_y,
         };
@@ -131,9 +132,7 @@ double Gosu::Input::accelerometer_z() const
 
 void Gosu::Input::update()
 {
-    // Check for dead touches and remove from vector if
-    // necessary
-
+    // Check for dead touches and remove from vector if necessary.
     NSMutableSet* dead_touches = nil;
 
     for (UITouch* touch in pimpl->current_touches_set) {
@@ -145,9 +144,7 @@ void Gosu::Input::update()
         }
         
         // Something was deleted, we will need the set.
-        if (!dead_touches) {
-            dead_touches = [NSMutableSet new];
-        }
+        if (!dead_touches) dead_touches = [NSMutableSet new];
         [dead_touches addObject:touch];
     }
     
@@ -166,12 +163,18 @@ void Gosu::Input::update()
 
 Gosu::TextInput* Gosu::Input::text_input() const
 {
-    return nullptr;
+    return pimpl->text_input;
 }
 
-void Gosu::Input::set_text_input(TextInput* input)
+void Gosu::Input::set_text_input(TextInput* text_input)
 {
-    throw "NYI";
+    if (text_input) {
+        [pimpl->view becomeFirstResponder];
+    } else {
+        [pimpl->view resignFirstResponder];
+    }
+
+    pimpl->text_input = text_input;
 }
 
 #endif
