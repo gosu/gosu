@@ -61,5 +61,15 @@ namespace Gosu
         {
             return text;
         }
+        
+        //! Replaces the current selection (if any) and inserts the given string at the current
+        //! caret position.
+        void insert_text(std::string text);
+        
+        //! Deletes the current selection, if any, or the next character.
+        void delete_forward();
+        
+        //! Deletes the current selection, if any, or the previous character.
+        void delete_backward();
     };
 }

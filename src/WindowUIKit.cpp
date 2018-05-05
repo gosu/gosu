@@ -3,7 +3,9 @@
 
 #include "GosuViewController.hpp"
 #include <Gosu/Gosu.hpp>
+
 using namespace std;
+
 
 namespace Gosu
 {
@@ -65,6 +67,9 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     pimpl->input->on_touch_moved = [this](Gosu::Touch touch) { touch_moved(touch); };
     pimpl->input->on_touch_ended = [this](Gosu::Touch touch) { touch_ended(touch); };
     pimpl->input->on_touch_cancelled = [this](Gosu::Touch touch) { touch_cancelled(touch); };
+    
+    // Now let the controller know about our Input instance.
+    [pimpl->controller trackTextInput:*pimpl->input];
     
     pimpl->fullscreen = fullscreen;
     pimpl->update_interval = update_interval;

@@ -11,10 +11,6 @@
 #import <OpenGLES/ES1/glext.h>
 #import <QuartzCore/QuartzCore.h>
 
-#import <algorithm>
-
-using namespace std;
-
 
 static EAGLContext __weak* globalContext;
 
@@ -32,60 +28,8 @@ namespace Gosu
     }
 }
 
-#pragma mark - GosuTextPosition
-
-@interface GosuTextPosition : UITextPosition
-
-@property (nonatomic) NSInteger position;
-
-@end
-
-@implementation GosuTextPosition
-
-- (instancetype)initWithPosition:(NSInteger)position
-{
-    if (self = [super init]) {
-        _position = position;
-    }
-    return self;
-}
-
-@end
-
-#pragma mark - GosuTextRange
-
-@interface GosuTextRange : UITextRange
-
-@property (nonatomic, readonly) GosuTextPosition* start;
-@property (nonatomic, readonly) GosuTextPosition* end;
-
-@end
-
-@implementation GosuTextRange
-
-@synthesize start = _start;
-@synthesize end   = _end;
-
-- (instancetype)initWithStart:(NSInteger)start end:(NSInteger)end
-{
-    if (self = [super init]) {
-        _start = [[GosuTextPosition alloc] initWithPosition:start];
-        _end   = [[GosuTextPosition alloc] initWithPosition:end];
-    }
-    return self;
-}
-
-- (BOOL)isEmpty
-{
-    return _start.position == _end.position;
-}
-
-@end
-
-
 @implementation GosuGLView
 {
-    Gosu::Input* _input;
     EAGLContext* _context;
 
     GLint _backingWidth;
@@ -95,13 +39,11 @@ namespace Gosu
     GLuint _viewFramebuffer;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame input:(Gosu::Input&)input
+- (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
         CAEAGLLayer* layer = (CAEAGLLayer*)self.layer;
         layer.opaque = YES;
-        
-        _input = &input;
         
         globalContext = _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
         [EAGLContext setCurrentContext:_context];
@@ -177,53 +119,31 @@ namespace Gosu
     _viewRenderbuffer = 0;
 }
 
-#pragma mark - NSResponder / UITextInput
+#pragma mark - NSResponder / UIKeyInput
 
 - (BOOL)canBecomeFirstResponder
 {
-    return _input->text_input() != nullptr;
+    return _input && _input->text_input();
 }
 
-- (NSString*)textInRange:(UITextRange*)range
+- (BOOL)hasText
 {
-    if (_input->text_input() == nullptr) return nil;
-    
-    NSString* string = @(_input->text_input()->text().c_str());
-    auto start = ((GosuTextPosition*)range.start).position;
-    auto length = ((GosuTextPosition*)range.end).position - start;
-    return [string substringWithRange:NSMakeRange(start, length)];
+    return _input && _input->text_input() && !_input->text_input()->text().empty();
 }
 
-- (void)replaceRange:(UITextRange*)range withText:(NSString*)text
+- (void)insertText:(NSString*)text
 {
-    NSString* string = @(_input->text_input()->text().c_str());
-    auto start = ((GosuTextPosition*)range.start).position;
-    auto length = ((GosuTextPosition*)range.end).position - start;
-    string = [string stringByReplacingCharactersInRange:NSMakeRange(start, length) withString:text];
-    _input->text_input()->set_text(string.UTF8String ?: "");
-    _input->text_input()->set_selection_start(static_cast<unsigned>(start + length));
+    if (_input && _input->text_input()) {
+        _input->text_input()->insert_text(text.UTF8String ?: "");
+    }
 }
 
-- (UITextRange*)selectedTextRange
+- (void)deleteBackward
 {
-    if (_input->text_input() == nullptr) return nil;
-    
-    auto& text_input = *_input->text_input();
-    auto start = min(text_input.selection_start(), text_input.caret_pos());
-    auto end   = max(text_input.selection_start(), text_input.caret_pos());
-    return [[GosuTextRange alloc] initWithStart:start end:end];
+    if (_input && _input->text_input()) {
+        _input->text_input()->delete_backward();
+    }
 }
-
-- (void)setSelectedTextRange:(UITextRange*)selectedTextRange
-{
-    if (_input->text_input() == nullptr) return;
-
-    GosuTextRange* range = (GosuTextRange*)selectedTextRange;
-    _input->text_input()->set_selection_start(static_cast<unsigned>(range.start.position));
-    _input->text_input()->set_caret_pos(static_cast<unsigned>(range.end.position));
-}
-
-
 
 @end
 

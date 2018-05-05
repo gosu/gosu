@@ -20,7 +20,6 @@ struct Gosu::TextInput::Impl
     // Indices into the UTF-8 encoded text.
     unsigned caret_pos = 0, selection_start = 0;
     
-#ifndef GOSU_IS_IPHONE
     // Skip continuation characters, see: https://en.wikipedia.org/wiki/UTF-8#Description
     // (0xc0 = 11'000000, 0x80 = 10'000000)
     bool should_skip(char ch)
@@ -145,7 +144,6 @@ struct Gosu::TextInput::Impl
             caret_pos = selection_start;
         }
     }
-#endif
 };
 
 Gosu::TextInput::TextInput()
@@ -155,7 +153,7 @@ Gosu::TextInput::TextInput()
 
 Gosu::TextInput::~TextInput()
 {
-    // TODO: Unset text_input to avoid stale pointers?
+    // TODO: Unset Input::text_input to avoid stale pointers?
 }
 
 string Gosu::TextInput::text() const
@@ -281,3 +279,18 @@ bool Gosu::TextInput::feed_sdl_event(void* event)
     return false;
 }
 #endif
+
+void Gosu::TextInput::insert_text(string text)
+{
+    pimpl->insert_text(text);
+}
+
+void Gosu::TextInput::delete_forward()
+{
+    pimpl->delete_forward();
+}
+
+void Gosu::TextInput::delete_backward()
+{
+    pimpl->delete_backward();
+}

@@ -1,12 +1,10 @@
 #import <UIKit/UIKit.h>
-
-
-@class GosuGLView;
+#import <Gosu/Fwd.hpp>
 
 
 @interface GosuViewController : UIViewController
 
-- (GosuGLView *)GLView;
+- (void)trackTextInput:(Gosu::Input&)input;
 
 @property (nonatomic, assign) void *gosuWindow;
 

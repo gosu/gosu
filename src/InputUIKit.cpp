@@ -169,12 +169,12 @@ Gosu::TextInput* Gosu::Input::text_input() const
 void Gosu::Input::set_text_input(TextInput* text_input)
 {
     if (text_input) {
+        pimpl->text_input = text_input;
         [pimpl->view becomeFirstResponder];
     } else {
         [pimpl->view resignFirstResponder];
+        pimpl->text_input = nullptr;
     }
-
-    pimpl->text_input = text_input;
 }
 
 #endif

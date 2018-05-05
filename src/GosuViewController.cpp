@@ -39,8 +39,7 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
 
 - (void)loadView
 {
-    self.view = [[GosuGLView alloc] initWithFrame:[UIScreen mainScreen].bounds
-                                            input:self.gosuWindowReference.input()];
+    self.view = [[GosuGLView alloc] initWithFrame:[UIScreen mainScreen].bounds];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -56,11 +55,6 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
 - (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskLandscape;
-}
-
-- (GosuGLView*)GLView
-{
-    return (GosuGLView*)self.view;
 }
 
 - (Gosu::Window&)gosuWindowReference
@@ -183,7 +177,7 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
     }
     
     if (window.needs_redraw()) {
-        [self.GLView redrawGL:^{
+        [(GosuGLView*)self.view redrawGL:^{
             window.graphics().frame([&window] {
                 window.draw();
                 Gosu::FPS::register_frame();
@@ -192,6 +186,13 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
     }
     
     Gosu::Song::update();
+}
+
+#pragma mark - Input setup
+
+- (void)trackTextInput:(Gosu::Input&)input
+{
+    ((GosuGLView*)self.view).input = &input;
 }
 
 #pragma mark - Touch forwarding
