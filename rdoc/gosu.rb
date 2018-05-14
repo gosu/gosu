@@ -678,7 +678,7 @@ module Gosu
 
     ##
     # Deletes the current selection, if any, or the next character.
-    def delete_forward: end
+    def delete_forward; end
 
     ##
     # Deletes the current selection, if any, or the previous character.
