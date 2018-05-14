@@ -143,7 +143,7 @@ class GameWindow : public Gosu::Window
 
 public:
     GameWindow()
-    : Window(640, 480), font(20)
+    :   Window(640, 480), font(20)
     {
         set_caption("Gosu Tutorial Game");
 
