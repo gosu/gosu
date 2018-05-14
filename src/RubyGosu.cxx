@@ -2353,9 +2353,9 @@ namespace Gosu
 {
     void draw_line(double x1, double y1, Gosu::Color c1,
                    double x2, double y2, Gosu::Color c2,
-                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT, double thickness = 1.0)
+                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
     {
-        Gosu::Graphics::draw_line(x1, y1, c1, x2, y2, c2, z, mode, thickness);
+        Gosu::Graphics::draw_line(x1, y1, c1, x2, y2, c2, z, mode);
     }
     
     void draw_triangle(double x1, double y1, Gosu::Color c1,
@@ -10195,7 +10195,6 @@ _wrap_draw_line(int argc, VALUE *argv, VALUE self) {
   Gosu::Color arg6 ;
   Gosu::ZPos arg7 = (Gosu::ZPos) 0 ;
   Gosu::AlphaMode arg8 = (Gosu::AlphaMode) Gosu::AM_DEFAULT ;
-  double arg9 = (double) 1.0 ;
   double val1 ;
   int ecode1 = 0 ;
   double val2 ;
@@ -10206,10 +10205,8 @@ _wrap_draw_line(int argc, VALUE *argv, VALUE self) {
   int ecode5 = 0 ;
   double val7 ;
   int ecode7 = 0 ;
-  double val9 ;
-  int ecode9 = 0 ;
   
-  if ((argc < 6) || (argc > 9)) {
+  if ((argc < 6) || (argc > 8)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 6)",argc); SWIG_fail;
   }
   ecode1 = SWIG_AsVal_double(argv[0], &val1);
@@ -10294,16 +10291,9 @@ _wrap_draw_line(int argc, VALUE *argv, VALUE self) {
       }
     }
   }
-  if (argc > 8) {
-    ecode9 = SWIG_AsVal_double(argv[8], &val9);
-    if (!SWIG_IsOK(ecode9)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode9), Ruby_Format_TypeError( "", "double","Gosu::draw_line", 9, argv[8] ));
-    } 
-    arg9 = static_cast< double >(val9);
-  }
   {
     try {
-      Gosu::draw_line(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9);
+      Gosu::draw_line(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());

@@ -239,9 +239,9 @@ namespace Gosu
 {
     void draw_line(double x1, double y1, Gosu::Color c1,
                    double x2, double y2, Gosu::Color c2,
-                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT, double thickness = 1.0)
+                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
     {
-        Gosu::Graphics::draw_line(x1, y1, c1, x2, y2, c2, z, mode, thickness);
+        Gosu::Graphics::draw_line(x1, y1, c1, x2, y2, c2, z, mode);
     }
     
     void draw_triangle(double x1, double y1, Gosu::Color c1,
@@ -1018,7 +1018,7 @@ namespace Gosu
 {
     void draw_line(double x1, double y1, Gosu::Color c1,
                    double x2, double y2, Gosu::Color c2,
-                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT, double thickness = 1.0);
+                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT);
 
     void draw_triangle(double x1, double y1, Gosu::Color c1,
                        double x2, double y2, Gosu::Color c2,

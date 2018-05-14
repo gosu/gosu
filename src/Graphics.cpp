@@ -289,24 +289,22 @@ void Gosu::Graphics::transform(const Gosu::Transform& transform, const function<
 }
 
 void Gosu::Graphics::draw_line(double x1, double y1, Color c1,
-    double x2, double y2, Color c2, ZPos z, AlphaMode mode, double thickness)
+                               double x2, double y2, Color c2,
+                               ZPos z, AlphaMode mode)
 {
-    if (x1 == x2 && y1 == y2) {
-        return;
-    }
+    if (x1 == x2 && y1 == y2) return;
 
     DrawOp op;
     op.render_state.mode = mode;
 
-    double an = angle(x1, y1, x2, y2) - 90.0;
-    double dx = offset_x(an, thickness/2);
-    double dy = offset_y(an, thickness/2);
+    double a = angle(x1, y1, x2, y2) - 90.0;
+    double dx = offset_x(a, 0.5);
+    double dy = offset_y(a, 0.5);
 
-    op.vertices[0] = DrawOp::Vertex(x1+dx, y1+dy, c1);
-    op.vertices[1] = DrawOp::Vertex(x2+dx, y2+dy, c2);
-    op.vertices[2] = DrawOp::Vertex(x2-dx, y2-dy, c2);
-    op.vertices[3] = DrawOp::Vertex(x1-dx, y1-dy, c1);
-
+    op.vertices[0] = DrawOp::Vertex(x1 + dx, y1 + dy, c1);
+    op.vertices[1] = DrawOp::Vertex(x2 + dx, y2 + dy, c2);
+    op.vertices[2] = DrawOp::Vertex(x2 - dx, y2 - dy, c2);
+    op.vertices[3] = DrawOp::Vertex(x1 - dx, y1 - dy, c1);
     op.z = z;
     
     current_queue().schedule_draw_op(op);
@@ -335,7 +333,7 @@ void Gosu::Graphics::draw_quad(double x1, double y1, Color c1, double x2, double
     op.render_state.mode = mode;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
-// TODO: Should be harmonized
+// TODO: Should use the same order on OpenGL and OpenGL ES
 #ifdef GOSU_IS_OPENGLES
     op.vertices[2] = DrawOp::Vertex(x3, y3, c3);
     op.vertices[3] = DrawOp::Vertex(x4, y4, c4);

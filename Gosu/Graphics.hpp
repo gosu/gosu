@@ -71,8 +71,7 @@ namespace Gosu
 
         static void draw_line(double x1, double y1, Color c1,
                               double x2, double y2, Color c2,
-                              ZPos z, AlphaMode mode = AM_DEFAULT,
-                              double thickness = 1.0);
+                              ZPos z, AlphaMode mode = AM_DEFAULT);
 
         static void draw_triangle(double x1, double y1, Color c1,
                                   double x2, double y2, Color c2,
