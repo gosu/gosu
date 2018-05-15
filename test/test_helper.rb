@@ -49,7 +49,11 @@ module TestHelper
   end
 
   def skip_on_ci
-    skip if ENV["APPVEYOR"] or ENV["TRAVIS"]
+    skip if runs_on_ci?
+  end
+
+  def runs_on_ci?
+    ENV["APPVEYOR"] or ENV["TRAVIS"]
   end
 
   def assert_screenshot_matches(window, expected)
@@ -59,10 +63,19 @@ module TestHelper
     sleep 1
 
     output = window.screenshot
-    output.save 'debug_' + expected if ENV['DEBUG']
     reference = Gosu::Image.new(File.join(media_path, expected))
 
-    assert output.similar?(reference, 0.90), "Screenshot should look similar to #{expected}!#{diff([reference.to_blob].pack('m*'), [output.to_blob].pack('m*')) if ENV['DEBUG']}"
+    begin
+      assert output.similar?(reference, 0.90), "Screenshot should look similar to #{expected}!"
+    rescue Minitest::Assertion => e
+      message = if runs_on_ci?
+         e.message + "\n" + diff([reference.to_blob].pack('m*'), [output.to_blob].pack('m*'))
+      else
+        output.save 'debug_' + expected
+        e.message + " Generated debug image: ./#{'debug_' + expected}"
+      end
+      raise Minitest::Assertion, message
+    end
   end
 end
 
