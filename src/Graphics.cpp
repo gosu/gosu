@@ -387,12 +387,12 @@ unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src,
         // Use the source bitmap directly if the source area completely covers
         // it.
         if (src_x == 0 && src_width == src.width() && src_y == 0 && src_height == src.height()) {
-            data = texture->try_alloc(texture, src, 0);
+            data = texture->try_alloc(src, 0);
         }
         else {
             Bitmap bmp(src_width, src_height);
             bmp.insert(src, 0, 0, src_x, src_y, src_width, src_height);
-            data = texture->try_alloc(texture, bmp, 0);
+            data = texture->try_alloc(bmp, 0);
         }
         
         if (!data) throw logic_error("Internal texture block allocation error");
@@ -415,7 +415,7 @@ unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src,
     for (const auto& texture : textures) {
         if (texture->retro() != wants_retro) continue;
         
-        unique_ptr<ImageData> data = texture->try_alloc(texture, bmp, 1);
+        unique_ptr<ImageData> data = texture->try_alloc(bmp, 1);
         if (data) return data;
     }
     
@@ -426,7 +426,7 @@ unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src,
     textures.push_back(texture);
     
     unique_ptr<ImageData> data;
-    data = texture->try_alloc(texture, bmp, 1);
+    data = texture->try_alloc(bmp, 1);
     if (!data.get()) throw logic_error("Internal texture block allocation error");
     return data;
 }
