@@ -119,7 +119,7 @@ public:
         transform_stack.pop();
     }
 
-    void perform_draw_ops_andCode()
+    void perform_draw_ops_and_code()
     {
         if (recording()) {
             throw std::logic_error("Flushing to the screen is not allowed while recording a macro");

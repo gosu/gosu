@@ -26,7 +26,6 @@ namespace Gosu
             if (current_graphics_pointer == nullptr) {
                 throw logic_error("Gosu::Graphics can only be drawn to while rendering");
             }
-            
             return *current_graphics_pointer;
         }
         
@@ -182,23 +181,23 @@ void Gosu::Graphics::frame(const function<void ()>& f)
     if (pimpl->black_height || pimpl->black_width) {
         if (pimpl->black_height) {
             draw_quad(0, -pimpl->black_height, Color::BLACK,
-                     width(), -pimpl->black_height, Color::BLACK,
-                     0, 0, Color::BLACK,
-                     width(), 0, Color::BLACK, 0);
+                      width(), -pimpl->black_height, Color::BLACK,
+                      0, 0, Color::BLACK,
+                      width(), 0, Color::BLACK, 0);
             draw_quad(0, height(), Color::BLACK,
-                     width(), height(), Color::BLACK,
-                     0, height() + pimpl->black_height, Color::BLACK,
-                     width(), height() + pimpl->black_height, Color::BLACK, 0);
+                      width(), height(), Color::BLACK,
+                      0, height() + pimpl->black_height, Color::BLACK,
+                      width(), height() + pimpl->black_height, Color::BLACK, 0);
         }
         if (pimpl->black_width) {
             draw_quad(-pimpl->black_width, 0, Color::BLACK,
-                     0, 0, Color::BLACK,
-                     -pimpl->black_width, height(), Color::BLACK,
-                     0, height(), Color::BLACK, 0);
+                      0, 0, Color::BLACK,
+                      -pimpl->black_width, height(), Color::BLACK,
+                      0, height(), Color::BLACK, 0);
             draw_quad(width(), 0, Color::BLACK,
-                     width() + pimpl->black_width, 0, Color::BLACK,
-                     width(), height(), Color::BLACK,
-                     width() + pimpl->black_width, height(), Color::BLACK, 0);
+                      width() + pimpl->black_width, 0, Color::BLACK,
+                      width(), height(), Color::BLACK,
+                      width() + pimpl->black_width, height(), Color::BLACK, 0);
         }
         flush();
     }
@@ -219,7 +218,7 @@ void Gosu::Graphics::frame(const function<void ()>& f)
 
 void Gosu::Graphics::flush()
 {
-    current_queue().perform_draw_ops_andCode();
+    current_queue().perform_draw_ops_and_code();
     current_queue().clear_queue();
 }
 
@@ -400,7 +399,7 @@ unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src,
             data = texture->try_alloc(texture, bmp, 0);
         }
         
-        if (!data.get()) throw logic_error("Internal texture block allocation error");
+        if (!data) throw logic_error("Internal texture block allocation error");
         return data;
     }
     
