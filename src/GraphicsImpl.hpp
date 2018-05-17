@@ -51,6 +51,12 @@ namespace Gosu
 
 namespace Gosu
 {
+    enum QueueMode
+    {
+        QM_RENDER_TO_SCREEN,
+        QM_RECORD_MACRO,
+    };
+
     class Texture;
     class TexChunk;
     class ClipRectStack;

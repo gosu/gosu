@@ -21,8 +21,8 @@ Gosu::Image::Image(const string& filename, unsigned flags)
     Image(bmp, flags).data_.swap(data_);
 }
 
-Gosu::Image::Image(const string& filename, unsigned src_x, unsigned src_y, unsigned src_width,
-    unsigned src_height, unsigned flags)
+Gosu::Image::Image(const string& filename, unsigned src_x, unsigned src_y,
+                   unsigned src_width, unsigned src_height, unsigned flags)
 {
     // Forward.
     Bitmap bmp;
@@ -36,8 +36,8 @@ Gosu::Image::Image(const Bitmap& source, unsigned flags)
     Image(source, 0, 0, source.width(), source.height(), flags).data_.swap(data_);
 }
 
-Gosu::Image::Image(const Bitmap& source, unsigned src_x, unsigned src_y, unsigned src_width,
-    unsigned src_height, unsigned flags)
+Gosu::Image::Image(const Bitmap& source, unsigned src_x, unsigned src_y,
+                   unsigned src_width, unsigned src_height, unsigned flags)
 : data_(Graphics::create_image(source, src_x, src_y, src_width, src_height, flags))
 {
 }
@@ -45,9 +45,7 @@ Gosu::Image::Image(const Bitmap& source, unsigned src_x, unsigned src_y, unsigne
 Gosu::Image::Image(unique_ptr<ImageData>&& data)
 : data_(data.release())
 {
-    if (this->data_.get() == nullptr) {
-        throw invalid_argument("Gosu::Image cannot be initialized with nullptr");
-    }
+    if (!data_) throw invalid_argument("Gosu::Image cannot be initialized with nullptr");
 }
 
 unsigned Gosu::Image::width() const

@@ -159,7 +159,7 @@ void Gosu::Graphics::frame(const function<void ()>& f)
     }
     else {
         // Create default draw-op queue.
-        queues.resize(1);
+        queues.emplace_back(QM_RENDER_TO_SCREEN);
     }
     
     queues.back().set_base_transform(pimpl->base_transform);
@@ -171,10 +171,8 @@ void Gosu::Graphics::frame(const function<void ()>& f)
     
     f();
     
-    // If recording is in process, cancel it.
-    while (current_queue().recording()) {
-        queues.pop_back();
-    }
+    // Cancel all intermediate queues that have not been cleaned up.
+    while (queues.size() > 1) queues.pop_back();
     
     flush();
     
@@ -224,7 +222,7 @@ void Gosu::Graphics::flush()
 
 void Gosu::Graphics::gl(const function<void ()>& f)
 {
-    if (current_queue().recording()) {
+    if (current_queue().mode() == QM_RECORD_MACRO) {
         throw logic_error("Custom OpenGL is not allowed while creating a macro");
     }
     
@@ -266,17 +264,15 @@ void Gosu::Graphics::clip_to(double x, double y, double width, double height,
     current_queue().end_clipping();
 }
 
-unique_ptr<Gosu::ImageData> Gosu::Graphics::record(int width, int height,
-                                                   const function<void ()>& f)
+Gosu::Image Gosu::Graphics::record(int width, int height, const function<void ()>& f)
 {
-    queues.resize(queues.size() + 1);
-    current_queue().set_recording();
+    queues.emplace_back(QM_RECORD_MACRO);
 
     f();
     
     unique_ptr<ImageData> result(new Macro(current_queue(), width, height));
     queues.pop_back();
-    return result;
+    return Image(move(result));
 }
 
 void Gosu::Graphics::transform(const Gosu::Transform& transform, const function<void ()>& f)

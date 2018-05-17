@@ -59,11 +59,8 @@ namespace Gosu
         static void clip_to(double x, double y, double width, double height,
                             const std::function<void ()>& f);
         
-        //! Records a macro and returns it as an ImageData instance.
-        //! Usually, the return value is passed to Image::Image().
-        //! Cannot be nested.
-        static std::unique_ptr<Gosu::ImageData> record(int width, int height,
-                                                       const std::function<void ()>& f);
+        //! Records a macro and returns it as an Image.
+        static Gosu::Image record(int width, int height, const std::function<void ()>& f);
         
         //! Pushes one transformation onto the transformation stack.
         static void transform(const Transform& transform,
