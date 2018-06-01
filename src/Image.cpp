@@ -61,7 +61,7 @@ unsigned Gosu::Image::height() const
 }
 
 void Gosu::Image::draw(double x, double y, ZPos z, double scale_x, double scale_y, Color c,
-    AlphaMode mode) const
+    BlendMode mode) const
 {
     double x2 = x + width() * scale_x;
     double y2 = y + height() * scale_y;
@@ -70,7 +70,7 @@ void Gosu::Image::draw(double x, double y, ZPos z, double scale_x, double scale_
 }
 
 void Gosu::Image::draw_mod(double x, double y, ZPos z, double scale_x, double scale_y, Color c1,
-    Color c2, Color c3, Color c4, AlphaMode mode) const
+    Color c2, Color c3, Color c4, BlendMode mode) const
 {
     double x2 = x + width() * scale_x;
     double y2 = y + height() * scale_y;
@@ -79,7 +79,7 @@ void Gosu::Image::draw_mod(double x, double y, ZPos z, double scale_x, double sc
 }
 
 void Gosu::Image::draw_rot(double x, double y, ZPos z, double angle,
-    double center_x, double center_y, double scale_x, double scale_y, Color c, AlphaMode mode) const
+    double center_x, double center_y, double scale_x, double scale_y, Color c, BlendMode mode) const
 {
     double size_x = width() * scale_x;
     double size_y = height() * scale_y;

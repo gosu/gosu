@@ -48,17 +48,17 @@
 }
 
 // Typemaps for enums that should be given in as symbols.
-%typemap(in) Gosu::AlphaMode {
+%typemap(in) Gosu::BlendMode {
     const char* cstr = Gosu::cstr_from_symbol($input);
     
     if (!strcmp(cstr, "default")) {
-        $1 = Gosu::AM_DEFAULT;
+        $1 = Gosu::BM_DEFAULT;
     }
     else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive")) {
-        $1 = Gosu::AM_ADD;
+        $1 = Gosu::BM_ADD;
     }
     else if (!strcmp(cstr, "multiply")) {
-        $1 = Gosu::AM_MULTIPLY;
+        $1 = Gosu::BM_MULTIPLY;
     }
     else {
         SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
@@ -239,7 +239,7 @@ namespace Gosu
 {
     void draw_line(double x1, double y1, Gosu::Color c1,
                    double x2, double y2, Gosu::Color c2,
-                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
+                   Gosu::ZPos z = 0, Gosu::BlendMode mode = Gosu::BM_DEFAULT)
     {
         Gosu::Graphics::draw_line(x1, y1, c1, x2, y2, c2, z, mode);
     }
@@ -247,7 +247,7 @@ namespace Gosu
     void draw_triangle(double x1, double y1, Gosu::Color c1,
                        double x2, double y2, Gosu::Color c2,
                        double x3, double y3, Gosu::Color c3,
-                       Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
+                       Gosu::ZPos z = 0, Gosu::BlendMode mode = Gosu::BM_DEFAULT)
     {
         Gosu::Graphics::draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z, mode);
     }
@@ -256,13 +256,13 @@ namespace Gosu
                    double x2, double y2, Gosu::Color c2,
                    double x3, double y3, Gosu::Color c3,
                    double x4, double y4, Gosu::Color c4,
-                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
+                   Gosu::ZPos z = 0, Gosu::BlendMode mode = Gosu::BM_DEFAULT)
     {
         Gosu::Graphics::draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
     }
     
     void draw_rect(double x, double y, double width, double height, Gosu::Color c,
-                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
+                   Gosu::ZPos z = 0, Gosu::BlendMode mode = Gosu::BM_DEFAULT)
     {
         Gosu::Graphics::draw_rect(x, y, width, height, c, z, mode);
     }
@@ -380,8 +380,8 @@ namespace Gosu
 
 // Graphics:
 
-// ZPos, AlphaMode, FontFlags, Alignment
-%ignore Gosu::AlphaMode;
+// ZPos, BlendMode, FontFlags, Alignment
+%ignore Gosu::BlendMode;
 %ignore Gosu::FontFlags;
 %ignore Gosu::Alignment;
 %ignore Gosu::ImageFlags;
@@ -619,7 +619,7 @@ namespace Gosu
                       double x2, double y2, Color c2,
                       double x3, double y3, Color c3,
                       double x4, double y4, Color c4,
-                      ZPos z, AlphaMode mode = Gosu::AM_DEFAULT)
+                      ZPos z, BlendMode mode = Gosu::BM_DEFAULT)
     {
         $self->data().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
     }
@@ -636,6 +636,31 @@ namespace Gosu
     {
         std::unique_ptr<Gosu::ImageData> image_data = $self->data().subimage(x, y, w, h);
         return image_data.get() ? new Gosu::Image(std::move(image_data)) : nullptr;
+    }
+
+    static Gosu::Image from_blob(const std::string& blob, int width, int height)
+    {
+        Gosu::Bitmap bitmap(width, height, Gosu::Color::NONE);
+
+        std::size_t size = width * height * 4;
+        if (blob.size() == size) {
+            // 32 bit per pixel, assume R8G8B8A8
+            std::memcpy(bitmap.data(), &blob[0], size);
+        }
+        else if (blob.size() == size * sizeof(float)) {
+            // 128 bit per channel, assume float/float/float/float
+            const float* in = reinterpret_cast<const float*>(&blob);
+            Gosu::Color::Channel* out = reinterpret_cast<Gosu::Color::Channel*>(bitmap.data());
+            for (int i = size; i > 0; --i) {
+                *(out++) = static_cast<Gosu::Color::Channel>(*(in++) * 255);
+            }
+        }
+        else {
+            rb_raise(rb_eArgError, "Blob length mismatch (%i) - must be 4 * width * height (as 32bit "
+                                   "R8G8B8A8 or 128bit float/float/float/float", blob.size());
+        }
+
+        return Gosu::Image(bitmap);
     }
     
     %newobject from_text;
@@ -1018,21 +1043,21 @@ namespace Gosu
 {
     void draw_line(double x1, double y1, Gosu::Color c1,
                    double x2, double y2, Gosu::Color c2,
-                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT);
+                   Gosu::ZPos z = 0, Gosu::BlendMode mode = Gosu::BM_DEFAULT);
 
     void draw_triangle(double x1, double y1, Gosu::Color c1,
                        double x2, double y2, Gosu::Color c2,
                        double x3, double y3, Gosu::Color c3,
-                       Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT);
+                       Gosu::ZPos z = 0, Gosu::BlendMode mode = Gosu::BM_DEFAULT);
 
     void draw_quad(double x1, double y1, Gosu::Color c1,
                    double x2, double y2, Gosu::Color c2,
                    double x3, double y3, Gosu::Color c3,
                    double x4, double y4, Gosu::Color c4,
-                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT);
+                   Gosu::ZPos z = 0, Gosu::BlendMode mode = Gosu::BM_DEFAULT);
 
     void draw_rect(double x, double y, double width, double height, Gosu::Color c,
-                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT);
+                   Gosu::ZPos z = 0, Gosu::BlendMode mode = Gosu::BM_DEFAULT);
 
     void flush();
     void unsafe_gl();

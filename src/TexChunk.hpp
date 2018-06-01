@@ -29,7 +29,7 @@ public:
         double x2, double y2, Color c2,
         double x3, double y3, Color c3,
         double x4, double y4, Color c4,
-        ZPos z, AlphaMode mode) const override;
+        ZPos z, BlendMode mode) const override;
 
     const GLTexInfo* gl_tex_info() const override { return &info; }
     

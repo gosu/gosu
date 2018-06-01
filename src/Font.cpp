@@ -120,7 +120,7 @@ double Gosu::Font::text_width(const string& text, double scale_x) const
 }
 
 void Gosu::Font::draw(const string& text, double x, double y, ZPos z,
-    double scale_x, double scale_y, Color c, AlphaMode mode) const
+    double scale_x, double scale_y, Color c, BlendMode mode) const
 {
     double current_y = y;
     
@@ -140,7 +140,7 @@ void Gosu::Font::draw(const string& text, double x, double y, ZPos z,
 }
 
 void Gosu::Font::draw_rel(const string& text, double x, double y, ZPos z,
-    double rel_x, double rel_y, double scale_x, double scale_y, Color c, AlphaMode mode) const
+    double rel_x, double rel_y, double scale_x, double scale_y, Color c, BlendMode mode) const
 {
     x -= text_width(text) * scale_x * rel_x;
     y -= height() * scale_y * rel_y;
@@ -149,7 +149,7 @@ void Gosu::Font::draw_rel(const string& text, double x, double y, ZPos z,
 }
 
 void Gosu::Font::draw_rot(const string& text, double x, double y, ZPos z, double angle,
-    double scale_x, double scale_y, Color c, AlphaMode mode) const
+    double scale_x, double scale_y, Color c, BlendMode mode) const
 {
     Graphics::transform(rotate(angle, x, y), [&] {
         draw(text, x, y, z, scale_x, scale_y, c, mode);

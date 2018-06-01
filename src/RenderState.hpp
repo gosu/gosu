@@ -10,12 +10,13 @@ struct Gosu::RenderState
     std::shared_ptr<Texture> texture;
     const Transform* transform;
     ClipRect clip_rect;
-    AlphaMode mode;
+    BlendMode mode;
     
     RenderState()
-    : transform(0), mode(AM_DEFAULT)
     {
         clip_rect.width = NO_CLIPPING;
+        transform = nullptr;
+        mode = BM_DEFAULT;
     }
     
     bool operator==(const RenderState& rhs) const
@@ -37,12 +38,12 @@ struct Gosu::RenderState
         }
     }
     
-    void apply_alpha_mode() const
+    void apply_blend_mode() const
     {
-        if (mode == AM_ADD) {
+        if (mode == BM_ADD) {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
         }
-        else if (mode == AM_MULTIPLY) {
+        else if (mode == BM_MULTIPLY) {
             glBlendFunc(GL_DST_COLOR, GL_ZERO);
         }
         else {
@@ -67,7 +68,7 @@ struct Gosu::RenderState
     {
         apply_texture();
         // TODO: No inner clip_rect yet - how would this work?!
-        apply_alpha_mode();
+        apply_blend_mode();
     }
     #endif
 };
@@ -100,7 +101,7 @@ class Gosu::RenderStateManager : private Gosu::RenderState
 public:
     RenderStateManager()
     {
-        apply_alpha_mode();
+        apply_blend_mode();
         // Preserve previous MV matrix
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
@@ -122,7 +123,7 @@ public:
         set_texture(rs.texture);
         set_transform(rs.transform);
         set_clip_rect(rs.clip_rect);
-        set_alpha_mode(rs.mode);
+        set_blend_mode(rs.mode);
     }
     
     void set_texture(std::shared_ptr<Texture> new_texture)
@@ -176,12 +177,12 @@ public:
         }
     }
     
-    void set_alpha_mode(AlphaMode new_mode)
+    void set_blend_mode(BlendMode new_mode)
     {
         if (new_mode == mode) return;
         
         mode = new_mode;
-        apply_alpha_mode();
+        apply_blend_mode();
     }
     
     // The cached values may have been messed with. Reset them again.
@@ -190,7 +191,7 @@ public:
         apply_texture();
         apply_transform();
         apply_clip_rect();
-        apply_alpha_mode();
+        apply_blend_mode();
     }
 };
 

@@ -1,5 +1,6 @@
 gem "minitest"
 require "minitest/autorun"
+require 'fileutils'
 
 require "gosu" unless defined? Gosu
 
@@ -35,6 +36,19 @@ class Gosu::Image
 end
 
 module TestHelper
+  class ScreenshotWindow < Gosu::Window
+    include TestHelper
+
+    def self.draw(w, h)
+      win = new(w, h)
+      win.caption = "Screenshotwindow"
+      win.define_singleton_method :draw do
+        yield(w, h)
+      end
+      win
+    end
+  end
+
   # TODO: Should be __dir__ after we drop Ruby 1.x support...
   def media_path(fname = "")
     File.join(File.dirname(__FILE__), "media", fname)
@@ -49,20 +63,48 @@ module TestHelper
   end
 
   def skip_on_ci
-    skip if ENV["APPVEYOR"] or ENV["TRAVIS"]
+    skip if ci?
   end
 
-  def assert_screenshot_matches(window, expected)
+  def ci?
+    ENV["APPVEYOR"] or ENV["TRAVIS"]
+  end
+
+  def assert_equal_files(reference, output, msg=nil)
+    begin
+      assert File.binread(reference) == File.binread(output), "#{reference} should be binary equal to #{output}!"
+    rescue Minitest::Assertion => e
+      message = if ci?
+         e.message + "\n" + diff([File.binread(reference)].pack('m*'), [File.binread(output)].pack('m*'))
+      else
+        debug = File.expand_path('../debug_'+File.basename(output), __FILE__)
+        FileUtils.cp(output, debug)
+        e.message + " Generated debug image: #{debug}"
+      end
+      raise Minitest::Assertion, message
+    end
+  end
+
+  def assert_screenshot_matches(window, expected, similarity=0.90)
     # TODO: Resolve the mystery around the needed(?) double-tick-second-sleep
     window.tick
     window.tick
     sleep 1
 
     output = window.screenshot
-    output.save 'debug_' + expected if ENV['DEBUG']
     reference = Gosu::Image.new(File.join(media_path, expected))
 
-    assert output.similar?(reference, 0.90), "Screenshot should look similar to #{expected}!#{diff([reference.to_blob].pack('m*'), [output.to_blob].pack('m*')) if ENV['DEBUG']}"
+    begin
+      assert output.similar?(reference, similarity), "Screenshot should look similar to #{expected}!"
+    rescue Minitest::Assertion => e
+      message = if ci?
+         e.message + "\n" + diff([reference.to_blob].pack('m*'), [output.to_blob].pack('m*'))
+      else
+        output.save 'debug_' + expected
+        e.message + " Generated debug image: ./#{'debug_' + expected}"
+      end
+      raise Minitest::Assertion, message
+    end
   end
 end
 

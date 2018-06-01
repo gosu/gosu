@@ -75,21 +75,21 @@ namespace Gosu
         //! image to simulate lines, or contribute a better draw_line to Gosu.
         static void draw_line(double x1, double y1, Color c1,
                               double x2, double y2, Color c2,
-                              ZPos z, AlphaMode mode = AM_DEFAULT);
+                              ZPos z, BlendMode mode = BM_DEFAULT);
 
         static void draw_triangle(double x1, double y1, Color c1,
                                   double x2, double y2, Color c2,
                                   double x3, double y3, Color c3,
-                                  ZPos z, AlphaMode mode = AM_DEFAULT);
+                                  ZPos z, BlendMode mode = BM_DEFAULT);
 
         static void draw_quad(double x1, double y1, Color c1,
                               double x2, double y2, Color c2,
                               double x3, double y3, Color c3,
                               double x4, double y4, Color c4,
-                              ZPos z, AlphaMode mode = AM_DEFAULT);
+                              ZPos z, BlendMode mode = BM_DEFAULT);
         
         static void draw_rect(double x, double y, double width, double height,
-                              Color c, ZPos z, AlphaMode mode = AM_DEFAULT);
+                              Color c, ZPos z, BlendMode mode = BM_DEFAULT);
 
         //! For internal use only.
         void set_physical_resolution(unsigned physical_width, unsigned physical_height);
