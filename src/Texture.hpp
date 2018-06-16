@@ -16,9 +16,10 @@ class Gosu::Texture : public std::enable_shared_from_this<Texture>
     bool retro_;
     
 public:
-    Texture(unsigned size, bool retro);
+    Texture(unsigned width, unsigned height, bool retro);
     ~Texture();
-    unsigned size() const;
+    unsigned width() const;
+    unsigned height() const;
     GLuint tex_name() const;
     bool retro() const;
     std::unique_ptr<TexChunk> try_alloc(const Bitmap& bmp, unsigned padding);

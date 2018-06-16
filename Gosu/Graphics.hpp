@@ -59,6 +59,9 @@ namespace Gosu
         static void clip_to(double x, double y, double width, double height,
                             const std::function<void ()>& f);
         
+        //! Renders everything drawn in f onto a new Image of size (width, height).
+        static Gosu::Image render(int width, int height, const std::function<void ()>& f);
+        
         //! Records a macro and returns it as an Image.
         static Gosu::Image record(int width, int height, const std::function<void ()>& f);
         

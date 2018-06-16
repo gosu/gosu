@@ -50,7 +50,7 @@ public:
     void gl(std::function<void ()> gl_block, ZPos z)
     {
         // TODO: Document this case: Clipped-away GL blocks are *not* being run.
-        if (clip_rect_stack.clipped_world_away())  return;
+        if (clip_rect_stack.clipped_world_away()) return;
 
         int complement_of_block_index = ~(int)gl_blocks.size();
         gl_blocks.push_back(gl_block);
@@ -122,9 +122,7 @@ public:
         RenderStateManager manager;
         
     #ifdef GOSU_IS_OPENGLES
-        if (ops.empty()) {
-            return;
-        }
+        if (ops.empty()) return;
 
         auto current = ops.begin(), last = ops.end() - 1;
         for (; current != last; ++current) {
@@ -132,12 +130,12 @@ public:
             current->perform(&*(current + 1));
         }
         manager.set_render_state(last->render_state);
-        last->perform(0);
+        last->perform(nullptr);
     #else
         for (const auto& op : ops) {
             manager.set_render_state(op.render_state);
             if (op.vertices_or_block_index >= 0) {
-                op.perform(0);
+                op.perform(nullptr);
             }
             else {
                 // GL code

@@ -11,8 +11,8 @@ namespace Gosu
     bool undocumented_retrofication = false;
 }
 
-Gosu::Texture::Texture(unsigned size, bool retro)
-: allocator_(size, size), retro_(retro)
+Gosu::Texture::Texture(unsigned width, unsigned height, bool retro)
+: allocator_(width, height), retro_(retro)
 {
     ensure_current_context();
     
@@ -55,9 +55,14 @@ Gosu::Texture::~Texture()
     glDeleteTextures(1, &tex_name_);
 }
 
-unsigned Gosu::Texture::size() const
+unsigned Gosu::Texture::width() const
 {
-    return allocator_.width(); // == height
+    return allocator_.width();
+}
+
+unsigned Gosu::Texture::height() const
+{
+    return allocator_.height();
 }
 
 GLuint Gosu::Texture::tex_name() const
@@ -109,7 +114,7 @@ Gosu::Bitmap Gosu::Texture::to_bitmap(unsigned x, unsigned y, unsigned width, un
 #else
     ensure_current_context();
     
-    Bitmap full_texture(size(), size());
+    Bitmap full_texture(this->width(), this->height());
     glBindTexture(GL_TEXTURE_2D, tex_name());
     glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, full_texture.data());
     Bitmap bitmap(width, height);

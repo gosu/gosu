@@ -54,6 +54,7 @@ namespace Gosu
     enum QueueMode
     {
         QM_RENDER_TO_SCREEN,
+        QM_RENDER_TO_TEXTURE,
         QM_RECORD_MACRO,
     };
 
