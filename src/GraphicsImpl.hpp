@@ -106,26 +106,11 @@ namespace Gosu
         y = out[1] / out[3];
     }
     
-    inline void multiply_bitmap_alpha(Bitmap& bmp, Color::Channel alpha)
-    {
-        for (int y = 0; y < bmp.height(); ++y) {
-            for (int x = 0; x < bmp.width(); ++x) {
-                Color c = bmp.get_pixel(x, y);
-                c.set_alpha(c.alpha() * alpha / 255);
-                bmp.set_pixel(x, y, c);
-            }
-        }
-    }
-    
-    #ifdef GOSU_IS_IPHONE
+#ifdef GOSU_IS_IPHONE
     int clip_rect_base_factor();
-    #else
+#else
     inline int clip_rect_base_factor() { return 1; }
-    #endif
-    
-    bool is_entity(const std::string& name);
-    const Bitmap& entity_bitmap(const std::string& name);
-    const Image& entity_image(const std::string& name);
+#endif
     
     void ensure_current_context();
 }

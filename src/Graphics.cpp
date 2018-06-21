@@ -4,7 +4,7 @@
 #include "GraphicsImpl.hpp"
 #include "LargeImageData.hpp"
 #include "Macro.hpp"
-#include "TexChunk.hpp"
+#include "OffScreenTarget.hpp"
 #include "Texture.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Image.hpp>
@@ -165,8 +165,8 @@ void Gosu::Graphics::frame(const function<void ()>& f)
     queues.back().set_base_transform(pimpl->base_transform);
     
     glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
-    
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     current_graphics_pointer = this;
     
     f();
@@ -266,8 +266,6 @@ void Gosu::Graphics::clip_to(double x, double y, double width, double height,
 
 Gosu::Image Gosu::Graphics::render(int width, int height, const function<void ()>& f)
 {
-    queues.emplace_back(QM_RENDER_TO_SCREEN);
-
     // Prepare for rendering at the requested size, but save the previous matrix and viewport.
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
@@ -283,49 +281,23 @@ Gosu::Image Gosu::Graphics::render(int width, int height, const function<void ()
     glOrtho(0, width, 0, height, -1, 1);
 #endif
 
-    // Create a new texture as the our rendering target.
-    shared_ptr<Texture> texture = make_shared<Texture>(width, height, false);
-    // Mark the full texture as blocked for our TexChunk.
-    texture->block(0, 0, width, height);
-
-    // Besides the texture, also create a renderbuffer for depth information. Gosu doesn't use this,
-    // but custom OpenGL could might.
-    GLuint renderbuffer;
-    glGenRenderbuffers(1, &renderbuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
-    
-    // Now tie everything together.
-    GLuint framebuffer;
-    glGenFramebuffers(1, &framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                           texture->tex_name(), 0);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer);
-    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    if (status != GL_FRAMEBUFFER_COMPLETE) throw runtime_error("Rendering failed");
-    
     // This is the actual render-to-texture step.
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    f();
-    queues.back().perform_draw_ops_and_code();
-    glFlush();
-
-    // Delete all temporary resources.
-    queues.pop_back();
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glDeleteRenderbuffers(1, &renderbuffer);
-    glDeleteFramebuffers(1, &framebuffer);
+    Image result = OffScreenTarget(width, height).render([&] {
+        glClearColor(0, 0, 0, 1);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        queues.emplace_back(QM_RENDER_TO_SCREEN);
+        f();
+        queues.back().perform_draw_ops_and_code();
+        queues.pop_back();
+        glFlush();
+    });
+    
     // Restore previous matrix and glViewport.
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
     glViewport(prev_viewport[0], prev_viewport[1], prev_viewport[2], prev_viewport[3]);
-
     
-    unique_ptr<ImageData> tex_chunk(new TexChunk(texture, 0, 0, width, height, 0));
-    return Image(move(tex_chunk));
+    return result;
 }
 
 Gosu::Image Gosu::Graphics::record(int width, int height, const function<void ()>& f)
