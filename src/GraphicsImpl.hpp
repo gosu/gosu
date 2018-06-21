@@ -4,21 +4,10 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Platform.hpp>
 
-#if defined(GOSU_IS_WIN)
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-#include <windows.h>
-#include <GL/gl.h>
-#elif defined(GOSU_IS_IPHONE)
-#include <OpenGLES/ES1/gl.h>
-#include <OpenGLES/ES1/glext.h>
-#elif defined(GOSU_IS_MAC)
-#include <OpenGL/gl.h>
-#elif defined GOSU_IS_OPENGLES
-#include <GLES/gl.h>
+#if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_OPENGLES)
+#include <SDL_opengles.h>
 #else
-#include <GL/gl.h>
+#include <SDL_opengl.h>
 #endif
 
 #include <algorithm>
