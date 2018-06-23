@@ -2408,6 +2408,10 @@ namespace Gosu
         return new Gosu::Image(Gosu::Graphics::record(width, height, [] { rb_yield(Qnil); }));
     }
     
+    Gosu::Image* render(int width, int height) {
+        return new Gosu::Image(Gosu::Graphics::render(width, height, [] { rb_yield(Qnil); }));
+    }
+    
     // This method cannot be called "transform" because then it would be an ambiguous overload of
     // Gosu::Transform Gosu::transform(...).
     // So it has to be renamed via %rename below... :( - same for the other transformations.
@@ -3110,9 +3114,6 @@ SWIGINTERN void Gosu_Window_set_mouse_y(Gosu::Window *self,double y){
     }
 SWIGINTERN void Gosu_Window_force_close(Gosu::Window *self){
         self->Gosu::Window::close();
-    }
-SWIGINTERN Gosu::Image Gosu_Window_screenshot(Gosu::Window *self){
-        return Gosu::Image(self->to_bitmap());
     }
 
     // Also mark the TextInput instance alive when the window is being marked.
@@ -10041,37 +10042,6 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Window_screenshot(int argc, VALUE *argv, VALUE self) {
-  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  Gosu::Image result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","screenshot", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
-  {
-    try {
-      result = Gosu_Window_screenshot(arg1);
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_NewPointerObj((new Gosu::Image(static_cast< const Gosu::Image& >(result))), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
 _wrap_disown_Window(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
@@ -10935,6 +10905,45 @@ _wrap_record(int argc, VALUE *argv, VALUE self) {
     }
   }
   vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_render(int argc, VALUE *argv, VALUE self) {
+  int arg1 ;
+  int arg2 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  Gosu::Image *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  ecode1 = SWIG_AsVal_int(argv[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "int","Gosu::render", 1, argv[0] ));
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_int(argv[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","Gosu::render", 2, argv[1] ));
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    try {
+      result = (Gosu::Image *)Gosu::render(arg1,arg2);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, 0 |  0 );
   return vresult;
 fail:
   return Qnil;
@@ -12113,7 +12122,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "mouse_x=", VALUEFUNC(_wrap_Window_mouse_xe___), -1);
   rb_define_method(SwigClassWindow.klass, "mouse_y=", VALUEFUNC(_wrap_Window_mouse_ye___), -1);
   rb_define_method(SwigClassWindow.klass, "close!", VALUEFUNC(_wrap_Window_closeN___), -1);
-  rb_define_method(SwigClassWindow.klass, "screenshot", VALUEFUNC(_wrap_Window_screenshot), -1);
   SwigClassWindow.mark = (void (*)(void *)) mark_window;
   SwigClassWindow.destroy = (void (*)(void *)) free_Gosu_Window;
   SwigClassWindow.trackObjects = 1;
@@ -12128,6 +12136,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "unsafe_gl", VALUEFUNC(_wrap_unsafe_gl), -1);
   rb_define_module_function(mGosu, "clip_to", VALUEFUNC(_wrap_clip_to), -1);
   rb_define_module_function(mGosu, "record", VALUEFUNC(_wrap_record), -1);
+  rb_define_module_function(mGosu, "render", VALUEFUNC(_wrap_render), -1);
   rb_define_module_function(mGosu, "transform", VALUEFUNC(_wrap_transform), -1);
   rb_define_module_function(mGosu, "rotate", VALUEFUNC(_wrap_rotate), -1);
   rb_define_module_function(mGosu, "scale", VALUEFUNC(_wrap_scale), -1);

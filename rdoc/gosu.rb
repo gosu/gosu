@@ -773,18 +773,6 @@ module Gosu
     def tick; end
 
     ##
-    # EXPERIMENTAL - MAY DISAPPEAR WITHOUT WARNING.
-    #
-    # Creates a Gosu::Image from the current framebuffer which can then be used for various
-    # things most commonly save it to a file.
-    #
-    # Please provide us with feedback in the forum (https://www.libgosu.org/) or on GitHub (https://github.com/gosu/gosu)
-    # if this works as intended.
-    #
-    # @return [Gosu::Image]
-    def screenshot; end
-
-    ##
     # Tells the window to end the current run loop as soon as possible.
     #
     # @return [void]
@@ -1037,20 +1025,34 @@ module Gosu
     def clip_to(x, y, w, h); end
 
     ##
-    # Records all drawing operations inside the block as a reusable "image". This method can be used to speed rendering of multiple static images, e.g., a fixed tile map.
+    # Records all drawing operations inside the block as a macro (a special {Gosu::Image}) that can be reused later on.
+    # This is useful for rendering larger groups of images (e.g. a tiled map in a game) and then rendering this group with a single call to {Gosu::Image#draw}.
     #
-    # @note Because the returned object is not a true image---it's implemented using vertex buffers and is not backed by a texture---there are restrictions on how it can be used.
+    # @note Because the returned object is not backed by a bitmap texture, there are restrictions on how it can be used. For example, you can not use any color other than {Gosu::Color#WHITE} when drawing the image.
     #
-    # @note The width and height of the returned object will be the same values you passed to {record}, regardless of the area you draw on. It is important to pass accurate values if you plan on using {Gosu::Image#draw_as_quad} or {Gosu::Image#draw_rot} with the result later.
+    # @note The width and height of the returned image will be the values you passed to {record}, regardless of the area you draw on.
+    # It is important to pass accurate values if you plan on calling {Gosu::Image#draw_as_quad} or {Gosu::Image#draw_rot} on the result later.
     #
     # @return [Gosu::Image] the recorded drawing operations.
-    # @param width [Float] the width of the recorded image.
-    # @param height [Float] the height of the recorded image.
+    # @param width [Integer] the width of the recorded image.
+    # @param height [Integer] the height of the recorded image.
     # @yield rendering code.
     #
-    # @see Window#draw
+    # @see Window#render
     # @see Gosu::Image
     def record(width, height); end
+
+    ##
+    # Records all drawing operations inside the block and returns the result as a new {Gosu::Image}.
+    #
+    # @return [Gosu::Image] the rendered drawing operations.
+    # @param width [Integer] the width of the recorded image.
+    # @param height [Integer] the height of the recorded image.
+    # @yield rendering code.
+    #
+    # @see Window#record
+    # @see Gosu::Image
+    def render(width, height); end
 
     ##
     # Rotates all drawing operations inside the block.

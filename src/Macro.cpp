@@ -1,5 +1,6 @@
 #include "Macro.hpp"
 #include "DrawOpQueue.hpp"
+#include <Gosu/Image.hpp>
 #include <cmath>
 #include <algorithm>
 #include <functional>
@@ -222,7 +223,13 @@ const Gosu::GLTexInfo* Gosu::Macro::gl_tex_info() const
 
 Gosu::Bitmap Gosu::Macro::to_bitmap() const
 {
-    throw logic_error("Gosu::Macro cannot be rendered as Gosu::Bitmap yet");
+    return Gosu::Graphics::render(pimpl->width, pimpl->height, [this] {
+        draw(0,            0,             Color::WHITE,
+             pimpl->width, 0,             Color::WHITE,
+             0,            pimpl->height, Color::WHITE,
+             pimpl->width, pimpl->height, Color::WHITE,
+             0, AM_DEFAULT);
+    }).data().to_bitmap();
 }
 
 unique_ptr<Gosu::ImageData> Gosu::Macro::subimage(int x, int y, int width, int height) const
