@@ -164,6 +164,7 @@ void Gosu::Graphics::frame(const function<void ()>& f)
     
     queues.back().set_base_transform(pimpl->base_transform);
     
+    ensure_current_context();
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -266,6 +267,8 @@ void Gosu::Graphics::clip_to(double x, double y, double width, double height,
 
 Gosu::Image Gosu::Graphics::render(int width, int height, const function<void ()>& f)
 {
+    ensure_current_context();
+    
     // Prepare for rendering at the requested size, but save the previous matrix and viewport.
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
