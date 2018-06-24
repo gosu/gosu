@@ -53,7 +53,14 @@ module TestHelper
   end
 
   def assert_output_matches(expected, width, height)
-    output = Gosu.render(width, height) { yield }
+    begin
+      output = Gosu.render(width, height) { yield }
+    rescue Exception => e
+      if e.message.include? "GL_EXT_framebuffer_object"
+        skip
+        return
+      end
+    end
     output.save 'debug_' + expected if ENV['DEBUG']
     reference = Gosu::Image.new(File.join(media_path, expected))
 
