@@ -5,7 +5,8 @@
 #include <Gosu/Platform.hpp>
 
 #if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_OPENGLES)
-#include <SDL_opengles.h>
+#include <OpenGLES/ES1/gl.h>
+#include <OpenGLES/ES1/glext.h>
 #else
 #include <SDL_opengl.h>
 #endif

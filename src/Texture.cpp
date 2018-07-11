@@ -110,12 +110,15 @@ void Gosu::Texture::free(unsigned x, unsigned y, unsigned width, unsigned height
 Gosu::Bitmap Gosu::Texture::to_bitmap(unsigned x, unsigned y, unsigned width, unsigned height) const
 {
 #ifdef GOSU_IS_OPENGLES
+    // See here for one possible implementation: https://github.com/apitrace/apitrace/issues/70
+    // (Could reuse a lot of code from OffScreenTarget)
     throw logic_error("Texture::to_bitmap not supported on iOS");
 #else
     ensure_current_context();
     
     Bitmap full_texture(this->width(), this->height());
     glBindTexture(GL_TEXTURE_2D, tex_name());
+    // TODO: There are ways to retrieve only part of a texture, which we should use sooner or later.
     glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, full_texture.data());
     Bitmap bitmap(width, height);
     bitmap.insert(full_texture, -int(x), -int(y));
