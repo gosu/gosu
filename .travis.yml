@@ -39,34 +39,27 @@ before_install:
   # Cause multi-line snippets to fail on first error.
   - set -ev
   
-  # Do not use RVM - it's been a mess for compiling Gosu on macOS.
-  - rvm use system
-
   # Print the Ruby configuration to see what's defined in CXXFLAGS etc.
   - ruby -rrbconfig -e 'RbConfig::CONFIG.each { |k, v| puts [k, v].join("=") }'
 
   # Do some macOS-specific preparations
   - |
     if [ $TRAVIS_OS_NAME == osx ]; then
+      # Do not use RVM - it's been a mess for compiling Gosu on macOS.
+      rvm use system
+      
       # Mac dependencies
       # See: https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X
       brew update
-      brew install sdl2
+      brew install ruby sdl2
       
       # Update the system RubyGems on macOS and install CocoaPods.
-      # Also install a very specific version of ActiveSupport, see:
-      # https://github.com/CocoaPods/CocoaPods/issues/4711#issuecomment-230096751
-      # Also install gem binaries into /usr/local/bin to work around SIP on macOS 10.11+
-      sudo gem update --system
-      sudo gem install activesupport -v 4.2.6
-      sudo gem install cocoapods -n /usr/local/bin
+      gem update --system
+      gem install cocoapods
     fi
 
   # Dependencies for 'rake gem' (not for actually using Gosu)
-  # We have to install binaries into ~ because of Apple's System Integrity Protection.
-  - sudo gem install rake-compiler minitest --no-ri --no-rdoc -n /usr/local/bin
-  # Only install (update) the rake gem on macOS; on Linux we use the old version from apt.
-  - if [ $TRAVIS_OS_NAME == osx ]; then sudo gem install rake -n /usr/local/bin; fi
+  - gem install rake-compiler minitest --no-ri --no-rdoc
   
 
 before_script:
@@ -99,7 +92,7 @@ install:
   # Install Ruby/Gosu using RubyGems.
   - |
     rake gem
-    sudo gem install pkg/gosu-9.9.9.gem --no-ri --no-rdoc
+    gem install pkg/gosu-9.9.9.gem --no-ri --no-rdoc
 
   # Install Gosu for C++ using CMake.
   - |
