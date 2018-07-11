@@ -3,7 +3,6 @@
 #include <cmath>
 #include <cstdlib>
 #include <list>
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -115,23 +114,22 @@ public:
 
     void collect_stars(std::list<Star>& stars)
     {
-        std::list<Star>::iterator cur = stars.begin();
-        while (cur != stars.end()) {
-            if (Gosu::distance(pos_x, pos_y, cur->x(), cur->y()) < 35) {
-                cur = stars.erase(cur);
+        stars.remove_if([this](Star& star) {
+            if (Gosu::distance(pos_x, pos_y, star.x(), star.y()) < 35) {
                 score += 10;
                 beep.play();
+                return true;
             }
             else {
-                ++cur;
+                return false;
             }
-        }
+        });
     }
 };
 
 class GameWindow : public Gosu::Window
 {
-    std::unique_ptr<Gosu::Image> background_image;
+    Gosu::Image background_image;
     Animation star_anim;
     Gosu::Font font;
 
@@ -145,7 +143,7 @@ public:
         set_caption("Gosu Tutorial Game");
         
         std::string filename = Gosu::resource_prefix() + "media/Space.png";
-        background_image.reset(new Gosu::Image(filename, Gosu::IF_TILEABLE));
+        background_image = Gosu::Image(filename, Gosu::IF_TILEABLE);
         
         filename = Gosu::resource_prefix() + "media/Star.png";
         star_anim = Gosu::load_tiles(filename, 25, 25);
@@ -171,9 +169,9 @@ public:
     void draw() override
     {
         player.draw();
-        background_image->draw(0, 0, Z_BACKGROUND,
-                               1.0 * WIDTH / background_image->width(),
-                               1.0 * HEIGHT / background_image->height());
+        background_image.draw(0, 0, Z_BACKGROUND,
+                              1.0 * WIDTH / background_image.width(),
+                              1.0 * HEIGHT / background_image.height());
         
         for (Star& star : stars) {
             star.draw();
