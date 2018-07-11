@@ -196,6 +196,7 @@
     <ClCompile Include="..\src\Macro.cpp" />
     <ClCompile Include="..\src\MarkupParser.cpp" />
     <ClCompile Include="..\src\Math.cpp" />
+    <ClCompile Include="..\src\OffScreenTarget.cpp" />
     <ClCompile Include="..\src\Resolution.cpp" />
     <ClCompile Include="..\src\ResolutionApple.cpp" />
     <ClCompile Include="..\src\TexChunk.cpp" />

@@ -52,13 +52,15 @@ module TestHelper
     skip if ENV["APPVEYOR"] or ENV["TRAVIS"]
   end
 
-  def assert_screenshot_matches(window, expected)
-    # TODO: Resolve the mystery around the needed(?) double-tick-second-sleep
-    window.tick
-    window.tick
-    sleep 1
-
-    output = window.screenshot
+  def assert_output_matches(expected, width, height)
+    begin
+      output = Gosu.render(width, height) { yield }
+    rescue Exception => e
+      if e.message.include? "GL_EXT_framebuffer_object"
+        skip
+        return
+      end
+    end
     output.save 'debug_' + expected if ENV['DEBUG']
     reference = Gosu::Image.new(File.join(media_path, expected))
 

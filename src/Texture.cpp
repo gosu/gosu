@@ -11,16 +11,14 @@ namespace Gosu
     bool undocumented_retrofication = false;
 }
 
-Gosu::Texture::Texture(unsigned size, bool retro)
-: allocator_(size, size), retro_(retro)
+Gosu::Texture::Texture(unsigned width, unsigned height, bool retro)
+: allocator_(width, height), retro_(retro)
 {
     ensure_current_context();
     
     // Create texture name.
     glGenTextures(1, &tex_name_);
-    if (tex_name_ == static_cast<GLuint>(-1)) {
-        throw runtime_error("Couldn't create OpenGL texture");
-    }
+    if (tex_name_ == static_cast<GLuint>(-1)) throw runtime_error("Couldn't create OpenGL texture");
 
     // Create empty texture.
     glBindTexture(GL_TEXTURE_2D, tex_name_);
@@ -57,9 +55,14 @@ Gosu::Texture::~Texture()
     glDeleteTextures(1, &tex_name_);
 }
 
-unsigned Gosu::Texture::size() const
+unsigned Gosu::Texture::width() const
 {
-    return allocator_.width(); // == height
+    return allocator_.width();
+}
+
+unsigned Gosu::Texture::height() const
+{
+    return allocator_.height();
 }
 
 GLuint Gosu::Texture::tex_name() const
@@ -72,19 +75,18 @@ bool Gosu::Texture::retro() const
     return retro_;
 }
 
-unique_ptr<Gosu::TexChunk> Gosu::Texture::try_alloc(shared_ptr<Texture> ptr, const Bitmap& bmp,
-                                                    unsigned padding)
+unique_ptr<Gosu::TexChunk> Gosu::Texture::try_alloc(const Bitmap& bmp, unsigned padding)
 {
     BlockAllocator::Block block;
     
     if (!allocator_.alloc(bmp.width(), bmp.height(), block)) return nullptr;
     
-    unique_ptr<Gosu::TexChunk> result(new TexChunk(ptr,
-                                                   block.left + padding,
-                                                   block.top + padding,
-                                                   block.width - 2 * padding,
-                                                   block.height - 2 * padding,
-                                                   padding));
+    unique_ptr<TexChunk> result(new TexChunk(shared_from_this(),
+                                             block.left   + padding,
+                                             block.top    + padding,
+                                             block.width  - 2 * padding,
+                                             block.height - 2 * padding,
+                                             padding));
     
     ensure_current_context();
     
@@ -108,14 +110,17 @@ void Gosu::Texture::free(unsigned x, unsigned y, unsigned width, unsigned height
 Gosu::Bitmap Gosu::Texture::to_bitmap(unsigned x, unsigned y, unsigned width, unsigned height) const
 {
 #ifdef GOSU_IS_OPENGLES
+    // See here for one possible implementation: https://github.com/apitrace/apitrace/issues/70
+    // (Could reuse a lot of code from OffScreenTarget)
     throw logic_error("Texture::to_bitmap not supported on iOS");
 #else
     ensure_current_context();
     
-    Gosu::Bitmap full_texture(size(), size());
+    Bitmap full_texture(this->width(), this->height());
     glBindTexture(GL_TEXTURE_2D, tex_name());
+    // TODO: There are ways to retrieve only part of a texture, which we should use sooner or later.
     glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, full_texture.data());
-    Gosu::Bitmap bitmap(width, height);
+    Bitmap bitmap(width, height);
     bitmap.insert(full_texture, -int(x), -int(y));
     
     return bitmap;

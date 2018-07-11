@@ -10,7 +10,6 @@ require_relative "test_helper"
 
 class TestWindow < Minitest::Test
   include InteractiveTests
-  include TestHelper
   
   class ShyWindow < Gosu::Window
     def update
@@ -73,24 +72,6 @@ class TestWindow < Minitest::Test
   def test_drag_and_drop
     interactive_gui("Drop any number of files into the window. Do all filenames appear?") do
       DropWindow.new
-    end
-  end
-
-  class ScreenshotWindow < Gosu::Window
-    def draw
-      Gosu.draw_triangle(0, 0, 0xff_ff0000, self.width, 0, 0xff_00ff00, self.width, self.height, 0xff_0000ff, 0)
-    end
-  end
-
-  GROUPS = {
-    25 => 'triangle-25.bmp',
-    50 => 'triangle-50.png',
-    500 => 'triangle-500.png'
-  }
-  def test_screenshot
-    GROUPS.each do |group, expected|
-      window = ScreenshotWindow.new(group,group)
-      assert_screenshot_matches window, expected
     end
   end
 end

@@ -4,21 +4,11 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Platform.hpp>
 
-#if defined(GOSU_IS_WIN)
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-#include <windows.h>
-#include <GL/gl.h>
-#elif defined(GOSU_IS_IPHONE)
+#if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_OPENGLES)
 #include <OpenGLES/ES1/gl.h>
 #include <OpenGLES/ES1/glext.h>
-#elif defined(GOSU_IS_MAC)
-#include <OpenGL/gl.h>
-#elif defined GOSU_IS_OPENGLES
-#include <GLES/gl.h>
 #else
-#include <GL/gl.h>
+#include <SDL_opengl.h>
 #endif
 
 #include <algorithm>
@@ -51,6 +41,13 @@ namespace Gosu
 
 namespace Gosu
 {
+    enum QueueMode
+    {
+        QM_RENDER_TO_SCREEN,
+        QM_RENDER_TO_TEXTURE,
+        QM_RECORD_MACRO,
+    };
+
     class Texture;
     class TexChunk;
     class ClipRectStack;
@@ -99,26 +96,11 @@ namespace Gosu
         y = out[1] / out[3];
     }
     
-    inline void multiply_bitmap_alpha(Bitmap& bmp, Color::Channel alpha)
-    {
-        for (int y = 0; y < bmp.height(); ++y) {
-            for (int x = 0; x < bmp.width(); ++x) {
-                Color c = bmp.get_pixel(x, y);
-                c.set_alpha(c.alpha() * alpha / 255);
-                bmp.set_pixel(x, y, c);
-            }
-        }
-    }
-    
-    #ifdef GOSU_IS_IPHONE
+#ifdef GOSU_IS_IPHONE
     int clip_rect_base_factor();
-    #else
+#else
     inline int clip_rect_base_factor() { return 1; }
-    #endif
-    
-    bool is_entity(const std::string& name);
-    const Bitmap& entity_bitmap(const std::string& name);
-    const Image& entity_image(const std::string& name);
+#endif
     
     void ensure_current_context();
 }

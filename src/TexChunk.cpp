@@ -9,13 +9,13 @@ using namespace std;
 
 void Gosu::TexChunk::set_tex_info()
 {
-    double texture_size = texture->size();
+    double width = texture->width(), height = texture->height();
 
     info.tex_name = texture->tex_name();
-    info.left   = x / texture_size;
-    info.top    = y / texture_size;
-    info.right  = (x + w) / texture_size;
-    info.bottom = (y + h) / texture_size;
+    info.left   = x / width;
+    info.top    = y / height;
+    info.right  = (x + w) / width;
+    info.bottom = (y + h) / height;
 }
 
 Gosu::TexChunk::TexChunk(shared_ptr<Texture> texture, int x, int y, int w, int h, int padding)

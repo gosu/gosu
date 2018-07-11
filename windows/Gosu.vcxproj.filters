@@ -84,6 +84,9 @@
     <ClCompile Include="..\src\Math.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\OffScreenTarget.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Resolution.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>

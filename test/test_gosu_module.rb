@@ -2,6 +2,8 @@
 require_relative "test_helper"
 
 class TestGosuModule < Minitest::Test
+  include TestHelper
+
   def test_drawing_primitives
     {
       # args: [x, y, width, height, c, z, mode]
@@ -18,12 +20,6 @@ class TestGosuModule < Minitest::Test
         Gosu.send(method, *args)
       end
       assert_equal Gosu::Image, img.class
-
-      # RuntimeError: Gosu::Macro cannot be rendered as Gosu::Bitmap yet
-      # that would be awesome. Making "screenshots" in general would greatly
-      # extend the possibilities of automated testing.
-      # Already requested in https://github.com/gosu/gosu/issues/317
-      # img.save("/tmp/test.png")
     end
   end
 
@@ -57,7 +53,7 @@ class TestGosuModule < Minitest::Test
     refute Gosu.button_down?(Gosu::KB_A)
   end
 
-  def test_math_angle
+  def test_angle
     {
       [ 0,  0] =>   0.0,
       [ 1,  0] =>  90.0,
@@ -72,7 +68,7 @@ class TestGosuModule < Minitest::Test
     end
   end
 
-  def test_math_angle_diff
+  def test_angle_diff
     {
       [90,  95] =>    5.0,
       [90,  85] =>   -5.0,
@@ -83,7 +79,7 @@ class TestGosuModule < Minitest::Test
     end
   end
 
-  def test_math_offset
+  def test_offset
     {
       [ 36.86, 5] => [ 3, -4], # a² + b² = c² | 3² + 4² = 5²
       [  0.0,  1] => [ 0, -1],
@@ -98,8 +94,8 @@ class TestGosuModule < Minitest::Test
     end
   end
 
-  # TODO: Add more test-vectors
-  def test_math_distance
+  # TODO: Add more test vectors
+  def test_distance
     {
       [0,0 , 3,4] => 5, # a² + b² = c² | 3² + 4² = 5²
       [-2,-3 , -4, 4] => 7.28,
@@ -108,12 +104,26 @@ class TestGosuModule < Minitest::Test
     end
   end
 
-  def test_math_random
+  def test_random
     100.times do
       val = Gosu.random(5, 10)
       assert val.is_a?(Float)
       assert val >= 5
       assert val < 10
+    end
+  end
+  
+  GROUPS = {
+    25 => 'triangle-25.bmp',
+    50 => 'triangle-50.png',
+    500 => 'triangle-500.png'
+  }
+
+  def test_render
+    GROUPS.each do |size, expected|
+      assert_output_matches(expected, size, size) do
+        Gosu.draw_triangle(0, 0, 0xff_ff0000, size, 0, 0xff_00ff00, size, size, 0xff_0000ff, 0)
+      end
     end
   end
 end

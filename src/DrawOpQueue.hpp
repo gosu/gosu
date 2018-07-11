@@ -15,32 +15,25 @@ class Gosu::DrawOpQueue
 {
     TransformStack transform_stack;
     ClipRectStack clip_rect_stack;
-    bool rec;
+    QueueMode queue_mode = QM_RENDER_TO_SCREEN;
 
     std::vector<DrawOp> ops;
     std::vector<std::function<void ()>> gl_blocks;
 
 public:
-    DrawOpQueue()
-    : rec(false)
+    DrawOpQueue(QueueMode mode)
+    : queue_mode(mode)
     {
     }
     
-    bool recording() const
+    QueueMode mode() const
     {
-        return rec;
-    }
-    
-    void set_recording()
-    {
-        rec = true;
+        return queue_mode;
     }
     
     void schedule_draw_op(DrawOp op)
     {
-        if (clip_rect_stack.clipped_world_away()) {
-            return;
-        }
+        if (clip_rect_stack.clipped_world_away()) return;
 
     #ifdef GOSU_IS_OPENGLES
         // No triangles, no lines supported
@@ -57,9 +50,7 @@ public:
     void gl(std::function<void ()> gl_block, ZPos z)
     {
         // TODO: Document this case: Clipped-away GL blocks are *not* being run.
-        if (clip_rect_stack.clipped_world_away()) {
-            return;
-        }
+        if (clip_rect_stack.clipped_world_away()) return;
 
         int complement_of_block_index = ~(int)gl_blocks.size();
         gl_blocks.push_back(gl_block);
@@ -76,7 +67,7 @@ public:
 
     void begin_clipping(double x, double y, double width, double height, double screen_height)
     {
-        if (recording()) {
+        if (mode() == QM_RECORD_MACRO) {
             throw std::logic_error("Clipping is not allowed while creating a macro");
         }
         
@@ -119,9 +110,9 @@ public:
         transform_stack.pop();
     }
 
-    void perform_draw_ops_andCode()
+    void perform_draw_ops_and_code()
     {
-        if (recording()) {
+        if (mode() == QM_RECORD_MACRO) {
             throw std::logic_error("Flushing to the screen is not allowed while recording a macro");
         }
         
@@ -131,9 +122,7 @@ public:
         RenderStateManager manager;
         
     #ifdef GOSU_IS_OPENGLES
-        if (ops.empty()) {
-            return;
-        }
+        if (ops.empty()) return;
 
         auto current = ops.begin(), last = ops.end() - 1;
         for (; current != last; ++current) {
@@ -141,12 +130,12 @@ public:
             current->perform(&*(current + 1));
         }
         manager.set_render_state(last->render_state);
-        last->perform(0);
+        last->perform(nullptr);
     #else
         for (const auto& op : ops) {
             manager.set_render_state(op.render_state);
             if (op.vertices_or_block_index >= 0) {
-                op.perform(0);
+                op.perform(nullptr);
             }
             else {
                 // GL code

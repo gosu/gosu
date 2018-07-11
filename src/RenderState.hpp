@@ -130,8 +130,6 @@ public:
         if (new_texture == texture) return;
 
         if (new_texture) {
-            // New texture *is* really a texture - change to it.
-            
             if (!texture) {
                 glEnable(GL_TEXTURE_2D);
             }

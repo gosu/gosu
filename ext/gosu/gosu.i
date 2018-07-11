@@ -294,6 +294,10 @@ namespace Gosu
         return new Gosu::Image(Gosu::Graphics::record(width, height, [] { rb_yield(Qnil); }));
     }
     
+    Gosu::Image* render(int width, int height) {
+        return new Gosu::Image(Gosu::Graphics::render(width, height, [] { rb_yield(Qnil); }));
+    }
+    
     // This method cannot be called "transform" because then it would be an ambiguous overload of
     // Gosu::Transform Gosu::transform(...).
     // So it has to be renamed via %rename below... :( - same for the other transformations.
@@ -915,7 +919,6 @@ namespace Gosu
 
 // Window
 %ignore Gosu::Window::resize(unsigned, unsigned, bool);
-%ignore Gosu::Window::to_bitmap();
 %rename("width=") set_width;
 %rename("height=") set_height;
 %rename("fullscreen=") set_fullscreen;
@@ -997,11 +1000,6 @@ namespace Gosu
     {
         $self->Gosu::Window::close();
     }
-
-    Gosu::Image screenshot()
-    {
-        return Gosu::Image($self->to_bitmap());
-    }
 };
 
 // Global input functions
@@ -1041,6 +1039,9 @@ namespace Gosu
 
     %newobject record;
     Gosu::Image* record(int width, int height);
+    
+    %newobject record;
+    Gosu::Image* render(int width, int height);
     
     %rename("transform") transform_for_ruby;
     %rename("rotate")    rotate_for_ruby;

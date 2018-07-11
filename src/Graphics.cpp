@@ -4,7 +4,7 @@
 #include "GraphicsImpl.hpp"
 #include "LargeImageData.hpp"
 #include "Macro.hpp"
-#include "TexChunk.hpp"
+#include "OffScreenTarget.hpp"
 #include "Texture.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Image.hpp>
@@ -26,7 +26,6 @@ namespace Gosu
             if (current_graphics_pointer == nullptr) {
                 throw logic_error("Gosu::Graphics can only be drawn to while rendering");
             }
-            
             return *current_graphics_pointer;
         }
         
@@ -160,45 +159,44 @@ void Gosu::Graphics::frame(const function<void ()>& f)
     }
     else {
         // Create default draw-op queue.
-        queues.resize(1);
+        queues.emplace_back(QM_RENDER_TO_SCREEN);
     }
     
     queues.back().set_base_transform(pimpl->base_transform);
     
+    ensure_current_context();
     glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
-    
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     current_graphics_pointer = this;
     
     f();
     
-    // If recording is in process, cancel it.
-    while (current_queue().recording()) {
-        queues.pop_back();
-    }
+    // Cancel all intermediate queues that have not been cleaned up.
+    while (queues.size() > 1) queues.pop_back();
     
     flush();
     
     if (pimpl->black_height || pimpl->black_width) {
         if (pimpl->black_height) {
             draw_quad(0, -pimpl->black_height, Color::BLACK,
-                     width(), -pimpl->black_height, Color::BLACK,
-                     0, 0, Color::BLACK,
-                     width(), 0, Color::BLACK, 0);
+                      width(), -pimpl->black_height, Color::BLACK,
+                      0, 0, Color::BLACK,
+                      width(), 0, Color::BLACK, 0);
             draw_quad(0, height(), Color::BLACK,
-                     width(), height(), Color::BLACK,
-                     0, height() + pimpl->black_height, Color::BLACK,
-                     width(), height() + pimpl->black_height, Color::BLACK, 0);
+                      width(), height(), Color::BLACK,
+                      0, height() + pimpl->black_height, Color::BLACK,
+                      width(), height() + pimpl->black_height, Color::BLACK, 0);
         }
         if (pimpl->black_width) {
             draw_quad(-pimpl->black_width, 0, Color::BLACK,
-                     0, 0, Color::BLACK,
-                     -pimpl->black_width, height(), Color::BLACK,
-                     0, height(), Color::BLACK, 0);
+                      0, 0, Color::BLACK,
+                      -pimpl->black_width, height(), Color::BLACK,
+                      0, height(), Color::BLACK, 0);
             draw_quad(width(), 0, Color::BLACK,
-                     width() + pimpl->black_width, 0, Color::BLACK,
-                     width(), height(), Color::BLACK,
-                     width() + pimpl->black_width, height(), Color::BLACK, 0);
+                      width() + pimpl->black_width, 0, Color::BLACK,
+                      width(), height(), Color::BLACK,
+                      width() + pimpl->black_width, height(), Color::BLACK, 0);
         }
         flush();
     }
@@ -219,13 +217,13 @@ void Gosu::Graphics::frame(const function<void ()>& f)
 
 void Gosu::Graphics::flush()
 {
-    current_queue().perform_draw_ops_andCode();
+    current_queue().perform_draw_ops_and_code();
     current_queue().clear_queue();
 }
 
 void Gosu::Graphics::gl(const function<void ()>& f)
 {
-    if (current_queue().recording()) {
+    if (current_queue().mode() == QM_RECORD_MACRO) {
         throw logic_error("Custom OpenGL is not allowed while creating a macro");
     }
     
@@ -267,17 +265,53 @@ void Gosu::Graphics::clip_to(double x, double y, double width, double height,
     current_queue().end_clipping();
 }
 
-unique_ptr<Gosu::ImageData> Gosu::Graphics::record(int width, int height,
-                                                   const function<void ()>& f)
+Gosu::Image Gosu::Graphics::render(int width, int height, const function<void ()>& f)
 {
-    queues.resize(queues.size() + 1);
-    current_queue().set_recording();
+    ensure_current_context();
+    
+    // Prepare for rendering at the requested size, but save the previous matrix and viewport.
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    GLint prev_viewport[4];
+    glGetIntegerv(GL_VIEWPORT, prev_viewport);
+    glViewport(0, 0, width, height);
+    // Note the flipped vertical axis in the glOrtho call - this is so we don't have to vertically
+    // flip the texture afterwards.
+#ifdef GOSU_IS_OPENGLES
+    glOrthof(0, width, 0, height, -1, 1);
+#else
+    glOrtho(0, width, 0, height, -1, 1);
+#endif
+
+    // This is the actual render-to-texture step.
+    Image result = OffScreenTarget(width, height).render([&] {
+        glClearColor(0, 0, 0, 1);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        queues.emplace_back(QM_RENDER_TO_SCREEN);
+        f();
+        queues.back().perform_draw_ops_and_code();
+        queues.pop_back();
+        glFlush();
+    });
+    
+    // Restore previous matrix and glViewport.
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glViewport(prev_viewport[0], prev_viewport[1], prev_viewport[2], prev_viewport[3]);
+    
+    return result;
+}
+
+Gosu::Image Gosu::Graphics::record(int width, int height, const function<void ()>& f)
+{
+    queues.emplace_back(QM_RECORD_MACRO);
 
     f();
     
     unique_ptr<ImageData> result(new Macro(current_queue(), width, height));
     queues.pop_back();
-    return result;
+    return Image(move(result));
 }
 
 void Gosu::Graphics::transform(const Gosu::Transform& transform, const function<void ()>& f)
@@ -386,21 +420,21 @@ unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src,
             src_width == src_height &&
             (src_width & (src_width - 1)) == 0 &&
             src_width >= 64 && src_width <= max_size) {
-        shared_ptr<Texture> texture(new Texture(src_width, wants_retro));
+        shared_ptr<Texture> texture(new Texture(src_width, src_height, wants_retro));
         unique_ptr<ImageData> data;
         
         // Use the source bitmap directly if the source area completely covers
         // it.
         if (src_x == 0 && src_width == src.width() && src_y == 0 && src_height == src.height()) {
-            data = texture->try_alloc(texture, src, 0);
+            data = texture->try_alloc(src, 0);
         }
         else {
             Bitmap bmp(src_width, src_height);
             bmp.insert(src, 0, 0, src_x, src_y, src_width, src_height);
-            data = texture->try_alloc(texture, bmp, 0);
+            data = texture->try_alloc(bmp, 0);
         }
         
-        if (!data.get()) throw logic_error("Internal texture block allocation error");
+        if (!data) throw logic_error("Internal texture block allocation error");
         return data;
     }
     
@@ -420,18 +454,18 @@ unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src,
     for (const auto& texture : textures) {
         if (texture->retro() != wants_retro) continue;
         
-        unique_ptr<ImageData> data = texture->try_alloc(texture, bmp, 1);
+        unique_ptr<ImageData> data = texture->try_alloc(bmp, 1);
         if (data) return data;
     }
     
     // All textures are full: Create a new one.
     
     shared_ptr<Texture> texture;
-    texture.reset(new Texture(max_size, wants_retro));
+    texture.reset(new Texture(max_size, max_size, wants_retro));
     textures.push_back(texture);
     
     unique_ptr<ImageData> data;
-    data = texture->try_alloc(texture, bmp, 1);
+    data = texture->try_alloc(bmp, 1);
     if (!data.get()) throw logic_error("Internal texture block allocation error");
     return data;
 }
