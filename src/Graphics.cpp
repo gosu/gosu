@@ -286,7 +286,7 @@ Gosu::Image Gosu::Graphics::render(int width, int height, const function<void ()
 
     // This is the actual render-to-texture step.
     Image result = OffScreenTarget(width, height).render([&] {
-        glClearColor(0, 0, 0, 1);
+        glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         queues.emplace_back(QM_RENDER_TO_SCREEN);
         f();
