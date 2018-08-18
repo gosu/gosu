@@ -116,7 +116,7 @@ double Gosu::Font::text_width(const string& text, double scale_x) const
         width = max(width, line_width);
     }).parse();
     
-    return width / FONT_RENDER_SCALE;
+    return scale_x * width / FONT_RENDER_SCALE;
 }
 
 void Gosu::Font::draw(const string& text, double x, double y, ZPos z,
