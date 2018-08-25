@@ -18,10 +18,9 @@ or look at existing projects in the [Gosu Showcase](https://www.libgosu.org/cgi-
 Community
 ---------
 
-- Visit our [message board](https://www.libgosu.org/cgi-bin/mwf/forum.pl) or the [r/gosu subreddit](https://reddit.com/r/gosu).
-- There’s also an IRC room, [#gosu on freenode](https://webchat.freenode.net/?channels=gosu).
-  The regulars are spread across many timezones, so you’ll need some patience.
-- Please file bugs and request features [on GitHub](https://github.com/gosu/gosu/issues).
+- There is a lively [Discord community](https://discord.gg/SZ4nbEd).
+- If you want to discuss or announce something in a more permanent place than a chat room, we also have a [message board](https://www.libgosu.org/cgi-bin/mwf/forum.pl).
+- Please file bugs and feature requests [on GitHub](https://github.com/gosu/gosu/issues).
 
 Build Status
 ------------
