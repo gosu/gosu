@@ -113,15 +113,11 @@ class TestGosuModule < Minitest::Test
     end
   end
   
-  GROUPS = {
-    25 => 'triangle-25.bmp',
-    50 => 'triangle-50.png',
-    500 => 'triangle-500.png'
-  }
+  SIZES = [25, 50, 500]
 
   def test_render
-    GROUPS.each do |size, expected|
-      assert_output_matches(expected, size, size) do
+    SIZES.each do |size|
+      assert_output_matches("triangle-#{size}.png", size, size) do
         Gosu.draw_triangle(0, 0, 0xff_ff0000, size, 0, 0xff_00ff00, size, size, 0xff_0000ff, 0)
       end
     end
