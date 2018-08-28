@@ -15,10 +15,12 @@ namespace Gosu
         std::shared_ptr<Impl> pimpl;
         
     public:
+        //! The caller must ensure that the ttf_data pointer will remain valid indefinitely.
         TrueTypeFont(const unsigned char* ttf_data, std::shared_ptr<TrueTypeFont> fallback);
         
-        //! Returns the width a string will occupy on a bitmap when rendered at the given height.
-        //! The caller must ensure that the ttf_data pointer will remain valid indefinitely.
+        //! Returns the right edge of a string when rendered onto a bitmap at the given position,
+        //! and with the given height.
+        //! If (bitmap != nullptr), the text is also rendered onto the bitmap.
         double draw_text(const std::u32string& text, double height,
                          Bitmap* bitmap, double x, double y, Color c);
         

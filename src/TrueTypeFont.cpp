@@ -80,8 +80,8 @@ struct Gosu::TrueTypeFont::Impl
                         
                         fallback_string.push_back(codepoint);
                     }
-                    x += fallback->pimpl->draw_text(fallback_string, index == text.size(), height,
-                                                    bitmap, x, y, c);
+                    x = fallback->pimpl->draw_text(fallback_string, index == text.size(), height,
+                                                   bitmap, x, y, c);
                     last_glyph = 0;
                 }
                 continue;
@@ -175,18 +175,18 @@ struct Gosu::TrueTypeFont::Impl
         
         for (int rel_y = 0; rel_y < h; ++rel_y) {
             for (int rel_x = 0; rel_x < w; ++rel_x) {
-                auto src_alpha = pixels[(src_y + rel_y) * stride + (src_x + rel_x)] * c.alpha() / 255;
-                auto inv_src_alpha = 255 - src_alpha;
-
+                int src_alpha = pixels[(src_y + rel_y) * stride + src_x + rel_x] * c.alpha() / 255;
                 if (src_alpha == 0) continue;
 
-                Color dest = bitmap.get_pixel(x + rel_x, y + rel_y);
-                dest.set_alpha(src_alpha + (dest.alpha() * inv_src_alpha) / 255);
-                dest.set_red  ((c.red()   * src_alpha + dest.red()   * inv_src_alpha) / src_alpha);
-                dest.set_green((c.green() * src_alpha + dest.green() * inv_src_alpha) / src_alpha);
-                dest.set_blue ((c.blue()  * src_alpha + dest.blue()  * inv_src_alpha) / src_alpha);
+                Color out = bitmap.get_pixel(x + rel_x, y + rel_y);
+                int inv_alpha = out.alpha() * (255 - src_alpha) / 255;
                 
-                bitmap.set_pixel(x + rel_x, y + rel_y, dest);
+                out.set_alpha(src_alpha + inv_alpha);
+                out.set_red  ((c.red()   * src_alpha + out.red()   * inv_alpha) / out.alpha());
+                out.set_green((c.green() * src_alpha + out.green() * inv_alpha) / out.alpha());
+                out.set_blue ((c.blue()  * src_alpha + out.blue()  * inv_alpha) / out.alpha());
+                
+                bitmap.set_pixel(x + rel_x, y + rel_y, out);
             }
         }
     }
@@ -249,7 +249,7 @@ Gosu::TrueTypeFont& Gosu::font_by_name(const string& font_name, unsigned font_fl
         if (font_name.find_first_of("./\\") != string::npos) {
             // A filename? Load it and add it to the stack.
             ttf_stack.push_back(ttf_data_from_file(font_name));
-        } else {
+        } else if (font_name != default_font_name()) {
             // A font name? Add it to the stack, both with font_flags and without.
             ttf_stack.push_back(ttf_data_by_name(font_name, 0));
             ttf_stack.push_back(ttf_data_by_name(font_name, font_flags));

@@ -54,28 +54,28 @@ Gosu::Bitmap Gosu::create_text(const string& text, const string& font_name, doub
         if (line.back().text.back() == '\n') {
             line.back().text.pop_back();
         }
-            
+        
         lines.emplace_back(line);
     }).parse();
     
     // Measure every part of every line.
-    int width = 0;
+    double width = 0;
     for (auto& line : lines) {
-        int line_width = 0;
+        double line_width = 0;
         for (auto& part : line) {
             line_width += text_width(part.text, font_name, font_height, part.flags);
         }
         width = max(width, line_width);
     }
     
-    Bitmap result(width, static_cast<int>(lines.size() * font_height));
+    Bitmap result(width, static_cast<int>(ceil(lines.size() * font_height)));
     
     // Render every part of every line.
-    int y = 0;
+    double y = 0;
     for (auto& line : lines) {
-        int x = 0;
+        double x = 0;
         for (auto& part : line) {
-            x += draw_text(result, x, y, Color::WHITE, part.text, font_name, font_height);
+            x = draw_text(result, x, y, part.color, part.text, font_name, font_height);
         }
         y += font_height;
     }

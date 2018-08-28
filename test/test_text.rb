@@ -28,7 +28,7 @@ class TestText < Minitest::Test
         Dir.chdir media_path do
           expected_filename = "text-#{key}-#{i}.png"
 
-          # Prepend <c=r00> to each string because white-on-translucent images are hard
+          # Prepend <c=f00> to each string because white-on-translucent images are hard
           # to view (at least on macOS).
           image = Gosu::Image.from_text("<c=ff0000>#{string}", 41, options)
           image.save "debug-#{expected_filename}" if ENV["DEBUG"]
