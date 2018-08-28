@@ -175,16 +175,18 @@ struct Gosu::TrueTypeFont::Impl
         
         for (int rel_y = 0; rel_y < h; ++rel_y) {
             for (int rel_x = 0; rel_x < w; ++rel_x) {
-                unsigned char pixel = pixels[(src_y + rel_y) * stride + (src_x + rel_x)];
-                unsigned char inv_pixel = 255 - pixel;
+                auto src_alpha = pixels[(src_y + rel_y) * stride + (src_x + rel_x)] * c.alpha() / 255;
+                auto inv_src_alpha = 255 - src_alpha;
+
+                if (src_alpha == 0) continue;
+
+                Color dest = bitmap.get_pixel(x + rel_x, y + rel_y);
+                dest.set_alpha(src_alpha + (dest.alpha() * inv_src_alpha) / 255);
+                dest.set_red  ((c.red()   * src_alpha + dest.red()   * inv_src_alpha) / src_alpha);
+                dest.set_green((c.green() * src_alpha + dest.green() * inv_src_alpha) / src_alpha);
+                dest.set_blue ((c.blue()  * src_alpha + dest.blue()  * inv_src_alpha) / src_alpha);
                 
-                Color color = bitmap.get_pixel(x + rel_x, y + rel_y);
-                color.set_alpha((pixel * c.alpha() + inv_pixel * color.alpha()) / 255);
-                color.set_red  ((pixel * c.red()   + inv_pixel * color.red())   / 255);
-                color.set_green((pixel * c.green() + inv_pixel * color.green()) / 255);
-                color.set_blue ((pixel * c.blue()  + inv_pixel * color.blue())  / 255);
-                
-                bitmap.set_pixel(x + rel_x, y + rel_y, color);
+                bitmap.set_pixel(x + rel_x, y + rel_y, dest);
             }
         }
     }
