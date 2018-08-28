@@ -484,6 +484,7 @@ namespace Gosu
 
 // Font
 %ignore Gosu::Font::Font(int height, const std::string& font_name, unsigned flags);
+%ignore Gosu::Font::set_image(std::string codepoint, unsigned font_flags, const Gosu::Image& image);		
 
 %include "../../Gosu/Font.hpp"
 %extend Gosu::Font {
