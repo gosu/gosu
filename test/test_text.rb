@@ -31,7 +31,9 @@ class TestText < Minitest::Test
           # Prepend <c=r00> to each string because white-on-translucent images are hard
           # to view (at least on macOS).
           image = Gosu::Image.from_text("<c=ff0000>#{string}", 41, options)
-          assert_equal Gosu::Image.new(expected_filename), image
+          image.save "debug-#{expected_filename}" if ENV["DEBUG"]
+          expected = Gosu::Image.new(expected_filename)
+          assert_equal expected, image
         end
       end
     end
