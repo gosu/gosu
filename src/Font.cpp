@@ -44,12 +44,12 @@ struct Gosu::Font::Impl
             u32string string(1, codepoint);
             Bitmap bitmap(scaled_height, scaled_height);
             auto required_width = ceil(draw_text(bitmap, 0, 0, Color::WHITE, string,
-                                                 name, scaled_height, base_flags));
+                                                 name, scaled_height, font_flags));
             if (required_width > bitmap.width()) {
                 // If the character was wider than high, we need to render it again.
                 Bitmap(required_width, scaled_height).swap(bitmap);
                 draw_text(bitmap, 0, 0, Color::WHITE, string,
-                          name, scaled_height, base_flags);
+                          name, scaled_height, font_flags);
             }
             
             *image = Image(bitmap, 0, 0, required_width, scaled_height);
