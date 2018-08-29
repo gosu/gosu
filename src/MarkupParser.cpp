@@ -1,11 +1,11 @@
 #include "MarkupParser.hpp"
 #include <Gosu/Utility.hpp>
 #include "utf8proc.h"
+
 #include <cstring>
 using namespace std;
 
-
-// Helper method for allowing CJK text have line breaks even in the absence of whitespace.
+// Helper method for allowing CJK text to have line breaks in the absence of whitespace.
 static bool should_allow_break_after_codepoint(utf8proc_int32_t cp)
 {
     return (cp >= 0x3040 && cp <= 0x3096) || // Hiragana
@@ -32,7 +32,6 @@ bool Gosu::MarkupParser::match_and_skip(const char* chars, size_t length)
     add_current_substring();
     // Skip chars.
     markup += length;
-    substring = markup;
     return true;
 }
 
@@ -111,7 +110,6 @@ bool Gosu::MarkupParser::parse_markup()
         c.emplace_back(argb);
 
         markup += (4 + hex_chars);
-        substring = markup;
         return true;
     }
 
@@ -123,15 +121,15 @@ bool Gosu::MarkupParser::parse_escape_entity()
 {
     // These are not entities (images) but escapes for markup characters.
     if (match_and_skip("&lt;")) {
-        add_substring("<");
+        add_composed_substring(u32string(1, '<'));
         return true;
     }
     if (match_and_skip("&gt;")) {
-        add_substring(">");
+        add_composed_substring(u32string(1, '>'));
         return true;
     }
     if (match_and_skip("&amp;")) {
-        add_substring("&");
+        add_composed_substring(u32string(1, '&'));
         return true;
     }
 
@@ -141,21 +139,21 @@ bool Gosu::MarkupParser::parse_escape_entity()
 
 void Gosu::MarkupParser::add_current_substring()
 {
-    if (substring != markup) {
-        add_substring(string(substring, markup));
-        substring = markup;
+    if (!substring.empty()) {
+        add_composed_substring(utf8_to_composed_utc4(substring));
+        substring.clear();
     }
 }
 
-void Gosu::MarkupParser::add_substring(string&& substring)
+void Gosu::MarkupParser::add_composed_substring(u32string&& substring)
 {
     FormattedString fstr;
-    fstr.string = substring;
+    fstr.text = substring;
     fstr.flags = flags();
     fstr.color = c.back();
 
     if (! substrings.empty() && substrings.back().can_be_merged_with(fstr)) {
-        substrings.back().string.append(move(fstr.string));
+        substrings.back().text.append(move(fstr.text));
     }
     else {
         substrings.emplace_back(move(fstr));
@@ -172,7 +170,7 @@ void Gosu::MarkupParser::flush_to_consumer()
 
 Gosu::MarkupParser::MarkupParser(const char* markup, unsigned base_flags, bool split_words,
                                  function<void (vector<FormattedString>)> consumer)
-: markup(markup), substring(markup), consumer(move(consumer))
+: markup(markup), consumer(move(consumer))
 {
     word_state = (split_words ? ADDING_WORD : IGNORE_WORDS);
 
@@ -210,8 +208,10 @@ void Gosu::MarkupParser::parse()
         // Cancel parsing when invalid UTF-8 is encountered.
         if (len < 1) break;
         
-        // This uses isspace(), not Unicode character properties, for consistency with TextBuilder.
-        bool whitespace_except_newline = isspace(static_cast<int>(*markup));
+        auto* properties = utf8proc_get_property(codepoint);
+        // Also check the BiDi class to filter out non-breaking spaces.
+        bool whitespace_except_newline = properties->category == UTF8PROC_CATEGORY_ZS &&
+                                         properties->bidi_class == UTF8PROC_BIDI_CLASS_WS;
 
         if (whitespace_except_newline && word_state == ADDING_WORD) {
             // We are in word-parsing mode, and this is was the end of a word.
@@ -225,9 +225,10 @@ void Gosu::MarkupParser::parse()
             word_state = ADDING_WORD;
         }
 
+        substring.append(markup, len);
         markup += len;
         
-        if (should_allow_break_after_codepoint(codepoint)) {
+        if (word_state != IGNORE_WORDS && should_allow_break_after_codepoint(codepoint)) {
             // Flush each individual CJK character out as a word so that the TextBuilder can insert
             // line breaks as needed.
             add_current_substring();

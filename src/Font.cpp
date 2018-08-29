@@ -21,60 +21,41 @@ struct Gosu::Font::Impl
     unsigned base_flags;
 
     // The most common characters are stored directly in an array for maximum performance.
-    // (It probably makes sense to just store the full Basic Multilingual Plane in here.)
-    array<array<Image, 128>, FF_COMBINATIONS> ascii_graphemes;
+    // (This is the start of the Basic Multilingual Plane, up until the part where right-to-left
+    // languages begin, which don't really work with Gosu yet.)
+    array<array<Image, 0x58f>, FF_COMBINATIONS> fast_glyphs;
     // Everything else is looked up through a map...
-    array<map<string, Image>, FF_COMBINATIONS> other_graphemes;
+    array<map<utf8proc_int32_t, Image>, FF_COMBINATIONS> other_glyphs;
     
-    const Image& image(const string& grapheme, unsigned font_flags)
+    const Image& image(char32_t codepoint, unsigned font_flags)
     {
         Image* image;
-        if (grapheme.length() == 1 && grapheme[0] < ascii_graphemes[font_flags].size()) {
-            image = &ascii_graphemes[font_flags][grapheme[0]];
+        if (codepoint < fast_glyphs.size()) {
+            image = &fast_glyphs[font_flags][codepoint];
         }
         else {
-            image = &other_graphemes[font_flags][grapheme];
+            image = &other_glyphs[font_flags][codepoint];
         }
         
-        // If this grapheme has not been rendered before, do it now.
-        if (image->height() == 0) {
-            *image = Image(create_text(grapheme, name, height * FONT_RENDER_SCALE, font_flags));
+        // If this codepoint has not been rendered before, do it now.
+        if (image->width() == 0 && image->height() == 0) {
+            auto scaled_height = height * FONT_RENDER_SCALE;
+            
+            u32string string(1, codepoint);
+            Bitmap bitmap(scaled_height, scaled_height);
+            auto required_width = ceil(draw_text(bitmap, 0, 0, Color::WHITE, string,
+                                                 name, scaled_height, font_flags));
+            if (required_width > bitmap.width()) {
+                // If the character was wider than high, we need to render it again.
+                Bitmap(required_width, scaled_height).swap(bitmap);
+                draw_text(bitmap, 0, 0, Color::WHITE, string,
+                          name, scaled_height, font_flags);
+            }
+            
+            *image = Image(bitmap, 0, 0, required_width, scaled_height);
         }
         
         return *image;
-    }
-    
-    template<typename Functor>
-    void for_each_grapheme(const FormattedString& fstr, const Functor& functor)
-    {
-        utf8proc_int32_t grapheme_state = 0;
-        auto* ptr = (utf8proc_uint8_t*) fstr.string.c_str();
-        auto* end_of_string = ptr + fstr.string.length();
-        auto* begin_of_grapheme = ptr;
-        utf8proc_uint32_t last_cp = 0;
-        
-        auto flush_current_grapheme = [&] {
-            if (begin_of_grapheme != ptr) {
-                functor(image(string(begin_of_grapheme, ptr), fstr.flags));
-                begin_of_grapheme = ptr;
-            }
-        };
-        
-        while (ptr < end_of_string) {
-            utf8proc_int32_t codepoint;
-            auto len = utf8proc_iterate(ptr, end_of_string - ptr, &codepoint);
-            // Cancel parsing when invalid UTF-8 is encountered.
-            if (len < 1) break;
-            
-            if (last_cp && utf8proc_grapheme_break_stateful(last_cp, codepoint, &grapheme_state)) {
-                flush_current_grapheme();
-            }
-
-            last_cp = codepoint;
-            ptr += len;
-        }
-        
-        flush_current_grapheme();
     }
 };
 
@@ -109,14 +90,14 @@ double Gosu::Font::text_width(const string& text, double scale_x) const
     MarkupParser(text.c_str(), pimpl->base_flags, false, [&](vector<FormattedString>&& line) {
         int line_width = 0;
         for (auto& part : line) {
-            pimpl->for_each_grapheme(part, [&](const Image& image) {
-                line_width += image.width();
-            });
+            for (auto codepoint : part.text) {
+                line_width += pimpl->image(codepoint, part.flags).width();
+            }
         }
         width = max(width, line_width);
     }).parse();
     
-    return width / FONT_RENDER_SCALE;
+    return scale_x * width / FONT_RENDER_SCALE;
 }
 
 void Gosu::Font::draw(const string& text, double x, double y, ZPos z,
@@ -128,12 +109,13 @@ void Gosu::Font::draw(const string& text, double x, double y, ZPos z,
     MarkupParser(text.c_str(), pimpl->base_flags, false, [&](vector<FormattedString>&& line) {
         double current_x = x;
         for (auto& part : line) {
-            pimpl->for_each_grapheme(part, [&](const Image& image) {
+            for (auto codepoint : part.text) {
+                auto& image = pimpl->image(codepoint, part.flags);
                 image.draw(current_x, current_y, z,
                            scale_x / FONT_RENDER_SCALE, scale_y / FONT_RENDER_SCALE,
                            c, mode);
                 current_x += scale_x * image.width() / FONT_RENDER_SCALE;
-            });
+            }
         }
         current_y += scale_y * height();
     }).parse();
@@ -156,3 +138,23 @@ void Gosu::Font::draw_rot(const string& text, double x, double y, ZPos z, double
     });
 }
 
+void Gosu::Font::set_image(std::string codepoint, unsigned font_flags, const Gosu::Image& image)
+{
+    auto utc4 = utf8_to_composed_utc4(codepoint);
+    if (utc4.length() != 1) {
+        throw invalid_argument("Could not compose '" + codepoint + "' into a single codepoint");
+    }
+    
+    if (utc4[0] < pimpl->fast_glyphs[font_flags].size()) {
+        pimpl->fast_glyphs[font_flags][utc4[0]] = image;
+    } else {
+        pimpl->other_glyphs[font_flags][utc4[0]] = image;
+    }
+}
+
+void Gosu::Font::set_image(std::string codepoint, const Gosu::Image& image)
+{
+    for (unsigned font_flags = 0; font_flags < FF_COMBINATIONS; ++font_flags) {
+        set_image(codepoint, font_flags, image);
+    }
+}

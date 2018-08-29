@@ -13,8 +13,7 @@ void Gosu::Bitmap::swap(Bitmap& other)
 
 void Gosu::Bitmap::resize(unsigned width, unsigned height, Color c)
 {
-    if (width == w && height == h)
-        return;
+    if (width == w && height == h) return;
 
     Bitmap temp(width, height, c);
     temp.insert(*this, 0, 0);

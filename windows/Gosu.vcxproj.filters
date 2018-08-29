@@ -99,22 +99,10 @@
     <ClCompile Include="..\src\Text.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\TextApple.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\TextBuilder.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\TextImpl.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\TextInput.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TextUnix.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TextWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Texture.cpp">
@@ -130,6 +118,18 @@
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Transform.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TrueTypeFont.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TrueTypeFontApple.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TrueTypeFontUnix.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TrueTypeFontWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Utility.cpp">

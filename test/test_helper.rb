@@ -61,7 +61,7 @@ module TestHelper
         return
       end
     end
-    output.save 'debug_' + expected if ENV['DEBUG']
+    output.save "debug_#{expected}" if ENV['DEBUG']
     reference = Gosu::Image.new(File.join(media_path, expected))
 
     assert output.similar?(reference, 0.90), "Screenshot should look similar to #{expected}!#{diff([reference.to_blob].pack('m*'), [output.to_blob].pack('m*')) if ENV['DEBUG']}"

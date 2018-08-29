@@ -12,7 +12,10 @@ void Gosu::sleep(unsigned milliseconds)
 
 unsigned long Gosu::milliseconds()
 {
-    static unsigned long start = (timeBeginPeriod(1), timeGetTime());
+    static unsigned long start = [] {
+        timeBeginPeriod(1);
+        return timeGetTime();
+    }();
     return timeGetTime() - start;
 }
 

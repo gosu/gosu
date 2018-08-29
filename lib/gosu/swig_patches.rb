@@ -62,3 +62,8 @@ module Gosu
     unsafe_gl(*args, &block)
   end
 end
+
+# SWIG will not let me rename my method to '[]=', so use alias here.
+class Gosu::Font
+  alias []= set_image
+end
