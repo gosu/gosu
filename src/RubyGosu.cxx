@@ -2786,6 +2786,7 @@ SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_0(Gosu::Window &window,std::string co
     }
 SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_1(int height,VALUE options=0){
         std::string font_name = Gosu::default_font_name();
+        unsigned font_flags = 0;
         
         if (options) {
             Check_Type(options, T_HASH);
@@ -2798,11 +2799,19 @@ SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_1(int height,VALUE options=0){
                 const char* key_string = Gosu::cstr_from_symbol(key);
                 
                 VALUE value = rb_hash_aref(options, key);
-                if (!strcmp(key_string, "name")) {
+                if (!strcmp(key_string, "name") || !strcmp(key_string, "font")) {
                     VALUE rb_string = rb_obj_as_string(value);
                     font_name = StringValueCStr(rb_string);
                 }
-                // TODO - would be nice & trivial to support :bold => false and :italic => true here
+                else if (!strcmp(key_string, "bold")) {
+                    if (RTEST(value)) font_flags |= Gosu::FF_BOLD;
+                }
+                else if (!strcmp(key_string, "italic")) {
+                    if (RTEST(value)) font_flags |= Gosu::FF_ITALIC;
+                }
+                else if (!strcmp(key_string, "underline")) {
+                    if (RTEST(value)) font_flags |= Gosu::FF_UNDERLINE;
+                }
                 else {
                     static bool issued_warning = false;
                     if (!issued_warning) {
@@ -2813,7 +2822,7 @@ SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_1(int height,VALUE options=0){
             }
         }
         
-        return new Gosu::Font(height, font_name);
+        return new Gosu::Font(height, font_name, font_flags);
     }
 SWIGINTERN Gosu::Image *new_Gosu_Image(VALUE source,VALUE options=0){
         Gosu::Bitmap bmp;
@@ -2882,7 +2891,8 @@ SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::string const &text,int font_he
         int width = 0;
         int spacing = 0;
         Gosu::Alignment align = Gosu::AL_LEFT;
-        unsigned flags = 0;
+        unsigned image_flags = 0;
+        unsigned font_flags = 0;
         
         if (options) {
             Check_Type(options, T_HASH);
@@ -2897,6 +2907,15 @@ SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::string const &text,int font_he
                 VALUE value = rb_hash_aref(options, key);
                 if (!strcmp(key_string, "font")) {
                     font = StringValuePtr(value);
+                }
+                else if (!strcmp(key_string, "bold")) {
+                    if (RTEST(value)) font_flags |= Gosu::FF_BOLD;
+                }
+                else if (!strcmp(key_string, "italic")) {
+                    if (RTEST(value)) font_flags |= Gosu::FF_ITALIC;
+                }
+                else if (!strcmp(key_string, "underline")) {
+                    if (RTEST(value)) font_flags |= Gosu::FF_UNDERLINE;
                 }
                 else if (!strcmp(key_string, "align")) {
                     const char* cstr = Gosu::cstr_from_symbol(value);
@@ -2925,7 +2944,7 @@ SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::string const &text,int font_he
                     spacing = NUM2INT(value);
                 }
                 else if (!strcmp(key_string, "retro")) {
-                    if (RTEST(value)) flags |= Gosu::IF_RETRO;
+                    if (RTEST(value)) image_flags |= Gosu::IF_RETRO;
                 }
                 else {
                     static bool issued_warning = false;
@@ -2939,12 +2958,12 @@ SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::string const &text,int font_he
         
         Gosu::Bitmap bitmap;
         if (width == 0) {
-            bitmap = Gosu::create_text(text, font, font_height);
+            bitmap = Gosu::create_text(text, font, font_height, font_flags);
         }
         else {
-            bitmap = Gosu::create_text(text, font, font_height, spacing, width, align);
+            bitmap = Gosu::create_text(text, font, font_height, spacing, width, align, font_flags);
         }
-        return new Gosu::Image(bitmap, flags);
+        return new Gosu::Image(bitmap, image_flags);
     }
 SWIGINTERN std::vector< Gosu::Image > Gosu_Image_load_tiles__SWIG_0(VALUE source,int tile_width,int tile_height,VALUE options=0){
         Gosu::Bitmap bmp;
@@ -5657,64 +5676,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Font_set_image__SWIG_0(int argc, VALUE *argv, VALUE self) {
-  Gosu::Font *arg1 = (Gosu::Font *) 0 ;
-  std::string arg2 ;
-  unsigned int arg3 ;
-  Gosu::Image *arg4 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned int val3 ;
-  int ecode3 = 0 ;
-  void *argp4 ;
-  int res4 = 0 ;
-  
-  if ((argc < 3) || (argc > 3)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Font, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Font *","set_image", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Font * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    int res = SWIG_AsPtr_std_string(argv[0], &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), Ruby_Format_TypeError( "", "std::string","set_image", 2, argv[0] )); 
-    }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
-  }
-  ecode3 = SWIG_AsVal_unsigned_SS_int(argv[1], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "unsigned int","set_image", 3, argv[1] ));
-  } 
-  arg3 = static_cast< unsigned int >(val3);
-  res4 = SWIG_ConvertPtr(argv[2], &argp4, SWIGTYPE_p_Gosu__Image,  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), Ruby_Format_TypeError( "", "Gosu::Image const &","set_image", 4, argv[2] )); 
-  }
-  if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Gosu::Image const &","set_image", 4, argv[2])); 
-  }
-  arg4 = reinterpret_cast< Gosu::Image * >(argp4);
-  {
-    try {
-      (arg1)->set_image(arg2,arg3,(Gosu::Image const &)*arg4);
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Font_set_image__SWIG_1(int argc, VALUE *argv, VALUE self) {
+_wrap_Font_set_image(int argc, VALUE *argv, VALUE self) {
   Gosu::Font *arg1 = (Gosu::Font *) 0 ;
   std::string arg2 ;
   Gosu::Image *arg3 = 0 ;
@@ -5758,69 +5720,6 @@ _wrap_Font_set_image__SWIG_1(int argc, VALUE *argv, VALUE self) {
   }
   return Qnil;
 fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE _wrap_Font_set_image(int nargs, VALUE *args, VALUE self) {
-  int argc;
-  VALUE argv[5];
-  int ii;
-  
-  argc = nargs + 1;
-  argv[0] = self;
-  if (argc > 5) SWIG_fail;
-  for (ii = 1; (ii < argc); ++ii) {
-    argv[ii] = args[ii-1];
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Font, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        void *vptr = 0;
-        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_Gosu__Image, 0);
-        _v = SWIG_CheckState(res);
-        if (_v) {
-          return _wrap_Font_set_image__SWIG_1(nargs, args, self);
-        }
-      }
-    }
-  }
-  if (argc == 4) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Font, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        {
-          int res = SWIG_AsVal_unsigned_SS_int(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          void *vptr = 0;
-          int res = SWIG_ConvertPtr(argv[3], &vptr, SWIGTYPE_p_Gosu__Image, 0);
-          _v = SWIG_CheckState(res);
-          if (_v) {
-            return _wrap_Font_set_image__SWIG_0(nargs, args, self);
-          }
-        }
-      }
-    }
-  }
-  
-fail:
-  Ruby_Format_OverloadedError( argc, 5, "Font.set_image", 
-    "    void Font.set_image(std::string codepoint, unsigned int font_flags, Gosu::Image const &image)\n"
-    "    void Font.set_image(std::string codepoint, Gosu::Image const &image)\n");
-  
   return Qnil;
 }
 

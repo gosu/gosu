@@ -233,7 +233,10 @@ module Gosu
     #
     # @param height [Integer] the height of the font, in pixels.
     # @param [Hash] options
-    # @option options [String] :name the name of a system font, or a path to a TrueType Font (TTF) file. A path must contain at least one '/' character to distinguish it from a system font.
+    # @option options [String] :font the name of a system font, or a path to a TrueType Font (TTF) file. A path must contain at least one '/' character to distinguish it from a system font.
+    # @option options [bool] :bold (false)
+    # @option options [bool] :italic (false)
+    # @option options [bool] :underline (false)
     #
     # @overload initialize(height, options = {})
     # @overload initialize(window, font_name, height)
@@ -348,6 +351,9 @@ module Gosu
     # @param [Integer] line_height the line height, in pixels.
     # @param [Hash] options
     # @option options [String] :font (Gosu::default_font_name) the name of a system font, or a path to a TrueType Font (TTF) file. A path must contain at least one '/' character to distinguish it from a system font.
+    # @option options [bool] :bold (false)
+    # @option options [bool] :italic (false)
+    # @option options [bool] :underline (false)
     # @option options [Integer] :width the width of the image, in pixels. Long lines will be automatically wrapped around to avoid overflow, but overlong words will be truncated. If this option is omitted, lines will not be wrapped, and :align and :spacing will be ignored as well.
     # @option options [Integer] :spacing (0) the spacing between lines, in pixels.
     # @option options [:left, :right, :center, :justify] :align (:left) the text alignment.

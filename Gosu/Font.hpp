@@ -13,9 +13,8 @@
 
 namespace Gosu
 {
-    //! A font can be used to draw text on a Graphics object very flexibly.
-    //! Fonts are ideal for small texts that change regularly. For large,
-    //! static texts you should use create_bitmap and turn the result into
+    //! Fonts are ideal for drawing short, dynamic strings.
+    //! For large, static texts you should use Gosu::create_text and turn the result into
     //! an image.
     class Font
     {
@@ -65,21 +64,13 @@ namespace Gosu
         GOSU_DEPRECATED
     #endif
         void draw_rot(const std::string& text, double x, double y, ZPos z, double angle,
-                      double scale_x = 1, double scale_y = 1, Color c = Color::WHITE,
-                      AlphaMode mode = AM_DEFAULT) const;
+                      double scale_x = 1, double scale_y = 1,
+                      Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
 
         //! Maps a letter to a specific image instead of generating one using
-        //! Gosu's built-in text rendering. This can only be called once per
-        //! character, and the character must not have been drawn before.
-        //! This ensures that Fonts are still (sort of) immutable.
-    #ifndef SWIG
-        GOSU_DEPRECATED
-    #endif
+        //! Gosu's built-in text rendering.
         void set_image(std::string codepoint, unsigned font_flags, const Gosu::Image& image);
         //! A shortcut for mapping a character to an image regardless of font_flags.
-    #ifndef SWIG
-        GOSU_DEPRECATED
-    #endif
         void set_image(std::string codepoint, const Gosu::Image& image);
     };
 }
