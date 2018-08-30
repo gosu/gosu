@@ -2886,10 +2886,10 @@ SWIGINTERN Gosu::Image *Gosu_Image_subimage(Gosu::Image *self,int x,int y,int w,
         std::unique_ptr<Gosu::ImageData> image_data = self->data().subimage(x, y, w, h);
         return image_data.get() ? new Gosu::Image(std::move(image_data)) : nullptr;
     }
-SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::string const &text,int font_height,VALUE options=0){
+SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::string const &text,double font_height,VALUE options=0){
         std::string font = Gosu::default_font_name();
-        int width = 0;
-        int spacing = 0;
+        int width = -1;
+        double spacing = 0;
         Gosu::Alignment align = Gosu::AL_LEFT;
         unsigned image_flags = 0;
         unsigned font_flags = 0;
@@ -2941,7 +2941,7 @@ SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::string const &text,int font_he
                     width = NUM2INT(value);
                 }
                 else if (!strcmp(key_string, "spacing")) {
-                    spacing = NUM2INT(value);
+                    spacing = NUM2DBL(value);
                 }
                 else if (!strcmp(key_string, "retro")) {
                     if (RTEST(value)) image_flags |= Gosu::IF_RETRO;
@@ -2956,13 +2956,8 @@ SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::string const &text,int font_he
             }
         }
         
-        Gosu::Bitmap bitmap;
-        if (width == 0) {
-            bitmap = Gosu::create_text(text, font, font_height, font_flags);
-        }
-        else {
-            bitmap = Gosu::create_text(text, font, font_height, spacing, width, align, font_flags);
-        }
+        Gosu::Bitmap bitmap = Gosu::layout_text(text, font, font_height, spacing, width,
+                                                align, font_flags);
         return new Gosu::Image(bitmap, image_flags);
     }
 SWIGINTERN std::vector< Gosu::Image > Gosu_Image_load_tiles__SWIG_0(VALUE source,int tile_width,int tile_height,VALUE options=0){
@@ -7028,10 +7023,10 @@ fail:
 SWIGINTERN VALUE
 _wrap_Image_from_text(int argc, VALUE *argv, VALUE self) {
   std::string *arg1 = 0 ;
-  int arg2 ;
+  double arg2 ;
   VALUE arg3 = (VALUE) 0 ;
   int res1 = SWIG_OLDOBJ ;
-  int val2 ;
+  double val2 ;
   int ecode2 = 0 ;
   Gosu::Image *result = 0 ;
   VALUE vresult = Qnil;
@@ -7050,11 +7045,11 @@ _wrap_Image_from_text(int argc, VALUE *argv, VALUE self) {
     }
     arg1 = ptr;
   }
-  ecode2 = SWIG_AsVal_int(argv[1], &val2);
+  ecode2 = SWIG_AsVal_double(argv[1], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","Gosu_Image_from_text", 2, argv[1] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","Gosu_Image_from_text", 2, argv[1] ));
   } 
-  arg2 = static_cast< int >(val2);
+  arg2 = static_cast< double >(val2);
   if (argc > 2) {
     arg3 = argv[2];
   }

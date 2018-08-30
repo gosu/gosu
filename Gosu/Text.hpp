@@ -20,23 +20,14 @@ namespace Gosu
     double text_width(const std::u32string& text, const std::string& font_name, double font_height,
                       unsigned font_flags = 0);
 
-    //! Draws a line of unformatted text on a bitmap. This is a very low-level function that does
-    //! not understand any of Gosu's HTML-like markup.
+    //! Draws a line of unformatted text on a bitmap. This is a low-level function that does not
+    //! understand any of Gosu's HTML-like markup.
     //! \param text A UCS-4 string, normalization: NFC.
     //! \param font_name Name of a system font, or filename of a TTF file (must contain '/' or '.').
     //! \param font_height Height, in pixels, of the text.
     //! \param font_flags Binary combination of members of the FontFlags enum.
     double draw_text(Bitmap& bitmap, double x, double y, Color c, const std::u32string& text,
                      const std::string& font_name, double font_height, unsigned font_flags = 0);
-
-    //! Creates a bitmap that is filled with a line of formatted text given to the function.
-    //! The line can contain line breaks and HTML-like markup.
-    //! \param text Formatted text.
-    //! \param font_name Name of a system font, or filename of a TTF file (must contain '/' or '.').
-    //! \param font_height Height of the font in pixels.
-    //! \param font_flags Binary combination of members of the FontFlags enum.
-    Bitmap create_text(const std::string& text, const std::string& font_name, double font_height,
-                       unsigned font_flags = 0);
 
     //! Creates a bitmap that is filled with the formatted text given to the function.
     //! The line can contain line breaks and HTML-like markup.
@@ -48,7 +39,10 @@ namespace Gosu
     //! \param width Width of the bitmap that will be returned.
     //!        Text will be split into multiple lines to avoid drawing over the right border.
     //!        When a single word is too long, it will be truncated.
+    //!        A width smaller than 0 indicates that lines should not be wrapped, and the resulting
+    //!        bitmap will be as wide as the widest line.
     //! \param font_flags Binary combination of members of the FontFlags enum.
-    Bitmap create_text(const std::string& text, const std::string& font_name, double font_height,
-                       double line_spacing, int width, Alignment align, unsigned font_flags = 0);
+    Bitmap layout_text(const std::string& text, const std::string& font_name, double font_height,
+                       double line_spacing = 0, int width = -1, Alignment align = AL_LEFT,
+                       unsigned font_flags = 0);
 }

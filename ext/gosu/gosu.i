@@ -363,8 +363,8 @@ namespace Gosu
 %ignore Gosu::gosu_to_radians;
 %include "../../Gosu/Math.hpp"
 %ignore Gosu::text_width;
-%ignore Gosu::create_text;
 %ignore Gosu::draw_text;
+%ignore Gosu::layout_text;
 %include "../../Gosu/Text.hpp"
 
 
@@ -639,11 +639,11 @@ namespace Gosu
     }
     
     %newobject from_text;
-    static Gosu::Image* from_text(const std::string& text, int font_height, VALUE options = 0)
+    static Gosu::Image* from_text(const std::string& text, double font_height, VALUE options = 0)
     {
         std::string font = Gosu::default_font_name();
-        int width = 0;
-        int spacing = 0;
+        int width = -1;
+        double spacing = 0;
         Gosu::Alignment align = Gosu::AL_LEFT;
         unsigned image_flags = 0;
         unsigned font_flags = 0;
@@ -695,7 +695,7 @@ namespace Gosu
                     width = NUM2INT(value);
                 }
                 else if (!strcmp(key_string, "spacing")) {
-                    spacing = NUM2INT(value);
+                    spacing = NUM2DBL(value);
                 }
                 else if (!strcmp(key_string, "retro")) {
                     if (RTEST(value)) image_flags |= Gosu::IF_RETRO;
@@ -710,13 +710,8 @@ namespace Gosu
             }
         }
         
-        Gosu::Bitmap bitmap;
-        if (width == 0) {
-            bitmap = Gosu::create_text(text, font, font_height, font_flags);
-        }
-        else {
-            bitmap = Gosu::create_text(text, font, font_height, spacing, width, align, font_flags);
-        }
+        Gosu::Bitmap bitmap = Gosu::layout_text(text, font, font_height, spacing, width,
+                                                align, font_flags);
         return new Gosu::Image(bitmap, image_flags);
     }
     

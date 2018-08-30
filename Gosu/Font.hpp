@@ -14,7 +14,7 @@
 namespace Gosu
 {
     //! Fonts are ideal for drawing short, dynamic strings.
-    //! For large, static texts you should use Gosu::create_text and turn the result into
+    //! For large, static texts you should use Gosu::layout_text and turn the result into
     //! an image.
     class Font
     {
