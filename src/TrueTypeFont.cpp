@@ -70,16 +70,8 @@ struct Gosu::TrueTypeFont::Impl
                     // Missing characters often come in clusters, so build a substring of
                     // codepoints that this font doesn't contain and then defer to the fallback
                     // font.
-                    u32string fallback_string;
-                    for (; index < text.size(); ++index) {
-                        auto codepoint = text[index];
-                        // Skip control characters.
-                        if (codepoint < ' ') continue;
-                        // Stop as soon as a glyph is available in the current font.
-                        if (stbtt_FindGlyphIndex(&info, codepoint) != 0) break;
-                        
-                        fallback_string.push_back(codepoint);
-                    }
+                    u32string fallback_string = string_of_missing_glyphs(text, index);
+                    index += fallback_string.length();
                     x = fallback->pimpl->draw_text(fallback_string, index == text.size(), height,
                                                    bitmap, x, y, c);
                     last_glyph = 0;
@@ -130,6 +122,21 @@ struct Gosu::TrueTypeFont::Impl
         return max<double>(0, x);
     }
     
+    u32string string_of_missing_glyphs(const u32string& text, u32string::size_type from_index)
+    {
+        u32string result;
+        
+        for (u32string::size_type index = from_index; index < text.size(); ++index) {
+            auto codepoint = text[index];
+            // Stop as soon as a glyph (except control characters) is available in the current font.
+            if (codepoint >= ' ' && stbtt_FindGlyphIndex(&info, codepoint) != 0) break;
+            
+            result.push_back(codepoint);
+        }
+        
+        return result;
+    }
+    
     void draw_glyph(Bitmap& bitmap, double fx, double fy, Color c, int glyph, double scale)
     {
         int x = static_cast<int>(fx);
@@ -146,15 +153,13 @@ struct Gosu::TrueTypeFont::Impl
         free(pixels);
     }
     
-    // This implements the "over" alpha compositing operator, see:
-    // https://en.wikipedia.org/wiki/Alpha_compositing
     void blend_into_bitmap(Bitmap& bitmap, const unsigned char* pixels, int x, int y, int w, int h,
                            Color c)
     {
         int stride = w;
         
         // Instead of transferring all pixels in the range [0; w) x [0; h) into the bitmap, clip
-        // these values because Bitmap::set_pixel does not perform bounds checking.
+        // these values because Bitmap::blend_pixel does not perform bounds checking.
         
         int src_x = 0;
         if (x < 0) {
@@ -175,18 +180,9 @@ struct Gosu::TrueTypeFont::Impl
         
         for (int rel_y = 0; rel_y < h; ++rel_y) {
             for (int rel_x = 0; rel_x < w; ++rel_x) {
-                int src_alpha = pixels[(src_y + rel_y) * stride + src_x + rel_x] * c.alpha() / 255;
-                if (src_alpha == 0) continue;
-
-                Color out = bitmap.get_pixel(x + rel_x, y + rel_y);
-                int inv_alpha = out.alpha() * (255 - src_alpha) / 255;
-                
-                out.set_alpha(src_alpha + inv_alpha);
-                out.set_red  ((c.red()   * src_alpha + out.red()   * inv_alpha) / out.alpha());
-                out.set_green((c.green() * src_alpha + out.green() * inv_alpha) / out.alpha());
-                out.set_blue ((c.blue()  * src_alpha + out.blue()  * inv_alpha) / out.alpha());
-                
-                bitmap.set_pixel(x + rel_x, y + rel_y, out);
+                int pixel = pixels[(src_y + rel_y) * stride + src_x + rel_x];
+                Color c_with_alpha(pixel * c.alpha() / 255, c.red(), c.green(), c.blue());
+                bitmap.blend_pixel(x + rel_x, y + rel_y, c_with_alpha);
             }
         }
     }
