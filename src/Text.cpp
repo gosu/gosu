@@ -29,8 +29,26 @@ double Gosu::draw_text(Bitmap& bitmap, double x, double y, Color c, const u32str
     return font.draw_text(text, font_height, &bitmap, x, y, c);
 }
 
-Gosu::Bitmap Gosu::layout_text(const string& text, const string& font_name, double font_height,
-                               double line_spacing, int width, Alignment align, unsigned font_flags)
+Gosu::Bitmap Gosu::layout_text(const string& text, const string& font_name,
+                               double font_height, double line_spacing,
+                               int width, Alignment align, unsigned font_flags)
+{
+    // Escape all markup and delegate to layout_markup.
+    auto markup = text;
+    for (string::size_type pos = 0; pos < markup.length(); ++pos) {
+        if (markup[pos] == '&') {
+            markup.replace(pos, 1, "&amp;");
+        }
+        else if (markup[pos] == '<') {
+            markup.replace(pos, 1, "&lt;");
+        }
+    }
+    return layout_markup(markup, font_name, font_height, line_spacing, width, align, font_flags);
+}
+
+Gosu::Bitmap Gosu::layout_markup(const string& markup, const string& font_name,
+                                 double font_height, double line_spacing,
+                                 int width, Alignment align, unsigned font_flags)
 {
     if (font_height <= 0)              throw invalid_argument("font_height must be > 0");
     if (line_spacing < -font_height)   throw invalid_argument("line_spacing must be ≥ -font_height");
@@ -41,9 +59,10 @@ Gosu::Bitmap Gosu::layout_text(const string& text, const string& font_name, doub
         
         // Feed all formatted substrings to the TextBuilder, which will construct the result.
         // Split the input string into words, because this method implements word-wrapping.
-        MarkupParser(text.c_str(), font_flags, true, [&text_builder](vector<FormattedString> word) {
+        MarkupParser parser(font_flags, true, [&text_builder](vector<FormattedString> word) {
             text_builder.feed_word(move(word));
-        }).parse();
+        });
+        parser.parse(markup);
         
         return text_builder.move_into_bitmap();
     }
@@ -51,14 +70,15 @@ Gosu::Bitmap Gosu::layout_text(const string& text, const string& font_name, doub
         vector<vector<FormattedString>> lines;
         
         // Split the text into lines (split_words = false) since this method does not wrap lines.
-        MarkupParser(text.c_str(), font_flags, false, [&lines](vector<FormattedString>&& line) {
+        MarkupParser parser(font_flags, false, [&lines](vector<FormattedString>&& line) {
             // Remove trailing \n characters from each line to avoid errors from Gosu::text_width().
             if (line.back().text.back() == '\n') {
                 line.back().text.pop_back();
             }
             
             lines.emplace_back(line);
-        }).parse();
+        });
+        parser.parse(markup);
         
         if (lines.empty()) return Bitmap();
         
@@ -86,7 +106,7 @@ Gosu::Bitmap Gosu::layout_text(const string& text, const string& font_name, doub
             else if (align == AL_RIGHT) {
                 x = result.width() - line_widths[i];
             }
-                
+            
             for (auto& part : lines[i]) {
                 x = draw_text(result, x, y, part.color, part.text, font_name, font_height);
             }

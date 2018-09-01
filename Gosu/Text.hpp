@@ -42,7 +42,24 @@ namespace Gosu
     //!        A width smaller than 0 indicates that lines should not be wrapped, and the resulting
     //!        bitmap will be as wide as the widest line.
     //! \param font_flags Binary combination of members of the FontFlags enum.
-    Bitmap layout_text(const std::string& text, const std::string& font_name, double font_height,
-                       double line_spacing = 0, int width = -1, Alignment align = AL_LEFT,
-                       unsigned font_flags = 0);
+    Bitmap layout_text(const std::string& text, const std::string& font_name,
+                       double font_height, double line_spacing = 0,
+                       int width = -1, Alignment align = AL_LEFT, unsigned font_flags = 0);
+    
+    //! Creates a bitmap that is filled with the formatted text given to the function.
+    //! The line can contain line breaks and HTML-like markup.
+    //! \param text Formatted text.
+    //! \param font_name Name of a system font, or filename of a TTF file (must contain '/' or '.').
+    //! \param font_height Height of the font in pixels.
+    //! \param line_spacing Spacing between two lines of text in pixels. Can be negative to make
+    //!        text stick together more closely.
+    //! \param width Width of the bitmap that will be returned.
+    //!        Text will be split into multiple lines to avoid drawing over the right border.
+    //!        When a single word is too long, it will be truncated.
+    //!        A width smaller than 0 indicates that lines should not be wrapped, and the resulting
+    //!        bitmap will be as wide as the widest line.
+    //! \param font_flags Binary combination of members of the FontFlags enum.
+    Bitmap layout_markup(const std::string& markup, const std::string& font_name,
+                         double font_height, double line_spacing = 0,
+                         int width = -1, Alignment align = AL_LEFT, unsigned font_flags = 0);
 }
