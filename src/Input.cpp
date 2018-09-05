@@ -4,7 +4,10 @@
 #include <Gosu/Input.hpp>
 #include <Gosu/TextInput.hpp>
 #include <Gosu/Utility.hpp>
+
 #include <SDL.h>
+#include "utf8proc.h"
+
 #include <cwctype>
 #include <cstdlib>
 #include <algorithm>
@@ -325,14 +328,17 @@ string Gosu::Input::id_to_char(Button btn)
     const char* name = SDL_GetKeyName(keycode);
     if (name == nullptr) return "";
     
-    wstring wname = utf8_to_wstring(name);
-    if (wname.length() != 1) return "";
+    u32string codepoints = utf8_to_composed_utc4(name);
     
-    // Convert to lower case to be consistent with previous versions of Gosu.
-    // German umlauts are already reported in lower-case by SDL, anyway.
-    // (This should handle Turkish i/I just fine because it uses the current locale.)
-    wname[0] = (wchar_t) towlower((wint_t) wname[0]);
-    return wstring_to_utf8(wname);
+    // Filter out names that are more than one logical character.
+    if (codepoints.length() != 1) return "";
+    
+    // Always return lower case to be consistent with previous versions of Gosu.
+    codepoints[0] = utf8proc_tolower(codepoints[0]);
+    // Convert back to UTF-8.
+    utf8proc_uint8_t utf8_buffer[4];
+    auto len = utf8proc_encode_char(codepoints[0], utf8_buffer);
+    return string(reinterpret_cast<char*>(utf8_buffer), len);
 }
 
 Gosu::Button Gosu::Input::char_to_id(string ch)

@@ -19,13 +19,13 @@ class ::Numeric
 end
 
 class Gosu::Font
-  alias_method :draw_markup, :draw
-  # This will be its own method in Gosu 1.0.
-  alias_method :draw_text, :draw
+  alias_method :draw, :draw_text
+  # draw_text will stop parsing markup in Gosu 1.0.
+  alias_method :draw_markup, :draw_text
 end
 
 class Gosu::Image
-  # This will be its own method in Gosu 1.0.
+  # from_markup will stop parsing markup in Gosu 1.0.
   def self.from_markup(*args)
     self.from_text(*args)
   end

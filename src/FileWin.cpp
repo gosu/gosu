@@ -39,7 +39,7 @@ Gosu::File::File(const string& filename, FileMode mode)
     DWORD share_mode = FILE_SHARE_READ;
     DWORD creation_disp = (mode == FM_READ) ? OPEN_EXISTING : OPEN_ALWAYS;
 
-    wstring wfilename = utf8_to_wstring(filename);
+    wstring wfilename = utf8_to_utf16(filename);
     pimpl->handle = CreateFileW(wfilename.c_str(), access, share_mode, 0, creation_disp,
                                 FILE_ATTRIBUTE_NORMAL, 0);
     if (pimpl->handle == INVALID_HANDLE_VALUE) {

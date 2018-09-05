@@ -177,8 +177,8 @@ public:
             star.draw();
         }
 
-        font.draw("Score: " + std::to_string(player.get_score()), 10, 10, Z_UI,
-                  1, 1, Gosu::Color::YELLOW);
+        font.draw_text("Score: " + std::to_string(player.get_score()), 10, 10, Z_UI,
+                       1, 1, Gosu::Color::YELLOW);
     }
 };
 
