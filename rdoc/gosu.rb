@@ -233,7 +233,10 @@ module Gosu
     #
     # @param height [Integer] the height of the font, in pixels.
     # @param [Hash] options
-    # @option options [String] :name the name of a system font, or a path to a TrueType Font (TTF) file. A path must contain at least one '/' character to distinguish it from a system font.
+    # @option options [String] :name the name of a system font, or a path to a TrueType Font (TTF) file. A path must contain at least one '/' or '.' character to distinguish it from a system font.
+    # @option options [bool] :bold (false)
+    # @option options [bool] :italic (false)
+    # @option options [bool] :underline (false)
     #
     # @overload initialize(height, options = {})
     # @overload initialize(window, font_name, height)
@@ -268,7 +271,11 @@ module Gosu
     # @see Gosu::Image.from_text
     # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
     # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
-    def draw(text, x, y, z, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
+    def draw_text(text, x, y, z, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
+
+    ##
+    # Like {#draw_text}, but supports the following markup tags: `<b>bold</b>`, `<i>italic</i>`, `<c=rrggbb>colors</c>`.
+    def draw_markup(markup, x, y, z, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
 
     ##
     # Draws a single line of text relative to (x, y).
@@ -285,7 +292,11 @@ module Gosu
     # @see #draw
     # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
     # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
-    def draw_rel(text, x, y, z, rel_x, rel_y, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
+    def draw_text_rel(text, x, y, z, rel_x, rel_y, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
+
+    ##
+    # Like {#draw_text_rel}, but supports the following markup tags: `<b>bold</b>`, `<i>italic</i>`, `<c=rrggbb>colors</c>`.
+    def draw_markup_rel(markup, x, y, z, rel_x, rel_y, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
 
     # @!endgroup
 
@@ -295,6 +306,10 @@ module Gosu
     # @return [Integer] the width of the text, in pixels.
     # @param text [String]
     def text_width(text, scale_x=1); end
+    
+    ##
+    # Like {#text_width}, but supports the following markup tags: `<b>bold</b>`, `<i>italic</i>`, `<c=rrggbb>colors</c>`.
+    def markup_width(markup, scale_x=1); end
   end
 
   ##
@@ -348,6 +363,9 @@ module Gosu
     # @param [Integer] line_height the line height, in pixels.
     # @param [Hash] options
     # @option options [String] :font (Gosu::default_font_name) the name of a system font, or a path to a TrueType Font (TTF) file. A path must contain at least one '/' character to distinguish it from a system font.
+    # @option options [bool] :bold (false)
+    # @option options [bool] :italic (false)
+    # @option options [bool] :underline (false)
     # @option options [Integer] :width the width of the image, in pixels. Long lines will be automatically wrapped around to avoid overflow, but overlong words will be truncated. If this option is omitted, lines will not be wrapped, and :align and :spacing will be ignored as well.
     # @option options [Integer] :spacing (0) the spacing between lines, in pixels.
     # @option options [:left, :right, :center, :justify] :align (:left) the text alignment.
@@ -356,6 +374,10 @@ module Gosu
     # @see Gosu::Font
     # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
     def self.from_text(text, line_height, options = {}); end
+
+    ##
+    # Like {#from_text}, but supports the following markup tags: `<b>bold</b>`, `<i>italic</i>`, `<c=rrggbb>colors</c>`.
+    def self.from_markup(markup, line_height, options = {}); end
 
     ##
     # Loads an image from a file or an RMagick image, then divides the image into an array of equal-sized tiles.

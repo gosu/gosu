@@ -20,6 +20,26 @@ void Gosu::Bitmap::resize(unsigned width, unsigned height, Color c)
     swap(temp);
 }
 
+void Gosu::Bitmap::blend_pixel(unsigned x, unsigned y, Color c)
+{
+    if (c.alpha() == 0) return;
+    
+    Color out = get_pixel(x, y);
+    if (out.alpha() == 0) {
+        set_pixel(x, y, c);
+        return;
+    }
+    
+    int inv_alpha = out.alpha() * (255 - c.alpha()) / 255;
+    
+    out.set_alpha(c.alpha() + inv_alpha);
+    out.set_red  ((c.red()   * c.alpha() + out.red()   * inv_alpha) / out.alpha());
+    out.set_green((c.green() * c.alpha() + out.green() * inv_alpha) / out.alpha());
+    out.set_blue ((c.blue()  * c.alpha() + out.blue()  * inv_alpha) / out.alpha());
+    
+    set_pixel(x, y, out);
+}
+
 void Gosu::Bitmap::insert(const Bitmap& source, int x, int y)
 {
     insert(source, x, y, 0, 0, source.width(), source.height());

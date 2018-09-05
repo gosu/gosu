@@ -20,7 +20,7 @@ static string special_folder_path(int csidl)
         buf[len] = L'\\';
         buf[len + 1] = 0;
     }
-    return Gosu::wstring_to_utf8(buf);
+    return Gosu::utf16_to_utf8(buf);
 }
 
 static string exe_filename()
@@ -30,14 +30,14 @@ static string exe_filename()
         WCHAR buffer[MAX_PATH * 2];
         Gosu::winapi_check(GetModuleFileNameW(nullptr, buffer, MAX_PATH * 2),
                            "getting the module filename");
-        result = Gosu::wstring_to_utf8(buffer);
+        result = Gosu::utf16_to_utf8(buffer);
     }
     return result;
 }
 
 void Gosu::use_resource_directory()
 {
-    SetCurrentDirectory(utf8_to_wstring(resource_prefix()).c_str());
+    SetCurrentDirectory(utf8_to_utf16(resource_prefix()).c_str());
 }
 
 string Gosu::resource_prefix()

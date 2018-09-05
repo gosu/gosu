@@ -80,7 +80,7 @@ const unsigned char* Gosu::ttf_fallback_data()
     static const unsigned char* unifont = ttf_data_by_name("Unifont", 0);
     if (unifont) return unifont;
     
-    return ttf_data_from_file("/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf", 0);
+    return ttf_data_from_file("/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf");
 }
 
 string Gosu::default_font_name()

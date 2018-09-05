@@ -36,7 +36,7 @@ const unsigned char* Gosu::ttf_data_by_name(const string& font_name, unsigned fo
         DEFAULT_PITCH | FF_DONTCARE
     };
     
-    wstring wfont_name = utf8_to_wstring(font_name);
+    wstring wfont_name = utf8_to_utf16(font_name);
     wcsncpy(logfont.lfFaceName, wfont_name.c_str(), LF_FACESIZE);
     logfont.lfFaceName[LF_FACESIZE - 1] = 0;
     

@@ -59,6 +59,10 @@ namespace Gosu
         {
             pixels[y * w + x] = c;
         }
+        
+        //! This updates a pixel using the "over" alpha compositing operator, see:
+        //! https://en.wikipedia.org/wiki/Alpha_compositing
+        void blend_pixel(unsigned x, unsigned y, Color c);
 
         //! Inserts a bitmap at the given position. Parts of the inserted
         //! bitmap that would be outside of the target bitmap will be

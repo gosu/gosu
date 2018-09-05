@@ -54,8 +54,8 @@ namespace Gosu
         void flush_to_consumer();
 
     public:
-        MarkupParser(const char* markup, unsigned base_flags, bool split_words,
+        MarkupParser(unsigned base_flags, bool split_words,
                      std::function<void (std::vector<FormattedString>)> consumer);
-        void parse();
+        void parse(const std::string& markup);
     };
 }

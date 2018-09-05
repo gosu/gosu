@@ -139,7 +139,7 @@ bool Gosu::MarkupParser::parse_escape_entity()
 
 void Gosu::MarkupParser::add_current_substring()
 {
-    if (!substring.empty()) {
+    if (! substring.empty()) {
         add_composed_substring(utf8_to_composed_utc4(substring));
         substring.clear();
     }
@@ -168,9 +168,9 @@ void Gosu::MarkupParser::flush_to_consumer()
     }
 }
 
-Gosu::MarkupParser::MarkupParser(const char* markup, unsigned base_flags, bool split_words,
+Gosu::MarkupParser::MarkupParser(unsigned base_flags, bool split_words,
                                  function<void (vector<FormattedString>)> consumer)
-: markup(markup), consumer(move(consumer))
+: consumer(move(consumer))
 {
     word_state = (split_words ? ADDING_WORD : IGNORE_WORDS);
 
@@ -179,9 +179,10 @@ Gosu::MarkupParser::MarkupParser(const char* markup, unsigned base_flags, bool s
     u = (base_flags & FF_UNDERLINE) ? 1 : 0;
 }
 
-void Gosu::MarkupParser::parse()
+void Gosu::MarkupParser::parse(const std::string& markup_string)
 {
-    auto end_of_markup = markup + strlen(markup);
+    markup = markup_string.data();
+    const char* end_of_markup = markup_string.data() + markup_string.length();
     
     while (markup < end_of_markup) {
         if (*markup == '<' && parse_markup()) {

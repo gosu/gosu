@@ -363,8 +363,9 @@ namespace Gosu
 %ignore Gosu::gosu_to_radians;
 %include "../../Gosu/Math.hpp"
 %ignore Gosu::text_width;
-%ignore Gosu::create_text;
 %ignore Gosu::draw_text;
+%ignore Gosu::layout_text;
+%ignore Gosu::layout_markup;
 %include "../../Gosu/Text.hpp"
 
 
@@ -496,6 +497,7 @@ namespace Gosu
     Font(int height, VALUE options = 0)
     {
         std::string font_name = Gosu::default_font_name();
+        unsigned font_flags = 0;
         
         if (options) {
             Check_Type(options, T_HASH);
@@ -512,7 +514,15 @@ namespace Gosu
                     VALUE rb_string = rb_obj_as_string(value);
                     font_name = StringValueCStr(rb_string);
                 }
-                // TODO - would be nice & trivial to support :bold => false and :italic => true here
+                else if (!strcmp(key_string, "bold")) {
+                    if (RTEST(value)) font_flags |= Gosu::FF_BOLD;
+                }
+                else if (!strcmp(key_string, "italic")) {
+                    if (RTEST(value)) font_flags |= Gosu::FF_ITALIC;
+                }
+                else if (!strcmp(key_string, "underline")) {
+                    if (RTEST(value)) font_flags |= Gosu::FF_UNDERLINE;
+                }
                 else {
                     static bool issued_warning = false;
                     if (!issued_warning) {
@@ -523,7 +533,7 @@ namespace Gosu
             }
         }
         
-        return new Gosu::Font(height, font_name);
+        return new Gosu::Font(height, font_name, font_flags);
     }
 }
 
@@ -630,13 +640,14 @@ namespace Gosu
     }
     
     %newobject from_text;
-    static Gosu::Image* from_text(const std::string& text, int font_height, VALUE options = 0)
+    static Gosu::Image* from_text(const std::string& markup, double font_height, VALUE options = 0)
     {
         std::string font = Gosu::default_font_name();
-        int width = 0;
-        int spacing = 0;
+        int width = -1;
+        double spacing = 0;
         Gosu::Alignment align = Gosu::AL_LEFT;
-        unsigned flags = 0;
+        unsigned image_flags = 0;
+        unsigned font_flags = 0;
         
         if (options) {
             Check_Type(options, T_HASH);
@@ -651,6 +662,15 @@ namespace Gosu
                 VALUE value = rb_hash_aref(options, key);
                 if (!strcmp(key_string, "font")) {
                     font = StringValuePtr(value);
+                }
+                else if (!strcmp(key_string, "bold")) {
+                    if (RTEST(value)) font_flags |= Gosu::FF_BOLD;
+                }
+                else if (!strcmp(key_string, "italic")) {
+                    if (RTEST(value)) font_flags |= Gosu::FF_ITALIC;
+                }
+                else if (!strcmp(key_string, "underline")) {
+                    if (RTEST(value)) font_flags |= Gosu::FF_UNDERLINE;
                 }
                 else if (!strcmp(key_string, "align")) {
                     const char* cstr = Gosu::cstr_from_symbol(value);
@@ -676,10 +696,10 @@ namespace Gosu
                     width = NUM2INT(value);
                 }
                 else if (!strcmp(key_string, "spacing")) {
-                    spacing = NUM2INT(value);
+                    spacing = NUM2DBL(value);
                 }
                 else if (!strcmp(key_string, "retro")) {
-                    if (RTEST(value)) flags |= Gosu::IF_RETRO;
+                    if (RTEST(value)) image_flags |= Gosu::IF_RETRO;
                 }
                 else {
                     static bool issued_warning = false;
@@ -691,14 +711,9 @@ namespace Gosu
             }
         }
         
-        Gosu::Bitmap bitmap;
-        if (width == 0) {
-            bitmap = Gosu::create_text(text, font, font_height);
-        }
-        else {
-            bitmap = Gosu::create_text(text, font, font_height, spacing, width, align);
-        }
-        return new Gosu::Image(bitmap, flags);
+        Gosu::Bitmap bitmap = Gosu::layout_markup(markup, font, font_height, spacing, width,
+                                                  align, font_flags);
+        return new Gosu::Image(bitmap, image_flags);
     }
     
     static std::vector<Gosu::Image> load_tiles(VALUE source, int tile_width, int tile_height,

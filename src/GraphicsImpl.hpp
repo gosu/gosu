@@ -103,4 +103,18 @@ namespace Gosu
 #endif
     
     void ensure_current_context();
+    
+    inline std::string escape_markup(const std::string& text) {
+        // Escape all markup and delegate to layout_markup.
+        auto markup = text;
+        for (std::string::size_type pos = 0; pos < markup.length(); ++pos) {
+            if (markup[pos] == '&') {
+                markup.replace(pos, 1, "&amp;");
+            }
+            else if (markup[pos] == '<') {
+                markup.replace(pos, 1, "&lt;");
+            }
+        }
+        return markup;
+    }
 }

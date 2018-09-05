@@ -18,6 +18,19 @@ class ::Numeric
   end
 end
 
+class Gosu::Font
+  alias_method :draw, :draw_text
+  # draw_text will stop parsing markup in Gosu 1.0.
+  alias_method :draw_markup, :draw_text
+end
+
+class Gosu::Image
+  # from_markup will stop parsing markup in Gosu 1.0.
+  def self.from_markup(*args)
+    self.from_text(*args)
+  end
+end
+
 # Color constants.
 # This is cleaner than having SWIG define them.
 module Gosu
