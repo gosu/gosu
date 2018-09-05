@@ -365,6 +365,7 @@ namespace Gosu
 %ignore Gosu::text_width;
 %ignore Gosu::draw_text;
 %ignore Gosu::layout_text;
+%ignore Gosu::layout_markup;
 %include "../../Gosu/Text.hpp"
 
 
@@ -509,7 +510,7 @@ namespace Gosu
                 const char* key_string = Gosu::cstr_from_symbol(key);
                 
                 VALUE value = rb_hash_aref(options, key);
-                if (!strcmp(key_string, "name") || !strcmp(key_string, "font")) {
+                if (!strcmp(key_string, "name")) {
                     VALUE rb_string = rb_obj_as_string(value);
                     font_name = StringValueCStr(rb_string);
                 }
@@ -639,7 +640,7 @@ namespace Gosu
     }
     
     %newobject from_text;
-    static Gosu::Image* from_text(const std::string& text, double font_height, VALUE options = 0)
+    static Gosu::Image* from_text(const std::string& markup, double font_height, VALUE options = 0)
     {
         std::string font = Gosu::default_font_name();
         int width = -1;
@@ -710,8 +711,8 @@ namespace Gosu
             }
         }
         
-        Gosu::Bitmap bitmap = Gosu::layout_text(text, font, font_height, spacing, width,
-                                                align, font_flags);
+        Gosu::Bitmap bitmap = Gosu::layout_markup(markup, font, font_height, spacing, width,
+                                                  align, font_flags);
         return new Gosu::Image(bitmap, image_flags);
     }
     

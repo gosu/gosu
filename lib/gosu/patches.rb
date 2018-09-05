@@ -18,6 +18,19 @@ class ::Numeric
   end
 end
 
+class Gosu::Font
+  alias_method :draw_markup, :draw
+  # This will be its own method in Gosu 1.0.
+  alias_method :draw_text, :draw
+end
+
+class Gosu::Image
+  # This will be its own method in Gosu 1.0.
+  def self.from_markup(*args)
+    self.from_text(*args)
+  end
+end
+
 # Color constants.
 # This is cleaner than having SWIG define them.
 module Gosu
