@@ -33,17 +33,9 @@ Gosu::Bitmap Gosu::layout_text(const string& text, const string& font_name,
                                double font_height, double line_spacing,
                                int width, Alignment align, unsigned font_flags)
 {
-    // Escape all markup and delegate to layout_markup.
-    auto markup = text;
-    for (string::size_type pos = 0; pos < markup.length(); ++pos) {
-        if (markup[pos] == '&') {
-            markup.replace(pos, 1, "&amp;");
-        }
-        else if (markup[pos] == '<') {
-            markup.replace(pos, 1, "&lt;");
-        }
-    }
-    return layout_markup(markup, font_name, font_height, line_spacing, width, align, font_flags);
+    return layout_markup(escape_markup(text), font_name,
+                         font_height, line_spacing,
+                         width, align, font_flags);
 }
 
 Gosu::Bitmap Gosu::layout_markup(const string& markup, const string& font_name,

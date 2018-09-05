@@ -139,7 +139,7 @@ bool Gosu::MarkupParser::parse_escape_entity()
 
 void Gosu::MarkupParser::add_current_substring()
 {
-    if (!substring.empty()) {
+    if (! substring.empty()) {
         add_composed_substring(utf8_to_composed_utc4(substring));
         substring.clear();
     }

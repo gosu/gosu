@@ -43,13 +43,13 @@ struct Gosu::Font::Impl
             
             u32string string(1, codepoint);
             Bitmap bitmap(scaled_height, scaled_height);
-            auto required_width = ceil(draw_text(bitmap, 0, 0, Color::WHITE, string,
-                                                 name, scaled_height, font_flags));
+            auto required_width = ceil(Gosu::draw_text(bitmap, 0, 0, Color::WHITE, string,
+                                                       name, scaled_height, font_flags));
             if (required_width > bitmap.width()) {
                 // If the character was wider than high, we need to render it again.
                 Bitmap(required_width, scaled_height).swap(bitmap);
-                draw_text(bitmap, 0, 0, Color::WHITE, string,
-                          name, scaled_height, font_flags);
+                Gosu::draw_text(bitmap, 0, 0, Color::WHITE, string,
+                                name, scaled_height, font_flags);
             }
             
             *image = Image(bitmap, 0, 0, required_width, scaled_height);
@@ -84,29 +84,41 @@ unsigned Gosu::Font::flags() const
 
 double Gosu::Font::text_width(const string& text, double scale_x) const
 {
-    int width = 0;
+    return markup_width(escape_markup(text), scale_x);
+}
+
+double Gosu::Font::markup_width(const string& markup, double scale_x) const
+{
+    double width = 0;
 
     // Split the text into lines (split_words = false) because Font doesn't implement word-wrapping.
-    MarkupParser(text.c_str(), pimpl->base_flags, false, [&](vector<FormattedString>&& line) {
-        int line_width = 0;
+    MarkupParser parser(pimpl->base_flags, false, [&](vector<FormattedString>&& line) {
+        double line_width = 0;
         for (auto& part : line) {
             for (auto codepoint : part.text) {
                 line_width += pimpl->image(codepoint, part.flags).width();
             }
         }
         width = max(width, line_width);
-    }).parse();
+    });
+    parser.parse(markup);
     
     return scale_x * width / FONT_RENDER_SCALE;
 }
 
-void Gosu::Font::draw(const string& text, double x, double y, ZPos z,
+void Gosu::Font::draw_text(const string& text, double x, double y, ZPos z,
+                             double scale_x, double scale_y, Color c, AlphaMode mode) const
+{
+    draw_markup(escape_markup(text), x, y, z, scale_x, scale_y, c, mode);
+}
+
+void Gosu::Font::draw_markup(const string& markup, double x, double y, ZPos z,
     double scale_x, double scale_y, Color c, AlphaMode mode) const
 {
     double current_y = y;
     
     // Split the text into lines (split_words = false) because Font doesn't implement word-wrapping.
-    MarkupParser(text.c_str(), pimpl->base_flags, false, [&](vector<FormattedString>&& line) {
+    MarkupParser parser(pimpl->base_flags, false, [&](vector<FormattedString>&& line) {
         double current_x = x;
         for (auto& part : line) {
             for (auto codepoint : part.text) {
@@ -118,24 +130,28 @@ void Gosu::Font::draw(const string& text, double x, double y, ZPos z,
             }
         }
         current_y += scale_y * height();
-    }).parse();
-}
-
-void Gosu::Font::draw_rel(const string& text, double x, double y, ZPos z,
-    double rel_x, double rel_y, double scale_x, double scale_y, Color c, AlphaMode mode) const
-{
-    x -= text_width(text) * scale_x * rel_x;
-    y -= height() * scale_y * rel_y;
-    
-    draw(text, x, y, z, scale_x, scale_y, c, mode);
-}
-
-void Gosu::Font::draw_rot(const string& text, double x, double y, ZPos z, double angle,
-    double scale_x, double scale_y, Color c, AlphaMode mode) const
-{
-    Graphics::transform(rotate(angle, x, y), [&] {
-        draw(text, x, y, z, scale_x, scale_y, c, mode);
     });
+    parser.parse(markup);
+}
+
+void Gosu::Font::draw_text_rel(const string& text, double x, double y, ZPos z,
+                               double rel_x, double rel_y, double scale_x, double scale_y,
+                               Color c, AlphaMode mode) const
+{
+    if (rel_x) x -= text_width(text) * scale_x * rel_x;
+    if (rel_y) y -= height() * scale_y * rel_y;
+    
+    draw_text(text, x, y, z, scale_x, scale_y, c, mode);
+}
+
+void Gosu::Font::draw_markup_rel(const string& markup, double x, double y, ZPos z,
+                                 double rel_x, double rel_y, double scale_x, double scale_y,
+                                 Color c, AlphaMode mode) const
+{
+    if (rel_x) x -= markup_width(markup) * scale_x * rel_x;
+    if (rel_y) y -= height() * scale_y * rel_y;
+    
+    draw_markup(markup, x, y, z, scale_x, scale_y, c, mode);
 }
 
 void Gosu::Font::set_image(std::string codepoint, unsigned font_flags, const Gosu::Image& image)
