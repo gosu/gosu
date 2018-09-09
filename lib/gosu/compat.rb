@@ -129,7 +129,15 @@ class Gosu::Song
   end
 end
 
-# Moved some Window-methods to the Gosu::Module
+class Gosu::Font
+  def draw_rot(text, x, y, z, angle, scale_x = 1, scale_y = 1, c = 0xff_ffffff, mode = :default)
+    Gosu.rotate(angle, x, y) { draw_markup(text, x, y, z, scale_x, scale_y, c, mode) }
+  end
+
+  Gosu.deprecate Gosu::Font, :draw_rot, "Font#draw with Gosu.rotate"
+end
+
+# Moved some Window methods to the Gosu module.
 class Gosu::Window
   # Class methods that have been turned into module methods.
   class << self
@@ -151,13 +159,12 @@ class Gosu::Window
       Gosu.send method, *args, &block
     end
   end
+
+  Gosu.deprecate Gosu::Window, :set_mouse_position, "Window#mouse_x= and Window#mouse_y="
 end
 
 # Constants
 module Gosu
-  Gosu.deprecate Window, :set_mouse_position, "Window#mouse_x= and Window#mouse_y="
-  Gosu.deprecate Font, :draw_rot, "Font#draw with Gosu.rotate"
-  
   # This was renamed because it's not actually a "copyright notice".
   # (https://en.wikipedia.org/wiki/Copyright_notice)
   deprecate_const :GOSU_COPYRIGHT_NOTICE, :LICENSES
