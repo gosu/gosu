@@ -125,7 +125,7 @@ void Gosu::Font::draw_markup(const string& markup, double x, double y, ZPos z,
                 auto& image = pimpl->image(codepoint, part.flags);
                 image.draw(current_x, current_y, z,
                            scale_x / FONT_RENDER_SCALE, scale_y / FONT_RENDER_SCALE,
-                           c, mode);
+                           part.color, mode);
                 current_x += scale_x * image.width() / FONT_RENDER_SCALE;
             }
         }

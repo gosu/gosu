@@ -2800,14 +2800,6 @@ SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_1(int height,VALUE options=0){
                 
                 VALUE value = rb_hash_aref(options, key);
                 if (!strcmp(key_string, "name")) {
-                    static bool issued_warning = false;
-                    if (!issued_warning) {
-                        issued_warning = true;
-                        rb_warn("The :name keyword argument to Font#initialize has been renamed to :font");
-                    }
-                    VALUE rb_string = rb_obj_as_string(value);
-                    font_name = StringValueCStr(rb_string);
-                } else if (!strcmp(key_string, "font")) {
                     VALUE rb_string = rb_obj_as_string(value);
                     font_name = StringValueCStr(rb_string);
                 }
