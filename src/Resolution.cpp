@@ -102,14 +102,14 @@ unsigned Gosu::available_height(Window* window)
 #ifdef GOSU_IS_X
 // Pessimistic fallback implementation for available_width / available_height.
 // TODO: Look at this NET_WORKAREA based implementation: https://github.com/glfw/glfw/pull/989/files
-unsigned Gosu::available_width(int display_index)
+unsigned Gosu::available_width(Window* window)
 {
-    return static_cast<unsigned>(Gosu::screen_width(display_index) * 0.9);
+    return static_cast<unsigned>(Gosu::screen_width(window) * 0.9);
 }
 
-unsigned Gosu::available_height(int display_index)
+unsigned Gosu::available_height(Window* window)
 {
-    return static_cast<unsigned>(Gosu::screen_height(display_index) * 0.8);
+    return static_cast<unsigned>(Gosu::screen_height(window) * 0.8);
 }
 #endif
 
