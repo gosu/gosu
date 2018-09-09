@@ -107,13 +107,13 @@ double Gosu::Font::markup_width(const string& markup, double scale_x) const
 }
 
 void Gosu::Font::draw_text(const string& text, double x, double y, ZPos z,
-                             double scale_x, double scale_y, Color c, AlphaMode mode) const
+                           double scale_x, double scale_y, Color c, AlphaMode mode) const
 {
     draw_markup(escape_markup(text), x, y, z, scale_x, scale_y, c, mode);
 }
 
 void Gosu::Font::draw_markup(const string& markup, double x, double y, ZPos z,
-    double scale_x, double scale_y, Color c, AlphaMode mode) const
+                             double scale_x, double scale_y, Color c, AlphaMode mode) const
 {
     double current_y = y;
     
@@ -125,7 +125,7 @@ void Gosu::Font::draw_markup(const string& markup, double x, double y, ZPos z,
                 auto& image = pimpl->image(codepoint, part.flags);
                 image.draw(current_x, current_y, z,
                            scale_x / FONT_RENDER_SCALE, scale_y / FONT_RENDER_SCALE,
-                           part.color, mode);
+                           multiply(c, part.color), mode);
                 current_x += scale_x * image.width() / FONT_RENDER_SCALE;
             }
         }
