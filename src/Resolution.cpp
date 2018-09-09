@@ -1,86 +1,116 @@
-#include <Gosu/Gosu.hpp>
+#include <Gosu/Platform.hpp>
+#ifndef GOSU_IS_IPHONE // iPhone definitions live in WindowUIKit.cpp
+
+#include <Gosu/Window.hpp>
+#include "GraphicsImpl.hpp"
+#include <SDL.h>
+
+static SDL_DisplayMode display_mode(Gosu::Window* window)
+{
+    static struct VideoSubsystem {
+        VideoSubsystem()  { SDL_InitSubSystem(SDL_INIT_VIDEO); };
+        ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
+    } subsystem;
+    
+    int index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
+    SDL_DisplayMode result;
+    SDL_GetDesktopDisplayMode(index, &result);
+    return result;
+}
+
+unsigned Gosu::screen_width(Window* window)
+{
+    return display_mode(window).w;
+}
+
+unsigned Gosu::screen_height(Window* window)
+{
+    return display_mode(window).h;
+}
+
+#ifdef GOSU_IS_MAC
+#import <AppKit/AppKit.h>
+
+static NSSize max_window_size(Gosu::Window* window)
+{
+    // Keep in sync with SDL_cocoawindow.m.
+    auto style = NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable;
+
+    auto index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
+    auto screen_frame = NSScreen.screens[index].visibleFrame;
+    return [NSWindow contentRectForFrameRect:screen_frame styleMask:style].size;
+}
+
+unsigned Gosu::available_width(Window* window)
+{
+    return max_window_size(window).width;
+}
+
+unsigned Gosu::available_height(Window* window)
+{
+    return max_window_size(window).height;
+}
+#endif
 
 #ifdef GOSU_IS_WIN
 #include <windows.h>
 
-// On Windows, do not use the SDL 2 code below. It reports 2560x1920 in my Windows VM, which is
-// running at 2560x1080. (SDL 2.0.3)
-
-unsigned Gosu::screen_width()
-{
-    return GetSystemMetrics(SM_CXSCREEN);
-}
-
-unsigned Gosu::screen_height()
-{
-    return GetSystemMetrics(SM_CYSCREEN);
-}
-
-static SIZE calculate_available_size()
+static SIZE max_window_size(Window* window)
 {
     RECT work_area;
-    SystemParametersInfo(SPI_GETWORKAREA, 0, &work_area, 0);
+    
+    if (window == nullptr) {
+        // Easy case: Return the work area of the primary monitor.
+        SystemParametersInfo(SPI_GETWORKAREA, 0, &work_area, 0);
+    } else {
+        // Return the work area of the monitor the window is on.
+        SDL_SysWMinfo wm_info;
+        SDL_VERSION(&wm_info.version);
+        SDL_GetWindowWMInfo(window, &wm_info);
+        HMONITOR monitor = MonitorFromWindow(wm_info.info.win.window);
+        
+        MONITORINFO monitor_info;
+        monitor_info.cbSize = sizeof(monitor_info);
+        GetMonitorInfo(monitor, &monitor_info);
+        work_area = monitor_info.rcWork;
+    }
     
     RECT window_size = work_area;
-    // Note: This should be kept in sync with STYLE_NORMAL in SDL_windowswindow.c.
+    // Keep in sync with STYLE_NORMAL in SDL_windowswindow.c.
     DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
     AdjustWindowRectEx(&window_size, style, FALSE, 0);
     
+    // Because AdjustWindowRectEx will make our rect larger, not smaller, we need to perform some
+    // unintuitive math here.
     SIZE size;
     size.cx = 2 * (work_area.right - work_area.left) - (window_size.right - window_size.left);
     size.cy = 2 * (work_area.bottom - work_area.top) - (window_size.bottom - window_size.top);
     return size;
 }
 
-static SIZE available_size = calculate_available_size();
-
-unsigned Gosu::available_width()
+unsigned Gosu::available_width(Window* window)
 {
-    return available_size.cx;
+    return max_window_size(window).cx;
 }
 
-unsigned Gosu::available_height()
+unsigned Gosu::available_height(Window* window)
 {
-    return available_size.cy;
-}
-#elif !defined(GOSU_IS_IPHONE)
-#include <SDL.h>
-
-static SDL_DisplayMode current_display_mode = { 0, 0 };
-
-unsigned Gosu::screen_width()
-{
-    // TODO - not thread-safe
-    if (current_display_mode.w == 0) {
-        SDL_Init(SDL_INIT_VIDEO);
-        SDL_GetDisplayMode(0, 0, &current_display_mode);
-        SDL_QuitSubSystem(SDL_INIT_VIDEO);
-    }
-    return current_display_mode.w;
-}
-
-unsigned Gosu::screen_height()
-{
-    // TODO - not thread-safe
-    if (current_display_mode.h == 0) {
-        SDL_Init(SDL_INIT_VIDEO);
-        SDL_GetDisplayMode(0, 0, &current_display_mode);
-        SDL_QuitSubSystem(SDL_INIT_VIDEO);
-    }
-    return current_display_mode.h;
-}
-
-// Pessimistic fallback implementation for available_width / available_height.
-
-#if !defined(GOSU_IS_MAC)
-unsigned Gosu::available_width()
-{
-    return static_cast<unsigned>(Gosu::screen_width() * 0.9);
-}
-
-unsigned Gosu::available_height()
-{
-    return static_cast<unsigned>(Gosu::screen_height() * 0.8);
+    return max_window_size(window).cy;
 }
 #endif
+
+#ifdef GOSU_IS_X
+// Pessimistic fallback implementation for available_width / available_height.
+// TODO: Look at this NET_WORKAREA based implementation: https://github.com/glfw/glfw/pull/989/files
+unsigned Gosu::available_width(int display_index)
+{
+    return static_cast<unsigned>(Gosu::screen_width(display_index) * 0.9);
+}
+
+unsigned Gosu::available_height(int display_index)
+{
+    return static_cast<unsigned>(Gosu::screen_height(display_index) * 0.8);
+}
+#endif
+
 #endif

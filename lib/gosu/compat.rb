@@ -130,8 +130,8 @@ class Gosu::Song
 end
 
 class Gosu::Font
-  def draw_rot(text, x, y, z, angle, scale_x = 1, scale_y = 1, c = 0xff_ffffff, mode = :default)
-    Gosu.rotate(angle, x, y) { draw_markup(text, x, y, z, scale_x, scale_y, c, mode) }
+  def draw_rot(markup, x, y, z, angle, scale_x = 1, scale_y = 1, c = 0xff_ffffff, mode = :default)
+    Gosu.rotate(angle, x, y) { draw_markup(markup, x, y, z, scale_x, scale_y, c, mode) }
   end
 
   Gosu.deprecate Gosu::Font, :draw_rot, "Font#draw with Gosu.rotate"

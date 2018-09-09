@@ -24,7 +24,7 @@ namespace Gosu
 
     static void cleanup();
 
-    static SDL_Window* shared_window()
+    SDL_Window* shared_window()
     {
         static SDL_Window* window = nullptr;
         if (window == nullptr) {
@@ -148,8 +148,8 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
     double black_bar_height = 0;
     
     if (fullscreen) {
-        actual_width = Gosu::screen_width();
-        actual_height = Gosu::screen_height();
+        actual_width = Gosu::screen_width(this);
+        actual_height = Gosu::screen_height(this);
 
         double scale_x = 1.0 * actual_width / width;
         double scale_y = 1.0 * actual_height / height;
@@ -163,8 +163,8 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
         }
     }
     else {
-        double max_width = Gosu::available_width();
-        double max_height = Gosu::available_height();
+        double max_width = Gosu::available_width(this);
+        double max_height = Gosu::available_height(this);
         
         if (width > max_width || height > max_height) {
             scale_factor = min(max_width / width, max_height / height);
