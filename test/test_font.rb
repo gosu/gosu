@@ -10,37 +10,56 @@ class TestFont < Minitest::Test
     Gosu::Image.new(single_pixel_data)
   end
   
-  # TODO: This functionality is still missing.
-  # def test_font_constructor
-  #   # Font.text_width and Font.draw should request to render each the letter only once when it is
-  #   # first needed.
-  #   requested_strings = []
-  #   font = Gosu::Font.new(20) { |str| requested_strings << str; SINGLE_PIXEL }
-  #   font.text_width("Hallo Welt!") # implicitly renders each letter
-  #   assert_equal %w(H a l o W e t !), requested_strings
-  # end  
+  def test_markup_parsing
+    font = Gosu::Font.new(20)
+    # markup_width and text_width will return the same thing, for compatibility, until Gosu 1.0.
+    assert_equal 0, font.markup_width("<b>")
+    assert_equal 0, font.text_width("<b>")
+  end
   
-  STRING_LENGTHS = {
-    "" => 0,
-    " " => 1,
-    "Hi" => 2,
-    "Öäü" => 3,
+  def test_custom_characters
+    font = Gosu::Font.new(20)
+    font["a"] = SINGLE_PIXEL
+    font["b"] = SINGLE_PIXEL
+    font["c"] = SINGLE_PIXEL
+    # Five square letters will be scaled up to 20px.
+    assert_equal 100, font.text_width("abcba")
+  end
+  
+  def test_constructor_args
+    bold_font = Gosu::Font.new(7, bold: true)
+    regular_font = Gosu::Font.new(7, bold: false)
+    refute_equal bold_font.text_width("IJK"), regular_font.text_width("IJK")
+    assert_equal bold_font.text_width("IJK"), regular_font.text_width("<b>IJK</b>")
+    assert_equal bold_font.text_width("</b>IJK"), regular_font.text_width("IJK")
+  end
+  
+  def test_draw_and_draw_rel
+    font = Gosu::Font.new(10, name: media_path("daniel.otf"))
     
-    "🐒🐓🐕🐖🐀🐂🐆🐇🐉🐍🐎🐑" => 12, # 12 "normal" emoji
-    "👩🏻‍⚕️" => 1, # one emoji - https://emojipedia.org/female-health-worker-type-1-2/
-  }
-  
-  # TODO: Give up on grapheme clusters because or TTF rendering engine can't handle it.
-  # def test_font_grapheme_clusters
-  #   requested_strings = []
-  #   assert_equal 1, SINGLE_PIXEL.width
-  #   font = Gosu::Font.new(20) { |str| requested_strings << str; SINGLE_PIXEL }
-  #
-  #   # Ensure that Font considers the right number of UTF-8 bytes a single character to render.
-  #   STRING_LENGTHS.each do |str, length|
-  #     assert_equal length, font.text_width(str)
-  #   end
-  #
-  #   assert_equal %w( H i Ö ä ü 🐒 🐓 🐕 🐖 🐀 🐂 🐆 🐇 🐉 🐍 🐎 🐑 👩🏻‍⚕️), requested_strings
-  # end
+    assert_output_matches "test_font/draw_markup", 0.99, [200, 50] do
+      font.draw_markup "Hi! <c=f00>Red.\r\nNew   line! Äöß\n", 5, 5, -6, 1, 2.0, 0xff_ff00ff, :add
+    end
+    
+    assert_output_matches "test_font/draw_markup_rel", 0.99, [100, 100] do
+      font.draw_markup_rel "<c=000>I &lt;3 Ruby/Gosu!\n", 50, 50, 5, 0.4, -2
+    end
+  end
+
+  def test_deprecated_features
+    font = Gosu::Font.new(20, name: media_path("daniel.ttf"))
+    
+    # The scale_x parameter to Font#text_width has been deprecated in Gosu 0.14.0.
+    assert_equal 5 * font.text_width("Hello"), font.text_width("Hello", 5)
+    
+    # Font#draw and Font#draw_rel have been deprecated in Gosu 0.14.0.
+    assert_respond_to font, :draw
+    assert_respond_to font, :draw_rel
+    
+    # Font#draw_rot has been deprecated a long time ago.
+    assert_output_matches "test_font/draw_rot", 0.99, [200, 200] do
+      font.draw_rot "<b>Hello</b> <c=888>World!</c>", 10, 0, 0, 45, 0.7, 3, 0xff_ff00ff, :add
+    end
+  end
+
 end

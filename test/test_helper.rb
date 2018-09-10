@@ -15,7 +15,7 @@ class Gosu::Image
   end
 
   # Checks if two images are similar on a really basic level (check the difference of each channel)
-  def similar?(img, threshold=0.90)
+  def similar?(img, threshold)
     return true if self == img
     return false unless img.is_a?(Gosu::Image)
     return false if self.width != img.width or self.height != img.height
@@ -23,8 +23,8 @@ class Gosu::Image
     blob = img.to_blob
     differences = []
 
-    self.to_blob.each_byte.with_index do |by,idx|
-      delta = (by - blob.getbyte(idx)).abs
+    self.to_blob.each_byte.with_index do |byte, idx|
+      delta = (byte - blob.getbyte(idx)).abs
       differences << (delta / 255.0) if delta > 0
     end
 
@@ -52,19 +52,33 @@ module TestHelper
     skip if ENV["APPVEYOR"] or ENV["TRAVIS"]
   end
 
-  def assert_output_matches(expected, width, height)
+  def assert_output_matches(expected, threshold, size)
+    expected = File.expand_path("#{expected}.png", File.dirname(__FILE__))
+    
     begin
-      output = Gosu.render(width, height) { yield }
+      actual_image = Gosu.render(*size) { yield }
     rescue Exception => e
       if e.message.include? "GL_EXT_framebuffer_object"
         skip
         return
       end
     end
-    output.save "debug_#{expected}" if ENV['DEBUG']
-    reference = Gosu::Image.new(File.join(media_path, expected))
 
-    assert output.similar?(reference, 0.90), "Screenshot should look similar to #{expected}!#{diff([reference.to_blob].pack('m*'), [output.to_blob].pack('m*')) if ENV['DEBUG']}"
+    if ENV["DEBUG"]
+      actual_basename = File.basename(expected, ".png") + ".actual.png"
+      actual_image.save File.join(File.dirname(expected), actual_basename)
+    end
+
+    expected_image = Gosu::Image.new(expected)
+
+    assert actual_image.similar?(expected_image, threshold) do
+      message = "Screenshot should look similar to #{expected}"
+      if ENV["TRAVIS"] || ENV["APPVEYOR"]
+        # Print a diff when running in the CI so we can copy and paste the image if necessary.
+        message += "\n"
+        message += diff([expected_image.to_blob].pack('m*'), [actual_image.to_blob].pack('m*'))
+      end
+    end
   end
 end
 

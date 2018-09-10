@@ -97,9 +97,9 @@ bool Gosu::MarkupParser::parse_markup()
 
         if (hex_chars == 3) {
             // Expand 0xrgb to 0xFFrrggbb:
-            auto r = argb >> 8 & 0x7;
-            auto g = argb >> 4 & 0x7;
-            auto b = argb >> 0 & 0x7;
+            auto r = argb >> 8 & 0xf;
+            auto g = argb >> 4 & 0xf;
+            auto b = argb >> 0 & 0xf;
             argb = 0xff000000 | r << 20 | r << 16 | g << 12 | g << 8 | b << 4 | b << 0;
         }
         else if (hex_chars == 6) {
