@@ -198,7 +198,6 @@
     <ClCompile Include="..\src\Math.cpp" />
     <ClCompile Include="..\src\OffScreenTarget.cpp" />
     <ClCompile Include="..\src\Resolution.cpp" />
-    <ClCompile Include="..\src\ResolutionApple.cpp" />
     <ClCompile Include="..\src\TexChunk.cpp" />
     <ClCompile Include="..\src\Text.cpp" />
     <ClCompile Include="..\src\TextBuilder.cpp" />

@@ -8,6 +8,7 @@
 #include <OpenGLES/ES1/gl.h>
 #include <OpenGLES/ES1/glext.h>
 #else
+#include <SDL.h>
 #include <SDL_opengl.h>
 #endif
 
@@ -100,6 +101,10 @@ namespace Gosu
     int clip_rect_base_factor();
 #else
     inline int clip_rect_base_factor() { return 1; }
+#endif
+    
+#ifndef GOSU_IS_IPHONE
+    SDL_Window* shared_window();
 #endif
     
     void ensure_current_context();

@@ -24,7 +24,7 @@ namespace Gosu
 
     static void cleanup();
 
-    static SDL_Window* shared_window()
+    SDL_Window* shared_window()
     {
         static SDL_Window* window = nullptr;
         if (window == nullptr) {
@@ -148,8 +148,8 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
     double black_bar_height = 0;
     
     if (fullscreen) {
-        actual_width = Gosu::screen_width();
-        actual_height = Gosu::screen_height();
+        actual_width  = Gosu::screen_width(this);
+        actual_height = Gosu::screen_height(this);
 
         double scale_x = 1.0 * actual_width / width;
         double scale_y = 1.0 * actual_height / height;
@@ -163,8 +163,8 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
         }
     }
     else {
-        double max_width = Gosu::available_width();
-        double max_height = Gosu::available_height();
+        double max_width  = Gosu::available_width(this);
+        double max_height = Gosu::available_height(this);
         
         if (width > max_width || height > max_height) {
             scale_factor = min(max_width / width, max_height / height);
@@ -257,11 +257,23 @@ bool Gosu::Window::tick()
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         switch (e.type) {
-            case (SDL_QUIT): {
+        #ifdef GOSU_IS_MAC
+            // Workaround for https://github.com/gosu/gosu/issues/458
+            // "Resize" the window to its current dimensions after it is shown.
+            // Otherwise it will be black on macOS 10.14 (Mojave) until the user moves it around.
+            // TODO: Since this affects `brew install supertux` as well, maybe file an SDL bug?
+            case SDL_WINDOWEVENT: {
+                if (e.window.event == SDL_WINDOWEVENT_SHOWN) {
+                    resize(this->width(), this->height(), fullscreen());
+                }
+                break;
+            }
+        #endif
+            case SDL_QUIT: {
                 close();
                 break;
             }
-            case (SDL_DROPFILE): {
+            case SDL_DROPFILE: {
                 char* dropped_filedir = e.drop.file;
                 if (dropped_filedir == nullptr) break;
                 drop(string(dropped_filedir));

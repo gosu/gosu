@@ -18,27 +18,12 @@
 
 namespace Gosu
 {
-    //! Returns the width (in pixels) of the user's primary screen.
-    unsigned screen_width();
-    
-    //! Returns the height (in pixels) of the user's primary screen.
-    unsigned screen_height();
-    
-    //! Returns the maximum width (in 'points') that is available for a non-fullscreen Window.
-    //! All windows larger than this size will automatically be shrunk to fit.
-    unsigned available_width();
-    
-    //! Returns the maximum height (in 'points') that is available for a non-fullscreen Window.
-    //! All windows larger than this size will automatically be shrunk to fit.
-    unsigned available_height();
-    
     //! Convenient all-in-one class that serves as the foundation of a standard Gosu application.
     //! Manages initialization of all of Gosu's core components and provides timing functionality.
     //! Note that you should really only use one instance of this class at the same time.
     class Window
     {
         struct Impl;
-        // Non-movable (const) to avoid dangling internal references.
         const std::unique_ptr<Impl> pimpl;
 
     public:
@@ -68,7 +53,7 @@ namespace Gosu
         virtual void show();
         
         //! EXPERIMENTAL - MAY DISAPPEAR WITHOUT WARNING.
-        //! Performs a single mainloop step.
+        //! Performs a single main loop step.
         //! This method is only useful if you want to integrate Gosu with another library that has
         //! its own main loop.
         //! This method implicitly shows the window if it was hidden before, and returns false when
@@ -141,4 +126,26 @@ namespace Gosu
         void* uikit_window() const;
         #endif
     };
+
+    //! Returns the width (in pixels) of a screen.
+    //! \param window The result describes the screen on which the window is shown, or the
+    //!               primary screen if no window is given.
+    unsigned screen_width(Window* window = nullptr);
+    
+    //! Returns the height (in pixels) of the user's primary screen.
+    //! \param window The result describes the screen on which the window is shown, or the
+    //!               primary screen if no window is given.
+    unsigned screen_height(Window* window = nullptr);
+    
+    //! Returns the maximum width (in 'points') that is available for a non-fullscreen Window.
+    //! All windows larger than this size will automatically be shrunk to fit.
+    //! \param window The result describes the screen on which the window is shown, or the
+    //!               primary screen if no window is given.
+    unsigned available_width(Window* window = nullptr);
+    
+    //! Returns the maximum height (in 'points') that is available for a non-fullscreen Window.
+    //! All windows larger than this size will automatically be shrunk to fit.
+    //! \param window The result describes the screen on which the window is shown, or the
+    //!               primary screen if no window is given.
+    unsigned available_height(Window* window = nullptr);
 }

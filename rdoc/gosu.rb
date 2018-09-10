@@ -1245,20 +1245,22 @@ module Gosu
     def default_font_name(); end
 
     ##
-    # @return [Integer] the width (in pixels) of the user's primary screen.
-    def screen_width(); end
+    # @return [Integer] the width (in pixels) of a screen.
+    # @param window [Gosu::Window] The result describes the screen on which the window is shown, or the primary screen if no window is given.
+    def screen_width(window = nil); end
 
-    # @return [Integer] the height (in pixels) of the user's primary screen.
-    def screen_height(); end
+    # @return [Integer] the height (in pixels) of a screen.
+    # @param window [Gosu::Window] The result describes the screen on which the window is shown, or the primary screen if no window is given.
+    def screen_height(window = nil); end
 
     ##
     # @return [Integer] the maximum width (in 'points') that is available for a non-fullscreen Window.
     # All windows larger than this size will automatically be shrunk to fit.
-    def available_width(); end
+    def available_width(window = nil); end
 
     # @return [Integer] the maximum height (in 'points') that is available for a non-fullscreen Window.
     # All windows larger than this size will automatically be shrunk to fit.
-    def available_height(); end
+    def available_height(window = nil); end
 
     ##
     # Returns the language code for the user's preferred language.

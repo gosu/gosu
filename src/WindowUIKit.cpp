@@ -6,34 +6,6 @@
 
 using namespace std;
 
-
-namespace Gosu
-{
-    unsigned screen_width()
-    {
-        static CGSize screen_size = [UIScreen mainScreen].bounds.size;
-        static CGFloat width = MIN(screen_size.width, screen_size.height);
-        return width;
-    }
-    
-    unsigned screen_height()
-    {
-        static CGSize screen_size = [UIScreen mainScreen].bounds.size;
-        static CGFloat width = MAX(screen_size.width, screen_size.height);
-        return width;
-    }
-    
-    unsigned available_width()
-    {
-        return screen_width();
-    }
-    
-    unsigned available_height()
-    {
-        return screen_height();
-    }
-}
-
 struct Gosu::Window::Impl
 {
     UIWindow* window;
@@ -61,7 +33,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     pimpl->graphics->set_resolution(width, height);
     
     pimpl->input.reset(new Input((__bridge void*) pimpl->controller.view, update_interval));
-    pimpl->input->set_mouse_factors(1.0 * width / screen_height(), 1.0 * height / screen_width());
+    pimpl->input->set_mouse_factors(1.0 * width / available_width(), 1.0 * height / available_height());
     
     pimpl->input->on_touch_began = [this](Gosu::Touch touch) { touch_began(touch); };
     pimpl->input->on_touch_moved = [this](Gosu::Touch touch) { touch_moved(touch); };
@@ -160,6 +132,30 @@ void Gosu::Window::button_down(Button button)
 void* Gosu::Window::uikit_window() const
 {
     return (__bridge void*) pimpl->window;
+}
+
+unsigned Gosu::screen_width(Window*)
+{
+    return available_width() * [UIScreen mainScreen].scale;
+}
+
+unsigned Gosu::screen_height(Window*)
+{
+    return available_height() * [UIScreen mainScreen].scale;
+}
+
+unsigned Gosu::available_width(Window*)
+{
+    static CGSize screen_size = [UIScreen mainScreen].bounds.size;
+    static CGFloat width = MIN(screen_size.width, screen_size.height);
+    return width;
+}
+
+unsigned Gosu::available_height(Window*)
+{
+    static CGSize screen_size = [UIScreen mainScreen].bounds.size;
+    static CGFloat width = MAX(screen_size.width, screen_size.height);
+    return width;
 }
 
 #endif

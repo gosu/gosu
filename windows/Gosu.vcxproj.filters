@@ -90,9 +90,6 @@
     <ClCompile Include="..\src\Resolution.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ResolutionApple.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\TexChunk.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>

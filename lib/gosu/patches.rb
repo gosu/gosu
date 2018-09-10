@@ -19,9 +19,9 @@ class ::Numeric
 end
 
 class Gosu::Font
-  alias_method :draw, :draw_text
+  alias_method :draw, :draw_markup
   # draw_text will stop parsing markup in Gosu 1.0.
-  alias_method :draw_markup, :draw_text
+  alias_method :draw_text, :draw_markup
 end
 
 class Gosu::Image

@@ -2800,14 +2800,6 @@ SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_1(int height,VALUE options=0){
                 
                 VALUE value = rb_hash_aref(options, key);
                 if (!strcmp(key_string, "name")) {
-                    static bool issued_warning = false;
-                    if (!issued_warning) {
-                        issued_warning = true;
-                        rb_warn("The :name keyword argument to Font#initialize has been renamed to :font");
-                    }
-                    VALUE rb_string = rb_obj_as_string(value);
-                    font_name = StringValueCStr(rb_string);
-                } else if (!strcmp(key_string, "font")) {
                     VALUE rb_string = rb_obj_as_string(value);
                     font_name = StringValueCStr(rb_string);
                 }
@@ -8975,98 +8967,6 @@ fail:
 }
 
 
-SWIGINTERN VALUE
-_wrap_screen_width(int argc, VALUE *argv, VALUE self) {
-  unsigned int result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  {
-    try {
-      result = (unsigned int)Gosu::screen_width();
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_screen_height(int argc, VALUE *argv, VALUE self) {
-  unsigned int result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  {
-    try {
-      result = (unsigned int)Gosu::screen_height();
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_available_width(int argc, VALUE *argv, VALUE self) {
-  unsigned int result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  {
-    try {
-      result = (unsigned int)Gosu::available_width();
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_available_height(int argc, VALUE *argv, VALUE self) {
-  unsigned int result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  {
-    try {
-      result = (unsigned int)Gosu::available_height();
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
 static swig_class SwigClassWindow;
 
 SWIGINTERN VALUE
@@ -10324,6 +10224,138 @@ _wrap_disown_Window(int argc, VALUE *argv, VALUE self) {
   }
   
   return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_screen_width(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) nullptr ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  if (argc > 0) {
+    res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","Gosu::screen_width", 1, argv[0] )); 
+    }
+    arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  }
+  {
+    try {
+      result = (unsigned int)Gosu::screen_width(arg1);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_screen_height(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) nullptr ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  if (argc > 0) {
+    res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","Gosu::screen_height", 1, argv[0] )); 
+    }
+    arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  }
+  {
+    try {
+      result = (unsigned int)Gosu::screen_height(arg1);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_available_width(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) nullptr ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  if (argc > 0) {
+    res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","Gosu::available_width", 1, argv[0] )); 
+    }
+    arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  }
+  {
+    try {
+      result = (unsigned int)Gosu::available_width(arg1);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_available_height(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) nullptr ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  if (argc > 0) {
+    res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","Gosu::available_height", 1, argv[0] )); 
+    }
+    arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  }
+  {
+    try {
+      result = (unsigned int)Gosu::available_height(arg1);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  return vresult;
 fail:
   return Qnil;
 }
@@ -12348,10 +12380,6 @@ SWIGEXPORT void Init_gosu(void) {
   SwigClassTextInput.mark = 0;
   SwigClassTextInput.destroy = (void (*)(void *)) free_Gosu_TextInput;
   SwigClassTextInput.trackObjects = 1;
-  rb_define_module_function(mGosu, "screen_width", VALUEFUNC(_wrap_screen_width), -1);
-  rb_define_module_function(mGosu, "screen_height", VALUEFUNC(_wrap_screen_height), -1);
-  rb_define_module_function(mGosu, "available_width", VALUEFUNC(_wrap_available_width), -1);
-  rb_define_module_function(mGosu, "available_height", VALUEFUNC(_wrap_available_height), -1);
   rb_define_module_function(mGosu, "disown_Window", VALUEFUNC(_wrap_disown_Window), -1);
   
   SwigClassWindow.klass = rb_define_class_under(mGosu, "Window", rb_cObject);
@@ -12391,6 +12419,10 @@ SWIGEXPORT void Init_gosu(void) {
   SwigClassWindow.mark = (void (*)(void *)) mark_window;
   SwigClassWindow.destroy = (void (*)(void *)) free_Gosu_Window;
   SwigClassWindow.trackObjects = 1;
+  rb_define_module_function(mGosu, "screen_width", VALUEFUNC(_wrap_screen_width), -1);
+  rb_define_module_function(mGosu, "screen_height", VALUEFUNC(_wrap_screen_height), -1);
+  rb_define_module_function(mGosu, "available_width", VALUEFUNC(_wrap_available_width), -1);
+  rb_define_module_function(mGosu, "available_height", VALUEFUNC(_wrap_available_height), -1);
   rb_define_module_function(mGosu, "char_to_button_id", VALUEFUNC(_wrap_char_to_button_id), -1);
   rb_define_module_function(mGosu, "button_id_to_char", VALUEFUNC(_wrap_button_id_to_char), -1);
   rb_define_module_function(mGosu, "button_down?", VALUEFUNC(_wrap_button_downq___), -1);
