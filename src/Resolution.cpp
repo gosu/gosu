@@ -54,8 +54,9 @@ unsigned Gosu::available_height(Window* window)
 
 #ifdef GOSU_IS_WIN
 #include <windows.h>
+#include <SDL_syswm.h>
 
-static SIZE max_window_size(Window* window)
+static SIZE max_window_size(Gosu::Window* window)
 {
     RECT work_area;
     
@@ -66,8 +67,8 @@ static SIZE max_window_size(Window* window)
         // Return the work area of the monitor the window is on.
         SDL_SysWMinfo wm_info;
         SDL_VERSION(&wm_info.version);
-        SDL_GetWindowWMInfo(window, &wm_info);
-        HMONITOR monitor = MonitorFromWindow(wm_info.info.win.window);
+        SDL_GetWindowWMInfo(Gosu::shared_window(), &wm_info);
+        HMONITOR monitor = MonitorFromWindow(wm_info.info.win.window, MONITOR_DEFAULTTONEAREST);
         
         MONITORINFO monitor_info;
         monitor_info.cbSize = sizeof(monitor_info);
