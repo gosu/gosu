@@ -37,8 +37,8 @@ class TestFont < Minitest::Test
   def test_draw_and_draw_rel
     font = Gosu::Font.new(10, name: media_path("daniel.otf"))
     
-    assert_output_matches "test_font/draw_markup", 0.99, [200, 50] do
-      font.draw_markup "Hi! <c=f00>Red.\r\nNew   line! Äöß\n", 5, 5, -6, 1, 2.0, 0xff_ff00ff, :add
+    assert_output_matches "test_font/draw_markup", 0.99, [200, 100] do
+      font.draw_markup "Hi! <c=f00>Red.\r\nNew   line! Äöß\n", 5, 5, -6, 2.0, 4.0, 0xff_ff00ff, :add
     end
     
     assert_output_matches "test_font/draw_markup_rel", 0.99, [100, 100] do
@@ -58,7 +58,7 @@ class TestFont < Minitest::Test
     
     # Font#draw_rot has been deprecated a long time ago.
     assert_output_matches "test_font/draw_rot", 0.99, [200, 200] do
-      font.draw_rot "<b>Hello</b> <c=888>World!</c>", 10, 0, 0, 45, 0.7, 3, 0xff_ff00ff, :add
+      font.draw_rot "<b>Hello</b> <c=888>World!</c>", 50, 40, 0, 45, 1, 3, 0xff_ff00ff, :add
     end
   end
 

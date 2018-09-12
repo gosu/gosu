@@ -97,8 +97,8 @@ double Gosu::Font::markup_width(const string& markup) const
         for (auto& part : line) {
             for (auto codepoint : part.text) {
                 auto& image = pimpl->image(codepoint, part.flags);
-                double scale_to_height = 1.0 * height() / image.height();
-                line_width += scale_to_height * image.width();
+                double image_scale = 1.0 * height() / image.height();
+                line_width += image_scale * image.width();
             }
         }
         width = max(width, line_width);
@@ -125,11 +125,11 @@ void Gosu::Font::draw_markup(const string& markup, double x, double y, ZPos z,
         for (auto& part : line) {
             for (auto codepoint : part.text) {
                 auto& image = pimpl->image(codepoint, part.flags);
-                double scale_to_height = scale_y * height() / image.height();
+                double image_scale = 1.0 * height() / image.height();
                 image.draw(current_x, current_y, z,
-                           scale_to_height * scale_x, scale_to_height,
+                           image_scale * scale_x, image_scale * scale_y,
                            multiply(c, part.color), mode);
-                current_x += scale_to_height * scale_x * image.width();
+                current_x += image_scale * scale_x * image.width();
             }
         }
         current_y += scale_y * height();
@@ -164,7 +164,12 @@ void Gosu::Font::set_image(std::string codepoint, unsigned font_flags, const Gos
         throw invalid_argument("Could not compose '" + codepoint + "' into a single codepoint");
     }
     
-    pimpl->image(utc4[0], font_flags) = image;
+    if (utc4[0] < pimpl->fast_glyphs[font_flags].size()) {
+        pimpl->fast_glyphs[font_flags][utc4[0]] = image;
+    }
+    else {
+        pimpl->other_glyphs[font_flags][utc4[0]] = image;
+    }
 }
 
 void Gosu::Font::set_image(std::string codepoint, const Gosu::Image& image)
