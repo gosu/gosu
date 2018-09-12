@@ -13,9 +13,10 @@
 
 class Gosu::DrawOpQueue
 {
+    const QueueMode queue_mode;
+
     TransformStack transform_stack;
     ClipRectStack clip_rect_stack;
-    QueueMode queue_mode = QM_RENDER_TO_SCREEN;
 
     std::vector<DrawOp> ops;
     std::vector<std::function<void ()>> gl_blocks;

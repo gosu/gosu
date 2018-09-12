@@ -21,7 +21,7 @@ Gosu::WordInfo::WordInfo(const string& font_name, double font_height, vector<For
     
     width = 0;
     for (const auto& part : parts) {
-        assert (! part.text.empty());
+        assert (is_end_of_line || ! part.text.empty());
         
         width += text_width(part.text, font_name, font_height, part.flags);
     }

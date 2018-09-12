@@ -10,7 +10,7 @@ class TestImageIO < Minitest::Test
   GROUPS = { "alpha" => "alpha-bmp24.bmp", "no-alpha" => "no-alpha-png32.png" }
 
   def test_image_roundtrip
-    Dir.chdir media_path do
+    Dir.chdir File.join(File.dirname(__FILE__), "test_image_io") do
       Dir.mktmpdir do |tmpdir|
         GROUPS.each do |group, expected|
           dimensions = nil
@@ -18,11 +18,8 @@ class TestImageIO < Minitest::Test
           Dir.glob("#{group}-*.*") do |filename|
             image = Gosu::Image.new(filename)
 
-            if dimensions.nil?
-              dimensions = [image.width, image.height]
-            else
-              assert_equal dimensions, [image.width, image.height]
-            end
+            dimensions ||= [image.width, image.height]
+            assert_equal dimensions, [image.width, image.height]
 
             output_filename = File.join(tmpdir, expected)
             image.save output_filename

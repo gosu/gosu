@@ -199,9 +199,12 @@ double Gosu::TrueTypeFont::draw_text(const u32string &text, double height,
     return pimpl->draw_text(text, true, height, bitmap, x, y, c);
 }
 
-bool Gosu::TrueTypeFont::verify_font_name(const unsigned char* ttf_data, const string& font_name)
+bool Gosu::TrueTypeFont::verify_font_name(const unsigned char* ttf_data, const string& font_name, unsigned font_flags)
 {
-    return stbtt_FindMatchingFont(ttf_data, font_name.c_str(), STBTT_MACSTYLE_NONE) >= 0 ||
+    // Gosu's FontFlags enum mostly uses the same values as the STBTT_ macros.
+    int flags = (font_flags == 0 ? STBTT_MACSTYLE_NONE : font_flags);
+
+    return stbtt_FindMatchingFont(ttf_data, font_name.c_str(), font_flags) >= 0 ||
            stbtt_FindMatchingFont(ttf_data, font_name.c_str(), STBTT_MACSTYLE_DONTCARE) >= 0;
 }
 

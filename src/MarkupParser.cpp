@@ -97,9 +97,9 @@ bool Gosu::MarkupParser::parse_markup()
 
         if (hex_chars == 3) {
             // Expand 0xrgb to 0xFFrrggbb:
-            auto r = argb >> 8 & 0x7;
-            auto g = argb >> 4 & 0x7;
-            auto b = argb >> 0 & 0x7;
+            auto r = argb >> 8 & 0xf;
+            auto g = argb >> 4 & 0xf;
+            auto b = argb >> 0 & 0xf;
             argb = 0xff000000 | r << 20 | r << 16 | g << 12 | g << 8 | b << 4 | b << 0;
         }
         else if (hex_chars == 6) {
@@ -197,7 +197,9 @@ void Gosu::MarkupParser::parse(const std::string& markup_string)
         if (*markup == '\n') {
             // Explicitly add the trailing \n to the current substring so that the consumer can
             // distinguish between line breaks and word breaks in split_words mode.
+            substring.append(1, '\n');
             ++markup;
+            
             add_current_substring();
             flush_to_consumer();
             // Avoid incrementing ++markup again.

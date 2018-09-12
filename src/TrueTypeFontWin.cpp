@@ -27,12 +27,12 @@ const unsigned char* Gosu::ttf_data_by_name(const string& font_name, unsigned fo
     if (buffer_ptr) return static_cast<const unsigned char*>(buffer_ptr->data());
 
     LOGFONT logfont = {
-        20 /* arbitrary font height */, 0, 0, 0,
+        0, 0, 0, 0,
         (font_flags & Gosu::FF_BOLD) ? FW_BOLD : FW_NORMAL,
         (font_flags & Gosu::FF_ITALIC) ? TRUE : FALSE,
         (font_flags & Gosu::FF_UNDERLINE) ? TRUE : FALSE,
         FALSE /* no strikethrough */,
-        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
+        ANSI_CHARSET, OUT_OUTLINE_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
         DEFAULT_PITCH | FF_DONTCARE
     };
     
@@ -49,7 +49,7 @@ const unsigned char* Gosu::ttf_data_by_name(const string& font_name, unsigned fo
                 buffer->resize(ttf_buffer_size);
                 if (GetFontData(hdc, 0, 0, buffer->data(), buffer->size()) != GDI_ERROR) {
                     auto data = static_cast<const unsigned char*>(buffer->data());
-                    if (TrueTypeFont::verify_font_name(data, font_name)) {
+                    if (TrueTypeFont::verify_font_name(data, font_name, font_flags)) {
                         buffer_ptr = buffer;
                     }
                 }

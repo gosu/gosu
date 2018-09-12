@@ -1,40 +1,40 @@
-require 'rubygems'
-require 'fileutils'
-require 'date'
-require 'rake/extensiontask'
-require 'rake/testtask'
+require "rubygems"
+require "fileutils"
+require "date"
+require "rake/extensiontask"
+require "rake/testtask"
 
 COMMON_FILES = FileList[
-  '.yardopts',
-  'COPYING',
-  'README.md',
+  ".yardopts",
+  "COPYING",
+  "README.md",
 ]
 
 COMMON_CPP_FILES = COMMON_FILES + FileList[
-  'examples/**/*.{cpp}',
-  'examples/media/*',
-  'reference/cpp/**/*',
+  "examples/**/*.{cpp}",
+  "examples/media/*",
+  "reference/cpp/**/*",
 ]
 
 COMMON_RUBY_FILES = COMMON_FILES + FileList[
-  'Gosu/**/*',
-  'lib/**/*.rb',
-  'examples/*.rb',
-  'examples/media/*',
-  'reference/**/*.rb',
+  "Gosu/**/*",
+  "lib/**/*.rb",
+  "examples/*.rb",
+  "examples/media/*",
+  "reference/**/*.rb",
 ]
 
-GOSU_VERSION = ENV['GOSU_RELEASE_VERSION'] || '0.0.0'
+GOSU_VERSION = ENV["GOSU_RELEASE_VERSION"] || "0.0.0"
 
 def zip filename, files
   if RUBY_PLATFORM =~ /mswin$|mingw32|mingw64|win32\-|\-win32/
-    sh "7z a #{filename} #{files.map { |fn| "\"#{fn}\"" }.join(' ')}"
+    sh "7z a #{filename} #{files.map { |fn| "\"#{fn}\"" }.join(" ")}"
   else
-    sh "zip #{filename} #{files.map { |fn| "'#{fn}'" }.join(' ')}"
+    sh "zip #{filename} #{files.map { |fn| "'#{fn}'" }.join(" ")}"
   end
 end
 
-Dir.glob('./rake/*.rb').sort.each { |task| require task }
+Dir.glob("./rake/*.rb").sort.each { |task| require task }
 
 desc "Regenerate the SWIG wrapper that makes Gosu available as a C extension"
 task :swig do
@@ -46,20 +46,20 @@ end
 
 desc "Update the C++ reference on libgosu.org (needs SSH access)"
 task :update_doxygen do
-  sh "ssh #{ENV['PROJECTS_HOST']} 'cd #{ENV['PROJECTS_ROOT']}/libgosu.org/ && " +
+  sh "ssh #{ENV["PROJECTS_HOST"]} 'cd #{ENV["PROJECTS_ROOT"]}/libgosu.org/ && " +
        "svn checkout https://github.com/gosu/gosu/trunk/Gosu && PATH=../doxygen/bin:$PATH doxygen'"
 end
 
 Rake::TestTask.new do |t|
   t.verbose = true
   t.warning = true
-  # On Windows, we want to require everything from the 'lib' directory directly.
+  # On Windows, we want to require everything from the "lib" directory directly.
   # On UNIX systems, the tests should be run after installing the gosu gem instead (ignore ./lib).
   t.libs = [] unless RUBY_PLATFORM =~ /mswin$|mingw32|mingw64|win32\-|\-win32/
 end
 
 desc "Run all tests, even those that require human input"
 task :test_interactive do
-  ENV['GOSU_TEST_INTERACTIVE'] = "true"
+  ENV["GOSU_TEST_INTERACTIVE"] = "true"
   Rake::Task["test"].invoke
 end

@@ -27,7 +27,7 @@ namespace Gosu
         //! \param font_height Height of the font, in pixels.
         //! \param font_flags Flags used to render individual characters of
         //!        the font.
-        Font(int height, const std::string& name = default_font_name(), unsigned flags = FF_BOLD);
+        Font(int height, const std::string& name = default_font_name(), unsigned flags = 0);
         
         //! Returns the name of the font that was used to create it.
         const std::string& name() const;
@@ -39,9 +39,9 @@ namespace Gosu
         unsigned flags() const;
         
         //! Returns the width, in pixels, the given text would occupy if drawn.
-        double text_width(const std::string& text, double scale_x = 1) const;
+        double text_width(const std::string& text) const;
         //! Returns the width, in pixels, the given text would occupy if drawn.
-        double markup_width(const std::string& markup, double scale_x = 1) const;
+        double markup_width(const std::string& markup) const;
         
         //! Draws text so the top left corner of the text is at (x; y).
         void draw_text(const std::string& text, double x, double y, ZPos z,
