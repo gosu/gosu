@@ -117,7 +117,7 @@ class TestGosuModule < Minitest::Test
 
   def test_render
     SIZES.each do |size|
-      assert_output_matches("triangle-#{size}.png", size, size) do
+      assert_output_matches("test_gosu_module/triangle-#{size}", 0.9, [size, size]) do
         Gosu.draw_triangle(0, 0, 0xff_ff0000, size, 0, 0xff_00ff00, size, size, 0xff_0000ff, 0)
       end
     end
