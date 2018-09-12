@@ -197,7 +197,9 @@ void Gosu::MarkupParser::parse(const std::string& markup_string)
         if (*markup == '\n') {
             // Explicitly add the trailing \n to the current substring so that the consumer can
             // distinguish between line breaks and word breaks in split_words mode.
+            substring.append(1, '\n');
             ++markup;
+            
             add_current_substring();
             flush_to_consumer();
             // Avoid incrementing ++markup again.

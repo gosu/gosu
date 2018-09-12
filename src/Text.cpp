@@ -100,7 +100,8 @@ Gosu::Bitmap Gosu::layout_markup(const string& markup, const string& font_name,
             }
             
             for (auto& part : lines[i]) {
-                x = draw_text(result, x, y, part.color, part.text, font_name, font_height);
+                x = draw_text(result, x, y, part.color, part.text,
+                              font_name, font_height, part.flags);
             }
             y += (font_height + line_spacing);
         }
