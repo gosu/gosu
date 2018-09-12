@@ -2824,7 +2824,7 @@ SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_1(int height,VALUE options=0){
         
         return new Gosu::Font(height, font_name, font_flags);
     }
-SWIGINTERN double Gosu_Font_markup_width__SWIG_1(Gosu::Font *self,std::string const &markup,double scale_x=1.0){
+SWIGINTERN double Gosu_Font_markup_width(Gosu::Font *self,std::string const &markup,double scale_x=1.0){
       static bool issued_warning = false;
       if (scale_x != 1.0 && !issued_warning) {
           issued_warning = true;
@@ -5215,226 +5215,6 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Font_text_width(int argc, VALUE *argv, VALUE self) {
-  Gosu::Font *arg1 = (Gosu::Font *) 0 ;
-  std::string *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  double result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Font, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Font const *","text_width", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Font * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(argv[0], &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "std::string const &","text_width", 2, argv[0] )); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "std::string const &","text_width", 2, argv[0])); 
-    }
-    arg2 = ptr;
-  }
-  {
-    try {
-      result = (double)((Gosu::Font const *)arg1)->text_width((std::string const &)*arg2);
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_double(static_cast< double >(result));
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return vresult;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Font_markup_width__SWIG_0(int argc, VALUE *argv, VALUE self) {
-  Gosu::Font *arg1 = (Gosu::Font *) 0 ;
-  std::string *arg2 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  double result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Font, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Font const *","markup_width", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Font * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(argv[0], &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "std::string const &","markup_width", 2, argv[0] )); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "std::string const &","markup_width", 2, argv[0])); 
-    }
-    arg2 = ptr;
-  }
-  {
-    try {
-      result = (double)((Gosu::Font const *)arg1)->markup_width((std::string const &)*arg2);
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_double(static_cast< double >(result));
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return vresult;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Font_draw_text(int argc, VALUE *argv, VALUE self) {
-  Gosu::Font *arg1 = (Gosu::Font *) 0 ;
-  std::string *arg2 = 0 ;
-  double arg3 ;
-  double arg4 ;
-  Gosu::ZPos arg5 ;
-  double arg6 = (double) 1 ;
-  double arg7 = (double) 1 ;
-  Gosu::Color arg8 = (Gosu::Color) Gosu::Color::WHITE ;
-  Gosu::AlphaMode arg9 = (Gosu::AlphaMode) Gosu::AM_DEFAULT ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  double val3 ;
-  int ecode3 = 0 ;
-  double val4 ;
-  int ecode4 = 0 ;
-  double val5 ;
-  int ecode5 = 0 ;
-  double val6 ;
-  int ecode6 = 0 ;
-  double val7 ;
-  int ecode7 = 0 ;
-  
-  if ((argc < 4) || (argc > 8)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Font, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Font const *","draw_text", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Font * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(argv[0], &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "std::string const &","draw_text", 2, argv[0] )); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "std::string const &","draw_text", 2, argv[0])); 
-    }
-    arg2 = ptr;
-  }
-  ecode3 = SWIG_AsVal_double(argv[1], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "double","draw_text", 3, argv[1] ));
-  } 
-  arg3 = static_cast< double >(val3);
-  ecode4 = SWIG_AsVal_double(argv[2], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "double","draw_text", 4, argv[2] ));
-  } 
-  arg4 = static_cast< double >(val4);
-  ecode5 = SWIG_AsVal_double(argv[3], &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), Ruby_Format_TypeError( "", "Gosu::ZPos","draw_text", 5, argv[3] ));
-  } 
-  arg5 = static_cast< Gosu::ZPos >(val5);
-  if (argc > 4) {
-    ecode6 = SWIG_AsVal_double(argv[4], &val6);
-    if (!SWIG_IsOK(ecode6)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode6), Ruby_Format_TypeError( "", "double","draw_text", 6, argv[4] ));
-    } 
-    arg6 = static_cast< double >(val6);
-  }
-  if (argc > 5) {
-    ecode7 = SWIG_AsVal_double(argv[5], &val7);
-    if (!SWIG_IsOK(ecode7)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode7), Ruby_Format_TypeError( "", "double","draw_text", 7, argv[5] ));
-    } 
-    arg7 = static_cast< double >(val7);
-  }
-  if (argc > 6) {
-    {
-      if (TYPE(argv[6]) == T_FIXNUM || TYPE(argv[6]) == T_BIGNUM) {
-        arg8 = Gosu::Color(NUM2ULONG(argv[6]));
-      }
-      else {
-        void* ptr;
-        int res = SWIG_ConvertPtr(argv[6], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-        if (!SWIG_IsOK(res)) {
-          SWIG_exception_fail(SWIG_ValueError, "invalid value");
-        }
-        else if (ptr == nullptr) {
-          SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
-        }
-        else {
-          arg8 = *reinterpret_cast<Gosu::Color*>(ptr);
-        }
-      }
-    }
-  }
-  if (argc > 7) {
-    {
-      const char* cstr = Gosu::cstr_from_symbol(argv[7]);
-      
-      if (!strcmp(cstr, "default")) {
-        arg9 = Gosu::AM_DEFAULT;
-      }
-      else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive")) {
-        arg9 = Gosu::AM_ADD;
-      }
-      else if (!strcmp(cstr, "multiply")) {
-        arg9 = Gosu::AM_MULTIPLY;
-      }
-      else {
-        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
-          ":multiply)");
-      }
-    }
-  }
-  {
-    try {
-      ((Gosu::Font const *)arg1)->draw_text((std::string const &)*arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9);
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return Qnil;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
 _wrap_Font_draw_markup(int argc, VALUE *argv, VALUE self) {
   Gosu::Font *arg1 = (Gosu::Font *) 0 ;
   std::string *arg2 = 0 ;
@@ -5549,150 +5329,6 @@ _wrap_Font_draw_markup(int argc, VALUE *argv, VALUE self) {
   {
     try {
       ((Gosu::Font const *)arg1)->draw_markup((std::string const &)*arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9);
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return Qnil;
-fail:
-  if (SWIG_IsNewObj(res2)) delete arg2;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Font_draw_text_rel(int argc, VALUE *argv, VALUE self) {
-  Gosu::Font *arg1 = (Gosu::Font *) 0 ;
-  std::string *arg2 = 0 ;
-  double arg3 ;
-  double arg4 ;
-  Gosu::ZPos arg5 ;
-  double arg6 ;
-  double arg7 ;
-  double arg8 = (double) 1 ;
-  double arg9 = (double) 1 ;
-  Gosu::Color arg10 = (Gosu::Color) Gosu::Color::WHITE ;
-  Gosu::AlphaMode arg11 = (Gosu::AlphaMode) Gosu::AM_DEFAULT ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = SWIG_OLDOBJ ;
-  double val3 ;
-  int ecode3 = 0 ;
-  double val4 ;
-  int ecode4 = 0 ;
-  double val5 ;
-  int ecode5 = 0 ;
-  double val6 ;
-  int ecode6 = 0 ;
-  double val7 ;
-  int ecode7 = 0 ;
-  double val8 ;
-  int ecode8 = 0 ;
-  double val9 ;
-  int ecode9 = 0 ;
-  
-  if ((argc < 6) || (argc > 10)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 6)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Font, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Font const *","draw_text_rel", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Font * >(argp1);
-  {
-    std::string *ptr = (std::string *)0;
-    res2 = SWIG_AsPtr_std_string(argv[0], &ptr);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "std::string const &","draw_text_rel", 2, argv[0] )); 
-    }
-    if (!ptr) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "std::string const &","draw_text_rel", 2, argv[0])); 
-    }
-    arg2 = ptr;
-  }
-  ecode3 = SWIG_AsVal_double(argv[1], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "double","draw_text_rel", 3, argv[1] ));
-  } 
-  arg3 = static_cast< double >(val3);
-  ecode4 = SWIG_AsVal_double(argv[2], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "double","draw_text_rel", 4, argv[2] ));
-  } 
-  arg4 = static_cast< double >(val4);
-  ecode5 = SWIG_AsVal_double(argv[3], &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), Ruby_Format_TypeError( "", "Gosu::ZPos","draw_text_rel", 5, argv[3] ));
-  } 
-  arg5 = static_cast< Gosu::ZPos >(val5);
-  ecode6 = SWIG_AsVal_double(argv[4], &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), Ruby_Format_TypeError( "", "double","draw_text_rel", 6, argv[4] ));
-  } 
-  arg6 = static_cast< double >(val6);
-  ecode7 = SWIG_AsVal_double(argv[5], &val7);
-  if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), Ruby_Format_TypeError( "", "double","draw_text_rel", 7, argv[5] ));
-  } 
-  arg7 = static_cast< double >(val7);
-  if (argc > 6) {
-    ecode8 = SWIG_AsVal_double(argv[6], &val8);
-    if (!SWIG_IsOK(ecode8)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode8), Ruby_Format_TypeError( "", "double","draw_text_rel", 8, argv[6] ));
-    } 
-    arg8 = static_cast< double >(val8);
-  }
-  if (argc > 7) {
-    ecode9 = SWIG_AsVal_double(argv[7], &val9);
-    if (!SWIG_IsOK(ecode9)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode9), Ruby_Format_TypeError( "", "double","draw_text_rel", 9, argv[7] ));
-    } 
-    arg9 = static_cast< double >(val9);
-  }
-  if (argc > 8) {
-    {
-      if (TYPE(argv[8]) == T_FIXNUM || TYPE(argv[8]) == T_BIGNUM) {
-        arg10 = Gosu::Color(NUM2ULONG(argv[8]));
-      }
-      else {
-        void* ptr;
-        int res = SWIG_ConvertPtr(argv[8], &ptr, SWIGTYPE_p_Gosu__Color, 0);
-        if (!SWIG_IsOK(res)) {
-          SWIG_exception_fail(SWIG_ValueError, "invalid value");
-        }
-        else if (ptr == nullptr) {
-          SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
-        }
-        else {
-          arg10 = *reinterpret_cast<Gosu::Color*>(ptr);
-        }
-      }
-    }
-  }
-  if (argc > 9) {
-    {
-      const char* cstr = Gosu::cstr_from_symbol(argv[9]);
-      
-      if (!strcmp(cstr, "default")) {
-        arg11 = Gosu::AM_DEFAULT;
-      }
-      else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive")) {
-        arg11 = Gosu::AM_ADD;
-      }
-      else if (!strcmp(cstr, "multiply")) {
-        arg11 = Gosu::AM_MULTIPLY;
-      }
-      else {
-        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
-          ":multiply)");
-      }
-    }
-  }
-  {
-    try {
-      ((Gosu::Font const *)arg1)->draw_text_rel((std::string const &)*arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -6064,7 +5700,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Font_markup_width__SWIG_1(int argc, VALUE *argv, VALUE self) {
+_wrap_Font_markup_width(int argc, VALUE *argv, VALUE self) {
   Gosu::Font *arg1 = (Gosu::Font *) 0 ;
   std::string *arg2 = 0 ;
   double arg3 = (double) 1.0 ;
@@ -6104,7 +5740,7 @@ _wrap_Font_markup_width__SWIG_1(int argc, VALUE *argv, VALUE self) {
   }
   {
     try {
-      result = (double)Gosu_Font_markup_width__SWIG_1(arg1,(std::string const &)*arg2,arg3);
+      result = (double)Gosu_Font_markup_width(arg1,(std::string const &)*arg2,arg3);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -6115,62 +5751,6 @@ _wrap_Font_markup_width__SWIG_1(int argc, VALUE *argv, VALUE self) {
   return vresult;
 fail:
   if (SWIG_IsNewObj(res2)) delete arg2;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE _wrap_Font_markup_width(int nargs, VALUE *args, VALUE self) {
-  int argc;
-  VALUE argv[4];
-  int ii;
-  
-  argc = nargs + 1;
-  argv[0] = self;
-  if (argc > 4) SWIG_fail;
-  for (ii = 1; (ii < argc); ++ii) {
-    argv[ii] = args[ii-1];
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Font, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_Font_markup_width__SWIG_0(nargs, args, self);
-      }
-    }
-  }
-  if ((argc >= 2) && (argc <= 3)) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Gosu__Font, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsPtr_std_string(argv[1], (std::string**)(0));
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        if (argc <= 2) {
-          return _wrap_Font_markup_width__SWIG_1(nargs, args, self);
-        }
-        {
-          int res = SWIG_AsVal_double(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          return _wrap_Font_markup_width__SWIG_1(nargs, args, self);
-        }
-      }
-    }
-  }
-  
-fail:
-  Ruby_Format_OverloadedError( argc, 4, "Font.markup_width", 
-    "    double Font.markup_width(std::string const &markup)\n"
-    "    double Font.markup_width(std::string const &markup, double scale_x)\n");
-  
   return Qnil;
 }
 
@@ -12149,10 +11729,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassFont.klass, "name", VALUEFUNC(_wrap_Font_name), -1);
   rb_define_method(SwigClassFont.klass, "height", VALUEFUNC(_wrap_Font_height), -1);
   rb_define_method(SwigClassFont.klass, "flags", VALUEFUNC(_wrap_Font_flags), -1);
-  rb_define_method(SwigClassFont.klass, "text_width", VALUEFUNC(_wrap_Font_text_width), -1);
-  rb_define_method(SwigClassFont.klass, "draw_text", VALUEFUNC(_wrap_Font_draw_text), -1);
   rb_define_method(SwigClassFont.klass, "draw_markup", VALUEFUNC(_wrap_Font_draw_markup), -1);
-  rb_define_method(SwigClassFont.klass, "draw_text_rel", VALUEFUNC(_wrap_Font_draw_text_rel), -1);
   rb_define_method(SwigClassFont.klass, "draw_markup_rel", VALUEFUNC(_wrap_Font_draw_markup_rel), -1);
   rb_define_method(SwigClassFont.klass, "set_image", VALUEFUNC(_wrap_Font_set_image), -1);
   rb_define_method(SwigClassFont.klass, "markup_width", VALUEFUNC(_wrap_Font_markup_width), -1);
