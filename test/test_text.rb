@@ -8,7 +8,7 @@ class TestText < Minitest::Test
     # All of these strings are still horribly broken in Gosu.
     # For now, the value of these tests is that all text is guaranteed to render the same across
     # operating systems.
-    "unicode"    => "Grüße vom Test! ≠ ✓",
+    "unicode"    => "Grüße vom Test!",
     "whitespace" => "$ ls\n  .\t..\tfoo\r\n  bar\tqux        ",
     "markup"     => "<b>Bold, <u>underlined &amp; <i>italic. <c=4400ff>How <c=0f3>about</c> colors?</c></i></u>&lt;&gt;</b>",
     # All Emoji should be invisible for now.

@@ -2,7 +2,7 @@
 require_relative "test_helper"
 
 class TestDeprecations < Minitest::Test
-  @@win = Gosu::Window.new(100, 100)
+  DUMMY_WINDOW = Gosu::Window.new(100, 100)
   
   def test_gosu_module_constants
     # Backward compatibility
@@ -17,25 +17,25 @@ class TestDeprecations < Minitest::Test
   end
 
   def single_origin
-    @@win.set_mouse_position(1, 2)
+    DUMMY_WINDOW.set_mouse_position(1, 2)
   end
   
   def test_window_no_longer_needed
     assert_output("", /DEPRECATION WARNING: Passing a Window to Sample#initialize has been deprecated in Gosu 0.7.17./) do
-      assert_raises(::ArgumentError) { Gosu::Sample.new(@@win) }
+      assert_raises(::ArgumentError) { Gosu::Sample.new(DUMMY_WINDOW) }
     end
 
     assert_output("", /DEPRECATION WARNING: Passing a Window to Song#initialize has been deprecated in Gosu 0.7.17./) do
-      assert_raises(::ArgumentError) { Gosu::Song.new(@@win) }
+      assert_raises(::ArgumentError) { Gosu::Song.new(DUMMY_WINDOW) }
     end
 
     assert_output("", /DEPRECATION WARNING: Passing a Window to Image#initialize has been deprecated in Gosu 0.9./) do
-      assert_raises(::NoMethodError) { Gosu::Image.new(@@win) }
+      assert_raises(::NoMethodError) { Gosu::Image.new(DUMMY_WINDOW) }
     end
 
     assert_output("", /DEPRECATION WARNING: Passing a Window to Image.from_text has been deprecated in Gosu 0.9./) do
-      assert_raises(::TypeError) { Gosu::Image.from_text(@@win, 2, 3, 4) }
-      assert_raises(::TypeError) { Gosu::Image.from_text(@@win, 2, 3, 4, 5, 6, 7) }
+      assert_raises(::TypeError) { Gosu::Image.from_text(DUMMY_WINDOW, 2, 3, 4) }
+      assert_raises(::TypeError) { Gosu::Image.from_text(DUMMY_WINDOW, 2, 3, 4, 5, 6, 7) }
     end
   end
 end

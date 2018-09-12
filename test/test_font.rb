@@ -29,9 +29,9 @@ class TestFont < Minitest::Test
   def test_constructor_args
     bold_font = Gosu::Font.new(7, bold: true)
     regular_font = Gosu::Font.new(7, bold: false)
-    refute_equal bold_font.text_width("IJK"), regular_font.text_width("IJK")
-    assert_equal bold_font.text_width("IJK"), regular_font.text_width("<b>IJK</b>")
-    assert_equal bold_font.text_width("</b>IJK"), regular_font.text_width("IJK")
+    refute_equal bold_font.text_width("Afdslkgjd"), regular_font.text_width("Afdslkgjd")
+    assert_equal bold_font.text_width("Afdslkgjd"), regular_font.text_width("<b>Afdslkgjd</b>")
+    assert_equal bold_font.text_width("</b>Afdslkgjd"), regular_font.text_width("Afdslkgjd")
   end
   
   def test_draw_and_draw_rel

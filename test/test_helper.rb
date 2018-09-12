@@ -77,14 +77,15 @@ module TestHelper
 
     expected_image = Gosu::Image.new(expected)
 
-    assert actual_image.similar?(expected_image, threshold), Proc.new do
+    assert actual_image.similar?(expected_image, threshold), lambda {
       message = "Screenshot should look similar to #{expected}"
       if ENV["TRAVIS"] || ENV["APPVEYOR"]
         # Print a diff when running in the CI so we can copy and paste the image if necessary.
         message += "\n"
         message += diff([expected_image.to_blob].pack('m*'), [actual_image.to_blob].pack('m*'))
       end
-    end
+      message
+    }
   end
 end
 
