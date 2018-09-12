@@ -39,9 +39,9 @@ namespace Gosu
         unsigned flags() const;
         
         //! Returns the width, in pixels, the given text would occupy if drawn.
-        double text_width(const std::string& text, double scale_x = 1) const;
+        double text_width(const std::string& text) const;
         //! Returns the width, in pixels, the given text would occupy if drawn.
-        double markup_width(const std::string& markup, double scale_x = 1) const;
+        double markup_width(const std::string& markup) const;
         
         //! Draws text so the top left corner of the text is at (x; y).
         void draw_text(const std::string& text, double x, double y, ZPos z,

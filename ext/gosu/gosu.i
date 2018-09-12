@@ -485,6 +485,8 @@ namespace Gosu
 
 // Font
 %ignore Gosu::Font::Font(int height, const std::string& font_name, unsigned flags);
+%ignore Gosu::Font::markup_width(const std::string& markup);
+%ignore Gosu::Font::text_width(const std::string& text);
 %ignore Gosu::Font::set_image(std::string codepoint, unsigned font_flags, const Gosu::Image& image);		
 
 %include "../../Gosu/Font.hpp"
@@ -534,6 +536,16 @@ namespace Gosu
         }
         
         return new Gosu::Font(height, font_name, font_flags);
+    }
+    
+    double markup_width(const std::string& markup, double scale_x = 1.0)
+    {
+      static bool issued_warning = false;
+      if (scale_x != 1.0 && !issued_warning) {
+          issued_warning = true;
+          rb_warn("The second argument to Font#markup_width and Font#text_width is deprecated, multiply the result instead");
+      }
+      return $self->markup_width(markup) * scale_x;
     }
 }
 

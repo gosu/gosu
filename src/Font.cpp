@@ -27,10 +27,10 @@ struct Gosu::Font::Impl
     // Everything else is looked up through a map...
     array<map<utf8proc_int32_t, Image>, FF_COMBINATIONS> other_glyphs;
     
-    const Image& image(char32_t codepoint, unsigned font_flags)
+    Image& image(char32_t codepoint, unsigned font_flags)
     {
         Image* image;
-        if (codepoint < fast_glyphs.size()) {
+        if (codepoint < fast_glyphs[font_flags].size()) {
             image = &fast_glyphs[font_flags][codepoint];
         }
         else {
@@ -82,12 +82,12 @@ unsigned Gosu::Font::flags() const
     return pimpl->base_flags;
 }
 
-double Gosu::Font::text_width(const string& text, double scale_x) const
+double Gosu::Font::text_width(const string& text) const
 {
-    return markup_width(escape_markup(text), scale_x);
+    return markup_width(escape_markup(text));
 }
 
-double Gosu::Font::markup_width(const string& markup, double scale_x) const
+double Gosu::Font::markup_width(const string& markup) const
 {
     double width = 0;
 
@@ -96,14 +96,16 @@ double Gosu::Font::markup_width(const string& markup, double scale_x) const
         double line_width = 0;
         for (auto& part : line) {
             for (auto codepoint : part.text) {
-                line_width += pimpl->image(codepoint, part.flags).width();
+                auto& image = pimpl->image(codepoint, part.flags);
+                double scale_to_height = 1.0 * height() / image.height();
+                line_width += scale_to_height * image.width();
             }
         }
         width = max(width, line_width);
     });
     parser.parse(markup);
     
-    return scale_x * width / FONT_RENDER_SCALE;
+    return width;
 }
 
 void Gosu::Font::draw_text(const string& text, double x, double y, ZPos z,
@@ -123,10 +125,11 @@ void Gosu::Font::draw_markup(const string& markup, double x, double y, ZPos z,
         for (auto& part : line) {
             for (auto codepoint : part.text) {
                 auto& image = pimpl->image(codepoint, part.flags);
+                double scale_to_height = scale_y * height() / image.height();
                 image.draw(current_x, current_y, z,
-                           scale_x / FONT_RENDER_SCALE, scale_y / FONT_RENDER_SCALE,
+                           scale_to_height * scale_x, scale_to_height,
                            multiply(c, part.color), mode);
-                current_x += scale_x * image.width() / FONT_RENDER_SCALE;
+                current_x += scale_to_height * scale_x * image.width();
             }
         }
         current_y += scale_y * height();
@@ -161,11 +164,7 @@ void Gosu::Font::set_image(std::string codepoint, unsigned font_flags, const Gos
         throw invalid_argument("Could not compose '" + codepoint + "' into a single codepoint");
     }
     
-    if (utc4[0] < pimpl->fast_glyphs[font_flags].size()) {
-        pimpl->fast_glyphs[font_flags][utc4[0]] = image;
-    } else {
-        pimpl->other_glyphs[font_flags][utc4[0]] = image;
-    }
+    pimpl->image(utc4[0], font_flags) = image;
 }
 
 void Gosu::Font::set_image(std::string codepoint, const Gosu::Image& image)
