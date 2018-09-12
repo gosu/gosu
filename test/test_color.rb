@@ -1,7 +1,7 @@
 # Encoding: UTF-8
 require_relative "test_helper"
 
-class TestConstants < Minitest::Test
+class TestColor < Minitest::Test
   def test_predefined_colors
     [:NONE, :BLACK, :GRAY, :WHITE, :AQUA, :RED, :GREEN, :BLUE, :YELLOW, :FUCHSIA, :CYAN].each do |base_color|
       assert Gosu::Color.const_get(base_color).is_a? Gosu::Color
