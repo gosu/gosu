@@ -36,10 +36,14 @@ end
 
 module TestHelper
   # TODO: Should be __dir__ after we drop Ruby 1.x support...
-  def media_path(fname = "")
+  def self.media_path(fname = "")
     File.join(File.dirname(__FILE__), "media", fname)
   end
-
+  
+  def media_path(fname = "")
+    TestHelper.media_path(fname)
+  end
+  
   def skip_on_appveyor
     skip if ENV["APPVEYOR"]
   end
@@ -50,6 +54,11 @@ module TestHelper
 
   def skip_on_ci
     skip if ENV["APPVEYOR"] or ENV["TRAVIS"]
+  end
+  
+  def actual_from_expected_filename(expected)
+    actual_basename = File.basename(expected, ".png") + ".actual.png"
+    File.join(File.dirname(expected), actual_basename)
   end
 
   def assert_output_matches(expected, threshold, size)
@@ -64,14 +73,11 @@ module TestHelper
       end
     end
 
-    if ENV["DEBUG"]
-      actual_basename = File.basename(expected, ".png") + ".actual.png"
-      actual_image.save File.join(File.dirname(expected), actual_basename)
-    end
+    actual_image.save actual_from_expected_filename(expected) if ENV["DEBUG"]
 
     expected_image = Gosu::Image.new(expected)
 
-    assert actual_image.similar?(expected_image, threshold) do
+    assert actual_image.similar?(expected_image, threshold), Proc.new do
       message = "Screenshot should look similar to #{expected}"
       if ENV["TRAVIS"] || ENV["APPVEYOR"]
         # Print a diff when running in the CI so we can copy and paste the image if necessary.
