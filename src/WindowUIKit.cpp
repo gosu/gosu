@@ -29,7 +29,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     // It is important to load the view before creating the Graphics instance.
     [pimpl->controller loadView];
     
-    pimpl->graphics.reset(new Graphics(screen_height(), screen_width()));
+    pimpl->graphics.reset(new Graphics(screen_width(), screen_height()));
     pimpl->graphics->set_resolution(width, height);
     
     pimpl->input.reset(new Input((__bridge void*) pimpl->controller.view, update_interval));
@@ -147,15 +147,15 @@ unsigned Gosu::screen_height(Window*)
 unsigned Gosu::available_width(Window*)
 {
     static CGSize screen_size = [UIScreen mainScreen].bounds.size;
-    static CGFloat width = MIN(screen_size.width, screen_size.height);
+    static CGFloat width = MAX(screen_size.width, screen_size.height);
     return width;
 }
 
 unsigned Gosu::available_height(Window*)
 {
     static CGSize screen_size = [UIScreen mainScreen].bounds.size;
-    static CGFloat width = MAX(screen_size.width, screen_size.height);
-    return width;
+    static CGFloat height = MIN(screen_size.width, screen_size.height);
+    return height;
 }
 
 #endif
