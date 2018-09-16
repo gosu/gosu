@@ -310,7 +310,6 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Tutorial-Touch/Tutorial-Touch-Prefix.pch";
 				INFOPLIST_FILE = "Tutorial-Touch/Tutorial-Touch-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.libgosu.${PRODUCT_NAME:rfc1034identifier}";
@@ -326,7 +325,6 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Tutorial-Touch/Tutorial-Touch-Prefix.pch";
 				INFOPLIST_FILE = "Tutorial-Touch/Tutorial-Touch-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.libgosu.${PRODUCT_NAME:rfc1034identifier}";
