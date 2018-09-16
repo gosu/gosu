@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 2.6)
 project(Gosu)
 
 set(GOSU_VERSION_MAJOR "0")
-set(GOSU_VERSION_MINOR "13")
-set(GOSU_VERSION_PATCH "3")
+set(GOSU_VERSION_MINOR "14")
+set(GOSU_VERSION_PATCH "0")
 set(GOSU_VERSION "${GOSU_VERSION_MAJOR}.${GOSU_VERSION_MINOR}.${GOSU_VERSION_PATCH}")
 
 option(CMAKE_VERBOSE_MAKEFILE "Display every compilation command" OFF)
