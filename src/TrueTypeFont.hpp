@@ -25,8 +25,8 @@ namespace Gosu
                          Bitmap* bitmap, double x, double y, Color c);
         
         //! Returns true if the supplied buffer seems to be a font of the given name.
-        static bool verify_font_name(const unsigned char* ttf_data,
-                                     const std::string& font_name, unsigned font_flags);
+        static bool matches(const unsigned char* ttf_data,
+                            const std::string& font_name, unsigned font_flags);
     };
     
     TrueTypeFont& font_by_name(const std::string& font_name, unsigned font_flags);
