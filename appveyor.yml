@@ -29,4 +29,4 @@ test_script:
     
     gem install rake rake-compiler minitest --no-ri --no-rdoc
     
-    cmd /c rake test '2>&1'
+    cmd /c rake format test '2>&1'

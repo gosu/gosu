@@ -4,6 +4,8 @@ task :format do
     lines = File.readlines(filename)
     last_indent = 0
     line_no = lines.count
+    have_warning = false
+    old_lines = lines.map(&:dup)
     lines.reverse_each do |line|
       # No tabs, ever.
       line.gsub!("\t", "    ")
@@ -39,17 +41,23 @@ task :format do
         # Lines that just contain random whitespace are reduced to empty lines.
         line.replace("\n") if line.chomp.length != last_indent
       when /^ *=/
-        warn("#{location}: Lines should never start with the assignment operator")
+        warn "#{location}: Lines should never start with the assignment operator"
+        have_warning ||= true
       when /^ *if [^\n]+\)$/
-        warn("#{location}: single-line if statements should be on one line")
+        warn "#{location}: single-line if statements should be on one line"
+        have_warning ||= true
       when /^ *(for|while) [^\n]+\)$/
-        warn("#{location}: for/while always need braces")
+        warn "#{location}: for/while always need braces"
+        have_warning ||= true
       when /} else/
-        warn("#{location}: else must always be at the start of the line")
+        warn "#{location}: else must always be at the start of the line"
+        have_warning ||= true
       when /^ *else$/
-        warn("#{location}: if-else must always have braces")
+        warn "#{location}: if-else must always have braces"
+        have_warning ||= true
       when /@autoreleasepool$/
-        warn("#{location}: @autoreleasepool must be followed by { on same line")
+        warn "#{location}: @autoreleasepool must be followed by { on same line"
+        have_warning ||= true
       end
       
       unless line =~ /^ *#/ # Ignore the indentation of preprocessor directives.
@@ -59,6 +67,13 @@ task :format do
       
       line_no -= 1
     end
-    File.open(filename, "w") { |io| io.write lines.join }
+    
+    if ENV["TRAVIS"] or ENV["APPVEYOR"]
+      if have_warning or lines != old_lines
+        raise "Please run `rake format`, fix all warnings, and push the result before merging this PR."
+      end
+    else
+      File.open(filename, "w") { |io| io.write lines.join }
+    end
   end
 end
