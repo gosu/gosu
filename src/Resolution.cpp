@@ -34,7 +34,7 @@ unsigned Gosu::screen_height(Window* window)
 static NSSize max_window_size(Gosu::Window* window)
 {
     // Keep in sync with SDL_cocoawindow.m.
-    auto style = NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable;
+    auto style = NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
 
     auto index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
     auto screen_frame = NSScreen.screens[index].visibleFrame;
