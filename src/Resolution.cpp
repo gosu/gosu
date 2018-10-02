@@ -63,7 +63,8 @@ static SIZE max_window_size(Gosu::Window* window)
     if (window == nullptr) {
         // Easy case: Return the work area of the primary monitor.
         SystemParametersInfo(SPI_GETWORKAREA, 0, &work_area, 0);
-    } else {
+    }
+    else {
         // Return the work area of the monitor the window is on.
         SDL_SysWMinfo wm_info;
         SDL_VERSION(&wm_info.version);

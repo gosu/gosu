@@ -1,32 +1,32 @@
-desc "Verify that all C++ code is formatted correctly (and fixed some issues)"
+desc "Verify that all C++ code is formatted correctly (and automatically fix some issues)"
 task :format do
   Dir.glob("{Gosu,src,examples}/**/*.{hpp,cpp}") do |filename|
     lines = File.readlines(filename)
     last_indent = 0
     line_no = lines.count
     lines.reverse_each do |line|
-      # In accordance with the C++ Core Guidelines: https://github.com/isocpp/CppCoreGuidelines
-      line.gsub!("template <", "template<")
-      
-      # Space after control flow operators.
-      line.gsub!("if(", "if (")
-      line.gsub!("for(", "for (")
-      line.gsub!("while(", "while (")
-      # assert is control flow (to me, anyway :P)
-      line.gsub!("assert(", "assert (")
-      
-      # Some people prefer a space before ! (I to), but it's hard to enforce with a regex.
-      # => Consistently remove it instead.
-      line.gsub!("! ", "!") unless line =~ /^ *\/\//
-      
       # No tabs, ever.
       line.gsub!("\t", "    ")
       
       # Same for \r.
-      line.gsub!("\t", "")
+      line.gsub!("\r", "")
       
       # No trailing space in non-empty lines.
       line.gsub!(/([^ ]) +$/) { $1 }
+
+      # In accordance with the C++ Core Guidelines: https://github.com/isocpp/CppCoreGuidelines
+      line.gsub!("template <", "template<")
+      
+      # Space after control flow operators.
+      line.gsub!(" if(",     " if (")
+      line.gsub!(" for(",    " for (")
+      line.gsub!(" while(",  " while (")
+      # assert counts as control flow (to me, anyway :P)
+      line.gsub!(" assert(", " assert (")
+      
+      # Some people prefer a space before ! (me too), but it's hard to enforce with a regex.
+      # => Consistently remove it instead.
+      line.gsub!("! ", "!") unless line =~ /^ *\/\//
       
       # std::function<void(int)> => std::function<void (int)>
       line.gsub!(/function<([^ ]+)\(/) { "function<#$1 (" }

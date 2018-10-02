@@ -25,7 +25,7 @@ namespace Gosu
                          Bitmap* bitmap, double x, double y, Color c);
         
         //! Returns true if the supplied buffer seems to be a font of the given name.
-        static bool verify_font_name(const unsigned char* ttf_data, 
+        static bool verify_font_name(const unsigned char* ttf_data,
                                      const std::string& font_name, unsigned font_flags);
     };
     
@@ -63,5 +63,5 @@ namespace Gosu
     // 3. As a last resort, Gosu could implement faux bold and faux italics. I think faux
     //    underlines are a must anyway, since no font provides a dedicated TTF file for that.
     // These options are not mutually exclusive.
-    
+
 }

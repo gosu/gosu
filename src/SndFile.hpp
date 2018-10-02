@@ -19,9 +19,8 @@ namespace Gosu
         Reader reader;
         Buffer buffer;
         
-        // Cannot use /DELAYLOAD with libsndfile.dll because it was compiled
-        // using arcane GNU tools of dark magic (or maybe it's the filename).
-        #ifdef GOSU_IS_WIN
+        // /DELAYLOAD doesn't work with libsndfile.dll (is this still true?); manually lazy-load it.
+    #ifdef GOSU_IS_WIN
         static HMODULE dll()
         {
             static HMODULE dll = LoadLibrary(L"libsndfile.dll");
@@ -29,7 +28,7 @@ namespace Gosu
             return dll;
         }
         
-        #define CREATE_STUB(NAME, RETURN, PARAMS, NAMES)                    \
+    #define CREATE_STUB(NAME, RETURN, PARAMS, NAMES)                        \
         static RETURN NAME PARAMS                                           \
         {                                                                   \
             typedef RETURN (__cdecl *NAME##_ptr) PARAMS;                    \
@@ -54,8 +53,8 @@ namespace Gosu
         CREATE_STUB(sf_strerror, const char*,
             (SNDFILE* sndfile),
             (sndfile))
-        #undef CREATE_STUB
-        #endif
+    #undef CREATE_STUB
+    #endif
         
         static sf_count_t get_filelen(SndFile* self)
         {
@@ -126,12 +125,12 @@ namespace Gosu
             info.format = 0;
             // TODO: Not sure if this is still necessary.
             // Can libsndfile open UTF-8 filenames on Windows?
-            #ifdef GOSU_IS_WIN
+        #ifdef GOSU_IS_WIN
             load_file(buffer, filename);
             file = sf_open_virtual(io_interface(), SFM_READ, &info, this);
-            #else
+        #else
             file = sf_open(filename.c_str(), SFM_READ, &info);
-            #endif
+        #endif
             if (!file) {
                 throw std::runtime_error(sf_strerror(nullptr));
             }

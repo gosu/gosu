@@ -139,7 +139,7 @@ bool Gosu::MarkupParser::parse_escape_entity()
 
 void Gosu::MarkupParser::add_current_substring()
 {
-    if (! substring.empty()) {
+    if (!substring.empty()) {
         add_composed_substring(utf8_to_composed_utc4(substring));
         substring.clear();
     }
@@ -152,7 +152,7 @@ void Gosu::MarkupParser::add_composed_substring(u32string&& substring)
     fstr.flags = flags();
     fstr.color = c.back();
 
-    if (! substrings.empty() && substrings.back().can_be_merged_with(fstr)) {
+    if (!substrings.empty() && substrings.back().can_be_merged_with(fstr)) {
         substrings.back().text.append(move(fstr.text));
     }
     else {
@@ -162,7 +162,7 @@ void Gosu::MarkupParser::add_composed_substring(u32string&& substring)
 
 void Gosu::MarkupParser::flush_to_consumer()
 {
-    if (! substrings.empty()) {
+    if (!substrings.empty()) {
         consumer(move(substrings));
         substrings.clear();
     }
@@ -221,7 +221,8 @@ void Gosu::MarkupParser::parse(const std::string& markup_string)
             add_current_substring();
             flush_to_consumer();
             word_state = ADDING_WHITESPACE;
-        } else if (!whitespace_except_newline && word_state == ADDING_WHITESPACE) {
+        }
+        else if (!whitespace_except_newline && word_state == ADDING_WHITESPACE) {
             // We are in word-parsing mode, and this is was the start of a word.
             add_current_substring();
             flush_to_consumer();

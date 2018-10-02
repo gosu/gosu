@@ -44,12 +44,14 @@ const unsigned char* Gosu::ttf_data_by_name(const string& font_name, unsigned fo
                 int diff = 0;
                 if (font_flags & Gosu::FF_BOLD) {
                     diff += abs(weight - 200);
-                } else {
+                }
+                else {
                     diff += abs(weight - 80);
                 }
                 if (font_flags & Gosu::FF_ITALIC) {
                     diff += abs(slant - 100);
-                } else {
+                }
+                else {
                     diff += abs(slant - 0);
                 }
                 
