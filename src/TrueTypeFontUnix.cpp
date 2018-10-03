@@ -93,7 +93,7 @@ const unsigned char* Gosu::ttf_fallback_data()
 
 string Gosu::default_font_name()
 {
-    return "Liberation";
+    return "Liberation Sans";
 }
 
 #endif
