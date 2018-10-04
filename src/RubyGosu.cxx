@@ -2435,7 +2435,7 @@ namespace Gosu
             }
         }
         
-        return new Gosu::Image(Gosu::Graphics::render(width, height, [] { rb_yield(Qnil); }));
+        return new Gosu::Image(Gosu::Graphics::render(width, height, [] { rb_yield(Qnil); }, image_flags));
     }
     
     // This method cannot be called "transform" because then it would be an ambiguous overload of
