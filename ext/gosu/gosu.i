@@ -294,7 +294,7 @@ namespace Gosu
                 const char* key_string = Gosu::cstr_from_symbol(key);
                 
                 VALUE value = rb_hash_aref(options, key);
-                if (!strcmp(key_string, "bold")) {
+                if (!strcmp(key_string, "retro")) {
                     if (RTEST(value)) image_flags |= Gosu::IF_RETRO;
                 }
                 else {
@@ -307,7 +307,7 @@ namespace Gosu
             }
         }
         
-        return new Gosu::Image(Gosu::Graphics::render(width, height, [] { rb_yield(Qnil); }));
+        return new Gosu::Image(Gosu::Graphics::render(width, height, [] { rb_yield(Qnil); }, image_flags));
     }
     
     // This method cannot be called "transform" because then it would be an ambiguous overload of
