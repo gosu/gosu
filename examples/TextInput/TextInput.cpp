@@ -46,16 +46,15 @@ public:
     
     // Example filter member function. You can truncate the text to employ a length limit,
     // limit the text to certain characters etc.
-    std::string filter(std::string string) const override
+    std::string filter(std::string str) const override
     {
-        std::wstring wide_string = Gosu::utf8_to_wstring(string);
-        std::transform(wide_string.begin(), wide_string.end(), wide_string.begin(), [](wchar_t in) {
-            // Use namespace std so it doesn't matter whether towupper is part of it or not.
-            // (Depends on your compiler/standard library.)
-            using namespace std;
-            return towupper((wint_t) in);
-        });
-        return Gosu::wstring_to_utf8(wide_string);
+        std::string numbers_in_circles[] = { "⓪","①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧", "⑨" };
+        std::string::size_type index;
+        while ((index = str.find_first_of("0123456789")) != std::string::npos) {
+            // Replace all numbers with Unicode "number in circle" characters.
+            str.replace(index, 1, numbers_in_circles[str[index] - '0']);
+        }
+        return str;
     }
     
     void draw() const
@@ -84,7 +83,7 @@ public:
         }
         
         // Finally, draw the text itself!
-        font.draw(text(), x, y, 0);
+        font.draw_text(text(), x, y, 0);
     }
     
     // This text field grows with the text that's being entered.
