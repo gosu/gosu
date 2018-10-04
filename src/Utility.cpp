@@ -23,7 +23,8 @@ u32string Gosu::utf8_to_composed_utc4(const string& utf8)
             // Not looking good, skip this byte and retry.
             current_byte += 1;
             remaining_length -= 1;
-        } else {
+        }
+        else {
             utc4.push_back(codepoint);
             current_byte += bytes_read;
             remaining_length -= bytes_read;

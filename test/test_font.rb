@@ -35,18 +35,30 @@ class TestFont < Minitest::Test
   end
   
   def test_draw_and_draw_rel
+    # Gosu.render does not work on Appveyor.
+    skip_on_appveyor
+    
     font = Gosu::Font.new(10, name: media_path("daniel.otf"))
     
-    assert_output_matches "test_font/draw_markup", 0.99, [200, 100] do
-      font.draw_markup "Hi! <c=f00>Red.\r\nNew   line! Äöß\n", 5, 5, -6, 2.0, 4.0, 0xff_ff00ff, :add
+    assert_output_matches "test_font/draw_markup", 0.98, [200, 100] do
+      # draw this string repeatedly to make up for opacity differences in OpenGL renderers.
+      20.times do
+        font.draw_markup "Hi! <c=f00>Red.\r\nNew   line! Äöß\n", 5, 5, -6, 2.0, 4.0, 0xff_ff00ff, :add
+      end
     end
     
-    assert_output_matches "test_font/draw_markup_rel", 0.99, [100, 100] do
-      font.draw_markup_rel "<c=000>I &lt;3 Ruby/Gosu!\n", 50, 50, 5, 0.4, -2
+    assert_output_matches "test_font/draw_markup_rel", 0.98, [100, 100] do
+      # draw this string repeatedly to make up for opacity differences in OpenGL renderers.
+      20.times do
+        font.draw_markup_rel "<c=000>I &lt;3 Ruby/Gosu!\n", 50, 50, 5, 0.4, -2
+      end
     end
   end
 
   def test_deprecated_features
+    # Gosu.render does not work on Appveyor.
+    skip_on_appveyor
+    
     font = Gosu::Font.new(20, name: media_path("daniel.ttf"))
     
     # The scale_x parameter to Font#text_width has been deprecated in Gosu 0.14.0.
@@ -57,8 +69,11 @@ class TestFont < Minitest::Test
     assert_respond_to font, :draw_rel
     
     # Font#draw_rot has been deprecated a long time ago.
-    assert_output_matches "test_font/draw_rot", 0.99, [200, 200] do
-      font.draw_rot "<b>Hello</b> <c=888>World!</c>", 50, 40, 0, 45, 1, 3, 0xff_ff00ff, :add
+    assert_output_matches "test_font/draw_rot", 0.98, [200, 200] do
+      # draw this string repeatedly to make up for opacity differences in OpenGL renderers.
+      20.times do
+        font.draw_rot "<b>Hello</b> <c=800>World!</c>", 50, 40, 0, 45, 1, 3, 0xff_ff00ff, :add
+      end
     end
   end
 

@@ -30,7 +30,7 @@ void Gosu::throw_last_winapi_error(const string& action)
 {
     // Obtain error message from Windows.
     wchar_t* buffer;
-                 
+
     if (!FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                         FORMAT_MESSAGE_FROM_SYSTEM |
                         FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, GetLastError(),

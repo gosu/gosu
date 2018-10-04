@@ -21,11 +21,13 @@ const unsigned char* Gosu::ttf_data_by_name(const string& font_name, unsigned fo
 
     static FcConfig* config = FcInitLoadConfigAndFonts();
     if (config) {
+        // Find "outline fonts" (so no bitmap fonts).
         // Our search pattern does not include weight or slant so that we can compromise on these.
-        FcPattern* pattern = FcPatternBuild(nullptr,
-                                            FC_FAMILY,  FcTypeString,  font_name.c_str(),
-                                            FC_OUTLINE, FcTypeBool,    FcTrue, /* no bitmap fonts */
-                                            nullptr);
+        FcPattern* pattern = FcPatternBuild(nullptr, FC_OUTLINE, FcTypeBool, FcTrue, nullptr);
+        // If a font name was given, add it to the pattern.
+        if (!font_name.empty()) {
+            FcPatternBuild(pattern, FC_FAMILY, FcTypeString, font_name.c_str(), nullptr);
+        }
         FcObjectSet* props = FcObjectSetBuild(FC_FILE, FC_WEIGHT, FC_SLANT, nullptr);
 
         if (FcFontSet* fonts = FcFontList(config, pattern, props)) {
@@ -44,12 +46,14 @@ const unsigned char* Gosu::ttf_data_by_name(const string& font_name, unsigned fo
                 int diff = 0;
                 if (font_flags & Gosu::FF_BOLD) {
                     diff += abs(weight - 200);
-                } else {
+                }
+                else {
                     diff += abs(weight - 80);
                 }
                 if (font_flags & Gosu::FF_ITALIC) {
                     diff += abs(slant - 100);
-                } else {
+                }
+                else {
                     diff += abs(slant - 0);
                 }
                 
@@ -80,12 +84,16 @@ const unsigned char* Gosu::ttf_fallback_data()
     static const unsigned char* unifont = ttf_data_by_name("Unifont", 0);
     if (unifont) return unifont;
     
+    // Otherwise, just use any font that font-config gives us.
+    static const unsigned char* any_font = ttf_data_by_name("", 0);
+    if (any_font) return any_font;
+
     return ttf_data_from_file("/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf");
 }
 
 string Gosu::default_font_name()
 {
-    return "Liberation";
+    return "Liberation Sans";
 }
 
 #endif

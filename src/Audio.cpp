@@ -12,11 +12,9 @@
 #ifdef GOSU_IS_MAC
 #import <Foundation/Foundation.h>
 #include "AudioToolboxFile.hpp"
-#define WAVE_FILE AudioToolboxFile
 #else
 #include "MPEGFile.hpp"
 #include "SndFile.hpp"
-#define WAVE_FILE SndFile
 #endif
 
 #ifdef GOSU_IS_IPHONE
@@ -47,7 +45,7 @@ struct Gosu::Sample::SampleData
 {
     ALuint buffer;
 
-    SampleData(AudioFile& audio_file)
+    SampleData(AudioFile&& audio_file)
     {
         al_initialize();
         alGenBuffers(1, &buffer);
@@ -74,37 +72,41 @@ Gosu::Sample::Sample(const string& filename)
 {
     if (is_ogg_file(filename)) {
         File file(filename);
-        OggFile ogg_file(file.front_reader());
-        data.reset(new SampleData(ogg_file));
+        data.reset(new SampleData(OggFile(file.front_reader())));
+        return;
     }
-    else {
-        WAVE_FILE audio_file(filename);
-        data.reset(new SampleData(audio_file));
+    
+#ifdef GOSU_IS_MAC
+    File file(filename);
+    data.reset(new SampleData(AudioToolboxFile(file.front_reader())));
+#else
+    try {
+        data.reset(new SampleData(SndFile(filename)));
     }
+    catch (const runtime_error& ex) {
+        File file(filename);
+        data.reset(new SampleData(MPEGFile(file.front_reader())));
+    }
+#endif
 }
 
 Gosu::Sample::Sample(Gosu::Reader reader)
 {
     if (is_ogg_file(reader)) {
-        OggFile ogg_file(reader);
-        data.reset(new SampleData(ogg_file));
+        data.reset(new SampleData(OggFile(reader)));
         return;
     }
 
+#ifdef GOSU_IS_MAC
+    data.reset(new SampleData(AudioToolboxFile(reader)));
+#else
     try {
-        WAVE_FILE audio_file(reader);
-        data.reset(new SampleData(audio_file));
+        data.reset(new SampleData(SndFile(reader)));
     }
     catch (const runtime_error& ex) {
-    #ifndef GOSU_IS_MAC
-        if (string(ex.what()).find("unknown format") != string::npos) {
-            MPEGFile mpeg_file(reader);
-            data.reset(new SampleData(mpeg_file));
-            return;
-        }
-    #endif
-        throw ex;
+        data.reset(new SampleData(MPEGFile(reader)));
     }
+#endif
 }
 
 Gosu::Channel Gosu::Sample::play(double volume, double speed, bool looping) const
@@ -252,19 +254,17 @@ public:
             file.reset(new OggFile(source_file.front_reader()));
         }
         else {
+        #ifdef GOSU_IS_MAC
+            file.reset(new AudioToolboxFile(filename));
+        #else
             try {
-                file.reset(new WAVE_FILE(filename));
+                file.reset(new SndFile(filename));
             }
             catch (const runtime_error& ex) {
-            #ifndef GOSU_IS_MAC
-                if (string(ex.what()).find("unknown format") != string::npos) {
-                    File source_file(filename);
-                    file.reset(new MPEGFile(source_file.front_reader()));
-                }
-                else
-            #endif
-                throw ex;
+                File source_file(filename);
+                file.reset(new MPEGFile(source_file.front_reader()));
             }
+        #endif
         }
         
         al_initialize();
@@ -277,18 +277,16 @@ public:
             file.reset(new OggFile(reader));
         }
         else {
+        #ifdef GOSU_IS_MAC
+            file.reset(new AudioToolboxFile(reader));
+        #else
             try {
-                file.reset(new WAVE_FILE(reader));
+                file.reset(new SndFile(reader));
             }
             catch (const runtime_error& ex) {
-            #ifndef GOSU_IS_MAC
-                if (string(ex.what()).find("unknown format") != string::npos) {
-                    file.reset(new MPEGFile(reader));
-                }
-                else
-            #endif
-                throw ex;
+                file.reset(new MPEGFile(reader));
             }
+        #endif
         }
         
         al_initialize();
@@ -401,8 +399,8 @@ Gosu::Song::Song(const string& filename)
             has_extension(filename, ".aac") ||
             has_extension(filename, ".m4a")) {
         data.reset(new ModuleData(filename));
+        return;
     }
-    else
 #endif
     data.reset(new StreamData(filename));
 }

@@ -33,7 +33,7 @@ const unsigned char* Gosu::ttf_data_by_name(const string& font_name, unsigned fo
         (font_flags & Gosu::FF_UNDERLINE) ? TRUE : FALSE,
         FALSE /* no strikethrough */,
         ANSI_CHARSET, OUT_OUTLINE_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
-        DEFAULT_PITCH | FF_DONTCARE
+        DEFAULT_PITCH
     };
     
     wstring wfont_name = utf8_to_utf16(font_name);
@@ -49,7 +49,7 @@ const unsigned char* Gosu::ttf_data_by_name(const string& font_name, unsigned fo
                 buffer->resize(ttf_buffer_size);
                 if (GetFontData(hdc, 0, 0, buffer->data(), buffer->size()) != GDI_ERROR) {
                     auto data = static_cast<const unsigned char*>(buffer->data());
-                    if (TrueTypeFont::verify_font_name(data, font_name, font_flags)) {
+                    if (font_name.empty() || TrueTypeFont::matches(data, font_name, font_flags)) {
                         buffer_ptr = buffer;
                     }
                 }
@@ -69,8 +69,13 @@ const unsigned char* Gosu::ttf_fallback_data()
     static const unsigned char* arial_unicode = ttf_data_by_name("Arial Unicode MS", 0);
     if (arial_unicode) return arial_unicode;
     
+    // Otherwise, just try to find *any* font.
+    static const unsigned char* any_font = ttf_data_by_name("", 0);
+    if (any_font) return any_font;
+    
     static const char* windir = getenv("WINDIR");
-    if (windir) ttf_data_from_file(string(windir) + "/Fonts/arial.ttf");
+    if (windir) return ttf_data_from_file(string(windir) + "/Fonts/arial.ttf");
+    
     return ttf_data_from_file("C:/Windows/Fonts/arial.ttf");
 }
 

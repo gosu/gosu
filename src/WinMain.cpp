@@ -38,8 +38,7 @@ vector<string> split_cmd_line()
         ++cmd_line;
     }
 
-    if (arg_begin != 0)
-        result.push_back(arg_begin);
+    if (arg_begin != 0) result.push_back(arg_begin);
 
     return result;
 }
@@ -51,8 +50,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     try {
         vector<string> arguments = split_cmd_line();
         vector<char*> argv(arguments.size());
-        for (unsigned i = 0; i < argv.size(); ++i)
+        for (unsigned i = 0; i < argv.size(); ++i) {
             argv[i] = const_cast<char*>(arguments[i].c_str());
+        }
         return main(argv.size(), &argv[0]);
     }
     catch (const exception& e) {

@@ -7,7 +7,7 @@ using namespace std;
 
 Gosu::WordInfo::WordInfo(const string& font_name, double font_height, vector<FormattedString> parts)
 {
-    assert (! parts.empty());
+    assert (!parts.empty());
     
     auto* properties = utf8proc_get_property(parts.front().text.front());
 
@@ -21,7 +21,7 @@ Gosu::WordInfo::WordInfo(const string& font_name, double font_height, vector<For
     
     width = 0;
     for (const auto& part : parts) {
-        assert (is_end_of_line || ! part.text.empty());
+        assert (is_end_of_line || !part.text.empty());
         
         width += text_width(part.text, font_name, font_height, part.flags);
     }
@@ -42,7 +42,7 @@ void Gosu::TextBuilder::flush_current_line(EndOfLineReason reason)
     if (current_line.back().is_whitespace) current_line.pop_back();
     
     // Shouldn't happen because the first word on a line should never be whitespace.
-    assert (! current_line.empty());
+    assert (!current_line.empty());
     
     double words_width = 0, whitespace_width = 0;
     for (const auto& word : current_line) {

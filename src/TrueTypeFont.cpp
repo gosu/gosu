@@ -199,12 +199,13 @@ double Gosu::TrueTypeFont::draw_text(const u32string &text, double height,
     return pimpl->draw_text(text, true, height, bitmap, x, y, c);
 }
 
-bool Gosu::TrueTypeFont::verify_font_name(const unsigned char* ttf_data, const string& font_name, unsigned font_flags)
+bool Gosu::TrueTypeFont::matches(const unsigned char* ttf_data,
+                                 const string& font_name, unsigned font_flags)
 {
-    // Gosu's FontFlags enum mostly uses the same values as the STBTT_ macros.
+    // Gosu::FontFlags uses the same values as the STBTT_ macros, except for this one.
     int flags = (font_flags == 0 ? STBTT_MACSTYLE_NONE : font_flags);
 
-    return stbtt_FindMatchingFont(ttf_data, font_name.c_str(), font_flags) >= 0 ||
+    return stbtt_FindMatchingFont(ttf_data, font_name.c_str(), flags) >= 0 ||
            stbtt_FindMatchingFont(ttf_data, font_name.c_str(), STBTT_MACSTYLE_DONTCARE) >= 0;
 }
 
@@ -248,7 +249,8 @@ Gosu::TrueTypeFont& Gosu::font_by_name(const string& font_name, unsigned font_fl
         if (font_name.find_first_of("./\\") != string::npos) {
             // A filename? Load it and add it to the stack.
             ttf_stack.push_back(ttf_data_from_file(font_name));
-        } else if (font_name != default_font_name()) {
+        }
+        else if (font_name != default_font_name()) {
             // A font name? Add it to the stack, both with font_flags and without.
             ttf_stack.push_back(ttf_data_by_name(font_name, 0));
             ttf_stack.push_back(ttf_data_by_name(font_name, font_flags));
