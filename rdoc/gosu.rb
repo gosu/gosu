@@ -1080,6 +1080,8 @@ module Gosu
     # @return [Gosu::Image] the rendered drawing operations.
     # @param width [Integer] the width of the recorded image.
     # @param height [Integer] the height of the recorded image.
+    # @param [Hash] options
+    # @option options [true, false] :retro (false) if true, the resulting image will not be interpolated when it is scaled up or down.
     # @yield rendering code.
     #
     # @see Window#record
