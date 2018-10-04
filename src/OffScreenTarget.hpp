@@ -16,7 +16,7 @@ namespace Gosu
         OffScreenTarget& operator=(OffScreenTarget&& other) = delete;
         
     public:
-        OffScreenTarget(int width, int height);
+        OffScreenTarget(int width, int height, unsigned image_flags);
         ~OffScreenTarget();
         Gosu::Image render(const std::function<void ()>& f);
     };

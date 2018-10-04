@@ -28,7 +28,7 @@ using namespace std;
         GL_DEPTH_COMPONENT
 #endif
 
-Gosu::OffScreenTarget::OffScreenTarget(int width, int height)
+Gosu::OffScreenTarget::OffScreenTarget(int width, int height, unsigned image_flags)
 {
 #ifndef GOSU_IS_IPHONE
     if (!SDL_GL_ExtensionSupported("GL_EXT_framebuffer_object")) {
@@ -37,7 +37,7 @@ Gosu::OffScreenTarget::OffScreenTarget(int width, int height)
 #endif
     
     // Create a new texture that will be our rendering target.
-    texture = make_shared<Texture>(width, height, false);
+    texture = make_shared<Texture>(width, height, image_flags & IF_RETRO);
     // Mark the full texture as blocked for our TexChunk.
     texture->block(0, 0, width, height);
     
