@@ -60,7 +60,10 @@ namespace Gosu
                             const std::function<void ()>& f);
         
         //! Renders everything drawn in f onto a new Image of size (width, height).
-        static Gosu::Image render(int width, int height, const std::function<void ()>& f);
+        //! \param image_flags Pass Gosu::IF_RETRO if you do not want the resulting image to use
+        //! interpolation when it is scaled or rotated.
+        static Gosu::Image render(int width, int height, const std::function<void ()>& f,
+                                  unsigned image_flags = 0);
         
         //! Records a macro and returns it as an Image.
         static Gosu::Image record(int width, int height, const std::function<void ()>& f);

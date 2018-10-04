@@ -852,8 +852,8 @@ module Gosu
     ##
     # This method is called before {#update} if a button is pressed while the window has focus.
     #
-    # By default, this method  will toggle fullscreen mode if the user presses Alt+Enter (Windows,
-    # Linux) or cmd+F (macOS).
+    # By default, this will toggle fullscreen mode if the user presses Alt+Enter (Windows,
+    # Linux), cmd+F (macOS), or F11 (on all operating systems).
     # To support these shortcuts in your application, make sure to call super in your
     # implementation.
     #
@@ -1080,6 +1080,8 @@ module Gosu
     # @return [Gosu::Image] the rendered drawing operations.
     # @param width [Integer] the width of the recorded image.
     # @param height [Integer] the height of the recorded image.
+    # @param [Hash] options
+    # @option options [true, false] :retro (false) if true, the resulting image will not be interpolated when it is scaled up or down.
     # @yield rendering code.
     #
     # @see Window#record

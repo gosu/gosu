@@ -2408,7 +2408,33 @@ namespace Gosu
         return new Gosu::Image(Gosu::Graphics::record(width, height, [] { rb_yield(Qnil); }));
     }
     
-    Gosu::Image* render(int width, int height) {
+    Gosu::Image* render(int width, int height, VALUE options = 0) {
+        unsigned image_flags = 0;
+        
+        if (options) {
+            Check_Type(options, T_HASH);
+            
+            VALUE keys = rb_funcall(options, rb_intern("keys"), 0, NULL);
+            int keys_size = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
+            
+            for (int i = 0; i < keys_size; ++i) {
+                VALUE key = rb_ary_entry(keys, i);
+                const char* key_string = Gosu::cstr_from_symbol(key);
+                
+                VALUE value = rb_hash_aref(options, key);
+                if (!strcmp(key_string, "bold")) {
+                    if (RTEST(value)) image_flags |= Gosu::IF_RETRO;
+                }
+                else {
+                    static bool issued_warning = false;
+                    if (!issued_warning) {
+                        issued_warning = true;
+                        rb_warn("Unknown keyword argument: :%s", key_string);
+                    }
+                }
+            }
+        }
+        
         return new Gosu::Image(Gosu::Graphics::render(width, height, [] { rb_yield(Qnil); }));
     }
     
@@ -10890,6 +10916,7 @@ SWIGINTERN VALUE
 _wrap_render(int argc, VALUE *argv, VALUE self) {
   int arg1 ;
   int arg2 ;
+  VALUE arg3 = (VALUE) 0 ;
   int val1 ;
   int ecode1 = 0 ;
   int val2 ;
@@ -10897,7 +10924,7 @@ _wrap_render(int argc, VALUE *argv, VALUE self) {
   Gosu::Image *result = 0 ;
   VALUE vresult = Qnil;
   
-  if ((argc < 2) || (argc > 2)) {
+  if ((argc < 2) || (argc > 3)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
   }
   ecode1 = SWIG_AsVal_int(argv[0], &val1);
@@ -10910,15 +10937,18 @@ _wrap_render(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","Gosu::render", 2, argv[1] ));
   } 
   arg2 = static_cast< int >(val2);
+  if (argc > 2) {
+    arg3 = argv[2];
+  }
   {
     try {
-      result = (Gosu::Image *)Gosu::render(arg1,arg2);
+      result = (Gosu::Image *)Gosu::render(arg1,arg2,arg3);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, 0 |  0 );
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Image, SWIG_POINTER_OWN |  0 );
   return vresult;
 fail:
   return Qnil;

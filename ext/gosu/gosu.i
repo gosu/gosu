@@ -280,7 +280,33 @@ namespace Gosu
         return new Gosu::Image(Gosu::Graphics::record(width, height, [] { rb_yield(Qnil); }));
     }
     
-    Gosu::Image* render(int width, int height) {
+    Gosu::Image* render(int width, int height, VALUE options = 0) {
+        unsigned image_flags = 0;
+        
+        if (options) {
+            Check_Type(options, T_HASH);
+            
+            VALUE keys = rb_funcall(options, rb_intern("keys"), 0, NULL);
+            int keys_size = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
+            
+            for (int i = 0; i < keys_size; ++i) {
+                VALUE key = rb_ary_entry(keys, i);
+                const char* key_string = Gosu::cstr_from_symbol(key);
+                
+                VALUE value = rb_hash_aref(options, key);
+                if (!strcmp(key_string, "bold")) {
+                    if (RTEST(value)) image_flags |= Gosu::IF_RETRO;
+                }
+                else {
+                    static bool issued_warning = false;
+                    if (!issued_warning) {
+                        issued_warning = true;
+                        rb_warn("Unknown keyword argument: :%s", key_string);
+                    }
+                }
+            }
+        }
+        
         return new Gosu::Image(Gosu::Graphics::render(width, height, [] { rb_yield(Qnil); }));
     }
     
@@ -1056,8 +1082,8 @@ namespace Gosu
     %newobject record;
     Gosu::Image* record(int width, int height);
     
-    %newobject record;
-    Gosu::Image* render(int width, int height);
+    %newobject render;
+    Gosu::Image* render(int width, int height, VALUE options = 0);
     
     %rename("transform") transform_for_ruby;
     %rename("rotate")    rotate_for_ruby;

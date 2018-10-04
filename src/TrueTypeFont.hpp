@@ -36,6 +36,19 @@ namespace Gosu
     //! In case of failure, this method must not return nullptr, but raise an exception.
     //! Note that this method does not accept any font flags, and so it will always load the first
     //! font in a TTC font collection.
+    //!
+    //! This function does not yet support Gosu::FontFlags, and consequently, custom TTF fonts do
+    //! not support markup or bold/italic text right now.
+    //!
+    //! Options for the future:
+    //! 1. Use stbtt_FindMatchingFont. This will only work for TTC font collections, and we will
+    //!    have to patch stb_truetype to look for fonts only based on `int flags`, while ignoring
+    //!    the name of fonts inside a bundle (who wants to deal with strings, anyway).
+    //! 2. Maybe Gosu should accept filename patterns like "LibreBaskerville-*.ttf" as the font
+    //!    name and then replace the * with "Regular", "Bold", "Italic" etc.?
+    //! 3. As a last resort, Gosu could implement faux bold and faux italics. I think faux
+    //!    underlines are a must anyway, since no font provides a dedicated TTF file for that.
+    //! These options are not mutually exclusive.
     const unsigned char* ttf_data_from_file(const std::string& filename);
     
     //! This method loads a TODO
@@ -46,22 +59,4 @@ namespace Gosu
     //! This method has a different implementation on each platform.
     //! In case of failure, this method must not return nullptr, but raise an exception.
     const unsigned char* ttf_fallback_data();
-
-    // TODO still true? ↓
-    // These functions do not yet support Gosu::FontFlags. This is fine for system fonts like Arial,
-    // where the callers of these methods will typically load the correct file (e.g. ArialBold.ttf).
-    // However, games which ship with their own font files (which is a good idea) can't use bold or
-    // italic text using <b> or <i> markup because there is no way to associate one TTF file as the
-    // "bold variant" of another.
-    //
-    // Options for the future:
-    // 1. Use stbtt_FindMatchingFont. This will only work for TTC font collections, and we will
-    //    have to patch stb_truetype to look for fonts only based on `int flags`, while ignoring
-    //    the name of fonts inside a bundle (who wants to deal with strings, anyway).
-    // 2. Maybe Gosu should accept filename patterns like "LibreBaskerville-*.ttf" as the font
-    //    name and then replace the * with "Regular", "Bold", "Italic" etc.?
-    // 3. As a last resort, Gosu could implement faux bold and faux italics. I think faux
-    //    underlines are a must anyway, since no font provides a dedicated TTF file for that.
-    // These options are not mutually exclusive.
-
 }
