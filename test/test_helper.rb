@@ -64,14 +64,7 @@ module TestHelper
   def assert_output_matches(expected, threshold, size)
     expected = File.expand_path("#{expected}.png", File.dirname(__FILE__))
     
-    begin
-      actual_image = Gosu.render(*size) { yield }
-    rescue Exception => e
-      if e.message.include? "GL_EXT_framebuffer_object"
-        skip
-        return
-      end
-    end
+    actual_image = Gosu.render(*size) { yield }
 
     actual_image.save actual_from_expected_filename(expected) if ENV["DEBUG"]
 

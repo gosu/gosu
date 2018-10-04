@@ -35,6 +35,9 @@ class TestFont < Minitest::Test
   end
   
   def test_draw_and_draw_rel
+    # Gosu.render does not work on Appveyor.
+    skip_on_appveyor
+    
     font = Gosu::Font.new(10, name: media_path("daniel.otf"))
     
     assert_output_matches "test_font/draw_markup", 0.98, [200, 100] do
@@ -53,6 +56,9 @@ class TestFont < Minitest::Test
   end
 
   def test_deprecated_features
+    # Gosu.render does not work on Appveyor.
+    skip_on_appveyor
+    
     font = Gosu::Font.new(20, name: media_path("daniel.ttf"))
     
     # The scale_x parameter to Font#text_width has been deprecated in Gosu 0.14.0.
