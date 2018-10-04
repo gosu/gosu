@@ -338,6 +338,14 @@ void Gosu::Window::button_down(Button button)
         !Input::down(KB_LEFT_META)    && !Input::down(KB_RIGHT_META) &&
         !Input::down(KB_LEFT_SHIFT)   && !Input::down(KB_RIGHT_SHIFT);
 #endif
+    // F11 is supported as a shortcut for fullscreen mode on all platforms.
+    if (!toggle_fullscreen && button == KB_F11 &&
+        !Input::down(KB_LEFT_ALT)     && !Input::down(KB_RIGHT_ALT) &&
+        !Input::down(KB_LEFT_CONTROL) && !Input::down(KB_RIGHT_CONTROL) &&
+        !Input::down(KB_LEFT_META)    && !Input::down(KB_RIGHT_META) &&
+        !Input::down(KB_LEFT_SHIFT)   && !Input::down(KB_RIGHT_SHIFT)) {
+        toggle_fullscreen = true;
+    }
 
     if (toggle_fullscreen) {
         resize(width(), height(), !fullscreen());

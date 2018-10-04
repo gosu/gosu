@@ -94,7 +94,7 @@ namespace Gosu
 
         //! Called before update when the user presses a button while the window has the focus.
         //! By default, this will toggle fullscreen mode if the user presses Alt+Enter (Windows,
-        //! Linux) or cmd+F (macOS).
+        //! Linux), cmd+F (macOS), or F11 (on all operating systems).
         //! To support these shortcuts in your application, make sure to call Window::button_down
         //! in your implementation.
         virtual void button_down(Gosu::Button);
