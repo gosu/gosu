@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Gosu"
-  s.version      = "0.14.3"
+  s.version      = "0.14.4"
   s.summary      = "2D game development library."
   s.homepage     = "https://www.libgosu.org/"
   s.documentation_url = "https://www.libgosu.org/cpp/"
@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.license      = { type: "MIT", file: "COPYING" }
   s.author       = { "Julian Raschke" => "julian@raschke.de" }
 
-  s.source       = { git: "https://github.com/gosu/gosu.git", tag: "v0.14.3" }
+  s.source       = { git: "https://github.com/gosu/gosu.git", tag: "v0.14.4" }
 
   # We can't compile utf8proc.c as C++, and we need to silence warnings in stb_vorbis.c.
   # => Group all C dependencies into a subspec.

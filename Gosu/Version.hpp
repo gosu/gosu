@@ -4,7 +4,7 @@
 
 #define GOSU_MAJOR_VERSION 0
 #define GOSU_MINOR_VERSION 14
-#define GOSU_POINT_VERSION 3
+#define GOSU_POINT_VERSION 4
 
 namespace Gosu
 {
