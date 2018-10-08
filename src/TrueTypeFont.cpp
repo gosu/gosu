@@ -244,7 +244,7 @@ Gosu::TrueTypeFont& Gosu::font_by_name(const string& font_name, unsigned font_fl
         vector<const unsigned char*> ttf_stack;
         ttf_stack.push_back(ttf_fallback_data());
         ttf_stack.push_back(ttf_data_by_name(default_font_name(), 0));
-        ttf_stack.push_back(ttf_data_by_name(default_font_name(), font_flags));
+        if (font_flags != 0) ttf_stack.push_back(ttf_data_by_name(default_font_name(), font_flags));
         
         if (font_name.find_first_of("./\\") != string::npos) {
             // A filename? Load it and add it to the stack.
@@ -253,7 +253,7 @@ Gosu::TrueTypeFont& Gosu::font_by_name(const string& font_name, unsigned font_fl
         else if (font_name != default_font_name()) {
             // A font name? Add it to the stack, both with font_flags and without.
             ttf_stack.push_back(ttf_data_by_name(font_name, 0));
-            ttf_stack.push_back(ttf_data_by_name(font_name, font_flags));
+            if (font_flags != 0) ttf_stack.push_back(ttf_data_by_name(font_name, font_flags));
         }
         
         font_ptr = &font_with_stack(move(ttf_stack));
