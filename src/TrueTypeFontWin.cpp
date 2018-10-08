@@ -2,6 +2,7 @@
 #if defined(GOSU_IS_WIN)
 
 #include "TrueTypeFont.hpp"
+#include "Log.hpp"
 
 #define _WIN32_WINNT 0x0500
 #include <windows.h>
@@ -25,6 +26,8 @@ const unsigned char* Gosu::ttf_data_by_name(const string& font_name, unsigned fo
     
     auto& buffer_ptr = ttf_file_cache[make_pair(font_name, font_flags)];
     if (buffer_ptr) return static_cast<const unsigned char*>(buffer_ptr->data());
+
+    log("Trying to find a font named '%s', flags=%x", font_name.c_str(), font_flags);
 
     LOGFONT logfont = {
         0, 0, 0, 0,
@@ -51,6 +54,10 @@ const unsigned char* Gosu::ttf_data_by_name(const string& font_name, unsigned fo
                     auto data = static_cast<const unsigned char*>(buffer->data());
                     if (font_name.empty() || TrueTypeFont::matches(data, font_name, font_flags)) {
                         buffer_ptr = buffer;
+                        log("Found a matching file (%d bytes)", (int) buffer->size());
+                    }
+                    else {
+                        log("Internal font name did not match; discarding result");
                     }
                 }
             }
