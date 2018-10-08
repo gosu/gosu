@@ -1,5 +1,6 @@
 #include "Texture.hpp"
 #include "TexChunk.hpp"
+#include "Log.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Platform.hpp>
@@ -14,6 +15,8 @@ namespace Gosu
 Gosu::Texture::Texture(unsigned width, unsigned height, bool retro)
 : allocator_(width, height), retro_(retro)
 {
+    log("Allocating a new texture of size %dx%d (retro=%d)", width, height, (int) retro);
+
     ensure_current_context();
     
     // Create texture name.
