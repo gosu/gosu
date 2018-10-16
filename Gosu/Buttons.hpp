@@ -104,6 +104,7 @@ namespace Gosu
         KB_NUMPAD_7        = 95,
         KB_NUMPAD_8        = 96,
         KB_NUMPAD_9        = 97,
+        KB_NUMPAD_DELETE   = 99,
         KB_NUMPAD_PLUS     = 87,
         KB_NUMPAD_MINUS    = 86,
         KB_NUMPAD_MULTIPLY = 85,
