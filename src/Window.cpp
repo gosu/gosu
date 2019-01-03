@@ -85,6 +85,7 @@ struct Gosu::Window::Impl
 {
     bool fullscreen;
     double update_interval;
+    bool resizable;
 
     // A single `bool open` is not good enough to support the tick() method: When close() is called
     // from outside the window's call graph, the next call to tick() must return false (transition
@@ -113,6 +114,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     SDL_GL_SetSwapInterval(1);
 
     pimpl->update_interval = update_interval;
+    pimpl->resizable = resizable;
 
     input().on_button_down = [this](Button button) { button_down(button); };
     input().on_button_up   = [this](Button button) { button_up(button); };
@@ -138,7 +140,12 @@ bool Gosu::Window::fullscreen() const
     return pimpl->fullscreen;
 }
 
-void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
+bool Gosu::Window::resizable() const
+{
+    return pimpl->resizable;
+}
+
+void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen, bool resizing)
 {
     pimpl->fullscreen = fullscreen;
     
@@ -167,11 +174,13 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
         double max_width  = Gosu::available_width(this);
         double max_height = Gosu::available_height(this);
         
-        if (width > max_width || height > max_height) {
+
+        if (!resizing && (width > max_width || height > max_height)) {
             scale_factor = min(max_width / width, max_height / height);
             actual_width  = width  * scale_factor;
             actual_height = height * scale_factor;
         }
+        printf("screen size available %fx%f, actual size %dx%d\n", max_width, max_height, actual_width, actual_height);
     }
     
     SDL_SetWindowFullscreen(shared_window(), fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
@@ -196,6 +205,9 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
     }
     pimpl->input->set_mouse_factors(1 / scale_factor, 1 / scale_factor,
                                     black_bar_width, black_bar_height);
+
+    printf("Resizing to %dx%d from target %dx%d, was %dx%d\n", actual_width, actual_height, width, height, pimpl->graphics->width(), pimpl->graphics->height());
+    printf("Scale Factor: %f, black bar: %fx%f\n\n", scale_factor, black_bar_width, black_bar_height);
 }
 
 double Gosu::Window::update_interval() const
@@ -257,22 +269,26 @@ bool Gosu::Window::tick()
     
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
+
         switch (e.type) {
-        #ifdef GOSU_IS_MAC
-            // Workaround for https://github.com/gosu/gosu/issues/458
-            // "Resize" the window to its current dimensions after it is shown.
-            // Otherwise it will be black on macOS 10.14 (Mojave) until the user moves it around.
-            // TODO: Since this affects `brew install supertux` as well, maybe file an SDL bug?
             case SDL_WINDOWEVENT: {
                 switch (e.window.event) {
-                    case SDL_WINDOWEVENT_SHOWN: {
-                        resize(this->width(), this->height(), fullscreen());
-                        break;
-                    }
+                    #ifdef GOSU_IS_MAC
+                        // Workaround for https://github.com/gosu/gosu/issues/458
+                        // "Resize" the window to its current dimensions after it is shown.
+                        // Otherwise it will be black on macOS 10.14 (Mojave) until the user moves it around.
+                        // TODO: Since this affects `brew install supertux` as well, maybe file an SDL bug?
+                        case SDL_WINDOWEVENT_SHOWN: {
+                            resize(this->width(), this->height(), fullscreen());
+                            break;
+                        }
+                    #endif
+
                     case SDL_WINDOWEVENT_SIZE_CHANGED: {
-                        // if (width() != e.window.data1 || height() != e.window.data2) {
-                        //     resize(e.window.data1, e.window.data2, fullscreen());
-                        // }
+                        if (width() != e.window.data1 || height() != e.window.data2) {
+                            resize(e.window.data1, e.window.data2, fullscreen(), true);
+                        }
+                        break;
                     }
                     default: {
                         break;
@@ -280,7 +296,6 @@ bool Gosu::Window::tick()
                 }
                 break;
             }
-        #endif
             case SDL_QUIT: {
                 close();
                 break;
