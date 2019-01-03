@@ -85,34 +85,35 @@ struct Gosu::Window::Impl
 {
     bool fullscreen;
     double update_interval;
-    
+
     // A single `bool open` is not good enough to support the tick() method: When close() is called
     // from outside the window's call graph, the next call to tick() must return false (transition
     // from CLOSING to CLOSED), but the call after that must return show the window again
     // (transition from CLOSED to OPEN).
     enum { CLOSED, OPEN, CLOSING } state = CLOSED;
-    
+
     unique_ptr<Graphics> graphics;
     unique_ptr<Input> input;
 };
 
-Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval)
+Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval, bool resizable)
 : pimpl(new Impl)
 {
     // Even in fullscreen mode, temporarily show the window in windowed mode to centre it.
     // This ensures that the window will be centred correctly when exiting fullscreen mode.
     // Fixes https://github.com/gosu/gosu/issues/369
     // (This will implicitly create graphics() and input(), and make the OpenGL context current.)
+    SDL_SetWindowResizable(shared_window(), (SDL_bool)resizable);
     resize(width, height, false);
     SDL_SetWindowPosition(shared_window(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
     // Really enable fullscreen if desired.
     resize(width, height, fullscreen);
-    
+
     SDL_GL_SetSwapInterval(1);
 
     pimpl->update_interval = update_interval;
-    
+
     input().on_button_down = [this](Button button) { button_down(button); };
     input().on_button_up   = [this](Button button) { button_up(button); };
 }
@@ -263,8 +264,19 @@ bool Gosu::Window::tick()
             // Otherwise it will be black on macOS 10.14 (Mojave) until the user moves it around.
             // TODO: Since this affects `brew install supertux` as well, maybe file an SDL bug?
             case SDL_WINDOWEVENT: {
-                if (e.window.event == SDL_WINDOWEVENT_SHOWN) {
-                    resize(this->width(), this->height(), fullscreen());
+                switch (e.window.event) {
+                    case SDL_WINDOWEVENT_SHOWN: {
+                        resize(this->width(), this->height(), fullscreen());
+                        break;
+                    }
+                    case SDL_WINDOWEVENT_SIZE_CHANGED: {
+                        // if (width() != e.window.data1 || height() != e.window.data2) {
+                        //     resize(e.window.data1, e.window.data2, fullscreen());
+                        // }
+                    }
+                    default: {
+                        break;
+                    }
                 }
                 break;
             }

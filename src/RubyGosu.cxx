@@ -3212,7 +3212,7 @@ std::string SwigDirector_TextInput::filter(std::string text) const {
 }
 
 
-SwigDirector_Window::SwigDirector_Window(VALUE self, unsigned int width, unsigned int height, bool fullscreen, double update_interval): Gosu::Window(width, height, fullscreen, update_interval), Swig::Director(self) {
+SwigDirector_Window::SwigDirector_Window(VALUE self, unsigned int width, unsigned int height, bool fullscreen, double update_interval, bool resizable): Gosu::Window(width, height, fullscreen, update_interval, resizable), Swig::Director(self) {
   
 }
 
@@ -8697,6 +8697,7 @@ _wrap_new_Window(int argc, VALUE *argv, VALUE self) {
   unsigned int arg3 ;
   bool arg4 = (bool) false ;
   double arg5 = (double) 16.666666 ;
+  bool arg6 = (bool) false ;
   unsigned int val2 ;
   int ecode2 = 0 ;
   unsigned int val3 ;
@@ -8705,10 +8706,12 @@ _wrap_new_Window(int argc, VALUE *argv, VALUE self) {
   int ecode4 = 0 ;
   double val5 ;
   int ecode5 = 0 ;
+  bool val6 ;
+  int ecode6 = 0 ;
   const char *classname SWIGUNUSED = "Gosu::Window";
   Gosu::Window *result = 0 ;
   
-  if ((argc < 2) || (argc > 4)) {
+  if ((argc < 2) || (argc > 5)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
   }
   arg1 = self;
@@ -8736,13 +8739,20 @@ _wrap_new_Window(int argc, VALUE *argv, VALUE self) {
     } 
     arg5 = static_cast< double >(val5);
   }
+  if (argc > 4) {
+    ecode6 = SWIG_AsVal_bool(argv[4], &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), Ruby_Format_TypeError( "", "bool","Window", 6, argv[4] ));
+    } 
+    arg6 = static_cast< bool >(val6);
+  }
   {
     try {
       if ( strcmp(rb_obj_classname(self), classname) != 0 ) {
         /* subclassed */
-        result = (Gosu::Window *)new SwigDirector_Window(arg1,arg2,arg3,arg4,arg5); 
+        result = (Gosu::Window *)new SwigDirector_Window(arg1,arg2,arg3,arg4,arg5,arg6); 
       } else {
-        result = (Gosu::Window *)new Gosu::Window(arg2,arg3,arg4,arg5); 
+        result = (Gosu::Window *)new Gosu::Window(arg2,arg3,arg4,arg5,arg6); 
       }
       
       DATA_PTR(self) = result;
