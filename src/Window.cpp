@@ -288,7 +288,7 @@ bool Gosu::Window::tick()
                     #endif
 
                     case SDL_WINDOWEVENT_SIZE_CHANGED: {
-                        if (width() != e.window.data1 || height() != e.window.data2) {
+                        if (pimpl->resizable && width() != e.window.data1 || height() != e.window.data2) {
                             resize(e.window.data1, e.window.data2, fullscreen(), true);
                         }
                         break;
