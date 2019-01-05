@@ -100,11 +100,14 @@ struct Gosu::Window::Impl
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval, bool resizable)
 : pimpl(new Impl)
 {
+    #if SDL_VERSION_ATLEAST(2, 0, 5)
+        SDL_SetWindowResizable(shared_window(), (SDL_bool)resizable);
+    #endif
+
     // Even in fullscreen mode, temporarily show the window in windowed mode to centre it.
     // This ensures that the window will be centred correctly when exiting fullscreen mode.
     // Fixes https://github.com/gosu/gosu/issues/369
     // (This will implicitly create graphics() and input(), and make the OpenGL context current.)
-    SDL_SetWindowResizable(shared_window(), (SDL_bool)resizable);
     resize(width, height, false);
     SDL_SetWindowPosition(shared_window(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
