@@ -11701,7 +11701,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "LICENSES", SWIG_From_std_string(static_cast< std::string >(Gosu::LICENSES)));
   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(14)));
-  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(4)));
+  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(5)));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
   rb_define_module_function(mGosu, "degrees_to_radians", VALUEFUNC(_wrap_degrees_to_radians), -1);
@@ -11946,6 +11946,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "KB_NUMPAD_7", SWIG_From_int(static_cast< int >(Gosu::KB_NUMPAD_7)));
   rb_define_const(mGosu, "KB_NUMPAD_8", SWIG_From_int(static_cast< int >(Gosu::KB_NUMPAD_8)));
   rb_define_const(mGosu, "KB_NUMPAD_9", SWIG_From_int(static_cast< int >(Gosu::KB_NUMPAD_9)));
+  rb_define_const(mGosu, "KB_NUMPAD_DELETE", SWIG_From_int(static_cast< int >(Gosu::KB_NUMPAD_DELETE)));
   rb_define_const(mGosu, "KB_NUMPAD_PLUS", SWIG_From_int(static_cast< int >(Gosu::KB_NUMPAD_PLUS)));
   rb_define_const(mGosu, "KB_NUMPAD_MINUS", SWIG_From_int(static_cast< int >(Gosu::KB_NUMPAD_MINUS)));
   rb_define_const(mGosu, "KB_NUMPAD_MULTIPLY", SWIG_From_int(static_cast< int >(Gosu::KB_NUMPAD_MULTIPLY)));
