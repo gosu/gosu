@@ -2358,6 +2358,12 @@ namespace Gosu
         Gosu::Graphics::draw_line(x1, y1, c1, x2, y2, c2, z, mode);
     }
     
+    void fill_circle(double x, double y, double radius, Gosu::Color color,
+                       Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
+    {
+        Gosu::Graphics::fill_circle(x, y, radius, color, z, mode);
+    }
+
     void draw_triangle(double x1, double y1, Gosu::Color c1,
                        double x2, double y2, Gosu::Color c2,
                        double x3, double y3, Gosu::Color c3,
@@ -2519,7 +2525,7 @@ SWIG_ruby_failed(void)
 } 
 
 
-/*@SWIG:/usr/local/Cellar/swig/3.0.12/share/swig/3.0.12/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
+/*@SWIG:/usr/share/swig/3.0.12/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
 SWIGINTERN VALUE SWIG_AUX_NUM2DBL(VALUE *args)
 {
   VALUE obj = args[0];
@@ -2561,7 +2567,7 @@ SWIG_From_unsigned_SS_int  (unsigned int value)
 #include <string>
 
 
-/*@SWIG:/usr/local/Cellar/swig/3.0.12/share/swig/3.0.12/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
+/*@SWIG:/usr/share/swig/3.0.12/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
 SWIGINTERN VALUE SWIG_AUX_NUM2ULONG(VALUE *args)
 {
   VALUE obj = args[0];
@@ -2763,7 +2769,7 @@ SWIG_AsPtr_std_string (VALUE obj, std::string **val)
 }
 
 
-/*@SWIG:/usr/local/Cellar/swig/3.0.12/share/swig/3.0.12/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
+/*@SWIG:/usr/share/swig/3.0.12/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
 SWIGINTERN VALUE SWIG_AUX_NUM2LONG(VALUE *args)
 {
   VALUE obj = args[0];
@@ -10277,6 +10283,99 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_fill_circle(int argc, VALUE *argv, VALUE self) {
+  double arg1 ;
+  double arg2 ;
+  double arg3 ;
+  Gosu::Color arg4 ;
+  Gosu::ZPos arg5 = (Gosu::ZPos) 0 ;
+  Gosu::AlphaMode arg6 = (Gosu::AlphaMode) Gosu::AM_DEFAULT ;
+  double val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
+  
+  if ((argc < 4) || (argc > 6)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
+  }
+  ecode1 = SWIG_AsVal_double(argv[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "double","Gosu::fill_circle", 1, argv[0] ));
+  } 
+  arg1 = static_cast< double >(val1);
+  ecode2 = SWIG_AsVal_double(argv[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","Gosu::fill_circle", 2, argv[1] ));
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_double(argv[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "double","Gosu::fill_circle", 3, argv[2] ));
+  } 
+  arg3 = static_cast< double >(val3);
+  {
+    if (TYPE(argv[3]) == T_FIXNUM || TYPE(argv[3]) == T_BIGNUM) {
+      arg4 = Gosu::Color(NUM2ULONG(argv[3]));
+    }
+    else {
+      void* ptr;
+      int res = SWIG_ConvertPtr(argv[3], &ptr, SWIGTYPE_p_Gosu__Color, 0);
+      if (!SWIG_IsOK(res)) {
+        SWIG_exception_fail(SWIG_ValueError, "invalid value");
+      }
+      else if (ptr == nullptr) {
+        SWIG_exception_fail(SWIG_ValueError, "invalid null reference of type Gosu::Color");
+      }
+      else {
+        arg4 = *reinterpret_cast<Gosu::Color*>(ptr);
+      }
+    }
+  }
+  if (argc > 4) {
+    ecode5 = SWIG_AsVal_double(argv[4], &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), Ruby_Format_TypeError( "", "Gosu::ZPos","Gosu::fill_circle", 5, argv[4] ));
+    } 
+    arg5 = static_cast< Gosu::ZPos >(val5);
+  }
+  if (argc > 5) {
+    {
+      const char* cstr = Gosu::cstr_from_symbol(argv[5]);
+      
+      if (!strcmp(cstr, "default")) {
+        arg6 = Gosu::AM_DEFAULT;
+      }
+      else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive")) {
+        arg6 = Gosu::AM_ADD;
+      }
+      else if (!strcmp(cstr, "multiply")) {
+        arg6 = Gosu::AM_MULTIPLY;
+      }
+      else {
+        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
+          ":multiply)");
+      }
+    }
+  }
+  {
+    try {
+      Gosu::fill_circle(arg1,arg2,arg3,arg4,arg5,arg6);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_draw_triangle(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
   double arg2 ;
@@ -12135,6 +12234,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "button_id_to_char", VALUEFUNC(_wrap_button_id_to_char), -1);
   rb_define_module_function(mGosu, "button_down?", VALUEFUNC(_wrap_button_downq___), -1);
   rb_define_module_function(mGosu, "draw_line", VALUEFUNC(_wrap_draw_line), -1);
+  rb_define_module_function(mGosu, "fill_circle", VALUEFUNC(_wrap_fill_circle), -1);
   rb_define_module_function(mGosu, "draw_triangle", VALUEFUNC(_wrap_draw_triangle), -1);
   rb_define_module_function(mGosu, "draw_quad", VALUEFUNC(_wrap_draw_quad), -1);
   rb_define_module_function(mGosu, "draw_rect", VALUEFUNC(_wrap_draw_rect), -1);

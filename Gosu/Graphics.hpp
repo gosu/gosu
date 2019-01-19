@@ -80,6 +80,9 @@ namespace Gosu
                               double x2, double y2, Color c2,
                               ZPos z, AlphaMode mode = AM_DEFAULT);
 
+        static void fill_circle(double x, double y, double radius, Color color,
+                                  ZPos z, AlphaMode mode = AM_DEFAULT);
+
         static void draw_triangle(double x1, double y1, Color c1,
                                   double x2, double y2, Color c2,
                                   double x3, double y3, Color c3,

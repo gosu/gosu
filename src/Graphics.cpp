@@ -9,6 +9,7 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/Platform.hpp>
+#include <Gosu/Math.hpp>
 #include <cmath>
 #include <algorithm>
 #include <functional>
@@ -333,6 +334,29 @@ void Gosu::Graphics::draw_line(double x1, double y1, Color c1,
     op.z = z;
     
     current_queue().schedule_draw_op(op);
+}
+
+void Gosu::Graphics::fill_circle(double x, double y, double radius, Color color, ZPos z, AlphaMode mode)
+{
+    double width = radius * 2;
+    double height, x2;
+
+    for (int i = 0; i < width; i++) {
+        x2 = (x - radius) + i;
+        height = 0;
+
+        for (int j = 0; j < radius; j++) {
+            if (Gosu::distance(x, y, x2, (y - radius) + j) < radius) {
+                height = radius - j;
+                break;
+            }
+        }
+
+        double y2 = y - height;
+        double y3 = y + height;
+
+        Gosu::Graphics::draw_line(x2, y2, color, x2, y3, color, z, mode);
+    }
 }
 
 void Gosu::Graphics::draw_triangle(double x1, double y1, Color c1, double x2, double y2, Color c2,

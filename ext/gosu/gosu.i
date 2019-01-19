@@ -230,6 +230,12 @@ namespace Gosu
         Gosu::Graphics::draw_line(x1, y1, c1, x2, y2, c2, z, mode);
     }
     
+    void fill_circle(double x, double y, double radius, Gosu::Color color,
+                       Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
+    {
+        Gosu::Graphics::fill_circle(x, y, radius, color, z, mode);
+    }
+
     void draw_triangle(double x1, double y1, Gosu::Color c1,
                        double x2, double y2, Gosu::Color c2,
                        double x3, double y3, Gosu::Color c3,
@@ -1059,6 +1065,9 @@ namespace Gosu
     void draw_line(double x1, double y1, Gosu::Color c1,
                    double x2, double y2, Gosu::Color c2,
                    Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT);
+
+    void fill_circle(double x, double y, double radius, Gosu::Color color,
+                       Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT);
 
     void draw_triangle(double x1, double y1, Gosu::Color c1,
                        double x2, double y2, Gosu::Color c2,

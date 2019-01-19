@@ -157,7 +157,7 @@ class Gosu::Window
   end
 
   # Instance methods that have been turned into module methods.
-  %w(draw_line draw_triangle draw_quad draw_rect
+  %w(draw_line fill_cicle draw_triangle draw_quad draw_rect
      flush gl clip_to record
      transform translate rotate scale
      button_id_to_char char_to_button_id button_down?).each do |method|
