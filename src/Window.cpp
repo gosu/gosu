@@ -177,17 +177,18 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen, bool
         double max_width  = Gosu::available_width(this);
         double max_height = Gosu::available_height(this);
         
-
+        // Don't use scaling if window was resized by user
         if (!resizing && (width > max_width || height > max_height)) {
             scale_factor = min(max_width / width, max_height / height);
             actual_width  = width  * scale_factor;
             actual_height = height * scale_factor;
         }
-        printf("screen size available %fx%f, actual size %dx%d\n", max_width, max_height, actual_width, actual_height);
     }
     
     SDL_SetWindowFullscreen(shared_window(), fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+    if (!resizing) { // Don't set window size if window was resized by user
     SDL_SetWindowSize(shared_window(), actual_width, actual_height);
+    }
     
 #if SDL_VERSION_ATLEAST(2, 0, 1)
     SDL_GL_GetDrawableSize(shared_window(), &actual_width, &actual_height);
@@ -208,9 +209,6 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen, bool
     }
     pimpl->input->set_mouse_factors(1 / scale_factor, 1 / scale_factor,
                                     black_bar_width, black_bar_height);
-
-    printf("Resizing to %dx%d from target %dx%d, was %dx%d\n", actual_width, actual_height, width, height, pimpl->graphics->width(), pimpl->graphics->height());
-    printf("Scale Factor: %f, black bar: %fx%f\n\n", scale_factor, black_bar_width, black_bar_height);
 }
 
 double Gosu::Window::update_interval() const
@@ -288,7 +286,7 @@ bool Gosu::Window::tick()
                     #endif
 
                     case SDL_WINDOWEVENT_SIZE_CHANGED: {
-                        if (pimpl->resizable && width() != e.window.data1 || height() != e.window.data2) {
+                        if (pimpl->resizable && (width() != e.window.data1 || height() != e.window.data2)) {
                             resize(e.window.data1, e.window.data2, fullscreen(), true);
                         }
                         break;
