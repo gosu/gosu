@@ -50,6 +50,7 @@ module Gosu
   KB_LEFT_SHIFT = :an_integer
   KB_MINUS = :an_integer
   KB_NUMPAD_0…KB_NUMPAD_9 = :an_integer
+  KB_NUMPAD_DELETE = :an_integer
   KB_NUMPAD_DIVIDE = :an_integer
   KB_NUMPAD_MINUS = :an_integer
   KB_NUMPAD_MULTIPLY = :an_integer
