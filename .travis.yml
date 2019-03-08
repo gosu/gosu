@@ -2,6 +2,9 @@ language: cpp
 
 matrix:
   include:
+    - language: ruby
+      rvm: 2.6
+
     # Ubuntu 14.04 Trusty Tahr
     - os: linux
       dist: trusty
@@ -38,7 +41,7 @@ addons:
 before_install:
   # Cause multi-line snippets to fail on first error.
   - set -ev
-  
+
   # Print the Ruby configuration to see what's defined in CXXFLAGS etc.
   - ruby -rrbconfig -e 'RbConfig::CONFIG.each { |k, v| puts [k, v].join("=") }'
 
@@ -46,21 +49,21 @@ before_install:
   - |
     if [ $TRAVIS_OS_NAME == osx ]; then
       # Do not use RVM - it's been a mess for compiling Gosu on macOS.
-      rvm use system
-      
+
       # Mac dependencies
       # See: https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X
       brew update
-      brew install ruby sdl2
-      
+      brew install sdl2
+
       # Update the system RubyGems on macOS and install CocoaPods.
       gem update --system
       gem install cocoapods
     fi
 
   # Dependencies for 'rake gem' (not for actually using Gosu)
-  - gem install rake-compiler minitest --no-ri --no-rdoc
-  
+  - gem update --system
+  - gem install rake-compiler minitest --no-doc
+
 
 before_script:
   # Enable "dummy" devices for audio and video on Linux.
@@ -92,7 +95,7 @@ install:
   # Install Ruby/Gosu using RubyGems.
   - |
     rake gem
-    gem install pkg/gosu-9.9.9.gem --no-ri --no-rdoc
+    gem install pkg/gosu-9.9.9.gem --no-doc
 
   # Install Gosu for C++ using CMake.
   - |
