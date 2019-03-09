@@ -45,26 +45,19 @@ before_install:
   # Do some macOS-specific preparations
   - |
     if [ $TRAVIS_OS_NAME == osx ]; then
+      rvm use ruby
       # Mac dependencies
       # See: https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X
       brew update
-      brew install gnupg sdl2
-    fi
+      brew install sdl2
 
-  # Install lastest ruby
-  - gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-  - rvm get head
-  - rvm install 2.6
-  - rvm use 2.6
-  - gem update --system
-
-  - |
-    if [ $TRAVIS_OS_NAME == osx ]; then
-      # Install CocoaPods
+      # Update the system RubyGems on macOS and install CocoaPods.
+      gem update --system
       gem install cocoapods
     fi
 
   # Dependencies for 'rake gem' (not for actually using Gosu)
+  - gem update --system
   - gem install rake-compiler minitest --no-doc
 
 
