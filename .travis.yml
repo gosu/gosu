@@ -45,11 +45,10 @@ before_install:
   # Print the Ruby configuration to see what's defined in CXXFLAGS etc.
   - ruby -rrbconfig -e 'RbConfig::CONFIG.each { |k, v| puts [k, v].join("=") }'
 
+  - rvm use ruby
   # Do some macOS-specific preparations
   - |
     if [ $TRAVIS_OS_NAME == osx ]; then
-      # Do not use RVM - it's been a mess for compiling Gosu on macOS.
-
       # Mac dependencies
       # See: https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X
       brew update
