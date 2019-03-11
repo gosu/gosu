@@ -187,7 +187,7 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen, bool
     
     SDL_SetWindowFullscreen(shared_window(), fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
     if (!resizing) { // Don't set window size if window was resized by user
-    SDL_SetWindowSize(shared_window(), actual_width, actual_height);
+        SDL_SetWindowSize(shared_window(), actual_width, actual_height);
     }
     
 #if SDL_VERSION_ATLEAST(2, 0, 1)
