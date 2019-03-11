@@ -27,6 +27,6 @@ test_script:
       $env:PATH = "C:\Ruby23\bin;$env:PATH"
     }
     
-    gem install rake rake-compiler minitest --no-ri --no-rdoc
+    gem install rake rake-compiler minitest --no-doc
     
     cmd /c rake format test TESTOPTS='-v' '2>&1'
