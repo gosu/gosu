@@ -7,11 +7,6 @@ matrix:
       dist: xenial
       sudo: required
       compiler: gcc
-    # Ubuntu 14.04 Trusty Tahr
-    - os: linux
-      dist: trusty
-      sudo: required
-      compiler: gcc
     # macOS 10.11 El Capitan
     - os: osx
       osx_image: xcode7.3
