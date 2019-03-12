@@ -34,6 +34,7 @@ addons:
       - cmake
       # For Linux Soundtests (like xvfb for sound: lets us headlessly run audio tests)
       - alsa-base
+      - alsa-utils
 
 services:
   - xvfb
