@@ -34,7 +34,9 @@ addons:
       - cmake
       # For Linux Soundtests (like xvfb for sound: lets us headlessly run audio tests)
       - alsa-base
-      - xvfb
+
+services:
+  - xvfb
 
 before_install:
   # Cause multi-line snippets to fail on first error.
@@ -66,9 +68,6 @@ before_script:
   # Enable "dummy" devices for audio and video on Linux.
   - |
     if [ $TRAVIS_OS_NAME != osx ]; then
-      export DISPLAY=:99.0
-      sh -e /etc/init.d/xvfb start
-      sleep 3
       sudo modprobe snd-dummy
       sudo usermod -a -G audio $USER
     fi
