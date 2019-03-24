@@ -18,7 +18,7 @@ or look at existing projects in the [Gosu Showcase](https://www.libgosu.org/cgi-
 Community
 ---------
 
-- There is a lively [Discord community](https://discord.gg/SZ4nbEd).
+- There is a lively [Discord community](https://discord.gg/5nEBXDc).
 - If you want to discuss or announce something in a more permanent place than a chat room, we also have a [message board](https://www.libgosu.org/cgi-bin/mwf/forum.pl).
 - Please file bugs and feature requests [on GitHub](https://github.com/gosu/gosu/issues).
 
