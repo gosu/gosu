@@ -105,7 +105,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
 #endif
 
     // Even in fullscreen mode, temporarily show the window in windowed mode to centre it.
-    // This ensures that the window will be centred correctly when exiting fullscreen mode.
+    // This ensures that the window will be centered correctly when exiting fullscreen mode.
     // Fixes https://github.com/gosu/gosu/issues/369
     // (This will implicitly create graphics() and input(), and make the OpenGL context current.)
     resize(width, height, false);
@@ -148,7 +148,7 @@ bool Gosu::Window::resizable() const
     return pimpl->resizable;
 }
 
-void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen, bool resizing)
+void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
 {
     pimpl->fullscreen = fullscreen;
     
@@ -177,8 +177,8 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen, bool
         double max_width  = Gosu::available_width(this);
         double max_height = Gosu::available_height(this);
         
-        // Don't use scaling if window was resized by user
-        if (!resizing && (width > max_width || height > max_height)) {
+        // Don't use scaling if window is resizable.
+        if (!resizable() && (width > max_width || height > max_height)) {
             scale_factor = min(max_width / width, max_height / height);
             actual_width  = width  * scale_factor;
             actual_height = height * scale_factor;
@@ -186,9 +186,7 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen, bool
     }
     
     SDL_SetWindowFullscreen(shared_window(), fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
-    if (!resizing) { // Don't set window size if window was resized by user
-        SDL_SetWindowSize(shared_window(), actual_width, actual_height);
-    }
+    SDL_SetWindowSize(shared_window(), actual_width, actual_height);
     
 #if SDL_VERSION_ATLEAST(2, 0, 1)
     SDL_GL_GetDrawableSize(shared_window(), &actual_width, &actual_height);
@@ -276,7 +274,7 @@ bool Gosu::Window::tick()
                 switch (e.window.event) {
                     case SDL_WINDOWEVENT_SIZE_CHANGED: {
                         if (pimpl->resizable && (width() != e.window.data1 || height() != e.window.data2)) {
-                            resize(e.window.data1, e.window.data2, fullscreen(), true);
+                            resize(e.window.data1, e.window.data2, fullscreen());
                         }
                         break;
                     }

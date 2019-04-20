@@ -41,7 +41,7 @@ namespace Gosu
         unsigned height() const;
         bool fullscreen() const;
         bool resizable() const;
-        void resize(unsigned width, unsigned height, bool fullscreen, bool resizing = false);
+        void resize(unsigned width, unsigned height, bool fullscreen);
 
         double update_interval() const;
         void set_update_interval(double update_interval);
