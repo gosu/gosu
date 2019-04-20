@@ -100,9 +100,9 @@ struct Gosu::Window::Impl
 Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval, bool resizable)
 : pimpl(new Impl)
 {
-    #if SDL_VERSION_ATLEAST(2, 0, 5)
-        SDL_SetWindowResizable(shared_window(), (SDL_bool)resizable);
-    #endif
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+    SDL_SetWindowResizable(shared_window(), (SDL_bool)resizable);
+#endif
 
     // Even in fullscreen mode, temporarily show the window in windowed mode to centre it.
     // This ensures that the window will be centred correctly when exiting fullscreen mode.
@@ -274,17 +274,6 @@ bool Gosu::Window::tick()
         switch (e.type) {
             case SDL_WINDOWEVENT: {
                 switch (e.window.event) {
-                    #ifdef GOSU_IS_MAC
-                        // Workaround for https://github.com/gosu/gosu/issues/458
-                        // "Resize" the window to its current dimensions after it is shown.
-                        // Otherwise it will be black on macOS 10.14 (Mojave) until the user moves it around.
-                        // TODO: Since this affects `brew install supertux` as well, maybe file an SDL bug?
-                        case SDL_WINDOWEVENT_SHOWN: {
-                            resize(this->width(), this->height(), fullscreen());
-                            break;
-                        }
-                    #endif
-
                     case SDL_WINDOWEVENT_SIZE_CHANGED: {
                         if (pimpl->resizable && (width() != e.window.data1 || height() != e.window.data2)) {
                             resize(e.window.data1, e.window.data2, fullscreen(), true);
