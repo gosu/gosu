@@ -86,6 +86,7 @@ struct Gosu::Window::Impl
     bool fullscreen;
     double update_interval;
     bool resizable;
+    bool resizing;
 
     // A single `bool open` is not good enough to support the tick() method: When close() is called
     // from outside the window's call graph, the next call to tick() must return false (transition
@@ -118,6 +119,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
 
     pimpl->update_interval = update_interval;
     pimpl->resizable = resizable;
+    pimpl->resizing = false;
 
     input().on_button_down = [this](Button button) { button_down(button); };
     input().on_button_up   = [this](Button button) { button_up(button); };
@@ -186,7 +188,9 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
     }
     
     SDL_SetWindowFullscreen(shared_window(), fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
-    SDL_SetWindowSize(shared_window(), actual_width, actual_height);
+    if (!pimpl->resizing) {
+        SDL_SetWindowSize(shared_window(), actual_width, actual_height);
+    }
     
 #if SDL_VERSION_ATLEAST(2, 0, 1)
     SDL_GL_GetDrawableSize(shared_window(), &actual_width, &actual_height);
@@ -274,7 +278,9 @@ bool Gosu::Window::tick()
                 switch (e.window.event) {
                     case SDL_WINDOWEVENT_SIZE_CHANGED: {
                         if (pimpl->resizable && (width() != e.window.data1 || height() != e.window.data2)) {
+                            pimpl->resizing = true;
                             resize(e.window.data1, e.window.data2, fullscreen());
+                            pimpl->resizing = false;
                         }
                         break;
                     }
