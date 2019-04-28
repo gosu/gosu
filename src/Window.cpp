@@ -193,7 +193,7 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
         }
         else if (width > max_width || height > max_height) {
             // If the window cannot fit on the screen, shrink its contents.
-            scale_factor = min(max_width / width, max_height / height);
+            scale_factor = min(1.0 * max_width / width, 1.0 * max_height / height);
             actual_width  = width  * scale_factor;
             actual_height = height * scale_factor;
         }
