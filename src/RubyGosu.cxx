@@ -8869,7 +8869,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Window_resizable(int argc, VALUE *argv, VALUE self) {
+_wrap_Window_resizableq___(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -12138,7 +12138,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "width", VALUEFUNC(_wrap_Window_width), -1);
   rb_define_method(SwigClassWindow.klass, "height", VALUEFUNC(_wrap_Window_height), -1);
   rb_define_method(SwigClassWindow.klass, "fullscreen?", VALUEFUNC(_wrap_Window_fullscreenq___), -1);
-  rb_define_method(SwigClassWindow.klass, "resizable", VALUEFUNC(_wrap_Window_resizable), -1);
+  rb_define_method(SwigClassWindow.klass, "resizable?", VALUEFUNC(_wrap_Window_resizableq___), -1);
   rb_define_method(SwigClassWindow.klass, "update_interval", VALUEFUNC(_wrap_Window_update_interval), -1);
   rb_define_method(SwigClassWindow.klass, "update_interval=", VALUEFUNC(_wrap_Window_update_intervale___), -1);
   rb_define_method(SwigClassWindow.klass, "caption", VALUEFUNC(_wrap_Window_caption), -1);

@@ -765,6 +765,10 @@ module Gosu
     ##
     # Toggles between windowed mode and fullscreen.
     attr_writer :fullscreen
+    
+    ##
+    # @return [true, false] whether this window is resizable.
+    def resizable?; end
 
     ##
     # @return [Float] the interval between calls to {#update}, in milliseconds.
