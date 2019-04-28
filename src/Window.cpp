@@ -98,7 +98,8 @@ struct Gosu::Window::Impl
     unique_ptr<Input> input;
 };
 
-Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval, bool resizable)
+Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval,
+                     bool resizable)
 : pimpl(new Impl)
 {
 #if SDL_VERSION_ATLEAST(2, 0, 5)
