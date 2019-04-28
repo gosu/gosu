@@ -86,7 +86,7 @@ struct Gosu::Window::Impl
     bool fullscreen;
     double update_interval;
     bool resizable;
-    bool resizing;
+    bool resizing = false;
 
     // A single `bool open` is not good enough to support the tick() method: When close() is called
     // from outside the window's call graph, the next call to tick() must return false (transition
@@ -119,7 +119,6 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
 
     pimpl->update_interval = update_interval;
     pimpl->resizable = resizable;
-    pimpl->resizing = false;
 
     input().on_button_down = [this](Button button) { button_down(button); };
     input().on_button_up   = [this](Button button) { button_up(button); };
