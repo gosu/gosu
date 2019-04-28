@@ -162,24 +162,37 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
     if (fullscreen) {
         actual_width  = Gosu::screen_width(this);
         actual_height = Gosu::screen_height(this);
-
-        double scale_x = 1.0 * actual_width / width;
-        double scale_y = 1.0 * actual_height / height;
-        scale_factor = min(scale_x, scale_y);
-
-        if (scale_x < scale_y) {
-            black_bar_height = (actual_height / scale_x - height) / 2;
+        
+        if (resizable()) {
+            // Resizable fullscreen windows stubbornly follow the desktop resolution.
+            width  = actual_width;
+            height = actual_height;
         }
-        else if (scale_y < scale_x) {
-            black_bar_width = (actual_width / scale_y - width) / 2;
+        else {
+            // Scale the window to fill the desktop resolution.
+            double scale_x = 1.0 * actual_width / width;
+            double scale_y = 1.0 * actual_height / height;
+            scale_factor = min(scale_x, scale_y);
+            // Add black bars to preserve the aspect ratio, if necessary.
+            if (scale_x < scale_y) {
+                black_bar_height = (actual_height / scale_x - height) / 2;
+            }
+            else if (scale_y < scale_x) {
+                black_bar_width = (actual_width / scale_y - width) / 2;
+            }
         }
     }
     else {
-        double max_width  = Gosu::available_width(this);
-        double max_height = Gosu::available_height(this);
+        unsigned max_width  = Gosu::available_width(this);
+        unsigned max_height = Gosu::available_height(this);
         
-        // Don't use scaling if window is resizable.
-        if (!resizable() && (width > max_width || height > max_height)) {
+        if (resizable()) {
+            // If the window is resizable, limit its size, without preserving the aspect ratio.
+            width  = actual_width  = min(width,  max_width);
+            height = actual_height = min(height, max_height);
+        }
+        else if (width > max_width || height > max_height) {
+            // If the window cannot fit on the screen, shrink its contents.
             scale_factor = min(max_width / width, max_height / height);
             actual_width  = width  * scale_factor;
             actual_height = height * scale_factor;
