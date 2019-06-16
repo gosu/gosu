@@ -472,7 +472,6 @@ module Gosu
     # @return [Gosu::GLTexInfo?] information about the underlying OpenGL texture.
     #
     # @see Gosu::GLTexInfo
-    # @see file:examples/OpenGLIntegration.rb
     def gl_tex_info; end
 
     ##
@@ -896,7 +895,6 @@ module Gosu
   # Can be retrieved from some images to use them in OpenGL operations.
   #
   # @see Gosu::Image#gl_tex_info
-  # @see file:examples/OpenGLIntegration.rb
   class GLTexInfo
     ##
     # @return [Integer] OpenGL texture id
@@ -1047,7 +1045,6 @@ module Gosu
     #
     # @see Window#draw
     # @see file:reference/Z-Ordering
-    # @see file:examples/OpenGLIntegration.rb
     def gl(z=nil); end
 
     ##
