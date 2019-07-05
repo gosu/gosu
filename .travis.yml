@@ -65,6 +65,14 @@ before_install:
   - gem update --system
   - gem install rake-compiler minitest --no-doc
 
+
+before_script:
+  # Enable "dummy" devices for audio and video on Linux.
+  - |
+    if [ $TRAVIS_OS_NAME != osx ]; then
+      sudo usermod -a -G audio $USER
+    fi
+
 # Minimal git coverage.
 branches:
   only:
