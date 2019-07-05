@@ -973,6 +973,7 @@ namespace Gosu
 %rename("needs_redraw?") needs_redraw;
 %rename("close!") force_close;
 %rename("fullscreen?") fullscreen;
+%rename("resizable?") resizable;
 %markfunc Gosu::Window "mark_window";
 %include "../../Gosu/Window.hpp"
 

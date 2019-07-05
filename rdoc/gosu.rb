@@ -1,4 +1,4 @@
-# Encoding: UTF-8
+## Encoding: UTF-8
 
 module Gosu
   ##
@@ -472,7 +472,6 @@ module Gosu
     # @return [Gosu::GLTexInfo?] information about the underlying OpenGL texture.
     #
     # @see Gosu::GLTexInfo
-    # @see file:examples/OpenGLIntegration.rb
     def gl_tex_info; end
 
     ##
@@ -765,6 +764,10 @@ module Gosu
     ##
     # Toggles between windowed mode and fullscreen.
     attr_writer :fullscreen
+    
+    ##
+    # @return [true, false] whether this window is resizable.
+    def resizable?; end
 
     ##
     # @return [Float] the interval between calls to {#update}, in milliseconds.
@@ -773,8 +776,9 @@ module Gosu
     ##
     # Creates a new window with the requested size.
     #
-    # @note The actual window may be smaller if the requested size is too large for the current display resolution; in that case, Gosu will automatically scale all coordinates to transparently emulate a larger window. No need to thank us.
-    #
+    # Resizable fullscreen windows always use the full desktop resolution.
+    # Windows that are larger than the desktop resolution will be shrunk.
+    # 
     # @overload initialize(width, height, options = {})
     # @overload initialize(width, height, fullscreen, update_interval = 16.666666)
     #
@@ -782,6 +786,7 @@ module Gosu
     # @param height [Integer] the desired window height.
     # @param [Hash] options
     # @option options [true, false] :fullscreen (false) whether to present the window in fullscreen mode.
+    # @option options [true, false] :resizable (false) whether the window can be resized by the user.
     # @option options [Float] :update_interval (16.666666) the interval between frames, in milliseconds.
     def initialize(width, height, options); end
 
@@ -890,7 +895,6 @@ module Gosu
   # Can be retrieved from some images to use them in OpenGL operations.
   #
   # @see Gosu::Image#gl_tex_info
-  # @see file:examples/OpenGLIntegration.rb
   class GLTexInfo
     ##
     # @return [Integer] OpenGL texture id
@@ -1041,7 +1045,6 @@ module Gosu
     #
     # @see Window#draw
     # @see file:reference/Z-Ordering
-    # @see file:examples/OpenGLIntegration.rb
     def gl(z=nil); end
 
     ##

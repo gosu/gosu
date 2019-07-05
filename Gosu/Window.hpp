@@ -34,14 +34,15 @@ namespace Gosu
         //! \param update_interval Interval in milliseconds between two calls to the update member
         //! function.
         Window(unsigned width, unsigned height, bool fullscreen = false,
-            double update_interval = 16.666666);
+            double update_interval = 16.666666, bool resizable = false);
         virtual ~Window();
 
         unsigned width() const;
         unsigned height() const;
         bool fullscreen() const;
+        bool resizable() const;
         void resize(unsigned width, unsigned height, bool fullscreen);
-        
+
         double update_interval() const;
         void set_update_interval(double update_interval);
 

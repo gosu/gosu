@@ -28,7 +28,7 @@ public:
 class SwigDirector_Window : public Gosu::Window, public Swig::Director {
 
 public:
-    SwigDirector_Window(VALUE self, unsigned int width, unsigned int height, bool fullscreen = false, double update_interval = 16.666666);
+    SwigDirector_Window(VALUE self, unsigned int width, unsigned int height, bool fullscreen = false, double update_interval = 16.666666, bool resizable = false);
     virtual ~SwigDirector_Window();
     virtual void show();
     virtual bool tick();

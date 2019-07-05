@@ -74,7 +74,7 @@ class Gosu::Image
 
   def initialize(*args)
     if args[0].is_a? Gosu::Window
-      Gosu.deprecation_message("Passing a Window to Image#initialize has been deprecated in Gosu 0.9 and this method now uses an options hash, see https://www.libgosu.org/rdoc/Gosu/Image.html.")
+      Gosu.deprecation_message("Passing a Window to Image#initialize has been deprecated in Gosu 0.9 and this method now uses an options hash, see https://www.libgosu.org/rdoc/Gosu/Image.html ")
       if args.size == 7
         initialize_without_window args[1], :tileable => args[2], :rect => args[3..-1]
       else
@@ -91,10 +91,10 @@ class Gosu::Image
 
   def self.from_text(*args)
     if args.size == 4
-      Gosu.deprecation_message("Passing a Window to Image.from_text has been deprecated in Gosu 0.9 and this method now uses an options hash, see https://www.libgosu.org/rdoc/Gosu/Image.html.")
+      Gosu.deprecation_message("Passing a Window to Image.from_text has been deprecated in Gosu 0.9 and this method now uses an options hash, see https://www.libgosu.org/rdoc/Gosu/Image.html ")
       from_text_without_window(args[1], args[3], :font => args[2])
     elsif args.size == 7
-      Gosu.deprecation_message("Passing a Window to Image.from_text has been deprecated in Gosu 0.9 and this method now uses an options hash, see https://www.libgosu.org/rdoc/Gosu/Image.html.")
+      Gosu.deprecation_message("Passing a Window to Image.from_text has been deprecated in Gosu 0.9 and this method now uses an options hash, see https://www.libgosu.org/rdoc/Gosu/Image.html ")
       from_text_without_window(args[1], args[3], :font => args[2],
         :spacing => args[4], :width => args[5], :align => args[6])
     else

@@ -4,19 +4,20 @@
 # custom debugging help:
 class Gosu::Window
   alias initialize_without_hash initialize
-  
+
   def initialize width, height, *args
     if args.empty? or args.first.is_a? Hash
       options = args.first || {}
       fullscreen = options[:fullscreen]
       update_interval = options[:update_interval]
+      resizable = options[:resizable]
     else
       fullscreen, update_interval = *args
     end
     $gosu_gl_blocks = nil
-    initialize_without_hash width, height, !!fullscreen, update_interval || 16.666666
+    initialize_without_hash width, height, !!fullscreen, update_interval || 16.666666, !!resizable
   end
-  
+
   %w(update draw needs_redraw? needs_cursor?
      lose_focus button_down button_up).each do |callback|
     define_method "protected_#{callback}" do |*args|
@@ -56,10 +57,14 @@ end
 module Gosu
   # Keep a reference to these blocks that is only cleared after Window#draw.
   # Otherwise, the GC might free these blocks while Gosu is still rendering.
-  def self.gl(*args, &block)
+  def self.gl(z = nil, &block)
     $gosu_gl_blocks ||= []
     $gosu_gl_blocks << block
-    unsafe_gl(*args, &block)
+    if z.nil?
+      unsafe_gl(&block)
+    else
+      unsafe_gl(z, &block)
+    end
   end
 end
 
