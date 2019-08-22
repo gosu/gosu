@@ -29,15 +29,15 @@ int Gosu_Image_width(Gosu_Image *image);
 int Gosu_Image_height(Gosu_Image *image);
 
 // Rendering
-void Gosu_Image_draw(Gosu_Image *image, double x, double y, double z, unsigned color, int mode);
+void Gosu_Image_draw(Gosu_Image *image, double x, double y, double z, unsigned color, unsigned mode);
 void Gosu_Image_draw_rot(Gosu_Image *image, double x, double y, double z,
                           double angle, double center_x, double center_y,
-                          double scale_x, double scale_y, unsigned color, int mode);
+                          double scale_x, double scale_y, unsigned color, unsigned mode);
 void Gosu_Image_draw_as_quad(Gosu_Image* image, double x1, double y1, unsigned color1,
                                double x2, double y2, unsigned color2,
                                double x3, double y3, unsigned color3,
                                double x4, double y4, unsigned color4,
-                               double z, int mode);
+                               double z, unsigned mode);
 
 // Operations
 void Gosu_Image_insert(Gosu_Image *image, Gosu_Image *source, int x, int y);
