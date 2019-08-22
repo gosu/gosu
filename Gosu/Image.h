@@ -33,12 +33,16 @@ void Gosu_Image_draw(Gosu_Image *image, double x, double y, double z, unsigned c
 void Gosu_Image_draw_rot(Gosu_Image *image, double x, double y, double z,
                           double angle, double center_x, double center_y,
                           double scale_x, double scale_y, unsigned color, int mode);
-void Gosu_Image_draw_as_quad();
+void Gosu_Image_draw_as_quad(Gosu_Image* image, double x1, double y1, unsigned color1,
+                               double x2, double y2, unsigned color2,
+                               double x3, double y3, unsigned color3,
+                               double x4, double y4, unsigned color4,
+                               double z, int mode);
 
 // Operations
 void Gosu_Image_insert(Gosu_Image *image, Gosu_Image *source, int x, int y);
 void Gosu_Image_save(Gosu_Image *image, char *filename);
-char* Gosu_Image_to_blob(Gosu_Image *image);
+const char* Gosu_Image_to_blob(Gosu_Image *image);
 Gosu_GLTexInfo Gosu_Image_gl_texinfo(Gosu_Image *image);
 
 #ifdef __cplusplus
