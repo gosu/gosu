@@ -4,9 +4,9 @@ extern "C" {
   #include <Gosu/Image.h>
 
   // Constructors
-  Gosu_Image* Gosu_Image_create(char* filename, unsigned image_flags)
+  Gosu_Image* Gosu_Image_create(const char* filename, unsigned image_flags)
   {
-    return reinterpret_cast<Gosu_Image*>( new Gosu::Image(std::string(filename), image_flags) );
+    return reinterpret_cast<Gosu_Image*>( new Gosu::Image(filename, image_flags) );
   };
 
   // Properties
@@ -18,6 +18,19 @@ extern "C" {
   int Gosu_Image_height(Gosu_Image* image)
   {
     return reinterpret_cast<Gosu::Image*>( image )->height();
+  }
+
+  Gosu_GLTexInfo* Gosu_Image_gl_texinfo(Gosu_Image* image)
+  {
+    Gosu_GLTexInfo* tex_info;
+    const Gosu::GLTexInfo* gosu_texture_info = reinterpret_cast<Gosu::Image*>( image )->data().gl_tex_info();
+
+    tex_info->texture_name = gosu_texture_info->tex_name;
+    tex_info->left         = gosu_texture_info->left;
+    tex_info->right        = gosu_texture_info->right;
+    tex_info->top          = gosu_texture_info->top;
+    tex_info->bottom       = gosu_texture_info->bottom;
+    return tex_info;
   }
 
   // Rendering
@@ -76,7 +89,7 @@ extern "C" {
     return reinterpret_cast<const char*>( gosu_image->data().to_bitmap().data() );
   }
 
-  void Gosu_Image_save(Gosu_Image* image, char* filename)
+  void Gosu_Image_save(Gosu_Image* image, const char* filename)
   {
     Gosu::save_image_file(reinterpret_cast<Gosu::Image*>( image )->data().to_bitmap(), filename);
   }
