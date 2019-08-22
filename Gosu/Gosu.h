@@ -1,6 +1,6 @@
 #pragma once
 
-// #include <Gosu/Window.h>
+#include <Gosu/Window.h>
 #include <Gosu/Image.h>
 // #include <Gosu/Font.h>
 // #include <Gosu/TextInput.h>
