@@ -17,17 +17,26 @@ extern "C" {
 
   void Gosu_Window_update(Gosu_Window* window, void function())
   {
-    // reinterpret_cast<Gosu::Window*>( window )->draw_callback(&function);
   }
 
   void Gosu_Window_button_down(Gosu_Window* window, void function())
   {
-    // reinterpret_cast<Gosu::Window*>( window )->draw_callback(&function);
   }
 
   void Gosu_Window_button_up(Gosu_Window* window, void function())
   {
-    // reinterpret_cast<Gosu::Window*>( window )->draw_callback(&function);
+  }
+
+  void Gosu_Window_button_drop(Gosu_Window* window, void function())
+  {
+  }
+
+  void Gosu_Window_button_needs_redraw(Gosu_Window* window, void function())
+  {
+  }
+
+  void Gosu_Window_button_needs_cursor(Gosu_Window* window, void function())
+  {
   }
 
   void Gosu_Window_show(Gosu_Window* window)
@@ -35,14 +44,41 @@ extern "C" {
     reinterpret_cast<Gosu::Window*>( window )->show();
   }
 
+  void Gosu_Window_set_caption(Gosu_Window* window, const char* caption)
+  {
+    reinterpret_cast<Gosu::Window*>( window )->set_caption(caption);
+  }
+
+  void Gosu_Window_set_update_interval(Gosu_Window* window, double update_interval)
+  {
+    reinterpret_cast<Gosu::Window*>( window )->set_update_interval(update_interval);
+  }
+
+  void Gosu_Window_set_mouse_x(Gosu_Window* window, int x)
+  {
+    Gosu::Window* gosu_window = reinterpret_cast<Gosu::Window*>( window );
+    gosu_window->input().set_mouse_position(x, gosu_window->input().mouse_x());
+  }
+
+  void Gosu_Window_set_mouse_y(Gosu_Window* window, int y)
+  {
+    Gosu::Window* gosu_window = reinterpret_cast<Gosu::Window*>( window );
+    gosu_window->input().set_mouse_position(gosu_window->input().mouse_x(), y);
+  }
+
+  double Gosu_Window_mouse_x(Gosu_Window* window)
+  {
+   return reinterpret_cast<Gosu::Window*>( window )->input().mouse_x();
+  }
+
+  double Gosu_Window_mouse_y(Gosu_Window* window)
+  {
+   return reinterpret_cast<Gosu::Window*>( window )->input().mouse_y();
+  }
+
   void Gosu_Window_resize(Gosu_Window* window, int width, int height, int fullscreen)
   {
     reinterpret_cast<Gosu::Window*>( window )->resize(width, height, fullscreen);
-  }
-
-  int Gosu_Window_is_button_down(Gosu_Window* window, int btn)
-  {
-    return Gosu::Input::down((Gosu::ButtonName)btn);
   }
 
   // Destructor
