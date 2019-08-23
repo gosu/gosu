@@ -44,9 +44,19 @@ extern "C" {
     reinterpret_cast<Gosu::Window*>( window )->show();
   }
 
+  const char* Gosu_Window_caption(Gosu_Window* window)
+  {
+    reinterpret_cast<Gosu::Window*>( window )->caption();
+  }
+
   void Gosu_Window_set_caption(Gosu_Window* window, const char* caption)
   {
     reinterpret_cast<Gosu::Window*>( window )->set_caption(caption);
+  }
+
+  double Gosu_Window_update_interval(Gosu_Window* window)
+  {
+    reinterpret_cast<Gosu::Window*>( window )->update_interval();
   }
 
   void Gosu_Window_set_update_interval(Gosu_Window* window, double update_interval)
