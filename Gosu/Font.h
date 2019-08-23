@@ -29,6 +29,7 @@
 
   void Gosu_Font_set_image(Gosu_Font* font, const char codepoint, unsigned font_flags, Gosu_Image* image);
 
+  void Gosu_Font_destroy(Gosu_Font* font);
 
 #ifdef __cplusplus
   }

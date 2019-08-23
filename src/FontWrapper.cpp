@@ -62,4 +62,9 @@ extern "C" {
     const Gosu::Image* gosu_image = reinterpret_cast<Gosu::Image*>( image );
     reinterpret_cast<Gosu::Font*>( font )->set_image(std::string(&codepoint), font_flags, *gosu_image);
   }
+
+  void Gosu_Font_destroy(Gosu_Font* font)
+  {
+    delete( reinterpret_cast<Gosu::Font*>( font ) );
+  }
 }
