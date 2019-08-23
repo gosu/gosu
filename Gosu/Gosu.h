@@ -6,7 +6,7 @@
 
 #include <Gosu/Window.h>
 #include <Gosu/Image.h>
-// #include <Gosu/Font.h>
+#include <Gosu/Font.h>
 // #include <Gosu/TextInput.h>
 // #include <Gosu/Sample.h>
 // #include <Gosu/Song.h>
