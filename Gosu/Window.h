@@ -1,6 +1,25 @@
 #pragma once
 
 #ifdef __cplusplus
+  namespace Gosu
+  {
+    class WindowForWrapper : public Gosu::Window
+    {
+    struct Callbacks
+    {
+      void (*update)();
+      void (*draw)();
+    } callbacks;
+
+    public:
+        WindowForWrapper(int width, int height, bool fullscreen, double update_interval, bool resizable);
+        void set_draw(void function());
+        void set_update(void function());
+        void update() override;
+        void draw() override;
+    };
+  }
+
   extern "C" {
 #endif
 

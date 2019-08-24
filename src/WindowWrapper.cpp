@@ -1,5 +1,36 @@
 #include <Gosu/Gosu.hpp>
-#include <Gosu/WindowForWrapper.hpp>
+#include <Gosu/Window.h>
+
+Gosu::WindowForWrapper::WindowForWrapper(int width, int height, bool fullscreen,
+                                         double update_interval, bool resizable)
+: Gosu::Window(width, height, fullscreen, update_interval, resizable) {
+}
+
+void Gosu::WindowForWrapper::set_update(void function())
+{
+  callbacks.update = function;
+}
+
+void Gosu::WindowForWrapper::set_draw(void function())
+{
+  callbacks.draw = function;
+}
+
+void Gosu::WindowForWrapper::update()
+{
+  if (callbacks.update != nullptr)
+  {
+    callbacks.update();
+  }
+}
+
+void Gosu::WindowForWrapper::draw()
+{
+  if (callbacks.draw != nullptr)
+  {
+    callbacks.draw();
+  }
+}
 
 extern "C" {
   #include <Gosu/Window.h>
