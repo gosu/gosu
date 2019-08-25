@@ -7,16 +7,32 @@
     {
     struct Callbacks
     {
-      void (*update)();
-      void (*draw)();
+      void (*update)() = nullptr;
+      void (*draw)() = nullptr;
+      void (*button_down)(unsigned btn) = nullptr;
+      void (*button_up)(unsigned btn) = nullptr;
+      void (*drop)(const char* filename) = nullptr;
+      int (*needs_redraw)() = nullptr; // explicitly set to prevent segfault
+      int (*needs_cursor)() = nullptr;
     } callbacks;
 
     public:
         WindowForWrapper(int width, int height, bool fullscreen, double update_interval, bool resizable);
         void set_draw(void function());
         void set_update(void function());
+        void set_button_down(void function(unsigned btn));
+        void set_button_up(void function(unsigned btn));
+        void set_drop(void function(const char* filename));
+        void set_needs_redraw(int function());
+        void set_needs_cursor(int function());
+
         void update() override;
         void draw() override;
+        void button_down(Gosu::Button btn) override;
+        void button_up(Gosu::Button btn) override;
+        void drop(const std::string& filename) override;
+        bool needs_redraw() const override;
+        bool needs_cursor() const override;
     };
   }
 
@@ -31,11 +47,11 @@ Gosu_Window* Gosu_Window_create(int width, int height, int fullscreen, double up
 // callbacks
 void Gosu_Window_update(Gosu_Window* window, void function());
 void Gosu_Window_draw(Gosu_Window* window, void function());
-void Gosu_Window_button_down(Gosu_Window* window, void function());
-void Gosu_Window_button_up(Gosu_Window* window, void function());
-void Gosu_Window_drop(Gosu_Window* window, void function());
-void Gosu_Window_needs_redraw(Gosu_Window* window, void function());
-void Gosu_Window_needs_cursor(Gosu_Window* window, void function());
+void Gosu_Window_button_down(Gosu_Window* window, void function(unsigned btn));
+void Gosu_Window_button_up(Gosu_Window* window, void function(unsigned btn));
+void Gosu_Window_drop(Gosu_Window* window, void function(const char* filename));
+void Gosu_Window_needs_redraw(Gosu_Window* window, int function());
+void Gosu_Window_needs_cursor(Gosu_Window* window, int function());
 
 // Properties
 int Gosu_Window_width(Gosu_Window* window);

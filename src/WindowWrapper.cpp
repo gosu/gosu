@@ -16,6 +16,31 @@ void Gosu::WindowForWrapper::set_draw(void function())
   callbacks.draw = function;
 }
 
+void Gosu::WindowForWrapper::set_button_down(void function(unsigned btn))
+{
+  callbacks.button_down = function;
+}
+
+void Gosu::WindowForWrapper::set_button_up(void function(unsigned btn))
+{
+  callbacks.button_up = function;
+}
+
+void Gosu::WindowForWrapper::set_drop(void function(const char* filename))
+{
+  callbacks.drop = function;
+}
+
+void Gosu::WindowForWrapper::set_needs_redraw(int function())
+{
+  callbacks.needs_redraw = function;
+}
+
+void Gosu::WindowForWrapper::set_needs_cursor(int function())
+{
+  callbacks.needs_cursor = function;
+}
+
 void Gosu::WindowForWrapper::update()
 {
   if (callbacks.update != nullptr)
@@ -29,6 +54,50 @@ void Gosu::WindowForWrapper::draw()
   if (callbacks.draw != nullptr)
   {
     callbacks.draw();
+  }
+}
+
+void Gosu::WindowForWrapper::button_down(Gosu::Button btn)
+{
+  if (callbacks.button_down != nullptr)
+  {
+    callbacks.button_down(btn.id());
+  }
+}
+
+void Gosu::WindowForWrapper::button_up(Gosu::Button btn)
+{
+  if (callbacks.button_up != nullptr)
+  {
+    callbacks.button_up(btn.id());
+  }
+}
+
+void Gosu::WindowForWrapper::drop(const std::string& filename)
+{
+  if (callbacks.drop != nullptr)
+  {
+    callbacks.drop(filename.c_str());
+  }
+}
+
+bool Gosu::WindowForWrapper::needs_redraw() const
+{
+  if (callbacks.needs_redraw != nullptr)
+  {
+    return callbacks.needs_redraw();
+  } else {
+    return true;
+  }
+}
+
+bool Gosu::WindowForWrapper::needs_cursor() const
+{
+  if (callbacks.needs_cursor != nullptr)
+  {
+    return callbacks.needs_cursor();
+  } else {
+    return false;
   }
 }
 
@@ -52,24 +121,29 @@ extern "C" {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_update(function);
   }
 
-  void Gosu_Window_button_down(Gosu_Window* window, void function())
+  void Gosu_Window_button_down(Gosu_Window* window, void function(unsigned btn))
   {
+    reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_button_down(function);
   }
 
-  void Gosu_Window_button_up(Gosu_Window* window, void function())
+  void Gosu_Window_button_up(Gosu_Window* window, void function(unsigned btn))
   {
+    reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_button_up(function);
   }
 
-  void Gosu_Window_button_drop(Gosu_Window* window, void function())
+  void Gosu_Window_drop(Gosu_Window* window, void function(const char* filename))
   {
+    reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_drop(function);
   }
 
-  void Gosu_Window_button_needs_redraw(Gosu_Window* window, void function())
+  void Gosu_Window_needs_redraw(Gosu_Window* window, int function())
   {
+    reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_needs_redraw(function);
   }
 
-  void Gosu_Window_button_needs_cursor(Gosu_Window* window, void function())
+  void Gosu_Window_needs_cursor(Gosu_Window* window, int function())
   {
+    reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_needs_cursor(function);
   }
 
   void Gosu_Window_show(Gosu_Window* window)
