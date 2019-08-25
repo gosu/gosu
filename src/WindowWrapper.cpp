@@ -1,5 +1,39 @@
 #include <Gosu/Gosu.hpp>
-#include <Gosu/Window.h>
+
+namespace Gosu
+{
+  class WindowForWrapper : public Gosu::Window
+  {
+  struct Callbacks
+  {
+    void (*update)() = nullptr;
+    void (*draw)() = nullptr;
+    void (*button_down)(unsigned btn) = nullptr;
+    void (*button_up)(unsigned btn) = nullptr;
+    void (*drop)(const char* filename) = nullptr;
+    int (*needs_redraw)() = nullptr; // explicitly set to prevent segfault
+    int (*needs_cursor)() = nullptr;
+  } callbacks;
+
+  public:
+      WindowForWrapper(int width, int height, bool fullscreen, double update_interval, bool resizable);
+      void set_draw(void function());
+      void set_update(void function());
+      void set_button_down(void function(unsigned btn));
+      void set_button_up(void function(unsigned btn));
+      void set_drop(void function(const char* filename));
+      void set_needs_redraw(int function());
+      void set_needs_cursor(int function());
+
+      void update() override;
+      void draw() override;
+      void button_down(Gosu::Button btn) override;
+      void button_up(Gosu::Button btn) override;
+      void drop(const std::string& filename) override;
+      bool needs_redraw() const override;
+      bool needs_cursor() const override;
+  };
+}
 
 Gosu::WindowForWrapper::WindowForWrapper(int width, int height, bool fullscreen,
                                          double update_interval, bool resizable)
@@ -31,60 +65,54 @@ void Gosu::WindowForWrapper::set_drop(void function(const char* filename))
   callbacks.drop = function;
 }
 
-void Gosu::WindowForWrapper::set_needs_redraw(int function())
+void Gosu::WindowForWrapper::set_needs_redraw(int function(void))
 {
   callbacks.needs_redraw = function;
 }
 
-void Gosu::WindowForWrapper::set_needs_cursor(int function())
+void Gosu::WindowForWrapper::set_needs_cursor(int function(void))
 {
   callbacks.needs_cursor = function;
 }
 
 void Gosu::WindowForWrapper::update()
 {
-  if (callbacks.update != nullptr)
-  {
+  if (callbacks.update != nullptr) {
     callbacks.update();
   }
 }
 
 void Gosu::WindowForWrapper::draw()
 {
-  if (callbacks.draw != nullptr)
-  {
+  if (callbacks.draw != nullptr) {
     callbacks.draw();
   }
 }
 
 void Gosu::WindowForWrapper::button_down(Gosu::Button btn)
 {
-  if (callbacks.button_down != nullptr)
-  {
+  if (callbacks.button_down != nullptr) {
     callbacks.button_down(btn.id());
   }
 }
 
 void Gosu::WindowForWrapper::button_up(Gosu::Button btn)
 {
-  if (callbacks.button_up != nullptr)
-  {
+  if (callbacks.button_up != nullptr) {
     callbacks.button_up(btn.id());
   }
 }
 
 void Gosu::WindowForWrapper::drop(const std::string& filename)
 {
-  if (callbacks.drop != nullptr)
-  {
+  if (callbacks.drop != nullptr) {
     callbacks.drop(filename.c_str());
   }
 }
 
 bool Gosu::WindowForWrapper::needs_redraw() const
 {
-  if (callbacks.needs_redraw != nullptr)
-  {
+  if (callbacks.needs_redraw != nullptr) {
     return callbacks.needs_redraw();
   } else {
     return true;
@@ -93,8 +121,7 @@ bool Gosu::WindowForWrapper::needs_redraw() const
 
 bool Gosu::WindowForWrapper::needs_cursor() const
 {
-  if (callbacks.needs_cursor != nullptr)
-  {
+  if (callbacks.needs_cursor != nullptr) {
     return callbacks.needs_cursor();
   } else {
     return false;
@@ -105,7 +132,7 @@ extern "C" {
   #include <Gosu/Window.h>
 
   // Constructor
-  Gosu_Window* Gosu_Window_create(int width, int height, int fullscreen, double update_interval, int resizable)
+  Gosu_Window* Gosu_Window_create(int width, int height, bool fullscreen, double update_interval, bool resizable)
   {
     return reinterpret_cast<Gosu_Window*>( new Gosu::WindowForWrapper(width, height, fullscreen, update_interval, resizable) );
   };
@@ -136,12 +163,12 @@ extern "C" {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_drop(function);
   }
 
-  void Gosu_Window_set_needs_redraw(Gosu_Window* window, int function())
+  void Gosu_Window_set_needs_redraw(Gosu_Window* window, int function(void))
   {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_needs_redraw(function);
   }
 
-  void Gosu_Window_set_needs_cursor(Gosu_Window* window, int function())
+  void Gosu_Window_set_needs_cursor(Gosu_Window* window, int function(void))
   {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_needs_cursor(function);
   }
