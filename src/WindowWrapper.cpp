@@ -111,37 +111,37 @@ extern "C" {
   };
 
   // Callbacks
-  void Gosu_Window_draw(Gosu_Window* window, void function())
+  void Gosu_Window_set_draw(Gosu_Window* window, void function())
   {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_draw(function);
   }
 
-  void Gosu_Window_update(Gosu_Window* window, void function())
+  void Gosu_Window_set_update(Gosu_Window* window, void function())
   {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_update(function);
   }
 
-  void Gosu_Window_button_down(Gosu_Window* window, void function(unsigned btn))
+  void Gosu_Window_set_button_down(Gosu_Window* window, void function(unsigned btn))
   {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_button_down(function);
   }
 
-  void Gosu_Window_button_up(Gosu_Window* window, void function(unsigned btn))
+  void Gosu_Window_set_button_up(Gosu_Window* window, void function(unsigned btn))
   {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_button_up(function);
   }
 
-  void Gosu_Window_drop(Gosu_Window* window, void function(const char* filename))
+  void Gosu_Window_set_drop(Gosu_Window* window, void function(const char* filename))
   {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_drop(function);
   }
 
-  void Gosu_Window_needs_redraw(Gosu_Window* window, int function())
+  void Gosu_Window_set_needs_redraw(Gosu_Window* window, int function())
   {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_needs_redraw(function);
   }
 
-  void Gosu_Window_needs_cursor(Gosu_Window* window, int function())
+  void Gosu_Window_set_needs_cursor(Gosu_Window* window, int function())
   {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_needs_cursor(function);
   }

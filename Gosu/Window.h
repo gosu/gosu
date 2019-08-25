@@ -45,13 +45,13 @@ typedef struct Gosu_Window Gosu_Window;
 Gosu_Window* Gosu_Window_create(int width, int height, int fullscreen, double update_interval, int resizable);
 
 // callbacks
-void Gosu_Window_update(Gosu_Window* window, void function());
-void Gosu_Window_draw(Gosu_Window* window, void function());
-void Gosu_Window_button_down(Gosu_Window* window, void function(unsigned btn));
-void Gosu_Window_button_up(Gosu_Window* window, void function(unsigned btn));
-void Gosu_Window_drop(Gosu_Window* window, void function(const char* filename));
-void Gosu_Window_needs_redraw(Gosu_Window* window, int function());
-void Gosu_Window_needs_cursor(Gosu_Window* window, int function());
+void Gosu_Window_set_update(Gosu_Window* window, void function());
+void Gosu_Window_set_draw(Gosu_Window* window, void function());
+void Gosu_Window_set_button_down(Gosu_Window* window, void function(unsigned btn));
+void Gosu_Window_set_button_up(Gosu_Window* window, void function(unsigned btn));
+void Gosu_Window_set_drop(Gosu_Window* window, void function(const char* filename));
+void Gosu_Window_set_needs_redraw(Gosu_Window* window, int function());
+void Gosu_Window_set_needs_cursor(Gosu_Window* window, int function());
 
 // Properties
 int Gosu_Window_width(Gosu_Window* window);
