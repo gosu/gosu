@@ -146,6 +146,9 @@ extern "C" {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_needs_cursor(function);
   }
 
+
+
+
   void Gosu_Window_show(Gosu_Window* window)
   {
     reinterpret_cast<Gosu::Window*>( window )->show();
@@ -196,6 +199,11 @@ extern "C" {
   void Gosu_Window_resize(Gosu_Window* window, int width, int height, int fullscreen)
   {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->resize(width, height, fullscreen);
+  }
+
+  int Gosu_Window_is_button_down(Gosu_Window* window, unsigned btn)
+  {
+    return reinterpret_cast<Gosu::Window*>( window )->input().down(Gosu::Button(btn));
   }
 
   // Destructor

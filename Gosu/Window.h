@@ -64,6 +64,7 @@ const char* Gosu_Window_caption(Gosu_Window* window);
 int Gosu_Window_text_input(Gosu_Window* window); // TODO: implement Gosu_TextInput
 double Gosu_Window_mouse_x(Gosu_Window* window);
 double Gosu_Window_mouse_y(Gosu_Window* window);
+int Gosu_Window_is_button_down(Gosu_Window* window, unsigned btn);
 
 // Setters
 void Gosu_Window_set_text_input(Gosu_Window* window); // Gosu_TextInput* text_input
