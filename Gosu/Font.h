@@ -27,7 +27,7 @@
                                  double rel_x, double rel_y, double scale_x, double scale_y,
                                  unsigned c, unsigned mode);
 
-  void Gosu_Font_set_image(Gosu_Font* font, const char codepoint, unsigned font_flags, Gosu_Image* image);
+  void Gosu_Font_set_image(Gosu_Font* font, const char* codepoint, unsigned font_flags, Gosu_Image* image);
 
   void Gosu_Font_destroy(Gosu_Font* font);
 

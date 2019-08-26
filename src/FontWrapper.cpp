@@ -56,11 +56,11 @@ extern "C" {
     reinterpret_cast<Gosu::Font*>( font )->draw_markup_rel(text, x, y, z, rel_x, rel_y, scale_x, scale_y, c, (Gosu::AlphaMode) mode);
   }
 
-  void Gosu_Font_set_image(Gosu_Font* font, const char codepoint, unsigned font_flags, Gosu_Image* image)
+  void Gosu_Font_set_image(Gosu_Font* font, const char* codepoint, unsigned font_flags, Gosu_Image* image)
   {
 
     const Gosu::Image* gosu_image = reinterpret_cast<Gosu::Image*>( image );
-    reinterpret_cast<Gosu::Font*>( font )->set_image(std::string(&codepoint), font_flags, *gosu_image);
+    reinterpret_cast<Gosu::Font*>( font )->set_image(codepoint, font_flags, *gosu_image);
   }
 
   void Gosu_Font_destroy(Gosu_Font* font)
