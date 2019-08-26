@@ -46,6 +46,11 @@ extern "C" {
     Gosu::Graphics::transform(Gosu::rotate(angle, around_x, around_y), function);
   }
 
+  void Gosu_clip_to(double x, double y, double width, double height, void function())
+  {
+    Gosu::Graphics::clip_to(x, y, width, height, function);
+  }
+
   void Gosu_draw_line(double x1, double y1, unsigned c1,
                     double x2, double y2, unsigned c2,
                     double z, unsigned mode)

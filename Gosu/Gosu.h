@@ -29,6 +29,8 @@ void Gosu_translate(double x, double y, void function());
 void Gosu_scale(double scale_x, double scale_y, double around_x, double around_y, void function());
 void Gosu_rotate(double angle, double around_x, double around_y, void function());
 
+void Gosu_clip_to(double x, double y, double width, double height, void function());
+
 // Rendering
 void Gosu_draw_line(double x1, double y1, unsigned c1,
                     double x2, double y2, unsigned c2,

@@ -10,12 +10,12 @@ extern "C" {
   };
 
   // Properties
-  int Gosu_Image_width(Gosu_Image* image)
+  const unsigned Gosu_Image_width(Gosu_Image* image)
   {
     return reinterpret_cast<Gosu::Image*>( image )->width();
   }
 
-  int Gosu_Image_height(Gosu_Image* image)
+  const unsigned Gosu_Image_height(Gosu_Image* image)
   {
     return reinterpret_cast<Gosu::Image*>( image )->height();
   }

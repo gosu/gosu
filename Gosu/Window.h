@@ -18,6 +18,7 @@ void Gosu_Window_set_button_up(Gosu_Window* window, void function(unsigned btn))
 void Gosu_Window_set_drop(Gosu_Window* window, void function(const char* filename));
 void Gosu_Window_set_needs_redraw(Gosu_Window* window, int function(void));
 void Gosu_Window_set_needs_cursor(Gosu_Window* window, int function(void));
+void Gosu_Window_set_close(Gosu_Window* window, void function());
 
 // Properties
 int Gosu_Window_width(Gosu_Window* window);
@@ -36,13 +37,16 @@ int Gosu_Window_is_button_down(Gosu_Window* window, unsigned btn);
 void Gosu_Window_set_text_input(Gosu_Window* window); // Gosu_TextInput* text_input
 void Gosu_Window_set_caption(Gosu_Window* window, const char* caption);
 void Gosu_Window_set_update_interval(Gosu_Window* window, double update_interval);
-void Gosu_Window_set_mouse_x(Gosu_Window* window, int width);
-void Gosu_Window_set_mouse_y(Gosu_Window* window, int height);
+void Gosu_Window_set_mouse_x(Gosu_Window* window, double width);
+void Gosu_Window_set_mouse_y(Gosu_Window* window, double height);
+void Gosu_Window_set_width(Gosu_Window* window, int width);
+void Gosu_Window_set_height(Gosu_Window* window, int height);
 
 void Gosu_Window_resize(Gosu_Window* window, int width, int height, int fullscreen);
 
 // Main Loop
 void Gosu_Window_show(Gosu_Window* window);
+void Gosu_Window_close_immediately(Gosu_Window* window);
 int Gosu_Window_tick(Gosu_Window* window);
 
 // Destructor
