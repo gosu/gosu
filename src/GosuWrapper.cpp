@@ -117,24 +117,40 @@ extern "C" {
     return Gosu::random(min, max);
   }
 
-  int Gosu_available_width()
+  unsigned Gosu_available_width(Gosu_Window* window)
   {
-    return Gosu::available_width();
+    Gosu::Window* gosu_window = nullptr;
+    if (window != nullptr) {
+      gosu_window = reinterpret_cast<Gosu::Window*>( window );
+    }
+    return Gosu::available_width(gosu_window);
   }
 
-  int Gosu_available_height()
+  unsigned Gosu_available_height(Gosu_Window* window)
   {
-    return Gosu::available_height();
+    Gosu::Window* gosu_window = nullptr;
+    if (window != nullptr) {
+      gosu_window = reinterpret_cast<Gosu::Window*>( window );
+    }
+    return Gosu::available_height(gosu_window);
   }
 
-  int Gosu_screen_width()
+  unsigned Gosu_screen_width(Gosu_Window* window)
   {
-    return Gosu::screen_width();
+    Gosu::Window* gosu_window = nullptr;
+    if (window != nullptr) {
+      gosu_window = reinterpret_cast<Gosu::Window*>( window );
+    }
+    return Gosu::screen_width(gosu_window);
   }
 
-  int Gosu_screen_height()
+  unsigned Gosu_screen_height(Gosu_Window* window)
   {
-    return Gosu::screen_height();
+    Gosu::Window* gosu_window = nullptr;
+    if (window != nullptr) {
+      gosu_window = reinterpret_cast<Gosu::Window*>( window );
+    }
+    return Gosu::screen_height(gosu_window);
   }
 
   int Gosu_button_down(int btn)

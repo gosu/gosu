@@ -29,6 +29,7 @@ namespace Gosu
 
       void update() override;
       void draw() override;
+      void gosu_button_down(unsigned btn); // Enables fullscreen toggle
       void button_down(Gosu::Button btn) override;
       void button_up(Gosu::Button btn) override;
       void drop(const std::string& filename) override;
@@ -97,6 +98,11 @@ void Gosu::WindowForWrapper::draw()
   if (callbacks.draw != nullptr) {
     callbacks.draw();
   }
+}
+
+void Gosu::WindowForWrapper::gosu_button_down(unsigned btn)
+{
+  Gosu::Window::button_down(Gosu::ButtonName(btn));
 }
 
 void Gosu::WindowForWrapper::button_down(Gosu::Button btn)
@@ -180,6 +186,11 @@ extern "C" {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_button_down(function);
   }
 
+  void Gosu_Window_gosu_button_down(Gosu_Window* window, unsigned btn)
+  {
+    reinterpret_cast<Gosu::WindowForWrapper*>( window )->gosu_button_down(btn);
+  }
+
   void Gosu_Window_set_button_up(Gosu_Window* window, void function(unsigned btn))
   {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_button_up(function);
@@ -216,6 +227,11 @@ extern "C" {
   void Gosu_Window_close_immediately(Gosu_Window* window)
   {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->close_immediately();
+  }
+
+  bool Gosu_Window_fullscreen(Gosu_Window* window)
+  {
+    return reinterpret_cast<Gosu::WindowForWrapper*>( window )->fullscreen();
   }
 
   const char* Gosu_Window_caption(Gosu_Window* window)
@@ -283,7 +299,7 @@ extern "C" {
     gosu_window->resize(gosu_window->width(), height, gosu_window->fullscreen());
   }
 
-  void Gosu_Window_resize(Gosu_Window* window, int width, int height, int fullscreen)
+  void Gosu_Window_resize(Gosu_Window* window, int width, int height, bool fullscreen)
   {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->resize(width, height, fullscreen);
   }

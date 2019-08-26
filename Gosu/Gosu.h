@@ -58,10 +58,10 @@ double Gosu_offset_y(double theta, double r);
 double Gosu_random(double min, double max);
 
 // Window/Screen information
-int Gosu_available_width();
-int Gosu_available_height();
-int Gosu_screen_width();
-int Gosu_screen_height();
+unsigned Gosu_available_width(Gosu_Window* window);
+unsigned Gosu_available_height(Gosu_Window* window);
+unsigned Gosu_screen_width(Gosu_Window* window);
+unsigned Gosu_screen_height(Gosu_Window* window);
 
 // Button querying
 int Gosu_button_down(int id);

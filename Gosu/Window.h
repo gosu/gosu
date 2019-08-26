@@ -20,10 +20,12 @@ void Gosu_Window_set_needs_redraw(Gosu_Window* window, int function(void));
 void Gosu_Window_set_needs_cursor(Gosu_Window* window, int function(void));
 void Gosu_Window_set_close(Gosu_Window* window, void function());
 
+void Gosu_Window_gosu_button_down(Gosu_Window* window, unsigned btn);
+
 // Properties
 int Gosu_Window_width(Gosu_Window* window);
 int Gosu_Window_height(Gosu_Window* window);
-int Gosu_Window_fullscreen(Gosu_Window* window);
+bool Gosu_Window_fullscreen(Gosu_Window* window);
 double Gosu_Window_update_interval(Gosu_Window* window);
 int Gosu_Window_resizable(Gosu_Window* window);
 const char* Gosu_Window_caption(Gosu_Window* window);
@@ -42,7 +44,7 @@ void Gosu_Window_set_mouse_y(Gosu_Window* window, double height);
 void Gosu_Window_set_width(Gosu_Window* window, int width);
 void Gosu_Window_set_height(Gosu_Window* window, int height);
 
-void Gosu_Window_resize(Gosu_Window* window, int width, int height, int fullscreen);
+void Gosu_Window_resize(Gosu_Window* window, int width, int height, bool fullscreen);
 
 // Main Loop
 void Gosu_Window_show(Gosu_Window* window);
