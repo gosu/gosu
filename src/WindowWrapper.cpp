@@ -124,7 +124,8 @@ bool Gosu::WindowForWrapper::needs_redraw() const
 {
   if (callbacks.needs_redraw != nullptr) {
     return callbacks.needs_redraw();
-  } else {
+  }
+  else {
     return true;
   }
 }
@@ -133,7 +134,8 @@ bool Gosu::WindowForWrapper::needs_cursor() const
 {
   if (callbacks.needs_cursor != nullptr) {
     return callbacks.needs_cursor();
-  } else {
+  }
+  else {
     return false;
   }
 }
@@ -142,7 +144,8 @@ void Gosu::WindowForWrapper::close()
 {
   if (callbacks.close != nullptr) {
     callbacks.close();
-  } else {
+  }
+  else {
     Gosu::Window::close();
   }
 }
