@@ -1,17 +1,17 @@
 #pragma once
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 
 #include <Gosu/Window.h>
 #include <Gosu/Image.h>
 #include <Gosu/Font.h>
-// #include <Gosu/TextInput.h>
+#include <Gosu/Color.h>
+#include <Gosu/TextInput.h>
 // #include <Gosu/Sample.h>
 // #include <Gosu/Song.h>
 // #include <Gosu/Channel.h>
-// #include <Gosu/Color.h>
 // #include <Gosu/GLTexInfo.h>
 
 // #include "Gosu/Buttons.h"
@@ -75,5 +75,5 @@ long Gosu_milliseconds();
 const char* Gosu_default_font_name();
 
 #ifdef __cplusplus
-  }
+}
 #endif
