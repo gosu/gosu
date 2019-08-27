@@ -25,8 +25,8 @@ Gosu_Image* Gosu_Image_create_from_subimage(Gosu_Image *source, int left, int to
 void Gosu_Image_destroy(Gosu_Image *image);
 
 // Image properties
-const unsigned Gosu_Image_width(Gosu_Image *image);
-const unsigned Gosu_Image_height(Gosu_Image *image);
+unsigned Gosu_Image_width(Gosu_Image *image);
+unsigned Gosu_Image_height(Gosu_Image *image);
 
 // Rendering
 void Gosu_Image_draw(Gosu_Image *image, double x, double y, double z, unsigned color, unsigned mode);
