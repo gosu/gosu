@@ -22,7 +22,7 @@ namespace Gosu
         };
         
     public:
-        MPEGFile(Gosu::Reader reader)
+        explicit MPEGFile(Gosu::Reader reader)
         {
             contents_.resize(reader.resource().size() - reader.position());
             reader.read(contents_.data(), contents_.size());
@@ -61,6 +61,11 @@ namespace Gosu
             return SAMPLE_RATE;
         }
         
+        double length() const override
+        {
+            return mpg123_length(handle_) / SAMPLE_RATE;
+        }
+
         std::size_t read_data(void* dest, std::size_t length) override
         {
             std::size_t written = 0;

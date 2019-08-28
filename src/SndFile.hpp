@@ -107,7 +107,7 @@ namespace Gosu
         }
         
     public:
-        SndFile(Reader reader)
+        explicit SndFile(Reader reader)
         : file(nullptr), reader(buffer.front_reader())
         {
             info.format = 0;
@@ -119,7 +119,7 @@ namespace Gosu
             }
         }
         
-        SndFile(const std::string& filename)
+        explicit SndFile(const std::string& filename)
         : file(nullptr), reader(buffer.front_reader())
         {
             info.format = 0;
@@ -160,6 +160,11 @@ namespace Gosu
             return info.samplerate;
         }
         
+        double length() const override
+        {
+            return 1.0 * info.frames / info.samplerate;
+        }
+
         std::size_t read_data(void* dest, std::size_t length) override
         {
             int frame_size = sizeof(short) * info.channels;

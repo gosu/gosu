@@ -28,7 +28,7 @@ namespace Gosu
         stb_vorbis* stream_;
 
     public:
-        OggFile(Gosu::Reader reader)
+        explicit OggFile(Gosu::Reader reader)
         {
             contents_.resize(reader.resource().size() - reader.position());
             reader.read(contents_.data(), contents_.size());
@@ -65,6 +65,11 @@ namespace Gosu
             return sample_rate_;
         }
         
+        double length() const override
+        {
+            return stb_vorbis_stream_length_in_seconds(stream_);
+        }
+
         std::size_t read_data(void* dest, std::size_t length) override
         {
             int samples = 0;

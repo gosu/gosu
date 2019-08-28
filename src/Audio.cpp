@@ -41,20 +41,22 @@ static bool is_ogg_file(const string& filename)
 static Gosu::Song* cur_song = nullptr;
 static bool cur_song_looping;
 
-struct Gosu::Sample::SampleData
+struct Gosu::Sample::Impl
 {
     ALuint buffer;
+    double length;
 
-    SampleData(AudioFile&& audio_file)
+    Impl(AudioFile&& audio_file)
     {
         al_initialize();
         alGenBuffers(1, &buffer);
         alBufferData(buffer, audio_file.format(), &audio_file.decoded_data().front(),
                      static_cast<ALsizei>(audio_file.decoded_data().size()),
                      audio_file.sample_rate());
+        length = audio_file.length();
     }
     
-    ~SampleData()
+    ~Impl()
     {
         // It's hard to free things in the right order in Ruby/Gosu.
         // Make sure buffer isn't deleted after the context/device are shut down.
@@ -72,20 +74,20 @@ Gosu::Sample::Sample(const string& filename)
 {
     if (is_ogg_file(filename)) {
         File file(filename);
-        data.reset(new SampleData(OggFile(file.front_reader())));
+        pimpl.reset(new Impl(OggFile(file.front_reader())));
         return;
     }
     
 #ifdef GOSU_IS_MAC
     File file(filename);
-    data.reset(new SampleData(AudioToolboxFile(file.front_reader())));
+    pimpl.reset(new Impl(AudioToolboxFile(file.front_reader())));
 #else
     try {
-        data.reset(new SampleData(SndFile(filename)));
+        pimpl.reset(new Impl(SndFile(filename)));
     }
     catch (const runtime_error& ex) {
         File file(filename);
-        data.reset(new SampleData(MPEGFile(file.front_reader())));
+        pimpl.reset(new Impl(MPEGFile(file.front_reader())));
     }
 #endif
 }
@@ -93,20 +95,25 @@ Gosu::Sample::Sample(const string& filename)
 Gosu::Sample::Sample(Gosu::Reader reader)
 {
     if (is_ogg_file(reader)) {
-        data.reset(new SampleData(OggFile(reader)));
+        pimpl.reset(new Impl(OggFile(reader)));
         return;
     }
 
 #ifdef GOSU_IS_MAC
-    data.reset(new SampleData(AudioToolboxFile(reader)));
+    pimpl.reset(new Impl(AudioToolboxFile(reader)));
 #else
     try {
-        data.reset(new SampleData(SndFile(reader)));
+        pimpl.reset(new Impl(SndFile(reader)));
     }
     catch (const runtime_error& ex) {
-        data.reset(new SampleData(MPEGFile(reader)));
+        pimpl.reset(new Impl(MPEGFile(reader)));
     }
 #endif
+}
+
+double Gosu::Sample::length() const
+{
+    return pimpl ? pimpl->length : 0.0;
 }
 
 Gosu::Channel Gosu::Sample::play(double volume, double speed, bool looping) const
@@ -116,7 +123,7 @@ Gosu::Channel Gosu::Sample::play(double volume, double speed, bool looping) cons
 
 Gosu::Channel Gosu::Sample::play_pan(double pan, double volume, double speed, bool looping) const
 {
-    if (!data) return Channel();
+    if (!pimpl) return Channel();
 
     Channel channel = allocate_channel();
     
@@ -124,7 +131,7 @@ Gosu::Channel Gosu::Sample::play_pan(double pan, double volume, double speed, bo
     if (channel.current_channel() == NO_CHANNEL) return channel;
     
     ALuint source = al_source_for_channel(channel.current_channel());
-    alSourcei(source, AL_BUFFER, data->buffer);
+    alSourcei(source, AL_BUFFER, pimpl->buffer);
     alSource3f(source, AL_POSITION, pan * 10, 0, 0);
     alSourcef(source, AL_GAIN, max(volume, 0.0));
     alSourcef(source, AL_PITCH, speed);
@@ -133,103 +140,12 @@ Gosu::Channel Gosu::Sample::play_pan(double pan, double volume, double speed, bo
     return channel;
 }
 
-class Gosu::Song::BaseData
-{
-    BaseData(const BaseData&) = delete;
-    BaseData& operator=(const BaseData&) = delete;
-    
-    double volume_;
-
-protected:
-    BaseData() : volume_(1) {}
-    virtual void apply_volume() = 0;
-
-public:
-    virtual ~BaseData() {}
-    virtual void play(bool looping) = 0;
-    virtual void pause() = 0;
-    virtual void resume() = 0;
-    virtual bool paused() const = 0;
-    virtual void stop() = 0;
-    virtual void update() = 0;
-    
-    double volume() const
-    {
-        return volume_;
-    }
-    
-    void set_volume(double volume)
-    {
-        volume_ = clamp(volume, 0.0, 1.0);
-        apply_volume();
-    }
-};
-
-#ifdef GOSU_IS_IPHONE
-// AVAudioPlayer impl
-class Gosu::Song::ModuleData : public BaseData
-{
-    AVAudioPlayer* player;
-    
-    void apply_volume() override
-    {
-        player.volume = volume();
-    }
-    
-public:
-    ModuleData(const string& filename)
-    {
-        NSURL* URL = [NSURL fileURLWithPath:[NSString stringWithUTF8String:filename.c_str()]];
-        player = [[AVAudioPlayer alloc] initWithContentsOfURL:URL error:nil];
-    }
-    
-    void play(bool looping) override
-    {
-        if (paused()) {
-            stop();
-        }
-        player.numberOfLoops = looping ? -1 : 0;
-        [player play];
-    }
-    
-    void pause() override
-    {
-        [player pause];
-    }
-    
-    void resume() override
-    {
-        [player play];
-    }
-    
-    bool paused() const override
-    {
-        return !player.playing;
-    }
-    
-    void stop() override
-    {
-        [player stop];
-        player.currentTime = 0;
-    }
-    
-    void update() override
-    {
-    }
-};
-#endif
-
-// AudioFile impl
-class Gosu::Song::StreamData : public BaseData
+struct Gosu::Song::Impl
 {
     unique_ptr<AudioFile> file;
     ALuint buffers[2];
-    
-    void apply_volume() override
-    {
-        alSourcef(al_source_for_songs(), AL_GAIN, max(volume(), 0.0));
-    }
-    
+    double volume;
+
     bool stream_to_buffer(ALuint buffer)
     {
         #ifdef GOSU_IS_IPHONE
@@ -245,174 +161,65 @@ class Gosu::Song::StreamData : public BaseData
         }
         return read_bytes > 0;
     }
-    
-public:
-    StreamData(const string& filename)
-    {
-        if (is_ogg_file(filename)) {
-            File source_file(filename);
-            file.reset(new OggFile(source_file.front_reader()));
-        }
-        else {
-        #ifdef GOSU_IS_MAC
-            file.reset(new AudioToolboxFile(filename));
-        #else
-            try {
-                file.reset(new SndFile(filename));
-            }
-            catch (const runtime_error& ex) {
-                File source_file(filename);
-                file.reset(new MPEGFile(source_file.front_reader()));
-            }
-        #endif
-        }
-        
-        al_initialize();
-        alGenBuffers(2, buffers);
-    }
-
-    StreamData(Reader reader)
-    {
-        if (is_ogg_file(reader)) {
-            file.reset(new OggFile(reader));
-        }
-        else {
-        #ifdef GOSU_IS_MAC
-            file.reset(new AudioToolboxFile(reader));
-        #else
-            try {
-                file.reset(new SndFile(reader));
-            }
-            catch (const runtime_error& ex) {
-                file.reset(new MPEGFile(reader));
-            }
-        #endif
-        }
-        
-        al_initialize();
-        alGenBuffers(2, buffers);
-    }
-    
-    ~StreamData()
-    {
-        // It's hard to free things in the right order in Ruby/Gosu.
-        // Make sure buffers aren't deleted after the context/device are shut down.
-        if (!al_initialized()) return;
-        
-        alDeleteBuffers(2, buffers);
-    }
-    
-    void play(bool looping) override
-    {
-        ALuint source = al_source_for_songs();
-
-        alSource3f(source, AL_POSITION, 0, 0, 0);
-        alSourcef(source, AL_GAIN, max(volume(), 0.0));
-        alSourcef(source, AL_PITCH, 1);
-        alSourcei(source, AL_LOOPING, AL_FALSE); // need to implement this manually...
-
-        stream_to_buffer(buffers[0]);
-        stream_to_buffer(buffers[1]);
-        
-        // TODO: Not good for songs with less than two buffers full of data.
-        alSourceQueueBuffers(source, 2, buffers);
-        alSourcePlay(source);
-    }
-
-    void stop() override
-    {
-        ALuint source = al_source_for_songs();
-
-        alSourceStop(source);
-
-        // Unqueue all buffers for this source.
-        // The number of QUEUED buffers apparently includes the number of PROCESSED ones,
-        // so getting rid of the QUEUED ones is enough.
-        ALuint buffer;
-        int queued;
-        alGetSourcei(source, AL_BUFFERS_QUEUED, &queued);
-        while (queued--) {
-            alSourceUnqueueBuffers(source, 1, &buffer);
-        }
-        
-        file->rewind();
-    }
-    
-    void pause() override
-    {
-        alSourcePause(al_source_for_songs());
-    }
-    
-    void resume() override
-    {
-        alSourcePlay(al_source_for_songs());
-    }
-    
-    bool paused() const override
-    {
-        ALint state;
-        alGetSourcei(al_source_for_songs(), AL_SOURCE_STATE, &state);
-        return state == AL_PAUSED;
-    }
-    
-    void update() override
-    {
-        ALuint source = al_source_for_songs();
-
-        ALuint buffer;
-        int processed;
-        bool active = true;
-        
-        alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
-        for (int i = 0; i < processed; ++i) {
-            alSourceUnqueueBuffers(source, 1, &buffer);
-            active = stream_to_buffer(buffer);
-            if (active) alSourceQueueBuffers(source, 1, &buffer);
-        }
-        
-        ALint state;
-        alGetSourcei(source, AL_SOURCE_STATE, &state);
-        if (active && state != AL_PLAYING && state != AL_PAUSED) {
-            // We seemingly got starved.
-            alSourcePlay(source);
-        }
-        else if (!active) {
-            // We got starved and there is nothing left to play.
-            stop();
-
-            if (cur_song_looping) {
-                // Start anew.
-                play(true);
-            }
-            else {
-                // Let the world know we're finished.
-                cur_song = nullptr;
-            }
-        }
-    }
 };
 
 Gosu::Song::Song(const string& filename)
+: pimpl(new Impl)
 {
-#ifdef GOSU_IS_IPHONE
-    if (has_extension(filename, ".mp3") ||
-            has_extension(filename, ".aac") ||
-            has_extension(filename, ".m4a")) {
-        data.reset(new ModuleData(filename));
-        return;
+    if (is_ogg_file(filename)) {
+        File source_file(filename);
+        pimpl->file.reset(new OggFile(source_file.front_reader()));
     }
-#endif
-    data.reset(new StreamData(filename));
+    else {
+    #ifdef GOSU_IS_MAC
+        pimpl->file.reset(new AudioToolboxFile(filename));
+    #else
+        try {
+            pimpl->file.reset(new SndFile(filename));
+        }
+        catch (const runtime_error& ex) {
+            File source_file(filename);
+            pimpl->file.reset(new MPEGFile(source_file.front_reader()));
+        }
+    #endif
+    }
+
+    al_initialize();
+    alGenBuffers(2, pimpl->buffers);
 }
 
 Gosu::Song::Song(Reader reader)
+: pimpl(new Impl)
 {
-    data.reset(new StreamData(reader));
+    if (is_ogg_file(reader)) {
+        pimpl->file.reset(new OggFile(reader));
+    }
+    else {
+    #ifdef GOSU_IS_MAC
+        pimpl->file.reset(new AudioToolboxFile(reader));
+    #else
+        try {
+            pimpl->file.reset(new SndFile(reader));
+        }
+        catch (const runtime_error& ex) {
+            pimpl->file.reset(new MPEGFile(reader));
+        }
+    #endif
+    }
+
+    al_initialize();
+    alGenBuffers(2, pimpl->buffers);
 }
 
 Gosu::Song::~Song()
 {
+    // It's hard to free things in the right order in Ruby/Gosu.
+    // Make sure buffers aren't deleted after the context/device are shut down.
+    if (!al_initialized()) return;
+
     stop();
+
+    alDeleteBuffers(2, pimpl->buffers);
 }
 
 Gosu::Song* Gosu::Song::current_song()
@@ -423,7 +230,7 @@ Gosu::Song* Gosu::Song::current_song()
 void Gosu::Song::play(bool looping)
 {
     if (paused()) {
-        data->resume();
+        alSourcePlay(al_source_for_songs());
     }
     
     if (cur_song && cur_song != this) {
@@ -432,7 +239,19 @@ void Gosu::Song::play(bool looping)
     }
     
     if (cur_song == nullptr) {
-        data->play(looping);
+        ALuint source = al_source_for_songs();
+
+        alSource3f(source, AL_POSITION, 0, 0, 0);
+        alSourcef(source, AL_GAIN, volume());
+        alSourcef(source, AL_PITCH, 1);
+        alSourcei(source, AL_LOOPING, AL_FALSE); // need to implement this manually...
+
+        pimpl->stream_to_buffer(pimpl->buffers[0]);
+        pimpl->stream_to_buffer(pimpl->buffers[1]);
+
+        // TODO: Not good for songs with less than two buffers full of data.
+        alSourceQueueBuffers(source, 2, pimpl->buffers);
+        alSourcePlay(source);
     }
     
     cur_song = this;
@@ -442,41 +261,98 @@ void Gosu::Song::play(bool looping)
 void Gosu::Song::pause()
 {
     if (cur_song == this) {
-        data->pause();
+        alSourcePause(al_source_for_songs());
     }
 }
 
 bool Gosu::Song::paused() const
 {
-    return cur_song == this && data->paused();
+    if (cur_song != this) return false;
+
+    ALint state;
+    alGetSourcei(al_source_for_songs(), AL_SOURCE_STATE, &state);
+    return state == AL_PAUSED;
 }
 
 void Gosu::Song::stop()
 {
-    if (cur_song == this) {
-        data->stop();
-        cur_song = nullptr;
+    if (cur_song != this) return;
+    
+    ALuint source = al_source_for_songs();
+
+    alSourceStop(source);
+
+    // Unqueue all buffers for this source.
+    // The number of QUEUED buffers apparently includes the number of PROCESSED ones,
+    // so getting rid of the QUEUED ones is enough.
+    ALuint buffer;
+    int queued;
+    alGetSourcei(source, AL_BUFFERS_QUEUED, &queued);
+    while (queued--) {
+        alSourceUnqueueBuffers(source, 1, &buffer);
     }
+
+    pimpl->file->rewind();
+
+    cur_song = nullptr;
 }
 
 bool Gosu::Song::playing() const
 {
-    return cur_song == this && !data->paused();
+    return cur_song == this && !paused();
+}
+
+double Gosu::Song::length() const
+{
+    return pimpl->file->length();
 }
 
 double Gosu::Song::volume() const
 {
-    return data->volume();
+    return pimpl->volume;
 }
 
 void Gosu::Song::set_volume(double volume)
 {
-    data->set_volume(volume);
+    pimpl->volume = clamp(volume, 0.0, 1.0);
+    alSourcef(al_source_for_songs(), AL_GAIN, pimpl->volume);
 }
 
 void Gosu::Song::update()
 {
-    if (current_song()) {
-        current_song()->data->update();
+    if (cur_song == nullptr) return;
+
+    ALuint source = al_source_for_songs();
+
+    ALuint buffer;
+    int processed;
+    bool active = true;
+
+    alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
+    for (int i = 0; i < processed; ++i) {
+        alSourceUnqueueBuffers(source, 1, &buffer);
+        active = cur_song->pimpl->stream_to_buffer(buffer);
+        if (active) alSourceQueueBuffers(source, 1, &buffer);
+    }
+
+    ALint state;
+    alGetSourcei(source, AL_SOURCE_STATE, &state);
+    if (active && state != AL_PLAYING && state != AL_PAUSED) {
+        // We apparently got starved because this method wasn't being called in time - resume
+        // playback and hope nobody will notice.
+        alSourcePlay(source);
+    }
+    else if (!active) {
+        // We got starved and there is nothing left to play.
+        cur_song->stop();
+
+        if (cur_song_looping) {
+            // Start anew.
+            cur_song->play(true);
+        }
+        else {
+            // Let the world know the song is over.
+            cur_song = nullptr;
+        }
     }
 }

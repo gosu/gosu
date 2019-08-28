@@ -41,6 +41,7 @@ namespace Gosu
         
         ALenum format_;
         ALuint sample_rate_;
+        double length_;
         UInt32 bytes_per_frame_;
         bool big_endian_;
         
@@ -120,6 +121,13 @@ namespace Gosu
                 throw std::runtime_error("Non-interleaved formats are unsupported");
             }
             
+            // Calculate the length of the file in seconds before we enable any conversions.
+            SInt64 length_in_frames;
+            size_of_property = sizeof length_in_frames;
+            CHECK_OS(ExtAudioFileGetProperty(file_, kExtAudioFileProperty_FileLengthFrames,
+                                             &size_of_property, &length_in_frames));
+            length_ = 1.0 * length_in_frames / sample_rate_;
+
             // Easy formats
             format_ = 0;
             if (desc.mChannelsPerFrame == 1 && desc.mBitsPerChannel == 16) {
@@ -145,7 +153,7 @@ namespace Gosu
         }
         
     public:
-        AudioToolboxFile(const std::string& filename)
+        explicit AudioToolboxFile(const std::string& filename)
         {
             NSURL* URL = [NSURL fileURLWithPath:[NSString stringWithUTF8String:filename.c_str()]];
             CHECK_OS(ExtAudioFileOpenURL((__bridge CFURLRef) URL, &file_));
@@ -155,7 +163,7 @@ namespace Gosu
             init();
         }
         
-        AudioToolboxFile(Reader reader)
+        explicit AudioToolboxFile(Reader reader)
         {
             buffer_.resize(reader.resource().size() - reader.position());
             reader.read(buffer_.data(), buffer_.size());
@@ -190,6 +198,11 @@ namespace Gosu
             return sample_rate_;
         }
         
+        double length() const override
+        {
+            return length_;
+        }
+
         void rewind() override
         {
             CHECK_OS(ExtAudioFileSeek(file_, 0 + seek_offset_));
