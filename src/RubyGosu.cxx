@@ -2859,35 +2859,40 @@ SWIGINTERN double Gosu_Font_markup_width(Gosu::Font *self,std::string const &mar
       return self->markup_width(markup) * scale_x;
     }
 SWIGINTERN Gosu::Image *new_Gosu_Image(VALUE source,VALUE options=0){
-        Gosu::Bitmap bmp;
-        Gosu::load_bitmap(bmp, source);
-        
         unsigned src_x = 0, src_y = 0;
-        unsigned src_width = bmp.width(), src_height = bmp.height();
-        unsigned flags = 0;
+        unsigned src_width = 0, src_height = 0;
+        unsigned flags = 0, normal_color = 1;
+        Gosu::Bitmap bmp;
+        Gosu::enable_flip_y(false);
         
         if (options) {
             Check_Type(options, T_HASH);
-            
             VALUE keys = rb_funcall(options, rb_intern("keys"), 0, NULL);
             int keys_size = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
             
             for (int i = 0; i < keys_size; ++i) {
                 VALUE key = rb_ary_entry(keys, i);
                 const char* key_string = Gosu::cstr_from_symbol(key);
-                
                 VALUE value = rb_hash_aref(options, key);
+                // Prevent all bitmaps to be flipped vertically if a previous bitmap was flipped
                 if (!strcmp(key_string, "tileable")) {
                     if (RTEST(value)) flags |= Gosu::IF_TILEABLE;
                 }
                 else if (!strcmp(key_string, "retro")) {
                     if (RTEST(value)) flags |= Gosu::IF_RETRO;
                 }
+                else if (!strcmp(key_string,"flip_y")) {
+                    Gosu::enable_flip_y(true);
+                }
+                else if (!strcmp(key_string, "invert")) {
+                    normal_color = 0;
+                    std::string fn = StringValueCStr(source);
+                    Gosu::load_image_inverse_color(bmp, fn);
+                }
                 else if (!strcmp(key_string, "rect")) {
                     Check_Type(value, T_ARRAY);
                     
-                    int rect_size = NUM2INT(rb_funcall(value, rb_intern("size"), 0, NULL));
-                    if (rect_size != 4) {
+                    if (rb_array_len(ary) != 4) {
                         rb_raise(rb_eArgError, "Argument passed to :rect must be a four-element "
                                                "Array [x, y, width, height]");
                     }
@@ -2904,6 +2909,10 @@ SWIGINTERN Gosu::Image *new_Gosu_Image(VALUE source,VALUE options=0){
                         rb_warn("Unknown keyword argument: :%s", key_string);
                     }
                 }
+                if (normal_color) // No Inverse Color Applied
+                    Gosu::load_bitmap(bmp, source);
+                src_width = bmp.width();
+                src_height = bmp.height();
             }
         }
         
@@ -2927,6 +2936,7 @@ SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::string const &markup,double fo
         Gosu::Alignment align = Gosu::AL_LEFT;
         unsigned image_flags = 0;
         unsigned font_flags = 0;
+        Gosu::enable_flip_y(false);
         
         if (options) {
             Check_Type(options, T_HASH);
@@ -2979,6 +2989,9 @@ SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::string const &markup,double fo
                 }
                 else if (!strcmp(key_string, "retro")) {
                     if (RTEST(value)) image_flags |= Gosu::IF_RETRO;
+                }
+                else if (!strcmp(key_string, "flip_y")) {
+                    if (value == Qtrue) Gosu::enable_flip_y(true);
                 }
                 else {
                     static bool issued_warning = false;
@@ -3212,7 +3225,7 @@ std::string SwigDirector_TextInput::filter(std::string text) const {
 }
 
 
-SwigDirector_Window::SwigDirector_Window(VALUE self, unsigned int width, unsigned int height, bool fullscreen, double update_interval, bool resizable): Gosu::Window(width, height, fullscreen, update_interval, resizable), Swig::Director(self) {
+SwigDirector_Window::SwigDirector_Window(VALUE self, unsigned int width, unsigned int height, bool fullscreen, double update_interval): Gosu::Window(width, height, fullscreen, update_interval), Swig::Director(self) {
   
 }
 
@@ -4563,8 +4576,7 @@ fail:
 }
 
 
-SWIGINTERN VALUE
-_wrap_Color_valuee___(int argc, VALUE *argv, VALUE self) {
+SWIGINTERN VALUE _wrap_Color_valuee___(int argc, VALUE *argv, VALUE self) {
   Gosu::Color *arg1 = (Gosu::Color *) 0 ;
   double arg2 ;
   void *argp1 = 0 ;
@@ -4594,6 +4606,45 @@ _wrap_Color_valuee___(int argc, VALUE *argv, VALUE self) {
     }
   }
   return Qnil;
+fail:
+  return Qnil;
+}
+
+SWIGINTERN VALUE _wrap_Color_invert( VALUE self) {
+  Gosu::Color *arg1 = (Gosu::Color *) 0;
+  Gosu::Color result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  res1 = SWIG_ConvertPtr(self, &argp1, SWIGTYPE_p_Gosu__Color, 0 | 0);
+  arg1 = reinterpret_cast<Gosu::Color*>(argp1);
+  if (!SWIG_IsOK(res1))
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError("", "Gosu::Color", "invert", 1, self));
+  try {
+    result = (arg1)->invert();
+  } catch (const std::exception& e) {
+    SWIG_exception(SWIG_RuntimeError, e.what());
+  }
+  vresult = SWIG_NewPointerObj((new Gosu::Color(static_cast< const Gosu::Color& >(result))), SWIGTYPE_p_Gosu__Color, SWIG_POINTER_OWN | 0);
+  return vresult;
+fail:
+  return Qnil;
+}
+
+SWIGINTERN VALUE _wrap_Color_invert_destructive( VALUE self) {
+  Gosu::Color *arg1 = (Gosu::Color *) 0;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  res1 = SWIG_ConvertPtr(self, &argp1, SWIGTYPE_p_Gosu__Color, 0 | 0);
+  arg1 = reinterpret_cast<Gosu::Color*>(argp1);
+  if (!SWIG_IsOK(res1))
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError("", "Gosu::Color", "invert!", 1, self));
+  try {
+    ((Gosu::Color*)arg1)->inverted();
+  } catch (const std::exception& e) {
+    SWIG_exception(SWIG_RuntimeError, e.what()); //}
+  }
+  return self;
 fail:
   return Qnil;
 }
@@ -8192,9 +8243,7 @@ fail:
   return Qnil;
 }
 
-
-SWIGINTERN VALUE
-_wrap_Song_volumee___(int argc, VALUE *argv, VALUE self) {
+SWIGINTERN VALUE _wrap_Song_volumee___(int argc, VALUE *argv, VALUE self) {
   Gosu::Song *arg1 = (Gosu::Song *) 0 ;
   double arg2 ;
   void *argp1 = 0 ;
@@ -8205,15 +8254,15 @@ _wrap_Song_volumee___(int argc, VALUE *argv, VALUE self) {
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Song, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1, SWIGTYPE_p_Gosu__Song, 0 | 0);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Song *","set_volume", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError("", "Gosu::Song", "volume=", 1, self));
   }
   arg1 = reinterpret_cast< Gosu::Song * >(argp1);
   ecode2 = SWIG_AsVal_double(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "double","set_volume", 2, argv[0] ));
-  } 
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError("", "double", "volume=", 2, argv[0]));
+  }
   arg2 = static_cast< double >(val2);
   {
     try {
@@ -8228,6 +8277,143 @@ fail:
   return Qnil;
 }
 
+SWIGINTERN VALUE _wrap_Song_position(VALUE self) {
+  Gosu::Song *arg1 = (Gosu::Song *) 0;
+  void *argp1 = 0;
+  float pos;
+  int res1 = 0;
+  res1 = SWIG_ConvertPtr(self, &argp1, SWIGTYPE_p_Gosu__Song, 0 | 0);
+  if (!SWIG_IsOK(res1))
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError("", "Gosu::Song", "position", 1, self));
+  arg1 = reinterpret_cast< Gosu::Song * >(argp1);
+  try {
+    pos = (arg1)->position();
+  } catch (const std::exception& e) {
+    return rb_float_new(0.0);
+    SWIG_exception(SWIG_RuntimeError, e.what());
+  }
+  return rb_float_new(pos);
+fail:
+  return Qnil;
+}
+
+SWIGINTERN VALUE _wrap_Song_position_minutes(VALUE self) {
+  Gosu::Song *arg1 = (Gosu::Song *) 0;
+  void *argp1 = 0;
+  float pos;
+  int res1 = 0;
+  res1 = SWIG_ConvertPtr(self, &argp1, SWIGTYPE_p_Gosu__Song, 0 | 0);
+  if (!SWIG_IsOK(res1))
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError("", "Gosu::Song", "position_minutes", 1, self));
+  arg1 = reinterpret_cast< Gosu::Song * >(argp1);
+  try {
+    pos = (arg1)->position_minutes();
+  } catch (const std::exception& e) {
+    return rb_float_new(0.0);
+    SWIG_exception(SWIG_RuntimeError, e.what());
+  }
+  return rb_float_new(pos);
+fail:
+  return Qnil;
+}
+
+SWIGINTERN VALUE _wrap_Song_position_hours(VALUE self) {
+  Gosu::Song *arg1 = (Gosu::Song *) 0;
+  void *argp1 = 0;
+  float pos;
+  int res1 = 0;
+  res1 = SWIG_ConvertPtr(self, &argp1, SWIGTYPE_p_Gosu__Song, 0 | 0);
+  if (!SWIG_IsOK(res1))
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError("", "Gosu::Song", "position_hours", 1, self));
+  arg1 = reinterpret_cast< Gosu::Song * >(argp1);
+  try {
+    pos = (arg1)->position_hours();
+  } catch (const std::exception& e) {
+    return rb_float_new(0.0);
+    SWIG_exception(SWIG_RuntimeError, e.what());
+  }
+  return rb_float_new(pos);
+fail:
+  return Qnil;
+}
+
+SWIGINTERN VALUE _wrap_Song_positioneq(VALUE self, VALUE rpos) {
+  Gosu::Song *arg1 = (Gosu::Song *) 0;
+  void *argp1 = 0;
+  int res1 = 0;
+  res1 = SWIG_ConvertPtr(self, &argp1, SWIGTYPE_p_Gosu__Song, 0 | 0);
+  if (!SWIG_IsOK(res1))
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError("", "Gosu::Song", "position=", 1, self));
+  arg1 = reinterpret_cast< Gosu::Song * >(argp1);
+  try {
+    (arg1)->set_position(rb_num2dbl(rpos));
+  } catch (const std::exception& e) {
+    return rb_float_new(0.0);
+    SWIG_exception(SWIG_RuntimeError, e.what());
+  }
+  return rpos;
+fail:
+  return Qnil;
+}
+
+SWIGINTERN VALUE _wrap_Song_duration(VALUE self) {
+  Gosu::Song *arg1 = (Gosu::Song *) 0;
+  void *argp1 = 0;
+  float pos;
+  int res1 = 0;
+  res1 = SWIG_ConvertPtr(self, &argp1, SWIGTYPE_p_Gosu__Song, 0 | 0);
+  if (!SWIG_IsOK(res1))
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError("", "Gosu::Song", "duration", 1, self));
+  arg1 = reinterpret_cast< Gosu::Song * >(argp1);
+  try {
+    pos = (arg1)->duration();
+  } catch (const std::exception& e) {
+    return DBL2NUM(0.0);
+    SWIG_exception(SWIG_RuntimeError, e.what());
+  }
+  return DBL2NUM(pos);
+fail:
+  return Qnil;
+}
+
+SWIGINTERN VALUE _wrap_Song_format(VALUE self) {
+  Gosu::Song *arg1 = (Gosu::Song *) 0;
+  void *argp1 = 0;
+  int res1 = 0;
+  const char* fmt;
+  res1 = SWIG_ConvertPtr(self, &argp1, SWIGTYPE_p_Gosu__Song, 0 | 0);
+  if (!SWIG_IsOK(res1))
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError("", "Gosu::Song", "format", 1, self));
+  arg1 = reinterpret_cast< Gosu::Song * >(argp1);
+  try {
+    fmt = (arg1)->format();
+  } catch (const std::exception& e) {
+    return rb_str_new_cstr("unknown");
+    SWIG_exception(SWIG_RuntimeError, e.what());
+  }
+  return rb_str_new_cstr(fmt);
+fail:
+  return Qnil;
+}
+
+SWIGINTERN VALUE _wrap_Song_sample_rate(VALUE self) {
+  Gosu::Song *arg1 = (Gosu::Song *) 0;
+  void *argp1 = 0;
+  int res1 = 0, sr = 0;
+  res1 = SWIG_ConvertPtr(self, &argp1, SWIGTYPE_p_Gosu__Song, 0 | 0);
+  if (!SWIG_IsOK(res1))
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError("", "Gosu::Song", "sample_rate", 1, self));
+  arg1 = reinterpret_cast< Gosu::Song * >(argp1);
+  try {
+    sr = (arg1)->sample_rate();
+  } catch (const std::exception& e) {
+    return RB_INT2FIX(0);
+    SWIG_exception(SWIG_RuntimeError, e.what());
+  }
+  return RB_INT2FIX(sr);
+fail:
+  return Qnil;
+}
 
 SWIGINTERN VALUE
 _wrap_Song_update(int argc, VALUE *argv, VALUE self) {
@@ -8697,7 +8883,6 @@ _wrap_new_Window(int argc, VALUE *argv, VALUE self) {
   unsigned int arg3 ;
   bool arg4 = (bool) false ;
   double arg5 = (double) 16.666666 ;
-  bool arg6 = (bool) false ;
   unsigned int val2 ;
   int ecode2 = 0 ;
   unsigned int val3 ;
@@ -8706,12 +8891,10 @@ _wrap_new_Window(int argc, VALUE *argv, VALUE self) {
   int ecode4 = 0 ;
   double val5 ;
   int ecode5 = 0 ;
-  bool val6 ;
-  int ecode6 = 0 ;
   const char *classname SWIGUNUSED = "Gosu::Window";
   Gosu::Window *result = 0 ;
   
-  if ((argc < 2) || (argc > 5)) {
+  if ((argc < 2) || (argc > 4)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
   }
   arg1 = self;
@@ -8739,20 +8922,13 @@ _wrap_new_Window(int argc, VALUE *argv, VALUE self) {
     } 
     arg5 = static_cast< double >(val5);
   }
-  if (argc > 4) {
-    ecode6 = SWIG_AsVal_bool(argv[4], &val6);
-    if (!SWIG_IsOK(ecode6)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode6), Ruby_Format_TypeError( "", "bool","Window", 6, argv[4] ));
-    } 
-    arg6 = static_cast< bool >(val6);
-  }
   {
     try {
       if ( strcmp(rb_obj_classname(self), classname) != 0 ) {
         /* subclassed */
-        result = (Gosu::Window *)new SwigDirector_Window(arg1,arg2,arg3,arg4,arg5,arg6); 
+        result = (Gosu::Window *)new SwigDirector_Window(arg1,arg2,arg3,arg4,arg5); 
       } else {
-        result = (Gosu::Window *)new Gosu::Window(arg2,arg3,arg4,arg5,arg6); 
+        result = (Gosu::Window *)new Gosu::Window(arg2,arg3,arg4,arg5); 
       }
       
       DATA_PTR(self) = result;
@@ -8867,26 +9043,23 @@ fail:
   return Qnil;
 }
 
-
-SWIGINTERN VALUE
-_wrap_Window_resizableq___(int argc, VALUE *argv, VALUE self) {
+SWIGINTERN VALUE _wrap_Window_block_fullscreenq___(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   bool result;
   VALUE vresult = Qnil;
-  
   if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)", argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1, SWIGTYPE_p_Gosu__Window, 0 | 0);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","resizable", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError("", "Gosu::Window", "block_fullscreen?", 1, self));
   }
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
     try {
-      result = (bool)((Gosu::Window const *)arg1)->resizable();
+      result = (bool)((Gosu::Window const *)arg1)->block_fullscreen();
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -8897,7 +9070,6 @@ _wrap_Window_resizableq___(int argc, VALUE *argv, VALUE self) {
 fail:
   return Qnil;
 }
-
 
 SWIGINTERN VALUE
 _wrap_Window_update_interval(int argc, VALUE *argv, VALUE self) {
@@ -9671,6 +9843,38 @@ fail:
   return Qnil;
 }
 
+SWIGINTERN VALUE _wrap_Window_block_fullscreene___(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError("", "Gosu::Window", "block_fullscreen=", 1, self));
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  ecode2 = SWIG_AsVal_bool(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError("", "bool", "block_fullscreen=", 2, argv[0]));
+  }
+  arg2 = static_cast< bool >(val2);
+  {
+    try {
+      Gosu_Window_set_block_fullscreen(arg1, arg2);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
 
 SWIGINTERN VALUE
 _wrap_Window_text_input(int argc, VALUE *argv, VALUE self) {
@@ -11742,7 +11946,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "LICENSES", SWIG_From_std_string(static_cast< std::string >(Gosu::LICENSES)));
   rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(14)));
-  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(5)));
+  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(6)));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
   rb_define_module_function(mGosu, "degrees_to_radians", VALUEFUNC(_wrap_degrees_to_radians), -1);
@@ -11780,6 +11984,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassColor.klass, "saturation=", VALUEFUNC(_wrap_Color_saturatione___), -1);
   rb_define_method(SwigClassColor.klass, "value", VALUEFUNC(_wrap_Color_value), -1);
   rb_define_method(SwigClassColor.klass, "value=", VALUEFUNC(_wrap_Color_valuee___), -1);
+  rb_define_method(SwigClassColor.klass, "invert", VALUEFUNC(_wrap_Color_invert), 0);
+  rb_define_method(SwigClassColor.klass, "invert!", VALUEFUNC(_wrap_Color_invert_destructive), 0);
   rb_define_method(SwigClassColor.klass, "bgr", VALUEFUNC(_wrap_Color_bgr), -1);
   rb_define_method(SwigClassColor.klass, "abgr", VALUEFUNC(_wrap_Color_abgr), -1);
   rb_define_method(SwigClassColor.klass, "gl", VALUEFUNC(_wrap_Color_gl), -1);
@@ -11804,6 +12010,9 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassFont.klass, "draw_markup_rel", VALUEFUNC(_wrap_Font_draw_markup_rel), -1);
   rb_define_method(SwigClassFont.klass, "set_image", VALUEFUNC(_wrap_Font_set_image), -1);
   rb_define_method(SwigClassFont.klass, "markup_width", VALUEFUNC(_wrap_Font_markup_width), -1);
+  rb_define_method(SwigClassFont.klass, "draw_text", VALUEFUNC(_wrap_Font_draw_markup), -1);
+  rb_define_method(SwigClassFont.klass, "draw_text_rel", VALUEFUNC(_wrap_Font_draw_markup_rel), -1);
+  rb_define_method(SwigClassFont.klass, "text_width", VALUEFUNC(_wrap_Font_markup_width), -1);
   SwigClassFont.mark = 0;
   SwigClassFont.destroy = (void (*)(void *)) free_Gosu_Font;
   SwigClassFont.trackObjects = 1;
@@ -11885,10 +12094,18 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassSong.klass, "play", VALUEFUNC(_wrap_Song_play), -1);
   rb_define_method(SwigClassSong.klass, "pause", VALUEFUNC(_wrap_Song_pause), -1);
   rb_define_method(SwigClassSong.klass, "paused?", VALUEFUNC(_wrap_Song_pausedq___), -1);
+  rb_define_method(SwigClassSong.klass, "resume", VALUEFUNC(_wrap_Song_resume), 0);
   rb_define_method(SwigClassSong.klass, "stop", VALUEFUNC(_wrap_Song_stop), -1);
   rb_define_method(SwigClassSong.klass, "playing?", VALUEFUNC(_wrap_Song_playingq___), -1);
   rb_define_method(SwigClassSong.klass, "volume", VALUEFUNC(_wrap_Song_volume), -1);
   rb_define_method(SwigClassSong.klass, "volume=", VALUEFUNC(_wrap_Song_volumee___), -1);
+  rb_define_method(SwigClassSong.klass, "position", VALUEFUNC(_wrap_Song_position), 0);
+  rb_define_method(SwigClassSong.klass, "position_minutes", VALUEFUNC(_wrap_Song_position_minutes), 0);
+  rb_define_method(SwigClassSong.klass, "position_hours", VALUEFUNC(_wrap_Song_position_hours), 0);
+  rb_define_method(SwigClassSong.klass, "position=", VALUEFUNC(_wrap_Song_positioneq), 1);
+  rb_define_method(SwigClassSong.klass, "duration", VALUEFUNC(_wrap_Song_duration), 0);
+  rb_define_method(SwigClassSong.klass, "format", VALUEFUNC(_wrap_Song_format), 0);
+  rb_define_method(SwigClassSong.klass, "sample_rate", VALUEFUNC(_wrap_Song_sample_rate), 0);
   rb_define_singleton_method(SwigClassSong.klass, "update", VALUEFUNC(_wrap_Song_update), -1);
   SwigClassSong.mark = 0;
   SwigClassSong.destroy = (void (*)(void *)) free_Gosu_Song;
@@ -11917,6 +12134,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "KB_8", SWIG_From_int(static_cast< int >(Gosu::KB_8)));
   rb_define_const(mGosu, "KB_9", SWIG_From_int(static_cast< int >(Gosu::KB_9)));
   rb_define_const(mGosu, "KB_TAB", SWIG_From_int(static_cast< int >(Gosu::KB_TAB)));
+  rb_define_const(mGosu, "KB_CAPSLOCK", SWIG_From_int(static_cast< int >(Gosu::KB_CAPSLOCK)));
   rb_define_const(mGosu, "KB_RETURN", SWIG_From_int(static_cast< int >(Gosu::KB_RETURN)));
   rb_define_const(mGosu, "KB_SPACE", SWIG_From_int(static_cast< int >(Gosu::KB_SPACE)));
   rb_define_const(mGosu, "KB_LEFT_SHIFT", SWIG_From_int(static_cast< int >(Gosu::KB_LEFT_SHIFT)));
@@ -11933,6 +12151,9 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "KB_UP", SWIG_From_int(static_cast< int >(Gosu::KB_UP)));
   rb_define_const(mGosu, "KB_DOWN", SWIG_From_int(static_cast< int >(Gosu::KB_DOWN)));
   rb_define_const(mGosu, "KB_HOME", SWIG_From_int(static_cast< int >(Gosu::KB_HOME)));
+  rb_define_const(mGosu, "KB_PRINTSCREEN", SWIG_From_int(static_cast< int >(Gosu::KB_PRINTSCREEN)));
+  rb_define_const(mGosu, "KB_SCROLLLOCK", SWIG_From_int(static_cast< int >(Gosu::KB_SCROLLLOCK)));
+  rb_define_const(mGosu, "KB_PAUSE", SWIG_From_int(static_cast< int >(Gosu::KB_PAUSE)));
   rb_define_const(mGosu, "KB_END", SWIG_From_int(static_cast< int >(Gosu::KB_END)));
   rb_define_const(mGosu, "KB_INSERT", SWIG_From_int(static_cast< int >(Gosu::KB_INSERT)));
   rb_define_const(mGosu, "KB_DELETE", SWIG_From_int(static_cast< int >(Gosu::KB_DELETE)));
@@ -12138,7 +12359,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "width", VALUEFUNC(_wrap_Window_width), -1);
   rb_define_method(SwigClassWindow.klass, "height", VALUEFUNC(_wrap_Window_height), -1);
   rb_define_method(SwigClassWindow.klass, "fullscreen?", VALUEFUNC(_wrap_Window_fullscreenq___), -1);
-  rb_define_method(SwigClassWindow.klass, "resizable?", VALUEFUNC(_wrap_Window_resizableq___), -1);
+  rb_define_method(SwigClassWindow.klass, "block_fullscreen?", VALUEFUNC(_wrap_Window_block_fullscreenq___), -1);
   rb_define_method(SwigClassWindow.klass, "update_interval", VALUEFUNC(_wrap_Window_update_interval), -1);
   rb_define_method(SwigClassWindow.klass, "update_interval=", VALUEFUNC(_wrap_Window_update_intervale___), -1);
   rb_define_method(SwigClassWindow.klass, "caption", VALUEFUNC(_wrap_Window_caption), -1);
@@ -12158,6 +12379,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "width=", VALUEFUNC(_wrap_Window_widthe___), -1);
   rb_define_method(SwigClassWindow.klass, "height=", VALUEFUNC(_wrap_Window_heighte___), -1);
   rb_define_method(SwigClassWindow.klass, "fullscreen=", VALUEFUNC(_wrap_Window_fullscreene___), -1);
+  rb_define_method(SwigClassWindow.klass, "block_fullscreen=", VALUEFUNC(_wrap_Window_block_fullscreene___), -1);
   rb_define_method(SwigClassWindow.klass, "text_input", VALUEFUNC(_wrap_Window_text_input), -1);
   rb_define_method(SwigClassWindow.klass, "text_input=", VALUEFUNC(_wrap_Window_text_inpute___), -1);
   rb_define_method(SwigClassWindow.klass, "mouse_x", VALUEFUNC(_wrap_Window_mouse_x), -1);
@@ -12176,6 +12398,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "char_to_button_id", VALUEFUNC(_wrap_char_to_button_id), -1);
   rb_define_module_function(mGosu, "button_id_to_char", VALUEFUNC(_wrap_button_id_to_char), -1);
   rb_define_module_function(mGosu, "button_down?", VALUEFUNC(_wrap_button_downq___), -1);
+  rb_define_module_function(mGosu, "down?", VALUEFUNC(_wrap_button_downq___), 1);
   rb_define_module_function(mGosu, "draw_line", VALUEFUNC(_wrap_draw_line), -1);
   rb_define_module_function(mGosu, "draw_triangle", VALUEFUNC(_wrap_draw_triangle), -1);
   rb_define_module_function(mGosu, "draw_quad", VALUEFUNC(_wrap_draw_quad), -1);
@@ -12189,5 +12412,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "rotate", VALUEFUNC(_wrap_rotate), -1);
   rb_define_module_function(mGosu, "scale", VALUEFUNC(_wrap_scale), -1);
   rb_define_module_function(mGosu, "translate", VALUEFUNC(_wrap_translate), -1);
+  ruby_ext_init();
 }
 

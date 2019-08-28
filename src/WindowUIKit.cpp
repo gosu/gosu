@@ -13,12 +13,12 @@ struct Gosu::Window::Impl
     unique_ptr<Graphics> graphics;
     unique_ptr<Input> input;
     
+    bool fullscreen;
     double update_interval;
     string caption;
 };
 
-Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval,
-                     bool resizable)
+Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval)
 : pimpl(new Impl)
 {
     pimpl->window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -43,6 +43,7 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     // Now let the controller know about our Input instance.
     [pimpl->controller trackTextInput:*pimpl->input];
     
+    pimpl->fullscreen = fullscreen;
     pimpl->update_interval = update_interval;
 }
 
@@ -62,12 +63,7 @@ unsigned Gosu::Window::height() const
 
 bool Gosu::Window::fullscreen() const
 {
-    return true;
-}
-
-bool Gosu::Window::resizable() const
-{
-    return false;
+    return pimpl->fullscreen;
 }
 
 void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)

@@ -86,5 +86,16 @@ namespace Gosu
             mpg123_feedseek(handle_, 0, SEEK_SET, &position_);
             assert (position_ >= 0 && position_ <= contents_.size());
         }
+
+        float duration() override
+        {
+            return mpg123_length(handle_) / SAMPLE_RATE;
+        }
+
+        void seek_pos(float pos) override
+        {
+            mpg123_feedseek(handle_, pos, SEEK_SET, &position_);
+            assert (position_ >= 0 && position_ <= contents_.size());
+        }
     };
 }

@@ -115,6 +115,16 @@ void Gosu::Color::set_value(double v)
     *this = from_ahsv(alpha(), hue(), saturation(), v);
 }
 
+void Gosu::Color::inverted()
+{
+    *this = Color(alpha(), 255 - red(), 255 - green(), 255 - blue());
+}
+
+Gosu::Color Gosu::Color::invert()
+{
+    return Color(alpha(), 255 - red(), 255 - green(), 255 - blue());
+}
+
 Gosu::Color Gosu::interpolate(Color a, Color b, double weight)
 {
     return Color(clamp<long>(round(interpolate(a.alpha(), b.alpha(), weight)), 0, 255),

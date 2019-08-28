@@ -129,6 +129,10 @@ namespace Gosu
         
         //! Returns the internal representation of the color (RGBA in memory).
         std::uint32_t gl() const { return rep; }
+        //! Invert the current Color destructively!
+        void inverted();
+        //! Return the inverse color without modifying this one
+        Gosu::Color invert();
         
         static const Color NONE;
         static const Color BLACK;

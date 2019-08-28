@@ -141,7 +141,7 @@ class Gosu::Song::BaseData
     double volume_;
 
 protected:
-    BaseData() : volume_(1) {}
+    BaseData() : volume_(1), frames(0) {}
     virtual void apply_volume() = 0;
 
 public:
@@ -151,6 +151,11 @@ public:
     virtual void resume() = 0;
     virtual bool paused() const = 0;
     virtual void stop() = 0;
+    virtual int sample_rate() = 0;
+    virtual float position() const = 0;
+    virtual void set_position(float pos) = 0;
+    virtual float duration() const = 0;
+    virtual const char* format() = 0;
     virtual void update() = 0;
     
     double volume() const
@@ -354,6 +359,40 @@ public:
         alGetSourcei(al_source_for_songs(), AL_SOURCE_STATE, &state);
         return state == AL_PAUSED;
     }
+
+    float position() const override
+    {
+        float pos;
+        alGetSourcef(al_source_for_songs(), AL_SEC_OFFSET, &pos);
+        return static_cast<float>(frames) / file->sample_rate() + pos;
+    }
+
+    void set_position(float pos) override
+    {
+        frames = pos * file->sample_rate();
+        file->seek_pos(frames);
+    }
+
+    float duration() const override
+    {
+        return file->duration();
+    }
+
+    const char* format()
+    {
+      switch (file->format()) {
+      case AL_FORMAT_MONO16:
+        return "Mono";
+      case AL_FORMAT_STEREO16:
+      default:
+        return "Stereo";
+      }
+    }
+
+    int sample_rate() override
+    {
+        return file->sample_rate();
+    }
     
     void update() override
     {
@@ -366,6 +405,12 @@ public:
         alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
         for (int i = 0; i < processed; ++i) {
             alSourceUnqueueBuffers(source, 1, &buffer);
+            // Retrieve bits, size and channels
+            alGetBufferi(buffer, AL_BITS, &bits);
+            alGetBufferi(buffer, AL_SIZE, &size);
+            alGetBufferi(buffer, AL_CHANNELS, &channels);
+            // If they are greater than 0, count frames and store them for later use
+            if (bits > 0 && channels > 0) frames += ((size / (bits / 8)) / channels);
             active = stream_to_buffer(buffer);
             if (active) alSourceQueueBuffers(source, 1, &buffer);
         }
@@ -450,6 +495,12 @@ bool Gosu::Song::paused() const
 {
     return cur_song == this && data->paused();
 }
+// Exposed resume function for convenience
+void Gosu::Song::resume()
+{
+    if (paused())
+        data->resume();
+}
 
 void Gosu::Song::stop()
 {
@@ -464,6 +515,31 @@ bool Gosu::Song::playing() const
     return cur_song == this && !data->paused();
 }
 
+int Gosu::Song::position() const
+{
+    return (int)data->position();
+}
+
+int Gosu::Song::position_minutes()
+{
+    return (int)data->position() / 60;
+}
+
+int Gosu::Song::position_hours()
+{
+    return (int)data->position() / 60 / 60;
+}
+
+void Gosu::Song::set_position(float pos)
+{
+    data->set_position(pos);
+}
+
+float Gosu::Song::duration() const
+{
+    return data->duration();
+}
+
 double Gosu::Song::volume() const
 {
     return data->volume();
@@ -472,6 +548,16 @@ double Gosu::Song::volume() const
 void Gosu::Song::set_volume(double volume)
 {
     data->set_volume(volume);
+}
+
+const char* Gosu::Song::format()
+{
+    return data->format();
+}
+
+int Gosu::Song::sample_rate() const
+{
+    return data->sample_rate();
 }
 
 void Gosu::Song::update()

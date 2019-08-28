@@ -40,6 +40,13 @@ void Gosu::Bitmap::blend_pixel(unsigned x, unsigned y, Color c)
     set_pixel(x, y, out);
 }
 
+void Gosu::Bitmap::invert_pixel(unsigned x, unsigned y)
+{
+    Color c = get_pixel(x, y);
+    if (c.alpha() > 0)
+        set_pixel(x, y, c.invert());
+}
+
 void Gosu::Bitmap::insert(const Bitmap& source, int x, int y)
 {
     insert(source, x, y, 0, 0, source.width(), source.height());

@@ -136,6 +136,20 @@ namespace Gosu
         double volume() const;
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full volume).
         void set_volume(double volume);
+        //! Returns the current song's playback position in seconds
+        int position() const;
+        //! Returns the current song's playback position in minutes
+        int position_minutes();
+        //! Returns the current song's playback position in hours
+        int position_hours();
+        //! \param pos position can be any value from 0.0 through the last second
+        void set_position(float pos);
+        //! Returns how long your song might be
+        float duration() const;
+        //! Returns a string with the audio format: Mono or Stereo
+        const char* format();
+        //! The song's sample rate aka samples per second
+        int sample_rate() const;
         
         //! Called every tick by Window for management purposes.
         static void update();

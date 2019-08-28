@@ -32,6 +32,10 @@ namespace Gosu
         
         virtual void rewind() = 0;
         
+        virtual float duration() = 0;
+        
+        virtual void seek_pos(float pos) = 0;
+        
         const std::vector<char>& decoded_data()
         {
             static const std::size_t INCREMENT = 512 * 1024;

@@ -170,5 +170,15 @@ namespace Gosu
         {
             sf_seek(file, 0, SEEK_SET);
         }
+
+        float duration() override
+        {
+            return (float)info.frames / info.samplerate;
+        }
+
+        void seek_pos(float pos) override
+        {
+            sf_seek(file, pos, SEEK_SET);
+        }
     };
 }

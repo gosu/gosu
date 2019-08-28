@@ -88,5 +88,15 @@ namespace Gosu
         {
             stb_vorbis_seek_start(stream_);
         }
+
+        float duration() override
+        {
+            stb_vorbis_stream_length_in_seconds(stream_);
+        }
+
+        void seek_pos(float pos)
+        {
+            stb_vorbis_seek_frame(stream_, pos);
+        }
     };
 }

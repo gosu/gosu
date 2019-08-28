@@ -56,6 +56,20 @@ namespace
     }
 }
 
+void Gosu::enable_flip_y(bool flip_y)
+{
+  stbi_set_flip_vertically_on_load(flip_y);
+}
+
+void Gosu::load_image_inverse_color(Gosu::Bitmap& bitmap, const string& filename)
+{
+    load_image_file(bitmap, filename);
+    int w = bitmap.width(), h = bitmap.height();
+    for (int x = 0; x < w; x++)
+        for (int y = 0; y < h; y++)
+            bitmap.invert_pixel(x, y);
+}
+
 void Gosu::load_image_file(Gosu::Bitmap& bitmap, const string& filename)
 {
     Buffer buffer;

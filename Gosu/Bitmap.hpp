@@ -63,6 +63,9 @@ namespace Gosu
         //! This updates a pixel using the "over" alpha compositing operator, see:
         //! https://en.wikipedia.org/wiki/Alpha_compositing
         void blend_pixel(unsigned x, unsigned y, Color c);
+        
+        //! Inverts the current pixel, ignored if alpha value is 0.
+        void invert_pixel(unsigned x, unsigned y);
 
         //! Inserts a bitmap at the given position. Parts of the inserted
         //! bitmap that would be outside of the target bitmap will be
@@ -88,6 +91,8 @@ namespace Gosu
         }
     };
     
+    void enable_flip_y(bool flip_y);
+    void load_image_inverse_color(Bitmap& bitmap, const std::string& filename);
     //! Loads any supported image into a Bitmap.
     void load_image_file(Bitmap& bitmap, const std::string& filename);
     //! Loads any supported image into a Bitmap.
