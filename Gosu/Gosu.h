@@ -4,7 +4,6 @@
 extern "C" {
 #endif
 
-#include <Gosu/Constants.h>
 #include <Gosu/Window.h>
 #include <Gosu/Image.h>
 #include <Gosu/Font.h>
