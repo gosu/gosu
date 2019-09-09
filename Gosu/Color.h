@@ -4,37 +4,34 @@
 extern "C" {
 #endif
 
-typedef struct Gosu_Color Gosu_Color;
-typedef unsigned char Channel;
+typedef unsigned char Gosu_Color_Channel;
 
-Gosu_Color* Gosu_Color_create(unsigned argb);
-Gosu_Color* Gosu_Color_create_argb(Channel a, Channel r, Channel g, Channel b);
-Gosu_Color* Gosu_Color_create_from_hsv(double h, double s, double v);
-Gosu_Color* Gosu_Color_create_from_ahsv(Channel alpha, double h, double s, double v);
+unsigned Gosu_Color_create(unsigned argb);
+unsigned Gosu_Color_create_argb(Gosu_Color_Channel a, Gosu_Color_Channel r, Gosu_Color_Channel g, Gosu_Color_Channel b);
+unsigned Gosu_Color_create_from_hsv(double h, double s, double v);
+unsigned Gosu_Color_create_from_ahsv(Gosu_Color_Channel alpha, double h, double s, double v);
 
-Channel Gosu_Color_alpha(Gosu_Color* color);
-Channel Gosu_Color_red(Gosu_Color* color);
-Channel Gosu_Color_green(Gosu_Color* color);
-Channel Gosu_Color_blue(Gosu_Color* color);
-void Gosu_Color_set_alpha(Gosu_Color* color, Channel value);
-void Gosu_Color_set_red(Gosu_Color* color, Channel value);
-void Gosu_Color_set_green(Gosu_Color* color, Channel value);
-void Gosu_Color_set_blue(Gosu_Color* color, Channel value);
+Gosu_Color_Channel Gosu_Color_alpha(unsigned color);
+Gosu_Color_Channel Gosu_Color_red(unsigned color);
+Gosu_Color_Channel Gosu_Color_green(unsigned color);
+Gosu_Color_Channel Gosu_Color_blue(unsigned color);
+unsigned Gosu_Color_set_alpha(unsigned color, Gosu_Color_Channel value);
+unsigned Gosu_Color_set_red(unsigned color, Gosu_Color_Channel value);
+unsigned Gosu_Color_set_green(unsigned color, Gosu_Color_Channel value);
+unsigned Gosu_Color_set_blue(unsigned color, Gosu_Color_Channel value);
 
-double Gosu_Color_hue(Gosu_Color* color);
-double Gosu_Color_saturation(Gosu_Color* color);
-double Gosu_Color_value(Gosu_Color* color);
-void Gosu_Color_set_hue(Gosu_Color* color, double value);
-void Gosu_Color_set_saturation(Gosu_Color* color, double value);
-void Gosu_Color_set_value(Gosu_Color* color, double value);
+double Gosu_Color_hue(unsigned color);
+double Gosu_Color_saturation(unsigned color);
+double Gosu_Color_value(unsigned color);
+unsigned Gosu_Color_set_hue(unsigned color, double value);
+unsigned Gosu_Color_set_saturation(unsigned color, double value);
+unsigned Gosu_Color_set_value(unsigned color, double value);
 
-unsigned Gosu_Color_argb(Gosu_Color* color);
-unsigned Gosu_Color_bgr(Gosu_Color* color);
-unsigned Gosu_Color_abgr(Gosu_Color* color);
+unsigned Gosu_Color_argb(unsigned color);
+unsigned Gosu_Color_bgr(unsigned color);
+unsigned Gosu_Color_abgr(unsigned color);
 
-unsigned Gosu_Color_gl(Gosu_Color* color);
-
-void Gosu_Color_destroy(Gosu_Color* color);
+unsigned Gosu_Color_gl(unsigned color);
 
 #ifdef __cplusplus
 }

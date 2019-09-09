@@ -4,6 +4,7 @@
 extern "C" {
 #endif
 
+#include <Gosu/Constants.h>
 #include <Gosu/Window.h>
 #include <Gosu/Image.h>
 #include <Gosu/Font.h>
@@ -17,6 +18,7 @@ extern "C" {
 // #include "Gosu/Buttons.h"
 
 // Graphics operations
+void Gosu_gl_z(double z, void function());
 void Gosu_gl(void function());
 void Gosu_flush();
 Gosu_Image* Gosu_render(int width, int height, void function(), unsigned image_flags);

@@ -4,6 +4,11 @@
 extern "C" {
   #include <Gosu/Gosu.h>
 
+  void Gosu_gl_z(double z, void function())
+  {
+    Gosu::Graphics::gl(z, *function);
+  }
+
   void Gosu_gl(void function())
   {
     Gosu::Graphics::gl(*function);

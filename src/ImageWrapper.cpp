@@ -85,9 +85,10 @@ extern "C" {
   const char* Gosu_Image_to_blob(Gosu_Image* image)
   {
     Gosu::Image* gosu_image = reinterpret_cast<Gosu::Image*>( image );
-    static thread_local std::string blob = (const char*) gosu_image->data().to_bitmap().data();
+    static thread_local Gosu::Bitmap bitmap;
+    bitmap = gosu_image->data().to_bitmap();
 
-    return (const char*)&blob;
+    return reinterpret_cast<const char*>(bitmap.data());
   }
 
   void Gosu_Image_save(Gosu_Image* image, const char* filename)
