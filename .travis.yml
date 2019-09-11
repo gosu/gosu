@@ -7,13 +7,13 @@ matrix:
       dist: xenial
       sudo: required
       compiler: gcc
-    # macOS 10.11 El Capitan
+    # macOS 10.12 Sierra with last Xcode 8 release
     - os: osx
-      osx_image: xcode7.3
+      osx_image: xcode8.3
       compiler: clang
-    # Xcode 8 beta
+    # macOS 10.14 Mojave with first Xcode 11 release
     - os: osx
-      osx_image: xcode8
+      osx_image: xcode11
       compiler: clang
 
 # Linux dependencies
@@ -39,9 +39,6 @@ services:
   - xvfb
 
 before_install:
-  # Cause multi-line snippets to fail on first error.
-  - set -ev
-
   # Print the Ruby configuration to see what's defined in CXXFLAGS etc.
   - ruby -rrbconfig -e 'RbConfig::CONFIG.each { |k, v| puts [k, v].join("=") }'
 
@@ -128,6 +125,3 @@ script:
     cd examples/build &&
     cmake .. &&
     make
-
-  # Reset the 'e' option to avoid a shell_session_update error from Travis.
-  - set +ev
