@@ -49,6 +49,8 @@ namespace Gosu
         std::string caption() const;
         void set_caption(const std::string& caption);
 
+        void set_window_icon(const Bitmap& icon);
+
         //! Enters a modal loop where the Window is visible on screen and
         //! receives calls to draw, update etc.
         virtual void show();

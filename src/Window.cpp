@@ -247,6 +247,38 @@ void Gosu::Window::set_caption(const string& caption)
     SDL_SetWindowTitle(shared_window(), caption.c_str());
 }
 
+void Gosu::Window::set_window_icon(const Bitmap& icon)
+{
+    #ifdef GOSU_IS_LITTLE_ENDIAN
+    enum { RED_OFFSET = 0, GREEN_OFFSET = 8, BLUE_OFFSET = 16, ALPHA_OFFSET = 24 };
+    #else
+    enum { RED_OFFSET = 24, GREEN_OFFSET = 16, BLUE_OFFSET = 8, ALPHA_OFFSET = 0 };
+    #endif
+
+    void* pixels = const_cast<Color*>(icon.data());
+    int width = icon.width();
+    int height = icon.height();
+    int depth = 8 * sizeof(Color); // Number of bits.
+    int pitch = width * sizeof(Color); // Number of bytes.
+    Uint32 red_mask = 0xff << RED_OFFSET;
+    Uint32 green_mask = 0xff << GREEN_OFFSET;
+    Uint32 blue_mask = 0xff << BLUE_OFFSET;
+    Uint32 alpha_mask = 0xff << ALPHA_OFFSET;
+
+    SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(pixels, width, height, depth, pitch,
+        red_mask, green_mask, blue_mask, alpha_mask);
+    if (surface == nullptr) {
+        throw_sdl_error("Could not create icon");
+    }
+
+    // Surface's pixels are copied.
+    SDL_SetWindowIcon(shared_window(), surface);
+
+    // Bitmap's pixels are not freed because the Surface was created with
+    // SDL_CreateRGBSurfaceFrom().
+    SDL_FreeSurface(surface);
+}
+
 void Gosu::Window::show()
 {
     unsigned long time_before_tick = milliseconds();
