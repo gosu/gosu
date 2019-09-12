@@ -1,9 +1,9 @@
 #pragma once
 #include <stdbool.h>
+#include "TextInput.h"
 
 #ifdef __cplusplus
 extern "C" {
-#include "TextInput.h"
 #endif
 
 typedef struct Gosu_Window Gosu_Window;

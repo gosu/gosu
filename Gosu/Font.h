@@ -8,7 +8,7 @@
 
   Gosu_Font* Gosu_Font_create(int height, const char* name, unsigned flags);
 
-  const char& Gosu_Font_name(Gosu_Font* font);
+  const char &Gosu_Font_name(Gosu_Font* font);
   int Gosu_Font_height(Gosu_Font* font);
   unsigned Gosu_Font_flags(Gosu_Font* font);
 
