@@ -10,7 +10,12 @@ extern "C" {
     return reinterpret_cast<Gosu_Font*>( new Gosu::Font(height, name, flags) );
   }
 
-  int Gosu_Font_height(Gosu_Font* font)
+  const char *Gosu_Font_name(Gosu_Font* font)
+  {
+    return reinterpret_cast<Gosu::Font*>( font )->name().c_str();
+  }
+
+  int Gosu_Font_height(Gosu_Font *font)
   {
     return reinterpret_cast<Gosu::Font*>( font )->height();
   }

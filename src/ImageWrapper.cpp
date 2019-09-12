@@ -1,4 +1,6 @@
 #include <Gosu/Gosu.hpp>
+#include <stdio.h>
+#include <cstring>
 
 extern "C" {
   #include <Gosu/Image.h>
@@ -8,6 +10,55 @@ extern "C" {
   {
     return reinterpret_cast<Gosu_Image*>( new Gosu::Image(filename, image_flags) );
   };
+
+  Gosu_Image *Gosu_Image_create_from_markup(const char *markup, const char *font, double font_height,
+                                          int width, double spacing, unsigned align, unsigned font_flags, unsigned image_flags)
+  {
+    Gosu::Bitmap bitmap = Gosu::layout_markup(markup, font, font_height, spacing, width,
+                                              (Gosu::Alignment)align, font_flags);
+    return reinterpret_cast<Gosu_Image*>( new Gosu::Image(bitmap, image_flags) );
+  }
+
+  Gosu_Image *Gosu_Image_create_from_text(const char *text, const char *font, double font_height,
+                                          int width, double spacing, unsigned align, unsigned font_flags, unsigned image_flags)
+  {
+    Gosu::Bitmap bitmap = Gosu::layout_text(text, font, font_height, spacing, width,
+                                              (Gosu::Alignment)align, font_flags);
+    return reinterpret_cast<Gosu_Image*>( new Gosu::Image(bitmap, image_flags) );
+  }
+
+  // TODO: replace use of char* with something that doesn't eat NULL
+  Gosu_Image *Gosu_Image_create_from_blob(const char* blob, int columns, int rows, unsigned image_flags)
+  {
+    std::size_t size = columns * rows * 4;
+    Gosu::Bitmap bitmap(columns, rows, Gosu::Color::NONE);
+
+    if (strlen(blob) == size) {
+      // 32 bit per pixel, assume R8G8B8A8
+      std::memcpy(bitmap.data(), blob, size);
+    }
+    else if (strlen(blob) == size * sizeof(float)) {
+      // 128 bit per channel, assume float/float/float/float
+      const float *in = reinterpret_cast<const float *>( blob );
+      Gosu::Color::Channel *out = reinterpret_cast<Gosu::Color::Channel *>(bitmap.data());
+      for (int i = size; i > 0; --i)
+      {
+        *(out++) = static_cast<Gosu::Color::Channel>(*(in++) * 255);
+      }
+    } else {
+      return nullptr; // abort?
+    }
+
+    return reinterpret_cast<Gosu_Image *>(new Gosu::Image(bitmap, image_flags));
+  }
+
+  Gosu_Image *Gosu_Image_create_from_subimage(Gosu_Image *image, int left, int top, int width, int height)
+  {
+    Gosu::Image *gosu_image = reinterpret_cast<Gosu::Image *>(image);
+    std::unique_ptr<Gosu::ImageData> image_data = gosu_image->data().subimage(left, top, width, height);
+
+    return reinterpret_cast<Gosu_Image *>(image_data.get() ? new Gosu::Image(std::move(image_data)) : nullptr);
+  }
 
   // Properties
   unsigned Gosu_Image_width(Gosu_Image* image)
@@ -20,17 +71,20 @@ extern "C" {
     return reinterpret_cast<Gosu::Image*>( image )->height();
   }
 
-  Gosu_GLTexInfo* Gosu_Image_gl_texinfo(Gosu_Image* image)
+  Gosu_GLTexInfo* Gosu_Image_gl_tex_info(Gosu_Image* image)
   {
     Gosu_GLTexInfo* tex_info;
     const Gosu::GLTexInfo* gosu_texture_info = reinterpret_cast<Gosu::Image*>( image )->data().gl_tex_info();
-
-    tex_info->texture_name = gosu_texture_info->tex_name;
-    tex_info->left         = gosu_texture_info->left;
-    tex_info->right        = gosu_texture_info->right;
-    tex_info->top          = gosu_texture_info->top;
-    tex_info->bottom       = gosu_texture_info->bottom;
-    return tex_info;
+    if (gosu_texture_info) {
+      tex_info->texture_name = gosu_texture_info->tex_name;
+      tex_info->left         = gosu_texture_info->left;
+      tex_info->right        = gosu_texture_info->right;
+      tex_info->top          = gosu_texture_info->top;
+      tex_info->bottom       = gosu_texture_info->bottom;
+      return tex_info;
+    } else {
+      return nullptr;
+    }
   }
 
   // Rendering
@@ -67,14 +121,6 @@ extern "C" {
   }
 
   // Image operations
-  Gosu_Image* Gosu_Image_subimage(Gosu_Image* image, int left, int top, int width, int height)
-  {
-    Gosu::Image* gosu_image = reinterpret_cast<Gosu::Image*>( image );
-    std::unique_ptr<Gosu::ImageData> image_data = gosu_image->data().subimage(left, top, width, height);
-
-    return reinterpret_cast<Gosu_Image*>( image_data.get() ? new Gosu::Image(std::move(image_data)) : nullptr );
-  }
-
   void Gosu_Image_insert(Gosu_Image* image, Gosu_Image* source, int x, int y)
   {
     Gosu::Bitmap bmp;
@@ -82,7 +128,8 @@ extern "C" {
     reinterpret_cast<Gosu::Image*>( image )->data().insert(bmp, x, y);
   }
 
-  const char* Gosu_Image_to_blob(Gosu_Image* image)
+  // TODO: replace use of char* with something that doesn't eat NULL
+  const char* Gosu_Image_to_blob(Gosu_Image *image)
   {
     Gosu::Image* gosu_image = reinterpret_cast<Gosu::Image*>( image );
     static thread_local Gosu::Bitmap bitmap;
