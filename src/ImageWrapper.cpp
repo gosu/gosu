@@ -34,9 +34,9 @@ extern "C" {
   }
 
   // Rendering
-  void Gosu_Image_draw(Gosu_Image* image, double x, double y, double z, unsigned color, unsigned mode)
+  void Gosu_Image_draw(Gosu_Image* image, double x, double y, double z, double scale_x, double scale_y, unsigned color, unsigned mode)
   {
-    reinterpret_cast<Gosu::Image*>( image )->draw(x, y, z, 1.0, 1.0, color, (Gosu::AlphaMode)mode);
+    reinterpret_cast<Gosu::Image*>( image )->draw(x, y, z, scale_x, scale_y, color, (Gosu::AlphaMode)mode);
   }
 
   void Gosu_Image_draw_rot(Gosu_Image* image, double x, double y, double z,

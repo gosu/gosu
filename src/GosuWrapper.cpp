@@ -16,14 +16,12 @@ extern "C" {
 
   Gosu_Image* Gosu_render(int width, int height, void function(), unsigned image_flags)
   {
-    // Disabled for now, couldn't figure out how to get a Gosu::Image* from static Gosu::Image
-
-    // return reinterpret_cast<Gosu_Image*>( Gosu::Graphics::render(width, height, *function, image_flags) );
+    return reinterpret_cast<Gosu_Image*>( new Gosu::Image(Gosu::Graphics::render(width, height, *function, image_flags)) );
   }
 
   Gosu_Image* Gosu_record(int width, int height, void function())
   {
-    // return reinterpret_cast<Gosu_Image*>( Gosu::Graphics::record(width, height, *function) );
+    return reinterpret_cast<Gosu_Image*>( new Gosu::Image(Gosu::Graphics::record(width, height, *function)) );
   }
 
   void Gosu_flush()
@@ -31,9 +29,14 @@ extern "C" {
     Gosu::Graphics::flush();
   }
 
-  void Gosu_transform()
+  void Gosu_transform(double m0, double m1, double m2, double m3, double m4, double m5, double m6,
+                      double m7, double m8, double m9, double m10, double m11, double m12, double m13,
+                      double m14, double m15, void function())
   {
-    // Gosu::Graphics::transform();
+    Gosu::Transform transform = {
+        m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15
+    };
+    Gosu::Graphics::transform(transform, *function);
   }
 
   void Gosu_translate(double x, double y, void function())
