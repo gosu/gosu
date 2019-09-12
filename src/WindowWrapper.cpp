@@ -163,6 +163,7 @@ void Gosu::WindowForWrapper::close_immediately()
 
 extern "C" {
   #include <Gosu/Window.h>
+  #include <Gosu/TextInput.h>
 
   // Constructor
   Gosu_Window* Gosu_Window_create(int width, int height, bool fullscreen, double update_interval, bool resizable)
@@ -217,6 +218,17 @@ extern "C" {
   }
 
 
+  Gosu_TextInput* Gosu_Window_text_input(Gosu_Window* window)
+  {
+    Gosu::Window *gosu_window = reinterpret_cast<Gosu::WindowForWrapper *>( window );
+    return reinterpret_cast<Gosu_TextInput*>( gosu_window->input().text_input() );
+  }
+
+  void Gosu_Window_set_text_input(Gosu_Window* window, Gosu_TextInput* text_input)
+  {
+    Gosu::Window *gosu_window = reinterpret_cast<Gosu::WindowForWrapper *>( window );
+    gosu_window->input().set_text_input( reinterpret_cast<Gosu::TextInput*>( text_input ));
+  }
 
 
   void Gosu_Window_show(Gosu_Window* window)

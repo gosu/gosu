@@ -3,6 +3,7 @@
 
 #ifdef __cplusplus
 extern "C" {
+#include "TextInput.h"
 #endif
 
 typedef struct Gosu_Window Gosu_Window;
@@ -30,13 +31,13 @@ double Gosu_Window_update_interval(Gosu_Window* window);
 int Gosu_Window_resizable(Gosu_Window* window);
 const char* Gosu_Window_caption(Gosu_Window* window);
 
-int Gosu_Window_text_input(Gosu_Window* window); // TODO: implement Gosu_TextInput
+Gosu_TextInput* Gosu_Window_text_input(Gosu_Window *window);
 double Gosu_Window_mouse_x(Gosu_Window* window);
 double Gosu_Window_mouse_y(Gosu_Window* window);
 int Gosu_Window_is_button_down(Gosu_Window* window, unsigned btn);
 
 // Setters
-void Gosu_Window_set_text_input(Gosu_Window* window); // Gosu_TextInput* text_input
+void Gosu_Window_set_text_input(Gosu_Window *window, Gosu_TextInput *text_input);
 void Gosu_Window_set_caption(Gosu_Window* window, const char* caption);
 void Gosu_Window_set_update_interval(Gosu_Window* window, double update_interval);
 void Gosu_Window_set_mouse_x(Gosu_Window* window, double width);
