@@ -41,11 +41,11 @@ extern "C" {
       // 128 bit per channel, assume float/float/float/float
       const float *in = reinterpret_cast<const float *>( blob );
       Gosu::Color::Channel *out = reinterpret_cast<Gosu::Color::Channel *>(bitmap.data());
-      for (int i = size; i > 0; --i)
-      {
+      for (int i = size; i > 0; --i) {
         *(out++) = static_cast<Gosu::Color::Channel>(*(in++) * 255);
       }
-    } else {
+    }
+    else {
       return nullptr; // abort?
     }
 
@@ -82,7 +82,8 @@ extern "C" {
       tex_info->top          = gosu_texture_info->top;
       tex_info->bottom       = gosu_texture_info->bottom;
       return tex_info;
-    } else {
+    }
+    else {
       return nullptr;
     }
   }
