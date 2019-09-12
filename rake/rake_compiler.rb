@@ -22,7 +22,7 @@ EOS
   # Gosu source code including the Ruby interface (.cxx).
   s.files += Dir["src/**/*.{h,hpp,c,cpp,cxx}"]
   # Gosu header files, for compiling the gem & for using inline C++ from Ruby.
-  s.files += Dir["Gosu/*.hpp"]
+  s.files += Dir["Gosu/*.{h,hpp}"]
   # RDoc setup:
   # The docs will never look great in rdoc, though, because we are using some yard-specific syntax
   # in rdoc/gosu.rb.
