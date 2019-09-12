@@ -7,6 +7,7 @@ namespace Gosu
     public:
       TextInputForWrapper();
       std::string filter(std::string text) const override;
+      const char* (*filter_callback)(const char*) = nullptr;
   };
 }
 
@@ -15,7 +16,13 @@ Gosu::TextInputForWrapper::TextInputForWrapper() : Gosu::TextInput()
 }
 std::string Gosu::TextInputForWrapper::filter(std::string text) const
 {
-  return text;
+  if (filter_callback != nullptr) {
+    const char *string = filter_callback(text.c_str()); // currently returns NULL...
+    return text;
+  }
+  else {
+    return text;
+  }
 }
 
 
@@ -57,10 +64,24 @@ extern "C" {
     return reinterpret_cast<Gosu::TextInputForWrapper *>(text_input)->set_selection_start(pos);
   }
 
-  void Gosu_TextInput_filter(Gosu_TextInput *text_input, void function())
+  void Gosu_TextInput_set_filter(Gosu_TextInput *text_input, const char* function(const char*))
   {
-    // TODO: Add 'shadow' Gosu::TextInputForWrapperWithCallback? for this callback
-    // return reinterpret_cast<Gosu::TextInputForWrapper*>( text_input )->filter(&function);
+    reinterpret_cast<Gosu::TextInputForWrapper*>( text_input )->filter_callback = function;
+  }
+
+  void Gosu_TextInput_insert_text(Gosu_TextInput *text_input, const char* text)
+  {
+    reinterpret_cast<Gosu::TextInputForWrapper*>( text_input )->insert_text(text);
+  }
+
+  void Gosu_TextInput_delete_backward(Gosu_TextInput *text_input)
+  {
+    reinterpret_cast<Gosu::TextInputForWrapper*>( text_input )->delete_backward();
+  }
+
+  void Gosu_TextInput_delete_forward(Gosu_TextInput *text_input)
+  {
+    reinterpret_cast<Gosu::TextInputForWrapper*>( text_input )->delete_forward();
   }
 
   void Gosu_TextInput_destroy(Gosu_TextInput* text_input)

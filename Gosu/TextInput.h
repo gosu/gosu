@@ -1,7 +1,7 @@
 #pragma once
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 
 typedef struct Gosu_TextInput Gosu_TextInput;
@@ -17,10 +17,13 @@ void Gosu_TextInput_set_caret_pos(Gosu_TextInput* text_input, unsigned pos);
 unsigned Gosu_TextInput_selection_start(Gosu_TextInput* text_input);
 void Gosu_TextInput_set_selection_start(Gosu_TextInput* text_input, unsigned pos);
 
-void Gosu_TextInput_filter(Gosu_TextInput *text_input, void function());
+void Gosu_TextInput_set_filter(Gosu_TextInput *text_input, const char* function(const char*));
+void Gosu_TextInput_insert_text(Gosu_TextInput *text_input, const char* text);
+void Gosu_TextInput_delete_backward(Gosu_TextInput *text_input);
+void Gosu_TextInput_delete_forward(Gosu_TextInput *text_input);
 
 void Gosu_TextInput_destroy(Gosu_TextInput* text_input);
 
 #ifdef __cplusplus
-  }
+}
 #endif
