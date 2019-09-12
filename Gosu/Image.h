@@ -1,7 +1,7 @@
 #pragma once
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 
 typedef struct Gosu_Image Gosu_Image;
@@ -49,5 +49,5 @@ const char* Gosu_Image_to_blob(Gosu_Image *image);
 Gosu_GLTexInfo* Gosu_Image_gl_tex_info(Gosu_Image *image);
 
 #ifdef __cplusplus
-  }
+}
 #endif
