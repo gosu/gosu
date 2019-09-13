@@ -52,8 +52,8 @@ double Gosu_distance(double x1, double y1, double x2, double y2);
 double Gosu_angle(double from_x, double from_y, double to_x, double to_y);
 double Gosu_angle_diff(double from, double to);
 
-double Gosu_offset_x(double theta, double r);
-double Gosu_offset_y(double theta, double r);
+double Gosu_offset_x(double angle, double radius);
+double Gosu_offset_y(double angle, double radius);
 
 double Gosu_random(double min, double max);
 

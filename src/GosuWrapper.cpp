@@ -110,14 +110,14 @@ extern "C" {
     return Gosu::angle_diff(from, to);
   }
 
-  double Gosu_offset_x(double theta, double r)
+  double Gosu_offset_x(double angle, double radius)
   {
-    return Gosu::offset_x(theta, r);
+    return Gosu::offset_x(angle, radius);
   }
 
-  double Gosu_offset_y(double theta, double r)
+  double Gosu_offset_y(double angle, double radius)
   {
-    return Gosu::offset_y(theta, r);
+    return Gosu::offset_y(angle, radius);
   }
 
   double Gosu_random(double min, double max)

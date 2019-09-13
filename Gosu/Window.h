@@ -50,7 +50,7 @@ void Gosu_Window_resize(Gosu_Window* window, int width, int height, bool fullscr
 // Main Loop
 void Gosu_Window_show(Gosu_Window* window);
 void Gosu_Window_close_immediately(Gosu_Window* window);
-int Gosu_Window_tick(Gosu_Window* window);
+bool Gosu_Window_tick(Gosu_Window* window);
 
 // Destructor
 void Gosu_Window_destroy(Gosu_Window* window);

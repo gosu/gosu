@@ -236,6 +236,11 @@ extern "C" {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->show();
   }
 
+  bool Gosu_Window_tick(Gosu_Window* window)
+  {
+    return reinterpret_cast<Gosu::WindowForWrapper*>( window )->tick();
+  }
+
   void Gosu_Window_close_immediately(Gosu_Window* window)
   {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->close_immediately();
