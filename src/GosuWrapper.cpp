@@ -4,24 +4,24 @@
 extern "C" {
   #include <Gosu/Gosu.h>
 
-  void Gosu_gl_z(double z, void function())
+  void Gosu_gl_z(double z, void function(void))
   {
-    Gosu::Graphics::gl(z, *function);
+    Gosu::Graphics::gl(z, function);
   }
 
-  void Gosu_gl(void function())
+  void Gosu_gl(void function(void))
   {
-    Gosu::Graphics::gl(*function);
+    Gosu::Graphics::gl(function);
   }
 
-  Gosu_Image* Gosu_render(int width, int height, void function(), unsigned image_flags)
+  Gosu_Image *Gosu_render(int width, int height, void function(void), unsigned image_flags)
   {
-    return reinterpret_cast<Gosu_Image*>( new Gosu::Image(Gosu::Graphics::render(width, height, *function, image_flags)) );
+    return reinterpret_cast<Gosu_Image*>( new Gosu::Image(Gosu::Graphics::render(width, height, function, image_flags)) );
   }
 
-  Gosu_Image* Gosu_record(int width, int height, void function())
+  Gosu_Image *Gosu_record(int width, int height, void function(void))
   {
-    return reinterpret_cast<Gosu_Image*>( new Gosu::Image(Gosu::Graphics::record(width, height, *function)) );
+    return reinterpret_cast<Gosu_Image*>( new Gosu::Image(Gosu::Graphics::record(width, height, function)) );
   }
 
   void Gosu_flush()
@@ -31,30 +31,30 @@ extern "C" {
 
   void Gosu_transform(double m0, double m1, double m2, double m3, double m4, double m5, double m6,
                       double m7, double m8, double m9, double m10, double m11, double m12, double m13,
-                      double m14, double m15, void function())
+                      double m14, double m15, void function(void))
   {
     Gosu::Transform transform = {
         m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15
     };
-    Gosu::Graphics::transform(transform, *function);
+    Gosu::Graphics::transform(transform, function);
   }
 
-  void Gosu_translate(double x, double y, void function())
+  void Gosu_translate(double x, double y, void function(void))
   {
     Gosu::Graphics::transform(Gosu::translate(x, y), function);
   }
 
-  void Gosu_scale(double scale_x, double scale_y, double around_x, double around_y, void function())
+  void Gosu_scale(double scale_x, double scale_y, double around_x, double around_y, void function(void))
   {
     Gosu::Graphics::transform(Gosu::scale(scale_x, scale_y, around_x, around_y), function);
   }
 
-  void Gosu_rotate(double angle, double around_x, double around_y, void function())
+  void Gosu_rotate(double angle, double around_x, double around_y, void function(void))
   {
     Gosu::Graphics::transform(Gosu::rotate(angle, around_x, around_y), function);
   }
 
-  void Gosu_clip_to(double x, double y, double width, double height, void function())
+  void Gosu_clip_to(double x, double y, double width, double height, void function(void))
   {
     Gosu::Graphics::clip_to(x, y, width, height, function);
   }
