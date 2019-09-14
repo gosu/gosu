@@ -147,11 +147,9 @@ public:
     {
         set_caption("Gosu Tutorial Game");
 
-        {
-            Gosu::Bitmap icon;
-            Gosu::load_image_file(icon, Gosu::resource_prefix() + "media/Starfighter.bmp");
-            set_window_icon(icon);
-        }
+        Gosu::Bitmap icon;
+        Gosu::load_image_file(icon, Gosu::resource_prefix() + "media/Starfighter.bmp");
+        set_window_icon(icon);
 
         std::string filename = Gosu::resource_prefix() + "media/Space.png";
         background_image = Gosu::Image(filename, Gosu::IF_TILEABLE);
