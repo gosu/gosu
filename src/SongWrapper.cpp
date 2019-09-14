@@ -12,9 +12,9 @@ extern "C" {
     delete( reinterpret_cast<Gosu::Song*>( song ));
   }
 
-  void Gosu_Song_play(Gosu_Song* song)
+  void Gosu_Song_play(Gosu_Song* song, bool looping)
   {
-    reinterpret_cast<Gosu::Song*>( song )->play();
+    reinterpret_cast<Gosu::Song*>( song )->play(looping);
   }
 
   bool Gosu_Song_playing(Gosu_Song* song)
