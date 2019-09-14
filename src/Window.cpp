@@ -258,8 +258,8 @@ void Gosu::Window::set_window_icon(const Bitmap& icon)
     void* pixels = const_cast<Color*>(icon.data());
     int width = icon.width();
     int height = icon.height();
-    int depth = 8 * sizeof(Color); // Number of bits.
-    int pitch = width * sizeof(Color); // Number of bytes.
+    int depth = 8 * sizeof(Color); // Number of bits per pixel.
+    int pitch = width * sizeof(Color); // Number of bytes per row of pixels.
     Uint32 red_mask = 0xff << RED_OFFSET;
     Uint32 green_mask = 0xff << GREEN_OFFSET;
     Uint32 blue_mask = 0xff << BLUE_OFFSET;
