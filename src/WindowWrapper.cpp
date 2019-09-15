@@ -29,24 +29,14 @@ namespace Gosu
 
     // Callback function pointers
     // All explicitly set as nullptr to prevent segfault
-    void (*update_callback)(void *data) = nullptr;
-    void (*draw_callback)(void *data) = nullptr;
-    void (*button_down_callback)(void *data, unsigned btn) = nullptr;
-    void (*button_up_callback)(void *data, unsigned btn) = nullptr;
-    void (*drop_callback)(void *data, const char *filename) = nullptr;
-    bool (*needs_redraw_callback)(void* data) = nullptr;
-    bool (*needs_cursor_callback)(void* data) = nullptr;
-    void (*close_callback)(void *data) = nullptr;
-
-    // Callback data pointer
-    void *update_callback_data = nullptr;
-    void *draw_callback_data = nullptr;
-    void *button_down_callback_data = nullptr;
-    void *button_up_callback_data = nullptr;
-    void *drop_callback_data = nullptr;
-    void *needs_redraw_callback_data = nullptr;
-    void *needs_cursor_callback_data = nullptr;
-    void *close_callback_data = nullptr;
+    std::function<void(void)> update_callback;
+    std::function<void(void)> draw_callback;
+    std::function<void(unsigned btn)> button_down_callback;
+    std::function<void(unsigned btn)> button_up_callback;
+    std::function<void(const char* filename)> drop_callback;
+    std::function<bool(void)> needs_redraw_callback;
+    std::function<bool(void)> needs_cursor_callback;
+    std::function<void(void)> close_callback;
   };
 }
 
@@ -57,63 +47,55 @@ Gosu::WindowForWrapper::WindowForWrapper(int width, int height, bool fullscreen,
 
 void Gosu::WindowForWrapper::set_update(void function(void *data), void *data)
 {
-  update_callback = function;
-  update_callback_data = data;
+  update_callback = [=](void) { function(data); };
 }
 
 void Gosu::WindowForWrapper::set_draw(void function(void *data), void *data)
 {
-  draw_callback = function;
-  draw_callback_data = data;
+  draw_callback = [=](void) { function(data); };
 }
 
 void Gosu::WindowForWrapper::set_button_down(void function(void *data, unsigned btn), void *data)
 {
-  button_down_callback = function;
-  button_down_callback_data = data;
+  button_down_callback = [=](unsigned btn) { function(data, btn); };
 }
 
 void Gosu::WindowForWrapper::set_button_up(void function(void *data, unsigned btn), void *data)
 {
-  button_up_callback = function;
-  button_up_callback_data = data;
+  button_up_callback = [=](unsigned btn) { function(data, btn); };
 }
 
 void Gosu::WindowForWrapper::set_drop(void function(void *data, const char *filename), void *data)
 {
-  drop_callback = function;
-  drop_callback_data = data;
+  drop_callback = [=](const char* filename){ function(data, filename); };
 }
 
 void Gosu::WindowForWrapper::set_needs_redraw(bool function(void *data), void *data)
 {
-  needs_redraw_callback = function;
-  needs_redraw_callback_data = data;
+  needs_redraw_callback = [=](void)->bool { return function(data); };
 }
 
 void Gosu::WindowForWrapper::set_needs_cursor(bool function(void *data), void *data)
 {
-  needs_cursor_callback = function;
-  needs_cursor_callback_data = data;
+  needs_cursor_callback = [=](void)->bool { return function(data); };
 }
 
 void Gosu::WindowForWrapper::set_close(void function(void *data), void *data)
 {
-  close_callback = function;
-  close_callback_data = data;
+  close_callback = [=](void) { function(data); };
 }
 
 void Gosu::WindowForWrapper::update()
 {
   if (update_callback != nullptr) {
-    update_callback(update_callback_data);
+    update_callback();
   }
 }
 
 void Gosu::WindowForWrapper::draw()
 {
   if (draw_callback != nullptr) {
-    draw_callback(draw_callback_data);
+    draw_callback();
   }
 }
 
@@ -125,28 +107,28 @@ void Gosu::WindowForWrapper::gosu_button_down(unsigned btn)
 void Gosu::WindowForWrapper::button_down(Gosu::Button btn)
 {
   if (button_down_callback != nullptr) {
-    button_down_callback(button_down_callback_data, btn.id());
+    button_down_callback(btn.id());
   }
 }
 
 void Gosu::WindowForWrapper::button_up(Gosu::Button btn)
 {
   if (button_up_callback != nullptr) {
-    button_up_callback(button_up_callback_data, btn.id());
+    button_up_callback(btn.id());
   }
 }
 
 void Gosu::WindowForWrapper::drop(const std::string& filename)
 {
   if (drop_callback != nullptr) {
-    drop_callback(drop_callback_data, filename.c_str());
+    drop_callback(filename.c_str());
   }
 }
 
 bool Gosu::WindowForWrapper::needs_redraw() const
 {
   if (needs_redraw_callback != nullptr) {
-    return needs_redraw_callback(needs_redraw_callback_data);
+    return needs_redraw_callback();
   }
   else {
     return true;
@@ -156,7 +138,7 @@ bool Gosu::WindowForWrapper::needs_redraw() const
 bool Gosu::WindowForWrapper::needs_cursor() const
 {
   if (needs_cursor_callback != nullptr) {
-    return needs_cursor_callback(needs_cursor_callback_data);
+    return needs_cursor_callback();
   }
   else {
     return false;
@@ -166,7 +148,7 @@ bool Gosu::WindowForWrapper::needs_cursor() const
 void Gosu::WindowForWrapper::close()
 {
   if (close_callback != nullptr) {
-    close_callback(close_callback_data);
+    close_callback();
   }
   else {
     Gosu::Window::close();
