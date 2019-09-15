@@ -7,7 +7,7 @@ namespace Gosu
     public:
       TextInputForWrapper();
       std::string filter(std::string text) const override;
-      void (*filter_callback)(const char*, void* data) = nullptr;
+      void (*filter_callback)(void* data, const char* text) = nullptr;
       void* filter_callback_data = nullptr;
       std::string filter_result = "";
   };
@@ -19,7 +19,7 @@ Gosu::TextInputForWrapper::TextInputForWrapper() : Gosu::TextInput()
 std::string Gosu::TextInputForWrapper::filter(std::string text) const
 {
   if (filter_callback != nullptr) {
-    filter_callback(text.c_str(), filter_callback_data);
+    filter_callback(filter_callback_data, text.c_str());
     return filter_result;
   }
   else {
@@ -69,7 +69,7 @@ extern "C" {
     return reinterpret_cast<Gosu::TextInputForWrapper *>(text_input)->set_selection_start(pos);
   }
 
-  void Gosu_TextInput_set_filter(Gosu_TextInput *text_input, void function(const char* text, void* data), void* data)
+  void Gosu_TextInput_set_filter(Gosu_TextInput *text_input, void function(void* data, const char* text), void* data)
   {
     reinterpret_cast<Gosu::TextInputForWrapper*>( text_input )->filter_callback = function;
     reinterpret_cast<Gosu::TextInputForWrapper*>( text_input )->filter_callback_data = data;
