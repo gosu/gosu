@@ -270,7 +270,7 @@ extern "C" {
 
   const char* Gosu_Window_caption(Gosu_Window* window)
   {
-    thread_local std::string caption;
+    static thread_local std::string caption;
     caption = reinterpret_cast<Gosu::WindowForWrapper *>(window)->caption();
 
     return caption.c_str();

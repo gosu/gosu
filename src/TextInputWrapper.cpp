@@ -36,7 +36,7 @@ extern "C" {
 
   const char* Gosu_TextInput_text(Gosu_TextInput* text_input)
   {
-    thread_local std::string string;
+    static thread_local std::string string;
     string = reinterpret_cast<Gosu::TextInputForWrapper *>(text_input)->text();
 
     return string.c_str();
