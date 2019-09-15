@@ -29,14 +29,14 @@ namespace Gosu
 
     // Callback function pointers
     // All explicitly set as nullptr to prevent segfault
-    std::function<void(void)> update_callback;
-    std::function<void(void)> draw_callback;
-    std::function<void(unsigned btn)> button_down_callback;
-    std::function<void(unsigned btn)> button_up_callback;
-    std::function<void(const char* filename)> drop_callback;
-    std::function<bool(void)> needs_redraw_callback;
-    std::function<bool(void)> needs_cursor_callback;
-    std::function<void(void)> close_callback;
+    std::function<void (void)> update_callback;
+    std::function<void (void)> draw_callback;
+    std::function<void (unsigned btn)> button_down_callback;
+    std::function<void (unsigned btn)> button_up_callback;
+    std::function<void (const char* filename)> drop_callback;
+    std::function<bool (void)> needs_redraw_callback;
+    std::function<bool (void)> needs_cursor_callback;
+    std::function<void (void)> close_callback;
   };
 }
 

@@ -7,7 +7,7 @@ namespace Gosu
     public:
       TextInputForWrapper();
       std::string filter(std::string text) const override;
-      std::function<void(const char* text)> filter_callback;
+      std::function<void (const char* text)> filter_callback;
       std::string filter_result = "";
   };
 }
