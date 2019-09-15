@@ -11,8 +11,8 @@ namespace Gosu
     void (*button_down)(void *data, unsigned btn) = nullptr;
     void (*button_up)(void *data, unsigned btn) = nullptr;
     void (*drop)(void *data, const char *filename) = nullptr;
-    int (*needs_redraw)(void* data) = nullptr; // explicitly set to prevent segfault
-    int (*needs_cursor)(void* data) = nullptr;
+    bool (*needs_redraw)(void* data) = nullptr; // explicitly set to prevent segfault
+    bool (*needs_cursor)(void* data) = nullptr;
     void (*close)(void *data) = nullptr;
 
     void *update_data = nullptr;
@@ -32,8 +32,8 @@ namespace Gosu
       void set_button_down(void function(void *data, unsigned btn), void *data);
       void set_button_up(void function(void *data, unsigned btn), void *data);
       void set_drop(void function(void *data, const char *filename), void *data);
-      void set_needs_redraw(int function(void *data), void *data);
-      void set_needs_cursor(int function(void *data), void *data);
+      void set_needs_redraw(bool function(void *data), void *data);
+      void set_needs_cursor(bool function(void *data), void *data);
       void set_close(void function(void *data), void *data);
 
       void update() override;
@@ -85,13 +85,13 @@ void Gosu::WindowForWrapper::set_drop(void function(void *data, const char *file
   callbacks.drop_data = data;
 }
 
-void Gosu::WindowForWrapper::set_needs_redraw(int function(void *data), void *data)
+void Gosu::WindowForWrapper::set_needs_redraw(bool function(void *data), void *data)
 {
   callbacks.needs_redraw = function;
   callbacks.needs_redraw_data = data;
 }
 
-void Gosu::WindowForWrapper::set_needs_cursor(int function(void *data), void *data)
+void Gosu::WindowForWrapper::set_needs_cursor(bool function(void *data), void *data)
 {
   callbacks.needs_cursor = function;
   callbacks.needs_cursor_data = data;
@@ -219,12 +219,12 @@ extern "C" {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_drop(function, data);
   }
 
-  void Gosu_Window_set_needs_redraw(Gosu_Window *window, int function(void *data), void *data)
+  void Gosu_Window_set_needs_redraw(Gosu_Window *window, bool function(void *data), void *data)
   {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_needs_redraw(function, data);
   }
 
-  void Gosu_Window_set_needs_cursor(Gosu_Window *window, int function(void *data), void *data)
+  void Gosu_Window_set_needs_cursor(Gosu_Window *window, bool function(void *data), void *data)
   {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->set_needs_cursor(function, data);
   }
@@ -270,7 +270,10 @@ extern "C" {
 
   const char* Gosu_Window_caption(Gosu_Window* window)
   {
-    return reinterpret_cast<Gosu::WindowForWrapper*>( window )->caption().c_str();
+    thread_local std::string caption;
+    caption = reinterpret_cast<Gosu::WindowForWrapper *>(window)->caption();
+
+    return caption.c_str();
   }
 
   void Gosu_Window_set_caption(Gosu_Window* window, const char* caption)
