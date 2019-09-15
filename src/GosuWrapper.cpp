@@ -168,7 +168,10 @@ extern "C" {
 
   const char* Gosu_button_id_to_char(int id)
   {
-    return Gosu::Input::id_to_char((Gosu::Button)id).c_str();
+    static thread_local std::string button;
+    button = Gosu::Input::id_to_char((Gosu::Button)id);
+
+    return button.c_str();
   }
 
   unsigned Gosu_button_char_to_id(const char* btn)
@@ -183,7 +186,10 @@ extern "C" {
 
   const char* Gosu_language()
   {
-    return Gosu::language().c_str();
+    static thread_local std::string language;
+    language = Gosu::language();
+
+    return language.c_str();
   }
 
   long Gosu_milliseconds()
@@ -193,6 +199,9 @@ extern "C" {
 
   const char* Gosu_default_font_name()
   {
-    return Gosu::default_font_name().c_str();
+    static thread_local std::string name;
+    name = Gosu::default_font_name();
+
+    return name.c_str();
   }
 }
