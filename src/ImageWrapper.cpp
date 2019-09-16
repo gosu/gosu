@@ -27,17 +27,16 @@ extern "C" {
     return reinterpret_cast<Gosu_Image*>( new Gosu::Image(bitmap, image_flags) );
   }
 
-  // TODO: replace use of char* with something that doesn't eat NULL
-  Gosu_Image *Gosu_Image_create_from_blob(const char* blob, int columns, int rows, unsigned image_flags)
+  Gosu_Image *Gosu_Image_create_from_blob(unsigned char* blob, int byte_count, int columns, int rows, unsigned image_flags)
   {
     std::size_t size = columns * rows * 4;
     Gosu::Bitmap bitmap(columns, rows, Gosu::Color::NONE);
 
-    if (strlen(blob) == size) {
+    if (byte_count == size) {
       // 32 bit per pixel, assume R8G8B8A8
       std::memcpy(bitmap.data(), blob, size);
     }
-    else if (strlen(blob) == size * sizeof(float)) {
+    else if (byte_count == size * sizeof(float)) {
       // 128 bit per channel, assume float/float/float/float
       const float *in = reinterpret_cast<const float *>( blob );
       Gosu::Color::Channel *out = reinterpret_cast<Gosu::Color::Channel *>(bitmap.data());
@@ -129,14 +128,13 @@ extern "C" {
     reinterpret_cast<Gosu::Image*>( image )->data().insert(bmp, x, y);
   }
 
-  // TODO: replace use of char* with something that doesn't eat NULL
-  const char* Gosu_Image_to_blob(Gosu_Image *image)
+  unsigned char* Gosu_Image_to_blob(Gosu_Image *image)
   {
     Gosu::Image* gosu_image = reinterpret_cast<Gosu::Image*>( image );
     static thread_local Gosu::Bitmap bitmap;
     bitmap = gosu_image->data().to_bitmap();
 
-    return reinterpret_cast<const char*>(bitmap.data());
+    return reinterpret_cast<unsigned char*>(bitmap.data());
   }
 
   void Gosu_Image_save(Gosu_Image* image, const char* filename)

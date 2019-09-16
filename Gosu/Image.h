@@ -13,7 +13,7 @@ typedef struct Gosu_GLTexInfo {
 
 // Constructor
 Gosu_Image* Gosu_Image_create(const char *filename, unsigned image_flags);
-Gosu_Image *Gosu_Image_create_from_blob(const char *blob, int width, int height, unsigned image_flags); // support for RMagick blob objects
+Gosu_Image *Gosu_Image_create_from_blob(unsigned char *blob, int byte_count, int width, int height, unsigned image_flags); // support for RMagick blob objects
 Gosu_Image *Gosu_Image_create_from_markup(const char *markup, const char *font, double font_height,
                                         int width, double spacing, unsigned align, unsigned font_flags, unsigned image_flags);
 Gosu_Image* Gosu_Image_create_from_text(const char *text, const char *font, double font_height,
@@ -45,7 +45,7 @@ void Gosu_Image_draw_as_quad(Gosu_Image *image, double x1, double y1, unsigned c
 // Operations
 void Gosu_Image_insert(Gosu_Image *image, Gosu_Image *source, int x, int y);
 void Gosu_Image_save(Gosu_Image *image, const char *filename);
-const char* Gosu_Image_to_blob(Gosu_Image *image);
+unsigned char* Gosu_Image_to_blob(Gosu_Image *image);
 Gosu_GLTexInfo* Gosu_Image_gl_tex_info(Gosu_Image *image);
 
 #ifdef __cplusplus
