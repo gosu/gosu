@@ -250,6 +250,11 @@ extern "C" {
     return reinterpret_cast<Gosu::WindowForWrapper*>( window )->fullscreen();
   }
 
+  bool Gosu_Window_resizable(Gosu_Window *window)
+  {
+    return reinterpret_cast<Gosu::WindowForWrapper*>( window )->resizable();
+  }
+
   const char* Gosu_Window_caption(Gosu_Window* window)
   {
     static thread_local std::string caption;

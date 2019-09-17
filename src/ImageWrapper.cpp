@@ -59,6 +59,23 @@ extern "C" {
     return reinterpret_cast<Gosu_Image *>(image_data.get() ? new Gosu::Image(std::move(image_data)) : nullptr);
   }
 
+  void Gosu_Image_create_from_tiles(const char* source, int tile_width, int tile_height, Gosu_Image** buffer, int buffer_size, unsigned image_flags)
+  {
+    std::vector<Gosu::Image> gosu_images = Gosu::load_tiles(source, tile_width, tile_height, image_flags);
+
+    // TODO: Improve error message
+    if (sizeof(buffer) * buffer_size != sizeof(Gosu_Image *) * gosu_images.size()) {
+      printf("Provided buffer is not the correct size, got: %zu, need: %zu.\n", sizeof(buffer) * buffer_size, sizeof(Gosu_Image *) * gosu_images.size());
+      abort();
+    }
+
+    for(int i = 0; i < gosu_images.size(); i++)
+    {
+      Gosu::Image img = gosu_images[i];
+      buffer[i] = reinterpret_cast<Gosu_Image*>(new Gosu::Image(img) );
+    }
+  }
+
   // Properties
   unsigned Gosu_Image_width(Gosu_Image* image)
   {
@@ -73,6 +90,7 @@ extern "C" {
   Gosu_GLTexInfo* Gosu_Image_gl_tex_info(Gosu_Image* image)
   {
     Gosu_GLTexInfo* tex_info;
+    // FIXME: accessing gosu_texture_info causes segfault
     const Gosu::GLTexInfo* gosu_texture_info = reinterpret_cast<Gosu::Image*>( image )->data().gl_tex_info();
     if (gosu_texture_info) {
       tex_info->texture_name = gosu_texture_info->tex_name;
