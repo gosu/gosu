@@ -69,7 +69,7 @@ extern "C" {
       abort();
     }
 
-    for(int i = 0; i < gosu_images.size(); i++)
+    for (int i = 0; i < gosu_images.size(); i++)
     {
       Gosu::Image img = gosu_images[i];
       buffer[i] = reinterpret_cast<Gosu_Image*>(new Gosu::Image(img) );
