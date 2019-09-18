@@ -245,12 +245,12 @@ extern "C" {
     reinterpret_cast<Gosu::WindowForWrapper*>( window )->close_immediately();
   }
 
-  bool Gosu_Window_fullscreen(Gosu_Window* window)
+  bool Gosu_Window_is_fullscreen(Gosu_Window* window)
   {
     return reinterpret_cast<Gosu::WindowForWrapper*>( window )->fullscreen();
   }
 
-  bool Gosu_Window_resizable(Gosu_Window *window)
+  bool Gosu_Window_is_resizable(Gosu_Window *window)
   {
     return reinterpret_cast<Gosu::WindowForWrapper*>( window )->resizable();
   }

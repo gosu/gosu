@@ -26,9 +26,9 @@ void Gosu_Window_gosu_button_down(Gosu_Window* window, unsigned btn);
 // Properties
 int Gosu_Window_width(Gosu_Window* window);
 int Gosu_Window_height(Gosu_Window* window);
-bool Gosu_Window_fullscreen(Gosu_Window* window);
+bool Gosu_Window_is_fullscreen(Gosu_Window* window);
+bool Gosu_Window_is_resizable(Gosu_Window* window);
 double Gosu_Window_update_interval(Gosu_Window* window);
-bool Gosu_Window_resizable(Gosu_Window* window);
 const char* Gosu_Window_caption(Gosu_Window* window);
 
 Gosu_TextInput* Gosu_Window_text_input(Gosu_Window *window);
