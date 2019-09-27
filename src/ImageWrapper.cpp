@@ -59,19 +59,12 @@ extern "C" {
     return reinterpret_cast<Gosu_Image *>(image_data.get() ? new Gosu::Image(std::move(image_data)) : nullptr);
   }
 
-  void Gosu_Image_create_from_tiles(const char* source, int tile_width, int tile_height, Gosu_Image** buffer, int buffer_size, unsigned image_flags)
+  void Gosu_Image_create_from_tiles(const char* source, int tile_width, int tile_height, void function(void* data, Gosu_Image* image), void* data, unsigned image_flags)
   {
     std::vector<Gosu::Image> gosu_images = Gosu::load_tiles(source, tile_width, tile_height, image_flags);
 
-    // TODO: Improve error message
-    if (sizeof(buffer) * buffer_size != sizeof(Gosu_Image *) * gosu_images.size()) {
-      printf("Provided buffer is not the correct size, got: %zu, need: %zu.\n", sizeof(buffer) * buffer_size, sizeof(Gosu_Image *) * gosu_images.size());
-      abort();
-    }
-
-    for (int i = 0; i < gosu_images.size(); i++) {
-      Gosu::Image img = gosu_images[i];
-      buffer[i] = reinterpret_cast<Gosu_Image*>(new Gosu::Image(img) );
+    for (Gosu::Image &img : gosu_images) {
+      function(data, reinterpret_cast<Gosu_Image*>(new Gosu::Image(img) ));
     }
   }
 
