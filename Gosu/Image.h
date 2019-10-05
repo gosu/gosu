@@ -7,7 +7,7 @@ extern "C" {
 typedef struct Gosu_Image Gosu_Image;
 
 typedef struct Gosu_GLTexInfo {
-  int texture_name;
+  int tex_name;
   double left, right, top, bottom;
 } Gosu_GLTexInfo;
 
@@ -45,7 +45,8 @@ void Gosu_Image_draw_as_quad(Gosu_Image *image, double x1, double y1, unsigned c
 void Gosu_Image_insert(Gosu_Image *image, Gosu_Image *source, int x, int y);
 void Gosu_Image_save(Gosu_Image *image, const char *filename);
 unsigned char* Gosu_Image_to_blob(Gosu_Image *image);
-Gosu_GLTexInfo* Gosu_Image_gl_tex_info(Gosu_Image *image);
+Gosu_GLTexInfo* Gosu_Image_gl_tex_info_create(Gosu_Image *image);
+void Gosu_Image_gl_tex_info_destroy(Gosu_GLTexInfo *tex_info);
 
 #ifdef __cplusplus
 }

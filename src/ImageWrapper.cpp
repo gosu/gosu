@@ -79,22 +79,21 @@ extern "C" {
     return reinterpret_cast<Gosu::Image*>( image )->height();
   }
 
-  Gosu_GLTexInfo* Gosu_Image_gl_tex_info(Gosu_Image* image)
+  Gosu_GLTexInfo *Gosu_Image_gl_tex_info_create(Gosu_Image *image)
   {
-    Gosu_GLTexInfo* tex_info;
-    // FIXME: accessing gosu_texture_info causes segfault
-    const Gosu::GLTexInfo* gosu_texture_info = reinterpret_cast<Gosu::Image*>( image )->data().gl_tex_info();
+    Gosu::Image *gosu_image = reinterpret_cast<Gosu::Image *>(image);
+    Gosu::GLTexInfo *gosu_texture_info = new Gosu::GLTexInfo(*gosu_image->data().gl_tex_info());
     if (gosu_texture_info) {
-      tex_info->texture_name = gosu_texture_info->tex_name;
-      tex_info->left         = gosu_texture_info->left;
-      tex_info->right        = gosu_texture_info->right;
-      tex_info->top          = gosu_texture_info->top;
-      tex_info->bottom       = gosu_texture_info->bottom;
-      return tex_info;
+      return reinterpret_cast<Gosu_GLTexInfo *>(gosu_texture_info);
     }
     else {
       return nullptr;
     }
+  }
+
+  void Gosu_Image_gl_tex_info_destroy(Gosu_GLTexInfo *gl_tex_info)
+  {
+    delete (reinterpret_cast<Gosu::GLTexInfo *>(gl_tex_info));
   }
 
   // Rendering
