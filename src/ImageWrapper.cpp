@@ -68,6 +68,15 @@ extern "C" {
     }
   }
 
+  void Gosu_Image_create_tiles_from_image(Gosu_Image *image, int tile_width, int tile_height, void function(void* data, Gosu_Image* image), void* data, unsigned image_flags)
+  {
+    std::vector<Gosu::Image> gosu_images = Gosu::load_tiles(reinterpret_cast<Gosu::Image*>(image)->data().to_bitmap(), tile_width, tile_height, image_flags);
+
+    for (Gosu::Image &img : gosu_images) {
+      function(data, reinterpret_cast<Gosu_Image*>(new Gosu::Image(img) ));
+    }
+  }
+
   // Properties
   unsigned Gosu_Image_width(Gosu_Image* image)
   {

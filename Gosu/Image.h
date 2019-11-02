@@ -21,6 +21,7 @@ Gosu_Image* Gosu_Image_create_from_text(const char *text, const char *font, doub
 Gosu_Image* Gosu_Image_create_from_subimage(Gosu_Image *source, int left, int top, int width, int height);
 
 void Gosu_Image_create_from_tiles(const char *source, int tile_width, int tile_height, void function(void* data, Gosu_Image* image), void *data, unsigned image_flags);
+void Gosu_Image_create_tiles_from_image(Gosu_Image *image, int tile_width, int tile_height, void function(void *data, Gosu_Image *image), void *data, unsigned image_flags);
 
 // Destructor
 void Gosu_Image_destroy(Gosu_Image *image);
