@@ -4,24 +4,35 @@
 extern "C" {
   #include <Gosu/Gosu.h>
 
-  void Gosu_gl_z(double z, void function(void))
+  void Gosu_gl_z(double z, void function(void *data), void *data)
   {
-    Gosu::Graphics::gl(z, function);
+    std::function<void (void)> callback;
+    callback = [=](void) { function(data); };
+
+    Gosu::Graphics::gl(z, callback);
   }
 
-  void Gosu_gl(void function(void))
+  void Gosu_gl(void function(void *data), void *data)
   {
-    Gosu::Graphics::gl(function);
+    std::function<void (void)> callback;
+    callback = [=](void) { function(data); };
+
+    Gosu::Graphics::gl(callback);
   }
 
-  Gosu_Image *Gosu_render(int width, int height, void function(void), unsigned image_flags)
+  Gosu_Image *Gosu_render(int width, int height, void function(void *data), void *data, unsigned image_flags)
   {
-    return reinterpret_cast<Gosu_Image*>( new Gosu::Image(Gosu::Graphics::render(width, height, function, image_flags)) );
+    std::function<void (void)> callback;
+    callback = [=](void) { function(data); };
+
+    return reinterpret_cast<Gosu_Image*>( new Gosu::Image(Gosu::Graphics::render(width, height, callback, image_flags)) );
   }
 
-  Gosu_Image *Gosu_record(int width, int height, void function(void))
+  Gosu_Image *Gosu_record(int width, int height, void function(void *data), void *data)
   {
-    return reinterpret_cast<Gosu_Image*>( new Gosu::Image(Gosu::Graphics::record(width, height, function)) );
+    std::function<void (void)> callback;
+    callback = [=](void) { function(data); };
+    return reinterpret_cast<Gosu_Image*>( new Gosu::Image(Gosu::Graphics::record(width, height, callback)) );
   }
 
   void Gosu_flush()
@@ -31,32 +42,47 @@ extern "C" {
 
   void Gosu_transform(double m0, double m1, double m2, double m3, double m4, double m5, double m6,
                       double m7, double m8, double m9, double m10, double m11, double m12, double m13,
-                      double m14, double m15, void function(void))
+                      double m14, double m15, void function(void *data), void *data)
   {
     Gosu::Transform transform = {
         m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15
     };
-    Gosu::Graphics::transform(transform, function);
+    std::function<void (void)> callback;
+
+    callback = [=](void) { function(data); };
+    Gosu::Graphics::transform(transform, callback);
   }
 
-  void Gosu_translate(double x, double y, void function(void))
+  void Gosu_translate(double x, double y, void function(void *data), void *data)
   {
-    Gosu::Graphics::transform(Gosu::translate(x, y), function);
+    std::function<void (void)> callback;
+    callback = [=](void) { function(data); };
+
+    Gosu::Graphics::transform(Gosu::translate(x, y), callback);
   }
 
-  void Gosu_scale(double scale_x, double scale_y, double around_x, double around_y, void function(void))
+  void Gosu_scale(double scale_x, double scale_y, double around_x, double around_y, void function(void *data), void *data)
   {
-    Gosu::Graphics::transform(Gosu::scale(scale_x, scale_y, around_x, around_y), function);
+    std::function<void (void)> callback;
+    callback = [=](void) { function(data); };
+
+    Gosu::Graphics::transform(Gosu::scale(scale_x, scale_y, around_x, around_y), callback);
   }
 
-  void Gosu_rotate(double angle, double around_x, double around_y, void function(void))
+  void Gosu_rotate(double angle, double around_x, double around_y, void function(void *data), void *data)
   {
-    Gosu::Graphics::transform(Gosu::rotate(angle, around_x, around_y), function);
+    std::function<void (void)> callback;
+    callback = [=](void) { function(data); };
+
+    Gosu::Graphics::transform(Gosu::rotate(angle, around_x, around_y), callback);
   }
 
-  void Gosu_clip_to(double x, double y, double width, double height, void function(void))
+  void Gosu_clip_to(double x, double y, double width, double height, void function(void *data), void *data)
   {
-    Gosu::Graphics::clip_to(x, y, width, height, function);
+    std::function<void (void)> callback;
+    callback = [=](void) { function(data); };
+
+    Gosu::Graphics::clip_to(x, y, width, height, callback);
   }
 
   void Gosu_draw_line(double x1, double y1, unsigned c1,

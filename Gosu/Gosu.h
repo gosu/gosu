@@ -14,22 +14,22 @@ extern "C" {
 // #include <Gosu/Channel.h>
 
 // Graphics operations
-void Gosu_gl_z(double z, void function());
-void Gosu_gl(void function());
+void Gosu_gl_z(double z, void function(void *data), void* data);
+void Gosu_gl(void function(void *data), void* data);
 void Gosu_flush();
-Gosu_Image* Gosu_render(int width, int height, void function(), unsigned image_flags);
-Gosu_Image* Gosu_record(int width, int height, void function());
-void Gosu_clip_to(double x, double y, double width, double height, void function());
+Gosu_Image* Gosu_render(int width, int height, void function(void *data), void* data, unsigned image_flags);
+Gosu_Image* Gosu_record(int width, int height, void function(void *data), void* data);
+void Gosu_clip_to(double x, double y, double width, double height, void function(void *data), void* data);
 
 // Transformations
 void Gosu_transform(double m0, double m1, double m2, double m3, double m4, double m5, double m6,
                     double m7, double m8, double m9, double m10, double m11, double m12, double m13,
-                    double m14, double m15, void function());
-void Gosu_translate(double x, double y, void function());
-void Gosu_scale(double scale_x, double scale_y, double around_x, double around_y, void function());
-void Gosu_rotate(double angle, double around_x, double around_y, void function());
+                    double m14, double m15, void function(void *data), void* data);
+void Gosu_translate(double x, double y, void function(void *data), void* data);
+void Gosu_scale(double scale_x, double scale_y, double around_x, double around_y, void function(void *data), void* data);
+void Gosu_rotate(double angle, double around_x, double around_y, void function(void *data), void* data);
 
-void Gosu_clip_to(double x, double y, double width, double height, void function());
+void Gosu_clip_to(double x, double y, double width, double height, void function(void *data), void* data);
 
 // Rendering
 void Gosu_draw_line(double x1, double y1, unsigned c1,
