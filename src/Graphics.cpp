@@ -68,7 +68,7 @@ struct Gosu::Graphics::Impl
     {
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glDisable(GL_BLEND);
-        // Reset the colour to white to avoid surprises.
+        // Reset the color to white to avoid surprises.
         // https://www.libgosu.org/cgi-bin/mwf/topic_show.pl?pid=9115#pid9115
         glColor4ubv(reinterpret_cast<const GLubyte*>(&Color::WHITE));
         while (glGetError() != GL_NO_ERROR);
@@ -287,13 +287,16 @@ Gosu::Image Gosu::Graphics::render(int width, int height, const function<void ()
 
     // This is the actual render-to-texture step.
     Image result = OffScreenTarget(width, height, image_flags).render([&] {
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
         glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_BLEND);
         queues.emplace_back(QM_RENDER_TO_TEXTURE);
         f();
         queues.back().perform_draw_ops_and_code();
         queues.pop_back();
         glFlush();
+        glPopAttrib();
     });
     
     // Restore previous matrix and glViewport.
