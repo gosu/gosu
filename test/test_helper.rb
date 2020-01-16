@@ -61,15 +61,25 @@ module TestHelper
     File.join(File.dirname(expected), actual_basename)
   end
 
-  def assert_output_matches(expected, threshold, size)
-    expected = File.expand_path("#{expected}.png", File.dirname(__FILE__))
+  def assert_image_matches(expected, actual_image, threshold)
+    expected_filename = File.expand_path("#{expected}.png", File.dirname(__FILE__))
+    actual_filename = actual_from_expected_filename(expected_filename)
     
+    begin
+      assert actual_image.similar?(Gosu::Image.new(expected_filename), threshold),
+             "Image should look similar to #{expected_filename}"
+    rescue Minitest::Assertion
+      # When a comparison fails, save the "actual" image next to the expected one.
+      actual_image.save actual_filename
+      raise
+    end
+    # Since the comparison succeeded, we can clean up the last "actual" image (if any).
+    File.delete actual_filename if File.exist? actual_filename
+  end
+
+  def assert_output_matches(expected, threshold, size)
     actual_image = Gosu.render(*size) { yield }
-
-    actual_image.save actual_from_expected_filename(expected) if ENV["DEBUG"]
-
-    assert actual_image.similar?(Gosu::Image.new(expected), threshold),
-           "Screenshot should look similar to #{expected}"
+    assert_image_matches(expected, actual_image, threshold)
   end
 end
 

@@ -28,6 +28,12 @@ class Gosu::Font
 end
 
 class Gosu::Image
+  BlobHelper = Struct.new(:columns, :rows, :to_blob)
+  
+  def self.from_blob(width, height, rgba = "\0\0\0\0" * (width * height))
+    self.new(BlobHelper.new(width, height, rgba))
+  end
+  
   # from_markup will stop parsing markup in Gosu 1.0.
   def self.from_markup(*args)
     self.from_text(*args)
