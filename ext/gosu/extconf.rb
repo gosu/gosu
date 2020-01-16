@@ -46,6 +46,9 @@ if `uname`.chomp == 'Darwin'
   $CXXFLAGS << " #{`sdl2-config --cflags`.chomp}"
   # Prefer statically linking SDL 2.
   $LDFLAGS  << " #{`sdl2-config --static-libs`.chomp} -framework OpenGL -framework Metal -framework OpenAL"
+  # And yet another hack: `sdl2-config --static-libs` uses `-lSDL2` instead of linking to the static library,
+  # even if it exists. -> Manually replace it. (Ugh!)
+  $LDFLAGS.sub! " -lSDL2 ", " /usr/local/lib/libSDL2.a " if File.exist? "/usr/local/lib/libSDL2.a"
   
   # Disable building of 32-bit slices in Apple's Ruby.
   # (RbConfig::CONFIG['CXXFLAGS'] on 10.11: -arch x86_64 -arch i386 -g -Os -pipe)
