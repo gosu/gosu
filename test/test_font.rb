@@ -4,11 +4,7 @@ require_relative "test_helper"
 class TestFont < Minitest::Test
   include TestHelper
 
-  SINGLE_PIXEL = begin
-    image_data = Struct.new(:columns, :rows, :to_blob)
-    single_pixel_data = image_data.new(1, 1, "\xff\xff\xff\xff")
-    Gosu::Image.new(single_pixel_data)
-  end
+  SINGLE_PIXEL = Gosu::Image.from_blob(1, 1, "\xff\xff\xff\xff")
   
   def test_markup_parsing
     font = Gosu::Font.new(20)
