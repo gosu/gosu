@@ -42,14 +42,14 @@ class TestFont < Minitest::Test
     
     assert_output_matches "test_font/draw_markup", 0.98, [200, 100] do
       # draw this string repeatedly to make up for opacity differences in OpenGL renderers.
-      20.times do
+      255.times do
         font.draw_markup "Hi! <c=f00>Red.\r\nNew   line! Äöß\n", 5, 5, -6, 2.0, 4.0, 0xff_ff00ff, :add
       end
     end
     
     assert_output_matches "test_font/draw_markup_rel", 0.98, [100, 100] do
       # draw this string repeatedly to make up for opacity differences in OpenGL renderers.
-      20.times do
+      255.times do
         font.draw_markup_rel "<c=000>I &lt;3 Ruby/Gosu!\n", 50, 50, 5, 0.4, -2
       end
     end
@@ -71,7 +71,7 @@ class TestFont < Minitest::Test
     # Font#draw_rot has been deprecated a long time ago.
     assert_output_matches "test_font/draw_rot", 0.98, [200, 200] do
       # draw this string repeatedly to make up for opacity differences in OpenGL renderers.
-      20.times do
+      255.times do
         font.draw_rot "<b>Hello</b> <c=800>World!</c>", 50, 40, 0, 45, 1, 3, 0xff_ff00ff, :add
       end
     end
