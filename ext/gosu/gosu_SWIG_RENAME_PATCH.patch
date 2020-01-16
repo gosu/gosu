@@ -1,75 +1,75 @@
 --- src/RubyGosu.cxx
 +++ src/RubyGosu.cxx
-@@ -2912,14 +2912,14 @@ SwigDirector_Window::~SwigDirector_Window() {
+@@ -3216,14 +3216,14 @@
  void SwigDirector_Window::update() {
    VALUE SWIGUNUSED result;
    
--  result = rb_funcall(swig_get_self(), rb_intern("update"), 0, NULL);
-+  result = rb_funcall(swig_get_self(), rb_intern("protected_update"), 0, NULL);
+-  result = rb_funcall(swig_get_self(), rb_intern("update"), 0, Qnil);
++  result = rb_funcall(swig_get_self(), rb_intern("protected_update"), 0, Qnil);
  }
  
  
  void SwigDirector_Window::draw() {
    VALUE SWIGUNUSED result;
    
--  result = rb_funcall(swig_get_self(), rb_intern("draw"), 0, NULL);
-+  result = rb_funcall(swig_get_self(), rb_intern("protected_draw_2"), 0, NULL);
+-  result = rb_funcall(swig_get_self(), rb_intern("draw"), 0, Qnil);
++  result = rb_funcall(swig_get_self(), rb_intern("protected_draw_2"), 0, Qnil);
  }
  
  
-@@ -2927,7 +2927,7 @@ bool SwigDirector_Window::needsRedraw() const {
-   bool c_result ;
+@@ -3231,7 +3231,7 @@
+   bool c_result = SwigValueInit< bool >() ;
    VALUE SWIGUNUSED result;
    
--  result = rb_funcall(swig_get_self(), rb_intern("needs_redraw?"), 0, NULL);
-+  result = rb_funcall(swig_get_self(), rb_intern("protected_needs_redraw?"), 0, NULL);
+-  result = rb_funcall(swig_get_self(), rb_intern("needs_redraw?"), 0, Qnil);
++  result = rb_funcall(swig_get_self(), rb_intern("protected_needs_redraw?"), 0, Qnil);
    bool swig_val;
    int swig_res = SWIG_AsVal_bool(result, &swig_val);
    if (!SWIG_IsOK(swig_res)) {
-@@ -2942,7 +2942,7 @@ bool SwigDirector_Window::needsCursor() const {
-   bool c_result ;
+@@ -3246,7 +3246,7 @@
+   bool c_result = SwigValueInit< bool >() ;
    VALUE SWIGUNUSED result;
    
--  result = rb_funcall(swig_get_self(), rb_intern("needs_cursor?"), 0, NULL);
-+  result = rb_funcall(swig_get_self(), rb_intern("protected_needs_cursor?"), 0, NULL);
+-  result = rb_funcall(swig_get_self(), rb_intern("needs_cursor?"), 0, Qnil);
++  result = rb_funcall(swig_get_self(), rb_intern("protected_needs_cursor?"), 0, Qnil);
    bool swig_val;
    int swig_res = SWIG_AsVal_bool(result, &swig_val);
    if (!SWIG_IsOK(swig_res)) {
-@@ -2956,7 +2956,7 @@ bool SwigDirector_Window::needsCursor() const {
- void SwigDirector_Window::loseFocus() {
+@@ -3260,7 +3260,7 @@
+ void SwigDirector_Window::lose_focus() {
    VALUE SWIGUNUSED result;
    
--  result = rb_funcall(swig_get_self(), rb_intern("lose_focus"), 0, NULL);
-+  result = rb_funcall(swig_get_self(), rb_intern("protected_lose_focus"), 0, NULL);
+-  result = rb_funcall(swig_get_self(), rb_intern("lose_focus"), 0, Qnil);
++  result = rb_funcall(swig_get_self(), rb_intern("protected_lose_focus"), 0, Qnil);
  }
  
  
-@@ -2977,7 +2977,7 @@ void SwigDirector_Window::buttonDown(Gosu::Button arg0) {
-     else
-     obj0 = LONG2NUM((&arg0)->id());
+@@ -3278,7 +3278,7 @@
+   {
+     obj0 = arg0 == Gosu::NO_BUTTON ? Qnil : LONG2NUM((&arg0)->id());
    }
 -  result = rb_funcall(swig_get_self(), rb_intern("button_down"), 1,obj0);
 +  result = rb_funcall(swig_get_self(), rb_intern("protected_button_down"), 1,obj0);
  }
  
  
-@@ -2991,7 +2991,7 @@ void SwigDirector_Window::buttonUp(Gosu::Button arg0) {
-     else
-     obj0 = LONG2NUM((&arg0)->id());
+@@ -3289,7 +3289,7 @@
+   {
+     obj0 = arg0 == Gosu::NO_BUTTON ? Qnil : LONG2NUM((&arg0)->id());
    }
 -  result = rb_funcall(swig_get_self(), rb_intern("button_up"), 1,obj0);
 +  result = rb_funcall(swig_get_self(), rb_intern("protected_button_up"), 1,obj0);
  }
-
-
-@@ -11515,8 +11515,8 @@ SWIGEXPORT void Init_gosu(void) {
+ 
+ 
+@@ -11696,8 +11696,8 @@
    }
-
+   
    SWIG_RubyInitializeTrackings();
 -  rb_define_const(mGosu, "VERSION", SWIG_NewPointerObj(SWIG_as_voidptr(&Gosu::VERSION),SWIGTYPE_p_std__string, 0 ));
 -  rb_define_const(mGosu, "LICENSES", SWIG_NewPointerObj(SWIG_as_voidptr(&Gosu::LICENSES),SWIGTYPE_p_std__string, 0 ));
 +  rb_define_const(mGosu, "VERSION", SWIG_From_std_string(static_cast< std::string >(Gosu::VERSION)));
 +  rb_define_const(mGosu, "LICENSES", SWIG_From_std_string(static_cast< std::string >(Gosu::LICENSES)));
    rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
-   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(10)));
-   rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(8)));
+   rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(14)));
+   rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(5)));
