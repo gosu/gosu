@@ -349,6 +349,14 @@ module Gosu
     def initialize(source, options = {}); end
 
     ##
+    # Creates a new image with the given dimensions and RGBA pixel data.
+    #
+    # @param [Integer] width Width of the image in pixels.
+    # @param [Integer] height Height of the image in pixels.
+    # @param [String] rgba A string containing raw binary image data, with either one byte ('uint8') or four bytes ('float') per RGBA component.
+    def self.from_blob(width, height, rgba = "\0\0\0\0" * (width * height)); end
+
+    ##
     # Creates a reusable image from one or more lines of text.
     #
     # (Passing a Window reference is not necessary anymore, please use the first overload from now on.)
