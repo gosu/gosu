@@ -119,17 +119,25 @@ bool Gosu::MarkupParser::parse_markup()
 
 bool Gosu::MarkupParser::parse_escape_entity()
 {
+    auto translate_to = [this](char ch) {
+        if (word_state == ADDING_WHITESPACE) {
+            flush_to_consumer();
+            word_state = ADDING_WORD;
+        }
+        add_composed_substring(u32string(1, ch));
+    };
+    
     // These are not entities (images) but escapes for markup characters.
     if (match_and_skip("&lt;")) {
-        add_composed_substring(u32string(1, '<'));
+        translate_to('<');
         return true;
     }
     if (match_and_skip("&gt;")) {
-        add_composed_substring(u32string(1, '>'));
+        translate_to('>');
         return true;
     }
     if (match_and_skip("&amp;")) {
-        add_composed_substring(u32string(1, '&'));
+        translate_to('&');
         return true;
     }
 
