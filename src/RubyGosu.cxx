@@ -2597,6 +2597,9 @@ SWIGINTERN Gosu::Color Gosu_Color_argb__SWIG_1(Gosu::Color::Channel a,Gosu::Colo
 SWIGINTERN Gosu::Color Gosu_Color_argb__SWIG_2(std::uint32_t argb){
         return Gosu::Color(argb);
     }
+SWIGINTERN std::uint32_t Gosu_Color_to_i(Gosu::Color const *self){
+      return self->argb();
+    }
 SWIGINTERN Gosu::Color Gosu_Color_dup(Gosu::Color const *self){
         return *self;
     }
@@ -4981,6 +4984,45 @@ fail:
     "    Gosu::Color Color.argb(Gosu::Color::Channel a, Gosu::Color::Channel r, Gosu::Color::Channel g, Gosu::Color::Channel b)\n"
     "    Gosu::Color Color.argb(std::uint32_t argb)\n");
   
+  return Qnil;
+}
+
+
+/*
+  Document-method: Gosu::Color.to_i
+
+  call-seq:
+    to_i -> std::uint32_t
+
+Convert Color to an Integer.
+*/
+SWIGINTERN VALUE
+_wrap_Color_to_i(int argc, VALUE *argv, VALUE self) {
+  Gosu::Color *arg1 = (Gosu::Color *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  std::uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Color, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color const *","to_i", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Color * >(argp1);
+  {
+    try {
+      result = Gosu_Color_to_i((Gosu::Color const *)arg1);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_unsigned_SS_long(static_cast< unsigned long >(result));
+  return vresult;
+fail:
   return Qnil;
 }
 
@@ -11750,6 +11792,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_singleton_method(SwigClassColor.klass, "rgb", VALUEFUNC(_wrap_Color_rgb), -1);
   rb_define_singleton_method(SwigClassColor.klass, "rgba", VALUEFUNC(_wrap_Color_rgba), -1);
   rb_define_singleton_method(SwigClassColor.klass, "argb", VALUEFUNC(_wrap_Color_argb), -1);
+  rb_define_method(SwigClassColor.klass, "to_i", VALUEFUNC(_wrap_Color_to_i), -1);
   rb_define_method(SwigClassColor.klass, "dup", VALUEFUNC(_wrap_Color_dup), -1);
   rb_define_method(SwigClassColor.klass, "inspect", VALUEFUNC(_wrap_Color_inspect), -1);
   rb_define_method(SwigClassColor.klass, "==", VALUEFUNC(_wrap_Color___eq__), -1);
