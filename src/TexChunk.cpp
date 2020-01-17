@@ -82,39 +82,49 @@ Gosu::Bitmap Gosu::TexChunk::to_bitmap() const
     return texture->to_bitmap(x, y, w, h);
 }
 
-void Gosu::TexChunk::insert(const Bitmap& original, int x, int y)
+void Gosu::TexChunk::insert(const Bitmap& original_bitmap, int x, int y)
 {
-    Bitmap alternate;
-    const Bitmap* bitmap = &original;
+    Bitmap clipped_bitmap;
+    const Bitmap* bitmap = &original_bitmap;
     
-    if (x < 0 || y < 0 || x + original.width() > w || y + original.height() > h) {
-        int offset_x = 0, offset_y = 0;
-        int trimmed_width = original.width(), trimmed_height = original.height();
+    // If inserting the bitmap at the given position exceeds the boundaries of the space allocated
+    // for this image on the texture, we need to clip the bitmap and insert the clipped version
+    // instead.
+    if (x < 0 || y < 0 || x + original_bitmap.width() > w || y + original_bitmap.height() > h) {
+        // How many pixels to remove at the top and left sides.
+        int clip_left = 0, clip_top = 0;
+        // How large the clipped version needs to be.
+        int clipped_width = original_bitmap.width(), clipped_height = original_bitmap.height();
+
+        // Clip away pixels on the left side, if necessary.
         if (x < 0) {
-            offset_x = x;
-            trimmed_width += x;
+            clip_left = -x;
+            clipped_width -= -x;
             x = 0;
         }
+        // Clip away pixels at the top, if necessary.
         if (y < 0) {
-            offset_y = y;
-            trimmed_height += y;
+            clip_top = -y;
+            clipped_height -= -y;
             y = 0;
         }
-        if (x + trimmed_width > w) {
-            trimmed_width -= (w - x - trimmed_width);
+        // Clip away pixels on the right side, if necessary.
+        if (x + clipped_width > w) {
+            clipped_width = (w - x);
         }
-        if (y + trimmed_height > h) {
-            trimmed_height -= (h - y - trimmed_height);
+        // Clip away pixels on the bottom, if necessary.
+        if (y + clipped_height > h) {
+            clipped_height = (h - y);
         }
 
-        if (trimmed_width <= 0 || trimmed_height <= 0) return;
+        if (clipped_width <= 0 || clipped_height <= 0) return;
         
-        alternate.resize(trimmed_width, trimmed_height);
-        alternate.insert(original, offset_x, offset_y);
-        bitmap = &alternate;
+        clipped_bitmap.resize(clipped_width, clipped_height);
+        clipped_bitmap.insert(original_bitmap, -clip_left, -clip_top);
+        bitmap = &clipped_bitmap;
     }
     
     glBindTexture(GL_TEXTURE_2D, tex_name());
     glTexSubImage2D(GL_TEXTURE_2D, 0, this->x + x, this->y + y, bitmap->width(), bitmap->height(),
-        Color::GL_FORMAT, GL_UNSIGNED_BYTE, bitmap->data());
+                    Color::GL_FORMAT, GL_UNSIGNED_BYTE, bitmap->data());
 }
