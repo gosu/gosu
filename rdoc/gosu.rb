@@ -190,10 +190,19 @@ module Gosu
 
     # @!endgroup
 
-    # Returns a 32-bit representation of the color suitable for use with OpenGL calls. This color is stored in a fixed order in memory and its integer value may vary depending on your system's byte order.
+    ##
+    # @return [Integer] a 32-bit representation of the color in 0xAARRGGBB format.
+    def argb; end
+    
+    alias_method :to_i, :argb
+
+    # Returns a 32-bit representation of the color suitable for use with OpenGL calls. This color is stored in a fixed format in memory and its integer value may vary depending on your system's byte order.
     #
     # @return [Integer] a 32-bit OpenGL color.
     def gl; end
+    
+    # Returns an OpenGL integer constant that identifies the RGBA color format that Gosu uses.
+    GL_FORMAT = :some_integer
 
     ##
     # @return [Color] a copy of the color.

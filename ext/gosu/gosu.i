@@ -436,9 +436,6 @@ namespace Gosu
 %include "std_string.i"
 
 %ignore Gosu::Color::Channel;
-%ignore Gosu::Color::argb();
-%ignore Gosu::Color::bgr();
-%ignore Gosu::Color::abgr();
 %ignore Gosu::Color::NONE;
 %ignore Gosu::Color::BLACK;
 %ignore Gosu::Color::GRAY;
@@ -481,6 +478,11 @@ namespace Gosu
     static Gosu::Color argb(std::uint32_t argb)
     {
         return Gosu::Color(argb);
+    }
+    
+    std::uint32_t to_i() const
+    {
+      return $self->argb();
     }
     
     Gosu::Color dup() const

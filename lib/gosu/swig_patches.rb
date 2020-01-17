@@ -68,7 +68,13 @@ module Gosu
   end
 end
 
-# SWIG will not let me rename my method to '[]=', so use alias here.
+# SWIG somehow maps the instance method "argb" as an overload of the class
+# method of the same name.
+class Gosu::Color
+  alias_method :argb, :to_i
+end
+
+# SWIG will not let me rename my method to '[]=', so use alias_method here.
 class Gosu::Font
-  alias []= set_image
+  alias_method :[]=, :set_image
 end
