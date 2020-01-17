@@ -68,6 +68,11 @@ module Gosu
   end
 end
 
+# These were useful for working with Direct3D and the Win32 API a long time ago,
+# there was never a real reason to have them available in Ruby.
+Gosu.deprecate Gosu::Color, :bgr, :none
+Gosu.deprecate Gosu::Color, :abgr, :none
+
 # No need to pass a Window to Image.
 class Gosu::Image
   alias_method :initialize_without_window, :initialize
