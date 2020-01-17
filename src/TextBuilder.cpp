@@ -58,7 +58,7 @@ void Gosu::TextBuilder::flush_current_line(EndOfLineReason reason)
     }
     
     double whitespace_factor = 1.0;
-    if (align == AL_JUSTIFY && reason == LINE_TOO_LONG) {
+    if (align == AL_JUSTIFY && whitespace_width != 0 && reason == LINE_TOO_LONG) {
         whitespace_factor = (result.width() - words_width) / whitespace_width;
     }
     
@@ -132,7 +132,7 @@ void Gosu::TextBuilder::feed_word(vector<FormattedString>&& word)
     current_line.emplace_back(new_word);
     current_line_width += new_word.width;
 
-    if (current_line_width > result.width() || new_word.is_end_of_line) {
-        flush_current_line(new_word.is_end_of_line ? END_OF_PARAGRAPH : LINE_TOO_LONG);
+    if (new_word.is_end_of_line) {
+        flush_current_line(END_OF_PARAGRAPH);
     }
 }

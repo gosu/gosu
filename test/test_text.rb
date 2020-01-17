@@ -6,8 +6,8 @@ class TestText < Minitest::Test
   
   STRINGS = {
     # All of these strings are still horribly broken in Gosu.
-    # For now, the value of these tests is that all text is guaranteed to render the same across
-    # operating systems.
+    # The only thing that these tests verify is that they're equally broken on
+    # all operation systems.
     "unicode"    => "Grüße vom Test!",
     "whitespace" => "$ ls\n  .\t..\tfoo\r\n  bar\tqux        ",
     "markup"     => "<b>Bold, <u>underlined &amp; <i>italic. <c=4400ff>How <c=0f3>about</c> colors?</c></i></u>&lt;&gt;</b>",
@@ -24,14 +24,11 @@ class TestText < Minitest::Test
     OPTION_SETS.each_with_index do |options, i|
       define_method("test_text_#{key}_#{i}") do
         Dir.chdir File.join(File.dirname(__FILE__), "test_text") do
-          expected_filename = "text-#{key}-#{i}.png"
-
           # Prepend <c=f00> to each string because white-on-translucent images are hard
           # to view (at least on macOS).
-          image = Gosu::Image.from_text("<c=ff0000>#{string}", 41, options)
-          image.save actual_from_expected_filename(expected_filename) if ENV["DEBUG"]
-          expected = Gosu::Image.new(expected_filename)
-          assert_equal expected, image
+          image = Gosu::Image.from_markup("<c=ff0000>#{string}", 41, options)
+          
+          assert_image_matches "test_text/text-#{key}-#{i}", image, 1.00
         end
       end
     end

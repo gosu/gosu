@@ -33,6 +33,7 @@ Gosu::Bitmap Gosu::layout_text(const string& text, const string& font_name,
                                double font_height, double line_spacing,
                                int width, Alignment align, unsigned font_flags)
 {
+    // Escape all markup and delegate to layout_markup.
     return layout_markup(escape_markup(text), font_name,
                          font_height, line_spacing,
                          width, align, font_flags);
