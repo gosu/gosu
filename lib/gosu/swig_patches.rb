@@ -3,7 +3,7 @@
 # compatible, but I just call protected_update etc. in the Ruby wrapper so I can add this
 # custom debugging help:
 class Gosu::Window
-  alias initialize_without_hash initialize
+  alias_method :initialize_without_hash, :initialize
 
   def initialize width, height, *args
     if args.empty? or args.first.is_a? Hash
@@ -40,7 +40,7 @@ class Gosu::Window
     $gosu_gl_blocks = nil
   end
   
-  alias show_internal show
+  alias_method :show_internal, :show
   def show
     show_internal
     # Try to format the message nicely, without any useless patching that we are

@@ -70,7 +70,7 @@ end
 
 # No need to pass a Window to Image.
 class Gosu::Image
-  alias initialize_without_window initialize
+  alias_method :initialize_without_window, :initialize
 
   def initialize(*args)
     if args[0].is_a? Gosu::Window
@@ -86,7 +86,7 @@ class Gosu::Image
   end
 
   class << self
-    alias from_text_without_window from_text
+    alias_method :from_text_without_window, :from_text
   end
 
   def self.from_text(*args)
@@ -105,7 +105,7 @@ end
 
 # No need to pass a Window to Sample.
 class Gosu::Sample
-  alias initialize_without_window initialize
+  alias_method :initialize_without_window, :initialize
 
   def initialize(*args)
     if args.first.is_a? Gosu::Window
@@ -118,7 +118,7 @@ end
 
 # No need to pass a Window to Song.
 class Gosu::Song
-  alias initialize_without_window initialize
+  alias_method :initialize_without_window, :initialize
 
   def initialize(*args)
     if args.first.is_a? Gosu::Window

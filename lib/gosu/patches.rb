@@ -60,7 +60,7 @@ module Gosu
     FUCHSIA = Gosu::ImmutableColor.new(0xff_ff00ff)
     CYAN    = Gosu::ImmutableColor.new(0xff_00ffff)
 
-    alias hash gl
+    alias_method :hash, :gl
     def eql?(other)
       gl == other.gl
     end
@@ -71,7 +71,7 @@ class Gosu::Window
   # Call Thread.pass every tick, which may or may not be necessary for friendly co-existence with
   # Ruby's Thread class.
 
-  alias _tick tick
+  alias_method :_tick, :tick
 
   def tick
     Thread.pass
