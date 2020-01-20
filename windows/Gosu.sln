@@ -17,6 +17,8 @@ Global
 		Release (Ruby 2.4)|x86 = Release (Ruby 2.4)|x86
 		Release (Ruby 2.5)|x64 = Release (Ruby 2.5)|x64
 		Release (Ruby 2.5)|x86 = Release (Ruby 2.5)|x86
+		Release (Ruby 2.6)|x64 = Release (Ruby 2.6)|x64
+		Release (Ruby 2.6)|x86 = Release (Ruby 2.6)|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
@@ -37,6 +39,10 @@ Global
 		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.5)|x64.Build.0 = Release|x64
 		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.5)|x86.ActiveCfg = Release|Win32
 		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.5)|x86.Build.0 = Release|Win32
+		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.6)|x64.ActiveCfg = Release|x64
+		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.6)|x64.Build.0 = Release|x64
+		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.6)|x86.ActiveCfg = Release|Win32
+		{4989339B-019C-4399-86F5-1D9245C420C6}.Release (Ruby 2.6)|x86.Build.0 = Release|Win32
 		{4989339B-019C-4399-86F5-1D9245C420C6}.Release|x64.ActiveCfg = Release|x64
 		{4989339B-019C-4399-86F5-1D9245C420C6}.Release|x64.Build.0 = Release|x64
 		{4989339B-019C-4399-86F5-1D9245C420C6}.Release|x86.ActiveCfg = Release|Win32
@@ -57,10 +63,14 @@ Global
 		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.5)|x64.Build.0 = Release (Ruby 2.5)|x64
 		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.5)|x86.ActiveCfg = Release (Ruby 2.5)|Win32
 		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.5)|x86.Build.0 = Release (Ruby 2.5)|Win32
+		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.6)|x64.ActiveCfg = Release (Ruby 2.6)|x64
+		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.6)|x64.Build.0 = Release (Ruby 2.6)|x64
+		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.6)|x86.ActiveCfg = Release (Ruby 2.6)|Win32
+		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release (Ruby 2.6)|x86.Build.0 = Release (Ruby 2.6)|Win32
 		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release|x64.ActiveCfg = Release (Ruby 2.5)|x64
 		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release|x64.Build.0 = Release (Ruby 2.5)|x64
-		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release|x86.ActiveCfg = Release (Ruby 2.6)|Win32
-		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release|x86.Build.0 = Release (Ruby 2.6)|Win32
+		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release|x86.ActiveCfg = Release (Ruby 2.7)|Win32
+		{1A89DFFB-65C3-4FE2-89A9-18D718A8822C}.Release|x86.Build.0 = Release (Ruby 2.7)|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
