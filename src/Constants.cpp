@@ -5,8 +5,17 @@
 extern "C" {
 #endif
 
-  const char* Gosu_VERSION = Gosu::VERSION.c_str();
-  const char* Gosu_LICENSES = Gosu::LICENSES.c_str();
+  const char* Gosu_version() {
+    Gosu::VERSION.c_str();
+  }
+
+  const char* Gosu_licenses() {
+    Gosu::LICENSES.c_str();
+  }
+
+  unsigned Gosu_MAJOR_VERSION = GOSU_MAJOR_VERSION;
+  unsigned Gosu_MINOR_VERSION = GOSU_MINOR_VERSION;
+  unsigned Gosu_POINT_VERSION = GOSU_POINT_VERSION;
 
   unsigned Gosu_KB_RANGE_BEGIN = Gosu::KB_RANGE_BEGIN;
   unsigned Gosu_KB_ESCAPE = Gosu::KB_ESCAPE;
