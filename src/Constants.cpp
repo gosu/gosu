@@ -1,21 +1,49 @@
 #include <Gosu/Version.hpp>
 #include <Gosu/Buttons.hpp>
+#include <Gosu/GraphicsBase.hpp>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
   const char* Gosu_version() {
-    Gosu::VERSION.c_str();
+    return Gosu::VERSION.c_str();
   }
 
   const char* Gosu_licenses() {
-    Gosu::LICENSES.c_str();
+    return Gosu::LICENSES.c_str();
   }
 
   unsigned Gosu_MAJOR_VERSION = GOSU_MAJOR_VERSION;
   unsigned Gosu_MINOR_VERSION = GOSU_MINOR_VERSION;
   unsigned Gosu_POINT_VERSION = GOSU_POINT_VERSION;
+
+  // Alpha/Blend Modes
+  unsigned Gosu_AM_DEFAULT = Gosu::AM_DEFAULT;
+  unsigned Gosu_AM_INTERPOLATE = Gosu::AM_INTERPOLATE;
+  unsigned Gosu_AM_ADD = Gosu::AM_ADD;
+  unsigned Gosu_AM_MULTIPLY = Gosu::AM_MULTIPLY;
+
+  // Font Flags
+  unsigned Gosu_FF_BOLD = Gosu::FF_BOLD;
+  unsigned Gosu_FF_ITALIC = Gosu::FF_ITALIC;
+  unsigned Gosu_FF_UNDERLINE = Gosu::FF_UNDERLINE;
+  unsigned Gosu_FF_COMBINATIONS = Gosu::FF_COMBINATIONS;
+
+  // Alignment
+  unsigned Gosu_AL_LEFT = Gosu::AL_LEFT;
+  unsigned Gosu_AL_RIGHT = Gosu::AL_RIGHT;
+  unsigned Gosu_AL_CENTER = Gosu::AL_CENTER;
+  unsigned Gosu_AL_JUSTIFY = Gosu::AL_JUSTIFY;
+
+  // Image Flags
+  unsigned Gosu_IF_SMOOTH = Gosu::IF_SMOOTH;
+  unsigned Gosu_IF_TILEABLE_LEFT = Gosu::IF_TILEABLE_LEFT;
+  unsigned Gosu_IF_TILEABLE_TOP = Gosu::IF_TILEABLE_TOP;
+  unsigned Gosu_IF_TILEABLE_RIGHT = Gosu::IF_TILEABLE_RIGHT;
+  unsigned Gosu_IF_TILEABLE_BOTTOM = Gosu::IF_TILEABLE_BOTTOM;
+  unsigned Gosu_IF_TILEABLE = Gosu::IF_TILEABLE;
+  unsigned Gosu_IF_RETRO = Gosu::IF_RETRO;
 
   unsigned Gosu_KB_RANGE_BEGIN = Gosu::KB_RANGE_BEGIN;
   unsigned Gosu_KB_ESCAPE = Gosu::KB_ESCAPE;
