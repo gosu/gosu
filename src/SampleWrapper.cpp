@@ -10,7 +10,7 @@ Gosu_Sample *Gosu_Sample_create(const char *filename)
 
 void Gosu_Sample_destroy(Gosu_Sample *sample)
 {
-  delete( reinterpret_cast<Gosu_Sample *>( sample ) );
+  delete( reinterpret_cast<Gosu::Sample *>( sample ) );
 }
 
 Gosu_Channel *Gosu_Sample_play(Gosu_Sample *sample, double volume, double speed, bool looping)
