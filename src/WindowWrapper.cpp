@@ -29,14 +29,14 @@ namespace Gosu
 
     // Callback function pointers
     // All explicitly set as nullptr to prevent segfault
-    std::function<void (void)> update_callback;
-    std::function<void (void)> draw_callback;
+    std::function<void ()> update_callback;
+    std::function<void ()> draw_callback;
     std::function<void (unsigned btn)> button_down_callback;
     std::function<void (unsigned btn)> button_up_callback;
     std::function<void (const char* filename)> drop_callback;
-    std::function<bool (void)> needs_redraw_callback;
-    std::function<bool (void)> needs_cursor_callback;
-    std::function<void (void)> close_callback;
+    std::function<bool ()> needs_redraw_callback;
+    std::function<bool ()> needs_cursor_callback;
+    std::function<void ()> close_callback;
   };
 }
 
@@ -47,12 +47,12 @@ Gosu::WindowForWrapper::WindowForWrapper(int width, int height, bool fullscreen,
 
 void Gosu::WindowForWrapper::set_update(void function(void *data), void *data)
 {
-  update_callback = [=](void) { function(data); };
+  update_callback = [=]() { function(data); };
 }
 
 void Gosu::WindowForWrapper::set_draw(void function(void *data), void *data)
 {
-  draw_callback = [=](void) { function(data); };
+  draw_callback = [=]() { function(data); };
 }
 
 void Gosu::WindowForWrapper::set_button_down(void function(void *data, unsigned btn), void *data)
@@ -72,17 +72,17 @@ void Gosu::WindowForWrapper::set_drop(void function(void *data, const char *file
 
 void Gosu::WindowForWrapper::set_needs_redraw(bool function(void *data), void *data)
 {
-  needs_redraw_callback = [=](void)->bool { return function(data); };
+  needs_redraw_callback = [=]()->bool { return function(data); };
 }
 
 void Gosu::WindowForWrapper::set_needs_cursor(bool function(void *data), void *data)
 {
-  needs_cursor_callback = [=](void)->bool { return function(data); };
+  needs_cursor_callback = [=]()->bool { return function(data); };
 }
 
 void Gosu::WindowForWrapper::set_close(void function(void *data), void *data)
 {
-  close_callback = [=](void) { function(data); };
+  close_callback = [=]() { function(data); };
 }
 
 void Gosu::WindowForWrapper::update()

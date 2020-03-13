@@ -6,32 +6,32 @@ extern "C" {
 
   void Gosu_gl_z(double z, void function(void *data), void *data)
   {
-    std::function<void (void)> callback;
-    callback = [=](void) { function(data); };
+    std::function<void()> callback;
+    callback = [=]() { function(data); };
 
     Gosu::Graphics::gl(z, callback);
   }
 
   void Gosu_gl(void function(void *data), void *data)
   {
-    std::function<void (void)> callback;
-    callback = [=](void) { function(data); };
+    std::function<void()> callback;
+    callback = [=]() { function(data); };
 
     Gosu::Graphics::gl(callback);
   }
 
   Gosu_Image *Gosu_render(int width, int height, void function(void *data), void *data, unsigned image_flags)
   {
-    std::function<void (void)> callback;
-    callback = [=](void) { function(data); };
+    std::function<void()> callback;
+    callback = [=]() { function(data); };
 
     return reinterpret_cast<Gosu_Image*>( new Gosu::Image(Gosu::Graphics::render(width, height, callback, image_flags)) );
   }
 
   Gosu_Image *Gosu_record(int width, int height, void function(void *data), void *data)
   {
-    std::function<void (void)> callback;
-    callback = [=](void) { function(data); };
+    std::function<void()> callback;
+    callback = [=]() { function(data); };
     return reinterpret_cast<Gosu_Image*>( new Gosu::Image(Gosu::Graphics::record(width, height, callback)) );
   }
 
@@ -47,40 +47,40 @@ extern "C" {
     Gosu::Transform transform = {
         m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15
     };
-    std::function<void (void)> callback;
+    std::function<void()> callback;
+    callback = [=]() { function(data); };
 
-    callback = [=](void) { function(data); };
     Gosu::Graphics::transform(transform, callback);
   }
 
   void Gosu_translate(double x, double y, void function(void *data), void *data)
   {
-    std::function<void (void)> callback;
-    callback = [=](void) { function(data); };
+    std::function<void()> callback;
+    callback = [=]() { function(data); };
 
     Gosu::Graphics::transform(Gosu::translate(x, y), callback);
   }
 
   void Gosu_scale(double scale_x, double scale_y, double around_x, double around_y, void function(void *data), void *data)
   {
-    std::function<void (void)> callback;
-    callback = [=](void) { function(data); };
+    std::function<void()> callback;
+    callback = [=]() { function(data); };
 
     Gosu::Graphics::transform(Gosu::scale(scale_x, scale_y, around_x, around_y), callback);
   }
 
   void Gosu_rotate(double angle, double around_x, double around_y, void function(void *data), void *data)
   {
-    std::function<void (void)> callback;
-    callback = [=](void) { function(data); };
+    std::function<void()> callback;
+    callback = [=]() { function(data); };
 
     Gosu::Graphics::transform(Gosu::rotate(angle, around_x, around_y), callback);
   }
 
   void Gosu_clip_to(double x, double y, double width, double height, void function(void *data), void *data)
   {
-    std::function<void (void)> callback;
-    callback = [=](void) { function(data); };
+    std::function<void()> callback;
+    callback = [=]() { function(data); };
 
     Gosu::Graphics::clip_to(x, y, width, height, callback);
   }
