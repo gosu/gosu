@@ -6,15 +6,6 @@ class WindowForWrapper : public Gosu::Window
 {
 public:
     WindowForWrapper(int width, int height, bool fullscreen, double update_interval, bool resizable);
-    void set_draw(void function(void *data), void *data);
-    void set_update(void function(void *data), void *data);
-    void set_button_down(void function(void *data, unsigned btn), void *data);
-    void set_button_up(void function(void *data, unsigned btn), void *data);
-    void set_drop(void function(void *data, const char *filename), void *data);
-    void set_needs_redraw(bool function(void *data), void *data);
-    void set_needs_cursor(bool function(void *data), void *data);
-    void set_close(void function(void *data), void *data);
-
     void update() override;
     void draw() override;
     void default_button_down(unsigned btn); // Enables fullscreen toggle
@@ -42,46 +33,6 @@ Gosu::WindowForWrapper::WindowForWrapper(int width, int height, bool fullscreen,
                                          double update_interval, bool resizable)
     : Gosu::Window(width, height, fullscreen, update_interval, resizable)
 {
-}
-
-void Gosu::WindowForWrapper::set_update(void function(void *data), void *data)
-{
-    update_callback = [=]() { function(data); };
-}
-
-void Gosu::WindowForWrapper::set_draw(void function(void *data), void *data)
-{
-    draw_callback = [=]() { function(data); };
-}
-
-void Gosu::WindowForWrapper::set_button_down(void function(void *data, unsigned btn), void *data)
-{
-    button_down_callback = [=](unsigned btn) { function(data, btn); };
-}
-
-void Gosu::WindowForWrapper::set_button_up(void function(void *data, unsigned btn), void *data)
-{
-    button_up_callback = [=](unsigned btn) { function(data, btn); };
-}
-
-void Gosu::WindowForWrapper::set_drop(void function(void *data, const char *filename), void *data)
-{
-    drop_callback = [=](const char *filename) { function(data, filename); };
-}
-
-void Gosu::WindowForWrapper::set_needs_redraw(bool function(void *data), void *data)
-{
-    needs_redraw_callback = [=]() -> bool { return function(data); };
-}
-
-void Gosu::WindowForWrapper::set_needs_cursor(bool function(void *data), void *data)
-{
-    needs_cursor_callback = [=]() -> bool { return function(data); };
-}
-
-void Gosu::WindowForWrapper::set_close(void function(void *data), void *data)
-{
-    close_callback = [=]() { function(data); };
 }
 
 void Gosu::WindowForWrapper::update()
@@ -172,17 +123,17 @@ Gosu_Window *Gosu_Window_create(int width, int height, bool fullscreen, double u
 // Callbacks
 void Gosu_Window_set_draw(Gosu_Window *window, void function(void *data), void *data)
 {
-    reinterpret_cast<Gosu::WindowForWrapper *>(window)->set_draw(function, data);
+    reinterpret_cast<Gosu::WindowForWrapper *>(window)->draw_callback = [=]() { function(data); };
 }
 
 void Gosu_Window_set_update(Gosu_Window *window, void function(void *data), void *data)
 {
-    reinterpret_cast<Gosu::WindowForWrapper *>(window)->set_update(function, data);
+    reinterpret_cast<Gosu::WindowForWrapper *>(window)->update_callback = [=]() { function(data); };
 }
 
 void Gosu_Window_set_button_down(Gosu_Window *window, void function(void *data, unsigned btn), void *data)
 {
-    reinterpret_cast<Gosu::WindowForWrapper *>(window)->set_button_down(function, data);
+    reinterpret_cast<Gosu::WindowForWrapper *>(window)->button_down_callback = [=](unsigned btn) { function(data, btn); };
 }
 
 void Gosu_Window_default_button_down(Gosu_Window *window, unsigned btn)
@@ -192,27 +143,27 @@ void Gosu_Window_default_button_down(Gosu_Window *window, unsigned btn)
 
 void Gosu_Window_set_button_up(Gosu_Window *window, void function(void *data, unsigned btn), void *data)
 {
-    reinterpret_cast<Gosu::WindowForWrapper *>(window)->set_button_up(function, data);
+    reinterpret_cast<Gosu::WindowForWrapper *>(window)->button_up_callback = [=](unsigned btn) { function(data, btn); };
 }
 
 void Gosu_Window_set_drop(Gosu_Window *window, void function(void *data, const char *filename), void *data)
 {
-    reinterpret_cast<Gosu::WindowForWrapper *>(window)->set_drop(function, data);
+    reinterpret_cast<Gosu::WindowForWrapper *>(window)->drop_callback = [=](const char *filename) { function(data, filename); };
 }
 
 void Gosu_Window_set_needs_redraw(Gosu_Window *window, bool function(void *data), void *data)
 {
-    reinterpret_cast<Gosu::WindowForWrapper *>(window)->set_needs_redraw(function, data);
+    reinterpret_cast<Gosu::WindowForWrapper *>(window)->needs_redraw_callback = [=]() -> bool { return function(data); };
 }
 
 void Gosu_Window_set_needs_cursor(Gosu_Window *window, bool function(void *data), void *data)
 {
-    reinterpret_cast<Gosu::WindowForWrapper *>(window)->set_needs_cursor(function, data);
+    reinterpret_cast<Gosu::WindowForWrapper *>(window)->needs_cursor_callback = [=]() -> bool { return function(data); };
 }
 
 void Gosu_Window_set_close(Gosu_Window *window, void function(void *data), void *data)
 {
-    reinterpret_cast<Gosu::WindowForWrapper *>(window)->set_close(function, data);
+    reinterpret_cast<Gosu::WindowForWrapper *>(window)->close_callback = [=]() { function(data); };
 }
 
 Gosu_TextInput *Gosu_Window_text_input(Gosu_Window *window)
