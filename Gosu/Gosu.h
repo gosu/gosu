@@ -9,9 +9,9 @@ extern "C" {
 #include <Gosu/Font.h>
 #include <Gosu/Color.h>
 #include <Gosu/TextInput.h>
-// #include <Gosu/Sample.h>
-// #include <Gosu/Song.h>
-// #include <Gosu/Channel.h>
+#include <Gosu/Sample.h>
+#include <Gosu/Song.h>
+#include <Gosu/Channel.h>
 
 // Graphics operations
 void Gosu_gl_z(double z, void function(void *data), void* data);
