@@ -126,7 +126,7 @@ namespace Gosu
         MS_OTHER_6,
         MS_OTHER_7,
         MS_RANGE_END = 0x110,
-        
+
         GP_RANGE_BEGIN,
         GP_LEFT = GP_RANGE_BEGIN,
         GP_RIGHT,
@@ -148,6 +148,12 @@ namespace Gosu
         GP_BUTTON_13,
         GP_BUTTON_14,
         GP_BUTTON_15,
+        GP_AXIS_LEFT_X,
+        GP_AXIS_LEFT_Y,
+        GP_AXIS_RIGHT_X,
+        GP_AXIS_RIGHT_Y,
+        GP_AXIS_LEFT_TRIGGER,
+        GP_AXIS_RIGHT_TRIGGER,
 
         GP_0_LEFT,
         GP_0_RIGHT,
@@ -169,7 +175,13 @@ namespace Gosu
         GP_0_BUTTON_13,
         GP_0_BUTTON_14,
         GP_0_BUTTON_15,
-        
+        GP_0_AXIS_LEFT_X,
+        GP_0_AXIS_LEFT_Y,
+        GP_0_AXIS_RIGHT_X,
+        GP_0_AXIS_RIGHT_Y,
+        GP_0_AXIS_LEFT_TRIGGER,
+        GP_0_AXIS_RIGHT_TRIGGER,
+
         GP_1_LEFT,
         GP_1_RIGHT,
         GP_1_UP,
@@ -190,7 +202,13 @@ namespace Gosu
         GP_1_BUTTON_13,
         GP_1_BUTTON_14,
         GP_1_BUTTON_15,
-        
+        GP_1_AXIS_LEFT_X,
+        GP_1_AXIS_LEFT_Y,
+        GP_1_AXIS_RIGHT_X,
+        GP_1_AXIS_RIGHT_Y,
+        GP_1_AXIS_LEFT_TRIGGER,
+        GP_1_AXIS_RIGHT_TRIGGER,
+
         GP_2_LEFT,
         GP_2_RIGHT,
         GP_2_UP,
@@ -211,7 +229,13 @@ namespace Gosu
         GP_2_BUTTON_13,
         GP_2_BUTTON_14,
         GP_2_BUTTON_15,
-        
+        GP_2_AXIS_LEFT_X,
+        GP_2_AXIS_LEFT_Y,
+        GP_2_AXIS_RIGHT_X,
+        GP_2_AXIS_RIGHT_Y,
+        GP_2_AXIS_LEFT_TRIGGER,
+        GP_2_AXIS_RIGHT_TRIGGER,
+
         GP_3_LEFT,
         GP_3_RIGHT,
         GP_3_UP,
@@ -232,13 +256,19 @@ namespace Gosu
         GP_3_BUTTON_13,
         GP_3_BUTTON_14,
         GP_3_BUTTON_15,
-        
-        GP_RANGE_END       = GP_3_BUTTON_15,
-        
+        GP_3_AXIS_LEFT_X,
+        GP_3_AXIS_LEFT_Y,
+        GP_3_AXIS_RIGHT_X,
+        GP_3_AXIS_RIGHT_Y,
+        GP_3_AXIS_LEFT_TRIGGER,
+        GP_3_AXIS_RIGHT_TRIGGER,
+
+        GP_RANGE_END       = GP_3_AXIS_RIGHT_TRIGGER,
+
         NUM_BUTTONS        = GP_RANGE_END + 1,
         NUM_GAMEPADS       = 4,
         NO_BUTTON          = 0xffffffff,
-        
+
         KB_NUM             = KB_RANGE_END - KB_RANGE_BEGIN + 1,
         MS_NUM             = MS_RANGE_END - MS_RANGE_BEGIN + 1,
         GP_NUM             = GP_RANGE_END - GP_RANGE_BEGIN + 1,
