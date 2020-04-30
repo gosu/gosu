@@ -7,9 +7,9 @@ namespace Gosu
     //! List of button ids that can be used with Gosu::Input.
     //! This enumeration contains ids for keyboard keys (KB_*),
     //! mouse buttons and mouse wheel (MS_*) and gamepad buttons (GP_*).
-    enum ButtonName
-    {
-        KB_RANGE_BEGIN,
+enum ButtonName
+{
+    KB_RANGE_BEGIN,
         KB_ESCAPE          = 41,
         KB_F1              = 58,
         KB_F2              = 59,
@@ -148,12 +148,6 @@ namespace Gosu
         GP_BUTTON_13,
         GP_BUTTON_14,
         GP_BUTTON_15,
-        GP_AXIS_LEFT_X,
-        GP_AXIS_LEFT_Y,
-        GP_AXIS_RIGHT_X,
-        GP_AXIS_RIGHT_Y,
-        GP_AXIS_LEFT_TRIGGER,
-        GP_AXIS_RIGHT_TRIGGER,
 
         GP_0_LEFT,
         GP_0_RIGHT,
@@ -175,12 +169,6 @@ namespace Gosu
         GP_0_BUTTON_13,
         GP_0_BUTTON_14,
         GP_0_BUTTON_15,
-        GP_0_AXIS_LEFT_X,
-        GP_0_AXIS_LEFT_Y,
-        GP_0_AXIS_RIGHT_X,
-        GP_0_AXIS_RIGHT_Y,
-        GP_0_AXIS_LEFT_TRIGGER,
-        GP_0_AXIS_RIGHT_TRIGGER,
 
         GP_1_LEFT,
         GP_1_RIGHT,
@@ -202,12 +190,6 @@ namespace Gosu
         GP_1_BUTTON_13,
         GP_1_BUTTON_14,
         GP_1_BUTTON_15,
-        GP_1_AXIS_LEFT_X,
-        GP_1_AXIS_LEFT_Y,
-        GP_1_AXIS_RIGHT_X,
-        GP_1_AXIS_RIGHT_Y,
-        GP_1_AXIS_LEFT_TRIGGER,
-        GP_1_AXIS_RIGHT_TRIGGER,
 
         GP_2_LEFT,
         GP_2_RIGHT,
@@ -229,12 +211,6 @@ namespace Gosu
         GP_2_BUTTON_13,
         GP_2_BUTTON_14,
         GP_2_BUTTON_15,
-        GP_2_AXIS_LEFT_X,
-        GP_2_AXIS_LEFT_Y,
-        GP_2_AXIS_RIGHT_X,
-        GP_2_AXIS_RIGHT_Y,
-        GP_2_AXIS_LEFT_TRIGGER,
-        GP_2_AXIS_RIGHT_TRIGGER,
 
         GP_3_LEFT,
         GP_3_RIGHT,
@@ -256,6 +232,35 @@ namespace Gosu
         GP_3_BUTTON_13,
         GP_3_BUTTON_14,
         GP_3_BUTTON_15,
+
+        GP_AXIS_LEFT_X,
+        GP_AXIS_LEFT_Y,
+        GP_AXIS_RIGHT_X,
+        GP_AXIS_RIGHT_Y,
+        GP_AXIS_LEFT_TRIGGER,
+        GP_AXIS_RIGHT_TRIGGER,
+
+        GP_0_AXIS_LEFT_X,
+        GP_0_AXIS_LEFT_Y,
+        GP_0_AXIS_RIGHT_X,
+        GP_0_AXIS_RIGHT_Y,
+        GP_0_AXIS_LEFT_TRIGGER,
+        GP_0_AXIS_RIGHT_TRIGGER,
+
+        GP_1_AXIS_LEFT_X,
+        GP_1_AXIS_LEFT_Y,
+        GP_1_AXIS_RIGHT_X,
+        GP_1_AXIS_RIGHT_Y,
+        GP_1_AXIS_LEFT_TRIGGER,
+        GP_1_AXIS_RIGHT_TRIGGER,
+
+        GP_2_AXIS_LEFT_X,
+        GP_2_AXIS_LEFT_Y,
+        GP_2_AXIS_RIGHT_X,
+        GP_2_AXIS_RIGHT_Y,
+        GP_2_AXIS_LEFT_TRIGGER,
+        GP_2_AXIS_RIGHT_TRIGGER,
+
         GP_3_AXIS_LEFT_X,
         GP_3_AXIS_LEFT_Y,
         GP_3_AXIS_RIGHT_X,
@@ -263,7 +268,7 @@ namespace Gosu
         GP_3_AXIS_LEFT_TRIGGER,
         GP_3_AXIS_RIGHT_TRIGGER,
 
-        GP_RANGE_END       = GP_3_AXIS_RIGHT_TRIGGER,
+        GP_RANGE_END       = GP_3_BUTTON_15,
 
         NUM_BUTTONS        = GP_RANGE_END + 1,
         NUM_GAMEPADS       = 4,
@@ -272,6 +277,7 @@ namespace Gosu
         KB_NUM             = KB_RANGE_END - KB_RANGE_BEGIN + 1,
         MS_NUM             = MS_RANGE_END - MS_RANGE_BEGIN + 1,
         GP_NUM             = GP_RANGE_END - GP_RANGE_BEGIN + 1,
-        GP_NUM_PER_GAMEPAD = GP_NUM / (NUM_GAMEPADS + 1)
+        GP_NUM_PER_GAMEPAD = GP_NUM / (NUM_GAMEPADS + 1),
+        GP_NUM_AXES        = (GP_AXIS_RIGHT_TRIGGER - GP_AXIS_LEFT_X) * (NUM_GAMEPADS + 1)
     };
 }

@@ -52,7 +52,7 @@ namespace Gosu
         //! Enters a modal loop where the Window is visible on screen and
         //! receives calls to draw, update etc.
         virtual void show();
-        
+
         //! EXPERIMENTAL - MAY DISAPPEAR WITHOUT WARNING.
         //! Performs a single main loop step.
         //! This method is only useful if you want to integrate Gosu with another library that has
@@ -62,7 +62,7 @@ namespace Gosu
         //! If you discard the return value and keep calling tick(), the window will be shown again,
         //! or keep being shown.
         virtual bool tick();
-        
+
         //! Closes the window if it is currently shown.
         //! If you do not want the window to close immediately, you should override this method and
         //! only call the base implementation (Window::close) when needed.
@@ -71,11 +71,11 @@ namespace Gosu
         //! Called every update_interval milliseconds while the window is being shown.
         //! Your application's main game logic goes here.
         virtual void update() {}
-        
+
         //! Called after every update and when the OS wants the window to repaint itself.
         //! Your application's rendering code goes here.
         virtual void draw() {}
-        
+
         //! Gives the game a chance to say no to being redrawn.
         //! This is not a definitive answer. The operating system can still force the window to
         //! redraw itself.
@@ -84,11 +84,11 @@ namespace Gosu
 
         //! If this function returns true, the system arrow cursor is drawn while over the window.
         virtual bool needs_cursor() const { return false; }
-        
+
         //! This function is called when the window loses focus on some platforms.
         //! Most importantly, it is called on the iPhone or iPad when the user locks the screen.
         virtual void lose_focus() {}
-        
+
         //! This function is called when the operating system's memory is low.
         //! So far, it is only called in iOS applications.
         virtual void release_memory() {}
@@ -99,9 +99,17 @@ namespace Gosu
         //! To support these shortcuts in your application, make sure to call Window::button_down
         //! in your implementation.
         virtual void button_down(Gosu::Button);
-        
+
         //! Same as button_down. Called when the user releases a button.
         virtual void button_up(Gosu::Button) {}
+
+        // TODO: finalize name.
+        virtual void axis_motion(Gosu::Button, double) {}
+
+        // TODO: finalize name.
+        // triggered when a controller is connected or disconnected
+        // controller_changed(gamepad index, connected)
+        virtual void controller_changed(int, bool) {}
 
         //! Called when a file is dropped onto the window.
         //! \param filename The filename of the dropped file. When multiple files are dropped, this
@@ -115,14 +123,14 @@ namespace Gosu
         virtual void touch_moved(Touch touch) {}
         virtual void touch_ended(Touch touch) {}
         virtual void touch_cancelled(Touch touch) {}
-        
+
         const Graphics& graphics() const;
         Graphics& graphics();
-        
+
         const Input& input() const;
         Input& input();
         #endif
-        
+
         #ifdef GOSU_IS_IPHONE
         void* uikit_window() const;
         #endif
@@ -132,18 +140,18 @@ namespace Gosu
     //! \param window The result describes the screen on which the window is shown, or the
     //!               primary screen if no window is given.
     unsigned screen_width(Window* window = nullptr);
-    
+
     //! Returns the height (in pixels) of the user's primary screen.
     //! \param window The result describes the screen on which the window is shown, or the
     //!               primary screen if no window is given.
     unsigned screen_height(Window* window = nullptr);
-    
+
     //! Returns the maximum width (in 'points') that is available for a non-fullscreen Window.
     //! All windows larger than this size will automatically be shrunk to fit.
     //! \param window The result describes the screen on which the window is shown, or the
     //!               primary screen if no window is given.
     unsigned available_width(Window* window = nullptr);
-    
+
     //! Returns the maximum height (in 'points') that is available for a non-fullscreen Window.
     //! All windows larger than this size will automatically be shrunk to fit.
     //! \param window The result describes the screen on which the window is shown, or the

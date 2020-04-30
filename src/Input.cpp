@@ -31,53 +31,42 @@ static void require_sdl_video()
 }
 
 static array<bool, Gosu::NUM_BUTTONS> button_states = { { false } };
+static array<double, Gosu::GP_NUM_AXES> axis_states = { {0.0} };
+vector<SDL_Joystick *> joysticks;
+vector<SDL_GameController *> game_controllers;
 
 struct Gosu::Input::Impl
 {
     Input& input;
     SDL_Window* window;
-    
+
     TextInput* text_input = nullptr;
     double mouse_x, mouse_y;
     double mouse_scale_x = 1;
     double mouse_scale_y = 1;
     double mouse_offset_x = 0;
     double mouse_offset_y = 0;
-    
+
     Impl(Input& input, SDL_Window* window)
     : input(input), window(window)
     {
         require_sdl_video();
-        
+
         SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
-        
+
         int num_gamepads = min<int>(Gosu::NUM_GAMEPADS, SDL_NumJoysticks());
-        
-        for (int i = 0; i < num_gamepads; ++i) {
-            // Prefer the SDL_GameController API...
-            if (SDL_IsGameController(i)) {
-                if (SDL_GameController* game_controller = SDL_GameControllerOpen(i)) {
-                    game_controllers.push_back(game_controller);
-                    continue;
-                }
-            }
-            // ...but fall back on the good, old SDL_Joystick API.
-            if (SDL_Joystick* joystick = SDL_JoystickOpen(i)) {
-                joysticks.push_back(joystick);
-            }
-        }
     }
-    
+
     ~Impl()
     {
         for_each(joysticks.begin(), joysticks.end(), &SDL_JoystickClose);
         joysticks.clear();
         for_each(game_controllers.begin(), game_controllers.end(), &SDL_GameControllerClose);
         game_controllers.clear();
-        
+
         SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
     }
-    
+
     void update_mouse_position()
     {
     #if defined(GOSU_IS_MAC)
@@ -103,7 +92,7 @@ struct Gosu::Input::Impl
         mouse_y = y;
     #endif
     }
-    
+
     void set_mouse_position(double x, double y)
     {
         SDL_WarpMouseInWindow(window,
@@ -120,7 +109,7 @@ struct Gosu::Input::Impl
         mouse_x = x, mouse_y = y;
     #endif
     }
-    
+
     bool feed_sdl_event(const SDL_Event* e)
     {
         switch (e->type) {
@@ -153,24 +142,61 @@ struct Gosu::Input::Impl
                 }
                 break;
             }
+            case SDL_JOYAXISMOTION: {
+                if (SDL_IsGameController(e->jaxis.which)) {
+                    break; // Ignore as triggers are reported -1..1 instead of 0..1
+                } else {
+                    printf("Joystick Device ID: %i, axis: %i, value: %d\n", e->jaxis.which, e->jaxis.axis, e->jaxis.value);
+                }
+                break;
+            }
+            case SDL_CONTROLLERAXISMOTION: {
+                printf("GameController Device ID: %i, axis: %i, value: %d\n", e->caxis.which, e->caxis.axis, e->caxis.value);
+                break;
+            }
+            case SDL_JOYDEVICEADDED: {
+                if (game_controllers.size() + joysticks.size() >= Gosu::NUM_GAMEPADS) {
+                    printf("Max Num of Gamepads added (%i)\n", game_controllers.size() + joysticks.size());
+                    break;
+                }
+                // Prefer the SDL_GameController API...
+                if (SDL_IsGameController(e->jaxis.which)) {
+                    if (SDL_GameController *game_controller = SDL_GameControllerOpen(e->jaxis.which)) {
+                        printf("Added GameController Device with Instance ID: %i (%s)\n", SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller)), SDL_GameControllerNameForIndex(e->caxis.which));
+                        game_controllers.push_back(game_controller);
+                        break;
+                    }
+                }
+                // ...but fall back on the good, old SDL_Joystick API.
+                if (SDL_Joystick *joystick = SDL_JoystickOpen(e->jaxis.which)) {
+                    printf("Added Joystick Device with Instance ID: %i (%s)\n", SDL_JoystickInstanceID(joystick), SDL_JoystickNameForIndex(e->jaxis.which));
+                    joysticks.push_back(joystick);
+                }
+                break;
+            }
+            case SDL_JOYDEVICEREMOVED: {
+                // TODO: Remove and close game_controllers/joysticks
+                printf("Removed a Device with Instance ID: %i\n", e->caxis.which);
+                break;
+            }
         }
         return false;
     }
-    
+
     typedef array<bool, GP_NUM_PER_GAMEPAD> GamepadBuffer;
-    
+
     void poll_gamepads()
     {
         // This gamepad is an OR-ed version of all the other gamepads. If button
         // 3 is pressed on any attached gamepad, down(GP_BUTTON_3) will return
         // true. This is handy for singleplayer games.
         GamepadBuffer any_gamepad = { false };
-        
+
         size_t available_gamepads = game_controllers.size() + joysticks.size();
-        
+
         for (int i = 0; i < available_gamepads; ++i) {
             GamepadBuffer current_gamepad = { false };
-            
+
             // Poll data from SDL, using either of two API interfaces.
             if (i < game_controllers.size()) {
                 SDL_GameController* game_controller = game_controllers[i];
@@ -180,13 +206,13 @@ struct Gosu::Input::Impl
                 SDL_Joystick* joystick = joysticks[i - game_controllers.size()];
                 poll_joystick(joystick, current_gamepad);
             }
-            
+
             // Now at the same time, enqueue all events for this particular
             // gamepad, and OR the keyboard state into any_gamepad.
             int offset = GP_RANGE_BEGIN + GP_NUM_PER_GAMEPAD * (i + 1);
             for (int j = 0; j < current_gamepad.size(); ++j) {
                 any_gamepad[j] = any_gamepad[j] || current_gamepad[j];
-                
+
                 if (current_gamepad[j] && !button_states[j + offset]) {
                     button_states[j + offset] = true;
                     enqueue_event(j + offset, true);
@@ -197,7 +223,7 @@ struct Gosu::Input::Impl
                 }
             }
         }
-        
+
         // And lastly, enqueue events for the virtual "any" gamepad.
         for (int j = 0; j < any_gamepad.size(); ++j) {
             if (any_gamepad[j] && !button_states[j + GP_RANGE_BEGIN]) {
@@ -210,13 +236,13 @@ struct Gosu::Input::Impl
             }
         }
     }
-    
+
     void dispatch_enqueued_events()
     {
         for (int event : event_queue) {
             bool down = (event >= 0);
             Button button(down ? event : ~event);
-            
+
             button_states[button.id()] = down;
             if (down && input.on_button_down) {
                 input.on_button_down(button);
@@ -227,7 +253,7 @@ struct Gosu::Input::Impl
         }
         event_queue.clear();
     }
-    
+
 private:
     // For button down event: Button name value (>= 0)
     // For button up event: ~Button name value (< 0)
@@ -237,36 +263,33 @@ private:
     {
         event_queue.push_back(down ? id : ~id);
     }
-    
-    vector<SDL_Joystick*> joysticks;
-    vector<SDL_GameController*> game_controllers;
-    
+
     // SDL returns axis values in the range -2^15 through 2^15-1, so we consider -2^14 through
     // 2^14 (half of that range) the dead zone.
     enum { DEAD_ZONE = (1 << 14) };
-    
+
     void poll_game_controller(SDL_GameController* controller, GamepadBuffer& gamepad)
     {
         gamepad[GP_LEFT - GP_RANGE_BEGIN] =
             SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_LEFT) ||
             SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX) < -DEAD_ZONE ||
             SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTX) < -DEAD_ZONE;
-        
+
         gamepad[GP_RIGHT - GP_RANGE_BEGIN] =
             SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) ||
             SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX) > +DEAD_ZONE ||
             SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTX) > +DEAD_ZONE;
-        
+
         gamepad[GP_UP - GP_RANGE_BEGIN] =
             SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_UP) ||
             SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY) < -DEAD_ZONE ||
             SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTY) < -DEAD_ZONE;
-        
+
         gamepad[GP_DOWN - GP_RANGE_BEGIN] =
             SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_DOWN) ||
             SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY) > +DEAD_ZONE ||
             SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTY) > +DEAD_ZONE;
-        
+
         int button = 0;
         for (; button < SDL_CONTROLLER_BUTTON_DPAD_UP; ++button) {
             gamepad[GP_BUTTON_0 + button - GP_RANGE_BEGIN] =
@@ -277,13 +300,13 @@ private:
         gamepad[GP_BUTTON_0 + button++ - GP_RANGE_BEGIN] =
             SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > +DEAD_ZONE;
     }
-    
+
     void poll_joystick(SDL_Joystick* joystick, GamepadBuffer& gamepad)
     {
         int axes = SDL_JoystickNumAxes(joystick);
         for (int axis = 0; axis < axes; ++axis) {
             Sint16 value = SDL_JoystickGetAxis(joystick, axis);
-            
+
             if (value < -DEAD_ZONE) {
                 gamepad[(axis % 2 ? GP_UP   : GP_LEFT)  - GP_RANGE_BEGIN] = true;
             }
@@ -291,7 +314,7 @@ private:
                 gamepad[(axis % 2 ? GP_DOWN : GP_RIGHT) - GP_RANGE_BEGIN] = true;
             }
         }
-        
+
         int hats = SDL_JoystickNumHats(joystick);
         for (int hat = 0; hat < hats; ++hat) {
             Uint8 value = SDL_JoystickGetHat(joystick, hat);
@@ -300,7 +323,7 @@ private:
             if (value & SDL_HAT_UP)    gamepad[GP_UP    - GP_RANGE_BEGIN] = true;
             if (value & SDL_HAT_DOWN)  gamepad[GP_DOWN  - GP_RANGE_BEGIN] = true;
         }
-        
+
         int buttons = min<int>(GP_NUM_PER_GAMEPAD - 4, SDL_JoystickNumButtons(joystick));
         for (int button = 0; button < buttons; ++button) {
             if (SDL_JoystickGetButton(joystick, button)) {
@@ -328,23 +351,23 @@ bool Gosu::Input::feed_sdl_event(void* event)
 string Gosu::Input::id_to_char(Button btn)
 {
     require_sdl_video();
-    
+
     if (btn.id() > KB_RANGE_END) return "";
-    
+
     // SDL_GetKeyName returns "Space" for this value, but we want the character value.
     if (btn.id() == KB_SPACE) return " ";
-    
+
     SDL_Keycode keycode = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(btn.id()));
     if (keycode == SDLK_UNKNOWN) return "";
-    
+
     const char* name = SDL_GetKeyName(keycode);
     if (name == nullptr) return "";
-    
+
     u32string codepoints = utf8_to_composed_utc4(name);
-    
+
     // Filter out names that are more than one logical character.
     if (codepoints.length() != 1) return "";
-    
+
     // Always return lower case to be consistent with previous versions of Gosu.
     codepoints[0] = utf8proc_tolower(codepoints[0]);
     // Convert back to UTF-8.
@@ -356,7 +379,7 @@ string Gosu::Input::id_to_char(Button btn)
 Gosu::Button Gosu::Input::char_to_id(string ch)
 {
     require_sdl_video();
-    
+
     SDL_Keycode keycode = SDL_GetKeyFromName(ch.c_str());
     return keycode == SDLK_UNKNOWN ? NO_BUTTON : Button(SDL_GetScancodeFromKey(keycode));
 }
@@ -364,8 +387,13 @@ Gosu::Button Gosu::Input::char_to_id(string ch)
 bool Gosu::Input::down(Gosu::Button btn)
 {
     if (btn == NO_BUTTON || btn.id() >= NUM_BUTTONS) return false;
-    
+
     return button_states[btn.id()];
+}
+
+double Gosu::Input::axis(Gosu::Button btn)
+{
+    return 0;
 }
 
 double Gosu::Input::mouse_x() const
@@ -395,7 +423,7 @@ void Gosu::Input::set_mouse_factors(double scale_x, double scale_y,
 const Gosu::Touches& Gosu::Input::current_touches() const
 {
     // We could use the SDL 2 touch API to implement this.
-    
+
     static Gosu::Touches none;
     return none;
 }
@@ -435,7 +463,7 @@ void Gosu::Input::set_text_input(TextInput* text_input)
     else if (pimpl->text_input == nullptr && text_input) {
         SDL_StartTextInput();
     }
-    
+
     pimpl->text_input = text_input;
 }
 
