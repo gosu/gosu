@@ -271,6 +271,41 @@ unsigned Gosu_GP_3_BUTTON_13 = Gosu::GP_3_BUTTON_13;
 unsigned Gosu_GP_3_BUTTON_14 = Gosu::GP_3_BUTTON_14;
 unsigned Gosu_GP_3_BUTTON_15 = Gosu::GP_3_BUTTON_15;
 
+unsigned Gosu_GP_AXIS_LEFT_X = Gosu::GP_AXIS_LEFT_X;
+unsigned Gosu_GP_AXIS_LEFT_Y = Gosu::GP_AXIS_LEFT_Y;
+unsigned Gosu_GP_AXIS_RIGHT_X = Gosu::GP_AXIS_RIGHT_X;
+unsigned Gosu_GP_AXIS_RIGHT_Y = Gosu::GP_AXIS_RIGHT_Y;
+unsigned Gosu_GP_AXIS_LEFT_TRIGGER = Gosu::GP_AXIS_LEFT_TRIGGER;
+unsigned Gosu_GP_AXIS_RIGHT_TRIGGER = Gosu::GP_AXIS_RIGHT_TRIGGER;
+
+unsigned Gosu_GP_0_AXIS_LEFT_X = Gosu::GP_0_AXIS_LEFT_X;
+unsigned Gosu_GP_0_AXIS_LEFT_Y = Gosu::GP_0_AXIS_LEFT_Y;
+unsigned Gosu_GP_0_AXIS_RIGHT_X = Gosu::GP_0_AXIS_RIGHT_X;
+unsigned Gosu_GP_0_AXIS_RIGHT_Y = Gosu::GP_0_AXIS_RIGHT_Y;
+unsigned Gosu_GP_0_AXIS_LEFT_TRIGGER = Gosu::GP_0_AXIS_LEFT_TRIGGER;
+unsigned Gosu_GP_0_AXIS_RIGHT_TRIGGER = Gosu::GP_0_AXIS_RIGHT_TRIGGER;
+
+unsigned Gosu_GP_1_AXIS_LEFT_X = Gosu::GP_1_AXIS_LEFT_X;
+unsigned Gosu_GP_1_AXIS_LEFT_Y = Gosu::GP_1_AXIS_LEFT_Y;
+unsigned Gosu_GP_1_AXIS_RIGHT_X = Gosu::GP_1_AXIS_RIGHT_X;
+unsigned Gosu_GP_1_AXIS_RIGHT_Y = Gosu::GP_1_AXIS_RIGHT_Y;
+unsigned Gosu_GP_1_AXIS_LEFT_TRIGGER = Gosu::GP_1_AXIS_LEFT_TRIGGER;
+unsigned Gosu_GP_1_AXIS_RIGHT_TRIGGER = Gosu::GP_1_AXIS_RIGHT_TRIGGER;
+
+unsigned Gosu_GP_2_AXIS_LEFT_X = Gosu::GP_2_AXIS_LEFT_X;
+unsigned Gosu_GP_2_AXIS_LEFT_Y = Gosu::GP_2_AXIS_LEFT_Y;
+unsigned Gosu_GP_2_AXIS_RIGHT_X = Gosu::GP_2_AXIS_RIGHT_X;
+unsigned Gosu_GP_2_AXIS_RIGHT_Y = Gosu::GP_2_AXIS_RIGHT_Y;
+unsigned Gosu_GP_2_AXIS_LEFT_TRIGGER = Gosu::GP_2_AXIS_LEFT_TRIGGER;
+unsigned Gosu_GP_2_AXIS_RIGHT_TRIGGER = Gosu::GP_2_AXIS_RIGHT_TRIGGER;
+
+unsigned Gosu_GP_3_AXIS_LEFT_X = Gosu::GP_3_AXIS_LEFT_X;
+unsigned Gosu_GP_3_AXIS_LEFT_Y = Gosu::GP_3_AXIS_LEFT_Y;
+unsigned Gosu_GP_3_AXIS_RIGHT_X = Gosu::GP_3_AXIS_RIGHT_X;
+unsigned Gosu_GP_3_AXIS_RIGHT_Y = Gosu::GP_3_AXIS_RIGHT_Y;
+unsigned Gosu_GP_3_AXIS_LEFT_TRIGGER = Gosu::GP_3_AXIS_LEFT_TRIGGER;
+unsigned Gosu_GP_3_AXIS_RIGHT_TRIGGER = Gosu::GP_3_AXIS_RIGHT_TRIGGER;
+
 unsigned Gosu_GP_RANGE_END = Gosu::GP_RANGE_END;
 
 unsigned Gosu_NUM_BUTTONS = Gosu::NUM_BUTTONS;

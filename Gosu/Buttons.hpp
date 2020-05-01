@@ -7,9 +7,9 @@ namespace Gosu
     //! List of button ids that can be used with Gosu::Input.
     //! This enumeration contains ids for keyboard keys (KB_*),
     //! mouse buttons and mouse wheel (MS_*) and gamepad buttons (GP_*).
-enum ButtonName
-{
-    KB_RANGE_BEGIN,
+    enum ButtonName
+    {
+        KB_RANGE_BEGIN,
         KB_ESCAPE          = 41,
         KB_F1              = 58,
         KB_F2              = 59,

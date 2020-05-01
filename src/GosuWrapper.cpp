@@ -203,6 +203,11 @@ unsigned Gosu_button_char_to_id(const char *btn)
     return Gosu::Input::char_to_id(btn).id();
 }
 
+double Gosu_axis(int btn)
+{
+    return Gosu::Input::axis((Gosu::ButtonName)btn);
+}
+
 int Gosu_fps()
 {
     return Gosu::fps();

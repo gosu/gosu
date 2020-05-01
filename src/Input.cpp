@@ -34,6 +34,19 @@ static array<bool, Gosu::NUM_BUTTONS> button_states = { { false } };
 static array<double, Gosu::GP_NUM_AXES> axis_states = { {0.0} };
 vector<SDL_Joystick *> joysticks;
 vector<SDL_GameController *> game_controllers;
+struct InputEvent
+{
+    int id;
+    int type;
+    double axis_value;
+    bool controller_connected_value;
+};
+
+enum InputEventType {
+    ButtonEvent,
+    AxisEvent,
+    ControllerConnectionEvent
+};
 
 struct Gosu::Input::Impl
 {
@@ -145,13 +158,16 @@ struct Gosu::Input::Impl
             case SDL_JOYAXISMOTION: {
                 if (SDL_IsGameController(e->jaxis.which)) {
                     break; // Ignore as triggers are reported -1..1 instead of 0..1
-                } else {
-                    printf("Joystick Device ID: %i, axis: %i, value: %d\n", e->jaxis.which, e->jaxis.axis, e->jaxis.value);
+                }
+                else {
+                    // printf("Joystick Device ID: %i, axis: %i, value: %d\n", e->jaxis.which, e->jaxis.axis, e->jaxis.value);
+                    enqueue_event(ButtonName::GP_AXIS_LEFT_X + e->jaxis.axis, (double)e->jaxis.value);
                 }
                 break;
             }
             case SDL_CONTROLLERAXISMOTION: {
-                printf("GameController Device ID: %i, axis: %i, value: %d\n", e->caxis.which, e->caxis.axis, e->caxis.value);
+                // printf("GameController Device ID: %i, axis: %i, value: %d\n", e->caxis.which, e->caxis.axis, e->caxis.value);
+                enqueue_event(ButtonName::GP_AXIS_LEFT_X + e->caxis.axis, (double)e->caxis.value);
                 break;
             }
             case SDL_JOYDEVICEADDED: {
@@ -159,6 +175,7 @@ struct Gosu::Input::Impl
                     printf("Max Num of Gamepads added (%i)\n", game_controllers.size() + joysticks.size());
                     break;
                 }
+                int index_of_controller = -1;
                 // Prefer the SDL_GameController API...
                 if (SDL_IsGameController(e->jaxis.which)) {
                     if (SDL_GameController *game_controller = SDL_GameControllerOpen(e->jaxis.which)) {
@@ -172,11 +189,18 @@ struct Gosu::Input::Impl
                     printf("Added Joystick Device with Instance ID: %i (%s)\n", SDL_JoystickInstanceID(joystick), SDL_JoystickNameForIndex(e->jaxis.which));
                     joysticks.push_back(joystick);
                 }
+                if (index_of_controller >= 0) {
+                    enqueue_controller_connection_event(index_of_controller, true);
+                }
                 break;
             }
             case SDL_JOYDEVICEREMOVED: {
                 // TODO: Remove and close game_controllers/joysticks
+                int index_of_controller = -1;
                 printf("Removed a Device with Instance ID: %i\n", e->caxis.which);
+                if (index_of_controller >= 0) {
+                    enqueue_controller_connection_event(index_of_controller, false);
+                }
                 break;
             }
         }
@@ -239,16 +263,24 @@ struct Gosu::Input::Impl
 
     void dispatch_enqueued_events()
     {
-        for (int event : event_queue) {
-            bool down = (event >= 0);
-            Button button(down ? event : ~event);
+        for (InputEvent event : event_queue) {
+            if (event.type == InputEventType::ButtonEvent) {
+                bool down = (event.id >= 0);
+                Button button(down ? event.id : ~event.id);
 
-            button_states[button.id()] = down;
-            if (down && input.on_button_down) {
-                input.on_button_down(button);
+                button_states[button.id()] = down;
+                if (down && input.on_button_down) {
+                    input.on_button_down(button);
+                }
+                else if (!down && input.on_button_up) {
+                    input.on_button_up(button);
+                }
             }
-            else if (!down && input.on_button_up) {
-                input.on_button_up(button);
+            else if (event.type == InputEventType::AxisEvent) {
+                axis_states[event.id - ButtonName::GP_AXIS_LEFT_X] = event.axis_value;
+                if (input.on_axis_motion) {
+                    input.on_axis_motion((Button)event.id, event.axis_value);
+                }
             }
         }
         event_queue.clear();
@@ -257,11 +289,25 @@ struct Gosu::Input::Impl
 private:
     // For button down event: Button name value (>= 0)
     // For button up event: ~Button name value (< 0)
-    vector<int> event_queue;
+    vector<InputEvent> event_queue;
 
     void enqueue_event(int id, bool down)
     {
-        event_queue.push_back(down ? id : ~id);
+        InputEvent s = { down ? id : ~id, InputEventType::ButtonEvent };
+        event_queue.push_back( s );
+    }
+
+    void enqueue_event(int id, double value)
+    {
+        double axis_value = value >= 0 ? (double)value / SDL_JOYSTICK_AXIS_MAX : -(double)value / SDL_JOYSTICK_AXIS_MIN;
+        InputEvent s = { id, InputEventType::AxisEvent, axis_value };
+        event_queue.push_back( s );
+    }
+
+    void enqueue_controller_connection_event(int controller_index_id, bool connected)
+    {
+        InputEvent s = { controller_index_id, InputEventType::ControllerConnectionEvent, 0, connected };
+        event_queue.push_back( s );
     }
 
     // SDL returns axis values in the range -2^15 through 2^15-1, so we consider -2^14 through
@@ -393,7 +439,7 @@ bool Gosu::Input::down(Gosu::Button btn)
 
 double Gosu::Input::axis(Gosu::Button btn)
 {
-    return 0;
+    return axis_states[btn.id() - Gosu::ButtonName::GP_AXIS_LEFT_X];
 }
 
 double Gosu::Input::mouse_x() const
