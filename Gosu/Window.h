@@ -16,6 +16,9 @@ void Gosu_Window_set_update(Gosu_Window *window, void function(void *data), void
 void Gosu_Window_set_draw(Gosu_Window *window, void function(void *data), void* data);
 void Gosu_Window_set_button_down(Gosu_Window *window, void function(void *data, unsigned btn), void* data);
 void Gosu_Window_set_button_up(Gosu_Window *window, void function(void *data, unsigned btn), void* data);
+void Gosu_Window_set_axis_motion(Gosu_Window *window, void function(void *data, unsigned btn, double value), void *data);
+void Gosu_Window_set_controller_connected(Gosu_Window *window, void function(void *data, int id), void* data);
+void Gosu_Window_set_controller_disconnected(Gosu_Window *window, void function(void *data, int id), void* data);
 void Gosu_Window_set_drop(Gosu_Window *window, void function(void *data, const char *filename), void* data);
 void Gosu_Window_set_needs_redraw(Gosu_Window *window, bool function(void *data), void* data);
 void Gosu_Window_set_needs_cursor(Gosu_Window *window, bool function(void *data), void* data);

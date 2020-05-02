@@ -12,6 +12,8 @@ public:
     void button_down(Gosu::Button btn) override;
     void button_up(Gosu::Button btn) override;
     void axis_motion(Gosu::Button btn, double value) override;
+    void controller_connected(int id) override;
+    void controller_disconnected(int id) override;
     void drop(const std::string &filename) override;
     bool needs_redraw() const override;
     bool needs_cursor() const override;
@@ -24,6 +26,8 @@ public:
     std::function<void (unsigned btn)> button_down_callback;
     std::function<void (unsigned btn)> button_up_callback;
     std::function<void (unsigned btn, double value)> axis_motion_callback;
+    std::function<void (int id)> controller_connected_callback;
+    std::function<void (int id)> controller_disconnected_callback;
     std::function<void (const char *filename)> drop_callback;
     std::function<bool ()> needs_redraw_callback;
     std::function<bool ()> needs_cursor_callback;
@@ -74,6 +78,22 @@ void Gosu::WindowForWrapper::axis_motion(Gosu::Button btn, double value)
 {
     if (axis_motion_callback != nullptr) {
         axis_motion_callback(btn.id(), value);
+    }
+}
+
+void Gosu::WindowForWrapper::controller_connected(int id)
+{
+    if (controller_connected_callback != nullptr)
+    {
+        controller_connected_callback(id);
+    }
+}
+
+void Gosu::WindowForWrapper::controller_disconnected(int id)
+{
+    if (controller_disconnected_callback != nullptr)
+    {
+        controller_disconnected_callback(id);
     }
 }
 
@@ -158,6 +178,16 @@ void Gosu_Window_set_button_up(Gosu_Window *window, void function(void *data, un
 void Gosu_Window_set_axis_motion(Gosu_Window *window, void function(void *data, unsigned btn, double value), void *data)
 {
     reinterpret_cast<Gosu::WindowForWrapper *>(window)->axis_motion_callback = [=](unsigned btn, double value) { function(data, btn, value); };
+}
+
+void Gosu_Window_set_controller_connected(Gosu_Window *window, void function(void *data, int id), void *data)
+{
+    reinterpret_cast<Gosu::WindowForWrapper *>(window)->controller_connected_callback = [=](int id) { function(data, id); };
+}
+
+void Gosu_Window_set_controller_disconnected(Gosu_Window *window, void function(void *data, int id), void *data)
+{
+    reinterpret_cast<Gosu::WindowForWrapper *>(window)->controller_disconnected_callback = [=](int id) { function(data, id); };
 }
 
 void Gosu_Window_set_drop(Gosu_Window *window, void function(void *data, const char *filename), void *data)
