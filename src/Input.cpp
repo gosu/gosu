@@ -41,6 +41,7 @@ struct InputEvent
     int type;
     double axis_value;
     bool gamepad_connected;
+    const char *gamepad_name;
 };
 
 enum InputEventType {
@@ -185,12 +186,14 @@ struct Gosu::Input::Impl
                 }
                 int gamepad_slot = -1;
                 int device_instance_id = -1;
+                const char *gamepad_name;
                 // Prefer the SDL_GameController API...
                 if (SDL_IsGameController(e->jdevice.which)) {
                     if (SDL_GameController *game_controller = SDL_GameControllerOpen(e->jdevice.which)) {
                         printf("Added GameController Device with Instance ID: %i (%s)\n", SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller)), SDL_GameControllerNameForIndex(e->jdevice.which));
                         game_controllers.push_back(game_controller);
                         gamepad_slot = available_gamepad_slot_index();
+                        gamepad_name = SDL_GameControllerNameForIndex(e->jdevice.which);
                         device_instance_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller));
                     }
                 }
@@ -200,12 +203,13 @@ struct Gosu::Input::Impl
                         printf("Added Joystick Device with Instance ID: %i (%s)\n", SDL_JoystickInstanceID(joystick), SDL_JoystickNameForIndex(e->jdevice.which));
                         joysticks.push_back(joystick);
                         gamepad_slot = available_gamepad_slot_index();
+                        gamepad_name = SDL_JoystickNameForIndex(e->jdevice.which);
                         device_instance_id = SDL_JoystickInstanceID(joystick);
                     }
                 }
                 if (gamepad_slot >= 0 && device_instance_id >= 0) {
                     gamepad_slots[gamepad_slot] = device_instance_id;
-                    enqueue_gamepad_connection_event(gamepad_slot, true);
+                    enqueue_gamepad_connection_event(gamepad_slot, true, gamepad_name);
                 }
                 break;
             }
@@ -213,7 +217,7 @@ struct Gosu::Input::Impl
                 int gamepad_slot = gamepad_slot_index(e->jdevice.which);
 
                 if (gamepad_slot >= 0) {
-                    enqueue_gamepad_connection_event(gamepad_slot, false);
+                    enqueue_gamepad_connection_event(gamepad_slot, false, nullptr);
                     free_gamepad_slot_index(e->jdevice.which);
                 }
                 break;
@@ -368,7 +372,7 @@ struct Gosu::Input::Impl
             else if (event.type == InputEventType::ControllerConnectionEvent) {
                 if (event.gamepad_connected) {
                     if (input.on_gamepad_connected) {
-                        input.on_gamepad_connected(event.id);
+                        input.on_gamepad_connected(event.id, event.gamepad_name);
                     }
                 }
                 else {
@@ -399,9 +403,9 @@ private:
         event_queue.push_back( s );
     }
 
-    void enqueue_gamepad_connection_event(int gamepad_index_id, bool connected)
+    void enqueue_gamepad_connection_event(int gamepad_index_id, bool connected, const char *name)
     {
-        InputEvent s = { gamepad_index_id, InputEventType::ControllerConnectionEvent, 0, connected };
+        InputEvent s = { gamepad_index_id, InputEventType::ControllerConnectionEvent, 0, connected, name };
         event_queue.push_back( s );
     }
 

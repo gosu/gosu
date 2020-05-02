@@ -12,7 +12,7 @@ public:
     void button_down(Gosu::Button btn) override;
     void button_up(Gosu::Button btn) override;
     void axis_motion(Gosu::Button btn, double value) override;
-    void gamepad_connected(int id) override;
+    void gamepad_connected(int id, const std::string &name) override;
     void gamepad_disconnected(int id) override;
     void drop(const std::string &filename) override;
     bool needs_redraw() const override;
@@ -26,7 +26,7 @@ public:
     std::function<void (unsigned btn)> button_down_callback;
     std::function<void (unsigned btn)> button_up_callback;
     std::function<void (unsigned btn, double value)> axis_motion_callback;
-    std::function<void (int id)> gamepad_connected_callback;
+    std::function<void (int id, const char *name)> gamepad_connected_callback;
     std::function<void (int id)> gamepad_disconnected_callback;
     std::function<void (const char *filename)> drop_callback;
     std::function<bool ()> needs_redraw_callback;
@@ -81,10 +81,10 @@ void Gosu::WindowForWrapper::axis_motion(Gosu::Button btn, double value)
     }
 }
 
-void Gosu::WindowForWrapper::gamepad_connected(int id)
+void Gosu::WindowForWrapper::gamepad_connected(int id, const std::string &name)
 {
     if (gamepad_connected_callback != nullptr) {
-        gamepad_connected_callback(id);
+        gamepad_connected_callback(id, name.c_str());
     }
 }
 
@@ -178,9 +178,9 @@ void Gosu_Window_set_axis_motion(Gosu_Window *window, void function(void *data, 
     reinterpret_cast<Gosu::WindowForWrapper *>(window)->axis_motion_callback = [=](unsigned btn, double value) { function(data, btn, value); };
 }
 
-void Gosu_Window_set_gamepad_connected(Gosu_Window *window, void function(void *data, int id), void *data)
+void Gosu_Window_set_gamepad_connected(Gosu_Window *window, void function(void *data, int id, const char *name), void *data)
 {
-    reinterpret_cast<Gosu::WindowForWrapper *>(window)->gamepad_connected_callback = [=](int id) { function(data, id); };
+    reinterpret_cast<Gosu::WindowForWrapper *>(window)->gamepad_connected_callback = [=](int id, const char *name) { function(data, id, name); };
 }
 
 void Gosu_Window_set_gamepad_disconnected(Gosu_Window *window, void function(void *data, int id), void *data)
