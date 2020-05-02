@@ -83,16 +83,14 @@ void Gosu::WindowForWrapper::axis_motion(Gosu::Button btn, double value)
 
 void Gosu::WindowForWrapper::controller_connected(int id)
 {
-    if (controller_connected_callback != nullptr)
-    {
+    if (controller_connected_callback != nullptr) {
         controller_connected_callback(id);
     }
 }
 
 void Gosu::WindowForWrapper::controller_disconnected(int id)
 {
-    if (controller_disconnected_callback != nullptr)
-    {
+    if (controller_disconnected_callback != nullptr) {
         controller_disconnected_callback(id);
     }
 }
