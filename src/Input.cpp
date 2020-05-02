@@ -40,7 +40,7 @@ struct InputEvent
     int id;
     int type;
     double axis_value;
-    bool controller_connected;
+    bool gamepad_connected;
 };
 
 enum InputEventType {
@@ -205,7 +205,7 @@ struct Gosu::Input::Impl
                 }
                 if (gamepad_slot >= 0 && device_instance_id >= 0) {
                     gamepad_slots[gamepad_slot] = device_instance_id;
-                    enqueue_controller_connection_event(gamepad_slot, true);
+                    enqueue_gamepad_connection_event(gamepad_slot, true);
                 }
                 break;
             }
@@ -213,7 +213,7 @@ struct Gosu::Input::Impl
                 int gamepad_slot = gamepad_slot_index(e->jdevice.which);
 
                 if (gamepad_slot >= 0) {
-                    enqueue_controller_connection_event(gamepad_slot, false);
+                    enqueue_gamepad_connection_event(gamepad_slot, false);
                     free_gamepad_slot_index(e->jdevice.which);
                 }
                 break;
@@ -290,18 +290,27 @@ struct Gosu::Input::Impl
         // true. This is handy for singleplayer games.
         GamepadBuffer any_gamepad = { false };
 
-        size_t available_gamepads = game_controllers.size() + joysticks.size();
-
-        for (int i = 0; i < available_gamepads; ++i) {
+        for (int i = 0; i < gamepad_slots.size(); ++i) {
+            SDL_GameController *game_controller = nullptr;
+            SDL_Joystick *joystick = nullptr;
             GamepadBuffer current_gamepad = { false };
 
+            if (gamepad_slots[i] == -1) {
+                continue;
+            }
+            else {
+                if (game_controller = SDL_GameControllerFromInstanceID(gamepad_slots[i])) {
+                }
+                else {
+                    joystick = SDL_JoystickFromInstanceID(gamepad_slots[i]);
+                }
+            }
+
             // Poll data from SDL, using either of two API interfaces.
-            if (i < game_controllers.size()) {
-                SDL_GameController* game_controller = game_controllers[i];
+            if (game_controller) {
                 poll_game_controller(game_controller, current_gamepad);
             }
             else {
-                SDL_Joystick* joystick = joysticks[i - game_controllers.size()];
                 poll_joystick(joystick, current_gamepad);
             }
 
@@ -357,14 +366,14 @@ struct Gosu::Input::Impl
                 }
             }
             else if (event.type == InputEventType::ControllerConnectionEvent) {
-                if (event.controller_connected) {
-                    if (input.on_controller_connected) {
-                        input.on_controller_connected(event.id);
+                if (event.gamepad_connected) {
+                    if (input.on_gamepad_connected) {
+                        input.on_gamepad_connected(event.id);
                     }
                 }
                 else {
-                    if (input.on_controller_disconnected) {
-                        input.on_controller_disconnected(event.id);
+                    if (input.on_gamepad_disconnected) {
+                        input.on_gamepad_disconnected(event.id);
                     }
                 }
             }
@@ -390,9 +399,9 @@ private:
         event_queue.push_back( s );
     }
 
-    void enqueue_controller_connection_event(int controller_index_id, bool connected)
+    void enqueue_gamepad_connection_event(int gamepad_index_id, bool connected)
     {
-        InputEvent s = { controller_index_id, InputEventType::ControllerConnectionEvent, 0, connected };
+        InputEvent s = { gamepad_index_id, InputEventType::ControllerConnectionEvent, 0, connected };
         event_queue.push_back( s );
     }
 

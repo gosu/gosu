@@ -124,8 +124,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     input().on_button_down = [this](Button button) { button_down(button); };
     input().on_button_up   = [this](Button button) { button_up(button); };
     input().on_axis_motion = [this](Button axis, double value) { axis_motion(axis, value); };
-    input().on_controller_connected    = [this](int id) { controller_connected(id); };
-    input().on_controller_disconnected = [this](int id) { controller_disconnected(id); };
+    input().on_gamepad_connected    = [this](int id) { gamepad_connected(id); };
+    input().on_gamepad_disconnected = [this](int id) { gamepad_disconnected(id); };
 }
 
 Gosu::Window::~Window()
