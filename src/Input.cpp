@@ -31,7 +31,8 @@ static void require_sdl_video()
 }
 
 static array<bool, Gosu::NUM_BUTTONS> button_states = { { false } };
-static array<double, Gosu::GP_NUM_AXES> axis_states = { {0.0} };
+static array<double, Gosu::GP_NUM_AXES> axis_states = { { 0 } };
+static array<int, Gosu::NUM_GAMEPADS> gamepad_slots = { { -1, -1, -1, -1 } }; // Stores joystick instance id or -1 if empty
 vector<SDL_Joystick *> joysticks;
 vector<SDL_GameController *> game_controllers;
 struct InputEvent
@@ -39,7 +40,7 @@ struct InputEvent
     int id;
     int type;
     double axis_value;
-    bool controller_connected_value;
+    bool controller_connected;
 };
 
 enum InputEventType {
@@ -157,54 +158,127 @@ struct Gosu::Input::Impl
             }
             case SDL_JOYAXISMOTION: {
                 if (SDL_IsGameController(e->jaxis.which)) {
-                    break; // Ignore as triggers are reported -1..1 instead of 0..1
+                    // Ignore this event as joystick triggers are reported in range -1..1 instead of 0..1
+                    break;
                 }
                 else {
-                    // printf("Joystick Device ID: %i, axis: %i, value: %d\n", e->jaxis.which, e->jaxis.axis, e->jaxis.value);
                     enqueue_event(ButtonName::GP_AXIS_LEFT_X + e->jaxis.axis, (double)e->jaxis.value);
+
+                    if (int i = gamepad_slot_index(e->jaxis.which) && i >= 0) {
+                        enqueue_event(ButtonName::GP_0_AXIS_LEFT_X + (6 * i), (double)e->jaxis.value);
+                    }
                 }
                 break;
             }
             case SDL_CONTROLLERAXISMOTION: {
-                // printf("GameController Device ID: %i, axis: %i, value: %d\n", e->caxis.which, e->caxis.axis, e->caxis.value);
                 enqueue_event(ButtonName::GP_AXIS_LEFT_X + e->caxis.axis, (double)e->caxis.value);
+
+                if (int i = gamepad_slot_index(e->caxis.which) && i >= 0) {
+                    enqueue_event(ButtonName::GP_0_AXIS_LEFT_X + (6 * i), (double)e->caxis.value);
+                }
                 break;
             }
             case SDL_JOYDEVICEADDED: {
-                if (game_controllers.size() + joysticks.size() >= Gosu::NUM_GAMEPADS) {
-                    printf("Max Num of Gamepads added (%i)\n", game_controllers.size() + joysticks.size());
+                if (available_gamepad_slot_index() == -1) {
+                    printf("Max Num of Gamepads added. Controllers: %i, Joysticks: %i (total: %i)\n", game_controllers.size(), joysticks.size(), game_controllers.size() + joysticks.size());
                     break;
                 }
-                int index_of_controller = -1;
+                int gamepad_slot = -1;
+                int device_instance_id = -1;
                 // Prefer the SDL_GameController API...
-                if (SDL_IsGameController(e->jaxis.which)) {
-                    if (SDL_GameController *game_controller = SDL_GameControllerOpen(e->jaxis.which)) {
-                        printf("Added GameController Device with Instance ID: %i (%s)\n", SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller)), SDL_GameControllerNameForIndex(e->caxis.which));
+                if (SDL_IsGameController(e->jdevice.which)) {
+                    if (SDL_GameController *game_controller = SDL_GameControllerOpen(e->jdevice.which)) {
+                        printf("Added GameController Device with Instance ID: %i (%s)\n", SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller)), SDL_GameControllerNameForIndex(e->jdevice.which));
                         game_controllers.push_back(game_controller);
-                        break;
+                        gamepad_slot = available_gamepad_slot_index();
+                        device_instance_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller));
                     }
                 }
                 // ...but fall back on the good, old SDL_Joystick API.
-                if (SDL_Joystick *joystick = SDL_JoystickOpen(e->jaxis.which)) {
-                    printf("Added Joystick Device with Instance ID: %i (%s)\n", SDL_JoystickInstanceID(joystick), SDL_JoystickNameForIndex(e->jaxis.which));
-                    joysticks.push_back(joystick);
+                else {
+                    if (SDL_Joystick *joystick = SDL_JoystickOpen(e->jdevice.which)) {
+                        printf("Added Joystick Device with Instance ID: %i (%s)\n", SDL_JoystickInstanceID(joystick), SDL_JoystickNameForIndex(e->jdevice.which));
+                        joysticks.push_back(joystick);
+                        gamepad_slot = available_gamepad_slot_index();
+                        device_instance_id = SDL_JoystickInstanceID(joystick);
+                    }
                 }
-                if (index_of_controller >= 0) {
-                    enqueue_controller_connection_event(index_of_controller, true);
+                if (gamepad_slot >= 0 && device_instance_id >= 0) {
+                    gamepad_slots[gamepad_slot] = device_instance_id;
+                    enqueue_controller_connection_event(gamepad_slot, true);
                 }
                 break;
             }
             case SDL_JOYDEVICEREMOVED: {
-                // TODO: Remove and close game_controllers/joysticks
-                int index_of_controller = -1;
-                printf("Removed a Device with Instance ID: %i\n", e->caxis.which);
-                if (index_of_controller >= 0) {
-                    enqueue_controller_connection_event(index_of_controller, false);
+                int gamepad_slot = gamepad_slot_index(e->jdevice.which);
+
+                if (gamepad_slot >= 0) {
+                    enqueue_controller_connection_event(gamepad_slot, false);
+                    free_gamepad_slot_index(e->jdevice.which);
                 }
                 break;
             }
         }
         return false;
+    }
+
+    int gamepad_slot_index(int joystick_instance_id)
+    {
+        int index = -1;
+
+        for (int i = 0; i < gamepad_slots.size(); i++) {
+            if (gamepad_slots[i] == joystick_instance_id) {
+                index = i;
+                break;
+            }
+        }
+
+        return index;
+    }
+
+    int available_gamepad_slot_index()
+    {
+        int index = -1;
+
+        for (int i = 0; i < gamepad_slots.size(); i++) {
+            if (gamepad_slots[i] == -1) {
+                index = i;
+                break;
+            }
+        }
+
+        return index;
+    }
+
+    void free_gamepad_slot_index(int joystick_instance_id)
+    {
+        int index = -1;
+
+        for (int i = 0; i < gamepad_slots.size(); i++) {
+            if (gamepad_slots[i] == joystick_instance_id) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index >= 0) {
+            for(int i = 0; i < game_controllers.size(); i++) {
+                if (SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controllers[i])) == joystick_instance_id) {
+                    SDL_GameControllerClose(game_controllers[i]);
+                    game_controllers.erase(game_controllers.begin() + i);
+                    gamepad_slots[i] = -1;
+                    return;
+                }
+            }
+            for(int i = 0; i < joysticks.size(); i++) {
+                if (SDL_JoystickInstanceID(joysticks[i]) == joystick_instance_id) {
+                    SDL_JoystickClose(joysticks[i]);
+                    joysticks.erase(joysticks.begin() + i);
+                    gamepad_slots[i] = -1;
+                    return;
+                }
+            }
+        }
     }
 
     typedef array<bool, GP_NUM_PER_GAMEPAD> GamepadBuffer;
@@ -280,6 +354,18 @@ struct Gosu::Input::Impl
                 axis_states[event.id - ButtonName::GP_AXIS_LEFT_X] = event.axis_value;
                 if (input.on_axis_motion) {
                     input.on_axis_motion((Button)event.id, event.axis_value);
+                }
+            }
+            else if (event.type == InputEventType::ControllerConnectionEvent) {
+                if (event.controller_connected) {
+                    if (input.on_controller_connected) {
+                        input.on_controller_connected(event.id);
+                    }
+                }
+                else {
+                    if (input.on_controller_disconnected) {
+                        input.on_controller_disconnected(event.id);
+                    }
                 }
             }
         }

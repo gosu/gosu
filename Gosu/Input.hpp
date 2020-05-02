@@ -114,6 +114,8 @@ namespace Gosu
 
         std::function<void (Button, double)> on_axis_motion;
 
+        std::function<void (int)> on_controller_connected, on_controller_disconnected;
+
         //! Assignable events that are called by update. You can bind these to your own functions.
         //! If you use the Window class, it will assign these to its own methods.
         std::function<void (Touch)> on_touch_began, on_touch_moved, on_touch_ended,

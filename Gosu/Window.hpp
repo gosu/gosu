@@ -106,10 +106,9 @@ namespace Gosu
         // TODO: finalize name.
         virtual void axis_motion(Gosu::Button, double) {}
 
-        // TODO: finalize name.
-        // triggered when a controller is connected or disconnected
-        // controller_changed(gamepad index, connected)
-        virtual void controller_changed(int, bool) {}
+        virtual void on_controller_connected(int) {}
+
+        virtual void on_controller_disconnected(int) {}
 
         //! Called when a file is dropped onto the window.
         //! \param filename The filename of the dropped file. When multiple files are dropped, this
