@@ -262,7 +262,7 @@ struct Gosu::Input::Impl
         }
 
         if (index >= 0) {
-            for(int i = 0; i < game_controllers.size(); i++) {
+            for (int i = 0; i < game_controllers.size(); i++) {
                 if (SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controllers[i])) == joystick_instance_id) {
                     SDL_GameControllerClose(game_controllers[i]);
                     game_controllers.erase(game_controllers.begin() + i);
@@ -270,7 +270,7 @@ struct Gosu::Input::Impl
                     return;
                 }
             }
-            for(int i = 0; i < joysticks.size(); i++) {
+            for (int i = 0; i < joysticks.size(); i++) {
                 if (SDL_JoystickInstanceID(joysticks[i]) == joystick_instance_id) {
                     SDL_JoystickClose(joysticks[i]);
                     joysticks.erase(joysticks.begin() + i);
