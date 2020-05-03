@@ -112,8 +112,6 @@ namespace Gosu
         //! If you use the Window class, it will assign these to its own methods.
         std::function<void (Button)> on_button_down, on_button_up;
 
-        std::function<void (Button, double)> on_axis_motion;
-
         std::function<void (int)> on_gamepad_connected, on_gamepad_disconnected;
 
         //! Assignable events that are called by update. You can bind these to your own functions.

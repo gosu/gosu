@@ -11,7 +11,6 @@ public:
     void default_button_down(unsigned btn); // Enables fullscreen toggle
     void button_down(Gosu::Button btn) override;
     void button_up(Gosu::Button btn) override;
-    void axis_motion(Gosu::Button btn, double value) override;
     void gamepad_connected(int id) override;
     void gamepad_disconnected(int id) override;
     void drop(const std::string &filename) override;
@@ -25,7 +24,6 @@ public:
     std::function<void ()> draw_callback;
     std::function<void (unsigned btn)> button_down_callback;
     std::function<void (unsigned btn)> button_up_callback;
-    std::function<void (unsigned btn, double value)> axis_motion_callback;
     std::function<void (int id)> gamepad_connected_callback;
     std::function<void (int id)> gamepad_disconnected_callback;
     std::function<void (const char *filename)> drop_callback;
@@ -71,13 +69,6 @@ void Gosu::WindowForWrapper::button_up(Gosu::Button btn)
 {
     if (button_up_callback != nullptr) {
         button_up_callback(btn.id());
-    }
-}
-
-void Gosu::WindowForWrapper::axis_motion(Gosu::Button btn, double value)
-{
-    if (axis_motion_callback != nullptr) {
-        axis_motion_callback(btn.id(), value);
     }
 }
 
@@ -171,11 +162,6 @@ void Gosu_Window_default_button_down(Gosu_Window *window, unsigned btn)
 void Gosu_Window_set_button_up(Gosu_Window *window, void function(void *data, unsigned btn), void *data)
 {
     reinterpret_cast<Gosu::WindowForWrapper *>(window)->button_up_callback = [=](unsigned btn) { function(data, btn); };
-}
-
-void Gosu_Window_set_axis_motion(Gosu_Window *window, void function(void *data, unsigned btn, double value), void *data)
-{
-    reinterpret_cast<Gosu::WindowForWrapper *>(window)->axis_motion_callback = [=](unsigned btn, double value) { function(data, btn, value); };
 }
 
 void Gosu_Window_set_gamepad_connected(Gosu_Window *window, void function(void *data, int id), void *data)

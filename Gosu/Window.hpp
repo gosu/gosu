@@ -103,9 +103,6 @@ namespace Gosu
         //! Same as button_down. Called when the user releases a button.
         virtual void button_up(Gosu::Button) {}
 
-        // TODO: finalize name.
-        virtual void axis_motion(Gosu::Button, double) {}
-
         virtual void gamepad_connected(int) {}
 
         virtual void gamepad_disconnected(int) {}

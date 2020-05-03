@@ -16,7 +16,6 @@ void Gosu_Window_set_update(Gosu_Window *window, void function(void *data), void
 void Gosu_Window_set_draw(Gosu_Window *window, void function(void *data), void* data);
 void Gosu_Window_set_button_down(Gosu_Window *window, void function(void *data, unsigned btn), void* data);
 void Gosu_Window_set_button_up(Gosu_Window *window, void function(void *data, unsigned btn), void* data);
-void Gosu_Window_set_axis_motion(Gosu_Window *window, void function(void *data, unsigned btn, double value), void *data);
 void Gosu_Window_set_gamepad_connected(Gosu_Window *window, void function(void *data, int id), void* data);
 void Gosu_Window_set_gamepad_disconnected(Gosu_Window *window, void function(void *data, int id), void* data);
 void Gosu_Window_set_drop(Gosu_Window *window, void function(void *data, const char *filename), void* data);
