@@ -33,15 +33,15 @@ static void require_sdl_video()
 static array<bool, Gosu::NUM_BUTTONS> button_states = { { false } };
 static array<double, Gosu::GP_NUM_AXES> axis_states = { { 0 } };
 static array<int, Gosu::NUM_GAMEPADS> gamepad_slots = { { -1, -1, -1, -1 } }; // Stores joystick instance id or -1 if empty
-vector<SDL_Joystick *> joysticks;
-vector<SDL_GameController *> game_controllers;
+static vector<SDL_Joystick *> joysticks;
+static vector<SDL_GameController *> game_controllers;
 struct InputEvent
 {
     int id;
     int type;
     double axis_value;
     bool gamepad_connected;
-    const char *gamepad_name;
+    int gamepad_instance_id;
 };
 
 enum InputEventType {
@@ -209,7 +209,7 @@ struct Gosu::Input::Impl
                 }
                 if (gamepad_slot >= 0 && device_instance_id >= 0) {
                     gamepad_slots[gamepad_slot] = device_instance_id;
-                    enqueue_gamepad_connection_event(gamepad_slot, true, gamepad_name);
+                    enqueue_gamepad_connection_event(gamepad_slot, true, -1);
                 }
                 break;
             }
@@ -217,8 +217,7 @@ struct Gosu::Input::Impl
                 int gamepad_slot = gamepad_slot_index(e->jdevice.which);
 
                 if (gamepad_slot >= 0) {
-                    enqueue_gamepad_connection_event(gamepad_slot, false, nullptr);
-                    free_gamepad_slot_index(e->jdevice.which);
+                    enqueue_gamepad_connection_event(gamepad_slot, false, e->jdevice.which);
                 }
                 break;
             }
@@ -226,44 +225,35 @@ struct Gosu::Input::Impl
         return false;
     }
 
+    // returns the gamepad slot index (0..NUM_GAMEPADS - 1) for the joystick instance id or -1 if not found
     int gamepad_slot_index(int joystick_instance_id)
     {
-        int index = -1;
-
         for (int i = 0; i < gamepad_slots.size(); i++) {
             if (gamepad_slots[i] == joystick_instance_id) {
-                index = i;
-                break;
+                return i;
             }
         }
 
-        return index;
+        return -1;
     }
 
+    // returns first available gamepad slot or -1 if non are available
     int available_gamepad_slot_index()
     {
-        int index = -1;
-
         for (int i = 0; i < gamepad_slots.size(); i++) {
             if (gamepad_slots[i] == -1) {
-                index = i;
-                break;
+                return i;
             }
         }
 
-        return index;
+        return -1;
     }
 
+    // frees the gamepad slot associated with this joystick instance id
+    // and frees the SDL_GameController/SDL_Joystick
     void free_gamepad_slot_index(int joystick_instance_id)
     {
-        int index = -1;
-
-        for (int i = 0; i < gamepad_slots.size(); i++) {
-            if (gamepad_slots[i] == joystick_instance_id) {
-                index = i;
-                break;
-            }
-        }
+        int index = gamepad_slot_index(joystick_instance_id);
 
         if (index >= 0) {
             for (int i = 0; i < game_controllers.size(); i++) {
@@ -372,12 +362,13 @@ struct Gosu::Input::Impl
             else if (event.type == InputEventType::ControllerConnectionEvent) {
                 if (event.gamepad_connected) {
                     if (input.on_gamepad_connected) {
-                        input.on_gamepad_connected(event.id, event.gamepad_name);
+                        input.on_gamepad_connected(event.id);
                     }
                 }
                 else {
                     if (input.on_gamepad_disconnected) {
                         input.on_gamepad_disconnected(event.id);
+                        free_gamepad_slot_index(event.gamepad_instance_id);
                     }
                 }
             }
@@ -403,9 +394,9 @@ private:
         event_queue.push_back( s );
     }
 
-    void enqueue_gamepad_connection_event(int gamepad_index_id, bool connected, const char *name)
+    void enqueue_gamepad_connection_event(int gamepad_index_id, bool connected, int instance_id)
     {
-        InputEvent s = { gamepad_index_id, InputEventType::ControllerConnectionEvent, 0, connected, name };
+        InputEvent s = { gamepad_index_id, InputEventType::ControllerConnectionEvent, 0, connected, instance_id };
         event_queue.push_back( s );
     }
 
