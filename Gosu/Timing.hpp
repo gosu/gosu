@@ -11,4 +11,10 @@ namespace Gosu
     //! Returns the milliseconds since first calling this function.
     //! Can wrap after running for a long time.
     unsigned long milliseconds();
+
+    //! Returns milliseconds() / 1000.0.
+    inline double seconds()
+    {
+        return milliseconds() / 1000.0;
+    }
 }
