@@ -31,6 +31,10 @@ module Gosu
   KB_DELETE = :an_integer
   KB_DOWN = :an_integer
   KB_END = :an_integer
+  
+  KB_PRINTSCREEN = :an_integer
+  KB_SCROLLLOCK = :an_integer
+  KB_PAUSE = :an_integer
 
   ##
   # This is the key on the numpad.
@@ -71,6 +75,7 @@ module Gosu
   KB_RIGHT_SHIFT = :an_integer
   KB_SEMICOLON = :an_integer
   KB_SLASH = :an_integer
+  KB_CAPSLOCK = :an_integer
   KB_SPACE = :an_integer
   KB_TAB = :an_integer
   KB_UP = :an_integer
@@ -532,6 +537,10 @@ module Gosu
   # @see Gosu::Song
   class Sample
     ##
+    # @return [Float] the length of this sample in seconds, as a Float.
+    attr_reader :length
+
+    ##
     # Loads a sample from a file.
     #
     # (Passing a Window reference is not necessary anymore, please use the first overload from now on.)
@@ -541,7 +550,7 @@ module Gosu
     #
     # @param filename [String] the path to load the sample from.
     def initialize(filename); end
-
+    
     ##
     # Plays the sample without panning.
     #
@@ -636,6 +645,10 @@ module Gosu
     ##
     # @return [Float] the song's playback volume.
     attr_accessor :volume
+
+    ##
+    # @return [Float] the length of this song in seconds, as a Float.
+    attr_reader :length
 
     ##
     # Loads a song from a file.
@@ -1252,10 +1265,12 @@ module Gosu
     def distance(x1, y1, x2, y2); end
 
     ##
-    # @note For long-running games, this counter will eventually wrap around to 0 again.
-    #
-    # @return [Integer] the number of milliseconds elapsed.
+    # @return [Integer] the number of milliseconds elapsed since either this method, Gosu.seconds, or Window#show was first called.
     def milliseconds(); end
+
+    ##
+    # @return [Float] the number of seconds elapsed since either this method, Gosu.milliseconds, or Window#show was first called.
+    def seconds(); end
 
     ##
     # @return [Integer] the current framerate, in frames per second.
