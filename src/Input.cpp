@@ -512,6 +512,42 @@ Gosu::Button Gosu::Input::char_to_id(string ch)
     return keycode == SDLK_UNKNOWN ? NO_BUTTON : Button(SDL_GetScancodeFromKey(keycode));
 }
 
+std::string Gosu::Input::button_name(Button btn)
+{
+    SDL_Keycode keycode = SDL_GetKeyFromScancode( static_cast<SDL_Scancode>(btn.id()) );
+    const char *name = SDL_GetKeyName(keycode);
+
+    return name;
+}
+
+std::string Gosu::Input::gamepad_name(int id)
+{
+    SDL_Joystick *joystick;
+    SDL_GameController *game_controller;
+    int instance_id;
+
+    if (id < 0 || id > gamepad_slots.size() - 1) {
+        return "";
+    }
+
+    instance_id = gamepad_slots[id];
+
+    if (instance_id == -1) {
+        return "";
+    }
+
+    if (game_controller = SDL_GameControllerFromInstanceID(instance_id)) {
+        printf("C NAME: %s\n", SDL_GameControllerName(game_controller));
+        printf("CPP NAME: %s\n", string(SDL_GameControllerName(game_controller)));
+        return SDL_GameControllerName(game_controller);
+    }
+    else if (joystick = SDL_JoystickFromInstanceID(instance_id)) {
+        return SDL_JoystickName(joystick);
+    }
+
+    return "";
+}
+
 bool Gosu::Input::down(Gosu::Button btn)
 {
     if (btn == NO_BUTTON || btn.id() >= NUM_BUTTONS) return false;

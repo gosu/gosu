@@ -74,6 +74,10 @@ namespace Gosu
         //! encoded string), or NO_BUTTON.
         static Button char_to_id(std::string ch);
 
+        static std::string button_name(Button btn);
+
+        static std::string gamepad_name(int id);
+
         //! Returns true if a button is currently pressed.
         //! Updated every tick.
         static bool down(Button btn);

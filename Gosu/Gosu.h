@@ -67,6 +67,8 @@ unsigned Gosu_screen_height(Gosu_Window* window);
 int Gosu_button_down(int id);
 const char* Gosu_button_id_to_char(int id);
 unsigned Gosu_button_char_to_id(const char* character);
+const char *Gosu_button_name(int id);
+const char *Gosu_gamepad_name(int id);
 double Gosu_axis(int id);
 
 // Misc
