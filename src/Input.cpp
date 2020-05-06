@@ -537,8 +537,6 @@ std::string Gosu::Input::gamepad_name(int id)
     }
 
     if (game_controller = SDL_GameControllerFromInstanceID(instance_id)) {
-        printf("C NAME: %s\n", SDL_GameControllerName(game_controller));
-        printf("CPP NAME: %s\n", string(SDL_GameControllerName(game_controller)));
         return SDL_GameControllerName(game_controller);
     }
     else if (joystick = SDL_JoystickFromInstanceID(instance_id)) {
