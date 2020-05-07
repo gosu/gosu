@@ -189,7 +189,6 @@ struct Gosu::Input::Impl
                 // Prefer the SDL_GameController API...
                 if (SDL_IsGameController(e->jdevice.which)) {
                     if (SDL_GameController *game_controller = SDL_GameControllerOpen(e->jdevice.which)) {
-                        printf("Added GameController Device with Instance ID: %i (%s)\n", SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller)), SDL_GameControllerNameForIndex(e->jdevice.which));
                         game_controllers.push_back(game_controller);
                         gamepad_slot = available_gamepad_slot_index();
                         gamepad_name = SDL_GameControllerNameForIndex(e->jdevice.which);
@@ -199,7 +198,6 @@ struct Gosu::Input::Impl
                 // ...but fall back on the good, old SDL_Joystick API.
                 else {
                     if (SDL_Joystick *joystick = SDL_JoystickOpen(e->jdevice.which)) {
-                        printf("Added Joystick Device with Instance ID: %i (%s)\n", SDL_JoystickInstanceID(joystick), SDL_JoystickNameForIndex(e->jdevice.which));
                         joysticks.push_back(joystick);
                         gamepad_slot = available_gamepad_slot_index();
                         gamepad_name = SDL_JoystickNameForIndex(e->jdevice.which);
@@ -208,13 +206,13 @@ struct Gosu::Input::Impl
                 }
                 if (gamepad_slot >= 0 && device_instance_id >= 0) {
                     gamepad_slots[gamepad_slot] = device_instance_id;
+                    printf("Gamepad using slot: %i (%s|%i)\n", gamepad_slot, SDL_GameControllerName(SDL_GameControllerFromInstanceID(device_instance_id)), device_instance_id);
                     enqueue_gamepad_connection_event(gamepad_slot, true, -1);
                 }
                 break;
             }
             case SDL_JOYDEVICEREMOVED: {
                 int gamepad_slot = gamepad_slot_index(e->jdevice.which);
-
                 if (gamepad_slot >= 0) {
                     enqueue_gamepad_connection_event(gamepad_slot, false, e->jdevice.which);
                 }
@@ -263,6 +261,7 @@ struct Gosu::Input::Impl
         if (index >= 0) {
             for (int i = 0; i < game_controllers.size(); i++) {
                 if (SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controllers[i])) == joystick_instance_id) {
+                    printf("Freed gamepad slot: %i (%s|%i)\n", i, SDL_GameControllerName( SDL_GameControllerFromInstanceID(joystick_instance_id) ), joystick_instance_id);
                     SDL_GameControllerClose(game_controllers[i]);
                     game_controllers.erase(game_controllers.begin() + i);
                     gamepad_slots[i] = -1;
