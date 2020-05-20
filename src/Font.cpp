@@ -10,6 +10,7 @@
 #include <array>
 #include <cassert>
 #include <map>
+#include <stdexcept>
 using namespace std;
 
 static const int FONT_RENDER_SCALE = 2;

@@ -7,6 +7,7 @@
 #include <cmath>
 #include <algorithm>
 #include <vector>
+#include <stdexcept>
 using namespace std;
 
 double Gosu::text_width(const u32string& text,
