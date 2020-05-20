@@ -1,6 +1,7 @@
 #include "TrueTypeFont.hpp"
 #include <Gosu/IO.hpp>
 #include <Gosu/Text.hpp>
+#include <stdexcept>
 
 // Disable comma warnings in stb headers.
 #ifdef __GNUC__

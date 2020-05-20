@@ -3,6 +3,7 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Math.hpp>
 #include <cmath>
+#include <stdexcept>
 using namespace std;
 
 Gosu::LargeImageData::LargeImageData(const Bitmap& source, int tile_width, int tile_height,
