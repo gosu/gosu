@@ -162,19 +162,19 @@ struct Gosu::Input::Impl
                     break;
                 }
                 else {
-                    store_axis_value(ButtonName::GP_AXIS_LEFT_X + e->jaxis.axis, (double)e->jaxis.value);
+                    store_axis_value(ButtonName::GP_LEFT_STICK_X_AXIS + e->jaxis.axis, (double)e->jaxis.value);
 
                     if (int i = gamepad_slot_index(e->jaxis.which) && i >= 0) {
-                        store_axis_value(ButtonName::GP_0_AXIS_LEFT_X + e->jaxis.axis + (6 * i), (double)e->jaxis.value);
+                        store_axis_value(ButtonName::GP_0_LEFT_STICK_X_AXIS + e->jaxis.axis + (6 * i), (double)e->jaxis.value);
                     }
                 }
                 break;
             }
             case SDL_CONTROLLERAXISMOTION: {
-                store_axis_value(ButtonName::GP_AXIS_LEFT_X + e->caxis.axis, (double)e->caxis.value);
+                store_axis_value(ButtonName::GP_LEFT_STICK_X_AXIS + e->caxis.axis, (double)e->caxis.value);
 
                 if (int i = gamepad_slot_index(e->caxis.which) && i >= 0) {
-                    store_axis_value(ButtonName::GP_0_AXIS_LEFT_X + e->caxis.axis + (6 * i), (double)e->caxis.value);
+                    store_axis_value(ButtonName::GP_0_LEFT_STICK_X_AXIS + e->caxis.axis + (6 * i), (double)e->caxis.value);
                 }
                 break;
             }
@@ -225,7 +225,7 @@ struct Gosu::Input::Impl
     void store_axis_value(unsigned id, double value)
     {
         double axis_value = value >= 0 ? (double)value / SDL_JOYSTICK_AXIS_MAX : -(double)value / SDL_JOYSTICK_AXIS_MIN;
-        axis_states[id - ButtonName::GP_AXIS_LEFT_X] = axis_value;
+        axis_states[id - ButtonName::GP_LEFT_STICK_X_AXIS] = axis_value;
     }
 
     // returns the gamepad slot index (0..NUM_GAMEPADS - 1) for the joystick instance id or -1 if not found
@@ -554,7 +554,7 @@ bool Gosu::Input::down(Gosu::Button btn)
 
 double Gosu::Input::axis(Gosu::Button btn)
 {
-    return axis_states[btn.id() - Gosu::ButtonName::GP_AXIS_LEFT_X];
+    return axis_states[btn.id() - Gosu::ButtonName::GP_LEFT_STICK_X_AXIS];
 }
 
 double Gosu::Input::mouse_x() const
