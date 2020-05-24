@@ -5,7 +5,7 @@ if(WIN32)
         ARCHIVE DESTINATION Gosu/lib COMPONENT library)
 
     # Install the core header files in the Gosu subfolder.
-    install(DIRECTORY ../Gosu
+    install(DIRECTORY Gosu
         DESTINATION Gosu
         COMPONENT development)
     
@@ -25,7 +25,7 @@ else(WIN32)
         ARCHIVE DESTINATION lib COMPONENT library)
     
     # Install the header files in the Gosu.
-    install(DIRECTORY ../Gosu
+    install(DIRECTORY Gosu
         DESTINATION include
         COMPONENT development)
 endif(WIN32)

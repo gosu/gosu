@@ -91,12 +91,12 @@ install:
 
   # Install Gosu for C++ using CMake.
   - |
-    mkdir -p cmake/build
-    cd cmake/build
+    mkdir -p build
+    cd build
     cmake ..
     make
     sudo make install
-    cd ../..
+    cd ..
 
   # Compile Gosu for macOS and iOS using CocoaPods.
   - |

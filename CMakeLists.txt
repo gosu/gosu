@@ -16,5 +16,5 @@ endif()
 
 option(CMAKE_BUILD_TYPE "Build type (Debug, Release, RelWithDebInfo or MinSizeRel)" RelWithDebInfo)
 
-include(Compilation.cmake)
-include(Installation.cmake)
+include(cmake/Compilation.cmake)
+include(cmake/Installation.cmake)

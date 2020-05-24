@@ -1,6 +1,6 @@
-file(GLOB C_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/*.c)
-file(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/*.cpp)
-file(GLOB HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../Gosu/*.hpp)
+file(GLOB C_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c)
+file(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+file(GLOB HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/Gosu/*.hpp)
 
 # Compile all C++ files as Objective C++ on macOS.
 if(APPLE)
@@ -24,29 +24,29 @@ endif()
 
 
 configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/GosuConfig.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/GosuConfig.cmake
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/GosuConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/cmake/GosuConfig.cmake
     @ONLY)
     
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/GosuConfig.cmake
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/GosuConfig.cmake
     DESTINATION ${CONFIG_FILE_DIR}
     COMPONENT development)
 
 set(COMPILING_GOSU 1)
 mark_as_advanced(COMPILING_GOSU)
 
-include(${CMAKE_CURRENT_BINARY_DIR}/GosuConfig.cmake)
+include(${CMAKE_CURRENT_BINARY_DIR}/cmake/GosuConfig.cmake)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gosu.pc.in
-    ${CMAKE_CURRENT_BINARY_DIR}/gosu.pc
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/gosu.pc.in
+    ${CMAKE_CURRENT_BINARY_DIR}/cmake/gosu.pc
     @ONLY)
     
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gosu.pc
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/gosu.pc
     DESTINATION ${INSTALL_PKGCONFIG_DIR}
     COMPONENT development)
 
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${FREETYPE_INCLUDE_DIRS}
     ${OPENAL_INCLUDE_DIRS}
     ${SDL2_INCLUDE_DIRS}
