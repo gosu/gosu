@@ -18,5 +18,3 @@ option(CMAKE_BUILD_TYPE "Build type (Debug, Release, RelWithDebInfo or MinSizeRe
 
 include(Compilation.cmake)
 include(Installation.cmake)
-
-include(Packaging.cmake)
