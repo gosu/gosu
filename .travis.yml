@@ -7,13 +7,13 @@ matrix:
       dist: xenial
       sudo: required
       compiler: gcc
-    # macOS 10.12 Sierra with last Xcode 8 release
-    - os: osx
-      osx_image: xcode8.3
-      compiler: clang
-    # macOS 10.14 Mojave with first Xcode 11 release
+    # macOS 10.14 Mojave with Xcode 11.0
     - os: osx
       osx_image: xcode11
+      compiler: clang
+    # macOS 10.15 Catalina with Xcode 11.4
+    - os: osx
+      osx_image: xcode11.4
       compiler: clang
 
 # Linux dependencies
