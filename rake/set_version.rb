@@ -1,17 +1,21 @@
-desc "Updates Version.hpp and cmake/CMakeLists.txt to match ENV['GOSU_RELEASE_VERSION']"
+desc "Updates Version.hpp, CMakeLists.txt, and Gosu.podspec to match ENV['GOSU_RELEASE_VERSION']"
 task :set_version do
   throw "GOSU_RELEASE_VERSION must be set" if GOSU_VERSION == "0.0.0"
   
-  major, minor, patch = *GOSU_VERSION.split(".")
-  
-  cmake_lists = File.read("cmake/CMakeLists.txt")
-  cmake_lists.sub! /(set\(GOSU_VERSION_MAJOR ")[^"]+("\))/, "\\1#{major}\\2"
-  cmake_lists.sub! /(set\(GOSU_VERSION_MINOR ")[^"]+("\))/, "\\1#{minor}\\2"
-  cmake_lists.sub! /(set\(GOSU_VERSION_PATCH ")[^"]+("\))/, "\\1#{patch}\\2"
-  File.open("cmake/CMakeLists.txt", "w") do |file|
+  cmake_lists = File.read("CMakeLists.txt")
+  cmake_lists.sub! /(project\(Gosu VERSION )[^)]+(\))/, "\\1#{GOSU_VERSION}\\2"
+  File.open("CMakeLists.txt", "w") do |file|
     file.write cmake_lists
   end
-  
+
+  podspec = File.read("Gosu.podspec")
+  podspec.sub! /(s\.version\s+=\s+\")[^"]+(")/, "\\1#{GOSU_VERSION}\\2"
+  File.open("Gosu.podspec", "w") do |file|
+    file.write podspec
+  end
+
+  major, minor, patch = *GOSU_VERSION.split(".")
+
   File.open("Gosu/Version.hpp", "w") do |file|
     file.puts <<-EOF
 #pragma once

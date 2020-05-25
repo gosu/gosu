@@ -5,12 +5,7 @@
 # - This is not (yet?) going to replace the Visual Studio project for Windows.
 cmake_minimum_required(VERSION 3.10)
 
-project(Gosu)
-
-set(GOSU_VERSION_MAJOR "0")
-set(GOSU_VERSION_MINOR "15")
-set(GOSU_VERSION_PATCH "1")
-set(GOSU_VERSION "${GOSU_VERSION_MAJOR}.${GOSU_VERSION_MINOR}.${GOSU_VERSION_PATCH}")
+project(Gosu VERSION 0.15.1)
 
 option(CMAKE_VERBOSE_MAKEFILE "Display every compilation command" OFF)
 if(WIN32)
