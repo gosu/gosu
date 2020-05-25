@@ -2,6 +2,10 @@
 /lib*/?.?
 /pkg
 
+# CMake files
+/build
+/examples/build
+
 # CLion files
 /.idea
 /cmake-build-debug

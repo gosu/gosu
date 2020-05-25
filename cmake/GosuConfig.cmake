@@ -9,15 +9,10 @@
 
 include(FindPackageMessage)
 
-# TODO - why is this necessary?
 get_filename_component(THIS_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
-if(WIN32)
-    set(PREFIX ${THIS_DIR}/..)
-else()
-    set(PREFIX ${THIS_DIR}/../../..)
-endif()
+set(PREFIX ${THIS_DIR}/../../..)
 
-set(GOSU_INCLUDE_DIR "${PREFIX}/@GOSU_INCLUDE_INSTALL_DIRS@/..")
+set(GOSU_INCLUDE_DIR "${PREFIX}/include")
 set(GOSU_INCLUDE_DIRS ${GOSU_INCLUDE_DIR})
 
 find_package(OpenAL REQUIRED)
