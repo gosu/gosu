@@ -7,6 +7,9 @@ cmake_minimum_required(VERSION 3.10)
 
 project(Gosu VERSION 0.15.1)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 if(WIN32)
     option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 else()
