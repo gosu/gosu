@@ -1,21 +1,15 @@
-
-(*)
-/.bundle
-/vendor
 /lib*/Gosu*.lib
 /lib*/?.?
-/pkg/
-/reference/cpp/
-/reference/rdoc/
-/website/downloads/
-/website/cpp/
-/website/index.html
-/website/mwf
-/website/potd*
-/website/rdoc/
-/website/RubyGosu.tmbundle.zip
+/pkg
 
-.yardoc/
+# CMake files
+/build
+/examples/build
+
+# CLion files
+/.idea
+/cmake-build-debug
+/cmake-build-release
 
 # QtCreator project files
 Gosu.config
@@ -28,10 +22,8 @@ Gosu.includes
 /examples/*Example
 
 # Files from Mac builds & CocoaPod installs
-/**/*.xcworkspace
 /**/xcuserdata
 /**/Pods
-/**/Podfile.lock
 /**/*.app
 
 # MSVC clutter

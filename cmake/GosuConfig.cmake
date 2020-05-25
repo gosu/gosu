@@ -9,18 +9,15 @@
 
 include(FindPackageMessage)
 
-# TODO - why is this necessary?
 get_filename_component(THIS_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
-if(WIN32)
-    set(PREFIX ${THIS_DIR}/..)
-else()
-    set(PREFIX ${THIS_DIR}/../../..)
-endif()
+set(PREFIX ${THIS_DIR}/../../..)
 
-set(GOSU_INCLUDE_DIR "${PREFIX}/@GOSU_INCLUDE_INSTALL_DIRS@/..")
+set(GOSU_INCLUDE_DIR "${PREFIX}/include")
 set(GOSU_INCLUDE_DIRS ${GOSU_INCLUDE_DIR})
 
 find_package(OpenAL REQUIRED)
+# Prefer glvnd (the "GL Vendor-Neutral Dispatch library") over plain libGL.so
+cmake_policy(SET CMP0072 NEW)
 find_package(OpenGL REQUIRED)
 
 find_package(PkgConfig REQUIRED)
