@@ -7,22 +7,20 @@ cmake_minimum_required(VERSION 3.10)
 
 project(Gosu VERSION 0.15.1)
 
-option(CMAKE_VERBOSE_MAKEFILE "Display every compilation command" OFF)
 if(WIN32)
     option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 else()
     option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 endif()
 
-option(CMAKE_BUILD_TYPE "Build type (Debug, Release, RelWithDebInfo or MinSizeRel)" RelWithDebInfo)
-
 file(GLOB C_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c)
 file(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 file(GLOB HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/Gosu/*.hpp)
 
-# Compile all C++ files as Objective C++ on macOS.
+# Compile all C++ files as Objective C++ on macOS so we can use Cocoa APIs.
 if(APPLE)
-    set_source_files_properties(${SOURCE_FILES} PROPERTIES COMPILE_FLAGS "-x objective-c++ -Wno-documentation")
+    set_source_files_properties(${SOURCE_FILES} PROPERTIES COMPILE_FLAGS
+            "-x objective-c++ -Wno-documentation")
 endif()
 
 # Set up install paths e.g. for GosuConfig.cmake
@@ -104,16 +102,17 @@ if(WIN32)
             DESTINATION Gosu
             COMPONENT development)
 
-    # On windows, we also install the debug information. It's unfortunate that we have to hard-code
-    # the 'Debug' part of the path, but CMake doesn't seem to provide a way around this. The best I
-    # found was: http://www.cmake.org/pipermail/cmake/2007-October/016924.html (and it is a bit ugly).
+    # On Windows, we also install the debug information. It's unfortunate that
+    # we have to hard-code the 'Debug' part of the path, but CMake doesn't seem
+    # to provide a way around this. The best I found was this (and it's a hack):
+    # http://www.cmake.org/pipermail/cmake/2007-October/016924.html
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Debug/Gosu.pdb
             DESTINATION Gosu/lib
             CONFIGURATIONS Debug)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/RelWithDebInfo/Gosu.pdb
             DESTINATION Gosu/lib
             CONFIGURATIONS RelWithDebInfo)
-else(WIN32)
+else()
     install(TARGETS gosu
             RUNTIME DESTINATION bin COMPONENT library
             LIBRARY DESTINATION lib COMPONENT library
@@ -123,5 +122,4 @@ else(WIN32)
     install(DIRECTORY Gosu
             DESTINATION include
             COMPONENT development)
-endif(WIN32)
-
+endif()
