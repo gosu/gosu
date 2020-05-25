@@ -60,13 +60,10 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/gosu.pc
 
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}
-        ${FREETYPE_INCLUDE_DIRS}
         ${OPENAL_INCLUDE_DIRS}
         ${SDL2_INCLUDE_DIRS}
         ${OPENGL_INCLUDE_DIRS}
         ${SNDFILE_INCLUDE_DIRS}
-        ${PANGO_INCLUDE_DIRS}
-        ${PANGOFT_INCLUDE_DIRS}
 )
 
 # "Sources" and "Headers" are the group names in Visual Studio.
