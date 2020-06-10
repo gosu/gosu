@@ -106,6 +106,8 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     SDL_SetWindowResizable(shared_window(), (SDL_bool)resizable);
 #endif
 
+    pimpl->resizable = resizable;
+
     // Even in fullscreen mode, temporarily show the window in windowed mode to centre it.
     // This ensures that the window will be centered correctly when exiting fullscreen mode.
     // Fixes https://github.com/gosu/gosu/issues/369
@@ -119,7 +121,6 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     SDL_GL_SetSwapInterval(1);
 
     pimpl->update_interval = update_interval;
-    pimpl->resizable = resizable;
 
     input().on_button_down = [this](Button button) { button_down(button); };
     input().on_button_up   = [this](Button button) { button_up(button); };
@@ -188,9 +189,7 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
         unsigned max_height = Gosu::available_height(this);
         
         if (resizable()) {
-            // If the window is resizable, limit its size, without preserving the aspect ratio.
-            width  = actual_width  = min(width,  max_width);
-            height = actual_height = min(height, max_height);
+            // If the window is resizable, don't perform hidden scaling or resizing.
         }
         else if (width > max_width || height > max_height) {
             // If the window cannot fit on the screen, shrink its contents.
