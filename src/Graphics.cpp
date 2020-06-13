@@ -287,7 +287,9 @@ Gosu::Image Gosu::Graphics::render(int width, int height, const function<void ()
 
     // This is the actual render-to-texture step.
     Image result = OffScreenTarget(width, height, image_flags).render([&] {
+#ifndef GOSU_IS_OPENGLES
         glPushAttrib(GL_ALL_ATTRIB_BITS);
+#endif
         glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_BLEND);
@@ -296,7 +298,9 @@ Gosu::Image Gosu::Graphics::render(int width, int height, const function<void ()
         queues.back().perform_draw_ops_and_code();
         queues.pop_back();
         glFlush();
+#ifndef GOSU_IS_OPENGLES
         glPopAttrib();
+#endif
     });
     
     // Restore previous matrix and glViewport.

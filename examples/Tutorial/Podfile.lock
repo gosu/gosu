@@ -1,0 +1,20 @@
+PODS:
+  - Gosu (0.15.2):
+    - Gosu/Gosu (= 0.15.2)
+  - Gosu/C (0.15.2)
+  - Gosu/Gosu (0.15.2):
+    - Gosu/C
+
+DEPENDENCIES:
+  - Gosu (from `../..`)
+
+EXTERNAL SOURCES:
+  Gosu:
+    :path: "../.."
+
+SPEC CHECKSUMS:
+  Gosu: 8905cc6cab83b7cd66660cf70d7d4c00ccb35b4b
+
+PODFILE CHECKSUM: 6d90e9429378d42966ff3eff051b194170f3f19b
+
+COCOAPODS: 1.9.3
