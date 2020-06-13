@@ -76,7 +76,7 @@ namespace Gosu
 
         static std::string button_name(Button btn);
 
-        static std::string gamepad_name(int id);
+        static std::string gamepad_name(int index);
 
         //! Returns true if a button is currently pressed.
         //! Updated every tick.

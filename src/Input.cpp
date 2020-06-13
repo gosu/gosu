@@ -519,17 +519,17 @@ std::string Gosu::Input::button_name(Button btn)
     return name;
 }
 
-std::string Gosu::Input::gamepad_name(int id)
+std::string Gosu::Input::gamepad_name(int index)
 {
     SDL_Joystick *joystick;
     SDL_GameController *game_controller;
     int instance_id;
 
-    if (id < 0 || id > gamepad_slots.size() - 1) {
+    if (index < 0 || index > gamepad_slots.size() - 1) {
         return "";
     }
 
-    instance_id = gamepad_slots[id];
+    instance_id = gamepad_slots[index];
 
     if (instance_id == -1) {
         return "";

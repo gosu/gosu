@@ -103,9 +103,9 @@ namespace Gosu
         //! Same as button_down. Called when the user releases a button.
         virtual void button_up(Gosu::Button) {}
 
-        virtual void gamepad_connected(int) {}
+        virtual void gamepad_connected(int index) {}
 
-        virtual void gamepad_disconnected(int) {}
+        virtual void gamepad_disconnected(int index) {}
 
         //! Called when a file is dropped onto the window.
         //! \param filename The filename of the dropped file. When multiple files are dropped, this
