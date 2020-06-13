@@ -67,8 +67,6 @@ struct Gosu::Input::Impl
         require_sdl_video();
 
         SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
-
-        int num_gamepads = min<int>(Gosu::NUM_GAMEPADS, SDL_NumJoysticks());
     }
 
     ~Impl()
@@ -129,7 +127,7 @@ struct Gosu::Input::Impl
         switch (e->type) {
             case SDL_KEYDOWN:
             case SDL_KEYUP: {
-                if (e->key.repeat == 0 && e->key.keysym.scancode <= KB_RANGE_END) {
+                if (e->key.repeat == 0 && e->key.keysym.scancode <= static_cast<int>(KB_RANGE_END)) {
                     enqueue_event(e->key.keysym.scancode, e->type == SDL_KEYDOWN);
                     return true;
                 }
@@ -164,7 +162,7 @@ struct Gosu::Input::Impl
                 else {
                     store_axis_value(ButtonName::GP_LEFT_STICK_X_AXIS + e->jaxis.axis, (double)e->jaxis.value);
 
-                    if (int i = gamepad_slot_index(e->jaxis.which) && i >= 0) {
+                    if (int i = gamepad_slot_index(e->jaxis.which); i >= 0) {
                         store_axis_value(ButtonName::GP_0_LEFT_STICK_X_AXIS + e->jaxis.axis + (6 * i), (double)e->jaxis.value);
                     }
                 }
@@ -173,7 +171,7 @@ struct Gosu::Input::Impl
             case SDL_CONTROLLERAXISMOTION: {
                 store_axis_value(ButtonName::GP_LEFT_STICK_X_AXIS + e->caxis.axis, (double)e->caxis.value);
 
-                if (int i = gamepad_slot_index(e->caxis.which) && i >= 0) {
+                if (int i = gamepad_slot_index(e->caxis.which); i >= 0) {
                     store_axis_value(ButtonName::GP_0_LEFT_STICK_X_AXIS + e->caxis.axis + (6 * i), (double)e->caxis.value);
                 }
                 break;
@@ -297,7 +295,7 @@ struct Gosu::Input::Impl
                 continue;
             }
             else {
-                if (game_controller = SDL_GameControllerFromInstanceID(gamepad_slots[i])) {
+                if ((game_controller = SDL_GameControllerFromInstanceID(gamepad_slots[i]))) {
                 }
                 else {
                     joystick = SDL_JoystickFromInstanceID(gamepad_slots[i]);
@@ -535,10 +533,10 @@ std::string Gosu::Input::gamepad_name(int index)
         return "";
     }
 
-    if (game_controller = SDL_GameControllerFromInstanceID(instance_id)) {
+    if ((game_controller = SDL_GameControllerFromInstanceID(instance_id))) {
         return SDL_GameControllerName(game_controller);
     }
-    else if (joystick = SDL_JoystickFromInstanceID(instance_id)) {
+    else if ((joystick = SDL_JoystickFromInstanceID(instance_id))) {
         return SDL_JoystickName(joystick);
     }
 
