@@ -14,12 +14,6 @@
 #include <array>
 using namespace std;
 
-// Workaround for broken SDL_GetGlobalMouseState, see below.
-#ifdef GOSU_IS_MAC
-#import <CoreGraphics/CoreGraphics.h>
-#import <AppKit/AppKit.h>
-#endif
-
 static void require_sdl_video()
 {
     static bool initialized = false;
@@ -81,15 +75,7 @@ struct Gosu::Input::Impl
 
     void update_mouse_position()
     {
-    #if defined(GOSU_IS_MAC)
-        // Avoid SDL_GetGlobalMouseState on macOS until this bug is fixed:
-        // https://bugzilla.libsdl.org/show_bug.cgi?id=4255
-        int window_x, window_y;
-        SDL_GetWindowPosition(window, &window_x, &window_y);
-        auto mouse_position = NSEvent.mouseLocation;
-        mouse_x = mouse_position.x - window_x;
-        mouse_y = (CGDisplayPixelsHigh(kCGDirectMainDisplay) - mouse_position.y) - window_y;
-    #elif SDL_VERSION_ATLEAST(2, 0, 5)
+    #if SDL_VERSION_ATLEAST(2, 0, 5)
         // SDL_GetGlobalMouseState was added in SDL 2.0.4, but it only started using the same
         // coordinate system as SDL_GetWindowPosition on X11 in 2.0.5.
         int x, y, window_x, window_y;
