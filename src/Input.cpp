@@ -24,27 +24,29 @@ static void require_sdl_video()
     }
 }
 
-static array<bool, Gosu::NUM_BUTTONS> button_states = { { false } };
-static array<double, Gosu::GP_NUM_AXES> axis_states = { { 0 } };
-static array<int, Gosu::NUM_GAMEPADS> gamepad_slots = { { -1, -1, -1, -1 } }; // Stores joystick instance id or -1 if empty
+static array<bool, Gosu::NUM_BUTTONS> button_states = {false};
+static array<double, Gosu::GP_NUM_AXES> axis_states = {0};
+// Stores joystick instance id or -1 if empty
 static vector<SDL_Joystick *> joysticks;
 static vector<SDL_GameController *> game_controllers;
-struct InputEvent
-{
-    int id;
-    int type;
-    double axis_value;
-    bool gamepad_connected;
-    int gamepad_instance_id;
-};
-
-enum InputEventType {
-    ButtonEvent,
-    ControllerConnectionEvent
-};
+static array<int, Gosu::NUM_GAMEPADS> gamepad_slots = {-1, -1, -1, -1};
 
 struct Gosu::Input::Impl
 {
+    struct InputEvent
+    {
+        enum {
+            ButtonUp,
+            ButtonDown,
+            AxisChange,
+            GamepadConnected,
+            GamepadDisconnected
+        } type;
+        int id = -1;
+        double axis_value = 0.0;
+        int gamepad_instance_id = -1;
+    };
+
     Input& input;
     SDL_Window* window;
 
@@ -146,47 +148,42 @@ struct Gosu::Input::Impl
                     break;
                 }
                 else {
-                    store_axis_value(ButtonName::GP_LEFT_STICK_X_AXIS + e->jaxis.axis, (double)e->jaxis.value);
+                    enqueue_axis_value(ButtonName::GP_LEFT_STICK_X_AXIS + e->jaxis.axis, (double)e->jaxis.value);
 
                     if (int i = gamepad_slot_index(e->jaxis.which); i >= 0) {
-                        store_axis_value(ButtonName::GP_0_LEFT_STICK_X_AXIS + e->jaxis.axis + (6 * i), (double)e->jaxis.value);
+                        enqueue_axis_value(ButtonName::GP_0_LEFT_STICK_X_AXIS + e->jaxis.axis + (6 * i), (double)e->jaxis.value);
                     }
                 }
                 break;
             }
             case SDL_CONTROLLERAXISMOTION: {
-                store_axis_value(ButtonName::GP_LEFT_STICK_X_AXIS + e->caxis.axis, (double)e->caxis.value);
+                enqueue_axis_value(ButtonName::GP_LEFT_STICK_X_AXIS + e->caxis.axis, (double)e->caxis.value);
 
                 if (int i = gamepad_slot_index(e->caxis.which); i >= 0) {
-                    store_axis_value(ButtonName::GP_0_LEFT_STICK_X_AXIS + e->caxis.axis + (6 * i), (double)e->caxis.value);
+                    enqueue_axis_value(ButtonName::GP_0_LEFT_STICK_X_AXIS + e->caxis.axis + (6 * i), (double)e->caxis.value);
                 }
                 break;
             }
             case SDL_JOYDEVICEADDED: {
                 if (available_gamepad_slot_index() == -1) {
-                    printf("Max Num of Gamepads added. Controllers: %i, Joysticks: %i (total: %i)\n", game_controllers.size(), joysticks.size(), game_controllers.size() + joysticks.size());
+                    printf("Max Num of Gamepads added. Controllers: %i, Joysticks: %i (total: %i)\n", (int)game_controllers.size(), (int)joysticks.size(), (int)(game_controllers.size() + joysticks.size()));
                     break;
                 }
                 int gamepad_slot = -1;
                 int device_instance_id = -1;
-                const char *gamepad_name;
                 // Prefer the SDL_GameController API...
                 if (SDL_IsGameController(e->jdevice.which)) {
                     if (SDL_GameController *game_controller = SDL_GameControllerOpen(e->jdevice.which)) {
                         game_controllers.push_back(game_controller);
                         gamepad_slot = available_gamepad_slot_index();
-                        gamepad_name = SDL_GameControllerNameForIndex(e->jdevice.which);
                         device_instance_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller));
                     }
                 }
                 // ...but fall back on the good, old SDL_Joystick API.
-                else {
-                    if (SDL_Joystick *joystick = SDL_JoystickOpen(e->jdevice.which)) {
-                        joysticks.push_back(joystick);
-                        gamepad_slot = available_gamepad_slot_index();
-                        gamepad_name = SDL_JoystickNameForIndex(e->jdevice.which);
-                        device_instance_id = SDL_JoystickInstanceID(joystick);
-                    }
+                else if (SDL_Joystick *joystick = SDL_JoystickOpen(e->jdevice.which)) {
+                    joysticks.push_back(joystick);
+                    gamepad_slot = available_gamepad_slot_index();
+                    device_instance_id = SDL_JoystickInstanceID(joystick);
                 }
                 if (gamepad_slot >= 0 && device_instance_id >= 0) {
                     gamepad_slots[gamepad_slot] = device_instance_id;
@@ -206,14 +203,8 @@ struct Gosu::Input::Impl
         return false;
     }
 
-    void store_axis_value(unsigned id, double value)
-    {
-        double axis_value = value >= 0 ? (double)value / SDL_JOYSTICK_AXIS_MAX : -(double)value / SDL_JOYSTICK_AXIS_MIN;
-        axis_states[id - ButtonName::GP_LEFT_STICK_X_AXIS] = axis_value;
-    }
-
     // returns the gamepad slot index (0..NUM_GAMEPADS - 1) for the joystick instance id or -1 if not found
-    int gamepad_slot_index(int joystick_instance_id)
+    int gamepad_slot_index(int joystick_instance_id) const
     {
         for (int i = 0; i < gamepad_slots.size(); i++) {
             if (gamepad_slots[i] == joystick_instance_id) {
@@ -225,7 +216,7 @@ struct Gosu::Input::Impl
     }
 
     // returns first available gamepad slot or -1 if non are available
-    int available_gamepad_slot_index()
+    int available_gamepad_slot_index() const
     {
         for (int i = 0; i < gamepad_slots.size(); i++) {
             if (gamepad_slots[i] == -1) {
@@ -281,9 +272,8 @@ struct Gosu::Input::Impl
                 continue;
             }
             else {
-                if ((game_controller = SDL_GameControllerFromInstanceID(gamepad_slots[i]))) {
-                }
-                else {
+                game_controller = SDL_GameControllerFromInstanceID(gamepad_slots[i]);
+                if (!game_controller) {
                     joystick = SDL_JoystickFromInstanceID(gamepad_slots[i]);
                 }
             }
@@ -328,31 +318,35 @@ struct Gosu::Input::Impl
 
     void dispatch_enqueued_events()
     {
-        for (InputEvent event : event_queue) {
-            if (event.type == InputEventType::ButtonEvent) {
-                bool down = (event.id >= 0);
-                Button button(down ? event.id : ~event.id);
-
-                button_states[button.id()] = down;
-                if (down && input.on_button_down) {
-                    input.on_button_down(button);
-                }
-                else if (!down && input.on_button_up) {
-                    input.on_button_up(button);
-                }
-            }
-            else if (event.type == InputEventType::ControllerConnectionEvent) {
-                if (event.gamepad_connected) {
+        for (const InputEvent& event : event_queue) {
+            switch (event.type) {
+                case InputEvent::ButtonDown:
+                    button_states[event.id] = true;
+                    if (input.on_button_down) {
+                        input.on_button_down(Button(event.id));
+                    }
+                    break;
+                case InputEvent::ButtonUp:
+                    button_states[event.id] = false;
+                    if (input.on_button_up) {
+                        input.on_button_up(Button(event.id));
+                    }
+                    break;
+                case InputEvent::AxisChange:
+                    axis_states[event.id - ButtonName::GP_LEFT_STICK_X_AXIS] =
+                    event.axis_value;
+                    break;
+                case InputEvent::GamepadConnected:
                     if (input.on_gamepad_connected) {
                         input.on_gamepad_connected(event.id);
                     }
-                }
-                else {
+                    break;
+                case InputEvent::GamepadDisconnected:
                     if (input.on_gamepad_disconnected) {
                         input.on_gamepad_disconnected(event.id);
-                        free_gamepad_slot_index(event.gamepad_instance_id);
                     }
-                }
+                    free_gamepad_slot_index(event.gamepad_instance_id);
+                    break;
             }
         }
         event_queue.clear();
@@ -363,16 +357,30 @@ private:
     // For button up event: ~Button name value (< 0)
     vector<InputEvent> event_queue;
 
-    void enqueue_event(int id, bool down)
+    void enqueue_event(unsigned id, bool down)
     {
-        InputEvent s = { down ? id : ~id, InputEventType::ButtonEvent };
-        event_queue.push_back( s );
+        InputEvent event;
+        event.type = down ? InputEvent::ButtonDown : InputEvent::ButtonUp;
+        event.id = id;
+        event_queue.push_back(event);
+    }
+
+    void enqueue_axis_value(unsigned id, double value)
+    {
+        InputEvent event;
+        event.type = InputEvent::AxisChange;
+        event.id = id;
+        event.axis_value = value >= 0 ? value / SDL_JOYSTICK_AXIS_MAX : -value / SDL_JOYSTICK_AXIS_MIN;
+        event_queue.push_back(event);
     }
 
     void enqueue_gamepad_connection_event(int gamepad_index_id, bool connected, int instance_id)
     {
-        InputEvent s = { gamepad_index_id, InputEventType::ControllerConnectionEvent, 0, connected, instance_id };
-        event_queue.push_back( s );
+        InputEvent event;
+        event.type = connected ? InputEvent::GamepadConnected : InputEvent::GamepadDisconnected;
+        event.id = gamepad_index_id;
+        event.gamepad_instance_id = instance_id;
+        event_queue.push_back(event);
     }
 
     // SDL returns axis values in the range -2^15 through 2^15-1, so we consider -2^14 through
@@ -497,32 +505,26 @@ Gosu::Button Gosu::Input::char_to_id(string ch)
 
 std::string Gosu::Input::button_name(Button btn)
 {
-    SDL_Keycode keycode = SDL_GetKeyFromScancode( static_cast<SDL_Scancode>(btn.id()) );
-    const char *name = SDL_GetKeyName(keycode);
-
-    return name;
+    SDL_Keycode keycode = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(btn.id()));
+    return SDL_GetKeyName(keycode);
 }
 
 std::string Gosu::Input::gamepad_name(int index)
 {
-    SDL_Joystick *joystick;
-    SDL_GameController *game_controller;
-    int instance_id;
-
     if (index < 0 || index > gamepad_slots.size() - 1) {
         return "";
     }
 
-    instance_id = gamepad_slots[index];
+    int instance_id = gamepad_slots[index];
 
     if (instance_id == -1) {
         return "";
     }
 
-    if ((game_controller = SDL_GameControllerFromInstanceID(instance_id))) {
+    if (SDL_GameController* game_controller = SDL_GameControllerFromInstanceID(instance_id)) {
         return SDL_GameControllerName(game_controller);
     }
-    else if ((joystick = SDL_JoystickFromInstanceID(instance_id))) {
+    else if (SDL_Joystick* joystick = SDL_JoystickFromInstanceID(instance_id)) {
         return SDL_JoystickName(joystick);
     }
 
