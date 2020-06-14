@@ -239,7 +239,7 @@ struct Gosu::Input::Impl
                     printf("Freed gamepad slot: %i (%s|%i)\n", i, SDL_GameControllerName( SDL_GameControllerFromInstanceID(joystick_instance_id) ), joystick_instance_id);
                     SDL_GameControllerClose(game_controllers[i]);
                     game_controllers.erase(game_controllers.begin() + i);
-                    gamepad_slots[i] = -1;
+                    gamepad_slots[index] = -1;
                     return;
                 }
             }
@@ -247,7 +247,7 @@ struct Gosu::Input::Impl
                 if (SDL_JoystickInstanceID(joysticks[i]) == joystick_instance_id) {
                     SDL_JoystickClose(joysticks[i]);
                     joysticks.erase(joysticks.begin() + i);
-                    gamepad_slots[i] = -1;
+                    gamepad_slots[index] = -1;
                     return;
                 }
             }
