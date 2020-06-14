@@ -26,9 +26,9 @@ static void require_sdl_video()
 
 static array<bool, Gosu::NUM_BUTTONS> button_states = {false};
 static array<double, Gosu::GP_NUM_AXES> axis_states = {0};
+static vector<shared_ptr<SDL_Joystick>> open_joysticks;
+static vector<shared_ptr<SDL_GameController>> open_game_controllers;
 // Stores joystick instance id or -1 if empty
-static vector<SDL_Joystick *> joysticks;
-static vector<SDL_GameController *> game_controllers;
 static array<int, Gosu::NUM_GAMEPADS> gamepad_slots = {-1, -1, -1, -1};
 
 struct Gosu::Input::Impl
@@ -67,10 +67,8 @@ struct Gosu::Input::Impl
 
     ~Impl()
     {
-        for_each(joysticks.begin(), joysticks.end(), &SDL_JoystickClose);
-        joysticks.clear();
-        for_each(game_controllers.begin(), game_controllers.end(), &SDL_GameControllerClose);
-        game_controllers.clear();
+        open_joysticks.clear();
+        open_game_controllers.clear();
 
         SDL_QuitSubSystem(SDL_INIT_GAMECONTROLLER);
     }
@@ -166,7 +164,10 @@ struct Gosu::Input::Impl
             }
             case SDL_JOYDEVICEADDED: {
                 if (available_gamepad_slot_index() == -1) {
-                    printf("Max Num of Gamepads added. Controllers: %i, Joysticks: %i (total: %i)\n", (int)game_controllers.size(), (int)joysticks.size(), (int)(game_controllers.size() + joysticks.size()));
+                    printf("Max Num of Gamepads added. Controllers: %i, Joysticks: %i (total: %i)\n",
+                           (int)open_game_controllers.size(),
+                           (int)open_joysticks.size(),
+                           (int)(open_game_controllers.size() + open_joysticks.size()));
                     break;
                 }
                 int gamepad_slot = -1;
@@ -174,14 +175,18 @@ struct Gosu::Input::Impl
                 // Prefer the SDL_GameController API...
                 if (SDL_IsGameController(e->jdevice.which)) {
                     if (SDL_GameController *game_controller = SDL_GameControllerOpen(e->jdevice.which)) {
-                        game_controllers.push_back(game_controller);
+                        open_game_controllers.emplace_back(
+                            shared_ptr<SDL_GameController>(game_controller, SDL_GameControllerClose)
+                        );
                         gamepad_slot = available_gamepad_slot_index();
                         device_instance_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller));
                     }
                 }
                 // ...but fall back on the good, old SDL_Joystick API.
                 else if (SDL_Joystick *joystick = SDL_JoystickOpen(e->jdevice.which)) {
-                    joysticks.push_back(joystick);
+                    open_joysticks.emplace_back(
+                        shared_ptr<SDL_Joystick>(joystick, SDL_JoystickClose)
+                    );
                     gamepad_slot = available_gamepad_slot_index();
                     device_instance_id = SDL_JoystickInstanceID(joystick);
                 }
@@ -229,27 +234,25 @@ struct Gosu::Input::Impl
 
     // frees the gamepad slot associated with this joystick instance id
     // and frees the SDL_GameController/SDL_Joystick
-    void free_gamepad_slot_index(int joystick_instance_id)
+    void free_gamepad_slot(int instance_id)
     {
-        int index = gamepad_slot_index(joystick_instance_id);
+        int index = gamepad_slot_index(instance_id);
 
-        if (index >= 0) {
-            for (int i = 0; i < game_controllers.size(); i++) {
-                if (SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controllers[i])) == joystick_instance_id) {
-                    printf("Freed gamepad slot: %i (%s|%i)\n", i, SDL_GameControllerName( SDL_GameControllerFromInstanceID(joystick_instance_id) ), joystick_instance_id);
-                    SDL_GameControllerClose(game_controllers[i]);
-                    game_controllers.erase(game_controllers.begin() + i);
-                    gamepad_slots[index] = -1;
-                    return;
-                }
+        for (int i = 0; i < open_game_controllers.size(); i++) {
+            SDL_Joystick* joystick = SDL_GameControllerGetJoystick(open_game_controllers[i].get());
+            if (SDL_JoystickInstanceID(joystick) == instance_id) {
+                printf("Freed gamepad slot: %i (%s|%i)\n", i, SDL_GameControllerName( SDL_GameControllerFromInstanceID(instance_id) ), instance_id);
+                open_game_controllers.erase(open_game_controllers.begin() + i);
+                gamepad_slots[index] = -1;
+                return;
             }
-            for (int i = 0; i < joysticks.size(); i++) {
-                if (SDL_JoystickInstanceID(joysticks[i]) == joystick_instance_id) {
-                    SDL_JoystickClose(joysticks[i]);
-                    joysticks.erase(joysticks.begin() + i);
-                    gamepad_slots[index] = -1;
-                    return;
-                }
+        }
+        
+        for (int i = 0; i < open_joysticks.size(); i++) {
+            if (SDL_JoystickInstanceID(open_joysticks[i].get()) == instance_id) {
+                open_joysticks.erase(open_joysticks.begin() + i);
+                gamepad_slots[index] = -1;
+                return;
             }
         }
     }
@@ -345,7 +348,7 @@ struct Gosu::Input::Impl
                     if (input.on_gamepad_disconnected) {
                         input.on_gamepad_disconnected(event.id);
                     }
-                    free_gamepad_slot_index(event.gamepad_instance_id);
+                    free_gamepad_slot(event.gamepad_instance_id);
                     break;
             }
         }
@@ -385,7 +388,7 @@ private:
 
     // SDL returns axis values in the range -2^15 through 2^15-1, so we consider -2^14 through
     // 2^14 (half of that range) the dead zone.
-    enum { DEAD_ZONE = (1 << 14) };
+    inline static const int DEAD_ZONE = 1 << 14;
 
     void poll_game_controller(SDL_GameController* controller, GamepadBuffer& gamepad)
     {
