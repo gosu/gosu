@@ -38,12 +38,10 @@ struct Gosu::Input::Impl
         enum {
             ButtonUp,
             ButtonDown,
-            AxisChange,
             GamepadConnected,
             GamepadDisconnected
         } type;
         int id = -1;
-        double axis_value = 0.0;
         int gamepad_instance_id = -1;
     };
 
@@ -146,19 +144,19 @@ struct Gosu::Input::Impl
                     break;
                 }
                 else {
-                    enqueue_axis_value(ButtonName::GP_LEFT_STICK_X_AXIS + e->jaxis.axis, (double)e->jaxis.value);
+                    store_axis_value(ButtonName::GP_LEFT_STICK_X_AXIS + e->jaxis.axis, (double)e->jaxis.value);
 
                     if (int i = gamepad_slot_index(e->jaxis.which); i >= 0) {
-                        enqueue_axis_value(ButtonName::GP_0_LEFT_STICK_X_AXIS + e->jaxis.axis + (6 * i), (double)e->jaxis.value);
+                        store_axis_value(ButtonName::GP_0_LEFT_STICK_X_AXIS + e->jaxis.axis + (6 * i), (double)e->jaxis.value);
                     }
                 }
                 break;
             }
             case SDL_CONTROLLERAXISMOTION: {
-                enqueue_axis_value(ButtonName::GP_LEFT_STICK_X_AXIS + e->caxis.axis, (double)e->caxis.value);
+                store_axis_value(ButtonName::GP_LEFT_STICK_X_AXIS + e->caxis.axis, (double)e->caxis.value);
 
                 if (int i = gamepad_slot_index(e->caxis.which); i >= 0) {
-                    enqueue_axis_value(ButtonName::GP_0_LEFT_STICK_X_AXIS + e->caxis.axis + (6 * i), (double)e->caxis.value);
+                    store_axis_value(ButtonName::GP_0_LEFT_STICK_X_AXIS + e->caxis.axis + (6 * i), (double)e->caxis.value);
                 }
                 break;
             }
@@ -206,6 +204,12 @@ struct Gosu::Input::Impl
             }
         }
         return false;
+    }
+
+    void store_axis_value(unsigned id, double value)
+    {
+        double axis_value = value >= 0 ? value / SDL_JOYSTICK_AXIS_MAX : -value / SDL_JOYSTICK_AXIS_MIN;
+        axis_states[id - ButtonName::GP_LEFT_STICK_X_AXIS] = axis_value;
     }
 
     // returns the gamepad slot index (0..NUM_GAMEPADS - 1) for the joystick instance id or -1 if not found
@@ -335,10 +339,6 @@ struct Gosu::Input::Impl
                         input.on_button_up(Button(event.id));
                     }
                     break;
-                case InputEvent::AxisChange:
-                    axis_states[event.id - ButtonName::GP_LEFT_STICK_X_AXIS] =
-                    event.axis_value;
-                    break;
                 case InputEvent::GamepadConnected:
                     if (input.on_gamepad_connected) {
                         input.on_gamepad_connected(event.id);
@@ -365,15 +365,6 @@ private:
         InputEvent event;
         event.type = down ? InputEvent::ButtonDown : InputEvent::ButtonUp;
         event.id = id;
-        event_queue.push_back(event);
-    }
-
-    void enqueue_axis_value(unsigned id, double value)
-    {
-        InputEvent event;
-        event.type = InputEvent::AxisChange;
-        event.id = id;
-        event.axis_value = value >= 0 ? value / SDL_JOYSTICK_AXIS_MAX : -value / SDL_JOYSTICK_AXIS_MIN;
         event_queue.push_back(event);
     }
 
