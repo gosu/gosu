@@ -233,7 +233,34 @@ namespace Gosu
         GP_3_BUTTON_14,
         GP_3_BUTTON_15,
 
-        GP_LEFT_STICK_X_AXIS,
+        GP_LEFT,
+        GP_RIGHT,
+        GP_UP,
+        GP_DOWN,
+
+        GP_0_LEFT,
+        GP_0_RIGHT,
+        GP_0_UP,
+        GP_0_DOWN,
+
+        GP_1_LEFT,
+        GP_1_RIGHT,
+        GP_1_UP,
+        GP_1_DOWN,
+
+        GP_2_LEFT,
+        GP_2_RIGHT,
+        GP_2_UP,
+        GP_2_DOWN,
+
+        GP_3_LEFT,
+        GP_3_RIGHT,
+        GP_3_UP,
+        GP_3_DOWN,
+        GP_RANGE_END = GP_3_DOWN,
+
+        GP_AXES_RANGE_BEGIN,
+        GP_LEFT_STICK_X_AXIS = GP_AXES_RANGE_BEGIN,
         GP_LEFT_STICK_Y_AXIS,
         GP_RIGHT_STICK_X_AXIS,
         GP_RIGHT_STICK_Y_AXIS,
@@ -267,42 +294,13 @@ namespace Gosu
         GP_3_RIGHT_STICK_Y_AXIS,
         GP_3_LEFT_TRIGGER_AXIS,
         GP_3_RIGHT_TRIGGER_AXIS,
-
-        GP_LEFT,
-        GP_RIGHT,
-        GP_UP,
-        GP_DOWN,
-
-        GP_0_LEFT,
-        GP_0_RIGHT,
-        GP_0_UP,
-        GP_0_DOWN,
-
-        GP_1_LEFT,
-        GP_1_RIGHT,
-        GP_1_UP,
-        GP_1_DOWN,
-
-        GP_2_LEFT,
-        GP_2_RIGHT,
-        GP_2_UP,
-        GP_2_DOWN,
-
-        GP_3_LEFT,
-        GP_3_RIGHT,
-        GP_3_UP,
-        GP_3_DOWN,
-
-        GP_RANGE_END = GP_3_BUTTON_15,
+        GP_AXES_RANGE_END = GP_3_RIGHT_TRIGGER_AXIS,
 
         NUM_BUTTONS = GP_RANGE_END + 1,
         NUM_GAMEPADS = 4,
         NO_BUTTON = 0xffffffff,
 
-        KB_NUM = KB_RANGE_END - KB_RANGE_BEGIN + 1,
-        MS_NUM = MS_RANGE_END - MS_RANGE_BEGIN + 1,
-        GP_NUM = GP_RANGE_END - GP_RANGE_BEGIN + 1,
-        GP_NUM_PER_GAMEPAD = GP_NUM / (NUM_GAMEPADS + 1),
-        GP_NUM_AXES = (GP_RIGHT_TRIGGER_AXIS - GP_LEFT_STICK_X_AXIS) * (NUM_GAMEPADS + 1)
+        GP_NUM_BUTTONS_PER_GAMEPAD = (GP_RANGE_END - GP_RANGE_BEGIN + 1 - 4) / (NUM_GAMEPADS + 1),
+        GP_NUM_AXES_PER_GAMEPAD = (GP_AXES_RANGE_END - GP_AXES_RANGE_BEGIN + 1) / (NUM_GAMEPADS + 1)
     };
 }

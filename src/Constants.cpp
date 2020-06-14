@@ -271,6 +271,32 @@ unsigned Gosu_GP_3_BUTTON_13 = Gosu::GP_3_BUTTON_13;
 unsigned Gosu_GP_3_BUTTON_14 = Gosu::GP_3_BUTTON_14;
 unsigned Gosu_GP_3_BUTTON_15 = Gosu::GP_3_BUTTON_15;
 
+unsigned Gosu_GP_LEFT = Gosu::GP_LEFT;
+unsigned Gosu_GP_RIGHT = Gosu::GP_RIGHT;
+unsigned Gosu_GP_UP = Gosu::GP_UP;
+unsigned Gosu_GP_DOWN = Gosu::GP_DOWN;
+
+unsigned Gosu_0_GP_LEFT = Gosu::GP_0_LEFT;
+unsigned Gosu_0_GP_RIGHT = Gosu::GP_0_RIGHT;
+unsigned Gosu_0_GP_UP = Gosu::GP_0_UP;
+unsigned Gosu_0_GP_DOWN = Gosu::GP_0_DOWN;
+
+unsigned Gosu_GP_1_LEFT = Gosu::GP_1_LEFT;
+unsigned Gosu_GP_1_RIGHT = Gosu::GP_1_RIGHT;
+unsigned Gosu_GP_1_UP = Gosu::GP_1_UP;
+unsigned Gosu_GP_1_DOWN = Gosu::GP_1_DOWN;
+
+unsigned Gosu_GP_2_LEFT = Gosu::GP_2_LEFT;
+unsigned Gosu_GP_2_RIGHT = Gosu::GP_2_RIGHT;
+unsigned Gosu_GP_2_UP = Gosu::GP_2_UP;
+unsigned Gosu_GP_2_DOWN = Gosu::GP_2_DOWN;
+
+unsigned Gosu_GP_3_LEFT = Gosu::GP_3_LEFT;
+unsigned Gosu_GP_3_RIGHT = Gosu::GP_3_RIGHT;
+unsigned Gosu_GP_3_UP = Gosu::GP_3_UP;
+unsigned Gosu_GP_3_DOWN = Gosu::GP_3_DOWN;
+unsigned Gosu_GP_RANGE_END = Gosu::GP_RANGE_END;
+
 unsigned Gosu_GP_LEFT_STICK_X_AXIS = Gosu::GP_LEFT_STICK_Y_AXIS;
 unsigned Gosu_GP_LEFT_STICK_Y_AXIS = Gosu::GP_LEFT_STICK_Y_AXIS;
 unsigned Gosu_GP_RIGHT_STICK_X_AXIS = Gosu::GP_RIGHT_STICK_X_AXIS;
@@ -306,41 +332,11 @@ unsigned Gosu_GP_3_RIGHT_STICK_Y_AXIS = Gosu::GP_3_RIGHT_STICK_Y_AXIS;
 unsigned Gosu_GP_3_LEFT_TRIGGER_AXIS = Gosu::GP_3_LEFT_TRIGGER_AXIS;
 unsigned Gosu_GP_3_RIGHT_TRIGGER_AXIS = Gosu::GP_3_RIGHT_TRIGGER_AXIS;
 
-unsigned Gosu_GP_LEFT = Gosu::GP_LEFT;
-unsigned Gosu_GP_RIGHT = Gosu::GP_RIGHT;
-unsigned Gosu_GP_UP = Gosu::GP_UP;
-unsigned Gosu_GP_DOWN = Gosu::GP_DOWN;
-
-unsigned Gosu_0_GP_LEFT = Gosu::GP_0_LEFT;
-unsigned Gosu_0_GP_RIGHT = Gosu::GP_0_RIGHT;
-unsigned Gosu_0_GP_UP = Gosu::GP_0_UP;
-unsigned Gosu_0_GP_DOWN = Gosu::GP_0_DOWN;
-
-unsigned Gosu_GP_1_LEFT = Gosu::GP_1_LEFT;
-unsigned Gosu_GP_1_RIGHT = Gosu::GP_1_RIGHT;
-unsigned Gosu_GP_1_UP = Gosu::GP_1_UP;
-unsigned Gosu_GP_1_DOWN = Gosu::GP_1_DOWN;
-
-unsigned Gosu_GP_2_LEFT = Gosu::GP_2_LEFT;
-unsigned Gosu_GP_2_RIGHT = Gosu::GP_2_RIGHT;
-unsigned Gosu_GP_2_UP = Gosu::GP_2_UP;
-unsigned Gosu_GP_2_DOWN = Gosu::GP_2_DOWN;
-
-unsigned Gosu_GP_3_LEFT = Gosu::GP_3_LEFT;
-unsigned Gosu_GP_3_RIGHT = Gosu::GP_3_RIGHT;
-unsigned Gosu_GP_3_UP = Gosu::GP_3_UP;
-unsigned Gosu_GP_3_DOWN = Gosu::GP_3_DOWN;
-
-unsigned Gosu_GP_RANGE_END = Gosu::GP_RANGE_END;
-
-unsigned Gosu_NUM_BUTTONS = Gosu::NUM_BUTTONS;
 unsigned Gosu_NUM_GAMEPADS = Gosu::NUM_GAMEPADS;
 unsigned Gosu_NO_BUTTON = Gosu::NO_BUTTON;
 
-unsigned Gosu_KB_NUM = Gosu::KB_NUM;
-unsigned Gosu_MS_NUM = Gosu::MS_NUM;
-unsigned Gosu_GP_NUM = Gosu::GP_NUM;
-unsigned Gosu_GP_NUM_PER_GAMEPAD = Gosu::GP_NUM_PER_GAMEPAD;
+unsigned Gosu_GP_NUM_BUTTONS_PER_GAMEPAD = Gosu::GP_NUM_BUTTONS_PER_GAMEPAD;
+unsigned Gosu_GP_NUM_AXES_PER_GAMEPAD = Gosu::GP_NUM_AXES_PER_GAMEPAD;
 
 #ifdef __cplusplus
 }

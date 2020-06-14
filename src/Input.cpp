@@ -25,7 +25,7 @@ static void require_sdl_video()
 }
 
 static array<bool, Gosu::NUM_BUTTONS> button_states = {false};
-static array<double, Gosu::GP_NUM_AXES> axis_states = {0};
+static array<double, Gosu::GP_NUM_AXES_PER_GAMEPAD * (Gosu::NUM_GAMEPADS + 1)> axis_states = {0.0};
 static vector<shared_ptr<SDL_Joystick>> open_joysticks;
 static vector<shared_ptr<SDL_GameController>> open_game_controllers;
 // Stores joystick instance id or -1 if empty
@@ -138,28 +138,6 @@ struct Gosu::Input::Impl
                 }
                 break;
             }
-            case SDL_JOYAXISMOTION: {
-                if (SDL_IsGameController(e->jaxis.which)) {
-                    // Ignore this event as joystick triggers are reported in range -1..1 instead of 0..1
-                    break;
-                }
-                else {
-                    store_axis_value(ButtonName::GP_LEFT_STICK_X_AXIS + e->jaxis.axis, (double)e->jaxis.value);
-
-                    if (int i = gamepad_slot_index(e->jaxis.which); i >= 0) {
-                        store_axis_value(ButtonName::GP_0_LEFT_STICK_X_AXIS + e->jaxis.axis + (6 * i), (double)e->jaxis.value);
-                    }
-                }
-                break;
-            }
-            case SDL_CONTROLLERAXISMOTION: {
-                store_axis_value(ButtonName::GP_LEFT_STICK_X_AXIS + e->caxis.axis, (double)e->caxis.value);
-
-                if (int i = gamepad_slot_index(e->caxis.which); i >= 0) {
-                    store_axis_value(ButtonName::GP_0_LEFT_STICK_X_AXIS + e->caxis.axis + (6 * i), (double)e->caxis.value);
-                }
-                break;
-            }
             case SDL_JOYDEVICEADDED: {
                 if (available_gamepad_slot_index() == -1) {
                     printf("Max Num of Gamepads added. Controllers: %i, Joysticks: %i (total: %i)\n",
@@ -206,10 +184,9 @@ struct Gosu::Input::Impl
         return false;
     }
 
-    void store_axis_value(unsigned id, double value)
+    double scale_axis(double value)
     {
-        double axis_value = value >= 0 ? value / SDL_JOYSTICK_AXIS_MAX : -value / SDL_JOYSTICK_AXIS_MIN;
-        axis_states[id - ButtonName::GP_LEFT_STICK_X_AXIS] = axis_value;
+        return value >= 0 ? value / SDL_JOYSTICK_AXIS_MAX : -value / SDL_JOYSTICK_AXIS_MIN;
     }
 
     // returns the gamepad slot index (0..NUM_GAMEPADS - 1) for the joystick instance id or -1 if not found
@@ -261,64 +238,97 @@ struct Gosu::Input::Impl
         }
     }
 
-    typedef array<bool, GP_NUM_PER_GAMEPAD> GamepadBuffer;
+    struct GamepadBuffer
+    {
+        array<bool, GP_NUM_BUTTONS_PER_GAMEPAD> buttons = { false };
+        array<bool, 4> directions = { false };
+        array<double, GP_NUM_AXES_PER_GAMEPAD> axes = { 0.0 };
+    };
 
     void poll_gamepads()
     {
-        // This gamepad is an OR-ed version of all the other gamepads. If button
-        // 3 is pressed on any attached gamepad, down(GP_BUTTON_3) will return
-        // true. This is handy for singleplayer games.
+        // This gamepad is an OR-ed version of all the other gamepads.
+        // If button3 is pressed on any attached gamepad, down(GP_BUTTON_3) will return true.
+        // This is handy for singleplayer games where you don't care which gamepad that player uses.
         GamepadBuffer any_gamepad = { false };
+        
+        // Reset all axes values, they will be recalculated below.
+        axis_states.fill(0.0);
 
         for (int i = 0; i < gamepad_slots.size(); ++i) {
-            SDL_GameController *game_controller = nullptr;
-            SDL_Joystick *joystick = nullptr;
-            GamepadBuffer current_gamepad = { false };
-
             if (gamepad_slots[i] == -1) {
                 continue;
             }
-            else {
-                game_controller = SDL_GameControllerFromInstanceID(gamepad_slots[i]);
-                if (!game_controller) {
-                    joystick = SDL_JoystickFromInstanceID(gamepad_slots[i]);
-                }
-            }
 
             // Poll data from SDL, using either of two API interfaces.
-            if (game_controller) {
-                poll_game_controller(game_controller, current_gamepad);
+            GamepadBuffer current_gamepad;
+            if (SDL_GameController* game_controller = SDL_GameControllerFromInstanceID(gamepad_slots[i])) {
+                current_gamepad = poll_game_controller(game_controller);
             }
             else {
-                poll_joystick(joystick, current_gamepad);
+                current_gamepad = poll_joystick(SDL_JoystickFromInstanceID(gamepad_slots[i]));
+            }
+
+            int axis_offset = GP_NUM_AXES_PER_GAMEPAD * (i + i);
+            for (int a = 0; a < GP_NUM_AXES_PER_GAMEPAD; ++a) {
+                // Transfer the axes values into the global axis_state array..
+                axis_states[a + axis_offset] = current_gamepad.axes[a];
+                // Also transfer the gamepad-specific axes values into the "any gamepad" slots.
+                // (Values with a higher amplitude override smaller ones.)
+                if (abs(current_gamepad.axes[a]) > abs(axis_states[a])) {
+                    axis_states[a] = current_gamepad.axes[a];
+                }
             }
 
             // Now at the same time, enqueue all events for this particular
             // gamepad, and OR the keyboard state into any_gamepad.
-            int offset = GP_RANGE_BEGIN + GP_NUM_PER_GAMEPAD * (i + 1);
-            for (int j = 0; j < current_gamepad.size(); ++j) {
-                any_gamepad[j] = any_gamepad[j] || current_gamepad[j];
+            int offset = GP_RANGE_BEGIN + GP_NUM_BUTTONS_PER_GAMEPAD * (i + 1);
+            for (int j = 0; j < current_gamepad.buttons.size(); ++j) {
+                any_gamepad.buttons[j] = any_gamepad.buttons[j] || current_gamepad.buttons[j];
 
-                if (current_gamepad[j] && !button_states[j + offset]) {
+                if (current_gamepad.buttons[j] && !button_states[j + offset]) {
                     button_states[j + offset] = true;
                     enqueue_event(j + offset, true);
                 }
-                else if (!current_gamepad[j] && button_states[j + offset]) {
+                else if (!current_gamepad.buttons[j] && button_states[j + offset]) {
                     button_states[j + offset] = false;
                     enqueue_event(j + offset, false);
+                }
+            }
+            int direction_offset = GP_LEFT + 4 * (i + 1);
+            for (int d = 0; d < 4; ++d) {
+                any_gamepad.directions[d] = any_gamepad.directions[d] || current_gamepad.directions[d];
+                
+                if (current_gamepad.directions[d] && !button_states[d + direction_offset]) {
+                    button_states[d + direction_offset] = true;
+                    enqueue_event(d + direction_offset, true);
+                }
+                else if (!current_gamepad.directions[d] && button_states[d + direction_offset]) {
+                    button_states[d + direction_offset] = false;
+                    enqueue_event(d + direction_offset, false);
                 }
             }
         }
 
         // And lastly, enqueue events for the virtual "any" gamepad.
-        for (int j = 0; j < any_gamepad.size(); ++j) {
-            if (any_gamepad[j] && !button_states[j + GP_RANGE_BEGIN]) {
+        for (int j = 0; j < any_gamepad.buttons.size(); ++j) {
+            if (any_gamepad.buttons[j] && !button_states[j + GP_RANGE_BEGIN]) {
                 button_states[j + GP_RANGE_BEGIN] = true;
                 enqueue_event(j + GP_RANGE_BEGIN, true);
             }
-            else if (!any_gamepad[j] && button_states[j + GP_RANGE_BEGIN]) {
+            else if (!any_gamepad.buttons[j] && button_states[j + GP_RANGE_BEGIN]) {
                 button_states[j + GP_RANGE_BEGIN] = false;
                 enqueue_event(j + GP_RANGE_BEGIN, false);
+            }
+        }
+        for (int d = 0; d < 4; ++d) {
+            if (any_gamepad.directions[d] && !button_states[d + GP_LEFT]) {
+                button_states[d + GP_LEFT] = true;
+                enqueue_event(d + GP_LEFT, true);
+            }
+            else if (!any_gamepad.directions[d] && button_states[d + GP_LEFT]) {
+                button_states[d + GP_LEFT] = false;
+                enqueue_event(d + GP_LEFT, false);
             }
         }
     }
@@ -377,72 +387,110 @@ private:
         event_queue.push_back(event);
     }
 
-    // SDL returns axis values in the range -2^15 through 2^15-1, so we consider -2^14 through
-    // 2^14 (half of that range) the dead zone.
-    inline static const int DEAD_ZONE = 1 << 14;
-
-    void poll_game_controller(SDL_GameController* controller, GamepadBuffer& gamepad)
+    GamepadBuffer poll_game_controller(SDL_GameController* controller)
     {
-        gamepad[GP_LEFT - GP_RANGE_BEGIN] =
-            SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_LEFT) ||
-            SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX) < -DEAD_ZONE ||
-            SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTX) < -DEAD_ZONE;
-
-        gamepad[GP_RIGHT - GP_RANGE_BEGIN] =
-            SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) ||
-            SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX) > +DEAD_ZONE ||
-            SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTX) > +DEAD_ZONE;
-
-        gamepad[GP_UP - GP_RANGE_BEGIN] =
-            SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_UP) ||
-            SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY) < -DEAD_ZONE ||
-            SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTY) < -DEAD_ZONE;
-
-        gamepad[GP_DOWN - GP_RANGE_BEGIN] =
-            SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_DOWN) ||
-            SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY) > +DEAD_ZONE ||
-            SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTY) > +DEAD_ZONE;
+        GamepadBuffer gamepad;
+        
+        // Poll axes first.
+        gamepad.axes[GP_LEFT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] =
+            scale_axis(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX));
+        gamepad.axes[GP_LEFT_STICK_Y_AXIS - GP_AXES_RANGE_BEGIN] =
+            scale_axis(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY));
+        gamepad.axes[GP_RIGHT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] =
+            scale_axis(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTX));
+        gamepad.axes[GP_RIGHT_STICK_Y_AXIS - GP_AXES_RANGE_BEGIN] =
+            scale_axis(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTY));
+        gamepad.axes[GP_LEFT_TRIGGER_AXIS - GP_AXES_RANGE_BEGIN] =
+            scale_axis(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT));
+        gamepad.axes[GP_RIGHT_TRIGGER_AXIS - GP_AXES_RANGE_BEGIN] =
+            scale_axis(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT));
+        
+        gamepad.buttons[GP_DPAD_LEFT - GP_RANGE_BEGIN] =
+            SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_LEFT);
+        gamepad.buttons[GP_DPAD_RIGHT - GP_RANGE_BEGIN] =
+            SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
+        gamepad.buttons[GP_DPAD_UP - GP_RANGE_BEGIN] =
+            SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_UP);
+        gamepad.buttons[GP_DPAD_DOWN - GP_RANGE_BEGIN] =
+            SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_DOWN);
 
         int button = 0;
         for (; button < SDL_CONTROLLER_BUTTON_DPAD_UP; ++button) {
-            gamepad[GP_BUTTON_0 + button - GP_RANGE_BEGIN] =
+            gamepad.buttons[GP_BUTTON_0 + button - GP_RANGE_BEGIN] =
                 SDL_GameControllerGetButton(controller, (SDL_GameControllerButton) button);
         }
-        gamepad[GP_BUTTON_0 + button++ - GP_RANGE_BEGIN] =
-            SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT) > +DEAD_ZONE;
-        gamepad[GP_BUTTON_0 + button++ - GP_RANGE_BEGIN] =
-            SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > +DEAD_ZONE;
+        // Represent the triggers as buttons in addition to them being axes.
+        gamepad.buttons[GP_BUTTON_0 + button++ - GP_RANGE_BEGIN] =
+            gamepad.axes[GP_LEFT_TRIGGER_AXIS] >= 0.5;
+        gamepad.buttons[GP_BUTTON_0 + button++ - GP_RANGE_BEGIN] =
+            gamepad.axes[GP_RIGHT_TRIGGER_AXIS] >= 0.5;
+        
+        merge_directions(gamepad);
+        return gamepad;
     }
 
-    void poll_joystick(SDL_Joystick* joystick, GamepadBuffer& gamepad)
+    GamepadBuffer poll_joystick(SDL_Joystick* joystick)
     {
+        GamepadBuffer gamepad;
+        
+        // Just guess that the first four axes are equivalent to two analog sticks.
         int axes = SDL_JoystickNumAxes(joystick);
-        for (int axis = 0; axis < axes; ++axis) {
-            Sint16 value = SDL_JoystickGetAxis(joystick, axis);
-
-            if (value < -DEAD_ZONE) {
-                gamepad[(axis % 2 ? GP_UP   : GP_LEFT)  - GP_RANGE_BEGIN] = true;
-            }
-            else if (value > +DEAD_ZONE) {
-                gamepad[(axis % 2 ? GP_DOWN : GP_RIGHT) - GP_RANGE_BEGIN] = true;
-            }
+        if (axes > 0) {
+            gamepad.axes[GP_LEFT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] =
+                scale_axis(SDL_JoystickGetAxis(joystick, 0));
+        }
+        if (axes > 1) {
+            gamepad.axes[GP_LEFT_STICK_Y_AXIS - GP_AXES_RANGE_BEGIN] =
+                scale_axis(SDL_JoystickGetAxis(joystick, 1));
+        }
+        if (axes > 2) {
+            gamepad.axes[GP_RIGHT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] =
+                scale_axis(SDL_JoystickGetAxis(joystick, 2));
+        }
+        if (axes > 3) {
+            gamepad.axes[GP_RIGHT_STICK_Y_AXIS - GP_AXES_RANGE_BEGIN] =
+                scale_axis(SDL_JoystickGetAxis(joystick, 3));
         }
 
+        // All hats are merged into the DPad.
         int hats = SDL_JoystickNumHats(joystick);
         for (int hat = 0; hat < hats; ++hat) {
             Uint8 value = SDL_JoystickGetHat(joystick, hat);
-            if (value & SDL_HAT_LEFT)  gamepad[GP_LEFT  - GP_RANGE_BEGIN] = true;
-            if (value & SDL_HAT_RIGHT) gamepad[GP_RIGHT - GP_RANGE_BEGIN] = true;
-            if (value & SDL_HAT_UP)    gamepad[GP_UP    - GP_RANGE_BEGIN] = true;
-            if (value & SDL_HAT_DOWN)  gamepad[GP_DOWN  - GP_RANGE_BEGIN] = true;
+            if (value & SDL_HAT_LEFT)  gamepad.buttons[GP_DPAD_LEFT  - GP_RANGE_BEGIN] = true;
+            if (value & SDL_HAT_RIGHT) gamepad.buttons[GP_DPAD_RIGHT - GP_RANGE_BEGIN] = true;
+            if (value & SDL_HAT_UP)    gamepad.buttons[GP_DPAD_UP    - GP_RANGE_BEGIN] = true;
+            if (value & SDL_HAT_DOWN)  gamepad.buttons[GP_DPAD_DOWN  - GP_RANGE_BEGIN] = true;
         }
 
-        int buttons = min<int>(GP_NUM_PER_GAMEPAD - 4, SDL_JoystickNumButtons(joystick));
+        int buttons = min<int>(GP_NUM_BUTTONS_PER_GAMEPAD - 4, SDL_JoystickNumButtons(joystick));
         for (int button = 0; button < buttons; ++button) {
             if (SDL_JoystickGetButton(joystick, button)) {
-                gamepad[GP_BUTTON_0 + button - GP_RANGE_BEGIN] = true;
+                gamepad.buttons[GP_BUTTON_0 + button - GP_RANGE_BEGIN] = true;
             }
         }
+        
+        merge_directions(gamepad);
+        return gamepad;
+    }
+    
+    void merge_directions(GamepadBuffer& gamepad)
+    {
+        gamepad.directions[0] =
+            gamepad.buttons[GP_DPAD_LEFT - GP_RANGE_BEGIN] ||
+            gamepad.axes[GP_LEFT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] <= -0.5 ||
+            gamepad.axes[GP_RIGHT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] <= -0.5;
+        gamepad.directions[1] =
+            gamepad.buttons[GP_DPAD_RIGHT - GP_RANGE_BEGIN] ||
+            gamepad.axes[GP_LEFT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] >= +0.5 ||
+            gamepad.axes[GP_RIGHT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] >= +0.5;
+        gamepad.directions[2] =
+            gamepad.buttons[GP_DPAD_UP - GP_RANGE_BEGIN] ||
+            gamepad.axes[GP_LEFT_STICK_Y_AXIS - GP_AXES_RANGE_BEGIN] <= -0.5 ||
+            gamepad.axes[GP_RIGHT_STICK_Y_AXIS - GP_AXES_RANGE_BEGIN] <= -0.5;
+        gamepad.directions[3] =
+            gamepad.buttons[GP_DPAD_DOWN - GP_RANGE_BEGIN] ||
+            gamepad.axes[GP_LEFT_STICK_Y_AXIS - GP_AXES_RANGE_BEGIN] >= +0.5 ||
+            gamepad.axes[GP_RIGHT_STICK_Y_AXIS - GP_AXES_RANGE_BEGIN] >= +0.5;
     }
 };
 
