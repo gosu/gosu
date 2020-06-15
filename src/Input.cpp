@@ -250,7 +250,7 @@ struct Gosu::Input::Impl
         // This gamepad is an OR-ed version of all the other gamepads.
         // If button3 is pressed on any attached gamepad, down(GP_BUTTON_3) will return true.
         // This is handy for singleplayer games where you don't care which gamepad that player uses.
-        GamepadBuffer any_gamepad = { false };
+        GamepadBuffer any_gamepad;
         
         // Reset all axes values, they will be recalculated below.
         axis_states.fill(0.0);
