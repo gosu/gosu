@@ -48,7 +48,7 @@ class Gosu::Window
     # doing here.
     if defined? @_exception
       if @_exception.backtrace.is_a? Array and not @_exception.backtrace.frozen?
-        @_exception.backtrace.reject! { |line| line.include? 'lib/gosu/swig_patches.rb' }
+        @_exception.backtrace.reject! { |line| line.include? "lib/gosu/swig_patches.rb" }
       end
       raise @_exception
     end

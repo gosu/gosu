@@ -7,7 +7,7 @@ class TestText < Minitest::Test
   STRINGS = {
     # All of these strings are still horribly broken in Gosu.
     # The only thing that these tests verify is that they're equally broken on
-    # all operation systems.
+    # all operating systems.
     "unicode"    => "Grüße vom Test!",
     "whitespace" => "$ ls\n  .\t..\tfoo\r\n  bar\tqux        ",
     "markup"     => "<b>Bold, <u>underlined &amp; <i>italic. <c=4400ff>How <c=0f3>about</c> colors?</c></i></u>&lt;&gt;</b>",
