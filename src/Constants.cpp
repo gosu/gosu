@@ -276,10 +276,10 @@ unsigned Gosu_GP_RIGHT = Gosu::GP_RIGHT;
 unsigned Gosu_GP_UP = Gosu::GP_UP;
 unsigned Gosu_GP_DOWN = Gosu::GP_DOWN;
 
-unsigned Gosu_0_GP_LEFT = Gosu::GP_0_LEFT;
-unsigned Gosu_0_GP_RIGHT = Gosu::GP_0_RIGHT;
-unsigned Gosu_0_GP_UP = Gosu::GP_0_UP;
-unsigned Gosu_0_GP_DOWN = Gosu::GP_0_DOWN;
+unsigned Gosu_GP_0_LEFT = Gosu::GP_0_LEFT;
+unsigned Gosu_GP_0_RIGHT = Gosu::GP_0_RIGHT;
+unsigned Gosu_GP_0_UP = Gosu::GP_0_UP;
+unsigned Gosu_GP_0_DOWN = Gosu::GP_0_DOWN;
 
 unsigned Gosu_GP_1_LEFT = Gosu::GP_1_LEFT;
 unsigned Gosu_GP_1_RIGHT = Gosu::GP_1_RIGHT;
