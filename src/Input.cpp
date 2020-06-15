@@ -12,16 +12,17 @@
 #include <cstdlib>
 #include <algorithm>
 #include <array>
+#include <mutex>
 using namespace std;
 
 static void require_sdl_video()
 {
-    static bool initialized = false;
-    if (!initialized) {
+    static std::once_flag initialized;
+     
+    std::call_once(initialized, [] {
         SDL_InitSubSystem(SDL_INIT_VIDEO);
-        initialized = true;
         atexit([] { SDL_QuitSubSystem(SDL_INIT_VIDEO); });
-    }
+    });
 }
 
 static array<bool, Gosu::NUM_BUTTONS> button_states = {false};
@@ -547,6 +548,8 @@ Gosu::Button Gosu::Input::char_to_id(string ch)
 
 std::string Gosu::Input::button_name(Button btn)
 {
+    require_sdl_video();
+
     SDL_Keycode keycode = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(btn.id()));
     return SDL_GetKeyName(keycode);
 }
