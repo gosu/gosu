@@ -217,6 +217,18 @@ namespace Gosu
     {
         return Gosu::Input::down(btn);
     }
+
+    VALUE button_name(Gosu::Button btn)
+    {
+      std::string result = Gosu::Input::button_name(btn);
+      return result.empty() ? Qnil : rb_str_new2(result.c_str());
+    }
+
+    VALUE gamepad_name(int index)
+    {
+      std::string result = Gosu::Input::gamepad_name(index);
+      return result.empty() ? Qnil : rb_str_new2(result.c_str());
+    }
 }
 
 // Global graphics functions
@@ -1054,6 +1066,8 @@ namespace Gosu
     std::string button_id_to_char(Gosu::Button btn);
     %rename("button_down?") is_button_down;
     bool is_button_down(Gosu::Button btn);
+    VALUE button_name(Gosu::Button btn);
+    VALUE gamepad_name(int index);
 }
 
 // Global graphics functions

@@ -41,6 +41,8 @@ public:
     virtual void release_memory();
     virtual void button_down(Gosu::Button arg0);
     virtual void button_up(Gosu::Button arg0);
+    virtual void gamepad_connected(int index);
+    virtual void gamepad_disconnected(int index);
     virtual void drop(std::string const &filename);
 };
 

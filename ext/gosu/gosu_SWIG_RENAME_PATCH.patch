@@ -62,6 +62,33 @@
  }
  
  
+@@ -3322,7 +3322,7 @@ void SwigDirector_Window::gamepad_connected(int index) {
+   VALUE SWIGUNUSED result;
+ 
+   obj0 = SWIG_From_int(static_cast< int >(index));
+-  result = rb_funcall(swig_get_self(), rb_intern("gamepad_connected"), 1,obj0);
++  result = rb_funcall(swig_get_self(), rb_intern("protected_gamepad_connected"), 1,obj0);
+ }
+ 
+ 
+@@ -3331,7 +3331,7 @@ void SwigDirector_Window::gamepad_disconnected(int index) {
+   VALUE SWIGUNUSED result;
+ 
+   obj0 = SWIG_From_int(static_cast< int >(index));
+-  result = rb_funcall(swig_get_self(), rb_intern("gamepad_disconnected"), 1,obj0);
++  result = rb_funcall(swig_get_self(), rb_intern("protected_gamepad_disconnected"), 1,obj0);
+ }
+ 
+ 
+@@ -3340,7 +3340,7 @@ void SwigDirector_Window::drop(std::string const &filename) {
+   VALUE SWIGUNUSED result;
+  
+   obj0 = SWIG_From_std_string(static_cast< std::string >(filename));
+-  result = rb_funcall(swig_get_self(), rb_intern("drop"), 1,obj0);
++  result = rb_funcall(swig_get_self(), rb_intern("protected_drop"), 1,obj0);
+ }
+ 
+ 
 @@ -11696,8 +11696,8 @@
    }
    

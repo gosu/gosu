@@ -2326,6 +2326,18 @@ namespace Gosu
     {
         return Gosu::Input::down(btn);
     }
+
+    VALUE button_name(Gosu::Button btn)
+    {
+      std::string result = Gosu::Input::button_name(btn);
+      return result.empty() ? Qnil : rb_str_new2(result.c_str());
+    }
+
+    VALUE gamepad_name(int index)
+    {
+      std::string result = Gosu::Input::gamepad_name(index);
+      return result.empty() ? Qnil : rb_str_new2(result.c_str());
+    }
 }
 
 // Global graphics functions
@@ -3317,12 +3329,30 @@ void SwigDirector_Window::button_up(Gosu::Button arg0) {
 }
 
 
+void SwigDirector_Window::gamepad_connected(int index) {
+  VALUE obj0 = Qnil ;
+  VALUE SWIGUNUSED result;
+  
+  obj0 = SWIG_From_int(static_cast< int >(index));
+  result = rb_funcall(swig_get_self(), rb_intern("protected_gamepad_connected"), 1,obj0);
+}
+
+
+void SwigDirector_Window::gamepad_disconnected(int index) {
+  VALUE obj0 = Qnil ;
+  VALUE SWIGUNUSED result;
+  
+  obj0 = SWIG_From_int(static_cast< int >(index));
+  result = rb_funcall(swig_get_self(), rb_intern("protected_gamepad_disconnected"), 1,obj0);
+}
+
+
 void SwigDirector_Window::drop(std::string const &filename) {
   VALUE obj0 = Qnil ;
   VALUE SWIGUNUSED result;
   
   obj0 = SWIG_From_std_string(static_cast< std::string >(filename));
-  result = rb_funcall(swig_get_self(), rb_intern("drop"), 1,obj0);
+  result = rb_funcall(swig_get_self(), rb_intern("protected_drop"), 1,obj0);
 }
 
 
@@ -9530,6 +9560,104 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Window_gamepad_connected(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  Swig::Director *director = 0;
+  bool upcall = false;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","gamepad_connected", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","gamepad_connected", 2, argv[0] ));
+  } 
+  arg2 = static_cast< int >(val2);
+  director = dynamic_cast<Swig::Director *>(arg1);
+  upcall = (director && (director->swig_get_self() == self));
+  try {
+    {
+      try {
+        if (upcall) {
+          (arg1)->Gosu::Window::gamepad_connected(arg2);
+        } else {
+          (arg1)->gamepad_connected(arg2);
+        }
+      }
+      catch (const std::exception& e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
+    }
+  } catch (Swig::DirectorException& e) {
+    rb_exc_raise(e.getError());
+    SWIG_fail;
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Window_gamepad_disconnected(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  Swig::Director *director = 0;
+  bool upcall = false;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","gamepad_disconnected", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","gamepad_disconnected", 2, argv[0] ));
+  } 
+  arg2 = static_cast< int >(val2);
+  director = dynamic_cast<Swig::Director *>(arg1);
+  upcall = (director && (director->swig_get_self() == self));
+  try {
+    {
+      try {
+        if (upcall) {
+          (arg1)->Gosu::Window::gamepad_disconnected(arg2);
+        } else {
+          (arg1)->gamepad_disconnected(arg2);
+        }
+      }
+      catch (const std::exception& e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+      }
+    }
+  } catch (Swig::DirectorException& e) {
+    rb_exc_raise(e.getError());
+    SWIG_fail;
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Window_drop(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   std::string *arg2 = 0 ;
@@ -10212,6 +10340,64 @@ _wrap_button_downq___(int argc, VALUE *argv, VALUE self) {
     }
   }
   vresult = SWIG_From_bool(static_cast< bool >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_button_name(int argc, VALUE *argv, VALUE self) {
+  Gosu::Button arg1 ;
+  VALUE result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  {
+    arg1 = NIL_P(argv[0]) ? Gosu::NO_BUTTON : Gosu::Button(NUM2LONG(argv[0]));
+  }
+  {
+    try {
+      result = (VALUE)Gosu::button_name(arg1);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = result;
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_gamepad_name(int argc, VALUE *argv, VALUE self) {
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  VALUE result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  ecode1 = SWIG_AsVal_int(argv[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "int","Gosu::gamepad_name", 1, argv[0] ));
+  } 
+  arg1 = static_cast< int >(val1);
+  {
+    try {
+      result = (VALUE)Gosu::gamepad_name(arg1);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = result;
   return vresult;
 fail:
   return Qnil;
@@ -12027,10 +12213,10 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "MS_OTHER_5", SWIG_From_int(static_cast< int >(Gosu::MS_OTHER_5)));
   rb_define_const(mGosu, "MS_OTHER_6", SWIG_From_int(static_cast< int >(Gosu::MS_OTHER_6)));
   rb_define_const(mGosu, "MS_OTHER_7", SWIG_From_int(static_cast< int >(Gosu::MS_OTHER_7)));
-  rb_define_const(mGosu, "GP_LEFT", SWIG_From_int(static_cast< int >(Gosu::GP_LEFT)));
-  rb_define_const(mGosu, "GP_RIGHT", SWIG_From_int(static_cast< int >(Gosu::GP_RIGHT)));
-  rb_define_const(mGosu, "GP_UP", SWIG_From_int(static_cast< int >(Gosu::GP_UP)));
-  rb_define_const(mGosu, "GP_DOWN", SWIG_From_int(static_cast< int >(Gosu::GP_DOWN)));
+  rb_define_const(mGosu, "GP_DPAD_LEFT", SWIG_From_int(static_cast< int >(Gosu::GP_DPAD_LEFT)));
+  rb_define_const(mGosu, "GP_DPAD_RIGHT", SWIG_From_int(static_cast< int >(Gosu::GP_DPAD_RIGHT)));
+  rb_define_const(mGosu, "GP_DPAD_UP", SWIG_From_int(static_cast< int >(Gosu::GP_DPAD_UP)));
+  rb_define_const(mGosu, "GP_DPAD_DOWN", SWIG_From_int(static_cast< int >(Gosu::GP_DPAD_DOWN)));
   rb_define_const(mGosu, "GP_BUTTON_0", SWIG_From_int(static_cast< int >(Gosu::GP_BUTTON_0)));
   rb_define_const(mGosu, "GP_BUTTON_1", SWIG_From_int(static_cast< int >(Gosu::GP_BUTTON_1)));
   rb_define_const(mGosu, "GP_BUTTON_2", SWIG_From_int(static_cast< int >(Gosu::GP_BUTTON_2)));
@@ -12047,10 +12233,10 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "GP_BUTTON_13", SWIG_From_int(static_cast< int >(Gosu::GP_BUTTON_13)));
   rb_define_const(mGosu, "GP_BUTTON_14", SWIG_From_int(static_cast< int >(Gosu::GP_BUTTON_14)));
   rb_define_const(mGosu, "GP_BUTTON_15", SWIG_From_int(static_cast< int >(Gosu::GP_BUTTON_15)));
-  rb_define_const(mGosu, "GP_0_LEFT", SWIG_From_int(static_cast< int >(Gosu::GP_0_LEFT)));
-  rb_define_const(mGosu, "GP_0_RIGHT", SWIG_From_int(static_cast< int >(Gosu::GP_0_RIGHT)));
-  rb_define_const(mGosu, "GP_0_UP", SWIG_From_int(static_cast< int >(Gosu::GP_0_UP)));
-  rb_define_const(mGosu, "GP_0_DOWN", SWIG_From_int(static_cast< int >(Gosu::GP_0_DOWN)));
+  rb_define_const(mGosu, "GP_0_DPAD_LEFT", SWIG_From_int(static_cast< int >(Gosu::GP_0_DPAD_LEFT)));
+  rb_define_const(mGosu, "GP_0_DPAD_RIGHT", SWIG_From_int(static_cast< int >(Gosu::GP_0_DPAD_RIGHT)));
+  rb_define_const(mGosu, "GP_0_DPAD_UP", SWIG_From_int(static_cast< int >(Gosu::GP_0_DPAD_UP)));
+  rb_define_const(mGosu, "GP_0_DPAD_DOWN", SWIG_From_int(static_cast< int >(Gosu::GP_0_DPAD_DOWN)));
   rb_define_const(mGosu, "GP_0_BUTTON_0", SWIG_From_int(static_cast< int >(Gosu::GP_0_BUTTON_0)));
   rb_define_const(mGosu, "GP_0_BUTTON_1", SWIG_From_int(static_cast< int >(Gosu::GP_0_BUTTON_1)));
   rb_define_const(mGosu, "GP_0_BUTTON_2", SWIG_From_int(static_cast< int >(Gosu::GP_0_BUTTON_2)));
@@ -12067,10 +12253,10 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "GP_0_BUTTON_13", SWIG_From_int(static_cast< int >(Gosu::GP_0_BUTTON_13)));
   rb_define_const(mGosu, "GP_0_BUTTON_14", SWIG_From_int(static_cast< int >(Gosu::GP_0_BUTTON_14)));
   rb_define_const(mGosu, "GP_0_BUTTON_15", SWIG_From_int(static_cast< int >(Gosu::GP_0_BUTTON_15)));
-  rb_define_const(mGosu, "GP_1_LEFT", SWIG_From_int(static_cast< int >(Gosu::GP_1_LEFT)));
-  rb_define_const(mGosu, "GP_1_RIGHT", SWIG_From_int(static_cast< int >(Gosu::GP_1_RIGHT)));
-  rb_define_const(mGosu, "GP_1_UP", SWIG_From_int(static_cast< int >(Gosu::GP_1_UP)));
-  rb_define_const(mGosu, "GP_1_DOWN", SWIG_From_int(static_cast< int >(Gosu::GP_1_DOWN)));
+  rb_define_const(mGosu, "GP_1_DPAD_LEFT", SWIG_From_int(static_cast< int >(Gosu::GP_1_DPAD_LEFT)));
+  rb_define_const(mGosu, "GP_1_DPAD_RIGHT", SWIG_From_int(static_cast< int >(Gosu::GP_1_DPAD_RIGHT)));
+  rb_define_const(mGosu, "GP_1_DPAD_UP", SWIG_From_int(static_cast< int >(Gosu::GP_1_DPAD_UP)));
+  rb_define_const(mGosu, "GP_1_DPAD_DOWN", SWIG_From_int(static_cast< int >(Gosu::GP_1_DPAD_DOWN)));
   rb_define_const(mGosu, "GP_1_BUTTON_0", SWIG_From_int(static_cast< int >(Gosu::GP_1_BUTTON_0)));
   rb_define_const(mGosu, "GP_1_BUTTON_1", SWIG_From_int(static_cast< int >(Gosu::GP_1_BUTTON_1)));
   rb_define_const(mGosu, "GP_1_BUTTON_2", SWIG_From_int(static_cast< int >(Gosu::GP_1_BUTTON_2)));
@@ -12087,10 +12273,10 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "GP_1_BUTTON_13", SWIG_From_int(static_cast< int >(Gosu::GP_1_BUTTON_13)));
   rb_define_const(mGosu, "GP_1_BUTTON_14", SWIG_From_int(static_cast< int >(Gosu::GP_1_BUTTON_14)));
   rb_define_const(mGosu, "GP_1_BUTTON_15", SWIG_From_int(static_cast< int >(Gosu::GP_1_BUTTON_15)));
-  rb_define_const(mGosu, "GP_2_LEFT", SWIG_From_int(static_cast< int >(Gosu::GP_2_LEFT)));
-  rb_define_const(mGosu, "GP_2_RIGHT", SWIG_From_int(static_cast< int >(Gosu::GP_2_RIGHT)));
-  rb_define_const(mGosu, "GP_2_UP", SWIG_From_int(static_cast< int >(Gosu::GP_2_UP)));
-  rb_define_const(mGosu, "GP_2_DOWN", SWIG_From_int(static_cast< int >(Gosu::GP_2_DOWN)));
+  rb_define_const(mGosu, "GP_2_DPAD_LEFT", SWIG_From_int(static_cast< int >(Gosu::GP_2_DPAD_LEFT)));
+  rb_define_const(mGosu, "GP_2_DPAD_RIGHT", SWIG_From_int(static_cast< int >(Gosu::GP_2_DPAD_RIGHT)));
+  rb_define_const(mGosu, "GP_2_DPAD_UP", SWIG_From_int(static_cast< int >(Gosu::GP_2_DPAD_UP)));
+  rb_define_const(mGosu, "GP_2_DPAD_DOWN", SWIG_From_int(static_cast< int >(Gosu::GP_2_DPAD_DOWN)));
   rb_define_const(mGosu, "GP_2_BUTTON_0", SWIG_From_int(static_cast< int >(Gosu::GP_2_BUTTON_0)));
   rb_define_const(mGosu, "GP_2_BUTTON_1", SWIG_From_int(static_cast< int >(Gosu::GP_2_BUTTON_1)));
   rb_define_const(mGosu, "GP_2_BUTTON_2", SWIG_From_int(static_cast< int >(Gosu::GP_2_BUTTON_2)));
@@ -12107,10 +12293,10 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "GP_2_BUTTON_13", SWIG_From_int(static_cast< int >(Gosu::GP_2_BUTTON_13)));
   rb_define_const(mGosu, "GP_2_BUTTON_14", SWIG_From_int(static_cast< int >(Gosu::GP_2_BUTTON_14)));
   rb_define_const(mGosu, "GP_2_BUTTON_15", SWIG_From_int(static_cast< int >(Gosu::GP_2_BUTTON_15)));
-  rb_define_const(mGosu, "GP_3_LEFT", SWIG_From_int(static_cast< int >(Gosu::GP_3_LEFT)));
-  rb_define_const(mGosu, "GP_3_RIGHT", SWIG_From_int(static_cast< int >(Gosu::GP_3_RIGHT)));
-  rb_define_const(mGosu, "GP_3_UP", SWIG_From_int(static_cast< int >(Gosu::GP_3_UP)));
-  rb_define_const(mGosu, "GP_3_DOWN", SWIG_From_int(static_cast< int >(Gosu::GP_3_DOWN)));
+  rb_define_const(mGosu, "GP_3_DPAD_LEFT", SWIG_From_int(static_cast< int >(Gosu::GP_3_DPAD_LEFT)));
+  rb_define_const(mGosu, "GP_3_DPAD_RIGHT", SWIG_From_int(static_cast< int >(Gosu::GP_3_DPAD_RIGHT)));
+  rb_define_const(mGosu, "GP_3_DPAD_UP", SWIG_From_int(static_cast< int >(Gosu::GP_3_DPAD_UP)));
+  rb_define_const(mGosu, "GP_3_DPAD_DOWN", SWIG_From_int(static_cast< int >(Gosu::GP_3_DPAD_DOWN)));
   rb_define_const(mGosu, "GP_3_BUTTON_0", SWIG_From_int(static_cast< int >(Gosu::GP_3_BUTTON_0)));
   rb_define_const(mGosu, "GP_3_BUTTON_1", SWIG_From_int(static_cast< int >(Gosu::GP_3_BUTTON_1)));
   rb_define_const(mGosu, "GP_3_BUTTON_2", SWIG_From_int(static_cast< int >(Gosu::GP_3_BUTTON_2)));
@@ -12127,6 +12313,60 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "GP_3_BUTTON_13", SWIG_From_int(static_cast< int >(Gosu::GP_3_BUTTON_13)));
   rb_define_const(mGosu, "GP_3_BUTTON_14", SWIG_From_int(static_cast< int >(Gosu::GP_3_BUTTON_14)));
   rb_define_const(mGosu, "GP_3_BUTTON_15", SWIG_From_int(static_cast< int >(Gosu::GP_3_BUTTON_15)));
+  rb_define_const(mGosu, "GP_LEFT", SWIG_From_int(static_cast< int >(Gosu::GP_LEFT)));
+  rb_define_const(mGosu, "GP_RIGHT", SWIG_From_int(static_cast< int >(Gosu::GP_RIGHT)));
+  rb_define_const(mGosu, "GP_UP", SWIG_From_int(static_cast< int >(Gosu::GP_UP)));
+  rb_define_const(mGosu, "GP_DOWN", SWIG_From_int(static_cast< int >(Gosu::GP_DOWN)));
+  rb_define_const(mGosu, "GP_0_LEFT", SWIG_From_int(static_cast< int >(Gosu::GP_0_LEFT)));
+  rb_define_const(mGosu, "GP_0_RIGHT", SWIG_From_int(static_cast< int >(Gosu::GP_0_RIGHT)));
+  rb_define_const(mGosu, "GP_0_UP", SWIG_From_int(static_cast< int >(Gosu::GP_0_UP)));
+  rb_define_const(mGosu, "GP_0_DOWN", SWIG_From_int(static_cast< int >(Gosu::GP_0_DOWN)));
+  rb_define_const(mGosu, "GP_1_LEFT", SWIG_From_int(static_cast< int >(Gosu::GP_1_LEFT)));
+  rb_define_const(mGosu, "GP_1_RIGHT", SWIG_From_int(static_cast< int >(Gosu::GP_1_RIGHT)));
+  rb_define_const(mGosu, "GP_1_UP", SWIG_From_int(static_cast< int >(Gosu::GP_1_UP)));
+  rb_define_const(mGosu, "GP_1_DOWN", SWIG_From_int(static_cast< int >(Gosu::GP_1_DOWN)));
+  rb_define_const(mGosu, "GP_2_LEFT", SWIG_From_int(static_cast< int >(Gosu::GP_2_LEFT)));
+  rb_define_const(mGosu, "GP_2_RIGHT", SWIG_From_int(static_cast< int >(Gosu::GP_2_RIGHT)));
+  rb_define_const(mGosu, "GP_2_UP", SWIG_From_int(static_cast< int >(Gosu::GP_2_UP)));
+  rb_define_const(mGosu, "GP_2_DOWN", SWIG_From_int(static_cast< int >(Gosu::GP_2_DOWN)));
+  rb_define_const(mGosu, "GP_3_LEFT", SWIG_From_int(static_cast< int >(Gosu::GP_3_LEFT)));
+  rb_define_const(mGosu, "GP_3_RIGHT", SWIG_From_int(static_cast< int >(Gosu::GP_3_RIGHT)));
+  rb_define_const(mGosu, "GP_3_UP", SWIG_From_int(static_cast< int >(Gosu::GP_3_UP)));
+  rb_define_const(mGosu, "GP_3_DOWN", SWIG_From_int(static_cast< int >(Gosu::GP_3_DOWN)));
+  rb_define_const(mGosu, "GP_AXES_RANGE_BEGIN", SWIG_From_int(static_cast< int >(Gosu::GP_AXES_RANGE_BEGIN)));
+  rb_define_const(mGosu, "GP_LEFT_STICK_X_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_LEFT_STICK_X_AXIS)));
+  rb_define_const(mGosu, "GP_LEFT_STICK_Y_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_LEFT_STICK_Y_AXIS)));
+  rb_define_const(mGosu, "GP_RIGHT_STICK_X_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_RIGHT_STICK_X_AXIS)));
+  rb_define_const(mGosu, "GP_RIGHT_STICK_Y_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_RIGHT_STICK_Y_AXIS)));
+  rb_define_const(mGosu, "GP_LEFT_TRIGGER_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_LEFT_TRIGGER_AXIS)));
+  rb_define_const(mGosu, "GP_RIGHT_TRIGGER_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_RIGHT_TRIGGER_AXIS)));
+  rb_define_const(mGosu, "GP_0_LEFT_STICK_X_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_0_LEFT_STICK_X_AXIS)));
+  rb_define_const(mGosu, "GP_0_LEFT_STICK_Y_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_0_LEFT_STICK_Y_AXIS)));
+  rb_define_const(mGosu, "GP_0_RIGHT_STICK_X_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_0_RIGHT_STICK_X_AXIS)));
+  rb_define_const(mGosu, "GP_0_RIGHT_STICK_Y_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_0_RIGHT_STICK_Y_AXIS)));
+  rb_define_const(mGosu, "GP_0_LEFT_TRIGGER_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_0_LEFT_TRIGGER_AXIS)));
+  rb_define_const(mGosu, "GP_0_RIGHT_TRIGGER_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_0_RIGHT_TRIGGER_AXIS)));
+  rb_define_const(mGosu, "GP_1_LEFT_STICK_X_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_1_LEFT_STICK_X_AXIS)));
+  rb_define_const(mGosu, "GP_1_LEFT_STICK_Y_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_1_LEFT_STICK_Y_AXIS)));
+  rb_define_const(mGosu, "GP_1_RIGHT_STICK_X_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_1_RIGHT_STICK_X_AXIS)));
+  rb_define_const(mGosu, "GP_1_RIGHT_STICK_Y_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_1_RIGHT_STICK_Y_AXIS)));
+  rb_define_const(mGosu, "GP_1_LEFT_TRIGGER_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_1_LEFT_TRIGGER_AXIS)));
+  rb_define_const(mGosu, "GP_1_RIGHT_TRIGGER_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_1_RIGHT_TRIGGER_AXIS)));
+  rb_define_const(mGosu, "GP_2_LEFT_STICK_X_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_2_LEFT_STICK_X_AXIS)));
+  rb_define_const(mGosu, "GP_2_LEFT_STICK_Y_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_2_LEFT_STICK_Y_AXIS)));
+  rb_define_const(mGosu, "GP_2_RIGHT_STICK_X_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_2_RIGHT_STICK_X_AXIS)));
+  rb_define_const(mGosu, "GP_2_RIGHT_STICK_Y_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_2_RIGHT_STICK_Y_AXIS)));
+  rb_define_const(mGosu, "GP_2_LEFT_TRIGGER_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_2_LEFT_TRIGGER_AXIS)));
+  rb_define_const(mGosu, "GP_2_RIGHT_TRIGGER_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_2_RIGHT_TRIGGER_AXIS)));
+  rb_define_const(mGosu, "GP_3_LEFT_STICK_X_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_3_LEFT_STICK_X_AXIS)));
+  rb_define_const(mGosu, "GP_3_LEFT_STICK_Y_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_3_LEFT_STICK_Y_AXIS)));
+  rb_define_const(mGosu, "GP_3_RIGHT_STICK_X_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_3_RIGHT_STICK_X_AXIS)));
+  rb_define_const(mGosu, "GP_3_RIGHT_STICK_Y_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_3_RIGHT_STICK_Y_AXIS)));
+  rb_define_const(mGosu, "GP_3_LEFT_TRIGGER_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_3_LEFT_TRIGGER_AXIS)));
+  rb_define_const(mGosu, "GP_3_RIGHT_TRIGGER_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_3_RIGHT_TRIGGER_AXIS)));
+  rb_define_const(mGosu, "GP_AXES_RANGE_END", SWIG_From_int(static_cast< int >(Gosu::GP_AXES_RANGE_END)));
+  rb_define_const(mGosu, "GP_NUM_BUTTONS_PER_GAMEPAD", SWIG_From_int(static_cast< int >(Gosu::GP_NUM_BUTTONS_PER_GAMEPAD)));
+  rb_define_const(mGosu, "GP_NUM_AXES_PER_GAMEPAD", SWIG_From_int(static_cast< int >(Gosu::GP_NUM_AXES_PER_GAMEPAD)));
   
   // Call srand() so that Gosu::random() is actually random in Ruby scripts
   std::srand(static_cast<unsigned>(std::time(0)));
@@ -12176,6 +12416,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "release_memory", VALUEFUNC(_wrap_Window_release_memory), -1);
   rb_define_method(SwigClassWindow.klass, "button_down", VALUEFUNC(_wrap_Window_button_down), -1);
   rb_define_method(SwigClassWindow.klass, "button_up", VALUEFUNC(_wrap_Window_button_up), -1);
+  rb_define_method(SwigClassWindow.klass, "gamepad_connected", VALUEFUNC(_wrap_Window_gamepad_connected), -1);
+  rb_define_method(SwigClassWindow.klass, "gamepad_disconnected", VALUEFUNC(_wrap_Window_gamepad_disconnected), -1);
   rb_define_method(SwigClassWindow.klass, "drop", VALUEFUNC(_wrap_Window_drop), -1);
   rb_define_method(SwigClassWindow.klass, "width=", VALUEFUNC(_wrap_Window_widthe___), -1);
   rb_define_method(SwigClassWindow.klass, "height=", VALUEFUNC(_wrap_Window_heighte___), -1);
@@ -12198,6 +12440,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "char_to_button_id", VALUEFUNC(_wrap_char_to_button_id), -1);
   rb_define_module_function(mGosu, "button_id_to_char", VALUEFUNC(_wrap_button_id_to_char), -1);
   rb_define_module_function(mGosu, "button_down?", VALUEFUNC(_wrap_button_downq___), -1);
+  rb_define_module_function(mGosu, "button_name", VALUEFUNC(_wrap_button_name), -1);
+  rb_define_module_function(mGosu, "gamepad_name", VALUEFUNC(_wrap_gamepad_name), -1);
   rb_define_module_function(mGosu, "draw_line", VALUEFUNC(_wrap_draw_line), -1);
   rb_define_module_function(mGosu, "draw_triangle", VALUEFUNC(_wrap_draw_triangle), -1);
   rb_define_module_function(mGosu, "draw_quad", VALUEFUNC(_wrap_draw_quad), -1);
