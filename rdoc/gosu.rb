@@ -83,12 +83,32 @@ module Gosu
   MS_OTHER_0…MS_OTHER_7 = :an_integer
 
   GP_BUTTON_0…GP_BUTTON_15 = :an_integer
+  GP_LEFT_STICK_X_AXIS = :an_integer
+  GP_RIGHT_STICK_X_AXIS = :an_integer
+  GP_LEFT_STICK_Y_AXIS = :an_integer
+  GP_RIGHT_STICK_Y_AXIS = :an_integer
+  GP_LEFT_TRIGGER_AXIS = :an_integer
+  GP_RIGHT_TRIGGER_AXIS = :an_integer
+  GP_DPAD_DOWN = :an_integer
+  GP_DPAD_LEFT = :an_integer
+  GP_DPAD_RIGHT = :an_integer
+  GP_DPAD_UP = :an_integer
   GP_DOWN = :an_integer
   GP_LEFT = :an_integer
   GP_RIGHT = :an_integer
   GP_UP = :an_integer
 
   GP_0_BUTTON_0…GP_3_BUTTON_15 = :an_integer
+  GP_0_LEFT_STICK_X_AXIS…GP_3_LEFT_STICK_X_AXIS = :an_integer
+  GP_0_RIGHT_STICK_X_AXIS…GP_3_RIGHT_STICK_X_AXIS = :an_integer
+  GP_0_LEFT_STICK_Y_AXIS…GP_3_LEFT_STICK_Y_AXIS = :an_integer
+  GP_0_RIGHT_STICK_Y_AXIS…GP_3_RIGHT_STICK_Y_AXIS = :an_integer
+  GP_0_LEFT_TRIGGER_AXIS…GP_3_LEFT_TRIGGER_AXIS = :an_integer
+  GP_0_RIGHT_TRIGGER_AXIS…GP_3_RIGHT_TRIGGER_AXIS = :an_integer
+  GP_0_DPAD_DOWN…GP_3_DPAD_DOWN = :an_integer
+  GP_0_DPAD_LEFT…GP_3_DPAD_LEFT = :an_integer
+  GP_0_DPAD_RIGHT…GP_3_DPAD_RIGHT = :an_integer
+  GP_0_DPAD_UP…GP_3_DPAD_UP = :an_integer
   GP_0_DOWN…GP_3_DOWN = :an_integer
   GP_0_LEFT…GP_3_LEFT = :an_integer
   GP_0_RIGHT…GP_3_RIGHT = :an_integer
@@ -193,14 +213,14 @@ module Gosu
     ##
     # @return [Integer] a 32-bit representation of the color in 0xAARRGGBB format.
     def argb; end
-    
+
     alias_method :to_i, :argb
 
     # Returns a 32-bit representation of the color suitable for use with OpenGL calls. This color is stored in a fixed format in memory and its integer value may vary depending on your system's byte order.
     #
     # @return [Integer] a 32-bit OpenGL color.
     def gl; end
-    
+
     # Returns an OpenGL integer constant that identifies the RGBA color format that Gosu uses.
     GL_FORMAT = :some_integer
 
@@ -316,7 +336,7 @@ module Gosu
     # @return [Integer] the width of the text, in pixels.
     # @param text [String]
     def text_width(text, scale_x=1); end
-    
+
     ##
     # Like {#text_width}, but supports the following markup tags: `<b>bold</b>`, `<i>italic</i>`, `<c=rrggbb>colors</c>`.
     def markup_width(markup, scale_x=1); end
@@ -420,13 +440,13 @@ module Gosu
 
     ##
     # Returns an image that is a smaller, rectangular view of this {Image}.
-    # 
+    #
     # This is a very fast operation, and no new textures will be allocated.
     # If you update this {Image} or the {#subimage} using {#insert}, the other {Image} will be affected as well.
-    # 
+    #
     # Caveats:
     # * If you stretch or rotate a {#subimage}, the pixels adjacent to it might bleed into it, as Gosu does not manage the 'tileability' of subimages.
-    # 
+    #
     # @return [Image?] an image that represents a portion of the containing image
     def subimage(left, top, width, height); end
 
@@ -576,16 +596,16 @@ module Gosu
     # @param [Float]
     # @return [Float]
     attr_writer :volume
-    
+
     ##
     # Sets the playback speed. A value of 2.0 will play the sample at 200% speed and one octave higher. A value of 0.5 will play the sample at 50% speed and one octave lower. The valid range of this property depends on the operating system, but values up to 8.0 should work.
-    # @param [Float]    
+    # @param [Float]
     # @return [Float]
     attr_writer :speed
-    
+
     ##
     # Set the amount of panning, i.e. the position of the sound when using stereo speakers. 0.0 is the centre, negative values are to the left, positive values are to the right. If something happens on the edge of the screen, a good value for pan would be ±0.1.
-    # @param [Float] 
+    # @param [Float]
     # @return [Float]
     attr_writer :pan
 
@@ -781,7 +801,7 @@ module Gosu
     ##
     # Toggles between windowed mode and fullscreen.
     attr_writer :fullscreen
-    
+
     ##
     # @return [true, false] whether this window is resizable.
     def resizable?; end
@@ -795,7 +815,7 @@ module Gosu
     #
     # Resizable fullscreen windows always use the full desktop resolution.
     # Windows that are larger than the desktop resolution will be shrunk.
-    # 
+    #
     # @overload initialize(width, height, options = {})
     # @overload initialize(width, height, fullscreen, update_interval = 16.666666)
     #
@@ -812,18 +832,18 @@ module Gosu
     #
     # @return [void]
     def show; end
-    
+
     ##
     # EXPERIMENTAL - MAY DISAPPEAR WITHOUT WARNING.
-    # 
+    #
     # Performs a single step in the main loop.
     # This can be useful for integrating Gosu with other libraries that have their own main loop, e.g. Ruby/Tk.
-    # 
+    #
     # See: https://www.libgosu.org/cgi-bin/mwf/topic_show.pl?tid=1218
-    # 
+    #
     # If you find a good way to use {#tick}, please let us know on the forum and we can make this a part of Gosu's stable interface.
     # Thank you!
-    # 
+    #
     # @return [true, false] whether the {Window} should still be shown after this tick
     def tick; end
 
@@ -871,7 +891,7 @@ module Gosu
     #
     # @return [bool]
     def close; end
-    
+
     ##
     # This method is called before {#update} if a button is pressed while the window has focus.
     #
@@ -902,6 +922,24 @@ module Gosu
     #
     # @param filename [String] the filename of the dropped file. When multiple files are dropped, this method will be called several times.
     def drop(filename); end
+
+    ##
+    # Called when a gamepad is connected.
+    # If a gamepad is momentarily disconnected and then reconnected, before another gamepad, it will have the same index.
+    #
+    # @param index [integer] index for looking up gamepad.
+    #
+    # @see Gosu.gamepad_name
+    def gamepad_connected(index); end
+
+    ##
+    # Called when a gamepad is disconnected.
+    #
+    # @param index [integer] index for looking up gamepad.
+    #
+    # @see #gamepad_connected
+    # @see Gosu.gamepad_name
+    def gamepad_disconnected(index); end
 
     # @!endgroup
   end
@@ -944,6 +982,27 @@ module Gosu
     # @see Window#button_down
     # @see Window#button_up
     def button_down?(id); end
+
+    ##
+    # Returns the name of a Gosu::KB_{*} constant. Returns nil if no name is found.
+    #
+    # @example
+    #   Gosu.button_name(Gosu::KB_SPACE) #=> "Space"
+    #
+    # @return [String, nil]
+    # @param id [Integer]
+    #
+    def button_name(id); end
+
+    ##
+    # Returns the name for gamepad at `index` or nil if there is no connected at the specified index.
+    #
+    # @example
+    #   Gosu.gamepad_name(0) #=> "PS4 Controller"
+    #
+    # @return [String, nil]
+    # @param index [Integer]
+    def gamepad_name(index); end
 
     # @!group Drawing primitives
 
