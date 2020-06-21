@@ -1,18 +1,15 @@
 #include "AudioImpl.hpp"
+#include "AudioFile.hpp"
+
 #include <Gosu/Audio.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
 #include <Gosu/Utility.hpp>
+
 #include <cassert>
 #include <cstdlib>
 #include <algorithm>
-
-#ifdef GOSU_IS_MAC
-#import <Foundation/Foundation.h>
-#include "AudioToolboxFile.hpp"
-#endif
-
 using namespace std;
 
 static Gosu::Song* cur_song = nullptr;
@@ -47,21 +44,13 @@ Gosu::Sample::Sample()
 
 Gosu::Sample::Sample(const string& filename)
 {
-#ifdef GOSU_IS_MAC
     File file(filename);
-    pimpl.reset(new Impl(AudioToolboxFile(file.front_reader())));
-#else
-#error TODO
-#endif
+    pimpl.reset(new Impl(AudioFile(file.front_reader())));
 }
 
 Gosu::Sample::Sample(Gosu::Reader reader)
 {
-#ifdef GOSU_IS_MAC
-    pimpl.reset(new Impl(AudioToolboxFile(reader)));
-#else
-#error TODO
-#endif
+    pimpl.reset(new Impl(AudioFile(reader)));
 }
 
 Gosu::Channel Gosu::Sample::play(double volume, double speed, bool looping) const
@@ -114,24 +103,16 @@ class Gosu::Song::Impl
 public:
     explicit Impl(const string& filename)
     {
-        #ifdef GOSU_IS_MAC
-            file.reset(new AudioToolboxFile(filename));
-        #else
-        #error TODO
-        #endif
-        
+        file.reset(new AudioFile(filename));
+
         al_initialize();
         alGenBuffers(2, buffers);
     }
 
     explicit Impl(Reader reader)
     {
-        #ifdef GOSU_IS_MAC
-            file.reset(new AudioToolboxFile(reader));
-        #else
-        #error TODO
-        #endif
-        
+        file.reset(new AudioFile(reader));
+
         al_initialize();
         alGenBuffers(2, buffers);
     }
