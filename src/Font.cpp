@@ -6,7 +6,9 @@
 #include <Gosu/Math.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
-#include "utf8proc.h"
+
+#include <utf8proc.h>
+
 #include <array>
 #include <cassert>
 #include <map>

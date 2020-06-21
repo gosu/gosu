@@ -1,7 +1,7 @@
 #include <Gosu/Utility.hpp>
 #include <Gosu/Platform.hpp>
 
-#include "utf8proc.h"
+#include <utf8proc.h>
 
 #include <cstring>
 #include <stdexcept>

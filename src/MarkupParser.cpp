@@ -1,6 +1,7 @@
 #include "MarkupParser.hpp"
 #include <Gosu/Utility.hpp>
-#include "utf8proc.h"
+
+#include <utf8proc.h>
 
 #include <cstring>
 using namespace std;

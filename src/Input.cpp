@@ -6,7 +6,7 @@
 #include <Gosu/Utility.hpp>
 
 #include <SDL.h>
-#include "utf8proc.h"
+#include <utf8proc.h>
 
 #include <cwctype>
 #include <cstdlib>

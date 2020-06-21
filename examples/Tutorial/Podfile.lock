@@ -1,9 +1,9 @@
 PODS:
   - Gosu (0.15.2):
     - Gosu/Gosu (= 0.15.2)
-  - Gosu/C (0.15.2)
+  - Gosu/Dependencies (0.15.2)
   - Gosu/Gosu (0.15.2):
-    - Gosu/C
+    - Gosu/Dependencies
 
 DEPENDENCIES:
   - Gosu (from `../..`)
@@ -13,7 +13,7 @@ EXTERNAL SOURCES:
     :path: "../.."
 
 SPEC CHECKSUMS:
-  Gosu: 8905cc6cab83b7cd66660cf70d7d4c00ccb35b4b
+  Gosu: 15f2ed3bb2e5925550a936d20258f88c3d953a5b
 
 PODFILE CHECKSUM: 6d90e9429378d42966ff3eff051b194170f3f19b
 

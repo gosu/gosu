@@ -1,8 +1,10 @@
 #include "TextBuilder.hpp"
 #include <Gosu/Text.hpp>
+
+#include <utf8proc.h>
+
 #include <cassert>
 #include <cmath>
-#include "utf8proc.h"
 using namespace std;
 
 Gosu::WordInfo::WordInfo(const string& font_name, double font_height, vector<FormattedString> parts)
