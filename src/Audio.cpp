@@ -1,5 +1,4 @@
 #include "AudioImpl.hpp"
-#include "OggFile.hpp"
 #include <Gosu/Audio.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/IO.hpp>
@@ -12,9 +11,6 @@
 #ifdef GOSU_IS_MAC
 #import <Foundation/Foundation.h>
 #include "AudioToolboxFile.hpp"
-#else
-#include "MPEGFile.hpp"
-#include "SndFile.hpp"
 #endif
 
 #ifdef GOSU_IS_IPHONE
@@ -70,12 +66,6 @@ Gosu::Sample::Sample()
 
 Gosu::Sample::Sample(const string& filename)
 {
-    if (is_ogg_file(filename)) {
-        File file(filename);
-        data.reset(new SampleData(OggFile(file.front_reader())));
-        return;
-    }
-    
 #ifdef GOSU_IS_MAC
     File file(filename);
     data.reset(new SampleData(AudioToolboxFile(file.front_reader())));
@@ -92,11 +82,6 @@ Gosu::Sample::Sample(const string& filename)
 
 Gosu::Sample::Sample(Gosu::Reader reader)
 {
-    if (is_ogg_file(reader)) {
-        data.reset(new SampleData(OggFile(reader)));
-        return;
-    }
-
 #ifdef GOSU_IS_MAC
     data.reset(new SampleData(AudioToolboxFile(reader)));
 #else
@@ -249,11 +234,6 @@ class Gosu::Song::StreamData : public BaseData
 public:
     StreamData(const string& filename)
     {
-        if (is_ogg_file(filename)) {
-            File source_file(filename);
-            file.reset(new OggFile(source_file.front_reader()));
-        }
-        else {
         #ifdef GOSU_IS_MAC
             file.reset(new AudioToolboxFile(filename));
         #else
@@ -265,7 +245,6 @@ public:
                 file.reset(new MPEGFile(source_file.front_reader()));
             }
         #endif
-        }
         
         al_initialize();
         alGenBuffers(2, buffers);
@@ -273,10 +252,6 @@ public:
 
     StreamData(Reader reader)
     {
-        if (is_ogg_file(reader)) {
-            file.reset(new OggFile(reader));
-        }
-        else {
         #ifdef GOSU_IS_MAC
             file.reset(new AudioToolboxFile(reader));
         #else
@@ -287,7 +262,6 @@ public:
                 file.reset(new MPEGFile(reader));
             }
         #endif
-        }
         
         al_initialize();
         alGenBuffers(2, buffers);

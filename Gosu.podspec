@@ -1,19 +1,19 @@
 Pod::Spec.new do |s|
-  s.name         = "Gosu"
-  s.version      = "0.15.2"
-  s.summary      = "2D game development library."
-  s.homepage     = "https://www.libgosu.org/"
+  s.name     = "Gosu"
+  s.version  = "0.15.2"
+  s.summary  = "2D game development library."
+  s.homepage = "https://www.libgosu.org/"
+  s.license  = { type: "MIT", file: "COPYING" }
+  s.author   = { "Julian Raschke" => "julian@raschke.de" }
   s.documentation_url = "https://www.libgosu.org/cpp/"
-  
-  s.license      = { type: "MIT", file: "COPYING" }
-  s.author       = { "Julian Raschke" => "julian@raschke.de" }
 
-  s.source       = { git: "https://github.com/gosu/gosu.git", tag: "v#{s.version}" }
+  s.source = { git: "https://github.com/gosu/gosu.git", tag: "v#{s.version}" }
 
   # Bundle our dependencies into one subspec so that we can silence warnings for them.
   s.subspec "Dependencies" do |ss|
-    ss.compiler_flags = "-Wno-comma -Wno-conditional-uninitialized"
-    ss.source_files = "dependencies/{stb,utf8proc}/*.{h,c}"
+    ss.compiler_flags = "-Wno-everything"
+    ss.source_files = "dependencies/{stb,utf8proc,SDL_sound}/**/*.{h,c}"
+    ss.osx.compiler_flags = "-I/usr/local/include/SDL2"
   end
 
   s.subspec "Gosu" do |ss|
