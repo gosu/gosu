@@ -18,7 +18,7 @@ using namespace std;
 static void require_sdl_video()
 {
     static std::once_flag initialized;
-     
+
     std::call_once(initialized, [] {
         SDL_InitSubSystem(SDL_INIT_VIDEO);
         atexit([] { SDL_QuitSubSystem(SDL_INIT_VIDEO); });
