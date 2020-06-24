@@ -1,8 +1,9 @@
 #include <Gosu/Platform.hpp>
 
-#ifdef GOSU_IS_MAC
+#ifdef GOSU_IS_IPHONE
 
 #include "AudioFile.hpp"
+#include "AudioImpl.hpp"
 #include <Gosu/Utility.hpp>
 
 #import <AudioToolbox/AudioToolbox.h>
