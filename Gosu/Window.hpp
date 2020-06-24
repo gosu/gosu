@@ -103,8 +103,12 @@ namespace Gosu
         //! Same as button_down. Called when the user releases a button.
         virtual void button_up(Gosu::Button) {}
 
+        //! Called when a gamepad is connected.
+        //! \param index the index of the gamepad slot that the gamepad is in.
         virtual void gamepad_connected(int index) {}
 
+        //! Called when a gamepad is disconnected.
+        //! \param index the index of the gamepad slot that the gamepad is in. The slot will be freed immediately after this callback.
         virtual void gamepad_disconnected(int index) {}
 
         //! Called when a file is dropped onto the window.

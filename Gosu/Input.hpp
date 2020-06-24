@@ -74,14 +74,20 @@ namespace Gosu
         //! encoded string), or NO_BUTTON.
         static Button char_to_id(std::string ch);
 
+        //! Returns the name for the given button, provided it is a Gosu::KB_{constant}
+        //! Returns the empty string if nothing can be found.
         static std::string button_name(Button btn);
 
+        //! Returns the name for the given gamepad.
+        //! Returns an empty string if there is no gamepad in the slot index.
         static std::string gamepad_name(int index);
 
         //! Returns true if a button is currently pressed.
         //! Updated every tick.
         static bool down(Button btn);
 
+        //! Returns the value of a Gamepad joystick in the range -1.0 thru +1.0 and trigger in the range 0.0 thru +1.0.
+        //! Updated every tick.
         static double axis(Button btn);
 
         //! Returns the horizontal position of the mouse relative to the top
