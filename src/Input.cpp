@@ -141,10 +141,6 @@ struct Gosu::Input::Impl
             }
             case SDL_JOYDEVICEADDED: {
                 if (available_gamepad_slot_index() == -1) {
-                    printf("Max Num of Gamepads added. Controllers: %i, Joysticks: %i (total: %i)\n",
-                           (int)open_game_controllers.size(),
-                           (int)open_joysticks.size(),
-                           (int)(open_game_controllers.size() + open_joysticks.size()));
                     break;
                 }
                 int gamepad_slot = -1;
@@ -169,7 +165,6 @@ struct Gosu::Input::Impl
                 }
                 if (gamepad_slot >= 0 && device_instance_id >= 0) {
                     gamepad_slots[gamepad_slot] = device_instance_id;
-                    printf("Gamepad using slot: %i (%s|%i)\n", gamepad_slot, SDL_GameControllerName(SDL_GameControllerFromInstanceID(device_instance_id)), device_instance_id);
                     enqueue_gamepad_connection_event(gamepad_slot, true, -1);
                 }
                 break;
@@ -223,13 +218,12 @@ struct Gosu::Input::Impl
         for (int i = 0; i < open_game_controllers.size(); i++) {
             SDL_Joystick* joystick = SDL_GameControllerGetJoystick(open_game_controllers[i].get());
             if (SDL_JoystickInstanceID(joystick) == instance_id) {
-                printf("Freed gamepad slot: %i (%s|%i)\n", i, SDL_GameControllerName( SDL_GameControllerFromInstanceID(instance_id) ), instance_id);
                 open_game_controllers.erase(open_game_controllers.begin() + i);
                 gamepad_slots[index] = -1;
                 return;
             }
         }
-        
+
         for (int i = 0; i < open_joysticks.size(); i++) {
             if (SDL_JoystickInstanceID(open_joysticks[i].get()) == instance_id) {
                 open_joysticks.erase(open_joysticks.begin() + i);
@@ -252,7 +246,7 @@ struct Gosu::Input::Impl
         // If button3 is pressed on any attached gamepad, down(GP_BUTTON_3) will return true.
         // This is handy for singleplayer games where you don't care which gamepad that player uses.
         GamepadBuffer any_gamepad;
-        
+
         // Reset all axes values, they will be recalculated below.
         axis_states.fill(0.0);
 
@@ -299,7 +293,7 @@ struct Gosu::Input::Impl
             int direction_offset = GP_LEFT + 4 * (i + 1);
             for (int d = 0; d < 4; ++d) {
                 any_gamepad.directions[d] = any_gamepad.directions[d] || current_gamepad.directions[d];
-                
+
                 if (current_gamepad.directions[d] && !button_states[d + direction_offset]) {
                     button_states[d + direction_offset] = true;
                     enqueue_event(d + direction_offset, true);
@@ -391,7 +385,7 @@ private:
     GamepadBuffer poll_game_controller(SDL_GameController* controller)
     {
         GamepadBuffer gamepad;
-        
+
         // Poll axes first.
         gamepad.axes[GP_LEFT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] =
             scale_axis(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX));
@@ -405,7 +399,7 @@ private:
             scale_axis(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT));
         gamepad.axes[GP_RIGHT_TRIGGER_AXIS - GP_AXES_RANGE_BEGIN] =
             scale_axis(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT));
-        
+
         gamepad.buttons[GP_DPAD_LEFT - GP_RANGE_BEGIN] =
             SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_LEFT);
         gamepad.buttons[GP_DPAD_RIGHT - GP_RANGE_BEGIN] =
@@ -425,7 +419,7 @@ private:
             gamepad.axes[GP_LEFT_TRIGGER_AXIS] >= 0.5;
         gamepad.buttons[GP_BUTTON_0 + button++ - GP_RANGE_BEGIN] =
             gamepad.axes[GP_RIGHT_TRIGGER_AXIS] >= 0.5;
-        
+
         merge_directions(gamepad);
         return gamepad;
     }
@@ -433,7 +427,7 @@ private:
     GamepadBuffer poll_joystick(SDL_Joystick* joystick)
     {
         GamepadBuffer gamepad;
-        
+
         // Just guess that the first four axes are equivalent to two analog sticks.
         int axes = SDL_JoystickNumAxes(joystick);
         if (axes > 0) {
@@ -469,11 +463,11 @@ private:
                 gamepad.buttons[GP_BUTTON_0 + button - GP_RANGE_BEGIN] = true;
             }
         }
-        
+
         merge_directions(gamepad);
         return gamepad;
     }
-    
+
     void merge_directions(GamepadBuffer& gamepad)
     {
         gamepad.directions[0] =
