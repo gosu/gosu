@@ -203,6 +203,25 @@ unsigned Gosu_button_char_to_id(const char *btn)
     return Gosu::Input::char_to_id(btn).id();
 }
 
+const char *Gosu_button_name(int btn)
+{
+    static thread_local std::string name;
+    name = Gosu::Input::button_name((Gosu::ButtonName)btn);
+    return name.empty() ? nullptr : name.c_str();
+}
+
+const char *Gosu_gamepad_name(int id)
+{
+    static thread_local std::string name;
+    name = Gosu::Input::gamepad_name(id);
+    return name.empty() ? nullptr : name.c_str();
+}
+
+double Gosu_axis(int btn)
+{
+    return Gosu::Input::axis((Gosu::ButtonName)btn);
+}
+
 int Gosu_fps()
 {
     return Gosu::fps();

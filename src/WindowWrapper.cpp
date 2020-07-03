@@ -11,6 +11,8 @@ public:
     void default_button_down(unsigned btn); // Enables fullscreen toggle
     void button_down(Gosu::Button btn) override;
     void button_up(Gosu::Button btn) override;
+    void gamepad_connected(int id) override;
+    void gamepad_disconnected(int id) override;
     void drop(const std::string &filename) override;
     bool needs_redraw() const override;
     bool needs_cursor() const override;
@@ -22,6 +24,8 @@ public:
     std::function<void ()> draw_callback;
     std::function<void (unsigned btn)> button_down_callback;
     std::function<void (unsigned btn)> button_up_callback;
+    std::function<void (int id)> gamepad_connected_callback;
+    std::function<void (int id)> gamepad_disconnected_callback;
     std::function<void (const char *filename)> drop_callback;
     std::function<bool ()> needs_redraw_callback;
     std::function<bool ()> needs_cursor_callback;
@@ -65,6 +69,20 @@ void Gosu::WindowForWrapper::button_up(Gosu::Button btn)
 {
     if (button_up_callback != nullptr) {
         button_up_callback(btn.id());
+    }
+}
+
+void Gosu::WindowForWrapper::gamepad_connected(int id)
+{
+    if (gamepad_connected_callback != nullptr) {
+        gamepad_connected_callback(id);
+    }
+}
+
+void Gosu::WindowForWrapper::gamepad_disconnected(int id)
+{
+    if (gamepad_disconnected_callback != nullptr) {
+        gamepad_disconnected_callback(id);
     }
 }
 
@@ -144,6 +162,16 @@ void Gosu_Window_default_button_down(Gosu_Window *window, unsigned btn)
 void Gosu_Window_set_button_up(Gosu_Window *window, void function(void *data, unsigned btn), void *data)
 {
     reinterpret_cast<Gosu::WindowForWrapper *>(window)->button_up_callback = [=](unsigned btn) { function(data, btn); };
+}
+
+void Gosu_Window_set_gamepad_connected(Gosu_Window *window, void function(void *data, int id), void *data)
+{
+    reinterpret_cast<Gosu::WindowForWrapper *>(window)->gamepad_connected_callback = [=](int id) { function(data, id); };
+}
+
+void Gosu_Window_set_gamepad_disconnected(Gosu_Window *window, void function(void *data, int id), void *data)
+{
+    reinterpret_cast<Gosu::WindowForWrapper *>(window)->gamepad_disconnected_callback = [=](int id) { function(data, id); };
 }
 
 void Gosu_Window_set_drop(Gosu_Window *window, void function(void *data, const char *filename), void *data)

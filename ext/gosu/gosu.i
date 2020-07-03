@@ -217,6 +217,18 @@ namespace Gosu
     {
         return Gosu::Input::down(btn);
     }
+
+    VALUE button_name(Gosu::Button btn)
+    {
+      std::string result = Gosu::Input::button_name(btn);
+      return result.empty() ? Qnil : rb_str_new2(result.c_str());
+    }
+
+    VALUE gamepad_name(int index)
+    {
+      std::string result = Gosu::Input::gamepad_name(index);
+      return result.empty() ? Qnil : rb_str_new2(result.c_str());
+    }
 }
 
 // Global graphics functions
@@ -900,11 +912,12 @@ namespace Gosu
 %ignore Gosu::MS_RANGE_END;
 %ignore Gosu::GP_RANGE_BEGIN;
 %ignore Gosu::GP_RANGE_END;
+%ignore Gosu::GP_AXES_RANGE_BEGIN;
+%ignore Gosu::GP_AXES_RANGE_END;
 %ignore Gosu::KB_NUM;
 %ignore Gosu::MS_NUM;
 %ignore Gosu::GP_NUM;
 %ignore Gosu::GP_NUM_PER_GAMEPAD;
-%ignore Gosu::NUM_BUTTONS;
 %ignore Gosu::NUM_GAMEPADS;
 %ignore Gosu::NO_BUTTON;
 %include "../../Gosu/Buttons.hpp"
@@ -1054,6 +1067,8 @@ namespace Gosu
     std::string button_id_to_char(Gosu::Button btn);
     %rename("button_down?") is_button_down;
     bool is_button_down(Gosu::Button btn);
+    VALUE button_name(Gosu::Button btn);
+    VALUE gamepad_name(int index);
 }
 
 // Global graphics functions
