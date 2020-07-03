@@ -585,7 +585,12 @@ bool Gosu::Input::down(Gosu::Button btn)
 
 double Gosu::Input::axis(Gosu::Button btn)
 {
-    return axis_states[btn.id() - Gosu::ButtonName::GP_LEFT_STICK_X_AXIS];
+    unsigned axis_id = btn.id() - GP_LEFT_STICK_X_AXIS;
+
+    if (axis_id >= axis_states.size())
+        throw std::out_of_range("Invalid axis ID: " + std::to_string(btn.id()));
+
+    return axis_states[axis_id];
 }
 
 double Gosu::Input::mouse_x() const
