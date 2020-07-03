@@ -12333,7 +12333,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "GP_3_RIGHT", SWIG_From_int(static_cast< int >(Gosu::GP_3_RIGHT)));
   rb_define_const(mGosu, "GP_3_UP", SWIG_From_int(static_cast< int >(Gosu::GP_3_UP)));
   rb_define_const(mGosu, "GP_3_DOWN", SWIG_From_int(static_cast< int >(Gosu::GP_3_DOWN)));
-  rb_define_const(mGosu, "GP_AXES_RANGE_BEGIN", SWIG_From_int(static_cast< int >(Gosu::GP_AXES_RANGE_BEGIN)));
   rb_define_const(mGosu, "GP_LEFT_STICK_X_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_LEFT_STICK_X_AXIS)));
   rb_define_const(mGosu, "GP_LEFT_STICK_Y_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_LEFT_STICK_Y_AXIS)));
   rb_define_const(mGosu, "GP_RIGHT_STICK_X_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_RIGHT_STICK_X_AXIS)));
@@ -12364,7 +12363,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "GP_3_RIGHT_STICK_Y_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_3_RIGHT_STICK_Y_AXIS)));
   rb_define_const(mGosu, "GP_3_LEFT_TRIGGER_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_3_LEFT_TRIGGER_AXIS)));
   rb_define_const(mGosu, "GP_3_RIGHT_TRIGGER_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_3_RIGHT_TRIGGER_AXIS)));
-  rb_define_const(mGosu, "GP_AXES_RANGE_END", SWIG_From_int(static_cast< int >(Gosu::GP_AXES_RANGE_END)));
   
   // Call srand() so that Gosu::random() is actually random in Ruby scripts
   std::srand(static_cast<unsigned>(std::time(0)));

@@ -47,7 +47,6 @@ unsigned Gosu_IF_TILEABLE_BOTTOM = Gosu::IF_TILEABLE_BOTTOM;
 unsigned Gosu_IF_TILEABLE = Gosu::IF_TILEABLE;
 unsigned Gosu_IF_RETRO = Gosu::IF_RETRO;
 
-unsigned Gosu_KB_RANGE_BEGIN = Gosu::KB_RANGE_BEGIN;
 unsigned Gosu_KB_ESCAPE = Gosu::KB_ESCAPE;
 unsigned Gosu_KB_F1 = Gosu::KB_F1;
 unsigned Gosu_KB_F2 = Gosu::KB_F2;
@@ -147,9 +146,7 @@ unsigned Gosu_KB_NUMPAD_PLUS = Gosu::KB_NUMPAD_PLUS;
 unsigned Gosu_KB_NUMPAD_MINUS = Gosu::KB_NUMPAD_MINUS;
 unsigned Gosu_KB_NUMPAD_MULTIPLY = Gosu::KB_NUMPAD_MULTIPLY;
 unsigned Gosu_KB_NUMPAD_DIVIDE = Gosu::KB_NUMPAD_DIVIDE;
-unsigned Gosu_KB_RANGE_END = Gosu::KB_RANGE_END;
 
-unsigned Gosu_MS_RANGE_BEGIN = Gosu::MS_RANGE_BEGIN;
 unsigned Gosu_MS_LEFT = Gosu::MS_LEFT;
 unsigned Gosu_MS_MIDDLE = Gosu::MS_MIDDLE;
 unsigned Gosu_MS_RIGHT = Gosu::MS_RIGHT;
@@ -163,9 +160,7 @@ unsigned Gosu_MS_OTHER_4 = Gosu::MS_OTHER_4;
 unsigned Gosu_MS_OTHER_5 = Gosu::MS_OTHER_5;
 unsigned Gosu_MS_OTHER_6 = Gosu::MS_OTHER_6;
 unsigned Gosu_MS_OTHER_7 = Gosu::MS_OTHER_7;
-unsigned Gosu_MS_RANGE_END = Gosu::MS_RANGE_END;
 
-unsigned Gosu_GP_RANGE_BEGIN = Gosu::GP_RANGE_BEGIN;
 unsigned Gosu_GP_DPAD_LEFT = Gosu::GP_DPAD_LEFT;
 unsigned Gosu_GP_DPAD_RIGHT = Gosu::GP_DPAD_RIGHT;
 unsigned Gosu_GP_DPAD_UP = Gosu::GP_DPAD_UP;
@@ -295,7 +290,6 @@ unsigned Gosu_GP_3_LEFT = Gosu::GP_3_LEFT;
 unsigned Gosu_GP_3_RIGHT = Gosu::GP_3_RIGHT;
 unsigned Gosu_GP_3_UP = Gosu::GP_3_UP;
 unsigned Gosu_GP_3_DOWN = Gosu::GP_3_DOWN;
-unsigned Gosu_GP_RANGE_END = Gosu::GP_RANGE_END;
 
 unsigned Gosu_GP_LEFT_STICK_X_AXIS = Gosu::GP_LEFT_STICK_Y_AXIS;
 unsigned Gosu_GP_LEFT_STICK_Y_AXIS = Gosu::GP_LEFT_STICK_Y_AXIS;

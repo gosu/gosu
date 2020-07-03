@@ -912,6 +912,8 @@ namespace Gosu
 %ignore Gosu::MS_RANGE_END;
 %ignore Gosu::GP_RANGE_BEGIN;
 %ignore Gosu::GP_RANGE_END;
+%ignore Gosu::GP_AXES_RANGE_BEGIN;
+%ignore Gosu::GP_AXES_RANGE_END;
 %ignore Gosu::KB_NUM;
 %ignore Gosu::MS_NUM;
 %ignore Gosu::GP_NUM;
