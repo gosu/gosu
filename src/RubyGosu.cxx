@@ -12365,8 +12365,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "GP_3_LEFT_TRIGGER_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_3_LEFT_TRIGGER_AXIS)));
   rb_define_const(mGosu, "GP_3_RIGHT_TRIGGER_AXIS", SWIG_From_int(static_cast< int >(Gosu::GP_3_RIGHT_TRIGGER_AXIS)));
   rb_define_const(mGosu, "GP_AXES_RANGE_END", SWIG_From_int(static_cast< int >(Gosu::GP_AXES_RANGE_END)));
-  rb_define_const(mGosu, "GP_NUM_BUTTONS_PER_GAMEPAD", SWIG_From_int(static_cast< int >(Gosu::GP_NUM_BUTTONS_PER_GAMEPAD)));
-  rb_define_const(mGosu, "GP_NUM_AXES_PER_GAMEPAD", SWIG_From_int(static_cast< int >(Gosu::GP_NUM_AXES_PER_GAMEPAD)));
   
   // Call srand() so that Gosu::random() is actually random in Ruby scripts
   std::srand(static_cast<unsigned>(std::time(0)));

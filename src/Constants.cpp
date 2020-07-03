@@ -335,9 +335,6 @@ unsigned Gosu_GP_3_RIGHT_TRIGGER_AXIS = Gosu::GP_3_RIGHT_TRIGGER_AXIS;
 unsigned Gosu_NUM_GAMEPADS = Gosu::NUM_GAMEPADS;
 unsigned Gosu_NO_BUTTON = Gosu::NO_BUTTON;
 
-unsigned Gosu_GP_NUM_BUTTONS_PER_GAMEPAD = Gosu::GP_NUM_BUTTONS_PER_GAMEPAD;
-unsigned Gosu_GP_NUM_AXES_PER_GAMEPAD = Gosu::GP_NUM_AXES_PER_GAMEPAD;
-
 #ifdef __cplusplus
 }
 #endif

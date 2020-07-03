@@ -916,7 +916,6 @@ namespace Gosu
 %ignore Gosu::MS_NUM;
 %ignore Gosu::GP_NUM;
 %ignore Gosu::GP_NUM_PER_GAMEPAD;
-%ignore Gosu::NUM_BUTTONS;
 %ignore Gosu::NUM_GAMEPADS;
 %ignore Gosu::NO_BUTTON;
 %include "../../Gosu/Buttons.hpp"

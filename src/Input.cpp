@@ -25,8 +25,14 @@ static void require_sdl_video()
     });
 }
 
-static array<bool, Gosu::NUM_BUTTONS> button_states = {false};
-static array<double, Gosu::GP_NUM_AXES_PER_GAMEPAD * (Gosu::NUM_GAMEPADS + 1)> axis_states = {0.0};
+static const unsigned NUM_BUTTONS_PER_GAMEPAD =
+    (Gosu::GP_RANGE_END - Gosu::GP_RANGE_BEGIN + 1 - 4) / (Gosu::NUM_GAMEPADS + 1);
+static const unsigned NUM_AXES_PER_GAMEPAD =
+    (Gosu::GP_AXES_RANGE_END - Gosu::GP_AXES_RANGE_BEGIN + 1) / (Gosu::NUM_GAMEPADS + 1);
+static const unsigned NUM_BUTTONS = Gosu::GP_RANGE_END + 1;
+
+static array<bool, NUM_BUTTONS> button_states = {false};
+static array<double, NUM_AXES_PER_GAMEPAD * (Gosu::NUM_GAMEPADS + 1)> axis_states = {0.0};
 static vector<shared_ptr<SDL_Joystick>> open_joysticks;
 static vector<shared_ptr<SDL_GameController>> open_game_controllers;
 // Stores joystick instance id or -1 if empty
@@ -235,9 +241,9 @@ struct Gosu::Input::Impl
 
     struct GamepadBuffer
     {
-        array<bool, GP_NUM_BUTTONS_PER_GAMEPAD> buttons = { false };
+        array<bool, NUM_BUTTONS_PER_GAMEPAD> buttons = { false };
         array<bool, 4> directions = { false };
-        array<double, GP_NUM_AXES_PER_GAMEPAD> axes = { 0.0 };
+        array<double, NUM_AXES_PER_GAMEPAD> axes = { 0.0 };
     };
 
     void poll_gamepads()
@@ -264,8 +270,8 @@ struct Gosu::Input::Impl
                 current_gamepad = poll_joystick(SDL_JoystickFromInstanceID(gamepad_slots[i]));
             }
 
-            int axis_offset = GP_NUM_AXES_PER_GAMEPAD * (i + i);
-            for (int a = 0; a < GP_NUM_AXES_PER_GAMEPAD; ++a) {
+            int axis_offset = NUM_AXES_PER_GAMEPAD * (i + i);
+            for (int a = 0; a < NUM_AXES_PER_GAMEPAD; ++a) {
                 // Transfer the axes values into the global axis_state array..
                 axis_states[a + axis_offset] = current_gamepad.axes[a];
                 // Also transfer the gamepad-specific axes values into the "any gamepad" slots.
@@ -277,7 +283,7 @@ struct Gosu::Input::Impl
 
             // Now at the same time, enqueue all events for this particular
             // gamepad, and OR the keyboard state into any_gamepad.
-            int offset = GP_RANGE_BEGIN + GP_NUM_BUTTONS_PER_GAMEPAD * (i + 1);
+            int offset = GP_RANGE_BEGIN + NUM_BUTTONS_PER_GAMEPAD * (i + 1);
             for (int j = 0; j < current_gamepad.buttons.size(); ++j) {
                 any_gamepad.buttons[j] = any_gamepad.buttons[j] || current_gamepad.buttons[j];
 
@@ -457,7 +463,7 @@ private:
             if (value & SDL_HAT_DOWN)  gamepad.buttons[GP_DPAD_DOWN  - GP_RANGE_BEGIN] = true;
         }
 
-        int buttons = min<int>(GP_NUM_BUTTONS_PER_GAMEPAD - 4, SDL_JoystickNumButtons(joystick));
+        int buttons = min<int>(NUM_BUTTONS_PER_GAMEPAD - 4, SDL_JoystickNumButtons(joystick));
         for (int button = 0; button < buttons; ++button) {
             if (SDL_JoystickGetButton(joystick, button)) {
                 gamepad.buttons[GP_BUTTON_0 + button - GP_RANGE_BEGIN] = true;
