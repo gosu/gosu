@@ -207,14 +207,14 @@ const char *Gosu_button_name(int btn)
 {
     static thread_local std::string name;
     name = Gosu::Input::button_name((Gosu::ButtonName)btn);
-    return name.c_str();
+    return name.empty() ? nullptr : name.c_str();
 }
 
 const char *Gosu_gamepad_name(int id)
 {
     static thread_local std::string name;
     name = Gosu::Input::gamepad_name(id);
-    return name.c_str();
+    return name.empty() ? nullptr : name.c_str();
 }
 
 double Gosu_axis(int btn)
