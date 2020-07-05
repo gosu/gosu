@@ -44,8 +44,7 @@ Gosu::Sample::Sample()
 
 Gosu::Sample::Sample(const string& filename)
 {
-    File file(filename);
-    pimpl.reset(new Impl(AudioFile(file.front_reader())));
+    pimpl.reset(new Impl(AudioFile(filename)));
 }
 
 Gosu::Sample::Sample(Gosu::Reader reader)

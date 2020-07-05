@@ -39,6 +39,14 @@ Gosu::AudioFile::AudioFile(const std::string& filename)
 {
     pimpl->sample.reset(Sound_NewSampleFromFile(filename.c_str(), nullptr, 4096),
                         Sound_FreeSample);
+    if (!pimpl->sample) {
+        std::string message = "Could not parse audio file " + filename;
+        if (const char* error = Sound_GetError()) {
+            message += ": ";
+            message += error;
+        }
+        throw std::runtime_error(message);
+    }
 }
 
 Gosu::AudioFile::AudioFile(Reader reader)
@@ -50,6 +58,14 @@ Gosu::AudioFile::AudioFile(Reader reader)
                                                static_cast<Uint32>(pimpl->buffer.size()),
                                                "", nullptr, 4096),
                         Sound_FreeSample);
+    if (!pimpl->sample) {
+        std::string message = "Could not parse audio file";
+        if (const char* error = Sound_GetError()) {
+            message += ": ";
+            message += error;
+        }
+        throw std::runtime_error(message);
+    }
 }
 
 Gosu::AudioFile::~AudioFile()
