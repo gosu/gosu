@@ -77,7 +77,7 @@ Gosu::Channel Gosu::Sample::play_pan(double pan, double volume, double speed, bo
 }
 
 // AudioFile impl
-class Gosu::Song::Impl
+struct Gosu::Song::Impl
 {
     double volume_ = 1.0;
     unique_ptr<AudioFile> file;
