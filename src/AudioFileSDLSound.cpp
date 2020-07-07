@@ -5,7 +5,7 @@
 #include "AudioFile.hpp"
 #include "AudioImpl.hpp"
 
-#include <SDL_Sound.h>
+#include <SDL_sound.h>
 
 #include <cstdlib>
 #include <algorithm>
