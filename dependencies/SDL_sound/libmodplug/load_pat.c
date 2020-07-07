@@ -60,8 +60,8 @@
 // 128 gm and 63 drum
 #define MAXSMP				191
 static char midipat[MAXSMP][PATH_MAX];
-static char pathforpat[PATH_MAX] = {};
-static char timiditycfg[PATH_MAX] = {};
+static char pathforpat[PATH_MAX];
+static char timiditycfg[PATH_MAX];
 
 #pragma pack(1)
 
