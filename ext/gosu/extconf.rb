@@ -26,7 +26,7 @@ $CXXFLAGS ||= ""
 $CXXFLAGS << " -std=gnu++11"
 
 # For #include <Gosu/...>
-$INCFLAGS << " -I../.."
+$INCFLAGS << " -I../.. -I../../dependencies/stb -I../../dependencies/utf8proc -I../../dependencies/SDL_sound"
 
 if `uname`.chomp == 'Darwin'
   # Disable assertions in C code.
@@ -76,7 +76,7 @@ else
   pkg_config 'libmpg123'
   pkg_config 'fontconfig'
   
-  have_header 'AL/al.h'   if have_library('openal')
+  have_header 'AL/al.h' if have_library('openal')
 end
 
 # Gem::Version#initialize is apparently broken in some versions of Ruby, so use a local helper.
