@@ -9,7 +9,148 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_aiff.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_au.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_coreaudio.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_flac.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_modplug.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_mp3.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_raw.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_shn.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_voc.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_vorbis.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_wav.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\fastmix.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_669.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_abc.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_amf.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_ams.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_dbm.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_dmf.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_dsm.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_far.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_it.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mdl.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_med.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mid.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mod.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mt2.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mtm.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_okt.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_pat.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_psm.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_ptm.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_s3m.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_stm.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_ult.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_umx.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_xm.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\mmcmp.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\modplug.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\snd_dsp.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\snd_flt.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\snd_fx.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\sndfile.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\sndmix.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\utf8proc\utf8proc.c">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Audio.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\AudioFileAudioToolbox.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\AudioFileSDLSound.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\AudioImpl.cpp">
@@ -27,7 +168,16 @@
     <ClCompile Include="..\src\Channel.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ChannelWrapper.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Color.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ColorWrapper.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Constants.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\DirectoriesApple.cpp">
@@ -48,10 +198,16 @@
     <ClCompile Include="..\src\Font.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\FontWrapper.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\GosuGLView.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\GosuViewController.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GosuWrapper.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Graphics.cpp">
@@ -61,6 +217,9 @@
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Image.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ImageWrapper.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Input.cpp">
@@ -90,6 +249,12 @@
     <ClCompile Include="..\src\Resolution.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\SampleWrapper.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\SongWrapper.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\TexChunk.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
@@ -100,6 +265,9 @@
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\TextInput.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextInputWrapper.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Texture.cpp">
@@ -153,10 +321,7 @@
     <ClCompile Include="..\src\WindowUIKit.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\stb_vorbis.c">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\utf8proc.c">
+    <ClCompile Include="..\src\WindowWrapper.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
   </ItemGroup>
