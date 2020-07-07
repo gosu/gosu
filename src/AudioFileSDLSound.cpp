@@ -8,6 +8,7 @@
 #include <SDL_sound.h>
 
 #include <cstdlib>
+#include <cstring>
 #include <algorithm>
 #include <memory>
 #include <mutex>
