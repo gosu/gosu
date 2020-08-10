@@ -270,7 +270,7 @@ struct Gosu::Input::Impl
                 current_gamepad = poll_joystick(SDL_JoystickFromInstanceID(gamepad_slots[i]));
             }
 
-            int axis_offset = NUM_AXES_PER_GAMEPAD * (i + i);
+            int axis_offset = NUM_AXES_PER_GAMEPAD * (i + 1);
             for (int a = 0; a < NUM_AXES_PER_GAMEPAD; ++a) {
                 // Transfer the axes values into the global axis_state array..
                 axis_states[a + axis_offset] = current_gamepad.axes[a];
