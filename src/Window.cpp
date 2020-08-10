@@ -93,6 +93,8 @@ Gosu::Window::Window(int width, int height, unsigned window_flags, double update
     set_borderless(window_flags & WF_BORDERLESS);
     set_resizable(window_flags & WF_RESIZABLE);
 
+    pimpl->resizable = resizable;
+
     // Even in fullscreen mode, temporarily show the window in windowed mode to centre it.
     // This ensures that the window will be centered correctly when exiting fullscreen mode.
     // Fixes https://github.com/gosu/gosu/issues/369
@@ -171,9 +173,7 @@ void Gosu::Window::resize(int width, int height, bool fullscreen)
         int max_height = Gosu::available_height(this);
 
         if (resizable()) {
-            // If the window is resizable, limit its size, without preserving the aspect ratio.
-            width  = actual_width  = min(width,  max_width);
-            height = actual_height = min(height, max_height);
+            // If the window is resizable, don't perform hidden scaling or resizing.
         }
         else if (width > max_width || height > max_height) {
             // If the window cannot fit on the screen, shrink its contents.
