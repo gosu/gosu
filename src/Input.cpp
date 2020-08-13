@@ -150,29 +150,38 @@ struct Gosu::Input::Impl
                     break;
                 }
                 int gamepad_slot = -1;
-                int device_instance_id = -1;
-                // Prefer the SDL_GameController API...
-                if (SDL_IsGameController(e->jdevice.which)) {
-                    if (SDL_GameController *game_controller = SDL_GameControllerOpen(e->jdevice.which)) {
-                        open_game_controllers.emplace_back(
-                            shared_ptr<SDL_GameController>(game_controller, SDL_GameControllerClose)
-                        );
-                        gamepad_slot = available_gamepad_slot_index();
-                        device_instance_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller));
-                        printf("Controller connected [%i]: %s\n", e->jdevice.which, SDL_GameControllerNameForIndex(e->jdevice.which));
+                int joystick_instance_id = -1;
+
+                // Loop through attached gamepads as e->jdevice.which cannot be trusted (always 0)
+                for (int i = 0; i < SDL_NumJoysticks(); i++) {
+                    // Prefer the SDL_GameController API...
+                    if (SDL_IsGameController(i)) {
+                        if (SDL_GameController *game_controller = SDL_GameControllerOpen(i)) {
+                            gamepad_slot = available_gamepad_slot_index();
+                            joystick_instance_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller));
+                            if (gamepad_instance_id_is_known(joystick_instance_id))
+                                continue;
+                            open_game_controllers.emplace_back(
+                                shared_ptr<SDL_GameController>(game_controller, SDL_GameControllerClose)
+                            );
+                        }
                     }
-                }
-                // ...but fall back on the good, old SDL_Joystick API.
-                else if (SDL_Joystick *joystick = SDL_JoystickOpen(e->jdevice.which)) {
-                    open_joysticks.emplace_back(
-                        shared_ptr<SDL_Joystick>(joystick, SDL_JoystickClose)
-                    );
-                    gamepad_slot = available_gamepad_slot_index();
-                    device_instance_id = SDL_JoystickInstanceID(joystick);
-                }
-                if (gamepad_slot >= 0 && device_instance_id >= 0) {
-                    gamepad_slots[gamepad_slot] = device_instance_id;
-                    enqueue_gamepad_connection_event(gamepad_slot, true, -1);
+                    // ...but fall back on the good, old SDL_Joystick API.
+                    else if (SDL_Joystick *joystick = SDL_JoystickOpen(i)) {
+                        gamepad_slot = available_gamepad_slot_index();
+                        joystick_instance_id = SDL_JoystickInstanceID(joystick);
+                        if (gamepad_instance_id_is_known(joystick_instance_id))
+                            continue;
+                        open_joysticks.emplace_back(
+                            shared_ptr<SDL_Joystick>(joystick, SDL_JoystickClose)
+                        );
+                    }
+
+                    // Reserve gamepad slot and issue gamepad connection event
+                    if (gamepad_slot >= 0 && joystick_instance_id >= 0) {
+                        gamepad_slots[gamepad_slot] = joystick_instance_id;
+                        enqueue_gamepad_connection_event(gamepad_slot, true, -1);
+                    }
                 }
                 break;
             }
@@ -214,6 +223,18 @@ struct Gosu::Input::Impl
         }
 
         return -1;
+    }
+
+    // returns whether the gamepad using the joystick instance id is known
+    bool gamepad_instance_id_is_known(int id)
+    {
+        for (int j = 0; j < gamepad_slots.size(); j++) {
+            if (gamepad_slots[j] == id) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // frees the gamepad slot associated with this joystick instance id
