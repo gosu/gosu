@@ -159,8 +159,9 @@ struct Gosu::Input::Impl
                         if (SDL_GameController *game_controller = SDL_GameControllerOpen(i)) {
                             gamepad_slot = available_gamepad_slot_index();
                             joystick_instance_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller));
-                            if (gamepad_instance_id_is_known(joystick_instance_id))
+                            if (gamepad_instance_id_is_known(joystick_instance_id)) {
                                 continue;
+                            }
                             open_game_controllers.emplace_back(
                                 shared_ptr<SDL_GameController>(game_controller, SDL_GameControllerClose)
                             );
@@ -170,8 +171,9 @@ struct Gosu::Input::Impl
                     else if (SDL_Joystick *joystick = SDL_JoystickOpen(i)) {
                         gamepad_slot = available_gamepad_slot_index();
                         joystick_instance_id = SDL_JoystickInstanceID(joystick);
-                        if (gamepad_instance_id_is_known(joystick_instance_id))
+                        if (gamepad_instance_id_is_known(joystick_instance_id)) {
                             continue;
+                        }
                         open_joysticks.emplace_back(
                             shared_ptr<SDL_Joystick>(joystick, SDL_JoystickClose)
                         );
