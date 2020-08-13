@@ -159,6 +159,7 @@ struct Gosu::Input::Impl
                         );
                         gamepad_slot = available_gamepad_slot_index();
                         device_instance_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller));
+                        printf("Controller connected [%i]: %s\n", e->jdevice.which, SDL_GameControllerNameForIndex(e->jdevice.which));
                     }
                 }
                 // ...but fall back on the good, old SDL_Joystick API.
