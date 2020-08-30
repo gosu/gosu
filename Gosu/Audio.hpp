@@ -66,6 +66,9 @@ namespace Gosu
         //! system and loads the sample data from a stream.
         explicit Sample(Reader reader);
         
+        //! Returns the length of the sample in seconds.
+        double length() const;
+
         //! Plays the sample without panning.
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
         //! volume).
@@ -115,7 +118,10 @@ namespace Gosu
         //! no song has been played yet or the last song has finished
         //! playing.
         static Song* current_song();
-        
+
+        //! Returns the length of the song in seconds.
+        double length() const;
+
         //! Starts or resumes playback of the song. This will stop all other
         //! songs and set the current song to this object.
         void play(bool looping = false);

@@ -12142,6 +12142,9 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "KB_DOWN", SWIG_From_int(static_cast< int >(Gosu::KB_DOWN)));
   rb_define_const(mGosu, "KB_HOME", SWIG_From_int(static_cast< int >(Gosu::KB_HOME)));
   rb_define_const(mGosu, "KB_END", SWIG_From_int(static_cast< int >(Gosu::KB_END)));
+  rb_define_const(mGosu, "KB_PRINTSCREEN", SWIG_From_int(static_cast< int >(Gosu::KB_PRINTSCREEN)));
+  rb_define_const(mGosu, "KB_SCROLLLOCK", SWIG_From_int(static_cast< int >(Gosu::KB_SCROLLLOCK)));
+  rb_define_const(mGosu, "KB_PAUSE", SWIG_From_int(static_cast< int >(Gosu::KB_PAUSE)));
   rb_define_const(mGosu, "KB_INSERT", SWIG_From_int(static_cast< int >(Gosu::KB_INSERT)));
   rb_define_const(mGosu, "KB_DELETE", SWIG_From_int(static_cast< int >(Gosu::KB_DELETE)));
   rb_define_const(mGosu, "KB_PAGE_UP", SWIG_From_int(static_cast< int >(Gosu::KB_PAGE_UP)));
@@ -12158,6 +12161,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_const(mGosu, "KB_COMMA", SWIG_From_int(static_cast< int >(Gosu::KB_COMMA)));
   rb_define_const(mGosu, "KB_PERIOD", SWIG_From_int(static_cast< int >(Gosu::KB_PERIOD)));
   rb_define_const(mGosu, "KB_SLASH", SWIG_From_int(static_cast< int >(Gosu::KB_SLASH)));
+  rb_define_const(mGosu, "KB_CAPSLOCK", SWIG_From_int(static_cast< int >(Gosu::KB_CAPSLOCK)));
   rb_define_const(mGosu, "KB_A", SWIG_From_int(static_cast< int >(Gosu::KB_A)));
   rb_define_const(mGosu, "KB_B", SWIG_From_int(static_cast< int >(Gosu::KB_B)));
   rb_define_const(mGosu, "KB_C", SWIG_From_int(static_cast< int >(Gosu::KB_C)));

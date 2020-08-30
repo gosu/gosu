@@ -31,6 +31,10 @@ module Gosu
   KB_DELETE = :an_integer
   KB_DOWN = :an_integer
   KB_END = :an_integer
+  
+  KB_PRINTSCREEN = :an_integer
+  KB_SCROLLLOCK = :an_integer
+  KB_PAUSE = :an_integer
 
   ##
   # This is the key on the numpad.
@@ -71,6 +75,7 @@ module Gosu
   KB_RIGHT_SHIFT = :an_integer
   KB_SEMICOLON = :an_integer
   KB_SLASH = :an_integer
+  KB_CAPSLOCK = :an_integer
   KB_SPACE = :an_integer
   KB_TAB = :an_integer
   KB_UP = :an_integer
