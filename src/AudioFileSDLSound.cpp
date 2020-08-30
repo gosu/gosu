@@ -38,7 +38,16 @@ struct Gosu::AudioFile::Impl
 Gosu::AudioFile::AudioFile(const std::string& filename)
 : pimpl(new Impl)
 {
-    pimpl->sample.reset(Sound_NewSampleFromFile(filename.c_str(), nullptr, 4096),
+    // We need to set a "desired" audio format, otherwise we may encounter data formats such as
+    // floating-point samples that Apple's OpenAL implementation does not support.
+    Sound_AudioInfo desired;
+    // Prefer 16-bit signed data which is supported by all versions of OpenAL.
+    desired.format = AUDIO_S16;
+    // 0 means "use whatever we have" (see SDL_sound.c, init_sample).
+    desired.channels = 0;
+    desired.rate = 0;
+
+    pimpl->sample.reset(Sound_NewSampleFromFile(filename.c_str(), &desired, 4096),
                         Sound_FreeSample);
     if (!pimpl->sample) {
         std::string message = "Could not parse audio file " + filename;
@@ -75,8 +84,8 @@ Gosu::AudioFile::~AudioFile()
 
 ALenum Gosu::AudioFile::format() const
 {
-    auto channels = pimpl->sample->actual.channels;
-    auto format = pimpl->sample->actual.format;
+    auto channels = pimpl->sample->desired.channels;
+    auto format = pimpl->sample->desired.format;
 
     if (channels == 1 && SDL_AUDIO_ISINT(format)) {
         if (SDL_AUDIO_BITSIZE(format) == 8) return AL_FORMAT_MONO8;
