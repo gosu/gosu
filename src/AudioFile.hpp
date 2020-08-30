@@ -1,57 +1,37 @@
 #pragma once
 
-#include <Gosu/Platform.hpp>
-#include <vector>
+#include <Gosu/IO.hpp>
+
 #ifdef GOSU_IS_MAC
 #include <OpenAL/al.h>
 #else
 #include <AL/al.h>
 #endif
 
+#include <cstddef>
+#include <string>
+#include <vector>
+
 namespace Gosu
 {
     class AudioFile
     {
-        AudioFile(const AudioFile&) = delete;
-        AudioFile& operator=(const AudioFile&) = delete;
-        AudioFile(AudioFile&&) = delete;
-        AudioFile& operator=(AudioFile&&) = delete;
-        
-        std::vector<char> data_;
+        struct Impl;
+        std::unique_ptr<Impl> pimpl;
         
     public:
-        AudioFile() {}
+        explicit AudioFile(const std::string& filename);
+        explicit AudioFile(Reader reader);
+        ~AudioFile();
+
+        ALenum format() const;
         
-        virtual ~AudioFile() {}
+        ALuint sample_rate() const;
         
-        virtual ALenum format() const = 0;
+        std::size_t read_data(void* dest, std::size_t length);
         
-        virtual ALuint sample_rate() const = 0;
+        void rewind();
         
-        virtual std::size_t read_data(void* dest, std::size_t length) = 0;
-        
-        virtual void rewind() = 0;
-        
-        const std::vector<char>& decoded_data()
-        {
-            static const std::size_t INCREMENT = 512 * 1024;
-            
-            if (!data_.empty()) {
-                return data_;
-            }
-            
-            for (;;) {
-                data_.resize(data_.size() + INCREMENT);
-                
-                auto read_bytes = read_data(&data_[data_.size() - INCREMENT], INCREMENT);
-                
-                if (read_bytes < INCREMENT) {
-                    data_.resize(data_.size() - INCREMENT + read_bytes);
-                    break;
-                }
-            }
-            
-            return data_;
-        }
+        const std::vector<char>& decoded_data();
     };
 }

@@ -51,8 +51,8 @@ namespace Gosu
     //! parameters. Use samples for everything that's not music.
     class Sample
     {
-        struct SampleData;
-        std::shared_ptr<SampleData> data;
+        struct Impl;
+        std::shared_ptr<Impl> pimpl;
 
     public:
         //! Constructs an empty sample that is inaudible when played.
@@ -91,10 +91,8 @@ namespace Gosu
     //! and there is no way to control its pan (stereo position) or speed.
     class Song
     {
-        class BaseData;
-        class ModuleData;
-        class StreamData;
-        std::unique_ptr<BaseData> data;
+        struct Impl;
+        std::unique_ptr<Impl> pimpl;
         
         // Non-movable to avoid dangling internal references.
         Song(Song&&) = delete;
@@ -137,7 +135,7 @@ namespace Gosu
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full volume).
         void set_volume(double volume);
         
-        //! Called every tick by Window for management purposes.
+        //! Called every tick by Window to feed new audio data to OpenAL.
         static void update();
     };
 }

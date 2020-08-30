@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # See https://stackoverflow.com/q/2152077
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
-file(GLOB C_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c)
+file(GLOB_RECURSE C_FILES ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/*.c)
 file(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 file(GLOB HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/Gosu/*.hpp)
 
@@ -47,6 +47,9 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/gosu.pc
 
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/SDL_sound
+        ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/stb
+        ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/utf8proc
         ${OPENAL_INCLUDE_DIRS}
         ${SDL2_INCLUDE_DIRS}
         ${OPENGL_INCLUDE_DIRS}

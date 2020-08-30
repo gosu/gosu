@@ -19,6 +19,8 @@ EOS
   s.extensions = FileList["ext/**/extconf.rb"]
   # Ruby frontend for C++ extension.
   s.files += Dir["lib/**/*.rb"]
+  # Gosu dependencies
+  s.files += Dir["dependencies/{SDL_sound,stb,utf8proc}/**/*.{h,c}"]
   # Gosu source code including the Ruby interface (.cxx).
   s.files += Dir["src/**/*.{h,hpp,c,cpp,cxx}"]
   # Gosu header files, for compiling the gem & for using inline C++ from Ruby.

@@ -81,16 +81,16 @@
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\dependencies\al_soft\x64;..\dependencies\mpg123\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..;..\dependencies\libsndfile;..\dependencies\al_soft;..\dependencies\mpg123;$(IncludePath)</IncludePath>
+    <IncludePath>..;..\dependencies\al_soft;..\dependencies\stb;..\dependencies\utf8proc;..\dependencies\SDL_Sound;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..;..\dependencies\libsndfile;..\dependencies\al_soft;..\dependencies\mpg123;$(IncludePath)</IncludePath>
+    <IncludePath>..;..\dependencies\al_soft;..\dependencies\stb;..\dependencies\utf8proc;..\dependencies\SDL_Sound;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..;..\dependencies\libsndfile;..\dependencies\al_soft;..\dependencies\mpg123;$(IncludePath)</IncludePath>
+    <IncludePath>..;..\dependencies\al_soft;..\dependencies\stb;..\dependencies\utf8proc;..\dependencies\SDL_Sound;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..;..\dependencies\libsndfile;..\dependencies\al_soft;..\dependencies\mpg123;$(IncludePath)</IncludePath>
+    <IncludePath>..;..\dependencies\al_soft;..\dependencies\stb;..\dependencies\utf8proc;..\dependencies\SDL_Sound;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -107,7 +107,7 @@
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;libmpg123.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>$(SDL2_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
@@ -127,7 +127,7 @@
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;libmpg123.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>$(SDL2_LIB64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
@@ -146,9 +146,8 @@
       <AdditionalIncludeDirectories>$(SDL2_INCLUDE);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;libmpg123.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SDL2_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>/DELAYLOAD:openal32.dll /DELAYLOAD:libmpg123.dll %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -165,30 +164,82 @@
       <AdditionalIncludeDirectories>$(SDL2_INCLUDE);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;libmpg123.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SDL2_LIB64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>/DELAYLOAD:openal32.dll /DELAYLOAD:libmpg123.dll %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_aiff.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_au.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_coreaudio.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_flac.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_modplug.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_mp3.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_raw.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_shn.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_voc.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_vorbis.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_wav.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\fastmix.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_669.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_abc.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_amf.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_ams.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_dbm.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_dmf.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_dsm.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_far.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_it.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mdl.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_med.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mid.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mod.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mt2.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mtm.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_okt.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_pat.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_psm.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_ptm.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_s3m.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_stm.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_ult.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_umx.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_xm.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\mmcmp.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\modplug.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\snd_dsp.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\snd_flt.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\snd_fx.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\sndfile.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\sndmix.c" />
+    <ClCompile Include="..\dependencies\utf8proc\utf8proc.c" />
     <ClCompile Include="..\src\Audio.cpp" />
+    <ClCompile Include="..\src\AudioFileAudioToolbox.cpp" />
+    <ClCompile Include="..\src\AudioFileSDLSound.cpp" />
     <ClCompile Include="..\src\AudioImpl.cpp" />
     <ClCompile Include="..\src\Bitmap.cpp" />
     <ClCompile Include="..\src\BitmapIO.cpp" />
     <ClCompile Include="..\src\BlockAllocator.cpp" />
     <ClCompile Include="..\src\Channel.cpp" />
+    <ClCompile Include="..\src\ChannelWrapper.cpp" />
     <ClCompile Include="..\src\Color.cpp" />
+    <ClCompile Include="..\src\ColorWrapper.cpp" />
+    <ClCompile Include="..\src\Constants.cpp" />
     <ClCompile Include="..\src\DirectoriesApple.cpp" />
     <ClCompile Include="..\src\DirectoriesUnix.cpp" />
     <ClCompile Include="..\src\DirectoriesWin.cpp" />
     <ClCompile Include="..\src\FileUnix.cpp" />
     <ClCompile Include="..\src\FileWin.cpp" />
     <ClCompile Include="..\src\Font.cpp" />
+    <ClCompile Include="..\src\FontWrapper.cpp" />
     <ClCompile Include="..\src\GosuGLView.cpp" />
     <ClCompile Include="..\src\GosuViewController.cpp" />
+    <ClCompile Include="..\src\GosuWrapper.cpp" />
     <ClCompile Include="..\src\Graphics.cpp" />
     <ClCompile Include="..\src\IO.cpp" />
     <ClCompile Include="..\src\Image.cpp" />
+    <ClCompile Include="..\src\ImageWrapper.cpp" />
     <ClCompile Include="..\src\Input.cpp" />
     <ClCompile Include="..\src\InputUIKit.cpp" />
     <ClCompile Include="..\src\Inspection.cpp" />
@@ -198,10 +249,13 @@
     <ClCompile Include="..\src\Math.cpp" />
     <ClCompile Include="..\src\OffScreenTarget.cpp" />
     <ClCompile Include="..\src\Resolution.cpp" />
+    <ClCompile Include="..\src\SampleWrapper.cpp" />
+    <ClCompile Include="..\src\SongWrapper.cpp" />
     <ClCompile Include="..\src\TexChunk.cpp" />
     <ClCompile Include="..\src\Text.cpp" />
     <ClCompile Include="..\src\TextBuilder.cpp" />
     <ClCompile Include="..\src\TextInput.cpp" />
+    <ClCompile Include="..\src\TextInputWrapper.cpp" />
     <ClCompile Include="..\src\Texture.cpp" />
     <ClCompile Include="..\src\TimingApple.cpp" />
     <ClCompile Include="..\src\TimingUnix.cpp" />
@@ -219,8 +273,7 @@
     <ClCompile Include="..\src\WinUtility.cpp" />
     <ClCompile Include="..\src\Window.cpp" />
     <ClCompile Include="..\src\WindowUIKit.cpp" />
-    <ClCompile Include="..\src\stb_vorbis.c" />
-    <ClCompile Include="..\src\utf8proc.c" />
+    <ClCompile Include="..\src\WindowWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Gosu\Gosu.hpp" />

@@ -1,31 +1,30 @@
 Pod::Spec.new do |s|
-  s.name         = "Gosu"
-  s.version      = "0.15.2"
-  s.summary      = "2D game development library."
-  s.homepage     = "https://www.libgosu.org/"
+  s.name     = "Gosu"
+  s.version  = "0.15.2"
+  s.summary  = "2D game development library."
+  s.homepage = "https://www.libgosu.org/"
+  s.license  = { type: "MIT", file: "COPYING" }
+  s.author   = { "Julian Raschke" => "julian@raschke.de" }
   s.documentation_url = "https://www.libgosu.org/cpp/"
-  
-  s.license      = { type: "MIT", file: "COPYING" }
-  s.author       = { "Julian Raschke" => "julian@raschke.de" }
 
-  s.source       = { git: "https://github.com/gosu/gosu.git", tag: "v#{s.version}" }
+  s.source = { git: "https://github.com/gosu/gosu.git", tag: "v#{s.version}" }
 
-  # We can't compile utf8proc.c as C++, and we need to silence warnings in stb_vorbis.c.
-  # => Group all C dependencies into a subspec.
-  s.subspec "C" do |ss|
-    ss.compiler_flags = "-Wno-comma -Wno-conditional-uninitialized"
-    ss.source_files = "src/{stb,utf8proc}*.{h,c}"
+  # Bundle our dependencies into one subspec so that we can silence warnings for them.
+  s.subspec "Dependencies" do |ss|
+    ss.compiler_flags = "-Wno-everything"
+    ss.source_files = "dependencies/{stb,utf8proc,SDL_sound}/**/*.{h,c}"
+    ss.osx.compiler_flags = "-I/usr/local/include/SDL2"
   end
 
   s.subspec "Gosu" do |ss|
-    ss.dependency "Gosu/C"
+    ss.dependency "Gosu/Dependencies"
     ss.osx.deployment_target = "10.9"
     ss.ios.deployment_target = "8.0"
     
     # Ignore Gosu using deprecated Gosu APIs internally.
     # Compile all source files as Objective-C++ so we can use ObjC frameworks where necessary.
-    # Also silence warnings about invalid doxygen markup in SDL headers.
-    ss.compiler_flags = "-DGOSU_DEPRECATED= -Wno-documentation -x objective-c++"
+    # Also silence warnings about invalid doxygen markup in SDL headers, and make deps available.
+    ss.compiler_flags = "-DGOSU_DEPRECATED= -Wno-documentation -x objective-c++ -Idependencies/stb -Idependencies/utf8proc"
     
     ss.libraries = "iconv"
     ss.frameworks = "AudioToolbox", "OpenAL"
@@ -42,7 +41,7 @@ Pod::Spec.new do |s|
     ss.public_header_files = "Gosu/*.hpp"
     ss.source_files = ["Gosu/*.hpp", "src/*.{hpp,cpp}"]
     # Do not include FFI wrappers in the Pod project - this spec is for the C++ interface.
-    ss.exclude_files = "src/*Wrapper.cpp"
+    ss.exclude_files = "src/Constants.cpp", "src/*Wrapper.cpp"
     
     # Gosu requires C++17 features and GNU extensions, but Xcode only uses gnu++14 by default.
     ss.pod_target_xcconfig = {

@@ -35,19 +35,13 @@ link_directories(
 
 if(NOT APPLE)
     pkg_check_modules(FONTCONFIG REQUIRED fontconfig)
-    pkg_check_modules(SNDFILE REQUIRED sndfile)
-    pkg_check_modules(MPG123 REQUIRED libmpg123)
 
     set(GOSU_DEPENDENCIES ${GOSU_DEPENDENCIES}
         ${FONTCONFIG_LIBRARIES}
-        ${SNDFILE_LIBRARIES}
-        ${MPG123_LIBRARIES}
     )
 
     link_directories(
         ${FONTCONFIG_LIBRARY_DIRS}
-        ${SNDFILE_LIBRARY_DIRS}
-        ${MPG123_LIBRARY_DIRS}
     )
 endif()
 
@@ -56,7 +50,6 @@ if(APPLE)
     find_library(COCOA_LIBRARY Cocoa)
     find_library(CARBON_LIBRARY Carbon)
     find_library(APPLICATION_SERVICES_LIBRARY ApplicationServices)
-    find_library(AUDIO_TOOLBOX_LIBRARY AudioToolbox)
     find_library(ICONV_LIBRARY iconv)
     
     mark_as_advanced(
@@ -64,7 +57,6 @@ if(APPLE)
         COCOA_LIBRARY
         CARBON_LIBRARY
         APPLICATION_SERVICES_LIBRARY
-        AUDIO_TOOLBOX_LIBRARY
         ICONV_LIBRARY
     )
     
@@ -73,7 +65,6 @@ if(APPLE)
         ${COCOA_LIBRARY}
         ${CARBON_LIBRARY}
         ${APPLICATION_SERVICES_LIBRARY}
-        ${AUDIO_TOOLBOX_LIBRARY}
         ${ICONV_LIBRARY}
     )
 endif()

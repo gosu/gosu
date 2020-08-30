@@ -26,7 +26,7 @@ $CXXFLAGS ||= ""
 $CXXFLAGS << " -std=gnu++11"
 
 # For #include <Gosu/...>
-$INCFLAGS << " -I../.."
+$INCFLAGS << " -I../.. -I../../dependencies/stb -I../../dependencies/utf8proc -I../../dependencies/SDL_sound"
 
 if `uname`.chomp == 'Darwin'
   # Disable assertions in C code.
@@ -43,6 +43,7 @@ if `uname`.chomp == 'Darwin'
   $CXXFLAGS << " -stdlib=libc++"
   
   # Dependencies.
+  $CFLAGS << " #{`sdl2-config --cflags`.chomp}"
   $CXXFLAGS << " #{`sdl2-config --cflags`.chomp}"
   # Prefer statically linking SDL 2.
   $LDFLAGS  << " #{`sdl2-config --static-libs`.chomp} -framework OpenGL -framework Metal -framework OpenAL"
@@ -76,7 +77,16 @@ else
   pkg_config 'libmpg123'
   pkg_config 'fontconfig'
   
-  have_header 'AL/al.h'   if have_library('openal')
+  have_header 'AL/al.h' if have_library('openal')
+end
+
+# Because Ruby will only compile source file in the src/ folder, but our dependencies are
+# stored in dependencies/, we need to create symlinks for all the .c files. This is terrible,
+# but still seems better than putting everything into the same folder to begin with.
+Dir.glob('../../dependencies/**/*.c').each do |dep|
+  File.open("../../src/#{File.basename dep}", "w") do |shim|
+    shim.puts "#include \"#{File.expand_path dep}\""
+  end
 end
 
 # Gem::Version#initialize is apparently broken in some versions of Ruby, so use a local helper.
