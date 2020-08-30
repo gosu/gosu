@@ -45,6 +45,8 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/gosu.pc
         DESTINATION ${INSTALL_PKGCONFIG_DIR}
         COMPONENT development)
 
+# TODO: Use generator expressions instead of CMAKE_CURRENT_SOURCE_DIR, see:
+# https://cliutils.gitlab.io/modern-cmake/chapters/basics/functions.html
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/SDL_sound
