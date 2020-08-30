@@ -111,7 +111,7 @@ install:
     fi
 
 script:
-  # Run Ruby/Gosu tests and compile C++ examples.
+  # Run Ruby/Gosu tests.
   - |
     if [ $TRAVIS_OS_NAME == osx ]; then
       rake -rgosu test
