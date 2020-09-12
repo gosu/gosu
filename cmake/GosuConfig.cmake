@@ -50,6 +50,7 @@ if(APPLE)
     find_library(COCOA_LIBRARY Cocoa)
     find_library(CARBON_LIBRARY Carbon)
     find_library(APPLICATION_SERVICES_LIBRARY ApplicationServices)
+    find_library(AUDIO_TOOLBOX_LIBRARY AudioToolbox)
     find_library(ICONV_LIBRARY iconv)
     
     mark_as_advanced(
@@ -57,6 +58,7 @@ if(APPLE)
         COCOA_LIBRARY
         CARBON_LIBRARY
         APPLICATION_SERVICES_LIBRARY
+        AUDIO_TOOLBOX_LIBRARY
         ICONV_LIBRARY
     )
     
@@ -65,6 +67,7 @@ if(APPLE)
         ${COCOA_LIBRARY}
         ${CARBON_LIBRARY}
         ${APPLICATION_SERVICES_LIBRARY}
+        ${AUDIO_TOOLBOX_LIBRARY}
         ${ICONV_LIBRARY}
     )
 endif()
