@@ -26,7 +26,7 @@ static void require_sdl_video()
 }
 
 static const unsigned NUM_BUTTONS_PER_GAMEPAD =
-    (Gosu::GP_RANGE_END - Gosu::GP_RANGE_BEGIN + 1 - 4) / (Gosu::NUM_GAMEPADS + 1);
+    (Gosu::GP_RANGE_END - Gosu::GP_RANGE_BEGIN + 1 - 4) / (Gosu::NUM_GAMEPADS + 1) - 3;
 static const unsigned NUM_AXES_PER_GAMEPAD =
     (Gosu::GP_AXES_RANGE_END - Gosu::GP_AXES_RANGE_BEGIN + 1) / (Gosu::NUM_GAMEPADS + 1);
 static const unsigned NUM_BUTTONS = Gosu::GP_RANGE_END + 1;
