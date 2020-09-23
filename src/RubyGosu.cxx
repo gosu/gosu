@@ -1613,6 +1613,8 @@ SWIGRUNTIMEINLINE char *
 SWIG_Ruby_MangleStr(VALUE obj)
 {
   VALUE stype = rb_iv_get(obj, "@__swigtype__");
+  if (NIL_P(stype))
+    return NULL;
   return StringValuePtr(stype);
 }
 
@@ -2338,6 +2340,11 @@ namespace Gosu
       std::string result = Gosu::Input::gamepad_name(index);
       return result.empty() ? Qnil : rb_str_new2(result.c_str());
     }
+
+    double axis(Gosu::Button btn)
+    {
+        return Gosu::Input::axis(btn);
+    }
 }
 
 // Global graphics functions
@@ -2512,7 +2519,7 @@ SWIG_ruby_failed(VALUE SWIGUNUSEDPARM(arg1), VALUE SWIGUNUSEDPARM(arg2))
 } 
 
 
-/*@SWIG:/usr/local/Cellar/swig/HEAD-7051753/share/swig/4.0.2/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
+/*@SWIG:/usr/share/swig/4.0.2/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
 SWIGINTERN VALUE SWIG_AUX_NUM2DBL(VALUE arg)
 {
   VALUE *args = (VALUE *)arg;
@@ -2555,7 +2562,7 @@ SWIG_From_unsigned_SS_int  (unsigned int value)
 #include <string>
 
 
-/*@SWIG:/usr/local/Cellar/swig/HEAD-7051753/share/swig/4.0.2/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
+/*@SWIG:/usr/share/swig/4.0.2/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
 SWIGINTERN VALUE SWIG_AUX_NUM2ULONG(VALUE arg)
 {
   VALUE *args = (VALUE *)arg;
@@ -2761,7 +2768,7 @@ SWIG_AsPtr_std_string (VALUE obj, std::string **val)
 }
 
 
-/*@SWIG:/usr/local/Cellar/swig/HEAD-7051753/share/swig/4.0.2/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
+/*@SWIG:/usr/share/swig/4.0.2/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
 SWIGINTERN VALUE SWIG_AUX_NUM2LONG(VALUE arg)
 {
   VALUE *args = (VALUE *)arg;
@@ -7835,6 +7842,37 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_Sample_length(int argc, VALUE *argv, VALUE self) {
+  Gosu::Sample *arg1 = (Gosu::Sample *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Sample, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Sample const *","length", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Sample * >(argp1);
+  {
+    try {
+      result = (double)((Gosu::Sample const *)arg1)->length();
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_Sample_play(int argc, VALUE *argv, VALUE self) {
   Gosu::Sample *arg1 = (Gosu::Sample *) 0 ;
   double arg2 = (double) 1 ;
@@ -8051,6 +8089,37 @@ _wrap_Song_current_song(int argc, VALUE *argv, VALUE self) {
     }
   }
   vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Song, 0 |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Song_length(int argc, VALUE *argv, VALUE self) {
+  Gosu::Song *arg1 = (Gosu::Song *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Song, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Song const *","length", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Song * >(argp1);
+  {
+    try {
+      result = (double)((Gosu::Song const *)arg1)->length();
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_double(static_cast< double >(result));
   return vresult;
 fail:
   return Qnil;
@@ -10405,6 +10474,33 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_axis(int argc, VALUE *argv, VALUE self) {
+  Gosu::Button arg1 ;
+  double result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  {
+    arg1 = NIL_P(argv[0]) ? Gosu::NO_BUTTON : Gosu::Button(NUM2LONG(argv[0]));
+  }
+  {
+    try {
+      result = (double)Gosu::axis(arg1);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_double(static_cast< double >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_draw_line(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
   double arg2 ;
@@ -12079,6 +12175,7 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Sample, (void *) &SwigClassSample);
   rb_define_alloc_func(SwigClassSample.klass, _wrap_Sample_allocate);
   rb_define_method(SwigClassSample.klass, "initialize", VALUEFUNC(_wrap_new_Sample), -1);
+  rb_define_method(SwigClassSample.klass, "length", VALUEFUNC(_wrap_Sample_length), -1);
   rb_define_method(SwigClassSample.klass, "play", VALUEFUNC(_wrap_Sample_play), -1);
   rb_define_method(SwigClassSample.klass, "play_pan", VALUEFUNC(_wrap_Sample_play_pan), -1);
   SwigClassSample.mark = 0;
@@ -12090,6 +12187,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_alloc_func(SwigClassSong.klass, _wrap_Song_allocate);
   rb_define_method(SwigClassSong.klass, "initialize", VALUEFUNC(_wrap_new_Song), -1);
   rb_define_singleton_method(SwigClassSong.klass, "current_song", VALUEFUNC(_wrap_Song_current_song), -1);
+  rb_define_method(SwigClassSong.klass, "length", VALUEFUNC(_wrap_Song_length), -1);
   rb_define_method(SwigClassSong.klass, "play", VALUEFUNC(_wrap_Song_play), -1);
   rb_define_method(SwigClassSong.klass, "pause", VALUEFUNC(_wrap_Song_pause), -1);
   rb_define_method(SwigClassSong.klass, "paused?", VALUEFUNC(_wrap_Song_pausedq___), -1);
@@ -12442,6 +12540,7 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "button_down?", VALUEFUNC(_wrap_button_downq___), -1);
   rb_define_module_function(mGosu, "button_name", VALUEFUNC(_wrap_button_name), -1);
   rb_define_module_function(mGosu, "gamepad_name", VALUEFUNC(_wrap_gamepad_name), -1);
+  rb_define_module_function(mGosu, "axis", VALUEFUNC(_wrap_axis), -1);
   rb_define_module_function(mGosu, "draw_line", VALUEFUNC(_wrap_draw_line), -1);
   rb_define_module_function(mGosu, "draw_triangle", VALUEFUNC(_wrap_draw_triangle), -1);
   rb_define_module_function(mGosu, "draw_quad", VALUEFUNC(_wrap_draw_quad), -1);
