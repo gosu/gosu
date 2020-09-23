@@ -31,7 +31,7 @@ module Gosu
   KB_DELETE = :an_integer
   KB_DOWN = :an_integer
   KB_END = :an_integer
-  
+
   KB_PRINTSCREEN = :an_integer
   KB_SCROLLLOCK = :an_integer
   KB_PAUSE = :an_integer
@@ -1008,6 +1008,17 @@ module Gosu
     # @return [String, nil]
     # @param index [Integer]
     def gamepad_name(index); end
+
+    ##
+    # Returns the value for the specified gamepad axis in the range -1.0..1.0 for joysticks and 0.0..1.0 for triggers.
+    #
+    # @example
+    #   Gosu.axis(Gosu::GP_0_LEFT_STICK_Y_AXIS) #=> 0.75
+    #
+    # @return [Float]
+    # @param id [Integer]
+    #
+    def axis(id); end
 
     # @!group Drawing primitives
 
