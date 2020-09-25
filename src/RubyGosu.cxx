@@ -7842,37 +7842,6 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Sample_length(int argc, VALUE *argv, VALUE self) {
-  Gosu::Sample *arg1 = (Gosu::Sample *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Sample, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Sample const *","length", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Sample * >(argp1);
-  {
-    try {
-      result = (double)((Gosu::Sample const *)arg1)->length();
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_double(static_cast< double >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
 _wrap_Sample_play(int argc, VALUE *argv, VALUE self) {
   Gosu::Sample *arg1 = (Gosu::Sample *) 0 ;
   double arg2 = (double) 1 ;
@@ -8089,37 +8058,6 @@ _wrap_Song_current_song(int argc, VALUE *argv, VALUE self) {
     }
   }
   vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Gosu__Song, 0 |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Song_length(int argc, VALUE *argv, VALUE self) {
-  Gosu::Song *arg1 = (Gosu::Song *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  double result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Song, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Song const *","length", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Song * >(argp1);
-  {
-    try {
-      result = (double)((Gosu::Song const *)arg1)->length();
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_double(static_cast< double >(result));
   return vresult;
 fail:
   return Qnil;
@@ -12175,7 +12113,6 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Sample, (void *) &SwigClassSample);
   rb_define_alloc_func(SwigClassSample.klass, _wrap_Sample_allocate);
   rb_define_method(SwigClassSample.klass, "initialize", VALUEFUNC(_wrap_new_Sample), -1);
-  rb_define_method(SwigClassSample.klass, "length", VALUEFUNC(_wrap_Sample_length), -1);
   rb_define_method(SwigClassSample.klass, "play", VALUEFUNC(_wrap_Sample_play), -1);
   rb_define_method(SwigClassSample.klass, "play_pan", VALUEFUNC(_wrap_Sample_play_pan), -1);
   SwigClassSample.mark = 0;
@@ -12187,7 +12124,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_alloc_func(SwigClassSong.klass, _wrap_Song_allocate);
   rb_define_method(SwigClassSong.klass, "initialize", VALUEFUNC(_wrap_new_Song), -1);
   rb_define_singleton_method(SwigClassSong.klass, "current_song", VALUEFUNC(_wrap_Song_current_song), -1);
-  rb_define_method(SwigClassSong.klass, "length", VALUEFUNC(_wrap_Song_length), -1);
   rb_define_method(SwigClassSong.klass, "play", VALUEFUNC(_wrap_Song_play), -1);
   rb_define_method(SwigClassSong.klass, "pause", VALUEFUNC(_wrap_Song_pause), -1);
   rb_define_method(SwigClassSong.klass, "paused?", VALUEFUNC(_wrap_Song_pausedq___), -1);
