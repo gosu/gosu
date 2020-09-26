@@ -229,6 +229,11 @@ namespace Gosu
       std::string result = Gosu::Input::gamepad_name(index);
       return result.empty() ? Qnil : rb_str_new2(result.c_str());
     }
+
+    double axis(Gosu::Button btn)
+    {
+        return Gosu::Input::axis(btn);
+    }
 }
 
 // Global graphics functions
@@ -1069,6 +1074,7 @@ namespace Gosu
     bool is_button_down(Gosu::Button btn);
     VALUE button_name(Gosu::Button btn);
     VALUE gamepad_name(int index);
+    double axis(Gosu::Button btn);
 }
 
 // Global graphics functions
