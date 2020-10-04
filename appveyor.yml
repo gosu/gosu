@@ -4,7 +4,7 @@ branches:
   only:
   - master
 skip_tags: true
-configuration: Release (Ruby 2.7)
+configuration: Release (Ruby 2.6)
 platform:
 - x64
 - x86
@@ -21,10 +21,10 @@ install:
 test_script:
 - ps: >-
     If ($env:PLATFORM -Eq "x64") {
-      $env:PATH = "C:\Ruby27-x64\bin;$env:PATH"
+      $env:PATH = "C:\Ruby26-x64\bin;$env:PATH"
     }
     Else {
-      $env:PATH = "C:\Ruby27\bin;$env:PATH"
+      $env:PATH = "C:\Ruby26\bin;$env:PATH"
     }
     
     gem install rake rake-compiler minitest --no-doc
