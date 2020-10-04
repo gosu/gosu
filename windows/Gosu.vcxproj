@@ -77,14 +77,14 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\dependencies\al_soft\x86;..\dependencies\mpg123\x86;$(LibraryPath)</LibraryPath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\dependencies\al_soft\x86;..\dependencies\mpg123\x86;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\cyber\Code\gosu\dependencies\SDL2\lib\x64;..\dependencies\al_soft\x64;..\dependencies\mpg123\x64;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\cyber\Code\gosu\dependencies\SDL2\lib\x64;..\dependencies\al_soft\x64;..\dependencies\mpg123\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\dependencies\SDL2\lib\x64;..\dependencies\al_soft\x64;..\dependencies\mpg123\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\dependencies\SDL2\lib\x64;..\dependencies\al_soft\x64;..\dependencies\mpg123\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\cyber\Code\gosu\dependencies\SDL2\include;..;..\dependencies\al_soft;..\dependencies\stb;..\dependencies\utf8proc;..\dependencies\SDL_Sound;$(IncludePath)</IncludePath>
+    <IncludePath>..\dependencies\SDL2\include;..;..\dependencies\al_soft;..\dependencies\stb;..\dependencies\utf8proc;..\dependencies\SDL_Sound;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\cyber\Code\gosu\dependencies\SDL2\include;..;..\dependencies\al_soft;..\dependencies\stb;..\dependencies\utf8proc;..\dependencies\SDL_Sound;$(IncludePath)</IncludePath>
+    <IncludePath>..\dependencies\SDL2\include;..;..\dependencies\al_soft;..\dependencies\stb;..\dependencies\utf8proc;..\dependencies\SDL_Sound;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>..;..\dependencies\al_soft;..\dependencies\stb;..\dependencies\utf8proc;..\dependencies\SDL_Sound;$(IncludePath)</IncludePath>

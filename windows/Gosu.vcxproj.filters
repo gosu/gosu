@@ -504,9 +504,4 @@
       <Filter>Implementation</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\src\GosuAppDelegate.mm">
-      <Filter>Implementation</Filter>
-    </None>
-  </ItemGroup>
 </Project>

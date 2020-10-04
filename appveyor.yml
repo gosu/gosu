@@ -10,15 +10,17 @@ platform:
 - x86
 clone_depth: 3
 environment:
-  SDL2_INCLUDE: C:\SDL2-2.0.8\include
-  SDL2_LIB: C:\SDL2-2.0.8\lib\x86
-  SDL2_LIB64: C:\SDL2-2.0.8\lib\x64
+  SDL2_INCLUDE: C:\SDL2-2.0.12\include
+  SDL2_LIB: C:\SDL2-2.0.12\lib\x86
+  SDL2_LIB64: C:\SDL2-2.0.12\lib\x64
   DEBUG: true
 install:
 - ps: >-
-    Start-FileDownload http://libsdl.org/release/SDL2-devel-2.0.8-VC.zip
+    Start-FileDownload https://libsdl.org/release/SDL2-devel-2.0.12-VC.zip
     
-    7z x SDL2-devel-2.0.8-VC.zip -oC:\
+    7z x SDL2-devel-2.0.12-VC.zip -oC:\projects\gosu\dependencies
+    
+    move C:\projects\gosu\dependencies\SDL2-2.0.12 C:\projects\gosu\dependencies\SDL2
 test_script:
 - ps: >-
     If ($env:PLATFORM -Eq "x64") {
