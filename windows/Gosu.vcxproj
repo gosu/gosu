@@ -22,30 +22,30 @@
     <ProjectGuid>{4989339B-019C-4399-86F5-1D9245C420C6}</ProjectGuid>
     <RootNamespace>Gosu</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -77,14 +77,14 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(ProjectName)-$(Configuration)\</IntDir>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\dependencies\al_soft\x86;..\dependencies\mpg123\x86;$(LibraryPath)</LibraryPath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\dependencies\al_soft\x86;..\dependencies\mpg123\x86;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\dependencies\al_soft\x64;..\dependencies\mpg123\x64;$(LibraryPath)</LibraryPath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\dependencies\al_soft\x64;..\dependencies\mpg123\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\cyber\Code\gosu\dependencies\SDL2\lib\x64;..\dependencies\al_soft\x64;..\dependencies\mpg123\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\cyber\Code\gosu\dependencies\SDL2\lib\x64;..\dependencies\al_soft\x64;..\dependencies\mpg123\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..;..\dependencies\al_soft;..\dependencies\stb;..\dependencies\utf8proc;..\dependencies\SDL_Sound;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\cyber\Code\gosu\dependencies\SDL2\include;..;..\dependencies\al_soft;..\dependencies\stb;..\dependencies\utf8proc;..\dependencies\SDL_Sound;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..;..\dependencies\al_soft;..\dependencies\stb;..\dependencies\utf8proc;..\dependencies\SDL_Sound;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\cyber\Code\gosu\dependencies\SDL2\include;..;..\dependencies\al_soft;..\dependencies\stb;..\dependencies\utf8proc;..\dependencies\SDL_Sound;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>..;..\dependencies\al_soft;..\dependencies\stb;..\dependencies\utf8proc;..\dependencies\SDL_Sound;$(IncludePath)</IncludePath>
@@ -276,6 +276,10 @@
     <ClCompile Include="..\src\WindowWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Gosu\Channel.h" />
+    <ClInclude Include="..\Gosu\Color.h" />
+    <ClInclude Include="..\Gosu\Font.h" />
+    <ClInclude Include="..\Gosu\Gosu.h" />
     <ClInclude Include="..\Gosu\Gosu.hpp" />
     <ClInclude Include="..\Gosu\Audio.hpp" />
     <ClInclude Include="..\Gosu\AutoLink.hpp" />
@@ -287,6 +291,7 @@
     <ClInclude Include="..\Gosu\Fwd.hpp" />
     <ClInclude Include="..\Gosu\Graphics.hpp" />
     <ClInclude Include="..\Gosu\GraphicsBase.hpp" />
+    <ClInclude Include="..\Gosu\Image.h" />
     <ClInclude Include="..\Gosu\Image.hpp" />
     <ClInclude Include="..\Gosu\ImageData.hpp" />
     <ClInclude Include="..\Gosu\Input.hpp" />
@@ -294,15 +299,45 @@
     <ClInclude Include="..\Gosu\IO.hpp" />
     <ClInclude Include="..\Gosu\Math.hpp" />
     <ClInclude Include="..\Gosu\Platform.hpp" />
+    <ClInclude Include="..\Gosu\Sample.h" />
+    <ClInclude Include="..\Gosu\Song.h" />
     <ClInclude Include="..\Gosu\Text.hpp" />
+    <ClInclude Include="..\Gosu\TextInput.h" />
     <ClInclude Include="..\Gosu\TextInput.hpp" />
     <ClInclude Include="..\Gosu\Timing.hpp" />
     <ClInclude Include="..\Gosu\Utility.hpp" />
     <ClInclude Include="..\Gosu\Version.hpp" />
+    <ClInclude Include="..\Gosu\Window.h" />
     <ClInclude Include="..\Gosu\Window.hpp" />
+    <ClInclude Include="..\src\AudioFile.hpp" />
+    <ClInclude Include="..\src\AudioImpl.hpp" />
+    <ClInclude Include="..\src\BlockAllocator.hpp" />
+    <ClInclude Include="..\src\ClipRectStack.hpp" />
+    <ClInclude Include="..\src\DrawOp.hpp" />
+    <ClInclude Include="..\src\DrawOpQueue.hpp" />
+    <ClInclude Include="..\src\EmptyImageData.hpp" />
+    <ClInclude Include="..\src\GosuGLView.hpp" />
+    <ClInclude Include="..\src\GosuViewController.hpp" />
+    <ClInclude Include="..\src\GraphicsImpl.hpp" />
+    <ClInclude Include="..\src\Iconv.hpp" />
+    <ClInclude Include="..\src\LargeImageData.hpp" />
+    <ClInclude Include="..\src\Log.hpp" />
+    <ClInclude Include="..\src\Macro.hpp" />
+    <ClInclude Include="..\src\MarkupParser.hpp" />
+    <ClInclude Include="..\src\MPEGFile.hpp" />
+    <ClInclude Include="..\src\OffScreenTarget.hpp" />
+    <ClInclude Include="..\src\RenderState.hpp" />
     <ClInclude Include="..\src\stb_image.h" />
     <ClInclude Include="..\src\stb_image_write.h" />
+    <ClInclude Include="..\src\TexChunk.hpp" />
+    <ClInclude Include="..\src\TextBuilder.hpp" />
+    <ClInclude Include="..\src\Texture.hpp" />
+    <ClInclude Include="..\src\TransformStack.hpp" />
+    <ClInclude Include="..\src\TrueTypeFont.hpp" />
     <ClInclude Include="..\src\WinUtility.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\GosuAppDelegate.mm" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

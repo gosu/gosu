@@ -407,5 +407,106 @@
     <ClInclude Include="..\src\WinUtility.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
+    <ClInclude Include="..\Gosu\Channel.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Color.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Font.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Gosu.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Image.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Sample.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Song.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\TextInput.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Gosu\Window.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\AudioFile.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\AudioImpl.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\BlockAllocator.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ClipRectStack.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\DrawOp.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\DrawOpQueue.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\EmptyImageData.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GosuGLView.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GosuViewController.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GraphicsImpl.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Iconv.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\LargeImageData.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Log.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Macro.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\MarkupParser.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\MPEGFile.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\OffScreenTarget.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\RenderState.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TexChunk.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TextBuilder.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Texture.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TransformStack.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TrueTypeFont.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\GosuAppDelegate.mm">
+      <Filter>Implementation</Filter>
+    </None>
   </ItemGroup>
 </Project>
