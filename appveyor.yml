@@ -1,3 +1,4 @@
+image: Visual Studio 2019
 version: '{build}'
 branches:
   only:
