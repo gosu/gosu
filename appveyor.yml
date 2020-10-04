@@ -4,15 +4,12 @@ branches:
   only:
   - master
 skip_tags: true
-configuration: Release (Ruby 2.3)
+configuration: Release (Ruby 2.7)
 platform:
 - x64
 - x86
 clone_depth: 3
 environment:
-  SDL2_INCLUDE: C:\SDL2-2.0.12\include
-  SDL2_LIB: C:\SDL2-2.0.12\lib\x86
-  SDL2_LIB64: C:\SDL2-2.0.12\lib\x64
   DEBUG: true
 install:
 - ps: >-
@@ -24,10 +21,10 @@ install:
 test_script:
 - ps: >-
     If ($env:PLATFORM -Eq "x64") {
-      $env:PATH = "C:\Ruby23-x64\bin;$env:PATH"
+      $env:PATH = "C:\Ruby27-x64\bin;$env:PATH"
     }
     Else {
-      $env:PATH = "C:\Ruby23\bin;$env:PATH"
+      $env:PATH = "C:\Ruby27\bin;$env:PATH"
     }
     
     gem install rake rake-compiler minitest --no-doc
