@@ -336,9 +336,6 @@
     <ClInclude Include="..\src\TrueTypeFont.hpp" />
     <ClInclude Include="..\src\WinUtility.hpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\src\GosuAppDelegate.mm" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
