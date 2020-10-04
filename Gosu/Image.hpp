@@ -7,9 +7,8 @@
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
 #include <memory>
-#include <vector>
 #include <string>
-#include <iostream>
+#include <vector>
 
 namespace Gosu
 {

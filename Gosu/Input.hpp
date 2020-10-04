@@ -8,9 +8,8 @@
 #include <Gosu/Platform.hpp>
 #include <functional>
 #include <memory>
-#include <vector>
 #include <string>
-#include <iostream>
+#include <vector>
 
 namespace Gosu
 {
