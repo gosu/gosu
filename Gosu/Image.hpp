@@ -8,6 +8,8 @@
 #include <Gosu/GraphicsBase.hpp>
 #include <memory>
 #include <vector>
+#include <string>
+#include <iostream>
 
 namespace Gosu
 {
