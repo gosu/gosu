@@ -11,13 +11,6 @@ platform:
 clone_depth: 3
 environment:
   DEBUG: true
-install:
-- ps: >-
-    Start-FileDownload https://libsdl.org/release/SDL2-devel-2.0.12-VC.zip
-    
-    7z x SDL2-devel-2.0.12-VC.zip -oC:\projects\gosu\dependencies
-    
-    move C:\projects\gosu\dependencies\SDL2-2.0.12 C:\projects\gosu\dependencies\SDL2
 test_script:
 - ps: >-
     If ($env:PLATFORM -Eq "x64") {
