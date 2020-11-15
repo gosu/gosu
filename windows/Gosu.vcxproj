@@ -104,6 +104,7 @@
       <DebugInformationFormat>
       </DebugInformationFormat>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Lib>
       <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -123,6 +124,7 @@
       <DebugInformationFormat>
       </DebugInformationFormat>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Lib>
       <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -141,6 +143,7 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Lib>
       <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -160,6 +163,7 @@
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Lib>
       <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>

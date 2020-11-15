@@ -247,6 +247,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\dependencies\msvcrt-ruby\msvcrt-ruby230.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -272,6 +273,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\dependencies\msvcrt-ruby\msvcrt-ruby240.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -297,6 +299,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\dependencies\msvcrt-ruby\msvcrt-ruby250.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -322,6 +325,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\dependencies\msvcrt-ruby\msvcrt-ruby260.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -347,6 +351,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\dependencies\msvcrt-ruby\msvcrt-ruby270.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -372,6 +377,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\dependencies\msvcrt-ruby\x64-msvcrt-ruby230.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -396,6 +402,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\dependencies\msvcrt-ruby\x64-msvcrt-ruby240.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -420,6 +427,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\dependencies\msvcrt-ruby\x64-msvcrt-ruby250.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -444,6 +452,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\dependencies\msvcrt-ruby\x64-msvcrt-ruby260.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -468,6 +477,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ForcedIncludeFiles>map;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\dependencies\msvcrt-ruby\x64-msvcrt-ruby270.lib;Gosu.lib;%(AdditionalDependencies)</AdditionalDependencies>
