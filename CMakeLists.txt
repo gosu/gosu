@@ -16,7 +16,7 @@ option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
 file(GLOB_RECURSE C_FILES ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/*.c)
 file(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
-file(GLOB HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/Gosu/*.hpp)
+file(GLOB HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/Gosu/*.hpp)
 
 # Compile all C++ files as Objective C++ on macOS so we can use Cocoa APIs.
 if(APPLE)
@@ -48,7 +48,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/gosu.pc
 # TODO: Use generator expressions instead of CMAKE_CURRENT_SOURCE_DIR, see:
 # https://cliutils.gitlab.io/modern-cmake/chapters/basics/functions.html
 include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/SDL_sound
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/stb
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/utf8proc
@@ -73,7 +73,7 @@ install(TARGETS gosu
         LIBRARY DESTINATION lib COMPONENT library
         ARCHIVE DESTINATION lib COMPONENT library)
 
-# Install the header files in the Gosu.
+# Install the header files for Gosu.
 install(DIRECTORY Gosu
         DESTINATION include
         COMPONENT development)

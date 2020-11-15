@@ -38,8 +38,8 @@ Pod::Spec.new do |s|
     # Statically link SDL 2, so that compiled games will be self-contained.
     ss.osx.xcconfig = { "OTHER_LDFLAGS" => "/usr/local/lib/libSDL2.a" }
     
-    ss.public_header_files = "Gosu/*.hpp"
-    ss.source_files = ["Gosu/*.hpp", "src/*.{hpp,cpp}"]
+    ss.public_header_files = "include/Gosu/*.hpp"
+    ss.source_files = ["include/Gosu/*.hpp", "src/*.{hpp,cpp}"]
     # Do not include FFI wrappers in the Pod project - this spec is for the C++ interface.
     ss.exclude_files = "src/Constants.cpp", "src/*Wrapper.cpp"
     

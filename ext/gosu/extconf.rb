@@ -19,14 +19,14 @@ end
 require 'mkmf'
 require 'fileutils'
 
-# Silence internal deprecation warnings in Gosu
+# Silence internal deprecation warnings in Gosu.
 $CFLAGS << " -DGOSU_DEPRECATED="
 
 $CXXFLAGS ||= ""
 $CXXFLAGS << " -std=gnu++11"
 
-# For #include <Gosu/...>
-$INCFLAGS << " -I../.. -I../../dependencies/stb -I../../dependencies/utf8proc -I../../dependencies/SDL_sound"
+# Make Gosu's own header files and all of its dependencies available to C++ source files.
+$INCFLAGS << " -I../../include -I../../dependencies/stb -I../../dependencies/utf8proc -I../../dependencies/SDL_sound"
 
 if `uname`.chomp == 'Darwin'
   # Disable assertions in C code.

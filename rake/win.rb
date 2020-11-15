@@ -1,5 +1,5 @@
 namespace :win do
-  WINDOWS_FILES = COMMON_CPP_FILES + FileList["Gosu/*.hpp", "lib{,64}/*.{dll,lib}"]
+  WINDOWS_FILES = COMMON_CPP_FILES + FileList["include/Gosu/*.hpp", "lib{,64}/*.{dll,lib}"]
   WINDOWS_FILES.uniq!
   
   WINDOWS_ARCHIVE_FILENAME = "pkg/gosu-windows-#{GOSU_VERSION}.zip"
@@ -9,7 +9,7 @@ namespace :win do
     zip WINDOWS_ARCHIVE_FILENAME, WINDOWS_FILES
   end
   
-  desc "Updates the Visual Studio project to include all files matching src/**/*.cpp"
+  desc "Updates the Visual Studio project to include all C++ and C source files"
   task :vcxproj do
     files = FileList["{src,dependencies}/**/*.{c,cpp}"]
 
