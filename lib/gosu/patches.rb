@@ -78,12 +78,3 @@ class Gosu::Window
     _tick
   end
 end
-
-# Release OpenAL resources during Ruby's shutdown, not Gosu's.
-at_exit do
-  begin
-    Gosu::Song.current_song.stop if Gosu::Song.current_song
-    Gosu._release_all_openal_resources
-  rescue
-  end
-end

@@ -22,8 +22,6 @@ namespace Gosu
         throw runtime_error(operation + ": " + (error ? error : "(unknown error)"));
     }
 
-    static void cleanup();
-
     SDL_Window* shared_window()
     {
         static SDL_Window* window = nullptr;
@@ -31,8 +29,6 @@ namespace Gosu
             if (SDL_Init(SDL_INIT_VIDEO) < 0) {
                 throw_sdl_error("Could not initialize SDL Video");
             }
-
-            atexit(cleanup);
 
             Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN;
 
@@ -71,13 +67,6 @@ namespace Gosu
     void ensure_current_context()
     {
         SDL_GL_MakeCurrent(shared_window(), shared_gl_context());
-    }
-
-    static void cleanup()
-    {
-        SDL_GL_DeleteContext(shared_gl_context());
-        SDL_DestroyWindow(shared_window());
-        SDL_QuitSubSystem(SDL_INIT_VIDEO);
     }
 }
 
