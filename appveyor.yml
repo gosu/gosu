@@ -22,4 +22,4 @@ test_script:
     
     gem install rake rake-compiler minitest --no-doc
     
-    cmd /c rake format test TESTOPTS='-v' '2>&1'
+    cmd /c rake format test TEST=test/test_window.rb TESTOPTS='-v' '2>&1'
