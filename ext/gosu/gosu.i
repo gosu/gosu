@@ -433,13 +433,10 @@ namespace Gosu
 
 %constant unsigned MAX_TEXTURE_SIZE = Gosu::MAX_TEXTURE_SIZE;
 
-%rename("_release_all_openal_resources") al_shutdown;
-
 namespace Gosu
 {
     std::string language();
     void enable_undocumented_retrofication();
-    void al_shutdown();
 }
 
 // Color
