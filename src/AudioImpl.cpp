@@ -23,23 +23,14 @@ void Gosu::al_initialize()
     _context = alcCreateContext(_device, nullptr);
     alcMakeContextCurrent(_context);
     alGenSources(CHANNELS, _sources);
+
+    // Don't worry about ever closing the OpenAL device; it's hard to know when to clean up within
+    // the scope of a Ruby C extension. Let the operating system clean up after us.
 }
 
 bool Gosu::al_initialized()
 {
     return _device != nullptr;
-}
-
-void Gosu::al_shutdown()
-{
-    if (_device == nullptr) return;
-    
-    alDeleteSources(CHANNELS, _sources);
-    alcMakeContextCurrent(nullptr);
-    alcDestroyContext(_context);
-    _context = nullptr;
-    alcCloseDevice(_device);
-    _device = nullptr;
 }
 
 ALCdevice* Gosu::al_device()

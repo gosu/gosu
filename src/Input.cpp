@@ -21,7 +21,6 @@ static void require_sdl_video()
 
     std::call_once(initialized, [] {
         SDL_InitSubSystem(SDL_INIT_VIDEO);
-        atexit([] { SDL_QuitSubSystem(SDL_INIT_VIDEO); });
     });
 }
 

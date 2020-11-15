@@ -25,14 +25,10 @@ struct Gosu::AudioFile::Impl
     Impl()
     {
         static std::once_flag initialized;
-
-        std::call_once(initialized, [] {
-            Sound_Init();
-            std::atexit([] { Sound_Quit(); });
-        });
+        std::call_once(initialized, Sound_Init);
+        // Don't bother calling Sound_Quit(); it's hard to know when to clean up within the scope
+        // of a Ruby C extension. Let the operating system clean up after us.
     }
-
-
 };
 
 Gosu::AudioFile::AudioFile(const std::string& filename)

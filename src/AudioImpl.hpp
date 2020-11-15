@@ -14,7 +14,6 @@ namespace Gosu
 {
     void al_initialize();
     bool al_initialized();
-    void al_shutdown();
     
     // Will initialize OpenAL if necessary.
     ALCdevice* al_device();
