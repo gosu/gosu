@@ -57,10 +57,6 @@ include_directories(
         ${OPENGL_INCLUDE_DIRS}
         ${SNDFILE_INCLUDE_DIRS})
 
-# "Sources" and "Headers" are the group names in Visual Studio.
-source_group("Sources" FILES ${SOURCE_FILES} ${C_FILES})
-source_group("Headers" FILES ${HEADER_FILES})
-
 add_library(gosu ${SOURCE_FILES} ${C_FILES} ${HEADER_FILES})
 
 set_target_properties(gosu PROPERTIES
