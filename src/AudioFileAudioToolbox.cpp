@@ -1,5 +1,9 @@
 #include <Gosu/Platform.hpp>
 
+// The reason for having this implementation in addition to SDL_sound is that we don't currently
+// use SDL at all on iOS. The duplication between this file and SDL_sound_coreaudio.c is pretty
+// painful to watch, though. TODO: See if we can use parts of SDL on iOS as well?
+
 #ifdef GOSU_IS_IPHONE
 
 #include "AudioFile.hpp"

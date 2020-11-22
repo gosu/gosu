@@ -1,4 +1,4 @@
 cmake_minimum_required(VERSION 3.10)
 
-add_subdirectory("TextInput")
-add_subdirectory("Tutorial")
+add_subdirectory(TextInput)
+add_subdirectory(Tutorial)

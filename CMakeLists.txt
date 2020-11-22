@@ -1,5 +1,6 @@
+# Structure inspired by https://github.com/pabloariasal/modern-cmake-sample
 # Assumptions:
-# - We cannot go higher than CMake 3.10 while supporting Ubuntu 18.04.
+# - We cannot go higher than CMake 3.10 while we support Ubuntu 18.04.
 # - Prefer static libraries. Users should link Gosu into their games.
 # - This is not (yet?) going to be used for building Ruby/Gosu.
 # - This is not (yet?) going to replace the Visual Studio project for Windows.
@@ -7,75 +8,130 @@ cmake_minimum_required(VERSION 3.10)
 
 project(Gosu VERSION 0.15.2)
 
+
+##############################################
+# Global options
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# TODO: Build both a shared library (mostly for FFI) and a static one.
-# See https://stackoverflow.com/q/2152077
-option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
-file(GLOB_RECURSE C_FILES ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/*.c)
-file(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
-file(GLOB HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/Gosu/*.hpp)
+##############################################
+# Declare dependencies
 
-# Compile all C++ files as Objective C++ on macOS so we can use Cocoa APIs.
+find_package(SDL2 REQUIRED)
+find_package(OpenAL REQUIRED)
+# Prefer glvnd (the "GL Vendor-Neutral Dispatch library") over plain libGL.so.
+cmake_policy(SET CMP0072 NEW)
+find_package(OpenGL REQUIRED)
+
 if(APPLE)
-    set_source_files_properties(${SOURCE_FILES} PROPERTIES COMPILE_FLAGS
-            "-x objective-c++ -Wno-documentation")
+    find_library(COCOA_LIBRARY Cocoa)
+    find_library(AUDIO_TOOLBOX_LIBRARY AudioToolbox)
+    find_library(CORE_TEXT_LIBRARY CoreText)
+    find_library(ICONV_LIBRARY iconv)
+else()
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(FONTCONFIG REQUIRED fontconfig)
 endif()
 
-# Set up install paths e.g. for GosuConfig.cmake
-set(CONFIG_FILE_DIR "share/Gosu/cmake")
-set(INSTALL_PKGCONFIG_DIR "share/pkgconfig")
 
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/GosuConfig.cmake
-        DESTINATION ${CONFIG_FILE_DIR}
-        COMPONENT development)
+##############################################
+# Create target and set properties
 
-set(COMPILING_GOSU 1)
-mark_as_advanced(COMPILING_GOSU)
+file(GLOB_RECURSE C_FILES ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/*.c)
+file(GLOB HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/Gosu/*.hpp)
+file(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/GosuConfig.cmake)
+# Build Gosu as a shared library only for now. This also means we don't have to
+# find all of our dependencies again in cmake/GosuConfig.cmake.in, as the
+# compiled .so/.dylib file will already reference them.
+# TODO: Build both a shared library (mostly for FFI), and a static one.
+# See https://stackoverflow.com/q/2152077
+add_library(gosu SHARED ${C_FILES} ${HEADER_FILES} ${SOURCE_FILES})
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/gosu.pc.in
-        ${CMAKE_CURRENT_BINARY_DIR}/cmake/gosu.pc
-        @ONLY)
+# Ignore deprecation warnings from within Gosu while compiling Gosu itself.
+set_target_properties(gosu PROPERTIES
+        COMPILE_DEFINITIONS "GOSU_DEPRECATED=")
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/gosu.pc
-        DESTINATION ${INSTALL_PKGCONFIG_DIR}
-        COMPONENT development)
+# Compile all C++ files as Objective-C++ on macOS so that we can use ObjC APIs.
+if(APPLE)
+    set_source_files_properties(${SOURCE_FILES} PROPERTIES
+            COMPILE_FLAGS "-x objective-c++")
+endif()
 
-include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}
+target_include_directories(gosu
+    PUBLIC
+        $<INSTALL_INTERFACE:include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/SDL_sound
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/stb
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/utf8proc
-        ${OPENAL_INCLUDE_DIRS}
         ${SDL2_INCLUDE_DIRS}
-        ${OPENGL_INCLUDE_DIRS}
-        ${SNDFILE_INCLUDE_DIRS})
+        ${OPENAL_INCLUDE_DIRS})
 
-# "Sources" and "Headers" are the group names in Visual Studio.
-source_group("Sources" FILES ${SOURCE_FILES} ${C_FILES})
-source_group("Headers" FILES ${HEADER_FILES})
+target_link_libraries(gosu
+    PRIVATE
+        # The SDL2::SDL2 target is not available on Ubuntu 18.04.
+        ${SDL2_LIBRARIES}
+        OpenGL::GL
+        ${OPENAL_LIBRARY}
+        # Only defined on macOS
+        ${COCOA_LIBRARY}
+        ${AUDIO_TOOLBOX_LIBRARY}
+        ${CORE_TEXT_LIBRARY}
+        ${ICONV_LIBRARY}
+        # Only defined on Linux
+        ${FONTCONFIG_LIBRARIES})
 
-add_library(gosu ${SOURCE_FILES} ${C_FILES} ${HEADER_FILES})
 
-set_target_properties(gosu PROPERTIES
-        COMPILE_FLAGS "-DGOSU_DEPRECATED="
-        INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}
-        VERSION ${Gosu_VERSION}
-        SOVERSION ${Gosu_VERSION_MAJOR}
-        )
+##############################################
+# Installation instructions
 
-target_link_libraries(gosu ${GOSU_DEPENDENCIES})
+include(GNUInstallDirs)
+set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/Gosu)
 
 install(TARGETS gosu
-        RUNTIME DESTINATION bin COMPONENT library
-        LIBRARY DESTINATION lib COMPONENT library
-        ARCHIVE DESTINATION lib COMPONENT library)
+        EXPORT gosu-targets
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-# Install the header files in the Gosu.
-install(DIRECTORY Gosu
-        DESTINATION include
-        COMPONENT development)
+# Taken from modern-cmake-sample, although the point is not clear to me.
+set_target_properties(gosu PROPERTIES EXPORT_NAME Gosu)
+
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+# Export the targets to a script
+install(EXPORT gosu-targets
+        FILE
+        GosuTargets.cmake
+        NAMESPACE
+        Gosu::
+        DESTINATION
+        ${INSTALL_CONFIGDIR})
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file(${CMAKE_CURRENT_LIST_DIR}/cmake/GosuConfig.cmake.in
+        ${CMAKE_CURRENT_BINARY_DIR}/GosuConfig.cmake
+        INSTALL_DESTINATION ${INSTALL_CONFIGDIR})
+
+install(FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/GosuConfig.cmake
+        DESTINATION ${INSTALL_CONFIGDIR})
+
+export(EXPORT gosu-targets
+        FILE ${CMAKE_CURRENT_BINARY_DIR}/GosuTargets.cmake
+        NAMESPACE Gosu::)
+
+
+##############################################
+# Examples
+
+# Alias our library as Gosu::Gosu so that the examples can depend on it by its
+# normal name.
+add_library(Gosu::Gosu ALIAS gosu)
+
+# Including the examples here means they will always be built along with Gosu.
+# This is fine, we care more about catching errors than compilation speed.
+add_subdirectory(examples)

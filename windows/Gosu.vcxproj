@@ -81,16 +81,16 @@
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\dependencies\al_soft\x64;..\dependencies\SDL\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..;..\dependencies\al_soft;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\dependencies\al_soft;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..;..\dependencies\al_soft;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\dependencies\al_soft;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..;..\dependencies\al_soft;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\dependencies\al_soft;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..;..\dependencies\al_soft;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\dependencies\al_soft;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
