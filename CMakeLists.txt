@@ -68,11 +68,13 @@ target_include_directories(gosu
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/SDL_sound
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/stb
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/utf8proc
+        ${SDL2_INCLUDE_DIRS}
         ${OPENAL_INCLUDE_DIRS})
 
 target_link_libraries(gosu
     PRIVATE
-        SDL2::SDL2
+        # The SDL2::SDL2 target is not available on Ubuntu 18.04.
+        ${SDL2_LIBRARIES}
         OpenGL::GL
         ${OPENAL_LIBRARY}
         # Only defined on macOS
