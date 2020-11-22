@@ -84,42 +84,43 @@ target_link_libraries(gosu
         ${FONTCONFIG_LIBRARIES})
 
 
-## Set up install paths e.g. for GosuConfig.cmake
-#set(CONFIG_FILE_DIR "share/Gosu/cmake")
-#set(INSTALL_PKGCONFIG_DIR "share/pkgconfig")
-#
-#install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/GosuConfig.cmake
-#        DESTINATION ${CONFIG_FILE_DIR}
-#        COMPONENT development)
-#
-#set(COMPILING_GOSU 1)
-#mark_as_advanced(COMPILING_GOSU)
-#
-#include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/GosuConfig.cmake)
-#
-#configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/gosu.pc.in
-#        ${CMAKE_CURRENT_BINARY_DIR}/cmake/gosu.pc
-#        @ONLY)
-#
-#install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/gosu.pc
-#        DESTINATION ${INSTALL_PKGCONFIG_DIR}
-#        COMPONENT development)
-#
-#
+##############################################
+# Installation instructions
 
-#include(GNUInstallDirs)
-#install(TARGETS Gosu
-#        EXPORT gosu-export
-#        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
-#
-#install(EXPORT gosu-targets
-#    FILE
-#        cmake/GosuConfig.cmake
-#    NAMESPACE
-#        Gosu::
-#    DESTINATION
-#        ${CMAKE_INSTALL_LIBDIR}/cmake/Gosu)
+include(GNUInstallDirs)
+set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/Gosu)
+
+install(TARGETS gosu
+        EXPORT gosu-targets
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+# Taken from modern-cmake-sample, although the point is not clear to me.
+set_target_properties(gosu PROPERTIES EXPORT_NAME Gosu)
+
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+# Export the targets to a script
+install(EXPORT gosu-targets
+        FILE
+        GosuTargets.cmake
+        NAMESPACE
+        Gosu::
+        DESTINATION
+        ${INSTALL_CONFIGDIR})
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file(${CMAKE_CURRENT_LIST_DIR}/cmake/GosuConfig.cmake.in
+        ${CMAKE_CURRENT_BINARY_DIR}/GosuConfig.cmake
+        INSTALL_DESTINATION ${INSTALL_CONFIGDIR})
+
+install(FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/GosuConfig.cmake
+        DESTINATION ${INSTALL_CONFIGDIR})
+
+export(EXPORT gosu-targets
+        FILE ${CMAKE_CURRENT_BINARY_DIR}/GosuTargets.cmake
+        NAMESPACE Gosu::)
 
 
 ##############################################
