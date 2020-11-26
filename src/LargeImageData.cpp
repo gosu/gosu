@@ -185,7 +185,7 @@ Gosu::Bitmap Gosu::LargeImageData::to_bitmap() const
         int x = 0;
         for (int tx = 0; tx < tiles_x; ++tx) {
             ImageData& tile = *tiles[ty * tiles_x + tx];
-            bitmap.insert(tile.to_bitmap(), x, y);
+            bitmap.insert(x, y, tile.to_bitmap());
             x += tile.width();
         }
         y += tiles[ty * tiles_x]->height();

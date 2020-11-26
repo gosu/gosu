@@ -438,7 +438,7 @@ unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src,
         }
         else {
             Bitmap bmp(src_width, src_height);
-            bmp.insert(src, 0, 0, src_x, src_y, src_width, src_height);
+            bmp.insert(0, 0, src, src_x, src_y, src_width, src_height);
             data = texture->try_alloc(bmp, 0);
         }
         
@@ -449,14 +449,13 @@ unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src,
     // Too large to fit on a single texture.
     if (src_width > max_size - 2 || src_height > max_size - 2) {
         Bitmap bmp(src_width, src_height);
-        bmp.insert(src, 0, 0, src_x, src_y, src_width, src_height);
+        bmp.insert(0, 0, src, src_x, src_y, src_width, src_height);
         unique_ptr<ImageData> lidi;
         lidi.reset(new LargeImageData(bmp, max_size - 2, max_size - 2, flags));
         return lidi;
     }
     
-    Bitmap bmp;
-    apply_border_flags(bmp, src, src_x, src_y, src_width, src_height, flags);
+    Bitmap bmp = apply_border_flags(flags, src, src_x, src_y, src_width, src_height);
 
     // Try to put the bitmap into one of the already allocated textures.
     for (const auto& texture : textures) {

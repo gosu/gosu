@@ -1,57 +1,66 @@
 #include <Gosu/Bitmap.hpp>
-#include <cassert>
-#include <algorithm>
-#include <vector>
-using namespace std;
+#include <Gosu/GraphicsBase.hpp>
+#include <stdexcept> // for std::invalid_argument
+#include <utility>   // for std::swap
+
+Gosu::Bitmap::Bitmap(int width, int height, Gosu::Color c)
+{
+    resize(width, height, c);
+}
 
 void Gosu::Bitmap::swap(Bitmap& other)
 {
-    std::swap(pixels, other.pixels);
-    std::swap(w, other.w);
-    std::swap(h, other.h);
+    std::swap(m_pixels, other.m_pixels);
+    std::swap(m_width, other.m_width);
+    std::swap(m_height, other.m_height);
 }
 
-void Gosu::Bitmap::resize(unsigned width, unsigned height, Color c)
+void Gosu::Bitmap::resize(int width, int height, Color c)
 {
-    if (width == w && height == h) return;
+    if (width < 0 || height < 0) throw std::invalid_argument{"negative bitmap size"};
 
-    Bitmap temp(width, height, c);
-    temp.insert(*this, 0, 0);
+    if (width == m_width && height == m_height) return;
+
+    Bitmap temp;
+    temp.m_width = width;
+    temp.m_height = height;
+    temp.m_pixels.resize(width * height, c);
+    temp.insert(0, 0, *this);
     swap(temp);
 }
 
-void Gosu::Bitmap::blend_pixel(unsigned x, unsigned y, Color c)
+void Gosu::Bitmap::blend_pixel(int x, int y, Color c)
 {
     if (c.alpha() == 0) return;
-    
+
     Color out = get_pixel(x, y);
     if (out.alpha() == 0) {
         set_pixel(x, y, c);
         return;
     }
-    
+
     int inv_alpha = out.alpha() * (255 - c.alpha()) / 255;
-    
+
     out.set_alpha(c.alpha() + inv_alpha);
     out.set_red  ((c.red()   * c.alpha() + out.red()   * inv_alpha) / out.alpha());
     out.set_green((c.green() * c.alpha() + out.green() * inv_alpha) / out.alpha());
     out.set_blue ((c.blue()  * c.alpha() + out.blue()  * inv_alpha) / out.alpha());
-    
+
     set_pixel(x, y, out);
 }
 
-void Gosu::Bitmap::insert(const Bitmap& source, int x, int y)
+void Gosu::Bitmap::insert(int x, int y, const Bitmap& source)
 {
-    insert(source, x, y, 0, 0, source.width(), source.height());
+    insert(x, y, source, 0, 0, source.width(), source.height());
 }
 
-void Gosu::Bitmap::insert(const Bitmap& source, int x, int y, unsigned src_x, unsigned src_y,
-                          unsigned src_width, unsigned src_height)
+void Gosu::Bitmap::insert(int x, int y, const Bitmap& source,
+                          int src_x, int src_y, int src_width, int src_height)
 {
     // TODO: This should use memcpy if possible (x == 0 && src_width == this->width())
 
     if (x < 0) {
-        unsigned clip_left = -x;
+        int clip_left = -x;
 
         if (clip_left >= src_width) return;
 
@@ -61,7 +70,7 @@ void Gosu::Bitmap::insert(const Bitmap& source, int x, int y, unsigned src_x, un
     }
 
     if (y < 0) {
-        unsigned clip_top = -y;
+        int clip_top = -y;
 
         if (clip_top >= src_height) return;
 
@@ -70,20 +79,20 @@ void Gosu::Bitmap::insert(const Bitmap& source, int x, int y, unsigned src_x, un
         y = 0;
     }
 
-    if (x + src_width > w) {
-        if (static_cast<unsigned>(x) >= w) return;
+    if (x + src_width > m_width) {
+        if (x >= m_width) return;
 
-        src_width = w - x;
+        src_width = m_width - x;
     }
 
-    if (y + src_height > h) {
-        if (static_cast<unsigned>(y) >= h) return;
+    if (y + src_height > m_height) {
+        if (y >= m_height) return;
 
-        src_height = h - y;
+        src_height = m_height - y;
     }
 
-    for (unsigned rel_y = 0; rel_y < src_height; ++rel_y) {
-        for (unsigned rel_x = 0; rel_x < src_width; ++rel_x) {
+    for (int rel_y = 0; rel_y < src_height; ++rel_y) {
+        for (int rel_x = 0; rel_x < src_width; ++rel_x) {
             set_pixel(x + rel_x, y + rel_y, source.get_pixel(src_x + rel_x, src_y + rel_y));
         }
     }
@@ -91,85 +100,76 @@ void Gosu::Bitmap::insert(const Bitmap& source, int x, int y, unsigned src_x, un
 
 void Gosu::apply_color_key(Bitmap& bitmap, Color key)
 {
-    vector<Color> surrounding_colors;
-    surrounding_colors.reserve(4);
-
-    for (unsigned y = 0; y < bitmap.height(); ++y) {
-        for (unsigned x = 0; x < bitmap.width(); ++x) {
+    for (int y = 0; y < bitmap.height(); ++y) {
+        for (int x = 0; x < bitmap.width(); ++x) {
             if (bitmap.get_pixel(x, y) == key) {
-                surrounding_colors.clear();
-                if (x > 0 && bitmap.get_pixel(x - 1, y) != key) {
-                    surrounding_colors.push_back(bitmap.get_pixel(x - 1, y));
-                }
-                if (x < bitmap.width() - 1 && bitmap.get_pixel(x + 1, y) != key) {
-                    surrounding_colors.push_back(bitmap.get_pixel(x + 1, y));
-                }
-                if (y > 0 && bitmap.get_pixel(x, y - 1) != key) {
-                    surrounding_colors.push_back(bitmap.get_pixel(x, y - 1));
-                }
-                if (y < bitmap.height() - 1 && bitmap.get_pixel(x, y + 1) != key) {
-                    surrounding_colors.push_back(bitmap.get_pixel(x, y + 1));
-                }
+                // Calculate the average R/G/B of adjacent, non-transparent pixels.
+                unsigned neighbors = 0, red = 0, green = 0, blue = 0;
+                auto visit = [&](Color c) {
+                  if (c != key) {
+                      neighbors += 1;
+                      red += c.red();
+                      green += c.green();
+                      blue += c.blue();
+                  }
+                };
 
-                if (surrounding_colors.empty()) {
-                    bitmap.set_pixel(x, y, Color::NONE);
-                    continue;
-                }
+                if (x > 0) visit(bitmap.get_pixel(x - 1, y));
+                if (x < bitmap.width() - 1) visit(bitmap.get_pixel(x + 1, y));
+                if (y > 0) visit(bitmap.get_pixel(x, y - 1));
+                if (y < bitmap.height() - 1) visit(bitmap.get_pixel(x, y + 1));
 
-                unsigned red = 0, green = 0, blue = 0;
-                for (auto& color : surrounding_colors) {
-                    red   += color.red();
-                    green += color.green();
-                    blue  += color.blue();
+                Color replacement = Color::NONE;
+                if (neighbors > 0) {
+                    replacement.set_red(red / neighbors);
+                    replacement.set_green(green / neighbors);
+                    replacement.set_blue(blue / neighbors);
                 }
-                bitmap.set_pixel(x, y, Color(0,
-                                             red   / surrounding_colors.size(),
-                                             green / surrounding_colors.size(),
-                                             blue  / surrounding_colors.size()));
+                bitmap.set_pixel(x, y, replacement);
             }
         }
     }
 }
 
-void Gosu::unapply_color_key(Bitmap& bitmap, Color color)
+Gosu::Bitmap Gosu::apply_border_flags(unsigned image_flags, const Bitmap& source,
+                                      int src_x, int src_y, int src_width, int src_height)
 {
-    Color* p = bitmap.data();
-    for (int i = bitmap.width() * bitmap.height(); i > 0; --i, ++p) {
-        if (p->alpha() == 0) {
-            *p = color;
-        }
-        else {
-            p->set_alpha(255);
-        }
-    }
-}
+    // By default, we add one pixel of transparent data around the whole image to so that during
+    // interpolation, the image just fades out, instead of bleeding into adjacent image data on
+    // whatever shared texture atlas it ends up on.
+    // However, if a border is marked as "tileable", we instead repeat the outermost pixels, which
+    // leads to a nice sharp/hard border with no interpolation at all.
 
-void Gosu::apply_border_flags(Bitmap& dest, const Bitmap& source, unsigned src_x, unsigned src_y,
-                              unsigned src_width, unsigned src_height, unsigned image_flags)
-{
+    // TODO: Instead of using Color::NONE (transparent black) for non-tileable image, still repeat
+    // the border pixel colors, but turn them fully transparent.
+
     // Backward compatibility: This used to be 'bool tileable'.
     if (image_flags == 1) image_flags = IF_TILEABLE;
 
-    dest.resize(src_width + 2, src_height + 2);
+    Gosu::Bitmap dest{src_width + 2, src_height + 2};
 
     // The borders are made "harder" by duplicating the original bitmap's
     // borders.
 
     // Top.
     if (image_flags & IF_TILEABLE_TOP) {
-        dest.insert(source, 1, 0, src_x, src_y, src_width, 1);
+        dest.insert(1, 0,
+                    source, src_x, src_y, src_width, 1);
     }
     // Bottom.
     if (image_flags & IF_TILEABLE_BOTTOM) {
-        dest.insert(source, 1, dest.height() - 1, src_x, src_y + src_height - 1, src_width, 1);
+        dest.insert(1, dest.height() - 1,
+                    source, src_x, src_y + src_height - 1, src_width, 1);
     }
     // Left.
     if (image_flags & IF_TILEABLE_LEFT) {
-        dest.insert(source, 0, 1, src_x, src_y, 1, src_height);
+        dest.insert(0, 1,
+                    source, src_x, src_y, 1, src_height);
     }
     // Right.
     if (image_flags & IF_TILEABLE_RIGHT) {
-        dest.insert(source, dest.width() - 1, 1, src_x + src_width - 1, src_y, 1, src_height);
+        dest.insert(dest.width() - 1, 1,
+                    source, src_x + src_width - 1, src_y, 1, src_height);
     }
 
     // Top left.
@@ -194,5 +194,7 @@ void Gosu::apply_border_flags(Bitmap& dest, const Bitmap& source, unsigned src_x
     }
 
     // Now put the final image into the prepared borders.
-    dest.insert(source, 1, 1, src_x, src_y, src_width, src_height);
+    dest.insert(1, 1,
+                source, src_x, src_y, src_width, src_height);
+    return dest;
 }

@@ -11,7 +11,7 @@ namespace Gosu
     
     //! Returns true if the filename has the given extension.
     //! The comparison is case-insensitive, but you must pass the extension in lower case.
-    bool has_extension(const std::string& filename, const char* extension);
+    bool has_extension(std::string_view filename, std::string_view extension);
     
     //! Returns the user's preferred language, at the moment of calling the function. Expect return
     //! values such as 'en_US', 'de_DE.UTF-8', 'ja', 'zh-Hans'.

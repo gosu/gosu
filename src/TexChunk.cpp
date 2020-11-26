@@ -120,7 +120,7 @@ void Gosu::TexChunk::insert(const Bitmap& original_bitmap, int x, int y)
         if (clipped_width <= 0 || clipped_height <= 0) return;
         
         clipped_bitmap.resize(clipped_width, clipped_height);
-        clipped_bitmap.insert(original_bitmap, -clip_left, -clip_top);
+        clipped_bitmap.insert(-clip_left, -clip_top, original_bitmap);
         bitmap = &clipped_bitmap;
     }
     

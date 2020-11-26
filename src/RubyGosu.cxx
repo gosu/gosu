@@ -2267,13 +2267,13 @@ namespace Gosu
         rb_funcall(block, rb_intern("call"), 0);
     }
 
-    void load_bitmap(Bitmap& bitmap, VALUE val)
+    void load_bitmap(Gosu::Bitmap& bitmap, VALUE val)
     {
         // Try to treat as filename first.
         if (rb_respond_to(val, rb_intern("to_str"))) {
             VALUE to_str = rb_funcall(val, rb_intern("to_str"), 0);
             const char* filename = StringValuePtr(to_str);
-            load_image_file(bitmap, filename);
+            bitmap = Gosu::load_image_file(filename);
             return;
         }
 
@@ -2868,8 +2868,8 @@ SWIGINTERN Gosu::Image *new_Gosu_Image(VALUE source,VALUE options=0){
         Gosu::Bitmap bmp;
         Gosu::load_bitmap(bmp, source);
         
-        unsigned src_x = 0, src_y = 0;
-        unsigned src_width = bmp.width(), src_height = bmp.height();
+        int src_x = 0, src_y = 0;
+        int src_width = bmp.width(), src_height = bmp.height();
         unsigned flags = 0;
         
         if (options) {
@@ -3066,10 +3066,10 @@ SWIGINTERN VALUE Gosu_Image_to_blob(Gosu::Image const *self){
         auto size = bmp.width() * bmp.height() * sizeof(Gosu::Color);
         return rb_str_new(reinterpret_cast<const char*>(bmp.data()), size);
     }
-SWIGINTERN unsigned int Gosu_Image_columns(Gosu::Image const *self){
+SWIGINTERN int Gosu_Image_columns(Gosu::Image const *self){
         return self->width();
     }
-SWIGINTERN unsigned int Gosu_Image_rows(Gosu::Image const *self){
+SWIGINTERN int Gosu_Image_rows(Gosu::Image const *self){
         return self->height();
     }
 SWIGINTERN void Gosu_Image_save(Gosu::Image const *self,std::string const &filename){
@@ -7239,7 +7239,7 @@ _wrap_Image_columns(int argc, VALUE *argv, VALUE self) {
   Gosu::Image *arg1 = (Gosu::Image *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int result;
+  int result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -7252,13 +7252,13 @@ _wrap_Image_columns(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Image * >(argp1);
   {
     try {
-      result = (unsigned int)Gosu_Image_columns((Gosu::Image const *)arg1);
+      result = (int)Gosu_Image_columns((Gosu::Image const *)arg1);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  vresult = SWIG_From_int(static_cast< int >(result));
   return vresult;
 fail:
   return Qnil;
@@ -7270,7 +7270,7 @@ _wrap_Image_rows(int argc, VALUE *argv, VALUE self) {
   Gosu::Image *arg1 = (Gosu::Image *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int result;
+  int result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -7283,13 +7283,13 @@ _wrap_Image_rows(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Image * >(argp1);
   {
     try {
-      result = (unsigned int)Gosu_Image_rows((Gosu::Image const *)arg1);
+      result = (int)Gosu_Image_rows((Gosu::Image const *)arg1);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  vresult = SWIG_From_int(static_cast< int >(result));
   return vresult;
 fail:
   return Qnil;
