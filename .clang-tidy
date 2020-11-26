@@ -1,0 +1,29 @@
+Checks: >-
+  *,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -llvm-*,
+  -llvmlibc-*,
+  -fuchsia-*,
+  -google-objc-*,
+  -google-readability-namespace-comments,
+  -google-runtime-references,
+  -hicpp-braces-around-statements,
+  -hicpp-use-equals-default,
+  -misc-non-private-member-variables-in-classes,
+  -modernize-use-default-member-init,
+  -modernize-use-equals-default,
+  -modernize-use-nodiscard,
+  -modernize-use-trailing-return-type,
+  -readability-braces-around-statements,
+  -readability-implicit-bool-conversion,
+  -readability-isolate-declaration,
+  -readability-magic-numbers,
+
+CheckOptions:
+  - { key: readability-identifier-naming.ClassCase,            value: CamelCase  }
+  - { key: readability-identifier-naming.FunctionCase,         value: lower_case }
+  - { key: readability-identifier-naming.GlobalConstantCase,   value: UPPER_CASE }
+  - { key: readability-identifier-naming.NamespaceCase,        value: CamelCase }
+  - { key: readability-identifier-naming.PrivateMemberPrefix,  value: m_         }
+  - { key: readability-identifier-naming.StructCase,           value: CamelCase  }
+  - { key: readability-identifier-naming.VariableCase,         value: lower_case }
