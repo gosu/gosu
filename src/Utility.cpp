@@ -45,17 +45,20 @@ u32string Gosu::utf8_to_composed_utc4(const string& utf8)
     return utc4;
 }
 
-bool Gosu::has_extension(const string& filename, const char* extension)
+bool Gosu::has_extension(string_view filename, string_view extension)
 {
-    size_t ext_len = strlen(extension);
+    size_t ext_len = extension.length();
     if (ext_len > filename.length()) {
         return false;
     }
 
-    const char* str = filename.c_str() + filename.length();
-    const char* ext = extension + ext_len;
+    string_view::iterator filename_iter = filename.end();
+    string_view::iterator ext_iter = extension.end();
     while (ext_len--) {
-        if (tolower((int) *--str) != *--ext) {
+        --filename_iter;
+        --ext_iter;
+
+        if (tolower((int) *filename_iter) != tolower((int) *ext_iter)) {
             return false;
         }
     }
@@ -66,6 +69,7 @@ bool Gosu::has_extension(const string& filename, const char* extension)
 #if defined(GOSU_IS_UNIX) && !defined(GOSU_IS_MAC)
 string Gosu::language()
 {
-    return getenv("LANG");
+    const char* env = getenv("LANG");
+    return env ? env : "en_US";
 }
 #endif

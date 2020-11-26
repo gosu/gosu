@@ -156,13 +156,13 @@ namespace Gosu
         rb_funcall(block, rb_intern("call"), 0);
     }
 
-    void load_bitmap(Bitmap& bitmap, VALUE val)
+    void load_bitmap(Gosu::Bitmap& bitmap, VALUE val)
     {
         // Try to treat as filename first.
         if (rb_respond_to(val, rb_intern("to_str"))) {
             VALUE to_str = rb_funcall(val, rb_intern("to_str"), 0);
             const char* filename = StringValuePtr(to_str);
-            load_image_file(bitmap, filename);
+            bitmap = Gosu::load_image_file(filename);
             return;
         }
 
@@ -392,11 +392,11 @@ namespace Gosu
 %ignore Gosu::LICENSES;
 %constant std::string VERSION = Gosu::VERSION;
 %constant std::string LICENSES = Gosu::LICENSES;
-%include "../../Gosu/Version.hpp"
+%include "../../include/Gosu/Version.hpp"
 
 // Miscellaneous functions (timing, math)
 %ignore Gosu::sleep;
-%include "../../Gosu/Timing.hpp"
+%include "../../include/Gosu/Timing.hpp"
 %ignore Gosu::distance_sqr;
 %ignore Gosu::round;
 %ignore Gosu::trunc;
@@ -404,12 +404,12 @@ namespace Gosu
 %ignore Gosu::wrap;
 %ignore Gosu::radians_to_gosu;
 %ignore Gosu::gosu_to_radians;
-%include "../../Gosu/Math.hpp"
+%include "../../include/Gosu/Math.hpp"
 %ignore Gosu::text_width;
 %ignore Gosu::draw_text;
 %ignore Gosu::layout_text;
 %ignore Gosu::layout_markup;
-%include "../../Gosu/Text.hpp"
+%include "../../include/Gosu/Text.hpp"
 
 
 // Graphics:
@@ -423,13 +423,13 @@ namespace Gosu
 %ignore Gosu::translate;
 %ignore Gosu::rotate;
 %ignore Gosu::scale;
-%include "../../Gosu/GraphicsBase.hpp"
+%include "../../include/Gosu/GraphicsBase.hpp"
 
 // For screen_width/screen_height
 %ignore Gosu::Graphics;
 %ignore Gosu::BorderFlags;
 %ignore Gosu::MAX_TEXTURE_SIZE;
-%include "../../Gosu/Graphics.hpp"
+%include "../../include/Gosu/Graphics.hpp"
 
 %constant unsigned MAX_TEXTURE_SIZE = Gosu::MAX_TEXTURE_SIZE;
 
@@ -462,7 +462,7 @@ namespace Gosu
 %ignore Gosu::Color::FUCHSIA;
 %ignore Gosu::Color::CYAN;
 
-%include "../../Gosu/Color.hpp"
+%include "../../include/Gosu/Color.hpp"
 
 %extend Gosu::Color {
     static Gosu::Color rgb(Gosu::Color::Channel r, Gosu::Color::Channel g,
@@ -533,7 +533,7 @@ namespace Gosu
 %ignore Gosu::Font::draw_text_rel;
 %ignore Gosu::Font::set_image(std::string codepoint, unsigned font_flags, const Gosu::Image& image);
 
-%include "../../Gosu/Font.hpp"
+%include "../../include/Gosu/Font.hpp"
 %extend Gosu::Font {
     Font(Gosu::Window& window, const std::string& font_name, int height)
     {
@@ -594,7 +594,7 @@ namespace Gosu
 }
 
 %ignore Gosu::ImageData;
-%include "../../Gosu/ImageData.hpp"
+%include "../../include/Gosu/ImageData.hpp"
 
 // Image
 
@@ -610,22 +610,22 @@ namespace Gosu
 
 %ignore Gosu::Image::Image();
 %ignore Gosu::Image::Image(const std::string& filename, unsigned flags);
-%ignore Gosu::Image::Image(const std::string& filename, unsigned src_x, unsigned src_y,
-                           unsigned src_width, unsigned src_height, unsigned flags);
+%ignore Gosu::Image::Image(const std::string& filename, int src_x, int src_y,
+                           int src_width, int src_height, unsigned flags);
 %ignore Gosu::Image::Image(const Bitmap& source, unsigned flags);
-%ignore Gosu::Image::Image(const Bitmap& source, unsigned src_x, unsigned src_y,
-                           unsigned src_width, unsigned src_height, unsigned flags);
+%ignore Gosu::Image::Image(const Bitmap& source, int src_x, int src_y,
+                           int src_width, int src_height, unsigned flags);
 %ignore Gosu::Image::Image(std::unique_ptr<ImageData>&& data);
 %ignore Gosu::load_tiles;
-%include "../../Gosu/Image.hpp"
+%include "../../include/Gosu/Image.hpp"
 %extend Gosu::Image {
     Image(VALUE source, VALUE options = 0)
     {
         Gosu::Bitmap bmp;
         Gosu::load_bitmap(bmp, source);
         
-        unsigned src_x = 0, src_y = 0;
-        unsigned src_width = bmp.width(), src_height = bmp.height();
+        int src_x = 0, src_y = 0;
+        int src_width = bmp.width(), src_height = bmp.height();
         unsigned flags = 0;
         
         if (options) {
@@ -826,12 +826,12 @@ namespace Gosu
         return rb_str_new(reinterpret_cast<const char*>(bmp.data()), size);
     }
     
-    unsigned columns() const
+    int columns() const
     {
         return $self->width();
     }
     
-    unsigned rows() const
+    int rows() const
     {
         return $self->height();
     }
@@ -887,7 +887,7 @@ namespace Gosu
 
 // Inspection:
 
-%include "../../Gosu/Inspection.hpp"
+%include "../../include/Gosu/Inspection.hpp"
 
 
 // Audio:
@@ -903,7 +903,7 @@ namespace Gosu
 %rename("volume=") set_volume;
 %rename("pan=") set_pan;
 %rename("speed=") set_speed;
-%include "../../Gosu/Audio.hpp"
+%include "../../include/Gosu/Audio.hpp"
 
 // Input and Window:
 
@@ -922,7 +922,7 @@ namespace Gosu
 %ignore Gosu::GP_NUM_PER_GAMEPAD;
 %ignore Gosu::NUM_GAMEPADS;
 %ignore Gosu::NO_BUTTON;
-%include "../../Gosu/Buttons.hpp"
+%include "../../include/Gosu/Buttons.hpp"
 %init %{
     // Call srand() so that Gosu::random() is actually random in Ruby scripts
     std::srand(static_cast<unsigned>(std::time(0)));
@@ -938,7 +938,7 @@ namespace Gosu
 %rename("text=") set_text;
 %rename("caret_pos=") set_caret_pos;
 %rename("selection_start=") set_selection_start;
-%include "../../Gosu/TextInput.hpp"
+%include "../../include/Gosu/TextInput.hpp"
 
 // Make sure that the indices in caret_pos/selection_start are valid Ruby string indices.
 // (In C++, these methods return/accept UTF-8 byte indices.)
@@ -992,7 +992,7 @@ namespace Gosu
 %rename("fullscreen?") fullscreen;
 %rename("resizable?") resizable;
 %markfunc Gosu::Window "mark_window";
-%include "../../Gosu/Window.hpp"
+%include "../../include/Gosu/Window.hpp"
 
 %header %{
     // Also mark the TextInput instance alive when the window is being marked.

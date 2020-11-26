@@ -13,32 +13,30 @@ Gosu::Image::Image()
 {
 }
 
-Gosu::Image::Image(const string& filename, unsigned flags)
+Gosu::Image::Image(const string& filename, unsigned image_flags)
 {
     // Forward.
-    Bitmap bmp;
-    load_image_file(bmp, filename);
-    Image(bmp, flags).data_.swap(data_);
+    Bitmap bitmap = load_image_file(filename);
+    Image{bitmap, image_flags}.data_.swap(data_);
 }
 
-Gosu::Image::Image(const string& filename, unsigned src_x, unsigned src_y,
-                   unsigned src_width, unsigned src_height, unsigned flags)
+Gosu::Image::Image(const string& filename, int src_x, int src_y, int src_width, int src_height,
+                   unsigned image_flags)
 {
     // Forward.
-    Bitmap bmp;
-    load_image_file(bmp, filename);
-    Image(bmp, src_x, src_y, src_width, src_height, flags).data_.swap(data_);
+    Bitmap bitmap = load_image_file(filename);
+    Image{bitmap, src_x, src_y, src_width, src_height, image_flags}.data_.swap(data_);
 }
 
-Gosu::Image::Image(const Bitmap& source, unsigned flags)
+Gosu::Image::Image(const Bitmap& source, unsigned image_flags)
 {
     // Forward.
-    Image(source, 0, 0, source.width(), source.height(), flags).data_.swap(data_);
+    Image{source, 0, 0, source.width(), source.height(), image_flags}.data_.swap(data_);
 }
 
-Gosu::Image::Image(const Bitmap& source, unsigned src_x, unsigned src_y,
-                   unsigned src_width, unsigned src_height, unsigned flags)
-: data_(Graphics::create_image(source, src_x, src_y, src_width, src_height, flags))
+Gosu::Image::Image(const Bitmap& source, int src_x, int src_y, int src_width, int src_height,
+                   unsigned image_flags)
+: data_(Graphics::create_image(source, src_x, src_y, src_width, src_height, image_flags))
 {
 }
 
@@ -141,7 +139,6 @@ vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bmp, int tile_width, int tile
 vector<Gosu::Image> Gosu::load_tiles(const string& filename, int tile_width, int tile_height,
                                      unsigned flags)
 {
-    Bitmap bmp;
-    load_image_file(bmp, filename);
+    Bitmap bmp = load_image_file(filename);
     return load_tiles(bmp, tile_width, tile_height, flags);
 }

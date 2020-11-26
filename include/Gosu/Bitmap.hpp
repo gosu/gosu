@@ -1,113 +1,96 @@
-//! \file Bitmap.hpp
-//! Interface of the Bitmap class.
-
 #pragma once
 
-#include <Gosu/Fwd.hpp>
 #include <Gosu/Color.hpp>
-#include <Gosu/GraphicsBase.hpp>
-#include <Gosu/Platform.hpp>
+#include <Gosu/IO.hpp>
 #include <string>
 #include <vector>
 
 namespace Gosu
 {
-    //! Rectangular area of pixels, each represented by a Color value. Provides
-    //! minimal drawing functionality and serves as a temporary holder for
-    //! graphical resources which are usually turned into Images later.
-    //! Has (expensive) value semantics.
+    /// A two-dimensional array area of pixels, each represented by a Color value.
+    /// Bitmaps are typically created only as an intermediate step between loading image files, and
+    /// creating Gosu::Image objects from them (i.e. transferring the image into video RAM).
+    /// Has (expensive) value semantics.
     class Bitmap
     {
-        unsigned w, h;
-        std::vector<Color> pixels;
+        int m_width = 0, m_height = 0;
+        std::vector<Color> m_pixels;
 
     public:
-        Bitmap()
-        : w(0), h(0)
+        Bitmap() = default;
+
+        Bitmap(int width, int height, Color c = Color::NONE);
+
+        int width() const
         {
+            return m_width;
         }
-        
-        Bitmap(unsigned w, unsigned h, Color c = Color::NONE)
-        : w(w), h(h), pixels(w * h, c)
+
+        int height() const
         {
-        }
-        
-        unsigned width() const
-        {
-            return w;
-        }
-        
-        unsigned height() const
-        {
-            return h;
+            return m_height;
         }
 
         void swap(Bitmap& other);
 
-        void resize(unsigned width, unsigned height, Color c = Color::NONE);
-        
-        //! Returns the color at the specified position. x and y must be on the
-        //! bitmap.
-        Color get_pixel(unsigned x, unsigned y) const
+        void resize(int width, int height, Color c = Color::NONE);
+
+        /// Returns the color at the specified position without any bounds checking.
+        Color get_pixel(int x, int y) const
         {
-            return pixels[y * w + x];
+            return m_pixels[y * m_width + x];
         }
 
-        //! Sets the pixel at the specified position to a color. x and y must
-        //! be on the bitmap.
-        void set_pixel(unsigned x, unsigned y, Color c)
+        /// Sets the pixel at the specified position without any bounds checking.
+        void set_pixel(int x, int y, Color c)
         {
-            pixels[y * w + x] = c;
+            m_pixels[y * m_width + x] = c;
         }
-        
-        //! This updates a pixel using the "over" alpha compositing operator, see:
-        //! https://en.wikipedia.org/wiki/Alpha_compositing
-        void blend_pixel(unsigned x, unsigned y, Color c);
 
-        //! Inserts a bitmap at the given position. Parts of the inserted
-        //! bitmap that would be outside of the target bitmap will be
-        //! clipped away.
-        void insert(const Bitmap& source, int x, int y);
+        /// This updates a pixel using the "over" alpha compositing operator, see:
+        /// https://en.wikipedia.org/wiki/Alpha_compositing
+        void blend_pixel(int x, int y, Color c);
 
-        //! Inserts a portion of a bitmap at the given position. Parts of the
-        //! inserted bitmap that would be outside of the target bitmap will be
-        //! clipped away.
-        void insert(const Bitmap& source, int x, int y, unsigned src_x, unsigned src_y,
-            unsigned src_width, unsigned src_height);
+        /// Inserts a bitmap at the given position. Parts of the inserted bitmap that would be
+        /// outside of the target bitmap will be clipped away.
+        void insert(int x, int y, const Bitmap& source);
 
-        //! Direct access to the array of color values. May be useful for optimized
-        //! OpenGL operations.
+        /// Inserts a portion of a bitmap at the given position. Parts of the inserted bitmap that
+        /// would be outside of the target bitmap will be clipped away.
+        void insert(int x, int y, const Bitmap& source,
+                    int src_x, int src_y, int src_width, int src_height);
+
+        /// Direct access to the array of color values.
+        /// The return value is undefined if this bitmap is empty.
         const Color* data() const
         {
-            return &pixels[0];
+            return &m_pixels[0];
         }
-        
+
+        /// Direct access to the array of color values.
+        /// The return value is undefined if this bitmap is empty.
         Color* data()
         {
-            return &pixels[0];
+            return &m_pixels[0];
         }
     };
-    
-    //! Loads any supported image into a Bitmap.
-    void load_image_file(Bitmap& bitmap, const std::string& filename);
-    //! Loads any supported image into a Bitmap.
-    void load_image_file(Bitmap& bitmap, Reader input);
-    
-    //! Saves a Bitmap to a file.
-    void save_image_file(const Bitmap& bitmap, const std::string& filename);
-    //! Saves a Bitmap to an arbitrary resource.
-    void save_image_file(const Bitmap& bitmap, Writer writer,
-        const std::string& format_hint = "png");
 
-    //! Set the alpha value of all pixels which are equal to the color key
-    //! to zero. Color values are adjusted so that no borders show up when
-    //! the image is stretched or rotated.
+    /// Loads any supported image into a Bitmap.
+    Bitmap load_image_file(const std::string& filename);
+    /// Loads any supported image into a Bitmap.
+    Bitmap load_image_file(Reader input);
+
+    /// Saves a Bitmap to a file.
+    void save_image_file(const Bitmap& bitmap, const std::string& filename);
+    /// Saves a Bitmap to an arbitrary resource.
+    void save_image_file(const Bitmap& bitmap, Writer writer,
+                         const std::string_view& format_hint = "png");
+
+    /// Set the alpha value of all pixels which are equal to the color key to zero.
+    /// To reduce interpolation artefacts when stretching or rotating the resulting image, the color
+    /// value of these pixels will also be adjusted to the average of their surrounding pixels.
     void apply_color_key(Bitmap& bitmap, Color key);
-    
-    //! The reverse of apply_color_key. Resets all fully transparent pixels by
-    //! a background color, makes all other pixels fully opaque.
-    void unapply_color_key(Bitmap& bitmap, Color background);
-    
-    void apply_border_flags(Bitmap& dest, const Bitmap& source, unsigned src_x, unsigned src_y,
-        unsigned src_width, unsigned src_height, unsigned border_flags);
+
+    Bitmap apply_border_flags(unsigned image_flags, const Bitmap& source,
+                              int src_x, int src_y, int src_width, int src_height);
 }
