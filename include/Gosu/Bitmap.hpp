@@ -73,6 +73,10 @@ namespace Gosu
         {
             return &m_pixels[0];
         }
+
+        #ifdef FRIEND_TEST
+        FRIEND_TEST(BitmapTests, MemoryManagement);
+        #endif
     };
 
     /// Loads any supported image into a Bitmap.
