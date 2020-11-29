@@ -1,0 +1,9 @@
+# This file explicitly disables a few clang-tidy inspections that are triggered
+# by GoogleTest, see https://github.com/google/googletest/issues/2442
+InheritParentConfig: true
+Checks: >-
+  -cert-err58-cpp,
+  -cppcoreguidelines-avoid-non-const-global-variables,
+  -cppcoreguidelines-owning-memory,
+  -cppcoreguidelines-special-member-functions,
+  -hicpp-special-member-functions,

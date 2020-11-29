@@ -32,7 +32,8 @@ addons:
       - rake
       # For C++
       - cmake
-      # For Linux Soundtests (like xvfb for sound: lets us headlessly run audio tests)
+      - libgtest-dev
+      # For Linux tests (like xvfb for sound: lets us run headless audio tests)
       - pulseaudio
 
 services:
@@ -49,7 +50,7 @@ before_install:
       # Mac dependencies
       # See: https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X
       brew update
-      brew install sdl2
+      brew install sdl2 googletest
 
       # Update the system RubyGems on macOS and install CocoaPods.
       gem update --system
@@ -89,14 +90,22 @@ install:
     rake gem
     gem install pkg/gosu-9.9.9.gem --no-doc
 
-  # Install Gosu for C++ using CMake.
+  # Install Gosu for C++ using CMake (running tests on the way).
   - |
     mkdir -p build
     cd build
     cmake ..
     make
+    make test
     sudo make install
     cd ..
+
+  # Compile the C++ examples using CMake, outside of the main Gosu build tree.
+  - |
+    mkdir -p examples/build &&
+    cd examples/build &&
+    cmake .. &&
+    make
 
   # Compile Gosu for macOS and iOS using CocoaPods.
   - |
@@ -118,10 +127,3 @@ script:
     else
       sg audio 'rake -rgosu test'
     fi
-
-  # Compile C++ examples using CMake.
-  - |
-    mkdir -p examples/build &&
-    cd examples/build &&
-    cmake .. &&
-    make
