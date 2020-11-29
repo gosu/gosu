@@ -23,7 +23,10 @@ require 'fileutils'
 $CFLAGS << " -DGOSU_DEPRECATED="
 
 $CXXFLAGS ||= ""
-$CXXFLAGS << " -std=gnu++11"
+# Enable C++17, but at the same time make the compiler more permissive to avoid this error:
+# https://stackoverflow.com/a/31899029 (triggered by ruby.h, which uses register variables)
+# The "register" macro can be removed when support for Ruby 2.6 and older has been dropped.
+$CXXFLAGS << " -std=gnu++17 -Dregister="
 
 # Make Gosu's own header files and all of its dependencies available to C++ source files.
 $INCFLAGS << " -I../../include -I../../dependencies/stb -I../../dependencies/utf8proc -I../../dependencies/SDL_sound"
