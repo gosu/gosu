@@ -1,7 +1,5 @@
 // The complete Gosu library.
 #include <Gosu/Gosu.hpp>
-// Makes life a little easier when compiling the game in Visual C++.
-#include <Gosu/AutoLink.hpp>
 
 #include <cmath>
 #include <cstdlib>
