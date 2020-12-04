@@ -326,78 +326,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Gosu\Audio.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\AutoLink.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Bitmap.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Buttons.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Color.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Directories.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Font.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Fwd.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Graphics.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\GraphicsBase.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Image.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\ImageData.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Input.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Inspection.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\IO.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Math.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Platform.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Text.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\TextInput.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Timing.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Utility.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Version.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Window.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Gosu.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\stb_image.h">
       <Filter>Implementation</Filter>
     </ClInclude>
@@ -406,33 +334,6 @@
     </ClInclude>
     <ClInclude Include="..\src\WinUtility.hpp">
       <Filter>Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Channel.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Color.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Font.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Gosu.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Image.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Sample.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Song.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\TextInput.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Gosu\Window.h">
-      <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\src\AudioFile.hpp">
       <Filter>Implementation</Filter>
@@ -502,6 +403,102 @@
     </ClInclude>
     <ClInclude Include="..\src\TrueTypeFont.hpp">
       <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Audio.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Bitmap.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Buttons.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Channel.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Color.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Color.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Directories.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Font.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Font.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Fwd.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Gosu.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Gosu.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Graphics.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\GraphicsBase.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Image.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Image.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\ImageData.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Input.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Inspection.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\IO.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Math.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Platform.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Sample.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Song.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Text.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\TextInput.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\TextInput.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Timing.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Utility.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Version.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Window.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Window.hpp">
+      <Filter>Interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
