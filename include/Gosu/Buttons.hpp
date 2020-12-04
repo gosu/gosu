@@ -1,15 +1,12 @@
 #pragma once
 
-#include <Gosu/Platform.hpp>
-
 namespace Gosu
 {
-    //! List of button ids that can be used with Gosu::Input.
-    //! This enumeration contains ids for keyboard keys (KB_*),
-    //! mouse buttons and mouse wheel (MS_*) and gamepad buttons (GP_*).
+    /// List of button and axis IDs that can be used with Gosu::Input.
+    /// This enumeration contains ids for keyboard keys (KB_*),
+    /// mouse buttons and mouse wheel (MS_*), as well as gamepad buttons (GP_*).
     enum ButtonName
     {
-        KB_RANGE_BEGIN,
         KB_ESCAPE          = 41,
         KB_F1              = 58,
         KB_F2              = 59,
@@ -51,8 +48,8 @@ namespace Gosu
         KB_DOWN            = 81,
         KB_HOME            = 74,
         KB_END             = 77,
-        KB_PRINTSCREEN     = 70,
-        KB_SCROLLLOCK      = 71,
+        KB_PRINT_SCREEN    = 70,
+        KB_SCROLL_LOCK     = 71,
         KB_PAUSE           = 72,
         KB_INSERT          = 73,
         KB_DELETE          = 76,
@@ -70,7 +67,7 @@ namespace Gosu
         KB_COMMA           = 54,
         KB_PERIOD          = 55,
         KB_SLASH           = 56,
-        KB_CAPSLOCK        = 57,
+        KB_CAPS_LOCK       = 57,
         KB_A               = 4,
         KB_B               = 5,
         KB_C               = 6,
@@ -97,7 +94,8 @@ namespace Gosu
         KB_X               = 27,
         KB_Y               = 28,
         KB_Z               = 29,
-        KB_ISO             = 100, // ` on US/UK macOS, < on EU macOS, \ on US/UK Windows
+        /// ` on US/UK macOS, < on EU macOS, \ on US/UK Windows
+        KB_ISO             = 100,
         KB_NUMPAD_0        = 98,
         KB_NUMPAD_1        = 89,
         KB_NUMPAD_2        = 90,
@@ -129,7 +127,6 @@ namespace Gosu
         MS_OTHER_5,
         MS_OTHER_6,
         MS_OTHER_7,
-        MS_RANGE_END = 0x110,
 
         GP_RANGE_BEGIN,
         GP_DPAD_LEFT = GP_RANGE_BEGIN,
