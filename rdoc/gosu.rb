@@ -475,7 +475,7 @@ module Gosu
     # @see #draw_as_quad
     # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
     # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
-    def draw(x, y, z, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
+    def draw(x, y, z=0, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
 
     ##
     # Draws the image rotated, with its rotational center at (x, y).
@@ -489,7 +489,7 @@ module Gosu
     # @see #draw
     # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#drawing-with-colours Drawing with colors, explained in the Gosu Wiki
     # @see https://github.com/gosu/gosu/wiki/Basic-Concepts#z-ordering Z-ordering explained in the Gosu Wiki
-    def draw_rot(x, y, z, angle, center_x=0.5, center_y=0.5, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
+    def draw_rot(x, y, z=0, angle=0, center_x=0.5, center_y=0.5, scale_x=1, scale_y=1, color=0xff_ffffff, mode=:default); end
 
     ##
     # Draws the image as an arbitrary quad. This method can be used for advanced non-rectangular drawing techniques, e.g., faking perspective or isometric projection.

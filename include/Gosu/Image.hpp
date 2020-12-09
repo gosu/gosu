@@ -48,7 +48,7 @@ namespace Gosu
         unsigned height() const;
 
         //! Draws the image so its upper left corner is at (x; y).
-        void draw(double x, double y, ZPos z, double scale_x = 1, double scale_y = 1,
+        void draw(double x, double y, ZPos z = 0, double scale_x = 1, double scale_y = 1,
             Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
         //! Like draw(), but with modulation colors for all four corners.
         void draw_mod(double x, double y, ZPos z, double scale_x, double scale_y,
@@ -63,7 +63,7 @@ namespace Gosu
         //! on the image. 0 is the left border, 1 is the right border, 0.5 is
         //! the center (and default).
         //! \param center_y See center_x.
-        void draw_rot(double x, double y, ZPos z, double angle,
+        void draw_rot(double x, double y, ZPos z = 0, double angle = 0,
             double center_x = 0.5, double center_y = 0.5, double scale_x = 1, double scale_y = 1,
             Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
         

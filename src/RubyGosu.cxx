@@ -6211,7 +6211,7 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
   Gosu::Image *arg1 = (Gosu::Image *) 0 ;
   double arg2 ;
   double arg3 ;
-  Gosu::ZPos arg4 ;
+  Gosu::ZPos arg4 = (Gosu::ZPos) 0 ;
   double arg5 = (double) 1 ;
   double arg6 = (double) 1 ;
   Gosu::Color arg7 = (Gosu::Color) Gosu::Color::WHITE ;
@@ -6229,8 +6229,8 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
   double val6 ;
   int ecode6 = 0 ;
   
-  if ((argc < 3) || (argc > 7)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
+  if ((argc < 2) || (argc > 7)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Image, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
@@ -6247,11 +6247,13 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "double","draw", 3, argv[1] ));
   } 
   arg3 = static_cast< double >(val3);
-  ecode4 = SWIG_AsVal_double(argv[2], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "Gosu::ZPos","draw", 4, argv[2] ));
-  } 
-  arg4 = static_cast< Gosu::ZPos >(val4);
+  if (argc > 2) {
+    ecode4 = SWIG_AsVal_double(argv[2], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "Gosu::ZPos","draw", 4, argv[2] ));
+    } 
+    arg4 = static_cast< Gosu::ZPos >(val4);
+  }
   if (argc > 3) {
     ecode5 = SWIG_AsVal_double(argv[3], &val5);
     if (!SWIG_IsOK(ecode5)) {
@@ -6488,8 +6490,8 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
   Gosu::Image *arg1 = (Gosu::Image *) 0 ;
   double arg2 ;
   double arg3 ;
-  Gosu::ZPos arg4 ;
-  double arg5 ;
+  Gosu::ZPos arg4 = (Gosu::ZPos) 0 ;
+  double arg5 = (double) 0 ;
   double arg6 = (double) 0.5 ;
   double arg7 = (double) 0.5 ;
   double arg8 = (double) 1 ;
@@ -6515,8 +6517,8 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
   double val9 ;
   int ecode9 = 0 ;
   
-  if ((argc < 4) || (argc > 10)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
+  if ((argc < 2) || (argc > 10)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Image, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
@@ -6533,16 +6535,20 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "double","draw_rot", 3, argv[1] ));
   } 
   arg3 = static_cast< double >(val3);
-  ecode4 = SWIG_AsVal_double(argv[2], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "Gosu::ZPos","draw_rot", 4, argv[2] ));
-  } 
-  arg4 = static_cast< Gosu::ZPos >(val4);
-  ecode5 = SWIG_AsVal_double(argv[3], &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), Ruby_Format_TypeError( "", "double","draw_rot", 5, argv[3] ));
-  } 
-  arg5 = static_cast< double >(val5);
+  if (argc > 2) {
+    ecode4 = SWIG_AsVal_double(argv[2], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "Gosu::ZPos","draw_rot", 4, argv[2] ));
+    } 
+    arg4 = static_cast< Gosu::ZPos >(val4);
+  }
+  if (argc > 3) {
+    ecode5 = SWIG_AsVal_double(argv[3], &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), Ruby_Format_TypeError( "", "double","draw_rot", 5, argv[3] ));
+    } 
+    arg5 = static_cast< double >(val5);
+  }
   if (argc > 4) {
     ecode6 = SWIG_AsVal_double(argv[4], &val6);
     if (!SWIG_IsOK(ecode6)) {
