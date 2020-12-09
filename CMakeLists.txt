@@ -4,7 +4,7 @@
 # - Prefer static libraries. Users should link Gosu into their games.
 # - This is not (yet?) going to be used for building Ruby/Gosu.
 # - This is not (yet?) going to replace the Visual Studio project for Windows.
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.10...3.18.4)
 
 project(Gosu VERSION 0.15.2)
 
@@ -21,8 +21,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(SDL2 REQUIRED)
 find_package(OpenAL REQUIRED)
-# Prefer glvnd (the "GL Vendor-Neutral Dispatch library") over plain libGL.so.
-cmake_policy(SET CMP0072 NEW)
 find_package(OpenGL REQUIRED)
 
 if(APPLE)
