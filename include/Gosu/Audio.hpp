@@ -1,6 +1,3 @@
-//! \file Audio.hpp
-//! Contains all the classes of Gosu's audio system.
-
 #pragma once
 
 #include <Gosu/Fwd.hpp>
@@ -11,41 +8,41 @@
 
 namespace Gosu
 {
-    //! Sample::play returns a Channel that represents the sound being played.
-    //! This object can be used to stop sounds dynamically, or to check whether playback has
-    //! finished.
+    /// Sound::play returns a Channel that represents the sound being played.
+    /// This object can be used to stop or influence sounds as they are played, or to check whether
+    /// playback has finished.
     class Channel
     {
-        mutable int channel, token;
+        mutable int m_channel, m_token;
 
     public:
-        //! This creates an "empty" Channel which is expired and cannot be resumed.
+        /// This creates an "empty" Channel which is expired and cannot be resumed.
         Channel();
-        //! For internal use only.
+        /// For internal use only.
         Channel(int channel, int token);
-        
-        //! For internal use only.
+
+        /// For internal use only.
         int current_channel() const;
-        
+
         bool playing() const;
         bool paused() const;
-        //! Pauses this instance to be resumed afterwards.
-        //! Avoid leaving samples paused for too long, as they will still occupy one of Gosu's
-        //! limited channels.
+        /// Pauses this instance to be resumed afterwards.
+        /// Avoid leaving samples paused for too long, as they will still occupy one of Gosu's
+        /// limited channels.
         void pause();
         void resume();
-        //! Stops this channel if the sample is still being played.
-        //! If this method is called when playback has finished, it has no effect.
+        /// Stops this m_channel if the sample is still being played.
+        /// If this method is called when playback has finished, it has no effect.
         void stop();
 
-        //! \param volume Can be anything from 0.0 (silence) to 1.0 (full volume).
+        /// @param volume Can be anything from 0.0 (silence) to 1.0 (full volume).
         void set_volume(double volume);
-        //! \param pan Can be anything from -1.0 (left) to 1.0 (right).
+        /// @param pan Can be anything from -1.0 (left) to 1.0 (right).
         void set_pan(double pan);
-        //! \param speed Use 1.0 for normal playback speed.
+        /// @param speed Use 1.0 for normal playback speed.
         void set_speed(double speed);
     };
-    
+
     //! A sample is a short sound that is completely loaded in memory, can be
     //! played multiple times at once and offers very flexible playback
     //! parameters. Use samples for everything that's not music.
@@ -57,15 +54,15 @@ namespace Gosu
     public:
         //! Constructs an empty sample that is inaudible when played.
         Sample();
-        
+
         //! Constructs a sample that can be played on the specified audio
         //! system and loads the sample from a file.
         explicit Sample(const std::string& filename);
-        
+
         //! Constructs a sample that can be played on the specified audio
         //! system and loads the sample data from a stream.
         explicit Sample(Reader reader);
-        
+
         //! Plays the sample without panning.
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
         //! volume).
@@ -84,7 +81,7 @@ namespace Gosu
         //! and can accept very high
         //! or low values. Use 1.0 for normal playback speed.
         Channel play_pan(double pan, double volume = 1, double speed = 1,
-            bool looping = false) const;
+                         bool looping = false) const;
     };
 
     //! Songs are less flexible than samples. Only one Song can be played at any given time,
@@ -93,7 +90,7 @@ namespace Gosu
     {
         struct Impl;
         std::unique_ptr<Impl> pimpl;
-        
+
         // Non-movable to avoid dangling internal references.
         Song(Song&&) = delete;
         // Non-movable to avoid dangling internal references.
@@ -104,13 +101,13 @@ namespace Gosu
         //! and loads the song from a file.
         //! The file type is determined by the filename.
         explicit Song(const std::string& filename);
-        
+
         //! Constructs a song of the specified type that can be played on the
         //! provided audio system and loads the song data from a stream.
         explicit Song(Reader reader);
-        
+
         ~Song();
-        
+
         //! Returns the song currently being played or paused, or 0 if
         //! no song has been played yet or the last song has finished
         //! playing.
@@ -134,7 +131,7 @@ namespace Gosu
         double volume() const;
         //! \param volume Can be anything from 0.0 (silence) to 1.0 (full volume).
         void set_volume(double volume);
-        
+
         //! Called every tick by Window to feed new audio data to OpenAL.
         static void update();
     };

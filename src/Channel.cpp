@@ -1,8 +1,8 @@
 #include <Gosu/Audio.hpp>
 #include "AudioImpl.hpp"
-using namespace std;
+#include <algorithm>
 
-// Returns the current state of a source
+/// Returns the current state of a source.
 static ALint state(int& channel)
 {
     ALint state;
@@ -14,41 +14,41 @@ static ALint state(int& channel)
 }
 
 Gosu::Channel::Channel()
-: channel(NO_CHANNEL), token(0)
+: m_channel{NO_CHANNEL}, m_token{0}
 {
 }
 
 Gosu::Channel::Channel(int channel, int token)
-: channel(channel), token(token)
+: m_channel{channel}, m_token{token}
 {
 }
 
 int Gosu::Channel::current_channel() const
 {
-    if (channel != NO_CHANNEL && channel_expired(channel, token)) {
-        channel = NO_CHANNEL;
+    if (m_channel != NO_CHANNEL && channel_expired(m_channel, m_token)) {
+        m_channel = NO_CHANNEL;
     }
-    return channel;
+    return m_channel;
 }
 
 bool Gosu::Channel::playing() const
 {
     if (current_channel() == NO_CHANNEL) return false;
-    
-    return state(channel) == AL_PLAYING;
+
+    return state(m_channel) == AL_PLAYING;
 }
 
 bool Gosu::Channel::paused() const
 {
     if (current_channel() == NO_CHANNEL) return false;
 
-    return state(channel) == AL_PAUSED;
+    return state(m_channel) == AL_PAUSED;
 }
 
 void Gosu::Channel::pause()
 {
     if (playing()) {
-        ALuint source = al_source_for_channel(channel);
+        ALuint source = al_source_for_channel(m_channel);
         alSourcePause(source);
     }
 }
@@ -56,7 +56,7 @@ void Gosu::Channel::pause()
 void Gosu::Channel::resume()
 {
     if (paused()) {
-        ALuint source = al_source_for_channel(channel);
+        ALuint source = al_source_for_channel(m_channel);
         alSourcePlay(source);
     }
 }
@@ -65,24 +65,24 @@ void Gosu::Channel::stop()
 {
     if (current_channel() == NO_CHANNEL) return;
 
-    ALuint source = al_source_for_channel(channel);
+    ALuint source = al_source_for_channel(m_channel);
     alSourceStop(source);
-    channel = NO_CHANNEL;
+    m_channel = NO_CHANNEL;
 }
 
 void Gosu::Channel::set_volume(double volume)
 {
     if (current_channel() == NO_CHANNEL) return;
 
-    ALuint source = al_source_for_channel(channel);
-    alSourcef(source, AL_GAIN, max(volume, 0.0));
+    ALuint source = al_source_for_channel(m_channel);
+    alSourcef(source, AL_GAIN, std::max(volume, 0.0));
 }
 
 void Gosu::Channel::set_pan(double pan)
 {
     if (current_channel() == NO_CHANNEL) return;
 
-    ALuint source = al_source_for_channel(channel);
+    ALuint source = al_source_for_channel(m_channel);
     alSource3f(source, AL_POSITION, pan * 10, 0, 0);
 }
 
@@ -90,6 +90,6 @@ void Gosu::Channel::set_speed(double speed)
 {
     if (current_channel() == NO_CHANNEL) return;
 
-    ALuint source = al_source_for_channel(channel);
+    ALuint source = al_source_for_channel(m_channel);
     alSourcef(source, AL_PITCH, speed);
 }
