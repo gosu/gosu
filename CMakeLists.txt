@@ -126,13 +126,16 @@ export(EXPORT gosu-targets
 ##############################################
 # Examples and tests
 
-# Alias our library as Gosu::Gosu so that the examples can depend on it by its
-# normal name.
+# Alias our library as Gosu::Gosu so that examples and submodules can depend
+# on it by its normal name.
 add_library(Gosu::Gosu ALIAS gosu)
 
-# Including the examples here means they will always be built along with Gosu.
-# This is fine, we care more about catching errors than compilation speed.
-add_subdirectory(examples)
+# Only build examples and tests if this is the top-level CMake module.
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    # Including the examples here means they will always be built along with Gosu.
+    # This is fine, we care more about catching errors than compilation speed.
+    add_subdirectory(examples)
 
-# If GoogleTest is not available as a CMake module, this is a no-op.
-add_subdirectory(test)
+    # If GoogleTest is not available as a CMake module, this is a no-op.
+    add_subdirectory(test)
+endif()
