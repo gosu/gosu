@@ -43,44 +43,39 @@ namespace Gosu
         void set_speed(double speed);
     };
 
-    //! A sample is a short sound that is completely loaded in memory, can be
-    //! played multiple times at once and offers very flexible playback
-    //! parameters. Use samples for everything that's not music.
+    /// A sample is a short sound that is completely loaded in memory, can be played multiple times
+    /// at once and offers very flexible playback parameters.
     class Sample
     {
         struct Impl;
-        std::shared_ptr<Impl> pimpl;
+        std::shared_ptr<Impl> m_impl;
 
     public:
-        //! Constructs an empty sample that is inaudible when played.
+        /// Constructs an empty sample that is inaudible when played.
         Sample();
 
-        //! Constructs a sample that can be played on the specified audio
-        //! system and loads the sample from a file.
+        /// Constructs a sample that can be played on the specified audio
+        /// system and loads the sample from a file.
         explicit Sample(const std::string& filename);
 
-        //! Constructs a sample that can be played on the specified audio
-        //! system and loads the sample data from a stream.
+        /// Constructs a sample that can be played on the specified audio
+        /// system and loads the sample data from a stream.
         explicit Sample(Reader reader);
 
-        //! Plays the sample without panning.
-        //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
-        //! volume).
-        //! \param speed Playback speed is only limited by the underlying audio library,
-        //! and can accept very high or low values. Use 1.0 for
-        //! normal playback speed.
-        Channel play(double volume = 1, double speed = 1, bool looping = false) const;
+        /// Plays the sample without panning.
+        /// @param volume Can be anything from 0.0 (silence) to 1.0 (full volume).
+        /// @param speed Playback speed is only limited by the underlying audio library,
+        ///              and can accept very high or low values. Use 1.0 for normal playback speed.
+        Channel play(double volume = 1.0, double speed = 1.0, bool looping = false) const;
 
-        //! Plays the sample with panning. Even if pan is 0.0, the sample will
-        //! not be as loud as if it were played by calling play() due to the
-        //! way the panning works.
-        //! \param pan Can be anything from -1.0 (left) to 1.0 (right).
-        //! \param volume Can be anything from 0.0 (silence) to 1.0 (full
-        //! volume).
-        //! \param speed Playback speed is only limited by by the underlying audio library,
-        //! and can accept very high
-        //! or low values. Use 1.0 for normal playback speed.
-        Channel play_pan(double pan, double volume = 1, double speed = 1,
+        /// Plays the sample with panning. Even if pan is 0.0, the sample will
+        /// not be as loud as if it were played by calling play() due to the
+        /// way the panning works.
+        /// @param pan Can be anything from -1.0 (left) to 1.0 (right).
+        /// @param volume Can be anything from 0.0 (silence) to 1.0 (full volume).
+        /// @param speed Playback speed is only limited by by the underlying audio library,
+        ///              and can accept very high or low values. Use 1.0 for normal playback speed.
+        Channel play_pan(double pan, double volume = 1.0, double speed = 1.0,
                          bool looping = false) const;
     };
 

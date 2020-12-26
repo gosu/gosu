@@ -4,13 +4,9 @@
 #include <Gosu/Audio.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/IO.hpp>
-#include <Gosu/Platform.hpp>
-#include <Gosu/Utility.hpp>
 
 #include <cassert>
-#include <cstdlib>
 #include <algorithm>
-using namespace std;
 
 static Gosu::Song* cur_song = nullptr;
 static bool cur_song_looping;
@@ -19,15 +15,16 @@ struct Gosu::Sample::Impl
 {
     ALuint buffer;
 
-    Impl(AudioFile&& audio_file)
+    explicit Impl(AudioFile&& audio_file)
+    : buffer{}
     {
         al_initialize();
         alGenBuffers(1, &buffer);
         alBufferData(buffer, audio_file.format(), &audio_file.decoded_data().front(),
                      static_cast<ALsizei>(audio_file.decoded_data().size()),
-                     audio_file.sample_rate());
+                     static_cast<ALsizei>(audio_file.sample_rate()));
     }
-    
+
     ~Impl()
     {
         // It's hard to free things in the right order in Ruby/Gosu.
@@ -42,35 +39,35 @@ Gosu::Sample::Sample()
 {
 }
 
-Gosu::Sample::Sample(const string& filename)
+Gosu::Sample::Sample(const std::string& filename)
+: m_impl{new Impl(AudioFile(filename))}
 {
-    pimpl.reset(new Impl(AudioFile(filename)));
 }
 
 Gosu::Sample::Sample(Gosu::Reader reader)
+: m_impl{new Impl(AudioFile(reader))}
 {
-    pimpl.reset(new Impl(AudioFile(reader)));
 }
 
 Gosu::Channel Gosu::Sample::play(double volume, double speed, bool looping) const
 {
-    return play_pan(0, volume, speed, looping);
+    return play_pan(0.0, volume, speed, looping);
 }
 
 Gosu::Channel Gosu::Sample::play_pan(double pan, double volume, double speed, bool looping) const
 {
-    if (!pimpl) return Channel();
+    if (!m_impl) return Channel{};
 
     Channel channel = allocate_channel();
-    
+
     // Couldn't allocate a free channel.
     if (channel.current_channel() == NO_CHANNEL) return channel;
-    
+
     ALuint source = al_source_for_channel(channel.current_channel());
-    alSourcei(source, AL_BUFFER, pimpl->buffer);
-    alSource3f(source, AL_POSITION, pan * 10, 0, 0);
-    alSourcef(source, AL_GAIN, max(volume, 0.0));
-    alSourcef(source, AL_PITCH, speed);
+    alSourcei(source, AL_BUFFER, static_cast<ALint>(m_impl->buffer));
+    alSource3f(source, AL_POSITION, static_cast<ALfloat>(pan * 10), 0, 0);
+    alSourcef(source, AL_GAIN, std::max(volume, 0.0));
+    alSourcef(source, AL_PITCH, static_cast<ALfloat>(speed));
     alSourcei(source, AL_LOOPING, looping ? AL_TRUE : AL_FALSE);
     alSourcePlay(source);
     return channel;
@@ -80,12 +77,12 @@ Gosu::Channel Gosu::Sample::play_pan(double pan, double volume, double speed, bo
 struct Gosu::Song::Impl
 {
     double volume_ = 1.0;
-    unique_ptr<AudioFile> file;
+    std::unique_ptr<AudioFile> file;
     ALuint buffers[2];
     
     void apply_volume()
     {
-        alSourcef(al_source_for_songs(), AL_GAIN, max(volume(), 0.0));
+        alSourcef(al_source_for_songs(), AL_GAIN, std::max(volume(), 0.0));
     }
     
     bool stream_to_buffer(ALuint buffer)
@@ -100,7 +97,7 @@ struct Gosu::Song::Impl
     }
     
 public:
-    explicit Impl(const string& filename)
+    explicit Impl(const std::string& filename)
     {
         file.reset(new AudioFile(filename));
 
@@ -130,7 +127,7 @@ public:
         ALuint source = al_source_for_songs();
 
         alSource3f(source, AL_POSITION, 0, 0, 0);
-        alSourcef(source, AL_GAIN, max(volume(), 0.0));
+        alSourcef(source, AL_GAIN, std::max(volume(), 0.0));
         alSourcef(source, AL_PITCH, 1);
         alSourcei(source, AL_LOOPING, AL_FALSE); // need to implement this manually...
 
@@ -221,12 +218,12 @@ public:
     
     void set_volume(double volume)
     {
-        volume_ = clamp(volume, 0.0, 1.0);
+        volume_ = std::clamp(volume, 0.0, 1.0);
         apply_volume();
     }
 };
 
-Gosu::Song::Song(const string& filename)
+Gosu::Song::Song(const std::string& filename)
 {
     pimpl.reset(new Impl(filename));
 }
