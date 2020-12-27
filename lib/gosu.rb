@@ -17,9 +17,6 @@ if RUBY_PLATFORM =~ /mswin$|mingw32|mingw64|win32\-|\-win32/
     path_encoding = ENV["PATH"].encoding
     ENV["PATH"] = "#{binary_path.encode(path_encoding)};#{ENV["PATH"]}"
   end
-  
-  # Add the correct lib directory for the current version of Ruby (major.minor).
-  $LOAD_PATH.unshift File.join(binary_path, RUBY_VERSION[/^\d+.\d+/])
 end
 
 require "gosu.#{RbConfig::CONFIG["DLEXT"]}"

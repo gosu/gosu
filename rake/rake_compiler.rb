@@ -14,21 +14,16 @@ EOS
   s.date = Time.now.strftime "%Y-%m-%d"
   s.email = "julian@raschke.de"
   s.homepage = "https://www.libgosu.org/"
-  s.required_ruby_version = Gem::Requirement.new(">= 1.9.3")
+  s.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
   s.platform = Gem::Platform::RUBY
   s.extensions = FileList["ext/**/extconf.rb"]
-  # Ruby frontend for C++ extension.
-  s.files += Dir["lib/**/*.rb"]
-  # Gosu dependencies
-  s.files += Dir["dependencies/{SDL_sound,stb,utf8proc}/**/*.{h,c}"]
+  # Additional Ruby source files plus DLLs (for Windows).
+  s.files += Dir["{lib,lib64}/**/*.{rb,dll}"]
+  # Gosu dependencies.
+  s.files += Dir["dependencies/**/*.{h,c,a}"]
   # Gosu source code including the Ruby interface (.cxx).
-  s.files += Dir["src/**/*.{h,hpp,c,cpp,cxx}"]
-  # Gosu header files, for compiling the gem & for using inline C++ from Ruby.
-  s.files += Dir["include/**/*.{h,hpp}"]
-  # RDoc setup:
-  # The docs will never look great in rdoc, though, because we are using some yard-specific syntax
-  # in rdoc/gosu.rb.
-  # To generate more useful documentation, run "yard" in the git root.
+  s.files += Dir["{src,include}/**/*.{h,hpp,c,cpp,cxx}"] - ["src/WinMain.cpp"]
+  # RDoc/Yard setup.
   s.files += Dir["README.md", "COPYING", "rdoc/gosu.rb", ".yardopts"]
   s.rdoc_options += %w(-m README.md -x lib)
   s.extra_rdoc_files = %w(README.md COPYING rdoc/gosu.rb)
