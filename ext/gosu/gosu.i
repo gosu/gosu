@@ -169,7 +169,8 @@ namespace Gosu
         // Otherwise, try to call .to_blob on it (works with RMagick, TexPlay etc).
         VALUE conversion = rb_str_new2("to_blob { self.format = 'RGBA'; self.depth = 8 }");
         VALUE blob = rb_obj_instance_eval(1, &conversion, val);
-        rb_check_safe_obj(blob);
+        Check_Type(blob, T_STRING);
+
         int width  = NUM2ULONG(rb_funcall(val, rb_intern("columns"), 0));
         int height = NUM2ULONG(rb_funcall(val, rb_intern("rows"), 0));
         
