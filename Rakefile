@@ -53,9 +53,8 @@ end
 Rake::TestTask.new do |t|
   t.verbose = true
   t.warning = true
-  # On Windows, we want to require everything from the "lib" directory directly.
-  # On UNIX systems, the tests should be run after installing the gosu gem instead (ignore ./lib).
-  t.libs = [] unless RUBY_PLATFORM =~ /mswin$|mingw32|mingw64|win32\-|\-win32/
+  # The tests should be run after installing the gosu gem (ignore ./lib).
+  t.libs = []
 end
 
 desc "Run all tests, even those that require human input"

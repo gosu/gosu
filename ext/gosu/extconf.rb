@@ -1,19 +1,20 @@
-#!/usr/bin/env ruby
+require "rbconfig"
 
-if RUBY_PLATFORM =~ /mswin$|mingw32|mingw64|win32\-|\-win32/
-  platform = (RUBY_PLATFORM =~ /^x64-/ ? 'x64-mingw32' : 'i386-mingw32')
-  
-  puts "This gem is not meant to be installed on Windows. Instead, please use:"
-  puts "gem install gosu --platform=#{platform}"
-  exit 1
+case RbConfig::CONFIG["host_os"]
+when /^mingw/
+  windows = true
+when /^darwin/
+  macos = true
 end
 
-puts 'The Gosu gem requires some libraries to be installed system-wide.'
-puts 'See the following site for a list:'
-if `uname`.chomp == 'Darwin'
-  puts 'https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X'
-else
-  puts 'https://github.com/gosu/gosu/wiki/Getting-Started-on-Linux'
+if not windows
+  puts 'The Gosu gem requires some libraries to be installed system-wide.'
+  puts 'See the following site for a list:'
+  if macos
+    puts 'https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X'
+  else
+    puts 'https://github.com/gosu/gosu/wiki/Getting-Started-on-Linux'
+  end
 end
 
 require 'mkmf'
@@ -21,6 +22,9 @@ require 'fileutils'
 
 # Silence internal deprecation warnings in Gosu.
 $CFLAGS << " -DGOSU_DEPRECATED="
+
+# Disable assertions in C code.
+$CFLAGS << " -DNDEBUG"
 
 $CXXFLAGS ||= ""
 # Enable C++17, but at the same time make the compiler more permissive to avoid this error:
@@ -31,14 +35,26 @@ $CXXFLAGS << " -std=gnu++17 -Dregister="
 # Make Gosu's own header files and all of its dependencies available to C++ source files.
 $INCFLAGS << " -I../../include -I../../dependencies/stb -I../../dependencies/utf8proc -I../../dependencies/SDL_sound"
 
-if `uname`.chomp == 'Darwin'
-  # Disable assertions in C code.
-  $CFLAGS   << " -DNDEBUG"
+if windows
+  # We statically compile utf8proc into the Gosu binary.
+  # This macro is required to avoid errors about dllexport/dllimport mismatches.
+  $CFLAGS << " -DUTF8PROC_STATIC"
+  $CXXFLAGS << " -DUTF8PROC_STATIC"
+
+  # Define UNICODE to use the Unicode-aware variants of all Win32 API functions.
+  $CXXFLAGS << " -DUNICODE"
+
+  # Use the bundled versions of SDL 2 and open_al.
+  $INCFLAGS << " -I../../dependencies/al_soft -I../../dependencies/SDL/include"
+  if RbConfig::CONFIG['arch'] =~ /x64-/
+    $LDFLAGS << "  -L../../dependencies/al_soft/x64 -L../../dependencies/SDL/lib/x64"
+  else
+    $LDFLAGS << "  -L../../dependencies/al_soft/x86 -L../../dependencies/SDL/lib/x86"
+  end
+  $LDFLAGS << " -lgdi32 -lwinmm -lOpenGL32 -lOpenAL32 -lSDL2"
+elsif macos
   # Compile all C++ files as Objective C++ on macOS since mkmf does not support .mm files.
   $CXXFLAGS << " -x objective-c++ -fobjc-arc -DNDEBUG"
-  # Prevents issues with Apple's pre-installed Ruby 2.3 on macOS 10.13.
-  # https://github.com/gosu/gosu/issues/424
-  $CXXFLAGS << " -Wno-reserved-user-defined-literal"
 
   # Explicitly specify libc++ as the standard library.
   # rvm will sometimes try to override this:
@@ -90,23 +106,6 @@ Dir.glob('../../dependencies/**/*.c').each do |dep|
   File.open("../../src/#{File.basename dep}", "w") do |shim|
     shim.puts "#include \"#{File.expand_path dep}\""
   end
-end
-
-# Gem::Version#initialize is apparently broken in some versions of Ruby, so use a local helper.
-def ruby_newer_than?(want_version)
-  have_parts = RUBY_VERSION.split('.').map { |part| part.to_i }
-  want_parts = want_version.split('.').map { |part| part.to_i }
-  have_parts << 0 while have_parts.size < want_parts.size
-  want_parts << 0 while want_parts.size < have_parts.size
-  (have_parts <=> want_parts) == 1
-end
-
-# In some versions of Ruby/mkmf, the $CXXFLAGS variable does not work.
-# We can modify CONFIG instead, and our changes will end up in the Makefile.
-# See: http://bugs.ruby-lang.org/issues/8315
-# The lower bound was reduced to 1.9.3 here: https://github.com/gosu/gosu/issues/321
-if ruby_newer_than?("1.9.2") and not ruby_newer_than?("2.2.0")
-  CONFIG['CXXFLAGS'] = "#$CFLAGS #$CXXFLAGS"
 end
 
 create_makefile "gosu", "../../src"
