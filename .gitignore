@@ -13,12 +13,6 @@
 /cmake-build-debug
 /cmake-build-release
 
-# QtCreator project files
-Gosu.config
-Gosu.creator
-Gosu.files
-Gosu.includes
-
 # Files from Mac builds & CocoaPod installs
 /**/xcuserdata
 /**/Pods
@@ -36,5 +30,4 @@ Gosu.includes
 /windows/*.opendb
 /windows/*.opensdf
 /windows/Gosu.VC.db
-/windows/Release (Ruby ?.?)/*.exp
-/windows/Release (Ruby ?.?)/*.lib
+/examples/Tutorial.*
