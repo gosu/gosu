@@ -47,7 +47,7 @@ end
 desc "Update the C++ reference on libgosu.org (needs SSH access)"
 task :update_doxygen do
   sh "ssh #{ENV["PROJECTS_HOST"]} 'cd #{ENV["PROJECTS_ROOT"]}/libgosu.org/ && " +
-       "svn checkout https://github.com/gosu/gosu/trunk/Gosu && PATH=../doxygen/bin:$PATH doxygen'"
+       "svn checkout https://github.com/gosu/gosu/trunk/include/Gosu && PATH=../doxygen/bin:$PATH doxygen'"
 end
 
 Rake::TestTask.new do |t|
