@@ -12424,9 +12424,9 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_RubyInitializeTrackings();
   rb_define_const(mGosu, "VERSION", SWIG_From_std_string(static_cast< std::string >(Gosu::VERSION)));
   rb_define_const(mGosu, "LICENSES", SWIG_From_std_string(static_cast< std::string >(Gosu::LICENSES)));
-  rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(0)));
-  rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(15)));
-  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(2)));
+  rb_define_const(mGosu, "MAJOR_VERSION", SWIG_From_int(static_cast< int >(1)));
+  rb_define_const(mGosu, "MINOR_VERSION", SWIG_From_int(static_cast< int >(0)));
+  rb_define_const(mGosu, "POINT_VERSION", SWIG_From_int(static_cast< int >(0)));
   rb_define_module_function(mGosu, "milliseconds", VALUEFUNC(_wrap_milliseconds), -1);
   rb_define_module_function(mGosu, "random", VALUEFUNC(_wrap_random), -1);
   rb_define_module_function(mGosu, "degrees_to_radians", VALUEFUNC(_wrap_degrees_to_radians), -1);
