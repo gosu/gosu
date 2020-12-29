@@ -187,7 +187,7 @@ unsigned Gosu_screen_height(Gosu_Window *window)
 
 int Gosu_button_down(int btn)
 {
-    return Gosu::Input::down((Gosu::ButtonName)btn);
+    return Gosu::Input::down((Gosu::Button)btn);
 }
 
 const char *Gosu_button_id_to_char(int id)
@@ -200,13 +200,13 @@ const char *Gosu_button_id_to_char(int id)
 
 unsigned Gosu_button_char_to_id(const char *btn)
 {
-    return Gosu::Input::char_to_id(btn).id();
+    return Gosu::Input::char_to_id(btn);
 }
 
 const char *Gosu_button_name(int btn)
 {
     static thread_local std::string name;
-    name = Gosu::Input::button_name((Gosu::ButtonName)btn);
+    name = Gosu::Input::button_name((Gosu::Button)btn);
     return name.empty() ? nullptr : name.c_str();
 }
 
@@ -219,7 +219,7 @@ const char *Gosu_gamepad_name(int id)
 
 double Gosu_axis(int btn)
 {
-    return Gosu::Input::axis((Gosu::ButtonName)btn);
+    return Gosu::Input::axis((Gosu::Button)btn);
 }
 
 int Gosu_fps()

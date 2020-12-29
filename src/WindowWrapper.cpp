@@ -55,20 +55,20 @@ void Gosu::WindowForWrapper::draw()
 
 void Gosu::WindowForWrapper::default_button_down(unsigned btn)
 {
-    Gosu::Window::button_down(Gosu::ButtonName(btn));
+    Gosu::Window::button_down(Gosu::Button(btn));
 }
 
 void Gosu::WindowForWrapper::button_down(Gosu::Button btn)
 {
     if (button_down_callback != nullptr) {
-        button_down_callback(btn.id());
+        button_down_callback(btn);
     }
 }
 
 void Gosu::WindowForWrapper::button_up(Gosu::Button btn)
 {
     if (button_up_callback != nullptr) {
-        button_up_callback(btn.id());
+        button_up_callback(btn);
     }
 }
 

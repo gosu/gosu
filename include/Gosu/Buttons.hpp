@@ -2,10 +2,10 @@
 
 namespace Gosu
 {
-    /// List of button and axis IDs that can be used with Gosu::Input.
-    /// This enumeration contains ids for keyboard keys (KB_*),
+    /// List of button IDs that can be used with Gosu::Input.
+    /// This enumeration contains IDs for keyboard keys (KB_*),
     /// mouse buttons and mouse wheel (MS_*), as well as gamepad buttons (GP_*).
-    enum ButtonName
+    enum Button
     {
         KB_ESCAPE          = 41,
         KB_F1              = 58,
@@ -260,8 +260,14 @@ namespace Gosu
         GP_3_DOWN,
         GP_RANGE_END = GP_3_DOWN,
 
-        GP_AXES_RANGE_BEGIN,
-        GP_LEFT_STICK_X_AXIS = GP_AXES_RANGE_BEGIN,
+        NUM_GAMEPADS = 4,
+        NO_BUTTON = 0xffffffff,
+    };
+
+    /// List of axis IDs that can be used with Gosu::Input.
+    enum Axis
+    {
+        GP_LEFT_STICK_X_AXIS,
         GP_LEFT_STICK_Y_AXIS,
         GP_RIGHT_STICK_X_AXIS,
         GP_RIGHT_STICK_Y_AXIS,
@@ -295,9 +301,7 @@ namespace Gosu
         GP_3_RIGHT_STICK_Y_AXIS,
         GP_3_LEFT_TRIGGER_AXIS,
         GP_3_RIGHT_TRIGGER_AXIS,
-        GP_AXES_RANGE_END = GP_3_RIGHT_TRIGGER_AXIS,
 
-        NUM_GAMEPADS = 4,
-        NO_BUTTON = 0xffffffff,
+        NUM_AXES
     };
 }

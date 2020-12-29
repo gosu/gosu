@@ -27,10 +27,10 @@
     $1 = NIL_P($input) ? Gosu::NO_BUTTON : Gosu::Button(NUM2LONG($input));
 }
 %typemap(out) Gosu::Button {
-    $result = $1 == Gosu::NO_BUTTON ? Qnil : LONG2NUM($1.id());
+    $result = $1 == Gosu::NO_BUTTON ? Qnil : LONG2NUM($1);
 }
 %typemap(directorin) Gosu::Button {
-    $input = $1 == Gosu::NO_BUTTON ? Qnil : LONG2NUM($1.id());
+    $input = $1 == Gosu::NO_BUTTON ? Qnil : LONG2NUM($1);
 }
 
 // Typemaps for enums that should be given in as symbols.
@@ -922,6 +922,7 @@ namespace Gosu
 %ignore Gosu::GP_NUM;
 %ignore Gosu::GP_NUM_PER_GAMEPAD;
 %ignore Gosu::NUM_GAMEPADS;
+%ignore Gosu::NUM_AXES;
 %ignore Gosu::NO_BUTTON;
 %include "../../include/Gosu/Buttons.hpp"
 %init %{

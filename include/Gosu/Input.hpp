@@ -11,29 +11,6 @@
 
 namespace Gosu
 {
-    //! Very lightweight class that identifies a button (keyboard, mouse or other device).
-    class Button
-    {
-        unsigned id_;
-
-    public:
-        //! For internal use.
-        explicit Button(unsigned id) : id_(id) {}
-        //! For internal use.
-        unsigned id() const { return id_; }
-
-        //! Default constructor; == no_button.
-        Button() : id_(NO_BUTTON) {}
-
-        //! Conversion from ButtonName constants.
-        Button(ButtonName name) : id_(name) {}
-    };
-
-    //! Tests whether two Buttons identify the same physical button.
-    inline bool operator==(Button lhs, Button rhs) { return lhs.id() == rhs.id(); }
-    inline bool operator!=(Button lhs, Button rhs) { return !(lhs == rhs); }
-    inline bool operator<(Button lhs, Button rhs) { return lhs.id() < rhs.id(); }
-
     /// Struct that saves information about a touch on the surface of a multi-touch device.
     /// (Right now this is only supported on iOS.)
     struct Touch

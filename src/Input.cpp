@@ -26,8 +26,7 @@ static void require_sdl_video()
 
 static const unsigned NUM_BUTTONS_PER_GAMEPAD =
     (Gosu::GP_RANGE_END - Gosu::GP_RANGE_BEGIN + 1 - 4) / (Gosu::NUM_GAMEPADS + 1) - 3;
-static const unsigned NUM_AXES_PER_GAMEPAD =
-    (Gosu::GP_AXES_RANGE_END - Gosu::GP_AXES_RANGE_BEGIN + 1) / (Gosu::NUM_GAMEPADS + 1);
+static const unsigned NUM_AXES_PER_GAMEPAD = Gosu::NUM_AXES / (Gosu::NUM_GAMEPADS + 1);
 static const unsigned NUM_BUTTONS = Gosu::GP_RANGE_END + 1;
 
 static array<bool, NUM_BUTTONS> button_states = {false};
@@ -416,17 +415,17 @@ private:
         GamepadBuffer gamepad;
 
         // Poll axes first.
-        gamepad.axes[GP_LEFT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] =
+        gamepad.axes[GP_LEFT_STICK_X_AXIS] =
             scale_axis(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX));
-        gamepad.axes[GP_LEFT_STICK_Y_AXIS - GP_AXES_RANGE_BEGIN] =
+        gamepad.axes[GP_LEFT_STICK_Y_AXIS] =
             scale_axis(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY));
-        gamepad.axes[GP_RIGHT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] =
+        gamepad.axes[GP_RIGHT_STICK_X_AXIS] =
             scale_axis(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTX));
-        gamepad.axes[GP_RIGHT_STICK_Y_AXIS - GP_AXES_RANGE_BEGIN] =
+        gamepad.axes[GP_RIGHT_STICK_Y_AXIS] =
             scale_axis(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTY));
-        gamepad.axes[GP_LEFT_TRIGGER_AXIS - GP_AXES_RANGE_BEGIN] =
+        gamepad.axes[GP_LEFT_TRIGGER_AXIS] =
             scale_axis(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT));
-        gamepad.axes[GP_RIGHT_TRIGGER_AXIS - GP_AXES_RANGE_BEGIN] =
+        gamepad.axes[GP_RIGHT_TRIGGER_AXIS] =
             scale_axis(SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT));
 
         gamepad.buttons[GP_DPAD_LEFT - GP_RANGE_BEGIN] =
@@ -460,19 +459,19 @@ private:
         // Just guess that the first four axes are equivalent to two analog sticks.
         int axes = SDL_JoystickNumAxes(joystick);
         if (axes > 0) {
-            gamepad.axes[GP_LEFT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] =
+            gamepad.axes[GP_LEFT_STICK_X_AXIS] =
                 scale_axis(SDL_JoystickGetAxis(joystick, 0));
         }
         if (axes > 1) {
-            gamepad.axes[GP_LEFT_STICK_Y_AXIS - GP_AXES_RANGE_BEGIN] =
+            gamepad.axes[GP_LEFT_STICK_Y_AXIS] =
                 scale_axis(SDL_JoystickGetAxis(joystick, 1));
         }
         if (axes > 2) {
-            gamepad.axes[GP_RIGHT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] =
+            gamepad.axes[GP_RIGHT_STICK_X_AXIS] =
                 scale_axis(SDL_JoystickGetAxis(joystick, 2));
         }
         if (axes > 3) {
-            gamepad.axes[GP_RIGHT_STICK_Y_AXIS - GP_AXES_RANGE_BEGIN] =
+            gamepad.axes[GP_RIGHT_STICK_Y_AXIS] =
                 scale_axis(SDL_JoystickGetAxis(joystick, 3));
         }
 
@@ -501,20 +500,20 @@ private:
     {
         gamepad.directions[0] =
             gamepad.buttons[GP_DPAD_LEFT - GP_RANGE_BEGIN] ||
-            gamepad.axes[GP_LEFT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] <= -0.5 ||
-            gamepad.axes[GP_RIGHT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] <= -0.5;
+            gamepad.axes[GP_LEFT_STICK_X_AXIS] <= -0.5 ||
+            gamepad.axes[GP_RIGHT_STICK_X_AXIS] <= -0.5;
         gamepad.directions[1] =
             gamepad.buttons[GP_DPAD_RIGHT - GP_RANGE_BEGIN] ||
-            gamepad.axes[GP_LEFT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] >= +0.5 ||
-            gamepad.axes[GP_RIGHT_STICK_X_AXIS - GP_AXES_RANGE_BEGIN] >= +0.5;
+            gamepad.axes[GP_LEFT_STICK_X_AXIS] >= +0.5 ||
+            gamepad.axes[GP_RIGHT_STICK_X_AXIS] >= +0.5;
         gamepad.directions[2] =
             gamepad.buttons[GP_DPAD_UP - GP_RANGE_BEGIN] ||
-            gamepad.axes[GP_LEFT_STICK_Y_AXIS - GP_AXES_RANGE_BEGIN] <= -0.5 ||
-            gamepad.axes[GP_RIGHT_STICK_Y_AXIS - GP_AXES_RANGE_BEGIN] <= -0.5;
+            gamepad.axes[GP_LEFT_STICK_Y_AXIS] <= -0.5 ||
+            gamepad.axes[GP_RIGHT_STICK_Y_AXIS] <= -0.5;
         gamepad.directions[3] =
             gamepad.buttons[GP_DPAD_DOWN - GP_RANGE_BEGIN] ||
-            gamepad.axes[GP_LEFT_STICK_Y_AXIS - GP_AXES_RANGE_BEGIN] >= +0.5 ||
-            gamepad.axes[GP_RIGHT_STICK_Y_AXIS - GP_AXES_RANGE_BEGIN] >= +0.5;
+            gamepad.axes[GP_LEFT_STICK_Y_AXIS] >= +0.5 ||
+            gamepad.axes[GP_RIGHT_STICK_Y_AXIS] >= +0.5;
     }
 };
 
@@ -537,12 +536,12 @@ string Gosu::Input::id_to_char(Button btn)
 {
     require_sdl_video();
 
-    if (btn.id() > KB_RANGE_END) return "";
+    if (btn > KB_RANGE_END) return "";
 
     // SDL_GetKeyName returns "Space" for this value, but we want the character value.
-    if (btn.id() == KB_SPACE) return " ";
+    if (btn == KB_SPACE) return " ";
 
-    SDL_Keycode keycode = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(btn.id()));
+    SDL_Keycode keycode = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(btn));
     if (keycode == SDLK_UNKNOWN) return "";
 
     const char* name = SDL_GetKeyName(keycode);
@@ -573,7 +572,7 @@ std::string Gosu::Input::button_name(Button btn)
 {
     require_sdl_video();
 
-    SDL_Keycode keycode = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(btn.id()));
+    SDL_Keycode keycode = SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(btn));
     return SDL_GetKeyName(keycode);
 }
 
@@ -601,17 +600,17 @@ std::string Gosu::Input::gamepad_name(int index)
 
 bool Gosu::Input::down(Gosu::Button btn)
 {
-    if (btn == NO_BUTTON || btn.id() >= NUM_BUTTONS) return false;
+    if (btn == NO_BUTTON || btn >= NUM_BUTTONS) return false;
 
-    return button_states[btn.id()];
+    return button_states[btn];
 }
 
 double Gosu::Input::axis(Gosu::Button btn)
 {
-    unsigned axis_id = btn.id() - GP_LEFT_STICK_X_AXIS;
+    unsigned axis_id = btn - GP_LEFT_STICK_X_AXIS;
 
     if (axis_id >= axis_states.size()) {
-        throw std::out_of_range("Invalid axis ID: " + std::to_string(btn.id()));
+        throw std::out_of_range("Invalid axis ID: " + std::to_string(btn));
     }
 
     return axis_states[axis_id];

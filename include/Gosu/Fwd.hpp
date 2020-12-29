@@ -4,7 +4,6 @@ namespace Gosu
 {
     class Bitmap;
     class Buffer;
-    class Button;
     class Channel;
     class Color;
     class File;
