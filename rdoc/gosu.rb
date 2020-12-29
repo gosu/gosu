@@ -875,7 +875,7 @@ module Gosu
     def draw; end
 
     ##
-    # This method can be overriden to give the game a chance to opt out of a call to {#draw}; however, the operating system can still force a redraw for any reason.
+    # This method can be overridden to give the game a chance to opt out of a call to {#draw}; however, the operating system can still force a redraw for any reason.
     #
     # @return [true, false] whether the window needs to be redrawn.
     #
@@ -883,7 +883,8 @@ module Gosu
     def needs_redraw?; end
 
     ##
-    # This method can be overriden to control the visibility of the system cursor over your window, e.g., for level editors or other situations where introducing a custom cursor or hiding the default one is not desired.
+    # This method can be overridden to control the visibility of the system cursor over your window.
+    # The base class implementation returns true.
     #
     # @return [true, false] whether the system cursor should be shown.
     def needs_cursor?; end

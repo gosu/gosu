@@ -1,6 +1,3 @@
-//! \file Window.hpp
-//! Interface of the Window class.
-
 #pragma once
 
 #include <Gosu/Fwd.hpp>
@@ -8,13 +5,6 @@
 #include <Gosu/Platform.hpp>
 #include <memory>
 #include <string>
-
-#ifdef GOSU_IS_WIN
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-#include <windows.h>
-#endif
 
 namespace Gosu
 {
@@ -82,8 +72,8 @@ namespace Gosu
         //! By default, the window is redrawn all the time.
         virtual bool needs_redraw() const { return true; }
 
-        //! If this function returns true, the system arrow cursor is drawn while over the window.
-        virtual bool needs_cursor() const { return false; }
+        //! If this function returns true, the system cursor will be visible while over the window.
+        virtual bool needs_cursor() const { return true; }
 
         //! This function is called when the window loses focus on some platforms.
         //! Most importantly, it is called on the iPhone or iPad when the user locks the screen.
