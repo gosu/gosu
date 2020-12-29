@@ -1,6 +1,3 @@
-//! \file Utility.hpp
-//! General purpose utility functions.
-
 #pragma once
 
 #include <string>
@@ -17,4 +14,18 @@ namespace Gosu
     //! values such as 'en_US', 'de_DE.UTF-8', 'ja', 'zh-Hans'.
     //! The first two letters will always be a language code.
     std::string language();
+
+    class Noncopyable
+    {
+    protected:
+        Noncopyable() = default;
+        ~Noncopyable() = default;
+
+    public:
+        Noncopyable(const Noncopyable& other) = delete;
+        Noncopyable& operator=(const Noncopyable& other) = delete;
+
+        Noncopyable(Noncopyable&& other) = delete;
+        Noncopyable& operator=(Noncopyable&& other) = delete;
+    };
 }
