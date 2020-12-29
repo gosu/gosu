@@ -16,7 +16,7 @@ task :set_version do
 
   major, minor, patch = *GOSU_VERSION.split(".")
 
-  File.open("Gosu/Version.hpp", "w") do |file|
+  File.open("include/Gosu/Version.hpp", "w") do |file|
     file.puts <<-EOF
 #pragma once
 
