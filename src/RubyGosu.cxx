@@ -2174,22 +2174,21 @@ namespace Swig {
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-#define SWIGTYPE_p_Gosu__Button swig_types[0]
-#define SWIGTYPE_p_Gosu__Channel swig_types[1]
-#define SWIGTYPE_p_Gosu__Color swig_types[2]
-#define SWIGTYPE_p_Gosu__Font swig_types[3]
-#define SWIGTYPE_p_Gosu__GLTexInfo swig_types[4]
-#define SWIGTYPE_p_Gosu__Image swig_types[5]
-#define SWIGTYPE_p_Gosu__Sample swig_types[6]
-#define SWIGTYPE_p_Gosu__Song swig_types[7]
-#define SWIGTYPE_p_Gosu__TextInput swig_types[8]
-#define SWIGTYPE_p_Gosu__Window swig_types[9]
-#define SWIGTYPE_p_char swig_types[10]
-#define SWIGTYPE_p_double swig_types[11]
-#define SWIGTYPE_p_std__arrayT_double_16_t swig_types[12]
-#define SWIGTYPE_p_std__string swig_types[13]
-static swig_type_info *swig_types[15];
-static swig_module_info swig_module = {swig_types, 14, 0, 0, 0, 0};
+#define SWIGTYPE_p_Gosu__Channel swig_types[0]
+#define SWIGTYPE_p_Gosu__Color swig_types[1]
+#define SWIGTYPE_p_Gosu__Font swig_types[2]
+#define SWIGTYPE_p_Gosu__GLTexInfo swig_types[3]
+#define SWIGTYPE_p_Gosu__Image swig_types[4]
+#define SWIGTYPE_p_Gosu__Sample swig_types[5]
+#define SWIGTYPE_p_Gosu__Song swig_types[6]
+#define SWIGTYPE_p_Gosu__TextInput swig_types[7]
+#define SWIGTYPE_p_Gosu__Window swig_types[8]
+#define SWIGTYPE_p_char swig_types[9]
+#define SWIGTYPE_p_double swig_types[10]
+#define SWIGTYPE_p_std__arrayT_double_16_t swig_types[11]
+#define SWIGTYPE_p_std__string swig_types[12]
+static swig_type_info *swig_types[14];
+static swig_module_info swig_module = {swig_types, 13, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3320,7 +3319,7 @@ void SwigDirector_Window::button_down(Gosu::Button arg0) {
   VALUE SWIGUNUSED result;
   
   {
-    obj0 = arg0 == Gosu::NO_BUTTON ? Qnil : LONG2NUM((&arg0)->id());
+    obj0 = arg0 == Gosu::NO_BUTTON ? Qnil : LONG2NUM(arg0);
   }
   result = rb_funcall(swig_get_self(), rb_intern("protected_button_down"), 1,obj0);
 }
@@ -3331,7 +3330,7 @@ void SwigDirector_Window::button_up(Gosu::Button arg0) {
   VALUE SWIGUNUSED result;
   
   {
-    obj0 = arg0 == Gosu::NO_BUTTON ? Qnil : LONG2NUM((&arg0)->id());
+    obj0 = arg0 == Gosu::NO_BUTTON ? Qnil : LONG2NUM(arg0);
   }
   result = rb_funcall(swig_get_self(), rb_intern("protected_button_up"), 1,obj0);
 }
@@ -10272,14 +10271,14 @@ _wrap_char_to_button_id(int argc, VALUE *argv, VALUE self) {
   }
   {
     try {
-      result = Gosu::char_to_button_id(arg1);
+      result = (Gosu::Button)Gosu::char_to_button_id(arg1);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
   {
-    vresult = result == Gosu::NO_BUTTON ? Qnil : LONG2NUM((&result)->id());
+    vresult = result == Gosu::NO_BUTTON ? Qnil : LONG2NUM(result);
   }
   return vresult;
 fail:
@@ -11651,7 +11650,6 @@ fail:
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
-static swig_type_info _swigt__p_Gosu__Button = {"_p_Gosu__Button", "Gosu::Button *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Channel = {"_p_Gosu__Channel", "Gosu::Channel *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Color = {"_p_Gosu__Color", "Gosu::Color *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Font = {"_p_Gosu__Font", "Gosu::Font *", 0, 0, (void*)0, 0};
@@ -11667,7 +11665,6 @@ static swig_type_info _swigt__p_std__arrayT_double_16_t = {"_p_std__arrayT_doubl
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
-  &_swigt__p_Gosu__Button,
   &_swigt__p_Gosu__Channel,
   &_swigt__p_Gosu__Color,
   &_swigt__p_Gosu__Font,
@@ -11683,7 +11680,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__string,
 };
 
-static swig_cast_info _swigc__p_Gosu__Button[] = {  {&_swigt__p_Gosu__Button, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Channel[] = {  {&_swigt__p_Gosu__Channel, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Color[] = {  {&_swigt__p_Gosu__Color, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Font[] = {  {&_swigt__p_Gosu__Font, 0, 0, 0},{0, 0, 0, 0}};
@@ -11699,7 +11695,6 @@ static swig_cast_info _swigc__p_std__arrayT_double_16_t[] = {  {&_swigt__p_std__
 static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
-  _swigc__p_Gosu__Button,
   _swigc__p_Gosu__Channel,
   _swigc__p_Gosu__Color,
   _swigc__p_Gosu__Font,
