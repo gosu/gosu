@@ -3,6 +3,7 @@
 ## [1.0.0] – tbd
 
 * Breaking change: `Image.from_text`, `Font.draw_text` and `Font.text_width` have stopped parsing pseudo-HTML markup. Replace "text" with "markup" in each method name to get this functionality back.
+* Breaking change: The alternative `gosu/zen` interface has been removed.
 * Support for Ruby 3.0. Gosu now requires Ruby 2.5 or later, and can only be used on Windows when the RubyInstaller DevKit has been installed.
 * Support for analog gamepad sticks. Previously, all sticks and D-pads of gamepad 1 were merged into the same constants such as `GP_0_LEFT`. Now there is a `GP_0_DPAD_LEFT` button ID for the D-pad, and `GP_LEFT_STICK_X_AXIS` / `GP_RIGHT_STICK_X_AXIS` axis IDs that which can be used with `Gosu.axis()` to query a value between -1 and 1. Thanks to @cyberarm for this contribution. (#524, #540, #542, #543. #546)
 * Replace all audio libraries by a statically bundled copy of SDL_sound. (#539) 
