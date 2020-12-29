@@ -1,11 +1,9 @@
-//! \file Input.hpp
-//! Interface of the Input class.
-
 #pragma once
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Buttons.hpp>
 #include <Gosu/Platform.hpp>
+#include <Gosu/Utility.hpp>
 #include <functional>
 #include <memory>
 #include <string>
@@ -36,33 +34,30 @@ namespace Gosu
     inline bool operator!=(Button lhs, Button rhs) { return !(lhs == rhs); }
     inline bool operator<(Button lhs, Button rhs) { return lhs.id() < rhs.id(); }
 
-    //! Struct that saves information about a touch on the surface of a multi-
-    //! touch device.
-    //! Available even on non-iPhone platforms to make it easier to compile the
-    //! same source for multiple platforms.
+    /// Struct that saves information about a touch on the surface of a multi-touch device.
+    /// (Right now this is only supported on iOS.)
     struct Touch
     {
-        //! Allows for identification of a touch across calls.
+        /// Allows for identification of a touch across calls.
         void* id;
-        //! Position of a touch on the touch screen.
-        float x, y;
+        /// Position of a touch on the touch screen.
+        double x, y;
     };
     typedef std::vector<Touch> Touches;
 
-    //! Manages initialization and shutdown of the input system. Only one Input
-    //! instance can exist per application.
-    class Input
+    /// Manages initialization and shutdown of the input system.
+    /// Only one Input instance can exist per application.
+    class Input : Noncopyable
     {
         struct Impl;
-        // Non-movable (const) to avoid dangling internal references.
-        const std::unique_ptr<Impl> pimpl;
+        std::unique_ptr<Impl> pimpl;
 
     public:
     #ifdef GOSU_IS_IPHONE
         Input(void* view, float update_interval);
         void feed_touch_event(std::function<void (Touch)>& callback, void* touches);
     #else
-        Input(void* window);
+        explicit Input(void* window);
         bool feed_sdl_event(void* event);
     #endif
 
@@ -87,7 +82,8 @@ namespace Gosu
         //! Updated every tick.
         static bool down(Button btn);
 
-        //! Returns the value of a Gamepad joystick in the range -1.0 thru +1.0 and trigger in the range 0.0 thru +1.0.
+        //! Returns the value of a gamepad stick in the range -1.0 through +1.0, or a trigger in the
+        //! range 0.0 through +1.0.
         //! Updated every tick.
         static double axis(Button btn);
 

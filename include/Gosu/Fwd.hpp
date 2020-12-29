@@ -1,9 +1,5 @@
-//! \file Fwd.hpp
-//! Contains forward declarations of all of Gosu's available classes.
-
 #pragma once
 
-//! The library's main namespace.
 namespace Gosu
 {
     class Bitmap;
