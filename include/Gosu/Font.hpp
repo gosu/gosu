@@ -40,7 +40,7 @@ namespace Gosu
         
         //! Returns the width, in pixels, the given text would occupy if drawn.
         double text_width(const std::string& text) const;
-        //! Returns the width, in pixels, the given text would occupy if drawn.
+        //! Returns the width, in pixels, the given markup would occupy if drawn.
         double markup_width(const std::string& markup) const;
         
         //! Draws text so the top left corner of the text is at (x; y).
