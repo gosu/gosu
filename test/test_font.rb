@@ -8,9 +8,7 @@ class TestFont < Minitest::Test
   
   def test_markup_parsing
     font = Gosu::Font.new(20)
-    # markup_width and text_width will return the same thing, for compatibility, until Gosu 1.0.
     assert_equal 0, font.markup_width("<b>")
-    assert_equal 0, font.text_width("<b>")
   end
   
   def test_custom_characters
@@ -26,8 +24,8 @@ class TestFont < Minitest::Test
     bold_font = Gosu::Font.new(7, bold: true)
     regular_font = Gosu::Font.new(7, bold: false)
     refute_equal bold_font.text_width("Afdslkgjd"), regular_font.text_width("Afdslkgjd")
-    assert_equal bold_font.text_width("Afdslkgjd"), regular_font.text_width("<b>Afdslkgjd</b>")
-    assert_equal bold_font.text_width("</b>Afdslkgjd"), regular_font.text_width("Afdslkgjd")
+    assert_equal bold_font.text_width("Afdslkgjd"), regular_font.markup_width("<b>Afdslkgjd</b>")
+    assert_equal bold_font.markup_width("</b>Afdslkgjd"), regular_font.text_width("Afdslkgjd")
   end
   
   def test_draw_and_draw_rel

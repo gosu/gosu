@@ -528,10 +528,8 @@ namespace Gosu
 
 // Font
 %ignore Gosu::Font::Font(int height, const std::string& font_name, unsigned flags);
+%ignore Gosu::Font::text_width(const std::string& text) const;
 %ignore Gosu::Font::markup_width(const std::string& markup) const;
-%ignore Gosu::Font::text_width;
-%ignore Gosu::Font::draw_text;
-%ignore Gosu::Font::draw_text_rel;
 %ignore Gosu::Font::set_image(std::string codepoint, unsigned font_flags, const Gosu::Image& image);
 
 %include "../../include/Gosu/Font.hpp"
@@ -583,12 +581,22 @@ namespace Gosu
         return new Gosu::Font(height, font_name, font_flags);
     }
     
+    double text_width(const std::string& markup, double scale_x = 1.0)
+    {
+      static bool issued_warning = false;
+      if (scale_x != 1.0 && !issued_warning) {
+          issued_warning = true;
+          rb_warn("The second argument to Gosu::Font#text_width is deprecated, multiply the result instead");
+      }
+      return $self->text_width(markup) * scale_x;
+    }
+
     double markup_width(const std::string& markup, double scale_x = 1.0)
     {
       static bool issued_warning = false;
       if (scale_x != 1.0 && !issued_warning) {
           issued_warning = true;
-          rb_warn("The second argument to Font#markup_width and Font#text_width is deprecated, multiply the result instead");
+          rb_warn("The second argument to Gosu::Font#markup_width is deprecated, multiply the result instead");
       }
       return $self->markup_width(markup) * scale_x;
     }
@@ -697,7 +705,85 @@ namespace Gosu
     }
     
     %newobject from_text;
-    static Gosu::Image* from_text(const std::string& markup, double font_height, VALUE options = 0)
+    static Gosu::Image* from_text(const std::string& text, double font_height, VALUE options = 0)
+    {
+        std::string font = Gosu::default_font_name();
+        int width = -1;
+        double spacing = 0;
+        Gosu::Alignment align = Gosu::AL_LEFT;
+        unsigned image_flags = 0;
+        unsigned font_flags = 0;
+
+        if (options) {
+            Check_Type(options, T_HASH);
+
+            VALUE keys = rb_funcall(options, rb_intern("keys"), 0, NULL);
+            int keys_size = NUM2INT(rb_funcall(keys, rb_intern("size"), 0, NULL));
+
+            for (int i = 0; i < keys_size; ++i) {
+                VALUE key = rb_ary_entry(keys, i);
+                const char* key_string = Gosu::cstr_from_symbol(key);
+
+                VALUE value = rb_hash_aref(options, key);
+                if (!strcmp(key_string, "font")) {
+                    font = StringValuePtr(value);
+                }
+                else if (!strcmp(key_string, "bold")) {
+                    if (RTEST(value)) font_flags |= Gosu::FF_BOLD;
+                }
+                else if (!strcmp(key_string, "italic")) {
+                    if (RTEST(value)) font_flags |= Gosu::FF_ITALIC;
+                }
+                else if (!strcmp(key_string, "underline")) {
+                    if (RTEST(value)) font_flags |= Gosu::FF_UNDERLINE;
+                }
+                else if (!strcmp(key_string, "align")) {
+                    const char* cstr = Gosu::cstr_from_symbol(value);
+
+                    if (!strcmp(cstr, "left")) {
+                        align = Gosu::AL_LEFT;
+                    }
+                    else if (!strcmp(cstr, "center")) {
+                        align = Gosu::AL_CENTER;
+                    }
+                    else if (!strcmp(cstr, "right")) {
+                        align = Gosu::AL_RIGHT;
+                    }
+                    else if (!strcmp(cstr, "justify")) {
+                        align = Gosu::AL_JUSTIFY;
+                    }
+                    else {
+                        rb_raise(rb_eArgError, "Argument passed to :align must be a valid text "
+                                               "alignment (:left, :center, :right, :justify)");
+                    }
+                }
+                else if (!strcmp(key_string, "width")) {
+                    width = NUM2INT(value);
+                }
+                else if (!strcmp(key_string, "spacing")) {
+                    spacing = NUM2DBL(value);
+                }
+                else if (!strcmp(key_string, "retro")) {
+                    if (RTEST(value)) image_flags |= Gosu::IF_RETRO;
+                }
+                else {
+                    static bool issued_warning = false;
+                    if (!issued_warning) {
+                        issued_warning = true;
+                        rb_warn("Unknown keyword argument: :%s", key_string);
+                    }
+                }
+            }
+        }
+
+        Gosu::Bitmap bitmap = Gosu::layout_text(text, font, font_height, spacing, width,
+                                                align, font_flags);
+        return new Gosu::Image(bitmap, image_flags);
+    }
+
+    // TODO: Reduce duplication between from_text and from_markup.
+    %newobject from_markup;
+    static Gosu::Image* from_markup(const std::string& markup, double font_height, VALUE options = 0)
     {
         std::string font = Gosu::default_font_name();
         int width = -1;
