@@ -52,6 +52,8 @@ if windows
     $LDFLAGS << "  -L../../dependencies/al_soft/x86 -L../../dependencies/SDL/lib/x86"
   end
   $LDFLAGS << " -lgdi32 -lwinmm -lOpenGL32 -lOpenAL32 -lSDL2"
+  # Link libstdc++ statically to avoid having another DLL dependency when using Ocra.
+  $LDFLAGS << " -static-libstdc++"
 elsif macos
   # Compile all C++ files as Objective C++ on macOS since mkmf does not support .mm files.
   $CXXFLAGS << " -x objective-c++ -fobjc-arc -DNDEBUG"
