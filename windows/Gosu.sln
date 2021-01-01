@@ -10,6 +10,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tutorial", "Tutorial.vcxpro
 		{4989339B-019C-4399-86F5-1D9245C420C6} = {4989339B-019C-4399-86F5-1D9245C420C6}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GosuFFI", "GosuFFI.vcxproj", "{C265529A-DFC9-41E8-A3FD-844B2C666BC5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4989339B-019C-4399-86F5-1D9245C420C6} = {4989339B-019C-4399-86F5-1D9245C420C6}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8F5D1851-EEF1-4AC6-AA1D-F81F7E0EFC2D}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitignore = ..\.gitignore
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +44,14 @@ Global
 		{0B0CDADB-9066-452F-94F5-FD98E9CFA9FE}.Release|x64.Build.0 = Release|x64
 		{0B0CDADB-9066-452F-94F5-FD98E9CFA9FE}.Release|x86.ActiveCfg = Release|Win32
 		{0B0CDADB-9066-452F-94F5-FD98E9CFA9FE}.Release|x86.Build.0 = Release|Win32
+		{C265529A-DFC9-41E8-A3FD-844B2C666BC5}.Debug|x64.ActiveCfg = Debug|x64
+		{C265529A-DFC9-41E8-A3FD-844B2C666BC5}.Debug|x64.Build.0 = Debug|x64
+		{C265529A-DFC9-41E8-A3FD-844B2C666BC5}.Debug|x86.ActiveCfg = Debug|Win32
+		{C265529A-DFC9-41E8-A3FD-844B2C666BC5}.Debug|x86.Build.0 = Debug|Win32
+		{C265529A-DFC9-41E8-A3FD-844B2C666BC5}.Release|x64.ActiveCfg = Release|x64
+		{C265529A-DFC9-41E8-A3FD-844B2C666BC5}.Release|x64.Build.0 = Release|x64
+		{C265529A-DFC9-41E8-A3FD-844B2C666BC5}.Release|x86.ActiveCfg = Release|Win32
+		{C265529A-DFC9-41E8-A3FD-844B2C666BC5}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,8 +1,8 @@
 #include <Gosu/Gosu.hpp>
 
 extern "C" {
-#include <Gosu/Image.h>
-#include <Gosu/Font.h>
+#include "Gosu_Image.h"
+#include "Gosu_Font.h"
 
 Gosu_Font *Gosu_Font_create(int height, const char *name, unsigned flags)
 {

@@ -3,7 +3,7 @@
 #include <cstring>
 
 extern "C" {
-#include <Gosu/Image.h>
+#include "Gosu_Image.h"
 
 // Constructors
 Gosu_Image *Gosu_Image_create(const char *filename, unsigned image_flags)
