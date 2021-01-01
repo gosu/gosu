@@ -325,7 +325,6 @@
     <ClInclude Include="..\src\Log.hpp" />
     <ClInclude Include="..\src\Macro.hpp" />
     <ClInclude Include="..\src\MarkupParser.hpp" />
-    <ClInclude Include="..\src\MPEGFile.hpp" />
     <ClInclude Include="..\src\OffScreenTarget.hpp" />
     <ClInclude Include="..\src\RenderState.hpp" />
     <ClInclude Include="..\src\stb_image.h" />

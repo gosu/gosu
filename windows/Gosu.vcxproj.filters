@@ -380,9 +380,6 @@
     <ClInclude Include="..\src\MarkupParser.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\MPEGFile.hpp">
-      <Filter>Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\OffScreenTarget.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
