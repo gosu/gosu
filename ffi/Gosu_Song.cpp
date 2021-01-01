@@ -1,5 +1,5 @@
 #include <Gosu/Audio.hpp>
-#include <Gosu/Song.h>
+#include "Gosu_Song.h"
 
 extern "C" {
   Gosu_Song* Gosu_Song_create(const char* filename)

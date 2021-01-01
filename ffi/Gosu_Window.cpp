@@ -129,8 +129,8 @@ void Gosu::WindowForWrapper::close_immediately()
 }
 
 extern "C" {
-#include <Gosu/Window.h>
-#include <Gosu/TextInput.h>
+#include "Gosu_Window.h"
+#include "Gosu_TextInput.h"
 
 // Constructor
 Gosu_Window *Gosu_Window_create(int width, int height, bool fullscreen, double update_interval, bool resizable)

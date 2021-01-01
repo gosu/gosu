@@ -7,142 +7,145 @@
     <Filter Include="Interface">
       <UniqueIdentifier>{defefcfa-47f2-4cf5-9be9-79c759d06bc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dependencies">
+      <UniqueIdentifier>{cac4bebb-a900-4ca6-b71d-f150975b2a9a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_aiff.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_au.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_coreaudio.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_flac.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_modplug.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_mp3.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_raw.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_shn.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_voc.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_vorbis.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_wav.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\fastmix.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_669.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_abc.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_amf.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_ams.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_dbm.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_dmf.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_dsm.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_far.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_it.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mdl.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_med.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mid.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mod.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mt2.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mtm.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_okt.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_pat.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_psm.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_ptm.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_s3m.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_stm.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_ult.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_umx.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_xm.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\mmcmp.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\modplug.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\snd_dsp.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\snd_flt.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\snd_fx.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\sndfile.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\sndmix.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\utf8proc\utf8proc.c">
-      <Filter>Implementation</Filter>
+      <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Audio.cpp">
       <Filter>Implementation</Filter>
@@ -168,16 +171,7 @@
     <ClCompile Include="..\src\Channel.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ChannelWrapper.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Color.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ColorWrapper.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Constants.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\DirectoriesApple.cpp">
@@ -198,16 +192,10 @@
     <ClCompile Include="..\src\Font.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\FontWrapper.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\GosuGLView.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\GosuViewController.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GosuWrapper.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Graphics.cpp">
@@ -217,9 +205,6 @@
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Image.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ImageWrapper.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Input.cpp">
@@ -249,12 +234,6 @@
     <ClCompile Include="..\src\Resolution.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\SampleWrapper.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\SongWrapper.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\TexChunk.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
@@ -265,9 +244,6 @@
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\TextInput.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TextInputWrapper.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Texture.cpp">
@@ -321,19 +297,328 @@
     <ClCompile Include="..\src\WindowUIKit.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\WindowWrapper.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\stb_image.h">
-      <Filter>Implementation</Filter>
+    <ClInclude Include="..\dependencies\SDL\include\SDL.h">
+      <Filter>Dependencies</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\stb_image_write.h">
-      <Filter>Implementation</Filter>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_assert.h">
+      <Filter>Dependencies</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\WinUtility.hpp">
-      <Filter>Implementation</Filter>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_atomic.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_audio.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_bits.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_blendmode.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_clipboard.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_config.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_config_android.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_config_iphoneos.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_config_macosx.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_config_minimal.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_config_os2.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_config_pandora.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_config_psp.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_config_windows.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_config_winrt.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_config_wiz.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_copying.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_cpuinfo.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_egl.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_endian.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_error.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_events.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_filesystem.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_gamecontroller.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_gesture.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_haptic.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_hints.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_joystick.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_keyboard.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_keycode.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_loadso.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_locale.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_log.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_main.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_messagebox.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_metal.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_misc.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_mouse.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_mutex.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_name.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_opengl.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_opengl_glext.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_opengles.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_opengles2.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_opengles2_gl2.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_opengles2_gl2ext.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_opengles2_gl2platform.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_opengles2_khrplatform.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_pixels.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_platform.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_power.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_quit.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_rect.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_render.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_revision.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_rwops.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_scancode.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_sensor.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_shape.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_stdinc.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_surface.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_system.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_syswm.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_test.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_test_assert.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_test_common.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_test_compare.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_test_crc32.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_test_font.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_test_fuzzer.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_test_harness.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_test_images.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_test_log.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_test_md5.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_test_memory.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_test_random.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_thread.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_timer.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_touch.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_types.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_version.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_video.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_vulkan.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\begin_code.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\close_code.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL_sound\SDL_sound.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL_sound\SDL_sound_internal.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL_sound\dr_flac.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL_sound\dr_mp3.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL_sound\libmodplug\libmodplug.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL_sound\libmodplug\load_pat.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL_sound\libmodplug\modplug.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL_sound\libmodplug\tables.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL_sound\stb_vorbis.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\al_soft\AL\al.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\al_soft\AL\alc.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\al_soft\AL\alext.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\al_soft\AL\efx-creative.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\al_soft\AL\efx-presets.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\al_soft\AL\efx.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\stb\stb_image.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\stb\stb_image_write.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\stb\stb_truetype.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\utf8proc\utf8proc.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\utf8proc\utf8proc_data.h">
+      <Filter>Dependencies</Filter>
     </ClInclude>
     <ClInclude Include="..\src\AudioFile.hpp">
       <Filter>Implementation</Filter>
@@ -401,6 +686,9 @@
     <ClInclude Include="..\src\TrueTypeFont.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\WinUtility.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
     <ClInclude Include="..\include\Gosu\Audio.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
@@ -410,28 +698,16 @@
     <ClInclude Include="..\include\Gosu\Buttons.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Gosu\Channel.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Gosu\Color.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Gosu\Color.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Directories.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Gosu\Font.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Gosu\Font.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Fwd.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Gosu\Gosu.h">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Gosu.hpp">
@@ -443,7 +719,7 @@
     <ClInclude Include="..\include\Gosu\GraphicsBase.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Gosu\Image.h">
+    <ClInclude Include="..\include\Gosu\IO.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Image.hpp">
@@ -458,25 +734,13 @@
     <ClInclude Include="..\include\Gosu\Inspection.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Gosu\IO.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Gosu\Math.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Platform.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Gosu\Sample.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Gosu\Song.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Gosu\Text.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Gosu\TextInput.h">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\TextInput.hpp">
@@ -489,9 +753,6 @@
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Version.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Gosu\Window.h">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Window.hpp">

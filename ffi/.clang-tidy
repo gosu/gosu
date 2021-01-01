@@ -1,0 +1,9 @@
+# This file explicitly disables a few clang-tidy inspections that don't matter for the FFI bindings.
+InheritParentConfig: true
+Checks: >-
+  -cppcoreguidelines-macro-usage,
+  -hicpp-deprecated-headers,
+  -modernize-deprecated-headers,
+
+CheckOptions:
+  - { key: readability-identifier-naming.FunctionCase, value: aNy_CasE }

@@ -1,5 +1,5 @@
 #include <Gosu/Audio.hpp>
-#include <Gosu/Sample.h>
+#include "Gosu_Sample.h"
 
 extern "C" {
 

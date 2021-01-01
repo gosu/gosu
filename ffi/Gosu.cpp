@@ -1,7 +1,7 @@
 #include <Gosu/Gosu.hpp>
 
 extern "C" {
-#include <Gosu/Gosu.h>
+#include "Gosu.h"
 
 void Gosu_gl_z(double z, void function(void *data), void *data)
 {

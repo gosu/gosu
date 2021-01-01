@@ -44,8 +44,6 @@ file(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 # Build Gosu as a shared library only for now. This also means we don't have to
 # find all of our dependencies again in cmake/GosuConfig.cmake.in, as the
 # compiled .so/.dylib file will already reference them.
-# TODO: Build both a shared library (mostly for FFI), and a static one.
-# See https://stackoverflow.com/q/2152077
 add_library(gosu SHARED ${C_FILES} ${HEADER_FILES} ${SOURCE_FILES})
 
 # Ignore deprecation warnings from within Gosu while compiling Gosu itself.
@@ -95,7 +93,7 @@ install(TARGETS gosu
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-# Taken from modern-cmake-sample, although the point is not clear to me.
+# Copied from modern-cmake-sample, although the purpose is not clear to me.
 set_target_properties(gosu PROPERTIES EXPORT_NAME Gosu)
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
@@ -124,16 +122,16 @@ export(EXPORT gosu-targets
 
 
 ##############################################
-# Examples and tests
+# FFI interface, examples, and tests
 
 # Alias our library as Gosu::Gosu so that examples and submodules can depend
 # on it by its normal name.
 add_library(Gosu::Gosu ALIAS gosu)
 
-# Only build examples and tests if this is the top-level CMake module.
+# Only build the FFI interface, examples, and tests if this is the top-level CMake module.
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    # Including the examples here means they will always be built along with Gosu.
-    # This is fine, we care more about catching errors than compilation speed.
+    add_subdirectory(ffi)
+
     add_subdirectory(examples)
 
     # If GoogleTest is not available as a CMake module, this is a no-op.

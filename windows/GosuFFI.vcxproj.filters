@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Implementation">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ffi\Gosu.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ffi\Gosu_Channel.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ffi\Gosu_Color.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ffi\Gosu_FFI.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ffi\Gosu_Font.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ffi\Gosu_Image.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ffi\Gosu_Sample.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ffi\Gosu_Song.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ffi\Gosu_TextInput.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ffi\Gosu_Window.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ffi\Gosu.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ffi\Gosu_Channel.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ffi\Gosu_Color.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ffi\Gosu_Constants.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ffi\Gosu_Font.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ffi\Gosu_Image.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ffi\Gosu_Sample.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ffi\Gosu_Song.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ffi\Gosu_TextInput.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ffi\Gosu_Window.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

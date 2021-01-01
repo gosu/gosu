@@ -1,5 +1,5 @@
 #include <Gosu/Audio.hpp>
-#include <Gosu/Channel.h>
+#include "Gosu_Channel.h"
 
 extern "C" {
 

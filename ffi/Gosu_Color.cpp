@@ -1,5 +1,5 @@
 #include <Gosu/Color.hpp>
-#include <Gosu/Color.h>
+#include "Gosu_Color.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -28,7 +28,7 @@ std::string Gosu::TextInputForWrapper::filter(std::string text) const
 }
 
 extern "C" {
-#include <Gosu/TextInput.h>
+#include "Gosu_TextInput.h"
 
 Gosu_TextInput *Gosu_TextInput_create()
 {
