@@ -2,8 +2,12 @@
 InheritParentConfig: true
 Checks: >-
   -cppcoreguidelines-macro-usage,
+  -cppcoreguidelines-owning-memory,
+  -cppcoreguidelines-pro-type-reinterpret-cast,
   -hicpp-deprecated-headers,
   -modernize-deprecated-headers,
 
 CheckOptions:
-  - { key: readability-identifier-naming.FunctionCase, value: aNy_CasE }
+  - { key: readability-identifier-naming.FunctionCase,   value: aNy_CasE  }
+  - { key: readability-identifier-naming.FunctionPrefix, value: Gosu_ }
+  - { key: readability-identifier-naming.StructPrefix,   value: Gosu_ }
