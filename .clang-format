@@ -6,9 +6,9 @@ AlignOperands: Align
 AllowAllArgumentsOnNextLine: false
 AllowAllConstructorInitializersOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
-AllowShortBlocksOnASingleLine: Always
+AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: All
+AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: Always
 AllowShortLambdasOnASingleLine: All
 AllowShortLoopsOnASingleLine: true
@@ -22,11 +22,12 @@ BraceWrapping:
   AfterEnum: true
   AfterFunction: true
   AfterNamespace: true
+  AfterStruct: true
   AfterUnion: true
   BeforeCatch: false
   BeforeElse: true
   IndentBraces: false
-  SplitEmptyFunction: false
+  SplitEmptyFunction: true
   SplitEmptyRecord: true
 BreakBeforeBinaryOperators: None
 BreakBeforeTernaryOperators: true
@@ -34,6 +35,7 @@ BreakConstructorInitializers: BeforeColon
 BreakInheritanceList: BeforeColon
 ColumnLimit: 100
 CompactNamespaces: false
+ConstructorInitializerIndentWidth: 0
 ContinuationIndentWidth: 8
 IndentCaseLabels: true
 IndentPPDirectives: None
