@@ -9,6 +9,6 @@ Checks: >-
 
 CheckOptions:
   - { key: readability-identifier-naming.GlobalConstantPrefix, value: Gosu_ }
-  - { key: readability-identifier-naming.FunctionCase,         value: aNy_CasE  }
+  - { key: readability-identifier-naming.FunctionCase,         value: aNy_CasE }
   - { key: readability-identifier-naming.FunctionPrefix,       value: Gosu_ }
   - { key: readability-identifier-naming.StructPrefix,         value: Gosu_ }
