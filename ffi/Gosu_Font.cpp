@@ -1,74 +1,84 @@
 #include <Gosu/Gosu.hpp>
 
-extern "C" {
-#include "Gosu_Image.h"
 #include "Gosu_Font.h"
+#include "Gosu_Image.h"
 
-Gosu_Font *Gosu_Font_create(int height, const char *name, unsigned flags)
+struct Gosu_Font
 {
-    return reinterpret_cast<Gosu_Font *>(new Gosu::Font(height, name, flags));
+    Gosu::Font font;
+};
+
+GOSU_FFI_API Gosu_Font* Gosu_Font_create(int height, const char* name, unsigned flags)
+{
+    return new Gosu_Font{Gosu::Font{height, name, flags}};
 }
 
-const char *Gosu_Font_name(Gosu_Font *font)
+GOSU_FFI_API void Gosu_Font_destroy(Gosu_Font* font)
 {
-    return reinterpret_cast<Gosu::Font *>(font)->name().c_str();
+    delete font;
 }
 
-int Gosu_Font_height(Gosu_Font *font)
+GOSU_FFI_API const char* Gosu_Font_name(Gosu_Font* font)
 {
-    return reinterpret_cast<Gosu::Font *>(font)->height();
+    static thread_local std::string name;
+    name = font->font.name();
+    return name.c_str();
 }
 
-unsigned Gosu_Font_flags(Gosu_Font *font)
+GOSU_FFI_API int Gosu_Font_height(Gosu_Font* font)
 {
-    return reinterpret_cast<Gosu::Font *>(font)->flags();
+    return font->font.height();
 }
 
-double Gosu_Font_text_width(Gosu_Font *font, const char *text)
+GOSU_FFI_API unsigned Gosu_Font_flags(Gosu_Font* font)
 {
-    return reinterpret_cast<Gosu::Font *>(font)->text_width(text);
+    return font->font.flags();
 }
 
-double Gosu_Font_markup_width(Gosu_Font *font, const char *text)
+GOSU_FFI_API double Gosu_Font_text_width(Gosu_Font* font, const char* text)
 {
-    return reinterpret_cast<Gosu::Font *>(font)->markup_width(text);
+    return font->font.text_width(text);
 }
 
-void Gosu_Font_draw_text(Gosu_Font *font, const char *text, double x, double y, double z,
-                            double scale_x, double scale_y, unsigned c, unsigned mode)
+GOSU_FFI_API double Gosu_Font_markup_width(Gosu_Font* font, const char* markup)
 {
-    reinterpret_cast<Gosu::Font *>(font)->draw_text(text, x, y, z, scale_x, scale_y, c, (Gosu::AlphaMode)mode);
+    return font->font.markup_width(markup);
 }
 
-void Gosu_Font_draw_markup(Gosu_Font *font, const char *text, double x, double y, double z,
-                            double scale_x, double scale_y, unsigned c, unsigned mode)
+GOSU_FFI_API void Gosu_Font_draw_text(Gosu_Font* font, const char* text, double x, double y,
+                                      double z, double scale_x, double scale_y, unsigned c,
+                                      unsigned mode)
 {
-    reinterpret_cast<Gosu::Font *>(font)->draw_markup(text, x, y, z, scale_x, scale_y, c, (Gosu::AlphaMode)mode);
+    font->font.draw_text(text, x, y, z, scale_x, scale_y, c, static_cast<Gosu::AlphaMode>(mode));
 }
 
-void Gosu_Font_draw_text_rel(Gosu_Font *font, const char *text, double x, double y, double z,
-                                double rel_x, double rel_y, double scale_x, double scale_y,
-                                unsigned c, unsigned mode)
+GOSU_FFI_API void Gosu_Font_draw_markup(Gosu_Font* font, const char* markup, double x, double y,
+                                        double z, double scale_x, double scale_y, unsigned c,
+                                        unsigned mode)
 {
-    reinterpret_cast<Gosu::Font *>(font)->draw_text_rel(text, x, y, z, rel_x, rel_y, scale_x, scale_y, c, (Gosu::AlphaMode)mode);
+    font->font.draw_markup(markup, x, y, z, scale_x, scale_y, c,
+                           static_cast<Gosu::AlphaMode>(mode));
 }
 
-void Gosu_Font_draw_markup_rel(Gosu_Font *font, const char *text, double x, double y, double z,
-                                double rel_x, double rel_y, double scale_x, double scale_y,
-                                unsigned c, unsigned mode)
+GOSU_FFI_API void Gosu_Font_draw_text_rel(Gosu_Font* font, const char* text, double x, double y,
+                                          double z, double rel_x, double rel_y, double scale_x,
+                                          double scale_y, unsigned c, unsigned mode)
 {
-    reinterpret_cast<Gosu::Font *>(font)->draw_markup_rel(text, x, y, z, rel_x, rel_y, scale_x, scale_y, c, (Gosu::AlphaMode)mode);
+    font->font.draw_text_rel(text, x, y, z, rel_x, rel_y, scale_x, scale_y, c,
+                             static_cast<Gosu::AlphaMode>(mode));
 }
 
-void Gosu_Font_set_image(Gosu_Font *font, const char *codepoint, unsigned font_flags, Gosu_Image *image)
+GOSU_FFI_API void Gosu_Font_draw_markup_rel(Gosu_Font* font, const char* markup, double x, double y,
+                                            double z, double rel_x, double rel_y, double scale_x,
+                                            double scale_y, unsigned c, unsigned mode)
 {
-
-    const Gosu::Image *gosu_image = reinterpret_cast<Gosu::Image *>(image);
-    reinterpret_cast<Gosu::Font *>(font)->set_image(codepoint, font_flags, *gosu_image);
+    font->font.draw_markup_rel(markup, x, y, z, rel_x, rel_y, scale_x, scale_y, c,
+                               static_cast<Gosu::AlphaMode>(mode));
 }
 
-void Gosu_Font_destroy(Gosu_Font *font)
+GOSU_FFI_API void Gosu_Font_set_image(Gosu_Font* font, const char* codepoint, unsigned font_flags,
+                                      Gosu_Image* image)
 {
-    delete (reinterpret_cast<Gosu::Font *>(font));
-}
+    const Gosu::Image* gosu_image = reinterpret_cast<Gosu::Image*>(image);
+    font->font.set_image(codepoint, font_flags, *gosu_image);
 }
