@@ -1,8 +1,4 @@
-#include "Gosu_FFI.h"
-#include <Gosu/Buttons.hpp>
-#include <Gosu/GraphicsBase.hpp>
-#include <Gosu/Version.hpp>
-#include <stdint.h>
+#include "Gosu_FFI_internal.h"
 
 GOSU_FFI_API const char* Gosu_version()
 {

@@ -1,11 +1,5 @@
-#include "Gosu_Image.h"
-#include <Gosu/Gosu.hpp>
+#include "Gosu_FFI_internal.h"
 #include <cstring>
-
-struct Gosu_Image
-{
-    Gosu::Image image;
-};
 
 GOSU_FFI_API Gosu_Image* Gosu_Image_create(const char* filename, unsigned image_flags)
 {
@@ -78,7 +72,7 @@ GOSU_FFI_API void Gosu_Image_create_from_tiles(const char* source, int tile_widt
             Gosu::load_tiles(source, tile_width, tile_height, image_flags);
 
     for (Gosu::Image& img : gosu_images) {
-        function(data, reinterpret_cast<Gosu_Image*>(new Gosu::Image(img)));
+        function(data, new Gosu_Image{img});
     }
 }
 
@@ -91,7 +85,7 @@ GOSU_FFI_API void Gosu_Image_create_tiles_from_image(Gosu_Image* image, int tile
             Gosu::load_tiles(image->image.data().to_bitmap(), tile_width, tile_height, image_flags);
 
     for (Gosu::Image& img : gosu_images) {
-        function(data, reinterpret_cast<Gosu_Image*>(new Gosu::Image(img)));
+        function(data, new Gosu_Image{img});
     }
 }
 

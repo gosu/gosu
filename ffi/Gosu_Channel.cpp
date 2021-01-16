@@ -1,10 +1,4 @@
-#include "Gosu_Channel.h"
-#include <Gosu/Audio.hpp>
-
-struct Gosu_Channel
-{
-    Gosu::Channel channel;
-};
+#include "Gosu_FFI_internal.h"
 
 GOSU_FFI_API void Gosu_Channel_destroy(Gosu_Channel* channel)
 {

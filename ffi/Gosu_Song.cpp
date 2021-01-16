@@ -1,14 +1,4 @@
-#include "Gosu_Song.h"
-#include <Gosu/Audio.hpp>
-
-struct Gosu_Song : Gosu::Song
-{
-    [[maybe_unused]] // silence buggy warning - this is being used, see below.
-    explicit Gosu_Song(const std::string& filename)
-    : Gosu::Song{filename}
-    {
-    }
-};
+#include "Gosu_FFI_internal.h"
 
 GOSU_FFI_API Gosu_Song* Gosu_Song_create(const char* filename)
 {

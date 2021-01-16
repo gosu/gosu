@@ -1,10 +1,4 @@
-#include "Gosu_Sample.h"
-#include <Gosu/Audio.hpp>
-
-struct Gosu_Sample
-{
-    Gosu::Sample sample;
-};
+#include "Gosu_FFI_internal.h"
 
 GOSU_FFI_API Gosu_Sample* Gosu_Sample_create(const char* filename)
 {
@@ -19,13 +13,11 @@ GOSU_FFI_API void Gosu_Sample_destroy(Gosu_Sample* sample)
 GOSU_FFI_API Gosu_Channel* Gosu_Sample_play(Gosu_Sample* sample, double volume, double speed,
                                             bool looping)
 {
-    Gosu::Channel channel = sample->sample.play(volume, speed, looping);
-    return reinterpret_cast<Gosu_Channel*>(new Gosu::Channel{channel});
+    return new Gosu_Channel{sample->sample.play(volume, speed, looping)};
 }
 
 GOSU_FFI_API Gosu_Channel* Gosu_Sample_play_pan(Gosu_Sample* sample, double pan, double volume,
                                                 double speed, bool looping)
 {
-    Gosu::Channel channel = sample->sample.play_pan(pan, volume, speed, looping);
-    return reinterpret_cast<Gosu_Channel*>(new Gosu::Channel{channel});
+    return new Gosu_Channel{sample->sample.play_pan(pan, volume, speed, looping)};
 }

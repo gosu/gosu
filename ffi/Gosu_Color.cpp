@@ -1,5 +1,4 @@
-#include "Gosu_Color.h"
-#include <Gosu/Color.hpp>
+#include "Gosu_FFI_internal.h"
 
 GOSU_FFI_API uint32_t Gosu_Color_create(uint32_t argb)
 {

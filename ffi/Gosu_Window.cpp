@@ -1,79 +1,4 @@
-#include "Gosu_Window.h"
-#include "Gosu_TextInput.h"
-#include <Gosu/Gosu.hpp>
-
-struct Gosu_Window : public Gosu::Window
-{
-    [[maybe_unused]] // silence buggy warning - this is being used, see below.
-    Gosu_Window(int width, int height, bool fullscreen, double update_interval, bool resizable)
-    : Gosu::Window(width, height, fullscreen, update_interval, resizable)
-    {
-    }
-
-    void update() override
-    {
-        if (update_callback) update_callback();
-    }
-
-    void draw() override
-    {
-        if (draw_callback) draw_callback();
-    }
-
-    void button_down(Gosu::Button btn) override
-    {
-        if (button_down_callback) button_down_callback(btn);
-    }
-
-    void button_up(Gosu::Button btn) override
-    {
-        if (button_up_callback) button_up_callback(btn);
-    }
-
-    void gamepad_connected(int id) override
-    {
-        if (gamepad_connected_callback) gamepad_connected_callback(id);
-    }
-
-    void gamepad_disconnected(int id) override
-    {
-        if (gamepad_disconnected_callback) gamepad_disconnected_callback(id);
-    }
-
-    void drop(const std::string& filename) override
-    {
-        if (drop_callback) drop_callback(filename.c_str());
-    }
-
-    bool needs_redraw() const override
-    {
-        if (needs_redraw_callback) return needs_redraw_callback();
-        return Window::needs_redraw();
-    }
-
-    bool needs_cursor() const override
-    {
-        if (needs_cursor_callback) return needs_cursor_callback();
-        return Window::needs_cursor();
-    }
-
-    void close() override
-    {
-        if (close_callback != nullptr) return close_callback();
-        Gosu::Window::close();
-    }
-
-    std::function<void()> update_callback;
-    std::function<void()> draw_callback;
-    std::function<void(unsigned btn)> button_down_callback;
-    std::function<void(unsigned btn)> button_up_callback;
-    std::function<void(int id)> gamepad_connected_callback;
-    std::function<void(int id)> gamepad_disconnected_callback;
-    std::function<void(const char* filename)> drop_callback;
-    std::function<bool()> needs_redraw_callback;
-    std::function<bool()> needs_cursor_callback;
-    std::function<void()> close_callback;
-};
+#include "Gosu_FFI_internal.h"
 
 GOSU_FFI_API Gosu_Window* Gosu_Window_create(int width, int height, bool fullscreen,
                                              double update_interval, bool resizable)
@@ -150,12 +75,12 @@ GOSU_FFI_API void Gosu_Window_set_close(Gosu_Window* window, void function(void*
 
 GOSU_FFI_API Gosu_TextInput* Gosu_Window_text_input(Gosu_Window* window)
 {
-    return reinterpret_cast<Gosu_TextInput*>(window->input().text_input());
+    return dynamic_cast<Gosu_TextInput*>(window->input().text_input());
 }
 
 GOSU_FFI_API void Gosu_Window_set_text_input(Gosu_Window* window, Gosu_TextInput* text_input)
 {
-    window->input().set_text_input(reinterpret_cast<Gosu::TextInput*>(text_input));
+    window->input().set_text_input(text_input);
 }
 
 GOSU_FFI_API void Gosu_Window_show(Gosu_Window* window)

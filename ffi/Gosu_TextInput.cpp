@@ -1,21 +1,4 @@
-#include "Gosu_TextInput.h"
-#include <Gosu/Gosu.hpp>
-
-struct Gosu_TextInput : public Gosu::TextInput
-{
-    std::string filter(std::string text) const override
-    {
-        if (filter_callback) {
-            filter_callback(text.c_str());
-            // We now expect the result to be stored using Gosu_TextInput_set_filter_result.
-            return filter_result;
-        }
-        return Gosu::TextInput::filter(text);
-    }
-
-    std::function<void(const char* text)> filter_callback;
-    std::string filter_result;
-};
+#include "Gosu_FFI_internal.h"
 
 GOSU_FFI_API Gosu_TextInput* Gosu_TextInput_create()
 {

@@ -1,12 +1,4 @@
-#include <Gosu/Gosu.hpp>
-
-#include "Gosu_Font.h"
-#include "Gosu_Image.h"
-
-struct Gosu_Font
-{
-    Gosu::Font font;
-};
+#include "Gosu_FFI_internal.h"
 
 GOSU_FFI_API Gosu_Font* Gosu_Font_create(int height, const char* name, unsigned flags)
 {
@@ -79,6 +71,5 @@ GOSU_FFI_API void Gosu_Font_draw_markup_rel(Gosu_Font* font, const char* markup,
 GOSU_FFI_API void Gosu_Font_set_image(Gosu_Font* font, const char* codepoint, unsigned font_flags,
                                       Gosu_Image* image)
 {
-    const Gosu::Image* gosu_image = reinterpret_cast<Gosu::Image*>(image);
-    font->font.set_image(codepoint, font_flags, *gosu_image);
+    font->font.set_image(codepoint, font_flags, image->image);
 }

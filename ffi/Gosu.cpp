@@ -1,5 +1,4 @@
-#include "Gosu.h"
-#include <Gosu/Gosu.hpp>
+#include "Gosu_FFI_internal.h"
 
 GOSU_FFI_API void Gosu_gl_z(double z, void function(void*), void* data)
 {
@@ -14,14 +13,14 @@ GOSU_FFI_API void Gosu_gl(void function(void*), void* data)
 GOSU_FFI_API Gosu_Image* Gosu_render(int width, int height, void function(void*), void* data,
                                      unsigned image_flags)
 {
-    return reinterpret_cast<Gosu_Image*>(new Gosu::Image(Gosu::Graphics::render(
-            width, height, [=] { function(data); }, image_flags)));
+    Gosu::Image image = Gosu::Graphics::render(width, height, [=] { function(data); }, image_flags);
+    return new Gosu_Image{image};
 }
 
 GOSU_FFI_API Gosu_Image* Gosu_record(int width, int height, void function(void*), void* data)
 {
-    return reinterpret_cast<Gosu_Image*>(
-            new Gosu::Image(Gosu::Graphics::record(width, height, [=] { function(data); })));
+    Gosu::Image image = Gosu::Graphics::record(width, height, [=] { function(data); });
+    return new Gosu_Image{image};
 }
 
 GOSU_FFI_API void Gosu_flush(void)
@@ -123,26 +122,22 @@ GOSU_FFI_API double Gosu_random(double min, double max)
 
 GOSU_FFI_API unsigned Gosu_available_width(Gosu_Window* window)
 {
-    Gosu::Window* gosu_window = reinterpret_cast<Gosu::Window*>(window);
-    return Gosu::available_width(gosu_window);
+    return Gosu::available_width(window);
 }
 
 GOSU_FFI_API unsigned Gosu_available_height(Gosu_Window* window)
 {
-    Gosu::Window* gosu_window = reinterpret_cast<Gosu::Window*>(window);
-    return Gosu::available_height(gosu_window);
+    return Gosu::available_height(window);
 }
 
 GOSU_FFI_API unsigned Gosu_screen_width(Gosu_Window* window)
 {
-    Gosu::Window* gosu_window = reinterpret_cast<Gosu::Window*>(window);
-    return Gosu::screen_width(gosu_window);
+    return Gosu::screen_width(window);
 }
 
 GOSU_FFI_API unsigned Gosu_screen_height(Gosu_Window* window)
 {
-    Gosu::Window* gosu_window = reinterpret_cast<Gosu::Window*>(window);
-    return Gosu::screen_height(gosu_window);
+    return Gosu::screen_height(window);
 }
 
 GOSU_FFI_API int Gosu_button_down(int id)
