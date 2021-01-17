@@ -32,9 +32,9 @@ const unsigned char* Gosu::ttf_data_by_name(const string& font_name, unsigned fo
     LOGFONT logfont = {
         0, 0, 0, 0,
         (font_flags & Gosu::FF_BOLD) ? FW_BOLD : FW_NORMAL,
-        (font_flags & Gosu::FF_ITALIC) ? TRUE : FALSE,
-        (font_flags & Gosu::FF_UNDERLINE) ? TRUE : FALSE,
-        FALSE /* no strikethrough */,
+        static_cast<BYTE>((font_flags & Gosu::FF_ITALIC) ? TRUE : FALSE),
+        static_cast<BYTE>((font_flags & Gosu::FF_UNDERLINE) ? TRUE : FALSE),
+        0 /* no strikethrough */,
         ANSI_CHARSET, OUT_OUTLINE_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY,
         DEFAULT_PITCH
     };

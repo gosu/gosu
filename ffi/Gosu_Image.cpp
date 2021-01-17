@@ -40,8 +40,8 @@ GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_blob(void* blob, int byte_count,
         // 128 bit per channel, assume float/float/float/float - for Texplay compatibility.
         const float* in = static_cast<const float*>(blob);
         Gosu::Color::Channel* out = reinterpret_cast<Gosu::Color::Channel*>(bitmap.data());
-        for (int i = size; i > 0; --i) {
-            *out++ = static_cast<Gosu::Color::Channel>(*in++ * 255);
+        for (std::size_t i = 0; i < size; ++i) {
+            out[i] = static_cast<Gosu::Color::Channel>(in[i] * 255);
         }
     }
     else {
