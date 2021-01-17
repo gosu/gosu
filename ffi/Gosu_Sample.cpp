@@ -1,30 +1,23 @@
-#include <Gosu/Audio.hpp>
-#include "Gosu_Sample.h"
+#include "Gosu_FFI_internal.h"
 
-extern "C" {
-
-Gosu_Sample *Gosu_Sample_create(const char *filename)
+GOSU_FFI_API Gosu_Sample* Gosu_Sample_create(const char* filename)
 {
-  return reinterpret_cast<Gosu_Sample *>( new Gosu::Sample(filename) );
+    return new Gosu_Sample{Gosu::Sample{filename}};
 }
 
-void Gosu_Sample_destroy(Gosu_Sample *sample)
+GOSU_FFI_API void Gosu_Sample_destroy(Gosu_Sample* sample)
 {
-  delete( reinterpret_cast<Gosu::Sample *>( sample ) );
+    delete sample;
 }
 
-Gosu_Channel *Gosu_Sample_play(Gosu_Sample *sample, double volume, double speed, bool looping)
+GOSU_FFI_API Gosu_Channel* Gosu_Sample_play(Gosu_Sample* sample, double volume, double speed,
+                                            bool looping)
 {
-  Gosu::Channel channel = reinterpret_cast<Gosu::Sample *>( sample )->play(volume, speed, looping);
-
-  return reinterpret_cast<Gosu_Channel *>( new Gosu::Channel(channel) );
+    return new Gosu_Channel{sample->sample.play(volume, speed, looping)};
 }
 
-Gosu_Channel *Gosu_Sample_play_pan(Gosu_Sample *sample, double pan, double volume, double speed, bool looping)
+GOSU_FFI_API Gosu_Channel* Gosu_Sample_play_pan(Gosu_Sample* sample, double pan, double volume,
+                                                double speed, bool looping)
 {
-  Gosu::Channel channel = reinterpret_cast<Gosu::Sample *>( sample )->play_pan(pan, volume, speed, looping);
-
-  return reinterpret_cast<Gosu_Channel *>( new Gosu::Channel(channel) );
-}
-
+    return new Gosu_Channel{sample->sample.play_pan(pan, volume, speed, looping)};
 }

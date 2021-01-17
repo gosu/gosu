@@ -1,251 +1,201 @@
-#include <Gosu/Gosu.hpp>
+#include "Gosu_FFI_internal.h"
 
-extern "C" {
-#include "Gosu.h"
-
-void Gosu_gl_z(double z, void function(void *data), void *data)
+GOSU_FFI_API void Gosu_gl_z(double z, void function(void*), void* data)
 {
-    std::function<void ()> callback;
-    callback = [=]() { function(data); };
-
-    Gosu::Graphics::gl(z, callback);
+    Gosu::Graphics::gl(z, [=]() { function(data); });
 }
 
-void Gosu_gl(void function(void *data), void *data)
+GOSU_FFI_API void Gosu_gl(void function(void*), void* data)
 {
-    std::function<void ()> callback;
-    callback = [=]() { function(data); };
-
-    Gosu::Graphics::gl(callback);
+    Gosu::Graphics::gl([=] { function(data); });
 }
 
-Gosu_Image *Gosu_render(int width, int height, void function(void *data), void *data, unsigned image_flags)
+GOSU_FFI_API Gosu_Image* Gosu_render(int width, int height, void function(void*), void* data,
+                                     unsigned image_flags)
 {
-    std::function<void ()> callback;
-    callback = [=]() { function(data); };
-
-    return reinterpret_cast<Gosu_Image *>(new Gosu::Image(Gosu::Graphics::render(width, height, callback, image_flags)));
+    Gosu::Image image = Gosu::Graphics::render(width, height, [=] { function(data); }, image_flags);
+    return new Gosu_Image{image};
 }
 
-Gosu_Image *Gosu_record(int width, int height, void function(void *data), void *data)
+GOSU_FFI_API Gosu_Image* Gosu_record(int width, int height, void function(void*), void* data)
 {
-    std::function<void ()> callback;
-    callback = [=]() { function(data); };
-    return reinterpret_cast<Gosu_Image *>(new Gosu::Image(Gosu::Graphics::record(width, height, callback)));
+    Gosu::Image image = Gosu::Graphics::record(width, height, [=] { function(data); });
+    return new Gosu_Image{image};
 }
 
-void Gosu_flush()
+GOSU_FFI_API void Gosu_flush(void)
 {
     Gosu::Graphics::flush();
 }
 
-void Gosu_transform(double m0, double m1, double m2, double m3, double m4, double m5, double m6,
-                    double m7, double m8, double m9, double m10, double m11, double m12, double m13,
-                    double m14, double m15, void function(void *data), void *data)
+GOSU_FFI_API void Gosu_transform(double m0, double m1, double m2, double m3, double m4, double m5,
+                                 double m6, double m7, double m8, double m9, double m10, double m11,
+                                 double m12, double m13, double m14, double m15,
+                                 void function(void*), void* data)
 {
-    Gosu::Transform transform = {
-        m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15};
-    std::function<void ()> callback;
-    callback = [=]() { function(data); };
-
-    Gosu::Graphics::transform(transform, callback);
+    Gosu::Transform transform = {m0, m1, m2,  m3,  m4,  m5,  m6,  m7,
+                                 m8, m9, m10, m11, m12, m13, m14, m15};
+    Gosu::Graphics::transform(transform, [=] { function(data); });
 }
 
-void Gosu_translate(double x, double y, void function(void *data), void *data)
+GOSU_FFI_API void Gosu_translate(double x, double y, void function(void*), void* data)
 {
-    std::function<void ()> callback;
-    callback = [=]() { function(data); };
-
-    Gosu::Graphics::transform(Gosu::translate(x, y), callback);
+    Gosu::Graphics::transform(Gosu::translate(x, y), [=] { function(data); });
 }
 
-void Gosu_scale(double scale_x, double scale_y, double around_x, double around_y, void function(void *data), void *data)
+GOSU_FFI_API void Gosu_scale(double scale_x, double scale_y, double around_x, double around_y,
+                             void function(void*), void* data)
 {
-    std::function<void ()> callback;
-    callback = [=]() { function(data); };
-
-    Gosu::Graphics::transform(Gosu::scale(scale_x, scale_y, around_x, around_y), callback);
+    Gosu::Graphics::transform(Gosu::scale(scale_x, scale_y, around_x, around_y),
+                              [=] { function(data); });
 }
 
-void Gosu_rotate(double angle, double around_x, double around_y, void function(void *data), void *data)
+GOSU_FFI_API void Gosu_rotate(double angle, double around_x, double around_y, void function(void*),
+                              void* data)
 {
-    std::function<void ()> callback;
-    callback = [=]() { function(data); };
-
-    Gosu::Graphics::transform(Gosu::rotate(angle, around_x, around_y), callback);
+    Gosu::Graphics::transform(Gosu::rotate(angle, around_x, around_y), [=] { function(data); });
 }
 
-void Gosu_clip_to(double x, double y, double width, double height, void function(void *data), void *data)
+GOSU_FFI_API void Gosu_clip_to(double x, double y, double width, double height,
+                               void function(void*), void* data)
 {
-    std::function<void ()> callback;
-    callback = [=]() { function(data); };
-
-    Gosu::Graphics::clip_to(x, y, width, height, callback);
+    Gosu::Graphics::clip_to(x, y, width, height, [=] { function(data); });
 }
 
-void Gosu_draw_line(double x1, double y1, unsigned c1,
-                    double x2, double y2, unsigned c2,
-                    double z, unsigned mode)
+GOSU_FFI_API void Gosu_draw_line(double x1, double y1, unsigned c1, double x2, double y2,
+                                 unsigned c2, double z, unsigned mode)
 {
-    Gosu::Graphics::draw_line(x1, y1, c1, x2, y2, c2, z, (Gosu::AlphaMode)mode);
+    Gosu::Graphics::draw_line(x1, y1, c1, x2, y2, c2, z, static_cast<Gosu::AlphaMode>(mode));
 }
 
-void Gosu_draw_triangle(double x1, double y1, unsigned c1,
-                        double x2, double y2, unsigned c2,
-                        double x3, double y3, unsigned c3,
-                        double z, unsigned mode)
+GOSU_FFI_API void Gosu_draw_triangle(double x1, double y1, unsigned c1, double x2, double y2,
+                                     unsigned c2, double x3, double y3, unsigned c3, double z,
+                                     unsigned mode)
 {
-    Gosu::Graphics::draw_triangle(x1, y1, c1,
-                                    x2, y2, c2,
-                                    x3, y3, c3,
-                                    z, (Gosu::AlphaMode)mode);
+    Gosu::Graphics::draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z,
+                                  static_cast<Gosu::AlphaMode>(mode));
 }
 
-void Gosu_draw_rect(double x, double y, double width, double height, unsigned c, double z, unsigned mode)
+GOSU_FFI_API void Gosu_draw_rect(double x, double y, double width, double height, unsigned c,
+                                 double z, unsigned mode)
 {
-    Gosu::Graphics::draw_rect(x, y, width, height, c, z, (Gosu::AlphaMode)mode);
+    Gosu::Graphics::draw_rect(x, y, width, height, c, z, static_cast<Gosu::AlphaMode>(mode));
 }
 
-void Gosu_draw_quad(double x1, double y1, unsigned c1,
-                    double x2, double y2, unsigned c2,
-                    double x3, double y3, unsigned c3,
-                    double x4, double y4, unsigned c4,
-                    double z, unsigned mode)
+GOSU_FFI_API void Gosu_draw_quad(double x1, double y1, unsigned c1, double x2, double y2,
+                                 unsigned c2, double x3, double y3, unsigned c3, double x4,
+                                 double y4, unsigned c4, double z, unsigned mode)
 {
-    Gosu::Graphics::draw_quad(x1, y1, c1,
-                                x2, y2, c2,
-                                x3, y3, c3,
-                                x4, y4, c4,
-                                z, (Gosu::AlphaMode)mode);
+    Gosu::Graphics::draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z,
+                              static_cast<Gosu::AlphaMode>(mode));
 }
 
-double Gosu_distance(double x1, double y1, double x2, double y2)
+GOSU_FFI_API double Gosu_distance(double x1, double y1, double x2, double y2)
 {
     return Gosu::distance(x1, y1, x2, y2);
 }
 
-double Gosu_angle(double from_x, double from_y, double to_x, double to_y)
+GOSU_FFI_API double Gosu_angle(double from_x, double from_y, double to_x, double to_y)
 {
     return Gosu::angle(from_x, from_y, to_x, to_y);
 }
 
-double Gosu_angle_diff(double from, double to)
+GOSU_FFI_API double Gosu_angle_diff(double from, double to)
 {
     return Gosu::angle_diff(from, to);
 }
 
-double Gosu_offset_x(double angle, double radius)
+GOSU_FFI_API double Gosu_offset_x(double angle, double radius)
 {
     return Gosu::offset_x(angle, radius);
 }
 
-double Gosu_offset_y(double angle, double radius)
+GOSU_FFI_API double Gosu_offset_y(double angle, double radius)
 {
     return Gosu::offset_y(angle, radius);
 }
 
-double Gosu_random(double min, double max)
+GOSU_FFI_API double Gosu_random(double min, double max)
 {
     return Gosu::random(min, max);
 }
 
-unsigned Gosu_available_width(Gosu_Window *window)
+GOSU_FFI_API unsigned Gosu_available_width(Gosu_Window* window)
 {
-    Gosu::Window *gosu_window = nullptr;
-    if (window != nullptr) {
-        gosu_window = reinterpret_cast<Gosu::Window *>(window);
-    }
-    return Gosu::available_width(gosu_window);
+    return Gosu::available_width(window);
 }
 
-unsigned Gosu_available_height(Gosu_Window *window)
+GOSU_FFI_API unsigned Gosu_available_height(Gosu_Window* window)
 {
-    Gosu::Window *gosu_window = nullptr;
-    if (window != nullptr) {
-        gosu_window = reinterpret_cast<Gosu::Window *>(window);
-    }
-    return Gosu::available_height(gosu_window);
+    return Gosu::available_height(window);
 }
 
-unsigned Gosu_screen_width(Gosu_Window *window)
+GOSU_FFI_API unsigned Gosu_screen_width(Gosu_Window* window)
 {
-    Gosu::Window *gosu_window = nullptr;
-    if (window != nullptr) {
-        gosu_window = reinterpret_cast<Gosu::Window *>(window);
-    }
-    return Gosu::screen_width(gosu_window);
+    return Gosu::screen_width(window);
 }
 
-unsigned Gosu_screen_height(Gosu_Window *window)
+GOSU_FFI_API unsigned Gosu_screen_height(Gosu_Window* window)
 {
-    Gosu::Window *gosu_window = nullptr;
-    if (window != nullptr) {
-        gosu_window = reinterpret_cast<Gosu::Window *>(window);
-    }
-    return Gosu::screen_height(gosu_window);
+    return Gosu::screen_height(window);
 }
 
-int Gosu_button_down(int btn)
+GOSU_FFI_API int Gosu_button_down(int id)
 {
-    return Gosu::Input::down((Gosu::Button)btn);
+    return Gosu::Input::down(static_cast<Gosu::Button>(id));
 }
 
-const char *Gosu_button_id_to_char(int id)
+GOSU_FFI_API const char* Gosu_button_id_to_char(int id)
 {
     static thread_local std::string button;
-    button = Gosu::Input::id_to_char((Gosu::Button)id);
-
+    button = Gosu::Input::id_to_char(static_cast<Gosu::Button>(id));
     return button.c_str();
 }
 
-unsigned Gosu_button_char_to_id(const char *btn)
+GOSU_FFI_API unsigned Gosu_button_char_to_id(const char* btn)
 {
     return Gosu::Input::char_to_id(btn);
 }
 
-const char *Gosu_button_name(int btn)
+GOSU_FFI_API const char* Gosu_button_name(int id)
 {
     static thread_local std::string name;
-    name = Gosu::Input::button_name((Gosu::Button)btn);
+    name = Gosu::Input::button_name(static_cast<Gosu::Button>(id));
     return name.empty() ? nullptr : name.c_str();
 }
 
-const char *Gosu_gamepad_name(int id)
+GOSU_FFI_API const char* Gosu_gamepad_name(int id)
 {
     static thread_local std::string name;
     name = Gosu::Input::gamepad_name(id);
     return name.empty() ? nullptr : name.c_str();
 }
 
-double Gosu_axis(int btn)
+GOSU_FFI_API double Gosu_axis(int id)
 {
-    return Gosu::Input::axis((Gosu::Button)btn);
+    return Gosu::Input::axis(static_cast<Gosu::Button>(id));
 }
 
-int Gosu_fps()
+GOSU_FFI_API int Gosu_fps()
 {
     return Gosu::fps();
 }
 
-const char *Gosu_language()
+GOSU_FFI_API const char* Gosu_language()
 {
     static thread_local std::string language;
     language = Gosu::language();
-
     return language.c_str();
 }
 
-long Gosu_milliseconds()
+GOSU_FFI_API uint64_t Gosu_milliseconds()
 {
     return Gosu::milliseconds();
 }
 
-const char *Gosu_default_font_name()
+GOSU_FFI_API const char* Gosu_default_font_name()
 {
     static thread_local std::string name;
     name = Gosu::default_font_name();
-
     return name.c_str();
-}
-
 }

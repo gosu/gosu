@@ -4,25 +4,34 @@
 #include "Gosu_TextInput.h"
 #include <stdbool.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct Gosu_Window Gosu_Window;
 
 // Constructor
-GOSU_FFI_API Gosu_Window* Gosu_Window_create(int width, int height, bool fullscreen, double update_interval, bool resizable);
+GOSU_FFI_API Gosu_Window* Gosu_Window_create(int width, int height, bool fullscreen,
+                                             double update_interval, bool resizable);
+
+// Destructor
+GOSU_FFI_API void Gosu_Window_destroy(Gosu_Window* window);
 
 // callbacks
-GOSU_FFI_API void Gosu_Window_set_update(Gosu_Window *window, void function(void* data), void* data);
+GOSU_FFI_API void Gosu_Window_set_update(Gosu_Window* window, void function(void* data),
+                                         void* data);
 GOSU_FFI_API void Gosu_Window_set_draw(Gosu_Window* window, void function(void* data), void* data);
-GOSU_FFI_API void Gosu_Window_set_button_down(Gosu_Window* window, void function(void* data, unsigned btn), void* data);
-GOSU_FFI_API void Gosu_Window_set_button_up(Gosu_Window* window, void function(void* data, unsigned btn), void* data);
-GOSU_FFI_API void Gosu_Window_set_gamepad_connected(Gosu_Window* window, void function(void* data, int id), void* data);
-GOSU_FFI_API void Gosu_Window_set_gamepad_disconnected(Gosu_Window* window, void function(void* data, int id), void* data);
-GOSU_FFI_API void Gosu_Window_set_drop(Gosu_Window* window, void function(void* data, const char* filename), void* data);
-GOSU_FFI_API void Gosu_Window_set_needs_redraw(Gosu_Window* window, bool function(void* data), void* data);
-GOSU_FFI_API void Gosu_Window_set_needs_cursor(Gosu_Window* window, bool function(void* data), void* data);
+GOSU_FFI_API void Gosu_Window_set_button_down(Gosu_Window* window,
+                                              void function(void* data, unsigned btn), void* data);
+GOSU_FFI_API void Gosu_Window_set_button_up(Gosu_Window* window,
+                                            void function(void* data, unsigned btn), void* data);
+GOSU_FFI_API void Gosu_Window_set_gamepad_connected(Gosu_Window* window,
+                                                    void function(void* data, int id), void* data);
+GOSU_FFI_API void Gosu_Window_set_gamepad_disconnected(Gosu_Window* window,
+                                                       void function(void* data, int id),
+                                                       void* data);
+GOSU_FFI_API void Gosu_Window_set_drop(Gosu_Window* window,
+                                       void function(void* data, const char* filename), void* data);
+GOSU_FFI_API void Gosu_Window_set_needs_redraw(Gosu_Window* window, bool function(void* data),
+                                               void* data);
+GOSU_FFI_API void Gosu_Window_set_needs_cursor(Gosu_Window* window, bool function(void* data),
+                                               void* data);
 GOSU_FFI_API void Gosu_Window_set_close(Gosu_Window* window, void function(void* data), void* data);
 
 GOSU_FFI_API void Gosu_Window_default_button_down(Gosu_Window* window, unsigned btn);
@@ -38,7 +47,6 @@ GOSU_FFI_API const char* Gosu_Window_caption(Gosu_Window* window);
 GOSU_FFI_API Gosu_TextInput* Gosu_Window_text_input(Gosu_Window* window);
 GOSU_FFI_API double Gosu_Window_mouse_x(Gosu_Window* window);
 GOSU_FFI_API double Gosu_Window_mouse_y(Gosu_Window* window);
-GOSU_FFI_API int Gosu_Window_is_button_down(Gosu_Window* window, unsigned btn);
 
 // Setters
 GOSU_FFI_API void Gosu_Window_set_text_input(Gosu_Window* window, Gosu_TextInput* text_input);
@@ -55,10 +63,3 @@ GOSU_FFI_API void Gosu_Window_resize(Gosu_Window* window, int width, int height,
 GOSU_FFI_API void Gosu_Window_show(Gosu_Window* window);
 GOSU_FFI_API void Gosu_Window_close_immediately(Gosu_Window* window);
 GOSU_FFI_API bool Gosu_Window_tick(Gosu_Window* window);
-
-// Destructor
-GOSU_FFI_API void Gosu_Window_destroy(Gosu_Window* window);
-
-#ifdef __cplusplus
-}
-#endif

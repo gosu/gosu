@@ -5,6 +5,7 @@ Checks: >-
   -cppcoreguidelines-avoid-magic-numbers,
   -cppcoreguidelines-avoid-c-arrays,
   -cppcoreguidelines-init-variables,
+  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
   -cppcoreguidelines-special-member-functions,
   -llvm-*,
   -llvmlibc-*,

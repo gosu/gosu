@@ -20,7 +20,9 @@
 #if GOSU_FFI_EXPORTS
 // When building Gosu, also add [[maybe_unused]] to the definition (which is fine because we only
 // build Gosu using a C++17 compiler) to silence warnings about unused functions.
-#define GOSU_FFI_API [[maybe_unused]] GOSU_FFI_API_EXPORTS
+#define GOSU_FFI_API extern "C" [[maybe_unused]] GOSU_FFI_API_EXPORTS
+#elif defined(__cplusplus)
+#define GOSU_FFI_API extern "C" GOSU_FFI_API_IMPORTS
 #else
 #define GOSU_FFI_API GOSU_FFI_API_IMPORTS
 #endif
