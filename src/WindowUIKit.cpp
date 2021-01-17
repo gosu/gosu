@@ -17,8 +17,7 @@ struct Gosu::Window::Impl
     string caption;
 };
 
-Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval,
-                     bool resizable)
+Gosu::Window::Window(int width, int height, unsigned window_flags, double update_interval)
 : pimpl(new Impl)
 {
     pimpl->window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -50,12 +49,12 @@ Gosu::Window::~Window()
 {
 }
 
-unsigned Gosu::Window::width() const
+int Gosu::Window::width() const
 {
     return graphics().width();
 }
 
-unsigned Gosu::Window::height() const
+int Gosu::Window::height() const
 {
     return graphics().height();
 }
@@ -70,7 +69,20 @@ bool Gosu::Window::resizable() const
     return false;
 }
 
-void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
+void Gosu::Window::set_resizable(bool resizable)
+{
+}
+
+bool Gosu::Window::borderless() const
+{
+    return true;
+}
+
+void Gosu::Window::set_borderless(bool borderless)
+{
+}
+
+void Gosu::Window::resize(int width, int height, bool fullscreen)
 {
     throw logic_error("Cannot resize windows on iOS");
 }
@@ -138,24 +150,24 @@ void* Gosu::Window::uikit_window() const
     return (__bridge void*) pimpl->window;
 }
 
-unsigned Gosu::screen_width(Window*)
+int Gosu::screen_width(Window*)
 {
     return available_width() * [UIScreen mainScreen].scale;
 }
 
-unsigned Gosu::screen_height(Window*)
+int Gosu::screen_height(Window*)
 {
     return available_height() * [UIScreen mainScreen].scale;
 }
 
-unsigned Gosu::available_width(Window*)
+int Gosu::available_width(Window*)
 {
     static CGSize screen_size = [UIScreen mainScreen].bounds.size;
     static CGFloat width = MAX(screen_size.width, screen_size.height);
     return width;
 }
 
-unsigned Gosu::available_height(Window*)
+int Gosu::available_height(Window*)
 {
     static CGSize screen_size = [UIScreen mainScreen].bounds.size;
     static CGFloat height = MIN(screen_size.width, screen_size.height);

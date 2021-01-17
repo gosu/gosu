@@ -14,6 +14,12 @@ GOSU_FFI_API const unsigned Gosu_MAJOR_VERSION = GOSU_MAJOR_VERSION;
 GOSU_FFI_API const unsigned Gosu_MINOR_VERSION = GOSU_MINOR_VERSION;
 GOSU_FFI_API const unsigned Gosu_POINT_VERSION = GOSU_POINT_VERSION;
 
+// Window Flags
+GOSU_FFI_API const unsigned Gosu_WF_WINDOWED = Gosu::WF_WINDOWED;
+GOSU_FFI_API const unsigned Gosu_WF_FULLSCREEN = Gosu::WF_FULLSCREEN;
+GOSU_FFI_API const unsigned Gosu_WF_RESIZABLE = Gosu::WF_RESIZABLE;
+GOSU_FFI_API const unsigned Gosu_WF_BORDERLESS = Gosu::WF_BORDERLESS;
+
 // Alpha/Blend Modes
 GOSU_FFI_API const unsigned Gosu_AM_DEFAULT = Gosu::AM_DEFAULT;
 GOSU_FFI_API const unsigned Gosu_AM_INTERPOLATE = Gosu::AM_INTERPOLATE;

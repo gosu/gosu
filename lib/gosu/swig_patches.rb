@@ -3,19 +3,20 @@
 # compatible, but I just call protected_update etc. in the Ruby wrapper so I can add this
 # custom debugging help:
 class Gosu::Window
-  alias_method :initialize_without_hash, :initialize
+  alias_method :initialize_with_bitmask, :initialize
 
-  def initialize width, height, *args
-    if args.empty? or args.first.is_a? Hash
-      options = args.first || {}
-      fullscreen = options[:fullscreen]
-      update_interval = options[:update_interval]
-      resizable = options[:resizable]
-    else
-      fullscreen, update_interval = *args
-    end
+  def initialize(width, height, *args)
     $gosu_gl_blocks = nil
-    initialize_without_hash width, height, !!fullscreen, update_interval || 16.666666, !!resizable
+
+    if args.first.is_a? Hash
+      flags = 0
+      flags |= 1 if args.first[:fullscreen]
+      flags |= 2 if args.first[:resizable]
+      flags |= 4 if args.first[:borderless]
+      initialize_with_bitmask(width, height, flags, args.first[:update_interval] || 16.666666)
+    else
+      initialize_with_bitmask(width, height, args[0] ? 1 : 0, args[1] || 16.666666)
+    end
   end
 
   %w(update draw needs_redraw? needs_cursor?

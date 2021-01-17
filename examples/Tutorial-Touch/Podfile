@@ -1,4 +1,4 @@
-platform :ios, "8.0"
+platform :ios, "11.4"
 
 target "Tutorial-Touch" do
   # GosuAppDelegateMain is a subspec of the Gosu pod that contains a "main()" function.

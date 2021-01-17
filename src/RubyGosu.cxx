@@ -3300,7 +3300,7 @@ std::string SwigDirector_TextInput::filter(std::string text) const {
 }
 
 
-SwigDirector_Window::SwigDirector_Window(VALUE self,unsigned int width,unsigned int height,bool fullscreen,double update_interval,bool resizable): Gosu::Window(width, height, fullscreen, update_interval, resizable), Swig::Director(self) {
+SwigDirector_Window::SwigDirector_Window(VALUE self,int width,int height,unsigned int window_flags,double update_interval): Gosu::Window(width, height, window_flags, update_interval), Swig::Director(self) {
   
 }
 
@@ -9198,44 +9198,41 @@ _wrap_Window_allocate(int argc, VALUE *argv, VALUE self)
 SWIGINTERN VALUE
 _wrap_new_Window(int argc, VALUE *argv, VALUE self) {
   VALUE arg1 = (VALUE) 0 ;
-  unsigned int arg2 ;
-  unsigned int arg3 ;
-  bool arg4 = (bool) false ;
+  int arg2 ;
+  int arg3 ;
+  unsigned int arg4 = (unsigned int) Gosu::WF_WINDOWED ;
   double arg5 = (double) 16.666666 ;
-  bool arg6 = (bool) false ;
-  unsigned int val2 ;
+  int val2 ;
   int ecode2 = 0 ;
-  unsigned int val3 ;
+  int val3 ;
   int ecode3 = 0 ;
-  bool val4 ;
+  unsigned int val4 ;
   int ecode4 = 0 ;
   double val5 ;
   int ecode5 = 0 ;
-  bool val6 ;
-  int ecode6 = 0 ;
   const char *classname SWIGUNUSED = "Gosu::Window";
   Gosu::Window *result = 0 ;
   
-  if ((argc < 2) || (argc > 5)) {
+  if ((argc < 2) || (argc > 4)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
   }
   arg1 = self;
-  ecode2 = SWIG_AsVal_unsigned_SS_int(argv[0], &val2);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned int","Window", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","Window", 2, argv[0] ));
   } 
-  arg2 = static_cast< unsigned int >(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_int(argv[1], &val3);
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(argv[1], &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "unsigned int","Window", 3, argv[1] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "int","Window", 3, argv[1] ));
   } 
-  arg3 = static_cast< unsigned int >(val3);
+  arg3 = static_cast< int >(val3);
   if (argc > 2) {
-    ecode4 = SWIG_AsVal_bool(argv[2], &val4);
+    ecode4 = SWIG_AsVal_unsigned_SS_int(argv[2], &val4);
     if (!SWIG_IsOK(ecode4)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "bool","Window", 4, argv[2] ));
+      SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "unsigned int","Window", 4, argv[2] ));
     } 
-    arg4 = static_cast< bool >(val4);
+    arg4 = static_cast< unsigned int >(val4);
   }
   if (argc > 3) {
     ecode5 = SWIG_AsVal_double(argv[3], &val5);
@@ -9244,20 +9241,13 @@ _wrap_new_Window(int argc, VALUE *argv, VALUE self) {
     } 
     arg5 = static_cast< double >(val5);
   }
-  if (argc > 4) {
-    ecode6 = SWIG_AsVal_bool(argv[4], &val6);
-    if (!SWIG_IsOK(ecode6)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode6), Ruby_Format_TypeError( "", "bool","Window", 6, argv[4] ));
-    } 
-    arg6 = static_cast< bool >(val6);
-  }
   {
     try {
       if ( strcmp(rb_obj_classname(self), classname) != 0 ) {
         /* subclassed */
-        result = (Gosu::Window *)new SwigDirector_Window(arg1,arg2,arg3,arg4,arg5,arg6); 
+        result = (Gosu::Window *)new SwigDirector_Window(arg1,arg2,arg3,arg4,arg5); 
       } else {
-        result = (Gosu::Window *)new Gosu::Window(arg2,arg3,arg4,arg5,arg6); 
+        result = (Gosu::Window *)new Gosu::Window(arg2,arg3,arg4,arg5); 
       }
       
       DATA_PTR(self) = result;
@@ -9285,7 +9275,7 @@ _wrap_Window_width(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int result;
+  int result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -9298,13 +9288,13 @@ _wrap_Window_width(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
     try {
-      result = (unsigned int)((Gosu::Window const *)arg1)->width();
+      result = (int)((Gosu::Window const *)arg1)->width();
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  vresult = SWIG_From_int(static_cast< int >(result));
   return vresult;
 fail:
   return Qnil;
@@ -9316,7 +9306,7 @@ _wrap_Window_height(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int result;
+  int result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -9329,13 +9319,13 @@ _wrap_Window_height(int argc, VALUE *argv, VALUE self) {
   arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   {
     try {
-      result = (unsigned int)((Gosu::Window const *)arg1)->height();
+      result = (int)((Gosu::Window const *)arg1)->height();
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  vresult = SWIG_From_int(static_cast< int >(result));
   return vresult;
 fail:
   return Qnil;
@@ -9399,6 +9389,109 @@ _wrap_Window_resizableq___(int argc, VALUE *argv, VALUE self) {
   }
   vresult = SWIG_From_bool(static_cast< bool >(result));
   return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Window_resizablee___(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","set_resizable", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  ecode2 = SWIG_AsVal_bool(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "bool","set_resizable", 2, argv[0] ));
+  } 
+  arg2 = static_cast< bool >(val2);
+  {
+    try {
+      (arg1)->set_resizable(arg2);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Window_borderlessq___(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","borderless", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  {
+    try {
+      result = (bool)((Gosu::Window const *)arg1)->borderless();
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_bool(static_cast< bool >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Window_borderlesse___(int argc, VALUE *argv, VALUE self) {
+  Gosu::Window *arg1 = (Gosu::Window *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","set_borderless", 1, self )); 
+  }
+  arg1 = reinterpret_cast< Gosu::Window * >(argp1);
+  ecode2 = SWIG_AsVal_bool(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "bool","set_borderless", 2, argv[0] ));
+  } 
+  arg2 = static_cast< bool >(val2);
+  {
+    try {
+      (arg1)->set_borderless(arg2);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
 fail:
   return Qnil;
 }
@@ -10584,7 +10677,7 @@ _wrap_screen_width(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) nullptr ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int result;
+  int result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 1)) {
@@ -10599,13 +10692,13 @@ _wrap_screen_width(int argc, VALUE *argv, VALUE self) {
   }
   {
     try {
-      result = (unsigned int)Gosu::screen_width(arg1);
+      result = (int)Gosu::screen_width(arg1);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  vresult = SWIG_From_int(static_cast< int >(result));
   return vresult;
 fail:
   return Qnil;
@@ -10617,7 +10710,7 @@ _wrap_screen_height(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) nullptr ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int result;
+  int result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 1)) {
@@ -10632,13 +10725,13 @@ _wrap_screen_height(int argc, VALUE *argv, VALUE self) {
   }
   {
     try {
-      result = (unsigned int)Gosu::screen_height(arg1);
+      result = (int)Gosu::screen_height(arg1);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  vresult = SWIG_From_int(static_cast< int >(result));
   return vresult;
 fail:
   return Qnil;
@@ -10650,7 +10743,7 @@ _wrap_available_width(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) nullptr ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int result;
+  int result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 1)) {
@@ -10665,13 +10758,13 @@ _wrap_available_width(int argc, VALUE *argv, VALUE self) {
   }
   {
     try {
-      result = (unsigned int)Gosu::available_width(arg1);
+      result = (int)Gosu::available_width(arg1);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  vresult = SWIG_From_int(static_cast< int >(result));
   return vresult;
 fail:
   return Qnil;
@@ -10683,7 +10776,7 @@ _wrap_available_height(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) nullptr ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int result;
+  int result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 1)) {
@@ -10698,13 +10791,13 @@ _wrap_available_height(int argc, VALUE *argv, VALUE self) {
   }
   {
     try {
-      result = (unsigned int)Gosu::available_height(arg1);
+      result = (int)Gosu::available_height(arg1);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  vresult = SWIG_From_int(static_cast< int >(result));
   return vresult;
 fail:
   return Qnil;
@@ -12881,6 +12974,9 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassWindow.klass, "height", VALUEFUNC(_wrap_Window_height), -1);
   rb_define_method(SwigClassWindow.klass, "fullscreen?", VALUEFUNC(_wrap_Window_fullscreenq___), -1);
   rb_define_method(SwigClassWindow.klass, "resizable?", VALUEFUNC(_wrap_Window_resizableq___), -1);
+  rb_define_method(SwigClassWindow.klass, "resizable=", VALUEFUNC(_wrap_Window_resizablee___), -1);
+  rb_define_method(SwigClassWindow.klass, "borderless?", VALUEFUNC(_wrap_Window_borderlessq___), -1);
+  rb_define_method(SwigClassWindow.klass, "borderless=", VALUEFUNC(_wrap_Window_borderlesse___), -1);
   rb_define_method(SwigClassWindow.klass, "update_interval", VALUEFUNC(_wrap_Window_update_interval), -1);
   rb_define_method(SwigClassWindow.klass, "update_interval=", VALUEFUNC(_wrap_Window_update_intervale___), -1);
   rb_define_method(SwigClassWindow.klass, "caption", VALUEFUNC(_wrap_Window_caption), -1);

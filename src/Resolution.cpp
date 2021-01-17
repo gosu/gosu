@@ -18,12 +18,12 @@ static SDL_DisplayMode display_mode(Gosu::Window* window)
     return result;
 }
 
-unsigned Gosu::screen_width(Window* window)
+int Gosu::screen_width(Window* window)
 {
     return display_mode(window).w;
 }
 
-unsigned Gosu::screen_height(Window* window)
+int Gosu::screen_height(Window* window)
 {
     return display_mode(window).h;
 }
@@ -41,12 +41,12 @@ static NSSize max_window_size(Gosu::Window* window)
     return [NSWindow contentRectForFrameRect:screen_frame styleMask:style].size;
 }
 
-unsigned Gosu::available_width(Window* window)
+int Gosu::available_width(Window* window)
 {
     return max_window_size(window).width;
 }
 
-unsigned Gosu::available_height(Window* window)
+int Gosu::available_height(Window* window)
 {
     return max_window_size(window).height;
 }
@@ -90,12 +90,12 @@ static SIZE max_window_size(Gosu::Window* window)
     return size;
 }
 
-unsigned Gosu::available_width(Window* window)
+int Gosu::available_width(Window* window)
 {
     return max_window_size(window).cx;
 }
 
-unsigned Gosu::available_height(Window* window)
+int Gosu::available_height(Window* window)
 {
     return max_window_size(window).cy;
 }
@@ -104,12 +104,12 @@ unsigned Gosu::available_height(Window* window)
 #ifdef GOSU_IS_X
 // Pessimistic fallback implementation for available_width / available_height.
 // TODO: Look at this NET_WORKAREA based implementation: https://github.com/glfw/glfw/pull/989/files
-unsigned Gosu::available_width(Window* window)
+int Gosu::available_width(Window* window)
 {
     return static_cast<unsigned>(Gosu::screen_width(window) * 0.9);
 }
 
-unsigned Gosu::available_height(Window* window)
+int Gosu::available_height(Window* window)
 {
     return static_cast<unsigned>(Gosu::screen_height(window) * 0.8);
 }

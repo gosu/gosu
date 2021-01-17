@@ -812,6 +812,18 @@ module Gosu
     def resizable?; end
 
     ##
+    # Toggles between resizable and fixed modes.
+    attr_writer :resizable
+
+    ##
+    # @return [true, false] whether this window is borderless.
+    def borderless?; end
+
+    ##
+    # Toggles between borderless mode and having window chrome.
+    attr_writer :borderless
+
+    ##
     # @return [Float] the interval between calls to {#update}, in milliseconds.
     attr_accessor :update_interval
 
@@ -828,7 +840,8 @@ module Gosu
     # @param height [Integer] the desired window height.
     # @param [Hash] options
     # @option options [true, false] :fullscreen (false) whether to present the window in fullscreen mode.
-    # @option options [true, false] :resizable (false) whether the window can be resized by the user.
+    # @option options [true, false] :resizable (false) whether the window can be resized by the user. Not useful if the window is either fullscreen or borderless.
+    # @option options [true, false] :borderless (false) whether the window should hide all its window chrome. Does not affect fullscreen windows.
     # @option options [Float] :update_interval (16.666666) the interval between frames, in milliseconds.
     def initialize(width, height, options); end
 

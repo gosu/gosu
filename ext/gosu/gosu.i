@@ -1065,10 +1065,13 @@ namespace Gosu
 };
 
 // Window
-%ignore Gosu::Window::resize(unsigned, unsigned, bool);
+%ignore Gosu::WindowFlags;
+%ignore Gosu::Window::resize;
 %rename("width=") set_width;
 %rename("height=") set_height;
 %rename("fullscreen=") set_fullscreen;
+%rename("resizable=") set_resizable;
+%rename("borderless=") set_borderless;
 %rename("update_interval=") set_update_interval;
 %rename("caption=") set_caption;
 %rename("text_input=") set_text_input;
@@ -1079,6 +1082,7 @@ namespace Gosu
 %rename("close!") force_close;
 %rename("fullscreen?") fullscreen;
 %rename("resizable?") resizable;
+%rename("borderless?") borderless;
 %markfunc Gosu::Window "mark_window";
 %include "../../include/Gosu/Window.hpp"
 

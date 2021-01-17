@@ -23,6 +23,7 @@
     <ClInclude Include="..\ffi\Gosu_Channel.h" />
     <ClInclude Include="..\ffi\Gosu_Color.h" />
     <ClInclude Include="..\ffi\Gosu_FFI.h" />
+    <ClInclude Include="..\ffi\Gosu_FFI_internal.h" />
     <ClInclude Include="..\ffi\Gosu_Font.h" />
     <ClInclude Include="..\ffi\Gosu_Image.h" />
     <ClInclude Include="..\ffi\Gosu_Sample.h" />

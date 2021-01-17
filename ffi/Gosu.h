@@ -56,10 +56,10 @@ GOSU_FFI_API double Gosu_offset_y(double angle, double radius);
 GOSU_FFI_API double Gosu_random(double min, double max);
 
 // Window/Screen information
-GOSU_FFI_API unsigned Gosu_available_width(Gosu_Window* window);
-GOSU_FFI_API unsigned Gosu_available_height(Gosu_Window* window);
-GOSU_FFI_API unsigned Gosu_screen_width(Gosu_Window* window);
-GOSU_FFI_API unsigned Gosu_screen_height(Gosu_Window* window);
+GOSU_FFI_API int Gosu_available_width(Gosu_Window* window);
+GOSU_FFI_API int Gosu_available_height(Gosu_Window* window);
+GOSU_FFI_API int Gosu_screen_width(Gosu_Window* window);
+GOSU_FFI_API int Gosu_screen_height(Gosu_Window* window);
 
 // Button querying
 GOSU_FFI_API int Gosu_button_down(int id);
