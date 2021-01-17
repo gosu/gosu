@@ -1,6 +1,10 @@
 #include <Gosu/Platform.hpp>
 #if !defined(GOSU_IS_IPHONE)
 
+#if defined(GOSU_IS_WIN)
+#include <windows.h>
+#endif
+
 #include <Gosu/Gosu.hpp>
 #include "GraphicsImpl.hpp"
 #include <SDL.h>
@@ -242,15 +246,33 @@ void Gosu::Window::show()
 {
     unsigned long time_before_tick = milliseconds();
 
-    while (tick()) {
-        // Sleep to keep this loop from eating 100% CPU.
-        unsigned long tick_time = milliseconds() - time_before_tick;
-        if (tick_time < update_interval()) {
-            sleep(update_interval() - tick_time);
-        }
+#ifdef GOSU_IS_WIN
+    // Try to convince Windows to only run this thread on the first core, to avoid timing glitches.
+    // (If we ever run into a situation where the first core is not available, we should start to
+    // use GetProcessAffinityMask to retrieve the allowed cores as a bitmask.)
+    DWORD_PTR previous_affinity = SetThreadAffinityMask(GetCurrentThread(), 1);
+#endif
 
-        time_before_tick = milliseconds();
+    try {
+        while (tick()) {
+            // Sleep to keep this loop from eating 100% CPU.
+            unsigned long tick_time = milliseconds() - time_before_tick;
+            if (tick_time < update_interval()) {
+                sleep(update_interval() - tick_time);
+            }
+
+            time_before_tick = milliseconds();
+        }
+    } catch (...) {
+    #ifdef GOSU_IS_WIN
+        if (previous_affinity) SetThreadAffinityMask(GetCurrentThread(), previous_affinity);
+    #endif
+        throw;
     }
+
+#ifdef GOSU_IS_WIN
+    if (previous_affinity) SetThreadAffinityMask(GetCurrentThread(), previous_affinity);
+#endif
 
     pimpl->state = Impl::CLOSED;
 }
