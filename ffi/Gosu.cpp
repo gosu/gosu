@@ -120,22 +120,22 @@ GOSU_FFI_API double Gosu_random(double min, double max)
     return Gosu::random(min, max);
 }
 
-GOSU_FFI_API unsigned Gosu_available_width(Gosu_Window* window)
+GOSU_FFI_API int Gosu_available_width(Gosu_Window* window)
 {
     return Gosu::available_width(window);
 }
 
-GOSU_FFI_API unsigned Gosu_available_height(Gosu_Window* window)
+GOSU_FFI_API int Gosu_available_height(Gosu_Window* window)
 {
     return Gosu::available_height(window);
 }
 
-GOSU_FFI_API unsigned Gosu_screen_width(Gosu_Window* window)
+GOSU_FFI_API int Gosu_screen_width(Gosu_Window* window)
 {
     return Gosu::screen_width(window);
 }
 
-GOSU_FFI_API unsigned Gosu_screen_height(Gosu_Window* window)
+GOSU_FFI_API int Gosu_screen_height(Gosu_Window* window)
 {
     return Gosu::screen_height(window);
 }

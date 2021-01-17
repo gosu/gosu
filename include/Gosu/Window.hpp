@@ -8,6 +8,14 @@
 
 namespace Gosu
 {
+    enum WindowFlags
+    {
+        WF_WINDOWED,
+        WF_FULLSCREEN = 1,
+        WF_RESIZABLE  = 2,
+        WF_BORDERLESS = 4
+    };
+
     //! Convenient all-in-one class that serves as the foundation of a standard Gosu application.
     //! Manages initialization of all of Gosu's core components and provides timing functionality.
     //! Note that you should really only use one instance of this class at the same time.
@@ -21,17 +29,23 @@ namespace Gosu
         //! \param width Width of the window in points; that is, pixels on a normal display, and
         //! 'points' on a high-resolution display.
         //! \param height See width.
+        //! \param window_flags A bitmask of values from Gosu::WindowFlags.
         //! \param update_interval Interval in milliseconds between two calls to the update member
         //! function.
-        Window(unsigned width, unsigned height, bool fullscreen = false,
-            double update_interval = 16.666666, bool resizable = false);
+        Window(int width, int height, unsigned window_flags = WF_WINDOWED,
+               double update_interval = 16.666666);
         virtual ~Window();
 
-        unsigned width() const;
-        unsigned height() const;
+        int width() const;
+        int height() const;
         bool fullscreen() const;
+        void resize(int width, int height, bool fullscreen);
+
         bool resizable() const;
-        void resize(unsigned width, unsigned height, bool fullscreen);
+        void set_resizable(bool resizable);
+
+        bool borderless() const;
+        void set_borderless(bool borderless);
 
         double update_interval() const;
         void set_update_interval(double update_interval);
@@ -129,22 +143,22 @@ namespace Gosu
     //! Returns the width (in pixels) of a screen.
     //! \param window The result describes the screen on which the window is shown, or the
     //!               primary screen if no window is given.
-    unsigned screen_width(Window* window = nullptr);
+    int screen_width(Window* window = nullptr);
 
     //! Returns the height (in pixels) of the user's primary screen.
     //! \param window The result describes the screen on which the window is shown, or the
     //!               primary screen if no window is given.
-    unsigned screen_height(Window* window = nullptr);
+    int screen_height(Window* window = nullptr);
 
     //! Returns the maximum width (in 'points') that is available for a non-fullscreen Window.
     //! All windows larger than this size will automatically be shrunk to fit.
     //! \param window The result describes the screen on which the window is shown, or the
     //!               primary screen if no window is given.
-    unsigned available_width(Window* window = nullptr);
+    int available_width(Window* window = nullptr);
 
     //! Returns the maximum height (in 'points') that is available for a non-fullscreen Window.
     //! All windows larger than this size will automatically be shrunk to fit.
     //! \param window The result describes the screen on which the window is shown, or the
     //!               primary screen if no window is given.
-    unsigned available_height(Window* window = nullptr);
+    int available_height(Window* window = nullptr);
 }

@@ -91,13 +91,11 @@ struct Gosu::Window::Impl
     unique_ptr<Input> input;
 };
 
-Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double update_interval,
-                     bool resizable)
+Gosu::Window::Window(int width, int height, unsigned window_flags, double update_interval)
 : pimpl(new Impl)
 {
-#if SDL_VERSION_ATLEAST(2, 0, 5)
-    SDL_SetWindowResizable(shared_window(), (SDL_bool)resizable);
-#endif
+    set_borderless(window_flags & WF_BORDERLESS);
+    set_resizable(window_flags & WF_RESIZABLE);
 
     // Even in fullscreen mode, temporarily show the window in windowed mode to centre it.
     // This ensures that the window will be centered correctly when exiting fullscreen mode.
@@ -107,12 +105,11 @@ Gosu::Window::Window(unsigned width, unsigned height, bool fullscreen, double up
     SDL_SetWindowPosition(shared_window(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
     // Really enable fullscreen if desired.
-    resize(width, height, fullscreen);
+    resize(width, height, (window_flags & WF_FULLSCREEN));
 
     SDL_GL_SetSwapInterval(1);
 
     pimpl->update_interval = update_interval;
-    pimpl->resizable = resizable;
 
     input().on_button_down = [this](Button button) { button_down(button); };
     input().on_button_up   = [this](Button button) { button_up(button); };
@@ -125,12 +122,12 @@ Gosu::Window::~Window()
     SDL_HideWindow(shared_window());
 }
 
-unsigned Gosu::Window::width() const
+int Gosu::Window::width() const
 {
     return graphics().width();
 }
 
-unsigned Gosu::Window::height() const
+int Gosu::Window::height() const
 {
     return graphics().height();
 }
@@ -140,12 +137,7 @@ bool Gosu::Window::fullscreen() const
     return pimpl->fullscreen;
 }
 
-bool Gosu::Window::resizable() const
-{
-    return pimpl->resizable;
-}
-
-void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
+void Gosu::Window::resize(int width, int height, bool fullscreen)
 {
     pimpl->fullscreen = fullscreen;
 
@@ -179,8 +171,8 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
         }
     }
     else {
-        unsigned max_width  = Gosu::available_width(this);
-        unsigned max_height = Gosu::available_height(this);
+        int max_width  = Gosu::available_width(this);
+        int max_height = Gosu::available_height(this);
 
         if (resizable()) {
             // If the window is resizable, limit its size, without preserving the aspect ratio.
@@ -219,6 +211,29 @@ void Gosu::Window::resize(unsigned width, unsigned height, bool fullscreen)
     }
     pimpl->input->set_mouse_factors(1 / scale_factor, 1 / scale_factor,
                                     black_bar_width, black_bar_height);
+}
+
+bool Gosu::Window::resizable() const
+{
+    return pimpl->resizable;
+}
+
+void Gosu::Window::set_resizable(bool resizable)
+{
+    pimpl->resizable = resizable;
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+    SDL_SetWindowResizable(shared_window(), resizable ? SDL_TRUE : SDL_FALSE);
+#endif
+}
+
+bool Gosu::Window::borderless() const
+{
+    return SDL_GetWindowFlags(shared_window()) & SDL_WINDOW_BORDERLESS;
+}
+
+void Gosu::Window::set_borderless(bool borderless)
+{
+    SDL_SetWindowBordered(shared_window(), borderless ? SDL_FALSE : SDL_TRUE);
 }
 
 double Gosu::Window::update_interval() const

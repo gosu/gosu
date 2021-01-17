@@ -23,6 +23,9 @@
     <ClInclude Include="..\ffi\Gosu_FFI.h">
       <Filter>Interface</Filter>
     </ClInclude>
+    <ClInclude Include="..\ffi\Gosu_FFI_internal.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
     <ClInclude Include="..\ffi\Gosu_Font.h">
       <Filter>Interface</Filter>
     </ClInclude>

@@ -55,8 +55,8 @@ struct Gosu_TextInput : public Gosu::TextInput
 struct Gosu_Window : public Gosu::Window
 {
     [[maybe_unused]] // silence buggy warning, this is being used in Gosu_Window.cpp.
-    Gosu_Window(int width, int height, bool fullscreen, double update_interval, bool resizable)
-    : Gosu::Window(width, height, fullscreen, update_interval, resizable)
+    Gosu_Window(int width, int height, unsigned window_flags, double update_interval)
+    : Gosu::Window(width, height, window_flags, update_interval)
     {
     }
 
@@ -115,10 +115,10 @@ struct Gosu_Window : public Gosu::Window
 
     std::function<void()> update_callback;
     std::function<void()> draw_callback;
-    std::function<void(unsigned btn)> button_down_callback;
-    std::function<void(unsigned btn)> button_up_callback;
-    std::function<void(int id)> gamepad_connected_callback;
-    std::function<void(int id)> gamepad_disconnected_callback;
+    std::function<void(unsigned id)> button_down_callback;
+    std::function<void(unsigned id)> button_up_callback;
+    std::function<void(int index)> gamepad_connected_callback;
+    std::function<void(int index)> gamepad_disconnected_callback;
     std::function<void(const char* filename)> drop_callback;
     std::function<bool()> needs_redraw_callback;
     std::function<bool()> needs_cursor_callback;

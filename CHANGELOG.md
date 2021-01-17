@@ -2,7 +2,9 @@
 
 ## [1.1.0] - tbd
 
-* Windows: Pin the main thread to a single processor core during Window::show to avoid timing glitches.
+* `Gosu::Window` can now be created with `borderless: true` (`WF_BORDERLESS` in C++) to hide all window chrome. Thanks to @cyberarm for this contribution.
+* `Gosu::Window#resizable=` and `Gosu::Window#borderless=` allow changing these properties later.
+* Windows: Pin the main thread to the first processor core during `Window::show` to avoid timing glitches.
 
 ## [1.0.0] – 2020-12-29
 
