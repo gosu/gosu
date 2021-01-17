@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.0] - tbd
+
+* Windows: Pin the main thread to a single processor core during Window::show to avoid timing glitches.
+
 ## [1.0.0] – 2020-12-29
 
 * Breaking change: `Image.from_text`, `Font.draw_text` and `Font.text_width` have stopped parsing pseudo-HTML markup. Replace "text" with "markup" in each method name to get this functionality back.
