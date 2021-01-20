@@ -78,20 +78,11 @@ struct Gosu::Input::Impl
 
     void update_mouse_position()
     {
-    #if SDL_VERSION_ATLEAST(2, 0, 5)
-        // SDL_GetGlobalMouseState was added in SDL 2.0.4, but it only started using the same
-        // coordinate system as SDL_GetWindowPosition on X11 in 2.0.5.
         int x, y, window_x, window_y;
         SDL_GetWindowPosition(window, &window_x, &window_y);
         SDL_GetGlobalMouseState(&x, &y);
         mouse_x = x - window_x;
         mouse_y = y - window_y;
-    #else
-        int x, y;
-        SDL_GetMouseState(&x, &y);
-        mouse_x = x;
-        mouse_y = y;
-    #endif
     }
 
     void set_mouse_position(double x, double y)
@@ -100,7 +91,7 @@ struct Gosu::Input::Impl
                               static_cast<int>((x - mouse_offset_x) / mouse_scale_x),
                               static_cast<int>((y - mouse_offset_y) / mouse_scale_y));
 
-    #if SDL_VERSION_ATLEAST(2, 0, 4) && !defined(GOSU_IS_X)
+    #if !defined(GOSU_IS_X)
         // On systems where we have a working GetGlobalMouseState, we can warp the mouse and
         // retrieve its position directly afterwards.
         update_mouse_position();

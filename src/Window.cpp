@@ -34,11 +34,7 @@ namespace Gosu
                 throw_sdl_error("Could not initialize SDL Video");
             }
 
-            Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN;
-
-        #if SDL_VERSION_ATLEAST(2, 0, 1)
-            flags |= SDL_WINDOW_ALLOW_HIGHDPI;
-        #endif
+            Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN | SDL_WINDOW_ALLOW_HIGHDPI;
 
             window =
                 SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 64, flags);
@@ -192,9 +188,7 @@ void Gosu::Window::resize(int width, int height, bool fullscreen)
         SDL_SetWindowSize(shared_window(), actual_width, actual_height);
     }
 
-#if SDL_VERSION_ATLEAST(2, 0, 1)
     SDL_GL_GetDrawableSize(shared_window(), &actual_width, &actual_height);
-#endif
 
     ensure_current_context();
 
@@ -221,9 +215,7 @@ bool Gosu::Window::resizable() const
 void Gosu::Window::set_resizable(bool resizable)
 {
     pimpl->resizable = resizable;
-#if SDL_VERSION_ATLEAST(2, 0, 5)
     SDL_SetWindowResizable(shared_window(), resizable ? SDL_TRUE : SDL_FALSE);
-#endif
 }
 
 bool Gosu::Window::borderless() const
