@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.1.0] - tbd
+## [1.1.0] - 2021-01-20
 
 * `Gosu::Window` can now be created with `borderless: true` (`WF_BORDERLESS` in C++) to hide all window chrome. Thanks to @cyberarm for this contribution.
 * `Gosu::Window#resizable=` and `Gosu::Window#borderless=` allow changing these properties later.
