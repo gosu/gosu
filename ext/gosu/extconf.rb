@@ -62,6 +62,10 @@ elsif macos
   # rvm will sometimes try to override this:
   # https://github.com/shawn42/gamebox/issues/96
   $CXXFLAGS << " -stdlib=libc++"
+
+  # Disable an error that is disabled by default and prevents Gosu from building with universal Ruby:
+  # https://trac.macports.org/ticket/58255
+  $CXXFLAGS << " -Wno-reserved-user-defined-literal"
   
   # Dependencies.
   $CFLAGS << " #{`sdl2-config --cflags`.chomp}"
