@@ -20,7 +20,7 @@ namespace Gosu
     double text_width(const std::u32string& text, const std::string& font_name, double font_height,
                       unsigned font_flags = 0);
 
-    //! Draws a line of unformatted text on a bitmap. This is a low-level function that does not
+    //! Draws a line of plain text on a bitmap. This is a low-level function that does not
     //! understand any of Gosu's HTML-like markup.
     //! \param text A UCS-4 string, normalization: NFC.
     //! \param font_name Name of a system font, or filename of a TTF file (must contain '/' or '.').
@@ -29,9 +29,9 @@ namespace Gosu
     double draw_text(Bitmap& bitmap, double x, double y, Color c, const std::u32string& text,
                      const std::string& font_name, double font_height, unsigned font_flags = 0);
 
-    //! Creates a bitmap that is filled with the formatted text given to the function.
+    //! Creates a bitmap that is filled with the plain text given to the function.
     //! The line can contain line breaks and HTML-like markup.
-    //! \param text Formatted text.
+    //! \param text Plain text.
     //! \param font_name Name of a system font, or filename of a TTF file (must contain '/' or '.').
     //! \param font_height Height of the font in pixels.
     //! \param line_spacing Spacing between two lines of text in pixels. Can be negative to make
@@ -48,7 +48,7 @@ namespace Gosu
     
     //! Creates a bitmap that is filled with the formatted text given to the function.
     //! The line can contain line breaks and HTML-like markup.
-    //! \param text Formatted text.
+    //! \param markup Formatted text.
     //! \param font_name Name of a system font, or filename of a TTF file (must contain '/' or '.').
     //! \param font_height Height of the font in pixels.
     //! \param line_spacing Spacing between two lines of text in pixels. Can be negative to make
