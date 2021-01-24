@@ -75,9 +75,8 @@ struct Gosu::Macro::Impl
 
         // Solve:
         Float qx, qy;
-        static const Transform null_transform = {{ 0 }};
         if (!solve_2x2(a11, a12, a21, a22, b1, b2, qx, qy))
-            return null_transform;
+            return Transform{{0}};
 
         // Updating the last two rows with the computed solution yields
 
