@@ -1,4 +1,4 @@
-platform :osx, "10.9"
+platform :osx, "10.12"
 
 target "Tutorial" do
   pod "Gosu", path: "../.."
