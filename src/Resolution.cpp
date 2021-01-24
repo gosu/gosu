@@ -33,8 +33,18 @@ int Gosu::screen_height(Window* window)
 
 static NSSize max_window_size(Gosu::Window* window)
 {
-    // Keep in sync with SDL_cocoawindow.m.
-    auto style = NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+    // The extra size that a window needs depends on its style.
+    // This logic must be kept in sync with SDL_cocoawindow.m to be 100% accurate.
+    NSUInteger style;
+    if (window && window->borderless()) {
+        style = NSWindowStyleMaskBorderless;
+    }
+    else {
+        style = (NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable);
+    }
+    if (window && window->resizable()) {
+        style |= NSWindowStyleMaskResizable;
+    }
 
     auto index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
     auto screen_frame = NSScreen.screens[index].visibleFrame;
