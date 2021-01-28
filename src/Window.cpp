@@ -93,8 +93,6 @@ Gosu::Window::Window(int width, int height, unsigned window_flags, double update
     set_borderless(window_flags & WF_BORDERLESS);
     set_resizable(window_flags & WF_RESIZABLE);
 
-    pimpl->resizable = resizable;
-
     // Even in fullscreen mode, temporarily show the window in windowed mode to centre it.
     // This ensures that the window will be centered correctly when exiting fullscreen mode.
     // Fixes https://github.com/gosu/gosu/issues/369
