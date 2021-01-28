@@ -20,8 +20,7 @@ namespace
 bool solve_2x2(Float a11, Float a12, Float a21, Float a22, Float b1, Float b2, Float& x1, Float& x2)
 {
     const Float det = a11 * a22 - a21 * a12;
-    if (det == 0)
-        return false;
+    if (det == 0) return false;
     x1 = (a22 * b1 - a12 * b2) / det;
     x2 = (a11 * b2 - a21 * b1) / det;
     return true;
@@ -75,8 +74,7 @@ struct Gosu::Macro::Impl
 
         // Solve:
         Float qx, qy;
-        if (!solve_2x2(a11, a12, a21, a22, b1, b2, qx, qy))
-            return Transform{{0}};
+        if (!solve_2x2(a11, a12, a21, a22, b1, b2, qx, qy)) return Transform{{0}};
 
         // Updating the last two rows with the computed solution yields
 
