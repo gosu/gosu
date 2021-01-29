@@ -174,6 +174,8 @@ void Gosu::Window::resize(int width, int height, bool fullscreen)
             // If the window is resizable, don't perform hidden scaling or resizing.
             width  = actual_width  = min(width,  max_width);
             height = actual_height = min(height, max_height);
+
+            printf("RESIZER: Max Width: %d, Max Height: %d\n", max_width, max_height);
         }
         else if (width > max_width || height > max_height) {
             // If the window cannot fit on the screen, shrink its contents.
@@ -206,7 +208,10 @@ void Gosu::Window::resize(int width, int height, bool fullscreen)
     pimpl->input->set_mouse_factors(1 / scale_factor, 1 / scale_factor,
                                     black_bar_width, black_bar_height);
 
-    printf("RESIZE: scale_factor: %f, width: %d, height: %d, actual_width: %d, actual_height: %d, window_width: %d, window_height: %d\n", scale_factor, width, height, actual_width, actual_height, Gosu::Window::width(), Gosu::Window::height());
+    printf("RESIZE: scale_factor: %f, width: %d, height: %d, actual_width: %d, actual_height: %d, "
+           "window_width: %d, window_height: %d\n",
+           scale_factor, width, height, actual_width, actual_height, Gosu::Window::width(),
+           Gosu::Window::height());
 }
 
 bool Gosu::Window::resizable() const
