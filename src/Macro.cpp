@@ -1,168 +1,125 @@
 #include "Macro.hpp"
 #include "DrawOpQueue.hpp"
 #include <Gosu/Image.hpp>
-#include <cmath>
-#include <algorithm>
-#include <functional>
-#include <memory>
 #include <stdexcept>
 using namespace std;
 
 struct Gosu::Macro::Impl
 {
-    typedef double Float;
-    
     VertexArrays vertex_arrays;
     int width, height;
-    
-    Transform find_transform_for_target(Float x1, Float y1, Float x2, Float y2,
-        Float x3, Float y3, Float x4, Float y4) const
+
+    // Solves the 2x2 linear system for x:
+    // (a11 a12) (x1) = (b1)
+    // (a21 a22) (x2) = (b2)
+    // x1, x2 are output parameters. Returns false if the matrix is singular.
+    static bool solve_2x2(double a11, double a12, double a21, double a22, double b1, double b2,
+                          double& x1, double& x2)
+    {
+        const double det = a11 * a22 - a21 * a12;
+        if (det == 0) return false;
+        x1 = (a22 * b1 - a12 * b2) / det;
+        x2 = (a11 * b2 - a21 * b1) / det;
+        return true;
+    }
+
+    Transform find_transform_for_target(double x1, double y1, double x2, double y2,
+        double x3, double y3, double x4, double y4) const
     {
         // Transformation logic follows a discussion on the ImageMagick mailing
         // list (on which ImageMagick's perspective_transform.pl is based).
-        
+
         // To draw a macro at an arbitrary position, we solve the following system:
-        
-        // 0, 0, 1, 0, 0, 0,    0,    0 | x1
-        // 0, 0, 0, 0, 0, 1,    0,    0 | y1
-        // w, 0, 1, 0, 0, 0, -x2w,    0 | x2
-        // 0, 0, 0, w, 0, 1, -y2w,    0 | y2
-        // 0, h, 1, 0, 0, 0,    0, -x3h | x3
-        // 0, 0, 0, 0, h, 1,    0, -y3h | y3
-        // w, h, 1, 0, 0, 0, -x4w, -x4h | x4
-        // 0, 0, 0, w, h, 1, -y4w, -y4h | y4
-        
+
+        // 0, 0, 1, 0, 0, 0,     0,     0 | x1
+        // 0, 0, 0, 0, 0, 1,     0,     0 | y1
+        // w, 0, 1, 0, 0, 0, -x2 w,     0 | x2
+        // 0, 0, 0, w, 0, 1, -y2 w,     0 | y2
+        // 0, h, 1, 0, 0, 0,     0, -x3 h | x3
+        // 0, 0, 0, 0, h, 1,     0, -y3 h | y3
+        // w, h, 1, 0, 0, 0, -x4 w, -x4 h | x4
+        // 0, 0, 0, w, h, 1, -y4 w, -y4 h | y4
+
         // Equivalent:
-        
-        // 0, 0, 1, 0, 0, 0,        0,        0 | x1
-        // 0, 0, 0, 0, 0, 1,        0,        0 | y1
-        // w, 0, 0, 0, 0, 0,     -x2w,        0 | x2-x1
-        // 0, 0, 0, w, 0, 0,     -y2w,        0 | y2-y1
-        // 0, h, 0, 0, 0, 0,        0,     -x3h | x3-x1
-        // 0, 0, 0, 0, h, 0,        0,     -y3h | y3-y1
-        // 0, 0, 0, 0, 0, 0, (x2-x4)w, (x3-x4)h | x1-x2-x3+x4
-        // 0, 0, 0, 0, 0, 0, (y2-y4)w, (y3-y4)h | y1-y2-y3+y4
-        
-        // Since this matrix is relatively sparse, we unroll all three solving paths.
-        
-        static const Transform null_transform = {{ 0 }};
-        
-        // Row 7 is completely useless
-        if (x2 == x4 && x3 == x4) return null_transform;
-        // Row 8 is completely useless
-        if (y2 == y3 && y3 == y4) return null_transform;
-        // Col 7 is completely useless
-        if (x2 == x4 && y2 == y4) return null_transform;
-        // Col 8 is completely useless
-        if (x3 == x4 && y3 == y4) return null_transform;
-        
-        Float c[8];
-        
-        // Rows 1, 2
+
+        // 0, 0, 1, 0, 0, 0,         0,         0 | x1
+        // 0, 0, 0, 0, 0, 1,         0,         0 | y1
+        // w, 0, 0, 0, 0, 0,     -x2 w,         0 | x2-x1
+        // 0, 0, 0, w, 0, 0,     -y2 w,         0 | y2-y1
+        // 0, h, 0, 0, 0, 0,         0,     -x3 h | x3-x1
+        // 0, 0, 0, 0, h, 0,         0,     -y3 h | y3-y1
+        // 0, 0, 0, 0, 0, 0, (x2-x4) w, (x3-x4) h | x1-x2-x3+x4
+        // 0, 0, 0, 0, 0, 0, (y2-y4) w, (y3-y4) h | y1-y2-y3+y4
+
+        // The last two rows only involve the last two variables.
+        // We can directly solve this as a separate 2x2 linear system.
+
+        // Set up 2x2 linear system of the lower right corner entries.
+        const double a11 = (x2 - x4) * width;
+        const double a12 = (x3 - x4) * height;
+        const double a21 = (y2 - y4) * width;
+        const double a22 = (y3 - y4) * height;
+        const double b1 = x1 - x2 - x3 + x4;
+        const double b2 = y1 - y2 - y3 + y4;
+
+        // Solve:
+        double qx, qy;
+        if (!solve_2x2(a11, a12, a21, a22, b1, b2, qx, qy)) return Transform{{0}};
+
+        // Updating the last two rows with the computed solution yields
+
+        // 0, 0, 1, 0, 0, 0,     0,     0 | x1
+        // 0, 0, 0, 0, 0, 1,     0,     0 | y1
+        // w, 0, 0, 0, 0, 0, -x2 w,     0 | x2-x1
+        // 0, 0, 0, w, 0, 0, -y2 w,     0 | y2-y1
+        // 0, h, 0, 0, 0, 0,     0, -x3 h | x3-x1
+        // 0, 0, 0, 0, h, 0,     0, -y3 h | y3-y1
+        // 0, 0, 0, 0, 0, 0,     1,     0 | qx
+        // 0, 0, 0, 0, 0, 0,     0,     1 | qy
+
+        // We can use the last two rows to eliminate entries in rows 3, 4, 5, and 6:
+
+        // 0, 0, 1, 0, 0, 0, 0, 0 | x1
+        // 0, 0, 0, 0, 0, 1, 0, 0 | y1
+        // w, 0, 0, 0, 0, 0, 0, 0 | x2-x1 + qx x2 w
+        // 0, 0, 0, w, 0, 0, 0, 0 | y2-y1 + qx y2 w
+        // 0, h, 0, 0, 0, 0, 0, 0 | x3-x1 + qy x3 h
+        // 0, 0, 0, 0, h, 0, 0, 0 | y3-y1 + qy y3 h
+        // 0, 0, 0, 0, 0, 0, 1, 0 | qx
+        // 0, 0, 0, 0, 0, 0, 0, 1 | qy
+
+        // Normalize and reorder rows so we can read off the solution:
+
+        // 1, 0, 0, 0, 0, 0, 0, 0 | (x2-x1) / w + qx x2
+        // 0, 1, 0, 0, 0, 0, 0, 0 | (x3-x1) / h + qy x3
+        // 0, 0, 1, 0, 0, 0, 0, 0 | x1
+        // 0, 0, 0, 1, 0, 0, 0, 0 | (y2-y1) / w + qx y2
+        // 0, 0, 0, 0, 1, 0, 0, 0 | (y3-y1) / h + qy y3
+        // 0, 0, 0, 0, 0, 1, 0, 0 | y1
+        // 0, 0, 0, 0, 0, 0, 1, 0 | qx
+        // 0, 0, 0, 0, 0, 0, 0, 1 | qy
+
+        double c[8];
+        c[0] = (x2 - x1) / width  + qx * x2;
+        c[1] = (x3 - x1) / height + qy * x3;
         c[2] = x1;
+        c[3] = (y2 - y1) / width  + qx * y2;
+        c[4] = (y3 - y1) / height + qy * y3;
         c[5] = y1;
-        
-        // The logic below assumes x2 != x4, i.e. row7 can be used to eliminate
-        // the leftmost value in row 8 and afterwards the values in rows 3 & 4.
-        // If x2 == x4, we need to exchange rows 7 and 8.
-        
-        // TODO: x2==x4 is the normal case where an image is
-        // drawn upright; the code should rather swap in the rare case that x3==x4!
-        
-        Float left_cell7 = (x2 - x4) * width;
-        Float right_cell7 = (x3 - x4) * height;
-        Float orig_right_side7 = (x1 - x2 - x3 + x4);
-        Float left_cell8 = (y2 - y4) * width;
-        Float right_cell8 = (y3 - y4) * height;
-        Float orig_right_side8 = (y1 - y2 - y3 + y4);
-        
-        bool swap_rows78 = x2 == x4;
-        if (swap_rows78) {
-            swap(left_cell7, left_cell8);
-            swap(right_cell7, right_cell8);
-            swap(orig_right_side7, orig_right_side8);
-        }
-        
-        // 0, 0, 1, 0, 0, 0,         0,           0 | x1
-        // 0, 0, 0, 0, 0, 1,         0,           0 | y1
-        // w, 0, 0, 0, 0, 0,      -x2w,           0 | x2-x1
-        // 0, 0, 0, w, 0, 0,      -y2w,           0 | y2-y1
-        // 0, h, 0, 0, 0, 0,         0,        -x3h | x3-x1
-        // 0, 0, 0, 0, h, 0,         0,        -y3h | y3-y1
-        // 0, 0, 0, 0, 0, 0, left_cell7, right_cell7 | orig_right_side7
-        // 0, 0, 0, 0, 0, 0, left_cell8, right_cell8 | orig_right_side8
-        
-        // Use row 7 to eliminate the left cell in row 8
-        // Row8 = Row8 - factor78 * Row7
-        Float factor78 = left_cell8 / left_cell7;
-        Float rem_cell8 = right_cell8 - right_cell7 * factor78;
-        Float right_side8 = orig_right_side8 - orig_right_side7 * factor78;
-        c[7] = right_side8 / rem_cell8;
-        
-        // 0, 0, 1, 0, 0, 0,         0,          0 | x1
-        // 0, 0, 0, 0, 0, 1,         0,          0 | y1
-        // w, 0, 0, 0, 0, 0,      -x2w,          0 | x2-x1
-        // 0, 0, 0, w, 0, 0,      -y2w,          0 | y2-y1
-        // 0, h, 0, 0, 0, 0,         0,       -x3h | x3-x1
-        // 0, 0, 0, 0, h, 0,         0,       -y3h | y3-y1
-        // 0, 0, 0, 0, 0, 0, left_cell7, right_cell7 | orig_right_side7
-        // 0, 0, 0, 0, 0, 0,         0,   rem_cell8 | right_side8
-        
-        // Use the remaining value in row 8 to eliminate the right value in row 7.
-        // Row7 = Row7 - factor87 * Row8
-        Float factor87 = right_cell7 / rem_cell8;
-        Float rem_cell7 = left_cell7;
-        Float right_side7 = orig_right_side7 - right_side8 * factor87;
-        c[6] = right_side7 / rem_cell7;
-        
-        // 0, 0, 1, 0, 0, 0,        0,        0 | x1
-        // 0, 0, 0, 0, 0, 1,        0,        0 | y1
-        // w, 0, 0, 0, 0, 0,     -x2w,        0 | x2-x1
-        // 0, 0, 0, w, 0, 0,     -y2w,        0 | y2-y1
-        // 0, h, 0, 0, 0, 0,        0,     -x3h | x3-x1
-        // 0, 0, 0, 0, h, 0,        0,     -y3h | y3-y1
-        // 0, 0, 0, 0, 0, 0, rem_cell7,        0 | right_side7
-        // 0, 0, 0, 0, 0, 0,        0, rem_cell8 | right_side8
-        
-        // Use the new rows 7 and 8 to calculate c0, c1, c3 & c4.
-        // Row3 = Row3 - factor73 * Row7
-        Float factor73 = -x2 * width / rem_cell7;
-        Float rem_cell3 = width;
-        Float right_side3 = (x2 - x1) - right_side7 * factor73;
-        c[0] = right_side3 / rem_cell3;
-        // Row4 = Row4 - factor74 * Row7
-        Float factor74 = -y2 * width / rem_cell7;
-        Float rem_cell4 = width;
-        Float right_side4 = (y2 - y1) - right_side7 * factor74;
-        c[3] = right_side4 / rem_cell4;
-        // Row5 = Row5 - factor85 * Row7
-        Float factor85 = -x3 * height / rem_cell8;
-        Float rem_cell5 = height;
-        Float right_side5 = (x3 - x1) - right_side8 * factor85;
-        c[1] = right_side5 / rem_cell5;
-        // Row6 = Row6 - factor86 * Row8
-        Float factor86 = -y3 * height / rem_cell8;
-        Float rem_cell6 = height;
-        Float right_side6 = (y3 - y1) - right_side8 * factor86;
-        c[4] = right_side6 / rem_cell6;
-        
-        if (swap_rows78) {
-            swap(c[6], c[7]);
-        }
-        
-        // Let's hope I never have to debug/understand this again! :D
-        
+        c[6] = qx;
+        c[7] = qy;
+
         Transform result = {{
             c[0], c[3], 0, c[6],
             c[1], c[4], 0, c[7],
-            0, 0, 1, 0,
+            0,    0,    1, 0,
             c[2], c[5], 0, 1
         }};
         return result;
     }
-    
-    void draw_vertex_arrays(Float x1, Float y1, Float x2, Float y2, Float x3, Float y3,
-        Float x4, Float y4) const
+
+    void draw_vertex_arrays(double x1, double y1, double x2, double y2, double x3, double y3,
+        double x4, double y4) const
     {
         // TODO: Macros should not be split up just because they have different transforms.
         // They should be premultiplied and have the same transform by definition. Then the
