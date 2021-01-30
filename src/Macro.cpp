@@ -1,40 +1,30 @@
 #include "Macro.hpp"
 #include "DrawOpQueue.hpp"
 #include <Gosu/Image.hpp>
-#include <cmath>
-#include <algorithm>
-#include <functional>
-#include <memory>
 #include <stdexcept>
 using namespace std;
-
-typedef double Float;
-
-namespace
-{
-
-// Solves the 2x2 linear system for x:
-// (a11 a12) (x1) = (b1)
-// (a21 a22) (x2) = (b2)
-// x1, x2 are output parameters. Returns false if the matrix is singular.
-bool solve_2x2(Float a11, Float a12, Float a21, Float a22, Float b1, Float b2, Float& x1, Float& x2)
-{
-    const Float det = a11 * a22 - a21 * a12;
-    if (det == 0) return false;
-    x1 = (a22 * b1 - a12 * b2) / det;
-    x2 = (a11 * b2 - a21 * b1) / det;
-    return true;
-}
-
-}
 
 struct Gosu::Macro::Impl
 {
     VertexArrays vertex_arrays;
     int width, height;
-    
-    Transform find_transform_for_target(Float x1, Float y1, Float x2, Float y2,
-        Float x3, Float y3, Float x4, Float y4) const
+
+    // Solves the 2x2 linear system for x:
+    // (a11 a12) (x1) = (b1)
+    // (a21 a22) (x2) = (b2)
+    // x1, x2 are output parameters. Returns false if the matrix is singular.
+    static bool solve_2x2(double a11, double a12, double a21, double a22, double b1, double b2,
+                          double& x1, double& x2)
+    {
+        const double det = a11 * a22 - a21 * a12;
+        if (det == 0) return false;
+        x1 = (a22 * b1 - a12 * b2) / det;
+        x2 = (a11 * b2 - a21 * b1) / det;
+        return true;
+    }
+
+    Transform find_transform_for_target(double x1, double y1, double x2, double y2,
+        double x3, double y3, double x4, double y4) const
     {
         // Transformation logic follows a discussion on the ImageMagick mailing
         // list (on which ImageMagick's perspective_transform.pl is based).
@@ -65,15 +55,15 @@ struct Gosu::Macro::Impl
         // We can directly solve this as a separate 2x2 linear system.
 
         // Set up 2x2 linear system of the lower right corner entries.
-        const Float a11 = (x2 - x4) * width;
-        const Float a12 = (x3 - x4) * height;
-        const Float a21 = (y2 - y4) * width;
-        const Float a22 = (y3 - y4) * height;
-        const Float b1 = x1 - x2 - x3 + x4;
-        const Float b2 = y1 - y2 - y3 + y4;
+        const double a11 = (x2 - x4) * width;
+        const double a12 = (x3 - x4) * height;
+        const double a21 = (y2 - y4) * width;
+        const double a22 = (y3 - y4) * height;
+        const double b1 = x1 - x2 - x3 + x4;
+        const double b2 = y1 - y2 - y3 + y4;
 
         // Solve:
-        Float qx, qy;
+        double qx, qy;
         if (!solve_2x2(a11, a12, a21, a22, b1, b2, qx, qy)) return Transform{{0}};
 
         // Updating the last two rows with the computed solution yields
@@ -109,7 +99,7 @@ struct Gosu::Macro::Impl
         // 0, 0, 0, 0, 0, 0, 1, 0 | qx
         // 0, 0, 0, 0, 0, 0, 0, 1 | qy
 
-        Float c[8];
+        double c[8];
         c[0] = (x2 - x1) / width  + qx * x2;
         c[1] = (x3 - x1) / height + qy * x3;
         c[2] = x1;
@@ -128,8 +118,8 @@ struct Gosu::Macro::Impl
         return result;
     }
 
-    void draw_vertex_arrays(Float x1, Float y1, Float x2, Float y2, Float x3, Float y3,
-        Float x4, Float y4) const
+    void draw_vertex_arrays(double x1, double y1, double x2, double y2, double x3, double y3,
+        double x4, double y4) const
     {
         // TODO: Macros should not be split up just because they have different transforms.
         // They should be premultiplied and have the same transform by definition. Then the
