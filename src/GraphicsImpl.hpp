@@ -5,8 +5,10 @@
 #include <Gosu/Platform.hpp>
 
 #if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_OPENGLES)
-#include <OpenGLES/ES1/gl.h>
-#include <OpenGLES/ES1/glext.h>
+#include <SDL_opengles.h>
+#ifdef GOSU_IS_ANDROID
+#include <SDL.h>
+#endif
 #else
 #include <SDL.h>
 #include <SDL_opengl.h>

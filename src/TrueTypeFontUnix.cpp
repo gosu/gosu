@@ -1,5 +1,5 @@
 #include <Gosu/Platform.hpp>
-#if defined(GOSU_IS_X)
+#if defined(GOSU_IS_X) && !defined(GOSU_IS_ANDROID)
 
 #include "TrueTypeFont.hpp"
 #include "Log.hpp"

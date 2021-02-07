@@ -35,12 +35,12 @@ Gosu::OffScreenTarget::OffScreenTarget(int width, int height, unsigned image_fla
         throw runtime_error("Missing GL_EXT_framebuffer_object extension");
     }
 #endif
-    
+
     // Create a new texture that will be our rendering target.
     texture = make_shared<Texture>(width, height, image_flags & IF_RETRO);
     // Mark the full texture as blocked for our TexChunk.
     texture->block(0, 0, width, height);
-    
+
     // Besides the texture, also create a renderbuffer for depth information.
     // Gosu doesn't use this, but custom OpenGL code could might.
     GOSU_LOAD_GL_EXT(glGenRenderbuffers, PFNGLGENRENDERBUFFERSPROC);

@@ -341,7 +341,9 @@ bool Gosu::Window::tick()
         }
     }
 
+#ifndef GOSU_IS_ANDROID
     Song::update();
+#endif
 
     input().update();
 

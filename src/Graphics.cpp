@@ -269,6 +269,8 @@ Gosu::Image Gosu::Graphics::render(int width, int height, const function<void ()
                                    unsigned image_flags)
 {
     ensure_current_context();
+
+#ifndef GOSU_IS_ANDROID
     
     // Prepare for rendering at the requested size, but save the previous matrix and viewport.
     glMatrixMode(GL_PROJECTION);
@@ -309,6 +311,9 @@ Gosu::Image Gosu::Graphics::render(int width, int height, const function<void ()
     glViewport(prev_viewport[0], prev_viewport[1], prev_viewport[2], prev_viewport[3]);
     
     return result;
+#else
+    return Gosu::Image(Gosu::Bitmap(100, 100));
+#endif
 }
 
 Gosu::Image Gosu::Graphics::record(int width, int height, const function<void ()>& f)
