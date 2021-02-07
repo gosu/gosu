@@ -62,6 +62,11 @@ namespace Gosu
 # endif
 #endif
 
+#if defined(ANDROID)
+# define GOSU_IS_ANDROID
+# define GOSU_IS_OPENGLES
+#endif
+
 #ifndef GOSU_DEPRECATED
 # if defined(GOSU_IS_WIN)
 #  define GOSU_DEPRECATED __declspec(deprecated)
