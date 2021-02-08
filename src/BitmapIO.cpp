@@ -49,10 +49,15 @@ static bool is_bmp(Gosu::Reader reader)
     return magic_bytes[0] == 'B' && magic_bytes[1] == 'M';
 }
 
+#ifdef GOSU_IS_ANDROID
+#include <android/log.h>
+#endif
 Gosu::Bitmap Gosu::load_image_file(const std::string& filename)
 {
     Buffer buffer;
+    __android_log_print(android_LogPriority::ANDROID_LOG_INFO, "Gosu", "Loading image: %s\n", filename.c_str());
     load_file(buffer, filename);
+    __android_log_print(android_LogPriority::ANDROID_LOG_INFO, "Gosu", "Loaded image: %s\n", filename.c_str());
     return load_image_file(buffer.front_reader());
 }
 

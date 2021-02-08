@@ -27,13 +27,12 @@ LOCAL_SRC_FILES := \
 	$(wildcard $(LOCAL_PATH)/src/BlockAllocator.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/Color.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/DirectoriesUnix.cpp) \
-	$(wildcard $(LOCAL_PATH)/src/FileUnix.cpp) \
+	$(wildcard $(LOCAL_PATH)/src/FileAndroid.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/Font.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/Graphics.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/IO.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/Image.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/Input.cpp) \
-	$(wildcard $(LOCAL_PATH)/src/InputUIKit.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/Inspection.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/LargeImageData.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/Macro.cpp) \
@@ -51,7 +50,6 @@ LOCAL_SRC_FILES := \
 	$(wildcard $(LOCAL_PATH)/src/TrueTypeFontAndroid.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/Utility.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/Version.cpp) \
-	$(wildcard $(LOCAL_PATH)/src/WinUtility.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/Window.cpp) \
 	$(wildcard $(LOCAL_PATH)/dependencies/utf8proc/*.c) \
 
@@ -70,7 +68,7 @@ LOCAL_SHARED_LIBRARIES := SDL2 SDL2_ttf
 
 LOCAL_CFLAGS += -DANDROID
 
-LOCAL_CPPFLAGS += -fexceptions -std=c++17
+LOCAL_CPPFLAGS += -fexceptions -std=c++17 -fstack-protector
  
 
 LOCAL_LDLIBS := -llog -landroid -lEGL -lGLESv1_CM

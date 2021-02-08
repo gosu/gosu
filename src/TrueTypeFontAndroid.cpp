@@ -3,7 +3,9 @@
 // TODO: This is effectively a stub to enable linking without fontconfig available
 
 #include "TrueTypeFont.hpp"
-#include "Log.hpp"
+#include <android/log.h>
+#include <android/asset_manager.h>
+#include <android/asset_manager_jni.h>
 
 #include <Gosu/IO.hpp>
 #include <Gosu/Text.hpp>
@@ -14,7 +16,9 @@ using namespace std;
 
 const unsigned char* Gosu::ttf_data_by_name(const string& font_name, unsigned font_flags)
 {
-    return nullptr;
+    __android_log_print(android_LogPriority::ANDROID_LOG_ERROR, "Gosu", "Failed to load font: %s, IO is not yet supported!", &font_name);
+    // throw runtime_error("Android doesn't support IO yet!");
+    return ttf_data_from_file("daniel.ttf");
 }
 
 static const unsigned char* ttf_data_of_default_sans_serif_font()
@@ -38,7 +42,7 @@ const unsigned char* Gosu::ttf_fallback_data()
     // Unifont has pretty good Unicode coverage, but looks extremely ugly.
     static const unsigned char* unifont = ttf_data_by_name("Unifont", 0);
     if (unifont) return unifont;
-    
+
     // If none of the fonts above work, try to use the default sans-serif font.
     static const unsigned char* default_font = ttf_data_of_default_sans_serif_font();
     if (default_font) return default_font;
@@ -55,4 +59,3 @@ string Gosu::default_font_name()
 }
 
 #endif
-

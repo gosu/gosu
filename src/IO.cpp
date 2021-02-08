@@ -46,11 +46,16 @@ void Gosu::Buffer::write(size_t offset, size_t length, const void* source_buffer
     }
 }
 
+#ifdef GOSU_IS_ANDROID
+#include <android/log.h>
+#endif
 void Gosu::load_file(Buffer& buffer, const string& filename)
 {
     File file(filename);
     buffer.resize(file.size());
+    __android_log_print(android_LogPriority::ANDROID_LOG_INFO, "Gosu", "Reading file: %s\n", filename.c_str());
     file.read(0, buffer.size(), buffer.data());
+    __android_log_print(android_LogPriority::ANDROID_LOG_INFO, "Gosu", "Loaded file: %s\n", filename.c_str());
 }
 
 void Gosu::save_file(const Buffer& buffer, const string& filename)
