@@ -74,7 +74,7 @@ void Gosu::File::read(size_t offset, size_t length, void* dest_buffer) const
     __android_log_print(android_LogPriority::ANDROID_LOG_INFO, "Gosu", "Reading asset with length: %d/%d...\n", length, size());
 
     AAsset_seek(pimpl->asset, offset, SEEK_SET);
-    AAsset_read(pimpl->asset, &dest_buffer, length);
+    AAsset_read(pimpl->asset, dest_buffer, length);
 
     __android_log_print(android_LogPriority::ANDROID_LOG_INFO, "Gosu", "Read asset.\n");
 }
