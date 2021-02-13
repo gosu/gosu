@@ -11,7 +11,7 @@ static SDL_DisplayMode display_mode(Gosu::Window* window)
         VideoSubsystem()  { SDL_InitSubSystem(SDL_INIT_VIDEO); };
         ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
     } subsystem;
-    
+
     int index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
     SDL_DisplayMode result;
     SDL_GetDesktopDisplayMode(index, &result);
@@ -40,7 +40,7 @@ static NSSize max_window_size(Gosu::Window* window)
         style = NSWindowStyleMaskBorderless;
     }
     else {
-        style = (NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable);
+        style = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable;
     }
     if (window && window->resizable()) {
         style |= NSWindowStyleMaskResizable;
@@ -62,67 +62,109 @@ int Gosu::available_height(Window* window)
 }
 #endif
 
+// TODO: Remove this implementation and remove ifdef for GOSU_IS_X once WIN_GetWindowBordersSize is patched
 #ifdef GOSU_IS_WIN
 #include <windows.h>
 #include <SDL_syswm.h>
+#include <dwmapi.h>
+#pragma comment (lib, "Dwmapi.lib")
 
-static SIZE max_window_size(Gosu::Window* window)
+static SDL_Rect max_window_size(Gosu::Window* window)
 {
-    RECT work_area;
-    
-    if (window == nullptr) {
-        // Easy case: Return the work area of the primary monitor.
-        SystemParametersInfo(SPI_GETWORKAREA, 0, &work_area, 0);
+    // Replicate SDL's WIN_GetWindowBordersSize implementation (https://github.com/libsdl-org/SDL/blob/9f71a809e9bd6fbb5fa401a45c1537fc26abc1b4/src/video/windows/SDL_windowswindow.c#L514-L554)
+    // until it's patched to ignore the window drop shadow (window border is 1px but with drop shadow it's reported as 8px)
+    // REF: https://github.com/libsdl-org/SDL/issues/3835
+
+    static struct VideoSubsystem {
+        VideoSubsystem() { SDL_InitSubSystem(SDL_INIT_VIDEO); };
+        ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
+    } subsystem;
+
+    int index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
+    SDL_Rect rect;
+    SDL_GetDisplayUsableBounds(index, &rect);
+
+    if (window) {
+        SDL_SysWMinfo info;
+        SDL_VERSION(&info.version);
+        SDL_GetWindowWMInfo(Gosu::shared_window(), &info);
+        HWND hwnd = info.info.win.window;
+
+        RECT rcClient, rcWindow;
+        POINT ptDiff;
+        int top = 0, left = 0, bottom = 0, right = 0;
+
+        /* rcClient stores the size of the inner window, while rcWindow stores the outer size relative to the top-left
+         * screen position; so the top/left values of rcClient are always {0,0} and bottom/right are {height,width} */
+        GetClientRect(hwnd, &rcClient);
+        DwmGetWindowAttribute(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rcWindow, sizeof(rcWindow));
+
+        /* convert the top/left values to make them relative to
+         * the window; they will end up being slightly negative */
+        ptDiff.y = rcWindow.top;
+        ptDiff.x = rcWindow.left;
+
+        ScreenToClient(hwnd, &ptDiff);
+
+        rcWindow.top = ptDiff.y;
+        rcWindow.left = ptDiff.x;
+
+        /* convert the bottom/right values to make them relative to the window,
+         * these will be slightly bigger than the inner width/height */
+        ptDiff.y = rcWindow.bottom;
+        ptDiff.x = rcWindow.right;
+
+        ScreenToClient(hwnd, &ptDiff);
+
+        rcWindow.bottom = ptDiff.y;
+        rcWindow.right = ptDiff.x;
+
+        /* Now that both the inner and outer rects use the same coordinate system we can substract them to get the border size.
+         * Keep in mind that the top/left coordinates of rcWindow are negative because the border lies slightly before {0,0},
+         * so switch them around because SDL2 wants them in positive. */
+        top = rcClient.top - rcWindow.top;
+        left = rcClient.left - rcWindow.left;
+        bottom = rcWindow.bottom - rcClient.bottom;
+        right = rcWindow.right - rcClient.right;
+
+        rect.w -= left + right;
+        rect.h -= top + bottom;
     }
-    else {
-        // Return the work area of the monitor the window is on.
-        SDL_SysWMinfo wm_info;
-        SDL_VERSION(&wm_info.version);
-        SDL_GetWindowWMInfo(Gosu::shared_window(), &wm_info);
-        HMONITOR monitor = MonitorFromWindow(wm_info.info.win.window, MONITOR_DEFAULTTONEAREST);
-        
-        MONITORINFO monitor_info;
-        monitor_info.cbSize = sizeof(monitor_info);
-        GetMonitorInfo(monitor, &monitor_info);
-        work_area = monitor_info.rcWork;
-    }
-    
-    RECT window_size = work_area;
-    // Keep in sync with STYLE_NORMAL in SDL_windowswindow.c.
-    DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
-    AdjustWindowRectEx(&window_size, style, FALSE, 0);
-    
-    // Because AdjustWindowRectEx will make our rect larger, not smaller, we need to perform some
-    // unintuitive math here.
-    SIZE size;
-    size.cx = 2 * (work_area.right - work_area.left) - (window_size.right - window_size.left);
-    size.cy = 2 * (work_area.bottom - work_area.top) - (window_size.bottom - window_size.top);
-    return size;
-}
 
-int Gosu::available_width(Window* window)
-{
-    return max_window_size(window).cx;
-}
-
-int Gosu::available_height(Window* window)
-{
-    return max_window_size(window).cy;
+    // Return a rect to have one less Gosu::available_width/height implementation.
+    return rect;
 }
 #endif
 
 #ifdef GOSU_IS_X
-// Pessimistic fallback implementation for available_width / available_height.
-// TODO: Look at this NET_WORKAREA based implementation: https://github.com/glfw/glfw/pull/989/files
+static SDL_Rect max_window_size(Gosu::Window* window)
+{
+    static struct VideoSubsystem {
+        VideoSubsystem() { SDL_InitSubSystem(SDL_INIT_VIDEO); };
+        ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
+    } subsystem;
+
+    int index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
+    SDL_Rect rect;
+    int top, left, bottom, right;
+    SDL_GetDisplayUsableBounds(index, &rect);
+    SDL_GetWindowBordersSize(Gosu::shared_window(), &top, &left, &bottom, &right);
+
+    rect.w -= left + right;
+    rect.h -= top + bottom;
+
+    return rect;
+}
+#endif
+
+
 int Gosu::available_width(Window* window)
 {
-    return static_cast<unsigned>(Gosu::screen_width(window) * 0.9);
+    return max_window_size(window).w;
 }
 
 int Gosu::available_height(Window* window)
 {
-    return static_cast<unsigned>(Gosu::screen_height(window) * 0.8);
+    return max_window_size(window).h;
 }
-#endif
-
 #endif
