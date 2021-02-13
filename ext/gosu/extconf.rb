@@ -64,7 +64,7 @@ elsif macos
   $CXXFLAGS << " -stdlib=libc++"
 
   # Disable an error that is disabled by default and prevents Gosu from building with universal Ruby:
-  # https://trac.macports.org/ticket/58255
+  # https://trac.macports.org/ticket/58255 / https://github.com/gosu/gosu/issues/424
   $CXXFLAGS << " -Wno-reserved-user-defined-literal"
   
   # Dependencies.

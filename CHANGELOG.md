@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.1] - 2021-02-13
+
+* Improved accuracy of `Gosu.available_width` / `Gosu.available_height`. Thanks @cyberarm!
+* Fixed a bug where macros (images returned by `Gosu.record`) were deformed when rendered with specific coordinates. Thanks @jsb!
+* macOS: Improved support for ARM-based Macs.
+
 ## [1.1.0] - 2021-01-20
 
 * `Gosu::Window` can now be created with `borderless: true` (`WF_BORDERLESS` in C++) to hide all window chrome. Thanks to @cyberarm for this contribution.
