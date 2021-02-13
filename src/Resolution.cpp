@@ -84,52 +84,52 @@ static SDL_Rect max_window_size(Gosu::Window* window)
     SDL_Rect rect;
     SDL_GetDisplayUsableBounds(index, &rect);
 
-	if (window) {
-	    SDL_SysWMinfo info;
-	    SDL_VERSION(&info.version);
-	    SDL_GetWindowWMInfo(Gosu::shared_window(), &info);
-	    HWND hwnd = info.info.win.window;
+    if (window) {
+        SDL_SysWMinfo info;
+        SDL_VERSION(&info.version);
+        SDL_GetWindowWMInfo(Gosu::shared_window(), &info);
+        HWND hwnd = info.info.win.window;
 
-	    RECT rcClient, rcWindow;
-	    POINT ptDiff;
-	    int top = 0, left = 0, bottom = 0, right = 0;
+        RECT rcClient, rcWindow;
+        POINT ptDiff;
+        int top = 0, left = 0, bottom = 0, right = 0;
 
-	    /* rcClient stores the size of the inner window, while rcWindow stores the outer size relative to the top-left
-	     * screen position; so the top/left values of rcClient are always {0,0} and bottom/right are {height,width} */
-	    GetClientRect(hwnd, &rcClient);
-	    DwmGetWindowAttribute(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rcWindow, sizeof(rcWindow));
+        /* rcClient stores the size of the inner window, while rcWindow stores the outer size relative to the top-left
+         * screen position; so the top/left values of rcClient are always {0,0} and bottom/right are {height,width} */
+        GetClientRect(hwnd, &rcClient);
+        DwmGetWindowAttribute(hwnd, DWMWA_EXTENDED_FRAME_BOUNDS, &rcWindow, sizeof(rcWindow));
 
-	    /* convert the top/left values to make them relative to
-	     * the window; they will end up being slightly negative */
-	    ptDiff.y = rcWindow.top;
-	    ptDiff.x = rcWindow.left;
+        /* convert the top/left values to make them relative to
+         * the window; they will end up being slightly negative */
+        ptDiff.y = rcWindow.top;
+        ptDiff.x = rcWindow.left;
 
-	    ScreenToClient(hwnd, &ptDiff);
+        ScreenToClient(hwnd, &ptDiff);
 
-	    rcWindow.top = ptDiff.y;
-	    rcWindow.left = ptDiff.x;
+        rcWindow.top = ptDiff.y;
+        rcWindow.left = ptDiff.x;
 
-	    /* convert the bottom/right values to make them relative to the window,
-	     * these will be slightly bigger than the inner width/height */
-	    ptDiff.y = rcWindow.bottom;
-	    ptDiff.x = rcWindow.right;
+        /* convert the bottom/right values to make them relative to the window,
+         * these will be slightly bigger than the inner width/height */
+        ptDiff.y = rcWindow.bottom;
+        ptDiff.x = rcWindow.right;
 
-	    ScreenToClient(hwnd, &ptDiff);
+        ScreenToClient(hwnd, &ptDiff);
 
-	    rcWindow.bottom = ptDiff.y;
-	    rcWindow.right = ptDiff.x;
+        rcWindow.bottom = ptDiff.y;
+        rcWindow.right = ptDiff.x;
 
-	    /* Now that both the inner and outer rects use the same coordinate system we can substract them to get the border size.
-	     * Keep in mind that the top/left coordinates of rcWindow are negative because the border lies slightly before {0,0},
-	     * so switch them around because SDL2 wants them in positive. */
-	    top = rcClient.top - rcWindow.top;
-	    left = rcClient.left - rcWindow.left;
-	    bottom = rcWindow.bottom - rcClient.bottom;
-	    right = rcWindow.right - rcClient.right;
+        /* Now that both the inner and outer rects use the same coordinate system we can substract them to get the border size.
+         * Keep in mind that the top/left coordinates of rcWindow are negative because the border lies slightly before {0,0},
+         * so switch them around because SDL2 wants them in positive. */
+        top = rcClient.top - rcWindow.top;
+        left = rcClient.left - rcWindow.left;
+        bottom = rcWindow.bottom - rcClient.bottom;
+        right = rcWindow.right - rcClient.right;
 
-	    rect.w -= left + right;
-	    rect.h -= top + bottom;
-	}
+        rect.w -= left + right;
+        rect.h -= top + bottom;
+    }
 
     // Return a rect to have one less Gosu::available_width/height implementation.
     return rect;
