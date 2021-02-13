@@ -31,7 +31,7 @@ int Gosu::screen_height(Window* window)
 #ifdef GOSU_IS_MAC
 #import <AppKit/AppKit.h>
 
-static NSSize max_window_size(Gosu::Window* window)
+static SDL_Rect max_window_size(Gosu::Window* window)
 {
     // The extra size that a window needs depends on its style.
     // This logic must be kept in sync with SDL_cocoawindow.m to be 100% accurate.
@@ -47,18 +47,15 @@ static NSSize max_window_size(Gosu::Window* window)
     }
 
     auto index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
-    auto screen_frame = NSScreen.screens[index].visibleFrame;
-    return [NSWindow contentRectForFrameRect:screen_frame styleMask:style].size;
-}
+    NSRect screen_frame = NSScreen.screens[index].visibleFrame;
+    NSRect content_rect = [NSWindow contentRectForFrameRect:screen_frame styleMask:style];
 
-int Gosu::available_width(Window* window)
-{
-    return max_window_size(window).width;
-}
-
-int Gosu::available_height(Window* window)
-{
-    return max_window_size(window).height;
+    SDL_Rect result;
+    result.x = 0;
+    result.y = 0;
+    result.w = content_rect.size.width;
+    result.h = content_rect.size.height;
+    return result;
 }
 #endif
 
@@ -156,7 +153,6 @@ static SDL_Rect max_window_size(Gosu::Window* window)
     return rect;
 }
 #endif
-
 
 int Gosu::available_width(Window* window)
 {
