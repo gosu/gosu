@@ -40,7 +40,7 @@ static NSSize max_window_size(Gosu::Window* window)
         style = NSWindowStyleMaskBorderless;
     }
     else {
-        style = (NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable);
+        style = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable;
     }
     if (window && window->resizable()) {
         style |= NSWindowStyleMaskResizable;
@@ -48,7 +48,7 @@ static NSSize max_window_size(Gosu::Window* window)
 
     auto index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
     auto screen_frame = NSScreen.screens[index].visibleFrame;
-    return[NSWindow contentRectForFrameRect : screen_frame styleMask : style].size;
+    return [NSWindow contentRectForFrameRect:screen_frame styleMask:style].size;
 }
 
 int Gosu::available_width(Window* window)
