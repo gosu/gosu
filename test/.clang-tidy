@@ -7,3 +7,4 @@ Checks: >-
   -cppcoreguidelines-owning-memory,
   -cppcoreguidelines-special-member-functions,
   -hicpp-special-member-functions,
+  -readability-function-cognitive-complexity,

@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.1.2] - 2021-02-28
+* macOS: Fixed loading of bold/italic system TTF fonts.
+
 ## [1.1.1] - 2021-02-13
 
 * Improved accuracy of `Gosu.available_width` / `Gosu.available_height`. Thanks @cyberarm!
