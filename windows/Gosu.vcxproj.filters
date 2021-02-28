@@ -276,12 +276,6 @@
     <ClCompile Include="..\src\Utility.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\UtilityApple.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\UtilityWin.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Version.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>

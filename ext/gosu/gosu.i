@@ -434,9 +434,16 @@ namespace Gosu
 
 %constant unsigned MAX_TEXTURE_SIZE = Gosu::MAX_TEXTURE_SIZE;
 
+%typemap(out) std::vector<std::string> {
+    $result = rb_ary_new2($1.size());
+    for (std::size_t i = 0; i < $1.size(); i++) {
+        rb_ary_store($result, i, rb_str_new2((*&$1)[i].c_str()));
+    }
+}
+
 namespace Gosu
 {
-    std::string language();
+    std::vector<std::string> user_languages();
     void enable_undocumented_retrofication();
 }
 

@@ -259,8 +259,6 @@
     <ClCompile Include="..\src\TrueTypeFontUnix.cpp" />
     <ClCompile Include="..\src\TrueTypeFontWin.cpp" />
     <ClCompile Include="..\src\Utility.cpp" />
-    <ClCompile Include="..\src\UtilityApple.cpp" />
-    <ClCompile Include="..\src\UtilityWin.cpp" />
     <ClCompile Include="..\src\Version.cpp" />
     <ClCompile Include="..\src\WinMain.cpp" />
     <ClCompile Include="..\src\WinUtility.cpp" />

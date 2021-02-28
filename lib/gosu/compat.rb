@@ -202,4 +202,8 @@ module Gosu
     # Also import old-style constants into Gosu::Button.
     Gosu::Button.const_set old_name, Gosu.const_get(new_name)
   end
+
+  def self.language
+    @language_cache ||= (user_languages.first || "en_US")
+  end
 end
