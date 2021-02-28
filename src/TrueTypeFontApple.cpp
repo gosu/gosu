@@ -24,8 +24,8 @@ const unsigned char* Gosu::ttf_data_by_name(const string& font_name, unsigned fo
     log("Trying to find a font named '%s', flags=%x", font_name.c_str(), font_flags);
 
     unsigned symbolic_traits = 0;
-    if (font_flags & Gosu::FF_BOLD)   symbolic_traits |= kCTFontBoldTrait;
-    if (font_flags & Gosu::FF_ITALIC) symbolic_traits |= kCTFontItalicTrait;
+    if (font_flags & Gosu::FF_BOLD)   symbolic_traits |= kCTFontTraitBold;
+    if (font_flags & Gosu::FF_ITALIC) symbolic_traits |= kCTFontTraitItalic;
 
     NSDictionary *attributes = @{
         ((__bridge id) kCTFontNameAttribute): [NSString stringWithUTF8String:font_name.c_str()],
@@ -39,6 +39,14 @@ const unsigned char* Gosu::ttf_data_by_name(const string& font_name, unsigned fo
     if (descriptor) {
         CTFontRef font = CTFontCreateWithFontDescriptorAndOptions(descriptor, 20, nullptr, 0);
         if (font) {
+            if ((CTFontGetSymbolicTraits(font) & symbolic_traits) != symbolic_traits) {
+                // For some reason the initial call to CTFontCreateWithFontDescriptorAndOptions does
+                // not respect the requested font traits. Explicitly requesting the traits again
+                // seems to help. Tested on macOS 11.2.2.
+                CTFontRef correct_font = CTFontCreateCopyWithSymbolicTraits(font, 0.0, nullptr, symbolic_traits, symbolic_traits);
+                CFRelease(font);
+                font = correct_font;
+            }
             NSURL *url = CFBridgingRelease(CTFontCopyAttribute(font, kCTFontURLAttribute));
             if (url && url.fileSystemRepresentation) {
                 log("Loading file '%s'", url.fileSystemRepresentation);
