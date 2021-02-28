@@ -6,6 +6,7 @@ Checks: >-
   -cppcoreguidelines-avoid-c-arrays,
   -cppcoreguidelines-init-variables,
   -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+  -cppcoreguidelines-pro-type-reinterpret-cast,
   -cppcoreguidelines-special-member-functions,
   -llvm-*,
   -llvmlibc-*,

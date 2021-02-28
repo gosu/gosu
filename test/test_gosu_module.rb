@@ -30,6 +30,10 @@ class TestGosuModule < Minitest::Test
   def test_misc
     assert_match(/^[a-z]{2}/, Gosu.language)
 
+    Gosu.user_languages.each do |lang|
+      assert_match(/^[a-z]{2}/, lang)
+    end
+
     # TODO: This test can cause trouble if run after other tests, which might have updated Gosu.fps.
     # assert_equal 0, Gosu.fps, "Gosu.fps should be 0 as there is nothing drawn"
 
