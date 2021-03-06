@@ -15,18 +15,18 @@ namespace Gosu
     
     //! Determines the way colors are combined when one is drawn onto
     //! another.
-    enum AlphaMode
+    enum BlendMode
     {
-        AM_DEFAULT,
+        BM_DEFAULT,
         //! The color's channels will be interpolated. The alpha channel
         //! specifies the opacity of the new color, 255 is full opacity.
-        AM_INTERPOLATE = AM_DEFAULT,
+        BM_INTERPOLATE = BM_DEFAULT,
         //! The colors' channels will be added. The alpha channel specifies
         //! the percentage of the new color's channels that will be added
         //! to the old color's channels.
-        AM_ADD,
+        BM_ADD,
         //! The color's channels will be multiplied with each other.
-        AM_MULTIPLY
+        BM_MULTIPLY
     };
     
     enum FontFlags
@@ -50,7 +50,7 @@ namespace Gosu
     {
         IF_SMOOTH = 0,
         
-        // Note: No constant for '1', but Gosu treats '1' as if_tileable for
+        // Note: No constant for '1', but Gosu treats '1' as IF_TILEABLE for
         // backward compatibility reasons (this parameter used to be a bool).
         
         IF_TILEABLE_LEFT   = 1 << 1,

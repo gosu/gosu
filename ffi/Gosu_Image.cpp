@@ -127,7 +127,7 @@ GOSU_FFI_API void Gosu_Image_gl_tex_info_destroy(Gosu_GLTexInfo* gl_tex_info)
 GOSU_FFI_API void Gosu_Image_draw(Gosu_Image* image, double x, double y, double z, double scale_x,
                                   double scale_y, unsigned color, unsigned mode)
 {
-    image->image.draw(x, y, z, scale_x, scale_y, color, static_cast<Gosu::AlphaMode>(mode));
+    image->image.draw(x, y, z, scale_x, scale_y, color, static_cast<Gosu::BlendMode>(mode));
 }
 
 GOSU_FFI_API void Gosu_Image_draw_rot(Gosu_Image* image, double x, double y, double z, double angle,
@@ -135,7 +135,7 @@ GOSU_FFI_API void Gosu_Image_draw_rot(Gosu_Image* image, double x, double y, dou
                                       double scale_y, unsigned color, unsigned mode)
 {
     image->image.draw_rot(x, y, z, angle, center_x, center_y, scale_x, scale_y, color,
-                          static_cast<Gosu::AlphaMode>(mode));
+                          static_cast<Gosu::BlendMode>(mode));
 }
 
 GOSU_FFI_API void Gosu_Image_draw_as_quad(Gosu_Image* image, double x1, double y1, unsigned color1,
@@ -144,7 +144,7 @@ GOSU_FFI_API void Gosu_Image_draw_as_quad(Gosu_Image* image, double x1, double y
                                           unsigned color4, double z, unsigned mode)
 {
     image->image.data().draw(x1, y1, color1, x2, y2, color2, x3, y3, color3, x4, y4, color4, z,
-                             static_cast<Gosu::AlphaMode>(mode));
+                             static_cast<Gosu::BlendMode>(mode));
 }
 
 // Image operations

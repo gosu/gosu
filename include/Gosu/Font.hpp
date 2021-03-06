@@ -44,11 +44,11 @@ namespace Gosu
         //! Draws text so the top left corner of the text is at (x; y).
         void draw_text(const std::string& text, double x, double y, ZPos z,
                        double scale_x = 1, double scale_y = 1, Color c = Color::WHITE,
-                       AlphaMode mode = AM_DEFAULT) const;
+                       BlendMode mode = BM_DEFAULT) const;
         //! Draws markup so the top left corner of the text is at (x; y).
         void draw_markup(const std::string& markup, double x, double y, ZPos z,
                          double scale_x = 1, double scale_y = 1, Color c = Color::WHITE,
-                         AlphaMode mode = AM_DEFAULT) const;
+                         BlendMode mode = BM_DEFAULT) const;
         
         //! Draws text at a position relative to (x; y).
         //! \param rel_x Determines where the text is drawn horizontally. If
@@ -58,7 +58,7 @@ namespace Gosu
         //! \param rel_y See rel_x.
         void draw_text_rel(const std::string& text, double x, double y, ZPos z,
                            double rel_x, double rel_y, double scale_x = 1, double scale_y = 1,
-                           Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
+                           Color c = Color::WHITE, BlendMode mode = BM_DEFAULT) const;
         //! Draws text at a position relative to (x; y).
         //! \param rel_x Determines where the text is drawn horizontally. If
         //! rel_x is 0.0, the text will be to the right of x, if it is 1.0,
@@ -67,7 +67,7 @@ namespace Gosu
         //! \param rel_y See rel_x.
         void draw_markup_rel(const std::string& markup, double x, double y, ZPos z,
                              double rel_x, double rel_y, double scale_x = 1, double scale_y = 1,
-                             Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
+                             Color c = Color::WHITE, BlendMode mode = BM_DEFAULT) const;
         
         //! Maps a letter to a specific image, instead of generating one using
         //! Gosu's built-in text rendering.

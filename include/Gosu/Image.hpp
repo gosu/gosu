@@ -49,10 +49,10 @@ namespace Gosu
 
         //! Draws the image so its upper left corner is at (x; y).
         void draw(double x, double y, ZPos z = 0, double scale_x = 1, double scale_y = 1,
-            Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
+            Color c = Color::WHITE, BlendMode mode = BM_DEFAULT) const;
         //! Like draw(), but with modulation colors for all four corners.
         void draw_mod(double x, double y, ZPos z, double scale_x, double scale_y,
-            Color c1, Color c2, Color c3, Color c4, AlphaMode mode = AM_DEFAULT) const;
+            Color c1, Color c2, Color c3, Color c4, BlendMode mode = BM_DEFAULT) const;
 
         //! Draws the image rotated by the given angle so that its rotation
         //! center is at (x; y). Note that this is different from how all the
@@ -65,7 +65,7 @@ namespace Gosu
         //! \param center_y See center_x.
         void draw_rot(double x, double y, ZPos z = 0, double angle = 0,
             double center_x = 0.5, double center_y = 0.5, double scale_x = 1, double scale_y = 1,
-            Color c = Color::WHITE, AlphaMode mode = AM_DEFAULT) const;
+            Color c = Color::WHITE, BlendMode mode = BM_DEFAULT) const;
         
         #ifndef SWIG
         //! Provides access to the underlying image data object.

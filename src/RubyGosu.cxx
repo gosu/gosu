@@ -2353,7 +2353,7 @@ namespace Gosu
 {
     void draw_line(double x1, double y1, Gosu::Color c1,
                    double x2, double y2, Gosu::Color c2,
-                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
+                   Gosu::ZPos z = 0, Gosu::BlendMode mode = Gosu::BM_DEFAULT)
     {
         Gosu::Graphics::draw_line(x1, y1, c1, x2, y2, c2, z, mode);
     }
@@ -2361,7 +2361,7 @@ namespace Gosu
     void draw_triangle(double x1, double y1, Gosu::Color c1,
                        double x2, double y2, Gosu::Color c2,
                        double x3, double y3, Gosu::Color c3,
-                       Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
+                       Gosu::ZPos z = 0, Gosu::BlendMode mode = Gosu::BM_DEFAULT)
     {
         Gosu::Graphics::draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z, mode);
     }
@@ -2370,13 +2370,13 @@ namespace Gosu
                    double x2, double y2, Gosu::Color c2,
                    double x3, double y3, Gosu::Color c3,
                    double x4, double y4, Gosu::Color c4,
-                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
+                   Gosu::ZPos z = 0, Gosu::BlendMode mode = Gosu::BM_DEFAULT)
     {
         Gosu::Graphics::draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
     }
     
     void draw_rect(double x, double y, double width, double height, Gosu::Color c,
-                   Gosu::ZPos z = 0, Gosu::AlphaMode mode = Gosu::AM_DEFAULT)
+                   Gosu::ZPos z = 0, Gosu::BlendMode mode = Gosu::BM_DEFAULT)
     {
         Gosu::Graphics::draw_rect(x, y, width, height, c, z, mode);
     }
@@ -2923,7 +2923,7 @@ SWIGINTERN Gosu::Image *new_Gosu_Image(VALUE source,VALUE options=0){
         
         return new Gosu::Image(bmp, src_x, src_y, src_width, src_height, flags);
     }
-SWIGINTERN void Gosu_Image_draw_as_quad(Gosu::Image *self,double x1,double y1,Gosu::Color c1,double x2,double y2,Gosu::Color c2,double x3,double y3,Gosu::Color c3,double x4,double y4,Gosu::Color c4,Gosu::ZPos z,Gosu::AlphaMode mode=Gosu::AM_DEFAULT){
+SWIGINTERN void Gosu_Image_draw_as_quad(Gosu::Image *self,double x1,double y1,Gosu::Color c1,double x2,double y2,Gosu::Color c2,double x3,double y3,Gosu::Color c3,double x4,double y4,Gosu::Color c4,Gosu::ZPos z,Gosu::BlendMode mode=Gosu::BM_DEFAULT){
         self->data().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
     }
 SWIGINTERN Gosu::GLTexInfo *Gosu_Image_gl_tex_info(Gosu::Image const *self){
@@ -5375,7 +5375,7 @@ _wrap_Font_draw_text(int argc, VALUE *argv, VALUE self) {
   double arg6 = (double) 1 ;
   double arg7 = (double) 1 ;
   Gosu::Color arg8 = (Gosu::Color) Gosu::Color::WHITE ;
-  Gosu::AlphaMode arg9 = (Gosu::AlphaMode) Gosu::AM_DEFAULT ;
+  Gosu::BlendMode arg9 = (Gosu::BlendMode) Gosu::BM_DEFAULT ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
@@ -5463,16 +5463,16 @@ _wrap_Font_draw_text(int argc, VALUE *argv, VALUE self) {
       const char* cstr = Gosu::cstr_from_symbol(argv[7]);
       
       if (!strcmp(cstr, "default")) {
-        arg9 = Gosu::AM_DEFAULT;
+        arg9 = Gosu::BM_DEFAULT;
       }
       else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive")) {
-        arg9 = Gosu::AM_ADD;
+        arg9 = Gosu::BM_ADD;
       }
       else if (!strcmp(cstr, "multiply")) {
-        arg9 = Gosu::AM_MULTIPLY;
+        arg9 = Gosu::BM_MULTIPLY;
       }
       else {
-        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
+        SWIG_exception_fail(SWIG_ValueError, "invalid blend mode (expected one of :default, :add, "
           ":multiply)");
       }
     }
@@ -5503,7 +5503,7 @@ _wrap_Font_draw_markup(int argc, VALUE *argv, VALUE self) {
   double arg6 = (double) 1 ;
   double arg7 = (double) 1 ;
   Gosu::Color arg8 = (Gosu::Color) Gosu::Color::WHITE ;
-  Gosu::AlphaMode arg9 = (Gosu::AlphaMode) Gosu::AM_DEFAULT ;
+  Gosu::BlendMode arg9 = (Gosu::BlendMode) Gosu::BM_DEFAULT ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
@@ -5591,16 +5591,16 @@ _wrap_Font_draw_markup(int argc, VALUE *argv, VALUE self) {
       const char* cstr = Gosu::cstr_from_symbol(argv[7]);
       
       if (!strcmp(cstr, "default")) {
-        arg9 = Gosu::AM_DEFAULT;
+        arg9 = Gosu::BM_DEFAULT;
       }
       else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive")) {
-        arg9 = Gosu::AM_ADD;
+        arg9 = Gosu::BM_ADD;
       }
       else if (!strcmp(cstr, "multiply")) {
-        arg9 = Gosu::AM_MULTIPLY;
+        arg9 = Gosu::BM_MULTIPLY;
       }
       else {
-        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
+        SWIG_exception_fail(SWIG_ValueError, "invalid blend mode (expected one of :default, :add, "
           ":multiply)");
       }
     }
@@ -5633,7 +5633,7 @@ _wrap_Font_draw_text_rel(int argc, VALUE *argv, VALUE self) {
   double arg8 = (double) 1 ;
   double arg9 = (double) 1 ;
   Gosu::Color arg10 = (Gosu::Color) Gosu::Color::WHITE ;
-  Gosu::AlphaMode arg11 = (Gosu::AlphaMode) Gosu::AM_DEFAULT ;
+  Gosu::BlendMode arg11 = (Gosu::BlendMode) Gosu::BM_DEFAULT ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
@@ -5735,16 +5735,16 @@ _wrap_Font_draw_text_rel(int argc, VALUE *argv, VALUE self) {
       const char* cstr = Gosu::cstr_from_symbol(argv[9]);
       
       if (!strcmp(cstr, "default")) {
-        arg11 = Gosu::AM_DEFAULT;
+        arg11 = Gosu::BM_DEFAULT;
       }
       else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive")) {
-        arg11 = Gosu::AM_ADD;
+        arg11 = Gosu::BM_ADD;
       }
       else if (!strcmp(cstr, "multiply")) {
-        arg11 = Gosu::AM_MULTIPLY;
+        arg11 = Gosu::BM_MULTIPLY;
       }
       else {
-        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
+        SWIG_exception_fail(SWIG_ValueError, "invalid blend mode (expected one of :default, :add, "
           ":multiply)");
       }
     }
@@ -5777,7 +5777,7 @@ _wrap_Font_draw_markup_rel(int argc, VALUE *argv, VALUE self) {
   double arg8 = (double) 1 ;
   double arg9 = (double) 1 ;
   Gosu::Color arg10 = (Gosu::Color) Gosu::Color::WHITE ;
-  Gosu::AlphaMode arg11 = (Gosu::AlphaMode) Gosu::AM_DEFAULT ;
+  Gosu::BlendMode arg11 = (Gosu::BlendMode) Gosu::BM_DEFAULT ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int res2 = SWIG_OLDOBJ ;
@@ -5879,16 +5879,16 @@ _wrap_Font_draw_markup_rel(int argc, VALUE *argv, VALUE self) {
       const char* cstr = Gosu::cstr_from_symbol(argv[9]);
       
       if (!strcmp(cstr, "default")) {
-        arg11 = Gosu::AM_DEFAULT;
+        arg11 = Gosu::BM_DEFAULT;
       }
       else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive")) {
-        arg11 = Gosu::AM_ADD;
+        arg11 = Gosu::BM_ADD;
       }
       else if (!strcmp(cstr, "multiply")) {
-        arg11 = Gosu::AM_MULTIPLY;
+        arg11 = Gosu::BM_MULTIPLY;
       }
       else {
-        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
+        SWIG_exception_fail(SWIG_ValueError, "invalid blend mode (expected one of :default, :add, "
           ":multiply)");
       }
     }
@@ -6627,7 +6627,7 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
   double arg5 = (double) 1 ;
   double arg6 = (double) 1 ;
   Gosu::Color arg7 = (Gosu::Color) Gosu::Color::WHITE ;
-  Gosu::AlphaMode arg8 = (Gosu::AlphaMode) Gosu::AM_DEFAULT ;
+  Gosu::BlendMode arg8 = (Gosu::BlendMode) Gosu::BM_DEFAULT ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   double val2 ;
@@ -6705,16 +6705,16 @@ _wrap_Image_draw(int argc, VALUE *argv, VALUE self) {
       const char* cstr = Gosu::cstr_from_symbol(argv[6]);
       
       if (!strcmp(cstr, "default")) {
-        arg8 = Gosu::AM_DEFAULT;
+        arg8 = Gosu::BM_DEFAULT;
       }
       else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive")) {
-        arg8 = Gosu::AM_ADD;
+        arg8 = Gosu::BM_ADD;
       }
       else if (!strcmp(cstr, "multiply")) {
-        arg8 = Gosu::AM_MULTIPLY;
+        arg8 = Gosu::BM_MULTIPLY;
       }
       else {
-        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
+        SWIG_exception_fail(SWIG_ValueError, "invalid blend mode (expected one of :default, :add, "
           ":multiply)");
       }
     }
@@ -6745,7 +6745,7 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
   Gosu::Color arg8 ;
   Gosu::Color arg9 ;
   Gosu::Color arg10 ;
-  Gosu::AlphaMode arg11 = (Gosu::AlphaMode) Gosu::AM_DEFAULT ;
+  Gosu::BlendMode arg11 = (Gosu::BlendMode) Gosu::BM_DEFAULT ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   double val2 ;
@@ -6869,16 +6869,16 @@ _wrap_Image_draw_mod(int argc, VALUE *argv, VALUE self) {
       const char* cstr = Gosu::cstr_from_symbol(argv[9]);
       
       if (!strcmp(cstr, "default")) {
-        arg11 = Gosu::AM_DEFAULT;
+        arg11 = Gosu::BM_DEFAULT;
       }
       else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive")) {
-        arg11 = Gosu::AM_ADD;
+        arg11 = Gosu::BM_ADD;
       }
       else if (!strcmp(cstr, "multiply")) {
-        arg11 = Gosu::AM_MULTIPLY;
+        arg11 = Gosu::BM_MULTIPLY;
       }
       else {
-        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
+        SWIG_exception_fail(SWIG_ValueError, "invalid blend mode (expected one of :default, :add, "
           ":multiply)");
       }
     }
@@ -6909,7 +6909,7 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
   double arg8 = (double) 1 ;
   double arg9 = (double) 1 ;
   Gosu::Color arg10 = (Gosu::Color) Gosu::Color::WHITE ;
-  Gosu::AlphaMode arg11 = (Gosu::AlphaMode) Gosu::AM_DEFAULT ;
+  Gosu::BlendMode arg11 = (Gosu::BlendMode) Gosu::BM_DEFAULT ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   double val2 ;
@@ -7014,16 +7014,16 @@ _wrap_Image_draw_rot(int argc, VALUE *argv, VALUE self) {
       const char* cstr = Gosu::cstr_from_symbol(argv[9]);
       
       if (!strcmp(cstr, "default")) {
-        arg11 = Gosu::AM_DEFAULT;
+        arg11 = Gosu::BM_DEFAULT;
       }
       else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive")) {
-        arg11 = Gosu::AM_ADD;
+        arg11 = Gosu::BM_ADD;
       }
       else if (!strcmp(cstr, "multiply")) {
-        arg11 = Gosu::AM_MULTIPLY;
+        arg11 = Gosu::BM_MULTIPLY;
       }
       else {
-        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
+        SWIG_exception_fail(SWIG_ValueError, "invalid blend mode (expected one of :default, :add, "
           ":multiply)");
       }
     }
@@ -7103,7 +7103,7 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
   double arg12 ;
   Gosu::Color arg13 ;
   Gosu::ZPos arg14 ;
-  Gosu::AlphaMode arg15 = (Gosu::AlphaMode) Gosu::AM_DEFAULT ;
+  Gosu::BlendMode arg15 = (Gosu::BlendMode) Gosu::BM_DEFAULT ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   double val2 ;
@@ -7255,16 +7255,16 @@ _wrap_Image_draw_as_quad(int argc, VALUE *argv, VALUE self) {
       const char* cstr = Gosu::cstr_from_symbol(argv[13]);
       
       if (!strcmp(cstr, "default")) {
-        arg15 = Gosu::AM_DEFAULT;
+        arg15 = Gosu::BM_DEFAULT;
       }
       else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive")) {
-        arg15 = Gosu::AM_ADD;
+        arg15 = Gosu::BM_ADD;
       }
       else if (!strcmp(cstr, "multiply")) {
-        arg15 = Gosu::AM_MULTIPLY;
+        arg15 = Gosu::BM_MULTIPLY;
       }
       else {
-        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
+        SWIG_exception_fail(SWIG_ValueError, "invalid blend mode (expected one of :default, :add, "
           ":multiply)");
       }
     }
@@ -10989,7 +10989,7 @@ _wrap_draw_line(int argc, VALUE *argv, VALUE self) {
   double arg5 ;
   Gosu::Color arg6 ;
   Gosu::ZPos arg7 = (Gosu::ZPos) 0 ;
-  Gosu::AlphaMode arg8 = (Gosu::AlphaMode) Gosu::AM_DEFAULT ;
+  Gosu::BlendMode arg8 = (Gosu::BlendMode) Gosu::BM_DEFAULT ;
   double val1 ;
   int ecode1 = 0 ;
   double val2 ;
@@ -11072,16 +11072,16 @@ _wrap_draw_line(int argc, VALUE *argv, VALUE self) {
       const char* cstr = Gosu::cstr_from_symbol(argv[7]);
       
       if (!strcmp(cstr, "default")) {
-        arg8 = Gosu::AM_DEFAULT;
+        arg8 = Gosu::BM_DEFAULT;
       }
       else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive")) {
-        arg8 = Gosu::AM_ADD;
+        arg8 = Gosu::BM_ADD;
       }
       else if (!strcmp(cstr, "multiply")) {
-        arg8 = Gosu::AM_MULTIPLY;
+        arg8 = Gosu::BM_MULTIPLY;
       }
       else {
-        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
+        SWIG_exception_fail(SWIG_ValueError, "invalid blend mode (expected one of :default, :add, "
           ":multiply)");
       }
     }
@@ -11112,7 +11112,7 @@ _wrap_draw_triangle(int argc, VALUE *argv, VALUE self) {
   double arg8 ;
   Gosu::Color arg9 ;
   Gosu::ZPos arg10 = (Gosu::ZPos) 0 ;
-  Gosu::AlphaMode arg11 = (Gosu::AlphaMode) Gosu::AM_DEFAULT ;
+  Gosu::BlendMode arg11 = (Gosu::BlendMode) Gosu::BM_DEFAULT ;
   double val1 ;
   int ecode1 = 0 ;
   double val2 ;
@@ -11227,16 +11227,16 @@ _wrap_draw_triangle(int argc, VALUE *argv, VALUE self) {
       const char* cstr = Gosu::cstr_from_symbol(argv[10]);
       
       if (!strcmp(cstr, "default")) {
-        arg11 = Gosu::AM_DEFAULT;
+        arg11 = Gosu::BM_DEFAULT;
       }
       else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive")) {
-        arg11 = Gosu::AM_ADD;
+        arg11 = Gosu::BM_ADD;
       }
       else if (!strcmp(cstr, "multiply")) {
-        arg11 = Gosu::AM_MULTIPLY;
+        arg11 = Gosu::BM_MULTIPLY;
       }
       else {
-        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
+        SWIG_exception_fail(SWIG_ValueError, "invalid blend mode (expected one of :default, :add, "
           ":multiply)");
       }
     }
@@ -11270,7 +11270,7 @@ _wrap_draw_quad(int argc, VALUE *argv, VALUE self) {
   double arg11 ;
   Gosu::Color arg12 ;
   Gosu::ZPos arg13 = (Gosu::ZPos) 0 ;
-  Gosu::AlphaMode arg14 = (Gosu::AlphaMode) Gosu::AM_DEFAULT ;
+  Gosu::BlendMode arg14 = (Gosu::BlendMode) Gosu::BM_DEFAULT ;
   double val1 ;
   int ecode1 = 0 ;
   double val2 ;
@@ -11417,16 +11417,16 @@ _wrap_draw_quad(int argc, VALUE *argv, VALUE self) {
       const char* cstr = Gosu::cstr_from_symbol(argv[13]);
       
       if (!strcmp(cstr, "default")) {
-        arg14 = Gosu::AM_DEFAULT;
+        arg14 = Gosu::BM_DEFAULT;
       }
       else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive")) {
-        arg14 = Gosu::AM_ADD;
+        arg14 = Gosu::BM_ADD;
       }
       else if (!strcmp(cstr, "multiply")) {
-        arg14 = Gosu::AM_MULTIPLY;
+        arg14 = Gosu::BM_MULTIPLY;
       }
       else {
-        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
+        SWIG_exception_fail(SWIG_ValueError, "invalid blend mode (expected one of :default, :add, "
           ":multiply)");
       }
     }
@@ -11453,7 +11453,7 @@ _wrap_draw_rect(int argc, VALUE *argv, VALUE self) {
   double arg4 ;
   Gosu::Color arg5 ;
   Gosu::ZPos arg6 = (Gosu::ZPos) 0 ;
-  Gosu::AlphaMode arg7 = (Gosu::AlphaMode) Gosu::AM_DEFAULT ;
+  Gosu::BlendMode arg7 = (Gosu::BlendMode) Gosu::BM_DEFAULT ;
   double val1 ;
   int ecode1 = 0 ;
   double val2 ;
@@ -11518,16 +11518,16 @@ _wrap_draw_rect(int argc, VALUE *argv, VALUE self) {
       const char* cstr = Gosu::cstr_from_symbol(argv[6]);
       
       if (!strcmp(cstr, "default")) {
-        arg7 = Gosu::AM_DEFAULT;
+        arg7 = Gosu::BM_DEFAULT;
       }
       else if (!strcmp(cstr, "add") || !strcmp(cstr, "additive")) {
-        arg7 = Gosu::AM_ADD;
+        arg7 = Gosu::BM_ADD;
       }
       else if (!strcmp(cstr, "multiply")) {
-        arg7 = Gosu::AM_MULTIPLY;
+        arg7 = Gosu::BM_MULTIPLY;
       }
       else {
-        SWIG_exception_fail(SWIG_ValueError, "invalid alpha mode (expected one of :default, :add, "
+        SWIG_exception_fail(SWIG_ValueError, "invalid blend mode (expected one of :default, :add, "
           ":multiply)");
       }
     }

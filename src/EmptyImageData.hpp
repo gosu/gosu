@@ -22,7 +22,7 @@ namespace Gosu
                   double, double, Color,
                   double, double, Color,
                   double, double, Color,
-                  ZPos, AlphaMode) const override
+                  ZPos, BlendMode) const override
         {
         }
         

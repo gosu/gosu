@@ -41,7 +41,7 @@ GOSU_FFI_API void Gosu_Font_draw_text(Gosu_Font* font, const char* text, double 
                                       double z, double scale_x, double scale_y, unsigned c,
                                       unsigned mode)
 {
-    font->font.draw_text(text, x, y, z, scale_x, scale_y, c, static_cast<Gosu::AlphaMode>(mode));
+    font->font.draw_text(text, x, y, z, scale_x, scale_y, c, static_cast<Gosu::BlendMode>(mode));
 }
 
 GOSU_FFI_API void Gosu_Font_draw_markup(Gosu_Font* font, const char* markup, double x, double y,
@@ -49,7 +49,7 @@ GOSU_FFI_API void Gosu_Font_draw_markup(Gosu_Font* font, const char* markup, dou
                                         unsigned mode)
 {
     font->font.draw_markup(markup, x, y, z, scale_x, scale_y, c,
-                           static_cast<Gosu::AlphaMode>(mode));
+                           static_cast<Gosu::BlendMode>(mode));
 }
 
 GOSU_FFI_API void Gosu_Font_draw_text_rel(Gosu_Font* font, const char* text, double x, double y,
@@ -57,7 +57,7 @@ GOSU_FFI_API void Gosu_Font_draw_text_rel(Gosu_Font* font, const char* text, dou
                                           double scale_y, unsigned c, unsigned mode)
 {
     font->font.draw_text_rel(text, x, y, z, rel_x, rel_y, scale_x, scale_y, c,
-                             static_cast<Gosu::AlphaMode>(mode));
+                             static_cast<Gosu::BlendMode>(mode));
 }
 
 GOSU_FFI_API void Gosu_Font_draw_markup_rel(Gosu_Font* font, const char* markup, double x, double y,
@@ -65,7 +65,7 @@ GOSU_FFI_API void Gosu_Font_draw_markup_rel(Gosu_Font* font, const char* markup,
                                             double scale_y, unsigned c, unsigned mode)
 {
     font->font.draw_markup_rel(markup, x, y, z, rel_x, rel_y, scale_x, scale_y, c,
-                               static_cast<Gosu::AlphaMode>(mode));
+                               static_cast<Gosu::BlendMode>(mode));
 }
 
 GOSU_FFI_API void Gosu_Font_set_image(Gosu_Font* font, const char* codepoint, unsigned font_flags,
