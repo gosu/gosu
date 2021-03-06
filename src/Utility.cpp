@@ -1,6 +1,6 @@
 #include <Gosu/Utility.hpp>
 
-#include <SDL_locale.h>
+#include <SDL.h>
 #include <utf8proc.h>
 
 #include <cstring>
@@ -66,6 +66,7 @@ bool Gosu::has_extension(std::string_view filename, std::string_view extension)
     return true;
 }
 
+#if SDL_VERSION_ATLEAST(2, 0, 14)
 std::vector<std::string> Gosu::user_languages()
 {
     std::vector<std::string> user_languages;
@@ -84,3 +85,20 @@ std::vector<std::string> Gosu::user_languages()
 
     return user_languages;
 }
+#else
+#include <cstdlib>
+#include <regex>
+
+std::vector<std::string> Gosu::user_languages()
+{
+    static const std::regex language_regex{"[a-z]{2}_[A-Z]{2}([^A-Z].*)?"};
+
+    const char* locale = std::getenv("LANG");
+
+    if (locale && std::regex_match(locale, language_regex)) {
+        return {std::string{locale, locale + 5}};
+    }
+
+    return {};
+}
+#endif
