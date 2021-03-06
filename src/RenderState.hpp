@@ -10,10 +10,10 @@ struct Gosu::RenderState
     std::shared_ptr<Texture> texture;
     const Transform* transform;
     ClipRect clip_rect;
-    AlphaMode mode;
+    BlendMode mode;
     
     RenderState()
-    : transform(0), mode(AM_DEFAULT)
+    : transform(0), mode(BM_DEFAULT)
     {
         clip_rect.width = NO_CLIPPING;
     }
@@ -39,10 +39,10 @@ struct Gosu::RenderState
     
     void apply_alpha_mode() const
     {
-        if (mode == AM_ADD) {
+        if (mode == BM_ADD) {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
         }
-        else if (mode == AM_MULTIPLY) {
+        else if (mode == BM_MULTIPLY) {
             glBlendFunc(GL_DST_COLOR, GL_ZERO);
         }
         else {
@@ -174,7 +174,7 @@ public:
         }
     }
     
-    void set_alpha_mode(AlphaMode new_mode)
+    void set_alpha_mode(BlendMode new_mode)
     {
         if (new_mode == mode) return;
         

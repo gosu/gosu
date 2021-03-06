@@ -112,13 +112,13 @@ double Gosu::Font::markup_width(const string& markup) const
 }
 
 void Gosu::Font::draw_text(const string& text, double x, double y, ZPos z,
-                           double scale_x, double scale_y, Color c, AlphaMode mode) const
+                           double scale_x, double scale_y, Color c, BlendMode mode) const
 {
     draw_markup(escape_markup(text), x, y, z, scale_x, scale_y, c, mode);
 }
 
 void Gosu::Font::draw_markup(const string& markup, double x, double y, ZPos z,
-                             double scale_x, double scale_y, Color c, AlphaMode mode) const
+                             double scale_x, double scale_y, Color c, BlendMode mode) const
 {
     double current_y = y;
     
@@ -142,7 +142,7 @@ void Gosu::Font::draw_markup(const string& markup, double x, double y, ZPos z,
 
 void Gosu::Font::draw_text_rel(const string& text, double x, double y, ZPos z,
                                double rel_x, double rel_y, double scale_x, double scale_y,
-                               Color c, AlphaMode mode) const
+                               Color c, BlendMode mode) const
 {
     if (rel_x) x -= text_width(text) * scale_x * rel_x;
     if (rel_y) y -= height() * scale_y * rel_y;
@@ -152,7 +152,7 @@ void Gosu::Font::draw_text_rel(const string& text, double x, double y, ZPos z,
 
 void Gosu::Font::draw_markup_rel(const string& markup, double x, double y, ZPos z,
                                  double rel_x, double rel_y, double scale_x, double scale_y,
-                                 Color c, AlphaMode mode) const
+                                 Color c, BlendMode mode) const
 {
     if (rel_x) x -= markup_width(markup) * scale_x * rel_x;
     if (rel_y) y -= height() * scale_y * rel_y;

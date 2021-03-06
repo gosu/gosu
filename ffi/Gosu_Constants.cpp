@@ -21,10 +21,10 @@ GOSU_FFI_API const unsigned Gosu_WF_RESIZABLE = Gosu::WF_RESIZABLE;
 GOSU_FFI_API const unsigned Gosu_WF_BORDERLESS = Gosu::WF_BORDERLESS;
 
 // Alpha/Blend Modes
-GOSU_FFI_API const unsigned Gosu_AM_DEFAULT = Gosu::AM_DEFAULT;
-GOSU_FFI_API const unsigned Gosu_AM_INTERPOLATE = Gosu::AM_INTERPOLATE;
-GOSU_FFI_API const unsigned Gosu_AM_ADD = Gosu::AM_ADD;
-GOSU_FFI_API const unsigned Gosu_AM_MULTIPLY = Gosu::AM_MULTIPLY;
+GOSU_FFI_API const unsigned Gosu_BM_DEFAULT = Gosu::BM_DEFAULT;
+GOSU_FFI_API const unsigned Gosu_BM_INTERPOLATE = Gosu::BM_INTERPOLATE;
+GOSU_FFI_API const unsigned Gosu_BM_ADD = Gosu::BM_ADD;
+GOSU_FFI_API const unsigned Gosu_BM_MULTIPLY = Gosu::BM_MULTIPLY;
 
 // Font Flags
 GOSU_FFI_API const unsigned Gosu_FF_BOLD = Gosu::FF_BOLD;

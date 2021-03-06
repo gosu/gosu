@@ -330,7 +330,7 @@ void Gosu::Graphics::transform(const Gosu::Transform& transform, const function<
 }
 
 void Gosu::Graphics::draw_line(double x1, double y1, Color c1,
-    double x2, double y2, Color c2, ZPos z, AlphaMode mode)
+    double x2, double y2, Color c2, ZPos z, BlendMode mode)
 {
     DrawOp op;
     op.render_state.mode = mode;
@@ -343,7 +343,7 @@ void Gosu::Graphics::draw_line(double x1, double y1, Color c1,
 }
 
 void Gosu::Graphics::draw_triangle(double x1, double y1, Color c1, double x2, double y2, Color c2,
-    double x3, double y3, Color c3, ZPos z, AlphaMode mode)
+    double x3, double y3, Color c3, ZPos z, BlendMode mode)
 {
     DrawOp op;
     op.render_state.mode = mode;
@@ -361,7 +361,7 @@ void Gosu::Graphics::draw_triangle(double x1, double y1, Color c1, double x2, do
 }
 
 void Gosu::Graphics::draw_quad(double x1, double y1, Color c1, double x2, double y2, Color c2,
-    double x3, double y3, Color c3, double x4, double y4, Color c4, ZPos z, AlphaMode mode)
+    double x3, double y3, Color c3, double x4, double y4, Color c4, ZPos z, BlendMode mode)
 {
     normalize_coordinates(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
@@ -384,7 +384,7 @@ void Gosu::Graphics::draw_quad(double x1, double y1, Color c1, double x2, double
 }
 
 void Gosu::Graphics::draw_rect(double x, double y, double width, double height, Color c,
-                               ZPos z, Gosu::AlphaMode mode)
+                               ZPos z, Gosu::BlendMode mode)
 {
     draw_quad(x, y, c, x + width, y, c, x, y + height, c, x + width, y + height, c, z, mode);
 }
