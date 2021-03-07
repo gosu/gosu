@@ -20,7 +20,7 @@ GOSU_FFI_API const unsigned Gosu_WF_FULLSCREEN = Gosu::WF_FULLSCREEN;
 GOSU_FFI_API const unsigned Gosu_WF_RESIZABLE = Gosu::WF_RESIZABLE;
 GOSU_FFI_API const unsigned Gosu_WF_BORDERLESS = Gosu::WF_BORDERLESS;
 
-// Alpha/Blend Modes
+// Blend Modes
 GOSU_FFI_API const unsigned Gosu_BM_DEFAULT = Gosu::BM_DEFAULT;
 GOSU_FFI_API const unsigned Gosu_BM_INTERPOLATE = Gosu::BM_INTERPOLATE;
 GOSU_FFI_API const unsigned Gosu_BM_ADD = Gosu::BM_ADD;
