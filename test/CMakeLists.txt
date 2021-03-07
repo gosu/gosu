@@ -5,7 +5,7 @@ if(GTest_FOUND)
 
     file(GLOB TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
     add_executable(GosuTests ${TEST_FILES})
-    target_link_libraries(GosuTests Gosu::Gosu GTest::gtest GTest::gtest_main)
+    target_link_libraries(GosuTests Gosu::Gosu gosu-ffi GTest::gtest GTest::gtest_main)
 
     # Run the tests from within the test/ subdirectory so that we can load
     # media files using relative paths.

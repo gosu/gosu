@@ -11,6 +11,9 @@
 #include "Gosu_Window.h"
 #include <stdint.h>
 
+// Error reporting
+GOSU_FFI_API const char* Gosu_last_error(void);
+
 // Graphics operations
 GOSU_FFI_API void Gosu_gl_z(double z, void function(void* data), void* data);
 GOSU_FFI_API void Gosu_gl(void function(void* data), void* data);

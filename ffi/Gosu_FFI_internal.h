@@ -6,6 +6,27 @@
 
 #include "Gosu.h"
 #include <Gosu/Gosu.hpp>
+#include <stdexcept>
+
+// Error handling
+
+std::string& Gosu_internal_error();
+
+template<typename Functor>
+auto Gosu_translate_exceptions(Functor functor)
+{
+    try {
+        Gosu_internal_error().clear();
+        return functor();
+    }
+    catch (const std::exception& e) {
+        Gosu_internal_error() = e.what();
+        using R = decltype(functor());
+        return R();
+    }
+}
+
+// C-compatible wrapper structs for Gosu classes
 
 struct Gosu_Channel
 {
@@ -26,6 +47,8 @@ struct Gosu_Sample
 {
     Gosu::Sample sample;
 };
+
+// Use inheritance where composition is not feasible
 
 struct Gosu_Song : Gosu::Song
 {
