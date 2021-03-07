@@ -71,7 +71,7 @@ GOSU_FFI_API double Gosu_axis(int id);
 
 // Misc
 GOSU_FFI_API int Gosu_fps(void);
-GOSU_FFI_API void Gosu_get_user_languages(void function(void* data, const char* language),
-                                          void* data);
+GOSU_FFI_API void Gosu_user_languages(void function(void* data, const char* language),
+                                      void* data);
 GOSU_FFI_API uint64_t Gosu_milliseconds(void);
 GOSU_FFI_API const char* Gosu_default_font_name(void);

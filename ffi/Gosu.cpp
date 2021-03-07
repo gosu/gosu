@@ -181,7 +181,7 @@ GOSU_FFI_API int Gosu_fps()
     return Gosu::fps();
 }
 
-GOSU_FFI_API void Gosu_get_user_languages(void function(void*, const char*), void* data)
+GOSU_FFI_API void Gosu_user_languages(void function(void*, const char*), void* data)
 {
     for (const std::string& user_language : Gosu::user_languages()) {
         function(data, user_language.c_str());
