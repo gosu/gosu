@@ -258,7 +258,7 @@ GOSU_FFI_API int Gosu_fps()
     });
 }
 
-GOSU_FFI_API void Gosu_get_user_languages(void function(void*, const char*), void* data)
+GOSU_FFI_API void Gosu_user_languages(void function(void*, const char*), void* data)
 {
     Gosu_translate_exceptions([=] {
         for (const std::string& user_language : Gosu::user_languages()) {

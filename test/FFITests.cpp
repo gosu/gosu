@@ -12,7 +12,7 @@ namespace Gosu
     {
         std::vector<std::string> ffi_languages;
 
-        Gosu_get_user_languages([](void* context, const char* language) {
+        Gosu_user_languages([](void* context, const char* language) {
             static_cast<decltype(ffi_languages)*>(context)->emplace_back(language);
         }, &ffi_languages);
 
