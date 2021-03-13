@@ -200,6 +200,13 @@ GOSU_FFI_API int Gosu_screen_height(Gosu_Window* window)
     });
 }
 
+GOSU_FFI_API double Gosu_dpi(Gosu_Window* window)
+{
+    return Gosu_translate_exceptions([=] {
+        return Gosu::dpi(window);
+    });
+}
+
 GOSU_FFI_API int Gosu_button_down(int id)
 {
     return Gosu_translate_exceptions([=] {

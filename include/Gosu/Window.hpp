@@ -161,4 +161,7 @@ namespace Gosu
     //! \param window The result describes the screen on which the window is shown, or the
     //!               primary screen if no window is given.
     int available_height(Window* window = nullptr);
+
+    //! Returns the DPI
+    double dpi(Window* window = nullptr);
 }

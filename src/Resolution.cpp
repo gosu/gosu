@@ -28,6 +28,20 @@ int Gosu::screen_height(Window* window)
     return display_mode(window).h;
 }
 
+double Gosu::dpi(Window* window)
+{
+    static struct VideoSubsystem {
+        VideoSubsystem()  { SDL_InitSubSystem(SDL_INIT_VIDEO); };
+        ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
+    } subsystem;
+
+    float diagonal, horizontal, vertical;
+    int index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
+    int status = SDL_GetDisplayDPI(index, &diagonal, &horizontal, &vertical);
+
+    return status < 0 ? 96 : diagonal;
+}
+
 #ifdef GOSU_IS_MAC
 #import <AppKit/AppKit.h>
 
