@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.2.0] - 2021-02-28
+## [1.2.0] - 2021-03-18
 * Gosu.language() is deprecated, please use Gosu.user_languages() instead. 
 * macOS: Fixed loading of bold/italic system TTF fonts.
 
