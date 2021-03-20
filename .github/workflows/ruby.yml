@@ -1,0 +1,49 @@
+name: Ruby
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest, macos-latest]
+        ruby-version: ['2.6', '2.7', '3.0']
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies (Ubuntu)
+        if: matrix.platform == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libgl1-mesa-dev libopenal-dev libgmp-dev libfontconfig1-dev pulseaudio
+
+      - name: Set up pulseaudio
+        if: matrix.platform == 'ubuntu-latest'
+        run: sudo usermod -a -G audio $USER
+
+      - name: Install dependencies (macOS)
+        if: matrix.platform == 'macos-latest'
+        run: brew install sdl2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: false # runs 'bundle install' and caches installed gems automatically
+
+      - name: Install dependencies
+        run: gem install rake-compiler minitest --no-doc
+
+      - name: Install Ruby/Gosu
+        run: GOSU_RELEASE_VERSION=9.9.9 rake gem && gem install pkg/gosu-9.9.9.gem --no-doc
+
+      - name: Run tests (Linux)
+        if: matrix.platform == 'ubuntu-latest'
+        run: sg audio "rake -rgosu test"
+
+      - name: Run tests (macOS)
+        if: matrix.platform == 'macos-latest'
+        run: rake -rgosu test
