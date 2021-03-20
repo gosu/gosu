@@ -48,14 +48,10 @@ module TestHelper
     skip if ENV["APPVEYOR"]
   end
 
-  def skip_on_travis
-    skip if ENV["TRAVIS"]
+  def skip_on_github
+    skip if ENV["GITHUB_WORKFLOW"]
   end
 
-  def skip_on_ci
-    skip if ENV["APPVEYOR"] or ENV["TRAVIS"]
-  end
-  
   def actual_from_expected_filename(expected)
     actual_basename = File.basename(expected, ".png") + ".actual.png"
     File.join(File.dirname(expected), actual_basename)

@@ -9,6 +9,7 @@ class TestAudio < Minitest::Test
   
   def test_sample
     skip_on_appveyor
+    skip_on_github
 
     sound = Gosu::Sample.new(media_path("0614.ogg"))
     channel = sound.play(1, 1, true)
@@ -66,6 +67,7 @@ class TestAudio < Minitest::Test
   
   def test_song
     skip_on_appveyor
+    skip_on_github
 
     win = SongTestWindow.new
     

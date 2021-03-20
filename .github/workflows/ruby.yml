@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         platform: [ubuntu-latest, macos-latest]
-        ruby-version: ['2.6', '2.7', '3.0']
+        ruby-version: ['2.6', '3.0']
     runs-on: ${{ matrix.platform }}
 
     steps:
@@ -18,7 +18,7 @@ jobs:
 
       - name: Install dependencies (Ubuntu)
         if: matrix.platform == 'ubuntu-latest'
-        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libgl1-mesa-dev libopenal-dev libgmp-dev libfontconfig1-dev pulseaudio
+        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libgl1-mesa-dev libopenal-dev libgmp-dev libfontconfig1-dev xvfb
 
       - name: Set up pulseaudio
         if: matrix.platform == 'ubuntu-latest'
@@ -42,7 +42,7 @@ jobs:
 
       - name: Run tests (Linux)
         if: matrix.platform == 'ubuntu-latest'
-        run: sg audio "rake -rgosu test"
+        run: xvfb-run --auto-servernum rake -rgosu test
 
       - name: Run tests (macOS)
         if: matrix.platform == 'macos-latest'
