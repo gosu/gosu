@@ -46,4 +46,4 @@ jobs:
 
       - name: Run tests (macOS)
         if: matrix.platform == 'macos-latest'
-        run: rake -rgosu test
+        run: rake -rgosu format test
