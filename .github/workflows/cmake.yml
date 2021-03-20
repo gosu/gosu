@@ -15,6 +15,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install dependencies
+      if: matrix.platform == 'ubuntu-latest' || matrix.platform == 'ubuntu-18.04'
+      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libgl1-mesa-dev libopenal-dev libgmp-dev libfontconfig1-dev libgtest-dev
+
     - name: Create Build Environment
       run: cmake -E make_directory ${{github.workspace}}/build
 
@@ -31,7 +35,6 @@ jobs:
     - name: Build
       working-directory: ${{github.workspace}}/build
       shell: bash
-      # Execute the build.  You can specify a specific target with "--target <NAME>"
       run: cmake --build . --config $BUILD_TYPE
 
     - name: Test
