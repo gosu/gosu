@@ -1,0 +1,25 @@
+name: Xcode
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+env:
+  BUILD_TYPE: Debug
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies (macOS)
+        run: brew install sdl2
+
+      - name: Build Tutorial for macOS
+        run: cd examples/Tutorial && pod install && xcodebuild build -workspace Tutorial.xcworkspace -scheme Tutorial
+
+      - name: Build Tutorial for iOS
+        run: cd examples/Tutorial-Touch && pod install && xcodebuild build -workspace Tutorial-Touch.xcworkspace -scheme Tutorial-Touch -destination 'platform=iOS Simulator,name=iPad Air (4th generation)'
