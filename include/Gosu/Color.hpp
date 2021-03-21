@@ -16,12 +16,8 @@ namespace Gosu
     class Color
     {
         std::uint32_t rep;
-        #ifdef GOSU_IS_LITTLE_ENDIAN
         enum { RED_OFFSET = 0, GREEN_OFFSET = 8, BLUE_OFFSET = 16, ALPHA_OFFSET = 24 };
-        #else
-        enum { RED_OFFSET = 24, GREEN_OFFSET = 16, BLUE_OFFSET = 8, ALPHA_OFFSET = 0 };
-        #endif
-        
+
     public:
         typedef std::uint8_t Channel;
         static const unsigned GL_FORMAT = 0x1908; // GL_RGBA
