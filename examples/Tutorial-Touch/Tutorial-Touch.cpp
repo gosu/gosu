@@ -55,7 +55,7 @@ public:
         const Gosu::Image& image = animation.at(Gosu::milliseconds() / 100 % animation.size());
         
         image.draw(pos_x - image.width() / 2.0, pos_y - image.height() / 2.0, Z_STARS,
-                   1, 1, color, Gosu::AM_ADD);
+                   1, 1, color, Gosu::BM_ADD);
     }
 };
 
