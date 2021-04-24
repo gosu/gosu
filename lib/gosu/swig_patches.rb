@@ -57,7 +57,7 @@ class Gosu::Window
 
   alias_method :tick_internal, :tick
   def tick
-    tick_internal
+    value = tick_internal
     # Try to format the message nicely, without any useless patching that we are
     # doing here.
     if defined? @_exception
@@ -66,6 +66,8 @@ class Gosu::Window
       end
       raise @_exception
     end
+
+    value
   end
 end
 
