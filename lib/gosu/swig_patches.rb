@@ -35,13 +35,13 @@ class Gosu::Window
       end
     end
   end
-  
+
   def protected_draw_2
     protected_draw
     $gosu_gl_blocks_2 = $gosu_gl_blocks
     $gosu_gl_blocks = nil
   end
-  
+
   alias_method :show_internal, :show
   def show
     show_internal
@@ -53,6 +53,21 @@ class Gosu::Window
       end
       raise @_exception
     end
+  end
+
+  alias_method :tick_internal, :tick
+  def tick
+    value = tick_internal
+    # Try to format the message nicely, without any useless patching that we are
+    # doing here.
+    if defined? @_exception
+      if @_exception.backtrace.is_a? Array and not @_exception.backtrace.frozen?
+        @_exception.backtrace.reject! { |line| line.include? "lib/gosu/swig_patches.rb" }
+      end
+      raise @_exception
+    end
+
+    value
   end
 end
 
