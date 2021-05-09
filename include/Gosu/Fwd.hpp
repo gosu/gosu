@@ -19,4 +19,5 @@ namespace Gosu
     class TextInput;
     class Window;
     class Writer;
+    class Video;
 }

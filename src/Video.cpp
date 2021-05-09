@@ -1,21 +1,20 @@
-// TODO: Change to #ifdef when done implementing!
-#ifndef USE_FFMPEG
+#ifdef ENABLE_FFMPEG
 
-#include <Gosu/Graphics.hpp>
-#include <Gosu/IO.hpp>
-#include <Gosu/Math.hpp>
-#include <Gosu/Platform.hpp>
-#include <Gosu/Utility.hpp>
 #include <Gosu/Video.hpp>
-
-#include <algorithm>
-#include <cassert>
-#include <cstdlib>
 
 struct Gosu::Video::Impl
 {
     double volume_ = 1.0;
     bool looping_ = false;
+    int image_width_ = 0, image_height_ = 0;
+    unsigned image_flags_ = ImageFlags::IF_SMOOTH;
+
+    AVFormatContext* fmt_ctx = nullptr;
+    AVDictionaryEntry* tag = nullptr;
+
+    const AVCodec *codec;
+    AVCodecParser *parser;
+    AVCodecParserContext *context = nullptr;
 
     void apply_volume()
     {
@@ -23,16 +22,48 @@ struct Gosu::Video::Impl
       // volume();
     }
 
+    void initialize_video(const std::string filename)
+    {
+        // First thing to do is check if file exists, then if we can actually load/play it (supported codec)
+        int ret;
+
+        printf("Video file: %s\n", filename.c_str());
+
+        if ((ret = avformat_open_input(&fmt_ctx, filename.c_str(), NULL, NULL))) return;
+
+        puts("Successfully opened input!");
+
+        if ((ret = avformat_find_stream_info(fmt_ctx, NULL)) < 0) {
+            av_log(NULL, AV_LOG_ERROR, "Cannot find stream information\n");
+            return;
+        }
+
+        puts("Successfully read stream info");
+
+        while ((tag = av_dict_get(fmt_ctx->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))
+            printf("%s=%s\n", tag->key, tag->value);
+
+        avformat_close_input(&fmt_ctx);
+    }
+
 public:
     explicit Impl(const std::string& filename, unsigned image_flags)
     {
         // TODO: create a couple of Gosu::Image/Bitmap's to swap back and furth
         // as video frames are loaded
+
+        image_flags_ = image_flags;
+
+        initialize_video(filename);
     }
 
     explicit Impl(const std::string& filename, double width, double height, unsigned image_flags)
     {
+        image_width_ = width;
+        image_height_ = height;
+        image_flags_ = image_flags;
 
+        initialize_video(filename);
     }
 
     // TODO: clean up
@@ -75,7 +106,7 @@ public:
 
 Gosu::Video::Video(const std::string& filename, unsigned image_flags)
 {
-    pimpl.reset(new Impl(filename, imge_flags));
+    pimpl.reset(new Impl(filename, image_flags));
 }
 
 Gosu::Video::Video(const std::string& filename, double width, double height, unsigned image_flags)

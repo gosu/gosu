@@ -1,15 +1,31 @@
-// TODO: Change to #ifdef when done implementing!
-#ifndef USE_FFMPEG
+#ifdef ENABLE_FFMPEG
 
 #pragma once
 
 #include <Gosu/Fwd.hpp>
+#include <Gosu/Graphics.hpp>
+#include <Gosu/GraphicsBase.hpp>
 #include <Gosu/IO.hpp>
+#include <Gosu/Math.hpp>
 #include <Gosu/Platform.hpp>
+#include <Gosu/Utility.hpp>
+
+#include <algorithm>
+#include <cassert>
+#include <cstdlib>
 #include <memory>
 #include <string>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
+
+#ifdef __cplusplus
+}
+#endif
 
 namespace Gosu
 {

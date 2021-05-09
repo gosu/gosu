@@ -110,7 +110,7 @@ vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bmp, int tile_width, int tile
 {
     int tiles_x, tiles_y;
     vector<Image> images;
-    
+
     if (tile_width > 0) {
         tiles_x = bmp.width() / tile_width;
     }
@@ -118,7 +118,7 @@ vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bmp, int tile_width, int tile
         tiles_x = -tile_width;
         tile_width = bmp.width() / tiles_x;
     }
-    
+
     if (tile_height > 0) {
         tiles_y = bmp.height() / tile_height;
     }
@@ -126,14 +126,14 @@ vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bmp, int tile_width, int tile
         tiles_y = -tile_height;
         tile_height = bmp.height() / tiles_y;
     }
-    
+
     for (int y = 0; y < tiles_y; ++y) {
         for (int x = 0; x < tiles_x; ++x) {
             images.emplace_back(bmp, x * tile_width, y * tile_height, tile_width, tile_height,
                                 flags);
         }
     }
-    
+
     return images;
 }
 
