@@ -53,6 +53,8 @@ struct Gosu::Video::Impl
     {
         puts("REACHED DISPLAY");
         struct context* ctx = (context*) data;
+
+        ctx->image = new Gosu::Image(*ctx->bitmap);
     }
 
     void apply_volume()
