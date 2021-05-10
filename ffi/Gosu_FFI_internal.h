@@ -43,7 +43,7 @@ struct Gosu_Image
     Gosu::Image image;
 };
 
-#ifdef ENABLE_FFMPEG
+#ifdef GOSU_ENABLE_VIDEO
 struct Gosu_Video
 {
     Gosu::Video video;

@@ -28,6 +28,6 @@
 #include <Gosu/Utility.hpp>
 #include <Gosu/Version.hpp>
 #include <Gosu/Window.hpp>
-#ifdef ENABLE_FFMPEG
+#ifdef GOSU_ENABLE_VIDEO
 #include <Gosu/Video.hpp>
 #endif

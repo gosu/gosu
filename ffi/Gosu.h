@@ -9,7 +9,7 @@
 #include "Gosu_Song.h"
 #include "Gosu_TextInput.h"
 #include "Gosu_Window.h"
-#ifdef ENABLE_FFMPEG
+#ifdef GOSU_ENABLE_VIDEO
 #include "Gosu_Video.h"
 #endif
 #include <stdint.h>

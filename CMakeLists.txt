@@ -23,14 +23,13 @@ find_package(SDL2 REQUIRED)
 find_package(OpenAL REQUIRED)
 find_package(OpenGL REQUIRED)
 
-if(ENABLE_FFMPEG)
-    add_compile_definitions(ENABLE_FFMPEG)
+if(GOSU_ENABLE_VIDEO)
+    add_compile_definitions(GOSU_ENABLE_VIDEO)
 
     find_package(PkgConfig REQUIRED)
-    pkg_check_modules(libavcodec REQUIRED libavcodec)
-    pkg_check_modules(libavformat REQUIRED libavformat)
-    set(FFMPEG_LIBRARIES avcodec avformat)
-    set(FFMPEG_INCLUDE_DIRS /usr/include)
+    pkg_check_modules(libvlc REQUIRED libvlc)
+    set(VLC_LIBRARY vlc)
+    set(VLC_INCLUDE_DIRS /usr/include)
 endif()
 
 if(APPLE)
@@ -76,7 +75,7 @@ target_include_directories(gosu
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/utf8proc
         ${SDL2_INCLUDE_DIRS}
         ${OPENAL_INCLUDE_DIRS}
-        ${FFMPEG_INCLUDE_DIRS})
+        ${VLC_INCLUDE_DIRS})
 
 target_link_libraries(gosu
     PRIVATE
@@ -84,7 +83,7 @@ target_link_libraries(gosu
         ${SDL2_LIBRARIES}
         OpenGL::GL
         ${OPENAL_LIBRARY}
-        ${FFMPEG_LIBRARIES}
+        ${VLC_LIBRARY}
         # Only defined on macOS
         ${COCOA_LIBRARY}
         ${AUDIO_TOOLBOX_LIBRARY}
