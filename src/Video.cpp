@@ -28,32 +28,27 @@ struct Gosu::Video::Impl
 
     static void* lock_video(void* data, void** p_pixels)
     {
-        puts("REACHED lock_video");
         struct context* ctx = (context*) data;
-        puts("REACHED ctx");
-        ctx->locked = true;
-        puts("REACHED LOCKER");
-        *p_pixels = ctx->bitmap->data();
-        puts("REACHED DATA");
 
-        puts("REACHED LOCK");
-        return NULL;
+        ctx->locked = true;
+        *p_pixels = ctx->bitmap->data();
+
+        return nullptr;
     }
 
     static void unlock_video(void* data, void* picture, void* const* p_pixels)
     {
         struct context* ctx = (context*) data;
         ctx->locked = false;
-        puts("REACHED UNLOCK");
 
-        assert (picture == NULL);
+        assert (picture == nullptr);
     }
 
     static void display(void* data, void* picture)
     {
-        puts("REACHED DISPLAY");
         struct context* ctx = (context*) data;
 
+        // TODO: Optimize this
         ctx->image = new Gosu::Image(*ctx->bitmap);
     }
 
@@ -72,9 +67,8 @@ struct Gosu::Video::Impl
         // Start playing for a few microseconds to get metadata
         libvlc_media_player_play(vlc_media_player_);
 
-        libvlc_state_t vlc_media_player_state_ = libvlc_media_player_get_state(vlc_media_player_);
-
         // Block main thread while VLC buffers media
+        libvlc_state_t vlc_media_player_state_ = libvlc_media_player_get_state(vlc_media_player_);
         while (libvlc_media_player_get_length(vlc_media_player_) <= 0) {
         }
 
@@ -118,6 +112,7 @@ public:
     ~Impl()
     {
         libvlc_media_player_stop(vlc_media_player_);
+        libvlc_media_player_release(vlc_media_player_);
         libvlc_release(vlc_instance_);
     }
 
