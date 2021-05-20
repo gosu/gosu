@@ -12,11 +12,12 @@
 namespace Gosu
 {
     /// Struct that saves information about a touch on the surface of a multi-touch device.
-    /// (Right now this is only supported on iOS.)
     struct Touch
     {
         /// Allows for identification of a touch across calls.
         void* id;
+        /// Temp/SDL specific id
+        int sdl_id;
         /// Position of a touch on the touch screen.
         double x, y;
     };
