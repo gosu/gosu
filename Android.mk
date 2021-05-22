@@ -14,10 +14,10 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/include \
 	$(wildcard $(LOCAL_PATH)/dependencies/SDL/include) \
 	$(wildcard $(LOCAL_PATH)/dependencies/stb) \
 	$(wildcard $(LOCAL_PATH)/dependencies/utf8proc) \
-	$(wildcard $(LOCAL_PATH)/src/*.hpp)
-#	$(wildcard $(LOCAL_PATH)../al_soft/include) \
-#	$(wildcard $(LOCAL_PATH)/dependencies/SDL_sound) \
-#	$(wildcard $(LOCAL_PATH)/dependencies/SDL_sound/libmodplug) \
+	$(wildcard $(LOCAL_PATH)/src/*.hpp) \
+	$(wildcard $(LOCAL_PATH)/dependencies/mojoAL) \
+	$(wildcard $(LOCAL_PATH)/dependencies/SDL_sound) \
+	$(wildcard $(LOCAL_PATH)/dependencies/SDL_sound/libmodplug)
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)
 
@@ -52,17 +52,14 @@ LOCAL_SRC_FILES := \
 	$(wildcard $(LOCAL_PATH)/src/Version.cpp) \
 	$(wildcard $(LOCAL_PATH)/src/Window.cpp) \
 	$(wildcard $(LOCAL_PATH)/dependencies/utf8proc/*.c) \
-
-# Disable Audio for now
-#	$(wildcard $(LOCAL_PATH)/src/TrueTypeFontUnix.cpp) \
+	$(wildcard $(LOCAL_PATH)/src/Audio.cpp) \
+	$(wildcard $(LOCAL_PATH)/src/AudioFileSDLSound.cpp) \
+	$(wildcard $(LOCAL_PATH)/src/AudioImpl.cpp) \
+	$(wildcard $(LOCAL_PATH)/src/Channel.cpp) \
+	$(wildcard $(LOCAL_PATH)/dependencies/SDL_sound/*.c) \
+	$(wildcard $(LOCAL_PATH)/dependencies/SDL_sound/libmodplug/*.c) \
+	$(wildcard $(LOCAL_PATH)/dependencies/mojoAL/*.c) \
 #	$(wildcard $(LOCAL_PATH)/src/OffScreenTarget.cpp) \
-#	$(wildcard $(LOCAL_PATH)/src/Audio.cpp) \
-#	$(wildcard $(LOCAL_PATH)/src/AudioFileAudioToolbox.cpp) \
-#	$(wildcard $(LOCAL_PATH)/src/AudioFileSDLSound.cpp) \
-#	$(wildcard $(LOCAL_PATH)/src/AudioImpl.cpp) \
-#	$(wildcard $(LOCAL_PATH)/src/Channel.cpp) \
-#	$(wildcard $(LOCAL_PATH)/dependencies/SDL_sound/*.c) \
-#	$(wildcard $(LOCAL_PATH)/dependencies/SDL_sound/libmodplug/*.c) \
 
 LOCAL_SHARED_LIBRARIES := SDL2 SDL2_ttf
 
@@ -71,7 +68,7 @@ LOCAL_CFLAGS += -DANDROID
 LOCAL_CPPFLAGS += -fexceptions -std=c++17 -fstack-protector
  
 
-LOCAL_LDLIBS := -llog -landroid -lEGL -lGLESv1_CM
+LOCAL_LDLIBS := -llog -landroid -lEGL -lGLESv1_CM -lOpenSLES
 
 ifeq ($(NDK_DEBUG),1)
     cmd-strip :=

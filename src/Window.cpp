@@ -97,7 +97,7 @@ Gosu::Window::Window(int width, int height, unsigned window_flags, double update
     // This ensures that the window will be centered correctly when exiting fullscreen mode.
     // Fixes https://github.com/gosu/gosu/issues/369
     // (This will implicitly create graphics() and input(), and make the OpenGL context current.)
-    resize(width, height, false);
+    resize(width, height, true);
     SDL_SetWindowPosition(shared_window(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
     // Really enable fullscreen if desired.
@@ -115,6 +115,7 @@ Gosu::Window::Window(int width, int height, unsigned window_flags, double update
     input().on_touch_began = [this](Touch touch) { touch_began(touch); };
     input().on_touch_moved = [this](Touch touch) { touch_moved(touch); };
     input().on_touch_ended = [this](Touch touch) { touch_ended(touch); };
+    input().on_touch_cancelled = [this](Touch touch) { touch_cancelled(touch); };
 }
 
 Gosu::Window::~Window()
@@ -347,9 +348,7 @@ bool Gosu::Window::tick()
         }
     }
 
-#ifndef GOSU_IS_ANDROID
    Song::update();
-#endif
 
     input().update();
 
