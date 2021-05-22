@@ -80,6 +80,9 @@ namespace Gosu
         void set_mouse_factors(double factor_x, double factor_y,
             double offset_x = 0, double offset_y = 0);
 
+        // Set window's 'width' and 'height' to scale SDL touches into screen space
+        void set_touch_factors(double scale_x, double scale_y);
+
         //! Currently known touches.
         const Touches& current_touches() const;
 

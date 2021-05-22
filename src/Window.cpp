@@ -209,6 +209,8 @@ void Gosu::Window::resize(int width, int height, bool fullscreen)
     }
     pimpl->input->set_mouse_factors(1 / scale_factor, 1 / scale_factor,
                                     black_bar_width, black_bar_height);
+
+    pimpl->input->set_touch_factors(width, height);
 }
 
 bool Gosu::Window::resizable() const

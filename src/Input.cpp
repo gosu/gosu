@@ -63,6 +63,8 @@ struct Gosu::Input::Impl
     double mouse_scale_y = 1;
     double mouse_offset_x = 0;
     double mouse_offset_y = 0;
+    double touch_scale_x = 1;
+    double touch_scale_y = 1;
 
     Impl(Input& input, SDL_Window* window)
     : input(input), window(window)
@@ -194,8 +196,8 @@ struct Gosu::Input::Impl
                 Touch touch;
                 touch.sdl_id = e->tfinger.touchId + e->tfinger.fingerId;
                 // SDL gives use the x/y coordinates in normalized 0.0..1.0 range
-                touch.x = e->tfinger.x; // * input.pimpl->window->width();
-                touch.y = e->tfinger.y; // * input.pimpl->window->height();
+                touch.x = (e->tfinger.x * input.pimpl->touch_scale_x) * input.pimpl->mouse_scale_x + input.pimpl->mouse_offset_x;
+                touch.y = (e->tfinger.y * input.pimpl->touch_scale_y) * input.pimpl->mouse_scale_y + input.pimpl->mouse_offset_y;
 
                 enqueue_touch_event(touch, e->type);
                 break;
@@ -669,6 +671,12 @@ void Gosu::Input::set_mouse_factors(double scale_x, double scale_y,
     pimpl->mouse_scale_y = scale_y;
     pimpl->mouse_offset_x = -black_bar_width;
     pimpl->mouse_offset_y = -black_bar_height;
+}
+
+void Gosu::Input::set_touch_factors(double scale_x, double scale_y)
+{
+    pimpl->touch_scale_x = scale_x;
+    pimpl->touch_scale_y = scale_y;
 }
 
 const Gosu::Touches& Gosu::Input::current_touches() const
