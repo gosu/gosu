@@ -341,6 +341,8 @@ bool Gosu::Window::tick()
         }
     }
 
+    Video::lock_all();
+
     Song::update();
 
     input().update();
@@ -358,6 +360,8 @@ bool Gosu::Window::tick()
 
         SDL_GL_SwapWindow(shared_window());
     }
+
+    Video::unlock_all();
 
     if (pimpl->state == Impl::CLOSING) {
         pimpl->state = Impl::CLOSED;

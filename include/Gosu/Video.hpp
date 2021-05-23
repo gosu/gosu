@@ -3,33 +3,12 @@
 #pragma once
 
 #include <Gosu/Bitmap.hpp>
-#include <Gosu/Fwd.hpp>
-#include <Gosu/Graphics.hpp>
-#include <Gosu/GraphicsBase.hpp>
-#include <Gosu/IO.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/ImageData.hpp>
 #include <Gosu/Math.hpp>
-#include <Gosu/Platform.hpp>
-#include <Gosu/Utility.hpp>
-#include <Gosu/Window.hpp>
-#include <stdexcept>
 
-#include <algorithm>
 #include <cassert>
-#include <cstdlib>
-#include <memory>
 #include <string>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include <vlc/vlc.h>
-
-#ifdef __cplusplus
-}
-#endif
 
 namespace Gosu
 {
@@ -39,10 +18,14 @@ namespace Gosu
         std::shared_ptr<Impl> pimpl;
 
     public:
+        // Prevent concurrent modification
+        static void lock_all();
+        static void unlock_all();
+
         Video(const std::string& filename, unsigned image_flags);
         Video(const std::string& filename, double width, double height, unsigned image_flags);
 
-        ~Video();
+        virtual ~Video();
 
         unsigned width() const;
 
@@ -79,7 +62,12 @@ namespace Gosu
 
         void update();
 
-        Gosu::Image* image();
+        void lock();
+
+        void unlock();
+
+        // Current video frame as Gosu::Image
+        Gosu::Image image();
     };
 };
 
