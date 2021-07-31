@@ -481,7 +481,7 @@ module Gosu
     # Draws the image rotated, with its rotational center at (x, y).
     #
     # @return [void]
-    # @param angle [Float]
+    # @param angle [Float] the angle to rotate, in degrees.
     # @param center_x [Float] the relative horizontal rotation origin.
     # @param center_y [Float] the relative vertical rotation origin.
     # @param (see #draw)
