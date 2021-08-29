@@ -88,6 +88,19 @@ end
 # SWIG somehow maps the instance method "argb" as an overload of the class
 # method of the same name.
 class Gosu::Color
+  alias_method :initialize_without_argb, :initialize
+
+  # The (a,r,g,b) constructor overload was dropped in C++ to reduce ambiguity,
+  # adding it via %extend in gosu.i does not work, so patch it here.
+  def initialize(*args)
+    if args.size == 4
+      initialize_without_argb(args[1], args[2], args[3])
+      self.alpha = args[0]
+    else
+      initialize_without_argb(*args)
+    end
+  end
+
   alias_method :argb, :to_i
 end
 

@@ -7,7 +7,7 @@ GOSU_FFI_API uint32_t Gosu_Color_create(uint32_t argb)
 
 GOSU_FFI_API uint32_t Gosu_Color_create_argb(uint8_t a, uint8_t r, uint8_t g, uint8_t b)
 {
-    return Gosu::Color{a, r, g, b}.argb();
+    return Gosu::Color{r, g, b}.with_alpha(a).argb();
 }
 
 GOSU_FFI_API uint32_t Gosu_Color_create_from_hsv(double h, double s, double v)
@@ -17,33 +17,33 @@ GOSU_FFI_API uint32_t Gosu_Color_create_from_hsv(double h, double s, double v)
 
 GOSU_FFI_API uint32_t Gosu_Color_create_from_ahsv(uint8_t alpha, double h, double s, double v)
 {
-    return Gosu::Color::from_ahsv(alpha, h, s, v).argb();
+    return Gosu::Color::from_hsv(h, s, v).with_alpha(alpha).argb();
 }
 
 GOSU_FFI_API uint8_t Gosu_Color_alpha(uint32_t color)
 {
-    return Gosu::Color{color}.alpha();
+    return Gosu::Color{color}.alpha;
 }
 
 GOSU_FFI_API uint8_t Gosu_Color_red(uint32_t color)
 {
-    return Gosu::Color{color}.red();
+    return Gosu::Color{color}.red;
 }
 
 GOSU_FFI_API uint8_t Gosu_Color_green(uint32_t color)
 {
-    return Gosu::Color{color}.green();
+    return Gosu::Color{color}.green;
 }
 
 GOSU_FFI_API uint8_t Gosu_Color_blue(uint32_t color)
 {
-    return Gosu::Color{color}.blue();
+    return Gosu::Color{color}.blue;
 }
 
 GOSU_FFI_API uint32_t Gosu_Color_set_alpha(uint32_t color, uint8_t value)
 {
     Gosu::Color gosu_color{color};
-    gosu_color.set_alpha(value);
+    gosu_color.alpha = value;
 
     return gosu_color.argb();
 }
@@ -51,7 +51,7 @@ GOSU_FFI_API uint32_t Gosu_Color_set_alpha(uint32_t color, uint8_t value)
 GOSU_FFI_API uint32_t Gosu_Color_set_red(uint32_t color, uint8_t value)
 {
     Gosu::Color gosu_color{color};
-    gosu_color.set_red(value);
+    gosu_color.red = value;
 
     return gosu_color.argb();
 }
@@ -59,7 +59,7 @@ GOSU_FFI_API uint32_t Gosu_Color_set_red(uint32_t color, uint8_t value)
 GOSU_FFI_API uint32_t Gosu_Color_set_green(uint32_t color, uint8_t value)
 {
     Gosu::Color gosu_color{color};
-    gosu_color.set_green(value);
+    gosu_color.green = value;
 
     return gosu_color.argb();
 }
@@ -67,7 +67,7 @@ GOSU_FFI_API uint32_t Gosu_Color_set_green(uint32_t color, uint8_t value)
 GOSU_FFI_API uint32_t Gosu_Color_set_blue(uint32_t color, uint8_t value)
 {
     Gosu::Color gosu_color{color};
-    gosu_color.set_blue(value);
+    gosu_color.blue = value;
 
     return gosu_color.argb();
 }

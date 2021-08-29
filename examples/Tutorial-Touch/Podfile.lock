@@ -1,8 +1,8 @@
 PODS:
-  - Gosu/Dependencies (1.1.0)
-  - Gosu/Gosu (1.1.0):
+  - Gosu/Dependencies (1.2.0)
+  - Gosu/Gosu (1.2.0):
     - Gosu/Dependencies
-  - Gosu/GosuAppDelegateMain (1.1.0):
+  - Gosu/GosuAppDelegateMain (1.2.0):
     - Gosu/Gosu
 
 DEPENDENCIES:
@@ -13,8 +13,8 @@ EXTERNAL SOURCES:
     :path: "../.."
 
 SPEC CHECKSUMS:
-  Gosu: d636df64a0bdc4263cbc3cb86681bca81be386df
+  Gosu: 3cee748630cda9431531d1a2770b358f73731c5a
 
-PODFILE CHECKSUM: f8cd52c8c957102d1f0a73c25f732e809fb83a18
+PODFILE CHECKSUM: adbdd400c4e30e3637e29b8da0791568dbe69251
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.0
