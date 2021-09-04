@@ -1,5 +1,5 @@
 %trackobjects;
-%include exception.i  
+%include exception.i
 
 // Don't complain about ignored operators.
 #pragma SWIG nowarn=378
@@ -94,7 +94,7 @@
 
 // Make color channels less strict.
 %typemap(in) Gosu::Color::Channel {
-    $1 = Gosu::clamp<int>(NUM2ULONG($input), 0, 255);
+    $1 = std::clamp<int>(NUM2ULONG($input), 0, 255);
 }
 // To allow for overloading with Channel values.
 %typemap(typecheck) Gosu::Color::Channel {
@@ -399,9 +399,6 @@ namespace Gosu
 %ignore Gosu::sleep;
 %include "../../include/Gosu/Timing.hpp"
 %ignore Gosu::distance_sqr;
-%ignore Gosu::round;
-%ignore Gosu::trunc;
-%ignore Gosu::clamp;
 %ignore Gosu::wrap;
 %ignore Gosu::radians_to_gosu;
 %ignore Gosu::gosu_to_radians;
@@ -448,10 +445,6 @@ namespace Gosu
 }
 
 // Color
-%rename("alpha=") set_alpha;
-%rename("red=") set_red;
-%rename("green=") set_green;
-%rename("blue=") set_blue;
 %rename("hue=") set_hue;
 %rename("saturation=") set_saturation;
 %rename("value=") set_value;
@@ -476,30 +469,35 @@ namespace Gosu
     static Gosu::Color rgb(Gosu::Color::Channel r, Gosu::Color::Channel g,
         Gosu::Color::Channel b)
     {
-        return Gosu::Color(r, g, b);
+        return Gosu::Color{r, g, b};
     }
     
     static Gosu::Color rgba(Gosu::Color::Channel r, Gosu::Color::Channel g,
         Gosu::Color::Channel b, Gosu::Color::Channel a)
     {
-        return Gosu::Color(a, r, g, b);
+        return Gosu::Color{r, g, b}.with_alpha(a);
     }
     
     static Gosu::Color rgba(std::uint32_t rgba)
     {
-        return Gosu::Color((rgba >>  0) & 0xff, (rgba >> 24) & 0xff,
-                           (rgba >> 16) & 0xff, (rgba >>  8) & 0xff);
+        const std::uint32_t argb = (rgba >> 8) & 0xffffff | ((rgba & 0xff) << 24);
+        return Gosu::Color{argb};
     }
     
     static Gosu::Color argb(Gosu::Color::Channel a, Gosu::Color::Channel r,
         Gosu::Color::Channel g, Gosu::Color::Channel b)
     {
-        return Gosu::Color(a, r, g, b);
+        return Gosu::Color{r, g, b}.with_alpha(a);
     }
     
     static Gosu::Color argb(std::uint32_t argb)
     {
-        return Gosu::Color(argb);
+        return Gosu::Color{argb};
+    }
+
+    static Color from_ahsv(Channel alpha, double h, double s, double v)
+    {
+        return Gosu::Color::from_hsv(h, s, v).with_alpha(alpha);
     }
     
     std::uint32_t to_i() const
@@ -515,10 +513,10 @@ namespace Gosu
     std::string inspect() const
     {
         char buffer[32];
-        // snprintf is either member of std:: or a #define for ruby_snprintf.
+        // snprintf is either a member of std:: or a #define for ruby_snprintf.
         using namespace std;
-        snprintf(buffer, sizeof buffer, "#<Gosu::Color:ARGB=0x%02x_%06x>",
-            $self->alpha(), $self->argb() & 0xffffff);
+        snprintf(buffer, sizeof buffer, "#<Gosu::Color:ARGB=0x%02x_%02x%02x%02x>",
+            $self->alpha, $self->red, $self->green, $self->blue);
         return buffer;
     }
     
@@ -950,7 +948,7 @@ namespace Gosu
             Gosu::Bitmap bmp = $self->data().to_bitmap();
             // This is the scaled image width inside the ASCII art border, so make sure
             // there will be room for a leading and trailing '#' character.
-            int w = Gosu::clamp<int>(max_width - 2, 0, bmp.width());
+            int w = std::clamp<int>(max_width - 2, 0, bmp.width());
             // For images with width == 0, the output will have one line per pixel.
             // Otherwise, scale proportionally.
             int h = (w ? bmp.height() * w / bmp.width() : bmp.height());
@@ -966,7 +964,7 @@ namespace Gosu
                 for (int x = 0; x < w; ++x) {
                     int scaled_x = x * bmp.width()  / w;
                     int scaled_y = y * bmp.height() / h;
-                    int alpha3bit = bmp.get_pixel(scaled_x, scaled_y).alpha() / 32;
+                    int alpha3bit = bmp.get_pixel(scaled_x, scaled_y).alpha / 32;
                     str[(y + 1) * stride + (x + 1)] = " .:ioVM@"[alpha3bit];
                 }
                 str[(y + 1) * stride + (w + 2)] = '\n'; // newline after row of pixels

@@ -5,7 +5,7 @@ namespace Gosu
     class Bitmap;
     class Buffer;
     class Channel;
-    class Color;
+    struct Color;
     class File;
     class Font;
     class Graphics;

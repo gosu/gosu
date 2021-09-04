@@ -67,17 +67,7 @@ namespace Gosu
     {
         return value * value;
     }
-    
-    //! Returns min if value is smaller than min, max if value is larger than
-    //! max and value otherwise.
-    template<typename T>
-    T clamp(T value, T min, T max)
-    {
-        if (value < min) return min;
-        if (value > max) return max;
-        return value;
-    }
-    
+
     //! Returns (value-min) % (max-min) + min, where % always has a positive
     //! result for max > min. The results are undefined for max <= min.
     //! Note: This means that max is exclusive.
@@ -100,12 +90,10 @@ namespace Gosu
     //! Returns the distance between two points.
     double distance(double x1, double y1, double x2, double y2);
     
-    //! Interpolates a value between a and b, weight being the bias towards the second value.
-    //! Examples: interpolate(0, 10, 0.5) == 5, interpolate(-10, 10, 0.25) == 5,
-    //! interpolate(0, 10, -0.5) == -5.
+    //! Placeholder for std::lerp, will be removed when Gosu requires C++20.
     template<typename T>
-    T interpolate(T a, T b, double weight = 0.5)
+    T lerp(T a, T b, double t = 0.5)
     {
-        return a * (1.0 - weight) + b * weight;
+        return a * (1.0 - t) + b * t;
     }
 }

@@ -66,7 +66,7 @@ bool Gosu::has_extension(std::string_view filename, std::string_view extension)
     return true;
 }
 
-#ifdef GOSU_IS_IPHONE^
+#ifdef GOSU_IS_IPHONE
 #import <Foundation/Foundation.h>
 #include <regex>
 

@@ -20,7 +20,7 @@ class TestColor < Minitest::Test
     assert_equal Gosu::Color::YELLOW,  Gosu::Color.from_ahsv(255, 60, 1.0, 1.0)
   end
 
-  def test_color_atttributes_and_types
+  def test_color_attributes_and_types
     color = Gosu::Color.new(255, 255, 255, 255)
     [:alpha, :red, :green, :blue].each do |attr|
       assert_respond_to color, attr

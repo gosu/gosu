@@ -18,7 +18,7 @@ namespace Gosu
                 Color lhs_pixel = lhs.get_pixel(x, y);
                 Color rhs_pixel = rhs.get_pixel(x, y);
 
-                if (lhs_pixel.alpha() == 0 && rhs_pixel.alpha() == 0) continue;
+                if (lhs_pixel.alpha == 0 && rhs_pixel.alpha == 0) continue;
 
                 if (lhs_pixel != rhs_pixel) {
                     return testing::AssertionFailure() << "difference at " << x << ", " << y;

@@ -4,7 +4,6 @@
 #include "TrueTypeFont.hpp"
 #include "Log.hpp"
 
-#include <Gosu/IO.hpp>
 #include <Gosu/Text.hpp>
 
 #import <CoreText/CoreText.h>

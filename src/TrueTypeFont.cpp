@@ -182,7 +182,7 @@ struct Gosu::TrueTypeFont::Impl
         for (int rel_y = 0; rel_y < h; ++rel_y) {
             for (int rel_x = 0; rel_x < w; ++rel_x) {
                 int pixel = pixels[(src_y + rel_y) * stride + src_x + rel_x];
-                Color c_with_alpha(pixel * c.alpha() / 255, c.red(), c.green(), c.blue());
+                Color c_with_alpha = c.with_alpha(pixel * c.alpha / 255);
                 bitmap.blend_pixel(x + rel_x, y + rel_y, c_with_alpha);
             }
         }

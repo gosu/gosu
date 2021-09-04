@@ -84,25 +84,25 @@ void Gosu::LargeImageData::draw(double x1, double y1, Color c1,
             double rel_y_t = y / h;
             double rel_y_b = (y + tile.height()) / h;
             
-        #define INTERPOLATE(what, x_weight, y_weight) \
-            interpolate(interpolate(what##1, what##3, y_weight), \
-                        interpolate(what##2, what##4, y_weight), \
-                        x_weight);
+        #define LERP2D(what, x_weight, y_weight) \
+            lerp(lerp(what##1, what##3, y_weight), \
+            lerp(what##2, what##4, y_weight), \
+            x_weight);
 
-            double x_t_l = INTERPOLATE(x, rel_x_l, rel_y_t);
-            double x_t_r = INTERPOLATE(x, rel_x_r, rel_y_t);
-            double x_b_l = INTERPOLATE(x, rel_x_l, rel_y_b);
-            double x_b_r = INTERPOLATE(x, rel_x_r, rel_y_b);
+            double x_t_l = LERP2D(x, rel_x_l, rel_y_t);
+            double x_t_r = LERP2D(x, rel_x_r, rel_y_t);
+            double x_b_l = LERP2D(x, rel_x_l, rel_y_b);
+            double x_b_r = LERP2D(x, rel_x_r, rel_y_b);
 
-            double y_t_l = INTERPOLATE(y, rel_x_l, rel_y_t);
-            double y_t_r = INTERPOLATE(y, rel_x_r, rel_y_t);
-            double y_b_l = INTERPOLATE(y, rel_x_l, rel_y_b);
-            double y_b_r = INTERPOLATE(y, rel_x_r, rel_y_b);
+            double y_t_l = LERP2D(y, rel_x_l, rel_y_t);
+            double y_t_r = LERP2D(y, rel_x_r, rel_y_t);
+            double y_b_l = LERP2D(y, rel_x_l, rel_y_b);
+            double y_b_r = LERP2D(y, rel_x_r, rel_y_b);
 
-            Color  c_t_l = INTERPOLATE(c, rel_x_l, rel_y_t);
-            Color  c_t_r = INTERPOLATE(c, rel_x_r, rel_y_t);
-            Color  c_b_l = INTERPOLATE(c, rel_x_l, rel_y_b);
-            Color  c_b_r = INTERPOLATE(c, rel_x_r, rel_y_b);
+            Color  c_t_l = LERP2D(c, rel_x_l, rel_y_t);
+            Color  c_t_r = LERP2D(c, rel_x_r, rel_y_t);
+            Color  c_b_l = LERP2D(c, rel_x_l, rel_y_b);
+            Color  c_b_r = LERP2D(c, rel_x_r, rel_y_b);
 
             tile.draw(x_t_l, y_t_l, c_t_l,
                       x_t_r, y_t_r, c_t_r,

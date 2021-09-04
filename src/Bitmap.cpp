@@ -31,20 +31,20 @@ void Gosu::Bitmap::resize(int width, int height, Color c)
 
 void Gosu::Bitmap::blend_pixel(int x, int y, Color c)
 {
-    if (c.alpha() == 0) return;
+    if (c.alpha == 0) return;
 
     Color out = get_pixel(x, y);
-    if (out.alpha() == 0) {
+    if (out.alpha == 0) {
         set_pixel(x, y, c);
         return;
     }
 
-    int inv_alpha = out.alpha() * (255 - c.alpha()) / 255;
+    int inv_alpha = out.alpha * (255 - c.alpha) / 255;
 
-    out.set_alpha(c.alpha() + inv_alpha);
-    out.set_red  ((c.red()   * c.alpha() + out.red()   * inv_alpha) / out.alpha());
-    out.set_green((c.green() * c.alpha() + out.green() * inv_alpha) / out.alpha());
-    out.set_blue ((c.blue()  * c.alpha() + out.blue()  * inv_alpha) / out.alpha());
+    out.alpha = (c.alpha + inv_alpha);
+    out.red =   ((c.red   * c.alpha + out.red   * inv_alpha) / out.alpha);
+    out.green = ((c.green * c.alpha + out.green * inv_alpha) / out.alpha);
+    out.blue =  ((c.blue  * c.alpha + out.blue  * inv_alpha) / out.alpha);
 
     set_pixel(x, y, out);
 }
@@ -108,9 +108,9 @@ void Gosu::apply_color_key(Bitmap& bitmap, Color key)
                 auto visit = [&](Color c) {
                   if (c != key) {
                       neighbors += 1;
-                      red += c.red();
-                      green += c.green();
-                      blue += c.blue();
+                      red += c.red;
+                      green += c.green;
+                      blue += c.blue;
                   }
                 };
 
@@ -121,9 +121,9 @@ void Gosu::apply_color_key(Bitmap& bitmap, Color key)
 
                 Color replacement = Color::NONE;
                 if (neighbors > 0) {
-                    replacement.set_red(red / neighbors);
-                    replacement.set_green(green / neighbors);
-                    replacement.set_blue(blue / neighbors);
+                    replacement.red = red / neighbors;
+                    replacement.green = green / neighbors;
+                    replacement.blue = blue / neighbors;
                 }
                 bitmap.set_pixel(x, y, replacement);
             }
