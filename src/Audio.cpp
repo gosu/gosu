@@ -66,7 +66,7 @@ Gosu::Channel Gosu::Sample::play_pan(double pan, double volume, double speed, bo
     ALuint source = al_source_for_channel(channel.current_channel());
     alSourcei(source, AL_BUFFER, static_cast<ALint>(m_impl->buffer));
     alSource3f(source, AL_POSITION, static_cast<ALfloat>(pan * 10), 0, 0);
-    alSourcef(source, AL_GAIN, std::max(volume, 0.0));
+    alSourcef(source, AL_GAIN, static_cast<ALfloat>(std::max(volume, 0.0)));
     alSourcef(source, AL_PITCH, static_cast<ALfloat>(speed));
     alSourcei(source, AL_LOOPING, looping ? AL_TRUE : AL_FALSE);
     alSourcePlay(source);
@@ -76,41 +76,41 @@ Gosu::Channel Gosu::Sample::play_pan(double pan, double volume, double speed, bo
 // AudioFile impl
 struct Gosu::Song::Impl
 {
-    double volume_ = 1.0;
-    std::unique_ptr<AudioFile> file;
-    ALuint buffers[2];
+private:
+    double m_volume = 1.0;
+    std::unique_ptr<AudioFile> m_file;
+    ALuint m_buffers[2];
     
     void apply_volume()
     {
-        alSourcef(al_source_for_songs(), AL_GAIN, std::max(volume(), 0.0));
+        alSourcef(al_source_for_songs(), AL_GAIN, static_cast<ALfloat>(std::max(volume(), 0.0)));
     }
     
     bool stream_to_buffer(ALuint buffer)
     {
         char audio_data[4096 * 8];
-        size_t read_bytes = file->read_data(audio_data, sizeof audio_data);
+        size_t read_bytes = m_file->read_data(audio_data, sizeof audio_data);
         if (read_bytes > 0) {
-            alBufferData(buffer, file->format(), audio_data,
-                         static_cast<ALsizei>(read_bytes), file->sample_rate());
+            alBufferData(buffer, m_file->format(), audio_data,
+                         static_cast<ALsizei>(read_bytes),
+                         static_cast<ALsizei>(m_file->sample_rate()));
         }
         return read_bytes > 0;
     }
     
 public:
     explicit Impl(const std::string& filename)
+    : m_buffers{}, m_file{new AudioFile{filename}}
     {
-        file.reset(new AudioFile(filename));
-
         al_initialize();
-        alGenBuffers(2, buffers);
+        alGenBuffers(2, m_buffers);
     }
 
     explicit Impl(Reader reader)
+    : m_buffers{}, m_file{new AudioFile{reader}}
     {
-        file.reset(new AudioFile(reader));
-
         al_initialize();
-        alGenBuffers(2, buffers);
+        alGenBuffers(2, m_buffers);
     }
     
     ~Impl()
@@ -118,24 +118,24 @@ public:
         // It's hard to free things in the right order in Ruby/Gosu.
         // Make sure buffers aren't deleted after the context/device are shut down.
         if (!al_initialized()) return;
-        
-        alDeleteBuffers(2, buffers);
+
+        alDeleteBuffers(2, m_buffers);
     }
-    
-    void play(bool looping)
+
+    void play()
     {
         ALuint source = al_source_for_songs();
 
         alSource3f(source, AL_POSITION, 0, 0, 0);
-        alSourcef(source, AL_GAIN, std::max(volume(), 0.0));
+        alSourcef(source, AL_GAIN, static_cast<ALfloat>(std::max(volume(), 0.0)));
         alSourcef(source, AL_PITCH, 1);
         alSourcei(source, AL_LOOPING, AL_FALSE); // need to implement this manually...
 
-        stream_to_buffer(buffers[0]);
-        stream_to_buffer(buffers[1]);
+        stream_to_buffer(m_buffers[0]);
+        stream_to_buffer(m_buffers[1]);
         
         // TODO: Not good for songs with less than two buffers full of data.
-        alSourceQueueBuffers(source, 2, buffers);
+        alSourceQueueBuffers(source, 2, m_buffers);
         alSourcePlay(source);
     }
 
@@ -145,7 +145,7 @@ public:
 
         alSourceStop(source);
 
-        // Unqueue all buffers for this source.
+        // Dequeue all buffers for this source.
         // The number of QUEUED buffers apparently includes the number of PROCESSED ones,
         // so getting rid of the QUEUED ones is enough.
         ALuint buffer;
@@ -154,10 +154,10 @@ public:
         while (queued--) {
             alSourceUnqueueBuffers(source, 1, &buffer);
         }
-        
-        file->rewind();
+
+        m_file->rewind();
     }
-    
+
     void pause()
     {
         alSourcePause(al_source_for_songs());
@@ -202,7 +202,7 @@ public:
 
             if (cur_song_looping) {
                 // Start anew.
-                play(true);
+                play();
             }
             else {
                 // Let the world know we're finished.
@@ -213,24 +213,24 @@ public:
     
     double volume() const
     {
-        return volume_;
+        return m_volume;
     }
     
     void set_volume(double volume)
     {
-        volume_ = std::clamp(volume, 0.0, 1.0);
+        m_volume = std::clamp(volume, 0.0, 1.0);
         apply_volume();
     }
 };
 
 Gosu::Song::Song(const std::string& filename)
+: m_impl{new Impl(filename)}
 {
-    pimpl.reset(new Impl(filename));
 }
 
 Gosu::Song::Song(Reader reader)
+: m_impl{new Impl(reader)}
 {
-    pimpl.reset(new Impl(reader));
 }
 
 Gosu::Song::~Song()
@@ -246,16 +246,16 @@ Gosu::Song* Gosu::Song::current_song()
 void Gosu::Song::play(bool looping)
 {
     if (paused()) {
-        pimpl->resume();
+        m_impl->resume();
     }
     
     if (cur_song && cur_song != this) {
         cur_song->stop();
-        assert (cur_song == nullptr);
+        assert(cur_song == nullptr);
     }
     
     if (cur_song == nullptr) {
-        pimpl->play(looping);
+        m_impl->play();
     }
     
     cur_song = this;
@@ -265,41 +265,41 @@ void Gosu::Song::play(bool looping)
 void Gosu::Song::pause()
 {
     if (cur_song == this) {
-        pimpl->pause();
+        m_impl->pause();
     }
 }
 
 bool Gosu::Song::paused() const
 {
-    return cur_song == this && pimpl->paused();
+    return cur_song == this && m_impl->paused();
 }
 
 void Gosu::Song::stop()
 {
     if (cur_song == this) {
-        pimpl->stop();
+        m_impl->stop();
         cur_song = nullptr;
     }
 }
 
 bool Gosu::Song::playing() const
 {
-    return cur_song == this && !pimpl->paused();
+    return cur_song == this && !m_impl->paused();
 }
 
 double Gosu::Song::volume() const
 {
-    return pimpl->volume();
+    return m_impl->volume();
 }
 
 void Gosu::Song::set_volume(double volume)
 {
-    pimpl->set_volume(volume);
+    m_impl->set_volume(volume);
 }
 
 void Gosu::Song::update()
 {
     if (current_song()) {
-        current_song()->pimpl->update();
+        current_song()->m_impl->update();
     }
 }

@@ -3,6 +3,7 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/IO.hpp>
 #include <Gosu/Platform.hpp>
+#include <Gosu/Utility.hpp>
 #include <memory>
 #include <string>
 
@@ -79,55 +80,47 @@ namespace Gosu
                          bool looping = false) const;
     };
 
-    //! Songs are less flexible than samples. Only one Song can be played at any given time,
-    //! and there is no way to control its pan (stereo position) or speed.
-    class Song
+    /// Songs are less flexible than samples. Only one Song can be played at any given time,
+    /// and there is no way to control its pan (stereo position) or speed.
+    class Song : private Noncopyable
     {
         struct Impl;
-        std::unique_ptr<Impl> pimpl;
-
-        // Non-movable to avoid dangling internal references.
-        Song(Song&&) = delete;
-        // Non-movable to avoid dangling internal references.
-        Song& operator=(Song&&) = delete;
+        std::unique_ptr<Impl> m_impl;
 
     public:
-        //! Constructs a song that can be played on the provided audio system
-        //! and loads the song from a file.
-        //! The file type is determined by the filename.
+        /// Constructs a song that can be played on the provided audio system and loads the song
+        /// from a file. The file type is determined by the filename.
         explicit Song(const std::string& filename);
 
-        //! Constructs a song of the specified type that can be played on the
-        //! provided audio system and loads the song data from a stream.
+        /// Constructs a song of the specified type that can be played on the
+        /// provided audio system and loads the song data from a stream.
         explicit Song(Reader reader);
 
         ~Song();
 
-        //! Returns the song currently being played or paused, or 0 if
-        //! no song has been played yet or the last song has finished
-        //! playing.
+        /// Returns the song currently being played or paused, or 0 if no song has been played yet
+        /// or the last song has finished playing.
         static Song* current_song();
 
-        //! Starts or resumes playback of the song. This will stop all other
-        //! songs and set the current song to this object.
+        /// Starts or resumes playback of the song. This will stop all other songs and set the
+        /// current song to this object.
         void play(bool looping = false);
-        //! Pauses playback of the song. It is not considered being played.
-        //! current_song will stay the same.
+        /// Pauses playback of the song. It is not considered being played.
+        /// current_song will stay the same.
         void pause();
-        //! Returns true if the song is the current song, but in paused
-        //! mode.
+        /// Returns true if the song is the current song, but in paused mode.
         bool paused() const;
-        //! Stops playback of this song if it is currently played or paused.
-        //! Afterwards, current_song will return nullptr.
+        /// Stops playback of this song if it is currently played or paused.
+        /// Afterwards, current_song will return nullptr.
         void stop();
-        //! Returns true if the song is currently playing.
+        /// Returns true if the song is currently playing.
         bool playing() const;
-        //! Returns the current volume of the song.
+        /// Returns the current volume of the song.
         double volume() const;
-        //! \param volume Can be anything from 0.0 (silence) to 1.0 (full volume).
+        /// @param volume Can be anything from 0.0 (silence) to 1.0 (full volume).
         void set_volume(double volume);
 
-        //! Called every tick by Window to feed new audio data to OpenAL.
+        /// Called every tick by Window to feed new audio data to OpenAL.
         static void update();
     };
 }
