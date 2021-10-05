@@ -960,6 +960,14 @@ module Gosu
     # @see Gosu.gamepad_name
     def gamepad_disconnected(index); end
 
+    ##
+    # Called when the window gains focus
+    def gain_focus; end
+
+    ##
+    # Called when the windows loses focus
+    def lose_focus; end
+
     # @!endgroup
   end
 

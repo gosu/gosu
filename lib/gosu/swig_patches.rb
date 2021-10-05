@@ -20,7 +20,7 @@ class Gosu::Window
   end
 
   %w(update draw needs_redraw? needs_cursor?
-     lose_focus button_down button_up
+     gain_focus lose_focus button_down button_up
      gamepad_connected gamepad_disconnected drop).each do |callback|
     define_method "protected_#{callback}" do |*args|
       begin
