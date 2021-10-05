@@ -96,6 +96,20 @@ GOSU_FFI_API void Gosu_Window_set_close(Gosu_Window* window, void function(void*
     });
 }
 
+GOSU_FFI_API void Gosu_Window_set_gain_focus(Gosu_Window* window, void function(void*), void* data)
+{
+    Gosu_translate_exceptions([=] {
+        window->gain_focus_callback = [=] { function(data); };
+    });
+}
+
+GOSU_FFI_API void Gosu_Window_set_lose_focus(Gosu_Window* window, void function(void*), void* data)
+{
+    Gosu_translate_exceptions([=] {
+        window->lose_focus_callback = [=] { function(data); };
+    });
+}
+
 GOSU_FFI_API void Gosu_Window_default_button_down(Gosu_Window* window, unsigned id)
 {
     Gosu_translate_exceptions([=] {
@@ -254,6 +268,20 @@ GOSU_FFI_API void Gosu_Window_set_mouse_y(Gosu_Window* window, double y)
 {
     Gosu_translate_exceptions([=] {
         window->input().set_mouse_position(window->input().mouse_x(), y);
+    });
+}
+
+GOSU_FFI_API void Gosu_Window_gain_focus(Gosu_Window* window)
+{
+    Gosu_translate_exceptions([=] {
+        window->gain_focus();
+    });
+}
+
+GOSU_FFI_API void Gosu_Window_lose_focus(Gosu_Window* window)
+{
+    Gosu_translate_exceptions([=] {
+        window->lose_focus();
     });
 }
 

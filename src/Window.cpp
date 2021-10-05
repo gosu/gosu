@@ -317,6 +317,14 @@ bool Gosu::Window::tick()
                         }
                         break;
                     }
+                    case SDL_WINDOWEVENT_FOCUS_GAINED: {
+                        gain_focus();
+                        break;
+                    }
+                    case SDL_WINDOWEVENT_FOCUS_LOST: {
+                        lose_focus();
+                        break;
+                    }
                     default: {
                         break;
                     }

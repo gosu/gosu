@@ -136,6 +136,16 @@ struct Gosu_Window : public Gosu::Window
         Gosu::Window::close();
     }
 
+    void gain_focus() override
+    {
+        if (gain_focus_callback) gain_focus_callback();
+    }
+
+    void lose_focus() override
+    {
+        if (lose_focus_callback) lose_focus_callback();
+    }
+
     std::function<void()> update_callback;
     std::function<void()> draw_callback;
     std::function<void(unsigned id)> button_down_callback;
@@ -146,4 +156,6 @@ struct Gosu_Window : public Gosu::Window
     std::function<bool()> needs_redraw_callback;
     std::function<bool()> needs_cursor_callback;
     std::function<void()> close_callback;
+    std::function<void()> gain_focus_callback;
+    std::function<void()> lose_focus_callback;
 };
