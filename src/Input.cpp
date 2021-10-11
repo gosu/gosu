@@ -44,10 +44,14 @@ struct Gosu::Input::Impl
             ButtonUp,
             ButtonDown,
             GamepadConnected,
-            GamepadDisconnected
+            GamepadDisconnected,
+            TouchBegan,
+            TouchMoved,
+            TouchEnded
         } type;
         int id = -1;
         int gamepad_instance_id = -1;
+        Touch touch;
     };
 
     Input& input;
@@ -59,6 +63,8 @@ struct Gosu::Input::Impl
     double mouse_scale_y = 1;
     double mouse_offset_x = 0;
     double mouse_offset_y = 0;
+    double touch_scale_x = 1;
+    double touch_scale_y = 1;
 
     Impl(Input& input, SDL_Window* window)
     : input(input), window(window)
@@ -181,6 +187,19 @@ struct Gosu::Input::Impl
                 if (gamepad_slot >= 0) {
                     enqueue_gamepad_connection_event(gamepad_slot, false, e->jdevice.which);
                 }
+                break;
+            }
+
+            case SDL_FINGERDOWN:
+            case SDL_FINGERUP:
+            case SDL_FINGERMOTION: {
+                Touch touch;
+                touch.sdl_id = e->tfinger.touchId + e->tfinger.fingerId;
+                // SDL gives use the x/y coordinates in normalized 0.0..1.0 range
+                touch.x = (e->tfinger.x * input.pimpl->touch_scale_x) * input.pimpl->mouse_scale_x + input.pimpl->mouse_offset_x;
+                touch.y = (e->tfinger.y * input.pimpl->touch_scale_y) * input.pimpl->mouse_scale_y + input.pimpl->mouse_offset_y;
+
+                enqueue_touch_event(touch, e->type);
                 break;
             }
         }
@@ -374,6 +393,21 @@ struct Gosu::Input::Impl
                     }
                     free_gamepad_slot(event.gamepad_instance_id);
                     break;
+                case InputEvent::TouchBegan:
+                    if (input.on_touch_began) {
+                        input.on_touch_began(event.touch);
+                    }
+                    break;
+                case InputEvent::TouchMoved:
+                    if (input.on_touch_moved) {
+                        input.on_touch_moved(event.touch);
+                    }
+                    break;
+                case InputEvent::TouchEnded:
+                    if (input.on_touch_ended) {
+                        input.on_touch_ended(event.touch);
+                    }
+                    break;
             }
         }
         event_queue.clear();
@@ -398,6 +432,14 @@ private:
         event.type = connected ? InputEvent::GamepadConnected : InputEvent::GamepadDisconnected;
         event.id = gamepad_index_id;
         event.gamepad_instance_id = instance_id;
+        event_queue.push_back(event);
+    }
+
+    void enqueue_touch_event(Touch touch, uint32_t touch_type)
+    {
+        InputEvent event;
+        event.type = (touch_type == SDL_FINGERDOWN) ? InputEvent::TouchBegan : (touch_type == SDL_FINGERMOTION) ? InputEvent::TouchMoved : InputEvent::TouchEnded;
+        event.touch = touch;
         event_queue.push_back(event);
     }
 
@@ -629,6 +671,12 @@ void Gosu::Input::set_mouse_factors(double scale_x, double scale_y,
     pimpl->mouse_scale_y = scale_y;
     pimpl->mouse_offset_x = -black_bar_width;
     pimpl->mouse_offset_y = -black_bar_height;
+}
+
+void Gosu::Input::set_touch_factors(double scale_x, double scale_y)
+{
+    pimpl->touch_scale_x = scale_x;
+    pimpl->touch_scale_y = scale_y;
 }
 
 const Gosu::Touches& Gosu::Input::current_touches() const

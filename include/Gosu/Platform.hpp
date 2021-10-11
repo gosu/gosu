@@ -16,6 +16,11 @@
 # endif
 #endif
 
+#if defined(ANDROID)
+# define GOSU_IS_ANDROID
+# define GOSU_IS_OPENGLES
+#endif
+
 #ifndef GOSU_DEPRECATED
 # define GOSU_DEPRECATED [[deprecated]]
 #endif

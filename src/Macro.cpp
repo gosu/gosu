@@ -180,6 +180,7 @@ const Gosu::GLTexInfo* Gosu::Macro::gl_tex_info() const
 
 Gosu::Bitmap Gosu::Macro::to_bitmap() const
 {
+#ifndef GOSU_IS_ANDROID
     return Gosu::Graphics::render(pimpl->width, pimpl->height, [this] {
         draw(0,            0,             Color::WHITE,
              pimpl->width, 0,             Color::WHITE,
@@ -187,6 +188,9 @@ Gosu::Bitmap Gosu::Macro::to_bitmap() const
              pimpl->width, pimpl->height, Color::WHITE,
              0, BM_DEFAULT);
     }).data().to_bitmap();
+#else
+    return Gosu::Bitmap(100, 100);
+#endif
 }
 
 unique_ptr<Gosu::ImageData> Gosu::Macro::subimage(int x, int y, int width, int height) const

@@ -5,8 +5,14 @@
 #include <Gosu/Platform.hpp>
 
 #if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_OPENGLES)
+#ifndef GOSU_IS_ANDROID
 #include <OpenGLES/ES1/gl.h>
 #include <OpenGLES/ES1/glext.h>
+#endif
+#ifdef GOSU_IS_ANDROID
+#include <SDL.h>
+#include <SDL_opengles.h>
+#endif
 #else
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -23,13 +29,13 @@ namespace Gosu
 
     const GLuint NO_TEXTURE = static_cast<GLuint>(-1);
     const unsigned NO_CLIPPING = 0xffffffff;
-    
+
     // In various places in Gosu, width==NO_CLIPPING by convention means
     // that no clipping should happen.
     struct ClipRect
     {
         double x, y, width, height;
-        
+
         bool operator==(const ClipRect& other) const
         {
             // No clipping
@@ -64,13 +70,13 @@ namespace Gosu
         GLuint color;
         GLfloat vertices[3];
     };
-    
+
     template<typename T>
     bool is_p_to_the_left_of_ab(T xa, T ya, T xb, T yb, T xp, T yp)
     {
         return (xb - xa) * (yp - ya) - (xp - xa) * (yb - ya) > 0;
     }
-    
+
     template<typename T, typename C>
     void normalize_coordinates(T& x1, T& y1, T& x2, T& y2, T& x3, T& y3, C& c3, T& x4, T& y4, C& c4)
     {
@@ -82,7 +88,7 @@ namespace Gosu
             swap(c3, c4);
         }
     }
-    
+
     template<typename Float>
     void apply_transform(const Transform& transform, Float& x, Float& y)
     {
@@ -96,19 +102,19 @@ namespace Gosu
         x = out[0] / out[3];
         y = out[1] / out[3];
     }
-    
+
 #ifdef GOSU_IS_IPHONE
     int clip_rect_base_factor();
 #else
     inline int clip_rect_base_factor() { return 1; }
 #endif
-    
+
 #ifndef GOSU_IS_IPHONE
     SDL_Window* shared_window();
 #endif
-    
+
     void ensure_current_context();
-    
+
     inline std::string escape_markup(const std::string& text) {
         auto markup = text;
         for (std::string::size_type pos = 0; pos < markup.length(); ++pos) {

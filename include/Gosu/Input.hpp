@@ -12,11 +12,12 @@
 namespace Gosu
 {
     /// Struct that saves information about a touch on the surface of a multi-touch device.
-    /// (Right now this is only supported on iOS.)
     struct Touch
     {
         /// Allows for identification of a touch across calls.
         void* id;
+        /// Temp/SDL specific id
+        int sdl_id;
         /// Position of a touch on the touch screen.
         double x, y;
     };
@@ -78,6 +79,9 @@ namespace Gosu
         // Undocumented for the moment. Also applies to current_touches().
         void set_mouse_factors(double factor_x, double factor_y,
             double offset_x = 0, double offset_y = 0);
+
+        // Set window's 'width' and 'height' to scale SDL touches into screen space
+        void set_touch_factors(double scale_x, double scale_y);
 
         //! Currently known touches.
         const Touches& current_touches() const;

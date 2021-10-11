@@ -97,7 +97,7 @@ Gosu::Window::Window(int width, int height, unsigned window_flags, double update
     // This ensures that the window will be centered correctly when exiting fullscreen mode.
     // Fixes https://github.com/gosu/gosu/issues/369
     // (This will implicitly create graphics() and input(), and make the OpenGL context current.)
-    resize(width, height, false);
+    resize(width, height, true);
     SDL_SetWindowPosition(shared_window(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
     // Really enable fullscreen if desired.
@@ -111,6 +111,11 @@ Gosu::Window::Window(int width, int height, unsigned window_flags, double update
     input().on_button_up   = [this](Button button) { button_up(button); };
     input().on_gamepad_connected    = [this](int index) { gamepad_connected(index); };
     input().on_gamepad_disconnected = [this](int index) { gamepad_disconnected(index); };
+
+    input().on_touch_began = [this](Touch touch) { touch_began(touch); };
+    input().on_touch_moved = [this](Touch touch) { touch_moved(touch); };
+    input().on_touch_ended = [this](Touch touch) { touch_ended(touch); };
+    input().on_touch_cancelled = [this](Touch touch) { touch_cancelled(touch); };
 }
 
 Gosu::Window::~Window()
@@ -205,6 +210,8 @@ void Gosu::Window::resize(int width, int height, bool fullscreen)
     }
     pimpl->input->set_mouse_factors(1 / scale_factor, 1 / scale_factor,
                                     black_bar_width, black_bar_height);
+
+    pimpl->input->set_touch_factors(width, height);
 }
 
 bool Gosu::Window::resizable() const
@@ -341,7 +348,7 @@ bool Gosu::Window::tick()
         }
     }
 
-    Song::update();
+   Song::update();
 
     input().update();
 
