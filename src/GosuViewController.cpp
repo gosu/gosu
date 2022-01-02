@@ -121,6 +121,8 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
 - (void)applicationWillEnterForeground:(NSNotification*)notification
 {
     [self setupTimerOrDisplayLink];
+    
+    self.gosuWindowReference.gain_focus();
 }
 
 - (void)applicationDidEnterBackground:(NSNotification*)notification
