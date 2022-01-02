@@ -37,6 +37,7 @@ public:
     virtual void draw();
     virtual bool needs_redraw() const;
     virtual bool needs_cursor() const;
+    virtual void gain_focus();
     virtual void lose_focus();
     virtual void release_memory();
     virtual void button_down(Gosu::Button arg0);

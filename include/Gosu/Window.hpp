@@ -89,6 +89,8 @@ namespace Gosu
         //! If this function returns true, the system cursor will be visible while over the window.
         virtual bool needs_cursor() const { return true; }
 
+        virtual void gain_focus() {}
+
         //! This function is called when the window loses focus on some platforms.
         //! Most importantly, it is called on the iPhone or iPad when the user locks the screen.
         virtual void lose_focus() {}

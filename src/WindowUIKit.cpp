@@ -25,8 +25,8 @@ Gosu::Window::Window(int width, int height, unsigned window_flags, double update
     pimpl->controller.gosuWindow = this;
     pimpl->window.rootViewController = pimpl->controller;
     
-    // It is important to load the view before creating the Graphics instance.
-    [pimpl->controller loadView];
+    // It is important to (implicitly) load the view before creating the Graphics instance.
+    [pimpl->controller view];
     
     pimpl->graphics.reset(new Graphics(screen_width(), screen_height()));
     pimpl->graphics->set_resolution(width, height);

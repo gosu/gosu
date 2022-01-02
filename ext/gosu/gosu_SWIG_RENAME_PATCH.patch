@@ -35,7 +35,15 @@
    bool swig_val;
    int swig_res = SWIG_AsVal_bool(result, &swig_val);
    if (!SWIG_IsOK(swig_res)) {
-@@ -3260,7 +3260,7 @@
+@@ -3382,14 +3382,14 @@
+ void SwigDirector_Window::gain_focus() {
+   VALUE SWIGUNUSED result;
+   
+-  result = rb_funcall(swig_get_self(), rb_intern("gain_focus"), 0, Qnil);
++  result = rb_funcall(swig_get_self(), rb_intern("protected_gain_focus"), 0, Qnil);
+ }
+ 
+
  void SwigDirector_Window::lose_focus() {
    VALUE SWIGUNUSED result;
    
