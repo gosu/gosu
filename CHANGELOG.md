@@ -1,7 +1,12 @@
 # Changelog
 
+## [1.3.0] - 2022-01-02
+* Add `Window#gain_focus` callback to mirror `Window#lose_focus`, which was previously undocumented and only implemented on iOS. (#600) Thanks @cyberarm!
+* Fix Gosu::Window#tick not raising errors from callbacks. (#594) Thanks again, @cyberarm!
+* C++: Refactor the Gosu::Color interface to be less verbose.
+
 ## [1.2.0] - 2021-03-18
-* Gosu.language() is deprecated, please use Gosu.user_languages() instead. 
+* `Gosu.language()` is deprecated, please use `Gosu.user_languages()` instead. 
 * macOS: Fixed loading of bold/italic system TTF fonts.
 
 ## [1.1.1] - 2021-02-13

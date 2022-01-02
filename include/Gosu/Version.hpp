@@ -3,7 +3,7 @@
 #include <string>
 
 #define GOSU_MAJOR_VERSION 1
-#define GOSU_MINOR_VERSION 2
+#define GOSU_MINOR_VERSION 3
 #define GOSU_POINT_VERSION 0
 
 namespace Gosu
