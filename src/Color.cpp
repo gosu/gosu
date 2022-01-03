@@ -1,35 +1,38 @@
 #include <Gosu/Color.hpp>
 #include <Gosu/Math.hpp>
-#include <cmath>
 #include <algorithm>
+#include <cmath>
 
 namespace
 {
-    struct HSV { double h, s, v; };
-    
+    struct HSV
+    {
+        double h, s, v;
+    };
+
     HSV color_to_hsv(const Gosu::Color& c)
     {
         double r = c.red / 255.0;
         double g = c.green / 255.0;
         double b = c.blue / 255.0;
-        
+
         double min = std::min(std::min(r, g), b);
         double max = std::max(std::max(r, g), b);
         double delta = max - min;
 
         if (max == 0) {
-            HSV hsv = { 0, 0, 0 };
+            HSV hsv = {0, 0, 0};
             return hsv;
         }
-        
+
         HSV hsv{};
 
         // Value.
         hsv.v = max;
-        
+
         // Saturation.
         hsv.s = delta / max;
-        
+
         // Hue.
         if (delta == 0) {
             hsv.h = 0;
@@ -44,7 +47,7 @@ namespace
             hsv.h = (r - g) / delta + 4;
         }
         hsv.h *= 60;
-        
+
         return hsv;
     }
 }

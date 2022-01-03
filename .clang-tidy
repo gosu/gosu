@@ -8,17 +8,17 @@ Checks: >-
   -cppcoreguidelines-avoid-c-arrays,
   -cppcoreguidelines-init-variables,
   -cppcoreguidelines-prefer-member-initializer,
+  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
   -cppcoreguidelines-pro-bounds-pointer-arithmetic,
   -cppcoreguidelines-pro-type-reinterpret-cast,
   -cppcoreguidelines-special-member-functions,
   -llvm-*,
   -llvmlibc-*,
   -fuchsia-*,
-  -google-objc-*,
-  -google-readability-namespace-comments,
-  -google-runtime-references,
+  -google-*,
   -hicpp-avoid-c-arrays,
   -hicpp-braces-around-statements,
+  -hicpp-no-array-decay,
   -hicpp-signed-bitwise,
   -hicpp-special-member-functions,
   -hicpp-use-auto,
@@ -38,12 +38,15 @@ Checks: >-
   -readability-implicit-bool-conversion,
   -readability-isolate-declaration,
   -readability-magic-numbers,
+  -readability-make-member-function-const,
 
 CheckOptions:
   - { key: readability-identifier-naming.ClassCase,            value: CamelCase  }
   - { key: readability-identifier-naming.FunctionCase,         value: lower_case }
   - { key: readability-identifier-naming.GlobalConstantCase,   value: UPPER_CASE }
-  - { key: readability-identifier-naming.NamespaceCase,        value: CamelCase }
+  - { key: readability-identifier-naming.MemberFunctionCase,   value: lower_case }
+  - { key: readability-identifier-naming.NamespaceCase,        value: CamelCase  }
+  - { key: readability-identifier-naming.ParameterCase,        value: lower_case }
   - { key: readability-identifier-naming.PrivateMemberPrefix,  value: m_         }
   - { key: readability-identifier-naming.StructCase,           value: CamelCase  }
   - { key: readability-identifier-naming.VariableCase,         value: lower_case }

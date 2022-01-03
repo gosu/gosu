@@ -21,4 +21,4 @@ install:
 
 test_script:
 - ps: >-
-    cmd /c rake format test TESTOPTS='-v' '2>&1'
+    cmd /c rake test TESTOPTS='-v' '2>&1'

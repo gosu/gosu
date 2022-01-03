@@ -4,12 +4,11 @@ AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: false
 AlignOperands: Align
 AllowAllArgumentsOnNextLine: false
-AllowAllConstructorInitializersOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: None
-AllowShortIfStatementsOnASingleLine: Always
+AllowShortFunctionsOnASingleLine: InlineOnly
+AllowShortIfStatementsOnASingleLine: WithoutElse
 AllowShortLambdasOnASingleLine: All
 AllowShortLoopsOnASingleLine: true
 AlwaysBreakAfterReturnType: None
@@ -37,6 +36,23 @@ ColumnLimit: 100
 CompactNamespaces: false
 ConstructorInitializerIndentWidth: 0
 ContinuationIndentWidth: 8
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex:           '^<Gosu/Fwd.hpp>$'
+    Priority:        0
+    SortPriority:    2
+  - Regex:           '^<Gosu/'
+    Priority:        0
+    SortPriority:    3
+  - Regex:           '^"'
+    Priority:        0
+    SortPriority:    4
+  - Regex:           '\.h$'
+    Priority:        0
+    SortPriority:    5
+  - Regex:           '.*'
+    Priority:        0
+    SortPriority:    6
 IndentCaseLabels: false
 IndentPPDirectives: None
 IndentWidth: 4
@@ -46,6 +62,7 @@ MaxEmptyLinesToKeep: 1
 NamespaceIndentation: All
 ObjCSpaceAfterProperty: false
 ObjCSpaceBeforeProtocolList: false
+PackConstructorInitializers: Never
 PointerAlignment: Left
 ReflowComments: false
 SpaceAfterCStyleCast: true
