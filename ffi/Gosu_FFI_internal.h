@@ -43,9 +43,9 @@ struct Gosu_Image
     Gosu::Image image;
 };
 
-struct Gosu_Sample
+struct Gosu_Sound
 {
-    Gosu::Sample sample;
+    Gosu::Sound sound;
 };
 
 // Use inheritance where composition is not feasible

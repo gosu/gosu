@@ -170,6 +170,10 @@ module Gosu
   SampleInstance = Channel
   deprecate_constant :SampleInstance
 
+  # Sound was called Sample before Gosu 1.4.0.
+  Sample = Sound
+  deprecate_constant :Sample
+
   # Support for KbLeft instead of KB_LEFT and Gp3Button2 instead of GP_3_BUTTON_2.
   Gosu.constants.grep(/^KB_|MS_|GP_/).each do |new_name|
     old_name = case new_name

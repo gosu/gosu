@@ -14,8 +14,8 @@ class TestDeprecations < Minitest::Test
   end
 
   def test_window_no_longer_needed
-    assert_output("", /DEPRECATION WARNING: Passing a Window to Sample#initialize has been deprecated in Gosu 0.7.17./) do
-      assert_raises(::ArgumentError) { Gosu::Sample.new(DUMMY_WINDOW) }
+    assert_output("", /DEPRECATION WARNING: Passing a Window to Sound#initialize has been deprecated in Gosu 0.7.17./) do
+      assert_raises(::ArgumentError) { Gosu::Sound.new(DUMMY_WINDOW) }
     end
 
     assert_output("", /DEPRECATION WARNING: Passing a Window to Song#initialize has been deprecated in Gosu 0.7.17./) do

@@ -53,7 +53,7 @@ Gosu::Channel Gosu::allocate_channel()
 
     // Start looking at index 1 to keep one free channel for songs.
     for (int i = 1; i < CHANNELS; ++i) {
-        // Do not interrupt any playing or paused samples.
+        // Do not interrupt any playing or paused sounds.
         ALint state;
         alGetSourcei(_sources[i], AL_SOURCE_STATE, &state);
         if (state == AL_PLAYING || state == AL_PAUSED) continue;

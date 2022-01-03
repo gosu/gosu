@@ -62,7 +62,7 @@ public:
 class Player
 {
     Gosu::Image image;
-    Gosu::Sample beep;
+    Gosu::Sound beep;
     double pos_x, pos_y, vel_x, vel_y, angle;
     unsigned score;
 

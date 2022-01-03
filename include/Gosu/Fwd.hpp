@@ -14,8 +14,8 @@ namespace Gosu
     class Input;
     class Reader;
     class Resource;
-    class Sample;
     class Song;
+    class Sound;
     class TextInput;
     class Window;
     class Writer;

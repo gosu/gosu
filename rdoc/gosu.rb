@@ -550,49 +550,49 @@ module Gosu
   end
 
   ##
-  # A sample is a short sound that is completely loaded in memory, can be
+  # A sound is a short sound that is completely loaded in memory, can be
   # played multiple times at once and offers very flexible playback
   # parameters. Use samples for everything that's not music.
   #
   # @see Gosu::Song
-  class Sample
+  class Sound
     ##
-    # Loads a sample from a file.
+    # Loads a sound from a file.
     #
     # (Passing a Window reference is not necessary anymore, please use the first overload from now on.)
     #
     # @overload initialize(filename)
     # @overload initialize(window, filename)
     #
-    # @param filename [String] the path to load the sample from.
+    # @param filename [String] the path to load the sound from.
     def initialize(filename); end
 
     ##
-    # Plays the sample without panning.
+    # Plays the sound without panning.
     #
     # @return [Channel]
     # @param volume [Float] see {Channel#volume=}
     # @param speed [Float] see {Channel#speed=}
-    # @param looping [true, false] whether the sample should play in a loop. If you pass true, be sure to store the return value of this method so that you can later stop the looping sound.
+    # @param looping [true, false] whether the sound should play in a loop. If you pass true, be sure to store the return value of this method so that you can later stop the looping sound.
     #
     # @see #play_pan
     def play(volume=1, speed=1, looping=false); end
 
     ##
-    # Plays the sample with panning.
+    # Plays the sound with panning.
     #
     # @return [Channel]
     # @param pan [Float] see {Channel#pan=}
     # @param volume [Float] see {Channel#volume=}
     # @param speed [Float] see {Channel#speed=}
-    # @param looping [true, false] whether the sample should play in a loop. If you pass true, be sure to store the return value of this method so that you can later stop the looping sound.
+    # @param looping [true, false] whether the sound should play in a loop. If you pass true, be sure to store the return value of this method so that you can later stop the looping sound.
     #
     # @see #play
     def play_pan(pan=0, volume=1, speed=1, looping=false); end
   end
 
   ##
-  # {Sample#play} returns a Channel that represents the sound currently being played.
+  # {Sound#play} returns a Channel that represents the sound currently being played.
   #
   # This object can be used to stop sounds dynamically, or to check whether they have finished.
   class Channel
@@ -603,7 +603,7 @@ module Gosu
     attr_writer :volume
 
     ##
-    # Sets the playback speed. A value of 2.0 will play the sample at 200% speed and one octave higher. A value of 0.5 will play the sample at 50% speed and one octave lower. The valid range of this property depends on the operating system, but values up to 8.0 should work.
+    # Sets the playback speed. A value of 2.0 will play the sound at 200% speed and one octave higher. A value of 0.5 will play the sound at 50% speed and one octave lower. The valid range of this property depends on the operating system, but values up to 8.0 should work.
     # @param [Float]
     # @return [Float]
     attr_writer :speed
@@ -615,40 +615,40 @@ module Gosu
     attr_writer :pan
 
     ##
-    # Stops playback of this sample instance. After calling this method, the sample instance is useless and can be discarded.
+    # Stops playback of this sound instance. After calling this method, the sound instance is useless and can be discarded.
     #
-    # Calling `stop` after the sample has finished is harmless and has no effect.
+    # Calling `stop` after the sound has finished is harmless and has no effect.
     #
     # @return [void]
     def stop; end
 
     ##
-    # Pauses the sample, to be resumed afterwards.
+    # Pauses the sound, to be resumed afterwards.
     #
-    # @note The sample will still occupy a playback channel while paused.
+    # @note The sound will still occupy a playback channel while paused.
     #
     # @return [void]
     def pause; end
 
     ##
-    # Resumes playback of the sample.
+    # Resumes playback of the sound.
     #
     # @return [void]
     def resume; end
 
     ##
-    # @return [true, false] whether the sample is paused.
+    # @return [true, false] whether the sound is paused.
     def paused?; end
 
     ##
-    # @return [true, false] whether the sample is playing.
+    # @return [true, false] whether the sound is playing.
     def playing?; end
   end
 
   ##
   # Songs are less flexible than samples in that only one can be played at a time, with no panning or speed control.
   #
-  # @see Gosu::Sample
+  # @see Gosu::Sound
   class Song
     class <<Song
       ##

@@ -26,7 +26,7 @@
     <ClInclude Include="..\ffi\Gosu_FFI_internal.h" />
     <ClInclude Include="..\ffi\Gosu_Font.h" />
     <ClInclude Include="..\ffi\Gosu_Image.h" />
-    <ClInclude Include="..\ffi\Gosu_Sample.h" />
+    <ClInclude Include="..\ffi\Gosu_Sound.h" />
     <ClInclude Include="..\ffi\Gosu_Song.h" />
     <ClInclude Include="..\ffi\Gosu_TextInput.h" />
     <ClInclude Include="..\ffi\Gosu_Window.h" />
@@ -38,7 +38,7 @@
     <ClCompile Include="..\ffi\Gosu_Constants.cpp" />
     <ClCompile Include="..\ffi\Gosu_Font.cpp" />
     <ClCompile Include="..\ffi\Gosu_Image.cpp" />
-    <ClCompile Include="..\ffi\Gosu_Sample.cpp" />
+    <ClCompile Include="..\ffi\Gosu_Sound.cpp" />
     <ClCompile Include="..\ffi\Gosu_Song.cpp" />
     <ClCompile Include="..\ffi\Gosu_TextInput.cpp" />
     <ClCompile Include="..\ffi\Gosu_Window.cpp" />

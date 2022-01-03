@@ -11,7 +11,7 @@ class TestAudio < Minitest::Test
     skip_on_appveyor
     skip_on_github
 
-    sound = Gosu::Sample.new(media_path("0614.ogg"))
+    sound = Gosu::Sound.new(media_path("0614.ogg"))
     channel = sound.play(1, 1, true)
     interactive_cli("Do you hear a Star Wars-like Blaster sound?")
     
