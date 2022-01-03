@@ -9,7 +9,7 @@
 
 namespace Gosu
 {
-    /// Sample::play returns a Channel that represents the sound being played.
+    /// Sound::play returns a Channel that represents the sound being played.
     /// This object can be used to stop or influence sounds as they are played, or to check whether
     /// playback has finished.
     class Channel
@@ -28,11 +28,11 @@ namespace Gosu
         bool playing() const;
         bool paused() const;
         /// Pauses this instance to be resumed afterwards.
-        /// Avoid leaving samples paused for too long, as they will still occupy one of Gosu's
+        /// Avoid leaving sounds paused for too long, as they will still occupy one of Gosu's
         /// limited channels.
         void pause();
         void resume();
-        /// Stops this m_channel if the sample is still being played.
+        /// Stops this m_channel if the sounds is still being played.
         /// If this method is called when playback has finished, it has no effect.
         void stop();
 
@@ -44,34 +44,33 @@ namespace Gosu
         void set_speed(double speed);
     };
 
-    /// A sample is a short sound that is completely loaded in memory, can be played multiple times
+    /// A sounds is a short sound that is completely loaded in memory, can be played multiple times
     /// at once, and offers very flexible playback parameters.
-    class Sample
+    class Sound
     {
         struct Impl;
         std::shared_ptr<Impl> m_impl;
 
     public:
-        /// Constructs an empty sample that is inaudible when played.
-        Sample();
+        /// Constructs an empty sound that is inaudible when played.
+        Sound();
 
-        /// Constructs a sample that can be played on the specified audio
-        /// system and loads the sample from a file.
-        explicit Sample(const std::string& filename);
+        /// Constructs a sound that can be played on the specified audio
+        /// system and loads the sound from a file.
+        explicit Sound(const std::string& filename);
 
-        /// Constructs a sample that can be played on the specified audio
-        /// system and loads the sample data from a stream.
-        explicit Sample(Reader reader);
+        /// Constructs a sound that can be played on the specified audio
+        /// system and loads the sound data from a stream.
+        explicit Sound(Reader reader);
 
-        /// Plays the sample without panning.
+        /// Plays the sound without panning.
         /// @param volume Can be anything from 0.0 (silence) to 1.0 (full volume).
         /// @param speed Playback speed is only limited by the underlying audio library,
         ///              and can accept very high or low values. Use 1.0 for normal playback speed.
         Channel play(double volume = 1.0, double speed = 1.0, bool looping = false) const;
 
-        /// Plays the sample with panning. Even if pan is 0.0, the sample will
-        /// not be as loud as if it were played by calling play() due to the
-        /// way the panning works.
+        /// Plays the sound with panning. Even if pan is 0.0, the sound will not be as loud as if it
+        /// were played by calling play() due to the way the panning works.
         /// @param pan Can be anything from -1.0 (left) to 1.0 (right).
         /// @param volume Can be anything from 0.0 (silence) to 1.0 (full volume).
         /// @param speed Playback speed is only limited by by the underlying audio library,
@@ -80,7 +79,7 @@ namespace Gosu
                          bool looping = false) const;
     };
 
-    /// Songs are less flexible than Samples. Only one Song can be played at any given time,
+    /// Songs are less flexible than Sounds. Only one Song can be played at any given time,
     /// and there is no way to control its pan (stereo position) or speed.
     class Song : private Noncopyable
     {

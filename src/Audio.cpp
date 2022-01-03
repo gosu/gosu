@@ -13,7 +13,7 @@ static Gosu::Song* cur_song = nullptr;
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 static bool cur_song_looping;
 
-struct Gosu::Sample::Impl
+struct Gosu::Sound::Impl
 {
     ALuint buffer;
 
@@ -37,26 +37,26 @@ struct Gosu::Sample::Impl
     }
 };
 
-Gosu::Sample::Sample()
+Gosu::Sound::Sound()
 {
 }
 
-Gosu::Sample::Sample(const std::string& filename)
+Gosu::Sound::Sound(const std::string& filename)
 : m_impl{new Impl(AudioFile(filename))}
 {
 }
 
-Gosu::Sample::Sample(Gosu::Reader reader)
+Gosu::Sound::Sound(Gosu::Reader reader)
 : m_impl{new Impl(AudioFile(reader))}
 {
 }
 
-Gosu::Channel Gosu::Sample::play(double volume, double speed, bool looping) const
+Gosu::Channel Gosu::Sound::play(double volume, double speed, bool looping) const
 {
     return play_pan(0.0, volume, speed, looping);
 }
 
-Gosu::Channel Gosu::Sample::play_pan(double pan, double volume, double speed, bool looping) const
+Gosu::Channel Gosu::Sound::play_pan(double pan, double volume, double speed, bool looping) const
 {
     if (!m_impl) return Channel{};
 

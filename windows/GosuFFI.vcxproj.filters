@@ -32,7 +32,7 @@
     <ClInclude Include="..\ffi\Gosu_Image.h">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\ffi\Gosu_Sample.h">
+    <ClInclude Include="..\ffi\Gosu_Sound.h">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\ffi\Gosu_Song.h">
@@ -64,7 +64,7 @@
     <ClCompile Include="..\ffi\Gosu_Image.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\ffi\Gosu_Sample.cpp">
+    <ClCompile Include="..\ffi\Gosu_Sound.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\ffi\Gosu_Song.cpp">
