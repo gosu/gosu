@@ -16,25 +16,7 @@ module Gosu
     }
   end
 
-  def self.deprecate_const(name, repl)
-    send(:remove_const, name) if const_defined?(name)
-
-    @@_deprecated_constants ||= {}
-    @@_deprecated_constants[name] = repl
-  end
-
-  # Constant deprecation works by undefining the original constant and then re-adding it in
-  # const_missing, so that each deprecation warning is only printed once.
-  def self.const_missing(const_name)
-    if @@_deprecated_constants && repl = @@_deprecated_constants[const_name]
-      Gosu.deprecation_message(self, const_name, repl)
-      const_get(repl)
-    else
-      super
-    end
-  end
-
-  def self.deprecation_message(klass_or_full_message, name=nil, repl=nil)
+  def self.deprecation_message(klass_or_full_message, name = nil, repl = nil)
     @@_deprecations_shown ||= {}
 
     msg = if klass_or_full_message.is_a?(String) and name.nil? and repl.nil?
@@ -81,9 +63,9 @@ class Gosu::Image
     if args[0].is_a? Gosu::Window
       Gosu.deprecation_message("Passing a Window to Image#initialize has been deprecated in Gosu 0.9 and this method now uses an options hash, see https://www.libgosu.org/rdoc/Gosu/Image.html ")
       if args.size == 7
-        initialize_without_window args[1], :tileable => args[2], :rect => args[3..-1]
+        initialize_without_window args[1], tileable: args[2], rect: args[3..-1]
       else
-        initialize_without_window args[1], :tileable => args[2]
+        initialize_without_window args[1], tileable: args[2]
       end
     else
       initialize_without_window(*args)
@@ -97,11 +79,12 @@ class Gosu::Image
   def self.from_text(*args)
     if args.size == 4
       Gosu.deprecation_message("Passing a Window to Image.from_text has been deprecated in Gosu 0.9 and this method now uses an options hash, see https://www.libgosu.org/rdoc/Gosu/Image.html ")
-      from_text_without_window(args[1], args[3], :font => args[2])
+      from_text_without_window(args[1], args[3], font: args[2])
     elsif args.size == 7
       Gosu.deprecation_message("Passing a Window to Image.from_text has been deprecated in Gosu 0.9 and this method now uses an options hash, see https://www.libgosu.org/rdoc/Gosu/Image.html ")
-      from_text_without_window(args[1], args[3], :font => args[2],
-        :spacing => args[4], :width => args[5], :align => args[6])
+      from_text_without_window(args[1], args[3],
+                               font: args[2], spacing: args[4], width: args[5],
+                               align: args[6])
     else
       from_text_without_window(*args)
     end
@@ -137,7 +120,7 @@ end
 class Gosu::Font
   alias_method :draw, :draw_markup
   Gosu.deprecate Gosu::Font, :draw, "Font#draw_text or Font#draw_markup"
-  
+
   alias_method :draw_rel, :draw_markup_rel
   Gosu.deprecate Gosu::Font, :draw_rel, "Font#draw_text_rel or Font#draw_markup_rel"
 
@@ -178,30 +161,34 @@ end
 module Gosu
   # This was renamed because it's not actually a "copyright notice".
   # (https://en.wikipedia.org/wiki/Copyright_notice)
-  deprecate_const :GOSU_COPYRIGHT_NOTICE, :LICENSES
-  
+  GOSU_COPYRIGHT_NOTICE = LICENSES
+  deprecate_constant :GOSU_COPYRIGHT_NOTICE
+
   module Button; end
-  
+
   # Channel was called SampleInstance before Gosu 0.13.0.
   SampleInstance = Channel
-  deprecate_const :SampleInstance, :Channel
+  deprecate_constant :SampleInstance
 
   # Support for KbLeft instead of KB_LEFT and Gp3Button2 instead of GP_3_BUTTON_2.
   Gosu.constants.grep(/^KB_|MS_|GP_/).each do |new_name|
     old_name = case new_name
-    when :KB_ISO then "KbISO"
-    when :KB_NUMPAD_PLUS then "KbNumpadAdd"
-    when :KB_NUMPAD_MINUS then "KbNumpadSubtract"
-    when :KB_EQUALS then "KbEqual"
-    when :KB_LEFT_BRACKET then "KbBracketLeft"
-    when :KB_RIGHT_BRACKET then "KbBracketRight"
-    else new_name.to_s.capitalize.gsub(/_(.)/) { $1.upcase }
-    end
+      when :KB_ISO then "KbISO"
+      when :KB_NUMPAD_PLUS then "KbNumpadAdd"
+      when :KB_NUMPAD_MINUS then "KbNumpadSubtract"
+      when :KB_EQUALS then "KbEqual"
+      when :KB_LEFT_BRACKET then "KbBracketLeft"
+      when :KB_RIGHT_BRACKET then "KbBracketRight"
+      else new_name.to_s.capitalize.gsub(/_(.)/) { $1.upcase }
+      end
     Gosu.const_set old_name, Gosu.const_get(new_name)
+    deprecate_constant old_name
 
     # Also import old-style constants into Gosu::Button.
     Gosu::Button.const_set old_name, Gosu.const_get(new_name)
   end
+
+  deprecate_constant :Button
 
   def self.language
     @language_cache ||= (user_languages.first || "en_US")
