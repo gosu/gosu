@@ -4,7 +4,6 @@ AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: false
 AlignOperands: Align
 AllowAllArgumentsOnNextLine: false
-AllowAllConstructorInitializersOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: false
@@ -63,6 +62,7 @@ MaxEmptyLinesToKeep: 1
 NamespaceIndentation: All
 ObjCSpaceAfterProperty: false
 ObjCSpaceBeforeProtocolList: false
+PackConstructorInitializers: Never
 PointerAlignment: Left
 ReflowComments: false
 SpaceAfterCStyleCast: true

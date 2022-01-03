@@ -105,8 +105,8 @@ namespace Gosu
         /// Starts or resumes playback of the song. This will stop all other songs and set the
         /// current song to this object.
         void play(bool looping = false);
-        /// Pauses playback of the song. It is not considered being played.
-        /// current_song will stay the same.
+        /// Pauses playback of the song. Song::current_song() will still refer to this song, but
+        /// playing() will return false.
         void pause();
         /// Returns true if the song is the current song, but in paused mode.
         bool paused() const;

@@ -1,14 +1,16 @@
-#include "AudioImpl.hpp"
-#include "AudioFile.hpp"
-
 #include <Gosu/Audio.hpp>
-#include <Gosu/Math.hpp>
 #include <Gosu/IO.hpp>
-
-#include <cassert>
+#include <Gosu/Math.hpp>
+#include "AudioFile.hpp"
+#include "AudioImpl.hpp"
 #include <algorithm>
+#include <cassert>
 
+// These are global variables and not even thread-safe at that, but Gosu::Song is a legacy construct
+// that will be replaced by a unified Sound class anyway in #562.
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 static Gosu::Song* cur_song = nullptr;
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 static bool cur_song_looping;
 
 struct Gosu::Sample::Impl
@@ -80,39 +82,40 @@ private:
     double m_volume = 1.0;
     std::unique_ptr<AudioFile> m_file;
     ALuint m_buffers[2];
-    
+
     void apply_volume()
     {
         alSourcef(al_source_for_songs(), AL_GAIN, static_cast<ALfloat>(std::max(volume(), 0.0)));
     }
-    
+
     bool stream_to_buffer(ALuint buffer)
     {
         char audio_data[4096 * 8];
         size_t read_bytes = m_file->read_data(audio_data, sizeof audio_data);
         if (read_bytes > 0) {
-            alBufferData(buffer, m_file->format(), audio_data,
-                         static_cast<ALsizei>(read_bytes),
+            alBufferData(buffer, m_file->format(), audio_data, static_cast<ALsizei>(read_bytes),
                          static_cast<ALsizei>(m_file->sample_rate()));
         }
         return read_bytes > 0;
     }
-    
+
 public:
     explicit Impl(const std::string& filename)
-    : m_buffers{}, m_file{new AudioFile{filename}}
+    : m_buffers{},
+      m_file{new AudioFile{filename}}
     {
         al_initialize();
         alGenBuffers(2, m_buffers);
     }
 
     explicit Impl(Reader reader)
-    : m_buffers{}, m_file{new AudioFile{reader}}
+    : m_buffers{},
+      m_file{new AudioFile{reader}}
     {
         al_initialize();
         alGenBuffers(2, m_buffers);
     }
-    
+
     ~Impl()
     {
         // It's hard to free things in the right order in Ruby/Gosu.
@@ -133,7 +136,7 @@ public:
 
         stream_to_buffer(m_buffers[0]);
         stream_to_buffer(m_buffers[1]);
-        
+
         // TODO: Not good for songs with less than two buffers full of data.
         alSourceQueueBuffers(source, 2, m_buffers);
         alSourcePlay(source);
@@ -158,23 +161,23 @@ public:
         m_file->rewind();
     }
 
-    void pause()
+    static void pause()
     {
         alSourcePause(al_source_for_songs());
     }
-    
-    void resume()
+
+    static void resume()
     {
         alSourcePlay(al_source_for_songs());
     }
-    
-    bool paused() const
+
+    static bool paused()
     {
         ALint state;
         alGetSourcei(al_source_for_songs(), AL_SOURCE_STATE, &state);
         return state == AL_PAUSED;
     }
-    
+
     void update()
     {
         ALuint source = al_source_for_songs();
@@ -182,14 +185,14 @@ public:
         ALuint buffer;
         int processed;
         bool active = true;
-        
+
         alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
         for (int i = 0; i < processed; ++i) {
             alSourceUnqueueBuffers(source, 1, &buffer);
             active = stream_to_buffer(buffer);
             if (active) alSourceQueueBuffers(source, 1, &buffer);
         }
-        
+
         ALint state;
         alGetSourcei(source, AL_SOURCE_STATE, &state);
         if (active && state != AL_PLAYING && state != AL_PAUSED) {
@@ -210,12 +213,12 @@ public:
             }
         }
     }
-    
+
     double volume() const
     {
         return m_volume;
     }
-    
+
     void set_volume(double volume)
     {
         m_volume = std::clamp(volume, 0.0, 1.0);
@@ -248,16 +251,16 @@ void Gosu::Song::play(bool looping)
     if (paused()) {
         m_impl->resume();
     }
-    
+
     if (cur_song && cur_song != this) {
         cur_song->stop();
         assert(cur_song == nullptr);
     }
-    
+
     if (cur_song == nullptr) {
         m_impl->play();
     }
-    
+
     cur_song = this;
     cur_song_looping = looping;
 }
