@@ -16,20 +16,28 @@ namespace Gosu
         Channel red, green, blue, alpha;
 
         constexpr Color()
-        : red{0}, green{0}, blue{0}, alpha{0}
+        : red{0},
+          green{0},
+          blue{0},
+          alpha{0}
         {
         }
 
         /// Conversion constructor for literals of the form 0xaarrggbb.
         // NOLINTNEXTLINE: We want to allow implicit conversions.
         constexpr Color(std::uint32_t argb)
-        : red{static_cast<Channel>(argb >> 16)}, green{static_cast<Channel>(argb >> 8)},
-          blue{static_cast<Channel>(argb >> 0)}, alpha{static_cast<Channel>(argb >> 24)}
+        : red{static_cast<Channel>(argb >> 16)},
+          green{static_cast<Channel>(argb >> 8)},
+          blue{static_cast<Channel>(argb >> 0)},
+          alpha{static_cast<Channel>(argb >> 24)}
         {
         }
 
         constexpr Color(Channel red, Channel green, Channel blue)
-        : red{red}, green{green}, blue{blue}, alpha{255}
+        : red{red},
+          green{green},
+          blue{blue},
+          alpha{255}
         {
         }
 
@@ -46,19 +54,19 @@ namespace Gosu
 
         /// Returns the hue of the color, in the usual range of 0..360.
         double hue() const;
-        
+
         /// Changes the current color so hue() will return h.
         void set_hue(double h);
-        
+
         /// Returns the saturation of the color, in the range of 0..1.
         double saturation() const;
-        
+
         /// Changes the current color so saturation() will return s.
         void set_saturation(double s);
-        
+
         /// Returns the value (brightness) of the color, in the range of 0..1.
         double value() const;
-        
+
         /// Changes the current color so value() will return v.
         void set_value(double v);
 
@@ -92,7 +100,7 @@ namespace Gosu
 
     // Ensure that we can pass vectors of Gosu::Color straight to OpenGL and back.
     static_assert(sizeof(Color) == sizeof(std::uint32_t));
-    
+
 #ifndef SWIG
     inline bool operator<(Color a, Color b) { return a.gl() < b.gl(); }
     inline bool operator==(Color a, Color b) { return a.gl() == b.gl(); }
@@ -101,7 +109,7 @@ namespace Gosu
     /// Interpolates linearly between two colors, with a given weight towards
     /// the second color.
     Color lerp(Color a, Color b, double t = 0.5);
-    
+
     /// Combines two colors as if their channels were mapped to the 0..1 range
     /// and then multiplied with each other.
     Color multiply(Color a, Color b);

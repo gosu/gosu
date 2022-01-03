@@ -14,12 +14,14 @@ static ALint state(int& channel)
 }
 
 Gosu::Channel::Channel()
-: m_channel{NO_CHANNEL}, m_token{0}
+: m_channel{NO_CHANNEL},
+  m_token{0}
 {
 }
 
 Gosu::Channel::Channel(int channel, int token)
-: m_channel{channel}, m_token{token}
+: m_channel{channel},
+  m_token{token}
 {
 }
 

@@ -161,12 +161,12 @@ public:
         m_file->rewind();
     }
 
-    static void pause()
+    static void pause() //
     {
         alSourcePause(al_source_for_songs());
     }
 
-    static void resume()
+    static void resume() //
     {
         alSourcePlay(al_source_for_songs());
     }
