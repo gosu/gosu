@@ -75,7 +75,7 @@ void Gosu::Channel::set_volume(double volume)
     if (current_channel() == NO_CHANNEL) return;
 
     ALuint source = al_source_for_channel(m_channel);
-    alSourcef(source, AL_GAIN, std::max(volume, 0.0));
+    alSourcef(source, AL_GAIN, static_cast<ALfloat>(std::max(volume, 0.0)));
 }
 
 void Gosu::Channel::set_pan(double pan)
@@ -83,7 +83,7 @@ void Gosu::Channel::set_pan(double pan)
     if (current_channel() == NO_CHANNEL) return;
 
     ALuint source = al_source_for_channel(m_channel);
-    alSource3f(source, AL_POSITION, pan * 10, 0, 0);
+    alSource3f(source, AL_POSITION, static_cast<ALfloat>(pan * 10), 0, 0);
 }
 
 void Gosu::Channel::set_speed(double speed)
@@ -91,5 +91,5 @@ void Gosu::Channel::set_speed(double speed)
     if (current_channel() == NO_CHANNEL) return;
 
     ALuint source = al_source_for_channel(m_channel);
-    alSourcef(source, AL_PITCH, speed);
+    alSourcef(source, AL_PITCH, static_cast<ALfloat>(speed));
 }

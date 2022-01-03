@@ -9,7 +9,7 @@
 
 namespace Gosu
 {
-    /// Sound::play returns a Channel that represents the sound being played.
+    /// Sample::play returns a Channel that represents the sound being played.
     /// This object can be used to stop or influence sounds as they are played, or to check whether
     /// playback has finished.
     class Channel
@@ -45,7 +45,7 @@ namespace Gosu
     };
 
     /// A sample is a short sound that is completely loaded in memory, can be played multiple times
-    /// at once and offers very flexible playback parameters.
+    /// at once, and offers very flexible playback parameters.
     class Sample
     {
         struct Impl;
@@ -80,7 +80,7 @@ namespace Gosu
                          bool looping = false) const;
     };
 
-    /// Songs are less flexible than samples. Only one Song can be played at any given time,
+    /// Songs are less flexible than Samples. Only one Song can be played at any given time,
     /// and there is no way to control its pan (stereo position) or speed.
     class Song : private Noncopyable
     {
