@@ -53,7 +53,7 @@ IncludeCategories:
   - Regex:           '.*'
     Priority:        0
     SortPriority:    6
-IndentCaseLabels: false
+IndentCaseLabels: true
 IndentPPDirectives: None
 IndentWidth: 4
 FixNamespaceComments: false
