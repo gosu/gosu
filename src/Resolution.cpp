@@ -7,8 +7,9 @@
 
 static SDL_DisplayMode display_mode(Gosu::Window* window)
 {
-    static struct VideoSubsystem {
-        VideoSubsystem()  { SDL_InitSubSystem(SDL_INIT_VIDEO); };
+    static struct VideoSubsystem
+    {
+        VideoSubsystem() { SDL_InitSubSystem(SDL_INIT_VIDEO); };
         ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
     } subsystem;
 
@@ -40,7 +41,8 @@ static SDL_Rect max_window_size(Gosu::Window* window)
         style = NSWindowStyleMaskBorderless;
     }
     else {
-        style = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable;
+        style = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable |
+                NSWindowStyleMaskMiniaturizable;
     }
     if (window && window->resizable()) {
         style |= NSWindowStyleMaskResizable;
@@ -61,10 +63,10 @@ static SDL_Rect max_window_size(Gosu::Window* window)
 
 // TODO: Remove this implementation and remove ifdef for GOSU_IS_X once WIN_GetWindowBordersSize is patched
 #ifdef GOSU_IS_WIN
-#include <windows.h>
 #include <SDL_syswm.h>
 #include <dwmapi.h>
-#pragma comment (lib, "Dwmapi.lib")
+#include <windows.h>
+#pragma comment(lib, "Dwmapi.lib")
 
 static SDL_Rect max_window_size(Gosu::Window* window)
 {
@@ -72,7 +74,8 @@ static SDL_Rect max_window_size(Gosu::Window* window)
     // until it's patched to ignore the window drop shadow (window border is 1px but with drop shadow it's reported as 8px)
     // REF: https://github.com/libsdl-org/SDL/issues/3835
 
-    static struct VideoSubsystem {
+    static struct VideoSubsystem
+    {
         VideoSubsystem() { SDL_InitSubSystem(SDL_INIT_VIDEO); };
         ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
     } subsystem;
@@ -136,7 +139,8 @@ static SDL_Rect max_window_size(Gosu::Window* window)
 #ifdef GOSU_IS_X
 static SDL_Rect max_window_size(Gosu::Window* window)
 {
-    static struct VideoSubsystem {
+    static struct VideoSubsystem
+    {
         VideoSubsystem() { SDL_InitSubSystem(SDL_INIT_VIDEO); };
         ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
     } subsystem;
@@ -163,4 +167,5 @@ int Gosu::available_height(Window* window)
 {
     return max_window_size(window).h;
 }
+
 #endif

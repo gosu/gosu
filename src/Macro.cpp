@@ -1,8 +1,7 @@
 #include "Macro.hpp"
-#include "DrawOpQueue.hpp"
 #include <Gosu/Image.hpp>
+#include "DrawOpQueue.hpp"
 #include <stdexcept>
-using namespace std;
 
 struct Gosu::Macro::Impl
 {
@@ -23,8 +22,8 @@ struct Gosu::Macro::Impl
         return true;
     }
 
-    Transform find_transform_for_target(double x1, double y1, double x2, double y2,
-        double x3, double y3, double x4, double y4) const
+    Transform find_transform_for_target(double x1, double y1, double x2, double y2, double x3,
+                                        double y3, double x4, double y4) const
     {
         // Transformation logic follows a discussion on the ImageMagick mailing
         // list (on which ImageMagick's perspective_transform.pl is based).
@@ -100,37 +99,33 @@ struct Gosu::Macro::Impl
         // 0, 0, 0, 0, 0, 0, 0, 1 | qy
 
         double c[8];
-        c[0] = (x2 - x1) / width  + qx * x2;
+        c[0] = (x2 - x1) / width + qx * x2;
         c[1] = (x3 - x1) / height + qy * x3;
         c[2] = x1;
-        c[3] = (y2 - y1) / width  + qx * y2;
+        c[3] = (y2 - y1) / width + qx * y2;
         c[4] = (y3 - y1) / height + qy * y3;
         c[5] = y1;
         c[6] = qx;
         c[7] = qy;
 
-        Transform result = {{
-            c[0], c[3], 0, c[6],
-            c[1], c[4], 0, c[7],
-            0,    0,    1, 0,
-            c[2], c[5], 0, 1
-        }};
+        Transform result = {
+                {c[0], c[3], 0, c[6], c[1], c[4], 0, c[7], 0, 0, 1, 0, c[2], c[5], 0, 1}};
         return result;
     }
 
     void draw_vertex_arrays(double x1, double y1, double x2, double y2, double x3, double y3,
-        double x4, double y4) const
+                            double x4, double y4) const
     {
         // TODO: Macros should not be split up just because they have different transforms.
         // They should be premultiplied and have the same transform by definition. Then the
         // transformation only has to be performed once.
-        
-    #ifndef GOSU_IS_OPENGLES
+
+#ifndef GOSU_IS_OPENGLES
         glEnable(GL_BLEND);
         glMatrixMode(GL_MODELVIEW);
-        
+
         Transform transform = find_transform_for_target(x1, y1, x2, y2, x3, y3, x4, y4);
-        
+
         for (const auto& vertex_array : vertex_arrays) {
             glPushMatrix();
             vertex_array.render_state.apply();
@@ -139,7 +134,7 @@ struct Gosu::Macro::Impl
             glDrawArrays(GL_QUADS, 0, (GLsizei) vertex_array.vertices.size());
             glPopMatrix();
         }
-    #endif
+#endif
     }
 };
 
@@ -161,15 +156,16 @@ int Gosu::Macro::height() const
     return pimpl->height;
 }
 
-void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Color c2,
-    double x3, double y3, Color c3, double x4, double y4, Color c4, ZPos z, BlendMode mode) const
+void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Color c2, double x3,
+                       double y3, Color c3, double x4, double y4, Color c4, ZPos z,
+                       BlendMode mode) const
 {
     if (c1 != Color::WHITE || c2 != Color::WHITE || c3 != Color::WHITE || c4 != Color::WHITE) {
-        throw invalid_argument("Macros cannot be tinted with colors");
+        throw std::invalid_argument{"Macros cannot be tinted with colors"};
     }
-    
+
     normalize_coordinates(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
-    
+
     Gosu::Graphics::gl(z, [=] { pimpl->draw_vertex_arrays(x1, y1, x2, y2, x3, y3, x4, y4); });
 }
 
@@ -180,21 +176,20 @@ const Gosu::GLTexInfo* Gosu::Macro::gl_tex_info() const
 
 Gosu::Bitmap Gosu::Macro::to_bitmap() const
 {
-    return Gosu::Graphics::render(pimpl->width, pimpl->height, [this] {
-        draw(0,            0,             Color::WHITE,
-             pimpl->width, 0,             Color::WHITE,
-             0,            pimpl->height, Color::WHITE,
-             pimpl->width, pimpl->height, Color::WHITE,
-             0, BM_DEFAULT);
-    }).data().to_bitmap();
+    const auto render_this = [this] {
+        draw(0, 0, Color::WHITE, pimpl->width, 0, Color::WHITE, 0, pimpl->height, Color::WHITE,
+             pimpl->width, pimpl->height, Color::WHITE, 0, BM_DEFAULT);
+    };
+
+    return Gosu::Graphics::render(pimpl->width, pimpl->height, render_this).data().to_bitmap();
 }
 
-unique_ptr<Gosu::ImageData> Gosu::Macro::subimage(int x, int y, int width, int height) const
+std::unique_ptr<Gosu::ImageData> Gosu::Macro::subimage(int x, int y, int width, int height) const
 {
-    return unique_ptr<ImageData>();
+    return std::unique_ptr<ImageData>{};
 }
 
 void Gosu::Macro::insert(const Bitmap& bitmap, int x, int y)
 {
-    throw logic_error("Gosu::Macro cannot be updated with a Gosu::Bitmap yet");
+    throw std::logic_error{"Gosu::Macro cannot be updated with a Gosu::Bitmap yet"};
 }
