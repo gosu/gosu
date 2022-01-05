@@ -10,10 +10,12 @@
 class Gosu::LargeImageData : public Gosu::ImageData
 {
     int m_w, m_h;
-    int tiles_x, tiles_y;
+    int m_tiles_x, m_tiles_y;
     std::vector<std::unique_ptr<ImageData>> m_tiles;
 
     LargeImageData() = default;
+
+    const ImageData& tile(int x, int y) const;
 
 public:
     LargeImageData(const Bitmap& source, int tile_width, int tile_height, unsigned image_flags);

@@ -36,9 +36,11 @@ namespace Gosu
 
         virtual int height() const = 0;
 
-        virtual void draw(double x1, double y1, Color c1, double x2, double y2, Color c2, double x3,
-                          double y3, Color c3, double x4, double y4, Color c4, ZPos z,
-                          BlendMode mode) const = 0;
+        virtual void draw(double x1, double y1, Color c1, //
+                          double x2, double y2, Color c2, //
+                          double x3, double y3, Color c3, //
+                          double x4, double y4, Color c4, //
+                          ZPos z, BlendMode mode) const = 0;
 
         virtual const GLTexInfo* gl_tex_info() const = 0;
 
