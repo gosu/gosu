@@ -70,6 +70,9 @@ namespace Gosu
         //! See mouse_x.
         double mouse_y() const;
 
+        double relative_mouse_x() const;
+        double relative_mouse_y() const;
+
         //! Immediately moves the mouse as far towards the desired position
         //! as possible. x and y are relative to the window, just as in mouse_x()
         //! and mouse_y(), so (0, 0) is the top left corner of the window..

@@ -96,6 +96,13 @@ GOSU_FFI_API void Gosu_Window_set_capture_cursor(Gosu_Window* window, bool funct
     });
 }
 
+GOSU_FFI_API void Gosu_Window_set_relative_mouse_mode(Gosu_Window* window, bool function(void*), void* data)
+{
+    Gosu_translate_exceptions([=] {
+        window->relative_mouse_mode_callback = [=] { return function(data); };
+    });
+}
+
 GOSU_FFI_API void Gosu_Window_set_close(Gosu_Window* window, void function(void*), void* data)
 {
     Gosu_translate_exceptions([=] {
@@ -275,6 +282,20 @@ GOSU_FFI_API void Gosu_Window_set_mouse_y(Gosu_Window* window, double y)
 {
     Gosu_translate_exceptions([=] {
         window->input().set_mouse_position(window->input().mouse_x(), y);
+    });
+}
+
+GOSU_FFI_API double Gosu_Window_relative_mouse_x(Gosu_Window* window)
+{
+    return Gosu_translate_exceptions([=] {
+        return window->input().relative_mouse_x();
+    });
+}
+
+GOSU_FFI_API double Gosu_Window_relative_mouse_y(Gosu_Window* window)
+{
+    return Gosu_translate_exceptions([=] {
+        return window->input().relative_mouse_y();
     });
 }
 

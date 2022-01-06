@@ -55,6 +55,8 @@ struct Gosu::Input::Impl
 
     TextInput* text_input = nullptr;
     double mouse_x, mouse_y;
+    double relative_mouse_x = 0;
+    double relative_mouse_y = 0;
     double mouse_scale_x = 1;
     double mouse_scale_y = 1;
     double mouse_offset_x = 0;
@@ -131,6 +133,13 @@ struct Gosu::Input::Impl
                     enqueue_event(MS_WHEEL_DOWN, true);
                     enqueue_event(MS_WHEEL_DOWN, false);
                     return true;
+                }
+                break;
+            }
+            case SDL_MOUSEMOTION: {
+                if (SDL_GetRelativeMouseMode()) {
+                    relative_mouse_x += e->motion.xrel;
+                    relative_mouse_y += e->motion.yrel;
                 }
                 break;
             }
@@ -615,6 +624,16 @@ double Gosu::Input::mouse_x() const
 double Gosu::Input::mouse_y() const
 {
     return pimpl->mouse_y * pimpl->mouse_scale_y + pimpl->mouse_offset_y;
+}
+
+double Gosu::Input::relative_mouse_x() const
+{
+    return pimpl->relative_mouse_x;
+}
+
+double Gosu::Input::relative_mouse_y() const
+{
+    return pimpl->relative_mouse_y;
 }
 
 void Gosu::Input::set_mouse_position(double x, double y)
