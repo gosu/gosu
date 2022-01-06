@@ -9,27 +9,14 @@
 
 #include "libmodplug.h"
 
+static const
 BYTE autovibit2xm[8] =
 { 0, 3, 1, 4, 2, 0, 0, 0 };
-
-BYTE autovibxm2it[8] =
-{ 0, 2, 4, 1, 3, 0, 0, 0 };
 
 //////////////////////////////////////////////////////////
 // Impulse Tracker IT file support
 
-// for conversion of XM samples
-extern WORD XMPeriodTable[96+8];
-extern UINT XMLinearTable[768];
-
-static inline UINT ConvertVolParam(UINT value)
-//--------------------------------------------
-{
-	return (value > 9)  ? 9 : value;
-}
-
-
-BOOL CSoundFile_ITInstrToMPT(const void *p, INSTRUMENTHEADER *penv, UINT trkvers)
+static BOOL ITInstrToMPT(const void *p, INSTRUMENTHEADER *penv, UINT trkvers)
 //--------------------------------------------------------------------------------
 {
 	if (trkvers < 0x0200)
@@ -155,12 +142,13 @@ BOOL CSoundFile_ReadIT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 	DWORD inspos[MAX_INSTRUMENTS];
 	DWORD smppos[MAX_SAMPLES];
 	DWORD patpos[MAX_PATTERNS];
-	BYTE chnmask[64], channels_used[64];
+	BYTE chnmask[64];//, channels_used[64]
 	MODCOMMAND lastvalue[64];
+	UINT j;
 
 	if ((!lpStream) || (dwMemLength < sizeof(ITFILEHEADER))) return FALSE;
 	ITFILEHEADER pifh;
-    SDL_memcpy(&pifh, lpStream, sizeof (pifh));
+	SDL_memcpy(&pifh, lpStream, sizeof(pifh));
 
 	pifh.id = bswapLE32(pifh.id);
 	pifh.reserved1 = bswapLE16(pifh.reserved1);
@@ -218,9 +206,8 @@ BOOL CSoundFile_ReadIT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 	if (inspossize > MAX_INSTRUMENTS) inspossize = MAX_INSTRUMENTS;
 	inspossize <<= 2;
 	SDL_memcpy(inspos, lpStream+dwMemPos, inspossize);
-	for (UINT j=0; j < (inspossize>>2); j++)
-	{
-	       inspos[j] = bswapLE32(inspos[j]);
+	for (j=0; j < (inspossize>>2); j++) {
+	    inspos[j] = bswapLE32(inspos[j]);
 	}
 	dwMemPos += pifh.insnum * 4;
 	// Reading Samples Offsets
@@ -229,9 +216,8 @@ BOOL CSoundFile_ReadIT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 	if (smppossize > MAX_SAMPLES) smppossize = MAX_SAMPLES;
 	smppossize <<= 2;
 	SDL_memcpy(smppos, lpStream+dwMemPos, smppossize);
-	for (UINT j=0; j < (smppossize>>2); j++)
-	{
-	       smppos[j] = bswapLE32(smppos[j]);
+	for (j=0; j < (smppossize>>2); j++) {
+	    smppos[j] = bswapLE32(smppos[j]);
 	}
 	dwMemPos += pifh.smpnum * 4;
 	// Reading Patterns Offsets
@@ -240,9 +226,8 @@ BOOL CSoundFile_ReadIT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 	if (patpossize > MAX_PATTERNS) patpossize = MAX_PATTERNS;
 	patpossize <<= 2;
 	SDL_memcpy(patpos, lpStream+dwMemPos, patpossize);
-	for (UINT j=0; j < (patpossize>>2); j++)
-	{
-	       patpos[j] = bswapLE32(patpos[j]);
+	for (j=0; j < (patpossize>>2); j++) {
+	    patpos[j] = bswapLE32(patpos[j]);
 	}
 	dwMemPos += pifh.patnum * 4;
 	// Reading IT Extra Info
@@ -286,6 +271,8 @@ BOOL CSoundFile_ReadIT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 		dwMemPos += 8;
 		if ((dwMemPos + len <= dwMemLength) && (len <= 64*MAX_CHANNELNAME))
 		{
+			const UINT n = len / MAX_CHANNELNAME;
+			if (n > _this->m_nChannels) _this->m_nChannels = n;
 			dwMemPos += len;
 		}
 	}
@@ -346,13 +333,13 @@ BOOL CSoundFile_ReadIT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 	if (_this->m_nInstruments >= MAX_INSTRUMENTS) _this->m_nInstruments = MAX_INSTRUMENTS-1;
 	for (UINT nins=0; nins<_this->m_nInstruments; nins++)
 	{
-		if ((inspos[nins] > 0) && (inspos[nins] < dwMemLength - sizeof(ITOLDINSTRUMENT)))
+		if ((inspos[nins] > 0) && dwMemLength > sizeof(ITOLDINSTRUMENT) &&
+			(inspos[nins] < dwMemLength - sizeof(ITOLDINSTRUMENT)))
 		{
-			INSTRUMENTHEADER *penv = (INSTRUMENTHEADER *) SDL_malloc(sizeof (INSTRUMENTHEADER));
+			INSTRUMENTHEADER *penv = (INSTRUMENTHEADER *) SDL_calloc(1, sizeof (INSTRUMENTHEADER));
 			if (!penv) continue;
 			_this->Headers[nins+1] = penv;
-			SDL_memset(penv, 0, sizeof(INSTRUMENTHEADER));
-			CSoundFile_ITInstrToMPT(lpStream + inspos[nins], penv, pifh.cmwt);
+			ITInstrToMPT(lpStream + inspos[nins], penv, pifh.cmwt);
 		}
 	}
 	// Reading Samples
@@ -361,7 +348,7 @@ BOOL CSoundFile_ReadIT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 	for (UINT nsmp=0; nsmp<pifh.smpnum; nsmp++) if ((smppos[nsmp]) && (smppos[nsmp] <= dwMemLength - sizeof(ITSAMPLESTRUCT)))
 	{
 		ITSAMPLESTRUCT pis;
-        SDL_memcpy(&pis, lpStream+smppos[nsmp], sizeof (pis));
+		SDL_memcpy(&pis, lpStream+smppos[nsmp], sizeof (pis));
 		pis.id = bswapLE32(pis.id);
 		pis.length = bswapLE32(pis.length);
 		pis.loopbegin = bswapLE32(pis.loopbegin);
@@ -487,7 +474,7 @@ BOOL CSoundFile_ReadIT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 					if (note < 0x80) note++;
 					m[ch].note = note;
 					lastvalue[ch].note = note;
-					channels_used[ch] = TRUE;
+				//	channels_used[ch] = TRUE;
 				}
 			}
 			if (chnmask[ch] & 2)
@@ -567,12 +554,16 @@ BOOL CSoundFile_ReadIT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 //////////////////////////////////////////////////////////////////////////////
 // IT 2.14 compression
 
-static DWORD ITReadBits(DWORD *bitbuf, UINT *bitnum, LPBYTE *_ibuf, CHAR n)
+static DWORD ITReadBits(DWORD *bitbuf, UINT *bitnum, LPBYTE *_ibuf, LPBYTE ibufend, CHAR n)
 //-----------------------------------------------------------------
 {
-    LPBYTE ibuf = *_ibuf;
+	LPBYTE ibuf = *_ibuf;
 	DWORD retval = 0;
 	UINT i = n;
+
+	// explicit if read 0 bits, then return 0
+	if (i == 0)
+		return(0);
 
 	if (n > 0)
 	{
@@ -580,6 +571,11 @@ static DWORD ITReadBits(DWORD *bitbuf, UINT *bitnum, LPBYTE *_ibuf, CHAR n)
 		{
 			if (!*bitnum)
 			{
+				if (ibuf >= ibufend)
+				{
+					*_ibuf = ibuf;
+					return 0;
+				}
 				*bitbuf = *ibuf++;
 				*bitnum = 8;
 			}
@@ -591,7 +587,7 @@ static DWORD ITReadBits(DWORD *bitbuf, UINT *bitnum, LPBYTE *_ibuf, CHAR n)
 		} while (i);
 		i = n;
 	}
-    *_ibuf = ibuf;
+	*_ibuf = ibuf;
 	return (retval >> (32-i));
 }
 
@@ -601,7 +597,8 @@ void ITUnpack8Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dwM
 {
 	signed char *pDst = pSample;
 	LPBYTE pSrc = lpMemFile;
-	DWORD wHdr = 0;
+	LPBYTE pStop = lpMemFile + dwMemLength;
+//	DWORD wHdr = 0;
 	DWORD wCount = 0;
 	DWORD bitbuf = 0;
 	UINT bitnum = 0;
@@ -612,7 +609,7 @@ void ITUnpack8Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dwM
 		if (!wCount)
 		{
 			wCount = 0x8000;
-			wHdr = bswapLE16(*((LPWORD)pSrc));
+		//	wHdr = bswapLE16(*((LPWORD)pSrc));
 			pSrc += 2;
 			bLeft = 9;
 			bTemp = bTemp2 = 0;
@@ -624,13 +621,13 @@ void ITUnpack8Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dwM
 		DWORD dwPos = 0;
 		do
 		{
-			WORD wBits = (WORD)ITReadBits(&bitbuf, &bitnum, &pSrc, bLeft);
+			WORD wBits = (WORD)ITReadBits(&bitbuf, &bitnum, &pSrc, pStop, bLeft);
 			if (bLeft < 7)
 			{
 				DWORD i = 1 << (bLeft-1);
 				DWORD j = wBits & 0xFFFF;
 				if (i != j) goto UnpackByte;
-				wBits = (WORD)(ITReadBits(&bitbuf, &bitnum, &pSrc, 3) + 1) & 0xFF;
+				wBits = (WORD)(ITReadBits(&bitbuf, &bitnum, &pSrc, pStop, 3) + 1) & 0xFF;
 				bLeft = ((BYTE)wBits < bLeft) ? (BYTE)wBits : (BYTE)((wBits+1) & 0xFF);
 				goto Next;
 			}
@@ -668,7 +665,7 @@ void ITUnpack8Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dwM
 		SkipByte:
 			dwPos++;
 		Next:
-			if (pSrc >= lpMemFile+dwMemLength+1) return;
+			if (pSrc >= pStop + 1) return;
 		} while (dwPos < d);
 		// Move On
 		wCount -= d;
@@ -683,7 +680,8 @@ void ITUnpack16Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dw
 {
 	signed short *pDst = (signed short *)pSample;
 	LPBYTE pSrc = lpMemFile;
-	DWORD wHdr = 0;
+	LPBYTE pStop = lpMemFile + dwMemLength;
+//	DWORD wHdr = 0;
 	DWORD wCount = 0;
 	DWORD bitbuf = 0;
 	UINT bitnum = 0;
@@ -695,7 +693,7 @@ void ITUnpack16Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dw
 		if (!wCount)
 		{
 			wCount = 0x4000;
-			wHdr = bswapLE16(*((LPWORD)pSrc));
+		//	wHdr = bswapLE16(*((LPWORD)pSrc));
 			pSrc += 2;
 			bLeft = 17;
 			wTemp = wTemp2 = 0;
@@ -707,13 +705,13 @@ void ITUnpack16Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dw
 		DWORD dwPos = 0;
 		do
 		{
-			DWORD dwBits = ITReadBits(&bitbuf, &bitnum, &pSrc, bLeft);
+			DWORD dwBits = ITReadBits(&bitbuf, &bitnum, &pSrc, pStop, bLeft);
 			if (bLeft < 7)
 			{
 				DWORD i = 1 << (bLeft-1);
 				DWORD j = dwBits;
 				if (i != j) goto UnpackByte;
-				dwBits = ITReadBits(&bitbuf, &bitnum, &pSrc, 4) + 1;
+				dwBits = ITReadBits(&bitbuf, &bitnum, &pSrc, pStop, 4) + 1;
 				bLeft = ((BYTE)(dwBits & 0xFF) < bLeft) ? (BYTE)(dwBits & 0xFF) : (BYTE)((dwBits+1) & 0xFF);
 				goto Next;
 			}
@@ -751,13 +749,13 @@ void ITUnpack16Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dw
 		SkipByte:
 			dwPos++;
 		Next:
-			if (pSrc >= lpMemFile+dwMemLength+1) return;
+			if (pSrc >= pStop + 1) return;
 		} while (dwPos < d);
 		// Move On
 		wCount -= d;
 		dwLen -= d;
 		pDst += d;
-		if (pSrc >= lpMemFile+dwMemLength) break;
+		if (pSrc >= pStop) break;
 	}
 }
 
@@ -770,7 +768,6 @@ UINT CSoundFile_LoadMixPlugins(CSoundFile *_this, const void *pData, UINT nLen)
 	while (nPos+8 < nLen)
 	{
 		DWORD nPluginSize;
-		UINT nPlugin;
 
 		nPluginSize = bswapLE32(*(DWORD *)(p+nPos+4));
 		if (nPluginSize > nLen-nPos-8) break;;
@@ -787,10 +784,9 @@ UINT CSoundFile_LoadMixPlugins(CSoundFile *_this, const void *pData, UINT nLen)
 			{
 				break;
 			}
-            // took out the (otherwise unused) plugin loading code here.  --ryan.
+			// took out the (otherwise unused) plugin loading code here.  --ryan.
 		}
 		nPos += nPluginSize + 8;
 	}
 	return nPos;
 }
-

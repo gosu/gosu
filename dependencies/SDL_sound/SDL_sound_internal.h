@@ -18,14 +18,9 @@
 #error Do not include this header from your applications.
 #endif
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-
 #include "SDL_sound.h"
 
-#if (defined(__GNUC__) && (__GNUC__ >= 4)) || defined(__clang__)
+#if ((defined(__GNUC__) && (__GNUC__ >= 4)) || defined(__clang__)) && !(defined(_WIN32) || defined(__OS2__))
 #define SOUND_HAVE_PRAGMA_VISIBILITY 1
 #endif
 
@@ -34,11 +29,14 @@
 #endif
 
 #if (defined DEBUG_CHATTER)
-#define SNDDBG(x) SDL_LogDebug x
+#define SNDDBG(x) SDL_Log x
 #else
 #define SNDDBG(x)
 #endif
 
+#ifndef SOUND_SUPPORTS_MIDI
+#define SOUND_SUPPORTS_MIDI  0
+#endif
 #ifndef SOUND_SUPPORTS_MP3
 #define SOUND_SUPPORTS_MP3 1
 #endif
@@ -86,7 +84,7 @@
  *  SDL_sound that rely on it, though.
  * !!! FIXME: SDL2 supports more channels.
  */
-#define MAX_CHANNELS 2
+#define SOUND_MAX_CHANNELS  2
 
 
 typedef struct __SOUND_DECODERFUNCTIONS__
@@ -294,9 +292,18 @@ Uint32 __Sound_convertMsToBytePos(Sound_AudioInfo *info, Uint32 ms);
 #define BAIL_MACRO(e, r) { __Sound_SetError(e); return r; }
 #define BAIL_IF_MACRO(c, e, r) if (c) { __Sound_SetError(e); return r; }
 
-#ifdef __cplusplus
-extern "C" {
+#if SDL_VERSION_ATLEAST(2,0,12)
+#define HAVE_SDL_STRTOKR
+#else
+#define SDL_strtokr __Sound_strtokr
+extern char *SDL_strtokr(char *s1, const char *s2, char **saveptr);
 #endif
+
+/* SDL doesn't provide a rand() replacement */
+#define SDL_rand __Sound_rand
+#define SDL_srand __Sound_srand
+extern int SDL_rand(void);
+extern void SDL_srand(unsigned int seed);
 
 #endif /* defined _INCLUDE_SDL_SOUND_INTERNAL_H_ */
 

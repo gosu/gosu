@@ -69,7 +69,7 @@ BOOL CSoundFile_ReadPTM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 
 	if ((!lpStream) || (dwMemLength < sizeof(PTMFILEHEADER))) return FALSE;
 	PTMFILEHEADER pfh;
-    SDL_memcpy(&pfh, lpStream, sizeof (pfh));
+	SDL_memcpy(&pfh, lpStream, sizeof (pfh));
 
 	pfh.norders = bswapLE16(pfh.norders);
 	pfh.nsamples = bswapLE16(pfh.nsamples);
@@ -104,6 +104,7 @@ BOOL CSoundFile_ReadPTM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	{
 		MODINSTRUMENT *pins = &_this->Ins[ismp+1];
 		PTMSAMPLE *psmp = (PTMSAMPLE *)(lpStream+dwMemPos);
+
 		pins->nGlobalVol = 64;
 		pins->nPan = 128;
 		pins->nVolume = psmp->volume << 2;
@@ -149,48 +150,49 @@ BOOL CSoundFile_ReadPTM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			if (b)
 			{
 				UINT nChn = b & 0x1F;
+				MODCOMMAND *selm = &m[nChn < _this->m_nChannels ? nChn : 0];
 
 				if (b & 0x20)
 				{
 					if (dwMemPos + 2 > dwMemLength) break;
-					m[nChn].note = lpStream[dwMemPos++];
-					m[nChn].instr = lpStream[dwMemPos++];
+					selm->note = lpStream[dwMemPos++];
+					selm->instr = lpStream[dwMemPos++];
 				}
 				if (b & 0x40)
 				{
 					if (dwMemPos + 2 > dwMemLength) break;
-					m[nChn].command = lpStream[dwMemPos++];
-					m[nChn].param = lpStream[dwMemPos++];
-					if ((m[nChn].command == 0x0E) && ((m[nChn].param & 0xF0) == 0x80))
+					selm->command = lpStream[dwMemPos++];
+					selm->param = lpStream[dwMemPos++];
+					if ((selm->command == 0x0E) && ((selm->param & 0xF0) == 0x80))
 					{
-						m[nChn].command = CMD_S3MCMDEX;
+						selm->command = CMD_S3MCMDEX;
 					} else
-					if (m[nChn].command < 0x10)
+					if (selm->command < 0x10)
 					{
-						CSoundFile_ConvertModCommand(_this, &m[nChn]);
+						CSoundFile_ConvertModCommand(_this, selm);
 					} else
 					{
-						switch(m[nChn].command)
+						switch(selm->command)
 						{
 						case 16:
-							m[nChn].command = CMD_GLOBALVOLUME;
+							selm->command = CMD_GLOBALVOLUME;
 							break;
 						case 17:
-							m[nChn].command = CMD_RETRIG;
+							selm->command = CMD_RETRIG;
 							break;
 						case 18:
-							m[nChn].command = CMD_FINEVIBRATO;
+							selm->command = CMD_FINEVIBRATO;
 							break;
 						default:
-							m[nChn].command = 0;
+							selm->command = 0;
 						}
 					}
 				}
 				if (b & 0x80)
 				{
 					if (dwMemPos >= dwMemLength) break;
-					m[nChn].volcmd = VOLCMD_VOLUME;
-					m[nChn].vol = lpStream[dwMemPos++];
+					selm->volcmd = VOLCMD_VOLUME;
+					selm->vol = lpStream[dwMemPos++];
 				}
 			} else
 			{
@@ -201,4 +203,3 @@ BOOL CSoundFile_ReadPTM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	}
 	return TRUE;
 }
-

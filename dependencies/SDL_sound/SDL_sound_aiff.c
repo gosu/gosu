@@ -245,7 +245,7 @@ static int read_ssnd_chunk(SDL_RWops *rw, ssnd_t *ssnd)
     ssnd->blockSize = SDL_SwapBE32(ssnd->blockSize);
 
     /* Leave the SDL_RWops position indicator at the start of the samples */
-    if (SDL_RWseek(rw, (int) ssnd->offset, SEEK_CUR) == -1)
+    if (SDL_RWseek(rw, (int) ssnd->offset, RW_SEEK_CUR) == -1)
         return 0;
 
     return 1;
@@ -279,7 +279,7 @@ static Uint32 read_sample_fmt_normal(Sound_Sample *sample)
     if ((retval == 0) || (a->bytesLeft == 0))
         sample->flags |= SOUND_SAMPLEFLAG_EOF;
 
-    else if (retval == -1)
+    else if (retval == -1) /** FIXME: this error check is broken **/
         sample->flags |= SOUND_SAMPLEFLAG_ERROR;
 
         /* (next call this EAGAIN may turn into an EOF or error.) */
@@ -304,7 +304,7 @@ static int seek_sample_fmt_normal(Sound_Sample *sample, Uint32 ms)
     fmt_t *fmt = &a->fmt;
     int offset = __Sound_convertMsToBytePos(&sample->actual, ms);
     int pos = (int) (fmt->data_starting_offset + offset);
-    int rc = SDL_RWseek(internal->rw, pos, SEEK_SET);
+    int rc = SDL_RWseek(internal->rw, pos, RW_SEEK_SET);
     BAIL_IF_MACRO(rc != pos, ERR_IO_ERROR, 0);
     a->bytesLeft = fmt->total_bytes - offset;
     return 1;  /* success. */
@@ -360,7 +360,7 @@ static int find_chunk(SDL_RWops *rw, Uint32 id)
         BAIL_IF_MACRO(SDL_RWread(rw, &siz, sizeof (siz), 1) != 1, NULL, 0);
         siz = SDL_SwapBE32(siz);
         SDL_assert(siz > 0);
-        BAIL_IF_MACRO(SDL_RWseek(rw, siz, SEEK_CUR) == -1, NULL, 0);
+        BAIL_IF_MACRO(SDL_RWseek(rw, siz, RW_SEEK_CUR) == -1, NULL, 0);
     } /* while */
 
     return 0;  /* shouldn't hit this, but just in case... */
@@ -380,14 +380,11 @@ static int read_fmt(SDL_RWops *rw, comm_t *c, fmt_t *fmt)
 
         /* add other types here. */
 
-        default:
-            SNDDBG(("AIFF: Format %lu is unknown.\n",
-                    (unsigned int) fmt->type));
-            BAIL_MACRO("AIFF: Unsupported format", 0);
     } /* switch */
 
-    SDL_assert(0);  /* shouldn't hit this point. */
-    return 0;
+    SNDDBG(("AIFF: Format %u is unknown.\n",
+            (unsigned int) fmt->type));
+    BAIL_MACRO("AIFF: Unsupported format", 0);
 } /* read_fmt */
 
 
@@ -450,7 +447,7 @@ static int AIFF_open(Sound_Sample *sample, const char *ext)
         return 0;
     } /* if */
 
-    SDL_RWseek(rw, pos, SEEK_SET);    /* if the seek fails, let it go... */
+    SDL_RWseek(rw, pos, RW_SEEK_SET);   /* if the seek fails, let it go... */
 
     if (!find_chunk(rw, ssndID))
     {
@@ -497,7 +494,7 @@ static int AIFF_rewind(Sound_Sample *sample)
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     aiff_t *a = (aiff_t *) internal->decoder_private;
     fmt_t *fmt = &a->fmt;
-    int rc = SDL_RWseek(internal->rw, fmt->data_starting_offset, SEEK_SET);
+    int rc = SDL_RWseek(internal->rw, fmt->data_starting_offset, RW_SEEK_SET);
     BAIL_IF_MACRO(rc != fmt->data_starting_offset, ERR_IO_ERROR, 0);
     a->bytesLeft = fmt->total_bytes;
     return fmt->rewind_sample(sample);

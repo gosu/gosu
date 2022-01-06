@@ -6,6 +6,7 @@
 
 #include "libmodplug.h"
 
+#ifdef SNDFX_C
 static const BYTE ImpulseTrackerPortaVolCmd[16] =
 {
 	0x00, 0x01, 0x04, 0x08, 0x10, 0x20, 0x40, 0x60,
@@ -22,7 +23,6 @@ static const WORD ProTrackerPeriodTable[6*12] =
 	107,101,95,90,85,80,75,71,67,63,60,56,
 	53,50,47,45,42,40,37,35,33,31,30,28
 };
-
 
 static const WORD ProTrackerTunedPeriods[16*12] = 
 {
@@ -44,7 +44,6 @@ static const WORD ProTrackerTunedPeriods[16*12] =
 	1724,1628,1536,1450,1368,1292,1220,1150,1086,1026,968,914 
 };
 
-
 // S3M C-4 periods
 static const WORD FreqS3MTable[16] = 
 {
@@ -53,15 +52,15 @@ static const WORD FreqS3MTable[16] =
 	0,0,0,0
 };
 
-
 // S3M FineTune frequencies
 static const WORD S3MFineTuneTable[16] = 
 {
 	7895,7941,7985,8046,8107,8169,8232,8280,
 	8363,8413,8463,8529,8581,8651,8723,8757,	// 8363*2^((i-8)/(12*8))
 };
+#endif
 
-
+#ifdef SNDMIX_C
 // Sinus table
 static const int16_t ModSinusTable[64] =
 {
@@ -97,16 +96,15 @@ static const int16_t ModRandomTable[64] =
 	-23,88,21,-94,8,106,21,-112,6,109,20,-88,-30,9,-127,118,
 	42,-34,89,-4,-51,-72,21,-29,112,123,84,-101,-92,98,-54,-95
 };
+#endif
 
-
+#ifdef SNDFX_C
 // volume fade tables for Retrig Note:
 static const int8_t retrigTable1[16] =
 { 0, 0, 0, 0, 0, 0, 10, 8, 0, 0, 0, 0, 0, 0, 24, 32 };
 
 static const int8_t retrigTable2[16] =
 { 0, -1, -2, -4, -8, -16, 0, 0, 0, 1, 2, 4, 8, 16, 0, 0 };
-
-
 
 static const WORD XMPeriodTable[104] = 
 {
@@ -118,7 +116,6 @@ static const WORD XMPeriodTable[104] =
 	508,505,502,498,494,491,487,484,480,477,474,470,467,463,460,457,
 	453,450,447,443,440,437,434,431
 };
-
 
 static const uint32_t XMLinearTable[768] = 
 {
@@ -220,8 +217,9 @@ static const uint32_t XMLinearTable[768] =
 	271508,271263,271018,270774,270530,270286,270042,269798,
 	269555,269312,269069,268826,268583,268341,268099,267857 
 };
+#endif
 
-
+#ifdef SNDMIX_C
 static const int8_t ft2VibratoTable[256] = 
 {
 	0,-2,-3,-5,-6,-8,-9,-11,-12,-14,-16,-17,-19,-20,-22,-23,
@@ -241,8 +239,7 @@ static const int8_t ft2VibratoTable[256] =
 	48,47,46,45,44,43,42,41,39,38,37,36,34,33,32,30,29,27,
 	26,24,23,22,20,19,17,16,14,12,11,9,8,6,5,3,2 
 };
-
-
+#endif
 
 static const DWORD FineLinearSlideUpTable[16] =
 {
@@ -250,13 +247,11 @@ static const DWORD FineLinearSlideUpTable[16] =
 	66011, 66071, 66130, 66190, 66250, 66309, 66369, 66429
 };
 
-
 static const DWORD FineLinearSlideDownTable[16] =
 {
 	65535, 65477, 65418, 65359, 65300, 65241, 65182, 65123,
 	65065, 65006, 64947, 64888, 64830, 64772, 64713, 64645
 };
-
 
 static const DWORD LinearSlideUpTable[256] = 
 {
@@ -293,7 +288,6 @@ static const DWORD LinearSlideUpTable[256] =
 	155871, 156435, 157001, 157569, 158138, 158710, 159284, 159860, 
 	160439, 161019, 161601, 162186, 162772, 163361, 163952, 164545, 
 };
-
 
 static const DWORD LinearSlideDownTable[256] = 
 {
@@ -332,7 +326,7 @@ static const DWORD LinearSlideDownTable[256] =
 	26770, 26673, 26577, 26481, 26386, 26291, 26196, 26102, 
 };
 
-
+#if 0
 static const int SpectrumSinusTable[256*2] = 
 {
 	0, 1, 1, 2, 3, 3, 4, 5, 6, 7, 7, 8, 9, 10, 10, 11, 
@@ -368,4 +362,5 @@ static const int SpectrumSinusTable[256*2] =
 	-24, -23, -22, -22, -21, -20, -20, -19, -18, -17, -17, -16, -15, -14, -14, -13, 
 	-12, -11, -10, -10, -9, -8, -7, -7, -6, -5, -4, -3, -3, -2, -1, 0, 
 };
+#endif
 

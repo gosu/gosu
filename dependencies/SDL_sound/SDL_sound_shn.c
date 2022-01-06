@@ -174,6 +174,10 @@ static const Uint8 ulaw_outward[13][256] = {
 #define M_PI    3.14159265358979323846
 #endif
 
+#if defined(HAVE_LIBC) && defined(__WATCOMC__) /* Watcom has issues... */
+#define SDL_log log
+#endif
+
 
 static int word_get(shn_t *shn, SDL_RWops *rw, Uint32 *word)
 {
@@ -331,7 +335,7 @@ static SDL_INLINE int determine_shn_version(Sound_Sample *sample,
      *  check the whole stream, though.
      */
 
-    if (SDL_strcasecmp(ext, "shn") == 0)
+    if (ext != NULL && SDL_strcasecmp(ext, "shn") == 0)
         return extended_shn_magic_search(sample);
 
     BAIL_IF_MACRO(SDL_RWread(rw, &magic, sizeof (magic), 1) != 1, NULL, -1);
@@ -1016,13 +1020,10 @@ static Uint32 SHN_read(Sound_Sample *sample)
 {
     Uint32 retval = 0;
     Sint32 chan = 0;
-    Uint32 cpyBytes = 0;
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     SDL_RWops *rw = internal->rw;
     shn_t *shn = (shn_t *) internal->decoder_private;
     Sint32 cmd;
-
-    SDL_assert(shn->backBufLeft >= 0);
 
         /* see if there are leftovers to copy... */
     if (shn->backBufLeft > 0)
@@ -1253,10 +1254,10 @@ static Uint32 SHN_read(Sound_Sample *sample)
 static int SHN_rewind(Sound_Sample *sample)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
-    shn_t *shn = (shn_t *) internal->decoder_private;
 
 #if 0
-    int rc = SDL_RWseek(internal->rw, shn->start_pos, SEEK_SET);
+    shn_t *shn = (shn_t *) internal->decoder_private;
+    int rc = SDL_RWseek(internal->rw, shn->start_pos, RW_SEEK_SET);
     BAIL_IF_MACRO(rc != shn->start_pos, ERR_IO_ERROR, 0);
     /* !!! FIXME: set state. */
     return 1;
@@ -1267,7 +1268,7 @@ static int SHN_rewind(Sound_Sample *sample)
      * !!! FIXME:  to decode. The below kludge adds unneeded overhead and
      * !!! FIXME:  risk of failure.
      */
-    BAIL_IF_MACRO(SDL_RWseek(internal->rw, 0, SEEK_SET) != 0, ERR_IO_ERROR, 0);
+    BAIL_IF_MACRO(SDL_RWseek(internal->rw, 0, RW_SEEK_SET) != 0, ERR_IO_ERROR, 0);
     SHN_close(sample);
     return SHN_open(sample, "SHN");
 #endif

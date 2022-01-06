@@ -5,7 +5,7 @@
 */
 
 #include "libmodplug.h"
-#include <stdlib.h>
+#define SNDFX_C
 #include "tables.h"
 
 DWORD CSoundFile_GetLength(CSoundFile *_this, BOOL bAdjust, BOOL bTotal)
@@ -13,9 +13,8 @@ DWORD CSoundFile_GetLength(CSoundFile *_this, BOOL bAdjust, BOOL bTotal)
 {
 	UINT dwElapsedTime=0, nRow=0, nCurrentPattern=0, nNextPattern=0, nPattern=0;
 	UINT nMusicSpeed=_this->m_nDefaultSpeed, nMusicTempo=_this->m_nDefaultTempo, nNextRow=0;
-	UINT nMaxRow = 0, nMaxPattern = 0;
+	UINT nMaxRow = 0, nMaxPattern = 0, nNextStartRow = 0;
 	LONG nGlbVol = _this->m_nDefaultGlobalVolume, nOldGlbVolSlide = 0;
-	BYTE samples[MAX_CHANNELS];
 	BYTE instr[MAX_CHANNELS];
 	BYTE notes[MAX_CHANNELS];
 	BYTE vols[MAX_CHANNELS];
@@ -29,7 +28,6 @@ DWORD CSoundFile_GetLength(CSoundFile *_this, BOOL bAdjust, BOOL bTotal)
 	SDL_memset(patloop, 0, sizeof(patloop));
 	SDL_memset(oldparam, 0, sizeof(oldparam));
 	SDL_memset(chnvols, 64, sizeof(chnvols));
-	SDL_memset(samples, 0, sizeof(samples));
 	for (UINT icv=0; icv<_this->m_nChannels; icv++)
 		chnvols[icv] = _this->ChnSettings[icv].nVolume;
 	nMaxRow = _this->m_nNextRow;
@@ -40,7 +38,7 @@ DWORD CSoundFile_GetLength(CSoundFile *_this, BOOL bAdjust, BOOL bTotal)
 		nRow = nNextRow;
 		nCurrentPattern = nNextPattern;
 		// Check if pattern is valid
-		nPattern = _this->Order[nCurrentPattern];
+		nPattern = (nCurrentPattern < MAX_ORDERS) ? _this->Order[nCurrentPattern] : 0xFF;
 		while (nPattern >= MAX_PATTERNS)
 		{
 			// End of song ?
@@ -55,7 +53,8 @@ DWORD CSoundFile_GetLength(CSoundFile *_this, BOOL bAdjust, BOOL bTotal)
 			nNextPattern = nCurrentPattern;
 		}
 		// Weird stuff?
-		if ((nPattern >= MAX_PATTERNS) || (!_this->Patterns[nPattern])) break;
+		if ((nPattern >= MAX_PATTERNS) || (!_this->Patterns[nPattern]) ||
+			_this->PatternSize[nPattern] == 0) break;
 		// Should never happen
 		if (nRow >= _this->PatternSize[nPattern]) nRow = 0;
 		// Update next position
@@ -63,7 +62,8 @@ DWORD CSoundFile_GetLength(CSoundFile *_this, BOOL bAdjust, BOOL bTotal)
 		if (nNextRow >= _this->PatternSize[nPattern])
 		{
 			nNextPattern = nCurrentPattern + 1;
-			nNextRow = 0;
+			nNextRow = nNextStartRow;
+			nNextStartRow = 0;
 		}
 		if (!nRow)
 		{
@@ -98,6 +98,7 @@ DWORD CSoundFile_GetLength(CSoundFile *_this, BOOL bAdjust, BOOL bTotal)
 				if (param <= nCurrentPattern) goto EndMod;
 				nNextPattern = param;
 				nNextRow = 0;
+				nNextStartRow = 0;
 				if (bAdjust)
 				{
 					pChn->nPatternLoopCount = 0;
@@ -108,6 +109,7 @@ DWORD CSoundFile_GetLength(CSoundFile *_this, BOOL bAdjust, BOOL bTotal)
 			case CMD_PATTERNBREAK:
 				nNextRow = param;
 				nNextPattern = nCurrentPattern + 1;
+				nNextStartRow = 0;
 				if (bAdjust)
 				{
 					pChn->nPatternLoopCount = 0;
@@ -149,7 +151,10 @@ DWORD CSoundFile_GetLength(CSoundFile *_this, BOOL bAdjust, BOOL bTotal)
 				if ((param & 0xF0) == 0x60)
 				{
 					if (param & 0x0F) dwElapsedTime += (dwElapsedTime - patloop[nChn]) * (param & 0x0F);
-					else patloop[nChn] = dwElapsedTime;
+					else {
+						patloop[nChn] = dwElapsedTime;
+						if (_this->m_nType & MOD_TYPE_XM) nNextStartRow = nRow;
+					}
 				}
 				break;
 			}
@@ -515,13 +520,13 @@ void CSoundFile_NoteChange(CSoundFile *_this, UINT nChn, int note, BOOL bPorta, 
 					// Volume Swing
 					if (penv->nVolSwing)
 					{
-						int d = ((LONG)penv->nVolSwing*(LONG)((rand() & 0xFF) - 0x7F)) / 128;
+						int d = ((LONG)penv->nVolSwing*(LONG)((SDL_rand() & 0xFF) - 0x7F)) / 128;
 						pChn->nVolSwing = (signed short)((d * pChn->nVolume + 1)/128);
 					}
 					// Pan Swing
 					if (penv->nPanSwing)
 					{
-						int d = ((LONG)penv->nPanSwing*(LONG)((rand() & 0xFF) - 0x7F)) / 128;
+						int d = ((LONG)penv->nPanSwing*(LONG)((SDL_rand() & 0xFF) - 0x7F)) / 128;
 						pChn->nPanSwing = (signed short)d;
 					}
 				}
@@ -686,7 +691,7 @@ void CSoundFile_CheckNNA(CSoundFile *_this, UINT nChn, UINT instr, int note, BOO
 		UINT n = CSoundFile_GetNNAChannel(_this, nChn);
 		if (n)
 		{
-			MODCHANNEL *p = &_this->Chn[n];
+			p = &_this->Chn[n];
 			// Copy Channel
 			SDL_memcpy(p, pChn, sizeof (*p));
 			p->dwFlags &= ~(CHN_VIBRATO|CHN_TREMOLO|CHN_PANBRELLO|CHN_MUTE|CHN_PORTAMENTO);
@@ -1159,11 +1164,13 @@ BOOL CSoundFile_ProcessEffects(CSoundFile *_this)
 		// Position Jump
 		case CMD_POSITIONJUMP:
 			nPosJump = param;
+			_this->m_nNextStartRow = 0;
 			break;
 
 		// Pattern Break
 		case CMD_PATTERNBREAK:
 			nBreakRow = param;
+			_this->m_nNextStartRow = 0;
 			break;
 
 		// Midi Controller
@@ -1205,9 +1212,6 @@ BOOL CSoundFile_ProcessEffects(CSoundFile *_this)
 						if (_this->m_nRepeatCount > 0) _this->m_nRepeatCount--;
 					} else
 					{
-					#ifdef MODPLUG_TRACKER
-						if (_this->gdwSoundSetup & SNDMIX_NOBACKWARDJUMPS)
-					#endif
 						// Backward jump disabled
 						bNoLoop = TRUE;
 						//reset repeat count incase there are multiple loops.
@@ -2039,8 +2043,6 @@ void CSoundFile_SetSpeed(CSoundFile *_this, UINT param)
 //-----------------------------------
 {
 	UINT max = (_this->m_nType == MOD_TYPE_IT) ? 256 : 128;
-	// Modplug Tracker and Mod-Plugin don't do this check
-#ifndef MODPLUG_TRACKER
 	// Big Hack!!!
 	if ((!param) || (param >= 0x80) || ((_this->m_nType & (MOD_TYPE_MOD|MOD_TYPE_XM|MOD_TYPE_MT2)) && (param >= 0x1E)))
 	{
@@ -2049,7 +2051,6 @@ void CSoundFile_SetSpeed(CSoundFile *_this, UINT param)
 			CSoundFile_GlobalFadeSong(_this, 1000);
 		}
 	}
-#endif // MODPLUG_TRACKER
 	if ((_this->m_nType & MOD_TYPE_S3M) && (param > 0x80)) param -= 0x80;
 	if ((param) && (param <= max)) _this->m_nMusicSpeed = param;
 }
@@ -2100,6 +2101,7 @@ int CSoundFile_PatternLoop(CSoundFile *_this, MODCHANNEL *pChn, UINT param)
 	} else
 	{
 		pChn->nPatternLoop = _this->m_nRow;
+		if (_this->m_nType & MOD_TYPE_XM) _this->m_nNextStartRow = _this->m_nRow;
 	}
 	return -1;
 }
@@ -2271,8 +2273,12 @@ UINT CSoundFile_GetPeriodFromNote(CSoundFile *_this, UINT note, int nFineTune, U
 			return (FreqS3MTable[note % 12] << 5) >> (note / 12);
 		} else
 		{
+			int divider;
 			if (!nC4Speed) nC4Speed = 8363;
-			return _muldiv(8363, (FreqS3MTable[note % 12] << 5), nC4Speed << (note / 12));
+			// if C4Speed is large, then up shifting may produce a zero divider
+			divider = nC4Speed << (note / 12);
+			if (!divider) divider = 1e6;
+			return _muldiv(8363, (FreqS3MTable[note % 12] << 5), divider);
 		}
 	} else
 	if (_this->m_nType & (MOD_TYPE_XM|MOD_TYPE_MT2))

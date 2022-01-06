@@ -131,6 +131,9 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		// Instruments
 		if (chunk_id == bswapLE32(DBM_ID_INST))
 		{
+			// Skip duplicate chunks.
+			if (_this->m_nInstruments) continue;
+
 			if (nInstruments >= MAX_INSTRUMENTS) nInstruments = MAX_INSTRUMENTS-1;
 			for (UINT iIns=0; iIns<nInstruments; iIns++)
 			{
@@ -140,11 +143,10 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 				UINT nsmp;
 
 				if (chunk_pos + sizeof(DBMINSTRUMENT) > dwMemPos) break;
-				if ((penv = (INSTRUMENTHEADER *) SDL_malloc(sizeof (INSTRUMENTHEADER))) == NULL) break;
+				if ((penv = (INSTRUMENTHEADER *) SDL_calloc(1, sizeof (INSTRUMENTHEADER))) == NULL) break;
 				pih = (DBMINSTRUMENT *)(lpStream+chunk_pos);
 				nsmp = bswapBE16(pih->sampleno);
 				psmp = ((nsmp) && (nsmp < MAX_SAMPLES)) ? &_this->Ins[nsmp] : NULL;
-				SDL_memset(penv, 0, sizeof(INSTRUMENTHEADER));
 				_this->Headers[iIns+1] = penv;
 				penv->nFadeOut = 1024;	// ???
 				penv->nGlobalVol = 64;
@@ -228,6 +230,9 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 				DWORD pksize;
 				UINT nRows;
 
+				// Skip duplicate chunks.
+				if (_this->Patterns[iPat]) break;
+
 				if (chunk_pos + sizeof(DBMPATTERN) > dwMemPos) break;
 				pph = (DBMPATTERN *)(lpStream+chunk_pos);
 				pksize = bswapBE32(pph->packedsize);
@@ -238,7 +243,7 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 					MODCOMMAND *m = CSoundFile_AllocatePattern(nRows, _this->m_nChannels);
 					if (m)
 					{
-						LPBYTE pkdata = (LPBYTE)&pph->patterndata;
+						LPBYTE pkdata = (LPBYTE)pph->patterndata;
 						UINT row = 0;
 						UINT i = 0;
 
@@ -354,4 +359,3 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	}
 	return TRUE;
 }
-

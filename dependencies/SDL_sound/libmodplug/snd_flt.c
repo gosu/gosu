@@ -12,7 +12,7 @@
 
 #ifndef NO_FILTER
 
-DWORD CSoundFile_CutOffToFrequency(CSoundFile *_this, UINT nCutOff, int flt_modifier)
+static DWORD CutOffToFrequency(CSoundFile *_this, UINT nCutOff, int flt_modifier)
 //-----------------------------------------------------------------------
 {
 	float Fc;
@@ -33,7 +33,7 @@ DWORD CSoundFile_CutOffToFrequency(CSoundFile *_this, UINT nCutOff, int flt_modi
 void CSoundFile_SetupChannelFilter(CSoundFile *_this, MODCHANNEL *pChn, BOOL bReset, int flt_modifier)
 //----------------------------------------------------------------------------------------
 {
-	float fc = (float)CSoundFile_CutOffToFrequency(_this, pChn->nCutOff, flt_modifier);
+	float fc = (float)CutOffToFrequency(_this, pChn->nCutOff, flt_modifier);
 	float fs = (float)_this->gdwMixingFreq;
 	float fg, fb0, fb1;
 

@@ -9,35 +9,32 @@
 #ifndef _INCL_LIBMODPLUG_H_
 #define _INCL_LIBMODPLUG_H_
 
-#include "SDL.h"
+#define __SDL_SOUND_INTERNAL__
+#include "SDL_sound_internal.h"
 
-#if (defined(__GNUC__) && (__GNUC__ >= 4)) || defined(__clang__)
-#pragma GCC visibility push(hidden)
+#if defined(HAVE_LIBC) && defined(__WATCOMC__) /* Watcom has issues... */
+#define SDL_cos  cos
+#define SDL_fabs fabs
+#define SDL_log  log
+#define SDL_pow  pow
+#define SDL_sin  sin
+#define SDL_sinf sin
+#define SDL_abs  abs
 #endif
 
 #ifdef _WIN32
 
-#ifdef MSC_VER
+#ifdef _MSC_VER
 #pragma warning (disable:4201)
 #pragma warning (disable:4514)
 #endif
 
+#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
-#include <windowsx.h>
-#include <mmsystem.h>
-#include <stdio.h>
-#include <malloc.h>
-#include <stdint.h>
-
-#define srandom(_seed)  srand(_seed)
-#define random()        rand()
 
 #else
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 
 typedef Sint8 CHAR;
 typedef Uint8 UCHAR;
@@ -61,20 +58,7 @@ typedef const char* LPCSTR;
 typedef void* PVOID;
 typedef void VOID;
 
-inline LONG MulDiv (long a, long b, long c)
-{
-  // if (!c) return 0;
-  return ((uint64_t) a * (uint64_t) b ) / c;
-}
-
 #define LPCTSTR LPCSTR
-#define WAVE_FORMAT_PCM 1
-//#define ENABLE_EQ
-
-#define  GHND   0
-
-#define GlobalAllocPtr(x, size) ((int8_t *) SDL_calloc(1, (size)))
-#define GlobalFreePtr(p) SDL_free((void *)(p))
 
 #ifndef FALSE
 #define FALSE	0
@@ -86,43 +70,7 @@ inline LONG MulDiv (long a, long b, long c)
 
 #endif // _WIN32
 
-
-typedef struct {
-	char *mm;
-	int sz;
-	int pos;
-	int error;
-} MMFILE;
-
-void mmfclose(MMFILE *mmfile);
-int mmfeof(MMFILE *mmfile);
-int mmfgetc(MMFILE *mmfile);
-void mmfgets(char buf[], unsigned int bufsz, MMFILE *mmfile);
-long mmftell(MMFILE *mmfile);
-void mmfseek(MMFILE *mmfile, long p, int whence);
-BYTE mmreadUBYTE(MMFILE *mmfile);
-void mmreadUBYTES(BYTE *buf, long sz, MMFILE *mmfile);
-void mmreadSBYTES(char *buf, long sz, MMFILE *mmfile);
-char *rwops_fgets(char *buf, int buflen, SDL_RWops *rwops);
-
-#define MMSTREAM					SDL_RWops
-#define _mm_fopen(name,mode)		SDL_RWFromFile(name, mode)
-#define _mm_fgets(f,buf,sz)			rwops_fgets(buf,sz,f)
-#define _mm_fseek(f,pos,whence)		SDL_RWseek(f,pos,whence)
-#define _mm_ftell(f)				SDL_RWtell(f)
-#define _mm_read_UBYTES(buf,sz,f)	SDL_RWread(f, buf, 1, sz)
-#define _mm_read_SBYTES(buf,sz,f)	SDL_RWread(f, buf, 1, sz)
-#define _mm_feof(f)					(SDL_RWtell(f) >= SDL_RWsize(f))
-#define _mm_fclose(f)				SDL_RWclose(f)
-#define DupStr(h,buf,sz)			SDL_strdup(buf)
-#define _mm_calloc(h,n,sz)			SDL_calloc(n,sz)
-#define _mm_recalloc(h,buf,sz,elsz)	SDL_realloc(buf,sz)
-#define _mm_free(h,p)				SDL_free(p)
-
-
 #define MODPLUG_EXPORT
-
-
 
 /*
  * This source code is public domain.
@@ -130,6 +78,8 @@ char *rwops_fgets(char *buf, int buflen, SDL_RWops *rwops);
  * Authors: Olivier Lapicque <olivierl@jps.net>,
  *          Adam Goode       <adam@evdebs.org> (endian and char fixes for PPC)
 */
+
+extern void init_modplug_filters(void);
 
 #ifndef LPCBYTE
 typedef const BYTE * LPCBYTE;
@@ -153,7 +103,6 @@ typedef const BYTE * LPCBYTE;
 #define MAX_EQ_BANDS		6
 #define MAX_MIXPLUGINS		8
 
-
 #define MOD_TYPE_NONE		0x00
 #define MOD_TYPE_MOD		0x01
 #define MOD_TYPE_S3M		0x02
@@ -171,7 +120,6 @@ typedef const BYTE * LPCBYTE;
 #define MOD_TYPE_DSM		0x2000
 #define MOD_TYPE_MDL		0x4000
 #define MOD_TYPE_OKT		0x8000
-#define MOD_TYPE_MID		0x10000
 #define MOD_TYPE_DMF		0x20000
 #define MOD_TYPE_PTM		0x40000
 #define MOD_TYPE_DBM		0x80000
@@ -179,12 +127,9 @@ typedef const BYTE * LPCBYTE;
 #define MOD_TYPE_AMF0		0x200000
 #define MOD_TYPE_PSM		0x400000
 #define MOD_TYPE_J2B		0x800000
-#define MOD_TYPE_ABC		0x1000000
-#define MOD_TYPE_PAT		0x2000000
+#define MOD_TYPE_GDM		0x40000000 // Fake type
 #define MOD_TYPE_UMX		0x80000000 // Fake type
 #define MAX_MODTYPE		24
-
-
 
 // Channel flags:
 // Bits 0-7:	Sample Flags
@@ -217,7 +162,6 @@ typedef const BYTE * LPCBYTE;
 #define CHN_EXTRALOUD		0x2000000
 #define CHN_REVERB              0x4000000
 #define CHN_NOREVERB		0x8000000
-
 
 #define ENV_VOLUME              0x0001
 #define ENV_VOLSUSTAIN		0x0002
@@ -266,7 +210,6 @@ typedef const BYTE * LPCBYTE;
 #define CMD_PANNINGSLIDE		29
 #define CMD_SETENVPOSITION		30
 #define CMD_MIDI                        31
-
 
 // Volume Column commands
 #define VOLCMD_VOLUME			1
@@ -438,7 +381,6 @@ enum {
 	NUM_REVERBTYPES
 };
 
-
 enum {
 	SRCMODE_NEAREST,
 	SRCMODE_LINEAR,
@@ -446,7 +388,6 @@ enum {
 	SRCMODE_POLYPHASE,
 	NUM_SRC_MODES
 };
-
 
 // Sample Struct
 typedef struct _MODINSTRUMENT
@@ -466,7 +407,6 @@ typedef struct _MODINSTRUMENT
 	BYTE nVibDepth;
 	BYTE nVibRate;
 } MODINSTRUMENT;
-
 
 // Instrument Struct
 typedef struct _INSTRUMENTHEADER
@@ -514,7 +454,6 @@ typedef struct _INSTRUMENTHEADER
 	unsigned char nPPC;
 	CHAR filename[12];
 } INSTRUMENTHEADER;
-
 
 // Channel Struct
 typedef struct _MODCHANNEL
@@ -576,7 +515,6 @@ typedef struct _MODCHANNEL
 	BYTE nActiveMacro, nPadding;
 } MODCHANNEL;
 
-
 typedef struct _MODCHANNELSETTINGS
 {
 	UINT nPan;
@@ -584,7 +522,6 @@ typedef struct _MODCHANNELSETTINGS
 	DWORD dwFlags;
 	UINT nMixPlugin;
 } MODCHANNELSETTINGS;
-
 
 typedef struct _MODCOMMAND
 {
@@ -609,7 +546,6 @@ enum {
 	MIDIOUT_BANKSEL,
 	MIDIOUT_PROGRAM,
 };
-
 
 typedef struct MODMIDICFG
 {
@@ -637,7 +573,7 @@ typedef struct CSoundFile
 	UINT m_nType, m_nSamples, m_nInstruments;
 	UINT m_nTickCount, m_nTotalCount, m_nPatternDelay, m_nFrameDelay;
 	UINT m_nMusicSpeed, m_nMusicTempo;
-	UINT m_nNextRow, m_nRow;
+	UINT m_nNextRow, m_nRow, m_nNextStartRow;
 	UINT m_nPattern,m_nCurrentPattern,m_nNextPattern,m_nRestartPos;
 	UINT m_nMasterVolume, m_nGlobalVolume, m_nSongPreAmp;
 	UINT m_nFreqFactor, m_nTempoFactor, m_nOldGlbVolSlide;
@@ -654,6 +590,7 @@ typedef struct CSoundFile
 	UINT m_nMaxMixChannels;
 	DWORD gdwSoundSetup, gdwMixingFreq, gnBitsPerSample, gnChannels;
 	UINT gnVolumeRampSamples;
+
     UINT gSampleSize;
     int MixSoundBuffer[MIXBUFFERSIZE*4];
     #ifndef MODPLUG_NO_REVERB
@@ -721,8 +658,8 @@ typedef struct CSoundFile
     int gbInitPlugins;
 } CSoundFile;
 
-typedef struct _ModPlug_Settings ModPlug_Settings;
-CSoundFile *new_CSoundFile(LPCBYTE lpStream, DWORD dwMemLength, const ModPlug_Settings *settings);
+struct _ModPlug_Settings;
+CSoundFile *new_CSoundFile(LPCBYTE lpStream, DWORD dwMemLength, const struct _ModPlug_Settings *settings);
 void delete_CSoundFile(CSoundFile *_this);
 
 	UINT CSoundFile_GetMaxPosition(CSoundFile *_this);
@@ -752,15 +689,8 @@ void delete_CSoundFile(CSoundFile *_this);
 	BOOL CSoundFile_ReadAMF(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength);
 	BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength);
 	BOOL CSoundFile_ReadPSM(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength);
-	BOOL CSoundFile_ReadJ2B(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength);
+	BOOL CSoundFile_ReadGDM(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength);
 	BOOL CSoundFile_ReadUMX(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength);
-	BOOL CSoundFile_ReadABC(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength);
-	BOOL CSoundFile_ReadMID(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength);
-	BOOL CSoundFile_ReadPAT(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength);
-
-	BOOL CSoundFile_TestABC(LPCBYTE lpStream, DWORD dwMemLength);
-	BOOL CSoundFile_TestMID(LPCBYTE lpStream, DWORD dwMemLength);
-	BOOL CSoundFile_TestPAT(LPCBYTE lpStream, DWORD dwMemLength);
 
 	// MOD Convert function
 	void CSoundFile_ConvertModCommand(CSoundFile *_this, MODCOMMAND *);
@@ -854,9 +784,6 @@ void delete_CSoundFile(CSoundFile *_this);
 	BOOL CSoundFile_ITInstrToMPT(const void *p, INSTRUMENTHEADER *penv, UINT trkvers);
 
 	UINT CSoundFile_LoadMixPlugins(CSoundFile *_this, const void *pData, UINT nLen);
-#ifndef NO_FILTER
-	DWORD CSoundFile_CutOffToFrequency(CSoundFile *_this, UINT nCutOff, int flt_modifier); // [0-255] => [1-10KHz]
-#endif
 
 	DWORD CSoundFile_TransposeToFrequency(int transp, int ftune);
 	int CSoundFile_FrequencyToTranspose(DWORD freq);
@@ -867,7 +794,6 @@ void delete_CSoundFile(CSoundFile *_this);
 	void CSoundFile_FreePattern(LPVOID pat);
 	void CSoundFile_FreeSample(LPVOID p);
 	UINT CSoundFile_Normalize24BitBuffer(LPBYTE pbuffer, UINT cbsizebytes, DWORD lmax24, DWORD dwByteInc);
-
 
 
 #pragma pack(1)
@@ -897,7 +823,6 @@ typedef struct tagITFILEHEADER
 	BYTE chnpan[64];
 	BYTE chnvol[64];
 } ITFILEHEADER;
-
 
 typedef struct tagITENVELOPE
 {
@@ -929,12 +854,12 @@ typedef struct tagITOLDINSTRUMENT
 	WORD trkvers;
 	BYTE nos;
 	BYTE reserved2;
+	CHAR name[26];
 	WORD reserved3[3];
 	BYTE keyboard[240];
 	BYTE volenv[200];
 	BYTE nodes[50];
 } ITOLDINSTRUMENT;
-
 
 // Impulse Instrument Format
 typedef struct tagITINSTRUMENT
@@ -955,6 +880,7 @@ typedef struct tagITINSTRUMENT
 	WORD trkvers;
 	BYTE nos;
 	BYTE reserved1;
+	CHAR name[26];
 	BYTE ifc;
 	BYTE ifr;
 	BYTE mch;
@@ -967,7 +893,6 @@ typedef struct tagITINSTRUMENT
 	BYTE dummy[4]; // was 7, but IT v2.17 saves 554 bytes
 } ITINSTRUMENT;
 
-
 // IT Sample Format
 typedef struct ITSAMPLESTRUCT
 {
@@ -977,6 +902,7 @@ typedef struct ITSAMPLESTRUCT
 	BYTE gvl;
 	BYTE flags;
 	BYTE vol;
+	CHAR name[26];
 	BYTE cvt;
 	BYTE dfp;
 	DWORD length;
@@ -994,8 +920,4 @@ typedef struct ITSAMPLESTRUCT
 
 #pragma pack()
 
-extern BYTE autovibit2xm[8];
-extern BYTE autovibxm2it[8];
-
 #endif
-

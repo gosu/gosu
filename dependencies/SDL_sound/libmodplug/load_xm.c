@@ -10,7 +10,7 @@
 ////////////////////////////////////////////////////////
 // FastTracker II XM file support
 
-#ifdef MSC_VER
+#ifdef _MSC_VER
 #pragma warning(disable:4244)
 #endif
 
@@ -29,7 +29,6 @@ typedef struct tagXMFILEHEADER
 	BYTE order[256];
 } XMFILEHEADER;
 
-
 typedef struct tagXMINSTRUMENTHEADER
 {
 	DWORD size;
@@ -38,7 +37,6 @@ typedef struct tagXMINSTRUMENTHEADER
 	BYTE samples;
 	BYTE samplesh;
 } XMINSTRUMENTHEADER;
-
 
 typedef struct tagXMSAMPLEHEADER
 {
@@ -70,7 +68,6 @@ typedef struct tagXMSAMPLESTRUCT
 } XMSAMPLESTRUCT;
 #pragma pack()
 
-
 BOOL CSoundFile_ReadXM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLength)
 //--------------------------------------------------------------
 {
@@ -88,14 +85,16 @@ BOOL CSoundFile_ReadXM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 
 	_this->m_nChannels = 0;
 	if ((!lpStream) || (dwMemLength < 0x200)) return FALSE;
-	if (SDL_strncasecmp((LPCSTR)lpStream, "Extended Module", 15)) return FALSE;
+	if (SDL_strncmp((LPCSTR)lpStream, "Extended Module:", 16)) return FALSE;
 
 	SDL_memcpy(&xmhead, lpStream+60, sizeof (xmhead));
 	dwHdrSize = bswapLE32(xmhead.size);
 	norders = bswapLE16(xmhead.norder);
-	if ((!norders) || (norders > MAX_ORDERS)) return FALSE;
 	restartpos = bswapLE16(xmhead.restartpos);
 	channels = bswapLE16(xmhead.channels);
+
+	if ((!dwHdrSize) || dwHdrSize > dwMemLength - 60) return FALSE;
+	if ((!norders) || (norders > MAX_ORDERS)) return FALSE;
 	if ((!channels) || (channels > 64)) return FALSE;
 	_this->m_nType = MOD_TYPE_XM;
 	_this->m_nMinPeriod = 27;
@@ -162,6 +161,7 @@ BOOL CSoundFile_ReadXM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 			dwMemPos++;
 			dwSize = bswapLE32(*((DWORD *)(lpStream+dwMemPos)));
 		}
+		if (dwMemPos + 9 > dwMemLength) return TRUE;		
 		rows = bswapLE16(*((WORD *)(lpStream+dwMemPos+5)));
 		if ((!rows) || (rows > 256)) rows = 64;
 		packsize = bswapLE16(*((WORD *)(lpStream+dwMemPos+7)));
@@ -188,13 +188,14 @@ BOOL CSoundFile_ReadXM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 					UINT vol = 0;
 					if (b & 0x80)
 					{
-						if (b & 1) p->note = src[j++];
-						if (b & 2) p->instr = src[j++];
-						if (b & 4) vol = src[j++];
-						if (b & 8) p->command = src[j++];
-						if (b & 16) p->param = src[j++];
+						if ((b & 1)  && j < packsize) p->note = src[j++];
+						if ((b & 2)  && j < packsize) p->instr = src[j++];
+						if ((b & 4)  && j < packsize) vol = src[j++];
+						if ((b & 8)  && j < packsize) p->command = src[j++];
+						if ((b & 16) && j < packsize) p->param = src[j++];
 					} else
 					{
+						if (j + 5 > packsize) break;
 						p->note = b;
 						p->instr = src[j++];
 						vol = src[j++];
@@ -276,15 +277,16 @@ BOOL CSoundFile_ReadXM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 		DWORD samplesize[32];
 		UINT samplemap[32];
 		WORD nsamples;
+		DWORD pihlen;
 
 		if (dwMemPos + sizeof(XMINSTRUMENTHEADER) >= dwMemLength) return TRUE;
 		pih = (XMINSTRUMENTHEADER *)(lpStream+dwMemPos);
-		if (dwMemPos + bswapLE32(pih->size) > dwMemLength) return TRUE;
-		if ((_this->Headers[iIns] = (INSTRUMENTHEADER *) SDL_malloc(sizeof (INSTRUMENTHEADER))) == NULL) continue;
-		SDL_memset(_this->Headers[iIns], 0, sizeof(INSTRUMENTHEADER));
+		pihlen = bswapLE32(pih->size);
+		if (pihlen >= dwMemLength || dwMemPos > dwMemLength - pihlen) return TRUE;
+		if ((_this->Headers[iIns] = (INSTRUMENTHEADER *) SDL_calloc(1, sizeof(INSTRUMENTHEADER))) == NULL) continue;
 		if ((nsamples = pih->samples) > 0)
 		{
-			if (dwMemPos + sizeof(XMSAMPLEHEADER) > dwMemLength) return TRUE;
+			if (dwMemPos + sizeof(XMINSTRUMENTHEADER) + sizeof(XMSAMPLEHEADER) > dwMemLength) return TRUE;
 			SDL_memcpy(&xmsh, lpStream+dwMemPos+sizeof(XMINSTRUMENTHEADER), sizeof(XMSAMPLEHEADER));
 			xmsh.shsize = bswapLE32(xmsh.shsize);
 			for (int i = 0; i < 24; ++i) {
@@ -293,10 +295,10 @@ BOOL CSoundFile_ReadXM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 			}
 			xmsh.volfade = bswapLE16(xmsh.volfade);
 			xmsh.res = bswapLE16(xmsh.res);
-			dwMemPos += bswapLE32(pih->size);
+			dwMemPos += pihlen;
 		} else
 		{
-			if (bswapLE32(pih->size)) dwMemPos += bswapLE32(pih->size);
+			if (pihlen) dwMemPos += pihlen;
 			else dwMemPos += sizeof(XMINSTRUMENTHEADER);
 			continue;
 		}
@@ -431,7 +433,7 @@ BOOL CSoundFile_ReadXM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 		for (UINT ins=0; ins<nsamples; ins++)
 		{
 			if ((dwMemPos + sizeof(xmss) > dwMemLength)
-			 || (dwMemPos + xmsh.shsize > dwMemLength)) return TRUE;
+			 || (xmsh.shsize >= dwMemLength) || (dwMemPos > dwMemLength - xmsh.shsize)) return TRUE;
 			SDL_memcpy(&xmss, lpStream+dwMemPos, sizeof(xmss));
 			xmss.samplen = bswapLE32(xmss.samplen);
 			xmss.loopstart = bswapLE32(xmss.loopstart);
@@ -512,6 +514,7 @@ BOOL CSoundFile_ReadXM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 	{
 		UINT len = *((DWORD *)(lpStream+dwMemPos+4));
 		dwMemPos += 8;
+		if (len >= dwMemLength || dwMemPos > dwMemLength - len) return TRUE;
 		if (len == sizeof(MODMIDICFG))
 		{
 			SDL_memcpy(&_this->m_MidiCfg, lpStream+dwMemPos, len);
@@ -523,7 +526,8 @@ BOOL CSoundFile_ReadXM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 	{
 		UINT len = *((DWORD *)(lpStream+dwMemPos+4));
 		dwMemPos += 8;
-		if ((dwMemPos + len <= dwMemLength) && (len <= MAX_PATTERNS*MAX_PATTERNNAME) && (len >= MAX_PATTERNNAME))
+		if (len >= dwMemLength || dwMemPos > dwMemLength - len) return TRUE;
+		if ((len <= MAX_PATTERNS*MAX_PATTERNNAME) && (len >= MAX_PATTERNNAME))
 		{
 			_this->m_lpszPatternNames = (char *) SDL_malloc(len);
 			if (_this->m_lpszPatternNames)
@@ -539,7 +543,8 @@ BOOL CSoundFile_ReadXM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 	{
 		UINT len = *((DWORD *)(lpStream+dwMemPos+4));
 		dwMemPos += 8;
-		if ((dwMemPos + len <= dwMemLength) && (len <= MAX_BASECHANNELS*MAX_CHANNELNAME))
+		if (len >= dwMemLength || dwMemPos > dwMemLength - len) return TRUE;
+		if (len <= MAX_BASECHANNELS*MAX_CHANNELNAME)
 		{
 			dwMemPos += len;
 		}
@@ -551,4 +556,3 @@ BOOL CSoundFile_ReadXM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLengt
 	}
 	return TRUE;
 }
-

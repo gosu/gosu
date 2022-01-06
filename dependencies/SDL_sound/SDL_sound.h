@@ -62,16 +62,16 @@ extern "C" {
 
 #ifndef DOXYGEN_SHOULD_IGNORE_THIS
 
-#ifdef SDL_SOUND_DLL_EXPORTS
+#if defined(SDL_SOUND_DLL_EXPORTS) && (defined(_WIN32) || defined(__OS2__))
 #  define SNDDECLSPEC __declspec(dllexport)
-#elif (__GNUC__ >= 3)
+#elif ((defined(__GNUC__) && (__GNUC__ >= 4)) || defined(__clang__)) && !(defined(_WIN32) || defined(__OS2__))
 #  define SNDDECLSPEC __attribute__((visibility("default")))
 #else
 #  define SNDDECLSPEC
 #endif
 
-#define SOUND_VER_MAJOR 1
-#define SOUND_VER_MINOR 9
+#define SOUND_VER_MAJOR 2
+#define SOUND_VER_MINOR 0
 #define SOUND_VER_PATCH 0
 #endif
 
