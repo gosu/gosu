@@ -903,6 +903,16 @@ module Gosu
     def needs_cursor?; end
 
     ##
+    # This method can be overridden to confine the system cursor to your window.
+    #
+    # With great power comes great responsibity; Only capture the the mouse when you need it captured
+    # and release it as soon as you no longer need it captured as taking control away from your users
+    # without an obvious way of getting it back will readily irritate them.
+    #
+    # @return [true, false] whether the system cursor is captured.
+    def capture_cursor?; end
+
+    ##
     # This method is called whenever the user tries to close the window, e.g. by clicking the [x]
     # button in the window's title bar.
     # If you do not want the window to close immediately, you should override this method and

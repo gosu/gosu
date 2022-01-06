@@ -89,6 +89,13 @@ GOSU_FFI_API void Gosu_Window_set_needs_cursor(Gosu_Window* window, bool functio
     });
 }
 
+GOSU_FFI_API void Gosu_Window_set_capture_cursor(Gosu_Window* window, bool function(void*), void* data)
+{
+    Gosu_translate_exceptions([=] {
+        window->capture_cursor_callback = [=] { return function(data); };
+    });
+}
+
 GOSU_FFI_API void Gosu_Window_set_close(Gosu_Window* window, void function(void*), void* data)
 {
     Gosu_translate_exceptions([=] {

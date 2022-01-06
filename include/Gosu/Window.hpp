@@ -89,6 +89,9 @@ namespace Gosu
         //! If this function returns true, the system cursor will be visible while over the window.
         virtual bool needs_cursor() const { return true; }
 
+        //! If this function returns true, the system cursor is confined to the window.
+        virtual bool capture_cursor() const { return false; }
+
         virtual void gain_focus() {}
 
         //! This function is called when the window loses focus on some platforms.
