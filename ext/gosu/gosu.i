@@ -1083,6 +1083,7 @@ namespace Gosu
 %rename("mouse_x=") set_mouse_x;
 %rename("mouse_y=") set_mouse_y;
 %rename("needs_cursor?") needs_cursor;
+%rename("capture_cursor?") capture_cursor;
 %rename("needs_redraw?") needs_redraw;
 %rename("close!") force_close;
 %rename("fullscreen?") fullscreen;
