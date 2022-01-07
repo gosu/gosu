@@ -58,16 +58,6 @@
 #endif
 #define alloca(x) ((void *) SDL_stack_alloc(Uint8, (x)))
 */
-#if !(defined(HAVE_LIBC) && defined(__WATCOMC__)) /* Watcom has issues... */
-#define pow SDL_pow
-#define floor SDL_floor
-#define exp SDL_exp
-#define ldexp(v, e) SDL_scalbn((v), (e))
-#define abs(x) SDL_abs(x)
-#define cos(x) SDL_cos(x)
-#define sin(x) SDL_sin(x)
-#define log(x) SDL_log(x)
-#endif
 #endif
 #include "stb_vorbis.h"
 
