@@ -54,9 +54,6 @@
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_669.c">
       <Filter>Dependencies</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_abc.c">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_amf.c">
       <Filter>Dependencies</Filter>
     </ClCompile>
@@ -84,9 +81,6 @@
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_med.c">
       <Filter>Dependencies</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mid.c">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mod.c">
       <Filter>Dependencies</Filter>
     </ClCompile>
@@ -97,9 +91,6 @@
       <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_okt.c">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_pat.c">
       <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_psm.c">
@@ -290,6 +281,9 @@
     </ClCompile>
     <ClCompile Include="..\src\WindowUIKit.cpp">
       <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_gdm.c">
+      <Filter>Dependencies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -567,9 +561,6 @@
       <Filter>Dependencies</Filter>
     </ClInclude>
     <ClInclude Include="..\dependencies\SDL_sound\libmodplug\libmodplug.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL_sound\libmodplug\load_pat.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
     <ClInclude Include="..\dependencies\SDL_sound\libmodplug\modplug.h">
