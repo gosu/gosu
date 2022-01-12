@@ -43,6 +43,13 @@ struct Gosu_Image
     Gosu::Image image;
 };
 
+#ifdef GOSU_ENABLE_VIDEO
+struct Gosu_Video
+{
+    Gosu::Video video;
+};
+#endif
+
 struct Gosu_Sample
 {
     Gosu::Sample sample;
