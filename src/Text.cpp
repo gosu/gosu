@@ -56,7 +56,7 @@ Gosu::Bitmap Gosu::layout_markup(const std::string& markup, const std::string& f
                             }};
         parser.parse(markup);
 
-        return text_builder.move_into_bitmap();
+        return std::move(text_builder).move_into_bitmap();
     }
     else {
         std::vector<std::vector<FormattedString>> lines;
