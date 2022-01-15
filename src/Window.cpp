@@ -2,6 +2,7 @@
 #if !defined(GOSU_IS_IPHONE)
 
 #if defined(GOSU_IS_WIN)
+#define NOMINMAX
 #include <windows.h>
 #endif
 
