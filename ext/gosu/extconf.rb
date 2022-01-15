@@ -51,7 +51,7 @@ if windows
   else
     $LDFLAGS << "  -L../../dependencies/al_soft/x86 -L../../dependencies/SDL/lib/x86"
   end
-  $LDFLAGS << " -lgdi32 -lwinmm -ldwmapi -lOpenGL32 -lOpenAL32 -lSDL2"
+  $LDFLAGS << " -lgdi32 -lwinmm -ldwmapi -lOpenGL32 -lSDL2"
   # Link libstdc++ statically to avoid having another DLL dependency when using Ocra.
   $LDFLAGS << " -static-libstdc++"
 elsif macos
@@ -66,7 +66,7 @@ elsif macos
   # Disable an error that is disabled by default and prevents Gosu from building with universal Ruby:
   # https://trac.macports.org/ticket/58255 / https://github.com/gosu/gosu/issues/424
   $CXXFLAGS << " -Wno-reserved-user-defined-literal"
-  
+
   # Dependencies.
   $CFLAGS << " #{`sdl2-config --cflags`.chomp}"
   $CXXFLAGS << " #{`sdl2-config --cflags`.chomp}"
@@ -75,7 +75,7 @@ elsif macos
   # And yet another hack: `sdl2-config --static-libs` uses `-lSDL2` instead of linking to the static library,
   # even if it exists. -> Manually replace it. (Ugh!)
   $LDFLAGS.sub! " -lSDL2 ", " /usr/local/lib/libSDL2.a " if File.exist? "/usr/local/lib/libSDL2.a"
-  
+
   # Disable building of 32-bit slices in Apple's Ruby.
   # (RbConfig::CONFIG['CXXFLAGS'] on 10.11: -arch x86_64 -arch i386 -g -Os -pipe)
   $CFLAGS.gsub! "-arch i386", ""
@@ -97,12 +97,11 @@ else
 
   pkg_config 'sdl2'
   pkg_config 'vorbisfile'
-  pkg_config 'openal'
   pkg_config 'sndfile'
   pkg_config 'libmpg123'
   pkg_config 'fontconfig'
-  
-  have_header 'AL/al.h' if have_library('openal')
+
+  # have_header 'AL/al.h' if have_library('openal')
 end
 
 # Because Ruby will only compile source file in the src/ folder, but our dependencies are
