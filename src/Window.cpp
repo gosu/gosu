@@ -27,6 +27,7 @@ namespace Gosu
 
     SDL_Window* shared_window()
     {
+        // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
         static SDL_Window* window = nullptr;
         if (window == nullptr) {
             if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -244,12 +245,14 @@ void Gosu::Window::set_update_interval(double update_interval)
     m_impl->update_interval = update_interval;
 }
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 std::string Gosu::Window::caption() const
 {
     const char* title = SDL_GetWindowTitle(shared_window());
     return title ? title : "";
 }
 
+// NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 void Gosu::Window::set_caption(const std::string& caption)
 {
     SDL_SetWindowTitle(shared_window(), caption.c_str());
@@ -269,9 +272,10 @@ void Gosu::Window::show()
     try {
         while (tick()) {
             // Sleep to keep this loop from eating 100% CPU.
-            double tick_time = milliseconds() - time_before_tick;
-            if (tick_time < update_interval()) {
-                sleep(update_interval() - tick_time);
+            unsigned long tick_time = milliseconds() - time_before_tick;
+            double sleep_time = tick_time - update_interval();
+            if (sleep_time >= 1) {
+                sleep(static_cast<unsigned long>(sleep_time));
             }
 
             time_before_tick = milliseconds();
@@ -342,10 +346,9 @@ bool Gosu::Window::tick()
                 break;
             }
             case SDL_DROPFILE: {
-                char* dropped_filedir = e.drop.file;
-                if (dropped_filedir == nullptr) break;
-                drop(std::string(dropped_filedir));
-                SDL_free(dropped_filedir);
+                std::shared_ptr<char> dropped_file{e.drop.file, SDL_free};
+                if (dropped_file == nullptr) break;
+                drop(dropped_file.get());
                 break;
             }
             default: {
