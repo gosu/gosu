@@ -171,6 +171,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_gdm.c" />
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound.c" />
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_aiff.c" />
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_au.c" />
@@ -185,7 +186,6 @@
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_wav.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\fastmix.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_669.c" />
-    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_abc.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_amf.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_ams.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_dbm.c" />
@@ -195,12 +195,10 @@
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_it.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mdl.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_med.c" />
-    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mid.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mod.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mt2.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mtm.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_okt.c" />
-    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_pat.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_psm.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_ptm.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_s3m.c" />
@@ -358,7 +356,6 @@
     <ClInclude Include="..\dependencies\SDL_sound\dr_flac.h" />
     <ClInclude Include="..\dependencies\SDL_sound\dr_mp3.h" />
     <ClInclude Include="..\dependencies\SDL_sound\libmodplug\libmodplug.h" />
-    <ClInclude Include="..\dependencies\SDL_sound\libmodplug\load_pat.h" />
     <ClInclude Include="..\dependencies\SDL_sound\libmodplug\modplug.h" />
     <ClInclude Include="..\dependencies\SDL_sound\libmodplug\tables.h" />
     <ClInclude Include="..\dependencies\SDL_sound\stb_vorbis.h" />

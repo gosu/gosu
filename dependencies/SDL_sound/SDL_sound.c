@@ -19,6 +19,7 @@
 /* The various decoder drivers... */
 
 /* All these externs may be missing; we check SOUND_SUPPORTS_xxx before use. */
+extern const Sound_DecoderFunctions __Sound_DecoderFunctions_MIDI;
 extern const Sound_DecoderFunctions __Sound_DecoderFunctions_MODPLUG;
 extern const Sound_DecoderFunctions __Sound_DecoderFunctions_MP3;
 extern const Sound_DecoderFunctions __Sound_DecoderFunctions_WAV;
@@ -40,6 +41,9 @@ typedef struct
 
 static decoder_element decoders[] =
 {
+#if SOUND_SUPPORTS_MIDI
+    { 0, &__Sound_DecoderFunctions_MIDI },
+#endif
 #if SOUND_SUPPORTS_MODPLUG
     { 0, &__Sound_DecoderFunctions_MODPLUG },
 #endif
@@ -348,8 +352,7 @@ static Sound_Sample *alloc_sample(SDL_RWops *rw, Sound_AudioInfo *desired,
 #if (defined DEBUG_CHATTER)
 static SDL_INLINE const char *fmt_to_str(Uint16 fmt)
 {
-    switch(fmt)
-    {
+    switch(fmt) {
         case AUDIO_U8:
             return "U8";
         case AUDIO_S8:
@@ -371,7 +374,6 @@ static SDL_INLINE const char *fmt_to_str(Uint16 fmt)
         case AUDIO_F32MSB:
             return "F32MSB";
     } /* switch */
-
     return "Unknown";
 } /* fmt_to_str */
 #endif
@@ -396,7 +398,7 @@ static int init_sample(const Sound_DecoderFunctions *funcs,
     internal->funcs = funcs;
     if (!funcs->open(sample, ext))
     {
-        SDL_RWseek(internal->rw, pos, SEEK_SET);  /* set for next try... */
+        SDL_RWseek(internal->rw, pos, RW_SEEK_SET);     /* set for next try... */
         return 0;
     } /* if */
 
@@ -423,7 +425,7 @@ static int init_sample(const Sound_DecoderFunctions *funcs,
     {
         __Sound_SetError(SDL_GetError());
         funcs->close(sample);
-        SDL_RWseek(internal->rw, pos, SEEK_SET);  /* set for next try... */
+        SDL_RWseek(internal->rw, pos, RW_SEEK_SET);     /* set for next try... */
         return 0;
     } /* if */
 
@@ -433,7 +435,7 @@ static int init_sample(const Sound_DecoderFunctions *funcs,
         if (rc == NULL)
         {
             funcs->close(sample);
-            SDL_RWseek(internal->rw, pos, SEEK_SET);  /* set for next try... */
+            SDL_RWseek(internal->rw, pos, RW_SEEK_SET); /* set for next try... */
             return 0;
         } /* if */
 
@@ -517,7 +519,7 @@ Sound_Sample *Sound_NewSample(SDL_RWops *rw, const char *ext,
                 /* skip if we would have tried decoder above... */
             while (*decoderExt)
             {
-                if (SDL_strcasecmp(*decoderExt, ext) == 0)
+                if (ext && SDL_strcasecmp(*decoderExt, ext) == 0)
                 {
                     should_try = 0;
                     break;
@@ -790,6 +792,80 @@ Sint32 Sound_GetDuration(Sound_Sample *sample)
     internal = (Sound_SampleInternal *) sample->opaque;
     return internal->total_time;
 } /* Sound_GetDuration */
+
+
+/* Utility functions ... */
+
+/* The following uses the implementation suggested by
+ * the standard document, assumes RAND_MAX == 32767 */
+static unsigned long __Sound_seed = 1;
+int __Sound_rand(void)
+{
+    __Sound_seed = __Sound_seed * 1103515245 + 12345;
+    return (__Sound_seed / 65536) % 32768;
+}
+void __Sound_srand(unsigned int seed)
+{
+    __Sound_seed = seed;
+}
+
+#if !defined(HAVE_SDL_STRTOKR)
+/* Adapted from _PDCLIB_strtok() of PDClib library at
+ * https://github.com/DevSolar/pdclib.git
+ *
+ * The code was under CC0 license:
+ * https://creativecommons.org/publicdomain/zero/1.0/legalcode
+ */
+char *__Sound_strtokr(char *s1, const char *s2, char **ptr)
+{
+    const char *p = s2;
+
+    if (!s2 || !ptr || (!s1 && !*ptr)) return NULL;
+
+    if (s1 != NULL) {  /* new string */
+        *ptr = s1;
+    } else { /* old string continued */
+        if (*ptr == NULL) {
+        /* No old string, no new string, nothing to do */
+            return NULL;
+        }
+        s1 = *ptr;
+    }
+
+    /* skip leading s2 characters */
+    while (*p && *s1) {
+        if (*s1 == *p) {
+        /* found separator; skip and start over */
+            ++s1;
+            p = s2;
+            continue;
+        }
+        ++p;
+    }
+
+    if (! *s1) { /* no more to parse */
+        *ptr = s1;
+        return NULL;
+    }
+
+    /* skipping non-s2 characters */
+    *ptr = s1;
+    while (**ptr) {
+        p = s2;
+        while (*p) {
+            if (**ptr == *p++) {
+            /* found separator; overwrite with '\0', position *ptr, return */
+                *((*ptr)++) = '\0';
+                return s1;
+            }
+        }
+        ++(*ptr);
+    }
+
+    /* parsed to end of string */
+    return s1;
+}
+#endif
 
 /* end of SDL_sound.c ... */
 

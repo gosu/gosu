@@ -93,7 +93,7 @@ typedef struct tagMMD0SAMPLE
 typedef struct tagMMDSAMPLEHEADER
 {
 	DWORD length;     // length of *one* *unpacked* channel in *bytes*
-	WORD type;   
+	WORD type;
 				// if non-negative
 					// bits 0-3 reserved for multi-octave instruments, not supported on the PC
 					// 0x10: 16 bit (otherwise 8 bit)
@@ -165,7 +165,7 @@ typedef struct tagMMD2SONGHEADER
 	BYTE numsamples;	// # of samples (max 63)
 } MMD2SONGHEADER;
 
-// For MMD0 the note information is held in 3 bytes, byte0, byte1, byte2.  For reference we 
+// For MMD0 the note information is held in 3 bytes, byte0, byte1, byte2.  For reference we
 // number the bits in each byte 0..7, where 0 is the low bit.
 // The note is held as bits 5..0 of byte0
 // The instrument is encoded in 6 bits,  bits 7 and 6 of byte0 and bits 7,6,5,4 of byte1
@@ -238,7 +238,7 @@ typedef struct tagMMD0EXP
 	DWORD annotxt;
 	DWORD annolen;
 	DWORD iinfo;			// Instrument names
-	WORD i_ext_entries;	
+	WORD i_ext_entries;
 	WORD i_ext_entrsz;
 	DWORD jumpmask;
 	DWORD rgbtable;
@@ -576,11 +576,12 @@ BOOL CSoundFile_ReadMed(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			}
 			UINT pseq = 0;
 			
-			if ((playseqtable) && (playseqtable < dwMemLength) && (nplayseq*4 < dwMemLength - playseqtable))
+			if ((playseqtable) && (playseqtable < dwMemLength) && (nplayseq*4 + 4 < dwMemLength - playseqtable))
 			{
 				pseq = bswapBE32(((LPDWORD)(lpStream+playseqtable))[nplayseq]);
 			}
-			if ((pseq) && (pseq < dwMemLength - sizeof(MMD2PLAYSEQ)))
+			if ((pseq) && dwMemLength > sizeof(MMD2PLAYSEQ) &&
+				(pseq < dwMemLength - sizeof(MMD2PLAYSEQ)))
 			{
 				const MMD2PLAYSEQ *pmps = (MMD2PLAYSEQ *)(lpStream + pseq);
 				UINT n = bswapBE16(pmps->length);
@@ -623,10 +624,11 @@ BOOL CSoundFile_ReadMed(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		UINT len = bswapBE32(psdh->length);
 		if ((len > MAX_SAMPLE_LENGTH) || (dwPos + len + 6 > dwMemLength)) len = 0;
 		UINT flags = RS_PCM8S, stype = bswapBE16(psdh->type);
-		LPSTR psdata = (LPSTR)(lpStream + dwPos + 6);
+		dwPos += 6;
 		if (stype & 0x80)
 		{
-			psdata += (stype & 0x20) ? 14 : 6;
+			dwPos += (stype & 0x20) ? 14 : 6;
+			if (dwPos >= dwMemLength) continue;
 		} else
 		{
 			if (stype & 0x10)
@@ -641,11 +643,12 @@ BOOL CSoundFile_ReadMed(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			if (stype & 0x20) len /= 2;
 		}
 		_this->Ins[iSmp+1].nLength = len;
-		CSoundFile_ReadSample(_this, &_this->Ins[iSmp+1], flags, psdata, dwMemLength - dwPos - 6);
+		CSoundFile_ReadSample(_this, &_this->Ins[iSmp+1], flags, (const char *)(lpStream + dwPos), dwMemLength - dwPos);
 	}
 	// Reading patterns (blocks)
 	if (wNumBlocks > MAX_PATTERNS) wNumBlocks = MAX_PATTERNS;
-	if ((!dwBlockArr) || (dwBlockArr > dwMemLength - 4*wNumBlocks)) return TRUE;
+	if ((!dwBlockArr) || (dwMemLength < 4*wNumBlocks) ||
+		(dwBlockArr > dwMemLength - 4*wNumBlocks)) return TRUE;
 	pdwTable = (LPDWORD)(lpStream + dwBlockArr);
 	playtransp += (version == '3') ? 24 : 48;
 	for (UINT iBlk=0; iBlk<wNumBlocks; iBlk++)
@@ -701,9 +704,15 @@ BOOL CSoundFile_ReadMed(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 				{
 					DWORD nameofs = bswapBE32(pbi->blockname);
 					UINT namelen = bswapBE32(pbi->blocknamelen);
-					if ((nameofs < dwMemLength) && (namelen < dwMemLength + nameofs))
+					if ((namelen < dwMemLength) && (nameofs < dwMemLength - namelen))
 					{
-						CSoundFile_SetPatternName(_this, iBlk, (LPCSTR)(lpStream+nameofs));
+						// SetPatternName expects a nul-terminated string.
+						char blockname[MAX_PATTERNNAME];
+						if (namelen >= MAX_PATTERNNAME) namelen = MAX_PATTERNNAME - 1;
+						SDL_memcpy(blockname, lpStream + nameofs, namelen);
+						blockname[namelen] = '\0';
+
+						CSoundFile_SetPatternName(_this, iBlk, blockname);
 					}
 				}
 				if (pbi->cmdexttable)
@@ -754,4 +763,3 @@ BOOL CSoundFile_ReadMed(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	}
 	return TRUE;
 }
-

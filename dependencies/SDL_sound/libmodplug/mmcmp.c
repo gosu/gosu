@@ -9,11 +9,11 @@
 
 BOOL PP20_Unpack(LPCBYTE *ppMemFile, LPDWORD pdwMemLength);
 
+#pragma pack(1)
 typedef struct MMCMPFILEHEADER
 {
-	DWORD id_ziRC;	// "ziRC"
-	DWORD id_ONia;	// "ONia"
-	WORD hdrsize;
+	char id[8]; /* string 'ziRCONia' */
+	WORD hdrsize; /* sizeof MMCMPHEADER */
 } MMCMPFILEHEADER, *LPMMCMPFILEHEADER;
 
 typedef struct MMCMPHEADER
@@ -42,6 +42,13 @@ typedef struct MMCMPSUBBLOCK
 	DWORD unpk_pos;
 	DWORD unpk_size;
 } MMCMPSUBBLOCK, *LPMMCMPSUBBLOCK;
+#pragma pack()
+
+/* make sure of structure sizes */
+SDL_COMPILE_TIME_ASSERT(MMCMPFILEHEADER,sizeof(struct MMCMPFILEHEADER) == 10);
+SDL_COMPILE_TIME_ASSERT(MMCMPHEADER,sizeof(struct MMCMPHEADER) == 14);
+SDL_COMPILE_TIME_ASSERT(MMCMPBLOCK,sizeof(struct MMCMPBLOCK) == 20);
+SDL_COMPILE_TIME_ASSERT(MMCMPSUBBLOCK,sizeof(struct MMCMPSUBBLOCK) == 8);
 
 #define MMCMP_COMP		0x0001
 #define MMCMP_DELTA		0x0002
@@ -59,101 +66,182 @@ typedef struct MMCMPBITBUFFER
 } MMCMPBITBUFFER;
 
 
-static DWORD MMCMPBITBUFFER_GetBits(MMCMPBITBUFFER *_this, UINT nBits)
-//---------------------------------------
+static DWORD MMCMPBITBUFFER_GetBits(MMCMPBITBUFFER *bbuf, UINT nBits)
 {
 	DWORD d;
 	if (!nBits) return 0;
-	while (_this->bitcount < 24)
+	while (bbuf->bitcount < 24)
 	{
-		_this->bitbuffer |= ((_this->pSrc < _this->pEnd) ? *_this->pSrc++ : 0) << _this->bitcount;
-		_this->bitcount += 8;
+		bbuf->bitbuffer |= ((bbuf->pSrc < bbuf->pEnd) ? *bbuf->pSrc++ : 0) << bbuf->bitcount;
+		bbuf->bitcount += 8;
 	}
-	d = _this->bitbuffer & ((1 << nBits) - 1);
-	_this->bitbuffer >>= nBits;
-	_this->bitcount -= nBits;
+	d = bbuf->bitbuffer & ((1 << nBits) - 1);
+	bbuf->bitbuffer >>= nBits;
+	bbuf->bitcount -= nBits;
 	return d;
 }
 
-const DWORD MMCMP8BitCommands[8] =
+static const DWORD MMCMP8BitCommands[8] =
 {
 	0x01, 0x03,	0x07, 0x0F,	0x1E, 0x3C,	0x78, 0xF8
 };
 
-const UINT MMCMP8BitFetch[8] =
+static const UINT MMCMP8BitFetch[8] =
 {
 	3, 3, 3, 3, 2, 1, 0, 0
 };
 
-const DWORD MMCMP16BitCommands[16] =
+static const DWORD MMCMP16BitCommands[16] =
 {
 	0x01, 0x03,	0x07, 0x0F,	0x1E, 0x3C,	0x78, 0xF0,
 	0x1F0, 0x3F0, 0x7F0, 0xFF0, 0x1FF0, 0x3FF0, 0x7FF0, 0xFFF0
 };
 
-const UINT MMCMP16BitFetch[16] =
+static const UINT MMCMP16BitFetch[16] =
 {
 	4, 4, 4, 4, 3, 2, 1, 0,
 	0, 0, 0, 0, 0, 0, 0, 0
 };
 
 
-BOOL MMCMP_Unpack(LPCBYTE *ppMemFile, LPDWORD pdwMemLength)
-//---------------------------------------------------------
+static void swap_mfh(LPMMCMPFILEHEADER fh)
 {
-	DWORD dwMemLength = *pdwMemLength;
-	LPCBYTE lpMemFile = *ppMemFile;
-	LPBYTE pBuffer;
-	LPMMCMPFILEHEADER pmfh = (LPMMCMPFILEHEADER)(lpMemFile);
-	LPMMCMPHEADER pmmh = (LPMMCMPHEADER)(lpMemFile+10);
-	LPDWORD pblk_table;
+	fh->hdrsize = bswapLE16(fh->hdrsize);
+}
+
+static void swap_mmh(LPMMCMPHEADER mh)
+{
+	mh->version = bswapLE16(mh->version);
+	mh->nblocks = bswapLE16(mh->nblocks);
+	mh->filesize = bswapLE32(mh->filesize);
+	mh->blktable = bswapLE32(mh->blktable);
+}
+
+static void swap_block (LPMMCMPBLOCK blk)
+{
+	blk->unpk_size = bswapLE32(blk->unpk_size);
+	blk->pk_size = bswapLE32(blk->pk_size);
+	blk->xor_chk = bswapLE32(blk->xor_chk);
+	blk->sub_blk = bswapLE16(blk->sub_blk);
+	blk->flags = bswapLE16(blk->flags);
+	blk->tt_entries = bswapLE16(blk->tt_entries);
+	blk->num_bits = bswapLE16(blk->num_bits);
+}
+
+static void swap_subblock (LPMMCMPSUBBLOCK sblk)
+{
+	sblk->unpk_pos = bswapLE32(sblk->unpk_pos);
+	sblk->unpk_size = bswapLE32(sblk->unpk_size);
+}
+
+static BOOL MMCMP_IsDstBlockValid(const MMCMPSUBBLOCK *psub, DWORD dstlen)
+{
+	if (psub->unpk_pos >= dstlen) return FALSE;
+	if (psub->unpk_size > dstlen) return FALSE;
+	if (psub->unpk_size > dstlen - psub->unpk_pos) return FALSE;
+	return TRUE;
+}
+
+
+BOOL MMCMP_Unpack(LPCBYTE *ppMemFile, LPDWORD pdwMemLength)
+{
+	DWORD dwMemLength;
+	LPCBYTE lpMemFile;
+	LPBYTE pBuffer,pBufEnd;
+	LPMMCMPFILEHEADER pmfh;
+	LPMMCMPHEADER pmmh;
+	const DWORD *pblk_table;
 	DWORD dwFileSize;
+	BYTE tmp0[32], tmp1[32];
 
 	if (PP20_Unpack(ppMemFile, pdwMemLength))
 	{
 		return TRUE;
 	}
-	if ((dwMemLength < 256) || (!pmfh) || (pmfh->id_ziRC != 0x4352697A) || (pmfh->id_ONia != 0x61694e4f) || (pmfh->hdrsize < 14)
-	 || (!pmmh->nblocks) || (pmmh->filesize < 16) || (pmmh->filesize > 0x8000000)
-	 || (pmmh->blktable >= dwMemLength) || (pmmh->blktable + 4*pmmh->nblocks > dwMemLength)) return FALSE;
+
+	dwMemLength = *pdwMemLength;
+	lpMemFile = *ppMemFile;
+	if ((dwMemLength < 256) || (!lpMemFile)) return FALSE;
+	SDL_memcpy(tmp0, lpMemFile, 24);
+	pmfh = (LPMMCMPFILEHEADER)(tmp0);
+	pmmh = (LPMMCMPHEADER)(tmp0+10);
+	swap_mfh(pmfh);
+	swap_mmh(pmmh);
+
+	if ((SDL_memcmp(pmfh->id,"ziRCONia",8) != 0) || (pmfh->hdrsize != 14))
+		return FALSE;
+	if ((!pmmh->nblocks) || (pmmh->filesize < 16) || (pmmh->filesize > 0x8000000) ||
+	    (pmmh->blktable >= dwMemLength) || (pmmh->blktable + 4*pmmh->nblocks > dwMemLength)) {
+		return FALSE;
+	}
 	dwFileSize = pmmh->filesize;
-	if ((pBuffer = (LPBYTE)GlobalAllocPtr(GHND, (dwFileSize + 31) & ~15)) == NULL) return FALSE;
-	pblk_table = (LPDWORD)(lpMemFile+pmmh->blktable);
+	if ((pBuffer = (LPBYTE)SDL_malloc(dwFileSize)) == NULL)
+		return FALSE;
+	pBufEnd = pBuffer + dwFileSize;
+	pblk_table = (const DWORD *)(lpMemFile+pmmh->blktable);
 	for (UINT nBlock=0; nBlock<pmmh->nblocks; nBlock++)
 	{
-		DWORD dwMemPos = pblk_table[nBlock];
-		LPMMCMPBLOCK pblk = (LPMMCMPBLOCK)(lpMemFile+dwMemPos);
-		LPMMCMPSUBBLOCK psubblk = (LPMMCMPSUBBLOCK)(lpMemFile+dwMemPos+20);
+		DWORD dwMemPos = bswapLE32(pblk_table[nBlock]);
+		DWORD dwSubPos;
+		LPMMCMPBLOCK pblk;
+		LPMMCMPSUBBLOCK psubblk;
 
-		if ((dwMemPos + 20 >= dwMemLength) || (dwMemPos + 20 + pblk->sub_blk*8 >= dwMemLength)) break;
+		if (dwMemPos >= dwMemLength - 20)
+			goto err;
+		SDL_memcpy(tmp1,lpMemFile+dwMemPos,28);
+		pblk = (LPMMCMPBLOCK)(tmp1);
+		psubblk = (LPMMCMPSUBBLOCK)(tmp1+20);
+		swap_block(pblk);
+		swap_subblock(psubblk);
+
+		if (!pblk->unpk_size || !pblk->pk_size || !pblk->sub_blk)
+			goto err;
+		if (pblk->pk_size <= pblk->tt_entries)
+			goto err;
+		if (pblk->sub_blk*8 >= dwMemLength - dwMemPos - 20)
+			goto err;
+		if (pblk->flags & MMCMP_COMP) {
+			if (pblk->flags & MMCMP_16BIT) {
+				if (pblk->num_bits >= 16)
+					goto err;
+			}
+			else {
+				if (pblk->num_bits >=  8)
+					goto err;
+			}
+		}
+
+		dwSubPos = dwMemPos + 20;
 		dwMemPos += 20 + pblk->sub_blk*8;
-		// Data is not packed
 		if (!(pblk->flags & MMCMP_COMP))
-		{
-			for (UINT i=0; i<pblk->sub_blk; i++)
-			{
-				if ((psubblk->unpk_pos >= dwFileSize) ||
-					(psubblk->unpk_size >= dwFileSize) ||
-					(psubblk->unpk_size > dwFileSize - psubblk->unpk_pos)) break;
+		{ /* Data is not packed */
+			UINT i=0;
+			while (1) {
+				if (!MMCMP_IsDstBlockValid(psubblk, dwFileSize))
+					goto err;
 				SDL_memcpy(pBuffer+psubblk->unpk_pos, lpMemFile+dwMemPos, psubblk->unpk_size);
 				dwMemPos += psubblk->unpk_size;
-				psubblk++;
+				if (++i == pblk->sub_blk) break;
+				SDL_memcpy(tmp1+20,lpMemFile+dwSubPos+i*8,8);
+				swap_subblock(psubblk);
 			}
-		} else
-		// Data is 16-bit packed
-		if (pblk->flags & MMCMP_16BIT && pblk->num_bits < 16)
-		{
+		}
+		else if (pblk->flags & MMCMP_16BIT)
+		{ /* Data is 16-bit packed */
 			MMCMPBITBUFFER bb;
-			LPWORD pDest = (LPWORD)(pBuffer + psubblk->unpk_pos);
-			DWORD dwSize = psubblk->unpk_size >> 1;
+			LPBYTE pDest = pBuffer + psubblk->unpk_pos;
+			DWORD dwSize = psubblk->unpk_size;
 			DWORD dwPos = 0;
 			UINT numbits = pblk->num_bits;
 			UINT subblk = 0, oldval = 0;
+
+			if (!MMCMP_IsDstBlockValid(psubblk, dwFileSize))
+				goto err;
 			bb.bitcount = 0;
 			bb.bitbuffer = 0;
 			bb.pSrc = lpMemFile+dwMemPos+pblk->tt_entries;
 			bb.pEnd = lpMemFile+dwMemPos+pblk->pk_size;
-			while (subblk < pblk->sub_blk)
+			while (1)
 			{
 				UINT newval = 0x10000;
 				DWORD d = MMCMPBITBUFFER_GetBits(&bb, numbits+1);
@@ -192,19 +280,26 @@ BOOL MMCMP_Unpack(LPCBYTE *ppMemFile, LPDWORD pdwMemLength)
 					{
 						newval ^= 0x8000;
 					}
-					pDest[dwPos++] = (WORD)newval;
+					if (pBufEnd - pDest < 2) goto err;
+					dwPos += 2;
+					*pDest++ = (BYTE) (((WORD)newval) & 0xff);
+					*pDest++ = (BYTE) (((WORD)newval) >> 8);
 				}
 				if (dwPos >= dwSize)
 				{
-					subblk++;
+					if (++subblk == pblk->sub_blk) break;
 					dwPos = 0;
-					dwSize = psubblk[subblk].unpk_size >> 1;
-					pDest = (LPWORD)(pBuffer + psubblk[subblk].unpk_pos);
+					SDL_memcpy(tmp1+20,lpMemFile+dwSubPos+subblk*8,8);
+					swap_subblock(psubblk);
+					if (!MMCMP_IsDstBlockValid(psubblk, dwFileSize))
+						goto err;
+					dwSize = psubblk->unpk_size;
+					pDest = pBuffer + psubblk->unpk_pos;
 				}
 			}
-		} else if (pblk->num_bits < 8)
-		// Data is 8-bit packed
-		{
+		}
+		else
+		{ /* Data is 8-bit packed */
 			MMCMPBITBUFFER bb;
 			LPBYTE pDest = pBuffer + psubblk->unpk_pos;
 			DWORD dwSize = psubblk->unpk_size;
@@ -213,11 +308,13 @@ BOOL MMCMP_Unpack(LPCBYTE *ppMemFile, LPDWORD pdwMemLength)
 			UINT subblk = 0, oldval = 0;
 			LPCBYTE ptable = lpMemFile+dwMemPos;
 
+			if (!MMCMP_IsDstBlockValid(psubblk, dwFileSize))
+				goto err;
 			bb.bitcount = 0;
 			bb.bitbuffer = 0;
 			bb.pSrc = lpMemFile+dwMemPos+pblk->tt_entries;
 			bb.pEnd = lpMemFile+dwMemPos+pblk->pk_size;
-			while (subblk < pblk->sub_blk)
+			while (1)
 			{
 				UINT newval = 0x100;
 				DWORD d = MMCMPBITBUFFER_GetBits(&bb, numbits+1);
@@ -256,127 +353,176 @@ BOOL MMCMP_Unpack(LPCBYTE *ppMemFile, LPDWORD pdwMemLength)
 				}
 				if (dwPos >= dwSize)
 				{
-					subblk++;
+					if (++subblk == pblk->sub_blk) break;
 					dwPos = 0;
-					dwSize = psubblk[subblk].unpk_size;
-					pDest = pBuffer + psubblk[subblk].unpk_pos;
+					SDL_memcpy(tmp1+20,lpMemFile+dwSubPos+subblk*8,8);
+					swap_subblock(psubblk);
+					if (!MMCMP_IsDstBlockValid(psubblk, dwFileSize))
+						goto err;
+					dwSize = psubblk->unpk_size;
+					pDest = pBuffer + psubblk->unpk_pos;
 				}
 			}
-		} else
-		{
-			return FALSE;
 		}
 	}
 	*ppMemFile = pBuffer;
 	*pdwMemLength = dwFileSize;
 	return TRUE;
+
+  err:
+	SDL_free(pBuffer);
+	return FALSE;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// PowerPack PP20 Unpacker
-//
+/* PowerPack PP20 Unpacker */
 
-typedef struct _PPBITBUFFER
+/* Code from Heikki Orsila's amigadepack 0.02
+ * based on code by Stuart Caie <kyzer@4u.net>
+ * This software is in the Public Domain
+ *
+ * Modified for xmp by Claudio Matsuoka, 08/2007
+ * - merged mld's checks from the old depack sources. Original credits:
+ *   - corrupt file and data detection
+ *     (thanks to Don Adan and Dirk Stoecker for help and infos)
+ *   - implemeted "efficiency" checks
+ *   - further detection based on code by Georg Hoermann
+ *
+ * Modified for xmp by Claudio Matsuoka, 05/2013
+ * - decryption code removed
+ *
+ * Modified for libmodplug by O. Sezer, Apr. 2015
+ */
+
+#define PP_READ_BITS(nbits, var) do {                          \
+  bit_cnt = (nbits);                                           \
+  while (bits_left < bit_cnt) {                                \
+    if (buf_src <= src) return 0; /* out of source bits */     \
+    bit_buffer |= (*--buf_src << bits_left);                   \
+    bits_left += 8;                                            \
+  }                                                            \
+  (var) = 0;                                                   \
+  bits_left -= bit_cnt;                                        \
+  while (bit_cnt--) {                                          \
+    (var) = ((var) << 1) | (bit_buffer & 1);                   \
+    bit_buffer >>= 1;                                          \
+  }                                                            \
+} while(0)
+
+#define PP_BYTE_OUT(byte) do {                                 \
+  if (out <= dest) return 0; /* output overflow */             \
+  *--out = (byte);                                             \
+  written++;                                                   \
+} while (0)
+
+static BOOL ppDecrunch(LPCBYTE src, LPBYTE dest,
+                       LPCBYTE offset_lens,
+                       DWORD src_len, DWORD dest_len,
+                       BYTE skip_bits)
 {
-	UINT bitcount;
-	ULONG bitbuffer;
-	LPCBYTE pStart;
-	LPCBYTE pSrc;
-} PPBITBUFFER;
+  DWORD bit_buffer, x, todo, offbits, offset, written;
+  LPCBYTE buf_src;
+  LPBYTE out, dest_end;
+  BYTE bits_left, bit_cnt;
 
+  /* set up input and output pointers */
+  buf_src = src + src_len;
+  out = dest_end = dest + dest_len;
 
-static ULONG PPBITBUFFER_GetBits(PPBITBUFFER *_this, UINT n)
-{
-	ULONG result = 0;
+  written = 0;
+  bit_buffer = 0;
+  bits_left = 0;
 
-	for (UINT i=0; i<n; i++)
-	{
-		if (!_this->bitcount)
-		{
-			_this->bitcount = 8;
-			if (_this->pSrc != _this->pStart) _this->pSrc--;
-			_this->bitbuffer = *_this->pSrc;
-		}
-		result = (result<<1) | (_this->bitbuffer&1);
-		_this->bitbuffer >>= 1;
-		_this->bitcount--;
+  /* skip the first few bits */
+  PP_READ_BITS(skip_bits, x);
+
+  /* while there are input bits left */
+  while (written < dest_len) {
+    PP_READ_BITS(1, x);
+    if (x == 0) {
+      /* 1bit==0: literal, then match. 1bit==1: just match */
+      todo = 1; do { PP_READ_BITS(2, x); todo += x; } while (x == 3);
+      while (todo--) { PP_READ_BITS(8, x); PP_BYTE_OUT(x); }
+
+      /* should we end decoding on a literal, break out of the main loop */
+      if (written == dest_len) break;
     }
-    return result;
+
+    /* match: read 2 bits for initial offset bitlength / match length */
+    PP_READ_BITS(2, x);
+    offbits = offset_lens[x];
+    todo = x+2;
+    if (x == 3) {
+      PP_READ_BITS(1, x);
+      if (x==0) offbits = 7;
+      PP_READ_BITS(offbits, offset);
+      do { PP_READ_BITS(3, x); todo += x; } while (x == 7);
+    }
+    else {
+      PP_READ_BITS(offbits, offset);
+    }
+    if ((out + offset) >= dest_end) return 0; /* match overflow */
+    while (todo--) { x = out[offset]; PP_BYTE_OUT(x); }
+  }
+
+  /* all output bytes written without error */
+  return 1;
+  /* return (src == buf_src) ? 1 : 0; */
 }
-
-
-VOID PP20_DoUnpack(const BYTE *pSrc, UINT nSrcLen, BYTE *pDst, UINT nDstLen)
-{
-	PPBITBUFFER BitBuffer;
-	ULONG nBytesLeft;
-
-	BitBuffer.pStart = pSrc;
-	BitBuffer.pSrc = pSrc + nSrcLen - 4;
-	BitBuffer.bitbuffer = 0;
-	BitBuffer.bitcount = 0;
-	PPBITBUFFER_GetBits(&BitBuffer, pSrc[nSrcLen-1]);
-	nBytesLeft = nDstLen;
-	while (nBytesLeft > 0)
-	{
-		if (!PPBITBUFFER_GetBits(&BitBuffer, 1))
-		{
-			UINT n = 1;
-			while (n < nBytesLeft)
-			{
-				UINT code = PPBITBUFFER_GetBits(&BitBuffer, 2);
-				n += code;
-				if (code != 3) break;
-			}
-			for (UINT i=0; i<n; i++)
-			{
-				pDst[--nBytesLeft] = (BYTE)PPBITBUFFER_GetBits(&BitBuffer, 8);
-			}
-			if (!nBytesLeft) break;
-		}
-		{
-			UINT n = PPBITBUFFER_GetBits(&BitBuffer, 2)+1;
-			UINT nbits = pSrc[n-1];
-			UINT nofs;
-			if (n==4)
-			{
-				nofs = PPBITBUFFER_GetBits(&BitBuffer,  (PPBITBUFFER_GetBits(&BitBuffer, 1)) ? nbits : 7 );
-				while (n < nBytesLeft)
-				{
-					UINT code = PPBITBUFFER_GetBits(&BitBuffer, 3);
-					n += code;
-					if (code != 7) break;
-				}
-			} else
-			{
-				nofs = PPBITBUFFER_GetBits(&BitBuffer, nbits);
-			}
-			for (UINT i=0; i<=n; i++)
-			{
-				pDst[nBytesLeft-1] = (nBytesLeft+nofs < nDstLen) ? pDst[nBytesLeft+nofs] : 0;
-				if (!--nBytesLeft) break;
-			}
-		}
-	}
-}
-
 
 BOOL PP20_Unpack(LPCBYTE *ppMemFile, LPDWORD pdwMemLength)
 {
 	DWORD dwMemLength = *pdwMemLength;
 	LPCBYTE lpMemFile = *ppMemFile;
 	DWORD dwDstLen;
+	BYTE tmp[4], skip;
 	LPBYTE pBuffer;
 
-	if ((!lpMemFile) || (dwMemLength < 256) || (*(DWORD *)lpMemFile != 0x30325050)) return FALSE;
-	dwDstLen = (lpMemFile[dwMemLength-4]<<16) | (lpMemFile[dwMemLength-3]<<8) | (lpMemFile[dwMemLength-2]);
-	//Log("PP20 detected: Packed length=%d, Unpacked length=%d\n", dwMemLength, dwDstLen);
-	if ((dwDstLen < 512) || (dwDstLen > 0x400000) || (dwDstLen > 16*dwMemLength)) return FALSE;
-	if ((pBuffer = (LPBYTE)GlobalAllocPtr(GHND, (dwDstLen + 31) & ~15)) == NULL) return FALSE;
-	PP20_DoUnpack(lpMemFile+4, dwMemLength-4, pBuffer, dwDstLen);
+	if ((!lpMemFile) || (dwMemLength < 256) || (SDL_memcmp(lpMemFile,"PP20",4) != 0))
+		return FALSE;
+	if (dwMemLength & 3) /* file length should be a multiple of 4 */
+		return FALSE;
+
+	/* PP FORMAT:
+	 *      1 longword identifier           'PP20' or 'PX20'
+	 *     [1 word checksum (if 'PX20')     $ssss]
+	 *      1 longword efficiency           $eeeeeeee
+	 *      X longwords crunched file       $cccccccc,$cccccccc,...
+	 *      1 longword decrunch info        'decrlen' << 8 | '8 bits other info'
+	 */
+
+	SDL_memcpy(tmp,&lpMemFile[dwMemLength-4],4);
+	dwDstLen = (tmp[0]<<16) | (tmp[1]<<8) | tmp[2];
+	skip = tmp[3];
+	if (skip > 32) return 0;
+
+	/* original pp20 only support efficiency
+	 * from 9 9 9 9 up to 9 10 12 13, afaik,
+	 * but the xfd detection code says this...
+	 *
+	 * move.l 4(a0),d0
+	 * cmp.b #9,d0
+	 * blo.b .Exit
+	 * and.l #$f0f0f0f0,d0
+	 * bne.s .Exit
+	 */
+	SDL_memcpy(tmp,&lpMemFile[4],4);
+	if ((tmp[0] < 9) || (tmp[0] & 0xf0)) return FALSE;
+	if ((tmp[1] < 9) || (tmp[1] & 0xf0)) return FALSE;
+	if ((tmp[2] < 9) || (tmp[2] & 0xf0)) return FALSE;
+	if ((tmp[3] < 9) || (tmp[3] & 0xf0)) return FALSE;
+
+	if ((dwDstLen < 512) || (dwDstLen > 0x400000) || (dwDstLen > 16*dwMemLength))
+		return FALSE;
+	if ((pBuffer = (LPBYTE)SDL_malloc(dwDstLen)) == NULL)
+		return FALSE;
+
+	if (!ppDecrunch(lpMemFile+8, pBuffer, tmp, dwMemLength-12, dwDstLen, skip)) {
+		SDL_free(pBuffer);
+		return FALSE;
+	}
+
 	*ppMemFile = pBuffer;
 	*pdwMemLength = dwDstLen;
 	return TRUE;
 }
-

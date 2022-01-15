@@ -298,4 +298,3 @@ BOOL CSoundFile_SetWaveConfigEx(CSoundFile *_this, BOOL bSurround,BOOL bNoOverSa
 	CSoundFile_InitPlayer(_this, FALSE);
 	return TRUE;
 }
-

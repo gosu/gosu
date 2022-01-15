@@ -6,7 +6,6 @@
 */
 
 #include "libmodplug.h"
-#include "tables.h"
 
 //////////////////////////////////////////////////////////
 // ProTracker / NoiseTracker MOD/NST file support
@@ -34,7 +33,9 @@ void CSoundFile_ConvertModCommand(CSoundFile *_this, MODCOMMAND *m)
 	case 0x0D:	command = CMD_PATTERNBREAK; param = ((param >> 4) * 10) + (param & 0x0F); break;
 	case 0x0E:	command = CMD_MODCMDEX; break;
 	case 0x0F:	command = (param <= (UINT)((_this->m_nType & (MOD_TYPE_XM|MOD_TYPE_MT2)) ? 0x1F : 0x20)) ? CMD_SPEED : CMD_TEMPO;
-				if ((param == 0xFF) && (_this->m_nSamples == 15)) command = 0; break;
+			if((param == 0xFF) && (_this->m_nSamples == 15))
+			    command = 0;
+			break;
 	// Extension for XM extended effects
 	case 'G' - 55:	command = CMD_GLOBALVOLUME; break;
 	case 'H' - 55:	command = CMD_GLOBALVOLSLIDE; if (param & 0xF0) param &= 0xF0; break;
@@ -54,9 +55,7 @@ void CSoundFile_ConvertModCommand(CSoundFile *_this, MODCOMMAND *m)
 	m->param = param;
 }
 
-
 #pragma pack(1)
-
 typedef struct _MODSAMPLE
 {
 	CHAR name[22];
@@ -74,19 +73,33 @@ typedef struct _MODMAGIC
 	BYTE Orders[128];
         char Magic[4];          // changed from CHAR
 } MODMAGIC, *PMODMAGIC;
-
 #pragma pack()
+
+static BOOL IsValidName(LPCSTR s, int length, CHAR minChar)
+//-----------------------------------------------------------------
+{
+	int i, nt;
+	for (i = 0, nt = 0; i < length; i++)
+	{
+		if(s[i])
+		{
+			if (nt) return FALSE;// garbage after null
+			if (s[i] < minChar) return FALSE;// caller says it's garbage
+		}
+		else if (!nt) nt = i;// found null terminator
+	}
+	return TRUE;
+}
 
 static BOOL IsMagic(LPCSTR s1, LPCSTR s2)
 {
 	return ((*(DWORD *)s1) == (*(DWORD *)s2)) ? TRUE : FALSE;
 }
 
-
 BOOL CSoundFile_ReadMod(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLength)
 //---------------------------------------------------------------
 {
-    char s[1024];          // changed from CHAR
+        char s[1024];          // changed from CHAR
 	DWORD dwMemPos, dwTotalSampleLen;
 	PMODMAGIC pMagic;
 	UINT nErr;
@@ -101,6 +114,7 @@ BOOL CSoundFile_ReadMod(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	if ((IsMagic(s, "M.K.")) || (IsMagic(s, "M!K!"))
 	 || (IsMagic(s, "M&K!")) || (IsMagic(s, "N.T."))) _this->m_nChannels = 4; else
 	if ((IsMagic(s, "CD81")) || (IsMagic(s, "OKTA"))) _this->m_nChannels = 8; else
+	if (IsMagic(s, "CD61")) _this->m_nChannels = 6; else
 	if ((s[0]=='F') && (s[1]=='L') && (s[2]=='T') && (s[3]>='4') && (s[3]<='9')) _this->m_nChannels = s[3] - '0'; else
 	if ((s[0]>='2') && (s[0]<='9') && (s[1]=='C') && (s[2]=='H') && (s[3]=='N')) _this->m_nChannels = s[0] - '0'; else
 	if ((s[0]=='1') && (s[1]>='0') && (s[1]<='9') && (s[2]=='C') && (s[3]=='H')) _this->m_nChannels = s[1] - '0' + 10; else
@@ -108,7 +122,12 @@ BOOL CSoundFile_ReadMod(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	if ((s[0]=='3') && (s[1]>='0') && (s[1]<='2') && (s[2]=='C') && (s[3]=='H')) _this->m_nChannels = s[1] - '0' + 30; else
 	if ((s[0]=='T') && (s[1]=='D') && (s[2]=='Z') && (s[3]>='4') && (s[3]<='9')) _this->m_nChannels = s[3] - '0'; else
 	if (IsMagic(s,"16CN")) _this->m_nChannels = 16; else
-	if (IsMagic(s,"32CN")) _this->m_nChannels = 32; else _this->m_nSamples = 15;
+	if (IsMagic(s,"32CN")) _this->m_nChannels = 32;
+	else {
+		if (!IsValidName((LPCSTR)lpStream, 20, ' '))
+			return FALSE;
+		_this->m_nSamples = 15;
+	}
 	// Load Samples
 	nErr = 0;
 	dwTotalSampleLen = 0;
@@ -117,6 +136,14 @@ BOOL CSoundFile_ReadMod(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		PMODSAMPLE pms = (PMODSAMPLE)(lpStream+dwMemPos);
 		MODINSTRUMENT *psmp = &_this->Ins[i];
 		UINT loopstart, looplen;
+
+		if (_this->m_nSamples == 15)
+		{
+			if (!IsValidName((LPCSTR)pms->name, 22, 14)) return FALSE;
+			if (pms->finetune>>4) return FALSE;
+			if (pms->volume > 64) return FALSE;
+			if (bswapBE16(pms->length) > 32768) return FALSE;
+		}
 
 		psmp->uFlags = 0;
 		psmp->nLength = bswapBE16(pms->length)*2;
@@ -158,7 +185,10 @@ BOOL CSoundFile_ReadMod(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	if ((_this->m_nSamples == 15) && (dwTotalSampleLen > dwMemLength * 4)) return FALSE;
 	pMagic = (PMODMAGIC)(lpStream+dwMemPos);
 	dwMemPos += sizeof(MODMAGIC);
-	if (_this->m_nSamples == 15) dwMemPos -= 4;
+	if (_this->m_nSamples == 15) {
+		dwMemPos -= 4;
+		if (pMagic->nOrders > 128) return FALSE;
+	}
 	SDL_memset(_this->Order, 0,sizeof(_this->Order));
 	SDL_memcpy(_this->Order, pMagic->Orders, 128);
 
@@ -247,7 +277,7 @@ BOOL CSoundFile_ReadMod(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		LPSTR p = (LPSTR)(lpStream+dwMemPos);
 		UINT flags = 0;
 		if (dwMemPos + 5 >= dwMemLength) break;
-		if (!SDL_strncasecmp(p, "ADPCM", 5))
+		if (!SDL_strncmp(p, "ADPCM", 5))
 		{
 			flags = 3;
 			p += 5;
@@ -260,10 +290,5 @@ BOOL CSoundFile_ReadMod(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			dwErrCheck++;
 		}
 	}
-#ifdef MODPLUG_TRACKER
-	return TRUE;
-#else
 	return (dwErrCheck) ? TRUE : FALSE;
-#endif
 }
-

@@ -43,14 +43,14 @@ static void RAW_quit(void)
 static int RAW_open(Sound_Sample *sample, const char *ext)
 {
     Sound_SampleInternal *internal = sample->opaque;
-    SDL_RWops *rw = internal->rw;
-    Uint32 pos, sample_rate;
-  
+    Sint64 pos;
+    Uint32 sample_rate;
+
         /*
          * We check this explicitly, since we have no other way to
          *  determine whether we should handle this data or not.
          */
-    if (SDL_strcasecmp(ext, "RAW") != 0)
+    if (!ext || SDL_strcasecmp(ext, "RAW") != 0)
         BAIL_MACRO("RAW: extension isn't explicitly \"RAW\".", 0);
 
         /*
@@ -73,11 +73,11 @@ static int RAW_open(Sound_Sample *sample, const char *ext)
     SDL_memcpy(&sample->actual, &sample->desired, sizeof (Sound_AudioInfo));
     sample->flags = SOUND_SAMPLEFLAG_CANSEEK;
 
-    if ( (pos = SDL_RWseek(internal->rw, 0, SEEK_END) ) <= 0) {
-        BAIL_MACRO("RAW: cannot seek the end of the file \"RAW\".", 0);
+    if ((pos = SDL_RWseek(internal->rw, 0, RW_SEEK_END)) <= 0) {
+        BAIL_MACRO("RAW: can't seek to the end of the file.", 0);
     }
-    if ( SDL_RWseek(internal->rw, 0, SEEK_SET) ) {
-        BAIL_MACRO("RAW: cannot reset file \"RAW\".", 0);
+    if ( SDL_RWseek(internal->rw, 0, RW_SEEK_SET) != 0) {
+        BAIL_MACRO("RAW: can't reset file.", 0);
     }
 
     sample_rate =  (sample->actual.rate * sample->actual.channels
@@ -111,7 +111,7 @@ static Uint32 RAW_read(Sound_Sample *sample)
     if (retval == 0)
         sample->flags |= SOUND_SAMPLEFLAG_EOF;
 
-    else if (retval == -1)
+    else if (retval == -1) /** FIXME: this error check is broken **/
         sample->flags |= SOUND_SAMPLEFLAG_ERROR;
 
         /* (next call this EAGAIN may turn into an EOF or error.) */
@@ -125,7 +125,7 @@ static Uint32 RAW_read(Sound_Sample *sample)
 static int RAW_rewind(Sound_Sample *sample)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
-    BAIL_IF_MACRO(SDL_RWseek(internal->rw, 0, SEEK_SET) != 0, ERR_IO_ERROR, 0);
+    BAIL_IF_MACRO(SDL_RWseek(internal->rw, 0, RW_SEEK_SET) != 0, ERR_IO_ERROR, 0);
     return 1;
 } /* RAW_rewind */
 
@@ -134,7 +134,7 @@ static int RAW_seek(Sound_Sample *sample, Uint32 ms)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     int pos = (int) __Sound_convertMsToBytePos(&sample->actual, ms);
-    int err = (SDL_RWseek(internal->rw, pos, SEEK_SET) != pos);
+    int err = (SDL_RWseek(internal->rw, pos, RW_SEEK_SET) != pos);
     BAIL_IF_MACRO(err, ERR_IO_ERROR, 0);
     return 1;
 } /* RAW_seek */

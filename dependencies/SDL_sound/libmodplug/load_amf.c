@@ -39,11 +39,10 @@ typedef struct _AMFSAMPLE
 	UCHAR volume;
 } AMFSAMPLE;
 
-
 #pragma pack()
 
 
-VOID AMF_Unpack(MODCOMMAND *pPat, const BYTE *pTrack, UINT nRows, UINT nChannels)
+static VOID AMF_Unpack(MODCOMMAND *pPat, const BYTE *pTrack, UINT nRows, UINT nChannels)
 //-------------------------------------------------------------------------------
 {
 	UINT lastinstr = 0;
@@ -139,6 +138,7 @@ VOID AMF_Unpack(MODCOMMAND *pPat, const BYTE *pTrack, UINT nRows, UINT nChannels
 			case 0x17:	param = (param+64)&0x7F;
 						if (m->command) { if (!m->volcmd) { m->volcmd = VOLCMD_PANNING;  m->vol = param/2; } command = 0; }
 						else { command = CMD_PANNING8; }
+				break;
 			// Unknown effects
 			default:	command = param = 0;
 			}
@@ -151,7 +151,6 @@ VOID AMF_Unpack(MODCOMMAND *pPat, const BYTE *pTrack, UINT nRows, UINT nChannels
 		pTrack += 3;
 	}
 }
-
 
 
 BOOL CSoundFile_ReadAMF(CSoundFile *_this, LPCBYTE lpStream, const DWORD dwMemLength)
@@ -300,8 +299,12 @@ BOOL CSoundFile_ReadAMF(CSoundFile *_this, LPCBYTE lpStream, const DWORD dwMemLe
 			_this->PatternSize[iOrd] = 64;
 			if (pfh->version >= 14)
 			{
+				if (dwMemPos + _this->m_nChannels * sizeof(USHORT) + 2 > dwMemLength) return FALSE;
 				_this->PatternSize[iOrd] = bswapLE16(*(USHORT *)(lpStream+dwMemPos));
 				dwMemPos += 2;
+			} else
+			{
+				if (dwMemPos + _this->m_nChannels * sizeof(USHORT) > dwMemLength) return FALSE;
 			}
 			ptracks[iOrd] = (USHORT *)(lpStream+dwMemPos);
 			dwMemPos += _this->m_nChannels * sizeof(USHORT);
@@ -345,14 +348,16 @@ BOOL CSoundFile_ReadAMF(CSoundFile *_this, LPCBYTE lpStream, const DWORD dwMemLe
 	USHORT *pTrackMap = (USHORT *)(lpStream+dwMemPos);
 	UINT realtrackcnt = 0;
 	dwMemPos += pfh->numtracks * sizeof(USHORT);
+	if (dwMemPos >= dwMemLength)
+		return TRUE;
+
 	for (UINT iTrkMap=0; iTrkMap<pfh->numtracks; iTrkMap++)
 	{
 		if (realtrackcnt < pTrackMap[iTrkMap]) realtrackcnt = pTrackMap[iTrkMap];
 	}
 	// Store tracks positions
-	BYTE **pTrackData = (BYTE **) SDL_malloc(sizeof (BYTE *) * realtrackcnt);
-    if (!pTrackData) return TRUE;
-	SDL_memset(pTrackData, 0, sizeof(BYTE *) * realtrackcnt);
+	BYTE **pTrackData = (BYTE **) SDL_calloc(realtrackcnt, sizeof(BYTE*));
+	if (!pTrackData) return TRUE;/*FIXME: return FALSE? */
 	for (UINT iTrack=0; iTrack<realtrackcnt; iTrack++) if (dwMemPos <= dwMemLength - 3)
 	{
 		UINT nTrkSize = bswapLE16(*(USHORT *)(lpStream+dwMemPos));
@@ -400,4 +405,3 @@ BOOL CSoundFile_ReadAMF(CSoundFile *_this, LPCBYTE lpStream, const DWORD dwMemLe
 	}
 	return TRUE;
 }
-

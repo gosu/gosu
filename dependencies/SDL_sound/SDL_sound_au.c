@@ -109,7 +109,7 @@ static int AU_open(Sound_Sample *sample, const char *ext)
 {
     Sound_SampleInternal *internal = sample->opaque;
     SDL_RWops *rw = internal->rw;
-    int skip, hsize, i, bytes_per_second;
+    int hsize, i, bytes_per_second;
     struct au_file_hdr hdr;
     struct audec *dec;
     char c;
@@ -163,7 +163,7 @@ static int AU_open(Sound_Sample *sample, const char *ext)
         } /* for */
     } /* if */
 
-    else if (SDL_strcasecmp(ext, "au") == 0)
+    else if (ext && SDL_strcasecmp(ext, "au") == 0)
     {
         /*
          * A number of files in the wild have the .au extension but no valid
@@ -173,9 +173,9 @@ static int AU_open(Sound_Sample *sample, const char *ext)
 
         SNDDBG(("AU: Invalid header, assuming raw 8kHz µ-law.\n"));
         /* if seeking fails, we lose 24 samples. big deal */
-        SDL_RWseek(rw, -HDR_SIZE, SEEK_CUR);
+        SDL_RWseek(rw, -HDR_SIZE, RW_SEEK_CUR);
         dec->encoding = AU_ENC_ULAW_8;
-        dec->remaining = (Uint32)-1; 		/* no limit */
+        dec->remaining = (Uint32)-1;		/* no limit */
         sample->actual.format = AUDIO_S16SYS;
         sample->actual.rate = 8000;
         sample->actual.channels = 1;
@@ -271,7 +271,7 @@ static Uint32 AU_read(Sound_Sample *sample)
     ret = SDL_RWread(internal->rw, buf, 1, maxlen);
     if (ret == 0)
         sample->flags |= SOUND_SAMPLEFLAG_EOF;
-    else if (ret == -1)
+    else if (ret == -1) /** FIXME: this error check is broken **/
         sample->flags |= SOUND_SAMPLEFLAG_ERROR;
     else
     {
@@ -297,7 +297,7 @@ static int AU_rewind(Sound_Sample *sample)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     struct audec *dec = (struct audec *) internal->decoder_private;
-    int rc = SDL_RWseek(internal->rw, dec->start_offset, SEEK_SET);
+    int rc = SDL_RWseek(internal->rw, dec->start_offset, RW_SEEK_SET);
     BAIL_IF_MACRO(rc != dec->start_offset, ERR_IO_ERROR, 0);
     dec->remaining = dec->total;
     return 1;
@@ -316,7 +316,7 @@ static int AU_seek(Sound_Sample *sample, Uint32 ms)
         offset >>= 1;  /* halve the byte offset for compression. */
 
     pos = (int) (dec->start_offset + offset);
-    rc = SDL_RWseek(internal->rw, pos, SEEK_SET);
+    rc = SDL_RWseek(internal->rw, pos, RW_SEEK_SET);
     BAIL_IF_MACRO(rc != pos, ERR_IO_ERROR, 0);
     dec->remaining = dec->total - offset;
     return 1;

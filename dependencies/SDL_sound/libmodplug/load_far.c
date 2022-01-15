@@ -5,7 +5,7 @@
 */
 
 ////////////////////////////////////////
-// Farandole (FAR) module loader	  //
+// Farandole (FAR) module loader      //
 ////////////////////////////////////////
 #include "libmodplug.h"
 
@@ -102,8 +102,6 @@ BOOL CSoundFile_ReadFAR(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	dwMemPos += headerlen - (869 + stlen);
 	if (dwMemPos >= dwMemLength) return TRUE;
 
-	// end byteswap of pattern data
-
 	WORD *patsiz = (WORD *)pmh2->patsiz;
 	for (UINT ipat=0; ipat<256; ipat++) if (patsiz[ipat])
 	{
@@ -114,6 +112,7 @@ BOOL CSoundFile_ReadFAR(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			continue;
 		}
 		if (dwMemPos + patlen >= dwMemLength) return TRUE;
+		UINT max  = (patlen - 2) & ~3;
 		UINT rows = (patlen - 2) >> 6;
 		if (!rows)
 		{
@@ -122,13 +121,12 @@ BOOL CSoundFile_ReadFAR(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		}
 		if (rows > 256) rows = 256;
 		if (rows < 16) rows = 16;
+		if (max > rows*16*4) max = rows*16*4;
 		_this->PatternSize[ipat] = rows;
 		if ((_this->Patterns[ipat] = CSoundFile_AllocatePattern(rows, _this->m_nChannels)) == NULL) return TRUE;
 		MODCOMMAND *m = _this->Patterns[ipat];
 		UINT patbrk = lpStream[dwMemPos];
 		const BYTE *p = lpStream + dwMemPos + 2;
-		UINT max = rows*16*4;
-		if (max > patlen-2) max = patlen-2;
 		for (UINT len=0; len<max; len += 4, m++)
 		{
 			BYTE note = p[len];
@@ -140,11 +138,10 @@ BOOL CSoundFile_ReadFAR(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 				m->instr = ins + 1;
 				m->note = note + 36;
 			}
-			if (vol & 0x0F)
+			if (vol >= 0x01 && vol <= 0x10)
 			{
 				m->volcmd = VOLCMD_VOLUME;
-				m->vol = (vol & 0x0F) << 2;
-				if (m->vol <= 4) m->vol = 0;
+				m->vol = (vol - 1) << 2;
 			}
 			switch(eff & 0xF0)
 			{
@@ -224,10 +221,10 @@ BOOL CSoundFile_ReadFAR(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		const FARSAMPLE *pfs = (const FARSAMPLE*)(lpStream + dwMemPos);
 		dwMemPos += sizeof(FARSAMPLE);
 		_this->m_nSamples = ismp + 1;
-		const DWORD length = bswapLE32( pfs->length ) ; /* endian fix - Toad */
-		pins->nLength = length ;
-		pins->nLoopStart = bswapLE32(pfs->reppos) ;
-		pins->nLoopEnd = bswapLE32(pfs->repend) ;
+		const DWORD length = bswapLE32(pfs->length); /* endian fix - Toad */
+		pins->nLength = length;
+		pins->nLoopStart = bswapLE32(pfs->reppos);
+		pins->nLoopEnd = bswapLE32(pfs->repend);
 		pins->nFineTune = 0;
 		pins->nC4Speed = 8363*2;
 		pins->nGlobalVol = 64;
@@ -250,4 +247,3 @@ BOOL CSoundFile_ReadFAR(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	}
 	return TRUE;
 }
-

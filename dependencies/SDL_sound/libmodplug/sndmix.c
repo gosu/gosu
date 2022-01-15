@@ -5,6 +5,7 @@
 */
 
 #include "libmodplug.h"
+#define SNDMIX_C
 #include "tables.h"
 
 // Volume ramp length, in 1/10 ms
@@ -25,7 +26,7 @@ extern VOID MPPASMCALL X86_MonoFromStereo(int *pMixBuf, UINT nSamples);
 
 // Log tables for pre-amp
 // We don't want the tracker to get too loud
-const UINT PreAmpTable[16] =
+static const UINT PreAmpTable[16] =
 {
 	0x60, 0x60, 0x60, 0x70,	// 0-7
 	0x80, 0x88, 0x90, 0x98,	// 8-15
@@ -33,7 +34,7 @@ const UINT PreAmpTable[16] =
 	0xB4, 0xB8, 0xBC, 0xC0,	// 24-31
 };
 
-const UINT PreAmpAGCTable[16] =
+static const UINT PreAmpAGCTable[16] =
 {
 	0x60, 0x60, 0x60, 0x60,
 	0x68, 0x70, 0x78, 0x80,
@@ -47,7 +48,6 @@ int _muldiv(long a, long b, long c)
 {
 	return ((uint64_t) a * (uint64_t) b ) / c;
 }
-
 
 // Return (a*b+c/2)/c - no divide error
 int _muldivr(long a, long b, long c)
@@ -188,7 +188,6 @@ MixDone:
 }
 
 
-
 /////////////////////////////////////////////////////////////////////////////
 // Handles navigation/effects
 
@@ -260,14 +259,16 @@ BOOL CSoundFile_ProcessRow(CSoundFile *_this)
 			_this->m_nNextPattern = _this->m_nCurrentPattern;
 		}
 		// Weird stuff?
-		if ((_this->m_nPattern >= MAX_PATTERNS) || (!_this->Patterns[_this->m_nPattern])) return FALSE;
+		if ((_this->m_nPattern >= MAX_PATTERNS) || (!_this->Patterns[_this->m_nPattern]) ||
+			_this->PatternSize[_this->m_nPattern] == 0) return FALSE;
 		// Should never happen
 		if (_this->m_nRow >= _this->PatternSize[_this->m_nPattern]) _this->m_nRow = 0;
 		_this->m_nNextRow = _this->m_nRow + 1;
 		if (_this->m_nNextRow >= _this->PatternSize[_this->m_nPattern])
 		{
 			if (!(_this->m_dwSongFlags & SONG_PATTERNLOOP)) _this->m_nNextPattern = _this->m_nCurrentPattern + 1;
-			_this->m_nNextRow = 0;
+			_this->m_nNextRow = _this->m_nNextStartRow;
+			_this->m_nNextStartRow = 0;
 		}
 		// Reset channel values
 		MODCHANNEL *pChn = _this->Chn;
@@ -890,11 +891,7 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 		pChn->pCurrentSample = ((pChn->pSample) && (pChn->nLength) && (pChn->nInc)) ? pChn->pSample : NULL;
 		if (pChn->pCurrentSample)
 		{
-#ifdef MODPLUG_TRACKER
-			UINT kChnMasterVol = (pChn->dwFlags & CHN_EXTRALOUD) ? 0x100 : nMasterVol;
-#else
 #define		kChnMasterVol	nMasterVol
-#endif // MODPLUG_TRACKER
 			// Adjusting volumes
 			if (_this->gnChannels >= 2)
 			{
@@ -1030,5 +1027,3 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 	}
 	return TRUE;
 }
-
-

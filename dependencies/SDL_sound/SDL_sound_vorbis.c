@@ -28,6 +28,7 @@
 #define STB_VORBIS_NO_PUSHDATA_API 1
 #define STB_VORBIS_MAX_CHANNELS 6
 #define STBV_CDECL
+#define STB_VORBIS_NO_COMMENTS 1
 #define STB_FORCEINLINE SDL_FORCE_INLINE
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 #define STB_VORBIS_BIG_ENDIAN 1
@@ -43,26 +44,20 @@
 #ifdef memcpy
 #undef memcpy
 #endif
-#ifdef alloca
-#undef alloca
-#endif
 #define assert SDL_assert
 #define memset SDL_memset
 #define memcmp SDL_memcmp
 #define memcpy SDL_memcpy
 #define qsort SDL_qsort
-#define pow SDL_pow
-#define floor SDL_floor
 #define malloc SDL_malloc
 #define realloc SDL_realloc
 #define free SDL_free
+/* there is no 'dealloca' in stb_vorbis: we need alloca()
+#ifdef alloca
+#undef alloca
+#endif
 #define alloca(x) ((void *) SDL_stack_alloc(Uint8, (x)))
-#define dealloca(x) SDL_stack_free((x))
-#define ldexp(v, e) SDL_scalbn((v), (e))
-#define abs(x) SDL_abs(x)
-#define cos(x) SDL_cos(x)
-#define sin(x) SDL_sin(x)
-#define log(x) SDL_log(x)
+*/
 #endif
 #include "stb_vorbis.h"
 

@@ -6,9 +6,8 @@
 */
 
 #include "libmodplug.h"
-#include "tables.h"
 
-//////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 // ScreamTracker S3M file support
 
 #pragma pack(1)
@@ -34,7 +33,6 @@ typedef struct tagS3MSAMPLESTRUCT
 	CHAR scrs[4];
 } S3MSAMPLESTRUCT;
 
-
 typedef struct tagS3MFILEHEADER
 {
 	CHAR name[28];
@@ -58,6 +56,7 @@ typedef struct tagS3MFILEHEADER
 	WORD special;
 	BYTE channels[32];
 } S3MFILEHEADER;
+#pragma pack()
 
 
 void CSoundFile_S3MConvert(MODCOMMAND *m, BOOL bIT)
@@ -106,7 +105,6 @@ static DWORD boundInput(DWORD input, DWORD smin, DWORD smax)
 	return(input);
 }
 
-
 BOOL CSoundFile_ReadS3M(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLength)
 //---------------------------------------------------------------
 {
@@ -118,7 +116,7 @@ BOOL CSoundFile_ReadS3M(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 
 	if ((!lpStream) || (dwMemLength <= sizeof(S3MFILEHEADER)+sizeof(S3MSAMPLESTRUCT)+64)) return FALSE;
 	S3MFILEHEADER psfh;
-    SDL_memcpy(&psfh, lpStream, sizeof (psfh));
+	SDL_memcpy(&psfh, lpStream, sizeof (psfh));
 
 	psfh.reserved1 = bswapLE16(psfh.reserved1);
 	psfh.ordnum = bswapLE16(psfh.ordnum);
@@ -169,6 +167,7 @@ BOOL CSoundFile_ReadS3M(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	if (iord > MAX_ORDERS) iord = MAX_ORDERS;
 	if (iord)
 	{
+		if (dwMemPos + iord > dwMemLength) return FALSE;
 		SDL_memcpy(_this->Order, lpStream+dwMemPos, iord);
 		dwMemPos += iord;
 	}
@@ -186,6 +185,8 @@ BOOL CSoundFile_ReadS3M(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 
 	if (nins+npat)
 	{
+		if (2*(nins+npat) + dwMemPos > dwMemLength) return FALSE;
+
 		SDL_memcpy(ptr, lpStream+dwMemPos, 2*(nins+npat));
 		dwMemPos += 2*(nins+npat);
 		for (UINT j = 0; j < (nins+npat); ++j) {
@@ -193,6 +194,8 @@ BOOL CSoundFile_ReadS3M(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		}
 		if (psfh.panning_present == 252)
 		{
+			if (dwMemPos + 32 > dwMemLength) return FALSE;
+
 			const BYTE *chnpan = lpStream+dwMemPos;
 			for (UINT i=0; i<32; i++) if (chnpan[i] & 0x20)
 			{
@@ -315,11 +318,10 @@ BOOL CSoundFile_ReadS3M(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		if (inspack[iRaw-1] == 4) flags = RS_ADPCM4;
 		dwMemPos = insfile[iRaw];
 		if (dwMemPos < dwMemLength)
-			dwMemPos += CSoundFile_ReadSample(_this, &_this->Ins[iRaw], flags, (LPSTR)(lpStream + dwMemPos), dwMemLength - dwMemPos);
+			CSoundFile_ReadSample(_this, &_this->Ins[iRaw], flags, (LPSTR)(lpStream + dwMemPos), dwMemLength - dwMemPos);
 	}
 	_this->m_nMinPeriod = 64;
 	_this->m_nMaxPeriod = 32767;
 	if (psfh.flags & 0x10) _this->m_dwSongFlags |= SONG_AMIGALIMITS;
 	return TRUE;
 }
-
