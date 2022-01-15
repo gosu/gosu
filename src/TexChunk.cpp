@@ -1,8 +1,8 @@
 #include "TexChunk.hpp"
-#include "DrawOpQueue.hpp"
-#include "Texture.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
+#include "DrawOpQueue.hpp"
+#include "Texture.hpp"
 #include <stdexcept>
 
 void Gosu::TexChunk::set_tex_info()
@@ -51,15 +51,16 @@ Gosu::TexChunk::~TexChunk()
     m_texture->free(m_x - m_padding, m_y - m_padding, m_w + 2 * m_padding, m_h + 2 * m_padding);
 }
 
-void Gosu::TexChunk::draw(double x1, double y1, Color c1, double x2, double y2, Color c2,
-    double x3, double y3, Color c3, double x4, double y4, Color c4, ZPos z, BlendMode mode) const
+void Gosu::TexChunk::draw(double x1, double y1, Color c1, double x2, double y2, Color c2, //
+                          double x3, double y3, Color c3, double x4, double y4, Color c4, //
+                          ZPos z, BlendMode mode) const
 {
     DrawOp op;
     op.render_state.texture = m_texture;
     op.render_state.mode = mode;
 
     normalize_coordinates(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
-    
+
     op.vertices_or_block_index = 4;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
     op.vertices[1] = DrawOp::Vertex(x2, y2, c2);
@@ -94,7 +95,7 @@ void Gosu::TexChunk::insert(const Bitmap& original_bitmap, int x, int y)
 {
     Bitmap clipped_bitmap;
     const Bitmap* bitmap = &original_bitmap;
-    
+
     // If inserting the bitmap at the given position exceeds the boundaries of the space allocated
     // for this image on the texture, we need to clip the bitmap and insert the clipped version
     // instead.

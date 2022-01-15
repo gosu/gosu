@@ -153,7 +153,7 @@ std::unique_ptr<Gosu::ImageData> Gosu::LargeImageData::subimage(int left, int to
                 continue;
             }
             if (x >= left + width) {
-                // Also skip all rows after reaching the right-most requested Y coordinate.
+                // Also skip all columns after reaching the right-most requested Y coordinate.
                 break;
             }
 

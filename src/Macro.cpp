@@ -12,8 +12,8 @@ struct Gosu::Macro::Impl
     // (a11 a12) (x1) = (b1)
     // (a21 a22) (x2) = (b2)
     // x1, x2 are output parameters. Returns false if the matrix is singular.
-    static bool solve_2x2(double a11, double a12, double a21, double a22, double b1, double b2,
-                          double& x1, double& x2)
+    static bool solve_2x2(double a11, double a12, double a21, double a22, //
+                          double b1, double b2, double& x1, double& x2)
     {
         const double det = a11 * a22 - a21 * a12;
         if (det == 0) return false;
@@ -22,8 +22,8 @@ struct Gosu::Macro::Impl
         return true;
     }
 
-    Transform find_transform_for_target(double x1, double y1, double x2, double y2, double x3,
-                                        double y3, double x4, double y4) const
+    Transform find_transform_for_target(double x1, double y1, double x2, double y2, //
+                                        double x3, double y3, double x4, double y4) const
     {
         // Transformation logic follows a discussion on the ImageMagick mailing
         // list (on which ImageMagick's perspective_transform.pl is based).
@@ -108,13 +108,15 @@ struct Gosu::Macro::Impl
         c[6] = qx;
         c[7] = qy;
 
-        Transform result = {
-                {c[0], c[3], 0, c[6], c[1], c[4], 0, c[7], 0, 0, 1, 0, c[2], c[5], 0, 1}};
+        Transform result = {{c[0], c[3], 0, c[6], //
+                             c[1], c[4], 0, c[7], //
+                             0, 0, 1, 0,          //
+                             c[2], c[5], 0, 1}};
         return result;
     }
 
-    void draw_vertex_arrays(double x1, double y1, double x2, double y2, double x3, double y3,
-                            double x4, double y4) const
+    void draw_vertex_arrays(double x1, double y1, double x2, double y2, //
+                            double x3, double y3, double x4, double y4) const
     {
         // TODO: Macros should not be split up just because they have different transforms.
         // They should be premultiplied and have the same transform by definition. Then the
@@ -156,9 +158,9 @@ int Gosu::Macro::height() const
     return pimpl->height;
 }
 
-void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Color c2, double x3,
-                       double y3, Color c3, double x4, double y4, Color c4, ZPos z,
-                       BlendMode mode) const
+void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Color c2, //
+                       double x3, double y3, Color c3, double x4, double y4, Color c4, //
+                       ZPos z, BlendMode mode) const
 {
     if (c1 != Color::WHITE || c2 != Color::WHITE || c3 != Color::WHITE || c4 != Color::WHITE) {
         throw std::invalid_argument{"Macros cannot be tinted with colors"};
