@@ -1,9 +1,10 @@
+#include <Gosu/Utility.hpp>
 #include "BlockAllocator.hpp"
 #include <stdexcept>
 #include <vector>
 using namespace std;
 
-struct Gosu::BlockAllocator::Impl
+struct Gosu::BlockAllocator::Impl : Gosu::Noncopyable
 {
     unsigned width, height;
 

@@ -35,7 +35,7 @@ static void throw_os_error(OSStatus status, unsigned line)
 
 #define CHECK_OS(status) do { if (status) throw_os_error(status, __LINE__); } while (0)
 
-struct Gosu::AudioFile::Impl
+struct Gosu::AudioFile::Impl : Gosu::Noncopyable
 {
     Buffer buffer;
     AudioFileID file_id;

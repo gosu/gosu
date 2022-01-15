@@ -7,7 +7,7 @@
 #import <UIKit/UIKit.h>
 using namespace std;
 
-struct Gosu::Input::Impl
+struct Gosu::Input::Impl : Gosu::Noncopyable
 {
     UIView* view = nil;
     TextInput* text_input = nullptr;

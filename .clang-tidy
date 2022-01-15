@@ -18,6 +18,7 @@ Checks: >-
   -google-*,
   -hicpp-avoid-c-arrays,
   -hicpp-braces-around-statements,
+  -hicpp-named-parameter,
   -hicpp-no-array-decay,
   -hicpp-signed-bitwise,
   -hicpp-special-member-functions,
@@ -25,6 +26,7 @@ Checks: >-
   -hicpp-use-equals-default,
   -misc-non-private-member-variables-in-classes,
   -modernize-avoid-c-arrays,
+  -modernize-make-unique,
   -modernize-return-braced-init-list,
   -modernize-use-auto,
   -modernize-use-default-member-init,
@@ -39,6 +41,7 @@ Checks: >-
   -readability-isolate-declaration,
   -readability-magic-numbers,
   -readability-make-member-function-const,
+  -readability-named-parameter,
 
 CheckOptions:
   - { key: readability-identifier-naming.ClassCase,            value: CamelCase  }

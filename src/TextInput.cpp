@@ -9,7 +9,7 @@
 
 using namespace std;
 
-struct Gosu::TextInput::Impl
+struct Gosu::TextInput::Impl : Gosu::Noncopyable
 {
     string text;
     
