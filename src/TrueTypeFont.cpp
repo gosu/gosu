@@ -1,6 +1,7 @@
 #include "TrueTypeFont.hpp"
 #include <Gosu/IO.hpp>
 #include <Gosu/Text.hpp>
+#include <Gosu/Utility.hpp>
 #include <stdexcept>
 
 // Disable comma warnings in stb headers.
@@ -20,7 +21,7 @@
 #include <map>
 using namespace std;
 
-struct Gosu::TrueTypeFont::Impl
+struct Gosu::TrueTypeFont::Impl : Gosu::Noncopyable
 {
     stbtt_fontinfo info;
     shared_ptr<TrueTypeFont> fallback;

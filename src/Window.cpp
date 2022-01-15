@@ -68,7 +68,7 @@ namespace Gosu
     }
 }
 
-struct Gosu::Window::Impl
+struct Gosu::Window::Impl : Gosu::Noncopyable
 {
     bool fullscreen = false;
     double update_interval = 0;

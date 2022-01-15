@@ -1,6 +1,7 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
+#include <Gosu/Utility.hpp>
 #include "DrawOp.hpp"
 #include "DrawOpQueue.hpp"
 #include "GraphicsImpl.hpp"
@@ -41,7 +42,7 @@ namespace Gosu
     }
 }
 
-struct Gosu::Graphics::Impl
+struct Gosu::Graphics::Impl : Gosu::Noncopyable
 {
     unsigned virt_width = 0, virt_height = 0;
     unsigned phys_width = 0, phys_height = 0;

@@ -1,9 +1,10 @@
 #include "Macro.hpp"
 #include <Gosu/Image.hpp>
+#include <Gosu/Utility.hpp>
 #include "DrawOpQueue.hpp"
 #include <stdexcept>
 
-struct Gosu::Macro::Impl
+struct Gosu::Macro::Impl : Gosu::Noncopyable
 {
     VertexArrays vertex_arrays;
     int width, height;

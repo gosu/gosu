@@ -17,7 +17,7 @@ using namespace std;
 
 static const int FONT_RENDER_SCALE = 2;
 
-struct Gosu::Font::Impl
+struct Gosu::Font::Impl : Gosu::Noncopyable
 {
     string name;
     int height;

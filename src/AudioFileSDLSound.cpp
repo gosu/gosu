@@ -14,7 +14,7 @@
 #include <mutex>
 #include <vector>
 
-struct Gosu::AudioFile::Impl
+struct Gosu::AudioFile::Impl : Gosu::Noncopyable
 {
     Buffer buffer;
 
