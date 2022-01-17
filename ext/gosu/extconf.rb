@@ -33,7 +33,7 @@ $CXXFLAGS ||= ""
 $CXXFLAGS << " -std=gnu++17 -Dregister="
 
 # Make Gosu's own header files and all of its dependencies available to C++ source files.
-$INCFLAGS << " -I../../include -I../../dependencies/stb -I../../dependencies/utf8proc -I../../dependencies/SDL_sound"
+$INCFLAGS << " -I../../include -I../../dependencies/stb -I../../dependencies/utf8proc -I../../dependencies/SDL_sound -I../../dependencies/mojoAL"
 
 if windows
   # We statically compile utf8proc into the Gosu binary.
@@ -45,11 +45,11 @@ if windows
   $CXXFLAGS << " -DUNICODE"
 
   # Use the bundled versions of SDL 2 and open_al.
-  $INCFLAGS << " -I../../dependencies/al_soft -I../../dependencies/SDL/include"
+  $INCFLAGS << " -I../../dependencies/SDL/include"
   if RbConfig::CONFIG['arch'] =~ /x64-/
-    $LDFLAGS << "  -L../../dependencies/al_soft/x64 -L../../dependencies/SDL/lib/x64"
+    $LDFLAGS << "  -L../../dependencies/SDL/lib/x64"
   else
-    $LDFLAGS << "  -L../../dependencies/al_soft/x86 -L../../dependencies/SDL/lib/x86"
+    $LDFLAGS << "  -L../../dependencies/SDL/lib/x86"
   end
   $LDFLAGS << " -lgdi32 -lwinmm -ldwmapi -lOpenGL32 -lSDL2"
   # Link libstdc++ statically to avoid having another DLL dependency when using Ocra.
@@ -71,7 +71,7 @@ elsif macos
   $CFLAGS << " #{`sdl2-config --cflags`.chomp}"
   $CXXFLAGS << " #{`sdl2-config --cflags`.chomp}"
   # Prefer statically linking SDL 2.
-  $LDFLAGS  << " #{`sdl2-config --static-libs`.chomp} -framework OpenGL -framework Metal -framework OpenAL"
+  $LDFLAGS  << " #{`sdl2-config --static-libs`.chomp} -framework OpenGL -framework Metal"
   # And yet another hack: `sdl2-config --static-libs` uses `-lSDL2` instead of linking to the static library,
   # even if it exists. -> Manually replace it. (Ugh!)
   $LDFLAGS.sub! " -lSDL2 ", " /usr/local/lib/libSDL2.a " if File.exist? "/usr/local/lib/libSDL2.a"
@@ -100,8 +100,6 @@ else
   pkg_config 'sndfile'
   pkg_config 'libmpg123'
   pkg_config 'fontconfig'
-
-  # have_header 'AL/al.h' if have_library('openal')
 end
 
 # Because Ruby will only compile source file in the src/ folder, but our dependencies are
