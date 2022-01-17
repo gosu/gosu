@@ -38,8 +38,8 @@ $INCFLAGS << " -I../../include -I../../dependencies/stb -I../../dependencies/utf
 if windows
   # We statically compile utf8proc into the Gosu binary.
   # This macro is required to avoid errors about dllexport/dllimport mismatches.
-  $CFLAGS << " -DUTF8PROC_STATIC"
-  $CXXFLAGS << " -DUTF8PROC_STATIC"
+  $CFLAGS << " -DUTF8PROC_STATIC -DAL_LIBTYPE_STATIC"
+  $CXXFLAGS << " -DUTF8PROC_STATIC -DAL_LIBTYPE_STATIC"
 
   # Define UNICODE to use the Unicode-aware variants of all Win32 API functions.
   $CXXFLAGS << " -DUNICODE"
