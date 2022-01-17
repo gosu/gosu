@@ -285,6 +285,9 @@
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_gdm.c">
       <Filter>Dependencies</Filter>
     </ClCompile>
+    <ClCompile Include="..\dependencies\mojoAL\mojoal.c">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dependencies\SDL\include\SDL.h">
@@ -569,24 +572,6 @@
     <ClInclude Include="..\dependencies\SDL_sound\stb_vorbis.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
-    <ClInclude Include="..\dependencies\al_soft\AL\al.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\al_soft\AL\alc.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\al_soft\AL\alext.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\al_soft\AL\efx-creative.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\al_soft\AL\efx-presets.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\al_soft\AL\efx.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
     <ClInclude Include="..\dependencies\stb\stb_image.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
@@ -741,6 +726,12 @@
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\dependencies\SDL\include\SDL_hidapi.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\mojoAL\AL\al.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\mojoAL\AL\alc.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
   </ItemGroup>
