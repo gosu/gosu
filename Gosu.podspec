@@ -14,9 +14,9 @@ Pod::Spec.new do |s|
   # Bundle our dependencies into one subspec so that we can silence warnings for them.
   s.subspec "Dependencies" do |ss|
     ss.compiler_flags = "-Wno-everything"
-    # Be careful not to include SDL_sound on iOS, where Gosu still uses AudioToolbox instead.
+    # Be careful not to include SDL_sound or mojoAL on iOS, where Gosu still uses AudioToolbox and OpenAL instead.
     ss.source_files = "dependencies/{stb,utf8proc}/**/*.{h,c}"
-    ss.osx.source_files = "dependencies/SDL_sound/**/*.{h,c}"
+    ss.osx.source_files = "dependencies/{SDL_sound,mojoAL}/**/*.{h,c}"
     ss.osx.compiler_flags = "-I#{SDL2_PREFIX}/include/SDL2"
   end
 
@@ -31,15 +31,14 @@ Pod::Spec.new do |s|
     ss.compiler_flags = "-DGOSU_DEPRECATED= -DGLES_SILENCE_DEPRECATION -Wno-documentation -x objective-c++ -Idependencies/stb -Idependencies/utf8proc"
 
     ss.libraries = "iconv"
-    ss.frameworks = "AudioToolbox", "OpenAL"
     # Include all frameworks necessary for SDL 2, because we link to it statically.
     ss.osx.frameworks = "ApplicationServices", "AudioUnit", "Carbon", "Cocoa", "CoreAudio",
                         "ForceFeedback", "IOKit", "OpenGL"
     ss.osx.weak_frameworks = "CoreHaptics", "GameController", "QuartzCore", "Metal"
     # Frameworks used directly by Gosu for iOS.
-    ss.ios.frameworks = "AVFoundation", "CoreGraphics", "OpenGLES", "QuartzCore"
+    ss.ios.frameworks = "AVFoundation", "CoreGraphics", "OpenGLES", "QuartzCore", "AudioToolbox", "OpenAL"
 
-    ss.osx.compiler_flags = "-I#{SDL2_PREFIX}/include/SDL2"
+    ss.osx.compiler_flags = "-I#{SDL2_PREFIX}/include/SDL2 -Idependencies/mojoAL"
     # Statically link SDL 2, so that compiled games will be self-contained.
     ss.osx.xcconfig = { "OTHER_LDFLAGS" => "#{SDL2_PREFIX}/lib/libSDL2.a" }
 
