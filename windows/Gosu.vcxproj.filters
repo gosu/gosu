@@ -329,9 +329,6 @@
     <ClInclude Include="..\dependencies\SDL\include\SDL_config_minimal.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_os2.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
     <ClInclude Include="..\dependencies\SDL\include\SDL_config_pandora.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
@@ -751,6 +748,9 @@
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Window.hpp">
       <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_hidapi.h">
+      <Filter>Dependencies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
