@@ -2,7 +2,7 @@
 
 #include <Gosu/IO.hpp>
 
-#ifdef GOSU_IS_MAC
+#ifdef GOSU_IS_IPHONE
 // Ignore OpenAL deprecation warnings. If macOS stops shipping OpenAL, it's more likely that we bundle our own version
 // of it than that we switch to another audio API.
 #define OPENAL_DEPRECATED
