@@ -1,10 +1,10 @@
 require 'rbconfig'
 
-if RUBY_PLATFORM =~ /mswin$|mingw32|mingw64|win32\-|\-win32/
+if RUBY_PLATFORM =~ /mswin$|mingw|win32\-|\-win32/
   binary_path = File.dirname(__FILE__)
   # 64-bit builds of Windows use "x64-mingw32" as RUBY_PLATFORM
   binary_path += "64" if RUBY_PLATFORM =~ /^x64-/
-  
+
   begin
     # Make DLLs available as shown here:
     # https://github.com/oneclick/rubyinstaller2/wiki/For-gem-developers
