@@ -782,6 +782,16 @@ module Gosu
     attr_accessor :mouse_y
 
     ##
+    # @note Only updated if {#relative_mouse_mode} returns true.
+    # @return [Float] the mouse pointer's relative position X coordinate.
+    attr_reader :relative_mouse_x
+
+    ##
+    # @note Only updated if {#relative_mouse_mode} returns true.
+    # @return [Float] the mouse pointer's relative position Y coordinate.
+    attr_reader :relative_mouse_y
+
+    ##
     # The currently active {TextInput}. If not nil, all keyboard input will be handled by this object.
     #
     # @return [TextInput?] the currently active text input, if any.
@@ -901,6 +911,25 @@ module Gosu
     #
     # @return [true, false] whether the system cursor should be shown.
     def needs_cursor?; end
+
+    ##
+    # This method can be overridden to confine the system cursor to your window.
+    #
+    # With great power comes great responsibity; Only capture the the mouse when you need it captured
+    # and release it as soon as you no longer need it captured as taking control away from your users
+    # without an obvious way of getting it back will readily irritate them.
+    #
+    # @return [true, false] whether the system cursor is captured.
+    def capture_cursor?; end
+
+    ##
+    # This method can be overridden to enable relative mouse mode, which the system cursor is hidden and the mouse
+    # is unconfined by the display size.
+    #
+    # @note {#mouse_x} and {#mouse_y} will stop updating if this is set to true, query {#relative_mouse_x} and {#relative_mouse_x} instead.
+    #
+    # @return [true, false] whether mouse motion is relative or not.
+    def relative_mouse_mode; end
 
     ##
     # This method is called whenever the user tries to close the window, e.g. by clicking the [x]

@@ -90,6 +90,14 @@ namespace Gosu
         /// If this function returns true, the system cursor will be visible while over the window.
         virtual bool needs_cursor() const { return true; }
 
+        //! If this function returns true, the system cursor is confined to the window.
+        virtual bool capture_cursor() const { return false; }
+
+        //! If this function returns true, the system cursor is hidden and the mouse is unconfined by the display size.
+        //! Note: Gosu::mouse_x and Gosu::mouse_y will stop updating if this is set to true, query Gosu::relative_mouse_x
+        //! and Gosu::relative_mouse_y instead.
+        virtual bool relative_mouse_mode() const { return false; }
+
         virtual void gain_focus() {}
 
         /// This function is called when the window loses focus on some platforms.

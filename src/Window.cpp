@@ -362,6 +362,8 @@ bool Gosu::Window::tick()
     update();
 
     SDL_ShowCursor(needs_cursor());
+    SDL_SetWindowGrab(shared_window(), (SDL_bool) capture_cursor());
+    SDL_SetRelativeMouseMode((SDL_bool) relative_mouse_mode());
 
     if (needs_redraw()) {
         ensure_current_context();
