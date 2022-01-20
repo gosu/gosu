@@ -1,12 +1,12 @@
 SDL2_PREFIX = `sdl2-config --prefix`.chomp
 
 Pod::Spec.new do |s|
-  s.name     = "Gosu"
-  s.version  = "1.3.0"
-  s.summary  = "2D game development library."
+  s.name = "Gosu"
+  s.version = "1.3.0"
+  s.summary = "2D game development library."
   s.homepage = "https://www.libgosu.org/"
-  s.license  = { type: "MIT", file: "COPYING" }
-  s.author   = { "Julian Raschke" => "julian@raschke.de" }
+  s.license = { type: "MIT", file: "COPYING" }
+  s.author = { "Julian Raschke" => "julian@raschke.de" }
   s.documentation_url = "https://www.libgosu.org/cpp/"
 
   s.source = { git: "https://github.com/gosu/gosu.git", tag: "v#{s.version}" }
@@ -14,10 +14,11 @@ Pod::Spec.new do |s|
   # Bundle our dependencies into one subspec so that we can silence warnings for them.
   s.subspec "Dependencies" do |ss|
     ss.compiler_flags = "-Wno-everything"
-    # Be careful not to include SDL_sound on iOS, where Gosu still uses AudioToolbox instead.
+    # Be careful not to include SDL_sound or mojoAL on iOS, where Gosu still uses AudioToolbox and OpenAL instead.
     ss.source_files = "dependencies/{stb,utf8proc}/**/*.{h,c}"
-    ss.osx.source_files = "dependencies/SDL_sound/**/*.{h,c}"
-    ss.osx.compiler_flags = "-I#{SDL2_PREFIX}/include/SDL2"
+    ss.osx.source_files = "dependencies/{SDL_sound,mojoAL}/**/*.{h,c}"
+    ss.osx.header_mappings_dir = "dependencies/mojoAL" # don't flatten <AL/al.h> to just <al.h>
+    ss.osx.compiler_flags = "-I#{SDL2_PREFIX}/include/SDL2 -Idependencies/mojoAL"
   end
 
   s.subspec "Gosu" do |ss|
@@ -31,15 +32,14 @@ Pod::Spec.new do |s|
     ss.compiler_flags = "-DGOSU_DEPRECATED= -DGLES_SILENCE_DEPRECATION -Wno-documentation -x objective-c++ -Idependencies/stb -Idependencies/utf8proc"
 
     ss.libraries = "iconv"
-    ss.frameworks = "AudioToolbox", "OpenAL"
     # Include all frameworks necessary for SDL 2, because we link to it statically.
     ss.osx.frameworks = "ApplicationServices", "AudioUnit", "Carbon", "Cocoa", "CoreAudio",
                         "ForceFeedback", "IOKit", "OpenGL"
     ss.osx.weak_frameworks = "CoreHaptics", "GameController", "QuartzCore", "Metal"
     # Frameworks used directly by Gosu for iOS.
-    ss.ios.frameworks = "AVFoundation", "CoreGraphics", "OpenGLES", "QuartzCore"
+    ss.ios.frameworks = "AVFoundation", "CoreGraphics", "OpenGLES", "QuartzCore", "AudioToolbox", "OpenAL"
 
-    ss.osx.compiler_flags = "-I#{SDL2_PREFIX}/include/SDL2"
+    ss.osx.compiler_flags = "-I#{SDL2_PREFIX}/include/SDL2 -Idependencies/mojoAL"
     # Statically link SDL 2, so that compiled games will be self-contained.
     ss.osx.xcconfig = { "OTHER_LDFLAGS" => "#{SDL2_PREFIX}/lib/libSDL2.a" }
 
@@ -50,8 +50,8 @@ Pod::Spec.new do |s|
 
     # Gosu requires C++17 features and GNU extensions, but Xcode only uses gnu++14 by default.
     ss.pod_target_xcconfig = {
-      'CLANG_CXX_LANGUAGE_STANDARD' => 'gnu++17',
-      'CLANG_CXX_LIBRARY' => 'libc++'
+      "CLANG_CXX_LANGUAGE_STANDARD" => "gnu++17",
+      "CLANG_CXX_LIBRARY" => "libc++",
     }
   end
 

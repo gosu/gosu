@@ -20,7 +20,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Declare dependencies
 
 find_package(SDL2 REQUIRED)
-find_package(OpenAL REQUIRED)
 find_package(OpenGL REQUIRED)
 
 if(APPLE)
@@ -61,18 +60,17 @@ target_include_directories(gosu
         $<INSTALL_INTERFACE:include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/mojoAL
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/SDL_sound
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/stb
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/utf8proc
-        ${SDL2_INCLUDE_DIRS}
-        ${OPENAL_INCLUDE_DIRS})
+        ${SDL2_INCLUDE_DIRS})
 
 target_link_libraries(gosu
     PRIVATE
         # The SDL2::SDL2 target is not available on Ubuntu 18.04.
         ${SDL2_LIBRARIES}
         OpenGL::GL
-        ${OPENAL_LIBRARY}
         # Only defined on macOS
         ${COCOA_LIBRARY}
         ${AUDIO_TOOLBOX_LIBRARY}

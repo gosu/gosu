@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies (Ubuntu)
         if: matrix.platform == 'ubuntu-latest' || matrix.platform == 'ubuntu-18.04'
-        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libgl1-mesa-dev libopenal-dev libgmp-dev libfontconfig1-dev libgtest-dev
+        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libgl1-mesa-dev libgmp-dev libfontconfig1-dev libgtest-dev
 
       - name: Install dependencies (macOS)
         if: matrix.platform == 'macos-latest' || matrix.platform == 'macos-10.15'

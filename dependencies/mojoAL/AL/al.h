@@ -22,7 +22,7 @@ extern "C" {
 #endif
 
 
-/* Deprecated macros. */
+/** Deprecated macro. */
 #define OPENAL
 #define ALAPI                                    AL_API
 #define ALAPIENTRY                               AL_APIENTRY
@@ -30,7 +30,7 @@ extern "C" {
 #define AL_ILLEGAL_ENUM                          AL_INVALID_ENUM
 #define AL_ILLEGAL_COMMAND                       AL_INVALID_OPERATION
 
-/* Supported AL versions. */
+/** Supported AL version. */
 #define AL_VERSION_1_0
 #define AL_VERSION_1_1
 
@@ -234,7 +234,7 @@ typedef void ALvoid;
  */
 #define AL_SOURCE_STATE                          0x1010
 
-/* Source state values. */
+/** Source state value. */
 #define AL_INITIAL                               0x1011
 #define AL_PLAYING                               0x1012
 #define AL_PAUSED                                0x1013
@@ -300,7 +300,7 @@ typedef void ALvoid;
  * Source maximum distance.
  * Type:    ALfloat
  * Range:   [0.0 - ]
- * Default: FLT_MAX
+ * Default: +inf
  *
  * The distance above which the source is not attenuated any further with a
  * clamped distance model, or where attenuation reaches 0.0 gain for linear
@@ -330,18 +330,15 @@ typedef void ALvoid;
  */
 #define AL_SOURCE_TYPE                           0x1027
 
-/* Source type values. */
+/** Source type value. */
 #define AL_STATIC                                0x1028
 #define AL_STREAMING                             0x1029
 #define AL_UNDETERMINED                          0x1030
 
-/** Unsigned 8-bit mono buffer format. */
+/** Buffer format specifier. */
 #define AL_FORMAT_MONO8                          0x1100
-/** Signed 16-bit mono buffer format. */
 #define AL_FORMAT_MONO16                         0x1101
-/** Unsigned 8-bit stereo buffer format. */
 #define AL_FORMAT_STEREO8                        0x1102
-/** Signed 16-bit stereo buffer format. */
 #define AL_FORMAT_STEREO16                       0x1103
 
 /** Buffer frequency (query only). */
@@ -353,7 +350,11 @@ typedef void ALvoid;
 /** Buffer data size (query only). */
 #define AL_SIZE                                  0x2004
 
-/* Buffer state. Not for public use. */
+/**
+ * Buffer state.
+ *
+ * Not for public use.
+ */
 #define AL_UNUSED                                0x2010
 #define AL_PENDING                               0x2011
 #define AL_PROCESSED                             0x2012
@@ -440,7 +441,7 @@ AL_API void AL_APIENTRY alSpeedOfSound(ALfloat value);
 #define AL_DISTANCE_MODEL                        0xD000
 AL_API void AL_APIENTRY alDistanceModel(ALenum distanceModel);
 
-/* Distance model values. */
+/** Distance model value. */
 #define AL_INVERSE_DISTANCE                      0xD001
 #define AL_INVERSE_DISTANCE_CLAMPED              0xD002
 #define AL_LINEAR_DISTANCE                       0xD003
@@ -448,12 +449,12 @@ AL_API void AL_APIENTRY alDistanceModel(ALenum distanceModel);
 #define AL_EXPONENT_DISTANCE                     0xD005
 #define AL_EXPONENT_DISTANCE_CLAMPED             0xD006
 
-/* Renderer State management. */
+/** Renderer State management. */
 AL_API void AL_APIENTRY alEnable(ALenum capability);
 AL_API void AL_APIENTRY alDisable(ALenum capability);
 AL_API ALboolean AL_APIENTRY alIsEnabled(ALenum capability);
 
-/* State retrieval. */
+/** State retrieval. */
 AL_API const ALchar* AL_APIENTRY alGetString(ALenum param);
 AL_API void AL_APIENTRY alGetBooleanv(ALenum param, ALboolean *values);
 AL_API void AL_APIENTRY alGetIntegerv(ALenum param, ALint *values);
@@ -464,25 +465,25 @@ AL_API ALint AL_APIENTRY alGetInteger(ALenum param);
 AL_API ALfloat AL_APIENTRY alGetFloat(ALenum param);
 AL_API ALdouble AL_APIENTRY alGetDouble(ALenum param);
 
-/* Error retrieval. */
-
-/** Obtain the first error generated in the AL context since the last check. */
+/**
+ * Error retrieval.
+ *
+ * Obtain the first error generated in the AL context since the last check.
+ */
 AL_API ALenum AL_APIENTRY alGetError(void);
 
-/** Query for the presence of an extension on the AL context. */
+/**
+ * Extension support.
+ *
+ * Query for the presence of an extension, and obtain any appropriate function
+ * pointers and enum values.
+ */
 AL_API ALboolean AL_APIENTRY alIsExtensionPresent(const ALchar *extname);
-/**
- * Retrieve the address of a function. The returned function may be context-
- * specific.
- */
 AL_API void* AL_APIENTRY alGetProcAddress(const ALchar *fname);
-/**
- * Retrieve the value of an enum. The returned value may be context-specific.
- */
 AL_API ALenum AL_APIENTRY alGetEnumValue(const ALchar *ename);
 
 
-/* Set Listener parameters */
+/** Set Listener parameters */
 AL_API void AL_APIENTRY alListenerf(ALenum param, ALfloat value);
 AL_API void AL_APIENTRY alListener3f(ALenum param, ALfloat value1, ALfloat value2, ALfloat value3);
 AL_API void AL_APIENTRY alListenerfv(ALenum param, const ALfloat *values);
@@ -490,7 +491,7 @@ AL_API void AL_APIENTRY alListeneri(ALenum param, ALint value);
 AL_API void AL_APIENTRY alListener3i(ALenum param, ALint value1, ALint value2, ALint value3);
 AL_API void AL_APIENTRY alListeneriv(ALenum param, const ALint *values);
 
-/* Get Listener parameters */
+/** Get Listener parameters */
 AL_API void AL_APIENTRY alGetListenerf(ALenum param, ALfloat *value);
 AL_API void AL_APIENTRY alGetListener3f(ALenum param, ALfloat *value1, ALfloat *value2, ALfloat *value3);
 AL_API void AL_APIENTRY alGetListenerfv(ALenum param, ALfloat *values);
@@ -506,7 +507,7 @@ AL_API void AL_APIENTRY alDeleteSources(ALsizei n, const ALuint *sources);
 /** Verify a handle is a valid Source. */
 AL_API ALboolean AL_APIENTRY alIsSource(ALuint source);
 
-/* Set Source parameters. */
+/** Set Source parameters. */
 AL_API void AL_APIENTRY alSourcef(ALuint source, ALenum param, ALfloat value);
 AL_API void AL_APIENTRY alSource3f(ALuint source, ALenum param, ALfloat value1, ALfloat value2, ALfloat value3);
 AL_API void AL_APIENTRY alSourcefv(ALuint source, ALenum param, const ALfloat *values);
@@ -514,7 +515,7 @@ AL_API void AL_APIENTRY alSourcei(ALuint source, ALenum param, ALint value);
 AL_API void AL_APIENTRY alSource3i(ALuint source, ALenum param, ALint value1, ALint value2, ALint value3);
 AL_API void AL_APIENTRY alSourceiv(ALuint source, ALenum param, const ALint *values);
 
-/* Get Source parameters. */
+/** Get Source parameters. */
 AL_API void AL_APIENTRY alGetSourcef(ALuint source, ALenum param, ALfloat *value);
 AL_API void AL_APIENTRY alGetSource3f(ALuint source, ALenum param, ALfloat *value1, ALfloat *value2, ALfloat *value3);
 AL_API void AL_APIENTRY alGetSourcefv(ALuint source, ALenum param, ALfloat *values);
@@ -557,7 +558,7 @@ AL_API ALboolean AL_APIENTRY alIsBuffer(ALuint buffer);
 /** Specifies the data to be copied into a buffer */
 AL_API void AL_APIENTRY alBufferData(ALuint buffer, ALenum format, const ALvoid *data, ALsizei size, ALsizei freq);
 
-/* Set Buffer parameters, */
+/** Set Buffer parameters, */
 AL_API void AL_APIENTRY alBufferf(ALuint buffer, ALenum param, ALfloat value);
 AL_API void AL_APIENTRY alBuffer3f(ALuint buffer, ALenum param, ALfloat value1, ALfloat value2, ALfloat value3);
 AL_API void AL_APIENTRY alBufferfv(ALuint buffer, ALenum param, const ALfloat *values);
@@ -565,7 +566,7 @@ AL_API void AL_APIENTRY alBufferi(ALuint buffer, ALenum param, ALint value);
 AL_API void AL_APIENTRY alBuffer3i(ALuint buffer, ALenum param, ALint value1, ALint value2, ALint value3);
 AL_API void AL_APIENTRY alBufferiv(ALuint buffer, ALenum param, const ALint *values);
 
-/* Get Buffer parameters. */
+/** Get Buffer parameters. */
 AL_API void AL_APIENTRY alGetBufferf(ALuint buffer, ALenum param, ALfloat *value);
 AL_API void AL_APIENTRY alGetBuffer3f(ALuint buffer, ALenum param, ALfloat *value1, ALfloat *value2, ALfloat *value3);
 AL_API void AL_APIENTRY alGetBufferfv(ALuint buffer, ALenum param, ALfloat *values);
@@ -573,7 +574,7 @@ AL_API void AL_APIENTRY alGetBufferi(ALuint buffer, ALenum param, ALint *value);
 AL_API void AL_APIENTRY alGetBuffer3i(ALuint buffer, ALenum param, ALint *value1, ALint *value2, ALint *value3);
 AL_API void AL_APIENTRY alGetBufferiv(ALuint buffer, ALenum param, ALint *values);
 
-/* Pointer-to-function type, useful for dynamically getting AL entry points. */
+/** Pointer-to-function type, useful for dynamically getting AL entry points. */
 typedef void          (AL_APIENTRY *LPALENABLE)(ALenum capability);
 typedef void          (AL_APIENTRY *LPALDISABLE)(ALenum capability);
 typedef ALboolean     (AL_APIENTRY *LPALISENABLED)(ALenum capability);
@@ -647,6 +648,13 @@ typedef void          (AL_APIENTRY *LPALDOPPLERFACTOR)(ALfloat value);
 typedef void          (AL_APIENTRY *LPALDOPPLERVELOCITY)(ALfloat value);
 typedef void          (AL_APIENTRY *LPALSPEEDOFSOUND)(ALfloat value);
 typedef void          (AL_APIENTRY *LPALDISTANCEMODEL)(ALenum distanceModel);
+
+#define AL_EXT_TRACE_INFO 1
+typedef void          (AL_APIENTRY *LPALTRACEPUSHSCOPE)(const ALchar *str);
+typedef void          (AL_APIENTRY *LPALTRACEPOPSCOPE)(void);
+typedef void          (AL_APIENTRY *LPALTRACEMESSAGE)(const ALchar *str);
+typedef void          (AL_APIENTRY *LPALTRACEBUFFERLABEL)(ALuint name, const ALchar *str);
+typedef void          (AL_APIENTRY *LPALTRACESOURCELABEL)(ALuint name, const ALchar *str);
 
 #if defined(__cplusplus)
 }  /* extern "C" */

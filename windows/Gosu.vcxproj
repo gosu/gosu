@@ -81,21 +81,21 @@
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\dependencies\al_soft\x64;..\dependencies\SDL\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\include;..\dependencies\al_soft;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\dependencies\mojoAL;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\include;..\dependencies\al_soft;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\dependencies\mojoAL;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\include;..\dependencies\al_soft;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\dependencies\mojoAL;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\include;..\dependencies\al_soft;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\dependencies\mojoAL;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>GOSU_DEPRECATED=;LINK_MPG123_DLL;UTF8PROC_EXPORTS;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GOSU_DEPRECATED=;LINK_MPG123_DLL;UTF8PROC_EXPORTS;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;_DEBUG;AL_LIBTYPE_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -107,7 +107,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;dwmapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;opengl32.lib;winmm.lib;dwmapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>$(SDL2_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
@@ -115,7 +115,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>GOSU_DEPRECATED=;LINK_MPG123_DLL;UTF8PROC_EXPORTS;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GOSU_DEPRECATED=;LINK_MPG123_DLL;UTF8PROC_EXPORTS;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;_DEBUG;AL_LIBTYPE_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -127,7 +127,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;dwmapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;opengl32.lib;winmm.lib;dwmapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>$(SDL2_LIB64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
@@ -138,7 +138,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <PreprocessorDefinitions>GOSU_DEPRECATED=;LINK_MPG123_DLL;UTF8PROC_EXPORTS;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GOSU_DEPRECATED=;LINK_MPG123_DLL;UTF8PROC_EXPORTS;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;NDEBUG;AL_LIBTYPE_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -146,7 +146,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;dwmapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;opengl32.lib;winmm.lib;dwmapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SDL2_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -156,7 +156,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <PreprocessorDefinitions>GOSU_DEPRECATED=;LINK_MPG123_DLL;UTF8PROC_EXPORTS;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GOSU_DEPRECATED=;LINK_MPG123_DLL;UTF8PROC_EXPORTS;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;NDEBUG;AL_LIBTYPE_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -166,7 +166,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>SDL2.lib;opengl32.lib;openal32.lib;winmm.lib;dwmapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;opengl32.lib;winmm.lib;dwmapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SDL2_LIB64);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -214,6 +214,7 @@
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\sndfile.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\sndmix.c" />
     <ClCompile Include="..\dependencies\utf8proc\utf8proc.c" />
+    <ClCompile Include="..\dependencies\mojoAL\mojoal.c" />
     <ClCompile Include="..\src\Audio.cpp" />
     <ClCompile Include="..\src\AudioFileAudioToolbox.cpp" />
     <ClCompile Include="..\src\AudioFileSDLSound.cpp" />
@@ -359,17 +360,13 @@
     <ClInclude Include="..\dependencies\SDL_sound\libmodplug\modplug.h" />
     <ClInclude Include="..\dependencies\SDL_sound\libmodplug\tables.h" />
     <ClInclude Include="..\dependencies\SDL_sound\stb_vorbis.h" />
-    <ClInclude Include="..\dependencies\al_soft\AL\al.h" />
-    <ClInclude Include="..\dependencies\al_soft\AL\alc.h" />
-    <ClInclude Include="..\dependencies\al_soft\AL\alext.h" />
-    <ClInclude Include="..\dependencies\al_soft\AL\efx-creative.h" />
-    <ClInclude Include="..\dependencies\al_soft\AL\efx-presets.h" />
-    <ClInclude Include="..\dependencies\al_soft\AL\efx.h" />
     <ClInclude Include="..\dependencies\stb\stb_image.h" />
     <ClInclude Include="..\dependencies\stb\stb_image_write.h" />
     <ClInclude Include="..\dependencies\stb\stb_truetype.h" />
     <ClInclude Include="..\dependencies\utf8proc\utf8proc.h" />
     <ClInclude Include="..\dependencies\utf8proc\utf8proc_data.h" />
+    <ClInclude Include="..\dependencies\mojoAL\AL\al.h" />
+    <ClInclude Include="..\dependencies\mojoAL\AL\alc.h" />
     <ClInclude Include="..\src\AudioFile.hpp" />
     <ClInclude Include="..\src\AudioImpl.hpp" />
     <ClInclude Include="..\src\BlockAllocator.hpp" />
