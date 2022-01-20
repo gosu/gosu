@@ -1,7 +1,7 @@
 desc "Updates Version.hpp, CMakeLists.txt, and Gosu.podspec to match ENV['GOSU_RELEASE_VERSION']"
 task :set_version do
   throw "GOSU_RELEASE_VERSION must be set" if GOSU_VERSION == "0.0.0"
-  
+
   cmake_lists = File.read("CMakeLists.txt")
   cmake_lists.sub! /(project\(Gosu VERSION )[^)]+(\))/, "\\1#{GOSU_VERSION}\\2"
   File.open("CMakeLists.txt", "w") do |file|

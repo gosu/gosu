@@ -1,12 +1,12 @@
 SDL2_PREFIX = `sdl2-config --prefix`.chomp
 
 Pod::Spec.new do |s|
-  s.name     = "Gosu"
-  s.version  = "1.3.0"
-  s.summary  = "2D game development library."
+  s.name = "Gosu"
+  s.version = "1.3.0"
+  s.summary = "2D game development library."
   s.homepage = "https://www.libgosu.org/"
-  s.license  = { type: "MIT", file: "COPYING" }
-  s.author   = { "Julian Raschke" => "julian@raschke.de" }
+  s.license = { type: "MIT", file: "COPYING" }
+  s.author = { "Julian Raschke" => "julian@raschke.de" }
   s.documentation_url = "https://www.libgosu.org/cpp/"
 
   s.source = { git: "https://github.com/gosu/gosu.git", tag: "v#{s.version}" }
@@ -17,6 +17,7 @@ Pod::Spec.new do |s|
     # Be careful not to include SDL_sound or mojoAL on iOS, where Gosu still uses AudioToolbox and OpenAL instead.
     ss.source_files = "dependencies/{stb,utf8proc}/**/*.{h,c}"
     ss.osx.source_files = "dependencies/{SDL_sound,mojoAL}/**/*.{h,c}"
+    ss.osx.header_mappings_dir = "dependencies/mojoAL" # don't flatten <AL/al.h> to just <al.h>
     ss.osx.compiler_flags = "-I#{SDL2_PREFIX}/include/SDL2 -Idependencies/mojoAL"
   end
 
@@ -49,8 +50,8 @@ Pod::Spec.new do |s|
 
     # Gosu requires C++17 features and GNU extensions, but Xcode only uses gnu++14 by default.
     ss.pod_target_xcconfig = {
-      'CLANG_CXX_LANGUAGE_STANDARD' => 'gnu++17',
-      'CLANG_CXX_LIBRARY' => 'libc++'
+      "CLANG_CXX_LANGUAGE_STANDARD" => "gnu++17",
+      "CLANG_CXX_LIBRARY" => "libc++",
     }
   end
 

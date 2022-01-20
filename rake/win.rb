@@ -26,7 +26,7 @@ def update_msvc_project(path:, interface:, implementation:, dependencies: [])
       else
         filter = "Dependencies"
       end
-      "#$2<ClInclude Include=\"..\\#{file.tr("/", "\\")}\">#$2  <Filter>#{filter}</Filter>#$2</ClInclude>" 
+      "#$2<ClInclude Include=\"..\\#{file.tr("/", "\\")}\">#$2  <Filter>#{filter}</Filter>#$2</ClInclude>"
     end
     [$1, *items, $3].join
   end
@@ -39,7 +39,7 @@ def update_msvc_project(path:, interface:, implementation:, dependencies: [])
       else
         filter = "Dependencies"
       end
-      "#$2<ClCompile Include=\"..\\#{file.tr("/", "\\")}\">#$2  <Filter>#{filter}</Filter>#$2</ClCompile>" 
+      "#$2<ClCompile Include=\"..\\#{file.tr("/", "\\")}\">#$2  <Filter>#{filter}</Filter>#$2</ClCompile>"
     end
     [$1, *items, $3].join
   end
