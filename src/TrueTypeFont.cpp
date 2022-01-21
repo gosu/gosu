@@ -4,18 +4,8 @@
 #include <Gosu/Utility.hpp>
 #include <stdexcept>
 
-// Disable comma warnings in stb headers.
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcomma"
-#endif
-
 #define STB_TRUETYPE_IMPLEMENTATION
 #include <stb_truetype.h>
-
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
 
 #include <algorithm>
 #include <map>
