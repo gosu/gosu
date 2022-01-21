@@ -137,9 +137,9 @@ struct Gosu::TrueTypeFont::Impl : Gosu::Noncopyable
     {
         int x = static_cast<int>(fx);
         int y = static_cast<int>(fy);
+        float fscale = static_cast<float>(scale);
         float shift_x = static_cast<float>(fx - x);
         float shift_y = static_cast<float>(fy - y);
-        float fscale = static_cast<float>(scale);
 
         int w, h, xoff, yoff;
         // As an optimization, this method/class could try to re-use a buffer for rasterization

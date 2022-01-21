@@ -51,7 +51,7 @@ namespace Gosu
     /// These options are not mutually exclusive.
     const unsigned char* ttf_data_from_file(const std::string& filename);
 
-    /// This method loads a system font wit the given flags.
+    /// This method loads a system font with the given flags.
     /// This method has a different implementation on each platform.
     /// In case of failure, this method returns nullptr.
     const unsigned char* ttf_data_by_name(const std::string& font_name, unsigned font_flags);
