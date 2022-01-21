@@ -74,7 +74,9 @@ elsif macos
   $LDFLAGS << " #{`sdl2-config --static-libs`.chomp} -framework OpenGL -framework Metal"
   # And yet another hack: `sdl2-config --static-libs` uses `-lSDL2` instead of linking to the static library,
   # even if it exists. -> Manually replace it. (Ugh!)
-  $LDFLAGS.sub! " -lSDL2 ", " /usr/local/lib/libSDL2.a " if File.exist? "/usr/local/lib/libSDL2.a"
+  %w(/usr/local/lib/libSDL2.a /opt/homebrew/opt/sdl2/lib/libSDL2.a).each do |static_lib|
+    $LDFLAGS.sub! " -lSDL2 ", " #{static_lib} " if File.exist? static_lib
+  end
 
   # Disable building of 32-bit slices in Apple's Ruby.
   # (RbConfig::CONFIG['CXXFLAGS'] on 10.11: -arch x86_64 -arch i386 -g -Os -pipe)
