@@ -23,7 +23,14 @@ double Gosu::angle(double from_x, double from_y, double to_x, double to_y, doubl
     double dist_x = to_x - from_x;
     double dist_y = to_y - from_y;
 
-    if (dist_x == 0 && dist_y == 0) return def;
+    if (dist_x == 0) {
+        // Special-case these values so that for a result of 0°/360° we  never 
+        // run into subtle precision errors by converting from radian to angles.
+        if (dist_y < 0) return 0;
+        if (dist_y > 0) return 180;
+        // dist_y == 0
+        return 0;
+    }
 
     return normalize_angle(radians_to_gosu(atan2(dist_y, dist_x)));
 }

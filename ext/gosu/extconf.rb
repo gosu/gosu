@@ -8,17 +8,17 @@ when /^darwin/
 end
 
 if not windows
-  puts 'The Gosu gem requires some libraries to be installed system-wide.'
-  puts 'See the following site for a list:'
+  puts "The Gosu gem requires some libraries to be installed system-wide."
+  puts "See the following site for a list:"
   if macos
-    puts 'https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X'
+    puts "https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X"
   else
-    puts 'https://github.com/gosu/gosu/wiki/Getting-Started-on-Linux'
+    puts "https://github.com/gosu/gosu/wiki/Getting-Started-on-Linux"
   end
 end
 
-require 'mkmf'
-require 'fileutils'
+require "mkmf"
+require "fileutils"
 
 # Silence internal deprecation warnings in Gosu.
 $CFLAGS << " -DGOSU_DEPRECATED="
@@ -46,7 +46,7 @@ if windows
 
   # Use the bundled versions of SDL 2 and open_al.
   $INCFLAGS << " -I../../dependencies/SDL/include"
-  if RbConfig::CONFIG['arch'] =~ /x64-/
+  if RbConfig::CONFIG["arch"] =~ /x64-/
     $LDFLAGS << "  -L../../dependencies/SDL/lib/x64"
   else
     $LDFLAGS << "  -L../../dependencies/SDL/lib/x86"
@@ -71,10 +71,12 @@ elsif macos
   $CFLAGS << " #{`sdl2-config --cflags`.chomp}"
   $CXXFLAGS << " #{`sdl2-config --cflags`.chomp}"
   # Prefer statically linking SDL 2.
-  $LDFLAGS  << " #{`sdl2-config --static-libs`.chomp} -framework OpenGL -framework Metal"
+  $LDFLAGS << " #{`sdl2-config --static-libs`.chomp} -framework OpenGL -framework Metal"
   # And yet another hack: `sdl2-config --static-libs` uses `-lSDL2` instead of linking to the static library,
   # even if it exists. -> Manually replace it. (Ugh!)
-  $LDFLAGS.sub! " -lSDL2 ", " /usr/local/lib/libSDL2.a " if File.exist? "/usr/local/lib/libSDL2.a"
+  %w(/usr/local/lib/libSDL2.a /opt/homebrew/opt/sdl2/lib/libSDL2.a).each do |static_lib|
+    $LDFLAGS.sub! " -lSDL2 ", " #{static_lib} " if File.exist? static_lib
+  end
 
   # Disable building of 32-bit slices in Apple's Ruby.
   # (RbConfig::CONFIG['CXXFLAGS'] on 10.11: -arch x86_64 -arch i386 -g -Os -pipe)
@@ -82,30 +84,30 @@ elsif macos
   $CXXFLAGS.gsub! "-arch i386", ""
   $LDFLAGS.gsub! "-arch i386", ""
   $ARCH_FLAG.gsub! "-arch i386", ""
-  CONFIG['LDSHARED'].gsub! "-arch i386", ""
+  CONFIG["LDSHARED"].gsub! "-arch i386", ""
 else
   if /BCM2708/ =~ `cat /proc/cpuinfo`
     $INCFLAGS << " -I/opt/vc/include/GLES"
     $INCFLAGS << " -I/opt/vc/include"
     $LDFLAGS << " -L/opt/vc/lib"
     $LDFLAGS << " -lGLESv1_CM"
-    $CFLAGS   << " -DGOSU_IS_OPENGLES"
+    $CFLAGS << " -DGOSU_IS_OPENGLES"
     $CXXFLAGS << " -DGOSU_IS_OPENGLES"
   else
-    pkg_config 'gl'
+    pkg_config "gl"
   end
 
-  pkg_config 'sdl2'
-  pkg_config 'vorbisfile'
-  pkg_config 'sndfile'
-  pkg_config 'libmpg123'
-  pkg_config 'fontconfig'
+  pkg_config "sdl2"
+  pkg_config "vorbisfile"
+  pkg_config "sndfile"
+  pkg_config "libmpg123"
+  pkg_config "fontconfig"
 end
 
 # Because Ruby will only compile source file in the src/ folder, but our dependencies are
 # stored in dependencies/, we need to create symlinks for all the .c files. This is terrible,
 # but still seems better than putting everything into the same folder to begin with.
-Dir.glob('../../dependencies/**/*.c').each do |dep|
+Dir.glob("../../dependencies/**/*.c").each do |dep|
   File.open("../../src/#{File.basename dep}", "w") do |shim|
     shim.puts "#include \"#{File.expand_path dep}\""
   end

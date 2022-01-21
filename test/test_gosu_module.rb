@@ -66,7 +66,7 @@ class TestGosuModule < Minitest::Test
       [-1,  1] => 225.0,
       [-1,  0] => 270.0,
       [-1, -1] => 315.0,
-      [ 0, -1] =>   0.0, # 360.0
+      [ 0, -1] =>   0.0, # = 360.0
     }.each do |point, angle|
       assert_equal angle, Gosu.angle(0, 0, *point)
     end
