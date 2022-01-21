@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.0] - 2022-01-21
+* Windows: Support for Ruby 3.1. (#611/#612) Thanks to @cyberarm.
+* Windows: Update SDL to 2.0.20 (#610), also update SDL_sound on all platforms (#606).
+* Replace OpenAL (usually oal-soft) with mojoAL. (#608) Thanks again, @cyberarm.
+
 ## [1.3.0] - 2022-01-02
 * Add `Window#gain_focus` callback to mirror `Window#lose_focus`, which was previously undocumented and only implemented on iOS. (#600) Thanks @cyberarm!
 * Fix Gosu::Window#tick not raising errors from callbacks. (#594) Thanks again, @cyberarm!
