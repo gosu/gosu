@@ -9,9 +9,10 @@ namespace Gosu
 {
     /// TextInput instances are invisible objects that build a text string from input, using the
     /// current operating system's keyboard layout or input method editor (IME).
-    /// At its most basic form, you only need to create a new TextInput instance and pass it to your
-    /// window's Input object via set_text_input. Until you call this function again with a nullptr
-    /// value, the TextInput object will build a text that can be accessed via TextInput::text().
+    /// To start processing keyboard text input, you need to create a new TextInput instance and
+    /// pass it to your window's Input object via set_text_input.
+    /// Until you call this function again with a nullptr value, the TextInput object will then
+    /// build a text that can be accessed via TextInput::text().
     /// A TextInput object has no built-in UI. It is up to you to actually draw a text field.
     /// TextInput only provides a portable base for your own GUI to build upon.
     class TextInput
