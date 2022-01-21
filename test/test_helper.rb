@@ -28,9 +28,14 @@ class Gosu::Image
       differences << (delta / 255.0) if delta > 0
     end
 
-    # If the average color difference is only subtle even on "large" parts of the image its still ok (e.g. differently rendered color gradients) OR
-    # if the color difference is huge but on only a few pixels its ok too (e.g. a diagonal line may be off a few pixels)
-    (1 - (differences.inject(:+) / differences.size) >= threshold) or (1 - (differences.size / blob.size.to_f) >= threshold)
+    # Okay if the average color difference is only subtle even on "large" parts of the image
+    # (e.g. differently rendered color gradients)
+    return true if (1 - (differences.inject(:+) / differences.size) >= threshold)
+    # Okay if the color difference is huge, but on only a few pixels
+    # (e.g. a diagonal line may be off a few pixels)
+    return true if (1 - (differences.size / blob.size.to_f) >= threshold)
+
+    return false
   end
 end
 

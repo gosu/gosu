@@ -8217,8 +8217,8 @@ fail:
 SWIGINTERN VALUE
 _wrap_Sample_play(int argc, VALUE *argv, VALUE self) {
   Gosu::Sample *arg1 = (Gosu::Sample *) 0 ;
-  double arg2 = (double) 1 ;
-  double arg3 = (double) 1 ;
+  double arg2 = (double) 1.0 ;
+  double arg3 = (double) 1.0 ;
   bool arg4 = (bool) false ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -8279,8 +8279,8 @@ SWIGINTERN VALUE
 _wrap_Sample_play_pan(int argc, VALUE *argv, VALUE self) {
   Gosu::Sample *arg1 = (Gosu::Sample *) 0 ;
   double arg2 ;
-  double arg3 = (double) 1 ;
-  double arg4 = (double) 1 ;
+  double arg3 = (double) 1.0 ;
+  double arg4 = (double) 1.0 ;
   bool arg5 = (bool) false ;
   void *argp1 = 0 ;
   int res1 = 0 ;

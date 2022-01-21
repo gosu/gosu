@@ -58,7 +58,10 @@ endif()
 target_include_directories(gosu
     PUBLIC
         $<INSTALL_INTERFACE:include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+
+# Use target_include_directories(... SYSTEM ...) to suppress warnings in these headers.
+target_include_directories(gosu SYSTEM
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/mojoAL
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/SDL_sound

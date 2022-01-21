@@ -12,44 +12,44 @@ namespace Gosu
         bool is_whitespace;
         bool is_end_of_line;
         double width;
-        
+
         WordInfo(const std::string& font_name, double font_height,
                  std::vector<FormattedString> parts);
     };
-    
+
     class TextBuilder
     {
         // Parameters.
-        std::string font_name;
-        double font_height;
-        double line_spacing;
-        Alignment align;
-        
-        enum EndOfLineReason {
+        std::string m_font_name;
+        double m_font_height;
+        double m_line_spacing;
+        Alignment m_align;
+
+        enum EndOfLineReason
+        {
             LINE_TOO_LONG,
             END_OF_PARAGRAPH,
             END_OF_TEXT
         };
-        
+
         // Input.
-        std::vector<WordInfo> current_line;
-        int current_line_width = 0;
+        std::vector<WordInfo> m_current_line;
+        int m_current_line_width = 0;
         void flush_current_line(EndOfLineReason reason);
 
         // Output.
-        Bitmap result;
-        int used_lines = 0;
-        int allocated_lines = 0;
+        Bitmap m_result;
+        int m_used_lines = 0;
+        int m_allocated_lines = 0;
         void allocate_next_line();
         void resize_to_allocated_lines();
-        
+
     public:
-        TextBuilder(const std::string& font_name, int font_height, int line_spacing,
-                    int width, Alignment align);
-        
+        TextBuilder(const std::string& font_name, int font_height, int line_spacing, int width,
+                    Alignment align);
+
         void feed_word(std::vector<FormattedString>&& word);
 
-        Bitmap move_into_bitmap();
+        Bitmap move_into_bitmap() &&;
     };
 }
-

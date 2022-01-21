@@ -4,16 +4,16 @@ Checks: >-
   -altera-*,
   -bugprone-easily-swappable-parameters,
   -cert-err58-cpp,
-  -cppcoreguidelines-avoid-magic-numbers,
   -cppcoreguidelines-avoid-c-arrays,
+  -cppcoreguidelines-avoid-magic-numbers,
   -cppcoreguidelines-init-variables,
+  -cppcoreguidelines-owning-memory,
   -cppcoreguidelines-prefer-member-initializer,
   -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
   -cppcoreguidelines-pro-bounds-pointer-arithmetic,
   -cppcoreguidelines-pro-type-reinterpret-cast,
+  -cppcoreguidelines-pro-type-vararg,
   -cppcoreguidelines-special-member-functions,
-  -llvm-*,
-  -llvmlibc-*,
   -fuchsia-*,
   -google-*,
   -hicpp-avoid-c-arrays,
@@ -24,6 +24,10 @@ Checks: >-
   -hicpp-special-member-functions,
   -hicpp-use-auto,
   -hicpp-use-equals-default,
+  -hicpp-vararg,
+  -llvm-*,
+  -llvmlibc-*,
+  -misc-no-recursion,
   -misc-non-private-member-variables-in-classes,
   -modernize-avoid-c-arrays,
   -modernize-make-unique,
@@ -50,6 +54,7 @@ CheckOptions:
   - { key: readability-identifier-naming.MemberFunctionCase,   value: lower_case }
   - { key: readability-identifier-naming.NamespaceCase,        value: CamelCase  }
   - { key: readability-identifier-naming.ParameterCase,        value: lower_case }
+  - { key: readability-identifier-naming.PrivateMemberCase,    value: lower_case }
   - { key: readability-identifier-naming.PrivateMemberPrefix,  value: m_         }
   - { key: readability-identifier-naming.StructCase,           value: CamelCase  }
   - { key: readability-identifier-naming.VariableCase,         value: lower_case }

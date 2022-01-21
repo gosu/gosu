@@ -7,17 +7,7 @@
 #define STBI_NO_STDIO
 #define STBI_NO_LINEAR
 
-// Disable comma warnings in stb headers.
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcomma"
-#endif
-
 #include <stb_image.h>
-
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
 
 static int read_callback(void* user, char* data, int size)
 {
@@ -82,18 +72,8 @@ Gosu::Bitmap Gosu::load_image_file(Reader input)
     return bitmap;
 }
 
-// Disable comma warnings in stb headers.
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcomma"
-#endif
-
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
-
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
 
 void Gosu::save_image_file(const Gosu::Bitmap& bitmap, const std::string& filename)
 {
