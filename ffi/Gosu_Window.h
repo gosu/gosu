@@ -33,6 +33,8 @@ GOSU_FFI_API void Gosu_Window_set_needs_redraw(Gosu_Window* window, bool functio
                                                void* data);
 GOSU_FFI_API void Gosu_Window_set_needs_cursor(Gosu_Window* window, bool function(void* data),
                                                void* data);
+GOSU_FFI_API void Gosu_Window_set_gain_focus(Gosu_Window* window, void function(void* data), void* data);
+GOSU_FFI_API void Gosu_Window_set_lose_focus(Gosu_Window* window, void function(void* data), void* data);
 GOSU_FFI_API void Gosu_Window_set_close(Gosu_Window* window, void function(void* data), void* data);
 
 GOSU_FFI_API void Gosu_Window_default_button_down(Gosu_Window* window, unsigned id);
