@@ -148,6 +148,8 @@ public:
 
         alSourceStop(source);
 
+        alSourcei(source, AL_BUFFER, AL_NONE);
+
         // Dequeue all buffers for this source.
         // The number of QUEUED buffers apparently includes the number of PROCESSED ones,
         // so getting rid of the QUEUED ones is enough.
