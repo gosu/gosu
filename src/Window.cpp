@@ -273,7 +273,7 @@ void Gosu::Window::show()
         while (tick()) {
             // Sleep to keep this loop from eating 100% CPU.
             unsigned long tick_time = milliseconds() - time_before_tick;
-            double sleep_time = tick_time - update_interval();
+            double sleep_time = update_interval() - tick_time;
             if (sleep_time >= 1) {
                 sleep(static_cast<unsigned long>(sleep_time));
             }
