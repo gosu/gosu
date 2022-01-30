@@ -1,9 +1,15 @@
 # Changelog
 
+## [1.4.1] - 2022-01-30
+* Fix an audio bug when repeatedly playing a Gosu::Song. (#618 / #619)
+* Fixed Window::tick never waiting for update_interval. (#620 / #621)
+Both fixes once again contributed by @cyberarm.
+
 ## [1.4.0] - 2022-01-21
-* Windows: Support for Ruby 3.1. (#611/#612) Thanks to @cyberarm.
+* Windows: Support for Ruby 3.1. (#611/#612)
 * Windows: Update SDL to 2.0.20 (#610), also update SDL_sound on all platforms (#606).
-* Replace OpenAL (usually oal-soft) with mojoAL. (#608) Thanks again, @cyberarm.
+* Replace OpenAL (usually oal-soft) with mojoAL. (#608)
+All three improvements contributed by @cyberarm.
 
 ## [1.3.0] - 2022-01-02
 * Add `Window#gain_focus` callback to mirror `Window#lose_focus`, which was previously undocumented and only implemented on iOS. (#600) Thanks @cyberarm!
