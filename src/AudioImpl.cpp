@@ -33,13 +33,6 @@ bool Gosu::al_initialized()
     return _device != nullptr;
 }
 
-ALCdevice* Gosu::al_device()
-{
-    al_initialize();
-    
-    return _device;
-}
-
 ALCcontext* Gosu::al_context()
 {
     al_initialize();

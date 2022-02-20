@@ -1,6 +1,3 @@
-//! \file Math.hpp
-//! Contains simple math functionality.
-
 #pragma once
 
 #include <cmath>

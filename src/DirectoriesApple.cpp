@@ -4,65 +4,66 @@
 #import <Gosu/Directories.hpp>
 #import <Foundation/Foundation.h>
 #import <unistd.h>
-using namespace std;
 
 void Gosu::use_resource_directory()
 {
     chdir(resource_prefix().c_str());
 }
 
-string Gosu::user_settings_prefix()
+const std::string& Gosu::user_settings_prefix()
 {
-    static string result = [] {
+    static const std::string user_settings_prefix = [] {
         @autoreleasepool {
             NSString* library =
-                NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES)[0];
+                    NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES)
+                            .firstObject;
             NSString* preferences = [library stringByAppendingPathComponent:@"Preferences"];
-            
-            return string(preferences.UTF8String ?: ".") + "/";
+
+            return std::string{preferences.UTF8String ?: "."} + "/";
         }
     }();
-    return result;
+    return user_settings_prefix;
 }
 
-string Gosu::user_documents_prefix()
+const std::string& Gosu::user_documents_prefix()
 {
-    static string result = [] {
+    static const std::string user_documents_prefix = [] {
         @autoreleasepool {
             NSString* documents =
-                NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-            
-            return string(documents.UTF8String ?: ".") + "/";
+                    NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
+                            .firstObject;
+
+            return std::string{documents.UTF8String ?: "."} + "/";
         }
     }();
-    return result;
+    return user_documents_prefix;
 }
 
-string Gosu::resource_prefix()
+const std::string& Gosu::resource_prefix()
 {
-    static string result = [] {
+    static const std::string resource_prefix = [] {
         @autoreleasepool {
             NSString* resources = [NSBundle mainBundle].resourcePath;
-            return string(resources.UTF8String ?: ".") + "/";
+            return std::string{resources.UTF8String ?: "."} + "/";
         }
     }();
-    return result;
+    return resource_prefix;
 }
 
-string Gosu::shared_resource_prefix()
+const std::string& Gosu::shared_resource_prefix()
 {
-    #ifdef GOSU_IS_IPHONE
+#ifdef GOSU_IS_IPHONE
     return resource_prefix();
-    #else
-    static string result = [] {
+#else
+    static const std::string shared_resource_prefix = [] {
         @autoreleasepool {
             NSString* bundle_path = [NSBundle mainBundle].bundlePath;
             NSString* containing_path = [bundle_path stringByDeletingLastPathComponent];
-            return string(containing_path.UTF8String ?: ".");
+            return std::string{containing_path.UTF8String ?: "."};
         }
     }();
-    return result;
-    #endif
+    return shared_resource_prefix;
+#endif
 }
 
 #endif
