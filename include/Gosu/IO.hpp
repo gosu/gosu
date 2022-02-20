@@ -1,6 +1,3 @@
-//! \file IO.hpp
-//! Contains everything related to input and output.
-
 #pragma once
 
 #include <Gosu/Platform.hpp>

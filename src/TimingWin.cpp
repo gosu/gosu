@@ -2,13 +2,7 @@
 #if defined(GOSU_IS_WIN)
 
 #include <Gosu/Timing.hpp>
-#include <cstdlib>
 #include <windows.h>
-
-void Gosu::sleep(unsigned milliseconds)
-{
-    Sleep(milliseconds);
-}
 
 unsigned long Gosu::milliseconds()
 {
