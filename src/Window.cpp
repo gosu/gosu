@@ -11,6 +11,7 @@
 #include <SDL.h>
 #include <algorithm>
 #include <stdexcept>
+#include <thread>
 
 namespace Gosu
 {
@@ -272,10 +273,10 @@ void Gosu::Window::show()
     try {
         while (tick()) {
             // Sleep to keep this loop from eating 100% CPU.
-            unsigned long tick_time = milliseconds() - time_before_tick;
-            double sleep_time = update_interval() - tick_time;
+            long tick_time = milliseconds() - time_before_tick;
+            long sleep_time = static_cast<long>(update_interval() - tick_time);
             if (sleep_time >= 1) {
-                sleep(static_cast<unsigned long>(sleep_time));
+                std::this_thread::sleep_for(std::chrono::milliseconds{sleep_time});
             }
 
             time_before_tick = milliseconds();
