@@ -20,9 +20,10 @@ namespace Gosu
     public:
         /// @param name   Name of a system font, or path to a TTF file (must contain '/').
         /// @param height Height of the font, in pixels.
-        /// @param flags  Flags used to render individual characters of the font (FontFlags enum).
+        /// @param font_flags  Flags used to render individual characters of the font (FontFlags enum).
+        /// @param image_flags  Flags used to render individual characters of the font (ImageFlags enum).
         explicit Font(int height, const std::string& name = default_font_name(),
-                      unsigned flags = 0);
+                      unsigned font_flags = 0, unsigned image_flags = 0);
 
         /// Returns the name of the font that was used to create it, i.e. the filename, nor the
         /// internal TTF name. (TODO: Why not?)
@@ -33,6 +34,7 @@ namespace Gosu
 
         /// Returns the flags used to render the characters of the font (FontFlags enum).
         unsigned flags() const;
+        unsigned image_flags() const;
 
         /// Returns the width, in pixels, that the given text would occupy if drawn.
         double text_width(const std::string& text) const;

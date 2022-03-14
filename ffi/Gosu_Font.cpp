@@ -1,9 +1,9 @@
 #include "Gosu_FFI_internal.h"
 
-GOSU_FFI_API Gosu_Font* Gosu_Font_create(int height, const char* name, unsigned flags)
+GOSU_FFI_API Gosu_Font* Gosu_Font_create(int height, const char* name, unsigned flags, unsigned image_flags)
 {
     return Gosu_translate_exceptions([=] {
-        return new Gosu_Font{Gosu::Font{height, name, flags}};
+        return new Gosu_Font{Gosu::Font{height, name, flags, image_flags}};
     });
 }
 
@@ -35,6 +35,13 @@ GOSU_FFI_API unsigned Gosu_Font_flags(Gosu_Font* font)
 {
     return Gosu_translate_exceptions([=] {
         return font->font.flags();
+    });
+}
+
+GOSU_FFI_API unsigned Gosu_Font_image_flags(Gosu_Font* font)
+{
+    return Gosu_translate_exceptions([=] {
+        return font->font.image_flags();
     });
 }
 
