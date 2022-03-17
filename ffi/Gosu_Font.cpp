@@ -31,20 +31,6 @@ GOSU_FFI_API int Gosu_Font_height(Gosu_Font* font)
     });
 }
 
-GOSU_FFI_API unsigned Gosu_Font_flags(Gosu_Font* font)
-{
-    return Gosu_translate_exceptions([=] {
-        return font->font.flags();
-    });
-}
-
-GOSU_FFI_API unsigned Gosu_Font_image_flags(Gosu_Font* font)
-{
-    return Gosu_translate_exceptions([=] {
-        return font->font.image_flags();
-    });
-}
-
 GOSU_FFI_API double Gosu_Font_text_width(Gosu_Font* font, const char* text)
 {
     return Gosu_translate_exceptions([=] {

@@ -10,8 +10,6 @@ GOSU_FFI_API void Gosu_Font_destroy(Gosu_Font* font);
 
 GOSU_FFI_API const char* Gosu_Font_name(Gosu_Font* font);
 GOSU_FFI_API int Gosu_Font_height(Gosu_Font* font);
-GOSU_FFI_API unsigned Gosu_Font_flags(Gosu_Font* font);
-GOSU_FFI_API unsigned Gosu_Font_image_flags(Gosu_Font* font);
 
 GOSU_FFI_API double Gosu_Font_text_width(Gosu_Font* font, const char* text);
 GOSU_FFI_API double Gosu_Font_markup_width(Gosu_Font* font, const char* markup);
