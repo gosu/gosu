@@ -535,6 +535,8 @@ namespace Gosu
 %ignore Gosu::Font::text_width(const std::string& text) const;
 %ignore Gosu::Font::markup_width(const std::string& markup) const;
 %ignore Gosu::Font::set_image(std::string codepoint, unsigned font_flags, const Gosu::Image& image);
+%ignore Gosu::Font::flags;
+%ignore Gosu::Font::image_flags;
 
 %include "../../include/Gosu/Font.hpp"
 %extend Gosu::Font {
@@ -547,6 +549,7 @@ namespace Gosu
     {
         std::string font_name = Gosu::default_font_name();
         unsigned font_flags = 0;
+        unsigned image_flags = 0;
         
         if (options) {
             Check_Type(options, T_HASH);
@@ -572,6 +575,9 @@ namespace Gosu
                 else if (!strcmp(key_string, "underline")) {
                     if (RTEST(value)) font_flags |= Gosu::FF_UNDERLINE;
                 }
+                else if (!strcmp(key_string, "retro")) {
+                    if (RTEST(value)) image_flags |= Gosu::IF_RETRO;
+                }
                 else {
                     static bool issued_warning = false;
                     if (!issued_warning) {
@@ -582,7 +588,7 @@ namespace Gosu
             }
         }
         
-        return new Gosu::Font(height, font_name, font_flags);
+        return new Gosu::Font(height, font_name, font_flags, image_flags);
     }
     
     double text_width(const std::string& markup, double scale_x = 1.0)
