@@ -40,6 +40,9 @@ struct Gosu::Font::Impl : Gosu::Noncopyable
         // If this codepoint has not been rendered before, do it now.
         if (image->width() == 0 && image->height() == 0) {
             auto scaled_height = height * FONT_RENDER_SCALE;
+            // Optimization: Don't render higher-resolution versions if we use
+            // next neighbor interpolation anyway.
+            if (image_flags & IF_RETRO) scaled_height = height;
 
             std::u32string string(1, codepoint);
             Bitmap bitmap(scaled_height, scaled_height);
