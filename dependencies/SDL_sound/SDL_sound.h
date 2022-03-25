@@ -696,8 +696,8 @@ SNDDECLSPEC int SDLCALL Sound_Rewind(Sound_Sample *sample);
  *
  * This function can be emulated in the application with Sound_Rewind()
  *  and predecoding a specific amount of the sample, but this can be
- *  extremely inefficient. Sound_Seek() accelerates the seek on a
- *  with decoder-specific code.
+ *  extremely inefficient. Sound_Seek() accelerates the seek with
+ *  decoder-specific code.
  *
  * If this function fails, the sample should continue to function as if
  *  this call was never made. If there was an unrecoverable error,

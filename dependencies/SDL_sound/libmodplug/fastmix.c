@@ -8,6 +8,11 @@
 #include "libmodplug.h"
 #include <math.h>
 
+#include "SDL_stdinc.h"
+#if !(defined(HAVE_LIBC) && defined(__WATCOMC__)) /* Watcom has issues... */
+#define floor SDL_floor
+#endif
+
 /*
  *-----------------------------------------------------------------------------
  cubic spline interpolation doc,

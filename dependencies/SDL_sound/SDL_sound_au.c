@@ -18,9 +18,9 @@
 #if SOUND_SUPPORTS_AU
 
 /* no init/deinit needed */
-static int AU_init(void)
+static SDL_bool AU_init(void)
 {
-    return 1;
+    return SDL_TRUE;
 } /* AU_init */
 
 static void AU_quit(void)
@@ -63,7 +63,7 @@ struct audec
 {
     Uint32 total;
     Uint32 remaining;
-    Uint32 start_offset;
+    Sint64 start_offset;
     int encoding;
 };
 
@@ -297,7 +297,7 @@ static int AU_rewind(Sound_Sample *sample)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     struct audec *dec = (struct audec *) internal->decoder_private;
-    int rc = SDL_RWseek(internal->rw, dec->start_offset, RW_SEEK_SET);
+    const Sint64 rc = SDL_RWseek(internal->rw, dec->start_offset, RW_SEEK_SET);
     BAIL_IF_MACRO(rc != dec->start_offset, ERR_IO_ERROR, 0);
     dec->remaining = dec->total;
     return 1;
@@ -308,14 +308,14 @@ static int AU_seek(Sound_Sample *sample, Uint32 ms)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     struct audec *dec = (struct audec *) internal->decoder_private;
-    int offset = __Sound_convertMsToBytePos(&sample->actual, ms);
-    int rc;
-    int pos;
+    Sint64 offset = __Sound_convertMsToBytePos(&sample->actual, ms);
+    Sint64 rc;
+    Sint64 pos;
 
     if (dec->encoding == AU_ENC_ULAW_8)
         offset >>= 1;  /* halve the byte offset for compression. */
 
-    pos = (int) (dec->start_offset + offset);
+    pos = (dec->start_offset + offset);
     rc = SDL_RWseek(internal->rw, pos, RW_SEEK_SET);
     BAIL_IF_MACRO(rc != pos, ERR_IO_ERROR, 0);
     dec->remaining = dec->total - offset;

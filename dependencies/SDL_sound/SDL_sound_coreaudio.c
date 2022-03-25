@@ -23,9 +23,9 @@ typedef struct CoreAudioFileContainer
 } CoreAudioFileContainer;
 
 
-static int CoreAudio_init(void)
+static SDL_bool CoreAudio_init(void)
 {
-    return 1;  /* always succeeds. */
+    return SDL_TRUE;  /* always succeeds. */
 } /* CoreAudio_init */
 
 
@@ -193,11 +193,10 @@ static const char* CoreAudio_FourCCToString(int32_t error_code)
 SInt64 CoreAudio_SizeCallback(void* inClientData)
 {
 	SDL_RWops* rw_ops = (SDL_RWops*)inClientData;
-	SInt64 current_position = SDL_RWtell(rw_ops);
-	SInt64 end_position = SDL_RWseek(rw_ops, 0, RW_SEEK_END);
+	const Sint64 current_position = SDL_RWtell(rw_ops);
+	const Sint64 end_position = SDL_RWseek(rw_ops, 0, RW_SEEK_END);
 	SDL_RWseek(rw_ops, current_position, RW_SEEK_SET);
 //	fprintf(stderr, "CoreAudio_SizeCallback:%d\n", end_position);
-
 	return end_position;
 }
 
