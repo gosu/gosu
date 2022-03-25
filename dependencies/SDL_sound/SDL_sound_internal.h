@@ -97,16 +97,16 @@ typedef struct __SOUND_DECODERFUNCTIONS__
          *  set up any global state that your decoder needs, such as
          *  initializing an external library, etc.
          *
-         * Return non-zero if initialization is successful, zero if there's
-         *  a fatal error. If this method fails, then this decoder is
-         *  flagged as unavailable until SDL_sound() is shut down and
+         * Return SDL_TRUE if initialization is successful, SDL_FALSE if
+         *  there's a fatal error. If this method fails, then this decoder
+         *  is flagged as unavailable until SDL_sound() is shut down and
          *  reinitialized, in which case this method will be tried again.
          *
          * Note that the decoders quit() method won't be called if this
          *  method fails, so if you can't intialize, you'll have to clean
          *  up the half-initialized state in this method.
          */
-    int (*init)(void);
+    SDL_bool (*init)(void);
 
         /*
          * This is called during the Sound_Quit() function. Use this to

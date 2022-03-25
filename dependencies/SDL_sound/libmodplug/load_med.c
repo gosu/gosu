@@ -575,8 +575,8 @@ BOOL CSoundFile_ReadMed(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 				nSections = 0;
 			}
 			UINT pseq = 0;
-			
-			if ((playseqtable) && (playseqtable < dwMemLength) && (nplayseq*4 + 4 < dwMemLength - playseqtable))
+
+			if ((playseqtable) && (playseqtable < dwMemLength - 4) && ((nplayseq+1)*4 < dwMemLength - playseqtable))
 			{
 				pseq = bswapBE32(((LPDWORD)(lpStream+playseqtable))[nplayseq]);
 			}
@@ -624,11 +624,12 @@ BOOL CSoundFile_ReadMed(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		UINT len = bswapBE32(psdh->length);
 		if ((len > MAX_SAMPLE_LENGTH) || (dwPos + len + 6 > dwMemLength)) len = 0;
 		UINT flags = RS_PCM8S, stype = bswapBE16(psdh->type);
-		dwPos += 6;
+		LPSTR psdata = (LPSTR)(lpStream + dwPos + 6);
+		UINT bLimit = dwMemLength - dwPos - 6;
 		if (stype & 0x80)
 		{
-			dwPos += (stype & 0x20) ? 14 : 6;
-			if (dwPos >= dwMemLength) continue;
+			psdata += (stype & 0x20) ? 14 : 6;
+			bLimit -= (stype & 0x20) ? 14 : 6;
 		} else
 		{
 			if (stype & 0x10)
@@ -643,7 +644,7 @@ BOOL CSoundFile_ReadMed(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			if (stype & 0x20) len /= 2;
 		}
 		_this->Ins[iSmp+1].nLength = len;
-		CSoundFile_ReadSample(_this, &_this->Ins[iSmp+1], flags, (const char *)(lpStream + dwPos), dwMemLength - dwPos);
+		CSoundFile_ReadSample(_this, &_this->Ins[iSmp+1], flags, psdata, bLimit);
 	}
 	// Reading patterns (blocks)
 	if (wNumBlocks > MAX_PATTERNS) wNumBlocks = MAX_PATTERNS;

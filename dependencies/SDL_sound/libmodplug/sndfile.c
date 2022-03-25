@@ -14,8 +14,8 @@ extern BOOL MMCMP_Unpack(LPCBYTE *ppMemFile, LPDWORD pdwMemLength);
 extern void AMSUnpack(const char *psrc, UINT inputlen, char *pdest, UINT dmax, char packcharacter);
 extern WORD MDLReadBits(DWORD *bitbuf, UINT *bitnum, LPBYTE *ibuf, CHAR n);
 extern int DMFUnpack(LPBYTE psample, LPBYTE ibuf, LPBYTE ibufmax, UINT maxlen);
-extern void ITUnpack8Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dwMemLength, BOOL b215);
-extern void ITUnpack16Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dwMemLength, BOOL b215);
+extern DWORD ITUnpack8Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dwMemLength, DWORD channels, BOOL b215);
+extern DWORD ITUnpack16Bit(signed char *pSample, DWORD dwLen, LPBYTE lpMemFile, DWORD dwMemLength, DWORD channels, BOOL b215);
 
 
 static void CSoundFile_UpdateSettings(CSoundFile *_this, const ModPlug_Settings *settings)
@@ -665,9 +665,26 @@ UINT CSoundFile_ReadSample(CSoundFile *_this, MODINSTRUMENT *pIns, UINT nFlags, 
 		len = dwMemLength;
 		if (len < 4) break;
 		if ((nFlags == RS_IT2148) || (nFlags == RS_IT2158))
-			ITUnpack8Bit(pIns->pSample, pIns->nLength, (LPBYTE)lpMemFile, dwMemLength, (nFlags == RS_IT2158));
+			ITUnpack8Bit(pIns->pSample, pIns->nLength, (LPBYTE)lpMemFile, dwMemLength, 1, (nFlags == RS_IT2158));
 		else
-			ITUnpack16Bit(pIns->pSample, pIns->nLength, (LPBYTE)lpMemFile, dwMemLength, (nFlags == RS_IT21516));
+			ITUnpack16Bit(pIns->pSample, pIns->nLength, (LPBYTE)lpMemFile, dwMemLength, 1, (nFlags == RS_IT21516));
+		break;
+
+	case RS_IT2148 | RSF_STEREO:
+	case RS_IT21416 | RSF_STEREO:
+	case RS_IT2158 | RSF_STEREO:
+	case RS_IT21516 | RSF_STEREO:
+		len = dwMemLength;
+		if (len < 4) break;
+		if ((nFlags == (RS_IT2148 | RSF_STEREO)) || (nFlags == (RS_IT2158 | RSF_STEREO)))
+		{
+			DWORD offset = ITUnpack8Bit(pIns->pSample, pIns->nLength, (LPBYTE)lpMemFile, dwMemLength, 2, (nFlags == (RS_IT2158 | RSF_STEREO)));
+			ITUnpack8Bit(pIns->pSample + 1, pIns->nLength, (LPBYTE)lpMemFile + offset, dwMemLength - offset, 2, (nFlags == (RS_IT2158 | RSF_STEREO)));
+		} else
+		{
+			DWORD offset = ITUnpack16Bit(pIns->pSample, pIns->nLength, (LPBYTE)lpMemFile, dwMemLength, 2, (nFlags == (RS_IT21516 | RSF_STEREO)));
+			ITUnpack16Bit(pIns->pSample + 2, pIns->nLength, (LPBYTE)lpMemFile + offset, dwMemLength - offset, 2, (nFlags == (RS_IT21516 | RSF_STEREO)));
+		}
 		break;
 
 #ifndef MODPLUG_BASIC_SUPPORT
