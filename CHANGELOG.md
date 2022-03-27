@@ -1,14 +1,21 @@
 # Changelog
 
+## [1.4.3] - 2022-03-27
+* Update bundled dependencies: stb_image, stb_image_write, stb_truetype, stb_vorbis, utf8proc, mojoAL, SDL_sound.
+* These updates fix MP3 playback and Gosu::Sample pitch changes. (#592, #623).
+* Introduce optional `retro: true` option in `Font#initialize`, thanks to @cyberarm. (#479, #624)
+
 ## [1.4.1] - 2022-01-30
 * Fix an audio bug when repeatedly playing a Gosu::Song. (#618 / #619)
 * Fixed Window::tick never waiting for update_interval. (#620 / #621)
+
 Both fixes once again contributed by @cyberarm.
 
 ## [1.4.0] - 2022-01-21
 * Windows: Support for Ruby 3.1. (#611/#612)
 * Windows: Update SDL to 2.0.20 (#610), also update SDL_sound on all platforms (#606).
 * Replace OpenAL (usually oal-soft) with mojoAL. (#608)
+
 All three improvements contributed by @cyberarm.
 
 ## [1.3.0] - 2022-01-02

@@ -272,6 +272,7 @@ module Gosu
     # @option options [bool] :bold (false)
     # @option options [bool] :italic (false)
     # @option options [bool] :underline (false)
+    # @option options [bool] :retro (false) see Gosu::Image
     #
     # @overload initialize(height, options = {})
     # @overload initialize(window, font_name, height)
