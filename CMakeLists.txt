@@ -6,7 +6,7 @@
 # - This is not (yet?) going to replace the Visual Studio project for Windows.
 cmake_minimum_required(VERSION 3.10...3.18.4)
 
-project(Gosu VERSION 1.4.1)
+project(Gosu VERSION 1.4.3)
 
 
 ##############################################
