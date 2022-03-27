@@ -39,6 +39,26 @@ static bool is_bmp(Gosu::Reader reader)
     return magic_bytes[0] == 'B' && magic_bytes[1] == 'M';
 }
 
+/// Returns a copy of the given Gosu::Image with the alpha channel removed.
+/// Every pixel with alpha==0 will be replaced by Gosu::Color::FUCHSIA.
+static std::vector<Gosu::Color::Channel> bitmap_to_rgb(const Gosu::Bitmap& bmp)
+{
+    std::vector<Gosu::Color::Channel> rgb(static_cast<std::size_t>(bmp.width() * bmp.height() * 3));
+    for (std::size_t offset = 0; offset < rgb.size(); offset += 3) {
+        const Gosu::Color& color = bmp.data()[offset / 3];
+        if (color.alpha == 0) {
+            rgb[offset + 0] = 0xff;
+            rgb[offset + 1] = 0x00;
+            rgb[offset + 2] = 0xff;
+        } else {
+            rgb[offset + 0] = color.red;
+            rgb[offset + 1] = color.green;
+            rgb[offset + 2] = color.blue;
+        }
+    }
+    return rgb;
+}
+
 Gosu::Bitmap Gosu::load_image_file(const std::string& filename)
 {
     Buffer buffer;
@@ -80,7 +100,8 @@ void Gosu::save_image_file(const Gosu::Bitmap& bitmap, const std::string& filena
     int ok;
 
     if (has_extension(filename, "bmp")) {
-        ok = stbi_write_bmp(filename.c_str(), bitmap.width(), bitmap.height(), 4, bitmap.data());
+        ok = stbi_write_bmp(filename.c_str(), bitmap.width(), bitmap.height(), 3,
+                            bitmap_to_rgb(bitmap).data());
     }
     else if (has_extension(filename, "tga")) {
         ok = stbi_write_tga(filename.c_str(), bitmap.width(), bitmap.height(), 4, bitmap.data());
@@ -106,7 +127,7 @@ void Gosu::save_image_file(const Gosu::Bitmap& bitmap, Gosu::Writer writer,
 
     if (has_extension(format_hint, "bmp")) {
         ok = stbi_write_bmp_to_func(stbi_write_to_writer, &writer, bitmap.width(), bitmap.height(),
-                                    4, bitmap.data());
+                                    3, bitmap_to_rgb(bitmap).data());
     }
     else if (has_extension(format_hint, "tga")) {
         stbi_write_tga_with_rle = 0;
