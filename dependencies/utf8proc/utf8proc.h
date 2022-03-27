@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Steven G. Johnson, Jiahao Chen, Peter Colberg, Tony Kelman, Scott P. Jones, and other contributors.
+ * Copyright (c) 2014-2021 Steven G. Johnson, Jiahao Chen, Peter Colberg, Tony Kelman, Scott P. Jones, and other contributors.
  * Copyright (c) 2009 Public Software Group e. V., Berlin, Germany
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -27,8 +27,8 @@
  *
  * utf8proc is a free/open-source (MIT/expat licensed) C library
  * providing Unicode normalization, case-folding, and other operations
- * for strings in the UTF-8 encoding, supporting Unicode version
- * 9.0.0.  See the utf8proc home page (http://julialang.org/utf8proc/)
+ * for strings in the UTF-8 encoding, supporting up-to-date Unicode versions.
+ * See the utf8proc home page (http://julialang.org/utf8proc/)
  * for downloads and other information, or the source code on github
  * (https://github.com/JuliaLang/utf8proc).
  *
@@ -71,7 +71,7 @@
 /** The MAJOR version number (increased when backwards API compatibility is broken). */
 #define UTF8PROC_VERSION_MAJOR 2
 /** The MINOR version number (increased when new functionality is added in a backwards-compatible manner). */
-#define UTF8PROC_VERSION_MINOR 4
+#define UTF8PROC_VERSION_MINOR 7
 /** The PATCH version (increased for fixes that do not change the API). */
 #define UTF8PROC_VERSION_PATCH 0
 /** @} */
@@ -502,7 +502,7 @@ UTF8PROC_DLLEXPORT utf8proc_ssize_t utf8proc_decompose_char(
  * string and orders the decomposed sequences correctly.
  *
  * If the @ref UTF8PROC_NULLTERM flag in `options` is set, processing
- * will be stopped, when a NULL byte is encounted, otherwise `strlen`
+ * will be stopped, when a NULL byte is encountered, otherwise `strlen`
  * bytes are processed.  The result (in the form of 32-bit unicode
  * codepoints) is written into the buffer being pointed to by
  * `buffer` (which must contain at least `bufsize` entries).  In case of
@@ -634,6 +634,18 @@ UTF8PROC_DLLEXPORT utf8proc_int32_t utf8proc_toupper(utf8proc_int32_t c);
  * variant, or if `c` is not a valid codepoint) return `c`.
  */
 UTF8PROC_DLLEXPORT utf8proc_int32_t utf8proc_totitle(utf8proc_int32_t c);
+
+/**
+ * Given a codepoint `c`, return `1` if the codepoint corresponds to a lower-case character
+ * and `0` otherwise.
+ */
+UTF8PROC_DLLEXPORT int utf8proc_islower(utf8proc_int32_t c);
+
+/**
+ * Given a codepoint `c`, return `1` if the codepoint corresponds to an upper-case character
+ * and `0` otherwise.
+ */
+UTF8PROC_DLLEXPORT int utf8proc_isupper(utf8proc_int32_t c);
 
 /**
  * Given a codepoint, return a character width analogous to `wcwidth(codepoint)`,
