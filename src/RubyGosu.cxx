@@ -2806,6 +2806,7 @@ SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_0(Gosu::Window &window,std::string co
 SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_1(int height,VALUE options=0){
         std::string font_name = Gosu::default_font_name();
         unsigned font_flags = 0;
+        unsigned image_flags = 0;
         
         if (options) {
             Check_Type(options, T_HASH);
@@ -2831,6 +2832,9 @@ SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_1(int height,VALUE options=0){
                 else if (!strcmp(key_string, "underline")) {
                     if (RTEST(value)) font_flags |= Gosu::FF_UNDERLINE;
                 }
+                else if (!strcmp(key_string, "retro")) {
+                    if (RTEST(value)) image_flags |= Gosu::IF_RETRO;
+                }
                 else {
                     static bool issued_warning = false;
                     if (!issued_warning) {
@@ -2841,7 +2845,7 @@ SWIGINTERN Gosu::Font *new_Gosu_Font__SWIG_1(int height,VALUE options=0){
             }
         }
         
-        return new Gosu::Font(height, font_name, font_flags);
+        return new Gosu::Font(height, font_name, font_flags, image_flags);
     }
 SWIGINTERN double Gosu_Font_text_width(Gosu::Font *self,std::string const &markup,double scale_x=1.0){
       static bool issued_warning = false;
@@ -5252,37 +5256,6 @@ _wrap_Font_height(int argc, VALUE *argv, VALUE self) {
     }
   }
   vresult = SWIG_From_int(static_cast< int >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Font_flags(int argc, VALUE *argv, VALUE self) {
-  Gosu::Font *arg1 = (Gosu::Font *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned int result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Font, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Font const *","flags", 1, self )); 
-  }
-  arg1 = reinterpret_cast< Gosu::Font * >(argp1);
-  {
-    try {
-      result = (unsigned int)((Gosu::Font const *)arg1)->flags();
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
   return vresult;
 fail:
   return Qnil;
@@ -12544,7 +12517,6 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_method(SwigClassFont.klass, "initialize", VALUEFUNC(_wrap_new_Font), -1);
   rb_define_method(SwigClassFont.klass, "name", VALUEFUNC(_wrap_Font_name), -1);
   rb_define_method(SwigClassFont.klass, "height", VALUEFUNC(_wrap_Font_height), -1);
-  rb_define_method(SwigClassFont.klass, "flags", VALUEFUNC(_wrap_Font_flags), -1);
   rb_define_method(SwigClassFont.klass, "draw_text", VALUEFUNC(_wrap_Font_draw_text), -1);
   rb_define_method(SwigClassFont.klass, "draw_markup", VALUEFUNC(_wrap_Font_draw_markup), -1);
   rb_define_method(SwigClassFont.klass, "draw_text_rel", VALUEFUNC(_wrap_Font_draw_text_rel), -1);

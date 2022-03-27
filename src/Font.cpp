@@ -18,6 +18,7 @@ struct Gosu::Font::Impl : Gosu::Noncopyable
     std::string name;
     int height;
     unsigned base_flags;
+    unsigned image_flags;
 
     // The most common characters are stored directly in an array for maximum performance.
     // (This is the start of the Basic Multilingual Plane, up until the part where right-to-left
@@ -39,6 +40,9 @@ struct Gosu::Font::Impl : Gosu::Noncopyable
         // If this codepoint has not been rendered before, do it now.
         if (image->width() == 0 && image->height() == 0) {
             auto scaled_height = height * FONT_RENDER_SCALE;
+            // Optimization: Don't render higher-resolution versions if we use
+            // next neighbor interpolation anyway.
+            if (image_flags & IF_RETRO) scaled_height = height;
 
             std::u32string string(1, codepoint);
             Bitmap bitmap(scaled_height, scaled_height);
@@ -51,19 +55,20 @@ struct Gosu::Font::Impl : Gosu::Noncopyable
                                 font_flags);
             }
 
-            *image = Image(bitmap, 0, 0, required_width, scaled_height);
+            *image = Image(bitmap, 0, 0, required_width, scaled_height, image_flags);
         }
 
         return *image;
     }
 };
 
-Gosu::Font::Font(int font_height, const std::string& font_name, unsigned font_flags)
+Gosu::Font::Font(int font_height, const std::string& font_name, unsigned font_flags, unsigned image_flags)
 : m_impl{new Impl}
 {
     m_impl->name = font_name;
     m_impl->height = font_height;
     m_impl->base_flags = font_flags;
+    m_impl->image_flags = image_flags;
 }
 
 const std::string& Gosu::Font::name() const
@@ -79,6 +84,11 @@ int Gosu::Font::height() const
 unsigned Gosu::Font::flags() const
 {
     return m_impl->base_flags;
+}
+
+unsigned Gosu::Font::image_flags() const
+{
+    return m_impl->image_flags;
 }
 
 double Gosu::Font::text_width(const std::string& text) const

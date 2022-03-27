@@ -3,6 +3,7 @@ Checks: >-
   -*-avoid-c-arrays,
   -altera-*,
   -bugprone-easily-swappable-parameters,
+  -bugprone-exception-escape,
   -cert-err58-cpp,
   -cppcoreguidelines-avoid-c-arrays,
   -cppcoreguidelines-avoid-magic-numbers,

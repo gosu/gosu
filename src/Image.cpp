@@ -8,39 +8,34 @@
 #include <stdexcept>
 
 Gosu::Image::Image()
-: m_data(EmptyImageData::instance_ptr())
+: m_data{EmptyImageData::instance_ptr()}
 {
 }
 
 Gosu::Image::Image(const std::string& filename, unsigned image_flags)
+: Image(load_image_file(filename), image_flags)
 {
-    // Forward.
-    Bitmap bitmap = load_image_file(filename);
-    Image{bitmap, image_flags}.m_data.swap(m_data);
 }
 
 Gosu::Image::Image(const std::string& filename, int src_x, int src_y, int src_width, int src_height,
                    unsigned image_flags)
+: Image(load_image_file(filename), src_x, src_y, src_width, src_height, image_flags)
 {
-    // Forward.
-    Bitmap bitmap = load_image_file(filename);
-    Image{bitmap, src_x, src_y, src_width, src_height, image_flags}.m_data.swap(m_data);
 }
 
 Gosu::Image::Image(const Bitmap& source, unsigned image_flags)
+: Image(source, 0, 0, source.width(), source.height(), image_flags)
 {
-    // Forward.
-    Image{source, 0, 0, source.width(), source.height(), image_flags}.m_data.swap(m_data);
 }
 
 Gosu::Image::Image(const Bitmap& source, int src_x, int src_y, int src_width, int src_height,
                    unsigned image_flags)
-: m_data(Graphics::create_image(source, src_x, src_y, src_width, src_height, image_flags))
+: m_data{Graphics::create_image(source, src_x, src_y, src_width, src_height, image_flags)}
 {
 }
 
 Gosu::Image::Image(std::unique_ptr<ImageData>&& data)
-: m_data(data.release())
+: m_data{data.release()}
 {
     if (!m_data) throw std::invalid_argument("Gosu::Image cannot be initialized with nullptr");
 }
@@ -104,8 +99,8 @@ Gosu::ImageData& Gosu::Image::data() const
     return *m_data;
 }
 
-std::vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bmp, int tile_width, int tile_height,
-                                          unsigned flags)
+std::vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bmp, //
+                                          int tile_width, int tile_height, unsigned flags)
 {
     int tiles_x, tiles_y;
     std::vector<Image> images;
@@ -136,8 +131,8 @@ std::vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bmp, int tile_width, int
     return images;
 }
 
-std::vector<Gosu::Image> Gosu::load_tiles(const std::string& filename, int tile_width,
-                                          int tile_height, unsigned flags)
+std::vector<Gosu::Image> Gosu::load_tiles(const std::string& filename, //
+                                          int tile_width, int tile_height, unsigned flags)
 {
     Bitmap bmp = load_image_file(filename);
     return load_tiles(bmp, tile_width, tile_height, flags);
