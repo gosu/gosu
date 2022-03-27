@@ -531,7 +531,7 @@ namespace Gosu
 }
 
 // Font
-%ignore Gosu::Font::Font(int height, const std::string& font_name, unsigned flags);
+%ignore Gosu::Font::Font(int height, const std::string& font_name, unsigned font_flags, unsigned image_flags);
 %ignore Gosu::Font::text_width(const std::string& text) const;
 %ignore Gosu::Font::markup_width(const std::string& markup) const;
 %ignore Gosu::Font::set_image(std::string codepoint, unsigned font_flags, const Gosu::Image& image);
