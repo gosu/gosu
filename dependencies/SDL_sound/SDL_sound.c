@@ -30,12 +30,11 @@ extern const Sound_DecoderFunctions __Sound_DecoderFunctions_VOC;
 extern const Sound_DecoderFunctions __Sound_DecoderFunctions_RAW;
 extern const Sound_DecoderFunctions __Sound_DecoderFunctions_SHN;
 extern const Sound_DecoderFunctions __Sound_DecoderFunctions_FLAC;
-extern const Sound_DecoderFunctions __Sound_DecoderFunctions_QuickTime;
 extern const Sound_DecoderFunctions __Sound_DecoderFunctions_CoreAudio;
 
 typedef struct
 {
-    int available;
+    SDL_bool available;
     const Sound_DecoderFunctions *funcs;
 } decoder_element;
 
@@ -85,16 +84,13 @@ static decoder_element decoders[] =
 
 /* General SDL_sound state ... */
 
-typedef struct __SOUND_ERRMSGTYPE__
-{
-    Uint32 tid;
-    int error_available;
-    char error_string[128];
-    struct __SOUND_ERRMSGTYPE__ *next;
-} ErrMsg;
+static SDL_TLSID tlsid_errmsg = 0;
 
-static ErrMsg *error_msgs = NULL;
-static SDL_mutex *errorlist_mutex = NULL;
+typedef struct
+{
+    SDL_bool error_available;
+    char error_string[128];
+} ErrMsg;
 
 static Sound_Sample *sample_list = NULL;  /* this is a linked list. */
 static SDL_mutex *samplelist_mutex = NULL;
@@ -124,7 +120,6 @@ int Sound_Init(void)
     BAIL_IF_MACRO(initialized, ERR_IS_INITIALIZED, 0);
 
     sample_list = NULL;
-    error_msgs = NULL;
 
     available_decoders = (const Sound_DecoderInfo **)
                             SDL_calloc(total, sizeof (Sound_DecoderInfo *));
@@ -132,7 +127,8 @@ int Sound_Init(void)
 
     SDL_InitSubSystem(SDL_INIT_AUDIO);
 
-    errorlist_mutex = SDL_CreateMutex();
+    tlsid_errmsg = SDL_TLSCreate();
+
     samplelist_mutex = SDL_CreateMutex();
 
     for (i = 0; decoders[i].funcs != NULL; i++)
@@ -152,8 +148,6 @@ int Sound_Init(void)
 
 int Sound_Quit(void)
 {
-    ErrMsg *err;
-    ErrMsg *nexterr = NULL;
     size_t i;
 
     BAIL_IF_MACRO(!initialized, ERR_NOT_INITIALIZED, 0);
@@ -180,17 +174,7 @@ int Sound_Quit(void)
         SDL_free((void *) available_decoders);
     available_decoders = NULL;
 
-    /* clean up error state for each thread... */
-    SDL_LockMutex(errorlist_mutex);
-    for (err = error_msgs; err != NULL; err = nexterr)
-    {
-        nexterr = err->next;
-        SDL_free(err);
-    } /* for */
-    error_msgs = NULL;
-    SDL_UnlockMutex(errorlist_mutex);
-    SDL_DestroyMutex(errorlist_mutex);
-    errorlist_mutex = NULL;
+    tlsid_errmsg = 0;
 
     return 1;
 } /* Sound_Quit */
@@ -204,27 +188,8 @@ const Sound_DecoderInfo **Sound_AvailableDecoders(void)
 
 static ErrMsg *findErrorForCurrentThread(void)
 {
-    ErrMsg *i;
-    Uint32 tid;
-
-    if (error_msgs != NULL)
-    {
-        tid = SDL_ThreadID();
-
-        SDL_LockMutex(errorlist_mutex);
-        for (i = error_msgs; i != NULL; i = i->next)
-        {
-            if (i->tid == tid)
-            {
-                SDL_UnlockMutex(errorlist_mutex);
-                return i;
-            } /* if */
-        } /* for */
-        SDL_UnlockMutex(errorlist_mutex);
-    } /* if */
-
-    return NULL;   /* no error available. */
-} /* findErrorForCurrentThread */
+    return (ErrMsg *) SDL_TLSGet(tlsid_errmsg);
+}
 
 
 const char *Sound_GetError(void)
@@ -239,7 +204,7 @@ const char *Sound_GetError(void)
     if ((err != NULL) && (err->error_available))
     {
         retval = err->error_string;
-        err->error_available = 0;
+        err->error_available = SDL_FALSE;
     } /* if */
 
     return retval;
@@ -248,15 +213,14 @@ const char *Sound_GetError(void)
 
 void Sound_ClearError(void)
 {
-    ErrMsg *err;
-
-    if (!initialized)
-        return;
-
-    err = findErrorForCurrentThread();
-    if (err != NULL)
-        err->error_available = 0;
+    Sound_GetError();  /* this will set error_available to SDL_FALSE */
 } /* Sound_ClearError */
+
+
+static void SDLCALL free_errmsg(void *errmsg)
+{
+    SDL_free(errmsg);
+} /* free_errmsg */
 
 
 /*
@@ -269,8 +233,7 @@ void __Sound_SetError(const char *str)
     if (str == NULL)
         return;
 
-    SNDDBG(("__Sound_SetError(\"%s\");%s\n", str,
-              (initialized) ? "" : " [NOT INITIALIZED!]"));
+    SNDDBG(("__Sound_SetError(\"%s\");%s\n", str, (initialized) ? "" : " [NOT INITIALIZED!]"));
 
     if (!initialized)
         return;
@@ -282,15 +245,10 @@ void __Sound_SetError(const char *str)
         if (err == NULL)
             return;   /* uhh...? */
 
-        err->tid = SDL_ThreadID();
-
-        SDL_LockMutex(errorlist_mutex);
-        err->next = error_msgs;
-        error_msgs = err;
-        SDL_UnlockMutex(errorlist_mutex);
+        SDL_TLSSet(tlsid_errmsg, err, free_errmsg);
     } /* if */
 
-    err->error_available = 1;
+    err->error_available = SDL_TRUE;
     SDL_strlcpy(err->error_string, str, sizeof (err->error_string));
 } /* __Sound_SetError */
 
@@ -391,7 +349,7 @@ static int init_sample(const Sound_DecoderFunctions *funcs,
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     Sound_AudioInfo desired;
-    int pos = SDL_RWtell(internal->rw);
+    const Sint64 pos = SDL_RWtell(internal->rw);
 
         /* fill in the funcs for this decoder... */
     sample->decoder = &funcs->info;

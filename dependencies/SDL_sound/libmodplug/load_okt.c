@@ -10,17 +10,19 @@
 //////////////////////////////////////////////
 #include "libmodplug.h"
 
+#define MAGIC(a,b,c,d) (((a) << 24UL) | ((b) << 16UL) | ((c) << 8UL) | (d))
+
+#pragma pack(1)
 typedef struct OKTFILEHEADER
 {
 	DWORD okta;		// "OKTA"
 	DWORD song;		// "SONG"
 	DWORD cmod;		// "CMOD"
-	DWORD fixed8;
+	DWORD cmodlen;
 	BYTE chnsetup[8];
 	DWORD samp;		// "SAMP"
 	DWORD samplen;
 } OKTFILEHEADER;
-
 
 typedef struct OKTSAMPLE
 {
@@ -33,20 +35,29 @@ typedef struct OKTSAMPLE
 	BYTE pad2;
 	BYTE pad3;
 } OKTSAMPLE;
+#pragma pack()
 
+
+static DWORD readBE32(const BYTE *v)
+{
+	return (v[0] << 24UL) | (v[1] << 16UL) | (v[2] << 8UL) | v[3];
+}
 
 BOOL CSoundFile_ReadOKT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLength)
 //---------------------------------------------------------------
 {
 	const OKTFILEHEADER *pfh = (OKTFILEHEADER *)lpStream;
-	DWORD dwMemPos = sizeof(OKTFILEHEADER);
+	DWORD dwMemPos = sizeof(OKTFILEHEADER), dwSize;
 	UINT nsamples = 0, norders = 0;//, npatterns = 0
 
 	if ((!lpStream) || (dwMemLength < 1024)) return FALSE;
-	if ((pfh->okta != 0x41544B4F) || (pfh->song != 0x474E4F53)
-	 || (pfh->cmod != 0x444F4D43) || (pfh->chnsetup[0]) || (pfh->chnsetup[2])
-	 || (pfh->chnsetup[4]) || (pfh->chnsetup[6]) || (pfh->fixed8 != 0x08000000)
-	 || (pfh->samp != 0x504D4153)) return FALSE;
+	if ((bswapBE32(pfh->okta) != MAGIC('O','K','T','A'))
+	 || (bswapBE32(pfh->song) != MAGIC('S','O','N','G'))
+	 || (bswapBE32(pfh->cmod) != MAGIC('C','M','O','D'))
+	 || (bswapBE32(pfh->cmodlen) != 8)
+	 || (pfh->chnsetup[0]) || (pfh->chnsetup[2])
+	 || (pfh->chnsetup[4]) || (pfh->chnsetup[6])
+	 || (bswapBE32(pfh->samp) != MAGIC('S','A','M','P'))) return FALSE;
 	_this->m_nType = MOD_TYPE_OKT;
 	_this->m_nChannels = 4 + pfh->chnsetup[1] + pfh->chnsetup[3] + pfh->chnsetup[5] + pfh->chnsetup[7];
 	if (_this->m_nChannels > MAX_CHANNELS) _this->m_nChannels = MAX_CHANNELS;
@@ -56,10 +67,10 @@ BOOL CSoundFile_ReadOKT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	// Reading samples
 	for (UINT smp=1; smp <= nsamples; smp++)
 	{
-		if (dwMemPos + sizeof(OKTSAMPLE) >= dwMemLength) return TRUE;
+		if (dwMemPos >= dwMemLength - sizeof(OKTSAMPLE)) return TRUE;
 		if (smp < MAX_SAMPLES)
 		{
-			OKTSAMPLE *psmp = (OKTSAMPLE *)(lpStream + dwMemPos);
+			const OKTSAMPLE *psmp = (const OKTSAMPLE *)(lpStream + dwMemPos);
 			MODINSTRUMENT *pins = &_this->Ins[smp];
 
 			pins->uFlags = 0;
@@ -74,42 +85,52 @@ BOOL CSoundFile_ReadOKT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		dwMemPos += sizeof(OKTSAMPLE);
 	}
 	// SPEE
-	if (dwMemPos + 10 > dwMemLength) return TRUE;
-	if (*((DWORD *)(lpStream + dwMemPos)) == 0x45455053)
+	if (dwMemPos >= dwMemLength - 12) return TRUE;
+	if (readBE32(lpStream + dwMemPos) == MAGIC('S','P','E','E'))
 	{
 		_this->m_nDefaultSpeed = lpStream[dwMemPos+9];
-		dwMemPos += bswapBE32(*((DWORD *)(lpStream + dwMemPos + 4))) + 8;
+
+		dwSize = readBE32(lpStream + dwMemPos + 4);
+		if (dwSize > dwMemLength - 8 || dwMemPos > dwMemLength - dwSize - 8) return TRUE;
+		dwMemPos += dwSize + 8;
 	}
 	// SLEN
 	if (dwMemPos + 10 > dwMemLength) return TRUE;
-	if (*((DWORD *)(lpStream + dwMemPos)) == 0x4E454C53)
+	if (readBE32(lpStream + dwMemPos) == MAGIC('S','L','E','N'))
 	{
-		if (dwMemPos + 10 > dwMemLength) return TRUE;
 	//	npatterns = lpStream[dwMemPos+9];
-		dwMemPos += bswapBE32(*((DWORD *)(lpStream + dwMemPos + 4))) + 8;
+
+		dwSize = readBE32(lpStream + dwMemPos + 4);
+		if (dwSize > dwMemLength - 8 || dwMemPos > dwMemLength - dwSize - 8) return TRUE;
+		dwMemPos += dwSize + 8;
 	}
 	// PLEN
 	if (dwMemPos + 10 > dwMemLength) return TRUE;
-	if (*((DWORD *)(lpStream + dwMemPos)) == 0x4E454C50)
+	if (readBE32(lpStream + dwMemPos) == MAGIC('P','L','E','N'))
 	{
-		if (dwMemPos + 10 > dwMemLength) return TRUE;
 		norders = lpStream[dwMemPos+9];
-		dwMemPos += bswapBE32(*((DWORD *)(lpStream + dwMemPos + 4))) + 8;
+
+		dwSize = readBE32(lpStream + dwMemPos + 4);
+		if (dwSize > dwMemLength - 8 || dwMemPos > dwMemLength - dwSize - 8) return TRUE;
+		dwMemPos += dwSize + 8;
 	}
 	// PATT
 	if (dwMemPos + 8 > dwMemLength) return TRUE;
-	if (*((DWORD *)(lpStream + dwMemPos)) == 0x54544150)
+	if (readBE32(lpStream + dwMemPos) == MAGIC('P','A','T','T'))
 	{
 		UINT orderlen = norders;
 		if (orderlen >= MAX_ORDERS) orderlen = MAX_ORDERS-1;
 		if (dwMemPos + 8 + orderlen > dwMemLength) return TRUE;
 		for (UINT i=0; i<orderlen; i++) _this->Order[i] = lpStream[dwMemPos+8+i];
 		for (UINT j=orderlen; j>1; j--) { if (_this->Order[j-1]) break; _this->Order[j-1] = 0xFF; }
-		dwMemPos += bswapBE32(*((DWORD *)(lpStream + dwMemPos + 4))) + 8;
+
+		dwSize = readBE32(lpStream + dwMemPos + 4);
+		if (dwSize > dwMemLength - 8 || dwMemPos > dwMemLength - dwSize - 8) return TRUE;
+		dwMemPos += dwSize + 8;
 	}
 	// PBOD
 	UINT npat = 0;
-	while ((dwMemPos+10 < dwMemLength) && (*((DWORD *)(lpStream + dwMemPos)) == 0x444F4250))
+	while ((dwMemPos < dwMemLength - 10) && (readBE32(lpStream + dwMemPos) == MAGIC('P','B','O','D')))
 	{
 		DWORD dwPos = dwMemPos + 10;
 		UINT rows = lpStream[dwMemPos+9];
@@ -181,15 +202,21 @@ BOOL CSoundFile_ReadOKT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			}
 		}
 		npat++;
-		dwMemPos += bswapBE32(*((DWORD *)(lpStream + dwMemPos + 4))) + 8;
+
+		dwSize = readBE32(lpStream + dwMemPos + 4);
+		if (dwSize > dwMemLength - 8 || dwMemPos > dwMemLength - dwSize - 8) return TRUE;
+		dwMemPos += dwSize + 8;
 	}
 	// SBOD
 	UINT nsmp = 1;
-	while ((dwMemPos+10 < dwMemLength) && (*((DWORD *)(lpStream + dwMemPos)) == 0x444F4253))
+	while ((dwMemPos < dwMemLength-10) && (readBE32(lpStream + dwMemPos) == MAGIC('S','B','O','D')))
 	{
 		if (nsmp < MAX_SAMPLES) CSoundFile_ReadSample(_this, &_this->Ins[nsmp], RS_PCM8S, (LPSTR)(lpStream+dwMemPos+8), dwMemLength-dwMemPos-8);
-		dwMemPos += bswapBE32(*((DWORD *)(lpStream + dwMemPos + 4))) + 8;
 		nsmp++;
+
+		dwSize = readBE32(lpStream + dwMemPos + 4);
+		if (dwSize > dwMemLength - 8 || dwMemPos > dwMemLength - dwSize - 8) return TRUE;
+		dwMemPos += dwSize + 8;
 	}
 	return TRUE;
 }

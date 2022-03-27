@@ -56,7 +56,7 @@ static const char *extensions_modplug[] =
 
 
 
-static int MODPLUG_init(void)
+static SDL_bool MODPLUG_init(void)
 {
     return ModPlug_Init();  /* success. */
 } /* MODPLUG_init */

@@ -100,7 +100,7 @@ BOOL CSoundFile_ReadPSM(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 //	DWORD smpnames[MAX_SAMPLES];
 	DWORD patptrs[MAX_PATTERNS];
 	BYTE samplemap[MAX_SAMPLES];
-	UINT nPatterns;
+	UINT nPatterns = 0;
 
 	if (dwMemLength < 256) return FALSE;
 
@@ -309,8 +309,10 @@ BOOL CSoundFile_ReadPSM(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 			if ((flags & 0x40) && (pos+1 < len))
 			{
 				UINT nins = p[pos++];
-				if (nins < MAX_SAMPLES)
+				if (nins >= _this->m_nSamples) {
+				} else {
 					sp->instr = samplemap[nins];
+				}
 			}
 			// Volume
 			if ((flags & 0x20) && (pos < len))

@@ -608,21 +608,6 @@ enum STBVorbisError
 
 #include <limits.h>
 
-/* we need alloca() regardless of STB_VORBIS_NO_CRT,
- * because there is not a corresponding 'dealloca' */
-#if !defined(alloca)
-# if defined(HAVE_ALLOCA_H)
-#  include <alloca.h>
-# elif defined(__GNUC__)
-#  define alloca __builtin_alloca
-# elif defined(_MSC_VER)
-#  include <malloc.h>
-#  define alloca _alloca
-# elif defined(__WATCOMC__)
-#  include <malloc.h>
-# endif
-#endif
-
 #ifndef STB_FORCEINLINE
     #if defined(_MSC_VER)
         #define STB_FORCEINLINE __forceinline
@@ -646,7 +631,7 @@ enum STBVorbisError
 #include <crtdbg.h>
 #define CHECK(f)   _CrtIsValidHeapPointer(f->channel_buffers[1])
 #else
-#define CHECK(f)   ((void) 0)
+#define CHECK(f)   do {} while(0)
 #endif
 
 #define MAX_BLOCKSIZE_LOG  13   // from specification
@@ -937,6 +922,9 @@ struct stb_vorbis
    int channel_buffer_start;
    int channel_buffer_end;
 
+  // hack: decode work buffer (used in inverse_mdct and decode_residues)
+   void *work_buffer;
+
   // temporary buffers
    void *temp_lengths;
    void *temp_codewords;
@@ -971,8 +959,8 @@ static int error(vorb *f, enum STBVorbisError e)
 
 #define array_size_required(count,size)  (count*(sizeof(void *)+(size)))
 
-#define temp_alloc(f,size)              (f->alloc.alloc_buffer ? setup_temp_malloc(f,size) : alloca(size))
-#define temp_free(f,p)                  (void)0
+#define temp_alloc(f,size)              (f->alloc.alloc_buffer ? setup_temp_malloc(f,size) : f->work_buffer)
+#define temp_free(f,p)                  do {} while (0)
 #define temp_alloc_save(f)              ((f)->temp_offset)
 #define temp_alloc_restore(f,p)         ((f)->temp_offset = (p))
 
@@ -4297,6 +4285,9 @@ static int start_decoder(vorb *f)
       // check if there's enough temp memory so we don't error later
       if (f->setup_offset + sizeof(*f) + f->temp_memory_required > (unsigned) f->temp_offset)
          return error(f, VORBIS_outofmem);
+   } else {
+      f->work_buffer = setup_malloc(f, f->temp_memory_required);
+      if (f->work_buffer == NULL) return error(f, VORBIS_outofmem);
    }
 
    // @TODO: stb_vorbis_seek_start expects first_audio_page_offset to point to a page
@@ -4376,6 +4367,7 @@ static void vorbis_deinit(stb_vorbis *p)
       setup_free(p, p->bit_reverse[i]);
    }
    if (!p->alloc.alloc_buffer) {
+      setup_free(p, p->work_buffer);
       setup_temp_free(p, &p->temp_lengths, 0);
       setup_temp_free(p, &p->temp_codewords, 0);
       setup_temp_free(p, &p->temp_values, 0);

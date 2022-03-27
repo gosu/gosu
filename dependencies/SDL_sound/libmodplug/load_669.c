@@ -16,7 +16,7 @@
 typedef struct tagFILEHEADER669
 {
 	WORD sig;				// 'if' or 'JN'
-	signed char songmessage[108];	// Song Message
+	char songmessage[108];			// Song Message
 	BYTE samples;			// number of samples (1-64)
 	BYTE patterns;			// number of patterns (1-128)
 	BYTE restartpos;
