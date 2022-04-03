@@ -42,12 +42,12 @@ Gosu::Sample::Sample()
 }
 
 Gosu::Sample::Sample(const std::string& filename)
-: m_impl{new Impl(AudioFile(filename))}
+: pimpl{new Impl(AudioFile(filename))}
 {
 }
 
 Gosu::Sample::Sample(Gosu::Reader reader)
-: m_impl{new Impl(AudioFile(reader))}
+: pimpl{new Impl(AudioFile(reader))}
 {
 }
 
@@ -58,7 +58,7 @@ Gosu::Channel Gosu::Sample::play(double volume, double speed, bool looping) cons
 
 Gosu::Channel Gosu::Sample::play_pan(double pan, double volume, double speed, bool looping) const
 {
-    if (!m_impl) return Channel{};
+    if (!pimpl) return Channel{};
 
     Channel channel = allocate_channel();
 
@@ -66,7 +66,7 @@ Gosu::Channel Gosu::Sample::play_pan(double pan, double volume, double speed, bo
     if (channel.current_channel() == NO_CHANNEL) return channel;
 
     ALuint source = al_source_for_channel(channel.current_channel());
-    alSourcei(source, AL_BUFFER, static_cast<ALint>(m_impl->buffer));
+    alSourcei(source, AL_BUFFER, static_cast<ALint>(pimpl->buffer));
     alSource3f(source, AL_POSITION, static_cast<ALfloat>(pan * 10), 0, 0);
     alSourcef(source, AL_GAIN, static_cast<ALfloat>(std::max(volume, 0.0)));
     alSourcef(source, AL_PITCH, static_cast<ALfloat>(speed));
@@ -229,12 +229,12 @@ public:
 };
 
 Gosu::Song::Song(const std::string& filename)
-: m_impl{new Impl(filename)}
+: pimpl{new Impl(filename)}
 {
 }
 
 Gosu::Song::Song(Reader reader)
-: m_impl{new Impl(reader)}
+: pimpl{new Impl(reader)}
 {
 }
 
@@ -251,7 +251,7 @@ Gosu::Song* Gosu::Song::current_song()
 void Gosu::Song::play(bool looping)
 {
     if (paused()) {
-        m_impl->resume();
+        pimpl->resume();
     }
 
     if (cur_song && cur_song != this) {
@@ -260,7 +260,7 @@ void Gosu::Song::play(bool looping)
     }
 
     if (cur_song == nullptr) {
-        m_impl->play();
+        pimpl->play();
     }
 
     cur_song = this;
@@ -270,41 +270,41 @@ void Gosu::Song::play(bool looping)
 void Gosu::Song::pause()
 {
     if (cur_song == this) {
-        m_impl->pause();
+        pimpl->pause();
     }
 }
 
 bool Gosu::Song::paused() const
 {
-    return cur_song == this && m_impl->paused();
+    return cur_song == this && pimpl->paused();
 }
 
 void Gosu::Song::stop()
 {
     if (cur_song == this) {
-        m_impl->stop();
+        pimpl->stop();
         cur_song = nullptr;
     }
 }
 
 bool Gosu::Song::playing() const
 {
-    return cur_song == this && !m_impl->paused();
+    return cur_song == this && !pimpl->paused();
 }
 
 double Gosu::Song::volume() const
 {
-    return m_impl->volume();
+    return pimpl->volume();
 }
 
 void Gosu::Song::set_volume(double volume)
 {
-    m_impl->set_volume(volume);
+    pimpl->set_volume(volume);
 }
 
 void Gosu::Song::update()
 {
     if (current_song()) {
-        current_song()->m_impl->update();
+        current_song()->pimpl->update();
     }
 }

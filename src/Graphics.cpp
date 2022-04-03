@@ -94,12 +94,12 @@ struct Gosu::Graphics::Impl : Gosu::Noncopyable
 };
 
 Gosu::Graphics::Graphics(unsigned phys_width, unsigned phys_height)
-: m_impl(new Impl)
+: pimpl(new Impl)
 {
-    m_impl->virt_width = phys_width;
-    m_impl->virt_height = phys_height;
-    m_impl->black_width = 0;
-    m_impl->black_height = 0;
+    pimpl->virt_width = phys_width;
+    pimpl->virt_height = phys_height;
+    pimpl->black_width = 0;
+    pimpl->black_height = 0;
 
     // TODO: Should be merged into RenderState and removed from Graphics.
     glMatrixMode(GL_MODELVIEW);
@@ -118,12 +118,12 @@ Gosu::Graphics::~Graphics()
 
 unsigned Gosu::Graphics::width() const
 {
-    return m_impl->virt_width;
+    return pimpl->virt_width;
 }
 
 unsigned Gosu::Graphics::height() const
 {
-    return m_impl->virt_height;
+    return pimpl->virt_height;
 }
 
 void Gosu::Graphics::set_resolution(unsigned virtual_width, unsigned virtual_height,
@@ -134,12 +134,12 @@ void Gosu::Graphics::set_resolution(unsigned virtual_width, unsigned virtual_hei
         throw std::invalid_argument{"Invalid virtual resolution."};
     }
 
-    m_impl->virt_width = virtual_width;
-    m_impl->virt_height = virtual_height;
-    m_impl->black_width = horizontal_black_bar_width;
-    m_impl->black_height = vertical_black_bar_height;
+    pimpl->virt_width = virtual_width;
+    pimpl->virt_height = virtual_height;
+    pimpl->black_width = horizontal_black_bar_width;
+    pimpl->black_height = vertical_black_bar_height;
 
-    m_impl->update_base_transform();
+    pimpl->update_base_transform();
 }
 
 void Gosu::Graphics::frame(const std::function<void()>& f)
@@ -151,19 +151,19 @@ void Gosu::Graphics::frame(const std::function<void()>& f)
     // Cancel all recording or whatever that might still be in progress...
     queues.clear();
 
-    if (m_impl->warmed_up_queues.size() == 1) {
+    if (pimpl->warmed_up_queues.size() == 1) {
         // If we already have a "warmed up" queue, use that instead.
         // -> All internal std::vectors will already have a lot of capacity.
         // This helps reduce allocations during normal operation.
         queues.clear();
-        queues.swap(m_impl->warmed_up_queues);
+        queues.swap(pimpl->warmed_up_queues);
     }
     else {
         // Create default draw-op queue.
         queues.emplace_back(QM_RENDER_TO_SCREEN);
     }
 
-    queues.back().set_base_transform(m_impl->base_transform);
+    queues.back().set_base_transform(pimpl->base_transform);
 
     ensure_current_context();
     glClearColor(0, 0, 0, 1);
@@ -178,18 +178,18 @@ void Gosu::Graphics::frame(const std::function<void()>& f)
 
     flush();
 
-    if (m_impl->black_height != 0 || m_impl->black_width != 0) {
-        if (m_impl->black_height != 0) {
+    if (pimpl->black_height != 0 || pimpl->black_width != 0) {
+        if (pimpl->black_height != 0) {
             // Top black bar.
-            draw_rect(0, 0, width(), -m_impl->black_height, Color::BLACK, 0);
+            draw_rect(0, 0, width(), -pimpl->black_height, Color::BLACK, 0);
             // Bottom black bar.
-            draw_rect(0, height(), width(), +m_impl->black_height, Color::BLACK, 0);
+            draw_rect(0, height(), width(), +pimpl->black_height, Color::BLACK, 0);
         }
-        if (m_impl->black_width != 0) {
+        if (pimpl->black_width != 0) {
             // Left black bar.
-            draw_rect(0, 0, -m_impl->black_width, height(), Color::BLACK, 0);
+            draw_rect(0, 0, -pimpl->black_width, height(), Color::BLACK, 0);
             // Right black bar.
-            draw_rect(width(), 0, +m_impl->black_width, height(), Color::BLACK, 0);
+            draw_rect(width(), 0, +pimpl->black_width, height(), Color::BLACK, 0);
         }
         flush();
     }
@@ -200,8 +200,8 @@ void Gosu::Graphics::frame(const std::function<void()>& f)
 
     // Clear leftover transforms, clip rects etc.
     if (queues.size() == 1) {
-        queues.swap(m_impl->warmed_up_queues);
-        m_impl->warmed_up_queues.back().reset();
+        queues.swap(pimpl->warmed_up_queues);
+        pimpl->warmed_up_queues.back().reset();
     }
     else {
         queues.clear();
@@ -227,11 +227,11 @@ void Gosu::Graphics::gl(const std::function<void()>& f)
 
     flush();
 
-    cg.m_impl->begin_gl();
+    cg.pimpl->begin_gl();
 
     f();
 
-    cg.m_impl->end_gl();
+    cg.pimpl->end_gl();
 #endif
 }
 
@@ -242,9 +242,9 @@ void Gosu::Graphics::gl(Gosu::ZPos z, const std::function<void()>& f)
 #else
     const auto wrapped_f = [f] {
         Graphics& cg = current_graphics();
-        cg.m_impl->begin_gl();
+        cg.pimpl->begin_gl();
         f();
-        cg.m_impl->end_gl();
+        cg.pimpl->end_gl();
     };
     current_queue().gl(wrapped_f, z);
 #endif
@@ -253,7 +253,7 @@ void Gosu::Graphics::gl(Gosu::ZPos z, const std::function<void()>& f)
 void Gosu::Graphics::clip_to(double x, double y, double width, double height,
                              const std::function<void()>& f)
 {
-    double screen_height = current_graphics().m_impl->phys_height;
+    double screen_height = current_graphics().pimpl->phys_height;
     current_queue().begin_clipping(x, y, width, height, screen_height);
     f();
     current_queue().end_clipping();
@@ -391,8 +391,8 @@ void Gosu::Graphics::schedule_draw_op(const Gosu::DrawOp& op)
 
 void Gosu::Graphics::set_physical_resolution(unsigned phys_width, unsigned phys_height)
 {
-    m_impl->phys_width = phys_width;
-    m_impl->phys_height = phys_height;
+    pimpl->phys_width = phys_width;
+    pimpl->phys_height = phys_height;
     // TODO: Should be merged into RenderState and removed from Graphics.
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -403,7 +403,7 @@ void Gosu::Graphics::set_physical_resolution(unsigned phys_width, unsigned phys_
     glOrtho(0, phys_width, phys_height, 0, -1, 1);
 #endif
 
-    m_impl->update_base_transform();
+    pimpl->update_base_transform();
 }
 
 std::unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src, unsigned src_x,

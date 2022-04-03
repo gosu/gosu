@@ -142,7 +142,7 @@ struct Gosu::TextInput::Impl : Gosu::Noncopyable
 };
 
 Gosu::TextInput::TextInput()
-: m_impl{new Impl}
+: pimpl{new Impl}
 {
 }
 
@@ -150,38 +150,38 @@ Gosu::TextInput::~TextInput() = default;
 
 std::string Gosu::TextInput::text() const
 {
-    std::string composed_text = m_impl->text;
-    if (!m_impl->composition.empty()) {
-        composed_text.insert(m_impl->caret_pos, m_impl->composition);
+    std::string composed_text = pimpl->text;
+    if (!pimpl->composition.empty()) {
+        composed_text.insert(pimpl->caret_pos, pimpl->composition);
     }
     return composed_text;
 }
 
 void Gosu::TextInput::set_text(const std::string& text)
 {
-    m_impl->text = text;
-    m_impl->composition.clear();
-    m_impl->caret_pos = m_impl->selection_start = static_cast<unsigned>(m_impl->text.length());
+    pimpl->text = text;
+    pimpl->composition.clear();
+    pimpl->caret_pos = pimpl->selection_start = static_cast<unsigned>(pimpl->text.length());
 }
 
 unsigned Gosu::TextInput::caret_pos() const
 {
-    return m_impl->caret_pos;
+    return pimpl->caret_pos;
 }
 
 void Gosu::TextInput::set_caret_pos(unsigned caret_pos)
 {
-    m_impl->caret_pos = caret_pos;
+    pimpl->caret_pos = caret_pos;
 }
 
 unsigned Gosu::TextInput::selection_start() const
 {
-    return m_impl->selection_start;
+    return pimpl->selection_start;
 }
 
 void Gosu::TextInput::set_selection_start(unsigned selection_start)
 {
-    m_impl->selection_start = selection_start;
+    pimpl->selection_start = selection_start;
 }
 
 #ifndef GOSU_IS_IPHONE
@@ -192,18 +192,18 @@ bool Gosu::TextInput::feed_sdl_event(void* event)
     switch (e->type) {
         // Direct text input or completed IME composition.
         case SDL_TEXTINPUT: {
-            m_impl->insert_text(filter(e->text.text));
+            pimpl->insert_text(filter(e->text.text));
             return true;
         }
         // IME composition in progress.
         case SDL_TEXTEDITING: {
-            m_impl->composition = e->edit.text;
+            pimpl->composition = e->edit.text;
             return true;
         }
         // Emulate "standard" Windows/Linux keyboard behavior.
         case SDL_KEYDOWN: {
             // ...but not if the IME is currently compositing.
-            if (!m_impl->composition.empty()) return false;
+            if (!pimpl->composition.empty()) return false;
 
 #ifdef GOSU_IS_MAC
             bool words = (e->key.keysym.mod & (KMOD_LALT | KMOD_RALT));
@@ -218,48 +218,48 @@ bool Gosu::TextInput::feed_sdl_event(void* event)
                 case SDLK_LEFT:
 #ifdef GOSU_IS_MAC
                     if (command_down) {
-                        m_impl->move_to_beginning_of_line(!shift_down);
+                        pimpl->move_to_beginning_of_line(!shift_down);
                         return true;
                     }
 #endif
                     if (words) {
-                        m_impl->move_word_left(!shift_down);
+                        pimpl->move_word_left(!shift_down);
                     }
                     else {
-                        m_impl->move_left(!shift_down);
+                        pimpl->move_left(!shift_down);
                     }
                     return true;
                 case SDLK_RIGHT:
 #ifdef GOSU_IS_MAC
                     if (command_down) {
-                        m_impl->move_to_end_of_line(!shift_down);
+                        pimpl->move_to_end_of_line(!shift_down);
                         return true;
                     }
 #endif
                     if (words) {
-                        m_impl->move_word_right(!shift_down);
+                        pimpl->move_word_right(!shift_down);
                     }
                     else {
-                        m_impl->move_right(!shift_down);
+                        pimpl->move_right(!shift_down);
                     }
                     return true;
 #ifdef GOSU_IS_MAC
                 case SDLK_UP:
 #endif
                 case SDLK_HOME:
-                    m_impl->move_to_beginning_of_line(!shift_down);
+                    pimpl->move_to_beginning_of_line(!shift_down);
                     return true;
 #ifdef GOSU_IS_MAC
                 case SDLK_DOWN:
 #endif
                 case SDLK_END:
-                    m_impl->move_to_end_of_line(!shift_down);
+                    pimpl->move_to_end_of_line(!shift_down);
                     return true;
                 case SDLK_BACKSPACE:
-                    m_impl->delete_backward();
+                    pimpl->delete_backward();
                     return true;
                 case SDLK_DELETE:
-                    m_impl->delete_forward();
+                    pimpl->delete_forward();
                     return true;
             }
             break;
@@ -274,15 +274,15 @@ bool Gosu::TextInput::feed_sdl_event(void* event)
 
 void Gosu::TextInput::insert_text(std::string text)
 {
-    m_impl->insert_text(text);
+    pimpl->insert_text(text);
 }
 
 void Gosu::TextInput::delete_forward()
 {
-    m_impl->delete_forward();
+    pimpl->delete_forward();
 }
 
 void Gosu::TextInput::delete_backward()
 {
-    m_impl->delete_backward();
+    pimpl->delete_backward();
 }

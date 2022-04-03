@@ -22,7 +22,7 @@ namespace Gosu
     class Window
     {
         struct Impl;
-        const std::unique_ptr<Impl> m_impl;
+        const std::unique_ptr<Impl> pimpl;
 
     public:
         /// Constructs a Window.

@@ -19,7 +19,7 @@ namespace Gosu
     class Graphics
     {
         struct Impl;
-        std::unique_ptr<Impl> m_impl;
+        std::unique_ptr<Impl> pimpl;
 
     public:
         Graphics(unsigned physical_width, unsigned physical_height);

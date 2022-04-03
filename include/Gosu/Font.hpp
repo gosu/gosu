@@ -15,7 +15,7 @@ namespace Gosu
     class Font
     {
         struct Impl;
-        std::shared_ptr<Impl> m_impl;
+        std::shared_ptr<Impl> pimpl;
 
     public:
         /// @param name   Name of a system font, or path to a TTF file (must contain '/').

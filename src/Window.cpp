@@ -94,7 +94,7 @@ struct Gosu::Window::Impl : Gosu::Noncopyable
 };
 
 Gosu::Window::Window(int width, int height, unsigned window_flags, double update_interval)
-: m_impl(new Impl)
+: pimpl(new Impl)
 {
     set_borderless(window_flags & WF_BORDERLESS);
     set_resizable(window_flags & WF_RESIZABLE);
@@ -111,7 +111,7 @@ Gosu::Window::Window(int width, int height, unsigned window_flags, double update
 
     SDL_GL_SetSwapInterval(1);
 
-    m_impl->update_interval = update_interval;
+    pimpl->update_interval = update_interval;
 
     input().on_button_down = [this](Button button) { button_down(button); };
     input().on_button_up = [this](Button button) { button_up(button); };
@@ -136,12 +136,12 @@ int Gosu::Window::height() const
 
 bool Gosu::Window::fullscreen() const
 {
-    return m_impl->fullscreen;
+    return pimpl->fullscreen;
 }
 
 void Gosu::Window::resize(int width, int height, bool fullscreen)
 {
-    m_impl->fullscreen = fullscreen;
+    pimpl->fullscreen = fullscreen;
 
     int actual_width = width;
     int actual_height = height;
@@ -190,7 +190,7 @@ void Gosu::Window::resize(int width, int height, bool fullscreen)
     }
 
     SDL_SetWindowFullscreen(shared_window(), fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
-    if (!m_impl->resizing) {
+    if (!pimpl->resizing) {
         SDL_SetWindowSize(shared_window(), actual_width, actual_height);
     }
 
@@ -198,29 +198,29 @@ void Gosu::Window::resize(int width, int height, bool fullscreen)
 
     ensure_current_context();
 
-    if (!m_impl->graphics) {
-        m_impl->graphics.reset(new Graphics(actual_width, actual_height));
+    if (!pimpl->graphics) {
+        pimpl->graphics.reset(new Graphics(actual_width, actual_height));
     }
     else {
-        m_impl->graphics->set_physical_resolution(actual_width, actual_height);
+        pimpl->graphics->set_physical_resolution(actual_width, actual_height);
     }
-    m_impl->graphics->set_resolution(width, height, black_bar_width, black_bar_height);
+    pimpl->graphics->set_resolution(width, height, black_bar_width, black_bar_height);
 
-    if (!m_impl->input) {
-        m_impl->input.reset(new Input(shared_window()));
+    if (!pimpl->input) {
+        pimpl->input.reset(new Input(shared_window()));
     }
-    m_impl->input->set_mouse_factors(1 / scale_factor, 1 / scale_factor, black_bar_width,
+    pimpl->input->set_mouse_factors(1 / scale_factor, 1 / scale_factor, black_bar_width,
                                      black_bar_height);
 }
 
 bool Gosu::Window::resizable() const
 {
-    return m_impl->resizable;
+    return pimpl->resizable;
 }
 
 void Gosu::Window::set_resizable(bool resizable)
 {
-    m_impl->resizable = resizable;
+    pimpl->resizable = resizable;
     SDL_SetWindowResizable(shared_window(), resizable ? SDL_TRUE : SDL_FALSE);
 }
 
@@ -238,12 +238,12 @@ void Gosu::Window::set_borderless(bool borderless)
 
 double Gosu::Window::update_interval() const
 {
-    return m_impl->update_interval;
+    return pimpl->update_interval;
 }
 
 void Gosu::Window::set_update_interval(double update_interval)
 {
-    m_impl->update_interval = update_interval;
+    pimpl->update_interval = update_interval;
 }
 
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
@@ -292,19 +292,19 @@ void Gosu::Window::show()
     if (previous_affinity) SetThreadAffinityMask(GetCurrentThread(), previous_affinity);
 #endif
 
-    m_impl->state = Impl::CLOSED;
+    pimpl->state = Impl::CLOSED;
 }
 
 bool Gosu::Window::tick()
 {
-    if (m_impl->state == Impl::CLOSING) {
-        m_impl->state = Impl::CLOSED;
+    if (pimpl->state == Impl::CLOSING) {
+        pimpl->state = Impl::CLOSED;
         return false;
     }
 
-    if (m_impl->state == Impl::CLOSED) {
+    if (pimpl->state == Impl::CLOSED) {
         SDL_ShowWindow(shared_window());
-        m_impl->state = Impl::OPEN;
+        pimpl->state = Impl::OPEN;
 
         // SDL_GL_GetDrawableSize returns different values before and after showing the window.
         // -> When first showing the window, update the physical size of Graphics (=glViewport).
@@ -320,11 +320,11 @@ bool Gosu::Window::tick()
             case SDL_WINDOWEVENT: {
                 switch (e.window.event) {
                     case SDL_WINDOWEVENT_SIZE_CHANGED: {
-                        if (m_impl->resizable &&
+                        if (pimpl->resizable &&
                             (width() != e.window.data1 || height() != e.window.data2)) {
-                            m_impl->resizing = true;
+                            pimpl->resizing = true;
                             resize(e.window.data1, e.window.data2, fullscreen());
-                            m_impl->resizing = false;
+                            pimpl->resizing = false;
                         }
                         break;
                     }
@@ -377,16 +377,16 @@ bool Gosu::Window::tick()
         SDL_GL_SwapWindow(shared_window());
     }
 
-    if (m_impl->state == Impl::CLOSING) {
-        m_impl->state = Impl::CLOSED;
+    if (pimpl->state == Impl::CLOSING) {
+        pimpl->state = Impl::CLOSED;
     }
 
-    return m_impl->state == Impl::OPEN;
+    return pimpl->state == Impl::OPEN;
 }
 
 void Gosu::Window::close()
 {
-    m_impl->state = Impl::CLOSING;
+    pimpl->state = Impl::CLOSING;
     SDL_HideWindow(shared_window());
 }
 
@@ -426,22 +426,22 @@ void Gosu::Window::button_down(Button button)
 
 const Gosu::Graphics& Gosu::Window::graphics() const
 {
-    return *m_impl->graphics;
+    return *pimpl->graphics;
 }
 
 Gosu::Graphics& Gosu::Window::graphics()
 {
-    return *m_impl->graphics;
+    return *pimpl->graphics;
 }
 
 const Gosu::Input& Gosu::Window::input() const
 {
-    return *m_impl->input;
+    return *pimpl->input;
 }
 
 Gosu::Input& Gosu::Window::input()
 {
-    return *m_impl->input;
+    return *pimpl->input;
 }
 
 #endif
