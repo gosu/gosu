@@ -102,9 +102,18 @@ namespace Gosu
     static_assert(sizeof(Color) == sizeof(std::uint32_t));
 
 #ifndef SWIG
-    inline bool operator<(Color a, Color b) { return a.gl() < b.gl(); }
-    inline bool operator==(Color a, Color b) { return a.gl() == b.gl(); }
-    inline bool operator!=(Color a, Color b) { return a.gl() != b.gl(); }
+    inline bool operator<(Color a, Color b)
+    {
+        return a.gl() < b.gl();
+    }
+    inline bool operator==(Color a, Color b)
+    {
+        return a.gl() == b.gl();
+    }
+    inline bool operator!=(Color a, Color b)
+    {
+        return a.gl() != b.gl();
+    }
 
     /// Interpolates linearly between two colors, with a given weight towards
     /// the second color.

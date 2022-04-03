@@ -19,7 +19,7 @@ namespace Gosu
     {
         struct Impl;
         // Non-movable (const) to avoid dangling references to TextInput instances.
-        const std::unique_ptr<Impl> m_impl;
+        const std::unique_ptr<Impl> pimpl;
 
     public:
         TextInput();

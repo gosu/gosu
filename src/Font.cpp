@@ -63,32 +63,32 @@ struct Gosu::Font::Impl : Gosu::Noncopyable
 };
 
 Gosu::Font::Font(int font_height, const std::string& font_name, unsigned font_flags, unsigned image_flags)
-: m_impl{new Impl}
+: pimpl{new Impl}
 {
-    m_impl->name = font_name;
-    m_impl->height = font_height;
-    m_impl->base_flags = font_flags;
-    m_impl->image_flags = image_flags;
+    pimpl->name = font_name;
+    pimpl->height = font_height;
+    pimpl->base_flags = font_flags;
+    pimpl->image_flags = image_flags;
 }
 
 const std::string& Gosu::Font::name() const
 {
-    return m_impl->name;
+    return pimpl->name;
 }
 
 int Gosu::Font::height() const
 {
-    return m_impl->height;
+    return pimpl->height;
 }
 
 unsigned Gosu::Font::flags() const
 {
-    return m_impl->base_flags;
+    return pimpl->base_flags;
 }
 
 unsigned Gosu::Font::image_flags() const
 {
-    return m_impl->image_flags;
+    return pimpl->image_flags;
 }
 
 double Gosu::Font::text_width(const std::string& text) const
@@ -101,11 +101,11 @@ double Gosu::Font::markup_width(const std::string& markup) const
     double width = 0;
 
     // Split the text into lines (split_words = false) because Font doesn't implement word-wrapping.
-    MarkupParser parser(m_impl->base_flags, false, [&](std::vector<FormattedString>&& line) {
+    MarkupParser parser(pimpl->base_flags, false, [&](std::vector<FormattedString>&& line) {
         double line_width = 0;
         for (auto& part : line) {
             for (auto codepoint : part.text) {
-                auto& image = m_impl->image(codepoint, part.flags);
+                auto& image = pimpl->image(codepoint, part.flags);
                 double image_scale = 1.0 * height() / image.height();
                 line_width += image_scale * image.width();
             }
@@ -129,11 +129,11 @@ void Gosu::Font::draw_markup(const std::string& markup, double x, double y, ZPos
     double current_y = y;
 
     // Split the text into lines (split_words = false) because Font doesn't implement word-wrapping.
-    MarkupParser parser(m_impl->base_flags, false, [&](std::vector<FormattedString>&& line) {
+    MarkupParser parser(pimpl->base_flags, false, [&](std::vector<FormattedString>&& line) {
         double current_x = x;
         for (auto& part : line) {
             for (auto codepoint : part.text) {
-                auto& image = m_impl->image(codepoint, part.flags);
+                auto& image = pimpl->image(codepoint, part.flags);
                 double image_scale = 1.0 * height() / image.height();
                 image.draw(current_x, current_y, z, image_scale * scale_x, image_scale * scale_y,
                            multiply(c, part.color), mode);
@@ -172,11 +172,11 @@ void Gosu::Font::set_image(std::string codepoint, unsigned font_flags, const Gos
         throw std::invalid_argument{"Could not compose '" + codepoint + "' into single codepoint"};
     }
 
-    if (utc4[0] < m_impl->fast_glyphs[font_flags].size()) {
-        m_impl->fast_glyphs[font_flags][utc4[0]] = image;
+    if (utc4[0] < pimpl->fast_glyphs[font_flags].size()) {
+        pimpl->fast_glyphs[font_flags][utc4[0]] = image;
     }
     else {
-        m_impl->other_glyphs[font_flags][utc4[0]] = image;
+        pimpl->other_glyphs[font_flags][utc4[0]] = image;
     }
 }
 

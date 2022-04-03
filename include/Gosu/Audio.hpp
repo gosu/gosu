@@ -49,7 +49,7 @@ namespace Gosu
     class Sample
     {
         struct Impl;
-        std::shared_ptr<Impl> m_impl;
+        std::shared_ptr<Impl> pimpl;
 
     public:
         /// Constructs an empty sample that is inaudible when played.
@@ -85,7 +85,7 @@ namespace Gosu
     class Song : private Noncopyable
     {
         struct Impl;
-        std::unique_ptr<Impl> m_impl;
+        std::unique_ptr<Impl> pimpl;
 
     public:
         /// Constructs a song that can be played on the provided audio system and loads the song
