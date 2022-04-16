@@ -40,72 +40,73 @@ namespace Gosu
 
         ~Input();
 
-        //! Returns the character (as a UTF-8 encoded string) that a button usually produces.
-        //! Returns the empty string if nothing can be found.
+        /// Returns the character (as a UTF-8 encoded string) that a button usually produces.
+        /// Returns the empty string if nothing can be found.
         static std::string id_to_char(Button btn);
-        //! Returns the button that has to be pressed to produce the given character (as a UTF-8
-        //! encoded string), or NO_BUTTON.
-        static Button char_to_id(std::string ch);
+        /// Returns the button that has to be pressed to produce the given character (as a UTF-8
+        /// encoded string), or NO_BUTTON.
+        static Button char_to_id(const std::string& ch);
 
-        //! Returns the name for the given button, provided it is a Gosu::KB_{constant}
-        //! Returns the empty string if nothing can be found.
+        /// Returns the name for the given button, provided it is a Gosu::KB_{constant}
+        /// Returns the empty string if nothing can be found.
         static std::string button_name(Button btn);
 
-        //! Returns the name for the given gamepad.
-        //! Returns an empty string if there is no gamepad in the slot index.
+        /// Returns the name for the given gamepad.
+        /// Returns an empty string if there is no gamepad in the slot index.
         static std::string gamepad_name(int index);
 
-        //! Returns true if a button is currently pressed.
-        //! Updated every tick.
+        /// Returns true if a button is currently pressed.
+        /// Updated every tick.
         static bool down(Button btn);
 
-        //! Returns the value of a gamepad stick in the range -1.0 through +1.0, or a trigger in the
-        //! range 0.0 through +1.0.
-        //! Updated every tick.
+        /// Returns the value of a gamepad stick in the range -1.0 through +1.0, or a trigger in the
+        /// range 0.0 through +1.0.
+        /// Updated every tick.
         static double axis(Button btn);
 
-        //! Returns the horizontal position of the mouse relative to the top
-        //! left corner of the window given to Input's constructor.
+        /// Returns the horizontal offset of the mouse cursor relative to the left edge of the
+        /// that was passed to the constructor.
         double mouse_x() const;
-        //! See mouse_x.
+        /// Returns the vertical offset of the mouse cursor relative to the top edge of the window
+        /// that was passed to the constructor.
         double mouse_y() const;
 
-        //! Immediately moves the mouse as far towards the desired position
-        //! as possible. x and y are relative to the window, just as in mouse_x()
-        //! and mouse_y(), so (0, 0) is the top left corner of the window..
+        /// Immediately moves the mouse as far towards the desired position as possible.
+        /// x and y are relative to the window, just as in mouse_x() and mouse_y(), so (0, 0) is the
+        /// top left corner of the window.
         void set_mouse_position(double x, double y);
 
         // Undocumented for the moment. Also applies to current_touches().
         void set_mouse_factors(double factor_x, double factor_y,
             double offset_x = 0, double offset_y = 0);
 
-        //! Currently known touches.
+        /// Currently known touches.
         const Touches& current_touches() const;
 
-        //! Accelerometer positions in all three dimensions (smoothened).
-        //! Note: Not really deprecated, but temporarily defunct.
+        /// Accelerometer positions in all three dimensions (smoothened).
+        /// Note: Not really deprecated, but temporarily defunct.
         GOSU_DEPRECATED double accelerometer_x() const;
         GOSU_DEPRECATED double accelerometer_y() const;
         GOSU_DEPRECATED double accelerometer_z() const;
 
-        //! Collects new information about which buttons are pressed, where the
-        //! mouse is and calls on_button_up/on_button_down, if assigned.
+        /// Collects new information about which buttons are pressed, where the mouse is, and calls
+        /// on_button_up/on_button_down, if assigned.
         void update();
 
-        //! Assignable events that are called by update. You can bind these to your own functions.
-        //! If you use the Window class, it will assign these to its own methods.
+        /// Assignable events that are called by update. You can bind these to your own functions.
+        /// If you use the Window class, it will assign these to its own methods.
         std::function<void (Button)> on_button_down, on_button_up;
 
         std::function<void (int)> on_gamepad_connected, on_gamepad_disconnected;
 
-        //! Assignable events that are called by update. You can bind these to your own functions.
-        //! If you use the Window class, it will assign these to its own methods.
+        /// Assignable events that are called by update. You can bind these to your own functions.
+        /// If you use the Window class, it will assign these to its own methods.
         std::function<void (Touch)> on_touch_began, on_touch_moved, on_touch_ended,
             on_touch_cancelled;
 
-        //! Returns the currently active TextInput instance, or nullptr.
+        /// Returns the currently active TextInput instance, or nullptr.
         TextInput* text_input() const;
-        //! Sets the currently active TextInput, or resets it to the nullptr.
+        /// Sets the currently active TextInput, or resets it to the nullptr.
         void set_text_input(TextInput* input);
     };
 }

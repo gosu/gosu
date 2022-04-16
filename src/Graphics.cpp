@@ -47,7 +47,7 @@ struct Gosu::Graphics::Impl : Gosu::Noncopyable
     unsigned virt_width = 0, virt_height = 0;
     unsigned phys_width = 0, phys_height = 0;
     double black_width = 0.0, black_height = 0.0;
-    Transform base_transform;
+    Transform base_transform = translate(0, 0);
 
     DrawOpQueueStack warmed_up_queues;
 
