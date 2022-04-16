@@ -8,9 +8,9 @@
 
 namespace Gosu
 {
-    //! A string that contains the full version of the Gosu library, like "0.7.50" or "1.0.0.pre5".
+    /// A string that contains the full version of the Gosu library, like "0.7.50" or "1.0.0.pre5".
     extern const std::string VERSION;
     
-    //! A block of legal copy that your game is obliged to display somewhere.
+    /// A block of legal copy that your game is obliged to display somewhere.
     extern const std::string LICENSES;
 }

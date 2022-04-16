@@ -17,6 +17,7 @@ namespace Gosu
     /// typically the first language in the returned array that your game supports.
     std::vector<std::string> user_languages();
 
+    /// Effectively the same as boost::noncopyable: Prevents both moving and copying.
     class Noncopyable
     {
     protected:
