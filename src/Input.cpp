@@ -678,4 +678,14 @@ void Gosu::Input::set_text_input(TextInput* text_input)
     pimpl->text_input = text_input;
 }
 
+void Gosu::Input::set_clipboard(std::string text)
+{
+    SDL_SetClipboardText(text.c_str());
+}
+
+std::string Gosu::Input::clipboard()
+{
+    return std::string(SDL_GetClipboardText());
+}
+
 #endif
