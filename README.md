@@ -3,6 +3,9 @@ Welcome to Gosu!
 
 Gosu is a 2D game development library for Ruby and C++.
 
+[![kandi X-Ray](https://kandi.openweaver.com/badges/xray.svg)](https://kandi.openweaver.com/c%2B%2B/gosu/gosu)
+[![kandi Featured](https://kandi.openweaver.com/badges/featured.svg)](https://kandi.openweaver.com/collections/csharp/csharp-game-development)
+
 The main website is [www.libgosu.org](https://www.libgosu.org/).
 The source code, wiki, issue tracker and change log are all hosted on [GitHub](https://github.com/gosu/gosu).
 
