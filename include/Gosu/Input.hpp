@@ -109,6 +109,6 @@ namespace Gosu
         void set_text_input(TextInput* input);
 
         static std::string clipboard();
-        static void set_clipboard(std::string text);
+        static void set_clipboard(const std::string& text);
     };
 }

@@ -686,7 +686,7 @@ std::string Gosu::Input::clipboard()
     return std::string{clipboard.get()};
 }
 
-void Gosu::Input::set_clipboard(std::string text)
+void Gosu::Input::set_clipboard(const std::string& text)
 {
     require_sdl_video();
 
