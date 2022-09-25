@@ -251,6 +251,23 @@ GOSU_FFI_API double Gosu_axis(int id)
     });
 }
 
+GOSU_FFI_API const char* Gosu_clipboard()
+{
+    static thread_local std::string text;
+
+    return Gosu_translate_exceptions([=] {
+        text = Gosu::Input::clipboard();
+        return text.c_str();
+    });
+}
+
+GOSU_FFI_API void Gosu_set_clipboard(const char* text)
+{
+    Gosu_translate_exceptions([=] {
+        Gosu::Input::set_clipboard(text);
+    });
+}
+
 GOSU_FFI_API int Gosu_fps()
 {
     return Gosu_translate_exceptions([=] {

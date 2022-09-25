@@ -2345,6 +2345,16 @@ namespace Gosu
     {
         return Gosu::Input::axis(btn);
     }
+
+    std::string clipboard()
+    {
+        return Gosu::Input::clipboard();
+    }
+
+    void set_clipboard(const std::string& text)
+    {
+        return Gosu::Input::set_clipboard(text);
+    }
 }
 
 // Global graphics functions
@@ -10919,6 +10929,64 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_clipboard(int argc, VALUE *argv, VALUE self) {
+  std::string result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  {
+    try {
+      result = Gosu::clipboard();
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_std_string(static_cast< std::string >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_clipboarde___(int argc, VALUE *argv, VALUE self) {
+  std::string *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  {
+    std::string *ptr = (std::string *)0;
+    res1 = SWIG_AsPtr_std_string(argv[0], &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "std::string const &","Gosu::set_clipboard", 1, argv[0] )); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "std::string const &","Gosu::set_clipboard", 1, argv[0])); 
+    }
+    arg1 = ptr;
+  }
+  {
+    try {
+      Gosu::set_clipboard((std::string const &)*arg1);
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return Qnil;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_draw_line(int argc, VALUE *argv, VALUE self) {
   double arg1 ;
   double arg2 ;
@@ -12960,6 +13028,8 @@ SWIGEXPORT void Init_gosu(void) {
   rb_define_module_function(mGosu, "button_name", VALUEFUNC(_wrap_button_name), -1);
   rb_define_module_function(mGosu, "gamepad_name", VALUEFUNC(_wrap_gamepad_name), -1);
   rb_define_module_function(mGosu, "axis", VALUEFUNC(_wrap_axis), -1);
+  rb_define_module_function(mGosu, "clipboard", VALUEFUNC(_wrap_clipboard), -1);
+  rb_define_module_function(mGosu, "clipboard=", VALUEFUNC(_wrap_clipboarde___), -1);
   rb_define_module_function(mGosu, "draw_line", VALUEFUNC(_wrap_draw_line), -1);
   rb_define_module_function(mGosu, "draw_triangle", VALUEFUNC(_wrap_draw_triangle), -1);
   rb_define_module_function(mGosu, "draw_quad", VALUEFUNC(_wrap_draw_quad), -1);

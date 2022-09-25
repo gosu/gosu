@@ -235,6 +235,16 @@ namespace Gosu
     {
         return Gosu::Input::axis(btn);
     }
+
+    std::string clipboard()
+    {
+        return Gosu::Input::clipboard();
+    }
+
+    void set_clipboard(const std::string& text)
+    {
+        return Gosu::Input::set_clipboard(text);
+    }
 }
 
 // Global graphics functions
@@ -1174,6 +1184,9 @@ namespace Gosu
     VALUE button_name(Gosu::Button btn);
     VALUE gamepad_name(int index);
     double axis(Gosu::Button btn);
+    std::string clipboard();
+    %rename("clipboard=") set_clipboard;
+    void set_clipboard(const std::string& text);
 }
 
 // Global graphics functions

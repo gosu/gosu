@@ -678,4 +678,19 @@ void Gosu::Input::set_text_input(TextInput* text_input)
     pimpl->text_input = text_input;
 }
 
+std::string Gosu::Input::clipboard()
+{
+    require_sdl_video();
+
+    std::shared_ptr<char> clipboard{SDL_GetClipboardText(), SDL_free};
+    return std::string{clipboard.get()};
+}
+
+void Gosu::Input::set_clipboard(const std::string& text)
+{
+    require_sdl_video();
+
+    SDL_SetClipboardText(text.c_str());
+}
+
 #endif

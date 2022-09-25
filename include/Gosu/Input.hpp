@@ -107,5 +107,8 @@ namespace Gosu
         TextInput* text_input() const;
         //! Sets the currently active TextInput, or resets it to the nullptr.
         void set_text_input(TextInput* input);
+
+        static std::string clipboard();
+        static void set_clipboard(const std::string& text);
     };
 }
