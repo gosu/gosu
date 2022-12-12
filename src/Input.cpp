@@ -36,7 +36,7 @@ static vector<shared_ptr<SDL_GameController>> open_game_controllers;
 // Stores joystick instance id or -1 if empty
 static array<int, Gosu::NUM_GAMEPADS> gamepad_slots = {-1, -1, -1, -1};
 
-struct Gosu::Input::Impl : Gosu::Noncopyable
+struct Gosu::Input::Impl : private Gosu::Noncopyable
 {
     struct InputEvent
     {

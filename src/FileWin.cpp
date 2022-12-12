@@ -9,7 +9,7 @@ using namespace std;
 
 // TODO: Error checking
 
-struct Gosu::File::Impl : Gosu::Noncopyable
+struct Gosu::File::Impl : private Gosu::Noncopyable
 {
     HANDLE handle = INVALID_HANDLE_VALUE;
 
