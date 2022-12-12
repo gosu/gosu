@@ -6,7 +6,7 @@
 
 void Gosu::sleep(unsigned milliseconds)
 {
-    SleepEx(milliseconds, FALSE);
+    Sleep(milliseconds);
 }
 
 unsigned long Gosu::milliseconds()
