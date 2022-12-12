@@ -2,6 +2,12 @@
 #if defined(GOSU_IS_MAC)
 
 #include <Gosu/Timing.hpp>
+#include <unistd.h>
+
+void Gosu::sleep(unsigned milliseconds)
+{
+    usleep(milliseconds * 1000);
+}
 
 // Thanks to this blog for the unconvoluted code example:
 // http://shiftedbits.org/2008/10/01/mach_absolute_time-on-the-iphone/
@@ -11,7 +17,7 @@
 unsigned long Gosu::milliseconds()
 {
     static mach_timebase_info_data_t info;
-    static uint64_t first_tick = [] {
+    static const uint64_t first_tick = [] {
         mach_timebase_info(&info);
         return mach_absolute_time();
     }();
