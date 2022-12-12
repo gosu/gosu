@@ -42,7 +42,7 @@ namespace Gosu
     }
 }
 
-struct Gosu::Graphics::Impl : Gosu::Noncopyable
+struct Gosu::Graphics::Impl : private Gosu::Noncopyable
 {
     unsigned virt_width = 0, virt_height = 0;
     unsigned phys_width = 0, phys_height = 0;

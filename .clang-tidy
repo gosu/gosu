@@ -28,6 +28,7 @@ Checks: >-
   -hicpp-vararg,
   -llvm-*,
   -llvmlibc-*,
+  -misc-const-correctness,
   -misc-no-recursion,
   -misc-non-private-member-variables-in-classes,
   -modernize-avoid-c-arrays,

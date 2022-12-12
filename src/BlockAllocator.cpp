@@ -4,7 +4,7 @@
 #include <vector>
 using namespace std;
 
-struct Gosu::BlockAllocator::Impl : Gosu::Noncopyable
+struct Gosu::BlockAllocator::Impl : private Gosu::Noncopyable
 {
     unsigned width, height;
 

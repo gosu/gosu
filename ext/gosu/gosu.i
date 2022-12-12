@@ -406,6 +406,7 @@ namespace Gosu
 %include "../../include/Gosu/Version.hpp"
 
 // Miscellaneous functions (timing, math)
+%ignore Gosu::sleep;
 %include "../../include/Gosu/Timing.hpp"
 %ignore Gosu::distance_sqr;
 %ignore Gosu::wrap;

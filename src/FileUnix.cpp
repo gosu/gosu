@@ -16,7 +16,7 @@
 
 using namespace std;
 
-struct Gosu::File::Impl : Gosu::Noncopyable
+struct Gosu::File::Impl : private Gosu::Noncopyable
 {
     int fd = -1;
     void* mapping = MAP_FAILED;

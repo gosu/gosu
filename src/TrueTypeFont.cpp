@@ -9,7 +9,7 @@
 #define STB_TRUETYPE_IMPLEMENTATION
 #include <stb_truetype.h>
 
-struct Gosu::TrueTypeFont::Impl : Gosu::Noncopyable
+struct Gosu::TrueTypeFont::Impl : private Gosu::Noncopyable
 {
     stbtt_fontinfo info{};
     std::shared_ptr<TrueTypeFont> fallback;

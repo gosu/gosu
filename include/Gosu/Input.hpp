@@ -24,7 +24,7 @@ namespace Gosu
 
     /// Manages initialization and shutdown of the input system.
     /// Only one Input instance can exist per application.
-    class Input : Noncopyable
+    class Input : private Noncopyable
     {
         struct Impl;
         std::unique_ptr<Impl> pimpl;

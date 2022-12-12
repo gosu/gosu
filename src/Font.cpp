@@ -13,7 +13,7 @@
 
 static const int FONT_RENDER_SCALE = 2;
 
-struct Gosu::Font::Impl : Gosu::Noncopyable
+struct Gosu::Font::Impl : private Gosu::Noncopyable
 {
     std::string name;
     int height;

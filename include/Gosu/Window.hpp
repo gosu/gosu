@@ -3,6 +3,7 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/Platform.hpp>
+#include <Gosu/Utility.hpp>
 #include <memory>
 #include <string>
 
@@ -19,10 +20,10 @@ namespace Gosu
     /// Convenient all-in-one class that serves as the foundation of a standard Gosu application.
     /// Manages initialization of all of Gosu's core components and provides timing functionality.
     /// Note that you can only use one instance of this class at the same time.
-    class Window
+    class Window : private Noncopyable
     {
         struct Impl;
-        const std::unique_ptr<Impl> m_impl;
+        std::unique_ptr<Impl> m_impl;
 
     public:
         /// Constructs a Window.

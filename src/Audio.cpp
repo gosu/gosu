@@ -13,7 +13,7 @@ static Gosu::Song* cur_song = nullptr;
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 static bool cur_song_looping;
 
-struct Gosu::Sample::Impl : Gosu::Noncopyable
+struct Gosu::Sample::Impl : private Gosu::Noncopyable
 {
     ALuint buffer;
 
@@ -76,7 +76,7 @@ Gosu::Channel Gosu::Sample::play_pan(double pan, double volume, double speed, bo
 }
 
 // AudioFile impl
-struct Gosu::Song::Impl : Gosu::Noncopyable
+struct Gosu::Song::Impl : private Gosu::Noncopyable
 {
 private:
     double m_volume = 1.0;

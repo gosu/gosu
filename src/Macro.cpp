@@ -4,7 +4,7 @@
 #include "DrawOpQueue.hpp"
 #include <stdexcept>
 
-struct Gosu::Macro::Impl : Gosu::Noncopyable
+struct Gosu::Macro::Impl : private Gosu::Noncopyable
 {
     VertexArrays vertex_arrays;
     int width, height;

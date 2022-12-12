@@ -4,7 +4,7 @@
 #include "GosuViewController.hpp"
 #include <Gosu/Gosu.hpp>
 
-struct Gosu::Window::Impl : Gosu::Noncopyable
+struct Gosu::Window::Impl : private Gosu::Noncopyable
 {
     UIWindow* window;
     GosuViewController* controller;
