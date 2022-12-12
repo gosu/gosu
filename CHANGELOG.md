@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.4] - 2022-12-12
+* Add clipboard support in the form of `Gosu.clipboard`/`Gosu.clipboard=`. (Thanks @cyberarm! #630)
+* Fix a regression in the `Window.show` main loop on Windows that was introduced in 1.4.3. (#634)
+* Fix a potential build/linker error on ARM macOS. (Thanks @jimtng! #627)
+
 ## [1.4.3] - 2022-03-27
 * Update bundled dependencies: stb_image, stb_image_write, stb_truetype, stb_vorbis, utf8proc, mojoAL, SDL_sound.
 * These updates fix MP3 playback and Gosu::Sample pitch changes. (#592, #623).

@@ -1043,6 +1043,19 @@ module Gosu
     #
     def axis(id); end
 
+    ##
+    # Returns the contents of the clipboard as plain text, or an empty string if none is available.
+    #
+    # @return [String]
+    def clipboard(); end
+
+    ##
+    # Replaces the contents of the clipboard with the given string.
+    #
+    # @return [nil]
+    def clipboard=(text); end
+
+
     # @!group Drawing primitives
 
     ##
@@ -1296,7 +1309,7 @@ module Gosu
     # @see char_to_button_id
     # @see Window#text_input
     # @see TextInput
-    def self.button_id_to_char(id); end
+    def button_id_to_char(id); end
 
     ##
     # Returns the button that usually produces a character, if any.
@@ -1307,7 +1320,7 @@ module Gosu
     # @see button_id_to_char
     # @see Window#text_input
     # @see TextInput
-    def self.char_to_button_id(char); end
+    def char_to_button_id(char); end
 
     ##
     # @return [Float] a random number in the range [min; max).
