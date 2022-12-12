@@ -12,16 +12,12 @@ void Gosu::sleep(unsigned milliseconds)
 
 unsigned long Gosu::milliseconds()
 {
-    static const unsigned long start = 0;
-
     timeval tp;
     gettimeofday(&tp, nullptr);
+    unsigned long ms = tp.tv_usec / 1000UL + tp.tv_sec * 1000UL;
 
-    if (start == 0) {
-        start = tp.tv_usec / 1000UL + tp.tv_sec * 1000UL;
-    }
-
-    return tp.tv_usec / 1000UL + tp.tv_sec * 1000UL - start;
+    static unsigned long start = ms;
+    return ms - start;
 }
 
 #endif
