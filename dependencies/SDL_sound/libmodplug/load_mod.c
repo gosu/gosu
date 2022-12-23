@@ -102,7 +102,9 @@ BOOL CSoundFile_ReadMod(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
         char s[1024];          // changed from CHAR
 	DWORD dwMemPos, dwTotalSampleLen;
 	PMODMAGIC pMagic;
-	UINT nErr;
+	UINT nbp, nbpbuggy, nbpbuggy2, norders;
+	UINT i, nErr;
+	DWORD dwWowTest, dwErrCheck;
 
 	if ((!lpStream) || (dwMemLength < 0x600)) return FALSE;
 	dwMemPos = 20;
@@ -131,7 +133,7 @@ BOOL CSoundFile_ReadMod(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	// Load Samples
 	nErr = 0;
 	dwTotalSampleLen = 0;
-	for	(UINT i=1; i<=_this->m_nSamples; i++)
+	for	(i=1; i<=_this->m_nSamples; i++)
 	{
 		PMODSAMPLE pms = (PMODSAMPLE)(lpStream+dwMemPos);
 		MODINSTRUMENT *psmp = &_this->Ins[i];
@@ -192,8 +194,6 @@ BOOL CSoundFile_ReadMod(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	SDL_memset(_this->Order, 0,sizeof(_this->Order));
 	SDL_memcpy(_this->Order, pMagic->Orders, 128);
 
-	UINT nbp, nbpbuggy, nbpbuggy2, norders;
-
 	norders = pMagic->nOrders;
 	if ((!norders) || (norders > 0x80))
 	{
@@ -203,23 +203,23 @@ BOOL CSoundFile_ReadMod(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	nbpbuggy = 0;
 	nbpbuggy2 = 0;
 	nbp = 0;
-	for (UINT iord=0; iord<128; iord++)
+	for (i=0; i<128; i++)
 	{
-		UINT i = _this->Order[iord];
-		if ((i < 0x80) && (nbp <= i))
+		UINT j = _this->Order[i];
+		if ((j < 0x80) && (nbp <= j))
 		{
-			nbp = i+1;
-			if (iord<norders) nbpbuggy = nbp;
+			nbp = j+1;
+			if (i<norders) nbpbuggy = nbp;
 		}
-		if (i >= nbpbuggy2) nbpbuggy2 = i+1;
+		if (j >= nbpbuggy2) nbpbuggy2 = j+1;
 	}
-	for (UINT iend=norders; iend<MAX_ORDERS; iend++) _this->Order[iend] = 0xFF;
+	for (i=norders; i<MAX_ORDERS; i++) _this->Order[i] = 0xFF;
 	norders--;
 	_this->m_nRestartPos = pMagic->nRestartPos;
 	if (_this->m_nRestartPos >= 0x78) _this->m_nRestartPos = 0;
 	if (_this->m_nRestartPos + 1 >= (UINT)norders) _this->m_nRestartPos = 0;
 	if (!nbp) return FALSE;
-	DWORD dwWowTest = dwTotalSampleLen+dwMemPos;
+	dwWowTest = dwTotalSampleLen+dwMemPos;
 	if ((IsMagic(pMagic->Magic, "M.K.")) && (dwWowTest + nbp*8*256 == dwMemLength)) _this->m_nChannels = 8;
 	if ((nbp != nbpbuggy) && (dwWowTest + nbp*_this->m_nChannels*256 != dwMemLength))
 	{
@@ -239,25 +239,28 @@ BOOL CSoundFile_ReadMod(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	_this->m_nMinPeriod = 14 << 2;
 	_this->m_nMaxPeriod = 3424 << 2;
 	// Setting channels pan
-	for (UINT ich=0; ich<_this->m_nChannels; ich++)
+	for (i=0; i<_this->m_nChannels; i++)
 	{
-		_this->ChnSettings[ich].nVolume = 64;
+		_this->ChnSettings[i].nVolume = 64;
 		if (_this->gdwSoundSetup & SNDMIX_MAXDEFAULTPAN)
-			_this->ChnSettings[ich].nPan = (((ich&3)==1) || ((ich&3)==2)) ? 256 : 0;
+			_this->ChnSettings[i].nPan = (((i&3)==1) || ((i&3)==2)) ? 256 : 0;
 		else
-			_this->ChnSettings[ich].nPan = (((ich&3)==1) || ((ich&3)==2)) ? 0xC0 : 0x40;
+			_this->ChnSettings[i].nPan = (((i&3)==1) || ((i&3)==2)) ? 0xC0 : 0x40;
 	}
 	// Reading channels
-	for (UINT ipat=0; ipat<nbp; ipat++)
+	for (i=0; i<nbp; i++)
 	{
-		if (ipat < MAX_PATTERNS)
+		if (i < MAX_PATTERNS)
 		{
-			if ((_this->Patterns[ipat] = CSoundFile_AllocatePattern(64, _this->m_nChannels)) == NULL) break;
-			_this->PatternSize[ipat] = 64;
+			MODCOMMAND *m;
+			LPCBYTE p;
+			UINT j;
+			if ((_this->Patterns[i] = CSoundFile_AllocatePattern(64, _this->m_nChannels)) == NULL) break;
+			_this->PatternSize[i] = 64;
 			if (dwMemPos + _this->m_nChannels*256 >= dwMemLength) break;
-			MODCOMMAND *m = _this->Patterns[ipat];
-			LPCBYTE p = lpStream + dwMemPos;
-			for (UINT j=_this->m_nChannels*64; j; m++,p+=4,j--)
+			m = _this->Patterns[i];
+			p = lpStream + dwMemPos;
+			for (j=_this->m_nChannels*64; j; m++,p+=4,j--)
 			{
 				BYTE A0=p[0], A1=p[1], A2=p[2], A3=p[3];
 				UINT n = ((((UINT)A0 & 0x0F) << 8) | (A1));
@@ -271,11 +274,12 @@ BOOL CSoundFile_ReadMod(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		dwMemPos += _this->m_nChannels*256;
 	}
 	// Reading instruments
-	DWORD dwErrCheck = 0;
-	for (UINT ismp=1; ismp<=_this->m_nSamples; ismp++) if (_this->Ins[ismp].nLength)
+	dwErrCheck = 0;
+	for (i=1; i<=_this->m_nSamples; i++) if (_this->Ins[i].nLength)
 	{
 		LPSTR p = (LPSTR)(lpStream+dwMemPos);
 		UINT flags = 0;
+		DWORD dwSize;
 		if (dwMemPos + 5 >= dwMemLength) break;
 		if (!SDL_strncmp(p, "ADPCM", 5))
 		{
@@ -283,7 +287,7 @@ BOOL CSoundFile_ReadMod(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			p += 5;
 			dwMemPos += 5;
 		}
-		DWORD dwSize = CSoundFile_ReadSample(_this, &_this->Ins[ismp], flags, p, dwMemLength - dwMemPos);
+		dwSize = CSoundFile_ReadSample(_this, &_this->Ins[i], flags, p, dwMemLength - dwMemPos);
 		if (dwSize)
 		{
 			dwMemPos += dwSize;

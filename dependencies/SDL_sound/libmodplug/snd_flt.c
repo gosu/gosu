@@ -16,12 +16,13 @@ static DWORD CutOffToFrequency(CSoundFile *_this, UINT nCutOff, int flt_modifier
 //-----------------------------------------------------------------------
 {
 	float Fc;
+	LONG freq;
 
 	if (_this->m_dwSongFlags & SONG_EXFILTERRANGE)
 		Fc = 110.0f * SDL_pow(2.0f, 0.25f + ((float)(nCutOff*(flt_modifier+256)))/(21.0f*512.0f));
 	else
 		Fc = 110.0f * SDL_pow(2.0f, 0.25f + ((float)(nCutOff*(flt_modifier+256)))/(24.0f*512.0f));
-	LONG freq = (LONG)Fc;
+	freq = (LONG)Fc;
 	if (freq < 120) return 120;
 	if (freq > 10000) return 10000;
 	if (freq*2 > (LONG)_this->gdwMixingFreq) freq = _this->gdwMixingFreq>>1;
@@ -36,13 +37,14 @@ void CSoundFile_SetupChannelFilter(CSoundFile *_this, MODCHANNEL *pChn, BOOL bRe
 	float fc = (float)CutOffToFrequency(_this, pChn->nCutOff, flt_modifier);
 	float fs = (float)_this->gdwMixingFreq;
 	float fg, fb0, fb1;
+	float dmpfac, d, e;
 
 	fc *= (float)(2.0*3.14159265358/fs);
-	float dmpfac = SDL_pow(10.0f, -((24.0f / 128.0f)*(float)pChn->nResonance) / 20.0f);
-	float d = (1.0f-2.0f*dmpfac)* fc;
+	dmpfac = SDL_pow(10.0f, -((24.0f / 128.0f)*(float)pChn->nResonance) / 20.0f);
+	d = (1.0f-2.0f*dmpfac)* fc;
 	if (d>2.0) d = 2.0;
 	d = (2.0f*dmpfac - d)/fc;
-	float e = SDL_pow(1.0f/fc,2.0f);
+	e = SDL_pow(1.0f/fc,2.0f);
 
 	fg=1/(1+d+e);
 	fb0=(d+e+e)/(1+d+e);

@@ -152,6 +152,7 @@ BOOL MMCMP_Unpack(LPCBYTE *ppMemFile, LPDWORD pdwMemLength)
 	LPMMCMPHEADER pmmh;
 	const DWORD *pblk_table;
 	DWORD dwFileSize;
+	UINT nBlock;
 	BYTE tmp0[32], tmp1[32];
 
 	if (PP20_Unpack(ppMemFile, pdwMemLength))
@@ -179,7 +180,7 @@ BOOL MMCMP_Unpack(LPCBYTE *ppMemFile, LPDWORD pdwMemLength)
 		return FALSE;
 	pBufEnd = pBuffer + dwFileSize;
 	pblk_table = (const DWORD *)(lpMemFile+pmmh->blktable);
-	for (UINT nBlock=0; nBlock<pmmh->nblocks; nBlock++)
+	for (nBlock = 0; nBlock < pmmh->nblocks; nBlock++)
 	{
 		DWORD dwMemPos = bswapLE32(pblk_table[nBlock]);
 		DWORD dwSubPos;

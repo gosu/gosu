@@ -9,9 +9,7 @@
 #include <math.h>
 
 #include "SDL_stdinc.h"
-#if !(defined(HAVE_LIBC) && defined(__WATCOMC__)) /* Watcom has issues... */
 #define floor SDL_floor
-#endif
 
 /*
  *-----------------------------------------------------------------------------
@@ -246,18 +244,18 @@ void init_modplug_filters(void)
 // ----------------------------------------------------------------------------
 #define SNDMIX_BEGINSAMPLELOOP8\
 	register MODCHANNEL * const pChn = pChannel;\
-	nPos = pChn->nPosLo;\
 	const signed char *p = (signed char *)(pChn->pCurrentSample+pChn->nPos);\
-	if (pChn->dwFlags & CHN_STEREO) p += pChn->nPos;\
 	int *pvol = pbuffer;\
+	nPos = pChn->nPosLo;\
+	if (pChn->dwFlags & CHN_STEREO) p += pChn->nPos;\
 	do {
 
 #define SNDMIX_BEGINSAMPLELOOP16\
 	register MODCHANNEL * const pChn = pChannel;\
-	nPos = pChn->nPosLo;\
 	const signed short *p = (signed short *)(pChn->pCurrentSample+(pChn->nPos*2));\
-	if (pChn->dwFlags & CHN_STEREO) p += pChn->nPos;\
 	int *pvol = pbuffer;\
+	nPos = pChn->nPosLo;\
+	if (pChn->dwFlags & CHN_STEREO) p += pChn->nPos;\
 	do {
 
 #define SNDMIX_ENDSAMPLELOOP\
@@ -338,15 +336,16 @@ void init_modplug_filters(void)
     int poshi  = nPos >> 16;\
     int poslo  = (nPos & 0xFFFF);\
     int firidx = ((poslo+WFIR_FRACHALVE)>>WFIR_FRACSHIFT) & WFIR_FRACMASK; \
-    int vol1   = (CzWINDOWEDFIR_lut[firidx+0]*(int)p[poshi+1-4]);	\
+    int vol1, vol2, vol;						\
+        vol1   = (CzWINDOWEDFIR_lut[firidx+0]*(int)p[poshi+1-4]);	\
         vol1  += (CzWINDOWEDFIR_lut[firidx+1]*(int)p[poshi+2-4]);	\
         vol1  += (CzWINDOWEDFIR_lut[firidx+2]*(int)p[poshi+3-4]);	\
         vol1  += (CzWINDOWEDFIR_lut[firidx+3]*(int)p[poshi+4-4]);	\
-    int vol2   = (CzWINDOWEDFIR_lut[firidx+4]*(int)p[poshi+5-4]);	\
+        vol2   = (CzWINDOWEDFIR_lut[firidx+4]*(int)p[poshi+5-4]);	\
 	vol2  += (CzWINDOWEDFIR_lut[firidx+5]*(int)p[poshi+6-4]);	\
 	vol2  += (CzWINDOWEDFIR_lut[firidx+6]*(int)p[poshi+7-4]);	\
 	vol2  += (CzWINDOWEDFIR_lut[firidx+7]*(int)p[poshi+8-4]);	\
-    int vol    = ((vol1>>1)+(vol2>>1)) >> (WFIR_16BITSHIFT-1);
+        vol    = ((vol1>>1)+(vol2>>1)) >> (WFIR_16BITSHIFT-1);
 
 /////////////////////////////////////////////////////////////////////////////
 // Stereo
@@ -407,7 +406,8 @@ void init_modplug_filters(void)
     int poshi   = nPos >> 16;\
     int poslo   = (nPos & 0xFFFF);\
     int firidx  = ((poslo+WFIR_FRACHALVE)>>WFIR_FRACSHIFT) & WFIR_FRACMASK; \
-    int vol_l   = (CzWINDOWEDFIR_lut[firidx+0]*(int)p[(poshi+1-4)*2  ]);   \
+    int vol_l, vol_r;							   \
+        vol_l   = (CzWINDOWEDFIR_lut[firidx+0]*(int)p[(poshi+1-4)*2  ]);   \
 	vol_l  += (CzWINDOWEDFIR_lut[firidx+1]*(int)p[(poshi+2-4)*2  ]);   \
 	vol_l  += (CzWINDOWEDFIR_lut[firidx+2]*(int)p[(poshi+3-4)*2  ]);   \
         vol_l  += (CzWINDOWEDFIR_lut[firidx+3]*(int)p[(poshi+4-4)*2  ]);   \
@@ -416,7 +416,7 @@ void init_modplug_filters(void)
 	vol_l  += (CzWINDOWEDFIR_lut[firidx+6]*(int)p[(poshi+7-4)*2  ]);   \
         vol_l  += (CzWINDOWEDFIR_lut[firidx+7]*(int)p[(poshi+8-4)*2  ]);   \
 	vol_l >>= WFIR_8SHIFT; \
-    int vol_r   = (CzWINDOWEDFIR_lut[firidx+0]*(int)p[(poshi+1-4)*2+1]);   \
+        vol_r   = (CzWINDOWEDFIR_lut[firidx+0]*(int)p[(poshi+1-4)*2+1]);   \
 	vol_r  += (CzWINDOWEDFIR_lut[firidx+1]*(int)p[(poshi+2-4)*2+1]);   \
 	vol_r  += (CzWINDOWEDFIR_lut[firidx+2]*(int)p[(poshi+3-4)*2+1]);   \
 	vol_r  += (CzWINDOWEDFIR_lut[firidx+3]*(int)p[(poshi+4-4)*2+1]);   \
@@ -430,24 +430,25 @@ void init_modplug_filters(void)
     int poshi   = nPos >> 16;\
     int poslo   = (nPos & 0xFFFF);\
     int firidx  = ((poslo+WFIR_FRACHALVE)>>WFIR_FRACSHIFT) & WFIR_FRACMASK; \
-    int vol1_l  = (CzWINDOWEDFIR_lut[firidx+0]*(int)p[(poshi+1-4)*2  ]);   \
+    int vol1_l, vol2_l, vol_l, vol1_r, vol2_r, vol_r;			   \
+        vol1_l  = (CzWINDOWEDFIR_lut[firidx+0]*(int)p[(poshi+1-4)*2  ]);   \
 	vol1_l += (CzWINDOWEDFIR_lut[firidx+1]*(int)p[(poshi+2-4)*2  ]);   \
         vol1_l += (CzWINDOWEDFIR_lut[firidx+2]*(int)p[(poshi+3-4)*2  ]);   \
 	vol1_l += (CzWINDOWEDFIR_lut[firidx+3]*(int)p[(poshi+4-4)*2  ]);   \
-   int vol2_l  = (CzWINDOWEDFIR_lut[firidx+4]*(int)p[(poshi+5-4)*2  ]);    \
+       vol2_l  = (CzWINDOWEDFIR_lut[firidx+4]*(int)p[(poshi+5-4)*2  ]);    \
        vol2_l += (CzWINDOWEDFIR_lut[firidx+5]*(int)p[(poshi+6-4)*2  ]);    \
        vol2_l += (CzWINDOWEDFIR_lut[firidx+6]*(int)p[(poshi+7-4)*2  ]);    \
        vol2_l += (CzWINDOWEDFIR_lut[firidx+7]*(int)p[(poshi+8-4)*2  ]);    \
-   int vol_l   = ((vol1_l>>1)+(vol2_l>>1)) >> (WFIR_16BITSHIFT-1); \
-   int vol1_r  = (CzWINDOWEDFIR_lut[firidx+0]*(int)p[(poshi+1-4)*2+1]);    \
+       vol_l   = ((vol1_l>>1)+(vol2_l>>1)) >> (WFIR_16BITSHIFT-1); \
+       vol1_r  = (CzWINDOWEDFIR_lut[firidx+0]*(int)p[(poshi+1-4)*2+1]);    \
        vol1_r += (CzWINDOWEDFIR_lut[firidx+1]*(int)p[(poshi+2-4)*2+1]);    \
        vol1_r += (CzWINDOWEDFIR_lut[firidx+2]*(int)p[(poshi+3-4)*2+1]);    \
        vol1_r += (CzWINDOWEDFIR_lut[firidx+3]*(int)p[(poshi+4-4)*2+1]);    \
-   int vol2_r  = (CzWINDOWEDFIR_lut[firidx+4]*(int)p[(poshi+5-4)*2+1]);    \
+       vol2_r  = (CzWINDOWEDFIR_lut[firidx+4]*(int)p[(poshi+5-4)*2+1]);    \
        vol2_r += (CzWINDOWEDFIR_lut[firidx+5]*(int)p[(poshi+6-4)*2+1]);    \
        vol2_r += (CzWINDOWEDFIR_lut[firidx+6]*(int)p[(poshi+7-4)*2+1]);    \
        vol2_r += (CzWINDOWEDFIR_lut[firidx+7]*(int)p[(poshi+8-4)*2+1]);    \
-   int vol_r   = ((vol1_r>>1)+(vol2_r>>1)) >> (WFIR_16BITSHIFT-1);
+       vol_r   = ((vol1_r>>1)+(vol2_r>>1)) >> (WFIR_16BITSHIFT-1);
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -462,10 +463,12 @@ void init_modplug_filters(void)
 	pvol += 2;
 
 #define SNDMIX_STOREFASTMONOVOL\
+    do { \
 	int v = vol * pChn->nRightVol;\
 	pvol[0] += v;\
 	pvol[1] += v;\
-	pvol += 2;
+	pvol += 2; \
+    } while (0);
 
 #define SNDMIX_RAMPMONOVOL\
 	nRampLeftVol += pChn->nLeftRamp;\
@@ -476,10 +479,12 @@ void init_modplug_filters(void)
 
 #define SNDMIX_RAMPFASTMONOVOL\
 	nRampRightVol += pChn->nRightRamp;\
+    do { \
 	int fastvol = vol * (nRampRightVol >> VOLUMERAMPPRECISION);\
 	pvol[0] += fastvol;\
 	pvol[1] += fastvol;\
-	pvol += 2;
+	pvol += 2; \
+    } while (0);
 
 #define SNDMIX_RAMPSTEREOVOL\
 	nRampLeftVol += pChn->nLeftRamp;\
@@ -1319,6 +1324,7 @@ static LONG MPPFASTCALL GetSampleCount(MODCHANNEL *pChn, LONG nSamples)
 {
 	LONG nLoopStart = (pChn->dwFlags & CHN_LOOP) ? pChn->nLoopStart : 0;
 	LONG nInc = pChn->nInc;
+	LONG nPos, nPosLo, nSmpCount;
 
 	if ((nSamples <= 0) || (!nInc) || (!pChn->nLength)) return 0;
 	// Under zero ?
@@ -1357,6 +1363,7 @@ static LONG MPPFASTCALL GetSampleCount(MODCHANNEL *pChn, LONG nSamples)
 		if (!(pChn->dwFlags & CHN_LOOP)) return 0; // not looping -> stop this channel
 		if (pChn->dwFlags & CHN_PINGPONGLOOP)
 		{
+			LONG nDeltaHi, nDeltaLo;
 			// Invert loop
 			if (nInc > 0)
 			{
@@ -1365,8 +1372,8 @@ static LONG MPPFASTCALL GetSampleCount(MODCHANNEL *pChn, LONG nSamples)
 			}
 			pChn->dwFlags |= CHN_PINGPONGFLAG;
 			// adjust loop position
-			LONG nDeltaHi = (pChn->nPos - pChn->nLength);
-			LONG nDeltaLo = 0x10000 - (pChn->nPosLo & 0xffff);
+			nDeltaHi = (pChn->nPos - pChn->nLength);
+			nDeltaLo = 0x10000 - (pChn->nPosLo & 0xffff);
 			pChn->nPos = pChn->nLength - nDeltaHi - (nDeltaLo>>16);
 			pChn->nPosLo = nDeltaLo & 0xffff;
 			if ((pChn->nPos <= pChn->nLoopStart) ||
@@ -1385,23 +1392,24 @@ static LONG MPPFASTCALL GetSampleCount(MODCHANNEL *pChn, LONG nSamples)
 				pChn->nPos = pChn->nLoopStart;
 		}
 	}
-	LONG nPos = pChn->nPos;
+	nPos = pChn->nPos;
 	// too big increment, and/or too small loop length
 	if (nPos < nLoopStart)
 	{
 		if ((nPos < 0) || (nInc < 0)) return 0;
 	}
 	if ((nPos < 0) || (nPos >= (LONG)pChn->nLength)) return 0;
-	LONG nPosLo = (USHORT)pChn->nPosLo, nSmpCount = nSamples;
+	nPosLo = (USHORT)pChn->nPosLo, nSmpCount = nSamples;
 	if (nInc < 0)
 	{
 		LONG nInv = -nInc;
 		LONG maxsamples = 16384 / ((nInv>>16)+1);
+		LONG nDeltaHi, nDeltaLo, nPosDest;
 		if (maxsamples < 2) maxsamples = 2;
 		if (nSamples > maxsamples) nSamples = maxsamples;
-		LONG nDeltaHi = (nInv>>16) * (nSamples - 1);
-		LONG nDeltaLo = (nInv&0xffff) * (nSamples - 1);
-		LONG nPosDest = nPos - nDeltaHi + ((nPosLo - nDeltaLo) >> 16);
+		nDeltaHi = (nInv>>16) * (nSamples - 1);
+		nDeltaLo = (nInv&0xffff) * (nSamples - 1);
+		nPosDest = nPos - nDeltaHi + ((nPosLo - nDeltaLo) >> 16);
 		if (nPosDest < nLoopStart)
 		{
 			nSmpCount = (ULONG)(((((LONGLONG)nPos - nLoopStart) << 16) + nPosLo - 1) / nInv) + 1;
@@ -1409,11 +1417,12 @@ static LONG MPPFASTCALL GetSampleCount(MODCHANNEL *pChn, LONG nSamples)
 	} else
 	{
 		LONG maxsamples = 16384 / ((nInc>>16)+1);
+		LONG nDeltaHi, nDeltaLo, nPosDest;
 		if (maxsamples < 2) maxsamples = 2;
 		if (nSamples > maxsamples) nSamples = maxsamples;
-		LONG nDeltaHi = (nInc>>16) * (nSamples - 1);
-		LONG nDeltaLo = (nInc&0xffff) * (nSamples - 1);
-		LONG nPosDest = nPos + nDeltaHi + ((nPosLo + nDeltaLo)>>16);
+		nDeltaHi = (nInc>>16) * (nSamples - 1);
+		nDeltaLo = (nInc&0xffff) * (nSamples - 1);
+		nPosDest = nPos + nDeltaHi + ((nPosLo + nDeltaLo)>>16);
 		if (nPosDest >= (LONG)pChn->nLength)
 		{
 			nSmpCount = (ULONG)(((((LONGLONG)pChn->nLength - nPos) << 16) - nPosLo - 1) / nInc) + 1;
@@ -1430,12 +1439,12 @@ UINT CSoundFile_CreateStereoMix(CSoundFile *_this, int count)
 {
 	LPLONG pOfsL, pOfsR;
 	DWORD nchused, nchmixed;
-	UINT nrampsamples;
+	UINT nrampsamples, nChn;
 
 	if (!count) return 0;
 	if (_this->gnChannels > 2) X86_InitMixBuffer(_this->MixRearBuffer, count*2);
 	nchused = nchmixed = 0;
-	for (UINT nChn=0; nChn<_this->m_nMixChannels; nChn++)
+	for (nChn=0; nChn<_this->m_nMixChannels; nChn++)
 	{
 		const LPMIXINTERFACE *pMixFuncTable;
 		MODCHANNEL * const pChannel = &_this->Chn[_this->ChnMix[nChn]];
@@ -1443,6 +1452,7 @@ UINT CSoundFile_CreateStereoMix(CSoundFile *_this, int count)
 		LONG nSmpCount;
 		int nsamples;
 		int *pbuffer;
+		UINT naddmix;
 
 		if (!pChannel->pCurrentSample) continue;
 		//nMasterCh = (_this->ChnMix[nChn] < _this->m_nChannels) ? _this->ChnMix[nChn]+1 : pChannel->nMasterChn;
@@ -1510,7 +1520,6 @@ UINT CSoundFile_CreateStereoMix(CSoundFile *_this, int count)
 			continue;
 		}
 		// Should we mix this channel ?
-		UINT naddmix;
 		if (((nchmixed >= _this->m_nMaxMixChannels) && (!(_this->gdwSoundSetup & SNDMIX_DIRECTTODISK)))
 		 || ((!pChannel->nRampLength) && (!(pChannel->nLeftVol|pChannel->nRightVol))))
 		{
@@ -1525,8 +1534,9 @@ UINT CSoundFile_CreateStereoMix(CSoundFile *_this, int count)
 		{
 			// Choose function for mixing
 			LPMIXINTERFACE pMixFunc;
+			int *pbufmax;
 			pMixFunc = (pChannel->nRampLength) ? pMixFuncTable[nFlags|MIXNDX_RAMP] : pMixFuncTable[nFlags];
-			int *pbufmax = pbuffer + (nSmpCount*2);
+			pbufmax = pbuffer + (nSmpCount*2);
 			pChannel->nROfs = - *(pbufmax-2);
 			pChannel->nLOfs = - *(pbufmax-1);
 			pMixFunc(pChannel, pbuffer, pbufmax);
@@ -1567,7 +1577,8 @@ DWORD MPPASMCALL X86_Convert32To8(LPVOID lp8, int *pBuffer, DWORD lSampleCount, 
 {
 	int vumin = *lpMin, vumax = *lpMax;
 	unsigned char *p = (unsigned char *)lp8;
-	for (UINT i=0; i<lSampleCount; i++)
+	UINT i;
+	for (i=0; i<lSampleCount; i++)
 	{
 		int n = pBuffer[i];
 		if (n < MIXING_CLIPMIN)
@@ -1593,7 +1604,8 @@ DWORD MPPASMCALL X86_Convert32To16(LPVOID lp16, int *pBuffer, DWORD lSampleCount
 {
 	int vumin = *lpMin, vumax = *lpMax;
 	signed short *p = (signed short *)lp16;
-	for (UINT i=0; i<lSampleCount; i++)
+	UINT i;
+	for (i=0; i<lSampleCount; i++)
 	{
 		int n = pBuffer[i];
 		if (n < MIXING_CLIPMIN)
@@ -1689,8 +1701,8 @@ void MPPASMCALL X86_InterleaveFrontRear(int *pFrontBuf, int *pRearBuf, DWORD nSa
 //---GCCFIX: Asm replaced with C function
 VOID MPPASMCALL X86_MonoFromStereo(int *pMixBuf, UINT nSamples)
 {
-	UINT j;
-	for(UINT i = 0; i < nSamples; i++)
+	UINT i, j;
+	for(i = 0; i < nSamples; i++)
 	{
 		j = i << 1;
 		pMixBuf[i] = (pMixBuf[j] + pMixBuf[j + 1]) >> 1;
@@ -1705,13 +1717,14 @@ void MPPASMCALL X86_StereoFill(int *pBuffer, UINT nSamples, LPLONG lpROfs, LPLON
 {
 	int rofs = *lpROfs;
 	int lofs = *lpLOfs;
+	UINT i;
 
 	if ((!rofs) && (!lofs))
 	{
 		X86_InitMixBuffer(pBuffer, nSamples*2);
 		return;
 	}
-	for (UINT i=0; i<nSamples; i++)
+	for (i=0; i<nSamples; i++)
 	{
 		int x_r = (rofs + (((-rofs)>>31) & OFSDECAYMASK)) >> OFSDECAYSHIFT;
 		int x_l = (lofs + (((-lofs)>>31) & OFSDECAYMASK)) >> OFSDECAYSHIFT;
@@ -1730,9 +1743,10 @@ static void MPPASMCALL X86_EndChannelOfs(MODCHANNEL *pChannel, int *pBuffer, UIN
 {
 	int rofs = pChannel->nROfs;
 	int lofs = pChannel->nLOfs;
+	UINT i;
 
 	if ((!rofs) && (!lofs)) return;
-	for (UINT i=0; i<nSamples; i++)
+	for (i=0; i<nSamples; i++)
 	{
 		int x_r = (rofs + (((-rofs)>>31) & OFSDECAYMASK)) >> OFSDECAYSHIFT;
 		int x_l = (lofs + (((-lofs)>>31) & OFSDECAYMASK)) >> OFSDECAYSHIFT;

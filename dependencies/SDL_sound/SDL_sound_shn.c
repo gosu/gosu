@@ -1,5 +1,5 @@
 /**
- * SDL_sound; A sound processing toolkit.
+ * SDL_sound; An abstract sound format decoding API.
  *
  * Please see the file LICENSE.txt in the source's root directory.
  *
@@ -172,10 +172,6 @@ static const Uint8 ulaw_outward[13][256] = {
 
 #ifndef M_PI
 #define M_PI    3.14159265358979323846
-#endif
-
-#if defined(HAVE_LIBC) && defined(__WATCOMC__) /* Watcom has issues... */
-#define SDL_log log
 #endif
 
 

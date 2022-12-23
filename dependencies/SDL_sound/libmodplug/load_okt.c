@@ -48,7 +48,8 @@ BOOL CSoundFile_ReadOKT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 {
 	const OKTFILEHEADER *pfh = (OKTFILEHEADER *)lpStream;
 	DWORD dwMemPos = sizeof(OKTFILEHEADER), dwSize;
-	UINT nsamples = 0, norders = 0;//, npatterns = 0
+	UINT nsamples = 0, norders = 0, npat = 0, nsmp = 1;//, npatterns = 0
+	UINT i;
 
 	if ((!lpStream) || (dwMemLength < 1024)) return FALSE;
 	if ((bswapBE32(pfh->okta) != MAGIC('O','K','T','A'))
@@ -65,13 +66,13 @@ BOOL CSoundFile_ReadOKT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	_this->m_nSamples = nsamples;
 	if (_this->m_nSamples >= MAX_SAMPLES) _this->m_nSamples = MAX_SAMPLES-1;
 	// Reading samples
-	for (UINT smp=1; smp <= nsamples; smp++)
+	for (i=1; i <= nsamples; i++)
 	{
 		if (dwMemPos >= dwMemLength - sizeof(OKTSAMPLE)) return TRUE;
-		if (smp < MAX_SAMPLES)
+		if (i < MAX_SAMPLES)
 		{
 			const OKTSAMPLE *psmp = (const OKTSAMPLE *)(lpStream + dwMemPos);
-			MODINSTRUMENT *pins = &_this->Ins[smp];
+			MODINSTRUMENT *pins = &_this->Ins[i];
 
 			pins->uFlags = 0;
 			pins->nLength = bswapBE32(psmp->length) & ~1;
@@ -121,15 +122,14 @@ BOOL CSoundFile_ReadOKT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		UINT orderlen = norders;
 		if (orderlen >= MAX_ORDERS) orderlen = MAX_ORDERS-1;
 		if (dwMemPos + 8 + orderlen > dwMemLength) return TRUE;
-		for (UINT i=0; i<orderlen; i++) _this->Order[i] = lpStream[dwMemPos+8+i];
-		for (UINT j=orderlen; j>1; j--) { if (_this->Order[j-1]) break; _this->Order[j-1] = 0xFF; }
+		for (i=0; i<orderlen; i++) _this->Order[i] = lpStream[dwMemPos+8+i];
+		for (i=orderlen; i>1; i--) { if (_this->Order[i-1]) break; _this->Order[i-1] = 0xFF; }
 
 		dwSize = readBE32(lpStream + dwMemPos + 4);
 		if (dwSize > dwMemLength - 8 || dwMemPos > dwMemLength - dwSize - 8) return TRUE;
 		dwMemPos += dwSize + 8;
 	}
 	// PBOD
-	UINT npat = 0;
 	while ((dwMemPos < dwMemLength - 10) && (readBE32(lpStream + dwMemPos) == MAGIC('P','B','O','D')))
 	{
 		DWORD dwPos = dwMemPos + 10;
@@ -137,22 +137,26 @@ BOOL CSoundFile_ReadOKT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		if (!rows) rows = 64;
 		if (npat < MAX_PATTERNS)
 		{
+			MODCOMMAND *m;
+			UINT imax;
 			if ((_this->Patterns[npat] = CSoundFile_AllocatePattern(rows, _this->m_nChannels)) == NULL) return TRUE;
-			MODCOMMAND *m = _this->Patterns[npat];
+			m = _this->Patterns[npat];
 			_this->PatternSize[npat] = rows;
-			UINT imax = _this->m_nChannels*rows;
-			for (UINT i=0; i<imax; i++, m++, dwPos+=4)
+			imax = _this->m_nChannels*rows;
+			for (i=0; i<imax; i++, m++, dwPos+=4)
 			{
+				const BYTE *p;
+				UINT note, command, param;
 				if (dwPos+4 > dwMemLength) break;
-				const BYTE *p = lpStream+dwPos;
-				UINT note = p[0];
+				p = lpStream+dwPos;
+				note = p[0];
 				if (note)
 				{
 					m->note = note + 48;
 					m->instr = p[1] + 1;
 				}
-				UINT command = p[2];
-				UINT param = p[3];
+				command = p[2];
+				param = p[3];
 				m->param = param;
 				switch(command)
 				{
@@ -208,7 +212,6 @@ BOOL CSoundFile_ReadOKT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		dwMemPos += dwSize + 8;
 	}
 	// SBOD
-	UINT nsmp = 1;
 	while ((dwMemPos < dwMemLength-10) && (readBE32(lpStream + dwMemPos) == MAGIC('S','B','O','D')))
 	{
 		if (nsmp < MAX_SAMPLES) CSoundFile_ReadSample(_this, &_this->Ins[nsmp], RS_PCM8S, (LPSTR)(lpStream+dwMemPos+8), dwMemLength-dwMemPos-8);
@@ -220,4 +223,3 @@ BOOL CSoundFile_ReadOKT(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	}
 	return TRUE;
 }
-

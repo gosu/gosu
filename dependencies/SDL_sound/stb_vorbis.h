@@ -768,11 +768,12 @@ typedef struct
 
 typedef struct
 {
-   uint16 coupling_steps;
+  // https://github.com/nothings/stb/pull/1312
    MappingChannel *chan;
+   uint16 coupling_steps;
    uint8  submaps;
-   uint8  submap_floor[15]; // varies
-   uint8  submap_residue[15]; // varies
+   uint8  submap_floor[16]; // varies
+   uint8  submap_residue[16]; // varies
 } Mapping;
 
 typedef struct
@@ -1275,8 +1276,8 @@ static int vorbis_validate(uint8 *data)
 // called from setup only, once per code book
 // (formula implied by specification)
 //
-// hack: suppress an UBSan error caused by invalid input data.
-// see upstream:  https://github.com/nothings/stb/issues/1168.
+// suppress an UBSan error caused by invalid input data.
+// upstream:  https://github.com/nothings/stb/issues/1168.
 STB_NO_SANITIZE("float-cast-overflow")
 static int lookup1_values(int entries, int dim)
 {
@@ -1777,7 +1778,9 @@ static int codebook_decode_scalar_raw(vorb *f, Codebook *c)
    assert(!c->sparse);
    for (i=0; i < c->entries; ++i) {
       if (c->codeword_lengths[i] == NO_CODE) continue;
-      if (c->codewords[i] == (f->acc & ((1 << c->codeword_lengths[i])-1))) {
+      /* unsigned left shift for 32-bit codewords.
+       * https://github.com/nothings/stb/issues/1168 */
+      if (c->codewords[i] == (f->acc & ((1U << c->codeword_lengths[i])-1))) {
          if (f->valid_bits >= c->codeword_lengths[i]) {
             f->acc >>= c->codeword_lengths[i];
             f->valid_bits -= c->codeword_lengths[i];
@@ -3945,7 +3948,9 @@ static int start_decoder(vorb *f)
             if (values < 0) return error(f, VORBIS_invalid_setup);
             c->lookup_values = (uint32) values;
          } else {
-            c->lookup_values = c->entries * c->dimensions;
+            /* unsigned multiply to suppress (legitimate) warning.
+             * https://github.com/nothings/stb/issues/1168 */
+            c->lookup_values = (unsigned)c->entries * (unsigned)c->dimensions;
          }
          if (c->lookup_values == 0) return error(f, VORBIS_invalid_setup);
          mults = (uint16 *) setup_temp_malloc(f, sizeof(mults[0]) * c->lookup_values);
@@ -5303,8 +5308,8 @@ static int8 channel_position[7][6] =
 #ifndef STB_VORBIS_NO_FAST_SCALED_FLOAT
    typedef union {
       float f;
-      // hack: changed this to unsigned to suppress an UBSan error.
-      // see upstream: https://github.com/nothings/stb/issues/1168.
+      // changed this to unsigned to suppress an UBSan error.
+      // upstream: https://github.com/nothings/stb/issues/1168.
       unsigned int i;
    } float_conv;
    typedef char stb_vorbis_float_size_test[sizeof(float)==4 && sizeof(int) == 4];
