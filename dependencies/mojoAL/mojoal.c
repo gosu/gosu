@@ -470,6 +470,7 @@ SIMDALIGNEDSTRUCT ALsource
     ALfloat cone_outer_gain;
     ALbuffer *buffer;
     SDL_AudioStream *stream;  /* for resampling. */
+    SDL_atomic_t total_queued_buffers;   /* everything queued, playing and processed. AL_BUFFERS_QUEUED value. */
     BufferQueue buffer_queue;
     BufferQueue buffer_queue_processed;
     ALsizei offset;  /* offset in bytes for converted stream! */
@@ -567,7 +568,7 @@ static void queue_new_buffer_items_recursive(BufferQueue *queue, BufferQueueItem
         return;
     }
 
-    queue_new_buffer_items_recursive(queue, items->next);
+    queue_new_buffer_items_recursive(queue, (BufferQueueItem*)items->next);
     items->next = NULL;
     if (queue->tail) {
         queue->tail->next = items;
@@ -599,7 +600,7 @@ static void source_mark_all_buffers_processed(ALsource *src)
     while (src->buffer_queue.head) {
         void *ptr;
         BufferQueueItem *item = src->buffer_queue.head;
-        src->buffer_queue.head = item->next;
+        src->buffer_queue.head = (BufferQueueItem*)item->next;
         SDL_AtomicAdd(&src->buffer_queue.num_items, -1);
 
         /* Move it to the processed queue for alSourceUnqueueBuffers() to pick up. */
@@ -619,7 +620,7 @@ static void source_release_buffer_queue(ALCcontext *ctx, ALsource *src)
     obtain_newly_queued_buffers(&src->buffer_queue);
     if (src->buffer_queue.tail != NULL) {
         BufferQueueItem *i;
-        for (i = src->buffer_queue.head; i; i = i->next) {
+        for (i = src->buffer_queue.head; i; i = (BufferQueueItem*)i->next) {
             (void) SDL_AtomicDecRef(&i->buffer->refcount);
         }
         src->buffer_queue.tail->next = ctx->device->playback.buffer_queue_pool;
@@ -631,7 +632,7 @@ static void source_release_buffer_queue(ALCcontext *ctx, ALsource *src)
     obtain_newly_queued_buffers(&src->buffer_queue_processed);
     if (src->buffer_queue_processed.tail != NULL) {
         BufferQueueItem *i;
-        for (i = src->buffer_queue_processed.head; i; i = i->next) {
+        for (i = src->buffer_queue_processed.head; i; i = (BufferQueueItem*)i->next) {
             (void) SDL_AtomicDecRef(&i->buffer->refcount);
         }
         src->buffer_queue_processed.tail->next = ctx->device->playback.buffer_queue_pool;
@@ -764,7 +765,7 @@ ALCboolean alcCloseDevice(ALCdevice *device)
 
     item = device->playback.buffer_queue_pool;
     while (item) {
-        BufferQueueItem *next = item->next;
+        BufferQueueItem *next = (BufferQueueItem*)item->next;
         SDL_free(item);
         item = next;
     }
@@ -1165,11 +1166,11 @@ static void mix_float32_c2_neon(const ALfloat * restrict panning, const float * 
 *
 * Permission to use, copy, modify, distribute and sell this software and its
 * documentation for any purpose is hereby granted without fee, provided that
-* the above copyright notice and this license appear in all source copies. 
+* the above copyright notice and this license appear in all source copies.
 * THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY OF
 * ANY KIND. See http://www.dspguru.com/wol.htm for more information.
 *
-*****************************************************************************/ 
+*****************************************************************************/
 
 /* FFT routine, (C)1996 S.M.Bernsee. */
 static void pitch_fft(float *fftBuffer, int fftFrameSize, int sign)
@@ -1300,12 +1301,12 @@ static void pitch_shift(ALsource *src, const ALbuffer *buffer, int numSampsToPro
             SDL_memset(state->synmagn, '\0', sizeof (state->synmagn));
             for (k = 0; k <= pitch_framesize2; k++) {
                 index = k*pitchShift;
-                if (index <= pitch_framesize2) { 
+                if (index <= pitch_framesize2) {
                     state->synmagn[index] += state->workspace[2*k];
                     state->synfreq[index] = state->workspace[2*k+1] * pitchShift;
-                } 
+                }
             }
-            
+
             /* ***************** SYNTHESIS ******************* */
             /* this is the synthesis step */
             for (k = 0; k <= pitch_framesize2; k++) {
@@ -1333,7 +1334,7 @@ static void pitch_shift(ALsource *src, const ALbuffer *buffer, int numSampsToPro
                 /* get real and imag part and re-interleave */
                 state->workspace[2*k] = magn*SDL_cos(phase);
                 state->workspace[2*k+1] = magn*SDL_sin(phase);
-            } 
+            }
 
             /* zero negative frequencies */
             for (k = pitch_framesize+2; k < 2*pitch_framesize; k++) state->workspace[k] = 0.;
@@ -1341,7 +1342,7 @@ static void pitch_shift(ALsource *src, const ALbuffer *buffer, int numSampsToPro
             /* do inverse transform */
             pitch_fft(state->workspace, pitch_framesize, 1);
 
-            /* do windowing and add to output accumulator */ 
+            /* do windowing and add to output accumulator */
             for(k=0; k < pitch_framesize; k++) {
                 window = -.5*SDL_cos(2.*M_PI*(double)k/(double)pitch_framesize)+.5;
                 state->outputaccum[k] += 2.*window*state->workspace[2*k]/(pitch_framesize2*osamp);
@@ -1466,7 +1467,7 @@ static ALCboolean mix_source_buffer_queue(ALCcontext *ctx, ALsource *src, Buffer
     while ((len > 0) && (mix_source_buffer(ctx, src, queue, &stream, &len))) {
         /* Finished this buffer! */
         BufferQueueItem *item = queue;
-        BufferQueueItem *next = queue ? queue->next : NULL;
+        BufferQueueItem *next = queue ? (BufferQueueItem*)queue->next : NULL;
         void *ptr;
 
         if (queue) {
@@ -2569,6 +2570,16 @@ static void _alcGetIntegerv(ALCdevice *device, const ALCenum param, const ALCsiz
             *values = OPENAL_VERSION_MINOR;
             return;
 
+        case ALC_FREQUENCY:
+            if (!device) {
+                *values = 0;
+                set_alc_error(device, ALC_INVALID_DEVICE);
+                return;
+            }
+
+            *values = device->frequency;
+            return;
+
         default: break;
     }
 
@@ -3589,6 +3600,7 @@ static void _alGenSources(const ALsizei n, ALuint *names)
 
         SDL_zerop(src);
         SDL_AtomicSet(&src->state, AL_INITIAL);
+        SDL_AtomicSet(&src->total_queued_buffers, 0);
         src->name = names[i];
         src->type = AL_UNDETERMINED;
         src->recalc = AL_TRUE;
@@ -3906,7 +3918,7 @@ static void _alGetSourcefv(const ALuint name, const ALenum param, ALfloat *value
         case AL_REFERENCE_DISTANCE: *values = src->reference_distance; break;
         case AL_ROLLOFF_FACTOR: *values = src->rolloff_factor; break;
         case AL_MAX_DISTANCE: *values = src->max_distance; break;
-        case AL_PITCH: source_set_pitch(ctx, src, *values); break;
+        case AL_PITCH: *values = src->pitch; break;
         case AL_CONE_INNER_ANGLE: *values = src->cone_inner_angle; break;
         case AL_CONE_OUTER_ANGLE: *values = src->cone_outer_angle; break;
         case AL_CONE_OUTER_GAIN:  *values = src->cone_outer_gain; break;
@@ -3973,8 +3985,7 @@ static void _alGetSourceiv(const ALuint name, const ALenum param, ALint *values)
         case AL_SOURCE_STATE: *values = (ALint) SDL_AtomicGet(&src->state); break;
         case AL_SOURCE_TYPE: *values = (ALint) src->type; break;
         case AL_BUFFER: *values = (ALint) (src->buffer ? src->buffer->name : 0); break;
-        /* !!! FIXME: AL_BUFFERS_QUEUED is the total number of buffers pending, playing, and processed, so this is wrong. It might also have to be 1 if there's a static buffer, but I'm not sure. */
-        case AL_BUFFERS_QUEUED: *values = (ALint) SDL_AtomicGet(&src->buffer_queue.num_items); break;
+        case AL_BUFFERS_QUEUED: *values = (ALint) SDL_AtomicGet(&src->total_queued_buffers); break;
         case AL_BUFFERS_PROCESSED: *values = (ALint) SDL_AtomicGet(&src->buffer_queue_processed.num_items); break;
         case AL_SOURCE_RELATIVE: *values = (ALint) src->source_relative; break;
         case AL_LOOPING: *values = (ALint) src->looping; break;
@@ -4134,7 +4145,7 @@ static void source_play(ALCcontext *ctx, const ALsizei n, const ALuint *names)
        with it, as nothing else owns the pointers in that list. */
     do {
         ptr = SDL_AtomicGetPtr(&ctx->playlist_todo);
-        todoend->next = ptr;
+        todoend->next = (SourcePlayTodo*)ptr;
     } while (!SDL_AtomicCASPtr(&ctx->playlist_todo, ptr, todo.next));
 }
 
@@ -4162,6 +4173,9 @@ static void source_stop(ALCcontext *ctx, const ALuint name)
             }
             SDL_AtomicSet(&src->state, AL_STOPPED);
             source_mark_all_buffers_processed(src);
+            if (src->stream) {
+                SDL_AudioStreamClear(src->stream);
+            }
             if (must_lock) {
                 SDL_UnlockMutex(ctx->source_lock);
             }
@@ -4228,9 +4242,10 @@ static void source_set_offset(ALsource *src, ALenum param, ALfloat value)
     if (!ctx) {
         set_al_error(ctx, AL_INVALID_OPERATION);
         return;
-    }
-
-    if (src->type == AL_STREAMING) {
+    } else if (src->type == AL_UNDETERMINED) {  /* no buffer to seek in */
+        set_al_error(ctx, AL_INVALID_OPERATION);
+        return;
+    } else if (src->type == AL_STREAMING) {
         FIXME("set_offset for streaming sources not implemented");
         return;
     }
@@ -4347,7 +4362,7 @@ static void _alSourceQueueBuffers(const ALuint name, const ALsizei nb, const ALu
 
         item = ctx->device->playback.buffer_queue_pool;
         if (item) {
-            ctx->device->playback.buffer_queue_pool = item->next;
+            ctx->device->playback.buffer_queue_pool = (BufferQueueItem*)item->next;
         } else {  /* allocate a new item */
             item = (BufferQueueItem *) SDL_calloc(1, sizeof (BufferQueueItem));
             if (!item) {
@@ -4400,7 +4415,7 @@ static void _alSourceQueueBuffers(const ALuint name, const ALsizei nb, const ALu
         if (queue) {
             /* Drop our claim on any buffers we planned to queue. */
             BufferQueueItem *item;
-            for (item = queue; item != NULL; item = item->next) {
+            for (item = queue; item != NULL; item = (BufferQueueItem*)item->next) {
                 if (item->buffer) {
                     (void) SDL_AtomicDecRef(&item->buffer->refcount);
                 }
@@ -4446,6 +4461,7 @@ static void _alSourceQueueBuffers(const ALuint name, const ALsizei nb, const ALu
         SDL_AtomicSetPtr(&queueend->next, ptr);
     } while (!SDL_AtomicCASPtr(&src->buffer_queue.just_queued, ptr, queue));
 
+    SDL_AtomicAdd(&src->total_queued_buffers, (int) nb);
     SDL_AtomicAdd(&src->buffer_queue.num_items, (int) nb);
 }
 ENTRYPOINTVOID(alSourceQueueBuffers,(ALuint name, ALsizei nb, const ALuint *bufnames),(name,nb,bufnames))
@@ -4477,6 +4493,7 @@ static void _alSourceUnqueueBuffers(const ALuint name, const ALsizei nb, ALuint 
     }
 
     SDL_AtomicAdd(&src->buffer_queue_processed.num_items, -((int) nb));
+    SDL_AtomicAdd(&src->total_queued_buffers, -((int) nb));
 
     obtain_newly_queued_buffers(&src->buffer_queue_processed);
 
@@ -4484,7 +4501,7 @@ static void _alSourceUnqueueBuffers(const ALuint name, const ALsizei nb, ALuint 
     for (i = 0; i < nb; i++) {
         /* buffer_queue_processed.num_items said list was long enough. */
         SDL_assert(item != NULL);
-        item = item->next;
+        item = (BufferQueueItem*)item->next;
     }
     src->buffer_queue_processed.head = item;
     if (!item) {
@@ -4498,7 +4515,7 @@ static void _alSourceUnqueueBuffers(const ALuint name, const ALsizei nb, ALuint 
         }
         bufnames[i] = item->buffer ? item->buffer->name : 0;
         queueend = item;
-        item = item->next;
+        item = (BufferQueueItem*)item->next;
     }
 
     /* put the whole new queue back in the pool for reuse later. */
