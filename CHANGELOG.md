@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.4.5] - 2022-12-24
+* Finish the fix for the Windows main loop from #634, a key part was missing. (#636)
+* Update all bundled dependencies, thanks to @cyberarm for the automation. (#635)
+
 ## [1.4.4] - 2022-12-12
 * Add clipboard support in the form of `Gosu.clipboard`/`Gosu.clipboard=`. (Thanks @cyberarm! #630)
 * Fix a regression in the `Window.show` main loop on Windows that was introduced in 1.4.3. (#634)
