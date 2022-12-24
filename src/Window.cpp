@@ -275,6 +275,9 @@ void Gosu::Window::show()
             unsigned long tick_time = milliseconds() - time_before_tick;
             long sleep_time = static_cast<long>(update_interval() - static_cast<double>(tick_time));
             if (sleep_time >= 1) {
+                // Use Gosu::sleep instead of std::this_thread::sleep_for because Win32 Sleep()
+                // results in better behavior here, sleep_for causes FPS to drop from 60 to <50.
+                // (This is also the reason why Gosu::sleep still exists.)
                 Gosu::sleep(sleep_time);
             }
 
