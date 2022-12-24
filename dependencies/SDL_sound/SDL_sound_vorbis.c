@@ -1,5 +1,5 @@
 /**
- * SDL_sound; A sound processing toolkit.
+ * SDL_sound; An abstract sound format decoding API.
  *
  * Please see the file LICENSE.txt in the source's root directory.
  *
@@ -27,12 +27,12 @@
 #define STB_VORBIS_NO_CRT 1
 #define STB_VORBIS_NO_PUSHDATA_API 1
 #define STB_VORBIS_MAX_CHANNELS 6
-#define STBV_CDECL
 #define STB_VORBIS_NO_COMMENTS 1
 #define STB_FORCEINLINE SDL_FORCE_INLINE
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 #define STB_VORBIS_BIG_ENDIAN 1
 #endif
+#define STBV_CDECL SDLCALL /* for SDL_qsort */
 
 #if !defined(__clang_analyzer__)
 #ifdef assert
@@ -52,7 +52,6 @@
 #define malloc SDL_malloc
 #define realloc SDL_realloc
 #define free SDL_free
-#ifndef __WATCOMC__ /* #@!.!.. */
 #define pow SDL_pow
 #define floor SDL_floor
 #define ldexp(v, e) SDL_scalbn((v), (e))
@@ -62,7 +61,6 @@
 #define log(x) SDL_log(x)
 #if SDL_VERSION_ATLEAST(2, 0, 9)
 #define exp SDL_exp
-#endif
 #endif
 #endif
 

@@ -15,7 +15,7 @@ environment:
     - RUBY_VERSION: '26-x64'
 install:
 - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
-- gem install rake rake-compiler minitest
+- bundle install
 - rake gem
 - gem install pkg\gosu-0.0.0.gem
 

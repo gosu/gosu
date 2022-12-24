@@ -97,6 +97,7 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	const DBMFILEHEADER *pfh = (DBMFILEHEADER *)lpStream;
 	DWORD dwMemPos;
 	UINT nOrders, nSamples, nInstruments, nPatterns;
+	UINT i;
 	
 	if ((!lpStream) || (dwMemLength <= sizeof(DBMFILEHEADER)) || (!pfh->channels)
 	 || (pfh->dbm_id != bswapLE32(DBM_FILE_MAGIC)) || (!pfh->songs) || (pfh->song_id != bswapLE32(DBM_ID_SONG))
@@ -112,10 +113,10 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	_this->m_nChannels = bswapBE16(pfh->channels);
 	if (_this->m_nChannels < 4) _this->m_nChannels = 4;
 	if (_this->m_nChannels > 64) _this->m_nChannels = 64;
-	for (UINT iOrd=0; iOrd < nOrders; iOrd++)
+	for (i=0; i < nOrders; i++)
 	{
-		_this->Order[iOrd] = lpStream[dwMemPos+iOrd*2+1];
-		if (iOrd >= MAX_ORDERS-2) break;
+		_this->Order[i] = lpStream[dwMemPos+i*2+1];
+		if (i >= MAX_ORDERS-2) break;
 	}
 	dwMemPos += 2*nOrders;
 	while (dwMemPos + 10 < dwMemLength)
@@ -135,19 +136,19 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			if (_this->m_nInstruments) continue;
 
 			if (nInstruments >= MAX_INSTRUMENTS) nInstruments = MAX_INSTRUMENTS-1;
-			for (UINT iIns=0; iIns<nInstruments; iIns++)
+			for (i=0; i<nInstruments; i++)
 			{
 				MODINSTRUMENT *psmp;
 				INSTRUMENTHEADER *penv;
 				DBMINSTRUMENT *pih;
-				UINT nsmp;
+				UINT nsmp, j;
 
 				if (chunk_pos + sizeof(DBMINSTRUMENT) > dwMemPos) break;
 				if ((penv = (INSTRUMENTHEADER *) SDL_calloc(1, sizeof (INSTRUMENTHEADER))) == NULL) break;
 				pih = (DBMINSTRUMENT *)(lpStream+chunk_pos);
 				nsmp = bswapBE16(pih->sampleno);
 				psmp = ((nsmp) && (nsmp < MAX_SAMPLES)) ? &_this->Ins[nsmp] : NULL;
-				_this->Headers[iIns+1] = penv;
+				_this->Headers[i+1] = penv;
 				penv->nFadeOut = 1024;	// ???
 				penv->nGlobalVol = 64;
 				penv->nPan = bswapBE16(pih->panning);
@@ -156,20 +157,21 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 				else
 					penv->nPan = 128;
 				penv->nPPC = 5*12;
-				for (UINT i=0; i<NOTE_MAX; i++)
+				for (j=0; j<NOTE_MAX; j++)
 				{
-					penv->Keyboard[i] = nsmp;
-					penv->NoteMap[i] = i+1;
+					penv->Keyboard[j] = nsmp;
+					penv->NoteMap[j] = j+1;
 				}
 				// Sample Info
 				if (psmp)
 				{
 					DWORD sflags = bswapBE16(pih->flags);
+					int f2t;
 					psmp->nVolume = bswapBE16(pih->volume) * 4;
 					if ((!psmp->nVolume) || (psmp->nVolume > 256)) psmp->nVolume = 256;
 					psmp->nGlobalVol = 64;
 					psmp->nC4Speed = bswapBE32(pih->finetune);
-					int f2t = CSoundFile_FrequencyToTranspose(psmp->nC4Speed);
+					f2t = CSoundFile_FrequencyToTranspose(psmp->nC4Speed);
 					psmp->RelativeTone = f2t >> 7;
 					psmp->nFineTune = f2t & 0x7F;
 					if ((pih->looplen) && (sflags & 3))
@@ -182,7 +184,7 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 					}
 				}
 				chunk_pos += sizeof(DBMINSTRUMENT);
-				_this->m_nInstruments = iIns+1;
+				_this->m_nInstruments = i+1;
 			}
 		} else
 		// Volume Envelopes
@@ -191,7 +193,7 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			UINT nEnvelopes = lpStream[chunk_pos+1];
 			
 			chunk_pos += 2;
-			for (UINT iEnv=0; iEnv<nEnvelopes; iEnv++)
+			for (i=0; i<nEnvelopes; i++)
 			{
 				DBMENVELOPE *peh;
 				UINT nins;
@@ -202,6 +204,7 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 				if ((nins) && (nins < MAX_INSTRUMENTS) && (_this->Headers[nins]) && (peh->numpoints))
 				{
 					INSTRUMENTHEADER *penv = _this->Headers[nins];
+					UINT j;
 
 					if (peh->flags & 1) penv->dwFlags |= ENV_VOLUME;
 					if (peh->flags & 2) penv->dwFlags |= ENV_VOLSUSTAIN;
@@ -211,10 +214,10 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 					penv->nVolLoopStart = peh->loopbegin;
 					penv->nVolLoopEnd = peh->loopend;
 					penv->nVolSustainBegin = penv->nVolSustainEnd = peh->sustain1;
-					for (UINT i=0; i<penv->nVolEnv; i++)
+					for (j=0; j<penv->nVolEnv; j++)
 					{
-						penv->VolPoints[i] = bswapBE16(peh->volenv[i*2]);
-						penv->VolEnv[i] = (BYTE)bswapBE16(peh->volenv[i*2+1]);
+						penv->VolPoints[j] = bswapBE16(peh->volenv[j*2]);
+						penv->VolEnv[j] = (BYTE)bswapBE16(peh->volenv[j*2+1]);
 					}
 				}
 				chunk_pos += sizeof(DBMENVELOPE);
@@ -224,14 +227,14 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		if (chunk_id == bswapLE32(DBM_ID_PATT))
 		{
 			if (nPatterns > MAX_PATTERNS) nPatterns = MAX_PATTERNS;
-			for (UINT iPat=0; iPat<nPatterns; iPat++)
+			for (i=0; i<nPatterns; i++)
 			{
 				DBMPATTERN *pph;
 				DWORD pksize;
 				UINT nRows;
 
 				// Skip duplicate chunks.
-				if (_this->Patterns[iPat]) break;
+				if (_this->Patterns[i]) break;
 
 				if (chunk_pos + sizeof(DBMPATTERN) > dwMemPos) break;
 				pph = (DBMPATTERN *)(lpStream+chunk_pos);
@@ -245,23 +248,23 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 					{
 						LPBYTE pkdata = (LPBYTE)pph->patterndata;
 						UINT row = 0;
-						UINT i = 0;
+						UINT n = 0;
 
-						_this->PatternSize[iPat] = nRows;
-						_this->Patterns[iPat] = m;
-						while ((i+3<pksize) && (row < nRows))
+						_this->PatternSize[i] = nRows;
+						_this->Patterns[i] = m;
+						while ((n+3<pksize) && (row < nRows))
 						{
-							UINT ch = pkdata[i++];
+							UINT ch = pkdata[n++];
 
 							if (ch)
 							{
-								BYTE b = pkdata[i++];
+								BYTE b = pkdata[n++];
 								ch--;
 								if (ch < _this->m_nChannels)
 								{
 									if (b & 0x01)
 									{
-										UINT note = pkdata[i++];
+										UINT note = pkdata[n++];
 
 										if (note == 0x1F) note = 0xFF; else
 										if ((note) && (note < 0xFE))
@@ -270,14 +273,14 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 										}
 										m[ch].note = note;
 									}
-									if (b & 0x02) m[ch].instr = pkdata[i++];
+									if (b & 0x02) m[ch].instr = pkdata[n++];
 									if (b & 0x3C)
 									{
 										UINT cmd1 = 0xFF, param1 = 0, cmd2 = 0xFF, param2 = 0;
-										if (b & 0x04) cmd1 = (UINT)pkdata[i++];
-										if (b & 0x08) param1 = pkdata[i++];
-										if (b & 0x10) cmd2 = (UINT)pkdata[i++];
-										if (b & 0x20) param2 = pkdata[i++];
+										if (b & 0x04) cmd1 = (UINT)pkdata[n++];
+										if (b & 0x08) param1 = pkdata[n++];
+										if (b & 0x10) cmd2 = (UINT)pkdata[n++];
+										if (b & 0x20) param2 = pkdata[n++];
 										if (cmd1 == 0x0C)
 										{
 											m[ch].volcmd = VOLCMD_VOLUME;
@@ -305,12 +308,12 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 									}
 								} else
 								{
-									if (b & 0x01) i++;
-									if (b & 0x02) i++;
-									if (b & 0x04) i++;
-									if (b & 0x08) i++;
-									if (b & 0x10) i++;
-									if (b & 0x20) i++;
+									if (b & 0x01) n++;
+									if (b & 0x02) n++;
+									if (b & 0x04) n++;
+									if (b & 0x08) n++;
+									if (b & 0x10) n++;
+									if (b & 0x20) n++;
 								}
 							} else
 							{
@@ -328,7 +331,7 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		{
 			if (nSamples >= MAX_SAMPLES) nSamples = MAX_SAMPLES-1;
 			_this->m_nSamples = nSamples;
-			for (UINT iSmp=1; iSmp<=nSamples; iSmp++)
+			for (i=1; i<=nSamples; i++)
 			{
 				MODINSTRUMENT *pins;
 				DBMSAMPLE *psh;
@@ -340,7 +343,7 @@ BOOL CSoundFile_ReadDBM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 				chunk_pos += 8;
 				samplesize = bswapBE32(psh->samplesize);
 				sampleflags = bswapBE32(psh->flags);
-				pins = &_this->Ins[iSmp];
+				pins = &_this->Ins[i];
 				pins->nLength = samplesize;
 				if (sampleflags & 2)
 				{

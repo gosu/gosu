@@ -29,12 +29,6 @@
 #define DRMP3_COPY_MEMORY(dst, src, sz) SDL_memcpy((dst), (src), (sz))
 #define DRMP3_MOVE_MEMORY(dst, src, sz) SDL_memmove((dst), (src), (sz))
 #define DRMP3_ZERO_MEMORY(p, sz) SDL_memset((p), 0, (sz))
-#ifndef __WATCOMC__ /* #@!.!.. */
-#if SDL_VERSION_ATLEAST(2, 0, 9)
-#define exp SDL_exp
-#endif
-#define floor SDL_floor
-#endif
 
 #include "dr_mp3.h"
 
@@ -83,6 +77,7 @@ static int MP3_open(Sound_Sample *sample, const char *ext)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     drmp3 *dr = (drmp3 *) SDL_calloc(1, sizeof (drmp3));
+    Uint64 frames;
 
     BAIL_IF_MACRO(!dr, ERR_OUT_OF_MEMORY, 0);
     if (drmp3_init(dr, mp3_read, mp3_seek, sample, NULL) != DRMP3_TRUE)
@@ -99,7 +94,16 @@ static int MP3_open(Sound_Sample *sample, const char *ext)
     sample->actual.rate = dr->sampleRate;
     sample->actual.format = AUDIO_F32SYS;  /* dr_mp3 only does float. */
 
-    internal->total_time = -1;  /* !!! FIXME? */
+    frames = drmp3_get_pcm_frame_count(dr);
+    if (frames == 0) /* ever possible ??? */
+        internal->total_time = -1;
+    else
+    {
+        const Uint32 rate = dr->sampleRate;
+        internal->total_time = (frames / rate) * 1000;
+        internal->total_time += ((frames % rate) * 1000) / rate;
+    } /* else */
+
     internal->decoder_private = dr;
 
     return 1;

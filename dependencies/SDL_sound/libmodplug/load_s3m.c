@@ -109,14 +109,15 @@ static DWORD boundInput(DWORD input, DWORD smin, DWORD smax)
 BOOL CSoundFile_ReadS3M(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLength)
 //---------------------------------------------------------------
 {
-	UINT insnum,patnum,nins,npat;
+	S3MFILEHEADER psfh;
+	UINT insnum,patnum,nins,npat,iord;
 	DWORD insfile[MAX_SAMPLES];
 	WORD ptr[256];
 	DWORD dwMemPos;
 	BYTE insflags[MAX_SAMPLES], inspack[MAX_SAMPLES];
+	UINT i, j;
 
 	if ((!lpStream) || (dwMemLength <= sizeof(S3MFILEHEADER)+sizeof(S3MSAMPLESTRUCT)+64)) return FALSE;
-	S3MFILEHEADER psfh;
 	SDL_memcpy(&psfh, lpStream, sizeof (psfh));
 
 	psfh.reserved1 = bswapLE16(psfh.reserved1);
@@ -146,24 +147,25 @@ BOOL CSoundFile_ReadS3M(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	_this->m_nSongPreAmp = psfh.mastervol & 0x7F;
 	// Channels
 	_this->m_nChannels = 4;
-	for (UINT ich=0; ich<32; ich++)
+	for (i=0; i<32; i++)
 	{
-		_this->ChnSettings[ich].nPan = 128;
-		_this->ChnSettings[ich].nVolume = 64;
+		_this->ChnSettings[i].nPan = 128;
+		_this->ChnSettings[i].nVolume = 64;
 
-		_this->ChnSettings[ich].dwFlags = CHN_MUTE;
-		if (psfh.channels[ich] != 0xFF)
+		_this->ChnSettings[i].dwFlags = CHN_MUTE;
+		if (psfh.channels[i] != 0xFF)
 		{
-			_this->m_nChannels = ich+1;
-			UINT b = psfh.channels[ich] & 0x0F;
-			_this->ChnSettings[ich].nPan = (b & 8) ? 0xC0 : 0x40;
-			_this->ChnSettings[ich].dwFlags = 0;
+			UINT b;
+			_this->m_nChannels = i+1;
+			b = psfh.channels[i] & 0x0F;
+			_this->ChnSettings[i].nPan = (b & 8) ? 0xC0 : 0x40;
+			_this->ChnSettings[i].dwFlags = 0;
 		}
 	}
 	if (_this->m_nChannels < 4) _this->m_nChannels = 4;
 	if ((psfh.cwtv < 0x1320) || (psfh.flags & 0x40)) _this->m_dwSongFlags |= SONG_FASTVOLSLIDES;
 	// Reading pattern order
-	UINT iord = psfh.ordnum;
+	iord = psfh.ordnum;
 	if (iord<1) iord = 1;
 	if (iord > MAX_ORDERS) iord = MAX_ORDERS;
 	if (dwMemPos + iord + 1 >= dwMemLength) return FALSE;
@@ -190,14 +192,14 @@ BOOL CSoundFile_ReadS3M(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		if (dwMemPos + 2*(nins+npat) >= dwMemLength) return FALSE;
 		SDL_memcpy(ptr, lpStream+dwMemPos, 2*(nins+npat));
 		dwMemPos += 2*(nins+npat);
-		for (UINT j = 0; j < (nins+npat); ++j) {
+		for (j = 0; j < (nins+npat); ++j) {
 		        ptr[j] = bswapLE16(ptr[j]);
 		}
 		if (psfh.panning_present == 252)
 		{
 			const BYTE *chnpan = lpStream+dwMemPos;
 			if (dwMemPos > dwMemLength - 32) return FALSE;
-			for (UINT i=0; i<32; i++) if (chnpan[i] & 0x20)
+			for (i=0; i<32; i++) if (chnpan[i] & 0x20)
 			{
 				_this->ChnSettings[i].nPan = ((chnpan[i] & 0x0F) << 4) + 8;
 			}
@@ -206,60 +208,64 @@ BOOL CSoundFile_ReadS3M(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	if (!_this->m_nChannels) return TRUE;
 	// Reading instrument headers
 	SDL_memset(insfile, 0, sizeof(insfile));
-	for (UINT iSmp=1; iSmp<=insnum; iSmp++)
+	for (i=1; i<=insnum; i++)
 	{
-		UINT nInd = ((DWORD)ptr[iSmp-1])*16;
+		UINT nInd = ((DWORD)ptr[i-1])*16;
+		S3MSAMPLESTRUCT pSmp;
 		if ((!nInd) || (nInd + 0x50 > dwMemLength)) {
 			// initialize basic variables.
-			insflags[iSmp-1] = 0;
-			inspack[iSmp-1] = 0;
+			insflags[i-1] = 0;
+			inspack[i-1] = 0;
 			continue;
 		}
-		S3MSAMPLESTRUCT pSmp;
 		SDL_memcpy(&pSmp, lpStream+nInd, 0x50);
-		insflags[iSmp-1] = pSmp.flags;
-		inspack[iSmp-1] = pSmp.pack;
+		insflags[i-1] = pSmp.flags;
+		inspack[i-1] = pSmp.pack;
 		if ((pSmp.type==1) && (pSmp.scrs[2]=='R') && (pSmp.scrs[3]=='S'))
 		{
-			_this->Ins[iSmp].nLength = boundInput(bswapLE32(pSmp.length), 4, MAX_SAMPLE_LENGTH);
-			_this->Ins[iSmp].nLoopStart = boundInput(bswapLE32(pSmp.loopbegin), 4, _this->Ins[iSmp].nLength - 1);
-			_this->Ins[iSmp].nLoopEnd = boundInput(bswapLE32(pSmp.loopend), 4, _this->Ins[iSmp].nLength);
-			_this->Ins[iSmp].nVolume = boundInput(pSmp.vol, 0, 64) << 2;
-			_this->Ins[iSmp].nGlobalVol = 64;
-			if (pSmp.flags&1) _this->Ins[iSmp].uFlags |= CHN_LOOP;
-			UINT j = bswapLE32(pSmp.finetune);
+			_this->Ins[i].nLength = boundInput(bswapLE32(pSmp.length), 4, MAX_SAMPLE_LENGTH);
+			_this->Ins[i].nLoopStart = boundInput(bswapLE32(pSmp.loopbegin), 4, _this->Ins[i].nLength - 1);
+			_this->Ins[i].nLoopEnd = boundInput(bswapLE32(pSmp.loopend), 4, _this->Ins[i].nLength);
+			_this->Ins[i].nVolume = boundInput(pSmp.vol, 0, 64) << 2;
+			_this->Ins[i].nGlobalVol = 64;
+			if (pSmp.flags&1) _this->Ins[i].uFlags |= CHN_LOOP;
+			j = bswapLE32(pSmp.finetune);
 			if (!j) j = 8363;
 			if (j < 1024) j = 1024;
-			_this->Ins[iSmp].nC4Speed = j;
-			insfile[iSmp] = (pSmp.hmem << 20) + (bswapLE16(pSmp.memseg) << 4);
+			_this->Ins[i].nC4Speed = j;
+			insfile[i] = (pSmp.hmem << 20) + (bswapLE16(pSmp.memseg) << 4);
 			// offset is invalid - ignore this sample.
-			if (insfile[iSmp] > dwMemLength) insfile[iSmp] = 0;
-			else if (insfile[iSmp]) {
+			if (insfile[i] > dwMemLength) insfile[i] = 0;
+			else if (insfile[i]) {
 				// ignore duplicate samples.
-				for (int z=iSmp-1; z>=0; z--)
-					if (insfile[iSmp] == insfile[z])
-						insfile[iSmp] = 0;
+				int z = i - 1;
+				for (; z>=0; z--)
+					if (insfile[i] == insfile[z])
+						insfile[i] = 0;
 			}
-			if ((_this->Ins[iSmp].nLoopStart >= _this->Ins[iSmp].nLoopEnd) || (_this->Ins[iSmp].nLoopEnd - _this->Ins[iSmp].nLoopStart < 8))
-				_this->Ins[iSmp].nLoopStart = _this->Ins[iSmp].nLoopEnd = 0;
-			_this->Ins[iSmp].nPan = 0x80;
+			if ((_this->Ins[i].nLoopStart >= _this->Ins[i].nLoopEnd) || (_this->Ins[i].nLoopEnd - _this->Ins[i].nLoopStart < 8))
+				_this->Ins[i].nLoopStart = _this->Ins[i].nLoopEnd = 0;
+			_this->Ins[i].nPan = 0x80;
 		}
 	}
 	// Reading patterns
-	for (UINT iPat=0; iPat<patnum; iPat++)
+	for (i=0; i<patnum; i++)
 	{
-		UINT nInd = ((DWORD)ptr[nins+iPat]) << 4;
-		if (nInd + 0x40 > dwMemLength) continue;
-		WORD len = bswapLE16(*((WORD *)(lpStream+nInd)));
-		nInd += 2;
-		_this->PatternSize[iPat] = 64;
-		if ((!len) || (nInd + len > dwMemLength - 6)
-		 || ((_this->Patterns[iPat] = CSoundFile_AllocatePattern(64, _this->m_nChannels)) == NULL)) continue;
-		LPBYTE src = (LPBYTE)(lpStream+nInd);
-		// Unpacking pattern
-		MODCOMMAND *p = _this->Patterns[iPat];
+		LPBYTE src;
+		MODCOMMAND *p;
+		UINT nInd = ((DWORD)ptr[nins+i]) << 4;
 		UINT row = 0;
-		UINT j = 0;
+		WORD len;
+		if (nInd + 0x40 > dwMemLength) continue;
+		len = bswapLE16(*((WORD *)(lpStream+nInd)));
+		nInd += 2;
+		_this->PatternSize[i] = 64;
+		if ((!len) || (nInd + len > dwMemLength - 6)
+		 || ((_this->Patterns[i] = CSoundFile_AllocatePattern(64, _this->m_nChannels)) == NULL)) continue;
+		src = (LPBYTE)(lpStream+nInd);
+		// Unpacking pattern
+		p = _this->Patterns[i];
+		j = 0;
 		while (j < len)
 		{
 			BYTE b = src[j++];
@@ -310,15 +316,15 @@ BOOL CSoundFile_ReadS3M(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		}
 	}
 	// Reading samples
-	for (UINT iRaw=1; iRaw<=insnum; iRaw++) if ((_this->Ins[iRaw].nLength) && (insfile[iRaw]))
+	for (i=1; i<=insnum; i++) if ((_this->Ins[i].nLength) && (insfile[i]))
 	{
 		UINT flags = (psfh.version == 1) ? RS_PCM8S : RS_PCM8U;
-		if (insflags[iRaw-1] & 4) flags += 5;
-		if (insflags[iRaw-1] & 2) flags |= RSF_STEREO;
-		if (inspack[iRaw-1] == 4) flags = RS_ADPCM4;
-		dwMemPos = insfile[iRaw];
+		if (insflags[i-1] & 4) flags += 5;
+		if (insflags[i-1] & 2) flags |= RSF_STEREO;
+		if (inspack[i-1] == 4) flags = RS_ADPCM4;
+		dwMemPos = insfile[i];
 		if (dwMemPos < dwMemLength)
-			CSoundFile_ReadSample(_this, &_this->Ins[iRaw], flags, (LPSTR)(lpStream + dwMemPos), dwMemLength - dwMemPos);
+			CSoundFile_ReadSample(_this, &_this->Ins[i], flags, (LPSTR)(lpStream + dwMemPos), dwMemLength - dwMemPos);
 	}
 	_this->m_nMinPeriod = 64;
 	_this->m_nMaxPeriod = 32767;

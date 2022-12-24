@@ -217,12 +217,6 @@ void Sound_ClearError(void)
 } /* Sound_ClearError */
 
 
-static void SDLCALL free_errmsg(void *errmsg)
-{
-    SDL_free(errmsg);
-} /* free_errmsg */
-
-
 /*
  * This is declared in the internal header.
  */
@@ -245,7 +239,7 @@ void __Sound_SetError(const char *str)
         if (err == NULL)
             return;   /* uhh...? */
 
-        SDL_TLSSet(tlsid_errmsg, err, free_errmsg);
+        SDL_TLSSet(tlsid_errmsg, err, SDL_free);
     } /* if */
 
     err->error_available = SDL_TRUE;
@@ -288,7 +282,8 @@ static Sound_Sample *alloc_sample(SDL_RWops *rw, Sound_AudioInfo *desired,
     } /* if */
 
     SDL_assert(bufferSize > 0);
-    retval->buffer = SDL_calloc(1, bufferSize);  /* pure ugly. */
+
+    retval->buffer = __Sound_SIMDAlloc(bufferSize);
     if (!retval->buffer)
     {
         __Sound_SetError(ERR_OUT_OF_MEMORY);
@@ -296,6 +291,7 @@ static Sound_Sample *alloc_sample(SDL_RWops *rw, Sound_AudioInfo *desired,
         SDL_free(retval);
         return NULL;
     } /* if */
+    SDL_memset(retval->buffer, '\0', bufferSize);
     retval->buffer_size = bufferSize;
 
     if (desired != NULL)
@@ -362,7 +358,8 @@ static int init_sample(const Sound_DecoderFunctions *funcs,
 
     /* success; we've got a decoder! */
 
-    /* Now we need to set up the conversion buffer... */
+    /* Now we need to set up an audio stream for data conversion if necessary... */
+    internal->stream = NULL;
 
     if (_desired == NULL)
         SDL_memcpy(&desired, &sample->actual, sizeof (Sound_AudioInfo));
@@ -371,40 +368,32 @@ static int init_sample(const Sound_DecoderFunctions *funcs,
         desired.format = _desired->format ? _desired->format : sample->actual.format;
         desired.channels = _desired->channels ? _desired->channels : sample->actual.channels;
         desired.rate = _desired->rate ? _desired->rate : sample->actual.rate;
-    } /* else */
 
-    if (SDL_BuildAudioCVT(&internal->sdlcvt,
-                            sample->actual.format,
-                            sample->actual.channels,
-                            sample->actual.rate,
-                            desired.format,
-                            desired.channels,
-                            desired.rate) == -1)
-    {
-        __Sound_SetError(SDL_GetError());
-        funcs->close(sample);
-        SDL_RWseek(internal->rw, pos, RW_SEEK_SET);     /* set for next try... */
-        return 0;
-    } /* if */
-
-    if (internal->sdlcvt.len_mult > 1)
-    {
-        void *rc = SDL_realloc(sample->buffer, sample->buffer_size * internal->sdlcvt.len_mult);
-        if (rc == NULL)
+        if ( (sample->actual.format != desired.format) ||
+             (sample->actual.channels != desired.channels) ||
+             (sample->actual.rate != desired.rate) )
         {
-            funcs->close(sample);
-            SDL_RWseek(internal->rw, pos, RW_SEEK_SET); /* set for next try... */
-            return 0;
-        } /* if */
+            internal->stream = SDL_NewAudioStream(sample->actual.format,
+                                                  sample->actual.channels,
+                                                  sample->actual.rate,
+                                                  desired.format,
+                                                  desired.channels,
+                                                  desired.rate);
 
-        sample->buffer = rc;
-    } /* if */
+            if (internal->stream == NULL)
+            {
+                __Sound_SetError(SDL_GetError());
+                funcs->close(sample);
+                SDL_RWseek(internal->rw, pos, RW_SEEK_SET);     /* set for next try... */
+                return 0;
+            } /* if */
+        } /* if */
+    } /* else */
 
         /* these pointers are all one and the same. */
     SDL_memcpy(&sample->desired, &desired, sizeof (Sound_AudioInfo));
-    internal->sdlcvt.buf = internal->buffer = sample->buffer;
-    internal->buffer_size = sample->buffer_size / internal->sdlcvt.len_mult;
-    internal->sdlcvt.len = internal->buffer_size;
+    internal->buffer = sample->buffer;
+    internal->buffer_size = sample->buffer_size;
 
     /* Prepend our new Sound_Sample to the sample_list... */
     SDL_LockMutex(samplelist_mutex);
@@ -425,7 +414,7 @@ static int init_sample(const Sound_DecoderFunctions *funcs,
             sample->actual.channels));
 
     SNDDBG(("On-the-fly conversion: %s.\n",
-            internal->sdlcvt.needed ? "ENABLED" : "DISABLED"));
+            (internal->stream != NULL) ? "ENABLED" : "DISABLED"));
 
     return 1;
 } /* init_sample */
@@ -494,9 +483,14 @@ Sound_Sample *Sound_NewSample(SDL_RWops *rw, const char *ext,
     } /* for */
 
     /* nothing could handle the sound data... */
-    SDL_free(retval->opaque);
-    if (retval->buffer != NULL)
-        SDL_free(retval->buffer);
+    /* !!! FIXME: can we just push this through Sound_FreeSample() ? */
+    if (retval->opaque != NULL)
+    {
+        SDL_FreeAudioStream(((Sound_SampleInternal *) retval->opaque)->stream);
+        SDL_free(retval->opaque);
+    } /* if */
+
+    __Sound_SIMDFree(retval->buffer);
     SDL_free(retval);
     SDL_RWclose(rw);
     __Sound_SetError(ERR_UNSUPPORTED_FORMAT);
@@ -592,14 +586,9 @@ void Sound_FreeSample(Sound_Sample *sample)
     if (internal->rw != NULL)  /* this condition is a "just in case" thing. */
         SDL_RWclose(internal->rw);
 
-    if ((internal->buffer != NULL) && (internal->buffer != sample->buffer))
-        SDL_free(internal->buffer);
-
+    SDL_FreeAudioStream(internal->stream);
     SDL_free(internal);
-
-    if (sample->buffer != NULL)
-        SDL_free(sample->buffer);
-
+    __Sound_SIMDFree(sample->buffer);
     SDL_free(sample);
 } /* Sound_FreeSample */
 
@@ -612,13 +601,11 @@ int Sound_SetBufferSize(Sound_Sample *sample, Uint32 newSize)
     BAIL_IF_MACRO(!initialized, ERR_NOT_INITIALIZED, 0);
     BAIL_IF_MACRO(sample == NULL, ERR_INVALID_ARGUMENT, 0);
     internal = ((Sound_SampleInternal *) sample->opaque);
-    newBuf = SDL_realloc(sample->buffer, newSize * internal->sdlcvt.len_mult);
+    newBuf = __Sound_SIMDRealloc(sample->buffer, newSize);
     BAIL_IF_MACRO(newBuf == NULL, ERR_OUT_OF_MEMORY, 0);
 
-    internal->sdlcvt.buf = internal->buffer = sample->buffer = newBuf;
-    sample->buffer_size = newSize;
-    internal->buffer_size = newSize / internal->sdlcvt.len_mult;
-    internal->sdlcvt.len = internal->buffer_size;
+    internal->buffer = sample->buffer = newBuf;
+    internal->buffer_size = sample->buffer_size = newSize;
 
     return 1;
 } /* Sound_SetBufferSize */
@@ -627,7 +614,7 @@ int Sound_SetBufferSize(Sound_Sample *sample, Uint32 newSize)
 Uint32 Sound_Decode(Sound_Sample *sample)
 {
     Sound_SampleInternal *internal = NULL;
-    Uint32 retval = 0;
+    int available;
 
         /* a boatload of sanity checks... */
     BAIL_IF_MACRO(!initialized, ERR_NOT_INITIALIZED, 0);
@@ -642,18 +629,80 @@ Uint32 Sound_Decode(Sound_Sample *sample)
     SDL_assert(internal->buffer != NULL);
     SDL_assert(internal->buffer_size > 0);
 
-        /* reset EAGAIN. Decoder can flip it back on if it needs to. */
-    sample->flags &= ~SOUND_SAMPLEFLAG_EAGAIN;
-    retval = internal->funcs->read(sample);
-
-    if (retval > 0 && internal->sdlcvt.needed)
+    /* No AudioStream? No conversion. Decode right into the buffer and return it. */
+    if (!internal->stream)
     {
-        internal->sdlcvt.len = retval;
-        SDL_ConvertAudio(&internal->sdlcvt);
-        retval = internal->sdlcvt.len_cvt;
+        /* reset EAGAIN. Decoder can flip it back on if it needs to. */
+        sample->flags &= ~SOUND_SAMPLEFLAG_EAGAIN;
+        return internal->funcs->read(sample);
     } /* if */
 
-    return retval;
+    /* call into the decoder several times until we have enough data. */
+    while ((available = SDL_AudioStreamAvailable(internal->stream)) < internal->buffer_size)
+    {
+        SDL_bool flush_stream = SDL_FALSE;
+        Uint32 br;
+
+        if (internal->pending_eof || internal->pending_error)
+            break;
+
+        /* reset EAGAIN. Decoder can flip it back on if it needs to. */
+        sample->flags &= ~SOUND_SAMPLEFLAG_EAGAIN;
+        br = internal->funcs->read(sample);
+
+        /* if the sample hit an error or EOF, note it, but don't let these flags
+           be set for the calling app until the stream is empty too. */
+        if (sample->flags & SOUND_SAMPLEFLAG_EOF)
+        {
+            sample->flags &= ~SOUND_SAMPLEFLAG_EOF;
+            internal->pending_eof = SDL_TRUE;
+            flush_stream = SDL_TRUE;
+        } /* if */
+
+        if (sample->flags & SOUND_SAMPLEFLAG_ERROR)
+        {
+            sample->flags &= ~SOUND_SAMPLEFLAG_ERROR;
+            internal->pending_error = SDL_TRUE;
+            flush_stream = SDL_TRUE;
+        } /* if */
+
+        if ((br > 0) && (SDL_AudioStreamPut(internal->stream, internal->buffer, (int) br) == -1))
+        {
+            __Sound_SetError(SDL_GetError());
+            sample->flags |= SOUND_SAMPLEFLAG_ERROR;
+            return 0;  /* oh well. */
+        } /* if */
+
+        if (flush_stream)
+            SDL_AudioStreamFlush(internal->stream);
+    } /* while */
+
+    /* if we hit eof or error, drain the stream before reporting that. */
+    if (available > 0)
+    {
+        const int readlen = SDL_min(available, sample->buffer_size);
+        const int br = SDL_AudioStreamGet(internal->stream, sample->buffer, readlen);
+        if (br != readlen)
+        {
+            __Sound_SetError(SDL_GetError());
+            sample->flags |= SOUND_SAMPLEFLAG_ERROR;
+            return 0;  /* oh well. */
+        } /* if */
+
+        SDL_assert(br > 0);
+        return (Uint32) br;
+    } /* if */
+
+    /* stream is empty, set final flags. */
+    if (internal->pending_eof)
+        sample->flags |= SOUND_SAMPLEFLAG_EOF;
+
+    if (internal->pending_error)
+        sample->flags |= SOUND_SAMPLEFLAG_ERROR;
+
+    internal->pending_eof = internal->pending_error = SDL_FALSE;
+
+    return 0;
 } /* Sound_Decode */
 
 
@@ -673,7 +722,7 @@ Uint32 Sound_DecodeAll(Sound_Sample *sample)
             ((sample->flags & SOUND_SAMPLEFLAG_ERROR) == 0) )
     {
         Uint32 br = Sound_Decode(sample);
-        void *ptr = SDL_realloc(buf, newBufSize + br);
+        void *ptr = __Sound_SIMDRealloc(buf, newBufSize + br);
         if (ptr == NULL)
         {
             sample->flags |= SOUND_SAMPLEFLAG_ERROR;
@@ -687,18 +736,13 @@ Uint32 Sound_DecodeAll(Sound_Sample *sample)
         } /* else */
     } /* while */
 
-    if (buf == NULL)  /* ...in case first call to SDL_realloc() fails... */
+    if (buf == NULL)  /* ...in case first call to __Sound_SIMDRealloc() fails... */
         return sample->buffer_size;
 
-    if (internal->buffer != sample->buffer)
-        SDL_free(internal->buffer);
+    __Sound_SIMDFree(sample->buffer);
 
-    SDL_free(sample->buffer);
-
-    internal->sdlcvt.buf = internal->buffer = sample->buffer = buf;
-    sample->buffer_size = newBufSize;
-    internal->buffer_size = newBufSize / internal->sdlcvt.len_mult;
-    internal->sdlcvt.len = internal->buffer_size;
+    internal->buffer = sample->buffer = buf;
+    internal->buffer_size = sample->buffer_size = newBufSize;
 
     return newBufSize;
 } /* Sound_DecodeAll */
@@ -824,6 +868,101 @@ char *__Sound_strtokr(char *s1, const char *s2, char **ptr)
     return s1;
 }
 #endif
+
+
+/* This falls back to an included copy/paste of SDL's SIMDAlloc code if you aren't using a new enough SDL.
+   To keep this simple, the included copy assumes you need to align to 64 bytes, which is a little
+   wasteful but should work on everything from MMX to AVX-512. The real SDL checks the CPU at runtime
+   to decide what's available and aligns to smaller numbers if all you have is SSE, Altivec or NEON.
+   Not to mention this is just a second copy of the code that doesn't get attention...you should really
+   upgrade your SDL. Ideally this copy goes away at some point. */
+
+#define USE_REAL_SDL_SIMDALLOC SDL_VERSION_ATLEAST(2, 0, 14)
+
+void *__Sound_SIMDAlloc(const size_t len)
+{
+#if USE_REAL_SDL_SIMDALLOC
+    return SDL_SIMDAlloc(len);
+#else
+    const size_t alignment = 64;
+    const size_t padding = alignment - (len % alignment);
+    const size_t padded = (padding != alignment) ? (len + padding) : len;
+    Uint8 *retval = NULL;
+    Uint8 *ptr = (Uint8 *) SDL_malloc(padded + alignment + sizeof (void *));
+    if (ptr) {
+        /* store the actual allocated pointer right before our aligned pointer. */
+        retval = ptr + sizeof (void *);
+        retval += alignment - (((size_t) retval) % alignment);
+        *(((void **) retval) - 1) = ptr;
+    }
+    return retval;
+#endif
+}
+
+void *__Sound_SIMDRealloc(void *mem, const size_t len)
+{
+#if USE_REAL_SDL_SIMDALLOC
+    return SDL_SIMDRealloc(mem, len);
+#else
+    const size_t alignment = 64;
+    const size_t padding = alignment - (len % alignment);
+    const size_t padded = (padding != alignment) ? (len + padding) : len;
+    Uint8 *retval = (Uint8*) mem;
+    void *oldmem = mem;
+    size_t memdiff = 0, ptrdiff;
+    Uint8 *ptr;
+
+    if (mem) {
+        void **realptr = (void **) mem;
+        realptr--;
+        mem = *(((void **) mem) - 1);
+
+        /* Check the delta between the real pointer and user pointer */
+        memdiff = ((size_t) oldmem) - ((size_t) mem);
+    }
+
+    ptr = (Uint8 *) SDL_realloc(mem, padded + alignment + sizeof (void *));
+
+    if (ptr == NULL) {
+        return NULL; /* Out of memory, bail! */
+    }
+
+    /* Store the actual allocated pointer right before our aligned pointer. */
+    retval = ptr + sizeof (void *);
+    retval += alignment - (((size_t) retval) % alignment);
+
+    /* Make sure the delta is the same! */
+    if (mem) {
+        ptrdiff = ((size_t) retval) - ((size_t) ptr);
+        if (memdiff != ptrdiff) { /* Delta has changed, copy to new offset! */
+            oldmem = (void*) (((uintptr_t) ptr) + memdiff);
+
+            /* Even though the data past the old `len` is undefined, this is the
+             * only length value we have, and it guarantees that we copy all the
+             * previous memory anyhow.
+             */
+            SDL_memmove(retval, oldmem, len);
+        }
+    }
+
+    /* Actually store the allocated pointer, finally. */
+    *(((void **) retval) - 1) = ptr;
+    return retval;
+#endif
+}
+
+void __Sound_SIMDFree(void *ptr)
+{
+#if USE_REAL_SDL_SIMDALLOC
+    SDL_SIMDFree(ptr);
+#else
+    if (ptr) {
+        void **realptr = (void **) ptr;
+        realptr--;
+        SDL_free(*(((void **) ptr) - 1));
+    }
+#endif
+}
 
 /* end of SDL_sound.c ... */
 

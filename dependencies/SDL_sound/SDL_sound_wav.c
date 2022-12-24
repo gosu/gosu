@@ -1,5 +1,5 @@
 /**
- * SDL_sound; A sound processing toolkit.
+ * SDL_sound; An abstract sound format decoding API.
  *
  * Please see the file LICENSE.txt in the source's root directory.
  *
@@ -70,9 +70,10 @@ static SDL_INLINE int read_uint8(SDL_RWops *rw, Uint8 *ui8)
 
 #define fmtID  0x20746D66  /* "fmt ", in ascii. */
 
-#define FMT_NORMAL 0x0001    /* Uncompressed waveform data.     */
-#define FMT_ADPCM  0x0002    /* ADPCM compressed waveform data. */
-#define FMT_IEEE_FLOAT  0x0003    /* Uncompressed IEEE floating point waveform data. */
+#define FMT_NORMAL     0x0001   /* Uncompressed waveform data.     */
+#define FMT_ADPCM      0x0002   /* ADPCM compressed waveform data. */
+#define FMT_IEEE_FLOAT 0x0003   /* Uncompressed IEEE floating point waveform data. */
+#define FMT_EXTENSIBLE 0xFFFE   /* "Extensible" tag */
 
 typedef struct
 {
@@ -92,7 +93,7 @@ typedef struct S_WAV_FMT_T
 {
     Uint32 chunkID;
     Sint32 chunkSize;
-    Sint16 wFormatTag;
+    Uint16 wFormatTag;
     Uint16 wChannels;
     Uint32 dwSamplesPerSec;
     Uint32 dwAvgBytesPerSec;
@@ -144,7 +145,7 @@ static int read_fmt_chunk(SDL_RWops *rw, fmt_t *fmt)
     BAIL_IF_MACRO(fmt->chunkSize < 16, "WAV: Invalid chunk size", 0);
     fmt->next_chunk_offset = SDL_RWtell(rw) + fmt->chunkSize;
     
-    BAIL_IF_MACRO(!read_le16s(rw, &fmt->wFormatTag), NULL, 0);
+    BAIL_IF_MACRO(!read_le16(rw, &fmt->wFormatTag), NULL, 0);
     BAIL_IF_MACRO(!read_le16(rw, &fmt->wChannels), NULL, 0);
     BAIL_IF_MACRO(!read_le32(rw, &fmt->dwSamplesPerSec), NULL, 0);
     BAIL_IF_MACRO(!read_le32(rw, &fmt->dwAvgBytesPerSec), NULL, 0);
@@ -211,7 +212,19 @@ static Uint32 read_sample_fmt_normal(Sound_Sample *sample)
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     wav_t *w = (wav_t *) internal->decoder_private;
     Uint32 max = (internal->buffer_size < (Uint32) w->bytesLeft) ?
-                    internal->buffer_size : (Uint32) w->bytesLeft;
+                  internal->buffer_size : (Uint32) w->bytesLeft;
+
+    /* We need to convert 24-bit PCM to an SDL-friendly AUDIO_S32SYS ... */
+    if (w->fmt->wBitsPerSample == 24) {
+        const Uint32 num_samples = max / 3;
+
+        /* we're going to expand by 25%...3 bytes to 4. Make sure the buffer has room to expand. */
+        max = (num_samples - (num_samples / 4)) * 3;
+        if (max == 0) {
+            sample->flags |= SOUND_SAMPLEFLAG_EOF;
+            return 0;
+        }
+    }
 
     SDL_assert(max > 0);
 
@@ -233,6 +246,19 @@ static Uint32 read_sample_fmt_normal(Sound_Sample *sample)
         /* (next call this EAGAIN may turn into an EOF or error.) */
     else if (retval < internal->buffer_size)
         sample->flags |= SOUND_SAMPLEFLAG_EAGAIN;
+
+    /* deal with 24-bit PCM. */
+    if ((retval > 0) && (w->fmt->wBitsPerSample == 24)) {
+        const Uint32 total = retval / 3;
+        const Uint8 *src = ((Uint8 *)internal->buffer + retval) - 3;
+        Uint32 *dst = (Uint32 *) (((Uint8 *)internal->buffer + (total * 4)) - 4);
+        Uint32 i;
+        for (i = 0; i < total; i++, dst--, src -= 3) {
+            const Uint32 sample = ((Uint32) src[0]) | (((Uint32) src[1]) << 8) | (((Uint32) src[2]) << 16);
+            *dst = sample << 8;  /* shift it up so the most significant bits cover the 32-bit space. */
+        }
+        retval = total * 4;
+    }
 
     return retval;
 } /* read_sample_fmt_normal */
@@ -590,6 +616,7 @@ static int read_fmt(SDL_RWops *rw, fmt_t *fmt)
     /* if it's in this switch statement, we support the format. */
     switch (fmt->wFormatTag)
     {
+        case FMT_EXTENSIBLE:  /* !!! FIXME: this isn't correct */
         case FMT_NORMAL:
             SNDDBG(("WAV: Appears to be uncompressed audio.\n"));
             return read_fmt_normal(rw, fmt);
@@ -603,7 +630,6 @@ static int read_fmt(SDL_RWops *rw, fmt_t *fmt)
             return read_fmt_normal(rw, fmt);  /* just normal PCM, otherwise. */
 
         /* add other types here. */
-
     } /* switch */
 
     SNDDBG(("WAV: Format 0x%X is unknown.\n",
@@ -662,19 +688,17 @@ static int WAV_open_internal(Sound_Sample *sample, const char *ext, fmt_t *fmt)
     } /* if */
     else
     {
-        if (fmt->wBitsPerSample == 4)
-            sample->actual.format = AUDIO_S16SYS;
-        else if (fmt->wBitsPerSample == 8)
-            sample->actual.format = AUDIO_U8;
-        else if (fmt->wBitsPerSample == 16)
-            sample->actual.format = AUDIO_S16LSB;
-        else if (fmt->wBitsPerSample == 32)
-            sample->actual.format = AUDIO_S32LSB;
-        else
+        switch (fmt->wBitsPerSample)
         {
-            SNDDBG(("WAV: %d bits per sample!?\n", (int) fmt->wBitsPerSample));
-            BAIL_MACRO("WAV: Unsupported sample size.", 0);
-        } /* else */
+            case 4: sample->actual.format = AUDIO_S16SYS; break;
+            case 8: sample->actual.format = AUDIO_U8; break;
+            case 16: sample->actual.format = AUDIO_S16LSB; break;
+            case 24: sample->actual.format = AUDIO_S32SYS; break;
+            case 32: sample->actual.format = AUDIO_S32LSB; break;
+            default:
+                SNDDBG(("WAV: %d bits per sample!?\n", (int) fmt->wBitsPerSample));
+                BAIL_MACRO("WAV: Unsupported sample size.", 0);
+        } /* switch */
     } /* else */
 
     BAIL_IF_MACRO(!read_fmt(rw, fmt), NULL, 0);

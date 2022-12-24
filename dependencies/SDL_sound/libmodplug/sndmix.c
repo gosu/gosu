@@ -76,12 +76,14 @@ BOOL CSoundFile_FadeSong(CSoundFile *_this, UINT msec)
 //----------------------------------
 {
 	LONG nsamples = _muldiv(msec, _this->gdwMixingFreq, 1000);
+	LONG nRampLength;
+	UINT noff;
 	if (nsamples <= 0) return FALSE;
 	if (nsamples > 0x100000) nsamples = 0x100000;
 	_this->m_nBufferCount = nsamples;
-	LONG nRampLength = _this->m_nBufferCount;
+	nRampLength = _this->m_nBufferCount;
 	// Ramp everything down
-	for (UINT noff=0; noff < _this->m_nMixChannels; noff++)
+	for (noff=0; noff < _this->m_nMixChannels; noff++)
 	{
 		MODCHANNEL *pramp = &_this->Chn[_this->ChnMix[noff]];
 		if (!pramp) continue;
@@ -128,6 +130,7 @@ UINT CSoundFile_Read(CSoundFile *_this, LPVOID lpDestBuffer, UINT cbBuffer)
 	if (_this->m_dwSongFlags & SONG_ENDREACHED) goto MixDone;
 	while (lRead > 0)
 	{
+		UINT lTotalSampleCount;
 		// Update Channel Data
 		if (!_this->m_nBufferCount)
 		{
@@ -168,7 +171,7 @@ UINT CSoundFile_Read(CSoundFile *_this, LPVOID lpDestBuffer, UINT cbBuffer)
 			X86_MonoFromStereo(_this->MixSoundBuffer, lCount);
 		}
 		nStat++;
-		UINT lTotalSampleCount = lSampleCount;
+		lTotalSampleCount = lSampleCount;
 		// Multichannel
 		if (_this->gnChannels > 2)
 		{
@@ -196,6 +199,10 @@ BOOL CSoundFile_ProcessRow(CSoundFile *_this)
 {
 	if (++_this->m_nTickCount >= _this->m_nMusicSpeed * (_this->m_nPatternDelay+1) + _this->m_nFrameDelay)
 	{
+		MODCHANNEL *pChn;
+		MODCOMMAND *m;
+		UINT nChn;
+
 		_this->m_nPatternDelay = 0;
 		_this->m_nFrameDelay = 0;
 		_this->m_nTickCount = 0;
@@ -216,10 +223,11 @@ BOOL CSoundFile_ProcessRow(CSoundFile *_this)
 						return FALSE;     //never repeat entire song
 					if (!_this->m_nRestartPos)
 					{
+						UINT i;
 						_this->m_nMusicSpeed = _this->m_nDefaultSpeed;
 						_this->m_nMusicTempo = _this->m_nDefaultTempo;
 						_this->m_nGlobalVolume = _this->m_nDefaultGlobalVolume;
-						for (UINT i=0; i<MAX_CHANNELS; i++)
+						for (i=0; i<MAX_CHANNELS; i++)
 						{
 							_this->Chn[i].dwFlags |= CHN_NOTEFADE | CHN_KEYOFF;
 							_this->Chn[i].nFadeOutVol = 0;
@@ -271,9 +279,9 @@ BOOL CSoundFile_ProcessRow(CSoundFile *_this)
 			_this->m_nNextStartRow = 0;
 		}
 		// Reset channel values
-		MODCHANNEL *pChn = _this->Chn;
-		MODCOMMAND *m = _this->Patterns[_this->m_nPattern] + _this->m_nRow * _this->m_nChannels;
-		for (UINT nChn=0; nChn<_this->m_nChannels; pChn++, nChn++, m++)
+		pChn = _this->Chn;
+		m = _this->Patterns[_this->m_nPattern] + _this->m_nRow * _this->m_nChannels;
+		for (nChn=0; nChn<_this->m_nChannels; pChn++, nChn++, m++)
 		{
 			pChn->nRowNote = m->note;
 			pChn->nRowInstr = m->instr;
@@ -311,23 +319,29 @@ BOOL CSoundFile_ProcessRow(CSoundFile *_this)
 BOOL CSoundFile_ReadNote(CSoundFile *_this)
 //-------------------------
 {
+	DWORD nMasterVol;
+	MODCHANNEL *pChn;
+	UINT nChn;
+
 	if (!CSoundFile_ProcessRow(_this)) return FALSE;
 	////////////////////////////////////////////////////////////////////////////////////
 	_this->m_nTotalCount++;
 	if (!_this->m_nMusicTempo) return FALSE;
 	_this->m_nBufferCount = (_this->gdwMixingFreq * 5 * _this->m_nTempoFactor) / (_this->m_nMusicTempo << 8);
 	// Master Volume + Pre-Amplification / Attenuation setup
-	DWORD nMasterVol;
 	{
 		int nchn32 = (_this->m_nChannels < 32) ? _this->m_nChannels : 31;
+		int realmastervol;
+		UINT attenuation;
+		DWORD mastervol;
 		if ((_this->m_nType & MOD_TYPE_IT) && (_this->m_nInstruments) && (nchn32 < 6)) nchn32 = 6;
-		int realmastervol = _this->m_nMasterVolume;
+		realmastervol = _this->m_nMasterVolume;
 		if (realmastervol > 0x80)
 		{
 			realmastervol = 0x80 + ((realmastervol - 0x80) * (nchn32+4)) / 16;
 		}
-		UINT attenuation = (_this->gdwSoundSetup & SNDMIX_AGC) ? PreAmpAGCTable[nchn32>>1] : PreAmpTable[nchn32>>1];
-		DWORD mastervol = (realmastervol * (_this->m_nSongPreAmp + 0x10)) >> 6;
+		attenuation = (_this->gdwSoundSetup & SNDMIX_AGC) ? PreAmpAGCTable[nchn32>>1] : PreAmpTable[nchn32>>1];
+		mastervol = (realmastervol * (_this->m_nSongPreAmp + 0x10)) >> 6;
 		if (mastervol > 0x200) mastervol = 0x200;
 		if ((_this->m_dwSongFlags & SONG_GLOBALFADE) && (_this->m_nGlobalFadeMaxSamples))
 		{
@@ -339,8 +353,8 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 	////////////////////////////////////////////////////////////////////////////////////
 	// Update channels data
 	_this->m_nMixChannels = 0;
-	MODCHANNEL *pChn = _this->Chn;
-	for (UINT nChn=0; nChn<MAX_CHANNELS; nChn++,pChn++)
+	pChn = _this->Chn;
+	for (nChn=0; nChn<MAX_CHANNELS; nChn++,pChn++)
 	{
 		if ((pChn->dwFlags & CHN_NOTEFADE) && (!(pChn->nFadeOutVol|pChn->nRightVol|pChn->nLeftVol)))
 		{
@@ -363,6 +377,8 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 		if ((pChn->nPeriod)	&& (pChn->nLength))
 		{
 			int vol = pChn->nVolume + pChn->nVolSwing;
+			int period, nPeriodFrac;
+			UINT freq, ninc;
 
 			if (vol < 0) vol = 0;
 			if (vol > 256) vol = 256;
@@ -398,8 +414,8 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 			{
 				UINT n = (pChn->nTremorParam >> 4) + (pChn->nTremorParam & 0x0F);
 				UINT ontime = pChn->nTremorParam >> 4;
-				if ((!(_this->m_nType & MOD_TYPE_IT)) || (_this->m_dwSongFlags & SONG_ITOLDEFFECTS)) { n += 2; ontime++; }
 				UINT tremcount = (UINT)pChn->nTremorCount;
+				if ((!(_this->m_nType & MOD_TYPE_IT)) || (_this->m_dwSongFlags & SONG_ITOLDEFFECTS)) { n += 2; ontime++; }
 				if (tremcount >= n) tremcount = 0;
 				if ((_this->m_nTickCount) || (_this->m_nType & (MOD_TYPE_S3M|MOD_TYPE_IT)))
 				{
@@ -420,8 +436,10 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 				if ((pChn->dwFlags & CHN_VOLENV) && (penv->nVolEnv))
 				{
 					int envpos = pChn->nVolEnvPosition;
+					int x1, x2, envvol;
 					UINT pt = penv->nVolEnv - 1;
-					for (UINT i=0; i<(UINT)(penv->nVolEnv-1); i++)
+					UINT i;
+					for (i=0; i<(UINT)(penv->nVolEnv-1); i++)
 					{
 						if (envpos <= penv->VolPoints[i])
 						{
@@ -429,8 +447,7 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 							break;
 						}
 					}
-					int x2 = penv->VolPoints[pt];
-					int x1, envvol;
+					x2 = penv->VolPoints[pt];
 					if (envpos >= x2)
 					{
 						envvol = penv->VolEnv[pt] << 2;
@@ -458,8 +475,10 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 				if ((pChn->dwFlags & CHN_PANENV) && (penv->nPanEnv))
 				{
 					int envpos = pChn->nPanEnvPosition;
+					int x1, x2, y2, envpan, pan;
 					UINT pt = penv->nPanEnv - 1;
-					for (UINT i=0; i<(UINT)(penv->nPanEnv-1); i++)
+					UINT i;
+					for (i=0; i<(UINT)(penv->nPanEnv-1); i++)
 					{
 						if (envpos <= penv->PanPoints[i])
 						{
@@ -467,8 +486,7 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 							break;
 						}
 					}
-					int x2 = penv->PanPoints[pt], y2 = penv->PanEnv[pt];
-					int x1, envpan;
+					x2 = penv->PanPoints[pt], y2 = penv->PanEnv[pt];
 					if (envpos >= x2)
 					{
 						envpan = y2;
@@ -489,7 +507,7 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 					}
 					if (envpan < 0) envpan = 0;
 					if (envpan > 64) envpan = 64;
-					int pan = pChn->nPan;
+					pan = pChn->nPan;
 					if (pan >= 128)
 					{
 						pan += ((envpan - 32) * (256 - pan)) / 32;
@@ -541,7 +559,7 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 				pChn->nRealVolume = _muldiv(vol * _this->m_nGlobalVolume, pChn->nGlobalVol * pChn->nInsVol, 1 << 20);
 			}
 			if (pChn->nPeriod < _this->m_nMinPeriod) pChn->nPeriod = _this->m_nMinPeriod;
-			int period = pChn->nPeriod;
+			period = pChn->nPeriod;
 			if ((pChn->dwFlags & (CHN_GLISSANDO|CHN_PORTAMENTO)) ==	(CHN_GLISSANDO|CHN_PORTAMENTO))
 			{
 				period = CSoundFile_GetPeriodFromNote(_this, CSoundFile_GetNoteFromPeriod(_this, period), pChn->nFineTune, pChn->nC4Speed);
@@ -568,8 +586,10 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 			{
 				INSTRUMENTHEADER *penv = pChn->pHeader;
 				int envpos = pChn->nPitchEnvPosition;
+				int x1, x2, envpitch;
 				UINT pt = penv->nPitchEnv - 1;
-				for (UINT i=0; i<(UINT)(penv->nPitchEnv-1); i++)
+				UINT i;
+				for (i=0; i<(UINT)(penv->nPitchEnv-1); i++)
 				{
 					if (envpos <= penv->PitchPoints[i])
 					{
@@ -577,8 +597,7 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 						break;
 					}
 				}
-				int x2 = penv->PitchPoints[pt];
-				int x1, envpitch;
+				x2 = penv->PitchPoints[pt];
 				if (envpos >= x2)
 				{
 					envpitch = (((int)penv->PitchEnv[pt]) - 32) * 8;
@@ -629,6 +648,7 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 			{
 				UINT vibpos = pChn->nVibratoPos;
 				LONG vdelta;
+				UINT vdepth;
 				switch (pChn->nVibratoType & 0x03)
 				{
 				case 1:
@@ -643,7 +663,7 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 				default:
 					vdelta = ModSinusTable[vibpos];
 				}
-				UINT vdepth = ((_this->m_nType != MOD_TYPE_IT) || (_this->m_dwSongFlags & SONG_ITOLDEFFECTS)) ? 6 : 7;
+				vdepth = ((_this->m_nType != MOD_TYPE_IT) || (_this->m_dwSongFlags & SONG_ITOLDEFFECTS)) ? 6 : 7;
 				vdelta = (vdelta * (int)pChn->nVibratoDepth) >> vdepth;
 				if ((_this->m_dwSongFlags & SONG_LINEARSLIDES) && (_this->m_nType & MOD_TYPE_IT))
 				{
@@ -693,11 +713,12 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 				if (pdelta > 256) pdelta = 256;
 				pChn->nRealPan = pdelta;
 			}
-			int nPeriodFrac = 0;
+			nPeriodFrac = 0;
 			// Instrument Auto-Vibrato
 			if ((pChn->pInstrument) && (pChn->pInstrument->nVibDepth))
 			{
 				MODINSTRUMENT *pins = pChn->pInstrument;
+				int val, n;
 				if (pins->nVibSweep == 0)
 				{
 					pChn->nAutoVibDepth = pins->nVibDepth << 8;
@@ -715,7 +736,6 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 						pChn->nAutoVibDepth = pins->nVibDepth << 8;
 				}
 				pChn->nAutoVibPos += pins->nVibRate;
-				int val;
 				switch(pins->nVibType)
 				{
 				case 4:	// Random
@@ -734,19 +754,20 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 				default:	// Sine
 					val = ft2VibratoTable[pChn->nAutoVibPos & 255];
 				}
-				int n =	((val * pChn->nAutoVibDepth) >> 8);
+				n = ((val * pChn->nAutoVibDepth) >> 8);
 				if (_this->m_nType & MOD_TYPE_IT)
 				{
 					int df1, df2;
+					UINT n1;
 					if (n < 0)
 					{
 						n = -n;
-						UINT n1 = n >> 8;
+						n1 = n >> 8;
 						df1 = LinearSlideUpTable[n1];
 						df2 = LinearSlideUpTable[n1+1];
 					} else
 					{
-						UINT n1 = n >> 8;
+						n1 = n >> 8;
 						df1 = LinearSlideDownTable[n1];
 						df2 = LinearSlideDownTable[n1+1];
 					}
@@ -776,14 +797,14 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 				period = _this->m_nMaxPeriod;
 				nPeriodFrac = 0;
 			}
-			UINT freq = CSoundFile_GetFreqFromPeriod(_this, period, pChn->nC4Speed, nPeriodFrac);
+			freq = CSoundFile_GetFreqFromPeriod(_this, period, pChn->nC4Speed, nPeriodFrac);
 			if ((_this->m_nType & MOD_TYPE_IT) && (freq < 256))
 			{
 				pChn->nFadeOutVol = 0;
 				pChn->dwFlags |= CHN_NOTEFADE;
 				pChn->nRealVolume = 0;
 			}
-			UINT ninc = _muldiv(freq, 0x10000, _this->gdwMixingFreq);
+			ninc = _muldiv(freq, 0x10000, _this->gdwMixingFreq);
 			if ((ninc >= 0xFFB0) && (ninc <= 0x10090)) ninc = 0x10000;
 			if (_this->m_nFreqFactor != 128) ninc = (ninc * _this->m_nFreqFactor) >> 7;
 			if (ninc > 0xFF0000) ninc = 0xFF0000;
@@ -895,6 +916,7 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 			// Adjusting volumes
 			if (_this->gnChannels >= 2)
 			{
+				LONG realvol;
 				int pan = ((int)pChn->nRealPan) - 128;
 				pan *= (int)_this->m_nStereoSeparation;
 				pan /= 128;
@@ -903,7 +925,7 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 				if (pan < 0) pan = 0;
 				if (pan > 256) pan = 256;
 				if (_this->gdwSoundSetup & SNDMIX_REVERSESTEREO) pan = 256 - pan;
-				LONG realvol = (pChn->nRealVolume * kChnMasterVol) >> (8-1);
+				realvol = (pChn->nRealVolume * kChnMasterVol) >> (8-1);
 				if (_this->gdwSoundSetup & SNDMIX_SOFTPANNING)
 				{
 					if (pan < 128)
@@ -1001,7 +1023,8 @@ BOOL CSoundFile_ReadNote(CSoundFile *_this)
 	// Checking Max Mix Channels reached: ordering by volume
 	if ((_this->m_nMixChannels >= _this->m_nMaxMixChannels) && (!(_this->gdwSoundSetup & SNDMIX_DIRECTTODISK)))
 	{
-		for (UINT i=0; i<_this->m_nMixChannels; i++)
+		UINT i=0;
+		for (; i<_this->m_nMixChannels; i++)
 		{
 			UINT j=i;
 			while ((j+1<_this->m_nMixChannels) && (_this->Chn[_this->ChnMix[j]].nRealVolume < _this->Chn[_this->ChnMix[j+1]].nRealVolume))

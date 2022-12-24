@@ -72,7 +72,7 @@ extern "C" {
 
 #define SOUND_VER_MAJOR 2
 #define SOUND_VER_MINOR 0
-#define SOUND_VER_PATCH 0
+#define SOUND_VER_PATCH 1
 #endif
 
 
