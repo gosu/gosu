@@ -227,6 +227,13 @@ GOSU_FFI_API void Gosu_Window_set_caption(Gosu_Window* window, const char* capti
     });
 }
 
+GOSU_FFI_API void* Gosu_Window_sdl_window(Gosu_Window* window)
+{
+    return Gosu_translate_exceptions([=] {
+        return window->sdl_window();
+    });
+}
+
 // Input Properties
 
 GOSU_FFI_API Gosu_TextInput* Gosu_Window_text_input(Gosu_Window* window)

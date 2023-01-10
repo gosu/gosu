@@ -446,4 +446,9 @@ Gosu::Input& Gosu::Window::input()
     return *m_impl->input;
 }
 
+void* Gosu::Window::sdl_window()
+{
+    return shared_window();
+}
+
 #endif

@@ -142,6 +142,10 @@ namespace Gosu
 #ifdef GOSU_IS_IPHONE
         void* uikit_window() const;
 #endif
+
+#ifndef GOSU_IS_IPHONE
+        void* sdl_window();
+#endif
     };
 
     /// Returns the width (in pixels) of a screen.
