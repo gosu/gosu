@@ -140,39 +140,38 @@ struct Gosu::Input::Impl : private Gosu::Noncopyable
                 }
                 int gamepad_slot = -1;
                 int joystick_instance_id = -1;
+                int i = e->jdevice.which; // SDL2 device_index
 
-                // Loop through attached gamepads as e->jdevice.which cannot be trusted (always 0)
-                for (int i = 0; i < SDL_NumJoysticks(); i++) {
-                    // Prefer the SDL_GameController API...
-                    if (SDL_IsGameController(i)) {
-                        if (SDL_GameController *game_controller = SDL_GameControllerOpen(i)) {
-                            gamepad_slot = available_gamepad_slot_index();
-                            joystick_instance_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller));
-                            if (gamepad_instance_id_is_known(joystick_instance_id)) {
-                                continue;
-                            }
-                            open_game_controllers.emplace_back(
-                                shared_ptr<SDL_GameController>(game_controller, SDL_GameControllerClose)
-                            );
-                        }
-                    }
-                    // ...but fall back on the good, old SDL_Joystick API.
-                    else if (SDL_Joystick *joystick = SDL_JoystickOpen(i)) {
+                if (SDL_IsGameController(i)) {
+                    if (SDL_GameController *game_controller = SDL_GameControllerOpen(i)) {
                         gamepad_slot = available_gamepad_slot_index();
-                        joystick_instance_id = SDL_JoystickInstanceID(joystick);
+                        joystick_instance_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(game_controller));
                         if (gamepad_instance_id_is_known(joystick_instance_id)) {
-                            continue;
+                            return true;
                         }
-                        open_joysticks.emplace_back(
-                            shared_ptr<SDL_Joystick>(joystick, SDL_JoystickClose)
+                        SDL_GameControllerSetPlayerIndex(game_controller, gamepad_slot);
+                        open_game_controllers.emplace_back(
+                            shared_ptr<SDL_GameController>(game_controller, SDL_GameControllerClose)
                         );
                     }
-
-                    // Reserve gamepad slot and issue gamepad connection event
-                    if (gamepad_slot >= 0 && joystick_instance_id >= 0) {
-                        gamepad_slots[gamepad_slot] = joystick_instance_id;
-                        enqueue_gamepad_connection_event(gamepad_slot, true, -1);
+                }
+                // ...but fall back on the good, old SDL_Joystick API.
+                else if (SDL_Joystick* joystick = SDL_JoystickOpen(i)) {
+                    gamepad_slot = available_gamepad_slot_index();
+                    joystick_instance_id = SDL_JoystickInstanceID(joystick);
+                    if (gamepad_instance_id_is_known(joystick_instance_id)) {
+                        return true;
                     }
+                    SDL_JoystickSetPlayerIndex(joystick, gamepad_slot);
+                    open_joysticks.emplace_back(
+                        shared_ptr<SDL_Joystick>(joystick, SDL_JoystickClose)
+                    );
+                }
+
+                // Reserve gamepad slot and issue gamepad connection event
+                if (gamepad_slot >= 0 && joystick_instance_id >= 0) {
+                    gamepad_slots[gamepad_slot] = joystick_instance_id;
+                    enqueue_gamepad_connection_event(gamepad_slot, true, -1);
                 }
                 break;
             }
