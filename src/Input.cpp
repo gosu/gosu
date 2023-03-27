@@ -149,7 +149,9 @@ struct Gosu::Input::Impl : private Gosu::Noncopyable
                         if (gamepad_instance_id_is_known(joystick_instance_id)) {
                             return true;
                         }
+#if SDL_VERSION_ATLEAST(2, 0, 12)
                         SDL_GameControllerSetPlayerIndex(game_controller, gamepad_slot);
+#endif
                         open_game_controllers.emplace_back(
                             shared_ptr<SDL_GameController>(game_controller, SDL_GameControllerClose)
                         );
@@ -162,7 +164,9 @@ struct Gosu::Input::Impl : private Gosu::Noncopyable
                     if (gamepad_instance_id_is_known(joystick_instance_id)) {
                         return true;
                     }
+#if SDL_VERSION_ATLEAST(2, 0, 12)
                     SDL_JoystickSetPlayerIndex(joystick, gamepad_slot);
+#endif
                     open_joysticks.emplace_back(
                         shared_ptr<SDL_Joystick>(joystick, SDL_JoystickClose)
                     );
