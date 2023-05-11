@@ -12,8 +12,8 @@
 #include <algorithm>
 #include <memory>
 #include <mutex>
-#include <vector>
 #include <stdexcept>
+#include <vector>
 
 struct Gosu::AudioFile::Impl : private Gosu::Noncopyable
 {
