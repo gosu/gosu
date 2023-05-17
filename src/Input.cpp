@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <array>
 #include <mutex>
+#include <stdexcept>
 using namespace std;
 
 static void require_sdl_video()

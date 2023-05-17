@@ -13,6 +13,7 @@
 #include <memory>
 #include <mutex>
 #include <vector>
+#include <stdexcept>
 
 struct Gosu::AudioFile::Impl : private Gosu::Noncopyable
 {
