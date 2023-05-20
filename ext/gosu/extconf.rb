@@ -33,7 +33,7 @@ $CXXFLAGS ||= ""
 $CXXFLAGS << " -std=gnu++17 -Dregister="
 
 # Make Gosu's own header files and all of its dependencies available to C++ source files.
-$INCFLAGS << " -I../../include -I../../dependencies/stb -I../../dependencies/utf8proc -I../../dependencies/SDL_sound -I../../dependencies/mojoAL"
+$INCFLAGS << " -I../../include -I../../dependencies/stb -I../../dependencies/utf8proc -I../../dependencies/SDL_sound -I../../dependencies/mojoAL/AL"
 
 if windows
   # We statically compile utf8proc into the Gosu binary.
