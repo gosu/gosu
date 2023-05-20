@@ -212,7 +212,7 @@ typedef struct __SOUND_DECODERFUNCTIONS__
         /*
          * Reset the decoding to the beginning of the stream. Nonzero on
          *  success, zero on failure.
-         *
+         *  
          * The purpose of this method is to allow for higher efficiency than
          *  an application could get by just recreating the sample externally;
          *  not only do they not have to reopen the RWops, reallocate buffers,
@@ -230,9 +230,9 @@ typedef struct __SOUND_DECODERFUNCTIONS__
         /*
          * Reposition the decoding to an arbitrary point. Nonzero on
          *  success, zero on failure.
-         *
+         *  
          * The purpose of this method is to allow for higher efficiency than
-         *  an application could get by just rewinding the sample and
+         *  an application could get by just rewinding the sample and 
          *  decoding to a given point.
          *
          * The decoder is responsible for calling seek() on the associated

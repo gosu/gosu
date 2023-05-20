@@ -715,6 +715,11 @@ static int WAV_open_internal(Sound_Sample *sample, const char *ext, fmt_t *fmt)
                                sample->actual.channels );
     internal->decoder_private = (void *) w;
 
+    if (fmt->dwAvgBytesPerSec == 0) {  /* we assume data is uncompressed if this field is unset. */
+        fmt->dwAvgBytesPerSec = fmt->sample_frame_size * sample->actual.rate;
+        BAIL_IF_MACRO(fmt->dwAvgBytesPerSec == 0, "WAV: corrupt format chunk?", 0);
+    }
+
     internal->total_time = (fmt->total_bytes / fmt->dwAvgBytesPerSec) * 1000;
     internal->total_time += (fmt->total_bytes % fmt->dwAvgBytesPerSec)
                               *  1000 / fmt->dwAvgBytesPerSec;
