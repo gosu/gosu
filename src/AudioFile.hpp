@@ -8,7 +8,7 @@
 #define OPENAL_DEPRECATED
 #include <OpenAL/al.h>
 #else
-#include <AL/al.h>
+#include <al.h>
 #endif
 
 #include <cstddef>

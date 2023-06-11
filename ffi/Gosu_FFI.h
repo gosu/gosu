@@ -18,9 +18,16 @@
 #endif
 
 #if GOSU_FFI_EXPORTS
+#if defined(MRBGEM_MRUBY_GOSU_VERSION) && !defined(__cplusplus) // Compiling mruby-gosu as C only
+#if defined(_MSC_VER)
+#include <stdbool.h>
+#endif
+#define GOSU_FFI_API GOSU_FFI_API_EXPORTS
+#else
 // When building Gosu, also add [[maybe_unused]] to the definition (which is fine because we only
 // build Gosu using a C++17 compiler) to silence warnings about unused functions.
 #define GOSU_FFI_API extern "C" [[maybe_unused]] GOSU_FFI_API_EXPORTS
+#endif
 #elif defined(__cplusplus)
 #define GOSU_FFI_API extern "C" GOSU_FFI_API_IMPORTS
 #else

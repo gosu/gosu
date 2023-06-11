@@ -2,7 +2,7 @@ SDL2_PREFIX = `sdl2-config --prefix`.chomp
 
 Pod::Spec.new do |s|
   s.name = "Gosu"
-  s.version = "1.4.5"
+  s.version = "1.4.6"
   s.summary = "2D game development library."
   s.homepage = "https://www.libgosu.org/"
   s.license = { type: "MIT", file: "COPYING" }
@@ -17,8 +17,7 @@ Pod::Spec.new do |s|
     # Be careful not to include SDL_sound or mojoAL on iOS, where Gosu still uses AudioToolbox and OpenAL instead.
     ss.source_files = "dependencies/{stb,utf8proc}/**/*.{h,c}"
     ss.osx.source_files = "dependencies/{SDL_sound,mojoAL}/**/*.{h,c}"
-    ss.osx.header_mappings_dir = "dependencies/mojoAL" # don't flatten <AL/al.h> to just <al.h>
-    ss.osx.compiler_flags = "-I#{SDL2_PREFIX}/include/SDL2 -Idependencies/mojoAL"
+    ss.osx.compiler_flags = "-I#{SDL2_PREFIX}/include/SDL2 -Idependencies/mojoAL/AL"
   end
 
   s.subspec "Gosu" do |ss|

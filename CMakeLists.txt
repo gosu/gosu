@@ -6,7 +6,7 @@
 # - This is not (yet?) going to replace the Visual Studio project for Windows.
 cmake_minimum_required(VERSION 3.10...3.18.4)
 
-project(Gosu VERSION 1.4.5)
+project(Gosu VERSION 1.4.6)
 
 
 ##############################################
@@ -63,7 +63,7 @@ target_include_directories(gosu
 # Use target_include_directories(... SYSTEM ...) to suppress warnings in these headers.
 target_include_directories(gosu SYSTEM
     PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/mojoAL
+        ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/mojoAL/AL
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/SDL_sound
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/stb
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/utf8proc
