@@ -3,7 +3,7 @@
 ## [1.4.6] - 2023-05-20
 * When using SDL 2.0.12 or later, the LED indicators on gamepads will now be set to match the gamepad index that Gosu has allocated for them. (#639)
 * Added some missing `#include` statements, thanks to @LittleLightLittleFire for the PRs. (#641, #642)
-* Update all bundled dependencies. (#634)
+* Update all bundled dependencies. (#643)
 
 ## [1.4.5] - 2022-12-24
 * Finish the fix for the Windows main loop from #634, a key part was missing. (#636)
