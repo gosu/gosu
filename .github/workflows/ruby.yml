@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         platform: [ubuntu-latest, macos-latest]
-        ruby-version: ['2.6', '3.0']
+        ruby-version: ['2.7', '3.0']
     runs-on: ${{ matrix.platform }}
 
     steps:

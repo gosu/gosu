@@ -14,7 +14,7 @@ EOS
   s.date = Time.now.strftime "%Y-%m-%d"
   s.email = "julian@raschke.de"
   s.homepage = "https://www.libgosu.org/"
-  s.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
+  s.required_ruby_version = Gem::Requirement.new(">= 2.7.0")
   s.platform = Gem::Platform::RUBY
   s.extensions = FileList["ext/**/extconf.rb"]
   # Additional Ruby source files plus DLLs (for Windows).
