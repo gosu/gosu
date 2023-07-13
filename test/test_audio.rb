@@ -8,7 +8,6 @@ class TestAudio < Minitest::Test
   include InteractiveTests
   
   def test_sample
-    skip_on_appveyor
     skip_on_github
 
     sound = Gosu::Sample.new(media_path("0614.ogg"))
@@ -66,7 +65,6 @@ class TestAudio < Minitest::Test
   end
   
   def test_song
-    skip_on_appveyor
     skip_on_github
 
     win = SongTestWindow.new

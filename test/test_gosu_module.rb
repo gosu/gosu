@@ -120,8 +120,6 @@ class TestGosuModule < Minitest::Test
   SIZES = [25, 50, 500]
 
   def test_render
-    # Gosu.render does not work on Appveyor.
-    skip_on_appveyor
 
     SIZES.each do |size|
       assert_output_matches("test_gosu_module/triangle-#{size}", 0.9, [size, size]) do

@@ -9,9 +9,12 @@ jobs:
   test:
     strategy:
       matrix:
-        platform: [ubuntu-latest, macos-latest]
+        platform: [ubuntu-latest, macos-latest, windows-latest]
         ruby-version: ['2.6', '3.0']
     runs-on: ${{ matrix.platform }}
+
+    env:
+      GOSU_RELEASE_VERSION: 9.9.9
 
     steps:
       - uses: actions/checkout@v3
@@ -34,7 +37,7 @@ jobs:
         run: bundle install
 
       - name: Install Ruby/Gosu
-        run: GOSU_RELEASE_VERSION=9.9.9 rake gem && gem install pkg/gosu-9.9.9.gem --no-doc
+        run: rake gem && gem install pkg/gosu-9.9.9.gem --no-doc
 
       - name: Run tests (Linux)
         if: startsWith(matrix.platform, 'ubuntu-')
@@ -43,3 +46,7 @@ jobs:
       - name: Run tests (macOS)
         if: startsWith(matrix.platform, 'macos-')
         run: rake -rgosu test
+
+      - name: Run tests (Windows)
+        if: startsWith(matrix.platform, 'windows-')
+        run: cmd /c rake test TESTOPTS='-v' '2>&1'
