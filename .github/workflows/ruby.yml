@@ -14,14 +14,14 @@ jobs:
     runs-on: ${{ matrix.platform }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install dependencies (Ubuntu)
-        if: matrix.platform == 'ubuntu-latest'
+        if: startsWith(matrix.platform, 'ubuntu-')
         run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libgl1-mesa-dev libgmp-dev libfontconfig1-dev xvfb
 
       - name: Install dependencies (macOS)
-        if: matrix.platform == 'macos-latest'
+        if: startsWith(matrix.platform, 'macos-')
         run: brew install sdl2
 
       - name: Set up Ruby
@@ -37,9 +37,9 @@ jobs:
         run: GOSU_RELEASE_VERSION=9.9.9 rake gem && gem install pkg/gosu-9.9.9.gem --no-doc
 
       - name: Run tests (Linux)
-        if: matrix.platform == 'ubuntu-latest'
+        if: startsWith(matrix.platform, 'ubuntu-')
         run: xvfb-run --auto-servernum rake -rgosu test
 
       - name: Run tests (macOS)
-        if: matrix.platform == 'macos-latest'
+        if: startsWith(matrix.platform, 'macos-')
         run: rake -rgosu test
