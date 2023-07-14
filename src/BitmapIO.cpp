@@ -121,7 +121,7 @@ static void stbi_write_to_writer(void* context, void* data, int size)
 }
 
 void Gosu::save_image_file(const Gosu::Bitmap& bitmap, Gosu::Writer writer,
-                           const std::string_view& format_hint)
+                           std::string_view format_hint)
 {
     int ok;
 

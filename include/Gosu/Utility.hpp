@@ -5,6 +5,12 @@
 
 namespace Gosu
 {
+    /// Converts a UTF-8 string to composed UTC-4, i.e. to a list of Unicode codepoints.
+    ///
+    /// This is not quite as good as splitting a string into graphemes. For example, the "family of
+    /// four" Emoji is actually composed of seven(!) codepoints. But because Gosu's text rendering
+    /// facilities have no support for multi-codepoint graphemes, Gosu::Font and related classes are
+    /// based on codepoints.
     std::u32string utf8_to_composed_utc4(const std::string& utf8);
 
     /// Returns true if the filename has the given extension.
@@ -17,6 +23,7 @@ namespace Gosu
     /// typically the first language in the returned array that your game supports.
     std::vector<std::string> user_languages();
 
+    /// Base class to quickly make a type non-copyable/non-movable. Same as boost::noncopyable.
     class Noncopyable
     {
     protected:

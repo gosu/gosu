@@ -7,13 +7,17 @@
 
 namespace Gosu
 {
-    /// A two-dimensional array area of pixels, each represented by a Color value.
+    /// A two-dimensional area of pixels, each represented by a Color value.
+    /// Internally, it is stored as a contiguous array of Gosu::Color, row by row.
+    ///
     /// Bitmaps are typically created only as an intermediate step between loading image files, and
     /// creating Gosu::Image objects from them (i.e. transferring the image into video RAM).
-    /// Has (expensive) value semantics.
+    ///
+    /// Bitmaps have (expensive) value semantics.
     class Bitmap
     {
-        int m_width = 0, m_height = 0;
+        int m_width = 0;
+        int m_height = 0;
         std::vector<Color> m_pixels;
 
     public:
@@ -21,31 +25,17 @@ namespace Gosu
 
         Bitmap(int width, int height, Color c = Color::NONE);
 
-        int width() const
-        {
-            return m_width;
-        }
+        int width() const { return m_width; }
 
-        int height() const
-        {
-            return m_height;
-        }
-
-        void swap(Bitmap& other);
+        int height() const { return m_height; }
 
         void resize(int width, int height, Color c = Color::NONE);
 
         /// Returns the color at the specified position without any bounds checking.
-        Color get_pixel(int x, int y) const
-        {
-            return m_pixels[y * m_width + x];
-        }
+        Color get_pixel(int x, int y) const { return m_pixels[y * m_width + x]; }
 
         /// Sets the pixel at the specified position without any bounds checking.
-        void set_pixel(int x, int y, Color c)
-        {
-            m_pixels[y * m_width + x] = c;
-        }
+        void set_pixel(int x, int y, Color c) { m_pixels[y * m_width + x] = c; }
 
         /// This updates a pixel using the "over" alpha compositing operator, see:
         /// https://en.wikipedia.org/wiki/Alpha_compositing
@@ -57,26 +47,18 @@ namespace Gosu
 
         /// Inserts a portion of a bitmap at the given position. Parts of the inserted bitmap that
         /// would be outside of the target bitmap will be clipped away.
-        void insert(int x, int y, const Bitmap& source,
-                    int src_x, int src_y, int src_width, int src_height);
+        void insert(int x, int y, const Bitmap& source, int src_x, int src_y, int src_width,
+                    int src_height);
 
         /// Direct access to the array of color values.
-        /// The return value is undefined if this bitmap is empty.
-        const Color* data() const
-        {
-            return &m_pixels[0];
-        }
+        const Color* data() const { return m_pixels.data(); }
 
         /// Direct access to the array of color values.
-        /// The return value is undefined if this bitmap is empty.
-        Color* data()
-        {
-            return &m_pixels[0];
-        }
+        Color* data() { return m_pixels.data(); }
 
-        #ifdef FRIEND_TEST
-        FRIEND_TEST(BitmapTests, MemoryManagement);
-        #endif
+#ifdef FRIEND_TEST
+        FRIEND_TEST(BitmapTests, memory_management);
+#endif
     };
 
     /// Loads any supported image into a Bitmap.
@@ -87,14 +69,13 @@ namespace Gosu
     /// Saves a Bitmap to a file.
     void save_image_file(const Bitmap& bitmap, const std::string& filename);
     /// Saves a Bitmap to an arbitrary resource.
-    void save_image_file(const Bitmap& bitmap, Writer writer,
-                         const std::string_view& format_hint = "png");
+    void save_image_file(const Bitmap& bitmap, Writer writer, std::string_view format_hint = "png");
 
     /// Set the alpha value of all pixels which are equal to the color key to zero.
     /// To reduce interpolation artefacts when stretching or rotating the resulting image, the color
-    /// value of these pixels will also be adjusted to the average of their surrounding pixels.
+    /// value of these transparent pixels will be adjusted to the average of their neighbors.
     void apply_color_key(Bitmap& bitmap, Color key);
 
-    Bitmap apply_border_flags(unsigned image_flags, const Bitmap& source,
-                              int src_x, int src_y, int src_width, int src_height);
+    Bitmap apply_border_flags(unsigned image_flags, const Bitmap& source, int src_x, int src_y,
+                              int src_width, int src_height);
 }

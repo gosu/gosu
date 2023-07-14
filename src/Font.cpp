@@ -50,7 +50,8 @@ struct Gosu::Font::Impl : private Gosu::Noncopyable
                                                        scaled_height, font_flags));
             if (required_width > bitmap.width()) {
                 // If the character was wider than high, we need to render it again.
-                Bitmap(required_width, scaled_height).swap(bitmap);
+                Bitmap resized_bitmap(required_width, scaled_height);
+                std::swap(resized_bitmap, bitmap);
                 Gosu::draw_text(bitmap, 0, 0, Color::WHITE, string, name, scaled_height,
                                 font_flags);
             }

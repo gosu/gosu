@@ -1,85 +1,37 @@
-BasedOnStyle: LLVM
-AccessModifierOffset: -4
+BasedOnStyle: WebKit
+
 AlignAfterOpenBracket: Align
-AlignConsecutiveAssignments: false
-AlignOperands: Align
-AllowAllArgumentsOnNextLine: false
-AllowAllParametersOfDeclarationOnNextLine: false
-AllowShortBlocksOnASingleLine: Never
-AllowShortCaseLabelsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: InlineOnly
-AllowShortIfStatementsOnASingleLine: WithoutElse
-AllowShortLambdasOnASingleLine: All
-AllowShortLoopsOnASingleLine: true
-AlwaysBreakAfterReturnType: None
-AlwaysBreakTemplateDeclarations: Yes
 BreakBeforeBraces: Custom
+BreakConstructorInitializers: BeforeColon
 BraceWrapping:
-  AfterCaseLabel: false
   AfterClass: true
-  AfterControlStatement: Never
   AfterEnum: true
   AfterFunction: true
   AfterNamespace: true
   AfterStruct: true
   AfterUnion: true
-  BeforeCatch: false
-  BeforeElse: true
-  IndentBraces: false
-  SplitEmptyFunction: true
-  SplitEmptyRecord: true
-BreakBeforeBinaryOperators: None
-BreakBeforeTernaryOperators: true
-BreakConstructorInitializers: BeforeColon
-BreakInheritanceList: BeforeColon
 ColumnLimit: 100
-CompactNamespaces: false
-ConstructorInitializerIndentWidth: 0
-ContinuationIndentWidth: 8
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex:           '^<Gosu/Fwd.hpp>$'
-    Priority:        0
-    SortPriority:    2
-  - Regex:           '^<Gosu/'
-    Priority:        0
-    SortPriority:    3
-  - Regex:           '^"'
-    Priority:        0
-    SortPriority:    4
-  - Regex:           '\.h$'
-    Priority:        0
-    SortPriority:    5
-  - Regex:           '.*'
-    Priority:        0
-    SortPriority:    6
-IndentCaseLabels: true
-IndentPPDirectives: None
-IndentWidth: 4
-FixNamespaceComments: false
-KeepEmptyLinesAtTheStartOfBlocks: false
-MaxEmptyLinesToKeep: 1
+  # Make sure that Google Test comes first, so that the FRIEND_TEST macro works reliably.
+  - Regex: '^<gtest/gtest.h>$'
+    Priority: -1
+  - Regex: '^<Gosu/Fwd.hpp>$'
+    Priority: 0
+    SortPriority: 2
+  - Regex: '^<Gosu/'
+    Priority: 0
+    SortPriority: 3
+  - Regex: '^"'
+    Priority: 0
+    SortPriority: 4
+  - Regex: '\.h$'
+    Priority: 0
+    SortPriority: 5
+  - Regex: '.*'
+    Priority: 0
+    SortPriority: 6
+InsertBraces: true
 NamespaceIndentation: All
-ObjCSpaceAfterProperty: false
-ObjCSpaceBeforeProtocolList: false
 PackConstructorInitializers: Never
-PointerAlignment: Left
-ReflowComments: false
-SpaceAfterCStyleCast: true
-SpaceAfterLogicalNot: false
-SpaceAfterTemplateKeyword: false
-SpaceBeforeAssignmentOperators: true
-SpaceBeforeCpp11BracedList: false
-SpaceBeforeCtorInitializerColon: true
-SpaceBeforeInheritanceColon: true
-SpaceBeforeParens: ControlStatements
-SpaceBeforeRangeBasedForLoopColon: true
-SpaceInEmptyParentheses: false
-SpacesBeforeTrailingComments: 1
-SpacesInAngles: false
-SpacesInCStyleCastParentheses: false
-SpacesInContainerLiterals: false
-SpacesInParentheses: false
-SpacesInSquareBrackets: false
-TabWidth: 4
-UseTab: Never
