@@ -1,0 +1,24 @@
+name: Microsoft Visual C++
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build Gosu for Windows
+        run: msbuild windows/Gosu.vcxproj
+
+      - name: Build Gosu FFI interface for Windows
+        run: msbuild windows/GosuFFI.vcxproj
+
+      - name: Build Tutorial for Windows
+        run: msbuild windows/Tutorial.vcxproj

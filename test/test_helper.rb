@@ -40,7 +40,6 @@ class Gosu::Image
 end
 
 module TestHelper
-  # TODO: Should be __dir__ after we drop Ruby 1.x support...
   def self.media_path(fname = "")
     File.join(File.dirname(__FILE__), "media", fname)
   end
@@ -49,10 +48,6 @@ module TestHelper
     TestHelper.media_path(fname)
   end
   
-  def skip_on_appveyor
-    skip if ENV["APPVEYOR"]
-  end
-
   def skip_on_github
     skip if ENV["GITHUB_WORKFLOW"]
   end
