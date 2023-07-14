@@ -1088,6 +1088,7 @@ namespace Gosu
 // Window
 %ignore Gosu::WindowFlags;
 %ignore Gosu::Window::resize;
+%ignore Gosu::Window::sdl_window;
 %rename("width=") set_width;
 %rename("height=") set_height;
 %rename("fullscreen=") set_fullscreen;

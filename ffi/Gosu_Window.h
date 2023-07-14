@@ -60,6 +60,8 @@ GOSU_FFI_API void Gosu_Window_set_update_interval(Gosu_Window* window, double up
 GOSU_FFI_API const char* Gosu_Window_caption(Gosu_Window* window);
 GOSU_FFI_API void Gosu_Window_set_caption(Gosu_Window* window, const char* caption);
 
+GOSU_FFI_API void* Gosu_Window_sdl_window(Gosu_Window* window);
+
 // Input Properties
 
 GOSU_FFI_API Gosu_TextInput* Gosu_Window_text_input(Gosu_Window* window);
