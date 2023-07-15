@@ -86,6 +86,8 @@ void Gosu::LargeImageData::draw(double x1, double y1, Color c1, double x2, doubl
             double rel_y_t = y / m_h;
             double rel_y_b = (y + image.height()) / m_h;
 
+            using std::lerp;
+
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
 #define LERP2D(what, x_weight, y_weight)                                                           \
     lerp(lerp(what##1, what##3, y_weight), lerp(what##2, what##4, y_weight), x_weight);
@@ -171,7 +173,7 @@ std::unique_ptr<Gosu::ImageData> Gosu::LargeImageData::subimage(int left, int to
     }
 
     if (sub_tiles.size() == 1) {
-        return move(sub_tiles[0]);
+        return std::move(sub_tiles[0]);
     }
     else {
         std::unique_ptr<LargeImageData> result(new LargeImageData());
@@ -180,7 +182,7 @@ std::unique_ptr<Gosu::ImageData> Gosu::LargeImageData::subimage(int left, int to
         result->m_tiles_x = static_cast<int>(sub_tiles.size()) / sub_tiles_y;
         result->m_tiles_y = sub_tiles_y;
         result->m_tiles.swap(sub_tiles);
-        return move(result);
+        return std::move(result);
     }
 }
 

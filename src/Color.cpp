@@ -116,7 +116,7 @@ void Gosu::Color::set_value(double v)
 Gosu::Color Gosu::lerp(Color a, Color b, double t)
 {
     const auto lerp_channel = [](Color::Channel a, Color::Channel b, double t) {
-        return static_cast<Color::Channel>(std::clamp(std::round(lerp(a, b, t)), 0.0, 255.0));
+        return static_cast<Color::Channel>(std::clamp(std::round(std::lerp(a, b, t)), 0.0, 255.0));
     };
 
     Color result;

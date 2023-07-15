@@ -23,7 +23,7 @@ struct Gosu::TrueTypeFont::Impl : private Gosu::Noncopyable
     double base_scale;
 
     Impl(const unsigned char* ttf_data, std::shared_ptr<TrueTypeFont> fallback)
-    : fallback{move(fallback)}
+    : fallback{std::move(fallback)}
     {
         auto offset = stbtt_GetFontOffsetForIndex(ttf_data, 0);
         int success = stbtt_InitFont(&info, ttf_data, offset);
@@ -258,7 +258,7 @@ Gosu::TrueTypeFont& Gosu::font_by_name(const std::string& font_name, unsigned fo
             if (font_flags != 0) ttf_stack.push_back(ttf_data_by_name(font_name, font_flags));
         }
 
-        font_ptr = &font_with_stack(move(ttf_stack));
+        font_ptr = &font_with_stack(std::move(ttf_stack));
     }
 
     return *font_ptr;
