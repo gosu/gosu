@@ -17,7 +17,7 @@ void Gosu::TexChunk::set_tex_info()
 }
 
 Gosu::TexChunk::TexChunk(std::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding)
-: m_texture{move(texture)},
+: m_texture{std::move(texture)},
   m_x{x},
   m_y{y},
   m_w{w},
