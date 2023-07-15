@@ -47,9 +47,9 @@ Pod::Spec.new do |s|
     # Do not include FFI wrappers in the Pod project - this spec is for the C++ interface.
     ss.exclude_files = "src/Constants.cpp", "src/*Wrapper.cpp"
 
-    # Gosu requires C++17 features and GNU extensions, but Xcode only uses gnu++14 by default.
+    # Gosu requires C++20 features and GNU extensions, but Xcode only uses gnu++14 by default.
     ss.pod_target_xcconfig = {
-      "CLANG_CXX_LANGUAGE_STANDARD" => "gnu++17",
+      "CLANG_CXX_LANGUAGE_STANDARD" => "gnu++20",
       "CLANG_CXX_LIBRARY" => "libc++",
     }
   end
