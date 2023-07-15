@@ -1,4 +1,3 @@
-# Encoding: UTF-8
 require_relative "test_helper"
 
 class TestConstants < Minitest::Test

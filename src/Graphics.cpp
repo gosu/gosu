@@ -313,7 +313,7 @@ Gosu::Image Gosu::Graphics::record(int width, int height, const std::function<vo
 
     std::unique_ptr<ImageData> result(new Macro(current_queue(), width, height));
     queues.pop_back();
-    return Image(move(result));
+    return Image(std::move(result));
 }
 
 void Gosu::Graphics::transform(const Gosu::Transform& transform, const std::function<void()>& f)

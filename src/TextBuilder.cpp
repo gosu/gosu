@@ -26,7 +26,7 @@ Gosu::WordInfo::WordInfo(const std::string& font_name, double font_height,
         width += text_width(part.text, font_name, font_height, part.flags);
     }
 
-    this->parts = move(parts);
+    this->parts = std::move(parts);
 }
 
 void Gosu::TextBuilder::flush_current_line(EndOfLineReason reason)

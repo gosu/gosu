@@ -86,11 +86,4 @@ namespace Gosu
     
     //! Returns the distance between two points.
     double distance(double x1, double y1, double x2, double y2);
-    
-    //! Placeholder for std::lerp, will be removed when Gosu requires C++20.
-    template<typename T>
-    T lerp(T a, T b, double t = 0.5)
-    {
-        return a * (1.0 - t) + b * t;
-    }
 }

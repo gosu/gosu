@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Gosu/Platform.hpp>
+#include <compare>
 #include <cstdint>
 
 namespace Gosu
@@ -41,7 +42,7 @@ namespace Gosu
         {
         }
 
-        Color with_alpha(Channel new_alpha)
+        Color with_alpha(Channel new_alpha) const
         {
             Color result = *this;
             result.alpha = new_alpha;
@@ -96,16 +97,14 @@ namespace Gosu
         static const Color FUCHSIA;
         /// Same as Color::AQUA.
         static const Color CYAN;
+
+        std::strong_ordering operator<=>(const Color&) const = default;
     };
 
     // Ensure that we can pass vectors of Gosu::Color straight to OpenGL and back.
     static_assert(sizeof(Color) == sizeof(std::uint32_t));
 
 #ifndef SWIG
-    inline bool operator<(Color a, Color b) { return a.gl() < b.gl(); }
-    inline bool operator==(Color a, Color b) { return a.gl() == b.gl(); }
-    inline bool operator!=(Color a, Color b) { return a.gl() != b.gl(); }
-
     /// Interpolates linearly between two colors, with a given weight towards
     /// the second color.
     Color lerp(Color a, Color b, double t = 0.5);

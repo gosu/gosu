@@ -47,4 +47,12 @@ namespace Gosu
             EXPECT_EQ(c.saturation(), 0.0);
         }
     }
+
+    TEST_F(ColorTests, ComparisonOperators)
+    {
+        EXPECT_EQ(Color::CYAN, Color::AQUA);
+        EXPECT_NE(Color::GREEN, Color::BLACK);
+        // We order by RGBA -> BLUE must come after RED. (But this is an implementation detail.)
+        EXPECT_LT(Color::BLUE, Color::RED);
+    }
 }

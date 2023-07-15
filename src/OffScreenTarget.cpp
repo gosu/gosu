@@ -95,5 +95,5 @@ Gosu::Image Gosu::OffScreenTarget::render(const std::function<void ()>& f)
     glBindFramebuffer(GOSU_GL_CONST(GL_FRAMEBUFFER), 0);
 
     unique_ptr<ImageData> tex_chunk(new TexChunk(texture, 0, 0, texture->width(), texture->height(), 0));
-    return Image(move(tex_chunk));
+    return Image(std::move(tex_chunk));
 }

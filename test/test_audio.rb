@@ -1,4 +1,3 @@
-# Encoding: UTF-8
 require_relative "test_helper"
 
 # All sound files are from http://www.bigsoundbank.com/

@@ -50,13 +50,13 @@ Checks: >-
   -readability-named-parameter,
 
 CheckOptions:
-  - { key: readability-identifier-naming.ClassCase,            value: CamelCase  }
-  - { key: readability-identifier-naming.FunctionCase,         value: lower_case }
-  - { key: readability-identifier-naming.GlobalConstantCase,   value: UPPER_CASE }
-  - { key: readability-identifier-naming.MemberFunctionCase,   value: lower_case }
-  - { key: readability-identifier-naming.NamespaceCase,        value: CamelCase  }
-  - { key: readability-identifier-naming.ParameterCase,        value: lower_case }
-  - { key: readability-identifier-naming.PrivateMemberCase,    value: lower_case }
-  - { key: readability-identifier-naming.PrivateMemberPrefix,  value: m_         }
-  - { key: readability-identifier-naming.StructCase,           value: CamelCase  }
-  - { key: readability-identifier-naming.VariableCase,         value: lower_case }
+  readability-identifier-naming.ClassCase: CamelCase
+  readability-identifier-naming.FunctionCase: lower_case
+  readability-identifier-naming.GlobalConstantCase: UPPER_CASE
+  readability-identifier-naming.MemberFunctionCase: lower_case
+  readability-identifier-naming.NamespaceCase: CamelCase
+  readability-identifier-naming.ParameterCase: lower_case
+  readability-identifier-naming.PrivateMemberCase: lower_case
+  readability-identifier-naming.PrivateMemberPrefix: m_
+  readability-identifier-naming.StructCase: CamelCase
+  readability-identifier-naming.VariableCase: lower_case
