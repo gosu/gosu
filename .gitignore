@@ -11,7 +11,9 @@
 # CLion files
 /.idea
 /cmake-build-debug
+/cmake-build-debug-coverage
 /cmake-build-release
+*.profraw
 
 # Files from Mac builds & CocoaPod installs
 /**/xcuserdata

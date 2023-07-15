@@ -52,7 +52,7 @@ Gosu::Bitmap Gosu::layout_markup(const std::string& markup, const std::string& f
         // Feed all formatted substrings to the TextBuilder, which will construct the result.
         // Split the input string into words, because this method implements word-wrapping.
         MarkupParser parser{font_flags, true, [&text_builder](std::vector<FormattedString> word) {
-                                text_builder.feed_word(move(word));
+                                text_builder.feed_word(std::move(word));
                             }};
         parser.parse(markup);
 
