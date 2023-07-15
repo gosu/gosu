@@ -1,4 +1,3 @@
-# Encoding: UTF-8
 require_relative 'test_helper'
 
 # Make a backup of the Gosu modules and its helpers on Numeric.

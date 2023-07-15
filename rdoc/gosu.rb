@@ -1,5 +1,3 @@
-## Encoding: UTF-8
-
 module Gosu
   ##
   # The first component of the version.
