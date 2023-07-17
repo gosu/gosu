@@ -23,7 +23,7 @@ namespace Gosu
         Graphics& current_graphics()
         {
             if (current_graphics_pointer == nullptr) {
-                throw std::logic_error{"Gosu::Graphics can only be drawn to while rendering"};
+                throw std::logic_error { "Gosu::Graphics can only be drawn to while rendering" };
             }
             return *current_graphics_pointer;
         }
@@ -35,7 +35,7 @@ namespace Gosu
         DrawOpQueue& current_queue()
         {
             if (queues.empty()) {
-                throw std::logic_error{"There is no rendering queue for this operation"};
+                throw std::logic_error { "There is no rendering queue for this operation" };
             }
             return queues.back();
         }
@@ -94,7 +94,7 @@ struct Gosu::Graphics::Impl : private Gosu::Noncopyable
 };
 
 Gosu::Graphics::Graphics(unsigned phys_width, unsigned phys_height)
-: m_impl(new Impl)
+    : m_impl(new Impl)
 {
     m_impl->virt_width = phys_width;
     m_impl->virt_height = phys_height;
@@ -131,7 +131,7 @@ void Gosu::Graphics::set_resolution(unsigned virtual_width, unsigned virtual_hei
                                     double vertical_black_bar_height)
 {
     if (virtual_width == 0 || virtual_height == 0) {
-        throw std::invalid_argument{"Invalid virtual resolution."};
+        throw std::invalid_argument { "Invalid virtual resolution." };
     }
 
     m_impl->virt_width = virtual_width;
@@ -145,7 +145,7 @@ void Gosu::Graphics::set_resolution(unsigned virtual_width, unsigned virtual_hei
 void Gosu::Graphics::frame(const std::function<void()>& f)
 {
     if (current_graphics_pointer != nullptr) {
-        throw std::logic_error{"Cannot nest calls to Gosu::Graphics::begin()"};
+        throw std::logic_error { "Cannot nest calls to Gosu::Graphics::begin()" };
     }
 
     // Cancel all recording or whatever that might still be in progress...
@@ -157,8 +157,7 @@ void Gosu::Graphics::frame(const std::function<void()>& f)
         // This helps reduce allocations during normal operation.
         queues.clear();
         queues.swap(m_impl->warmed_up_queues);
-    }
-    else {
+    } else {
         // Create default draw-op queue.
         queues.emplace_back(QM_RENDER_TO_SCREEN);
     }
@@ -174,7 +173,9 @@ void Gosu::Graphics::frame(const std::function<void()>& f)
     f();
 
     // Cancel all intermediate queues that have not been cleaned up.
-    while (queues.size() > 1) queues.pop_back();
+    while (queues.size() > 1) {
+        queues.pop_back();
+    }
 
     flush();
 
@@ -202,8 +203,7 @@ void Gosu::Graphics::frame(const std::function<void()>& f)
     if (queues.size() == 1) {
         queues.swap(m_impl->warmed_up_queues);
         m_impl->warmed_up_queues.back().reset();
-    }
-    else {
+    } else {
         queues.clear();
     }
 }
@@ -217,11 +217,11 @@ void Gosu::Graphics::flush()
 void Gosu::Graphics::gl(const std::function<void()>& f)
 {
     if (current_queue().mode() == QM_RECORD_MACRO) {
-        throw std::logic_error{"Custom OpenGL is not allowed while creating a macro"};
+        throw std::logic_error { "Custom OpenGL is not allowed while creating a macro" };
     }
 
 #ifdef GOSU_IS_OPENGLES
-    throw std::logic_error{"Custom OpenGL ES is not supported yet"};
+    throw std::logic_error { "Custom OpenGL ES is not supported yet" };
 #else
     Graphics& cg = current_graphics();
 
@@ -238,7 +238,7 @@ void Gosu::Graphics::gl(const std::function<void()>& f)
 void Gosu::Graphics::gl(Gosu::ZPos z, const std::function<void()>& f)
 {
 #ifdef GOSU_IS_OPENGLES
-    throw std::logic_error{"Custom OpenGL ES is not supported yet"};
+    throw std::logic_error { "Custom OpenGL ES is not supported yet" };
 #else
     const auto wrapped_f = [f] {
         Graphics& cg = current_graphics();
@@ -406,65 +406,74 @@ void Gosu::Graphics::set_physical_resolution(unsigned phys_width, unsigned phys_
     m_impl->update_base_transform();
 }
 
-std::unique_ptr<Gosu::ImageData> Gosu::Graphics::create_image(const Bitmap& src, unsigned src_x,
-                                                              unsigned src_y, unsigned src_width,
-                                                              unsigned src_height, unsigned flags)
+std::unique_ptr<Gosu::ImageData>
+Gosu::Graphics::create_image(const Bitmap& source, const Rect& source_rect, unsigned flags)
 {
     static const unsigned max_size = MAX_TEXTURE_SIZE;
 
     // Backward compatibility: This used to be 'bool tileable'.
-    if (flags == 1) flags = IF_TILEABLE;
+    if (flags == 1) {
+        flags = IF_TILEABLE;
+    }
 
     bool wants_retro = (flags & IF_RETRO);
 
-    // Special case: If the texture is supposed to have hard borders, is
-    // quadratic, has a size that is at least 64 pixels but no more than max_size
-    // pixels and a power of two, create a single texture just for this image.
-    if ((flags & IF_TILEABLE) == IF_TILEABLE && src_width == src_height &&
-        (src_width & (src_width - 1)) == 0 && src_width >= 64 && src_width <= max_size) {
-        std::shared_ptr<Texture> texture{new Texture(src_width, src_height, wants_retro)};
+    // Special case: If the texture is supposed to be tileable, is quadratic, has a size that is at
+    // least 64 pixels but no more than max_size pixels and a power of two, create a single texture
+    // just for this image.
+    if ((flags & IF_TILEABLE) == IF_TILEABLE && source_rect.width == source_rect.height
+        && (source_rect.width & (source_rect.width - 1)) == 0 && source_rect.width >= 64
+        && source_rect.width <= max_size) {
+
+        std::shared_ptr<Texture> texture
+            = std::make_shared<Texture>(source_rect.width, source_rect.height, wants_retro);
         std::unique_ptr<ImageData> data;
 
-        // Use the source bitmap directly if the source area completely covers
-        // it.
-        if (src_x == 0 && src_width == src.width() && src_y == 0 && src_height == src.height()) {
-            data = texture->try_alloc(src, 0);
-        }
-        else {
-            Bitmap bmp(src_width, src_height);
-            bmp.insert(0, 0, src, src_x, src_y, src_width, src_height);
+        // Use the source bitmap directly if the source area completely covers it.
+        if (source_rect == Rect::covering(source)) {
+            data = texture->try_alloc(source, 0);
+        } else {
+            Bitmap bmp(source_rect.width, source_rect.height);
+            bmp.insert(0, 0, source, source_rect);
             data = texture->try_alloc(bmp, 0);
         }
 
-        if (!data) throw std::logic_error{"Internal texture block allocation error"};
+        if (!data) {
+            throw std::logic_error { "Internal texture block allocation error" };
+        }
         return data;
     }
 
     // Too large to fit on a single texture.
-    if (src_width > max_size - 2 || src_height > max_size - 2) {
-        Bitmap bmp(src_width, src_height);
-        bmp.insert(0, 0, src, src_x, src_y, src_width, src_height);
-        return std::unique_ptr<ImageData>{
-                new LargeImageData(bmp, max_size - 2, max_size - 2, flags)};
+    if (source_rect.width > max_size - 2 || source_rect.height > max_size - 2) {
+        Bitmap bmp(source_rect.width, source_rect.height);
+        bmp.insert(0, 0, source, source_rect);
+        return std::make_unique<LargeImageData>(bmp, max_size - 2, max_size - 2, flags);
     }
 
-    Bitmap bmp = apply_border_flags(flags, src, src_x, src_y, src_width, src_height);
+    Bitmap bmp = apply_border_flags(flags, source, source_rect);
 
     // Try to put the bitmap into one of the already allocated textures.
     for (const auto& texture : textures) {
-        if (texture->retro() != wants_retro) continue;
+        if (texture->retro() != wants_retro) {
+            continue;
+        }
 
         std::unique_ptr<ImageData> data = texture->try_alloc(bmp, 1);
-        if (data) return data;
+        if (data) {
+            return data;
+        }
     }
 
     // All textures are full: Create a new one.
 
-    std::shared_ptr<Texture> texture{new Texture(max_size, max_size, wants_retro)};
+    std::shared_ptr<Texture> texture = std::make_shared<Texture>(max_size, max_size, wants_retro);
     textures.push_back(texture);
 
-    std::unique_ptr<ImageData> data{texture->try_alloc(bmp, 1)};
-    if (!data.get()) throw std::logic_error("Internal texture block allocation error");
+    std::unique_ptr<ImageData> data = texture->try_alloc(bmp, 1);
+    if (!data) {
+        throw std::logic_error("Internal texture block allocation error");
+    }
 
     return data;
 }

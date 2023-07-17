@@ -8,7 +8,7 @@
 #include <stdexcept>
 
 Gosu::Image::Image()
-: m_data{EmptyImageData::instance_ptr()}
+: m_data {EmptyImageData::instance_ptr()}
 {
 }
 
@@ -30,14 +30,16 @@ Gosu::Image::Image(const Bitmap& source, unsigned image_flags)
 
 Gosu::Image::Image(const Bitmap& source, int src_x, int src_y, int src_width, int src_height,
                    unsigned image_flags)
-: m_data{Graphics::create_image(source, src_x, src_y, src_width, src_height, image_flags)}
+: m_data(Graphics::create_image(source, Rect { src_x, src_y, src_width, src_height }, image_flags))
 {
 }
 
 Gosu::Image::Image(std::unique_ptr<ImageData>&& data)
 : m_data{data.release()}
 {
-    if (!m_data) throw std::invalid_argument("Gosu::Image cannot be initialized with nullptr");
+    if (!m_data) {
+        throw std::invalid_argument("Gosu::Image cannot be initialized with nullptr");
+    }
 }
 
 unsigned Gosu::Image::width() const

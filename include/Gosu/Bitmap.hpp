@@ -2,6 +2,7 @@
 
 #include <Gosu/Color.hpp>
 #include <Gosu/IO.hpp>
+#include <Gosu/Utility.hpp>
 #include <string>
 #include <vector>
 
@@ -31,14 +32,17 @@ namespace Gosu
 
         void resize(int width, int height, Color c = Color::NONE);
 
-        /// Returns the color at the specified position without any bounds checking.
-        Color get_pixel(int x, int y) const { return m_pixels[y * m_width + x]; }
+        /// Returns a reference to the pixel at the specified position without any bounds checking.
+        /// This can be a two-argument operator[] once we require C++23.
+        const Color& pixel(int x, int y) const { return m_pixels[y * m_width + x]; }
 
-        /// Sets the pixel at the specified position without any bounds checking.
-        void set_pixel(int x, int y, Color c) { m_pixels[y * m_width + x] = c; }
+        /// Returns a reference to the pixel at the specified position without any bounds checking.
+        /// This can be a two-argument operator[] once we require C++23.
+        Color& pixel(int x, int y) { return m_pixels[y * m_width + x]; }
 
         /// This updates a pixel using the "over" alpha compositing operator, see:
         /// https://en.wikipedia.org/wiki/Alpha_compositing
+        /// Like pixel(), it does not perform any bounds checking.
         void blend_pixel(int x, int y, Color c);
 
         /// Inserts a bitmap at the given position. Parts of the inserted bitmap that would be
@@ -47,8 +51,8 @@ namespace Gosu
 
         /// Inserts a portion of a bitmap at the given position. Parts of the inserted bitmap that
         /// would be outside of the target bitmap will be clipped away.
-        void insert(int x, int y, const Bitmap& source, int src_x, int src_y, int src_width,
-                    int src_height);
+        /// Parts of the source_rect that are outside of the source image will be skipped.
+        void insert(int x, int y, const Bitmap& source, Rect source_rect);
 
         /// Direct access to the array of color values.
         const Color* data() const { return m_pixels.data(); }
@@ -56,8 +60,11 @@ namespace Gosu
         /// Direct access to the array of color values.
         Color* data() { return m_pixels.data(); }
 
+        bool operator==(const Bitmap&) const = default;
+
 #ifdef FRIEND_TEST
         FRIEND_TEST(BitmapTests, memory_management);
+        FRIEND_TEST(BitmapTests, insert);
 #endif
     };
 
@@ -76,6 +83,5 @@ namespace Gosu
     /// value of these transparent pixels will be adjusted to the average of their neighbors.
     void apply_color_key(Bitmap& bitmap, Color key);
 
-    Bitmap apply_border_flags(unsigned image_flags, const Bitmap& source, int src_x, int src_y,
-                              int src_width, int src_height);
+    Bitmap apply_border_flags(unsigned image_flags, const Bitmap& source, Rect source_rect);
 }

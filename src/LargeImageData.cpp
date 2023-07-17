@@ -19,7 +19,8 @@ Gosu::LargeImageData::LargeImageData(const Bitmap& source, int tile_width, int t
     m_tiles_x = (m_w + tile_width - 1) / tile_width;
     m_tiles_y = (m_h + tile_height - 1) / tile_height;
 
-    // When there are no tiles, set both fields to 0 to avoid entering any for () loop in this class.
+    // When there are no tiles, set both fields to 0 to avoid entering any for () loop in this
+    // class.
     if (m_tiles_x == 0 || m_tiles_y == 0) {
         m_tiles_x = m_tiles_y = 0;
     }
@@ -63,8 +64,9 @@ Gosu::LargeImageData::LargeImageData(const Bitmap& source, int tile_width, int t
                 local_flags |= (image_flags & IF_TILEABLE_BOTTOM);
             }
 
-            m_tiles.emplace_back(Graphics::create_image(source, x * tile_width, y * tile_height,
-                                                        src_width, src_height, local_flags));
+            m_tiles.emplace_back(Graphics::create_image(
+                source, Rect { x * tile_width, y * tile_height, src_width, src_height },
+                local_flags));
         }
     }
 }
@@ -120,10 +122,10 @@ std::unique_ptr<Gosu::ImageData> Gosu::LargeImageData::subimage(int left, int to
                                                                 int height) const
 {
     if (left < 0 || top < 0 || left + width > m_w || top + height > m_h) {
-        throw std::invalid_argument{"subimage bounds exceed those of its parent"};
+        throw std::invalid_argument { "subimage bounds exceed those of its parent" };
     }
     if (width <= 0 || height <= 0) {
-        throw std::invalid_argument{"cannot create empty subimage"};
+        throw std::invalid_argument { "cannot create empty subimage" };
     }
 
     int sub_tiles_y = 0;
@@ -165,7 +167,7 @@ std::unique_ptr<Gosu::ImageData> Gosu::LargeImageData::subimage(int left, int to
             int sub_bottom = std::min(image.height(), top + height - y);
 
             sub_tiles.emplace_back(
-                    image.subimage(sub_left, sub_top, sub_right - sub_left, sub_bottom - sub_top));
+                image.subimage(sub_left, sub_top, sub_right - sub_left, sub_bottom - sub_top));
 
             x += image.width();
         }
@@ -174,8 +176,7 @@ std::unique_ptr<Gosu::ImageData> Gosu::LargeImageData::subimage(int left, int to
 
     if (sub_tiles.size() == 1) {
         return std::move(sub_tiles[0]);
-    }
-    else {
+    } else {
         std::unique_ptr<LargeImageData> result(new LargeImageData());
         result->m_w = width;
         result->m_h = height;

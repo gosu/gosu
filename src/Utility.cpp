@@ -1,11 +1,9 @@
 #include <Gosu/Platform.hpp>
 #include <Gosu/Utility.hpp>
-
-#include <utf8proc.h>
-
 #include <cstring>
 #include <memory>
 #include <stdexcept>
+#include <utf8proc.h>
 
 std::u32string Gosu::utf8_to_composed_utc4(const std::string& utf8)
 {
@@ -23,8 +21,7 @@ std::u32string Gosu::utf8_to_composed_utc4(const std::string& utf8)
             // Not looking good, skip this byte and retry.
             current_byte += 1;
             remaining_length -= 1;
-        }
-        else {
+        } else {
             utc4.push_back(codepoint);
             current_byte += bytes_read;
             remaining_length -= bytes_read;
@@ -36,8 +33,8 @@ std::u32string Gosu::utf8_to_composed_utc4(const std::string& utf8)
     auto options = static_cast<utf8proc_option_t>(UTF8PROC_NLF2LF | UTF8PROC_COMPOSE);
     auto new_length = utf8proc_normalize_utf32(utc4_data, utc4.length(), options);
     if (new_length < 0) {
-        throw std::runtime_error{"Could not normalize '" + utf8 +
-                                 "': " + utf8proc_errmsg(new_length)};
+        throw std::runtime_error { "Could not normalize '" + utf8
+                                   + "': " + utf8proc_errmsg(new_length) };
     }
     utc4.resize(new_length);
 
@@ -57,8 +54,8 @@ bool Gosu::has_extension(std::string_view filename, std::string_view extension)
         --filename_iter;
         --ext_iter;
 
-        if (std::tolower(static_cast<int>(*filename_iter)) !=
-            std::tolower(static_cast<int>(*ext_iter))) {
+        if (std::tolower(static_cast<int>(*filename_iter))
+            != std::tolower(static_cast<int>(*ext_iter))) {
             return false;
         }
     }
@@ -72,7 +69,7 @@ bool Gosu::has_extension(std::string_view filename, std::string_view extension)
 
 std::vector<std::string> Gosu::user_languages()
 {
-    static const std::regex language_regex{"([a-z]{2})-([A-Z]{2})([^A-Z].*)?"};
+    static const std::regex language_regex { "([a-z]{2})-([A-Z]{2})([^A-Z].*)?" };
 
     std::vector<std::string> user_languages;
 
@@ -97,8 +94,11 @@ std::vector<std::string> Gosu::user_languages()
 {
     std::vector<std::string> user_languages;
 
-    std::unique_ptr<SDL_Locale, decltype(SDL_free)*> locales{SDL_GetPreferredLocales(), SDL_free};
-    if (!locales) return user_languages;
+    std::unique_ptr<SDL_Locale, decltype(SDL_free)*> locales { SDL_GetPreferredLocales(),
+                                                               SDL_free };
+    if (!locales) {
+        return user_languages;
+    }
 
     for (const SDL_Locale* locale = locales.get(); locale->language != nullptr; ++locale) {
         std::string language = locale->language;
@@ -118,13 +118,13 @@ std::vector<std::string> Gosu::user_languages()
 
 std::vector<std::string> Gosu::user_languages()
 {
-    static const std::regex language_regex{"[a-z]{2}_[A-Z]{2}([^A-Z].*)?"};
+    static const std::regex language_regex("[a-z]{2}_[A-Z]{2}([^A-Z].*)?");
 
     const char* locale = std::getenv("LANG");
 
     if (locale && std::regex_match(locale, language_regex)) {
         // Trim off anything after the language code.
-        return {std::string{locale, locale + 5}};
+        return { std::string(locale, locale + 5) };
     }
 
     return {};
@@ -132,3 +132,42 @@ std::vector<std::string> Gosu::user_languages()
 
 #endif
 #endif
+
+void Gosu::Rect::clip_to(const Gosu::Rect& bounding_box, int& adjust_x, int& adjust_y)
+{
+    // Cut off the area on the left that exceeds the bounding box, if any.
+    const int extra_pixels_left = bounding_box.x - x;
+    if (extra_pixels_left > 0) {
+        x += extra_pixels_left;
+        adjust_x += extra_pixels_left;
+        width -= extra_pixels_left;
+    }
+
+    // Cut off the area on the right that exceeds the bounding box, if any.
+    const int extra_pixels_right = (x + width) - (bounding_box.x + bounding_box.width);
+    if (extra_pixels_right > 0) {
+        width -= extra_pixels_right;
+    }
+
+    // Cut off the area at the top that exceeds the bounding box, if any.
+    const int extra_pixels_top = bounding_box.y - y;
+    if (extra_pixels_top > 0) {
+        y += extra_pixels_top;
+        adjust_y += extra_pixels_top;
+        height -= extra_pixels_top;
+    }
+
+    // Cut off the area at the bottom that exceeds the bounding box, if any.
+    const int extra_pixels_bottom = (y + height) - (bounding_box.y + bounding_box.height);
+    if (extra_pixels_bottom > 0) {
+        height -= extra_pixels_bottom;
+    }
+
+    // Leave 0 instead of negative values for width/height when the rect was clipped away.
+    if (width < 0) {
+        width = 0;
+    }
+    if (height < 0) {
+        height = 0;
+    }
+}

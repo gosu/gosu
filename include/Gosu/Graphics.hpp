@@ -91,8 +91,7 @@ namespace Gosu
         static void schedule_draw_op(const DrawOp& op);
 
         /// Turns a portion of a bitmap into something that can be drawn on a Graphics object.
-        static std::unique_ptr<ImageData> create_image(const Bitmap& src, unsigned src_x,
-                                                       unsigned src_y, unsigned src_width,
-                                                       unsigned src_height, unsigned image_flags);
+        static std::unique_ptr<ImageData>
+        create_image(const Bitmap& source, const Rect& source_rect, unsigned image_flags);
     };
 }
