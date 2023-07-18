@@ -179,13 +179,13 @@ Gosu::Bitmap Gosu::apply_border_flags(unsigned image_flags, const Bitmap& source
         }
     }
     if ((image_flags & IF_TILEABLE_LEFT) == 0) {
-        for (int y = 0; y < result.width(); ++y) {
+        for (int y = 0; y < result.height(); ++y) {
             result.pixel(0, y).alpha = 0;
         }
     }
-    if ((image_flags & IF_TILEABLE_TOP) == 0) {
+    if ((image_flags & IF_TILEABLE_RIGHT) == 0) {
         const int x = result.width() - 1;
-        for (int y = 0; y < result.width(); ++y) {
+        for (int y = 0; y < result.height(); ++y) {
             result.pixel(x, y).alpha = 0;
         }
     }

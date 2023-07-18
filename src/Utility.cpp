@@ -94,8 +94,7 @@ std::vector<std::string> Gosu::user_languages()
 {
     std::vector<std::string> user_languages;
 
-    std::unique_ptr<SDL_Locale, decltype(SDL_free)*> locales { SDL_GetPreferredLocales(),
-                                                               SDL_free };
+    std::unique_ptr<SDL_Locale, decltype(SDL_free)*> locales(SDL_GetPreferredLocales(), SDL_free);
     if (!locales) {
         return user_languages;
     }
