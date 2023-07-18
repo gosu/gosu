@@ -8,7 +8,7 @@
 #include <stdexcept>
 
 Gosu::Image::Image()
-: m_data {EmptyImageData::instance_ptr()}
+: m_data{EmptyImageData::instance_ptr()}
 {
 }
 
@@ -17,20 +17,18 @@ Gosu::Image::Image(const std::string& filename, unsigned image_flags)
 {
 }
 
-Gosu::Image::Image(const std::string& filename, int src_x, int src_y, int src_width, int src_height,
-                   unsigned image_flags)
-: Image(load_image_file(filename), src_x, src_y, src_width, src_height, image_flags)
+Gosu::Image::Image(const std::string& filename, const Rect& source_rect, unsigned image_flags)
+: Image(load_image_file(filename), source_rect, image_flags)
 {
 }
 
 Gosu::Image::Image(const Bitmap& source, unsigned image_flags)
-: Image(source, 0, 0, source.width(), source.height(), image_flags)
+: Image(source, Rect::covering(source), image_flags)
 {
 }
 
-Gosu::Image::Image(const Bitmap& source, int src_x, int src_y, int src_width, int src_height,
-                   unsigned image_flags)
-: m_data(Graphics::create_image(source, Rect { src_x, src_y, src_width, src_height }, image_flags))
+Gosu::Image::Image(const Bitmap& source, const Rect& source_rect, unsigned image_flags)
+: m_data(Graphics::create_image(source, source_rect, image_flags))
 {
 }
 
@@ -125,8 +123,8 @@ std::vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bmp, //
 
     for (int y = 0; y < tiles_y; ++y) {
         for (int x = 0; x < tiles_x; ++x) {
-            images.emplace_back(bmp, x * tile_width, y * tile_height, tile_width, tile_height,
-                                flags);
+            images.emplace_back(
+                bmp, Rect { x * tile_width, y * tile_height, tile_width, tile_height }, flags);
         }
     }
 

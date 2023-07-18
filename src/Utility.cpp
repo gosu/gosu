@@ -33,8 +33,8 @@ std::u32string Gosu::utf8_to_composed_utc4(const std::string& utf8)
     auto options = static_cast<utf8proc_option_t>(UTF8PROC_NLF2LF | UTF8PROC_COMPOSE);
     auto new_length = utf8proc_normalize_utf32(utc4_data, utc4.length(), options);
     if (new_length < 0) {
-        throw std::runtime_error { "Could not normalize '" + utf8
-                                   + "': " + utf8proc_errmsg(new_length) };
+        throw std::runtime_error("Could not normalize '" + utf8
+                                 + "': " + utf8proc_errmsg(new_length));
     }
     utc4.resize(new_length);
 
@@ -69,7 +69,7 @@ bool Gosu::has_extension(std::string_view filename, std::string_view extension)
 
 std::vector<std::string> Gosu::user_languages()
 {
-    static const std::regex language_regex { "([a-z]{2})-([A-Z]{2})([^A-Z].*)?" };
+    static const std::regex language_regex("([a-z]{2})-([A-Z]{2})([^A-Z].*)?");
 
     std::vector<std::string> user_languages;
 

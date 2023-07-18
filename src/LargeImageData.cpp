@@ -122,10 +122,10 @@ std::unique_ptr<Gosu::ImageData> Gosu::LargeImageData::subimage(int left, int to
                                                                 int height) const
 {
     if (left < 0 || top < 0 || left + width > m_w || top + height > m_h) {
-        throw std::invalid_argument { "subimage bounds exceed those of its parent" };
+        throw std::invalid_argument("subimage bounds exceed those of its parent");
     }
     if (width <= 0 || height <= 0) {
-        throw std::invalid_argument { "cannot create empty subimage" };
+        throw std::invalid_argument("cannot create empty subimage");
     }
 
     int sub_tiles_y = 0;
