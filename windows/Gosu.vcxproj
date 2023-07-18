@@ -219,9 +219,9 @@
     <ClCompile Include="..\src\AudioFileAudioToolbox.cpp" />
     <ClCompile Include="..\src\AudioFileSDLSound.cpp" />
     <ClCompile Include="..\src\AudioImpl.cpp" />
+    <ClCompile Include="..\src\BinPacker.cpp" />
     <ClCompile Include="..\src\Bitmap.cpp" />
     <ClCompile Include="..\src\BitmapIO.cpp" />
-    <ClCompile Include="..\src\BlockAllocator.cpp" />
     <ClCompile Include="..\src\Buffer.cpp" />
     <ClCompile Include="..\src\Channel.cpp" />
     <ClCompile Include="..\src\Color.cpp" />
@@ -358,7 +358,7 @@
     <ClInclude Include="..\dependencies\utf8proc\utf8proc_data.h" />
     <ClInclude Include="..\src\AudioFile.hpp" />
     <ClInclude Include="..\src\AudioImpl.hpp" />
-    <ClInclude Include="..\src\BlockAllocator.hpp" />
+    <ClInclude Include="..\src\BinPacker.hpp" />
     <ClInclude Include="..\src\ClipRectStack.hpp" />
     <ClInclude Include="..\src\DrawOp.hpp" />
     <ClInclude Include="..\src\DrawOpQueue.hpp" />

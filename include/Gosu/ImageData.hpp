@@ -13,7 +13,7 @@ namespace Gosu
     /// data. Can be retrieved from some images to use them in OpenGL operations.
     struct GLTexInfo
     {
-        int tex_name;
+        unsigned tex_name;
         double left, right, top, bottom;
     };
 

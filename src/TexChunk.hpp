@@ -2,28 +2,25 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
+#include <Gosu/Utility.hpp>
 #include "GraphicsImpl.hpp"
 #include <memory>
 #include <stdexcept>
 
 class Gosu::TexChunk : public Gosu::ImageData
 {
-    std::shared_ptr<Texture> m_texture;
-    int m_x, m_y, m_w, m_h, m_padding;
-
-    GLTexInfo m_info;
-
-    void set_tex_info();
+    const std::shared_ptr<Texture> m_texture;
+    const Rect m_rect;
+    const GLTexInfo m_info;
 
 public:
-    TexChunk(std::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding);
-    TexChunk(const TexChunk& parent, int x, int y, int w, int h);
+    TexChunk(const std::shared_ptr<Texture>& texture, const Rect& rect);
     ~TexChunk() override;
 
-    int width() const override { return m_w; }
-    int height() const override { return m_h; }
+    int width() const override { return m_rect.width; }
+    int height() const override { return m_rect.height; }
 
-    GLuint tex_name() const { return m_info.tex_name; }
+    unsigned tex_name() const { return m_info.tex_name; }
 
     void draw(double x1, double y1, Color c1, //
               double x2, double y2, Color c2, //

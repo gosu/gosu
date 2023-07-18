@@ -156,13 +156,13 @@
     <ClCompile Include="..\src\AudioImpl.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\BinPacker.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Bitmap.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\BitmapIO.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\BlockAllocator.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Buffer.cpp">
@@ -569,7 +569,7 @@
     <ClInclude Include="..\src\AudioImpl.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\BlockAllocator.hpp">
+    <ClInclude Include="..\src\BinPacker.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ClipRectStack.hpp">

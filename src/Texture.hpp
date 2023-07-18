@@ -1,29 +1,32 @@
 #pragma once
 
-#include "BlockAllocator.hpp"
-#include "GraphicsImpl.hpp"
-#include "TexChunk.hpp"
 #include <Gosu/Fwd.hpp>
-#include <Gosu/Bitmap.hpp>
+#include "BinPacker.hpp"
+#include "TexChunk.hpp"
 #include <memory>
-#include <vector>
 
-class Gosu::Texture : public std::enable_shared_from_this<Texture>
+namespace Gosu
 {
-    // BlockAllocator can't be copied or moved, so neither can Texture.
-    BlockAllocator allocator_;
-    GLuint tex_name_;
-    bool retro_;
-    
-public:
-    Texture(unsigned width, unsigned height, bool retro);
-    ~Texture();
-    unsigned width() const;
-    unsigned height() const;
-    GLuint tex_name() const;
-    bool retro() const;
-    std::unique_ptr<TexChunk> try_alloc(const Bitmap& bmp, unsigned padding);
-    void block(unsigned x, unsigned y, unsigned width, unsigned height);
-    void free(unsigned x, unsigned y, unsigned width, unsigned height);
-    Bitmap to_bitmap(unsigned x, unsigned y, unsigned width, unsigned height) const;
-};
+    class Texture : public std::enable_shared_from_this<Texture>, Noncopyable
+    {
+        BinPacker m_bin_packer;
+        GLuint m_tex_name;
+        bool m_retro;
+
+    public:
+        Texture(int width, int height, bool retro);
+        ~Texture();
+
+        int width() const { return m_bin_packer.width(); }
+        int height() const { return m_bin_packer.height(); }
+        GLuint tex_name() const { return m_tex_name; };
+        bool retro() const { return m_retro; }
+
+        std::unique_ptr<TexChunk> try_alloc(const Bitmap& bitmap, int padding);
+        void block(const Rect& rect);
+        void free(const Rect& rect);
+
+        Bitmap to_bitmap(const Rect& rect) const;
+    };
+
+}

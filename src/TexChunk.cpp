@@ -5,50 +5,27 @@
 #include "Texture.hpp"
 #include <stdexcept>
 
-void Gosu::TexChunk::set_tex_info()
+Gosu::TexChunk::TexChunk(const std::shared_ptr<Texture>& texture, const Rect& rect)
+    : m_texture(texture),
+      m_rect(rect),
+      m_info { .tex_name = texture->tex_name(),
+               .left = 1.0 * m_rect.x / texture->width(),
+               .right = 1.0 * (m_rect.x + m_rect.width) / texture->width(),
+               .top = 1.0 * m_rect.y / texture->height(),
+               .bottom = 1.0 * (m_rect.y + m_rect.height) / texture->height() }
 {
-    double width = m_texture->width(), height = m_texture->height();
-
-    m_info.tex_name = m_texture->tex_name();
-    m_info.left = m_x / width;
-    m_info.top = m_y / height;
-    m_info.right = (m_x + m_w) / width;
-    m_info.bottom = (m_y + m_h) / height;
-}
-
-Gosu::TexChunk::TexChunk(std::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding)
-: m_texture{std::move(texture)},
-  m_x{x},
-  m_y{y},
-  m_w{w},
-  m_h{h},
-  m_padding{padding}
-{
-    set_tex_info();
-}
-
-Gosu::TexChunk::TexChunk(const TexChunk& parent, int x, int y, int w, int h)
-: m_texture{parent.m_texture},
-  m_x{parent.m_x + x},
-  m_y{parent.m_y + y},
-  m_w{w},
-  m_h{h},
-  m_padding{0}
-{
-    if (x < 0 || y < 0 || x + w > parent.m_w || y + h > parent.m_h) {
-        throw std::invalid_argument{"subimage bounds exceed those of its parent"};
+    if (!Rect::covering(*m_texture).contains(rect)) {
+        throw std::invalid_argument("Gosu::TexChunk exceeds its Gosu::Texture");
     }
-    if (w <= 0 || h <= 0) {
-        throw std::invalid_argument{"cannot create empty image"};
+    if (rect.width <= 0 || rect.height <= 0) {
+        throw std::invalid_argument("Gosu::TexChunk cannot be empty");
     }
-
-    set_tex_info();
-    m_texture->block(m_x, m_y, m_w, m_h);
+    m_texture->block(m_rect);
 }
 
 Gosu::TexChunk::~TexChunk()
 {
-    m_texture->free(m_x - m_padding, m_y - m_padding, m_w + 2 * m_padding, m_h + 2 * m_padding);
+    m_texture->free(m_rect);
 }
 
 void Gosu::TexChunk::draw(double x1, double y1, Color c1, double x2, double y2, Color c2, //
@@ -83,57 +60,43 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1, double x2, double y2, 
 
 std::unique_ptr<Gosu::ImageData> Gosu::TexChunk::subimage(const Rect& rect) const
 {
-    return std::make_unique<TexChunk>(*this, rect.x, rect.y, rect.width, rect.height);
+    // Note: m_rect is relative to m_texture, but rect should be relative to m_rect.
+    if (!Rect::covering(*this).contains(rect)) {
+        throw std::invalid_argument("Gosu::TexChunk::subimage cannot exceed parent size");
+    }
+    const Rect nested_rect { m_rect.x + rect.x, m_rect.y + rect.y, rect.width, rect.height };
+    return std::make_unique<TexChunk>(m_texture, nested_rect);
 }
 
 Gosu::Bitmap Gosu::TexChunk::to_bitmap() const
 {
-    return m_texture->to_bitmap(m_x, m_y, m_w, m_h);
+    return m_texture->to_bitmap(m_rect);
 }
 
-void Gosu::TexChunk::insert(const Bitmap& original_bitmap, int x, int y)
+void Gosu::TexChunk::insert(const Bitmap& bitmap, int x, int y)
 {
     Bitmap clipped_bitmap;
-    const Bitmap* bitmap = &original_bitmap;
+    const Bitmap* source = &bitmap;
 
+    Rect target_rect { x, y, bitmap.width(), bitmap.height() };
+    int offset_x = 0, offset_y = 0;
     // If inserting the bitmap at the given position exceeds the boundaries of the space allocated
     // for this image on the texture, we need to clip the bitmap and insert the clipped version
     // instead.
-    if (x < 0 || y < 0 || x + original_bitmap.width() > m_w || y + original_bitmap.height() > m_h) {
-        // How many pixels to remove at the top and left sides.
-        int clip_left = 0, clip_top = 0;
-        // How large the clipped version needs to be.
-        int clipped_width = original_bitmap.width(), clipped_height = original_bitmap.height();
+    if (!Rect::covering(*this).contains(target_rect)) {
+        target_rect.clip_to(Rect::covering(*this), &offset_x, &offset_y);
 
-        // Clip away pixels on the left side, if necessary.
-        if (x < 0) {
-            clip_left = -x;
-            clipped_width -= -x;
-            x = 0;
-        }
-        // Clip away pixels at the top, if necessary.
-        if (y < 0) {
-            clip_top = -y;
-            clipped_height -= -y;
-            y = 0;
-        }
-        // Clip away pixels on the right side, if necessary.
-        if (x + clipped_width > m_w) {
-            clipped_width = (m_w - x);
-        }
-        // Clip away pixels on the bottom, if necessary.
-        if (y + clipped_height > m_h) {
-            clipped_height = (m_h - y);
+        if (target_rect.empty()) {
+            return;
         }
 
-        if (clipped_width <= 0 || clipped_height <= 0) return;
-
-        clipped_bitmap.resize(clipped_width, clipped_height);
-        clipped_bitmap.insert(original_bitmap, -clip_left, -clip_top);
-        bitmap = &clipped_bitmap;
+        clipped_bitmap.resize(target_rect.width, target_rect.height);
+        clipped_bitmap.insert(bitmap, -offset_x, -offset_y);
+        source = &clipped_bitmap;
     }
 
     glBindTexture(GL_TEXTURE_2D, tex_name());
-    glTexSubImage2D(GL_TEXTURE_2D, 0, m_x + x, m_y + y, bitmap->width(), bitmap->height(),
-                    Color::GL_FORMAT, GL_UNSIGNED_BYTE, bitmap->data());
+    glTexSubImage2D(GL_TEXTURE_2D, 0, m_rect.x + x + offset_x, m_rect.y + y + offset_y, //
+                    source->width(), source->height(), Color::GL_FORMAT, GL_UNSIGNED_BYTE,
+                    source->data());
 }
