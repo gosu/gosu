@@ -408,10 +408,9 @@ namespace Gosu
 // Miscellaneous functions (timing, math)
 %ignore Gosu::sleep;
 %include "../../include/Gosu/Timing.hpp"
-%ignore Gosu::distance_sqr;
 %ignore Gosu::wrap;
-%ignore Gosu::radians_to_gosu;
-%ignore Gosu::gosu_to_radians;
+%ignore Gosu::radians_to_angle;
+%ignore Gosu::angle_to_radians;
 %include "../../include/Gosu/Math.hpp"
 %ignore Gosu::text_width;
 %ignore Gosu::draw_text;
