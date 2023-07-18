@@ -169,7 +169,7 @@ void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Col
 
     normalize_coordinates(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
-    Gosu::Graphics::gl(z, [=] { pimpl->draw_vertex_arrays(x1, y1, x2, y2, x3, y3, x4, y4); });
+    Gosu::Graphics::gl(z, [=, this] { pimpl->draw_vertex_arrays(x1, y1, x2, y2, x3, y3, x4, y4); });
 }
 
 const Gosu::GLTexInfo* Gosu::Macro::gl_tex_info() const

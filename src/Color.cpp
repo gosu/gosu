@@ -1,56 +1,8 @@
 #include <Gosu/Color.hpp>
 #include <Gosu/Math.hpp>
-#include <algorithm>
+#include <algorithm> // for std::min, std::max
 #include <cmath>
-
-namespace
-{
-    struct HSV
-    {
-        double h, s, v;
-    };
-
-    HSV color_to_hsv(const Gosu::Color& c)
-    {
-        double r = c.red / 255.0;
-        double g = c.green / 255.0;
-        double b = c.blue / 255.0;
-
-        double min = std::min(std::min(r, g), b);
-        double max = std::max(std::max(r, g), b);
-        double delta = max - min;
-
-        if (max == 0) {
-            HSV hsv = {0, 0, 0};
-            return hsv;
-        }
-
-        HSV hsv{};
-
-        // Value.
-        hsv.v = max;
-
-        // Saturation.
-        hsv.s = delta / max;
-
-        // Hue.
-        if (delta == 0) {
-            hsv.h = 0;
-        }
-        else if (r == max) {
-            hsv.h = (g - b) / delta + (g < b ? 6 : 0);
-        }
-        else if (g == max) {
-            hsv.h = (b - r) / delta + 2;
-        }
-        else {
-            hsv.h = (r - g) / delta + 4;
-        }
-        hsv.h *= 60;
-
-        return hsv;
-    }
-}
+#include <iomanip> // for std::setw
 
 Gosu::Color Gosu::Color::from_hsv(double h, double s, double v)
 {
@@ -60,32 +12,51 @@ Gosu::Color Gosu::Color::from_hsv(double h, double s, double v)
     s = std::clamp(s, 0.0, 1.0);
     v = std::clamp(v, 0.0, 1.0);
 
-    int sector = static_cast<int>(h / 60);
-    double factorial = h / 60 - sector;
+    const auto to_channel = [](double d) { return static_cast<Channel>(std::round(255.0 * d)); };
 
-    Channel p = static_cast<Channel>(255 * v * (1 - s));
-    Channel q = static_cast<Channel>(255 * v * (1 - s * factorial));
-    Channel t = static_cast<Channel>(255 * v * (1 - s * (1 - factorial)));
+    int sector = static_cast<int>(h / 60);
+    double remainder = h / 60 - sector;
+
+    Channel p = to_channel(v * (1 - s));
+    Channel q = to_channel(v * (1 - s * remainder));
+    Channel t = to_channel(v * (1 - s * (1 - remainder)));
 
     switch (sector) {
     case 0:
-        return Color{static_cast<Channel>(255 * v), t, p};
+        return Color { to_channel(v), t, p };
     case 1:
-        return Color{q, static_cast<Channel>(255 * v), p};
+        return Color { q, to_channel(v), p };
     case 2:
-        return Color{p, static_cast<Channel>(255 * v), t};
+        return Color { p, to_channel(v), t };
     case 3:
-        return Color{p, q, static_cast<Channel>(255 * v)};
+        return Color { p, q, to_channel(v) };
     case 4:
-        return Color{t, p, static_cast<Channel>(255 * v)};
+        return Color { t, p, to_channel(v) };
     default: // sector 5
-        return Color{static_cast<Channel>(255 * v), p, q};
+        return Color { to_channel(v), p, q };
     }
 }
 
 double Gosu::Color::hue() const
 {
-    return color_to_hsv(*this).h;
+    double max = std::max({ red, green, blue });
+    double min = std::min({ red, green, blue });
+
+    if (min == max) {
+        return 0;
+    }
+
+    double factor = 60 / (max - min);
+
+    if (green == max) {
+        return (blue - red) * factor + 120; // 60...180
+    } else if (blue == max) {
+        return (red - green) * factor + 240; // 180...300
+    } else if (blue > green) {
+        return (green - blue) * factor + 360; // 300...360
+    } else {
+        return (green - blue) * factor + 0; // 0...60
+    }
 }
 
 void Gosu::Color::set_hue(double h)
@@ -95,7 +66,15 @@ void Gosu::Color::set_hue(double h)
 
 double Gosu::Color::saturation() const
 {
-    return color_to_hsv(*this).s;
+    double max = std::max({ red, green, blue });
+
+    if (max == 0) {
+        return 0;
+    }
+
+    double min = std::min({ red, green, blue });
+
+    return 1 - (min / max);
 }
 
 void Gosu::Color::set_saturation(double s)
@@ -105,13 +84,26 @@ void Gosu::Color::set_saturation(double s)
 
 double Gosu::Color::value() const
 {
-    return color_to_hsv(*this).v;
+    return std::max({ red, green, blue }) / 255.0;
 }
 
 void Gosu::Color::set_value(double v)
 {
     *this = from_hsv(hue(), saturation(), v).with_alpha(alpha);
 }
+
+const Gosu::Color Gosu::Color::NONE { 0x00'000000 };
+const Gosu::Color Gosu::Color::BLACK { 0, 0, 0 };
+const Gosu::Color Gosu::Color::GRAY { 128, 128, 128 };
+const Gosu::Color Gosu::Color::WHITE { 255, 255, 255 };
+
+const Gosu::Color Gosu::Color::AQUA { 0, 255, 255 };
+const Gosu::Color Gosu::Color::RED { 255, 0, 0 };
+const Gosu::Color Gosu::Color::GREEN { 0, 255, 0 };
+const Gosu::Color Gosu::Color::BLUE { 0, 0, 255 };
+const Gosu::Color Gosu::Color::YELLOW { 255, 255, 0 };
+const Gosu::Color Gosu::Color::FUCHSIA { 255, 0, 255 };
+const Gosu::Color Gosu::Color::CYAN { 0, 255, 255 };
 
 Gosu::Color Gosu::lerp(Color a, Color b, double t)
 {
@@ -129,23 +121,26 @@ Gosu::Color Gosu::lerp(Color a, Color b, double t)
 
 Gosu::Color Gosu::multiply(Color a, Color b)
 {
+    const auto multiply_channel = [](Color::Channel a, Color::Channel b) {
+        return static_cast<Color::Channel>(std::round(a * b / 255.0));
+    };
+
     Color result;
-    result.red = static_cast<Color::Channel>(std::round(a.red * b.red / 255.0));
-    result.green = static_cast<Color::Channel>(std::round(a.green * b.green / 255.0));
-    result.blue = static_cast<Color::Channel>(std::round(a.blue * b.blue / 255.0));
-    result.alpha = static_cast<Color::Channel>(std::round(a.alpha * b.alpha / 255.0));
+    result.red = multiply_channel(a.red, b.red);
+    result.green = multiply_channel(a.green, b.green);
+    result.blue = multiply_channel(a.blue, b.blue);
+    result.alpha = multiply_channel(a.alpha, b.alpha);
     return result;
 }
 
-const Gosu::Color Gosu::Color::NONE{0x00'000000};
-const Gosu::Color Gosu::Color::BLACK{0, 0, 0};
-const Gosu::Color Gosu::Color::GRAY{128, 128, 128};
-const Gosu::Color Gosu::Color::WHITE{255, 255, 255};
-
-const Gosu::Color Gosu::Color::AQUA{0, 255, 255};
-const Gosu::Color Gosu::Color::RED{255, 0, 0};
-const Gosu::Color Gosu::Color::GREEN{0, 255, 0};
-const Gosu::Color Gosu::Color::BLUE{0, 0, 255};
-const Gosu::Color Gosu::Color::YELLOW{255, 255, 0};
-const Gosu::Color Gosu::Color::FUCHSIA{255, 0, 255};
-const Gosu::Color Gosu::Color::CYAN{0, 255, 255};
+std::ostream& Gosu::operator<<(std::ostream& stream, Gosu::Color color)
+{
+    const auto previous_flags = stream.flags();
+    const char previous_fill = stream.fill();
+    stream << std::setfill('0');
+    stream << "0x" << std::hex << std::setw(2) << static_cast<int>(color.alpha);
+    stream << '\'' << std::setw(6) << static_cast<int>(color.argb() & 0x00'ffffff);
+    stream.flags(previous_flags);
+    stream.fill(previous_fill);
+    return stream;
+}

@@ -46,16 +46,18 @@ struct Gosu::Font::Impl : private Gosu::Noncopyable
 
             std::u32string string(1, codepoint);
             Bitmap bitmap(scaled_height, scaled_height);
-            auto required_width = ceil(Gosu::draw_text(bitmap, 0, 0, Color::WHITE, string, name,
-                                                       scaled_height, font_flags));
+            const int required_width = static_cast<int>(std::ceil(Gosu::draw_text(
+                bitmap, 0, 0, Color::WHITE, string, name, scaled_height, font_flags)));
             if (required_width > bitmap.width()) {
                 // If the character was wider than high, we need to render it again.
-                Bitmap(required_width, scaled_height).swap(bitmap);
+                Bitmap resized_bitmap(required_width, scaled_height);
+                std::swap(resized_bitmap, bitmap);
                 Gosu::draw_text(bitmap, 0, 0, Color::WHITE, string, name, scaled_height,
                                 font_flags);
             }
 
-            *image = Image(bitmap, 0, 0, required_width, scaled_height, image_flags);
+            const Rect source_rect { 0, 0, required_width, static_cast<int>(scaled_height) };
+            *image = Image(bitmap, source_rect, image_flags);
         }
 
         return *image;

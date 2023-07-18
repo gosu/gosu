@@ -1,6 +1,6 @@
-/// \mainpage Gosu C++ Documentation
+/// \mainpage Gosu: C++ Interface Reference
 ///
-/// These pages serve as a reference on the C++ interface of Gosu. For a higher-level
+/// These pages serve as a reference for the C++ interface of Gosu. For a higher-level
 /// discussion of concepts and ideas behind the library, see the Wiki entries linked
 /// from the official website, https://www.libgosu.org/.
 

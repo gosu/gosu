@@ -639,13 +639,12 @@ namespace Gosu
 }
 
 %ignore Gosu::Image::Image();
-%ignore Gosu::Image::Image(const std::string& filename, unsigned flags);
-%ignore Gosu::Image::Image(const std::string& filename, int src_x, int src_y,
-                           int src_width, int src_height, unsigned flags);
-%ignore Gosu::Image::Image(const Bitmap& source, unsigned flags);
-%ignore Gosu::Image::Image(const Bitmap& source, int src_x, int src_y,
-                           int src_width, int src_height, unsigned flags);
-%ignore Gosu::Image::Image(std::unique_ptr<ImageData>&& data);
+%ignore Gosu::Image::Image(const std::string& filename, unsigned image_flags);
+%ignore Gosu::Image::Image(const std::string& filename, const Rect& source_rect,
+                           unsigned image_flags);
+%ignore Gosu::Image::Image(const Bitmap& source, unsigned image_flags);
+%ignore Gosu::Image::Image(const Bitmap& source, const Rect& source_rect, unsigned image_flags);
+%ignore Gosu::Image::Image(std::unique_ptr<ImageData> data);
 %ignore Gosu::load_tiles;
 %include "../../include/Gosu/Image.hpp"
 %extend Gosu::Image {
@@ -653,9 +652,8 @@ namespace Gosu
     {
         Gosu::Bitmap bmp;
         Gosu::load_bitmap(bmp, source);
-        
-        int src_x = 0, src_y = 0;
-        int src_width = bmp.width(), src_height = bmp.height();
+
+        Gosu::Rect source_rect = Gosu::Rect::covering(bmp);
         unsigned flags = 0;
         
         if (options) {
@@ -684,10 +682,10 @@ namespace Gosu
                                                "Array [x, y, width, height]");
                     }
                     
-                    src_x      = NUM2INT(rb_ary_entry(value, 0));
-                    src_y      = NUM2INT(rb_ary_entry(value, 1));
-                    src_width  = NUM2INT(rb_ary_entry(value, 2));
-                    src_height = NUM2INT(rb_ary_entry(value, 3));
+                    source_rect.x      = NUM2INT(rb_ary_entry(value, 0));
+                    source_rect.y      = NUM2INT(rb_ary_entry(value, 1));
+                    source_rect.width  = NUM2INT(rb_ary_entry(value, 2));
+                    source_rect.height = NUM2INT(rb_ary_entry(value, 3));
                 }
                 else {
                     static bool issued_warning = false;
@@ -699,7 +697,7 @@ namespace Gosu
             }
         }
         
-        return new Gosu::Image(bmp, src_x, src_y, src_width, src_height, flags);
+        return new Gosu::Image(bmp, source_rect, flags);
     }
     
     void draw_as_quad(double x1, double y1, Color c1,
@@ -980,7 +978,7 @@ namespace Gosu
                 for (int x = 0; x < w; ++x) {
                     int scaled_x = x * bmp.width()  / w;
                     int scaled_y = y * bmp.height() / h;
-                    int alpha3bit = bmp.get_pixel(scaled_x, scaled_y).alpha / 32;
+                    int alpha3bit = bmp.pixel(scaled_x, scaled_y).alpha / 32;
                     str[(y + 1) * stride + (x + 1)] = " .:ioVM@"[alpha3bit];
                 }
                 str[(y + 1) * stride + (w + 2)] = '\n'; // newline after row of pixels

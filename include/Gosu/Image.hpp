@@ -28,18 +28,17 @@ namespace Gosu
         ///
         /// A color key of #ff00ff is automatically applied to BMP image files.
         /// For more flexibility, use the corresponding constructor that uses a Bitmap object.
-        Image(const std::string& filename, int src_x, int src_y, int src_width, int src_height,
+        Image(const std::string& filename, const Rect& source_rect,
               unsigned image_flags = IF_SMOOTH);
 
         /// Converts the given bitmap into an image.
         explicit Image(const Bitmap& source, unsigned image_flags = IF_SMOOTH);
 
         /// Converts a portion of the given bitmap into an image.
-        Image(const Bitmap& source, int src_x, int src_y, int src_width, int src_height,
-              unsigned image_flags = IF_SMOOTH);
+        Image(const Bitmap& source, const Rect& source_rect, unsigned image_flags = IF_SMOOTH);
 
         /// Creates an Image from a user-supplied instance of the ImageData interface.
-        explicit Image(std::unique_ptr<ImageData>&& data);
+        explicit Image(std::unique_ptr<ImageData> data);
 
         unsigned width() const;
         unsigned height() const;
