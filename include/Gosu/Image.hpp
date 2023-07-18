@@ -38,7 +38,7 @@ namespace Gosu
         Image(const Bitmap& source, const Rect& source_rect, unsigned image_flags = IF_SMOOTH);
 
         /// Creates an Image from a user-supplied instance of the ImageData interface.
-        explicit Image(std::unique_ptr<ImageData>&& data);
+        explicit Image(std::unique_ptr<ImageData> data);
 
         unsigned width() const;
         unsigned height() const;

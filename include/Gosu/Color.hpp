@@ -18,7 +18,8 @@ namespace Gosu
         Color() = default;
 
         /// Implicit conversion constructor for literals of the form 0xaarrggbb.
-        explicit(false) Color(std::uint32_t argb)
+        // NOLINTNEXTLINE: We want to allow implicit conversions.
+        Color(std::uint32_t argb)
             : red(argb >> 16),
               green(argb >> 8),
               blue(argb >> 0),

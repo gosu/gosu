@@ -2926,9 +2926,8 @@ SWIGINTERN double Gosu_Font_markup_width(Gosu::Font *self,std::string const &mar
 SWIGINTERN Gosu::Image *new_Gosu_Image(VALUE source,VALUE options=0){
         Gosu::Bitmap bmp;
         Gosu::load_bitmap(bmp, source);
-        
-        int src_x = 0, src_y = 0;
-        int src_width = bmp.width(), src_height = bmp.height();
+
+        Gosu::Rect source_rect = Gosu::Rect::covering(bmp);
         unsigned flags = 0;
         
         if (options) {
@@ -2957,10 +2956,10 @@ SWIGINTERN Gosu::Image *new_Gosu_Image(VALUE source,VALUE options=0){
                                                "Array [x, y, width, height]");
                     }
                     
-                    src_x      = NUM2INT(rb_ary_entry(value, 0));
-                    src_y      = NUM2INT(rb_ary_entry(value, 1));
-                    src_width  = NUM2INT(rb_ary_entry(value, 2));
-                    src_height = NUM2INT(rb_ary_entry(value, 3));
+                    source_rect.x      = NUM2INT(rb_ary_entry(value, 0));
+                    source_rect.y      = NUM2INT(rb_ary_entry(value, 1));
+                    source_rect.width  = NUM2INT(rb_ary_entry(value, 2));
+                    source_rect.height = NUM2INT(rb_ary_entry(value, 3));
                 }
                 else {
                     static bool issued_warning = false;
@@ -2972,7 +2971,7 @@ SWIGINTERN Gosu::Image *new_Gosu_Image(VALUE source,VALUE options=0){
             }
         }
         
-        return new Gosu::Image(bmp, src_x, src_y, src_width, src_height, flags);
+        return new Gosu::Image(bmp, source_rect, flags);
     }
 SWIGINTERN void Gosu_Image_draw_as_quad(Gosu::Image *self,double x1,double y1,Gosu::Color c1,double x2,double y2,Gosu::Color c2,double x3,double y3,Gosu::Color c3,double x4,double y4,Gosu::Color c4,Gosu::ZPos z,Gosu::BlendMode mode=Gosu::BM_DEFAULT){
         self->data().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
@@ -3234,7 +3233,7 @@ SWIGINTERN std::string Gosu_Image_inspect(Gosu::Image const *self,int max_width=
                 for (int x = 0; x < w; ++x) {
                     int scaled_x = x * bmp.width()  / w;
                     int scaled_y = y * bmp.height() / h;
-                    int alpha3bit = bmp.get_pixel(scaled_x, scaled_y).alpha / 32;
+                    int alpha3bit = bmp.pixel(scaled_x, scaled_y).alpha / 32;
                     str[(y + 1) * stride + (x + 1)] = " .:ioVM@"[alpha3bit];
                 }
                 str[(y + 1) * stride + (w + 2)] = '\n'; // newline after row of pixels
@@ -4356,7 +4355,7 @@ _wrap_Color_with_alpha(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Gosu__Color, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color *","with_alpha", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Color const *","with_alpha", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::Color * >(argp1);
   {
@@ -4364,7 +4363,7 @@ _wrap_Color_with_alpha(int argc, VALUE *argv, VALUE self) {
   }
   {
     try {
-      result = (arg1)->with_alpha(arg2);
+      result = ((Gosu::Color const *)arg1)->with_alpha(arg2);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());

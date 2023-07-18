@@ -32,8 +32,8 @@ Gosu::Image::Image(const Bitmap& source, const Rect& source_rect, unsigned image
 {
 }
 
-Gosu::Image::Image(std::unique_ptr<ImageData>&& data)
-: m_data{data.release()}
+Gosu::Image::Image(std::unique_ptr<ImageData> data)
+: m_data(std::move(data))
 {
     if (!m_data) {
         throw std::invalid_argument("Gosu::Image cannot be initialized with nullptr");

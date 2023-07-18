@@ -602,7 +602,7 @@ bool Gosu::Input::down(Gosu::Button btn)
 
 double Gosu::Input::axis(Gosu::Button btn)
 {
-    unsigned axis_id = btn - GP_LEFT_STICK_X_AXIS;
+    unsigned axis_id = btn - static_cast<unsigned>(GP_LEFT_STICK_X_AXIS);
 
     if (axis_id >= axis_states.size()) {
         throw std::out_of_range("Invalid axis ID: " + std::to_string(btn));
