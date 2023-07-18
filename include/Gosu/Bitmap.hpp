@@ -17,8 +17,7 @@ namespace Gosu
     /// Bitmaps have (expensive) value semantics.
     class Bitmap
     {
-        int m_width = 0;
-        int m_height = 0;
+        int m_width = 0, m_height = 0;
         std::vector<Color> m_pixels;
 
     public:
