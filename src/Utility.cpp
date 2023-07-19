@@ -46,8 +46,13 @@ std::u32string Gosu::utf8_to_composed_utc4(const std::string& utf8)
 
 bool Gosu::has_extension(std::string_view filename, std::string_view extension)
 {
+    /// To avoid extra code paths later, we cut off all leading dots.
+    if (extension.starts_with('.')) {
+        extension.remove_prefix(1);
+    }
+
     std::size_t ext_len = extension.length();
-    if (ext_len > filename.length()) {
+    if (ext_len >= filename.length()) {
         return false;
     }
 
@@ -62,8 +67,9 @@ bool Gosu::has_extension(std::string_view filename, std::string_view extension)
             return false;
         }
     }
-
-    return true;
+    // We have verified the part after the dot, now make sure that the preceding character is a dot.
+    --filename_iter;
+    return *filename_iter == '.';
 }
 
 #ifdef GOSU_IS_IPHONE

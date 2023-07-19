@@ -18,9 +18,12 @@ TEST_F(UtilityTests, utf8_to_composed_utc4)
 TEST_F(UtilityTests, has_extension)
 {
     ASSERT_TRUE(Gosu::has_extension("filename.bmp", ".bmp"));
-    ASSERT_TRUE(Gosu::has_extension("File.Png", "PNG"));
+    ASSERT_TRUE(Gosu::has_extension("C:\\Windows\\File.Png", "PNG"));
+    ASSERT_FALSE(Gosu::has_extension(std::string("File.Png") + '\0', "PNG"));
+    ASSERT_FALSE(Gosu::has_extension("png", "png"));
     ASSERT_FALSE(Gosu::has_extension("Image.bmp", "png"));
     ASSERT_FALSE(Gosu::has_extension("ng", ".png"));
+    ASSERT_FALSE(Gosu::has_extension("/foo/bar/pngpng", "png"));
 }
 
 TEST_F(UtilityTests, user_languages)
