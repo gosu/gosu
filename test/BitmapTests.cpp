@@ -69,6 +69,13 @@ public:
     }
 };
 
+TEST_F(BitmapTests, visible_pixels_are_equal)
+{
+    Bitmap red(1, 1, Color::RED);
+    Bitmap blue(1, 1, Color::BLUE);
+    ASSERT_FALSE(visible_pixels_are_equal(red, blue));
+}
+
 TEST_F(BitmapTests, memory_management)
 {
     Bitmap empty_bitmap;

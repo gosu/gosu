@@ -11,6 +11,8 @@ namespace Gosu
     /// four" Emoji is actually composed of seven(!) codepoints. But because Gosu's text rendering
     /// facilities have no support for multi-codepoint graphemes, Gosu::Font and related classes are
     /// based on codepoints.
+    ///
+    /// This method will silently skip over invalid UTF-8 sequences.
     std::u32string utf8_to_composed_utc4(const std::string& utf8);
 
     /// Returns true if the filename has the given extension.
