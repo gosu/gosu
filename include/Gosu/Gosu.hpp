@@ -22,6 +22,7 @@
 #include <Gosu/Text.hpp>
 #include <Gosu/TextInput.hpp>
 #include <Gosu/Timing.hpp>
+#include <Gosu/Transform.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/Version.hpp>
 #include <Gosu/Window.hpp>

@@ -11,10 +11,13 @@ namespace Gosu
     /// four" Emoji is actually composed of seven(!) codepoints. But because Gosu's text rendering
     /// facilities have no support for multi-codepoint graphemes, Gosu::Font and related classes are
     /// based on codepoints.
+    ///
+    /// This method will silently skip over invalid UTF-8 sequences.
     std::u32string utf8_to_composed_utc4(const std::string& utf8);
 
     /// Returns true if the filename has the given extension.
     /// The comparison is case-insensitive, but you must pass the extension in lower case.
+    /// If the extension does not start with a dot, then it will be implied.
     bool has_extension(std::string_view filename, std::string_view extension);
 
     /// Returns the user's preferred user_languages/locales, e.g. {"en_US", "de_DE", "ja"}.
@@ -38,6 +41,7 @@ namespace Gosu
         Noncopyable& operator=(Noncopyable&& other) = delete;
     };
 
+    /// An int-based rectangle class, mostly for internal use.
     struct Rect
     {
         int x = 0, y = 0;

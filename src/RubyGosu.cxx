@@ -2191,10 +2191,9 @@ namespace Swig {
 #define SWIGTYPE_p_Gosu__Window swig_types[8]
 #define SWIGTYPE_p_char swig_types[9]
 #define SWIGTYPE_p_double swig_types[10]
-#define SWIGTYPE_p_std__arrayT_double_16_t swig_types[11]
-#define SWIGTYPE_p_std__string swig_types[12]
-static swig_type_info *swig_types[14];
-static swig_module_info swig_module = {swig_types, 13, 0, 0, 0, 0};
+#define SWIGTYPE_p_std__string swig_types[11]
+static swig_type_info *swig_types[13];
+static swig_module_info swig_module = {swig_types, 12, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2501,7 +2500,7 @@ namespace Gosu
     // This method cannot be called "transform" because then it would be an ambiguous overload of
     // Gosu::Transform Gosu::transform(...).
     // So it has to be renamed via %rename below... :( - same for the other transformations.
-    
+
     void transform_for_ruby(double m0, double m1, double m2, double m3, double m4, double m5,
         double m6, double m7, double m8, double m9, double m10, double m11, double m12, double m13,
         double m14, double m15)
@@ -2512,34 +2511,34 @@ namespace Gosu
         Gosu::Graphics::transform(transform,
                                   [] { rb_yield(Qnil); });
     }
-    
+
     void rotate_for_ruby(double angle, double around_x = 0, double around_y = 0)
     {
-        Gosu::Graphics::transform(Gosu::rotate(angle, around_x, around_y),
+        Gosu::Graphics::transform(Gosu::Transform::rotate(angle).around(around_x, around_y),
                                   [] { rb_yield(Qnil); });
     }
-    
+
     void scale_for_ruby(double factor)
     {
-        Gosu::Graphics::transform(Gosu::scale(factor),
+        Gosu::Graphics::transform(Gosu::Transform::scale(factor),
                                   [] { rb_yield(Qnil); });
     }
-    
+
     void scale_for_ruby(double scale_x, double scale_y)
     {
-        Gosu::Graphics::transform(Gosu::scale(scale_x, scale_y),
+        Gosu::Graphics::transform(Gosu::Transform::scale(scale_x, scale_y),
                                   [] { rb_yield(Qnil); });
     }
-    
+
     void scale_for_ruby(double scale_x, double scale_y, double around_x, double around_y)
     {
-        Gosu::Graphics::transform(Gosu::scale(scale_x, scale_y, around_x, around_y),
+        Gosu::Graphics::transform(Gosu::Transform::scale(scale_x, scale_y).around(around_x, around_y),
                                   [] { rb_yield(Qnil); });
     }
-    
+
     void translate_for_ruby(double x, double y)
     {
-        Gosu::Graphics::transform(Gosu::translate(x, y),
+        Gosu::Graphics::transform(Gosu::Transform::translate(x, y),
                                   [] { rb_yield(Qnil); });
     }
 }
@@ -12271,7 +12270,6 @@ static swig_type_info _swigt__p_Gosu__TextInput = {"_p_Gosu__TextInput", "Gosu::
 static swig_type_info _swigt__p_Gosu__Window = {"_p_Gosu__Window", "Gosu::Window *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "Gosu::ZPos *|double *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__arrayT_double_16_t = {"_p_std__arrayT_double_16_t", "Gosu::Transform *|std::array< double,16 > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
@@ -12286,7 +12284,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Gosu__Window,
   &_swigt__p_char,
   &_swigt__p_double,
-  &_swigt__p_std__arrayT_double_16_t,
   &_swigt__p_std__string,
 };
 
@@ -12301,7 +12298,6 @@ static swig_cast_info _swigc__p_Gosu__TextInput[] = {  {&_swigt__p_Gosu__TextInp
 static swig_cast_info _swigc__p_Gosu__Window[] = {  {&_swigt__p_Gosu__Window, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__arrayT_double_16_t[] = {  {&_swigt__p_std__arrayT_double_16_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
@@ -12316,7 +12312,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Gosu__Window,
   _swigc__p_char,
   _swigc__p_double,
-  _swigc__p_std__arrayT_double_16_t,
   _swigc__p_std__string,
 };
 

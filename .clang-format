@@ -11,6 +11,7 @@ BraceWrapping:
   AfterNamespace: true
   AfterStruct: true
   AfterUnion: true
+  BeforeElse: true
 ColumnLimit: 100
 IncludeBlocks: Regroup
 IncludeCategories:

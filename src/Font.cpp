@@ -7,6 +7,7 @@
 #include "GraphicsImpl.hpp"
 #include "MarkupParser.hpp"
 #include <array>
+#include <cmath> // for std::ceil
 #include <map>
 #include <stdexcept>
 #include <utf8proc.h>

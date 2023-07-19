@@ -1,6 +1,5 @@
 #include <Gosu/Platform.hpp>
 #include <Gosu/Utility.hpp>
-#include <cstring>
 #include <memory>
 #include <stdexcept>
 #include <utf8proc.h>
@@ -11,17 +10,18 @@ std::u32string Gosu::utf8_to_composed_utc4(const std::string& utf8)
     utc4.reserve(utf8.size());
 
     const auto* current_byte = reinterpret_cast<const utf8proc_uint8_t*>(utf8.data());
-    auto remaining_length = utf8.length();
+    auto remaining_length = static_cast<utf8proc_ssize_t>(utf8.length());
 
     // First convert from UTF-8 to UTC-4.
     utf8proc_int32_t codepoint;
     while (remaining_length) {
         auto bytes_read = utf8proc_iterate(current_byte, remaining_length, &codepoint);
-        if (bytes_read == -1) {
+        if (bytes_read < 0) {
             // Not looking good, skip this byte and retry.
             current_byte += 1;
             remaining_length -= 1;
-        } else {
+        }
+        else {
             utc4.push_back(codepoint);
             current_byte += bytes_read;
             remaining_length -= bytes_read;
@@ -30,12 +30,15 @@ std::u32string Gosu::utf8_to_composed_utc4(const std::string& utf8)
 
     // Now compose characters in-place.
     auto* utc4_data = reinterpret_cast<utf8proc_int32_t*>(utc4.data());
+    auto utc4_length = static_cast<utf8proc_ssize_t>(utc4.length());
     auto options = static_cast<utf8proc_option_t>(UTF8PROC_NLF2LF | UTF8PROC_COMPOSE);
-    auto new_length = utf8proc_normalize_utf32(utc4_data, utc4.length(), options);
+    auto new_length = utf8proc_normalize_utf32(utc4_data, utc4_length, options);
+    // GCOV_EXCL_START: No code path in utf8proc_normalize_utf32 currently returns an error.
     if (new_length < 0) {
         throw std::runtime_error("Could not normalize '" + utf8
                                  + "': " + utf8proc_errmsg(new_length));
     }
+    // GCOV_EXCL_END
     utc4.resize(new_length);
 
     return utc4;
@@ -43,8 +46,13 @@ std::u32string Gosu::utf8_to_composed_utc4(const std::string& utf8)
 
 bool Gosu::has_extension(std::string_view filename, std::string_view extension)
 {
+    /// To avoid extra code paths later, we cut off all leading dots.
+    if (extension.starts_with('.')) {
+        extension.remove_prefix(1);
+    }
+
     std::size_t ext_len = extension.length();
-    if (ext_len > filename.length()) {
+    if (ext_len >= filename.length()) {
         return false;
     }
 
@@ -59,8 +67,9 @@ bool Gosu::has_extension(std::string_view filename, std::string_view extension)
             return false;
         }
     }
-
-    return true;
+    // We have verified the part after the dot, now make sure that the preceding character is a dot.
+    --filename_iter;
+    return *filename_iter == '.';
 }
 
 #ifdef GOSU_IS_IPHONE
@@ -95,14 +104,16 @@ std::vector<std::string> Gosu::user_languages()
     std::vector<std::string> user_languages;
 
     std::unique_ptr<SDL_Locale, decltype(SDL_free)*> locales(SDL_GetPreferredLocales(), SDL_free);
+    // GCOV_EXCL_START: There is no portable way to let SDL_GetPreferredLocales fail.
     if (!locales) {
         return user_languages;
     }
+    // GCOV_EXCL_END
 
     for (const SDL_Locale* locale = locales.get(); locale->language != nullptr; ++locale) {
         std::string language = locale->language;
         if (locale->country) {
-            language += "_";
+            language += '_';
             language += locale->country;
         }
         user_languages.emplace_back(std::move(language));

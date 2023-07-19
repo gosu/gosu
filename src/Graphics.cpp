@@ -57,9 +57,9 @@ struct Gosu::Graphics::Impl : private Gosu::Noncopyable
         double scale_y = 1.0 * phys_height / virt_height;
         double scale_factor = std::min(scale_x, scale_y);
 
-        Transform scale_transform = scale(scale_factor);
-        Transform translate_transform = translate(black_width, black_height);
-        base_transform = concat(translate_transform, scale_transform);
+        Transform scale_transform = Transform::scale(scale_factor);
+        Transform translate_transform = Transform::translate(black_width, black_height);
+        base_transform = translate_transform * scale_transform;
     }
 
 #ifndef GOSU_IS_OPENGLES

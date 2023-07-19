@@ -18,6 +18,7 @@ namespace Gosu
     class Sample;
     class Song;
     class TextInput;
+    struct Transform;
     class Window;
     class Writer;
 }

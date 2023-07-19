@@ -341,7 +341,7 @@ namespace Gosu
     // This method cannot be called "transform" because then it would be an ambiguous overload of
     // Gosu::Transform Gosu::transform(...).
     // So it has to be renamed via %rename below... :( - same for the other transformations.
-    
+
     void transform_for_ruby(double m0, double m1, double m2, double m3, double m4, double m5,
         double m6, double m7, double m8, double m9, double m10, double m11, double m12, double m13,
         double m14, double m15)
@@ -352,34 +352,34 @@ namespace Gosu
         Gosu::Graphics::transform(transform,
                                   [] { rb_yield(Qnil); });
     }
-    
+
     void rotate_for_ruby(double angle, double around_x = 0, double around_y = 0)
     {
-        Gosu::Graphics::transform(Gosu::rotate(angle, around_x, around_y),
+        Gosu::Graphics::transform(Gosu::Transform::rotate(angle).around(around_x, around_y),
                                   [] { rb_yield(Qnil); });
     }
-    
+
     void scale_for_ruby(double factor)
     {
-        Gosu::Graphics::transform(Gosu::scale(factor),
+        Gosu::Graphics::transform(Gosu::Transform::scale(factor),
                                   [] { rb_yield(Qnil); });
     }
-    
+
     void scale_for_ruby(double scale_x, double scale_y)
     {
-        Gosu::Graphics::transform(Gosu::scale(scale_x, scale_y),
+        Gosu::Graphics::transform(Gosu::Transform::scale(scale_x, scale_y),
                                   [] { rb_yield(Qnil); });
     }
-    
+
     void scale_for_ruby(double scale_x, double scale_y, double around_x, double around_y)
     {
-        Gosu::Graphics::transform(Gosu::scale(scale_x, scale_y, around_x, around_y),
+        Gosu::Graphics::transform(Gosu::Transform::scale(scale_x, scale_y).around(around_x, around_y),
                                   [] { rb_yield(Qnil); });
     }
-    
+
     void translate_for_ruby(double x, double y)
     {
-        Gosu::Graphics::transform(Gosu::translate(x, y),
+        Gosu::Graphics::transform(Gosu::Transform::translate(x, y),
                                   [] { rb_yield(Qnil); });
     }
 }
@@ -408,10 +408,9 @@ namespace Gosu
 // Miscellaneous functions (timing, math)
 %ignore Gosu::sleep;
 %include "../../include/Gosu/Timing.hpp"
-%ignore Gosu::distance_sqr;
 %ignore Gosu::wrap;
-%ignore Gosu::radians_to_gosu;
-%ignore Gosu::gosu_to_radians;
+%ignore Gosu::radians_to_angle;
+%ignore Gosu::angle_to_radians;
 %include "../../include/Gosu/Math.hpp"
 %ignore Gosu::text_width;
 %ignore Gosu::draw_text;
@@ -427,10 +426,6 @@ namespace Gosu
 %ignore Gosu::FontFlags;
 %ignore Gosu::Alignment;
 %ignore Gosu::ImageFlags;
-%ignore Gosu::concat;
-%ignore Gosu::translate;
-%ignore Gosu::rotate;
-%ignore Gosu::scale;
 %include "../../include/Gosu/GraphicsBase.hpp"
 
 // For screen_width/screen_height

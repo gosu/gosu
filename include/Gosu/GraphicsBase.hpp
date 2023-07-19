@@ -1,12 +1,9 @@
 #pragma once
 
-#include <Gosu/Platform.hpp>
-#include <array>
-
 namespace Gosu
 {
     /// Represents the Z position of something drawn with Gosu's graphics system.
-    /// Draw calls with higher ZPos values will cover those with a lower ZPos value.
+    /// Images drawn with higher ZPos values will cover those with a lower ZPos value.
     typedef double ZPos;
 
     /// Determines the way pixel colors are combined when images overlap.
@@ -56,11 +53,4 @@ namespace Gosu
         /// Apply nearest-neighbor interpolation when scaling this image up or down.
         IF_RETRO = 1 << 5
     };
-
-    typedef std::array<double, 16> Transform;
-    Transform translate(double x, double y);
-    Transform rotate(double angle, double around_x = 0, double around_y = 0);
-    Transform scale(double factor);
-    Transform scale(double scale_x, double scale_y, double from_x = 0, double from_y = 0);
-    Transform concat(const Transform& lhs, const Transform& rhs);
 }

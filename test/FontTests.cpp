@@ -1,16 +1,16 @@
-#include <Gosu/Font.hpp>
 #include <gtest/gtest.h>
 
-namespace Gosu
-{
-    class FontTests : public testing::Test
-    {
-    };
+#include <Gosu/Font.hpp>
 
-    TEST_F(FontTests, TextWidth)
-    {
-        Font regular_font{23, default_font_name()};
-        Font bold_font{23, default_font_name(), FF_BOLD | FF_ITALIC};
-        ASSERT_NE(regular_font.text_width("Afdslkgjd"), bold_font.text_width("Afdslkgjd"));
-    }
+class FontTests : public testing::Test
+{
+};
+
+TEST_F(FontTests, text_width)
+{
+    const Gosu::Font regular_font(23);
+    const Gosu::Font bold_font(23, Gosu::default_font_name(), Gosu::FF_BOLD | Gosu::FF_ITALIC);
+    ASSERT_EQ(regular_font.text_width(""), 0);
+    ASSERT_EQ(bold_font.text_width(""), 0);
+    ASSERT_LE(regular_font.text_width("Afdslkgjd"), bold_font.text_width("Afdslkgjd"));
 }

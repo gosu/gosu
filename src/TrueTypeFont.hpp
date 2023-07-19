@@ -1,11 +1,9 @@
 #pragma once
 
 #include <Gosu/Bitmap.hpp>
-#include <Gosu/IO.hpp>
 #include <functional>
 #include <memory>
 #include <string>
-#include <vector>
 
 namespace Gosu
 {

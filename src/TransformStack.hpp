@@ -14,7 +14,7 @@ namespace Gosu
         Transforms absolute;
         // Points to one absolute transform.
         Transforms::const_iterator current_iterator;
-        
+
         void make_current(const Transform& transform)
         {
             current_iterator = std::find(absolute.begin(), absolute.end(), transform);
@@ -22,12 +22,12 @@ namespace Gosu
                 current_iterator = absolute.insert(absolute.end(), transform);
             }
         }
-        
+
     public:
         TransformStack()
         {
             reset();
-            individual.front() = absolute.front() = scale(1);
+            individual.front() = absolute.front() = Transform::scale(1);
         }
 
         void reset()
@@ -39,18 +39,18 @@ namespace Gosu
             absolute.resize(1);
             current_iterator = absolute.begin();
         }
-        
+
         TransformStack(const TransformStack& other)
         {
             *this = other;
         }
-        
+
         // Custom assignment to ensure valid current_iterator
         TransformStack& operator=(const TransformStack& other)
         {
             individual = other.individual;
             absolute = other.absolute;
-            
+
             // Reset our current_iterator to point to the respective element
             // in our own 'absolute' transforms by iterating both lists up to
             // the other lists' current iterator
@@ -60,39 +60,39 @@ namespace Gosu
                 ++current_iterator;
                 ++other_iterator;
             }
-            
+
             return *this;
         }
-        
+
         void set_base_transform(const Transform& base_transform)
         {
             assert (individual.size() == 1);
             assert (absolute.size() == 1);
-            
+
             individual.front() = absolute.front() = base_transform;
         }
-        
+
         const Transform& current()
         {
             return *current_iterator;
         }
-        
+
         void push(const Transform& transform)
         {
             individual.push_back(transform);
-            Transform result = concat(transform, current());
+            Transform result = transform * current();
             make_current(result);
         }
-        
+
         void pop()
         {
             assert (individual.size() > 1);
-            
+
             individual.pop_back();
-            Transform result = scale(1);
+            Transform result = Transform::scale(1);
             for (Transforms::reverse_iterator it = individual.rbegin(),
                     end = individual.rend(); it != end; ++it)
-                result = concat(result, *it);
+                result = result *  *it;
             make_current(result);
         }
     };
