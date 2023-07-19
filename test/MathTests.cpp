@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <Gosu/Math.hpp>
+#include <cmath> // for std::isnan
 #include <set>
 
 class MathTests : public testing::Test
@@ -83,7 +84,7 @@ TEST_F(MathTests, trigonmetry)
     // Down
     ASSERT_EQ(Gosu::angle(0, 0, 0, 1e10), 180);
     // Left
-    ASSERT_EQ(Gosu::angle(0, 0, -1e-10, 0), -90);
+    ASSERT_EQ(Gosu::angle(0, 0, -1e-10, 0), 270);
     // Indeterminate angle, use fallback
     ASSERT_EQ(Gosu::angle(5, 5, 5, 5, 1234), 1234);
 }

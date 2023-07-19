@@ -92,7 +92,7 @@ class Gosu::RenderStateManager : private Gosu::RenderState
         // TODO: Ouch, should always use floats!
         GLfloat matrix[16];
         for (int i = 0; i < 16; ++i) {
-            matrix[i] = (*transform)[i];
+            matrix[i] = transform->matrix[i];
         }
         glMultMatrixf(matrix);
         #endif

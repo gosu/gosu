@@ -46,7 +46,7 @@ double Gosu::angle(double from_x, double from_y, double to_x, double to_y, doubl
         return dist_y < 0 ? 0 : 180;
     }
     else if (dist_y == 0) {
-        return dist_x < 0 ? -90 : 90;
+        return dist_x < 0 ? 270 : 90;
     }
 
     return normalize_angle(radians_to_angle(std::atan2(dist_y, dist_x)));
