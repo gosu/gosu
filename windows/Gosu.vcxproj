@@ -171,7 +171,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_gdm.c" />
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound.c" />
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_aiff.c" />
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_au.c" />
@@ -192,6 +191,7 @@
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_dmf.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_dsm.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_far.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_gdm.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_it.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mdl.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_med.c" />
@@ -213,8 +213,8 @@
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\snd_fx.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\sndfile.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\sndmix.c" />
-    <ClCompile Include="..\dependencies\utf8proc\utf8proc.c" />
     <ClCompile Include="..\dependencies\mojoAL\mojoal.c" />
+    <ClCompile Include="..\dependencies\utf8proc\utf8proc.c" />
     <ClCompile Include="..\src\Audio.cpp" />
     <ClCompile Include="..\src\AudioFileAudioToolbox.cpp" />
     <ClCompile Include="..\src\AudioFileSDLSound.cpp" />
@@ -273,16 +273,6 @@
     <ClInclude Include="..\dependencies\SDL\include\SDL_blendmode.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_clipboard.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_config.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_android.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_iphoneos.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_macosx.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_minimal.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_pandora.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_psp.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_windows.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_winrt.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_wiz.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_copying.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_cpuinfo.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_egl.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_endian.h" />
@@ -291,6 +281,7 @@
     <ClInclude Include="..\dependencies\SDL\include\SDL_filesystem.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_gamecontroller.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_gesture.h" />
+    <ClInclude Include="..\dependencies\SDL\include\SDL_guid.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_haptic.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_hidapi.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_hints.h" />
@@ -360,13 +351,13 @@
     <ClInclude Include="..\dependencies\SDL_sound\libmodplug\modplug.h" />
     <ClInclude Include="..\dependencies\SDL_sound\libmodplug\tables.h" />
     <ClInclude Include="..\dependencies\SDL_sound\stb_vorbis.h" />
+    <ClInclude Include="..\dependencies\mojoAL\AL\al.h" />
+    <ClInclude Include="..\dependencies\mojoAL\AL\alc.h" />
     <ClInclude Include="..\dependencies\stb\stb_image.h" />
     <ClInclude Include="..\dependencies\stb\stb_image_write.h" />
     <ClInclude Include="..\dependencies\stb\stb_truetype.h" />
     <ClInclude Include="..\dependencies\utf8proc\utf8proc.h" />
     <ClInclude Include="..\dependencies\utf8proc\utf8proc_data.h" />
-    <ClInclude Include="..\dependencies\mojoAL\AL\al.h" />
-    <ClInclude Include="..\dependencies\mojoAL\AL\alc.h" />
     <ClInclude Include="..\src\AudioFile.hpp" />
     <ClInclude Include="..\src\AudioImpl.hpp" />
     <ClInclude Include="..\src\BlockAllocator.hpp" />
@@ -410,6 +401,7 @@
     <ClInclude Include="..\include\Gosu\Text.hpp" />
     <ClInclude Include="..\include\Gosu\TextInput.hpp" />
     <ClInclude Include="..\include\Gosu\Timing.hpp" />
+    <ClInclude Include="..\include\Gosu\Transform.hpp" />
     <ClInclude Include="..\include\Gosu\Utility.hpp" />
     <ClInclude Include="..\include\Gosu\Version.hpp" />
     <ClInclude Include="..\include\Gosu\Window.hpp" />

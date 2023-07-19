@@ -72,6 +72,9 @@
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_far.c">
       <Filter>Dependencies</Filter>
     </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_gdm.c">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_it.c">
       <Filter>Dependencies</Filter>
     </ClCompile>
@@ -133,6 +136,9 @@
       <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\sndmix.c">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\mojoAL\mojoal.c">
       <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\dependencies\utf8proc\utf8proc.c">
@@ -282,12 +288,6 @@
     <ClCompile Include="..\src\WindowUIKit.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_gdm.c">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\mojoAL\mojoal.c">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dependencies\SDL\include\SDL.h">
@@ -314,36 +314,6 @@
     <ClInclude Include="..\dependencies\SDL\include\SDL_config.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_android.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_iphoneos.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_macosx.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_minimal.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_pandora.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_psp.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_windows.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_winrt.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_wiz.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_copying.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
     <ClInclude Include="..\dependencies\SDL\include\SDL_cpuinfo.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
@@ -368,7 +338,13 @@
     <ClInclude Include="..\dependencies\SDL\include\SDL_gesture.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_guid.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
     <ClInclude Include="..\dependencies\SDL\include\SDL_haptic.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_hidapi.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
     <ClInclude Include="..\dependencies\SDL\include\SDL_hints.h">
@@ -572,6 +548,12 @@
     <ClInclude Include="..\dependencies\SDL_sound\stb_vorbis.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
+    <ClInclude Include="..\dependencies\mojoAL\AL\al.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\mojoAL\AL\alc.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
     <ClInclude Include="..\dependencies\stb\stb_image.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
@@ -716,6 +698,9 @@
     <ClInclude Include="..\include\Gosu\Timing.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Gosu\Transform.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
     <ClInclude Include="..\include\Gosu\Utility.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
@@ -724,15 +709,6 @@
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Window.hpp">
       <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_hidapi.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\mojoAL\AL\al.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\mojoAL\AL\alc.h">
-      <Filter>Dependencies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

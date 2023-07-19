@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Gosu/Transform.hpp>
 #include "GraphicsImpl.hpp"
 #include "Texture.hpp"
 
@@ -11,13 +12,13 @@ struct Gosu::RenderState
     const Transform* transform;
     ClipRect clip_rect;
     BlendMode mode;
-    
+
     RenderState()
     : transform(0), mode(BM_DEFAULT)
     {
         clip_rect.width = NO_CLIPPING;
     }
-    
+
     bool operator==(const RenderState& rhs) const
     {
         return texture == rhs.texture &&
@@ -25,7 +26,7 @@ struct Gosu::RenderState
             clip_rect == rhs.clip_rect &&
             mode == rhs.mode;
     }
-    
+
     void apply_texture() const
     {
         if (texture) {
@@ -36,7 +37,7 @@ struct Gosu::RenderState
             glDisable(GL_TEXTURE_2D);
         }
     }
-    
+
     void apply_alpha_mode() const
     {
         if (mode == BM_ADD) {
@@ -49,7 +50,7 @@ struct Gosu::RenderState
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }
     }
-    
+
     void apply_clip_rect() const
     {
         if (clip_rect.width == NO_CLIPPING) {
@@ -60,7 +61,7 @@ struct Gosu::RenderState
             glScissor(clip_rect.x, clip_rect.y, clip_rect.width, clip_rect.height);
         }
     }
-    
+
     // Only used by Macro so far
     #ifndef GOSU_IS_OPENGLES
     void apply() const
@@ -79,14 +80,14 @@ class Gosu::RenderStateManager : private Gosu::RenderState
     // Not copyable
     RenderStateManager(const RenderStateManager&);
     RenderStateManager& operator=(const RenderStateManager&);
-    
+
     void apply_transform() const
     {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        
+
         #ifndef GOSU_IS_OPENGLES
-        glMultMatrixd(&(*transform)[0]);
+        glMultMatrixd(transform->matrix.data());
         #else
         // TODO: Ouch, should always use floats!
         GLfloat matrix[16];
@@ -96,7 +97,7 @@ class Gosu::RenderStateManager : private Gosu::RenderState
         glMultMatrixf(matrix);
         #endif
     }
-    
+
 public:
     RenderStateManager()
     {
@@ -105,7 +106,7 @@ public:
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
     }
-    
+
     ~RenderStateManager()
     {
         ClipRect no_clipping;
@@ -116,7 +117,7 @@ public:
         glMatrixMode(GL_MODELVIEW);
         glPopMatrix();
     }
-    
+
     void set_render_state(const RenderState& rs)
     {
         set_texture(rs.texture);
@@ -124,7 +125,7 @@ public:
         set_clip_rect(rs.clip_rect);
         set_alpha_mode(rs.mode);
     }
-    
+
     void set_texture(std::shared_ptr<Texture> new_texture)
     {
         if (new_texture == texture) return;
@@ -141,11 +142,11 @@ public:
         }
         texture = new_texture;
     }
-    
+
     void set_transform(const Transform* new_transform)
     {
         if (new_transform == transform) return;
-        
+
         transform = new_transform;
         apply_transform();
     }
@@ -173,15 +174,15 @@ public:
             }
         }
     }
-    
+
     void set_alpha_mode(BlendMode new_mode)
     {
         if (new_mode == mode) return;
-        
+
         mode = new_mode;
         apply_alpha_mode();
     }
-    
+
     // The cached values may have been messed with. Reset them again.
     void enforce_after_untrusted_gL() const
     {

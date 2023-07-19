@@ -77,8 +77,8 @@ public:
         double left = x, right = x + width;
         double top = y, bottom = y + height;
 
-        apply_transform(transform_stack.current(), left, top);
-        apply_transform(transform_stack.current(), right, bottom);
+        transform_stack.current().apply(left, top);
+        transform_stack.current().apply(right, bottom);
 
         double phys_x      = std::min(left, right);
         double phys_y      = std::min(top, bottom);

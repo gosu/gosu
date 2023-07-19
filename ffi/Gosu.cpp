@@ -1,3 +1,4 @@
+#include <Gosu/Transform.hpp>
 #include "Gosu_FFI_internal.h"
 
 std::string& Gosu_internal_error()
@@ -65,7 +66,7 @@ GOSU_FFI_API void Gosu_transform(double m0, double m1, double m2, double m3, dou
 GOSU_FFI_API void Gosu_translate(double x, double y, void function(void*), void* data)
 {
     Gosu_translate_exceptions([=] {
-        Gosu::Graphics::transform(Gosu::translate(x, y), [=] { function(data); });
+        Gosu::Graphics::transform(Gosu::Transform::translate(x, y), [=] { function(data); });
     });
 }
 
@@ -73,8 +74,9 @@ GOSU_FFI_API void Gosu_scale(double scale_x, double scale_y, double around_x, do
                              void function(void*), void* data)
 {
     Gosu_translate_exceptions([=] {
-        Gosu::Graphics::transform(Gosu::scale(scale_x, scale_y, around_x, around_y),
-                                  [=] { function(data); });
+        Gosu::Graphics::transform(
+            Gosu::Transform::scale(scale_x, scale_y).around(around_x, around_y),
+            [=] { function(data); });
     });
 }
 
@@ -82,7 +84,8 @@ GOSU_FFI_API void Gosu_rotate(double angle, double around_x, double around_y, vo
                               void* data)
 {
     Gosu_translate_exceptions([=] {
-        Gosu::Graphics::transform(Gosu::rotate(angle, around_x, around_y), [=] { function(data); });
+        Gosu::Graphics::transform(Gosu::Transform::rotate(angle).around(around_x, around_y),
+                                  [=] { function(data); });
     });
 }
 

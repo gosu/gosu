@@ -141,8 +141,11 @@ namespace Gosu
                 result[i].vertices[1] = vertices[i].y;
                 result[i].vertices[2] = 0;
                 result[i].color       = vertices[i].c.abgr();
-                apply_transform(*render_state.transform,
-                                result[i].vertices[0], result[i].vertices[1]);
+                double x = result[i].vertices[0];
+                double y = result[i].vertices[1];
+                render_state.transform->apply(x, y);
+                result[i].vertices[0] = static_cast<float>(x);
+                result[i].vertices[1] = static_cast<float>(y);
             }
             RenderState va_render_state = render_state;
             va_render_state.transform   = 0;

@@ -132,7 +132,7 @@ struct Gosu::Macro::Impl : private Gosu::Noncopyable
         for (const auto& vertex_array : vertex_arrays) {
             glPushMatrix();
             vertex_array.render_state.apply();
-            glMultMatrixd(&transform[0]);
+            glMultMatrixd(transform.matrix.data());
             glInterleavedArrays(GL_T2F_C4UB_V3F, 0, &vertex_array.vertices[0]);
             glDrawArrays(GL_QUADS, 0, (GLsizei) vertex_array.vertices.size());
             glPopMatrix();
