@@ -48,8 +48,15 @@ TEST_F(TransformTests, scale)
     ASSERT_NEAR(y, 3, EPSILON);
 }
 
-TEST_F(TransformTests, concat)
+TEST_F(TransformTests, concatenation)
 {
+    // "Concatenating" two translations results in the sum of both offsets.
     ASSERT_EQ(Gosu::Transform::translate(5, 0) * Gosu::Transform::translate(0, 20),
               Gosu::Transform::translate(5, 20));
+
+    // (A * B).apply(x, y) should be the same as A.apply(x, y); B.apply(x, y); (left-to-right)
+    double x = 0, y = -10;
+    (Gosu::Transform::rotate(90) * Gosu::Transform::translate(10, 0)).apply(x, y);
+    ASSERT_NEAR(x, 20, EPSILON);
+    ASSERT_NEAR(y, 0, EPSILON);
 }

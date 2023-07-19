@@ -40,6 +40,7 @@ namespace Gosu
         Noncopyable& operator=(Noncopyable&& other) = delete;
     };
 
+    /// An int-based rectangle class, mostly for internal use.
     struct Rect
     {
         int x = 0, y = 0;
