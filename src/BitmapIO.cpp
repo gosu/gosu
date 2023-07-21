@@ -1,94 +1,63 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Utility.hpp>
-#include <cstring>   // for std::memcpy, std::size_t
 #include <stdexcept> // for std::runtime_error
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_NO_STDIO
-#define STBI_NO_LINEAR
+#define STBI_NO_LINEAR // we don't really care about this, but it avoids warnings
 
 #include <stb_image.h>
 
-static int read_callback(void* user, char* data, int size)
+namespace
 {
-    Gosu::Reader* reader = static_cast<Gosu::Reader*>(user);
-    std::size_t remaining = reader->resource().size() - reader->position();
-    std::size_t adjusted_size = (size < remaining ? size : remaining);
-    reader->read(data, adjusted_size);
-    return static_cast<int>(adjusted_size);
-}
+    constexpr int JPEG_QUALITY = 80;
 
-static void skip_callback(void* user, int n)
-{
-    Gosu::Reader* reader = static_cast<Gosu::Reader*>(user);
-    reader->set_position(reader->position() + n);
-}
-
-static int eof_callback(void* user)
-{
-    Gosu::Reader* reader = static_cast<Gosu::Reader*>(user);
-    return reader->position() == reader->resource().size();
-}
-
-static bool is_bmp(Gosu::Reader reader)
-{
-    std::size_t remaining = reader.resource().size() - reader.position();
-    if (remaining < 2) return false;
-    char magic_bytes[2];
-    reader.read(&magic_bytes, sizeof magic_bytes);
-    return magic_bytes[0] == 'B' && magic_bytes[1] == 'M';
-}
-
-/// Returns a copy of the given Gosu::Image with the alpha channel removed.
-/// Every pixel with alpha==0 will be replaced by Gosu::Color::FUCHSIA.
-static std::vector<Gosu::Color::Channel> bitmap_to_rgb(const Gosu::Bitmap& bmp)
-{
-    std::vector<Gosu::Color::Channel> rgb(static_cast<std::size_t>(bmp.width() * bmp.height() * 3));
-    for (std::size_t offset = 0; offset < rgb.size(); offset += 3) {
-        const Gosu::Color& color = bmp.data()[offset / 3];
-        if (color.alpha == 0) {
-            rgb[offset + 0] = 0xff;
-            rgb[offset + 1] = 0x00;
-            rgb[offset + 2] = 0xff;
-        } else {
-            rgb[offset + 0] = color.red;
-            rgb[offset + 1] = color.green;
-            rgb[offset + 2] = color.blue;
+    /// Returns a copy of the given Gosu::Image with the alpha channel removed.
+    /// Every pixel with alpha==0 will be replaced by Gosu::Color::FUCHSIA.
+    std::vector<Gosu::Color::Channel> remove_alpha_channel(const Gosu::Bitmap& bmp)
+    {
+        std::vector<Gosu::Color::Channel> rgb(
+            static_cast<std::size_t>(bmp.width() * bmp.height() * 3));
+        for (std::size_t offset = 0; offset < rgb.size(); offset += 3) {
+            const Gosu::Color& color = bmp.data()[offset / 3];
+            if (color.alpha == 0) {
+                rgb[offset + 0] = 0xff;
+                rgb[offset + 1] = 0x00;
+                rgb[offset + 2] = 0xff;
+            }
+            else {
+                rgb[offset + 0] = color.red;
+                rgb[offset + 1] = color.green;
+                rgb[offset + 2] = color.blue;
+            }
         }
+        return rgb;
     }
-    return rgb;
 }
 
 Gosu::Bitmap Gosu::load_image_file(const std::string& filename)
 {
-    Buffer buffer;
-    load_file(buffer, filename);
-    return load_image_file(buffer.front_reader());
+    return load_image(load_file(filename));
 }
 
-Gosu::Bitmap Gosu::load_image_file(Reader input)
+Gosu::Bitmap Gosu::load_image(const Buffer& buffer)
 {
-    bool needs_color_key = is_bmp(input);
-
-    stbi_io_callbacks callbacks{};
-    callbacks.read = read_callback;
-    callbacks.skip = skip_callback;
-    callbacks.eof = eof_callback;
     int x = 0, y = 0, n = 0;
-
-    stbi_uc* bytes = stbi_load_from_callbacks(&callbacks, &input, &x, &y, &n, STBI_rgb_alpha);
+    stbi_uc* bytes = stbi_load_from_memory(buffer.data(), static_cast<int>(buffer.size()), &x, &y,
+                                           &n, STBI_rgb_alpha);
     if (bytes == nullptr) {
-        throw std::runtime_error{"Cannot load image: " + std::string(stbi_failure_reason())};
+        throw std::runtime_error("Cannot load image: " + std::string(stbi_failure_reason()));
     }
 
-    Gosu::Bitmap bitmap{x, y};
-    std::memcpy(bitmap.data(), bytes, x * y * sizeof(Gosu::Color));
+    int pixels = x * y;
+    Buffer pixel_buffer(bytes, static_cast<std::size_t>(pixels) * sizeof(Color), &stbi_image_free);
+    Gosu::Bitmap bitmap(x, y, std::move(pixel_buffer));
 
-    stbi_image_free(bytes);
-
-    if (needs_color_key) {
+    // If we just read a BMP file, we want to apply a color key.
+    if (buffer.size() > 2 && *buffer.data() == 'B' && *(buffer.data() + 1) == 'M') {
         apply_color_key(bitmap, Gosu::Color::FUCHSIA);
     }
+
     return bitmap;
 }
 
@@ -101,10 +70,11 @@ void Gosu::save_image_file(const Gosu::Bitmap& bitmap, const std::string& filena
 
     if (has_extension(filename, "bmp")) {
         ok = stbi_write_bmp(filename.c_str(), bitmap.width(), bitmap.height(), 3,
-                            bitmap_to_rgb(bitmap).data());
+                            remove_alpha_channel(bitmap).data());
     }
-    else if (has_extension(filename, "tga")) {
-        ok = stbi_write_tga(filename.c_str(), bitmap.width(), bitmap.height(), 4, bitmap.data());
+    else if (has_extension(filename, "jpg") || has_extension(filename, "jpeg")) {
+        ok = stbi_write_jpg(filename.c_str(), bitmap.width(), bitmap.height(), 3,
+                            remove_alpha_channel(bitmap).data(), JPEG_QUALITY);
     }
     else {
         ok = stbi_write_png(filename.c_str(), bitmap.width(), bitmap.height(), 4, bitmap.data(), 0);
@@ -115,32 +85,36 @@ void Gosu::save_image_file(const Gosu::Bitmap& bitmap, const std::string& filena
     }
 }
 
-static void stbi_write_to_writer(void* context, void* data, int size)
+Gosu::Buffer Gosu::save_image(const Gosu::Bitmap& bitmap, std::string_view format_hint)
 {
-    static_cast<Gosu::Writer*>(context)->write(data, size);
-}
+    const auto stbi_write_to_vector = [](void* context, void* data, int size) {
+        auto* vec = static_cast<std::vector<std::uint8_t>*>(context);
+        const auto* begin = static_cast<const std::uint8_t*>(data);
+        const auto* end = begin + size;
+        vec->insert(vec->end(), begin, end);
+    };
 
-void Gosu::save_image_file(const Gosu::Bitmap& bitmap, Gosu::Writer writer,
-                           std::string_view format_hint)
-{
+    std::vector<std::uint8_t> vector;
     int ok;
 
-    if (has_extension(format_hint, "bmp")) {
-        ok = stbi_write_bmp_to_func(stbi_write_to_writer, &writer, bitmap.width(), bitmap.height(),
-                                    3, bitmap_to_rgb(bitmap).data());
+    if (format_hint == "bmp" || has_extension(format_hint, "bmp")) {
+        ok = stbi_write_bmp_to_func(stbi_write_to_vector, &vector, bitmap.width(), bitmap.height(),
+                                    3, remove_alpha_channel(bitmap).data());
     }
-    else if (has_extension(format_hint, "tga")) {
-        stbi_write_tga_with_rle = 0;
-        ok = stbi_write_tga_to_func(stbi_write_to_writer, &writer, bitmap.width(), bitmap.height(),
-                                    4, bitmap.data());
+    else if (format_hint == "jpg" || format_hint == "jpeg" || has_extension(format_hint, "jpg")
+             || has_extension(format_hint, "jpeg")) {
+        ok = stbi_write_jpg_to_func(stbi_write_to_vector, &vector, bitmap.width(), bitmap.height(),
+                                    3, remove_alpha_channel(bitmap).data(), JPEG_QUALITY);
     }
     else {
-        ok = stbi_write_png_to_func(stbi_write_to_writer, &writer, bitmap.width(), bitmap.height(),
+        ok = stbi_write_png_to_func(stbi_write_to_vector, &vector, bitmap.width(), bitmap.height(),
                                     4, bitmap.data(), 0);
     }
 
     if (ok == 0) {
-        throw std::runtime_error("Could not save image data to memory (format hint = '" +
-                                 std::string{format_hint} + "'");
+        throw std::runtime_error("Could not save image data to memory (format hint = '"
+                                 + std::string(format_hint) + "'");
     }
+
+    return Buffer(std::move(vector));
 }

@@ -22,7 +22,7 @@ namespace Gosu
     [[noreturn]] static void throw_sdl_error(const std::string& operation)
     {
         const char* error = SDL_GetError();
-        throw std::runtime_error{operation + ": " + (error ? error : "(unknown error)")};
+        throw std::runtime_error { operation + ": " + (error ? error : "(unknown error)") };
     }
 
     SDL_Window* shared_window()
@@ -86,14 +86,15 @@ struct Gosu::Window::Impl : private Gosu::Noncopyable
         CLOSED,
         OPEN,
         CLOSING
-    } state = CLOSED;
+    } state
+        = CLOSED;
 
     std::unique_ptr<Graphics> graphics;
     std::unique_ptr<Input> input;
 };
 
 Gosu::Window::Window(int width, int height, unsigned window_flags, double update_interval)
-: m_impl(new Impl)
+    : m_impl(new Impl)
 {
     set_borderless(window_flags & WF_BORDERLESS);
     set_resizable(window_flags & WF_RESIZABLE);
@@ -285,13 +286,17 @@ void Gosu::Window::show()
         }
     } catch (...) {
 #ifdef GOSU_IS_WIN
-        if (previous_affinity) SetThreadAffinityMask(GetCurrentThread(), previous_affinity);
+        if (previous_affinity) {
+            SetThreadAffinityMask(GetCurrentThread(), previous_affinity);
+        }
 #endif
         throw;
     }
 
 #ifdef GOSU_IS_WIN
-    if (previous_affinity) SetThreadAffinityMask(GetCurrentThread(), previous_affinity);
+    if (previous_affinity) {
+        SetThreadAffinityMask(GetCurrentThread(), previous_affinity);
+    }
 #endif
 
     m_impl->state = Impl::CLOSED;
@@ -319,45 +324,47 @@ bool Gosu::Window::tick()
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         switch (e.type) {
-            case SDL_WINDOWEVENT: {
-                switch (e.window.event) {
-                    case SDL_WINDOWEVENT_SIZE_CHANGED: {
-                        if (m_impl->resizable &&
-                            (width() != e.window.data1 || height() != e.window.data2)) {
-                            m_impl->resizing = true;
-                            resize(e.window.data1, e.window.data2, fullscreen());
-                            m_impl->resizing = false;
-                        }
-                        break;
-                    }
-                    case SDL_WINDOWEVENT_FOCUS_GAINED: {
-                        gain_focus();
-                        break;
-                    }
-                    case SDL_WINDOWEVENT_FOCUS_LOST: {
-                        lose_focus();
-                        break;
-                    }
-                    default: {
-                        break;
-                    }
+        case SDL_WINDOWEVENT: {
+            switch (e.window.event) {
+            case SDL_WINDOWEVENT_SIZE_CHANGED: {
+                if (m_impl->resizable
+                    && (width() != e.window.data1 || height() != e.window.data2)) {
+                    m_impl->resizing = true;
+                    resize(e.window.data1, e.window.data2, fullscreen());
+                    m_impl->resizing = false;
                 }
                 break;
             }
-            case SDL_QUIT: {
-                close();
+            case SDL_WINDOWEVENT_FOCUS_GAINED: {
+                gain_focus();
                 break;
             }
-            case SDL_DROPFILE: {
-                std::shared_ptr<char> dropped_file{e.drop.file, SDL_free};
-                if (dropped_file == nullptr) break;
-                drop(dropped_file.get());
+            case SDL_WINDOWEVENT_FOCUS_LOST: {
+                lose_focus();
                 break;
             }
             default: {
-                input().feed_sdl_event(&e);
                 break;
             }
+            }
+            break;
+        }
+        case SDL_QUIT: {
+            close();
+            break;
+        }
+        case SDL_DROPFILE: {
+            std::shared_ptr<char> dropped_file { e.drop.file, SDL_free };
+            if (dropped_file == nullptr) {
+                break;
+            }
+            drop(dropped_file.get());
+            break;
+        }
+        default: {
+            input().feed_sdl_event(&e);
+            break;
+        }
         }
     }
 
@@ -400,24 +407,23 @@ void Gosu::Window::button_down(Button button)
 
 #ifdef GOSU_IS_MAC
     // cmd+F and cmd+ctrl+F are both common shortcuts for toggling fullscreen mode on macOS.
-    toggle_fullscreen = button == KB_F &&
-                        (Input::down(KB_LEFT_META) || Input::down(KB_RIGHT_META)) &&
-                        !Input::down(KB_LEFT_SHIFT) && !Input::down(KB_RIGHT_SHIFT) &&
-                        !Input::down(KB_LEFT_ALT) && !Input::down(KB_RIGHT_ALT);
+    toggle_fullscreen = button == KB_F && (Input::down(KB_LEFT_META) || Input::down(KB_RIGHT_META))
+        && !Input::down(KB_LEFT_SHIFT) && !Input::down(KB_RIGHT_SHIFT) && !Input::down(KB_LEFT_ALT)
+        && !Input::down(KB_RIGHT_ALT);
 #else
     // Alt+Enter and Alt+Return toggle fullscreen mode on all other platforms.
-    toggle_fullscreen = (button == KB_RETURN || button == KB_ENTER) &&
-                        (Input::down(KB_LEFT_ALT) || Input::down(KB_RIGHT_ALT)) &&
-                        !Input::down(KB_LEFT_CONTROL) && !Input::down(KB_RIGHT_CONTROL) &&
-                        !Input::down(KB_LEFT_META) && !Input::down(KB_RIGHT_META) &&
-                        !Input::down(KB_LEFT_SHIFT) && !Input::down(KB_RIGHT_SHIFT);
+    toggle_fullscreen = (button == KB_RETURN || button == KB_ENTER)
+        && (Input::down(KB_LEFT_ALT) || Input::down(KB_RIGHT_ALT)) && !Input::down(KB_LEFT_CONTROL)
+        && !Input::down(KB_RIGHT_CONTROL) && !Input::down(KB_LEFT_META)
+        && !Input::down(KB_RIGHT_META) && !Input::down(KB_LEFT_SHIFT)
+        && !Input::down(KB_RIGHT_SHIFT);
 #endif
     // F11 is supported as a shortcut for fullscreen mode on all platforms.
-    if (!toggle_fullscreen && button == KB_F11 && !Input::down(KB_LEFT_ALT) &&
-        !Input::down(KB_RIGHT_ALT) && !Input::down(KB_LEFT_CONTROL) &&
-        !Input::down(KB_RIGHT_CONTROL) && !Input::down(KB_LEFT_META) &&
-        !Input::down(KB_RIGHT_META) && !Input::down(KB_LEFT_SHIFT) &&
-        !Input::down(KB_RIGHT_SHIFT)) {
+    if (!toggle_fullscreen && button == KB_F11 && !Input::down(KB_LEFT_ALT)
+        && !Input::down(KB_RIGHT_ALT) && !Input::down(KB_LEFT_CONTROL)
+        && !Input::down(KB_RIGHT_CONTROL) && !Input::down(KB_LEFT_META)
+        && !Input::down(KB_RIGHT_META) && !Input::down(KB_LEFT_SHIFT)
+        && !Input::down(KB_RIGHT_SHIFT)) {
         toggle_fullscreen = true;
     }
 
@@ -446,7 +452,7 @@ Gosu::Input& Gosu::Window::input()
     return *m_impl->input;
 }
 
-void* Gosu::Window::sdl_window()
+SDL_Window* Gosu::Window::sdl_window()
 {
     return shared_window();
 }

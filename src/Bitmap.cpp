@@ -1,10 +1,11 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/GraphicsBase.hpp>
+#include <algorithm> // for std::equal, std::fill_n
 #include <cstring> // for std::memcpy
 #include <stdexcept> // for std::invalid_argument
-#include <utility> // for std::swap
+#include <utility> // for std::move, std::swap
 
-Gosu::Bitmap::Bitmap(int width, int height, Gosu::Color c)
+Gosu::Bitmap::Bitmap(int width, int height, Color c)
     : m_width(width),
       m_height(height)
 {
@@ -17,7 +18,21 @@ Gosu::Bitmap::Bitmap(int width, int height, Gosu::Color c)
         throw std::invalid_argument("Gosu::Bitmap size out of bounds");
     }
 
-    m_pixels.resize(static_cast<std::size_t>(size), c);
+    m_pixels = Buffer(size * sizeof(Color));
+    std::fill_n(data(), size, c);
+}
+
+Gosu::Bitmap::Bitmap(int width, int height, Gosu::Buffer&& buffer)
+    : m_width(width),
+      m_height(height),
+      m_pixels(std::move(buffer))
+{
+    int pixels = width * height;
+    if (static_cast<std::size_t>(pixels) * sizeof(Color) != m_pixels.size()) {
+        throw std::length_error("Gosu::Bitmap given Gosu::Buffer of mismatched size, expected "
+                                + std::to_string(pixels * sizeof(Color)) + ", given "
+                                + std::to_string(m_pixels.size()));
+    }
 }
 
 void Gosu::Bitmap::resize(int width, int height, Color c)
@@ -83,7 +98,8 @@ void Gosu::Bitmap::insert(int x, int y, const Bitmap& source, Rect source_rect)
         // a bitmap.
         const int size = target_rect.width * target_rect.height;
         std::memcpy(target_ptr, source_ptr, static_cast<std::size_t>(size) * sizeof(Color));
-    } else {
+    }
+    else {
         // Otherwise, we need to copy line by line.
         for (int row = 0; row < target_rect.height; ++row) {
             std::memcpy(target_ptr, source_ptr, target_rect.width * sizeof(Color));
@@ -91,6 +107,13 @@ void Gosu::Bitmap::insert(int x, int y, const Bitmap& source, Rect source_rect)
             source_ptr += source.width();
         }
     }
+}
+
+bool Gosu::Bitmap::operator==(const Gosu::Bitmap& other) const
+{
+    int pixels = width() * height();
+    return pixels == other.width() * other.height()
+        && std::equal(data(), data() + pixels, other.data());
 }
 
 void Gosu::apply_color_key(Bitmap& bitmap, Color key)

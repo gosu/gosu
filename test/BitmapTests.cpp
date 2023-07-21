@@ -1,17 +1,23 @@
 #include <gtest/gtest.h>
 
 #include <Gosu/Bitmap.hpp>
+#include <algorithm> // for std::copy_n
 #include <climits> // for INT_MAX
+#include <filesystem>
 #include <random>
 #include <stdexcept> // for std::invalid_argument
-
-namespace Gosu
-{
 
 class BitmapTests : public testing::Test
 {
 public:
-    static testing::AssertionResult visible_pixels_are_equal(const Bitmap& lhs, const Bitmap& rhs)
+    static void assign_pixels(Gosu::Bitmap& target, std::initializer_list<Gosu::Color> pixels)
+    {
+        ASSERT_EQ(target.width() * target.height(), pixels.size());
+        std::copy_n(std::data(pixels), pixels.size(), target.data());
+    }
+
+    static testing::AssertionResult
+    visible_pixels_are_equal(const Gosu::Bitmap& lhs, const Gosu::Bitmap& rhs, int tolerance = 0)
     {
         if (lhs.width() != rhs.width() || lhs.height() != rhs.height()) {
             return testing::AssertionFailure() << "different sizes";
@@ -19,14 +25,17 @@ public:
 
         for (int x = 0; x < lhs.width(); ++x) {
             for (int y = 0; y < lhs.height(); ++y) {
-                Color lhs_pixel = lhs.pixel(x, y);
-                Color rhs_pixel = rhs.pixel(x, y);
+                Gosu::Color lhs_pixel = lhs.pixel(x, y);
+                Gosu::Color rhs_pixel = rhs.pixel(x, y);
 
                 if (lhs_pixel.alpha == 0 && rhs_pixel.alpha == 0) {
                     continue;
                 }
 
-                if (lhs_pixel != rhs_pixel) {
+                if (lhs_pixel.alpha != rhs_pixel.alpha
+                    || std::abs(lhs_pixel.red - rhs_pixel.red) > tolerance
+                    || std::abs(lhs_pixel.green - rhs_pixel.green) > tolerance
+                    || std::abs(lhs_pixel.blue - rhs_pixel.blue) > tolerance) {
                     return testing::AssertionFailure() << "difference at " << x << ", " << y;
                 }
             }
@@ -37,10 +46,10 @@ public:
 
     // This is a naive implementation of Bitmap::insert that can be used to verify that the
     // optimized version behaves correctly.
-    static Bitmap insert_naively(const Bitmap& target, int x, int y, const Bitmap& source,
-                                 const Rect& source_rect)
+    static Gosu::Bitmap insert_naively(const Gosu::Bitmap& target, int x, int y,
+                                       const Gosu::Bitmap& source, const Gosu::Rect& source_rect)
     {
-        Bitmap result = target;
+        Gosu::Bitmap result = target;
 
         for (int rel_y = 0; rel_y < source_rect.height; ++rel_y) {
             for (int rel_x = 0; rel_x < source_rect.width; ++rel_x) {
@@ -71,65 +80,62 @@ public:
 
 TEST_F(BitmapTests, visible_pixels_are_equal)
 {
-    Bitmap red(1, 1, Color::RED);
-    Bitmap blue(1, 1, Color::BLUE);
+    Gosu::Bitmap red(1, 1, Gosu::Color::RED);
+    Gosu::Bitmap blue(1, 1, Gosu::Color::BLUE);
     ASSERT_FALSE(visible_pixels_are_equal(red, blue));
+
+    // A tolerance of 255 makes all colors the same.
+    ASSERT_TRUE(visible_pixels_are_equal(red, blue, 255));
+
+    Gosu::Bitmap red_but_larger(2, 2, Gosu::Color::RED);
+    ASSERT_FALSE(visible_pixels_are_equal(red, red_but_larger));
 }
 
-TEST_F(BitmapTests, memory_management)
+TEST_F(BitmapTests, resize)
 {
-    Bitmap empty_bitmap;
-    ASSERT_EQ(empty_bitmap.width(), 0);
-    ASSERT_EQ(empty_bitmap.height(), 0);
-    ASSERT_EQ(empty_bitmap.m_pixels.size(), 0);
-
-    Bitmap bitmap(7, 3, Color::RED);
+    Gosu::Bitmap bitmap(7, 3, Gosu::Color::RED);
     ASSERT_EQ(bitmap.width(), 7);
     ASSERT_EQ(bitmap.height(), 3);
-    ASSERT_EQ(bitmap.m_pixels.size(), 7 * 3);
     // Verify that everything was filled with the color constructor parameter.
     for (int x = 0; x < bitmap.width(); ++x) {
         for (int y = 0; y < bitmap.height(); ++y) {
-            ASSERT_EQ(bitmap.pixel(x, y), Color::RED);
+            ASSERT_EQ(bitmap.pixel(x, y), Gosu::Color::RED);
         }
     }
 
-    bitmap.resize(11, 4, Color::BLUE);
+    bitmap.resize(11, 4, Gosu::Color::BLUE);
     ASSERT_EQ(bitmap.width(), 11);
     ASSERT_EQ(bitmap.height(), 4);
-    ASSERT_EQ(bitmap.m_pixels.size(), 11 * 4);
     // When resizing, pixels to the right and below the original size must use the new color.
     for (int x = 0; x < bitmap.width(); ++x) {
         for (int y = 0; y < bitmap.height(); ++y) {
             if (x >= 7 || y >= 3) {
-                ASSERT_EQ(bitmap.pixel(x, y), Color::BLUE);
-            } else {
-                ASSERT_EQ(bitmap.pixel(x, y), Color::RED);
+                ASSERT_EQ(bitmap.pixel(x, y), Gosu::Color::BLUE);
+            }
+            else {
+                ASSERT_EQ(bitmap.pixel(x, y), Gosu::Color::RED);
             }
         }
     }
 
-    std::swap(bitmap, empty_bitmap);
-    ASSERT_TRUE(bitmap.m_pixels.empty());
-
-    ASSERT_THROW(Bitmap(-5, 3), std::invalid_argument);
-    ASSERT_THROW(Bitmap(INT_MAX, INT_MAX), std::invalid_argument);
+    ASSERT_THROW(Gosu::Bitmap(-5, 3), std::invalid_argument);
+    ASSERT_THROW(Gosu::Bitmap(INT_MAX, INT_MAX), std::invalid_argument);
 }
 
 TEST_F(BitmapTests, blend_pixel)
 {
-    Bitmap bitmap(3, 3, Color::RED.with_alpha(64));
+    Gosu::Bitmap bitmap(3, 3, Gosu::Color::RED.with_alpha(64));
 
     // Pixel gets fully replaced.
-    bitmap.blend_pixel(0, 0, Color::BLUE.with_alpha(255));
+    bitmap.blend_pixel(0, 0, Gosu::Color::BLUE.with_alpha(255));
     ASSERT_EQ(bitmap.pixel(0, 0), 0xff'0000ff);
 
     // No change, blended pixel is invisible.
-    bitmap.blend_pixel(1, 1, Color::BLUE.with_alpha(0));
+    bitmap.blend_pixel(1, 1, Gosu::Color::BLUE.with_alpha(0));
     ASSERT_EQ(bitmap.pixel(1, 1), 0x40'ff0000);
 
     // Pixel is interpolated towards the new pixel based on both alpha values.
-    bitmap.blend_pixel(2, 2, Color::GREEN.with_alpha(128));
+    bitmap.blend_pixel(2, 2, Gosu::Color::GREEN.with_alpha(128));
     // Verify "Over" compositing operation: https://en.wikipedia.org/wiki/Alpha_compositing
     // alpha = alpha_new + alpha_old * (1 - alpha_new). 64 is ~0.25, 128 is ~0.5.
     const double alpha = (0.5 + 0.25 * (1 - 0.5));
@@ -145,18 +151,20 @@ TEST_F(BitmapTests, blend_pixel)
 
 TEST_F(BitmapTests, insert)
 {
-    Bitmap canvas(5, 3);
-    canvas.m_pixels = {
-        0x00'000000, 0x00'000011, 0x00'000022, 0x00'000033, 0x00'000044, //
-        0x00'000055, 0x00'000066, 0x00'000077, 0x00'000088, 0x00'000099, //
-        0x00'0000aa, 0x00'0000bb, 0x00'0000cc, 0x00'0000dd, 0x00'0000ee, //
-    };
+    Gosu::Bitmap canvas(5, 3);
+    assign_pixels(canvas,
+                  {
+                      0x00'000000, 0x00'000011, 0x00'000022, 0x00'000033, 0x00'000044, //
+                      0x00'000055, 0x00'000066, 0x00'000077, 0x00'000088, 0x00'000099, //
+                      0x00'0000aa, 0x00'0000bb, 0x00'0000cc, 0x00'0000dd, 0x00'0000ee, //
+                  });
 
-    Bitmap red(3, 2);
-    red.m_pixels = {
-        0xff'ff0000, 0xff'ff0011, 0xff'ff0022, //
-        0xff'ff0033, 0xff'ff0044, 0xff'ff0055, //
-    };
+    Gosu::Bitmap red(3, 2);
+    assign_pixels(red,
+                  {
+                      0xff'ff0000, 0xff'ff0011, 0xff'ff0022, //
+                      0xff'ff0033, 0xff'ff0044, 0xff'ff0055, //
+                  });
     // Overwrite 2x1 pixels in the top left corner.
     canvas.insert(-1, -1, red);
     // No-op: Too far up.
@@ -165,12 +173,13 @@ TEST_F(BitmapTests, insert)
     canvas.insert(0, -10, red);
     // No-op: Source area does not match input.
 
-    Bitmap green(4, 3);
-    green.m_pixels = {
-        0x80'00ff00, 0x80'00ff11, 0x80'00ff22, 0x80'00ff33, //
-        0x80'00ff44, 0x80'00ff55, 0x80'00ff66, 0x80'00ff77, //
-        0x80'00ff88, 0x80'00ff99, 0x80'00ffaa, 0x80'00ffbb, //
-    };
+    Gosu::Bitmap green(4, 3);
+    assign_pixels(green,
+                  {
+                      0x80'00ff00, 0x80'00ff11, 0x80'00ff22, 0x80'00ff33, //
+                      0x80'00ff44, 0x80'00ff55, 0x80'00ff66, 0x80'00ff77, //
+                      0x80'00ff88, 0x80'00ff99, 0x80'00ffaa, 0x80'00ffbb, //
+                  });
     // Overwrite 2x2 pixels in the bottom left corner.
     canvas.insert(3, 1, green);
     // No-op: Too far to the right.
@@ -178,12 +187,14 @@ TEST_F(BitmapTests, insert)
     // No-op: Too far down.
     canvas.insert(0, 3, green);
 
-    const std::vector<Color> expected_pixels {
-        0xff'ff0044, 0xff'ff0055, 0x00'000022, 0x00'000033, 0x00'000044, //
-        0x00'000055, 0x00'000066, 0x00'000077, 0x80'00ff00, 0x80'00ff11, //
-        0x00'0000aa, 0x00'0000bb, 0x00'0000cc, 0x80'00ff44, 0x80'00ff55, //
-    };
-    ASSERT_EQ(canvas.m_pixels, expected_pixels);
+    Gosu::Bitmap expected_result(5, 3);
+    assign_pixels(expected_result,
+                  {
+                      0xff'ff0044, 0xff'ff0055, 0x00'000022, 0x00'000033, 0x00'000044, //
+                      0x00'000055, 0x00'000066, 0x00'000077, 0x80'00ff00, 0x80'00ff11, //
+                      0x00'0000aa, 0x00'0000bb, 0x00'0000cc, 0x80'00ff44, 0x80'00ff55, //
+                  });
+    ASSERT_EQ(canvas, expected_result);
 }
 
 TEST_F(BitmapTests, insert_fuzzing)
@@ -207,17 +218,17 @@ TEST_F(BitmapTests, insert_fuzzing)
     };
 
     for (int i = 0; i < 20'000; ++i) {
-        Bitmap target(next_size(), next_size());
+        Gosu::Bitmap target(next_size(), next_size());
         std::generate_n(target.data(), target.width() * target.height(), next_color);
 
-        Bitmap source(next_size(), next_size());
+        Gosu::Bitmap source(next_size(), next_size());
         std::generate_n(source.data(), source.width() * source.height(), next_color);
 
-        const Rect source_rect { next_offset(), next_offset(), next_size(), next_size() };
+        const Gosu::Rect source_rect { next_offset(), next_offset(), next_size(), next_size() };
         const int x = next_offset();
         const int y = next_offset();
 
-        const Bitmap naive_result = insert_naively(target, x, y, source, source_rect);
+        const Gosu::Bitmap naive_result = insert_naively(target, x, y, source, source_rect);
         target.insert(x, y, source, source_rect);
         ASSERT_EQ(target, naive_result);
     }
@@ -225,29 +236,66 @@ TEST_F(BitmapTests, insert_fuzzing)
 
 TEST_F(BitmapTests, image_formats_with_alpha_channel)
 {
-    Bitmap bmp24 = load_image_file("test_image_io/alpha-bmp24.bmp");
-    Bitmap png4 = load_image_file("test_image_io/alpha-png4.png");
-    Bitmap png8 = load_image_file("test_image_io/alpha-png8.png");
+    Gosu::Bitmap bmp24 = Gosu::load_image_file("test_image_io/alpha-bmp24.bmp");
+    Gosu::Bitmap gif = Gosu::load_image_file("test_image_io/alpha-gif.gif");
+    Gosu::Bitmap psd = Gosu::load_image_file("test_image_io/alpha-psd.psd");
+    Gosu::Bitmap png4 = Gosu::load_image_file("test_image_io/alpha-png4.png");
+    Gosu::Bitmap png8 = Gosu::load_image_file("test_image_io/alpha-png8.png");
 
-    // Load one file via Gosu::IO to spice things up:
-    File file { "test_image_io/alpha-png32.png" };
-    Bitmap png32 = load_image_file(file.front_reader());
+    // Load one file via Gosu::Buffer to spice things up:
+    Gosu::Buffer buffer = Gosu::load_file("test_image_io/alpha-png32.png");
+    Gosu::Bitmap png32 = load_image(buffer);
 
-    // Also load one more image that we know is _not_ the same as the others to test that our
-    // comparison actually does something.
-    Bitmap not_equal = load_image_file("test_image_io/no-alpha-jpg.jpg");
-
+    ASSERT_TRUE(visible_pixels_are_equal(bmp24, gif));
+    ASSERT_TRUE(visible_pixels_are_equal(bmp24, psd));
     ASSERT_TRUE(visible_pixels_are_equal(bmp24, png4));
     ASSERT_TRUE(visible_pixels_are_equal(bmp24, png8));
     ASSERT_TRUE(visible_pixels_are_equal(bmp24, png32));
-    ASSERT_FALSE(visible_pixels_are_equal(bmp24, not_equal));
 }
 
 TEST_F(BitmapTests, image_files_with_full_opacity)
 {
-    Bitmap jpg = load_image_file("test_image_io/no-alpha-jpg.jpg");
-    Bitmap png32 = load_image_file("test_image_io/no-alpha-png32.png");
+    Gosu::Bitmap jpg = Gosu::load_image_file("test_image_io/no-alpha-jpg.jpg");
+    Gosu::Bitmap png32 = Gosu::load_image_file("test_image_io/no-alpha-png32.png");
     ASSERT_TRUE(visible_pixels_are_equal(jpg, png32));
 }
 
+TEST_F(BitmapTests, image_format_roundtrips)
+{
+    const auto temp_dir = std::filesystem::temp_directory_path();
+
+    for (const std::string& filename :
+         { "alpha-bmp24.bmp", "alpha-png32.png", "no-alpha-jpg.jpg" }) {
+        // Allow small RGB differences when saving files using the lossy JPEG format.
+        int tolerance = (Gosu::has_extension(filename, "jpg") ? 10 : 0);
+
+        Gosu::Bitmap image = Gosu::load_image_file("test_image_io/" + filename);
+
+        // Roundtrip to file and back.
+        const std::string temp_filename = temp_dir / filename;
+        save_image_file(image, temp_filename);
+        Gosu::Bitmap image_from_file = Gosu::load_image_file(temp_filename);
+        ASSERT_TRUE(visible_pixels_are_equal(image, image_from_file, tolerance))
+            << "difference in " << temp_filename;
+        std::filesystem::remove(temp_filename);
+
+        // Roundtrip to memory buffer and back.
+        Gosu::Buffer buffer = Gosu::save_image(image, filename);
+        Gosu::Bitmap image_from_buffer = Gosu::load_image(buffer);
+        ASSERT_TRUE(visible_pixels_are_equal(image, image_from_buffer, tolerance))
+            << "difference in " << temp_filename;
+    }
+}
+
+TEST_F(BitmapTests, image_io_errors)
+{
+    ASSERT_THROW(Gosu::load_image_file(""), std::runtime_error);
+    ASSERT_THROW(Gosu::load_image(Gosu::Buffer(0)), std::runtime_error);
+
+    const Gosu::Bitmap bitmap(10, 10);
+    ASSERT_THROW(Gosu::save_image_file(bitmap, ""), std::runtime_error);
+
+    const Gosu::Bitmap empty_bitmap(0, 0);
+    // The JPEG format does not support empty files.
+    ASSERT_THROW(Gosu::save_image(empty_bitmap, "jpg"), std::runtime_error);
 }
