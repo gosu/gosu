@@ -1,9 +1,11 @@
 #include <Gosu/Buffer.hpp>
+#include <Gosu/Platform.hpp>
 #include <limits>
 #include <memory>
 #include <stdexcept>
 
-#ifdef GOSU_IS_IPHONE
+#ifdef GOSU_IS_MAC
+#include <filesystem>
 #include <fstream>
 #else
 #include <SDL.h>
@@ -65,8 +67,9 @@ Gosu::Buffer::Buffer(std::size_t size)
       m_size(size),
       m_deleter(std::free)
 {
-    if (m_buffer == nullptr)
+    if (m_buffer == nullptr) {
         throw std::bad_alloc();
+    }
 }
 
 Gosu::Buffer::Buffer(std::vector<std::uint8_t>&& vector) noexcept
@@ -93,6 +96,27 @@ Gosu::Buffer& Gosu::Buffer::operator=(const Gosu::Buffer& other)
     return *this = Buffer(other);
 }
 
+#ifdef GOSU_IS_MAC
+Gosu::Buffer Gosu::load_file(const std::string& filename)
+{
+    Buffer buffer(std::filesystem::file_size(filename));
+    char* ptr = reinterpret_cast<char*>(buffer.data());
+    std::ifstream file(filename, std::ios::binary);
+    if (!file || !file.read(ptr, static_cast<std::streamoff>(buffer.size()))) {
+        throw std::runtime_error("Could not read file '" + filename + "'");
+    }
+    return buffer;
+}
+
+void Gosu::save_file(const Buffer& buffer, const std::string& filename)
+{
+    std::ofstream file(filename, std::ios::binary | std::ios::trunc);
+    const char* ptr = reinterpret_cast<const char*>(buffer.data());
+    if (!file || !file.write(ptr, static_cast<std::streamoff>(buffer.size()))) {
+        throw std::runtime_error("Could not write file '" + filename + "'");
+    }
+}
+#else
 Gosu::Buffer Gosu::load_file(const std::string& filename)
 {
     std::size_t size = 0;
@@ -108,3 +132,4 @@ void Gosu::save_file(const Buffer& buffer, const std::string& filename)
     SDL_RWops* rwops = SDL_RWFromFile(filename.c_str(), "w");
     SDL_RWwrite(rwops, buffer.data(), buffer.size(), 1);
 }
+#endif
