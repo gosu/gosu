@@ -222,18 +222,16 @@
     <ClCompile Include="..\src\Bitmap.cpp" />
     <ClCompile Include="..\src\BitmapIO.cpp" />
     <ClCompile Include="..\src\BlockAllocator.cpp" />
+    <ClCompile Include="..\src\Buffer.cpp" />
     <ClCompile Include="..\src\Channel.cpp" />
     <ClCompile Include="..\src\Color.cpp" />
     <ClCompile Include="..\src\DirectoriesApple.cpp" />
     <ClCompile Include="..\src\DirectoriesUnix.cpp" />
     <ClCompile Include="..\src\DirectoriesWin.cpp" />
-    <ClCompile Include="..\src\FileUnix.cpp" />
-    <ClCompile Include="..\src\FileWin.cpp" />
     <ClCompile Include="..\src\Font.cpp" />
     <ClCompile Include="..\src\GosuGLView.cpp" />
     <ClCompile Include="..\src\GosuViewController.cpp" />
     <ClCompile Include="..\src\Graphics.cpp" />
-    <ClCompile Include="..\src\IO.cpp" />
     <ClCompile Include="..\src\Image.cpp" />
     <ClCompile Include="..\src\Input.cpp" />
     <ClCompile Include="..\src\InputUIKit.cpp" />
@@ -383,6 +381,7 @@
     <ClInclude Include="..\src\WinUtility.hpp" />
     <ClInclude Include="..\include\Gosu\Audio.hpp" />
     <ClInclude Include="..\include\Gosu\Bitmap.hpp" />
+    <ClInclude Include="..\include\Gosu\Buffer.hpp" />
     <ClInclude Include="..\include\Gosu\Buttons.hpp" />
     <ClInclude Include="..\include\Gosu\Color.hpp" />
     <ClInclude Include="..\include\Gosu\Directories.hpp" />
@@ -391,7 +390,6 @@
     <ClInclude Include="..\include\Gosu\Gosu.hpp" />
     <ClInclude Include="..\include\Gosu\Graphics.hpp" />
     <ClInclude Include="..\include\Gosu\GraphicsBase.hpp" />
-    <ClInclude Include="..\include\Gosu\IO.hpp" />
     <ClInclude Include="..\include\Gosu\Image.hpp" />
     <ClInclude Include="..\include\Gosu\ImageData.hpp" />
     <ClInclude Include="..\include\Gosu\Input.hpp" />

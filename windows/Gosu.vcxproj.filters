@@ -165,6 +165,9 @@
     <ClCompile Include="..\src\BlockAllocator.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Buffer.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Channel.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
@@ -180,12 +183,6 @@
     <ClCompile Include="..\src\DirectoriesWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\FileUnix.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\FileWin.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Font.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
@@ -196,9 +193,6 @@
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Graphics.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\IO.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Image.cpp">
@@ -644,6 +638,9 @@
     <ClInclude Include="..\include\Gosu\Bitmap.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Gosu\Buffer.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
     <ClInclude Include="..\include\Gosu\Buttons.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
@@ -666,9 +663,6 @@
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\GraphicsBase.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Gosu\IO.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Image.hpp">

@@ -1,8 +1,13 @@
 #include <Gosu/Buffer.hpp>
-#include <SDL.h>
 #include <limits>
 #include <memory>
 #include <stdexcept>
+
+#ifdef GOSU_IS_IPHONE
+#include <fstream>
+#else
+#include <SDL.h>
+#endif
 
 Gosu::Buffer::Buffer(void* buffer, std::size_t size, std::function<void(void*)> deleter)
     : m_buffer(buffer),

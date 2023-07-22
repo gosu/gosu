@@ -5,7 +5,7 @@
 #include "TrueTypeFont.hpp"
 
 #define _WIN32_WINNT 0x0500
-#include <Gosu/IO.hpp>
+#include <Gosu/Buffer.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
 #include "WinUtility.hpp"
@@ -48,11 +48,9 @@ const unsigned char* Gosu::ttf_data_by_name(const std::string& font_name, unsign
             HFONT last_font = (HFONT) SelectObject(hdc, (HGDIOBJ) font);
             auto ttf_buffer_size = GetFontData(hdc, 0, 0, nullptr, 0);
             if (ttf_buffer_size != GDI_ERROR) {
-                auto buffer = std::make_shared<Gosu::Buffer>();
-                buffer->resize(ttf_buffer_size);
+                auto buffer = std::make_shared<Gosu::Buffer>(ttf_buffer_size);
                 if (GetFontData(hdc, 0, 0, buffer->data(), buffer->size()) != GDI_ERROR) {
-                    auto data = static_cast<const unsigned char*>(buffer->data());
-                    if (font_name.empty() || TrueTypeFont::matches(data, font_name, font_flags)) {
+                    if (font_name.empty() || TrueTypeFont::matches(buffer->data(), font_name, font_flags)) {
                         buffer_ptr = buffer;
                         log("Found a matching file (%d bytes)", (int) buffer->size());
                     }
@@ -67,7 +65,7 @@ const unsigned char* Gosu::ttf_data_by_name(const std::string& font_name, unsign
         DeleteObject((HGDIOBJ) font);
     }
 
-    return buffer_ptr ? static_cast<const unsigned char*>(buffer_ptr->data()) : nullptr;
+    return buffer_ptr ? buffer_ptr->data() : nullptr;
 }
 
 const unsigned char* Gosu::ttf_fallback_data()
