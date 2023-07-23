@@ -7,6 +7,8 @@
 #include <memory>
 #include <string>
 
+struct SDL_Window;
+
 namespace Gosu
 {
     enum WindowFlags
@@ -144,7 +146,7 @@ namespace Gosu
 #endif
 
 #ifndef GOSU_IS_IPHONE
-        void* sdl_window();
+        SDL_Window* sdl_window();
 #endif
     };
 

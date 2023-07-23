@@ -1,9 +1,10 @@
 #include "TrueTypeFont.hpp"
-#include <Gosu/IO.hpp>
+#include <Gosu/Buffer.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
 #include <algorithm>
 #include <map>
+#include <mutex>
 #include <stdexcept>
 
 #define STB_TRUETYPE_IMPLEMENTATION
@@ -100,7 +101,7 @@ struct Gosu::TrueTypeFont::Impl : private Gosu::Noncopyable
             // TODO: Don't allocate a buffer just to get metrics!
             std::shared_ptr<unsigned char> unused_data{
                     stbtt_GetGlyphBitmapSubpixel(&info, fscale, fscale, shift_x, 0, last_glyph,
-                                                 &last_width, nullptr, &last_xoff, nullptr),
+                                             &last_width, nullptr, &last_xoff, nullptr),
                     std::free};
             // Move the cursor to the right if pixels have been touched by draw_glyph that are
             // to the right of the current cursor.
@@ -212,8 +213,10 @@ bool Gosu::TrueTypeFont::matches(const unsigned char* ttf_data, const std::strin
 
 static Gosu::TrueTypeFont& font_with_stack(std::vector<const unsigned char*> ttf_stack)
 {
-    // TODO: Make this cache thread-safe.
     static std::map<const unsigned char*, std::shared_ptr<Gosu::TrueTypeFont>> cache_by_data;
+    static std::mutex cache_by_data_mutex;
+
+    std::scoped_lock lock(cache_by_data_mutex);
 
     // Filter out any fonts that could not be found, as well as duplicates.
     auto end = unique(ttf_stack.begin(), ttf_stack.end());
@@ -236,8 +239,10 @@ static Gosu::TrueTypeFont& font_with_stack(std::vector<const unsigned char*> ttf
 
 Gosu::TrueTypeFont& Gosu::font_by_name(const std::string& font_name, unsigned font_flags)
 {
-    // TODO: Make this cache thread-safe.
     static std::map<std::pair<std::string, unsigned>, TrueTypeFont*> cache_by_name_and_flags;
+    static std::mutex cache_by_name_and_flags_mutex;
+
+    std::scoped_lock lock(cache_by_name_and_flags_mutex);
 
     auto& font_ptr = cache_by_name_and_flags[make_pair(font_name, font_flags)];
     if (!font_ptr) {
@@ -266,19 +271,13 @@ Gosu::TrueTypeFont& Gosu::font_by_name(const std::string& font_name, unsigned fo
 
 const unsigned char* Gosu::ttf_data_from_file(const std::string& filename)
 {
-    // TODO: Make this cache thread-safe.
-    static std::map<std::string, std::shared_ptr<Buffer>> ttf_file_cache;
+    static std::map<std::string, Buffer> ttf_file_cache;
+    static std::mutex ttf_file_cache_mutex;
 
-    auto& buffer_ptr = ttf_file_cache[filename];
-    if (!buffer_ptr) {
-        buffer_ptr = std::make_shared<Buffer>();
-        try {
-            load_file(*buffer_ptr, filename);
-        } catch (...) {
-            // Prevent partially loaded files from getting stuck in the cache.
-            buffer_ptr = nullptr;
-            throw;
-        }
+    std::scoped_lock lock(ttf_file_cache_mutex);
+
+    if (!ttf_file_cache.contains(filename)) {
+        ttf_file_cache.emplace(filename, load_file(filename));
     }
-    return static_cast<const unsigned char*>(buffer_ptr->data());
+    return ttf_file_cache.at(filename).data();
 }

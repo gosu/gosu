@@ -1,5 +1,5 @@
 #include <Gosu/Audio.hpp>
-#include <Gosu/IO.hpp>
+#include <Gosu/Buffer.hpp>
 #include <Gosu/Math.hpp>
 #include "AudioFile.hpp"
 #include "AudioImpl.hpp"
@@ -42,12 +42,12 @@ Gosu::Sample::Sample()
 }
 
 Gosu::Sample::Sample(const std::string& filename)
-: m_impl{new Impl(AudioFile(filename))}
+    : m_impl(new Impl(AudioFile(filename)))
 {
 }
 
-Gosu::Sample::Sample(Gosu::Reader reader)
-: m_impl{new Impl(AudioFile(reader))}
+Gosu::Sample::Sample(Buffer buffer)
+    : m_impl(new Impl(AudioFile(std::move(buffer))))
 {
 }
 
@@ -101,16 +101,16 @@ private:
 
 public:
     explicit Impl(const std::string& filename)
-    : m_buffers{},
-      m_file{new AudioFile{filename}}
+        : m_buffers {},
+          m_file(new AudioFile(filename))
     {
         al_initialize();
         alGenBuffers(2, m_buffers);
     }
 
-    explicit Impl(Reader reader)
-    : m_buffers{},
-      m_file{new AudioFile{reader}}
+    explicit Impl(Buffer buffer)
+        : m_buffers {},
+          m_file(new AudioFile(std::move(buffer)))
     {
         al_initialize();
         alGenBuffers(2, m_buffers);
@@ -229,12 +229,12 @@ public:
 };
 
 Gosu::Song::Song(const std::string& filename)
-: m_impl{new Impl(filename)}
+: m_impl(new Impl(filename))
 {
 }
 
-Gosu::Song::Song(Reader reader)
-: m_impl{new Impl(reader)}
+Gosu::Song::Song(Buffer buffer)
+: m_impl(new Impl(std::move(buffer)))
 {
 }
 

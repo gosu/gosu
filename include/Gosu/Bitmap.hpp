@@ -1,10 +1,10 @@
 #pragma once
 
+#include <Gosu/Buffer.hpp>
 #include <Gosu/Color.hpp>
-#include <Gosu/IO.hpp>
 #include <Gosu/Utility.hpp>
 #include <string>
-#include <vector>
+#include <string_view>
 
 namespace Gosu
 {
@@ -18,12 +18,16 @@ namespace Gosu
     class Bitmap
     {
         int m_width = 0, m_height = 0;
-        std::vector<Color> m_pixels;
+        Buffer m_pixels;
 
     public:
         Bitmap() = default;
 
         Bitmap(int width, int height, Color c = Color::NONE);
+
+        /// Takes ownership of the given memory buffer.
+        /// @throw std::length_error if the buffer does not contain (width * height * 4) bytes.
+        Bitmap(int width, int height, Gosu::Buffer&& buffer);
 
         int width() const { return m_width; }
 
@@ -33,11 +37,11 @@ namespace Gosu
 
         /// Returns a reference to the pixel at the specified position without any bounds checking.
         /// This can be a two-argument operator[] once we require C++23.
-        const Color& pixel(int x, int y) const { return m_pixels[y * m_width + x]; }
+        const Color& pixel(int x, int y) const { return data()[y * m_width + x]; }
 
         /// Returns a reference to the pixel at the specified position without any bounds checking.
         /// This can be a two-argument operator[] once we require C++23.
-        Color& pixel(int x, int y) { return m_pixels[y * m_width + x]; }
+        Color& pixel(int x, int y) { return data()[y * m_width + x]; }
 
         /// This updates a pixel using the "over" alpha compositing operator, see:
         /// https://en.wikipedia.org/wiki/Alpha_compositing
@@ -54,28 +58,23 @@ namespace Gosu
         void insert(int x, int y, const Bitmap& source, Rect source_rect);
 
         /// Direct access to the array of color values.
-        const Color* data() const { return m_pixels.data(); }
+        const Color* data() const { return reinterpret_cast<const Color*>(m_pixels.data()); }
 
         /// Direct access to the array of color values.
-        Color* data() { return m_pixels.data(); }
+        Color* data() { return reinterpret_cast<Color*>(m_pixels.data()); }
 
-        bool operator==(const Bitmap&) const = default;
-
-#ifdef FRIEND_TEST
-        FRIEND_TEST(BitmapTests, memory_management);
-        FRIEND_TEST(BitmapTests, insert);
-#endif
+        bool operator==(const Bitmap&) const;
     };
 
-    /// Loads any supported image into a Bitmap.
+    /// Loads an image file, in any supported format.
     Bitmap load_image_file(const std::string& filename);
-    /// Loads any supported image into a Bitmap.
-    Bitmap load_image_file(Reader input);
+    /// Loads an image from memory, in any supported format.
+    Bitmap load_image(const Buffer& buffer);
 
     /// Saves a Bitmap to a file.
     void save_image_file(const Bitmap& bitmap, const std::string& filename);
     /// Saves a Bitmap to an arbitrary resource.
-    void save_image_file(const Bitmap& bitmap, Writer writer, std::string_view format_hint = "png");
+    Gosu::Buffer save_image(const Bitmap& bitmap, std::string_view format_hint = "png");
 
     /// Set the alpha value of all pixels which are equal to the color key to zero.
     /// To reduce interpolation artefacts when stretching or rotating the resulting image, the color

@@ -1,6 +1,6 @@
 #include <Gosu/Bitmap.hpp>
+#include <Gosu/Buffer.hpp>
 #include <Gosu/Graphics.hpp>
-#include <Gosu/IO.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/ImageData.hpp>
 #include <Gosu/Math.hpp>

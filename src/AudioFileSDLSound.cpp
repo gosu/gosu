@@ -1,20 +1,18 @@
+#include <Gosu/Buffer.hpp>
 #include <Gosu/Platform.hpp>
 
 #ifndef GOSU_IS_IPHONE
 
 #include "AudioFile.hpp"
 #include "AudioImpl.hpp"
-
 #include <SDL_sound.h>
-
+#include <algorithm>
 #include <cstdlib>
 #include <cstring>
-#include <algorithm>
 #include <memory>
 #include <mutex>
 #include <stdexcept>
 #include <vector>
-#include <stdexcept>
 
 struct Gosu::AudioFile::Impl : private Gosu::Noncopyable
 {
@@ -57,14 +55,13 @@ Gosu::AudioFile::AudioFile(const std::string& filename)
     }
 }
 
-Gosu::AudioFile::AudioFile(Reader reader)
+Gosu::AudioFile::AudioFile(Gosu::Buffer buffer)
 : pimpl(new Impl)
 {
-    pimpl->buffer.resize(reader.resource().size() - reader.position());
-    reader.read(pimpl->buffer.data(), pimpl->buffer.size());
-    pimpl->sample.reset(Sound_NewSampleFromMem(reinterpret_cast<Uint8*>(pimpl->buffer.data()),
-                                               static_cast<Uint32>(pimpl->buffer.size()),
-                                               "", nullptr, 4096),
+    pimpl->buffer = std::move(buffer);
+    pimpl->sample.reset(Sound_NewSampleFromMem(pimpl->buffer.data(),
+                                               static_cast<Uint32>(pimpl->buffer.size()), "",
+                                               nullptr, 4096),
                         Sound_FreeSample);
     if (!pimpl->sample) {
         std::string message = "Could not parse audio file";

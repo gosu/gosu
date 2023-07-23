@@ -1,7 +1,6 @@
 #include <Gosu/Platform.hpp>
 #if defined(GOSU_IS_X)
 
-#include <Gosu/IO.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
 #include "Log.hpp"

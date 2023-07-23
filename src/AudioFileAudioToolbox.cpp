@@ -8,6 +8,7 @@
 
 #include "AudioFile.hpp"
 #include "AudioImpl.hpp"
+#include <Gosu/Buffer.hpp>
 #include <Gosu/Utility.hpp>
 
 #import <AudioToolbox/AudioToolbox.h>
@@ -18,6 +19,7 @@
 
 #include <algorithm>
 #include <arpa/inet.h>
+#include <cstring>
 #include <stdexcept>
 #include <vector>
 
@@ -53,16 +55,16 @@ struct Gosu::AudioFile::Impl : private Gosu::Noncopyable
     static OSStatus AudioFile_ReadProc(void* in_client_data, SInt64 in_position,
                                        UInt32 request_count, void* buffer, UInt32* actual_count)
     {
-        const Resource& res = *static_cast<Resource*>(in_client_data);
+        const Buffer& res = *static_cast<Buffer*>(in_client_data);
         *actual_count = std::min<UInt32>(request_count,
                                          static_cast<UInt32>(res.size() - in_position));
-        res.read(in_position, *actual_count, buffer);
+        std::memcpy(buffer, res.data() + in_position, *actual_count);
         return noErr;
     }
 
     static SInt64 AudioFile_GetSizeProc(void* in_client_data)
     {
-        const Resource& res = *static_cast<Resource*>(in_client_data);
+        const Buffer& res = *static_cast<Buffer*>(in_client_data);
         return res.size();
     }
 
@@ -162,14 +164,12 @@ Gosu::AudioFile::AudioFile(const std::string& filename)
     pimpl->init();
 }
 
-Gosu::AudioFile::AudioFile(Reader reader)
+Gosu::AudioFile::AudioFile(Buffer buffer)
 : pimpl(new Impl)
 {
-    pimpl->buffer.resize(reader.resource().size() - reader.position());
-    reader.read(pimpl->buffer.data(), pimpl->buffer.size());
+    pimpl->buffer = std::move(buffer);
     
-    void* client_data = &pimpl->buffer;
-    CHECK_OS(AudioFileOpenWithCallbacks(client_data, Impl::AudioFile_ReadProc, nullptr,
+    CHECK_OS(AudioFileOpenWithCallbacks(&pimpl->buffer, Impl::AudioFile_ReadProc, nullptr,
                                         Impl::AudioFile_GetSizeProc, nullptr, 0, &pimpl->file_id));
     CHECK_OS(ExtAudioFileWrapAudioFileID(pimpl->file_id, false, &pimpl->file));
     
