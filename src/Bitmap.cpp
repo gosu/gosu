@@ -29,7 +29,7 @@ Gosu::Bitmap::Bitmap(int width, int height, Gosu::Buffer&& buffer)
 {
     int pixels = width * height;
     if (static_cast<std::size_t>(pixels) * sizeof(Color) != m_pixels.size()) {
-        throw std::length_error("Gosu::Bitmap given Gosu::Buffer of mismatched size, expected "
+        throw std::length_error("Gosu::Bitmap given Gosu::Buffer of wrong size, expected "
                                 + std::to_string(pixels * sizeof(Color)) + ", given "
                                 + std::to_string(m_pixels.size()));
     }
