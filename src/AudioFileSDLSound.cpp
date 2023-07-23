@@ -16,7 +16,7 @@
 
 struct Gosu::AudioFile::Impl : private Gosu::Noncopyable
 {
-    Gosu::Buffer buffer;
+    Buffer buffer;
 
     std::shared_ptr<Sound_Sample> sample;
 
@@ -32,7 +32,7 @@ struct Gosu::AudioFile::Impl : private Gosu::Noncopyable
 };
 
 Gosu::AudioFile::AudioFile(const std::string& filename)
-    : pimpl(new Impl)
+: pimpl(new Impl)
 {
     // We need to set a "desired" audio format, otherwise we may encounter data formats such as
     // floating-point samples that Apple's OpenAL implementation does not support.
@@ -56,7 +56,7 @@ Gosu::AudioFile::AudioFile(const std::string& filename)
 }
 
 Gosu::AudioFile::AudioFile(Gosu::Buffer buffer)
-    : pimpl(new Impl)
+: pimpl(new Impl)
 {
     pimpl->buffer = std::move(buffer);
     pimpl->sample.reset(Sound_NewSampleFromMem(pimpl->buffer.data(),
@@ -83,24 +83,16 @@ ALenum Gosu::AudioFile::format() const
     auto format = pimpl->sample->desired.format;
 
     if (channels == 1 && SDL_AUDIO_ISINT(format)) {
-        if (SDL_AUDIO_BITSIZE(format) == 8) {
-            return AL_FORMAT_MONO8;
-        }
-        if (SDL_AUDIO_BITSIZE(format) == 16) {
-            return AL_FORMAT_MONO16;
-        }
+        if (SDL_AUDIO_BITSIZE(format) == 8) return AL_FORMAT_MONO8;
+        if (SDL_AUDIO_BITSIZE(format) == 16) return AL_FORMAT_MONO16;
     }
     if (channels == 2 && SDL_AUDIO_ISINT(format)) {
-        if (SDL_AUDIO_BITSIZE(format) == 8) {
-            return AL_FORMAT_STEREO8;
-        }
-        if (SDL_AUDIO_BITSIZE(format) == 16) {
-            return AL_FORMAT_STEREO16;
-        }
+        if (SDL_AUDIO_BITSIZE(format) == 8) return AL_FORMAT_STEREO8;
+        if (SDL_AUDIO_BITSIZE(format) == 16) return AL_FORMAT_STEREO16;
     }
 
-    throw std::runtime_error("Unsupported number of channels: " + std::to_string(channels)
-                             + " and format: " + std::to_string(format));
+    throw std::runtime_error("Unsupported number of channels: " + std::to_string(channels) +
+                             " and format: " + std::to_string(format));
 }
 
 ALuint Gosu::AudioFile::sample_rate() const
@@ -119,9 +111,7 @@ std::size_t Gosu::AudioFile::read_data(void* dest, size_t length)
     while (length > 0) {
         // TODO offset magic
         auto result = static_cast<std::size_t>(Sound_Decode(pimpl->sample.get()));
-        if (result == 0) {
-            break;
-        }
+        if (result == 0) break;
         auto to_copy = std::min(length, result);
         std::memcpy(dest, pimpl->sample->buffer, to_copy);
         dest = static_cast<char*>(dest) + to_copy;
@@ -133,24 +123,24 @@ std::size_t Gosu::AudioFile::read_data(void* dest, size_t length)
 
 const std::vector<char>& Gosu::AudioFile::decoded_data()
 {
-    if (!pimpl->data.empty()) {
-        return pimpl->data;
-    }
+   if (!pimpl->data.empty()) {
+       return pimpl->data;
+   }
 
-    static const std::size_t INCREMENT = 512 * 1024;
+   static const std::size_t INCREMENT = 512 * 1024;
 
-    for (;;) {
-        pimpl->data.resize(pimpl->data.size() + INCREMENT);
+   for (;;) {
+       pimpl->data.resize(pimpl->data.size() + INCREMENT);
 
-        auto read_bytes = read_data(&pimpl->data[pimpl->data.size() - INCREMENT], INCREMENT);
+       auto read_bytes = read_data(&pimpl->data[pimpl->data.size() - INCREMENT], INCREMENT);
 
-        if (read_bytes < INCREMENT) {
-            pimpl->data.resize(pimpl->data.size() - INCREMENT + read_bytes);
-            break;
-        }
-    }
+       if (read_bytes < INCREMENT) {
+           pimpl->data.resize(pimpl->data.size() - INCREMENT + read_bytes);
+           break;
+       }
+   }
 
-    return pimpl->data;
+   return pimpl->data;
 }
 
 #endif

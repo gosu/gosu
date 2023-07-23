@@ -12,7 +12,6 @@ namespace Gosu
     class ImageData;
     class Input;
     struct Rect;
-    class Resource;
     class Sample;
     class Song;
     class TextInput;

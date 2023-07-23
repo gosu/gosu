@@ -28,7 +28,7 @@ struct Gosu::TrueTypeFont::Impl : private Gosu::Noncopyable
     {
         auto offset = stbtt_GetFontOffsetForIndex(ttf_data, 0);
         int success = stbtt_InitFont(&info, ttf_data, offset);
-        if (!success) throw std::runtime_error { "Invalid TrueType font data" };
+        if (!success) throw std::runtime_error{"Invalid TrueType font data"};
 
         // Calculate metrics.
         int descent, line_gap;
@@ -99,11 +99,10 @@ struct Gosu::TrueTypeFont::Impl : private Gosu::Noncopyable
             float fscale = static_cast<float>(scale);
             int last_xoff, last_width;
             // TODO: Don't allocate a buffer just to get metrics!
-            std::shared_ptr<unsigned char> unused_data {
-                stbtt_GetGlyphBitmapSubpixel(&info, fscale, fscale, shift_x, 0, last_glyph,
+            std::shared_ptr<unsigned char> unused_data{
+                    stbtt_GetGlyphBitmapSubpixel(&info, fscale, fscale, shift_x, 0, last_glyph,
                                              &last_width, nullptr, &last_xoff, nullptr),
-                std::free
-            };
+                    std::free};
             // Move the cursor to the right if pixels have been touched by draw_glyph that are
             // to the right of the current cursor.
             // If the last character extends to the right of the cursor, then this prevents the
@@ -209,7 +208,7 @@ bool Gosu::TrueTypeFont::matches(const unsigned char* ttf_data, const std::strin
     int flags = (font_flags == 0 ? STBTT_MACSTYLE_NONE : static_cast<int>(font_flags));
 
     return stbtt_FindMatchingFont(ttf_data, font_name.c_str(), flags) >= 0 ||
-        stbtt_FindMatchingFont(ttf_data, font_name.c_str(), STBTT_MACSTYLE_DONTCARE) >= 0;
+           stbtt_FindMatchingFont(ttf_data, font_name.c_str(), STBTT_MACSTYLE_DONTCARE) >= 0;
 }
 
 static Gosu::TrueTypeFont& font_with_stack(std::vector<const unsigned char*> ttf_stack)
