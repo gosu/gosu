@@ -20,7 +20,7 @@ namespace Gosu
     /// <li> Windows: The parent directory of the executable.
     /// <li> macOS: The parent directory of the .app bundle.
     /// <li> Linux: The current directory (empty string).
-    /// </uil>
+    /// </ui>
     const std::string& shared_resource_prefix();
     
     /// Prefix for user settings.
