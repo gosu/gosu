@@ -405,25 +405,21 @@ void Gosu::Window::button_down(Button button)
 
     // Default shortcuts for toggling fullscreen mode, see: https://github.com/gosu/gosu/issues/361
 
+    const bool control_down = Input::down(KB_LEFT_CONTROL) || Input::down(KB_RIGHT_CONTROL);
+    const bool alt_down = Input::down(KB_LEFT_ALT) || Input::down(KB_RIGHT_ALT);
+    const bool shift_down = Input::down(KB_LEFT_SHIFT) || Input::down(KB_RIGHT_SHIFT);
+    const bool meta_down = Input::down(KB_LEFT_META) || Input::down(KB_RIGHT_META);
+
 #ifdef GOSU_IS_MAC
     // cmd+F and cmd+ctrl+F are both common shortcuts for toggling fullscreen mode on macOS.
-    toggle_fullscreen = button == KB_F && (Input::down(KB_LEFT_META) || Input::down(KB_RIGHT_META))
-        && !Input::down(KB_LEFT_SHIFT) && !Input::down(KB_RIGHT_SHIFT) && !Input::down(KB_LEFT_ALT)
-        && !Input::down(KB_RIGHT_ALT);
+    toggle_fullscreen = button == KB_F && meta_down && !control_down && !alt_down && !shift_down;
 #else
     // Alt+Enter and Alt+Return toggle fullscreen mode on all other platforms.
-    toggle_fullscreen = (button == KB_RETURN || button == KB_ENTER)
-        && (Input::down(KB_LEFT_ALT) || Input::down(KB_RIGHT_ALT)) && !Input::down(KB_LEFT_CONTROL)
-        && !Input::down(KB_RIGHT_CONTROL) && !Input::down(KB_LEFT_META)
-        && !Input::down(KB_RIGHT_META) && !Input::down(KB_LEFT_SHIFT)
-        && !Input::down(KB_RIGHT_SHIFT);
+    const bool enter_or_return = (button == KB_RETURN || button == KB_ENTER);
+    toggle_fullscreen = enter_or_return && alt_down && !control_down && !shift_down && !meta_down;
 #endif
     // F11 is supported as a shortcut for fullscreen mode on all platforms.
-    if (!toggle_fullscreen && button == KB_F11 && !Input::down(KB_LEFT_ALT)
-        && !Input::down(KB_RIGHT_ALT) && !Input::down(KB_LEFT_CONTROL)
-        && !Input::down(KB_RIGHT_CONTROL) && !Input::down(KB_LEFT_META)
-        && !Input::down(KB_RIGHT_META) && !Input::down(KB_LEFT_SHIFT)
-        && !Input::down(KB_RIGHT_SHIFT)) {
+    if (button == KB_F11 && !meta_down && !control_down && !alt_down && !shift_down) {
         toggle_fullscreen = true;
     }
 
