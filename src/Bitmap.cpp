@@ -2,6 +2,7 @@
 #include <Gosu/GraphicsBase.hpp>
 #include <algorithm> // for std::equal, std::fill_n
 #include <cstring> // for std::memcpy
+#include <limits>
 #include <stdexcept> // for std::invalid_argument
 #include <utility> // for std::move, std::swap
 
@@ -13,11 +14,12 @@ Gosu::Bitmap::Bitmap(int width, int height, Color c)
         throw std::invalid_argument("Negative Gosu::Bitmap size");
     }
 
-    int size = width * height;
-    if (width != 0 && size / width != height) {
+    // Don't allow bitmaps where there are more than INT_MAX pixels.
+    if (height != 0 && width > std::numeric_limits<int>::max() / height) {
         throw std::invalid_argument("Gosu::Bitmap size out of bounds");
     }
 
+    const int size = width * height;
     m_pixels = Buffer(size * sizeof(Color));
     std::fill_n(data(), size, c);
 }
