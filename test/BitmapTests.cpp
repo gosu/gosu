@@ -239,7 +239,9 @@ TEST_F(BitmapTests, apply_color_key)
                       0xff'ff00ff, 0xff'ff00ff, 0xff'ff00ff, // _ _ _
                       0xff'00ffff, 0xff'ff00ff, 0xff'ff00ff, // C _ _
                   });
+    bitmap.resize(30'000, 30'000, Gosu::Color::FUCHSIA);
     bitmap.apply_color_key(Gosu::Color::FUCHSIA);
+    bitmap.resize(3, 5);
     // The alpha values of all fuchsia pixels must be 0, and the color values are the average of
     // their surrounding pixels.
     Gosu::Bitmap expected_result(3, 5);
