@@ -120,47 +120,51 @@ bool Gosu::Bitmap::operator==(const Gosu::Bitmap& other) const
 
 void Gosu::Bitmap::apply_color_key(Color key)
 {
-    int index = 0, pixels = height() * width();
-    for (int y = 0; y < height(); ++y) {
-        for (int x = 0; x < width(); ++x, ++index) {
+    // The valid memory range from which the loop below can read.
+    const int pixels = width() * height();
+    Color* begin = data();
+    Color* end = begin + pixels;
+
+    for (Color* c = begin; c != end;) {
+        for (int x = 0; x < width(); ++x, ++c) {
             // All colors except the color key should stay as they are.
-            Color& c = data()[index];
-            if (c != key) {
+            if (*c != key) {
                 continue;
             }
 
             unsigned neighbors = 0, red = 0, green = 0, blue = 0;
 
-            const auto visit = [&](int neighbor_index) {
-                if (neighbor_index >= 0 && neighbor_index < pixels) {
-                    const Color& neighbor = data()[neighbor_index];
+            const auto visit = [&](const Color* neighbor) {
+                if (neighbor >= begin && neighbor < end && *neighbor != key && neighbor->alpha) {
                     // Ignore other pixels that are or were equal to the color key.
-                    if (neighbor != key && neighbor.alpha > 0) {
-                        neighbors += 1;
-                        red += neighbor.red;
-                        green += neighbor.green;
-                        blue += neighbor.blue;
-                    }
+                    neighbors += 1;
+                    red += neighbor->red;
+                    green += neighbor->green;
+                    blue += neighbor->blue;
                 }
             };
+            // Don't look at (x-1) pixels in the first column because we might accidentally use
+            // the pixels of the last column through wraparound.
             if (x != 0) {
-                visit(index - width() - 1);
-                visit(index - 1);
-                visit(index + width() - 1);
+                visit(c - width() - 1);
+                visit(c - 1);
+                visit(c + width() - 1);
             }
-            visit(index - width());
-            visit(index + width());
+            visit(c - width());
+            visit(c + width());
+            // Don't look at (x+1) pixels in the last column because we might accidentally use
+            // the pixels of the first column through wraparound.
             if (x != width() - 1) {
-                visit(index - width() + 1);
-                visit(index + 1);
-                visit(index + width() + 1);
+                visit(c - width() + 1);
+                visit(c + 1);
+                visit(c + width() + 1);
             }
 
-            c = Color::NONE;
+            *c = Color::NONE;
             if (neighbors > 0) {
-                c.red = red / neighbors;
-                c.green = green / neighbors;
-                c.blue = blue / neighbors;
+                c->red = red / neighbors;
+                c->green = green / neighbors;
+                c->blue = blue / neighbors;
             }
         }
     }
