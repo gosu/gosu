@@ -58,7 +58,7 @@ namespace Gosu
         void insert(int x, int y, const Bitmap& source, Rect source_rect);
 
         /// Set the alpha value of all pixels which are equal to the color key to zero.
-        /// To reduce interpolation artefacts when stretching or rotating the resulting image, the
+        /// To reduce interpolation artifacts when stretching or rotating the resulting image, the
         /// RGB values of transparent pixels will be adjusted to the average of their neighbors.
         void apply_color_key(Color key);
 
