@@ -57,6 +57,11 @@ namespace Gosu
         /// Parts of the source_rect that are outside of the source image will be skipped.
         void insert(int x, int y, const Bitmap& source, Rect source_rect);
 
+        /// Set the alpha value of all pixels which are equal to the color key to zero.
+        /// To reduce interpolation artefacts when stretching or rotating the resulting image, the
+        /// RGB values of transparent pixels will be adjusted to the average of their neighbors.
+        void apply_color_key(Color key);
+
         /// Direct access to the array of color values.
         const Color* data() const { return reinterpret_cast<const Color*>(m_pixels.data()); }
 
@@ -75,11 +80,6 @@ namespace Gosu
     void save_image_file(const Bitmap& bitmap, const std::string& filename);
     /// Saves a Bitmap to an arbitrary resource.
     Gosu::Buffer save_image(const Bitmap& bitmap, std::string_view format_hint = "png");
-
-    /// Set the alpha value of all pixels which are equal to the color key to zero.
-    /// To reduce interpolation artefacts when stretching or rotating the resulting image, the color
-    /// value of these transparent pixels will be adjusted to the average of their neighbors.
-    void apply_color_key(Bitmap& bitmap, Color key);
 
     Bitmap apply_border_flags(unsigned image_flags, const Bitmap& source, Rect source_rect);
 }

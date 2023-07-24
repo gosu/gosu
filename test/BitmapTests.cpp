@@ -4,6 +4,7 @@
 #include <algorithm> // for std::copy_n
 #include <climits> // for INT_MAX
 #include <filesystem>
+#include <numeric> // for std::iota
 #include <random>
 #include <stdexcept> // for std::invalid_argument
 
@@ -53,6 +54,7 @@ public:
 
         for (int rel_y = 0; rel_y < source_rect.height; ++rel_y) {
             for (int rel_x = 0; rel_x < source_rect.width; ++rel_x) {
+                // Skip pixels that are outside the target bitmap.
                 const int target_x = x + rel_x;
                 if (target_x < 0 || target_x >= target.width()) {
                     continue;
@@ -61,6 +63,7 @@ public:
                 if (target_y < 0 || target_y >= target.height()) {
                     continue;
                 }
+                // Skip pixels that are outside the source bitmap.
                 const int source_x = source_rect.x + rel_x;
                 if (source_x < 0 || source_x >= source.width()) {
                     continue;
@@ -77,6 +80,29 @@ public:
         return result;
     }
 };
+
+TEST_F(BitmapTests, construct_from_buffer)
+{
+    int size = 3 * 5;
+    Gosu::Buffer buffer(static_cast<std::size_t>(size) * sizeof(Gosu::Color));
+    std::iota(buffer.data(), buffer.data() + buffer.size(), 0);
+
+    Gosu::Bitmap bitmap(3, 5, std::move(buffer));
+    ASSERT_EQ(buffer.size(), 0); // NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
+    ASSERT_EQ(bitmap.width(), 3);
+    ASSERT_EQ(bitmap.height(), 5);
+    ASSERT_EQ(bitmap.pixel(0, 0).red, 0);
+    ASSERT_EQ(bitmap.pixel(0, 0).green, 1);
+    ASSERT_EQ(bitmap.pixel(0, 0).blue, 2);
+    ASSERT_EQ(bitmap.pixel(0, 0).alpha, 3);
+    // ... more RGBA values ...
+    ASSERT_EQ(bitmap.pixel(2, 4).red, 56);
+    ASSERT_EQ(bitmap.pixel(2, 4).green, 57);
+    ASSERT_EQ(bitmap.pixel(2, 4).blue, 58);
+    ASSERT_EQ(bitmap.pixel(2, 4).alpha, 59);
+
+    ASSERT_THROW(Gosu::Bitmap(10, 10, std::move(buffer)), std::length_error);
+}
 
 TEST_F(BitmapTests, visible_pixels_are_equal)
 {
@@ -195,6 +221,43 @@ TEST_F(BitmapTests, insert)
                       0x00'0000aa, 0x00'0000bb, 0x00'0000cc, 0x80'00ff44, 0x80'00ff55, //
                   });
     ASSERT_EQ(canvas, expected_result);
+
+    // Bitmap::insert does not support insertion into itself (yet).
+    ASSERT_THROW(canvas.insert(0, 0, canvas), std::invalid_argument);
+}
+
+TEST_F(BitmapTests, apply_color_key)
+{
+    Gosu::Bitmap bitmap(3, 5);
+    // The input image consists of five pixels (red, green, blue, yellow, cyan).
+    // Everything else is fuchsia (#ff00ff) and will be made transparent:
+    assign_pixels(bitmap,
+                  {
+                      0xff'ff00ff, 0xff'ff0000, 0xff'ff00ff, // _ R _
+                      0xff'00ff00, 0xff'ff00ff, 0xff'0000ff, // G _ B
+                      0xff'ff00ff, 0xff'ffff00, 0xff'ff00ff, // _ Y _
+                      0xff'ff00ff, 0xff'ff00ff, 0xff'ff00ff, // _ _ _
+                      0xff'00ffff, 0xff'ff00ff, 0xff'ff00ff, // C _ _
+                  });
+    bitmap.apply_color_key(Gosu::Color::FUCHSIA);
+    // The alpha values of all fuchsia pixels must be 0, and the color values are the average of
+    // their surrounding pixels.
+    Gosu::Bitmap expected_result(3, 5);
+    assign_pixels(expected_result,
+                  {
+                      0x00'7f7f00, 0xff'ff0000, 0x00'7f007f, // _ R _
+                      0xff'00ff00, 0x00'7f7f3f, 0xff'0000ff, // G _ B
+                      0x00'7fff00, 0xff'ffff00, 0x00'7f7f7f, // _ Y _
+                      0x00'7fff7f, 0x00'7fff7f, 0x00'ffff00, // _ _ _
+                      0xff'00ffff, 0x00'00ffff, 0x00'000000, // C _ _
+                  });
+    ASSERT_TRUE(visible_pixels_are_equal(bitmap, expected_result));
+    for (int y = 0; y < 5; ++y) {
+        for (int x = 0; x < 3; ++x) {
+            EXPECT_EQ(bitmap.pixel(x, y), expected_result.pixel(x, y)) << "at " << x << ", " << y;
+        }
+    }
+    ASSERT_EQ(bitmap, expected_result);
 }
 
 TEST_F(BitmapTests, insert_fuzzing)

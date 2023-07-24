@@ -116,42 +116,49 @@ bool Gosu::Bitmap::operator==(const Gosu::Bitmap& other) const
         && std::equal(data(), data() + pixels, other.data());
 }
 
-void Gosu::apply_color_key(Bitmap& bitmap, Color key)
+void Gosu::Bitmap::apply_color_key(Color key)
 {
-    for (int y = 0; y < bitmap.height(); ++y) {
-        for (int x = 0; x < bitmap.width(); ++x) {
-            if (bitmap.pixel(x, y) == key) {
-                // Calculate the average R/G/B of adjacent, non-transparent pixels.
-                unsigned neighbors = 0, red = 0, green = 0, blue = 0;
-                const auto visit = [&](Color c) {
-                    if (c != key) {
+    int index = 0, pixels = height() * width();
+    for (int y = 0; y < height(); ++y) {
+        for (int x = 0; x < width(); ++x, ++index) {
+            // All colors except the color key should stay as they are.
+            Color& c = data()[index];
+            if (c != key) {
+                continue;
+            }
+
+            unsigned neighbors = 0, red = 0, green = 0, blue = 0;
+
+            const auto visit = [&](int neighbor_index) {
+                if (neighbor_index >= 0 && neighbor_index < pixels) {
+                    const Color& neighbor = data()[neighbor_index];
+                    // Ignore other pixels that are or were equal to the color key.
+                    if (neighbor != key && neighbor.alpha > 0) {
                         neighbors += 1;
-                        red += c.red;
-                        green += c.green;
-                        blue += c.blue;
+                        red += neighbor.red;
+                        green += neighbor.green;
+                        blue += neighbor.blue;
                     }
-                };
+                }
+            };
+            if (x != 0) {
+                visit(index - width() - 1);
+                visit(index - 1);
+                visit(index + width() - 1);
+            }
+            visit(index - width());
+            visit(index + width());
+            if (x != width() - 1) {
+                visit(index - width() + 1);
+                visit(index + 1);
+                visit(index + width() + 1);
+            }
 
-                if (x > 0) {
-                    visit(bitmap.pixel(x - 1, y));
-                }
-                if (x < bitmap.width() - 1) {
-                    visit(bitmap.pixel(x + 1, y));
-                }
-                if (y > 0) {
-                    visit(bitmap.pixel(x, y - 1));
-                }
-                if (y < bitmap.height() - 1) {
-                    visit(bitmap.pixel(x, y + 1));
-                }
-
-                Color replacement = Color::NONE;
-                if (neighbors > 0) {
-                    replacement.red = red / neighbors;
-                    replacement.green = green / neighbors;
-                    replacement.blue = blue / neighbors;
-                }
-                bitmap.pixel(x, y) = replacement;
+            c = Color::NONE;
+            if (neighbors > 0) {
+                c.red = red / neighbors;
+                c.green = green / neighbors;
+                c.blue = blue / neighbors;
             }
         }
     }
