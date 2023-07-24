@@ -2,6 +2,7 @@
 #include <Gosu/GraphicsBase.hpp>
 #include <algorithm> // for std::equal, std::fill_n
 #include <cstring> // for std::memcpy
+#include <limits>
 #include <stdexcept> // for std::invalid_argument
 #include <utility> // for std::move, std::swap
 
@@ -13,11 +14,12 @@ Gosu::Bitmap::Bitmap(int width, int height, Color c)
         throw std::invalid_argument("Negative Gosu::Bitmap size");
     }
 
-    int size = width * height;
-    if (width != 0 && size / width != height) {
+    // Don't allow bitmaps where there are more than INT_MAX pixels.
+    if (height != 0 && width > std::numeric_limits<int>::max() / height) {
         throw std::invalid_argument("Gosu::Bitmap size out of bounds");
     }
 
+    const int size = width * height;
     m_pixels = Buffer(size * sizeof(Color));
     std::fill_n(data(), size, c);
 }
@@ -116,42 +118,53 @@ bool Gosu::Bitmap::operator==(const Gosu::Bitmap& other) const
         && std::equal(data(), data() + pixels, other.data());
 }
 
-void Gosu::apply_color_key(Bitmap& bitmap, Color key)
+void Gosu::Bitmap::apply_color_key(Color key)
 {
-    for (int y = 0; y < bitmap.height(); ++y) {
-        for (int x = 0; x < bitmap.width(); ++x) {
-            if (bitmap.pixel(x, y) == key) {
-                // Calculate the average R/G/B of adjacent, non-transparent pixels.
-                unsigned neighbors = 0, red = 0, green = 0, blue = 0;
-                const auto visit = [&](Color c) {
-                    if (c != key) {
-                        neighbors += 1;
-                        red += c.red;
-                        green += c.green;
-                        blue += c.blue;
-                    }
-                };
+    // The valid memory range from which the loop below can read.
+    const int pixels = width() * height();
+    Color* begin = data();
+    Color* end = begin + pixels;
 
-                if (x > 0) {
-                    visit(bitmap.pixel(x - 1, y));
-                }
-                if (x < bitmap.width() - 1) {
-                    visit(bitmap.pixel(x + 1, y));
-                }
-                if (y > 0) {
-                    visit(bitmap.pixel(x, y - 1));
-                }
-                if (y < bitmap.height() - 1) {
-                    visit(bitmap.pixel(x, y + 1));
-                }
+    for (Color* c = begin; c != end;) {
+        for (int x = 0; x < width(); ++x, ++c) {
+            // All colors except the color key should stay as they are.
+            if (*c != key) {
+                continue;
+            }
 
-                Color replacement = Color::NONE;
-                if (neighbors > 0) {
-                    replacement.red = red / neighbors;
-                    replacement.green = green / neighbors;
-                    replacement.blue = blue / neighbors;
+            unsigned neighbors = 0, red = 0, green = 0, blue = 0;
+
+            const auto visit = [&](const Color* neighbor) {
+                if (neighbor >= begin && neighbor < end && *neighbor != key && neighbor->alpha) {
+                    // Ignore other pixels that are or were equal to the color key.
+                    neighbors += 1;
+                    red += neighbor->red;
+                    green += neighbor->green;
+                    blue += neighbor->blue;
                 }
-                bitmap.pixel(x, y) = replacement;
+            };
+            // Don't look at (x-1) pixels in the first column because we might accidentally use
+            // the pixels of the last column through wraparound.
+            if (x != 0) {
+                visit(c - width() - 1);
+                visit(c - 1);
+                visit(c + width() - 1);
+            }
+            visit(c - width());
+            visit(c + width());
+            // Don't look at (x+1) pixels in the last column because we might accidentally use
+            // the pixels of the first column through wraparound.
+            if (x != width() - 1) {
+                visit(c - width() + 1);
+                visit(c + 1);
+                visit(c + width() + 1);
+            }
+
+            *c = Color::NONE;
+            if (neighbors > 0) {
+                c->red = red / neighbors;
+                c->green = green / neighbors;
+                c->blue = blue / neighbors;
             }
         }
     }

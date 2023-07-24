@@ -6,7 +6,7 @@
 # - This is not (yet?) going to replace the Visual Studio project for Windows.
 cmake_minimum_required(VERSION 3.22.1...3.26.4 FATAL_ERROR)
 
-project(Gosu VERSION 1.4.6)
+project(Gosu VERSION 2.0.0)
 
 
 ##############################################
