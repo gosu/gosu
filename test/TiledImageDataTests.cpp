@@ -66,8 +66,6 @@ TEST_F(TiledImageDataTests, drawing)
             std::make_unique<Gosu::TiledImageData>(current_bitmap, i * 3 + 5, Gosu::IF_TILEABLE));
         // Now render it at a 90° angle.
         image = rotated_by_90_degrees(image);
-        Gosu::save_image_file(image.data().to_bitmap(),
-                              "/Users/jlnr/Desktop/test" + std::to_string(i) + ".png");
     }
 
     ASSERT_EQ(source_image, image.data().to_bitmap());
