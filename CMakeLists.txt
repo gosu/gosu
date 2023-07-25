@@ -129,5 +129,7 @@ if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     add_subdirectory(examples)
 
     # If GoogleTest is not available as a CMake module, this is a no-op.
+    # (enable_testing() MUST come before add_subdirectory: https://stackoverflow.com/a/30264765)
+    enable_testing()
     add_subdirectory(test)
 endif ()
