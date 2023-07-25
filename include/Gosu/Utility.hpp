@@ -50,6 +50,8 @@ namespace Gosu
         int right() const { return x + width - 1; }
         int bottom() const { return y + height - 1; }
 
+        bool empty() const { return width <= 0 || height <= 0; }
+
         /// Returns a Rect that starts at the origin and uses T::width() and T::height() as its
         /// extents.
         template <typename T> static Rect covering(const T& object)
@@ -57,12 +59,14 @@ namespace Gosu
             return Rect { .x = 0, .y = 0, .width = object.width(), .height = object.height() };
         }
 
+        bool contains(const Rect& other) const;
+
         /// Makes sure that this rectangle does not exceed the bounding box.
         /// @param adjust_x If the rectangle origin will be moved to the right by this operation,
-        ///                 then this in-out parameter will be adjusted by the same amount.
+        ///                 then the pointed-to int (if any) will be adjusted by the same amount.
         /// @param adjust_y If the rectangle origin will be moved down by this operation,
-        ///                 then this in-out parameter will be adjusted by the same amount.
-        void clip_to(const Gosu::Rect& bounding_box, int& adjust_x, int& adjust_y);
+        ///                 then the pointed-to int (if any) will be adjusted by the same amount.
+        void clip_to(const Rect& bounding_box, int* adjust_x = nullptr, int* adjust_y = nullptr);
 
         bool operator==(const Rect& other) const = default;
     };

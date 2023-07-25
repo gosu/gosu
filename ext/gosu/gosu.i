@@ -714,7 +714,7 @@ namespace Gosu
     %newobject subimage;
     Gosu::Image* subimage(int x, int y, int w, int h)
     {
-        std::unique_ptr<Gosu::ImageData> image_data = $self->data().subimage(x, y, w, h);
+        std::unique_ptr<Gosu::ImageData> image_data = $self->data().subimage(Gosu::Rect{ x, y, w, h });
         return image_data.get() ? new Gosu::Image(std::move(image_data)) : nullptr;
     }
     

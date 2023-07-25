@@ -5,10 +5,10 @@
 #include "DrawOp.hpp"
 #include "DrawOpQueue.hpp"
 #include "GraphicsImpl.hpp"
-#include "LargeImageData.hpp"
 #include "Macro.hpp"
 #include "OffScreenTarget.hpp"
 #include "Texture.hpp"
+#include "TiledImageData.hpp"
 #include <algorithm>
 #include <cmath>
 #include <functional>
@@ -409,7 +409,9 @@ void Gosu::Graphics::set_physical_resolution(unsigned phys_width, unsigned phys_
 std::unique_ptr<Gosu::ImageData>
 Gosu::Graphics::create_image(const Bitmap& source, const Rect& source_rect, unsigned flags)
 {
-    static const unsigned max_size = MAX_TEXTURE_SIZE;
+    if (! Rect::covering(source).contains(source_rect)) {
+        throw std::invalid_argument("Source rectangle exceeds bitmap");
+    }
 
     // Backward compatibility: This used to be 'bool tileable'.
     if (flags == 1) {
@@ -423,7 +425,7 @@ Gosu::Graphics::create_image(const Bitmap& source, const Rect& source_rect, unsi
     // just for this image.
     if ((flags & IF_TILEABLE) == IF_TILEABLE && source_rect.width == source_rect.height
         && (source_rect.width & (source_rect.width - 1)) == 0 && source_rect.width >= 64
-        && source_rect.width <= max_size) {
+        && source_rect.width <= MAX_TEXTURE_SIZE) {
 
         std::shared_ptr<Texture> texture
             = std::make_shared<Texture>(source_rect.width, source_rect.height, wants_retro);
@@ -432,9 +434,11 @@ Gosu::Graphics::create_image(const Bitmap& source, const Rect& source_rect, unsi
         // Use the source bitmap directly if the source area completely covers it.
         if (source_rect == Rect::covering(source)) {
             data = texture->try_alloc(source, 0);
-        } else {
+        }
+        else {
+            // TODO: This is wasteful, Texture::try_alloc should just accept and use source_rect.
             Bitmap bmp(source_rect.width, source_rect.height);
-            bmp.insert(0, 0, source, source_rect);
+            bmp.insert(source, 0, 0, source_rect);
             data = texture->try_alloc(bmp, 0);
         }
 
@@ -444,11 +448,20 @@ Gosu::Graphics::create_image(const Bitmap& source, const Rect& source_rect, unsi
         return data;
     }
 
-    // Too large to fit on a single texture.
+    const int max_size = MAX_TEXTURE_SIZE;
+    // If the texture is neither tileable nor "retro" (using nearest-neighbor scaling), then we need
+    // to apply border flags below, and we need to account for 1-pixel borders on each side.
+    //  if (!(flags & IF_TILEABLE) && !(flags | IF_RETRO)) {
+    //      max_size -= 2;
+    //  }
+    // TODO: Commented out for now, this requires adjustments in Texture::try_alloc.
+
+    // Too large to fit on a single texture? -> Create a tiled representation.
     if (source_rect.width > max_size - 2 || source_rect.height > max_size - 2) {
+        // TODO: This is wasteful, TiledImageData should just accept and use source_rect.
         Bitmap bmp(source_rect.width, source_rect.height);
-        bmp.insert(0, 0, source, source_rect);
-        return std::make_unique<LargeImageData>(bmp, max_size - 2, max_size - 2, flags);
+        bmp.insert(source, 0, 0, source_rect);
+        return std::make_unique<TiledImageData>(bmp, max_size - 2, flags);
     }
 
     Bitmap bmp = apply_border_flags(flags, source, source_rect);

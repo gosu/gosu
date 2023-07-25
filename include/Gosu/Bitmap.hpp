@@ -50,12 +50,12 @@ namespace Gosu
 
         /// Inserts a bitmap at the given position. Parts of the inserted bitmap that would be
         /// outside of the target bitmap will be clipped away.
-        void insert(int x, int y, const Bitmap& source);
+        void insert(const Bitmap& source, int x, int y);
 
         /// Inserts a portion of a bitmap at the given position. Parts of the inserted bitmap that
         /// would be outside of the target bitmap will be clipped away.
         /// Parts of the source_rect that are outside of the source image will be skipped.
-        void insert(int x, int y, const Bitmap& source, Rect source_rect);
+        void insert(const Bitmap& source, int x, int y, Rect source_rect);
 
         /// Set the alpha value of all pixels which are equal to the color key to zero.
         /// To reduce interpolation artifacts when stretching or rotating the resulting image, the

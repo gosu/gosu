@@ -33,7 +33,7 @@ public:
 
     const GLTexInfo* gl_tex_info() const override { return &m_info; }
 
-    std::unique_ptr<ImageData> subimage(int x, int y, int width, int height) const override;
+    std::unique_ptr<ImageData> subimage(const Rect& rect) const override;
 
     Gosu::Bitmap to_bitmap() const override;
 

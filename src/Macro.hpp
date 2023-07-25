@@ -24,7 +24,7 @@ public:
 
     Gosu::Bitmap to_bitmap() const override;
 
-    std::unique_ptr<ImageData> subimage(int x, int y, int width, int height) const override;
+    std::unique_ptr<ImageData> subimage(const Rect&) const override;
 
-    void insert(const Bitmap& bitmap, int x, int y) override;
+    void insert(const Bitmap&, int x, int y) override;
 };

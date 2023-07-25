@@ -207,9 +207,6 @@
     <ClCompile Include="..\src\Inspection.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\LargeImageData.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Macro.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
@@ -238,6 +235,9 @@
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Texture.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TiledImageData.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\TimingApple.cpp">
@@ -596,9 +596,6 @@
     <ClInclude Include="..\src\Iconv.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\LargeImageData.hpp">
-      <Filter>Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Log.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
@@ -621,6 +618,9 @@
       <Filter>Implementation</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Texture.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TiledImageData.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
     <ClInclude Include="..\src\TransformStack.hpp">

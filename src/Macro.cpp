@@ -187,12 +187,12 @@ Gosu::Bitmap Gosu::Macro::to_bitmap() const
     return Gosu::Graphics::render(pimpl->width, pimpl->height, render_this).data().to_bitmap();
 }
 
-std::unique_ptr<Gosu::ImageData> Gosu::Macro::subimage(int x, int y, int width, int height) const
+std::unique_ptr<Gosu::ImageData> Gosu::Macro::subimage(const Rect&) const
 {
-    return std::unique_ptr<ImageData>{};
+    return nullptr;
 }
 
-void Gosu::Macro::insert(const Bitmap& bitmap, int x, int y)
+void Gosu::Macro::insert(const Bitmap&, int, int)
 {
     throw std::logic_error{"Gosu::Macro cannot be updated with a Gosu::Bitmap yet"};
 }

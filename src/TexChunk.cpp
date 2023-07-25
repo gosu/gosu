@@ -81,9 +81,9 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1, double x2, double y2, 
     Graphics::schedule_draw_op(op);
 }
 
-std::unique_ptr<Gosu::ImageData> Gosu::TexChunk::subimage(int x, int y, int width, int height) const
+std::unique_ptr<Gosu::ImageData> Gosu::TexChunk::subimage(const Rect& rect) const
 {
-    return std::unique_ptr<Gosu::ImageData>(new TexChunk(*this, x, y, width, height));
+    return std::make_unique<TexChunk>(*this, rect.x, rect.y, rect.width, rect.height);
 }
 
 Gosu::Bitmap Gosu::TexChunk::to_bitmap() const
@@ -129,7 +129,7 @@ void Gosu::TexChunk::insert(const Bitmap& original_bitmap, int x, int y)
         if (clipped_width <= 0 || clipped_height <= 0) return;
 
         clipped_bitmap.resize(clipped_width, clipped_height);
-        clipped_bitmap.insert(-clip_left, -clip_top, original_bitmap);
+        clipped_bitmap.insert(original_bitmap, -clip_left, -clip_top);
         bitmap = &clipped_bitmap;
     }
 
