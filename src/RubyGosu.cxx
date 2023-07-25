@@ -2980,7 +2980,7 @@ SWIGINTERN Gosu::GLTexInfo *Gosu_Image_gl_tex_info(Gosu::Image const *self){
         return info ? new Gosu::GLTexInfo(*info) : nullptr;
     }
 SWIGINTERN Gosu::Image *Gosu_Image_subimage(Gosu::Image *self,int x,int y,int w,int h){
-        std::unique_ptr<Gosu::ImageData> image_data = self->data().subimage(x, y, w, h);
+        std::unique_ptr<Gosu::ImageData> image_data = self->data().subimage(Gosu::Rect{ x, y, w, h });
         return image_data.get() ? new Gosu::Image(std::move(image_data)) : nullptr;
     }
 SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::string const &text,double font_height,VALUE options=0){
