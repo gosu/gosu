@@ -53,7 +53,7 @@ namespace Gosu
     class DrawOpQueue;
     typedef std::list<Transform> Transforms;
     typedef std::list<DrawOpQueue> DrawOpQueueStack;
-    class LargeImageData;
+    class TiledImageData;
     class Macro;
     struct ArrayVertex
     {

@@ -34,12 +34,12 @@ namespace Gosu
             return Bitmap();
         }
 
-        std::unique_ptr<ImageData> subimage(int, int, int, int) const override //
+        std::unique_ptr<ImageData> subimage(const Rect&) const override //
         {
             return nullptr;
         }
 
-        void insert(const Bitmap&, int x, int y) override //
+        void insert(int x, int y, const Bitmap&) override //
         {
         }
 

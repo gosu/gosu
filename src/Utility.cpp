@@ -143,14 +143,21 @@ std::vector<std::string> Gosu::user_languages()
 #endif
 #endif
 
-void Gosu::Rect::clip_to(const Gosu::Rect& bounding_box, int& adjust_x, int& adjust_y)
+bool Gosu::Rect::contains(const Gosu::Rect& other) const
+{
+    return x <= other.x && other.right() <= right() && y <= other.y && other.bottom() <= bottom();
+}
+
+void Gosu::Rect::clip_to(const Gosu::Rect& bounding_box, int* adjust_x, int* adjust_y)
 {
     // Cut off the area on the left that exceeds the bounding box, if any.
     const int extra_pixels_left = bounding_box.x - x;
     if (extra_pixels_left > 0) {
         x += extra_pixels_left;
-        adjust_x += extra_pixels_left;
         width -= extra_pixels_left;
+        if (adjust_x) {
+            *adjust_x += extra_pixels_left;
+        }
     }
 
     // Cut off the area on the right that exceeds the bounding box, if any.
@@ -163,8 +170,10 @@ void Gosu::Rect::clip_to(const Gosu::Rect& bounding_box, int& adjust_x, int& adj
     const int extra_pixels_top = bounding_box.y - y;
     if (extra_pixels_top > 0) {
         y += extra_pixels_top;
-        adjust_y += extra_pixels_top;
         height -= extra_pixels_top;
+        if (adjust_y) {
+            *adjust_y += extra_pixels_top;
+        }
     }
 
     // Cut off the area at the bottom that exceeds the bounding box, if any.

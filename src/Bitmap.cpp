@@ -79,12 +79,12 @@ void Gosu::Bitmap::insert(int x, int y, const Bitmap& source, Rect source_rect)
 
     // Make sure that the source area does not exceed the source image.
     // If we need to move the source_rect origin, then also move the target rectangle origin.
-    source_rect.clip_to(Rect::covering(source), x, y);
+    source_rect.clip_to(Rect::covering(source), &x, &y);
 
     // Set up the target area and make sure that it does not exceed this image.
     Rect target_rect { .x = x, .y = y, .width = source_rect.width, .height = source_rect.height };
     // If we need to move the target_rect origin, then also move the source_rect origin.
-    target_rect.clip_to(Rect::covering(*this), source_rect.x, source_rect.y);
+    target_rect.clip_to(Rect::covering(*this), &source_rect.x, &source_rect.y);
 
     // These are the first source and first destination pixels/rows.
     Color* target_ptr = &pixel(target_rect.x, target_rect.y);

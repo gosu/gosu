@@ -4,6 +4,7 @@
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Platform.hpp>
+#include <Gosu/Utility.hpp>
 #include <memory>
 
 namespace Gosu
@@ -16,19 +17,12 @@ namespace Gosu
         double left, right, top, bottom;
     };
 
-    /// The ImageData class is an abstract base class for drawable images.
-    /// Instances of classes derived by ImageData are usually returned by Graphics::create_image and
-    /// usually only used to implement drawing primitives like Image, which then provide a more
-    /// specialized and intuitive drawing interface.
-    class ImageData
+    /// Abstract base class for a rectangular thing that can be drawn on screen.
+    /// Instances are usually created through Graphics::create_image and used to implement drawing
+    /// primitives like Image, which then provide a more convenient drawing interface.
+    class ImageData : Noncopyable
     {
     public:
-        // Classes inside a hierarchy should not be copyable to avoid slicing.
-        ImageData(const ImageData&) = delete;
-        ImageData(ImageData&&) = delete;
-        ImageData& operator=(const ImageData&) = delete;
-        ImageData& operator=(ImageData&&) = delete;
-
         ImageData() = default;
         virtual ~ImageData() = default;
 
@@ -40,14 +34,15 @@ namespace Gosu
                           double x2, double y2, Color c2, //
                           double x3, double y3, Color c3, //
                           double x4, double y4, Color c4, //
-                          ZPos z, BlendMode mode) const = 0;
+                          ZPos z, BlendMode mode) const
+            = 0;
 
         virtual const GLTexInfo* gl_tex_info() const = 0;
 
         virtual Bitmap to_bitmap() const = 0;
 
-        virtual std::unique_ptr<ImageData> subimage(int x, int y, int width, int height) const = 0;
+        virtual std::unique_ptr<ImageData> subimage(const Rect& rect) const = 0;
 
-        virtual void insert(const Bitmap& bitmap, int x, int y) = 0;
+        virtual void insert(int x, int y, const Bitmap& bitmap) = 0;
     };
 }

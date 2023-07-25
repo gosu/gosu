@@ -66,7 +66,7 @@ GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_subimage(Gosu_Image* image, int 
 {
     return Gosu_translate_exceptions([=]() -> Gosu_Image* {
         std::unique_ptr<Gosu::ImageData> image_data =
-            image->image.data().subimage(left, top, width, height);
+            image->image.data().subimage(Gosu::Rect{ left, top, width, height});
 
         if (image_data) return nullptr;
 
@@ -184,7 +184,7 @@ GOSU_FFI_API void Gosu_Image_insert(Gosu_Image* image, Gosu_Image* source, int x
 {
     Gosu_translate_exceptions([=] {
         Gosu::Bitmap bitmap = source->image.data().to_bitmap();
-        image->image.data().insert(bitmap, x, y);
+        image->image.data().insert(x, y, bitmap);
     });
 }
 
