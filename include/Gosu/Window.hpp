@@ -146,29 +146,29 @@ namespace Gosu
 #endif
 
 #ifndef GOSU_IS_IPHONE
-        SDL_Window* sdl_window();
+        SDL_Window* sdl_window() const;
 #endif
     };
 
     /// Returns the width (in pixels) of a screen.
     /// @param window The result describes the screen on which the window is shown, or the
     ///               primary screen if no window is given.
-    int screen_width(Window* window = nullptr);
+    int screen_width(const Window* window = nullptr);
 
     /// Returns the height (in pixels) of the user's primary screen.
     /// @param window The result describes the screen on which the window is shown, or the
     ///               primary screen if no window is given.
-    int screen_height(Window* window = nullptr);
+    int screen_height(const Window* window = nullptr);
 
     /// Returns the maximum width (in 'points') that is available for a non-fullscreen Window.
     /// All windows larger than this size will automatically be shrunk to fit.
     /// @param window The result describes the screen on which the window is shown, or the
     ///               primary screen if no window is given.
-    int available_width(Window* window = nullptr);
+    int available_width(const Window* window = nullptr);
 
     /// Returns the maximum height (in 'points') that is available for a non-fullscreen Window.
     /// All windows larger than this size will automatically be shrunk to fit.
     /// @param window The result describes the screen on which the window is shown, or the
     ///               primary screen if no window is given.
-    int available_height(Window* window = nullptr);
+    int available_height(const Window* window = nullptr);
 }

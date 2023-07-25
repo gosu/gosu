@@ -99,32 +99,35 @@ Gosu::ImageData& Gosu::Image::data() const
     return *m_data;
 }
 
-std::vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bmp, //
+std::vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bitmap, //
                                           int tile_width, int tile_height, unsigned flags)
 {
+    if (tile_width == 0 || tile_height == 0)
+        throw std::invalid_argument("Gosu::load_tiles does not support empty tiles");
+
     int tiles_x, tiles_y;
     std::vector<Image> images;
 
     if (tile_width > 0) {
-        tiles_x = bmp.width() / tile_width;
+        tiles_x = bitmap.width() / tile_width;
     }
     else {
         tiles_x = -tile_width;
-        tile_width = bmp.width() / tiles_x;
+        tile_width = bitmap.width() / tiles_x;
     }
 
     if (tile_height > 0) {
-        tiles_y = bmp.height() / tile_height;
+        tiles_y = bitmap.height() / tile_height;
     }
     else {
         tiles_y = -tile_height;
-        tile_height = bmp.height() / tiles_y;
+        tile_height = bitmap.height() / tiles_y;
     }
 
     for (int y = 0; y < tiles_y; ++y) {
         for (int x = 0; x < tiles_x; ++x) {
             images.emplace_back(
-                bmp, Rect { x * tile_width, y * tile_height, tile_width, tile_height }, flags);
+                bitmap, Rect { x * tile_width, y * tile_height, tile_width, tile_height }, flags);
         }
     }
 
@@ -134,6 +137,6 @@ std::vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bmp, //
 std::vector<Gosu::Image> Gosu::load_tiles(const std::string& filename, //
                                           int tile_width, int tile_height, unsigned flags)
 {
-    Bitmap bmp = load_image_file(filename);
-    return load_tiles(bmp, tile_width, tile_height, flags);
+    const Bitmap bitmap = load_image_file(filename);
+    return load_tiles(bitmap, tile_width, tile_height, flags);
 }

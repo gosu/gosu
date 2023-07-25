@@ -9,6 +9,18 @@ class ImageTests : public testing::Test
 {
 };
 
+TEST_F(ImageTests, empty_image)
+{
+    Gosu::Image image;
+    ASSERT_EQ(image.width(), 0);
+    ASSERT_EQ(image.height(), 0);
+    ASSERT_NO_THROW(image.data().insert(Gosu::Bitmap(3, 5, Gosu::Color::GREEN), -4, 5));
+    ASSERT_EQ(image.data().subimage(Gosu::Rect { 0, -3, 3, 6 }), nullptr);
+    ASSERT_EQ(image.data().gl_tex_info(), nullptr);
+    ASSERT_NO_THROW(image.draw(53, 324.6, 0, 1.0, 1.0, Gosu::Color::RED));
+    ASSERT_EQ(image.data().to_bitmap(), Gosu::Bitmap(0, 0));
+}
+
 TEST_F(ImageTests, render_after_color_key)
 {
     // Create four yellow dots on a fuchsia background.
@@ -36,5 +48,32 @@ TEST_F(ImageTests, render_after_color_key)
             result_bitmap.pixel(x, y).alpha = 255;
             ASSERT_EQ(result_bitmap.pixel(x, y), Gosu::Color::YELLOW);
         }
+    }
+}
+
+TEST_F(ImageTests, load_tiles_from_tile)
+{
+    const std::vector<Gosu::Image> tiles
+        = Gosu::load_tiles("test_image_io/no-alpha-png32.png", 30, 20, Gosu::IF_RETRO);
+    ASSERT_GE(tiles.size(), 1);
+    for (const Gosu::Image& image : tiles) {
+        ASSERT_EQ(image.width(), 30);
+        ASSERT_EQ(image.height(), 20);
+    }
+    // Verify that the second tile looks as expected.
+    const Gosu::Bitmap tilemap = Gosu::load_image_file("test_image_io/no-alpha-png32.png");
+    Gosu::Bitmap second_tile(30, 20);
+    second_tile.insert(tilemap, -30, 0);
+    ASSERT_EQ(tiles.at(1).data().to_bitmap(), second_tile);
+}
+
+TEST_F(ImageTests, load_tiles_from_bitmap)
+{
+    const Gosu::Bitmap tilemap = Gosu::load_image_file("test_image/from_blob.png");
+    const std::vector<Gosu::Image> tiles = Gosu::load_tiles(tilemap, -3, -10);
+    ASSERT_EQ(tiles.size(), 3 * 10);
+    for (const Gosu::Image& image : tiles) {
+        ASSERT_EQ(image.width(), tilemap.width() / 3);
+        ASSERT_EQ(image.height(), tilemap.height() / 10);
     }
 }

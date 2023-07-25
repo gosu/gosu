@@ -2,7 +2,6 @@
 #if defined(GOSU_IS_MAC)
 
 #include <Gosu/Text.hpp>
-#include "Log.hpp"
 #include "TrueTypeFont.hpp"
 #include <CoreText/CoreText.h>
 #include <Foundation/Foundation.h>
@@ -15,8 +14,6 @@ const unsigned char* Gosu::ttf_data_by_name(const std::string& font_name, unsign
 
     auto& ttf_ptr = ttf_file_cache[make_pair(font_name, font_flags)];
     if (ttf_ptr) return ttf_ptr;
-
-    log("Trying to find a font named '%s', flags=%x", font_name.c_str(), font_flags);
 
     unsigned symbolic_traits = 0;
     if (font_flags & Gosu::FF_BOLD) symbolic_traits |= kCTFontTraitBold;
@@ -45,7 +42,6 @@ const unsigned char* Gosu::ttf_data_by_name(const std::string& font_name, unsign
             }
             NSURL* url = CFBridgingRelease(CTFontCopyAttribute(font, kCTFontURLAttribute));
             if (url && url.fileSystemRepresentation) {
-                log("Loading file '%s'", url.fileSystemRepresentation);
                 ttf_ptr = ttf_data_from_file(url.fileSystemRepresentation);
             }
             CFRelease(font);

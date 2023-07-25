@@ -23,7 +23,7 @@ unsigned long Gosu::milliseconds()
     }();
 
     uint64_t runtime = mach_absolute_time() - first_tick;
-    return runtime * info.numer / info.denom / 1000000;
+    return runtime * info.numer / info.denom / 1'000'000;
 }
 
 #endif

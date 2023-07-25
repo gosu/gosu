@@ -71,14 +71,16 @@ namespace Gosu
     /// @param tile_width If positive, specifies the width of one tile in pixels.
     /// If negative, the bitmap is divided into -tile_width rows.
     /// @param tile_height See tile_width.
-    std::vector<Gosu::Image> load_tiles(const Bitmap& bmp, int tile_width, int tile_height,
+    std::vector<Gosu::Image> load_tiles(const Bitmap& bitmap, //
+                                        int tile_width, int tile_height,
                                         unsigned image_flags = IF_SMOOTH);
 
     /// Convenience function that slices a bitmap into a grid and creates images from them.
     /// @param tile_width If positive, specifies the width of one tile in pixels.
     /// If negative, the bitmap is divided into -tile_width rows.
     /// @param tile_height See tile_width.
-    std::vector<Gosu::Image> load_tiles(const std::string& filename, int tile_width,
-                                        int tile_height, unsigned image_flags = IF_SMOOTH);
+    std::vector<Gosu::Image> load_tiles(const std::string& filename, //
+                                        int tile_width, int tile_height,
+                                        unsigned image_flags = IF_SMOOTH);
 #endif
 }

@@ -17,10 +17,10 @@ Gosu::Buffer::Buffer(void* buffer, std::size_t size, std::function<void(void*)> 
       m_deleter(std::move(deleter))
 {
     if (buffer == nullptr && size > 0) {
-        throw std::invalid_argument("Tried to create a non-empty Gosu::Buffer from nullptr");
+        throw std::invalid_argument("Tried to create non-empty Gosu::Buffer from nullptr");
     }
     if (size >= std::numeric_limits<std::ptrdiff_t>::max()) {
-        throw std::length_error("Tried to create a Gosu::Buffer from a negative size");
+        throw std::length_error("Tried to create Gosu::Buffer with a negative size");
     }
 }
 
@@ -63,12 +63,21 @@ Gosu::Buffer::~Buffer()
 }
 
 Gosu::Buffer::Buffer(std::size_t size)
-    : m_buffer(std::malloc(size)), // NOLINT(*-no-malloc)
+    : m_buffer(nullptr),
       m_size(size),
       m_deleter(std::free)
 {
-    if (m_buffer == nullptr) {
-        throw std::bad_alloc();
+    if (size >= std::numeric_limits<std::ptrdiff_t>::max()) {
+        throw std::length_error("Tried to create Gosu::Buffer with a negative size");
+    }
+
+    if (m_size) {
+        m_buffer = std::malloc(size); // NOLINT(*-no-malloc)
+        // GCOV_EXCL_START: Hard to simulate out-of-memory situations.
+        if (m_buffer == nullptr) {
+            throw std::bad_alloc();
+        }
+        // GCOV_EXCL_END
     }
 }
 
@@ -102,9 +111,11 @@ Gosu::Buffer Gosu::load_file(const std::string& filename)
     Buffer buffer(std::filesystem::file_size(filename));
     char* ptr = reinterpret_cast<char*>(buffer.data());
     std::ifstream file(filename, std::ios::binary);
+    // GCOV_EXCL_START: It is hard to set up a file where file_size works but reading doesn't.
     if (!file || !file.read(ptr, static_cast<std::streamoff>(buffer.size()))) {
         throw std::runtime_error("Could not read file '" + filename + "'");
     }
+    // GCOV_EXCL_END
     return buffer;
 }
 
