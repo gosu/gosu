@@ -247,7 +247,7 @@ TEST_F(BitmapTests, apply_color_key)
     assign_pixels(expected_result,
                   {
                       0x00'7f7f00, 0xff'ff0000, 0x00'7f007f, // _ R _
-                      0xff'00ff00, 0x00'7f7f3f, 0xff'1000ff, // G _ B
+                      0xff'00ff00, 0x00'7f7f3f, 0xff'0000ff, // G _ B
                       0x00'7fff00, 0xff'ffff00, 0x00'7f7f7f, // _ Y _
                       0x00'7fff7f, 0x00'7fff7f, 0x00'ffff00, // _ _ _
                       0xff'00ffff, 0x00'00ffff, 0x00'000000, // C _ _
