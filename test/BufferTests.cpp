@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
 
 #include <Gosu/Buffer.hpp>
-#include <filesystem>
+#include <cstring> // for std::memcmp
+#include <filesystem> // for std::filesystem::temp_directory_path
 
 class BufferTests : public testing::Test
 {
