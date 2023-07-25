@@ -4,7 +4,7 @@
 #include <memory>
 #include <stdexcept>
 
-#ifdef GOSU_IS_MAC
+#ifdef GOSU_IS_IPHONE
 #include <filesystem>
 #include <fstream>
 #else
@@ -105,7 +105,7 @@ Gosu::Buffer& Gosu::Buffer::operator=(const Gosu::Buffer& other)
     return *this = Buffer(other);
 }
 
-#ifdef GOSU_IS_MAC
+#ifdef GOSU_IS_IPHONE
 Gosu::Buffer Gosu::load_file(const std::string& filename)
 {
     Buffer buffer(std::filesystem::file_size(filename));
@@ -140,7 +140,23 @@ Gosu::Buffer Gosu::load_file(const std::string& filename)
 
 void Gosu::save_file(const Buffer& buffer, const std::string& filename)
 {
-    SDL_RWops* rwops = SDL_RWFromFile(filename.c_str(), "w");
-    SDL_RWwrite(rwops, buffer.data(), buffer.size(), 1);
+    struct RWopsDeleter
+    {
+        void operator()(SDL_RWops* p) const
+        {
+            // SDL_RWclose will crash if given nullptr.
+            if (p) {
+                SDL_RWclose(p);
+            }
+        }
+    };
+    std::unique_ptr<SDL_RWops, RWopsDeleter> rwops(SDL_RWFromFile(filename.c_str(), "w"));
+    if (rwops == nullptr) {
+        throw std::runtime_error("Could not open '" + filename + "', error: " + SDL_GetError());
+    }
+    std::size_t written = SDL_RWwrite(rwops.get(), buffer.data(), buffer.size(), 1);
+    if (written == 0) {
+        throw std::runtime_error("Could not write to '" + filename + "', error: " + SDL_GetError());
+    }
 }
 #endif
