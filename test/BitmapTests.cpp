@@ -192,11 +192,11 @@ TEST_F(BitmapTests, insert)
                       0xff'ff0033, 0xff'ff0044, 0xff'ff0055, //
                   });
     // Overwrite 2x1 pixels in the top left corner.
-    canvas.insert(-1, -1, red);
+    canvas.insert(red, -1, -1);
     // No-op: Too far up.
-    canvas.insert(-10, 0, red);
+    canvas.insert(red, -10, 0);
     // No-op: Too far to the left.
-    canvas.insert(0, -10, red);
+    canvas.insert(red, 0, -10);
     // No-op: Source area does not match input.
 
     Gosu::Bitmap green(4, 3);
@@ -207,11 +207,11 @@ TEST_F(BitmapTests, insert)
                       0x80'00ff88, 0x80'00ff99, 0x80'00ffaa, 0x80'00ffbb, //
                   });
     // Overwrite 2x2 pixels in the bottom left corner.
-    canvas.insert(3, 1, green);
+    canvas.insert(green, 3, 1);
     // No-op: Too far to the right.
-    canvas.insert(5, 0, green);
+    canvas.insert(green, 5, 0);
     // No-op: Too far down.
-    canvas.insert(0, 3, green);
+    canvas.insert(green, 0, 3);
 
     Gosu::Bitmap expected_result(5, 3);
     assign_pixels(expected_result,
@@ -223,7 +223,7 @@ TEST_F(BitmapTests, insert)
     ASSERT_EQ(canvas, expected_result);
 
     // Bitmap::insert does not support insertion into itself (yet).
-    ASSERT_THROW(canvas.insert(0, 0, canvas), std::invalid_argument);
+    ASSERT_THROW(canvas.insert(canvas, 0, 0), std::invalid_argument);
 }
 
 TEST_F(BitmapTests, apply_color_key)
@@ -288,7 +288,7 @@ TEST_F(BitmapTests, insert_fuzzing)
         const int y = next_offset();
 
         const Gosu::Bitmap naive_result = insert_naively(target, x, y, source, source_rect);
-        target.insert(x, y, source, source_rect);
+        target.insert(source, x, y, source_rect);
         ASSERT_EQ(target, naive_result);
     }
 }

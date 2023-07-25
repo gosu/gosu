@@ -124,7 +124,7 @@ Gosu::Bitmap Gosu::Texture::to_bitmap(unsigned x, unsigned y, unsigned width, un
     // TODO: There are ways to retrieve only part of a texture, which we should use sooner or later.
     glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, full_texture.data());
     Bitmap bitmap(width, height);
-    bitmap.insert(-int(x), -int(y), full_texture);
+    bitmap.insert(full_texture, -int(x), -int(y));
     
     return bitmap;
 #endif

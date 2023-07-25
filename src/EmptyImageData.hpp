@@ -39,7 +39,7 @@ namespace Gosu
             return nullptr;
         }
 
-        void insert(int x, int y, const Bitmap&) override //
+        void insert(const Bitmap&, int x, int y) override //
         {
         }
 

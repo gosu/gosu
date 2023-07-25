@@ -192,7 +192,7 @@ std::unique_ptr<Gosu::ImageData> Gosu::Macro::subimage(const Rect&) const
     return nullptr;
 }
 
-void Gosu::Macro::insert(int, int, const Bitmap&)
+void Gosu::Macro::insert(const Bitmap&, int, int)
 {
     throw std::logic_error{"Gosu::Macro cannot be updated with a Gosu::Bitmap yet"};
 }

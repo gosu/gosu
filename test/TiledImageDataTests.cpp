@@ -38,8 +38,8 @@ TEST_F(TiledImageDataTests, direct_creation)
     }
 
     const Gosu::Bitmap red_bitmap(10, 10, Gosu::Color::RED);
-    source.insert(4, 3, red_bitmap);
-    tiled_data.insert(4, 3, red_bitmap);
+    source.insert(red_bitmap, 4, 3);
+    tiled_data.insert(red_bitmap, 4, 3);
     ASSERT_EQ(source, tiled_data.to_bitmap());
 
     ASSERT_THROW(Gosu::TiledImageData(source, 0, Gosu::IF_RETRO), std::invalid_argument);

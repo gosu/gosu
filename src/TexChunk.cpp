@@ -91,7 +91,7 @@ Gosu::Bitmap Gosu::TexChunk::to_bitmap() const
     return m_texture->to_bitmap(m_x, m_y, m_w, m_h);
 }
 
-void Gosu::TexChunk::insert(int x, int y, const Bitmap& original_bitmap)
+void Gosu::TexChunk::insert(const Bitmap& original_bitmap, int x, int y)
 {
     Bitmap clipped_bitmap;
     const Bitmap* bitmap = &original_bitmap;
@@ -129,7 +129,7 @@ void Gosu::TexChunk::insert(int x, int y, const Bitmap& original_bitmap)
         if (clipped_width <= 0 || clipped_height <= 0) return;
 
         clipped_bitmap.resize(clipped_width, clipped_height);
-        clipped_bitmap.insert(-clip_left, -clip_top, original_bitmap);
+        clipped_bitmap.insert(original_bitmap, -clip_left, -clip_top);
         bitmap = &clipped_bitmap;
     }
 

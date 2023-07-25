@@ -125,19 +125,19 @@ Gosu::Bitmap Gosu::TiledImageData::to_bitmap() const
 {
     Bitmap bitmap(width(), height());
     for (const Tile& tile : m_tiles) {
-        bitmap.insert(tile.x, tile.y, tile.data->to_bitmap());
+        bitmap.insert(tile.data->to_bitmap(), tile.x, tile.y);
     }
     return bitmap;
 }
 
-void Gosu::TiledImageData::insert(int x, int y, const Bitmap& bitmap)
+void Gosu::TiledImageData::insert(const Bitmap& bitmap, int x, int y)
 {
     const Rect target_rect { x, y, bitmap.width(), bitmap.height() };
     for (const Tile& tile : m_tiles) {
         Rect tile_rect { tile.x, tile.y, tile.data->width(), tile.data->height() };
         tile_rect.clip_to(target_rect);
         if (!tile_rect.empty()) {
-            tile.data->insert(x - tile.x, y - tile.y, bitmap);
+            tile.data->insert(bitmap, x - tile.x, y - tile.y);
         }
     }
 }

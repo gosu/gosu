@@ -37,5 +37,5 @@ public:
 
     Gosu::Bitmap to_bitmap() const override;
 
-    void insert(int x, int y, const Bitmap& bitmap) override;
+    void insert(const Bitmap& bitmap, int x, int y) override;
 };

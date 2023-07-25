@@ -41,7 +41,7 @@ void Gosu::Bitmap::resize(int width, int height, Color c)
 {
     if (width != m_width || height != m_height) {
         Bitmap temp(width, height, c);
-        temp.insert(0, 0, *this);
+        temp.insert(*this, 0, 0);
         std::swap(*this, temp);
     }
 }
@@ -66,12 +66,12 @@ void Gosu::Bitmap::blend_pixel(int x, int y, Color c)
     out.blue = ((c.blue * c.alpha + out.blue * inv_alpha) / out.alpha);
 }
 
-void Gosu::Bitmap::insert(int x, int y, const Bitmap& source)
+void Gosu::Bitmap::insert(const Bitmap& source, int x, int y)
 {
-    insert(x, y, source, Rect::covering(source));
+    insert(source, x, y, Rect::covering(source));
 }
 
-void Gosu::Bitmap::insert(int x, int y, const Bitmap& source, Rect source_rect)
+void Gosu::Bitmap::insert(const Bitmap& source, int x, int y, Rect source_rect)
 {
     if (&source == this) {
         throw std::invalid_argument("Gosu::Bitmap::insert cannot copy parts of itself");
@@ -178,26 +178,26 @@ Gosu::Bitmap Gosu::apply_border_flags(unsigned image_flags, const Bitmap& source
 
     // Add one extra pixel around all four sides of the image.
     Gosu::Bitmap result(source_rect.width + 2, source_rect.height + 2);
-    result.insert(1, 1, source, source_rect);
+    result.insert(source, 1, 1, source_rect);
 
     // Now duplicate the edges of the image on all four sides.
     const Rect top { source_rect.x, source_rect.y, source_rect.width, 1 };
-    result.insert(1, 0, source, top);
+    result.insert(source, 1, 0, top);
     const Rect bottom { source_rect.x, source_rect.bottom(), source_rect.width, 1 };
-    result.insert(1, result.height() - 1, source, bottom);
+    result.insert(source, 1, result.height() - 1, bottom);
     const Rect left { source_rect.x, source_rect.y, 1, source_rect.height };
-    result.insert(0, 1, source, left);
+    result.insert(source, 0, 1, left);
     const Rect right { source_rect.right(), source_rect.y, 1, source_rect.height };
-    result.insert(result.width() - 1, 1, source, right);
+    result.insert(source, result.width() - 1, 1, right);
     // Also duplicate the corners of each size.
     const Rect top_left { source_rect.x, source_rect.y, 1, 1 };
-    result.insert(0, 0, source, top_left);
+    result.insert(source, 0, 0, top_left);
     const Rect top_right { source_rect.right(), source_rect.y, 1, 1 };
-    result.insert(result.width() - 1, 0, source, top_right);
+    result.insert(source, result.width() - 1, 0, top_right);
     const Rect bottom_left { source_rect.x, source_rect.bottom(), 1, 1 };
-    result.insert(0, result.height() - 1, source, bottom_left);
+    result.insert(source, 0, result.height() - 1, bottom_left);
     const Rect bottom_right { source_rect.right(), source_rect.bottom(), 1, 1 };
-    result.insert(result.width() - 1, result.height() - 1, source, bottom_right);
+    result.insert(source, result.width() - 1, result.height() - 1, bottom_right);
 
     // On edges which are supposed to have tileable borders, we are now finished.
     // Where soft borders are desired, we need to make all pixels on a side fully transparent.

@@ -184,7 +184,7 @@ GOSU_FFI_API void Gosu_Image_insert(Gosu_Image* image, Gosu_Image* source, int x
 {
     Gosu_translate_exceptions([=] {
         Gosu::Bitmap bitmap = source->image.data().to_bitmap();
-        image->image.data().insert(x, y, bitmap);
+        image->image.data().insert(bitmap, x, y);
     });
 }
 

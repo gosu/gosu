@@ -438,7 +438,7 @@ Gosu::Graphics::create_image(const Bitmap& source, const Rect& source_rect, unsi
         else {
             // TODO: This is wasteful, Texture::try_alloc should just accept and use source_rect.
             Bitmap bmp(source_rect.width, source_rect.height);
-            bmp.insert(0, 0, source, source_rect);
+            bmp.insert(source, 0, 0, source_rect);
             data = texture->try_alloc(bmp, 0);
         }
 
@@ -459,7 +459,7 @@ Gosu::Graphics::create_image(const Bitmap& source, const Rect& source_rect, unsi
     if (source_rect.width > max_size || source_rect.height > max_size) {
         // TODO: This is wasteful, TiledImageData should just accept and use source_rect.
         Bitmap bmp(source_rect.width, source_rect.height);
-        bmp.insert(0, 0, source, source_rect);
+        bmp.insert(source, 0, 0, source_rect);
         return std::make_unique<TiledImageData>(bmp, max_size, flags);
     }
 

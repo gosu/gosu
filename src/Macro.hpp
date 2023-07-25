@@ -26,5 +26,5 @@ public:
 
     std::unique_ptr<ImageData> subimage(const Rect&) const override;
 
-    void insert(int x, int y, const Bitmap& bitmap) override;
+    void insert(const Bitmap& bitmap, int x, int y) override;
 };

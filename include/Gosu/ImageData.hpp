@@ -43,6 +43,6 @@ namespace Gosu
 
         virtual std::unique_ptr<ImageData> subimage(const Rect& rect) const = 0;
 
-        virtual void insert(int x, int y, const Bitmap& bitmap) = 0;
+        virtual void insert(const Bitmap& bitmap, int x, int y) = 0;
     };
 }
