@@ -21,7 +21,7 @@ jobs:
 
       - name: Install dependencies (Ubuntu)
         if: startsWith(matrix.platform, 'ubuntu-')
-        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libgl1-mesa-dev libgmp-dev libfontconfig1-dev xvfb
+        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libgl1-mesa-dev libfontconfig1-dev xvfb
 
       - name: Install dependencies (macOS)
         if: startsWith(matrix.platform, 'macos-')
