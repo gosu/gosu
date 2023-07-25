@@ -253,11 +253,6 @@ TEST_F(BitmapTests, apply_color_key)
                       0xff'00ffff, 0x00'00ffff, 0x00'000000, // C _ _
                   });
     ASSERT_TRUE(visible_pixels_are_equal(bitmap, expected_result));
-    for (int y = 0; y < 5; ++y) {
-        for (int x = 0; x < 3; ++x) {
-            EXPECT_EQ(bitmap.pixel(x, y), expected_result.pixel(x, y)) << "at " << x << ", " << y;
-        }
-    }
     ASSERT_EQ(bitmap, expected_result);
 }
 
