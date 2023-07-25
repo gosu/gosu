@@ -8,15 +8,9 @@ namespace Gosu
     class EmptyImageData : public ImageData
     {
     public:
-        int width() const override //
-        {
-            return 0;
-        }
+        int width() const override { return 0; }
 
-        int height() const override //
-        {
-            return 0;
-        }
+        int height() const override { return 0; }
 
         void draw(double, double, Color, double, double, Color, //
                   double, double, Color, double, double, Color, //
@@ -24,24 +18,13 @@ namespace Gosu
         {
         }
 
-        GLTexInfo* gl_tex_info() const override //
-        {
-            return nullptr;
-        }
+        GLTexInfo* gl_tex_info() const override { return nullptr; }
 
-        Bitmap to_bitmap() const override //
-        {
-            return Bitmap();
-        }
+        Bitmap to_bitmap() const override { return Bitmap(); }
 
-        std::unique_ptr<ImageData> subimage(const Rect&) const override //
-        {
-            return nullptr;
-        }
+        std::unique_ptr<ImageData> subimage(const Rect&) const override { return nullptr; }
 
-        void insert(const Bitmap&, int x, int y) override //
-        {
-        }
+        void insert(const Bitmap&, int, int) override { }
 
         static const std::shared_ptr<EmptyImageData>& instance_ptr()
         {

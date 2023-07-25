@@ -448,7 +448,7 @@ Gosu::Input& Gosu::Window::input()
     return *m_impl->input;
 }
 
-SDL_Window* Gosu::Window::sdl_window()
+SDL_Window* Gosu::Window::sdl_window() const
 {
     return shared_window();
 }

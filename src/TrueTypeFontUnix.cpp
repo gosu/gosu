@@ -3,7 +3,6 @@
 
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
-#include "Log.hpp"
 #include "TrueTypeFont.hpp"
 #include <fontconfig/fontconfig.h>
 #include <map>
@@ -15,8 +14,6 @@ const unsigned char* Gosu::ttf_data_by_name(const std::string& font_name, unsign
 
     auto& ttf_ptr = ttf_file_cache[make_pair(font_name, font_flags)];
     if (ttf_ptr) return ttf_ptr;
-
-    log("Trying to find a font named '%s', flags=%x", font_name.c_str(), font_flags);
 
     static FcConfig* config = FcInitLoadConfigAndFonts();
     if (config) {
@@ -30,8 +27,6 @@ const unsigned char* Gosu::ttf_data_by_name(const std::string& font_name, unsign
         FcObjectSet* props = FcObjectSetBuild(FC_FILE, FC_WEIGHT, FC_SLANT, nullptr);
 
         if (FcFontSet* fonts = FcFontList(config, pattern, props)) {
-            log("Looking for the best candidate among %d matching fonts", (int) fonts->nfont);
-
             // Among all matching fonts, find the variant that is the best fit for our font_flags.
             std::string best_filename;
             int best_diff;
@@ -71,7 +66,6 @@ const unsigned char* Gosu::ttf_data_by_name(const std::string& font_name, unsign
                 }
             }
             if (!best_filename.empty()) {
-                log("Loading best candidate '%s'", best_filename.c_str());
                 ttf_ptr = ttf_data_from_file(best_filename.c_str());
             }
 
@@ -98,7 +92,6 @@ static const unsigned char* ttf_data_of_default_sans_serif_font()
     if (match_result == FcResultMatch) {
         FcChar8* filename;
         if (FcPatternGetString(pattern, FC_FILE, 0, &filename) == FcResultMatch) {
-            Gosu::log("Found the default sans-serif font: '%s'", filename);
             ttf_ptr = Gosu::ttf_data_from_file(reinterpret_cast<char*>(filename));
         }
     }

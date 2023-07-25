@@ -147,24 +147,24 @@ void* Gosu::Window::uikit_window() const
     return (__bridge void*) m_impl->window;
 }
 
-int Gosu::screen_width(Window*)
+int Gosu::screen_width(const Window*)
 {
     return available_width() * [UIScreen mainScreen].scale;
 }
 
-int Gosu::screen_height(Window*)
+int Gosu::screen_height(const Window*)
 {
     return available_height() * [UIScreen mainScreen].scale;
 }
 
-int Gosu::available_width(Window*)
+int Gosu::available_width(const Window*)
 {
     static CGSize screen_size = [UIScreen mainScreen].bounds.size;
     static CGFloat width = MAX(screen_size.width, screen_size.height);
     return width;
 }
 
-int Gosu::available_height(Window*)
+int Gosu::available_height(const Window*)
 {
     static CGSize screen_size = [UIScreen mainScreen].bounds.size;
     static CGFloat height = MIN(screen_size.width, screen_size.height);

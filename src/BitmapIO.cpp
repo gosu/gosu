@@ -54,7 +54,7 @@ Gosu::Bitmap Gosu::load_image(const Buffer& buffer)
     Gosu::Bitmap bitmap(x, y, std::move(pixel_buffer));
 
     // If we just read a BMP file, we want to apply a color key.
-    if (buffer.size() > 2 && *buffer.data() == 'B' && *(buffer.data() + 1) == 'M') {
+    if (buffer.size() > 2 && buffer.data()[0] == 'B' && buffer.data()[1] == 'M') {
         bitmap.apply_color_key(Gosu::Color::FUCHSIA);
     }
 

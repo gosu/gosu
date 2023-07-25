@@ -1,13 +1,13 @@
 #include <Gosu/Platform.hpp>
-#ifndef GOSU_IS_IPHONE // iPhone definitions live in WindowUIKit.cpp
+#ifndef GOSU_IS_IPHONE // Definitions for iOS live in WindowUIKit.cpp
 
 #include <Gosu/Window.hpp>
 #include "GraphicsImpl.hpp"
 #include <SDL.h>
 
-static SDL_DisplayMode display_mode(Gosu::Window* window)
+static SDL_DisplayMode display_mode(const Gosu::Window* window)
 {
-    static struct VideoSubsystem
+    static const struct VideoSubsystem : Gosu::Noncopyable
     {
         VideoSubsystem() { SDL_InitSubSystem(SDL_INIT_VIDEO); };
         ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
@@ -19,12 +19,12 @@ static SDL_DisplayMode display_mode(Gosu::Window* window)
     return result;
 }
 
-int Gosu::screen_width(Window* window)
+int Gosu::screen_width(const Window* window)
 {
     return display_mode(window).w;
 }
 
-int Gosu::screen_height(Window* window)
+int Gosu::screen_height(const Window* window)
 {
     return display_mode(window).h;
 }
@@ -32,7 +32,7 @@ int Gosu::screen_height(Window* window)
 #ifdef GOSU_IS_MAC
 #import <AppKit/AppKit.h>
 
-static SDL_Rect max_window_size(Gosu::Window* window)
+static SDL_Rect max_window_size(const Gosu::Window* window)
 {
     // The extra size that a window needs depends on its style.
     // This logic must be kept in sync with SDL_cocoawindow.m to be 100% accurate.
@@ -68,13 +68,13 @@ static SDL_Rect max_window_size(Gosu::Window* window)
 #include <windows.h>
 #pragma comment(lib, "Dwmapi.lib")
 
-static SDL_Rect max_window_size(Gosu::Window* window)
+static SDL_Rect max_window_size(const Gosu::Window* window)
 {
     // Replicate SDL's WIN_GetWindowBordersSize implementation (https://github.com/libsdl-org/SDL/blob/9f71a809e9bd6fbb5fa401a45c1537fc26abc1b4/src/video/windows/SDL_windowswindow.c#L514-L554)
     // until it's patched to ignore the window drop shadow (window border is 1px but with drop shadow it's reported as 8px)
     // REF: https://github.com/libsdl-org/SDL/issues/3835
 
-    static struct VideoSubsystem
+    static const struct VideoSubsystem : Gosu::Noncopyable
     {
         VideoSubsystem() { SDL_InitSubSystem(SDL_INIT_VIDEO); };
         ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
@@ -137,9 +137,9 @@ static SDL_Rect max_window_size(Gosu::Window* window)
 #endif
 
 #ifdef GOSU_IS_X
-static SDL_Rect max_window_size(Gosu::Window* window)
+static SDL_Rect max_window_size(const Gosu::Window* window)
 {
-    static struct VideoSubsystem
+    static const struct VideoSubsystem : Gosu::Noncopyable
     {
         VideoSubsystem() { SDL_InitSubSystem(SDL_INIT_VIDEO); };
         ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
@@ -158,12 +158,12 @@ static SDL_Rect max_window_size(Gosu::Window* window)
 }
 #endif
 
-int Gosu::available_width(Window* window)
+int Gosu::available_width(const Window* window)
 {
     return max_window_size(window).w;
 }
 
-int Gosu::available_height(Window* window)
+int Gosu::available_height(const Window* window)
 {
     return max_window_size(window).h;
 }
