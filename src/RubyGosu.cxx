@@ -2180,21 +2180,20 @@ namespace Swig {
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-#define SWIGTYPE_p_Buffer swig_types[0]
-#define SWIGTYPE_p_Gosu__Channel swig_types[1]
-#define SWIGTYPE_p_Gosu__Color swig_types[2]
-#define SWIGTYPE_p_Gosu__Font swig_types[3]
-#define SWIGTYPE_p_Gosu__GLTexInfo swig_types[4]
-#define SWIGTYPE_p_Gosu__Image swig_types[5]
-#define SWIGTYPE_p_Gosu__Sample swig_types[6]
-#define SWIGTYPE_p_Gosu__Song swig_types[7]
-#define SWIGTYPE_p_Gosu__TextInput swig_types[8]
-#define SWIGTYPE_p_Gosu__Window swig_types[9]
-#define SWIGTYPE_p_char swig_types[10]
-#define SWIGTYPE_p_double swig_types[11]
-#define SWIGTYPE_p_std__string swig_types[12]
-static swig_type_info *swig_types[14];
-static swig_module_info swig_module = {swig_types, 13, 0, 0, 0, 0};
+#define SWIGTYPE_p_Gosu__Channel swig_types[0]
+#define SWIGTYPE_p_Gosu__Color swig_types[1]
+#define SWIGTYPE_p_Gosu__Font swig_types[2]
+#define SWIGTYPE_p_Gosu__GLTexInfo swig_types[3]
+#define SWIGTYPE_p_Gosu__Image swig_types[4]
+#define SWIGTYPE_p_Gosu__Sample swig_types[5]
+#define SWIGTYPE_p_Gosu__Song swig_types[6]
+#define SWIGTYPE_p_Gosu__TextInput swig_types[7]
+#define SWIGTYPE_p_Gosu__Window swig_types[8]
+#define SWIGTYPE_p_char swig_types[9]
+#define SWIGTYPE_p_double swig_types[10]
+#define SWIGTYPE_p_std__string swig_types[11]
+static swig_type_info *swig_types[13];
+static swig_module_info swig_module = {swig_types, 12, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -8193,7 +8192,22 @@ free_Gosu_Channel(void *self) {
 static swig_class SwigClassSample;
 
 SWIGINTERN VALUE
-_wrap_new_Sample__SWIG_0(int argc, VALUE *argv, VALUE self) {
+#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
+_wrap_Sample_allocate(VALUE self)
+#else
+_wrap_Sample_allocate(int argc, VALUE *argv, VALUE self)
+#endif
+{
+  VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_Gosu__Sample);
+#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
+  rb_obj_call_init(vresult, argc, argv);
+#endif
+  return vresult;
+}
+
+
+SWIGINTERN VALUE
+_wrap_new_Sample(int argc, VALUE *argv, VALUE self) {
   std::string *arg1 = 0 ;
   int res1 = SWIG_OLDOBJ ;
   const char *classname SWIGUNUSED = "Gosu::Sample";
@@ -8227,96 +8241,6 @@ _wrap_new_Sample__SWIG_0(int argc, VALUE *argv, VALUE self) {
   return self;
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
-_wrap_Sample_allocate(VALUE self)
-#else
-_wrap_Sample_allocate(int argc, VALUE *argv, VALUE self)
-#endif
-{
-  VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_Gosu__Sample);
-#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
-  rb_obj_call_init(vresult, argc, argv);
-#endif
-  return vresult;
-}
-
-
-SWIGINTERN VALUE
-_wrap_new_Sample__SWIG_1(int argc, VALUE *argv, VALUE self) {
-  Buffer arg1 ;
-  void *argp1 ;
-  int res1 = 0 ;
-  const char *classname SWIGUNUSED = "Gosu::Sample";
-  Gosu::Sample *result = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  {
-    res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Buffer,  0 );
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Buffer","Sample", 1, argv[0] )); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Buffer","Sample", 1, argv[0]));
-    } else {
-      arg1 = *(reinterpret_cast< Buffer * >(argp1));
-    }
-  }
-  {
-    try {
-      result = (Gosu::Sample *)new Gosu::Sample(arg1);
-      DATA_PTR(self) = result;
-      SWIG_RubyAddTracking(result, self);
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return self;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE _wrap_new_Sample(int nargs, VALUE *args, VALUE self) {
-  int argc;
-  VALUE argv[1];
-  int ii;
-  
-  argc = nargs;
-  if (argc > 1) SWIG_fail;
-  for (ii = 0; (ii < argc); ++ii) {
-    argv[ii] = args[ii];
-  }
-  if (argc == 1) {
-    int _v = 0;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Buffer, SWIG_POINTER_NO_NULL);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_Sample__SWIG_1(nargs, args, self);
-    }
-  }
-  if (argc == 1) {
-    int _v = 0;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_Sample__SWIG_0(nargs, args, self);
-    }
-  }
-  
-fail:
-  Ruby_Format_OverloadedError( argc, 1, "Sample.new", 
-    "    Sample.new(std::string const &filename)\n"
-    "    Sample.new(Buffer buffer)\n");
-  
   return Qnil;
 }
 
@@ -8461,7 +8385,22 @@ free_Gosu_Sample(void *self) {
 static swig_class SwigClassSong;
 
 SWIGINTERN VALUE
-_wrap_new_Song__SWIG_0(int argc, VALUE *argv, VALUE self) {
+#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
+_wrap_Song_allocate(VALUE self)
+#else
+_wrap_Song_allocate(int argc, VALUE *argv, VALUE self)
+#endif
+{
+  VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_Gosu__Song);
+#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
+  rb_obj_call_init(vresult, argc, argv);
+#endif
+  return vresult;
+}
+
+
+SWIGINTERN VALUE
+_wrap_new_Song(int argc, VALUE *argv, VALUE self) {
   std::string *arg1 = 0 ;
   int res1 = SWIG_OLDOBJ ;
   const char *classname SWIGUNUSED = "Gosu::Song";
@@ -8495,96 +8434,6 @@ _wrap_new_Song__SWIG_0(int argc, VALUE *argv, VALUE self) {
   return self;
 fail:
   if (SWIG_IsNewObj(res1)) delete arg1;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
-_wrap_Song_allocate(VALUE self)
-#else
-_wrap_Song_allocate(int argc, VALUE *argv, VALUE self)
-#endif
-{
-  VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_Gosu__Song);
-#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
-  rb_obj_call_init(vresult, argc, argv);
-#endif
-  return vresult;
-}
-
-
-SWIGINTERN VALUE
-_wrap_new_Song__SWIG_1(int argc, VALUE *argv, VALUE self) {
-  Buffer arg1 ;
-  void *argp1 ;
-  int res1 = 0 ;
-  const char *classname SWIGUNUSED = "Gosu::Song";
-  Gosu::Song *result = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  {
-    res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Buffer,  0 );
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Buffer","Song", 1, argv[0] )); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Buffer","Song", 1, argv[0]));
-    } else {
-      arg1 = *(reinterpret_cast< Buffer * >(argp1));
-    }
-  }
-  {
-    try {
-      result = (Gosu::Song *)new Gosu::Song(arg1);
-      DATA_PTR(self) = result;
-      SWIG_RubyAddTracking(result, self);
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  return self;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE _wrap_new_Song(int nargs, VALUE *args, VALUE self) {
-  int argc;
-  VALUE argv[1];
-  int ii;
-  
-  argc = nargs;
-  if (argc > 1) SWIG_fail;
-  for (ii = 0; (ii < argc); ++ii) {
-    argv[ii] = args[ii];
-  }
-  if (argc == 1) {
-    int _v = 0;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_Buffer, SWIG_POINTER_NO_NULL);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_Song__SWIG_1(nargs, args, self);
-    }
-  }
-  if (argc == 1) {
-    int _v = 0;
-    int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_Song__SWIG_0(nargs, args, self);
-    }
-  }
-  
-fail:
-  Ruby_Format_OverloadedError( argc, 1, "Song.new", 
-    "    Song.new(std::string const &filename)\n"
-    "    Song.new(Buffer buffer)\n");
-  
   return Qnil;
 }
 
@@ -12410,7 +12259,6 @@ fail:
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
-static swig_type_info _swigt__p_Buffer = {"_p_Buffer", "Buffer *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Channel = {"_p_Gosu__Channel", "Gosu::Channel *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Color = {"_p_Gosu__Color", "Gosu::Color *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Gosu__Font = {"_p_Gosu__Font", "Gosu::Font *", 0, 0, (void*)0, 0};
@@ -12425,7 +12273,6 @@ static swig_type_info _swigt__p_double = {"_p_double", "Gosu::ZPos *|double *", 
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
-  &_swigt__p_Buffer,
   &_swigt__p_Gosu__Channel,
   &_swigt__p_Gosu__Color,
   &_swigt__p_Gosu__Font,
@@ -12440,7 +12287,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_std__string,
 };
 
-static swig_cast_info _swigc__p_Buffer[] = {  {&_swigt__p_Buffer, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Channel[] = {  {&_swigt__p_Gosu__Channel, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Color[] = {  {&_swigt__p_Gosu__Color, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Gosu__Font[] = {  {&_swigt__p_Gosu__Font, 0, 0, 0},{0, 0, 0, 0}};
@@ -12455,7 +12301,6 @@ static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0
 static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
-  _swigc__p_Buffer,
   _swigc__p_Gosu__Channel,
   _swigc__p_Gosu__Color,
   _swigc__p_Gosu__Font,
