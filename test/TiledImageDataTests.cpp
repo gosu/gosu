@@ -37,9 +37,9 @@ TEST_F(TiledImageDataTests, direct_creation)
         ASSERT_NE(tiled_data.subimage(rect)->gl_tex_info(), nullptr);
     }
 
-    const Gosu::Bitmap red_bitmap(10, 10, Gosu::Color::RED);
-    source.insert(red_bitmap, 4, 3);
-    tiled_data.insert(red_bitmap, 4, 3);
+    const Gosu::Bitmap other_bitmap = Gosu::load_image_file("test_image_io/alpha-bmp24.bmp");
+    source.insert(other_bitmap, 4, 1);
+    tiled_data.insert(other_bitmap, 4, 1);
     ASSERT_EQ(source, tiled_data.to_bitmap());
 
     ASSERT_THROW(Gosu::TiledImageData(source, 0, Gosu::IF_RETRO), std::invalid_argument);
