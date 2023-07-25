@@ -52,9 +52,9 @@ void Gosu::Bitmap::blend_pixel(int x, int y, Color c)
         return;
     }
 
-    Color out = pixel(x, y);
-    if (out.alpha == 0) {
-        pixel(x, y) = c;
+    Color& out = pixel(x, y);
+    if (out.alpha == 0 || c.alpha == 255) {
+        out = c;
         return;
     }
 
@@ -64,8 +64,6 @@ void Gosu::Bitmap::blend_pixel(int x, int y, Color c)
     out.red = ((c.red * c.alpha + out.red * inv_alpha) / out.alpha);
     out.green = ((c.green * c.alpha + out.green * inv_alpha) / out.alpha);
     out.blue = ((c.blue * c.alpha + out.blue * inv_alpha) / out.alpha);
-
-    pixel(x, y) = out;
 }
 
 void Gosu::Bitmap::insert(int x, int y, const Bitmap& source)
