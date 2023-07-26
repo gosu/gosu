@@ -3,6 +3,7 @@
 #include <Gosu/Fwd.hpp>
 #include "BinPacker.hpp"
 #include "TexChunk.hpp"
+#include <cstdint>
 #include <memory>
 
 namespace Gosu

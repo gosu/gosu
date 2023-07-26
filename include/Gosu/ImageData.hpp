@@ -5,6 +5,7 @@
 #include <Gosu/GraphicsBase.hpp>
 #include <Gosu/Platform.hpp>
 #include <Gosu/Utility.hpp>
+#include <cstdint>
 #include <memory>
 
 namespace Gosu
@@ -13,7 +14,7 @@ namespace Gosu
     /// data. Can be retrieved from some images to use them in OpenGL operations.
     struct GLTexInfo
     {
-        unsigned tex_name;
+        std::uint32_t tex_name;
         double left, right, top, bottom;
     };
 

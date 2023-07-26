@@ -3,8 +3,8 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
 #include <Gosu/Utility.hpp>
+#include <cstdint>
 #include <memory>
-#include <stdexcept>
 
 namespace Gosu
 {
@@ -23,10 +23,12 @@ namespace Gosu
         int width() const override { return m_rect.width; }
         int height() const override { return m_rect.height; }
 
-        unsigned tex_name() const { return m_info.tex_name; }
+        std::uint32_t tex_name() const { return m_info.tex_name; }
 
-        void draw(double x1, double y1, Color c1, double x2, double y2, Color c2, //
-                  double x3, double y3, Color c3, double x4, double y4, Color c4, //
+        void draw(double x1, double y1, Color c1, //
+                  double x2, double y2, Color c2, //
+                  double x3, double y3, Color c3, //
+                  double x4, double y4, Color c4, //
                   ZPos z, BlendMode mode) const override;
 
         const GLTexInfo* gl_tex_info() const override { return &m_info; }
