@@ -6,6 +6,7 @@ Checks: >-
   -bugprone-exception-escape,
   -cert-err58-cpp,
   -cppcoreguidelines-avoid-c-arrays,
+  -cppcoreguidelines-avoid-const-or-ref-data-members,
   -cppcoreguidelines-avoid-magic-numbers,
   -cppcoreguidelines-init-variables,
   -cppcoreguidelines-owning-memory,

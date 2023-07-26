@@ -40,7 +40,7 @@ Gosu::OffScreenTarget::OffScreenTarget(int width, int height, unsigned image_fla
     texture = make_shared<Texture>(width, height, image_flags & IF_RETRO);
 
     // Besides the texture, also create a renderbuffer for depth information.
-    // Gosu doesn't use this, but custom OpenGL code could might.
+    // Gosu doesn't use this, but custom OpenGL code might.
     GOSU_LOAD_GL_EXT(glGenRenderbuffers, PFNGLGENRENDERBUFFERSPROC);
     glGenRenderbuffers(1, &renderbuffer);
 

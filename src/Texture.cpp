@@ -1,6 +1,7 @@
 #include "Texture.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Platform.hpp>
+#include "GraphicsImpl.hpp"
 #include "TexChunk.hpp"
 #include <stdexcept>
 
@@ -13,13 +14,19 @@ Gosu::Texture::Texture(int width, int height, bool retro)
     : m_bin_packer(width, height),
       m_retro(retro)
 {
+    if (width <= 0 || height <= 0) {
+        throw std::invalid_argument("Gosu::Texture must not be empty");
+    }
+
     ensure_current_context();
 
     // Create texture name.
     glGenTextures(1, &m_tex_name);
+    // GCOV_EXCL_START: Hard to simulate out-of-texture situations.
     if (m_tex_name == static_cast<GLuint>(-1)) {
         throw std::runtime_error("Failed to allocate OpenGL texture");
     }
+    // GCOV_EXCL_END
 
     // Create empty texture.
     glBindTexture(GL_TEXTURE_2D, m_tex_name);
@@ -92,7 +99,7 @@ Gosu::Bitmap Gosu::Texture::to_bitmap(const Rect& rect) const
 
     Bitmap bitmap(width(), height());
     glBindTexture(GL_TEXTURE_2D, m_tex_name);
-    // TODO: There are ways to retrieve only part of a texture, which we should use sooner or later.
+    // This should use glGetTextureSubImage where available: https://stackoverflow.com/a/38148494
     glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmap.data());
 
     if (rect != Rect::covering(*this)) {
