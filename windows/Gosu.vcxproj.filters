@@ -596,9 +596,6 @@
     <ClInclude Include="..\src\Iconv.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Log.hpp">
-      <Filter>Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Macro.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>

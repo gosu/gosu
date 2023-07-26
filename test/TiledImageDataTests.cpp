@@ -39,9 +39,7 @@ TEST_F(TiledImageDataTests, direct_creation)
 
     const Gosu::Bitmap other_bitmap = Gosu::load_image_file("test_image_io/alpha-bmp24.bmp");
     source.insert(other_bitmap, 4, 1);
-    Gosu::save_image_file(source, "/Users/jlnr/Desktop/source.png");
     tiled_data.insert(other_bitmap, 4, 1);
-    Gosu::save_image_file(tiled_data.to_bitmap(), "/Users/jlnr/Desktop/tiled_data.png");
     ASSERT_EQ(source, tiled_data.to_bitmap());
 
     ASSERT_THROW(Gosu::TiledImageData(source, 0, Gosu::IF_RETRO), std::invalid_argument);

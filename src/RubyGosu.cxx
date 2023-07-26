@@ -2922,6 +2922,22 @@ SWIGINTERN double Gosu_Font_markup_width(Gosu::Font *self,std::string const &mar
       }
       return self->markup_width(markup) * scale_x;
     }
+
+SWIGINTERN int
+SWIG_AsVal_unsigned_SS_int (VALUE obj, unsigned int *val)
+{
+  unsigned long v;
+  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
+  if (SWIG_IsOK(res)) {
+    if ((v > UINT_MAX)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = static_cast< unsigned int >(v);
+    }
+  }  
+  return res;
+}
+
 SWIGINTERN Gosu::Image *new_Gosu_Image(VALUE source,VALUE options=0){
         Gosu::Bitmap bmp;
         Gosu::load_bitmap(bmp, source);
@@ -3267,22 +3283,6 @@ SWIGINTERN void Gosu_TextInput_set_selection_start(Gosu::TextInput *self,VALUE s
         std::string prefix = StringValueCStr(rb_prefix);
         self->set_selection_start(std::min(prefix.length(), self->text().length()));
     }
-
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_int (VALUE obj, unsigned int *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
-  if (SWIG_IsOK(res)) {
-    if ((v > UINT_MAX)) {
-      return SWIG_OverflowError;
-    } else {
-      if (val) *val = static_cast< unsigned int >(v);
-    }
-  }  
-  return res;
-}
-
 SWIGINTERN void Gosu_Window_set_width(Gosu::Window *self,unsigned int width){
         self->resize(width, self->height(), self->fullscreen());
     }
@@ -6201,10 +6201,10 @@ static swig_class SwigClassGLTexInfo;
 SWIGINTERN VALUE
 _wrap_GLTexInfo_tex_name_set(int argc, VALUE *argv, VALUE self) {
   Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
-  int arg2 ;
+  unsigned int arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int val2 ;
+  unsigned int val2 ;
   int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
@@ -6215,11 +6215,11 @@ _wrap_GLTexInfo_tex_name_set(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::GLTexInfo *","tex_name", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  ecode2 = SWIG_AsVal_unsigned_SS_int(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","tex_name", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned int","tex_name", 2, argv[0] ));
   } 
-  arg2 = static_cast< int >(val2);
+  arg2 = static_cast< unsigned int >(val2);
   if (arg1) (arg1)->tex_name = arg2;
   return Qnil;
 fail:
@@ -6232,7 +6232,7 @@ _wrap_GLTexInfo_tex_name_get(int argc, VALUE *argv, VALUE self) {
   Gosu::GLTexInfo *arg1 = (Gosu::GLTexInfo *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int result;
+  unsigned int result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
@@ -6243,8 +6243,8 @@ _wrap_GLTexInfo_tex_name_get(int argc, VALUE *argv, VALUE self) {
     SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::GLTexInfo *","tex_name", 1, self )); 
   }
   arg1 = reinterpret_cast< Gosu::GLTexInfo * >(argp1);
-  result = (int) ((arg1)->tex_name);
-  vresult = SWIG_From_int(static_cast< int >(result));
+  result = (unsigned int) ((arg1)->tex_name);
+  vresult = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
   return vresult;
 fail:
   return Qnil;
@@ -10684,13 +10684,13 @@ _wrap_screen_width(int argc, VALUE *argv, VALUE self) {
   if (argc > 0) {
     res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","Gosu::screen_width", 1, argv[0] )); 
+      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","Gosu::screen_width", 1, argv[0] )); 
     }
     arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   }
   {
     try {
-      result = (int)Gosu::screen_width(arg1);
+      result = (int)Gosu::screen_width((Gosu::Window const *)arg1);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -10717,13 +10717,13 @@ _wrap_screen_height(int argc, VALUE *argv, VALUE self) {
   if (argc > 0) {
     res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","Gosu::screen_height", 1, argv[0] )); 
+      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","Gosu::screen_height", 1, argv[0] )); 
     }
     arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   }
   {
     try {
-      result = (int)Gosu::screen_height(arg1);
+      result = (int)Gosu::screen_height((Gosu::Window const *)arg1);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -10750,13 +10750,13 @@ _wrap_available_width(int argc, VALUE *argv, VALUE self) {
   if (argc > 0) {
     res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","Gosu::available_width", 1, argv[0] )); 
+      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","Gosu::available_width", 1, argv[0] )); 
     }
     arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   }
   {
     try {
-      result = (int)Gosu::available_width(arg1);
+      result = (int)Gosu::available_width((Gosu::Window const *)arg1);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
@@ -10783,13 +10783,13 @@ _wrap_available_height(int argc, VALUE *argv, VALUE self) {
   if (argc > 0) {
     res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_Gosu__Window, 0 |  0 );
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window *","Gosu::available_height", 1, argv[0] )); 
+      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Gosu::Window const *","Gosu::available_height", 1, argv[0] )); 
     }
     arg1 = reinterpret_cast< Gosu::Window * >(argp1);
   }
   {
     try {
-      result = (int)Gosu::available_height(arg1);
+      result = (int)Gosu::available_height((Gosu::Window const *)arg1);
     }
     catch (const std::exception& e) {
       SWIG_exception(SWIG_RuntimeError, e.what());
