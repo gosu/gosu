@@ -24,8 +24,6 @@ namespace Gosu
         bool retro() const { return m_retro; }
 
         [[nodiscard]] std::unique_ptr<TexChunk> try_alloc(const Bitmap& bitmap, int padding);
-        void block(const Rect& rect);
-        void free(const Rect& rect);
 
         Bitmap to_bitmap(const Rect& rect) const;
     };

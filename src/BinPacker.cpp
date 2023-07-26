@@ -1,139 +1,155 @@
 #include <Gosu/Utility.hpp>
 #include "BinPacker.hpp"
-#include <stdexcept>
-#include <vector>
-
-struct Gosu::BinPacker::Impl : private Gosu::Noncopyable
-{
-    int width, height;
-
-    std::vector<Rect> blocks;
-    int first_x, first_y;
-    int max_w, max_h;
-
-    Impl(int width, int height)
-        : width(width),
-          height(height),
-          first_x(0),
-          first_y(0),
-          max_w(width),
-          max_h(height)
-    {
-    }
-
-    void mark_block_used(const Rect& block)
-    {
-        first_x += block.width;
-        if (first_x + block.width >= width) {
-            first_x = 0;
-            first_y += block.height;
-        }
-        blocks.push_back(block);
-    }
-
-    bool is_block_free(const Rect& block) const
-    {
-        // right and bottom are exclusive (not part of the block).
-        int right = block.x + block.width;
-        int bottom = block.y + block.height;
-
-        // Block isn't valid.
-        if (right > width || bottom > height) {
-            return false;
-        }
-
-        // Test if the block collides with any existing rects.
-        for (const auto& b : blocks) {
-            if (b.x < right && block.x < b.x + b.width && b.y < bottom
-                && block.y < b.y + b.height) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-};
+#include <algorithm>
 
 Gosu::BinPacker::BinPacker(int width, int height)
-    : pimpl(new Impl(width, height))
-{
-    pimpl->width = width;
-    pimpl->height = height;
-}
-
-Gosu::BinPacker::~BinPacker()
+    : m_width(width),
+      m_height(height),
+      m_free_rects { Rect { 0, 0, width, height } }
 {
 }
 
-int Gosu::BinPacker::width() const
-{
-    return pimpl->width;
-}
-
-int Gosu::BinPacker::height() const
-{
-    return pimpl->height;
-}
-
-std::optional<Gosu::Rect> Gosu::BinPacker::find_rect(int width, int height)
+std::shared_ptr<Gosu::Rect> Gosu::BinPacker::alloc(int width, int height)
 {
     // The rect wouldn't even fit onto the texture!
-    if (width > pimpl->width || height > pimpl->height) {
-        return std::nullopt;
+    if (width > m_width || height > m_height) {
+        return nullptr;
     }
 
-    // We know there's no space left.
-    if (width > pimpl->max_w && height > pimpl->max_h) {
-        return std::nullopt;
-    }
+    Rect* best_rect = nullptr;
+    int best_weight = 0;
 
-    // Start to look for a place next to the last returned rect. Chances are
-    // good we'll find a place there.
-    Rect b { pimpl->first_x, pimpl->first_y, width, height };
-    if (pimpl->is_block_free(b)) {
-        return b;
-    }
-
-    // Brute force: Look for a free place on this texture.
-    for (b.y = 0; b.y <= pimpl->height - height; b.y += 16) {
-        for (b.x = 0; b.x <= pimpl->width - width; b.x += 8) {
-            if (!pimpl->is_block_free(b)) {
-                continue;
-            }
-
-            // Found a nice place!
-
-            // Try to make up for the large for ()-stepping.
-            while (b.y > 0 && pimpl->is_block_free(Rect { b.x, b.y - 1, b.width, b.height })) {
-                --b.y;
-            }
-            while (b.x > 0 && pimpl->is_block_free(Rect { b.x - 1, b.y, b.width, b.height })) {
-                --b.x;
-            }
-
-            return b;
+    for (Rect& free_rect : m_free_rects) {
+        // This implements the "Best Short Side Fit" (BSSF) metric for choosing a free area.
+        int weight = std::min(free_rect.width - width, free_rect.height - height);
+        if (weight < 0) {
+            continue;
+        }
+        if (best_rect == nullptr || weight < best_weight) {
+            best_rect = &free_rect;
+            best_weight = weight;
         }
     }
 
-    // So there was no space for the bitmap. Remember this for later.
-    pimpl->max_w = width - 1;
-    pimpl->max_h = height - 1;
-    return std::nullopt;
-}
-
-void Gosu::BinPacker::block(const Rect& rect)
-{
-    pimpl->mark_block_used(rect);
-}
-
-void Gosu::BinPacker::free(const Rect& rect)
-{
-    const auto iterator = std::find(pimpl->blocks.begin(), pimpl->blocks.end(), rect);
-    if (iterator == pimpl->blocks.end()) {
-        throw std::logic_error("Tried to free an invalid block");
+    // We didn't find a single free rectangle that can fit the required size? Exit.
+    if (best_rect == nullptr) {
+        return nullptr;
     }
-    pimpl->blocks.erase(iterator);
-    // Be optimistic again, since we might have deleted the largest/only block.
-    pimpl->max_w = pimpl->width - 1;
-    pimpl->max_h = pimpl->height - 1;
+
+    auto free_rect = [this](const Rect* rect) {
+        if (rect) {
+            m_free_rects.push_back(*rect);
+            merge_neighbors(m_free_rects.size() - 1);
+        }
+    };
+    // We found a free area, place the result in the top left corner of it.
+    std::shared_ptr<Rect> result(new Rect { best_rect->x, best_rect->y, width, height }, free_rect);
+
+    // We need to split the remaining rectangle into two. We use the axis with the longer side.
+    // (Called "Longer Axis Split Rule", "-LAS" in the paper.)
+    if (best_rect->width < best_rect->height) {
+        // result | best_rect'
+        // -------------------
+        //   new_rect_below
+
+        const Rect new_rect_below {
+            .x = best_rect->x,
+            .y = best_rect->y + height,
+            .width = best_rect->width,
+            .height = best_rect->height - height,
+        };
+
+        best_rect->x += width;
+        best_rect->width -= width;
+        best_rect->height = height;
+        if (best_rect->width == 0) {
+            m_free_rects.erase(m_free_rects.begin() + (best_rect - m_free_rects.data()));
+        }
+        else {
+            merge_neighbors(best_rect - m_free_rects.data());
+        }
+
+        if (new_rect_below.height != 0) {
+            free_rect(&new_rect_below);
+        }
+    } else {
+        // result     | new_rect_right
+        // -----------|
+        // best_rect' |
+
+        const Rect new_rect_right {
+            .x = best_rect->x + width,
+            .y = best_rect->y,
+            .width = best_rect->width - width,
+            .height = best_rect->height,
+        };
+
+        best_rect->y += height;
+        best_rect->height -= height;
+        best_rect->width = width;
+        if (best_rect->height == 0) {
+            m_free_rects.erase(m_free_rects.begin() + (best_rect - m_free_rects.data()));
+        }
+        else {
+            merge_neighbors(best_rect - m_free_rects.data());
+        }
+
+        if (new_rect_right.width != 0) {
+            free_rect(&new_rect_right);
+        }
+    }
+
+    return result;
+}
+
+void Gosu::BinPacker::merge_neighbors(int index)
+{
+    // Merge any of the other rectangles in the list into the one with the given index if they share
+    // any of their four sides.
+    for (int j = 0; j < m_free_rects.size(); ++j) {
+        Rect& rect = m_free_rects[index];
+
+        const Rect& other_rect = m_free_rects[j];
+        bool merged = false;
+        if (rect.x == other_rect.x && rect.width == other_rect.width) {
+            // Both rectangles are horizontally aligned.
+
+            if (rect.y == other_rect.y + other_rect.height) {
+                // rect is directly below other_rect, expand it upward.
+                rect.y = other_rect.y;
+                rect.height += other_rect.height;
+                merged = true;
+            }
+            else if (other_rect.y == rect.y + rect.height) {
+                // rect is directly above other_rect, expand it downward.
+                rect.height += other_rect.height;
+                merged = true;
+            }
+        }
+        else if (rect.y == other_rect.y && rect.height == other_rect.height) {
+            // Both rectangles are vertically aligned.
+
+            if (rect.x == other_rect.x + other_rect.width) {
+                // rect is directly to the right of other_rect, expand it to the left.
+                rect.x = other_rect.x;
+                rect.width += other_rect.width;
+                merged = true;
+            }
+            else if (other_rect.x == rect.x + rect.width) {
+                // rect is directly to the left of other_rect, expand it to the right.
+                rect.width += other_rect.width;
+                merged = true;
+            }
+        }
+
+        // If we merged two rectangles, then we need to start over because the longer sides of the
+        // combined rectangle might allow new mergers with other adjacent rectangles, and so on.
+        if (merged) {
+            m_free_rects.erase(m_free_rects.begin() + j);
+            if (j < index) {
+                --index;
+            }
+            j = -1;
+        }
+    }
 }

@@ -5,14 +5,16 @@
 #include "Texture.hpp"
 #include <stdexcept>
 
-Gosu::TexChunk::TexChunk(const std::shared_ptr<Texture>& texture, const Rect& rect)
+Gosu::TexChunk::TexChunk(const std::shared_ptr<Texture>& texture, const Rect& rect,
+                         const std::shared_ptr<void>& rect_handle)
     : m_texture(texture),
       m_rect(rect),
       m_info { .tex_name = texture->tex_name(),
                .left = 1.0 * m_rect.x / texture->width(),
                .right = 1.0 * (m_rect.x + m_rect.width) / texture->width(),
                .top = 1.0 * m_rect.y / texture->height(),
-               .bottom = 1.0 * (m_rect.y + m_rect.height) / texture->height() }
+               .bottom = 1.0 * (m_rect.y + m_rect.height) / texture->height() },
+      m_rect_handle(rect_handle)
 {
     if (!Rect::covering(*m_texture).contains(rect)) {
         throw std::invalid_argument("Gosu::TexChunk exceeds its Gosu::Texture");
@@ -20,12 +22,6 @@ Gosu::TexChunk::TexChunk(const std::shared_ptr<Texture>& texture, const Rect& re
     if (rect.width <= 0 || rect.height <= 0) {
         throw std::invalid_argument("Gosu::TexChunk cannot be empty");
     }
-    m_texture->block(m_rect);
-}
-
-Gosu::TexChunk::~TexChunk()
-{
-    m_texture->free(m_rect);
 }
 
 void Gosu::TexChunk::draw(double x1, double y1, Color c1, double x2, double y2, Color c2, //
@@ -65,7 +61,7 @@ std::unique_ptr<Gosu::ImageData> Gosu::TexChunk::subimage(const Rect& rect) cons
         throw std::invalid_argument("Gosu::TexChunk::subimage cannot exceed parent size");
     }
     const Rect nested_rect { m_rect.x + rect.x, m_rect.y + rect.y, rect.width, rect.height };
-    return std::make_unique<TexChunk>(m_texture, nested_rect);
+    return std::make_unique<TexChunk>(m_texture, nested_rect, m_rect_handle);
 }
 
 Gosu::Bitmap Gosu::TexChunk::to_bitmap() const

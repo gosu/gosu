@@ -60,7 +60,7 @@ Gosu::Texture::~Texture()
 
 std::unique_ptr<Gosu::TexChunk> Gosu::Texture::try_alloc(const Bitmap& bitmap, int padding)
 {
-    const std::optional<Rect> rect = m_bin_packer.find_rect(bitmap.width(), bitmap.height());
+    const std::shared_ptr<Rect> rect = m_bin_packer.alloc(bitmap.width(), bitmap.height());
 
     if (!rect) {
         return nullptr;
@@ -69,23 +69,13 @@ std::unique_ptr<Gosu::TexChunk> Gosu::Texture::try_alloc(const Bitmap& bitmap, i
     ensure_current_context();
 
     glBindTexture(GL_TEXTURE_2D, m_tex_name);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, rect->x, rect->y, rect->width, rect->height, Color::GL_FORMAT,
-                    GL_UNSIGNED_BYTE, bitmap.data());
+    glTexSubImage2D(GL_TEXTURE_2D, 0, rect->x, rect->y, rect->width, rect->height,
+                    Color::GL_FORMAT, GL_UNSIGNED_BYTE, bitmap.data());
 
-    // TODO: Can we merge this with TexChunk::insert and have TexChunk update its borders itself?
+    // TODO: Can we merge this with TexChunk::insert / have TexChunk update its borders itself?
     const Rect rect_without_padding { rect->x + padding, rect->y + padding,
                                       rect->width - 2 * padding, rect->height - 2 * padding };
-    return std::make_unique<TexChunk>(shared_from_this(), rect_without_padding);
-}
-
-void Gosu::Texture::block(const Rect& rect)
-{
-    m_bin_packer.block(rect);
-}
-
-void Gosu::Texture::free(const Rect& rect)
-{
-    m_bin_packer.free(rect);
+    return std::make_unique<TexChunk>(shared_from_this(), rect_without_padding, rect);
 }
 
 Gosu::Bitmap Gosu::Texture::to_bitmap(const Rect& rect) const

@@ -15,10 +15,11 @@ namespace Gosu
         const std::shared_ptr<Texture> m_texture;
         const Rect m_rect;
         const GLTexInfo m_info;
+        const std::shared_ptr<void> m_rect_handle;
 
     public:
-        TexChunk(const std::shared_ptr<Texture>& texture, const Rect& rect);
-        ~TexChunk() override;
+        TexChunk(const std::shared_ptr<Texture>& texture, const Rect& rect,
+                 const std::shared_ptr<void>& rect_handle);
 
         int width() const override { return m_rect.width; }
         int height() const override { return m_rect.height; }
