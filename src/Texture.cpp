@@ -7,6 +7,7 @@
 
 namespace Gosu
 {
+    // This variable has been declared in multiple places. Define it here, where it will be used.
     bool undocumented_retrofication = false;
 }
 
@@ -80,6 +81,9 @@ std::unique_ptr<Gosu::TexChunk> Gosu::Texture::try_alloc(const Bitmap& bitmap, i
 
 Gosu::Bitmap Gosu::Texture::to_bitmap(const Rect& rect) const
 {
+    if (!Rect::covering(*this).contains(rect))
+        throw std::runtime_error("");
+
 #ifdef GOSU_IS_OPENGLES
     // See here for one possible implementation: https://github.com/apitrace/apitrace/issues/70
     // (Could reuse a lot of code from OffScreenTarget)
