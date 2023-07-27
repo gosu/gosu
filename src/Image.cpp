@@ -8,8 +8,9 @@
 #include <stdexcept>
 
 Gosu::Image::Image()
-: m_data{EmptyImageData::instance_ptr()}
 {
+    static const auto default_data_ptr = std::make_shared<EmptyImageData>(0, 0);
+    m_data = default_data_ptr;
 }
 
 Gosu::Image::Image(const std::string& filename, unsigned image_flags)

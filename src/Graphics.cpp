@@ -4,6 +4,7 @@
 #include <Gosu/Utility.hpp>
 #include "DrawOp.hpp"
 #include "DrawOpQueue.hpp"
+#include "EmptyImageData.hpp"
 #include "GraphicsImpl.hpp"
 #include "Macro.hpp"
 #include "OffScreenTarget.hpp"
@@ -411,6 +412,10 @@ Gosu::Graphics::create_image(const Bitmap& source, const Rect& source_rect, unsi
 {
     if (! Rect::covering(source).contains(source_rect)) {
         throw std::invalid_argument("Source rectangle exceeds bitmap");
+    }
+
+    if (source_rect.empty()) {
+        return std::make_unique<EmptyImageData>(source_rect.width, source_rect.height);
     }
 
     // Backward compatibility: This used to be 'bool tileable'.

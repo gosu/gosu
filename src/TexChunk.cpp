@@ -19,9 +19,6 @@ Gosu::TexChunk::TexChunk(const std::shared_ptr<Texture>& texture, const Rect& re
     if (!Rect::covering(*m_texture).contains(rect)) {
         throw std::invalid_argument("Gosu::TexChunk exceeds its Gosu::Texture");
     }
-    if (rect.width <= 0 || rect.height <= 0) {
-        throw std::invalid_argument("Gosu::TexChunk cannot be empty");
-    }
 }
 
 void Gosu::TexChunk::draw(double x1, double y1, Color c1, double x2, double y2, Color c2, //
