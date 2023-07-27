@@ -11,9 +11,9 @@ Gosu::TexChunk::TexChunk(const std::shared_ptr<Texture>& texture, const Rect& re
       m_rect(rect),
       m_info { .tex_name = texture->tex_name(),
                .left = 1.0 * m_rect.x / texture->width(),
-               .right = 1.0 * (m_rect.x + m_rect.width) / texture->width(),
+               .right = 1.0 * m_rect.right() / texture->width(),
                .top = 1.0 * m_rect.y / texture->height(),
-               .bottom = 1.0 * (m_rect.y + m_rect.height) / texture->height() },
+               .bottom = 1.0 * m_rect.bottom() / texture->height() },
       m_rect_handle(rect_handle)
 {
     if (!Rect::covering(*m_texture).contains(rect)) {

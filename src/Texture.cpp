@@ -61,28 +61,35 @@ Gosu::Texture::~Texture()
 
 std::unique_ptr<Gosu::TexChunk> Gosu::Texture::try_alloc(const Bitmap& bitmap, int padding)
 {
-    const std::shared_ptr<Rect> rect = m_bin_packer.alloc(bitmap.width(), bitmap.height());
+    const std::optional<Rect> rect = m_bin_packer.alloc(bitmap.width(), bitmap.height());
 
     if (!rect) {
         return nullptr;
     }
 
+    std::shared_ptr<Rect> rect_ptr(new Rect(*rect), [texture = shared_from_this()](Rect* rect) {
+        if (rect) {
+            texture->m_bin_packer.free(*rect);
+        }
+    });
+
     ensure_current_context();
 
-    glBindTexture(GL_TEXTURE_2D, m_tex_name);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, rect->x, rect->y, rect->width, rect->height,
-                    Color::GL_FORMAT, GL_UNSIGNED_BYTE, bitmap.data());
-
     // TODO: Can we merge this with TexChunk::insert / have TexChunk update its borders itself?
+    glBindTexture(GL_TEXTURE_2D, m_tex_name);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, rect->x, rect->y, rect->width, rect->height, Color::GL_FORMAT,
+                    GL_UNSIGNED_BYTE, bitmap.data());
+
     const Rect rect_without_padding { rect->x + padding, rect->y + padding,
                                       rect->width - 2 * padding, rect->height - 2 * padding };
-    return std::make_unique<TexChunk>(shared_from_this(), rect_without_padding, rect);
+    return std::make_unique<TexChunk>(shared_from_this(), rect_without_padding, rect_ptr);
 }
 
 Gosu::Bitmap Gosu::Texture::to_bitmap(const Rect& rect) const
 {
-    if (!Rect::covering(*this).contains(rect))
+    if (!Rect::covering(*this).contains(rect)) {
         throw std::runtime_error("");
+    }
 
 #ifdef GOSU_IS_OPENGLES
     // See here for one possible implementation: https://github.com/apitrace/apitrace/issues/70

@@ -47,8 +47,8 @@ namespace Gosu
         int x = 0, y = 0;
         int width = 0, height = 0;
 
-        int right() const { return x + width - 1; }
-        int bottom() const { return y + height - 1; }
+        int right() const { return x + width; }
+        int bottom() const { return y + height; }
 
         bool empty() const { return width <= 0 || height <= 0; }
 
@@ -59,6 +59,7 @@ namespace Gosu
             return Rect { .x = 0, .y = 0, .width = object.width(), .height = object.height() };
         }
 
+        bool overlaps(const Rect& other) const;
         bool contains(const Rect& other) const;
 
         /// Makes sure that this rectangle does not exceed the bounding box.

@@ -20,7 +20,7 @@ namespace Gosu
 
         int width() const { return m_bin_packer.width(); }
         int height() const { return m_bin_packer.height(); }
-        std::uint32_t tex_name() const { return m_tex_name; };
+        std::uint32_t tex_name() const { return m_tex_name; }
         bool retro() const { return m_retro; }
 
         [[nodiscard]] std::unique_ptr<TexChunk> try_alloc(const Bitmap& bitmap, int padding);
