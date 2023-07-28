@@ -10,16 +10,25 @@ namespace Gosu
 {
     class Texture;
 
+    /// The most common ImageData implementation which uses a portion of, or a full OpenGL texture
+    /// to store image data.
     class TexChunk : public ImageData
     {
         const std::shared_ptr<Texture> m_texture;
         const Rect m_rect;
         const GLTexInfo m_info;
-        const std::shared_ptr<void> m_rect_handle;
+        const std::shared_ptr<const Rect> m_rect_handle;
 
     public:
+        /// @param texture The texture on which the image data resides.
+        /// @param rect The portion of the texture that will be represented by this TexChunk.
+        ///             This excludes any padding pixels.
+        /// @param rect_handle A shared_ptr that references the full rectangle that was allocated
+        ///                    for this TexChunk, including padding. When this TexChunk and all
+        ///                    of its subimages have been deleted, this rectangle will be reclaimed
+        ///                    for use by other image data.
         TexChunk(const std::shared_ptr<Texture>& texture, const Rect& rect,
-                 const std::shared_ptr<void>& rect_handle);
+                 const std::shared_ptr<const Rect>& rect_handle);
 
         int width() const override { return m_rect.width; }
         int height() const override { return m_rect.height; }

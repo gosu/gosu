@@ -61,17 +61,11 @@ Gosu::Texture::~Texture()
 
 std::unique_ptr<Gosu::TexChunk> Gosu::Texture::try_alloc(const Bitmap& bitmap, int padding)
 {
-    const std::optional<Rect> rect = m_bin_packer.alloc(bitmap.width(), bitmap.height());
+    const std::shared_ptr<const Rect> rect = m_bin_packer.alloc(bitmap.width(), bitmap.height());
 
     if (!rect) {
         return nullptr;
     }
-
-    std::shared_ptr<Rect> rect_ptr(new Rect(*rect), [texture = shared_from_this()](Rect* rect) {
-        if (rect) {
-            texture->m_bin_packer.free(*rect);
-        }
-    });
 
     ensure_current_context();
 
@@ -82,7 +76,7 @@ std::unique_ptr<Gosu::TexChunk> Gosu::Texture::try_alloc(const Bitmap& bitmap, i
 
     const Rect rect_without_padding { rect->x + padding, rect->y + padding,
                                       rect->width - 2 * padding, rect->height - 2 * padding };
-    return std::make_unique<TexChunk>(shared_from_this(), rect_without_padding, rect_ptr);
+    return std::make_unique<TexChunk>(shared_from_this(), rect_without_padding, rect);
 }
 
 Gosu::Bitmap Gosu::Texture::to_bitmap(const Rect& rect) const

@@ -6,7 +6,7 @@
 #include <stdexcept>
 
 Gosu::TexChunk::TexChunk(const std::shared_ptr<Texture>& texture, const Rect& rect,
-                         const std::shared_ptr<void>& rect_handle)
+                         const std::shared_ptr<const Rect>& rect_handle)
     : m_texture(texture),
       m_rect(rect),
       m_info { .tex_name = texture->tex_name(),
@@ -16,7 +16,7 @@ Gosu::TexChunk::TexChunk(const std::shared_ptr<Texture>& texture, const Rect& re
                .bottom = 1.0 * m_rect.bottom() / texture->height() },
       m_rect_handle(rect_handle)
 {
-    if (!Rect::covering(*m_texture).contains(rect)) {
+    if (!Rect::covering(*texture).contains(rect)) {
         throw std::invalid_argument("Gosu::TexChunk exceeds its Gosu::Texture");
     }
 }

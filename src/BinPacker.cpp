@@ -13,17 +13,20 @@ Gosu::BinPacker::BinPacker(int width, int height)
 {
 }
 
-std::optional<Gosu::Rect> Gosu::BinPacker::alloc(int width, int height)
+std::shared_ptr<const Gosu::Rect> Gosu::BinPacker::alloc(int width, int height)
 {
     const Rect* best_rect = best_free_rect(width, height);
 
     // We didn't find a single free rectangle that can fit the required size? Exit.
     if (best_rect == nullptr) {
-        return std::nullopt;
+        return nullptr;
     }
 
     // We found a free area, place the result in the top left corner of it.
-    Rect result { best_rect->x, best_rect->y, width, height };
+    // (Also make sure that the pointer's deleter returns the rectangle. Note: Even though
+    // shared_ptr may call its deleter with a nullptr in general, it will not do so here.)
+    std::shared_ptr<const Rect> result(new Rect { best_rect->x, best_rect->y, width, height },
+                                       [this](const Rect* p) { add_free_rect(*p); });
 
     // We need to split the remaining rectangle into two. We use the axis with the longer side.
     // (Called "Longer Axis Split Rule", "-LAS" in the paper.)
@@ -59,16 +62,16 @@ std::optional<Gosu::Rect> Gosu::BinPacker::alloc(int width, int height)
     remove_free_rect(static_cast<int>(best_rect - m_free_rects.data()));
 
     if (!new_rect_below.empty()) {
-        free(new_rect_below);
+        add_free_rect(new_rect_below);
     }
     if (!new_rect_right.empty()) {
-        free(new_rect_right);
+        add_free_rect(new_rect_right);
     }
 
     return result;
 }
 
-void Gosu::BinPacker::free(const Rect& rect)
+void Gosu::BinPacker::add_free_rect(const Rect& rect)
 {
 #ifndef NDEBUG
     for (const Rect& other_free_rect : m_free_rects) {
@@ -117,6 +120,17 @@ void Gosu::BinPacker::remove_free_rect(int index, int* other_index)
 
 void Gosu::BinPacker::merge_neighbors(int index)
 {
+    // This algorithm tries to merge adjacent free rectangles into larger ones where possible.
+    // However, it only finds pairwise combinations of rectangles that can be merged into a single,
+    // larger rectangle. You may find that textures/bins sometimes end up with free rectangles that
+    // are shaped like this:
+    //   ┏━━━━┳━┓
+    //   ┣━┳━━┫ ┃
+    //   ┃ ┣━━┻━┫
+    //   ┗━┻━━━━┛
+    // In this case, the texture gets stuck in this fragmented state. We assume that this is not an
+    // issue in practice, just like memory
+
     // Merge any of the other rectangles in the list into the one with the given index if they share
     // any of their four sides.
     for (int j = 0; j < m_free_rects.size(); ++j) {
@@ -159,6 +173,7 @@ void Gosu::BinPacker::merge_neighbors(int index)
         // combined rectangle might allow new mergers with other adjacent rectangles, and so on.
         if (merged) {
             remove_free_rect(j, &index);
+            // Reset j to -1 so that the next loop iteration will resume at j == 0.
             j = -1;
         }
     }

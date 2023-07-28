@@ -8,7 +8,7 @@
 
 namespace Gosu
 {
-    class Texture : public std::enable_shared_from_this<Texture>, Noncopyable
+    class Texture : public std::enable_shared_from_this<Texture>, private Noncopyable
     {
         BinPacker m_bin_packer;
         std::uint32_t m_tex_name;

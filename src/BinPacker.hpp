@@ -2,7 +2,7 @@
 
 #include <Gosu/Platform.hpp>
 #include <Gosu/Utility.hpp>
-#include <optional>
+#include <memory>
 #include <vector>
 
 namespace Gosu
@@ -15,7 +15,10 @@ namespace Gosu
     /// Note: This class cannot use stb_rect_pack.h because that uses an "offline" algorithm,
     /// i.e. it requires all boxes to be allocated at the same time, which is not how Gosu games are
     /// usually structured.
-    class BinPacker
+    ///
+    /// (This class is non-copyable because alloc returns shared_ptrs that reference this object.
+    /// Moving a BinPacker instance would lead to dangling pointers.)
+    class BinPacker : private Noncopyable
     {
         int m_width, m_height;
         std::vector<Rect> m_free_rects;
@@ -26,11 +29,13 @@ namespace Gosu
         int width() const { return m_width; }
         int height() const { return m_height; }
 
-        /// Finds a free rectangle in the bin and marks it as used, or returns std::nullopt.
-        std::optional<Rect> alloc(int width, int height);
+        /// Finds a free rectangle in the bin and marks it as used, or returns nullptr.
+        /// The returned shared_ptr will automatically mark the rectangle as freed through its
+        /// deleter. The shared_ptr must not outlive the BinPacker.
+        std::shared_ptr<const Rect> alloc(int width, int height);
         /// Marks a previously allocated rectangle as free again. This must be called with one of
         /// the rectangles previously returned by alloc().
-        void free(const Rect& rect);
+        void add_free_rect(const Rect& rect);
 
     private:
         /// Finds the best free rectangle using the "Best Short Side Fit" ("BSSF") metric, if any.
