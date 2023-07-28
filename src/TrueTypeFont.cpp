@@ -12,23 +12,25 @@
 
 struct Gosu::TrueTypeFont::Impl : private Gosu::Noncopyable
 {
-    stbtt_fontinfo info{};
+    stbtt_fontinfo info {};
     std::shared_ptr<TrueTypeFont> fallback;
 
     // The height of the ascent in internal font metrics (an arbitrary integer scale). The ascent is
     // the part of the font above the baseline (which TrueType considers to be at y = 0).
-    int ascent{};
+    int ascent = 0;
 
     // Scaling factor from internal font metrics (an arbitrary integer scale) to a font with
     // height = 1px.
     double base_scale;
 
-    Impl(const unsigned char* ttf_data, std::shared_ptr<TrueTypeFont> fallback)
-    : fallback{std::move(fallback)}
+    Impl(const std::uint8_t* ttf_data, std::shared_ptr<TrueTypeFont> fallback)
+        : fallback(std::move(fallback))
     {
         auto offset = stbtt_GetFontOffsetForIndex(ttf_data, 0);
         int success = stbtt_InitFont(&info, ttf_data, offset);
-        if (!success) throw std::runtime_error{"Invalid TrueType font data"};
+        if (!success) {
+            throw std::runtime_error("Invalid TrueType font data");
+        }
 
         // Calculate metrics.
         int descent, line_gap;
@@ -41,7 +43,9 @@ struct Gosu::TrueTypeFont::Impl : private Gosu::Noncopyable
     double draw_text(const std::u32string& text, bool is_end, double height, Bitmap* bitmap,
                      double x, double y, Color c)
     {
-        if (text.empty()) return 0;
+        if (text.empty()) {
+            return 0;
+        }
 
         // The 'x' parameter is used as the running cursor variable in this method.
 
@@ -52,7 +56,9 @@ struct Gosu::TrueTypeFont::Impl : private Gosu::Noncopyable
         for (std::size_t index = 0; index < text.size(); ++index) {
             auto codepoint = text[index];
             // Silently skip control characters, including the \r in Windows-style line breaks.
-            if (codepoint < ' ') continue;
+            if (codepoint < ' ') {
+                continue;
+            }
 
             int glyph = stbtt_FindGlyphIndex(&info, static_cast<int>(codepoint));
             // Handle missing characters in this font...
@@ -99,10 +105,11 @@ struct Gosu::TrueTypeFont::Impl : private Gosu::Noncopyable
             float fscale = static_cast<float>(scale);
             int last_xoff, last_width;
             // TODO: Don't allocate a buffer just to get metrics!
-            std::shared_ptr<unsigned char> unused_data{
-                    stbtt_GetGlyphBitmapSubpixel(&info, fscale, fscale, shift_x, 0, last_glyph,
+            std::shared_ptr<std::uint8_t> unused_data {
+                stbtt_GetGlyphBitmapSubpixel(&info, fscale, fscale, shift_x, 0, last_glyph,
                                              &last_width, nullptr, &last_xoff, nullptr),
-                    std::free};
+                std::free
+            };
             // Move the cursor to the right if pixels have been touched by draw_glyph that are
             // to the right of the current cursor.
             // If the last character extends to the right of the cursor, then this prevents the
@@ -145,16 +152,16 @@ struct Gosu::TrueTypeFont::Impl : private Gosu::Noncopyable
         int w, h, xoff, yoff;
         // As an optimization, this method/class could try to re-use a buffer for rasterization
         // instead of having stb_truetype allocate a fresh one for each draw_glyph call.
-        std::shared_ptr<unsigned char> pixels{stbtt_GetGlyphBitmapSubpixel(&info, fscale, fscale,
-                                                                           shift_x, shift_y, glyph,
-                                                                           &w, &h, &xoff, &yoff),
-                                              std::free};
+        std::shared_ptr<std::uint8_t> pixels(stbtt_GetGlyphBitmapSubpixel(&info, fscale, fscale, //
+                                                                          shift_x, shift_y, glyph,
+                                                                          &w, &h, &xoff, &yoff),
+                                             std::free);
 
         int target_y = static_cast<int>(y + ascent * scale + yoff);
         blend_into_bitmap(bitmap, pixels.get(), x + xoff, target_y, w, h, c);
     }
 
-    static void blend_into_bitmap(Bitmap& bitmap, const unsigned char* pixels, //
+    static void blend_into_bitmap(Bitmap& bitmap, const std::uint8_t* pixels, //
                                   int x, int y, int w, int h, Color c)
     {
         int stride = w;
@@ -189,9 +196,9 @@ struct Gosu::TrueTypeFont::Impl : private Gosu::Noncopyable
     }
 };
 
-Gosu::TrueTypeFont::TrueTypeFont(const unsigned char* ttf_data,
+Gosu::TrueTypeFont::TrueTypeFont(const std::uint8_t* ttf_data,
                                  std::shared_ptr<TrueTypeFont> fallback)
-: m_impl{new Impl(ttf_data, std::move(fallback))}
+    : m_impl(new Impl(ttf_data, std::move(fallback)))
 {
 }
 
@@ -201,33 +208,33 @@ double Gosu::TrueTypeFont::draw_text(const std::u32string& text, double height, 
     return m_impl->draw_text(text, true, height, bitmap, x, y, c);
 }
 
-bool Gosu::TrueTypeFont::matches(const unsigned char* ttf_data, const std::string& font_name,
+bool Gosu::TrueTypeFont::matches(const std::uint8_t* ttf_data, const std::string& font_name,
                                  unsigned font_flags)
 {
     // Gosu::FontFlags uses the same values as the STBTT_ macros, except for this one.
     int flags = (font_flags == 0 ? STBTT_MACSTYLE_NONE : static_cast<int>(font_flags));
 
-    return stbtt_FindMatchingFont(ttf_data, font_name.c_str(), flags) >= 0 ||
-           stbtt_FindMatchingFont(ttf_data, font_name.c_str(), STBTT_MACSTYLE_DONTCARE) >= 0;
+    return stbtt_FindMatchingFont(ttf_data, font_name.c_str(), flags) >= 0
+        || stbtt_FindMatchingFont(ttf_data, font_name.c_str(), STBTT_MACSTYLE_DONTCARE) >= 0;
 }
 
-static Gosu::TrueTypeFont& font_with_stack(std::vector<const unsigned char*> ttf_stack)
+static Gosu::TrueTypeFont& font_with_stack(std::vector<const std::uint8_t*> ttf_stack)
 {
-    static std::map<const unsigned char*, std::shared_ptr<Gosu::TrueTypeFont>> cache_by_data;
-    static std::mutex cache_by_data_mutex;
+    static std::map<const std::uint8_t*, std::shared_ptr<Gosu::TrueTypeFont>> cache_by_data;
+    static std::recursive_mutex mutex;
+    std::scoped_lock lock(mutex);
 
-    std::scoped_lock lock(cache_by_data_mutex);
-
-    // Filter out any fonts that could not be found, as well as duplicates.
-    auto end = unique(ttf_stack.begin(), ttf_stack.end());
-    end = remove(ttf_stack.begin(), end, nullptr);
-    ttf_stack.erase(end, ttf_stack.end());
+    // Filter out any fonts that could not be found, as well as (adjacent) duplicates.
+    ttf_stack.erase(std::remove(ttf_stack.begin(), ttf_stack.end(), nullptr), ttf_stack.end());
+    ttf_stack.erase(std::unique(ttf_stack.begin(), ttf_stack.end()), ttf_stack.end());
 
     // This cannot happen because ttf_stack contains ttf_fallback_data(), which never returns null.
-    if (ttf_stack.empty()) throw std::logic_error{"Empty font stack"};
+    if (ttf_stack.empty()) {
+        throw std::logic_error("Empty font stack");
+    }
 
     std::shared_ptr<Gosu::TrueTypeFont> head_of_stack = nullptr;
-    for (const unsigned char* ttf_data : ttf_stack) {
+    for (const std::uint8_t* ttf_data : ttf_stack) {
         auto& font_ptr = cache_by_data[ttf_data];
         if (!font_ptr) {
             font_ptr = std::make_shared<Gosu::TrueTypeFont>(ttf_data, head_of_stack);
@@ -240,18 +247,19 @@ static Gosu::TrueTypeFont& font_with_stack(std::vector<const unsigned char*> ttf
 Gosu::TrueTypeFont& Gosu::font_by_name(const std::string& font_name, unsigned font_flags)
 {
     static std::map<std::pair<std::string, unsigned>, TrueTypeFont*> cache_by_name_and_flags;
-    static std::mutex cache_by_name_and_flags_mutex;
-
-    std::scoped_lock lock(cache_by_name_and_flags_mutex);
+    static std::recursive_mutex mutex;
+    std::scoped_lock lock(mutex);
 
     auto& font_ptr = cache_by_name_and_flags[make_pair(font_name, font_flags)];
     if (!font_ptr) {
         // Build a stack of TTF data in order of preference, where the fallback font is at the
         // front, and the desired font with all the right font flags (most preferable) at the back.
-        std::vector<const unsigned char*> ttf_stack;
+        std::vector<const std::uint8_t*> ttf_stack;
         ttf_stack.push_back(ttf_fallback_data());
         ttf_stack.push_back(ttf_data_by_name(default_font_name(), 0));
-        if (font_flags != 0) ttf_stack.push_back(ttf_data_by_name(default_font_name(), font_flags));
+        if (font_flags != 0) {
+            ttf_stack.push_back(ttf_data_by_name(default_font_name(), font_flags));
+        }
 
         if (font_name.find_first_of("./\\") != std::string::npos) {
             // A filename? Load it and add it to the stack.
@@ -260,7 +268,9 @@ Gosu::TrueTypeFont& Gosu::font_by_name(const std::string& font_name, unsigned fo
         else if (font_name != default_font_name()) {
             // A font name? Add it to the stack, both with font_flags and without.
             ttf_stack.push_back(ttf_data_by_name(font_name, 0));
-            if (font_flags != 0) ttf_stack.push_back(ttf_data_by_name(font_name, font_flags));
+            if (font_flags != 0) {
+                ttf_stack.push_back(ttf_data_by_name(font_name, font_flags));
+            }
         }
 
         font_ptr = &font_with_stack(std::move(ttf_stack));
@@ -269,12 +279,11 @@ Gosu::TrueTypeFont& Gosu::font_by_name(const std::string& font_name, unsigned fo
     return *font_ptr;
 }
 
-const unsigned char* Gosu::ttf_data_from_file(const std::string& filename)
+const std::uint8_t* Gosu::ttf_data_from_file(const std::string& filename)
 {
     static std::map<std::string, Buffer> ttf_file_cache;
-    static std::mutex ttf_file_cache_mutex;
-
-    std::scoped_lock lock(ttf_file_cache_mutex);
+    static std::recursive_mutex mutex;
+    std::scoped_lock lock(mutex);
 
     if (!ttf_file_cache.contains(filename)) {
         ttf_file_cache.emplace(filename, load_file(filename));

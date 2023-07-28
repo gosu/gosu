@@ -6,14 +6,18 @@
 #include "TrueTypeFont.hpp"
 #include <fontconfig/fontconfig.h>
 #include <map>
+#include <mutex>
 
-const unsigned char* Gosu::ttf_data_by_name(const std::string& font_name, unsigned font_flags)
+const std::uint8_t* Gosu::ttf_data_by_name(const std::string& font_name, unsigned font_flags)
 {
-    // TODO: Make this cache thread-safe.
-    static std::map<std::pair<std::string, unsigned>, const unsigned char*> ttf_file_cache;
+    static std::map<std::pair<std::string, unsigned>, const std::uint8_t*> ttf_file_cache;
+    static std::recursive_mutex mutex;
+    std::scoped_lock lock(mutex);
 
     auto& ttf_ptr = ttf_file_cache[make_pair(font_name, font_flags)];
-    if (ttf_ptr) return ttf_ptr;
+    if (ttf_ptr) {
+        return ttf_ptr;
+    }
 
     static FcConfig* config = FcInitLoadConfigAndFonts();
     if (config) {
@@ -79,9 +83,9 @@ const unsigned char* Gosu::ttf_data_by_name(const std::string& font_name, unsign
     return ttf_ptr;
 }
 
-static const unsigned char* ttf_data_of_default_sans_serif_font()
+static const std::uint8_t* ttf_data_of_default_sans_serif_font()
 {
-    const unsigned char* ttf_ptr = nullptr;
+    const std::uint8_t* ttf_ptr = nullptr;
 
     // At this point, we already have an open FcConfig, and can pass nullptr to these functions.
     FcPattern* pattern = FcNameParse(reinterpret_cast<const FcChar8*>("sans-serif"));
@@ -100,24 +104,32 @@ static const unsigned char* ttf_data_of_default_sans_serif_font()
     return ttf_ptr;
 }
 
-const unsigned char* Gosu::ttf_fallback_data()
+const std::uint8_t* Gosu::ttf_fallback_data()
 {
     // Prefer Arial Unicode MS as a fallback because it covers a lot of Unicode in a single file.
     // This is also the fallback font on Windows and macOS.
-    static const unsigned char* arial_unicode = ttf_data_by_name("Arial Unicode MS", 0);
-    if (arial_unicode) return arial_unicode;
+    static const std::uint8_t* arial_unicode = ttf_data_by_name("Arial Unicode MS", 0);
+    if (arial_unicode) {
+        return arial_unicode;
+    }
 
     // DejaVu has at least some Unicode coverage (though no CJK).
-    static const unsigned char* deja_vu = ttf_data_by_name("DejaVu", 0);
-    if (deja_vu) return deja_vu;
+    static const std::uint8_t* deja_vu = ttf_data_by_name("DejaVu", 0);
+    if (deja_vu) {
+        return deja_vu;
+    }
 
     // Unifont has pretty good Unicode coverage, but looks extremely ugly.
-    static const unsigned char* unifont = ttf_data_by_name("Unifont", 0);
-    if (unifont) return unifont;
+    static const std::uint8_t* unifont = ttf_data_by_name("Unifont", 0);
+    if (unifont) {
+        return unifont;
+    }
 
     // If none of the fonts above work, try to use the default sans-serif font.
-    static const unsigned char* default_font = ttf_data_of_default_sans_serif_font();
-    if (default_font) return default_font;
+    static const std::uint8_t* default_font = ttf_data_of_default_sans_serif_font();
+    if (default_font) {
+        return default_font;
+    }
 
     // If nothing else works, try to load a file from this hardcoded path.
     return ttf_data_from_file("/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf");
