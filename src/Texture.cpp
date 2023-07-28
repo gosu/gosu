@@ -82,7 +82,7 @@ std::unique_ptr<Gosu::TexChunk> Gosu::Texture::try_alloc(const Bitmap& bitmap, i
 Gosu::Bitmap Gosu::Texture::to_bitmap(const Rect& rect) const
 {
     if (!Rect::covering(*this).contains(rect)) {
-        throw std::runtime_error("");
+        throw std::invalid_argument("Gosu::Texture::to_bitmap: Rect exceeds bounds");
     }
 
 #ifdef GOSU_IS_OPENGLES

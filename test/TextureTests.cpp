@@ -67,10 +67,14 @@ TEST_F(TextureTests, tex_chunks)
     // Now the image should have the same content.
     ASSERT_EQ(texture_bitmap, yellow_with_red_frame);
 
-    // ASSERT_THROW(Gosu::TexChunk(texture_ptr, Gosu::Rect { -3, 5, 10, 10 }),
-    // std::invalid_argument); ASSERT_THROW(Gosu::TexChunk(texture_ptr, Gosu::Rect { 14, 3, 0, -5
-    // }), std::invalid_argument);
-    ASSERT_THROW(chunk_ptr->subimage(Gosu::Rect { 3, -5, 3, 5 }), std::invalid_argument);
+    ASSERT_THROW(texture_ptr->to_bitmap(Gosu::Rect { -4, -6, 10, 5 }), //
+                 std::invalid_argument);
+    ASSERT_THROW(Gosu::TexChunk(texture_ptr, Gosu::Rect { -3, 5, 10, 10 }, nullptr),
+                 std::invalid_argument);
+    ASSERT_THROW(Gosu::TexChunk(texture_ptr, Gosu::Rect { 14, 3, 0, 75 }, nullptr),
+                 std::invalid_argument);
+    ASSERT_THROW(chunk_ptr->subimage(Gosu::Rect { 3, -5, 3, 5 }), //
+                 std::invalid_argument);
 }
 
 TEST_F(TextureTests, bin_packing_benchmark)

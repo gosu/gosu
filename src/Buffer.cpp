@@ -65,19 +65,14 @@ Gosu::Buffer::~Buffer()
 Gosu::Buffer::Buffer(std::size_t size)
     : m_buffer(nullptr),
       m_size(size),
-      m_deleter(std::free)
+      m_deleter([](void* p) {  delete[] static_cast<std::uint8_t*>(p); })
 {
     if (size >= std::numeric_limits<std::ptrdiff_t>::max()) {
         throw std::length_error("Tried to create Gosu::Buffer with a negative size");
     }
 
     if (m_size) {
-        m_buffer = std::malloc(size); // NOLINT(*-no-malloc)
-        // GCOV_EXCL_START: Hard to simulate out-of-memory situations.
-        if (m_buffer == nullptr) {
-            throw std::bad_alloc();
-        }
-        // GCOV_EXCL_END
+        m_buffer = new std::uint8_t[m_size];
     }
 }
 
@@ -155,8 +150,10 @@ void Gosu::save_file(const Buffer& buffer, const std::string& filename)
         throw std::runtime_error("Could not open '" + filename + "', error: " + SDL_GetError());
     }
     std::size_t written = SDL_RWwrite(rwops.get(), buffer.data(), buffer.size(), 1);
+    // GCOV_EXCL_START: It is hard to set up a file where opening works but writing doesn't.
     if (written == 0) {
         throw std::runtime_error("Could not write to '" + filename + "', error: " + SDL_GetError());
     }
+    // GCOV_EXCL_END
 }
 #endif
