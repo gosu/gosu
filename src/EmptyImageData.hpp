@@ -30,10 +30,7 @@ namespace Gosu
 
         Bitmap to_bitmap() const override { return Bitmap(m_width, m_height); }
 
-        std::unique_ptr<ImageData> subimage(const Rect& rect) const override
-        {
-            return std::make_unique<EmptyImageData>(rect.width, rect.height);
-        }
+        std::unique_ptr<ImageData> subimage(const Rect&) const override { return nullptr; }
 
         void insert(const Bitmap&, int, int) override { }
     };
