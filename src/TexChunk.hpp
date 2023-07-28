@@ -2,40 +2,51 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/ImageData.hpp>
-#include "GraphicsImpl.hpp"
+#include <Gosu/Utility.hpp>
+#include <cstdint>
 #include <memory>
-#include <stdexcept>
 
-class Gosu::TexChunk : public Gosu::ImageData
+namespace Gosu
 {
-    std::shared_ptr<Texture> m_texture;
-    int m_x, m_y, m_w, m_h, m_padding;
+    class Texture;
 
-    GLTexInfo m_info;
+    /// The most common ImageData implementation which uses a portion of, or a full OpenGL texture
+    /// to store image data.
+    class TexChunk : public ImageData
+    {
+        const std::shared_ptr<Texture> m_texture;
+        const Rect m_rect;
+        const GLTexInfo m_info;
+        const std::shared_ptr<const Rect> m_rect_handle;
 
-    void set_tex_info();
+    public:
+        /// @param texture The texture on which the image data resides.
+        /// @param rect The portion of the texture that will be represented by this TexChunk.
+        ///             This excludes any padding pixels.
+        /// @param rect_handle A shared_ptr that references the full rectangle that was allocated
+        ///                    for this TexChunk, including padding. When this TexChunk and all
+        ///                    of its subimages have been deleted, this rectangle will be reclaimed
+        ///                    for use by other image data.
+        TexChunk(const std::shared_ptr<Texture>& texture, const Rect& rect,
+                 const std::shared_ptr<const Rect>& rect_handle);
 
-public:
-    TexChunk(std::shared_ptr<Texture> texture, int x, int y, int w, int h, int padding);
-    TexChunk(const TexChunk& parent, int x, int y, int w, int h);
-    ~TexChunk() override;
+        int width() const override { return m_rect.width; }
+        int height() const override { return m_rect.height; }
 
-    int width() const override { return m_w; }
-    int height() const override { return m_h; }
+        std::uint32_t tex_name() const { return m_info.tex_name; }
 
-    GLuint tex_name() const { return m_info.tex_name; }
+        void draw(double x1, double y1, Color c1, //
+                  double x2, double y2, Color c2, //
+                  double x3, double y3, Color c3, //
+                  double x4, double y4, Color c4, //
+                  ZPos z, BlendMode mode) const override;
 
-    void draw(double x1, double y1, Color c1, //
-              double x2, double y2, Color c2, //
-              double x3, double y3, Color c3, //
-              double x4, double y4, Color c4, //
-              ZPos z, BlendMode mode) const override;
+        const GLTexInfo* gl_tex_info() const override { return &m_info; }
 
-    const GLTexInfo* gl_tex_info() const override { return &m_info; }
+        std::unique_ptr<ImageData> subimage(const Rect& rect) const override;
 
-    std::unique_ptr<ImageData> subimage(const Rect& rect) const override;
+        Bitmap to_bitmap() const override;
 
-    Gosu::Bitmap to_bitmap() const override;
-
-    void insert(const Bitmap& bitmap, int x, int y) override;
-};
+        void insert(const Bitmap& bitmap, int x, int y) override;
+    };
+}

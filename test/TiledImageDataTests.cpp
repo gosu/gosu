@@ -49,7 +49,7 @@ TEST_F(TiledImageDataTests, drawing)
 {
     const auto rotated_by_90_degrees = [](const Gosu::Image& image) {
         return Gosu::Graphics::render(image.height(), image.width(), [&] {
-            // Draw the image rotated by 90° degrees, rotated around the bottom left corner.
+            // Draw the image rotated clockwise by 90°, rotated around the bottom left corner.
             image.draw_rot(0, 0, 0, 90, 0.0, 1.0);
         });
     };
@@ -60,11 +60,11 @@ TEST_F(TiledImageDataTests, drawing)
     // Rotate the image eight times. We should arrive where we started.
     for (int i = 0; i < 8; ++i) {
         // Reload image into a TiledImageData (split it up into tiles).
-        Gosu::Bitmap current_bitmap = image.data().to_bitmap();
+        const Gosu::Bitmap current_bitmap = image.data().to_bitmap();
         // TODO: Why are small tile_sizes (1, 2) so slow? Will a better BinPacker fix this?
         image = Gosu::Image(
             std::make_unique<Gosu::TiledImageData>(current_bitmap, i * 3 + 5, Gosu::IF_TILEABLE));
-        // Now render it at a 90° angle.
+        // Now rotate it clockwise by 90°.
         image = rotated_by_90_degrees(image);
     }
 

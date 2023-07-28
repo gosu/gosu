@@ -1,35 +1,39 @@
 #include "Texture.hpp"
-#include "TexChunk.hpp"
 #include <Gosu/Bitmap.hpp>
-#include <Gosu/Graphics.hpp>
 #include <Gosu/Platform.hpp>
+#include "GraphicsImpl.hpp"
+#include "TexChunk.hpp"
 #include <stdexcept>
-using namespace std;
 
 namespace Gosu
 {
+    // This variable has been declared in multiple places. Define it here, where it will be used.
     bool undocumented_retrofication = false;
 }
 
-Gosu::Texture::Texture(unsigned width, unsigned height, bool retro)
-: allocator_(width, height), retro_(retro)
+Gosu::Texture::Texture(int width, int height, bool retro)
+    : m_bin_packer(width, height),
+      m_retro(retro)
 {
+    if (width <= 0 || height <= 0) {
+        throw std::invalid_argument("Gosu::Texture must not be empty");
+    }
+
     ensure_current_context();
-    
+
     // Create texture name.
-    glGenTextures(1, &tex_name_);
-    if (tex_name_ == static_cast<GLuint>(-1)) throw runtime_error("Couldn't create OpenGL texture");
+    glGenTextures(1, &m_tex_name);
+    // GCOV_EXCL_START: Hard to simulate out-of-texture situations.
+    if (m_tex_name == static_cast<GLuint>(-1)) {
+        throw std::runtime_error("Failed to allocate OpenGL texture");
+    }
+    // GCOV_EXCL_END
 
     // Create empty texture.
-    glBindTexture(GL_TEXTURE_2D, tex_name_);
-#ifdef GOSU_IS_OPENGLES
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, allocator_.width(), allocator_.height(), 0, GL_RGBA,
-                 GL_UNSIGNED_BYTE, nullptr);
-#else
-    glTexImage2D(GL_TEXTURE_2D, 0, 4, allocator_.width(), allocator_.height(), 0, GL_RGBA,
-                 GL_UNSIGNED_BYTE, nullptr);
-#endif
-    
+    glBindTexture(GL_TEXTURE_2D, m_tex_name);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_bin_packer.width(), m_bin_packer.height(), 0,
+                 Color::GL_FORMAT, GL_UNSIGNED_BYTE, nullptr);
+
     if (retro || undocumented_retrofication) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -38,7 +42,7 @@ Gosu::Texture::Texture(unsigned width, unsigned height, bool retro)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     }
-    
+
 #ifdef GL_CLAMP_TO_EDGE
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -51,78 +55,54 @@ Gosu::Texture::Texture(unsigned width, unsigned height, bool retro)
 Gosu::Texture::~Texture()
 {
     ensure_current_context();
-    
-    glDeleteTextures(1, &tex_name_);
+
+    glDeleteTextures(1, &m_tex_name);
 }
 
-unsigned Gosu::Texture::width() const
+std::unique_ptr<Gosu::TexChunk> Gosu::Texture::try_alloc(const Bitmap& bitmap, int padding)
 {
-    return allocator_.width();
-}
+    const std::shared_ptr<const Rect> rect = m_bin_packer.alloc(bitmap.width(), bitmap.height());
 
-unsigned Gosu::Texture::height() const
-{
-    return allocator_.height();
-}
+    if (!rect) {
+        return nullptr;
+    }
 
-GLuint Gosu::Texture::tex_name() const
-{
-    return tex_name_;
-}
-
-bool Gosu::Texture::retro() const
-{
-    return retro_;
-}
-
-unique_ptr<Gosu::TexChunk> Gosu::Texture::try_alloc(const Bitmap& bmp, unsigned padding)
-{
-    BlockAllocator::Block block;
-    
-    if (!allocator_.alloc(bmp.width(), bmp.height(), block)) return nullptr;
-    
-    unique_ptr<TexChunk> result(new TexChunk(shared_from_this(),
-                                             block.left   + padding,
-                                             block.top    + padding,
-                                             block.width  - 2 * padding,
-                                             block.height - 2 * padding,
-                                             padding));
-    
     ensure_current_context();
-    
-    glBindTexture(GL_TEXTURE_2D, tex_name_);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, block.left, block.top, block.width, block.height,
-                    Color::GL_FORMAT, GL_UNSIGNED_BYTE, bmp.data());
 
-    return result;
+    // TODO: Can we merge this with TexChunk::insert / have TexChunk update its borders itself?
+    glBindTexture(GL_TEXTURE_2D, m_tex_name);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, rect->x, rect->y, rect->width, rect->height, Color::GL_FORMAT,
+                    GL_UNSIGNED_BYTE, bitmap.data());
+
+    const Rect rect_without_padding { rect->x + padding, rect->y + padding,
+                                      rect->width - 2 * padding, rect->height - 2 * padding };
+    return std::make_unique<TexChunk>(shared_from_this(), rect_without_padding, rect);
 }
 
-void Gosu::Texture::block(unsigned x, unsigned y, unsigned width, unsigned height)
+Gosu::Bitmap Gosu::Texture::to_bitmap(const Rect& rect) const
 {
-    allocator_.block(x, y, width, height);
-}
+    if (!Rect::covering(*this).contains(rect)) {
+        throw std::invalid_argument("Gosu::Texture::to_bitmap: Rect exceeds bounds");
+    }
 
-void Gosu::Texture::free(unsigned x, unsigned y, unsigned width, unsigned height)
-{
-    allocator_.free(x, y, width, height);
-}
-
-Gosu::Bitmap Gosu::Texture::to_bitmap(unsigned x, unsigned y, unsigned width, unsigned height) const
-{
 #ifdef GOSU_IS_OPENGLES
     // See here for one possible implementation: https://github.com/apitrace/apitrace/issues/70
     // (Could reuse a lot of code from OffScreenTarget)
-    throw logic_error("Texture::to_bitmap not supported on iOS");
+    throw std::logic_error("Texture::to_bitmap not supported on iOS");
 #else
     ensure_current_context();
-    
-    Bitmap full_texture(this->width(), this->height());
-    glBindTexture(GL_TEXTURE_2D, tex_name());
-    // TODO: There are ways to retrieve only part of a texture, which we should use sooner or later.
-    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, full_texture.data());
-    Bitmap bitmap(width, height);
-    bitmap.insert(full_texture, -int(x), -int(y));
-    
+
+    Bitmap bitmap(width(), height());
+    glBindTexture(GL_TEXTURE_2D, m_tex_name);
+    // This should use glGetTextureSubImage where available: https://stackoverflow.com/a/38148494
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmap.data());
+
+    if (rect != Rect::covering(*this)) {
+        Bitmap smaller_bitmap(rect.width, rect.height);
+        smaller_bitmap.insert(bitmap, -rect.x, -rect.y);
+        bitmap = std::move(smaller_bitmap);
+    }
+
     return bitmap;
 #endif
 }

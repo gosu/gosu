@@ -183,20 +183,20 @@ Gosu::Bitmap Gosu::apply_border_flags(unsigned image_flags, const Bitmap& source
     // Now duplicate the edges of the image on all four sides.
     const Rect top { source_rect.x, source_rect.y, source_rect.width, 1 };
     result.insert(source, 1, 0, top);
-    const Rect bottom { source_rect.x, source_rect.bottom(), source_rect.width, 1 };
+    const Rect bottom { source_rect.x, source_rect.bottom() - 1, source_rect.width, 1 };
     result.insert(source, 1, result.height() - 1, bottom);
     const Rect left { source_rect.x, source_rect.y, 1, source_rect.height };
     result.insert(source, 0, 1, left);
-    const Rect right { source_rect.right(), source_rect.y, 1, source_rect.height };
+    const Rect right { source_rect.right() - 1, source_rect.y, 1, source_rect.height };
     result.insert(source, result.width() - 1, 1, right);
     // Also duplicate the corners of each size.
     const Rect top_left { source_rect.x, source_rect.y, 1, 1 };
     result.insert(source, 0, 0, top_left);
-    const Rect top_right { source_rect.right(), source_rect.y, 1, 1 };
+    const Rect top_right { source_rect.right() - 1, source_rect.y, 1, 1 };
     result.insert(source, result.width() - 1, 0, top_right);
-    const Rect bottom_left { source_rect.x, source_rect.bottom(), 1, 1 };
+    const Rect bottom_left { source_rect.x, source_rect.bottom() - 1, 1, 1 };
     result.insert(source, 0, result.height() - 1, bottom_left);
-    const Rect bottom_right { source_rect.right(), source_rect.bottom(), 1, 1 };
+    const Rect bottom_right { source_rect.right() - 1, source_rect.bottom() - 1, 1, 1 };
     result.insert(source, result.width() - 1, result.height() - 1, bottom_right);
 
     // On edges which are supposed to have tileable borders, we are now finished.

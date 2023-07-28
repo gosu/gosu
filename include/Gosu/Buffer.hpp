@@ -17,9 +17,9 @@ namespace Gosu
     /// pointer, such as std::free or SDL_free.
     class Buffer
     {
-        void* m_buffer = nullptr;
-        std::size_t m_size = 0;
-        std::function<void(void*)> m_deleter = nullptr;
+        void* m_buffer;
+        std::size_t m_size ;
+        std::function<void(void*)> m_deleter;
 
     public:
         Buffer() = default;
