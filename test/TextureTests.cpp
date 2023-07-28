@@ -112,12 +112,4 @@ TEST_F(TextureTests, bin_packing_benchmark)
             images.erase(images.begin());
         }
     }
-
-    std::set<std::uint32_t> tex_names;
-    for (auto& image_ptr : images) {
-        const Gosu::GLTexInfo* info = image_ptr->gl_tex_info();
-        ASSERT_NE(info, nullptr);
-        tex_names.insert(info->tex_name);
-    }
-    std::printf("Used %d textures\n", (int)tex_names.size());
 }

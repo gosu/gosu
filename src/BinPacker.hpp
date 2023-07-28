@@ -10,7 +10,8 @@ namespace Gosu
     /// This implements an allocator for 2D rects in a given "bin", which is typically an OpenGL
     /// texture. It uses the GUILLOTINE-LAS-RM-BSSF algorithm because it has the best worst-case
     /// performance in the PDF paper found here: https://github.com/juj/RectangleBinPack
-    /// (The extra complexity of the MAXRECTS algorithm did not seem to be worth it.)
+    /// (The extra complexity of the MAXRECTS algorithm did not seem to be worth it, and the Skyline
+    /// algorithm does not seem well-suited for scenarios where images are occasionally deleted.)
     ///
     /// Note: This class cannot use stb_rect_pack.h because that uses an "offline" algorithm,
     /// i.e. it requires all boxes to be allocated at the same time, which is not how Gosu games are

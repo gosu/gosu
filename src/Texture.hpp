@@ -27,5 +27,4 @@ namespace Gosu
 
         Bitmap to_bitmap(const Rect& rect) const;
     };
-
 }
