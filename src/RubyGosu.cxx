@@ -2973,15 +2973,15 @@ SWIGINTERN Gosu::Image *new_Gosu_Image(VALUE source,VALUE options=0){
         return new Gosu::Image(bmp, source_rect, flags);
     }
 SWIGINTERN void Gosu_Image_draw_as_quad(Gosu::Image *self,double x1,double y1,Gosu::Color c1,double x2,double y2,Gosu::Color c2,double x3,double y3,Gosu::Color c3,double x4,double y4,Gosu::Color c4,Gosu::ZPos z,Gosu::BlendMode mode=Gosu::BM_DEFAULT){
-        self->data().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
+        self->drawable().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
     }
 SWIGINTERN Gosu::GLTexInfo *Gosu_Image_gl_tex_info(Gosu::Image const *self){
-        const Gosu::GLTexInfo* info = self->data().gl_tex_info();
+        const Gosu::GLTexInfo* info = self->drawable().gl_tex_info();
         return info ? new Gosu::GLTexInfo(*info) : nullptr;
     }
 SWIGINTERN Gosu::Image *Gosu_Image_subimage(Gosu::Image *self,int x,int y,int w,int h){
-        std::unique_ptr<Gosu::ImageData> image_data = self->data().subimage(Gosu::Rect{ x, y, w, h });
-        return image_data.get() ? new Gosu::Image(std::move(image_data)) : nullptr;
+        std::unique_ptr<Gosu::Drawable> drawable = self->drawable().subimage(Gosu::Rect{ x, y, w, h });
+        return drawable ? new Gosu::Image(std::move(drawable)) : nullptr;
     }
 SWIGINTERN Gosu::Image *Gosu_Image_from_text(std::string const &text,double font_height,VALUE options=0){
         std::string font = Gosu::default_font_name();
@@ -3193,7 +3193,7 @@ SWIGINTERN std::vector< Gosu::Image > Gosu_Image_load_tiles__SWIG_1(Gosu::Window
             tileable ? Gosu::IF_TILEABLE : Gosu::IF_SMOOTH);
     }
 SWIGINTERN VALUE Gosu_Image_to_blob(Gosu::Image const *self){
-        Gosu::Bitmap bmp = self->data().to_bitmap();
+        Gosu::Bitmap bmp = self->drawable().to_bitmap();
         auto size = bmp.width() * bmp.height() * sizeof(Gosu::Color);
         return rb_str_new(reinterpret_cast<const char*>(bmp.data()), size);
     }
@@ -3204,16 +3204,16 @@ SWIGINTERN int Gosu_Image_rows(Gosu::Image const *self){
         return self->height();
     }
 SWIGINTERN void Gosu_Image_save(Gosu::Image const *self,std::string const &filename){
-        Gosu::save_image_file(self->data().to_bitmap(), filename);
+        Gosu::save_image_file(self->drawable().to_bitmap(), filename);
     }
 SWIGINTERN void Gosu_Image_insert(Gosu::Image *self,VALUE source,int x,int y){
         Gosu::Bitmap bmp;
         Gosu::load_bitmap(bmp, source);
-        self->data().insert(bmp, x, y);
+        self->drawable().insert(bmp, x, y);
     }
 SWIGINTERN std::string Gosu_Image_inspect(Gosu::Image const *self,int max_width=80){
         try {
-            Gosu::Bitmap bmp = self->data().to_bitmap();
+            Gosu::Bitmap bmp = self->drawable().to_bitmap();
             // This is the scaled image width inside the ASCII art border, so make sure
             // there will be room for a leading and trailing '#' character.
             int w = std::clamp<int>(max_width - 2, 0, bmp.width());

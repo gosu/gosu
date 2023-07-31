@@ -18,14 +18,14 @@ namespace Gosu
         double left, right, top, bottom;
     };
 
-    /// Abstract base class for a rectangular thing that can be drawn on screen.
-    /// Instances are usually created through Graphics::create_image and used to implement drawing
-    /// primitives like Image, which then provide a more convenient drawing interface.
-    class ImageData : Noncopyable
+    /// Abstract base class for a rectangular thing that can be drawn.
+    /// Instances are usually created through Graphics::create_drawable and used to implement
+    /// drawing primitives like Image, which then provide a more convenient drawing interface.
+    class Drawable : Noncopyable
     {
     public:
-        ImageData() = default;
-        virtual ~ImageData() = default;
+        Drawable() = default;
+        virtual ~Drawable() = default;
 
         virtual int width() const = 0;
 
@@ -42,7 +42,7 @@ namespace Gosu
 
         virtual Bitmap to_bitmap() const = 0;
 
-        virtual std::unique_ptr<ImageData> subimage(const Rect& rect) const = 0;
+        virtual std::unique_ptr<Drawable> subimage(const Rect& rect) const = 0;
 
         virtual void insert(const Bitmap& bitmap, int x, int y) = 0;
     };

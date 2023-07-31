@@ -60,7 +60,7 @@ TEST_F(TiledImageDataTests, drawing)
     // Rotate the image eight times. We should arrive where we started.
     for (int i = 0; i < 8; ++i) {
         // Reload image into a TiledImageData (split it up into tiles).
-        const Gosu::Bitmap current_bitmap = image.data().to_bitmap();
+        const Gosu::Bitmap current_bitmap = image.drawable().to_bitmap();
         // TODO: Why are small tile_sizes (1, 2) so slow? Will a better BinPacker fix this?
         image = Gosu::Image(
             std::make_unique<Gosu::TiledImageData>(current_bitmap, i * 3 + 5, Gosu::IF_TILEABLE));
@@ -68,5 +68,5 @@ TEST_F(TiledImageDataTests, drawing)
         image = rotated_by_90_degrees(image);
     }
 
-    ASSERT_EQ(source_image, image.data().to_bitmap());
+    ASSERT_EQ(source_image, image.drawable().to_bitmap());
 }

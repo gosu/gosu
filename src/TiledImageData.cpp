@@ -45,7 +45,7 @@ Gosu::TiledImageData::TiledImageData(const Bitmap& source, int tile_size, unsign
             m_tiles.push_back(Tile {
                 .x = source_rect.x,
                 .y = source_rect.y,
-                .data = Graphics::create_image(source, source_rect, local_flags),
+                .data = Graphics::create_drawable(source, source_rect, local_flags),
             });
         }
     }
@@ -111,7 +111,7 @@ void Gosu::TiledImageData::draw(double x1, double y1, Color c1, double x2, doubl
     }
 }
 
-std::unique_ptr<Gosu::ImageData> Gosu::TiledImageData::subimage(const Rect& source_rect) const
+std::unique_ptr<Gosu::Drawable> Gosu::TiledImageData::subimage(const Rect& source_rect) const
 {
     auto tiled_data = std::make_unique<TiledImageData>(*this, source_rect);
     if (tiled_data->m_tiles.size() == 1) {

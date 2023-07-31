@@ -362,7 +362,7 @@
     <ClInclude Include="..\src\ClipRectStack.hpp" />
     <ClInclude Include="..\src\DrawOp.hpp" />
     <ClInclude Include="..\src\DrawOpQueue.hpp" />
-    <ClInclude Include="..\src\EmptyImageData.hpp" />
+    <ClInclude Include="..\src\EmptyDrawable.hpp" />
     <ClInclude Include="..\src\GosuGLView.hpp" />
     <ClInclude Include="..\src\GosuViewController.hpp" />
     <ClInclude Include="..\src\GraphicsImpl.hpp" />
@@ -384,13 +384,13 @@
     <ClInclude Include="..\include\Gosu\Buttons.hpp" />
     <ClInclude Include="..\include\Gosu\Color.hpp" />
     <ClInclude Include="..\include\Gosu\Directories.hpp" />
+    <ClInclude Include="..\include\Gosu\Drawable.hpp" />
     <ClInclude Include="..\include\Gosu\Font.hpp" />
     <ClInclude Include="..\include\Gosu\Fwd.hpp" />
     <ClInclude Include="..\include\Gosu\Gosu.hpp" />
     <ClInclude Include="..\include\Gosu\Graphics.hpp" />
     <ClInclude Include="..\include\Gosu\GraphicsBase.hpp" />
     <ClInclude Include="..\include\Gosu\Image.hpp" />
-    <ClInclude Include="..\include\Gosu\ImageData.hpp" />
     <ClInclude Include="..\include\Gosu\Input.hpp" />
     <ClInclude Include="..\include\Gosu\Inspection.hpp" />
     <ClInclude Include="..\include\Gosu\Math.hpp" />

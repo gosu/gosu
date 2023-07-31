@@ -1,16 +1,16 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Buffer.hpp>
+#include <Gosu/Drawable.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
-#include <Gosu/ImageData.hpp>
 #include <Gosu/Math.hpp>
-#include "EmptyImageData.hpp"
+#include "EmptyDrawable.hpp"
 #include <stdexcept>
 
 Gosu::Image::Image()
 {
-    static const auto default_data_ptr = std::make_shared<EmptyImageData>(0, 0);
-    m_data = default_data_ptr;
+    static const auto default_data_ptr = std::make_shared<EmptyDrawable>(0, 0);
+    m_drawable = default_data_ptr;
 }
 
 Gosu::Image::Image(const std::string& filename, unsigned image_flags)
@@ -29,26 +29,26 @@ Gosu::Image::Image(const Bitmap& source, unsigned image_flags)
 }
 
 Gosu::Image::Image(const Bitmap& source, const Rect& source_rect, unsigned image_flags)
-: m_data(Graphics::create_image(source, source_rect, image_flags))
+: m_drawable(Graphics::create_drawable(source, source_rect, image_flags))
 {
 }
 
-Gosu::Image::Image(std::unique_ptr<ImageData> data)
-: m_data(std::move(data))
+Gosu::Image::Image(std::unique_ptr<Drawable> data)
+: m_drawable(std::move(data))
 {
-    if (!m_data) {
+    if (!m_drawable) {
         throw std::invalid_argument("Gosu::Image cannot be initialized with nullptr");
     }
 }
 
 unsigned Gosu::Image::width() const
 {
-    return m_data->width();
+    return m_drawable->width();
 }
 
 unsigned Gosu::Image::height() const
 {
-    return m_data->height();
+    return m_drawable->height();
 }
 
 void Gosu::Image::draw(double x, double y, ZPos z, double scale_x, double scale_y, Color c,
@@ -57,7 +57,7 @@ void Gosu::Image::draw(double x, double y, ZPos z, double scale_x, double scale_
     double x2 = x + width() * scale_x;
     double y2 = y + height() * scale_y;
 
-    m_data->draw(x, y, c, x2, y, c, x, y2, c, x2, y2, c, z, mode);
+    m_drawable->draw(x, y, c, x2, y, c, x, y2, c, x2, y2, c, z, mode);
 }
 
 void Gosu::Image::draw_mod(double x, double y, ZPos z, double scale_x, double scale_y, Color c1,
@@ -66,7 +66,7 @@ void Gosu::Image::draw_mod(double x, double y, ZPos z, double scale_x, double sc
     double x2 = x + width() * scale_x;
     double y2 = y + height() * scale_y;
 
-    m_data->draw(x, y, c1, x2, y, c2, x, y2, c3, x2, y2, c4, z, mode);
+    m_drawable->draw(x, y, c1, x2, y, c2, x, y2, c3, x2, y2, c4, z, mode);
 }
 
 void Gosu::Image::draw_rot(double x, double y, ZPos z, double angle, double center_x,
@@ -88,16 +88,16 @@ void Gosu::Image::draw_rot(double x, double y, ZPos z, double angle, double cent
     double dist_to_bottom_x = -offs_x * size_y * (1 - center_y);
     double dist_to_bottom_y = -offs_y * size_y * (1 - center_y);
 
-    m_data->draw(x + dist_to_left_x + dist_to_top_x, y + dist_to_left_y + dist_to_top_y, c,
+    m_drawable->draw(x + dist_to_left_x + dist_to_top_x, y + dist_to_left_y + dist_to_top_y, c,
                  x + dist_to_right_x + dist_to_top_x, y + dist_to_right_y + dist_to_top_y, c,
                  x + dist_to_left_x + dist_to_bottom_x, y + dist_to_left_y + dist_to_bottom_y, c,
                  x + dist_to_right_x + dist_to_bottom_x, y + dist_to_right_y + dist_to_bottom_y, c,
                  z, mode);
 }
 
-Gosu::ImageData& Gosu::Image::data() const
+Gosu::Drawable& Gosu::Image::drawable() const
 {
-    return *m_data;
+    return *m_drawable;
 }
 
 std::vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bitmap, //

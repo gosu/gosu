@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Gosu/Fwd.hpp>
-#include <Gosu/ImageData.hpp>
+#include <Gosu/Drawable.hpp>
 #include <Gosu/Utility.hpp>
 #include <cstdint>
 #include <memory>
@@ -12,7 +12,7 @@ namespace Gosu
 
     /// The most common ImageData implementation which uses a portion of, or a full OpenGL texture
     /// to store image data.
-    class TexChunk : public ImageData
+    class TexChunk : public Drawable
     {
         const std::shared_ptr<Texture> m_texture;
         const Rect m_rect;
@@ -43,7 +43,7 @@ namespace Gosu
 
         const GLTexInfo* gl_tex_info() const override { return &m_info; }
 
-        std::unique_ptr<ImageData> subimage(const Rect& rect) const override;
+        std::unique_ptr<Drawable> subimage(const Rect& rect) const override;
 
         Bitmap to_bitmap() const override;
 

@@ -1,16 +1,16 @@
 #pragma once
 
-#include <Gosu/ImageData.hpp>
+#include <Gosu/Drawable.hpp>
 #include <memory>
 
 namespace Gosu
 {
-    class EmptyImageData : public ImageData
+    class EmptyDrawable : public Drawable
     {
         int m_width, m_height;
 
     public:
-        EmptyImageData(int width, int height)
+        EmptyDrawable(int width, int height)
             : m_width(width),
               m_height(height)
         {
@@ -30,7 +30,7 @@ namespace Gosu
 
         Bitmap to_bitmap() const override { return Bitmap(m_width, m_height); }
 
-        std::unique_ptr<ImageData> subimage(const Rect&) const override { return nullptr; }
+        std::unique_ptr<Drawable> subimage(const Rect&) const override { return nullptr; }
 
         void insert(const Bitmap&, int, int) override { }
     };

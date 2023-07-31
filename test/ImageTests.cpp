@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
 #include <Gosu/Bitmap.hpp>
+#include <Gosu/Drawable.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
-#include <Gosu/ImageData.hpp>
 
 class ImageTests : public testing::Test
 {
@@ -14,11 +14,11 @@ TEST_F(ImageTests, empty_image)
     Gosu::Image image;
     ASSERT_EQ(image.width(), 0);
     ASSERT_EQ(image.height(), 0);
-    ASSERT_NO_THROW(image.data().insert(Gosu::Bitmap(3, 5, Gosu::Color::GREEN), -4, 5));
-    ASSERT_EQ(image.data().subimage(Gosu::Rect { 0, -3, 3, 6 }), nullptr);
-    ASSERT_EQ(image.data().gl_tex_info(), nullptr);
+    ASSERT_NO_THROW(image.drawable().insert(Gosu::Bitmap(3, 5, Gosu::Color::GREEN), -4, 5));
+    ASSERT_EQ(image.drawable().subimage(Gosu::Rect { 0, -3, 3, 6 }), nullptr);
+    ASSERT_EQ(image.drawable().gl_tex_info(), nullptr);
     ASSERT_NO_THROW(image.draw(53, 324.6, 0, 1.0, 1.0, Gosu::Color::RED));
-    ASSERT_EQ(image.data().to_bitmap(), Gosu::Bitmap(0, 0));
+    ASSERT_EQ(image.drawable().to_bitmap(), Gosu::Bitmap(0, 0));
 }
 
 TEST_F(ImageTests, render_after_color_key)
@@ -34,14 +34,14 @@ TEST_F(ImageTests, render_after_color_key)
     // Now all previously fuchsia pixels should be yellow (like their neighbors) with alpha = 0.
     ASSERT_EQ(bitmap.pixel(1, 1), Gosu::Color::YELLOW.with_alpha(0));
     // Turn it into an image for rendering. (Use 'true' to test a backward compatibility code path.)
-    Gosu::Image image(Gosu::Graphics::create_image(bitmap, Gosu::Rect::covering(bitmap), true));
+    Gosu::Image image(Gosu::Graphics::create_drawable(bitmap, Gosu::Rect::covering(bitmap), true));
 
     const Gosu::Image result = Gosu::Graphics::render(300, 300, [&] {
         Gosu::Graphics::draw_rect(0, 0, 300, 300, Gosu::Color::YELLOW, 0);
         image.draw(0, 0, 1, 100, 100);
     });
 
-    Gosu::Bitmap result_bitmap = result.data().to_bitmap();
+    Gosu::Bitmap result_bitmap = result.drawable().to_bitmap();
     for (int y = 0; y < result_bitmap.height(); ++y) {
         for (int x = 0; x < result_bitmap.width(); ++x) {
             // TODO: Is it normal/expected that render-ed images have alpha<255 in some places?
@@ -64,7 +64,7 @@ TEST_F(ImageTests, load_tiles_from_tile)
     const Gosu::Bitmap tilemap = Gosu::load_image_file("test_image_io/no-alpha-png32.png");
     Gosu::Bitmap second_tile(30, 20);
     second_tile.insert(tilemap, -30, 0);
-    ASSERT_EQ(tiles.at(1).data().to_bitmap(), second_tile);
+    ASSERT_EQ(tiles.at(1).drawable().to_bitmap(), second_tile);
 }
 
 TEST_F(ImageTests, load_tiles_from_bitmap)

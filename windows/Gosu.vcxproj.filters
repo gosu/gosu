@@ -581,7 +581,7 @@
     <ClInclude Include="..\src\DrawOpQueue.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\EmptyImageData.hpp">
+    <ClInclude Include="..\src\EmptyDrawable.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
     <ClInclude Include="..\src\GosuGLView.hpp">
@@ -647,6 +647,9 @@
     <ClInclude Include="..\include\Gosu\Directories.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Gosu\Drawable.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
     <ClInclude Include="..\include\Gosu\Font.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
@@ -663,9 +666,6 @@
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Image.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Gosu\ImageData.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Input.hpp">

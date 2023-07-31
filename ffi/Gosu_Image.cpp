@@ -65,8 +65,8 @@ GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_subimage(Gosu_Image* image, int 
                                                          int width, int height)
 {
     return Gosu_translate_exceptions([=]() -> Gosu_Image* {
-        std::unique_ptr<Gosu::ImageData> image_data =
-            image->image.data().subimage(Gosu::Rect{ left, top, width, height});
+        std::unique_ptr<Gosu::Drawable> image_data
+            = image->image.drawable().subimage(Gosu::Rect { left, top, width, height });
 
         if (image_data) return nullptr;
 
@@ -94,8 +94,8 @@ GOSU_FFI_API void Gosu_Image_create_tiles_from_image(Gosu_Image* image, int tile
                                                      unsigned image_flags)
 {
     Gosu_translate_exceptions([=] {
-        std::vector<Gosu::Image> gosu_images =
-            Gosu::load_tiles(image->image.data().to_bitmap(), tile_width, tile_height, image_flags);
+        std::vector<Gosu::Image> gosu_images = Gosu::load_tiles(
+            image->image.drawable().to_bitmap(), tile_width, tile_height, image_flags);
 
         for (Gosu::Image& img : gosu_images) {
             function(data, new Gosu_Image{img});
@@ -135,7 +135,7 @@ GOSU_FFI_API Gosu_GLTexInfo* Gosu_Image_gl_tex_info_create(Gosu_Image* image)
 
     return Gosu_translate_exceptions([=] {
         Gosu::GLTexInfo* gosu_texture_info =
-            new Gosu::GLTexInfo{*image->image.data().gl_tex_info()};
+            new Gosu::GLTexInfo{*image->image.drawable().gl_tex_info()};
         return reinterpret_cast<Gosu_GLTexInfo*>(gosu_texture_info);
     });
 }
@@ -173,7 +173,7 @@ GOSU_FFI_API void Gosu_Image_draw_as_quad(Gosu_Image* image, double x1, double y
                                           unsigned color4, double z, unsigned mode)
 {
     Gosu_translate_exceptions([=] {
-        image->image.data().draw(x1, y1, color1, x2, y2, color2, x3, y3, color3, x4, y4, color4, z,
+        image->image.drawable().draw(x1, y1, color1, x2, y2, color2, x3, y3, color3, x4, y4, color4, z,
                                  static_cast<Gosu::BlendMode>(mode));
     });
 }
@@ -183,8 +183,8 @@ GOSU_FFI_API void Gosu_Image_draw_as_quad(Gosu_Image* image, double x1, double y
 GOSU_FFI_API void Gosu_Image_insert(Gosu_Image* image, Gosu_Image* source, int x, int y)
 {
     Gosu_translate_exceptions([=] {
-        Gosu::Bitmap bitmap = source->image.data().to_bitmap();
-        image->image.data().insert(bitmap, x, y);
+        Gosu::Bitmap bitmap = source->image.drawable().to_bitmap();
+        image->image.drawable().insert(bitmap, x, y);
     });
 }
 
@@ -192,7 +192,7 @@ GOSU_FFI_API uint8_t* Gosu_Image_to_blob(Gosu_Image* image)
 {
     static thread_local Gosu::Bitmap bitmap;
     return Gosu_translate_exceptions([=] {
-        bitmap = image->image.data().to_bitmap();
+        bitmap = image->image.drawable().to_bitmap();
         return reinterpret_cast<uint8_t*>(bitmap.data());
     });
 }
@@ -200,6 +200,6 @@ GOSU_FFI_API uint8_t* Gosu_Image_to_blob(Gosu_Image* image)
 GOSU_FFI_API void Gosu_Image_save(Gosu_Image* image, const char* filename)
 {
     Gosu_translate_exceptions([=] {
-        Gosu::save_image_file(image->image.data().to_bitmap(), filename);
+        Gosu::save_image_file(image->image.drawable().to_bitmap(), filename);
     });
 }
