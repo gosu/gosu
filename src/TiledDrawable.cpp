@@ -6,22 +6,29 @@
 #include <cmath>
 #include <stdexcept>
 
-Gosu::TiledDrawable::TiledDrawable(const Bitmap& source, int tile_size, unsigned image_flags)
-    : m_width(source.width()),
-      m_height(source.height())
+Gosu::TiledDrawable::TiledDrawable(const Bitmap& source, const Rect& source_rect, int tile_size,
+                                   unsigned image_flags)
+    : m_width(source_rect.width),
+      m_height(source_rect.height)
 {
+    if (!Rect::covering(source).contains(source_rect) || source_rect.empty()) {
+        throw std::invalid_argument("Invalid TiledDrawable source_rect");
+    }
     if (tile_size <= 0) {
         throw std::invalid_argument("tile_size must be greater than 0");
     }
 
     // Manually round up during this integer division.
-    const int tiles_x = (source.width() + tile_size - 1) / tile_size;
-    const int tiles_y = (source.height() + tile_size - 1) / tile_size;
+    const int tiles_x = (source_rect.width + tile_size - 1) / tile_size;
+    const int tiles_y = (source_rect.height + tile_size - 1) / tile_size;
 
     for (int ty = 0; ty < tiles_y; ++ty) {
         for (int tx = 0; tx < tiles_x; ++tx) {
-            Rect source_rect { tx * tile_size, ty * tile_size, tile_size, tile_size };
-            source_rect.clip_to(Rect::covering(source));
+            Rect tile_source_rect { .x = source_rect.x + tx * tile_size,
+                                    .y = source_rect.y + ty * tile_size,
+                                    .width = tile_size,
+                                    .height = tile_size };
+            tile_source_rect.clip_to(source_rect);
 
             unsigned local_flags = image_flags;
 
@@ -43,9 +50,9 @@ Gosu::TiledDrawable::TiledDrawable(const Bitmap& source, int tile_size, unsigned
             }
 
             m_tiles.push_back(Tile {
-                .x = source_rect.x,
-                .y = source_rect.y,
-                .data = Graphics::create_drawable(source, source_rect, local_flags),
+                .x = tile_source_rect.x,
+                .y = tile_source_rect.y,
+                .data = create_drawable(source, tile_source_rect, local_flags),
             });
         }
     }
@@ -113,12 +120,12 @@ void Gosu::TiledDrawable::draw(double x1, double y1, Color c1, double x2, double
 
 std::unique_ptr<Gosu::Drawable> Gosu::TiledDrawable::subimage(const Rect& source_rect) const
 {
-    auto tiled_data = std::make_unique<TiledDrawable>(*this, source_rect);
-    if (tiled_data->m_tiles.size() == 1) {
+    auto tiled_drawable = std::make_unique<TiledDrawable>(*this, source_rect);
+    if (tiled_drawable->m_tiles.size() == 1) {
         // Optimization: If the tiled subimage only contains a single tile, return that.
-        return std::move(tiled_data->m_tiles[0].data);
+        return std::move(tiled_drawable->m_tiles[0].data);
     }
-    return tiled_data;
+    return tiled_drawable;
 }
 
 Gosu::Bitmap Gosu::TiledDrawable::to_bitmap() const

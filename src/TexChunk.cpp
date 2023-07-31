@@ -88,8 +88,5 @@ void Gosu::TexChunk::insert(const Bitmap& bitmap, int x, int y)
         source = &clipped_bitmap;
     }
 
-    glBindTexture(GL_TEXTURE_2D, tex_name());
-    glTexSubImage2D(GL_TEXTURE_2D, 0, m_rect.x + x + offset_x, m_rect.y + y + offset_y, //
-                    source->width(), source->height(), Color::GL_FORMAT, GL_UNSIGNED_BYTE,
-                    source->data());
+    m_texture->insert(*source, m_rect.x + x + offset_x, m_rect.y + y + offset_y);
 }

@@ -22,7 +22,8 @@ namespace Gosu
         std::vector<Tile> m_tiles;
 
     public:
-        TiledDrawable(const Bitmap& source, int tile_size, unsigned image_flags);
+        TiledDrawable(const Bitmap& source, const Rect& source_rect, int tile_size,
+                      unsigned image_flags);
         /// This constructor is used to implement subimage().
         TiledDrawable(const TiledDrawable& parent, const Rect& rect);
 
