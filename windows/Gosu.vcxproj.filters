@@ -237,7 +237,7 @@
     <ClCompile Include="..\src\Texture.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\TiledImageData.cpp">
+    <ClCompile Include="..\src\TiledDrawable.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\TimingApple.cpp">
@@ -617,7 +617,7 @@
     <ClInclude Include="..\src\Texture.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\TiledImageData.hpp">
+    <ClInclude Include="..\src\TiledDrawable.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
     <ClInclude Include="..\src\TransformStack.hpp">

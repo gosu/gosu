@@ -1,12 +1,12 @@
-#include "TiledImageData.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Math.hpp>
 #include "GraphicsImpl.hpp"
+#include "TiledDrawable.hpp"
 #include <cmath>
 #include <stdexcept>
 
-Gosu::TiledImageData::TiledImageData(const Bitmap& source, int tile_size, unsigned image_flags)
+Gosu::TiledDrawable::TiledDrawable(const Bitmap& source, int tile_size, unsigned image_flags)
     : m_width(source.width()),
       m_height(source.height())
 {
@@ -51,7 +51,7 @@ Gosu::TiledImageData::TiledImageData(const Bitmap& source, int tile_size, unsign
     }
 }
 
-Gosu::TiledImageData::TiledImageData(const TiledImageData& parent, const Rect& rect)
+Gosu::TiledDrawable::TiledDrawable(const TiledDrawable& parent, const Rect& rect)
     : m_width(rect.width),
       m_height(rect.height)
 {
@@ -73,7 +73,7 @@ Gosu::TiledImageData::TiledImageData(const TiledImageData& parent, const Rect& r
     }
 }
 
-void Gosu::TiledImageData::draw(double x1, double y1, Color c1, double x2, double y2, Color c2,
+void Gosu::TiledDrawable::draw(double x1, double y1, Color c1, double x2, double y2, Color c2,
                                 double x3, double y3, Color c3, double x4, double y4, Color c4,
                                 ZPos z, BlendMode mode) const
 {
@@ -111,9 +111,9 @@ void Gosu::TiledImageData::draw(double x1, double y1, Color c1, double x2, doubl
     }
 }
 
-std::unique_ptr<Gosu::Drawable> Gosu::TiledImageData::subimage(const Rect& source_rect) const
+std::unique_ptr<Gosu::Drawable> Gosu::TiledDrawable::subimage(const Rect& source_rect) const
 {
-    auto tiled_data = std::make_unique<TiledImageData>(*this, source_rect);
+    auto tiled_data = std::make_unique<TiledDrawable>(*this, source_rect);
     if (tiled_data->m_tiles.size() == 1) {
         // Optimization: If the tiled subimage only contains a single tile, return that.
         return std::move(tiled_data->m_tiles[0].data);
@@ -121,7 +121,7 @@ std::unique_ptr<Gosu::Drawable> Gosu::TiledImageData::subimage(const Rect& sourc
     return tiled_data;
 }
 
-Gosu::Bitmap Gosu::TiledImageData::to_bitmap() const
+Gosu::Bitmap Gosu::TiledDrawable::to_bitmap() const
 {
     Bitmap bitmap(width(), height());
     for (const Tile& tile : m_tiles) {
@@ -130,7 +130,7 @@ Gosu::Bitmap Gosu::TiledImageData::to_bitmap() const
     return bitmap;
 }
 
-void Gosu::TiledImageData::insert(const Bitmap& bitmap, int x, int y)
+void Gosu::TiledDrawable::insert(const Bitmap& bitmap, int x, int y)
 {
     const Rect target_rect { x, y, bitmap.width(), bitmap.height() };
     for (const Tile& tile : m_tiles) {

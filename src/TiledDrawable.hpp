@@ -11,7 +11,7 @@ namespace Gosu
 {
     /// When an image file is too large to be represented by a single OpenGL texture, Gosu automatically
     /// splits it up into a rectangle of tiles instead of throwing an error.
-    class TiledImageData : public Drawable
+    class TiledDrawable : public Drawable
     {
         int m_width, m_height;
         struct Tile
@@ -22,9 +22,9 @@ namespace Gosu
         std::vector<Tile> m_tiles;
 
     public:
-        TiledImageData(const Bitmap& source, int tile_size, unsigned image_flags);
+        TiledDrawable(const Bitmap& source, int tile_size, unsigned image_flags);
         /// This constructor is used to implement subimage().
-        TiledImageData(const TiledImageData& parent, const Rect& rect);
+        TiledDrawable(const TiledDrawable& parent, const Rect& rect);
 
         int width() const override { return m_width; }
         int height() const override { return m_height; }

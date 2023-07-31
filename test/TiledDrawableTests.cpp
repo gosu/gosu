@@ -2,20 +2,20 @@
 
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
-#include "../src/TiledImageData.hpp"
+#include "../src/TiledDrawable.hpp"
 #include "Gosu/Bitmap.hpp"
 #include <numeric> // for std::iota
 
-class TiledImageDataTests : public testing::Test
+class TiledDrawableTests : public testing::Test
 {
 };
 
-TEST_F(TiledImageDataTests, direct_creation)
+TEST_F(TiledDrawableTests, direct_creation)
 {
     Gosu::Buffer buffer(180);
     std::iota(buffer.data(), buffer.data() + buffer.size(), 0);
     Gosu::Bitmap source(9, 5, std::move(buffer));
-    Gosu::TiledImageData tiled_data(source, 3, Gosu::IF_SMOOTH);
+    Gosu::TiledDrawable tiled_data(source, 3, Gosu::IF_SMOOTH);
     ASSERT_EQ(tiled_data.width(), 9);
     ASSERT_EQ(tiled_data.height(), 5);
     ASSERT_EQ(source, tiled_data.to_bitmap());
@@ -42,10 +42,10 @@ TEST_F(TiledImageDataTests, direct_creation)
     tiled_data.insert(other_bitmap, 4, 1);
     ASSERT_EQ(source, tiled_data.to_bitmap());
 
-    ASSERT_THROW(Gosu::TiledImageData(source, 0, Gosu::IF_RETRO), std::invalid_argument);
+    ASSERT_THROW(Gosu::TiledDrawable(source, 0, Gosu::IF_RETRO), std::invalid_argument);
 }
 
-TEST_F(TiledImageDataTests, drawing)
+TEST_F(TiledDrawableTests, drawing)
 {
     const auto rotated_by_90_degrees = [](const Gosu::Image& image) {
         return Gosu::Graphics::render(image.height(), image.width(), [&] {
@@ -59,11 +59,11 @@ TEST_F(TiledImageDataTests, drawing)
 
     // Rotate the image eight times. We should arrive where we started.
     for (int i = 0; i < 8; ++i) {
-        // Reload image into a TiledImageData (split it up into tiles).
+        // Reload image into a TiledDrawable (split it up into tiles).
         const Gosu::Bitmap current_bitmap = image.drawable().to_bitmap();
         // TODO: Why are small tile_sizes (1, 2) so slow? Will a better BinPacker fix this?
         image = Gosu::Image(
-            std::make_unique<Gosu::TiledImageData>(current_bitmap, i * 3 + 5, Gosu::IF_TILEABLE));
+            std::make_unique<Gosu::TiledDrawable>(current_bitmap, i * 3 + 5, Gosu::IF_TILEABLE));
         // Now rotate it clockwise by 90°.
         image = rotated_by_90_degrees(image);
     }

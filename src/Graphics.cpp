@@ -9,7 +9,7 @@
 #include "Macro.hpp"
 #include "OffScreenTarget.hpp"
 #include "Texture.hpp"
-#include "TiledImageData.hpp"
+#include "TiledDrawable.hpp"
 #include <algorithm>
 #include <cmath>
 #include <functional>
@@ -463,10 +463,10 @@ Gosu::Graphics::create_drawable(const Bitmap& source, const Rect& source_rect, u
 
     // Too large to fit on a single texture? -> Create a tiled representation.
     if (source_rect.width > max_size - 2 || source_rect.height > max_size - 2) {
-        // TODO: This is wasteful, TiledImageData should just accept and use source_rect.
+        // TODO: This is wasteful, TiledDrawable should just accept and use source_rect.
         Bitmap bmp(source_rect.width, source_rect.height);
         bmp.insert(source, 0, 0, source_rect);
-        return std::make_unique<TiledImageData>(bmp, max_size - 2, image_flags);
+        return std::make_unique<TiledDrawable>(bmp, max_size - 2, image_flags);
     }
 
     Bitmap bmp = apply_border_flags(image_flags, source, source_rect);

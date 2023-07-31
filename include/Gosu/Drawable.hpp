@@ -11,7 +11,7 @@
 namespace Gosu
 {
     /// Contains information about the underlying OpenGL texture and the u/v space used for image
-    /// data. Can be retrieved from some images to use them in OpenGL operations.
+    /// data. Can be retrieved from some drawables to use them in OpenGL operations.
     struct GLTexInfo
     {
         std::uint32_t tex_name;

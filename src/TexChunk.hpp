@@ -10,7 +10,7 @@ namespace Gosu
 {
     class Texture;
 
-    /// The most common ImageData implementation which uses a portion of, or a full OpenGL texture
+    /// The most common Drawable implementation which uses a portion of, or a full, OpenGL texture
     /// to store image data.
     class TexChunk : public Drawable
     {

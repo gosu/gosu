@@ -65,12 +65,12 @@ GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_subimage(Gosu_Image* image, int 
                                                          int width, int height)
 {
     return Gosu_translate_exceptions([=]() -> Gosu_Image* {
-        std::unique_ptr<Gosu::Drawable> image_data
+        std::unique_ptr<Gosu::Drawable> drawable
             = image->image.drawable().subimage(Gosu::Rect { left, top, width, height });
 
-        if (image_data) return nullptr;
+        if (! drawable) return nullptr;
 
-        return new Gosu_Image{Gosu::Image{std::move(image_data)}};
+        return new Gosu_Image{Gosu::Image{std::move(drawable)}};
     });
 }
 

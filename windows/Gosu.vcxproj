@@ -246,7 +246,7 @@
     <ClCompile Include="..\src\TextBuilder.cpp" />
     <ClCompile Include="..\src\TextInput.cpp" />
     <ClCompile Include="..\src\Texture.cpp" />
-    <ClCompile Include="..\src\TiledImageData.cpp" />
+    <ClCompile Include="..\src\TiledDrawable.cpp" />
     <ClCompile Include="..\src\TimingApple.cpp" />
     <ClCompile Include="..\src\TimingUnix.cpp" />
     <ClCompile Include="..\src\TimingWin.cpp" />
@@ -374,7 +374,7 @@
     <ClInclude Include="..\src\TexChunk.hpp" />
     <ClInclude Include="..\src\TextBuilder.hpp" />
     <ClInclude Include="..\src\Texture.hpp" />
-    <ClInclude Include="..\src\TiledImageData.hpp" />
+    <ClInclude Include="..\src\TiledDrawable.hpp" />
     <ClInclude Include="..\src\TransformStack.hpp" />
     <ClInclude Include="..\src\TrueTypeFont.hpp" />
     <ClInclude Include="..\src\WinUtility.hpp" />
