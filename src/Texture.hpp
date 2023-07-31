@@ -25,6 +25,7 @@ namespace Gosu
 
         [[nodiscard]] std::unique_ptr<TexChunk> try_alloc(const Bitmap& bitmap, int padding);
 
+        void insert(const Bitmap& bitmap, int x, int y);
         Bitmap to_bitmap(const Rect& rect) const;
     };
 }

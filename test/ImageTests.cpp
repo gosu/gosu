@@ -34,7 +34,7 @@ TEST_F(ImageTests, render_after_color_key)
     // Now all previously fuchsia pixels should be yellow (like their neighbors) with alpha = 0.
     ASSERT_EQ(bitmap.pixel(1, 1), Gosu::Color::YELLOW.with_alpha(0));
     // Turn it into an image for rendering. (Use 'true' to test a backward compatibility code path.)
-    Gosu::Image image(Gosu::Graphics::create_drawable(bitmap, Gosu::Rect::covering(bitmap), true));
+    Gosu::Image image(Gosu::create_drawable(bitmap, Gosu::Rect::covering(bitmap), true));
 
     const Gosu::Image result = Gosu::Graphics::render(300, 300, [&] {
         Gosu::Graphics::draw_rect(0, 0, 300, 300, Gosu::Color::YELLOW, 0);

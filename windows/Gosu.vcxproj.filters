@@ -183,6 +183,9 @@
     <ClCompile Include="..\src\DirectoriesWin.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Drawable.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Font.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>

@@ -106,7 +106,7 @@ TEST_F(TextureTests, bin_packing_benchmark)
         if (next_bool()) {
             image_flags |= Gosu::IF_TILEABLE;
         }
-        images.push_back(Gosu::Graphics::create_drawable(bitmap, source_rect, image_flags));
+        images.push_back(Gosu::create_drawable(bitmap, source_rect, image_flags));
 
         if (i % 3 == 0) {
             images.erase(images.begin());

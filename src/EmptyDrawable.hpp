@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Gosu/Bitmap.hpp>
 #include <Gosu/Drawable.hpp>
 #include <memory>
 

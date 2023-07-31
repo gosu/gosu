@@ -228,6 +228,7 @@
     <ClCompile Include="..\src\DirectoriesApple.cpp" />
     <ClCompile Include="..\src\DirectoriesUnix.cpp" />
     <ClCompile Include="..\src\DirectoriesWin.cpp" />
+    <ClCompile Include="..\src\Drawable.cpp" />
     <ClCompile Include="..\src\Font.cpp" />
     <ClCompile Include="..\src\GosuGLView.cpp" />
     <ClCompile Include="..\src\GosuViewController.cpp" />

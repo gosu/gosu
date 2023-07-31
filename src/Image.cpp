@@ -14,27 +14,27 @@ Gosu::Image::Image()
 }
 
 Gosu::Image::Image(const std::string& filename, unsigned image_flags)
-: Image(load_image_file(filename), image_flags)
+    : Image(load_image_file(filename), image_flags)
 {
 }
 
 Gosu::Image::Image(const std::string& filename, const Rect& source_rect, unsigned image_flags)
-: Image(load_image_file(filename), source_rect, image_flags)
+    : Image(load_image_file(filename), source_rect, image_flags)
 {
 }
 
 Gosu::Image::Image(const Bitmap& source, unsigned image_flags)
-: Image(source, Rect::covering(source), image_flags)
+    : Image(source, Rect::covering(source), image_flags)
 {
 }
 
 Gosu::Image::Image(const Bitmap& source, const Rect& source_rect, unsigned image_flags)
-: m_drawable(Graphics::create_drawable(source, source_rect, image_flags))
+    : m_drawable(create_drawable(source, source_rect, image_flags))
 {
 }
 
 Gosu::Image::Image(std::unique_ptr<Drawable> data)
-: m_drawable(std::move(data))
+    : m_drawable(std::move(data))
 {
     if (!m_drawable) {
         throw std::invalid_argument("Gosu::Image cannot be initialized with nullptr");
@@ -88,11 +88,12 @@ void Gosu::Image::draw_rot(double x, double y, ZPos z, double angle, double cent
     double dist_to_bottom_x = -offs_x * size_y * (1 - center_y);
     double dist_to_bottom_y = -offs_y * size_y * (1 - center_y);
 
-    m_drawable->draw(x + dist_to_left_x + dist_to_top_x, y + dist_to_left_y + dist_to_top_y, c,
-                 x + dist_to_right_x + dist_to_top_x, y + dist_to_right_y + dist_to_top_y, c,
-                 x + dist_to_left_x + dist_to_bottom_x, y + dist_to_left_y + dist_to_bottom_y, c,
-                 x + dist_to_right_x + dist_to_bottom_x, y + dist_to_right_y + dist_to_bottom_y, c,
-                 z, mode);
+    m_drawable->draw( //
+        x + dist_to_left_x + dist_to_top_x, y + dist_to_left_y + dist_to_top_y, c,
+        x + dist_to_right_x + dist_to_top_x, y + dist_to_right_y + dist_to_top_y, c,
+        x + dist_to_left_x + dist_to_bottom_x, y + dist_to_left_y + dist_to_bottom_y, c,
+        x + dist_to_right_x + dist_to_bottom_x, y + dist_to_right_y + dist_to_bottom_y, c, //
+        z, mode);
 }
 
 Gosu::Drawable& Gosu::Image::drawable() const
@@ -103,8 +104,9 @@ Gosu::Drawable& Gosu::Image::drawable() const
 std::vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bitmap, //
                                           int tile_width, int tile_height, unsigned flags)
 {
-    if (tile_width == 0 || tile_height == 0)
+    if (tile_width == 0 || tile_height == 0) {
         throw std::invalid_argument("Gosu::load_tiles does not support empty tiles");
+    }
 
     int tiles_x, tiles_y;
     std::vector<Image> images;

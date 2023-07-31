@@ -33,8 +33,6 @@ namespace Gosu
         int width() const override { return m_rect.width; }
         int height() const override { return m_rect.height; }
 
-        std::uint32_t tex_name() const { return m_info.tex_name; }
-
         void draw(double x1, double y1, Color c1, //
                   double x2, double y2, Color c2, //
                   double x3, double y3, Color c3, //

@@ -10,10 +10,6 @@ namespace Gosu
 {
     struct DrawOp;
 
-    /// Returns the maximum size of an texture that will be allocated internally by Gosu.
-    /// Useful when extending Gosu using OpenGL.
-    const unsigned MAX_TEXTURE_SIZE = 1024;
-
     /// Serves as the target of all drawing and provides primitive drawing functionality.
     /// Usually created internally by Gosu::Window.
     class Graphics
@@ -90,8 +86,5 @@ namespace Gosu
         /// For internal use only.
         static void schedule_draw_op(const DrawOp& op);
 
-        /// Turns a portion of a bitmap into something that can be drawn on a Graphics object.
-        static std::unique_ptr<Drawable>
-        create_drawable(const Bitmap& source, const Rect& source_rect, unsigned image_flags);
     };
 }

@@ -5,12 +5,6 @@
 #include "TexChunk.hpp"
 #include <stdexcept>
 
-namespace Gosu
-{
-    // This variable has been declared in multiple places. Define it here, where it will be used.
-    bool undocumented_retrofication = false;
-}
-
 Gosu::Texture::Texture(int width, int height, bool retro)
     : m_bin_packer(width, height),
       m_retro(retro)
@@ -34,7 +28,7 @@ Gosu::Texture::Texture(int width, int height, bool retro)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_bin_packer.width(), m_bin_packer.height(), 0,
                  Color::GL_FORMAT, GL_UNSIGNED_BYTE, nullptr);
 
-    if (retro || undocumented_retrofication) {
+    if (retro) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     }
@@ -67,16 +61,24 @@ std::unique_ptr<Gosu::TexChunk> Gosu::Texture::try_alloc(const Bitmap& bitmap, i
         return nullptr;
     }
 
-    ensure_current_context();
-
-    // TODO: Can we merge this with TexChunk::insert / have TexChunk update its borders itself?
-    glBindTexture(GL_TEXTURE_2D, m_tex_name);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, rect->x, rect->y, rect->width, rect->height, Color::GL_FORMAT,
-                    GL_UNSIGNED_BYTE, bitmap.data());
+    insert(bitmap, rect->x, rect->y);
 
     const Rect rect_without_padding { rect->x + padding, rect->y + padding,
                                       rect->width - 2 * padding, rect->height - 2 * padding };
     return std::make_unique<TexChunk>(shared_from_this(), rect_without_padding, rect);
+}
+
+void Gosu::Texture::insert(const Gosu::Bitmap& bitmap, int x, int y)
+{
+    if (!Rect::covering(*this).contains(Rect { x, y, bitmap.width(), bitmap.height() })) {
+        throw std::invalid_argument("Gosu::Texture::insert: Rect exceeds bounds");
+    }
+
+    ensure_current_context();
+
+    glBindTexture(GL_TEXTURE_2D, m_tex_name);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, bitmap.width(), bitmap.height(), Color::GL_FORMAT,
+                    GL_UNSIGNED_BYTE, bitmap.data());
 }
 
 Gosu::Bitmap Gosu::Texture::to_bitmap(const Rect& rect) const
