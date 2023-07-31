@@ -11,21 +11,21 @@
 namespace Gosu
 {
     /// Contains information about the underlying OpenGL texture and the u/v space used for image
-    /// data. Can be retrieved from some images to use them in OpenGL operations.
+    /// data. Can be retrieved from some drawables to use them in OpenGL operations.
     struct GLTexInfo
     {
         std::uint32_t tex_name;
         double left, right, top, bottom;
     };
 
-    /// Abstract base class for a rectangular thing that can be drawn on screen.
-    /// Instances are usually created through Graphics::create_image and used to implement drawing
-    /// primitives like Image, which then provide a more convenient drawing interface.
-    class ImageData : Noncopyable
+    /// Abstract base class for a rectangular thing that can be drawn.
+    /// Instances are usually created through Graphics::create_drawable and used to implement
+    /// drawing primitives like Image, which then provide a more convenient drawing interface.
+    class Drawable : Noncopyable
     {
     public:
-        ImageData() = default;
-        virtual ~ImageData() = default;
+        Drawable() = default;
+        virtual ~Drawable() = default;
 
         virtual int width() const = 0;
 
@@ -42,7 +42,7 @@ namespace Gosu
 
         virtual Bitmap to_bitmap() const = 0;
 
-        virtual std::unique_ptr<ImageData> subimage(const Rect& rect) const = 0;
+        virtual std::unique_ptr<Drawable> subimage(const Rect& rect) const = 0;
 
         virtual void insert(const Bitmap& bitmap, int x, int y) = 0;
     };

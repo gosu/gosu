@@ -246,7 +246,7 @@
     <ClCompile Include="..\src\TextBuilder.cpp" />
     <ClCompile Include="..\src\TextInput.cpp" />
     <ClCompile Include="..\src\Texture.cpp" />
-    <ClCompile Include="..\src\TiledImageData.cpp" />
+    <ClCompile Include="..\src\TiledDrawable.cpp" />
     <ClCompile Include="..\src\TimingApple.cpp" />
     <ClCompile Include="..\src\TimingUnix.cpp" />
     <ClCompile Include="..\src\TimingWin.cpp" />
@@ -362,7 +362,7 @@
     <ClInclude Include="..\src\ClipRectStack.hpp" />
     <ClInclude Include="..\src\DrawOp.hpp" />
     <ClInclude Include="..\src\DrawOpQueue.hpp" />
-    <ClInclude Include="..\src\EmptyImageData.hpp" />
+    <ClInclude Include="..\src\EmptyDrawable.hpp" />
     <ClInclude Include="..\src\GosuGLView.hpp" />
     <ClInclude Include="..\src\GosuViewController.hpp" />
     <ClInclude Include="..\src\GraphicsImpl.hpp" />
@@ -374,7 +374,7 @@
     <ClInclude Include="..\src\TexChunk.hpp" />
     <ClInclude Include="..\src\TextBuilder.hpp" />
     <ClInclude Include="..\src\Texture.hpp" />
-    <ClInclude Include="..\src\TiledImageData.hpp" />
+    <ClInclude Include="..\src\TiledDrawable.hpp" />
     <ClInclude Include="..\src\TransformStack.hpp" />
     <ClInclude Include="..\src\TrueTypeFont.hpp" />
     <ClInclude Include="..\src\WinUtility.hpp" />
@@ -384,13 +384,13 @@
     <ClInclude Include="..\include\Gosu\Buttons.hpp" />
     <ClInclude Include="..\include\Gosu\Color.hpp" />
     <ClInclude Include="..\include\Gosu\Directories.hpp" />
+    <ClInclude Include="..\include\Gosu\Drawable.hpp" />
     <ClInclude Include="..\include\Gosu\Font.hpp" />
     <ClInclude Include="..\include\Gosu\Fwd.hpp" />
     <ClInclude Include="..\include\Gosu\Gosu.hpp" />
     <ClInclude Include="..\include\Gosu\Graphics.hpp" />
     <ClInclude Include="..\include\Gosu\GraphicsBase.hpp" />
     <ClInclude Include="..\include\Gosu\Image.hpp" />
-    <ClInclude Include="..\include\Gosu\ImageData.hpp" />
     <ClInclude Include="..\include\Gosu\Input.hpp" />
     <ClInclude Include="..\include\Gosu\Inspection.hpp" />
     <ClInclude Include="..\include\Gosu\Math.hpp" />

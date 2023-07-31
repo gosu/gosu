@@ -184,10 +184,10 @@ Gosu::Bitmap Gosu::Macro::to_bitmap() const
              pimpl->width, pimpl->height, Color::WHITE, 0, BM_DEFAULT);
     };
 
-    return Gosu::Graphics::render(pimpl->width, pimpl->height, render_this).data().to_bitmap();
+    return Gosu::Graphics::render(pimpl->width, pimpl->height, render_this).drawable().to_bitmap();
 }
 
-std::unique_ptr<Gosu::ImageData> Gosu::Macro::subimage(const Rect&) const
+std::unique_ptr<Gosu::Drawable> Gosu::Macro::subimage(const Rect&) const
 {
     return nullptr;
 }

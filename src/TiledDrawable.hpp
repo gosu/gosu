@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Gosu/Fwd.hpp>
-#include <Gosu/ImageData.hpp>
+#include <Gosu/Drawable.hpp>
 #include <Gosu/Platform.hpp>
 #include <functional>
 #include <memory>
@@ -11,20 +11,20 @@ namespace Gosu
 {
     /// When an image file is too large to be represented by a single OpenGL texture, Gosu automatically
     /// splits it up into a rectangle of tiles instead of throwing an error.
-    class TiledImageData : public ImageData
+    class TiledDrawable : public Drawable
     {
         int m_width, m_height;
         struct Tile
         {
             int x = 0, y = 0;
-            std::unique_ptr<ImageData> data = nullptr;
+            std::unique_ptr<Drawable> data = nullptr;
         };
         std::vector<Tile> m_tiles;
 
     public:
-        TiledImageData(const Bitmap& source, int tile_size, unsigned image_flags);
+        TiledDrawable(const Bitmap& source, int tile_size, unsigned image_flags);
         /// This constructor is used to implement subimage().
-        TiledImageData(const TiledImageData& parent, const Rect& rect);
+        TiledDrawable(const TiledDrawable& parent, const Rect& rect);
 
         int width() const override { return m_width; }
         int height() const override { return m_height; }
@@ -37,7 +37,7 @@ namespace Gosu
 
         const GLTexInfo* gl_tex_info() const override { return nullptr; }
 
-        std::unique_ptr<ImageData> subimage(const Rect& rect) const override;
+        std::unique_ptr<Drawable> subimage(const Rect& rect) const override;
 
         Bitmap to_bitmap() const override;
 

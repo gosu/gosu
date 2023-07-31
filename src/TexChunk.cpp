@@ -51,7 +51,7 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1, double x2, double y2, 
     Graphics::schedule_draw_op(op);
 }
 
-std::unique_ptr<Gosu::ImageData> Gosu::TexChunk::subimage(const Rect& rect) const
+std::unique_ptr<Gosu::Drawable> Gosu::TexChunk::subimage(const Rect& rect) const
 {
     // Note: m_rect is relative to m_texture, but rect should be relative to m_rect.
     if (!Rect::covering(*this).contains(rect)) {

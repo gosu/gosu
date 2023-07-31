@@ -92,7 +92,7 @@ TEST_F(TextureTests, bin_packing_benchmark)
     };
     const Gosu::Bitmap bitmap(256, 256, Gosu::Color::RED);
 
-    std::vector<std::unique_ptr<Gosu::ImageData>> images;
+    std::vector<std::unique_ptr<Gosu::Drawable>> images;
 
     for (int i = 0; i < 5'000; ++i) {
         Gosu::Rect source_rect { 0, 0, next_size(), next_size() };
@@ -106,7 +106,7 @@ TEST_F(TextureTests, bin_packing_benchmark)
         if (next_bool()) {
             image_flags |= Gosu::IF_TILEABLE;
         }
-        images.push_back(Gosu::Graphics::create_image(bitmap, source_rect, image_flags));
+        images.push_back(Gosu::Graphics::create_drawable(bitmap, source_rect, image_flags));
 
         if (i % 3 == 0) {
             images.erase(images.begin());

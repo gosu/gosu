@@ -11,10 +11,10 @@
 #include <Gosu/Buffer.hpp>
 #include <Gosu/Color.hpp>
 #include <Gosu/Directories.hpp>
+#include <Gosu/Drawable.hpp>
 #include <Gosu/Font.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
-#include <Gosu/ImageData.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/Inspection.hpp>
 #include <Gosu/Math.hpp>

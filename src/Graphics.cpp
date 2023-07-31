@@ -4,12 +4,12 @@
 #include <Gosu/Utility.hpp>
 #include "DrawOp.hpp"
 #include "DrawOpQueue.hpp"
-#include "EmptyImageData.hpp"
+#include "EmptyDrawable.hpp"
 #include "GraphicsImpl.hpp"
 #include "Macro.hpp"
 #include "OffScreenTarget.hpp"
 #include "Texture.hpp"
-#include "TiledImageData.hpp"
+#include "TiledDrawable.hpp"
 #include <algorithm>
 #include <cmath>
 #include <functional>
@@ -312,7 +312,7 @@ Gosu::Image Gosu::Graphics::record(int width, int height, const std::function<vo
 
     f();
 
-    std::unique_ptr<ImageData> result(new Macro(current_queue(), width, height));
+    std::unique_ptr<Drawable> result(new Macro(current_queue(), width, height));
     queues.pop_back();
     return Image(std::move(result));
 }
@@ -407,34 +407,34 @@ void Gosu::Graphics::set_physical_resolution(unsigned phys_width, unsigned phys_
     m_impl->update_base_transform();
 }
 
-std::unique_ptr<Gosu::ImageData>
-Gosu::Graphics::create_image(const Bitmap& source, const Rect& source_rect, unsigned flags)
+std::unique_ptr<Gosu::Drawable>
+Gosu::Graphics::create_drawable(const Bitmap& source, const Rect& source_rect, unsigned image_flags)
 {
     if (! Rect::covering(source).contains(source_rect)) {
         throw std::invalid_argument("Source rectangle exceeds bitmap");
     }
 
     if (source_rect.empty()) {
-        return std::make_unique<EmptyImageData>(source_rect.width, source_rect.height);
+        return std::make_unique<EmptyDrawable>(source_rect.width, source_rect.height);
     }
 
     // Backward compatibility: This used to be 'bool tileable'.
-    if (flags == 1) {
-        flags = IF_TILEABLE;
+    if (image_flags == 1) {
+        image_flags = IF_TILEABLE;
     }
 
-    bool wants_retro = (flags & IF_RETRO);
+    bool wants_retro = (image_flags & IF_RETRO);
 
     // Special case: If the texture is supposed to be tileable, is quadratic, has a size that is at
     // least 64 pixels but no more than max_size pixels and a power of two, create a single texture
     // just for this image.
-    if ((flags & IF_TILEABLE) == IF_TILEABLE && source_rect.width == source_rect.height
+    if ((image_flags & IF_TILEABLE) == IF_TILEABLE && source_rect.width == source_rect.height
         && (source_rect.width & (source_rect.width - 1)) == 0 && source_rect.width >= 64
         && source_rect.width <= MAX_TEXTURE_SIZE) {
 
         std::shared_ptr<Texture> texture
             = std::make_shared<Texture>(source_rect.width, source_rect.height, wants_retro);
-        std::unique_ptr<ImageData> data;
+        std::unique_ptr<Drawable> data;
 
         // Use the source bitmap directly if the source area completely covers it.
         if (source_rect == Rect::covering(source)) {
@@ -463,13 +463,13 @@ Gosu::Graphics::create_image(const Bitmap& source, const Rect& source_rect, unsi
 
     // Too large to fit on a single texture? -> Create a tiled representation.
     if (source_rect.width > max_size - 2 || source_rect.height > max_size - 2) {
-        // TODO: This is wasteful, TiledImageData should just accept and use source_rect.
+        // TODO: This is wasteful, TiledDrawable should just accept and use source_rect.
         Bitmap bmp(source_rect.width, source_rect.height);
         bmp.insert(source, 0, 0, source_rect);
-        return std::make_unique<TiledImageData>(bmp, max_size - 2, flags);
+        return std::make_unique<TiledDrawable>(bmp, max_size - 2, image_flags);
     }
 
-    Bitmap bmp = apply_border_flags(flags, source, source_rect);
+    Bitmap bmp = apply_border_flags(image_flags, source, source_rect);
 
     // Try to put the bitmap into one of the already allocated textures.
     for (const auto& texture : textures) {
@@ -477,7 +477,7 @@ Gosu::Graphics::create_image(const Bitmap& source, const Rect& source_rect, unsi
             continue;
         }
 
-        std::unique_ptr<ImageData> data = texture->try_alloc(bmp, 1);
+        std::unique_ptr<Drawable> data = texture->try_alloc(bmp, 1);
         if (data) {
             return data;
         }
@@ -488,7 +488,7 @@ Gosu::Graphics::create_image(const Bitmap& source, const Rect& source_rect, unsi
     std::shared_ptr<Texture> texture = std::make_shared<Texture>(max_size, max_size, wants_retro);
     textures.push_back(texture);
 
-    std::unique_ptr<ImageData> data = texture->try_alloc(bmp, 1);
+    std::unique_ptr<Drawable> data = texture->try_alloc(bmp, 1);
     if (!data) {
         throw std::logic_error("Internal texture block allocation error");
     }

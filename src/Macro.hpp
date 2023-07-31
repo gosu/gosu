@@ -1,11 +1,11 @@
 #pragma once
 
 #include <Gosu/Fwd.hpp>
-#include <Gosu/ImageData.hpp>
+#include <Gosu/Drawable.hpp>
 #include "GraphicsImpl.hpp"
 #include <memory>
 
-class Gosu::Macro : public Gosu::ImageData
+class Gosu::Macro : public Gosu::Drawable
 {
     struct Impl;
     std::shared_ptr<Impl> pimpl;
@@ -24,7 +24,7 @@ public:
 
     Gosu::Bitmap to_bitmap() const override;
 
-    std::unique_ptr<ImageData> subimage(const Rect&) const override;
+    std::unique_ptr<Drawable> subimage(const Rect&) const override;
 
     void insert(const Bitmap&, int x, int y) override;
 };

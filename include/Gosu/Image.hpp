@@ -12,7 +12,7 @@ namespace Gosu
     /// Provides functionality for drawing rectangular images.
     class Image
     {
-        std::shared_ptr<ImageData> m_data;
+        std::shared_ptr<Drawable> m_drawable;
 
     public:
         /// Creates an empty image. It will have a width and height of 0, and not contain anything.
@@ -37,8 +37,8 @@ namespace Gosu
         /// Converts a portion of the given bitmap into an image.
         Image(const Bitmap& source, const Rect& source_rect, unsigned image_flags = IF_SMOOTH);
 
-        /// Creates an Image from a user-supplied instance of the ImageData interface.
-        explicit Image(std::unique_ptr<ImageData> data);
+        /// Creates an Image from a user-supplied instance of the Drawable interface.
+        explicit Image(std::unique_ptr<Drawable> data);
 
         unsigned width() const;
         unsigned height() const;
@@ -62,7 +62,7 @@ namespace Gosu
 
 #ifndef SWIG
         /// Provides access to the underlying image data object.
-        ImageData& data() const;
+        Drawable& drawable() const;
 #endif
     };
 

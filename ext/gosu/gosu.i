@@ -618,8 +618,8 @@ namespace Gosu
     }
 }
 
-%ignore Gosu::ImageData;
-%include "../../include/Gosu/ImageData.hpp"
+%ignore Gosu::Drawable;
+%include "../../include/Gosu/Drawable.hpp"
 
 // Image
 
@@ -639,7 +639,7 @@ namespace Gosu
                            unsigned image_flags);
 %ignore Gosu::Image::Image(const Bitmap& source, unsigned image_flags);
 %ignore Gosu::Image::Image(const Bitmap& source, const Rect& source_rect, unsigned image_flags);
-%ignore Gosu::Image::Image(std::unique_ptr<ImageData> data);
+%ignore Gosu::Image::Image(std::unique_ptr<Drawable> drawable);
 %ignore Gosu::load_tiles;
 %include "../../include/Gosu/Image.hpp"
 %extend Gosu::Image {
@@ -701,21 +701,21 @@ namespace Gosu
                       double x4, double y4, Color c4,
                       ZPos z, BlendMode mode = Gosu::BM_DEFAULT)
     {
-        $self->data().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
+        $self->drawable().draw(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode);
     }
     
     %newobject gl_tex_info;
     Gosu::GLTexInfo* gl_tex_info() const
     {
-        const Gosu::GLTexInfo* info = $self->data().gl_tex_info();
+        const Gosu::GLTexInfo* info = $self->drawable().gl_tex_info();
         return info ? new Gosu::GLTexInfo(*info) : nullptr;
     }
     
     %newobject subimage;
     Gosu::Image* subimage(int x, int y, int w, int h)
     {
-        std::unique_ptr<Gosu::ImageData> image_data = $self->data().subimage(Gosu::Rect{ x, y, w, h });
-        return image_data.get() ? new Gosu::Image(std::move(image_data)) : nullptr;
+        std::unique_ptr<Gosu::Drawable> drawable = $self->drawable().subimage(Gosu::Rect{ x, y, w, h });
+        return drawable ? new Gosu::Image(std::move(drawable)) : nullptr;
     }
     
     %newobject from_text;
@@ -922,7 +922,7 @@ namespace Gosu
     
     VALUE to_blob() const
     {
-        Gosu::Bitmap bmp = $self->data().to_bitmap();
+        Gosu::Bitmap bmp = $self->drawable().to_bitmap();
         auto size = bmp.width() * bmp.height() * sizeof(Gosu::Color);
         return rb_str_new(reinterpret_cast<const char*>(bmp.data()), size);
     }
@@ -939,14 +939,14 @@ namespace Gosu
     
     void save(const std::string& filename) const
     {
-        Gosu::save_image_file($self->data().to_bitmap(), filename);
+        Gosu::save_image_file($self->drawable().to_bitmap(), filename);
     }
     
     void insert(VALUE source, int x, int y)
     {
         Gosu::Bitmap bmp;
         Gosu::load_bitmap(bmp, source);
-        $self->data().insert(bmp, x, y);
+        $self->drawable().insert(bmp, x, y);
     }
     
     // This is a very low-tech helper that maps the image's alpha channel to ASCII art.
@@ -954,7 +954,7 @@ namespace Gosu
     std::string inspect(int max_width = 80) const
     {
         try {
-            Gosu::Bitmap bmp = $self->data().to_bitmap();
+            Gosu::Bitmap bmp = $self->drawable().to_bitmap();
             // This is the scaled image width inside the ASCII art border, so make sure
             // there will be room for a leading and trailing '#' character.
             int w = std::clamp<int>(max_width - 2, 0, bmp.width());

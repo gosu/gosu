@@ -38,8 +38,8 @@ class TestImage < Minitest::Test
   end
   
   # This uses large images so it implicitly tests the whole stack:
-  # - Ruby wrapper for Gosu::ImageData::insert
-  # - Gosu::TiledImageData::insert
+  # - Ruby wrapper for Gosu::Drawable::insert
+  # - Gosu::TiledDrawable::insert
   # - Gosu::TexChunk::insert
   # - Gosu::Bitmap::insert
   def test_image_insert

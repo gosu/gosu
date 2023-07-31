@@ -9,7 +9,7 @@ namespace Gosu
     class Font;
     class Graphics;
     class Image;
-    class ImageData;
+    class Drawable;
     class Input;
     struct Rect;
     class Sample;
