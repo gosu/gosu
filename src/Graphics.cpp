@@ -19,7 +19,7 @@ namespace Gosu
         Graphics& current_graphics()
         {
             if (current_graphics_pointer == nullptr) {
-                throw std::logic_error{"Gosu::Graphics can only be drawn to while rendering"};
+                throw std::logic_error("Gosu::Graphics can only be drawn to while rendering");
             }
             return *current_graphics_pointer;
         }
@@ -29,7 +29,7 @@ namespace Gosu
         DrawOpQueue& current_queue()
         {
             if (queues.empty()) {
-                throw std::logic_error{"There is no rendering queue for this operation"};
+                throw std::logic_error("There is no rendering queue for this operation");
             }
             return queues.back();
         }
@@ -38,8 +38,8 @@ namespace Gosu
 
 struct Gosu::Graphics::Impl : private Gosu::Noncopyable
 {
-    unsigned virt_width = 0, virt_height = 0;
-    unsigned phys_width = 0, phys_height = 0;
+    int virt_width = 0, virt_height = 0;
+    int phys_width = 0, phys_height = 0;
     double black_width = 0.0, black_height = 0.0;
     Transform base_transform;
 
@@ -87,8 +87,8 @@ struct Gosu::Graphics::Impl : private Gosu::Noncopyable
 #endif
 };
 
-Gosu::Graphics::Graphics(unsigned phys_width, unsigned phys_height)
-: m_impl(new Impl)
+Gosu::Graphics::Graphics(int phys_width, int phys_height)
+    : m_impl(new Impl)
 {
     m_impl->virt_width = phys_width;
     m_impl->virt_height = phys_height;
@@ -96,6 +96,7 @@ Gosu::Graphics::Graphics(unsigned phys_width, unsigned phys_height)
     m_impl->black_height = 0;
 
     // TODO: Should be merged into RenderState and removed from Graphics.
+    ensure_current_context();
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glEnable(GL_BLEND);
@@ -110,22 +111,22 @@ Gosu::Graphics::~Graphics()
     }
 }
 
-unsigned Gosu::Graphics::width() const
+int Gosu::Graphics::width() const
 {
     return m_impl->virt_width;
 }
 
-unsigned Gosu::Graphics::height() const
+int Gosu::Graphics::height() const
 {
     return m_impl->virt_height;
 }
 
-void Gosu::Graphics::set_resolution(unsigned virtual_width, unsigned virtual_height,
+void Gosu::Graphics::set_resolution(int virtual_width, int virtual_height,
                                     double horizontal_black_bar_width,
                                     double vertical_black_bar_height)
 {
-    if (virtual_width == 0 || virtual_height == 0) {
-        throw std::invalid_argument{"Invalid virtual resolution."};
+    if (virtual_width <= 0 || virtual_height <= 0) {
+        throw std::invalid_argument("Invalid virtual resolution.");
     }
 
     m_impl->virt_width = virtual_width;
@@ -139,7 +140,7 @@ void Gosu::Graphics::set_resolution(unsigned virtual_width, unsigned virtual_hei
 void Gosu::Graphics::frame(const std::function<void()>& f)
 {
     if (current_graphics_pointer != nullptr) {
-        throw std::logic_error{"Cannot nest calls to Gosu::Graphics::begin()"};
+        throw std::logic_error("Cannot nest calls to Gosu::Graphics::frame()");
     }
 
     // Cancel all recording or whatever that might still be in progress...
@@ -168,7 +169,9 @@ void Gosu::Graphics::frame(const std::function<void()>& f)
     f();
 
     // Cancel all intermediate queues that have not been cleaned up.
-    while (queues.size() > 1) queues.pop_back();
+    while (queues.size() > 1) {
+        queues.pop_back();
+    }
 
     flush();
 
@@ -209,11 +212,11 @@ void Gosu::Graphics::flush()
 void Gosu::Graphics::gl(const std::function<void()>& f)
 {
     if (current_queue().mode() == QM_RECORD_MACRO) {
-        throw std::logic_error{"Custom OpenGL is not allowed while creating a macro"};
+        throw std::logic_error("Custom OpenGL is not allowed while creating a macro");
     }
 
 #ifdef GOSU_IS_OPENGLES
-    throw std::logic_error{"Custom OpenGL ES is not supported yet"};
+    throw std::logic_error("Custom OpenGL ES is not supported yet");
 #else
     Graphics& cg = current_graphics();
 
@@ -230,7 +233,7 @@ void Gosu::Graphics::gl(const std::function<void()>& f)
 void Gosu::Graphics::gl(Gosu::ZPos z, const std::function<void()>& f)
 {
 #ifdef GOSU_IS_OPENGLES
-    throw std::logic_error{"Custom OpenGL ES is not supported yet"};
+    throw std::logic_error("Custom OpenGL ES is not supported yet");
 #else
     const auto wrapped_f = [f] {
         Graphics& cg = current_graphics();
@@ -380,14 +383,14 @@ void Gosu::Graphics::schedule_draw_op(const Gosu::DrawOp& op)
     current_queue().schedule_draw_op(op);
 }
 
-void Gosu::Graphics::set_physical_resolution(unsigned phys_width, unsigned phys_height)
+void Gosu::Graphics::set_physical_resolution(int phys_width, int phys_height)
 {
     m_impl->phys_width = phys_width;
     m_impl->phys_height = phys_height;
     // TODO: Should be merged into RenderState and removed from Graphics.
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glViewport(0, 0, phys_width, phys_height);
+    glViewport(0, 0, static_cast<GLsizei>(phys_width), static_cast<GLsizei>(phys_height));
 #ifdef GOSU_IS_OPENGLES
     glOrthof(0, phys_width, phys_height, 0, -1, 1);
 #else
