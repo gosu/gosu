@@ -12,7 +12,7 @@ namespace Gosu
     {
         BinPacker m_bin_packer;
         std::uint32_t m_tex_name;
-        bool m_retro;
+        const bool m_retro;
 
     public:
         Texture(int width, int height, bool retro);

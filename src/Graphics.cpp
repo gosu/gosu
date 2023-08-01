@@ -8,8 +8,6 @@
 #include "Macro.hpp"
 #include "OffScreenTarget.hpp"
 #include <algorithm>
-#include <cmath>
-#include <functional>
 #include <memory>
 
 namespace Gosu
@@ -25,8 +23,6 @@ namespace Gosu
             }
             return *current_graphics_pointer;
         }
-
-        std::vector<std::shared_ptr<Texture>> textures;
 
         DrawOpQueueStack queues;
 
@@ -192,8 +188,6 @@ void Gosu::Graphics::frame(const std::function<void()>& f)
         flush();
     }
 
-    glFlush();
-
     current_graphics_pointer = nullptr;
 
     // Clear leftover transforms, clip rects etc.
@@ -269,8 +263,8 @@ Gosu::Image Gosu::Graphics::render(int width, int height, const std::function<vo
     GLint prev_viewport[4];
     glGetIntegerv(GL_VIEWPORT, prev_viewport);
     glViewport(0, 0, width, height);
-    // Note the flipped vertical axis in the glOrtho call - this is so we don't have to vertically
-    // flip the texture afterwards.
+    // Note the flipped vertical axis in the glOrtho call, so we don't have to vertically
+    // flip the texture afterward.
 #ifdef GOSU_IS_OPENGLES
     glOrthof(0, width, 0, height, -1, 1); // NOLINT(readability-suspicious-call-argument)
 #else
@@ -289,7 +283,6 @@ Gosu::Image Gosu::Graphics::render(int width, int height, const std::function<vo
         f();
         queues.back().perform_draw_ops_and_code();
         queues.pop_back();
-        glFlush();
 #ifndef GOSU_IS_OPENGLES
         glPopAttrib();
 #endif

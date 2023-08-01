@@ -106,6 +106,9 @@ TEST_F(DrawableTests, large_texture_allocation)
     }
 }
 
+// Gosu is not actually ready for multithreading yet, but it turns out that Ruby's garbage collector
+// happily tries to delete images and other objects from background threads. This test verifies that
+// we don't outright crash when this happens.
 TEST_F(DrawableTests, multithreaded_stress_test)
 {
     // Gosu does not support directly creating images from background threads because it wants to
@@ -113,20 +116,20 @@ TEST_F(DrawableTests, multithreaded_stress_test)
     // -> Create a temporary window on the test thread (main thread) just to set things up.
     Gosu::Window(100, 100); // NOLINT(*-unused-raii)
 
-    constexpr int NUM_THREADS = 5;
-    constexpr int NUM_DRAWABLES_PER_THREAD = 500;
+    constexpr int numThreads = 5;
+    constexpr int numDrawablesPerThread = 500;
 
     std::vector<std::thread> threads;
-    threads.reserve(NUM_THREADS);
-    for (int i = 0; i < NUM_THREADS; ++i) {
+    threads.reserve(numThreads);
+    for (int i = 0; i < numThreads; ++i) {
         threads.emplace_back([] {
             std::vector<std::unique_ptr<Gosu::Drawable>> drawables;
-            for (int j = 0; j < NUM_DRAWABLES_PER_THREAD; ++j) {
+            for (int j = 0; j < numDrawablesPerThread; ++j) {
                 const Gosu::Bitmap source(j * 11 % 1234, (j + 4) * 7 % 1234);
                 drawables.push_back(Gosu::create_drawable(source, Gosu::Rect::covering(source), 0));
 
                 if (j % 3) {
-                    drawables.erase(drawables.begin() + drawables.size() / 2);
+                    drawables.erase(drawables.begin() + (j % static_cast<int>(drawables.size())));
                 }
             }
         });

@@ -22,9 +22,9 @@ namespace Gosu
     /// Moving a BinPacker instance would lead to dangling pointers.)
     class BinPacker : private Noncopyable
     {
-        int m_width, m_height;
+        const int m_width, m_height;
         std::vector<Rect> m_free_rects;
-        std::recursive_mutex m_mutex;
+        std::mutex m_mutex;
 
     public:
         BinPacker(int width, int height);

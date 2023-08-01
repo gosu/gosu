@@ -77,8 +77,8 @@ TEST_F(ImageTests, delete_tex_chunk_during_rendering)
     Gosu::Image image(bitmap);
     const auto* tex_info = image.drawable().gl_tex_info();
     ASSERT_NE(tex_info, nullptr);
-    // This image will not have an image by itself. Instead, it will be allocated somewhere on a
-    // shared OpenGL texture.
+    // This image will not have a full OpenGL texture by itself. Instead, it will be allocated
+    // somewhere on a shared texture.
     ASSERT_LT(tex_info->right, 0.5);
     ASSERT_LT(tex_info->bottom, 0.5);
 
