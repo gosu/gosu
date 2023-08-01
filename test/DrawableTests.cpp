@@ -6,6 +6,8 @@
 #include <Gosu/Image.hpp>
 #include <Gosu/Transform.hpp>
 #include <Gosu/Utility.hpp>
+#include <Gosu/Window.hpp>
+#include <thread>
 
 class DrawableTests : public testing::Test
 {
@@ -101,5 +103,39 @@ TEST_F(DrawableTests, large_texture_allocation)
                 ASSERT_EQ(rendered_bitmap.pixel(x, y), Gosu::Color::RED);
             }
         }
+    }
+}
+
+// Gosu is not actually ready for multithreading yet, but it turns out that Ruby's garbage collector
+// happily tries to delete images and other objects from background threads. This test verifies that
+// we don't outright crash when this happens.
+TEST_F(DrawableTests, multithreaded_stress_test)
+{
+    // Gosu does not support directly creating images from background threads because it wants to
+    // create an SDL2 window first, and at least macOS requires this to happen on the main thread.
+    // -> Create a temporary window on the test thread (main thread) just to set things up.
+    Gosu::Window(100, 100); // NOLINT(*-unused-raii)
+
+    constexpr int numThreads = 5;
+    constexpr int numDrawablesPerThread = 500;
+
+    std::vector<std::thread> threads;
+    threads.reserve(numThreads);
+    for (int i = 0; i < numThreads; ++i) {
+        threads.emplace_back([] {
+            std::vector<std::unique_ptr<Gosu::Drawable>> drawables;
+            for (int j = 0; j < numDrawablesPerThread; ++j) {
+                const Gosu::Bitmap source(j * 11 % 1234, (j + 4) * 7 % 1234);
+                drawables.push_back(Gosu::create_drawable(source, Gosu::Rect::covering(source), 0));
+
+                if (j % 3) {
+                    drawables.erase(drawables.begin() + (j % static_cast<int>(drawables.size())));
+                }
+            }
+        });
+    }
+
+    for (auto& thread : threads) {
+        thread.join();
     }
 }

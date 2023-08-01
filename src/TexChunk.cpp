@@ -29,6 +29,8 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1, double x2, double y2, 
     op.render_state.texture = m_texture;
     op.render_state.mode = mode;
 
+    op.rect_handle = m_rect_handle;
+
     normalize_coordinates(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
     op.vertices_or_block_index = 4;

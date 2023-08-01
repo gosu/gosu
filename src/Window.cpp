@@ -4,6 +4,8 @@
 #if defined(GOSU_IS_WIN)
 #define NOMINMAX
 #include <windows.h>
+#elif defined(GOSU_IS_MAC)
+#include <Foundation/Foundation.h>
 #endif
 
 #include <Gosu/Gosu.hpp>
@@ -30,6 +32,12 @@ namespace Gosu
         // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
         static SDL_Window* window = nullptr;
         if (window == nullptr) {
+#ifdef GOSU_IS_MAC
+            if (![NSThread isMainThread]) {
+                throw std::logic_error("First use of OpenGL by Gosu must be on the main thread");
+            }
+#endif
+
             if (SDL_Init(SDL_INIT_VIDEO) < 0) {
                 throw_sdl_error("Could not initialize SDL Video");
             }
@@ -64,7 +72,8 @@ namespace Gosu
         return context;
     }
 
-    void ensure_current_context() //
+    // TODO: Maybe better to have one context per thread, all of them sharing resources?
+    void ensure_current_context()
     {
         SDL_GL_MakeCurrent(shared_window(), shared_gl_context());
     }
