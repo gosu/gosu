@@ -15,6 +15,8 @@ Gosu::BinPacker::BinPacker(int width, int height)
 
 std::shared_ptr<const Gosu::Rect> Gosu::BinPacker::alloc(int width, int height)
 {
+    const std::scoped_lock lock(m_mutex);
+
     const Rect* best_rect = best_free_rect(width, height);
 
     // We didn't find a single free rectangle that can fit the required size? Exit.
@@ -73,6 +75,8 @@ std::shared_ptr<const Gosu::Rect> Gosu::BinPacker::alloc(int width, int height)
 
 void Gosu::BinPacker::add_free_rect(const Rect& rect)
 {
+    const std::scoped_lock lock(m_mutex);
+
 #ifndef NDEBUG
     for (const Rect& other_free_rect : m_free_rects) {
         assert(!rect.overlaps(other_free_rect));

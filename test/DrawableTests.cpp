@@ -6,6 +6,8 @@
 #include <Gosu/Image.hpp>
 #include <Gosu/Transform.hpp>
 #include <Gosu/Utility.hpp>
+#include <Gosu/Window.hpp>
+#include <thread>
 
 class DrawableTests : public testing::Test
 {
@@ -101,5 +103,36 @@ TEST_F(DrawableTests, large_texture_allocation)
                 ASSERT_EQ(rendered_bitmap.pixel(x, y), Gosu::Color::RED);
             }
         }
+    }
+}
+
+TEST_F(DrawableTests, multithreaded_stress_test)
+{
+    // Gosu does not support directly creating images from background threads because it wants to
+    // create an SDL2 window first, and at least macOS requires this to happen on the main thread.
+    // -> Create a temporary window on the test thread (main thread) just to set things up.
+    Gosu::Window(100, 100); // NOLINT(*-unused-raii)
+
+    constexpr int NUM_THREADS = 5;
+    constexpr int NUM_DRAWABLES_PER_THREAD = 500;
+
+    std::vector<std::thread> threads;
+    threads.reserve(NUM_THREADS);
+    for (int i = 0; i < NUM_THREADS; ++i) {
+        threads.emplace_back([] {
+            std::vector<std::unique_ptr<Gosu::Drawable>> drawables;
+            for (int j = 0; j < NUM_DRAWABLES_PER_THREAD; ++j) {
+                const Gosu::Bitmap source(j * 11 % 1234, (j + 4) * 7 % 1234);
+                drawables.push_back(Gosu::create_drawable(source, Gosu::Rect::covering(source), 0));
+
+                if (j % 3) {
+                    drawables.erase(drawables.begin() + drawables.size() / 2);
+                }
+            }
+        });
+    }
+
+    for (auto& thread : threads) {
+        thread.join();
     }
 }

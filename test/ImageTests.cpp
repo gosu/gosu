@@ -51,6 +51,48 @@ TEST_F(ImageTests, render_after_color_key)
     }
 }
 
+TEST_F(ImageTests, delete_texture_during_rendering)
+{
+    const Gosu::Bitmap bitmap(64, 64, Gosu::Color::FUCHSIA);
+    Gosu::Image image(bitmap, Gosu::IF_TILEABLE);
+    const auto* tex_info = image.drawable().gl_tex_info();
+    ASSERT_NE(tex_info, nullptr);
+    // This power-of-two sized, square image occupies a single texture all by itself.
+    ASSERT_EQ(tex_info->left, 0.0);
+    ASSERT_EQ(tex_info->top, 0.0);
+    ASSERT_EQ(tex_info->right, 1.0);
+    ASSERT_EQ(tex_info->bottom, 1.0);
+
+    const Gosu::Image result = Gosu::Graphics::render(64, 64, [&] {
+        image.draw(0, 0, 0);
+        // Reset our reference to the texture. Gosu must keep the OpenGL texture alive regardless.
+        image = Gosu::Image();
+    });
+    ASSERT_EQ(result.drawable().to_bitmap(), bitmap);
+}
+
+TEST_F(ImageTests, delete_tex_chunk_during_rendering)
+{
+    const Gosu::Bitmap bitmap(50, 50, Gosu::Color::FUCHSIA);
+    Gosu::Image image(bitmap);
+    const auto* tex_info = image.drawable().gl_tex_info();
+    ASSERT_NE(tex_info, nullptr);
+    // This image will not have an image by itself. Instead, it will be allocated somewhere on a
+    // shared OpenGL texture.
+    ASSERT_LT(tex_info->right, 0.5);
+    ASSERT_LT(tex_info->bottom, 0.5);
+
+    const Gosu::Image result = Gosu::Graphics::render(50, 50, [&] {
+        image.draw(0, 0, 0);
+        // Now reset our image and create another image of the same size. If Gosu is not careful and
+        // re-allocates another bitmap on the same part of the texture, then this will influence the
+        // outcome of the rendering process.
+        image = Gosu::Image();
+        image = Gosu::Image(Gosu::Bitmap(50, 50, Gosu::Color::GREEN));
+    });
+    ASSERT_EQ(result.drawable().to_bitmap(), bitmap);
+}
+
 TEST_F(ImageTests, load_tiles_from_tile)
 {
     const std::vector<Gosu::Image> tiles

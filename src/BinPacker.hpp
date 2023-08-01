@@ -2,6 +2,7 @@
 
 #include <Gosu/Platform.hpp>
 #include <Gosu/Utility.hpp>
+#include <mutex>
 #include <memory>
 #include <vector>
 
@@ -23,6 +24,7 @@ namespace Gosu
     {
         int m_width, m_height;
         std::vector<Rect> m_free_rects;
+        std::recursive_mutex m_mutex;
 
     public:
         BinPacker(int width, int height);
