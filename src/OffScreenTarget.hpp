@@ -1,23 +1,25 @@
 #pragma once
 
-#include "GraphicsImpl.hpp"
+#include <Gosu/Utility.hpp>
+#include <cstdint>
+#include <functional>
+#include <memory>
 
 namespace Gosu
 {
-    class OffScreenTarget
+    class Image;
+    class Texture;
+
+    class OffScreenTarget : private Noncopyable
     {
-        std::shared_ptr<Texture> texture;
-        GLuint renderbuffer;
-        GLuint framebuffer;
-        
-        OffScreenTarget(const OffScreenTarget& other) = delete;
-        OffScreenTarget& operator=(const OffScreenTarget& other) = delete;
-        OffScreenTarget(OffScreenTarget&& other) = delete;
-        OffScreenTarget& operator=(OffScreenTarget&& other) = delete;
-        
+        std::shared_ptr<Texture> m_texture;
+        std::uint32_t r_renderbuffer;
+        std::uint32_t m_framebuffer;
+
     public:
         OffScreenTarget(int width, int height, unsigned image_flags);
         ~OffScreenTarget();
+
         Gosu::Image render(const std::function<void ()>& f);
     };
 }
