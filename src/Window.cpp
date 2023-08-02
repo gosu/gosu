@@ -11,6 +11,7 @@
 #include <Gosu/Gosu.hpp>
 #include <SDL.h>
 #include <algorithm>
+#include <mutex>
 #include <stdexcept>
 #include <thread>
 
