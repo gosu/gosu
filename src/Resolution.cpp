@@ -13,7 +13,7 @@ static SDL_DisplayMode display_mode(const Gosu::Window* window)
         ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
     } subsystem;
 
-    int index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
+    int index = window ? SDL_GetWindowDisplayIndex(window->sdl_window()) : 0;
     SDL_DisplayMode result;
     SDL_GetDesktopDisplayMode(index, &result);
     return result;
@@ -48,7 +48,7 @@ static SDL_Rect max_window_size(const Gosu::Window* window)
         style |= NSWindowStyleMaskResizable;
     }
 
-    auto index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
+    auto index = window ? SDL_GetWindowDisplayIndex(window->sdl_window()) : 0;
     NSRect screen_frame = NSScreen.screens[index].visibleFrame;
     NSRect content_rect = [NSWindow contentRectForFrameRect:screen_frame styleMask:style];
 
@@ -80,14 +80,14 @@ static SDL_Rect max_window_size(const Gosu::Window* window)
         ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
     } subsystem;
 
-    int index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
+    int index = window ? SDL_GetWindowDisplayIndex(window->sdl_window()) : 0;
     SDL_Rect rect;
     SDL_GetDisplayUsableBounds(index, &rect);
 
     if (window) {
         SDL_SysWMinfo info;
         SDL_VERSION(&info.version);
-        SDL_GetWindowWMInfo(Gosu::shared_window(), &info);
+        SDL_GetWindowWMInfo(window->sdl_window(), &info);
         HWND hwnd = info.info.win.window;
 
         RECT rcClient, rcWindow;
@@ -145,14 +145,16 @@ static SDL_Rect max_window_size(const Gosu::Window* window)
         ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
     } subsystem;
 
-    int index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
+    int index = window ? SDL_GetWindowDisplayIndex(window->sdl_window()) : 0;
     SDL_Rect rect;
-    int top, left, bottom, right;
     SDL_GetDisplayUsableBounds(index, &rect);
-    SDL_GetWindowBordersSize(Gosu::shared_window(), &top, &left, &bottom, &right);
 
-    rect.w -= left + right;
-    rect.h -= top + bottom;
+    if (window) {
+        int top, left, bottom, right;
+        SDL_GetWindowBordersSize(window->sdl_window(), &top, &left, &bottom, &right);
+        rect.w -= left + right;
+        rect.h -= top + bottom;
+    }
 
     return rect;
 }

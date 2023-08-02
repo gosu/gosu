@@ -13,7 +13,7 @@ Gosu::Texture::Texture(int width, int height, bool retro)
         throw std::invalid_argument("Gosu::Texture must not be empty");
     }
 
-    ensure_current_context();
+    const auto lock = lock_gl_context();
 
     // Create texture name.
     glGenTextures(1, &m_tex_name);
@@ -48,8 +48,7 @@ Gosu::Texture::Texture(int width, int height, bool retro)
 
 Gosu::Texture::~Texture()
 {
-    ensure_current_context();
-
+    const auto lock = lock_gl_context();
     glDeleteTextures(1, &m_tex_name);
 }
 
@@ -74,8 +73,7 @@ void Gosu::Texture::insert(const Gosu::Bitmap& bitmap, int x, int y)
         throw std::invalid_argument("Gosu::Texture::insert: Rect exceeds bounds");
     }
 
-    ensure_current_context();
-
+    const auto lock = lock_gl_context();
     glBindTexture(GL_TEXTURE_2D, m_tex_name);
     glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, bitmap.width(), bitmap.height(), GL_RGBA,
                     GL_UNSIGNED_BYTE, bitmap.data());
@@ -92,8 +90,7 @@ Gosu::Bitmap Gosu::Texture::to_bitmap(const Rect& rect) const
     // (Could reuse a lot of code from OffScreenTarget)
     throw std::logic_error("Texture::to_bitmap not supported on iOS");
 #else
-    ensure_current_context();
-
+    const auto lock = lock_gl_context();
     Bitmap bitmap(width(), height());
     glBindTexture(GL_TEXTURE_2D, m_tex_name);
     // This should use glGetTextureSubImage where available: https://stackoverflow.com/a/38148494

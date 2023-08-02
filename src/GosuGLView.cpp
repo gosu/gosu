@@ -16,9 +16,15 @@ static EAGLContext __weak* globalContext;
 
 namespace Gosu
 {
-    void ensure_current_context()
+    std::unique_lock<std::recursive_mutex> ensure_current_context()
     {
+        // Gosu does not support multithreading on iOS.
+        if (![NSThread isMainThread]) {
+            throw std::logic_error("Multi-threaded OpenGL access is not supported on iOS");
+        }
+
         [EAGLContext setCurrentContext:globalContext];
+        return std::unique_lock<std::recursive_mutex>();
     }
     
     int clip_rect_base_factor()

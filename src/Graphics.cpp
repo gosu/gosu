@@ -96,7 +96,7 @@ Gosu::Graphics::Graphics(int phys_width, int phys_height)
     m_impl->black_height = 0;
 
     // TODO: Should be merged into RenderState and removed from Graphics.
-    ensure_current_context();
+    const auto lock = lock_gl_context();
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glEnable(GL_BLEND);
@@ -160,7 +160,8 @@ void Gosu::Graphics::frame(const std::function<void()>& f)
 
     queues.back().set_base_transform(m_impl->base_transform);
 
-    ensure_current_context();
+    const auto lock = lock_gl_context();
+
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -257,7 +258,7 @@ void Gosu::Graphics::clip_to(double x, double y, double width, double height,
 Gosu::Image Gosu::Graphics::render(int width, int height, const std::function<void()>& f,
                                    unsigned image_flags)
 {
-    ensure_current_context();
+    const auto lock = lock_gl_context();
 
     // Prepare for rendering at the requested size, but save the previous matrix and viewport.
     glMatrixMode(GL_PROJECTION);
@@ -388,6 +389,7 @@ void Gosu::Graphics::set_physical_resolution(int phys_width, int phys_height)
     m_impl->phys_width = phys_width;
     m_impl->phys_height = phys_height;
     // TODO: Should be merged into RenderState and removed from Graphics.
+    const auto lock = lock_gl_context();
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, static_cast<GLsizei>(phys_width), static_cast<GLsizei>(phys_height));

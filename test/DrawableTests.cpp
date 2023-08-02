@@ -116,21 +116,27 @@ TEST_F(DrawableTests, multithreaded_stress_test)
     // -> Create a temporary window on the test thread (main thread) just to set things up.
     Gosu::Window(100, 100); // NOLINT(*-unused-raii)
 
-    constexpr int numThreads = 5;
-    constexpr int numDrawablesPerThread = 500;
+    constexpr int num_threads = 5;
+    constexpr int num_drawables_per_thread = 500;
 
     std::vector<std::thread> threads;
-    threads.reserve(numThreads);
-    for (int i = 0; i < numThreads; ++i) {
+    threads.reserve(num_threads);
+    for (int i = 0; i < num_threads; ++i) {
         threads.emplace_back([] {
-            std::vector<std::unique_ptr<Gosu::Drawable>> drawables;
-            for (int j = 0; j < numDrawablesPerThread; ++j) {
-                const Gosu::Bitmap source(j * 11 % 1234, (j + 4) * 7 % 1234);
-                drawables.push_back(Gosu::create_drawable(source, Gosu::Rect::covering(source), 0));
+            try {
+                std::vector<std::unique_ptr<Gosu::Drawable>> drawables;
+                for (int j = 0; j < num_drawables_per_thread; ++j) {
+                    const Gosu::Bitmap source(j * 11 % 1234, (j + 4) * 7 % 1234);
+                    drawables.push_back(
+                        Gosu::create_drawable(source, Gosu::Rect::covering(source), 0));
 
-                if (j % 3) {
-                    drawables.erase(drawables.begin() + (j % static_cast<int>(drawables.size())));
+                    if (j % 3) {
+                        drawables.erase(drawables.begin()
+                                        + (j % static_cast<int>(drawables.size())));
+                    }
                 }
+            } catch (const std::exception& e) {
+                GTEST_FAIL() << e.what();
             }
         });
     }

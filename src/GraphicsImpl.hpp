@@ -14,6 +14,7 @@
 
 #include <algorithm>
 #include <list>
+#include <mutex>
 #include <vector>
 
 namespace Gosu
@@ -84,11 +85,7 @@ namespace Gosu
     inline int clip_rect_base_factor() { return 1; }
 #endif
 
-#ifndef GOSU_IS_IPHONE
-    SDL_Window* shared_window();
-#endif
-
-    void ensure_current_context();
+    [[nodiscard]] std::unique_lock<std::recursive_mutex> lock_gl_context();
 
     inline std::string escape_markup(const std::string& text) {
         auto markup = text;
