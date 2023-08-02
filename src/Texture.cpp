@@ -25,8 +25,8 @@ Gosu::Texture::Texture(int width, int height, bool retro)
 
     // Create empty texture.
     glBindTexture(GL_TEXTURE_2D, m_tex_name);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_bin_packer.width(), m_bin_packer.height(), 0,
-                 Color::GL_FORMAT, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_bin_packer.width(), m_bin_packer.height(), 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, nullptr);
 
     if (retro) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -77,7 +77,7 @@ void Gosu::Texture::insert(const Gosu::Bitmap& bitmap, int x, int y)
     ensure_current_context();
 
     glBindTexture(GL_TEXTURE_2D, m_tex_name);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, bitmap.width(), bitmap.height(), Color::GL_FORMAT,
+    glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, bitmap.width(), bitmap.height(), GL_RGBA,
                     GL_UNSIGNED_BYTE, bitmap.data());
 }
 
