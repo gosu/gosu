@@ -10,14 +10,6 @@
 #import <AudioToolbox/AudioSession.h>
 #import <OpenAL/alc.h>
 
-namespace Gosu
-{
-    namespace FPS
-    {
-        void register_frame();
-    }
-}
-
 static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
 {
     if (inInterruptionState == kAudioSessionBeginInterruption) {
@@ -182,7 +174,7 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
         [(GosuGLView*)self.view redrawGL:^{
             window.graphics().frame([&window] {
                 window.draw();
-                Gosu::FPS::register_frame();
+                Gosu::register_frame();
             });
         }];
     }

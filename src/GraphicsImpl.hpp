@@ -76,6 +76,8 @@ namespace Gosu
     inline int clip_rect_base_factor() { return 1; }
 #endif
 
+    void register_frame();
+
     inline std::string escape_markup(const std::string& text) {
         auto markup = text;
         for (std::string::size_type pos = 0; pos < markup.length(); ++pos) {

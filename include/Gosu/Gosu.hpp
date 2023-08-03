@@ -16,7 +16,6 @@
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/Input.hpp>
-#include <Gosu/Inspection.hpp>
 #include <Gosu/Math.hpp>
 #include <Gosu/Platform.hpp>
 #include <Gosu/Text.hpp>

@@ -7,13 +7,9 @@
 #endif
 
 #include <Gosu/Gosu.hpp>
+#include "GraphicsImpl.hpp"
 #include "OpenGLContext.hpp"
 #include <algorithm>
-
-namespace Gosu::FPS
-{
-    void register_frame();
-}
 
 struct Gosu::Window::Impl : private Gosu::Noncopyable
 {
@@ -327,7 +323,7 @@ bool Gosu::Window::tick()
         const OpenGLContext current_context;
         graphics().frame([&] {
             draw();
-            FPS::register_frame();
+            register_frame();
         });
 
         SDL_GL_SwapWindow(sdl_window());

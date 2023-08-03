@@ -987,11 +987,6 @@ namespace Gosu
     }
 }
 
-// Inspection:
-
-%include "../../include/Gosu/Inspection.hpp"
-
-
 // Audio:
 
 %ignore Gosu::Channel::Channel();

@@ -186,6 +186,9 @@
     <ClCompile Include="..\src\Drawable.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\FPS.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Font.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
@@ -207,9 +210,6 @@
     <ClCompile Include="..\src\InputUIKit.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Inspection.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Macro.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
@@ -220,6 +220,9 @@
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\OffScreenTarget.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OpenGLContext.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Resolution.cpp">
@@ -608,6 +611,9 @@
     <ClInclude Include="..\src\OffScreenTarget.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\OpenGLContext.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\RenderState.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
@@ -672,9 +678,6 @@
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Input.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Gosu\Inspection.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Math.hpp">
