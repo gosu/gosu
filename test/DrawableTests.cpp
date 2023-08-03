@@ -7,6 +7,7 @@
 #include <Gosu/Transform.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/Window.hpp>
+#include <mutex>
 #include <thread>
 
 class DrawableTests : public testing::Test

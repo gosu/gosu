@@ -8,11 +8,9 @@
 #include <SDL.h>
 #include <utf8proc.h>
 
-#include <cwctype>
 #include <cstdlib>
 #include <algorithm>
 #include <array>
-#include <mutex>
 #include <stdexcept>
 using namespace std;
 

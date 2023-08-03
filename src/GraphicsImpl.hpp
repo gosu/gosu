@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <cstdint>
 #include <list>
-#include <mutex>
 #include <vector>
 
 namespace Gosu
