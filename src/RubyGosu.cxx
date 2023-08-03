@@ -12594,7 +12594,6 @@ SWIGEXPORT void Init_gosu(void) {
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Color, (void *) &SwigClassColor);
   rb_define_alloc_func(SwigClassColor.klass, _wrap_Color_allocate);
   rb_define_method(SwigClassColor.klass, "initialize", VALUEFUNC(_wrap_new_Color), -1);
-  rb_define_const(SwigClassColor.klass, "GL_FORMAT", SWIG_From_unsigned_SS_int(static_cast< unsigned int >(Gosu::Color::GL_FORMAT)));
   rb_define_method(SwigClassColor.klass, "red=", VALUEFUNC(_wrap_Color_red_set), -1);
   rb_define_method(SwigClassColor.klass, "red", VALUEFUNC(_wrap_Color_red_get), -1);
   rb_define_method(SwigClassColor.klass, "green=", VALUEFUNC(_wrap_Color_green_set), -1);
