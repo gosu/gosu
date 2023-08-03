@@ -2,6 +2,7 @@
 
 #include <Gosu/Transform.hpp>
 #include "GraphicsImpl.hpp"
+#include "OpenGLContext.hpp"
 #include "Texture.hpp"
 
 // Properties that potentially need to be changed between each draw operation.

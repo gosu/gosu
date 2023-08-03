@@ -7,6 +7,7 @@
 #include <Gosu/Transform.hpp>
 #include <Gosu/Utility.hpp>
 #include <Gosu/Window.hpp>
+#include <mutex>
 #include <thread>
 
 class DrawableTests : public testing::Test
@@ -116,21 +117,30 @@ TEST_F(DrawableTests, multithreaded_stress_test)
     // -> Create a temporary window on the test thread (main thread) just to set things up.
     Gosu::Window(100, 100); // NOLINT(*-unused-raii)
 
-    constexpr int numThreads = 5;
-    constexpr int numDrawablesPerThread = 500;
+    constexpr int num_threads = 5;
+    constexpr int num_drawables_per_thread = 500;
+
+    std::vector<std::unique_ptr<Gosu::Drawable>> drawables;
+    std::mutex drawables_mutex;
 
     std::vector<std::thread> threads;
-    threads.reserve(numThreads);
-    for (int i = 0; i < numThreads; ++i) {
-        threads.emplace_back([] {
-            std::vector<std::unique_ptr<Gosu::Drawable>> drawables;
-            for (int j = 0; j < numDrawablesPerThread; ++j) {
-                const Gosu::Bitmap source(j * 11 % 1234, (j + 4) * 7 % 1234);
-                drawables.push_back(Gosu::create_drawable(source, Gosu::Rect::covering(source), 0));
+    threads.reserve(num_threads);
+    for (int i = 0; i < num_threads; ++i) {
+        threads.emplace_back([&] {
+            try {
+                for (int j = 0; j < num_drawables_per_thread; ++j) {
+                    const Gosu::Bitmap source(j * 11 % 1234, (j + 4) * 7 % 1234, Gosu::Color::RED);
+                    auto drawable = Gosu::create_drawable(source, Gosu::Rect::covering(source), 0);
 
-                if (j % 3) {
-                    drawables.erase(drawables.begin() + (j % static_cast<int>(drawables.size())));
+                    std::scoped_lock lock(drawables_mutex);
+                    drawables.push_back(std::move(drawable));
+                    if (j % 3) {
+                        const int index_to_delete = j % static_cast<int>(drawables.size());
+                        drawables.erase(drawables.begin() + index_to_delete);
+                    }
                 }
+            } catch (const std::exception& e) {
+                GTEST_FAIL() << e.what();
             }
         });
     }
@@ -138,4 +148,14 @@ TEST_F(DrawableTests, multithreaded_stress_test)
     for (auto& thread : threads) {
         thread.join();
     }
+
+    // Verify at least one of the drawables created by the other threads. If we cannot see that it
+    // is red, then texture sharing didn't work.
+    for (const auto& drawable : drawables) {
+        if (drawable->width() > 0 && drawable->height() > 0) {
+            ASSERT_EQ(drawable->to_bitmap().pixel(0, 0), Gosu::Color::RED);
+            return;
+        }
+    }
+    GTEST_SKIP_("All Drawables were empty");
 }

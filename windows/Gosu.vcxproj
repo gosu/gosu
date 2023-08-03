@@ -229,6 +229,7 @@
     <ClCompile Include="..\src\DirectoriesUnix.cpp" />
     <ClCompile Include="..\src\DirectoriesWin.cpp" />
     <ClCompile Include="..\src\Drawable.cpp" />
+    <ClCompile Include="..\src\FPS.cpp" />
     <ClCompile Include="..\src\Font.cpp" />
     <ClCompile Include="..\src\GosuGLView.cpp" />
     <ClCompile Include="..\src\GosuViewController.cpp" />
@@ -236,11 +237,11 @@
     <ClCompile Include="..\src\Image.cpp" />
     <ClCompile Include="..\src\Input.cpp" />
     <ClCompile Include="..\src\InputUIKit.cpp" />
-    <ClCompile Include="..\src\Inspection.cpp" />
     <ClCompile Include="..\src\Macro.cpp" />
     <ClCompile Include="..\src\MarkupParser.cpp" />
     <ClCompile Include="..\src\Math.cpp" />
     <ClCompile Include="..\src\OffScreenTarget.cpp" />
+    <ClCompile Include="..\src\OpenGLContext.cpp" />
     <ClCompile Include="..\src\Resolution.cpp" />
     <ClCompile Include="..\src\TexChunk.cpp" />
     <ClCompile Include="..\src\Text.cpp" />
@@ -371,6 +372,7 @@
     <ClInclude Include="..\src\Macro.hpp" />
     <ClInclude Include="..\src\MarkupParser.hpp" />
     <ClInclude Include="..\src\OffScreenTarget.hpp" />
+    <ClInclude Include="..\src\OpenGLContext.hpp" />
     <ClInclude Include="..\src\RenderState.hpp" />
     <ClInclude Include="..\src\TexChunk.hpp" />
     <ClInclude Include="..\src\TextBuilder.hpp" />
@@ -393,7 +395,6 @@
     <ClInclude Include="..\include\Gosu\GraphicsBase.hpp" />
     <ClInclude Include="..\include\Gosu\Image.hpp" />
     <ClInclude Include="..\include\Gosu\Input.hpp" />
-    <ClInclude Include="..\include\Gosu\Inspection.hpp" />
     <ClInclude Include="..\include\Gosu\Math.hpp" />
     <ClInclude Include="..\include\Gosu\Platform.hpp" />
     <ClInclude Include="..\include\Gosu\Text.hpp" />

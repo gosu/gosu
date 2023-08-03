@@ -150,6 +150,9 @@ namespace Gosu
 #endif
     };
 
+    /// Returns the current framerate.
+    int fps();
+
     /// Returns the width (in pixels) of a screen.
     /// @param window The result describes the screen on which the window is shown, or the
     ///               primary screen if no window is given.

@@ -9,6 +9,7 @@ Checks: >-
   -cppcoreguidelines-avoid-const-or-ref-data-members,
   -cppcoreguidelines-avoid-magic-numbers,
   -cppcoreguidelines-init-variables,
+  -cppcoreguidelines-macro-usage,
   -cppcoreguidelines-owning-memory,
   -cppcoreguidelines-prefer-member-initializer,
   -cppcoreguidelines-pro-bounds-array-to-pointer-decay,

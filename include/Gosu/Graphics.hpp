@@ -3,6 +3,7 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
+#include <Gosu/Utility.hpp>
 #include <functional>
 #include <memory>
 
@@ -12,20 +13,20 @@ namespace Gosu
 
     /// Serves as the target of all drawing and provides primitive drawing functionality.
     /// Usually created internally by Gosu::Window.
-    class Graphics
+    class Graphics : private Noncopyable
     {
         struct Impl;
         std::unique_ptr<Impl> m_impl;
 
     public:
-        Graphics(unsigned physical_width, unsigned physical_height);
+        Graphics(int physical_width, int physical_height);
         ~Graphics();
 
-        void set_resolution(unsigned logical_width, unsigned logical_height,
+        void set_resolution(int logical_width, int logical_height, //
                             double black_bar_width = 0, double black_bar_height = 0);
 
-        unsigned width() const;
-        unsigned height() const;
+        int width() const;
+        int height() const;
 
         /// Prepares the graphics object for drawing and then runs the rendering code in f.
         /// Nothing must be drawn outside of frame() and record().
@@ -81,7 +82,7 @@ namespace Gosu
                               BlendMode mode = BM_DEFAULT);
 
         /// For internal use only.
-        void set_physical_resolution(unsigned physical_width, unsigned physical_height);
+        void set_physical_resolution(int physical_width, int physical_height);
 
         /// For internal use only.
         static void schedule_draw_op(const DrawOp& op);

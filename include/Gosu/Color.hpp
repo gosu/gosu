@@ -10,8 +10,6 @@ namespace Gosu
     /// Colors can be implicitly constructed from literals of the form 0xaarrggbb.
     struct Color
     {
-        static const unsigned GL_FORMAT = 0x1908; // GL_RGBA
-
         using Channel = std::uint8_t;
         Channel red = 0, green = 0, blue = 0, alpha = 0;
 

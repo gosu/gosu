@@ -619,6 +619,7 @@ namespace Gosu
 }
 
 %ignore Gosu::Drawable;
+%ignore Gosu::create_drawable;
 %include "../../include/Gosu/Drawable.hpp"
 
 // Image
@@ -985,11 +986,6 @@ namespace Gosu
         }
     }
 }
-
-// Inspection:
-
-%include "../../include/Gosu/Inspection.hpp"
-
 
 // Audio:
 
