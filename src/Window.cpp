@@ -28,8 +28,8 @@ namespace
 
     SDL_Window* shared_window()
     {
-        /// Creates the shared SDL window. It will be created even if no Gosu::Window exists to set
-        /// up OpenGL context(s). It will also never be freed, only hidden.
+        /// Creates the shared SDL window. It will be created to set up OpenGL context(s), even if
+        /// no Gosu::Window exists. It will also never be freed, only hidden.
         static SDL_Window* const window = [] { // NOLINT(*-avoid-non-const-global-variables)
 #ifdef GOSU_IS_MAC
             if (![NSThread isMainThread]) {
@@ -40,7 +40,6 @@ namespace
                 throw_sdl_error("Could not initialize SDL");
             }
 
-            SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1);
 #ifdef GOSU_IS_OPENGLES
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
@@ -87,7 +86,7 @@ namespace Gosu
             std::unique_lock lock(other_threads_mutex);
             // Making a GL context current on a background thread, but with a window, causes a
             // deadlock on macOS because SDL tries to use dispatch_sync onto the main thread.
-            // -> Try without a window first (for macOS), then without window (for other platforms).
+            // -> Try without a window first (for macOS), then with a window (for other platforms).
             if (SDL_GL_MakeCurrent(nullptr, other_threads_context) != 0
                 && SDL_GL_MakeCurrent(window, other_threads_context) != 0) {
                 throw_sdl_error("Could not set current GL context on background thread");
