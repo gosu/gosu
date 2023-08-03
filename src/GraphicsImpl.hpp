@@ -3,16 +3,8 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Platform.hpp>
-
-#if defined(GOSU_IS_IPHONE) || defined(GOSU_IS_OPENGLES)
-#include <OpenGLES/ES1/gl.h>
-#include <OpenGLES/ES1/glext.h>
-#else
-#include <SDL.h>
-#include <SDL_opengl.h>
-#endif
-
 #include <algorithm>
+#include <cstdint>
 #include <list>
 #include <mutex>
 #include <vector>
@@ -22,7 +14,6 @@ namespace Gosu
     struct RenderState;
     class RenderStateManager;
 
-    const GLuint NO_TEXTURE = static_cast<GLuint>(-1);
     const unsigned NO_CLIPPING = 0xffffffff;
 
     // In various places in Gosu, width==NO_CLIPPING by convention means
@@ -57,9 +48,9 @@ namespace Gosu
     class Macro;
     struct ArrayVertex
     {
-        GLfloat tex_coords[2];
-        GLuint color;
-        GLfloat vertices[3];
+        float tex_coords[2];
+        std::uint32_t color;
+        float vertices[3];
     };
 
     template<typename T>
@@ -84,8 +75,6 @@ namespace Gosu
 #else
     inline int clip_rect_base_factor() { return 1; }
 #endif
-
-    [[nodiscard]] std::unique_lock<std::recursive_mutex> lock_gl_context();
 
     inline std::string escape_markup(const std::string& text) {
         auto markup = text;

@@ -4,96 +4,15 @@
 #if defined(GOSU_IS_WIN)
 #define NOMINMAX
 #include <windows.h> // for SetThreadAffinityMask()
-#elif defined(GOSU_IS_MAC)
-#include <Foundation/Foundation.h> // for -[NSThread isMainThread]
 #endif
 
 #include <Gosu/Gosu.hpp>
-#include <SDL.h>
+#include "OpenGLContext.hpp"
 #include <algorithm>
-#include <mutex>
-#include <stdexcept>
-#include <thread>
 
-namespace
+namespace Gosu::FPS
 {
-    [[noreturn]] void throw_sdl_error(const std::string& operation)
-    {
-        throw std::runtime_error(operation + ": " + SDL_GetError());
-    }
-
-    std::thread::id window_thread;
-    SDL_GLContext window_thread_context;
-    SDL_GLContext other_threads_context;
-
-    SDL_Window* shared_window()
-    {
-        /// Creates the shared SDL window. It will be created to set up OpenGL context(s), even if
-        /// no Gosu::Window exists. It will also never be freed, only hidden.
-        static SDL_Window* const window = [] { // NOLINT(*-avoid-non-const-global-variables)
-#ifdef GOSU_IS_MAC
-            if (![NSThread isMainThread]) {
-                throw std::logic_error("First use of OpenGL by Gosu must be on the main thread");
-            }
-#endif
-            if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-                throw_sdl_error("Could not initialize SDL");
-            }
-
-#ifdef GOSU_IS_OPENGLES
-            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
-            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-#endif
-
-            SDL_Window* window = SDL_CreateWindow(
-                "", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 64,
-                SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN | SDL_WINDOW_ALLOW_HIGHDPI);
-            if (window == nullptr) {
-                throw_sdl_error("Could not create SDL window");
-            }
-            SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
-
-            other_threads_context = SDL_GL_CreateContext(window);
-            SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1);
-            window_thread_context = SDL_GL_CreateContext(window);
-            window_thread = std::this_thread::get_id();
-
-            return window;
-        }();
-        return window;
-    }
-}
-
-namespace Gosu
-{
-    namespace FPS
-    {
-        void register_frame();
-    }
-
-    std::unique_lock<std::recursive_mutex> lock_gl_context()
-    {
-        SDL_Window* window = shared_window();
-
-        if (std::this_thread::get_id() == window_thread) {
-            if (SDL_GL_MakeCurrent(shared_window(), window_thread_context) != 0) {
-                throw_sdl_error("Could not set current GL context on UI thread");
-            }
-            return std::unique_lock<std::recursive_mutex>();
-        }
-        else {
-            static std::recursive_mutex other_threads_mutex;
-            std::unique_lock lock(other_threads_mutex);
-            // Making a GL context current on a background thread, but with a window, causes a
-            // deadlock on macOS because SDL tries to use dispatch_sync onto the main thread.
-            // -> Try without a window first (for macOS), then with a window (for other platforms).
-            if (SDL_GL_MakeCurrent(nullptr, other_threads_context) != 0
-                && SDL_GL_MakeCurrent(window, other_threads_context) != 0) {
-                throw_sdl_error("Could not set current GL context on background thread");
-            }
-            return lock;
-        }
-    }
+    void register_frame();
 }
 
 struct Gosu::Window::Impl : private Gosu::Noncopyable
@@ -221,7 +140,7 @@ void Gosu::Window::resize(int width, int height, bool fullscreen)
     SDL_GL_GetDrawableSize(sdl_window(), &actual_width, &actual_height);
 
     if (!m_impl->graphics) {
-        m_impl->graphics.reset(new Graphics(actual_width, actual_height));
+        m_impl->graphics = std::make_unique<Graphics>(actual_width, actual_height);
     }
     else {
         m_impl->graphics->set_physical_resolution(actual_width, actual_height);
@@ -229,7 +148,7 @@ void Gosu::Window::resize(int width, int height, bool fullscreen)
     m_impl->graphics->set_resolution(width, height, black_bar_width, black_bar_height);
 
     if (!m_impl->input) {
-        m_impl->input.reset(new Input(sdl_window()));
+        m_impl->input = std::make_unique<Input>(sdl_window());
     }
     m_impl->input->set_mouse_factors(1 / scale_factor, 1 / scale_factor, black_bar_width,
                                      black_bar_height);
@@ -335,8 +254,10 @@ bool Gosu::Window::tick()
         SDL_ShowWindow(sdl_window());
         m_impl->state = Impl::OPEN;
 
+        SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
+
         // Enable vsync.
-        const auto lock = lock_gl_context();
+        const OpenGLContext current_context;
         SDL_GL_SetSwapInterval(1);
 
         // SDL_GL_GetDrawableSize returns different values before and after showing the window.
@@ -403,7 +324,7 @@ bool Gosu::Window::tick()
     SDL_ShowCursor(needs_cursor());
 
     if (needs_redraw()) {
-        const auto lock = lock_gl_context();
+        const OpenGLContext current_context;
         graphics().frame([&] {
             draw();
             FPS::register_frame();
@@ -476,7 +397,7 @@ Gosu::Input& Gosu::Window::input()
 
 SDL_Window* Gosu::Window::sdl_window() const // NOLINT(*-convert-member-functions-to-static)
 {
-    return shared_window();
+    return OpenGLContext::shared_sdl_window();
 }
 
 #endif

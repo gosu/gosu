@@ -1,19 +1,20 @@
 #include "Texture.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Platform.hpp>
-#include "GraphicsImpl.hpp"
+#include "OpenGLContext.hpp"
 #include "TexChunk.hpp"
 #include <stdexcept>
 
 Gosu::Texture::Texture(int width, int height, bool retro)
     : m_bin_packer(width, height),
+      m_tex_name(0),
       m_retro(retro)
 {
     if (width <= 0 || height <= 0) {
         throw std::invalid_argument("Gosu::Texture must not be empty");
     }
 
-    const auto lock = lock_gl_context();
+    const OpenGLContext current_context;
 
     // Create texture name.
     glGenTextures(1, &m_tex_name);
@@ -48,7 +49,9 @@ Gosu::Texture::Texture(int width, int height, bool retro)
 
 Gosu::Texture::~Texture()
 {
-    const auto lock = lock_gl_context();
+    // Only the first construction of OpenGLContext can throw, but if we get here, then we must have
+    // already created a context in the constructor. Therefore, this destructor cannot throw.
+    const OpenGLContext current_context;
     glDeleteTextures(1, &m_tex_name);
 }
 
@@ -73,7 +76,7 @@ void Gosu::Texture::insert(const Gosu::Bitmap& bitmap, int x, int y)
         throw std::invalid_argument("Gosu::Texture::insert: Rect exceeds bounds");
     }
 
-    const auto lock = lock_gl_context();
+    const OpenGLContext current_context;
     glBindTexture(GL_TEXTURE_2D, m_tex_name);
     glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, bitmap.width(), bitmap.height(), GL_RGBA,
                     GL_UNSIGNED_BYTE, bitmap.data());
@@ -88,9 +91,9 @@ Gosu::Bitmap Gosu::Texture::to_bitmap(const Rect& rect) const
 #ifdef GOSU_IS_OPENGLES
     // See here for one possible implementation: https://github.com/apitrace/apitrace/issues/70
     // (Could reuse a lot of code from OffScreenTarget)
-    throw std::logic_error("Texture::to_bitmap not supported on iOS");
+    throw std::logic_error("Gosu::Texture::to_bitmap not supported in OpenGL ES");
 #else
-    const auto lock = lock_gl_context();
+    const OpenGLContext current_context;
     Bitmap bitmap(width(), height());
     glBindTexture(GL_TEXTURE_2D, m_tex_name);
     // This should use glGetTextureSubImage where available: https://stackoverflow.com/a/38148494

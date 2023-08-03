@@ -18,11 +18,12 @@ using namespace std;
 
 static void require_sdl_video()
 {
-    static std::once_flag initialized;
-
-    std::call_once(initialized, [] {
-        SDL_InitSubSystem(SDL_INIT_VIDEO);
-    });
+    // Don't bother shutting down the SDL video subsystem because OpenGLContext.cpp keeps it alive
+    // forever as well, and it is hard to know when to free things in a Ruby C extension.
+    static const int initialized = SDL_Init(SDL_INIT_VIDEO);
+    if (initialized < 0) {
+        throw std::runtime_error(SDL_GetError());
+    }
 }
 
 static const unsigned NUM_BUTTONS_PER_GAMEPAD =

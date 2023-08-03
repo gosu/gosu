@@ -1,22 +1,20 @@
 #include <Gosu/Platform.hpp>
 #if defined(GOSU_IS_IPHONE)
 
-#import "GosuGLView.hpp"
 #import <Gosu/Input.hpp>
 #import <Gosu/TextInput.hpp>
-
+#import "GosuGLView.hpp"
+#import "GraphicsImpl.hpp"
+#import "OpenGLContext.hpp"
 #import <OpenGLES/EAGL.h>
 #import <OpenGLES/EAGLDrawable.h>
-#import <OpenGLES/ES1/gl.h>
-#import <OpenGLES/ES1/glext.h>
 #import <QuartzCore/QuartzCore.h>
-
 
 static EAGLContext __weak* globalContext;
 
 namespace Gosu
 {
-    std::unique_lock<std::recursive_mutex> ensure_current_context()
+    OpenGLContext::OpenGLContext()
     {
         // Gosu does not support multithreading on iOS.
         if (![NSThread isMainThread]) {
@@ -24,7 +22,6 @@ namespace Gosu
         }
 
         [EAGLContext setCurrentContext:globalContext];
-        return std::unique_lock<std::recursive_mutex>();
     }
     
     int clip_rect_base_factor()
