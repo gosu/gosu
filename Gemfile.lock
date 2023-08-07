@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     excon (0.100.0)
+    ffi (1.15.5)
     minitest (5.19.0)
     rake (13.0.6)
     rake-compiler (1.2.5)
@@ -12,9 +13,11 @@ GEM
 PLATFORMS
   arm64-darwin-21
   arm64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   excon
+  ffi
   minitest
   rake-compiler
   rubyzip

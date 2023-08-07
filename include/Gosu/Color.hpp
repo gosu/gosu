@@ -97,7 +97,6 @@ namespace Gosu
     // Ensure that we can pass vectors of Gosu::Color straight to OpenGL and back.
     static_assert(sizeof(Color) == sizeof(std::uint32_t));
 
-#ifndef SWIG
     /// Interpolates linearly between two colors, with a given weight towards
     /// the second color.
     Color lerp(Color a, Color b, double t = 0.5);
@@ -107,5 +106,4 @@ namespace Gosu
     Color multiply(Color a, Color b);
 
     std::ostream& operator<<(std::ostream& stream, Color color);
-#endif
 }
