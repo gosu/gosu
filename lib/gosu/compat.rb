@@ -59,16 +59,19 @@ Gosu.deprecate Gosu::Color, :abgr, :none
 class Gosu::Image
   alias_method :initialize_without_window, :initialize
 
-  def initialize(*args)
+  def initialize(*args, **kwargs)
     if args[0].is_a? Gosu::Window
-      Gosu.deprecation_message("Passing a Window to Image#initialize has been deprecated in Gosu 0.9 and this method now uses an options hash, see https://www.libgosu.org/rdoc/Gosu/Image.html ")
+      # Old method signature: initialize(window, file_or_image, tileable)
+      Gosu.deprecation_message("Passing a Window to Image#initialize has been deprecated in Gosu 0.9, and this method now uses named arguments. https://www.libgosu.org/rdoc/Gosu/Image.html")
       if args.size == 7
         initialize_without_window args[1], tileable: args[2], rect: args[3..-1]
-      else
+      elsif args.size == 3
         initialize_without_window args[1], tileable: args[2]
+      else
+        raise ArgumentError, "wrong number of arguments (given #{args.size})"
       end
     else
-      initialize_without_window(*args)
+      initialize_without_window(*args, **kwargs)
     end
   end
 
@@ -76,17 +79,30 @@ class Gosu::Image
     alias_method :from_text_without_window, :from_text
   end
 
-  def self.from_text(*args)
+  def self.from_text(*args, **kwargs)
     if args.size == 4
-      Gosu.deprecation_message("Passing a Window to Image.from_text has been deprecated in Gosu 0.9 and this method now uses an options hash, see https://www.libgosu.org/rdoc/Gosu/Image.html ")
+      Gosu.deprecation_message("Passing a Window to Image.from_text has been deprecated in Gosu 0.9 and this method now uses named arguments. https://www.libgosu.org/rdoc/Gosu/Image.html")
       from_text_without_window(args[1], args[3], font: args[2])
     elsif args.size == 7
-      Gosu.deprecation_message("Passing a Window to Image.from_text has been deprecated in Gosu 0.9 and this method now uses an options hash, see https://www.libgosu.org/rdoc/Gosu/Image.html ")
+      Gosu.deprecation_message("Passing a Window to Image.from_text has been deprecated in Gosu 0.9 and this method now uses named arguments. https://www.libgosu.org/rdoc/Gosu/Image.html")
       from_text_without_window(args[1], args[3],
                                font: args[2], spacing: args[4], width: args[5],
                                align: args[6])
     else
-      from_text_without_window(*args)
+      from_text_without_window(*args, **kwargs)
+    end
+  end
+
+  class << self
+    alias_method :load_tiles_without_window, :load_tiles
+  end
+
+  def self.load_tiles(*args, **kwargs)
+    if args.first.is_a? Gosu::Window
+      # Old method signature: load_tiles(window, file_or_image, w, h, tileable)
+      load_tiles_without_window(args[1], args[2], args[3], tileable: args[4])
+    else
+      load_tiles_without_window(*args, **kwargs)
     end
   end
 end
@@ -133,6 +149,25 @@ end
 
 # Moved some Window methods to the Gosu module.
 class Gosu::Window
+  # Compat code taken from gosu/gosu
+  %w(update draw needs_redraw? needs_cursor? capture_cursor? hit_test gain_focus lose_focus
+    lose_focus button_down button_up gamepad_connected gamepad_disconnected drop close).each do |callback|
+    define_method "protected_#{callback}" do |*args|
+      begin
+        # If there has been an exception, don't do anything as to not make matters worse.
+        # Conveniently turn the return value into a boolean result (for needs_cursor? etc).
+        defined?(@__exception) ? false : send(callback, *args)
+      rescue Exception => e
+        # Exit the message loop naturally, then re-throw during the next tick.
+        @__exception = e
+        close!
+        false
+      ensure
+        $gosu_gl_blocks = nil if callback == "draw"
+      end
+    end
+  end
+
   # Class methods that have been turned into module methods.
   class << self
     def button_id_to_char(id)

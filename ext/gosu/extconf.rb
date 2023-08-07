@@ -43,7 +43,7 @@ if windows
   $CFLAGS << " -DUTF8PROC_STATIC -DAL_LIBTYPE_STATIC"
   $CXXFLAGS << " -DUTF8PROC_STATIC -DAL_LIBTYPE_STATIC"
 
-  # Use the bundled versions of SDL 2.
+  # Use the bundled version of SDL 2.
   $INCFLAGS << " -I$(srcdir)/../../dependencies/SDL/include"
   if RbConfig::CONFIG["arch"] =~ /x64-/
     $LDFLAGS << "  -L$(srcdir)/../../dependencies/SDL/lib/x64"
@@ -106,10 +106,9 @@ end
 # mkmf only looks for C/C++ files in $srcdir by default, but our source files are in other folders.
 
 Dir.chdir($srcdir) do # (not needed when installing the gem, but for 'rake compile')
-  $srcs = Dir["../../dependencies/**/*.c"] + Dir["../../src/*.{cpp,cxx}"]
+  $srcs = Dir["../../dependencies/**/*.c"] + Dir["../../{src,ffi}/*.cpp"]
   # We need to expand the $VPATH so that all source files can be found reliably. https://stackoverflow.com/a/35842162
   $VPATH += $srcs.map { |src| "$(srcdir)/#{File.dirname(src)}" }.uniq
-  pp $VPATH
 end
 
 create_makefile "gosu"

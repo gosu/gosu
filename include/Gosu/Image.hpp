@@ -60,13 +60,10 @@ namespace Gosu
                       double center_y = 0.5, double scale_x = 1, double scale_y = 1,
                       Color c = Color::WHITE, BlendMode mode = BM_DEFAULT) const;
 
-#ifndef SWIG
         /// Provides access to the underlying image data object.
         Drawable& drawable() const;
-#endif
     };
 
-#ifndef SWIG
     /// Convenience function that slices an image file into a grid and creates images from them.
     /// @param tile_width If positive, specifies the width of one tile in pixels.
     /// If negative, the bitmap is divided into -tile_width rows.
@@ -82,5 +79,4 @@ namespace Gosu
     std::vector<Gosu::Image> load_tiles(const std::string& filename, //
                                         int tile_width, int tile_height,
                                         unsigned image_flags = IF_SMOOTH);
-#endif
 }

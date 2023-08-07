@@ -126,8 +126,6 @@ namespace Gosu
         /// method will be called several times.
         virtual void drop(const std::string& filename) {}
 
-// Ignore when SWIG is wrapping this class for Ruby/Gosu.
-#ifndef SWIG
         // Callbacks for touch events. So far these are only used on iOS.
         virtual void touch_began(Touch touch) {}
         virtual void touch_moved(Touch touch) {}
@@ -139,7 +137,6 @@ namespace Gosu
 
         const Input& input() const;
         Input& input();
-#endif
 
 #ifdef GOSU_IS_IPHONE
         void* uikit_window() const;
