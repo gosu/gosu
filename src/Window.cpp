@@ -30,7 +30,7 @@ struct Gosu::Window::Impl : private Gosu::Noncopyable
     } state
         = CLOSED;
 
-    std::unique_ptr<Graphics> graphics;
+    std::unique_ptr<Viewport> viewport;
     std::unique_ptr<Input> input;
 };
 
@@ -65,12 +65,12 @@ Gosu::Window::~Window()
 
 int Gosu::Window::width() const
 {
-    return graphics().width();
+    return viewport().width();
 }
 
 int Gosu::Window::height() const
 {
-    return graphics().height();
+    return viewport().height();
 }
 
 bool Gosu::Window::fullscreen() const
@@ -135,13 +135,13 @@ void Gosu::Window::resize(int width, int height, bool fullscreen)
 
     SDL_GL_GetDrawableSize(sdl_window(), &actual_width, &actual_height);
 
-    if (!m_impl->graphics) {
-        m_impl->graphics = std::make_unique<Graphics>(actual_width, actual_height);
+    if (!m_impl->viewport) {
+        m_impl->viewport = std::make_unique<Viewport>(actual_width, actual_height);
     }
     else {
-        m_impl->graphics->set_physical_resolution(actual_width, actual_height);
+        m_impl->viewport->set_physical_resolution(actual_width, actual_height);
     }
-    m_impl->graphics->set_resolution(width, height, black_bar_width, black_bar_height);
+    m_impl->viewport->set_resolution(width, height, black_bar_width, black_bar_height);
 
     if (!m_impl->input) {
         m_impl->input = std::make_unique<Input>(sdl_window());
@@ -261,7 +261,7 @@ bool Gosu::Window::tick()
         // Fixes https://github.com/gosu/gosu/issues/318
         int width, height;
         SDL_GL_GetDrawableSize(sdl_window(), &width, &height);
-        graphics().set_physical_resolution(width, height);
+        viewport().set_physical_resolution(width, height);
     }
 
     SDL_Event e;
@@ -321,7 +321,7 @@ bool Gosu::Window::tick()
 
     if (needs_redraw()) {
         const OpenGLContext current_context;
-        graphics().frame([&] {
+        viewport().frame([&] {
             draw();
             register_frame();
         });
@@ -371,14 +371,14 @@ void Gosu::Window::button_down(Button button)
     }
 }
 
-const Gosu::Graphics& Gosu::Window::graphics() const
+const Gosu::Viewport& Gosu::Window::viewport() const
 {
-    return *m_impl->graphics;
+    return *m_impl->viewport;
 }
 
-Gosu::Graphics& Gosu::Window::graphics()
+Gosu::Viewport& Gosu::Window::viewport()
 {
-    return *m_impl->graphics;
+    return *m_impl->viewport;
 }
 
 const Gosu::Input& Gosu::Window::input() const

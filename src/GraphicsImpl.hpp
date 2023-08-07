@@ -69,6 +69,8 @@ namespace Gosu
         }
     }
 
+    void schedule_draw_op(const DrawOp& op);
+
 #ifdef GOSU_IS_IPHONE
     int clip_rect_base_factor();
 #else

@@ -51,7 +51,7 @@ TEST_F(TiledDrawableTests, direct_creation)
 TEST_F(TiledDrawableTests, drawing)
 {
     const auto rotated_by_90_degrees = [](const Gosu::Image& image) {
-        return Gosu::Graphics::render(image.height(), image.width(), [&] {
+        return Gosu::render(image.height(), image.width(), [&] {
             // Draw the image rotated clockwise by 90°, rotated around the bottom left corner.
             image.draw_rot(0, 0, 0, 90, 0.0, 1.0);
         });

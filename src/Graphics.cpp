@@ -15,14 +15,14 @@ namespace Gosu
 {
     namespace
     {
-        Graphics* current_graphics_pointer = nullptr;
+        Viewport* current_viewport_pointer = nullptr;
 
-        Graphics& current_graphics()
+        Viewport& current_viewport()
         {
-            if (current_graphics_pointer == nullptr) {
+            if (current_viewport_pointer == nullptr) {
                 throw std::logic_error("Gosu::Graphics can only be drawn to while rendering");
             }
-            return *current_graphics_pointer;
+            return *current_viewport_pointer;
         }
 
         DrawOpQueueStack queues;
@@ -37,7 +37,7 @@ namespace Gosu
     }
 }
 
-struct Gosu::Graphics::Impl : private Gosu::Noncopyable
+struct Gosu::Viewport::Impl : private Gosu::Noncopyable
 {
     int virt_width = 0, virt_height = 0;
     int phys_width = 0, phys_height = 0;
@@ -88,7 +88,7 @@ struct Gosu::Graphics::Impl : private Gosu::Noncopyable
 #endif
 };
 
-Gosu::Graphics::Graphics(int phys_width, int phys_height)
+Gosu::Viewport::Viewport(int phys_width, int phys_height)
     : m_impl(new Impl)
 {
     m_impl->virt_width = phys_width;
@@ -105,24 +105,24 @@ Gosu::Graphics::Graphics(int phys_width, int phys_height)
     set_physical_resolution(phys_width, phys_height);
 }
 
-Gosu::Graphics::~Graphics()
+Gosu::Viewport::~Viewport()
 {
-    if (current_graphics_pointer == this) {
-        current_graphics_pointer = nullptr;
+    if (current_viewport_pointer == this) {
+        current_viewport_pointer = nullptr;
     }
 }
 
-int Gosu::Graphics::width() const
+int Gosu::Viewport::width() const
 {
     return m_impl->virt_width;
 }
 
-int Gosu::Graphics::height() const
+int Gosu::Viewport::height() const
 {
     return m_impl->virt_height;
 }
 
-void Gosu::Graphics::set_resolution(int virtual_width, int virtual_height,
+void Gosu::Viewport::set_resolution(int virtual_width, int virtual_height,
                                     double horizontal_black_bar_width,
                                     double vertical_black_bar_height)
 {
@@ -138,9 +138,9 @@ void Gosu::Graphics::set_resolution(int virtual_width, int virtual_height,
     m_impl->update_base_transform();
 }
 
-void Gosu::Graphics::frame(const std::function<void()>& f)
+void Gosu::Viewport::frame(const std::function<void()>& f)
 {
-    if (current_graphics_pointer != nullptr) {
+    if (current_viewport_pointer != nullptr) {
         throw std::logic_error("Cannot nest calls to Gosu::Graphics::frame()");
     }
 
@@ -166,7 +166,7 @@ void Gosu::Graphics::frame(const std::function<void()>& f)
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    current_graphics_pointer = this;
+    current_viewport_pointer = this;
 
     f();
 
@@ -193,7 +193,7 @@ void Gosu::Graphics::frame(const std::function<void()>& f)
         flush();
     }
 
-    current_graphics_pointer = nullptr;
+    current_viewport_pointer = nullptr;
 
     // Clear leftover transforms, clip rects etc.
     if (queues.size() == 1) {
@@ -205,13 +205,13 @@ void Gosu::Graphics::frame(const std::function<void()>& f)
     }
 }
 
-void Gosu::Graphics::flush()
+void Gosu::flush()
 {
     current_queue().perform_draw_ops_and_code();
     current_queue().clear_queue();
 }
 
-void Gosu::Graphics::gl(const std::function<void()>& f)
+void Gosu::gl(const std::function<void()>& f)
 {
     if (current_queue().mode() == QM_RECORD_MACRO) {
         throw std::logic_error("Custom OpenGL is not allowed while creating a macro");
@@ -220,7 +220,7 @@ void Gosu::Graphics::gl(const std::function<void()>& f)
 #ifdef GOSU_IS_OPENGLES
     throw std::logic_error("Custom OpenGL ES is not supported yet");
 #else
-    Graphics& cg = current_graphics();
+    Viewport& cg = current_viewport();
 
     flush();
 
@@ -232,13 +232,13 @@ void Gosu::Graphics::gl(const std::function<void()>& f)
 #endif
 }
 
-void Gosu::Graphics::gl(Gosu::ZPos z, const std::function<void()>& f)
+void Gosu::gl(Gosu::ZPos z, const std::function<void()>& f)
 {
 #ifdef GOSU_IS_OPENGLES
     throw std::logic_error("Custom OpenGL ES is not supported yet");
 #else
     const auto wrapped_f = [f] {
-        Graphics& cg = current_graphics();
+        Viewport& cg = current_viewport();
         cg.m_impl->begin_gl();
         f();
         cg.m_impl->end_gl();
@@ -247,16 +247,16 @@ void Gosu::Graphics::gl(Gosu::ZPos z, const std::function<void()>& f)
 #endif
 }
 
-void Gosu::Graphics::clip_to(double x, double y, double width, double height,
+void Gosu::clip_to(double x, double y, double width, double height,
                              const std::function<void()>& f)
 {
-    double screen_height = current_graphics().m_impl->phys_height;
+    double screen_height = current_viewport().m_impl->phys_height;
     current_queue().begin_clipping(x, y, width, height, screen_height);
     f();
     current_queue().end_clipping();
 }
 
-Gosu::Image Gosu::Graphics::render(int width, int height, const std::function<void()>& f,
+Gosu::Image Gosu::render(int width, int height, const std::function<void()>& f,
                                    unsigned image_flags)
 {
     const OpenGLContext current_context;
@@ -301,7 +301,7 @@ Gosu::Image Gosu::Graphics::render(int width, int height, const std::function<vo
     return result;
 }
 
-Gosu::Image Gosu::Graphics::record(int width, int height, const std::function<void()>& f)
+Gosu::Image Gosu::record(int width, int height, const std::function<void()>& f)
 {
     queues.emplace_back(QM_RECORD_MACRO);
 
@@ -312,14 +312,14 @@ Gosu::Image Gosu::Graphics::record(int width, int height, const std::function<vo
     return Image(std::move(result));
 }
 
-void Gosu::Graphics::transform(const Gosu::Transform& transform, const std::function<void()>& f)
+void Gosu::transform(const Gosu::Transform& transform, const std::function<void()>& f)
 {
     current_queue().push_transform(transform);
     f();
     current_queue().pop_transform();
 }
 
-void Gosu::Graphics::draw_line(double x1, double y1, Color c1, double x2, double y2, Color c2,
+void Gosu::draw_line(double x1, double y1, Color c1, double x2, double y2, Color c2,
                                ZPos z, BlendMode mode)
 {
     DrawOp op;
@@ -332,7 +332,7 @@ void Gosu::Graphics::draw_line(double x1, double y1, Color c1, double x2, double
     current_queue().schedule_draw_op(op);
 }
 
-void Gosu::Graphics::draw_triangle(double x1, double y1, Color c1, double x2, double y2, Color c2,
+void Gosu::draw_triangle(double x1, double y1, Color c1, double x2, double y2, Color c2,
                                    double x3, double y3, Color c3, ZPos z, BlendMode mode)
 {
     DrawOp op;
@@ -350,7 +350,7 @@ void Gosu::Graphics::draw_triangle(double x1, double y1, Color c1, double x2, do
     current_queue().schedule_draw_op(op);
 }
 
-void Gosu::Graphics::draw_quad(double x1, double y1, Color c1, double x2, double y2, Color c2,
+void Gosu::draw_quad(double x1, double y1, Color c1, double x2, double y2, Color c2,
                                double x3, double y3, Color c3, double x4, double y4, Color c4,
                                ZPos z, BlendMode mode)
 {
@@ -374,18 +374,18 @@ void Gosu::Graphics::draw_quad(double x1, double y1, Color c1, double x2, double
     current_queue().schedule_draw_op(op);
 }
 
-void Gosu::Graphics::draw_rect(double x, double y, double width, double height, Color c, ZPos z,
+void Gosu::draw_rect(double x, double y, double width, double height, Color c, ZPos z,
                                Gosu::BlendMode mode)
 {
     draw_quad(x, y, c, x + width, y, c, x, y + height, c, x + width, y + height, c, z, mode);
 }
 
-void Gosu::Graphics::schedule_draw_op(const Gosu::DrawOp& op)
+void Gosu::schedule_draw_op(const Gosu::DrawOp& op)
 {
     current_queue().schedule_draw_op(op);
 }
 
-void Gosu::Graphics::set_physical_resolution(int phys_width, int phys_height)
+void Gosu::Viewport::set_physical_resolution(int phys_width, int phys_height)
 {
     m_impl->phys_width = phys_width;
     m_impl->phys_height = phys_height;

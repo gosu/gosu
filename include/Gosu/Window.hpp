@@ -132,8 +132,8 @@ namespace Gosu
         virtual void touch_ended(Touch touch) {}
         virtual void touch_cancelled(Touch touch) {}
 
-        const Graphics& graphics() const;
-        Graphics& graphics();
+        const Viewport& viewport() const;
+        Viewport& viewport();
 
         const Input& input() const;
         Input& input();
