@@ -1,7 +1,8 @@
 gem "minitest"
 require "minitest/autorun"
 
-require "gosu" unless defined? Gosu
+$LOAD_PATH.prepend "#{__dir__}/../lib"
+require "gosu"
 
 class Gosu::Image
   # Gosu does not implement this method by default because it is very inefficient.

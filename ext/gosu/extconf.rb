@@ -9,7 +9,7 @@ end
 
 if not windows
   puts "The Gosu gem requires some libraries to be installed system-wide."
-  puts "See the following site for a list:"
+  puts "See the following wiki page for a list:"
   if macos
     puts "https://github.com/gosu/gosu/wiki/Getting-Started-on-OS-X"
   else
@@ -33,7 +33,9 @@ $CXXFLAGS ||= ""
 $CXXFLAGS << " -std=gnu++20 -Dregister="
 
 # Make Gosu's own header files and all of its dependencies available to C++ source files.
-$INCFLAGS << " -I../../include -I../../dependencies/stb -I../../dependencies/utf8proc -I../../dependencies/SDL_sound -I../../dependencies/mojoAL/AL"
+%w(include dependencies/stb dependencies/utf8proc dependencies/SDL_sound dependencies/mojoAL/AL).each do |incdir|
+  $INCFLAGS << " -I$(srcdir)/../../#{incdir}"
+end
 
 if windows
   # We statically compile utf8proc into the Gosu binary.
@@ -41,15 +43,12 @@ if windows
   $CFLAGS << " -DUTF8PROC_STATIC -DAL_LIBTYPE_STATIC"
   $CXXFLAGS << " -DUTF8PROC_STATIC -DAL_LIBTYPE_STATIC"
 
-  # Define UNICODE to use the Unicode-aware variants of all Win32 API functions.
-  $CXXFLAGS << " -DUNICODE"
-
-  # Use the bundled versions of SDL 2 and open_al.
-  $INCFLAGS << " -I../../dependencies/SDL/include"
+  # Use the bundled versions of SDL 2.
+  $INCFLAGS << " -I$(srcdir)/../../dependencies/SDL/include"
   if RbConfig::CONFIG["arch"] =~ /x64-/
-    $LDFLAGS << "  -L../../dependencies/SDL/lib/x64"
+    $LDFLAGS << "  -L$(srcdir)/../../dependencies/SDL/lib/x64"
   else
-    $LDFLAGS << "  -L../../dependencies/SDL/lib/x86"
+    $LDFLAGS << "  -L$(srcdir)/../../dependencies/SDL/lib/x86"
   end
   $LDFLAGS << " -lgdi32 -lwinmm -ldwmapi -lOpenGL32 -lSDL2"
   # Link libstdc++ statically to avoid having another DLL dependency when using Ocra.
@@ -63,7 +62,7 @@ elsif macos
   # https://github.com/shawn42/gamebox/issues/96
   $CXXFLAGS << " -stdlib=libc++"
 
-  # Disable an error that is disabled by default and prevents Gosu from building with universal Ruby:
+  # Disable an error that is enabled by default and prevents Gosu from building with universal Ruby:
   # https://trac.macports.org/ticket/58255 / https://github.com/gosu/gosu/issues/424
   $CXXFLAGS << " -Wno-reserved-user-defined-literal"
 
@@ -82,7 +81,7 @@ elsif macos
   $LDFLAGS.sub! " -lSDL2 ", " #{static_lib} " if File.exist? static_lib
 
   # Disable building of 32-bit slices in Apple's Ruby.
-  # (RbConfig::CONFIG['CXXFLAGS'] on 10.11: -arch x86_64 -arch i386 -g -Os -pipe)
+  # (RbConfig::CONFIG['CXXFLAGS'] on macOS 10.11: -arch x86_64 -arch i386 -g -Os -pipe)
   $CFLAGS.gsub! "-arch i386", ""
   $CXXFLAGS.gsub! "-arch i386", ""
   $LDFLAGS.gsub! "-arch i386", ""
@@ -101,19 +100,16 @@ else
   end
 
   pkg_config "sdl2"
-  pkg_config "vorbisfile"
-  pkg_config "sndfile"
-  pkg_config "libmpg123"
   pkg_config "fontconfig"
 end
 
-# Because Ruby will only compile source file in the src/ folder, but our dependencies are
-# stored in dependencies/, we need to create symlinks for all the .c files. This is terrible,
-# but still seems better than putting everything into the same folder to begin with.
-Dir.glob("../../dependencies/**/*.c").each do |dep|
-  File.open("../../src/#{File.basename dep}", "w") do |shim|
-    shim.puts "#include \"#{File.expand_path dep}\""
-  end
+# mkmf only looks for C/C++ files in $srcdir by default, but our source files are in other folders.
+
+Dir.chdir($srcdir) do # (not needed when installing the gem, but for 'rake compile')
+  $srcs = Dir["../../dependencies/**/*.c"] + Dir["../../src/*.{cpp,cxx}"]
+  # We need to expand the $VPATH so that all source files can be found reliably. https://stackoverflow.com/a/35842162
+  $VPATH += $srcs.map { |src| "$(srcdir)/#{File.dirname(src)}" }.uniq
+  pp $VPATH
 end
 
-create_makefile "gosu", "../../src"
+create_makefile "gosu"
