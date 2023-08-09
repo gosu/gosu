@@ -17,7 +17,7 @@ EOS
   s.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
   s.platform = Gem::Platform::RUBY
   s.extensions = FileList["ext/**/extconf.rb"]
-  # Additional Ruby source files plus DLLs (for Windows).
+  # Ruby source files plus DLLs (for Windows).
   s.files += Dir["{lib,lib64}/**/*.{rb,dll}"]
   # Gosu dependencies.
   s.files += Dir["dependencies/**/*.{h,c,a}"]
@@ -29,7 +29,6 @@ EOS
   s.extra_rdoc_files = %w(README.md COPYING rdoc/gosu.rb)
 end
 
-Gem::PackageTask.new(GEM_SPEC) do |pkg|
-end
+Gem::PackageTask.new(GEM_SPEC).define
 
 Rake::ExtensionTask.new("gosu", GEM_SPEC)

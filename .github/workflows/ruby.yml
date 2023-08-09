@@ -36,9 +36,6 @@ jobs:
       - name: Install dependencies
         run: bundle install
 
-      - name: Install Ruby/Gosu
-        run: rake gem && gem install pkg/gosu-9.9.9.gem --no-doc
-
       - name: Run tests (Linux)
         if: startsWith(matrix.platform, 'ubuntu-')
         run: xvfb-run --auto-servernum rake -rgosu test

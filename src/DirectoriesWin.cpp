@@ -31,7 +31,7 @@ std::string exe_filename()
 
 void Gosu::use_resource_directory()
 {
-    SetCurrentDirectory(utf8_to_utf16(resource_prefix()).c_str());
+    SetCurrentDirectoryW(utf8_to_utf16(resource_prefix()).c_str());
 }
 
 const std::string& Gosu::resource_prefix()

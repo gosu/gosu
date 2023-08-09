@@ -1,15 +1,13 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    excon (0.95.0)
-    minitest (5.16.3)
+    excon (0.100.0)
+    minitest (5.19.0)
     rake (13.0.6)
-    rake-compiler (1.2.1)
+    rake-compiler (1.2.5)
       rake
     rubyzip (2.3.2)
-    webrick (1.7.0)
-    yard (0.9.28)
-      webrick (~> 1.7.0)
+    yard (0.9.34)
 
 PLATFORMS
   arm64-darwin-21

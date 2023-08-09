@@ -7872,29 +7872,6 @@ free_Gosu_Image(void *self) {
     delete arg1;
 }
 
-SWIGINTERN VALUE
-_wrap_fps(int argc, VALUE *argv, VALUE self) {
-  int result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  {
-    try {
-      result = (int)Gosu::fps();
-    }
-    catch (const std::exception& e) {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_int(static_cast< int >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
 static swig_class SwigClassChannel;
 
 SWIGINTERN VALUE
@@ -10671,6 +10648,29 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_fps(int argc, VALUE *argv, VALUE self) {
+  int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  {
+    try {
+      result = (int)Gosu::fps();
+    }
+    catch (const std::exception& e) {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_int(static_cast< int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_screen_width(int argc, VALUE *argv, VALUE self) {
   Gosu::Window *arg1 = (Gosu::Window *) nullptr ;
   void *argp1 = 0 ;
@@ -12684,7 +12684,6 @@ SWIGEXPORT void Init_gosu(void) {
   SwigClassImage.mark = 0;
   SwigClassImage.destroy = (void (*)(void *)) free_Gosu_Image;
   SwigClassImage.trackObjects = 1;
-  rb_define_module_function(mGosu, "fps", VALUEFUNC(_wrap_fps), -1);
   
   SwigClassChannel.klass = rb_define_class_under(mGosu, "Channel", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_Gosu__Channel, (void *) &SwigClassChannel);
@@ -13064,6 +13063,7 @@ SWIGEXPORT void Init_gosu(void) {
   SwigClassWindow.mark = (void (*)(void *)) mark_window;
   SwigClassWindow.destroy = (void (*)(void *)) free_Gosu_Window;
   SwigClassWindow.trackObjects = 1;
+  rb_define_module_function(mGosu, "fps", VALUEFUNC(_wrap_fps), -1);
   rb_define_module_function(mGosu, "screen_width", VALUEFUNC(_wrap_screen_width), -1);
   rb_define_module_function(mGosu, "screen_height", VALUEFUNC(_wrap_screen_height), -1);
   rb_define_module_function(mGosu, "available_width", VALUEFUNC(_wrap_available_width), -1);

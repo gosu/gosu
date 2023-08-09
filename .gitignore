@@ -1,6 +1,7 @@
 /lib*/Gosu*.lib
 /lib*/gosu-ffi.*
 /pkg
+/tmp
 
 # CMake files
 /build
