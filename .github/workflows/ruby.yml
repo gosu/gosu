@@ -38,11 +38,11 @@ jobs:
 
       - name: Run tests (Linux)
         if: startsWith(matrix.platform, 'ubuntu-')
-        run: xvfb-run --auto-servernum rake -rgosu test
+        run: xvfb-run --auto-servernum rake test
 
       - name: Run tests (macOS)
         if: startsWith(matrix.platform, 'macos-')
-        run: rake -rgosu test
+        run: rake test
 
       - name: Run tests (Windows)
         if: startsWith(matrix.platform, 'windows-')
