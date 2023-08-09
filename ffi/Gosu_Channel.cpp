@@ -2,9 +2,7 @@
 
 GOSU_FFI_API void Gosu_Channel_destroy(Gosu_Channel* channel)
 {
-    Gosu_translate_exceptions([=] {
-        delete channel;
-    });
+    delete channel;
 }
 
 GOSU_FFI_API bool Gosu_Channel_playing(Gosu_Channel* channel)

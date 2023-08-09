@@ -9,9 +9,7 @@ GOSU_FFI_API Gosu_Font* Gosu_Font_create(int height, const char* name, unsigned 
 
 GOSU_FFI_API void Gosu_Font_destroy(Gosu_Font* font)
 {
-    Gosu_translate_exceptions([=] {
-        delete font;
-    });
+    delete font;
 }
 
 GOSU_FFI_API const char* Gosu_Font_name(Gosu_Font* font)

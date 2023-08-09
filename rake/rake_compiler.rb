@@ -32,4 +32,4 @@ end
 
 Gem::PackageTask.new(GEM_SPEC).define
 
-Rake::ExtensionTask.new("gosu", GEM_SPEC)
+Rake::ExtensionTask.new("gosu-ffi", GEM_SPEC)

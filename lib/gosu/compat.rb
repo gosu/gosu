@@ -149,25 +149,6 @@ end
 
 # Moved some Window methods to the Gosu module.
 class Gosu::Window
-  # Compat code taken from gosu/gosu
-  %w(update draw needs_redraw? needs_cursor? capture_cursor? hit_test gain_focus lose_focus
-    lose_focus button_down button_up gamepad_connected gamepad_disconnected drop close).each do |callback|
-    define_method "protected_#{callback}" do |*args|
-      begin
-        # If there has been an exception, don't do anything as to not make matters worse.
-        # Conveniently turn the return value into a boolean result (for needs_cursor? etc).
-        defined?(@__exception) ? false : send(callback, *args)
-      rescue Exception => e
-        # Exit the message loop naturally, then re-throw during the next tick.
-        @__exception = e
-        close!
-        false
-      ensure
-        $gosu_gl_blocks = nil if callback == "draw"
-      end
-    end
-  end
-
   # Class methods that have been turned into module methods.
   class << self
     def button_id_to_char(id)
@@ -187,6 +168,11 @@ class Gosu::Window
     define_method method.to_sym do |*args, &block|
       Gosu.send method, *args, &block
     end
+  end
+
+  def set_mouse_position(x, y)
+    self.mouse_x = x
+    self.mouse_y = y
   end
 
   Gosu.deprecate Gosu::Window, :set_mouse_position, "Window#mouse_x= and Window#mouse_y="

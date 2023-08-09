@@ -17,8 +17,6 @@ end
 Rake::TestTask.new do |t|
   t.verbose = true
   t.warning = true
-  # The tests should be run after installing the gosu gem (ignore ./lib).
-  t.libs = []
 end
 
 task :test => :compile

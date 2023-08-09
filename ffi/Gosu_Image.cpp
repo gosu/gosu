@@ -105,9 +105,7 @@ GOSU_FFI_API void Gosu_Image_create_tiles_from_image(Gosu_Image* image, int tile
 
 GOSU_FFI_API void Gosu_Image_destroy(Gosu_Image* image)
 {
-    Gosu_translate_exceptions([=] {
-        delete image;
-    });
+    delete image;
 }
 
 // Properties
@@ -128,15 +126,18 @@ GOSU_FFI_API unsigned Gosu_Image_height(Gosu_Image* image)
 
 GOSU_FFI_API Gosu_GLTexInfo* Gosu_Image_gl_tex_info_create(Gosu_Image* image)
 {
-    // Ensure that our reinterpret_cast trick doesn't cause outright crashes.
-    static_assert(sizeof(Gosu::GLTexInfo) == sizeof(Gosu_GLTexInfo));
-    static_assert(std::is_trivial_v<Gosu::GLTexInfo>);
-    static_assert(std::is_trivial_v<Gosu_GLTexInfo>);
-
-    return Gosu_translate_exceptions([=] {
-        Gosu::GLTexInfo* gosu_texture_info =
-            new Gosu::GLTexInfo{*image->image.drawable().gl_tex_info()};
-        return reinterpret_cast<Gosu_GLTexInfo*>(gosu_texture_info);
+    return Gosu_translate_exceptions([=]() -> Gosu_GLTexInfo* {
+        const Gosu::GLTexInfo* info = image->image.drawable().gl_tex_info();
+        if (!info) {
+            return nullptr;
+        }
+        return new Gosu_GLTexInfo {
+            .tex_name = info->tex_name,
+            .left = info->left,
+            .right = info->right,
+            .top = info->top,
+            .bottom = info->bottom,
+        };
     });
 }
 
