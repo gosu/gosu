@@ -1,7 +1,4 @@
-module Gosu
-  extend FFI::Library
-  ffi_lib Gosu::LIBRARY_PATH
-
+module GosuFFI
   # uint32
   constants = [
     "KB_ESCAPE",
@@ -45,6 +42,9 @@ module Gosu
     "KB_DOWN",
     "KB_HOME",
     "KB_END",
+    "KB_PRINT_SCREEN",
+    "KB_SCROLL_LOCK",
+    "KB_PAUSE",
     "KB_INSERT",
     "KB_DELETE",
     "KB_PAGE_UP",
@@ -61,6 +61,7 @@ module Gosu
     "KB_COMMA",
     "KB_PERIOD",
     "KB_SLASH",
+    "KB_CAPS_LOCK",
     "KB_A",
     "KB_B",
     "KB_C",
@@ -282,7 +283,7 @@ module Gosu
   constants = constants + [
     "MAJOR_VERSION",
     "MINOR_VERSION",
-    "POINT_VERSION"
+    "POINT_VERSION",
   ]
 
   constants = constants + [
@@ -316,17 +317,70 @@ module Gosu
   ]
 
   constants.each do |const|
-    attach_variable :"#{const}", :"Gosu_#{const}", :uint32
-    Gosu.const_set(const, Gosu.send(:"#{const}"))
-
-    # TODO: Remove Gosu.CONSTANT after setting Gosu::CONSTANT
-    # puts "#{const}: #{Gosu.send(:"#{const}")}"
-    # Gosu.undef_method(:"#{const}")
+    attach_variable const, "Gosu_#{const}", :uint32
+    Gosu.const_set(const, GosuFFI.send(const)) if const =~ /^(KB|MS|GP)_/
   end
 
-  attach_function :Gosu_version, [], :string
-  attach_function :Gosu_licenses, [], :string
+  Gosu.const_set("VERSION", GosuFFI.Gosu_version())
+  Gosu.const_set("LICENSES", GosuFFI.Gosu_licenses())
+  Gosu.const_set("MAJOR_VERSION", GosuFFI.MAJOR_VERSION)
+  Gosu.const_set("MINOR_VERSION", GosuFFI.MINOR_VERSION)
+  Gosu.const_set("POINT_VERSION", GosuFFI.POINT_VERSION)
 
-  Gosu.const_set("VERSION", Gosu_version())
-  Gosu.const_set("LICENSES", Gosu_licenses())
+  # SEE: https://github.com/gosu/gosu/blob/master/Gosu/GraphicsBase.hpp
+
+  def self.blend_mode(mode)
+    case mode
+    when :default
+      GosuFFI.BM_DEFAULT
+    when :additive, :add
+      GosuFFI.BM_ADD
+    when :multiply
+      GosuFFI.BM_MULTIPLY
+    when Numeric
+      mode
+    else
+      raise ArgumentError, "No such blend mode: #{mode}"
+    end
+  end
+
+  def self.image_flags(retro: false, tileable: false)
+    flags = 0
+    flags |= GosuFFI.IF_RETRO if retro
+    flags |= GosuFFI.IF_TILEABLE if tileable
+    flags
+  end
+
+  def self.font_alignment_flags(flags)
+    case flags
+    when :left
+      GosuFFI.AL_LEFT
+    when :right
+      GosuFFI.AL_RIGHT
+    when :center
+      GosuFFI.AL_CENTER
+    when :justify
+      GosuFFI.AL_JUSTIFY
+    when Numeric
+      flags
+    else
+      raise ArgumentError, "No such font alignment: #{flags}"
+    end
+  end
+
+  def self.font_flags(bold, italic, underline)
+    flags = 0
+    flags |= GosuFFI.FF_BOLD if bold
+    flags |= GosuFFI.FF_ITALIC if italic
+    flags |= GosuFFI.FF_UNDERLINE if underline
+    flags
+  end
+
+  def self.window_flags(fullscreen: false, resizable: false, borderless: false)
+    flags = GosuFFI.WF_WINDOWED
+    flags |= GosuFFI.WF_FULLSCREEN if fullscreen
+    flags |= GosuFFI.WF_RESIZABLE if resizable
+    flags |= GosuFFI.WF_BORDERLESS if borderless
+    flags
+  end
 end

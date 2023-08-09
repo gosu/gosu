@@ -9,9 +9,7 @@ GOSU_FFI_API Gosu_Song* Gosu_Song_create(const char* filename)
 
 GOSU_FFI_API void Gosu_Song_destroy(Gosu_Song* song)
 {
-    Gosu_translate_exceptions([=] {
-        delete song;
-    });
+    delete song;
 }
 
 GOSU_FFI_API void Gosu_Song_play(Gosu_Song* song, bool looping)

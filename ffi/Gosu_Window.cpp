@@ -12,9 +12,7 @@ GOSU_FFI_API Gosu_Window* Gosu_Window_create(int width, int height, unsigned win
 
 GOSU_FFI_API void Gosu_Window_destroy(Gosu_Window* window)
 {
-    Gosu_translate_exceptions([=] {
-        delete window;
-    });
+    delete window;
 }
 
 // Callbacks

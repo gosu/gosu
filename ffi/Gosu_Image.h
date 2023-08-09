@@ -7,7 +7,7 @@ typedef struct Gosu_Image Gosu_Image;
 
 typedef struct Gosu_GLTexInfo
 {
-    int tex_name;
+    uint32_t tex_name;
     double left, right, top, bottom;
 } Gosu_GLTexInfo;
 

@@ -25,7 +25,7 @@ class TestText < Minitest::Test
         Dir.chdir File.join(File.dirname(__FILE__), "test_text") do
           # Prepend <c=f00> to each string because white-on-translucent images are hard
           # to view (at least on macOS).
-          image = Gosu::Image.from_markup("<c=ff0000>#{string}", 41, options)
+          image = Gosu::Image.from_markup("<c=ff0000>#{string}", 41, **options)
           
           assert_image_matches "test_text/text-#{key}-#{i}", image, 1.00
         end

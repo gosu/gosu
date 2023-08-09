@@ -37,12 +37,13 @@ $CXXFLAGS << " -std=gnu++20 -Dregister="
   $INCFLAGS << " -I$(srcdir)/../../#{incdir}"
 end
 
-if windows
-  # We statically compile utf8proc into the Gosu binary.
-  # This macro is required to avoid errors about dllexport/dllimport mismatches.
-  $CFLAGS << " -DUTF8PROC_STATIC -DAL_LIBTYPE_STATIC"
-  $CXXFLAGS << " -DUTF8PROC_STATIC -DAL_LIBTYPE_STATIC"
+# We statically compile utf8proc into the Gosu binary.
+# This macro is required on Windows to avoid errors about dllexport/dllimport mismatches.
+# On other platforms, it might help us avoid unnecessarily exported symbols.
+$CFLAGS << " -DUTF8PROC_STATIC -DAL_LIBTYPE_STATIC"
+$CXXFLAGS << " -DUTF8PROC_STATIC -DAL_LIBTYPE_STATIC"
 
+if windows
   # Use the bundled version of SDL 2.
   $INCFLAGS << " -I$(srcdir)/../../dependencies/SDL/include"
   if RbConfig::CONFIG["arch"] =~ /x64-/
@@ -56,6 +57,8 @@ if windows
 elsif macos
   # Compile all C++ files as Objective C++ on macOS since mkmf does not support .mm files.
   $CXXFLAGS << " -x objective-c++ -fobjc-arc -DNDEBUG"
+  # Also hide all symbols by default. FFI symbols use the GOSU_FFI_API macro to override this.
+  $CXXFLAGS << " -fvisibility=hidden -DGOSU_FFI_EXPORTS"
 
   # Explicitly specify libc++ as the standard library.
   # rvm will sometimes try to override this:
@@ -111,4 +114,4 @@ Dir.chdir($srcdir) do # (not needed when installing the gem, but for 'rake compi
   $VPATH += $srcs.map { |src| "$(srcdir)/#{File.dirname(src)}" }.uniq
 end
 
-create_makefile "gosu"
+create_makefile "gosu-ffi"
