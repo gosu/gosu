@@ -36,8 +36,8 @@ TEST_F(ImageTests, render_after_color_key)
     // Turn it into an image for rendering. (Use 'true' to test a backward compatibility code path.)
     Gosu::Image image(Gosu::create_drawable(bitmap, Gosu::Rect::covering(bitmap), true));
 
-    const Gosu::Image result = Gosu::Graphics::render(300, 300, [&] {
-        Gosu::Graphics::draw_rect(0, 0, 300, 300, Gosu::Color::YELLOW, 0);
+    const Gosu::Image result = Gosu::render(300, 300, [&] {
+        Gosu::draw_rect(0, 0, 300, 300, Gosu::Color::YELLOW, 0);
         image.draw(0, 0, 1, 100, 100);
     });
 
@@ -63,7 +63,7 @@ TEST_F(ImageTests, delete_texture_during_rendering)
     ASSERT_EQ(tex_info->right, 1.0);
     ASSERT_EQ(tex_info->bottom, 1.0);
 
-    const Gosu::Image result = Gosu::Graphics::render(64, 64, [&] {
+    const Gosu::Image result = Gosu::render(64, 64, [&] {
         image.draw(0, 0, 0);
         // Reset our reference to the texture. Gosu must keep the OpenGL texture alive regardless.
         image = Gosu::Image();
@@ -82,7 +82,7 @@ TEST_F(ImageTests, delete_tex_chunk_during_rendering)
     ASSERT_LT(tex_info->right, 0.5);
     ASSERT_LT(tex_info->bottom, 0.5);
 
-    const Gosu::Image result = Gosu::Graphics::render(50, 50, [&] {
+    const Gosu::Image result = Gosu::render(50, 50, [&] {
         image.draw(0, 0, 0);
         // Now reset our image and create another image of the same size. If Gosu is not careful and
         // re-allocates another bitmap on the same part of the texture, then this will influence the

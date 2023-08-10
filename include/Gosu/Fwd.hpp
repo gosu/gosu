@@ -7,7 +7,6 @@ namespace Gosu
     class Channel;
     struct Color;
     class Font;
-    class Graphics;
     class Image;
     class Drawable;
     class Input;
@@ -16,5 +15,6 @@ namespace Gosu
     class Song;
     class TextInput;
     struct Transform;
+    class Viewport;
     class Window;
 }

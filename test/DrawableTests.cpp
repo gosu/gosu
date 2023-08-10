@@ -85,10 +85,10 @@ TEST_F(DrawableTests, large_texture_allocation)
     auto tiled_drawable
         = Gosu::create_drawable(red, Gosu::Rect::covering(red), Gosu::IF_TILEABLE_TOP);
 
-    const Gosu::Image render_result = Gosu::Graphics::render(100, 100, [&] {
+    const Gosu::Image render_result = Gosu::render(100, 100, [&] {
         // Scale this image by factor 10 so that we can verify that it has a tileable top (only).
-        Gosu::Graphics::transform(Gosu::Transform::scale(10),
-                                  [&] { Gosu::Image(std::move(tiled_drawable)).draw(0, 0, 0); });
+        Gosu::transform(Gosu::Transform::scale(10),
+                        [&] { Gosu::Image(std::move(tiled_drawable)).draw(0, 0, 0); });
     });
     const Gosu::Bitmap rendered_bitmap = render_result.drawable().to_bitmap();
     for (int x = 0; x < 100; ++x) {

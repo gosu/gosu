@@ -50,7 +50,7 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1, double x2, double y2, 
     op.bottom = m_info.bottom;
 
     op.z = z;
-    Graphics::schedule_draw_op(op);
+    schedule_draw_op(op);
 }
 
 std::unique_ptr<Gosu::Drawable> Gosu::TexChunk::subimage(const Rect& rect) const

@@ -169,7 +169,7 @@ void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Col
 
     normalize_coordinates(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
-    Gosu::Graphics::gl(z, [=, this] { pimpl->draw_vertex_arrays(x1, y1, x2, y2, x3, y3, x4, y4); });
+    Gosu::gl(z, [=, this] { pimpl->draw_vertex_arrays(x1, y1, x2, y2, x3, y3, x4, y4); });
 }
 
 const Gosu::GLTexInfo* Gosu::Macro::gl_tex_info() const
@@ -184,7 +184,7 @@ Gosu::Bitmap Gosu::Macro::to_bitmap() const
              pimpl->width, pimpl->height, Color::WHITE, 0, BM_DEFAULT);
     };
 
-    return Gosu::Graphics::render(pimpl->width, pimpl->height, render_this).drawable().to_bitmap();
+    return Gosu::render(pimpl->width, pimpl->height, render_this).drawable().to_bitmap();
 }
 
 std::unique_ptr<Gosu::Drawable> Gosu::Macro::subimage(const Rect&) const
