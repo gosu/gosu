@@ -23,6 +23,11 @@ namespace Gosu
 
         [EAGLContext setCurrentContext:globalContext];
     }
+
+    OpenGLContext::~OpenGLContext()
+    {
+        // Don't bother unsetting anything.
+    }
     
     int clip_rect_base_factor()
     {
