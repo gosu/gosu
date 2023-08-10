@@ -8,7 +8,7 @@ struct Gosu::Window::Impl : private Gosu::Noncopyable
 {
     UIWindow* window;
     GosuViewController* controller;
-    std::unique_ptr<Graphics> graphics;
+    std::unique_ptr<Viewport> viewport;
     std::unique_ptr<Input> input;
 
     double update_interval;
@@ -23,11 +23,11 @@ Gosu::Window::Window(int width, int height, unsigned window_flags, double update
     m_impl->controller.gosuWindow = this;
     m_impl->window.rootViewController = m_impl->controller;
 
-    // It is important to (implicitly) load the view before creating the Graphics instance.
+    // It is important to (implicitly) load the view before creating the Viewport instance.
     [m_impl->controller view];
 
-    m_impl->graphics.reset(new Graphics(screen_width(), screen_height()));
-    m_impl->graphics->set_resolution(width, height);
+    m_impl->viewport = std::make_unique<Viewport>(screen_width(), screen_height());
+    m_impl->viewport->set_resolution(width, height);
 
     m_impl->input.reset(new Input((__bridge void*) m_impl->controller.view, update_interval));
     m_impl->input->set_mouse_factors(1.0 * width / available_width(),
@@ -48,12 +48,12 @@ Gosu::Window::~Window() = default;
 
 int Gosu::Window::width() const
 {
-    return graphics().width();
+    return viewport().width();
 }
 
 int Gosu::Window::height() const
 {
-    return graphics().height();
+    return viewport().height();
 }
 
 bool Gosu::Window::fullscreen() const
@@ -104,14 +104,14 @@ void Gosu::Window::set_caption(const std::string& caption)
     m_impl->caption = caption;
 }
 
-const Gosu::Graphics& Gosu::Window::graphics() const
+const Gosu::Viewport& Gosu::Window::viewport() const
 {
-    return *m_impl->graphics;
+    return *m_impl->viewport;
 }
 
-Gosu::Graphics& Gosu::Window::graphics()
+Gosu::Viewport& Gosu::Window::viewport()
 {
-    return *m_impl->graphics;
+    return *m_impl->viewport;
 }
 
 const Gosu::Input& Gosu::Window::input() const

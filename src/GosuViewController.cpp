@@ -172,7 +172,7 @@ static void handle_audio_interruption(void* unused, UInt32 inInterruptionState)
     
     if (window.needs_redraw()) {
         [(GosuGLView*)self.view redrawGL:^{
-            window.graphics().frame([&window] {
+            window.viewport().frame([&window] {
                 window.draw();
                 Gosu::register_frame();
             });
