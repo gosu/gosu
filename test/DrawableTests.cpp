@@ -149,8 +149,7 @@ TEST_F(DrawableTests, multithreaded_stress_test)
         thread.join();
     }
 
-    // Verify at least one of the drawables created by the other threads. If we cannot see that it
-    // is red, then texture sharing didn't work.
+    // Verify at least one of the drawables created by the other threads.
     for (const auto& drawable : drawables) {
         if (drawable->width() > 0 && drawable->height() > 0) {
             ASSERT_EQ(drawable->to_bitmap().pixel(0, 0), Gosu::Color::RED);

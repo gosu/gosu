@@ -16,16 +16,17 @@
 
 namespace Gosu
 {
-    /// Scoped lock/RAII class that makes an OpenGL context the current context, and prevents other
-    /// threads from taking over the context until this instance is destroyed.
+    /// Recursive lock/RAII class that makes an OpenGL context the current context, and prevents
+    /// other threads from taking over the context until this instance is destroyed.
     class OpenGLContext : Noncopyable
     {
-        std::unique_lock<std::recursive_mutex> m_lock;
+        std::unique_lock<std::mutex> m_lock;
 
     public:
         /// Makes an OpenGL context current. The very first call of this constructor may throw, all
         /// other calls can only block.
-        OpenGLContext();
+        explicit OpenGLContext(bool for_rendering_to_window = false);
+        ~OpenGLContext();
 
 #ifndef GOSU_IS_IPHONE
         // SDL does not allow creation of OpenGL contexts without creating an SDL_Window first.
