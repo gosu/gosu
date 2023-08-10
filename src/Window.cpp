@@ -253,7 +253,7 @@ bool Gosu::Window::tick()
         SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
 
         // Enable vsync.
-        const OpenGLContext current_context;
+        const OpenGLContext current_context(true);
         SDL_GL_SetSwapInterval(1);
 
         // SDL_GL_GetDrawableSize returns different values before and after showing the window.
@@ -320,7 +320,7 @@ bool Gosu::Window::tick()
     SDL_ShowCursor(needs_cursor());
 
     if (needs_redraw()) {
-        const OpenGLContext current_context;
+        const OpenGLContext current_context(true);
         viewport().frame([&] {
             draw();
             register_frame();

@@ -49,10 +49,13 @@ Gosu::Texture::Texture(int width, int height, bool retro)
 
 Gosu::Texture::~Texture()
 {
-    // Only the first construction of OpenGLContext can throw, but if we get here, then we must have
-    // already created a context in the constructor. Therefore, this destructor cannot throw.
-    const OpenGLContext current_context;
-    glDeleteTextures(1, &m_tex_name);
+    try {
+        const OpenGLContext current_context;
+        glDeleteTextures(1, &m_tex_name);
+    } catch (...)
+    {
+        // Leaking is better than throwing in a destructor.
+    }
 }
 
 std::unique_ptr<Gosu::TexChunk> Gosu::Texture::try_alloc(const Bitmap& bitmap, int padding)

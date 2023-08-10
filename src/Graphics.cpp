@@ -161,7 +161,7 @@ void Gosu::Viewport::frame(const std::function<void()>& f)
 
     queues.back().set_base_transform(m_impl->base_transform);
 
-    const OpenGLContext current_context;
+    const OpenGLContext current_context(true);
 
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
