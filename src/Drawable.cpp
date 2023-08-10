@@ -3,6 +3,7 @@
 #include "EmptyDrawable.hpp"
 #include "Texture.hpp"
 #include "TiledDrawable.hpp"
+#include <list>
 #include <mutex>
 
 namespace Gosu
@@ -67,12 +68,15 @@ std::unique_ptr<Gosu::Drawable> Gosu::create_drawable(const Bitmap& source, cons
     Bitmap source_with_borders = apply_border_flags(image_flags, source, source_rect);
 
     // Try to put the bitmap into one of the already allocated textures.
-    static std::vector<std::shared_ptr<Texture>> texture_pool;
+    static std::list<std::weak_ptr<Texture>> texture_pool;
     static std::mutex mutex;
     std::scoped_lock lock(mutex);
 
-    for (const std::shared_ptr<Texture>& texture : texture_pool) {
-        if (texture->retro() != wants_retro) {
+    texture_pool.remove_if([](const auto& weak_ptr) { return weak_ptr.expired(); });
+
+    for (const std::weak_ptr<Texture>& weak_texture : texture_pool) {
+        const auto texture = weak_texture.lock();
+        if (!texture || texture->retro() != wants_retro) {
             continue;
         }
 
