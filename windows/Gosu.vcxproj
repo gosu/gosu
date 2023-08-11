@@ -367,7 +367,6 @@
     <ClInclude Include="..\src\GosuGLView.hpp" />
     <ClInclude Include="..\src\GosuViewController.hpp" />
     <ClInclude Include="..\src\GraphicsImpl.hpp" />
-    <ClInclude Include="..\src\Iconv.hpp" />
     <ClInclude Include="..\src\Macro.hpp" />
     <ClInclude Include="..\src\MarkupParser.hpp" />
     <ClInclude Include="..\src\OffScreenTarget.hpp" />
