@@ -225,9 +225,8 @@
     <ClCompile Include="..\src\Buffer.cpp" />
     <ClCompile Include="..\src\Channel.cpp" />
     <ClCompile Include="..\src\Color.cpp" />
-    <ClCompile Include="..\src\DirectoriesApple.cpp" />
-    <ClCompile Include="..\src\DirectoriesUnix.cpp" />
-    <ClCompile Include="..\src\DirectoriesWin.cpp" />
+    <ClCompile Include="..\src\Directories.cpp" />
+    <ClCompile Include="..\src\DirectoriesUIKit.cpp" />
     <ClCompile Include="..\src\Drawable.cpp" />
     <ClCompile Include="..\src\FPS.cpp" />
     <ClCompile Include="..\src\Font.cpp" />

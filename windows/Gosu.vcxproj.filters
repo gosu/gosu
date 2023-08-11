@@ -174,13 +174,10 @@
     <ClCompile Include="..\src\Color.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\DirectoriesApple.cpp">
+    <ClCompile Include="..\src\Directories.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\DirectoriesUnix.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\DirectoriesWin.cpp">
+    <ClCompile Include="..\src\DirectoriesUIKit.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Drawable.cpp">
