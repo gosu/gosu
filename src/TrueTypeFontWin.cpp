@@ -7,7 +7,6 @@
 #include <Gosu/Buffer.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
-#include "WinUtility.hpp"
 #include <cstdlib>
 #include <cwchar>
 #include <map>

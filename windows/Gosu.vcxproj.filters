@@ -273,13 +273,13 @@
     <ClCompile Include="..\src\Utility.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\UtilityWin.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Version.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\WinMain.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\WinUtility.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Window.cpp">
@@ -633,9 +633,6 @@
       <Filter>Implementation</Filter>
     </ClInclude>
     <ClInclude Include="..\src\TrueTypeFont.hpp">
-      <Filter>Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\WinUtility.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Audio.hpp">
