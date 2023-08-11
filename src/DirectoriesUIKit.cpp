@@ -33,18 +33,18 @@ std::string Gosu::user_settings_path(const std::string& organization,
 
     std::string directory = user_settings_prefix;
     if (!organization.empty()) {
-        directory += "/";
+        directory += '/';
         directory += organization;
     }
     if (!application.empty()) {
-        directory += "/";
+        directory += '/';
         directory += application;
     }
     if (!std::filesystem::is_directory(directory)) {
         std::filesystem::create_directories(directory);
     }
 
-    return relative_filename.empty() ? directory : directory + "/" + relative_filename;
+    return relative_filename.empty() ? directory : directory + '/' + relative_filename;
 }
 
 #endif

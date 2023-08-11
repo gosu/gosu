@@ -19,7 +19,7 @@ namespace Gosu
     /// </ul>
     ///
     /// Note: This uses SDL_GetBasePath internally. https://wiki.libsdl.org/SDL2/SDL_GetBasePath
-    std::string resource_path(const std::string& relative_filename);
+    std::string resource_path(const std::string& relative_filename = "");
 
     /// Builds a filename for reading or writing game settings. This method will automatically
     /// create all intermediate directories needed to save files at the returned path.
@@ -36,5 +36,5 @@ namespace Gosu
     ///
     /// Note: This uses SDL_GetPrefPath internally. https://wiki.libsdl.org/SDL2/SDL_GetPrefPath
     std::string user_settings_path(const std::string& organization, const std::string& application,
-                                   const std::string& relative_filename);
+                                   const std::string& relative_filename = "");
 }
