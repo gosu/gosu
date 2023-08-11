@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Gosu/Platform.hpp>
 #include <string>
 #include <vector>
 
@@ -14,6 +15,13 @@ namespace Gosu
     ///
     /// This method will silently skip over invalid UTF-8 sequences.
     std::u32string utf8_to_composed_utc4(const std::string& utf8);
+
+#ifdef GOSU_IS_WIN
+    /// Converts UTF-8 to UTF-16, as it is used in "UNICODE" Windows APIs.
+    std::wstring utf8_to_utf16(const std::string& utf8);
+    /// Converts UTF-16 to UTF-8.
+    std::string utf16_to_utf8(const std::wstring& utf16);
+#endif
 
     /// Returns true if the filename has the given extension.
     /// The comparison is case-insensitive, but you must pass the extension in lower case.

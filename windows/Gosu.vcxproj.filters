@@ -174,13 +174,10 @@
     <ClCompile Include="..\src\Color.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\DirectoriesApple.cpp">
+    <ClCompile Include="..\src\Directories.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\DirectoriesUnix.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\DirectoriesWin.cpp">
+    <ClCompile Include="..\src\DirectoriesUIKit.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Drawable.cpp">
@@ -273,13 +270,13 @@
     <ClCompile Include="..\src\Utility.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\UtilityWin.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Version.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\WinMain.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\WinUtility.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Window.cpp">
@@ -599,9 +596,6 @@
     <ClInclude Include="..\src\GraphicsImpl.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Iconv.hpp">
-      <Filter>Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Macro.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
@@ -633,9 +627,6 @@
       <Filter>Implementation</Filter>
     </ClInclude>
     <ClInclude Include="..\src\TrueTypeFont.hpp">
-      <Filter>Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\WinUtility.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Audio.hpp">

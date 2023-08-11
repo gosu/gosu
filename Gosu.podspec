@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
     # Also silence warnings about invalid doxygen markup in SDL headers, and make deps available.
     ss.compiler_flags = "-DGOSU_DEPRECATED= -DGLES_SILENCE_DEPRECATION -Wno-documentation -x objective-c++ -Idependencies/stb -Idependencies/utf8proc"
 
-    ss.libraries = "iconv"
+    ss.osx.libraries = "iconv"
     # Include all frameworks necessary for SDL 2, because we link to it statically.
     ss.osx.frameworks = "ApplicationServices", "AudioUnit", "Carbon", "Cocoa", "CoreAudio",
                         "ForceFeedback", "IOKit", "OpenGL"

@@ -14,7 +14,7 @@ static EAGLContext __weak* globalContext;
 
 namespace Gosu
 {
-    OpenGLContext::OpenGLContext()
+    OpenGLContext::OpenGLContext(bool)
     {
         // Gosu does not support multithreading on iOS.
         if (![NSThread isMainThread]) {

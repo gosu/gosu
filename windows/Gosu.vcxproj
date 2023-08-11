@@ -225,9 +225,8 @@
     <ClCompile Include="..\src\Buffer.cpp" />
     <ClCompile Include="..\src\Channel.cpp" />
     <ClCompile Include="..\src\Color.cpp" />
-    <ClCompile Include="..\src\DirectoriesApple.cpp" />
-    <ClCompile Include="..\src\DirectoriesUnix.cpp" />
-    <ClCompile Include="..\src\DirectoriesWin.cpp" />
+    <ClCompile Include="..\src\Directories.cpp" />
+    <ClCompile Include="..\src\DirectoriesUIKit.cpp" />
     <ClCompile Include="..\src\Drawable.cpp" />
     <ClCompile Include="..\src\FPS.cpp" />
     <ClCompile Include="..\src\Font.cpp" />
@@ -258,9 +257,9 @@
     <ClCompile Include="..\src\TrueTypeFontUnix.cpp" />
     <ClCompile Include="..\src\TrueTypeFontWin.cpp" />
     <ClCompile Include="..\src\Utility.cpp" />
+    <ClCompile Include="..\src\UtilityWin.cpp" />
     <ClCompile Include="..\src\Version.cpp" />
     <ClCompile Include="..\src\WinMain.cpp" />
-    <ClCompile Include="..\src\WinUtility.cpp" />
     <ClCompile Include="..\src\Window.cpp" />
     <ClCompile Include="..\src\WindowUIKit.cpp" />
   </ItemGroup>
@@ -368,7 +367,6 @@
     <ClInclude Include="..\src\GosuGLView.hpp" />
     <ClInclude Include="..\src\GosuViewController.hpp" />
     <ClInclude Include="..\src\GraphicsImpl.hpp" />
-    <ClInclude Include="..\src\Iconv.hpp" />
     <ClInclude Include="..\src\Macro.hpp" />
     <ClInclude Include="..\src\MarkupParser.hpp" />
     <ClInclude Include="..\src\OffScreenTarget.hpp" />
@@ -380,7 +378,6 @@
     <ClInclude Include="..\src\TiledDrawable.hpp" />
     <ClInclude Include="..\src\TransformStack.hpp" />
     <ClInclude Include="..\src\TrueTypeFont.hpp" />
-    <ClInclude Include="..\src\WinUtility.hpp" />
     <ClInclude Include="..\include\Gosu\Audio.hpp" />
     <ClInclude Include="..\include\Gosu\Bitmap.hpp" />
     <ClInclude Include="..\include\Gosu\Buffer.hpp" />
