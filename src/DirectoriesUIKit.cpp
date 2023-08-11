@@ -1,6 +1,6 @@
 #include <Gosu/Directories.hpp>
 #include <Gosu/Platform.hpp>
-#if defined(GOSU_IS_MAC)
+#if defined(GOSU_IS_IPHONE)
 
 #import <Foundation/Foundation.h>
 #include <filesystem>
