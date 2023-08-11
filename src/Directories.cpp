@@ -1,16 +1,11 @@
 #include <Gosu/Directories.hpp>
 #include <Gosu/Platform.hpp>
-#include <Gosu/Utility.hpp>
 
 #ifdef GOSU_IS_WIN
+#include <Gosu/Utility.hpp>
 #include <windows.h>
 #else
 #include <unistd.h>
-#endif
-
-#ifndef GOSU_IS_IPHONE
-#include <SDL.h>
-#include <memory>
 #endif
 
 void Gosu::use_resource_directory()
@@ -21,6 +16,12 @@ void Gosu::use_resource_directory()
     chdir(resource_path("").c_str());
 #endif
 }
+
+#ifndef GOSU_IS_IPHONE
+#include <SDL.h>
+#include <memory>
+#include <stdexcept>
+#endif
 
 #ifndef GOSU_IS_IPHONE
 std::string Gosu::resource_path(const std::string& relative_filename)
