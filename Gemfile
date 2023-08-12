@@ -4,6 +4,7 @@ gem "ffi"
 
 group :test do
   gem "minitest"
+  gem "minitest-reporters"
 end
 
 group :development do

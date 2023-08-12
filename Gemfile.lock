@@ -1,12 +1,20 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    ansi (1.5.0)
+    builder (3.2.4)
     excon (0.100.0)
     ffi (1.15.5)
     minitest (5.19.0)
+    minitest-reporters (1.6.1)
+      ansi
+      builder
+      minitest (>= 5.0)
+      ruby-progressbar
     rake (13.0.6)
     rake-compiler (1.2.5)
       rake
+    ruby-progressbar (1.13.0)
     rubyzip (2.3.2)
     yard (0.9.34)
 
@@ -19,6 +27,7 @@ DEPENDENCIES
   excon
   ffi
   minitest
+  minitest-reporters
   rake-compiler
   rubyzip
   yard

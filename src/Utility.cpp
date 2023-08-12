@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <utf8proc.h>
 
-std::u32string Gosu::utf8_to_composed_utc4(const std::string& utf8)
+std::u32string Gosu::utf8_to_composed_utc4(std::string_view utf8)
 {
     std::u32string utc4;
     utc4.reserve(utf8.size());
@@ -35,7 +35,7 @@ std::u32string Gosu::utf8_to_composed_utc4(const std::string& utf8)
     auto new_length = utf8proc_normalize_utf32(utc4_data, utc4_length, options);
     // GCOV_EXCL_START: No code path in utf8proc_normalize_utf32 currently returns an error.
     if (new_length < 0) {
-        throw std::runtime_error("Could not normalize '" + utf8
+        throw std::runtime_error("Could not normalize '" + std::string(utf8)
                                  + "': " + utf8proc_errmsg(new_length));
     }
     // GCOV_EXCL_END

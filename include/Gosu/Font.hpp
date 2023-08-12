@@ -69,8 +69,8 @@ namespace Gosu
 
         /// Maps a letter to a specific image, instead of generating one using Gosu's built-in text
         /// rendering.
-        void set_image(std::string codepoint, unsigned font_flags, const Gosu::Image& image);
+        void set_image(std::string_view codepoint, unsigned font_flags, const Gosu::Image& image);
         /// A shortcut for mapping a character to an image regardless of font_flags.
-        void set_image(std::string codepoint, const Gosu::Image& image);
+        void set_image(std::string_view codepoint, const Gosu::Image& image);
     };
 }

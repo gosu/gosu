@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace Gosu
@@ -13,7 +14,7 @@ namespace Gosu
     /// based on codepoints.
     ///
     /// This method will silently skip over invalid UTF-8 sequences.
-    std::u32string utf8_to_composed_utc4(const std::string& utf8);
+    std::u32string utf8_to_composed_utc4(std::string_view utf8);
 
     /// Returns true if the filename has the given extension.
     /// The comparison is case-insensitive, but you must pass the extension in lower case.
