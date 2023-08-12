@@ -172,7 +172,7 @@ void Gosu::Font::draw_markup_rel(const std::string& markup, double x, double y, 
 void Gosu::Font::set_image(std::string_view codepoint, unsigned font_flags,
                            const Gosu::Image& image)
 {
-    auto utc4 = utf8_to_composed_utc4(codepoint);
+    const std::u32string utc4 = utf8_to_composed_utc4(codepoint);
     if (utc4.length() != 1) {
         throw std::invalid_argument("Could not compose '" + std::string(codepoint)
                                     + "' into single codepoint");

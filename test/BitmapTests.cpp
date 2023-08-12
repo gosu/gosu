@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <Gosu/Bitmap.hpp>
+#include "TestHelper.hpp"
 #include <algorithm> // for std::copy_n
 #include <climits> // for INT_MAX
 #include <filesystem>
@@ -15,34 +16,6 @@ public:
     {
         ASSERT_EQ(target.width() * target.height(), pixels.size());
         std::copy_n(std::data(pixels), pixels.size(), target.data());
-    }
-
-    static testing::AssertionResult
-    visible_pixels_are_equal(const Gosu::Bitmap& lhs, const Gosu::Bitmap& rhs, int tolerance = 0)
-    {
-        if (lhs.width() != rhs.width() || lhs.height() != rhs.height()) {
-            return testing::AssertionFailure() << "different sizes";
-        }
-
-        for (int x = 0; x < lhs.width(); ++x) {
-            for (int y = 0; y < lhs.height(); ++y) {
-                Gosu::Color lhs_pixel = lhs.pixel(x, y);
-                Gosu::Color rhs_pixel = rhs.pixel(x, y);
-
-                if (lhs_pixel.alpha == 0 && rhs_pixel.alpha == 0) {
-                    continue;
-                }
-
-                if (lhs_pixel.alpha != rhs_pixel.alpha
-                    || std::abs(lhs_pixel.red - rhs_pixel.red) > tolerance
-                    || std::abs(lhs_pixel.green - rhs_pixel.green) > tolerance
-                    || std::abs(lhs_pixel.blue - rhs_pixel.blue) > tolerance) {
-                    return testing::AssertionFailure() << "difference at " << x << ", " << y;
-                }
-            }
-        }
-
-        return testing::AssertionSuccess();
     }
 
     // This is a naive implementation of Bitmap::insert that can be used to verify that the

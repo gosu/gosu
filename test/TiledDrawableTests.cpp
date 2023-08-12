@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
+#include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
 #include "../src/TiledDrawable.hpp"
-#include "Gosu/Bitmap.hpp"
 #include <numeric> // for std::iota
 
 class TiledDrawableTests : public testing::Test
