@@ -112,7 +112,7 @@ module GosuFFI
   attach_function :Gosu_Color_abgr, [:uint32], :uint32
   attach_function :Gosu_Color_argb, [:uint32], :uint32
 
-  attach_function :Gosu_Font_create, [:int, :string, :uint32], :pointer
+  attach_function :Gosu_Font_create, [:int, :string, :uint32, :uint32], :pointer
   attach_function :Gosu_Font_destroy, [:pointer], :void
 
   attach_function :Gosu_Font_name, [:pointer], :string

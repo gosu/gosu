@@ -2,6 +2,7 @@
 
 #include <Gosu/Platform.hpp>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace Gosu
@@ -14,7 +15,7 @@ namespace Gosu
     /// based on codepoints.
     ///
     /// This method will silently skip over invalid UTF-8 sequences.
-    std::u32string utf8_to_composed_utc4(const std::string& utf8);
+    std::u32string utf8_to_composed_utc4(std::string_view utf8);
 
 #ifdef GOSU_IS_WIN
     /// Converts UTF-8 to UTF-16, as it is used in "UNICODE" Windows APIs.
