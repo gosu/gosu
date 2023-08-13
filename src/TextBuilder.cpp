@@ -8,16 +8,20 @@ Gosu::WordInfo::WordInfo(const std::string& font_name, double font_height,
                          std::vector<FormattedString> parts)
 {
     assert(!parts.empty());
+    assert(!parts[0].text.empty());
 
-    const auto* properties = utf8proc_get_property(parts.front().text.front());
+    const auto first_character = static_cast<utf8proc_int32_t>(parts.front().text.front());
+    const auto* properties = utf8proc_get_property(first_character);
 
     // Also check the BiDi class to filter out non-breaking spaces.
-    is_whitespace = properties->category == UTF8PROC_CATEGORY_ZS &&
-                    properties->bidi_class == UTF8PROC_BIDI_CLASS_WS;
+    is_whitespace = properties->category == UTF8PROC_CATEGORY_ZS
+        && properties->bidi_class == UTF8PROC_BIDI_CLASS_WS;
 
     is_end_of_line = parts.back().text.back() == '\n';
     // Remove the trailing backspace character to avoid errors from Gosu::text_width().
-    if (is_end_of_line) parts.back().text.pop_back();
+    if (is_end_of_line) {
+        parts.back().text.pop_back();
+    }
 
     width = 0;
     for (const auto& part : parts) {
@@ -29,17 +33,28 @@ Gosu::WordInfo::WordInfo(const std::string& font_name, double font_height,
     this->parts = std::move(parts);
 }
 
+enum Gosu::TextBuilder::EndOfLineReason : int
+{
+    LINE_TOO_LONG,
+    END_OF_PARAGRAPH,
+    END_OF_TEXT
+};
+
 void Gosu::TextBuilder::flush_current_line(EndOfLineReason reason)
 {
     if (m_current_line.empty()) {
-        if (reason == END_OF_PARAGRAPH) allocate_next_line();
+        if (reason == END_OF_PARAGRAPH) {
+            allocate_next_line();
+        }
         return;
     }
 
     allocate_next_line();
 
     // Remove trailing whitespace so that justifying the text across the line works.
-    if (m_current_line.back().is_whitespace) m_current_line.pop_back();
+    if (m_current_line.back().is_whitespace) {
+        m_current_line.pop_back();
+    }
 
     // Shouldn't happen because the first word on a line should never be whitespace.
     assert(!m_current_line.empty());
@@ -84,26 +99,26 @@ void Gosu::TextBuilder::flush_current_line(EndOfLineReason reason)
 void Gosu::TextBuilder::allocate_next_line()
 {
     if (m_used_lines == m_allocated_lines) {
-        m_allocated_lines += 10;
-        resize_to_allocated_lines();
+        reallocate(m_allocated_lines += 10);
     }
 
     ++m_used_lines;
 }
 
-void Gosu::TextBuilder::resize_to_allocated_lines()
+void Gosu::TextBuilder::reallocate(int lines)
 {
-    double new_height =
-            m_font_height * m_allocated_lines + m_line_spacing * std::max(0, m_allocated_lines - 1);
-    m_result.resize(m_result.width(), ceil(new_height));
+    m_allocated_lines = lines;
+    double new_height
+        = m_font_height * m_allocated_lines + m_line_spacing * std::max(0, m_allocated_lines - 1);
+    m_result.resize(m_result.width(), std::ceil(new_height));
 }
 
 Gosu::TextBuilder::TextBuilder(const std::string& font_name, int font_height, int line_spacing,
                                int width, Alignment align)
-: m_font_name{font_name},
-  m_font_height{font_height * 1.0},
-  m_line_spacing{line_spacing * 1.0},
-  m_align{align}
+    : m_font_name(font_name),
+      m_font_height(font_height * 1.0),
+      m_line_spacing(line_spacing * 1.0),
+      m_align(align)
 {
     // This class uses result.width() to remember its destination width, so store it in there.
     m_result.resize(width, 0);
@@ -114,14 +129,13 @@ Gosu::Bitmap Gosu::TextBuilder::move_into_bitmap() &&
     flush_current_line(END_OF_TEXT);
 
     // Shrink to fit the currently used height.
-    m_allocated_lines = m_used_lines;
-    resize_to_allocated_lines();
+    reallocate(m_used_lines);
     return std::move(m_result);
 }
 
-void Gosu::TextBuilder::feed_word(std::vector<FormattedString>&& word)
+void Gosu::TextBuilder::feed_word(std::vector<FormattedString> word)
 {
-    WordInfo new_word(m_font_name, m_font_height, word);
+    WordInfo new_word(m_font_name, m_font_height, std::move(word));
 
     if (m_current_line_width + new_word.width > m_result.width()) {
         // Can't fit it on the same line as before, so flush the last line before adding the word to
