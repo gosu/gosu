@@ -7,6 +7,7 @@
 #include <Gosu/Text.hpp>
 #include <memory>
 #include <string>
+#include <string_view>
 
 namespace Gosu
 {
@@ -22,11 +23,11 @@ namespace Gosu
         /// @param height Height of the font, in pixels.
         /// @param font_flags  Flags used to render individual characters of the font (FontFlags enum).
         /// @param image_flags  Flags used to render individual characters of the font (ImageFlags enum).
-        explicit Font(int height, const std::string& name = default_font_name(),
+        explicit Font(int height, std::string_view name = default_font_name(),
                       unsigned font_flags = 0, unsigned image_flags = 0);
 
-        /// Returns the name of the font that was used to create it, i.e. the filename, nor the
-        /// internal TTF name. (TODO: Why not?)
+        /// Returns the name of the font that was used to create it. If the font was loaded from a
+        /// filename, the same filename string will be returned here unmodified.
         const std::string& name() const;
 
         /// Returns the height of the font, in pixels.

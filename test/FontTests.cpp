@@ -40,6 +40,27 @@ TEST_F(FontTests, markup_width)
     ASSERT_EQ(bold_font.markup_width("</b>Afdslkgjd"), regular_font.text_width("Afdslkgjd"));
 }
 
+TEST_F(FontTests, draw_text_vs_draw_markup)
+{
+    const Gosu::Font font(10, "media/daniel.otf");
+    const Gosu::Image white_text = Gosu::render(100, 100, [&] {
+        font.draw_text_rel("Hallo Welt! 遊戲寫完了沒？", 50, 50, 0, 0.5, 0.5);
+    });
+    const Gosu::Image green_text = Gosu::render(100, 100, [&] {
+        font.draw_markup_rel("<c=0f0>Hallo Welt! 遊戲寫完了沒？</c>", 50, 50, 0, 0.5, 0.5);
+    });
+    // If we strip the red and blue channels from the normal text...
+    Gosu::Bitmap bitmap = white_text.drawable().to_bitmap();
+    for (int y = 0; y < bitmap.height(); ++y) {
+        for (int x = 0; x < bitmap.width(); ++x) {
+            bitmap.pixel(x, y).red = 0;
+            bitmap.pixel(x, y).blue = 0;
+        }
+    }
+    // ...it should be 100% equal to the green text.
+    ASSERT_TRUE(visible_pixels_are_equal(bitmap, green_text.drawable().to_bitmap()));
+}
+
 TEST_F(FontTests, draw_markup)
 {
     const Gosu::Font font(10, "media/daniel.otf");
@@ -69,4 +90,17 @@ TEST_F(FontTests, draw_markup_rel)
     ASSERT_TRUE(visible_pixels_are_equal(result.drawable().to_bitmap(),
                                          Gosu::load_image_file("test_font/draw_markup_rel.png"), //
                                          10, 0));
+}
+
+TEST_F(FontTests, set_image)
+{
+    Gosu::Font font(10, "media/daniel.otf", 0, Gosu::IF_RETRO);
+
+    ASSERT_THROW(font.set_image("Multiple codepoints", Gosu::Image()), std::invalid_argument);
+
+    ASSERT_GT(font.text_width("ßßß"), 0);
+
+    // Replace the glyph for "ß" by an empty image.
+    font.set_image("ß", Gosu::Image());
+    ASSERT_EQ(font.text_width("ßßß"), 0);
 }
