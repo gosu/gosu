@@ -170,12 +170,6 @@ void Gosu::Bitmap::apply_color_key(Color key)
 
 Gosu::Bitmap Gosu::apply_border_flags(unsigned image_flags, const Bitmap& source, Rect source_rect)
 {
-    // Backward compatibility: This used to be 'bool tileable'. Make sure that anyone who still
-    // passes "true" (implicitly converted to 1) automatically gets upgraded to IF_TILEABLE.
-    if (image_flags == 1) {
-        image_flags = IF_TILEABLE;
-    }
-
     // Add one extra pixel around all four sides of the image.
     Gosu::Bitmap result(source_rect.width + 2, source_rect.height + 2);
     result.insert(source, 1, 1, source_rect);
