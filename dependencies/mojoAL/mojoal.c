@@ -1254,7 +1254,7 @@ static void pitch_shift(ALsource *src, const ALbuffer *buffer, int numSampsToPro
             /* do windowing and re,im interleave */
             for (k = 0; k < pitch_framesize;k++) {
                 window = -.5*SDL_cos(2.*M_PI*(double)k/(double)pitch_framesize)+.5;
-                state->workspace[2*k] = (ALfloat) state->infifo[k] * window;
+                state->workspace[2*k] = (ALfloat) (state->infifo[k] * window);
                 state->workspace[2*k+1] = 0.0f;
             }
 

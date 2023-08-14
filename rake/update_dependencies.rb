@@ -225,8 +225,6 @@ task :update_mojoal do
       end
     end
 
-    puts "", "  NOTE: You'll need to manually change #{target_directory}/mojoAL.c to include 'AL/*.h' instead of '*.h'", ""
-
     puts "Updated mojoAL. Took: #{(Time.now - start_time).to_f.round(1)} seconds."
     puts
     puts
@@ -349,4 +347,5 @@ task :update_utf8proc do
   end
 end
 
+desc "Updates all dependencies"
 task update_dependencies: [:update_sdl, :update_sdl_sound, :update_mojoal, :update_stb, :update_utf8proc]
