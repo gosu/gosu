@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Gosu/Bitmap.hpp>
+#include <cstdint>
 #include <functional>
 #include <memory>
 #include <string>
@@ -14,7 +15,7 @@ namespace Gosu
 
     public:
         /// The caller must ensure that the ttf_data pointer will outlive this object.
-        TrueTypeFont(const unsigned char* ttf_data, std::shared_ptr<TrueTypeFont> fallback);
+        TrueTypeFont(const std::uint8_t* ttf_data, std::shared_ptr<TrueTypeFont> fallback);
 
         /// Returns the right edge of a string when rendered onto a bitmap at the given position,
         /// and with the given height.
@@ -23,7 +24,7 @@ namespace Gosu
                          Bitmap* bitmap, double x, double y, Color c);
 
         /// Returns true if the supplied buffer seems to be a font of the given name.
-        static bool matches(const unsigned char* ttf_data, //
+        static bool matches(const std::uint8_t* ttf_data, //
                             const std::string& font_name, unsigned font_flags);
     };
 
@@ -47,15 +48,15 @@ namespace Gosu
     /// 3. As a last resort, Gosu could implement faux bold and faux italics. I think faux
     ///    underlines are a must anyway, since no font provides a dedicated TTF file for that.
     /// These options are not mutually exclusive.
-    const unsigned char* ttf_data_from_file(const std::string& filename);
+    const std::uint8_t* ttf_data_from_file(const std::string& filename);
 
     /// This method loads a system font with the given flags.
     /// This method has a different implementation on each platform.
     /// In case of failure, this method returns nullptr.
-    const unsigned char* ttf_data_by_name(const std::string& font_name, unsigned font_flags);
+    const std::uint8_t* ttf_data_by_name(const std::string& font_name, unsigned font_flags);
 
     /// Returns the TTF data of a font that supports as many glyphs as possible.
     /// This method has a different implementation on each platform.
     /// In case of failure, this method must not return nullptr, but raise an exception.
-    const unsigned char* ttf_fallback_data();
+    const std::uint8_t* ttf_fallback_data();
 }
