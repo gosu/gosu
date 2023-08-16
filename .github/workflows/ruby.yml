@@ -13,9 +13,6 @@ jobs:
         ruby-version: ['2.6', '3.0']
     runs-on: ${{ matrix.platform }}
 
-    env:
-      GOSU_RELEASE_VERSION: 9.9.9
-
     steps:
       - uses: actions/checkout@v3
 
