@@ -20,14 +20,13 @@ end
 require "mkmf"
 require "fileutils"
 
-# Let all of our code know that it is being built for Ruby.
-$CFLAGS << " -DRUBYGOSU -DNDEBUG"
-$CXXFLAGS << " -DRUBYGOSU -DNDEBUG"
-
 # Silence internal deprecation warnings in Gosu.
 $CXXFLAGS << " -DGOSU_DEPRECATED="
 
-$CXXFLAGS ||= ""
+# Disable assertions in C and C++ code.
+$CFLAGS << " -DNDEBUG"
+$CXXFLAGS << " -DNDEBUG"
+
 # Enable C++20, but at the same time make the compiler more permissive, and avoid this error:
 # https://stackoverflow.com/a/31899029 (triggered by ruby.h, which uses register variables)
 # The "register" macro can be removed when support for Ruby 2.6 and older has been dropped.
@@ -110,7 +109,7 @@ end
 # mkmf only looks for C/C++ files in $srcdir by default, but our source files are in other folders.
 
 Dir.chdir($srcdir) do # (not needed when installing the gem, but for 'rake compile')
-  $srcs = Dir["../../dependencies/**/*.c"] + Dir["../../{src,ffi}/*.cpp"]
+  $srcs = Dir["*.cpp"] + Dir["../../dependencies/**/*.c"] + Dir["../../{src,ffi}/*.cpp"]
   # We need to expand the $VPATH so that all source files can be found reliably. https://stackoverflow.com/a/35842162
   $VPATH += $srcs.map { |src| "$(srcdir)/#{File.dirname(src)}" }.uniq
 end

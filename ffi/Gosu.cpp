@@ -1,13 +1,6 @@
 #include <Gosu/Transform.hpp>
 #include "Gosu_FFI_internal.h"
 
-#ifdef RUBYGOSU
-[[maybe_unused]] void Init_gosu() // NOLINT(*-identifier-naming)
-{
-    // Do nothing. This function must exist in order for gem compilation/linking to work on Windows.
-}
-#endif
-
 std::string& Gosu_internal_error()
 {
     static thread_local std::string error;
