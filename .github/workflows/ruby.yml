@@ -37,10 +37,6 @@ jobs:
         if: startsWith(matrix.platform, 'ubuntu-')
         run: xvfb-run --auto-servernum rake test
 
-      - name: Run tests (macOS)
-        if: startsWith(matrix.platform, 'macos-')
+      - name: Run tests (other platforms)
+        if: "!startsWith(matrix.platform, 'ubuntu-')"
         run: rake test
-
-      - name: Run tests (Windows)
-        if: startsWith(matrix.platform, 'windows-')
-        run: cmd /c rake test TESTOPTS='-v' '2>&1'
