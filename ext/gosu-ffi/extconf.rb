@@ -20,11 +20,12 @@ end
 require "mkmf"
 require "fileutils"
 
-# Silence internal deprecation warnings in Gosu.
-$CFLAGS << " -DGOSU_DEPRECATED="
+# Let all of our code know that it is being built for Ruby.
+$CFLAGS << " -DRUBYGOSU -DNDEBUG"
+$CXXFLAGS << " -DRUBYGOSU -DNDEBUG"
 
-# Disable assertions in C code.
-$CFLAGS << " -DNDEBUG"
+# Silence internal deprecation warnings in Gosu.
+$CXXFLAGS << " -DGOSU_DEPRECATED="
 
 $CXXFLAGS ||= ""
 # Enable C++20, but at the same time make the compiler more permissive, and avoid this error:
@@ -56,7 +57,7 @@ if windows
   $LDFLAGS << " -static-libstdc++"
 elsif macos
   # Compile all C++ files as Objective C++ on macOS since mkmf does not support .mm files.
-  $CXXFLAGS << " -x objective-c++ -fobjc-arc -DNDEBUG"
+  $CXXFLAGS << " -x objective-c++ -fobjc-arc"
   # Also hide all symbols by default. FFI symbols use the GOSU_FFI_API macro to override this.
   $CXXFLAGS << " -fvisibility=hidden -DGOSU_FFI_EXPORTS"
 
