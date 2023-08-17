@@ -17,7 +17,7 @@
 #pragma warning Unknown dynamic link import/export semantics.
 #endif
 
-#if GOSU_FFI_EXPORTS
+#ifdef GOSU_FFI_EXPORTS
 #if defined(MRBGEM_MRUBY_GOSU_VERSION) && !defined(__cplusplus) // Compiling mruby-gosu as C only
 #if defined(_MSC_VER)
 #include <stdbool.h>
