@@ -20,6 +20,9 @@ end
 require "mkmf"
 require "fileutils"
 
+# Ensure that FFI functions are exported.
+$CXXFLAGS << " -DGOSU_FFI_EXPORTS"
+
 # Silence internal deprecation warnings in Gosu.
 $CXXFLAGS << " -DGOSU_DEPRECATED="
 
