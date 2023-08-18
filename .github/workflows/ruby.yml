@@ -33,10 +33,19 @@ jobs:
       - name: Install dependencies
         run: bundle install
 
+      - name: Compile Gosu
+        run: bundle exec rake compile
+
+      - name: Upload temporary build files (Makefiles)
+        uses: actions/upload-artifact@v3
+        with:
+          name: Makefile
+          path: tmp/**/Makefile
+
       - name: Run tests (Linux)
         if: startsWith(matrix.platform, 'ubuntu-')
-        run: xvfb-run --auto-servernum rake test
+        run: xvfb-run --auto-servernum bundle exec rake test
 
       - name: Run tests (other platforms)
         if: "!startsWith(matrix.platform, 'ubuntu-')"
-        run: rake test
+        run: bundle exec rake test
