@@ -3,7 +3,6 @@
 
 #include "TrueTypeFont.hpp"
 
-#define _WIN32_WINNT 0x0500
 #include <Gosu/Buffer.hpp>
 #include <Gosu/Text.hpp>
 #include <Gosu/Utility.hpp>
@@ -25,25 +24,25 @@ const std::uint8_t* Gosu::ttf_data_by_name(const std::string& font_name, unsigne
         return static_cast<const std::uint8_t*>(buffer_ptr->data());
     }
 
-    LOGFONT logfont { 0,
-                      0,
-                      0,
-                      0,
-                      (font_flags & Gosu::FF_BOLD) ? FW_BOLD : FW_NORMAL,
-                      static_cast<BYTE>((font_flags & Gosu::FF_ITALIC) ? TRUE : FALSE),
-                      static_cast<BYTE>((font_flags & Gosu::FF_UNDERLINE) ? TRUE : FALSE),
-                      0 /* no strikethrough */,
-                      ANSI_CHARSET,
-                      OUT_OUTLINE_PRECIS,
-                      CLIP_DEFAULT_PRECIS,
-                      ANTIALIASED_QUALITY,
-                      DEFAULT_PITCH };
+    LOGFONTW logfont { 0,
+                       0,
+                       0,
+                       0,
+                       (font_flags & Gosu::FF_BOLD) ? FW_BOLD : FW_NORMAL,
+                       static_cast<BYTE>((font_flags & Gosu::FF_ITALIC) ? TRUE : FALSE),
+                       static_cast<BYTE>((font_flags & Gosu::FF_UNDERLINE) ? TRUE : FALSE),
+                       0 /* no strikethrough */,
+                       ANSI_CHARSET,
+                       OUT_OUTLINE_PRECIS,
+                       CLIP_DEFAULT_PRECIS,
+                       ANTIALIASED_QUALITY,
+                       DEFAULT_PITCH };
 
     std::wstring wfont_name = utf8_to_utf16(font_name);
     std::wcsncpy(logfont.lfFaceName, wfont_name.c_str(), LF_FACESIZE);
     logfont.lfFaceName[LF_FACESIZE - 1] = 0;
 
-    if (HFONT font = CreateFontIndirect(&logfont)) {
+    if (HFONT font = CreateFontIndirectW(&logfont)) {
         if (HDC hdc = GetDC(0)) {
             HFONT last_font = (HFONT)SelectObject(hdc, (HGDIOBJ)font);
             auto ttf_buffer_size = GetFontData(hdc, 0, 0, nullptr, 0);

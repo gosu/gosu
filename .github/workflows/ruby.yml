@@ -13,9 +13,6 @@ jobs:
         ruby-version: ['2.6', '3.0']
     runs-on: ${{ matrix.platform }}
 
-    env:
-      GOSU_RELEASE_VERSION: 9.9.9
-
     steps:
       - uses: actions/checkout@v3
 
@@ -36,14 +33,13 @@ jobs:
       - name: Install dependencies
         run: bundle install
 
+      - name: Compile Gosu
+        run: bundle exec rake compile
+
       - name: Run tests (Linux)
         if: startsWith(matrix.platform, 'ubuntu-')
-        run: xvfb-run --auto-servernum rake test
+        run: xvfb-run --auto-servernum bundle exec rake test
 
-      - name: Run tests (macOS)
-        if: startsWith(matrix.platform, 'macos-')
-        run: rake test
-
-      - name: Run tests (Windows)
-        if: startsWith(matrix.platform, 'windows-')
-        run: cmd /c rake test TESTOPTS='-v' '2>&1'
+      - name: Run tests (other platforms)
+        if: "!startsWith(matrix.platform, 'ubuntu-')"
+        run: bundle exec rake test

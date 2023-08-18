@@ -119,6 +119,7 @@ class TestGosuModule < Minitest::Test
   SIZES = [25, 50, 500]
 
   def test_render
+    skip_on_github_windows
 
     SIZES.each do |size|
       assert_output_matches("test_gosu_module/triangle-#{size}", 0.9, [size, size]) do

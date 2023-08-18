@@ -56,6 +56,11 @@ module TestHelper
     skip if ENV["GITHUB_WORKFLOW"]
   end
 
+  # This is mostly intended for tests that use Gosu.render, which doesn't work on Windows.
+  def skip_on_github_windows
+    skip if ENV["GITHUB_WORKFLOW"] and Gem.win_platform?
+  end
+
   def actual_from_expected_filename(expected)
     actual_basename = File.basename(expected, ".png") + ".actual.png"
     File.join(File.dirname(expected), actual_basename)
