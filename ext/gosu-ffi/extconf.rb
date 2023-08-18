@@ -112,7 +112,7 @@ end
 # mkmf only looks for C/C++ files in $srcdir by default, but our source files are in other folders.
 
 Dir.chdir($srcdir) do # (not needed when installing the gem, but for 'rake compile')
-  $srcs = Dir["*.cpp"] + Dir["../../dependencies/**/*.c"] + Dir["../../{src,ffi}/*.cpp"]
+  $srcs = Dir["../../dependencies/**/*.c"] + Dir["../../{src,ffi}/*.cpp"]
   # We need to expand the $VPATH so that all source files can be found reliably. https://stackoverflow.com/a/35842162
   $VPATH += $srcs.map { |src| "$(srcdir)/#{File.dirname(src)}" }.uniq
 end
