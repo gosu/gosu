@@ -23,6 +23,7 @@ Gosu_FF_BOLD
 Gosu_FF_COMBINATIONS
 Gosu_FF_ITALIC
 Gosu_FF_UNDERLINE
+Gosu_Font_create
 Gosu_Font_destroy
 Gosu_Font_draw_markup
 Gosu_Font_draw_markup_rel
@@ -190,12 +191,18 @@ Gosu_IF_TILEABLE_BOTTOM
 Gosu_IF_TILEABLE_LEFT
 Gosu_IF_TILEABLE_RIGHT
 Gosu_IF_TILEABLE_TOP
+Gosu_Image_create
+Gosu_Image_create_from_blob
+Gosu_Image_create_from_markup
+Gosu_Image_create_from_subimage
+Gosu_Image_create_from_text
 Gosu_Image_create_from_tiles
 Gosu_Image_create_tiles_from_image
 Gosu_Image_destroy
 Gosu_Image_draw
 Gosu_Image_draw_as_quad
 Gosu_Image_draw_rot
+Gosu_Image_gl_tex_info_create
 Gosu_Image_gl_tex_info_destroy
 Gosu_Image_height
 Gosu_Image_insert
@@ -322,7 +329,12 @@ Gosu_MS_WHEEL_UP
 Gosu_NO_BUTTON
 Gosu_NUM_GAMEPADS
 Gosu_POINT_VERSION
+Gosu_Sample_create
 Gosu_Sample_destroy
+Gosu_Sample_play
+Gosu_Sample_play_pan
+Gosu_Song_create
+Gosu_Song_current_song
 Gosu_Song_destroy
 Gosu_Song_pause
 Gosu_Song_paused
@@ -332,6 +344,7 @@ Gosu_Song_set_volume
 Gosu_Song_stop
 Gosu_Song_volume
 Gosu_TextInput_caret_pos
+Gosu_TextInput_create
 Gosu_TextInput_delete_backward
 Gosu_TextInput_delete_forward
 Gosu_TextInput_destroy
@@ -349,6 +362,7 @@ Gosu_WF_RESIZABLE
 Gosu_WF_WINDOWED
 Gosu_Window_caption
 Gosu_Window_close_immediately
+Gosu_Window_create
 Gosu_Window_default_button_down
 Gosu_Window_destroy
 Gosu_Window_gain_focus
@@ -384,6 +398,7 @@ Gosu_Window_set_update
 Gosu_Window_set_update_interval
 Gosu_Window_set_width
 Gosu_Window_show
+Gosu_Window_text_input
 Gosu_Window_tick
 Gosu_Window_update_interval
 Gosu_Window_width
@@ -414,6 +429,8 @@ Gosu_licenses
 Gosu_offset_x
 Gosu_offset_y
 Gosu_random
+Gosu_record
+Gosu_render
 Gosu_rotate
 Gosu_scale
 Gosu_screen_height
