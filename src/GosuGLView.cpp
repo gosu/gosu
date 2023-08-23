@@ -28,12 +28,6 @@ namespace Gosu
     {
         // Don't bother unsetting anything.
     }
-    
-    int clip_rect_base_factor()
-    {
-        static int result = [UIScreen mainScreen].scale;
-        return result;
-    }
 }
 
 @implementation GosuGLView
@@ -97,7 +91,7 @@ namespace Gosu
     [EAGLContext setCurrentContext:_context];
     [self destroyFramebuffer];
     [self createFramebuffer];
-    self.contentScaleFactor = Gosu::clip_rect_base_factor();
+    self.contentScaleFactor = [UIScreen mainScreen].scale;
 }
 
 - (BOOL)createFramebuffer

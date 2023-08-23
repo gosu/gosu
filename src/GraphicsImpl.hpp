@@ -13,23 +13,6 @@ namespace Gosu
     struct RenderState;
     class RenderStateManager;
 
-    const unsigned NO_CLIPPING = 0xffffffff;
-
-    // In various places in Gosu, width==NO_CLIPPING by convention means
-    // that no clipping should happen.
-    struct ClipRect
-    {
-        double x, y, width, height;
-
-        bool operator==(const ClipRect& other) const
-        {
-            // No clipping
-            return (width == NO_CLIPPING && other.width == NO_CLIPPING) ||
-                // Clipping, but same
-                (x == other.x && y == other.y && width == other.width && height == other.height);
-        }
-    };
-
     enum QueueMode
     {
         QM_RENDER_TO_SCREEN,
@@ -70,12 +53,6 @@ namespace Gosu
     }
 
     void schedule_draw_op(const DrawOp& op);
-
-#ifdef GOSU_IS_IPHONE
-    int clip_rect_base_factor();
-#else
-    inline int clip_rect_base_factor() { return 1; }
-#endif
 
     void register_frame();
 

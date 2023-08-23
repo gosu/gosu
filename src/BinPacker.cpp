@@ -136,7 +136,7 @@ void Gosu::BinPacker::merge_neighbors(int index)
     //   ┃ ┣━━┻━┫
     //   ┗━┻━━━━┛
     // In this case, the texture gets stuck in this fragmented state. We assume that this is not an
-    // issue in practice, just like memory
+    // issue in practice, just like RAM fragmentation has never 
 
     // Merge any of the other rectangles in the list into the one with the given index if they share
     // any of their four sides.
