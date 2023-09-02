@@ -1,7 +1,7 @@
 require "ffi"
 
 if RUBY_PLATFORM =~ /mswin$|mingw|win32\-|\-win32/
-  binary_path = File.expand_path("../../gosu/lib", __dir__)
+  binary_path = File.expand_path("../lib", __dir__)
   # 64-bit builds of Windows use "x64-mingw" as RUBY_PLATFORM
   binary_path += "64" if RUBY_PLATFORM =~ /^x64-/
 

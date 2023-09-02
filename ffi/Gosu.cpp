@@ -1,6 +1,10 @@
 #include <Gosu/Transform.hpp>
 #include "Gosu_FFI_internal.h"
 
+GOSU_FFI_API void Init_gosu()
+{
+}
+
 std::string& Gosu_internal_error()
 {
     static thread_local std::string error;

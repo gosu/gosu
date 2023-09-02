@@ -23,7 +23,7 @@ EOS
   s.files += Dir["dependencies/**/*.{h,c,a}"]
   s.add_dependency "ffi", "~> 1.12"
   # Gosu source code including the Ruby interface (.cxx).
-  s.files += Dir["{src,include,ffi}/**/*.{h,hpp,c,cpp}"] - ["src/WinMain.cpp"]
+  s.files += Dir["{src,include,ffi}/**/*.{h,hpp,c,cpp}"] - ["src/WinMain.cpp"] + Dir["ext/**/*.def"]
   # RDoc/Yard setup.
   s.files += Dir["README.md", "COPYING", "rdoc/gosu.rb", ".yardopts"]
   s.rdoc_options += %w(-m README.md -x lib)
