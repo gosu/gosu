@@ -80,7 +80,7 @@ public:
             .height = static_cast<int>(std::abs(top - bottom)),
         };
         // Adjust for OpenGL having the wrong idea of where y=0 is.
-        if (viewport_height) {
+        if (viewport_height && mode() == QM_RENDER_TO_SCREEN) {
             clip_rect.y = *viewport_height - clip_rect.y - clip_rect.height;
         }
 
