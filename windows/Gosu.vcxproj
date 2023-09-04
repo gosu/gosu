@@ -224,6 +224,7 @@
     <ClCompile Include="..\src\BitmapIO.cpp" />
     <ClCompile Include="..\src\Buffer.cpp" />
     <ClCompile Include="..\src\Channel.cpp" />
+    <ClCompile Include="..\src\ClipRectStack.cpp" />
     <ClCompile Include="..\src\Color.cpp" />
     <ClCompile Include="..\src\Directories.cpp" />
     <ClCompile Include="..\src\DirectoriesUIKit.cpp" />

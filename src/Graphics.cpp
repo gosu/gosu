@@ -247,17 +247,20 @@ void Gosu::gl(Gosu::ZPos z, const std::function<void()>& f)
 #endif
 }
 
-void Gosu::clip_to(double x, double y, double width, double height,
-                             const std::function<void()>& f)
+void Gosu::clip_to(double x, double y, double width, double height, const std::function<void()>& f)
 {
-    double screen_height = current_viewport().m_impl->phys_height;
-    current_queue().begin_clipping(x, y, width, height, screen_height);
+    std::optional<int> viewport_height;
+    if (current_viewport_pointer) {
+        viewport_height = current_viewport_pointer->m_impl->phys_height;
+    }
+
+    current_queue().begin_clipping(x, y, width, height, viewport_height);
     f();
     current_queue().end_clipping();
 }
 
 Gosu::Image Gosu::render(int width, int height, const std::function<void()>& f,
-                                   unsigned image_flags)
+                         unsigned image_flags)
 {
     const OpenGLContext current_context;
 

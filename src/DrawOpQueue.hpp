@@ -9,6 +9,7 @@
 #include <cmath>
 #include <functional>
 #include <map>
+#include <utility>
 #include <vector>
 
 class Gosu::DrawOpQueue
@@ -22,7 +23,7 @@ class Gosu::DrawOpQueue
     std::vector<std::function<void ()>> gl_blocks;
 
 public:
-    DrawOpQueue(QueueMode mode)
+    explicit DrawOpQueue(QueueMode mode)
     : queue_mode(mode)
     {
     }
@@ -34,39 +35,31 @@ public:
     
     void schedule_draw_op(DrawOp op)
     {
-        if (clip_rect_stack.clipped_world_away()) return;
-
-    #ifdef GOSU_IS_OPENGLES
+#ifdef GOSU_IS_OPENGLES
         // No triangles, no lines supported
-        assert (op.vertices_or_block_index == 4);
-    #endif
+        assert(op.vertices_or_block_index == 4);
+#endif
 
         op.render_state.transform = &transform_stack.current();
-        if (const ClipRect* cr = clip_rect_stack.maybe_effective_rect()) {
-            op.render_state.clip_rect = *cr;
-        }
+        op.render_state.clip_rect = clip_rect_stack.effective_rect();
         ops.push_back(op);
     }
 
     void gl(std::function<void ()> gl_block, ZPos z)
     {
-        // TODO: Document this case: Clipped-away GL blocks are *not* being run.
-        if (clip_rect_stack.clipped_world_away()) return;
-
         int complement_of_block_index = ~(int)gl_blocks.size();
-        gl_blocks.push_back(gl_block);
+        gl_blocks.push_back(std::move(gl_block));
 
         DrawOp op;
         op.vertices_or_block_index = complement_of_block_index;
         op.render_state.transform = &transform_stack.current();
-        if (const ClipRect* cr = clip_rect_stack.maybe_effective_rect()) {
-            op.render_state.clip_rect = *cr;
-        }
+        op.render_state.clip_rect = clip_rect_stack.effective_rect();
         op.z = z;
         ops.push_back(op);
     }
 
-    void begin_clipping(double x, double y, double width, double height, double screen_height)
+    void begin_clipping(double x, double y, double width, double height,
+                        std::optional<int> viewport_height)
     {
         if (mode() == QM_RECORD_MACRO) {
             throw std::logic_error("Clipping is not allowed while creating a macro");
@@ -80,21 +73,21 @@ public:
         transform_stack.current().apply(left, top);
         transform_stack.current().apply(right, bottom);
 
-        double phys_x      = std::min(left, right);
-        double phys_y      = std::min(top, bottom);
-        double phys_width  = std::abs(left - right);
-        double phys_height = std::abs(top - bottom);
-
+        Rect clip_rect {
+            .x = static_cast<int>(std::min(left, right)),
+            .y = static_cast<int>(std::min(top, bottom)),
+            .width = static_cast<int>(std::abs(left - right)),
+            .height = static_cast<int>(std::abs(top - bottom)),
+        };
         // Adjust for OpenGL having the wrong idea of where y=0 is.
-        phys_y = screen_height - phys_y - phys_height;
+        if (viewport_height) {
+            clip_rect.y = *viewport_height - clip_rect.y - clip_rect.height;
+        }
 
-        clip_rect_stack.begin_clipping(phys_x, phys_y, phys_width, phys_height);
+        clip_rect_stack.push(clip_rect);
     }
 
-    void end_clipping()
-    {
-        clip_rect_stack.end_clipping();
-    }
+    void end_clipping() { clip_rect_stack.pop(); }
 
     void set_base_transform(const Transform& base_transform)
     {
@@ -118,7 +111,8 @@ public:
         }
         
         // Apply Z-Ordering.
-        std::stable_sort(ops.begin(), ops.end());
+        std::stable_sort(ops.begin(), ops.end(),
+                         [](const DrawOp& lhs, const DrawOp& rhs) { return lhs.z < rhs.z; });
 
         RenderStateManager manager;
         
@@ -156,7 +150,7 @@ public:
             throw std::logic_error("Custom OpenGL code cannot be recorded as a macro");
         }
 
-        std::stable_sort(ops.begin(), ops.end());
+        std::stable_sort(ops.begin(), ops.end(), [](const DrawOp& lhs, const DrawOp& rhs) { return lhs.z < rhs.z; });
         for (const auto& op : ops) {
             op.compile_to(vas);
         }

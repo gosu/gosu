@@ -168,10 +168,5 @@ namespace Gosu
             
             vas.back().vertices.insert(vas.back().vertices.end(), result, result + 4);
         }
-        
-        bool operator<(const DrawOp& other) const
-        {
-            return z < other.z;
-        }
     };
 }

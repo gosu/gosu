@@ -171,6 +171,9 @@
     <ClCompile Include="..\src\Channel.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ClipRectStack.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Color.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>

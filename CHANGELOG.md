@@ -7,6 +7,7 @@
 * Fix a bug where invalid UTF-8 strings could trigger deadlocks or memory errors. (#652)  
 * Gosu now uses and requires C++20. Unfortunately, that means Ubuntu 20.04 has been dropped earlier than expected. (#647)
 * Make `Gosu::Window.sdl_window` available in Ruby. (#637)
+* `Gosu.clip_to` now works within `Gosu.render`. (#673) 
 
 ## [1.4.6] - 2023-05-20
 * When using SDL 2.0.12 or later, the LED indicators on gamepads will now be set to match the gamepad index that Gosu has allocated for them. (#639)
