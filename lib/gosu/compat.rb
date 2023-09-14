@@ -81,10 +81,10 @@ class Gosu::Image
 
   def self.from_text(*args, **kwargs)
     if args.size == 4
-      Gosu.deprecation_message("Passing a Window to Image.from_text has been deprecated in Gosu 0.9 and this method now uses named arguments. https://www.libgosu.org/rdoc/Gosu/Image.html")
+      Gosu.deprecation_message("Passing a Window to Image.from_text has been deprecated in Gosu 0.9, and this method now uses named arguments. https://www.libgosu.org/rdoc/Gosu/Image.html")
       from_text_without_window(args[1], args[3], font: args[2])
     elsif args.size == 7
-      Gosu.deprecation_message("Passing a Window to Image.from_text has been deprecated in Gosu 0.9 and this method now uses named arguments. https://www.libgosu.org/rdoc/Gosu/Image.html")
+      Gosu.deprecation_message("Passing a Window to Image.from_text has been deprecated in Gosu 0.9, and this method now uses named arguments. https://www.libgosu.org/rdoc/Gosu/Image.html")
       from_text_without_window(args[1], args[3],
                                font: args[2], spacing: args[4], width: args[5],
                                align: args[6])
