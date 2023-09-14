@@ -213,6 +213,7 @@ Gosu_IF_TILEABLE_TOP
 Gosu_Image_create
 Gosu_Image_create_from_blob
 Gosu_Image_create_from_markup
+Gosu_Image_create_from_rect
 Gosu_Image_create_from_subimage
 Gosu_Image_create_from_text
 Gosu_Image_create_from_tiles
