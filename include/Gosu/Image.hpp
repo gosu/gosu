@@ -24,7 +24,7 @@ namespace Gosu
         /// For more flexibility, use the corresponding constructor that uses a Bitmap object.
         explicit Image(const std::string& filename, unsigned image_flags = IF_SMOOTH);
 
-        //! Loads a portion of the the image at the given filename..
+        /// Loads a portion of the the image at the given filename..
         ///
         /// A color key of #ff00ff is automatically applied to BMP image files.
         /// For more flexibility, use the corresponding constructor that uses a Bitmap object.

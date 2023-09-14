@@ -11,7 +11,6 @@ class TestImage < Minitest::Test
 
     # This creates a binary string that contains a circle, thanks to the
     # Pythagorean theorem.
-    # Note that the returned size is (radius * 2 + 1), not (radius * 2).
     rgba = (-radius..+radius).map do |y|
       # 'x' is the distance from the center to the edges edge of the circle.
       x = Math.sqrt(radius ** 2 - y ** 2).round
@@ -20,7 +19,9 @@ class TestImage < Minitest::Test
       outside_circle + inside_circle + outside_circle
     end.join
     
+    # The image size is (radius * 2 + 1), not (radius * 2).
     size = radius * 2 + 1
+
     Gosu::Image.from_blob(size, size, rgba)
   end
   
@@ -49,5 +50,21 @@ class TestImage < Minitest::Test
       canvas.insert stamp, i * 300, i * 123
     end
     assert_image_matches "test_image/insert", canvas, 1.00
+  end
+
+  def test_subimage
+    filename = File.join(File.dirname(__FILE__), "test_image_io/no-alpha-jpg.jpg")
+    image = Gosu::Image.new(filename)
+    
+    # Passing an out-of-bound rectangle is not allowed.
+    assert_raises(Exception) { image.subimage(0, 0, 100, 1000) }
+
+    # Passing a rectangle that is entirely within the image is allowed.
+    subimage = image.subimage(1, 2, 99, 100)
+    assert_equal 99, subimage.width
+    assert_equal 100, subimage.height
+
+    image_from_rect = Gosu::Image.new(filename, rect: [1, 2, 99, 100])
+    assert image_from_rect.similar?(subimage, 0)
   end
 end

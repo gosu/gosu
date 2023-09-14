@@ -48,25 +48,38 @@ module Gosu
       return images
     end
 
-    def initialize(object, retro: false, tileable: false)
+    def initialize(object, retro: false, tileable: false, rect: nil)
+      if rect and rect.size != 4
+        raise ArgumentError, "Expected 4-element array as rect"
+      end
+
+      flags = GosuFFI.image_flags(retro: retro, tileable: tileable)
+
       if object.is_a? String
-        __image = GosuFFI.Gosu_Image_create(object, GosuFFI.image_flags(retro: retro, tileable: tileable))
+        if rect
+          __image = GosuFFI.Gosu_Image_create_rect(object, *rect, flags)
+        else
+          __image = GosuFFI.Gosu_Image_create(object, flags)
+        end
         GosuFFI.check_last_error
       elsif object.is_a?(FFI::Pointer)
         __image = object
-      elsif object.respond_to?(:to_blob) &&
-            object.respond_to?(:columns) &&
+      elsif object.respond_to?(:to_blob) and
+            object.respond_to?(:columns) and
             object.respond_to?(:rows)
-        blob_bytes = object.to_blob { self.format = "RGBA"; self.depth = 8 }.bytes
-        FFI::MemoryPointer.new(:uchar, blob_bytes.size) do |blob|
-          blob.write_array_of_type(:uchar, :put_uchar, blob_bytes)
-          __image = GosuFFI.Gosu_Image_create_from_blob(blob, blob_bytes.size, object.columns, object.rows, GosuFFI.image_flags(retro: retro, tileable: tileable))
-          GosuFFI.check_last_error
-        end
+      
+        blob = object.to_blob { self.format = "RGBA"; self.depth = 8 }
 
-        raise "Failed to load image from blob" if __image.null?
+        # This creates a copy of the Ruby string data, which shouldn't be necessary with CRuby.
+        ptr = FFI::MemoryPointer.from_string(blob)
+        rect ||= [0, 0, object.columns, object.rows]
+        # Do not consider the terminating null byte part of the ptr length.
+        __image = GosuFFI.Gosu_Image_create_from_blob(ptr, ptr.size - 1, object.columns, object.rows, *rect, flags)
+        ptr.free
+
+        GosuFFI.check_last_error
       else
-        raise ArgumentError
+        raise ArgumentError, "Expected String or RMagick::Image (or a type compatible with it)"
       end
 
       @managed_pointer = FFI::AutoPointer.new(__image, GosuFFI.method(:Gosu_Image_destroy))
@@ -112,17 +125,17 @@ module Gosu
     end
 
     def subimage(left, top, width, height)
-      __pointer = GosuFFI.Gosu_Image_create_from_subimage(__pointer, left, top, width, height)
+      __subimage = GosuFFI.Gosu_Image_create_from_subimage(__pointer, left, top, width, height)
       GosuFFI.check_last_error
-      Gosu::Image.new(__pointer)
+      Gosu::Image.new(__subimage)
     end
 
     def insert(image, x, y)
       image_ = nil
       if image.is_a?(Gosu::Image)
         image_ = image.__pointer
-      elsif image.respond_to?(:to_blob) &&
-            image.respond_to?(:rows) &&
+      elsif image.respond_to?(:to_blob) and
+            image.respond_to?(:rows) and
             image.respond_to?(:columns)
         image_ = Gosu::Image.new(image).__pointer
       else
