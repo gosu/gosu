@@ -134,7 +134,7 @@ module GosuFFI
   attach_function :Gosu_Font_set_image, [:pointer, :string, :uint32, :pointer], :void
 
   attach_function :Gosu_Image_create, [:string, :uint32], :pointer
-  attach_function :Gosu_Image_create_rect, [:string, :int, :int, :int, :int, :uint32], :pointer
+  attach_function :Gosu_Image_create_from_rect, [:string, :int, :int, :int, :int, :uint32], :pointer
   attach_function :Gosu_Image_destroy, [:pointer], :void
 
   attach_function :Gosu_Image_create_from_markup, [:string, :string, :double, :int, :double, :uint32, :uint32, :uint32], :pointer

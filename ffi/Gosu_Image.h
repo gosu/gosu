@@ -14,7 +14,7 @@ typedef struct Gosu_GLTexInfo
 
 // Constructor
 GOSU_FFI_API Gosu_Image* Gosu_Image_create(const char* filename, unsigned image_flags);
-GOSU_FFI_API Gosu_Image* Gosu_Image_create_rect(const char* filename, //
+GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_rect(const char* filename, //
                                                 int x, int y, int width, int height,
                                                 unsigned image_flags);
 GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_blob(void* blob, size_t byte_count, //

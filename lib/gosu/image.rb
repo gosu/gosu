@@ -56,7 +56,7 @@ module Gosu
 
       if object.is_a? String
         if rect
-          __image = GosuFFI.Gosu_Image_create_rect(object, *rect, flags)
+          __image = GosuFFI.Gosu_Image_create_from_rect(object, *rect, flags)
         else
           __image = GosuFFI.Gosu_Image_create(object, flags)
         end
