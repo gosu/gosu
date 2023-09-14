@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Gosu_FFI.h"
+#include <stddef.h> // for size_t
 #include <stdint.h>
 
 typedef struct Gosu_Image Gosu_Image;
@@ -13,8 +14,13 @@ typedef struct Gosu_GLTexInfo
 
 // Constructor
 GOSU_FFI_API Gosu_Image* Gosu_Image_create(const char* filename, unsigned image_flags);
-GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_blob(void* blob, int byte_count, int width,
-                                                     int height, unsigned image_flags);
+GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_rect(const char* filename, //
+                                                int x, int y, int width, int height,
+                                                unsigned image_flags);
+GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_blob(void* blob, size_t byte_count, //
+                                                     int columns, int rows, //
+                                                     int x, int y, int width, int height,
+                                                     unsigned image_flags);
 GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_markup(const char* markup, const char* font,
                                                        double font_height, int width,
                                                        double spacing, unsigned align,

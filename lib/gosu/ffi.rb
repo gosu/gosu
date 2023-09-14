@@ -134,11 +134,12 @@ module GosuFFI
   attach_function :Gosu_Font_set_image, [:pointer, :string, :uint32, :pointer], :void
 
   attach_function :Gosu_Image_create, [:string, :uint32], :pointer
+  attach_function :Gosu_Image_create_from_rect, [:string, :int, :int, :int, :int, :uint32], :pointer
   attach_function :Gosu_Image_destroy, [:pointer], :void
 
   attach_function :Gosu_Image_create_from_markup, [:string, :string, :double, :int, :double, :uint32, :uint32, :uint32], :pointer
   attach_function :Gosu_Image_create_from_text, [:string, :string, :double, :int, :double, :uint32, :uint32, :uint32], :pointer
-  attach_function :Gosu_Image_create_from_blob, [:pointer, :ulong, :int, :int, :uint32], :pointer
+  attach_function :Gosu_Image_create_from_blob, [:pointer, :size_t, :int, :int, :int, :int, :int, :int, :uint32], :pointer
   attach_function :Gosu_Image_create_from_subimage, [:pointer, :int, :int, :int, :int], :pointer
   attach_function :Gosu_Image_create_from_tiles, [:string, :int, :int, :_callback_with_image, :pointer, :uint32], :void
   attach_function :Gosu_Image_create_tiles_from_image, [:pointer, :int, :int, :_callback_with_image, :pointer, :uint32], :void

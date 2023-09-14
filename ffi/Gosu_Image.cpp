@@ -3,8 +3,17 @@
 
 GOSU_FFI_API Gosu_Image* Gosu_Image_create(const char* filename, unsigned image_flags)
 {
+    return Gosu_translate_exceptions([=] { //
+        return new Gosu_Image { Gosu::Image(filename, image_flags) };
+    });
+}
+
+GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_rect(const char* filename, //
+                                                int x, int y, int width, int height,
+                                                unsigned image_flags)
+{
     return Gosu_translate_exceptions([=] {
-        return new Gosu_Image{Gosu::Image{filename, image_flags}};
+        return new Gosu_Image { Gosu::Image(filename, { x, y, width, height }, image_flags) };
     });
 }
 
@@ -32,32 +41,35 @@ GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_text(const char* text, const cha
     });
 }
 
-GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_blob(void* blob, int byte_count, int columns,
-                                                     int rows, unsigned image_flags)
+GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_blob(void* blob, size_t byte_count, //
+                                                     int columns, int rows, //
+                                                     int x, int y, int width, int height,
+                                                     unsigned image_flags)
 {
     return Gosu_translate_exceptions([=] {
-        std::size_t size = columns * rows * 4;
-        Gosu::Bitmap bitmap{columns, rows};
+        const int pixels = columns * rows * 4;
+        Gosu::Bitmap bitmap;
 
-        if (byte_count == size) {
+        if (byte_count == pixels) {
             // 32 bit per pixel, assume R8G8B8A8
-            std::memcpy(bitmap.data(), blob, size);
+            bitmap = Gosu::Bitmap(columns, rows, Gosu::Buffer(blob, byte_count, nullptr));
         }
-        else if (byte_count == size * sizeof(float)) {
-            // 128 bit per channel, assume float/float/float/float - for Texplay compatibility.
+        else if (byte_count == pixels * 4UL * sizeof(float)) {
+            bitmap.resize(columns, rows);
+            // 128 bit per channel, assume float/float/float/float RGBA - for Texplay compatibility.
             const float* in = static_cast<const float*>(blob);
             Gosu::Color::Channel* out = reinterpret_cast<Gosu::Color::Channel*>(bitmap.data());
-            for (std::size_t i = 0; i < size; ++i) {
+            for (std::size_t i = 0; i < pixels; ++i) {
                 out[i] = static_cast<Gosu::Color::Channel>(in[i] * 255);
             }
         }
         else {
-            throw std::invalid_argument{"Invalid byte_count " + std::to_string(byte_count) +
-                                        "for image of size " + std::to_string(columns) + "x" +
-                                        std::to_string(rows)};
+            throw std::invalid_argument("Invalid byte_count " + std::to_string(byte_count)
+                                        + " for image of size " + std::to_string(columns) + "x"
+                                        + std::to_string(rows));
         }
 
-        return new Gosu_Image{Gosu::Image{bitmap, image_flags}};
+        return new Gosu_Image { Gosu::Image(bitmap, { x, y, width, height }, image_flags) };
     });
 }
 
