@@ -5,7 +5,7 @@ class TestImage < Minitest::Test
   
   private def circle_image(radius)
     # Opaque blue as an RGBA string (0x0000ffff).
-    inside = 0x00.chr + 0x00.chr + 0xff.chr + 0xff.chr
+    inside = "\x00\x00\xff\xff".force_encoding(Encoding::BINARY)
     # Transparent blue as an RGBA string (0x0000ff00).
     outside = 0x00.chr + 0xff.chr + 0xff.chr + 0x00.chr
 
@@ -27,6 +27,27 @@ class TestImage < Minitest::Test
   
   def test_image_from_blob
     assert_image_matches "test_image/from_blob", circle_image(70), 1.00
+  end
+
+  LooksLikeRMagickImage = Struct.new(:columns, :rows, :to_blob)
+
+  def test_image_roundtrips
+    circle = circle_image(70)
+    
+    padded_circle = Gosu::Image.from_blob(circle.width + 4, circle.height + 2)
+    padded_circle.insert circle, 2, 1
+    
+    # Convert to blob and back.
+    fake_rmagick_image = LooksLikeRMagickImage.new(padded_circle.width, padded_circle.height, padded_circle.to_blob)
+    circle2 = Gosu::Image.new(fake_rmagick_image, rect: [2, 1, circle.width, circle.height])
+    assert circle.similar?(circle2, 1.00)
+
+    # Convert to file and back.
+    temporary_filename = "#{Dir.tmpdir}/gosu_test_image_roundtrip.png"
+    padded_circle.save(temporary_filename)
+    circle3 = Gosu::Image.new(temporary_filename, rect: [2, 1, circle.width, circle.height])
+    assert circle.similar?(circle3, 1.00)
+    File.delete temporary_filename
   end
   
   private def rect_image(w, h)
@@ -65,6 +86,6 @@ class TestImage < Minitest::Test
     assert_equal 100, subimage.height
 
     image_from_rect = Gosu::Image.new(filename, rect: [1, 2, 99, 100])
-    assert image_from_rect.similar?(subimage, 0)
+    assert image_from_rect.similar?(subimage, 1.00)
   end
 end
