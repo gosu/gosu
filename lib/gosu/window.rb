@@ -20,10 +20,10 @@ module Gosu
 
     def initialize(width, height, _fullscreen = nil, _update_interval = nil, _resizable = nil, _borderless = nil,
                    fullscreen: false, update_interval: 16.66666667, resizable: false, borderless: false)
-      fullscreen = _fullscreen if _fullscreen
-      update_interval = _update_interval if _update_interval
-      resizable = _resizable if _resizable
-      borderless = _borderless if _borderless
+      fullscreen = _fullscreen unless _fullscreen.nil?
+      update_interval = _update_interval unless _update_interval.nil?
+      resizable = _resizable unless _resizable.nil?
+      borderless = _borderless unless _borderless.nil?
 
       window_flags = GosuFFI.window_flags(fullscreen: fullscreen, resizable: resizable, borderless: borderless)
 
