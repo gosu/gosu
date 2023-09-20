@@ -1,8 +1,8 @@
 module Gosu
   class Image
     def self.from_blob(width, height, rgba = "\0\0\0\0" * (width * height), retro: false, tileable: false)
-      @struct ||= Struct.new(:columns, :rows, :to_blob)
-      self.new(@struct.new(width, height, rgba), retro: retro, tileable: tileable)
+      @__struct ||= Struct.new(:columns, :rows, :to_blob)
+      self.new(@__struct.new(width, height, rgba), retro: retro, tileable: tileable)
     end
 
     def self.from_text(markup, line_height, font: Gosu.default_font_name, width: -1, spacing: 0, align: :left,
