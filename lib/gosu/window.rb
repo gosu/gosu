@@ -1,23 +1,5 @@
 module Gosu
   class Window
-    %w(update draw needs_redraw? needs_cursor? capture_cursor? hit_test gain_focus lose_focus
-       button_down button_up gamepad_connected gamepad_disconnected drop close).each do |callback|
-      define_method "protected_#{callback}" do |*args|
-        begin
-          # If there has been an exception, don't do anything as to not make matters worse.
-          # Conveniently turn the return value into a boolean result (for needs_cursor? etc).
-          defined?(@__exception) ? false : send(callback, *args)
-        rescue Exception => e
-          # Exit the message loop naturally, then re-throw during the next tick.
-          @__exception = e
-          close!
-          false
-        ensure
-          $gosu_gl_blocks = nil if callback == "draw"
-        end
-      end
-    end
-
     def initialize(width, height, _fullscreen = nil, _update_interval = nil, _resizable = nil, _borderless = nil,
                    fullscreen: false, update_interval: 16.66666667, resizable: false, borderless: false)
       fullscreen = _fullscreen unless _fullscreen.nil?
@@ -31,6 +13,22 @@ module Gosu
       GosuFFI.check_last_error
       @memory_pointer = FFI::AutoPointer.new(__window, GosuFFI.method(:Gosu_Window_destroy))
       @text_input = nil
+
+      # Set up callbacks without arguments.
+      %w(update draw needs_redraw needs_cursor close gain_focus lose_focus).each do |callback|
+        instance_variable_set(:"@__#{callback}_proc", proc do |data|
+          send(callback)
+        rescue Exception => e
+          @__exception = e
+          GosuFFI.Gosu_Window_close_immediately(__pointer)
+          # No need to check errors after this.
+          false
+        ensure
+          $gosu_gl_blocks = nil if callback == "draw"
+        end)
+        GosuFFI.send(:"Gosu_Window_set_#{callback}", __pointer, instance_variable_get(:"@__#{callback}_proc"), nil)
+        GosuFFI.check_last_error
+      end
 
       {
         update: [],
