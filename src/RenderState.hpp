@@ -172,7 +172,7 @@ public:
     }
 
     // The cached values may have been messed with. Reset them again.
-    void enforce_after_untrusted_gL() const
+    void enforce_after_untrusted_gl() const
     {
         apply_texture();
         apply_transform();
