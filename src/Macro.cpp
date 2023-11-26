@@ -133,7 +133,7 @@ struct Gosu::Macro::Impl : private Gosu::Noncopyable
             glPushMatrix();
             vertex_array.render_state.apply();
             glMultMatrixd(transform.matrix.data());
-            glInterleavedArrays(GL_T2F_C4UB_V3F, 0, &vertex_array.vertices[0]);
+            glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vertex_array.vertices.data());
             glDrawArrays(GL_QUADS, 0, (GLsizei) vertex_array.vertices.size());
             glPopMatrix();
         }
@@ -161,10 +161,10 @@ int Gosu::Macro::height() const
 
 void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Color c2, //
                        double x3, double y3, Color c3, double x4, double y4, Color c4, //
-                       ZPos z, BlendMode mode) const
+                       ZPos z, BlendMode) const
 {
     if (c1 != Color::WHITE || c2 != Color::WHITE || c3 != Color::WHITE || c4 != Color::WHITE) {
-        throw std::invalid_argument{"Macros cannot be tinted with colors"};
+        throw std::invalid_argument("Macros cannot be tinted with colors");
     }
 
     normalize_coordinates(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
@@ -194,5 +194,5 @@ std::unique_ptr<Gosu::Drawable> Gosu::Macro::subimage(const Rect&) const
 
 void Gosu::Macro::insert(const Bitmap&, int, int)
 {
-    throw std::logic_error{"Gosu::Macro cannot be updated with a Gosu::Bitmap yet"};
+    throw std::logic_error("Gosu::Macro cannot be updated with a Gosu::Bitmap yet");
 }
