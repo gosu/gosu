@@ -92,7 +92,6 @@ Gosu::Image Gosu::OffScreenTarget::render(const std::function<void ()>& f)
 
     try {
         f();
-
     } catch (...) {
         glBindFramebuffer(GOSU_GL_CONST(GL_FRAMEBUFFER), 0);
         throw;

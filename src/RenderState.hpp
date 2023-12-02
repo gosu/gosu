@@ -12,22 +12,11 @@
 struct Gosu::RenderState
 {
     std::shared_ptr<Texture> texture;
-    const Transform* transform;
+    const Transform* transform = nullptr;
     std::optional<Rect> clip_rect;
-    BlendMode mode;
+    BlendMode mode = BM_DEFAULT;
 
-    RenderState()
-    : transform(0), mode(BM_DEFAULT)
-    {
-    }
-
-    bool operator==(const RenderState& rhs) const
-    {
-        return texture == rhs.texture &&
-            transform == rhs.transform &&
-            clip_rect == rhs.clip_rect &&
-            mode == rhs.mode;
-    }
+    bool operator==(const RenderState& rhs) const = default;
 
     void apply_texture() const
     {
@@ -108,7 +97,7 @@ public:
     ~RenderStateManager()
     {
         set_clip_rect(std::nullopt);
-        set_texture(std::shared_ptr<Texture>());
+        set_texture(nullptr);
         // Return to previous MV matrix
         glMatrixMode(GL_MODELVIEW);
         glPopMatrix();
