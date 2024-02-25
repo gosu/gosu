@@ -107,7 +107,8 @@ module Gosu
     end
 
     def draw_as_quad(x1, y1, color1, x2, y2, color2, x3, y3, color3, x4, y4, color4, z = 0, mode = :default)
-      GosuFFI.Gosu_Image_draw_as_quad(x1, y1, GosuFFI.color_to_uint32(color1), x2, y2, GosuFFI.color_to_uint32(color2),
+      GosuFFI.Gosu_Image_draw_as_quad(__pointer,
+                                      x1, y1, GosuFFI.color_to_uint32(color1), x2, y2, GosuFFI.color_to_uint32(color2),
                                       x3, y3, GosuFFI.color_to_uint32(color3), x4, y4, GosuFFI.color_to_uint32(color4),
                                       z, GosuFFI.blend_mode(mode))
       GosuFFI.check_last_error
