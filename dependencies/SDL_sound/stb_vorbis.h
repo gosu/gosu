@@ -21,6 +21,7 @@
 //
 // Feature contributors:
 //    Dougall Johnson (sample-exact seeking)
+//    Vitaly Novichkov (sample-accurate tell)
 //
 // Bugfix/warning contributors:
 //    Terje Mathisen     Niklas Frykholm     Andy Hill
@@ -150,8 +151,10 @@ typedef struct
 // get general information about the file
 extern stb_vorbis_info stb_vorbis_get_info(stb_vorbis *f);
 
+#ifndef STB_VORBIS_NO_COMMENTS
 // get ogg comments
 extern stb_vorbis_comment stb_vorbis_get_comment(stb_vorbis *f);
+#endif
 
 // get the last error detected (clears it, too)
 extern int stb_vorbis_get_error(stb_vorbis *f);
@@ -165,6 +168,12 @@ extern void stb_vorbis_close(stb_vorbis *f);
 // it becomes valid again.
 // NOT WORKING YET after a seek with PULLDATA API
 extern int stb_vorbis_get_sample_offset(stb_vorbis *f);
+
+//  this function returns the count of returned samples from the beginning of the
+//  file. Functions "stb_vorbis_get_samples_*", "stb_vorbis_seek_*()" will
+//  affect the returned value. Use this call to get the accurate sample position
+//  during playback.
+extern int stb_vorbis_get_playback_sample_offset(stb_vorbis *f);
 
 // returns the current seek point within the file, or offset from the beginning
 // of the memory buffer. In pushdata mode it returns 0.
@@ -296,7 +305,7 @@ extern stb_vorbis * stb_vorbis_open_file_section(FILE *f, int close_handle_on_cl
 // confused.
 #endif
 
-#ifdef __SDL_SOUND_INTERNAL__
+#ifdef STB_VORBIS_SDL
 extern stb_vorbis * stb_vorbis_open_rwops_section(SDL_RWops *rwops, int close_on_free, int *error, const stb_vorbis_alloc *alloc, unsigned int length);
 extern stb_vorbis * stb_vorbis_open_rwops(SDL_RWops *rwops, int close_on_free, int *error, const stb_vorbis_alloc *alloc);
 #endif
@@ -551,8 +560,10 @@ enum STBVorbisError
 // #define STB_VORBIS_NO_DEFER_FLOOR
 
 // STB_VORBIS_NO_COMMENTS
-//     disables reading and storing user comments
+//     Disables reading and storing user comments.
 // #define STB_VORBIS_NO_COMMENTS
+
+
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -637,7 +648,7 @@ enum STBVorbisError
 #define MAX_BLOCKSIZE_LOG  13   // from specification
 #define MAX_BLOCKSIZE      (1 << MAX_BLOCKSIZE_LOG)
 
-#ifdef __SDL_SOUND_INTERNAL__
+#ifdef STB_VORBIS_SDL
 typedef Uint8 uint8;
 typedef Sint8 int8;
 typedef Uint16 uint16;
@@ -768,7 +779,6 @@ typedef struct
 
 typedef struct
 {
-  // https://github.com/nothings/stb/pull/1312
    MappingChannel *chan;
    uint16 coupling_steps;
    uint8  submaps;
@@ -821,7 +831,7 @@ struct stb_vorbis
    uint32 f_start;
    int close_on_free;
 #endif
-#ifdef __SDL_SOUND_INTERNAL__
+#ifdef STB_VORBIS_SDL
    SDL_RWops *rwops;
    uint32 rwops_start;
    int close_on_free;
@@ -886,6 +896,9 @@ struct stb_vorbis
 
    uint32 current_loc; // sample location of next frame to decode
    int    current_loc_valid;
+
+   int32  current_playback_loc; // sample location of played samples
+   int    current_playback_loc_valid;
 
   // per-blocksize precomputed data
 
@@ -970,6 +983,8 @@ static int error(vorb *f, enum STBVorbisError e)
 // given a sufficiently large block of memory, make an array of pointers to subblocks of it
 static void *make_block_array(void *mem, int count, int size)
 {
+  if (!mem) return NULL;
+  else {
    int i;
    void ** p = (void **) mem;
    char *q = (char *) (p + count);
@@ -978,10 +993,12 @@ static void *make_block_array(void *mem, int count, int size)
       q += size;
    }
    return p;
+  }
 }
 
 static void *setup_malloc(vorb *f, int sz)
 {
+   if (sz <= 0 || INT_MAX - 7 < sz) return NULL;
    sz = (sz+7) & ~7; // round up to nearest 8 for alignment of future allocs.
    f->setup_memory_required += sz;
    if (f->alloc.alloc_buffer) {
@@ -1001,6 +1018,7 @@ static void setup_free(vorb *f, void *p)
 
 static void *setup_temp_malloc(vorb *f, int sz)
 {
+   if (sz <= 0 || INT_MAX - 7 < sz) return NULL;
    sz = (sz+7) & ~7; // round up to nearest 8 for alignment of future allocs.
    if (f->alloc.alloc_buffer) {
       if (f->temp_offset - sz < f->setup_offset) return NULL;
@@ -1369,7 +1387,7 @@ static int STBV_CDECL point_compare(const void *p, const void *q)
 /////////////////////// END LEAF SETUP FUNCTIONS //////////////////////////
 
 
-#ifdef __SDL_SOUND_INTERNAL__
+#ifdef STB_VORBIS_SDL
    #define USE_MEMORY(z)    FALSE
 #elif defined(STB_VORBIS_NO_STDIO)
    #define USE_MEMORY(z)    TRUE
@@ -1379,7 +1397,7 @@ static int STBV_CDECL point_compare(const void *p, const void *q)
 
 static uint8 get8(vorb *z)
 {
-   #ifdef __SDL_SOUND_INTERNAL__
+   #ifdef STB_VORBIS_SDL
    uint8 c;
    if (SDL_RWread(z->rwops, &c, 1, 1) != 1) { z->eof = TRUE; return 0; }
    return c;
@@ -1412,7 +1430,7 @@ static uint32 get32(vorb *f)
 
 static int getn(vorb *z, uint8 *data, int n)
 {
-   #ifdef __SDL_SOUND_INTERNAL__
+   #ifdef STB_VORBIS_SDL
    if (SDL_RWread(z->rwops, data, n, 1) == 1) return 1;
    z->eof = 1;
    return 0;
@@ -1438,7 +1456,7 @@ static int getn(vorb *z, uint8 *data, int n)
 
 static void skip(vorb *z, int n)
 {
-   #ifdef __SDL_SOUND_INTERNAL__
+   #ifdef STB_VORBIS_SDL
    SDL_RWseek(z->rwops, n, RW_SEEK_CUR);
 
    #else
@@ -1464,7 +1482,7 @@ static int set_file_offset(stb_vorbis *f, unsigned int loc)
    #endif
    f->eof = 0;
 
-   #ifdef __SDL_SOUND_INTERNAL__
+   #ifdef STB_VORBIS_SDL
    if (loc + f->rwops_start < loc || loc >= 0x80000000) {
       loc = 0x7fffffff;
       f->eof = 1;
@@ -1837,7 +1855,7 @@ static int codebook_decode_scalar(vorb *f, Codebook *c)
 
 #define DECODE(var,f,c)                                       \
    DECODE_RAW(var,f,c)                                        \
-   if (c->sparse) var = c->sorted_values[var];
+   if (c->sparse && var >= 0) var = c->sorted_values[var];
 
 #ifndef STB_VORBIS_DIVIDES_IN_CODEBOOK
   #define DECODE_VQ(var,f,c)   DECODE_RAW(var,f,c)
@@ -2151,7 +2169,7 @@ STB_FORCEINLINE void draw_line(float *output, int x0, int y0, int x1, int y1, in
    ady -= abs(base) * adx;
    if (x1 > n) x1 = n;
    if (x < x1) {
-      LINE_OP(output[x], inverse_db_table[y&255]);
+      LINE_OP(output[x], inverse_db_table[(uint32)y&255]);
       for (++x; x < x1; ++x) {
          err += ady;
          if (err >= adx) {
@@ -2159,7 +2177,7 @@ STB_FORCEINLINE void draw_line(float *output, int x0, int y0, int x1, int y1, in
             y += sy;
          } else
             y += base;
-         LINE_OP(output[x], inverse_db_table[y&255]);
+         LINE_OP(output[x], inverse_db_table[(uint32)y&255]);
       }
    }
 }
@@ -3596,6 +3614,8 @@ static int vorbis_pump_first_frame(stb_vorbis *f)
    res = vorbis_decode_packet(f, &len, &left, &right);
    if (res)
       vorbis_finish_frame(f, len, left, right);
+   f->current_playback_loc = 0;
+   f->current_playback_loc_valid = TRUE;
    return res;
 }
 
@@ -3746,8 +3766,16 @@ static int start_decoder(vorb *f)
    f->comment_list = NULL;
    if (f->comment_list_length > 0)
    {
-      f->comment_list = (char**) setup_malloc(f, sizeof(char*) * (f->comment_list_length));
-      if (f->comment_list == NULL)                  return error(f, VORBIS_outofmem);
+      if (INT_MAX / sizeof(char*) < f->comment_list_length)
+          goto no_comment;
+      len = sizeof(char*) * f->comment_list_length;
+      f->comment_list = (char**) setup_malloc(f, len);
+      if (f->comment_list == NULL) {
+         no_comment:
+         f->comment_list_length = 0;
+         return error(f, VORBIS_outofmem);
+      }
+      memset(f->comment_list, 0, len);
    }
 
    for(i=0; i < f->comment_list_length; ++i) {
@@ -4379,7 +4407,7 @@ static void vorbis_deinit(stb_vorbis *p)
       setup_temp_free(p, &p->temp_values, 0);
       setup_temp_free(p, &p->temp_mults, 0);
    }
-   #ifdef __SDL_SOUND_INTERNAL__
+   #ifdef STB_VORBIS_SDL
    if (p->close_on_free) SDL_RWclose(p->rwops);
    #endif
    #ifndef STB_VORBIS_NO_STDIO
@@ -4407,7 +4435,7 @@ static void vorbis_init(stb_vorbis *p, const stb_vorbis_alloc *z)
    p->stream = NULL;
    p->codebooks = NULL;
    p->page_crc_tests = -1;
-   #ifdef __SDL_SOUND_INTERNAL__
+   #ifdef STB_VORBIS_SDL
    p->close_on_free = FALSE;
    p->rwops = NULL;
    #endif
@@ -4421,6 +4449,14 @@ int stb_vorbis_get_sample_offset(stb_vorbis *f)
 {
    if (f->current_loc_valid)
       return f->current_loc;
+   else
+      return -1;
+}
+
+int stb_vorbis_get_playback_sample_offset(stb_vorbis *f)
+{
+   if (f->current_playback_loc_valid)
+      return f->current_playback_loc;
    else
       return -1;
 }
@@ -4672,7 +4708,7 @@ unsigned int stb_vorbis_get_file_offset(stb_vorbis *f)
    #ifndef STB_VORBIS_NO_PUSHDATA_API
    if (f->push_mode) return 0;
    #endif
-   #ifdef __SDL_SOUND_INTERNAL__
+   #ifdef STB_VORBIS_SDL
    return (unsigned int) (SDL_RWtell(f->rwops) - f->rwops_start);
    #else
    if (USE_MEMORY(f)) return (unsigned int) (f->stream - f->stream_start);
@@ -5045,13 +5081,16 @@ int stb_vorbis_seek_frame(stb_vorbis *f, unsigned int sample_number)
    }
    // the next frame should start with the sample
    if (f->current_loc != sample_number) return error(f, VORBIS_seek_failed);
+   f->current_playback_loc = sample_number;
    return 1;
 }
 
 int stb_vorbis_seek(stb_vorbis *f, unsigned int sample_number)
 {
-   if (!stb_vorbis_seek_frame(f, sample_number))
+   if (!stb_vorbis_seek_frame(f, sample_number)) {
+      f->current_playback_loc_valid = FALSE;
       return 0;
+   }
 
    if (sample_number != f->current_loc) {
       int n;
@@ -5061,6 +5100,9 @@ int stb_vorbis_seek(stb_vorbis *f, unsigned int sample_number)
       assert(f->channel_buffer_start + (int) (sample_number-frame_start) <= f->channel_buffer_end);
       f->channel_buffer_start += (sample_number - frame_start);
    }
+
+   f->current_playback_loc_valid = TRUE;
+   f->current_playback_loc = sample_number;
 
    return 1;
 }
@@ -5228,7 +5270,7 @@ stb_vorbis * stb_vorbis_open_filename(const char *filename, int *error, const st
 }
 #endif // STB_VORBIS_NO_STDIO
 
-#ifdef __SDL_SOUND_INTERNAL__
+#ifdef STB_VORBIS_SDL
 stb_vorbis * stb_vorbis_open_rwops_section(SDL_RWops *rwops, int close_on_free, int *error, const stb_vorbis_alloc *alloc, unsigned int length)
 {
    stb_vorbis *f, p;
@@ -5486,6 +5528,7 @@ int stb_vorbis_get_samples_short_interleaved(stb_vorbis *f, int channels, short 
       if (n == len) break;
       if (!stb_vorbis_get_frame_float(f, NULL, &outputs)) break;
    }
+   f->current_playback_loc += n;
    return n;
 }
 
@@ -5503,6 +5546,7 @@ int stb_vorbis_get_samples_short(stb_vorbis *f, int channels, short **buffer, in
       if (n == len) break;
       if (!stb_vorbis_get_frame_float(f, NULL, &outputs)) break;
    }
+   f->current_playback_loc += n;
    return n;
 }
 
@@ -5611,6 +5655,7 @@ int stb_vorbis_get_samples_float_interleaved(stb_vorbis *f, int channels, float 
       if (!stb_vorbis_get_frame_float(f, NULL, &outputs))
          break;
    }
+   f->current_playback_loc += n;
    return n;
 }
 
@@ -5637,6 +5682,7 @@ int stb_vorbis_get_samples_float(stb_vorbis *f, int channels, float **buffer, in
       if (!stb_vorbis_get_frame_float(f, NULL, &outputs))
          break;
    }
+   f->current_playback_loc += n;
    return n;
 }
 #endif // STB_VORBIS_NO_PULLDATA_API

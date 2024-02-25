@@ -23,16 +23,17 @@
 #if SOUND_SUPPORTS_VORBIS
 
 /* Configure and include stb_vorbis for compiling... */
+#define STB_VORBIS_SDL 1 /* for SDL_sound-specific stuff. */
 #define STB_VORBIS_NO_STDIO 1
 #define STB_VORBIS_NO_CRT 1
 #define STB_VORBIS_NO_PUSHDATA_API 1
-#define STB_VORBIS_MAX_CHANNELS 6
+#define STB_VORBIS_MAX_CHANNELS 8   /* For 7.1 surround sound */
 #define STB_VORBIS_NO_COMMENTS 1
 #define STB_FORCEINLINE SDL_FORCE_INLINE
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 #define STB_VORBIS_BIG_ENDIAN 1
 #endif
-#define STBV_CDECL SDLCALL /* for SDL_qsort */
+#define STBV_CDECL SDLCALL /* for SDL_qsort() */
 
 #if !defined(__clang_analyzer__)
 #ifdef assert
@@ -124,7 +125,9 @@ static int VORBIS_open(Sound_Sample *sample, const char *ext)
     sample->actual.rate = stb->sample_rate;
     num_frames = stb_vorbis_stream_length_in_samples(stb);
     if (!num_frames)
-        internal->total_time = -1;
+    {
+        BAIL_MACRO("VORBIS: No samples in ogg/vorbis stream.", 0);
+    }
     else
     {
         const unsigned int rate = stb->sample_rate;
