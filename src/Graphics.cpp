@@ -107,9 +107,6 @@ Gosu::Viewport::Viewport(int phys_width, int phys_height)
 
 Gosu::Viewport::~Viewport()
 {
-    if (current_viewport_pointer == this) {
-        current_viewport_pointer = nullptr;
-    }
 }
 
 int Gosu::Viewport::width() const
@@ -136,6 +133,15 @@ void Gosu::Viewport::set_resolution(int virtual_width, int virtual_height,
     m_impl->black_height = vertical_black_bar_height;
 
     m_impl->update_base_transform();
+}
+
+std::shared_ptr<void> Gosu::Viewport::make_current()
+{
+    std::shared_ptr<Viewport> result(current_viewport_pointer, [](Viewport* previous) {
+        current_viewport_pointer = previous;
+    });
+    current_viewport_pointer = this;
+    return result;
 }
 
 void Gosu::Viewport::frame(const std::function<void()>& f)
@@ -166,7 +172,7 @@ void Gosu::Viewport::frame(const std::function<void()>& f)
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    current_viewport_pointer = this;
+    auto handle = make_current();
 
     f();
 
@@ -193,7 +199,7 @@ void Gosu::Viewport::frame(const std::function<void()>& f)
         flush();
     }
 
-    current_viewport_pointer = nullptr;
+    handle.reset();
 
     // Clear leftover transforms, clip rects etc.
     if (queues.size() == 1) {
