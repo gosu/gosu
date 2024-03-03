@@ -179,6 +179,9 @@ const Gosu::GLTexInfo* Gosu::Macro::gl_tex_info() const
 
 Gosu::Bitmap Gosu::Macro::to_bitmap() const
 {
+    Gosu::Viewport viewport{pimpl->width, pimpl->height};
+    auto handle = viewport.make_current();
+
     const auto render_this = [this] {
         draw(0, 0, Color::WHITE, pimpl->width, 0, Color::WHITE, 0, pimpl->height, Color::WHITE,
              pimpl->width, pimpl->height, Color::WHITE, 0, BM_DEFAULT);
