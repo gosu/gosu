@@ -27,7 +27,6 @@ namespace Gosu
     class DrawOpQueue;
     typedef std::list<Transform> Transforms;
     typedef std::list<DrawOpQueue> DrawOpQueueStack;
-    class Macro;
     struct ArrayVertex
     {
         float tex_coords[2];
