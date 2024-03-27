@@ -4,11 +4,8 @@
 #include "DrawOpQueue.hpp"
 #include <stdexcept>
 
-struct Gosu::Macro::Impl : private Gosu::Noncopyable
+namespace
 {
-    VertexArrays vertex_arrays;
-    int width, height;
-
     // Solves the 2x2 linear system for x:
     // (a11 a12) (x1) = (b1)
     // (a21 a22) (x2) = (b2)
@@ -23,8 +20,9 @@ struct Gosu::Macro::Impl : private Gosu::Noncopyable
         return true;
     }
 
-    Transform find_transform_for_target(double x1, double y1, double x2, double y2, //
-                                        double x3, double y3, double x4, double y4) const
+    Gosu::Transform find_transform_for_target(double x1, double y1, double x2, double y2, //
+                                              double x3, double y3, double x4, double y4, //
+                                              double width, double height)
     {
         // Transformation logic follows a discussion on the ImageMagick mailing
         // list (on which ImageMagick's perspective_transform.pl is based).
@@ -64,7 +62,9 @@ struct Gosu::Macro::Impl : private Gosu::Noncopyable
 
         // Solve:
         double qx, qy;
-        if (!solve_2x2(a11, a12, a21, a22, b1, b2, qx, qy)) return Transform{{0}};
+        if (!solve_2x2(a11, a12, a21, a22, b1, b2, qx, qy)) {
+            return Gosu::Transform { { 0 } };
+        }
 
         // Updating the last two rows with the computed solution yields
 
@@ -88,7 +88,7 @@ struct Gosu::Macro::Impl : private Gosu::Noncopyable
         // 0, 0, 0, 0, 0, 0, 1, 0 | qx
         // 0, 0, 0, 0, 0, 0, 0, 1 | qy
 
-        // Normalize and reorder rows so we can read off the solution:
+        // Normalize and reorder rows, so we can read off the solution:
 
         // 1, 0, 0, 0, 0, 0, 0, 0 | (x2-x1) / w + qx x2
         // 0, 1, 0, 0, 0, 0, 0, 0 | (x3-x1) / h + qy x3
@@ -109,55 +109,22 @@ struct Gosu::Macro::Impl : private Gosu::Noncopyable
         c[6] = qx;
         c[7] = qy;
 
-        Transform result = {{c[0], c[3], 0, c[6], //
-                             c[1], c[4], 0, c[7], //
-                             0, 0, 1, 0,          //
-                             c[2], c[5], 0, 1}};
+        Gosu::Transform result = { { c[0], c[3], 0, c[6], //
+                                     c[1], c[4], 0, c[7], //
+                                     0, 0, 1, 0, //
+                                     c[2], c[5], 0, 1 } };
         return result;
-    }
-
-    void draw_vertex_arrays(double x1, double y1, double x2, double y2, //
-                            double x3, double y3, double x4, double y4) const
-    {
-        // TODO: Macros should not be split up just because they have different transforms.
-        // They should be premultiplied and have the same transform by definition. Then the
-        // transformation only has to be performed once.
-
-#ifndef GOSU_IS_OPENGLES
-        glEnable(GL_BLEND);
-        glMatrixMode(GL_MODELVIEW);
-
-        Transform transform = find_transform_for_target(x1, y1, x2, y2, x3, y3, x4, y4);
-
-        for (const auto& vertex_array : vertex_arrays) {
-            glPushMatrix();
-            vertex_array.render_state.apply();
-            glMultMatrixd(transform.matrix.data());
-            glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vertex_array.vertices.data());
-            glDrawArrays(GL_QUADS, 0, (GLsizei) vertex_array.vertices.size());
-            glPopMatrix();
-        }
-#endif
     }
 };
 
 Gosu::Macro::Macro(DrawOpQueue& queue, int width, int height)
-: pimpl(new Impl)
+    : m_width(width),
+      m_height(height)
 {
-    pimpl->width = width;
-    pimpl->height = height;
-    queue.compile_to(pimpl->vertex_arrays);
+    queue.compile_to(m_vertex_arrays);
 }
 
-int Gosu::Macro::width() const
-{
-    return pimpl->width;
-}
-
-int Gosu::Macro::height() const
-{
-    return pimpl->height;
-}
+Gosu::Macro::~Macro() = default;
 
 void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Color c2, //
                        double x3, double y3, Color c3, double x4, double y4, Color c4, //
@@ -169,7 +136,27 @@ void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Col
 
     normalize_coordinates(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
-    Gosu::gl(z, [=, this] { pimpl->draw_vertex_arrays(x1, y1, x2, y2, x3, y3, x4, y4); });
+    gl(z, [=, this] {
+        Transform transform
+            = find_transform_for_target(x1, y1, x2, y2, x3, y3, x4, y4, m_width, m_height);
+
+#ifndef GOSU_IS_OPENGLES
+        glEnable(GL_BLEND);
+        glMatrixMode(GL_MODELVIEW);
+
+        // TODO: Macros should not be split up just because they have different transforms.
+        // They should be premultiplied and have the same transform by definition. Then the
+        // transformation only has to be performed once.
+        for (const auto& vertex_array : m_vertex_arrays) {
+            glPushMatrix();
+            vertex_array.render_state.apply();
+            glMultMatrixd(transform.matrix.data());
+            glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vertex_array.vertices.data());
+            glDrawArrays(GL_QUADS, 0, (GLsizei)vertex_array.vertices.size());
+            glPopMatrix();
+        }
+#endif
+    });
 }
 
 const Gosu::GLTexInfo* Gosu::Macro::gl_tex_info() const
@@ -179,15 +166,15 @@ const Gosu::GLTexInfo* Gosu::Macro::gl_tex_info() const
 
 Gosu::Bitmap Gosu::Macro::to_bitmap() const
 {
-    Gosu::Viewport viewport{pimpl->width, pimpl->height};
+    Gosu::Viewport viewport(m_width, m_height);
     auto handle = viewport.make_current();
 
     const auto render_this = [this] {
-        draw(0, 0, Color::WHITE, pimpl->width, 0, Color::WHITE, 0, pimpl->height, Color::WHITE,
-             pimpl->width, pimpl->height, Color::WHITE, 0, BM_DEFAULT);
+        draw(0, 0, Color::WHITE, m_width, 0, Color::WHITE, 0, m_height, Color::WHITE, m_width,
+             m_height, Color::WHITE, 0, BM_DEFAULT);
     };
 
-    return Gosu::render(pimpl->width, pimpl->height, render_this).drawable().to_bitmap();
+    return Gosu::render(m_width, m_height, render_this).drawable().to_bitmap();
 }
 
 std::unique_ptr<Gosu::Drawable> Gosu::Macro::subimage(const Rect&) const
