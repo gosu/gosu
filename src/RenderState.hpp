@@ -16,7 +16,7 @@ struct Gosu::RenderState
     std::optional<Rect> clip_rect;
     BlendMode mode = BM_DEFAULT;
 
-    bool operator==(const RenderState& rhs) const = default;
+    bool operator==(const RenderState&) const = default;
 
     void apply_texture() const
     {
