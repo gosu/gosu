@@ -98,6 +98,6 @@ namespace Gosu
         ///                 then the pointed-to int (if any) will be adjusted by the same amount.
         void clip_to(const Rect& bounding_box, int* adjust_x = nullptr, int* adjust_y = nullptr);
 
-        bool operator==(const Rect& other) const = default;
+        bool operator==(const Rect&) const = default;
     };
 }
