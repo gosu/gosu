@@ -1,4 +1,3 @@
-#include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/Utility.hpp>
@@ -8,7 +7,6 @@
 #include "Macro.hpp"
 #include "OffScreenTarget.hpp"
 #include "OpenGLContext.hpp"
-#include <algorithm>
 #include <memory>
 
 namespace Gosu
@@ -107,9 +105,6 @@ Gosu::Viewport::Viewport(int phys_width, int phys_height)
 
 Gosu::Viewport::~Viewport()
 {
-    if (current_viewport_pointer == this) {
-        current_viewport_pointer = nullptr;
-    }
 }
 
 int Gosu::Viewport::width() const
@@ -136,6 +131,15 @@ void Gosu::Viewport::set_resolution(int virtual_width, int virtual_height,
     m_impl->black_height = vertical_black_bar_height;
 
     m_impl->update_base_transform();
+}
+
+Gosu::Cleanup Gosu::Viewport::make_current()
+{
+    auto result = finally([previous = current_viewport_pointer] {
+        current_viewport_pointer = previous;
+    });
+    current_viewport_pointer = this;
+    return result;
 }
 
 void Gosu::Viewport::frame(const std::function<void()>& f)
@@ -166,7 +170,7 @@ void Gosu::Viewport::frame(const std::function<void()>& f)
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    current_viewport_pointer = this;
+    auto queue_cleanup = make_current();
 
     f();
 
@@ -193,7 +197,7 @@ void Gosu::Viewport::frame(const std::function<void()>& f)
         flush();
     }
 
-    current_viewport_pointer = nullptr;
+    queue_cleanup.perform();
 
     // Clear leftover transforms, clip rects etc.
     if (queues.size() == 1) {
@@ -224,11 +228,9 @@ void Gosu::gl(const std::function<void()>& f)
 
     flush();
 
+    auto cleanup_gl = finally([&cg] { cg.m_impl->end_gl(); });
     cg.m_impl->begin_gl();
-
     f();
-
-    cg.m_impl->end_gl();
 #endif
 }
 
@@ -239,9 +241,9 @@ void Gosu::gl(Gosu::ZPos z, const std::function<void()>& f)
 #else
     const auto wrapped_f = [f] {
         Viewport& cg = current_viewport();
+        auto cleanup_gl = finally([&cg] { cg.m_impl->end_gl(); });
         cg.m_impl->begin_gl();
         f();
-        cg.m_impl->end_gl();
     };
     current_queue().gl(wrapped_f, z);
 #endif
@@ -254,9 +256,9 @@ void Gosu::clip_to(double x, double y, double width, double height, const std::f
         viewport_height = current_viewport_pointer->m_impl->phys_height;
     }
 
+    auto cleanup_cliprect = finally([] { current_queue().end_clipping(); });
     current_queue().begin_clipping(x, y, width, height, viewport_height);
     f();
-    current_queue().end_clipping();
 }
 
 Gosu::Image Gosu::render(int width, int height, const std::function<void()>& f,
@@ -308,7 +310,12 @@ Gosu::Image Gosu::record(int width, int height, const std::function<void()>& f)
 {
     queues.emplace_back(QM_RECORD_MACRO);
 
-    f();
+    try {
+        f();
+    } catch (...) {
+        queues.pop_back();
+        throw;
+    }
 
     std::unique_ptr<Drawable> result(new Macro(current_queue(), width, height));
     queues.pop_back();
