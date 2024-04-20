@@ -16,7 +16,7 @@ GEM
       rake
     ruby-progressbar (1.13.0)
     rubyzip (2.3.2)
-    yard (0.9.34)
+    yard (0.9.36)
 
 PLATFORMS
   arm64-darwin-21
