@@ -138,7 +138,7 @@ public:
                 assert (block_index >= 0);
                 assert (block_index < gl_blocks.size());
                 gl_blocks[block_index]();
-                manager.enforce_after_untrusted_gL();
+                manager.enforce_after_untrusted_gl();
             }
         }
     #endif
