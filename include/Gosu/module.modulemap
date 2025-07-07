@@ -1,5 +1,6 @@
 module Gosu {
   requires cplusplus
   umbrella header "Gosu.hpp"
+  link "gosu"
   export *
 }
