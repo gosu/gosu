@@ -36,9 +36,9 @@ endif ()
 ##############################################
 # Create target and set properties
 
-file(GLOB_RECURSE C_FILES ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/*.c)
-file(GLOB HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/Gosu/*.hpp)
-file(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+file(GLOB_RECURSE C_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/*.c)
+file(GLOB HEADER_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/include/Gosu/*.hpp)
+file(GLOB SOURCE_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
 add_library(gosu ${C_FILES} ${HEADER_FILES} ${SOURCE_FILES})
 
