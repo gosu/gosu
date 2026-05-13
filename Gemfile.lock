@@ -3,25 +3,30 @@ GEM
   specs:
     ansi (1.5.0)
     builder (3.2.4)
+    drb (2.2.3)
     excon (0.100.0)
     ffi (1.15.5)
-    minitest (5.19.0)
+    minitest (6.0.6)
+      drb (~> 2.0)
+      prism (~> 1.5)
     minitest-reporters (1.6.1)
       ansi
       builder
       minitest (>= 5.0)
       ruby-progressbar
+    prism (1.9.0)
     rake (13.0.6)
     rake-compiler (1.2.5)
       rake
     ruby-progressbar (1.13.0)
     rubyzip (2.3.2)
-    yard (0.9.36)
+    yard (0.9.43)
 
 PLATFORMS
   arm64-darwin-21
   arm64-darwin-22
   arm64-darwin-23
+  arm64-darwin-25
   x86_64-linux
 
 DEPENDENCIES
@@ -34,4 +39,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   2.3.11
+  4.0.11
