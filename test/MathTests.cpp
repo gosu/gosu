@@ -12,23 +12,27 @@ public:
 
 TEST_F(MathTests, random)
 {
-    std::set<int> positive_values;
+    std::set<double> positive_values;
     for (int i = 0; i < 1'000'000; ++i) {
         const double random_value = Gosu::random(3.5, 7.0);
-        positive_values.insert(static_cast<int>(random_value));
+        ASSERT_GE(random_value, 3.5);
+        ASSERT_LT(random_value, 7.0);
+        positive_values.insert(std::floor(random_value));
     }
     // 7 must not be returned because the upper bound is exclusive.
-    ASSERT_EQ(positive_values, std::set<int>({ 3, 4, 5, 6 }));
+    ASSERT_EQ(positive_values, std::set({ 3.0, 4.0, 5.0, 6.0 }));
 
-    std::set<int> negative_values;
+    std::set<double> negative_values;
     for (int i = 0; i < 1'000'000; ++i) {
-        const double random_value = Gosu::random(-1000, -1005);
-        negative_values.insert(static_cast<int>(random_value));
+        const double random_value = Gosu::random(-1005, -1000);
+        ASSERT_GE(random_value, -1005);
+        ASSERT_LT(random_value, -1000);
+        negative_values.insert(std::floor(random_value));
     }
-    // -1005 must not be returned because the upper bound is exclusive.
-    ASSERT_EQ(negative_values, std::set<int>({ -1004, -1003, -1002, -1001, -1000 }));
+    // -1000 must not be returned because the upper bound is exclusive.
+    ASSERT_EQ(negative_values, std::set({ -1005.0, -1004.0, -1003.0, -1002.0, -1001.0 }));
 
-    ASSERT_EQ(Gosu::random(12345678, 12345678), 12345678.0);
+    ASSERT_THROW(Gosu::random(12345678, 12345678), std::invalid_argument);
 
     ASSERT_TRUE(std::isnan(Gosu::random(0.0 / 0.0, 0.0 / 0.0)));
 }
@@ -100,6 +104,7 @@ TEST_F(MathTests, angle_normalization)
     ASSERT_NEAR(Gosu::angle_diff(90, 0), -90, EPSILON);
     ASSERT_NEAR(Gosu::angle_diff(360, 360), 0, EPSILON);
     ASSERT_NEAR(Gosu::angle_diff(45, 315), -90, EPSILON);
+    ASSERT_NEAR(Gosu::angle_diff(315, 45), 90, EPSILON);
 }
 
 TEST_F(MathTests, wrap)
@@ -107,7 +112,7 @@ TEST_F(MathTests, wrap)
     ASSERT_EQ(Gosu::wrap(17, 10, 20), 17);
     ASSERT_EQ(Gosu::wrap(1, 10, 20), 11);
     ASSERT_EQ(Gosu::wrap(-3, 10, 20), 17);
-    ASSERT_EQ(Gosu::wrap(1, -10, -20), -9);
+    ASSERT_EQ(Gosu::wrap(1, -20, -10), -19);
 }
 
 TEST_F(MathTests, distance)
