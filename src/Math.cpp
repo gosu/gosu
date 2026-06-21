@@ -1,21 +1,23 @@
 #include <Gosu/Math.hpp>
+#include <algorithm>
 #include <cmath>
 #include <limits> // for std::numeric_limits::quiet_NaN
 #include <random>
+#include <stdexcept>
 
 double Gosu::random(double min, double max)
 {
-    if (std::isnan(min) || std::isnan(max)) {
+    if (!std::isfinite(min) || !std::isfinite(max)) {
         return std::numeric_limits<double>::quiet_NaN();
     }
-
-    if (min == max) {
-        return min;
+    if (min >= max) {
+        throw std::invalid_argument("Gosu::random: min >= max");
     }
 
-    thread_local std::mt19937_64 generator(std::random_device {}());
+    thread_local std::mt19937_64 generator(std::random_device { }());
     std::uniform_real_distribution<double> distribution(min, max);
     const double result = distribution(generator);
+
     // Make sure that we do not return "max" even when uniform_real_distribution is buggy.
     // See "Notes": https://en.cppreference.com/w/cpp/numeric/random/uniform_real_distribution
     return result == max ? min : result;
@@ -23,12 +25,12 @@ double Gosu::random(double min, double max)
 
 double Gosu::offset_x(double angle, double radius)
 {
-    return +std::sin(angle / 180 * std::numbers::pi) * radius;
+    return +std::sin(degrees_to_radians(angle)) * radius;
 }
 
 double Gosu::offset_y(double angle, double radius)
 {
-    return -std::cos(angle / 180 * std::numbers::pi) * radius;
+    return -std::cos(degrees_to_radians(angle)) * radius;
 }
 
 double Gosu::angle(double from_x, double from_y, double to_x, double to_y, double fallback)
@@ -64,12 +66,23 @@ double Gosu::normalize_angle(double angle)
 
 int Gosu::wrap(int value, int min, int max)
 {
+    if (min >= max) {
+        throw std::invalid_argument("Gosu::wrap: min >= max");
+    }
+
     int result = (value - min) % (max - min);
     return result < 0 ? result + max : result + min;
 }
 
 double Gosu::wrap(double value, double min, double max)
 {
+    if (!std::isfinite(value) || !std::isfinite(min) || !std::isfinite(max)) {
+        return std::numeric_limits<double>::quiet_NaN();
+    }
+    if (min >= max) {
+        throw std::invalid_argument("Gosu::wrap: min >= max");
+    }
+
     double result = std::fmod(value - min, max - min);
     return result < 0 ? result + max : result + min;
 }
