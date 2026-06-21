@@ -184,7 +184,8 @@ task :update_sdl_sound do
 end
 
 task :update_mojoal do
-  github_zip_url = "https://github.com/icculus/mojoAL/archive/refs/heads/main.zip"
+  # Track the sdl2 branch until we update to SDL 3: https://github.com/gosu/gosu/pull/685
+  github_zip_url = "https://github.com/icculus/mojoAL/archive/refs/heads/sdl2.zip"
   target_directory = File.expand_path("../dependencies/mojoAL", __dir__)
 
   start_time = Time.now # FIXME: use Process monotonic time
