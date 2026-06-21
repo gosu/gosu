@@ -120,7 +120,8 @@ task :update_sdl do
 end
 
 task :update_sdl_sound do
-  github_zip_url = "https://github.com/icculus/SDL_sound/archive/refs/heads/main.zip"
+  # Track the stable-2.0 branch until we update to SDL 3: https://github.com/gosu/gosu/pull/685
+  github_zip_url = "https://github.com/icculus/SDL_sound/archive/refs/heads/stable-2.0.zip"
   target_directory = File.expand_path("../dependencies/SDL_sound", __dir__)
 
   start_time = Time.now # FIXME: use Process monotonic time

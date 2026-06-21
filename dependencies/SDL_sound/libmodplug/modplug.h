@@ -51,7 +51,8 @@ enum _ModPlug_Flags
 	MODPLUG_ENABLE_NOISE_REDUCTION  = 1 << 1,  /* Enable noise reduction */
 	MODPLUG_ENABLE_REVERB           = 1 << 2,  /* Enable reverb */
 	MODPLUG_ENABLE_MEGABASS         = 1 << 3,  /* Enable megabass */
-	MODPLUG_ENABLE_SURROUND         = 1 << 4   /* Enable surround sound. */
+	MODPLUG_ENABLE_SURROUND         = 1 << 4,  /* Enable surround sound. */
+	MODPLUG_ENABLE_FADEOUT          = 1 << 5   /* Enable fade-out at end -- see: https://github.com/icculus/SDL_sound/issues/123 */
 };
 
 enum _ModPlug_ResamplingMode

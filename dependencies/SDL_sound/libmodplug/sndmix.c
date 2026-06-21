@@ -75,9 +75,13 @@ BOOL CSoundFile_InitPlayer(CSoundFile *_this, BOOL bReset)
 BOOL CSoundFile_FadeSong(CSoundFile *_this, UINT msec)
 //----------------------------------
 {
-	LONG nsamples = _muldiv(msec, _this->gdwMixingFreq, 1000);
+	LONG nsamples;
 	LONG nRampLength;
 	UINT noff;
+
+	if(_this->m_dwSongFlags & SONG_NOFADEOUT) return FALSE;  // https://github.com/icculus/SDL_sound/issues/123
+
+	nsamples = _muldiv(msec, _this->gdwMixingFreq, 1000);
 	if (nsamples <= 0) return FALSE;
 	if (nsamples > 0x100000) nsamples = 0x100000;
 	_this->m_nBufferCount = nsamples;
@@ -219,7 +223,7 @@ BOOL CSoundFile_ProcessRow(CSoundFile *_this)
 				// End of song ?
 				if ((_this->m_nPattern == 0xFF) || (_this->m_nCurrentPattern >= MAX_ORDERS))
 				{
-					//if (!_this->m_nRepeatCount)
+					if (!_this->m_nRepeatCount)
 						return FALSE;     //never repeat entire song
 					if (!_this->m_nRestartPos)
 					{
@@ -253,7 +257,7 @@ BOOL CSoundFile_ProcessRow(CSoundFile *_this)
 							}
 						}
 					}
-//					if (_this->m_nRepeatCount > 0) _this->m_nRepeatCount--;
+					if (_this->m_nRepeatCount > 0) _this->m_nRepeatCount--;
 					_this->m_nCurrentPattern = _this->m_nRestartPos;
 					_this->m_nRow = 0;
 					if ((_this->Order[_this->m_nCurrentPattern] >= MAX_PATTERNS) || (!_this->Patterns[_this->Order[_this->m_nCurrentPattern]])) return FALSE;
