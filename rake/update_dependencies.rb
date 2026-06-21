@@ -7,11 +7,9 @@ require "json"
 require "fileutils"
 require "stringio"
 
-# Adapted from https://gist.github.com/cyberarm/6e05d4b7108dd8b4ccdfdd0a0ee30dd0
-
-# Tested against SDL2 2.26.1
+# Tested against SDL 2.32.10
 task :update_sdl do
-  github_api = "https://api.github.com/repos/libsdl-org/SDL/releases"
+  github_api = "https://api.github.com/repos/libsdl-org/SDL/releases?per_page=100"
   target_directory = File.expand_path("../dependencies/SDL", __dir__)
   x86_dll_directory = File.expand_path("../lib", __dir__)
   x64_dll_directory = File.expand_path("../lib64", __dir__)
@@ -25,23 +23,28 @@ task :update_sdl do
   if response.status == 200
     array = JSON.parse(response.body, symbolize_names: true)
     selected_release = array.find do |release|
-      !release[:draft] && !release[:prerelease] && Integer(release[:name].split(".")[1]).even?
+      next false if release[:draft] or release[:prerelease]
+
+      next false if release[:assets].none? { |asset| asset[:name].end_with?("-VC.zip") }
+
+      major, minor = release[:name].split(".").take(2).map { |part| Integer(part) }
+      # The minor version of an SDL release is even for stable releases.
+      major == 2 and minor.even?
     end
 
-    # TODO: Report failure if no release is selected
+    abort "No matching SDL release found" if selected_release.nil?
 
     selected_assets = []
 
     selected_assets << selected_release[:assets].find do |asset|
-      (asset[:name].start_with?("SDL2-devel-") && asset[:name].end_with?("-VC.zip"))
+      asset[:name].end_with?("-VC.zip")
     end
 
     selected_assets << selected_release[:assets].find do |asset|
-      (asset[:name].start_with?("SDL2-devel-") && asset[:name].end_with?("-mingw.zip"))
+      asset[:name].end_with?("-mingw.zip")
     end
 
-    # TODO: Report failure if no asset is selected
-
+    abort "No matching assets found in SDL #{selected_release[:name]}" if selected_assets.empty?
     selected_assets.each_with_index do |asset, i|
       is_visual_c = i.zero?
       buffer = StringIO.new
