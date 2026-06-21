@@ -1,3 +1,4 @@
+# On Ubuntu, this requires `apt install libgtest-dev`, not `apt install googletest`.
 find_package(GTest)
 
 if (GTest_FOUND)

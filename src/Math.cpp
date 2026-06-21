@@ -47,7 +47,7 @@ double Gosu::angle(double from_x, double from_y, double to_x, double to_y, doubl
 
         return dist_y < 0 ? 0 : 180;
     }
-    if (dist_y == 0) {
+    else if (dist_y == 0) {
         return dist_x < 0 ? 270 : 90;
     }
 
@@ -89,5 +89,7 @@ double Gosu::wrap(double value, double min, double max)
 
 double Gosu::distance(double x1, double y1, double x2, double y2)
 {
-    return std::hypot(x2 - x1, y2 - y1);
+    double dist_x = (x2 - x1);
+    double dist_y = (y2 - y1);
+    return std::sqrt(dist_x * dist_x + dist_y * dist_y);
 }
