@@ -254,8 +254,8 @@ static Uint32 read_sample_fmt_normal(Sound_Sample *sample)
         Uint32 *dst = (Uint32 *) (((Uint8 *)internal->buffer + (total * 4)) - 4);
         Uint32 i;
         for (i = 0; i < total; i++, dst--, src -= 3) {
-            const Uint32 sample = ((Uint32) src[0]) | (((Uint32) src[1]) << 8) | (((Uint32) src[2]) << 16);
-            *dst = sample << 8;  /* shift it up so the most significant bits cover the 32-bit space. */
+            const Uint32 smpl = ((Uint32) src[0]) | (((Uint32) src[1]) << 8) | (((Uint32) src[2]) << 16);
+            *dst = smpl << 8;   /* shift it up so the most significant bits cover the 32-bit space. */
         }
         retval = total * 4;
     }
