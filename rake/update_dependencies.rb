@@ -25,7 +25,7 @@ task :update_sdl do
     selected_release = array.find do |release|
       next false if release[:draft] or release[:prerelease]
 
-      next false unless release[:assets].any? { |asset| asset[:name].end_with?("-VC.zip") }
+      next false if release[:assets].none? { |asset| asset[:name].end_with?("-VC.zip") }
 
       major, minor = release[:name].split(".").take(2).map { |part| Integer(part) }
       # The minor version of an SDL release is even for stable releases.
