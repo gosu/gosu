@@ -9,6 +9,7 @@ if (GTest_FOUND)
 
     # Run the tests from within the test/ subdirectory so that we can load
     # media files using relative paths.
+    include(GoogleTest)
     gtest_discover_tests(GosuTests WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
 
     # When CLion automatically detects our tests, it does not respect the
