@@ -55,11 +55,32 @@ static size_t mp3_read(void* pUserData, void* pBufferOut, size_t bytesToRead)
 
 static drmp3_bool32 mp3_seek(void* pUserData, int offset, drmp3_seek_origin origin)
 {
-    const int whence = (origin == drmp3_seek_origin_start) ? RW_SEEK_SET : RW_SEEK_CUR;
     Sound_Sample *sample = (Sound_Sample *) pUserData;
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
+    int whence;
+    switch (origin) {
+    case DRMP3_SEEK_SET:
+        whence = RW_SEEK_SET;
+        break;
+    case DRMP3_SEEK_CUR:
+        whence = RW_SEEK_CUR;
+        break;
+    case DRMP3_SEEK_END:
+        whence = RW_SEEK_END;
+        break;
+    default:
+        return DRMP3_FALSE;
+    }
     return (SDL_RWseek(internal->rw, offset, whence) != -1) ? DRMP3_TRUE : DRMP3_FALSE;
 } /* mp3_seek */
+
+static drmp3_bool32 mp3_tell(void* pUserData, drmp3_int64* pCursor)
+{
+    Sound_Sample *sample = (Sound_Sample *) pUserData;
+    Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
+    *pCursor = SDL_RWtell(internal->rw);
+    return (*pCursor != -1) ? DRMP3_TRUE : DRMP3_FALSE;
+} /* mp3_tell */
 
 
 static SDL_bool MP3_init(void)
@@ -80,7 +101,7 @@ static int MP3_open(Sound_Sample *sample, const char *ext)
     Uint64 frames;
 
     BAIL_IF_MACRO(!dr, ERR_OUT_OF_MEMORY, 0);
-    if (drmp3_init(dr, mp3_read, mp3_seek, sample, NULL) != DRMP3_TRUE)
+    if (drmp3_init(dr, mp3_read, mp3_seek, mp3_tell, NULL, sample, NULL) != DRMP3_TRUE)
     {
         SDL_free(dr);
         BAIL_IF_MACRO(sample->flags & SOUND_SAMPLEFLAG_ERROR, ERR_IO_ERROR, 0);

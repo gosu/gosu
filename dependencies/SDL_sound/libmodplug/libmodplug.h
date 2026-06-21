@@ -299,6 +299,7 @@ typedef const BYTE * LPCBYTE;
 #define SONG_SURROUNDPAN	0x4000
 #define SONG_EXFILTERRANGE	0x8000
 #define SONG_AMIGALIMITS	0x10000
+#define SONG_NOFADEOUT		0x20000 // see: https://github.com/icculus/SDL_sound/issues/123
 
 // Global Options (Renderer)
 #define SNDMIX_REVERSESTEREO	0x0001
