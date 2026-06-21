@@ -7,7 +7,7 @@
 
 double Gosu::random(double min, double max)
 {
-    if (std::isnan(min) || std::isnan(max)) {
+    if (!std::isfinite(min) || !std::isfinite(max)) {
         return std::numeric_limits<double>::quiet_NaN();
     }
     if (min >= max) {
@@ -76,7 +76,7 @@ int Gosu::wrap(int value, int min, int max)
 
 double Gosu::wrap(double value, double min, double max)
 {
-    if (std::isnan(value) || std::isnan(min) || std::isnan(max)) {
+    if (!std::isfinite(value) || !std::isfinite(min) || !std::isfinite(max)) {
         return std::numeric_limits<double>::quiet_NaN();
     }
     if (min >= max) {
