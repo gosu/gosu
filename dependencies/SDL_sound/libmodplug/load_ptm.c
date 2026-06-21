@@ -64,11 +64,12 @@ static uint32_t BS2WORD(uint16_t w[2]) {
 BOOL CSoundFile_ReadPTM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLength)
 //---------------------------------------------------------------
 {
+	PTMFILEHEADER pfh;
 	DWORD dwMemPos;
 	UINT nOrders;
+	UINT j;
 
 	if ((!lpStream) || (dwMemLength < sizeof(PTMFILEHEADER))) return FALSE;
-	PTMFILEHEADER pfh;
 	SDL_memcpy(&pfh, lpStream, sizeof (pfh));
 
 	pfh.norders = bswapLE16(pfh.norders);
@@ -78,7 +79,7 @@ BOOL CSoundFile_ReadPTM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	pfh.fileflags = bswapLE16(pfh.fileflags);
 	pfh.reserved2 = bswapLE16(pfh.reserved2);
 	pfh.ptmf_id = bswapLE32(pfh.ptmf_id);
-	for (UINT j=0; j<128; j++)
+	for (j=0; j<128; j++)
         {
 	        pfh.patseg[j] = bswapLE16(pfh.patseg[j]);
 	}
@@ -95,14 +96,14 @@ BOOL CSoundFile_ReadPTM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	dwMemPos = SIZEOF_PTMFILEHEADER;
 	nOrders = (pfh.norders < MAX_ORDERS) ? pfh.norders : MAX_ORDERS-1;
 	SDL_memcpy(_this->Order, pfh.orders, nOrders);
-	for (UINT ipan=0; ipan<_this->m_nChannels; ipan++)
+	for (j=0; j<_this->m_nChannels; j++)
 	{
-		_this->ChnSettings[ipan].nVolume = 64;
-		_this->ChnSettings[ipan].nPan = ((pfh.chnpan[ipan] & 0x0F) << 4) + 4;
+		_this->ChnSettings[j].nVolume = 64;
+		_this->ChnSettings[j].nPan = ((pfh.chnpan[j] & 0x0F) << 4) + 4;
 	}
-	for (UINT ismp=0; ismp<_this->m_nSamples; ismp++, dwMemPos += SIZEOF_PTMSAMPLE)
+	for (j=0; j<_this->m_nSamples; j++, dwMemPos += SIZEOF_PTMSAMPLE)
 	{
-		MODINSTRUMENT *pins = &_this->Ins[ismp+1];
+		MODINSTRUMENT *pins = &_this->Ins[j+1];
 		PTMSAMPLE *psmp = (PTMSAMPLE *)(lpStream+dwMemPos);
 
 		pins->nGlobalVol = 64;
@@ -113,10 +114,11 @@ BOOL CSoundFile_ReadPTM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		if ((psmp->sampletype & 3) == 1)
 		{
 			UINT smpflg = RS_PCM8D;
+			DWORD samplepos;
 			pins->nLength = BS2WORD(psmp->length);
 			pins->nLoopStart = BS2WORD(psmp->loopbeg);
 			pins->nLoopEnd = BS2WORD(psmp->loopend);
-			DWORD samplepos = BS2WORD(psmp->fileofs);
+			samplepos = BS2WORD(psmp->fileofs);
 			if (psmp->sampletype & 4) pins->uFlags |= CHN_LOOP;
 			if (psmp->sampletype & 8) pins->uFlags |= CHN_PINGPONGLOOP;
 			if (psmp->sampletype & 16)
@@ -134,15 +136,17 @@ BOOL CSoundFile_ReadPTM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		}
 	}
 	// Reading Patterns
-	for (UINT ipat=0; ipat<pfh.npatterns; ipat++)
+	for (j=0; j<pfh.npatterns; j++)
 	{
-		dwMemPos = ((UINT)pfh.patseg[ipat]) << 4;
+		MODCOMMAND *m;
+		UINT row;
+		dwMemPos = ((UINT)pfh.patseg[j]) << 4;
 		if ((!dwMemPos) || (dwMemPos >= dwMemLength)) continue;
-		_this->PatternSize[ipat] = 64;
-		if ((_this->Patterns[ipat] = CSoundFile_AllocatePattern(64, _this->m_nChannels)) == NULL) break;
+		_this->PatternSize[j] = 64;
+		if ((_this->Patterns[j] = CSoundFile_AllocatePattern(64, _this->m_nChannels)) == NULL) break;
 		//
-		MODCOMMAND *m = _this->Patterns[ipat];
-		for (UINT row=0; ((row < 64) && (dwMemPos < dwMemLength)); )
+		m = _this->Patterns[j];
+		for (row=0; ((row < 64) && (dwMemPos < dwMemLength)); )
 		{
 			UINT b = lpStream[dwMemPos++];
 

@@ -1,5 +1,5 @@
 get_filename_component(GOSU_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
-if(NOT TARGET Gosu::Gosu)
+if (NOT TARGET Gosu::Gosu)
     include("${GOSU_CMAKE_DIR}/GosuTargets.cmake")
-endif()
+endif ()

@@ -229,18 +229,20 @@ BOOL CSoundFile_ReadGDM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	const SAMPLEGDM *psmp;
 	BYTE sflags[256];
 	DWORD pos;
-	UINT npat;
+	UINT npat, i;
+	DWORD ordersPos, patternsPos, samplesPos, sampleDataPos;
+	UINT nPatterns, nOrders, nSamples;
 
 	if ((!lpStream) || (dwMemLength < sizeof(FILEHEADERGDM))) return FALSE;
 	if ((fixu32(pfh->sig) != GDM_SIG) || (fixu32(pfh->sig2) != GMFS_SIG)) return FALSE;
 
-	DWORD ordersPos = fixu32(pfh->ordersPos);
-	DWORD patternsPos = fixu32(pfh->patternsPos);
-	DWORD samplesPos = fixu32(pfh->samplesPos);
-	DWORD sampleDataPos = fixu32(pfh->sampleDataPos);
-	UINT nPatterns = pfh->nPatterns + 1;
-	UINT nOrders = pfh->nOrders + 1;
-	UINT nSamples = pfh->nSamples + 1;
+	ordersPos = fixu32(pfh->ordersPos);
+	patternsPos = fixu32(pfh->patternsPos);
+	samplesPos = fixu32(pfh->samplesPos);
+	sampleDataPos = fixu32(pfh->sampleDataPos);
+	nPatterns = pfh->nPatterns + 1;
+	nOrders = pfh->nOrders + 1;
+	nSamples = pfh->nSamples + 1;
 
 	if (nPatterns > MAX_PATTERNS) nPatterns = MAX_PATTERNS;
 	if (nOrders > MAX_ORDERS) nOrders = MAX_ORDERS;
@@ -265,7 +267,7 @@ BOOL CSoundFile_ReadGDM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	_this->m_nSamples = nSamples;
 
 	// Get initial panning.
-	for (UINT i = 0; i < 32; i++)
+	for (i = 0; i < 32; i++)
 	{
 		if (pfh->panning[i] < 16)
 		{
@@ -276,10 +278,10 @@ BOOL CSoundFile_ReadGDM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 
 	// Samples.
 	psmp = (const SAMPLEGDM *)(lpStream + samplesPos);
-	for (UINT nins = 0; nins < nSamples; nins++)
+	for (i = 0; i < nSamples; i++)
 	{
-		const SAMPLEGDM *smp = &psmp[nins];
-		MODINSTRUMENT *ins = &_this->Ins[nins + 1];
+		const SAMPLEGDM *smp = &psmp[i];
+		MODINSTRUMENT *ins = &_this->Ins[i + 1];
 
 		DWORD len = fixu32(smp->length);
 		DWORD loopstart = fixu32(smp->loopstart);
@@ -290,7 +292,7 @@ BOOL CSoundFile_ReadGDM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		// Note: BWSB and 2GDM don't support LZW, stereo samples, sample panning.
 		if (flags & S_16BIT)
 		{
-			sflags[nins] = RS_PCM16U;
+			sflags[i] = RS_PCM16U;
 			// Due to a 2GDM bug, the sample size is halved.
 			// (Note BWSB doesn't even check for these anyway.)
 			len /= 2;
@@ -298,7 +300,7 @@ BOOL CSoundFile_ReadGDM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			loopend /= 2;
 		}
 		else
-			sflags[nins] = RS_PCM8U;
+			sflags[i] = RS_PCM8U;
 
 		if (len > MAX_SAMPLE_LENGTH) len = MAX_SAMPLE_LENGTH;
 		if (loopend > len) loopend = len;
@@ -379,23 +381,27 @@ BadPattern:
 		UINT patLen = fixu16(lpStream + pos);
 		DWORD patEnd = pos + patLen;
 		UINT row = 0;
+		MODCOMMAND *m;
 
 		pos += 2;
 
 		_this->Patterns[npat] = CSoundFile_AllocatePattern(_this->PatternSize[npat], _this->m_nChannels);
 		if (!_this->Patterns[npat]) break;
 
-		MODCOMMAND *m = _this->Patterns[npat];
+		m = _this->Patterns[npat];
 		while (pos < patEnd)
 		{
 			while (pos < patEnd)
 			{
-				BYTE dat = lpStream[pos++];
+				MODCOMMAND *ev;
+				BYTE channel, dat;
+
+				dat = lpStream[pos++];
 				if (!dat)
 					break;
 
-				BYTE channel = dat & 0x1f;
-				MODCOMMAND *ev = &m[row * _this->m_nChannels + channel];
+				channel = dat & 0x1f;
+				ev = &m[row * _this->m_nChannels + channel];
 
 				if (dat & 0x20)
 				{
@@ -431,15 +437,15 @@ BadPattern:
 
 	// Reading Samples
 	pos = sampleDataPos;
-	for (UINT n = 0; n < nSamples; n++)
+	for (i = 0; i < nSamples; i++)
 	{
-		MODINSTRUMENT *ins = &_this->Ins[n + 1];
+		MODINSTRUMENT *ins = &_this->Ins[i + 1];
 		UINT len = ins->nLength;
 
 		if (pos >= dwMemLength) break;
 		if (len)
 		{
-			len = CSoundFile_ReadSample(_this, ins, sflags[n], (LPSTR)(lpStream + pos), dwMemLength - pos);
+			len = CSoundFile_ReadSample(_this, ins, sflags[i], (LPSTR)(lpStream + pos), dwMemLength - pos);
 			pos += len;
 		}
 	}

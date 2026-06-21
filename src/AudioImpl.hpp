@@ -3,14 +3,14 @@
 #include <Gosu/Audio.hpp>
 #include <Gosu/Platform.hpp>
 #ifdef GOSU_IS_IPHONE
-// Ignore OpenAL deprecation warnings. If macOS stops shipping OpenAL, it's more likely that we bundle our own version
+// Ignore OpenAL deprecation warnings. If iOS stops shipping OpenAL, it's more likely that we bundle our own version
 // of it than that we switch to another audio API.
 #define OPENAL_DEPRECATED
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
 #else
-#include <AL/al.h>
-#include <AL/alc.h>
+#include <al.h>
+#include <alc.h>
 #endif
 
 namespace Gosu
@@ -18,8 +18,6 @@ namespace Gosu
     void al_initialize();
     bool al_initialized();
 
-    // Will initialize OpenAL if necessary.
-    ALCdevice* al_device();
     // Will initialize OpenAL if necessary.
     ALCcontext* al_context();
 

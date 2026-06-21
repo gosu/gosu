@@ -1,47 +1,39 @@
 #pragma once
 
-#include <Gosu/Platform.hpp>
+#include <compare>
 #include <cstdint>
+#include <ostream>
 
 namespace Gosu
 {
-    /// Represents an RGBA color value with 8 bit for each channel.
-    /// Can be implicitly constructed from literals of the form 0xaarrggbb.
+    /// Color represents an RGBA 32-bit color value, using 8 bit for each channel.
+    /// Colors can be implicitly constructed from literals of the form 0xaarrggbb.
     struct Color
     {
-        static const unsigned GL_FORMAT = 0x1908; // GL_RGBA
+        using Channel = std::uint8_t;
+        Channel red = 0, green = 0, blue = 0, alpha = 0;
 
-        typedef std::uint8_t Channel;
+        Color() = default;
 
-        Channel red, green, blue, alpha;
-
-        constexpr Color()
-        : red{0},
-          green{0},
-          blue{0},
-          alpha{0}
-        {
-        }
-
-        /// Conversion constructor for literals of the form 0xaarrggbb.
+        /// Implicit conversion constructor for literals of the form 0xaarrggbb.
         // NOLINTNEXTLINE: We want to allow implicit conversions.
-        constexpr Color(std::uint32_t argb)
-        : red{static_cast<Channel>(argb >> 16)},
-          green{static_cast<Channel>(argb >> 8)},
-          blue{static_cast<Channel>(argb >> 0)},
-          alpha{static_cast<Channel>(argb >> 24)}
+        Color(std::uint32_t argb)
+            : red(argb >> 16),
+              green(argb >> 8),
+              blue(argb >> 0),
+              alpha(argb >> 24)
         {
         }
 
-        constexpr Color(Channel red, Channel green, Channel blue)
-        : red{red},
-          green{green},
-          blue{blue},
-          alpha{255}
+        Color(Channel red, Channel green, Channel blue)
+            : red(red),
+              green(green),
+              blue(blue),
+              alpha(255)
         {
         }
 
-        Color with_alpha(Channel new_alpha)
+        Color with_alpha(Channel new_alpha) const
         {
             Color result = *this;
             result.alpha = new_alpha;
@@ -49,13 +41,14 @@ namespace Gosu
         }
 
         /// Constructs a color from the given hue/saturation/value triple.
-        /// Ranges of these values are given as 0..360, 0..1, and 0..1, respectively.
+        /// s and v will be clamped into the range 0...1, and h will be normalized to 0...360.
         static Color from_hsv(double h, double s, double v);
 
         /// Returns the hue of the color, in the usual range of 0..360.
         double hue() const;
 
         /// Changes the current color so hue() will return h.
+        /// Note: This is a no-op when called on a grey tone (saturation() == 0).
         void set_hue(double h);
 
         /// Returns the saturation of the color, in the range of 0..1.
@@ -73,7 +66,8 @@ namespace Gosu
         /// Returns the color in 0xaarrggbb representation.
         std::uint32_t argb() const { return alpha << 24 | red << 16 | green << 8 | blue; }
 
-        /// Returns the color in 0x00bbggrr representation. Useful for Win32 programming.
+        /// Returns the color in 0xbbggrr representation. Useful for Win32 programming, as this
+        /// corresponds to the COLORREF type that can be created using the RGB() macro.
         std::uint32_t bgr() const { return blue << 16 | green << 8 | red; }
 
         /// Returns the color in 0xaabbggrr representation.
@@ -96,15 +90,12 @@ namespace Gosu
         static const Color FUCHSIA;
         /// Same as Color::AQUA.
         static const Color CYAN;
+
+        std::strong_ordering operator<=>(const Color&) const = default;
     };
 
     // Ensure that we can pass vectors of Gosu::Color straight to OpenGL and back.
     static_assert(sizeof(Color) == sizeof(std::uint32_t));
-
-#ifndef SWIG
-    inline bool operator<(Color a, Color b) { return a.gl() < b.gl(); }
-    inline bool operator==(Color a, Color b) { return a.gl() == b.gl(); }
-    inline bool operator!=(Color a, Color b) { return a.gl() != b.gl(); }
 
     /// Interpolates linearly between two colors, with a given weight towards
     /// the second color.
@@ -113,5 +104,6 @@ namespace Gosu
     /// Combines two colors as if their channels were mapped to the 0..1 range
     /// and then multiplied with each other.
     Color multiply(Color a, Color b);
-#endif
+
+    std::ostream& operator<<(std::ostream& stream, Color color);
 }

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2022 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -60,7 +60,11 @@ extern "C" {
  * - `parent`: the containing directory of the bundle. For example:
  *   `/Applications/SDLApp/`
  *
- * The returned path is guaranteed to end with a path separator ('\' on
+ * **Nintendo 3DS Specific Functionality**: This function returns "romfs"
+ * directory of the application as it is uncommon to store resources outside
+ * the executable. As such it is not a writable directory.
+ *
+ * The returned path is guaranteed to end with a path separator ('\\' on
  * Windows, '/' on most other platforms).
  *
  * The pointer returned is owned by the caller. Please call SDL_free() on the
@@ -92,7 +96,7 @@ extern DECLSPEC char *SDLCALL SDL_GetBasePath(void);
  *
  * `C:\\Users\\bob\\AppData\\Roaming\\My Company\\My Program Name\\`
  *
- * On Linux, the string might look like"
+ * On Linux, the string might look like:
  *
  * `/home/bob/.local/share/My Program Name/`
  *
@@ -116,7 +120,7 @@ extern DECLSPEC char *SDLCALL SDL_GetBasePath(void);
  * - ...only use letters, numbers, and spaces. Avoid punctuation like "Game
  *   Name 2: Bad Guy's Revenge!" ... "Game Name 2" is sufficient.
  *
- * The returned path is guaranteed to end with a path separator ('\' on
+ * The returned path is guaranteed to end with a path separator ('\\' on
  * Windows, '/' on most other platforms).
  *
  * The pointer returned is owned by the caller. Please call SDL_free() on the

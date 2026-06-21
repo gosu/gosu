@@ -1,30 +1,32 @@
 #include <Gosu/Platform.hpp>
 #if defined(GOSU_IS_IPHONE)
 
-#import "GosuGLView.hpp"
 #import <Gosu/Input.hpp>
 #import <Gosu/TextInput.hpp>
-
+#import "GosuGLView.hpp"
+#import "GraphicsImpl.hpp"
+#import "OpenGLContext.hpp"
 #import <OpenGLES/EAGL.h>
 #import <OpenGLES/EAGLDrawable.h>
-#import <OpenGLES/ES1/gl.h>
-#import <OpenGLES/ES1/glext.h>
 #import <QuartzCore/QuartzCore.h>
-
 
 static EAGLContext __weak* globalContext;
 
 namespace Gosu
 {
-    void ensure_current_context()
+    OpenGLContext::OpenGLContext(bool)
     {
+        // Gosu does not support multithreading on iOS.
+        if (![NSThread isMainThread]) {
+            throw std::logic_error("Multi-threaded OpenGL access is not supported on iOS");
+        }
+
         [EAGLContext setCurrentContext:globalContext];
     }
-    
-    int clip_rect_base_factor()
+
+    OpenGLContext::~OpenGLContext()
     {
-        static int result = [UIScreen mainScreen].scale;
-        return result;
+        // Don't bother unsetting anything.
     }
 }
 
@@ -89,7 +91,7 @@ namespace Gosu
     [EAGLContext setCurrentContext:_context];
     [self destroyFramebuffer];
     [self createFramebuffer];
-    self.contentScaleFactor = Gosu::clip_rect_base_factor();
+    self.contentScaleFactor = [UIScreen mainScreen].scale;
 }
 
 - (BOOL)createFramebuffer

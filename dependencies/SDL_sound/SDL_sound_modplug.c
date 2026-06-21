@@ -56,7 +56,7 @@ static const char *extensions_modplug[] =
 
 
 
-static int MODPLUG_init(void)
+static SDL_bool MODPLUG_init(void)
 {
     return ModPlug_Init();  /* success. */
 } /* MODPLUG_init */
@@ -121,14 +121,26 @@ static int MODPLUG_open(Sound_Sample *sample, const char *ext)
 
     SDL_memcpy(&sample->actual, &sample->desired, sizeof (Sound_AudioInfo));
     if (sample->actual.rate == 0) sample->actual.rate = 44100;
-    if (sample->actual.channels == 0) sample->actual.channels = 2;
+    if (sample->actual.channels != 1) sample->actual.channels = 2;
     if (sample->actual.format == 0) sample->actual.format = AUDIO_S16SYS;
 
-    SDL_zero(settings);
+    switch (sample->actual.format) {
+    case AUDIO_U8:
+    case AUDIO_S8:
+        sample->actual.format = AUDIO_U8;
+        break;
+    case AUDIO_S32MSB:
+    case AUDIO_S32LSB:
+    case AUDIO_F32MSB:
+    case AUDIO_F32LSB:
+        sample->actual.format = AUDIO_S32SYS;
+        break;
+    default:
+        sample->actual.format = AUDIO_S16SYS;
+        break;
+    }
 
-    settings.mChannels=sample->actual.channels;
-    settings.mFrequency=sample->actual.rate;
-    settings.mBits = sample->actual.format & 0xFF;
+    SDL_zero(settings);
 
     /* The settings will require some experimenting. I've borrowed some
         of them from the XMMS ModPlug plugin. */
@@ -143,9 +155,9 @@ static int MODPLUG_open(Sound_Sample *sample, const char *ext)
     settings.mBassRange = 30;
     settings.mSurroundDepth = 20;
     settings.mSurroundDelay = 20;
-    settings.mChannels = 2;
-    settings.mBits = 16;
-    settings.mFrequency = 44100;
+    settings.mChannels = sample->actual.channels;
+    settings.mBits = SDL_AUDIO_BITSIZE(sample->actual.format);
+    settings.mFrequency = sample->actual.rate;
     settings.mResamplingMode = MODPLUG_RESAMPLE_FIR;
     settings.mLoopCount = 0;
 

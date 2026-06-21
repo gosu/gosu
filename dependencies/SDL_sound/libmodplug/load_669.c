@@ -16,7 +16,7 @@
 typedef struct tagFILEHEADER669
 {
 	WORD sig;				// 'if' or 'JN'
-	signed char songmessage[108];	// Song Message
+	char songmessage[108];			// Song Message
 	BYTE samples;			// number of samples (1-64)
 	BYTE patterns;			// number of patterns (1-128)
 	BYTE restartpos;
@@ -50,17 +50,19 @@ BOOL CSoundFile_Read669(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	const FILEHEADER669 *pfh = (const FILEHEADER669 *)lpStream;
 	const SAMPLE669 *psmp = (const SAMPLE669 *)(lpStream + 0x1F1);
 	DWORD dwMemPos = 0;
+	DWORD donttouchme;
+	UINT i;
 
 	if ((!lpStream) || (dwMemLength < sizeof(FILEHEADER669))) return FALSE;
 	if ((bswapLE16(pfh->sig) != 0x6669) && (bswapLE16(pfh->sig) != 0x4E4A)) return FALSE;
 //	b669Ext = (bswapLE16(pfh->sig) == 0x4E4A) ? TRUE : FALSE;
 	if ((!pfh->samples) || (pfh->samples > 64) || (pfh->restartpos >= 128)
 	 || (!pfh->patterns) || (pfh->patterns > 128)) return FALSE;
-	DWORD donttouchme = 0x1F1 + pfh->samples * sizeof(SAMPLE669) + pfh->patterns * 0x600;
+	donttouchme = 0x1F1 + pfh->samples * sizeof(SAMPLE669) + pfh->patterns * 0x600;
 	if (donttouchme > dwMemLength) return FALSE;
-	for (UINT ichk=0; ichk<pfh->samples; ichk++)
+	for (i=0; i<pfh->samples; i++)
 	{
-		DWORD len = lengthArrayToDWORD(psmp[ichk].length);
+		DWORD len = lengthArrayToDWORD(psmp[i].length);
 		donttouchme += len;
 	}
 	if (donttouchme > dwMemLength) return FALSE;
@@ -73,7 +75,7 @@ BOOL CSoundFile_Read669(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	_this->m_nDefaultSpeed = 6;
 	_this->m_nChannels = 8;
 	_this->m_nSamples = pfh->samples;
-	for (UINT nins=1; nins<=_this->m_nSamples; nins++, psmp++)
+	for (i=1; i<=_this->m_nSamples; i++, psmp++)
 	{
 		DWORD len = lengthArrayToDWORD(psmp->length);
 		DWORD loopstart = lengthArrayToDWORD(psmp->loopstart);
@@ -82,45 +84,48 @@ BOOL CSoundFile_Read669(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		if ((loopend > len) && (!loopstart)) loopend = 0;
 		if (loopend > len) loopend = len;
 		if (loopstart + 4 >= loopend) loopstart = loopend = 0;
-		_this->Ins[nins].nLength = len;
-		_this->Ins[nins].nLoopStart = loopstart;
-		_this->Ins[nins].nLoopEnd = loopend;
-		if (loopend) _this->Ins[nins].uFlags |= CHN_LOOP;
-		_this->Ins[nins].nVolume = 256;
-		_this->Ins[nins].nGlobalVol = 64;
-		_this->Ins[nins].nPan = 128;
+		_this->Ins[i].nLength = len;
+		_this->Ins[i].nLoopStart = loopstart;
+		_this->Ins[i].nLoopEnd = loopend;
+		if (loopend) _this->Ins[i].uFlags |= CHN_LOOP;
+		_this->Ins[i].nVolume = 256;
+		_this->Ins[i].nGlobalVol = 64;
+		_this->Ins[i].nPan = 128;
 	}
 	// Reading Orders
 	SDL_memcpy(_this->Order, pfh->orders, 128);
 	_this->m_nRestartPos = pfh->restartpos;
 	if (_this->Order[_this->m_nRestartPos] >= pfh->patterns) _this->m_nRestartPos = 0;
 	// Reading Pattern Break Locations
-	for (UINT npan=0; npan<8; npan++)
+	for (i=0; i<8; i++)
 	{
-		_this->ChnSettings[npan].nPan = (npan & 1) ? 0x30 : 0xD0;
-		_this->ChnSettings[npan].nVolume = 64;
+		_this->ChnSettings[i].nPan = (i & 1) ? 0x30 : 0xD0;
+		_this->ChnSettings[i].nVolume = 64;
 	}
 	// Reading Patterns
 	dwMemPos = 0x1F1 + pfh->samples * 25;
-	for (UINT npat=0; npat<pfh->patterns; npat++)
+	for (i=0; i<pfh->patterns; i++)
 	{
-		_this->Patterns[npat] = CSoundFile_AllocatePattern(64, _this->m_nChannels);
-		if (!_this->Patterns[npat]) break;
-		_this->PatternSize[npat] = 64;
-		MODCOMMAND *m = _this->Patterns[npat];
-		const BYTE *p = lpStream + dwMemPos;
-		for (UINT row=0; row<64; row++)
+		MODCOMMAND *m;
+		const BYTE *p;
+		UINT row, j;
+		_this->Patterns[i] = CSoundFile_AllocatePattern(64, _this->m_nChannels);
+		if (!_this->Patterns[i]) break;
+		_this->PatternSize[i] = 64;
+		m = _this->Patterns[i];
+		p = lpStream + dwMemPos;
+		for (row=0; row<64; row++)
 		{
 			MODCOMMAND *mspeed = m;
-			if ((row == pfh->breaks[npat]) && (row != 63))
+			if ((row == pfh->breaks[i]) && (row != 63))
 			{
-				for (UINT i=0; i<8; i++)
+				for (j=0; j<8; j++)
 				{
-					m[i].command = CMD_PATTERNBREAK;
-					m[i].param = 0;
+					m[j].command = CMD_PATTERNBREAK;
+					m[j].param = 0;
 				}
 			}
-			for (UINT n=0; n<8; n++, m++, p+=3)
+			for (j=0; j<8; j++, m++, p+=3)
 			{
 				UINT note = p[0] >> 2;
 				UINT instr = ((p[0] & 0x03) << 4) | (p[1] >> 4);
@@ -163,10 +168,10 @@ BOOL CSoundFile_Read669(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			}
 			if ((!row) && (mspeed))
 			{
-				for (UINT i=0; i<8; i++) if (!mspeed[i].command)
+				for (j=0; j<8; j++) if (!mspeed[j].command)
 				{
-					mspeed[i].command = CMD_SPEED;
-					mspeed[i].param = pfh->tempolist[npat];
+					mspeed[j].command = CMD_SPEED;
+					mspeed[j].param = pfh->tempolist[j];
 					break;
 				}
 			}
@@ -174,11 +179,11 @@ BOOL CSoundFile_Read669(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		dwMemPos += 0x600;
 	}
 	// Reading Samples
-	for (UINT n=1; n<=_this->m_nSamples; n++)
+	for (i=1; i<=_this->m_nSamples; i++)
 	{
-		UINT len = _this->Ins[n].nLength;
+		UINT len = _this->Ins[i].nLength;
 		if (dwMemPos >= dwMemLength) break;
-		if (len > 4) CSoundFile_ReadSample(_this, &_this->Ins[n], RS_PCM8U, (LPSTR)(lpStream+dwMemPos), dwMemLength - dwMemPos);
+		if (len > 4) CSoundFile_ReadSample(_this, &_this->Ins[i], RS_PCM8U, (LPSTR)(lpStream+dwMemPos), dwMemLength - dwMemPos);
 		dwMemPos += len;
 	}
 	return TRUE;

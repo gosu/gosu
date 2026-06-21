@@ -45,7 +45,10 @@ BOOL CSoundFile_ReadMTM(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 //-----------------------------------------------------------
 {
 	MTMHEADER *pmh = (MTMHEADER *)lpStream;
+	LPCBYTE pTracks;
+	LPWORD pSeq;
 	DWORD dwMemPos = 66;
+	UINT i, j;
 
 	if ((!lpStream) || (dwMemLength < 0x100)) return FALSE;
 	if ((SDL_strncmp(pmh->id, "MTM", 3)) || (pmh->numchannels > 32)
@@ -60,12 +63,13 @@ BOOL CSoundFile_ReadMTM(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 	_this->m_nSamples = pmh->numsamples;
 	_this->m_nChannels = pmh->numchannels;
 	// Reading instruments
-	for	(UINT i=1; i<=_this->m_nSamples; i++)
+	for	(i=1; i<=_this->m_nSamples; i++)
 	{
 		MTMSAMPLE *pms = (MTMSAMPLE *)(lpStream + dwMemPos);
+		DWORD len;
 		_this->Ins[i].nVolume = pms->volume << 2;
 		_this->Ins[i].nGlobalVol = 64;
-		DWORD len = pms->length;
+		len = pms->length;
 		if ((len > 4) && (len <= MAX_SAMPLE_LENGTH))
 		{
 			_this->Ins[i].nLength = len;
@@ -89,32 +93,34 @@ BOOL CSoundFile_ReadMTM(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 		dwMemPos += 37;
 	}
 	// Setting Channel Pan Position
-	for (UINT ich=0; ich<_this->m_nChannels; ich++)
+	for (i=0; i<_this->m_nChannels; i++)
 	{
-		_this->ChnSettings[ich].nPan = ((pmh->panpos[ich] & 0x0F) << 4) + 8;
-		_this->ChnSettings[ich].nVolume = 64;
+		_this->ChnSettings[i].nPan = ((pmh->panpos[i] & 0x0F) << 4) + 8;
+		_this->ChnSettings[i].nVolume = 64;
 	}
 	// Reading pattern order
 	SDL_memcpy(_this->Order, lpStream + dwMemPos, pmh->lastorder+1);
 	dwMemPos += 128;
 	// Reading Patterns
-	LPCBYTE pTracks = lpStream + dwMemPos;
+	pTracks = lpStream + dwMemPos;
 	dwMemPos += 192 * pmh->numtracks;
-	LPWORD pSeq = (LPWORD)(lpStream + dwMemPos);
-	for (UINT pat=0; pat<=pmh->lastpattern; pat++)
+	pSeq = (LPWORD)(lpStream + dwMemPos);
+	for (j=0; j<=pmh->lastpattern; j++)
 	{
-		_this->PatternSize[pat] = 64;
-		if ((_this->Patterns[pat] = CSoundFile_AllocatePattern(64, _this->m_nChannels)) == NULL) break;
-		for (UINT n=0; n<32; n++) if ((pSeq[n]) && (pSeq[n] <= pmh->numtracks) && (n < _this->m_nChannels))
+		UINT n;
+		_this->PatternSize[j] = 64;
+		if ((_this->Patterns[j] = CSoundFile_AllocatePattern(64, _this->m_nChannels)) == NULL) break;
+		for (n=0; n<32; n++) if ((pSeq[n]) && (pSeq[n] <= pmh->numtracks) && (n < _this->m_nChannels))
 		{
 			LPCBYTE p = pTracks + 192 * (pSeq[n]-1);
-			MODCOMMAND *m = _this->Patterns[pat] + n;
-			for (UINT i=0; i<64; i++, m+=_this->m_nChannels, p+=3)
+			MODCOMMAND *m = _this->Patterns[j] + n;
+			for (i=0; i<64; i++, m+=_this->m_nChannels, p+=3)
 			{
+				UINT cmd, param;
 				if (p[0] & 0xFC) m->note = (p[0] >> 2) + 37;
 				m->instr = ((p[0] & 0x03) << 4) | (p[1] >> 4);
-				UINT cmd = p[1] & 0x0F;
-				UINT param = p[2];
+				cmd = p[1] & 0x0F;
+				param = p[2];
 				if (cmd == 0x0A)
 				{
 					if (param & 0xF0) param &= 0xF0; else param &= 0x0F;
@@ -129,10 +135,10 @@ BOOL CSoundFile_ReadMTM(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 	dwMemPos += 64*(pmh->lastpattern+1);
 	dwMemPos += pmh->commentsize;
 	// Reading Samples
-	for (UINT ismp=1; ismp<=_this->m_nSamples; ismp++)
+	for (i=1; i<=_this->m_nSamples; i++)
 	{
 		if (dwMemPos >= dwMemLength) break;
-		dwMemPos += CSoundFile_ReadSample(_this, &_this->Ins[ismp], (_this->Ins[ismp].uFlags & CHN_16BIT) ? RS_PCM16U : RS_PCM8U,
+		dwMemPos += CSoundFile_ReadSample(_this, &_this->Ins[i], (_this->Ins[i].uFlags & CHN_16BIT) ? RS_PCM16U : RS_PCM8U,
 								(LPSTR)(lpStream + dwMemPos), dwMemLength - dwMemPos);
 	}
 	_this->m_nMinPeriod = 64;

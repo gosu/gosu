@@ -122,6 +122,19 @@ typedef struct _MT2GROUP
 #pragma pack()
 
 
+static int calcNumOnes(int number) {
+	int cnt = 0;
+
+	while(number)
+	{
+		number &= (number -1);
+		cnt ++;
+	}
+
+	return(cnt);
+}
+
+
 static VOID ConvertMT2Command(CSoundFile *that, MODCOMMAND *m, const MT2COMMAND *p)
 //---------------------------------------------------------------------------
 {
@@ -187,8 +200,9 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 	const MT2DRUMSDATA *pdd;
 	const MT2INSTRUMENT *InstrMap[255];
 	const MT2SAMPLE *SampleMap[256];
+	UINT i, j;
 
-	if ((!lpStream) || (dwMemLength < sizeof(MT2FILEHEADER))
+	if ((!lpStream) || (dwMemLength < sizeof(MT2FILEHEADER) + 4)
 	 || (pfh->dwMT20 != 0x3032544D)
 	 || (pfh->wVersion < 0x0200) || (pfh->wVersion >= 0x0300)
 	 || (pfh->wChannels < 4) || (pfh->wChannels > 64)) return FALSE;
@@ -202,9 +216,9 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 	{
 		_this->m_nDefaultTempo = 110250 / pfh->wSamplesPerTick;
 	}
-	for (UINT iOrd=0; iOrd<MAX_ORDERS; iOrd++)
+	for (j=0; j<MAX_ORDERS; j++)
 	{
-		_this->Order[iOrd] = (BYTE)((iOrd < pfh->nOrders) ? pfh->Orders[iOrd] : 0xFF);
+		_this->Order[j] = (BYTE)((j < pfh->nOrders) ? pfh->Orders[j] : 0xFF);
 	}
 	dwMemPos = sizeof(MT2FILEHEADER);
 	if (dwMemPos+2 > dwMemLength) return TRUE;
@@ -240,25 +254,31 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 	}
 	// Load Patterns
 	dwMemPos = dwExtraDataPos + nExtraDataLen;
-	for (UINT iPat=0; iPat<pfh->wPatterns; iPat++) if (dwMemPos < dwMemLength-6)
+	for (j=0; j<pfh->wPatterns; j++) if (dwMemPos < dwMemLength-6)
 	{
 		const MT2PATTERN *pmp = (MT2PATTERN *)(lpStream+dwMemPos);
 		UINT wDataLen = (pmp->wDataLen + 1) & ~1;
+		UINT nLines;
 		dwMemPos += 6;
 		if (dwMemPos > dwMemLength - wDataLen || wDataLen > dwMemLength) break;
-		UINT nLines = pmp->wLines;
-		if ((iPat < MAX_PATTERNS) && (nLines > 0) && (nLines <= 256))
+
+		nLines = pmp->wLines;
+		if ((j < MAX_PATTERNS) && (nLines > 0) && (nLines <= 256))
 		{
-			_this->PatternSize[iPat] = nLines;
-			_this->Patterns[iPat] = CSoundFile_AllocatePattern(nLines, _this->m_nChannels);
-			if (!_this->Patterns[iPat]) return TRUE;
-			MODCOMMAND *m = _this->Patterns[iPat];
-			UINT len = wDataLen;
+			MODCOMMAND *m;
+			UINT len;
+			_this->PatternSize[j] = nLines;
+			_this->Patterns[j] = CSoundFile_AllocatePattern(nLines, _this->m_nChannels);
+			if (!_this->Patterns[j]) return TRUE;
+			m = _this->Patterns[j];
+			len = wDataLen;
+			if (len <= 4) return TRUE;
+
 			if (pfh->fulFlags & 1) // Packed Patterns
 			{
 				const BYTE *p = lpStream+dwMemPos;
 				UINT pos = 0, row=0, ch=0;
-				while (pos < len)
+				while (pos < len - 4)
 				{
 					MT2COMMAND cmd;
 					UINT infobyte = p[pos++];
@@ -273,13 +293,14 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 					{
 						UINT patpos = row*_this->m_nChannels+ch;
 						cmd.note = cmd.instr = cmd.vol = cmd.pan = cmd.fxcmd = cmd.fxparam1 = cmd.fxparam2 = 0;
-						if ((infobyte & 1)  && (pos < len)) cmd.note = p[pos++];
-						if ((infobyte & 2)  && (pos < len)) cmd.instr = p[pos++];
-						if ((infobyte & 4)  && (pos < len)) cmd.vol = p[pos++];
-						if ((infobyte & 8)  && (pos < len)) cmd.pan = p[pos++];
-						if ((infobyte & 16) && (pos < len)) cmd.fxcmd = p[pos++];
-						if ((infobyte & 32) && (pos < len)) cmd.fxparam1 = p[pos++];
-						if ((infobyte & 64) && (pos < len)) cmd.fxparam2 = p[pos++];
+						if (pos >= len - calcNumOnes(infobyte & 0x7F)) break;
+						if (infobyte & 1) cmd.note = p[pos++];
+						if (infobyte & 2) cmd.instr = p[pos++];
+						if (infobyte & 4) cmd.vol = p[pos++];
+						if (infobyte & 8) cmd.pan = p[pos++];
+						if (infobyte & 16) cmd.fxcmd = p[pos++];
+						if (infobyte & 32) cmd.fxparam1 = p[pos++];
+						if (infobyte & 64) cmd.fxparam2 = p[pos++];
 						ConvertMT2Command(_this, &m[patpos], &cmd);
 					}
 					row += rptcount+1;
@@ -306,10 +327,11 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 	// Skip Drum Patterns
 	if (pdd)
 	{
-		for (UINT iDrm=0; iDrm<pdd->wDrumPatterns; iDrm++)
+		for (j=0; j<pdd->wDrumPatterns; j++)
 		{
+			UINT nLines;
 			if (dwMemPos > dwMemLength-2) return TRUE;
-			UINT nLines = *(WORD *)(lpStream+dwMemPos);
+			nLines = *(WORD *)(lpStream+dwMemPos);
 			dwMemPos += 2 + nLines * 32;
 		}
 	}
@@ -320,14 +342,15 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 		if (pfh->fulFlags & 0x10) nAutoCount++; // Master Automation
 		if ((pfh->fulFlags & 0x08) && (pdd)) nAutoCount += 8; // Drums Automation
 		nAutoCount *= pfh->wPatterns;
-		for (UINT iAuto=0; iAuto<nAutoCount; iAuto++)
+		for (j=0; j<nAutoCount; j++)
 		{
+			const MT2AUTOMATION *pma;
 			if (dwMemPos+12 >= dwMemLength) return TRUE;
-			const MT2AUTOMATION *pma = (MT2AUTOMATION *)(lpStream+dwMemPos);
+			pma = (MT2AUTOMATION *)(lpStream+dwMemPos);
 			dwMemPos += (pfh->wVersion <= 0x201) ? 4 : 8;
-			for (UINT iEnv=0; iEnv<14; iEnv++)
+			for (i=0; i<14; i++)
 			{
-				if (pma->dwFlags & (1 << iEnv))
+				if (pma->dwFlags & (1 << i))
 				{
 					dwMemPos += 260;
 				}
@@ -337,20 +360,22 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 	// Load Instruments
 	SDL_memset(InstrMap, 0, sizeof(InstrMap));
 	_this->m_nInstruments = (pfh->wInstruments < MAX_INSTRUMENTS) ? pfh->wInstruments : MAX_INSTRUMENTS-1;
-	for (UINT iIns=1; iIns<=255; iIns++)
+	for (j=1; j<=255; j++)
 	{
+		const MT2INSTRUMENT *pmi;
+		INSTRUMENTHEADER *penv;
 		if (dwMemPos+36 > dwMemLength) return TRUE;
-		const MT2INSTRUMENT *pmi = (MT2INSTRUMENT *)(lpStream+dwMemPos);
-		INSTRUMENTHEADER *penv = NULL;
-		if (iIns <= _this->m_nInstruments)
+		pmi = (MT2INSTRUMENT *)(lpStream+dwMemPos);
+		penv = NULL;
+		if (j <= _this->m_nInstruments)
 		{
 			penv = (INSTRUMENTHEADER *) SDL_calloc(1,sizeof(INSTRUMENTHEADER));
-			_this->Headers[iIns] = penv;
+			_this->Headers[j] = penv;
 			if (penv)
 			{
 				penv->nGlobalVol = 64;
 				penv->nPan = 128;
-				for (UINT i=0; i<NOTE_MAX; i++)
+				for (i=0; i<NOTE_MAX; i++)
 				{
 					penv->NoteMap[i] = i+1;
 				}
@@ -360,15 +385,15 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 		if (pmi->dwDataLen > 0)
 		{
 			if (dwMemPos + sizeof(MT2INSTRUMENT) - 4 > dwMemLength) return TRUE;
-			InstrMap[iIns-1] = pmi;
-			if (penv)
+			InstrMap[j-1] = pmi;
+			if (penv && pmi->dwDataLen >= sizeof(MT2INSTRUMENT) - 40)
 			{
+				MT2ENVELOPE *pehdr[4];
+				WORD *pedata[4];
 				penv->nFadeOut = pmi->wFadeOut;
 				penv->nNNA = pmi->wNNA & 3;
 				penv->nDCT = (pmi->wNNA>>8) & 3;
 				penv->nDNA = (pmi->wNNA>>12) & 3;
-				MT2ENVELOPE *pehdr[4];
-				WORD *pedata[4];
 				if (pfh->wVersion <= 0x201)
 				{
 					DWORD dwEnvPos = dwMemPos + sizeof(MT2INSTRUMENT) - 4;
@@ -383,7 +408,7 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 				{
 					DWORD dwEnvPos = dwMemPos + sizeof(MT2INSTRUMENT);
 					if (dwEnvPos > dwMemLength) return TRUE;
-					for (UINT i=0; i<4; i++)
+					for (i=0; i<4; i++)
 					{
 						if (pmi->wEnvFlags1 & (1<<i))
 						{
@@ -397,14 +422,18 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 							pedata[i] = NULL;
 						}
 					}
+
+					// envelopes exceed file length?
+					if (dwEnvPos > dwMemLength) return TRUE;
+
 				}
 				// Load envelopes
-				for (UINT iEnv=0; iEnv<4; iEnv++) if (pehdr[iEnv])
+				for (i=0; i<4; i++) if (pehdr[i])
 				{
-					const MT2ENVELOPE *pme = pehdr[iEnv];
+					const MT2ENVELOPE *pme = pehdr[i];
 					WORD *pEnvPoints = NULL;
 					BYTE *pEnvData = NULL;
-					switch(iEnv)
+					switch(i)
 					{
 					// Volume Envelope
 					case 0:
@@ -434,7 +463,7 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 
 					// Pitch/Filter envelope
 					default:
-						if (pme->nFlags & 1) penv->dwFlags |= (iEnv==3) ? (ENV_PITCH|ENV_FILTER) : ENV_PITCH;
+						if (pme->nFlags & 1) penv->dwFlags |= (i==3) ? (ENV_PITCH|ENV_FILTER) : ENV_PITCH;
 						if (pme->nFlags & 2) penv->dwFlags |= ENV_PITCHSUSTAIN;
 						if (pme->nFlags & 4) penv->dwFlags |= ENV_PITCHLOOP;
 						penv->nPitchEnv = (pme->nPoints > 16) ? 16 : pme->nPoints;
@@ -445,13 +474,14 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 						pEnvData = penv->PitchEnv;
 					}
 					// Envelope data
-					if ((pEnvPoints) && (pEnvData) && (pedata[iEnv]))
+					if ((pEnvPoints) && (pEnvData) && (pedata[i]))
 					{
-						WORD *psrc = pedata[iEnv];
-						for (UINT i=0; i<16; i++)
+						WORD *psrc = pedata[i];
+						UINT k = 0;
+						for (; k<16; k++)
 						{
-							pEnvPoints[i] = psrc[i*2];
-							pEnvData[i] = (BYTE)psrc[i*2+1];
+							pEnvPoints[k] = psrc[k*2];
+							pEnvData[k] = (BYTE)psrc[k*2+1];
 						}
 					}
 				}
@@ -465,17 +495,18 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 	}
 	SDL_memset(SampleMap, 0, sizeof(SampleMap));
 	_this->m_nSamples = (pfh->wSamples < MAX_SAMPLES) ? pfh->wSamples : MAX_SAMPLES-1;
-	for (UINT iSmp=1; iSmp<=256; iSmp++)
+	for (j=1; j<=256; j++)
 	{
-		if (dwMemPos+36 > dwMemLength) return TRUE;
-		const MT2SAMPLE *pms = (MT2SAMPLE *)(lpStream+dwMemPos);
+		const MT2SAMPLE *pms;
+		if (dwMemPos > dwMemLength - 36) return TRUE;
+		pms = (MT2SAMPLE *)(lpStream+dwMemPos);
 		if (pms->dwDataLen > dwMemLength - (dwMemPos+36)) return TRUE;
 		if (pms->dwDataLen > 0)
 		{
-			SampleMap[iSmp-1] = pms;
-			if (iSmp < MAX_SAMPLES)
+			SampleMap[j-1] = pms;
+			if (j < MAX_SAMPLES)
 			{
-				MODINSTRUMENT *psmp = &_this->Ins[iSmp];
+				MODINSTRUMENT *psmp = &_this->Ins[j];
 				psmp->nGlobalVol = 64;
 				if (dwMemPos+sizeof(MT2SAMPLE) > dwMemLength) return TRUE;
 				psmp->nVolume = (pms->wVolume >> 7);
@@ -498,23 +529,23 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 			dwMemPos += 36;
 		}
 	}
-	for (UINT iMap=0; iMap<255; iMap++) if (InstrMap[iMap])
+	for (j=0; j<255; j++) if (InstrMap[j])
 	{
-		const MT2INSTRUMENT *pmi = InstrMap[iMap];
+		const MT2INSTRUMENT *pmi = InstrMap[j];
 		INSTRUMENTHEADER *penv = NULL;
-		if (iMap<_this->m_nInstruments) penv = _this->Headers[iMap+1];
-		for (UINT iGrp=0; iGrp<pmi->wSamples; iGrp++)
+		if (j<_this->m_nInstruments) penv = _this->Headers[j+1];
+		for (i=0; i<pmi->wSamples; i++)
 		{
-			if (dwMemPos+8 > dwMemLength) return TRUE;
-			if (penv)
+			if (penv && dwMemPos < dwMemLength && dwMemPos < dwMemLength - 8)
 			{
 				const MT2GROUP *pmg = (MT2GROUP *)(lpStream+dwMemPos);
-				for (UINT i=0; i<96; i++)
+				UINT k = 0;
+				for (; k<96; k++)
 				{
-					if (pmi->GroupsMapping[i] == iGrp)
+					if (pmi->GroupsMapping[k] == i)
 					{
 						UINT nSmp = pmg->nSmpNo+1;
-						penv->Keyboard[i+12] = (BYTE)nSmp;
+						penv->Keyboard[k+12] = (BYTE)nSmp;
 						if (nSmp <= _this->m_nSamples)
 						{
 							_this->Ins[nSmp].nVibType = pmi->bVibType;
@@ -528,16 +559,16 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 			dwMemPos += 8;
 		}
 	}
-	for (UINT iData=0; iData<256; iData++) if ((iData < _this->m_nSamples) && (SampleMap[iData]))
+	for (j=0; j<256; j++) if ((j < _this->m_nSamples) && (SampleMap[j]))
 	{
-		const MT2SAMPLE *pms = SampleMap[iData];
-		MODINSTRUMENT *psmp = &_this->Ins[iData+1];
+		const MT2SAMPLE *pms = SampleMap[j];
+		MODINSTRUMENT *psmp = &_this->Ins[j+1];
 		if (!(pms->nFlags & 5))
 		{
 			if (psmp->nLength > 0 && dwMemPos < dwMemLength)
 			{
 				UINT rsflags;
-				
+
 				if (pms->nChannels == 2)
 					rsflags = (psmp->uFlags & CHN_16BIT) ? RS_STPCM16D : RS_STPCM8D;
 				else
@@ -546,13 +577,12 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 				dwMemPos += CSoundFile_ReadSample(_this, psmp, rsflags, (LPCSTR)(lpStream+dwMemPos), dwMemLength-dwMemPos);
 			}
 		} else
-		if (dwMemPos+4 < dwMemLength)
+		if (dwMemPos < dwMemLength-4)
 		{
 			UINT nNameLen = *(DWORD *)(lpStream+dwMemPos);
 			dwMemPos += nNameLen + 16;
 		}
-		if (dwMemPos+4 >= dwMemLength) break;
+		if (dwMemPos >= dwMemLength-4) break;
 	}
 	return TRUE;
 }
-

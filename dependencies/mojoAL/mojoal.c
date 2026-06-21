@@ -11,7 +11,10 @@
 #include <math.h>
 #include <float.h>
 
-#ifdef _WIN32
+/* Unless compiling statically into another app, we want the public API
+   to export on Windows. Define these before including al.h, so we override
+   its attempt to mark these as `dllimport`. */
+#if defined(_WIN32) && !defined(AL_LIBTYPE_STATIC)
   #define AL_API __declspec(dllexport)
   #define ALC_API __declspec(dllexport)
 #endif
@@ -20,8 +23,8 @@
   #define M_PI (3.14159265358979323846264338327950288)
 #endif
 
-#include "AL/al.h"
-#include "AL/alc.h"
+#include "al.h"
+#include "alc.h"
 #include "SDL.h"
 
 #ifdef __SSE__  /* if you are on x86 or x86-64, we assume you have SSE1 by now. */
@@ -230,6 +233,12 @@ static int has_neon = 0;
 #endif
 #endif
 
+/* no threads in Emscripten (at the moment...!) */
+#if defined(__EMSCRIPTEN__) && !defined(__EMSCRIPTEN_PTHREADS__)
+#define init_api_lock() 1
+#define grab_api_lock()
+#define ungrab_api_lock()
+#else
 static SDL_mutex *api_lock = NULL;
 
 static int init_api_lock(void)
@@ -264,6 +273,7 @@ static void ungrab_api_lock(void)
     const int rc = SDL_UnlockMutex(api_lock);
     SDL_assert(rc == 0);
 }
+#endif
 
 #define ENTRYPOINT(rettype,fn,params,args) \
     rettype fn params { rettype retval; grab_api_lock(); retval = _##fn args ; ungrab_api_lock(); return retval; }
@@ -417,6 +427,23 @@ typedef struct BufferQueue
     SDL_atomic_t num_items;  /* counts just_queued+head/tail */
 } BufferQueue;
 
+#define pitch_framesize 1024
+#define pitch_framesize2 512
+typedef struct PitchState
+{
+    /* !!! FIXME: this is a wild amount of memory for pitch-shifting! */
+    ALfloat infifo[pitch_framesize];
+    ALfloat outfifo[pitch_framesize];
+    ALfloat workspace[2*pitch_framesize];
+    ALfloat lastphase[pitch_framesize2+1];
+    ALfloat sumphase[pitch_framesize2+1];
+    ALfloat outputaccum[2*pitch_framesize];
+    ALfloat synmagn[pitch_framesize2+1];
+    ALfloat synfreq[pitch_framesize2+1];
+    ALint rover;
+} PitchState;
+
+
 typedef struct ALsource ALsource;
 
 SIMDALIGNEDSTRUCT ALsource
@@ -446,12 +473,14 @@ SIMDALIGNEDSTRUCT ALsource
     ALfloat cone_outer_gain;
     ALbuffer *buffer;
     SDL_AudioStream *stream;  /* for resampling. */
+    SDL_atomic_t total_queued_buffers;   /* everything queued, playing and processed. AL_BUFFERS_QUEUED value. */
     BufferQueue buffer_queue;
     BufferQueue buffer_queue_processed;
     ALsizei offset;  /* offset in bytes for converted stream! */
     ALboolean offset_latched;  /* AL_SEC_OFFSET, etc, say set values apply to next alSourcePlay if not currently playing! */
     ALint queue_channels;
     ALsizei queue_frequency;
+    PitchState *pitchstate;
     ALsource *playlist_next;  /* linked list that contains currently-playing sources! Only touched by mixer thread! */
 };
 
@@ -542,7 +571,7 @@ static void queue_new_buffer_items_recursive(BufferQueue *queue, BufferQueueItem
         return;
     }
 
-    queue_new_buffer_items_recursive(queue, items->next);
+    queue_new_buffer_items_recursive(queue, (BufferQueueItem*)items->next);
     items->next = NULL;
     if (queue->tail) {
         queue->tail->next = items;
@@ -574,7 +603,7 @@ static void source_mark_all_buffers_processed(ALsource *src)
     while (src->buffer_queue.head) {
         void *ptr;
         BufferQueueItem *item = src->buffer_queue.head;
-        src->buffer_queue.head = item->next;
+        src->buffer_queue.head = (BufferQueueItem*)item->next;
         SDL_AtomicAdd(&src->buffer_queue.num_items, -1);
 
         /* Move it to the processed queue for alSourceUnqueueBuffers() to pick up. */
@@ -594,7 +623,7 @@ static void source_release_buffer_queue(ALCcontext *ctx, ALsource *src)
     obtain_newly_queued_buffers(&src->buffer_queue);
     if (src->buffer_queue.tail != NULL) {
         BufferQueueItem *i;
-        for (i = src->buffer_queue.head; i; i = i->next) {
+        for (i = src->buffer_queue.head; i; i = (BufferQueueItem*)i->next) {
             (void) SDL_AtomicDecRef(&i->buffer->refcount);
         }
         src->buffer_queue.tail->next = ctx->device->playback.buffer_queue_pool;
@@ -606,7 +635,7 @@ static void source_release_buffer_queue(ALCcontext *ctx, ALsource *src)
     obtain_newly_queued_buffers(&src->buffer_queue_processed);
     if (src->buffer_queue_processed.tail != NULL) {
         BufferQueueItem *i;
-        for (i = src->buffer_queue_processed.head; i; i = i->next) {
+        for (i = src->buffer_queue_processed.head; i; i = (BufferQueueItem*)i->next) {
             (void) SDL_AtomicDecRef(&i->buffer->refcount);
         }
         src->buffer_queue_processed.tail->next = ctx->device->playback.buffer_queue_pool;
@@ -739,7 +768,7 @@ ALCboolean alcCloseDevice(ALCdevice *device)
 
     item = device->playback.buffer_queue_pool;
     while (item) {
-        BufferQueueItem *next = item->next;
+        BufferQueueItem *next = (BufferQueueItem*)item->next;
         SDL_free(item);
         item = next;
     }
@@ -1124,8 +1153,222 @@ static void mix_float32_c2_neon(const ALfloat * restrict panning, const float * 
 #endif
 
 
-static void mix_buffer(const ALbuffer *buffer, const ALfloat * restrict panning, const float * restrict data, float * restrict stream, const ALsizei mixframes)
+/****************************************************************************
+*
+* pitch_fft and pitch_shift are modified versions of code from:
+*
+*    http://blogs.zynaptiq.com/bernsee/pitch-shifting-using-the-ft/
+*
+*   The original code has this copyright/license:
+*
+*****************************************************************************
+*
+* COPYRIGHT 1999-2015 Stephan M. Bernsee <s.bernsee [AT] zynaptiq [DOT] com>
+*
+* 						The Wide Open License (WOL)
+*
+* Permission to use, copy, modify, distribute and sell this software and its
+* documentation for any purpose is hereby granted without fee, provided that
+* the above copyright notice and this license appear in all source copies. 
+* THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY OF
+* ANY KIND. See http://www.dspguru.com/wol.htm for more information.
+*
+*****************************************************************************/ 
+
+/* FFT routine, (C)1996 S.M.Bernsee. */
+static void pitch_fft(float *fftBuffer, int fftFrameSize, int sign)
 {
+    float wr, wi, arg, *p1, *p2, temp;
+    float tr, ti, ur, ui, *p1r, *p1i, *p2r, *p2i;
+    int i, bitm, j, le, le2, k;
+
+    for (i = 2; i < 2*fftFrameSize-2; i += 2) {
+        for (bitm = 2, j = 0; bitm < 2*fftFrameSize; bitm <<= 1) {
+            if (i & bitm) j++;
+            j <<= 1;
+        }
+        if (i < j) {
+            p1 = fftBuffer+i; p2 = fftBuffer+j;
+            temp = *p1; *(p1++) = *p2;
+            *(p2++) = temp; temp = *p1;
+            *p1 = *p2; *p2 = temp;
+        }
+    }
+    const int endval = (int)(SDL_log(fftFrameSize)/SDL_log(2.)+.5);   /* !!! FIXME: precalc this. */
+    for (k = 0, le = 2; k < endval; k++) {
+        le <<= 1;
+        le2 = le>>1;
+        ur = 1.0f;
+        ui = 0.0f;
+        arg = (float) (M_PI / (le2>>1));
+        wr = SDL_cosf(arg);
+        wi = sign*SDL_sinf(arg);
+        for (j = 0; j < le2; j += 2) {
+            p1r = fftBuffer+j; p1i = p1r+1;
+            p2r = p1r+le2; p2i = p2r+1;
+            for (i = j; i < 2*fftFrameSize; i += le) {
+                tr = *p2r * ur - *p2i * ui;
+                ti = *p2r * ui + *p2i * ur;
+                *p2r = *p1r - tr; *p2i = *p1i - ti;
+                *p1r += tr; *p1i += ti;
+                p1r += le; p1i += le;
+                p2r += le; p2i += le;
+            }
+            tr = ur*wr - ui*wi;
+            ui = ur*wi + ui*wr;
+            ur = tr;
+        }
+    }
+}
+
+static void pitch_shift(ALsource *src, const ALbuffer *buffer, int numSampsToProcess, const float *indata, float *outdata)
+{
+    const float pitchShift = src->pitch;
+    const float sampleRate = (float) buffer->frequency;
+    const int osamp = 4;
+    const int stepSize = pitch_framesize / osamp;
+    const int inFifoLatency = pitch_framesize - stepSize;
+    const double freqPerBin = sampleRate / (double)pitch_framesize;
+    const double expct = 2.0 * M_PI * ((double)stepSize / (double)pitch_framesize);
+
+    double magn, phase, tmp, window, real, imag;
+    int i,k, qpd, index;
+    PitchState *state = src->pitchstate;
+
+    SDL_assert(state != NULL);
+
+    if (state->rover == 0) state->rover = inFifoLatency;
+
+    /* main processing loop */
+    for (i = 0; i < numSampsToProcess; i++){
+
+        /* As long as we have not yet collected enough data just read in */
+        state->infifo[state->rover] = indata[i];
+        outdata[i] = state->outfifo[state->rover-inFifoLatency];
+        state->rover++;
+
+        /* now we have enough data for processing */
+        if (state->rover >= pitch_framesize) {
+            state->rover = inFifoLatency;
+
+            /* do windowing and re,im interleave */
+            for (k = 0; k < pitch_framesize;k++) {
+                window = -.5*SDL_cos(2.*M_PI*(double)k/(double)pitch_framesize)+.5;
+                state->workspace[2*k] = (ALfloat) (state->infifo[k] * window);
+                state->workspace[2*k+1] = 0.0f;
+            }
+
+
+            /* ***************** ANALYSIS ******************* */
+            /* do transform */
+            pitch_fft(state->workspace, pitch_framesize, -1);
+
+            /* this is the analysis step */
+            for (k = 0; k <= pitch_framesize2; k++) {
+
+                /* de-interlace FFT buffer */
+                real = state->workspace[2*k];
+                imag = state->workspace[2*k+1];
+
+                /* compute magnitude and phase */
+                magn = 2.*SDL_sqrt(real*real + imag*imag);
+                phase = SDL_atan2(imag,real);
+
+                /* compute phase difference */
+                tmp = phase - state->lastphase[k];
+                state->lastphase[k] = (ALfloat) phase;
+
+                /* subtract expected phase difference */
+                tmp -= (double)k*expct;
+
+                /* map delta phase into +/- Pi interval */
+                qpd = (int) (tmp/M_PI);
+                if (qpd >= 0) qpd += qpd&1;
+                else qpd -= qpd&1;
+                tmp -= M_PI*(double)qpd;
+
+                /* get deviation from bin frequency from the +/- Pi interval */
+                tmp = osamp*tmp/(2.*M_PI);
+
+                /* compute the k-th partials' true frequency */
+                tmp = (double)k*freqPerBin + tmp*freqPerBin;
+
+                /* store magnitude and true frequency in analysis arrays */
+                state->workspace[2*k] = (ALfloat) magn;
+                state->workspace[2*k+1] = (ALfloat) tmp;
+
+            }
+
+            /* ***************** PROCESSING ******************* */
+            /* this does the actual pitch shifting */
+            SDL_memset(state->synmagn, '\0', sizeof (state->synmagn));
+            for (k = 0; k <= pitch_framesize2; k++) {
+                index = (int) (k*pitchShift);
+                if (index <= pitch_framesize2) { 
+                    state->synmagn[index] += state->workspace[2*k];
+                    state->synfreq[index] = state->workspace[2*k+1] * pitchShift;
+                } 
+            }
+            
+            /* ***************** SYNTHESIS ******************* */
+            /* this is the synthesis step */
+            for (k = 0; k <= pitch_framesize2; k++) {
+
+                /* get magnitude and true frequency from synthesis arrays */
+                magn = state->synmagn[k];
+                tmp = state->synfreq[k];
+
+                /* subtract bin mid frequency */
+                tmp -= (double)k*freqPerBin;
+
+                /* get bin deviation from freq deviation */
+                tmp /= freqPerBin;
+
+                /* take osamp into account */
+                tmp = 2.*M_PI*tmp/osamp;
+
+                /* add the overlap phase advance back in */
+                tmp += (double)k*expct;
+
+                /* accumulate delta phase to get bin phase */
+                state->sumphase[k] += (ALfloat) tmp;
+                phase = state->sumphase[k];
+
+                /* get real and imag part and re-interleave */
+                state->workspace[2*k] = (ALfloat) (magn*SDL_cos(phase));
+                state->workspace[2*k+1] = (ALfloat) (magn*SDL_sin(phase));
+            } 
+
+            /* zero negative frequencies */
+            for (k = pitch_framesize+2; k < 2*pitch_framesize; k++) state->workspace[k] = 0.;
+
+            /* do inverse transform */
+            pitch_fft(state->workspace, pitch_framesize, 1);
+
+            /* do windowing and add to output accumulator */ 
+            for(k=0; k < pitch_framesize; k++) {
+                window = -.5*SDL_cos(2.*M_PI*(double)k/(double)pitch_framesize)+.5;
+                state->outputaccum[k] += (ALfloat) (2.*window*state->workspace[2*k]/(pitch_framesize2*osamp));
+            }
+            for (k = 0; k < stepSize; k++) state->outfifo[k] = state->outputaccum[k];
+
+            /* shift accumulator */
+            SDL_memmove(state->outputaccum, state->outputaccum+stepSize, pitch_framesize*sizeof(float));
+
+            /* move input FIFO */
+            for (k = 0; k < inFifoLatency; k++) state->infifo[k] = state->infifo[k+stepSize];
+        }
+    }
+}
+
+static void mix_buffer(ALsource *src, const ALbuffer *buffer, const ALfloat * restrict panning, const float * restrict data, float * restrict stream, const ALsizei mixframes)
+{
+    if ((src->pitch != 1.0f) && (src->pitchstate != NULL)) {
+        float *pitched = (float *) alloca(mixframes * buffer->channels * sizeof (float));
+        pitch_shift(src, buffer, mixframes * buffer->channels, data, pitched);
+        data = pitched;
+    }
+
     const ALfloat left = panning[0];
     const ALfloat right = panning[1];
     FIXME("currently expects output to be stereo");
@@ -1194,7 +1437,7 @@ static ALboolean mix_source_buffer(ALCcontext *ctx, ALsource *src, BufferQueueIt
                 const int mixbufframes = mixbuflen / bufferframesize;
                 const int getframes = SDL_min(remainingmixframes, mixbufframes);
                 SDL_AudioStreamGet(src->stream, mixbuf, getframes * bufferframesize);
-                mix_buffer(buffer, src->panning, mixbuf, *stream, getframes);
+                mix_buffer(src, buffer, src->panning, mixbuf, *stream, getframes);
                 *len -= getframes * deviceframesize;
                 *stream += getframes * ctx->device->channels;
                 remainingmixframes -= getframes;
@@ -1202,7 +1445,7 @@ static ALboolean mix_source_buffer(ALCcontext *ctx, ALsource *src, BufferQueueIt
         } else {
             const int framesavail = (buffer->len - src->offset) / bufferframesize;
             const int mixframes = SDL_min(framesneeded, framesavail);
-            mix_buffer(buffer, src->panning, data, *stream, mixframes);
+            mix_buffer(src, buffer, src->panning, data, *stream, mixframes);
             src->offset += mixframes * bufferframesize;
             *len -= mixframes * deviceframesize;
             *stream += mixframes * ctx->device->channels;
@@ -1227,7 +1470,7 @@ static ALCboolean mix_source_buffer_queue(ALCcontext *ctx, ALsource *src, Buffer
     while ((len > 0) && (mix_source_buffer(ctx, src, queue, &stream, &len))) {
         /* Finished this buffer! */
         BufferQueueItem *item = queue;
-        BufferQueueItem *next = queue ? queue->next : NULL;
+        BufferQueueItem *next = queue ? (BufferQueueItem*)queue->next : NULL;
         void *ptr;
 
         if (queue) {
@@ -2330,6 +2573,16 @@ static void _alcGetIntegerv(ALCdevice *device, const ALCenum param, const ALCsiz
             *values = OPENAL_VERSION_MINOR;
             return;
 
+        case ALC_FREQUENCY:
+            if (!device) {
+                *values = 0;
+                set_alc_error(device, ALC_INVALID_DEVICE);
+                return;
+            }
+
+            *values = device->frequency;
+            return;
+
         default: break;
     }
 
@@ -2682,7 +2935,7 @@ static const ALchar *_alGetString(const ALenum param)
 
     return NULL;
 }
-ENTRYPOINT(const ALchar *,alGetString,(const ALenum param),(param))
+ENTRYPOINT(const ALchar *,alGetString,(ALenum param),(param))
 
 static void _alGetBooleanv(const ALenum param, ALboolean *values)
 {
@@ -3350,6 +3603,7 @@ static void _alGenSources(const ALsizei n, ALuint *names)
 
         SDL_zerop(src);
         SDL_AtomicSet(&src->state, AL_INITIAL);
+        SDL_AtomicSet(&src->total_queued_buffers, 0);
         src->name = names[i];
         src->type = AL_UNDETERMINED;
         src->recalc = AL_TRUE;
@@ -3433,6 +3687,19 @@ static ALboolean _alIsSource(const ALuint name)
 }
 ENTRYPOINT(ALboolean,alIsSource,(ALuint name),(name))
 
+static void source_set_pitch(ALCcontext *ctx, ALsource *src, const ALfloat pitch)
+{
+    /* only allocate pitchstate if the pitch every changes, because it's a lot of
+       RAM and we leave it allocated to the source until forever once needed */
+    if ((pitch != 1.0f) && (src->pitchstate == NULL)) {
+        src->pitchstate = (PitchState *) SDL_calloc(1, sizeof (PitchState));
+        if (src->pitchstate == NULL) {
+            set_al_error(ctx, AL_OUT_OF_MEMORY);
+        }
+    }
+    src->pitch = pitch;
+}
+
 static void _alSourcefv(const ALuint name, const ALenum param, const ALfloat *values)
 {
     ALCcontext *ctx = get_current_context();
@@ -3449,7 +3716,7 @@ static void _alSourcefv(const ALuint name, const ALenum param, const ALfloat *va
         case AL_REFERENCE_DISTANCE: src->reference_distance = *values; break;
         case AL_ROLLOFF_FACTOR: src->rolloff_factor = *values; break;
         case AL_MAX_DISTANCE: src->max_distance = *values; break;
-        case AL_PITCH: src->pitch = *values; break;
+        case AL_PITCH: source_set_pitch(ctx, src, *values); break;
         case AL_CONE_INNER_ANGLE: src->cone_inner_angle = *values; break;
         case AL_CONE_OUTER_ANGLE: src->cone_outer_angle = *values; break;
         case AL_CONE_OUTER_GAIN: src->cone_outer_gain = *values; break;
@@ -3721,8 +3988,7 @@ static void _alGetSourceiv(const ALuint name, const ALenum param, ALint *values)
         case AL_SOURCE_STATE: *values = (ALint) SDL_AtomicGet(&src->state); break;
         case AL_SOURCE_TYPE: *values = (ALint) src->type; break;
         case AL_BUFFER: *values = (ALint) (src->buffer ? src->buffer->name : 0); break;
-        /* !!! FIXME: AL_BUFFERS_QUEUED is the total number of buffers pending, playing, and processed, so this is wrong. It might also have to be 1 if there's a static buffer, but I'm not sure. */
-        case AL_BUFFERS_QUEUED: *values = (ALint) SDL_AtomicGet(&src->buffer_queue.num_items); break;
+        case AL_BUFFERS_QUEUED: *values = (ALint) SDL_AtomicGet(&src->total_queued_buffers); break;
         case AL_BUFFERS_PROCESSED: *values = (ALint) SDL_AtomicGet(&src->buffer_queue_processed.num_items); break;
         case AL_SOURCE_RELATIVE: *values = (ALint) src->source_relative; break;
         case AL_LOOPING: *values = (ALint) src->looping; break;
@@ -3882,7 +4148,7 @@ static void source_play(ALCcontext *ctx, const ALsizei n, const ALuint *names)
        with it, as nothing else owns the pointers in that list. */
     do {
         ptr = SDL_AtomicGetPtr(&ctx->playlist_todo);
-        todoend->next = ptr;
+        todoend->next = (SourcePlayTodo*)ptr;
     } while (!SDL_AtomicCASPtr(&ctx->playlist_todo, ptr, todo.next));
 }
 
@@ -3910,6 +4176,9 @@ static void source_stop(ALCcontext *ctx, const ALuint name)
             }
             SDL_AtomicSet(&src->state, AL_STOPPED);
             source_mark_all_buffers_processed(src);
+            if (src->stream) {
+                SDL_AudioStreamClear(src->stream);
+            }
             if (must_lock) {
                 SDL_UnlockMutex(ctx->source_lock);
             }
@@ -3955,7 +4224,7 @@ static float source_get_offset(ALsource *src, ALenum param)
             int proc_buf = SDL_AtomicGet(&src->buffer_queue_processed.num_items);
             offset = (proc_buf * item->buffer->len + src->offset);
         }
-    } else {
+    } else if (src->buffer) {
         framesize = (int) (src->buffer->channels * sizeof (float));
         freq = (int) src->buffer->frequency;
         offset = src->offset;
@@ -3976,9 +4245,10 @@ static void source_set_offset(ALsource *src, ALenum param, ALfloat value)
     if (!ctx) {
         set_al_error(ctx, AL_INVALID_OPERATION);
         return;
-    }
-
-    if (src->type == AL_STREAMING) {
+    } else if (src->type == AL_UNDETERMINED) {  /* no buffer to seek in */
+        set_al_error(ctx, AL_INVALID_OPERATION);
+        return;
+    } else if (src->type == AL_STREAMING) {
         FIXME("set_offset for streaming sources not implemented");
         return;
     }
@@ -3990,14 +4260,18 @@ static void source_set_offset(ALsource *src, ALenum param, ALfloat value)
 
     switch (param) {
         case AL_SAMPLE_OFFSET:
-            offset = value * framesize;
+            offset = ((int) value) * framesize;
             break;
         case AL_SEC_OFFSET:
-            offset = value * freq * framesize;
+            offset = ((int) value) * freq * framesize;
             break;
         case AL_BYTE_OFFSET:
-            offset = ((int)value / framesize) * framesize;
+            offset = (((int) value) / framesize) * framesize;
             break;
+        default:
+            SDL_assert(!"Unexpected source offset type!");
+            set_al_error(ctx, AL_INVALID_ENUM);  /* this is a MojoAL bug, not an app bug, but we'll try to recover. */
+            return;
     }
 
     if ((offset < 0) || (offset > bufflen)) {
@@ -4014,6 +4288,10 @@ static void source_set_offset(ALsource *src, ALenum param, ALfloat value)
         SDL_LockMutex(ctx->source_lock);
         src->offset = offset;
         SDL_UnlockMutex(ctx->source_lock);
+    }
+
+    if (SDL_AtomicGet(&src->state) != AL_PLAYING) {
+        src->offset_latched = SDL_TRUE;
     }
 }
 
@@ -4095,7 +4373,7 @@ static void _alSourceQueueBuffers(const ALuint name, const ALsizei nb, const ALu
 
         item = ctx->device->playback.buffer_queue_pool;
         if (item) {
-            ctx->device->playback.buffer_queue_pool = item->next;
+            ctx->device->playback.buffer_queue_pool = (BufferQueueItem*)item->next;
         } else {  /* allocate a new item */
             item = (BufferQueueItem *) SDL_calloc(1, sizeof (BufferQueueItem));
             if (!item) {
@@ -4148,7 +4426,7 @@ static void _alSourceQueueBuffers(const ALuint name, const ALsizei nb, const ALu
         if (queue) {
             /* Drop our claim on any buffers we planned to queue. */
             BufferQueueItem *item;
-            for (item = queue; item != NULL; item = item->next) {
+            for (item = queue; item != NULL; item = (BufferQueueItem*)item->next) {
                 if (item->buffer) {
                     (void) SDL_AtomicDecRef(&item->buffer->refcount);
                 }
@@ -4194,6 +4472,7 @@ static void _alSourceQueueBuffers(const ALuint name, const ALsizei nb, const ALu
         SDL_AtomicSetPtr(&queueend->next, ptr);
     } while (!SDL_AtomicCASPtr(&src->buffer_queue.just_queued, ptr, queue));
 
+    SDL_AtomicAdd(&src->total_queued_buffers, (int) nb);
     SDL_AtomicAdd(&src->buffer_queue.num_items, (int) nb);
 }
 ENTRYPOINTVOID(alSourceQueueBuffers,(ALuint name, ALsizei nb, const ALuint *bufnames),(name,nb,bufnames))
@@ -4225,6 +4504,7 @@ static void _alSourceUnqueueBuffers(const ALuint name, const ALsizei nb, ALuint 
     }
 
     SDL_AtomicAdd(&src->buffer_queue_processed.num_items, -((int) nb));
+    SDL_AtomicAdd(&src->total_queued_buffers, -((int) nb));
 
     obtain_newly_queued_buffers(&src->buffer_queue_processed);
 
@@ -4232,7 +4512,7 @@ static void _alSourceUnqueueBuffers(const ALuint name, const ALsizei nb, ALuint 
     for (i = 0; i < nb; i++) {
         /* buffer_queue_processed.num_items said list was long enough. */
         SDL_assert(item != NULL);
-        item = item->next;
+        item = (BufferQueueItem*)item->next;
     }
     src->buffer_queue_processed.head = item;
     if (!item) {
@@ -4246,7 +4526,7 @@ static void _alSourceUnqueueBuffers(const ALuint name, const ALsizei nb, ALuint 
         }
         bufnames[i] = item->buffer ? item->buffer->name : 0;
         queueend = item;
-        item = item->next;
+        item = (BufferQueueItem*)item->next;
     }
 
     /* put the whole new queue back in the pool for reuse later. */
@@ -4482,12 +4762,14 @@ static void _alBufferData(const ALuint name, const ALenum alfmt, const ALvoid *d
     if (rc == 1) {  /* conversion necessary */
         rc = SDL_ConvertAudio(&sdlcvt);
         SDL_assert(rc == 0);  /* this shouldn't fail. */
+        #if 0   /* !!! FIXME: need realloc_simd_aligned. */
         if (sdlcvt.len_cvt < (size * sdlcvt.len_mult)) {  /* maybe shrink buffer */
             void *ptr = SDL_realloc(sdlcvt.buf, sdlcvt.len_cvt);
             if (ptr) {
                 sdlcvt.buf = (Uint8 *) ptr;
             }
         }
+        #endif
     }
 
     free_simd_aligned((void *) buffer->data);  /* nuke any previous data. */

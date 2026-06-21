@@ -1,5 +1,46 @@
 # Changelog
 
+## [2.0.0] - tbd
+* This version drops support for streaming I/O and other details from Gosu. The version number has been bumped to 2.0.0 to reflect this. Ruby/Gosu games should not be affected, and work as before. (#653)   
+* Slightly improve rendering artifacts in scaled images when not using "retro" mode. (#646, #653)
+* Remove support for writing TGA files, but add support for writing JPEG files. (#646)  
+* Fix a bug where invalid UTF-8 strings could trigger deadlocks or memory errors. (#652)  
+* Gosu now uses and requires C++20. Unfortunately, that means Ubuntu 20.04 has been dropped earlier than expected. (#647)
+* Make `Gosu::Window.sdl_window` available in Ruby. (#637)
+* `Gosu.clip_to` now works within `Gosu.render`. (#673) 
+
+## [1.4.6] - 2023-05-20
+* When using SDL 2.0.12 or later, the LED indicators on gamepads will now be set to match the gamepad index that Gosu has allocated for them. (#639)
+* Added some missing `#include` statements, thanks to @LittleLightLittleFire for the PRs. (#641, #642)
+* Update all bundled dependencies. (#643)
+
+## [1.4.5] - 2022-12-24
+* Finish the fix for the Windows main loop from #634, a key part was missing. (#636)
+* Update all bundled dependencies, thanks to @cyberarm for the automation. (#635)
+
+## [1.4.4] - 2022-12-12
+* Add clipboard support in the form of `Gosu.clipboard`/`Gosu.clipboard=`. (Thanks @cyberarm! #630)
+* Fix a regression in the `Window.show` main loop on Windows that was introduced in 1.4.3. (#634)
+* Fix a potential build/linker error on ARM macOS. (Thanks @jimtng! #627)
+
+## [1.4.3] - 2022-03-27
+* Update bundled dependencies: stb_image, stb_image_write, stb_truetype, stb_vorbis, utf8proc, mojoAL, SDL_sound.
+* These updates fix MP3 playback and Gosu::Sample pitch changes. (#592, #623).
+* Introduce optional `retro: true` option in `Font#initialize`, thanks to @cyberarm. (#479, #624)
+
+## [1.4.1] - 2022-01-30
+* Fix an audio bug when repeatedly playing a Gosu::Song. (#618 / #619)
+* Fixed Window::tick never waiting for update_interval. (#620 / #621)
+
+Both fixes once again contributed by @cyberarm.
+
+## [1.4.0] - 2022-01-21
+* Windows: Support for Ruby 3.1. (#611/#612)
+* Windows: Update SDL to 2.0.20 (#610), also update SDL_sound on all platforms (#606).
+* Replace OpenAL (usually oal-soft) with mojoAL. (#608)
+
+All three improvements contributed by @cyberarm.
+
 ## [1.3.0] - 2022-01-02
 * Add `Window#gain_focus` callback to mirror `Window#lose_focus`, which was previously undocumented and only implemented on iOS. (#600) Thanks @cyberarm!
 * Fix Gosu::Window#tick not raising errors from callbacks. (#594) Thanks again, @cyberarm!

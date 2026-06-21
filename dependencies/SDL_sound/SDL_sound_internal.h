@@ -20,6 +20,11 @@
 
 #include "SDL_sound.h"
 
+/* SDL_AudioStream, which we use internally, didn't arrive until SDL 2.0.7. */
+#if !SDL_VERSION_ATLEAST(2, 0, 7)
+#error SDL_sound requires SDL 2.0.7 or later. Please upgrade.
+#endif
+
 #if ((defined(__GNUC__) && (__GNUC__ >= 4)) || defined(__clang__)) && !(defined(_WIN32) || defined(__OS2__))
 #define SOUND_HAVE_PRAGMA_VISIBILITY 1
 #endif
@@ -97,16 +102,16 @@ typedef struct __SOUND_DECODERFUNCTIONS__
          *  set up any global state that your decoder needs, such as
          *  initializing an external library, etc.
          *
-         * Return non-zero if initialization is successful, zero if there's
-         *  a fatal error. If this method fails, then this decoder is
-         *  flagged as unavailable until SDL_sound() is shut down and
+         * Return SDL_TRUE if initialization is successful, SDL_FALSE if
+         *  there's a fatal error. If this method fails, then this decoder
+         *  is flagged as unavailable until SDL_sound() is shut down and
          *  reinitialized, in which case this method will be tried again.
          *
          * Note that the decoders quit() method won't be called if this
          *  method fails, so if you can't intialize, you'll have to clean
          *  up the half-initialized state in this method.
          */
-    int (*init)(void);
+    SDL_bool (*init)(void);
 
         /*
          * This is called during the Sound_Quit() function. Use this to
@@ -140,7 +145,9 @@ typedef struct __SOUND_DECODERFUNCTIONS__
          *    Sound_Sample *prev;  (offlimits)
          *    SDL_RWops *rw;       (can use, but do NOT close it)
          *    const Sound_DecoderFunctions *funcs; (that's this structure)
-         *    SDL_AudioCVT sdlcvt; (offlimits)
+         *    SDL_AudioStream stream; (offlimits)
+         *    SDL_bool pending_eof; (offlimits)
+         *    SDL_bool pending_error; (offlimits)
          *    void *buffer;        (offlimits until read() method)
          *    Uint32 buffer_size;  (offlimits until read() method)
          *    void *decoder_private; (read and write access)
@@ -246,7 +253,9 @@ typedef struct __SOUND_SAMPLEINTERNAL__
     Sound_Sample *prev;
     SDL_RWops *rw;
     const Sound_DecoderFunctions *funcs;
-    SDL_AudioCVT sdlcvt;
+    SDL_AudioStream *stream;
+    SDL_bool pending_eof;
+    SDL_bool pending_error;
     void *buffer;
     Uint32 buffer_size;
     void *decoder_private;
@@ -271,6 +280,10 @@ typedef struct __SOUND_SAMPLEINTERNAL__
 #define ERR_PREV_ERROR           "Previous decoding already caused an error"
 #define ERR_PREV_EOF             "Previous decoding already triggered EOF"
 #define ERR_CANNOT_SEEK          "Sample is not seekable"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  * Call this to set the message returned by Sound_GetError().
@@ -304,6 +317,15 @@ extern char *SDL_strtokr(char *s1, const char *s2, char **saveptr);
 #define SDL_srand __Sound_srand
 extern int SDL_rand(void);
 extern void SDL_srand(unsigned int seed);
+
+/* Wrappers around the SDL versions of these in case you're on an older SDL */
+extern void *__Sound_SIMDAlloc(const size_t len);
+extern void *__Sound_SIMDRealloc(void *mem, const size_t len);
+extern void __Sound_SIMDFree(void *ptr);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* defined _INCLUDE_SDL_SOUND_INTERNAL_H_ */
 

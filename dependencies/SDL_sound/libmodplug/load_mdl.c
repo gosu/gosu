@@ -122,17 +122,18 @@ static void UnpackMDLTrack(MODCOMMAND *pat, UINT nChannels, UINT nRows, UINT nTr
 
 		case 0x03:
 			{
-				cmd.note = (xx & 0x01) ? lpTracks[pos++] : 0;
-				cmd.instr = (xx & 0x02) ? lpTracks[pos++] : 0;
+				UINT volume, commands, command1, command2, param1, param2;
+				cmd.note = (xx & 0x01) ? (pos < len ? lpTracks[pos++] : 0) : 0;
+				cmd.instr = (xx & 0x02) ? (pos < len ? lpTracks[pos++] : 0) : 0;
 				cmd.volcmd = cmd.vol = 0;
 				cmd.command = cmd.param = 0;
 				if ((cmd.note < NOTE_MAX-12) && (cmd.note)) cmd.note += 12;
-				UINT volume = (xx & 0x04) ? lpTracks[pos++] : 0;
-				UINT commands = (xx & 0x08) ? lpTracks[pos++] : 0;
-				UINT command1 = commands & 0x0F;
-				UINT command2 = commands & 0xF0;
-				UINT param1 = (xx & 0x10) ? lpTracks[pos++] : 0;
-				UINT param2 = (xx & 0x20) ? lpTracks[pos++] : 0;
+				volume = (xx & 0x04) ? (pos < len ? lpTracks[pos++] : 0) : 0;
+				commands = (xx & 0x08) ? (pos < len ? lpTracks[pos++] : 0) : 0;
+				command1 = commands & 0x0F;
+				command2 = commands & 0xF0;
+				param1 = (xx & 0x10) ? (pos < len ? lpTracks[pos++] : 0) : 0;
+				param2 = (xx & 0x20) ? (pos < len ? lpTracks[pos++] : 0) : 0;
 				if ((command1 == 0x0E) && ((param1 & 0xF0) == 0xF0) && (!command2))
 				{
 					param1 = ((param1 & 0x0F) << 8) | param2;
@@ -180,10 +181,11 @@ BOOL CSoundFile_ReadMDL(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	BYTE inspanenv[MAX_INSTRUMENTS];
 	LPCBYTE pvolenv, ppanenv, ppitchenv;
 	UINT nvolenv, npanenv, npitchenv;
+	UINT hdrLen;
 
 	if ((!lpStream) || (dwMemLength < 1024)) return FALSE;
 	if ((pmsh->id != 0x4C444D44) || ((pmsh->version & 0xF0) > 0x10)) return FALSE;
-	const UINT hdrLen = (pmsh->version>0)? 59 : 57;
+	hdrLen = (pmsh->version>0)? 59 : 57;
 	SDL_memset(patterntracks, 0, sizeof(patterntracks));
 	SDL_memset(smpinfo, 0, sizeof(smpinfo));
 	SDL_memset(insvolenv, 0, sizeof(insvolenv));
@@ -208,6 +210,7 @@ BOOL CSoundFile_ReadMDL(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		{
 		// IN: infoblock
 		case 0x4E49:
+			if (blocklen < sizeof(MDLINFOBLOCK)) break;
 			pmib = (const MDLINFOBLOCK *)(lpStream+dwMemPos);
 			norders = pmib->norders;
 			if (norders > MAX_ORDERS) norders = MAX_ORDERS;
@@ -244,8 +247,9 @@ BOOL CSoundFile_ReadMDL(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 					if (_this->m_nChannels < 32) _this->m_nChannels = 32;
 					ch = 32;
 				} else {
+					const MDLPATTERNDATA *pmpd;
 					if (dwPos+18 >= dwMemLength) break;
-					const MDLPATTERNDATA *pmpd = (const MDLPATTERNDATA *)(lpStream + dwPos);
+					pmpd = (const MDLPATTERNDATA *)(lpStream + dwPos);
 					if (pmpd->channels > 32) break;
 					_this->PatternSize[i] = pmpd->lastrow+1;
 					if (_this->m_nChannels < pmpd->channels) _this->m_nChannels = pmpd->channels;
@@ -263,6 +267,7 @@ BOOL CSoundFile_ReadMDL(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			break;
 		// TR: Track Data
 		case 0x5254:
+			if (blocklen < 2) break;
 			if (dwTrackPos) break;
 			pp = lpStream + dwMemPos;
 			ntracks = pp[0] | (pp[1] << 8);
@@ -272,16 +277,20 @@ BOOL CSoundFile_ReadMDL(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		case 0x4949:
 			ninstruments = lpStream[dwMemPos];
 			dwPos = dwMemPos+1;
-			for (i=0; dwPos+34<dwMemLength && i<ninstruments; i++)
+			if (blocklen < sizeof(INSTRUMENTHEADER)*ninstruments + 1) break;
+
+			for (i=0; i<ninstruments; i++)
 			{
 				UINT nins = lpStream[dwPos];
 				if ((nins >= MAX_INSTRUMENTS) || (!nins)) break;
 				if (_this->m_nInstruments < nins) _this->m_nInstruments = nins;
 				if (!_this->Headers[nins])
 				{
+					INSTRUMENTHEADER *penv;
 					UINT note = 12;
 					if ((_this->Headers[nins] = (INSTRUMENTHEADER *) SDL_calloc(1, sizeof (INSTRUMENTHEADER))) == NULL) break;
-					INSTRUMENTHEADER *penv = _this->Headers[nins];
+					penv = _this->Headers[nins];
+					if (dwPos > dwMemLength - 34) break;
 					penv->nGlobalVol = 64;
 					penv->nPPC = 5*12;
 					if (34 + 14u*lpStream[dwPos+1] > dwMemLength - dwPos) break;
@@ -321,6 +330,7 @@ BOOL CSoundFile_ReadMDL(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 					}
 				}
 				dwPos += 34 + 14*lpStream[dwPos+1];
+				if (dwPos > dwMemLength - 2) break;
 			}
 			for (j=1; j<=_this->m_nInstruments; j++) if (!_this->Headers[j])
 			{
@@ -351,9 +361,10 @@ BOOL CSoundFile_ReadMDL(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			for (i=0; i<nsamples; i++, dwPos += hdrLen)
 			{
 				UINT nins = lpStream[dwPos];
+				MODINSTRUMENT *pins;
 				if ((nins >= MAX_SAMPLES) || (!nins)) continue;
 				if (_this->m_nSamples < nins) _this->m_nSamples = nins;
-				MODINSTRUMENT *pins = &_this->Ins[nins];
+				pins = &_this->Ins[nins];
 				pp = lpStream + dwPos + 41;
 				pins->nC4Speed = pp[0] | (pp[1] << 8); pp += 2;
 				if (pmsh->version > 0) {
@@ -406,19 +417,23 @@ BOOL CSoundFile_ReadMDL(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	// Unpack Patterns
 	if ((dwTrackPos) && (npatterns) && (_this->m_nChannels) && (ntracks))
 	{
-		for (UINT ipat=0; ipat<npatterns; ipat++)
+		for (i=0; i<npatterns; i++)
 		{
-			if ((_this->Patterns[ipat] = CSoundFile_AllocatePattern(_this->PatternSize[ipat], _this->m_nChannels)) == NULL) break;
-			for (UINT chn=0; chn<_this->m_nChannels; chn++) if ((patterntracks[ipat*32+chn]) && (patterntracks[ipat*32+chn] <= ntracks))
+			UINT chn;
+			if ((_this->Patterns[i] = CSoundFile_AllocatePattern(_this->PatternSize[i], _this->m_nChannels)) == NULL) break;
+			for (chn=0; chn<_this->m_nChannels; chn++) if ((patterntracks[i*32+chn]) && (patterntracks[i*32+chn] <= ntracks))
 			{
 			    const BYTE *lpTracks = lpStream + dwTrackPos;
-			    UINT len = lpTracks[0] | (lpTracks[1] << 8);
+			    UINT len = 0;
+			    if (dwTrackPos + 2 < dwMemLength)
+				len = lpTracks[0] | (lpTracks[1] << 8);
+
 			    if (len < dwMemLength-dwTrackPos) {
-				MODCOMMAND *m = _this->Patterns[ipat] + chn;
-				UINT nTrack = patterntracks[ipat*32+chn];
+				MODCOMMAND *m = _this->Patterns[i] + chn;
+				UINT nTrack = patterntracks[i*32+chn];
 
 				lpTracks += 2;
-				for (UINT ntrk=1; ntrk<nTrack && lpTracks + 1 < (dwMemLength + lpStream - len); ntrk++)
+				for (j=1; j<nTrack && lpTracks < (dwMemLength + lpStream - len - 2); j++)
 				{
 					lpTracks += len;
 					len = lpTracks[0] | (lpTracks[1] << 8);
@@ -427,31 +442,32 @@ BOOL CSoundFile_ReadMDL(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 
 				if ( len > dwMemLength - (lpTracks - lpStream) ) len = 0;
 
-				UnpackMDLTrack(m, _this->m_nChannels, _this->PatternSize[ipat], nTrack, lpTracks, len);
+				UnpackMDLTrack(m, _this->m_nChannels, _this->PatternSize[i], nTrack, lpTracks, len);
 			    }
 			}
 		}
 	}
 	// Set up envelopes
-	for (UINT iIns=1; iIns<=_this->m_nInstruments; iIns++) if (_this->Headers[iIns])
+	for (i=1; i<=_this->m_nInstruments; i++) if (_this->Headers[i])
 	{
-		INSTRUMENTHEADER *penv = _this->Headers[iIns];
+		INSTRUMENTHEADER *penv = _this->Headers[i];
 		// Setup volume envelope
-		if ((nvolenv) && (pvolenv) && (insvolenv[iIns]))
+		if ((nvolenv) && (pvolenv) && (insvolenv[i]))
 		{
 			LPCBYTE pve = pvolenv;
-			for (UINT nve=0; nve<nvolenv; nve++, pve+=33) if (pve[0]+1 == insvolenv[iIns])
+			UINT nve;
+			for (nve=0; nve<nvolenv; nve++, pve+=33) if (pve[0]+1 == insvolenv[i])
 			{
 				WORD vtick = 1;
 				penv->nVolEnv = 15;
-				for (UINT iv=0; iv<15; iv++)
+				for (j=0; j<15; j++)
 				{
-					if (iv) vtick += pve[iv*2+1];
-					penv->VolPoints[iv] = vtick;
-					penv->VolEnv[iv] = pve[iv*2+2];
-					if (!pve[iv*2+1])
+					if (j) vtick += pve[j*2+1];
+					penv->VolPoints[j] = vtick;
+					penv->VolEnv[j] = pve[j*2+2];
+					if (!pve[j*2+1])
 					{
-						penv->nVolEnv = iv+1;
+						penv->nVolEnv = j+1;
 						break;
 					}
 				}
@@ -463,21 +479,22 @@ BOOL CSoundFile_ReadMDL(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			}
 		}
 		// Setup panning envelope
-		if ((npanenv) && (ppanenv) && (inspanenv[iIns]))
+		if ((npanenv) && (ppanenv) && (inspanenv[i]))
 		{
 			LPCBYTE ppe = ppanenv;
-			for (UINT npe=0; npe<npanenv; npe++, ppe+=33) if (ppe[0]+1 == inspanenv[iIns])
+			UINT npe;
+			for (npe=0; npe<npanenv; npe++, ppe+=33) if (ppe[0]+1 == inspanenv[i])
 			{
 				WORD vtick = 1;
 				penv->nPanEnv = 15;
-				for (UINT iv=0; iv<15; iv++)
+				for (j=0; j<15; j++)
 				{
-					if (iv) vtick += ppe[iv*2+1];
-					penv->PanPoints[iv] = vtick;
-					penv->PanEnv[iv] = ppe[iv*2+2];
-					if (!ppe[iv*2+1])
+					if (j) vtick += ppe[j*2+1];
+					penv->PanPoints[j] = vtick;
+					penv->PanEnv[j] = ppe[j*2+2];
+					if (!ppe[j*2+1])
 					{
-						penv->nPanEnv = iv+1;
+						penv->nPanEnv = j+1;
 						break;
 					}
 				}

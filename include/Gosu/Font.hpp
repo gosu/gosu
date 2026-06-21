@@ -7,6 +7,7 @@
 #include <Gosu/Text.hpp>
 #include <memory>
 #include <string>
+#include <string_view>
 
 namespace Gosu
 {
@@ -20,12 +21,13 @@ namespace Gosu
     public:
         /// @param name   Name of a system font, or path to a TTF file (must contain '/').
         /// @param height Height of the font, in pixels.
-        /// @param flags  Flags used to render individual characters of the font (FontFlags enum).
-        explicit Font(int height, const std::string& name = default_font_name(),
-                      unsigned flags = 0);
+        /// @param font_flags  Flags used to render individual characters of the font (FontFlags enum).
+        /// @param image_flags  Flags used to render individual characters of the font (ImageFlags enum).
+        explicit Font(int height, std::string_view name = default_font_name(),
+                      unsigned font_flags = 0, unsigned image_flags = 0);
 
-        /// Returns the name of the font that was used to create it, i.e. the filename, nor the
-        /// internal TTF name. (TODO: Why not?)
+        /// Returns the name of the font that was used to create it. If the font was loaded from a
+        /// filename, the same filename string will be returned here unmodified.
         const std::string& name() const;
 
         /// Returns the height of the font, in pixels.
@@ -33,6 +35,7 @@ namespace Gosu
 
         /// Returns the flags used to render the characters of the font (FontFlags enum).
         unsigned flags() const;
+        unsigned image_flags() const;
 
         /// Returns the width, in pixels, that the given text would occupy if drawn.
         double text_width(const std::string& text) const;
@@ -67,8 +70,8 @@ namespace Gosu
 
         /// Maps a letter to a specific image, instead of generating one using Gosu's built-in text
         /// rendering.
-        void set_image(std::string codepoint, unsigned font_flags, const Gosu::Image& image);
+        void set_image(std::string_view codepoint, unsigned font_flags, const Gosu::Image& image);
         /// A shortcut for mapping a character to an image regardless of font_flags.
-        void set_image(std::string codepoint, const Gosu::Image& image);
+        void set_image(std::string_view codepoint, const Gosu::Image& image);
     };
 }

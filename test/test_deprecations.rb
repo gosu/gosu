@@ -1,4 +1,3 @@
-# Encoding: UTF-8
 require_relative "test_helper"
 
 class TestDeprecations < Minitest::Test
@@ -23,7 +22,7 @@ class TestDeprecations < Minitest::Test
     end
 
     assert_output("", /DEPRECATION WARNING: Passing a Window to Image#initialize has been deprecated in Gosu 0.9./) do
-      assert_raises(::NoMethodError) { Gosu::Image.new(DUMMY_WINDOW) }
+      assert_raises(::ArgumentError) { Gosu::Image.new(DUMMY_WINDOW) }
     end
 
     assert_output("", /DEPRECATION WARNING: Passing a Window to Image.from_text has been deprecated in Gosu 0.9./) do

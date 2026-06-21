@@ -44,7 +44,7 @@ BOOL CSoundFile_ReadAMS(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 //	BYTE pkinf[MAX_SAMPLES];
 	const AMSFILEHEADER *pfh = (AMSFILEHEADER *)lpStream;
 	DWORD dwMemPos;
-	UINT tmp, tmp2;
+	UINT tmp, tmp2, i;
 
 	if ((!lpStream) || (dwMemLength < 1024)) return FALSE;
 	if ((pfh->verhi != 0x01) || (SDL_strncmp(pfh->szHeader, "Extreme", 7))
@@ -59,10 +59,10 @@ BOOL CSoundFile_ReadAMS(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 	_this->m_nInstruments = 0;
 	_this->m_nChannels = (pfh->chncfg & 0x1F) + 1;
 	_this->m_nSamples = pfh->samples;
-	for (UINT nSmp=1; nSmp<=_this->m_nSamples; nSmp++, dwMemPos += sizeof(AMSSAMPLEHEADER))
+	for (i=1; i<=_this->m_nSamples; i++, dwMemPos += sizeof(AMSSAMPLEHEADER))
 	{
 		const AMSSAMPLEHEADER *psh = (AMSSAMPLEHEADER *)(lpStream + dwMemPos);
-		MODINSTRUMENT *pins = &_this->Ins[nSmp];
+		MODINSTRUMENT *pins = &_this->Ins[i];
 		pins->nLength = psh->length;
 		pins->nLoopStart = psh->loopstart;
 		pins->nLoopEnd = psh->loopend;
@@ -74,21 +74,21 @@ BOOL CSoundFile_ReadAMS(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 		pins->nFineTune = MOD2XMFineTune(psh->finetune_and_pan & 0x0F);
 		pins->uFlags = (psh->infobyte & 0x80) ? CHN_16BIT : 0;
 		if ((pins->nLoopEnd <= pins->nLength) && (pins->nLoopStart+4 <= pins->nLoopEnd)) pins->uFlags |= CHN_LOOP;
-	//	pkinf[nSmp] = psh->infobyte;
+	//	pkinf[i] = psh->infobyte;
 	}
 	// Read Song Name
 	tmp = lpStream[dwMemPos++];
 	if (dwMemPos + tmp + 1 >= dwMemLength) return TRUE;
 	dwMemPos += tmp;
 	// Read sample names
-	for (UINT sNam=1; sNam<=_this->m_nSamples; sNam++)
+	for (i=1; i<=_this->m_nSamples; i++)
 	{
 		if (dwMemPos + 32 >= dwMemLength) return TRUE;
 		tmp = lpStream[dwMemPos++];
 		dwMemPos += tmp;
 	}
 	// Skip Channel names
-	for (UINT cNam=0; cNam<_this->m_nChannels; cNam++)
+	for (i=0; i<_this->m_nChannels; i++)
 	{
 		if (dwMemPos + 32 >= dwMemLength) return TRUE;
 		tmp = lpStream[dwMemPos++];
@@ -98,12 +98,12 @@ BOOL CSoundFile_ReadAMS(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 	_this->m_lpszPatternNames = (char *) SDL_calloc(pfh->patterns, 32);  // changed from CHAR
 	if (!_this->m_lpszPatternNames) return TRUE;
 	_this->m_nPatternNames = pfh->patterns;
-	for (UINT pNam=0; pNam < _this->m_nPatternNames; pNam++)
+	for (i=0; i < _this->m_nPatternNames; i++)
 	{
 		if (dwMemPos + 32 >= dwMemLength) return TRUE;
 		tmp = lpStream[dwMemPos++];
 		tmp2 = (tmp < 32) ? tmp : 31;
-		if (tmp2) SDL_memcpy(_this->m_lpszPatternNames+pNam*32, lpStream+dwMemPos, tmp2);
+		if (tmp2) SDL_memcpy(_this->m_lpszPatternNames+i*32, lpStream+dwMemPos, tmp2);
 		dwMemPos += tmp;
 	}
 	// Read Song Comments
@@ -117,35 +117,49 @@ BOOL CSoundFile_ReadAMS(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 	}
 	// Read Order List
 	if (2*pfh->orders >= dwMemLength || dwMemPos > dwMemLength - 2*pfh->orders) return TRUE;
-	for (UINT iOrd=0; iOrd<pfh->orders; iOrd++, dwMemPos += 2)
+	for (i=0; i<pfh->orders; i++, dwMemPos += 2)
 	{
 		UINT n = *((WORD *)(lpStream+dwMemPos));
-		_this->Order[iOrd] = (BYTE)n;
+		_this->Order[i] = (BYTE)n;
 	}
 	// Read Patterns
-	for (UINT iPat=0; iPat<pfh->patterns; iPat++)
+	for (i=0; i<pfh->patterns; i++)
 	{
+		MODCOMMAND *m;
+		const BYTE *p;
+		UINT len, row, j;
 		if (dwMemPos + 4 >= dwMemLength) return TRUE;
-		UINT len = *((DWORD *)(lpStream + dwMemPos));
+		len = *((DWORD *)(lpStream + dwMemPos));
 		dwMemPos += 4;
 		if ((len >= dwMemLength) || (dwMemPos > dwMemLength - len)) return TRUE;
-		_this->PatternSize[iPat] = 64;
-		MODCOMMAND *m = CSoundFile_AllocatePattern(_this->PatternSize[iPat], _this->m_nChannels);
+		_this->PatternSize[i] = 64;
+		m = CSoundFile_AllocatePattern(_this->PatternSize[i], _this->m_nChannels);
 		if (!m) return TRUE;
-		_this->Patterns[iPat] = m;
-		const BYTE *p = lpStream + dwMemPos;
-		UINT row = 0, i = 0;
-		while ((row < _this->PatternSize[iPat]) && (i+2 < len))
+		_this->Patterns[i] = m;
+		p = lpStream + dwMemPos;
+		row = 0, j = 0;
+		while ((row < _this->PatternSize[i]) && (j+2 < len))
 		{
-			BYTE b0 = p[i++];
-			BYTE b1 = p[i++];
-			BYTE b2 = 0;
-			UINT ch = b0 & 0x3F;
+			BYTE b0, b1, b2;
+			UINT ch;
+
+			b0 = p[j++];
+			ch = b0 & 0x3F;
+
+			if (b0 == 0xff)
+			{
+				row++;
+				continue;
+			}
+
+			b1 = p[j++];
+			b2 = 0;
+			ch = b0 & 0x3F;
 			// Note+Instr
 			if (!(b0 & 0x40))
 			{
-				if (i+1 > len) break;
-				b2 = p[i++];
+				if (j+1 > len) break;
+				b2 = p[j++];
 				if (ch < _this->m_nChannels)
 				{
 					if (b1 & 0x7F) m[ch].note = (b1 & 0x7F) + 25;
@@ -153,9 +167,9 @@ BOOL CSoundFile_ReadAMS(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 				}
 				if (b1 & 0x80)
 				{
-					if (i+1 > len) break;
+					if (j+1 > len) break;
 					b0 |= 0x40;
-					b1 = p[i++];
+					b1 = p[j++];
 				}
 			}
 			// Effect
@@ -171,8 +185,8 @@ BOOL CSoundFile_ReadAMS(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 					}
 				} else
 				{
-					if (i+1 > len) break;
-					b2 = p[i++];
+					if (j+1 > len) break;
+					b2 = p[j++];
 					if (ch < _this->m_nChannels)
 					{
 						UINT cmd = b1 & 0x3F;
@@ -214,9 +228,9 @@ BOOL CSoundFile_ReadAMS(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 				}
 				if (b1 & 0x80)
 				{
-					if (i+1 > len) break;
-					b1 = p[i++];
-					if (i <= len) goto anothercommand;
+					if (j+1 > len) break;
+					b1 = p[j++];
+					if (j <= len) goto anothercommand;
 				}
 			}
 			if (b0 & 0x80)
@@ -228,12 +242,13 @@ BOOL CSoundFile_ReadAMS(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 		dwMemPos += len;
 	}
 	// Read Samples
-	for (UINT iSmp=1; iSmp<=_this->m_nSamples; iSmp++) if (_this->Ins[iSmp].nLength)
+	for (i=1; i<=_this->m_nSamples; i++) if (_this->Ins[i].nLength)
 	{
+		UINT flags;
 		if (dwMemPos >= dwMemLength - 9) return TRUE;
-		UINT flags = (_this->Ins[iSmp].uFlags & CHN_16BIT) ? RS_AMS16 : RS_AMS8;
-		if (!AMSUnpackCheck(lpStream+dwMemPos, dwMemLength-dwMemPos, &_this->Ins[iSmp])) break;
-		dwMemPos += CSoundFile_ReadSample(_this, &_this->Ins[iSmp], flags, (LPCSTR)(lpStream+dwMemPos), dwMemLength-dwMemPos);
+		flags = (_this->Ins[i].uFlags & CHN_16BIT) ? RS_AMS16 : RS_AMS8;
+		if (!AMSUnpackCheck(lpStream+dwMemPos, dwMemLength-dwMemPos, &_this->Ins[i])) break;
+		dwMemPos += CSoundFile_ReadSample(_this, &_this->Ins[i], flags, (LPCSTR)(lpStream+dwMemPos), dwMemLength-dwMemPos);
 	}
 	return TRUE;
 }
@@ -307,6 +322,7 @@ BOOL CSoundFile_ReadAMS2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 	DWORD dwMemPos;
 	BYTE smpmap[16];
 	BYTE packedsamples[MAX_SAMPLES];
+	UINT i;
 
 	if ((pfh->dwHdr1 != 0x68534D41) || (pfh->wHdr2 != 0x7264)
 	 || (pfh->b1A != 0x1A) || (pfh->titlelen > 30)) return FALSE;
@@ -322,14 +338,17 @@ BOOL CSoundFile_ReadAMS2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 	_this->m_nInstruments = psh->instruments;
 	_this->m_nSamples = 0;
 	if (psh->flags & 0x40) _this->m_dwSongFlags |= SONG_LINEARSLIDES;
-	for (UINT nIns=1; nIns<=_this->m_nInstruments; nIns++)
+	for (i=1; i<=_this->m_nInstruments; i++)
 	{
-		if (dwMemPos >= dwMemLength) return TRUE;
-		const UINT insnamelen = lpStream[dwMemPos];
-		dwMemPos += insnamelen + 1;
-		const AMS2INSTRUMENT *pins = (AMS2INSTRUMENT *)(lpStream + dwMemPos);
-		dwMemPos += sizeof(AMS2INSTRUMENT);
+		const AMS2INSTRUMENT *pins;
 		const AMS2ENVELOPE *volenv, *panenv, *pitchenv;
+		INSTRUMENTHEADER *penv;
+		UINT c, envflags;
+		if (dwMemPos >= dwMemLength) return TRUE;
+		c = lpStream[dwMemPos];/* insnamelen */
+		dwMemPos += c + 1;
+		pins = (AMS2INSTRUMENT *)(lpStream + dwMemPos);
+		dwMemPos += sizeof(AMS2INSTRUMENT);
 		if (dwMemPos + sizeof(AMS2ENVELOPE) > dwMemLength) return TRUE;
 		volenv = (AMS2ENVELOPE *)(lpStream+dwMemPos);
 		dwMemPos += 5 + volenv->points*3;
@@ -340,53 +359,55 @@ BOOL CSoundFile_ReadAMS2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 		pitchenv = (AMS2ENVELOPE *)(lpStream+dwMemPos);
 		dwMemPos += 5 + pitchenv->points*3;
 		if (dwMemPos >= dwMemLength) return TRUE;
-		INSTRUMENTHEADER *penv = (INSTRUMENTHEADER *) SDL_calloc(1, sizeof (INSTRUMENTHEADER));
+		penv = (INSTRUMENTHEADER *) SDL_calloc(1, sizeof (INSTRUMENTHEADER));
 		if (!penv) return TRUE;
 		SDL_memset(smpmap, 0, sizeof(smpmap));
-		for (UINT ismpmap=0; ismpmap<pins->samples; ismpmap++)
+		for (c=0; c<pins->samples; c++)
 		{
-			if ((ismpmap >= 16) || (_this->m_nSamples+1 >= MAX_SAMPLES)) break;
+			if ((c >= 16) || (_this->m_nSamples+1 >= MAX_SAMPLES)) break;
 			_this->m_nSamples++;
-			smpmap[ismpmap] = _this->m_nSamples;
+			smpmap[c] = _this->m_nSamples;
 		}
 		penv->nGlobalVol = 64;
 		penv->nPan = 128;
 		penv->nPPC = 60;
-		_this->Headers[nIns] = penv;
-		for (UINT inotemap=0; inotemap<NOTE_MAX; inotemap++)
+		_this->Headers[i] = penv;
+		for (c=0; c<NOTE_MAX; c++)
 		{
-			penv->NoteMap[inotemap] = inotemap+1;
-			penv->Keyboard[inotemap] = smpmap[pins->notemap[inotemap] & 0x0F];
+			penv->NoteMap[c] = c+1;
+			penv->Keyboard[c] = smpmap[pins->notemap[c] & 0x0F];
 		}
 		// Volume Envelope
 		{
-			UINT pos = 0;
+			UINT e, pos = 0;
 			penv->nVolEnv = (volenv->points > 16) ? 16 : volenv->points;
 			penv->nVolSustainBegin = penv->nVolSustainEnd = volenv->sustain;
 			penv->nVolLoopStart = volenv->loopbegin;
 			penv->nVolLoopEnd = volenv->loopend;
-			for (UINT i=0; i<penv->nVolEnv; i++)
+			for (e=0; e<penv->nVolEnv; e++)
 			{
-				penv->VolEnv[i] = (BYTE)((volenv->info[i*3+2] & 0x7F) >> 1);
-				pos += volenv->info[i*3] + ((volenv->info[i*3+1] & 1) << 8);
-				penv->VolPoints[i] = (WORD)pos;
+				penv->VolEnv[e] = (BYTE)((volenv->info[e*3+2] & 0x7F) >> 1);
+				pos += volenv->info[e*3] + ((volenv->info[e*3+1] & 1) << 8);
+				penv->VolPoints[e] = (WORD)pos;
 			}
 		}
 		if (dwMemPos + 5 > dwMemLength) return TRUE;
 		penv->nFadeOut = (((lpStream[dwMemPos+2] & 0x0F) << 8) | (lpStream[dwMemPos+1])) << 3;
-		UINT envflags = lpStream[dwMemPos+3];
+		envflags = lpStream[dwMemPos+3];
 		if (envflags & 0x01) penv->dwFlags |= ENV_VOLLOOP;
 		if (envflags & 0x02) penv->dwFlags |= ENV_VOLSUSTAIN;
 		if (envflags & 0x04) penv->dwFlags |= ENV_VOLUME;
 		dwMemPos += 5;
 		// Read Samples
-		for (UINT ismp=0; ismp<pins->samples; ismp++)
+		for (c=0; c<pins->samples; c++)
 		{
+			MODINSTRUMENT *psmp;
+			UINT l;
 			if (dwMemPos + 1 > dwMemLength) return TRUE;
-			MODINSTRUMENT *psmp = ((ismp < 16) && (smpmap[ismp])) ? &_this->Ins[smpmap[ismp]] : NULL;
-			const UINT smpnamelen = lpStream[dwMemPos];
-			if (dwMemPos + smpnamelen + 1 > dwMemLength) return TRUE;
-			dwMemPos += smpnamelen + 1;
+			psmp = ((c < 16) && (smpmap[c])) ? &_this->Ins[smpmap[c]] : NULL;
+			l = lpStream[dwMemPos]; /* namelen */
+			if (dwMemPos + l + 1 > dwMemLength) return TRUE;
+			dwMemPos += l + 1;
 			if (dwMemPos + sizeof(AMS2SAMPLE) > dwMemLength) return TRUE;
 			if (psmp)
 			{
@@ -399,7 +420,7 @@ BOOL CSoundFile_ReadAMS2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 				psmp->nC4Speed = pams->c4speed;
 				psmp->RelativeTone = pams->transpose;
 				psmp->nVolume = pams->volume / 2;
-				packedsamples[smpmap[ismp]] = pams->flags;
+				packedsamples[smpmap[c]] = pams->flags;
 				if (pams->flags & 0x04) psmp->uFlags |= CHN_16BIT;
 				if (pams->flags & 0x08) psmp->uFlags |= CHN_LOOP;
 				if (pams->flags & 0x10) psmp->uFlags |= CHN_PINGPONGLOOP;
@@ -410,23 +431,23 @@ BOOL CSoundFile_ReadAMS2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 	if (dwMemPos + 256 >= dwMemLength) return TRUE;
 	// Comments
 	{
-		UINT composernamelen = lpStream[dwMemPos];
-		dwMemPos += composernamelen + 1;
+		UINT c = lpStream[dwMemPos]; /* namelen */
+		dwMemPos += c + 1;
 		// channel names
-		for (UINT i=0; i<32; i++)
+		for (i=0; i<32; i++)
 		{
-			const UINT chnnamlen = lpStream[dwMemPos];
-			dwMemPos += chnnamlen + 1;
-			if (dwMemPos + chnnamlen + 256 >= dwMemLength) return TRUE;
+			c = lpStream[dwMemPos]; /* namelen */
+			dwMemPos += c + 1;
+			if (dwMemPos + c + 256 >= dwMemLength) return TRUE;
 		}
 		// packed comments (ignored)
-		UINT songtextlen = *((LPDWORD)(lpStream+dwMemPos));
-		dwMemPos += songtextlen;
+		c = *((LPDWORD)(lpStream+dwMemPos));		/* songtextlen */
+		dwMemPos += c;
 		if (dwMemPos + 256 >= dwMemLength) return TRUE;
 	}
 	// Order List
 	{
-		for (UINT i=0; i<MAX_ORDERS; i++)
+		for (i=0; i<MAX_ORDERS; i++)
 		{
 			_this->Order[i] = 0xFF;
 			if (dwMemPos + 2 >= dwMemLength) return TRUE;
@@ -438,69 +459,85 @@ BOOL CSoundFile_ReadAMS2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 		}
 	}
 	// Pattern Data
-	for (UINT ipat=0; ipat<psh->patterns; ipat++)
+	for (i=0; i<psh->patterns; i++)
 	{
+		//UINT patchn, patcmds;
+		UINT packedlen;
+		UINT numrows;
+		UINT patnamlen;
 		if (dwMemPos+8 >= dwMemLength) return TRUE;
-		UINT packedlen = *((LPDWORD)(lpStream+dwMemPos));
-		UINT numrows = 1 + (UINT)(lpStream[dwMemPos+4]);
-		//UINT patchn = 1 + (UINT)(lpStream[dwMemPos+5] & 0x1F);
-		//UINT patcmds = 1 + (UINT)(lpStream[dwMemPos+5] >> 5);
-		UINT patnamlen = lpStream[dwMemPos+6];
+		packedlen = *((LPDWORD)(lpStream+dwMemPos));
+		numrows = 1 + (UINT)(lpStream[dwMemPos+4]);
+		//patchn = 1 + (UINT)(lpStream[dwMemPos+5] & 0x1F);
+		//patcmds = 1 + (UINT)(lpStream[dwMemPos+5] >> 5);
+		patnamlen = lpStream[dwMemPos+6];
 		dwMemPos += 4;
-		if ((ipat < MAX_PATTERNS) && (packedlen < dwMemLength-dwMemPos) && (numrows >= 8))
+		if ((i < MAX_PATTERNS) && (packedlen < dwMemLength-dwMemPos) && (numrows >= 8))
 		{
+			LPCBYTE psrc;
+			UINT pos,row;
 			if ((patnamlen) && (patnamlen < MAX_PATTERNNAME))
 			{
 				char s[MAX_PATTERNNAME]; // changed from CHAR
 				SDL_memcpy(s, lpStream+dwMemPos+3, patnamlen);
 				s[patnamlen] = 0;
-				CSoundFile_SetPatternName(_this, ipat, s);
+				CSoundFile_SetPatternName(_this, i, s);
 			}
-			_this->PatternSize[ipat] = numrows;
-			_this->Patterns[ipat] = CSoundFile_AllocatePattern(numrows, _this->m_nChannels);
-			if (!_this->Patterns[ipat]) return TRUE;
+			_this->PatternSize[i] = numrows;
+			_this->Patterns[i] = CSoundFile_AllocatePattern(numrows, _this->m_nChannels);
+			if (!_this->Patterns[i]) return TRUE;
 			// Unpack Pattern Data
-			LPCBYTE psrc = lpStream + dwMemPos;
-			UINT pos = 3 + patnamlen;
-			UINT row = 0;
+			psrc = lpStream + dwMemPos;
+			pos = 3 + patnamlen;
+			row = 0;
 			while ((pos < packedlen) && (row < numrows))
 			{
-				MODCOMMAND *m = _this->Patterns[ipat] + row * _this->m_nChannels;
+				MODCOMMAND *m = _this->Patterns[i] + row * _this->m_nChannels;
 				UINT byte1 = psrc[pos++];
+				UINT byte2;
 				UINT ch = byte1 & 0x1F;
+				if (byte1 == 0xff)
+				{
+					row++;
+					continue;
+				}
+
 				// Read Note + Instr
 				if (!(byte1 & 0x40))
 				{
-					UINT byte2 = psrc[pos++];
-					UINT note = byte2 & 0x7F;
+					UINT note;
+					byte2 = psrc[pos++];
+					note = byte2 & 0x7F;
 					if (note) m[ch].note = (note > 1) ? (note-1) : 0xFF;
 					m[ch].instr = psrc[pos++];
-					// Read Effect
-					while (byte2 & 0x80)
+				} else {
+					byte2 = 0x80; /* row contains atleast one effect, so trigged the first parse */
+				}
+				// Read Effect
+				while (byte2 & 0x80)
+				{
+					byte2 = psrc[pos++];
+					if (byte2 & 0x40)
 					{
-						byte2 = psrc[pos++];
-						if (byte2 & 0x40)
+						m[ch].volcmd = VOLCMD_VOLUME;
+						m[ch].vol = byte2 & 0x3F;
+					} else
+					{
+						UINT command = byte2 & 0x3F;
+						UINT param = psrc[pos++];
+						if (command == 0x0C)
 						{
 							m[ch].volcmd = VOLCMD_VOLUME;
-							m[ch].vol = byte2 & 0x3F;
+							m[ch].vol = param / 2;
+						} else
+						if (command < 0x10)
+						{
+							m[ch].command = command;
+							m[ch].param = param;
+							CSoundFile_ConvertModCommand(_this, &m[ch]);
 						} else
 						{
-							UINT command = byte2 & 0x3F;
-							UINT param = psrc[pos++];
-							if (command == 0x0C)
-							{
-								m[ch].volcmd = VOLCMD_VOLUME;
-								m[ch].vol = param / 2;
-							} else
-							if (command < 0x10)
-							{
-								m[ch].command = command;
-								m[ch].param = param;
-								CSoundFile_ConvertModCommand(_this, &m[ch]);
-							} else
-							{
-								// TODO: AMS effects
-							}
+							// TODO: AMS effects
 						}
 					}
 				}
@@ -510,19 +547,19 @@ BOOL CSoundFile_ReadAMS2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 		dwMemPos += packedlen;
 	}
 	// Read Samples
-	for (UINT iSmp=1; iSmp<=_this->m_nSamples; iSmp++) if (_this->Ins[iSmp].nLength)
+	for (i=1; i<=_this->m_nSamples; i++) if (_this->Ins[i].nLength)
 	{
-		if (dwMemPos >= dwMemLength - 9) return TRUE;
 		UINT flags;
-		if (packedsamples[iSmp] & 0x03)
+		if (dwMemPos >= dwMemLength - 9) return TRUE;
+		if (packedsamples[i] & 0x03)
 		{
-			flags = (_this->Ins[iSmp].uFlags & CHN_16BIT) ? RS_AMS16 : RS_AMS8;
-			if (!AMSUnpackCheck(lpStream+dwMemPos, dwMemLength-dwMemPos, &_this->Ins[iSmp])) break;
+			flags = (_this->Ins[i].uFlags & CHN_16BIT) ? RS_AMS16 : RS_AMS8;
+			if (!AMSUnpackCheck(lpStream+dwMemPos, dwMemLength-dwMemPos, &_this->Ins[i])) break;
 		} else
 		{
-			flags = (_this->Ins[iSmp].uFlags & CHN_16BIT) ? RS_PCM16S : RS_PCM8S;
+			flags = (_this->Ins[i].uFlags & CHN_16BIT) ? RS_PCM16S : RS_PCM8S;
 		}
-		dwMemPos += CSoundFile_ReadSample(_this, &_this->Ins[iSmp], flags, (LPCSTR)(lpStream+dwMemPos), dwMemLength-dwMemPos);
+		dwMemPos += CSoundFile_ReadSample(_this, &_this->Ins[i], flags, (LPCSTR)(lpStream+dwMemPos), dwMemLength-dwMemPos);
 	}
 	return TRUE;
 }
@@ -532,15 +569,19 @@ BOOL CSoundFile_ReadAMS2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 static BOOL AMSUnpackCheck(const BYTE *lpStream, DWORD dwMemLength, MODINSTRUMENT *ins)
 // -----------------------------------------------------------------------------------
 {
-	if (dwMemLength < 9) return FALSE;
-	DWORD packedbytes = *((DWORD *)(lpStream + 4));
+	DWORD packedbytes;
+	DWORD samplebytes;
+	DWORD packedmin;
 
-	DWORD samplebytes = ins->nLength;
+	if (dwMemLength < 9) return FALSE;
+	packedbytes = *((DWORD *)(lpStream + 4));
+
+	samplebytes = ins->nLength;
 	if (samplebytes > MAX_SAMPLE_LENGTH) samplebytes = MAX_SAMPLE_LENGTH;
 	if (ins->uFlags & CHN_16BIT) samplebytes *= 2;
 
 	// RLE can pack a run of up to 255 bytes into 3 bytes.
-	DWORD packedmin = (samplebytes * 3) >> 8;
+	packedmin = (samplebytes * 3) >> 8;
 	if (packedbytes < packedmin)
 	{
 		samplebytes = packedbytes * (255 / 3) + 2;
@@ -569,8 +610,9 @@ void AMSUnpack(const char *psrc, UINT inputlen, char *pdest, UINT dmax, char pac
 			signed char ch = psrc[i++];
 			if (ch == packcharacter)
 			{
+				BYTE ch2;
 				if (i >= inputlen) break;
-				BYTE ch2 = psrc[i++];
+				ch2 = psrc[i++];
 				if (ch2)
 				{
 					if (i >= inputlen) break;
@@ -594,12 +636,12 @@ void AMSUnpack(const char *psrc, UINT inputlen, char *pdest, UINT dmax, char pac
 	{
 		signed char *p = amstmp;
 		UINT bitcount = 0x80, dh;
-		UINT k=0;
-		for (UINT i=0; i<dmax; i++)
+		UINT k=0, i, count;
+		for (i=0; i<dmax; i++)
 		{
 			BYTE al = *p++;
 			dh = 0;
-			for (UINT count=0; count<8; count++)
+			for (count=0; count<8; count++)
 			{
 				UINT bl = al & bitcount;
 				bl = ((bl|(bl<<8)) >> ((dh+8-count) & 7)) & 0xFF;
@@ -617,7 +659,8 @@ void AMSUnpack(const char *psrc, UINT inputlen, char *pdest, UINT dmax, char pac
 	// Delta Unpack
 	{
 		signed char old = 0;
-		for (UINT i=0; i<dmax; i++)
+		UINT i;
+		for (i=0; i<dmax; i++)
 		{
 			int pos = ((LPBYTE)pdest)[i];
 			if ((pos != 128) && (pos & 0x80)) pos = -(pos & 0x7F);

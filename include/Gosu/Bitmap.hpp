@@ -1,100 +1,85 @@
 #pragma once
 
+#include <Gosu/Buffer.hpp>
 #include <Gosu/Color.hpp>
-#include <Gosu/IO.hpp>
+#include <Gosu/Utility.hpp>
 #include <string>
-#include <vector>
+#include <string_view>
 
 namespace Gosu
 {
-    /// A two-dimensional array area of pixels, each represented by a Color value.
+    /// A two-dimensional area of pixels, each represented by a Color value.
+    /// Internally, it is stored as a contiguous array of Gosu::Color, row by row.
+    ///
     /// Bitmaps are typically created only as an intermediate step between loading image files, and
     /// creating Gosu::Image objects from them (i.e. transferring the image into video RAM).
-    /// Has (expensive) value semantics.
+    ///
+    /// Bitmaps have (expensive) value semantics.
     class Bitmap
     {
         int m_width = 0, m_height = 0;
-        std::vector<Color> m_pixels;
+        Buffer m_pixels;
 
     public:
         Bitmap() = default;
 
         Bitmap(int width, int height, Color c = Color::NONE);
 
-        int width() const
-        {
-            return m_width;
-        }
+        /// Takes ownership of the given memory buffer.
+        /// @throw std::length_error if the buffer does not contain (width * height * 4) bytes.
+        Bitmap(int width, int height, Gosu::Buffer&& buffer);
 
-        int height() const
-        {
-            return m_height;
-        }
+        int width() const { return m_width; }
 
-        void swap(Bitmap& other);
+        int height() const { return m_height; }
 
         void resize(int width, int height, Color c = Color::NONE);
 
-        /// Returns the color at the specified position without any bounds checking.
-        Color get_pixel(int x, int y) const
-        {
-            return m_pixels[y * m_width + x];
-        }
+        /// Returns a reference to the pixel at the specified position without any bounds checking.
+        /// This can be a two-argument operator[] once we require C++23.
+        const Color& pixel(int x, int y) const { return data()[y * m_width + x]; }
 
-        /// Sets the pixel at the specified position without any bounds checking.
-        void set_pixel(int x, int y, Color c)
-        {
-            m_pixels[y * m_width + x] = c;
-        }
+        /// Returns a reference to the pixel at the specified position without any bounds checking.
+        /// This can be a two-argument operator[] once we require C++23.
+        Color& pixel(int x, int y) { return data()[y * m_width + x]; }
 
         /// This updates a pixel using the "over" alpha compositing operator, see:
         /// https://en.wikipedia.org/wiki/Alpha_compositing
+        /// Like pixel(), it does not perform any bounds checking.
         void blend_pixel(int x, int y, Color c);
 
         /// Inserts a bitmap at the given position. Parts of the inserted bitmap that would be
         /// outside of the target bitmap will be clipped away.
-        void insert(int x, int y, const Bitmap& source);
+        void insert(const Bitmap& source, int x, int y);
 
         /// Inserts a portion of a bitmap at the given position. Parts of the inserted bitmap that
         /// would be outside of the target bitmap will be clipped away.
-        void insert(int x, int y, const Bitmap& source,
-                    int src_x, int src_y, int src_width, int src_height);
+        /// Parts of the source_rect that are outside of the source image will be skipped.
+        void insert(const Bitmap& source, int x, int y, Rect source_rect);
+
+        /// Set the alpha value of all pixels which are equal to the color key to zero.
+        /// To reduce interpolation artifacts when stretching or rotating the resulting image, the
+        /// RGB values of transparent pixels will be adjusted to the average of their neighbors.
+        void apply_color_key(Color key);
 
         /// Direct access to the array of color values.
-        /// The return value is undefined if this bitmap is empty.
-        const Color* data() const
-        {
-            return &m_pixels[0];
-        }
+        const Color* data() const { return reinterpret_cast<const Color*>(m_pixels.data()); }
 
         /// Direct access to the array of color values.
-        /// The return value is undefined if this bitmap is empty.
-        Color* data()
-        {
-            return &m_pixels[0];
-        }
+        Color* data() { return reinterpret_cast<Color*>(m_pixels.data()); }
 
-        #ifdef FRIEND_TEST
-        FRIEND_TEST(BitmapTests, MemoryManagement);
-        #endif
+        bool operator==(const Bitmap&) const;
     };
 
-    /// Loads any supported image into a Bitmap.
+    /// Loads an image file, in any supported format.
     Bitmap load_image_file(const std::string& filename);
-    /// Loads any supported image into a Bitmap.
-    Bitmap load_image_file(Reader input);
+    /// Loads an image from memory, in any supported format.
+    Bitmap load_image(const Buffer& buffer);
 
     /// Saves a Bitmap to a file.
     void save_image_file(const Bitmap& bitmap, const std::string& filename);
     /// Saves a Bitmap to an arbitrary resource.
-    void save_image_file(const Bitmap& bitmap, Writer writer,
-                         const std::string_view& format_hint = "png");
+    Gosu::Buffer save_image(const Bitmap& bitmap, std::string_view format_hint = "png");
 
-    /// Set the alpha value of all pixels which are equal to the color key to zero.
-    /// To reduce interpolation artefacts when stretching or rotating the resulting image, the color
-    /// value of these pixels will also be adjusted to the average of their surrounding pixels.
-    void apply_color_key(Bitmap& bitmap, Color key);
-
-    Bitmap apply_border_flags(unsigned image_flags, const Bitmap& source,
-                              int src_x, int src_y, int src_width, int src_height);
+    Bitmap apply_border_flags(unsigned image_flags, const Bitmap& source, Rect source_rect);
 }

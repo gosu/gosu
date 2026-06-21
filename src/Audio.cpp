@@ -1,5 +1,5 @@
 #include <Gosu/Audio.hpp>
-#include <Gosu/IO.hpp>
+#include <Gosu/Buffer.hpp>
 #include <Gosu/Math.hpp>
 #include "AudioFile.hpp"
 #include "AudioImpl.hpp"
@@ -13,7 +13,7 @@ static Gosu::Song* cur_song = nullptr;
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 static bool cur_song_looping;
 
-struct Gosu::Sample::Impl : Gosu::Noncopyable
+struct Gosu::Sample::Impl : private Gosu::Noncopyable
 {
     ALuint buffer;
 
@@ -42,12 +42,12 @@ Gosu::Sample::Sample()
 }
 
 Gosu::Sample::Sample(const std::string& filename)
-: m_impl{new Impl(AudioFile(filename))}
+    : m_impl(new Impl(AudioFile(filename)))
 {
 }
 
-Gosu::Sample::Sample(Gosu::Reader reader)
-: m_impl{new Impl(AudioFile(reader))}
+Gosu::Sample::Sample(Buffer buffer)
+    : m_impl(new Impl(AudioFile(std::move(buffer))))
 {
 }
 
@@ -76,7 +76,7 @@ Gosu::Channel Gosu::Sample::play_pan(double pan, double volume, double speed, bo
 }
 
 // AudioFile impl
-struct Gosu::Song::Impl : Gosu::Noncopyable
+struct Gosu::Song::Impl : private Gosu::Noncopyable
 {
 private:
     double m_volume = 1.0;
@@ -101,16 +101,16 @@ private:
 
 public:
     explicit Impl(const std::string& filename)
-    : m_buffers{},
-      m_file{new AudioFile{filename}}
+        : m_buffers {},
+          m_file(new AudioFile(filename))
     {
         al_initialize();
         alGenBuffers(2, m_buffers);
     }
 
-    explicit Impl(Reader reader)
-    : m_buffers{},
-      m_file{new AudioFile{reader}}
+    explicit Impl(Buffer buffer)
+        : m_buffers {},
+          m_file(new AudioFile(std::move(buffer)))
     {
         al_initialize();
         alGenBuffers(2, m_buffers);
@@ -147,6 +147,8 @@ public:
         ALuint source = al_source_for_songs();
 
         alSourceStop(source);
+
+        alSourcei(source, AL_BUFFER, AL_NONE);
 
         // Dequeue all buffers for this source.
         // The number of QUEUED buffers apparently includes the number of PROCESSED ones,
@@ -227,12 +229,12 @@ public:
 };
 
 Gosu::Song::Song(const std::string& filename)
-: m_impl{new Impl(filename)}
+: m_impl(new Impl(filename))
 {
 }
 
-Gosu::Song::Song(Reader reader)
-: m_impl{new Impl(reader)}
+Gosu::Song::Song(Buffer buffer)
+: m_impl(new Impl(std::move(buffer)))
 {
 }
 

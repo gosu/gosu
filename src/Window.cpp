@@ -3,74 +3,15 @@
 
 #if defined(GOSU_IS_WIN)
 #define NOMINMAX
-#include <windows.h>
+#include <windows.h> // for SetThreadAffinityMask()
 #endif
 
 #include <Gosu/Gosu.hpp>
 #include "GraphicsImpl.hpp"
-#include <SDL.h>
+#include "OpenGLContext.hpp"
 #include <algorithm>
-#include <stdexcept>
 
-namespace Gosu
-{
-    namespace FPS
-    {
-        void register_frame();
-    }
-
-    [[noreturn]] static void throw_sdl_error(const std::string& operation)
-    {
-        const char* error = SDL_GetError();
-        throw std::runtime_error{operation + ": " + (error ? error : "(unknown error)")};
-    }
-
-    SDL_Window* shared_window()
-    {
-        // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-        static SDL_Window* window = nullptr;
-        if (window == nullptr) {
-            if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-                throw_sdl_error("Could not initialize SDL Video");
-            }
-
-            Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN | SDL_WINDOW_ALLOW_HIGHDPI;
-
-            window = SDL_CreateWindow("", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 64, 64,
-                                      flags);
-            if (window == nullptr) {
-                throw_sdl_error("Could not create window");
-            }
-            SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
-        }
-        return window;
-    }
-
-    static SDL_GLContext shared_gl_context()
-    {
-        static SDL_GLContext context = nullptr;
-        if (context == nullptr) {
-#ifdef GOSU_IS_OPENGLES
-            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
-            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-#endif
-
-            context = SDL_GL_CreateContext(shared_window());
-
-            if (context == nullptr) {
-                throw_sdl_error("Could not create OpenGL context");
-            }
-        }
-        return context;
-    }
-
-    void ensure_current_context() //
-    {
-        SDL_GL_MakeCurrent(shared_window(), shared_gl_context());
-    }
-}
-
-struct Gosu::Window::Impl : Gosu::Noncopyable
+struct Gosu::Window::Impl : private Gosu::Noncopyable
 {
     bool fullscreen = false;
     double update_interval = 0;
@@ -86,14 +27,15 @@ struct Gosu::Window::Impl : Gosu::Noncopyable
         CLOSED,
         OPEN,
         CLOSING
-    } state = CLOSED;
+    } state
+        = CLOSED;
 
-    std::unique_ptr<Graphics> graphics;
+    std::unique_ptr<Viewport> viewport;
     std::unique_ptr<Input> input;
 };
 
 Gosu::Window::Window(int width, int height, unsigned window_flags, double update_interval)
-: m_impl(new Impl)
+    : m_impl(new Impl)
 {
     set_borderless(window_flags & WF_BORDERLESS);
     set_resizable(window_flags & WF_RESIZABLE);
@@ -103,12 +45,10 @@ Gosu::Window::Window(int width, int height, unsigned window_flags, double update
     // Fixes https://github.com/gosu/gosu/issues/369
     // (This will implicitly create graphics() and input(), and make the OpenGL context current.)
     resize(width, height, false);
-    SDL_SetWindowPosition(shared_window(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+    SDL_SetWindowPosition(sdl_window(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 
     // Really enable fullscreen if desired.
     resize(width, height, (window_flags & WF_FULLSCREEN));
-
-    SDL_GL_SetSwapInterval(1);
 
     m_impl->update_interval = update_interval;
 
@@ -120,17 +60,17 @@ Gosu::Window::Window(int width, int height, unsigned window_flags, double update
 
 Gosu::Window::~Window()
 {
-    SDL_HideWindow(shared_window());
+    SDL_HideWindow(sdl_window());
 }
 
 int Gosu::Window::width() const
 {
-    return graphics().width();
+    return viewport().width();
 }
 
 int Gosu::Window::height() const
 {
-    return graphics().height();
+    return viewport().height();
 }
 
 bool Gosu::Window::fullscreen() const
@@ -188,25 +128,23 @@ void Gosu::Window::resize(int width, int height, bool fullscreen)
         }
     }
 
-    SDL_SetWindowFullscreen(shared_window(), fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+    SDL_SetWindowFullscreen(sdl_window(), fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
     if (!m_impl->resizing) {
-        SDL_SetWindowSize(shared_window(), actual_width, actual_height);
+        SDL_SetWindowSize(sdl_window(), actual_width, actual_height);
     }
 
-    SDL_GL_GetDrawableSize(shared_window(), &actual_width, &actual_height);
+    SDL_GL_GetDrawableSize(sdl_window(), &actual_width, &actual_height);
 
-    ensure_current_context();
-
-    if (!m_impl->graphics) {
-        m_impl->graphics.reset(new Graphics(actual_width, actual_height));
+    if (!m_impl->viewport) {
+        m_impl->viewport = std::make_unique<Viewport>(actual_width, actual_height);
     }
     else {
-        m_impl->graphics->set_physical_resolution(actual_width, actual_height);
+        m_impl->viewport->set_physical_resolution(actual_width, actual_height);
     }
-    m_impl->graphics->set_resolution(width, height, black_bar_width, black_bar_height);
+    m_impl->viewport->set_resolution(width, height, black_bar_width, black_bar_height);
 
     if (!m_impl->input) {
-        m_impl->input.reset(new Input(shared_window()));
+        m_impl->input = std::make_unique<Input>(sdl_window());
     }
     m_impl->input->set_mouse_factors(1 / scale_factor, 1 / scale_factor, black_bar_width,
                                      black_bar_height);
@@ -220,19 +158,19 @@ bool Gosu::Window::resizable() const
 void Gosu::Window::set_resizable(bool resizable)
 {
     m_impl->resizable = resizable;
-    SDL_SetWindowResizable(shared_window(), resizable ? SDL_TRUE : SDL_FALSE);
+    SDL_SetWindowResizable(sdl_window(), resizable ? SDL_TRUE : SDL_FALSE);
 }
 
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 bool Gosu::Window::borderless() const
 {
-    return SDL_GetWindowFlags(shared_window()) & SDL_WINDOW_BORDERLESS;
+    return SDL_GetWindowFlags(sdl_window()) & SDL_WINDOW_BORDERLESS;
 }
 
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 void Gosu::Window::set_borderless(bool borderless)
 {
-    SDL_SetWindowBordered(shared_window(), borderless ? SDL_FALSE : SDL_TRUE);
+    SDL_SetWindowBordered(sdl_window(), borderless ? SDL_FALSE : SDL_TRUE);
 }
 
 double Gosu::Window::update_interval() const
@@ -248,14 +186,14 @@ void Gosu::Window::set_update_interval(double update_interval)
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 std::string Gosu::Window::caption() const
 {
-    const char* title = SDL_GetWindowTitle(shared_window());
+    const char* title = SDL_GetWindowTitle(sdl_window());
     return title ? title : "";
 }
 
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 void Gosu::Window::set_caption(const std::string& caption)
 {
-    SDL_SetWindowTitle(shared_window(), caption.c_str());
+    SDL_SetWindowTitle(sdl_window(), caption.c_str());
 }
 
 void Gosu::Window::show()
@@ -273,22 +211,29 @@ void Gosu::Window::show()
         while (tick()) {
             // Sleep to keep this loop from eating 100% CPU.
             unsigned long tick_time = milliseconds() - time_before_tick;
-            double sleep_time = tick_time - update_interval();
+            long sleep_time = static_cast<long>(update_interval() - static_cast<double>(tick_time));
             if (sleep_time >= 1) {
-                sleep(static_cast<unsigned long>(sleep_time));
+                // Use Gosu::sleep instead of std::this_thread::sleep_for because Win32 Sleep()
+                // results in better behavior here, sleep_for causes FPS to drop from 60 to <50.
+                // (This is also the reason why Gosu::sleep still exists.)
+                Gosu::sleep(sleep_time);
             }
 
             time_before_tick = milliseconds();
         }
     } catch (...) {
 #ifdef GOSU_IS_WIN
-        if (previous_affinity) SetThreadAffinityMask(GetCurrentThread(), previous_affinity);
+        if (previous_affinity) {
+            SetThreadAffinityMask(GetCurrentThread(), previous_affinity);
+        }
 #endif
         throw;
     }
 
 #ifdef GOSU_IS_WIN
-    if (previous_affinity) SetThreadAffinityMask(GetCurrentThread(), previous_affinity);
+    if (previous_affinity) {
+        SetThreadAffinityMask(GetCurrentThread(), previous_affinity);
+    }
 #endif
 
     m_impl->state = Impl::CLOSED;
@@ -302,59 +247,67 @@ bool Gosu::Window::tick()
     }
 
     if (m_impl->state == Impl::CLOSED) {
-        SDL_ShowWindow(shared_window());
+        SDL_ShowWindow(sdl_window());
         m_impl->state = Impl::OPEN;
+
+        SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
+
+        // Enable vsync.
+        const OpenGLContext current_context(true);
+        SDL_GL_SetSwapInterval(1);
 
         // SDL_GL_GetDrawableSize returns different values before and after showing the window.
         // -> When first showing the window, update the physical size of Graphics (=glViewport).
         // Fixes https://github.com/gosu/gosu/issues/318
         int width, height;
-        SDL_GL_GetDrawableSize(shared_window(), &width, &height);
-        graphics().set_physical_resolution(width, height);
+        SDL_GL_GetDrawableSize(sdl_window(), &width, &height);
+        viewport().set_physical_resolution(width, height);
     }
 
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         switch (e.type) {
-            case SDL_WINDOWEVENT: {
-                switch (e.window.event) {
-                    case SDL_WINDOWEVENT_SIZE_CHANGED: {
-                        if (m_impl->resizable &&
-                            (width() != e.window.data1 || height() != e.window.data2)) {
-                            m_impl->resizing = true;
-                            resize(e.window.data1, e.window.data2, fullscreen());
-                            m_impl->resizing = false;
-                        }
-                        break;
-                    }
-                    case SDL_WINDOWEVENT_FOCUS_GAINED: {
-                        gain_focus();
-                        break;
-                    }
-                    case SDL_WINDOWEVENT_FOCUS_LOST: {
-                        lose_focus();
-                        break;
-                    }
-                    default: {
-                        break;
-                    }
+        case SDL_WINDOWEVENT: {
+            switch (e.window.event) {
+            case SDL_WINDOWEVENT_SIZE_CHANGED: {
+                if (m_impl->resizable
+                    && (width() != e.window.data1 || height() != e.window.data2)) {
+                    m_impl->resizing = true;
+                    resize(e.window.data1, e.window.data2, fullscreen());
+                    m_impl->resizing = false;
                 }
                 break;
             }
-            case SDL_QUIT: {
-                close();
+            case SDL_WINDOWEVENT_FOCUS_GAINED: {
+                gain_focus();
                 break;
             }
-            case SDL_DROPFILE: {
-                std::shared_ptr<char> dropped_file{e.drop.file, SDL_free};
-                if (dropped_file == nullptr) break;
-                drop(dropped_file.get());
+            case SDL_WINDOWEVENT_FOCUS_LOST: {
+                lose_focus();
                 break;
             }
             default: {
-                input().feed_sdl_event(&e);
                 break;
             }
+            }
+            break;
+        }
+        case SDL_QUIT: {
+            close();
+            break;
+        }
+        case SDL_DROPFILE: {
+            std::shared_ptr<char> dropped_file { e.drop.file, SDL_free };
+            if (dropped_file == nullptr) {
+                break;
+            }
+            drop(dropped_file.get());
+            break;
+        }
+        default: {
+            input().feed_sdl_event(&e);
+            break;
+        }
         }
     }
 
@@ -367,13 +320,13 @@ bool Gosu::Window::tick()
     SDL_ShowCursor(needs_cursor());
 
     if (needs_redraw()) {
-        ensure_current_context();
-        graphics().frame([&] {
+        const OpenGLContext current_context(true);
+        viewport().frame([&] {
             draw();
-            FPS::register_frame();
+            register_frame();
         });
 
-        SDL_GL_SwapWindow(shared_window());
+        SDL_GL_SwapWindow(sdl_window());
     }
 
     if (m_impl->state == Impl::CLOSING) {
@@ -386,7 +339,7 @@ bool Gosu::Window::tick()
 void Gosu::Window::close()
 {
     m_impl->state = Impl::CLOSING;
-    SDL_HideWindow(shared_window());
+    SDL_HideWindow(sdl_window());
 }
 
 void Gosu::Window::button_down(Button button)
@@ -395,26 +348,21 @@ void Gosu::Window::button_down(Button button)
 
     // Default shortcuts for toggling fullscreen mode, see: https://github.com/gosu/gosu/issues/361
 
+    const bool control_down = Input::down(KB_LEFT_CONTROL) || Input::down(KB_RIGHT_CONTROL);
+    const bool alt_down = Input::down(KB_LEFT_ALT) || Input::down(KB_RIGHT_ALT);
+    const bool shift_down = Input::down(KB_LEFT_SHIFT) || Input::down(KB_RIGHT_SHIFT);
+    const bool meta_down = Input::down(KB_LEFT_META) || Input::down(KB_RIGHT_META);
+
 #ifdef GOSU_IS_MAC
     // cmd+F and cmd+ctrl+F are both common shortcuts for toggling fullscreen mode on macOS.
-    toggle_fullscreen = button == KB_F &&
-                        (Input::down(KB_LEFT_META) || Input::down(KB_RIGHT_META)) &&
-                        !Input::down(KB_LEFT_SHIFT) && !Input::down(KB_RIGHT_SHIFT) &&
-                        !Input::down(KB_LEFT_ALT) && !Input::down(KB_RIGHT_ALT);
+    toggle_fullscreen = button == KB_F && meta_down && !control_down && !alt_down && !shift_down;
 #else
     // Alt+Enter and Alt+Return toggle fullscreen mode on all other platforms.
-    toggle_fullscreen = (button == KB_RETURN || button == KB_ENTER) &&
-                        (Input::down(KB_LEFT_ALT) || Input::down(KB_RIGHT_ALT)) &&
-                        !Input::down(KB_LEFT_CONTROL) && !Input::down(KB_RIGHT_CONTROL) &&
-                        !Input::down(KB_LEFT_META) && !Input::down(KB_RIGHT_META) &&
-                        !Input::down(KB_LEFT_SHIFT) && !Input::down(KB_RIGHT_SHIFT);
+    const bool enter_or_return = (button == KB_RETURN || button == KB_ENTER);
+    toggle_fullscreen = enter_or_return && alt_down && !control_down && !shift_down && !meta_down;
 #endif
     // F11 is supported as a shortcut for fullscreen mode on all platforms.
-    if (!toggle_fullscreen && button == KB_F11 && !Input::down(KB_LEFT_ALT) &&
-        !Input::down(KB_RIGHT_ALT) && !Input::down(KB_LEFT_CONTROL) &&
-        !Input::down(KB_RIGHT_CONTROL) && !Input::down(KB_LEFT_META) &&
-        !Input::down(KB_RIGHT_META) && !Input::down(KB_LEFT_SHIFT) &&
-        !Input::down(KB_RIGHT_SHIFT)) {
+    if (button == KB_F11 && !meta_down && !control_down && !alt_down && !shift_down) {
         toggle_fullscreen = true;
     }
 
@@ -423,14 +371,14 @@ void Gosu::Window::button_down(Button button)
     }
 }
 
-const Gosu::Graphics& Gosu::Window::graphics() const
+const Gosu::Viewport& Gosu::Window::viewport() const
 {
-    return *m_impl->graphics;
+    return *m_impl->viewport;
 }
 
-Gosu::Graphics& Gosu::Window::graphics()
+Gosu::Viewport& Gosu::Window::viewport()
 {
-    return *m_impl->graphics;
+    return *m_impl->viewport;
 }
 
 const Gosu::Input& Gosu::Window::input() const
@@ -441,6 +389,11 @@ const Gosu::Input& Gosu::Window::input() const
 Gosu::Input& Gosu::Window::input()
 {
     return *m_impl->input;
+}
+
+SDL_Window* Gosu::Window::sdl_window() const // NOLINT(*-convert-member-functions-to-static)
+{
+    return OpenGLContext::shared_sdl_window();
 }
 
 #endif

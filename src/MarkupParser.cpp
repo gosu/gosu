@@ -157,29 +157,29 @@ void Gosu::MarkupParser::add_current_substring()
 void Gosu::MarkupParser::add_composed_substring(u32string&& substring)
 {
     FormattedString fstr;
-    fstr.text = substring;
+    fstr.text = std::move(substring);
     fstr.flags = flags();
     fstr.color = c.back();
 
     if (!substrings.empty() && substrings.back().can_be_merged_with(fstr)) {
-        substrings.back().text.append(move(fstr.text));
+        substrings.back().text.append(fstr.text);
     }
     else {
-        substrings.emplace_back(move(fstr));
+        substrings.emplace_back(std::move(fstr));
     }
 }
 
 void Gosu::MarkupParser::flush_to_consumer()
 {
     if (!substrings.empty()) {
-        consumer(move(substrings));
+        consumer(std::move(substrings));
         substrings.clear();
     }
 }
 
 Gosu::MarkupParser::MarkupParser(unsigned base_flags, bool split_words,
                                  function<void (vector<FormattedString>)> consumer)
-: consumer(move(consumer))
+: consumer(std::move(consumer))
 {
     word_state = (split_words ? ADDING_WORD : IGNORE_WORDS);
 

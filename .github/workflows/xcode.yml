@@ -5,15 +5,12 @@ on:
     branches: [master]
   pull_request:
 
-env:
-  BUILD_TYPE: Debug
-
 jobs:
   build:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install dependencies (macOS)
         run: brew install sdl2

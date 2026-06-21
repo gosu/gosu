@@ -72,6 +72,10 @@ GOSU_FFI_API const char* Gosu_button_name(int id);
 GOSU_FFI_API const char* Gosu_gamepad_name(int id);
 GOSU_FFI_API double Gosu_axis(int id);
 
+// Clipboard
+GOSU_FFI_API const char* Gosu_clipboard();
+GOSU_FFI_API void Gosu_set_clipboard(const char* text);
+
 // Misc
 GOSU_FFI_API int Gosu_fps(void);
 GOSU_FFI_API void Gosu_user_languages(void function(void* data, const char* language),

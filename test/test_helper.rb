@@ -1,7 +1,11 @@
 gem "minitest"
 require "minitest/autorun"
 
-require "gosu" unless defined? Gosu
+require "minitest/reporters"
+Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
+
+$LOAD_PATH.prepend "#{__dir__}/../lib"
+require "gosu"
 
 class Gosu::Image
   # Gosu does not implement this method by default because it is very inefficient.
@@ -40,7 +44,6 @@ class Gosu::Image
 end
 
 module TestHelper
-  # TODO: Should be __dir__ after we drop Ruby 1.x support...
   def self.media_path(fname = "")
     File.join(File.dirname(__FILE__), "media", fname)
   end
@@ -49,12 +52,13 @@ module TestHelper
     TestHelper.media_path(fname)
   end
   
-  def skip_on_appveyor
-    skip if ENV["APPVEYOR"]
-  end
-
   def skip_on_github
     skip if ENV["GITHUB_WORKFLOW"]
+  end
+
+  # This is mostly intended for tests that use Gosu.render, which doesn't work on Windows.
+  def skip_on_github_windows
+    skip if ENV["GITHUB_WORKFLOW"] and Gem.win_platform?
   end
 
   def actual_from_expected_filename(expected)

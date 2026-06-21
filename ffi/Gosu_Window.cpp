@@ -12,9 +12,7 @@ GOSU_FFI_API Gosu_Window* Gosu_Window_create(int width, int height, unsigned win
 
 GOSU_FFI_API void Gosu_Window_destroy(Gosu_Window* window)
 {
-    Gosu_translate_exceptions([=] {
-        delete window;
-    });
+    delete window;
 }
 
 // Callbacks
@@ -224,6 +222,13 @@ GOSU_FFI_API void Gosu_Window_set_caption(Gosu_Window* window, const char* capti
 {
     Gosu_translate_exceptions([=] {
         window->set_caption(caption);
+    });
+}
+
+GOSU_FFI_API void* Gosu_Window_sdl_window(Gosu_Window* window)
+{
+    return Gosu_translate_exceptions([=] {
+        return window->sdl_window();
     });
 }
 

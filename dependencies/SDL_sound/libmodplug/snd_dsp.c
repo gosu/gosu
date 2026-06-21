@@ -18,6 +18,7 @@ static UINT GetMaskFromSize(UINT len)
 void CSoundFile_InitializeDSP(CSoundFile *_this, BOOL bReset)
 //-----------------------------------------
 {
+	BOOL bResetBass = FALSE;
 	if (!_this->m_nReverbDelay) _this->m_nReverbDelay = 100;
 	if (!_this->m_nXBassRange) _this->m_nXBassRange = XBASS_DELAY;
 	if (!_this->m_nProLogicDelay) _this->m_nProLogicDelay = 20;
@@ -74,13 +75,13 @@ void CSoundFile_InitializeDSP(CSoundFile *_this, BOOL bReset)
 		}
 	} else _this->nReverbSize = 0;
 #endif
-	BOOL bResetBass = FALSE;
 	// Bass Expansion Reset
 	if (_this->gdwSoundSetup & SNDMIX_MEGABASS)
 	{
 		UINT nXBassSamples = (_this->gdwMixingFreq * _this->m_nXBassRange) / 10000;
+		UINT mask;
 		if (nXBassSamples > XBASSBUFFERSIZE) nXBassSamples = XBASSBUFFERSIZE;
-		UINT mask = GetMaskFromSize(nXBassSamples);
+		mask = GetMaskFromSize(nXBassSamples);
 		if ((bReset) || (mask != (UINT)_this->nXBassMask))
 		{
 			_this->nXBassMask = mask;
@@ -110,22 +111,24 @@ void CSoundFile_ProcessStereoDSP(CSoundFile *_this, int count)
 		int *pr = _this->MixSoundBuffer, *pin = _this->MixReverbBuffer, rvbcount = count;
 		do
 		{
-			int echo = _this->ReverbBuffer[_this->nReverbBufferPos] + _this->ReverbBuffer2[_this->nReverbBufferPos2]
+			int echo, echodly, n, tmp, v, vlp;
+
+			echo = _this->ReverbBuffer[_this->nReverbBufferPos] + _this->ReverbBuffer2[_this->nReverbBufferPos2]
 					+ _this->ReverbBuffer3[_this->nReverbBufferPos3] + _this->ReverbBuffer4[_this->nReverbBufferPos4];	// echo = reverb signal
 			// Delay line and remove Low Frequencies			// v = original signal
-			int echodly = _this->ReverbLoFilterDelay[_this->nReverbLoDlyPos];	// echodly = delayed signal
+			echodly = _this->ReverbLoFilterDelay[_this->nReverbLoDlyPos];	// echodly = delayed signal
 			_this->ReverbLoFilterDelay[_this->nReverbLoDlyPos] = echo >> 1;
 			_this->nReverbLoDlyPos++;
 			_this->nReverbLoDlyPos &= 0x1F;
-			int n = _this->nReverbLoFltPos;
+			n = _this->nReverbLoFltPos;
 			_this->nReverbLoFltSum -= _this->ReverbLoFilterBuffer[n];
-			int tmp = echo / 128;
+			tmp = echo / 128;
 			_this->ReverbLoFilterBuffer[n] = tmp;
 			_this->nReverbLoFltSum += tmp;
 			echodly -= _this->nReverbLoFltSum;
 			_this->nReverbLoFltPos = (n + 1) & 0x3F;
 			// Reverb
-			int v = (pin[0]+pin[1]) >> _this->nFilterAttn;
+			v = (pin[0]+pin[1]) >> _this->nFilterAttn;
 			pr[0] += pin[0] + echodly;
 			pr[1] += pin[1] + echodly;
 			v += echodly >> 2;
@@ -138,7 +141,7 @@ void CSoundFile_ProcessStereoDSP(CSoundFile *_this, int count)
 			_this->gRvbLowPass[_this->gRvbLPPos] = v;
 			_this->gRvbLPPos++;
 			_this->gRvbLPPos &= 7;
-			const int vlp = _this->gRvbLPSum >> 2;
+			vlp = _this->gRvbLPSum >> 2;
 			_this->ReverbBuffer[_this->nReverbBufferPos] = vlp;
 			_this->ReverbBuffer2[_this->nReverbBufferPos2] = vlp;
 			if (++_this->nReverbBufferPos >= _this->nReverbSize) _this->nReverbBufferPos = 0;
@@ -154,9 +157,11 @@ void CSoundFile_ProcessStereoDSP(CSoundFile *_this, int count)
 	if (_this->gdwSoundSetup & SNDMIX_SURROUND)
 	{
 		int *pr = _this->MixSoundBuffer, n = _this->nDolbyLoFltPos;
-		for (int r=count; r; r--)
+		int   r = count;
+		for (; r; r--)
 		{
-			int v = (pr[0]+pr[1]+DOLBYATTNROUNDUP) >> (nDolbyHiFltAttn+1);
+			int v, secho, tmp;
+			v = (pr[0]+pr[1]+DOLBYATTNROUNDUP) >> (nDolbyHiFltAttn+1);
 			v *= (int)_this->nDolbyDepth;
 			// Low-Pass Filter
 			_this->nDolbyHiFltSum -= _this->DolbyHiFilterBuffer[_this->nDolbyHiFltPos];
@@ -166,7 +171,7 @@ void CSoundFile_ProcessStereoDSP(CSoundFile *_this, int count)
 			_this->nDolbyHiFltPos++;
 			_this->nDolbyHiFltPos &= nDolbyHiFltMask;
 			// Surround
-			int secho = _this->SurroundBuffer[_this->nSurroundPos];
+			secho = _this->SurroundBuffer[_this->nSurroundPos];
 			_this->SurroundBuffer[_this->nSurroundPos] = v;
 			// Delay line and remove low frequencies
 			v = _this->DolbyLoFilterDelay[_this->nDolbyLoDlyPos];		// v = delayed signal
@@ -174,7 +179,7 @@ void CSoundFile_ProcessStereoDSP(CSoundFile *_this, int count)
 			_this->nDolbyLoDlyPos++;
 			_this->nDolbyLoDlyPos &= 0x1F;
 			_this->nDolbyLoFltSum -= _this->DolbyLoFilterBuffer[n];
-			int tmp = secho / 64;
+			tmp = secho / 64;
 			_this->DolbyLoFilterBuffer[n] = tmp;
 			_this->nDolbyLoFltSum += tmp;
 			v -= _this->nDolbyLoFltSum;
@@ -194,14 +199,16 @@ void CSoundFile_ProcessStereoDSP(CSoundFile *_this, int count)
 		int *px = _this->MixSoundBuffer;
 		int xba = _this->m_nXBassDepth+1, xbamask = (1 << xba) - 1;
 		int n = _this->nXBassBufferPos;
-		for (int x=count; x; x--)
+		int x = count;
+		for (; x; x--)
 		{
+			int tmp0, tmp, v;
 			_this->nXBassSum -= _this->XBassBuffer[n];
-			int tmp0 = px[0] + px[1];
-			int tmp = (tmp0 + ((tmp0 >> 31) & xbamask)) >> xba;
+			tmp0 = px[0] + px[1];
+			tmp = (tmp0 + ((tmp0 >> 31) & xbamask)) >> xba;
 			_this->XBassBuffer[n] = tmp;
 			_this->nXBassSum += tmp;
-			int v = _this->XBassDelay[_this->nXBassDlyPos];
+			v = _this->XBassDelay[_this->nXBassDlyPos];
 			_this->XBassDelay[_this->nXBassDlyPos] = px[0];
 			px[0] = v + _this->nXBassSum;
 			v = _this->XBassDelay[_this->nXBassDlyPos+1];
@@ -219,7 +226,8 @@ void CSoundFile_ProcessStereoDSP(CSoundFile *_this, int count)
 	{
 		int n1 = _this->nLeftNR, n2 = _this->nRightNR;
 		int *pnr = _this->MixSoundBuffer;
-		for (int nr=count; nr; nr--)
+		int  nr = count;
+		for (; nr; nr--)
 		{
 			int vnr = pnr[0] >> 1;
 			pnr[0] = vnr + n1;
@@ -242,8 +250,9 @@ void CSoundFile_ProcessStereoDSP(CSoundFile *_this, int count)
 BOOL CSoundFile_SetReverbParameters(CSoundFile *_this, UINT nDepth, UINT nDelay)
 //------------------------------------------------------------
 {
+	UINT gain;
 	if (nDepth > 100) nDepth = 100;
-	UINT gain = nDepth / 20;
+	gain = nDepth / 20;
 	if (gain > 4) gain = 4;
 	_this->m_nReverbDepth = 4 - gain;
 	if (nDelay < 40) nDelay = 40;
@@ -257,11 +266,12 @@ BOOL CSoundFile_SetReverbParameters(CSoundFile *_this, UINT nDepth, UINT nDelay)
 BOOL CSoundFile_SetXBassParameters(CSoundFile *_this, UINT nDepth, UINT nRange)
 //-----------------------------------------------------------
 {
+	UINT gain, range;
 	if (nDepth > 100) nDepth = 100;
-	UINT gain = nDepth / 20;
+	gain = nDepth / 20;
 	if (gain > 4) gain = 4;
 	_this->m_nXBassDepth = 8 - gain;	// filter attenuation 1/256 .. 1/16
-	UINT range = nRange / 5;
+	range = nRange / 5;
 	if (range > 5) range -= 5; else range = 0;
 	if (nRange > 16) nRange = 16;
 	_this->m_nXBassRange = 21 - range;	// filter average on 0.5-1.6ms

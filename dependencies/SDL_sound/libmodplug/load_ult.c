@@ -43,8 +43,9 @@ BOOL CSoundFile_ReadUlt(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 {
 	ULTHEADER *pmh = (ULTHEADER *)lpStream;
 	ULTSAMPLE *pus;
-	UINT nos, nop;
+	UINT nos, nop, j;
 	DWORD dwMemPos = 0;
+	UINT smpsize = 64;
 
 	// try to read module header
 	if ((!lpStream) || (dwMemLength < 0x100)) return FALSE;
@@ -65,13 +66,13 @@ BOOL CSoundFile_ReadUlt(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	nos = lpStream[dwMemPos++];
 	_this->m_nSamples = nos;
 	if (_this->m_nSamples >= MAX_SAMPLES) _this->m_nSamples = MAX_SAMPLES-1;
-	UINT smpsize = 64;
 	if (pmh->id[14] >= '4')	smpsize += 2;
 	if (dwMemPos + nos*smpsize + 256 + 2 > dwMemLength) return TRUE;
-	for (UINT ins=1; ins<=nos; ins++, dwMemPos+=smpsize) if (ins<=_this->m_nSamples)
+	for (j=1; j<=nos; j++, dwMemPos+=smpsize) if (j<=_this->m_nSamples)
 	{
+		MODINSTRUMENT *pins;
 		pus	= (ULTSAMPLE *)(lpStream+dwMemPos);
-		MODINSTRUMENT *pins = &_this->Ins[ins];
+		pins = &_this->Ins[j];
 		pins->nLoopStart = pus->loopstart;
 		pins->nLoopEnd = pus->loopend;
 		pins->nLength = pus->sizeend - pus->sizestart;
@@ -98,61 +99,64 @@ BOOL CSoundFile_ReadUlt(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	dwMemPos += 2;
 	if (_this->m_nChannels > 32) _this->m_nChannels = 32;
 	// Default channel settings
-	for (UINT nSet=0; nSet<_this->m_nChannels; nSet++)
+	for (j=0; j<_this->m_nChannels; j++)
 	{
-		_this->ChnSettings[nSet].nVolume = 64;
-		_this->ChnSettings[nSet].nPan = (nSet & 1) ? 0x40 : 0xC0;
+		_this->ChnSettings[j].nVolume = 64;
+		_this->ChnSettings[j].nPan = (j & 1) ? 0x40 : 0xC0;
 	}
 	// read pan position table for v1.5 and higher
 	if(pmh->id[14]>='3')
 	{
 		if (dwMemPos + _this->m_nChannels > dwMemLength) return TRUE;
-		for(UINT t=0; t<_this->m_nChannels; t++)
+		for(j=0; j<_this->m_nChannels; j++)
 		{
-			_this->ChnSettings[t].nPan = (lpStream[dwMemPos++] << 4) + 8;
-			if (_this->ChnSettings[t].nPan > 256) _this->ChnSettings[t].nPan = 256;
+			_this->ChnSettings[j].nPan = (lpStream[dwMemPos++] << 4) + 8;
+			if (_this->ChnSettings[j].nPan > 256) _this->ChnSettings[j].nPan = 256;
 		}
 	}
 	// Allocating Patterns
-	for (UINT nAllocPat=0; nAllocPat<nop; nAllocPat++)
+	for (j=0; j<nop; j++)
 	{
-		if (nAllocPat < MAX_PATTERNS)
+		if (j < MAX_PATTERNS)
 		{
-			_this->PatternSize[nAllocPat] = 64;
-			_this->Patterns[nAllocPat] = CSoundFile_AllocatePattern(64, _this->m_nChannels);
+			_this->PatternSize[j] = 64;
+			_this->Patterns[j] = CSoundFile_AllocatePattern(64, _this->m_nChannels);
 		}
 	}
 	// Reading Patterns
-	for (UINT nChn=0; nChn<_this->m_nChannels; nChn++)
+	for (j=0; j<_this->m_nChannels; j++)
 	{
-		for (UINT nPat=0; nPat<nop; nPat++)
+		UINT nPat=0;
+		for ( ; nPat<nop; nPat++)
 		{
 			MODCOMMAND *pat = NULL;
-			
+			UINT row = 0;
+
 			if (nPat < MAX_PATTERNS)
 			{
 				pat = _this->Patterns[nPat];
-				if (pat) pat += nChn;
+				if (pat) pat += j;
 			}
-			UINT row = 0;
 			while (row < 64)
 			{
-				if (dwMemPos + 5 > dwMemLength) return TRUE;
-				UINT rep = 1;
-				UINT note = lpStream[dwMemPos++];
+				UINT rep, note, instr, eff, dat1, dat2, cmd1, cmd2;
+				if (dwMemPos > dwMemLength - 5) return TRUE;
+				rep = 1;
+				note = lpStream[dwMemPos++];
 				if (note == 0xFC)
 				{
-					if (dwMemPos + 7 > dwMemLength) return TRUE;
 					rep = lpStream[dwMemPos];
 					note = lpStream[dwMemPos+1];
 					dwMemPos += 2;
+					if (dwMemPos > dwMemLength - 4) return TRUE;
 				}
-				UINT instr = lpStream[dwMemPos++];
-				UINT eff = lpStream[dwMemPos++];
-				UINT dat1 = lpStream[dwMemPos++];
-				UINT dat2 = lpStream[dwMemPos++];
-				UINT cmd1 = eff & 0x0F;
-				UINT cmd2 = eff >> 4;
+
+				instr = lpStream[dwMemPos++];
+				eff = lpStream[dwMemPos++];
+				dat1 = lpStream[dwMemPos++];
+				dat2 = lpStream[dwMemPos++];
+				cmd1 = eff & 0x0F;
+				cmd2 = eff >> 4;
 				if (cmd1 == 0x0C) dat1 >>= 2; else
 				if (cmd1 == 0x0B) { cmd1 = dat1 = 0; }
 				if (cmd2 == 0x0C) dat2 >>= 2; else
@@ -196,11 +200,12 @@ BOOL CSoundFile_ReadUlt(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		}
 	}
 	// Reading Instruments
-	for (UINT smp=1; smp<=_this->m_nSamples; smp++) if (_this->Ins[smp].nLength)
+	for (j=1; j<=_this->m_nSamples; j++) if (_this->Ins[j].nLength)
 	{
+		UINT flags;
 		if (dwMemPos >= dwMemLength) return TRUE;
-		UINT flags = (_this->Ins[smp].uFlags & CHN_16BIT) ? RS_PCM16S : RS_PCM8S;
-		dwMemPos += CSoundFile_ReadSample(_this, &_this->Ins[smp], flags, (LPSTR)(lpStream+dwMemPos), dwMemLength - dwMemPos);
+		flags = (_this->Ins[j].uFlags & CHN_16BIT) ? RS_PCM16S : RS_PCM8S;
+		dwMemPos += CSoundFile_ReadSample(_this, &_this->Ins[j], flags, (LPSTR)(lpStream+dwMemPos), dwMemLength - dwMemPos);
 	}
 	return TRUE;
 }

@@ -60,8 +60,8 @@ public:
             background_color = ACTIVE_COLOR;
         }
 
-        Gosu::Graphics::draw_rect(m_x - PADDING, m_y - PADDING, width() + 2 * PADDING,
-                                  height() + 2 * PADDING, background_color, 0);
+        Gosu::draw_rect(m_x - PADDING, m_y - PADDING, width() + 2 * PADDING, height() + 2 * PADDING,
+                        background_color, 0);
 
         // Calculate the position of the caret and the selection start.
         double pos_x = m_x + m_font.text_width(text().substr(0, caret_pos()));
@@ -69,11 +69,11 @@ public:
 
         // Draw the selection background, if any; if not, sel_x and pos_x will be
         // the same value, making this rect empty and invisible.
-        Gosu::Graphics::draw_rect(sel_x, m_y, pos_x - sel_x, height(), SELECTION_COLOR, 0);
+        Gosu::draw_rect(sel_x, m_y, pos_x - sel_x, height(), SELECTION_COLOR, 0);
 
         // Draw the caret if this is the currently selected field.
         if (m_window.input().text_input() == this) {
-            Gosu::Graphics::draw_rect(pos_x, m_y, 1, height(), CARET_COLOR, 0);
+            Gosu::draw_rect(pos_x, m_y, 1, height(), CARET_COLOR, 0);
         }
 
         // Finally, draw the text itself!

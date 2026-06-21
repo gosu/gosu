@@ -1,14 +1,11 @@
-//! \file Timing.hpp
-//! Functions for timing.
-
 #pragma once
 
 namespace Gosu
 {
-    //! Freezes the current thread for at least the specified time.
+    /// Freezes the current thread for the given amount of milliseconds.
     void sleep(unsigned milliseconds);
 
-    //! Returns the milliseconds since first calling this function.
-    //! Can wrap after running for a long time.
+    /// Returns the milliseconds since first calling this function.
+    /// Can wrap after running for a long time.
     unsigned long milliseconds();
 }

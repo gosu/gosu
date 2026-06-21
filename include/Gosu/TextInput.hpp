@@ -2,6 +2,7 @@
 
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Platform.hpp>
+#include <Gosu/Utility.hpp>
 #include <memory>
 #include <string>
 
@@ -15,11 +16,10 @@ namespace Gosu
     /// build a text that can be accessed via TextInput::text().
     /// A TextInput object has no built-in UI. It is up to you to actually draw a text field.
     /// TextInput only provides a portable base for your own GUI to build upon.
-    class TextInput
+    class TextInput : private Noncopyable
     {
         struct Impl;
-        // Non-movable (const) to avoid dangling references to TextInput instances.
-        const std::unique_ptr<Impl> m_impl;
+        std::unique_ptr<Impl> m_impl;
 
     public:
         TextInput();

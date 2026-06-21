@@ -1,5 +1,5 @@
 /**
- * SDL_sound; A sound processing toolkit.
+ * SDL_sound; An abstract sound format decoding API.
  *
  * Please see the file LICENSE.txt in the source's root directory.
  *
@@ -28,9 +28,9 @@
 
 #if SOUND_SUPPORTS_RAW
 
-static int RAW_init(void)
+static SDL_bool RAW_init(void)
 {
-    return 1;  /* always succeeds. */
+    return SDL_TRUE;  /* always succeeds. */
 } /* RAW_init */
 
 
@@ -80,8 +80,7 @@ static int RAW_open(Sound_Sample *sample, const char *ext)
         BAIL_MACRO("RAW: can't reset file.", 0);
     }
 
-    sample_rate =  (sample->actual.rate * sample->actual.channels
-      * ( (sample->actual.format & 0x0018) >> 3) );
+    sample_rate = (sample->actual.rate * sample->actual.channels * ((sample->actual.format & 0x0018) >> 3));
     internal->total_time = ( pos ) / sample_rate * 1000;
     internal->total_time += (pos % sample_rate) * 1000 / sample_rate;
 
@@ -133,8 +132,8 @@ static int RAW_rewind(Sound_Sample *sample)
 static int RAW_seek(Sound_Sample *sample, Uint32 ms)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
-    int pos = (int) __Sound_convertMsToBytePos(&sample->actual, ms);
-    int err = (SDL_RWseek(internal->rw, pos, RW_SEEK_SET) != pos);
+    const Sint64 pos = __Sound_convertMsToBytePos(&sample->actual, ms);
+    const int err = (SDL_RWseek(internal->rw, pos, RW_SEEK_SET) != pos);
     BAIL_IF_MACRO(err, ERR_IO_ERROR, 0);
     return 1;
 } /* RAW_seek */

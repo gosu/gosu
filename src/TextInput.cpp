@@ -7,7 +7,7 @@
 #include <SDL.h>
 #endif
 
-struct Gosu::TextInput::Impl : Gosu::Noncopyable
+struct Gosu::TextInput::Impl : private Gosu::Noncopyable
 {
     std::string text;
 

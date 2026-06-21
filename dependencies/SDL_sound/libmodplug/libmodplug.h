@@ -12,16 +12,6 @@
 #define __SDL_SOUND_INTERNAL__
 #include "SDL_sound_internal.h"
 
-#if defined(HAVE_LIBC) && defined(__WATCOMC__) /* Watcom has issues... */
-#define SDL_cos  cos
-#define SDL_fabs fabs
-#define SDL_log  log
-#define SDL_pow  pow
-#define SDL_sin  sin
-#define SDL_sinf sin
-#define SDL_abs  abs
-#endif
-
 #ifdef _WIN32
 
 #ifdef _MSC_VER
@@ -57,8 +47,6 @@ typedef Uint16* LPWORD;
 typedef const char* LPCSTR;
 typedef void* PVOID;
 typedef void VOID;
-
-#define LPCTSTR LPCSTR
 
 #ifndef FALSE
 #define FALSE	0

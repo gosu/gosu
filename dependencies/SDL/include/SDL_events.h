@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2022 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -102,6 +102,7 @@ typedef enum
     SDL_KEYMAPCHANGED,          /**< Keymap changed due to a system event such as an
                                      input language or keyboard layout change.
                                 */
+    SDL_TEXTEDITING_EXT,       /**< Extended keyboard text editing (composition) */
 
     /* Mouse events */
     SDL_MOUSEMOTION    = 0x400, /**< Mouse moved */
@@ -117,6 +118,7 @@ typedef enum
     SDL_JOYBUTTONUP,            /**< Joystick button released */
     SDL_JOYDEVICEADDED,         /**< A new joystick has been inserted into the system */
     SDL_JOYDEVICEREMOVED,       /**< An opened joystick has been removed */
+    SDL_JOYBATTERYUPDATED,      /**< Joystick battery level change */
 
     /* Game controller events */
     SDL_CONTROLLERAXISMOTION  = 0x650, /**< Game controller axis motion */
@@ -129,6 +131,8 @@ typedef enum
     SDL_CONTROLLERTOUCHPADMOTION,      /**< Game controller touchpad finger was moved */
     SDL_CONTROLLERTOUCHPADUP,          /**< Game controller touchpad finger was lifted */
     SDL_CONTROLLERSENSORUPDATE,        /**< Game controller sensor was updated */
+    SDL_CONTROLLERUPDATECOMPLETE_RESERVED_FOR_SDL3,
+    SDL_CONTROLLERSTEAMHANDLEUPDATED,  /**< Game controller Steam handle has changed */
 
     /* Touch events */
     SDL_FINGERDOWN      = 0x700,
@@ -141,7 +145,7 @@ typedef enum
     SDL_MULTIGESTURE,
 
     /* Clipboard events */
-    SDL_CLIPBOARDUPDATE = 0x900, /**< The clipboard changed */
+    SDL_CLIPBOARDUPDATE = 0x900, /**< The clipboard or primary selection changed */
 
     /* Drag and drop events */
     SDL_DROPFILE        = 0x1000, /**< The system requests a file open */
@@ -243,6 +247,19 @@ typedef struct SDL_TextEditingEvent
     Sint32 length;                              /**< The length of selected editing text */
 } SDL_TextEditingEvent;
 
+/**
+ *  \brief Extended keyboard text editing event structure (event.editExt.*) when text would be
+ *  truncated if stored in the text buffer SDL_TextEditingEvent
+ */
+typedef struct SDL_TextEditingExtEvent
+{
+    Uint32 type;                                /**< ::SDL_TEXTEDITING_EXT */
+    Uint32 timestamp;                           /**< In milliseconds, populated using SDL_GetTicks() */
+    Uint32 windowID;                            /**< The window with keyboard focus, if any */
+    char* text;                                 /**< The editing text, which should be freed with SDL_free(), and will not be NULL */
+    Sint32 start;                               /**< The start cursor of selected editing text */
+    Sint32 length;                              /**< The length of selected editing text */
+} SDL_TextEditingExtEvent;
 
 #define SDL_TEXTINPUTEVENT_TEXT_SIZE (32)
 /**
@@ -303,6 +320,8 @@ typedef struct SDL_MouseWheelEvent
     Uint32 direction;   /**< Set to one of the SDL_MOUSEWHEEL_* defines. When FLIPPED the values in X and Y will be opposite. Multiply by -1 to change them back */
     float preciseX;     /**< The amount scrolled horizontally, positive to the right and negative to the left, with float precision (added in 2.0.18) */
     float preciseY;     /**< The amount scrolled vertically, positive away from the user and negative toward the user, with float precision (added in 2.0.18) */
+    Sint32 mouseX;      /**< X coordinate, relative to window (added in 2.26.0) */
+    Sint32 mouseY;      /**< Y coordinate, relative to window (added in 2.26.0) */
 } SDL_MouseWheelEvent;
 
 /**
@@ -381,6 +400,16 @@ typedef struct SDL_JoyDeviceEvent
     Sint32 which;       /**< The joystick device index for the ADDED event, instance id for the REMOVED event */
 } SDL_JoyDeviceEvent;
 
+/**
+ *  \brief Joysick battery level change event structure (event.jbattery.*)
+ */
+typedef struct SDL_JoyBatteryEvent
+{
+    Uint32 type;        /**< ::SDL_JOYBATTERYUPDATED */
+    Uint32 timestamp;   /**< In milliseconds, populated using SDL_GetTicks() */
+    SDL_JoystickID which; /**< The joystick instance id */
+    SDL_JoystickPowerLevel level; /**< The joystick battery level */
+} SDL_JoyBatteryEvent;
 
 /**
  *  \brief Game controller axis motion event structure (event.caxis.*)
@@ -419,7 +448,7 @@ typedef struct SDL_ControllerButtonEvent
  */
 typedef struct SDL_ControllerDeviceEvent
 {
-    Uint32 type;        /**< ::SDL_CONTROLLERDEVICEADDED, ::SDL_CONTROLLERDEVICEREMOVED, or ::SDL_CONTROLLERDEVICEREMAPPED */
+    Uint32 type;        /**< ::SDL_CONTROLLERDEVICEADDED, ::SDL_CONTROLLERDEVICEREMOVED, ::SDL_CONTROLLERDEVICEREMAPPED, or ::SDL_CONTROLLERSTEAMHANDLEUPDATED */
     Uint32 timestamp;   /**< In milliseconds, populated using SDL_GetTicks() */
     Sint32 which;       /**< The joystick device index for the ADDED event, instance id for the REMOVED or REMAPPED event */
 } SDL_ControllerDeviceEvent;
@@ -449,6 +478,7 @@ typedef struct SDL_ControllerSensorEvent
     SDL_JoystickID which; /**< The joystick instance id */
     Sint32 sensor;      /**< The type of the sensor, one of the values of ::SDL_SensorType */
     float data[3];      /**< Up to 3 values from the sensor, as defined in SDL_sensor.h */
+    Uint64 timestamp_us; /**< The timestamp of the sensor reading in microseconds, if the hardware provides this information. */
 } SDL_ControllerSensorEvent;
 
 /**
@@ -540,6 +570,7 @@ typedef struct SDL_SensorEvent
     Uint32 timestamp;   /**< In milliseconds, populated using SDL_GetTicks() */
     Sint32 which;       /**< The instance ID of the sensor */
     float data[6];      /**< Up to 6 values from the sensor - additional values can be queried using SDL_SensorGetData() */
+    Uint64 timestamp_us; /**< The timestamp of the sensor reading in microseconds, if the hardware provides this information. */
 } SDL_SensorEvent;
 
 /**
@@ -550,15 +581,6 @@ typedef struct SDL_QuitEvent
     Uint32 type;        /**< ::SDL_QUIT */
     Uint32 timestamp;   /**< In milliseconds, populated using SDL_GetTicks() */
 } SDL_QuitEvent;
-
-/**
- *  \brief OS Specific event
- */
-typedef struct SDL_OSEvent
-{
-    Uint32 type;        /**< ::SDL_QUIT */
-    Uint32 timestamp;   /**< In milliseconds, populated using SDL_GetTicks() */
-} SDL_OSEvent;
 
 /**
  *  \brief A user-defined event type (event.user.*)
@@ -601,6 +623,7 @@ typedef union SDL_Event
     SDL_WindowEvent window;                 /**< Window event data */
     SDL_KeyboardEvent key;                  /**< Keyboard event data */
     SDL_TextEditingEvent edit;              /**< Text editing event data */
+    SDL_TextEditingExtEvent editExt;        /**< Extended text editing event data */
     SDL_TextInputEvent text;                /**< Text input event data */
     SDL_MouseMotionEvent motion;            /**< Mouse motion event data */
     SDL_MouseButtonEvent button;            /**< Mouse button event data */
@@ -610,6 +633,7 @@ typedef union SDL_Event
     SDL_JoyHatEvent jhat;                   /**< Joystick hat event data */
     SDL_JoyButtonEvent jbutton;             /**< Joystick button event data */
     SDL_JoyDeviceEvent jdevice;             /**< Joystick device change event data */
+    SDL_JoyBatteryEvent jbattery;           /**< Joystick battery event data */
     SDL_ControllerAxisEvent caxis;          /**< Game Controller axis event data */
     SDL_ControllerButtonEvent cbutton;      /**< Game Controller button event data */
     SDL_ControllerDeviceEvent cdevice;      /**< Game Controller device event data */

@@ -1,4 +1,9 @@
+#include <Gosu/Transform.hpp>
 #include "Gosu_FFI_internal.h"
+
+GOSU_FFI_API void Init_gosu()
+{
+}
 
 std::string& Gosu_internal_error()
 {
@@ -14,14 +19,14 @@ GOSU_FFI_API const char* Gosu_last_error(void)
 GOSU_FFI_API void Gosu_gl_z(double z, void function(void*), void* data)
 {
     Gosu_translate_exceptions([=] {
-        Gosu::Graphics::gl(z, [=] { function(data); });
+        Gosu::gl(z, [=] { function(data); });
     });
 }
 
 GOSU_FFI_API void Gosu_gl(void function(void*), void* data)
 {
     Gosu_translate_exceptions([=] {
-        Gosu::Graphics::gl([=] { function(data); });
+        Gosu::gl([=] { function(data); });
     });
 }
 
@@ -29,8 +34,7 @@ GOSU_FFI_API Gosu_Image* Gosu_render(int width, int height, void function(void*)
                                      unsigned image_flags)
 {
     return Gosu_translate_exceptions([=] {
-        Gosu::Image image = Gosu::Graphics::render(width, height, [=] { function(data); },
-                                                   image_flags);
+        Gosu::Image image = Gosu::render(width, height, [=] { function(data); }, image_flags);
         return new Gosu_Image{image};
     });
 }
@@ -38,7 +42,7 @@ GOSU_FFI_API Gosu_Image* Gosu_render(int width, int height, void function(void*)
 GOSU_FFI_API Gosu_Image* Gosu_record(int width, int height, void function(void*), void* data)
 {
     return Gosu_translate_exceptions([=] {
-        Gosu::Image image = Gosu::Graphics::record(width, height, [=] { function(data); });
+        Gosu::Image image = Gosu::record(width, height, [=] { function(data); });
         return new Gosu_Image{image};
     });
 }
@@ -46,7 +50,7 @@ GOSU_FFI_API Gosu_Image* Gosu_record(int width, int height, void function(void*)
 GOSU_FFI_API void Gosu_flush(void)
 {
     Gosu_translate_exceptions([=] {
-        Gosu::Graphics::flush();
+        Gosu::flush();
     });
 }
 
@@ -58,14 +62,14 @@ GOSU_FFI_API void Gosu_transform(double m0, double m1, double m2, double m3, dou
     Gosu_translate_exceptions([=] {
         Gosu::Transform transform = {m0, m1, m2,  m3,  m4,  m5,  m6,  m7,
                                      m8, m9, m10, m11, m12, m13, m14, m15};
-        Gosu::Graphics::transform(transform, [=] { function(data); });
+        Gosu::transform(transform, [=] { function(data); });
     });
 }
 
 GOSU_FFI_API void Gosu_translate(double x, double y, void function(void*), void* data)
 {
     Gosu_translate_exceptions([=] {
-        Gosu::Graphics::transform(Gosu::translate(x, y), [=] { function(data); });
+        Gosu::transform(Gosu::Transform::translate(x, y), [=] { function(data); });
     });
 }
 
@@ -73,8 +77,8 @@ GOSU_FFI_API void Gosu_scale(double scale_x, double scale_y, double around_x, do
                              void function(void*), void* data)
 {
     Gosu_translate_exceptions([=] {
-        Gosu::Graphics::transform(Gosu::scale(scale_x, scale_y, around_x, around_y),
-                                  [=] { function(data); });
+        Gosu::transform(Gosu::Transform::scale(scale_x, scale_y).around(around_x, around_y),
+            [=] { function(data); });
     });
 }
 
@@ -82,7 +86,8 @@ GOSU_FFI_API void Gosu_rotate(double angle, double around_x, double around_y, vo
                               void* data)
 {
     Gosu_translate_exceptions([=] {
-        Gosu::Graphics::transform(Gosu::rotate(angle, around_x, around_y), [=] { function(data); });
+        Gosu::transform(Gosu::Transform::rotate(angle).around(around_x, around_y),
+                        [=] { function(data); });
     });
 }
 
@@ -90,7 +95,7 @@ GOSU_FFI_API void Gosu_clip_to(double x, double y, double width, double height,
                                void function(void*), void* data)
 {
     Gosu_translate_exceptions([=] {
-        Gosu::Graphics::clip_to(x, y, width, height, [=] { function(data); });
+        Gosu::clip_to(x, y, width, height, [=] { function(data); });
     });
 }
 
@@ -98,7 +103,7 @@ GOSU_FFI_API void Gosu_draw_line(double x1, double y1, unsigned c1, double x2, d
                                  unsigned c2, double z, unsigned mode)
 {
     Gosu_translate_exceptions([=] {
-        Gosu::Graphics::draw_line(x1, y1, c1, x2, y2, c2, z, static_cast<Gosu::BlendMode>(mode));
+        Gosu::draw_line(x1, y1, c1, x2, y2, c2, z, static_cast<Gosu::BlendMode>(mode));
     });
 }
 
@@ -107,8 +112,8 @@ GOSU_FFI_API void Gosu_draw_triangle(double x1, double y1, unsigned c1, double x
                                      unsigned mode)
 {
     Gosu_translate_exceptions([=] {
-        Gosu::Graphics::draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z,
-                                      static_cast<Gosu::BlendMode>(mode));
+        Gosu::draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z,
+                            static_cast<Gosu::BlendMode>(mode));
     });
 }
 
@@ -116,7 +121,7 @@ GOSU_FFI_API void Gosu_draw_rect(double x, double y, double width, double height
                                  double z, unsigned mode)
 {
     Gosu_translate_exceptions([=] {
-        Gosu::Graphics::draw_rect(x, y, width, height, c, z, static_cast<Gosu::BlendMode>(mode));
+        Gosu::draw_rect(x, y, width, height, c, z, static_cast<Gosu::BlendMode>(mode));
     });
 }
 
@@ -125,8 +130,8 @@ GOSU_FFI_API void Gosu_draw_quad(double x1, double y1, unsigned c1, double x2, d
                                  double y4, unsigned c4, double z, unsigned mode)
 {
     Gosu_translate_exceptions([=] {
-        Gosu::Graphics::draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z,
-                                  static_cast<Gosu::BlendMode>(mode));
+        Gosu::draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z,
+                        static_cast<Gosu::BlendMode>(mode));
     });
 }
 
@@ -248,6 +253,23 @@ GOSU_FFI_API double Gosu_axis(int id)
 {
     return Gosu_translate_exceptions([=] {
         return Gosu::Input::axis(static_cast<Gosu::Button>(id));
+    });
+}
+
+GOSU_FFI_API const char* Gosu_clipboard()
+{
+    static thread_local std::string text;
+
+    return Gosu_translate_exceptions([=] {
+        text = Gosu::Input::clipboard();
+        return text.c_str();
+    });
+}
+
+GOSU_FFI_API void Gosu_set_clipboard(const char* text)
+{
+    Gosu_translate_exceptions([=] {
+        Gosu::Input::set_clipboard(text);
     });
 }
 

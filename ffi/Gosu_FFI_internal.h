@@ -26,7 +26,7 @@ auto Gosu_translate_exceptions(Functor functor)
     }
 }
 
-// C-compatible wrapper structs for Gosu classes
+// C-compatible wrapper structs for Gosu classes. (No inheritance because of missing virtual dtors.)
 
 struct Gosu_Channel
 {
@@ -48,7 +48,7 @@ struct Gosu_Sample
     Gosu::Sample sample;
 };
 
-// Use inheritance where composition is not feasible
+// Use inheritance where composition is not feasible (because we want to compare pointers).
 
 struct Gosu_Song : Gosu::Song
 {

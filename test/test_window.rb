@@ -1,4 +1,3 @@
-# Encoding: UTF-8
 require_relative "test_helper"
 
 # Desired behavior of interactions between tick, show and close:

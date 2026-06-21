@@ -1,4 +1,3 @@
-# Encoding: UTF-8
 require_relative "test_helper"
 
 class TestGosuModule < Minitest::Test
@@ -66,7 +65,7 @@ class TestGosuModule < Minitest::Test
       [-1,  1] => 225.0,
       [-1,  0] => 270.0,
       [-1, -1] => 315.0,
-      [ 0, -1] =>   0.0, # 360.0
+      [ 0, -1] =>   0.0, # = 360.0
     }.each do |point, angle|
       assert_equal angle, Gosu.angle(0, 0, *point)
     end
@@ -116,17 +115,25 @@ class TestGosuModule < Minitest::Test
       assert val < 10
     end
   end
-  
+
   SIZES = [25, 50, 500]
 
   def test_render
-    # Gosu.render does not work on Appveyor.
-    skip_on_appveyor
-    
+    skip_on_github_windows
+
     SIZES.each do |size|
       assert_output_matches("test_gosu_module/triangle-#{size}", 0.9, [size, size]) do
         Gosu.draw_triangle(0, 0, 0xff_ff0000, size, 0, 0xff_00ff00, size, size, 0xff_0000ff, 0)
       end
     end
+  end
+
+  def test_clipboard
+    Gosu.clipboard = ""
+    assert_equal(Gosu.clipboard, "")
+
+    # If SDL has an error, the result of Gosu.clipboard will be an empty string.
+    Gosu.clipboard = "What hath God wrought"
+    assert_equal(Gosu.clipboard, "What hath God wrought")
   end
 end

@@ -1,5 +1,5 @@
 /**
- * SDL_sound; A sound processing toolkit.
+ * SDL_sound; An abstract sound format decoding API.
  *
  * Please see the file LICENSE.txt in the source's root directory.
  *
@@ -57,7 +57,7 @@ typedef struct
     Uint8 *backBuffer;
     Uint32 backBufferSize;
     Uint32 backBufLeft;
-    Uint32 start_pos;
+    Sint64 start_pos;
 } shn_t;
 
 
@@ -174,10 +174,6 @@ static const Uint8 ulaw_outward[13][256] = {
 #define M_PI    3.14159265358979323846
 #endif
 
-#if defined(HAVE_LIBC) && defined(__WATCOMC__) /* Watcom has issues... */
-#define SDL_log log
-#endif
-
 
 static int word_get(shn_t *shn, SDL_RWops *rw, Uint32 *word)
 {
@@ -282,9 +278,9 @@ static SDL_INLINE int uint_get(int nbit, shn_t *shn, SDL_RWops *rw, Sint32 *w)
 } /* uint_get */
 
 
-static int SHN_init(void)
+static SDL_bool SHN_init(void)
 {
-    return 1;  /* initialization always successful. */
+    return SDL_TRUE;  /* initialization always successful. */
 } /* SHN_init */
 
 
@@ -1257,7 +1253,7 @@ static int SHN_rewind(Sound_Sample *sample)
 
 #if 0
     shn_t *shn = (shn_t *) internal->decoder_private;
-    int rc = SDL_RWseek(internal->rw, shn->start_pos, RW_SEEK_SET);
+    Sint64 rc = SDL_RWseek(internal->rw, shn->start_pos, RW_SEEK_SET);
     BAIL_IF_MACRO(rc != shn->start_pos, ERR_IO_ERROR, 0);
     /* !!! FIXME: set state. */
     return 1;

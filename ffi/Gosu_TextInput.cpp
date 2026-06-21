@@ -9,9 +9,7 @@ GOSU_FFI_API Gosu_TextInput* Gosu_TextInput_create()
 
 GOSU_FFI_API void Gosu_TextInput_destroy(Gosu_TextInput* text_input)
 {
-    Gosu_translate_exceptions([=] {
-        delete text_input;
-    });
+    delete text_input;
 }
 
 GOSU_FFI_API const char* Gosu_TextInput_text(Gosu_TextInput* text_input)

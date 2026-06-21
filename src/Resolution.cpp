@@ -1,30 +1,30 @@
 #include <Gosu/Platform.hpp>
-#ifndef GOSU_IS_IPHONE // iPhone definitions live in WindowUIKit.cpp
+#ifndef GOSU_IS_IPHONE // Definitions for iOS live in WindowUIKit.cpp
 
 #include <Gosu/Window.hpp>
 #include "GraphicsImpl.hpp"
 #include <SDL.h>
 
-static SDL_DisplayMode display_mode(Gosu::Window* window)
+static SDL_DisplayMode display_mode(const Gosu::Window* window)
 {
-    static struct VideoSubsystem
+    static const struct VideoSubsystem : Gosu::Noncopyable
     {
         VideoSubsystem() { SDL_InitSubSystem(SDL_INIT_VIDEO); };
         ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
     } subsystem;
 
-    int index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
+    int index = window ? SDL_GetWindowDisplayIndex(window->sdl_window()) : 0;
     SDL_DisplayMode result;
     SDL_GetDesktopDisplayMode(index, &result);
     return result;
 }
 
-int Gosu::screen_width(Window* window)
+int Gosu::screen_width(const Window* window)
 {
     return display_mode(window).w;
 }
 
-int Gosu::screen_height(Window* window)
+int Gosu::screen_height(const Window* window)
 {
     return display_mode(window).h;
 }
@@ -32,7 +32,7 @@ int Gosu::screen_height(Window* window)
 #ifdef GOSU_IS_MAC
 #import <AppKit/AppKit.h>
 
-static SDL_Rect max_window_size(Gosu::Window* window)
+static SDL_Rect max_window_size(const Gosu::Window* window)
 {
     // The extra size that a window needs depends on its style.
     // This logic must be kept in sync with SDL_cocoawindow.m to be 100% accurate.
@@ -48,7 +48,7 @@ static SDL_Rect max_window_size(Gosu::Window* window)
         style |= NSWindowStyleMaskResizable;
     }
 
-    auto index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
+    auto index = window ? SDL_GetWindowDisplayIndex(window->sdl_window()) : 0;
     NSRect screen_frame = NSScreen.screens[index].visibleFrame;
     NSRect content_rect = [NSWindow contentRectForFrameRect:screen_frame styleMask:style];
 
@@ -68,26 +68,26 @@ static SDL_Rect max_window_size(Gosu::Window* window)
 #include <windows.h>
 #pragma comment(lib, "Dwmapi.lib")
 
-static SDL_Rect max_window_size(Gosu::Window* window)
+static SDL_Rect max_window_size(const Gosu::Window* window)
 {
     // Replicate SDL's WIN_GetWindowBordersSize implementation (https://github.com/libsdl-org/SDL/blob/9f71a809e9bd6fbb5fa401a45c1537fc26abc1b4/src/video/windows/SDL_windowswindow.c#L514-L554)
     // until it's patched to ignore the window drop shadow (window border is 1px but with drop shadow it's reported as 8px)
     // REF: https://github.com/libsdl-org/SDL/issues/3835
 
-    static struct VideoSubsystem
+    static const struct VideoSubsystem : Gosu::Noncopyable
     {
         VideoSubsystem() { SDL_InitSubSystem(SDL_INIT_VIDEO); };
         ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
     } subsystem;
 
-    int index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
+    int index = window ? SDL_GetWindowDisplayIndex(window->sdl_window()) : 0;
     SDL_Rect rect;
     SDL_GetDisplayUsableBounds(index, &rect);
 
     if (window) {
         SDL_SysWMinfo info;
         SDL_VERSION(&info.version);
-        SDL_GetWindowWMInfo(Gosu::shared_window(), &info);
+        SDL_GetWindowWMInfo(window->sdl_window(), &info);
         HWND hwnd = info.info.win.window;
 
         RECT rcClient, rcWindow;
@@ -137,33 +137,35 @@ static SDL_Rect max_window_size(Gosu::Window* window)
 #endif
 
 #ifdef GOSU_IS_X
-static SDL_Rect max_window_size(Gosu::Window* window)
+static SDL_Rect max_window_size(const Gosu::Window* window)
 {
-    static struct VideoSubsystem
+    static const struct VideoSubsystem : Gosu::Noncopyable
     {
         VideoSubsystem() { SDL_InitSubSystem(SDL_INIT_VIDEO); };
         ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
     } subsystem;
 
-    int index = window ? SDL_GetWindowDisplayIndex(Gosu::shared_window()) : 0;
+    int index = window ? SDL_GetWindowDisplayIndex(window->sdl_window()) : 0;
     SDL_Rect rect;
-    int top, left, bottom, right;
     SDL_GetDisplayUsableBounds(index, &rect);
-    SDL_GetWindowBordersSize(Gosu::shared_window(), &top, &left, &bottom, &right);
 
-    rect.w -= left + right;
-    rect.h -= top + bottom;
+    if (window) {
+        int top, left, bottom, right;
+        SDL_GetWindowBordersSize(window->sdl_window(), &top, &left, &bottom, &right);
+        rect.w -= left + right;
+        rect.h -= top + bottom;
+    }
 
     return rect;
 }
 #endif
 
-int Gosu::available_width(Window* window)
+int Gosu::available_width(const Window* window)
 {
     return max_window_size(window).w;
 }
 
-int Gosu::available_height(Window* window)
+int Gosu::available_height(const Window* window)
 {
     return max_window_size(window).h;
 }

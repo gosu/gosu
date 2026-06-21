@@ -6,6 +6,9 @@
 
 namespace Gosu
 {
+    // A single word and its formatting context. A "word" is anything that is atomic in terms of
+    // where Gosu can introduce line breaks. Even a single word has several "parts" because e.g. a
+    // single character in the middle could be bold.
     struct WordInfo
     {
         std::vector<FormattedString> parts;
@@ -25,16 +28,10 @@ namespace Gosu
         double m_line_spacing;
         Alignment m_align;
 
-        enum EndOfLineReason
-        {
-            LINE_TOO_LONG,
-            END_OF_PARAGRAPH,
-            END_OF_TEXT
-        };
-
         // Input.
         std::vector<WordInfo> m_current_line;
         int m_current_line_width = 0;
+        enum EndOfLineReason : int;
         void flush_current_line(EndOfLineReason reason);
 
         // Output.
@@ -42,13 +39,13 @@ namespace Gosu
         int m_used_lines = 0;
         int m_allocated_lines = 0;
         void allocate_next_line();
-        void resize_to_allocated_lines();
+        void reallocate(int lines);
 
     public:
         TextBuilder(const std::string& font_name, int font_height, int line_spacing, int width,
                     Alignment align);
 
-        void feed_word(std::vector<FormattedString>&& word);
+        void feed_word(std::vector<FormattedString> word);
 
         Bitmap move_into_bitmap() &&;
     };

@@ -1,5 +1,5 @@
 /**
- * SDL_sound; A sound processing toolkit.
+ * SDL_sound; An abstract sound format decoding API.
  *
  * Please see the file LICENSE.txt in the source's root directory.
  *
@@ -39,7 +39,7 @@ typedef struct vocstuff {
     Uint8   channels;       /* number of sound channels */
     int     extended;       /* Has an extended block been read? */
     Uint32  bufpos;         /* byte position in internal->buffer. */
-    Uint32  start_pos;      /* offset to seek to in stream when rewinding. */
+    Sint64  start_pos;      /* offset to seek to in stream when rewinding. */
     int     error;          /* error condition (as opposed to EOF). */
 } vs_t;
 
@@ -77,9 +77,9 @@ typedef struct vocstuff {
 #define VOC_DATA_16   9
 
 
-static int VOC_init(void)
+static SDL_bool VOC_init(void)
 {
-    return 1;  /* always succeeds. */
+    return SDL_TRUE;  /* always succeeds. */
 } /* VOC_init */
 
 
@@ -191,8 +191,7 @@ static int voc_get_block(Sound_Sample *sample, vs_t *v)
                 v->rest = sblen - 2;
                 v->size = ST_SIZE_BYTE;
 
-                bytes_per_second = sample->actual.rate
-                    * sample->actual.channels;
+                bytes_per_second = sample->actual.rate * sample->actual.channels;
                 internal->total_time += ( v->rest ) / bytes_per_second * 1000;
                 internal->total_time += (v->rest % bytes_per_second) * 1000
                                             / bytes_per_second;
@@ -342,7 +341,7 @@ static int voc_read_waveform(Sound_Sample *sample, int fill_buf, Uint32 max)
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     SDL_RWops *src = internal->rw;
     vs_t *v = (vs_t *) internal->decoder_private;
-    int done = 0;
+    Sint64 done = 0;
     Uint8 silence = 0x80;
     Uint8 *buf = internal->buffer;
 
@@ -355,7 +354,8 @@ static int voc_read_waveform(Sound_Sample *sample, int fill_buf, Uint32 max)
     if (v->rest == 0)
         return 0;
 
-    max = (v->rest < max) ? v->rest : max;
+    if (v->rest < max)
+        max = v->rest;
 
     if (v->silent)
     {
@@ -366,8 +366,8 @@ static int voc_read_waveform(Sound_Sample *sample, int fill_buf, Uint32 max)
         if (fill_buf)
             SDL_memset(buf + v->bufpos, silence, max);
 
-        done = max;
-        v->rest -= done;
+        done = (Sint64) max;
+        v->rest -= max;
     } /* if */
 
     else
@@ -375,7 +375,7 @@ static int voc_read_waveform(Sound_Sample *sample, int fill_buf, Uint32 max)
         if (fill_buf)
         {
             done = SDL_RWread(src, buf + v->bufpos, 1, max);
-            if (done < max)
+            if (done < ((Sint64) max))
             {
                 __Sound_SetError("VOC: i/o error");
                 sample->flags |= SOUND_SAMPLEFLAG_ERROR;
@@ -384,7 +384,7 @@ static int voc_read_waveform(Sound_Sample *sample, int fill_buf, Uint32 max)
 
         else
         {
-            int cur, rc;
+            Sint64 cur, rc;
             cur = SDL_RWtell(src);
             if (cur >= 0)
             {
@@ -482,7 +482,7 @@ static int VOC_rewind(Sound_Sample *sample)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     vs_t *v = (vs_t *) internal->decoder_private;
-    int rc = SDL_RWseek(internal->rw, v->start_pos, RW_SEEK_SET);
+    const Sint64 rc = SDL_RWseek(internal->rw, v->start_pos, RW_SEEK_SET);
     BAIL_IF_MACRO(rc != v->start_pos, ERR_IO_ERROR, 0);
     v->rest = 0;
     return 1;
@@ -503,9 +503,9 @@ static int VOC_seek(Sound_Sample *sample, Uint32 ms)
 
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     vs_t *v = (vs_t *) internal->decoder_private;
-    int offset = __Sound_convertMsToBytePos(&sample->actual, ms);
-    int origpos = SDL_RWtell(internal->rw);
-    int origrest = v->rest;
+    Uint32 offset = __Sound_convertMsToBytePos(&sample->actual, ms);
+    const Sint64 origpos = SDL_RWtell(internal->rw);
+    const Uint32 origrest = v->rest;
 
     BAIL_IF_MACRO(!VOC_rewind(sample), NULL, 0);
 

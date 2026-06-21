@@ -29,17 +29,18 @@
 #define DR_FLAC_IMPLEMENTATION
 #define DR_FLAC_NO_STDIO 1
 #define DR_FLAC_NO_WIN32_IO 1
-#define DR_FLAC_NO_CRC 1
 #define DRFLAC_ASSERT(x) SDL_assert((x))
 #define DRFLAC_MALLOC(sz) SDL_malloc((sz))
 #define DRFLAC_REALLOC(p, sz) SDL_realloc((p), (sz))
 #define DRFLAC_FREE(p) SDL_free((p))
 #define DRFLAC_COPY_MEMORY(dst, src, sz) SDL_memcpy((dst), (src), (sz))
 #define DRFLAC_ZERO_MEMORY(p, sz) SDL_memset((p), 0, (sz))
+
 #include "dr_flac.h"
 
 static size_t flac_read(void* pUserData, void* pBufferOut, size_t bytesToRead)
 {
+    /* !!! FIXME: dr_flac treats returning less than bytesToRead as EOF. So we can't EAGAIN. */
     Uint8 *ptr = (Uint8 *) pBufferOut;
     Sound_Sample *sample = (Sound_Sample *) pUserData;
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
@@ -47,24 +48,13 @@ static size_t flac_read(void* pUserData, void* pBufferOut, size_t bytesToRead)
     size_t retval = 0;
 
     /* !!! FIXME: dr_flac treats returning less than bytesToRead as EOF. So we can't EAGAIN. */
-    while (retval < bytesToRead)
+    while (bytesToRead)
     {
         const size_t rc = SDL_RWread(rwops, ptr, 1, bytesToRead);
-        if (rc == 0)
-        {
-            sample->flags |= SOUND_SAMPLEFLAG_EOF;
-            break;
-        } /* if */
-        else if (rc == -1) /** FIXME: this error check is broken **/
-        {
-            sample->flags |= SOUND_SAMPLEFLAG_ERROR;
-            break;
-        } /* else if */
-        else
-        {
-            retval += rc;
-            ptr += rc;
-        } /* else */
+        if (rc == 0) break;
+        bytesToRead -= rc;
+        retval += rc;
+        ptr += rc;
     } /* while */
 
     return retval;
@@ -79,9 +69,9 @@ static drflac_bool32 flac_seek(void* pUserData, int offset, drflac_seek_origin o
 } /* flac_seek */
 
 
-static int FLAC_init(void)
+static SDL_bool FLAC_init(void)
 {
-    return 1;  /* always succeeds. */
+    return SDL_TRUE;  /* always succeeds. */
 } /* FLAC_init */
 
 
@@ -94,7 +84,7 @@ static void FLAC_quit(void)
 static int FLAC_open(Sound_Sample *sample, const char *ext)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
-    drflac *dr = drflac_open(flac_read, flac_seek, sample);
+    drflac *dr = drflac_open(flac_read, flac_seek, sample, NULL);
 
     if (!dr)
     {
@@ -109,14 +99,14 @@ static int FLAC_open(Sound_Sample *sample, const char *ext)
     sample->actual.rate = dr->sampleRate;
     sample->actual.format = AUDIO_S32SYS;  /* dr_flac only does Sint32. */
 
-    if (dr->totalSampleCount == 0)
+    if (dr->totalPCMFrameCount == 0)
         internal->total_time = -1;
     else
     {
         const Uint32 rate = (Uint32) dr->sampleRate;
-        const Uint64 frames = (Uint64) (dr->totalSampleCount / dr->channels);
+        const Uint64 frames = (Uint64) dr->totalPCMFrameCount;
         internal->total_time = (frames / rate) * 1000;
-        internal->total_time += ((dr->totalSampleCount % dr->sampleRate) * 1000) / dr->sampleRate;
+        internal->total_time += ((dr->totalPCMFrameCount % dr->sampleRate) * 1000) / dr->sampleRate;
     } /* else */
 
     internal->decoder_private = dr;
@@ -134,17 +124,21 @@ static void FLAC_close(Sound_Sample *sample)
 static Uint32 FLAC_read(Sound_Sample *sample)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
+    const int channels = (int) sample->actual.channels;
     drflac *dr = (drflac *) internal->decoder_private;
-    const drflac_uint64 rc = drflac_read_s32(dr, internal->buffer_size / sizeof (drflac_int32), (drflac_int32 *) internal->buffer);
-    /* !!! FIXME: the flac_read callback sets ERROR and EOF flags, but this only tells you about i/o errors, not corruption. */
-    return rc * sizeof (drflac_int32);
+    const drflac_uint64 frames_to_read = (internal->buffer_size / channels) / sizeof (drflac_int32);
+    const drflac_uint64 rc = drflac_read_pcm_frames_s32(dr, frames_to_read, (drflac_int32 *) internal->buffer);
+    /* !!! FIXME: we only set the EOF flags, but this only tells you we're done, not about i/o errors, nor corruption. */
+    if (rc < frames_to_read)
+        sample->flags |= SOUND_SAMPLEFLAG_EOF;
+    return rc * channels * sizeof (drflac_int32);
 } /* FLAC_read */
 
 static int FLAC_rewind(Sound_Sample *sample)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     drflac *dr = (drflac *) internal->decoder_private;
-    return (drflac_seek_to_sample(dr, 0) == DRFLAC_TRUE);
+    return (drflac_seek_to_pcm_frame(dr, 0) == DRFLAC_TRUE);
 } /* FLAC_rewind */
 
 static int FLAC_seek(Sound_Sample *sample, Uint32 ms)
@@ -153,8 +147,7 @@ static int FLAC_seek(Sound_Sample *sample, Uint32 ms)
     drflac *dr = (drflac *) internal->decoder_private;
     const float frames_per_ms = ((float) sample->actual.rate) / 1000.0f;
     const drflac_uint64 frame_offset = (drflac_uint64) (frames_per_ms * ((float) ms));
-    const drflac_uint64 sampnum = frame_offset * sample->actual.channels;
-    return (drflac_seek_to_sample(dr, sampnum) == DRFLAC_TRUE);
+    return (drflac_seek_to_pcm_frame(dr, frame_offset) == DRFLAC_TRUE);
 } /* FLAC_seek */
 
 static const char *extensions_flac[] = { "FLAC", "FLA", NULL };
@@ -179,4 +172,3 @@ const Sound_DecoderFunctions __Sound_DecoderFunctions_FLAC =
 #endif /* SOUND_SUPPORTS_FLAC */
 
 /* end of SDL_sound_flac.c ... */
-

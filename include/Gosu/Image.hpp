@@ -12,7 +12,7 @@ namespace Gosu
     /// Provides functionality for drawing rectangular images.
     class Image
     {
-        std::shared_ptr<ImageData> m_data;
+        std::shared_ptr<Drawable> m_drawable;
 
     public:
         /// Creates an empty image. It will have a width and height of 0, and not contain anything.
@@ -24,22 +24,21 @@ namespace Gosu
         /// For more flexibility, use the corresponding constructor that uses a Bitmap object.
         explicit Image(const std::string& filename, unsigned image_flags = IF_SMOOTH);
 
-        //! Loads a portion of the the image at the given filename..
+        /// Loads a portion of the the image at the given filename..
         ///
         /// A color key of #ff00ff is automatically applied to BMP image files.
         /// For more flexibility, use the corresponding constructor that uses a Bitmap object.
-        Image(const std::string& filename, int src_x, int src_y, int src_width, int src_height,
+        Image(const std::string& filename, const Rect& source_rect,
               unsigned image_flags = IF_SMOOTH);
 
         /// Converts the given bitmap into an image.
         explicit Image(const Bitmap& source, unsigned image_flags = IF_SMOOTH);
 
         /// Converts a portion of the given bitmap into an image.
-        Image(const Bitmap& source, int src_x, int src_y, int src_width, int src_height,
-              unsigned image_flags = IF_SMOOTH);
+        Image(const Bitmap& source, const Rect& source_rect, unsigned image_flags = IF_SMOOTH);
 
-        /// Creates an Image from a user-supplied instance of the ImageData interface.
-        explicit Image(std::unique_ptr<ImageData>&& data);
+        /// Creates an Image from a user-supplied instance of the Drawable interface.
+        explicit Image(std::unique_ptr<Drawable> data);
 
         unsigned width() const;
         unsigned height() const;
@@ -61,25 +60,23 @@ namespace Gosu
                       double center_y = 0.5, double scale_x = 1, double scale_y = 1,
                       Color c = Color::WHITE, BlendMode mode = BM_DEFAULT) const;
 
-#ifndef SWIG
         /// Provides access to the underlying image data object.
-        ImageData& data() const;
-#endif
+        Drawable& drawable() const;
     };
 
-#ifndef SWIG
     /// Convenience function that slices an image file into a grid and creates images from them.
     /// @param tile_width If positive, specifies the width of one tile in pixels.
     /// If negative, the bitmap is divided into -tile_width rows.
     /// @param tile_height See tile_width.
-    std::vector<Gosu::Image> load_tiles(const Bitmap& bmp, int tile_width, int tile_height,
+    std::vector<Gosu::Image> load_tiles(const Bitmap& bitmap, //
+                                        int tile_width, int tile_height,
                                         unsigned image_flags = IF_SMOOTH);
 
     /// Convenience function that slices a bitmap into a grid and creates images from them.
     /// @param tile_width If positive, specifies the width of one tile in pixels.
     /// If negative, the bitmap is divided into -tile_width rows.
     /// @param tile_height See tile_width.
-    std::vector<Gosu::Image> load_tiles(const std::string& filename, int tile_width,
-                                        int tile_height, unsigned image_flags = IF_SMOOTH);
-#endif
+    std::vector<Gosu::Image> load_tiles(const std::string& filename, //
+                                        int tile_width, int tile_height,
+                                        unsigned image_flags = IF_SMOOTH);
 }

@@ -83,6 +83,7 @@ BOOL CSoundFile_ReadDMF(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	DWORD dwMemPos;
 	BYTE infobyte[32];
 	BYTE smplflags[MAX_SAMPLES], hasSMPI = 0, hasSMPD = 0;
+	UINT i;
 
 	if ((!lpStream) || (dwMemLength < 1024)) return FALSE;
 	if ((pfh->id != 0x464d4444) || (!pfh->version) || (pfh->version & 0xF0)) return FALSE;
@@ -114,7 +115,7 @@ BOOL CSoundFile_ReadDMF(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 				UINT nseq = (sequ->seqsize - 4) >> 1;
 				if (nseq >= MAX_ORDERS-1) nseq = MAX_ORDERS-1;
 				if (sequ->loopstart < nseq) _this->m_nRestartPos = sequ->loopstart;
-				for (UINT i=0; i<nseq; i++) _this->Order[i] = (BYTE)sequ->sequ[i];
+				for (i=0; i<nseq; i++) _this->Order[i] = (BYTE)sequ->sequ[i];
 			}
 			dwMemPos += sequ->seqsize + 8;
 			break;
@@ -125,7 +126,7 @@ BOOL CSoundFile_ReadDMF(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			if ((patt->patsize >= dwMemLength) || (dwMemPos + 8 > dwMemLength - patt->patsize)) goto dmfexit;
 			if (patt->patsize >= 4 && !_this->m_nChannels)
 			{
-				UINT numpat;
+				UINT numpat, c;
 				DWORD dwPos = dwMemPos + 11;
 				numpat = patt->numpat;
 				if (numpat > MAX_PATTERNS) numpat = MAX_PATTERNS;
@@ -133,38 +134,44 @@ BOOL CSoundFile_ReadDMF(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 				if (_this->m_nChannels < patt->firstpatinfo) _this->m_nChannels = patt->firstpatinfo;
 				if (_this->m_nChannels > 32) _this->m_nChannels = 32;
 				if (_this->m_nChannels < 4) _this->m_nChannels = 4;
-				for (UINT npat=0; npat<numpat; npat++)
+				for (c=0; c<numpat; c++)
 				{
 					const DMFTRACK *pt = (DMFTRACK *)(lpStream+dwPos);
+					MODCOMMAND *m;
+					UINT tracks, ticks, row;
+					UINT ttype, tempo, glbinfobyte, pbeat;
+					BOOL tempochange;
+					DWORD d;
 					if (dwPos + 8 >= dwMemLength) break;
-					UINT tracks = pt->tracks;
+					tracks = pt->tracks;
 					if (tracks > 32) tracks = 32;
-					UINT ticks = pt->ticks;
+					ticks = pt->ticks;
 					if (ticks > 256) ticks = 256;
 					if (ticks < 16) ticks = 16;
 					dwPos += 8;
 					if ((pt->jmpsize >= dwMemLength) || (dwPos + 4 > dwMemLength - pt->jmpsize)) break;
-					_this->PatternSize[npat] = (WORD)ticks;
-					MODCOMMAND *m = CSoundFile_AllocatePattern(_this->PatternSize[npat], _this->m_nChannels);
+					_this->PatternSize[c] = (WORD)ticks;
+					m = CSoundFile_AllocatePattern(_this->PatternSize[c], _this->m_nChannels);
 					if (!m) goto dmfexit;
-					_this->Patterns[npat] = m;
-					DWORD d = dwPos;
+					_this->Patterns[c] = m;
+					d = dwPos;
 					dwPos += pt->jmpsize;
-					UINT ttype = 1;
-					UINT tempo = 125;
-					UINT glbinfobyte = 0;
-					UINT pbeat = (pt->beat & 0xf0) ? pt->beat>>4 : 8;
-					BOOL tempochange = (pt->beat & 0xf0) ? TRUE : FALSE;
+					ttype = 1;
+					tempo = 125;
+					glbinfobyte = 0;
+					pbeat = (pt->beat & 0xf0) ? pt->beat>>4 : 8;
+					tempochange = (pt->beat & 0xf0) ? TRUE : FALSE;
 					SDL_memset(infobyte, 0, sizeof(infobyte));
-					for (UINT row=0; row<ticks; row++)
+					for (row=0; row<ticks; row++)
 					{
 						MODCOMMAND *p = &m[row*_this->m_nChannels];
 						// Parse track global effects
 						if (!glbinfobyte)
 						{
+							BYTE info, infoval;
 							if (d+1 > dwPos) break;
-							BYTE info = lpStream[d++];
-							BYTE infoval = 0;
+							info = lpStream[d++];
+							infoval = 0;
 							if ((info & 0x80) && (d < dwPos)) glbinfobyte = lpStream[d++];
 							info &= 0x7f;
 							if ((info) && (d < dwPos)) infoval = lpStream[d++];
@@ -179,12 +186,13 @@ BOOL CSoundFile_ReadDMF(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 							glbinfobyte--;
 						}
 						// Parse channels
-						for (UINT i=0; i<tracks; i++) if (!infobyte[i])
+						for (i=0; i<tracks; i++) if (!infobyte[i])
 						{
-							if (d+1 > dwPos) break;
 							MODCOMMAND cmd;
+							BYTE info;
+							if (d+1 > dwPos) break;
 							SDL_zero(cmd);
-							BYTE info = lpStream[d++];
+							info = lpStream[d++];
 							if (info & 0x80)
 							{
 								if (d+1 > dwPos) break;
@@ -214,10 +222,11 @@ BOOL CSoundFile_ReadDMF(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 							// Effect 1
 							if (info & 0x08)
 							{
+								BYTE efx, eval;
 								if (d+2 > dwPos) break;
 
-								BYTE efx = lpStream[d++];
-								BYTE eval = lpStream[d++];
+								efx = lpStream[d++];
+								eval = lpStream[d++];
 								switch(efx)
 								{
 								// 1: Key Off
@@ -234,10 +243,11 @@ BOOL CSoundFile_ReadDMF(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 							// Effect 2
 							if (info & 0x04)
 							{
+								BYTE efx, eval;
 								if (d+2 > dwPos) break;
 
-								BYTE efx = lpStream[d++];
-								BYTE eval = lpStream[d++];
+								efx = lpStream[d++];
+								eval = lpStream[d++];
 								switch(efx)
 								{
 								// 1: Finetune
@@ -263,10 +273,11 @@ BOOL CSoundFile_ReadDMF(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 							// Effect 3
 							if (info & 0x02)
 							{
+								BYTE efx, eval;
 								if (d+2 > dwPos) break;
 
-								BYTE efx = lpStream[d++];
-								BYTE eval = lpStream[d++];
+								efx = lpStream[d++];
+								eval = lpStream[d++];
 								switch(efx)
 								{
 								// 1: Vol Slide Up
@@ -303,27 +314,27 @@ BOOL CSoundFile_ReadDMF(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 						// Find free channel for tempo change
 						if (tempochange)
 						{
-							tempochange = FALSE;
 							UINT speed=6, modtempo=tempo;
 							UINT rpm = ((ttype) && (pbeat)) ? tempo*pbeat : (tempo+1)*15;
+							tempochange = FALSE;
 							for (speed=30; speed>1; speed--)
 							{
 								modtempo = rpm*speed/24;
 								if (modtempo <= 200) break;
 								if ((speed < 6) && (modtempo < 256)) break;
 							}
-							for (UINT ich=0; ich<_this->m_nChannels; ich++) if (!p[ich].command)
+							for (i=0; i<_this->m_nChannels; i++) if (!p[i].command)
 							{
 								if (speed)
 								{
-									p[ich].command = CMD_SPEED;
-									p[ich].param = (BYTE)speed;
+									p[i].command = CMD_SPEED;
+									p[i].param = (BYTE)speed;
 									speed = 0;
 								} else
 								if ((modtempo >= 32) && (modtempo < 256))
 								{
-									p[ich].command = CMD_TEMPO;
-									p[ich].param = (BYTE)modtempo;
+									p[i].command = CMD_TEMPO;
+									p[i].param = (BYTE)modtempo;
 									modtempo = 0;
 								} else
 								{
@@ -342,23 +353,26 @@ BOOL CSoundFile_ReadDMF(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		// "SMPI": Sample Info
 		case 0x49504d53:
 			{
-				hasSMPI = 1;
 				const DMFSMPI *pds = (DMFSMPI *)(lpStream+dwMemPos);
+				hasSMPI = 1;
 				if ((pds->size >= dwMemLength) || (dwMemPos + 8 > dwMemLength - pds->size)) goto dmfexit;
 				if (pds->size >= 1)
 				{
 					DWORD dwPos = dwMemPos + 9;
 					_this->m_nSamples = pds->samples;
 					if (_this->m_nSamples >= MAX_SAMPLES) _this->m_nSamples = MAX_SAMPLES-1;
-					for (UINT iSmp=1; iSmp<=_this->m_nSamples; iSmp++)
+					for (i=1; i<=_this->m_nSamples; i++)
 					{
+						const DMFSAMPLE *psh;
+						MODINSTRUMENT *psmp;
+						UINT namelen;
 						if (dwPos >= dwMemPos + pds->size + 8) break;
-						const UINT namelen = lpStream[dwPos];
-						smplflags[iSmp] = 0;
+						namelen = lpStream[dwPos];
+						smplflags[i] = 0;
 						if (dwPos+namelen+1+sizeof(DMFSAMPLE) > dwMemPos+pds->size+8) break;
 						dwPos += namelen + 1;
-						const DMFSAMPLE *psh = (DMFSAMPLE *)(lpStream+dwPos);
-						MODINSTRUMENT *psmp = &_this->Ins[iSmp];
+						psh = (DMFSAMPLE *)(lpStream+dwPos);
+						psmp = &_this->Ins[i];
 						psmp->nLength = psh->len;
 						psmp->nLoopStart = psh->loopstart;
 						psmp->nLoopEnd = psh->loopend;
@@ -368,7 +382,7 @@ BOOL CSoundFile_ReadDMF(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 						psmp->uFlags = (psh->flags & 2) ? CHN_16BIT : 0;
 						if (psmp->uFlags & CHN_16BIT) psmp->nLength >>= 1;
 						if (psh->flags & 1) psmp->uFlags |= CHN_LOOP;
-						smplflags[iSmp] = psh->flags;
+						smplflags[i] = psh->flags;
 						dwPos += (pfh->version < 8) ? 22 : 30;
 					}
 				}
@@ -381,10 +395,10 @@ BOOL CSoundFile_ReadDMF(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 			{
 				DWORD dwPos = dwMemPos + 8;
 				UINT ismpd = 0;
-				for (UINT iSmp=1; iSmp<=_this->m_nSamples && !hasSMPD; iSmp++)
+				for (i=1; i<=_this->m_nSamples && !hasSMPD; i++)
 				{
-					ismpd++;
 					DWORD pksize;
+					ismpd++;
 					if (dwPos + 4 >= dwMemLength)
 					{
 						break;
@@ -395,12 +409,12 @@ BOOL CSoundFile_ReadDMF(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 					{
 						pksize = dwMemLength - dwPos;
 					}
-					if ((pksize) && (iSmp <= _this->m_nSamples))
+					if ((pksize) && (i <= _this->m_nSamples))
 					{
-						UINT flags = (_this->Ins[iSmp].uFlags & CHN_16BIT) ? RS_PCM16S : RS_PCM8S;
+						UINT flags = (_this->Ins[i].uFlags & CHN_16BIT) ? RS_PCM16S : RS_PCM8S;
 						if (hasSMPI && smplflags[ismpd] & 4)
-							flags = (_this->Ins[iSmp].uFlags & CHN_16BIT) ? RS_DMF16 : RS_DMF8;
-						CSoundFile_ReadSample(_this, &_this->Ins[iSmp], flags, (LPSTR)(lpStream+dwPos), pksize);
+							flags = (_this->Ins[i].uFlags & CHN_16BIT) ? RS_DMF16 : RS_DMF8;
+						CSoundFile_ReadSample(_this, &_this->Ins[i], flags, (LPSTR)(lpStream+dwPos), pksize);
 					}
 					dwPos += pksize;
 				}
@@ -521,7 +535,7 @@ int DMFUnpack(LPBYTE psample, LPBYTE ibuf, LPBYTE ibufmax, UINT maxlen)
 //----------------------------------------------------------------------
 {
 	DMF_HTREE tree;
-	UINT actnode;
+	UINT actnode,i;
 	BYTE value, sign, delta = 0;
 
 	SDL_memset(&tree, 0, sizeof(tree));
@@ -532,7 +546,7 @@ int DMFUnpack(LPBYTE psample, LPBYTE ibuf, LPBYTE ibufmax, UINT maxlen)
 
 	if (tree.ibuf >= ibufmax) return tree.ibuf - ibuf;
 
-	for (UINT i=0; i<maxlen; i++)
+	for (i=0; i<maxlen; i++)
 	{
 		if ((tree.ibuf >= tree.ibufmax) && (!tree.bitnum))
 		{
@@ -557,5 +571,3 @@ int DMFUnpack(LPBYTE psample, LPBYTE ibuf, LPBYTE ibufmax, UINT maxlen)
 	}
 	return tree.ibuf - ibuf;
 }
-
-

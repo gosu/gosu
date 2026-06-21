@@ -1,7 +1,5 @@
-// The complete Gosu library.
 #include <Gosu/Gosu.hpp>
 
-#include <cmath>
 #include <cstdlib>
 #include <list>
 #include <string>
@@ -67,8 +65,8 @@ class Player
 
 public:
     Player()
-    :   image(Gosu::resource_prefix() + "media/Starfighter.bmp"),
-        beep(Gosu::resource_prefix() + "media/Beep.wav")
+    :   image(Gosu::resource_path("media/Starfighter.bmp")),
+        beep(Gosu::resource_path("media/Beep.wav"))
     {
         pos_x = pos_y = vel_x = vel_y = angle = 0;
         score = 0;
@@ -145,10 +143,10 @@ public:
     {
         set_caption("Gosu Tutorial Game");
 
-        std::string filename = Gosu::resource_prefix() + "media/Space.png";
+        std::string filename = Gosu::resource_path("media/Space.png");
         background_image = Gosu::Image(filename, Gosu::IF_TILEABLE);
 
-        filename = Gosu::resource_prefix() + "media/Star.png";
+        filename = Gosu::resource_path("media/Star.png");
         star_anim = Gosu::load_tiles(filename, 25, 25);
 
         player.warp(320, 240);

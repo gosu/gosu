@@ -24,7 +24,7 @@ namespace Gosu
 
     /// Manages initialization and shutdown of the input system.
     /// Only one Input instance can exist per application.
-    class Input : Noncopyable
+    class Input : private Noncopyable
     {
         struct Impl;
         std::unique_ptr<Impl> pimpl;
@@ -107,5 +107,11 @@ namespace Gosu
         TextInput* text_input() const;
         //! Sets the currently active TextInput, or resets it to the nullptr.
         void set_text_input(TextInput* input);
+
+        /// Returns the contents of the clipboard as plain text, or an empty string if none is available.
+        static std::string clipboard();
+
+        /// Replaces the contents of the clipboard with the given string.
+        static void set_clipboard(const std::string& text);
     };
 }

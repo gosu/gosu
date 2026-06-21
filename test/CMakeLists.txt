@@ -1,9 +1,9 @@
 find_package(GTest)
 
-if(GTest_FOUND)
+if (GTest_FOUND)
     enable_testing()
 
-    file(GLOB TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+    file(GLOB TEST_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
     add_executable(GosuTests ${TEST_FILES})
     target_link_libraries(GosuTests Gosu::Gosu gosu-ffi GTest::gtest GTest::gtest_main)
 
@@ -16,4 +16,4 @@ if(GTest_FOUND)
     # directory as a workaround.
     set_target_properties(GosuTests PROPERTIES
             RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
-endif()
+endif ()

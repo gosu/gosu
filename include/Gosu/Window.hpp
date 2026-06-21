@@ -3,8 +3,11 @@
 #include <Gosu/Fwd.hpp>
 #include <Gosu/Input.hpp>
 #include <Gosu/Platform.hpp>
+#include <Gosu/Utility.hpp>
 #include <memory>
 #include <string>
+
+struct SDL_Window;
 
 namespace Gosu
 {
@@ -19,10 +22,10 @@ namespace Gosu
     /// Convenient all-in-one class that serves as the foundation of a standard Gosu application.
     /// Manages initialization of all of Gosu's core components and provides timing functionality.
     /// Note that you can only use one instance of this class at the same time.
-    class Window
+    class Window : private Noncopyable
     {
         struct Impl;
-        const std::unique_ptr<Impl> m_impl;
+        std::unique_ptr<Impl> m_impl;
 
     public:
         /// Constructs a Window.
@@ -123,45 +126,49 @@ namespace Gosu
         /// method will be called several times.
         virtual void drop(const std::string& filename) {}
 
-// Ignore when SWIG is wrapping this class for Ruby/Gosu.
-#ifndef SWIG
         // Callbacks for touch events. So far these are only used on iOS.
         virtual void touch_began(Touch touch) {}
         virtual void touch_moved(Touch touch) {}
         virtual void touch_ended(Touch touch) {}
         virtual void touch_cancelled(Touch touch) {}
 
-        const Graphics& graphics() const;
-        Graphics& graphics();
+        const Viewport& viewport() const;
+        Viewport& viewport();
 
         const Input& input() const;
         Input& input();
-#endif
 
 #ifdef GOSU_IS_IPHONE
         void* uikit_window() const;
 #endif
+
+#ifndef GOSU_IS_IPHONE
+        SDL_Window* sdl_window() const;
+#endif
     };
+
+    /// Returns the current framerate.
+    int fps();
 
     /// Returns the width (in pixels) of a screen.
     /// @param window The result describes the screen on which the window is shown, or the
     ///               primary screen if no window is given.
-    int screen_width(Window* window = nullptr);
+    int screen_width(const Window* window = nullptr);
 
     /// Returns the height (in pixels) of the user's primary screen.
     /// @param window The result describes the screen on which the window is shown, or the
     ///               primary screen if no window is given.
-    int screen_height(Window* window = nullptr);
+    int screen_height(const Window* window = nullptr);
 
     /// Returns the maximum width (in 'points') that is available for a non-fullscreen Window.
     /// All windows larger than this size will automatically be shrunk to fit.
     /// @param window The result describes the screen on which the window is shown, or the
     ///               primary screen if no window is given.
-    int available_width(Window* window = nullptr);
+    int available_width(const Window* window = nullptr);
 
     /// Returns the maximum height (in 'points') that is available for a non-fullscreen Window.
     /// All windows larger than this size will automatically be shrunk to fit.
     /// @param window The result describes the screen on which the window is shown, or the
     ///               primary screen if no window is given.
-    int available_height(Window* window = nullptr);
+    int available_height(const Window* window = nullptr);
 }

@@ -1,58 +1,54 @@
 #include <Gosu/Bitmap.hpp>
+#include <Gosu/Buffer.hpp>
+#include <Gosu/Drawable.hpp>
 #include <Gosu/Graphics.hpp>
-#include <Gosu/IO.hpp>
 #include <Gosu/Image.hpp>
-#include <Gosu/ImageData.hpp>
 #include <Gosu/Math.hpp>
-#include "EmptyImageData.hpp"
+#include "EmptyDrawable.hpp"
 #include <stdexcept>
 
 Gosu::Image::Image()
-: m_data(EmptyImageData::instance_ptr())
 {
+    static const auto default_data_ptr = std::make_shared<EmptyDrawable>(0, 0);
+    m_drawable = default_data_ptr;
 }
 
 Gosu::Image::Image(const std::string& filename, unsigned image_flags)
+    : Image(load_image_file(filename), image_flags)
 {
-    // Forward.
-    Bitmap bitmap = load_image_file(filename);
-    Image{bitmap, image_flags}.m_data.swap(m_data);
 }
 
-Gosu::Image::Image(const std::string& filename, int src_x, int src_y, int src_width, int src_height,
-                   unsigned image_flags)
+Gosu::Image::Image(const std::string& filename, const Rect& source_rect, unsigned image_flags)
+    : Image(load_image_file(filename), source_rect, image_flags)
 {
-    // Forward.
-    Bitmap bitmap = load_image_file(filename);
-    Image{bitmap, src_x, src_y, src_width, src_height, image_flags}.m_data.swap(m_data);
 }
 
 Gosu::Image::Image(const Bitmap& source, unsigned image_flags)
-{
-    // Forward.
-    Image{source, 0, 0, source.width(), source.height(), image_flags}.m_data.swap(m_data);
-}
-
-Gosu::Image::Image(const Bitmap& source, int src_x, int src_y, int src_width, int src_height,
-                   unsigned image_flags)
-: m_data(Graphics::create_image(source, src_x, src_y, src_width, src_height, image_flags))
+    : Image(source, Rect::covering(source), image_flags)
 {
 }
 
-Gosu::Image::Image(std::unique_ptr<ImageData>&& data)
-: m_data(data.release())
+Gosu::Image::Image(const Bitmap& source, const Rect& source_rect, unsigned image_flags)
+    : m_drawable(create_drawable(source, source_rect, image_flags))
 {
-    if (!m_data) throw std::invalid_argument("Gosu::Image cannot be initialized with nullptr");
+}
+
+Gosu::Image::Image(std::unique_ptr<Drawable> data)
+    : m_drawable(std::move(data))
+{
+    if (!m_drawable) {
+        throw std::invalid_argument("Gosu::Image cannot be initialized with nullptr");
+    }
 }
 
 unsigned Gosu::Image::width() const
 {
-    return m_data->width();
+    return m_drawable->width();
 }
 
 unsigned Gosu::Image::height() const
 {
-    return m_data->height();
+    return m_drawable->height();
 }
 
 void Gosu::Image::draw(double x, double y, ZPos z, double scale_x, double scale_y, Color c,
@@ -61,7 +57,7 @@ void Gosu::Image::draw(double x, double y, ZPos z, double scale_x, double scale_
     double x2 = x + width() * scale_x;
     double y2 = y + height() * scale_y;
 
-    m_data->draw(x, y, c, x2, y, c, x, y2, c, x2, y2, c, z, mode);
+    m_drawable->draw(x, y, c, x2, y, c, x, y2, c, x2, y2, c, z, mode);
 }
 
 void Gosu::Image::draw_mod(double x, double y, ZPos z, double scale_x, double scale_y, Color c1,
@@ -70,7 +66,7 @@ void Gosu::Image::draw_mod(double x, double y, ZPos z, double scale_x, double sc
     double x2 = x + width() * scale_x;
     double y2 = y + height() * scale_y;
 
-    m_data->draw(x, y, c1, x2, y, c2, x, y2, c3, x2, y2, c4, z, mode);
+    m_drawable->draw(x, y, c1, x2, y, c2, x, y2, c3, x2, y2, c4, z, mode);
 }
 
 void Gosu::Image::draw_rot(double x, double y, ZPos z, double angle, double center_x,
@@ -92,53 +88,58 @@ void Gosu::Image::draw_rot(double x, double y, ZPos z, double angle, double cent
     double dist_to_bottom_x = -offs_x * size_y * (1 - center_y);
     double dist_to_bottom_y = -offs_y * size_y * (1 - center_y);
 
-    m_data->draw(x + dist_to_left_x + dist_to_top_x, y + dist_to_left_y + dist_to_top_y, c,
-                 x + dist_to_right_x + dist_to_top_x, y + dist_to_right_y + dist_to_top_y, c,
-                 x + dist_to_left_x + dist_to_bottom_x, y + dist_to_left_y + dist_to_bottom_y, c,
-                 x + dist_to_right_x + dist_to_bottom_x, y + dist_to_right_y + dist_to_bottom_y, c,
-                 z, mode);
+    m_drawable->draw( //
+        x + dist_to_left_x + dist_to_top_x, y + dist_to_left_y + dist_to_top_y, c,
+        x + dist_to_right_x + dist_to_top_x, y + dist_to_right_y + dist_to_top_y, c,
+        x + dist_to_left_x + dist_to_bottom_x, y + dist_to_left_y + dist_to_bottom_y, c,
+        x + dist_to_right_x + dist_to_bottom_x, y + dist_to_right_y + dist_to_bottom_y, c, //
+        z, mode);
 }
 
-Gosu::ImageData& Gosu::Image::data() const
+Gosu::Drawable& Gosu::Image::drawable() const
 {
-    return *m_data;
+    return *m_drawable;
 }
 
-std::vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bmp, int tile_width, int tile_height,
-                                          unsigned flags)
+std::vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bitmap, //
+                                          int tile_width, int tile_height, unsigned flags)
 {
+    if (tile_width == 0 || tile_height == 0) {
+        throw std::invalid_argument("Gosu::load_tiles does not support empty tiles");
+    }
+
     int tiles_x, tiles_y;
     std::vector<Image> images;
 
     if (tile_width > 0) {
-        tiles_x = bmp.width() / tile_width;
+        tiles_x = bitmap.width() / tile_width;
     }
     else {
         tiles_x = -tile_width;
-        tile_width = bmp.width() / tiles_x;
+        tile_width = bitmap.width() / tiles_x;
     }
 
     if (tile_height > 0) {
-        tiles_y = bmp.height() / tile_height;
+        tiles_y = bitmap.height() / tile_height;
     }
     else {
         tiles_y = -tile_height;
-        tile_height = bmp.height() / tiles_y;
+        tile_height = bitmap.height() / tiles_y;
     }
 
     for (int y = 0; y < tiles_y; ++y) {
         for (int x = 0; x < tiles_x; ++x) {
-            images.emplace_back(bmp, x * tile_width, y * tile_height, tile_width, tile_height,
-                                flags);
+            images.emplace_back(
+                bitmap, Rect { x * tile_width, y * tile_height, tile_width, tile_height }, flags);
         }
     }
 
     return images;
 }
 
-std::vector<Gosu::Image> Gosu::load_tiles(const std::string& filename, int tile_width,
-                                          int tile_height, unsigned flags)
+std::vector<Gosu::Image> Gosu::load_tiles(const std::string& filename, //
+                                          int tile_width, int tile_height, unsigned flags)
 {
-    Bitmap bmp = load_image_file(filename);
-    return load_tiles(bmp, tile_width, tile_height, flags);
+    const Bitmap bitmap = load_image_file(filename);
+    return load_tiles(bitmap, tile_width, tile_height, flags);
 }

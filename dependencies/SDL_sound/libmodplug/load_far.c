@@ -57,9 +57,11 @@ BOOL CSoundFile_ReadFAR(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 {
 	const FARHEADER1 *pmh1 = (const FARHEADER1 *)lpStream;
 	const FARHEADER2 *pmh2;
+	MODINSTRUMENT *pins;
 	DWORD dwMemPos = sizeof(FARHEADER1);
-	UINT headerlen, stlen;
+	UINT headerlen, stlen, i;
 	BYTE samplemap[8];
+	WORD *patsiz;
 
 	if ((!lpStream) || (dwMemLength < 1024) || (bswapLE32(pmh1->id) != FARFILEMAGIC)
 	 || (pmh1->magic2[0] != 13) || (pmh1->magic2[1] != 10) || (pmh1->magic2[2] != 26)) return FALSE;
@@ -77,11 +79,11 @@ BOOL CSoundFile_ReadFAR(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	_this->m_nDefaultGlobalVolume = 256;
 
 	// Channel Setting
-	for (UINT nchpan=0; nchpan<16; nchpan++)
+	for (i=0; i<16; i++)
 	{
-		_this->ChnSettings[nchpan].dwFlags = 0;
-		_this->ChnSettings[nchpan].nPan = ((pmh1->panning[nchpan] & 0x0F) << 4) + 8;
-		_this->ChnSettings[nchpan].nVolume = 64;
+		_this->ChnSettings[i].dwFlags = 0;
+		_this->ChnSettings[i].nPan = ((pmh1->panning[i] & 0x0F) << 4) + 8;
+		_this->ChnSettings[i].nVolume = 64;
 	}
 	// Reading comment
 	if (stlen)
@@ -93,27 +95,30 @@ BOOL CSoundFile_ReadFAR(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	pmh2 = (const FARHEADER2 *)(lpStream + dwMemPos);
 	dwMemPos += sizeof(FARHEADER2);
 	if (dwMemPos >= dwMemLength) return TRUE;
-	for (UINT iorder=0; iorder<MAX_ORDERS; iorder++)
+	for (i=0; i<MAX_ORDERS; i++)
 	{
-		_this->Order[iorder] = (iorder <= pmh2->snglen) ? pmh2->orders[iorder] : 0xFF;
+		_this->Order[i] = (i <= pmh2->snglen) ? pmh2->orders[i] : 0xFF;
 	}
 	_this->m_nRestartPos = pmh2->loopto;
 	// Reading Patterns	
 	dwMemPos += headerlen - (869 + stlen);
 	if (dwMemPos >= dwMemLength) return TRUE;
 
-	WORD *patsiz = (WORD *)pmh2->patsiz;
-	for (UINT ipat=0; ipat<256; ipat++) if (patsiz[ipat])
+	patsiz = (WORD *)pmh2->patsiz;
+	for (i=0; i<256; i++) if (patsiz[i])
 	{
-		UINT patlen = bswapLE16(patsiz[ipat]);
-		if ((ipat >= MAX_PATTERNS) || (patlen < 2))
+		MODCOMMAND *m;
+		const BYTE *p;
+		UINT len, max, rows, patbrk, patlen;
+		patlen = bswapLE16(patsiz[i]);
+		if ((i >= MAX_PATTERNS) || (patlen < 2))
 		{
 			dwMemPos += patlen;
 			continue;
 		}
 		if (dwMemPos + patlen >= dwMemLength) return TRUE;
-		UINT max  = (patlen - 2) & ~3;
-		UINT rows = (patlen - 2) >> 6;
+		max  = (patlen - 2) & ~3;
+		rows = (patlen - 2) >> 6;
 		if (!rows)
 		{
 			dwMemPos += patlen;
@@ -122,12 +127,12 @@ BOOL CSoundFile_ReadFAR(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		if (rows > 256) rows = 256;
 		if (rows < 16) rows = 16;
 		if (max > rows*16*4) max = rows*16*4;
-		_this->PatternSize[ipat] = rows;
-		if ((_this->Patterns[ipat] = CSoundFile_AllocatePattern(rows, _this->m_nChannels)) == NULL) return TRUE;
-		MODCOMMAND *m = _this->Patterns[ipat];
-		UINT patbrk = lpStream[dwMemPos];
-		const BYTE *p = lpStream + dwMemPos + 2;
-		for (UINT len=0; len<max; len += 4, m++)
+		_this->PatternSize[i] = rows;
+		if ((_this->Patterns[i] = CSoundFile_AllocatePattern(rows, _this->m_nChannels)) == NULL) return TRUE;
+		m = _this->Patterns[i];
+		patbrk = lpStream[dwMemPos];
+		p = lpStream + dwMemPos + 2;
+		for (len=0; len<max; len += 4, m++)
 		{
 			BYTE note = p[len];
 			BYTE ins = p[len+1];
@@ -214,14 +219,16 @@ BOOL CSoundFile_ReadFAR(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	if (dwMemPos + 8 >= dwMemLength) return TRUE;
 	SDL_memcpy(samplemap, lpStream+dwMemPos, 8);
 	dwMemPos += 8;
-	MODINSTRUMENT *pins = &_this->Ins[1];
-	for (UINT ismp=0; ismp<64; ismp++, pins++) if (samplemap[ismp >> 3] & (1 << (ismp & 7)))
+	pins = &_this->Ins[1];
+	for (i=0; i<64; i++, pins++) if (samplemap[i >> 3] & (1 << (i & 7)))
 	{
+		const FARSAMPLE *pfs;
+		DWORD length;
 		if (dwMemPos + sizeof(FARSAMPLE) > dwMemLength) return TRUE;
-		const FARSAMPLE *pfs = (const FARSAMPLE*)(lpStream + dwMemPos);
+		pfs = (const FARSAMPLE*)(lpStream + dwMemPos);
 		dwMemPos += sizeof(FARSAMPLE);
-		_this->m_nSamples = ismp + 1;
-		const DWORD length = bswapLE32(pfs->length); /* endian fix - Toad */
+		_this->m_nSamples = i + 1;
+		length = bswapLE32(pfs->length); /* endian fix - Toad */
 		pins->nLength = length;
 		pins->nLoopStart = bswapLE32(pfs->reppos);
 		pins->nLoopEnd = bswapLE32(pfs->repend);

@@ -81,16 +81,16 @@
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\dependencies\al_soft\x64;..\dependencies\SDL\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\include;..\dependencies\mojoAL;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\dependencies\mojoAL\AL;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\include;..\dependencies\mojoAL;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\dependencies\mojoAL\AL;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\include;..\dependencies\mojoAL;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\dependencies\mojoAL\AL;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\include;..\dependencies\mojoAL;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\dependencies\mojoAL\AL;..\dependencies\SDL\include;..\dependencies\SDL_Sound;..\dependencies\stb;..\dependencies\utf8proc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -104,7 +104,7 @@
       <DebugInformationFormat>
       </DebugInformationFormat>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Lib>
       <AdditionalDependencies>SDL2.lib;opengl32.lib;winmm.lib;dwmapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -124,7 +124,7 @@
       <DebugInformationFormat>
       </DebugInformationFormat>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Lib>
       <AdditionalDependencies>SDL2.lib;opengl32.lib;winmm.lib;dwmapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -143,7 +143,7 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Lib>
       <AdditionalDependencies>SDL2.lib;opengl32.lib;winmm.lib;dwmapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -163,7 +163,7 @@
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Lib>
       <AdditionalDependencies>SDL2.lib;opengl32.lib;winmm.lib;dwmapi.lib;delayimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -171,7 +171,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_gdm.c" />
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound.c" />
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_aiff.c" />
     <ClCompile Include="..\dependencies\SDL_sound\SDL_sound_au.c" />
@@ -192,6 +191,7 @@
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_dmf.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_dsm.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_far.c" />
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_gdm.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_it.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_mdl.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_med.c" />
@@ -213,42 +213,42 @@
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\snd_fx.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\sndfile.c" />
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\sndmix.c" />
-    <ClCompile Include="..\dependencies\utf8proc\utf8proc.c" />
     <ClCompile Include="..\dependencies\mojoAL\mojoal.c" />
+    <ClCompile Include="..\dependencies\utf8proc\utf8proc.c" />
     <ClCompile Include="..\src\Audio.cpp" />
     <ClCompile Include="..\src\AudioFileAudioToolbox.cpp" />
     <ClCompile Include="..\src\AudioFileSDLSound.cpp" />
     <ClCompile Include="..\src\AudioImpl.cpp" />
+    <ClCompile Include="..\src\BinPacker.cpp" />
     <ClCompile Include="..\src\Bitmap.cpp" />
     <ClCompile Include="..\src\BitmapIO.cpp" />
-    <ClCompile Include="..\src\BlockAllocator.cpp" />
+    <ClCompile Include="..\src\Buffer.cpp" />
     <ClCompile Include="..\src\Channel.cpp" />
+    <ClCompile Include="..\src\ClipRectStack.cpp" />
     <ClCompile Include="..\src\Color.cpp" />
-    <ClCompile Include="..\src\DirectoriesApple.cpp" />
-    <ClCompile Include="..\src\DirectoriesUnix.cpp" />
-    <ClCompile Include="..\src\DirectoriesWin.cpp" />
-    <ClCompile Include="..\src\FileUnix.cpp" />
-    <ClCompile Include="..\src\FileWin.cpp" />
+    <ClCompile Include="..\src\Directories.cpp" />
+    <ClCompile Include="..\src\DirectoriesUIKit.cpp" />
+    <ClCompile Include="..\src\Drawable.cpp" />
+    <ClCompile Include="..\src\FPS.cpp" />
     <ClCompile Include="..\src\Font.cpp" />
     <ClCompile Include="..\src\GosuGLView.cpp" />
     <ClCompile Include="..\src\GosuViewController.cpp" />
     <ClCompile Include="..\src\Graphics.cpp" />
-    <ClCompile Include="..\src\IO.cpp" />
     <ClCompile Include="..\src\Image.cpp" />
     <ClCompile Include="..\src\Input.cpp" />
     <ClCompile Include="..\src\InputUIKit.cpp" />
-    <ClCompile Include="..\src\Inspection.cpp" />
-    <ClCompile Include="..\src\LargeImageData.cpp" />
     <ClCompile Include="..\src\Macro.cpp" />
     <ClCompile Include="..\src\MarkupParser.cpp" />
     <ClCompile Include="..\src\Math.cpp" />
     <ClCompile Include="..\src\OffScreenTarget.cpp" />
+    <ClCompile Include="..\src\OpenGLContext.cpp" />
     <ClCompile Include="..\src\Resolution.cpp" />
     <ClCompile Include="..\src\TexChunk.cpp" />
     <ClCompile Include="..\src\Text.cpp" />
     <ClCompile Include="..\src\TextBuilder.cpp" />
     <ClCompile Include="..\src\TextInput.cpp" />
     <ClCompile Include="..\src\Texture.cpp" />
+    <ClCompile Include="..\src\TiledDrawable.cpp" />
     <ClCompile Include="..\src\TimingApple.cpp" />
     <ClCompile Include="..\src\TimingUnix.cpp" />
     <ClCompile Include="..\src\TimingWin.cpp" />
@@ -258,9 +258,9 @@
     <ClCompile Include="..\src\TrueTypeFontUnix.cpp" />
     <ClCompile Include="..\src\TrueTypeFontWin.cpp" />
     <ClCompile Include="..\src\Utility.cpp" />
+    <ClCompile Include="..\src\UtilityWin.cpp" />
     <ClCompile Include="..\src\Version.cpp" />
     <ClCompile Include="..\src\WinMain.cpp" />
-    <ClCompile Include="..\src\WinUtility.cpp" />
     <ClCompile Include="..\src\Window.cpp" />
     <ClCompile Include="..\src\WindowUIKit.cpp" />
   </ItemGroup>
@@ -273,16 +273,6 @@
     <ClInclude Include="..\dependencies\SDL\include\SDL_blendmode.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_clipboard.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_config.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_android.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_iphoneos.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_macosx.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_minimal.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_pandora.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_psp.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_windows.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_winrt.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_wiz.h" />
-    <ClInclude Include="..\dependencies\SDL\include\SDL_copying.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_cpuinfo.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_egl.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_endian.h" />
@@ -291,6 +281,7 @@
     <ClInclude Include="..\dependencies\SDL\include\SDL_filesystem.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_gamecontroller.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_gesture.h" />
+    <ClInclude Include="..\dependencies\SDL\include\SDL_guid.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_haptic.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_hidapi.h" />
     <ClInclude Include="..\dependencies\SDL\include\SDL_hints.h" />
@@ -360,56 +351,54 @@
     <ClInclude Include="..\dependencies\SDL_sound\libmodplug\modplug.h" />
     <ClInclude Include="..\dependencies\SDL_sound\libmodplug\tables.h" />
     <ClInclude Include="..\dependencies\SDL_sound\stb_vorbis.h" />
+    <ClInclude Include="..\dependencies\mojoAL\AL\al.h" />
+    <ClInclude Include="..\dependencies\mojoAL\AL\alc.h" />
     <ClInclude Include="..\dependencies\stb\stb_image.h" />
     <ClInclude Include="..\dependencies\stb\stb_image_write.h" />
     <ClInclude Include="..\dependencies\stb\stb_truetype.h" />
     <ClInclude Include="..\dependencies\utf8proc\utf8proc.h" />
     <ClInclude Include="..\dependencies\utf8proc\utf8proc_data.h" />
-    <ClInclude Include="..\dependencies\mojoAL\AL\al.h" />
-    <ClInclude Include="..\dependencies\mojoAL\AL\alc.h" />
     <ClInclude Include="..\src\AudioFile.hpp" />
     <ClInclude Include="..\src\AudioImpl.hpp" />
-    <ClInclude Include="..\src\BlockAllocator.hpp" />
+    <ClInclude Include="..\src\BinPacker.hpp" />
     <ClInclude Include="..\src\ClipRectStack.hpp" />
     <ClInclude Include="..\src\DrawOp.hpp" />
     <ClInclude Include="..\src\DrawOpQueue.hpp" />
-    <ClInclude Include="..\src\EmptyImageData.hpp" />
+    <ClInclude Include="..\src\EmptyDrawable.hpp" />
     <ClInclude Include="..\src\GosuGLView.hpp" />
     <ClInclude Include="..\src\GosuViewController.hpp" />
     <ClInclude Include="..\src\GraphicsImpl.hpp" />
-    <ClInclude Include="..\src\Iconv.hpp" />
-    <ClInclude Include="..\src\LargeImageData.hpp" />
-    <ClInclude Include="..\src\Log.hpp" />
     <ClInclude Include="..\src\Macro.hpp" />
     <ClInclude Include="..\src\MarkupParser.hpp" />
     <ClInclude Include="..\src\OffScreenTarget.hpp" />
+    <ClInclude Include="..\src\OpenGLContext.hpp" />
     <ClInclude Include="..\src\RenderState.hpp" />
     <ClInclude Include="..\src\TexChunk.hpp" />
     <ClInclude Include="..\src\TextBuilder.hpp" />
     <ClInclude Include="..\src\Texture.hpp" />
+    <ClInclude Include="..\src\TiledDrawable.hpp" />
     <ClInclude Include="..\src\TransformStack.hpp" />
     <ClInclude Include="..\src\TrueTypeFont.hpp" />
-    <ClInclude Include="..\src\WinUtility.hpp" />
     <ClInclude Include="..\include\Gosu\Audio.hpp" />
     <ClInclude Include="..\include\Gosu\Bitmap.hpp" />
+    <ClInclude Include="..\include\Gosu\Buffer.hpp" />
     <ClInclude Include="..\include\Gosu\Buttons.hpp" />
     <ClInclude Include="..\include\Gosu\Color.hpp" />
     <ClInclude Include="..\include\Gosu\Directories.hpp" />
+    <ClInclude Include="..\include\Gosu\Drawable.hpp" />
     <ClInclude Include="..\include\Gosu\Font.hpp" />
     <ClInclude Include="..\include\Gosu\Fwd.hpp" />
     <ClInclude Include="..\include\Gosu\Gosu.hpp" />
     <ClInclude Include="..\include\Gosu\Graphics.hpp" />
     <ClInclude Include="..\include\Gosu\GraphicsBase.hpp" />
-    <ClInclude Include="..\include\Gosu\IO.hpp" />
     <ClInclude Include="..\include\Gosu\Image.hpp" />
-    <ClInclude Include="..\include\Gosu\ImageData.hpp" />
     <ClInclude Include="..\include\Gosu\Input.hpp" />
-    <ClInclude Include="..\include\Gosu\Inspection.hpp" />
     <ClInclude Include="..\include\Gosu\Math.hpp" />
     <ClInclude Include="..\include\Gosu\Platform.hpp" />
     <ClInclude Include="..\include\Gosu\Text.hpp" />
     <ClInclude Include="..\include\Gosu\TextInput.hpp" />
     <ClInclude Include="..\include\Gosu\Timing.hpp" />
+    <ClInclude Include="..\include\Gosu\Transform.hpp" />
     <ClInclude Include="..\include\Gosu\Utility.hpp" />
     <ClInclude Include="..\include\Gosu\Version.hpp" />
     <ClInclude Include="..\include\Gosu\Window.hpp" />

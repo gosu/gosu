@@ -58,6 +58,8 @@ BOOL CSoundFile_ReadSTM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 {
 	const STMHEADER *phdr = (STMHEADER *)lpStream;
 	DWORD dwMemPos = 0;
+	UINT nPatterns;
+	UINT j;
 	
 	if ((!lpStream) || (dwMemLength < sizeof(STMHEADER))) return FALSE;
 	if ((phdr->filetype != 2) || (phdr->unused != 0x1A)
@@ -77,17 +79,17 @@ BOOL CSoundFile_ReadSTM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 	if (_this->m_nDefaultGlobalVolume > 256) _this->m_nDefaultGlobalVolume = 256;
 	SDL_memcpy(_this->Order, phdr->patorder, 128);
 	// Setting up channels
-	for (UINT nSet=0; nSet<4; nSet++)
+	for (j=0; j<4; j++)
 	{
-		_this->ChnSettings[nSet].dwFlags = 0;
-		_this->ChnSettings[nSet].nVolume = 64;
-		_this->ChnSettings[nSet].nPan = (nSet & 1) ? 0x40 : 0xC0;
+		_this->ChnSettings[j].dwFlags = 0;
+		_this->ChnSettings[j].nVolume = 64;
+		_this->ChnSettings[j].nPan = (j & 1) ? 0x40 : 0xC0;
 	}
 	// Reading samples
-	for (UINT nIns=0; nIns<31; nIns++)
+	for (j=0; j<31; j++)
 	{
-		MODINSTRUMENT *pIns = &_this->Ins[nIns+1];
-		const STMSAMPLE *pStm = &phdr->sample[nIns];  // STM sample data
+		MODINSTRUMENT *pIns = &_this->Ins[j+1];
+		const STMSAMPLE *pStm = &phdr->sample[j];  // STM sample data
 		pIns->nC4Speed = bswapLE16(pStm->c2spd);
 		pIns->nGlobalVol = 64;
 		pIns->nVolume = pStm->volume << 2;
@@ -99,17 +101,20 @@ BOOL CSoundFile_ReadSTM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		if ((pIns->nLoopEnd > pIns->nLoopStart) && (pIns->nLoopEnd != 0xFFFF)) pIns->uFlags |= CHN_LOOP;
 	}
 	dwMemPos = sizeof(STMHEADER);
-	for (UINT nOrd=0; nOrd<MAX_ORDERS; nOrd++) if (_this->Order[nOrd] >= 99) _this->Order[nOrd] = 0xFF;
-	UINT nPatterns = phdr->numpat;
+	for (j=0; j<MAX_ORDERS; j++) if (_this->Order[j] >= 99) _this->Order[j] = 0xFF;
+	nPatterns = phdr->numpat;
 	if (nPatterns > MAX_PATTERNS) nPatterns = MAX_PATTERNS;
-	for (UINT nPat=0; nPat<nPatterns; nPat++)
+	for (j=0; j<nPatterns; j++)
 	{
+		MODCOMMAND *m;
+		const STMNOTE *p;
+		UINT n;
 		if (dwMemPos + 64*4*4 > dwMemLength) return TRUE;
-		_this->PatternSize[nPat] = 64;
-		if ((_this->Patterns[nPat] = CSoundFile_AllocatePattern(64, _this->m_nChannels)) == NULL) return TRUE;
-		MODCOMMAND *m = _this->Patterns[nPat];
-		const STMNOTE *p = (const STMNOTE *)(lpStream + dwMemPos);
-		for (UINT n=0; n<64*4; n++, p++, m++)
+		_this->PatternSize[j] = 64;
+		if ((_this->Patterns[j] = CSoundFile_AllocatePattern(64, _this->m_nChannels)) == NULL) return TRUE;
+		m = _this->Patterns[j];
+		p = (const STMNOTE *)(lpStream + dwMemPos);
+		for (n=0; n<64*4; n++, p++, m++)
 		{
 			UINT note,ins,vol,cmd;
 			// extract the various information from the 4 bytes that
@@ -162,13 +167,13 @@ BOOL CSoundFile_ReadSTM(CSoundFile *_this, const BYTE *lpStream, DWORD dwMemLeng
 		dwMemPos += 64*4*4;
 	}
 	// Reading Samples
-	for (UINT nSmp=1; nSmp<=31; nSmp++)
+	for (j=1; j<=31; j++)
 	{
-		MODINSTRUMENT *pIns = &_this->Ins[nSmp];
+		MODINSTRUMENT *pIns = &_this->Ins[j];
 		dwMemPos = (dwMemPos + 15) & (~15);
 		if (pIns->nLength)
 		{
-			UINT nPos = ((UINT)phdr->sample[nSmp-1].reserved) << 4;
+			UINT nPos = ((UINT)phdr->sample[j-1].reserved) << 4;
 			if ((nPos >= sizeof(STMHEADER)) && (nPos+pIns->nLength <= dwMemLength)) dwMemPos = nPos;
 			if (dwMemPos < dwMemLength)
 			{

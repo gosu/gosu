@@ -17,7 +17,9 @@ namespace Gosu
         RenderState render_state;
         // Only valid if render_state.tex_name != NO_TEXTURE
         GLfloat top, left, bottom, right;
-        
+        // Used to keep TexChunk rectangles on shared textures alive until the end of the frame.
+        std::shared_ptr<const Rect> rect_handle;
+
         // TODO: Merge with Gosu::ArrayVertex.
         struct Vertex
         {
@@ -30,7 +32,7 @@ namespace Gosu
         
         // Number of vertices used, or: complement index of code block
         int vertices_or_block_index;
-        
+
         void perform(const DrawOp* next) const
         {
             // This should not be called on GL code ops.
@@ -141,8 +143,11 @@ namespace Gosu
                 result[i].vertices[1] = vertices[i].y;
                 result[i].vertices[2] = 0;
                 result[i].color       = vertices[i].c.abgr();
-                apply_transform(*render_state.transform,
-                                result[i].vertices[0], result[i].vertices[1]);
+                double x = result[i].vertices[0];
+                double y = result[i].vertices[1];
+                render_state.transform->apply(x, y);
+                result[i].vertices[0] = static_cast<float>(x);
+                result[i].vertices[1] = static_cast<float>(y);
             }
             RenderState va_render_state = render_state;
             va_render_state.transform   = 0;
@@ -162,11 +167,6 @@ namespace Gosu
             }
             
             vas.back().vertices.insert(vas.back().vertices.end(), result, result + 4);
-        }
-        
-        bool operator<(const DrawOp& other) const
-        {
-            return z < other.z;
         }
     };
 }

@@ -4,7 +4,7 @@
 #include "DrawOpQueue.hpp"
 #include <stdexcept>
 
-struct Gosu::Macro::Impl : Gosu::Noncopyable
+struct Gosu::Macro::Impl : private Gosu::Noncopyable
 {
     VertexArrays vertex_arrays;
     int width, height;
@@ -132,7 +132,7 @@ struct Gosu::Macro::Impl : Gosu::Noncopyable
         for (const auto& vertex_array : vertex_arrays) {
             glPushMatrix();
             vertex_array.render_state.apply();
-            glMultMatrixd(&transform[0]);
+            glMultMatrixd(transform.matrix.data());
             glInterleavedArrays(GL_T2F_C4UB_V3F, 0, &vertex_array.vertices[0]);
             glDrawArrays(GL_QUADS, 0, (GLsizei) vertex_array.vertices.size());
             glPopMatrix();
@@ -169,7 +169,7 @@ void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Col
 
     normalize_coordinates(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
-    Gosu::Graphics::gl(z, [=] { pimpl->draw_vertex_arrays(x1, y1, x2, y2, x3, y3, x4, y4); });
+    Gosu::gl(z, [=, this] { pimpl->draw_vertex_arrays(x1, y1, x2, y2, x3, y3, x4, y4); });
 }
 
 const Gosu::GLTexInfo* Gosu::Macro::gl_tex_info() const
@@ -184,15 +184,15 @@ Gosu::Bitmap Gosu::Macro::to_bitmap() const
              pimpl->width, pimpl->height, Color::WHITE, 0, BM_DEFAULT);
     };
 
-    return Gosu::Graphics::render(pimpl->width, pimpl->height, render_this).data().to_bitmap();
+    return Gosu::render(pimpl->width, pimpl->height, render_this).drawable().to_bitmap();
 }
 
-std::unique_ptr<Gosu::ImageData> Gosu::Macro::subimage(int x, int y, int width, int height) const
+std::unique_ptr<Gosu::Drawable> Gosu::Macro::subimage(const Rect&) const
 {
-    return std::unique_ptr<ImageData>{};
+    return nullptr;
 }
 
-void Gosu::Macro::insert(const Bitmap& bitmap, int x, int y)
+void Gosu::Macro::insert(const Bitmap&, int, int)
 {
     throw std::logic_error{"Gosu::Macro cannot be updated with a Gosu::Bitmap yet"};
 }

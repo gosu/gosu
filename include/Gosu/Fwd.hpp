@@ -6,17 +6,15 @@ namespace Gosu
     class Buffer;
     class Channel;
     struct Color;
-    class File;
     class Font;
-    class Graphics;
     class Image;
-    class ImageData;
+    class Drawable;
     class Input;
-    class Reader;
-    class Resource;
+    struct Rect;
     class Sample;
     class Song;
     class TextInput;
+    struct Transform;
+    class Viewport;
     class Window;
-    class Writer;
 }

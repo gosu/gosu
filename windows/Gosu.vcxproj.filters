@@ -72,6 +72,9 @@
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_far.c">
       <Filter>Dependencies</Filter>
     </ClCompile>
+    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_gdm.c">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_it.c">
       <Filter>Dependencies</Filter>
     </ClCompile>
@@ -135,6 +138,9 @@
     <ClCompile Include="..\dependencies\SDL_sound\libmodplug\sndmix.c">
       <Filter>Dependencies</Filter>
     </ClCompile>
+    <ClCompile Include="..\dependencies\mojoAL\mojoal.c">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
     <ClCompile Include="..\dependencies\utf8proc\utf8proc.c">
       <Filter>Dependencies</Filter>
     </ClCompile>
@@ -150,34 +156,37 @@
     <ClCompile Include="..\src\AudioImpl.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\BinPacker.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Bitmap.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\BitmapIO.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\BlockAllocator.cpp">
+    <ClCompile Include="..\src\Buffer.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Channel.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ClipRectStack.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Color.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\DirectoriesApple.cpp">
+    <ClCompile Include="..\src\Directories.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\DirectoriesUnix.cpp">
+    <ClCompile Include="..\src\DirectoriesUIKit.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\DirectoriesWin.cpp">
+    <ClCompile Include="..\src\Drawable.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\FileUnix.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\FileWin.cpp">
+    <ClCompile Include="..\src\FPS.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Font.cpp">
@@ -192,9 +201,6 @@
     <ClCompile Include="..\src\Graphics.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\IO.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Image.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
@@ -202,12 +208,6 @@
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\InputUIKit.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Inspection.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\LargeImageData.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Macro.cpp">
@@ -220,6 +220,9 @@
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\OffScreenTarget.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OpenGLContext.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Resolution.cpp">
@@ -238,6 +241,9 @@
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Texture.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TiledDrawable.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\TimingApple.cpp">
@@ -267,13 +273,13 @@
     <ClCompile Include="..\src\Utility.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\UtilityWin.cpp">
+      <Filter>Implementation</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Version.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\WinMain.cpp">
-      <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\WinUtility.cpp">
       <Filter>Implementation</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Window.cpp">
@@ -281,12 +287,6 @@
     </ClCompile>
     <ClCompile Include="..\src\WindowUIKit.cpp">
       <Filter>Implementation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\SDL_sound\libmodplug\load_gdm.c">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
-    <ClCompile Include="..\dependencies\mojoAL\mojoal.c">
-      <Filter>Dependencies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -314,36 +314,6 @@
     <ClInclude Include="..\dependencies\SDL\include\SDL_config.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_android.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_iphoneos.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_macosx.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_minimal.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_pandora.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_psp.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_windows.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_winrt.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_config_wiz.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_copying.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
     <ClInclude Include="..\dependencies\SDL\include\SDL_cpuinfo.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
@@ -368,7 +338,13 @@
     <ClInclude Include="..\dependencies\SDL\include\SDL_gesture.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_guid.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
     <ClInclude Include="..\dependencies\SDL\include\SDL_haptic.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\SDL\include\SDL_hidapi.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
     <ClInclude Include="..\dependencies\SDL\include\SDL_hints.h">
@@ -572,6 +548,12 @@
     <ClInclude Include="..\dependencies\SDL_sound\stb_vorbis.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
+    <ClInclude Include="..\dependencies\mojoAL\AL\al.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\mojoAL\AL\alc.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
     <ClInclude Include="..\dependencies\stb\stb_image.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
@@ -593,7 +575,7 @@
     <ClInclude Include="..\src\AudioImpl.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\BlockAllocator.hpp">
+    <ClInclude Include="..\src\BinPacker.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ClipRectStack.hpp">
@@ -605,7 +587,7 @@
     <ClInclude Include="..\src\DrawOpQueue.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\EmptyImageData.hpp">
+    <ClInclude Include="..\src\EmptyDrawable.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
     <ClInclude Include="..\src\GosuGLView.hpp">
@@ -617,15 +599,6 @@
     <ClInclude Include="..\src\GraphicsImpl.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Iconv.hpp">
-      <Filter>Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\LargeImageData.hpp">
-      <Filter>Implementation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Log.hpp">
-      <Filter>Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Macro.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
@@ -633,6 +606,9 @@
       <Filter>Implementation</Filter>
     </ClInclude>
     <ClInclude Include="..\src\OffScreenTarget.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\OpenGLContext.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
     <ClInclude Include="..\src\RenderState.hpp">
@@ -647,19 +623,22 @@
     <ClInclude Include="..\src\Texture.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\TiledDrawable.hpp">
+      <Filter>Implementation</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\TransformStack.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
     <ClInclude Include="..\src\TrueTypeFont.hpp">
       <Filter>Implementation</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\WinUtility.hpp">
-      <Filter>Implementation</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Gosu\Audio.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Bitmap.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Buffer.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Buttons.hpp">
@@ -669,6 +648,9 @@
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Directories.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Gosu\Drawable.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Font.hpp">
@@ -686,19 +668,10 @@
     <ClInclude Include="..\include\Gosu\GraphicsBase.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Gosu\IO.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Gosu\Image.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Gosu\ImageData.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Gosu\Input.hpp">
-      <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Gosu\Inspection.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Math.hpp">
@@ -716,6 +689,9 @@
     <ClInclude Include="..\include\Gosu\Timing.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Gosu\Transform.hpp">
+      <Filter>Interface</Filter>
+    </ClInclude>
     <ClInclude Include="..\include\Gosu\Utility.hpp">
       <Filter>Interface</Filter>
     </ClInclude>
@@ -724,15 +700,6 @@
     </ClInclude>
     <ClInclude Include="..\include\Gosu\Window.hpp">
       <Filter>Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\SDL\include\SDL_hidapi.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\mojoAL\AL\al.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dependencies\mojoAL\AL\alc.h">
-      <Filter>Dependencies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
