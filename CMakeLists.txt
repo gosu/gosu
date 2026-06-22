@@ -79,6 +79,9 @@ set_property(TARGET gosu PROPERTY POSITION_INDEPENDENT_CODE ON)
 # Ignore deprecation warnings from within Gosu while compiling Gosu itself.
 target_compile_definitions(gosu PRIVATE -DGOSU_DEPRECATED=)
 
+# Let utf8proc and mojoAL know that they are being compiled statically (important on Windows: no DLL exports).
+target_compile_definitions(gosu PRIVATE -DUTF8PROC_STATIC -DAL_LIBTYPE_STATIC)
+
 # Compile all C++ files as Objective-C++ on macOS so that we can use ObjC APIs.
 if (APPLE)
     set_source_files_properties(${SOURCE_FILES} PROPERTIES
