@@ -43,6 +43,9 @@ static void CSoundFile_UpdateSettings(CSoundFile *_this, const ModPlug_Settings 
 	                           settings->mFlags & MODPLUG_ENABLE_NOISE_REDUCTION,
 	                           FALSE);
 	CSoundFile_SetResamplingMode(_this, settings->mResamplingMode);
+
+	if(!(settings->mFlags & MODPLUG_ENABLE_FADEOUT)) // see: https://github.com/icculus/SDL_sound/issues/123
+		_this->m_dwSongFlags |= SONG_NOFADEOUT;
 }
 
 CSoundFile *new_CSoundFile(LPCBYTE lpStream, DWORD dwMemLength, const ModPlug_Settings *settings)

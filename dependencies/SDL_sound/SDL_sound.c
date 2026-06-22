@@ -46,9 +46,6 @@ static decoder_element decoders[] =
 #if SOUND_SUPPORTS_MODPLUG
     { 0, &__Sound_DecoderFunctions_MODPLUG },
 #endif
-#if SOUND_SUPPORTS_MP3
-    { 0, &__Sound_DecoderFunctions_MP3 },
-#endif
 #if SOUND_SUPPORTS_WAV
     { 0, &__Sound_DecoderFunctions_WAV },
 #endif
@@ -72,6 +69,9 @@ static decoder_element decoders[] =
 #endif
 #if SOUND_SUPPORTS_FLAC
     { 0, &__Sound_DecoderFunctions_FLAC },
+#endif
+#if SOUND_SUPPORTS_MP3
+    { 0, &__Sound_DecoderFunctions_MP3 },
 #endif
 #if SOUND_SUPPORTS_COREAUDIO
     { 0, &__Sound_DecoderFunctions_CoreAudio },

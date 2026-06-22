@@ -358,8 +358,8 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 		}
 	}
 	// Load Instruments
-	SDL_memset(InstrMap, 0, sizeof(InstrMap));
 	_this->m_nInstruments = (pfh->wInstruments < MAX_INSTRUMENTS) ? pfh->wInstruments : MAX_INSTRUMENTS-1;
+	for (j=0; j< 255; j++) InstrMap[j]=NULL;
 	for (j=1; j<=255; j++)
 	{
 		const MT2INSTRUMENT *pmi;
@@ -493,8 +493,8 @@ BOOL CSoundFile_ReadMT2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 			dwMemPos += 36;
 		}
 	}
-	SDL_memset(SampleMap, 0, sizeof(SampleMap));
 	_this->m_nSamples = (pfh->wSamples < MAX_SAMPLES) ? pfh->wSamples : MAX_SAMPLES-1;
+	for (j=0; j< 256; j++) SampleMap[j]=NULL;
 	for (j=1; j<=256; j++)
 	{
 		const MT2SAMPLE *pms;
