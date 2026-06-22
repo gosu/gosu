@@ -46,11 +46,15 @@ endif ()
 
 find_package(OpenGL REQUIRED)
 
+# Platform-specific libraries that we need in addition to SDL2.
 if (APPLE)
     find_library(COCOA_LIBRARY Cocoa)
     find_library(AUDIO_TOOLBOX_LIBRARY AudioToolbox)
     find_library(CORE_TEXT_LIBRARY CoreText)
     find_library(ICONV_LIBRARY iconv)
+elseif (WIN32)
+    # gdi32 for graphics, winmm for TimingWin.cpp, dwmapi for Resolution.cpp.
+    set(WINDOWS_LIBRARIES gdi32 winmm dwmapi)
 else ()
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(FONTCONFIG REQUIRED fontconfig)
@@ -100,6 +104,8 @@ target_link_libraries(gosu PRIVATE
         ${AUDIO_TOOLBOX_LIBRARY}
         ${CORE_TEXT_LIBRARY}
         ${ICONV_LIBRARY}
+        # Only defined on Windows
+        ${WINDOWS_LIBRARIES}
         # Only defined on Linux
         ${FONTCONFIG_LIBRARIES})
 
