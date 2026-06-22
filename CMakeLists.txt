@@ -1,10 +1,10 @@
 # Structure inspired by https://github.com/pabloariasal/modern-cmake-sample
 # Assumptions:
-# - We cannot go higher than CMake 3.22.1 while we support Ubuntu 22.04.
+# - We cannot go higher than CMake 3.28.3 while we support Ubuntu 24.04.
 # - Prefer static libraries. Users should link Gosu into their games.
 # - This is not (yet?) going to be used for building Ruby/Gosu.
 # - This is not (yet?) going to replace the Visual Studio project for Windows.
-cmake_minimum_required(VERSION 3.22.1...3.26.4 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.28.3 FATAL_ERROR)
 
 project(Gosu VERSION 2.0.0)
 
