@@ -66,7 +66,6 @@ static SDL_Rect max_window_size(const Gosu::Window* window)
 #include <SDL_syswm.h>
 #include <dwmapi.h>
 #include <windows.h>
-#pragma comment(lib, "Dwmapi.lib")
 
 static SDL_Rect max_window_size(const Gosu::Window* window)
 {
