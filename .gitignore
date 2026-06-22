@@ -20,17 +20,3 @@
 /**/xcuserdata
 /**/Pods
 /**/*.app
-
-# MSVC clutter
-/windows/ipch
-/windows/Win32
-/windows/x64
-/windows/*.ncb
-/windows/*.sdf
-/windows/*.suo
-/windows/*.user
-/windows/*.vs
-/windows/*.opendb
-/windows/*.opensdf
-/windows/Gosu.VC.db
-/examples/Tutorial.*

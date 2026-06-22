@@ -1,10 +1,10 @@
 # Structure inspired by https://github.com/pabloariasal/modern-cmake-sample
 # Assumptions:
-# - We cannot go higher than CMake 3.22.1 while we support Ubuntu 22.04.
+# - We cannot go higher than CMake 3.28.3 while we support Ubuntu 24.04.
 # - Prefer static libraries. Users should link Gosu into their games.
 # - This is not (yet?) going to be used for building Ruby/Gosu.
 # - This is not (yet?) going to replace the Visual Studio project for Windows.
-cmake_minimum_required(VERSION 3.22.1...3.26.4 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.28.3 FATAL_ERROR)
 
 project(Gosu VERSION 2.0.0)
 
@@ -19,14 +19,42 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 ##############################################
 # Declare dependencies
 
-find_package(SDL2 REQUIRED)
+if (WIN32)
+    # This git repository bundles a copy of SDL2 so that the Ruby gem is self-contained.
+    # Conveniently, using it also simplifies the use of Gosu from CMake / C++.
+    # We define the SDL2::SDL2 target by hand to match find_package(SDL2) on Linux or macO.
+    set(SDL2_BUNDLED_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/SDL)
+    if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+        set(SDL2_BUNDLED_LIB_DIR ${SDL2_BUNDLED_DIR}/lib/x64)
+    else ()
+        set(SDL2_BUNDLED_LIB_DIR ${SDL2_BUNDLED_DIR}/lib/x86)
+    endif ()
+    if (MSVC)
+        set(SDL2_BUNDLED_LIB ${SDL2_BUNDLED_LIB_DIR}/SDL2.lib)
+    else ()
+        set(SDL2_BUNDLED_LIB ${SDL2_BUNDLED_LIB_DIR}/libSDL2.dll.a)
+    endif ()
+
+    add_library(SDL2::SDL2 UNKNOWN IMPORTED)
+    set_target_properties(SDL2::SDL2 PROPERTIES
+            INTERFACE_INCLUDE_DIRECTORIES ${SDL2_BUNDLED_DIR}/include
+            IMPORTED_LOCATION ${SDL2_BUNDLED_LIB})
+else ()
+    # On Linux and macOS, we expect to find a system-wide installation of SDL2.
+    find_package(SDL2 REQUIRED)
+endif ()
+
 find_package(OpenGL REQUIRED)
 
+# Platform-specific libraries that we need in addition to SDL2.
 if (APPLE)
     find_library(COCOA_LIBRARY Cocoa)
     find_library(AUDIO_TOOLBOX_LIBRARY AudioToolbox)
     find_library(CORE_TEXT_LIBRARY CoreText)
     find_library(ICONV_LIBRARY iconv)
+elseif (WIN32)
+    # gdi32 for graphics, winmm for TimingWin.cpp, dwmapi for Resolution.cpp.
+    set(WINDOWS_LIBRARIES gdi32 winmm dwmapi)
 else ()
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(FONTCONFIG REQUIRED fontconfig)
@@ -50,6 +78,9 @@ set_property(TARGET gosu PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 # Ignore deprecation warnings from within Gosu while compiling Gosu itself.
 target_compile_definitions(gosu PRIVATE -DGOSU_DEPRECATED=)
+
+# Let utf8proc and mojoAL know that they are being compiled statically (important on Windows: no DLL exports).
+target_compile_definitions(gosu PRIVATE -DUTF8PROC_STATIC -DAL_LIBTYPE_STATIC)
 
 # Compile all C++ files as Objective-C++ on macOS so that we can use ObjC APIs.
 if (APPLE)
@@ -76,6 +107,8 @@ target_link_libraries(gosu PRIVATE
         ${AUDIO_TOOLBOX_LIBRARY}
         ${CORE_TEXT_LIBRARY}
         ${ICONV_LIBRARY}
+        # Only defined on Windows
+        ${WINDOWS_LIBRARIES}
         # Only defined on Linux
         ${FONTCONFIG_LIBRARIES})
 
