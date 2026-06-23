@@ -1,0 +1,4 @@
+BasedOnStyle: InheritParentConfig
+
+# This makes the Gosu_translate_exceptions calls too inconsistent.
+AllowShortLambdasOnASingleLine: None
