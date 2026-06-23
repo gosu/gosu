@@ -456,7 +456,7 @@ static Uint32 VOC_read(Sound_Sample *sample)
     v->bufpos = 0;
     while (v->bufpos < internal->buffer_size)
     {
-        Uint32 rc = voc_read_waveform(sample, 1, internal->buffer_size);
+        Uint32 rc = voc_read_waveform(sample, 1, internal->buffer_size - v->bufpos);
         if (rc == 0)
         {
             sample->flags |= (v->error) ? 

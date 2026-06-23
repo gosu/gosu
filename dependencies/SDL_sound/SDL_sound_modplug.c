@@ -220,7 +220,7 @@ const Sound_DecoderFunctions __Sound_DecoderFunctions_MODPLUG =
         extensions_modplug,
         "Play modules through ModPlug",
         "Torbjörn Andersson <d91tan@Update.UU.SE>",
-        "http://modplug-xmms.sourceforge.net/"
+        "https://modplug-xmms.sourceforge.net/"
     },
 
     MODPLUG_init,       /*   init() method */

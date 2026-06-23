@@ -6,7 +6,7 @@ namespace Gosu
 {
     /// Returns a double value between min (inclusive) and max (exclusive).
     /// This function returns random values based on a uniform distribution.
-    /// Special case: If min and max are the same value, then that value is returned.
+    /// @throw std::invalid_argument if min >= max
     double random(double min, double max);
 
     /// Translates between 360° degrees (as used by Gosu) and radians, but does not change the
@@ -61,12 +61,12 @@ namespace Gosu
     double normalize_angle(double angle);
 
     /// Returns (value-min) % (max-min) + min, where % always has a positive
-    /// result for max > min. The results are undefined for max <= min.
-    /// Note: This means that max is exclusive.
+    /// result for max > min. This means that max is exclusive.
+    /// @throw std::invalid_argument if min >= max
     int wrap(int value, int min, int max);
     /// Returns (value-min) % (max-min) + min, where % always has a positive
-    /// result for max > min. The results are undefined for max <= min.
-    /// Note: This means that max is exclusive.
+    /// result for max > min. This means that max is exclusive.
+    /// @throw std::invalid_argument if min >= max
     double wrap(double value, double min, double max);
 
     /// Returns the distance between two points.

@@ -517,7 +517,7 @@ const Sound_DecoderFunctions __Sound_DecoderFunctions_AIFF =
     {
         extensions_aiff,
         "Audio Interchange File Format",
-        "TorbjÃ¶rn Andersson <d91tan@Update.UU.SE>",
+        "Torbjörn Andersson <d91tan@Update.UU.SE>",
         "https://icculus.org/SDL_sound/"
     },
 
