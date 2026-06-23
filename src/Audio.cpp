@@ -1,6 +1,5 @@
 #include <Gosu/Audio.hpp>
 #include <Gosu/Buffer.hpp>
-#include <Gosu/Math.hpp>
 #include "AudioFile.hpp"
 #include "AudioImpl.hpp"
 #include <algorithm>
@@ -18,11 +17,11 @@ struct Gosu::Sample::Impl : private Gosu::Noncopyable
     ALuint buffer;
 
     explicit Impl(AudioFile&& audio_file)
-    : buffer{}
+        : buffer()
     {
         al_initialize();
         alGenBuffers(1, &buffer);
-        alBufferData(buffer, audio_file.format(), &audio_file.decoded_data().front(),
+        alBufferData(buffer, audio_file.format(), audio_file.decoded_data().data(),
                      static_cast<ALsizei>(audio_file.decoded_data().size()),
                      static_cast<ALsizei>(audio_file.sample_rate()));
     }
@@ -31,7 +30,9 @@ struct Gosu::Sample::Impl : private Gosu::Noncopyable
     {
         // It's hard to free things in the right order in Ruby/Gosu.
         // Make sure buffer isn't deleted after the context/device are shut down.
-        if (!al_initialized()) return;
+        if (!al_initialized()) {
+            return;
+        }
 
         alDeleteBuffers(1, &buffer);
     }
@@ -58,12 +59,16 @@ Gosu::Channel Gosu::Sample::play(double volume, double speed, bool looping) cons
 
 Gosu::Channel Gosu::Sample::play_pan(double pan, double volume, double speed, bool looping) const
 {
-    if (!m_impl) return Channel{};
+    if (!m_impl) {
+        return Channel();
+    }
 
     Channel channel = allocate_channel();
 
     // Couldn't allocate a free channel.
-    if (channel.current_channel() == NO_CHANNEL) return channel;
+    if (channel.current_channel() == NO_CHANNEL) {
+        return channel;
+    }
 
     ALuint source = al_source_for_channel(channel.current_channel());
     alSourcei(source, AL_BUFFER, static_cast<ALint>(m_impl->buffer));
@@ -101,7 +106,7 @@ private:
 
 public:
     explicit Impl(const std::string& filename)
-        : m_buffers {},
+        : m_buffers(),
           m_file(new AudioFile(filename))
     {
         al_initialize();
@@ -109,7 +114,7 @@ public:
     }
 
     explicit Impl(Buffer buffer)
-        : m_buffers {},
+        : m_buffers(),
           m_file(new AudioFile(std::move(buffer)))
     {
         al_initialize();
@@ -120,7 +125,9 @@ public:
     {
         // It's hard to free things in the right order in Ruby/Gosu.
         // Make sure buffers aren't deleted after the context/device are shut down.
-        if (!al_initialized()) return;
+        if (!al_initialized()) {
+            return;
+        }
 
         alDeleteBuffers(2, m_buffers);
     }
@@ -192,7 +199,9 @@ public:
         for (int i = 0; i < processed; ++i) {
             alSourceUnqueueBuffers(source, 1, &buffer);
             active = stream_to_buffer(buffer);
-            if (active) alSourceQueueBuffers(source, 1, &buffer);
+            if (active) {
+                alSourceQueueBuffers(source, 1, &buffer);
+            }
         }
 
         ALint state;
@@ -216,10 +225,7 @@ public:
         }
     }
 
-    double volume() const
-    {
-        return m_volume;
-    }
+    double volume() const { return m_volume; }
 
     void set_volume(double volume)
     {
@@ -229,12 +235,12 @@ public:
 };
 
 Gosu::Song::Song(const std::string& filename)
-: m_impl(new Impl(filename))
+    : m_impl(new Impl(filename))
 {
 }
 
 Gosu::Song::Song(Buffer buffer)
-: m_impl(new Impl(std::move(buffer)))
+    : m_impl(new Impl(std::move(buffer)))
 {
 }
 
