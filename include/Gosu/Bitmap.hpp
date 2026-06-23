@@ -79,7 +79,7 @@ namespace Gosu
     /// Saves a Bitmap to a file.
     void save_image_file(const Bitmap& bitmap, const std::string& filename);
     /// Saves a Bitmap to an arbitrary resource.
-    Gosu::Buffer save_image(const Bitmap& bitmap, std::string_view format_hint = "png");
+    Buffer save_image(const Bitmap& bitmap, std::string_view format_hint = "png");
 
     Bitmap apply_border_flags(unsigned image_flags, const Bitmap& source, Rect source_rect);
 }
