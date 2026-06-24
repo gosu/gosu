@@ -23,7 +23,7 @@ module GosuFFI
 
   attach_function :Gosu_fps, [], :int
   attach_function :Gosu_flush, [], :void
-  attach_function :Gosu_milliseconds, [], :long
+  attach_function :Gosu_milliseconds, [], :uint64
   attach_function :Gosu_default_font_name, [], :string
   attach_function :Gosu_user_languages, [:_callback_with_string, :pointer], :void
 

@@ -15,7 +15,9 @@ static SDL_DisplayMode display_mode(const Gosu::Window* window)
 
     int index = window ? SDL_GetWindowDisplayIndex(window->sdl_window()) : 0;
     SDL_DisplayMode result;
-    SDL_GetDesktopDisplayMode(index, &result);
+    if (SDL_GetDesktopDisplayMode(index, &result) < 0) {
+        throw std::runtime_error("SDL_GetDesktopDisplayMode: " + std::string(SDL_GetError()));
+    }
     return result;
 }
 

@@ -6,9 +6,7 @@
 #include <stdexcept> // for std::invalid_argument
 #include <utility> // for std::move, std::swap
 
-Gosu::Bitmap::Bitmap(int width, int height, Color c)
-    : m_width(width),
-      m_height(height)
+static void check_bitmap_size(int width, int height)
 {
     if (width < 0 || height < 0) {
         throw std::invalid_argument("Negative Gosu::Bitmap size");
@@ -18,21 +16,30 @@ Gosu::Bitmap::Bitmap(int width, int height, Color c)
     if (height != 0 && width > std::numeric_limits<int>::max() / height) {
         throw std::invalid_argument("Gosu::Bitmap size out of bounds");
     }
+}
+
+Gosu::Bitmap::Bitmap(int width, int height, Color c)
+    : m_width(width),
+      m_height(height)
+{
+    check_bitmap_size(width, height);
 
     const int size = width * height;
     m_pixels = Buffer(size * sizeof(Color));
     std::fill_n(data(), size, c);
 }
 
-Gosu::Bitmap::Bitmap(int width, int height, Gosu::Buffer&& buffer)
+Gosu::Bitmap::Bitmap(int width, int height, Buffer&& buffer)
     : m_width(width),
       m_height(height),
       m_pixels(std::move(buffer))
 {
-    int pixels = width * height;
-    if (static_cast<std::size_t>(pixels) * sizeof(Color) != m_pixels.size()) {
+    check_bitmap_size(width, height);
+
+    const int size = width * height;
+    if (static_cast<std::size_t>(size) * sizeof(Color) != m_pixels.size()) {
         throw std::length_error("Gosu::Bitmap given Gosu::Buffer of wrong size, expected "
-                                + std::to_string(pixels * sizeof(Color)) + ", given "
+                                + std::to_string(size * sizeof(Color)) + ", given "
                                 + std::to_string(m_pixels.size()));
     }
 }
@@ -109,7 +116,7 @@ void Gosu::Bitmap::insert(const Bitmap& source, int x, int y, Rect source_rect)
     }
 }
 
-bool Gosu::Bitmap::operator==(const Gosu::Bitmap& other) const
+bool Gosu::Bitmap::operator==(const Bitmap& other) const
 {
     int pixels = width() * height();
     return pixels == other.width() * other.height()
