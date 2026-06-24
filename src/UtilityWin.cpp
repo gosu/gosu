@@ -37,8 +37,12 @@ std::string Gosu::utf16_to_utf8(const std::wstring& utf16)
                                  + std::to_string(GetLastError()));
     }
     std::string utf8(result, '\0');
-    WideCharToMultiByte(CP_UTF8, MB_ERR_INVALID_CHARS, utf16.c_str(), utf16.size(), utf8.data(),
-                        utf8.size(), nullptr, nullptr);
+    result = WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, utf16.c_str(), utf16.size(),
+                                 utf8.data(), utf8.size(), nullptr, nullptr);
+    if (result == 0) {
+        throw std::runtime_error("Could not convert UTF-16 to UTF-8, GetLastError() = "
+                                 + std::to_string(GetLastError()));
+    }
     return utf8;
 }
 
