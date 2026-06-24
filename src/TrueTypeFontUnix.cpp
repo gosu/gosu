@@ -33,11 +33,10 @@ const std::uint8_t* Gosu::ttf_data_by_name(const std::string& font_name, unsigne
         if (FcFontSet* fonts = FcFontList(config, pattern, props)) {
             // Among all matching fonts, find the variant that is the best fit for our font_flags.
             std::string best_filename;
-            int best_diff;
+            int best_diff = 0;
 
             for (int i = 0; i < fonts->nfont; ++i) {
-                int weight, slant;
-
+                int weight = 0, slant = 0;
                 FcPatternGetInteger(fonts->fonts[i], FC_WEIGHT, 0, &weight);
                 FcPatternGetInteger(fonts->fonts[i], FC_SLANT, 0, &slant);
 
@@ -57,15 +56,19 @@ const std::uint8_t* Gosu::ttf_data_by_name(const std::string& font_name, unsigne
                     diff += abs(slant - FC_SLANT_ROMAN);
                 }
 
+                FcChar8* filename = nullptr;
+                if (FcPatternGetString(fonts->fonts[i], FC_FILE, 0, &filename) != FcResultMatch
+                    || filename == nullptr) {
+                    continue;
+                }
+
                 // Penalize OTF fonts since we are not really good at handling these.
-                FcChar8* file;
-                FcPatternGetString(fonts->fonts[i], FC_FILE, 0, &file);
-                if (has_extension(reinterpret_cast<char*>(file), ".otf")) {
+                if (has_extension(reinterpret_cast<char*>(filename), ".otf")) {
                     diff += 10000;
                 }
 
                 if (best_filename.empty() || diff < best_diff) {
-                    best_filename = reinterpret_cast<char*>(file);
+                    best_filename = reinterpret_cast<char*>(filename);
                     best_diff = diff;
                 }
             }
@@ -94,8 +97,8 @@ static const std::uint8_t* ttf_data_of_default_sans_serif_font()
     FcResult match_result;
     pattern = FcFontMatch(nullptr, pattern, &match_result);
     if (match_result == FcResultMatch) {
-        FcChar8* filename;
-        if (FcPatternGetString(pattern, FC_FILE, 0, &filename) == FcResultMatch) {
+        FcChar8* filename = nullptr;
+        if (FcPatternGetString(pattern, FC_FILE, 0, &filename) == FcResultMatch && filename) {
             ttf_ptr = Gosu::ttf_data_from_file(reinterpret_cast<char*>(filename));
         }
     }
