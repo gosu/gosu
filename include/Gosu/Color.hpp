@@ -1,5 +1,6 @@
 #pragma once
 
+#include <bit>
 #include <compare>
 #include <cstdint>
 #include <ostream>
@@ -74,7 +75,7 @@ namespace Gosu
         std::uint32_t abgr() const { return alpha << 24 | blue << 16 | green << 8 | red; }
 
         /// Returns the internal representation of the color (RGBA in memory).
-        std::uint32_t gl() const { return *reinterpret_cast<const std::uint32_t*>(this); }
+        std::uint32_t gl() const { return std::bit_cast<std::uint32_t>(*this); }
 
         static const Color NONE;
         static const Color BLACK;
