@@ -354,10 +354,10 @@ typedef const BYTE * LPCBYTE;
 int _muldiv(long a, long b, long c);
 int _muldivr(long a, long b, long c);
 
-#define bswapLE16(X) SDL_SwapLE16((X))
-#define bswapLE32(X) SDL_SwapLE32((X))
-#define bswapBE16(X) SDL_SwapBE16((X))
-#define bswapBE32(X) SDL_SwapBE32((X))
+#define bswapLE16(X) SDL_Swap16LE((X))
+#define bswapLE32(X) SDL_Swap32LE((X))
+#define bswapBE16(X) SDL_Swap16BE((X))
+#define bswapBE32(X) SDL_Swap32BE((X))
 
 // Reverb Types (GM2 Presets)
 enum {

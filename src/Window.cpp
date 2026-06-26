@@ -27,8 +27,7 @@ struct Gosu::Window::Impl : private Gosu::Noncopyable
         CLOSED,
         OPEN,
         CLOSING
-    } state
-        = CLOSED;
+    } state = CLOSED;
 
     std::unique_ptr<Viewport> viewport;
     std::unique_ptr<Input> input;
@@ -128,12 +127,12 @@ void Gosu::Window::resize(int width, int height, bool fullscreen)
         }
     }
 
-    SDL_SetWindowFullscreen(sdl_window(), fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+    SDL_SetWindowFullscreen(sdl_window(), fullscreen);
     if (!m_impl->resizing) {
         SDL_SetWindowSize(sdl_window(), actual_width, actual_height);
     }
 
-    SDL_GL_GetDrawableSize(sdl_window(), &actual_width, &actual_height);
+    SDL_GetWindowSizeInPixels(sdl_window(), &actual_width, &actual_height);
 
     if (!m_impl->viewport) {
         m_impl->viewport = std::make_unique<Viewport>(actual_width, actual_height);
@@ -158,7 +157,7 @@ bool Gosu::Window::resizable() const
 void Gosu::Window::set_resizable(bool resizable)
 {
     m_impl->resizable = resizable;
-    SDL_SetWindowResizable(sdl_window(), resizable ? SDL_TRUE : SDL_FALSE);
+    SDL_SetWindowResizable(sdl_window(), resizable);
 }
 
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
@@ -170,7 +169,7 @@ bool Gosu::Window::borderless() const
 // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
 void Gosu::Window::set_borderless(bool borderless)
 {
-    SDL_SetWindowBordered(sdl_window(), borderless ? SDL_FALSE : SDL_TRUE);
+    SDL_SetWindowBordered(sdl_window(), !borderless);
 }
 
 double Gosu::Window::update_interval() const
@@ -250,7 +249,7 @@ bool Gosu::Window::tick()
         SDL_ShowWindow(sdl_window());
         m_impl->state = Impl::OPEN;
 
-        SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
+        SDL_SetEventEnabled(SDL_EVENT_DROP_FILE, true);
 
         // Enable vsync.
         const OpenGLContext current_context(true);
@@ -260,48 +259,40 @@ bool Gosu::Window::tick()
         // -> When first showing the window, update the physical size of Graphics (=glViewport).
         // Fixes https://github.com/gosu/gosu/issues/318
         int width, height;
-        SDL_GL_GetDrawableSize(sdl_window(), &width, &height);
+        SDL_GetWindowSizeInPixels(sdl_window(), &width, &height);
         viewport().set_physical_resolution(width, height);
     }
 
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         switch (e.type) {
-        case SDL_WINDOWEVENT: {
-            switch (e.window.event) {
-            case SDL_WINDOWEVENT_SIZE_CHANGED: {
-                if (m_impl->resizable
-                    && (width() != e.window.data1 || height() != e.window.data2)) {
-                    m_impl->resizing = true;
-                    resize(e.window.data1, e.window.data2, fullscreen());
-                    m_impl->resizing = false;
-                }
-                break;
-            }
-            case SDL_WINDOWEVENT_FOCUS_GAINED: {
-                gain_focus();
-                break;
-            }
-            case SDL_WINDOWEVENT_FOCUS_LOST: {
-                lose_focus();
-                break;
-            }
-            default: {
-                break;
-            }
+        // TODO: Also handle SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED and fix OpenGL settings?
+        case SDL_EVENT_WINDOW_RESIZED: {
+            if (m_impl->resizable && (width() != e.window.data1 || height() != e.window.data2)) {
+                m_impl->resizing = true;
+                resize(e.window.data1, e.window.data2, fullscreen());
+                m_impl->resizing = false;
             }
             break;
         }
-        case SDL_QUIT: {
+        case SDL_EVENT_WINDOW_FOCUS_GAINED: {
+            gain_focus();
+            break;
+        }
+        case SDL_EVENT_WINDOW_FOCUS_LOST: {
+            lose_focus();
+            break;
+        }
+        case SDL_EVENT_QUIT: {
             close();
             break;
         }
-        case SDL_DROPFILE: {
-            std::shared_ptr<char> dropped_file { e.drop.file, SDL_free };
+        case SDL_EVENT_DROP_FILE: {
+            const char* dropped_file = e.drop.data;
             if (dropped_file == nullptr) {
                 break;
             }
-            drop(dropped_file.get());
+            drop(dropped_file);
             break;
         }
         default: {
@@ -317,7 +308,12 @@ bool Gosu::Window::tick()
 
     update();
 
-    SDL_ShowCursor(needs_cursor());
+    if (needs_cursor()) {
+        SDL_ShowCursor();
+    }
+    else {
+        SDL_HideCursor();
+    }
 
     if (needs_redraw()) {
         const OpenGLContext current_context(true);

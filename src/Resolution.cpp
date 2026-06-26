@@ -3,9 +3,9 @@
 
 #include <Gosu/Window.hpp>
 #include "GraphicsImpl.hpp"
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
-static SDL_DisplayMode display_mode(const Gosu::Window* window)
+static const SDL_DisplayMode& display_mode(const Gosu::Window* window)
 {
     static const struct VideoSubsystem : Gosu::Noncopyable
     {
@@ -13,12 +13,13 @@ static SDL_DisplayMode display_mode(const Gosu::Window* window)
         ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
     } subsystem;
 
-    int index = window ? SDL_GetWindowDisplayIndex(window->sdl_window()) : 0;
-    SDL_DisplayMode result;
-    if (SDL_GetDesktopDisplayMode(index, &result) < 0) {
+    SDL_DisplayID index =
+        window ? SDL_GetDisplayForWindow(window->sdl_window()) : SDL_GetPrimaryDisplay();
+    const SDL_DisplayMode* result = SDL_GetDesktopDisplayMode(index);
+    if (result == nullptr) {
         throw std::runtime_error("SDL_GetDesktopDisplayMode: " + std::string(SDL_GetError()));
     }
-    return result;
+    return *result;
 }
 
 int Gosu::screen_width(const Window* window)
@@ -36,44 +37,42 @@ int Gosu::screen_height(const Window* window)
 
 static SDL_Rect max_window_size(const Gosu::Window* window)
 {
-    // The extra size that a window needs depends on its style.
-    // This logic must be kept in sync with SDL_cocoawindow.m to be 100% accurate.
-    NSUInteger style;
-    if (window && window->borderless()) {
-        style = NSWindowStyleMaskBorderless;
-    }
-    else {
-        style = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable |
-                NSWindowStyleMaskMiniaturizable;
-    }
-    if (window && window->resizable()) {
-        style |= NSWindowStyleMaskResizable;
-    }
+    static const struct VideoSubsystem : Gosu::Noncopyable
+    {
+        VideoSubsystem() { SDL_InitSubSystem(SDL_INIT_VIDEO); };
+        ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
+    } subsystem;
 
-    auto index = window ? SDL_GetWindowDisplayIndex(window->sdl_window()) : 0;
-    NSRect screen_frame = NSScreen.screens[index].visibleFrame;
-    NSRect content_rect = [NSWindow contentRectForFrameRect:screen_frame styleMask:style];
-
+    // SDL_GetDisplayUsableBounds gives the maximum size of a borderless window (the screen minus
+    // the menu bar and dock).
+    SDL_DisplayID display =
+        window ? SDL_GetDisplayForWindow(window->sdl_window()) : SDL_GetPrimaryDisplay();
     SDL_Rect result;
-    result.x = 0;
-    result.y = 0;
-    result.w = content_rect.size.width;
-    result.h = content_rect.size.height;
+    if (!SDL_GetDisplayUsableBounds(display, &result)) {
+        throw std::runtime_error("SDL_GetDisplayUsableBounds: " + std::string(SDL_GetError()));
+    }
+
+    // Now subtract the decorations that a default-styled Cocoa window would add.
+    // This logic must be kept in sync with SDL_cocoawindow.m to be 100% accurate.
+    NSUInteger style =
+        NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable;
+    NSRect content = [NSWindow contentRectForFrameRect:NSMakeRect(0, 0, result.w, result.h)
+                                             styleMask:style];
+    result.w = static_cast<int>(content.size.width);
+    result.h = static_cast<int>(content.size.height);
     return result;
 }
 #endif
 
-// TODO: Remove this implementation and remove ifdef for GOSU_IS_X once WIN_GetWindowBordersSize is patched
-#ifdef GOSU_IS_WIN
-#include <SDL_syswm.h>
+#if defined(GOSU_IS_WIN)
 #include <dwmapi.h>
 #include <windows.h>
 
 static SDL_Rect max_window_size(const Gosu::Window* window)
 {
-    // Replicate SDL's WIN_GetWindowBordersSize implementation (https://github.com/libsdl-org/SDL/blob/9f71a809e9bd6fbb5fa401a45c1537fc26abc1b4/src/video/windows/SDL_windowswindow.c#L514-L554)
-    // until it's patched to ignore the window drop shadow (window border is 1px but with drop shadow it's reported as 8px)
-    // REF: https://github.com/libsdl-org/SDL/issues/3835
+    // Replicate SDL's WIN_GetWindowBordersSize implementation because the original includes the
+    // size of the drop shadow, which doesn't make sense as they don't actually take up space.
+    // https://github.com/libsdl-org/SDL/issues/3835
 
     static const struct VideoSubsystem : Gosu::Noncopyable
     {
@@ -81,15 +80,20 @@ static SDL_Rect max_window_size(const Gosu::Window* window)
         ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
     } subsystem;
 
-    int index = window ? SDL_GetWindowDisplayIndex(window->sdl_window()) : 0;
+    SDL_DisplayID display
+        = window ? SDL_GetDisplayForWindow(window->sdl_window()) : SDL_GetPrimaryDisplay();
     SDL_Rect rect;
-    SDL_GetDisplayUsableBounds(index, &rect);
+    if (!SDL_GetDisplayUsableBounds(display, &rect)) {
+        throw std::runtime_error("SDL_GetDisplayUsableBounds: " + std::string(SDL_GetError()));
+    }
 
+    // Note: We only subtract the window border when a window is given - but the main use case of
+    // available_width/available_height is to determine the available space for a new window!
+    // TODO: Replace DWM with a better API (AdjustWindowRectExForDpi?)
     if (window) {
-        SDL_SysWMinfo info;
-        SDL_VERSION(&info.version);
-        SDL_GetWindowWMInfo(window->sdl_window(), &info);
-        HWND hwnd = info.info.win.window;
+        HWND hwnd = static_cast<HWND>(
+            SDL_GetPointerProperty(SDL_GetWindowProperties(window->sdl_window()),
+                                   SDL_PROP_WINDOW_WIN32_HWND_POINTER, nullptr));
 
         RECT rcClient, rcWindow;
         POINT ptDiff;
@@ -132,7 +136,6 @@ static SDL_Rect max_window_size(const Gosu::Window* window)
         rect.h -= top + bottom;
     }
 
-    // Return a rect to have one less Gosu::available_width/height implementation.
     return rect;
 }
 #endif
@@ -146,9 +149,12 @@ static SDL_Rect max_window_size(const Gosu::Window* window)
         ~VideoSubsystem() { SDL_QuitSubSystem(SDL_INIT_VIDEO); };
     } subsystem;
 
-    int index = window ? SDL_GetWindowDisplayIndex(window->sdl_window()) : 0;
+    SDL_DisplayID index =
+        window ? SDL_GetDisplayForWindow(window->sdl_window()) : SDL_GetPrimaryDisplay();
     SDL_Rect rect;
-    SDL_GetDisplayUsableBounds(index, &rect);
+    if (!SDL_GetDisplayUsableBounds(index, &rect)) {
+        throw std::runtime_error("SDL_GetDisplayUsableBounds: " + std::string(SDL_GetError()));
+    }
 
     if (window) {
         int top, left, bottom, right;

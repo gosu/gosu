@@ -56,7 +56,7 @@ static const char *extensions_modplug[] =
 
 
 
-static SDL_bool MODPLUG_init(void)
+static bool MODPLUG_init(void)
 {
     return ModPlug_Init();  /* success. */
 } /* MODPLUG_init */
@@ -102,41 +102,33 @@ static int MODPLUG_open(Sound_Sample *sample, const char *ext)
 
     /* ModPlug needs the entire stream in one big chunk. I don't like it,
        but I don't think there's any way around it.  !!! FIXME: rework modplug? */
-    size = SDL_RWsize(internal->rw);
+    size = SDL_GetIOSize(internal->io);
     BAIL_IF_MACRO(size <= 0 || size > (Sint64)0x7fffffff, "MODPLUG: Not a module file.", 0);
 
-    if (internal->rw->type == SDL_RWOPS_MEMORY || internal->rw->type == SDL_RWOPS_MEMORY_RO)
-    {
-        data = internal->rw->hidden.mem.base;
-        retval = 0;
-    }
-    else
-    {
-        data = SDL_malloc((size_t) size);
-        BAIL_IF_MACRO(data == NULL, ERR_OUT_OF_MEMORY, 0);
-        retval = SDL_RWread(internal->rw, data, 1, size);
-        if (retval != (size_t)size) SDL_free(data);
-        BAIL_IF_MACRO(retval != (size_t)size, ERR_IO_ERROR, 0);
-    }
+    data = SDL_malloc((size_t) size);
+    BAIL_IF_MACRO(data == NULL, ERR_OUT_OF_MEMORY, 0);
+    retval = SDL_ReadIO(internal->io, data, size);
+    if (retval != (size_t)size) SDL_free(data);
+    BAIL_IF_MACRO(retval != (size_t)size, ERR_IO_ERROR, 0);
 
-    SDL_memcpy(&sample->actual, &sample->desired, sizeof (Sound_AudioInfo));
-    if (sample->actual.rate == 0) sample->actual.rate = 44100;
+    SDL_copyp(&sample->actual, &sample->desired);
+    if (sample->actual.freq == 0) sample->actual.freq = 44100;
     if (sample->actual.channels != 1) sample->actual.channels = 2;
-    if (sample->actual.format == 0) sample->actual.format = AUDIO_S16SYS;
+    if (sample->actual.format == 0) sample->actual.format = SDL_AUDIO_S16;
 
     switch (sample->actual.format) {
-    case AUDIO_U8:
-    case AUDIO_S8:
-        sample->actual.format = AUDIO_U8;
+    case SDL_AUDIO_U8:
+    case SDL_AUDIO_S8:
+        sample->actual.format = SDL_AUDIO_U8;
         break;
-    case AUDIO_S32MSB:
-    case AUDIO_S32LSB:
-    case AUDIO_F32MSB:
-    case AUDIO_F32LSB:
-        sample->actual.format = AUDIO_S32SYS;
+    case SDL_AUDIO_S32BE:
+    case SDL_AUDIO_S32LE:
+    case SDL_AUDIO_F32BE:
+    case SDL_AUDIO_F32LE:
+        sample->actual.format = SDL_AUDIO_S32;
         break;
     default:
-        sample->actual.format = AUDIO_S16SYS;
+        sample->actual.format = SDL_AUDIO_S16;
         break;
     }
 
@@ -157,7 +149,7 @@ static int MODPLUG_open(Sound_Sample *sample, const char *ext)
     settings.mSurroundDelay = 20;
     settings.mChannels = sample->actual.channels;
     settings.mBits = SDL_AUDIO_BITSIZE(sample->actual.format);
-    settings.mFrequency = sample->actual.rate;
+    settings.mFrequency = sample->actual.freq;
     settings.mResamplingMode = MODPLUG_RESAMPLE_FIR;
     settings.mLoopCount = 0;
 

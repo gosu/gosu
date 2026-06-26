@@ -77,9 +77,9 @@ typedef struct vocstuff {
 #define VOC_DATA_16   9
 
 
-static SDL_bool VOC_init(void)
+static bool VOC_init(void)
 {
-    return SDL_TRUE;  /* always succeeds. */
+    return true; /* always succeeds. */
 } /* VOC_init */
 
 
@@ -89,9 +89,9 @@ static void VOC_quit(void)
 } /* VOC_quit */
 
 
-static SDL_INLINE int voc_readbytes(SDL_RWops *src, vs_t *v, void *p, int size)
+static SDL_INLINE int voc_readbytes(SDL_IOStream *src, vs_t *v, void *p, int size)
 {
-    if (SDL_RWread(src, p, size, 1) != 1)
+    if (SDL_ReadIO(src, p, size) != size)
     {
         v->error = 1;
         BAIL_MACRO("VOC: i/o error", 0);
@@ -101,7 +101,7 @@ static SDL_INLINE int voc_readbytes(SDL_RWops *src, vs_t *v, void *p, int size)
 } /* voc_readbytes */
 
 
-static SDL_INLINE int voc_check_header(SDL_RWops *src)
+static SDL_INLINE int voc_check_header(SDL_IOStream *src)
 {
     /* VOC magic header */
     Uint8  signature[20];  /* "Creative Voice File\032" */
@@ -120,9 +120,9 @@ static SDL_INLINE int voc_check_header(SDL_RWops *src)
     if (!voc_readbytes(src, &v, &datablockofs, sizeof (Uint16)))
         return 0;
 
-    datablockofs = SDL_SwapLE16(datablockofs);
+    datablockofs = SDL_Swap16LE(datablockofs);
 
-    if (SDL_RWseek(src, datablockofs, RW_SEEK_SET) != datablockofs)
+    if (SDL_SeekIO(src, datablockofs, SDL_IO_SEEK_SET) != datablockofs)
     {
         BAIL_MACRO("VOC: Failed to seek to data block.", 0);
     } /* if */
@@ -135,7 +135,7 @@ static SDL_INLINE int voc_check_header(SDL_RWops *src)
 static int voc_get_block(Sound_Sample *sample, vs_t *v)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
-    SDL_RWops *src = internal->rw;
+    SDL_IOStream *src = internal->io;
     Uint8 bits24[3];
     Uint8 uc, block;
     Uint32 sblen;
@@ -149,15 +149,15 @@ static int voc_get_block(Sound_Sample *sample, vs_t *v)
     v->silent = 0;
     while (v->rest == 0)
     {
-        if (SDL_RWread(src, &block, sizeof (block), 1) != 1)
+        if (SDL_ReadIO(src, &block, sizeof (block)) != sizeof (block))
             return 1;  /* assume that's the end of the file. */
 
         if (block == VOC_TERM)
             return 1;
 
-        if (SDL_RWread(src, bits24, sizeof (bits24), 1) != 1)
+        if (SDL_ReadIO(src, bits24, sizeof (bits24)) != sizeof (bits24))
             return 1;  /* assume that's the end of the file. */
-        
+
         /* Size is an 24-bit value. Ugh. */
         sblen = ( (bits24[0]) | (bits24[1] << 8) | (bits24[2] << 16) );
 
@@ -177,7 +177,7 @@ static int voc_get_block(Sound_Sample *sample, vs_t *v)
                         BAIL_MACRO("VOC sample rate codes differ", 0);
 
                     v->rate = uc;
-                    sample->actual.rate = 1000000.0/(256 - v->rate);
+                    sample->actual.freq = 1000000.0/(256 - v->rate);
                     sample->actual.channels = 1;
                     v->channels = 1;
                 } /* if */
@@ -191,7 +191,7 @@ static int voc_get_block(Sound_Sample *sample, vs_t *v)
                 v->rest = sblen - 2;
                 v->size = ST_SIZE_BYTE;
 
-                bytes_per_second = sample->actual.rate * sample->actual.channels;
+                bytes_per_second = sample->actual.freq * sample->actual.channels;
                 internal->total_time += ( v->rest ) / bytes_per_second * 1000;
                 internal->total_time += (v->rest % bytes_per_second) * 1000
                                             / bytes_per_second;
@@ -201,14 +201,14 @@ static int voc_get_block(Sound_Sample *sample, vs_t *v)
                 if (!voc_readbytes(src, v, &new_rate_long, sizeof (Uint32)))
                     return 0;
 
-                new_rate_long = SDL_SwapLE32(new_rate_long);
+                new_rate_long = SDL_Swap32LE(new_rate_long);
                 BAIL_IF_MACRO(!new_rate_long, "VOC: Sample rate is zero?", 0);
 
                 if ((v->rate != -1) && (new_rate_long != v->rate))
                     BAIL_MACRO("VOC: sample rate codes differ", 0);
 
                 v->rate = new_rate_long;
-                sample->actual.rate = new_rate_long;
+                sample->actual.freq = new_rate_long;
 
                 if (!voc_readbytes(src, v, &uc, sizeof (uc)))
                     return 0;
@@ -229,7 +229,7 @@ static int voc_get_block(Sound_Sample *sample, vs_t *v)
                 v->rest = sblen - 12;
 
                 bytes_per_second = ((v->size == ST_SIZE_WORD) ? (2) : (1)) *
-                                    sample->actual.rate * v->channels;
+                                    sample->actual.freq * v->channels;
                 internal->total_time += v->rest / bytes_per_second * 1000;
                 internal->total_time += ( v->rest % bytes_per_second ) * 1000
                                             / bytes_per_second;
@@ -243,7 +243,7 @@ static int voc_get_block(Sound_Sample *sample, vs_t *v)
                 if (!voc_readbytes(src, v, &period, sizeof (period)))
                     return 0;
 
-                period = SDL_SwapLE16(period);
+                period = SDL_Swap16LE(period);
 
                 if (!voc_readbytes(src, v, &uc, sizeof (uc)))
                     return 0;
@@ -284,7 +284,7 @@ static int voc_get_block(Sound_Sample *sample, vs_t *v)
                 if (!voc_readbytes(src, v, &new_rate_short, sizeof (Uint16)))
                     return 0;
 
-                new_rate_short = SDL_SwapLE16(new_rate_short);
+                new_rate_short = SDL_Swap16LE(new_rate_short);
                 BAIL_IF_MACRO(!new_rate_short, "VOC: sample rate is zero", 0);
 
                 if ((v->rate != -1) && (new_rate_short != v->rate))
@@ -307,7 +307,7 @@ static int voc_get_block(Sound_Sample *sample, vs_t *v)
 
                 /* Needed number of channels before finishing
                    compute for rate */
-                sample->actual.rate =
+                sample->actual.freq =
                      (256000000L/(65536L - v->rate)) / sample->actual.channels;
                 /* An extended block must be followed by a data */
                 /* block to be valid so loop back to top so it  */
@@ -339,7 +339,7 @@ static int voc_get_block(Sound_Sample *sample, vs_t *v)
 static int voc_read_waveform(Sound_Sample *sample, int fill_buf, Uint32 max)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
-    SDL_RWops *src = internal->rw;
+    SDL_IOStream *src = internal->io;
     vs_t *v = (vs_t *) internal->decoder_private;
     Sint64 done = 0;
     Uint8 silence = 0x80;
@@ -374,7 +374,7 @@ static int voc_read_waveform(Sound_Sample *sample, int fill_buf, Uint32 max)
     {
         if (fill_buf)
         {
-            done = SDL_RWread(src, buf + v->bufpos, 1, max);
+            done = SDL_ReadIO(src, buf + v->bufpos, max);
             if (done < ((Sint64) max))
             {
                 __Sound_SetError("VOC: i/o error");
@@ -385,10 +385,10 @@ static int voc_read_waveform(Sound_Sample *sample, int fill_buf, Uint32 max)
         else
         {
             Sint64 cur, rc;
-            cur = SDL_RWtell(src);
+            cur = SDL_TellIO(src);
             if (cur >= 0)
             {
-                rc = SDL_RWseek(src, max, RW_SEEK_CUR);
+                rc = SDL_SeekIO(src, max, SDL_IO_SEEK_CUR);
                 if (rc >= 0)
                     done = rc - cur;
                 else
@@ -412,13 +412,13 @@ static int VOC_open(Sound_Sample *sample, const char *ext)
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     vs_t *v = NULL;
 
-    if (!voc_check_header(internal->rw))
+    if (!voc_check_header(internal->io))
         return 0;
 
     v = (vs_t *) SDL_calloc(1, sizeof (vs_t));
     BAIL_IF_MACRO(v == NULL, ERR_OUT_OF_MEMORY, 0);
 
-    v->start_pos = SDL_RWtell(internal->rw);
+    v->start_pos = SDL_TellIO(internal->io);
     v->rate = -1;
     if (!voc_get_block(sample, v))
     {
@@ -433,7 +433,7 @@ static int VOC_open(Sound_Sample *sample, const char *ext)
     } /* if */
 
     SNDDBG(("VOC: Accepting data stream.\n"));
-    sample->actual.format = (v->size == ST_SIZE_WORD) ? AUDIO_S16LSB:AUDIO_U8;
+    sample->actual.format = (v->size == ST_SIZE_WORD) ? SDL_AUDIO_S16LE : SDL_AUDIO_U8;
     sample->actual.channels = v->channels;
     sample->flags = SOUND_SAMPLEFLAG_CANSEEK;
     internal->decoder_private = v;
@@ -482,7 +482,7 @@ static int VOC_rewind(Sound_Sample *sample)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     vs_t *v = (vs_t *) internal->decoder_private;
-    const Sint64 rc = SDL_RWseek(internal->rw, v->start_pos, RW_SEEK_SET);
+    const Sint64 rc = SDL_SeekIO(internal->io, v->start_pos, SDL_IO_SEEK_SET);
     BAIL_IF_MACRO(rc != v->start_pos, ERR_IO_ERROR, 0);
     v->rest = 0;
     return 1;
@@ -504,7 +504,7 @@ static int VOC_seek(Sound_Sample *sample, Uint32 ms)
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     vs_t *v = (vs_t *) internal->decoder_private;
     Uint32 offset = __Sound_convertMsToBytePos(&sample->actual, ms);
-    const Sint64 origpos = SDL_RWtell(internal->rw);
+    const Sint64 origpos = SDL_TellIO(internal->io);
     const Uint32 origrest = v->rest;
 
     BAIL_IF_MACRO(!VOC_rewind(sample), NULL, 0);
@@ -516,7 +516,7 @@ static int VOC_seek(Sound_Sample *sample, Uint32 ms)
         Uint32 rc = voc_read_waveform(sample, 0, offset);
         if ( (rc == 0) || (!voc_get_block(sample, v)) )
         {
-            SDL_RWseek(internal->rw, origpos, RW_SEEK_SET);
+            SDL_SeekIO(internal->io, origpos, SDL_IO_SEEK_SET);
             v->rest = origrest;
             return 0;
         } /* if */

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2026 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -50,10 +50,10 @@
 #ifndef SDL_atomic_h_
 #define SDL_atomic_h_
 
-#include "SDL_stdinc.h"
-#include "SDL_platform.h"
+#include <SDL3/SDL_stdinc.h>
+#include <SDL3/SDL_platform_defines.h>
 
-#include "begin_code.h"
+#include <SDL3/SDL_begin_code.h>
 
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus
@@ -61,22 +61,24 @@ extern "C" {
 #endif
 
 /**
- * \name SDL AtomicLock
+ * An atomic spinlock.
  *
- * The atomic locks are efficient spinlocks using CPU instructions,
- * but are vulnerable to starvation and can spin forever if a thread
- * holding a lock has been terminated.  For this reason you should
- * minimize the code executed inside an atomic lock and never do
- * expensive things like API or system calls while holding them.
+ * The atomic locks are efficient spinlocks using CPU instructions, but are
+ * vulnerable to starvation and can spin forever if a thread holding a lock
+ * has been terminated. For this reason you should minimize the code executed
+ * inside an atomic lock and never do expensive things like API or system
+ * calls while holding them.
+ *
+ * They are also vulnerable to starvation if the thread holding the lock is
+ * lower priority than other threads and doesn't get scheduled. In general you
+ * should use mutexes instead, since they have better performance and
+ * contention behavior.
  *
  * The atomic locks are not safe to lock recursively.
  *
- * Porting Note:
- * The spin lock functions and type are required and can not be
+ * Porting Note: The spin lock functions and type are required and can not be
  * emulated because they are used in the atomic emulation code.
  */
-/* @{ */
-
 typedef int SDL_SpinLock;
 
 /**
@@ -86,15 +88,16 @@ typedef int SDL_SpinLock;
  * doing. Please be careful using any sort of spinlock!***
  *
  * \param lock a pointer to a lock variable.
- * \returns SDL_TRUE if the lock succeeded, SDL_FALSE if the lock is already
- *          held.
+ * \returns true if the lock succeeded, false if the lock is already held.
  *
- * \since This function is available since SDL 2.0.0.
+ * \threadsafety It is safe to call this function from any thread.
  *
- * \sa SDL_AtomicLock
- * \sa SDL_AtomicUnlock
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_LockSpinlock
+ * \sa SDL_UnlockSpinlock
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_AtomicTryLock(SDL_SpinLock *lock);
+extern SDL_DECLSPEC bool SDLCALL SDL_TryLockSpinlock(SDL_SpinLock *lock);
 
 /**
  * Lock a spin lock by setting it to a non-zero value.
@@ -104,12 +107,14 @@ extern DECLSPEC SDL_bool SDLCALL SDL_AtomicTryLock(SDL_SpinLock *lock);
  *
  * \param lock a pointer to a lock variable.
  *
- * \since This function is available since SDL 2.0.0.
+ * \threadsafety It is safe to call this function from any thread.
  *
- * \sa SDL_AtomicTryLock
- * \sa SDL_AtomicUnlock
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_TryLockSpinlock
+ * \sa SDL_UnlockSpinlock
  */
-extern DECLSPEC void SDLCALL SDL_AtomicLock(SDL_SpinLock *lock);
+extern SDL_DECLSPEC void SDLCALL SDL_LockSpinlock(SDL_SpinLock *lock);
 
 /**
  * Unlock a spin lock by setting it to 0.
@@ -121,36 +126,100 @@ extern DECLSPEC void SDLCALL SDL_AtomicLock(SDL_SpinLock *lock);
  *
  * \param lock a pointer to a lock variable.
  *
- * \since This function is available since SDL 2.0.0.
+ * \threadsafety It is safe to call this function from any thread.
  *
- * \sa SDL_AtomicLock
- * \sa SDL_AtomicTryLock
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_LockSpinlock
+ * \sa SDL_TryLockSpinlock
  */
-extern DECLSPEC void SDLCALL SDL_AtomicUnlock(SDL_SpinLock *lock);
+extern SDL_DECLSPEC void SDLCALL SDL_UnlockSpinlock(SDL_SpinLock *lock);
 
-/* @} *//* SDL AtomicLock */
 
+#ifdef SDL_WIKI_DOCUMENTATION_SECTION
 
 /**
- * The compiler barrier prevents the compiler from reordering
- * reads and writes to globally visible variables across the call.
+ * Mark a compiler barrier.
+ *
+ * A compiler barrier prevents the compiler from reordering reads and writes
+ * to globally visible variables across the call.
+ *
+ * This macro only prevents the compiler from reordering reads and writes, it
+ * does not prevent the CPU from reordering reads and writes. However, all of
+ * the atomic operations that modify memory are full memory barriers.
+ *
+ * \threadsafety Obviously this macro is safe to use from any thread at any
+ *               time, but if you find yourself needing this, you are probably
+ *               dealing with some very sensitive code; be careful!
+ *
+ * \since This macro is available since SDL 3.2.0.
  */
-#if defined(_MSC_VER) && (_MSC_VER > 1200) && !defined(__clang__)
+#define SDL_CompilerBarrier() DoCompilerSpecificReadWriteBarrier()
+
+#elif SDL_HAS_BUILTIN(__atomic_signal_fence) || (defined(__GNUC__) && (__GNUC__ >= 5))
+#define SDL_CompilerBarrier()   __atomic_signal_fence(__ATOMIC_SEQ_CST)
+#elif defined(_MSC_VER) && (_MSC_VER > 1200) && !defined(__clang__)
 void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
 #define SDL_CompilerBarrier()   _ReadWriteBarrier()
-#elif (defined(__GNUC__) && !defined(__EMSCRIPTEN__)) || (defined(__SUNPRO_C) && (__SUNPRO_C >= 0x5120))
+#elif (defined(__GNUC__) && !defined(SDL_PLATFORM_EMSCRIPTEN)) || (defined(__SUNPRO_C) && (__SUNPRO_C >= 0x5120))
 /* This is correct for all CPUs when using GCC or Solaris Studio 12.1+. */
 #define SDL_CompilerBarrier()   __asm__ __volatile__ ("" : : : "memory")
 #elif defined(__WATCOMC__)
 extern __inline void SDL_CompilerBarrier(void);
 #pragma aux SDL_CompilerBarrier = "" parm [] modify exact [];
 #else
+/* We don't unlock here to avoid possible infinite recursion */
 #define SDL_CompilerBarrier()   \
-{ SDL_SpinLock _tmp = 0; SDL_AtomicLock(&_tmp); SDL_AtomicUnlock(&_tmp); }
+{ SDL_SpinLock _tmp = 0; SDL_LockSpinlock(&_tmp); }
 #endif
 
 /**
+ * Insert a memory release barrier (function version).
+ *
+ * Please refer to SDL_MemoryBarrierRelease for details. This is a function
+ * version, which might be useful if you need to use this functionality from a
+ * scripting language, etc. Also, some of the macro versions call this
+ * function behind the scenes, where more heavy lifting can happen inside of
+ * SDL. Generally, though, an app written in C/C++/etc should use the macro
+ * version, as it will be more efficient.
+ *
+ * \threadsafety Obviously this function is safe to use from any thread at any
+ *               time, but if you find yourself needing this, you are probably
+ *               dealing with some very sensitive code; be careful!
+ *
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_MemoryBarrierRelease
+ */
+extern SDL_DECLSPEC void SDLCALL SDL_MemoryBarrierReleaseFunction(void);
+
+/**
+ * Insert a memory acquire barrier (function version).
+ *
+ * Please refer to SDL_MemoryBarrierRelease for details. This is a function
+ * version, which might be useful if you need to use this functionality from a
+ * scripting language, etc. Also, some of the macro versions call this
+ * function behind the scenes, where more heavy lifting can happen inside of
+ * SDL. Generally, though, an app written in C/C++/etc should use the macro
+ * version, as it will be more efficient.
+ *
+ * \threadsafety Obviously this function is safe to use from any thread at any
+ *               time, but if you find yourself needing this, you are probably
+ *               dealing with some very sensitive code; be careful!
+ *
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_MemoryBarrierAcquire
+ */
+extern SDL_DECLSPEC void SDLCALL SDL_MemoryBarrierAcquireFunction(void);
+
+
+#ifdef SDL_WIKI_DOCUMENTATION_SECTION
+
+/**
+ * Insert a memory release barrier (macro version).
+ *
  * Memory barriers are designed to prevent reads and writes from being
  * reordered by the compiler and being seen out of order on multi-core CPUs.
  *
@@ -169,19 +238,61 @@ extern __inline void SDL_CompilerBarrier(void);
  * For more information on these semantics, take a look at the blog post:
  * http://preshing.com/20120913/acquire-and-release-semantics
  *
- * \since This function is available since SDL 2.0.6.
+ * This is the macro version of this functionality; if possible, SDL will use
+ * compiler intrinsics or inline assembly, but some platforms might need to
+ * call the function version of this, SDL_MemoryBarrierReleaseFunction to do
+ * the heavy lifting. Apps that can use the macro should favor it over the
+ * function.
+ *
+ * \threadsafety Obviously this macro is safe to use from any thread at any
+ *               time, but if you find yourself needing this, you are probably
+ *               dealing with some very sensitive code; be careful!
+ *
+ * \since This macro is available since SDL 3.2.0.
+ *
+ * \sa SDL_MemoryBarrierAcquire
+ * \sa SDL_MemoryBarrierReleaseFunction
  */
-extern DECLSPEC void SDLCALL SDL_MemoryBarrierReleaseFunction(void);
-extern DECLSPEC void SDLCALL SDL_MemoryBarrierAcquireFunction(void);
+#define SDL_MemoryBarrierRelease() SDL_MemoryBarrierReleaseFunction()
 
-#if defined(__GNUC__) && (defined(__powerpc__) || defined(__ppc__))
+/**
+ * Insert a memory acquire barrier (macro version).
+ *
+ * Please see SDL_MemoryBarrierRelease for the details on what memory barriers
+ * are and when to use them.
+ *
+ * This is the macro version of this functionality; if possible, SDL will use
+ * compiler intrinsics or inline assembly, but some platforms might need to
+ * call the function version of this, SDL_MemoryBarrierAcquireFunction, to do
+ * the heavy lifting. Apps that can use the macro should favor it over the
+ * function.
+ *
+ * \threadsafety Obviously this macro is safe to use from any thread at any
+ *               time, but if you find yourself needing this, you are probably
+ *               dealing with some very sensitive code; be careful!
+ *
+ * \since This macro is available since SDL 3.2.0.
+ *
+ * \sa SDL_MemoryBarrierRelease
+ * \sa SDL_MemoryBarrierAcquireFunction
+ */
+#define SDL_MemoryBarrierAcquire() SDL_MemoryBarrierAcquireFunction()
+
+#elif SDL_HAS_BUILTIN(__atomic_thread_fence) || (defined(__GNUC__) && (__GNUC__ >= 5))
+#define SDL_MemoryBarrierRelease()   __atomic_thread_fence(__ATOMIC_RELEASE)
+#define SDL_MemoryBarrierAcquire()   __atomic_thread_fence(__ATOMIC_ACQUIRE)
+#elif defined(__GNUC__) && (defined(__powerpc__) || defined(__ppc__))
 #define SDL_MemoryBarrierRelease()   __asm__ __volatile__ ("lwsync" : : : "memory")
 #define SDL_MemoryBarrierAcquire()   __asm__ __volatile__ ("lwsync" : : : "memory")
 #elif defined(__GNUC__) && defined(__aarch64__)
 #define SDL_MemoryBarrierRelease()   __asm__ __volatile__ ("dmb ish" : : : "memory")
-#define SDL_MemoryBarrierAcquire()   __asm__ __volatile__ ("dmb ish" : : : "memory")
+#define SDL_MemoryBarrierAcquire()   __asm__ __volatile__ ("dmb ishld" : : : "memory")
+#elif defined(_MSC_VER) && (defined(_M_ARM64) || defined(_M_ARM64EC))
+#include <arm64intr.h>
+#define SDL_MemoryBarrierRelease() __dmb(_ARM64_BARRIER_ISH)
+#define SDL_MemoryBarrierAcquire() __dmb(_ARM64_BARRIER_ISHLD)
 #elif defined(__GNUC__) && defined(__arm__)
-#if 0 /* defined(__LINUX__) || defined(__ANDROID__) */
+#if 0 /* defined(SDL_PLATFORM_LINUX) || defined(SDL_PLATFORM_ANDROID) */
 /* Information from:
    https://chromium.googlesource.com/chromium/chromium/+/trunk/base/atomicops_internals_arm_gcc.h#19
 
@@ -189,13 +300,8 @@ extern DECLSPEC void SDLCALL SDL_MemoryBarrierAcquireFunction(void);
    hard-coded at address 0xffff0fa0
 */
 typedef void (*SDL_KernelMemoryBarrierFunc)();
-#define SDL_MemoryBarrierRelease()	((SDL_KernelMemoryBarrierFunc)0xffff0fa0)()
-#define SDL_MemoryBarrierAcquire()	((SDL_KernelMemoryBarrierFunc)0xffff0fa0)()
-#elif 0 /* defined(__QNXNTO__) */
-#include <sys/cpuinline.h>
-
-#define SDL_MemoryBarrierRelease()   __cpu_membarrier()
-#define SDL_MemoryBarrierAcquire()   __cpu_membarrier()
+#define SDL_MemoryBarrierRelease()  ((SDL_KernelMemoryBarrierFunc)0xffff0fa0)()
+#define SDL_MemoryBarrierAcquire()  ((SDL_KernelMemoryBarrierFunc)0xffff0fa0)()
 #else
 #if defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_7EM__) || defined(__ARM_ARCH_7R__) || defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7S__) || defined(__ARM_ARCH_8A__)
 #define SDL_MemoryBarrierRelease()   __asm__ __volatile__ ("dmb ish" : : : "memory")
@@ -213,7 +319,7 @@ typedef void (*SDL_KernelMemoryBarrierFunc)();
 #else
 #define SDL_MemoryBarrierRelease()   __asm__ __volatile__ ("" : : : "memory")
 #define SDL_MemoryBarrierAcquire()   __asm__ __volatile__ ("" : : : "memory")
-#endif /* __LINUX__ || __ANDROID__ */
+#endif /* SDL_PLATFORM_LINUX || SDL_PLATFORM_ANDROID */
 #endif /* __GNUC__ && __arm__ */
 #else
 #if (defined(__SUNPRO_C) && (__SUNPRO_C >= 0x5120))
@@ -229,12 +335,34 @@ typedef void (*SDL_KernelMemoryBarrierFunc)();
 #endif
 
 /* "REP NOP" is PAUSE, coded for tools that don't know it by that name. */
-#if (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
+#ifdef SDL_WIKI_DOCUMENTATION_SECTION
+
+/**
+ * A macro to insert a CPU-specific "pause" instruction into the program.
+ *
+ * This can be useful in busy-wait loops, as it serves as a hint to the CPU as
+ * to the program's intent; some CPUs can use this to do more efficient
+ * processing. On some platforms, this doesn't do anything, so using this
+ * macro might just be a harmless no-op.
+ *
+ * Note that if you are busy-waiting, there are often more-efficient
+ * approaches with other synchronization primitives: mutexes, semaphores,
+ * condition variables, etc.
+ *
+ * \threadsafety This macro is safe to use from any thread.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+#define SDL_CPUPauseInstruction() DoACPUPauseInACompilerAndArchitectureSpecificWay
+
+#elif (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
     #define SDL_CPUPauseInstruction() __asm__ __volatile__("pause\n")  /* Some assemblers can't do REP NOP, so go with PAUSE. */
 #elif (defined(__arm__) && defined(__ARM_ARCH) && __ARM_ARCH >= 7) || defined(__aarch64__)
     #define SDL_CPUPauseInstruction() __asm__ __volatile__("yield" ::: "memory")
 #elif (defined(__powerpc__) || defined(__powerpc64__))
     #define SDL_CPUPauseInstruction() __asm__ __volatile__("or 27,27,27");
+#elif (defined(__riscv) && __riscv_xlen == 64)
+    #define SDL_CPUPauseInstruction() __asm__ __volatile__(".insn i 0x0F, 0, x0, x0, 0x010");
 #elif defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))
     #define SDL_CPUPauseInstruction() _mm_pause()  /* this is actually "rep nop" and not a SIMD instruction. No inline asm in MSVC x86-64! */
 #elif defined(_MSC_VER) && (defined(_M_ARM) || defined(_M_ARM64))
@@ -250,11 +378,31 @@ typedef void (*SDL_KernelMemoryBarrierFunc)();
 /**
  * A type representing an atomic integer value.
  *
- * It is a struct so people don't accidentally use numeric operations on it.
+ * This can be used to manage a value that is synchronized across multiple
+ * CPUs without a race condition; when an app sets a value with
+ * SDL_SetAtomicInt all other threads, regardless of the CPU it is running on,
+ * will see that value when retrieved with SDL_GetAtomicInt, regardless of CPU
+ * caches, etc.
+ *
+ * This is also useful for atomic compare-and-swap operations: a thread can
+ * change the value as long as its current value matches expectations. When
+ * done in a loop, one can guarantee data consistency across threads without a
+ * lock (but the usual warnings apply: if you don't know what you're doing, or
+ * you don't do it carefully, you can confidently cause any number of
+ * disasters with this, so in most cases, you _should_ use a mutex instead of
+ * this!).
+ *
+ * This is a struct so people don't accidentally use numeric operations on it
+ * directly. You have to use SDL atomic functions.
+ *
+ * \since This struct is available since SDL 3.2.0.
+ *
+ * \sa SDL_CompareAndSwapAtomicInt
+ * \sa SDL_GetAtomicInt
+ * \sa SDL_SetAtomicInt
+ * \sa SDL_AddAtomicInt
  */
-typedef struct SDL_atomic_t {
-    int value;
-} SDL_atomic_t;
+typedef struct SDL_AtomicInt { int value; } SDL_AtomicInt;
 
 /**
  * Set an atomic variable to a new value if it is currently an old value.
@@ -262,18 +410,19 @@ typedef struct SDL_atomic_t {
  * ***Note: If you don't know what this function is for, you shouldn't use
  * it!***
  *
- * \param a a pointer to an SDL_atomic_t variable to be modified.
+ * \param a a pointer to an SDL_AtomicInt variable to be modified.
  * \param oldval the old value.
  * \param newval the new value.
- * \returns SDL_TRUE if the atomic variable was set, SDL_FALSE otherwise.
+ * \returns true if the atomic variable was set, false otherwise.
  *
- * \since This function is available since SDL 2.0.0.
+ * \threadsafety It is safe to call this function from any thread.
  *
- * \sa SDL_AtomicCASPtr
- * \sa SDL_AtomicGet
- * \sa SDL_AtomicSet
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_GetAtomicInt
+ * \sa SDL_SetAtomicInt
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_AtomicCAS(SDL_atomic_t *a, int oldval, int newval);
+extern SDL_DECLSPEC bool SDLCALL SDL_CompareAndSwapAtomicInt(SDL_AtomicInt *a, int oldval, int newval);
 
 /**
  * Set an atomic variable to a value.
@@ -283,15 +432,17 @@ extern DECLSPEC SDL_bool SDLCALL SDL_AtomicCAS(SDL_atomic_t *a, int oldval, int 
  * ***Note: If you don't know what this function is for, you shouldn't use
  * it!***
  *
- * \param a a pointer to an SDL_atomic_t variable to be modified.
+ * \param a a pointer to an SDL_AtomicInt variable to be modified.
  * \param v the desired value.
  * \returns the previous value of the atomic variable.
  *
- * \since This function is available since SDL 2.0.2.
+ * \threadsafety It is safe to call this function from any thread.
  *
- * \sa SDL_AtomicGet
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_GetAtomicInt
  */
-extern DECLSPEC int SDLCALL SDL_AtomicSet(SDL_atomic_t *a, int v);
+extern SDL_DECLSPEC int SDLCALL SDL_SetAtomicInt(SDL_AtomicInt *a, int v);
 
 /**
  * Get the value of an atomic variable.
@@ -299,14 +450,16 @@ extern DECLSPEC int SDLCALL SDL_AtomicSet(SDL_atomic_t *a, int v);
  * ***Note: If you don't know what this function is for, you shouldn't use
  * it!***
  *
- * \param a a pointer to an SDL_atomic_t variable.
+ * \param a a pointer to an SDL_AtomicInt variable.
  * \returns the current value of an atomic variable.
  *
- * \since This function is available since SDL 2.0.2.
+ * \threadsafety It is safe to call this function from any thread.
  *
- * \sa SDL_AtomicSet
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_SetAtomicInt
  */
-extern DECLSPEC int SDLCALL SDL_AtomicGet(SDL_atomic_t *a);
+extern SDL_DECLSPEC int SDLCALL SDL_GetAtomicInt(SDL_AtomicInt *a);
 
 /**
  * Add to an atomic variable.
@@ -316,33 +469,160 @@ extern DECLSPEC int SDLCALL SDL_AtomicGet(SDL_atomic_t *a);
  * ***Note: If you don't know what this function is for, you shouldn't use
  * it!***
  *
- * \param a a pointer to an SDL_atomic_t variable to be modified.
+ * \param a a pointer to an SDL_AtomicInt variable to be modified.
  * \param v the desired value to add.
  * \returns the previous value of the atomic variable.
  *
- * \since This function is available since SDL 2.0.2.
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_AtomicDecRef
  * \sa SDL_AtomicIncRef
  */
-extern DECLSPEC int SDLCALL SDL_AtomicAdd(SDL_atomic_t *a, int v);
+extern SDL_DECLSPEC int SDLCALL SDL_AddAtomicInt(SDL_AtomicInt *a, int v);
 
-/**
- * \brief Increment an atomic variable used as a reference count.
- */
 #ifndef SDL_AtomicIncRef
-#define SDL_AtomicIncRef(a)    SDL_AtomicAdd(a, 1)
+
+/**
+ * Increment an atomic variable used as a reference count.
+ *
+ * ***Note: If you don't know what this macro is for, you shouldn't use it!***
+ *
+ * \param a a pointer to an SDL_AtomicInt to increment.
+ * \returns the previous value of the atomic variable.
+ *
+ * \threadsafety It is safe to call this macro from any thread.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ *
+ * \sa SDL_AtomicDecRef
+ */
+#define SDL_AtomicIncRef(a)    SDL_AddAtomicInt(a, 1)
+#endif
+
+#ifndef SDL_AtomicDecRef
+
+/**
+ * Decrement an atomic variable used as a reference count.
+ *
+ * ***Note: If you don't know what this macro is for, you shouldn't use it!***
+ *
+ * \param a a pointer to an SDL_AtomicInt to decrement.
+ * \returns true if the variable reached zero after decrementing, false
+ *          otherwise.
+ *
+ * \threadsafety It is safe to call this macro from any thread.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ *
+ * \sa SDL_AtomicIncRef
+ */
+#define SDL_AtomicDecRef(a)    (SDL_AddAtomicInt(a, -1) == 1)
 #endif
 
 /**
- * \brief Decrement an atomic variable used as a reference count.
+ * A type representing an atomic unsigned 32-bit value.
  *
- * \return SDL_TRUE if the variable reached zero after decrementing,
- *         SDL_FALSE otherwise
+ * This can be used to manage a value that is synchronized across multiple
+ * CPUs without a race condition; when an app sets a value with
+ * SDL_SetAtomicU32 all other threads, regardless of the CPU it is running on,
+ * will see that value when retrieved with SDL_GetAtomicU32, regardless of CPU
+ * caches, etc.
+ *
+ * This is also useful for atomic compare-and-swap operations: a thread can
+ * change the value as long as its current value matches expectations. When
+ * done in a loop, one can guarantee data consistency across threads without a
+ * lock (but the usual warnings apply: if you don't know what you're doing, or
+ * you don't do it carefully, you can confidently cause any number of
+ * disasters with this, so in most cases, you _should_ use a mutex instead of
+ * this!).
+ *
+ * This is a struct so people don't accidentally use numeric operations on it
+ * directly. You have to use SDL atomic functions.
+ *
+ * \since This struct is available since SDL 3.2.0.
+ *
+ * \sa SDL_CompareAndSwapAtomicU32
+ * \sa SDL_GetAtomicU32
+ * \sa SDL_SetAtomicU32
  */
-#ifndef SDL_AtomicDecRef
-#define SDL_AtomicDecRef(a)    (SDL_AtomicAdd(a, -1) == 1)
-#endif
+typedef struct SDL_AtomicU32 { Uint32 value; } SDL_AtomicU32;
+
+/**
+ * Set an atomic variable to a new value if it is currently an old value.
+ *
+ * ***Note: If you don't know what this function is for, you shouldn't use
+ * it!***
+ *
+ * \param a a pointer to an SDL_AtomicU32 variable to be modified.
+ * \param oldval the old value.
+ * \param newval the new value.
+ * \returns true if the atomic variable was set, false otherwise.
+ *
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_GetAtomicU32
+ * \sa SDL_SetAtomicU32
+ */
+extern SDL_DECLSPEC bool SDLCALL SDL_CompareAndSwapAtomicU32(SDL_AtomicU32 *a, Uint32 oldval, Uint32 newval);
+
+/**
+ * Set an atomic variable to a value.
+ *
+ * This function also acts as a full memory barrier.
+ *
+ * ***Note: If you don't know what this function is for, you shouldn't use
+ * it!***
+ *
+ * \param a a pointer to an SDL_AtomicU32 variable to be modified.
+ * \param v the desired value.
+ * \returns the previous value of the atomic variable.
+ *
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_GetAtomicU32
+ */
+extern SDL_DECLSPEC Uint32 SDLCALL SDL_SetAtomicU32(SDL_AtomicU32 *a, Uint32 v);
+
+/**
+ * Get the value of an atomic variable.
+ *
+ * ***Note: If you don't know what this function is for, you shouldn't use
+ * it!***
+ *
+ * \param a a pointer to an SDL_AtomicU32 variable.
+ * \returns the current value of an atomic variable.
+ *
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_SetAtomicU32
+ */
+extern SDL_DECLSPEC Uint32 SDLCALL SDL_GetAtomicU32(SDL_AtomicU32 *a);
+
+/**
+ * Add to an atomic variable.
+ *
+ * This function also acts as a full memory barrier.
+ *
+ * ***Note: If you don't know what this function is for, you shouldn't use
+ * it!***
+ *
+ * \param a a pointer to an SDL_AtomicU32 variable to be modified.
+ * \param v the desired value to add or subtract.
+ * \returns the previous value of the atomic variable.
+ *
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.4.0.
+ */
+extern SDL_DECLSPEC Uint32 SDLCALL SDL_AddAtomicU32(SDL_AtomicU32 *a, int v);
 
 /**
  * Set a pointer to a new value if it is currently an old value.
@@ -353,15 +633,17 @@ extern DECLSPEC int SDLCALL SDL_AtomicAdd(SDL_atomic_t *a, int v);
  * \param a a pointer to a pointer.
  * \param oldval the old pointer value.
  * \param newval the new pointer value.
- * \returns SDL_TRUE if the pointer was set, SDL_FALSE otherwise.
+ * \returns true if the pointer was set, false otherwise.
  *
- * \since This function is available since SDL 2.0.0.
+ * \threadsafety It is safe to call this function from any thread.
  *
- * \sa SDL_AtomicCAS
- * \sa SDL_AtomicGetPtr
- * \sa SDL_AtomicSetPtr
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_CompareAndSwapAtomicInt
+ * \sa SDL_GetAtomicPointer
+ * \sa SDL_SetAtomicPointer
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_AtomicCASPtr(void **a, void *oldval, void *newval);
+extern SDL_DECLSPEC bool SDLCALL SDL_CompareAndSwapAtomicPointer(void **a, void *oldval, void *newval);
 
 /**
  * Set a pointer to a value atomically.
@@ -373,12 +655,14 @@ extern DECLSPEC SDL_bool SDLCALL SDL_AtomicCASPtr(void **a, void *oldval, void *
  * \param v the desired pointer value.
  * \returns the previous value of the pointer.
  *
- * \since This function is available since SDL 2.0.2.
+ * \threadsafety It is safe to call this function from any thread.
  *
- * \sa SDL_AtomicCASPtr
- * \sa SDL_AtomicGetPtr
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_CompareAndSwapAtomicPointer
+ * \sa SDL_GetAtomicPointer
  */
-extern DECLSPEC void* SDLCALL SDL_AtomicSetPtr(void **a, void* v);
+extern SDL_DECLSPEC void * SDLCALL SDL_SetAtomicPointer(void **a, void *v);
 
 /**
  * Get the value of a pointer atomically.
@@ -389,20 +673,20 @@ extern DECLSPEC void* SDLCALL SDL_AtomicSetPtr(void **a, void* v);
  * \param a a pointer to a pointer.
  * \returns the current value of a pointer.
  *
- * \since This function is available since SDL 2.0.2.
+ * \threadsafety It is safe to call this function from any thread.
  *
- * \sa SDL_AtomicCASPtr
- * \sa SDL_AtomicSetPtr
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_CompareAndSwapAtomicPointer
+ * \sa SDL_SetAtomicPointer
  */
-extern DECLSPEC void* SDLCALL SDL_AtomicGetPtr(void **a);
+extern SDL_DECLSPEC void * SDLCALL SDL_GetAtomicPointer(void **a);
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 }
 #endif
 
-#include "close_code.h"
+#include <SDL3/SDL_close_code.h>
 
 #endif /* SDL_atomic_h_ */
-
-/* vi: set ts=4 sw=4 expandtab: */

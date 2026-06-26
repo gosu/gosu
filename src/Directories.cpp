@@ -18,7 +18,7 @@ void Gosu::use_resource_directory()
 }
 
 #ifndef GOSU_IS_IPHONE
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <memory>
 #include <stdexcept>
 #endif

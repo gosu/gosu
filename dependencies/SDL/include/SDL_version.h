@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2026 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -22,141 +22,157 @@
 /**
  * # CategoryVersion
  *
- * This header defines the current SDL version.
+ * Functionality to query the current SDL version, both as headers the app was
+ * compiled against, and a library the app is linked to.
  */
 
 #ifndef SDL_version_h_
 #define SDL_version_h_
 
-#include "SDL_stdinc.h"
+#include <SDL3/SDL_stdinc.h>
 
-#include "begin_code.h"
+#include <SDL3/SDL_begin_code.h>
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
- * Information about the version of SDL in use.
+ * The current major version of SDL headers.
  *
- * Represents the library's version as three levels: major revision
- * (increments with massive changes, additions, and enhancements), minor
- * revision (increments with backwards-compatible changes to the major
- * revision), and patchlevel (increments with fixes to the minor revision).
+ * If this were SDL version 3.2.1, this value would be 3.
  *
- * \sa SDL_VERSION
- * \sa SDL_GetVersion
+ * \since This macro is available since SDL 3.2.0.
  */
-typedef struct SDL_version
-{
-    Uint8 major;        /**< major version */
-    Uint8 minor;        /**< minor version */
-    Uint8 patch;        /**< update version */
-} SDL_version;
-
-/* Printable format: "%d.%d.%d", MAJOR, MINOR, PATCHLEVEL
-*/
-#define SDL_MAJOR_VERSION   2
-#define SDL_MINOR_VERSION   32
-#define SDL_PATCHLEVEL      10
+#define SDL_MAJOR_VERSION   3
 
 /**
- * Macro to determine SDL version program was compiled against.
+ * The current minor version of the SDL headers.
  *
- * This macro fills in a SDL_version structure with the version of the library
- * you compiled against. This is determined by what header the compiler uses.
- * Note that if you dynamically linked the library, you might have a slightly
- * newer or older version at runtime. That version can be determined with
- * SDL_GetVersion(), which, unlike SDL_VERSION(), is not a macro.
+ * If this were SDL version 3.2.1, this value would be 2.
  *
- * \param x A pointer to a SDL_version struct to initialize.
- *
- * \sa SDL_version
- * \sa SDL_GetVersion
+ * \since This macro is available since SDL 3.2.0.
  */
-#define SDL_VERSION(x)                          \
-{                                   \
-    (x)->major = SDL_MAJOR_VERSION;                 \
-    (x)->minor = SDL_MINOR_VERSION;                 \
-    (x)->patch = SDL_PATCHLEVEL;                    \
-}
-
-/* TODO: Remove this whole block in SDL 3 */
-#if SDL_MAJOR_VERSION < 3
+#define SDL_MINOR_VERSION   4
 
 /**
- * This macro turns the version numbers into a numeric value:
+ * The current micro (or patchlevel) version of the SDL headers.
  *
- * ```
- * (1,2,3) -> (1203)
- * ```
+ * If this were SDL version 3.2.1, this value would be 1.
  *
- * This assumes that there will never be more than 100 patchlevels.
- *
- * In versions higher than 2.9.0, the minor version overflows into the
- * thousands digit: for example, 2.23.0 is encoded as 4300, and 2.255.99 would
- * be encoded as 25799.
- *
- * This macro will not be available in SDL 3.x.
+ * \since This macro is available since SDL 3.2.0.
  */
-#define SDL_VERSIONNUM(X, Y, Z)                     \
-    ((X)*1000 + (Y)*100 + (Z))
+#define SDL_MICRO_VERSION   10
+
+/**
+ * This macro turns the version numbers into a numeric value.
+ *
+ * (1,2,3) becomes 1002003.
+ *
+ * \param major the major version number.
+ * \param minor the minorversion number.
+ * \param patch the patch version number.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+#define SDL_VERSIONNUM(major, minor, patch) \
+    ((major) * 1000000 + (minor) * 1000 + (patch))
+
+/**
+ * This macro extracts the major version from a version number
+ *
+ * 1002003 becomes 1.
+ *
+ * \param version the version number.
+ *
+ * \threadsafety It is safe to call this macro from any thread.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+#define SDL_VERSIONNUM_MAJOR(version) ((version) / 1000000)
+
+/**
+ * This macro extracts the minor version from a version number
+ *
+ * 1002003 becomes 2.
+ *
+ * \param version the version number.
+ *
+ * \threadsafety It is safe to call this macro from any thread.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+#define SDL_VERSIONNUM_MINOR(version) (((version) / 1000) % 1000)
+
+/**
+ * This macro extracts the micro version from a version number
+ *
+ * 1002003 becomes 3.
+ *
+ * \param version the version number.
+ *
+ * \threadsafety It is safe to call this macro from any thread.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+#define SDL_VERSIONNUM_MICRO(version) ((version) % 1000)
 
 /**
  * This is the version number macro for the current SDL version.
  *
- * In versions higher than 2.9.0, the minor version overflows into the
- * thousands digit: for example, 2.23.0 is encoded as 4300. This macro will
- * not be available in SDL 3.x.
+ * \threadsafety It is safe to call this macro from any thread.
  *
- * Deprecated, use SDL_VERSION_ATLEAST or SDL_VERSION instead.
+ * \since This macro is available since SDL 3.2.0.
+ *
+ * \sa SDL_GetVersion
  */
-#define SDL_COMPILEDVERSION \
-    SDL_VERSIONNUM(SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL)
-#endif /* SDL_MAJOR_VERSION < 3 */
+#define SDL_VERSION \
+    SDL_VERSIONNUM(SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_MICRO_VERSION)
 
 /**
  * This macro will evaluate to true if compiled with SDL at least X.Y.Z.
+ *
+ * \threadsafety It is safe to call this macro from any thread.
+ *
+ * \since This macro is available since SDL 3.2.0.
  */
 #define SDL_VERSION_ATLEAST(X, Y, Z) \
-    ((SDL_MAJOR_VERSION >= X) && \
-     (SDL_MAJOR_VERSION > X || SDL_MINOR_VERSION >= Y) && \
-     (SDL_MAJOR_VERSION > X || SDL_MINOR_VERSION > Y || SDL_PATCHLEVEL >= Z))
+    (SDL_VERSION >= SDL_VERSIONNUM(X, Y, Z))
 
 /**
  * Get the version of SDL that is linked against your program.
  *
  * If you are linking to SDL dynamically, then it is possible that the current
  * version will be different than the version you compiled against. This
- * function returns the current version, while SDL_VERSION() is a macro that
- * tells you what version you compiled with.
+ * function returns the current version, while SDL_VERSION is the version you
+ * compiled with.
  *
  * This function may be called safely at any time, even before SDL_Init().
  *
- * \param ver the SDL_version structure that contains the version information.
+ * \returns the version of the linked library.
  *
- * \since This function is available since SDL 2.0.0.
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_GetRevision
  */
-extern DECLSPEC void SDLCALL SDL_GetVersion(SDL_version * ver);
+extern SDL_DECLSPEC int SDLCALL SDL_GetVersion(void);
 
 /**
- * Get the code revision of SDL that is linked against your program.
+ * Get the code revision of the SDL library that is linked against your
+ * program.
  *
- * This value is the revision of the code you are linked with and may be
+ * This value is the revision of the code you are linking against and may be
  * different from the code you are compiling with, which is found in the
- * constant SDL_REVISION.
+ * constant SDL_REVISION if you explicitly include SDL_revision.h
  *
- * The revision is arbitrary string (a hash value) uniquely identifying the
+ * The revision is an arbitrary string (a hash value) uniquely identifying the
  * exact revision of the SDL library in use, and is only useful in comparing
  * against other revisions. It is NOT an incrementing number.
  *
  * If SDL wasn't built from a git repository with the appropriate tools, this
  * will return an empty string.
- *
- * Prior to SDL 2.0.16, before development moved to GitHub, this returned a
- * hash for a Mercurial repository.
  *
  * You shouldn't use this function for anything but logging it for debugging
  * purposes. The string is not intended to be reliable in any way.
@@ -164,42 +180,19 @@ extern DECLSPEC void SDLCALL SDL_GetVersion(SDL_version * ver);
  * \returns an arbitrary string, uniquely identifying the exact revision of
  *          the SDL library in use.
  *
- * \since This function is available since SDL 2.0.0.
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_GetVersion
  */
-extern DECLSPEC const char *SDLCALL SDL_GetRevision(void);
-
-/**
- * Obsolete function, do not use.
- *
- * When SDL was hosted in a Mercurial repository, and was built carefully,
- * this would return the revision number that the build was created from. This
- * number was not reliable for several reasons, but more importantly, SDL is
- * now hosted in a git repository, which does not offer numbers at all, only
- * hashes. This function only ever returns zero now. Don't use it.
- *
- * Before SDL 2.0.16, this might have returned an unreliable, but non-zero
- * number.
- *
- * \deprecated Use SDL_GetRevision() instead; if SDL was carefully built, it
- *             will return a git hash.
- *
- * \returns zero, always, in modern SDL releases.
- *
- * \since This function is available since SDL 2.0.0.
- *
- * \sa SDL_GetRevision
- */
-extern SDL_DEPRECATED DECLSPEC int SDLCALL SDL_GetRevisionNumber(void);
+extern SDL_DECLSPEC const char * SDLCALL SDL_GetRevision(void);
 
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 }
 #endif
-#include "close_code.h"
+#include <SDL3/SDL_close_code.h>
 
 #endif /* SDL_version_h_ */
-
-/* vi: set ts=4 sw=4 expandtab: */

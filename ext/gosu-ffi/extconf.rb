@@ -45,14 +45,14 @@ $CFLAGS << " -DUTF8PROC_STATIC -DAL_LIBTYPE_STATIC"
 $CXXFLAGS << " -DUTF8PROC_STATIC -DAL_LIBTYPE_STATIC"
 
 if windows
-  # Use the bundled version of SDL 2.
+  # Use the bundled version of SDL 3.
   $INCFLAGS << " -I$(srcdir)/../../dependencies/SDL/include"
   if RbConfig::CONFIG["arch"] =~ /x64-/
     $LDFLAGS << "  -L$(srcdir)/../../dependencies/SDL/lib/x64"
   else
     $LDFLAGS << "  -L$(srcdir)/../../dependencies/SDL/lib/x86"
   end
-  $LDFLAGS << " -lgdi32 -lwinmm -ldwmapi -lOpenGL32 -lSDL2"
+  $LDFLAGS << " -lgdi32 -lwinmm -ldwmapi -lOpenGL32 -lSDL3"
   # Link libstdc++ statically to avoid having another DLL dependency when using Ocra.
   $LDFLAGS << " -static-libstdc++"
 elsif macos
@@ -70,28 +70,13 @@ elsif macos
   # https://trac.macports.org/ticket/58255 / https://github.com/gosu/gosu/issues/424
   $CXXFLAGS << " -Wno-reserved-user-defined-literal"
 
-  # Dependencies.
-  $CFLAGS << " #{`sdl2-config --cflags`.chomp}"
-  $CXXFLAGS << " #{`sdl2-config --cflags`.chomp}"
-  # Prefer statically linking SDL 2.
-  $LDFLAGS << " #{`sdl2-config --static-libs`.chomp} -framework OpenGL -framework Metal"
-  # And yet another hack: `sdl2-config --static-libs` uses `-lSDL2` instead of linking to the static library,
-  # even if it exists. -> Manually replace it. (Ugh!)
-  static_lib = if RbConfig::CONFIG["target_cpu"] == "arm64"
-                 "/opt/homebrew/opt/sdl2/lib/libSDL2.a"
-               else
-                 "/usr/local/lib/libSDL2.a"
-               end
-  $LDFLAGS.sub! " -lSDL2 ", " #{static_lib} " if File.exist? static_lib
-
-  # Disable building of 32-bit slices in Apple's Ruby.
-  # (RbConfig::CONFIG['CXXFLAGS'] on macOS 10.11: -arch x86_64 -arch i386 -g -Os -pipe)
-  $CFLAGS.gsub! "-arch i386", ""
-  $CXXFLAGS.gsub! "-arch i386", ""
-  $LDFLAGS.gsub! "-arch i386", ""
-  $ARCH_FLAG.gsub! "-arch i386", ""
-  CONFIG["LDSHARED"].gsub! "-arch i386", ""
+  # Dependencies. SDL3 ships no sdl3-config, so use pkg-config instead.
+  $CFLAGS << " #{`pkg-config --cflags sdl3`.chomp}"
+  $CXXFLAGS << " #{`pkg-config --cflags sdl3`.chomp}"
+  # Prefer statically linking SDL 3.
+  $LDFLAGS << " #{`pkg-config --static --libs sdl3`.chomp} -framework OpenGL -framework Metal"
 else
+  # Raspberry Pi support, hasn't been tested in a long time.
   if /BCM2708/ =~ `cat /proc/cpuinfo`
     $INCFLAGS << " -I/opt/vc/include/GLES"
     $INCFLAGS << " -I/opt/vc/include"
@@ -103,7 +88,7 @@ else
     pkg_config "gl"
   end
 
-  pkg_config "sdl2"
+  pkg_config "sdl3"
   pkg_config "fontconfig"
 end
 

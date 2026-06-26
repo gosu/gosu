@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2026 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -19,15 +19,23 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef SDLname_h_
-#define SDLname_h_
+/*
+ * This file reverses the effects of SDL_begin_code.h and should be included
+ * after you finish any function and structure declarations in your headers.
+ *
+ * SDL's headers use this; applications generally should not include this
+ * header directly.
+ */
 
-#if defined(__STDC__) || defined(__cplusplus)
-#define NeedFunctionPrototypes 1
+#ifndef SDL_begin_code_h
+#error SDL_close_code.h included without matching SDL_begin_code.h
 #endif
+#undef SDL_begin_code_h
 
-#define SDL_NAME(X) SDL_##X
-
-#endif /* SDLname_h_ */
-
-/* vi: set ts=4 sw=4 expandtab: */
+/* Reset structure packing at previous byte alignment */
+#if defined(_MSC_VER) || defined(__MWERKS__) || defined(__BORLANDC__)
+#ifdef __BORLANDC__
+#pragma nopackwarning
+#endif
+#pragma pack(pop)
+#endif /* Compiler needs structure packing set */

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2026 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -26,30 +26,27 @@
  *
  * A GUID is a 128-bit value that represents something that is uniquely
  * identifiable by this value: "globally unique."
+ *
+ * SDL provides functions to convert a GUID to/from a string.
  */
 
 #ifndef SDL_guid_h_
 #define SDL_guid_h_
 
-#include "SDL_stdinc.h"
-#include "SDL_error.h"
+#include <SDL3/SDL_stdinc.h>
 
-#include "begin_code.h"
+#include <SDL3/SDL_begin_code.h>
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
- * An SDL_GUID is a 128-bit identifier.
+ * An SDL_GUID is a 128-bit identifier for an input device that identifies
+ * that device across runs of SDL programs on the same platform.
  *
- * This is an acronym for "Globally Unique ID."
- *
- * While a GUID can be used to assign a unique value to almost anything, in
- * SDL these are largely used to identify input devices across runs of SDL
- * programs on the same platform.If the device is detached and then
- * re-attached to a different port, or if the base system is rebooted, the
- * device should still report the same GUID.
+ * If the device is detached and then re-attached to a different port, or if
+ * the base system is rebooted, the device should still report the same GUID.
  *
  * GUIDs are as precise as possible but are not guaranteed to distinguish
  * physically distinct but equivalent devices. For example, two game
@@ -58,6 +55,8 @@ extern "C" {
  *
  * GUIDs may be platform-dependent (i.e., the same device may report different
  * GUIDs on different operating systems).
+ *
+ * \since This struct is available since SDL 3.2.0.
  */
 typedef struct SDL_GUID {
     Uint8 data[16];
@@ -68,17 +67,17 @@ typedef struct SDL_GUID {
 /**
  * Get an ASCII string representation for a given SDL_GUID.
  *
- * You should supply at least 33 bytes for pszGUID.
- *
  * \param guid the SDL_GUID you wish to convert to string.
  * \param pszGUID buffer in which to write the ASCII string.
- * \param cbGUID the size of pszGUID.
+ * \param cbGUID the size of pszGUID, should be at least 33 bytes.
  *
- * \since This function is available since SDL 2.24.0.
+ * \threadsafety It is safe to call this function from any thread.
  *
- * \sa SDL_GUIDFromString
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_StringToGUID
  */
-extern DECLSPEC void SDLCALL SDL_GUIDToString(SDL_GUID guid, char *pszGUID, int cbGUID);
+extern SDL_DECLSPEC void SDLCALL SDL_GUIDToString(SDL_GUID guid, char *pszGUID, int cbGUID);
 
 /**
  * Convert a GUID string into a SDL_GUID structure.
@@ -90,18 +89,18 @@ extern DECLSPEC void SDLCALL SDL_GUIDToString(SDL_GUID guid, char *pszGUID, int 
  * \param pchGUID string containing an ASCII representation of a GUID.
  * \returns a SDL_GUID structure.
  *
- * \since This function is available since SDL 2.24.0.
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_GUIDToString
  */
-extern DECLSPEC SDL_GUID SDLCALL SDL_GUIDFromString(const char *pchGUID);
+extern SDL_DECLSPEC SDL_GUID SDLCALL SDL_StringToGUID(const char *pchGUID);
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 }
 #endif
-#include "close_code.h"
+#include <SDL3/SDL_close_code.h>
 
 #endif /* SDL_guid_h_ */
-
-/* vi: set ts=4 sw=4 expandtab: */

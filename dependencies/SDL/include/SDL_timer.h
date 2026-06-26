@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2026 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -25,85 +25,192 @@
 /**
  * # CategoryTimer
  *
- * Header for the SDL time management routines.
+ * SDL provides time management functionality. It is useful for dealing with
+ * (usually) small durations of time.
+ *
+ * This is not to be confused with _calendar time_ management, which is
+ * provided by [CategoryTime](CategoryTime).
+ *
+ * This category covers measuring time elapsed (SDL_GetTicks(),
+ * SDL_GetPerformanceCounter()), putting a thread to sleep for a certain
+ * amount of time (SDL_Delay(), SDL_DelayNS(), SDL_DelayPrecise()), and firing
+ * a callback function after a certain amount of time has elapsed
+ * (SDL_AddTimer(), etc).
+ *
+ * There are also useful macros to convert between time units, like
+ * SDL_SECONDS_TO_NS() and such.
  */
 
-#include "SDL_stdinc.h"
-#include "SDL_error.h"
+#include <SDL3/SDL_stdinc.h>
+#include <SDL3/SDL_error.h>
 
-#include "begin_code.h"
+#include <SDL3/SDL_begin_code.h>
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/**
- * Get the number of milliseconds since SDL library initialization.
- *
- * This value wraps if the program runs for more than ~49 days.
- *
- * This function is not recommended as of SDL 2.0.18; use SDL_GetTicks64()
- * instead, where the value doesn't wrap every ~49 days. There are places in
- * SDL where we provide a 32-bit timestamp that can not change without
- * breaking binary compatibility, though, so this function isn't officially
- * deprecated.
- *
- * \returns an unsigned 32-bit value representing the number of milliseconds
- *          since the SDL library initialized.
- *
- * \since This function is available since SDL 2.0.0.
- *
- * \sa SDL_TICKS_PASSED
- */
-extern DECLSPEC Uint32 SDLCALL SDL_GetTicks(void);
+/* SDL time constants */
 
 /**
- * Get the number of milliseconds since SDL library initialization.
+ * Number of milliseconds in a second.
  *
- * Note that you should not use the SDL_TICKS_PASSED macro with values
- * returned by this function, as that macro does clever math to compensate for
- * the 32-bit overflow every ~49 days that SDL_GetTicks() suffers from. 64-bit
- * values from this function can be safely compared directly.
+ * This is always 1000.
  *
- * For example, if you want to wait 100 ms, you could do this:
- *
- * ```c
- * const Uint64 timeout = SDL_GetTicks64() + 100;
- * while (SDL_GetTicks64() < timeout) {
- *     // ... do work until timeout has elapsed
- * }
- * ```
- *
- * \returns an unsigned 64-bit value representing the number of milliseconds
- *          since the SDL library initialized.
- *
- * \since This function is available since SDL 2.0.18.
+ * \since This macro is available since SDL 3.2.0.
  */
-extern DECLSPEC Uint64 SDLCALL SDL_GetTicks64(void);
+#define SDL_MS_PER_SECOND   1000
 
 /**
- * Compare 32-bit SDL ticks values, and return true if `A` has passed `B`.
+ * Number of microseconds in a second.
  *
- * This should be used with results from SDL_GetTicks(), as this macro
- * attempts to deal with the 32-bit counter wrapping back to zero every ~49
- * days, but should _not_ be used with SDL_GetTicks64(), which does not have
- * that problem.
+ * This is always 1000000.
  *
- * For example, with SDL_GetTicks(), if you want to wait 100 ms, you could do
- * this:
- *
- * ```c
- * const Uint32 timeout = SDL_GetTicks() + 100;
- * while (!SDL_TICKS_PASSED(SDL_GetTicks(), timeout)) {
- *     // ... do work until timeout has elapsed
- * }
- * ```
- *
- * Note that this does not handle tick differences greater than 2^31 so take
- * care when using the above kind of code with large timeout delays (tens of
- * days).
+ * \since This macro is available since SDL 3.2.0.
  */
-#define SDL_TICKS_PASSED(A, B)  ((Sint32)((B) - (A)) <= 0)
+#define SDL_US_PER_SECOND   1000000
+
+/**
+ * Number of nanoseconds in a second.
+ *
+ * This is always 1000000000.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+#define SDL_NS_PER_SECOND   1000000000LL
+
+/**
+ * Number of nanoseconds in a millisecond.
+ *
+ * This is always 1000000.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+#define SDL_NS_PER_MS       1000000
+
+/**
+ * Number of nanoseconds in a microsecond.
+ *
+ * This is always 1000.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+#define SDL_NS_PER_US       1000
+
+/**
+ * Convert seconds to nanoseconds.
+ *
+ * This only converts whole numbers, not fractional seconds.
+ *
+ * \param S the number of seconds to convert.
+ * \returns S, expressed in nanoseconds.
+ *
+ * \threadsafety It is safe to call this macro from any thread.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+#define SDL_SECONDS_TO_NS(S)    (((Uint64)(S)) * SDL_NS_PER_SECOND)
+
+/**
+ * Convert nanoseconds to seconds.
+ *
+ * This performs a division, so the results can be dramatically different if
+ * `NS` is an integer or floating point value.
+ *
+ * \param NS the number of nanoseconds to convert.
+ * \returns NS, expressed in seconds.
+ *
+ * \threadsafety It is safe to call this macro from any thread.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+#define SDL_NS_TO_SECONDS(NS)   ((NS) / SDL_NS_PER_SECOND)
+
+/**
+ * Convert milliseconds to nanoseconds.
+ *
+ * This only converts whole numbers, not fractional milliseconds.
+ *
+ * \param MS the number of milliseconds to convert.
+ * \returns MS, expressed in nanoseconds.
+ *
+ * \threadsafety It is safe to call this macro from any thread.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+#define SDL_MS_TO_NS(MS)        (((Uint64)(MS)) * SDL_NS_PER_MS)
+
+/**
+ * Convert nanoseconds to milliseconds.
+ *
+ * This performs a division, so the results can be dramatically different if
+ * `NS` is an integer or floating point value.
+ *
+ * \param NS the number of nanoseconds to convert.
+ * \returns NS, expressed in milliseconds.
+ *
+ * \threadsafety It is safe to call this macro from any thread.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+#define SDL_NS_TO_MS(NS)        ((NS) / SDL_NS_PER_MS)
+
+/**
+ * Convert microseconds to nanoseconds.
+ *
+ * This only converts whole numbers, not fractional microseconds.
+ *
+ * \param US the number of microseconds to convert.
+ * \returns US, expressed in nanoseconds.
+ *
+ * \threadsafety It is safe to call this macro from any thread.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+#define SDL_US_TO_NS(US)        (((Uint64)(US)) * SDL_NS_PER_US)
+
+/**
+ * Convert nanoseconds to microseconds.
+ *
+ * This performs a division, so the results can be dramatically different if
+ * `NS` is an integer or floating point value.
+ *
+ * \param NS the number of nanoseconds to convert.
+ * \returns NS, expressed in microseconds.
+ *
+ * \threadsafety It is safe to call this macro from any thread.
+ *
+ * \since This macro is available since SDL 3.2.0.
+ */
+#define SDL_NS_TO_US(NS)        ((NS) / SDL_NS_PER_US)
+
+/**
+ * Get the number of milliseconds that have elapsed since the SDL library
+ * initialization.
+ *
+ * \returns an unsigned 64‑bit integer that represents the number of
+ *          milliseconds that have elapsed since the SDL library was
+ *          initialized (typically via a call to SDL_Init).
+ *
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_GetTicksNS
+ */
+extern SDL_DECLSPEC Uint64 SDLCALL SDL_GetTicks(void);
+
+/**
+ * Get the number of nanoseconds since SDL library initialization.
+ *
+ * \returns an unsigned 64-bit value representing the number of nanoseconds
+ *          since the SDL library initialized.
+ *
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.2.0.
+ */
+extern SDL_DECLSPEC Uint64 SDLCALL SDL_GetTicksNS(void);
 
 /**
  * Get the current value of the high resolution counter.
@@ -116,22 +223,26 @@ extern DECLSPEC Uint64 SDLCALL SDL_GetTicks64(void);
  *
  * \returns the current counter value.
  *
- * \since This function is available since SDL 2.0.0.
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_GetPerformanceFrequency
  */
-extern DECLSPEC Uint64 SDLCALL SDL_GetPerformanceCounter(void);
+extern SDL_DECLSPEC Uint64 SDLCALL SDL_GetPerformanceCounter(void);
 
 /**
  * Get the count per second of the high resolution counter.
  *
  * \returns a platform-specific count per second.
  *
- * \since This function is available since SDL 2.0.0.
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_GetPerformanceCounter
  */
-extern DECLSPEC Uint64 SDLCALL SDL_GetPerformanceFrequency(void);
+extern SDL_DECLSPEC Uint64 SDLCALL SDL_GetPerformanceFrequency(void);
 
 /**
  * Wait a specified number of milliseconds before returning.
@@ -142,36 +253,94 @@ extern DECLSPEC Uint64 SDLCALL SDL_GetPerformanceFrequency(void);
  *
  * \param ms the number of milliseconds to delay.
  *
- * \since This function is available since SDL 2.0.0.
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_DelayNS
+ * \sa SDL_DelayPrecise
  */
-extern DECLSPEC void SDLCALL SDL_Delay(Uint32 ms);
+extern SDL_DECLSPEC void SDLCALL SDL_Delay(Uint32 ms);
 
 /**
- * Function prototype for the timer callback function.
+ * Wait a specified number of nanoseconds before returning.
  *
- * The callback function is passed the current timer interval and returns the
- * next timer interval. If the returned value is the same as the one passed
- * in, the periodic alarm continues, otherwise a new alarm is scheduled. If
- * the callback returns 0, the periodic alarm is cancelled.
+ * This function waits a specified number of nanoseconds before returning. It
+ * waits at least the specified time, but possibly longer due to OS
+ * scheduling.
+ *
+ * \param ns the number of nanoseconds to delay.
+ *
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_Delay
+ * \sa SDL_DelayPrecise
  */
-typedef Uint32 (SDLCALL * SDL_TimerCallback) (Uint32 interval, void *param);
+extern SDL_DECLSPEC void SDLCALL SDL_DelayNS(Uint64 ns);
+
+/**
+ * Wait a specified number of nanoseconds before returning.
+ *
+ * This function waits a specified number of nanoseconds before returning. It
+ * will attempt to wait as close to the requested time as possible, busy
+ * waiting if necessary, but could return later due to OS scheduling.
+ *
+ * \param ns the number of nanoseconds to delay.
+ *
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_Delay
+ * \sa SDL_DelayNS
+ */
+extern SDL_DECLSPEC void SDLCALL SDL_DelayPrecise(Uint64 ns);
 
 /**
  * Definition of the timer ID type.
+ *
+ * \since This datatype is available since SDL 3.2.0.
  */
-typedef int SDL_TimerID;
+typedef Uint32 SDL_TimerID;
+
+/**
+ * Function prototype for the millisecond timer callback function.
+ *
+ * The callback function is passed the current timer interval and returns the
+ * next timer interval, in milliseconds. If the returned value is the same as
+ * the one passed in, the periodic alarm continues, otherwise a new alarm is
+ * scheduled. If the callback returns 0, the periodic alarm is canceled and
+ * will be removed.
+ *
+ * \param userdata an arbitrary pointer provided by the app through
+ *                 SDL_AddTimer, for its own use.
+ * \param timerID the current timer being processed.
+ * \param interval the current callback time interval.
+ * \returns the new callback time interval, or 0 to disable further runs of
+ *          the callback.
+ *
+ * \threadsafety SDL may call this callback at any time from a background
+ *               thread; the application is responsible for locking resources
+ *               the callback touches that need to be protected.
+ *
+ * \since This datatype is available since SDL 3.2.0.
+ *
+ * \sa SDL_AddTimer
+ */
+typedef Uint32 (SDLCALL *SDL_TimerCallback)(void *userdata, SDL_TimerID timerID, Uint32 interval);
 
 /**
  * Call a callback function at a future time.
  *
- * If you use this function, you must pass `SDL_INIT_TIMER` to SDL_Init().
- *
  * The callback function is passed the current timer interval and the user
  * supplied parameter from the SDL_AddTimer() call and should return the next
  * timer interval. If the value returned from the callback is 0, the timer is
- * canceled.
+ * canceled and will be removed.
  *
- * The callback is run on a separate thread.
+ * The callback is run on a separate thread, and for short timeouts can
+ * potentially be called before this function returns.
  *
  * Timers take into account the amount of time it took to execute the
  * callback. For example, if the callback took 250 ms to execute and returned
@@ -179,44 +348,107 @@ typedef int SDL_TimerID;
  * iteration.
  *
  * Timing may be inexact due to OS scheduling. Be sure to note the current
- * time with SDL_GetTicks() or SDL_GetPerformanceCounter() in case your
+ * time with SDL_GetTicksNS() or SDL_GetPerformanceCounter() in case your
  * callback needs to adjust for variances.
  *
  * \param interval the timer delay, in milliseconds, passed to `callback`.
  * \param callback the SDL_TimerCallback function to call when the specified
  *                 `interval` elapses.
- * \param param a pointer that is passed to `callback`.
- * \returns a timer ID or 0 if an error occurs; call SDL_GetError() for more
+ * \param userdata a pointer that is passed to `callback`.
+ * \returns a timer ID or 0 on failure; call SDL_GetError() for more
  *          information.
  *
- * \since This function is available since SDL 2.0.0.
+ * \threadsafety It is safe to call this function from any thread.
  *
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_AddTimerNS
  * \sa SDL_RemoveTimer
  */
-extern DECLSPEC SDL_TimerID SDLCALL SDL_AddTimer(Uint32 interval,
-                                                 SDL_TimerCallback callback,
-                                                 void *param);
+extern SDL_DECLSPEC SDL_TimerID SDLCALL SDL_AddTimer(Uint32 interval, SDL_TimerCallback callback, void *userdata);
+
+/**
+ * Function prototype for the nanosecond timer callback function.
+ *
+ * The callback function is passed the current timer interval and returns the
+ * next timer interval, in nanoseconds. If the returned value is the same as
+ * the one passed in, the periodic alarm continues, otherwise a new alarm is
+ * scheduled. If the callback returns 0, the periodic alarm is canceled and
+ * will be removed.
+ *
+ * \param userdata an arbitrary pointer provided by the app through
+ *                 SDL_AddTimer, for its own use.
+ * \param timerID the current timer being processed.
+ * \param interval the current callback time interval.
+ * \returns the new callback time interval, or 0 to disable further runs of
+ *          the callback.
+ *
+ * \threadsafety SDL may call this callback at any time from a background
+ *               thread; the application is responsible for locking resources
+ *               the callback touches that need to be protected.
+ *
+ * \since This datatype is available since SDL 3.2.0.
+ *
+ * \sa SDL_AddTimerNS
+ */
+typedef Uint64 (SDLCALL *SDL_NSTimerCallback)(void *userdata, SDL_TimerID timerID, Uint64 interval);
+
+/**
+ * Call a callback function at a future time.
+ *
+ * The callback function is passed the current timer interval and the user
+ * supplied parameter from the SDL_AddTimerNS() call and should return the
+ * next timer interval. If the value returned from the callback is 0, the
+ * timer is canceled and will be removed.
+ *
+ * The callback is run on a separate thread, and for short timeouts can
+ * potentially be called before this function returns.
+ *
+ * Timers take into account the amount of time it took to execute the
+ * callback. For example, if the callback took 250 ns to execute and returned
+ * 1000 (ns), the timer would only wait another 750 ns before its next
+ * iteration.
+ *
+ * Timing may be inexact due to OS scheduling. Be sure to note the current
+ * time with SDL_GetTicksNS() or SDL_GetPerformanceCounter() in case your
+ * callback needs to adjust for variances.
+ *
+ * \param interval the timer delay, in nanoseconds, passed to `callback`.
+ * \param callback the SDL_TimerCallback function to call when the specified
+ *                 `interval` elapses.
+ * \param userdata a pointer that is passed to `callback`.
+ * \returns a timer ID or 0 on failure; call SDL_GetError() for more
+ *          information.
+ *
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.2.0.
+ *
+ * \sa SDL_AddTimer
+ * \sa SDL_RemoveTimer
+ */
+extern SDL_DECLSPEC SDL_TimerID SDLCALL SDL_AddTimerNS(Uint64 interval, SDL_NSTimerCallback callback, void *userdata);
 
 /**
  * Remove a timer created with SDL_AddTimer().
  *
  * \param id the ID of the timer to remove.
- * \returns SDL_TRUE if the timer is removed or SDL_FALSE if the timer wasn't
- *          found.
+ * \returns true on success or false on failure; call SDL_GetError() for more
+ *          information.
  *
- * \since This function is available since SDL 2.0.0.
+ * \threadsafety It is safe to call this function from any thread.
+ *
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_AddTimer
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_RemoveTimer(SDL_TimerID id);
+extern SDL_DECLSPEC bool SDLCALL SDL_RemoveTimer(SDL_TimerID id);
 
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 }
 #endif
-#include "close_code.h"
+#include <SDL3/SDL_close_code.h>
 
 #endif /* SDL_timer_h_ */
-
-/* vi: set ts=4 sw=4 expandtab: */

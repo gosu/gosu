@@ -306,9 +306,9 @@ extern stb_vorbis * stb_vorbis_open_file_section(FILE *f, int close_handle_on_cl
 #endif
 
 #ifdef STB_VORBIS_SDL
-extern stb_vorbis * stb_vorbis_open_rwops_section(SDL_RWops *rwops, int close_on_free, int *error, const stb_vorbis_alloc *alloc, unsigned int length);
-extern stb_vorbis * stb_vorbis_open_rwops(SDL_RWops *rwops, int close_on_free, int *error, const stb_vorbis_alloc *alloc);
-#define RWOPS_BUFFER_SIZE 2048
+extern stb_vorbis * stb_vorbis_open_io_section(SDL_IOStream *io, int close_on_free, int *error, const stb_vorbis_alloc *alloc, unsigned int length);
+extern stb_vorbis * stb_vorbis_open_io(SDL_IOStream *io, int close_on_free, int *error, const stb_vorbis_alloc *alloc);
+#define IO_BUFFER_SIZE 2048
 #endif
 
 extern int stb_vorbis_seek_frame(stb_vorbis *f, unsigned int sample_number);
@@ -852,12 +852,12 @@ struct stb_vorbis
    int close_on_free;
 #endif
 #ifdef STB_VORBIS_SDL
-   SDL_RWops *rwops;
-   uint32 rwops_start;
-   uint32 rwops_virtual_pos;
-   uint32 rwops_buffer_pos;
-   uint32 rwops_buffer_fill;
-   uint8 rwops_buffer[RWOPS_BUFFER_SIZE];
+   SDL_IOStream *io;
+   uint32 io_start;
+   uint32 io_virtual_pos;
+   uint32 io_buffer_pos;
+   uint32 io_buffer_fill;
+   uint8 io_buffer[IO_BUFFER_SIZE];
    int close_on_free;
 #endif
 
@@ -1424,13 +1424,13 @@ static int STBV_CDECL point_compare(const void *p, const void *q)
 static uint8 get8(vorb *z)
 {
    #ifdef STB_VORBIS_SDL
-   if (z->rwops_buffer_pos >= z->rwops_buffer_fill) {
-      z->rwops_buffer_fill = SDL_RWread(z->rwops, z->rwops_buffer, 1, RWOPS_BUFFER_SIZE);
-      z->rwops_buffer_pos = 0;
-      if (z->rwops_buffer_fill == 0) { z->eof = TRUE; return 0; }
+   if (z->io_buffer_pos >= z->io_buffer_fill) {
+      z->io_buffer_fill = SDL_ReadIO(z->io, z->io_buffer, IO_BUFFER_SIZE);
+      z->io_buffer_pos = 0;
+      if (z->io_buffer_fill == 0) { z->eof = TRUE; return 0; }
    }
-   z->rwops_virtual_pos++;
-   return z->rwops_buffer[z->rwops_buffer_pos++];
+   z->io_virtual_pos++;
+   return z->io_buffer[z->io_buffer_pos++];
 
    #else
    if (USE_MEMORY(z)) {
@@ -1464,21 +1464,21 @@ static int getn(vorb *z, uint8 *data, int n)
    while (n > 0) {
       int chunk;
 
-      if (z->rwops_buffer_pos >= z->rwops_buffer_fill) {
-         z->rwops_buffer_fill = SDL_RWread(z->rwops, z->rwops_buffer, 1, RWOPS_BUFFER_SIZE);
-         z->rwops_buffer_pos = 0;
-         if (z->rwops_buffer_fill == 0) {
+      if (z->io_buffer_pos >= z->io_buffer_fill) {
+         z->io_buffer_fill = SDL_ReadIO(z->io, z->io_buffer, IO_BUFFER_SIZE);
+         z->io_buffer_pos = 0;
+         if (z->io_buffer_fill == 0) {
             z->eof = 1;
             return 0;
          }
       }
 
-      chunk = z->rwops_buffer_fill - z->rwops_buffer_pos;
+      chunk = z->io_buffer_fill - z->io_buffer_pos;
       if (chunk > n) chunk = n;
 
-      memcpy(data, z->rwops_buffer + z->rwops_buffer_pos, chunk);
-      z->rwops_buffer_pos += chunk;
-      z->rwops_virtual_pos += chunk;
+      memcpy(data, z->io_buffer + z->io_buffer_pos, chunk);
+      z->io_buffer_pos += chunk;
+      z->io_virtual_pos += chunk;
       data += chunk;
       n -= chunk;
    }
@@ -1508,7 +1508,7 @@ static int set_file_offset(stb_vorbis *f, unsigned int loc);
 static void skip(vorb *z, int n)
 {
    #ifdef STB_VORBIS_SDL
-   set_file_offset(z, z->rwops_virtual_pos + n);
+   set_file_offset(z, z->io_virtual_pos + n);
    #else
    if (USE_MEMORY(z)) {
       z->stream += n;
@@ -1533,29 +1533,29 @@ static int set_file_offset(stb_vorbis *f, unsigned int loc)
    f->eof = 0;
 
    #ifdef STB_VORBIS_SDL
- { unsigned int rwops_pos;
-   uint32 buffer_start = f->rwops_virtual_pos - f->rwops_buffer_pos;
-   uint32 buffer_end = buffer_start + f->rwops_buffer_fill;
-   f->rwops_virtual_pos = loc;
+ { unsigned int io_pos;
+   uint32 buffer_start = f->io_virtual_pos - f->io_buffer_pos;
+   uint32 buffer_end = buffer_start + f->io_buffer_fill;
+   f->io_virtual_pos = loc;
 
    // Move within buffer if possible
    if (loc >= buffer_start && loc < buffer_end)
    {
-      f->rwops_buffer_pos = loc - buffer_start;
+      f->io_buffer_pos = loc - buffer_start;
       return 1;
    }
 
-   rwops_pos = loc + f->rwops_start;
-   if (rwops_pos < loc || loc >= 0x80000000) {
-      rwops_pos = 0x7fffffff;
+   io_pos = loc + f->io_start;
+   if (io_pos < loc || loc >= 0x80000000) {
+      io_pos = 0x7fffffff;
       f->eof = 1;
    }
 
-   f->rwops_buffer_pos = f->rwops_buffer_fill = 0;  // Invalidate buffer
-   if (SDL_RWseek(f->rwops, rwops_pos, RW_SEEK_SET) != -1)
+   f->io_buffer_pos = f->io_buffer_fill = 0;  // Invalidate buffer
+   if (SDL_SeekIO(f->io, io_pos, SDL_IO_SEEK_SET) != -1)
       return 1;
    f->eof = 1;
-   SDL_RWseek(f->rwops, f->rwops_start, RW_SEEK_END);
+   SDL_SeekIO(f->io, f->io_start, SDL_IO_SEEK_END);
    return 0;
  }
 
@@ -4475,7 +4475,7 @@ static void vorbis_deinit(stb_vorbis *p)
       setup_temp_free(p, &p->temp_mults, 0);
    }
    #ifdef STB_VORBIS_SDL
-   if (p->close_on_free) SDL_RWclose(p->rwops);
+   if (p->close_on_free) SDL_CloseIO(p->io);
    #endif
    #ifndef STB_VORBIS_NO_STDIO
    if (p->close_on_free) fclose(p->f);
@@ -4504,11 +4504,11 @@ static void vorbis_init(stb_vorbis *p, const stb_vorbis_alloc *z)
    p->page_crc_tests = -1;
    #ifdef STB_VORBIS_SDL
    p->close_on_free = FALSE;
-   p->rwops = NULL;
-   p->rwops_start = 0;
-   p->rwops_virtual_pos = 0;
-   p->rwops_buffer_pos = 0;
-   p->rwops_buffer_fill = 0;
+   p->io = NULL;
+   p->io_start = 0;
+   p->io_virtual_pos = 0;
+   p->io_buffer_pos = 0;
+   p->io_buffer_fill = 0;
    #endif
    #ifndef STB_VORBIS_NO_STDIO
    p->close_on_free = FALSE;
@@ -4780,7 +4780,7 @@ unsigned int stb_vorbis_get_file_offset(stb_vorbis *f)
    if (f->push_mode) return 0;
    #endif
    #ifdef STB_VORBIS_SDL
-   return f->rwops_virtual_pos;
+   return f->io_virtual_pos;
    #else
    if (USE_MEMORY(f)) return (unsigned int) (f->stream - f->stream_start);
    #endif
@@ -5342,12 +5342,12 @@ stb_vorbis * stb_vorbis_open_filename(const char *filename, int *error, const st
 #endif // STB_VORBIS_NO_STDIO
 
 #ifdef STB_VORBIS_SDL
-stb_vorbis * stb_vorbis_open_rwops_section(SDL_RWops *rwops, int close_on_free, int *error, const stb_vorbis_alloc *alloc, unsigned int length)
+stb_vorbis * stb_vorbis_open_io_section(SDL_IOStream *io, int close_on_free, int *error, const stb_vorbis_alloc *alloc, unsigned int length)
 {
    stb_vorbis *f, p;
    vorbis_init(&p, alloc);
-   p.rwops = rwops;
-   p.rwops_start = (uint32) SDL_RWtell(rwops);
+   p.io = io;
+   p.io_start = (uint32) SDL_TellIO(io);
    p.stream_len   = length;
    p.close_on_free = close_on_free;
    if (start_decoder(&p)) {
@@ -5363,11 +5363,11 @@ stb_vorbis * stb_vorbis_open_rwops_section(SDL_RWops *rwops, int close_on_free, 
    return NULL;
 }
 
-stb_vorbis * stb_vorbis_open_rwops(SDL_RWops *rwops, int close_on_free, int *error, const stb_vorbis_alloc *alloc)
+stb_vorbis * stb_vorbis_open_io(SDL_IOStream *io, int close_on_free, int *error, const stb_vorbis_alloc *alloc)
 {
-   const unsigned int start = (unsigned int) SDL_RWtell(rwops);
-   const unsigned int len = (unsigned int) (SDL_RWsize(rwops) - start);
-   return stb_vorbis_open_rwops_section(rwops, close_on_free, error, alloc, len);
+   const unsigned int start = (unsigned int) SDL_TellIO(io);
+   const unsigned int len = (unsigned int) (SDL_GetIOSize(io) - start);
+   return stb_vorbis_open_io_section(io, close_on_free, error, alloc, len);
 }
 #endif
 

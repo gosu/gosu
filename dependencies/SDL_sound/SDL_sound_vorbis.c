@@ -60,11 +60,8 @@
 #define cos(x) SDL_cos(x)
 #define sin(x) SDL_sin(x)
 #define log(x) SDL_log(x)
-#if SDL_VERSION_ATLEAST(2,0,9)
-#define exp SDL_exp
+#define exp(x) SDL_exp(x)
 #endif
-#endif
-
 #include "stb_vorbis.h"
 
 static const char *vorbis_error_string(const int err)
@@ -95,9 +92,9 @@ static const char *vorbis_error_string(const int err)
     return "VORBIS: unknown error";
 } /* vorbis_error_string */
 
-static SDL_bool VORBIS_init(void)
+static bool VORBIS_init(void)
 {
-    return SDL_TRUE;  /* always succeeds. */
+    return true; /* always succeeds. */
 } /* VORBIS_init */
 
 static void VORBIS_quit(void)
@@ -108,9 +105,9 @@ static void VORBIS_quit(void)
 static int VORBIS_open(Sound_Sample *sample, const char *ext)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
-    SDL_RWops *rw = internal->rw;
+    SDL_IOStream *src = internal->io;
     int err = 0;
-    stb_vorbis *stb = stb_vorbis_open_rwops(rw, 0, &err, NULL);
+    stb_vorbis *stb = stb_vorbis_open_io(src, 0, &err, NULL);
     unsigned int num_frames;
 
     BAIL_IF_MACRO(!stb, vorbis_error_string(err), 0);
@@ -119,9 +116,9 @@ static int VORBIS_open(Sound_Sample *sample, const char *ext)
 
     internal->decoder_private = stb;
     sample->flags = SOUND_SAMPLEFLAG_CANSEEK;
-    sample->actual.format = AUDIO_F32SYS;
+    sample->actual.format = SDL_AUDIO_F32;
     sample->actual.channels = stb->channels;
-    sample->actual.rate = stb->sample_rate;
+    sample->actual.freq = stb->sample_rate;
     num_frames = stb_vorbis_stream_length_in_samples(stb);
     if (!num_frames)
     {
@@ -198,7 +195,7 @@ static int VORBIS_seek(Sound_Sample *sample, Uint32 ms)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     stb_vorbis *stb = (stb_vorbis *) internal->decoder_private;
-    const float frames_per_ms = ((float) sample->actual.rate) / 1000.0f;
+    const float frames_per_ms = ((float) sample->actual.freq) / 1000.0f;
     const Uint32 frame_offset = (Uint32) (frames_per_ms * ((float) ms));
     const unsigned int sampnum = (unsigned int) frame_offset;
     BAIL_IF_MACRO(!stb_vorbis_seek(stb, sampnum), vorbis_error_string(stb_vorbis_get_error(stb)), 0);

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2026 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -53,24 +53,62 @@
 #ifndef SDL_hidapi_h_
 #define SDL_hidapi_h_
 
-#include "SDL_stdinc.h"
+#include <SDL3/SDL_stdinc.h>
+#include <SDL3/SDL_error.h>
+#include <SDL3/SDL_properties.h>
 
-#include "begin_code.h"
+#include <SDL3/SDL_begin_code.h>
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
- * A handle representing an open HID device
+ * An opaque handle representing an open HID device.
+ *
+ * \since This struct is available since SDL 3.2.0.
  */
-struct SDL_hid_device_;
-typedef struct SDL_hid_device_ SDL_hid_device; /**< opaque hidapi structure */
+typedef struct SDL_hid_device SDL_hid_device;
+
+/**
+ * HID underlying bus types.
+ *
+ * \since This enum is available since SDL 3.2.0.
+ */
+typedef enum SDL_hid_bus_type {
+    /** Unknown bus type */
+    SDL_HID_API_BUS_UNKNOWN = 0x00,
+
+    /** USB bus
+       Specifications:
+       https://usb.org/hid */
+    SDL_HID_API_BUS_USB = 0x01,
+
+    /** Bluetooth or Bluetooth LE bus
+       Specifications:
+       https://www.bluetooth.com/specifications/specs/human-interface-device-profile-1-1-1/
+       https://www.bluetooth.com/specifications/specs/hid-service-1-0/
+       https://www.bluetooth.com/specifications/specs/hid-over-gatt-profile-1-0/ */
+    SDL_HID_API_BUS_BLUETOOTH = 0x02,
+
+    /** I2C bus
+       Specifications:
+       https://docs.microsoft.com/previous-versions/windows/hardware/design/dn642101(v=vs.85) */
+    SDL_HID_API_BUS_I2C = 0x03,
+
+    /** SPI bus
+       Specifications:
+       https://www.microsoft.com/download/details.aspx?id=103325 */
+    SDL_HID_API_BUS_SPI = 0x04
+
+} SDL_hid_bus_type;
 
 /** hidapi info structure */
 
 /**
  * Information about a connected HID device
+ *
+ * \since This struct is available since SDL 3.2.0.
  */
 typedef struct SDL_hid_device_info
 {
@@ -90,17 +128,17 @@ typedef struct SDL_hid_device_info
     /** Product string */
     wchar_t *product_string;
     /** Usage Page for this Device/Interface
-        (Windows/Mac only). */
+        (Windows/Mac/hidraw only) */
     unsigned short usage_page;
     /** Usage for this Device/Interface
-        (Windows/Mac only).*/
+        (Windows/Mac/hidraw only) */
     unsigned short usage;
     /** The USB interface which this logical device
         represents.
 
-        * Valid on both Linux implementations in all cases.
-        * Valid on the Windows implementation only if the device
-          contains more than one interface. */
+        Valid only if the device is a USB HID device.
+        Set to -1 in all other cases.
+    */
     int interface_number;
 
     /** Additional information about the USB interface.
@@ -109,8 +147,12 @@ typedef struct SDL_hid_device_info
     int interface_subclass;
     int interface_protocol;
 
+    /** Underlying bus type */
+    SDL_hid_bus_type bus_type;
+
     /** Pointer to the next device */
     struct SDL_hid_device_info *next;
+
 } SDL_hid_device_info;
 
 
@@ -125,13 +167,14 @@ typedef struct SDL_hid_device_info
  *
  * Each call to this function should have a matching call to SDL_hid_exit()
  *
- * \returns 0 on success and -1 on error.
+ * \returns 0 on success or a negative error code on failure; call
+ *          SDL_GetError() for more information.
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_hid_exit
  */
-extern DECLSPEC int SDLCALL SDL_hid_init(void);
+extern SDL_DECLSPEC int SDLCALL SDL_hid_init(void);
 
 /**
  * Finalize the HIDAPI library.
@@ -139,13 +182,14 @@ extern DECLSPEC int SDLCALL SDL_hid_init(void);
  * This function frees all of the static data associated with HIDAPI. It
  * should be called at the end of execution to avoid memory leaks.
  *
- * \returns 0 on success and -1 on error.
+ * \returns 0 on success or a negative error code on failure; call
+ *          SDL_GetError() for more information.
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_hid_init
  */
-extern DECLSPEC int SDLCALL SDL_hid_exit(void);
+extern SDL_DECLSPEC int SDLCALL SDL_hid_exit(void);
 
 /**
  * Check to see if devices may have been added or removed.
@@ -162,11 +206,11 @@ extern DECLSPEC int SDLCALL SDL_hid_exit(void);
  * \returns a change counter that is incremented with each potential device
  *          change, or 0 if device change detection isn't available.
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_hid_enumerate
  */
-extern DECLSPEC Uint32 SDLCALL SDL_hid_device_change_count(void);
+extern SDL_DECLSPEC Uint32 SDLCALL SDL_hid_device_change_count(void);
 
 /**
  * Enumerate the HID Devices.
@@ -177,30 +221,36 @@ extern DECLSPEC Uint32 SDLCALL SDL_hid_device_change_count(void);
  * matches. If `vendor_id` and `product_id` are both set to 0, then all HID
  * devices will be returned.
  *
- * \param vendor_id The Vendor ID (VID) of the types of device to open.
- * \param product_id The Product ID (PID) of the types of device to open.
+ * By default SDL will only enumerate controllers, to reduce risk of hanging
+ * or crashing on bad drivers, but SDL_HINT_HIDAPI_ENUMERATE_ONLY_CONTROLLERS
+ * can be set to "0" to enumerate all HID devices.
+ *
+ * \param vendor_id the Vendor ID (VID) of the types of device to open, or 0
+ *                  to match any vendor.
+ * \param product_id the Product ID (PID) of the types of device to open, or 0
+ *                   to match any product.
  * \returns a pointer to a linked list of type SDL_hid_device_info, containing
  *          information about the HID devices attached to the system, or NULL
  *          in the case of failure. Free this linked list by calling
  *          SDL_hid_free_enumeration().
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  *
  * \sa SDL_hid_device_change_count
  */
-extern DECLSPEC SDL_hid_device_info * SDLCALL SDL_hid_enumerate(unsigned short vendor_id, unsigned short product_id);
+extern SDL_DECLSPEC SDL_hid_device_info * SDLCALL SDL_hid_enumerate(unsigned short vendor_id, unsigned short product_id);
 
 /**
- * Free an enumeration Linked List
+ * Free an enumeration linked list.
  *
  * This function frees a linked list created by SDL_hid_enumerate().
  *
- * \param devs Pointer to a list of struct_device returned from
+ * \param devs pointer to a list of struct_device returned from
  *             SDL_hid_enumerate().
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  */
-extern DECLSPEC void SDLCALL SDL_hid_free_enumeration(SDL_hid_device_info *devs);
+extern SDL_DECLSPEC void SDLCALL SDL_hid_free_enumeration(SDL_hid_device_info *devs);
 
 /**
  * Open a HID device using a Vendor ID (VID), Product ID (PID) and optionally
@@ -209,16 +259,16 @@ extern DECLSPEC void SDLCALL SDL_hid_free_enumeration(SDL_hid_device_info *devs)
  * If `serial_number` is NULL, the first device with the specified VID and PID
  * is opened.
  *
- * \param vendor_id The Vendor ID (VID) of the device to open.
- * \param product_id The Product ID (PID) of the device to open.
- * \param serial_number The Serial Number of the device to open (Optionally
+ * \param vendor_id the Vendor ID (VID) of the device to open.
+ * \param product_id the Product ID (PID) of the device to open.
+ * \param serial_number the Serial Number of the device to open (Optionally
  *                      NULL).
  * \returns a pointer to a SDL_hid_device object on success or NULL on
- *          failure.
+ *          failure; call SDL_GetError() for more information.
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  */
-extern DECLSPEC SDL_hid_device * SDLCALL SDL_hid_open(unsigned short vendor_id, unsigned short product_id, const wchar_t *serial_number);
+extern SDL_DECLSPEC SDL_hid_device * SDLCALL SDL_hid_open(unsigned short vendor_id, unsigned short product_id, const wchar_t *serial_number);
 
 /**
  * Open a HID device by its path name.
@@ -226,13 +276,31 @@ extern DECLSPEC SDL_hid_device * SDLCALL SDL_hid_open(unsigned short vendor_id, 
  * The path name be determined by calling SDL_hid_enumerate(), or a
  * platform-specific path name can be used (eg: /dev/hidraw0 on Linux).
  *
- * \param path The path name of the device to open.
+ * \param path the path name of the device to open.
  * \returns a pointer to a SDL_hid_device object on success or NULL on
- *          failure.
+ *          failure; call SDL_GetError() for more information.
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  */
-extern DECLSPEC SDL_hid_device * SDLCALL SDL_hid_open_path(const char *path, int bExclusive);
+extern SDL_DECLSPEC SDL_hid_device * SDLCALL SDL_hid_open_path(const char *path);
+
+/**
+ * Get the properties associated with an SDL_hid_device.
+ *
+ * The following read-only properties are provided by SDL:
+ *
+ * - `SDL_PROP_HIDAPI_LIBUSB_DEVICE_HANDLE_POINTER`: the libusb_device_handle
+ *   associated with the device, if it was opened using libusb.
+ *
+ * \param dev a device handle returned from SDL_hid_open().
+ * \returns a valid property ID on success or 0 on failure; call
+ *          SDL_GetError() for more information.
+ *
+ * \since This function is available since SDL 3.4.0.
+ */
+extern SDL_DECLSPEC SDL_PropertiesID SDLCALL SDL_hid_get_properties(SDL_hid_device *dev);
+
+#define SDL_PROP_HIDAPI_LIBUSB_DEVICE_HANDLE_POINTER   "SDL.hidapi.libusb.device.handle"
 
 /**
  * Write an Output report to a HID device.
@@ -250,15 +318,16 @@ extern DECLSPEC SDL_hid_device * SDLCALL SDL_hid_open_path(const char *path, int
  * exists. If it does not, it will send the data through the Control Endpoint
  * (Endpoint 0).
  *
- * \param dev A device handle returned from SDL_hid_open().
- * \param data The data to send, including the report number as the first
+ * \param dev a device handle returned from SDL_hid_open().
+ * \param data the data to send, including the report number as the first
  *             byte.
- * \param length The length in bytes of the data to send.
- * \returns the actual number of bytes written and -1 on error.
+ * \param length the length in bytes of the data to send.
+ * \returns the actual number of bytes written and -1 on on failure; call
+ *          SDL_GetError() for more information.
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  */
-extern DECLSPEC int SDLCALL SDL_hid_write(SDL_hid_device *dev, const unsigned char *data, size_t length);
+extern SDL_DECLSPEC int SDLCALL SDL_hid_write(SDL_hid_device *dev, const unsigned char *data, size_t length);
 
 /**
  * Read an Input report from a HID device with timeout.
@@ -267,19 +336,19 @@ extern DECLSPEC int SDLCALL SDL_hid_write(SDL_hid_device *dev, const unsigned ch
  * The first byte will contain the Report number if the device uses numbered
  * reports.
  *
- * \param dev A device handle returned from SDL_hid_open().
- * \param data A buffer to put the read data into.
- * \param length The number of bytes to read. For devices with multiple
+ * \param dev a device handle returned from SDL_hid_open().
+ * \param data a buffer to put the read data into.
+ * \param length the number of bytes to read. For devices with multiple
  *               reports, make sure to read an extra byte for the report
  *               number.
  * \param milliseconds timeout in milliseconds or -1 for blocking wait.
- * \returns the actual number of bytes read and -1 on error. If no packet was
- *          available to be read within the timeout period, this function
- *          returns 0.
+ * \returns the actual number of bytes read and -1 on on failure; call
+ *          SDL_GetError() for more information. If no packet was available to
+ *          be read within the timeout period, this function returns 0.
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  */
-extern DECLSPEC int SDLCALL SDL_hid_read_timeout(SDL_hid_device *dev, unsigned char *data, size_t length, int milliseconds);
+extern SDL_DECLSPEC int SDLCALL SDL_hid_read_timeout(SDL_hid_device *dev, unsigned char *data, size_t length, int milliseconds);
 
 /**
  * Read an Input report from a HID device.
@@ -288,18 +357,19 @@ extern DECLSPEC int SDLCALL SDL_hid_read_timeout(SDL_hid_device *dev, unsigned c
  * The first byte will contain the Report number if the device uses numbered
  * reports.
  *
- * \param dev A device handle returned from SDL_hid_open().
- * \param data A buffer to put the read data into.
- * \param length The number of bytes to read. For devices with multiple
+ * \param dev a device handle returned from SDL_hid_open().
+ * \param data a buffer to put the read data into.
+ * \param length the number of bytes to read. For devices with multiple
  *               reports, make sure to read an extra byte for the report
  *               number.
- * \returns the actual number of bytes read and -1 on error. If no packet was
- *          available to be read and the handle is in non-blocking mode, this
- *          function returns 0.
+ * \returns the actual number of bytes read and -1 on failure; call
+ *          SDL_GetError() for more information. If no packet was available to
+ *          be read and the handle is in non-blocking mode, this function
+ *          returns 0.
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  */
-extern DECLSPEC int SDLCALL SDL_hid_read(SDL_hid_device *dev, unsigned char *data, size_t length);
+extern SDL_DECLSPEC int SDLCALL SDL_hid_read(SDL_hid_device *dev, unsigned char *data, size_t length);
 
 /**
  * Set the device handle to be non-blocking.
@@ -310,14 +380,15 @@ extern DECLSPEC int SDLCALL SDL_hid_read(SDL_hid_device *dev, unsigned char *dat
  *
  * Nonblocking can be turned on and off at any time.
  *
- * \param dev A device handle returned from SDL_hid_open().
+ * \param dev a device handle returned from SDL_hid_open().
  * \param nonblock enable or not the nonblocking reads - 1 to enable
  *                 nonblocking - 0 to disable nonblocking.
- * \returns 0 on success and -1 on error.
+ * \returns 0 on success or a negative error code on failure; call
+ *          SDL_GetError() for more information.
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  */
-extern DECLSPEC int SDLCALL SDL_hid_set_nonblocking(SDL_hid_device *dev, int nonblock);
+extern SDL_DECLSPEC int SDLCALL SDL_hid_set_nonblocking(SDL_hid_device *dev, int nonblock);
 
 /**
  * Send a Feature report to the device.
@@ -332,16 +403,17 @@ extern DECLSPEC int SDLCALL SDL_hid_set_nonblocking(SDL_hid_device *dev, int non
  * devices which do not use numbered reports), followed by the report data (16
  * bytes). In this example, the length passed in would be 17.
  *
- * \param dev A device handle returned from SDL_hid_open().
- * \param data The data to send, including the report number as the first
+ * \param dev a device handle returned from SDL_hid_open().
+ * \param data the data to send, including the report number as the first
  *             byte.
- * \param length The length in bytes of the data to send, including the report
+ * \param length the length in bytes of the data to send, including the report
  *               number.
- * \returns the actual number of bytes written and -1 on error.
+ * \returns the actual number of bytes written and -1 on failure; call
+ *          SDL_GetError() for more information.
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  */
-extern DECLSPEC int SDLCALL SDL_hid_send_feature_report(SDL_hid_device *dev, const unsigned char *data, size_t length);
+extern SDL_DECLSPEC int SDLCALL SDL_hid_send_feature_report(SDL_hid_device *dev, const unsigned char *data, size_t length);
 
 /**
  * Get a feature report from a HID device.
@@ -351,93 +423,149 @@ extern DECLSPEC int SDLCALL SDL_hid_send_feature_report(SDL_hid_device *dev, con
  * first byte will still contain the Report ID, and the report data will start
  * in data[1].
  *
- * \param dev A device handle returned from SDL_hid_open().
- * \param data A buffer to put the read data into, including the Report ID.
+ * \param dev a device handle returned from SDL_hid_open().
+ * \param data a buffer to put the read data into, including the Report ID.
  *             Set the first byte of `data` to the Report ID of the report to
  *             be read, or set it to zero if your device does not use numbered
  *             reports.
- * \param length The number of bytes to read, including an extra byte for the
+ * \param length the number of bytes to read, including an extra byte for the
  *               report ID. The buffer can be longer than the actual report.
  * \returns the number of bytes read plus one for the report ID (which is
- *          still in the first byte), or -1 on error.
+ *          still in the first byte), or -1 on on failure; call SDL_GetError()
+ *          for more information.
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  */
-extern DECLSPEC int SDLCALL SDL_hid_get_feature_report(SDL_hid_device *dev, unsigned char *data, size_t length);
+extern SDL_DECLSPEC int SDLCALL SDL_hid_get_feature_report(SDL_hid_device *dev, unsigned char *data, size_t length);
+
+/**
+ * Get an input report from a HID device.
+ *
+ * Set the first byte of `data` to the Report ID of the report to be read.
+ * Make sure to allow space for this extra byte in `data`. Upon return, the
+ * first byte will still contain the Report ID, and the report data will start
+ * in data[1].
+ *
+ * \param dev a device handle returned from SDL_hid_open().
+ * \param data a buffer to put the read data into, including the Report ID.
+ *             Set the first byte of `data` to the Report ID of the report to
+ *             be read, or set it to zero if your device does not use numbered
+ *             reports.
+ * \param length the number of bytes to read, including an extra byte for the
+ *               report ID. The buffer can be longer than the actual report.
+ * \returns the number of bytes read plus one for the report ID (which is
+ *          still in the first byte), or -1 on on failure; call SDL_GetError()
+ *          for more information.
+ *
+ * \since This function is available since SDL 3.2.0.
+ */
+extern SDL_DECLSPEC int SDLCALL SDL_hid_get_input_report(SDL_hid_device *dev, unsigned char *data, size_t length);
 
 /**
  * Close a HID device.
  *
- * \param dev A device handle returned from SDL_hid_open().
+ * \param dev a device handle returned from SDL_hid_open().
+ * \returns 0 on success or a negative error code on failure; call
+ *          SDL_GetError() for more information.
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  */
-extern DECLSPEC void SDLCALL SDL_hid_close(SDL_hid_device *dev);
+extern SDL_DECLSPEC int SDLCALL SDL_hid_close(SDL_hid_device *dev);
 
 /**
  * Get The Manufacturer String from a HID device.
  *
- * \param dev A device handle returned from SDL_hid_open().
- * \param string A wide string buffer to put the data into.
- * \param maxlen The length of the buffer in multiples of wchar_t.
- * \returns 0 on success and -1 on error.
+ * \param dev a device handle returned from SDL_hid_open().
+ * \param string a wide string buffer to put the data into.
+ * \param maxlen the length of the buffer in multiples of wchar_t.
+ * \returns 0 on success or a negative error code on failure; call
+ *          SDL_GetError() for more information.
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  */
-extern DECLSPEC int SDLCALL SDL_hid_get_manufacturer_string(SDL_hid_device *dev, wchar_t *string, size_t maxlen);
+extern SDL_DECLSPEC int SDLCALL SDL_hid_get_manufacturer_string(SDL_hid_device *dev, wchar_t *string, size_t maxlen);
 
 /**
  * Get The Product String from a HID device.
  *
- * \param dev A device handle returned from SDL_hid_open().
- * \param string A wide string buffer to put the data into.
- * \param maxlen The length of the buffer in multiples of wchar_t.
- * \returns 0 on success and -1 on error.
+ * \param dev a device handle returned from SDL_hid_open().
+ * \param string a wide string buffer to put the data into.
+ * \param maxlen the length of the buffer in multiples of wchar_t.
+ * \returns 0 on success or a negative error code on failure; call
+ *          SDL_GetError() for more information.
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  */
-extern DECLSPEC int SDLCALL SDL_hid_get_product_string(SDL_hid_device *dev, wchar_t *string, size_t maxlen);
+extern SDL_DECLSPEC int SDLCALL SDL_hid_get_product_string(SDL_hid_device *dev, wchar_t *string, size_t maxlen);
 
 /**
  * Get The Serial Number String from a HID device.
  *
- * \param dev A device handle returned from SDL_hid_open().
- * \param string A wide string buffer to put the data into.
- * \param maxlen The length of the buffer in multiples of wchar_t.
- * \returns 0 on success and -1 on error.
+ * \param dev a device handle returned from SDL_hid_open().
+ * \param string a wide string buffer to put the data into.
+ * \param maxlen the length of the buffer in multiples of wchar_t.
+ * \returns 0 on success or a negative error code on failure; call
+ *          SDL_GetError() for more information.
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  */
-extern DECLSPEC int SDLCALL SDL_hid_get_serial_number_string(SDL_hid_device *dev, wchar_t *string, size_t maxlen);
+extern SDL_DECLSPEC int SDLCALL SDL_hid_get_serial_number_string(SDL_hid_device *dev, wchar_t *string, size_t maxlen);
 
 /**
  * Get a string from a HID device, based on its string index.
  *
- * \param dev A device handle returned from SDL_hid_open().
- * \param string_index The index of the string to get.
- * \param string A wide string buffer to put the data into.
- * \param maxlen The length of the buffer in multiples of wchar_t.
- * \returns 0 on success and -1 on error.
+ * \param dev a device handle returned from SDL_hid_open().
+ * \param string_index the index of the string to get.
+ * \param string a wide string buffer to put the data into.
+ * \param maxlen the length of the buffer in multiples of wchar_t.
+ * \returns 0 on success or a negative error code on failure; call
+ *          SDL_GetError() for more information.
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  */
-extern DECLSPEC int SDLCALL SDL_hid_get_indexed_string(SDL_hid_device *dev, int string_index, wchar_t *string, size_t maxlen);
+extern SDL_DECLSPEC int SDLCALL SDL_hid_get_indexed_string(SDL_hid_device *dev, int string_index, wchar_t *string, size_t maxlen);
 
 /**
- * Start or stop a BLE scan on iOS and tvOS to pair Steam Controllers
+ * Get the device info from a HID device.
  *
- * \param active SDL_TRUE to start the scan, SDL_FALSE to stop the scan.
+ * \param dev a device handle returned from SDL_hid_open().
+ * \returns a pointer to the SDL_hid_device_info for this hid_device or NULL
+ *          on failure; call SDL_GetError() for more information. This struct
+ *          is valid until the device is closed with SDL_hid_close().
  *
- * \since This function is available since SDL 2.0.18.
+ * \since This function is available since SDL 3.2.0.
  */
-extern DECLSPEC void SDLCALL SDL_hid_ble_scan(SDL_bool active);
+extern SDL_DECLSPEC SDL_hid_device_info * SDLCALL SDL_hid_get_device_info(SDL_hid_device *dev);
+
+/**
+ * Get a report descriptor from a HID device.
+ *
+ * User has to provide a preallocated buffer where descriptor will be copied
+ * to. The recommended size for a preallocated buffer is 4096 bytes.
+ *
+ * \param dev a device handle returned from SDL_hid_open().
+ * \param buf the buffer to copy descriptor into.
+ * \param buf_size the size of the buffer in bytes.
+ * \returns the number of bytes actually copied or -1 on failure; call
+ *          SDL_GetError() for more information.
+ *
+ * \since This function is available since SDL 3.2.0.
+ */
+extern SDL_DECLSPEC int SDLCALL SDL_hid_get_report_descriptor(SDL_hid_device *dev, unsigned char *buf, size_t buf_size);
+
+/**
+ * Start or stop a BLE scan on iOS and tvOS to pair Steam Controllers.
+ *
+ * \param active true to start the scan, false to stop the scan.
+ *
+ * \since This function is available since SDL 3.2.0.
+ */
+extern SDL_DECLSPEC void SDLCALL SDL_hid_ble_scan(bool active);
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 }
 #endif
-#include "close_code.h"
+#include <SDL3/SDL_close_code.h>
 
 #endif /* SDL_hidapi_h_ */
-
-/* vi: set sts=4 ts=4 sw=4 expandtab: */
