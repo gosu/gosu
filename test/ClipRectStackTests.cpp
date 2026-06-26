@@ -35,6 +35,28 @@ TEST_F(ClipRectStackTests, not_in_macros)
     ASSERT_THROW(Gosu::record(10, 10, [] { Gosu::clip_to(1, 2, 3, 4, [] {}); }), std::logic_error);
 }
 
+TEST_F(ClipRectStackTests, allow_when_rendering)
+{
+    const Gosu::Image drawable = Gosu::render(10, 10, [] {
+        // Gosu's current behavior is to truncate doubles to the nearest integer.
+        // Does that really make sense?
+        Gosu::clip_to(1.0, 2.5, 3.0, 4.5,
+                      [] { Gosu::draw_rect(-10, 3, 100, 100, Gosu::Color::RED, 0); });
+    });
+    const Gosu::Bitmap bitmap = drawable.drawable().to_bitmap();
+    for (int x = 0; x < 10; ++x) {
+        for (int y = 0; y < 10; ++y) {
+            const Gosu::Color pixel = bitmap.pixel(x, y);
+            if (x < 1 || x >= 4 || y < 3 || y >= 6) {
+                ASSERT_EQ(pixel, Gosu::Color::NONE) << "at x = " << x << ", y = " << y;
+            }
+            else {
+                ASSERT_EQ(pixel, Gosu::Color::RED) << "at x = " << x << ", y = " << y;
+            }
+        }
+    }
+}
+
 TEST_F(ClipRectStackTests, rendering)
 {
     Gosu::Bitmap expected(320, 240, Gosu::Color::RED);
