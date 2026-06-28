@@ -102,19 +102,23 @@ std::vector<std::string> Gosu::user_languages()
     std::vector<std::string> user_languages;
 
     int locale_count = 0;
-    SDL_Locale** locales = SDL_GetPreferredLocales(&locale_count);
+    std::unique_ptr<SDL_Locale*[], decltype(&SDL_free)> locales(
+        SDL_GetPreferredLocales(&locale_count), SDL_free);
+    // GCOV_EXCL_START: There is no portable way to let SDL_GetPreferredLocales fail.
+    if (!locales) {
+        return user_languages;
+    }
+    // GCOV_EXCL_END
 
-    for (int i = 0; i < locale_count; ++i)
-    {
-        std::string language = locales[i]->language;
-        if (locales[i]->country) {
+    for (int i = 0; i < locale_count; ++i) {
+        const SDL_Locale* locale = locales[i];
+        std::string language = locale->language;
+        if (locale->country) {
             language += '_';
-            language += locales[i]->country;
+            language += locale->country;
         }
         user_languages.push_back(std::move(language));
     }
-
-    SDL_free(locales);
 
     return user_languages;
 }

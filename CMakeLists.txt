@@ -40,7 +40,7 @@ if (WIN32)
             INTERFACE_INCLUDE_DIRECTORIES ${SDL3_BUNDLED_DIR}/include
             IMPORTED_LOCATION ${SDL3_BUNDLED_LIB})
 else ()
-    # On Linux and macOS, we use a system-wide installation of SDL3.
+    # On Linux and macOS, we expect to find a system-wide installation of SDL3.
     find_package(SDL3 REQUIRED)
 endif ()
 

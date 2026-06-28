@@ -45,7 +45,8 @@ namespace
 
             window = //
                 SDL_CreateWindow("", 64, 64,
-                                 SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
+                                 SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN
+                                     | SDL_WINDOW_HIGH_PIXEL_DENSITY);
             if (!window) {
                 throw_sdl_error("Could not create SDL window");
             }
@@ -87,19 +88,11 @@ Gosu::OpenGLContext::OpenGLContext(bool for_rendering_to_window)
         }
     }
     else if (current_nesting_depth == 0) {
-#ifdef GOSU_IS_MAC
-        // Making a GL context current on a background thread, but with a window, causes a deadlock
-        // on macOS because SDL tries to use dispatch_sync onto the main thread. -> Use no window.
-        if (!SDL_GL_MakeCurrent(nullptr, window.gl_context)) {
-            throw_sdl_error("Could not set current GL context");
-        }
-#else
         // On other platforms, make the context current together with its (hidden) window.
         // A context without a Window is broken under Linux with SDL3 (cannot find extensions).
         if (!SDL_GL_MakeCurrent(window.window, window.gl_context)) {
             throw_sdl_error("Could not set current GL context");
         }
-#endif
     }
 
     ++current_nesting_depth;

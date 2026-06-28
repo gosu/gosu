@@ -27,7 +27,8 @@ struct Gosu::Window::Impl : private Gosu::Noncopyable
         CLOSED,
         OPEN,
         CLOSING
-    } state = CLOSED;
+    } state
+        = CLOSED;
 
     std::unique_ptr<Viewport> viewport;
     std::unique_ptr<Input> input;
