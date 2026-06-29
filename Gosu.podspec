@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
     # Be careful not to include SDL_sound or mojoAL on iOS, where Gosu still uses AudioToolbox and OpenAL instead.
     ss.source_files = "dependencies/{stb,utf8proc}/**/*.{h,c}"
     ss.osx.source_files = "dependencies/{SDL_sound,mojoAL}/**/*.{h,c}"
-    ss.osx.compiler_flags = "-Idependencies/mojoAL/AL"
+    ss.osx.compiler_flags = "-I/opt/homebrew/include -Idependencies/mojoAL/AL"
   end
 
   s.subspec "Gosu" do |ss|
@@ -28,11 +28,13 @@ Pod::Spec.new do |s|
     # Also silence warnings about invalid doxygen markup in SDL headers, and make deps available.
     ss.compiler_flags = "-DGOSU_DEPRECATED= -DGLES_SILENCE_DEPRECATION -Wno-documentation -x objective-c++ -Idependencies/stb -Idependencies/utf8proc"
 
-    ss.osx.libraries = "iconv", "SDL2"
+    # Unfortunately, `brew install sdl3` does not produce a static library that we can link to,
+    # which probably prevents Gosu games built using Xcode from being published...
+    ss.osx.libraries = "iconv", "/opt/homebrew/lib/libSDL3"
     # Frameworks used directly by Gosu for iOS.
     ss.ios.frameworks = "AVFoundation", "CoreGraphics", "OpenGLES", "QuartzCore", "AudioToolbox", "OpenAL"
 
-    ss.osx.compiler_flags = "-Idependencies/mojoAL"
+    ss.osx.compiler_flags = "-I/opt/homebrew/include -Idependencies/mojoAL/AL -Idependencies/SDL_sound"
 
     ss.public_header_files = "include/Gosu/*.hpp"
     ss.source_files = ["include/Gosu/*.hpp", "src/*.{hpp,cpp}"]
