@@ -41,8 +41,6 @@ Pod::Spec.new do |s|
     # Frameworks used directly by Gosu for iOS.
     ss.ios.frameworks = "AVFoundation", "CoreGraphics", "OpenGLES", "QuartzCore", "AudioToolbox", "OpenAL"
 
-    ss.osx.compiler_flags = "-I/opt/homebrew/include -Idependencies/mojoAL/AL -Idependencies/SDL_sound"
-
     ss.public_header_files = "include/Gosu/*.hpp"
     ss.source_files = ["include/Gosu/*.hpp", "src/*.{hpp,cpp}"]
     # Do not include FFI wrappers in the Pod project - this spec is for the C++ interface.
@@ -52,6 +50,8 @@ Pod::Spec.new do |s|
     ss.pod_target_xcconfig = {
       "CLANG_CXX_LANGUAGE_STANDARD" => "gnu++20",
       "CLANG_CXX_LIBRARY" => "libc++",
+      # We don't need this on iOS, but it should also not hurt.
+      "HEADER_SEARCH_PATHS" => "$(PODS_TARGET_SRCROOT)/dependencies/SDL_sound"
     }
   end
 
