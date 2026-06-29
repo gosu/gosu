@@ -69,7 +69,7 @@ task :update_sdl do
 
           puts "  Creating #{target_directory} with required subdirectories..."
           FileUtils.mkdir_p(target_directory)
-          FileUtils.mkdir_p("#{target_directory}/include")
+          FileUtils.mkdir_p("#{target_directory}/include/SDL3")
           FileUtils.mkdir_p("#{target_directory}/lib/x86")
           FileUtils.mkdir_p("#{target_directory}/lib/x64")
         end
@@ -77,8 +77,8 @@ task :update_sdl do
         Zip::File.open_buffer(buffer) do |zip_file|
           if is_visual_c
             puts "    Updating headers..."
-            zip_file.glob("*/include/**/*.h").each do |entry|
-              File.write("#{target_directory}/include/#{File.basename(entry.name)}", zip_file.read(entry))
+            zip_file.glob("*/include/SDL3/**/*.h").each do |entry|
+              File.write("#{target_directory}/include/SDL3/#{File.basename(entry.name)}", zip_file.read(entry))
             end
 
             puts "    Updating VC SDL3..."
