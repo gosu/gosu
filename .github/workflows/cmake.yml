@@ -12,7 +12,7 @@ jobs:
   build:
     strategy:
       matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
+        platform: [ubuntu-26.04, macos-latest, windows-latest] # ubuntu-latest doesn't have libsdl3-dev yet
     runs-on: ${{ matrix.platform }}
 
     steps:
@@ -20,11 +20,11 @@ jobs:
 
       - name: Install dependencies (Ubuntu)
         if: startsWith(matrix.platform, 'ubuntu-')
-        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev libgl1-mesa-dev libfontconfig1-dev libgtest-dev xvfb
+        run: sudo apt-get update && sudo apt-get install -y libsdl3-dev libgl1-mesa-dev libgl1-mesa-dri libfontconfig1-dev libgtest-dev xvfb
 
       - name: Install dependencies (macOS)
         if: startsWith(matrix.platform, 'macos-')
-        run: brew install sdl2 googletest
+        run: brew install sdl3 googletest
 
       - name: Create Build Environment
         run: cmake -E make_directory ${{github.workspace}}/build
@@ -43,6 +43,9 @@ jobs:
 
       - name: Run tests (Linux)
         if: startsWith(matrix.platform, 'ubuntu-')
+        env:
+          SDL_VIDEO_FORCE_EGL: 1
+          LIBGL_ALWAYS_SOFTWARE: 1
         working-directory: ${{github.workspace}}/build
         shell: bash
         # Execute tests defined by the CMake configuration.

@@ -4,7 +4,7 @@
 #include <cctype>
 
 #ifndef GOSU_IS_IPHONE
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #endif
 
 struct Gosu::TextInput::Impl : private Gosu::Noncopyable
@@ -191,28 +191,28 @@ bool Gosu::TextInput::feed_sdl_event(void* event)
 
     switch (e->type) {
         // Direct text input or completed IME composition.
-        case SDL_TEXTINPUT: {
+        case SDL_EVENT_TEXT_INPUT: {
             m_impl->insert_text(filter(e->text.text));
             return true;
         }
         // IME composition in progress.
-        case SDL_TEXTEDITING: {
+        case SDL_EVENT_TEXT_EDITING: {
             m_impl->composition = e->edit.text;
             return true;
         }
         // Emulate "standard" Windows/Linux keyboard behavior.
-        case SDL_KEYDOWN: {
+        case SDL_EVENT_KEY_DOWN: {
             // ...but not if the IME is currently compositing.
             if (!m_impl->composition.empty()) return false;
 
 #ifdef GOSU_IS_MAC
-            bool words = (e->key.keysym.mod & (KMOD_LALT | KMOD_RALT));
-            bool command_down = (e->key.keysym.mod & (KMOD_LGUI | KMOD_RGUI));
+            bool words = (e->key.mod & (SDL_KMOD_LALT | SDL_KMOD_RALT));
+            bool command_down = (e->key.mod & (SDL_KMOD_LGUI | SDL_KMOD_RGUI));
 #else
-            bool words = (e->key.keysym.mod & (KMOD_LCTRL | KMOD_RCTRL));
+            bool words = (e->key.mod & (SDL_KMOD_LCTRL | SDL_KMOD_RCTRL));
 #endif
-            bool shift_down = (e->key.keysym.mod & (KMOD_LSHIFT | KMOD_RSHIFT));
-            SDL_Keycode key = e->key.keysym.sym;
+            bool shift_down = (e->key.mod & (SDL_KMOD_LSHIFT | SDL_KMOD_RSHIFT));
+            SDL_Keycode key = e->key.key;
 
             switch (key) {
                 case SDLK_LEFT:

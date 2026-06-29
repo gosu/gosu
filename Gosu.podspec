@@ -1,4 +1,5 @@
-SDL2_PREFIX = `sdl2-config --prefix`.chomp
+SDL3_PREFIX = (`pkg-config --variable=prefix sdl3`.chomp rescue "")
+raise "Please run: brew install pkg-config sdl3" if SDL3_PREFIX.empty?
 
 Pod::Spec.new do |s|
   s.name = "Gosu"
@@ -17,7 +18,7 @@ Pod::Spec.new do |s|
     # Be careful not to include SDL_sound or mojoAL on iOS, where Gosu still uses AudioToolbox and OpenAL instead.
     ss.source_files = "dependencies/{stb,utf8proc}/**/*.{h,c}"
     ss.osx.source_files = "dependencies/{SDL_sound,mojoAL}/**/*.{h,c}"
-    ss.osx.compiler_flags = "-I#{SDL2_PREFIX}/include/SDL2 -Idependencies/mojoAL/AL"
+    ss.osx.compiler_flags = "-I#{SDL3_PREFIX}/include"
   end
 
   s.subspec "Gosu" do |ss|
@@ -31,16 +32,14 @@ Pod::Spec.new do |s|
     ss.compiler_flags = "-DGOSU_DEPRECATED= -DGLES_SILENCE_DEPRECATION -Wno-documentation -x objective-c++ -Idependencies/stb -Idependencies/utf8proc"
 
     ss.osx.libraries = "iconv"
-    # Include all frameworks necessary for SDL 2, because we link to it statically.
-    ss.osx.frameworks = "ApplicationServices", "AudioUnit", "Carbon", "Cocoa", "CoreAudio",
-                        "ForceFeedback", "IOKit", "OpenGL"
-    ss.osx.weak_frameworks = "CoreHaptics", "GameController", "QuartzCore", "Metal"
+
+    # Unfortunately, `brew install sdl3` does not produce a static library that we can link to,
+    # which probably prevents Gosu games built using Xcode from being published...
+    ss.osx.compiler_flags = "-I#{SDL3_PREFIX}/include"
+    ss.osx.xcconfig = { "OTHER_LDFLAGS" => "#{SDL3_PREFIX}/lib/libSDL3.dylib" }
+    
     # Frameworks used directly by Gosu for iOS.
     ss.ios.frameworks = "AVFoundation", "CoreGraphics", "OpenGLES", "QuartzCore", "AudioToolbox", "OpenAL"
-
-    ss.osx.compiler_flags = "-I#{SDL2_PREFIX}/include/SDL2 -Idependencies/mojoAL"
-    # Statically link SDL 2, so that compiled games will be self-contained.
-    ss.osx.xcconfig = { "OTHER_LDFLAGS" => "#{SDL2_PREFIX}/lib/libSDL2.a" }
 
     ss.public_header_files = "include/Gosu/*.hpp"
     ss.source_files = ["include/Gosu/*.hpp", "src/*.{hpp,cpp}"]
@@ -51,6 +50,8 @@ Pod::Spec.new do |s|
     ss.pod_target_xcconfig = {
       "CLANG_CXX_LANGUAGE_STANDARD" => "gnu++20",
       "CLANG_CXX_LIBRARY" => "libc++",
+      # We don't need this on iOS, but it should also not hurt.
+      "HEADER_SEARCH_PATHS" => "$(PODS_TARGET_SRCROOT)/dependencies/SDL_sound"
     }
   end
 

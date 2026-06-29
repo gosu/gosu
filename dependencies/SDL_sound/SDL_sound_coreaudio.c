@@ -22,9 +22,9 @@ typedef struct CoreAudioFileContainer
 } CoreAudioFileContainer;
 
 
-static SDL_bool CoreAudio_init(void)
+static bool CoreAudio_init(void)
 {
-    return SDL_TRUE;  /* always succeeds. */
+    return true; /* always succeeds. */
 } /* CoreAudio_init */
 
 
@@ -158,7 +158,7 @@ static AudioFileTypeID CoreAudio_GetAudioTypeForExtension(const char* file_exten
 static const char* CoreAudio_FourCCToString(Sint32 error_code)
 {
 	static char return_string[16];
-	Uint32 big_endian_code = SDL_SwapBE32((Uint32)error_code);
+	Uint32 big_endian_code = SDL_Swap32BE((Uint32)error_code);
 	char* big_endian_str = (char*)&big_endian_code;
 	// see if it appears to be a 4-char-code
 	if(isprint(big_endian_str[0])
@@ -191,10 +191,10 @@ static const char* CoreAudio_FourCCToString(Sint32 error_code)
 
 SInt64 CoreAudio_SizeCallback(void* inClientData)
 {
-	SDL_RWops* rw_ops = (SDL_RWops*)inClientData;
-	const Sint64 current_position = SDL_RWtell(rw_ops);
-	const Sint64 end_position = SDL_RWseek(rw_ops, 0, RW_SEEK_END);
-	SDL_RWseek(rw_ops, current_position, RW_SEEK_SET);
+	SDL_IOStream *io = (SDL_IOStream *) inClientData;
+	const Sint64 current_position = SDL_TellIO(io);
+	const Sint64 end_position = SDL_SeekIO(io, 0, SDL_IO_SEEK_END);
+	SDL_SeekIO(io, current_position, SDL_IO_SEEK_SET);
 //	fprintf(stderr, "CoreAudio_SizeCallback:%d\n", end_position);
 	return end_position;
 }
@@ -207,10 +207,10 @@ OSStatus CoreAudio_ReadCallback(
 	UInt32* actualCount
 )
 {
-	SDL_RWops* rw_ops = (SDL_RWops*)inClientData;
-	SDL_RWseek(rw_ops, inPosition, RW_SEEK_SET);
-	size_t bytes_actually_read = SDL_RWread(rw_ops, data_buffer, 1, requestCount);
-	// Not sure how to test for a read error with SDL_RWops
+	SDL_IOStream* io = (SDL_IOStream *) inClientData;
+	SDL_SeekIO(io, inPosition, SDL_IO_SEEK_SET);
+	size_t bytes_actually_read = SDL_ReadIO(io, data_buffer, requestCount);
+	// Not sure how to test for a read error with SDL_IOStream
 //	fprintf(stderr, "CoreAudio_ReadCallback:%d, %d\n", requestCount, bytes_actually_read);
 
 	*actualCount = bytes_actually_read;
@@ -236,7 +236,7 @@ static int CoreAudio_open(Sound_Sample *sample, const char *ext)
 	BAIL_IF_MACRO(audio_file_id == NULL, ERR_OUT_OF_MEMORY, 0);
 
 	error_result = AudioFileOpenWithCallbacks(
-		internal->rw,
+		internal->io,
 		CoreAudio_ReadCallback,
 		NULL,
 		CoreAudio_SizeCallback,
@@ -290,7 +290,7 @@ static int CoreAudio_open(Sound_Sample *sample, const char *ext)
 	internal->decoder_private = core_audio_file_container;
 
 	sample->flags = SOUND_SAMPLEFLAG_CANSEEK;
-	sample->actual.rate = (UInt32) actual_format.mSampleRate;
+	sample->actual.freq = (UInt32) actual_format.mSampleRate;
 	sample->actual.channels = (UInt8)actual_format.mChannelsPerFrame;
 	internal->total_time = (SInt32)(estimated_duration * 1000.0 + 0.5);
 
@@ -302,22 +302,22 @@ static int CoreAudio_open(Sound_Sample *sample, const char *ext)
 			{
 				if(actual_format.mFormatFlags & kAudioFormatFlagIsBigEndian)
 				{
-					sample->actual.format = AUDIO_F32MSB;
+					sample->actual.format = SDL_AUDIO_F32BE;
 				}
 				else
 				{
-					sample->actual.format = AUDIO_F32LSB;
+					sample->actual.format = SDL_AUDIO_F32LE;
 				}
 			}
 			else
 			{
-				if(actual_format.mFormatFlags & kAudioFormatFlagIsBigEndian)
+				if (actual_format.mFormatFlags & kAudioFormatFlagIsBigEndian)
 				{
-					sample->actual.format = AUDIO_S32MSB;
+					sample->actual.format = SDL_AUDIO_S32BE;
 				}
 				else
 				{
-					sample->actual.format = AUDIO_S32LSB;
+					sample->actual.format = SDL_AUDIO_S32LE;
 				}
 			}
 		}
@@ -327,22 +327,11 @@ static int CoreAudio_open(Sound_Sample *sample, const char *ext)
 			{
 				if(actual_format.mFormatFlags & kAudioFormatFlagIsBigEndian)
 				{
-					sample->actual.format = AUDIO_S16MSB;
+					sample->actual.format = SDL_AUDIO_S16BE;
 				}
 				else
 				{
-					sample->actual.format = AUDIO_S16LSB;
-				}
-			}
-			else
-			{
-				if(actual_format.mFormatFlags & kAudioFormatFlagIsBigEndian)
-				{
-					sample->actual.format = AUDIO_U16MSB;
-				}
-				else
-				{
-					sample->actual.format = AUDIO_U16LSB;
+					sample->actual.format = SDL_AUDIO_S16LE;
 				}
 			}
 		}
@@ -350,17 +339,17 @@ static int CoreAudio_open(Sound_Sample *sample, const char *ext)
 		{
 			if(kAudioFormatFlagIsSignedInteger & actual_format.mFormatFlags)
 			{
-				sample->actual.format = AUDIO_S8;
+				sample->actual.format = SDL_AUDIO_S8;
 			}
 			else
 			{
-				sample->actual.format = AUDIO_U8;
+				sample->actual.format = SDL_AUDIO_U8;
 			}
 		}
 		else // might be 0 for undefined?
 		{
 			// This case seems to come up a lot for me. Maybe for file types like .m4a?
-			sample->actual.format = AUDIO_S16SYS;
+			sample->actual.format = SDL_AUDIO_S16;
 			SNDDBG(("Core Audio: Unsupported actual_format.mBitsPerChannel: [%d].\n", actual_format.mBitsPerChannel));
 		}
 	}
@@ -375,14 +364,8 @@ static int CoreAudio_open(Sound_Sample *sample, const char *ext)
 		sample->actual.format = sample->desired.format;
 	}
 
-	/* AUDIO_U16LSB and AUDIO_U16MSB don't seem to be supported by CoreAudio. */
-	if (sample->actual.format == AUDIO_U16LSB)
-		sample->actual.format = AUDIO_S16LSB;
-	if (sample->actual.format == AUDIO_U16MSB)
-		sample->actual.format = AUDIO_S16MSB;
-
 	SNDDBG(("CoreAudio: channels == (%d).\n", sample->actual.channels));
-	SNDDBG(("CoreAudio: sampling rate == (%d).\n",sample->actual.rate));
+	SNDDBG(("CoreAudio: sampling rate == (%d).\n",sample->actual.freq));
 	SNDDBG(("CoreAudio: total seconds of sample == (%d).\n", internal->total_time));
 	SNDDBG(("CoreAudio: sample->actual.format == (%d).\n", sample->actual.format));
 

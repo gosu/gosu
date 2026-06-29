@@ -162,30 +162,30 @@ static Uint32 SANE_to_Uint32 (Uint8 *sanebuf)
  * Read in a comm_t from disk. This makes this process safe regardless of
  *  the processor's byte order or how the comm_t structure is packed.
  */
-static int read_comm_chunk(SDL_RWops *rw, comm_t *comm)
+static int read_comm_chunk(SDL_IOStream *io, comm_t *comm)
 {
     Uint8 sampleRate[10];
 
     /* skip reading the chunk ID, since it was already read at this point... */
     comm->ckID = commID;
 
-    if (SDL_RWread(rw, &comm->ckDataSize, sizeof (comm->ckDataSize), 1) != 1)
+    if (SDL_ReadIO(io, &comm->ckDataSize, sizeof (comm->ckDataSize)) != sizeof (comm->ckDataSize))
         return 0;
-    comm->ckDataSize = SDL_SwapBE32(comm->ckDataSize);
+    comm->ckDataSize = SDL_Swap32BE(comm->ckDataSize);
 
-    if (SDL_RWread(rw, &comm->numChannels, sizeof (comm->numChannels), 1) != 1)
+    if (SDL_ReadIO(io, &comm->numChannels, sizeof (comm->numChannels)) != sizeof (comm->numChannels))
         return 0;
-    comm->numChannels = SDL_SwapBE16(comm->numChannels);
+    comm->numChannels = SDL_Swap16BE(comm->numChannels);
 
-    if (SDL_RWread(rw, &comm->numSampleFrames, sizeof (comm->numSampleFrames), 1) != 1)
+    if (SDL_ReadIO(io, &comm->numSampleFrames, sizeof (comm->numSampleFrames)) != sizeof (comm->numSampleFrames))
         return 0;
-    comm->numSampleFrames = SDL_SwapBE32(comm->numSampleFrames);
+    comm->numSampleFrames = SDL_Swap32BE(comm->numSampleFrames);
 
-    if (SDL_RWread(rw, &comm->sampleSize, sizeof (comm->sampleSize), 1) != 1)
+    if (SDL_ReadIO(io, &comm->sampleSize, sizeof (comm->sampleSize)) != sizeof (comm->sampleSize))
         return 0;
-    comm->sampleSize = SDL_SwapBE16(comm->sampleSize);
+    comm->sampleSize = SDL_Swap16BE(comm->sampleSize);
 
-    if (SDL_RWread(rw, sampleRate, sizeof (sampleRate), 1) != 1)
+    if (SDL_ReadIO(io, sampleRate, sizeof (sampleRate)) != sizeof (sampleRate))
         return 0;
     comm->sampleRate = SANE_to_Uint32(sampleRate);
 
@@ -194,10 +194,10 @@ static int read_comm_chunk(SDL_RWops *rw, comm_t *comm)
                          + sizeof(comm->sampleSize)
                          + sizeof(sampleRate))
     {
-        if (SDL_RWread(rw, &comm->compressionType,
-                       sizeof (comm->compressionType), 1) != 1)
+        if (SDL_ReadIO(io, &comm->compressionType,
+                       sizeof (comm->compressionType)) != sizeof (comm->compressionType))
             return 0;
-        comm->compressionType = SDL_SwapBE32(comm->compressionType);
+        comm->compressionType = SDL_Swap32BE(comm->compressionType);
     } /* if */
     else
     {
@@ -226,25 +226,25 @@ typedef struct
 } ssnd_t;
 
 
-static int read_ssnd_chunk(SDL_RWops *rw, ssnd_t *ssnd)
+static int read_ssnd_chunk(SDL_IOStream *io, ssnd_t *ssnd)
 {
     /* skip reading the chunk ID, since it was already read at this point... */
     ssnd->ckID = ssndID;
 
-    if (SDL_RWread(rw, &ssnd->ckDataSize, sizeof (ssnd->ckDataSize), 1) != 1)
+    if (SDL_ReadIO(io, &ssnd->ckDataSize, sizeof (ssnd->ckDataSize)) != sizeof (ssnd->ckDataSize))
         return 0;
-    ssnd->ckDataSize = SDL_SwapBE32(ssnd->ckDataSize);
+    ssnd->ckDataSize = SDL_Swap32BE(ssnd->ckDataSize);
 
-    if (SDL_RWread(rw, &ssnd->offset, sizeof (ssnd->offset), 1) != 1)
+    if (SDL_ReadIO(io, &ssnd->offset, sizeof (ssnd->offset)) != sizeof (ssnd->offset))
         return 0;
-    ssnd->offset = SDL_SwapBE32(ssnd->offset);
+    ssnd->offset = SDL_Swap32BE(ssnd->offset);
 
-    if (SDL_RWread(rw, &ssnd->blockSize, sizeof (ssnd->blockSize), 1) != 1)
+    if (SDL_ReadIO(io, &ssnd->blockSize, sizeof (ssnd->blockSize)) != sizeof (ssnd->blockSize))
         return 0;
-    ssnd->blockSize = SDL_SwapBE32(ssnd->blockSize);
+    ssnd->blockSize = SDL_Swap32BE(ssnd->blockSize);
 
-    /* Leave the SDL_RWops position indicator at the start of the samples */
-    if (SDL_RWseek(rw, ssnd->offset, RW_SEEK_CUR) == -1)
+    /* Leave the SDL_IOStream position indicator at the start of the samples */
+    if (SDL_SeekIO(io, ssnd->offset, SDL_IO_SEEK_CUR) == -1)
         return 0;
 
     return 1;
@@ -269,7 +269,7 @@ static Uint32 read_sample_fmt_normal(Sound_Sample *sample)
          * We don't actually do any decoding, so we read the AIFF data
          *  directly into the internal buffer...
          */
-    retval = SDL_RWread(internal->rw, internal->buffer, 1, max);
+    retval = SDL_ReadIO(internal->io, internal->buffer, max);
 
     a->bytesLeft -= retval;
 
@@ -302,7 +302,7 @@ static int seek_sample_fmt_normal(Sound_Sample *sample, Uint32 ms)
     const fmt_t *fmt = &a->fmt;
     const Uint32 offset = __Sound_convertMsToBytePos(&sample->actual, ms);
     const Sint64 pos = (Sint64) (fmt->data_starting_offset + offset);
-    const Sint64 rc = SDL_RWseek(internal->rw, pos, RW_SEEK_SET);
+    const Sint64 rc = SDL_SeekIO(internal->io, pos, SDL_IO_SEEK_SET);
     BAIL_IF_MACRO(rc != pos, ERR_IO_ERROR, 0);
     a->bytesLeft = fmt->total_bytes - offset;
     return 1;  /* success. */
@@ -315,9 +315,9 @@ static void free_fmt_normal(fmt_t *fmt)
 } /* free_fmt_normal */
 
 
-static int read_fmt_normal(SDL_RWops *rw, fmt_t *fmt)
+static int read_fmt_normal(SDL_IOStream *io, fmt_t *fmt)
 {
-    /* (don't need to read more from the RWops...) */
+    /* (don't need to read more from the SDL_IOStream...) */
     fmt->free = free_fmt_normal;
     fmt->read_sample = read_sample_fmt_normal;
     fmt->rewind_sample = rewind_sample_fmt_normal;
@@ -332,9 +332,9 @@ static int read_fmt_normal(SDL_RWops *rw, fmt_t *fmt)
  * Everything else...                                                        *
  *****************************************************************************/
 
-static SDL_bool AIFF_init(void)
+static bool AIFF_init(void)
 {
-    return SDL_TRUE;  /* always succeeds. */
+    return true; /* always succeeds. */
 } /* AIFF_init */
 
 
@@ -344,28 +344,28 @@ static void AIFF_quit(void)
 } /* AIFF_quit */
 
 
-static int find_chunk(SDL_RWops *rw, Uint32 id)
+static int find_chunk(SDL_IOStream *io, Uint32 id)
 {
     Sint32 siz = 0;
     Uint32 _id = 0;
 
     while (1)
     {
-        BAIL_IF_MACRO(SDL_RWread(rw, &_id, sizeof (_id), 1) != 1, NULL, 0);
-        if (SDL_SwapLE32(_id) == id)
+        BAIL_IF_MACRO(SDL_ReadIO(io, &_id, sizeof (_id)) != sizeof (_id), NULL, 0);
+        if (SDL_Swap32LE(_id) == id)
             return 1;
 
-        BAIL_IF_MACRO(SDL_RWread(rw, &siz, sizeof (siz), 1) != 1, NULL, 0);
-        siz = SDL_SwapBE32(siz);
+        BAIL_IF_MACRO(SDL_ReadIO(io, &siz, sizeof (siz)) != sizeof (siz), NULL, 0);
+        siz = SDL_Swap32BE(siz);
         SDL_assert(siz > 0);
-        BAIL_IF_MACRO(SDL_RWseek(rw, siz, RW_SEEK_CUR) == -1, NULL, 0);
+        BAIL_IF_MACRO(SDL_SeekIO(io, siz, SDL_IO_SEEK_CUR) == -1, NULL, 0);
     } /* while */
 
     return 0;  /* shouldn't hit this, but just in case... */
 } /* find_chunk */
 
 
-static int read_fmt(SDL_RWops *rw, comm_t *c, fmt_t *fmt)
+static int read_fmt(SDL_IOStream *io, comm_t *c, fmt_t *fmt)
 {
     fmt->type = c->compressionType;
 
@@ -374,7 +374,7 @@ static int read_fmt(SDL_RWops *rw, comm_t *c, fmt_t *fmt)
     {
         case noneID:
             SNDDBG(("AIFF: Appears to be uncompressed audio.\n"));
-            return read_fmt_normal(rw, fmt);
+            return read_fmt_normal(io, fmt);
 
         /* add other types here. */
 
@@ -389,7 +389,7 @@ static int read_fmt(SDL_RWops *rw, comm_t *c, fmt_t *fmt)
 static int AIFF_open(Sound_Sample *sample, const char *ext)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
-    SDL_RWops *rw = internal->rw;
+    SDL_IOStream *io = internal->io;
     Uint32 chunk_id;
     Uint32 bytes_per_sample;
     Sint64 pos;
@@ -397,33 +397,35 @@ static int AIFF_open(Sound_Sample *sample, const char *ext)
     ssnd_t s;
     aiff_t *a;
 
-    BAIL_IF_MACRO(SDL_ReadLE32(rw) != formID, "AIFF: Not a FORM file.", 0);
-        SDL_ReadBE32(rw);  /* throw the length away; we don't need it. */
+    Uint32 value = 0;
+    SDL_ReadU32LE(io, &value);
+    BAIL_IF_MACRO(value != formID, "AIFF: Not a FORM file.", 0);
+    SDL_ReadU32BE(io, &value); /* throw the length away; we don't need it. */
 
-    chunk_id = SDL_ReadLE32(rw);
+    SDL_ReadU32LE(io, &chunk_id);
     BAIL_IF_MACRO(chunk_id != aiffID && chunk_id != aifcID,
         "AIFF: Not an AIFF or AIFC file.", 0);
 
     /* Chunks may appear in any order, so we establish base camp here. */
-    pos = SDL_RWtell(rw);
+    pos = SDL_TellIO(io);
 
-    BAIL_IF_MACRO(!find_chunk(rw, commID), "AIFF: No common chunk.", 0);
-    BAIL_IF_MACRO(!read_comm_chunk(rw, &c),
+    BAIL_IF_MACRO(!find_chunk(io, commID), "AIFF: No common chunk.", 0);
+    BAIL_IF_MACRO(!read_comm_chunk(io, &c),
                   "AIFF: Can't read common chunk.", 0);
 
     BAIL_IF_MACRO(c.numChannels == 0, "AIFF: no channels specified.", 0);
 
     sample->actual.channels = (Uint8) c.numChannels;
-    sample->actual.rate = c.sampleRate;
+    sample->actual.freq = c.sampleRate;
 
     if (c.sampleSize <= 8)
     {
-        sample->actual.format = AUDIO_S8;
+        sample->actual.format = SDL_AUDIO_S8;
         bytes_per_sample = c.numChannels;
     } /* if */
     else if (c.sampleSize <= 16)
     {
-        sample->actual.format = AUDIO_S16MSB;
+        sample->actual.format = SDL_AUDIO_S16BE;
         bytes_per_sample = 2 * c.numChannels;
     } /* if */
     else
@@ -436,21 +438,21 @@ static int AIFF_open(Sound_Sample *sample, const char *ext)
     a = (aiff_t *) SDL_malloc(sizeof(aiff_t));
     BAIL_IF_MACRO(a == NULL, ERR_OUT_OF_MEMORY, 0);
 
-    if (!read_fmt(rw, &c, &(a->fmt)))
+    if (!read_fmt(io, &c, &(a->fmt)))
     {
         SDL_free(a);
         return 0;
     } /* if */
 
-    SDL_RWseek(rw, pos, RW_SEEK_SET);   /* if the seek fails, let it go... */
+    SDL_SeekIO(io, pos, SDL_IO_SEEK_SET);  /* if the seek fails, let it go... */
 
-    if (!find_chunk(rw, ssndID))
+    if (!find_chunk(io, ssndID))
     {
         SDL_free(a);
         BAIL_MACRO("AIFF: No sound data chunk.", 0);
     } /* if */
 
-    if (!read_ssnd_chunk(rw, &s))
+    if (!read_ssnd_chunk(io, &s))
     {
         SDL_free(a);
         BAIL_MACRO("AIFF: Can't read sound data chunk.", 0);
@@ -465,7 +467,7 @@ static int AIFF_open(Sound_Sample *sample, const char *ext)
 
 
     a->fmt.total_bytes = a->bytesLeft = bytes_per_sample * c.numSampleFrames;
-    a->fmt.data_starting_offset = SDL_RWtell(rw);
+    a->fmt.data_starting_offset = SDL_TellIO(io);
     internal->decoder_private = (void *) a;
 
     sample->flags = SOUND_SAMPLEFLAG_CANSEEK;
@@ -491,13 +493,12 @@ static Uint32 AIFF_read(Sound_Sample *sample)
     return a->fmt.read_sample(sample);
 } /* AIFF_read */
 
-
 static int AIFF_rewind(Sound_Sample *sample)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     aiff_t *a = (aiff_t *) internal->decoder_private;
     const fmt_t *fmt = &a->fmt;
-    const Sint64 rc = SDL_RWseek(internal->rw, fmt->data_starting_offset, RW_SEEK_SET);
+    const Sint64 rc = SDL_SeekIO(internal->io, fmt->data_starting_offset, SDL_IO_SEEK_SET);
     BAIL_IF_MACRO(rc != fmt->data_starting_offset, ERR_IO_ERROR, 0);
     a->bytesLeft = fmt->total_bytes;
     return fmt->rewind_sample(sample);

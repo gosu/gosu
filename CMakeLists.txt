@@ -20,33 +20,33 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Declare dependencies
 
 if (WIN32)
-    # This git repository bundles a copy of SDL2 so that the Ruby gem is self-contained.
+    # This git repository bundles a copy of SDL3 so that the Ruby gem is self-contained.
     # Conveniently, using it also simplifies the use of Gosu from CMake / C++.
-    # We define the SDL2::SDL2 target by hand to match find_package(SDL2) on Linux or macO.
-    set(SDL2_BUNDLED_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/SDL)
+    # We define the SDL3::SDL3 target by hand to match find_package(SDL3) on Linux or macOS.
+    set(SDL3_BUNDLED_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/SDL)
     if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-        set(SDL2_BUNDLED_LIB_DIR ${SDL2_BUNDLED_DIR}/lib/x64)
+        set(SDL3_BUNDLED_LIB_DIR ${SDL3_BUNDLED_DIR}/lib/x64)
     else ()
-        set(SDL2_BUNDLED_LIB_DIR ${SDL2_BUNDLED_DIR}/lib/x86)
+        set(SDL3_BUNDLED_LIB_DIR ${SDL3_BUNDLED_DIR}/lib/x86)
     endif ()
     if (MSVC)
-        set(SDL2_BUNDLED_LIB ${SDL2_BUNDLED_LIB_DIR}/SDL2.lib)
+        set(SDL3_BUNDLED_LIB ${SDL3_BUNDLED_LIB_DIR}/SDL3.lib)
     else ()
-        set(SDL2_BUNDLED_LIB ${SDL2_BUNDLED_LIB_DIR}/libSDL2.dll.a)
+        set(SDL3_BUNDLED_LIB ${SDL3_BUNDLED_LIB_DIR}/libSDL3.dll.a)
     endif ()
 
-    add_library(SDL2::SDL2 UNKNOWN IMPORTED)
-    set_target_properties(SDL2::SDL2 PROPERTIES
-            INTERFACE_INCLUDE_DIRECTORIES ${SDL2_BUNDLED_DIR}/include
-            IMPORTED_LOCATION ${SDL2_BUNDLED_LIB})
+    add_library(SDL3::SDL3 UNKNOWN IMPORTED)
+    set_target_properties(SDL3::SDL3 PROPERTIES
+            INTERFACE_INCLUDE_DIRECTORIES ${SDL3_BUNDLED_DIR}/include
+            IMPORTED_LOCATION ${SDL3_BUNDLED_LIB})
 else ()
-    # On Linux and macOS, we expect to find a system-wide installation of SDL2.
-    find_package(SDL2 REQUIRED)
+    # On Linux and macOS, we expect to find a system-wide installation of SDL3.
+    find_package(SDL3 REQUIRED)
 endif ()
 
 find_package(OpenGL REQUIRED)
 
-# Platform-specific libraries that we need in addition to SDL2.
+# Platform-specific libraries that we need in addition to SDL3.
 if (APPLE)
     find_library(COCOA_LIBRARY Cocoa)
     find_library(AUDIO_TOOLBOX_LIBRARY AudioToolbox)
@@ -100,7 +100,7 @@ target_include_directories(gosu SYSTEM PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/utf8proc)
 
 target_link_libraries(gosu PRIVATE
-        SDL2::SDL2
+        SDL3::SDL3
         OpenGL::GL
         # Only defined on macOS
         ${COCOA_LIBRARY}

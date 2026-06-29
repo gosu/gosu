@@ -4,7 +4,7 @@
 #include "OpenGLContext.hpp"
 #include "Texture.hpp"
 #ifndef GOSU_IS_IPHONE
-#include <SDL.h> // for SDL_GL_GetProcAddress
+#include <SDL3/SDL.h> // for SDL_GL_GetProcAddress
 #endif
 
 #ifdef GOSU_IS_OPENGLES

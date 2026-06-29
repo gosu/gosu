@@ -7,7 +7,7 @@ require "json"
 require "fileutils"
 require "stringio"
 
-# Tested against SDL 2.32.10
+# Tested against SDL3 3.4.2
 task :update_sdl do
   github_api = "https://api.github.com/repos/libsdl-org/SDL/releases?per_page=100"
   target_directory = File.expand_path("../dependencies/SDL", __dir__)
@@ -29,7 +29,7 @@ task :update_sdl do
 
       major, minor = release[:name].split(".").take(2).map { |part| Integer(part) }
       # The minor version of an SDL release is even for stable releases.
-      major == 2 and minor.even?
+      major == 3 and minor.even?
     end
 
     abort "No matching SDL release found" if selected_release.nil?
@@ -65,11 +65,11 @@ task :update_sdl do
         # Remove SDL directory and stub /include and /lib directories
         if is_visual_c
           puts "  Removing #{target_directory} directory..."
-          FileUtils.remove_dir(target_directory)
+          FileUtils.remove_dir(target_directory) if Dir.exist?(target_directory)
 
           puts "  Creating #{target_directory} with required subdirectories..."
           FileUtils.mkdir_p(target_directory)
-          FileUtils.mkdir_p("#{target_directory}/include")
+          FileUtils.mkdir_p("#{target_directory}/include/SDL3")
           FileUtils.mkdir_p("#{target_directory}/lib/x86")
           FileUtils.mkdir_p("#{target_directory}/lib/x64")
         end
@@ -77,34 +77,32 @@ task :update_sdl do
         Zip::File.open_buffer(buffer) do |zip_file|
           if is_visual_c
             puts "    Updating headers..."
-            zip_file.glob("*/include/**").each do |entry|
-              next if File.basename(entry.name).end_with?(".h.orig")
-
-              File.write("#{target_directory}/include/#{File.basename(entry.name)}", zip_file.read(entry))
+            zip_file.glob("*/include/SDL3/**/*.h").each do |entry|
+              File.write("#{target_directory}/include/SDL3/#{File.basename(entry.name)}", zip_file.read(entry))
             end
 
-            puts "    Updating VC SDL2..."
+            puts "    Updating VC SDL3..."
             zip_file.glob("*/lib/x*/**").each do |entry|
-              if entry.name.end_with?("/x86/SDL2.lib")
+              if entry.name.end_with?("/x86/SDL3.lib")
                 File.open("#{target_directory}/lib/x86/#{File.basename(entry.name)}", "wb") { |f| f.write zip_file.read(entry) }
-              elsif entry.name.end_with?("/x64/SDL2.lib")
+              elsif entry.name.end_with?("/x64/SDL3.lib")
                 File.open("#{target_directory}/lib/x64/#{File.basename(entry.name)}", "wb") { |f| f.write zip_file.read(entry) }
               end
 
-              if entry.name.end_with?("/x86/SDL2.dll")
+              if entry.name.end_with?("/x86/SDL3.dll")
                 File.open("#{x86_dll_directory}/#{File.basename(entry.name)}", "wb") { |f| f.write zip_file.read(entry) }
-              elsif entry.name.end_with?("/x64/SDL2.dll")
+              elsif entry.name.end_with?("/x64/SDL3.dll")
                 File.open("#{x64_dll_directory}/#{File.basename(entry.name)}", "wb") { |f| f.write zip_file.read(entry) }
               end
             end
           else # mingw
-            puts "    Updating mingw SDL2.dll.a..."
-            zip_file.glob("*/i686*-mingw32/lib/libSDL2.dll.a").each do |entry|
+            puts "    Updating mingw SDL3.dll.a..."
+            zip_file.glob("*/i686*-mingw32/lib/libSDL3.dll.a").each do |entry|
               pp entry.name
               File.open("#{target_directory}/lib/x86/#{File.basename(entry.name)}", "wb") { |f| f.write zip_file.read(entry) }
             end
 
-            zip_file.glob("*/x86_64*-mingw32/lib/libSDL2.dll.a").each do |entry|
+            zip_file.glob("*/x86_64*-mingw32/lib/libSDL3.dll.a").each do |entry|
               pp entry.name
               File.open("#{target_directory}/lib/x64/#{File.basename(entry.name)}", "wb") { |f| f.write zip_file.read(entry) }
             end
@@ -123,8 +121,7 @@ task :update_sdl do
 end
 
 task :update_sdl_sound do
-  # Track the stable-2.0 branch until we update to SDL 3: https://github.com/gosu/gosu/pull/685
-  github_zip_url = "https://github.com/icculus/SDL_sound/archive/refs/heads/stable-2.0.zip"
+  github_zip_url = "https://github.com/icculus/SDL_sound/archive/refs/heads/main.zip"
   target_directory = File.expand_path("../dependencies/SDL_sound", __dir__)
 
   start_time = Time.now # FIXME: use Process monotonic time
@@ -147,7 +144,7 @@ task :update_sdl_sound do
 
   if response.status == 200
     puts "  Removing #{target_directory} directory..."
-    FileUtils.remove_dir(target_directory)
+    FileUtils.remove_dir(target_directory) if Dir.exist?(target_directory)
 
     puts "  Creating #{target_directory}..."
     FileUtils.mkdir_p(target_directory)
@@ -159,7 +156,7 @@ task :update_sdl_sound do
         # Skip MIDI bits since we can't currently use them...
         next if entry.name.include?("midi.c") || entry.name.include?("/timidity/")
         # Exclude 'example' file
-        next if File.basename(entry.name).downcase == "SDL_sound_skeleton.c".downcase
+        next if File.basename(entry.name) == "SDL_sound_skeleton.c"
         # Only include implementation and header files
         next unless entry.name.end_with?(".c") || entry.name.end_with?(".h")
         next if entry.name_is_directory?
@@ -170,9 +167,19 @@ task :update_sdl_sound do
           File.write("#{target_directory}/#{File.basename(entry.name)}", zip_file.read(entry))
         end
       end
+
+      # The public header moved to include/SDL3_sound/ in the SDL3 version (it used to live in src/).
+      zip_file.glob("*/include/SDL3_sound/*.h").each do |entry|
+        FileUtils.mkdir_p("#{target_directory}/SDL3_sound")
+        File.write("#{target_directory}/SDL3_sound/#{File.basename(entry.name)}", zip_file.read(entry))
+      end
     end
 
-    puts "", "  NOTE: You'll need to manually change #{target_directory}/SDL_sound_internal.h to disable MIDI support. 'SOUND_SUPPORTS_MIDI'", ""
+    # Disable MIDI support because we don't want to bundle timidity.
+    sdl_sound_config = File.read("#{target_directory}/SDL_sound_internal.h")
+    sdl_sound_config.sub!("#define SOUND_SUPPORTS_MIDI  1", "#define SOUND_SUPPORTS_MIDI  0")
+    File.write("#{target_directory}/SDL_sound_internal.h", sdl_sound_config)
+    puts "    Disabled MIDI support in SDL_sound_internal.h."
 
     puts "Updated SDL_sound. Took: #{(Time.now - start_time).to_f.round(1)} seconds."
     puts
@@ -184,8 +191,7 @@ task :update_sdl_sound do
 end
 
 task :update_mojoal do
-  # Track the sdl2 branch until we update to SDL 3: https://github.com/gosu/gosu/pull/685
-  github_zip_url = "https://github.com/icculus/mojoAL/archive/refs/heads/sdl2.zip"
+  github_zip_url = "https://github.com/icculus/mojoAL/archive/refs/heads/main.zip"
   target_directory = File.expand_path("../dependencies/mojoAL", __dir__)
 
   start_time = Time.now # FIXME: use Process monotonic time
@@ -208,7 +214,7 @@ task :update_mojoal do
 
   if response.status == 200
     puts "  Removing #{target_directory} directory..."
-    FileUtils.remove_dir(target_directory)
+    FileUtils.remove_dir(target_directory) if Dir.exist?(target_directory)
 
     puts "  Creating #{target_directory}..."
     FileUtils.mkdir_p(target_directory)
@@ -265,7 +271,7 @@ task :update_stb do
 
   if response.status == 200
     puts "  Removing #{target_directory} directory..."
-    FileUtils.remove_dir(target_directory)
+    FileUtils.remove_dir(target_directory) if Dir.exist?(target_directory)
 
     puts "  Creating #{target_directory}..."
     FileUtils.mkdir_p(target_directory)
@@ -324,7 +330,7 @@ task :update_utf8proc do
 
     if response.status == 200
       puts "  Removing #{target_directory} directory..."
-      FileUtils.remove_dir(target_directory)
+      FileUtils.remove_dir(target_directory) if Dir.exist?(target_directory)
 
       puts "  Creating #{target_directory}..."
       FileUtils.mkdir_p(target_directory)
@@ -339,9 +345,13 @@ task :update_utf8proc do
           end
         end
       end
-    end
 
-    puts "", "  NOTE: You'll need to manually change #{target_directory}/utf8proc.c to include 'utf8proc_data.h' instead of 'utf8proc_data.c'", ""
+      # We rename utf8proc_data.c to .h above, so point utf8proc.c at the renamed header
+      # (otherwise it fails to find the now-nonexistent utf8proc_data.c).
+      utf8proc_config = File.read("#{target_directory}/utf8proc.c")
+      utf8proc_config.sub!('#include "utf8proc_data.c"', '#include "utf8proc_data.h"')
+      File.write("#{target_directory}/utf8proc.c", utf8proc_config)
+    end
 
     puts "Updated utf8proc. Took: #{(Time.now - start_time).to_f.round(1)} seconds."
     puts

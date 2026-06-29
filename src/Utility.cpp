@@ -96,51 +96,32 @@ std::vector<std::string> Gosu::user_languages()
 }
 
 #else
-#include <SDL.h>
-#if SDL_VERSION_ATLEAST(2, 0, 14)
-
+#include <SDL3/SDL.h>
 std::vector<std::string> Gosu::user_languages()
 {
     std::vector<std::string> user_languages;
 
-    std::unique_ptr<SDL_Locale, decltype(SDL_free)*> locales(SDL_GetPreferredLocales(), SDL_free);
+    int locale_count = 0;
+    std::unique_ptr<SDL_Locale*[], decltype(&SDL_free)> locales(
+        SDL_GetPreferredLocales(&locale_count), SDL_free);
     // GCOV_EXCL_START: There is no portable way to let SDL_GetPreferredLocales fail.
     if (!locales) {
         return user_languages;
     }
     // GCOV_EXCL_END
 
-    for (const SDL_Locale* locale = locales.get(); locale->language != nullptr; ++locale) {
+    for (int i = 0; i < locale_count; ++i) {
+        const SDL_Locale* locale = locales[i];
         std::string language = locale->language;
         if (locale->country) {
             language += '_';
             language += locale->country;
         }
-        user_languages.emplace_back(std::move(language));
+        user_languages.push_back(std::move(language));
     }
 
     return user_languages;
 }
-
-#else
-#include <cstdlib>
-#include <regex>
-
-std::vector<std::string> Gosu::user_languages()
-{
-    static const std::regex language_regex("[a-z]{2}_[A-Z]{2}([^A-Z].*)?");
-
-    const char* locale = std::getenv("LANG");
-
-    if (locale && std::regex_match(locale, language_regex)) {
-        // Trim off anything after the language code.
-        return { std::string(locale, locale + 5) };
-    }
-
-    return {};
-}
-
-#endif
 #endif
 
 bool Gosu::Rect::overlaps(const Rect& other) const

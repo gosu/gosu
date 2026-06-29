@@ -536,13 +536,13 @@ void CSoundFile_NoteChange(CSoundFile *_this, UINT nChn, int note, BOOL bPorta, 
 					// Volume Swing
 					if (penv->nVolSwing)
 					{
-						int d = ((LONG)penv->nVolSwing*(LONG)((SDL_rand() & 0xFF) - 0x7F)) / 128;
+						int d = ((LONG)penv->nVolSwing*(LONG)((SDL_rand_bits() & 0xFF) - 0x7F)) / 128;
 						pChn->nVolSwing = (signed short)((d * pChn->nVolume + 1)/128);
 					}
 					// Pan Swing
 					if (penv->nPanSwing)
 					{
-						int d = ((LONG)penv->nPanSwing*(LONG)((SDL_rand() & 0xFF) - 0x7F)) / 128;
+						int d = ((LONG)penv->nPanSwing*(LONG)((SDL_rand_bits() & 0xFF) - 0x7F)) / 128;
 						pChn->nPanSwing = (signed short)d;
 					}
 				}
@@ -609,7 +609,7 @@ void CSoundFile_CheckNNA(CSoundFile *_this, UINT nChn, UINT instr, int note, BOO
 //------------------------------------------------------------------------
 {
 	MODCHANNEL *pChn = &_this->Chn[nChn];
-	INSTRUMENTHEADER *penv = pChn->pHeader, *pHeader = 0;
+	INSTRUMENTHEADER *penv = pChn->pHeader, *pHeader = NULL;
 	MODCHANNEL *p;
 	signed char *pSample;
 	UINT i, n;

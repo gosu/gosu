@@ -11,27 +11,14 @@
  *  application.
  */
 
-#ifndef _INCLUDE_SDL_SOUND_INTERNAL_H_
-#define _INCLUDE_SDL_SOUND_INTERNAL_H_
+#ifndef SDL_SOUND_INTERNAL_H_
+#define SDL_SOUND_INTERNAL_H_
 
 #ifndef __SDL_SOUND_INTERNAL__
 #error Do not include this header from your applications.
 #endif
 
-#include "SDL_sound.h"
-
-/* SDL_AudioStream, which we use internally, didn't arrive until SDL 2.0.7. */
-#if !SDL_VERSION_ATLEAST(2, 0, 7)
-#error SDL_sound requires SDL 2.0.7 or later. Please upgrade.
-#endif
-
-#if ((defined(__GNUC__) && (__GNUC__ >= 4)) || defined(__clang__)) && !(defined(_WIN32) || defined(__OS2__))
-#define SOUND_HAVE_PRAGMA_VISIBILITY 1
-#endif
-
-#if SOUND_HAVE_PRAGMA_VISIBILITY
-#pragma GCC visibility push(hidden)
-#endif
+#include <SDL3_sound/SDL_sound.h>
 
 #if (defined DEBUG_CHATTER)
 #define SNDDBG(x) SDL_Log x
@@ -98,7 +85,7 @@
  * SDL itself only supports mono and stereo output, but hopefully we can
  *  raise this value someday...there's probably a lot of assumptions in
  *  SDL_sound that rely on it, though.
- * !!! FIXME: SDL2 supports more channels.
+ * !!! FIXME: SDL3 supports more channels.
  */
 #define SOUND_MAX_CHANNELS  2
 
@@ -113,7 +100,7 @@ typedef struct __SOUND_DECODERFUNCTIONS__
          *  set up any global state that your decoder needs, such as
          *  initializing an external library, etc.
          *
-         * Return SDL_TRUE if initialization is successful, SDL_FALSE if
+         * Return true if initialization is successful, false if
          *  there's a fatal error. If this method fails, then this decoder
          *  is flagged as unavailable until SDL_sound() is shut down and
          *  reinitialized, in which case this method will be tried again.
@@ -122,7 +109,7 @@ typedef struct __SOUND_DECODERFUNCTIONS__
          *  method fails, so if you can't intialize, you'll have to clean
          *  up the half-initialized state in this method.
          */
-    SDL_bool (*init)(void);
+    bool (*init)(void);
 
         /*
          * This is called during the Sound_Quit() function. Use this to
@@ -154,11 +141,11 @@ typedef struct __SOUND_DECODERFUNCTIONS__
          * in Sound_SampleInternal section:
          *    Sound_Sample *next;  (offlimits)
          *    Sound_Sample *prev;  (offlimits)
-         *    SDL_RWops *rw;       (can use, but do NOT close it)
+         *    SDL_IOStream *io;       (can use, but do NOT close it)
          *    const Sound_DecoderFunctions *funcs; (that's this structure)
          *    SDL_AudioStream stream; (offlimits)
-         *    SDL_bool pending_eof; (offlimits)
-         *    SDL_bool pending_error; (offlimits)
+         *    bool pending_eof; (offlimits)
+         *    bool pending_error; (offlimits)
          *    void *buffer;        (offlimits until read() method)
          *    Uint32 buffer_size;  (offlimits until read() method)
          *    void *decoder_private; (read and write access)
@@ -166,8 +153,8 @@ typedef struct __SOUND_DECODERFUNCTIONS__
          * in rest of Sound_Sample:
          *    void *opaque;        (this was internal section, above)
          *    const Sound_DecoderInfo *decoder;  (read only)
-         *    Sound_AudioInfo desired; (read only, usually not needed here)
-         *    Sound_AudioInfo actual;  (please fill this in)
+         *    SDL_AudioSpec desired; (read only, usually not needed here)
+         *    SDL_AudioSpec actual;  (please fill this in)
          *    void *buffer;            (offlimits)
          *    Uint32 buffer_size;      (offlimits)
          *    Sound_SampleFlags flags; (set appropriately)
@@ -191,7 +178,7 @@ typedef struct __SOUND_DECODERFUNCTIONS__
          *
          *  ...and then start decoding. Fill in up to internal->buffer_size
          *  bytes of decoded sound in the space pointed to by
-         *  internal->buffer. The encoded data is read in from internal->rw.
+         *  internal->buffer. The encoded data is read in from internal->io.
          *  Data should be decoded in the format specified during the
          *  decoder's open() method in the sample->actual field. The
          *  conversion to the desired format is done at a higher level.
@@ -223,17 +210,17 @@ typedef struct __SOUND_DECODERFUNCTIONS__
         /*
          * Reset the decoding to the beginning of the stream. Nonzero on
          *  success, zero on failure.
-         *  
+         *
          * The purpose of this method is to allow for higher efficiency than
          *  an application could get by just recreating the sample externally;
-         *  not only do they not have to reopen the RWops, reallocate buffers,
+         *  not only do they not have to reopen the SDL_IOStream, reallocate buffers,
          *  and potentially pass the data through several rejecting decoders,
          *  but certain decoders will not have to recreate their existing
          *  state (search for metadata, etc) since they already know they
          *  have a valid audio stream with a given set of characteristics.
          *
          * The decoder is responsible for calling seek() on the associated
-         *  SDL_RWops. A failing call to seek() should be the ONLY reason that
+         *  SDL_IOStream. A failing call to seek() should be the ONLY reason that
          *  this method should ever fail!
          */
     int (*rewind)(Sound_Sample *sample);
@@ -247,7 +234,7 @@ typedef struct __SOUND_DECODERFUNCTIONS__
          *  decoding to a given point.
          *
          * The decoder is responsible for calling seek() on the associated
-         *  SDL_RWops.
+         *  SDL_IOStream.
          *
          * If there is an error, try to recover so that the next read will
          *  continue as if nothing happened.
@@ -262,11 +249,11 @@ typedef struct __SOUND_SAMPLEINTERNAL__
 {
     Sound_Sample *next;
     Sound_Sample *prev;
-    SDL_RWops *rw;
+    SDL_IOStream *io;
     const Sound_DecoderFunctions *funcs;
     SDL_AudioStream *stream;
-    SDL_bool pending_eof;
-    SDL_bool pending_error;
+    bool pending_eof;
+    bool pending_error;
     void *buffer;
     Uint32 buffer_size;
     void *decoder_private;
@@ -309,27 +296,14 @@ void __Sound_SetError(const char *err);
  * Call this to convert milliseconds to an actual byte position, based on
  *  audio data characteristics.
  */
-Uint32 __Sound_convertMsToBytePos(Sound_AudioInfo *info, Uint32 ms);
+Uint32 __Sound_convertMsToBytePos(SDL_AudioSpec *info, Uint32 ms);
 
 
 /* These get used all over for lessening code clutter. */
 #define BAIL_MACRO(e, r) { __Sound_SetError(e); return r; }
 #define BAIL_IF_MACRO(c, e, r) if (c) { __Sound_SetError(e); return r; }
 
-#if SDL_VERSION_ATLEAST(2,0,12)
-#define HAVE_SDL_STRTOKR
-#else
-#define SDL_strtokr __Sound_strtokr
-extern char *SDL_strtokr(char *s1, const char *s2, char **saveptr);
-#endif
-
-/* SDL doesn't provide a rand() replacement */
-#define SDL_rand __Sound_rand
-#define SDL_srand __Sound_srand
-extern int SDL_rand(void);
-extern void SDL_srand(unsigned int seed);
-
-/* Wrappers around the SDL versions of these in case you're on an older SDL */
+/* Wrappers around SDL versions. SDL3 doesn't provide a SIMDRealloc() */
 extern void *__Sound_SIMDAlloc(const size_t len);
 extern void *__Sound_SIMDRealloc(void *mem, const size_t len);
 extern void __Sound_SIMDFree(void *ptr);
@@ -338,7 +312,7 @@ extern void __Sound_SIMDFree(void *ptr);
 }
 #endif
 
-#endif /* defined _INCLUDE_SDL_SOUND_INTERNAL_H_ */
+#endif /* defined SDL_SOUND_INTERNAL_H_ */
 
 /* end of SDL_sound_internal.h ... */
 

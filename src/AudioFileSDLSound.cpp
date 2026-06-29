@@ -5,7 +5,7 @@
 
 #include "AudioFile.hpp"
 #include "AudioImpl.hpp"
-#include <SDL_sound.h>
+#include <SDL3_sound/SDL_sound.h>
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
@@ -36,12 +36,12 @@ Gosu::AudioFile::AudioFile(const std::string& filename)
 {
     // We need to set a "desired" audio format, otherwise we may encounter data formats such as
     // floating-point samples that Apple's OpenAL implementation does not support.
-    Sound_AudioInfo desired;
+    SDL_AudioSpec desired;
     // Prefer 16-bit signed data which is supported by all versions of OpenAL.
-    desired.format = AUDIO_S16;
+    desired.format = SDL_AUDIO_S16;
     // 0 means "use whatever we have" (see SDL_sound.c, init_sample).
     desired.channels = 0;
-    desired.rate = 0;
+    desired.freq = 0;
 
     pimpl->sample.reset(Sound_NewSampleFromFile(filename.c_str(), &desired, 4096),
                         Sound_FreeSample);
@@ -97,7 +97,7 @@ ALenum Gosu::AudioFile::format() const
 
 ALuint Gosu::AudioFile::sample_rate() const
 {
-    return pimpl->sample->actual.rate;
+    return pimpl->sample->actual.freq;
 }
 
 void Gosu::AudioFile::rewind()

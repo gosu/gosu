@@ -28,9 +28,9 @@
 
 #if SOUND_SUPPORTS_RAW
 
-static SDL_bool RAW_init(void)
+static bool RAW_init(void)
 {
-    return SDL_TRUE;  /* always succeeds. */
+    return true; /* always succeeds. */
 } /* RAW_init */
 
 
@@ -44,7 +44,7 @@ static int RAW_open(Sound_Sample *sample, const char *ext)
 {
     Sound_SampleInternal *internal = sample->opaque;
     Sint64 pos;
-    Uint32 sample_rate;
+    Uint32 sample_freq;
 
         /*
          * We check this explicitly, since we have no other way to
@@ -59,7 +59,7 @@ static int RAW_open(Sound_Sample *sample, const char *ext)
          */
     if ( (sample->desired.channels < 1)  ||
          (sample->desired.channels > 2)  ||
-         (sample->desired.rate == 0)     ||
+         (sample->desired.freq == 0)     ||
          (sample->desired.format == 0) )
     {
         BAIL_MACRO("RAW: invalid desired format.", 0);
@@ -70,19 +70,19 @@ static int RAW_open(Sound_Sample *sample, const char *ext)
         /*
          * We never convert raw samples; what you ask for is what you get.
          */
-    SDL_memcpy(&sample->actual, &sample->desired, sizeof (Sound_AudioInfo));
+    SDL_copyp(&sample->actual, &sample->desired);
     sample->flags = SOUND_SAMPLEFLAG_CANSEEK;
 
-    if ((pos = SDL_RWseek(internal->rw, 0, RW_SEEK_END)) <= 0) {
+    if ((pos = SDL_SeekIO(internal->io, 0, SDL_IO_SEEK_END)) <= 0) {
         BAIL_MACRO("RAW: can't seek to the end of the file.", 0);
     }
-    if ( SDL_RWseek(internal->rw, 0, RW_SEEK_SET) != 0) {
+    if (SDL_SeekIO(internal->io, 0, SDL_IO_SEEK_SET) != 0) {
         BAIL_MACRO("RAW: can't reset file.", 0);
     }
 
-    sample_rate = (sample->actual.rate * sample->actual.channels * ((sample->actual.format & 0x0018) >> 3));
-    internal->total_time = ( pos ) / sample_rate * 1000;
-    internal->total_time += (pos % sample_rate) * 1000 / sample_rate;
+    sample_freq = (sample->actual.freq * sample->actual.channels * ((sample->actual.format & 0x0018) >> 3));
+    internal->total_time = ( pos ) / sample_freq * 1000;
+    internal->total_time += (pos % sample_freq) * 1000 / sample_freq;
 
     return 1; /* we'll handle this data. */
 } /* RAW_open */
@@ -103,8 +103,8 @@ static Uint32 RAW_read(Sound_Sample *sample)
          * We don't actually do any decoding, so we read the raw data
          *  directly into the internal buffer...
          */
-    retval = SDL_RWread(internal->rw, internal->buffer,
-                        1, internal->buffer_size);
+    retval = SDL_ReadIO(internal->io, internal->buffer,
+                        internal->buffer_size);
 
         /* Make sure the read went smoothly... */
     if (retval == 0)
@@ -124,16 +124,15 @@ static Uint32 RAW_read(Sound_Sample *sample)
 static int RAW_rewind(Sound_Sample *sample)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
-    BAIL_IF_MACRO(SDL_RWseek(internal->rw, 0, RW_SEEK_SET) != 0, ERR_IO_ERROR, 0);
+    BAIL_IF_MACRO(SDL_SeekIO(internal->io, 0, SDL_IO_SEEK_SET) != 0, ERR_IO_ERROR, 0);
     return 1;
 } /* RAW_rewind */
-
 
 static int RAW_seek(Sound_Sample *sample, Uint32 ms)
 {
     Sound_SampleInternal *internal = (Sound_SampleInternal *) sample->opaque;
     const Sint64 pos = __Sound_convertMsToBytePos(&sample->actual, ms);
-    const int err = (SDL_RWseek(internal->rw, pos, RW_SEEK_SET) != pos);
+    const int err = (SDL_SeekIO(internal->io, pos, SDL_IO_SEEK_SET) != pos);
     BAIL_IF_MACRO(err, ERR_IO_ERROR, 0);
     return 1;
 } /* RAW_seek */
