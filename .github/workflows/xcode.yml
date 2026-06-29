@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install dependencies (macOS)
-        run: brew install sdl3
+        run: brew install pkg-config sdl3
 
       - name: Build Tutorial for macOS
         run: cd examples/Tutorial && pod install && xcodebuild build -workspace Tutorial.xcworkspace -scheme Tutorial
