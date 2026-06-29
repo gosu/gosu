@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
     # Be careful not to include SDL_sound or mojoAL on iOS, where Gosu still uses AudioToolbox and OpenAL instead.
     ss.source_files = "dependencies/{stb,utf8proc}/**/*.{h,c}"
     ss.osx.source_files = "dependencies/{SDL_sound,mojoAL}/**/*.{h,c}"
-    ss.osx.compiler_flags = "-I#{SDL2_PREFIX}/include/SDL2 -Idependencies/mojoAL/AL"
+    ss.osx.compiler_flags = "-Idependencies/mojoAL/AL"
   end
 
   s.subspec "Gosu" do |ss|
