@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies (Ubuntu)
         if: startsWith(matrix.platform, 'ubuntu-')
-        run: sudo apt-get update && sudo apt-get install -y libsdl3-dev libgl1-mesa-dev libfontconfig1-dev libgtest-dev xvfb
+        run: sudo apt-get update && sudo apt-get install -y libsdl3-dev libgl1-mesa-dev libgl1-mesa-dri libfontconfig1-dev libgtest-dev xvfb
 
       - name: Install dependencies (macOS)
         if: startsWith(matrix.platform, 'macos-')
@@ -43,6 +43,9 @@ jobs:
 
       - name: Run tests (Linux)
         if: startsWith(matrix.platform, 'ubuntu-')
+        env:
+          SDL_VIDEO_FORCE_EGL: 1
+          LIBGL_ALWAYS_SOFTWARE: 1
         working-directory: ${{github.workspace}}/build
         shell: bash
         # Execute tests defined by the CMake configuration.
