@@ -1,5 +1,3 @@
-SDL2_PREFIX = `sdl2-config --prefix`.chomp
-
 Pod::Spec.new do |s|
   s.name = "Gosu"
   s.version = "2.0.0"
@@ -30,17 +28,11 @@ Pod::Spec.new do |s|
     # Also silence warnings about invalid doxygen markup in SDL headers, and make deps available.
     ss.compiler_flags = "-DGOSU_DEPRECATED= -DGLES_SILENCE_DEPRECATION -Wno-documentation -x objective-c++ -Idependencies/stb -Idependencies/utf8proc"
 
-    ss.osx.libraries = "iconv"
-    # Include all frameworks necessary for SDL 2, because we link to it statically.
-    ss.osx.frameworks = "ApplicationServices", "AudioUnit", "Carbon", "Cocoa", "CoreAudio",
-                        "ForceFeedback", "IOKit", "OpenGL"
-    ss.osx.weak_frameworks = "CoreHaptics", "GameController", "QuartzCore", "Metal"
+    ss.osx.libraries = "iconv", "SDL2"
     # Frameworks used directly by Gosu for iOS.
     ss.ios.frameworks = "AVFoundation", "CoreGraphics", "OpenGLES", "QuartzCore", "AudioToolbox", "OpenAL"
 
-    ss.osx.compiler_flags = "-I#{SDL2_PREFIX}/include/SDL2 -Idependencies/mojoAL"
-    # Statically link SDL 2, so that compiled games will be self-contained.
-    ss.osx.xcconfig = { "OTHER_LDFLAGS" => "#{SDL2_PREFIX}/lib/libSDL2.a" }
+    ss.osx.compiler_flags = "-Idependencies/mojoAL"
 
     ss.public_header_files = "include/Gosu/*.hpp"
     ss.source_files = ["include/Gosu/*.hpp", "src/*.{hpp,cpp}"]
