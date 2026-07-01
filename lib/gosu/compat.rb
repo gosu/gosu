@@ -133,7 +133,21 @@ class Gosu::Song
   end
 end
 
+# No need to pass a Window to Font.
 class Gosu::Font
+  alias_method :initialize_without_window, :initialize
+
+  # Old method signature: Font.new(window, name, height)
+  def initialize(*args, **kwargs)
+    if args.first.is_a? Gosu::Window
+      Gosu.deprecation_message("Passing a Window to Font#initialize has been deprecated in Gosu 0.9.")
+      _, name, height = args
+      initialize_without_window(height, name: name, **kwargs)
+    else
+      initialize_without_window(*args, **kwargs)
+    end
+  end
+
   alias_method :draw, :draw_markup
   Gosu.deprecate Gosu::Font, :draw, "Font#draw_text or Font#draw_markup"
 
