@@ -267,13 +267,19 @@ bool Gosu::Window::tick()
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         switch (e.type) {
-        // TODO: Also handle SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED and fix OpenGL settings?
         case SDL_EVENT_WINDOW_RESIZED: {
             if (m_impl->resizable && (width() != e.window.data1 || height() != e.window.data2)) {
                 m_impl->resizing = true;
                 resize(e.window.data1, e.window.data2, fullscreen());
                 m_impl->resizing = false;
             }
+            break;
+        }
+        case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
+            // The logical window size stays the same, but the pixel density changed.
+            // Example: the window is moved to a display with a different scaling factor.
+            // => Update the viewport (and thus glViewport) without going through a full resize().
+            viewport().set_physical_resolution(e.window.data1, e.window.data2);
             break;
         }
         case SDL_EVENT_WINDOW_FOCUS_GAINED: {
