@@ -30,10 +30,10 @@ public:
     inline static const int PADDING = 5;
 
     TextField(Gosu::Window& window, Gosu::Font font, double x, double y)
-    : m_window{window},
-      m_font{std::move(font)},
-      m_x{x},
-      m_y{y}
+        : m_window(window),
+          m_font(std::move(font)),
+          m_x(x),
+          m_y(y)
     {
         // Start with a self-explanatory text in each field.
         set_text("Click to change text");
@@ -42,8 +42,8 @@ public:
     // Example filter member function: Replace numbers by fancy Unicode numbers in circles.
     std::string filter(std::string str) const override
     {
-        std::array<std::string, 10> numbers_in_circles{"⓪", "①", "②", "③", "④",
-                                                       "⑤", "⑥", "⑦", "⑧", "⑨"};
+        std::array<std::string, 10> numbers_in_circles { "⓪", "①", "②", "③", "④",
+                                                         "⑤", "⑥", "⑦", "⑧", "⑨" };
         std::string::size_type index = 0;
         while ((index = str.find_first_of("0123456789", index)) != std::string::npos) {
             // Replace all numbers with Unicode "number in circle" characters.
@@ -88,8 +88,8 @@ public:
 
     bool is_under_point(double mouse_x, double mouse_y)
     {
-        return mouse_x > m_x - PADDING && mouse_x < m_x + width() + PADDING &&
-               mouse_y > m_y - PADDING && mouse_y < m_y + height() + PADDING;
+        return mouse_x > m_x - PADDING && mouse_x < m_x + width() + PADDING
+            && mouse_y > m_y - PADDING && mouse_y < m_y + height() + PADDING;
     }
 };
 
@@ -99,7 +99,7 @@ class Window : public Gosu::Window
 
 public:
     Window()
-    : Gosu::Window(300, 200, Gosu::WF_RESIZABLE)
+        : Gosu::Window(360, 200, Gosu::WF_RESIZABLE)
     {
         set_caption("Text Input Example");
 
@@ -113,6 +113,12 @@ public:
     bool needs_cursor() const override //
     {
         return true;
+    }
+
+    void update() override
+    {
+        // Not relevant for TextInput, but let's demonstrate that windows can be resizable.
+        set_caption("TextInput @ " + std::to_string(width()) + "x" + std::to_string(height()));
     }
 
     void draw() override
