@@ -18,7 +18,7 @@ namespace Gosu
 
         /// Implicit conversion constructor for literals of the form 0xaarrggbb.
         // NOLINTNEXTLINE: We want to allow implicit conversions.
-        Color(std::uint32_t argb)
+        constexpr Color(std::uint32_t argb) noexcept
             : red(argb >> 16),
               green(argb >> 8),
               blue(argb >> 0),
@@ -26,7 +26,7 @@ namespace Gosu
         {
         }
 
-        Color(Channel red, Channel green, Channel blue)
+        constexpr Color(Channel red, Channel green, Channel blue) noexcept
             : red(red),
               green(green),
               blue(blue),
@@ -34,7 +34,7 @@ namespace Gosu
         {
         }
 
-        Color with_alpha(Channel new_alpha) const
+        constexpr Color with_alpha(Channel new_alpha) const noexcept
         {
             Color result = *this;
             result.alpha = new_alpha;
