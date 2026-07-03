@@ -1,11 +1,14 @@
 # Changelog
 
 ## [2.0.0] - tbd
-* This version drops support for streaming I/O and other details from Gosu. The version number has been bumped to 2.0.0 to reflect this. Ruby/Gosu games should not be affected, and work as before. (#653)   
-* Slightly improve rendering artifacts in scaled images when not using "retro" mode. (#646, #653)
+* SDL has been updated to 3.x. (Thanks @cyberarm! #685)
+* Gosu now uses and requires C++20. (#647)
+* The MSVC projects have been removed. In turn, the CMake setup now works on Windows. (#692)
+* This version drops support for streaming I/O (only relevant for C++). The version number has been bumped to 2.0.0 to reflect this. Ruby/Gosu games should not be affected, and work as before. (#653)   
+* Ruby/Gosu uses FFI instead of SWIG. (Thanks @cyberarm! #664)
+* Slightly reduce rendering artifacts in scaled images when not using "retro" mode. (#646, #653)
 * Remove support for writing TGA files, but add support for writing JPEG files. (#646)  
 * Fix a bug where invalid UTF-8 strings could trigger deadlocks or memory errors. (#652)  
-* Gosu now uses and requires C++20. Unfortunately, that means Ubuntu 20.04 has been dropped earlier than expected. (#647)
 * Make `Gosu::Window.sdl_window` available in Ruby. (#637)
 * `Gosu.clip_to` now works within `Gosu.render`. (#673) 
 
@@ -148,7 +151,7 @@ All three improvements contributed by @cyberarm.
 * macOS: Work around a compiler bug in Xcode 9+.
 * C++: Image and Sample have a default constructor now that creates an "empty" object; minor interface changes.
 
-## [0.12.1] – 2016-06-17
+## [0.12.1] – 2017-06-17
 
 * Windows: Support for Ruby 2.4. (#407)
 * Windows: Fix MP3 playback on 32-bit systems. (#405)

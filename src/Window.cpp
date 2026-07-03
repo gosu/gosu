@@ -18,6 +18,11 @@ struct Gosu::Window::Impl : private Gosu::Noncopyable
     bool resizable = false;
     bool resizing = false;
 
+    // We remember the last size in windowed mode so that we can restore it when leaving fullscreen.
+    // (In fullscreen, the logical resolution follows the desktop and would otherwise be lost.)
+    int windowed_width = 0;
+    int windowed_height = 0;
+
     // A single `bool open` is not good enough to support the tick() method: When close() is called
     // from outside the window's call graph, the next call to tick() must return false (transition
     // from CLOSING to CLOSED), but the call after that must show the window again (transition from
@@ -81,6 +86,12 @@ bool Gosu::Window::fullscreen() const
 void Gosu::Window::resize(int width, int height, bool fullscreen)
 {
     m_impl->fullscreen = fullscreen;
+
+    // Remember the windowed size so we can restore it when leaving fullscreen mode later.
+    if (!fullscreen) {
+        m_impl->windowed_width = width;
+        m_impl->windowed_height = height;
+    }
 
     int actual_width = width;
     int actual_height = height;
@@ -267,13 +278,19 @@ bool Gosu::Window::tick()
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         switch (e.type) {
-        // TODO: Also handle SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED and fix OpenGL settings?
         case SDL_EVENT_WINDOW_RESIZED: {
             if (m_impl->resizable && (width() != e.window.data1 || height() != e.window.data2)) {
                 m_impl->resizing = true;
                 resize(e.window.data1, e.window.data2, fullscreen());
                 m_impl->resizing = false;
             }
+            break;
+        }
+        case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED: {
+            // The logical window size stays the same, but the pixel density changed.
+            // Example: the window is moved to a display with a different scaling factor.
+            // => Update the viewport (and thus glViewport) without going through a full resize().
+            viewport().set_physical_resolution(e.window.data1, e.window.data2);
             break;
         }
         case SDL_EVENT_WINDOW_FOCUS_GAINED: {
@@ -364,7 +381,13 @@ void Gosu::Window::button_down(Button button)
     }
 
     if (toggle_fullscreen) {
-        resize(width(), height(), !fullscreen());
+        if (fullscreen()) {
+            // Restore the previous windowed size instead of the current (desktop) resolution.
+            resize(m_impl->windowed_width, m_impl->windowed_height, false);
+        }
+        else {
+            resize(width(), height(), true);
+        }
     }
 }
 
