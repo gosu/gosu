@@ -44,10 +44,15 @@ struct Gosu::Input::Impl : private Gosu::Noncopyable
             ButtonUp,
             ButtonDown,
             GamepadConnected,
-            GamepadDisconnected
+            GamepadDisconnected,
+            TouchBegan,
+            TouchMoved,
+            TouchEnded,
+            TouchCancelled
         } type;
         int id = -1;
         int gamepad_instance_id = -1;
+        Touch touch;
     };
 
     Input& input;
@@ -181,6 +186,20 @@ struct Gosu::Input::Impl : private Gosu::Noncopyable
                 if (gamepad_slot >= 0) {
                     enqueue_gamepad_connection_event(gamepad_slot, false, e->jdevice.which);
                 }
+                break;
+            }
+
+            case SDL_EVENT_FINGER_DOWN:
+            case SDL_EVENT_FINGER_UP:
+            case SDL_EVENT_FINGER_CANCELED:
+            case SDL_EVENT_FINGER_MOTION: {
+                Touch touch;
+                touch.id = e->tfinger.fingerID;
+                touch.x = e->tfinger.x;
+                touch.y = e->tfinger.y;
+                touch.pressure = e->tfinger.pressure;
+
+                enqueue_touch_event(touch, e->type);
                 break;
             }
         }
@@ -374,6 +393,26 @@ struct Gosu::Input::Impl : private Gosu::Noncopyable
                     }
                     free_gamepad_slot(event.gamepad_instance_id);
                     break;
+                case InputEvent::TouchBegan:
+                    if (input.on_touch_began) {
+                        input.on_touch_began(event.touch);
+                    }
+                    break;
+                case InputEvent::TouchMoved:
+                    if (input.on_touch_moved) {
+                        input.on_touch_moved(event.touch);
+                    }
+                    break;
+                case InputEvent::TouchEnded:
+                    if (input.on_touch_ended) {
+                        input.on_touch_ended(event.touch);
+                    }
+                    break;
+                case InputEvent::TouchCancelled:
+                    if (input.on_touch_cancelled) {
+                        input.on_touch_cancelled(event.touch);
+                    }
+                    break;
             }
         }
         event_queue.clear();
@@ -401,6 +440,30 @@ private:
         event_queue.push_back(event);
     }
 
+<<<<<<< HEAD
+=======
+    void enqueue_touch_event(Touch touch, uint32_t touch_type)
+    {
+        InputEvent event;
+        switch (touch_type) {
+            case SDL_EVENT_FINGER_DOWN:
+                event.type = InputEvent::TouchBegan;
+                break;
+            case SDL_EVENT_FINGER_MOTION:
+                event.type = InputEvent::TouchMoved;
+                break;
+            case SDL_EVENT_FINGER_UP:
+                event.type = InputEvent::TouchEnded;
+                break;
+            case SDL_EVENT_FINGER_CANCELED:
+                event.type = InputEvent::TouchCancelled;
+                break;
+        }
+
+        event_queue.push_back(event);
+    }
+
+>>>>>>> 3fd901fe (First pass at adding touch support)
     GamepadBuffer poll_game_controller(SDL_Gamepad* controller)
     {
         GamepadBuffer gamepad;

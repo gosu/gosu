@@ -6,6 +6,7 @@
 #include <Gosu/Utility.hpp>
 #include <functional>
 #include <memory>
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -16,9 +17,13 @@ namespace Gosu
     struct Touch
     {
         /// Allows for identification of a touch across calls.
-        void* id;
+        #ifdef GOSU_IS_IPHONE
+            void* id;
+        #else
+            uint64_t id;
+        #endif
         /// Position of a touch on the touch screen.
-        double x, y;
+        double x, y, pressure;
     };
     typedef std::vector<Touch> Touches;
 
