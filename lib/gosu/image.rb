@@ -96,12 +96,12 @@ module Gosu
       GosuFFI.check_last_error(GosuFFI.Gosu_Image_height(__pointer))
     end
 
-    def draw(x, y, z, scale_x = 1, scale_y = 1, color = Gosu::Color::WHITE, flags = :default)
+    def draw(x, y, z = 0, scale_x = 1, scale_y = 1, color = Gosu::Color::WHITE, flags = :default)
       GosuFFI.Gosu_Image_draw(__pointer, x, y, z, scale_x, scale_y, GosuFFI.color_to_uint32(color), GosuFFI.blend_mode(flags))
       GosuFFI.check_last_error
     end
 
-    def draw_rot(x, y, z, angle = 0, center_x = 0.5, center_y = 0.5, scale_x = 1, scale_y = 1, color = Gosu::Color::WHITE, flags = :default)
+    def draw_rot(x, y, z = 0, angle = 0, center_x = 0.5, center_y = 0.5, scale_x = 1, scale_y = 1, color = Gosu::Color::WHITE, flags = :default)
       GosuFFI.Gosu_Image_draw_rot(__pointer, x, y, z, angle, center_x, center_y, scale_x, scale_y, GosuFFI.color_to_uint32(color), GosuFFI.blend_mode(flags))
       GosuFFI.check_last_error
     end
