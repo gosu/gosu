@@ -9,11 +9,21 @@ module Gosu
     klass.class_eval {
       old = "_deprecated_#{name}"
       alias_method old, name
-      define_method name do |*args, &block|
+      define_method name do |*args, **kwargs, &block|
         Gosu.deprecation_message(self, name, repl)
-        send old, *args, &block
+        send old, *args, **kwargs, &block
       end
     }
+  end
+
+  # The old C extension accepted options as a trailing Hash (`options = {}`).
+  # -> Convert this to keyword arguments to support e.g. `super(640, 480, options)`.
+  # Returns the args and kwargs to pass to the new method.
+  def self.extract_legacy_options(args, kwargs, method_name)
+    return args, kwargs unless kwargs.empty? and args.last.is_a?(Hash)
+
+    deprecation_message("Passing options as a Hash to #{method_name} has been deprecated, use keyword arguments instead")
+    return args[0...-1], args.last
   end
 
   def self.deprecation_message(klass_or_full_message, name = nil, repl = nil)
@@ -21,7 +31,7 @@ module Gosu
 
     msg = if klass_or_full_message.is_a?(String) and name.nil? and repl.nil?
       [ "DEPRECATION WARNING: #{klass_or_full_message},
-        \n#Called from #{caller[1, DEPRECATION_STACKTRACE_LINES]}"
+        \n#Called from #{caller.reject { |line| line.start_with?(__FILE__) }.first(DEPRECATION_STACKTRACE_LINES)}"
       ]
     else
       # Class method deprecation warnings result in something like this:
@@ -60,13 +70,17 @@ class Gosu::Image
   alias_method :initialize_without_window, :initialize
 
   def initialize(*args, **kwargs)
+    args, kwargs = Gosu.extract_legacy_options(args, kwargs, "Image#initialize")
+
     if args[0].is_a? Gosu::Window
-      # Old method signature: initialize(window, file_or_image, tileable)
+      # Old method signature: initialize(window, file_or_image, tileable = false, *rect)
       Gosu.deprecation_message("Passing a Window to Image#initialize has been deprecated in Gosu 0.9, and this method now uses named arguments. https://www.libgosu.org/rdoc/Gosu/Image.html")
       if args.size == 7
-        initialize_without_window args[1], tileable: args[2], rect: args[3..-1]
+        initialize_without_window args[1], tileable: args[2], rect: args[3..-1], **kwargs
       elsif args.size == 3
-        initialize_without_window args[1], tileable: args[2]
+        initialize_without_window args[1], tileable: args[2], **kwargs
+      elsif args.size == 2
+        initialize_without_window args[1], **kwargs
       else
         raise ArgumentError, "wrong number of arguments (given #{args.size})"
       end
@@ -77,13 +91,19 @@ class Gosu::Image
 
   class << self
     alias_method :from_text_without_window, :from_text
+    alias_method :from_markup_without_hash, :from_markup
+    alias_method :load_tiles_without_window, :load_tiles
   end
 
   def self.from_text(*args, **kwargs)
-    if args.size == 4
+    args, kwargs = Gosu.extract_legacy_options(args, kwargs, "Image.from_text")
+
+    if args.first.is_a? Gosu::Window and args.size == 4
+      # Old method signature: from_text(window, text, font_name, font_height)
       Gosu.deprecation_message("Passing a Window to Image.from_text has been deprecated in Gosu 0.9 and this method now uses named arguments. https://www.libgosu.org/rdoc/Gosu/Image.html")
       from_text_without_window(args[1], args[3], font: args[2])
-    elsif args.size == 7
+    elsif args.first.is_a? Gosu::Window and args.size == 7
+      # Old method signature: from_text(window, text, font_name, font_height, line_spacing, width, align)
       Gosu.deprecation_message("Passing a Window to Image.from_text has been deprecated in Gosu 0.9 and this method now uses named arguments. https://www.libgosu.org/rdoc/Gosu/Image.html")
       from_text_without_window(args[1], args[3],
                                font: args[2], spacing: args[4], width: args[5],
@@ -93,14 +113,18 @@ class Gosu::Image
     end
   end
 
-  class << self
-    alias_method :load_tiles_without_window, :load_tiles
+  def self.from_markup(*args, **kwargs)
+    args, kwargs = Gosu.extract_legacy_options(args, kwargs, "Image.from_markup")
+    from_markup_without_hash(*args, **kwargs)
   end
 
   def self.load_tiles(*args, **kwargs)
+    args, kwargs = Gosu.extract_legacy_options(args, kwargs, "Image.load_tiles")
+
     if args.first.is_a? Gosu::Window
       # Old method signature: load_tiles(window, file_or_image, w, h, tileable)
-      load_tiles_without_window(args[1], args[2], args[3], tileable: args[4])
+      Gosu.deprecation_message("Passing a Window to Image.load_tiles has been deprecated in Gosu 0.9, and this method now uses named arguments. https://www.libgosu.org/rdoc/Gosu/Image.html")
+      load_tiles_without_window(args[1], args[2], args[3], tileable: args[4], **kwargs)
     else
       load_tiles_without_window(*args, **kwargs)
     end
@@ -133,7 +157,23 @@ class Gosu::Song
   end
 end
 
+# No need to pass a Window to Font.
 class Gosu::Font
+  alias_method :initialize_without_window, :initialize
+
+  # Old method signature: Font.new(window, name, height)
+  def initialize(*args, **kwargs)
+    args, kwargs = Gosu.extract_legacy_options(args, kwargs, "Font#initialize")
+
+    if args.first.is_a? Gosu::Window
+      Gosu.deprecation_message("Passing a Window to Font#initialize has been deprecated in Gosu 0.9.")
+      _, name, height = args
+      initialize_without_window(height, name: name, **kwargs)
+    else
+      initialize_without_window(*args, **kwargs)
+    end
+  end
+
   alias_method :draw, :draw_markup
   Gosu.deprecate Gosu::Font, :draw, "Font#draw_text or Font#draw_markup"
 
@@ -147,8 +187,16 @@ class Gosu::Font
   Gosu.deprecate Gosu::Font, :draw_rot, "Font#draw with Gosu.rotate"
 end
 
-# Moved some Window methods to the Gosu module.
 class Gosu::Window
+  alias_method :initialize_without_hash, :initialize
+
+  # Without this, an options Hash would be interpreted as the positional `fullscreen` argument.
+  def initialize(*args, **kwargs)
+    args, kwargs = Gosu.extract_legacy_options(args, kwargs, "Window#initialize")
+    initialize_without_hash(*args, **kwargs)
+  end
+
+  # Moved some Window methods to the Gosu module:
   # Class methods that have been turned into module methods.
   class << self
     def button_id_to_char(id)
@@ -176,6 +224,16 @@ class Gosu::Window
   end
 
   Gosu.deprecate Gosu::Window, :set_mouse_position, "Window#mouse_x= and Window#mouse_y="
+end
+
+module Gosu
+  alias_method :render_without_hash, :render
+  module_function :render_without_hash
+
+  module_function def render(*args, **kwargs, &block)
+    args, kwargs = Gosu.extract_legacy_options(args, kwargs, "Gosu.render")
+    render_without_hash(*args, **kwargs, &block)
+  end
 end
 
 # Constants

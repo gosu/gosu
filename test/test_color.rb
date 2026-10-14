@@ -13,6 +13,8 @@ class TestColor < Minitest::Test
     assert_equal Gosu::Color::RED,     Gosu::Color.new( 0xff, 0xff, 0x00, 0x00)
     assert_equal Gosu::Color::GREEN,   Gosu::Color.argb(0xff, 0x00, 0xff, 0x00)
     assert_equal Gosu::Color::BLUE,    Gosu::Color.rgba(0x00, 0x00, 0xff, 0xff)
+    assert_equal Gosu::Color::YELLOW,  Gosu::Color.rgba(0xffff00_ff)
+    assert_equal Gosu::Color.argb(0x12_345678), Gosu::Color.rgba(0x345678_12)
 
     # (A)HSV
     assert_equal Gosu::Color::FUCHSIA, Gosu::Color.from_hsv(     300, 1.0, 1.0)

@@ -337,8 +337,6 @@ module GosuFFI
       GosuFFI.BM_ADD
     when :multiply
       GosuFFI.BM_MULTIPLY
-    when Numeric
-      mode
     else
       raise ArgumentError, "No such blend mode: #{mode}"
     end
@@ -361,8 +359,6 @@ module GosuFFI
       GosuFFI.AL_CENTER
     when :justify
       GosuFFI.AL_JUSTIFY
-    when Numeric
-      flags
     else
       raise ArgumentError, "No such font alignment: #{flags}"
     end

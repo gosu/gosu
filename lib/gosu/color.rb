@@ -6,12 +6,26 @@ module Gosu
     # this is used for {Gosu::Image#to_blob} and {Gosu::Image.from_blob}
     SIZEOF = 4
 
+    # The OpenGL texture format (always GL_RGBA) of {Gosu::Image#to_blob} and {Gosu::Image.from_blob}.
+    GL_FORMAT = 0x1908
+
     def self.argb(*args)
       Gosu::Color.new(*args)
     end
 
-    def self.rgba(r, g, b, a)
-      Gosu::Color.new(a, r, g, b)
+    def self.rgba(*args)
+      case args.size
+      when 1
+        rgba = args.first
+        alpha = (rgba & 0xff) << 24
+        rgb = (rgba >> 8) & 0xff_ffff
+        Gosu::Color.new(alpha | rgb)
+      when 4
+        r, g, b, a = args
+        Gosu::Color.new(a, r, g, b)
+      else
+        raise ArgumentError
+      end
     end
 
     def self.rgb(r, g, b)
