@@ -27,7 +27,7 @@ class TestDeprecations < Minitest::Test
 
     assert_output("", /DEPRECATION WARNING: Passing a Window to Image.from_text has been deprecated in Gosu 0.9./) do
       assert_raises(::TypeError) { Gosu::Image.from_text(DUMMY_WINDOW, 2, 3, 4) }
-      assert_raises(::TypeError) { Gosu::Image.from_text(DUMMY_WINDOW, 2, 3, 4, 5, 6, 7) }
+      assert_raises(::TypeError) { Gosu::Image.from_text(DUMMY_WINDOW, 2, 3, 4, 5, 6, :left) }
     end
   end
 
