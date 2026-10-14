@@ -440,8 +440,6 @@ private:
         event_queue.push_back(event);
     }
 
-<<<<<<< HEAD
-=======
     void enqueue_touch_event(Touch touch, uint32_t touch_type)
     {
         InputEvent event;
@@ -463,7 +461,6 @@ private:
         event_queue.push_back(event);
     }
 
->>>>>>> 3fd901fe (First pass at adding touch support)
     GamepadBuffer poll_game_controller(SDL_Gamepad* controller)
     {
         GamepadBuffer gamepad;
