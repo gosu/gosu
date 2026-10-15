@@ -121,6 +121,10 @@ struct Gosu::Input::Impl : private Gosu::Noncopyable
             }
             case SDL_EVENT_MOUSE_BUTTON_DOWN:
             case SDL_EVENT_MOUSE_BUTTON_UP: {
+                // ignore "virtual" mouse events from touches
+                // https://wiki.libsdl.org/SDL3/CategoryTouch
+                if (e->button.which == SDL_TOUCH_MOUSEID) break;
+
                 if (e->button.button >= 1 && e->button.button <= 3) {
                     enqueue_event(MS_LEFT + e->button.button - 1, e->type == SDL_EVENT_MOUSE_BUTTON_DOWN);
                     return true;
