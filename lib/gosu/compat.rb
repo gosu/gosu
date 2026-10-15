@@ -31,14 +31,14 @@ module Gosu
 
     msg = if klass_or_full_message.is_a?(String) and name.nil? and repl.nil?
       [ "DEPRECATION WARNING: #{klass_or_full_message},
-        \n#Called from #{caller.reject { |line| line.start_with?(__FILE__) }.first(DEPRECATION_STACKTRACE_LINES)}"
+        \n#Called from #{caller.reject { |line| line.start_with?(__dir__) }.first(DEPRECATION_STACKTRACE_LINES)}"
       ]
     else
       # Class method deprecation warnings result in something like this:
       # #<Class:Gosu::Window>::button_id_to_char is deprecated
       # Remove the instance-inspect stuff to make it look a bit better:
-      if klass_or_full_message.kind_of?(Module)
-        target = "#{klass_or_full_message.to_s.gsub(/#<Class:(.*)>/, '\1')}::"
+      target = if klass_or_full_message.kind_of?(Module)
+        "#{klass_or_full_message.to_s.gsub(/#<Class:(.*)>/, '\1')}::"
       else
         "#{klass_or_full_message.class}#"
       end
@@ -64,6 +64,20 @@ end
 # there was never a real reason to have them available in Ruby.
 Gosu.deprecate Gosu::Color, :bgr, :none
 Gosu.deprecate Gosu::Color, :abgr, :none
+
+class Gosu::Color
+  alias_method :initialize_without_rgb, :initialize
+
+  # The C++ constructor Color(red, green, blue) used to be available in Ruby as well.
+  def initialize(*args)
+    if args.size == 3
+      Gosu.deprecation_message("Color.new(r, g, b) has been deprecated, use Color.rgb(r, g, b) instead")
+      initialize_without_rgb(255, *args)
+    else
+      initialize_without_rgb(*args)
+    end
+  end
+end
 
 # No need to pass a Window to Image.
 class Gosu::Image
@@ -233,6 +247,17 @@ module Gosu
   module_function def render(*args, **kwargs, &block)
     args, kwargs = Gosu.extract_legacy_options(args, kwargs, "Gosu.render")
     render_without_hash(*args, **kwargs, &block)
+  end
+end
+
+# The SWIG-based C extension exported these functions from Math.hpp. They have users in the wild.
+module Gosu
+  %w(degrees_to_radians radians_to_degrees).each do |helper|
+    define_method helper do |angle|
+      Gosu.deprecation_message("Gosu.#{helper}(angle) has been deprecated, use angle.#{helper} instead")
+      angle.send(helper)
+    end
+    module_function helper
   end
 end
 
