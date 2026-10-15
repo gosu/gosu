@@ -66,6 +66,16 @@ class TestDeprecations < Minitest::Test
     end
   end
 
+  def test_misc_helpers
+    assert_output("", /Color.new\(r, g, b\) has been deprecated/) do
+      assert_equal Gosu::Color.rgb(1, 2, 3), Gosu::Color.new(1, 2, 3)
+    end
+
+    assert_output("", /Gosu.degrees_to_radians\(angle\) has been deprecated/) do
+      assert_equal 90.degrees_to_radians, Gosu.degrees_to_radians(90)
+    end
+  end
+
   def test_old_window_signatures
     assert_output("", /Passing a Window to Image#initialize/) do
       # Image.new(window, filename) is valid, tileable used to be optional.
