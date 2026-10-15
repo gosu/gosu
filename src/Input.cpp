@@ -58,6 +58,8 @@ struct Gosu::Input::Impl : private Gosu::Noncopyable
     Input& input;
     SDL_Window* window;
 
+    int window_width, window_height;
+
     TextInput* text_input = nullptr;
     double mouse_x, mouse_y;
     double mouse_scale_x = 1;
@@ -199,8 +201,8 @@ struct Gosu::Input::Impl : private Gosu::Noncopyable
             case SDL_EVENT_FINGER_MOTION: {
                 Touch touch;
                 touch.id = e->tfinger.fingerID;
-                touch.x = e->tfinger.x;
-                touch.y = e->tfinger.y;
+                touch.x = e->tfinger.x * window_width * mouse_scale_x + mouse_offset_x;
+                touch.y = e->tfinger.y * window_height * mouse_scale_y + mouse_offset_y;
                 touch.pressure = e->tfinger.pressure;
 
                 enqueue_touch_event(touch, e->type);
@@ -743,6 +745,12 @@ void Gosu::Input::set_text_input(TextInput* text_input)
     }
 
     pimpl->text_input = text_input;
+}
+
+void Gosu::Input::set_window_size(int width, int height)
+{
+  pimpl->window_width = width;
+  pimpl->window_height = height;
 }
 
 std::string Gosu::Input::clipboard()

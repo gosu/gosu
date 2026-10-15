@@ -111,6 +111,8 @@ namespace Gosu
         //! Sets the currently active TextInput, or resets it to the nullptr.
         void set_text_input(TextInput* input);
 
+        void set_window_size(int width, int height);
+
         /// Returns the contents of the clipboard as plain text, or an empty string if none is available.
         static std::string clipboard();
 

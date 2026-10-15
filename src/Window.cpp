@@ -164,6 +164,8 @@ void Gosu::Window::resize(int width, int height, bool fullscreen)
     }
     m_impl->input->set_mouse_factors(1 / scale_factor, 1 / scale_factor, black_bar_width,
                                      black_bar_height);
+
+    m_impl->input->set_window_size(m_impl->viewport->width(), m_impl->viewport->height());
 }
 
 bool Gosu::Window::resizable() const
