@@ -446,15 +446,19 @@ private:
         switch (touch_type) {
             case SDL_EVENT_FINGER_DOWN:
                 event.type = InputEvent::TouchBegan;
+                event.touch = touch;
                 break;
             case SDL_EVENT_FINGER_MOTION:
                 event.type = InputEvent::TouchMoved;
+                event.touch = touch;
                 break;
             case SDL_EVENT_FINGER_UP:
                 event.type = InputEvent::TouchEnded;
+                event.touch = touch;
                 break;
             case SDL_EVENT_FINGER_CANCELED:
                 event.type = InputEvent::TouchCancelled;
+                event.touch = touch;
                 break;
         }
 
