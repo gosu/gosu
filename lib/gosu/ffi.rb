@@ -19,6 +19,22 @@ module GosuFFI
            :x, :double,
            :y, :double,
            :pressure, :double
+
+    def id
+      self[:id]
+    end
+
+    def x
+      self[:x]
+    end
+
+    def y
+      self[:y]
+    end
+
+    def pressure
+      self[:pressure]
+    end
   end
 
   callback :_callback, [:pointer], :void
