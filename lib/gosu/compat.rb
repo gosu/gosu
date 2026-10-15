@@ -31,14 +31,14 @@ module Gosu
 
     msg = if klass_or_full_message.is_a?(String) and name.nil? and repl.nil?
       [ "DEPRECATION WARNING: #{klass_or_full_message},
-        \n#Called from #{caller.reject { |line| line.start_with?(__FILE__) }.first(DEPRECATION_STACKTRACE_LINES)}"
+        \n#Called from #{caller.reject { |line| line.start_with?(__dir__) }.first(DEPRECATION_STACKTRACE_LINES)}"
       ]
     else
       # Class method deprecation warnings result in something like this:
       # #<Class:Gosu::Window>::button_id_to_char is deprecated
       # Remove the instance-inspect stuff to make it look a bit better:
-      if klass_or_full_message.kind_of?(Module)
-        target = "#{klass_or_full_message.to_s.gsub(/#<Class:(.*)>/, '\1')}::"
+      target = if klass_or_full_message.kind_of?(Module)
+        "#{klass_or_full_message.to_s.gsub(/#<Class:(.*)>/, '\1')}::"
       else
         "#{klass_or_full_message.class}#"
       end
