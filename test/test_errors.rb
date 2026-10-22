@@ -41,4 +41,21 @@ class TestErrors < Minitest::Test
     error = assert_raises(RuntimeError) { window.tick }
     assert_equal "filter failed", error.message
   end
+
+  # After raising an exception from a callback, the window should not keep raising it.
+  def test_window_exceptions_are_only_raised_once
+    window_class = Class.new(Gosu::Window) do
+      define_method(:update) do
+        next if @raised
+
+        @raised = true
+        raise "update failed"
+      end
+    end
+    window = window_class.new(10, 10)
+
+    error = assert_raises(RuntimeError) { window.tick }
+    assert_equal "update failed", error.message
+    window.tick
+  end
 end

@@ -209,7 +209,7 @@ module Gosu
     def show
       GosuFFI.Gosu_Window_show(__pointer)
 
-      raise @__exception if defined?(@__exception)
+      raise remove_instance_variable(:@__exception) if defined?(@__exception)
 
       GosuFFI.check_last_error
     end
@@ -217,7 +217,7 @@ module Gosu
     def tick
       value = GosuFFI.check_last_error(GosuFFI.Gosu_Window_tick(__pointer))
 
-      raise @__exception if defined?(@__exception)
+      raise remove_instance_variable(:@__exception) if defined?(@__exception)
 
       value
     end
