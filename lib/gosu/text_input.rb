@@ -62,8 +62,20 @@ module Gosu
 
     # Ensures that filter_result is set on C side before filter callback returns
     private def protected_filter(text)
-      string = filter(text)
+      string = begin
+        filter(text)
+      rescue Exception => e
+        # We cannot use Ruby exceptions (internally: longjmp) in C++ callbacks.
+        # Reject the input and remember the exception. Window will re-raise it.
+        @__exception = e
+        ""
+      end
       GosuFFI.Gosu_TextInput_set_filter_result(__pointer, string)
+    end
+
+    # Raises and forgets the last exception from #filter, if any.
+    def __raise_filter_exception
+      raise remove_instance_variable(:@__exception) if defined?(@__exception)
     end
   end
 end

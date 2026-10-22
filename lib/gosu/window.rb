@@ -6,7 +6,13 @@ module Gosu
         begin
           # If there has been an exception, don't do anything as to not make matters worse.
           # Conveniently turn the return value into a boolean result (for needs_cursor? etc).
-          defined?(@__exception) ? false : send(callback, *args)
+          if defined?(@__exception)
+            false
+          else
+            # Treat exceptions from TextInput#filter like exceptions from the callbacks themselves.
+            @text_input&.__raise_filter_exception
+            send(callback, *args)
+          end
         rescue Exception => e
           # Exit the message loop naturally, then re-throw during the next tick.
           @__exception = e
