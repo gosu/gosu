@@ -28,7 +28,7 @@ module Gosu
   end
 
   module_function def gl(z = nil, &block)
-    raise "Block not given!" unless block
+    raise LocalJumpError, "no block given (yield)" unless block
 
     if z
       # When given a Z position, Gosu.gl will not call its block immediately, but enqueue it.
@@ -52,7 +52,7 @@ module Gosu
   end
 
   module_function def render(width, height, retro: false, tileable: false, &block)
-    raise "Block not given!" unless block
+    raise LocalJumpError, "no block given (yield)" unless block
 
     # Ruby-FFI rescues exceptions in callbacks and re-raises them as soon as the FFI call returns.
     # (It only keeps the exception from the last callback, which is fine for blocks that are called
@@ -73,7 +73,7 @@ module Gosu
   end
 
   module_function def record(width, height, &block)
-    raise "Block not given!" unless block
+    raise LocalJumpError, "no block given (yield)" unless block
 
     # See Gosu.render.
     exception = nil
@@ -90,21 +90,29 @@ module Gosu
   end
 
   module_function def transform(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, &block)
+    raise LocalJumpError, "no block given (yield)" unless block
+
     GosuFFI.Gosu_transform(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, block)
     GosuFFI.check_last_error
   end
 
   module_function def translate(x, y, &block)
+    raise LocalJumpError, "no block given (yield)" unless block
+
     GosuFFI.Gosu_translate(x, y, block)
     GosuFFI.check_last_error
   end
 
   module_function def rotate(angle, around_x = 0, around_y = 0, &block)
+    raise LocalJumpError, "no block given (yield)" unless block
+
     GosuFFI.Gosu_rotate(angle, around_x, around_y, block)
     GosuFFI.check_last_error
   end
 
   module_function def scale(x, y = x, around_x = 0, around_y = 0, &block)
+    raise LocalJumpError, "no block given (yield)" unless block
+
     GosuFFI.Gosu_scale(x, y, around_x, around_y, block)
     GosuFFI.check_last_error
   end
@@ -112,6 +120,8 @@ module Gosu
   # Note: On JRuby this seems to get "optimized out" for some reason
   # For now, call jruby with the `--dev` option
   module_function def clip_to(x, y, width, height, &block)
+    raise LocalJumpError, "no block given (yield)" unless block
+
     GosuFFI.Gosu_clip_to(x, y, width, height, block)
     GosuFFI.check_last_error
   end

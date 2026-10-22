@@ -94,4 +94,19 @@ class TestErrors < Minitest::Test
     3.times { window.tick }
     assert_equal 33, calls
   end
+
+  # Like in Gosu 1.4.6 (which used rb_yield), calling these methods without a block raises LocalJumpError.
+  def test_missing_blocks
+    assert_raises(LocalJumpError) { Gosu.render(1, 1) }
+    assert_raises(LocalJumpError) { Gosu.record(1, 1) }
+    Gosu.render(1, 1) do
+      assert_raises(LocalJumpError) { Gosu.gl }
+      assert_raises(LocalJumpError) { Gosu.gl(0) }
+      assert_raises(LocalJumpError) { Gosu.transform([1] * 16) }
+      assert_raises(LocalJumpError) { Gosu.translate(1, 1) }
+      assert_raises(LocalJumpError) { Gosu.rotate(45) }
+      assert_raises(LocalJumpError) { Gosu.scale(2) }
+      assert_raises(LocalJumpError) { Gosu.clip_to(0, 0, 1, 1) }
+    end
+  end
 end
