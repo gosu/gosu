@@ -9,6 +9,7 @@ module Gosu
   module_function def flush
     GosuFFI.Gosu_flush()
     GosuFFI.check_last_error
+    GosuFFI.check_last_gl_error
   end
 
   module_function def milliseconds
@@ -30,12 +31,19 @@ module Gosu
     raise "Block not given!" unless block
 
     if z
-      # When given a Z position, Gosu.gl will not call its block immediately, but enqueue it for later execution.
+      # When given a Z position, Gosu.gl will not call its block immediately, but enqueue it.
+      # Ruby exceptions cannot propagate through the C++ code that calls it then, so remember
+      # the first exception (and skip the remaining blocks) until Gosu::Window re-raises it.
+      wrapped_block = proc do
+        block.call unless $gosu_gl_exception
+      rescue Exception => e
+        $gosu_gl_exception = e
+      end
       # To prevent the block from getting GC'd, store it in a global variable which is cleared after Window.draw.
       $gosu_gl_blocks ||= []
-      $gosu_gl_blocks << block
+      $gosu_gl_blocks << wrapped_block
 
-      GosuFFI.Gosu_gl_z(z, block)
+      GosuFFI.Gosu_gl_z(z, wrapped_block)
     else
       GosuFFI.Gosu_gl(block)
     end

@@ -9,8 +9,12 @@ module Gosu
           if defined?(@__exception)
             false
           else
-            # Treat exceptions from TextInput#filter like exceptions from the callbacks themselves.
+            # Treat exceptions from TextInput#filter and Gosu.gl(z) like exceptions from the callbacks themselves.
             @text_input&.__raise_filter_exception
+            GosuFFI.check_last_gl_error
+
+            # Let the GC clean up deferred Gosu.gl(z) blocks before the next draw.
+            $gosu_gl_blocks = nil if callback == "draw"
             send(callback, *args)
           end
         rescue Exception => e
@@ -18,8 +22,6 @@ module Gosu
           @__exception = e
           close!
           false
-        ensure
-          $gosu_gl_blocks = nil if callback == "draw"
         end
       end
     end
@@ -207,19 +209,29 @@ module Gosu
     end
 
     def show
-      GosuFFI.Gosu_Window_show(__pointer)
+      GosuFFI.check_last_error GosuFFI.Gosu_Window_show(__pointer)
 
-      raise remove_instance_variable(:@__exception) if defined?(@__exception)
-
-      GosuFFI.check_last_error
+      raise_pending_exception
     end
 
     def tick
       value = GosuFFI.check_last_error(GosuFFI.Gosu_Window_tick(__pointer))
 
-      raise remove_instance_variable(:@__exception) if defined?(@__exception)
+      raise_pending_exception
 
       value
+    end
+
+    private def raise_pending_exception
+      raise remove_instance_variable(:@__exception) if defined?(@__exception)
+
+      # Blocks passed to Gosu.gl(z) are called after Window#draw, so they may have failed after the last callback.
+      begin
+        GosuFFI.check_last_gl_error
+      rescue Exception
+        close!
+        raise
+      end
     end
 
     def close!

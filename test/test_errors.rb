@@ -58,4 +58,40 @@ class TestErrors < Minitest::Test
     assert_equal "update failed", error.message
     window.tick
   end
+
+  # Gosu.gl(z) blocks are called from C++ after Window#draw.
+  # Their exceptions are re-raised by Gosu::Window.
+  def test_exceptions_in_gl_blocks
+    window_class = Class.new(Gosu::Window) do
+      attr_reader :frames
+
+      define_method(:update) { @frames = (@frames || 0) + 1; close! if @frames == 10 }
+      define_method(:draw) { Gosu.gl(0) { raise "gl failed" } if @frames == 2 }
+    end
+
+    window = window_class.new(10, 10)
+    error = assert_raises(RuntimeError) { window.show }
+    assert_equal "gl failed", error.message
+    assert_equal 2, window.frames
+
+    window = window_class.new(10, 10)
+    window.tick
+    error = assert_raises(RuntimeError) { window.tick }
+    assert_equal "gl failed", error.message
+  end
+
+  # Gosu.gl(z) blocks must not be garbage collected before C++ calls them.
+  def test_gl_blocks_survive_gc
+    calls = 0
+    window_class = Class.new(Gosu::Window) do
+      define_method(:draw) do
+        Gosu.gl(0) { GC.start; calls += 1 }
+        10.times { Gosu.gl(1) { calls += 1 } }
+      end
+    end
+
+    window = window_class.new(10, 10)
+    3.times { window.tick }
+    assert_equal 33, calls
+  end
 end
