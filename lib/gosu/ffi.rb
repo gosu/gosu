@@ -256,4 +256,12 @@ module GosuFFI
     end
     value
   end
+
+  # Raises and forgets the first exception from a block passed to Gosu.gl(z), see Gosu.gl.
+  def self.check_last_gl_error
+    if (err = $gosu_gl_exception)
+      $gosu_gl_exception = nil
+      raise err
+    end
+  end
 end

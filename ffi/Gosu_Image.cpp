@@ -157,9 +157,7 @@ GOSU_FFI_API Gosu_GLTexInfo* Gosu_Image_gl_tex_info_create(Gosu_Image* image)
 
 GOSU_FFI_API void Gosu_Image_gl_tex_info_destroy(Gosu_GLTexInfo* gl_tex_info)
 {
-    Gosu_translate_exceptions([=] {
-        delete gl_tex_info;
-    });
+    delete gl_tex_info;
 }
 
 // Rendering

@@ -129,11 +129,13 @@ class TestGosuModule < Minitest::Test
   end
 
   def test_clipboard
-    Gosu.clipboard = ""
-    assert_equal(Gosu.clipboard, "")
-
     # If SDL has an error, the result of Gosu.clipboard will be an empty string.
     Gosu.clipboard = "What hath God wrought"
-    assert_equal(Gosu.clipboard, "What hath God wrought")
+    assert_equal("What hath God wrought", Gosu.clipboard)
+
+    # Setting an empty string only withdraws our own clipboard contents. On Wayland, this does not affect the
+    # clipboard of other applications, so we cannot expect Gosu.clipboard to be empty afterwards.
+    Gosu.clipboard = ""
+    refute_equal("What hath God wrought", Gosu.clipboard)
   end
 end

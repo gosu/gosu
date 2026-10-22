@@ -7,6 +7,7 @@
 #include "Gosu.h"
 #include <Gosu/Gosu.hpp>
 #include <stdexcept>
+#include <type_traits>
 
 // Error handling
 
@@ -15,13 +16,26 @@ std::string& Gosu_internal_error();
 template<typename Functor>
 auto Gosu_translate_exceptions(Functor functor)
 {
+    using R = decltype(functor());
     try {
         Gosu_internal_error().clear();
-        return functor();
+
+        // The functor may call back into Ruby, which may in turn call other Gosu methods that fail.
+        // If the Ruby callback handles these errors itself, they must not be reported again.
+        // => Reset it not only before, but also after the functor.
+
+        if constexpr (std::is_void_v<R>) {
+            functor();
+            Gosu_internal_error().clear();
+        }
+        else {
+            R result = functor();
+            Gosu_internal_error().clear();
+            return result;
+        }
     }
     catch (const std::exception& e) {
         Gosu_internal_error() = e.what();
-        using R = decltype(functor());
         return R();
     }
 }
