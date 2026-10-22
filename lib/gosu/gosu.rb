@@ -52,15 +52,41 @@ module Gosu
   end
 
   module_function def render(width, height, retro: false, tileable: false, &block)
-    __image = GosuFFI.Gosu_render(width, height, block, GosuFFI.image_flags(retro: retro, tileable: tileable))
+    raise "Block not given!" unless block
+
+    # Ruby-FFI rescues exceptions in callbacks and re-raises them as soon as the FFI call returns.
+    # (It only keeps the exception from the last callback, which is fine for blocks that are called
+    # exactly once, like in Gosu.translate.)
+    # Here, that would happen before the resulting image could be wrapped and later freed.
+    # Remember the exception and raise it ourselves instead.
+    exception = nil
+    wrapped_block = proc do
+      block.call
+    rescue Exception => e
+      exception = e
+    end
+    __image = GosuFFI.Gosu_render(width, height, wrapped_block, GosuFFI.image_flags(retro: retro, tileable: tileable))
     GosuFFI.check_last_error
-    Gosu::Image.new(__image)
+    image = Gosu::Image.new(__image)
+    raise exception if exception
+    image
   end
 
   module_function def record(width, height, &block)
-    __image = GosuFFI.Gosu_record(width, height, block)
+    raise "Block not given!" unless block
+
+    # See Gosu.render.
+    exception = nil
+    wrapped_block = proc do
+      block.call
+    rescue Exception => e
+      exception = e
+    end
+    __image = GosuFFI.Gosu_record(width, height, wrapped_block)
     GosuFFI.check_last_error
-    Gosu::Image.new(__image)
+    image = Gosu::Image.new(__image)
+    raise exception if exception
+    image
   end
 
   module_function def transform(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, &block)
