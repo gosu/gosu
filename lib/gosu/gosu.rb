@@ -44,39 +44,33 @@ module Gosu
   end
 
   module_function def render(width, height, retro: false, tileable: false, &block)
-    # TODO: Exception translation from inner block
     __image = GosuFFI.Gosu_render(width, height, block, GosuFFI.image_flags(retro: retro, tileable: tileable))
     GosuFFI.check_last_error
     Gosu::Image.new(__image)
   end
 
   module_function def record(width, height, &block)
-    # TODO: Exception translation from inner block
     __image = GosuFFI.Gosu_record(width, height, block)
     GosuFFI.check_last_error
     Gosu::Image.new(__image)
   end
 
   module_function def transform(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, &block)
-    # TODO: Exception translation from inner block
     GosuFFI.Gosu_transform(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, block)
     GosuFFI.check_last_error
   end
 
   module_function def translate(x, y, &block)
-    # TODO: Exception translation from inner block
     GosuFFI.Gosu_translate(x, y, block)
     GosuFFI.check_last_error
   end
 
   module_function def rotate(angle, around_x = 0, around_y = 0, &block)
-    # TODO: Exception translation from inner block
     GosuFFI.Gosu_rotate(angle, around_x, around_y, block)
     GosuFFI.check_last_error
   end
 
   module_function def scale(x, y = x, around_x = 0, around_y = 0, &block)
-    # TODO: Exception translation from inner block
     GosuFFI.Gosu_scale(x, y, around_x, around_y, block)
     GosuFFI.check_last_error
   end
@@ -84,7 +78,6 @@ module Gosu
   # Note: On JRuby this seems to get "optimized out" for some reason
   # For now, call jruby with the `--dev` option
   module_function def clip_to(x, y, width, height, &block)
-    # TODO: Exception translation from inner block
     GosuFFI.Gosu_clip_to(x, y, width, height, block)
     GosuFFI.check_last_error
   end
