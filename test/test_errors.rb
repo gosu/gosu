@@ -1,8 +1,10 @@
 require_relative "test_helper"
 
 class TestErrors < Minitest::Test
+  include TestHelper
+
   # Every FFI function must reset the last error, so that an error does not get reported twice.
-  def test_errors_are_not_reported_twice
+  def test_errors_are_not_reported_again
     assert_raises(RuntimeError) { Gosu::Image.new("does_not_exist.png") }
 
     # ...other functions that check the last error...
@@ -15,14 +17,18 @@ class TestErrors < Minitest::Test
 
   # Errors in Gosu callbacks that Ruby handles itself must not make the outer call fail.
   def test_handled_errors_in_callbacks_are_not_reported_again
-    Gosu.render(1, 1) { Gosu::Image.new("does_not_exist.png") rescue nil }
-
     window_class = Class.new(Gosu::Window) do
       define_method(:update) { Gosu::Sample.new("does_not_exist.wav") rescue nil }
       define_method(:draw) { Gosu::Song.new("does_not_exist.ogg") rescue nil }
     end
     window = window_class.new(10, 10)
     2.times { window.tick }
+  end
+
+  def test_handled_errors_in_render_are_not_reported_again
+    skip_on_github_windows
+
+    Gosu.render(1, 1) { Gosu::Image.new("does_not_exist.png") rescue nil }
   end
 
   class FailingTextInput < Gosu::TextInput
@@ -99,10 +105,13 @@ class TestErrors < Minitest::Test
   def test_missing_blocks
     assert_raises(LocalJumpError) { Gosu.render(1, 1) }
     assert_raises(LocalJumpError) { Gosu.record(1, 1) }
+
+    skip_on_github_windows
+
     Gosu.render(1, 1) do
       assert_raises(LocalJumpError) { Gosu.gl }
       assert_raises(LocalJumpError) { Gosu.gl(0) }
-      assert_raises(LocalJumpError) { Gosu.transform([1] * 16) }
+      assert_raises(LocalJumpError) { Gosu.transform(*[1] * 16) }
       assert_raises(LocalJumpError) { Gosu.translate(1, 1) }
       assert_raises(LocalJumpError) { Gosu.rotate(45) }
       assert_raises(LocalJumpError) { Gosu.scale(2) }

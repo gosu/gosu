@@ -1,6 +1,8 @@
 require_relative "test_helper"
 
 class TestDeprecations < Minitest::Test
+  include TestHelper
+
   DUMMY_WINDOW = Gosu::Window.new(100, 100)
 
   def test_only_warn_once_per_origin
@@ -60,6 +62,10 @@ class TestDeprecations < Minitest::Test
     assert_output("", /Passing options as a Hash to Font#initialize/) do
       assert_equal 20, Gosu::Font.new(20, { bold: true }).height
     end
+  end
+
+  def test_options_hash_instead_of_keyword_arguments_in_render
+    skip_on_github_windows
 
     assert_output("", /Passing options as a Hash to Gosu.render/) do
       assert_equal 10, Gosu.render(10, 10, { retro: true }) {}.width
