@@ -3,6 +3,7 @@ Checks: >-
   -*-avoid-c-arrays,
   -*-avoid-pragma-once,
   -*-math-missing-parentheses,
+  -*-trailing-comma,
   -altera-*,
   -bugprone-easily-swappable-parameters,
   -bugprone-exception-escape,

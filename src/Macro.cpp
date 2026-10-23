@@ -23,11 +23,9 @@ namespace
         return true;
     }
 
-    std::optional<Gosu::Transform> find_transform_for_target(double x1, double y1, //
-                                                             double x2, double y2, //
-                                                             double x3, double y3, //
-                                                             double x4, double y4, //
-                                                             double width, double height)
+    std::optional<Gosu::Transform> find_transform(double x1, double y1, double x2, double y2, //
+                                                  double x3, double y3, double x4, double y4, //
+                                                  double width, double height)
     {
         // Transformation logic follows a discussion on the ImageMagick mailing
         // list (on which ImageMagick's perspective_transform.pl is based).
@@ -143,7 +141,7 @@ void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Col
 
     gl(z, [=, this] {
         const std::optional<Transform> transform
-            = find_transform_for_target(x1, y1, x2, y2, x3, y3, x4, y4, m_width, m_height);
+            = find_transform(x1, y1, x2, y2, x3, y3, x4, y4, m_width, m_height);
 
         if (!transform.has_value()) {
             return;
@@ -177,11 +175,12 @@ const Gosu::GLTexInfo* Gosu::Macro::gl_tex_info() const
 Gosu::Bitmap Gosu::Macro::to_bitmap() const
 {
     Viewport viewport(m_width, m_height);
-    auto handle = viewport.make_current();
+    const auto current = viewport.make_current();
 
     const auto render_this = [this] {
-        draw(0, 0, Color::WHITE, m_width, 0, Color::WHITE, 0, m_height, Color::WHITE, m_width,
-             m_height, Color::WHITE, 0, BM_DEFAULT);
+        draw(0, 0, Color::WHITE, m_width, 0, Color::WHITE, //
+             0, m_height, Color::WHITE, m_width, m_height, Color::WHITE, //
+             0, BM_DEFAULT);
     };
 
     return render(m_width, m_height, render_this).drawable().to_bitmap();
