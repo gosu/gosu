@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Gosu/Platform.hpp>
+#include <functional>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -34,6 +35,24 @@ namespace Gosu
     /// This value is not cached. Please memorize the specific value that you are interested in,
     /// typically the first language in the returned array that your game supports.
     std::vector<std::string> user_languages();
+
+    class [[nodiscard]] Cleanup
+    {
+        std::function<void()> m_action;
+
+    public:
+        explicit Cleanup(std::function<void()> action);
+        ~Cleanup();
+        // Move-constructible, but not copyable or assignable.
+        Cleanup(Cleanup&&) noexcept;
+        Cleanup(const Cleanup&) = delete;
+        Cleanup& operator=(const Cleanup&) = delete;
+        Cleanup& operator=(Cleanup&&) = delete;
+
+        void perform();
+    };
+
+    Cleanup finally(std::function<void()> action);
 
     /// Base class to quickly make a type non-copyable/non-movable. Same as boost::noncopyable.
     class Noncopyable
@@ -78,6 +97,6 @@ namespace Gosu
         ///                 then the pointed-to int (if any) will be adjusted by the same amount.
         void clip_to(const Rect& bounding_box, int* adjust_x = nullptr, int* adjust_y = nullptr);
 
-        bool operator==(const Rect& other) const = default;
+        bool operator==(const Rect&) const = default;
     };
 }

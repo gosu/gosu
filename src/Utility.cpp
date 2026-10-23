@@ -3,6 +3,38 @@
 #include <memory>
 #include <stdexcept>
 #include <utf8proc.h>
+#include <utility>
+
+Gosu::Cleanup::Cleanup(std::function<void()> action)
+    : m_action(std::move(action))
+{
+}
+
+Gosu::Cleanup::~Cleanup()
+{
+    perform();
+}
+
+Gosu::Cleanup::Cleanup(Cleanup&& rhs) noexcept
+    : m_action(std::exchange(rhs.m_action, nullptr))
+{
+}
+
+void Gosu::Cleanup::perform()
+{
+    if (m_action) {
+        m_action();
+        m_action = nullptr;
+    }
+}
+
+Gosu::Cleanup Gosu::finally(std::function<void()> action)
+{
+    if (action == nullptr) {
+        throw std::invalid_argument("Gosu::finally must be called with an action");
+    }
+    return Cleanup(std::move(action));
+}
 
 std::u32string Gosu::utf8_to_composed_utc4(std::string_view utf8)
 {
