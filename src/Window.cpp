@@ -61,6 +61,11 @@ Gosu::Window::Window(int width, int height, unsigned window_flags, double update
     input().on_button_up = [this](Button button) { button_up(button); };
     input().on_gamepad_connected = [this](int index) { gamepad_connected(index); };
     input().on_gamepad_disconnected = [this](int index) { gamepad_disconnected(index); };
+
+    input().on_touch_began = [this](Touch touch) { touch_began(touch); };
+    input().on_touch_moved = [this](Touch touch) { touch_moved(touch); };
+    input().on_touch_ended = [this](Touch touch) { touch_ended(touch); };
+    input().on_touch_cancelled = [this](Touch touch) { touch_cancelled(touch); };
 }
 
 Gosu::Window::~Window()
@@ -159,6 +164,8 @@ void Gosu::Window::resize(int width, int height, bool fullscreen)
     }
     m_impl->input->set_mouse_factors(1 / scale_factor, 1 / scale_factor, black_bar_width,
                                      black_bar_height);
+
+    m_impl->input->set_window_size(m_impl->viewport->width(), m_impl->viewport->height());
 }
 
 bool Gosu::Window::resizable() const

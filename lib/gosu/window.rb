@@ -1,7 +1,8 @@
 module Gosu
   class Window
     %w(update draw needs_redraw? needs_cursor? capture_cursor? hit_test gain_focus lose_focus
-       button_down button_up gamepad_connected gamepad_disconnected drop close).each do |callback|
+       button_down button_up gamepad_connected gamepad_disconnected
+      touch_began touch_moved touch_ended touch_cancelled drop close).each do |callback|
       define_method "protected_#{callback}" do |*args|
         begin
           # If there has been an exception, don't do anything as to not make matters worse.
@@ -47,6 +48,10 @@ module Gosu
         button_up: [:id],
         gamepad_connected: [:id],
         gamepad_disconnected: [:id],
+        touch_began: [:touch],
+        touch_moved: [:touch],
+        touch_ended: [:touch],
+        touch_cancelled: [:touch],
         drop: [:filename],
         needs_redraw?: [],
         needs_cursor?: [],
@@ -85,6 +90,18 @@ module Gosu
     end
 
     def gamepad_disconnected(id)
+    end
+
+    def touch_began(touch)
+    end
+
+    def touch_moved(touch)
+    end
+
+    def touch_ended(touch)
+    end
+
+    def touch_cancelled(touch)
     end
 
     def drop(filename)

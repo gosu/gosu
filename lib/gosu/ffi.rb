@@ -14,10 +14,34 @@ module GosuFFI
   candidates.prepend(Gem.loaded_specs["gosu"].extension_dir) if Gem.loaded_specs["gosu"]
   ffi_lib(candidates.map { |dir| File.expand_path(library, dir) })
 
+  class Touch < FFI::Struct
+    layout :id, :uint64,
+           :x, :double,
+           :y, :double,
+           :pressure, :double
+
+    def id
+      self[:id]
+    end
+
+    def x
+      self[:x]
+    end
+
+    def y
+      self[:y]
+    end
+
+    def pressure
+      self[:pressure]
+    end
+  end
+
   callback :_callback, [:pointer], :void
   callback :_callback_with_image, [:pointer, :pointer], :void
   callback :_callback_with_unsigned, [:pointer, :uint32], :void
   callback :_callback_with_string, [:pointer, :string], :void
+  callback :_callback_with_touch, [:pointer, Touch.by_value], :void
   callback :_callback_returns_bool, [:pointer], :bool
   callback :_callback_hit_test_returns_unsigned, [:pointer, :int, :int], :uint32
 
@@ -205,6 +229,10 @@ module GosuFFI
   attach_function :Gosu_Window_set_button_up, [:pointer, :_callback_with_unsigned, :pointer], :void
   attach_function :Gosu_Window_set_gamepad_connected, [:pointer, :_callback_with_unsigned, :pointer], :void
   attach_function :Gosu_Window_set_gamepad_disconnected, [:pointer, :_callback_with_unsigned, :pointer], :void
+  attach_function :Gosu_Window_set_touch_began, [:pointer, :_callback_with_touch, :pointer], :void
+  attach_function :Gosu_Window_set_touch_moved, [:pointer, :_callback_with_touch, :pointer], :void
+  attach_function :Gosu_Window_set_touch_ended, [:pointer, :_callback_with_touch, :pointer], :void
+  attach_function :Gosu_Window_set_touch_cancelled, [:pointer, :_callback_with_touch, :pointer], :void
   attach_function :Gosu_Window_set_drop, [:pointer, :_callback_with_string, :pointer], :void
   attach_function :Gosu_Window_set_needs_redraw, [:pointer, :_callback_returns_bool, :pointer], :void
   attach_function :Gosu_Window_set_needs_cursor, [:pointer, :_callback_returns_bool, :pointer], :void

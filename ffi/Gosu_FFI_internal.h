@@ -42,6 +42,11 @@ auto Gosu_translate_exceptions(Functor functor)
 
 // C-compatible wrapper structs for Gosu classes. (No inheritance because of missing virtual dtors.)
 
+struct Gosu_Touch {
+  uint64_t id;
+  double x, y, pressure;
+};
+
 struct Gosu_Channel
 {
     Gosu::Channel channel;
@@ -127,6 +132,58 @@ struct Gosu_Window : public Gosu::Window
         if (gamepad_disconnected_callback) gamepad_disconnected_callback(id);
     }
 
+    void touch_began(Gosu::Touch touch) override
+    {
+        if (touch_began_callback)
+        {
+            Gosu_Touch gosu_touch;
+            gosu_touch.id = touch.id;
+            gosu_touch.x = touch.x;
+            gosu_touch.y = touch.y;
+            gosu_touch.pressure = touch.pressure;
+            touch_began_callback(gosu_touch);
+        }
+    }
+
+    void touch_moved(Gosu::Touch touch) override
+    {
+        if (touch_moved_callback)
+        {
+            Gosu_Touch gosu_touch;
+            gosu_touch.id = touch.id;
+            gosu_touch.x = touch.x;
+            gosu_touch.y = touch.y;
+            gosu_touch.pressure = touch.pressure;
+            touch_moved_callback(gosu_touch);
+        }
+    }
+
+    void touch_ended(Gosu::Touch touch) override
+    {
+        if (touch_ended_callback)
+        {
+            Gosu_Touch gosu_touch;
+            gosu_touch.id = touch.id;
+            gosu_touch.x = touch.x;
+            gosu_touch.y = touch.y;
+            gosu_touch.pressure = touch.pressure;
+            touch_ended_callback(gosu_touch);
+        }
+    }
+
+    void touch_cancelled(Gosu::Touch touch) override
+    {
+        if (touch_cancelled_callback)
+        {
+            Gosu_Touch gosu_touch;
+            gosu_touch.id = touch.id;
+            gosu_touch.x = touch.x;
+            gosu_touch.y = touch.y;
+            gosu_touch.pressure = touch.pressure;
+            touch_cancelled_callback(gosu_touch);
+        }
+    }
+
     void drop(const std::string& filename) override
     {
         if (drop_callback) drop_callback(filename.c_str());
@@ -166,6 +223,10 @@ struct Gosu_Window : public Gosu::Window
     std::function<void(unsigned id)> button_up_callback;
     std::function<void(int index)> gamepad_connected_callback;
     std::function<void(int index)> gamepad_disconnected_callback;
+    std::function<void(Gosu_Touch touch)> touch_began_callback;
+    std::function<void(Gosu_Touch touch)> touch_moved_callback;
+    std::function<void(Gosu_Touch touch)> touch_ended_callback;
+    std::function<void(Gosu_Touch touch)> touch_cancelled_callback;
     std::function<void(const char* filename)> drop_callback;
     std::function<bool()> needs_redraw_callback;
     std::function<bool()> needs_cursor_callback;
