@@ -1,6 +1,7 @@
 Checks: >-
   *,
   -*-avoid-c-arrays,
+  -*-avoid-pragma-once,
   -*-math-missing-parentheses,
   -altera-*,
   -bugprone-easily-swappable-parameters,

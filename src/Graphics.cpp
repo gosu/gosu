@@ -1,4 +1,3 @@
-#include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/Utility.hpp>
@@ -8,7 +7,6 @@
 #include "Macro.hpp"
 #include "OffScreenTarget.hpp"
 #include "OpenGLContext.hpp"
-#include <algorithm>
 #include <memory>
 
 namespace Gosu
@@ -107,9 +105,6 @@ Gosu::Viewport::Viewport(int phys_width, int phys_height)
 
 Gosu::Viewport::~Viewport()
 {
-    if (current_viewport_pointer == this) {
-        current_viewport_pointer = nullptr;
-    }
 }
 
 int Gosu::Viewport::width() const
@@ -136,6 +131,15 @@ void Gosu::Viewport::set_resolution(int virtual_width, int virtual_height,
     m_impl->black_height = vertical_black_bar_height;
 
     m_impl->update_base_transform();
+}
+
+Gosu::Cleanup Gosu::Viewport::make_current()
+{
+    auto result = finally([previous = current_viewport_pointer] {
+        current_viewport_pointer = previous;
+    });
+    current_viewport_pointer = this;
+    return result;
 }
 
 void Gosu::Viewport::frame(const std::function<void()>& f)
@@ -166,7 +170,7 @@ void Gosu::Viewport::frame(const std::function<void()>& f)
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    current_viewport_pointer = this;
+    auto queue_cleanup = make_current();
 
     f();
 
@@ -193,7 +197,7 @@ void Gosu::Viewport::frame(const std::function<void()>& f)
         flush();
     }
 
-    current_viewport_pointer = nullptr;
+    queue_cleanup.perform();
 
     // Clear leftover transforms, clip rects etc.
     if (queues.size() == 1) {
@@ -221,14 +225,10 @@ void Gosu::gl(const std::function<void()>& f)
     throw std::logic_error("Custom OpenGL ES is not supported yet");
 #else
     Viewport& cg = current_viewport();
-
     flush();
-
     cg.m_impl->begin_gl();
-
+    const auto cleanup_gl = finally([&cg] { cg.m_impl->end_gl(); });
     f();
-
-    cg.m_impl->end_gl();
 #endif
 }
 
@@ -240,8 +240,8 @@ void Gosu::gl(Gosu::ZPos z, const std::function<void()>& f)
     const auto wrapped_f = [f] {
         Viewport& cg = current_viewport();
         cg.m_impl->begin_gl();
+        const auto cleanup_gl = finally([&cg] { cg.m_impl->end_gl(); });
         f();
-        cg.m_impl->end_gl();
     };
     current_queue().gl(wrapped_f, z);
 #endif
@@ -255,8 +255,9 @@ void Gosu::clip_to(double x, double y, double width, double height, const std::f
     }
 
     current_queue().begin_clipping(x, y, width, height, viewport_height);
+    const auto cleanup_cliprect = finally([] { current_queue().end_clipping(); });
+
     f();
-    current_queue().end_clipping();
 }
 
 Gosu::Image Gosu::render(int width, int height, const std::function<void()>& f,
@@ -283,17 +284,15 @@ Gosu::Image Gosu::render(int width, int height, const std::function<void()>& f,
     Image result = OffScreenTarget(width, height, image_flags).render([&] {
 #ifndef GOSU_IS_OPENGLES
         glPushAttrib(GL_ALL_ATTRIB_BITS);
+        const auto pop_attributes = finally([] { glPopAttrib(); });
 #endif
         glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_BLEND);
         queues.emplace_back(QM_RENDER_TO_TEXTURE);
+        const auto pop_queue = finally([&] { queues.pop_back(); });
         f();
         queues.back().perform_draw_ops_and_code();
-        queues.pop_back();
-#ifndef GOSU_IS_OPENGLES
-        glPopAttrib();
-#endif
     });
 
     // Restore previous matrix and glViewport.
@@ -307,19 +306,20 @@ Gosu::Image Gosu::render(int width, int height, const std::function<void()>& f,
 Gosu::Image Gosu::record(int width, int height, const std::function<void()>& f)
 {
     queues.emplace_back(QM_RECORD_MACRO);
+    const auto pop_queue = finally([&] { queues.pop_back(); });
 
     f();
 
     std::unique_ptr<Drawable> result(new Macro(current_queue(), width, height));
-    queues.pop_back();
     return Image(std::move(result));
 }
 
 void Gosu::transform(const Gosu::Transform& transform, const std::function<void()>& f)
 {
     current_queue().push_transform(transform);
+    const auto pop_transform = finally([&] { current_queue().pop_transform(); });
+
     f();
-    current_queue().pop_transform();
 }
 
 void Gosu::draw_line(double x1, double y1, Color c1, double x2, double y2, Color c2,

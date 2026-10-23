@@ -90,14 +90,7 @@ Gosu::Image Gosu::OffScreenTarget::render(const std::function<void ()>& f)
         throw std::runtime_error("Incomplete framebuffer");
     }
 
-    try {
-        f();
-
-    } catch (...) {
-        glBindFramebuffer(GOSU_GL_CONST(GL_FRAMEBUFFER), 0);
-        throw;
-    }
-    glBindFramebuffer(GOSU_GL_CONST(GL_FRAMEBUFFER), 0);
-
+    auto reset_framebuffer = finally([] { glBindFramebuffer(GOSU_GL_CONST(GL_FRAMEBUFFER), 0); });
+    f();
     return Image(std::make_unique<TexChunk>(m_texture, Rect::covering(*m_texture), nullptr));
 }

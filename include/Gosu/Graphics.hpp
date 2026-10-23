@@ -25,6 +25,8 @@ namespace Gosu
         int width() const;
         int height() const;
 
+        Cleanup make_current();
+
         /// Prepares the graphics object for drawing and then runs the rendering code in f.
         /// Nothing must be drawn outside of frame() and record().
         void frame(const std::function<void()>& f);

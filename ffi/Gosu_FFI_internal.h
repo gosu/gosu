@@ -6,8 +6,9 @@
 
 #include "Gosu.h"
 #include <Gosu/Gosu.hpp>
-#include <stdexcept>
-#include <type_traits>
+#include <exception>
+#include <functional>
+#include <string>
 
 // Error handling
 
@@ -16,26 +17,18 @@ std::string& Gosu_internal_error();
 template<typename Functor>
 auto Gosu_translate_exceptions(Functor functor)
 {
-    using R = decltype(functor());
     try {
-        Gosu_internal_error().clear();
-
         // The functor may call back into Ruby, which may in turn call other Gosu methods that fail.
         // If the Ruby callback handles these errors itself, they must not be reported again.
         // => Reset it not only before, but also after the functor.
+        Gosu_internal_error().clear();
+        const auto clear_again = Gosu::finally([] { Gosu_internal_error().clear(); });
 
-        if constexpr (std::is_void_v<R>) {
-            functor();
-            Gosu_internal_error().clear();
-        }
-        else {
-            R result = functor();
-            Gosu_internal_error().clear();
-            return result;
-        }
+        return functor();
     }
     catch (const std::exception& e) {
         Gosu_internal_error() = e.what();
+        using R = decltype(functor());
         return R();
     }
 }
@@ -66,11 +59,7 @@ struct Gosu_Sample
 
 struct Gosu_Song : Gosu::Song
 {
-    [[maybe_unused]] // silence buggy warning, this is being used in Gosu_Song.cpp.
-    explicit Gosu_Song(const std::string& filename)
-    : Gosu::Song{filename}
-    {
-    }
+    using Song::Song;
 };
 
 struct Gosu_TextInput : public Gosu::TextInput
@@ -91,11 +80,7 @@ struct Gosu_TextInput : public Gosu::TextInput
 
 struct Gosu_Window : public Gosu::Window
 {
-    [[maybe_unused]] // silence buggy warning, this is being used in Gosu_Window.cpp.
-    Gosu_Window(int width, int height, unsigned window_flags, double update_interval)
-    : Gosu::Window(width, height, window_flags, update_interval)
-    {
-    }
+    using Window::Window;
 
     void update() override
     {
