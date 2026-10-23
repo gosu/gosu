@@ -2,6 +2,7 @@
 #include <Gosu/Image.hpp>
 #include <Gosu/Utility.hpp>
 #include "DrawOpQueue.hpp"
+#include <optional>
 #include <stdexcept>
 
 namespace
@@ -10,19 +11,23 @@ namespace
     // (a11 a12) (x1) = (b1)
     // (a21 a22) (x2) = (b2)
     // x1, x2 are output parameters. Returns false if the matrix is singular.
-    static bool solve_2x2(double a11, double a12, double a21, double a22, //
-                          double b1, double b2, double& x1, double& x2)
+    bool solve_2x2(double a11, double a12, double a21, double a22, //
+                   double b1, double b2, double& x1, double& x2)
     {
         const double det = a11 * a22 - a21 * a12;
-        if (det == 0) return false;
+        if (det == 0) {
+            return false;
+        }
         x1 = (a22 * b1 - a12 * b2) / det;
         x2 = (a11 * b2 - a21 * b1) / det;
         return true;
     }
 
-    Gosu::Transform find_transform_for_target(double x1, double y1, double x2, double y2, //
-                                              double x3, double y3, double x4, double y4, //
-                                              double width, double height)
+    std::optional<Gosu::Transform> find_transform_for_target(double x1, double y1, //
+                                                             double x2, double y2, //
+                                                             double x3, double y3, //
+                                                             double x4, double y4, //
+                                                             double width, double height)
     {
         // Transformation logic follows a discussion on the ImageMagick mailing
         // list (on which ImageMagick's perspective_transform.pl is based).
@@ -63,7 +68,7 @@ namespace
         // Solve:
         double qx, qy;
         if (!solve_2x2(a11, a12, a21, a22, b1, b2, qx, qy)) {
-            return Gosu::Transform { { 0 } };
+            return std::nullopt;
         }
 
         // Updating the last two rows with the computed solution yields
@@ -137,8 +142,12 @@ void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Col
     normalize_coordinates(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
     gl(z, [=, this] {
-        Transform transform
+        const std::optional<Transform> transform
             = find_transform_for_target(x1, y1, x2, y2, x3, y3, x4, y4, m_width, m_height);
+
+        if (!transform.has_value()) {
+            return;
+        }
 
 #ifndef GOSU_IS_OPENGLES
         glEnable(GL_BLEND);
@@ -149,11 +158,12 @@ void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Col
         // transformation only has to be performed once.
         for (const auto& vertex_array : m_vertex_arrays) {
             glPushMatrix();
+            const auto pop_matrix = finally([] { glPopMatrix(); });
+
             vertex_array.render_state.apply();
-            glMultMatrixd(transform.matrix.data());
+            glMultMatrixd(transform->matrix.data());
             glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vertex_array.vertices.data());
             glDrawArrays(GL_QUADS, 0, (GLsizei)vertex_array.vertices.size());
-            glPopMatrix();
         }
 #endif
     });
@@ -166,7 +176,7 @@ const Gosu::GLTexInfo* Gosu::Macro::gl_tex_info() const
 
 Gosu::Bitmap Gosu::Macro::to_bitmap() const
 {
-    Gosu::Viewport viewport(m_width, m_height);
+    Viewport viewport(m_width, m_height);
     auto handle = viewport.make_current();
 
     const auto render_this = [this] {
@@ -174,7 +184,7 @@ Gosu::Bitmap Gosu::Macro::to_bitmap() const
              m_height, Color::WHITE, 0, BM_DEFAULT);
     };
 
-    return Gosu::render(m_width, m_height, render_this).drawable().to_bitmap();
+    return render(m_width, m_height, render_this).drawable().to_bitmap();
 }
 
 std::unique_ptr<Gosu::Drawable> Gosu::Macro::subimage(const Rect&) const
