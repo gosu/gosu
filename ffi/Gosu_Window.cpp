@@ -63,6 +63,34 @@ GOSU_FFI_API void Gosu_Window_set_gamepad_disconnected(Gosu_Window* window,
     });
 }
 
+GOSU_FFI_API void Gosu_Window_set_touch_began(Gosu_Window* window, void function(void*, Gosu_Touch), void* data)
+{
+    Gosu_translate_exceptions([=] {
+        window->touch_began_callback = [=](Gosu_Touch touch) { function(data, touch); };
+    });
+}
+
+GOSU_FFI_API void Gosu_Window_set_touch_moved(Gosu_Window* window, void function(void*, Gosu_Touch), void* data)
+{
+    Gosu_translate_exceptions([=] {
+        window->touch_moved_callback = [=](Gosu_Touch touch) { function(data, touch); };
+    });
+}
+
+GOSU_FFI_API void Gosu_Window_set_touch_ended(Gosu_Window* window, void function(void*, Gosu_Touch), void* data)
+{
+    Gosu_translate_exceptions([=] {
+        window->touch_ended_callback = [=](Gosu_Touch touch) { function(data, touch); };
+    });
+}
+
+GOSU_FFI_API void Gosu_Window_set_touch_cancelled(Gosu_Window* window, void function(void*, Gosu_Touch), void* data)
+{
+    Gosu_translate_exceptions([=] {
+        window->touch_cancelled_callback = [=](Gosu_Touch touch) { function(data, touch); };
+    });
+}
+
 GOSU_FFI_API void Gosu_Window_set_drop(Gosu_Window* window, void function(void*, const char*),
                                        void* data)
 {

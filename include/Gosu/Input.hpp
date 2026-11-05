@@ -6,6 +6,7 @@
 #include <Gosu/Utility.hpp>
 #include <functional>
 #include <memory>
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -16,9 +17,13 @@ namespace Gosu
     struct Touch
     {
         /// Allows for identification of a touch across calls.
-        void* id;
+        #ifdef GOSU_IS_IPHONE
+            void* id;
+        #else
+            uint64_t id;
+        #endif
         /// Position of a touch on the touch screen.
-        double x, y;
+        double x, y, pressure;
     };
     typedef std::vector<Touch> Touches;
 
@@ -98,8 +103,6 @@ namespace Gosu
 
         std::function<void (int)> on_gamepad_connected, on_gamepad_disconnected;
 
-        //! Assignable events that are called by update. You can bind these to your own functions.
-        //! If you use the Window class, it will assign these to its own methods.
         std::function<void (Touch)> on_touch_began, on_touch_moved, on_touch_ended,
             on_touch_cancelled;
 
@@ -107,6 +110,8 @@ namespace Gosu
         TextInput* text_input() const;
         //! Sets the currently active TextInput, or resets it to the nullptr.
         void set_text_input(TextInput* input);
+
+        void set_window_size(int width, int height);
 
         /// Returns the contents of the clipboard as plain text, or an empty string if none is available.
         static std::string clipboard();

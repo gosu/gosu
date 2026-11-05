@@ -5,6 +5,7 @@
 #include <stdbool.h>
 
 typedef struct Gosu_Window Gosu_Window;
+typedef struct Gosu_Touch Gosu_Touch;
 
 // Lifecycle
 
@@ -27,6 +28,10 @@ GOSU_FFI_API void Gosu_Window_set_gamepad_connected(Gosu_Window* window,
 GOSU_FFI_API void Gosu_Window_set_gamepad_disconnected(Gosu_Window* window,
                                                        void function(void* data, int index),
                                                        void* data);
+GOSU_FFI_API void Gosu_Window_set_touch_began(Gosu_Window* window, void function(void* data, Gosu_Touch touch), void* data);
+GOSU_FFI_API void Gosu_Window_set_touch_moved(Gosu_Window* window, void function(void* data, Gosu_Touch touch), void* data);
+GOSU_FFI_API void Gosu_Window_set_touch_ended(Gosu_Window* window, void function(void* data, Gosu_Touch touch), void* data);
+GOSU_FFI_API void Gosu_Window_set_touch_cancelled(Gosu_Window* window, void function(void* data, Gosu_Touch touch), void* data);
 GOSU_FFI_API void Gosu_Window_set_drop(Gosu_Window* window,
                                        void function(void* data, const char* filename), void* data);
 GOSU_FFI_API void Gosu_Window_set_needs_redraw(Gosu_Window* window, bool function(void* data),
