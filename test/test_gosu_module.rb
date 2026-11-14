@@ -15,6 +15,12 @@ class TestGosuModule < Minitest::Test
     }.each do |method, args|
       assert_respond_to Gosu, method
 
+      # Lines cannot be recorded into macros.
+      if method == :draw_line
+        assert_raises(RuntimeError) { Gosu.record(20, 20) { Gosu.send(method, *args) } }
+        next
+      end
+
       img = Gosu.record(20, 20) do
         Gosu.send(method, *args)
       end

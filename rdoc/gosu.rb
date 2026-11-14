@@ -1192,6 +1192,8 @@ module Gosu
     #
     # @note Because the returned object is not backed by a bitmap texture, there are restrictions on how it can be used. For example, you can not use any color other than {Gosu::Color#WHITE} when drawing the image.
     #
+    # @note {draw_line}, {clip_to} and {gl} cannot currently be used inside the block.
+    #
     # @note The width and height of the returned image will be the values you passed to {record}, regardless of the area you draw on.
     # It is important to pass accurate values if you plan on calling {Gosu::Image#draw_as_quad} or {Gosu::Image#draw_rot} on the result later.
     #

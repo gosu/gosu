@@ -325,6 +325,10 @@ void Gosu::transform(const Gosu::Transform& transform, const std::function<void(
 void Gosu::draw_line(double x1, double y1, Color c1, double x2, double y2, Color c2,
                                ZPos z, BlendMode mode)
 {
+    if (current_queue().mode() == QM_RECORD_MACRO) {
+        throw std::logic_error("Drawing lines is not allowed while recording a macro");
+    }
+
     DrawOp op;
     op.render_state.mode = mode;
     op.vertices_or_block_index = 2;
