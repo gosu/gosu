@@ -318,25 +318,29 @@ module GosuFFI
 
   constants.each do |const|
     attach_variable const, "Gosu_#{const}", :uint32
-    Gosu.const_set(const, GosuFFI.send(const)) if const =~ /^(KB|MS|GP)_/
+    # Reading an attached variable goes through FFI every time, which is too slow for every draw call.
+    # The values never change, so read them once and store them as Ruby constants.
+    value = GosuFFI.send(const)
+    const_set(const, value)
+    Gosu.const_set(const, value) if const =~ /^(KB|MS|GP)_/
   end
 
   Gosu.const_set("VERSION", GosuFFI.Gosu_version())
   Gosu.const_set("LICENSES", GosuFFI.Gosu_licenses())
-  Gosu.const_set("MAJOR_VERSION", GosuFFI.MAJOR_VERSION)
-  Gosu.const_set("MINOR_VERSION", GosuFFI.MINOR_VERSION)
-  Gosu.const_set("POINT_VERSION", GosuFFI.POINT_VERSION)
+  Gosu.const_set("MAJOR_VERSION", MAJOR_VERSION)
+  Gosu.const_set("MINOR_VERSION", MINOR_VERSION)
+  Gosu.const_set("POINT_VERSION", POINT_VERSION)
 
   # SEE: https://github.com/gosu/gosu/blob/master/Gosu/GraphicsBase.hpp
 
   def self.blend_mode(mode)
     case mode
     when :default
-      GosuFFI.BM_DEFAULT
+      BM_DEFAULT
     when :additive, :add
-      GosuFFI.BM_ADD
+      BM_ADD
     when :multiply
-      GosuFFI.BM_MULTIPLY
+      BM_MULTIPLY
     else
       raise ArgumentError, "No such blend mode: #{mode}"
     end
@@ -344,21 +348,21 @@ module GosuFFI
 
   def self.image_flags(retro: false, tileable: false)
     flags = 0
-    flags |= GosuFFI.IF_RETRO if retro
-    flags |= GosuFFI.IF_TILEABLE if tileable
+    flags |= IF_RETRO if retro
+    flags |= IF_TILEABLE if tileable
     flags
   end
 
   def self.font_alignment_flags(flags)
     case flags
     when :left
-      GosuFFI.AL_LEFT
+      AL_LEFT
     when :right
-      GosuFFI.AL_RIGHT
+      AL_RIGHT
     when :center
-      GosuFFI.AL_CENTER
+      AL_CENTER
     when :justify
-      GosuFFI.AL_JUSTIFY
+      AL_JUSTIFY
     else
       raise ArgumentError, "No such font alignment: #{flags}"
     end
@@ -366,17 +370,17 @@ module GosuFFI
 
   def self.font_flags(bold, italic, underline)
     flags = 0
-    flags |= GosuFFI.FF_BOLD if bold
-    flags |= GosuFFI.FF_ITALIC if italic
-    flags |= GosuFFI.FF_UNDERLINE if underline
+    flags |= FF_BOLD if bold
+    flags |= FF_ITALIC if italic
+    flags |= FF_UNDERLINE if underline
     flags
   end
 
   def self.window_flags(fullscreen: false, resizable: false, borderless: false)
-    flags = GosuFFI.WF_WINDOWED
-    flags |= GosuFFI.WF_FULLSCREEN if fullscreen
-    flags |= GosuFFI.WF_RESIZABLE if resizable
-    flags |= GosuFFI.WF_BORDERLESS if borderless
+    flags = WF_WINDOWED
+    flags |= WF_FULLSCREEN if fullscreen
+    flags |= WF_RESIZABLE if resizable
+    flags |= WF_BORDERLESS if borderless
     flags
   end
 end
