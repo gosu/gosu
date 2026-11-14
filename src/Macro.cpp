@@ -124,6 +124,10 @@ struct Gosu::Macro::Impl : private Gosu::Noncopyable
     void draw_vertex_arrays(double x1, double y1, double x2, double y2, //
                             double x3, double y3, double x4, double y4) const
     {
+        // TODO: Macros should not be split up just because they have different transforms.
+        // They should be premultiplied and have the same transform by definition. Then the
+        // transformation only has to be performed once.
+
 #ifndef GOSU_IS_OPENGLES
         const std::optional<Transform> transform
             = find_transform(x1, y1, x2, y2, x3, y3, x4, y4);
@@ -134,9 +138,6 @@ struct Gosu::Macro::Impl : private Gosu::Noncopyable
         glEnable(GL_BLEND);
         glMatrixMode(GL_MODELVIEW);
 
-        // TODO: Macros should not be split up just because they have different transforms.
-        // They should be premultiplied and have the same transform by definition. Then the
-        // transformation only has to be performed once.
         for (const auto& vertex_array : vertex_arrays) {
             glPushMatrix();
             const auto pop_matrix = finally([] { glPopMatrix(); });
@@ -151,7 +152,6 @@ struct Gosu::Macro::Impl : private Gosu::Noncopyable
 };
 
 Gosu::Macro::Macro(DrawOpQueue& queue, int width, int height)
-    : pimpl(new Impl{.width = width, .height = height})
 {
     auto impl = std::make_shared<Impl>();
     impl->width = width;
