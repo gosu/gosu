@@ -148,8 +148,10 @@ module GosuFFI
   attach_function :Gosu_Image_height, [:pointer], :int
 
   attach_function :Gosu_Image_draw, [:pointer, :double, :double, :double, :double, :double, :uint32, :uint32], :void
+  attach_function :Gosu_Image_draw_quick, [:pointer, :double, :double, :double], :void
   attach_function :Gosu_Image_draw_rot, [:pointer, :double, :double, :double, :double, :double, :double,
                                          :double, :double, :uint32, :uint32], :void
+  attach_function :Gosu_Image_draw_rot_quick, [:pointer, :double, :double, :double, :double], :void
   attach_function :Gosu_Image_draw_as_quad, [:pointer, :double, :double, :uint32, :double, :double, :uint32,
                                              :double, :double, :uint32, :double, :double, :uint32, :double, :uint32], :void
 

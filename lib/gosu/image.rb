@@ -99,12 +99,23 @@ module Gosu
     end
 
     def draw(x, y, z = 0, scale_x = 1, scale_y = 1, color = Gosu::Color::WHITE, flags = :default)
-      GosuFFI.Gosu_Image_draw(__pointer, x, y, z, scale_x, scale_y, GosuFFI.color_to_uint32(color), GosuFFI.blend_mode(flags))
+      if scale_x == 1 and scale_y == 1 and color.equal?(Gosu::Color::WHITE) and flags == :default
+        # Use a fast-path method when most arguments have their default value.
+        GosuFFI.Gosu_Image_draw_quick(__pointer, x, y, z)
+      else
+        GosuFFI.Gosu_Image_draw(__pointer, x, y, z, scale_x, scale_y, GosuFFI.color_to_uint32(color), GosuFFI.blend_mode(flags))
+      end
       GosuFFI.check_last_error
     end
 
     def draw_rot(x, y, z = 0, angle = 0, center_x = 0.5, center_y = 0.5, scale_x = 1, scale_y = 1, color = Gosu::Color::WHITE, flags = :default)
-      GosuFFI.Gosu_Image_draw_rot(__pointer, x, y, z, angle, center_x, center_y, scale_x, scale_y, GosuFFI.color_to_uint32(color), GosuFFI.blend_mode(flags))
+      if center_x == 0.5 and center_y == 0.5 and scale_x == 1 and scale_y == 1 and
+         color.equal?(Gosu::Color::WHITE) and flags == :default
+        # Use a fast-path method when most arguments have their default value.
+        GosuFFI.Gosu_Image_draw_rot_quick(__pointer, x, y, z, angle)
+      else
+        GosuFFI.Gosu_Image_draw_rot(__pointer, x, y, z, angle, center_x, center_y, scale_x, scale_y, GosuFFI.color_to_uint32(color), GosuFFI.blend_mode(flags))
+      end
       GosuFFI.check_last_error
     end
 

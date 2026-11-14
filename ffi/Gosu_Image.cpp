@@ -170,6 +170,11 @@ GOSU_FFI_API void Gosu_Image_draw(Gosu_Image* image, double x, double y, double 
     });
 }
 
+GOSU_FFI_API void Gosu_Image_draw_quick(Gosu_Image* image, double x, double y, double z)
+{
+    Gosu_translate_exceptions([=] { image->image.draw(x, y, z); });
+}
+
 GOSU_FFI_API void Gosu_Image_draw_rot(Gosu_Image* image, double x, double y, double z, double angle,
                                       double center_x, double center_y, double scale_x,
                                       double scale_y, unsigned color, unsigned mode)
@@ -178,6 +183,12 @@ GOSU_FFI_API void Gosu_Image_draw_rot(Gosu_Image* image, double x, double y, dou
         image->image.draw_rot(x, y, z, angle, center_x, center_y, scale_x, scale_y, color,
                               static_cast<Gosu::BlendMode>(mode));
     });
+}
+
+GOSU_FFI_API void Gosu_Image_draw_rot_quick(Gosu_Image* image, double x, double y, double z,
+                                            double angle)
+{
+    Gosu_translate_exceptions([=] { image->image.draw_rot(x, y, z, angle); });
 }
 
 GOSU_FFI_API void Gosu_Image_draw_as_quad(Gosu_Image* image, double x1, double y1, unsigned color1,
