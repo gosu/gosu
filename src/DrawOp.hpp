@@ -5,6 +5,7 @@
 #include "TexChunk.hpp"
 #include <Gosu/Color.hpp>
 #include <Gosu/GraphicsBase.hpp>
+#include <algorithm>
 #include <cassert>
 
 namespace Gosu
@@ -15,15 +16,15 @@ namespace Gosu
         ZPos z;
         
         RenderState render_state;
-        // Only valid if render_state.tex_name != NO_TEXTURE
-        GLfloat top, left, bottom, right;
+        // Only set if render_state.tex_name != NO_TEXTURE
+        GLfloat top = 0, left = 0, bottom = 0, right = 0;
         // Used to keep TexChunk rectangles on shared textures alive until the end of the frame.
         std::shared_ptr<const Rect> rect_handle;
 
         // TODO: Merge with Gosu::ArrayVertex.
         struct Vertex
         {
-            float x, y;
+            float x = 0, y = 0;
             Color c;
             Vertex() {}
             Vertex(float x, float y, Color c) : x(x), y(y), c(c) {}
@@ -139,15 +140,17 @@ namespace Gosu
             // frame anyway.
             ArrayVertex result[4];
             for (int i = 0; i < 4; ++i) {
-                result[i].vertices[0] = vertices[i].x;
-                result[i].vertices[1] = vertices[i].y;
-                result[i].vertices[2] = 0;
-                result[i].color       = vertices[i].c.abgr();
-                double x = result[i].vertices[0];
-                double y = result[i].vertices[1];
+                // Triangles are turned into quads by repeating the last vertex.
+                // This allows us to use the same array for both triangles and quads.
+                // (This is also why draw_line does not work inside macros right now.)
+                const Vertex& vertex = vertices[std::min(i, vertices_or_block_index - 1)];
+                double x = vertex.x;
+                double y = vertex.y;
                 render_state.transform->apply(x, y);
                 result[i].vertices[0] = static_cast<float>(x);
                 result[i].vertices[1] = static_cast<float>(y);
+                result[i].vertices[2] = 0;
+                result[i].color       = vertex.c.abgr();
             }
             RenderState va_render_state = render_state;
             va_render_state.transform   = 0;
@@ -161,9 +164,8 @@ namespace Gosu
             result[3].tex_coords[0] = left;
             result[3].tex_coords[1] = bottom;
             
-            if (vas.empty() || !(vas.back().render_state == va_render_state)) {
-                vas.push_back(VertexArray());
-                vas.back().render_state = va_render_state;
+            if (vas.empty() || vas.back().render_state != va_render_state) {
+                vas.emplace_back().render_state = va_render_state;
             }
             
             vas.back().vertices.insert(vas.back().vertices.end(), result, result + 4);

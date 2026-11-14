@@ -5,14 +5,17 @@
 #include <optional>
 #include <stdexcept>
 
-namespace
+struct Gosu::Macro::Impl : private Gosu::Noncopyable
 {
+    VertexArrays vertex_arrays;
+    int width, height;
+
     // Solves the 2x2 linear system for x:
     // (a11 a12) (x1) = (b1)
     // (a21 a22) (x2) = (b2)
     // x1, x2 are output parameters. Returns false if the matrix is singular.
-    bool solve_2x2(double a11, double a12, double a21, double a22, //
-                   double b1, double b2, double& x1, double& x2)
+    static bool solve_2x2(double a11, double a12, double a21, double a22, //
+                          double b1, double b2, double& x1, double& x2)
     {
         const double det = a11 * a22 - a21 * a12;
         if (det == 0) {
@@ -23,9 +26,8 @@ namespace
         return true;
     }
 
-    std::optional<Gosu::Transform> find_transform(double x1, double y1, double x2, double y2, //
-                                                  double x3, double y3, double x4, double y4, //
-                                                  double width, double height)
+    std::optional<Transform> find_transform(double x1, double y1, double x2, double y2, //
+                                            double x3, double y3, double x4, double y4) const
     {
         // Transformation logic follows a discussion on the ImageMagick mailing
         // list (on which ImageMagick's perspective_transform.pl is based).
@@ -112,22 +114,61 @@ namespace
         c[6] = qx;
         c[7] = qy;
 
-        Gosu::Transform result = { { c[0], c[3], 0, c[6], //
-                                     c[1], c[4], 0, c[7], //
-                                     0, 0, 1, 0, //
-                                     c[2], c[5], 0, 1 } };
+        Transform result = { { c[0], c[3], 0, c[6], //
+                               c[1], c[4], 0, c[7], //
+                               0, 0, 1, 0, //
+                               c[2], c[5], 0, 1 } };
         return result;
+    }
+
+    void draw_vertex_arrays(double x1, double y1, double x2, double y2, //
+                            double x3, double y3, double x4, double y4) const
+    {
+#ifndef GOSU_IS_OPENGLES
+        const std::optional<Transform> transform
+            = find_transform(x1, y1, x2, y2, x3, y3, x4, y4);
+        if (!transform.has_value()) {
+            return;
+        }
+
+        glEnable(GL_BLEND);
+        glMatrixMode(GL_MODELVIEW);
+
+        // TODO: Macros should not be split up just because they have different transforms.
+        // They should be premultiplied and have the same transform by definition. Then the
+        // transformation only has to be performed once.
+        for (const auto& vertex_array : vertex_arrays) {
+            glPushMatrix();
+            const auto pop_matrix = finally([] { glPopMatrix(); });
+
+            vertex_array.render_state.apply();
+            glMultMatrixd(transform->matrix.data());
+            glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vertex_array.vertices.data());
+            glDrawArrays(GL_QUADS, 0, (GLsizei)vertex_array.vertices.size());
+        }
+#endif
     }
 };
 
 Gosu::Macro::Macro(DrawOpQueue& queue, int width, int height)
-    : m_width(width),
-      m_height(height)
+    : pimpl(new Impl{.width = width, .height = height})
 {
-    queue.compile_to(m_vertex_arrays);
+    auto impl = std::make_shared<Impl>();
+    impl->width = width;
+    impl->height = height;
+    queue.compile_to(impl->vertex_arrays);
+    pimpl = std::move(impl);
 }
 
-Gosu::Macro::~Macro() = default;
+int Gosu::Macro::width() const
+{
+    return pimpl->width;
+}
+
+int Gosu::Macro::height() const
+{
+    return pimpl->height;
+}
 
 void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Color c2, //
                        double x3, double y3, Color c3, double x4, double y4, Color c4, //
@@ -139,32 +180,9 @@ void Gosu::Macro::draw(double x1, double y1, Color c1, double x2, double y2, Col
 
     normalize_coordinates(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
-    gl(z, [=, this] {
-        const std::optional<Transform> transform
-            = find_transform(x1, y1, x2, y2, x3, y3, x4, y4, m_width, m_height);
-
-        if (!transform.has_value()) {
-            return;
-        }
-
-#ifndef GOSU_IS_OPENGLES
-        glEnable(GL_BLEND);
-        glMatrixMode(GL_MODELVIEW);
-
-        // TODO: Macros should not be split up just because they have different transforms.
-        // They should be premultiplied and have the same transform by definition. Then the
-        // transformation only has to be performed once.
-        for (const auto& vertex_array : m_vertex_arrays) {
-            glPushMatrix();
-            const auto pop_matrix = finally([] { glPopMatrix(); });
-
-            vertex_array.render_state.apply();
-            glMultMatrixd(transform->matrix.data());
-            glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vertex_array.vertices.data());
-            glDrawArrays(GL_QUADS, 0, (GLsizei)vertex_array.vertices.size());
-        }
-#endif
-    });
+    // Capture pimpl, not this: The GL block only runs when the queue is flushed, and this Macro
+    // may have been destroyed by then.
+    gl(z, [=, impl = pimpl] { impl->draw_vertex_arrays(x1, y1, x2, y2, x3, y3, x4, y4); });
 }
 
 const Gosu::GLTexInfo* Gosu::Macro::gl_tex_info() const
@@ -174,16 +192,16 @@ const Gosu::GLTexInfo* Gosu::Macro::gl_tex_info() const
 
 Gosu::Bitmap Gosu::Macro::to_bitmap() const
 {
-    Viewport viewport(m_width, m_height);
+    Viewport viewport(pimpl->width, pimpl->height);
     const auto current = viewport.make_current();
 
     const auto render_this = [this] {
-        draw(0, 0, Color::WHITE, m_width, 0, Color::WHITE, //
-             0, m_height, Color::WHITE, m_width, m_height, Color::WHITE, //
+        draw(0, 0, Color::WHITE, pimpl->width, 0, Color::WHITE, //
+             0, pimpl->height, Color::WHITE, pimpl->width, pimpl->height, Color::WHITE, //
              0, BM_DEFAULT);
     };
 
-    return render(m_width, m_height, render_this).drawable().to_bitmap();
+    return render(pimpl->width, pimpl->height, render_this).drawable().to_bitmap();
 }
 
 std::unique_ptr<Gosu::Drawable> Gosu::Macro::subimage(const Rect&) const
