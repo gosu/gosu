@@ -15,7 +15,8 @@ module Gosu
     end
 
     def height
-      GosuFFI.check_last_error(GosuFFI.Gosu_Font_height(__pointer))
+      # We can cache this, font sizes never change in Gosu.
+      @height ||= GosuFFI.check_last_error(GosuFFI.Gosu_Font_height(__pointer))
     end
 
     def text_width(text, scale_x = 1)

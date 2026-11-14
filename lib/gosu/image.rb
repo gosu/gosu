@@ -89,11 +89,13 @@ module Gosu
     end
 
     def width
-      GosuFFI.check_last_error(GosuFFI.Gosu_Image_width(__pointer))
+      # We can cache this, image sizes cannot change in Gosu.
+      @width ||= GosuFFI.check_last_error(GosuFFI.Gosu_Image_width(__pointer))
     end
 
     def height
-      GosuFFI.check_last_error(GosuFFI.Gosu_Image_height(__pointer))
+      # We can cache this, image sizes cannot change in Gosu.
+      @height ||= GosuFFI.check_last_error(GosuFFI.Gosu_Image_height(__pointer))
     end
 
     def draw(x, y, z = 0, scale_x = 1, scale_y = 1, color = Gosu::Color::WHITE, flags = :default)
