@@ -17,10 +17,10 @@ class DrawableTests : public testing::Test
 TEST_F(DrawableTests, empty_drawables)
 {
     const Gosu::Bitmap empty(0, 5);
-    ASSERT_THROW(Gosu::create_drawable(empty, Gosu::Rect { -5, -2, 5, 2 }, 0),
+    ASSERT_THROW(Gosu::create_drawable(empty, Gosu::Rect::xywh(-5, -2, 5, 2), 0),
                  std::invalid_argument);
 
-    const auto empty_drawable = Gosu::create_drawable(empty, Gosu::Rect { 0, 2, 0, 3 }, 0);
+    const auto empty_drawable = Gosu::create_drawable(empty, Gosu::Rect::xywh(0, 2, 0, 3), 0);
     ASSERT_NE(empty_drawable, nullptr);
     ASSERT_EQ(empty_drawable->width(), 0);
     ASSERT_EQ(empty_drawable->height(), 3);
@@ -32,7 +32,7 @@ TEST_F(DrawableTests, square_power_of_two_texture)
     const Gosu::Bitmap source = Gosu::load_image_file("test_image_io/no-alpha-jpg.jpg");
 
     const auto square_pot_drawable
-        = Gosu::create_drawable(source, Gosu::Rect { 5, 3, 64, 64 }, true);
+        = Gosu::create_drawable(source, Gosu::Rect::xywh(5, 3, 64, 64), true);
     ASSERT_EQ(square_pot_drawable->width(), 64);
     ASSERT_EQ(square_pot_drawable->height(), 64);
     const auto* square_pot_tex_info = square_pot_drawable->gl_tex_info();
@@ -73,7 +73,7 @@ TEST_F(DrawableTests, texture_allocation)
     ASSERT_NE(normal_tex_info->tex_name, retro_tex_info->tex_name);
 
     const auto second_retro_drawable
-        = Gosu::create_drawable(source, Gosu::Rect { 0, 0, 5, 2 }, Gosu::IF_RETRO);
+        = Gosu::create_drawable(source, Gosu::Rect::xywh(0, 0, 5, 2), Gosu::IF_RETRO);
     // A second retro drawable should end up on the same texture atlas as the first one.
     ASSERT_EQ(retro_tex_info->tex_name, second_retro_drawable->gl_tex_info()->tex_name);
 }

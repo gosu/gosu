@@ -23,15 +23,15 @@ TEST_F(TiledDrawableTests, direct_creation)
     // A tiled image does not consist of a single area on a single texture.
     ASSERT_EQ(tiled_drawable.gl_tex_info(), nullptr);
     // Neither does a subimage that spans multiple tiles.
-    ASSERT_EQ(tiled_drawable.subimage(Gosu::Rect { 2, 2, 2, 2 })->gl_tex_info(), nullptr);
+    ASSERT_EQ(tiled_drawable.subimage(Gosu::Rect::xywh(2, 2, 2, 2))->gl_tex_info(), nullptr);
     // These are the rectangles we expect to see:
     for (const auto& rect : {
-             Gosu::Rect { 0, 0, 3, 3 },
-             Gosu::Rect { 3, 0, 3, 3 },
-             Gosu::Rect { 6, 0, 3, 3 },
-             Gosu::Rect { 0, 3, 3, 2 },
-             Gosu::Rect { 3, 3, 3, 2 },
-             Gosu::Rect { 6, 3, 3, 2 },
+             Gosu::Rect::xywh(0, 0, 3, 3),
+             Gosu::Rect::xywh(3, 0, 3, 3),
+             Gosu::Rect::xywh(6, 0, 3, 3),
+             Gosu::Rect::xywh(0, 3, 3, 2),
+             Gosu::Rect::xywh(3, 3, 3, 2),
+             Gosu::Rect::xywh(6, 3, 3, 2),
          }) {
         // The individual tiles are rectangles on an OpenGL texture and can give us information.
         ASSERT_NE(tiled_drawable.subimage(rect)->gl_tex_info(), nullptr);
@@ -42,7 +42,7 @@ TEST_F(TiledDrawableTests, direct_creation)
     tiled_drawable.insert(other_bitmap, 4, 1);
     ASSERT_EQ(source, tiled_drawable.to_bitmap());
 
-    ASSERT_THROW(Gosu::TiledDrawable(source, Gosu::Rect { 1, 2, 3, 4 }, 10, Gosu::IF_RETRO),
+    ASSERT_THROW(Gosu::TiledDrawable(source, Gosu::Rect::xywh(1, 2, 3, 4), 10, Gosu::IF_RETRO),
                  std::invalid_argument);
     ASSERT_THROW(Gosu::TiledDrawable(source, Gosu::Rect::covering(source), -6, Gosu::IF_RETRO),
                  std::invalid_argument);

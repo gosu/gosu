@@ -16,23 +16,23 @@ TEST_F(ClipRectStackTests, direct_use)
     ASSERT_EQ(stack.effective_rect(), std::nullopt);
     ASSERT_THROW(stack.pop(), std::logic_error);
 
-    stack.push(Gosu::Rect { 10, 10, 40, 40 });
-    ASSERT_EQ(stack.effective_rect(), Gosu::Rect({ 10, 10, 40, 40 }));
+    stack.push(Gosu::Rect::xywh(10, 10, 40, 40));
+    ASSERT_EQ(stack.effective_rect(), Gosu::Rect::xywh(10, 10, 40, 40));
 
-    stack.push(Gosu::Rect { -5, -5, 20, 20 });
-    ASSERT_EQ(stack.effective_rect(), Gosu::Rect({ 10, 10, 5, 5 }));
+    stack.push(Gosu::Rect::xywh(-5, -5, 20, 20));
+    ASSERT_EQ(stack.effective_rect(), Gosu::Rect::xywh(10, 10, 5, 5));
 
-    stack.push(Gosu::Rect { 0, 0, 1, 2 });
+    stack.push(Gosu::Rect::xywh(0, 0, 1, 2));
     ASSERT_TRUE(stack.effective_rect().value().empty());
 
     stack.pop();
-    ASSERT_EQ(stack.effective_rect(), Gosu::Rect({ 10, 10, 5, 5 }));
+    ASSERT_EQ(stack.effective_rect(), Gosu::Rect::xywh(10, 10, 5, 5));
 }
 
 TEST_F(ClipRectStackTests, not_in_macros)
 {
     // Gosu::record does not support clipping, only Gosu::render does.
-    ASSERT_THROW(Gosu::record(10, 10, [] { Gosu::clip_to(1, 2, 3, 4, [] {}); }), std::logic_error);
+    ASSERT_THROW(Gosu::record(10, 10, [] { Gosu::clip_to(1, 2, 3, 4, [] { }); }), std::logic_error);
 }
 
 TEST_F(ClipRectStackTests, allow_when_rendering)

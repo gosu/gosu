@@ -57,23 +57,23 @@ TEST_F(TextureTests, tex_chunks)
     ASSERT_LT(info->left, info->right);
     ASSERT_LT(info->top, info->bottom);
     const Gosu::Bitmap texture_bitmap = texture_ptr->to_bitmap(Gosu::Rect {
-        static_cast<int>(std::round(info->left * tex_size) - 1),
-        static_cast<int>(std::round(info->top * tex_size) - 1),
-        yellow_with_red_frame.width(),
-        yellow_with_red_frame.height(),
+        .x = static_cast<int>(std::round(info->left * tex_size) - 1),
+        .y = static_cast<int>(std::round(info->top * tex_size) - 1),
+        .width = yellow_with_red_frame.width(),
+        .height = yellow_with_red_frame.height(),
     });
     // Simulate the green rectangle insertion on our source bitmap as well.
     yellow_with_red_frame.insert(Gosu::Bitmap(2, 2, Gosu::Color::GREEN), 7, 4);
     // Now the image should have the same content.
     ASSERT_EQ(texture_bitmap, yellow_with_red_frame);
 
-    ASSERT_THROW(texture_ptr->to_bitmap(Gosu::Rect { -4, -6, 10, 5 }), //
+    ASSERT_THROW(texture_ptr->to_bitmap(Gosu::Rect::xywh(-4, -6, 10, 5)), //
                  std::invalid_argument);
-    ASSERT_THROW(Gosu::TexChunk(texture_ptr, Gosu::Rect { -3, 5, 10, 10 }, nullptr),
+    ASSERT_THROW(Gosu::TexChunk(texture_ptr, Gosu::Rect::xywh(-3, 5, 10, 10), nullptr),
                  std::invalid_argument);
-    ASSERT_THROW(Gosu::TexChunk(texture_ptr, Gosu::Rect { 14, 3, 0, 75 }, nullptr),
+    ASSERT_THROW(Gosu::TexChunk(texture_ptr, Gosu::Rect::xywh(14, 3, 0, 75), nullptr),
                  std::invalid_argument);
-    ASSERT_THROW(chunk_ptr->subimage(Gosu::Rect { 3, -5, 3, 5 }), //
+    ASSERT_THROW(chunk_ptr->subimage(Gosu::Rect::xywh(3, -5, 3, 5)), //
                  std::invalid_argument);
 }
 
@@ -95,7 +95,7 @@ TEST_F(TextureTests, bin_packing_benchmark)
     std::vector<std::unique_ptr<Gosu::Drawable>> images;
 
     for (int i = 0; i < 5'000; ++i) {
-        Gosu::Rect source_rect { 0, 0, next_size(), next_size() };
+        Gosu::Rect source_rect = Gosu::Rect::xywh(0, 0, next_size(), next_size());
         if (next_bool()) {
             source_rect.width = source_rect.height;
         }

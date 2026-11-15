@@ -129,8 +129,8 @@ std::vector<Gosu::Image> Gosu::load_tiles(const Bitmap& bitmap, //
 
     for (int y = 0; y < tiles_y; ++y) {
         for (int x = 0; x < tiles_x; ++x) {
-            images.emplace_back(
-                bitmap, Rect { x * tile_width, y * tile_height, tile_width, tile_height }, flags);
+            Rect rect = Rect::xywh(x * tile_width, y * tile_height, tile_width, tile_height);
+            images.emplace_back(bitmap, rect, flags);
         }
     }
 

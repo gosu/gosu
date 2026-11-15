@@ -12,7 +12,8 @@ GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_rect(const char* filename, //
                                                      unsigned image_flags)
 {
     return Gosu_translate_exceptions([=] {
-        return new Gosu_Image(Gosu::Image(filename, { x, y, width, height }, image_flags));
+        return new Gosu_Image(
+            Gosu::Image(filename, Gosu::Rect::xywh(x, y, width, height), image_flags));
     });
 }
 
@@ -68,7 +69,8 @@ GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_blob(void* blob, size_t byte_cou
                                         + std::to_string(rows));
         }
 
-        return new Gosu_Image(Gosu::Image(bitmap, { x, y, width, height }, image_flags));
+        return new Gosu_Image(
+            Gosu::Image(bitmap, Gosu::Rect::xywh(x, y, width, height), image_flags));
     });
 }
 
@@ -77,7 +79,7 @@ GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_subimage(Gosu_Image* image, int 
 {
     return Gosu_translate_exceptions([=]() -> Gosu_Image* {
         std::unique_ptr<Gosu::Drawable> drawable
-            = image->image.drawable().subimage({ left, top, width, height });
+            = image->image.drawable().subimage(Gosu::Rect::xywh(left, top, width, height));
 
         if (!drawable) {
             return nullptr;

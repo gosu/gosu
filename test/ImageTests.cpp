@@ -15,7 +15,7 @@ TEST_F(ImageTests, empty_image)
     ASSERT_EQ(image.width(), 0);
     ASSERT_EQ(image.height(), 0);
     ASSERT_NO_THROW(image.drawable().insert(Gosu::Bitmap(3, 5, Gosu::Color::GREEN), -4, 5));
-    ASSERT_EQ(image.drawable().subimage(Gosu::Rect { 0, -3, 3, 6 }), nullptr);
+    ASSERT_EQ(image.drawable().subimage(Gosu::Rect::xywh(0, -3, 3, 6)), nullptr);
     ASSERT_EQ(image.drawable().gl_tex_info(), nullptr);
     ASSERT_NO_THROW(image.draw(53, 324.6, 0, 1.0, 1.0, Gosu::Color::RED));
     ASSERT_EQ(image.drawable().to_bitmap(), Gosu::Bitmap(0, 0));

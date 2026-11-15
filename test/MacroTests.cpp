@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
 
-#include "TestHelper.hpp"
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Drawable.hpp>
 #include <Gosu/Graphics.hpp>
 #include <Gosu/Image.hpp>
 #include <Gosu/Transform.hpp>
+#include "TestHelper.hpp"
 #include <functional>
 #include <stdexcept>
 
@@ -24,7 +24,7 @@ protected:
         Gosu::draw_triangle(20, 5, Gosu::Color::GREEN, 35, 5, Gosu::Color::BLUE, //
                             20, 25, Gosu::Color::YELLOW, 3);
         Gosu::transform(Gosu::Transform::translate(25, 18), [] {
-            Gosu::draw_rect(0, 0, 8, 8, Gosu::Color::CYAN, 4);
+            Gosu::draw_rect(0, 0, 8, 8, Gosu::Color::CYAN, 4); //
         });
     }
 
@@ -39,11 +39,11 @@ protected:
 
 TEST_F(MacroTests, basic)
 {
-    const Gosu::Image macro = Gosu::record(320, 240, [] {});
+    const Gosu::Image macro = Gosu::record(320, 240, [] { });
     ASSERT_EQ(macro.width(), 320);
     ASSERT_EQ(macro.height(), 240);
     ASSERT_EQ(macro.drawable().gl_tex_info(), nullptr);
-    ASSERT_EQ(macro.drawable().subimage(Gosu::Rect { 0, 0, 1, 1 }), nullptr);
+    ASSERT_EQ(macro.drawable().subimage(Gosu::Rect::xywh(0, 0, 1, 1)), nullptr);
     ASSERT_THROW(macro.drawable().insert(Gosu::Bitmap(), 3, 5), std::logic_error);
     ASSERT_THROW(macro.draw(0, 0, 0), std::logic_error);
 
@@ -73,7 +73,7 @@ TEST_F(MacroTests, scaled_and_inside_transform)
     const auto placed = [](const std::function<void()>& f) {
         return [f] {
             Gosu::transform(Gosu::Transform::translate(7, 3), [&] {
-                Gosu::transform(Gosu::Transform::scale(2), f);
+                Gosu::transform(Gosu::Transform::scale(2), f); //
             });
         };
     };
@@ -120,21 +120,21 @@ TEST_F(MacroTests, corners_map_to_target_quad)
 
 TEST_F(MacroTests, cannot_be_tinted)
 {
-    const Gosu::Image macro = Gosu::record(10, 10, [] {});
+    const Gosu::Image macro = Gosu::record(10, 10, [] { });
     ASSERT_THROW(render_to_bitmap(10, 10, [&] { macro.draw(0, 0, 0, 1, 1, Gosu::Color::RED); }),
                  std::invalid_argument);
 }
 
 TEST_F(MacroTests, no_custom_opengl)
 {
-    ASSERT_THROW(Gosu::record(10, 10, [] { Gosu::gl([] {}); }), std::logic_error);
+    ASSERT_THROW(Gosu::record(10, 10, [] { Gosu::gl([] { }); }), //
+                 std::logic_error);
 }
 
 TEST_F(MacroTests, no_lines)
 {
-    ASSERT_THROW(Gosu::record(10, 10, [] {
-        Gosu::draw_line(0, 0, Gosu::Color::WHITE, 10, 10, Gosu::Color::WHITE, 0);
-    }), std::logic_error);
+    ASSERT_THROW(Gosu::record(10, 10, [] { Gosu::draw_line(0, 0, 0, 10, 10, 0, 0); }),
+                 std::logic_error);
 }
 
 TEST_F(MacroTests, exception_while_recording)
@@ -144,20 +144,20 @@ TEST_F(MacroTests, exception_while_recording)
     // The macro's queue must have been removed again.
     ASSERT_THROW(Gosu::flush(), std::logic_error);
     // ...and recording must still work.
-    ASSERT_EQ(Gosu::record(10, 10, [] {}).width(), 10);
+    ASSERT_EQ(Gosu::record(10, 10, [] { }).width(), 10);
 }
 
 TEST_F(MacroTests, degenerate_targets)
 {
     const Gosu::Image macro = Gosu::record(10, 10, [] {
-        Gosu::draw_rect(0, 0, 10, 10, Gosu::Color::RED, 0);
+        Gosu::draw_rect(0, 0, 10, 10, Gosu::Color::RED, 0); //
     });
     const Gosu::Bitmap result = render_to_bitmap(10, 10, [&] {
         // All four corners in the same place.
         macro.drawable().draw(5, 5, Gosu::Color::WHITE, 5, 5, Gosu::Color::WHITE, //
                               5, 5, Gosu::Color::WHITE, 5, 5, Gosu::Color::WHITE, //
                               0, Gosu::BM_DEFAULT);
-        Gosu::record(0, 0, [] {}).draw(0, 0, 0);
+        Gosu::record(0, 0, [] { }).draw(0, 0, 0);
     });
     // -> Nothing is rendered.
     EXPECT_TRUE(visible_pixels_are_equal(result, Gosu::Bitmap(10, 10)));
@@ -169,7 +169,7 @@ TEST_F(MacroTests, temporary_macro)
     // This is a regression test for a previous bug where the macro vertices were not being kept
     // alive by a shared_ptr.
     const Gosu::Bitmap result = render_to_bitmap(W, H, [] {
-        Gosu::record(W, H, draw_scene).draw(0, 0, 0);
+        Gosu::record(W, H, draw_scene).draw(0, 0, 0); //
     });
     EXPECT_TRUE(visible_pixels_are_equal(result, render_to_bitmap(W, H, draw_scene), 2));
 }
