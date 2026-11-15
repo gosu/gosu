@@ -28,23 +28,23 @@ module Gosu
     end
 
     def draw_text(text, x, y, z, scale_x = 1, scale_y = 1, c = Gosu::Color::WHITE, mode = :default)
-      GosuFFI.Gosu_Font_draw_text(__pointer, text.to_s, x, y, z, scale_x, scale_y, GosuFFI.color_to_uint32(c), GosuFFI.blend_mode(mode))
-      GosuFFI.check_last_error
+      GosuFFI.check_last_error if not
+        GosuFFI.Gosu_Font_draw_text(__pointer, text.to_s, x, y, z, scale_x, scale_y, GosuFFI.color_to_uint32(c), GosuFFI.blend_mode(mode))
     end
 
     def draw_markup(text, x, y, z, scale_x = 1, scale_y = 1, c = Gosu::Color::WHITE, mode = :default)
-      GosuFFI.Gosu_Font_draw_markup(__pointer, text.to_s, x, y, z, scale_x, scale_y, GosuFFI.color_to_uint32(c), GosuFFI.blend_mode(mode))
-      GosuFFI.check_last_error
+      GosuFFI.check_last_error if not
+        GosuFFI.Gosu_Font_draw_markup(__pointer, text.to_s, x, y, z, scale_x, scale_y, GosuFFI.color_to_uint32(c), GosuFFI.blend_mode(mode))
     end
 
     def draw_text_rel(text, x, y, z, rel_x, rel_y, scale_x = 1, scale_y = 1, c = Gosu::Color::WHITE, mode = :default)
-      GosuFFI.Gosu_Font_draw_text_rel(__pointer, text.to_s, x, y, z, rel_x, rel_y, scale_x, scale_y, GosuFFI.color_to_uint32(c), GosuFFI.blend_mode(mode))
-      GosuFFI.check_last_error
+      GosuFFI.check_last_error if not
+        GosuFFI.Gosu_Font_draw_text_rel(__pointer, text.to_s, x, y, z, rel_x, rel_y, scale_x, scale_y, GosuFFI.color_to_uint32(c), GosuFFI.blend_mode(mode))
     end
 
     def draw_markup_rel(text, x, y, z, rel_x, rel_y, scale_x = 1, scale_y = 1, c = Gosu::Color::WHITE, mode = :default)
-      GosuFFI.Gosu_Font_draw_markup_rel(__pointer, text.to_s, x, y, z, rel_x, rel_y, scale_x, scale_y, GosuFFI.color_to_uint32(c), GosuFFI.blend_mode(mode))
-      GosuFFI.check_last_error
+      GosuFFI.check_last_error if not
+        GosuFFI.Gosu_Font_draw_markup_rel(__pointer, text.to_s, x, y, z, rel_x, rel_y, scale_x, scale_y, GosuFFI.color_to_uint32(c), GosuFFI.blend_mode(mode))
     end
 
     def []=(codepoint, image)

@@ -48,17 +48,17 @@ GOSU_FFI_API unsigned Gosu_Image_width(Gosu_Image* image);
 GOSU_FFI_API unsigned Gosu_Image_height(Gosu_Image* image);
 
 // Rendering
-GOSU_FFI_API void Gosu_Image_draw(Gosu_Image* image, double x, double y, double z, double scale_x,
+GOSU_FFI_API bool Gosu_Image_draw(Gosu_Image* image, double x, double y, double z, double scale_x,
                                   double scale_y, unsigned color, unsigned mode);
 // FFI only: this is a fast-path variant of Gosu_Image_draw with default arguments.
-GOSU_FFI_API void Gosu_Image_draw_quick(Gosu_Image* image, double x, double y, double z);
-GOSU_FFI_API void Gosu_Image_draw_rot(Gosu_Image* image, double x, double y, double z, double angle,
+GOSU_FFI_API bool Gosu_Image_draw_quick(Gosu_Image* image, double x, double y, double z);
+GOSU_FFI_API bool Gosu_Image_draw_rot(Gosu_Image* image, double x, double y, double z, double angle,
                                       double center_x, double center_y, double scale_x,
                                       double scale_y, unsigned color, unsigned mode);
 // FFI only: this is a fast-path variant of Gosu_Image_draw_rot with default arguments.
-GOSU_FFI_API void Gosu_Image_draw_rot_quick(Gosu_Image* image, double x, double y, double z,
+GOSU_FFI_API bool Gosu_Image_draw_rot_quick(Gosu_Image* image, double x, double y, double z,
                                             double angle);
-GOSU_FFI_API void Gosu_Image_draw_as_quad(Gosu_Image* image, double x1, double y1, unsigned color1,
+GOSU_FFI_API bool Gosu_Image_draw_as_quad(Gosu_Image* image, double x1, double y1, unsigned color1,
                                           double x2, double y2, unsigned color2, double x3,
                                           double y3, unsigned color3, double x4, double y4,
                                           unsigned color4, double z, unsigned mode);

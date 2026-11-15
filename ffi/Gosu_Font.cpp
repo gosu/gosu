@@ -1,9 +1,10 @@
 #include "Gosu_FFI_internal.h"
 
-GOSU_FFI_API Gosu_Font* Gosu_Font_create(int height, const char* name, unsigned flags, unsigned image_flags)
+GOSU_FFI_API Gosu_Font* Gosu_Font_create(int height, const char* name, unsigned flags,
+                                         unsigned image_flags)
 {
     return Gosu_translate_exceptions([=] {
-        return new Gosu_Font{Gosu::Font{height, name, flags, image_flags}};
+        return new Gosu_Font(Gosu::Font(height, name, flags, image_flags));
     });
 }
 
@@ -14,7 +15,7 @@ GOSU_FFI_API void Gosu_Font_destroy(Gosu_Font* font)
 
 GOSU_FFI_API const char* Gosu_Font_name(Gosu_Font* font)
 {
-    static thread_local std::string name;
+    thread_local std::string name;
 
     return Gosu_translate_exceptions([=] {
         name = font->font.name();
@@ -43,43 +44,47 @@ GOSU_FFI_API double Gosu_Font_markup_width(Gosu_Font* font, const char* markup)
     });
 }
 
-GOSU_FFI_API void Gosu_Font_draw_text(Gosu_Font* font, const char* text, double x, double y,
+GOSU_FFI_API bool Gosu_Font_draw_text(Gosu_Font* font, const char* text, double x, double y,
                                       double z, double scale_x, double scale_y, unsigned c,
                                       unsigned mode)
 {
-    Gosu_translate_exceptions([=] {
+    return Gosu_translate_exceptions([=] {
         font->font.draw_text(text, x, y, z, scale_x, scale_y, c,
                              static_cast<Gosu::BlendMode>(mode));
+        return true;
     });
 }
 
-GOSU_FFI_API void Gosu_Font_draw_markup(Gosu_Font* font, const char* markup, double x, double y,
+GOSU_FFI_API bool Gosu_Font_draw_markup(Gosu_Font* font, const char* markup, double x, double y,
                                         double z, double scale_x, double scale_y, unsigned c,
                                         unsigned mode)
 {
-    Gosu_translate_exceptions([=] {
+    return Gosu_translate_exceptions([=] {
         font->font.draw_markup(markup, x, y, z, scale_x, scale_y, c,
                                static_cast<Gosu::BlendMode>(mode));
+        return true;
     });
 }
 
-GOSU_FFI_API void Gosu_Font_draw_text_rel(Gosu_Font* font, const char* text, double x, double y,
+GOSU_FFI_API bool Gosu_Font_draw_text_rel(Gosu_Font* font, const char* text, double x, double y,
                                           double z, double rel_x, double rel_y, double scale_x,
                                           double scale_y, unsigned c, unsigned mode)
 {
-    Gosu_translate_exceptions([=] {
+    return Gosu_translate_exceptions([=] {
         font->font.draw_text_rel(text, x, y, z, rel_x, rel_y, scale_x, scale_y, c,
                                  static_cast<Gosu::BlendMode>(mode));
+        return true;
     });
 }
 
-GOSU_FFI_API void Gosu_Font_draw_markup_rel(Gosu_Font* font, const char* markup, double x, double y,
+GOSU_FFI_API bool Gosu_Font_draw_markup_rel(Gosu_Font* font, const char* markup, double x, double y,
                                             double z, double rel_x, double rel_y, double scale_x,
                                             double scale_y, unsigned c, unsigned mode)
 {
-    Gosu_translate_exceptions([=] {
+    return Gosu_translate_exceptions([=] {
         font->font.draw_markup_rel(markup, x, y, z, rel_x, rel_y, scale_x, scale_y, c,
                                    static_cast<Gosu::BlendMode>(mode));
+        return true;
     });
 }
 

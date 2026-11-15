@@ -101,30 +101,34 @@ module Gosu
     def draw(x, y, z = 0, scale_x = 1, scale_y = 1, color = Gosu::Color::WHITE, flags = :default)
       if scale_x == 1 and scale_y == 1 and color.equal?(Gosu::Color::WHITE) and flags == :default
         # Use a fast-path method when most arguments have their default value.
-        GosuFFI.Gosu_Image_draw_quick(__pointer, x, y, z)
+        GosuFFI.check_last_error if not
+          GosuFFI.Gosu_Image_draw_quick(__pointer, x, y, z)
       else
-        GosuFFI.Gosu_Image_draw(__pointer, x, y, z, scale_x, scale_y, GosuFFI.color_to_uint32(color), GosuFFI.blend_mode(flags))
+        GosuFFI.check_last_error if not
+          GosuFFI.Gosu_Image_draw(__pointer, x, y, z, scale_x, scale_y,
+                                  GosuFFI.color_to_uint32(color), GosuFFI.blend_mode(flags))
       end
-      GosuFFI.check_last_error
     end
 
     def draw_rot(x, y, z = 0, angle = 0, center_x = 0.5, center_y = 0.5, scale_x = 1, scale_y = 1, color = Gosu::Color::WHITE, flags = :default)
       if center_x == 0.5 and center_y == 0.5 and scale_x == 1 and scale_y == 1 and
          color.equal?(Gosu::Color::WHITE) and flags == :default
         # Use a fast-path method when most arguments have their default value.
-        GosuFFI.Gosu_Image_draw_rot_quick(__pointer, x, y, z, angle)
+        GosuFFI.check_last_error if not
+          GosuFFI.Gosu_Image_draw_rot_quick(__pointer, x, y, z, angle)
       else
-        GosuFFI.Gosu_Image_draw_rot(__pointer, x, y, z, angle, center_x, center_y, scale_x, scale_y, GosuFFI.color_to_uint32(color), GosuFFI.blend_mode(flags))
+        GosuFFI.check_last_error if not
+          GosuFFI.Gosu_Image_draw_rot(__pointer, x, y, z, angle, center_x, center_y, scale_x, scale_y,
+                                      GosuFFI.color_to_uint32(color), GosuFFI.blend_mode(flags))
       end
-      GosuFFI.check_last_error
     end
 
     def draw_as_quad(x1, y1, color1, x2, y2, color2, x3, y3, color3, x4, y4, color4, z = 0, mode = :default)
-      GosuFFI.Gosu_Image_draw_as_quad(__pointer,
-                                      x1, y1, GosuFFI.color_to_uint32(color1), x2, y2, GosuFFI.color_to_uint32(color2),
-                                      x3, y3, GosuFFI.color_to_uint32(color3), x4, y4, GosuFFI.color_to_uint32(color4),
-                                      z, GosuFFI.blend_mode(mode))
-      GosuFFI.check_last_error
+      GosuFFI.check_last_error if not
+        GosuFFI.Gosu_Image_draw_as_quad(__pointer,
+                                        x1, y1, GosuFFI.color_to_uint32(color1), x2, y2, GosuFFI.color_to_uint32(color2),
+                                        x3, y3, GosuFFI.color_to_uint32(color3), x4, y4, GosuFFI.color_to_uint32(color4),
+                                        z, GosuFFI.blend_mode(mode))
     end
 
     def save(filename)

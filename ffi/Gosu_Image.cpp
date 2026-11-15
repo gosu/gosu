@@ -1,5 +1,4 @@
 #include "Gosu_FFI_internal.h"
-#include <cstring> // for std::memcpy
 
 GOSU_FFI_API Gosu_Image* Gosu_Image_create(const char* filename, unsigned image_flags)
 {
@@ -59,7 +58,7 @@ GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_blob(void* blob, size_t byte_cou
             // 128 bit per channel, assume float/float/float/float RGBA - for Texplay compatibility.
             const float* in = static_cast<const float*>(blob);
             Gosu::Color::Channel* out = reinterpret_cast<Gosu::Color::Channel*>(bitmap.data());
-            for (std::size_t i = 0; i < values; ++i) {
+            for (int i = 0; i < values; ++i) {
                 out[i] = static_cast<Gosu::Color::Channel>(in[i] * 255);
             }
         }
@@ -84,7 +83,7 @@ GOSU_FFI_API Gosu_Image* Gosu_Image_create_from_subimage(Gosu_Image* image, int 
             return nullptr;
         }
 
-        return new Gosu_Image { Gosu::Image { std::move(drawable) } };
+        return new Gosu_Image(Gosu::Image(std::move(drawable)));
     });
 }
 
@@ -162,43 +161,52 @@ GOSU_FFI_API void Gosu_Image_gl_tex_info_destroy(Gosu_GLTexInfo* gl_tex_info)
 
 // Rendering
 
-GOSU_FFI_API void Gosu_Image_draw(Gosu_Image* image, double x, double y, double z, double scale_x,
+GOSU_FFI_API bool Gosu_Image_draw(Gosu_Image* image, double x, double y, double z, double scale_x,
                                   double scale_y, unsigned color, unsigned mode)
 {
-    Gosu_translate_exceptions([=] {
+    return Gosu_translate_exceptions([=] {
         image->image.draw(x, y, z, scale_x, scale_y, color, static_cast<Gosu::BlendMode>(mode));
+        return true;
     });
 }
 
-GOSU_FFI_API void Gosu_Image_draw_quick(Gosu_Image* image, double x, double y, double z)
+GOSU_FFI_API bool Gosu_Image_draw_quick(Gosu_Image* image, double x, double y, double z)
 {
-    Gosu_translate_exceptions([=] { image->image.draw(x, y, z); });
+    return Gosu_translate_exceptions([=] {
+        image->image.draw(x, y, z);
+        return true;
+    });
 }
 
-GOSU_FFI_API void Gosu_Image_draw_rot(Gosu_Image* image, double x, double y, double z, double angle,
+GOSU_FFI_API bool Gosu_Image_draw_rot(Gosu_Image* image, double x, double y, double z, double angle,
                                       double center_x, double center_y, double scale_x,
                                       double scale_y, unsigned color, unsigned mode)
 {
-    Gosu_translate_exceptions([=] {
+    return Gosu_translate_exceptions([=] {
         image->image.draw_rot(x, y, z, angle, center_x, center_y, scale_x, scale_y, color,
                               static_cast<Gosu::BlendMode>(mode));
+        return true;
     });
 }
 
-GOSU_FFI_API void Gosu_Image_draw_rot_quick(Gosu_Image* image, double x, double y, double z,
+GOSU_FFI_API bool Gosu_Image_draw_rot_quick(Gosu_Image* image, double x, double y, double z,
                                             double angle)
 {
-    Gosu_translate_exceptions([=] { image->image.draw_rot(x, y, z, angle); });
+    return Gosu_translate_exceptions([=] {
+        image->image.draw_rot(x, y, z, angle);
+        return true;
+    });
 }
 
-GOSU_FFI_API void Gosu_Image_draw_as_quad(Gosu_Image* image, double x1, double y1, unsigned color1,
+GOSU_FFI_API bool Gosu_Image_draw_as_quad(Gosu_Image* image, double x1, double y1, unsigned color1,
                                           double x2, double y2, unsigned color2, double x3,
                                           double y3, unsigned color3, double x4, double y4,
                                           unsigned color4, double z, unsigned mode)
 {
-    Gosu_translate_exceptions([=] {
+    return Gosu_translate_exceptions([=] {
         image->image.drawable().draw(x1, y1, color1, x2, y2, color2, x3, y3, color3, x4, y4, color4,
                                      z, static_cast<Gosu::BlendMode>(mode));
+        return true;
     });
 }
 
