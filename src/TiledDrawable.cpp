@@ -1,6 +1,5 @@
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
-#include <Gosu/Math.hpp>
 #include "GraphicsImpl.hpp"
 #include "TiledDrawable.hpp"
 #include <cmath>
@@ -64,7 +63,7 @@ Gosu::TiledDrawable::TiledDrawable(const TiledDrawable& parent, const Rect& rect
 {
     for (const Tile& tile : parent.m_tiles) {
         // rect is the source area on the parent, tile_rect is this tile's area on the parent.
-        Rect tile_rect { tile.x, tile.y, tile.data->width(), tile.data->height() };
+        Rect tile_rect = Rect::xywh(tile.x, tile.y, tile.data->width(), tile.data->height());
         // The x/y source position on the tile...
         int x = 0, y = 0;
         // ...must be adjusted while clipping.
@@ -74,15 +73,15 @@ Gosu::TiledDrawable::TiledDrawable(const TiledDrawable& parent, const Rect& rect
             m_tiles.push_back(Tile {
                 .x = tile.x - rect.x,
                 .y = tile.y - rect.y,
-                .data = tile.data->subimage(Rect { x, y, tile_rect.width, tile_rect.height }),
+                .data = tile.data->subimage(Rect::xywh(x, y, tile_rect.width, tile_rect.height)),
             });
         }
     }
 }
 
 void Gosu::TiledDrawable::draw(double x1, double y1, Color c1, double x2, double y2, Color c2,
-                                double x3, double y3, Color c3, double x4, double y4, Color c4,
-                                ZPos z, BlendMode mode) const
+                               double x3, double y3, Color c3, double x4, double y4, Color c4,
+                               ZPos z, BlendMode mode) const
 {
     normalize_coordinates(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
@@ -139,9 +138,9 @@ Gosu::Bitmap Gosu::TiledDrawable::to_bitmap() const
 
 void Gosu::TiledDrawable::insert(const Bitmap& bitmap, int x, int y)
 {
-    const Rect target_rect { x, y, bitmap.width(), bitmap.height() };
+    const Rect target_rect = Rect::xywh(x, y, bitmap.width(), bitmap.height());
     for (const Tile& tile : m_tiles) {
-        Rect tile_rect { tile.x, tile.y, tile.data->width(), tile.data->height() };
+        Rect tile_rect = Rect::xywh(tile.x, tile.y, tile.data->width(), tile.data->height());
         tile_rect.clip_to(target_rect);
         if (!tile_rect.empty()) {
             tile.data->insert(bitmap, x - tile.x, y - tile.y);

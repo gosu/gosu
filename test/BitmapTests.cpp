@@ -155,14 +155,14 @@ TEST_F(BitmapTests, insert)
                   {
                       0x00'000000, 0x00'000011, 0x00'000022, 0x00'000033, 0x00'000044, //
                       0x00'000055, 0x00'000066, 0x00'000077, 0x00'000088, 0x00'000099, //
-                      0x00'0000aa, 0x00'0000bb, 0x00'0000cc, 0x00'0000dd, 0x00'0000ee, //
+                      0x00'0000aa, 0x00'0000bb, 0x00'0000cc, 0x00'0000dd, 0x00'0000ee ///
                   });
 
     Gosu::Bitmap red(3, 2);
     assign_pixels(red,
                   {
                       0xff'ff0000, 0xff'ff0011, 0xff'ff0022, //
-                      0xff'ff0033, 0xff'ff0044, 0xff'ff0055, //
+                      0xff'ff0033, 0xff'ff0044, 0xff'ff0055 ///
                   });
     // Overwrite 2x1 pixels in the top left corner.
     canvas.insert(red, -1, -1);
@@ -177,7 +177,7 @@ TEST_F(BitmapTests, insert)
                   {
                       0x80'00ff00, 0x80'00ff11, 0x80'00ff22, 0x80'00ff33, //
                       0x80'00ff44, 0x80'00ff55, 0x80'00ff66, 0x80'00ff77, //
-                      0x80'00ff88, 0x80'00ff99, 0x80'00ffaa, 0x80'00ffbb, //
+                      0x80'00ff88, 0x80'00ff99, 0x80'00ffaa, 0x80'00ffbb ///
                   });
     // Overwrite 2x2 pixels in the bottom left corner.
     canvas.insert(green, 3, 1);
@@ -191,7 +191,7 @@ TEST_F(BitmapTests, insert)
                   {
                       0xff'ff0044, 0xff'ff0055, 0x00'000022, 0x00'000033, 0x00'000044, //
                       0x00'000055, 0x00'000066, 0x00'000077, 0x80'00ff00, 0x80'00ff11, //
-                      0x00'0000aa, 0x00'0000bb, 0x00'0000cc, 0x80'00ff44, 0x80'00ff55, //
+                      0x00'0000aa, 0x00'0000bb, 0x00'0000cc, 0x80'00ff44, 0x80'00ff55 ///
                   });
     ASSERT_EQ(canvas, expected_result);
 
@@ -210,7 +210,7 @@ TEST_F(BitmapTests, apply_color_key)
                       0xff'00ff00, 0xff'ff00ff, 0xff'0000ff, // G _ B
                       0xff'ff00ff, 0xff'ffff00, 0xff'ff00ff, // _ Y _
                       0xff'ff00ff, 0xff'ff00ff, 0xff'ff00ff, // _ _ _
-                      0xff'00ffff, 0xff'ff00ff, 0xff'ff00ff, // C _ _
+                      0xff'00ffff, 0xff'ff00ff, 0xff'ff00ff /// C _ _
                   });
     bitmap.apply_color_key(Gosu::Color::FUCHSIA);
 
@@ -223,7 +223,7 @@ TEST_F(BitmapTests, apply_color_key)
                       0xff'00ff00, 0x00'7f7f3f, 0xff'0000ff, // G _ B
                       0x00'7fff00, 0xff'ffff00, 0x00'7f7f7f, // _ Y _
                       0x00'7fff7f, 0x00'7fff7f, 0x00'ffff00, // _ _ _
-                      0xff'00ffff, 0x00'00ffff, 0x00'000000, // C _ _
+                      0xff'00ffff, 0x00'00ffff, 0x00'000000 /// C _ _
                   });
     ASSERT_TRUE(visible_pixels_are_equal(bitmap, expected_result));
     ASSERT_EQ(bitmap, expected_result);
@@ -256,12 +256,12 @@ TEST_F(BitmapTests, insert_fuzzing)
         Gosu::Bitmap source(next_size(), next_size());
         std::generate_n(source.data(), source.width() * source.height(), next_color);
 
-        const Gosu::Rect source_rect { next_offset(), next_offset(), next_size(), next_size() };
+        const auto rect = Gosu::Rect::xywh(next_offset(), next_offset(), next_size(), next_size());
         const int x = next_offset();
         const int y = next_offset();
 
-        const Gosu::Bitmap naive_result = insert_naively(target, x, y, source, source_rect);
-        target.insert(source, x, y, source_rect);
+        const Gosu::Bitmap naive_result = insert_naively(target, x, y, source, rect);
+        target.insert(source, x, y, rect);
         ASSERT_EQ(target, naive_result);
     }
 }

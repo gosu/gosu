@@ -80,6 +80,13 @@ namespace Gosu
 
         bool empty() const { return width <= 0 || height <= 0; }
 
+        /// A little factory helper to make it clear that we are passing "width" and "height",
+        /// not "right" and "bottom".
+        static Rect xywh(int x, int y, int width, int height)
+        {
+            return Rect { .x = x, .y = y, .width = width, .height = height };
+        }
+
         /// Returns a Rect that starts at the origin and uses T::width() and T::height() as its
         /// extents.
         template <typename T> static Rect covering(const T& object)

@@ -79,7 +79,7 @@ struct Gosu::Font::Impl : private Gosu::Noncopyable
             std::swap(resized_bitmap, bitmap);
             Gosu::draw_text(bitmap, 0, 0, Color::WHITE, string, name, scaled_height, font_flags);
         }
-        const Rect source_rect { 0, 0, required_width, bitmap.height() };
+        const Rect source_rect = Rect::xywh(0, 0, required_width, bitmap.height());
 
         return glyphs[key] = Image(bitmap, source_rect, image_flags);
     }

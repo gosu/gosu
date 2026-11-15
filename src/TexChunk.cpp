@@ -59,7 +59,7 @@ std::unique_ptr<Gosu::Drawable> Gosu::TexChunk::subimage(const Rect& rect) const
     if (!Rect::covering(*this).contains(rect)) {
         throw std::invalid_argument("Gosu::TexChunk::subimage cannot exceed parent size");
     }
-    const Rect nested_rect { m_rect.x + rect.x, m_rect.y + rect.y, rect.width, rect.height };
+    Rect nested_rect = Rect::xywh(m_rect.x + rect.x, m_rect.y + rect.y, rect.width, rect.height);
     return std::make_unique<TexChunk>(m_texture, nested_rect, m_rect_handle);
 }
 
@@ -73,7 +73,7 @@ void Gosu::TexChunk::insert(const Bitmap& bitmap, int x, int y)
     Bitmap clipped_bitmap;
     const Bitmap* source = &bitmap;
 
-    Rect target_rect { x, y, bitmap.width(), bitmap.height() };
+    Rect target_rect = Rect::xywh(x, y, bitmap.width(), bitmap.height());
     int offset_x = 0, offset_y = 0;
     // If inserting the bitmap at the given position exceeds the boundaries of the space allocated
     // for this image on the texture, we need to clip the bitmap and insert the clipped version

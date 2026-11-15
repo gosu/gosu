@@ -75,7 +75,7 @@ std::unique_ptr<Gosu::TexChunk> Gosu::Texture::try_alloc(const Bitmap& bitmap, i
 
 void Gosu::Texture::insert(const Gosu::Bitmap& bitmap, int x, int y)
 {
-    if (!Rect::covering(*this).contains(Rect { x, y, bitmap.width(), bitmap.height() })) {
+    if (!Rect::covering(*this).contains(Rect::xywh(x, y, bitmap.width(), bitmap.height()))) {
         throw std::invalid_argument("Gosu::Texture::insert: Rect exceeds bounds");
     }
 
