@@ -6,6 +6,7 @@ Checks: >-
   -cppcoreguidelines-pro-type-reinterpret-cast,
   -hicpp-deprecated-headers,
   -modernize-deprecated-headers,
+  -*-include-cleaner,
 
 CheckOptions:
   - { key: readability-identifier-naming.GlobalConstantPrefix, value: Gosu_ }

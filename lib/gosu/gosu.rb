@@ -160,28 +160,28 @@ module Gosu
   end
 
   module_function def draw_line(x1, y1, c1, x2, y2, c2, z = 0, mode = :default)
-    GosuFFI.Gosu_draw_line(x1, y1, GosuFFI.color_to_uint32(c1), x2, y2, GosuFFI.color_to_uint32(c2), z, GosuFFI.blend_mode(mode))
-    GosuFFI.check_last_error
+    GosuFFI.check_last_error if not
+      GosuFFI.Gosu_draw_line(x1, y1, GosuFFI.color_to_uint32(c1), x2, y2, GosuFFI.color_to_uint32(c2), z, GosuFFI.blend_mode(mode))
   end
 
   module_function def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z = 0, mode = :default)
-    GosuFFI.Gosu_draw_triangle(x1, y1, GosuFFI.color_to_uint32(c1), x2, y2, GosuFFI.color_to_uint32(c2),
-                               x3, y3, GosuFFI.color_to_uint32(c3), z, GosuFFI.blend_mode(mode))
-    GosuFFI.check_last_error
+    GosuFFI.check_last_error if not
+      GosuFFI.Gosu_draw_triangle(x1, y1, GosuFFI.color_to_uint32(c1), x2, y2, GosuFFI.color_to_uint32(c2),
+                                 x3, y3, GosuFFI.color_to_uint32(c3), z, GosuFFI.blend_mode(mode))
   end
 
   module_function def draw_quad(x1, y1, c1, x2, y2, c2,
                      x3, y3, c3, x4, y4, c4,
                      z = 0, mode = :default)
-    GosuFFI.Gosu_draw_quad(x1, y1, GosuFFI.color_to_uint32(c1), x2, y2, GosuFFI.color_to_uint32(c2),
-                           x3, y3, GosuFFI.color_to_uint32(c3), x4, y4, GosuFFI.color_to_uint32(c4),
-                           z, GosuFFI.blend_mode(mode))
-    GosuFFI.check_last_error
+    GosuFFI.check_last_error if not
+      GosuFFI.Gosu_draw_quad(x1, y1, GosuFFI.color_to_uint32(c1), x2, y2, GosuFFI.color_to_uint32(c2),
+                             x3, y3, GosuFFI.color_to_uint32(c3), x4, y4, GosuFFI.color_to_uint32(c4),
+                             z, GosuFFI.blend_mode(mode))
   end
 
   module_function def draw_rect(x, y, width, height, c, z = 0, mode = :default)
-    GosuFFI.Gosu_draw_rect(x, y, width, height, GosuFFI.color_to_uint32(c), z, GosuFFI.blend_mode(mode))
-    GosuFFI.check_last_error
+    GosuFFI.check_last_error if not
+      GosuFFI.Gosu_draw_rect(x, y, width, height, GosuFFI.color_to_uint32(c), z, GosuFFI.blend_mode(mode))
   end
 
   module_function def offset_x(angle, distance)

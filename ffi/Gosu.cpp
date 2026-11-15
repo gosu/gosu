@@ -118,39 +118,43 @@ GOSU_FFI_API void Gosu_clip_to(double x, double y, double width, double height,
     });
 }
 
-GOSU_FFI_API void Gosu_draw_line(double x1, double y1, unsigned c1, double x2, double y2,
+GOSU_FFI_API bool Gosu_draw_line(double x1, double y1, unsigned c1, double x2, double y2,
                                  unsigned c2, double z, unsigned mode)
 {
-    Gosu_translate_exceptions([=] {
+    return Gosu_translate_exceptions([=] {
         Gosu::draw_line(x1, y1, c1, x2, y2, c2, z, static_cast<Gosu::BlendMode>(mode));
+        return true;
     });
 }
 
-GOSU_FFI_API void Gosu_draw_triangle(double x1, double y1, unsigned c1, double x2, double y2,
+GOSU_FFI_API bool Gosu_draw_triangle(double x1, double y1, unsigned c1, double x2, double y2,
                                      unsigned c2, double x3, double y3, unsigned c3, double z,
                                      unsigned mode)
 {
-    Gosu_translate_exceptions([=] {
+    return Gosu_translate_exceptions([=] {
         Gosu::draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z,
                             static_cast<Gosu::BlendMode>(mode));
+        return true;
     });
 }
 
-GOSU_FFI_API void Gosu_draw_rect(double x, double y, double width, double height, unsigned c,
+GOSU_FFI_API bool Gosu_draw_rect(double x, double y, double width, double height, unsigned c,
                                  double z, unsigned mode)
 {
-    Gosu_translate_exceptions([=] {
+    return Gosu_translate_exceptions([=] {
         Gosu::draw_rect(x, y, width, height, c, z, static_cast<Gosu::BlendMode>(mode));
+        return true;
     });
 }
 
-GOSU_FFI_API void Gosu_draw_quad(double x1, double y1, unsigned c1, double x2, double y2,
+GOSU_FFI_API bool Gosu_draw_quad(double x1, double y1, unsigned c1, double x2, double y2,
                                  unsigned c2, double x3, double y3, unsigned c3, double x4,
                                  double y4, unsigned c4, double z, unsigned mode)
 {
-    Gosu_translate_exceptions([=] {
+    return Gosu_translate_exceptions([=] {
         Gosu::draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z,
                         static_cast<Gosu::BlendMode>(mode));
+        return true;
     });
 }
 
