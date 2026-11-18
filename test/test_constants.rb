@@ -6,6 +6,10 @@ class TestConstants < Minitest::Test
       Gosu::VERSION)
   end
  
+  def test_max_texture_size
+    assert_equal 1024, Gosu::MAX_TEXTURE_SIZE
+  end
+
   def test_licenses
     assert_match(/Gosu/, Gosu::LICENSES)
     assert_match(/SDL/, Gosu::LICENSES)
