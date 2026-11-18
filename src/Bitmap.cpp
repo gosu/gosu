@@ -89,7 +89,7 @@ void Gosu::Bitmap::insert(const Bitmap& source, int x, int y, Rect source_rect)
     source_rect.clip_to(Rect::covering(source), &x, &y);
 
     // Set up the target area and make sure that it does not exceed this image.
-    Rect target_rect { .x = x, .y = y, .width = source_rect.width, .height = source_rect.height };
+    Rect target_rect = Rect::xywh(x, y, source_rect.width, source_rect.height);
     // If we need to move the target_rect origin, then also move the source_rect origin.
     target_rect.clip_to(Rect::covering(*this), &source_rect.x, &source_rect.y);
 

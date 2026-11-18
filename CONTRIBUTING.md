@@ -14,6 +14,22 @@ Longer lines require horizontal scrolling in editors (depending on screen size) 
 Gosu provides a .clang-format file that yields acceptable results for most C++ code.
 Sometimes, code will look a bit more consistent if you add a `//` at the end of a line to force a line break.
 
+## C++: Do not insist on "uniform initialization"
+
+The C++ Core Guidelines [recommend using `{}` for initialization almost everywhere](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#es23-prefer-the--initializer-syntax). ([Practical example.](https://github.com/isocpp/CppCoreGuidelines/pull/1973/files))
+This project follows more traditional rules:
+
+* Use `{}` only to initialize containers and for designated initializers.
+* Use `()` to call constructors.
+* Use `=` to initialize values.
+
+Examples: `const int x = 5;`, not `const int x{5};`. `const Point p { .x = 1, .y = 2 };`, not `const Point p{1, 2}`.
+
+Rationale: Using braces for everything is more "consistent" in the same way that LISP consistently uses parentheses for everything.
+That has not made it more legible.
+
+Related reading: [The Knightmare of Initialization in C++](https://quuxplusone.github.io/blog/2019/02/18/knightmare-of-initialization/) by Arthur O'Dwyer.
+
 ## Ruby: Use rufo
 
 * Use [the `rufo` gem](https://github.com/ruby-formatter/rufo) with the default settings. 

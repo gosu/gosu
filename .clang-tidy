@@ -35,6 +35,7 @@ Checks: >-
   -llvm-*,
   -llvmlibc-*,
   -misc-const-correctness,
+  -misc-include-cleaner,
   -misc-no-recursion,
   -misc-non-private-member-variables-in-classes,
   -modernize-avoid-c-arrays,

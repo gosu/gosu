@@ -50,12 +50,12 @@ module GosuFFI
   attach_function :Gosu_clipboard, [], :string
   attach_function :Gosu_set_clipboard, [:string], :void
 
-  attach_function :Gosu_draw_line, [:double, :double, :uint32, :double, :double, :uint32, :double, :uint32], :void
+  attach_function :Gosu_draw_line, [:double, :double, :uint32, :double, :double, :uint32, :double, :uint32], :bool
   attach_function :Gosu_draw_triangle, [:double, :double, :uint32, :double, :double, :uint32,
-                                        :double, :double, :uint32, :double, :uint32], :void
+                                        :double, :double, :uint32, :double, :uint32], :bool
   attach_function :Gosu_draw_quad, [:double, :double, :uint32, :double, :double, :uint32,
-                                    :double, :double, :uint32, :double, :double, :uint32, :double, :uint32], :void
-  attach_function :Gosu_draw_rect, [:double, :double, :double, :double, :uint32, :double, :uint32], :void
+                                    :double, :double, :uint32, :double, :double, :uint32, :double, :uint32], :bool
+  attach_function :Gosu_draw_rect, [:double, :double, :double, :double, :uint32, :double, :uint32], :bool
 
   attach_function :Gosu_offset_x, [:double, :double], :double
   attach_function :Gosu_offset_y, [:double, :double], :double
@@ -122,14 +122,14 @@ module GosuFFI
   attach_function :Gosu_Font_markup_width, [:pointer, :string], :double
 
   attach_function :Gosu_Font_draw_text, [:pointer, :string, :double, :double, :double,
-                                         :double, :double, :uint32, :uint32], :void
+                                         :double, :double, :uint32, :uint32], :bool
   attach_function :Gosu_Font_draw_markup, [:pointer, :string, :double, :double, :double,
-                                           :double, :double, :uint32, :uint32], :void
+                                           :double, :double, :uint32, :uint32], :bool
 
   attach_function :Gosu_Font_draw_text_rel, [:pointer, :string, :double, :double, :double,
-                                             :double, :double, :double, :double, :uint32, :uint32], :void
+                                             :double, :double, :double, :double, :uint32, :uint32], :bool
   attach_function :Gosu_Font_draw_markup_rel, [:pointer, :string, :double, :double, :double,
-                                               :double, :double, :double, :double, :uint32, :uint32], :void
+                                               :double, :double, :double, :double, :uint32, :uint32], :bool
 
   attach_function :Gosu_Font_set_image, [:pointer, :string, :uint32, :pointer], :void
 
@@ -147,11 +147,13 @@ module GosuFFI
   attach_function :Gosu_Image_width, [:pointer], :int
   attach_function :Gosu_Image_height, [:pointer], :int
 
-  attach_function :Gosu_Image_draw, [:pointer, :double, :double, :double, :double, :double, :uint32, :uint32], :void
+  attach_function :Gosu_Image_draw, [:pointer, :double, :double, :double, :double, :double, :uint32, :uint32], :bool
+  attach_function :Gosu_Image_draw_quick, [:pointer, :double, :double, :double], :bool
   attach_function :Gosu_Image_draw_rot, [:pointer, :double, :double, :double, :double, :double, :double,
-                                         :double, :double, :uint32, :uint32], :void
+                                         :double, :double, :uint32, :uint32], :bool
+  attach_function :Gosu_Image_draw_rot_quick, [:pointer, :double, :double, :double, :double], :bool
   attach_function :Gosu_Image_draw_as_quad, [:pointer, :double, :double, :uint32, :double, :double, :uint32,
-                                             :double, :double, :uint32, :double, :double, :uint32, :double, :uint32], :void
+                                             :double, :double, :uint32, :double, :double, :uint32, :double, :uint32], :bool
 
   attach_function :Gosu_Image_save, [:pointer, :string], :void
   attach_function :Gosu_Image_to_blob, [:pointer], :pointer

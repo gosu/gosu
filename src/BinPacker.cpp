@@ -9,7 +9,7 @@
 Gosu::BinPacker::BinPacker(int width, int height)
     : m_width(width),
       m_height(height),
-      m_free_rects { Rect { 0, 0, width, height } }
+      m_free_rects { Rect::xywh(0, 0, width, height) }
 {
 }
 
@@ -27,8 +27,9 @@ std::shared_ptr<const Gosu::Rect> Gosu::BinPacker::alloc(int width, int height)
     // We found a free area, place the result in the top left corner of it.
     // (Also make sure that the pointer's deleter returns the rectangle. Note: Even though
     // shared_ptr may call its deleter with a nullptr in general, it will not do so here.)
-    std::shared_ptr<const Rect> result(new Rect { best_rect->x, best_rect->y, width, height },
-                                       [this](const Rect* p) { add_free_rect(*p); });
+    std::shared_ptr<const Rect> result(
+        new Rect(Rect::xywh(best_rect->x, best_rect->y, width, height)),
+        [this](const Rect* p) { add_free_rect(*p); });
 
     // We need to split the remaining rectangle into two. We use the axis with the longer side.
     // (Called "Longer Axis Split Rule", "-LAS" in the paper.)

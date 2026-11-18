@@ -14,17 +14,17 @@ GOSU_FFI_API int Gosu_Font_height(Gosu_Font* font);
 GOSU_FFI_API double Gosu_Font_text_width(Gosu_Font* font, const char* text);
 GOSU_FFI_API double Gosu_Font_markup_width(Gosu_Font* font, const char* markup);
 
-GOSU_FFI_API void Gosu_Font_draw_text(Gosu_Font* font, const char* text, double x, double y,
+GOSU_FFI_API bool Gosu_Font_draw_text(Gosu_Font* font, const char* text, double x, double y,
                                       double z, double scale_x, double scale_y, unsigned c,
                                       unsigned mode);
-GOSU_FFI_API void Gosu_Font_draw_markup(Gosu_Font* font, const char* markup, double x, double y,
+GOSU_FFI_API bool Gosu_Font_draw_markup(Gosu_Font* font, const char* markup, double x, double y,
                                         double z, double scale_x, double scale_y, unsigned c,
                                         unsigned mode);
 
-GOSU_FFI_API void Gosu_Font_draw_text_rel(Gosu_Font* font, const char* text, double x, double y,
+GOSU_FFI_API bool Gosu_Font_draw_text_rel(Gosu_Font* font, const char* text, double x, double y,
                                           double z, double rel_x, double rel_y, double scale_x,
                                           double scale_y, unsigned c, unsigned mode);
-GOSU_FFI_API void Gosu_Font_draw_markup_rel(Gosu_Font* font, const char* markup, double x, double y,
+GOSU_FFI_API bool Gosu_Font_draw_markup_rel(Gosu_Font* font, const char* markup, double x, double y,
                                             double z, double rel_x, double rel_y, double scale_x,
                                             double scale_y, unsigned c, unsigned mode);
 
