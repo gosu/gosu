@@ -5,9 +5,9 @@ module Gosu
       self.new(@struct.new(width, height, rgba), retro: retro, tileable: tileable)
     end
 
-    def self.from_text(markup, line_height, font: Gosu.default_font_name, width: -1, spacing: 0, align: :left,
+    def self.from_text(text, line_height, font: Gosu.default_font_name, width: -1, spacing: 0, align: :left,
                                             bold: false, italic: false, underline: false, retro: false)
-      __image = GosuFFI.Gosu_Image_create_from_text(markup, font, line_height, width, spacing,
+      __image = GosuFFI.Gosu_Image_create_from_text(text.to_s, font, line_height, width, spacing,
                                                     GosuFFI.font_alignment_flags(align),
                                                     GosuFFI.font_flags(bold, italic, underline),
                                                     GosuFFI.image_flags(retro: retro))
@@ -17,7 +17,7 @@ module Gosu
 
     def self.from_markup(markup, line_height, font: Gosu.default_font_name, width: -1, spacing: 0, align: :left,
                                               bold: false, italic: false, underline: false, retro: false)
-      __image = GosuFFI.Gosu_Image_create_from_markup(markup, font, line_height, width, spacing,
+      __image = GosuFFI.Gosu_Image_create_from_markup(markup.to_s, font, line_height, width, spacing,
                                                       GosuFFI.font_alignment_flags(align),
                                                       GosuFFI.font_flags(bold, italic, underline),
                                                       GosuFFI.image_flags(retro: retro))
