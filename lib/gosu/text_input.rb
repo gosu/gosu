@@ -8,6 +8,8 @@ module Gosu
       @__filter_proc = proc { |data, text| protected_filter(text) }
       GosuFFI.Gosu_TextInput_set_filter(__pointer, @__filter_proc, nil)
       GosuFFI.check_last_error
+
+      self
     end
 
     def __pointer

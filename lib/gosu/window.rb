@@ -60,6 +60,8 @@ module Gosu
         GosuFFI.send(:"Gosu_Window_set_#{callback_safename}", __pointer, instance_variable_get(:"@__#{callback_safename}_proc"), nil)
         GosuFFI.check_last_error
       end
+
+      self
     end
 
     # Returns FFI pointer of C side Gosu::Window

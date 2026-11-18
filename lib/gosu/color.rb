@@ -55,6 +55,7 @@ module Gosu
       else
         raise ArgumentError
       end
+      self
     end
 
     def alpha

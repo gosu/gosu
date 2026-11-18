@@ -2,6 +2,7 @@ module Gosu
   class Channel
     def initialize(pointer)
       @managed_pointer = FFI::AutoPointer.new(pointer, GosuFFI.method(:Gosu_Channel_destroy))
+      self
     end
 
     def __pointer

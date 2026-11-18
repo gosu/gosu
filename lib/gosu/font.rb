@@ -4,6 +4,7 @@ module Gosu
       __font = GosuFFI.Gosu_Font_create(height, name, GosuFFI.font_flags(bold, italic, underline), 0)
       GosuFFI.check_last_error
       @memory_pointer = FFI::AutoPointer.new(__font, GosuFFI.method(:Gosu_Font_destroy))
+      self
     end
 
     def __pointer

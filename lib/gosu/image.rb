@@ -82,6 +82,7 @@ module Gosu
       end
 
       @managed_pointer = FFI::AutoPointer.new(__image, GosuFFI.method(:Gosu_Image_destroy))
+      self
     end
 
     def __pointer

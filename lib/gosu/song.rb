@@ -14,6 +14,7 @@ module Gosu
       __song = GosuFFI.Gosu_Song_create(filename)
       GosuFFI.check_last_error
       @memory_pointer = FFI::AutoPointer.new(__song, GosuFFI.method(:Gosu_Song_destroy))
+      self
     end
 
     def __pointer
