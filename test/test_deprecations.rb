@@ -80,6 +80,11 @@ class TestDeprecations < Minitest::Test
     assert_output("", /Gosu.degrees_to_radians\(angle\) has been deprecated/) do
       assert_equal 90.degrees_to_radians, Gosu.degrees_to_radians(90)
     end
+
+    assert_output("", /Gosu.normalize_angle\(angle\) has been deprecated/) do
+      assert_equal 270.0, Gosu.normalize_angle(-90)
+      assert_equal 0.5, Object.new.extend(Gosu).send(:normalize_angle, 720.5)
+    end
   end
 
   def test_old_window_signatures

@@ -259,6 +259,12 @@ module Gosu
     end
     module_function helper
   end
+
+  def normalize_angle(angle)
+    Gosu.deprecation_message("Gosu.normalize_angle(angle) has been deprecated, use angle % 360.0 instead")
+    angle % 360.0
+  end
+  module_function :normalize_angle
 end
 
 # Constants
