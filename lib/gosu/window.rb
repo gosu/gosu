@@ -5,7 +5,6 @@ module Gosu
       define_method "protected_#{callback}" do |*args|
         begin
           # If there has been an exception, don't do anything as to not make matters worse.
-          # Conveniently turn the return value into a boolean result (for needs_cursor? etc).
           if defined?(@__exception)
             false
           else
@@ -15,7 +14,9 @@ module Gosu
 
             # Let the GC clean up deferred Gosu.gl(z) blocks before the next draw.
             $gosu_gl_blocks = nil if callback == "draw"
-            send(callback, *args)
+            result = send(callback, *args)
+            # Conveniently turn the return value into a boolean result (for needs_cursor? etc).
+            callback.end_with?("?") ? !!result : result
           end
         rescue Exception => e
           # Exit the message loop naturally, then re-throw during the next tick.
@@ -60,6 +61,8 @@ module Gosu
         GosuFFI.send(:"Gosu_Window_set_#{callback_safename}", __pointer, instance_variable_get(:"@__#{callback_safename}_proc"), nil)
         GosuFFI.check_last_error
       end
+
+      self
     end
 
     # Returns FFI pointer of C side Gosu::Window
@@ -95,7 +98,7 @@ module Gosu
     end
 
     def needs_cursor?
-      false
+      true
     end
 
     def capture_cursor?

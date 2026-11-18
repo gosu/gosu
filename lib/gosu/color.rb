@@ -55,6 +55,7 @@ module Gosu
       else
         raise ArgumentError
       end
+      self
     end
 
     def alpha
@@ -125,6 +126,12 @@ module Gosu
       GosuFFI.check_last_error(GosuFFI.Gosu_Color_argb(@__color))
     end
 
+    def with_alpha(alpha)
+      color = dup
+      color.alpha = alpha
+      color
+    end
+
     def gl
       @__color
     end
@@ -149,16 +156,18 @@ module Gosu
       self == other
     end
 
-    NONE = Gosu::Color.argb(0x00_000000)
-    BLACK = Gosu::Color.argb(0xff_000000)
-    GRAY = Gosu::Color.argb(0xff_808080)
-    WHITE = Gosu::Color.argb(0xff_ffffff)
-    AQUA = Gosu::Color.argb(0xff_00ffff)
-    RED = Gosu::Color.argb(0xff_ff0000)
-    GREEN = Gosu::Color.argb(0xff_00ff00)
-    BLUE = Gosu::Color.argb(0xff_0000ff)
-    YELLOW = Gosu::Color.argb(0xff_ffff00)
-    FUCHSIA = Gosu::Color.argb(0xff_ff00ff)
-    CYAN = Gosu::Color.argb(0xff_00ffff)
+    # Frozen so that e.g. Color::RED.alpha = 128 cannot change the constant globally.
+    # (Gosu 1.x and older used a separate class, ImmutableColor, for the same purpose.)
+    NONE = Gosu::Color.argb(0x00_000000).freeze
+    BLACK = Gosu::Color.argb(0xff_000000).freeze
+    GRAY = Gosu::Color.argb(0xff_808080).freeze
+    WHITE = Gosu::Color.argb(0xff_ffffff).freeze
+    AQUA = Gosu::Color.argb(0xff_00ffff).freeze
+    RED = Gosu::Color.argb(0xff_ff0000).freeze
+    GREEN = Gosu::Color.argb(0xff_00ff00).freeze
+    BLUE = Gosu::Color.argb(0xff_0000ff).freeze
+    YELLOW = Gosu::Color.argb(0xff_ffff00).freeze
+    FUCHSIA = Gosu::Color.argb(0xff_ff00ff).freeze
+    CYAN = Gosu::Color.argb(0xff_00ffff).freeze
   end
 end

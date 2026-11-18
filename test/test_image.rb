@@ -73,6 +73,21 @@ class TestImage < Minitest::Test
     assert_image_matches "test_image/insert", canvas, 1.00
   end
 
+  def test_image_insert_filename
+    filename = File.join(File.dirname(__FILE__), "test_image_io/no-alpha-jpg.jpg")
+    canvas = Gosu::Image.from_blob(100, 100)
+    canvas.insert filename, 10, 10
+    expected = Gosu::Image.from_blob(100, 100)
+    expected.insert Gosu::Image.new(filename), 10, 10
+    assert_equal expected, canvas
+  end
+
+  def test_image_copy
+    image = Gosu::Image.from_blob(4, 3)
+    assert_equal [4, 3], [image.columns, image.rows]
+    assert_equal image, Gosu::Image.new(image)
+  end
+
   def test_subimage
     filename = File.join(File.dirname(__FILE__), "test_image_io/no-alpha-jpg.jpg")
     image = Gosu::Image.new(filename)

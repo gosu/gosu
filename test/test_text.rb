@@ -32,4 +32,10 @@ class TestText < Minitest::Test
       end
     end
   end
+
+  def test_non_string_text
+    assert_equal Gosu::Image.from_text("123", 20), Gosu::Image.from_text(123, 20)
+    assert_equal Gosu::Image.from_markup("123", 20), Gosu::Image.from_markup(123, 20)
+    assert_equal Gosu::Image.from_text("", 20), Gosu::Image.from_text(nil, 20)
+  end
 end

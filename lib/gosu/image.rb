@@ -5,9 +5,9 @@ module Gosu
       self.new(@struct.new(width, height, rgba), retro: retro, tileable: tileable)
     end
 
-    def self.from_text(markup, line_height, font: Gosu.default_font_name, width: -1, spacing: 0, align: :left,
+    def self.from_text(text, line_height, font: Gosu.default_font_name, width: -1, spacing: 0, align: :left,
                                             bold: false, italic: false, underline: false, retro: false)
-      __image = GosuFFI.Gosu_Image_create_from_text(markup, font, line_height, width, spacing,
+      __image = GosuFFI.Gosu_Image_create_from_text(text.to_s, font, line_height, width, spacing,
                                                     GosuFFI.font_alignment_flags(align),
                                                     GosuFFI.font_flags(bold, italic, underline),
                                                     GosuFFI.image_flags(retro: retro))
@@ -17,7 +17,7 @@ module Gosu
 
     def self.from_markup(markup, line_height, font: Gosu.default_font_name, width: -1, spacing: 0, align: :left,
                                               bold: false, italic: false, underline: false, retro: false)
-      __image = GosuFFI.Gosu_Image_create_from_markup(markup, font, line_height, width, spacing,
+      __image = GosuFFI.Gosu_Image_create_from_markup(markup.to_s, font, line_height, width, spacing,
                                                       GosuFFI.font_alignment_flags(align),
                                                       GosuFFI.font_flags(bold, italic, underline),
                                                       GosuFFI.image_flags(retro: retro))
@@ -82,6 +82,7 @@ module Gosu
       end
 
       @managed_pointer = FFI::AutoPointer.new(__image, GosuFFI.method(:Gosu_Image_destroy))
+      self
     end
 
     def __pointer
@@ -97,6 +98,11 @@ module Gosu
       # We can cache this, image sizes cannot change in Gosu.
       @height ||= GosuFFI.check_last_error(GosuFFI.Gosu_Image_height(__pointer))
     end
+
+    # Together with to_blob, these make Gosu::Image compatible with RMagick::Image, so that an image
+    # can be passed wherever an RMagick image is accepted, e.g. Gosu::Image.new(image).
+    alias columns width
+    alias rows height
 
     def draw(x, y, z = 0, scale_x = 1, scale_y = 1, color = Gosu::Color::WHITE, flags = :default)
       if scale_x == 1 and scale_y == 1 and color.equal?(Gosu::Color::WHITE) and flags == :default
@@ -151,6 +157,8 @@ module Gosu
       image_ = nil
       if image.is_a?(Gosu::Image)
         image_ = image.__pointer
+      elsif image.respond_to?(:to_str)
+        image_ = Gosu::Image.new(image.to_str).__pointer
       elsif image.respond_to?(:to_blob) and
             image.respond_to?(:rows) and
             image.respond_to?(:columns)

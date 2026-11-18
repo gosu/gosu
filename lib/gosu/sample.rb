@@ -3,6 +3,7 @@ module Gosu
     def initialize(filename)
       __sample = GosuFFI.check_last_error(GosuFFI.Gosu_Sample_create(filename))
       @memory_pointer = FFI::AutoPointer.new(__sample, GosuFFI.method(:Gosu_Sample_destroy))
+      self
     end
 
     def __pointer

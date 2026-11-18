@@ -47,6 +47,22 @@ class TestColor < Minitest::Test
     assert_equal Gosu::Color.from_ahsv(100, 1, 0.0, 0.0), Gosu::Color.from_ahsv(100, 361, -1.0, -1.0)
   end
 
+  def test_predefined_colors_are_frozen
+    assert_raises(FrozenError) { Gosu::Color::RED.alpha = 128 }
+    assert_equal 0xff_ff0000, Gosu::Color::RED.argb
+
+    copy = Gosu::Color::RED.dup
+    copy.alpha = 128
+    assert_equal 128, copy.alpha
+  end
+
+  def test_with_alpha
+    color = Gosu::Color::RED.with_alpha(128)
+    assert_equal 0x80_ff0000, color.argb
+    assert_equal 0xff_ff0000, Gosu::Color::RED.argb
+    refute color.frozen?
+  end
+
   def test_dup_and_gl
     refute_equal Gosu::Color::BLACK.object_id, Gosu::Color::BLACK.dup.object_id
     assert_equal 0xff00ff00, Gosu::Color::GREEN.gl

@@ -4,6 +4,7 @@ module Gosu
       __font = GosuFFI.Gosu_Font_create(height, name, GosuFFI.font_flags(bold, italic, underline), 0)
       GosuFFI.check_last_error
       @memory_pointer = FFI::AutoPointer.new(__font, GosuFFI.method(:Gosu_Font_destroy))
+      self
     end
 
     def __pointer
@@ -23,28 +24,32 @@ module Gosu
       GosuFFI.check_last_error(GosuFFI.Gosu_Font_text_width(__pointer, text.to_s)) * scale_x
     end
 
-    def markup_width(text, scale_x = 1)
-      GosuFFI.check_last_error(GosuFFI.Gosu_Font_markup_width(__pointer, text.to_s)) * scale_x
+    def markup_width(markup, scale_x = 1)
+      GosuFFI.check_last_error(GosuFFI.Gosu_Font_markup_width(__pointer, markup.to_s)) * scale_x
     end
 
     def draw_text(text, x, y, z, scale_x = 1, scale_y = 1, c = Gosu::Color::WHITE, mode = :default)
       GosuFFI.check_last_error if not
-        GosuFFI.Gosu_Font_draw_text(__pointer, text.to_s, x, y, z, scale_x, scale_y, GosuFFI.color_to_uint32(c), GosuFFI.blend_mode(mode))
+        GosuFFI.Gosu_Font_draw_text(__pointer, text.to_s, x, y, z, scale_x, scale_y,
+                                    GosuFFI.color_to_uint32(c), GosuFFI.blend_mode(mode))
     end
 
-    def draw_markup(text, x, y, z, scale_x = 1, scale_y = 1, c = Gosu::Color::WHITE, mode = :default)
+    def draw_markup(markup, x, y, z, scale_x = 1, scale_y = 1, c = Gosu::Color::WHITE, mode = :default)
       GosuFFI.check_last_error if not
-        GosuFFI.Gosu_Font_draw_markup(__pointer, text.to_s, x, y, z, scale_x, scale_y, GosuFFI.color_to_uint32(c), GosuFFI.blend_mode(mode))
+        GosuFFI.Gosu_Font_draw_markup(__pointer, markup.to_s, x, y, z, scale_x, scale_y,
+                                      GosuFFI.color_to_uint32(c), GosuFFI.blend_mode(mode))
     end
 
     def draw_text_rel(text, x, y, z, rel_x, rel_y, scale_x = 1, scale_y = 1, c = Gosu::Color::WHITE, mode = :default)
       GosuFFI.check_last_error if not
-        GosuFFI.Gosu_Font_draw_text_rel(__pointer, text.to_s, x, y, z, rel_x, rel_y, scale_x, scale_y, GosuFFI.color_to_uint32(c), GosuFFI.blend_mode(mode))
+        GosuFFI.Gosu_Font_draw_text_rel(__pointer, text.to_s, x, y, z, rel_x, rel_y, scale_x, scale_y,
+                                        GosuFFI.color_to_uint32(c), GosuFFI.blend_mode(mode))
     end
 
-    def draw_markup_rel(text, x, y, z, rel_x, rel_y, scale_x = 1, scale_y = 1, c = Gosu::Color::WHITE, mode = :default)
+    def draw_markup_rel(markup, x, y, z, rel_x, rel_y, scale_x = 1, scale_y = 1, c = Gosu::Color::WHITE, mode = :default)
       GosuFFI.check_last_error if not
-        GosuFFI.Gosu_Font_draw_markup_rel(__pointer, text.to_s, x, y, z, rel_x, rel_y, scale_x, scale_y, GosuFFI.color_to_uint32(c), GosuFFI.blend_mode(mode))
+        GosuFFI.Gosu_Font_draw_markup_rel(__pointer, markup.to_s, x, y, z, rel_x, rel_y, scale_x, scale_y,
+                                          GosuFFI.color_to_uint32(c), GosuFFI.blend_mode(mode))
     end
 
     def []=(codepoint, image)
