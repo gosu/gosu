@@ -506,6 +506,7 @@ BOOL CSoundFile_ReadAMS2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 				if (!(byte1 & 0x40))
 				{
 					UINT note;
+					if (pos >= packedlen - 1) break;
 					byte2 = psrc[pos++];
 					note = byte2 & 0x7F;
 					if (note) m[ch].note = (note > 1) ? (note-1) : 0xFF;
@@ -514,7 +515,7 @@ BOOL CSoundFile_ReadAMS2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 					byte2 = 0x80; /* row contains atleast one effect, so trigged the first parse */
 				}
 				// Read Effect
-				while (byte2 & 0x80)
+				while (byte2 & 0x80 && pos < packedlen)
 				{
 					byte2 = psrc[pos++];
 					if (byte2 & 0x40)
@@ -523,8 +524,10 @@ BOOL CSoundFile_ReadAMS2(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 						m[ch].vol = byte2 & 0x3F;
 					} else
 					{
-						UINT command = byte2 & 0x3F;
-						UINT param = psrc[pos++];
+						UINT command, param;
+						if (pos >= packedlen) break;
+						command = byte2 & 0x3F;
+						param = psrc[pos++];
 						if (command == 0x0C)
 						{
 							m[ch].volcmd = VOLCMD_VOLUME;

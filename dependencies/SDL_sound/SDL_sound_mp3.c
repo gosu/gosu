@@ -28,6 +28,7 @@
 #define DRMP3_FREE(p) SDL_free((p))
 #define DRMP3_COPY_MEMORY(dst, src, sz) SDL_memcpy((dst), (src), (sz))
 #define DRMP3_MOVE_MEMORY(dst, src, sz) SDL_memmove((dst), (src), (sz))
+#define DRMP3_CMP_MEMORY(src1,src2, sz) SDL_memcmp((src1),(src2), (sz))
 #define DRMP3_ZERO_MEMORY(p, sz) SDL_memset((p), 0, (sz))
 
 #include "dr_mp3.h"

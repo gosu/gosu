@@ -131,7 +131,8 @@ BOOL CSoundFile_ReadDSM(CSoundFile *_this, LPCBYTE lpStream, DWORD dwMemLength)
 			DWORD dwPos;
 			UINT row = 0;
 			dwMemPos += 8;
-			if (dwMemPos + ppatt->patt_len >= dwMemLength) break;
+			if (ppatt->patt_len >= dwMemLength - dwMemPos) break;
+			if (nPat >= MAX_PATTERNS) break;
 			dwPos = dwMemPos;
 			dwMemPos += ppatt->patt_len;
 			m = CSoundFile_AllocatePattern(64, _this->m_nChannels);

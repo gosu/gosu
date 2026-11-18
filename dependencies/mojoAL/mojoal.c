@@ -791,7 +791,7 @@ static ALfloat calculate_distance_attenuation(const ALCcontext *ctx, const ALsou
     FIXME("check divisions by zero");
 
     const ALenum distance_model = ctx->source_distance_model ? src->distance_model : ctx->distance_model;
-    switch (ctx->distance_model) {
+    switch (distance_model) {
         case AL_INVERSE_DISTANCE_CLAMPED:
             distance = SDL_min(SDL_max(distance, src->reference_distance), src->max_distance);
             SDL_FALLTHROUGH;
