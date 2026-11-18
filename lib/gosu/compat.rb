@@ -300,6 +300,9 @@ module Gosu
 
   deprecate_constant :Button
 
+  # The size of the textures that Gosu uses internally (Gosu/Drawable.hpp). TexPlay relies on this.
+  MAX_TEXTURE_SIZE = 1024
+
   def self.language
     @language_cache ||= (user_languages.first || "en_US")
   end
