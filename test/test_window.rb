@@ -45,6 +45,24 @@ class TestWindow < Minitest::Test
     assert window.tick
   end
   
+  class TruthyWindow < Gosu::Window
+    def needs_cursor?
+      1
+    end
+
+    def needs_redraw?
+      nil
+    end
+  end
+
+  def test_boolean_callbacks
+    assert_equal true, Gosu::Window.new(200, 150).needs_cursor?
+
+    window = TruthyWindow.new(200, 150)
+    assert_equal true, window.protected_needs_cursor?
+    assert_equal false, window.protected_needs_redraw?
+  end
+
   class DropWindow < Gosu::Window
     def initialize
       super(400, 400)

@@ -5,7 +5,6 @@ module Gosu
       define_method "protected_#{callback}" do |*args|
         begin
           # If there has been an exception, don't do anything as to not make matters worse.
-          # Conveniently turn the return value into a boolean result (for needs_cursor? etc).
           if defined?(@__exception)
             false
           else
@@ -15,7 +14,9 @@ module Gosu
 
             # Let the GC clean up deferred Gosu.gl(z) blocks before the next draw.
             $gosu_gl_blocks = nil if callback == "draw"
-            send(callback, *args)
+            result = send(callback, *args)
+            # Conveniently turn the return value into a boolean result (for needs_cursor? etc).
+            callback.end_with?("?") ? !!result : result
           end
         rescue Exception => e
           # Exit the message loop naturally, then re-throw during the next tick.
