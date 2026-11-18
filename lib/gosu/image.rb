@@ -99,6 +99,11 @@ module Gosu
       @height ||= GosuFFI.check_last_error(GosuFFI.Gosu_Image_height(__pointer))
     end
 
+    # Together with to_blob, these make Gosu::Image compatible with RMagick::Image, so that an image
+    # can be passed wherever an RMagick image is accepted, e.g. Gosu::Image.new(image).
+    alias columns width
+    alias rows height
+
     def draw(x, y, z = 0, scale_x = 1, scale_y = 1, color = Gosu::Color::WHITE, flags = :default)
       if scale_x == 1 and scale_y == 1 and color.equal?(Gosu::Color::WHITE) and flags == :default
         # Use a fast-path method when most arguments have their default value.
@@ -152,6 +157,8 @@ module Gosu
       image_ = nil
       if image.is_a?(Gosu::Image)
         image_ = image.__pointer
+      elsif image.respond_to?(:to_str)
+        image_ = Gosu::Image.new(image.to_str).__pointer
       elsif image.respond_to?(:to_blob) and
             image.respond_to?(:rows) and
             image.respond_to?(:columns)
