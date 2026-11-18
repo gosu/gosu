@@ -97,7 +97,7 @@ module Gosu
     end
 
     def needs_cursor?
-      false
+      true
     end
 
     def capture_cursor?
