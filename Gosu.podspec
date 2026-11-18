@@ -3,7 +3,7 @@ raise "Please run: brew install pkg-config sdl3" if SDL3_PREFIX.empty?
 
 Pod::Spec.new do |s|
   s.name = "Gosu"
-  s.version = "2.0.0"
+  s.version = "1.5.0"
   s.summary = "2D game development library."
   s.homepage = "https://www.libgosu.org/"
   s.license = { type: "MIT", file: "COPYING" }
@@ -23,8 +23,8 @@ Pod::Spec.new do |s|
 
   s.subspec "Gosu" do |ss|
     ss.dependency "Gosu/Dependencies"
-    ss.osx.deployment_target = "10.15"
-    ss.ios.deployment_target = "13.0"
+    ss.osx.deployment_target = "12.0"
+    ss.ios.deployment_target = "18.0"
 
     # Ignore Gosu using deprecated Gosu APIs internally.
     # Compile all source files as Objective-C++ so we can use ObjC frameworks where necessary.

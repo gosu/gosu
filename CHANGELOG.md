@@ -1,16 +1,18 @@
 # Changelog
 
-## [2.0.0] - tbd
-* SDL has been updated to 3.x. (Thanks @cyberarm! #685)
-* Gosu now uses and requires C++20. (#647)
-* The MSVC projects have been removed. In turn, the CMake setup now works on Windows. (#692)
-* This version drops support for streaming I/O (only relevant for C++). The version number has been bumped to 2.0.0 to reflect this. Ruby/Gosu games should not be affected, and work as before. (#653)   
-* Ruby/Gosu uses FFI instead of SWIG. (Thanks @cyberarm! #664)
+## [1.5.0] - 2026-11-18 - formerly known as 2.0.0-pre - "new Gosu before GTA 6!"
+* SDL has been updated to 3.4.20. (Thanks @cyberarm! #685)
+* C++: Gosu now uses and requires C++20. (#647)
+* C++: The MSVC projects have been removed. In turn, the CMake setup now works on Windows. (#692)
+* C++: This version drops support for streaming I/O. (#653)   
+* Ruby: Gosu uses FFI instead of SWIG. (Thanks @cyberarm! #664)
+* Ruby: Gosu now requires Ruby 3.2+ (#615)
 * Slightly reduce rendering artifacts in scaled images when not using "retro" mode. (#646, #653)
 * Remove support for writing TGA files, but add support for writing JPEG files. (#646)  
 * Fix a bug where invalid UTF-8 strings could trigger deadlocks or memory errors. (#652)  
 * Make `Gosu::Window.sdl_window` available in Ruby. (#637)
-* `Gosu.clip_to` now works within `Gosu.render`. (#673) 
+* `Gosu.draw_triangle` now works in `Gosu.record`, and macros from `Gosu.record` can be saves as images. (#678)
+* `Gosu.clip_to` now works in `Gosu.render`. (#673) 
 
 ## [1.4.6] - 2023-05-20
 * When using SDL 2.0.12 or later, the LED indicators on gamepads will now be set to match the gamepad index that Gosu has allocated for them. (#639)
